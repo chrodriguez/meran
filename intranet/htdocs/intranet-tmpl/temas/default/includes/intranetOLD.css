@@ -260,62 +260,6 @@ td.abc{
     margin: 2px;
 }
 
-.tdout{
-    /*background-color: #F4F4F4;*/
-    font-family: "Trebuchet MS", "Verdana", "Arial";
-    font-size: 9pt;
-    color: #000000;
-    list-style: none;
-    font-weight: normal;
-    border: #000000; 
-    border-style: none; 
-    border-top-width: 0px; 
-    border-right-width: 0px; 
-    border-bottom-width: 0px; 
-    border-left-width: 0px;
-    padding: 0px;
-    margin: 2px;
-}
-/* tdhover */
-.tdhover{
-    background-color: #F4F4E5;
-    list-style: none;
-}
-
-/*.tdout a {display:block;background:#F4F4F4;}*/
-.tdout a:link {
-	color: #000000;
-	text-decoration: none;
-}
-.tdout a:visited {
-	color: #000000;
-	text-decoration: none;
-}
-.tdout a:hover {
-	color: #000000;
-	text-decoration: none;
-}
-.tdout a:active {
-	color: #000000;
-	text-decoration: none;
-}
-.tdhover /*a {display:block;background:#CCCCCC;}*/
-.tdhover a:link {
-        color: #000000;
-	text-decoration: none;
-		}
-.tdhover a:visited {
-        color: #000000;
-	text-decoration: none;
-		}
-.tdhover a:hover {
-	color: #000000;
-	text-decoration: none;
-		}
-.tdhover a:active {
-	color: #000000;
-	text-decoration: none;
-		}
 
 .subtitle {
 	   font-weight: bold;	
@@ -507,6 +451,16 @@ img.showhelp {
 	cursor: pointer;
 }
 
+.tablaresultadoTitleClick { 
+	font-Family : "Trebuchet MS", "Verdana";
+        color: #ffffff;
+        font-size: 9pt;
+	background: url(../imagenes/tablaresultado.png) repeat-x ;
+	background-color:#3c9eb4;
+	cursor: pointer;
+	text-align: center;
+	font-weight: bold;
+	}
 
 
 div.boton{
@@ -928,7 +882,18 @@ ul li {
     font-size: 125%;
 }
 
+.fecha_critica{
 
+    color: red;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.fecha_cumple{
+
+    color: green;
+    font-weight: bold;
+}
 
 /*=====================================================Circulacion===============================================================*/
 

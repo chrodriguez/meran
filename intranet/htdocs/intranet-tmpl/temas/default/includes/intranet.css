@@ -49,13 +49,13 @@ body {
 	}
 #marca{
 	background-image:url(../imagenes/logo_meran.png);
-	background-color:#f7f6f6;
+	background-color:#416ca5;/*#f7f6f6;*/
 	background-position:center;
 	text-align:center;
 	padding:1%;
 	margin-top:1%;
 	background-repeat: no-repeat;
-	height:40px;
+	height:30px;
 	}
 
 /*PARTE SUPERIOR*/
@@ -68,9 +68,13 @@ body {
 }
 
 .idioma_y_login{
-	width: 35%;
+	width: 18%;
 	float: right;
 	margin-bottom:12px;
+	font:bold 7px tahoma,arial,helvetica,sans-serif;
+	text-align:right;
+	
+	
    }
 
 /* MENU*/ 
@@ -139,7 +143,7 @@ border:0px;
    display:block;
    white-space:nowrap;
    margin:0;
-   -moz-border-radius-topleft:8px;
+    -moz-border-radius-topleft:8px;
    -webkit-border-top-left-radius:8px;
    -moz-border-radius-topright:8px;
    -webkit-border-top-right-radius:8px;
@@ -188,8 +192,31 @@ border:0px;
    width:auto;
    text-decoration:none;
    
+ }
+ 
+ /*                                    titulos                                      */
+ 
+.title {/*cambiar por nombre titulos*/
+       font-weight: bold;
+	   font-Family : normal tahoma,arial,helvetica,sans-serif;
+	   font-size: 12pt;
+	   color: #ffffff;
+	   background-color: transparent;
+	   text-align: left;
+	   height: 30px;
 }
+	   
+.pagetitle { /*cambiar por nombre titulos_interior*/
+	  font-weight: bold;
+	  font-Family : tahoma, arial, helvetica, sans-serif;
+	  font-size : 11pt;
+	  color: #416ca5;
+	  text-align: left;
+	  margin-left:20px;
+	
 
+	  }
+/*                                 fin de titulos                                      */
 
 /* TODO no se si es compatible con IE */
 /* cambia el color de fondo cuando se selecciona un input */
@@ -221,8 +248,61 @@ input[type=text]:focus{
 }
 
 /*                                  Fin   estilos para el paginador                               */
+/*                                   estilos para texto contenido                          */
 
+.tdout{
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 8pt;
+    color: #416ca5;
+    list-style: none;
+    font-weight: normal;
+    padding: 0px;
+    margin: 2px;
+	text-decoration:none;
+	
+}
+.tdhover{
+     list-style: none;
+	font-size: 8pt;
+	text-decoration:none;
+	color: #365989;
+	}
+	.tdout a:link {
+	color: #000000;
+	text-decoration: none;
+	}
+	.tdout a:visited {
+	color: #000000;
+	text-decoration: none;
+	}
+	.tdout a:hover {
+	color: #000000;
+	text-decoration: none;
+	}
+	.tdout a:active {
+	color: #000000;
+	text-decoration: none;
+}
 
+.tdhover /*a {display:block;background:#CCCCCC;}*/
+.tdhover a:link {
+        color: #000000;
+	text-decoration: none;
+		}
+.tdhover a:visited {
+        color: #000000;
+	text-decoration: none;
+		}
+.tdhover a:hover {
+	color: #000000;
+	text-decoration: none;
+		}
+.tdhover a:active {
+	color: #000000;
+	text-decoration: none;
+	}
+/*                                   Fin  estilos para texto contenido                                          */
+	
 /*                                     estilos para la zebra                                            */
 tr.par {
     background-color:#FFFFFF;
@@ -268,19 +348,6 @@ tr.impar {
     color: red;
     font-weight: bold;
 }
-
-.fecha_critica{
-
-    color: red;
-    font-weight: bold;
-    font-style: italic;
-}
-
-.fecha_cumple{
-
-    color: green;
-    font-weight: bold;
-}
 /*                                     Fin   estilos para Circulacion                                           */
 
 /*                                        para los resultados en tablas                                                */
@@ -293,7 +360,6 @@ tr.impar {
     text-align: center;
     font-weight: bold;
 }
-
 /*                                     Fin   para los resultados en tablas                                             */
 
 
