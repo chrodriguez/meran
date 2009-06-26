@@ -237,9 +237,18 @@ tr.impar {
     background-color: white;
     margin-left: 30px;
 }
+
+.fontMsgConfirmation {
+
+    text-decoration: none;
+    font-size: 10pt;
+    font-family: "Trebuchet MS", "Verdana";
+    color: red;
+    font-weight: bold;
+}
 /*                                     Fin   estilos para Circulacion                                           */
 
-
+/*                                        para los resultados en tablas                                                */
 .tablaresultadoTitle { 
     font-Family : "Trebuchet MS", "Verdana";
     color: #ffffff;
@@ -249,3 +258,4 @@ tr.impar {
     text-align: center;
     font-weight: bold;
 }
+/*                                     Fin   para los resultados en tablas                                             */

@@ -597,14 +597,7 @@ div.detalle{
 
         border:0;
 }
-.fontMsgConfirmation {
 
-        text-decoration: none;
-        font-size:10pt;
-        font-family:verdana;
-        color:red;
-	font-weight:bold;
-}
 
 
 /*                                                         MODULO DE CIRCULACION                                                         */
@@ -689,28 +682,6 @@ p.nivel2Selected:hover{
 
 /* end agregado */
 
-
-/* para agregar documento */
-.divContentComponente{
-    clear:both; 
-    padding-top:1%;
-}
-
-.divComponente{
-    float: left;
-    padding-right:1%; 
-    padding-bottom: 1%;
-}
-
-.divLabelComponente{
-    float: left; 
-    width: 25%;
-    font-family: "Trebuchet MS", "Verdana", "Arial";
-    font-size: 10pt;
-    color: #000000;
-    font-weight: normal;
-}
-/* fin para agregar documento */
 
 
 

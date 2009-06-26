@@ -237,6 +237,15 @@ tr.impar {
     background-color: white;
     margin-left: 30px;
 }
+
+.fontMsgConfirmation {
+
+    text-decoration: none;
+    font-size: 10pt;
+    font-family: "Trebuchet MS", "Verdana";
+    color: red;
+    font-weight: bold;
+}
 /*                                     Fin   estilos para Circulacion                                           */
 
 /*                                        para los resultados en tablas                                                */
@@ -250,3 +259,26 @@ tr.impar {
     font-weight: bold;
 }
 /*                                     Fin   para los resultados en tablas                                             */
+
+
+/* para agregar documento */
+.divContentComponente{
+    clear:both; 
+    padding-top:1%;
+}
+
+.divComponente{
+    float: left;
+    padding-right:1%; 
+    padding-bottom: 1%;
+}
+
+.divLabelComponente{
+    float: left; 
+    width: 25%;
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 10pt;
+    color: #000000;
+    font-weight: normal;
+}
+/* fin para agregar documento */

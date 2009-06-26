@@ -18,6 +18,7 @@
 <script src="/includes/MessageHelper.js"></script>
 <script src="/includes/WindowHelper.js"></script>
 <script src="/includes/AutocompleteHelper.js"></script>
+
 [% INCLUDE 'datePicker.inc' %]
 
 [% INCLUDE  'AutocompleteHelper.inc'  %]
