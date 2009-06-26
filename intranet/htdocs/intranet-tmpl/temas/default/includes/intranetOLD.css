@@ -335,16 +335,7 @@ td.abc{
 	text-align: center;
         
 	}	
-.tablaresultadoTitle { 
-	font-Family : "Trebuchet MS", "Verdana";
-        color: #ffffff;
-        font-size: 9pt;
-	background: url(../imagenes/tablaresultado.png) repeat-x ;
-	background-color:#3c9eb4;
-	/*background-color:#D9E6F6;*/
-	text-align: center;
-	font-weight: bold;
-	}
+
 								
 .title {
            font-weight: bold;
