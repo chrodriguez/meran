@@ -16,6 +16,8 @@ my $tipoAccion = $obj->{'tipoAccion'};
 my $id_tipo_prestamo = $obj->{'tipo_prestamo'};
 $obj->{'id_tipo_prestamo'}=$obj->{'tipo_prestamo'};
 
+my $authnotrequired = 0;
+
 if ($tipoAccion eq 'MODIFICAR_TIPO_PRESTAMO') {
 
 my ($template, $session, $t_params) = get_template_and_user({
@@ -103,7 +105,7 @@ elsif ($tipoAccion eq 'BORRAR') {
 if ($tipoAccion eq 'TIPOS_PRESTAMOS') {
 
 my ($template, $session, $t_params) = get_template_and_user({
-                            template_name => "admin/tipos_de_prestamos.tmpl",
+                            template_name => "admin/tipos_de_prestamos_lista.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,

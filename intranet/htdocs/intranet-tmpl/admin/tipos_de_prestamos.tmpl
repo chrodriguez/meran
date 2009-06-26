@@ -1,6 +1,5 @@
 [% INCLUDE "intranet-top.inc" %]
 
-
 <script language="JavaScript" type="text/javascript">
 
 var objAH;//Objeto AjaxHelper.
@@ -28,8 +27,7 @@ function borrarDiv(){$("#divResultado").html("");}
 function agregarTipoPrestamo(){
     objAH=new AjaxHelper(updateAgregarTipoPrestamo);
     objAH.url= "/cgi-bin/koha/admin/tipos_de_prestamosDB.pl";
-    objAH.op= "AGREGAR_TIPO_PRESTAMO";
-    borrarDiv();
+    objAH.tipoAccion= "NUEVO_TIPO_PRESTAMO";
     objAH.sendToServer();
 }
 
@@ -41,18 +39,21 @@ function updateAgregarTipoPrestamo(responseText){
  *  eliminarTipoPrestamo
  */
 function eliminarTipoPrestamo(tipo){
-
+    if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO) ){
     objAH=new AjaxHelper(updateEliminarTipoPrestamo);
     objAH.debug= true;
     objAH.url= "/cgi-bin/koha/admin/tipos_de_prestamosDB.pl";
     objAH.tipo_prestamo=tipo;
-    objAH.accion= "CONFIRMAR_BORRADO";
+    objAH.tipoAccion= "BORRAR";
     borrarDiv();
     objAH.sendToServer();
+    }
 }
 
 function updateEliminarTipoPrestamo(responseText){
-    $("#divResultado").html(responseText);
+    borrarDiv();
+    respuesta(responseText);
+    buscarTiposPrestamos();
 }
 
 /*
@@ -65,53 +66,15 @@ function respuesta(responseText){
     setMessages(Messages);
 }
 
-
-/*
-//  * guardarModificacion
-//  * Hace el llamado ajax para poder guardar los datos ingresados para la variable.
-//  */
-// function guardarModificacion(){
-// 
-//     objAH=new AjaxHelper(updateGuardarModificacion);
-//     objAH.debug= true;
-//     objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
-//     objAH.variable=$("#variable").val();
-//     objAH.valor=$("#valor").val();
-// 
-//     if ($("#tipoVar").val() == 'bool'){
-//     objAH.valor=(getRadioButtonSelectedValue( $("[name=valor]")));
-//     }
-// 
-//     objAH.explicacion=$("#explicacion").val();
-//     objAH.accion= "GUARDAR_MODIFICACION_VARIABLE";
-//     objAH.sendToServer();
-// 
-// }
-// 
-// /*
-//  * updateGuardarModificacion
-//  * Funcion que se ejecuta cuando se guarda una variable. Si la variable no existe hace una busqueda para encontrar
-//  * todas las variables, si existe muestra un mensaje de error en la pantalla.
-//  */
-// function updateGuardarModificacion(responseText){
-//     
-//     respuesta(responseText);
-//     $("#tabla").remove();
-//     $("#campo").remove();
-//     $("#categoria").remove();
-//     $("#tipoVar").val(0);
-//     borrarDiv();
-//     buscarPreferencia();
-// }
-
 /*
  * buscarTiposPrestamos
  */
+
 function buscarTiposPrestamos(){
     objAH=new AjaxHelper(updateTiposPrestamos);
     objAH.debug= true;
     objAH.url= "/cgi-bin/koha/admin/tipos_de_prestamosDB.pl";
-    objAH.accion= "TIPOS_PRESTAMOS";
+    objAH.tipoAccion= "TIPOS_PRESTAMOS";
     objAH.sendToServer();
 }
 
@@ -119,26 +82,17 @@ function updateTiposPrestamos(responseText){
     $("#divResultado").html(responseText);
 }
 
-
-/*
- * limpiar
- * Borra el texto ingresado en el componente de busqueda.
- */
-function limpiar(){$("#buscar").val("");}
-
 /*
  * modificarTipoPrestamo
  * Hace el llamado ajax para poder modificar y mostrar la parte de modificacion
  */
+
 function modificarTipoPrestamo(tipo){
-
-    borrarDiv();
-
     objAH=new AjaxHelper(updateModificarTipoPrestamo);
     objAH.debug= true;
     objAH.url= "/cgi-bin/koha/admin/tipos_de_prestamosDB.pl";
     objAH.tipo_prestamo=tipo;
-    objAH.op= "MODIFICAR_TIPO_PRESTAMO";
+    objAH.tipoAccion= "MODIFICAR_TIPO_PRESTAMO";
     objAH.sendToServer();
 }
 
@@ -146,141 +100,74 @@ function updateModificarTipoPrestamo(responseText){
     $("#divResultado").html(responseText);
 }
 
-// /*
-//  * guardarNuevaVariable
-//  * Hace el llamado ajax para poder guardar los datos ingresados para la nueva variable.
-//  */
-// function guardarNuevaVariable(){
-// 
-//     objAH=new AjaxHelper(updateGuardarModificacion);
-//     objAH.debug= true;
-//     objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
-//     objAH.variable=$("#variable").val();
-//     objAH.explicacion=$("#explicacion").val();
-//     objAH.tipo=$("#tipoVar").val();
-// 
-//     if (objAH.tipo == 'bool'){
-//     objAH.valor=(getRadioButtonSelectedValue( $("[name=valor]")));
-//     }
-//     else
-//     {objAH.valor=$("#valor").val();
-//     
-//     if (objAH.tipo == "valAuto" ){
-//             objAH.categoria=$("#categoria").val();
-//                             }
-//     if (objAH.tipo == "referencia"){    
-//             objAH.tabla=$("#tabla").val();
-//             objAH.campo=$("#campo").val();
-//                             }
-//     }
-// 
-// 
-//     objAH.accion= "GUARDAR_NUEVA_VARIABLE";
-//     objAH.sendToServer();
-// 
-// }
 
 /*
- * updateGuardarNuevaVariable
- * Funcion que se ejecuta cuando se guarda una nueva variable. Si la variable existe muestra un mensaje de error en la pantalla.
-//  */
-// function updateGuardarModificacion(responseText){
-//     
-//     respuesta(responseText);
-//     $("#tabla").remove();
-//     $("#campo").remove();
-//     $("#categoria").remove();
-//     $("#tipoVar").val(0);
-//     borrarDiv();
-//     buscarPreferencia();
-// 
-// }
+ * modificarTipoPrestamo
+ * Hace el llamado ajax para poder modificar y mostrar la parte de modificacion
+ */
+
+function guardarModificacionTipoPrestamo(){
+
+    objAH=new AjaxHelper(updateGuardarModificacionTipoPrestamo);
+    objAH.debug= true;
+    objAH.url= "/cgi-bin/koha/admin/tipos_de_prestamosDB.pl";
+    objAH.tipo_prestamo=$("#id_tipo_prestamo").val();
+    objAH.descripcion=$("#descripcion").val();
+    if ($("#disponibilidad:checked").val()){objAH.disponibilidad=1;}else{objAH.disponibilidad=0;}
+    if ($("#habilitado:checked").val()){objAH.habilitado=1;}else{objAH.habilitado=0;}
+    objAH.prestamos=$("#prestamos").val();
+    objAH.dias_prestamo=$("#dias_prestamo").val();
+    objAH.renovaciones=$("#renovaciones").val();
+    objAH.dias_renovacion=$("#dias_renovacion").val();
+    objAH.dias_antes_renovacion=$("#dias_antes_renovacion").val();
+
+    objAH.tipoAccion= "GUARDAR_MODIFICACION_TIPO_PRESTAMO";
+    objAH.sendToServer();
+}
+
+function updateGuardarModificacionTipoPrestamo(responseText){
+    borrarDiv();
+    respuesta(responseText);
+    buscarTiposPrestamos();
+}
+
+/*
+ * modificarTipoPrestamo
+ * Hace el llamado ajax para poder modificar y mostrar la parte de modificacion
+ */
+
+function guardarNuevoTipoPrestamo(){
+
+    objAH=new AjaxHelper(updateGuardarNuevoTipoPrestamo);
+    objAH.debug= true;
+    objAH.url= "/cgi-bin/koha/admin/tipos_de_prestamosDB.pl";
+    objAH.tipo_prestamo=$("#id_tipo_prestamo").val();
+    objAH.descripcion=$("#descripcion").val();
+    if ($("#disponibilidad:checked").val()){objAH.disponibilidad=1;}else{objAH.disponibilidad=0;}
+    if ($("#habilitado:checked").val()){objAH.habilitado=1;}else{objAH.habilitado=0;}
+    objAH.prestamos=$("#prestamos").val();
+    objAH.dias_prestamo=$("#dias_prestamo").val();
+    objAH.renovaciones=$("#renovaciones").val();
+    objAH.dias_renovacion=$("#dias_renovacion").val();
+    objAH.dias_antes_renovacion=$("#dias_antes_renovacion").val();
+
+    objAH.tipoAccion= "AGREGAR_TIPO_PRESTAMO";
+    objAH.sendToServer();
+}
+
+function updateGuardarNuevoTipoPrestamo(responseText){
+    borrarDiv();
+    respuesta(responseText);
+    buscarTiposPrestamos();
+}
+
+$(document).ready( function() {
+    buscarTiposPrestamos();
+});
 
 </script>
 
  <div id="divResultado">
-            <table width="100%" class="pagetitle" border="0" cellpadding="0" cellspacing="0" >
-                    <tr>
-                            <td>[% "Administraci&oacute;n de Tipos de Pr&eacute;stamo" | i18n %]</td>
-                    </tr>
-                    <tr>
-                            <td class="lineagruesa"  align="left" colspan="3"></td>
-                    </tr>
-            </table>
-            
-            <br>
-            
-            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-                    <tr class="tablaresultadoTitle">
-                            <td width="1%" align="left" valign="top"><img src="images/izquierda.png"></td>
-                            <td>[% "C&oacute;digo" | i18n %]</td>
-                            <td>[% "Descripci&oacute;n" | i18n %]</td>
-                            <td>[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]</td>
-                            <td>[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]</td>
-                            <td>[% "Renovaciones" | i18n %]</td>
-                            <td>[% "D&iacute;as de Renovaci&oacute;n" | i18n %]</td>
-                            <td>[% "Cantidad de d&iacute;as para renovar" | i18n %]</td>
-                            <td>[% "Para Sala" | i18n %]</td>
-                            <td>[% "Habilitado" | i18n %]</td>
-                            <td width="8%">[% "Editar" | i18n %]</td>
-                            <td>[% "Eliminar" | i18n %]</td>
-                            <td width="1%" align="right"><img src="images/derecha.png"></td>
-                    </tr>
-            [% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS_LOOP %]
-                    <tr align="middle">    
-                            <td height=25  >&nbsp;</td>
-                            <td   class="inputFontNormal">
-                                    [% tipo_prestamo.getId_tipo_prestamo %]
-                            </td>
-                            <td   class="inputFontNormal">
-                                    [% tipo_prestamo.getDescripcion %]
-                            </td>
-                            <td   class="inputFontNormal" align="center">
-                                    [% tipo_prestamo.getPrestamos %]
-                            </td>
-                            <td   class="inputFontNormal" align="center">
-                                    [% tipo_prestamo.getDias_prestamo %]
-                            </td>
-                            <td   class="inputFontNormal" align="center">
-                                    [% tipo_prestamo.getRenovaciones %]
-                            </td>
-                            <td   class="inputFontNormal" align="center">
-                                    [% tipo_prestamo.getDias_renovacion %]
-                            </td>
-                            <td   class="inputFontNormal" align="center">
-                                    [% tipo_prestamo.getDias_antes_renovacion %]
-                            </td>
-                            <td   class="inputFontNormal" align="center">
-                                    [% IF tipo_prestamo.disponibilidad.getCodigo %]
-                                            [% "Si" | i18n %]
-                                    [% ELSE %]
-                                            [% "No" | i18n %]
-                                    [% END %]
-                            </td>
-                            <td class='[% clase %]' class="inputFontNormal" align="center">
-                                    [% IF tipo_prestamo.getHabilitado %]
-                                            [% "Si" | i18n %]
-                                    [% ELSE %]
-                                            [% "No" | i18n %]
-                                    [% END %]
-                            </td>
-                            <td   align="center">
-                            <input type="image" onclick="modificarTipoPrestamo([% tipo_prestamo.getId_tipo_prestamo %])" src="[% themelang  %]/images/editar.png" alt="Editar">
-                            </td>
-                            <td   align="center">
-                        <input type="image" onclick="eliminarTipoPrestamo([% tipo_prestamo.getId_tipo_prestamo %])" src="[% themelang %]/images/borrar.png" alt="Eliminar">
-                            </td>
-                            <td height=25  >&nbsp;</td>
-                    </tr>
-            [% END %]
-                    <tr valign=bottom>
-                            <td class="lineafinaltabla"  align="left" colspan="9"></td>
-                    </tr>
-            </table>
-
-            <center>
-            <input type="image" alt="Agregar Tipo de Pr&eacute;stamo"  src="[% themelang %]/images/agregar.png" onclick="agregarTipoPrestamo()" >
-            </center>
 </div>
 
 [% INCLUDE "intranet-bottom.inc" %]
