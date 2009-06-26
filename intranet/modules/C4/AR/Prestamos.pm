@@ -120,7 +120,7 @@ sub prestamosHabilitadosPorTipo {
  	my ($id_disponibilidad, $nro_socio)=@_;
 
 	#Se buscan todas las sanciones de un usuario
-	my $sanciones=C4::AR::Sanciones::tieneSanciones($nro_socio);
+	my $sanciones= C4::AR::Sanciones::tieneSanciones($nro_socio);
 
 	#Trae todos los tipos de prestamos que estan habilitados
 	my $tipos_habilitados_array_ref = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(   
@@ -130,23 +130,29 @@ sub prestamosHabilitadosPorTipo {
 																			], 
 										);
 
+
+
 	my @tipos;
 	foreach my $tipo_prestamo (@$tipos_habilitados_array_ref){
-		my $estaSancionado=0;
+		my $estaSancionado= 0;
 		
-		foreach my $sancion (@$sanciones){
-			if($sancion->getTipo_sancion){#Si no es una sancion por una reserva
-			#tipos de prestamo que afecta
-			my @tipos_prestamo_sancion=$sancion->ref_tipo_sancion->ref_tipo_prestamo_sancion;
-				foreach my $tipo_prestamo_sancion (@tipos_prestamo_sancion){
-					if ($tipo_prestamo_sancion->getId_tipo_prestamo eq $tipo_prestamo->getId_tipo_prestamo){
-						$estaSancionado=1;
-					}
-				}
-			}
-			else{#Si es una sancion por reserva???
-			}
-		}
+
+        if($sanciones){
+        #tiene sanciones
+		    foreach my $sancion (@$sanciones){
+			    if($sancion->getTipo_sancion){#Si no es una sancion por una reserva
+			    #tipos de prestamo que afecta
+			    my @tipos_prestamo_sancion=$sancion->ref_tipo_sancion->ref_tipo_prestamo_sancion;
+				    foreach my $tipo_prestamo_sancion (@tipos_prestamo_sancion){
+					    if ($tipo_prestamo_sancion->getId_tipo_prestamo eq $tipo_prestamo->getId_tipo_prestamo){
+						    $estaSancionado= 1;
+					    }
+				    }
+			    }
+			    else{#Si es una sancion por reserva???
+			    }
+		    }# END foreach my $sancion (@$sanciones)
+        }
 
 		if(!$estaSancionado){
 			#solo se agrega si no esta sancionado para ese tipo de prestamo
@@ -156,6 +162,7 @@ sub prestamosHabilitadosPorTipo {
 			push(@tipos,$tipo)
 		}
 	}
+
 	return(\@tipos);
 }
 

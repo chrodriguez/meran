@@ -15,7 +15,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 							query           => $input,
 							type            => "intranet",
 							authnotrequired => 0,
-							flagsrequired   => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1'},
+							flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1'},
 						});
 
 my $id1=$input->param('id1');

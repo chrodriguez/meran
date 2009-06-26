@@ -66,6 +66,7 @@ body {
    margin-bottom:12px;
    height:104px;
    }
+
 .idioma_y_login{
 	width: 35%;
 	float: right;
@@ -169,7 +170,7 @@ body {
 
 
 /* TODO no se si es compatible con IE */
-/* cambia el color de fondo cuando se para en un input */
+/* cambia el color de fondo cuando se selecciona un input */
 input[type=text]:focus{
     background-color:infoBackground;
 }
@@ -179,3 +180,61 @@ input[type=text]:focus{
     cursor: pointer;
 }
 
+
+/*                                     estilos para el paginador                                 */
+.paginaNormal{
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 10pt;
+    color: #000000;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.paginaActual{
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 10pt;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/*                                  Fin   estilos para el paginador                               */
+
+
+/*                                     estilos para la zebra                                            */
+tr.par {
+    background-color:#FFFFFF;
+}
+
+tr.impar {
+    background-color:#F4F4F4;
+}
+/*                                   Fin  estilos para la zebra                                         */
+
+
+/*                                       estilos para mensajes de usuario                                   */
+.tableMsgUser{
+    Background-color: #000000;
+    border: 0;
+}
+
+.fontMsgUser{
+    text-decoration: none;
+    font-size: 12pt;
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    color: #f2f2f2;
+    font-weight: bold;
+}
+/*                                  Fin     estilos para mensajes de usuario                                */
+
+/*                                        estilos para Circulacion                                              */
+
+.divCirculacion{
+    border-style: solid; 
+    border-color: gray;
+    left: 75%; 
+    text-align: center; 
+    background-color: white;
+    margin-left: 30px;
+}
+/*                                     Fin   estilos para Circulacion                                           */

@@ -14,7 +14,7 @@ my ($template, $session, $t_params) = get_template_and_user ({
                             query       => $input,
                             type        => "intranet",
                             authnotrequired => 0,
-                            flagsrequired   =>  { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1'},
+                            flagsrequired   =>  { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                         });
 
 my $authnotrequired= 0;
@@ -50,7 +50,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
         $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
         $t_params->{'cantidad'}= $cantidad;
     
-    }elsif($tipoAccion eq "BUSQUEDA_COMBINADA"){
+}elsif($tipoAccion eq "BUSQUEDA_COMBINADA"){
     
 	    my $outside= $input->param('outside');
 	    my $keyword= $obj->{'keyword'};
@@ -73,7 +73,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
             $t_params->{'HEADERS'}= 1;
 	    }
 	    
-    }elsif($tipoAccion eq "BUSQUEDA_AVANZADA"){
+}elsif($tipoAccion eq "BUSQUEDA_AVANZADA"){
 	    my $funcion= $obj->{'funcion'};
 	    my $ini= ($obj->{'ini'}||'');
 	    
