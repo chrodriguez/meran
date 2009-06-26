@@ -151,7 +151,7 @@ sub actualizarPermisos{
         $permisos->load();
         $hash_permisos->{'tipo_documento'} = $tipo_documento;
         $hash_permisos->{'nro_socio'} = $nro_socio;
-        $id_ui = $id_ui || 'ANY';
+        $id_ui = $id_ui || 'ALL';
         $hash_permisos->{'id_ui'} = $id_ui;
 
         $permisos->agregar($hash_permisos);
@@ -175,7 +175,7 @@ sub nuevoPermiso{
     my $permisos = C4::Modelo::PermCatalogo->new();
     $hash_permisos->{'tipo_documento'} = $tipo_documento;
     $hash_permisos->{'nro_socio'} = $nro_socio;
-    $hash_permisos->{'id_ui'} = $id_ui || 'ANY';
+    $hash_permisos->{'id_ui'} = $id_ui || 'ALL';
 
     $permisos->agregar($hash_permisos);
 
