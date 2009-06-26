@@ -888,7 +888,7 @@ sub armarPaginas{
 #@$cantRenglones, cantidad de renglones maximo a mostrar
 #@$t_params, para obtener el path para las imagenes
 
-
+# FIXME falta pasar las imagenes al estilo
     my ($actual, $cantRegistros, $cantRenglones,$funcion, $t_params)=@_;
 
     my $pagAMostrar=C4::AR::Preferencias->getValorPreferencia("paginas")||10;

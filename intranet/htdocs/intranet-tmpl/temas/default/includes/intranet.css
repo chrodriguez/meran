@@ -61,11 +61,11 @@ body {
 /*PARTE SUPERIOR*/
 .logo_Superior{
    background-image:  url(../imagenes/logo.jpeg);
-    width: 142px;
+   width: 142px;
    float: left;
    margin-bottom:12px;
    height:104px;
-   }
+}
 
 .idioma_y_login{
 	width: 35%;

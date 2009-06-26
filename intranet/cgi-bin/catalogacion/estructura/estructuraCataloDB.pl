@@ -32,7 +32,7 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 			                query => $input,
 			                type => "intranet",
 			                authnotrequired => 0,
-			                flagsrequired => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+			                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
 			                debug => 1,
 			        });
 
@@ -49,8 +49,8 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -70,8 +70,8 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
 elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -92,8 +92,8 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
 elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -114,8 +114,8 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
 elsif($tipoAccion eq "GENERAR_ARREGLO_TABLA_REF"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -139,7 +139,7 @@ elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_CAMPOS"){
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
                         debug => 1,
                     });
 
@@ -157,7 +157,7 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
                         debug => 1,
                     });
 
@@ -174,8 +174,8 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
 elsif($tipoAccion eq "GUARDAR_ESTRUCTURA_CATALOGACION"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -194,8 +194,8 @@ elsif($tipoAccion eq "GUARDAR_ESTRUCTURA_CATALOGACION"){
 elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -215,8 +215,8 @@ elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
 elsif($tipoAccion eq "SUBIR_ORDEN"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -232,8 +232,8 @@ elsif($tipoAccion eq "SUBIR_ORDEN"){
 elsif($tipoAccion eq "BAJAR_ORDEN"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -249,8 +249,8 @@ elsif($tipoAccion eq "BAJAR_ORDEN"){
 elsif($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -268,8 +268,8 @@ elsif($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
 elsif($tipoAccion eq "ELIMINAR_CAMPO"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -285,8 +285,8 @@ elsif($tipoAccion eq "ELIMINAR_CAMPO"){
 elsif($tipoAccion eq "AGREGAR_CAMPO"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -309,8 +309,8 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
 
     my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => $entorno}, 
                                                 'intranet'
@@ -328,8 +328,8 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
 elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -345,8 +345,8 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
 elsif($tipoAccion eq "MOSTRAR_SUBCAMPOS_DE_CAMPO"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -367,7 +367,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
                             debug => 1,
                     });
 
@@ -389,7 +389,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
                             debug => 1,
                     });
 
@@ -416,7 +416,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
                             debug => 1,
                     });
 
@@ -439,8 +439,8 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
 elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
      my ($user, $session, $flags)= checkauth(   $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'ALTA', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -460,8 +460,8 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
 elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
      my ($user, $session, $flags)= checkauth(   $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'ALTA', 
                                                     entorno => 'datos_nivel2'}, 
                                                 'intranet'
@@ -483,7 +483,7 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
 	my ($user, $session, $flags)= checkauth(
 												$input, 	
 												$authnotrequired,	
-                                                { ui => 'CD', tipo_documento => 'ALL', accion => 'ALTA', entorno => 'datos_nivel3'}, 
+                                                { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'datos_nivel3'}, 
 												'intranet'
 											);
                 
@@ -500,8 +500,8 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
 elsif($tipoAccion eq "MODIFICAR_NIVEL_1"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'MODIFICACION', 
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
@@ -520,8 +520,8 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_1"){
 elsif($tipoAccion eq "MODIFICAR_NIVEL_2"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'MODIFICACION', 
                                                     entorno => 'datos_nivel2'}, 
                                                 'intranet'
@@ -541,8 +541,8 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_2"){
 elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'MODIFICACION', 
                                                     entorno => 'datos_nivel3'}, 
                                                 'intranet'
@@ -563,8 +563,8 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
     
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ALL', 
-                                                    tipo_documento => 'ALL', 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
                                                     accion => 'BAJA', 
                                                     entorno => $entorno}, 
                                                 'intranet'
@@ -598,7 +598,7 @@ elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
 							query           => $input,
 							type            => "intranet",
 							authnotrequired => 0,
-							flagsrequired   => { ui => 'ALL', tipo_documento => 'ALL', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+							flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
 });
 
 	#Cuando viene desde otra pagina que llama al detalle.
