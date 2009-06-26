@@ -181,12 +181,9 @@ function actualizarPermisos(){
     objAH.tipo_documento = $('#tipo_nivel3_id').val();
     objAH.permisos = armarArregloDePermisos();
     confirmMessage = "\n\n";
-        if (superUserGranted == 1)
-            confirmMessage += SUPER_USER_GRANTED;
-        var is_confirmed = jConfirm(confirmMessage,'Advertencia de cesión de Permisos');
-    if (is_confirmed) {
-        objAH.sendToServer();
-    }
+    if (superUserGranted == 1)
+        confirmMessage += SUPER_USER_GRANTED;
+    jConfirm(confirmMessage,'Advertencia de cesión de Permisos', function(){objAH.sendToServer();});
 }
 
 function updateActualizarPermisos(responseText){
@@ -213,10 +210,7 @@ function nuevoPermiso(){
         confirmMessage = NEW_GRANT+"\n\n";
         if (superUserGranted == 1)
             confirmMessage += SUPER_USER_GRANTED;
-        var is_confirmed = jConfirm(confirmMessage,'Advertencia de cesión de Permisos');
-        if (is_confirmed) {
-            objAH.sendToServer();
-        }
+        jConfirm(confirmMessage,'Advertencia de cesión de Permisos', function(){objAH.sendToServer();});
     }else{
         jAlert(NO_SE_SELECCIONO_NINGUN_USUARIO, 'Error');
         $('#usuario').focus();
