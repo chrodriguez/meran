@@ -54,6 +54,25 @@ sub agregar{
     $self->save();
 }
 
+sub setAll{
+
+    my ($self) = shift;
+    my ($permisosByte) = @_;
+
+    $self->setDatos_nivel1($permisosByte);
+    $self->setDatos_nivel2($permisosByte);
+    $self->setDatos_nivel3($permisosByte);
+    $self->setEstantes_virtuales($permisosByte);
+    $self->setEstructura_catalogacion_n1($permisosByte);
+    $self->setEstructura_catalogacion_n2($permisosByte);
+    $self->setEstructura_catalogacion_n3($permisosByte);
+    $self->setTablas_de_referencia($permisosByte);
+    $self->setControl_de_autoridades($permisosByte);
+    $self->setUsuarios($permisosByte);
+    $self->setSistema($permisosByte);
+    $self->setUndefined($permisosByte);
+}
+
 sub modificar{
     my ($self) = shift;
     my ($permisos_hash) = @_;

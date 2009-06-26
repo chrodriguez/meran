@@ -68,25 +68,30 @@ sub parsearPermisos{
 
 sub obtenerPermisos{
 
-    my ($nro_socio,$id_ui,$tipo_documento)= @_;
-
+    my ($nro_socio,$id_ui,$tipo_documento,$perfil)= @_;
+    my $permisos;
     my @filtros;
-
+    my $newUpdate;
     push (@filtros, (nro_socio => {eq => $nro_socio}));
     $id_ui = $id_ui || 'ANY';
     push (@filtros, (ui => {eq => $id_ui}));
     push (@filtros, (tipo_documento => {eq => $tipo_documento}));
 
-    my $permisos = C4::Modelo::PermCatalogo::Manager::get_perm_catalogo( query => \@filtros,
+    $permisos = C4::Modelo::PermCatalogo::Manager::get_perm_catalogo( query => \@filtros,
                                                                         );
     if ($permisos->[0]){
         $permisos = C4::AR::Permisos::parsearPermisos($permisos->[0]);
+        $newUpdate = 0;
     }else{
-        $permisos = 0;
+        if ($perfil){
+            $permisos = C4::AR::Permisos::armarPerfil($perfil);
+            $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+        }else{
+            $permisos = 0;
+        }
+        $newUpdate = 1;
     }
-
-    return ($permisos);
-
+    return ($permisos,$newUpdate);
 }
 
 
@@ -99,6 +104,24 @@ sub armarByte{
     $byte.= $permiso->{'todos'}.$permiso->{'alta'}.$permiso->{'baja'}.$permiso->{'modif'}.$permiso->{'consulta'};
 
     return ($byte);
+}
+
+sub armarPerfil{
+
+    my ($perfil) = @_;
+
+    use C4::Modelo::PermCatalogo;
+    my $permisoTemp = C4::Modelo::PermCatalogo->new();
+
+    if ($perfil eq 'SL'){
+        $permisoTemp->setAll(TODOS);
+    }
+    elsif ($perfil eq 'L'){
+        $permisoTemp->setAll(ALTA | MODIFICACION | CONSULTA);
+
+    }
+    return $permisoTemp;
+
 }
 
 sub procesarPermisos{
@@ -124,18 +147,20 @@ sub actualizarPermisos{
     my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
 
     my $permisos = C4::Modelo::PermCatalogo->new(nro_socio => $nro_socio, ui => $id_ui, tipo_documento => $tipo_documento);
-       $permisos->load();
-    $hash_permisos->{'tipo_documento'} = $tipo_documento;
-    $hash_permisos->{'nro_socio'} = $nro_socio;
+    eval{
+        $permisos->load();
+        $hash_permisos->{'tipo_documento'} = $tipo_documento;
+        $hash_permisos->{'nro_socio'} = $nro_socio;
+        $id_ui = $id_ui || 'ANY';
+        $hash_permisos->{'id_ui'} = $id_ui;
 
-    $id_ui = $id_ui || 'ANY';
-    $hash_permisos->{'id_ui'} = $id_ui;
+        $permisos->agregar($hash_permisos);
 
-    $permisos->agregar($hash_permisos);
+        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
 
-    $permisos = C4::AR::Permisos::parsearPermisos($permisos);
-
-    return ($permisos);
+        return ($permisos);
+    };
+    return (0);
 
 }
 

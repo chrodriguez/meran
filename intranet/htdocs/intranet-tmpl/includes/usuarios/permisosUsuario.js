@@ -1,6 +1,23 @@
 //Para saber si se dio algun TODOS
 superUserGranted = 0;
 
+function seleccionoPerfil(combo){
+
+    valueSelected = $(combo).val();
+    return (valueSelected != 'custom');
+}
+
+
+function armarPermisos(){
+}
+
+function profileSelection(combo){
+
+    valueSelected = $(combo).val();
+    if (seleccionoPerfil(combo))
+        armarPermisos(valueSelected);
+}
+
 function adviceGrant(checkBox,divID,risk,dontCallChecks){
     array = new Array();
     array['low']="green";
@@ -70,16 +87,34 @@ function obtenerPermisos(){
             objAH.id_ui = $('#id_ui').val();
         else
             objAH.id_ui = 0;
+    comboPerfiles = $('#perfiles');
+    if (seleccionoPerfil(comboPerfiles)){
+        objAH.perfil=comboPerfiles.val();
+    }
     objAH.accion="OBTENER_PERMISOS";
     objAH.tipo_documento = $('#tipo_nivel3_id').val();
     objAH.permiso = $('#permisos').val();
     objAH.sendToServer();
 }
 
+
+function toggleGrantsDiv(state){
+
+    checkBoxItems = $('#permisos_assign_chk > div > span > input');
+    for (y=0; y<checkBoxItems.length; y++){
+        riskPart = $(checkBoxItems[y]).attr("disabled",state);
+    }
+}
+
 function updateObtenerPermisos(responseText){
     $('#permisos_assign_chk').html(responseText);
     superUserGranted = 0;
     checkChecks();
+    comboPerfiles = $('#perfiles');
+//     if (seleccionoPerfil(comboPerfiles))
+//         toggleGrantsDiv(true);
+//     else
+//         toggleGrantsDiv(false);
 }
 
 function nuevoPermisoSHOW(){

@@ -43,6 +43,8 @@ if(!$accion){
     $t_params->{'combo_UI'}=$combo_UI;
     my $combo_permisos = C4::AR::Utilidades::generarComboPermisos();
     $t_params->{'combo_permisos'}= $combo_permisos;
+    my $combo_perfiles = C4::AR::Utilidades::generarComboPerfiles();
+    $t_params->{'combo_perfiles'}= $combo_perfiles;
 
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
@@ -60,10 +62,10 @@ elsif ($accion eq "OBTENER_PERMISOS"){
                         flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
                         debug => 1,
                     });
-
-    my $permisos = C4::AR::Permisos::obtenerPermisos($nro_socio,$id_ui,$tipo_documento);
+    my $perfil = $obj->{'perfil'} || 0;
+    my ($permisos,$newUpdate) = C4::AR::Permisos::obtenerPermisos($nro_socio,$id_ui,$tipo_documento,$perfil);
     $t_params->{'permisos'}=$permisos;
-    if (!$permisos){
+    if ($newUpdate){
         $t_params->{'nuevoPermiso'}=1;
     }
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
@@ -85,10 +87,9 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS"){
                             debug => 1,
                     });
 
-    C4::AR::Permisos::actualizarPermisos($nro_socio,$id_ui,$tipo_documento,$permisos);
+    my $updateStatus = C4::AR::Permisos::actualizarPermisos($nro_socio,$id_ui,$tipo_documento,$permisos);
     my $permisos = C4::AR::Permisos::obtenerPermisos($nro_socio,$id_ui,$tipo_documento);
     $t_params->{'permisos'}=$permisos;
-
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 elsif ($accion eq "NUEVO_PERMISO"){

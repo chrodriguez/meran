@@ -78,6 +78,7 @@ use vars qw(@EXPORT @ISA);
     &generarComboTipoPrestamo
     &generarComboDeSocios
     &generarComboPermisos
+    &generarComboPerfiles
     &generarComboTipoDeOperacion
     &existeInArray
     &paginarArreglo
@@ -1295,6 +1296,36 @@ sub generarComboPermisos{
 
 }
 
+sub generarComboPerfiles{
+    my ($params) = @_;
+
+    my (@label,@values);
+# FIXME podria ir a tabla PERFILES, pero se vera en un futuro...
+    push (@label,"SuperLibrarian");
+    push (@label,"Librarian");
+
+    my %labels;
+    my %options_hash; 
+    @values[0]='SL';
+    @values[1]='L';
+    @values[2]='custom';
+    $labels{"SL"}= 'SuperLibrarian';
+    $labels{"L"}= 'Librarian';
+    $labels{"custom"}= 'Custom';
+
+    $options_hash{'onChange'}= $params->{'onChange'} || 'profileSelection(this)';
+    $options_hash{'values'}= \@values;
+    $options_hash{'labels'}=\%labels;
+    $options_hash{'defaults'}= 'custom';
+    $options_hash{'size'}= 1;
+    $options_hash{'name'}= 'perfiles';
+    $options_hash{'id'}= 'perfiles';
+
+    my $select = CGI::scrolling_list(\%options_hash);
+
+    return($select);
+
+}
 
 sub generarComboDeDisponibilidad{
 
