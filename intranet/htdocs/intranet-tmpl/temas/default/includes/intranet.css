@@ -238,3 +238,15 @@ tr.impar {
     margin-left: 30px;
 }
 /*                                     Fin   estilos para Circulacion                                           */
+
+/*                                        para los resultados en tablas                                                */
+.tablaresultadoTitle { 
+    font-Family : "Trebuchet MS", "Verdana";
+    color: #ffffff;
+    font-size: 9pt;
+    background: url(../imagenes/tablaresultado.png) repeat-x ;
+    background-color:#3c9eb4;
+    text-align: center;
+    font-weight: bold;
+}
+/*                                     Fin   para los resultados en tablas                                             */

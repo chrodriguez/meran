@@ -198,29 +198,6 @@ input[type=text]:focus{
     cursor: pointer;
 }
 
-.siguiente{
-    width: 16px;
-    height:10px;
-    background: url(../imagenes/pag_siguiente.png) no-repeat right;
-}
-
-.anterior{
-    width: 16px;
-    height:10px;
-    background: url(../imagenes/pag_anterior.png) no-repeat right;
-}
-
-.primera{
-    width: 16px;
-    height:10px;
-    background: url(../imagenes/pag_primera.png) no-repeat right;
-}
-
-.ultima{
-    width: 16px;
-    height:10px;
-    background: url(../imagenes/pag_ultima.png) no-repeat right;
-}
 /*                                  Fin   estilos para el paginador                               */
 
 
@@ -261,3 +238,14 @@ tr.impar {
     margin-left: 30px;
 }
 /*                                     Fin   estilos para Circulacion                                           */
+
+
+.tablaresultadoTitle { 
+    font-Family : "Trebuchet MS", "Verdana";
+    color: #ffffff;
+    font-size: 9pt;
+    background: url(../imagenes/tablaresultado.png) repeat-x ;
+    background-color:#3c9eb4;
+    text-align: center;
+    font-weight: bold;
+}
