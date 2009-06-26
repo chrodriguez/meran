@@ -16,8 +16,8 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $tabla = $obj->{'tabla'};
 my $tipo = $obj->{'tipo'};
 my $accion = $obj->{'accion'};
+my $authnotrequired= 0;
 
-my ($userid, $session, $flags) = checkauth($input, 0,{ parameters => 1});
 
 if($accion eq "BUSCAR_PREFERENCIAS"){
 #Busca las preferencias segun lo ingresado como parametro y luego las muestra
@@ -137,6 +137,15 @@ my ($template, $session, $t_params) =
 
 if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){
 #Guarda la modificacion realizada a la preferencia
+    my ($userid, $session, $flags)= checkauth(   $input, 
+                                            $authnotrequired, 
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'ALTA', 
+                                                entorno => 'undefined'}, 
+                                            'intranet'
+                                    );
+
 
  	my $variable=$obj->{'variable'};
  	my $valor= &C4::AR::Utilidades::trim($obj->{'valor'});
@@ -151,6 +160,15 @@ if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){
 } #end GUARDAR_MODIFICACION_VARIABLE
 
 if($accion eq "SELECCION_CAMPO"){
+    my ($userid, $session, $flags)= checkauth(   $input, 
+                                            $authnotrequired, 
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'undefined'}, 
+                                            'intranet'
+                                    );
+
 
 	my $guardar=$obj->{'guardar'};
 	my $tipo=$obj->{'tipo'};
@@ -238,6 +256,15 @@ my ($template, $session, $t_params) =
 
 
 if($accion eq "GUARDAR_NUEVA_VARIABLE"){
+    my ($userid, $session, $flags)= checkauth(   $input, 
+                                            $authnotrequired, 
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'ALTA', 
+                                                entorno => 'undefined'}, 
+                                            'intranet'
+                                    );
+
 
 #Se guarda la nueva preferencias
 
