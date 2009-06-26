@@ -268,6 +268,19 @@ tr.impar {
     color: red;
     font-weight: bold;
 }
+
+.fecha_critica{
+
+    color: red;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.fecha_cumple{
+
+    color: green;
+    font-weight: bold;
+}
 /*                                     Fin   estilos para Circulacion                                           */
 
 /*                                        para los resultados en tablas                                                */
@@ -280,6 +293,7 @@ tr.impar {
     text-align: center;
     font-weight: bold;
 }
+
 /*                                     Fin   para los resultados en tablas                                             */
 
 

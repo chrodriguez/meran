@@ -507,16 +507,6 @@ img.showhelp {
 	cursor: pointer;
 }
 
-.tablaresultadoTitleClick { 
-	font-Family : "Trebuchet MS", "Verdana";
-        color: #ffffff;
-        font-size: 9pt;
-	background: url(../imagenes/tablaresultado.png) repeat-x ;
-	background-color:#3c9eb4;
-	cursor: pointer;
-	text-align: center;
-	font-weight: bold;
-	}
 
 
 div.boton{
@@ -938,18 +928,7 @@ ul li {
     font-size: 125%;
 }
 
-.fecha_critica{
 
-    color: red;
-    font-weight: bold;
-    font-style: italic;
-}
-
-.fecha_cumple{
-
-    color: green;
-    font-weight: bold;
-}
 
 /*=====================================================Circulacion===============================================================*/
 

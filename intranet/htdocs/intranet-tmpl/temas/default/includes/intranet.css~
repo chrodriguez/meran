@@ -81,12 +81,32 @@ body {
    margin:0px;
 }
 .main-header{
-
    width:100%;
    float:left;
    margin-bottom:0px;
    padding-bottom:-10px;
-
+}
+#menu a, #menu a:visited{
+	font:bold normal 100%/205% tahoma, arial, helvetica, sans-serif;
+	color:#fff;
+	border:0px;
+	text-decoration:none;
+}
+#menu a, #menu a:visited{
+font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+color:#fff;
+border:0px;
+text-decoration:none;
+}
+#menu a, #menu a:visited{
+font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+color:#fff;
+border:0px;
+}
+#menu a, #menu a:visited{
+font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+color:#fff;
+border:0px;
 }
 #menu li ul li{
 	display: none;
@@ -147,11 +167,12 @@ body {
    width:auto;
    text-transform:uppercase;
    border-bottom:#ccc solid 1px;
-   
+   text-decoration:none;
 }
 
 .menu-item a:hover{
    background: #ccc;
+   text-decoration:none;
 }
 .menu-item a{
    font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
@@ -165,6 +186,7 @@ body {
    margin:0;
    padding:0 5px;
    width:auto;
+   text-decoration:none;
    
 }
 
@@ -246,6 +268,19 @@ tr.impar {
     color: red;
     font-weight: bold;
 }
+
+.fecha_critica{
+
+    color: red;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.fecha_cumple{
+
+    color: green;
+    font-weight: bold;
+}
 /*                                     Fin   estilos para Circulacion                                           */
 
 /*                                        para los resultados en tablas                                                */
@@ -258,4 +293,39 @@ tr.impar {
     text-align: center;
     font-weight: bold;
 }
+
+.tablaresultadoTitleClick { 
+    font-Family : "Trebuchet MS", "Verdana";
+    color: #ffffff;
+    font-size: 9pt;
+    background: url(../imagenes/tablaresultado.png) repeat-x ;
+    background-color:#3c9eb4;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+}
+
 /*                                     Fin   para los resultados en tablas                                             */
+
+
+/* para agregar documento */
+.divContentComponente{
+    clear:both; 
+    padding-top:1%;
+}
+
+.divComponente{
+    float: left;
+    padding-right:1%; 
+    padding-bottom: 1%;
+}
+
+.divLabelComponente{
+    float: left; 
+    width: 25%;
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 10pt;
+    color: #000000;
+    font-weight: normal;
+}
+/* fin para agregar documento */
