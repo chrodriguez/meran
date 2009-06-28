@@ -14,6 +14,7 @@ use vars qw(@EXPORT @ISA);
 	&i18n
 	&setComboLang
 	&link_to
+    &to_Button
 );
 
 
@@ -102,6 +103,36 @@ sub i18n {
 	Locale::Maketext::Gettext::Functions::get_handle($locale);
 
  	return __($text);
+}
+
+sub to_Button{
+    my (%params_hash_ref) = @_;
+
+    my $button= '';
+    my $text= $params_hash_ref{'text'}; #obtengo el texto a mostrar
+    my $boton= $params_hash_ref{'boton'}; #obtengo el boton
+    my $onClick= $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onClick
+    my $width= length($text);
+
+    if($params_hash_ref{'width'}){
+        $width= $params_hash_ref{'width'};
+    }
+
+    $width += 90;
+    
+
+#     $button .=  "<div id='boton_medio'> ";
+    $button .=  "<span id='boton_medio' class='click' onClick=".$onClick." style=width:".$width."px;> ";
+    $button .=  "    <div id=".$boton."> ";
+    $button .=  "   </div> ";
+    $button .=  "   <div id='boton_der'> ";
+    $button .=  "   </div> ";
+#     $button .=  "   <div id='boton_texto'><p>".$text."</p></div> ";
+    $button .=  "   <div id='boton_texto'>".$text."</div> ";
+#     $button .=  "</div> ";
+    $button .=  "</span> ";
+
+    return $button;
 }
 
 =item

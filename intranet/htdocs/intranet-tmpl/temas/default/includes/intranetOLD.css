@@ -152,15 +152,8 @@ color:black;
    height: 160px; 
    list-style:none;
 }
-.textOverBoton {
-	cursor: pointer;
-   font-family: helvetica;
-   text-align:center;
-}
-.botonBehindText {
-   margin-right: -135px; 
-   margin-bottom:-3px
-}
+
+
 a:link {
 	color: #000000;
 	text-decoration: none;

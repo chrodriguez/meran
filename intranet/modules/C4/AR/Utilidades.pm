@@ -2311,4 +2311,17 @@ sub redirectAndAdvice{
     C4::Auth::redirectTo('/cgi-bin/koha/informacion.pl');
 #     exit;
 }
+
+#######################################FUNCIONES PARA TRABAJAR CON BINARIOS##########################################
+sub bin2dec {
+    return unpack("N", pack("B32", substr("0" x 32 . shift, -32)));
+}
+
+sub dec2bin {
+    my $str = unpack("B32", pack("N", shift));
+    $str =~ s/^0+(?=\d)//;   # otherwise you'll get leading zeros
+    return $str;
+}
+####################################FIN###FUNCIONES PARA TRABAJAR CON BINARIOS#######################################
+
 1;

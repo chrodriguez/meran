@@ -499,40 +499,6 @@ sub esRegular{
     return $estado->getRegular;
 }
 
-#===================================VA A PERMISOS==========================================
-
-sub read_grants {
-    my ($permisos) = @_;
-    my $flag;
-    $flag= 'OTRO';
-
-    if($permisos eq "00010000"){
-        $flag= 'TODOS';
-    }elsif($permisos eq "00001000"){
-        $flag= 'ALTA';
-    }elsif($permisos eq "00000100"){
-        $flag= 'BAJA';
-    }elsif($permisos eq "00000010"){
-        $flag= 'MODIFICACION';
-    }elsif($permisos eq "00000001"){
-        $flag= 'CONSULTA';
-    }
-
-    return $flag;
-}
-
-
-sub bin2dec {
-    return unpack("N", pack("B32", substr("0" x 32 . shift, -32)));
-}
-
-sub dec2bin {
-    my $str = unpack("B32", pack("N", shift));
-    $str =~ s/^0+(?=\d)//;   # otherwise you'll get leading zeros
-    return $str;
-}
-
-
 =item
 Esta funcion se encarga de verificar los permisos para un entorno dado
 Entorno de datos de nivel, para ABM de datos de nivel 1, 2 y 3
@@ -590,8 +556,8 @@ sub verificar_permisos_por_nivel{
     
         my $permiso_bin_del_usuario= $permisos_hash_ref->{$flagsrequired->{'entorno'}};
         my $permiso_bin_requerido= C4::AR::Permisos::permisos_str_to_bin($flagsrequired->{'accion'});
-        my $permiso_dec_del_usuario= bin2dec($permiso_bin_del_usuario);
-        my $permiso_dec_requerido = bin2dec($permiso_bin_requerido);
+        my $permiso_dec_del_usuario= C4::AR::Utilidades::bin2dec($permiso_bin_del_usuario);
+        my $permiso_dec_requerido = C4::AR::Utilidades::bin2dec($permiso_bin_requerido);
 
         if( ($permiso_bin_del_usuario & '00010000') > 0){
             #tiene TODOS los permisos
@@ -601,14 +567,10 @@ sub verificar_permisos_por_nivel{
         }
     
         C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: ".$permiso_bin_del_usuario);
-#         C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin2dec: ".$permiso_dec_del_usuario);
         C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS REQUERIDOS=================bin: ".$permiso_bin_requerido);
-#         C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS REQUERIDOS=================bin2dec: ".$permiso_dec_requerido);
         C4::AR::Debug::debug("verificar_permisos_por_nivel => ENTORNO=================: ".$flagsrequired->{'entorno'});
         my $resultado= $permiso_bin_del_usuario & $permiso_bin_requerido;
-#         C4::AR::Debug::debug("verificar_permisos_por_nivel => result AND=================: ".$resultado);
-#         C4::AR::Debug::debug("verificar_permisos_por_nivel => AND=================bin2dec: ".(bin2dec($resultado)));    
-        if( bin2dec($resultado) > 0 ){
+        if( C4::AR::Utilidades::bin2dec($resultado) > 0 ){
             return 1;
         }
     }
@@ -630,19 +592,8 @@ sub tienePermisos {
     my ($self) = shift;
     my ($flagsrequired) = @_;
 
-#     $self->log($flagsrequired,'tienePermisos => permisos requeridos');
-    #Obtengo los permisos del socio
-#     my $flags= $self->getPermisos;
-
-
     # Se setean los flags requeridos
     $flagsrequired->{'nro_socio'}= $self->getNro_socio;
-# 
-#     $flagsrequired->{'tipo_documento'}= 'LIB';
-#     $flagsrequired->{'entorno'}= 'datos_nivel3';
-#     $flagsrequired->{'accion'}= 'ALTA';
-   
-#========TEST
 
     #se verifican permisos level1
     C4::AR::Debug::debug("tienePermisos??? => intento level1");
@@ -669,22 +620,6 @@ sub tienePermisos {
         C4::AR::Debug::debug("NO TIENE EL PERMISO");
         return 0;
     }
-
-=item
-    if($flagsrequired){
-        #se verifica si el socio tiene los permisos pasados por parametro
-        foreach (keys %$flagsrequired) {
-            return $flags if $flags->{'superlibrarian'};
-            return $flags if $flags->{$_};
-        }
-    }else{
-        #si no hay flags requeridos, tiene permisos
-        return 1
-    }
-
-
-    return 0;
-=cut
 }
 
 

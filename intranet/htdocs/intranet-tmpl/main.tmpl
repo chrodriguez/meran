@@ -26,8 +26,15 @@ $(document).ready(function() {
 		<td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" valign="top">
 			[% "B&uacute;squeda combinada" | i18n %]
 			<input type="text" id="keyword" size="20" class="inputFontNormal" tabindex=1>
-  			<input type="image" alt="Buscar" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="buscar()">
-    		</td>
+  			<!--<input type="image" alt="Buscar" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="buscar()">-->
+<!--             <input type="image" alt="Buscar" border="0" onClick="buscar()" class="boton_buscar"> -->
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "buscar();"
+                                        ) ;
+            [% END %]
+    	</td>
   	</tr>
   	<tr>
 		<td width="15%" >&nbsp;</td>
@@ -54,7 +61,16 @@ $(document).ready(function() {
 		    	B&uacute;squeda de usuarios &nbsp;
                 <input id="socio" class="inputFontNormal" type=text name="socio" onFocus="checkFilter('focus')" 
                    onBlur="checkFilter('blur')" value="[% socio %]" tabindex=2>		
-                <input id="buscar" type="image" onClick="consultar('');" src="[% themelang %]/images/boton-buscar.png" border='0'>
+                <!--<input id="buscar" type="image" onClick="consultar('');" src="[% themelang %]/images/boton-buscar.png" border='0'>-->
+<!--                 <input id="buscar" type="image" onClick="consultar('');" border='0' class="boton_buscar"> -->
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text =>     "[% 'Buscar' | i18n %]",
+                                                                    boton =>    "boton_buscar",
+                                                                    onClick => "consultar();"
+                                        ) ;
+                [% END %]
+
         </td>
  	 </tr>
 </table>

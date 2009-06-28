@@ -19,26 +19,29 @@ body {
 	width: 100%;
 	height: 7px;
 	font-size: 1px;
-		   }
+}
+
 #marco_superior div {
 	background: transparent url(../imagenes/arriba_der.png) no-repeat top right;
 	width: 100%;
 	height: 7px;
 	font-size: 1px;
-	}
+}
 
 #marco_inferior {
 	background: transparent  url(../imagenes/abajo_izq.png) no-repeat bottom left;
 	width: 100%;
 	height: 7px;
 	font-size: 1px;
-		   }
+}
+
 #marco_inferior div {
 	background: transparent url(../imagenes/abajo_der.png) no-repeat bottom right;
 	width: 100%;
 	height: 7px;
 	font-size: 1px;
-		}
+}
+
 #marco_contenido{
 	clear:both;
 	margin-bottom:3%;
@@ -218,6 +221,19 @@ border:0px;
 	  }
 /*                                 fin de titulos                                      */
 
+/*                                        estilos para los botones                                     */
+.textOverBoton {
+    cursor: pointer;
+    font-family: helvetica;
+    text-align:center;
+}
+
+.botonBehindText {
+   margin-right: -135px; 
+   margin-bottom:-3px
+}
+/*                                      Fin  estilos para los botones                                  */
+
 /* TODO no se si es compatible con IE */
 /* cambia el color de fondo cuando se selecciona un input */
 input[type=text]:focus{
@@ -384,3 +400,42 @@ tr.impar {
     font-weight: normal;
 }
 /* fin para agregar documento */
+
+
+/*                                                 estilos para los botones                                */
+
+#boton_buscar {
+    background: transparent  url(../imagenes/boton_buscar.png) no-repeat;
+    height: 20px;
+    width: 20px;
+    float: left;
+}
+
+
+/*              parte del boton generica                  */
+#boton_texto {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: #000000;
+    background-position: center;
+    margin-left: 27px;
+}
+
+#boton_medio {
+    background:url(../imagenes/boton_medio.png) repeat-x scroll center ;
+    height: 20px;
+    /*width: 7%;*//*se debe modificar dinamicamente*/
+    position: absolute;
+/*     margin-left: 25px;*/
+}
+
+#boton_der {
+    float:right;
+    background: transparent url(../imagenes/boton_der.png) no-repeat;
+    height: 20px;
+    width: 3px;
+}
+/*            fin  parte del boton generica                */
+
+/*                                                Fin estilos para los botones                             */
