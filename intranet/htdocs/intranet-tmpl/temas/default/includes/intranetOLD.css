@@ -421,39 +421,6 @@ text-align:center;
 /* fin Estilo para tabs */
 
 
-/*Estilo HELPPPPPPPPPPP******************************************/
-
-div.headerWindowHelp{
-	text-decoration: none;
-        font-size:8pt;
-        font-family:verdana;
-        color:#55C5D0;
-	background-color: #666666;
-	font-weight: bold;
-	text-align: right;
-	border:1px solid #888;
-
-	width: 100%; 
-	height: 5%;
-}
-
-/********************************************************************************************/
-
-
-img.showhelp {
-	cursor: pointer;
-}
-
-.tablaresultadoTitleClick { 
-	font-Family : "Trebuchet MS", "Verdana";
-        color: #ffffff;
-        font-size: 9pt;
-	background: url(../imagenes/tablaresultado.png) repeat-x ;
-	background-color:#3c9eb4;
-	cursor: pointer;
-	text-align: center;
-	font-weight: bold;
-	}
 
 
 div.boton{
@@ -484,26 +451,6 @@ div.detalle{
 }
 
 
-/* Miguel agregado para cambiar fondo de inputs */
-
-.inputFontDisabled{
-	font-family: "Trebuchet MS", "Verdana", "Arial";
-	font-size: 10pt;
-	color: #000000;
-	font-weight: normal;
-	overflow:auto;
-	background-color:gray; 
-}
-
-.inputFontEnabled{
-	font-family: "Trebuchet MS", "Verdana", "Arial";
-	font-size: 10pt;
-	color: #000000;
-	font-weight: normal;
-	overflow:auto;
-	background-color:white; 
-}
-
 .divDatosUsuario{
 	float:left;
 	width:50%;
@@ -513,21 +460,8 @@ div.detalle{
 	font-weight: normal;
 }
 
-/* PARA EL DETALLE*/
-.fechaVencida{
-	font-size:10pt;
-	color:red;
-}
 
-.prestamo{
-	font-size:10pt;
-	color:green;
-}
 
-.salaLectura{
-	font-size:10pt;
-	color:blue;
-}
 
 
 .tableMsgConfirmation{
@@ -834,35 +768,6 @@ span.as120240l{float:left;margin:0 1.0em .2em 1.0em;}
 .highlight { background-color: yellow }
 
 
-/* para MARC */
-
-.MARCResult li{
-		border-top:1px dotted #CCCCCC;
-		color:#000000;
-		font-family:'lucida console','courier new',monospace;
-		line-height:1.5em;
-/* 		margin:0; */
-		margin-left:32px;	
-		table-layout:fixed;
-}
-
-
-.detalleMARC {
-      list-style-type:none;
-      display:block;
-      padding:5px;
-      text-align: left;
-      width: 90%; 
-}
-
-li.MARCHeader{
-	margin:0;
-	padding:5px;
-	background-color:#FFFFFF;
-	width: 90%;
-	list-style-type:none;
-}
-/* FIN MARC */
 
 ul li {
       list-style-type:none;
@@ -875,18 +780,7 @@ ul li {
     font-size: 125%;
 }
 
-.fecha_critica{
 
-    color: red;
-    font-weight: bold;
-    font-style: italic;
-}
-
-.fecha_cumple{
-
-    color: green;
-    font-weight: bold;
-}
 
 /*=====================================================Circulacion===============================================================*/
 

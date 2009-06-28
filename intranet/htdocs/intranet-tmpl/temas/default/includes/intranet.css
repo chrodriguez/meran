@@ -364,6 +364,35 @@ tr.impar {
     color: red;
     font-weight: bold;
 }
+
+.fechaVencida{
+    font-size:10pt;
+    color:red;
+}
+
+.fecha_critica{
+
+    color: red;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.fecha_cumple{
+
+    color: green;
+    font-weight: bold;
+}
+
+.prestamo{
+    font-size:10pt;
+    color:green;
+}
+
+.salaLectura{
+    font-size:10pt;
+    color:blue;
+}
+
 /*                                     Fin   estilos para Circulacion                                           */
 
 /*                                        para los resultados en tablas                                                */
@@ -439,3 +468,36 @@ tr.impar {
 /*            fin  parte del boton generica                */
 
 /*                                                Fin estilos para los botones                             */
+
+
+
+/*                                          para MARC                                                    */
+
+.MARCResult li{
+        border-top:1px dotted #CCCCCC;
+        color:#000000;
+        font-family:'lucida console','courier new',monospace;
+        line-height:1.5em;
+/*      margin:0; */
+        margin-left:32px;   
+        table-layout:fixed;
+}
+
+
+.detalleMARC {
+      list-style-type:none;
+      display:block;
+      padding:5px;
+      text-align: left;
+      width: 90%; 
+}
+
+li.MARCHeader{
+    margin:0;
+    padding:5px;
+    background-color:#FFFFFF;
+    width: 90%;
+    list-style-type:none;
+}
+/*                                                 FIN MARC                            */
+
