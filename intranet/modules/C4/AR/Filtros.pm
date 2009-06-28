@@ -115,14 +115,15 @@ sub to_Button{
     my $width= length($text);
 
     if($params_hash_ref{'width'}){
+ C4::AR::Debug::debug("to_Button => width: ".$params_hash_ref{'width'});
         $width= $params_hash_ref{'width'};
+    }else{
+        $width += 90;
     }
-
-    $width += 90;
     
 
 #     $button .=  "<div id='boton_medio'> ";
-    $button .=  "<span id='boton_medio' class='click' onClick=".$onClick." style=width:".$width."px;> ";
+    $button .=  "<span id='boton_medio' class='click' onClick=".$onClick." style='width:".$width."px'> ";
     $button .=  "    <div id=".$boton."> ";
     $button .=  "   </div> ";
     $button .=  "   <div id='boton_der'> ";

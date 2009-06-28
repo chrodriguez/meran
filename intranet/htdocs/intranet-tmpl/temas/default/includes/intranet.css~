@@ -370,6 +370,19 @@ tr.impar {
     color:red;
 }
 
+.fecha_critica{
+
+    color: red;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.fecha_cumple{
+
+    color: green;
+    font-weight: bold;
+}
+
 .prestamo{
     font-size:10pt;
     color:green;
@@ -436,6 +449,7 @@ tr.impar {
     color: #000000;
     background-position: center;
     margin-left: 27px;
+/*     margin-top: 3px; */
 }
 
 #boton_medio {
@@ -443,6 +457,10 @@ tr.impar {
     height: 20px;
     /*width: 7%;*//*se debe modificar dinamicamente*/
     position: absolute;
+    padding-bottom:0;
+    padding-left:0;
+    padding-right:0;
+    padding-top:6px;
 /*     margin-left: 25px;*/
 }
 
