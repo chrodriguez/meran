@@ -461,7 +461,7 @@ tr.impar {
 
 #boton_medio {
     background:url(../imagenes/boton_medio.png) repeat-x scroll center ;
-    height: 20px;
+    height: 22px;
     /*width: 7%;*//*se debe modificar dinamicamente*/
     position: absolute;
     padding-bottom:0;
@@ -474,7 +474,7 @@ tr.impar {
 #boton_der {
     float:right;
     background: transparent url(../imagenes/boton_der.png) no-repeat;
-    height: 20px;
+    height: 22px;
     width: 3px;
 }
 /*            fin  parte del boton generica                */
