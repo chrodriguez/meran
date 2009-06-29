@@ -291,8 +291,13 @@ $(document).ready(function() {
 			<div id="estadoUsuario"></div>
 			<input type='hidden' id='nro_socio_hidden' value=''>
 			<span id="divAutorizado" style="float:right">Autorizado: <input type="checkbox" value="autorizado"></span>
-			<input 	type="button" id="divAgregarAutorizado" value="[% 'Agregar' | i18n %]" title="[% 'Agregar Autorizado' | i18n %]" 
-					onClick="agregarAutorizado()" style="float: left">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Autorizado' | i18n %]",
+                                                                    boton   => "boton_agregar",
+                                                                    onClick => "agregarAutorizado();",
+                                                                    title   => "[% 'Agregar Autorizado' | i18n %]",
+                                        ) ;
+            [% END %]
 		</div>
 	</li>
 </ul>

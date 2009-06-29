@@ -73,19 +73,20 @@
             [% END %]
 		</td>
 		<td align="middle"> 
-	       		<input type="image" name="cancel"  value="cancelar" 
-			src="[% themelang %]/images/borrar.png" 
-			onClick="cancelarReserva('[% reserva.getId_reserva %]')" title="Cancelar">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar' | i18n %]",
+                                                                    boton   => "boton_borrar",
+                                                                    onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
+                                                                    title   => "[% 'Cancelar' | i18n %]",
+                                        ) ;
+            [% END %]
 		</td>
 		<td width="1%">&nbsp;</td>
 	</tr>
     [% END %] 
 </table>
     <p colspan="10" class="inputFontNormal" align=center>
-        <input type="image" name="borrowD"  value="prestar" 
-        src="[% themelang %]/images/item-prestar.png" 
-        title="Realizar pr&eacute;stamo" 
-        onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
+     <input type="image" name="borrowD"  value="prestar" src="[% themelang %]/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
     </p>
 [% ELSE %]
 <br>
@@ -140,9 +141,13 @@
             [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
 			</td>
 			<td>
-				<input type="image" name="cancel"  value="cancelar" 
-				src="[% themelang %]/images/borrar.png" 
-				onClick="cancelarReserva('[% reserva.getId_reserva %]')" title="Cancelar">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar' | i18n %]",
+                                                                    boton   => "boton_borrar",
+                                                                    onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
+                                                                    title   => "[% 'Cancelar' | i18n %]",
+                                        ) ;
+            [% END %]
 			</td>
 			<td width="1%">&nbsp;</td>
 			<td width="1%">&nbsp;</td>

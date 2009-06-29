@@ -106,8 +106,13 @@ function borrarSanciones(chck){
 	<td colspan="12" >&nbsp;</td>
     </tr>
 	<tr><td colspan="12" align="center" >
-	<INPUT 	TYPE="image" name="Eliminar"  VALUE="Eliminar" BORDER=0 src="[% themelang %]/images/eliminar.png" 
-			onClick="borrarSanciones('chkboxSanciones')" title="Borrar Sanciones">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Sanciones' | i18n %]",
+                                                                    boton   => "boton_borrar",
+                                                                    onClick => "borrarSanciones('chkboxSanciones');",
+                                                                    title   => "[% 'Borrar Sanciones' | i18n %]",
+                                        ) ;
+            [% END %]
 	</td></tr>
 	</form>
 </table>
