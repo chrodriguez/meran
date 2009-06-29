@@ -778,10 +778,10 @@ sub reporteNiveles{
 
 sub disponibilidadAnio {
 
-      my ($id_ui,$ini,$fin)=@_;
-      my @filtros;
-      my $dateformat = C4::Date::get_date_format();
-      use C4::Modelo::CatDetalleDisponibilidad::Manager;
+    my ($id_ui,$ini,$fin)=@_;
+    my @filtros;
+    my $dateformat = C4::Date::get_date_format();
+    use C4::Modelo::CatHistoricoDisponibilidad::Manager;
 #       my $query="SELECT month( date )  AS mes, year( date )  AS year, avail, count( avail )  AS cantidad
 #       FROM cat_detalle_disponibilidad
 #       WHERE branch =  ?  AND date BETWEEN ? AND  ?
@@ -803,7 +803,7 @@ sub disponibilidadAnio {
    }
 
    my $detalle_disponibilidad =
-                     C4::Modelo::CatDetalleDisponibilidad::Manager->get_cat_detalle_disponibilidad(
+                     C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad(
                                                                                                 query => \@filtros,
                                                                                                 select => [ 'estado',
                                                                                                             'YEAR(fecha) AS anio_agregacion',  

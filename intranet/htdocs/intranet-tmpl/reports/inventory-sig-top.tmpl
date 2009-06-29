@@ -38,7 +38,16 @@ function updateInfo(responseText){
 		<td class="inputFontNormal">
 			<input class="inputFontNormal" type="text" id="sigtop" value="[% sigtop %]">&nbsp;
 		</td>
-		<td><input type="image" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="consultar()"></td>
+		<td>
+<!--             <input type="image" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="consultar()"> -->
+            [% PERL %]
+                            print C4::AR::Filtros::to_Button( 
+                                                                text    =>  "[% 'Buscar' | i18n %]",
+                                                                boton   =>  "boton_buscar",
+                                                                onClick =>  "consultar();",
+                                    ) ;
+            [% END %]
+        </td>
 	</tr>
 </table>
 

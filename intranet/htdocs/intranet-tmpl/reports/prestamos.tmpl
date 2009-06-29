@@ -172,7 +172,14 @@ function updateInfo(responseText){
 	<tr class="inputFontNormal"  align="center">
 		<td colspan="5">
 			<br>
-		<a href="#" title="Buscar" onClick="consultar();"><input type="image" src="[% themelang %]/images/boton-buscar.png" border="0"></a>
+<!-- 		<a href="#" title="Buscar" onClick="consultar();"><input type="image" src="[% themelang %]/images/boton-buscar.png" border="0"></a> -->
+            [% PERL %]
+                            print C4::AR::Filtros::to_Button( 
+                                                                text    =>  "[% 'Buscar' | i18n %]",
+                                                                boton   =>  "boton_buscar",
+                                                                onClick =>  "consultar();",
+                                    ) ;
+            [% END %]
 		</td>
 	</tr>
 </table>

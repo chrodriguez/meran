@@ -119,7 +119,14 @@ function generarEtiquetas(){
 
 </table>
 <br>
-<input type="image" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="hacerSubmit();">
+<!-- <input type="image" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="hacerSubmit();"> -->
+   [% PERL %]
+                                            print C4::AR::Filtros::to_Button(   
+                                                                                boton   => "boton_buscar",
+                                                                                onClick => "hacerSubmit();",
+                                                                                width   => "173"
+                                                    ) ;
+    [% END %]
 </form>
 <br>
 

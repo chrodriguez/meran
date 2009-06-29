@@ -110,7 +110,14 @@ function consultar(){
 </table>
 
 	<br>
-	<input type="image" onClick="consultar()"  src="[% themelang %]/images/boton-buscar.png" border="0">
+<!-- 	<input type="image" onClick="consultar()"  src="[% themelang %]/images/boton-buscar.png" border="0"> -->
+            [% PERL %]
+                            print C4::AR::Filtros::to_Button( 
+                                                                text    =>  "[% 'Buscar' | i18n %]",
+                                                                boton   =>  "boton_buscar",
+                                                                onClick =>  "consultar();",
+                                    ) ;
+            [% END %]
 
 </center>
 <div id="result"></div>

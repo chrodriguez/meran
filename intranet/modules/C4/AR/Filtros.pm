@@ -138,6 +138,8 @@ sub to_Button{
     $button .=  "   <div id='boton_texto'>".$text."</div> ";
 #     $button .=  "</div> ";
     $button .=  "</span> ";
+# FIXME por ahora
+    $button .=  "<br> "; 
 
     return $button;
 }

@@ -68,6 +68,13 @@ function consultar(){
 	<li>[% selectCatUsuarios  %]</li>
 	<li>
 		<input type="image" name="consulta" src="[% themelang %]/images/generarListado.png" onClick="consultar('');">
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Buscar' | i18n %]",
+                                                                    boton   =>  "boton_buscar",
+                                                                    onClick =>  "consultar('');",
+                                        ) ;
+                [% END %]
 	</li>
 </ul>
 
