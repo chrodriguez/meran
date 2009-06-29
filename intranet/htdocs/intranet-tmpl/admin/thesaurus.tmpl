@@ -105,8 +105,14 @@ document.getElementById(id).src=src;
 				<input type="hidden" name="search_category" value="<!-- TMPL_VAR name="search_category" -->">
 				<input type="hidden" name="searchstring" value="<!-- TMPL_VAR name="searchstring" escape=HTML -->">
 				<input type="hidden" name="offset" value="<!-- TMPL_VAR name="offset" -->">
-				<input type="image" alt="Guardar Cambios"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/guardar.png" onclick="Aform.submit">
 
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                                    boton   => "boton_guardar",
+                                                                    onClick => "Aform.submit;",
+                                                                    title   => "[% 'Guardar' | i18n %]",
+                                        ) ;
+            [% END %]
 			</td>
 		</tr>
 	</table>

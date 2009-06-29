@@ -380,11 +380,21 @@ $(document).ready( function() {
 <br>
 <p>
 	<input type="text" id="buscar" name="buscar" value="">
-	<input type="image" alt="Buscar"  
-	src="[% themelang %]/images/boton-buscar.png" 
-	onClick="buscarPreferencia()">
-	<input type="image" name="clear" id="clear" alt="Limpiar" 
-	src="[% themelang %]/images/borrar2.png" border="0" onClick="limpiar()">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "buscarPreferencia();",
+                                                                    title   => "[% 'Buscar' | i18n %]",
+                                        ) ;
+            [% END %]
+
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                    boton   => "boton_borrar",
+                                                                    onClick => "limpiar();",
+                                                                    title   => "[% 'Limpiar' | i18n %]",
+                                        ) ;
+            [% END %]
 </p>
 
 <div id="divCombos">
@@ -398,9 +408,13 @@ $(document).ready( function() {
 		<option value="referencia">[% "Referencia" | i18n %]</option>
 		<option value="valAuto">[% "Valores autorizados" | i18n %]</option>
 	</select>
-	<input 	id="boton" type="image" alt="Agregar Preferencia de Sistema"  
-		src="[% themelang %]/images/agregar.png"
-		onclick="agregarPreferencia()">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
+                                                                    boton   => "boton_agregar",
+                                                                    onClick => "agregarPreferencia();",
+                                                                    title   => "[% 'Agregar' | i18n %]",
+                                        ) ;
+            [% END %]
 </p>
 <div id="divAgregar"></div>
 </div>
