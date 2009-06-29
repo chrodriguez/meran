@@ -418,6 +418,11 @@ C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
             $hash_nivel3{'nro_socio'}= $socio->getNro_socio;
             $hash_nivel3{'usuarioNombre'}= $socio->persona->getApeYNom;
             $hash_nivel3{'vencimiento'}= $prestamo->getFecha_vencimiento_formateada;
+            if ($prestamo->estaVencido) {
+            $hash_nivel3{'claseFecha'}= 'fechaVencida';
+            }else {
+            $hash_nivel3{'claseFecha'}= 'fecha_cumple';
+            }
         }
     
         $result[$i]= \%hash_nivel3;
