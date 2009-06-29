@@ -439,7 +439,23 @@ sub getFecha_vencimiento_formateada{
 
 sub sePuedeRenovar{
 	my ($self)=shift;
-	return 0;
+    
+    my $err;
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);
+    my $desde=C4::Date::format_date_in_iso(DateCalc($self->getFecha_vencimiento,"- ".$self->tipo->getDias_antes_renovacion." days",\$err,2),$dateformat);
+    my $flag = Date_Cmp($desde,$hoy);
+    #comparo la fecha de hoy con el inicio del plazo de renovacion  
+    if (!($flag gt 0)){ 
+        #quiere decir que la fecha de hoy es mayor o igual al inicio del plazo de renovacion
+        #ahora tengo que ver que la fecha de hoy sea anterior al vencimiento
+        my $flag2=Date_Cmp($self->getFecha_vencimiento,$hoy);
+        if (!($flag2 lt 0)){
+            #la fecha esta ok, se puede renovar
+            return 1;
+        }
+    }
+    return 0;
 }
 
 

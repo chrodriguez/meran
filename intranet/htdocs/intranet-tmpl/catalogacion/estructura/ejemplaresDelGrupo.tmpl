@@ -52,7 +52,7 @@
         <div>
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(   
-                                                                    boton   => "icon_borrar",
+                                                                    boton   => "borrar",
                                                                     onClick => "borrarN3('[% id2 %]','[% id3 %]');",
                                                                     title   => "[% 'Borrar Ejemplar' | i18n %]",
                                         ) ;
@@ -77,15 +77,15 @@
 					[% nivel3_obj.ref_disponibilidad.getNombre %]
 				</span>
 				<p class="usuario_del_prestamo">
-				[% IF nro_socio %]
-						[% usuarioNombre %]
+				[% IF socio %]
+						[% socio.persona.getApeYNom %]
 				[% END %]
 				</p>
 			</td>
 			<td>
 				<span class="[% claseFecha %]">
-					[% IF vencimiento %]
-						[% vencimiento %]
+					[% IF prestamo %]
+						[% prestamo.getFecha_vencimiento_formateada %]
 					[% ELSE %]
 						-------
 					[% END %]
@@ -96,10 +96,10 @@
 			[% IF paraPrestamo %]
 
 				<input 	type="image" src="[% themelang %]/images/item-return.png" title="[% 'Devolver' | i18n %]" 
-						onClick="devolverPrestamo('[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id_prestamo %]')">
-				[% IF renew %]
+						onClick="devolverPrestamo('[% socio.getNro_socio %]','[% socio.persona.getApeYNom %]','[% id2 %]','[% id_prestamo %]')">
+				[% IF prestamo.sePuedeRenovar %]
 				<input 	type="image" src="[% themelang %]/images/renew.png" title="[% 'Renovar' | i18n %]" 
-						onClick="renovar('RENOVACION','[% nro_socio %]','[% usuarioNombre %]','[% id2 %]','[% id_prestamo %]')">
+						onClick="renovar('RENOVACION','[% socio.getNro_socio %]','[% socio.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]')">
 				[% END %]
 			[% ELSE %]
 				<input 	type="image" src="[% themelang %]/images/item-prestar.png" title="[% 'Realizar pr&eacute;stamo' | i18n %]" 

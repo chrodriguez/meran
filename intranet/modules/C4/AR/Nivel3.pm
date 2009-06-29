@@ -414,14 +414,12 @@ C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
         if($socio){ 
             C4::AR::Debug::debug("ENTRO POR HAY SOCIO...");
             my $prestamo=C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'});
-            $hash_nivel3{'id_prestamo'}= $prestamo->getId_prestamo;
-            $hash_nivel3{'nro_socio'}= $socio->getNro_socio;
-            $hash_nivel3{'usuarioNombre'}= $socio->persona->getApeYNom;
-            $hash_nivel3{'vencimiento'}= $prestamo->getFecha_vencimiento_formateada;
+            $hash_nivel3{'prestamo'}= $prestamo;
+            $hash_nivel3{'socio'}= $socio;
             if ($prestamo->estaVencido) {
-            $hash_nivel3{'claseFecha'}= 'fechaVencida';
+                $hash_nivel3{'claseFecha'}= "fechaVencida";
             }else {
-            $hash_nivel3{'claseFecha'}= 'fecha_cumple';
+                $hash_nivel3{'claseFecha'}= "fecha_cumple";
             }
         }
     
