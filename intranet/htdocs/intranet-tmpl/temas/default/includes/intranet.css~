@@ -383,6 +383,13 @@ tr.impar {
     font-weight: bold;
 }
 
+/*.fecha_special{
+
+    color: orange;
+    font-weight: bold;
+    font-style: underline;
+}*/
+
 .prestamo{
     font-size:10pt;
     color:green;
@@ -460,7 +467,7 @@ tr.impar {
     padding-bottom:0;
     padding-left:0;
     padding-right:0;
-    padding-top:6px;
+/*     padding-top:6px; */
 /*     margin-left: 25px;*/
 }
 

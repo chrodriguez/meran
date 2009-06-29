@@ -77,33 +77,7 @@ font-size:0.7em;
 color:black;
 }
 
-.floater {
-position:absolute;
-bottom:0;
-right:0;
-z-index:2;
-display:none;
-padding:0;
-font-family: "Trebuchet MS", "Verdana", "Arial";
-font-size: 10pt;
 
-}
-.wickEnabled
-{
-font-family: "Trebuchet MS", "Verdana", "Arial";
-font-size: 10pt;
-
-color:black;
-
-}
-.floater td {
-font-family: "Trebuchet MS", "Verdana", "Arial";
-font-size: 10pt;
-
-background-color:white;
-border:1px inset #979797;
-color:black;
-}
 
 .Estilo8 {color: #FFFFFF}
 .Estilo9 {
@@ -440,15 +414,6 @@ div.detalle{
 	margin-left: 10px;
 }
 
-
-/* color para fila seleccionada en una tabla, poner un color mejor */
-.selected {
-	background-color:#999999;
-}
-
-.focus {
-	background-color:#FFFAAA;  
-}
 
 
 .divDatosUsuario{
@@ -944,12 +909,7 @@ h2.active {
 	text-align:center;
 }
 
-/*.fecha_special{
 
-    color: orange;
-    font-weight: bold;
-    font-style: underline;
-}*/
 
 /*para los cambios nuevo introducidos con los divs */
 

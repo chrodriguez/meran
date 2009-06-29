@@ -31,7 +31,8 @@ $(document).ready(function() {
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
                                                                     boton   => "boton_buscar",
-                                                                    onClick => "buscar();"
+                                                                    onClick => "buscar();",
+                                                                    title   => "[% 'Buscar en el cat&aacute;logo' | i18n %]",
                                         ) ;
             [% END %]
     	</td>
@@ -40,9 +41,9 @@ $(document).ready(function() {
 		<td width="15%" >&nbsp;</td>
       		<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
                         [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'B&uacute;squeda avanzada' | i18n %]",
-                                            url =>      "/cgi-bin/koha/busquedas/filtrado.pl",
-                                            title =>    "[% 'B&uacute;squeda avanzada' | i18n %]"
+                                print C4::AR::Filtros::link_to( text    =>  "[% 'B&uacute;squeda avanzada' | i18n %]",
+                                                                url     =>  "/cgi-bin/koha/busquedas/filtrado.pl",
+                                                                title   =>  "[% 'B&uacute;squeda avanzada' | i18n %]"
                                         ) ;
                         [% END %]
       		</td>
@@ -65,9 +66,10 @@ $(document).ready(function() {
 <!--                 <input id="buscar" type="image" onClick="consultar('');" border='0' class="boton_buscar"> -->
                 [% PERL %]
                                 print C4::AR::Filtros::to_Button( 
-                                                                    text =>     "[% 'Buscar' | i18n %]",
-                                                                    boton =>    "boton_buscar",
-                                                                    onClick => "consultar();"
+                                                                    text    =>  "[% 'Buscar' | i18n %]",
+                                                                    boton   =>  "boton_buscar",
+                                                                    onClick =>  "consultar();",
+                                                                    title   =>  "[% 'Buscar usuario' | i18n %]",
                                         ) ;
                 [% END %]
 
