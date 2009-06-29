@@ -66,10 +66,12 @@ CONFIRMA_LA_BAJA= "[% 'Confirma la baja ?' | i18n %]";
 FILTRO_POR= "[% 'filtro: ' | i18n %]";
 SOLO_SERA_NUMERICO= "[% 'Solo sera numerico' | i18n %]";
 CONFIRMAR_ELIMINAR_AFILIADO= "[% 'Desea eliminar el autorizado para este usuario?' | i18n %]";
+GRANT_PERMISSION_TITLE= "[% 'Advertencia de cesion de Permisos' | i18n %]";
 //================================================Fin==Usuarios==================================================
 
 //================================================Catalogo=======================================================
 INGRESE_EL_USUARIO= "[% 'Ingrese el Usuario' | i18n %]";
+ERROR_ITSELF= "[% 'Error' | i18n %]";
 //================================================Fin==Catalogo==================================================
 //================================================Circulacion===================================================
 ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA= "[% 'Esta seguro que desea cancelar la reserva?' | i18n %]";
