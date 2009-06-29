@@ -632,6 +632,140 @@ tr.impar {
     height: 25px;
     width: 25px;
 }
+
+#icon_cambiarlibro {
+    background: transparent url(../imagenes/iconos/cambiarlibro.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_der {
+    background: transparent url(../imagenes/iconos/der.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_devolverlibro {
+    background: transparent url(../imagenes/iconos/buscar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+#icon_buscar {
+    background: transparent url(../imagenes/iconos/devolverlibro.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_edicion {
+    background: transparent url(../imagenes/iconos/edicion.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+#icon_entrar {
+    background: transparent url(../imagenes/iconos/entrar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+#icon_enviar {
+    background: transparent url(../imagenes/iconos/enviar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+#icon_estvirtuales {
+    background: transparent url(../imagenes/iconos/estvirtuales.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_favoritos {
+    background: transparent url(../imagenes/iconos/favoritos.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_guardar {
+    background: transparent url(../imagenes/iconos/guardar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_imprimir {
+    background: transparent url(../imagenes/iconos/imprimir.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_indice {
+    background: transparent url(../imagenes/iconos/indice.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_inicio {
+    background: transparent url(../imagenes/iconos/inicio.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_ir {
+    background: transparent url(../imagenes/iconos/ir.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_izq {
+    background: transparent url(../imagenes/iconos/izq.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_micuenta {
+    background: transparent url(../imagenes/iconos/micuenta.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_miembros {
+    background: transparent url(../imagenes/iconos/miembros.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_pdf {
+    background: transparent url(../imagenes/iconos/pdf.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_prestarlibro {
+    background: transparent url(../imagenes/iconos/prestarlibro.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_sacar {
+    background: transparent url(../imagenes/iconos/sacar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_salir {
+    background: transparent url(../imagenes/iconos/salir.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_seleccionar {
+    background: transparent url(../imagenes/iconos/seleccionar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_subir {
+    background: transparent url(../imagenes/iconos/subir.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
 /*                                                     Fin estilos para los iconos                                 */
 
 

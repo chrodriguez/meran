@@ -39,6 +39,7 @@ sub link_to {
 	my $url= $params_hash_ref{'url'}; #obtengo la url
 	my $title= $params_hash_ref{'title'}; #obtengo el title a mostrar
 	my $class= $params_hash_ref{'class'}; #obtengo la clase
+    my $image= $params_hash_ref{'image'}; #obtengo el title a mostrar
 	my $cant= scalar(@$params);
 # C4::AR::Debug::debug("link_to => cant params: ".$cant);
 
@@ -77,10 +78,11 @@ sub link_to {
 	}
 
 	$link .= " tabindex='-1'>";
+
 	$link .= $text."</a>"; 
 
 #  	C4::AR::Debug::debug("url: ".$url);
-# 	C4::AR::Debug::debug("link: ".$link);
+#  	C4::AR::Debug::debug("link: ".$link);
 
 	return $link;
 }
@@ -123,8 +125,6 @@ C4::AR::Debug::debug("width==========================".$width);
         $width += 90;
     }
     
-
-#     $button .=  "<div id='boton_medio'> ";
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
     $button .=  "<li id='boton_medio' class='click ".$alternClass. "' onClick=".$onClick." style='width:".$width."px'";
     if($title){
@@ -136,9 +136,7 @@ C4::AR::Debug::debug("width==========================".$width);
     $button .=  "   </div> ";
     $button .=  "   <div id='boton_der'> ";
     $button .=  "   </div> ";
-#     $button .=  "   <div id='boton_texto'><p>".$text."</p></div> ";
     $button .=  "   <div id='boton_texto'>".$text."</div> ";
-#     $button .=  "</div> ";
     $button .=  "</li> ";
     return $button;
 }
@@ -152,13 +150,13 @@ sub to_Icon{
     my $title= $params_hash_ref{'title'}; #obtengo el title de la componete
     
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
-    $button .=  "<li id='".$boton."' class='click ".$alternClass. "' onClick=".$onClick;
+    $button .=  "<span id='".$boton."' class='click ".$alternClass. "' onClick=".$onClick;
     if($title){
         $button .= " title='".$title."'";
     }
     
     $button .= "> ";
-    $button .=  "</li> ";
+    $button .=  "</span> ";
 
     return $button;
 }

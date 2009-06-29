@@ -10,13 +10,13 @@
 	Ejemplares Prestados:<b> [% cantPrestados %]</b><br>
 <hr>                
         
-	<table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
+	<table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult">
 		<tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
 	
 			<td colspan="2" >
 				<b>Edici&oacute;n</b>
 				[% PERL %]
-					print C4::AR::Filtros::link_to( text =>     "<input type='image' src='[% themelang %]/images/editar.png'>",
+					print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
 													url =>      "agregarDocumento.pl", 
 													params =>   ["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
 													title =>    "[% 'Editar Nivel 2' | i18n %]"
@@ -39,7 +39,7 @@
 
         <!-- Si se puede Editar ??? -->
 			[% PERL %]
-				print C4::AR::Filtros::link_to( text => "<input type='image' src='[% themelang %]/images/editar.png'>",
+				print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
 												url =>      "/cgi-bin/koha/catalogacion/estructura/agregarDocumento.pl", 
 												params =>   ["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
 												title =>    "[% 'Editar Ejemplar' | i18n %]"

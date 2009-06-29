@@ -292,23 +292,23 @@ $(document).ready(function(){
 </table>
 
 <div class="detalle">
-	[% PERL %]
-		print C4::AR::Filtros::link_to(	text => 	"<input type='image' border='0'  src='[% themelang %]/images/editar.png'>",
-										url => 		"agregarDocumento.pl", 
-										params =>	["id1=[% id1 %]","tipoAccion=MODIFICAR_NIVEL_1"],
-										title =>	"[% 'Editar Nivel 1' | i18n %]"
-									) ;
-	[% END %]
 
-        <div>
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Nivel 1' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "borrarNivel1([% id1 %]);",
-                                                                    title   => "[% 'Borrar Nivel 1' | i18n %]",
-                                        ) ;
-            [% END %]
-        </div>
+    [% PERL %]
+        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
+                                        url =>      "agregarDocumento.pl", 
+                                        params =>   ["id1=[% id1 %]","tipoAccion=MODIFICAR_NIVEL_1"],
+                                        title =>    "[% 'Editar Nivel 1' | i18n %]"
+                                    ) ;
+    [% END %]
+
+    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(    
+                                                            boton   => "icon_borrar",
+                                                            onClick => "borrarNivel1([% id1 %]);",
+                                                            title   => "[% 'Borrar Nivel 1' | i18n %]",
+                                ) ;
+    [% END %]
+    
 	<br>
 	[% FOREACH nivel1 %]
 		[% IF liblibrarian %]
@@ -335,7 +335,7 @@ $(document).ready(function(){
         <!-- NIVEL 2 -->
 	        <div id="[% id2 %]" style="position: relative; float:right;"></div>
 	        [% PERL %]
-		        print C4::AR::Filtros::link_to(	text => 	"<input type='image' src='[% themelang %]/images/editar.png'>",
+		        print C4::AR::Filtros::link_to(	text => 	C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
 										        url => 		"agregarDocumento.pl", 
 										        params =>	["id1=[% id1 %]","id2=[% id2 %]","tipoAccion=MODIFICAR_NIVEL_2"],
 										        title =>	"[% 'Editar Nivel 2' | i18n %]"
@@ -344,8 +344,8 @@ $(document).ready(function(){
         
         <div>
             [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Grupo' | i18n %]",
-                                                                    boton   => "boton_buscar",
+                                print C4::AR::Filtros::to_Icon(  
+                                                                    boton   => "icon_borrar",
                                                                     onClick => "borrarGrupo([% id1 %],[% id2 %]);",
                                                                     title   => "[% 'Borrar Grupo' | i18n %]",
                                         ) ;
