@@ -413,10 +413,11 @@ C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
         $hash_nivel3{'vencimiento'} = undef;
         if($socio){ 
             C4::AR::Debug::debug("ENTRO POR HAY SOCIO...");
-            $hash_nivel3{'id_prestamo'}= C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'})->getId_prestamo;
+            my $prestamo=C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'});
+            $hash_nivel3{'id_prestamo'}= $prestamo->getId_prestamo;
             $hash_nivel3{'nro_socio'}= $socio->getNro_socio;
             $hash_nivel3{'usuarioNombre'}= $socio->persona->getApeYNom;
-            $hash_nivel3{'vencimiento'}= "VENCERA EN BREVE..."; #OBTENER LA FECHA D EVENCIMIENTO DEL PRESTAMO
+            $hash_nivel3{'vencimiento'}= $prestamo->getFecha_vencimiento_formateada;
         }
     
         $result[$i]= \%hash_nivel3;
