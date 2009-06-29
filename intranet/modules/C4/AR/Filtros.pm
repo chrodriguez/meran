@@ -114,6 +114,7 @@ sub to_Button{
     my $onClick= $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onClick
     my $title= $params_hash_ref{'title'}; #obtengo el title de la componete
     my $width= length($text);
+C4::AR::Debug::debug("width==========================".$width);
 
     if($params_hash_ref{'width'}){
 #         C4::AR::Debug::debug("to_Button => width: ".$params_hash_ref{'width'});
@@ -138,6 +139,41 @@ sub to_Button{
 #     $button .=  "   <div id='boton_texto'><p>".$text."</p></div> ";
     $button .=  "   <div id='boton_texto'>".$text."</div> ";
 #     $button .=  "</div> ";
+    $button .=  "</span> ";
+    return $button;
+}
+
+sub to_Icon{
+    my (%params_hash_ref) = @_;
+
+    my $button= '';
+    my $boton= $params_hash_ref{'boton'}; #obtengo el boton
+    my $onClick= $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onClick
+    my $title= $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $width;
+C4::AR::Debug::debug("width==========================".$width);
+
+    if($params_hash_ref{'width'}){
+#         C4::AR::Debug::debug("to_Button => width: ".$params_hash_ref{'width'});
+        $width= $params_hash_ref{'width'};
+    }else{
+        $width += 150;
+    }
+    
+
+#     $button .=  "<div id='boton_medio'> ";
+    my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
+    $button .=  "<span id='boton_medio' class='click ".$alternClass. "' onClick=".$onClick." style='width:".$width."px'";
+    if($title){
+        $button .= " title='".$title."'";
+    }
+    
+    $button .= "> ";
+    $button .=  "    <div id=".$boton."> ";
+    $button .=  "   </div> ";
+    $button .=  "   <div id='boton_der'> ";
+    $button .=  "   </div> ";
+    $button .=  "   <div id='boton_texto'></div> ";
     $button .=  "</span> ";
     return $button;
 }

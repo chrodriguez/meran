@@ -7,7 +7,6 @@
 [% paginador %]
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%">
 	<tr>
-		<td class="tablaresultadoTitle" width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
 		<th class="tablaresultadoTitle click" onclick="ordenar('surname')" title=[% "Ordenar por usuario" | i18n %]>[% "Usuario" | i18n %]</th>
 		<th class="tablaresultadoTitle click" onclick="ordenar('fecha')" title=[% "Ordenar por fecha" | i18n %]>[% "Fecha" | i18n %]</th>
 		<th class="tablaresultadoTitle click" onclick="ordenar('operacion')" title=[% "Ordenar por operacion" | i18n %]>[% "Operaci&oacute;n" | i18n %]</th>
@@ -15,7 +14,6 @@
 		<th class="tablaresultadoTitle click" onclick="ordenar('numero')" title=[% "Ordenar por numero de documento" | i18n %]>[% "N&uacute;mero" | i18n %]</th>
 		<th class="tablaresultadoTitle">[% "Nota" | i18n %]</th>
 		<th class="tablaresultadoTitle">[% "Agregar nota" | i18n %]</th>
-		<td class="tablaresultadoTitle" align="right" valign="top" width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
 
 [% FOREACH registro IN resultsloop %]

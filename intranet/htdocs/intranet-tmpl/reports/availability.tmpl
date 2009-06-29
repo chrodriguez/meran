@@ -73,7 +73,6 @@ function consultar(){
 			<input id="fechaFin" class="inputFontNormal" type="text" > 
 		</td>
           	<td colspan=2 align="center">
-<!-- 		<input type="image" name="consulta" src="[% themelang %]/images/generarListado.png" onClick="consultar();"> -->
             [% PERL %]
                             print C4::AR::Filtros::to_Button( 
                                                                 text    =>  "[% 'Generar Listado' | i18n %]",

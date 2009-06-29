@@ -13,7 +13,6 @@
 	<table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
 		<tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
 	
-			<td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
 			<td colspan="2" >
 				<b>Edici&oacute;n</b>
 				[% PERL %]
@@ -30,7 +29,6 @@
 			<td><b>Vencimiento</b></td>
 			<td width="20%"  colspan="2"><b>Circulaci&oacute;n</b></td>
 			<td>MARC</td>
-			<td width="1%" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
                     
 		</tr>
 							
@@ -38,7 +36,7 @@
 
 
 		<tr align="center">
-			<td width="10%" colspan="2" valign="middle" height="25">
+
         <!-- Si se puede Editar ??? -->
 			[% PERL %]
 				print C4::AR::Filtros::link_to( text => "<input type='image' src='[% themelang %]/images/editar.png'>",
@@ -53,8 +51,8 @@
         <!-- Si se puede borrar ???-->
         <div>
             [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Ejemplar' | i18n %]",
-                                                                    boton   => "boton_buscar",
+                                print C4::AR::Filtros::to_Icon(   
+                                                                    boton   => "borrar",
                                                                     onClick => "borrarN3('[% id2 %]','[% id3 %]');",
                                                                     title   => "[% 'Borrar Ejemplar' | i18n %]",
                                         ) ;

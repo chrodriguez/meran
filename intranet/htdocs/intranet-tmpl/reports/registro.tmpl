@@ -121,7 +121,6 @@ function updateGuardarNota(responseText){
 			[% "desde:" | i18n %] <input id="numDesde" class="inputFontNormal" type="text" name="numDesde" size="12">
 			[% "hasta:" | i18n %] </b><input id="numHasta" class="inputFontNormal" type="text" name="numHasta" size="12" >
 			<br><br>
-<!-- 			<input type="image" onClick="consultar()"  src="[% themelang %]/images/boton-buscar.png" border="0"> -->
             [% PERL %]
                             print C4::AR::Filtros::to_Button( 
                                                                 text    =>  "[% 'Buscar' | i18n %]",

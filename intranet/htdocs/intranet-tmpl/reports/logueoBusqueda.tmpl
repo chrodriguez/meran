@@ -67,7 +67,6 @@ function consultar(){
 	<li><b>[% "Categoria de Usuario:" | i18n %] </b></li>
 	<li>[% selectCatUsuarios  %]</li>
 	<li>
-		<input type="image" name="consulta" src="[% themelang %]/images/generarListado.png" onClick="consultar('');">
                 [% PERL %]
                                 print C4::AR::Filtros::to_Button( 
                                                                     text    =>  "[% 'Buscar' | i18n %]",

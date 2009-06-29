@@ -4,13 +4,10 @@
 <table id="tablaSeudonimos" class="tablesorter" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
 	<thead>
  	<tr class="tablaresultadoTitle">
-
-		<th width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></th>
 	
 		<th>Seud&oacute;nimo</th>
 		<th>Eliminar</th>
 	
-		<th width="1%" align="rigth" valign="top"><img src="[% themelang %]/images/derecha.png"></th>
 	</tr>
 
 	</thead>
@@ -18,8 +15,6 @@
 	<tbody>
 [% FOREACH seudonimo IN RESULTSLOOP %]
 	<tr align='center' class="tablaresultadoTitle">
-
-		<td height=25 class="[% clase %]">&nbsp;</td>
 
 		<td class="[% clase %]" class="inputFontNormal"> 
             [% IF seudonimo.seudonimo.getApellido %]
@@ -41,8 +36,6 @@
             </div>
 
 		</td>
-
-		<td height=25 class="[% clase %]">&nbsp;</td>
 
 	</tr>
 [% END %]

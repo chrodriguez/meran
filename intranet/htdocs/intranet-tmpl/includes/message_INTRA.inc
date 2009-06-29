@@ -83,6 +83,8 @@ CONFIRMA_LA_BAJA_DEL_SINONIMO= "[% 'Confirma la baja del sinonimo?' | i18n %]";
 //================================================Visualizacion Opac==============================================
 AGREGAR_ENCABEZADO= "[% 'Agregar Encabezado' | i18n %]";
 //=============================================Fin===Visualizacion Opac===========================================
-
+//================================================Busquedas==============================================
+SELECCIONE_AL_MENOS_UN_CAMPO_PARA_BUSCAR= "[% 'Seleccione al menos un campo para buscar' | i18n %]";
+//=============================================Fin===Busquedas===========================================
 
 </script>

@@ -8,9 +8,6 @@
         	</td>
      	</tr>
 	<tr class="tablaresultadoTitle">
-        	<td width="1%" align="left" valign="top">
-		<img src="[% themelang %]/images/izquierda.png">
-		</td>
 
 		<td>
 			<a class="click" id="checkAllPrestamos">
@@ -26,13 +23,10 @@
                 <td>Vencimiento</td>
                 <td>Tipo</td>
 
-        	<td width="1%" align="rigth" valign="top">
-		<img src="[% themelang %]/images/derecha.png">
-		</td>
 	</tr>
      [% FOREACH prestamo IN PRESTAMOS %]
 	<tr class="inputFontNormal">
-		<td width="1%">&nbsp;</td>
+	
 		<td>
 			 <input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.getId_prestamo %]">
 		</td>
@@ -71,7 +65,7 @@
                         [% prestamo.tipo.getDescripcion %]
                 [% END %]
 		</td>
-        	<td width="1%">&nbsp;</td>
+        	
 	</tr>
         [% END %]
 </table>

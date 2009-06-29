@@ -2,11 +2,7 @@
 
 <table id="tablaVisualizacion" class="tablesorter" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
 	<thead>
- 	<tr class="tablaresultadoTitle">
-		<th width="1%" align="left" valign="top">
-			<img src="[%themelang %]/images/izquierda.png">
-		</th>
-	
+ 	<tr class="tablaresultadoTitle">	
 		<th>[% 'Campo' | i18n %]</th>
 		<th>[% 'Subcampo' | i18n %]</th>
 		<th>[% 'Texto Pred' | i18n %]</th>
@@ -15,16 +11,11 @@
 		<th>[% 'Visible' | i18n %]</th>
 		<th>[% 'Editar' | i18n %]</th>
 		<th>[% 'Eliminar' | i18n %]</th>
-	
-		<th width="1%" align="rigth" valign="top">
-			<img src="[%themelang %]/images/derecha.png">
-		</th>
 	</tr>
 	</thead>
 	<tbody>
 [% FOREACH RESULTSLOOP %]
 	<tr align='center' class="inputFontNormal">
-		<td height=25>&nbsp;</td>
 
 		<td>[% campo %]</td>
 		<td>[% subcampo %]</td>
@@ -50,7 +41,6 @@
 			</a>
 		</td>
 
-		<td height=25>&nbsp;</td>
 	</tr>
 [% END %]
 	</tbody>

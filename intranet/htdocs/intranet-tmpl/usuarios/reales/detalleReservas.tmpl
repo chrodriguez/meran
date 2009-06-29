@@ -6,9 +6,6 @@
 	<span class="tituloArribaTabla">[% "EJEMPLARES ASIGNADOS" | i18n %]</span>
 	<table class="reseravsAsignadasResult" cellspacing=0  cellpadding=0  border=0   width="100%">
 		<tr class="tablaresultadoTitle">
-			<th width="1%" align="right" valing="top">
-				<img src="[% themelang %]/images/izquierda.png">
-			</th>
 			<th>
 				<a class="click" id="checkAllReservas">
 					<img src="[% themelang %]/images/check.png" border="0" title="[% 'Invertir la selecci&oacute;n' | i18n %]">
@@ -24,9 +21,6 @@
 			<th>[% "Vencimiento" | i18n %]</th>
 			<th width="10%">[% "Retira en" | i18n %]</th>
 			<th width="10%">[% "Cancelar" | i18n %]</th>
-			<th width="1%" valing="top">
-			<img src="[% interface %]/[% theme %]/images/derecha.png">
-			</th>
 		</tr>
 	[% FOREACH reserva IN RESERVAS_ASIGNADAS %]
 		<tr class="inputFontNormal" align="center">
@@ -138,17 +132,11 @@
 	
 	<table class="reservasEnEsperaResult" cellspacing=0  cellpadding=0  border=0   width="100%">
 		<tr valign=middle class="tablaresultadoTitle">
-			<th width="1%" align="right" valing="top">
-				<img src="[% themelang %]/images/izquierda.png">
-			</th>
 			<th>[% "T&iacute;tulo" | i18n %]</th>
 			<th>[% "Autor" | i18n %]</th>
 			<th>[% "Edici&oacute;n" | i18n %]</th>
 			<th>[% "Volumen" | i18n %]</th>
 			<th>[% "Cancelar" | i18n %]</th>
-			<th width="1%" valing="top">
-				<img src="[% themelang %]/images/derecha.png">
-			</th>
 		</tr>
     [% FOREACH reserva IN RESERVAS_ESPERA %]
 		<tr align="center" class="inputFontNormal">

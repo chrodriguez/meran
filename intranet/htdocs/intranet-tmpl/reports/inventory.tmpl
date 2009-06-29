@@ -35,11 +35,11 @@ function updateInfo(responseText){
 <center>
 <table border="0" cellspacing="0" cellpadding="0" width="90%">
 	<tr class="tablaresultadoTitle">
-		<td align="left"><img src="[% interface %]/[% themelang %]/images/izquierda.png"></td>
+
 		<td align="center" width="30%">[% "Tipo" | i18n %]</td>
 		<td align="center">[% "M&iacute;nimo" | i18n %]</td>
 		<td align="center">[% "M&aacute;ximo" | i18n %]</td>
-		<td align="right"><img src="[% interface %]/[% themelang %]/images/derecha.png"></td>
+
 	</tr>
 
 [% FOREACH barcodePorTipo %]
@@ -62,7 +62,6 @@ function updateInfo(responseText){
 			<input  class="inputFontNormal" type="text" id="hasta" value="[% hasta %]">&nbsp;
 		</td>
 		<td>
-<!--              <input type="image" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="consultar(0,'barcode')"> -->
                 [% PERL %]
                                 print C4::AR::Filtros::to_Button( 
                                                                     text    =>  "[% 'Buscar' | i18n %]",

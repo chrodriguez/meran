@@ -13,7 +13,6 @@
 
 <table id="tablaResult" class="tablaResult" cellspacing="0" cellpadding="0" border="0" align="left" width="100%">
 	<tr height="24">
-		<td class="tablaresultadoTitle" width="1%" align="left"  valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
 
 	<!-- ver si va esta clase ????, falta q se vea la manito-->
 		<td class="tablaresultadoTitle click" onClick="ordenar('completo');" title=[% "Ordenar por autor" | i18n %]>[% "Autor" | i18n %]</td>
@@ -24,7 +23,6 @@
 		<td class="tablaresultadoTitle click" onClick="ordenar('anio_publicacion');" title=[% "Ordenar por a&ntilde;o de publicacion" | i18n %]>[% "A&ntilde;o de Publicaci&oacute;n" | i18n %]</td>
 		<td class="tablaresultadoTitle click" onClick="ordenar('date');" title=[% "Ordenar por fecha" | i18n %]>[% "Fecha" | i18n %]</a></th>
 
-		<td  class="tablaresultadoTitle" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
 [% FOREACH historico IN resultsloop %]
 	<tr align="center" class="inputFontNormal">

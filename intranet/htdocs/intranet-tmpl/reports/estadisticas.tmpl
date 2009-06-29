@@ -81,7 +81,6 @@ function updateInfo(responseText){
 				<input id="chkuser" class="inputFontNormal" type="checkbox"  value="US" name="chkuser">[% "Usuario" | i18n %]
 				<br><br>
 
-<!-- 				<input type="image" onClick='consultar()' src="[% themelang %]/images/boton-buscar.png" border="0"> -->
                 [% PERL %]
                                 print C4::AR::Filtros::to_Button( 
                                                                     text    =>  "[% 'Buscar' | i18n %]",

@@ -62,11 +62,7 @@ function ordenarPor(ord){
 
 
 function buscar(){
-
     //primero verifico las busquedas individuales
-//     keyword = $('#keyword').val();
-//     keyword = $.trim(keyword);
-//     if (keyword.length > 0) {
         if ($('#keyword').val() != ''){
             busquedaPorKeyword();
         }else 
@@ -84,12 +80,10 @@ function buscar(){
         }else 
         if ($('#tema').val() != '') {
             buscarPorTema();
-        }else {
+        }else 
+        if( ($('#titulo').val() != '') || ($('#autor').val() != '') || ( $('#signatura').val() != '') ){
             busquedaCombinable();
-        }
-//     }else {
-//         $('#keyword').val('');
-//     }
+        }else{alert(SELECCIONE_AL_MENOS_UN_CAMPO_PARA_BUSCAR)}
 }
 
 function buscarPorCodigoBarra(){

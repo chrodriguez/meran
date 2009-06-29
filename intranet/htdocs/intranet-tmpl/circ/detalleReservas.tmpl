@@ -14,9 +14,6 @@
 <table class="tablaReservas" border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
 
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top">
-			<img src="[% themelang %]/images/izquierda.png">
-		</td>
 		<td>
 			<input type="image" id="checkAllReservas" src="[% themelang %]/images/check.png" title="Seleccionar todos">
 		</td>
@@ -27,14 +24,10 @@
 		<td>Reservado hasta</td>
 		<td>&nbsp;</td>
 
-		<td width="1%" align="right" valign="top">
-			<img src="[% themelang %]/images/derecha.png">
-		</td>
 	</tr>
 <!-- ESTE LOOP MUESTRA LOS EJEMPLARES RESERVADOS DEL USUARIO-->
     [% FOREACH reserva IN RESERVAS_ASIGNADAS %]
 	<tr align="center" class="inputFontNormal">
-		<td width="1%">&nbsp;</td>
 		<td>
 			<input type="checkbox"  name="chkboxReservas" value="[%  reserva.getId3 %]" id="[% reserva.getId3 %]">
 		</td>
@@ -81,7 +74,7 @@
                                         ) ;
             [% END %]
 		</td>
-		<td width="1%">&nbsp;</td>
+
 	</tr>
     [% END %] 
 </table>
@@ -103,9 +96,6 @@
 </table>
 <table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="tablaReservas">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top">
-			<img src="[% themelang %]/images/izquierda.png">
-		</td>
 
 		<td>T&iacute;tulo</td>
 		<td>Autor</td>
@@ -113,9 +103,6 @@
 		<td>&nbsp;</td>
 		<td>&nbsp;</td>
 
-		<td width="1%" align="right" valign="top">
-			<img src="[% themelang %]/images/derecha.png">
-		</td>
 	</tr>
 	<!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
     [% FOREACH reserva IN RESERVAS_ESPERA %]

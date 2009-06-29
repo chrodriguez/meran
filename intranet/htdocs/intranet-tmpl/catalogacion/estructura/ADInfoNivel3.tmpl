@@ -1,8 +1,6 @@
 
 <table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
     <tr align="center" cellpadding="0"  valign="middle" class="tablaresultadoTitle">
-
-        <td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
 		
 		<td>
 			<input type="image" id="checkAllEjemplares" src="[% themelang %]/images/check.png" title="Seleccionar todos">
@@ -15,12 +13,9 @@
         <td><b>Estado</b></td>
         <td><b>Acci&oacute;n</b></td>
 
-        <td width="1%" align="right" valign="top"><img src="[% themelang %]/images/derecha.png"></td>
-
     </tr>
 [% FOREACH nivel3 IN nivel3_array %]
 	<tr align="center">
-			<td></td>
 			<td>
 				<input type="checkbox" id="checkEjemplares" name="checkEjemplares" value="[% nivel3.getId3 %]">
 			</td>

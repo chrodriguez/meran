@@ -60,7 +60,6 @@ function consultar(){
 	  <td><b>[% "Seleccione una fecha de Fin: " | i18n %]</b></td>	
 	  <td  class=inputFontNormal><input id="f_fin" class="inputFontNormal" name="f_fin" value="[% f_fin %]"></td>
 	  <td colspan=2 align="center">
-		<input type="image" name="consulta" src="[% themelang %]/images/generarListado.png" onClick="consultar();">
                 [% PERL %]
                                 print C4::AR::Filtros::to_Button( 
                                                                     text    =>  "[% 'Buscar' | i18n %]",

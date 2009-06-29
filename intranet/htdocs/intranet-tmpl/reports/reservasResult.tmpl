@@ -8,7 +8,6 @@
 
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td>
 
 		<td class="tablaresultadoTitle click" onclick="ordenar('surname')" title=[% "Ordenar por apellido" | i18n %]> [% "Apellido" | i18n %]</td>
 		<td class="tablaresultadoTitle click" onclick="ordenar('firstname')" title=[% "Ordenar por nombre" | i18n %]> [% "Nombre" | i18n %]</td>
@@ -18,7 +17,6 @@
 		<td class="tablaresultadoTitle click" onclick="ordenar('reminderdate')" title=[% "Ordenar por fecha de vencimiento" | i18n %]> [% "Fecha de vencimiento" | i18n %]</td>
 		<td class="tablaresultadoTitle click" onclick="ordenar('barcode')" title=[% "Ordenar por codigo de barra" | i18n %]> [% "C&oacute;digo de barra" | i18n %]</td>
 
- 		<td align="rigth" valign="top" width="1%"><img src="[% themelang %]/images/derecha.png"></td>
 	</tr>
 [% FOREACH reserva IN resultsloop %]
 	<tr align='center'>

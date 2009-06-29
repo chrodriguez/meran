@@ -119,7 +119,6 @@ function generarEtiquetas(){
 
 </table>
 <br>
-<!-- <input type="image" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="hacerSubmit();"> -->
    [% PERL %]
                                             print C4::AR::Filtros::to_Button(   
                                                                                 boton   => "boton_buscar",
@@ -158,7 +157,6 @@ function generarEtiquetas(){
 
 <table border="0" cellspacing="0" cellpadding="0"  width="90%" align="center">
 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top"><img src="[% themelang %]/images/izquierda.png"></td> 
 
 		<td><a class="inputFontNormal" href="#" onclick="ordenar('barcode')">[% "Nro. de Inventario" | i18n %]</a></td>
 		<td><a class="inputFontNormal" href="#" onclick="ordenar('completo')">[% "Autor" | i18n %]</a></td>
@@ -168,9 +166,6 @@ function generarEtiquetas(){
 		<td><a class="inputFontNormal" href="#" onclick="ordenar('anio_publicacion')">[% "A&ntilde;o" | i18n %]</a></td>
 		<td><a class="inputFontNormal" href="#" onclick="ordenar('signatura_topografica')">[% "Signatura Topogr&aacute;fica" | i18n %]</a></td>
 
-		<td width="1%" align="right" valign="top">
-                    <img src="[% themelang %]/images/derecha.png">
-                </td>
 	</tr>
 
 [% FOREACH RESULTSLOOP %]

@@ -2,11 +2,7 @@
 
 <table id="tablaEncabezados" class="tablaEncabezados" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
 
- 	<tr class="tablaresultadoTitle">
-		<td width="1%" align="left" valign="top">
-			<img src="[%themelang %]/images/izquierda.png">
-		</td>
-	
+ 	<tr class="tablaresultadoTitle">	
 		<th>[% 'Encabezado' | i18n %]</th>
 		<th>[% 'Orden' | i18n %]</th>
 		<th>[% 'Visible' | i18n %]</th>
@@ -15,18 +11,10 @@
 		<th>[% 'Editar' | i18n %]</th>
 		<th>[% 'Eliminar' | i18n %]</th>
 		<th>[% 'Mostrar' | i18n %]</th>
-	
-		<td width="1%" align="rigth" valign="top">
-			<img src="[%themelang %]/images/derecha.png">
-		</td>
 	</tr>
 
 [% FOREACH encabezado IN RESULTSLOOP %]
 	<tr class="inputFontNormal" align='center' >
-		<td height=25>&nbsp;</td>
-
-<!--		<td id="encabezado[% idencabezado %]" class="click" 	
-			onClick="seleccionarEncabezado('[% idencabezado %]');"> -->
 
 		<td id="encabezado[% encabezado.getIdEncabezado %]"> 
 
@@ -86,7 +74,6 @@
 			</a>
 		</td>
 
-		<td height=25>&nbsp;</td>
 	</tr>
 [% END %]
 	<tr valign=bottom>
