@@ -120,13 +120,13 @@ C4::AR::Debug::debug("width==========================".$width);
 #         C4::AR::Debug::debug("to_Button => width: ".$params_hash_ref{'width'});
         $width= $params_hash_ref{'width'};
     }else{
-        $width += 150;
+        $width += 90;
     }
     
 
 #     $button .=  "<div id='boton_medio'> ";
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
-    $button .=  "<span id='boton_medio' class='click ".$alternClass. "' onClick=".$onClick." style='width:".$width."px'";
+    $button .=  "<li id='boton_medio' class='click ".$alternClass. "' onClick=".$onClick." style='width:".$width."px'";
     if($title){
         $button .= " title='".$title."'";
     }
@@ -139,7 +139,7 @@ C4::AR::Debug::debug("width==========================".$width);
 #     $button .=  "   <div id='boton_texto'><p>".$text."</p></div> ";
     $button .=  "   <div id='boton_texto'>".$text."</div> ";
 #     $button .=  "</div> ";
-    $button .=  "</span> ";
+    $button .=  "</li> ";
     return $button;
 }
 

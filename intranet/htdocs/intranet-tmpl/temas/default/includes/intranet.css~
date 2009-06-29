@@ -404,13 +404,14 @@ tr.impar {
 
 /*                                        para los resultados en tablas                                                */
 .tablaresultadoTitle { 
-    font-Family : "Trebuchet MS", "Verdana";
+    font-Family : "Verdana","Trebuchet MS" ;
     color: #ffffff;
     font-size: 9pt;
     background: url(../imagenes/tablaresultado.png) repeat-x ;
-    background-color:#3c9eb4;
+   /* background-color:#3c9eb4;*/
     text-align: center;
     font-weight: bold;
+	height:30px;
 }
 /*                                     Fin   para los resultados en tablas                                             */
 
@@ -598,6 +599,7 @@ tr.impar {
     background-position: center;
     margin-left: 27px;
     margin-top: 5px;
+    text-align:center;
 /*     margin-top: 3px; */
 }
 
@@ -657,6 +659,9 @@ li.MARCHeader{
 .horizontal{
     float:left;
     margin-right: 10px;
+}
+.buttonContainerHorizontal{
+    text-align:center;
 }
 
 .vertical{

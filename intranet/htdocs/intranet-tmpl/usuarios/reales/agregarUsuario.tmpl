@@ -92,6 +92,9 @@
     <br>
 <table width="100%"  cellpadding='0' cellspacing='0'>
     <tr valign=middle class="tablaresultadoTitle">
+        <td width="1%" align="left" valign="top">
+            <img src="[% themelang %]/images/izquierda.png">
+        </td>
 
         <td width="35%" >[% "DATOS PERSONALES DEL USUARIO" | i18n %]</td>
         <td   width="65%" ALIGN=RIGHT>*
@@ -101,6 +104,9 @@
             <input type=text id="nacimiento" class="required" name="nacimiento" size=10 value="[% socio.persona.getNacimiento %]">
         </td>
 
+        <td width="1%" valign="top" align="right">
+            <img src="[% themelang %]/images/derecha.png">
+        </td>
     </tr>
 </table>
 
@@ -189,7 +195,13 @@
     <br>
 <table width="100%"  cellpadding='0' cellspacing='0'>
     <tr valign=middle colspan=6 width="100%" class="tablaresultadoTitle">
+        <td width="1%" align="left" valign="top">
+            <img src="[% themelang %]/images/izquierda.png">
+        </td>
         <td COLSPAN=6 width="100%">[% "DIRECCI&Oacute;N DEL USUARIO" | i18n %]</td>
+        <td width="1%" valign="top" align="right">
+            <img src="[% themelang %]/images/derecha.png">
+        </td>
     </tr>
         <tr valign=middle>
         <td height=25 class="[% clase %] ">&nbsp;</td>
@@ -287,33 +299,35 @@
 <br>
 <table width=100%>
     <tr>
-<div class="buttonContainerHorizontal" >
+<div class="buttonContainerHorizontal">
+    <ul class="horizontal-list" >
         [% IF addBorrower %]
             [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "save();",
-                                                                    title   => "[% 'Guardar' | i18n %]",
-                                        ) ;
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                        boton   => "boton_buscar",
+                                                        onClick => "save();",
+                                                        title   => "[% 'Guardar' | i18n %]",
+                            ) ;
             [% END %]
         [% ELSE  %]
                 [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Modificacion' | i18n %]",
-                                                                        boton   => "boton_buscar",
-                                                                        onClick => "save();",
-                                                                        title   => "[% 'Guardar' | i18n %]",
-                                            ) ;
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Modificacion' | i18n %]",
+                                                        boton   => "boton_buscar",
+                                                        onClick => "save();",
+                                                        title   => "[% 'Guardar' | i18n %]",
+                            ) ;
                 [% END %]
         [% END %]
 
 
                 [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                        boton   => "boton_buscar",
-                                                                        onClick => "form1.reset();",
-                                                                        title   => "[% 'Limpiar' | i18n %]",
-                                            ) ;
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                        boton   => "boton_buscar",
+                                                        onClick => "form1.reset();",
+                                                        title   => "[% 'Limpiar' | i18n %]",
+                            ) ;
                 [% END %]
+    </ul>
 </div>
         <td  align="left" class="inputFontNormal">
             <b>(*) [% "Obligatorio " | i18n %]</b>
