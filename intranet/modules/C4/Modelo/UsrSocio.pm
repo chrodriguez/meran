@@ -549,8 +549,6 @@ sub verificar_permisos_por_nivel{
     }
 
     foreach my $permisos_hash_ref (@$permisos_array_hash_ref){
-#     my $permisos_hash_ref= C4::Modelo::PermCatalogo::Manager::get_permisos_catalogo( query => \@filtros );
-# FIXME aca faltaria iterar sobre un conjunto de premisos
 #         if($permisos_hash_ref ne 0){
             C4::AR::Debug::debug("verificar_permisos_por_nivel");
             #se encontraron permisos level1

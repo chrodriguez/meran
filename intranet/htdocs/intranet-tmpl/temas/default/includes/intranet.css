@@ -441,11 +441,152 @@ tr.impar {
 /*                                                 estilos para los botones                                */
 
 #boton_buscar {
-    background: transparent  url(../imagenes/boton_buscar.png) no-repeat;
-    height: 20px;
+    background: transparent  url(../imagenes/botones/boton_buscar.png) no-repeat;
+    height: 22px;
     width: 20px;
     float: left;
 }
+
+#boton_agregar {
+    background: transparent  url(../imagenes/botones/boton_agregar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_ayuda {
+    background: transparent  url(../imagenes/botones/boton_ayuda.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_borrar {
+    background: transparent  url(../imagenes/botones/boton_borrar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_campo_temporal {
+    background: transparent  url(../imagenes/botones/boton_campo_temporal.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_edicion {
+    background: transparent  url(../imagenes/botones/boton_edicion.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_entrar {
+    background: transparent  url(../imagenes/botones/boton_entrar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_enviar {
+    background: transparent  url(../imagenes/botones/boton_enviar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_estantes {
+    background: transparent  url(../imagenes/botones/boton_estantes.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_favoritos {
+    background: transparent  url(../imagenes/botones/boton_favoritos.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_guardar {
+    background: transparent  url(../imagenes/botones/boton_guardar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_imprimir {
+    background: transparent  url(../imagenes/botones/boton_imprimir.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_indice {
+    background: transparent  url(../imagenes/botones/boton_indice.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_inicio {
+    background: transparent  url(../imagenes/botones/boton_inicio.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_ir {
+    background: transparent  url(../imagenes/botones/boton_ir.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_micuenta {
+    background: transparent  url(../imagenes/botones/boton_micuenta.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_miembros {
+    background: transparent  url(../imagenes/botones/boton_miembros.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_PDF {
+    background: transparent  url(../imagenes/botones/boton_PDF.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_salir {
+    background: transparent  url(../imagenes/botones/boton_salir.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_seleccionar {
+    background: transparent  url(../imagenes/botones/boton_seleccionar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_subir {
+    background: transparent  url(../imagenes/botones/boton_subir.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
 
 
 /*              parte del boton generica                  */
@@ -461,7 +602,7 @@ tr.impar {
 }
 
 #boton_medio {
-    background:url(../imagenes/boton_medio.png) repeat-x scroll center ;
+    background:url(../imagenes/botones/boton_medio.png) repeat-x scroll center ;
     height: 22px;
     /*width: 7%;*//*se debe modificar dinamicamente*/
     position: absolute;
@@ -474,7 +615,7 @@ tr.impar {
 
 #boton_der {
     float:right;
-    background: transparent url(../imagenes/boton_der.png) no-repeat;
+    background: transparent url(../imagenes/botones/boton_der.png) no-repeat;
     height: 22px;
     width: 3px;
 }
