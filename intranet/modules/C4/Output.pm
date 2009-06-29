@@ -99,12 +99,10 @@ sub gettemplate {
 	my $tema = C4::Context->config('tema');
 	my $temas = C4::Context->config('temas');
 	C4::AR::Debug::debug($htdocs);
-	#my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
 
 	my $filter= Template::Filters->new({
 						FILTERS => {	'i18n' =>  \&C4::AR::Filtros::i18n, #se carga el filtro i18n
 								        'setComboLang' =>  \&C4::AR::Filtros::setComboLang, #se carga el cambo de lenguajes
-# 										'link_to' =>  \&C4::AR::Filtros::link_to, #solo para probar
 							},
 					});
 

@@ -119,7 +119,7 @@ sub to_Button{
 #         C4::AR::Debug::debug("to_Button => width: ".$params_hash_ref{'width'});
         $width= $params_hash_ref{'width'};
     }else{
-        $width += 90;
+        $width += 150;
     }
     
 

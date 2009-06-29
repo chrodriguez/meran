@@ -580,8 +580,8 @@ tr.impar {
     float: left;
 }
 
-#boton_ir {
-    background: transparent  url(../imagenes/botones/boton_ir.png) no-repeat;
+#boton_subir {
+    background: transparent  url(../imagenes/botones/boton_subir.png) no-repeat;
     height: 22px;
     width: 20px;
     float: left;
