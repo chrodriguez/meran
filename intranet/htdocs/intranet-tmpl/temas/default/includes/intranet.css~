@@ -626,6 +626,14 @@ tr.impar {
 /*                                                Fin estilos para los botones                             */
 
 
+/*                                                      estilos para los iconos                                   */
+#icon_borrar {
+    background: transparent url(../imagenes/iconos/borrar.png) no-repeat;
+    height: 22px;
+    width: 3px;
+}
+/*                                                     Fin estilos para los iconos                                 */
+
 
 /*                                          para MARC                                                    */
 
@@ -661,8 +669,18 @@ li.MARCHeader{
     margin-right: 10px;
 }
 .buttonContainerHorizontal{
-    text-align:center;
+    display: table;   /* Allow the centering to work */
+    margin: 0 auto;
 }
+
+ul#horizontal-list {
+    min-width: 696px;
+    list-style: none;
+    padding-top: 20px;
+    }
+    ul#horizontal-list li {
+        display: inline;
+    }
 
 .vertical{
 }

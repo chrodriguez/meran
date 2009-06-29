@@ -19,7 +19,6 @@
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width=100%>
 	<tr class="tablaresultadoTitle">
 
-		<td width="5%"  class="tablaresultadoTitle">&nbsp;</td>
 		<td width="35%" class="tablaresultadoTitle click" 
 			onClick="ordenar('titulo')" Title='[% "Ordenar por T&iacute;tulo" | i18n %]'>
 			T&iacute;tulo
@@ -35,7 +34,6 @@
 <!-- Actual Resultados de la b&uacute;squeda -->
 [% FOREACH SEARCH_RESULTS %]
 	<tr class="inputFontNormal">
-		<td>&nbsp;</td>
 		<td>
 		[% IF amazon_cover %]
 			<img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% amazon_cover %]" title="Tapa">
@@ -86,7 +84,6 @@
          		[% END %]
 		</td>	
 
-		<td height=25>&nbsp;</td>
 	</tr>
 [% END %]
 </table>
