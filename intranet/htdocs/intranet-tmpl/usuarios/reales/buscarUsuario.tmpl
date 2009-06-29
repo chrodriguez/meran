@@ -29,24 +29,23 @@ $(document).ready(function() {
                 onBlur="checkFilter('blur')" value="[% socio %]">
 		</td>
  		<td>
-            <div>
-                [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                        boton   => "boton_buscar",
-                                                                        onClick => "consultar('');",
-                                                                        title   => "[% 'Buscar' | i18n %]",
-                                            ) ;
-                [% END %]
-            </div>
-
-            <div>
-                [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                        boton   => "boton_buscar",
-                                                                        onClick => "Borrar();",
-                                                                        title   => "[% 'Limpiar' | i18n %]",
-                                            ) ;
-                [% END %]
+           <div class="buttonContainerHorizontal">
+                 <ul class="horizontal-list" >
+                    [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                            boton   => "boton_buscar",
+                                                                            onClick => "consultar('');",
+                                                                            title   => "[% 'Buscar' | i18n %]",
+                                                ) ;
+                    [% END %]
+                    [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                            boton   => "boton_buscar",
+                                                                            onClick => "Borrar();",
+                                                                            title   => "[% 'Limpiar' | i18n %]",
+                                                ) ;
+                    [% END %]
+                </ul>
             </div>
 		</td>
 	</tr>
