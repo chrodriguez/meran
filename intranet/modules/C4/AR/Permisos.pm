@@ -229,7 +229,7 @@ sub get_permisos_catalogo {
                                                                                             query => \@filtros,
                                                                      );
     if(scalar(@$permisos_catalogo_array_ref) > 0){
-        return $permisos_catalogo_array_ref->[0];
+        return $permisos_catalogo_array_ref;
     }else{
         return 0;
     }

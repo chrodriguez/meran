@@ -342,14 +342,6 @@
                                                             ) ;
                             [% END %]
                 </li>
-                <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Thesaurus' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/admin/thesaurus.pl",
-                                                                title =>    "[% 'Thesaurus' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                </li>
 				<li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Admin. permisos Tablas' | i18n %]",

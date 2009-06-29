@@ -45,7 +45,14 @@
 <td align='center'>
 	<form name="feriados" action="feriados.pl">
 		<input type="hidden" name="feriadosh" id="feriadosh" value="">
-		<input type="image" title=[% "Actualiza los d&iacute;as de inactividad" | i18n %]  src="[% interface %]/[% theme %]/images/guardar.png" onclick="cal.submitFlatDates(); submit();">
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Guardar' | i18n %]",
+                                                                    boton   =>  "boton_buscar",
+                                                                    onClick =>  "cal.submitFlatDates(); submit();",
+                                                                    title   =>  "[% 'Guardar' | i18n %]",
+                                        ) ;
+                [% END %]
 	</form>
 </td>
 </tr>

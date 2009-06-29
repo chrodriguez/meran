@@ -171,6 +171,14 @@
 			<td>&nbsp;</td>
 			<td>
 			<input type="image" alt="Guardar Cambios"  src="[% interface %]/[% themelang %]/images/guardar.png" onclick="Aform.submit">
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Buscar' | i18n %]",
+                                                                    boton   =>  "boton_buscar",
+                                                                    onClick =>  "Aform.submit();",
+                                                                    title   =>  "[% 'Buscar usuario' | i18n %]",
+                                        ) ;
+                [% END %]
 			</td>
 		</tr>
 	</table>
@@ -363,8 +371,16 @@
                 <center>
                 <p><form action='[% script_name %]' method=post name=form2>
                         <input type=hidden name=op value=add_form>
-        <input type="image" alt="Agregar Categor&iacute;a"  src="[% interface %]/[% themelang %]/images/agregar.png" onclick="form2.submit">
-                        <!--<input type=submit class="button" value="Agregar Categor&iacute;a"  ALT="Agregar Categor&iacute;a">--><br>
+<!--         <input type="image" alt="Agregar Categor&iacute;a"  src="[% interface %]/[% themelang %]/images/agregar.png" onclick="form2.submit"> -->
+        <br>
+       [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Agregar Categor&iacute;a' | i18n %]",
+                                                                    boton   =>  "boton_buscar",
+                                                                    onClick =>  "form2.submit();",
+                                                                    title   =>  "[% 'Agregar Categor&iacute;a' | i18n %]",
+                                        ) ;
+        [% END %]        
                 </form></p>
                 </center>
 [% END %]

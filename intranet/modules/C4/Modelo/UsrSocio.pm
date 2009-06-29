@@ -518,7 +518,7 @@ sub verificar_permisos_por_nivel{
     use C4::Modelo::PermCatalogo::Manager;
 
     my @filtros;
-    my $permisos_hash_ref;
+    my $permisos_array_hash_ref;
 #     my @entornos_datos_nivel = ('datos_nivel1','datos_nivel2','datos_nivel3'); 
 #     my @entornos_estructura_catalogacion= ('estructura_catalogacion_n1','estructura_catalogacion_n2','estructura_catalogacion_n3');
     my @entornos_perm_catalogo= (   'datos_nivel1','datos_nivel2','datos_nivel3', 'estructura_catalogacion_n1',
@@ -537,7 +537,7 @@ sub verificar_permisos_por_nivel{
 
     if( (C4::AR::Utilidades::existeInArray($flagsrequired->{'entorno'}, @entornos_perm_catalogo)) ){
    
-        $permisos_hash_ref= C4::AR::Permisos::get_permisos_catalogo({
+        $permisos_array_hash_ref= C4::AR::Permisos::get_permisos_catalogo({
                                                             ui => $flagsrequired->{'ui'}, 
                                                             tipo_documento => $flagsrequired->{'tipo_documento'}, 
                                                             nro_socio => $flagsrequired->{'nro_socio'},
@@ -548,31 +548,33 @@ sub verificar_permisos_por_nivel{
         return 0;
     }
 
+    foreach my $permisos_hash_ref (@$permisos_array_hash_ref){
 #     my $permisos_hash_ref= C4::Modelo::PermCatalogo::Manager::get_permisos_catalogo( query => \@filtros );
 # FIXME aca faltaria iterar sobre un conjunto de premisos
-    if($permisos_hash_ref ne 0){
-        C4::AR::Debug::debug("verificar_permisos_por_nivel");
-        #se encontraron permisos level1
+#         if($permisos_hash_ref ne 0){
+            C4::AR::Debug::debug("verificar_permisos_por_nivel");
+            #se encontraron permisos level1
+        
+            my $permiso_bin_del_usuario= $permisos_hash_ref->{$flagsrequired->{'entorno'}};
+            my $permiso_bin_requerido= C4::AR::Permisos::permisos_str_to_bin($flagsrequired->{'accion'});
+            my $permiso_dec_del_usuario= C4::AR::Utilidades::bin2dec($permiso_bin_del_usuario);
+            my $permiso_dec_requerido = C4::AR::Utilidades::bin2dec($permiso_bin_requerido);
     
-        my $permiso_bin_del_usuario= $permisos_hash_ref->{$flagsrequired->{'entorno'}};
-        my $permiso_bin_requerido= C4::AR::Permisos::permisos_str_to_bin($flagsrequired->{'accion'});
-        my $permiso_dec_del_usuario= C4::AR::Utilidades::bin2dec($permiso_bin_del_usuario);
-        my $permiso_dec_requerido = C4::AR::Utilidades::bin2dec($permiso_bin_requerido);
-
-        if( ($permiso_bin_del_usuario & '00010000') > 0){
-            #tiene TODOS los permisos
+            if( ($permiso_bin_del_usuario & '00010000') > 0){
+                #tiene TODOS los permisos
+                C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: ".$permiso_bin_del_usuario);
+                C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================TODOS");
+                return 1;
+            }
+        
             C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: ".$permiso_bin_del_usuario);
-            C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================TODOS");
-            return 1;
-        }
-    
-        C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: ".$permiso_bin_del_usuario);
-        C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS REQUERIDOS=================bin: ".$permiso_bin_requerido);
-        C4::AR::Debug::debug("verificar_permisos_por_nivel => ENTORNO=================: ".$flagsrequired->{'entorno'});
-        my $resultado= $permiso_bin_del_usuario & $permiso_bin_requerido;
-        if( C4::AR::Utilidades::bin2dec($resultado) > 0 ){
-            return 1;
-        }
+            C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS REQUERIDOS=================bin: ".$permiso_bin_requerido);
+            C4::AR::Debug::debug("verificar_permisos_por_nivel => ENTORNO=================: ".$flagsrequired->{'entorno'});
+            my $resultado= $permiso_bin_del_usuario & $permiso_bin_requerido;
+            if( C4::AR::Utilidades::bin2dec($resultado) > 0 ){
+                return 1;
+            }
+#         }
     }
 
     C4::AR::Debug::debug("");

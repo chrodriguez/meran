@@ -78,5 +78,11 @@
             </table>
 
             <center>
-            <input type="image" alt="Agregar Tipo de Pr&eacute;stamo"  src="[% themelang %]/images/agregar.png" onclick="agregarTipoPrestamo()" >
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "buscar();",
+                                                                    title   => "[% 'Agregar Tipo de Pr&eacute;stamo' | i18n %]",
+                                        ) ;
+            [% END %]
             </center>

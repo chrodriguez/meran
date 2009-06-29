@@ -154,8 +154,15 @@ function Check(f) {
 			<tr>
 				<td  class="inputFontNormal">&nbsp;</td>
 				<td>
-				<input type="image" alt="Guardar Cambios"  src="[% interface %]/[% themelang %]/images/guardar.png" onclick="Aform.submit">
-
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Guardar Cambios' | i18n %]",
+                                                                    boton   =>  "boton_buscar",
+                                                                    onClick =>  "Aform.submit",
+                                                                    title   =>  "[% 'Guardar Cambios' | i18n %]",
+                                                                    width   =>  "155",
+                                        ) ;
+                [% END %]
 				</td>
 			</tr>
 		</table>

@@ -169,7 +169,14 @@ function Check(f) {
                         <td  class="inputFontNormal">&nbsp;</td>
                         <td>
                            [% IF tipo_prestamo %]
-                                <input type="image" alt="Guardar Cambios"  src="[% themelang %]/images/guardar.png" onclick="guardarModificacionTipoPrestamo()">
+<input type="image" alt="Guardar Cambios"  src="[% themelang %]/images/guardar.png" onclick="guardarModificacionTipoPrestamo()">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "guardarModificacionTipoPrestamo();",
+                                                                    title   => "[% 'Guardar Cambios' | i18n %]",
+                                        ) ;
+            [% END %]
                            [% ELSE %]
                                     <input type="image" alt="Guardar Cambios"  src="[% themelang %]/images/guardar.png" onclick="guardarNuevoTipoPrestamo()">
                            [% END %]
