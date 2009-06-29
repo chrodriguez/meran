@@ -29,9 +29,25 @@ $(document).ready(function() {
                 onBlur="checkFilter('blur')" value="[% socio %]">
 		</td>
  		<td>
-			<input id="buscar" type="image" onClick="consultar('');" src="[% themelang %]/images/boton-buscar.png" border='0'>
+            <div>
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                        boton   => "boton_buscar",
+                                                                        onClick => "consultar('');",
+                                                                        title   => "[% 'Buscar' | i18n %]",
+                                            ) ;
+                [% END %]
+            </div>
 
- 			<input type="image" onClick="Borrar();" alt="Limpiar" src="[% themelang %]/images/borrar2.png" border="0" > 
+            <div>
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                        boton   => "boton_buscar",
+                                                                        onClick => "Borrar();",
+                                                                        title   => "[% 'Limpiar' | i18n %]",
+                                            ) ;
+                [% END %]
+            </div>
 		</td>
 	</tr>
 	<tr>

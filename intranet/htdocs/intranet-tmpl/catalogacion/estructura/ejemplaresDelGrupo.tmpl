@@ -51,8 +51,15 @@
 			</td>
 			<td width="6%" valign="middle">
         <!-- Si se puede borrar ???-->
-				<input 	type="image" src="[% themelang %]/images/borrar.png" 
-                        onClick="borrarN3('[% id2 %]','[% id3 %]')" title="[% 'Borrar Ejemplar' | i18n %]">
+        <div>
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Ejemplar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "borrarN3('[% id2 %]','[% id3 %]');",
+                                                                    title   => "[% 'Borrar Ejemplar' | i18n %]",
+                                        ) ;
+            [% END %]
+        </div>
         <!--            END  -->
 			</td>
 			<td>[% nivel3_obj.getSignatura_topografica %]</td>

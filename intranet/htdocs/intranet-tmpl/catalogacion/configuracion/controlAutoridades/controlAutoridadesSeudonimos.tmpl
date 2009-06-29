@@ -377,9 +377,17 @@ $(document).ready(function(){
 	</li>
 
 	<li><hr></hr></li>
-	<li><input  src="[% themelang %]/images/guardar.png" type="image"  value="Guardar Seudónimo" 
-				title="Guardar Seudónimo" onClick="guardarDatos()">
-	</li>
+        <div>
+            [% PERL %]
+                            print C4::AR::Filtros::to_Button( 
+                                                                text    =>  "[% 'Guardar Seudónimo' | i18n %]",
+                                                                boton   =>  "boton_buscar",
+                                                                onClick =>  "guardarDatos();",
+                                                                title   =>  "[% 'Guardar Seudónimo' | i18n %]",
+                                    ) ;
+            [% END %]
+        </div>
+
 	<li><div id="resultSeudonimos"></div></li>
 </ul>
 </div>

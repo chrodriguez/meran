@@ -1,6 +1,6 @@
 [% IF addBorrower == 1 %]
     [% INCLUDE "intranet-top.inc" %] 
-	<script src="/intranet-tmpl/includes/usuarios/usuariosReales.js"></script>
+    <script src="/intranet-tmpl/includes/usuarios/usuariosReales.js"></script>
 [% END %]
 <script src="/includes/jquery/datetimepicker/ui.datepicker.js"></script>
 <link href="/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
@@ -37,8 +37,8 @@
         [% END %]
 
         $("#userDataForm").validate();
-		CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
-		CrearAutocompleteCiudades({IdInput: 'alt_ciudad', IdInputHidden: 'id_alt_ciudad'});
+        CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
+        CrearAutocompleteCiudades({IdInput: 'alt_ciudad', IdInputHidden: 'id_alt_ciudad'});
         crearDatePicker('nacimiento');
         $('#categoria_socio_id').addClass('required');
 
@@ -76,7 +76,6 @@
 
 <table border=0  width="100%" class="tablaresultado" align="right">
     <tr valign=top width="100%">
-        
         <td  width="50%" ALIGN=RIGHT>
         [% "Tarjeta de identificaci&oacute;n" | i18n %] *
         [% IF addBorrower %]
@@ -136,7 +135,7 @@
             <b>[% "Documento" | i18n %] ([% "solo digitos" | i18n %]) *</b><br>
                     [% combo_tipo_documento %]
             <input 	id="nro_documento" name="nro_documento" class="required" type=text size=41 
-					value="[% socio.persona.getNro_documento %]">
+                value="[% socio.persona.getNro_documento %]">
         </td>
         <td width="35%" class="inputFontNormal" align="left">
             <b>[% "Legajo" | i18n %]</b><br>
@@ -239,7 +238,7 @@
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Tel&eacute;fono del trabajo" | i18n %]</b><br>
                 <input 	class="inputFontNormal" type=text id="telefono_laboral" name="telefono_laboral" size=50 
-						value="[% socio.persona.getTelefono_laboral %]">
+                    value="[% socio.persona.getTelefono_laboral %]">
         </td>
     </tr>
     <tr>
@@ -251,7 +250,7 @@
             <td width="40%" class="inputFontNormal" align="left" valign="top">
             <b>[% "Ciudad de origen" | i18n %]</b><br>
             <input  class="InputFontNormal" type=text id="alt_ciudad" name="alt_ciudad" 
-					value="[% socio.persona.alt_ciudad_ref.getNombre%]" size='50'>
+                value="[% socio.persona.alt_ciudad_ref.getNombre%]" size='50'>
             <input class="InputFontNormal" type=hidden id="id_alt_ciudad" value="[% socio.persona.alt_ciudad_ref.LOCALIDAD %]"> 
         </td>
             <tr>
@@ -274,7 +273,7 @@
                     <input  class="InputFontNormal" type=text id="auth_nombre" name="auth_nombre" 
                             value="[% socio.getNombre_apellido_autorizado %]" size='50'>
                 </td>
-        
+
         <br>
                 <td width="40%" class="inputFontNormal" align="left" valign="top">
                     <b>[% "DNI del autorizado" | i18n %]</b><br>
@@ -304,28 +303,46 @@
         <td width="50%" align="right">
 
         [% IF addBorrower %]
-            <a onClick="save()" >
-                    <img alt="Guardar" src="[% themelang %]/images/guardar.png" border="0">
-			</a>
+        <div>
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "save();",
+                                                                    title   => "[% 'Guardar' | i18n %]",
+                                        ) ;
+            [% END %]
+        </div>
         [% ELSE  %]
-            <a onClick="save()" >
-                    <img alt="Guardar Modificacion" src="[% themelang %]/images/guardar.png" border="0">
-			</a>
+            <div>
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Modificacion' | i18n %]",
+                                                                        boton   => "boton_buscar",
+                                                                        onClick => "save();",
+                                                                        title   => "[% 'Guardar' | i18n %]",
+                                            ) ;
+                [% END %]
+            </div>
         [% END %]
-    
-            
-		</td>
+
+
+	</td>
         <td  width="25%" align="left"> 
-            <a href="#" onClick="form1.reset()" >
-            <img name="clear" id="clear" alt="Limpiar" src="[% themelang %]/images/borrar2.png" border="0">
-            </a>
+            <div>
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                        boton   => "boton_buscar",
+                                                                        onClick => "form1.reset();",
+                                                                        title   => "[% 'Limpiar' | i18n %]",
+                                            ) ;
+                [% END %]
+            </div>
         </td>
-        
+
         <td  align="left" class="inputFontNormal">
             <b>(*) [% "Obligatorio " | i18n %]</b>
         </td>
-        
-    
+
+
     </tr>
 
 </table>
@@ -334,4 +351,3 @@
 [% IF addBorrower %]
     [% INCLUDE "intranet-bottom.inc" %]
 [% END %]
-            

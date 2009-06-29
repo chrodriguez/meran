@@ -282,7 +282,23 @@
 <br>
 <br>
     [% IF nuevoPermiso != 1%]
-        <img border="0" src="/intranet-tmpl/images/guardar.png" alt="Guardar" onClick="actualizarPermisos();"/>
+        <div>
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Permisos' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "actualizarPermisos();",
+                                                                    title   => "[% 'Guardar Permisos' | i18n %]",
+                                        ) ;
+            [% END %]
+        </div>
     [% ELSE %]
-        <img border="0" src="/intranet-tmpl/images/guardar.png" alt="Guardar" onClick="nuevoPermiso();"/>
+        <div>
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Permisos' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "nuevoPermiso();",
+                                                                    title   => "[% 'Guardar Permisos' | i18n %]",
+                                        ) ;
+            [% END %]
+        </div>
     [% END %]

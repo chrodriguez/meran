@@ -97,8 +97,15 @@ $(document).ready( function() {
     <p><br><br><br><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
     
     <center>
-    <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 1' | i18n %]" title="[% 'Guardar nivel 1' | i18n %]"  
-            onClick="guardar(1)">
+                    <div>
+                        [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 1' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "guardar(1);",
+                                                                    title   => "[% 'Guardar el nivel 1' | i18n %]",
+                                        ) ;
+                        [% END %]
+                    </div>
     </center>
 </span>
 
@@ -126,8 +133,13 @@ $(document).ready( function() {
     <p><br><br><br><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
     
     <center>
-    <input  type="image" src="[% themelang %]/images/guardar.png" value="[% 'Guardar nivel 2' | i18n %]" title="[% 'Guardar nivel 2' | i18n %]"  
-            onClick="guardar(2)">
+                        [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 2' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "guardar(2);",
+                                                                    title   => "[% 'Guardar el nivel 2' | i18n %]",
+                                        ) ;
+                        [% END %]
     </center>
 </span>
 
@@ -159,10 +171,13 @@ $(document).ready( function() {
     <p><br><br><br><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
     
     <center>
-	<a onClick="guardar(3)" >
-                    <img alt="Guardar" src="[% themelang %]/images/guardar.png" border="0" value="[% 'Guardar nivel 3' | i18n %]" 
-					title="[% 'Guardar nivel 3' | i18n %]">
-	</a>
+                        [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 3' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "guardar(3);",
+                                                                    title   => "[% 'Guardar el nivel 3' | i18n %]",
+                                        ) ;
+                        [% END %]
 
     </center>
 </span>

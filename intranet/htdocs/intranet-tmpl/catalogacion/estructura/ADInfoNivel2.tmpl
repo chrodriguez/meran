@@ -2,12 +2,35 @@
     <p class="nivel2Selected" onClick="mostrarInfoAltaNivel3( '[% nivel2.getId1 %]',  '[% nivel2.getId2 %]'); toggleClass(this);">
     <b>Grupo: [% nivel2.getId2 %] - [% nivel2.cat_ref_tipo_nivel3.getNombre %]</b>
     <br/>
-    <input  type="image" border="0" onclick="modificarN2('[% nivel2.getId2 %]')" title="Modificar Grupo" 
-            src="/intranet-tmpl/images/editar.png" value="modify" name="submit"/>
-    <input type="button" border="0" onclick="agregarN3()" title="Agregar Ejemplar" value="+" name="agregar"/>
-    <input  type="image" border="0" title="Borrar Grupo" onclick="borrarN2('[% nivel2.getId2 %]')"  
-            src="/intranet-tmpl/images/borrar.png" value="delete" name="delete"/>
-    <br/>
+    <div>
+        [% PERL %]
+                print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar Nivel 2' | i18n %]",
+                                                    boton   => "boton_buscar",
+                                                    onClick => "modificarN2('[% nivel2.getId2 %]');",
+                                                    title   => "[% 'Modificar nivel 2' | i18n %]",
+                        ) ;
+        [% END %]
+    </div>
+    <div>
+        [% PERL %]
+                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Nivel 3' | i18n %]",
+                                                    boton   => "boton_buscar",
+                                                    onClick => "agregarN3();",
+                                                    title   => "[% 'Agregar nivel 3' | i18n %]",
+                        ) ;
+        [% END %]
+    </div>
+    <div>
+        [% PERL %]
+                print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Nivel 1' | i18n %]",
+                                                    boton   => "boton_buscar",
+                                                    onClick => "borrarN2('[% nivel2.getId2 %]');",
+                                                    title   => "[% 'Borrar nivel 2' | i18n %]",
+                        ) ;
+        [% END %]
+    </div>
+
+
     Nivel bibliogr&aacute;fico: [% nivel2.ref_nivel_bibliografico.getDescription %]
     <br/>
     Soporte: [% nivel2.ref_soporte.getDescription %]

@@ -27,8 +27,14 @@
 
 	</table>
 
-	<p><a class="click" onClick="guardarPermisos()" >
-		<img alt="Guardar Permisos" src="[% themelang %]/images/guardar.png" border="0">
-	</a></p>
+    <div>
+        [% PERL %]
+                            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Permisos' | i18n %]",
+                                                                boton   => "boton_buscar",
+                                                                onClick => "guardarPermisos();",
+                                                                title   => "[% 'Guardar Permisos' | i18n %]",
+                                    ) ;
+        [% END %]
+    </div>
 
 <!-- *******************************Fin**Window Permisos Usuario***************************************** -->

@@ -9,7 +9,7 @@ use C4::AR::Utilidades;
 use JSON;
 
 my $input = new CGI;
-my ($userid, $session, $flags) = checkauth($input, 0,{ editcatalogue => 1});
+
 
 
 my $obj=$input->param('obj');
@@ -22,7 +22,7 @@ my $componente= $obj->{'componente'}||"";
 my $tabla= $obj->{'tabla'}||"";
 my $result;
 my %infoRespuesta;
-
+my $authnotrequired = 0;
 
 #************************* para cargar la tabla de encabezados*************************************
 if($tipoAccion eq "CARGAR_TABLA_ENCABEZADOS"){
@@ -47,6 +47,15 @@ if($tipoAccion eq "CARGAR_TABLA_ENCABEZADOS"){
 
 #***********************************Cambio Visibilidad en OPAC**********************************
 if($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
+  my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
+
 	
 	C4::AR::Validator::validateParams('U389',$obj,['id']);
 	my  $visualizacionOPAC= C4::AR::VisualizacionOpac::getVisualizacionOpac($obj);
@@ -59,7 +68,8 @@ if($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
 
 #******* Se arma una tabla con la Visualizacion de OPAC y se muestra con un tmpl********************
 if($tipoAccion eq "MOSTAR_TABLA_VISUALIZACION"){
-	
+
+
 	my ($template, $session, $t_params)= get_template_and_user({
 						template_name => "catalogacion/visualizacionOPAC/visualizacionOpacTabla.tmpl",
 						query => $input,
@@ -81,7 +91,14 @@ if($tipoAccion eq "MOSTAR_TABLA_VISUALIZACION"){
 
 
 if($tipoAccion eq "CAMBIAR_LINEA_ENCABEZADO"){
-				
+  my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
 	C4::AR::Validator::validateParams('U389',$obj,['encabezado']);
 	my  $visualizacionOPAC= C4::AR::VisualizacionOpac::getEncabezadoOpac($obj);
 	$visualizacionOPAC->cambiarLinea();
@@ -90,7 +107,14 @@ if($tipoAccion eq "CAMBIAR_LINEA_ENCABEZADO"){
 }
 
 if($tipoAccion eq "CAMBIAR_NOMBRE_ENCABEZADO"){
-				
+  my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
 	C4::AR::Validator::validateParams('U389',$obj,['encabezado', 'nombre']);
 	my  $visualizacionOPAC= C4::AR::VisualizacionOpac::getEncabezadoOpac($obj);
 	$visualizacionOPAC->cambiarNombre($obj->{'nombre'});
@@ -99,7 +123,15 @@ if($tipoAccion eq "CAMBIAR_NOMBRE_ENCABEZADO"){
 }
 
 if($tipoAccion eq "CAMBIAR_VISIBILIDAD_ENCABEZADO"){
-				
+  my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
+
 	C4::AR::Validator::validateParams('U389',$obj,['encabezado']);
 	my  $visualizacionOPAC= C4::AR::VisualizacionOpac::getEncabezadoOpac($obj);
 	$visualizacionOPAC->cambiarVisibilidad();
@@ -109,6 +141,14 @@ if($tipoAccion eq "CAMBIAR_VISIBILIDAD_ENCABEZADO"){
 
 #*********************************se actualiza el campo linea del encabezado*********************************
 if(($tipoAccion eq "UPDATE")&&($tabla eq "ENCABEZADO")){
+  my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
 
 	my $idencabezado= $obj->{'encabezado'};
 	my $linea= $obj->{'linea'};
@@ -121,6 +161,14 @@ if(($tipoAccion eq "UPDATE")&&($tabla eq "ENCABEZADO")){
 #*********************************se actualiza el campo linea del encabezado*********************************
 
 if($tipoAccion eq "CAMBIAR_ORDEN_ENCABEZADO"){
+  my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
 
 	my $idencabezado= $obj->{'encabezado'};
 	my $orden= $obj->{'orden'};
@@ -137,7 +185,15 @@ if($tipoAccion eq "CAMBIAR_ORDEN_ENCABEZADO"){
 }
 
 if($tipoAccion eq "ESTRUCTURA_VISUALIZACION"){
-	
+  my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'ALTA', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
+
 	my ($Message_arrayref)=  &C4::AR::VisualizacionOpac::t_insertConfVisualizacion($obj);
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
@@ -147,7 +203,15 @@ if($tipoAccion eq "ESTRUCTURA_VISUALIZACION"){
 }
 
 if($tipoAccion eq "GUARDAR_ENCABEZADO_VISUALIZACION_OPAC"){
-	
+  my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
+
 	my ($Message_arrayref)=  &C4::AR::VisualizacionOpac::t_insertEncabezado($obj);
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
@@ -156,7 +220,15 @@ if($tipoAccion eq "GUARDAR_ENCABEZADO_VISUALIZACION_OPAC"){
     print $infoOperacionJSON;
 }
 if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
-	
+  my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
+
 	my ($Message_arrayref)=  &C4::AR::VisualizacionOpac::t_updateConfVisualizacion($obj);
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
@@ -165,6 +237,14 @@ if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
     print $infoOperacionJSON;
 }
 if($tipoAccion eq "AGREGAR_CONFIGURACION_VISUALIZACION"){
+  my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'ALTA', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
 
 	my ($template, $session, $t_params)= get_template_and_user({
 						template_name => "catalogacion/visualizacionOPAC/agregarVisualizacionOpac.tmpl",
@@ -189,7 +269,7 @@ if($tipoAccion eq "AGREGAR_ENCABEZADO_VISUALIZACION_OPAC"){
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'undefined'},
 					debug => 1,
 	});
 	
@@ -205,12 +285,13 @@ if($tipoAccion eq "AGREGAR_ENCABEZADO_VISUALIZACION_OPAC"){
 
 if($tipoAccion eq "MODIFICAR_CONFIGURACION_VISUALIZACION"){
 
+
 	my ($template, $session, $t_params)= get_template_and_user({
 						template_name => "catalogacion/visualizacionOPAC/agregarVisualizacionOpac.tmpl",
 						query => $input,
 						type => "intranet",
 						authnotrequired => 0,
-						flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+						flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICACION', entorno => 'undefined'},
 						debug => 1,
 	});
 	
@@ -221,6 +302,14 @@ if($tipoAccion eq "MODIFICAR_CONFIGURACION_VISUALIZACION"){
 }
 #**************** gurado la catalogacion en estructura_catalogacion_opac**************************
 if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
+  my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
 
 	my $textoPred =$obj->{'textoPredecesor'};
 	my $textoSucc =$obj->{'textoSucesor'};
@@ -234,7 +323,15 @@ if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
 
 #**************** elimino una tupla en estructura_catalogacion_opac**************************
 if(($tipoAccion eq "DELETE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
-	
+  my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'BAJA', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
+
 	C4::AR::Validator::validateParams('U389',$obj,['idestcatopac']);
 	my ($Message_arrayref)= &C4::AR::VisualizacionOpac::t_deleteConfVisualizacion($obj);
     
@@ -248,6 +345,14 @@ if(($tipoAccion eq "DELETE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
 
 #********************************* elimino un Encabezado*******************************************
 if(($tipoAccion eq "DELETE")&&($tabla eq "ENCABEZADO_CAMPO_OPAC")){
+  my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'BAJA', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
 
 	my $encabezado =$obj->{'encabezado'};
 	

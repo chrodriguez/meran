@@ -33,7 +33,7 @@ function busquedaReAvanzada(){
 		objAH.sendToServer();
 	}
 	else{
-		alert([% "No ingreso datos para consultar" | i18n %]);
+		alert('[% "No ingreso datos para consultar" | i18n %]');
 	}
 
 }
@@ -315,8 +315,25 @@ $(document).ready(function() {
 		<ul>
 			<li>
 			<input type="hidden" name="type" value="intra">
-			<input type="image" alt="Buscar"  src="[% themelang %]/images/boton-buscar.png" onClick="busquedaReAvanzada()">
-			<input type="image" alt="Limpiar"  src="[% themelang %]/images/borrar2.png" onClick="limpiar()">
+                    <div>
+                        [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "busquedaReAvanzada();",
+                                                                    title   => "[% 'Buscar en el cat&aacute;logo' | i18n %]",
+                                        ) ;
+                        [% END %]
+                    </div>
+                    <br><br>
+                    <div>
+                        [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "limpiar();",
+                                                                    title   => "[% 'Limpiar el formulario' | i18n %]",
+                                        ) ;
+                        [% END %]
+                    </div>
 			</li>
 		</ul>
 		</div>

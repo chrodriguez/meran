@@ -24,13 +24,31 @@
 			[% sinonimo.autor %] [% sinonimo.tema %] [% sinonimo.editorial %]
 		</td>
 		<td align="center">
-			<a class="click" 
-			onClick="deleteSinonimo('[% sinonimo.id %]','[% sinonimo.autor %][% sinonimo.tema %][% sinonimo.editorial %]');"><img src="[% themelang %]/images/borrar.png" Title="Eliminar" ALT='Eliminar' hspace='0' vspace='0' border='0'></a>
-		</td>
+            <div>
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Eliminar' | i18n %]",
+                                                                    boton   =>  "boton_buscar",
+                                                                    onClick =>  "deleteSinonimo('[% sinonimo.id %]','[% sinonimo.autor %][% sinonimo.tema %][% sinonimo.editorial %]');",
+                                                                    title   =>  "[% 'Eliminar' | i18n %]",
+                                        ) ;
+                [% END %]
+            </div>
+        </td>
 		<td align="center">
 			<a class="click" 
-			onClick="modificarSinonimo('[% sinonimo.id %]','[% nroSinonimo %]','[% sinonimo.autor %][% sinonimo.tema %][% sinonimo.geteditorial %]');"><img src="[% themelang %]/images/editar.png" Title="Editar" ALT='Editar' hspace='0' vspace='0' border='0'></a>
-		</td>
+			onClick=""><img src="[% themelang %]/images/editar.png" Title="Editar" ALT='Editar' hspace='0' vspace='0' border='0'></a>
+            <div>
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Editar' | i18n %]",
+                                                                    boton   =>  "boton_buscar",
+                                                                    onClick =>  "modificarSinonimo('[% sinonimo.id %]','[% nroSinonimo %]','[% sinonimo.autor %][% sinonimo.tema %][% sinonimo.geteditorial %]');",
+                                                                    title   =>  "[% 'Editar' | i18n %]",
+                                        ) ;
+                [% END %]
+            </div>
+        </td>
 
 		<td height=25>&nbsp;</td>
 

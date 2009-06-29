@@ -302,7 +302,15 @@ $(document).ready(function(){
 									) ;
 	[% END %]
 
-	<input type="image" border=0 src="[% themelang %]/images/borrar.png" onClick="borrarNivel1([% id1 %])" title="[% 'Borrar Nivel 1' | i18n %]">
+        <div>
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Nivel 1' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "borrarNivel1([% id1 %]);",
+                                                                    title   => "[% 'Borrar Nivel 1' | i18n %]",
+                                        ) ;
+            [% END %]
+        </div>
 	<br>
 	[% FOREACH nivel1 %]
 		[% IF liblibrarian %]
@@ -336,9 +344,15 @@ $(document).ready(function(){
 									        ) ;
 	        [% END %]
         
-	        <input 	TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="[% themelang %]/images/borrar.png"   
-			        onClick="borrarGrupo([% id1 %],[% id2 %])" 
-			        title="Borrar Grupo">
+        <div>
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Grupo' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "borrarGrupo([% id1 %],[% id2 %]);",
+                                                                    title   => "[% 'Borrar Grupo' | i18n %]",
+                                        ) ;
+            [% END %]
+        </div>
 	        <br>
 	        [% IF amazon_cover %]
 		        <div class='amazon_cover_detail' style="position: relative; float:right;">

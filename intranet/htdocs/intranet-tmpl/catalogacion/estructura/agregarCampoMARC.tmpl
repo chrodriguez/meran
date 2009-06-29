@@ -72,4 +72,23 @@
             onClick="agregarEstructuraCatalogacion([% nivel %])">
     <input type="image" src="[% themelang %]/images/borrar2.png" value="Cancelar" title="Cancelar Campo Temp" 
             onClick="cancelarEstructuraCatalogacion()">
+    <div>
+        [% PERL %]
+                            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo temporal' | i18n %]",
+                                                                boton   => "boton_buscar",
+                                                                onClick => "agregarEstructuraCatalogacion([% nivel %]);",
+                                                                title   => "[% 'Guardar Campo temporal' | i18n %]",
+                                    ) ;
+        [% END %]
+    </div>
+    <div>
+        [% PERL %]
+                            print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo temporal' | i18n %]",
+                                                                boton   => "boton_buscar",
+                                                                onClick => "cancelarEstructuraCatalogacion();",
+                                                                title   => "[% 'Cancelar Campo temporal' | i18n %]",
+                                    ) ;
+        [% END %]
+    </div>
+
 </div>

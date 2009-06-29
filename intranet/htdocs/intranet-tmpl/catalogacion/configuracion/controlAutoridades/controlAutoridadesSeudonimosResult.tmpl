@@ -29,8 +29,17 @@
             [% seudonimo.seudonimo.getEditorial %] <!-- PARA EDITORIAL -->
 		</td>
 		<td class="[% clase %]" align="center">
-			<a class="click" 
-			onClick="deleteSeudonimo('[% seudonimo.getIdAutorSeudonimo %]'+'[% seudonimo.getIdTemaSeudonimo %]'+'[% seudonimo.getIdEditorialSeudonimo %]');"><img src="[% themelang %]/images/borrar.png" Title="Eliminar" ALT='Eliminar' hspace='0' vspace='0' border='0'></a>
+            <div>
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Eliminar' | i18n %]",
+                                                                    boton   =>  "boton_buscar",
+                                                                    onClick =>  "deleteSeudonimo('[% seudonimo.getIdAutorSeudonimo %]'+'[% seudonimo.getIdTemaSeudonimo %]'+'[% seudonimo.getIdEditorialSeudonimo %]');",
+                                                                    title   =>  "[% 'Eliminar' | i18n %]",
+                                        ) ;
+                [% END %]
+            </div>
+
 		</td>
 
 		<td height=25 class="[% clase %]">&nbsp;</td>
