@@ -19,7 +19,7 @@
 
 [% FOREACH RESULTSLOOP %]
 	<tr class="inputFontNormal" align="center">
-		<td>&nbsp;</td>
+		
 		<td> 
 			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">
                             [% socio.persona.getApellido %]</a>
@@ -40,7 +40,7 @@
   		<td> [% socio.persona.getNacimiento %]</td>
   		<td> [% socio.persona.categoria.getDescription %]</td>
   		<td><b>[% socio.estado.getRegular %]</b></td>
- 		<td>&nbsp;</td>
+ 		
   	</tr>
 
 [% END %]

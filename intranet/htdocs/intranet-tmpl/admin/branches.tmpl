@@ -172,7 +172,7 @@
 		</tr>
 		[% FOREACH branches %]M;
 			<tr valign="middle">
-				<td heigth=25 class="[% clase %]">&nbsp;</td>
+	
 				<td  class="[% clase %]"class="inputFontNormal" align="left" valign="top">[% HTML.escape(branch_name) %]</td>
 				<td  class="[% clase %]" class="inputFontNormal" align="left" valign="top">[% HTML.escape(branch_code) %]</td>
 				<td  class="[% clase %]" class="inputFontNormal" align="left" valign="top">
@@ -229,7 +229,6 @@
 						<input type="hidden" name="op" value="delete"><input type="image" ALT="Eliminar"  src="[% interface %]/[% themelang %]/images/borrar.png" onclick="form2.submit">
 						</form>
 					</td>
-					<td class="[% clase %]">&nbsp;</td>
 		
 			</tr>
 		[% END %]
@@ -267,7 +266,7 @@
 	
 		[% FOREACH branchcategories %]
 			<tr>
-				<td height=25 class="[% clase %]">&nbsp;</td>
+		
 				<td class="[% clase %]"class="inputFontNormal" align="left" valign="top">[% categoryname %]</td>
 				<td class="[% clase %]"class="inputFontNormal" align="center" valign="top"> [%categorycode %]</td>
 				<td class="[% clase %]"class="inputFontNormal" align="left" valign="top">[% codedescription %]</td>
@@ -284,7 +283,7 @@
 					<input type="hidden" name="op" value="delete_category"><input type="image" ALT="Eliminar"  src="[% interface %]/[% themelang %]/images/borrar.png" onclick="form4.submit">
 					</form>
 				</td>
-				<td  class="[% clase %]">&nbsp;</td>
+	
 			</tr>
 		[% END %]
 	

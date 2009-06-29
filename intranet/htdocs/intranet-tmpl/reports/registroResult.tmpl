@@ -19,7 +19,7 @@
 [% FOREACH registro IN resultsloop %]
 	
   	<tr align='center' class="inputFontNormal">
-  		<td height=25 >&nbsp;</td>
+  		
   		<td> [% registro.socio_responsable.getNro_socio %] ([% registro.socio_responsable.persona.getApellido %] [% registro.socio_responsable.persona.getNomre %] )  </td>
   		<td> [% registro.fecha %] </td>
   		<td> [% registro.operacion %]</td>
@@ -33,7 +33,7 @@
   		<td> 
 			<input  src="[% themelang %]/images/guardar.png" type="image"  value=[% "Guardar Nota" | i18n %] title=[% "Guardar Nota" | i18n %] onClick="guardarNota('[% registro.idModificacion %]')"> 
 		</td>
- 		<td height=25 >&nbsp;</td>
+ 		
  	</tr>
 	
 [% END %]

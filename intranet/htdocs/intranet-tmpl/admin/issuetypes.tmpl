@@ -282,7 +282,7 @@ function Check(f) {
                     </tr>
             [% FOREACH loop %]
                     <tr align="middle">    
-                            <td height=25 class="[% clase %]">&nbsp;</td>
+        
                             <td class="[% clase %]" class="inputFontNormal">
                                     [% issuetype %]
                             </td>
@@ -324,7 +324,7 @@ function Check(f) {
                             <td class="[% clase %]" align="center">
                                     <a  class="inputFontNormal" href="[% script_name %]?op=delete_confirm&issuetype=[% HTML.escape(issuetype) %]"><img src="[% interface %]/[% themelang %]/images/borrar.png" hspace=0 vspace=0 border=0 ALT="Eliminar"></a>
                             </td>
-                            <td height=25 class="[% clase %]">&nbsp;</td>
+                            
                     </tr>
             [% END %]
                     <tr valign=bottom>

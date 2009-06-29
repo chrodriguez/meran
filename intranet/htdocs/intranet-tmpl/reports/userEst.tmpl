@@ -37,11 +37,11 @@ $(document).ready( function() {
 
 [% FOREACH socio IN resultsloop %]
   	<tr align='center' class="inputFontNormal">
-   		<td height=25>&nbsp;</td>	
+   		
   		<td>[% socio.categoria.getDescription %] </td>
   		<td>[% socio.agregacion_temp %] </td>
 		<td>[% potenciales %] </td>
- 		<td height=25 >&nbsp;</td>
+ 		
  	</tr>
 [% END %]
 </table>

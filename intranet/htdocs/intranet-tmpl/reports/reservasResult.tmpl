@@ -20,7 +20,7 @@
 	</tr>
 [% FOREACH reserva IN resultsloop %]
 	<tr align='center'>
-		<td height=25 >&nbsp;</td>
+		
 		<td class="inputFontNormal"> 
 			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% reserva.socio.getNro_socio %]">[% reserva.socio.persona.getApellido %]</a>
 		</td>
@@ -46,7 +46,7 @@
 		<td class="inputFontNormal"> 
 			<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=[% biblionumber %]">[% reserva.nivel3.getBarcode %]</a>
 		</td>
-		<td height=25 >&nbsp;</td>
+		
 	</tr>
 [% END %]
 </table>

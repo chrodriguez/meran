@@ -71,12 +71,10 @@ function hacerSubmit(){
 </tr>
 [% FOREACH disponibilidad IN resultsloop %]
   <tr align='center'>
-  <td height=25 class="[% clase %]">&nbsp;</td>
-  <td class="[% clase %]"> [% disponibilidad.mes_agregacion %] </td>
-  <td class="[% clase %]"> [% disponibilidad.anio_agregacion %] </td>
-  <td class="[% clase %]"> [% disponibilidad.estado %] </td>
-  <td class="[% clase %]"> [% disponibilidad.agregacion_temp %] </td>
-  <td height=25 class="[% clase %]">&nbsp;</td>
+    <td class="[% clase %]"> [% disponibilidad.mes_agregacion %] </td>
+    <td class="[% clase %]"> [% disponibilidad.anio_agregacion %] </td>
+    <td class="[% clase %]"> [% disponibilidad.estado %] </td>
+    <td class="[% clase %]"> [% disponibilidad.agregacion_temp %] </td>
   </tr>
 [% END %]
 </table>

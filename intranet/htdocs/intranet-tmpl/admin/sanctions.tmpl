@@ -62,10 +62,10 @@
         </tr>
 	[% FOREACH issues %]
 		<tr valign="middle">
-			<td height=25 class="[% clase %]">&nbsp;</td>
+			
 			<td class="inputFontNormal"><input class="inputFontNormal" type="checkbox" name="issuestypes" value="[% issuecode %]" [% IF checked %] "checked="checked [% END %] > </td>
 			<td class="inputFontNormal">[% description %]</td>
-			<td height=25 class="[% clase %]">&nbsp;</td>
+			
 		</tr>
 	[% END %]
 	<tr valign=bottom>
@@ -90,7 +90,7 @@
         </tr>
         [% FOREACH loop_sanctions_types %]
 		<tr valign=middle>
-			<td height=25 class="[% clase %]">&nbsp;</td>
+
 			<td class="inputFontNormal">[% orden %]</td>
 			<td class="inputFontNormal">[% desccategory %]</td>
 			<td class="inputFontNormal">[% descissuetype %]</td>
@@ -99,7 +99,7 @@
 			<td class="inputFontNormal">[% amount %]</td>
 			<td><FONT SIZE=2 face="arial, helvetica"><a href="#" onClick="borrar('[% sanctiontypecode %]','[% sanctionrulecode %]');">[% "Eliminar" | i18n %]</a></FONT>
 			</td>
-			<td  class="[% clase %]">&nbsp;</td>
+
 		</tr>
 	[% END %]
 	<tr valign=bottom>

@@ -26,7 +26,7 @@
 		</tr>
 	[% FOREACH prestamo IN PRESTAMOS %]
 		<tr class="inputFontNormal" align="center">
-			<td height=25 >&nbsp;</td>
+	
 			<td>
 		[% IF circularDesdeDetalleUsuario %]
 			<input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.getId_prestamo %]">
@@ -103,7 +103,7 @@
 						[% prestamo.tipo.getDescripcion %]
 				[% END %]
 			</td>
-			<td>&nbsp;</td>	
+			
 		</tr>
 	[% END %] <!-- FOREACH prestamos -->
 	

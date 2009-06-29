@@ -44,7 +44,7 @@
         
         [% FOREACH loop_reading %]
         <tr valign=middle align="center" class="inputFontNormal">
-	        <td height=25 >&nbsp;</td>
+	        
 	        <td>
 		        [% PERL %]
 				        print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(titulo) %]",
@@ -112,8 +112,6 @@
                     --------
                 [% END %]
 	        </td>
-        
-	        <td height=25>&nbsp;</td>
         
         [% END %] <!-- FOREACH PRIMERO -->
     

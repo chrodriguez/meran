@@ -30,10 +30,10 @@ $(document).ready( function() {
 	</tr>
 [% FOREACH nivel IN resultsloop %]
   	<tr align='center' class="inputFontNormal">
-  		<td height=25>&nbsp;</td>
+  		
   		<td>[% nivel.nivel2.ref_nivel_bibliografico.getDescription %] </td>
   		<td>[% nivel.agregacion_temp %] </td>
-		<td height=25>&nbsp;</td>
+		
  	</tr>
 [% END %]
 </table>

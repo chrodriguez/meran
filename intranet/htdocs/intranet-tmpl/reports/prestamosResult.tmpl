@@ -47,7 +47,7 @@
 [% FOREACH prestamo IN resultsloop %]
 
 	<tr align='center'>
-		<td>&nbsp;</td>
+		
 		<td class="inputFontNormal"> 
 		      [% IF prestamo.vencido %]
                <input type="checkbox" name="chkboxPrestamos" value="[% prestamo.socio.getNro_socio %]" id="[% prestamo.socio.getNro_socio %]">
@@ -97,10 +97,7 @@
             [% prestamo.nivel3.getSignatura_topografica %]
          </a>
 		</td>
-	<!--	<td class="inputFontNormal"> 
-			[% description %]
-		</td>-->
-		<td>&nbsp;</td>
+
 	</tr>
 [% END %]
 </table>
