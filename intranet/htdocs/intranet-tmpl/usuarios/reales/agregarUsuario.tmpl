@@ -299,11 +299,8 @@
 <br>
 <table width=100%>
     <tr>
-
-        <td width="50%" align="right">
-
+<div class="buttonContainerHorizontal" >
         [% IF addBorrower %]
-        <div>
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
                                                                     boton   => "boton_buscar",
@@ -311,9 +308,7 @@
                                                                     title   => "[% 'Guardar' | i18n %]",
                                         ) ;
             [% END %]
-        </div>
         [% ELSE  %]
-            <div>
                 [% PERL %]
                                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Modificacion' | i18n %]",
                                                                         boton   => "boton_buscar",
@@ -321,13 +316,9 @@
                                                                         title   => "[% 'Guardar' | i18n %]",
                                             ) ;
                 [% END %]
-            </div>
         [% END %]
 
 
-	</td>
-        <td  width="25%" align="left"> 
-            <div>
                 [% PERL %]
                                     print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
                                                                         boton   => "boton_buscar",
@@ -335,9 +326,7 @@
                                                                         title   => "[% 'Limpiar' | i18n %]",
                                             ) ;
                 [% END %]
-            </div>
-        </td>
-
+</div>
         <td  align="left" class="inputFontNormal">
             <b>(*) [% "Obligatorio " | i18n %]</b>
         </td>

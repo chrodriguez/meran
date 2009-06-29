@@ -607,7 +607,7 @@ tr.impar {
     background:url(../imagenes/botones/boton_medio.png) repeat-x scroll center ;
     height: 22px;
     /*width: 7%;*//*se debe modificar dinamicamente*/
-    position: absolute;
+    position: relative;
     padding-bottom:0;
     padding-left:0;
     padding-right:0;
@@ -654,6 +654,17 @@ li.MARCHeader{
     background-color:#FFFFFF;
     width: 90%;
     list-style-type:none;
+}
+
+.horizontal{
+    float:left;
+    margin-right: 10px;
+}
+.buttonContainerHorizontal{
+    text-align:center;
+}
+
+.vertical{
 }
 /*                                                 FIN MARC                            */
 

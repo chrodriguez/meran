@@ -124,7 +124,8 @@ sub to_Button{
     
 
 #     $button .=  "<div id='boton_medio'> ";
-    $button .=  "<span id='boton_medio' class='click' onClick=".$onClick." style='width:".$width."px'";
+    my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
+    $button .=  "<span id='boton_medio' class='click ".$alternClass. "' onClick=".$onClick." style='width:".$width."px'";
     if($title){
         $button .= " title='".$title."'";
     }
@@ -138,9 +139,6 @@ sub to_Button{
     $button .=  "   <div id='boton_texto'>".$text."</div> ";
 #     $button .=  "</div> ";
     $button .=  "</span> ";
-# FIXME por ahora
-    $button .=  "<br> "; 
-
     return $button;
 }
 
