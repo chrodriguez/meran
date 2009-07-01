@@ -878,7 +878,6 @@ sub crearPaginador{
     my ($cantResult, $cantRenglones, $pagActual, $funcion,$t_params)=@_;
 
     my ($paginador, $cantPaginas)=C4::AR::Utilidades::armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion,$t_params);
-
     return $paginador;
 
 }
@@ -892,7 +891,7 @@ sub armarPaginas{
 # FIXME falta pasar las imagenes al estilo
     my ($actual, $cantRegistros, $cantRenglones,$funcion, $t_params)=@_;
 
-    my $pagAMostrar=C4::AR::Preferencias->getValorPreferencia("paginas")||10;
+    my $pagAMostrar=C4::AR::Preferencias->getValorPreferencia("paginas") || 10;
     my $numBloq=floor($actual / $pagAMostrar);
     my $limInf=($numBloq * $pagAMostrar);
     my $limSup=$limInf + $pagAMostrar;

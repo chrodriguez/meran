@@ -26,7 +26,9 @@ my $dateformat = C4::Date::get_date_format();
 my $ini= $obj->{'ini'};
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+
 $obj->{'ini'}= $ini;
+
 $obj->{'cantR'}= $cantR;
 $obj->{'type'} = 'INTRA';
 

@@ -7,7 +7,6 @@
 $(document).ready(function() {
     crearDatePicker('begindate');
     crearDatePicker('enddate');
-
 });
 </script>
 
@@ -46,11 +45,13 @@ function ordenar(orden){
 function consultar(){
 	objAH=new AjaxHelper(updateInfo);
 	objAH.url="/cgi-bin/koha/reports/prestamosResult.pl";
-	objAH.id_ui=$("#ui_id").val();
+	objAH.id_ui=$("#id_ui").val();
 	objAH.begindate=$("#begindate").val();
 	objAH.enddate=$("#enddate").val();
 	objAH.estado=$("#estado").val();
-	objAH.renglones=$("#renglones").val();
+    renglones = $("#renglones").val();
+    if (!isNaN(renglones))
+    	objAH.renglones=renglones;
 	objAH.funcion= "changePage";
 	objAH.sendToServer();	
 }

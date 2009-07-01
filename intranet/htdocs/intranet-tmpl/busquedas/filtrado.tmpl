@@ -8,19 +8,18 @@
 
 $(document).ready(function() {
 
-	registrarKeypress('INPUT');
+    registrarKeypress('INPUT');
 
-	$("#volver").hide();
+    $("#volver").hide();
 
-	$("#volver").click(function(){
-		//muestro el resultado de la busqueda
-		$("#resultBusqueda").slideDown("fast");
-		$("#volver").hide();
-	});
-	
+    $("#volver").click(function(){
+        //muestro el resultado de la busqueda
+        $("#resultBusqueda").slideDown("fast");
+        $("#volver").hide();
+    });
 
- 	$("#filtrosBusqueda").show();
-	$("#showBusqueda p.showBusqueda ").click(function(){
+    $("#filtrosBusqueda").show();
+    $("#showBusqueda p.showBusqueda ").click(function(){
 						$("#volver").hide();
 						if($("#showBusqueda p.showBusqueda ").html() == "[-]"){
 							$("#showBusqueda p.showBusqueda ").html("[+]");

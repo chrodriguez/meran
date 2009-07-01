@@ -645,9 +645,9 @@ sub estaEnteFechas {
 }
 
 sub prestamos{
+
          my ($params_obj)=@_;
          my @results;
-      
          my $dateformat = C4::Date::get_date_format();
          my @filtros;
 
@@ -657,14 +657,14 @@ sub prestamos{
                                        }
                            ) );
          }
-      
+
          if ($params_obj->{'fechaIni'} ne ""){
             push(@filtros, ( 'fecha_prestamo' => {       eq=> format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
                                                          lt => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
                                     }
                            ) );
          }
-      
+
          if($params_obj->{'id_ui'} ne "SIN SELECCIONAR"){
             push(@filtros, ( id_ui_origen => { eq=> $params_obj->{'id_ui'}, }) );
          }
@@ -674,20 +674,18 @@ sub prestamos{
                                                                              query => \@filtros,
                                                                              require_objects => ['socio','nivel3'],
                                                                              );
-
          my @datearr = localtime(time);
          my $hoy =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
          my @results;
          foreach my $prestamo (@$prestamos){
             my $dateformat = C4::Date::get_date_format();
-            $prestamo->{'vencimiento'}=C4::Date::format_date(C4::AR::Prestamos::vencimiento($prestamo),$dateformat);
+            $prestamo->{'vencimiento'}=$prestamo->getFecha_vencimiento_formateada();
             #Se filtra por Fechas de Vencimiento 
             if ( estaEnteFechas(($params_obj->{'fechaIni'},($params_obj->{'fechaFin'},$prestamo->getFecha_vencimiento_formateada))) ) {
               #Se filtra por Fechas de Vencimiento 
                if ($prestamo->socio->persona->getTelefono eq "" ){
                   $prestamo->socio->persona->setTelefono('-');
                }
-      
 
                if (!($prestamo->socio->persona->getEmail)){
                         $prestamo->socio->persona->setEmail('-');
@@ -707,17 +705,17 @@ sub prestamos{
                   push (@results,$prestamo);
             }
             elsif ( $params_obj->{'estado'} eq "VE" ){ 
-                  if (C4::AR::Prestamos::estaVencido($prestamo->getId3,$prestamo->tipo->getId_tipo_prestamo)){
+                  if ($prestamo->estaVencido()){
                         push (@results,$prestamo);
                   }
             } else{
-                     if (!C4::AR::Prestamos::estaVencido($prestamo->getId3,$prestamo->tipo->getId_tipo_prestamo)){
+                     if (!$prestamo->estaVencido()){
                         push (@results,$prestamo);
                   }
             }
          }
       }#foreach
-      
+
 #       # Da el ORDEN al arreglo
 #        if (($orden ne "vencimiento") and ($orden ne "date_due")) {
 #        #ordeno alfabeticamente
@@ -729,7 +727,7 @@ sub prestamos{
 #           my @sorted = sort { Date::Manip::Date_Cmp($a->{$orden},$b->{$orden}) } @results;
 #           @results=@sorted;
 #        }
-      #  
+      #
          my $cantReg=scalar(@results);
       #Se chequean si se quieren devolver todos
          if(($cantReg > $params_obj->{'fin'})&&($params_obj->{'fin'} ne "todos")){
@@ -741,15 +739,16 @@ sub prestamos{
             else{
                @results2=@results[$params_obj->{'ini'}..$params_obj->{'cantR'}-1+$params_obj->{'ini'}];
             }
-      
-            return($cantReg,@results2);
+
+            return($cantReg,\@results2);
          }
             else{
-              return ($cantReg,@results);
+              return ($cantReg,\@results);
          }
 }
 
 sub reservas{
+
    my ($id_ui,$orden,$ini,$cantR,$tipo)=@_;
    my $dateformat = C4::Date::get_date_format();
    my @filtros;
