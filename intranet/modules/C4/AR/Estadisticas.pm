@@ -732,21 +732,7 @@ sub reservas{
                                                                         offset => $ini,
                                                                         require_objects => ['socio','nivel3'],
                                                                       );
-
-   foreach my $reserva (@$reservas){
-      $reserva->setFecha_recordatorio(format_date($reserva->getFecha_recordatorio,$dateformat));
-      $reserva->setFecha_reserva(format_date($reserva->getFecha_reserva,$dateformat));
-      if ($reserva->getId3 eq "" ){
-         $reserva->setId3("\-") 
-      }
-      if ($reserva->socio->persona->getEmail eq "" ){
-         $reserva->socio->persona->setEmail("\-");
-         $reserva->{'mail'}=1;
-      }
-      push(@results,$reserva);
-      return ($reservas_count,@results);
-   }
-
+    return ($reservas_count,$reservas);
 }
 
 sub cantidadAnaliticas{

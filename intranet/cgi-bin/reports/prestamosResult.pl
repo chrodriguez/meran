@@ -19,7 +19,10 @@ my ($template, $session, $t_params) = get_template_and_user({
                         debug => 1,
                 });
 
+
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+
+
 my $branch = $obj->{'id_ui'};
 my $orden = $obj->{'orden'} = $obj->{'orden'} || 'cardnumber';
 my $estado = $obj->{'estado'} = $obj->{'estado'}|| 'TO';
@@ -27,6 +30,9 @@ my $estado = $obj->{'estado'} = $obj->{'estado'}|| 'TO';
 #Fechas
 $obj->{'fechaIni'} = $obj->{'begindate'};
 $obj->{'fechaFin'} = $obj->{'enddate'};
+
+C4::AR::Validator::validateParams('VA001',$obj,['id_ui','fechaIni','fechaFin']);
+
 
 my $loggedinuser = $session->param('loggedinuser');
 

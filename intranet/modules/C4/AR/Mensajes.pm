@@ -313,6 +313,7 @@ my %mensajesINTRA = (
     'SP011' => 'El tipo de pr&eacute;stamo ha sido agregado al sistema con &eacute;xito.',
     'SP012' => 'El tipo de pr&eacute;stamo no pudo ser eliminado ya que se encuentra en uso por *?* pr&eacute;stamos.',
     'UT001' => 'Se rompio Utilidades::from_json_ISO',
+    'VA001' => 'Error de parametros, inconsistentes o faltantes, don\'t HACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
 	
 );
 

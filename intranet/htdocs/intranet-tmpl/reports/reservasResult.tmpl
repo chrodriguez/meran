@@ -18,7 +18,7 @@
 		<td class="tablaresultadoTitle click" onclick="ordenar('barcode')" title=[% "Ordenar por codigo de barra" | i18n %]> [% "C&oacute;digo de barra" | i18n %]</td>
 
 	</tr>
-[% FOREACH reserva IN resultsloop %]
+[% FOREACH reserva IN reservas %]
 	<tr align='center'>
 		
 		<td class="inputFontNormal"> 
@@ -38,10 +38,10 @@
 			[% END %]
 		</td>
 		<td class="inputFontNormal"> 
-			[% reserva.getFecha_reserva %]
+			[% reserva.getFecha_reserva_formateada %]
 		</td>
 		<td class="inputFontNormal"> 
-			[% reserva.getFecha_recordatorio %]
+			[% reserva.getFecha_recordatorio_formateada %]
 		</td>
 		<td class="inputFontNormal"> 
 			<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=[% biblionumber %]">[% reserva.nivel3.getBarcode %]</a>
