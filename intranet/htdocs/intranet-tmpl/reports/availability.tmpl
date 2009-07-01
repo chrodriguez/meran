@@ -34,7 +34,7 @@ function consultar(){
 	objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
 	objAH.url="/cgi-bin/koha/reports/availabilityResult.pl";
-	objAH.ui=$("#ui_id").val();
+	objAH.ui=$("#id_ui").val();
 	objAH.fechaIni=$("#fechaIni").val();
 	objAH.fechaFin=$("#fechaFin").val();
 	objAH.disponibilidad=$("#disponibilidad_id").val();

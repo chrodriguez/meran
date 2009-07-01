@@ -18,7 +18,7 @@ my $orden=$input->param('orden')||'date';
 #Inicializo avail
 my $avail=$input->param('avail')||1;
 #fin
-
+# FIXME esto esta malisimo, pasar todo y generar mensajes de error no concatenar
 #Fechas
 my $fini=$input->param('fechaIni');
 my $ffin=$input->param('fechaFin');

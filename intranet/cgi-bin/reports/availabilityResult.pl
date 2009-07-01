@@ -24,9 +24,11 @@ $obj->{'orden'} = $obj->{'orden'}||'date';
 my $ini =$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
 my $ui = $obj->{'ui'};
-$obj->{'disponibilidad'}= C4::Modelo::RefDisponibilidad->new(codigo => $obj->{'disponibilidad'} );
-   $obj->{'disponibilidad'}->load();
-my $disponibilidad = $obj->{'disponibilidad'} = $obj->{'disponibilidad'}->getNombre;
+# $obj->{'disponibilidad'}= C4::Modelo::RefDisponibilidad->new(codigo => $obj->{'disponibilidad'} );
+#    $obj->{'disponibilidad'}->load();
+my $ref_disponibilidad= C4::Modelo::RefDisponibilidad->new(codigo => $obj->{'disponibilidad'} );
+$ref_disponibilidad->load();
+$obj->{'disponibilidad'} = $ref_disponibilidad->getNombre;
 my $fechaIni=$obj->{'fechaIni'};
 my $fechaFin=$obj->{'fechaFin'};
 
@@ -41,16 +43,13 @@ my ($cantidad, $resultsdata)= C4::AR::Estadisticas::disponibilidad($obj);
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 my $availD;
-   if ($disponibilidad eq 0){
-	   $availD='Disponible';
-   }
-   else{
-   
-	   my $av=C4::AR::Busquedas::getAvail($disponibilidad);
-   
-	   if ($av){
-         $availD=$av->{'description'};
-      }
+if ($obj->{'disponibilidad'} eq 0){
+    $availD='Disponible';
+}else{
+    my $av=C4::AR::Busquedas::getAvail($obj->{'disponibilidad'});
+    if ($av){
+        $availD=$av->{'description'};
+    }
 }
 
 $t_params->{'resultsloop'}= $resultsdata;
@@ -62,4 +61,4 @@ $t_params->{'availD'}= $availD;
 $t_params->{'fechaIni'}= $fechaIni;
 $t_params->{'fechaFin'}= $fechaFin;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

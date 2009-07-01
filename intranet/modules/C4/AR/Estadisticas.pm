@@ -234,6 +234,7 @@ sub prestamosAnual{
 ##Ejemplares perdidos del branch que le paso por parametro
 sub disponibilidad{
    my ($params_obj)=@_;
+
    use C4::Modelo::CatHistoricoDisponibilidad::Manager;
    my $dateformat = C4::Date::get_date_format();
    my $dates='';
@@ -271,51 +272,6 @@ sub disponibilidad{
 }
 
 
-#Cantidad de renglones seteado en los parametros del sistema para ver por cada pagina
-sub cantidadRenglones{
-        my $dbh = C4::Context->dbh;
-        my $query="select value
-		   from pref_preferencia_sistema
-                   where variable='renglones'";
-        my $sth=$dbh->prepare($query);
-	$sth->execute();
-	return($sth->fetchrow_array);
-}
-
-#
-#Esta funcion recibe un numero que equivale a la cantidad de tuplas que devuelve cualquier consulta
-# y en base a eso arma el array con la cantidad de paginas que tiene que quedar como respuesta
-# Paginador
-sub armarPaginas{
-	my ($cant,$actual)=@_;
-	my $renglones = cantidadRenglones();
-	my $paginas = 0;
-	if ($renglones != 0){
-		$paginas= $cant % $renglones;}
-	if  ($paginas == 0){
-        	$paginas= $cant /$renglones;}
-	else {$paginas= (($cant - $paginas)/$renglones) +1};
-	my @numeros=();
-	for (my $i=1; ($paginas >1 and $i <= $paginas) ; $i++ ) {
-		 push @numeros, { number => $i, actual => ($i!=$actual)}
-	};
-	return(@numeros);
-}
-
-sub armarPaginasPorRenglones {
-	my ($cant,$actual,$renglones)=@_;
-	my $paginas = 0;
-	if ($renglones != 0){
-		$paginas= $cant % $renglones;}
-	if  ($paginas == 0){
-        	$paginas= $cant /$renglones;}
-	else {$paginas= (($cant - $paginas)/$renglones) +1};
-	my @numeros=();
-	for (my $i=1; ($paginas >1 and $i <= $paginas) ; $i++ ) {
-		 push @numeros, { number => $i, actual => ($i!=$actual)}
-	};
-	return(@numeros);
-}
 
 sub insertarNota{
 	my ($id,$nota)=@_;
