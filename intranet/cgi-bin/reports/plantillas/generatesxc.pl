@@ -9,7 +9,7 @@ use CGI;
 my $input = new CGI;
 
 
-my $files_location;  
+my $files_location;
 my $ID;  
 my @fileholder;
 
@@ -17,7 +17,7 @@ $files_location = ".";
 $ID = $input->param('name').".sxc";
 
 open(DLFILE, "<$files_location/$ID") || Error('open', 'file');  
-@fileholder = <DLFILE>;  
+@fileholder = <DLFILE>;
 close (DLFILE) || Error ('close', 'file');  
 
 print "Content-Type:application/vnd.sun.xml.calc\n";  

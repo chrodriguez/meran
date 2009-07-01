@@ -51,18 +51,97 @@ use vars qw(@EXPORT @ISA);
 	&signaturamax
 	&signaturamin
 	&listaDeEjemplares
+    &listadoDeInventorio
+    &getMaxBarcode
+    &getMinBarcode
+    &getMinBarcodeLike
+    &getMaxBarcodeLike
+    &listarItemsDeInventorioSigTop
 );
 
+sub listarItemsDeInventorioSigTop{
+    my ($sigtop,$orden) = @_;
+
+    my $cat_nivel3 = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( 
+                                                                        query => [ signatura_topografica => { like => $sigtop.'%' } ], 
+                                                                        require_objects => ['nivel2','nivel1'],
+                                                                        select => ['*'],
+                                                                    );
+    return ($cat_nivel3);
+
+
+}
+
+sub getMaxBarcode {
+   my ($branch) = @_;
+   use C4::Modelo::CatNivel3::Manager;
+   my $max = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                         select => ['MAX(t1.barcode) as barcode'],
+                                                         );
+   return ($max->[0]->barcode);
+}
+
+sub getMinBarcode {
+   my ($branch) = @_;
+   use C4::Modelo::CatNivel3::Manager;
+   my $min = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                         select => ['MIN(t1.barcode) as barcode'],
+                                                         );
+   return ($min->[0]->barcode);
+}
+
+sub getMinBarcodeLike {
+   my ($branch,$part_barcode) = @_;
+   use C4::Modelo::CatNivel3::Manager;
+   my $min = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                         query => [ barcode => { like => $part_barcode } ],
+                                                         select => ['MIN(t1.barcode) as barcode'],
+                                                         );
+   return ($min->[0]->barcode);
+}
+
+sub getMaxBarcodeLike {
+   my ($branch,$part_barcode) = @_;
+   use C4::Modelo::CatNivel3::Manager;
+   my $max = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                         query => [ barcode => { like => $part_barcode } ],
+                                                         select => ['MAX(t1.barcode) as barcode'],
+                                                         );
+   return ($max->[0]->barcode);
+}
+
+sub listadoDeInventorio{
+
+    my ($params_obj)=@_;
+
+    use C4::Modelo::CatNivel3::Manager;
+    my @filtros;
+
+    push (@filtros,(barcode => {eq => $params_obj->{'minBarcode'},
+                                gt => $params_obj->{'minBarcode'},
+                                }));
+    push (@filtros,(barcode => {eq => $params_obj->{'maxBarcode'},
+                                lt => $params_obj->{'maxBarcode'},
+                                }));
+    push (@filtros,(id_ui_origen => {eq => $params_obj->{'id_ui_origen'}}));
+
+    my $inventorio = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                                    query => \@filtros,
+                                                                    require_objects => ['nivel2','nivel1'],
+                                                                    sort_by => ['nivel1.titulo'],
+                                                                    );
+    return ($inventorio);
+}
 
 sub historicoDeBusqueda{
    my ($params_obj)=@_;
 
    my $dateformat = C4::Date::get_date_format();
    my @filtros;
-    
+
    if ($params_obj->{'fechaIni'} ne ""){
-      push(@filtros, ( 'busqueda.fecha' => {       eq=> format_date_in_iso($params_obj->{'fechaIni'},$dateformat), 
-                                                   gt => format_date_in_iso($params_obj->{'fechaIni'},$dateformat), 
+      push(@filtros, ( 'busqueda.fecha' => {       eq=> format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
+                                                   gt => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
                                  }
                       ) );
    }

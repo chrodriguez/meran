@@ -26,8 +26,8 @@ my $branch=$input->param('branch');
 ( $branch || ($branch=C4::AR::Preferencias->getValorPreferencia("defaultbranch")) );
 #
 
-my $MIN=C4::Circulation::Circ2::getMinBarcode($branch);
-my $MAX=C4::Circulation::Circ2::getMaxBarcode($branch);
+my $MIN=C4::AR::Estadisticas::getMinBarcode($branch);
+my $MAX=C4::AR::Estadisticas::getMaxBarcode($branch);
 
 my @barcodePorTipo=C4::Circulation::Circ2::barcodesPorTipo($branch);
 

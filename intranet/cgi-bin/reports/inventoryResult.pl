@@ -16,8 +16,9 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $desde=$obj->{'desde'};
 my $hasta=$obj->{'hasta'};
 my $orden=$obj->{'orden'}||'barcode';
+my $accion=$obj->{'accion'};
 
-my ($template, $loggedinuser, $cookie)
+my ($template, $session, $t_params)
     = get_template_and_user({template_name => "reports/inventoryResult.tmpl",
 			     query => $input,
 			     type => "intranet",
@@ -27,35 +28,24 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 #Buscar
-my ($cant,@res) = C4::Circulation::Circ2::listitemsforinventory($desde,$hasta,"",1,"todos",$orden); #Hay que paginar
-#
+# my ($cant,@res) = C4::Circulation::Circ2::listitemsforinventory($desde,$hasta,"",1,"todos",$orden); #Hay que paginar
+
+$t_params->{'minBarcode'} = $desde;
+$t_params->{'maxBarcode'} = $hasta;
+$t_params->{'id_ui_origen'} = "";
+my ($res) = C4::AR::Estadisticas::listadoDeInventorio($t_params);
 
 # Generar Planilla
-my $planilla=generar_planilla_inventario(\@res,$loggedinuser);
-#
+# my $planilla=generar_planilla_inventario($res,$loggedinuser);
 
-foreach my $element (@res) {
-                my %line;
-		$line{'barcode'}=$element->{'barcode'};
-		$line{'id1'}=$element->{'id1'};
-		$line{'signatura_topografica'}=$element->{'signatura_topografica'};
-		$line{'autor'}=$element->{'completo'};
-		$line{'titulo'}=$element->{'titulo'};
-		$line{'unititle'}=C4::AR::Nivel1::getUnititle($element->{'id1'});
-		$line{'publisher'}=$element->{'publisher'};
-		$line{'anio_publicacion'}=$element->{'anio_publicacion'};
-		$line{'number'}=$element->{'number'};
-	        push (@results, \%line);
-}
 
 # my $cant=scalar(@results);
 
-$template->param( 
-			results => \@results,
-			name    => $planilla,
-			cantidad    => $cant,
-			desde   => $desde,
-			hasta   => $hasta,
-		);
+$t_params->{'results'} = $res,
+# $t_params->{'name'} => $planilla;
+# $t_params->{'cantidad'}=> $cant;
+$t_params->{'desde'} = $desde;
+$t_params->{'hasta'} = $hasta;
 
-output_html_with_http_headers $input, $cookie, $template->output;
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+

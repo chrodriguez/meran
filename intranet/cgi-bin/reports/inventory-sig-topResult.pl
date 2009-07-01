@@ -26,7 +26,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 #Buscar
 my $cat_nivel3;
 if($sigtop ne ''){
-   $cat_nivel3 = C4::Circulation::Circ2::listaritemsDeInventorioSigTop($sigtop,$orden);
+   $cat_nivel3 = C4::AR::Estadisticas::listarItemsDeInventorioSigTop($sigtop,$orden);
 }
 #
 # Generar Planilla
@@ -34,30 +34,11 @@ if($sigtop ne ''){
 # my $planilla=generar_planilla_inventario_sig_top(\@res,$loggedinuser);
 #
 
-# foreach my $element ($sigtop."%") {
-#         my %line;
-#  $line{'barcode'}=$element->{'barcode'};
-#  $line{'id2'}=$element->{'id2'};
-#  $line{'signatura_topografica'}=$element->{'signatura_topografica'};
-#  $line{'id'}=$element->{'id'};
-#  $line{'autor'}=$element->{'autor'}->{'completo'};
-#  $line{'titulo'}=$element->{'titulo'};
-#  $line{'unititle'}=C4::AR::Nivel1::getUnititle($element->{'id1'});
-#  $line{'publisher'}=$element->{'publisher'};
-#  $line{'anio_publicacion'}=$element->{'anio_publicacion'};
-#  $line{'number'}=$element->{'number'};
-#         push (@results, \%line);
-# }
-# 
 my @results;
 my $cant=scalar(@$cat_nivel3);
-foreach my $cat_nivel3 (@$cat_nivel3){
-   my %row = (
-               cat_nivel3 => $cat_nivel3,
-               );
-   push(@results, \%row);
-}
-$t_params->{'results'}= \@results;
+
+
+$t_params->{'results'}= $cat_nivel3;
 
 # print $cat_nivel3->[0]->nivel2->nivel1->autor;
 # $t_params->{'name'}= $planilla;

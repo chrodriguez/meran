@@ -1,58 +1,61 @@
 [% USE HTML %]
 <br>
-<p class="inputFontNormal" align="center">[% "La cantidad Total de ejemplares es:" | i18n %] [% cantidad %]</p>
+
+<p class="inputFontNormal" align="center">
+    [% "La cantidad Total de ejemplares es:" | i18n %] [% cantidad %]
+</p>
+
 <br>
 
 
 <table id="tablaResult" class="tablaResult" border="0" cellspacing="0" cellpadding="0" width="100%">
-<tr class="tablaresultadoTitle click">
+    <tr class="tablaresultadoTitle click">
 
-	<th onClick="ordenar('barcode');">[% "Nro. de Inventario" | i18n %]</th>
-	<th onClick="ordenar('completo');">[% "Autor" | i18n %]</th>
-	<th onClick="ordenar('title');">[% "T&iacute;tulo" | i18n %]</th>
-	<th onClick="ordenar('number');">[% "Edic." | i18n %]</th>
-	<th onClick="ordenar('publisher');">[% "Editor" | i18n %]</th>
-	<th onClick="ordenar('publicationyear');">[% "A&ntilde;o" | i18n %]</th>
-	<th onClick="ordenar('bulk');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
+        <th onClick="ordenar('barcode');">[% "Nro. de Inventario" | i18n %]</th>
+        <th onClick="ordenar('completo');">[% "Autor" | i18n %]</th>
+        <th onClick="ordenar('title');">[% "T&iacute;tulo" | i18n %]</th>
+        <th onClick="ordenar('number');">[% "Edic." | i18n %]</th>
+        <th onClick="ordenar('publisher');">[% "Editor" | i18n %]</th>
+        <th onClick="ordenar('publicationyear');">[% "A&ntilde;o" | i18n %]</th>
+        <th onClick="ordenar('bulk');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
 
-</tr>
+    </tr>
 
-[% FOREACH results %]
-        <tr class="inputFontNormal">
-                <td  align=left>
-                        [% cat_nivel3.getBarcode %]
-                </td>
-                <td align="center">
-                        [% cat_nivel3.nivel2.nivel1.cat_autor.getNombre %]
-                </td>
-                <td align="center">
-                        [% HTML.escape(cat_nivel3.nivel2.nivel1.getTitulo) %]
-                        [% IF cat_nivel3.unititle %]:&nbsp;
-                                [% HTML.escape(unititle) %]
-                        [% END %]
-                </td>
-                <td align="center">
-                        [% number %]
-                </td>
-                <td align="center">
-                        [% publisher %]
-                </td>
-                <td align="center">
-                        [% cat_nivel3.nivel2.getAnio_publicacion %]
-                </td>
-                <td align="center">
-                        [% cat_nivel3.getSignatura_topografica %]
-                </td>              
-        </tr>
+    [% FOREACH cat_nivel3 IN results %]
+            <tr class="inputFontNormal">
+                    <td  align="center">
+                            [% cat_nivel3.getBarcode %]
+                    </td>
+                    <td align="center">
+                            [% cat_nivel3.nivel2.nivel1.cat_autor.getNombre %]
+                    </td>
+                    <td align="center">
+                            [% HTML.escape(cat_nivel3.nivel2.nivel1.getTitulo) %]
+                            [% IF cat_nivel3.unititle %]:&nbsp;
+                                    [% HTML.escape(unititle) %]
+                            [% END %]
+                    </td>
+                    <td align="center">
+                            [% number %]
+                    </td>
+                    <td align="center">
+                            [% publisher %]
+                    </td>
+                    <td align="center">
+                            [% cat_nivel3.nivel2.getAnio_publicacion %]
+                    </td>
+                    <td align="center">
+                            [% cat_nivel3.getSignatura_topografica %]
+                    </td>
+            </tr>
 
-[% END %]
+    [% END %]
 </table>
 
 <br><br>
 
 <center>
-	<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% name %]">[% "Generar planilla " | i18n %]
-	<img src="[% interface %]/[% themelang %]/images/sxc.png" border="0">
-	</a>
+    <a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% name %]">[% "Generar planilla " | i18n %]
+        <img src="[% interface %]/[% themelang %]/images/sxc.png" border="0">
+    </a>
 </center>
-

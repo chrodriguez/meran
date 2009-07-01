@@ -112,51 +112,6 @@ sub insertHistoricCirculation {
   return;
 }
 
-=item
-SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS (inventory.pl) TAMBIEN SE USA EN barcodesbytype FUNCION QUE ESTA MAS ABAJO.
-=cut
-sub getMaxBarcode {
-   my ($branch) = @_;
-   use C4::Modelo::CatNivel3::Manager;
-   my $max = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-                                                         select => ['MAX(t1.barcode) as barcode'],
-                                                         );
-   return ($max->[0]->barcode);
-}
-
-sub getMinBarcode {
-   my ($branch) = @_;
-   use C4::Modelo::CatNivel3::Manager;
-   my $min = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-                                                         select => ['MIN(t1.barcode) as barcode'],
-                                                         );
-   return ($min->[0]->barcode);
-}
-=item
-SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS (inventory.pl), TAMBIEN SE USA EN barcodesbytype FUNCION QUE ESTA MAS ABAJO.($sth3->fetchrow_hashref)->{'max'};
-=cut
-sub getMinBarcodeLike {
-   my ($branch,$part_barcode) = @_;
-   use C4::Modelo::CatNivel3::Manager;
-   my $min = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-                                                         query => [ barcode => { like => $part_barcode } ],
-                                                         select => ['MIN(t1.barcode) as barcode'],
-                                                         );
-   return ($min->[0]->barcode);
-}
-
-sub getMaxBarcodeLike {
-   my ($branch,$part_barcode) = @_;
-   use C4::Modelo::CatNivel3::Manager;
-   my $max = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-                                                         query => [ barcode => { like => $part_barcode } ],
-                                                         select => ['MAX(t1.barcode) as barcode'],
-                                                         );
-   return ($max->[0]->barcode);
-}
-
-
-
 
 =item
 SE USA EN EL REPORTE DE BARCODES POR TIPO - PERO NO SE SI ANDA SE PUEDE PASAR A ESTADISTICAS.PM
@@ -206,31 +161,33 @@ SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS
 =cut
 
 sub listitemsforinventory {
-	my ($minlocation,$maxlocation,$branch,$ini,$fin,$orden) = @_;
-	my $branchcode=  $branch || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
-	my $dbh = C4::Context->dbh;
-	# unititle,number,
-	my $sth = $dbh->prepare("SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id1, n3.homebranch
-	FROM (( cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2) INNER JOIN cat_nivel1 n1 ON n1.id1 = n2.id1)
-	WHERE (barcode BETWEEN ? AND ?) AND n3.homebranch= ? ORDER BY barcode, titulo ");
-		
-	$sth->execute($minlocation,$maxlocation,$branchcode);
-	
-	my @results;
-	while (my $row = $sth->fetchrow_hashref) {
-# 		$row->{'publisher'}=getpublishers($row->{'biblioitemnumber'});
-		$row->{'autor'}=C4::AR::Busquedas::getautor($row->{'autor'});
-		$row->{'completo'}=($row->{'autor'})->{'completo'}; #para dar el orden
-		push @results,$row;
-	}
+    my ($minlocation,$maxlocation,$branch,$ini,$fin,$orden) = @_;
+    my $branchcode=  $branch || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
+    my $dbh = C4::Context->dbh;
+    # unititle,number,
+    my $sth = $dbh->prepare("SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id1, n3.homebranch
+                            FROM (( cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2) INNER JOIN cat_nivel1 n1 ON n1.id1 = n2.id1)
+                            WHERE (barcode BETWEEN ? AND ?) AND (n3.homebranch= ?)
+                            ORDER BY barcode, titulo 
+    ");
 
-	if ($orden){
-	# Da el ORDEN al arreglo
-	my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
-	@results=@sorted;
-	}
+    $sth->execute($minlocation,$maxlocation,$branchcode);
 
-	my $cantReg=scalar(@results);
+    my @results;
+    while (my $row = $sth->fetchrow_hashref) {
+# 	      $row->{'publisher'}=getpublishers($row->{'biblioitemnumber'});
+	    $row->{'autor'}=C4::AR::Busquedas::getautor($row->{'autor'});
+	    $row->{'completo'}=($row->{'autor'})->{'completo'}; #para dar el orden
+	    push @results,$row;
+    }
+
+    if ($orden){
+    # Da el ORDEN al arreglo
+    my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
+    @results=@sorted;
+    }
+
+    my $cantReg=scalar(@results);
 
 #Se chequean si se quieren devolver todos
 	if(($cantReg > $fin)&&($fin ne "todos")){
@@ -249,33 +206,6 @@ sub listitemsforinventory {
 		return ($cantReg,@results);
 	}
 
-}
-
-=item
-SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS
-=cutsignatura_topografica
-sub listaritemsDeInventorioSigTop{
-	my ($sigtop,$orden) = @_;
-	#FALTA unititle,number es la edicion,
-# 	my $sth = $dbh->prepare("SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n1.id1 as id1
-# 	FROM ((cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2) INNER JOIN cat_nivel1 n1 ON n1.id1 = n2.id1)
-# 	WHERE signatura_topografica LIKE ?
-# 	ORDER BY barcode, titulo");
-   
-   my $cat_nivel3 = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( 
-                                                                     query => [ signatura_topografica => { like => $sigtop.'%' } ], 
-                                                                     require_objects => ['nivel2'],
-                                                                     select => ['*'],
-                                                                   );
-# 		
-	
-# 	if ($orden){
-# 	   # Da el ORDEN al arreglo
-# 	   my @sorted = sort { $a->{$orden} cmp $b->{$orden} } @results;
-# 	   @results=@sorted;
-# 	}
-
-   
 }
 
 
