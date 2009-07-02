@@ -1,24 +1,5 @@
 package C4::AR::Mensajes;
 
-#Este modulo provee funcionalidades para la reservas de documentos
-#
-#Copyright (C) 2003-2008  Linti, Facultad de Inform�tica, UNLP
-#This file is part of Koha-UNLP
-#
-#This program is free software; you can redistribute it and/or
-#modify it under the terms of the GNU General Public License
-#as published by the Free Software Foundation; either version 2
-#of the License, or (at your option) any later version.
-#
-#This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#GNU General Public License for more details.
-#
-#You should have received a copy of the GNU General Public License
-#along with this program; if not, write to the Free Software
-#Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
 use strict;
 require Exporter;
 
@@ -137,7 +118,7 @@ my %mensajesINTRA = (
 	'U301' => 'El usuario no puede reservar porque no ha realizado a&uacute;n el curso para usuarios.',
 	'U302' => '',
 	'U303' => '',
-	'U304' => 'El usuario no hizo el curso de koha.',
+	'U304' => 'El usuario no hizo el curso de MERAN.',
 	'U305' => 'Disculpe, no se pudo eliminar el item con c&oacute;digo de barras *?*, intente nuevamente.',
 	'U306' => 'Disculpe, no se pudo eliminar el grupo *?*, intente nuevamente.',
 	'U307' => 'Disculpe, no se pudo eliminar el registro *?*, intente nuevamente.',
@@ -187,11 +168,11 @@ my %mensajesINTRA = (
 	'U351' => 'El usuario no se puede borrar ya que cuenta con prestamos activos y/o vencidos!!!',
 	'U352' => 'El usuario no se puede borrar ya que es el mismo que est&aacute; activo en la sesi&oacute;n.',
 	'U353' => 'El usuario solicitado no existe.',
-	'U354' => 'Disculpe, Koha cree que usted no tenga permiso para esta p&aacute;gina.',
+	'U354' => 'Disculpe, MERAN cree que usted no tenga permiso para esta p&aacute;gina.',
 	'U355' => 'Disculpe, su sesi&oacute;n ha caducado. Por favor ingrese nuevamente.',
-	'U356' => 'Esta accediendo a Koha desde una direcci&oacute;n IP diferente! Por favor ingrese nuevamente.',
+	'U356' => 'Esta accediendo a MERAN desde una direcci&oacute;n IP diferente! Por favor ingrese nuevamente.',
 	'U357' => 'Ha ingresado un nombre de usuario o password incorrecto. Por favor intente nuevamente.',
-	'U358' => 'Ud. ha cerrado su sesion. Gracias por usar KOHA.',
+	'U358' => 'Ud. ha cerrado su sesion. Gracias por usar MERAN.',
     'U359' => 'El password ha sido reseteado.',
     'U360' => 'El password NO ha sido reseteado, intentelo m&aacute;s tarde.',
     'U361' => 'El password actual NO coincide con el suyo.',

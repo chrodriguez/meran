@@ -247,7 +247,7 @@ border:0px;
  
  /*                                    titulos                                      */
  
-.title {/*cambiar por nombre titulos*/
+.titulos {/*esto era title, cambiar en templates*/
        font-weight: bold;
 	   font-Family : normal tahoma,arial,helvetica,sans-serif;
 	   font-size: 12pt;
@@ -257,17 +257,15 @@ border:0px;
 	   height: 30px;
 }
 	   
-.pagetitle { /*cambiar por nombre titulos_interior*/
+.titulos_interior { /*esto era pagetitle, cambiar en templates*/
 	  font-weight: bold;
 	  font-Family : tahoma, arial, helvetica, sans-serif;
-	  font-size : 11pt;
+	  font-size : 25px;
 	  color: #416ca5;
 	  text-align: left;
-	  margin-left:20px;
-	  padding-left:20px;
-	
-
-	  }
+	  margin-left: 20px;
+	  padding-left: 20px;
+}
 /*                                 fin de titulos                                      */
 
 /*                                        estilos para los botones                                     */
@@ -281,7 +279,7 @@ border:0px;
    margin-right: -135px; 
    margin-bottom:-3px
 }
-.inputFontNormal{
+/*.inputFontNormal{
 	font-family: "Verdana","Trebuchet MS", "Arial";
 	font-size: 10pt;
 	color: #000000;
@@ -289,7 +287,7 @@ border:0px;
 	overflow:auto; 
 	padding-left:20px;
 	            
-}
+}*/
 /*                                      Fin  estilos para los botones                                  */
 
 /* TODO no se si es compatible con IE */
@@ -873,5 +871,28 @@ ul#horizontal-list {
 .vertical{
 }
 /*                                                 FIN MARC                            */
+
+/*                                                   estilos para los reportes                     */
+.filtros_reportes{
+    font-size: 13px;
+    overflow: auto;
+    display:table;
+    margin:0 auto;
+}
+
+.filtros_reportes li{
+    padding-top: 5px;
+}
+
+.filtros_reportes_izq{
+    float: left;
+    padding-right: 70px;
+}
+
+.filtros_reportes_der{
+    float: left;
+}
+
+/*                                              fin estilos para los reportes                           */
 
 

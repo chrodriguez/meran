@@ -9,6 +9,7 @@ $(document).ready(function() {
     crearDatePicker('f_fin');
 
 });
+
 </script>
 
 <script language="javascript">
@@ -44,51 +45,38 @@ function consultar(){
 </script>
 
 
-<table width="100%"  border="0" cellpadding="0" cellspacing="0">
-	<tr><td class="pagetitle" >[% "Historial de Pr&eacute;stamos" | i18n %]</td></tr>
-	<tr><td class="lineagruesa"  align="left" colspan="3"></td></tr>
-</table>
-<br>
+<div class="titulos_interior">[% "Historial de Pr&eacute;stamos" | i18n %]</div>
+
+<div class="filtros_reportes">
+    <ul class="filtros_reportes_izq">
+        <li>[% "Seleccione una fecha de inicio:" | i18n %]</li>
+	    <li><input id="f_ini" name="f_ini" value="[% f_ini %]"></li>
+        <li>[% "Seleccione una fecha de Fin: " | i18n %]</li>
+        <li><input id="f_fin" name="f_fin" value="[% f_fin %]"></li>
+    </ul>
+
+    <ul class="filtros_reportes_der">
+	    <li>[% "Categoria de Usuario:" | i18n %]</li>
+        <li>[% selectCatUsuarios %]</li>
+        <li>[% "Tipo de Pr&eacute;stamo:" | i18n %]</li>
+        <li>[% selectTiposPrestamos %]</li>
+        <li>[% "Tipo de Item:" | i18n %]</li>
+        <li>[% selectTiposDocumentos %]</li>
+    </ul>
+</div>
+
+<div class="buttonContainerHorizontal">
+[% PERL %]
+                        print C4::AR::Filtros::to_Button( 
+                                                            text    =>  "[% 'Buscar' | i18n %]",
+                                                            title    =>  "[% 'Buscar' | i18n %]",
+                                                            boton   =>  "boton_buscar",
+                                                            onClick =>  "consultar();",
+                                ) ;
+[% END %]
+</div>
+
+<div id="result"></div>
 
 
-<table border=0 cellspacing=0 cellpadding=0 width="80%" align="left">
-	<tr>
-	  <td><b>[% "Seleccione una fecha de inicio:" | i18n %]</b></td>
-	  <td><input id="f_ini" class="inputFontNormal" name="f_ini" value="[% f_ini %]">  </td>
-	<td colspan="2">&nbsp;</td>	
-	<tr>
-	  <td><b>[% "Seleccione una fecha de Fin: " | i18n %]</b></td>	
-	  <td  class=inputFontNormal><input id="f_fin" class="inputFontNormal" name="f_fin" value="[% f_fin %]"></td>
-	  <td colspan=2 align="center">
-                [% PERL %]
-                                print C4::AR::Filtros::to_Button( 
-                                                                    text    =>  "[% 'Buscar' | i18n %]",
-                                                                    boton   =>  "boton_buscar",
-                                                                    onClick =>  "consultar();",
-                                        ) ;
-                [% END %]
-	  </td>
-        </tr>
-	<tr>
-	  <td><b>[% "Categoria de Usuario:" | i18n %] </b></td>
-	  <td>[% selectCatUsuarios %]</td>
-	  <td colspan="3">&nbsp;</td>
-	</tr>
-	<tr>
-	  <td><b>[% "Tipo de Pr&eacute;stamo:" | i18n %] </b></td>
-	  <td>[% selectTiposPrestamos %]</td>
-	  <td colspan="3">&nbsp;</td>
-    	</tr>
-	<tr>
-	  <td><b>[% "Tipo de Item:" | i18n %] </b></td>
-	  <td>[% selectTiposItems %]</td>
-	  <td colspan="3">&nbsp;</td>
-	</tr>
-</table>
-
-<br><br>
-
-<div id="result" width="100%" height="100%"></div>
-
-<br>
 [% INCLUDE "intranet-bottom.inc" %]

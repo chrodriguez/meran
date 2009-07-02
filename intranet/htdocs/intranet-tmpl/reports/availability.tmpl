@@ -43,14 +43,14 @@ function consultar(){
 }
 
 function generarPDF(){
-    $('#unidadInformacion')[0].action= "/cgi-bin/koha/reports/print.pl";
+    $('#unidadInformacion')[0].action= "/cgi-bin/koha/reports/printDisponibilidadEjemplares.pl";
     $('#unidadInformacion')[0].target= "_self";
     $('#unidadInformacion')[0].type.value= "pdf";
     $('#unidadInformacion')[0].submit();
 }
 
 function imprimir(){
-    $('#unidadInformacion')[0].action= "/cgi-bin/koha/reports/print.pl";
+    $('#unidadInformacion')[0].action= "/cgi-bin/koha/reports/printDisponibilidadEjemplares.pl";
     $('#unidadInformacion')[0].target= "_blank";
     $('#unidadInformacion')[0].type.value= "print";
     $('#unidadInformacion')[0].submit();
