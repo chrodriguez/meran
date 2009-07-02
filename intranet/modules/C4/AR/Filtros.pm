@@ -116,7 +116,6 @@ sub to_Button{
     my $onClick= $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onClick
     my $title= $params_hash_ref{'title'}; #obtengo el title de la componete
     my $width= length($text);
-C4::AR::Debug::debug("width==========================".$width);
 
     if($params_hash_ref{'width'}){
 #         C4::AR::Debug::debug("to_Button => width: ".$params_hash_ref{'width'});

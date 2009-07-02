@@ -225,7 +225,7 @@ sub get_template_and_user {
 
 
 sub output_html_with_http_headers {
-    my($query, $template, $params, $session, $cookie) = @_;
+    my($query, $template, $params, $session) = @_;
 
  	print $session->header(	charset => C4::Context->config("charset")||'utf-8', "Cache-control: public");
 # 		print $session->header(	charset => C4::Context->config("charset")||'utf-8');

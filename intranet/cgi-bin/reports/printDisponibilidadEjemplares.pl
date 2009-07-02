@@ -32,19 +32,21 @@ if (($fini) and ($ffin)){
 	$msg.='entre las fechas: <b>'.C4::Date::format_date($fini,$dateformat).'</b> y <b>'.format_date($ffin,$dateformat).'</b> .'; 
 }
 
-if ($input->param('type') eq 'pdf') {#Para PDF
+if ($input->param('type') eq 'pdf') {
+C4::AR::Debug::debug("PDF");
+    #Para PDF
 	my  $msg2='Ejemplares con disponibilidad: '.C4::AR::Busquedas::getAvail($avail)->{'description'}.' ';
 	if (($fini) and ($ffin)){
 		$msg2.='entre las fechas: '.format_date($fini,$dateformat).' y '.format_date($ffin,$dateformat).' .';
 	}
-	availPdfGenerator($msg2,@results);
+ 	availPdfGenerator($msg2,@results);
 }
 else{ #Para imprimir
 my  ($template, $session, $t_params)= get_template_and_user({
-									template_name => "reports/print.tmpl",
+									template_name => "reports/printDisponibilidadEjemplares.tmpl",
 									query => $input,
 									type => "intranet",
-									authnotrequired => 1,
+									authnotrequired => 0,
 									flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                              });
 
@@ -55,6 +57,6 @@ $t_params->{'SEARCH_RESULTS'}= $resultsarray;
 $t_params->{'numrecords'}= $cantidad;
 $t_params->{'msg'}= $msg;
 
-
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
+

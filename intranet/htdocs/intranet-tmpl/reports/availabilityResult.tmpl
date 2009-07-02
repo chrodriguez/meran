@@ -15,13 +15,27 @@
 	<tr height="24">
 
 	<!-- ver si va esta clase ????, falta q se vea la manito-->
-		<td class="tablaresultadoTitle click" onClick="ordenar('completo');" title=[% "Ordenar por autor" | i18n %]>[% "Autor" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onClick="ordenar('titulo');" title=[% "Ordenar por titulo" | i18n %]>[% "T&iacute;tulo" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onClick="ordenar('signatura_topografica');" title=[% "Ordenar por Sig. Topografica" | i18n %]>[% "Signatura Topogr&aacute;fica" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onClick="ordenar('barcode');" title=[% "Ordenar por cod. de barras" | i18n %]>[% "C&oacute;digo de barras" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onClick="ordenar('number');" title=[% "Ordenar por edicion" | i18n %]>[% "Edici&oacute;n" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onClick="ordenar('anio_publicacion');" title=[% "Ordenar por a&ntilde;o de publicacion" | i18n %]>[% "A&ntilde;o de Publicaci&oacute;n" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onClick="ordenar('date');" title=[% "Ordenar por fecha" | i18n %]>[% "Fecha" | i18n %]</a></th>
+		<td class="tablaresultadoTitle click" onClick="ordenar('completo');" title="[% 'Ordenar por autor' | i18n %]">
+            [% "Autor" | i18n %]
+        </td>
+		<td class="tablaresultadoTitle click" onClick="ordenar('titulo');" title="[% 'Ordenar por titulo' | i18n %]">
+            [% "T&iacute;tulo" | i18n %]
+        </td>
+		<td class="tablaresultadoTitle click" onClick="ordenar('signatura_topografica');" title="[% 'Ordenar por Sig. Topografica' | i18n %]">
+            [% "Signatura Topogr&aacute;fica" | i18n %]
+        </td>
+		<td class="tablaresultadoTitle click" onClick="ordenar('barcode');" title="[% 'Ordenar por cod. de barras' | i18n %]">
+            [% "C&oacute;digo de barras" | i18n %]
+        </td>
+		<td class="tablaresultadoTitle click" onClick="ordenar('number');" title="[% 'Ordenar por edicion' | i18n %]">
+            [% "Edici&oacute;n" | i18n %]
+        </td>
+		<td class="tablaresultadoTitle click" onClick="ordenar('anio_publicacion');" title="[% 'Ordenar por a&ntilde;o de publicacion' | i18n %]">
+            [% "A&ntilde;o de Publicaci&oacute;n" | i18n %]
+        </td>
+		<td class="tablaresultadoTitle click" onClick="ordenar('date');" title="[% 'Ordenar por fecha' | i18n %]">
+            [% "Fecha" | i18n %]
+        </th>
 
 	</tr>
 [% FOREACH historico IN resultsloop %]
@@ -40,21 +54,36 @@
 
 </table>
 <!--Botones del fondo -->
-<form name="unidadInformacion" method="post">
+<form id="unidadInformacion" name="unidadInformacion" method="post">
 	<!-- Para poder imprimir bien los datos en la pagina y pdf -->
 	<input type="hidden" name="orden" value="[% orden %]">
 	<input type="hidden" name="disponibilidad" value="[% disponibilidad %]">
 	<input type="hidden" name="fechaIni" value="[% fechaIni %]">
 	<input type="hidden" name="fechaFin" value="[% fechaFin %]">
 	<input type="hidden" name="ui" value="[% ui %]">
-
-	<input TYPE="hidden" VALUE="pdf" NAME="type" > 
-		<a  onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
+    <input type="hidden" name="token" value="[% token %]">
+	<input type="hidden" name="type" value="pdf"> 
+		<!--<a  onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
 		<input onClick="uinidadInformacion.action='/cgi-bin/koha/reports/print.pl';uinidadInformacion.target='_blank';uinidadInformacion.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="[% themelang %]/images/menu-imprimir.png" border="0" title=[% "Imprimir Resultados" | i18n %]>
 		</a>
 
 		<a  onMouseOut="swap('pdf','[% themelang %]/images/pdf.png')" onMouseOver="swap('pdf','[% themelang %]/images/pdfbis.png')">
 		<input onClick="uinidadInformacion.action='/cgi-bin/koha/reports/print.pl';uinidadInformacion.target='_self'; uinidadInformacion.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value=[% "Generar PDF" | i18n %] src="[% themelang %]/images/pdf.png" border="0" title=[% "Generar archivo PDF" | i18n %]>
-		</a>
+		</a>-->
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                boton   => "icon_imprimir",
+                                                                onClick => "imprimir();",
+                                                                title   => "[% "Imprimir" | i18n %]",
+                                        ) ;
+            [% END %]
+
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                boton   => "icon_pdf",
+                                                                onClick => "generarPDF();",
+                                                                title   => "[% "Generar PDF" | i18n %]",
+                                        ) ;
+            [% END %]
 <form>
-<br><br>
+
