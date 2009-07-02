@@ -1,0 +1,118 @@
+body {
+	}
+
+#marco_superior {
+	background: transparent  url(../imagenes/arriba_izq.png) no-repeat top left;
+		   }
+#marco_superior div {
+	background: transparent url(../imagenes/arriba_der.png) no-repeat top right;
+			}
+#marco_inferior {
+	background: transparent  url(../imagenes/abajo_izq.png) no-repeat bottom left;
+		   }
+#marco_inferior div {
+	background: transparent url(../imagenes/abajo_der.png) no-repeat bottom right;
+			}
+#marco_contenido{
+	clear:both;
+	margin-bottom:3%;
+}
+#marco_principal{
+	background:#f7f6f6 url(../imagenes/medio.gif) repeat ;
+	}
+#marca{
+	background-image:url(../imagenes/logo_meran.png);
+	background-color:#DC143C;/*#f7f6f6;*/
+	background-position:center;
+	text-align:center;
+	padding:1%;
+	margin-top:1%;
+	background-repeat: no-repeat;
+	height:30px;
+	}
+
+.logo_Superior{
+   background-image:  url(../imagenes/logo.jpeg);
+   width: 142px;
+   float: left;
+   margin-bottom:12px;
+   height:104px;
+}
+
+#login {
+	background-image:url(../imagenes/fondolog.png);
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 14px;
+	position: static;
+	height: 261px;
+	width: 362px;
+	text-align: left ; 
+	font-weight: bold;
+}
+
+/*                                   estilos para texto contenido                          */
+
+.tdout{
+      font-family: "Verdana","Trebuchet MS", "Arial";
+    font-size: 8pt;
+    color: #90030F;
+    list-style: none;
+    font-weight: normal;
+    padding: 0px;
+    margin: 2px;
+	text-decoration:none;
+	
+}
+.tdhover{
+	  font-family: "Verdana","Trebuchet MS", "Arial";
+    list-style: none;
+	font-size: 8pt;
+	text-decoration:none;
+	color: #B20413;
+	}
+
+.menu_superior_sin_sub{
+   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+   color:#fff;
+   background:url(../imagenes/menu.png);
+   text-transform:uppercase;
+   cursor: pointer;
+   display:block;
+   white-space:nowrap;
+   margin:0;
+   padding:0 5px;
+   height:20px;
+   -moz-border-radius-topleft:5px;
+   -webkit-border-top-left-radius:5px;
+   -moz-border-radius-topright:5px;
+   -webkit-border-top-right-radius:5px;
+}
+
+.menu_superior{
+   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+   color:#fff;
+   background: url(../imagenes/menu.png) repeat 100% 100%;
+   text-transform:uppercase;
+   text-align:center;
+   cursor: pointer;
+   display:block;
+   white-space:nowrap;
+   margin:0;
+    -moz-border-radius-topleft:8px;
+   -webkit-border-top-left-radius:8px;
+   -moz-border-radius-topright:8px;
+   -webkit-border-top-right-radius:8px;
+}
+.menu_intermedio{
+	color:#fff;
+	background:#DC143C url(../imagenes/expand3.gif) no-repeat right;
+	text-transform:uppercase;
+	cursor: pointer;
+	display:block;
+	white-space:nowrap;
+	margin:0;
+	padding:0 5px;
+	width:auto;
+	font-size: 10px;
+
+}

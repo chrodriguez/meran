@@ -82,6 +82,40 @@ body {
    margin-bottom:12px;
    height:104px;
 }
+#login {
+	background-image:url(../imagenes/fondolog.png);
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	font-size: 14px;
+	position: static;
+	height: 261px;
+	width: 362px;
+	text-align: left ; 
+	font-weight: bold;
+}
+
+#login span {
+display:block;
+margin-bottom:12%;
+}
+
+#login input {
+float:right;
+}
+#login label {
+float:left;
+}
+
+#contenido_login  {
+display:block;
+padding: 14% 12%; 
+margin-top:50%;
+}
+#boton_login  {
+display:block;
+padding: 11% 32%; 
+}
+
+
 
 .idioma_y_login{
 	width: 18%;

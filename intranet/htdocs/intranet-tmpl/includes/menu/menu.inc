@@ -6,11 +6,11 @@
 
  <div class="idioma_y_login">
             [% IF loggedinusername %]
-                  <h2 class="login" id="login">Ingres&oacute; como:<b> [% loggedinusername %]</b> 
+                  <h2 id="logout">Ingres&oacute; como:<b> [% loggedinusername %]</b> 
                            [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1 tabindex="-1">Salir</a>]
                   </h2>
             [% ELSE %]
-               <p class="login">
+               <p id="logout">
                     <a href=/cgi-bin/koha/opac-user.pl>Entrar a Koha</a>
                </p>
             [% END %]
