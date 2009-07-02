@@ -48,15 +48,28 @@ body {
 }
 #marco_principal{
 	clear:both;
-	background:#f7f6f6 url(../imagenes/medio.png) repeat ;
-	}
+	background:#f7f6f6 url(../imagenes/medio.png) repeat;
+
+}
 #marca{
-	background-image:url(../imagenes/logo_meran.png);
-	background-color:#416ca5;/*#f7f6f6;*/
-	background-position:center;
+	background-image:url(../imagenes/fondo_footer.png);
+	background-color:#f7f6f6;
 	text-align:center;
 	padding:1%;
 	margin-top:1%;
+	-moz-border-radius-topleft:8px;
+    -moz-border-radius-topright:8px;
+	-moz-border-radius-bottomleft:8px;
+    -moz-border-radius-bottomright:8px;
+	background-repeat: repeat-x;
+	height:10px;
+	}
+#marca div{
+	background-image:url(../imagenes/logo_meran.png);
+    padding:1%;
+	margin-top:-21px;
+	background-position:center;
+	text-align:center;
 	background-repeat: no-repeat;
 	height:30px;
 	}
@@ -85,7 +98,8 @@ body {
 #menu{
    width:1024px;
    float:left;
-   margin:0px;
+   margin:2px;
+   
 }
 .main-header{
    width:100%;
@@ -216,6 +230,7 @@ border:0px;
 	  color: #416ca5;
 	  text-align: left;
 	  margin-left:20px;
+	  padding-left:20px;
 	
 
 	  }
@@ -231,6 +246,15 @@ border:0px;
 .botonBehindText {
    margin-right: -135px; 
    margin-bottom:-3px
+}
+.inputFontNormal{
+	font-family: "Verdana","Trebuchet MS", "Arial";
+	font-size: 10pt;
+	color: #000000;
+	font-weight: normal;
+	overflow:auto; 
+	padding-left:20px;
+	            
 }
 /*                                      Fin  estilos para los botones                                  */
 
@@ -282,7 +306,7 @@ input[type=text]:focus{
     list-style: none;
 	font-size: 8pt;
 	text-decoration:none;
-	color: #365989;
+	color: #999999;
 	}
 
 	
@@ -324,6 +348,7 @@ tr.impar {
     font-family: "Trebuchet MS", "Verdana", "Arial";
     color: #f2f2f2;
     font-weight: bold;
+	background-color:#FF9999;
 }
 /*                                  Fin     estilos para mensajes de usuario                                */
 
@@ -749,8 +774,20 @@ tr.impar {
     height: 25px;
     width: 25px;
 }
-/*                                                     Fin estilos para los iconos                                 */
+/*                 Fin estilos para los iconos  */     
+                          
+/*                  estilo ventanas emergentes            */                                                                    
 
+.winHeader {
+	background-image:url(../imagenes/head_div.gif);
+	background-color:#8BB2CC;
+	border:1px solid #999999;
+	color:#FFFFFF;
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:13px;
+	font-weight:bold;
+	height:24px;
+}
 
 /*                                          para MARC                                                    */
 

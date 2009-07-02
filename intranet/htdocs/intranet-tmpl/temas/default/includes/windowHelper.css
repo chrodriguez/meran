@@ -34,16 +34,7 @@ div.dimming {
 	z-index:80;
 } 
 
-.winHeader {
-	background-image:url(../imagenes/head_div.gif);
-	background-color:#8BB2CC;
-	border:1px solid #999999;
-	color:#FFFFFF;
-	font-family:Arial,Helvetica,sans-serif;
-	font-size:13px;
-	font-weight:bold;
-	height:24px;
-}
+
 
 /* no se si se usa */
 .ventanaContenido {
