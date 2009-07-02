@@ -408,7 +408,7 @@ function updateInfoRenovar(responseText){
 	}
 
 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
-    ejemplaresDelGrupo(ID_N2);
+    	ejemplaresDelGrupo(ID_N2);
 }
 
 

@@ -38,10 +38,10 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 	$infoDevRen[0]->{'accion'}=$tipoAccion;
 	for(my $i=0;$i<$loop;$i++){
  		my $id_prestamo=$array_ids->[$i];
-        my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $id_prestamo);
-        $prestamo->load();
+        	my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $id_prestamo);
+        	$prestamo->load();
 		$infoDevRen[$i]->{'id_prestamo'}=$id_prestamo;
-        $infoDevRen[$i]->{'id3'}=$prestamo->getId3;
+        	$infoDevRen[$i]->{'id3'}=$prestamo->getId3;
  		$infoDevRen[$i]->{'barcode'}=$prestamo->nivel3->getBarcode;
 		if($prestamo->nivel3->nivel1->getAutor){
 			#si tengo el ID del autor lo busco, sino se rompe
@@ -297,12 +297,9 @@ elsif($tipoAccion eq "REALIZAR_RENOVACION"){
                                 );
 
     my ($Message_arrayref) = C4::AR::Prestamos::t_renovar($obj);
-    
-    my %info;
-    $info{'Message_arrayref'}= $Message_arrayref;
-
-    C4::Output::printHeader($session);
-    print to_json \%info;
+	my $infoOperacionJSON=to_json $Message_arrayref;
+    	C4::Output::printHeader($session);
+	print $infoOperacionJSON;
 }
 #******************************************FIN***DEVOLVER_RENOVAR*********************************************
 

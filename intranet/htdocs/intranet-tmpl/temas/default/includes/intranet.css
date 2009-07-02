@@ -404,26 +404,23 @@ tr.impar {
     font-weight: bold;
 }
 
-.fechaVencida{
+.fecha_vencida{
     font-size:10pt;
     color:red;
 }
 
 .fecha_critica{
-
     color: red;
     font-weight: bold;
     font-style: italic;
 }
 
 .fecha_cumple{
-
     color: green;
     font-weight: bold;
 }
 
 .fecha_special{
-
     color: orange;
     font-weight: bold;
     font-style: underline;
@@ -438,6 +435,16 @@ tr.impar {
     font-size:10pt;
     color:blue;
 }
+.disponible{
+    font-size:10pt;
+    color:green;
+}
+
+.nodisponible{
+    font-size:10pt;
+    color:red;
+}
+
 
 /*                                     Fin   estilos para Circulacion                                           */
 

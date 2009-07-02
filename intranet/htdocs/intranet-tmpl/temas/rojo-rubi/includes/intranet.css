@@ -71,6 +71,23 @@ body {
 	color: #B20413;
 	}
 
+
+/*                                        para los resultados en tablas                                                */
+.tablaresultadoTitle { 
+    font-Family : "Verdana" ;
+    color: #fff;
+    font-size: 9pt;
+    background: url(../imagenes/tablaresultado.png) repeat-x ;
+   /* background-color:#3c9eb4;*/
+    text-align: center;
+    font-weight: bold;
+	height:30px;
+	border-left: 1px solid #ccc;
+ }
+/*                                     Fin   para los resultados en tablas                                             */
+
+
+/*                                                    Menu                                                              */
 .menu_superior_sin_sub{
    font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
    color:#fff;

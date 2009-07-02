@@ -120,21 +120,21 @@ var items_array = new Array();
 var grupo;
 
 
-function renovar(accion,userId,userNom,id2,id3){
+function renovarPrestamo(userId,userNom,id2,id_prestamo){
 	
 	array=new Array;
-	array[0]= id3;
+	array[0]= id_prestamo;
 	USUARIO=new objeto_usuario();
 	USUARIO.ID=userId;
 	USUARIO.text=userNom;
 
-	objAH=new AjaxHelper(generaDivDevRen);
+	objAH=new AjaxHelper(generaDivRenovacion);
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'RENOVACION';
 	objAH.datosArray= array;
 	objAH.nro_socio= USUARIO.ID;
-    objAH.id_prestamo = id3;
+    	objAH.id_prestamo = id_prestamo;
 	//se envia la consulta
 	objAH.sendToServer();
 	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!

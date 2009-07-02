@@ -377,6 +377,8 @@ sub detalleDisponibilidadNivel3{
 # con el debug no veo el nro_socio luego de my $socio, o sea lo que se esta mamando es el template, va haber q inicializar los flags
 # que van hacia el template.
    		$hash_nivel3{'nro_socio'}= undef;
+# FIXME no alcanza con undef
+
 # C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
 
         $hash_nivel3{'nivel3_obj'}= $nivel3_array_ref->[$i]; 
@@ -388,25 +390,39 @@ sub detalleDisponibilidadNivel3{
 
         my $UI_origen= C4::AR::Referencias::getNombreUI($hash_nivel3{'id_ui_origen'});
         $hash_nivel3{'UI_origen'}= $UI_origen;
-
+	
+	#ESTADO
+	$hash_nivel3{'estado'}= $nivel3_array_ref->[$i]->getEstado;
         if($nivel3_array_ref->[$i]->estadoDisponible){
-        #Disponible
-            $hash_nivel3{'disponibilidad'}= $nivel3_array_ref->[$i]->getEstado;
-            $hash_nivel3{'clase'}= "fechaVencida";
+        #ESTADO DISPONIBLE
+            $hash_nivel3{'claseEstado'}= "disponible";
             $cantDisponibles++;
-        }
-        
-        if( ($nivel3_array_ref->[$i]->estadoDisponible) && (!$nivel3_array_ref->[$i]->esParaSala) ){
-        #esta DISPONIBLE y es PARA PRESTAMO
-            $hash_nivel3{'disponibilidad'}= "PRESTAMO";
-            $hash_nivel3{'clase'}= "prestamo";
-            $infoNivel3{'cantParaPrestamo'}++;
+ 	    $hash_nivel3{'disponible'}= 1; # lo marco como disponible
+
+		if(!$nivel3_array_ref->[$i]->esParaSala){
+        	#esta DISPONIBLE y es PARA PRESTAMO
+            		$infoNivel3{'cantParaPrestamo'}++;
+        	}elsif($nivel3_array_ref->[$i]->esParaSala){
+        	#es PARA SALA
+            		$infoNivel3{'cantParaSala'}++;
+        	}
+        } else {
+	#ESTADO NO DISPONIBLE
+	     $hash_nivel3{'claseEstado'}= "nodisponible";
+	     $hash_nivel3{'disponible'}= 0; # lo marco como no disponible
+	}
+	
+	#DISPONIBILIDAD
+	if(!$nivel3_array_ref->[$i]->esParaSala){
+        #PARA PRESTAMO
+            $hash_nivel3{'disponibilidad'}= "Prestamo";
+            $hash_nivel3{'claseDisponibilidad'}= "prestamo";
         }elsif($nivel3_array_ref->[$i]->esParaSala){
         #es PARA SALA
-            $infoNivel3{'cantParaSala'}++;
-            $hash_nivel3{'disponibilidad'}= "SALA DE LECTURA";
-            $hash_nivel3{'clase'}= "salaLectura";
+            $hash_nivel3{'disponibilidad'}= "Sala de Lectura";
+            $hash_nivel3{'claseDisponibilidad'}= "salaLectura";
         }
+   
 		
 C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
         $socio= C4::AR::Prestamos::getSocioFromPrestamo($hash_nivel3{'id3'});
@@ -417,7 +433,7 @@ C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
             $hash_nivel3{'prestamo'}= $prestamo;
             $hash_nivel3{'socio'}= $socio;
             if ($prestamo->estaVencido) {
-                $hash_nivel3{'claseFecha'}= "fechaVencida";
+                $hash_nivel3{'claseFecha'}= "fecha_vencida";
             }else {
                 $hash_nivel3{'claseFecha'}= "fecha_cumple";
             }
