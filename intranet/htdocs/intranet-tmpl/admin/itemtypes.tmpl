@@ -66,20 +66,13 @@ function Check(f) {
 }
 </SCRIPT>
 [% IF ! add_form %]
-	<table width="100%" class="titulos_interior" border="0" cellpadding="0" cellspacing="0" >
-		<tr>
+<div class="titulos_interior">
 	[% IF itemtype %]
-	 
-			<td>[% "Modificar Tipo de Documento" | i18n %]</td>
+	    [% "Modificar Tipo de Documento" | i18n %]
 	[% ELSE %]
-	
-			<td>[% "Agregar Tipo de Documento" | i18n %]</td>
+	    [% "Agregar Tipo de Documento" | i18n %]
 	[% END %]
-        </tr>
-        <tr>
-                <td class="lineagruesa"  align="left" colspan="3"></td>
-        </tr>
-	</table>
+</div>        
 
 	<form action='[% script_name %]' name=Aform method=post>
 		<input type=hidden name=op value='add_validate'>

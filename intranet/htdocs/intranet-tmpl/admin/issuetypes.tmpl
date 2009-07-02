@@ -69,24 +69,14 @@ function Check(f) {
 <!-- EL NOT DEL IF NO VA, ESTA AHORA SOLO PARA VER EL TEMPLATE COMPILADO -->
 [% IF !add_form %]     
 	[% IF itemtype %]
-            <table width="100%" class="titulos_interior" border="0" cellpadding="0" cellspacing="0" >
-                    <tr>
-                            <td>[% "Modificar Tipo de Pr&eacute;stamo" | i18n %]</td>
-                    </tr>
-                    <tr>
-                            <td class="lineagruesa"  align="left" colspan="3"></td>
-                    </tr>
-            </table>
+            <div class="titulos_interior">
+                [% "Modificar Tipo de Pr&eacute;stamo" | i18n %]
+            </div>
 	[% ELSE %]
-            <table width="100%" class="titulos_interior" border="0" cellpadding="0" cellspacing="0" >
-                    <tr>
-                            <td>[% "Agregar Tipo de Pr&eacute;stamo" | i18n %]</td>
-                    </tr>
-                    <tr>
-                            <td class="lineagruesa"  align="left" colspan="3"></td>
-                    </tr>
-            </table>
-        [% END %]
+            <div class="titulos_interior">
+                [% "Agregar Tipo de Pr&eacute;stamo" | i18n %]
+            </div>
+    [% END %]
         <form action='[% script_name %]' name=Aform method=post>
                 <input type=hidden name=op value='add_validate'>
                 <input type=hidden name=checked value=0>
@@ -253,16 +243,9 @@ function Check(f) {
 [% END %]
 
 [% IF else %]
-            <table width="100%" class="titulos_interior" border="0" cellpadding="0" cellspacing="0" >
-                    <tr>
-                            <td>[% "Administraci&oacute;n de Tipos de Pr&eacute;stamo" | i18n %]</td>
-                    </tr>
-                    <tr>
-                            <td class="lineagruesa"  align="left" colspan="3"></td>
-                    </tr>
-            </table>
-            
-            <br>
+            <div class="titulos_interior">
+                [% "Administraci&oacute;n de Tipos de Pr&eacute;stamo" | i18n %]
+            </div>
             
             <table border='0' cellpadding='0' cellspacing='0' width='100%'>
                     <tr class="tablaresultadoTitle">

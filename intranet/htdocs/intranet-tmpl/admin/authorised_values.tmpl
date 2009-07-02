@@ -10,9 +10,8 @@ document.getElementById(id).src=src;
 [% IF ! add_form %]
 <!---------------------------------------------------------------------------->
 
-<table width="100%" class="titulos_interior" border="0" cellpadding="0" cellspacing="0" >
-	<tr>
-		<td>
+<div class="titulos_interior">
+
  	[% IF use-heading-flags-p %]
  		[% IF heading-modify-authorized-value-p %]
 			[% "Modificar Valores Autorizados" | i18n %]
@@ -26,12 +25,7 @@ document.getElementById(id).src=src;
  		[% ELSE %]
 			[% action %]
 		[% END %]
-		</td>
-	</tr>
-	<tr>
-		<td class="lineagruesa"  align="left" colspan="3"></td>
-	</tr>
-</table>
+</div>
 
 <form action='[% script_name %]' name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
@@ -97,14 +91,7 @@ document.getElementById(id).src=src;
 <!---------------------------------------------------------------------------->
 [% IF else %]
 
-<table width="100%" class="titulos_interior" border="0" cellpadding="0" cellspacing="0" >
-	<tr>
-		<td>[% "Administraci&oacute;n de Valores Autorizados" | i18n %]</td>
-	</tr>
-	<tr>
-		<td class="lineagruesa"  align="left" colspan="3"></td>
-	</tr>
-</table>
+<div class="titulos_interior">[% "Administraci&oacute;n de Valores Autorizados" | i18n %]</div>
 		
 <p class="inputFontNormal">[% "Esta tabla es utilizada en la definici&oacute;n de MARC. Usted puede definir tantas categor&iacute;as como quiera, y tantos valores autorizados como necesite en cada categor&iacute;a." | i18n %] </p>
 <p class="inputFontNormal" >[% "Cuando defina la estructura del subcampo MARC, puede vincular un subcampo con una categor&iacute;a permitida. Cuando el usuario agrega o modifica un libro, el subcampo no se ingresa manualmente, se selecciona de una lista de valores permitidos." | i18n %]</p>
