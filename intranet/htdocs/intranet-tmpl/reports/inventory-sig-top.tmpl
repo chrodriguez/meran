@@ -1,46 +1,49 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <script>
-function ordenar(orden){
-	objAH.sort=orden;
-	objAH.sendToServer();
-}
-
-function consultar(){
-	objAH=new AjaxHelper(updateInfo);
-	objAH.url= "/cgi-bin/koha/reports/inventory-sig-topResult.pl";
-	objAH.sigtop= $("#sigtop").val();
-	//se envia la consulta
-	objAH.sendToServer();
-}
-
-function updateInfo(responseText){
-	$("#result").html(responseText);
-	zebra("tablaResult");
-}
+    function ordenar(orden){
+	    objAH.sort=orden;
+	    objAH.sendToServer();
+    }
+    
+    function consultar(){
+	    objAH=new AjaxHelper(updateInfo);
+	    objAH.url= "/cgi-bin/koha/reports/inventory-sig-topResult.pl";
+	    objAH.sigtop= $("#sigtop").val();
+	    //se envia la consulta
+	    objAH.sendToServer();
+    }
+    
+    function updateInfo(responseText){
+	    $("#result").html(responseText);
+	    zebra("tablaResult");
+    }
+    $(document).ready(function() {
+        //onEnter con foco en input, ejecuta la busqueda
+        onEnter("sigtop",consultar);
+    });
 </script>
 
 <div class="titulos_interior" >[% "Inventario por signatura topogr&aacute;fica:" | i18n %]</div>
 
 <!-- <form method="post" name="form1" action='inventory-sig-top.pl'> -->
 
-<table border="0" cellspacing="0" cellpadding="0" align="left">
-	<tr>
-		<td class="inputFontNormal">[% "Buscar signatura topogr&aacute;fica: &nbsp;" | i18n %]</td>
-		<td class="inputFontNormal">
-			<input class="inputFontNormal" type="text" id="sigtop" value="[% sigtop %]">&nbsp;
-		</td>
-		<td>
-            [% PERL %]
-                            print C4::AR::Filtros::to_Button( 
-                                                                text    =>  "[% 'Buscar' | i18n %]",
-                                                                boton   =>  "boton_buscar",
-                                                                onClick =>  "consultar();",
-                                    ) ;
-            [% END %]
-        </td>
-	</tr>
-</table>
+<div class="filtros_reportes">
+    <ul class="filtros_reportes_izq">
+        <li>[% "Buscar signatura topogr&aacute;fica: &nbsp;" | i18n %]</li>
+		<li><input class="inputFontNormal" type="text" id="sigtop" value="[% sigtop %]">&nbsp;</li>
+    </ul>
+</div>
+
+<div class="buttonContainerHorizontal">
+        [% PERL %]
+                        print C4::AR::Filtros::to_Button( 
+                                                            text    =>  "[% 'Buscar' | i18n %]",
+                                                            boton   =>  "boton_buscar",
+                                                            onClick =>  "consultar();",
+                                ) ;
+        [% END %]
+</div>
 
 <!-- </form> -->
 

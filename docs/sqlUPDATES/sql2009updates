@@ -842,3 +842,5 @@ ALTER TABLE `perm_catalogo` ADD `usuarios` VARCHAR( 8 ) NOT NULL DEFAULT '000000
 ALTER TABLE `perm_catalogo` ADD `sistema` VARCHAR( 8 ) NOT NULL DEFAULT '00000001' AFTER `usuarios` ;
 ALTER TABLE `perm_catalogo` ADD `undefined` VARCHAR( 8 ) NOT NULL DEFAULT '00000001' AFTER `sistema` ;
 
+ALTER TABLE `rep_historial_circulacion` CHANGE `tipo` `tipo_operacion` VARCHAR( 15 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `rep_historial_circulacion` CHANGE `responsable` `responsable` VARCHAR( 16 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;

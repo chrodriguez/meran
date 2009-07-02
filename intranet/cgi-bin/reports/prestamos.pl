@@ -56,6 +56,8 @@ my $CGIbranch=C4::AR::Utilidades::generarComboUI();
 $t_params->{'unidades'}= $CGIbranch;
 $t_params->{'msg'}= $msg;
 
+$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Prestamos no devueltos");
+
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 

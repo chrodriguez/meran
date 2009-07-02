@@ -4,43 +4,41 @@
 
 <script language="javascript" type="text/javascript">
 
-$(document).ready(function() {
-    crearDatePicker('f_ini');
-    crearDatePicker('f_fin');
-
-});
+    $(document).ready(function() {
+        crearDatePicker('f_ini');
+        crearDatePicker('f_fin');
+    });
 
 </script>
 
 <script language="javascript">
 
-var objAH;
-function ordenar(orden){
-	objAH.sort(orden);
-}
+    var objAH;
+    function ordenar(orden){
+        objAH.sort(orden);
+    }
 
-function updateInfo(responseText){
-	$("#result").html(responseText);
-	zebra("tablaResult");
-}
+    function updateInfo(responseText){
+        $("#result").html(responseText);
+        zebra("tablaResult");
+    }
 
-function changePage(ini){
-	objAH.changePage(ini);
-}
+    function changePage(ini){
+        objAH.changePage(ini);
+    }
 
-function consultar(){
-	objAH=new AjaxHelper(updateInfo);
-    objAH.debug= true;
-	objAH.f_ini= $('#f_ini').val();
-	objAH.f_fin= $('#f_fin').val();
-	objAH.tiposItems= $('#tiposItems').val();
-	objAH.tipoPrestamos=$('#tipoPrestamos').val();
-	objAH.catUsuarios=$('#categoria_socio_id').val();
-	objAH.url= "/cgi-bin/koha/reports/historico_PrestamosResult.pl";
-	objAH.funcion="changePage";
-	objAH.sendToServer();
-}
-
+    function consultar(){
+        objAH=new AjaxHelper(updateInfo);
+        objAH.debug= true;
+        objAH.f_ini= $('#f_ini').val();
+        objAH.f_fin= $('#f_fin').val();
+        objAH.tiposItems= $('#tiposItems').val();
+        objAH.tipoPrestamos=$('#tipoPrestamos').val();
+        objAH.catUsuarios=$('#categoria_socio_id').val();
+        objAH.url= "/cgi-bin/koha/reports/historico_PrestamosResult.pl";
+        objAH.funcion="changePage";
+        objAH.sendToServer();
+    }
 
 </script>
 
@@ -48,15 +46,16 @@ function consultar(){
 <div class="titulos_interior">[% "Historial de Pr&eacute;stamos" | i18n %]</div>
 
 <div class="filtros_reportes">
+
     <ul class="filtros_reportes_izq">
         <li>[% "Seleccione una fecha de inicio:" | i18n %]</li>
-	    <li><input id="f_ini" name="f_ini" value="[% f_ini %]"></li>
+        <li><input id="f_ini" name="f_ini" value="[% f_ini %]"></li>
         <li>[% "Seleccione una fecha de Fin: " | i18n %]</li>
         <li><input id="f_fin" name="f_fin" value="[% f_fin %]"></li>
     </ul>
 
     <ul class="filtros_reportes_der">
-	    <li>[% "Categoria de Usuario:" | i18n %]</li>
+        <li>[% "Categoria de Usuario:" | i18n %]</li>
         <li>[% selectCatUsuarios %]</li>
         <li>[% "Tipo de Pr&eacute;stamo:" | i18n %]</li>
         <li>[% selectTiposPrestamos %]</li>
@@ -66,17 +65,16 @@ function consultar(){
 </div>
 
 <div class="buttonContainerHorizontal">
-[% PERL %]
-                        print C4::AR::Filtros::to_Button( 
-                                                            text    =>  "[% 'Buscar' | i18n %]",
-                                                            title    =>  "[% 'Buscar' | i18n %]",
-                                                            boton   =>  "boton_buscar",
-                                                            onClick =>  "consultar();",
-                                ) ;
-[% END %]
+    [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Buscar' | i18n %]",
+                                                title    =>  "[% 'Buscar' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "consultar();",
+                                            );
+    [% END %]
 </div>
 
 <div id="result"></div>
-
 
 [% INCLUDE "intranet-bottom.inc" %]

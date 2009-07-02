@@ -114,49 +114,6 @@ sub insertHistoricCirculation {
 
 
 =item
-SE USA EN EL REPORTE DE BARCODES POR TIPO - PERO NO SE SI ANDA SE PUEDE PASAR A ESTADISTICAS.PM
-=cut
-sub barcodesPorTipo{
-	my ($branch) = @_;
-	
-	my $clase='par';
-	my @results;
-	my $row;
-	$row->{'tipo'}='TODOS';
-	$row->{'minimo'}= &getMinBarcode($branch);
-	$row->{'maximo'}= &getMaxBarcode($branch);
-	
-   if (($row->{'minimo'} ne '') or ($row->{'maximo'} ne '')){
-      push @results,$row 
-   }
-
-	my $cat_ref_tipo_nivel3 = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(
-                                                                                          select => ['id_tipo_doc'],
-                                                                                       );
-
-	
-   foreach my $it (@$cat_ref_tipo_nivel3) {
-      my $row;
-      my $id_tipo_doc = $it->{'id_tipo_doc'};
-      
-      $row->{'tipo'}=  $id_tipo_doc;
-
-      my $inicio=$branch."-".$it->{'id_tipo_doc'}."-%";
-
-      $row->{'minimo'} = getMinBarcodeLike($branch,$inicio);
-
-      $row->{'maximo'} = getMaxBarcodeLike($branch,$inicio);
-
-      if (($row->{'minimo'} ne '') or ($row->{'maximo'} ne ''))  {
-         push @results,$row 
-      }
-   }
-   return @results;
-}
-
-
-
-=item
 SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS
 =cut
 

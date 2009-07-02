@@ -29,7 +29,12 @@
 [% INCLUDE "message_INTRA.inc" %]
 
 <head>
-<title>Meran::UNLP</title>
+[% IF page_sub_title %]
+    <title>Meran::UNLP::[% page_sub_title %]</title>
+[% ELSE %]
+    <title>Meran::UNLP</title>
+[% END %]
+
 <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/menu.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/intranet.css">

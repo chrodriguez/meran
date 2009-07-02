@@ -29,67 +29,64 @@ my $input = new CGI;
 
 
 my ($template, $session, $t_params) = get_template_and_user({
-								template_name => "reports/historicoCirculacionResult.tmpl",
-								query => $input,
-								type => "intranet",
-								authnotrequired => 0,
-								flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-								debug => 1,
-			    });
+                    template_name => "reports/historicoCirculacionResult.tmpl",
+                    query => $input,
+                    type => "intranet",
+                    authnotrequired => 0,
+                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    debug => 1,
+                });
 
-my $orden= "date";  # $input->param('orden')||'operacion';
+my $orden= "fecha";  # $input->param('orden')||'operacion';
 
 ###Marca la Fecha de Hoy
 my @datearr = localtime(time);
 my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
 my $dateformat = C4::Date::get_date_format();
+
 $t_params->{'todaydate'}= format_date($today,$dateformat);
 
 
 my $obj=$input->param('obj');
 
-if($obj ne ""){
-	$obj= C4::AR::Utilidades::from_json_ISO($obj);
-}
+$obj= C4::AR::Utilidades::from_json_ISO($obj);
 
-#Inserta la nota en la tupla correspondiente al id.
-my $id   = $obj->{'id'};
-if ($id ne "0"){
-	my $nota = $obj->{'notas'};
-       &insertarNotaHistCirc($id,$nota);
-}
+# #Inserta la nota en la tupla correspondiente al id.
+# my $id   = $obj->{'id'};
+# if ($id ne "0"){
+# 	my $nota = $obj->{'notas'};
+#        &insertarNotaHistCirc($id,$nota);
+# }
+# 
+#Tomo las fechas que setea el usuario y las paso a formato ISO
+$obj->{'fechaIni'} =  format_date_in_iso($obj->{'fechaIni'},$dateformat);
+$obj->{'fechaFin'} =  format_date_in_iso($obj->{'fechaFin'},$dateformat);
 
+C4::AR::Validator::validateParams('VA001',$obj,['socio','tipoPrestamo','tipoOperacion']);
 
 my $dateformat = C4::Date::get_date_format();
-#Tomo las fechas que setea el usuario y las paso a formato ISO
-my $fechaInicio =  format_date_in_iso($obj->{'fechaIni'},$dateformat);
-my $fechaFin    =  format_date_in_iso($obj->{'fechaFin'},$dateformat);
-my $user= $obj->{'user'};
-my $chkfecha= $obj->{'chkfecha'}; #checkbox que busca por fecha
-my $funcion= $obj->{'funcion'};
-my $tipoPrestamo= $obj->{'tiposPrestamos'};
-my $tipoOperacion= $obj->{'tipoOperacion'};
-my @resultsdata;
-my $cant;
-
 
 my $ini= ($obj->{'ini'});
+
+
 my ($ini,$pageNumber,$cantR)=&C4::AR::Utilidades::InitPaginador($ini);
+$obj->{'cantR'} = $cantR;
+$obj->{'pageNumber'} = $pageNumber;
+$obj->{'ini'} = $ini;
 
 
-my ($cantidad,@resultsdata)= &historicoCirculacion($chkfecha,$fechaInicio,$fechaFin,$user,"",$ini,$cantR,$orden,$tipoPrestamo, $tipoOperacion);
+my ($cantidad,$historicoCirculacionResult)= C4::AR::Estadisticas::historicoCirculacion($obj);
 
-C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
-
-$t_params->{'resultsloop'}= \@resultsdata;
+$t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
+$t_params->{'historico'}= $historicoCirculacionResult;
 $t_params->{'cantidad'}= $cantidad;
-$t_params->{'fechaFin'}= $fechaFin;
-$t_params->{'fechaInicio'}= $fechaInicio;
-$t_params->{'chkfecha'}= $chkfecha;
+$t_params->{'fechaFin'}= $obj->{'fechaFin'};
+$t_params->{'fechaInicio'}= $obj->{'fechaInicio'};
+$t_params->{'chkfecha'}= $obj->{'chkfecha'};
 $t_params->{'dateselected'}= $input->param('fechaIni');
 $t_params->{'dateselectedEnd'}= $input->param('fechaFin');
-$t_params->{'user'}= $user;
-$t_params->{'tiposPrestamos'}= $tipoPrestamo;
-$t_params->{'tipoOperacion'}= $tipoOperacion;
+$t_params->{'socio'}= $obj->{'socio'};
+$t_params->{'tiposPrestamos'}= $obj->{'tipoPrestamo'};
+$t_params->{'tipoOperacion'}= $obj->{'tipoOperacion'};
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

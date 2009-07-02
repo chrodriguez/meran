@@ -54,10 +54,14 @@
             [% END %]
 		</td>
 
-		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?nro_socio=[% prestamo.socio.getNro_socio %]">
-            [%  prestamo.socio.persona.getNombre %]
-         </a>
+    	<td class="inputFontNormal"> 
+            [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     "[%  prestamo.socio.persona.getNombre %]",
+                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                params =>   ["nro_socio=[%  prestamo.socio.persona.getNro_socio %]"],
+                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                            ) ;
+            [% END %]
 		</td>
 
 		<td class="inputFontNormal"> 

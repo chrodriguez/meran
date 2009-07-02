@@ -42,8 +42,7 @@ function consultar(){
 	objAH.dateselectedEnd=$("#dateselectedEnd").val();
 	objAH.operacion=$("input[@name='operacion']:checked").val();
 	objAH.tipo=     $("input[@name='tipo']:checked").val();
-	objAH.user=$("#user").val();
-   alert("TIPO SELECCIONADO: "+objAH.tipo);
+	objAH.user=$("#socios").val();
 	objAH.numDesde=$("#numDesde").val();
 	objAH.numHasta=$("#numHasta").val();
 	objAH.funcion= "changePage";
@@ -60,7 +59,7 @@ function guardarNota(idNota){
 }
 
 function updateGuardarNota(responseText){
-   alert("LA NOTA SE GUARDO");
+   jAlert("LA NOTA SE GUARDO");
 }
 
 </script>
@@ -69,61 +68,56 @@ function updateGuardarNota(responseText){
 
 
 <!-- FIXME para los tipos, el script anda mal, los toma como el check de fecha o el radio operacion -->
-<br>
-<table border="0" cellspacing="0" cellpadding="0">
-  	<tr>
-		<td valign= "top" class=inputFontNormal>
-			<input id="chkfecha" class="inputFontNormal" type="checkbox" name="chkfecha">
-			<b>S[% "eleccione para buscar por fecha." | i18n %]</b><br><br>
-			[% "Seleccione una fecha de inicio:" | i18n %]<br><br>
-			[% "Seleccione una fecha de Fin:" | i18n %]
-		</td>
+<div class="filtros_reportes">
+    <ul class="filtros_reportes_izq">
+        <li>
+            <b>[% "Seleccione para buscar por fecha." | i18n %]</b>
+            <input id="chkfecha" class="inputFontNormal" type="checkbox" name="chkfecha">
+        </li>
+        <li>
+            [% "Seleccione una fecha de inicio:" | i18n %]
+            <input id="dateselected" class="inputFontNormal" name="dateselected" value="[% todaydate %]">
+        </li>
+        <li>
+            [% "Seleccione una fecha de Fin:" | i18n %]
+            <input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="[% todaydate %]"> 
+        </li>
+    </ul>
+    <ul class="filtros_reportes_der">
 
-		<td valign= "top" class=inputFontNormal><br><br>
-			<input id="dateselected" class="inputFontNormal" name="dateselected" value="
-			[% todaydate %]">
-			<br><br>
-			<input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="[% todaydate %]"> 
-			
-		</td>
-
-		<td class="inputFontNormal" rowspan=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td rowspan=3 class="inputFontNormal"> <b>[% "Filtrar por:" | i18n %]</b> <br>
-			<input id="operacion" class="inputFontNormal" type="radio" name="operacion" value=[% "Alta" | i18n %]>&nbsp;[% "Alta" | i18n %]
-				&nbsp;&nbsp;&nbsp;
-			<input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="Actualizado">&nbsp;[% "Actualizado" | i18n %]
-			<input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="Borrado">&nbsp;[% "Borrado" | i18n %]
-				&nbsp;
-			<input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="" checked>&nbsp;[% "Ninguno" | i18n %]
-			<br><br>
-
-			<input id="tipo" class="inputFontNormal" type="radio" name="tipo" value=[% "Libro" | i18n %]>&nbsp;[% "Libro" | i18n %]
-	        		&nbsp;
-			<input id="tipo" class="inputFontNormal" type="radio" name="tipo" value=[% "Grupo" | i18n %]>[% "Grupo" | i18n %]
-                		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input id="tipo" class="inputFontNormal" type="radio" name="tipo" value=[% "Ejemplar" | i18n %]>[% "&nbsp;Ejemplar" | i18n %]
-			<input id="tipo" class="inputFontNormal" type="radio" name="tipo" value="" checked>&nbsp;[% "Ninguno" | i18n %]
-			<br><br>
-
-			<!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
-
-			<input id="chkuser" class="inputFontNormal" type="checkbox" name="chkuser" value="usuario"><b>[% "Nombre de usuario: " | i18n %]</b>[% selectusuarios %]
-			<br><br>
-			<input id="chknum" class="inputFontNormal" type="checkbox" name="chknum" value="num"><b>[% "N&uacute;mero" | i18n %]
-
-			[% "desde:" | i18n %] <input id="numDesde" class="inputFontNormal" type="text" name="numDesde" size="12">
-			[% "hasta:" | i18n %] </b><input id="numHasta" class="inputFontNormal" type="text" name="numHasta" size="12" >
-			<br><br>
-            [% PERL %]
-                            print C4::AR::Filtros::to_Button( 
-                                                                text    =>  "[% 'Buscar' | i18n %]",
-                                                                boton   =>  "boton_buscar",
-                                                                onClick =>  "consultar();",
-                                    ) ;
-            [% END %]
-		</td>
-   	</tr>
-</table>
+        <li><b>[% "Filtrar por:" | i18n %]</b></li>
+        <li>
+            <input id="operacion" class="inputFontNormal" type="radio" name="operacion" value=[% "Alta" | i18n %]>&nbsp;[% "Alta" | i18n %]
+            <input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="Actualizado">&nbsp;[% "Actualizado" | i18n %]
+            <input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="Borrado">&nbsp;[% "Borrado" | i18n %]
+            <input id="operacion" class="inputFontNormal" type="radio" name="operacion" value="" checked>&nbsp;[% "Ninguno" | i18n %]
+        </li>
+        <li>
+            <input id="tipo" class="inputFontNormal" type="radio" name="tipo" value=[% "Libro" | i18n %]>&nbsp;[% "Libro" | i18n %]
+            <input id="tipo" class="inputFontNormal" type="radio" name="tipo" value=[% "Grupo" | i18n %]>[% "Grupo" | i18n %]
+            <input id="tipo" class="inputFontNormal" type="radio" name="tipo" value=[% "Ejemplar" | i18n %]>[% "&nbsp;Ejemplar" | i18n %]
+            <input id="tipo" class="inputFontNormal" type="radio" name="tipo" value="" checked>&nbsp;[% "Ninguno" | i18n %]
+        </li>
+            <!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
+        <li>
+            <input id="chkuser" class="inputFontNormal" type="checkbox" name="chkuser" value="usuario"><b>[% "Nombre de usuario: " | i18n %]</b>[% select_usuarios %]
+        </li>
+        <li>
+            <input id="chknum" class="inputFontNormal" type="checkbox" name="chknum" value="num"><b>[% "N&uacute;mero" | i18n %]
+            [% "desde:" | i18n %] <input id="numDesde" class="inputFontNormal" type="text" name="numDesde" size="12">
+            [% "hasta:" | i18n %] </b><input id="numHasta" class="inputFontNormal" type="text" name="numHasta" size="12" >
+        </li>
+    </ul>
+</div>
+<div class="buttonContainerHorizontal">
+        [% PERL %]
+                        print C4::AR::Filtros::to_Button( 
+                                                            text    =>  "[% 'Buscar' | i18n %]",
+                                                            boton   =>  "boton_buscar",
+                                                            onClick =>  "consultar();",
+                                ) ;
+        [% END %]
+</div>
 
 <div id="result" ></div>
 

@@ -28,32 +28,20 @@ use C4::Date;
 my $input = new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user({
-								template_name => "reports/historicoCirculacion.tmpl",
-								query => $input,
-								type => "intranet",
-								authnotrequired => 0,
-								flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-								debug => 1,
-			    });
+                                    template_name => "reports/historicoCirculacion.tmpl",
+                                    query => $input,
+                                    type => "intranet",
+                                    authnotrequired => 0,
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                    debug => 1,
+                            });
 
-#Select de usuarios
-my @users;
-my @select_user;
-my %select_users;
-my $users=getuser(); #funcion agregada en C4::AR::Estadisticas para buscar a los administradores.
+
 
 $t_params->{'selectusuarios'}= C4::AR::Utilidades::generarComboDeSocios();
-#fin select de usuarios
-
-
-#*********************************Select Tipos de Prestamos*****************************************
-
-$t_params->{'selectTiposPrestamos'}= C4::AR::Utilidades::generarComboTipoPrestamo();
-#*******************************Fin**Select Tipos de Prestamos***************************************
-
-#*********************************Select tipo Operacion*****************************************
-
+$t_params->{'selectTipoPrestamos'}= C4::AR::Utilidades::generarComboTipoPrestamo();
 $t_params->{'selectTipoOperacion'}= C4::AR::Utilidades::generarComboTipoDeOperacion();
-#*******************************Fin**Select Tipos de Operacion***************************************
+$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Historico de Circulacion");
+
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

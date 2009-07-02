@@ -885,6 +885,7 @@ ul#horizontal-list {
     overflow: auto;
     display:table;
     margin:0 auto;
+    width:auto;
 }
 
 .filtros_reportes li{
@@ -897,7 +898,8 @@ ul#horizontal-list {
 }
 
 .filtros_reportes_der{
-    float: left;
+    float: right;
+    overflow:auto;
 }
 
 /*                                              fin estilos para los reportes                           */

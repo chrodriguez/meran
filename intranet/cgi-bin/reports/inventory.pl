@@ -29,10 +29,11 @@ my $branch=$input->param('branch');
 my $MIN=C4::AR::Estadisticas::getMinBarcode($branch);
 my $MAX=C4::AR::Estadisticas::getMaxBarcode($branch);
 
-my @barcodePorTipo=C4::Circulation::Circ2::barcodesPorTipo($branch);
+my @barcodePorTipo=C4::AR::Estadisticas::barcodesPorTipo($branch);
 
 $t_params->{'MAX'}= $MAX;
 $t_params->{'MIN'}= $MIN;
 $t_params->{'barcodePorTipo'}=\@barcodePorTipo;
+$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Inventario");
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

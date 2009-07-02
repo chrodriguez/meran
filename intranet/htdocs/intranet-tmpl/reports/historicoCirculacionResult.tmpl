@@ -1,4 +1,4 @@
-
+[% USE HTML %]
 <br>
 <br>
 <center>
@@ -14,7 +14,6 @@
 		<td width="1%" align="left" valign="top">
 			<img src="[% themelang %]/images/izquierda.png">
 		</td>
-
 		<th>[% "T&iacute;tulo" | i18n %]</th>
 		<th>[% "Autor" | i18n %]</th>
 		<th>[% "C. Barra" | i18n %]</th>
@@ -23,64 +22,90 @@
 		<th>[% "Fecha" | i18n %]</th>
 		<th>[% "Operaci&oacute;n" | i18n %]</th>
 		<th>[% "Nota" | i18n %]</th>
-
 		<td align="right" valign="top" width="1%">
 			<img src="[% themelang %]/images/derecha.png">
 		</td>
 	</tr>
 
-[% FOREACH resultsloop %]
-  	<tr align='center' class="inputFontNormal">
-
-		<td>
-			<a href="/cgi-bin/koha/busquedas/detalle.pl?id1=[% id1 %]">[% HTML.escape(titulo) %]
-                            [% IF unititle %]:&nbsp;
-                                [% unititle %]
-                            [% END %]</a>
-		</td>
-		<td>
-			<a ref="/cgi-bin/koha/busquedas/filtrado.pl?origen=detalle&idAutor=<[% HTML.escape(idautor) %]">[% completo %]
-			</a>
-		</td>
-		<td>
-			
-			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% barcode %]&signatura_topografica=[% signatura_topografica %]' title='Detalle del Item'>[% barcode %]</a> 
-		</td>	
-		<td> 
-			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">
-				[% IF responsable %]
-					[% userCompleto %]
-				[% END %]
-			</a>
-		</td>
-                [% IF responsable %]
-                    <td> 
-                            <a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% responsable %]">
-                                    [% nomCompleto %]
-                            </a>
-                    </td>
+    [% FOREACH hist IN historico %]
+        <tr align='center' class="inputFontNormal">
+        <br><br>
+		    <td>
+                [% PERL %]
+                    print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(hist.nivel1.getTitulo) %]",
+                                                    url =>      "/cgi-bin/koha/busquedas/detalle.p", 
+                                                    params =>   ["id1=[% hist.getId1 %]"],
+                                                    title =>    "[% 'Mostrar Detalle' | i18n %]"
+                                                ) ;
                 [% END %]
-  		<td> 
-			[% fecha %] </td>
-  		<td>
-			[% operacion %]
-			[% IF description %]
-				<br>([% description %]) 
-			[% END %]
-		</td>
-  		<td>
-			<textarea id="[% id %]" class="inputFontNormal" name="notas" cols="15" rows="4">
-                                [% nota %]
-                        </textarea>
-		<br>
-		<input  src="[% themelang %]/images/guardar.png" type="image"  value='[% "Guardar Nota" | i18n %]' 
-			title='[% "Guardar Nota" | i18n %]' onClick="guardarNota('[% id %]')">
-		</td>
- 	</tr>
-[% END %]
- 	<tr valign=middle>
-        	<td class="lineafinaltabla"  align="left" colspan="8"></td>
+
+		    </td>
+		    <td>
+                [% PERL %]
+                    print C4::AR::Filtros::link_to( text =>     "[% hist.nivel1.cat_autor.getCompleto %]",
+                                                    url =>      "/cgi-bin/koha/busquedas/filtrado.pl", 
+                                                    params =>   ["origen=detalle&idAutor='[% hist.nivel1.autor %]"],
+                                                    title =>    "[% 'Buscar' | i18n %]"
+                                                ) ;
+                [% END %]
+
+		    </td>
+		    <td>
+                [% PERL %]
+                    print C4::AR::Filtros::link_to( text =>     "[% hist.nivel3.getBarcode %]",
+                                                    url =>      "/cgi-bin/koha/busquedas/detalleItem.pl", 
+                                                    params =>   ["id1=[% hist.getId1 %]&id2=[% hist.getId2 %]&id3=[% hist.getId3 %]&barcode=[% hist.nivel3.getBarcode %]&signatura_topografica=[% hist.nivel3.getSignatura_topografica %]"],
+                                                    title =>    "[% 'Mostrar Detalle del Item' | i18n %]"
+                                                ) ;
+                [% END %]
+		    </td>	
+            <td>
+                [% PERL %]
+                    print C4::AR::Filtros::link_to( text =>     "[% hist.getNro_socio %]",
+                                                    url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                    params =>   ["nro_socio=[% hist.getNro_socio%]"],
+                                                    title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                ) ;
+                [% END %]
+            </td> 
+
+            <td>
+                [% IF hist.getResponsable %]
+                    <!--FIXME tira error ROSE con esta relacion, arreglar!!! -->
+                    [% PERL %]
+                        print C4::AR::Filtros::link_to( text =>     "[% hist.getResponsable %]",
+                                                        url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                        params =>   ["nro_socio=[% hist.getResponsable %]"],
+                                                        title =>    "[% 'Mostrar Detalle del Usuario Responsable' | i18n %]"
+                                                    ) ;
+                    [% END %]
+                [% ELSE %]
+                    <h3> No hay responsable </h3>
+                [% END %]
+            </td> 
+
+            <td> 
+			    [% hist.getFecha %]
+            </td>
+            <td>
+			    [% hist.getTipo_operacion %]
+			    [% IF description %]
+				    <br>([% description %]) 
+			    [% END %]
+		    </td>
+            <td>
+			    <textarea id="[% hist.getId %]" class="inputFontNormal" name="notas" cols="15" rows="4">
+                                    [% hist.getNota %]
+                </textarea>
+		        <br>
+		        <input  src="[% themelang %]/images/guardar.png" type="image"  value='[% "Guardar Nota" | i18n %]' 
+			        title='[% "Guardar Nota" | i18n %]' onClick="guardarNota('[% hist.getId %]')">
+		    </td>
         </tr>
+    [% END %]
+    <tr valign=middle>
+            <td class="lineafinaltabla"  align="left" colspan="8"></td>
+    </tr>
 </table>
 
 </center>

@@ -30,64 +30,15 @@ else {$orden=$input->param('orden')};
 
 my %params;
 $params{'default'}= 'SIN SELECCIONAR';
-# my $comboCategoriasDeSocio= C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
 
-#llamo a la funcion en C4::AR::Prestamos, traer todos los tipos de prestamos
-#*************************************Select de Tipos de Prestamos*******************************
-=item
-my @select_tiposPrestamos_Values;
-my %select_tiposPrestamos_Labels;
-my @tipoDePrestamos=&IssuesType(); #Funcion de C4::AR::Prestamos, traer los tipos de prestamos
-
-push @select_tiposPrestamos_Values, '-1';
-$select_tiposPrestamos_Labels{'-1'}= 'SIN SELECCIONAR';
-
-my $i=0;
-my $hash;
-my $value = "";
-my $key = "";
-
-#************************************Select de Tipos de Items************************************
-my @select_tiposItems_Values;
-my %select_tiposItems_Labels;
-#Funcion de C4::Biblio, trae los tipos de items
-my ($cant,@tiposDeItems)=&C4::AR::Busquedas::getItemTypes(); 
-my $i=0;
-my $hash;
-my $value = "";
-my $key = "";
-
-push @select_tiposItems_Values, '-1';
-$select_tiposItems_Labels{'-1'}= 'SIN SELECCIONAR';
-
-foreach (@tiposDeItems) {
-	
-	$hash = @tiposDeItems[$i];
-	$value = $hash->{'description'};
-	$key = $hash->{'itemtype'};
-	push @select_tiposItems_Values, $key;
-	$select_tiposItems_Labels{$key} = $value;
-	$i++;
-}
-
-
-
-
-# CGI::scrolling_list(	-name      => 'tiposItems',
-#                                         	-id        => 'tiposItems',
-#                                         	-values    => \@select_tiposItems_Values,
-#                                         	-labels    => \%select_tiposItems_Labels,
-#                                         	-size      => 1,
-# 						-defaults  => 'SIN SELECCIONAR'
-#                                  		);
-#************************************Fin Select de Tipos de Items*********************************
-=cut
 my $camboTiposPrestamos= C4::AR::Utilidades::generarComboTipoPrestamo();
 my $comboCategoriasDeSocio= C4::AR::Utilidades::generarComboCategoriasDeSocio();
 my $camboTiposDeDocumentos= C4::AR::Utilidades::generarComboTipoNivel3();
+
 $t_params->{'orden'}= $orden;
 $t_params->{'selectTiposDocumentos'}= $camboTiposDeDocumentos;
 $t_params->{'selectCatUsuarios'}= $comboCategoriasDeSocio;
 $t_params->{'selectTiposPrestamos'}= $camboTiposPrestamos;
+$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Historial de prestamos");
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

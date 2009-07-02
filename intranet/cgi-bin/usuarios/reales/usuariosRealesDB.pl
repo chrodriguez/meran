@@ -26,8 +26,9 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
                                             {   ui => 'ANY', 
                                                 tipo_documento => 'ANY', 
                                                 accion => 'MODIFICACION', 
-                                                entorno => 'usuarios'},
-                                            "intranet"
+                                                entorno => 'usuarios'
+                                            },
+                                                "intranet"
                                 );
 
     my $session = CGI::Session->load();

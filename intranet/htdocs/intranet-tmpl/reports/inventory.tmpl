@@ -2,22 +2,22 @@
 
 <script>
 function ordenar(orden){
-	objAH.sort=orden;
-	objAH.sendToServer();
+    objAH.sort=orden;
+    objAH.sendToServer();
 }
 
 function consultar(){
-	objAH=new AjaxHelper(updateInfo);
-	objAH.url= "/cgi-bin/koha/reports/inventoryResult.pl";
-	objAH.desde= $("#desde").val();
-	objAH.hasta= $("#hasta").val();
-	//se envia la consulta
-	objAH.sendToServer();
+    objAH=new AjaxHelper(updateInfo);
+    objAH.url= "/cgi-bin/koha/reports/inventoryResult.pl";
+    objAH.desde= $("#desde").val();
+    objAH.hasta= $("#hasta").val();
+    //se envia la consulta
+    objAH.sendToServer();
 }
 
 function updateInfo(responseText){
-	$("#result").html(responseText);
-	zebra("tablaResult");
+    $("#result").html(responseText);
+    zebra("tablaResult");
 }
 
 </script>
@@ -26,34 +26,38 @@ function updateInfo(responseText){
 
 <center>
 <table border="0" cellspacing="0" cellpadding="0" width="90%">
-	<tr class="tablaresultadoTitle">
+    <tr class="tablaresultadoTitle">
 
-		<td align="center" width="30%">[% "Tipo" | i18n %]</td>
-		<td align="center">[% "M&iacute;nimo" | i18n %]</td>
-		<td align="center">[% "M&aacute;ximo" | i18n %]</td>
+        <td align="center" width="30%">[% "Tipo" | i18n %]</td>
+        <td align="center">[% "M&iacute;nimo" | i18n %]</td>
+        <td align="center">[% "M&aacute;ximo" | i18n %]</td>
 
-	</tr>
+    </tr>
 
 [% FOREACH barcodePorTipo %]
-  	<tr align="center">
+    <tr align="center">
 
-	 	<td class="[% clase %]"> [% tipo %] </td>
-	 	<td class="[% clase %]"> [% minimo %] </td>
-	 	<td class="[% clase %]"> [% maximo %] </td>
+        <td class="[% clase %]"> [% tipo %] </td>
+        <td class="[% clase %]"> [% minimo %] </td>
+        <td class="[% clase %]"> [% maximo %] </td>
 
- 	</tr>
+    </tr>
 [% END %]
 </table>
 </center>
 <br>
 <table border="0" cellspacing="0" cellpadding="0" align="left">
-	<tr>
-		<td class="inputFontNormal">[% "Localizaci&oacute;n del ejemplar entre &nbsp;" | i18n %]</td>
-		<td class="inputFontNormal">
-			<input class="inputFontNormal" type="text" id="desde" value="[% desde %]">&nbsp; y &nbsp;
-			<input  class="inputFontNormal" type="text" id="hasta" value="[% hasta %]">&nbsp;
-		</td>
-		<td>
+    <tr>
+        <div class="titulos_interior">[% "Localizaci&oacute;n del ejemplar entre &nbsp;" | i18n %]</div>
+        <div class="filtros_reportes">
+            <ul class="filtros_reportes_izq">
+                <li><input class="inputFontNormal" type="text" id="desde" value="[% desde %]">&nbsp;</li>
+                <li>Y</li>
+                <li><input  class="inputFontNormal" type="text" id="hasta" value="[% hasta %]">&nbsp;</li>
+            </ul>
+        </div>
+        <ul class="filtros_reportes_der">
+            <li>
                 [% PERL %]
                                 print C4::AR::Filtros::to_Button( 
                                                                     text    =>  "[% 'Buscar' | i18n %]",
@@ -61,14 +65,17 @@ function updateInfo(responseText){
                                                                     onClick =>  "consultar(0,'barcode')",
                                         ) ;
                 [% END %]
-        </td>
-	</tr>
+            </li>
+        </ul>
+    </tr>
 </table>
 
 <br>
-<p class="inputFontNormal" align="left">[% "El m&iacute;nimo inventario existente es:" | i18n %] <b>[% MIN %] </b>[% " y el m&aacute;ximo es:" | i18n %] <b>[% MAX %]</b>. </p> 
-
+<ul class="filtros_reportes_der">
+    <li>
+        [% "El m&iacute;nimo inventario existente es:" | i18n %] <b>[% MIN %] </b>[% " y el m&aacute;ximo es:" | i18n %] <b>[% MAX %]</b>
+    </li>
+</ul>
 <div id="result"></div>
 
-
-[% INCLUDE "intranet-bottom.inc" %] 
+[% INCLUDE "intranet-bottom.inc" %]

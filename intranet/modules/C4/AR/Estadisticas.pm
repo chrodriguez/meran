@@ -57,7 +57,46 @@ use vars qw(@EXPORT @ISA);
     &getMinBarcodeLike
     &getMaxBarcodeLike
     &listarItemsDeInventorioSigTop
+    &barcodesPorTipo
 );
+
+sub barcodesPorTipo{
+    my ($branch) = @_;
+    
+    my $clase='par';
+    my @results;
+    my $row;
+    $row->{'tipo'}='TODOS';
+    $row->{'minimo'}= &getMinBarcode($branch);
+    $row->{'maximo'}= &getMaxBarcode($branch);
+    
+   if (($row->{'minimo'} ne '') or ($row->{'maximo'} ne '')){
+      push @results,$row 
+   }
+
+    my $cat_ref_tipo_nivel3 = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(
+                                                                                          select => ['id_tipo_doc'],
+                                                                                       );
+
+    
+   foreach my $it (@$cat_ref_tipo_nivel3) {
+      my $row;
+      my $id_tipo_doc = $it->{'id_tipo_doc'};
+      
+      $row->{'tipo'}=  $id_tipo_doc;
+
+      my $inicio=$branch."-".$it->{'id_tipo_doc'}."-%";
+
+      $row->{'minimo'} = C4::AR::Estadisticas::getMinBarcodeLike($branch,$inicio);
+
+      $row->{'maximo'} = C4::AR::Estadisticas::getMaxBarcodeLike($branch,$inicio);
+
+      if (($row->{'minimo'} ne '') or ($row->{'maximo'} ne ''))  {
+         push @results,$row 
+      }
+   }
+   return @results;
+}
 
 sub listarItemsDeInventorioSigTop{
     my ($sigtop,$orden) = @_;
@@ -234,7 +273,6 @@ sub prestamosAnual{
 ##Ejemplares perdidos del branch que le paso por parametro
 sub disponibilidad{
    my ($params_obj)=@_;
-
    use C4::Modelo::CatHistoricoDisponibilidad::Manager;
    my $dateformat = C4::Date::get_date_format();
    my $dates='';
@@ -272,6 +310,51 @@ sub disponibilidad{
 }
 
 
+#Cantidad de renglones seteado en los parametros del sistema para ver por cada pagina
+sub cantidadRenglones{
+        my $dbh = C4::Context->dbh;
+        my $query="select value
+		   from pref_preferencia_sistema
+                   where variable='renglones'";
+        my $sth=$dbh->prepare($query);
+	$sth->execute();
+	return($sth->fetchrow_array);
+}
+
+#
+#Esta funcion recibe un numero que equivale a la cantidad de tuplas que devuelve cualquier consulta
+# y en base a eso arma el array con la cantidad de paginas que tiene que quedar como respuesta
+# Paginador
+sub armarPaginas{
+	my ($cant,$actual)=@_;
+	my $renglones = cantidadRenglones();
+	my $paginas = 0;
+	if ($renglones != 0){
+		$paginas= $cant % $renglones;}
+	if  ($paginas == 0){
+        	$paginas= $cant /$renglones;}
+	else {$paginas= (($cant - $paginas)/$renglones) +1};
+	my @numeros=();
+	for (my $i=1; ($paginas >1 and $i <= $paginas) ; $i++ ) {
+		 push @numeros, { number => $i, actual => ($i!=$actual)}
+	};
+	return(@numeros);
+}
+
+sub armarPaginasPorRenglones {
+	my ($cant,$actual,$renglones)=@_;
+	my $paginas = 0;
+	if ($renglones != 0){
+		$paginas= $cant % $renglones;}
+	if  ($paginas == 0){
+        	$paginas= $cant /$renglones;}
+	else {$paginas= (($cant - $paginas)/$renglones) +1};
+	my @numeros=();
+	for (my $i=1; ($paginas >1 and $i <= $paginas) ; $i++ ) {
+		 push @numeros, { number => $i, actual => ($i!=$actual)}
+	};
+	return(@numeros);
+}
 
 sub insertarNota{
 	my ($id,$nota)=@_;
@@ -355,7 +438,7 @@ sub registroEntreFechas{
                                        gt => $params_obj->{'fechaInicio'}, 
                                  }
                       ) );
-      
+
       push(@filtros, ( fecha => {      eq=> $params_obj->{'fechaFin'},
                                        lt => $params_obj->{'fechaFin'}  
                                 }
@@ -374,7 +457,7 @@ sub registroEntreFechas{
    if ($params_obj->{'chkuser'} ne "false"){
       push(@filtros, ( responsable => { eq => $params_obj->{'user'} }) );
    }
-   
+
    if ($params_obj->{'chknum'} ne "false"){
       push(@filtros, ( numero => {  eq=> $params_obj->{'numDesde'},
                                     gt => $params_obj->{'numDesde'}, 
@@ -387,6 +470,11 @@ sub registroEntreFechas{
                      ) );
    }
 
+   my $registros_count = C4::Modelo::RepRegistroModificacion::Manager->get_rep_registro_modificacion_count(
+                                                                        query => \@filtros,
+                                                                        require_objects => ['socio_responsable'],
+                                                                        );
+
    my $registros = C4::Modelo::RepRegistroModificacion::Manager->get_rep_registro_modificacion(
                                                                         query => \@filtros,
                                                                         sorty_by => $params_obj->{'orden'},
@@ -395,7 +483,7 @@ sub registroEntreFechas{
                                                                         require_objects => ['socio_responsable'],
                                                                         );
 
-   return (scalar(@$registros),$registros);
+   return ($registros_count,$registros);
 }
 
 =item
@@ -705,33 +793,33 @@ sub prestamos{
 
 sub reservas{
 
-   my ($id_ui,$orden,$ini,$cantR,$tipo)=@_;
-   my $dateformat = C4::Date::get_date_format();
-   my @filtros;
-   my @results;
-
-   push (@filtros, ( id_ui => { eq => $id_ui}) );
-
-   if($tipo eq "GR"){
-       push (@filtros, ( estado => { eq => 'G'}) );
-
-   }
-   elsif($tipo eq "EJ"){
-       push (@filtros, ( estado => { eq => 'E'}) );
-   }
-   else {
-       push (@filtros, ( estado => { eq => 'E', eq => 'G'}) );
-   }
-
-   my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count(   query => \@filtros,
-                                                                               );
-
-   my $reservas = C4::Modelo::CircReserva::Manager->get_circ_reserva(   query => \@filtros,
-                                                                        sorty_by => [$orden],
-                                                                        limit => $cantR,
-                                                                        offset => $ini,
-                                                                        require_objects => ['socio','nivel3'],
-                                                                      );
+    my ($id_ui,$orden,$ini,$cantR,$tipo)=@_;
+    my $dateformat = C4::Date::get_date_format();
+    my @filtros;
+    my @results;
+    
+    push (@filtros, ( id_ui => { eq => $id_ui}) );
+    
+    if($tipo eq "GR"){
+        push (@filtros, ( estado => { eq => 'G'}) );
+    
+    }
+    elsif($tipo eq "EJ"){
+        push (@filtros, ( estado => { eq => 'E'}) );
+    }
+    else {
+        push (@filtros, ( estado => { eq => 'E', eq => 'G'}) );
+    }
+    
+    my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count(   query => \@filtros,
+                                                                                );
+    
+    my $reservas = C4::Modelo::CircReserva::Manager->get_circ_reserva(   query => \@filtros,
+                                                                            sorty_by => [$orden],
+                                                                            limit => $cantR,
+                                                                            offset => $ini,
+                                                                            require_objects => ['socio','nivel3'],
+                                                                        );
     return ($reservas_count,$reservas);
 }
 
@@ -1034,85 +1122,60 @@ sub historialReservas {
 }
 
 sub historicoCirculacion{
-	my ($chkfecha,$fechaIni,$fechaFin,$user,$id3,$ini,$cantR,$orden,
-	$tipoPrestamo,$tipoOperacion)=@_;
-	
-        my $dbh = C4::Context->dbh;
-	my $dateformat = C4::Date::get_date_format();
-	my @bind;
-	my $query="";
-	my $cant=0;
-	my $select= " 	SELECT h.id, nota, a.completo,a.id as idAutor,h.id1, titulo,
-			h.id2,h.id3,h.branchcode as branchcode, it.description,date,h.borrowernumber,responsable,type,b.surname,b.firstname, n3.barcode, n3.signatura_topografica, u.firstname as userFirstname, u.surname as userSurname";
 
-	my $from= "	FROM rep_historial_circulacion h LEFT JOIN borrowers b 
-			ON (h.responsable=b.borrowernumber)
-			LEFT JOIN borrowers u
-			ON (h.borrowernumber = u.borrowernumber)
-			LEFT JOIN circ_ref_tipo_prestamo it
-			ON(it.id_tipo_prestamo = h.issuetype)
-			LEFT JOIN cat_nivel1 n1
-			ON (n1.id1 = h.id1)
-			LEFT JOIN cat_autor a
-			ON (a.id = n1.autor) 
-			LEFT JOIN cat_nivel3 n3
-			ON (n3.id3 = h.id3) ";
+    my ($params)=@_;
+    use C4::Modelo::RepHistorialCirculacion::Manager;
+    my @filtros;
 
-	my $where = "";
-	if ($chkfecha ne 'false'){
-		$where = " WHERE (date>=?) AND (date<=?) ";
-		push(@bind,$fechaIni);
-		push(@bind,$fechaFin);
-	}
-	if (($user)&&($user ne '-1')){	
-		if ($where eq ''){$where = " WHERE responsable=? ";}
-		else {$where.= " AND responsable=? ";}
-		push(@bind,$user);
-	}
-	if(($tipoOperacion)&&($tipoOperacion ne '-1')){
-		if ($where eq ''){$where = " WHERE h.type = ? ";}
-		else{$where .= " AND h.type = ? ";}
-		push(@bind, $tipoOperacion);
-	}
+    if ( $params->{'chkfecha'} ){
+        push( @filtros,(fecha =>{eq => $params->{'fechaIni'}, gt => $params->{'fechaIni'}}) );
+        push( @filtros,(fecha =>{eq => $params->{'fechaFin'}, lt => $params->{'fechaFin'}}) );
+    }
+    if ( $params->{'socio'} ){
+        push( @filtros, (nro_socio => {eq => $params->{'socio'}} ) );
+    }
+    if( $params->{'tipoOperacion'} ne '-1' ){
+        push( @filtros, (tipo_operacion => { eq => $params->{'tipoOperacion'}}) );
+    }
 
-	if(($tipoPrestamo)&&($tipoPrestamo ne '-1')){
-		if ($where eq ''){ $where = " WHERE h.issuetype = ? ";}
-		else{$where .= " AND h.issuetype = ? ";}
-		push(@bind, $tipoPrestamo);
-	}
+    if( $params->{'tipoPrestamo'} ){
+        push( @filtros, (tipo_prestamo => {eq => $params->{'tipoPrestamo'}}) );
+    }
 
-# 	my $finCons=" ORDER BY ".$orden." limit $ini,$cantR ";
-#Miguel solo para testear, despues sacar
-	my $finCons=" ORDER BY h.timestamp desc limit $ini,$cantR ";
+    if( $params->{'id3'} ){
+        push( @filtros , (id3 => {eq => $params->{'id3'}}) );
+    }
 
-#para buscar las operaciones sobre un item, viene desde el pl detalleItemResult.pl
-	if($id3 ne ''){
-		$where.=" AND n3.id3 = ?";
-		push(@bind,$id3);
-	}
-	
-	$query="SELECT count(*) as cant ".$from.$where;
-        my $sth=$dbh->prepare($query);
-        $sth->execute(@bind);
-	$cant=$sth->fetchrow_array;
-	
-	$query=$select.$from.$where.$finCons;
-	$sth=$dbh->prepare($query);
-        $sth->execute(@bind);
-	my @results;
-        while (my $data=$sth->fetchrow_hashref){
-		$data->{'fecha'}=format_date($data->{'date'},$dateformat);
-		$data->{'operacion'}=tipoDeOperacion($data->{'type'});
-		$data->{'nomCompleto'}=$data->{'surname'}.", ".$data->{'firstname'};
-		$data->{'userCompleto'}=$data->{'userSurname'}.", ".$data->{'userFirstname'};
-		$data->{'unititle'}=C4::AR::Nivel1::getUnititle($data->{'id1'});
-                push(@results,$data);
-        }
-        return ($cant,@results);
+    my $orden = $params->{'orden'} || 'fecha',
+
+    my $cantidad_registros = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
+                                                                                                            query => \@filtros,
+                                                                                                            require_objects => ['nivel1',
+                                                                                                                                'nivel2',
+                                                                                                                                'nivel3',
+                                                                                                                                'socio',
+#                                                                                                                                 'responsable',
+                                                                                                                                'tipo_prestamo_ref',
+                                                                                                                               ],
+                                                                                                           );
+    my $historicoCirculacion = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion(
+                                                                                                            query => \@filtros,
+                                                                                                            offset => $params->{'ini'},
+                                                                                                            limit => $params->{'cantR'},
+                                                                                                            sort_by => $orden,
+                                                                                                            require_objects => ['nivel1',
+                                                                                                                                'nivel2',
+                                                                                                                                'nivel3',
+                                                                                                                                'socio',
+#                                                                                                                                 'responsable',
+                                                                                                                                'tipo_prestamo_ref',
+                                                                                                                               ],
+                                                                                                           );
+    return ($cantidad_registros,$historicoCirculacion);
 }
 
 sub historicoSanciones{
-	my ($params_obj)=@_;
+   my ($params_obj)=@_;
    use C4::Modelo::RepHistorialSancion::Manager;
    my @filtros;
    my @results;

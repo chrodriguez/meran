@@ -24,3 +24,12 @@ body {
 -->menu ver en default menu.css<--	
 	
 -->menu<--
+.filtros_reportes_izq{
+    float: left;
+    padding-right: 70px;
+}
+
+.filtros_reportes_der{
+    float: right;
+    overflow:auto;
+}

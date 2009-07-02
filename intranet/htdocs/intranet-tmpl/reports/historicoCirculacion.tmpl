@@ -37,8 +37,8 @@ $(document).ready(function() {
 		objAH.fechaIni=  $('#fechaIni').val();
 		objAH.fechaFin= $('#fechaFin').val();
 		objAH.chkfecha=  $('#chkfecha')[0].checked;
-		objAH.user= $('#user').val()
-		objAH.tiposPrestamos= $('#tiposPrestamos').val();
+		objAH.socio= $('#socios').val();
+		objAH.tipoPrestamo= $('#tipo_nivel3_id').val();
 		objAH.tipoOperacion= $('#tipoOperacion').val();
 		//se setea la funcion para cambiar de pagina
 		objAH.funcion= 'changePage';
@@ -47,7 +47,7 @@ $(document).ready(function() {
 	}
 	
 	function guardarNota(id){
-		objAH.id=  id;
+		objAH.id= id;
 		objAH.notas= $('#'+id).val();
 		objAH.sendToServer();
 	}
@@ -94,7 +94,7 @@ $(document).ready(function() {
 			<br><br>
 
 			<b>[% "Tipo de Pr&eacute;stamo: " | i18n %]</b>
-			[% selectTiposPrestamos %]
+			[% selectTipoPrestamos %]
 			<br><br>
 			<b>[% "Tipo de Operaci&oacute;n: " | i18n %]</b>
 			[% selectTipoOperacion %]

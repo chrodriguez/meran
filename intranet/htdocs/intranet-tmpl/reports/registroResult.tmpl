@@ -1,4 +1,3 @@
-
 <center>
 <p class="inputFontNormal"> 
 	<b>[% "La cantidad de modificaciones hechas fueron:" | i18n %] &nbsp;[% cant %]</b>
@@ -16,11 +15,21 @@
 		<th class="tablaresultadoTitle">[% "Agregar nota" | i18n %]</th>
 	</tr>
 
-[% FOREACH registro IN resultsloop %]
+[% FOREACH registro IN registros %]
 	
   	<tr align='center' class="inputFontNormal">
-  		
-  		<td> [% registro.socio_responsable.getNro_socio %] ([% registro.socio_responsable.persona.getApellido %] [% registro.socio_responsable.persona.getNomre %] )  </td>
+
+        <td> 
+            [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     "[% registro.socio_responsable.getNro_socio %] ([% registro.socio_responsable.persona.getApellido %] [% registro.socio_responsable.persona.getNomre %] )",
+                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                params =>   ["nro_socio=[% registro.socio_responsable.getNro_socio %]"],
+                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                            ) ;
+            [% END %]
+            <a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?nro_socio=[% registro.socio_responsable.getNro_socio %]">
+            </a>
+        </td>
   		<td> [% registro.fecha %] </td>
   		<td> [% registro.operacion %]</td>
   		<td> [% registro.tipo %]</td>

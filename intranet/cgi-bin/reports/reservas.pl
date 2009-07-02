@@ -21,6 +21,9 @@ my ($template, $session, $t_params, $cookie) = get_template_and_user({
 
 
 my $ComboUI=C4::AR::Utilidades::generarComboUI();
+
 $t_params->{'unidades'}= $ComboUI;
+
+$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Reservas");
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);

@@ -44,47 +44,32 @@ function consultar(){
 
 <div class="titulos_interior" >[% "Reservas" | i18n %]</div>
 
-<center>
+<div class="filtros_reportes">
 
-<table border=0 cellspacing=0 cellpadding=2>
-
-	<tr class="inputFontNormal">
-		<td>    [% "Seleccione el tipo de reserva:" | i18n %]
-	
-		</td>
-
-		<td>
+    <ul class="filtros_reportes_izq">
+        <li>[% "Seleccione el tipo de reserva:" | i18n %]
 			<select name="tipoReserva" id="tipoReserva">
 				<option selected="selected" value="EJ" id="EJ">[% "Por ejemplar" | i18n %]</option>
 				<option value="GR" id="GR">[% "Por grupo" | i18n %]</option>
 				<option value="TO" id="TO">[% "Todas" | i18n %]</option>
 			</select>
-		</td>
-	</tr>
-	<tr class="inputFontNormal">
-	
-		<td class="inputFontNormal">
-			<br>[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]
-		</td>
-		<td class="inputFontNormal">
-			<br>[% unidades %]
-		</td>
-	</tr>
-	<tr class="inputFontNormal"  align="center">
-		<td colspan="2">
-			<br>
-            [% PERL %]
-                            print C4::AR::Filtros::to_Button( 
-                                                                text    =>  "[% 'Buscar' | i18n %]",
-                                                                boton   =>  "boton_buscar",
-                                                                onClick =>  "consultar();",
-                                    ) ;
-            [% END %]
-		</td>
-	</tr>
-</table>
+		</li>
 
-<br>
+        <li>
+            [% "Seleccione una unidad de informaci&oacute;n:" | i18n %]
+            [% unidades %]
+        </li>
+    </ul>
+</div>
+<div class="buttonContainerHorizontal">
+    [% PERL %]
+                    print C4::AR::Filtros::to_Button( 
+                                                        text    =>  "[% 'Buscar' | i18n %]",
+                                                        boton   =>  "boton_buscar",
+                                                        onClick =>  "consultar();",
+                            ) ;
+    [% END %]
+</div>
 
 <div id="result"></div>
 

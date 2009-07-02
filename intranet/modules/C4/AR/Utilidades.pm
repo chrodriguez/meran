@@ -1596,8 +1596,8 @@ sub generarComboDeSocios{
                                                                        ],);
 
     foreach my $socio (@$socios) {
-        push(@select_socios, $socio->getId_socio);
-        $select_socios{$socio->getId_socio}= $socio->persona->getApeYNom." (".$socio->getNro_socio.")" ;
+        push(@select_socios, $socio->getNro_socio);
+        $select_socios{$socio->getNro_socio}= $socio->persona->getApeYNom." (".$socio->getNro_socio.")" ;
     }
 
     my %options_hash; 
@@ -1613,7 +1613,7 @@ sub generarComboDeSocios{
     }
 
     $options_hash{'name'}= $params->{'name'}||'ui_name';
-    $options_hash{'id'}= $params->{'id'}||'ui_id';
+    $options_hash{'id'}= $params->{'id'}||'socios';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || '-1';

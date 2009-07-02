@@ -12,15 +12,61 @@ __PACKAGE__->meta->setup(
         id1            => { type => 'integer', not_null => 1 },
         id2            => { type => 'integer', not_null => 1 },
         id3            => { type => 'integer', not_null => 1 },
-        tipo           => { type => 'varchar', default => '', length => 15, not_null => 1 },
-        nro_socio      => { type => 'integer', default => '0', not_null => 1 },
-        responsable    => { type => 'varchar', length => 20, not_null => 1 },
+        tipo_operacion => { type => 'varchar', default => 'issue', length => 15, not_null => 1 },
+        nro_socio      => { type => 'varchar', length => 16, default => '0', not_null => 1 },
+        responsable    => { type => 'varchar', length => 16, not_null => 1 },
         id_ui	       => { type => 'varchar', length => 4 },
         timestamp      => { type => 'timestamp', not_null => 1 },
-        fecha           => { type => 'varchar', default => '0000-00-00', not_null => 1 },
+        fecha          => { type => 'varchar', default => '0000-00-00', not_null => 1 },
         nota           => { type => 'varchar', length => 50 },
-        fecha_fin       => { type => 'varchar' },
-        tipo_prestamo      => { type => 'character', length => 2 },
+        fecha_fin      => { type => 'varchar' },
+        tipo_prestamo  => { type => 'character', length => 2 },
+    ],
+
+    relationships =>
+    [
+      nivel1 => 
+      {
+        class       => 'C4::Modelo::CatNivel1',
+        key_columns => { id1 => 'id1' },
+        type        => 'one to one',
+      },
+
+      nivel2 => 
+      {
+        class       => 'C4::Modelo::CatNivel2',
+        key_columns => { id2 => 'id2' },
+        type        => 'one to one',
+      },
+
+      nivel3 => 
+      {
+        class       => 'C4::Modelo::CatNivel3',
+        key_columns => { id3 => 'id3' },
+        type        => 'one to one',
+      },
+
+     socio => 
+      {
+        class       => 'C4::Modelo::UsrSocio',
+        key_columns => { nro_socio => 'nro_socio' },
+        type        => 'one to one',
+      },
+
+     responsable => 
+      {
+        class       => 'C4::Modelo::UsrSocio',
+        key_columns => { responsable => 'nro_socio' },
+        type        => 'one to one',
+      },
+
+     tipo_prestamo_ref => 
+      {
+        class       => 'C4::Modelo::CircRefTipoPrestamo',
+        key_columns => { tipo_prestamo => 'id_tipo_prestamo' },
+        type        => 'one to one',
+      },
+
     ],
 
     primary_key_columns => [ 'id' ],
@@ -71,15 +117,15 @@ sub setId3{
     $self->id3($id3);
 }
 
-sub getTipo{
+sub getTipo_operacion{
     my ($self) = shift;
-    return ($self->tipo);
+    return ($self->tipo_operacion);
 }
 
-sub setTipo{
+sub setTipo_operacion{
     my ($self) = shift;
     my ($tipo) = @_;
-    $self->tipo($tipo);
+    $self->tipo_operacion($tipo);
 }
 
 sub getNro_socio{
