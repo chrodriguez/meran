@@ -78,7 +78,7 @@ function cambiarIdioma() {
 <tr class="tope" >  
 	 <td >&nbsp;</td>
 
-	<td class="pagetitulo">[% pagetitle %]</td>
+	<td class="titulos_interior">[% pagetitle %]</td>
 
         <td align="right" valign="middle">
 
