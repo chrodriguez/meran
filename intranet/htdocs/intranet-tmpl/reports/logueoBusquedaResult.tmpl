@@ -1,25 +1,35 @@
 
-<p>
-<b>[% "La cantidad de logueos es :" | i18n %] [% cantidad %]<br>
-</p>
-<br>
+<div class="resultados_consulta">[% "La cantidad de logueos es :" | i18n %] [% cantidad %]</div>
 
-[% paginador %]
-
+<div class="contenedor_paginador">[% paginador %]</div>
 
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
  	<tr class="tablaresultadoTitle">
 	
-		<th class="tablaresultadoTitle click" onclick="ordenar('surname')" Title="Ordenar por Apellido">[% "Apellido" | i18n %]</th>
-		<th class="tablaresultadoTitle click" onclick="ordenar('firstname')" Title="Ordenar por Nombre">[% "Nombre" | i18n %]</th>
-		<th class="tablaresultadoTitle click" onclick="ordenar('cardnumber')" Title="Ordenar por Socio">[% "N&uacute;mero de socio" | i18n %]</th>
-		<th class="tablaresultadoTitle click" onclick="ordenar('description')" Title="Ordenar por Categor&iacute;a">
+		<th class="click" onclick="ordenar('surname')" Title="[% 'Ordenar por Apellido' | i18n %]">
+            [% "Apellido" | i18n %]
+        </th>
+		<th class="click" onclick="ordenar('firstname')" Title="[% 'Ordenar por Nombre' | i18n %]">
+            [% "Nombre" | i18n %]
+        </th>
+		<th class="click" onclick="ordenar('cardnumber')" Title="[% 'Ordenar por Socio' | i18n %]">
+            [% "N&uacute;mero de socio" | i18n %]
+        </th>
+		<th class="click" onclick="ordenar('description')" Title="[% 'Ordenar por Categor&iacute;a' | i18n %]">
             [% "Categor&iacute;a" | i18n %]
         </th>
-		<th class="tablaresultadoTitle click" onclick="ordenar('fecha')" Title="Ordenar por Fecha">[% "Fecha" | i18n %]</th>
-		<th class="tablaresultadoTitle click" onclick="ordenar('campo')" Title="Ordenar por Campo">[% "Campo" | i18n %]</th>
-		<th class="tablaresultadoTitle click" onclick="ordenar('valor')" Title="Ordenar por Valor">[% "Valor" | i18n %]</th>
-		<th class="tablaresultadoTitle click" onclick="ordenar('tipo')" Title="Ordenar por Tipo">[% "Tipo" | i18n %]</th>
+		<th class="click" onclick="ordenar('fecha')" Title="[% 'Ordenar por Fecha' | i18n %]">
+            [% "Fecha" | i18n %]
+        </th>
+		<th class="click" onclick="ordenar('campo')" Title="[% 'Ordenar por Campo' | i18n %]">
+            [% "Campo" | i18n %]
+        </th>
+		<th class="click" onclick="ordenar('valor')" Title="[% 'Ordenar por Valor' | i18n %]">
+            [% "Valor" | i18n %]
+        </th>
+		<th class="click" onclick="ordenar('tipo')" Title="[% 'Ordenar por Tipo' | i18n %]">
+            [% "Tipo" | i18n %]
+        </th>
 
 	</tr>
 [% FOREACH busqueda IN resulsloop %]
@@ -43,6 +53,3 @@
     </tr>
 
 </table>
-<br>
-</center>
-

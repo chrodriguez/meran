@@ -179,33 +179,40 @@ sub historicoDeBusqueda{
    my @filtros;
 
    if ($params_obj->{'fechaIni'} ne ""){
-      push(@filtros, ( 'busqueda.fecha' => {       eq=> format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
+      push(@filtros, ( 'busqueda.fecha' => {       eq => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
                                                    gt => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
                                  }
                       ) );
    }
+
    if ($params_obj->{'fechaFin'} ne ""){
-      push(@filtros, ( 'busqueda.fecha' => {       eq=> format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
+      push(@filtros, ( 'busqueda.fecha' => {       eq => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
                                                    lt => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
                                 }
                      ) );
    }
+
    if($params_obj->{'catUsuarios'} ne "SIN SELECCIONAR"){
       push(@filtros, ( 'busqueda.socio.cod_categoria' => { eq=> $params_obj->{'catUsuarios'}, }) );
    }
+
    use C4::Modelo::RepHistorialBusqueda::Manager;
 
    my $busquedas_count = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda_count(
                                                                                           query => \@filtros,
-                                                                                          select => ['*','usr_socio.*'],
-                                                                                          with_objects => ['busqueda','busqueda.socio'],
-                                                                                           );
+#                                                                                           with_objects => ['busqueda','busqueda.socio'],
+                                                                                     );
+
+
    my $busquedas = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda(
-                                                                                          query => \@filtros,
-                                                                                          sorty_by => $params_obj->{'orden'},
-                                                                                          select => ['*','usr_socio.*'],
-                                                                                          with_objects => ['busqueda','busqueda.socio'],
-                                                                                        );
+                                                                                query => \@filtros,
+                                                                                select => ['*','usr_socio.*'],
+                                                                                with_objects => ['busqueda','busqueda.socio'],
+                                                                                limit   => $params_obj->{'cantR'},
+                                                                                offset  => $params_obj->{'ini'},
+                                                                                sorty_by => $params_obj->{'orden'},
+                                                                    );
+
    return($busquedas_count,$busquedas);
 
 }

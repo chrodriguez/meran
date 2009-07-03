@@ -32,6 +32,7 @@ $obj->{'ini'} = $ini;
 $obj->{'cantR'} = $cantR;
 #historial de busquedas desde OPAC
 my ($cantidad, $resultsdata)= C4::AR::Estadisticas::historicoDeBusqueda($obj);
+
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 

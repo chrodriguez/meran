@@ -17,17 +17,16 @@
 		<td>
 			<input type="image" id="checkAllReservas" src="[% themelang %]/images/check.png" title="Seleccionar todos">
 		</td>
-		<td>T&iacute;tulo</td>
-		<td>Autor</td>
-		<td>Edici&oacute;n</td>
-		<td>Reservado desde</td>
-		<td>Reservado hasta</td>
-		<td>&nbsp;</td>
+		<td>[% 'T&iacute;tulo' | i18n %]</td>
+		<td>[% 'Autor' | i18n %]</td>
+		<td>[% 'Edici&oacute;n' | i18n %]</td>
+		<td>[% 'Reservado desde' | i18n %]</td>
+		<td>[% 'Reservado hasta' | i18n %]</td>
 
 	</tr>
 <!-- ESTE LOOP MUESTRA LOS EJEMPLARES RESERVADOS DEL USUARIO-->
     [% FOREACH reserva IN RESERVAS_ASIGNADAS %]
-	<tr align="center" class="inputFontNormal">
+	<tr align="center">
 		<td>
 			<input type="checkbox"  name="chkboxReservas" value="[%  reserva.getId3 %]" id="[% reserva.getId3 %]">
 		</td>

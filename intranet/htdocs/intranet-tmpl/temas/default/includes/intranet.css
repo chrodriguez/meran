@@ -870,16 +870,31 @@ ul#horizontal-list {
     min-width: 696px;
     list-style: none;
     padding-top: 20px;
-    }
-    ul#horizontal-list li {
-        display: inline;
-    }
+}
+
+ul#horizontal-list li {
+    display: inline;
+}
 
 .vertical{
 }
 /*                                                 FIN MARC                            */
 
 /*                                                   estilos para los reportes                     */
+
+/* para mostrar la cant de resultados */
+.resultados_consulta{
+    text-align:center;
+    font-size: 13px;  
+    font-weight:bold;  
+    padding: 5px;
+}
+
+.contenedor_paginador{
+    text-align:center;
+    padding: 5px;
+}
+
 .filtros_reportes{
     font-size: 13px;
     overflow: auto;
