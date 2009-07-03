@@ -43,31 +43,30 @@ function consultar(){
 }
 </script>
 
-<div class="titulos_interior" >[% "Logueo de B&uacute;squedas desde OPAC" | i18n %]</div>
+<div class="titulos_interior" >[% "Logueo de B&uacute;squedas" | i18n %]</div>
 
-<center>
 
-<ul>
-	<li>
-	  <b>[% "Seleccione una fecha de inicio: " | i18n %]</b>
-	</li>
-	<li>
-		<input id="fechaIni" class="inputFontNormal" name="fechaIni" value="[% fechaIni %]"></li>
-	<li><b>[% "Seleccione una fecha de Fin: " | i18n %]</b></li>	
-	<li>
-	  	<input id="fechaFin" class="inputFontNormal" name="fechaFin" value="[% fechaFin %]"></li>
-	<li><b>[% "Categoria de Usuario:" | i18n %] </b></li>
-	<li>[% selectCatUsuarios  %]</li>
-	<li>
-                [% PERL %]
-                                print C4::AR::Filtros::to_Button( 
-                                                                    text    =>  "[% 'Buscar' | i18n %]",
-                                                                    boton   =>  "boton_buscar",
-                                                                    onClick =>  "consultar('');",
-                                        ) ;
-                [% END %]
-	</li>
-</ul>
+<div class="filtros_reportes">
+    <ul class="filtros_reportes_izq">
+	    <li>[% "Seleccione una fecha de inicio: " | i18n %]</li>
+	    <li><input id="fechaIni" name="fechaIni" value="[% fechaIni %]"></li>
+	    <li>[% "Seleccione una fecha de Fin: " | i18n %]</li>	
+	    <li><input id="fechaFin" name="fechaFin" value="[% fechaFin %]"></li>
+	    <li>[% "Categoria de Usuario:" | i18n %]</li>
+	    <li>[% selectCatUsuarios  %]</li>
+     </ul>
+</div>
+
+
+<div class="buttonContainerHorizontal">
+    [% PERL %]
+                    print C4::AR::Filtros::to_Button( 
+                                                        text    =>  "[% 'Buscar' | i18n %]",
+                                                        boton   =>  "boton_buscar",
+                                                        onClick =>  "consultar('');",
+                            ) ;
+    [% END %]   
+</div>
 
 <div id="result"></div>
 

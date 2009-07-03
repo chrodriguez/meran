@@ -23,5 +23,5 @@ my $comboCategoriasDeSocio= C4::AR::Utilidades::generarComboCategoriasDeSocio(\%
 
 $t_params->{'selectCatUsuarios'}= $comboCategoriasDeSocio;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 

@@ -13,7 +13,9 @@
 		<th class="tablaresultadoTitle click" onclick="ordenar('surname')" Title="Ordenar por Apellido">[% "Apellido" | i18n %]</th>
 		<th class="tablaresultadoTitle click" onclick="ordenar('firstname')" Title="Ordenar por Nombre">[% "Nombre" | i18n %]</th>
 		<th class="tablaresultadoTitle click" onclick="ordenar('cardnumber')" Title="Ordenar por Socio">[% "N&uacute;mero de socio" | i18n %]</th>
-		<th class="tablaresultadoTitle click" onclick="ordenar('description')" Title="Ordenar por Categor&iacute;a">[% "Categor&iacute;a" | i18n %]</th>
+		<th class="tablaresultadoTitle click" onclick="ordenar('description')" Title="Ordenar por Categor&iacute;a">
+            [% "Categor&iacute;a" | i18n %]
+        </th>
 		<th class="tablaresultadoTitle click" onclick="ordenar('fecha')" Title="Ordenar por Fecha">[% "Fecha" | i18n %]</th>
 		<th class="tablaresultadoTitle click" onclick="ordenar('campo')" Title="Ordenar por Campo">[% "Campo" | i18n %]</th>
 		<th class="tablaresultadoTitle click" onclick="ordenar('valor')" Title="Ordenar por Valor">[% "Valor" | i18n %]</th>
@@ -23,29 +25,22 @@
 [% FOREACH busqueda IN resulsloop %]
 	<tr align='center'>
 
-		<td  class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">[% surname %]</a>
+		<td>
+        		<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">[% surname %]</a>
 		</td>
-		<td  class="inputFontNormal"> [% busqueda.busqueda.socio.persona.getNombre %]
-		</td>
-		<td  class="inputFontNormal">[% busqueda.busqueda.socio.getNro_socio %] 
-		</td>
-			<td  class="inputFontNormal">[% busqueda.busqueda.descripcion %] 
-		</td>
-		<td  class="inputFontNormal">[% busqueda.busqueda.fecha %] 
-		</td>
-		<td  class="inputFontNormal">[% busqueda.campo %] 
-		</td>
-		<td  class="inputFontNormal">[% busqueda.valor %] 
-		</td>
-		<td  class="inputFontNormal">[% busqueda.tipo %] 
-		</td>
+		<td>[% busqueda.busqueda.socio.persona.getNombre %]</td>
+		<td>[% busqueda.busqueda.socio.getNro_socio %]</td>
+		<td>[% busqueda.busqueda.descripcion %]</td>
+		<td>[% busqueda.busqueda.fecha %]</td>
+		<td>[% busqueda.campo %]</td>
+		<td>[% HTML.escape(busqueda.valor) %]</td>
+		<td>[% busqueda.tipo %]</td>
 
 	</tr>
 [% END %]
 	<tr valign=bottom>
 	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
-        </tr>
+    </tr>
 
 </table>
 <br>
