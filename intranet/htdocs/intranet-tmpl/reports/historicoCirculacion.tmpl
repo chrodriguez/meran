@@ -1,7 +1,5 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<script src="/intranet-tmpl/includes/jquery/validate/jquery.validate.js"></script>
-
 <script language="javascript" type="text/javascript">
 
 $(document).ready(function() {
@@ -13,103 +11,113 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 
+    var objAH;
 
-	var objAH;
+    function ordenar(orden){
+        objAH.sort(orden);
+    }
 
-	function ordenar(orden){
-		objAH.sort(orden);
-	}
+    function changePage(ini){
+        objAH.changePage(ini);
+    }
 
-	function changePage(ini){
-		objAH.changePage(ini);
-	}
+    function updateInfo(responseText){
+        $('#result').html(responseText);
+        zebra('tablaResult');
+        objAH.id="";
+        objAH.notas="";
+    }
 
-	function updateInfo(responseText){
-		$('#result').html(responseText);
-		zebra('tablaResult');
-		objAH.id="";
-		objAH.notas="";
-	}
+    function consultar(){
+        objAH=new AjaxHelper(updateInfo);
+        objAH.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
+        objAH.fechaIni=  $('#fechaIni').val();
+        objAH.fechaFin= $('#fechaFin').val();
+        objAH.chkfecha=  $('#chkfecha')[0].checked;
+        objAH.socio= $('#socios').val();
+        objAH.tipoPrestamo= $('#tipo_nivel3_id').val();
+        objAH.tipoOperacion= $('#tipoOperacion').val();
+        //se setea la funcion para cambiar de pagina
+        objAH.funcion= 'changePage';
+        objAH.sendToServer();
 
-	function consultar(){
-		objAH=new AjaxHelper(updateInfo);
-		objAH.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
-		objAH.fechaIni=  $('#fechaIni').val();
-		objAH.fechaFin= $('#fechaFin').val();
-		objAH.chkfecha=  $('#chkfecha')[0].checked;
-		objAH.socio= $('#socios').val();
-		objAH.tipoPrestamo= $('#tipo_nivel3_id').val();
-		objAH.tipoOperacion= $('#tipoOperacion').val();
-		//se setea la funcion para cambiar de pagina
-		objAH.funcion= 'changePage';
-		objAH.sendToServer();
+    }
 
-	}
-	
-	function guardarNota(id){
-		objAH.id= id;
-		objAH.notas= $('#'+id).val();
-		objAH.sendToServer();
-	}
+    function guardarNota(id_historico){
+        objAH=new AjaxHelper(updateGuardarNota);
+        objAH.id_historico= id_historico;
+        objAH.nota= $('#'+id_historico).val();
+        objAH.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
+        //se setea la funcion para cambiar de pagina
+        objAH.accion= 'NOTA_HISTORICO';
+        objAH.sendToServer();
+    }
+    function updateGuardarNota(responseText){
+        if (responseText != '0')
+            jAlert(NOTA_GUARDADA);
+        else
+            jAlert(FALLO_NOTA);
+    }
 
 </script>
 
 <div class="titulos_interior" >[% "Registro de Circulaci&oacute;n" | i18n %]</div>
 
 
-<table border="0" cellspacing="0" cellpadding="0">
-	<tr>
-		<td valign= "top" class=inputFontNormal>
-		<input class="inputFontNormal" type="checkbox" id="chkfecha">
-		<b>[% "Seleccione para buscar por fecha." | i18n %]</b><br><br>
-		[% "Seleccione una fecha de inicio:" | i18n %]<br><br>
-		[% "Seleccione una fecha de Fin:" | i18n %]
-		</td>
+<div class="filtros_reportes">
 
-		<td valign= "top" class=inputFontNormal><br><br>
-			<input id="fechaIni" class="inputFontNormal" name="dateselected" value="
+    <ul class="filtros_reportes_izq">
+        <li>
+            <b>[% "Seleccione para buscar por fecha." | i18n %]</b>
+            <input class="inputFontNormal" type="checkbox" id="chkfecha">
+        </li>
+        <li>
+            [% "Seleccione una fecha de inicio:" | i18n %]
+            <input id="fechaIni" class="inputFontNormal" name="dateselected" value="
                                 [% IF fechaInicio %]
                                     [% dateselected %]
                                 [% ELSE %]
                                     [% todaydate %]
                                 [% END %] "
                         >
-			<br><br>
-			<input id="fechaFin" class="inputFontNormal" name="dateselectedEnd" value="
-		              [% IF fechaFin %]
-                                    [% dateselectedEnd %]
-                                [% ELSE %]
-                                    [% todaydate %]
-                                [% END %] "
-                        >
-			
-		</td>
+        </li>
+        <li>
+            [% "Seleccione una fecha de Fin:" | i18n %]
+            <input id="fechaFin" class="inputFontNormal" name="dateselectedEnd" value="
+                    [% IF fechaFin %]
+                        [% dateselectedEnd %]
+                    [% ELSE %]
+                        [% todaydate %]
+                    [% END %]"
+            >
+        </li>
+    </ul>
+    <ul class="filtros_reportes_der">
 
-		<td class="inputFontNormal" rowspan=4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td rowspan="4" valign="top" class="inputFontNormal"> <b>[% "Filtrar por:" | i18n %]</b> <br>
-
-		<!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
-			<b>[% "Responsable:" | i18n %] </b>[% selectusuarios %]
-
-			<br><br>
-
-			<b>[% "Tipo de Pr&eacute;stamo: " | i18n %]</b>
-			[% selectTipoPrestamos %]
-			<br><br>
-			<b>[% "Tipo de Operaci&oacute;n: " | i18n %]</b>
-			[% selectTipoOperacion %]
-		</td>
-		<td>
-		<td>
-	</tr>
-	<tr>
-		<td colspan="4" align="center">
-			<br><br>
-			<a  onClick="consultar();"><img   src="[% themelang %]/images/boton-buscar.png" border="0"></a>
-		</td>
-	</tr>
-</table>
-
+        <li><b>[% "Filtrar por:" | i18n %]</b></li>
+        <li>
+            <b>[% "Responsable:" | i18n %]</b>[% selectusuarios %]
+        </li>
+        <li>
+            <b>[% "Tipo de Pr&eacute;stamo: " | i18n %]</b>
+            [% selectTipoPrestamos %]
+        </li>
+        <li>
+            <b>[% "Tipo de Operaci&oacute;n: " | i18n %]</b>
+            [% selectTipoOperacion %]
+        </li>
+    </ul>
+</div>
+<div class="buttonContainerHorizontal">
+    [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Buscar' | i18n %]",
+                                                title    =>  "[% 'Buscar' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "consultar();",
+                                            );
+    [% END %]
+</div>
 <div id="result"></div>
 
 [% INCLUDE "intranet-bottom.inc" %]

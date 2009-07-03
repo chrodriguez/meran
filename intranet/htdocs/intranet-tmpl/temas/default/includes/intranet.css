@@ -897,7 +897,7 @@ ul#horizontal-list li {
 
 .filtros_reportes{
     font-size: 13px;
-    overflow: auto;
+/*     overflow: auto; */
     display:table;
     margin:0 auto;
     width:auto;

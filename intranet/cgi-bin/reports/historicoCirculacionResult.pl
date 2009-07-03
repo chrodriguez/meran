@@ -50,43 +50,39 @@ $t_params->{'todaydate'}= format_date($today,$dateformat);
 my $obj=$input->param('obj');
 
 $obj= C4::AR::Utilidades::from_json_ISO($obj);
+my $accion = $obj->{'accion'} || undef;
+if ($accion){
+    if ($accion = "NOTA_HISTORICO"){
+        my $historico_tmp = C4::AR::Estadisticas::actualizarNotaHistoricoCirculacion($obj);
+        C4::AR::Validator::validateObjectInstance($historico_tmp);
+    }
+}else{
+    $obj->{'fechaIni'} =  format_date_in_iso($obj->{'fechaIni'},$dateformat);
+    $obj->{'fechaFin'} =  format_date_in_iso($obj->{'fechaFin'},$dateformat);
 
-# #Inserta la nota en la tupla correspondiente al id.
-# my $id   = $obj->{'id'};
-# if ($id ne "0"){
-# 	my $nota = $obj->{'notas'};
-#        &insertarNotaHistCirc($id,$nota);
-# }
-# 
-#Tomo las fechas que setea el usuario y las paso a formato ISO
-$obj->{'fechaIni'} =  format_date_in_iso($obj->{'fechaIni'},$dateformat);
-$obj->{'fechaFin'} =  format_date_in_iso($obj->{'fechaFin'},$dateformat);
+    C4::AR::Validator::validateParams('VA001',$obj,['socio','tipoPrestamo','tipoOperacion']);
 
-C4::AR::Validator::validateParams('VA001',$obj,['socio','tipoPrestamo','tipoOperacion']);
+    my $dateformat = C4::Date::get_date_format();
+    my $ini= ($obj->{'ini'});
+    my ($ini,$pageNumber,$cantR)=&C4::AR::Utilidades::InitPaginador($ini);
 
-my $dateformat = C4::Date::get_date_format();
+    $obj->{'cantR'} = $cantR;
+    $obj->{'pageNumber'} = $pageNumber;
+    $obj->{'ini'} = $ini;
 
-my $ini= ($obj->{'ini'});
+    my ($cantidad,$historicoCirculacionResult)= C4::AR::Estadisticas::historicoCirculacion($obj);
 
+    $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
+    $t_params->{'historico'}= $historicoCirculacionResult;
+    $t_params->{'cantidad'}= $cantidad;
+    $t_params->{'fechaFin'}= $obj->{'fechaFin'};
+    $t_params->{'fechaInicio'}= $obj->{'fechaInicio'};
+    $t_params->{'chkfecha'}= $obj->{'chkfecha'};
+    $t_params->{'dateselected'}= $input->param('fechaIni');
+    $t_params->{'dateselectedEnd'}= $input->param('fechaFin');
+    $t_params->{'socio'}= $obj->{'socio'};
+    $t_params->{'tiposPrestamos'}= $obj->{'tipoPrestamo'};
+    $t_params->{'tipoOperacion'}= $obj->{'tipoOperacion'};
 
-my ($ini,$pageNumber,$cantR)=&C4::AR::Utilidades::InitPaginador($ini);
-$obj->{'cantR'} = $cantR;
-$obj->{'pageNumber'} = $pageNumber;
-$obj->{'ini'} = $ini;
-
-
-my ($cantidad,$historicoCirculacionResult)= C4::AR::Estadisticas::historicoCirculacion($obj);
-
-$t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
-$t_params->{'historico'}= $historicoCirculacionResult;
-$t_params->{'cantidad'}= $cantidad;
-$t_params->{'fechaFin'}= $obj->{'fechaFin'};
-$t_params->{'fechaInicio'}= $obj->{'fechaInicio'};
-$t_params->{'chkfecha'}= $obj->{'chkfecha'};
-$t_params->{'dateselected'}= $input->param('fechaIni');
-$t_params->{'dateselectedEnd'}= $input->param('fechaFin');
-$t_params->{'socio'}= $obj->{'socio'};
-$t_params->{'tiposPrestamos'}= $obj->{'tipoPrestamo'};
-$t_params->{'tipoOperacion'}= $obj->{'tipoOperacion'};
-
+}
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

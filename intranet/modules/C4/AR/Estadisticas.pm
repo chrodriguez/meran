@@ -58,18 +58,35 @@ use vars qw(@EXPORT @ISA);
     &getMaxBarcodeLike
     &listarItemsDeInventorioSigTop
     &barcodesPorTipo
+    &actualizarNotaHistoricoCirculacion
 );
+
+sub actualizarNotaHistoricoCirculacion{
+
+    my ($params) = @_;
+    my $id_historico = $params->{'id_historico'};
+    my $historico = C4::Modelo::RepHistorialCirculacion->new(id => $id_historico);
+    eval{
+        $historico->load();
+        $historico->setNota($params->{'nota'});
+        $historico->save();
+    };
+    if ($@){
+        return (0);
+    }
+    return ($historico);
+}
 
 sub barcodesPorTipo{
     my ($branch) = @_;
-    
     my $clase='par';
     my @results;
     my $row;
+
     $row->{'tipo'}='TODOS';
     $row->{'minimo'}= &getMinBarcode($branch);
     $row->{'maximo'}= &getMaxBarcode($branch);
-    
+
    if (($row->{'minimo'} ne '') or ($row->{'maximo'} ne '')){
       push @results,$row 
    }
@@ -78,11 +95,10 @@ sub barcodesPorTipo{
                                                                                           select => ['id_tipo_doc'],
                                                                                        );
 
-    
    foreach my $it (@$cat_ref_tipo_nivel3) {
       my $row;
       my $id_tipo_doc = $it->{'id_tipo_doc'};
-      
+
       $row->{'tipo'}=  $id_tipo_doc;
 
       my $inicio=$branch."-".$it->{'id_tipo_doc'}."-%";
@@ -1230,15 +1246,6 @@ sub tipoDeOperacion(){
 	elsif($tipo eq "Insert"){$tipo="Agregado";}	
 	elsif($tipo eq "Delete"){$tipo="Borrado";}
 	return $tipo;
-}
-
-sub insertarNotaHistCirc(){
-	my ($id,$nota)=@_;
-        my $dbh = C4::Context->dbh;
-        my $query="update  rep_historial_circulacion set nota=?
-		   where id=?";
-        my $sth=$dbh->prepare($query);
-        $sth->execute($nota,$id);
 }
 
 sub userCategReport{

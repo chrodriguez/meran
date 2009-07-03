@@ -18,7 +18,7 @@ __PACKAGE__->meta->setup(
         id_ui	       => { type => 'varchar', length => 4 },
         timestamp      => { type => 'timestamp', not_null => 1 },
         fecha          => { type => 'varchar', default => '0000-00-00', not_null => 1 },
-        nota           => { type => 'varchar', length => 50 },
+        nota           => { type => 'varchar', length => 255 },
         fecha_fin      => { type => 'varchar' },
         tipo_prestamo  => { type => 'character', length => 2 },
     ],
@@ -181,6 +181,17 @@ sub setId_ui{
     my ($self) = shift;
     my ($id_ui) = @_;
     $self->id_ui($id_ui);
+}
+
+sub getNota{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->nota));
+}
+
+sub setNota{
+    my ($self) = shift;
+    my ($nota) = @_;
+    $self->nota(C4::AR::Utilidades::trim($nota));
 }
 
 sub getTipo_prestamo{
