@@ -261,38 +261,60 @@ sub historicoPrestamos{
 }
 
 
-#
-#Cuenta la cantidad de prestamos realizados durante el año que ingresa por parametro
 sub prestamosAnual{
-        my ($branch,$year)=@_;
-        my $dbh = C4::Context->dbh;
-	my @results;
-	my $query ="SELECT month( date_due ) AS mes, count( * ) AS cantidad,SUM( renewals ) AS 
-			   renovaciones, issuecode
-		    FROM  circ_prestamo 
-		    WHERE year( date_due ) = ? 
-		    GROUP BY month( date_due ), issuecode";
 
-	my $sth=$dbh->prepare($query);
-        $sth->execute($year);
-	while (my $data=$sth->fetchrow_hashref){
-		$data->{'mes'}=&mesString($data->{'mes'});
-		push(@results,$data);
-        	};
-	$query ="SELECT count( * ) AS devoluciones
-                 FROM  circ_prestamo 
-                 WHERE year( date_due ) = ? and returndate is not null
-                 GROUP BY month( date_due ), issuecode";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($year);
-	my $i=0;
-	while (my $data=$sth->fetchrow_hashref){
-		@results[$i]->{'devoluciones'}=$data->{'devoluciones'};
-		$i++;
-		};
+    my ($params)=@_;
+    my @filtros;
 
-	return(@results);
+    use C4::Modelo::CircPrestamo::Manager;
+
+    push ( @filtros, ('year(fecha_prestamo)' => { eq => $params->{'year'} }));
+
+    my $prestamos_anual_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
+                                                                                query => \@filtros,
+                                                                                group_by => ['fecha_prestamo'],
+                                                                                require_objects => ['nivel3','socio','tipo','ui','ui_prestamo'],
+                                                                               );
+
+    my $prestamos_anual = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                                query => \@filtros,
+                                                                                group_by => ['fecha_prestamo'],
+                                                                                require_objects => ['nivel3','socio','tipo','ui','ui_prestamo'],
+                                                                               );
+    return ($prestamos_anual_count,$prestamos_anual);
+
 }
+
+# sub prestamosAnual{
+#     my ($branch,$year)=@_;
+#     my $dbh = C4::Context->dbh;
+# 	my @results;
+# 	my $query ="SELECT month( date_due ) AS mes, count( * ) AS cantidad,SUM( renewals ) AS 
+# 			   renovaciones, issuecode
+# 		    FROM  circ_prestamo 
+# 		    WHERE year( date_due ) = ? 
+# 		    GROUP BY month( date_due ), issuecode";
+# 
+# 	my $sth=$dbh->prepare($query);
+#         $sth->execute($year);
+# 	while (my $data=$sth->fetchrow_hashref){
+# 		$data->{'mes'}=&mesString($data->{'mes'});
+# 		push(@results,$data);
+#         	};
+# 	$query ="SELECT count( * ) AS devoluciones
+#                  FROM  circ_prestamo 
+#                  WHERE year( date_due ) = ? and returndate is not null
+#                  GROUP BY month( date_due ), issuecode";
+# 	my $sth=$dbh->prepare($query);
+#         $sth->execute($year);
+# 	my $i=0;
+# 	while (my $data=$sth->fetchrow_hashref){
+# 		@results[$i]->{'devoluciones'}=$data->{'devoluciones'};
+# 		$i++;
+# 		};
+# 
+# 	return(@results);
+# }
 
 #
 ##Ejemplares perdidos del branch que le paso por parametro

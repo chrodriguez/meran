@@ -85,6 +85,7 @@ use vars qw(@EXPORT @ISA);
     &capitalizarString
     &ciudadesAutocomplete
     &redirectAndAdvice
+    &generarComboDeAnios
 
 );
 
@@ -97,6 +98,24 @@ $values los valores o que puede devolver el componente (combo, radiobotton y che
 $labels lo que va a mostrar el componente (combo, radiobotton y checkbox).
 $valor es el valor por defecto que tiene el componente, si es que tiene.
 =cut
+
+sub generarComboDeAnios{
+    my $year_Default="Seleccione";
+    my @years;
+    my @yearsValues;
+    push (@years,"Seleccione");
+    for (my $i =2000 ; $i < 2036; $i++){
+        push (@years,$i);
+    }
+    my $year_select=CGI::scrolling_list(   -name      => 'year',
+                    -id    => 'year',
+                                    -values    => \@years,
+                                    -defaults  => 0,
+                                    -size      => 1,
+                                    -onChange  =>'consultar()'
+                                );
+    return ($year_select);
+}
 sub crearComponentes{
 
     my ($tipoInput,$id,$values,$labels,$valor)=@_;

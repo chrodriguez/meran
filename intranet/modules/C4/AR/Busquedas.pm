@@ -1697,17 +1697,15 @@ sub t_loguearBusqueda {
     $desde = $desde || 'SIN_TIPO';
     my $historial = C4::Modelo::RepHistorialBusqueda->new();
     my $db = $historial->db;
-    
+    my $msg_object= C4::AR::Mensajes::create();
     $db->{connect_options}->{AutoCommit} = 0;
     eval {
-    
         $historial->agregar($loggedinuser,$desde,$http_user_agent,$search_array);
         $db->commit;
     };
 
     if ($@){
         #Se loguea error de Base de Datos
-    
         #Se setea error para el usuario
         &C4::AR::Mensajes::printErrorDB($@, 'B407',"INTRA");
         $msg_object->{'error'}= 1;
@@ -1715,7 +1713,6 @@ sub t_loguearBusqueda {
         $db->rollback;
     }
     $db->{connect_options}->{AutoCommit} = 1;
-    
     # FIXME este mensaje de error no va mas asi
     my $message= &C4::AR::Mensajes::getMensaje($codMsg,$desde,$paraMens);
     return ($error, $codMsg, $message);
