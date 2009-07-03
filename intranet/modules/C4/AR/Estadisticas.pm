@@ -194,19 +194,22 @@ sub historicoDeBusqueda{
    my $dateformat = C4::Date::get_date_format();
    my @filtros;
 
+
    if ($params_obj->{'fechaIni'} ne ""){
-      push(@filtros, ( 'busqueda.fecha' => {       eq => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
-                                                   gt => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
+      push(@filtros, ( fecha => {         eq => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
+                                            gt => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
                                  }
                       ) );
    }
 
+
    if ($params_obj->{'fechaFin'} ne ""){
-      push(@filtros, ( 'busqueda.fecha' => {       eq => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
-                                                   lt => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
+      push(@filtros, ( fecha => {         eq => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
+                                            lt => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
                                 }
                      ) );
    }
+
 
    if($params_obj->{'catUsuarios'} ne "SIN SELECCIONAR"){
       push(@filtros, ( 'busqueda.socio.cod_categoria' => { eq=> $params_obj->{'catUsuarios'}, }) );
@@ -216,7 +219,7 @@ sub historicoDeBusqueda{
 
    my $busquedas_count = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda_count(
                                                                                           query => \@filtros,
-#                                                                                           with_objects => ['busqueda','busqueda.socio'],
+                                                                                          with_objects => ['busqueda','busqueda.socio'],
                                                                                      );
 
 
@@ -230,7 +233,6 @@ sub historicoDeBusqueda{
                                                                     );
 
    return($busquedas_count,$busquedas);
-
 }
 
 sub historicoPrestamos{

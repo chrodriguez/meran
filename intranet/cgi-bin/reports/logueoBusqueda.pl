@@ -22,6 +22,7 @@ my $comboCategoriasDeSocio= C4::AR::Utilidades::generarComboCategoriasDeSocio(\%
 
 
 $t_params->{'selectCatUsuarios'}= $comboCategoriasDeSocio;
+$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Logueo de B&uacute;quedas");
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 

@@ -1,35 +1,36 @@
 
-<center>
-<p class=inputFontNormal align="center">[% "La cantidad de pr&eacute;stamos es:" | i18n %] [% cantidad %]</p> 
+<div class="resultados_consulta">[% "La cantidad de pr&eacute;stamos es:" | i18n %] [% cantidad %]</div> 
 
-<br>
-
-[% paginador %]
-</center>
-
+<div class="contenedor_paginador">[% paginador %]</div>
 
 <table id="tablaResult" class="tablaResult" cellspacing="0" cellpadding="0" border="0" width="100%">
 <tr height="24" class="tablaresultadoTitle">
 
-	<td class="tablaresultadoTitle click" onclick="ordenar('surname')" title=[% "Ordenar por apellido" | i18n %]>[% "Apellido" | i18n %]</td>
-	<td class="tablaresultadoTitle click" onclick="ordenar('firstname')" title=[% "Ordenar por nombre" | i18n %]>[% "Nombre" | i18n %]</td>
-	<td class="tablaresultadoTitle click" onclick="ordenar('DNI')" title=[% "Ordenar por DNI" | i18n %]>[% "DNI" | i18n %]</td>
-	<td class="tablaresultadoTitle click" onclick="ordenar('CatUsuario')" title=[% "Ordenar por Categoria" | i18n %]>
+	<td class="click" onclick="ordenar('surname')" title="[% 'Ordenar por apellido' | i18n %]">
+        [% "Apellido" | i18n %]
+    </td>
+	<td class="click" onclick="ordenar('firstname')" title="[% 'Ordenar por nombre' | i18n %]">
+        [% "Nombre" | i18n %]
+    </td>
+	<td class="click" onclick="ordenar('DNI')" title="[% 'Ordenar por DNI' | i18n %]">
+        [% "DNI" | i18n %]
+    </td>
+	<td class="click" onclick="ordenar('CatUsuario')" title="[% 'Ordenar por Categoria' | i18n %]">
         [% "Categor&iacute;a" | i18n %]
     </td>
-	<td class="tablaresultadoTitle click" onclick="ordenar('tipoPrestamo')" title=[% "Ordenar por tipo de prestamo" | i18n %]>
+	<td class="click" onclick="ordenar('tipoPrestamo')" title="[% 'Ordenar por tipo de prestamo' | i18n %]">
         [% "Tipo Pr&eacute;stamo" | i18n %]
     </td>
-	<td class="tablaresultadoTitle click" onclick="ordenar('barcode')" title=[% "Ordenar por codigo de barra" | i18n %]>
+	<td class="click" onclick="ordenar('barcode')" title="[% 'Ordenar por codigo de barra' | i18n %]">
         [% "C&oacute;digo de Barras" | i18n %]
     </td>
-	<td class="tablaresultadoTitle click" onclick="ordenar('fechaPrestamo')" title=[% "Ordenar por fecha de prestamo" | i18n %]>
+	<td class="click" onclick="ordenar('fechaPrestamo')" title="[% 'Ordenar por fecha de prestamo' | i18n %]">
         [% "Fecha Pr&eacute;stamo" | i18n %]
     </td>
-	<td class="tablaresultadoTitle click" onclick="ordenar('fechaDevolucion')" title=[% "Ordenar por fecha de devolucion" | i18n %]>
+	<td class="click" onclick="ordenar('fechaDevolucion')" title="[% 'Ordenar por fecha de devolucion' | i18n %]">
         [% "Fecha Devoluci&oacute;n" | i18n %]
     </td>
-	<td class="tablaresultadoTitle click" onclick="ordenar('tipoItem')" title=[% "Ordenar por tipo de documento" | i18n %]>
+	<td class="click" onclick="ordenar('tipoItem')" title="[% 'Ordenar por tipo de documento' | i18n %]">
         [% "T&iacute;po" | i18n %]
     </td>
 
@@ -37,15 +38,16 @@
 	
 [% FOREACH RESULTSLOOP %]
     <tr align="center">
-            <td align="left" class="inputFontNormal">[% surname %]</td>
-            <td class="inputFontNormal"> [% firstname %]</td>
-            <td class="inputFontNormal"> [% DNI %]</td>
-            <td class="inputFontNormal"> [% CatUsuario %]</td>
-            <td class="inputFontNormal"> [% tipoPrestamo %]</td>
-            <td class="inputFontNormal"> [% barcode %]</td>
-            <td class="inputFontNormal"> [% fechaPrestamo %]</td>
-            <td class="inputFontNormal"> [% fechaDevolucion %]</td>
-            <td class="inputFontNormal"> [% tipoItem %]</td>
+
+            <td align="left">[% surname %]</td>
+            <td> [% firstname %]</td>
+            <td> [% DNI %]</td>
+            <td> [% CatUsuario %]</td>
+            <td> [% tipoPrestamo %]</td>
+            <td> [% barcode %]</td>
+            <td> [% fechaPrestamo %]</td>
+            <td> [% fechaDevolucion %]</td>
+            <td> [% tipoItem %]</td>
     
     </tr>
 [% END %]

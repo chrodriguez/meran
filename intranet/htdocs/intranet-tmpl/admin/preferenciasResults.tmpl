@@ -11,22 +11,23 @@
 	</tr>
 
 	</thead>
-	<tbody>
+<tbody>
 
 
 [% FOREACH preferencia IN preferencias %]
-	<tr class="inputFontNormal">
+	<tr>
 		
 		<td >[% preferencia.getVariable %]</td>
 		<td >[% preferencia.getShowValue %]</td>
 		<td >[% preferencia.getExplanation %]</td>
 		<td align="center">
-		<input type="image" src="[% themelang %]/images/editar.png"
-		alt="Editar" border="0" 
-		onClick="modificarVariable('[% preferencia.getVariable %]','[% preferencia.getType %]')">
+		    <input  type="image" src="[% themelang %]/images/editar.png"
+                    alt="Editar" border="0" 
+		            onClick="modificarVariable('[% preferencia.getVariable %]','[% preferencia.getType %]')">
 		</td>
 	
 	</tr>
+
 [% END %]
 
 	</tbody>

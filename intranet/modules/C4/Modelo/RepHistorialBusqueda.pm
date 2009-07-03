@@ -30,8 +30,8 @@ __PACKAGE__->meta->setup(
 
 
 sub agregarSimple{
-   
    my $self = shift;
+
    my($id_rep_busqueda,$tipo_busqueda,$valor,$desde,$user_agent)=@_;
 
    $self->setIdBusqueda($id_rep_busqueda);
@@ -108,6 +108,7 @@ sub agregar{
 		}
 	
 		if (C4::AR::Utilidades::validateString($search->{'titulo'}) ){
+C4::AR::Debug::debug("logueo de busqueda => busco por titulo: ".$search->{'titulo'});
 			$historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'titulo', $search->{'titulo'}, $desde, $http_user_agent);
 		}
 	

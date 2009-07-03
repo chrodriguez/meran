@@ -1691,35 +1691,34 @@ sub filtrarPorAutor{
 
 sub t_loguearBusqueda {
 
-   my($loggedinuser,$desde,$http_user_agent,$search_array)=@_;
-   my $paramsReserva;
-   my ($error, $codMsg,$paraMens);
-   $desde = $desde || 'SIN_TIPO';
-   my $historial = C4::Modelo::RepHistorialBusqueda->new();
-   my $db = $historial->db;
+    my($loggedinuser,$desde,$http_user_agent,$search_array)=@_;
+    my $paramsReserva;
+    my ($error, $codMsg,$paraMens);
+    $desde = $desde || 'SIN_TIPO';
+    my $historial = C4::Modelo::RepHistorialBusqueda->new();
+    my $db = $historial->db;
+    
+    $db->{connect_options}->{AutoCommit} = 0;
+    eval {
+    
+        $historial->agregar($loggedinuser,$desde,$http_user_agent,$search_array);
+        $db->commit;
+    };
 
-   $db->{connect_options}->{AutoCommit} = 0;
-   eval {
-
-#     ($error,$codMsg,$paraMens)=_loguearBusqueda($loggedinuser,$desde,$search_array);
-      $historial->agregar($loggedinuser,$desde,$http_user_agent,$search_array);
-      $db->commit;
-   };
-
-   if ($@){
-      #Se loguea error de Base de Datos
-      $codMsg= 'B407';
-      &C4::AR::Mensajes::printErrorDB($@, $codMsg,$desde);
-      eval {$db->rollback};
-      #Se setea error para el usuario
-      $error= 1;
-      $codMsg= 'R011';
-   }
-   $db->{connect_options}->{AutoCommit} = 1;
-
-
-   my $message= &C4::AR::Mensajes::getMensaje($codMsg,$desde,$paraMens);
-   return ($error, $codMsg, $message);
+    if ($@){
+        #Se loguea error de Base de Datos
+    
+        #Se setea error para el usuario
+        &C4::AR::Mensajes::printErrorDB($@, 'B407',"INTRA");
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R011', 'params' => []} ) ;        
+        $db->rollback;
+    }
+    $db->{connect_options}->{AutoCommit} = 1;
+    
+    # FIXME este mensaje de error no va mas asi
+    my $message= &C4::AR::Mensajes::getMensaje($codMsg,$desde,$paraMens);
+    return ($error, $codMsg, $message);
 }
 
 
