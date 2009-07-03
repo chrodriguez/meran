@@ -1,34 +1,24 @@
-
+[% paginador %]
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%">
-	<tr class="tablaresultadoTitle">
+    <tr class="tablaresultadoTitle">
+        <th>[% "Mes" | i18n %]</th>
+        <th>[% "Prestamos" | i18n %]</th>
+        <th>[% "Renovaciones" | i18n %]</th>
+        <th>[% "Devoluciones" | i18n %]</th>
+        <th>[% "Domiciliarios" | i18n %]</th>
+        <th>[% "Fotocopia" | i18n %]</th> 
+        <th>[% "Sala de Lectura" | i18n %]</th>
+        <th>[% "Prestamos Especiales" | i18n %]</th>
+    </tr>
 
-		<th>[% "Mes" | i18n %]</th>
-		<th>[% "Prestamos" | i18n %]</th>
-		<th>[% "Renovaciones" | i18n %]</th>
-		<th>[% "Devoluciones" | i18n %]</th>
-		<th>[% "Domiciliarios" | i18n %]</th>
-		<th>[% "Fotocopia" | i18n %]</th> 
-		<th>[% "Sala de Lectura" | i18n %]</th>
-		<th>[% "Prestamos Especiales" | i18n %]</th>
-
-	</tr>
-
-[% FOREACH resultsloop %]
+[% FOREACH prestamo IN estadisticas_anuales %]
 	<tr align='center'>
 		
 		<td class="inputFontNormal"> 
-			[% IF mes %]
-                            [% mes %]
-			[% ELSE %]
-                                -- 
-                        [% END %]
+            [% prestamo.getFecha_prestamo_formateada %]
 		</td>
 		<td class="inputFontNormal"> 
-			[% IF cantTotal %]
-                              [% cantTotal %]
-			[% ELSE %]
-                                -- 
-                        [% END %]
+            [% prestamo.agregacion_temp %]
 		</td>
 		<td class="inputFontNormal"> 
 			[% IF renovaciones %] 
@@ -38,12 +28,8 @@
                         [% END %]
 		</td>
 		<td class="inputFontNormal"> 
-			[% IF devoluciones %] 
-                            [% devoluciones %]
-			[% ELSE %]
-                             -- 
-                        [% END %]
-		</td>
+            [% prestamo.getDevoluciones %]
+        </td>
 		<td class="inputFontNormal">
 			[% IF DO %] 
                             [% DO %]
@@ -75,7 +61,7 @@
 		
 	</tr>
 [% END %]
-	<tr valign=bottom>
-	<td class="lineafinaltabla"  align="left" colspan="9"></td>
-	</tr>
+    <tr valign=bottom>
+        <td class="lineafinaltabla"  align="left" colspan="9"></td>
+    </tr>
 </table>

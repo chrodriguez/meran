@@ -194,22 +194,19 @@ sub historicoDeBusqueda{
    my $dateformat = C4::Date::get_date_format();
    my @filtros;
 
-
    if ($params_obj->{'fechaIni'} ne ""){
-      push(@filtros, ( fecha => {         eq => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
-                                            gt => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
+      push(@filtros, ( 'busqueda.fecha' => {       eq => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
+                                                   gt => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
                                  }
                       ) );
    }
 
-
    if ($params_obj->{'fechaFin'} ne ""){
-      push(@filtros, ( fecha => {         eq => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
-                                            lt => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
+      push(@filtros, ( 'busqueda.fecha' => {       eq => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
+                                                   lt => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
                                 }
                      ) );
    }
-
 
    if($params_obj->{'catUsuarios'} ne "SIN SELECCIONAR"){
       push(@filtros, ( 'busqueda.socio.cod_categoria' => { eq=> $params_obj->{'catUsuarios'}, }) );
@@ -219,7 +216,7 @@ sub historicoDeBusqueda{
 
    my $busquedas_count = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda_count(
                                                                                           query => \@filtros,
-                                                                                          with_objects => ['busqueda','busqueda.socio'],
+#                                                                                           with_objects => ['busqueda','busqueda.socio'],
                                                                                      );
 
 
@@ -233,6 +230,7 @@ sub historicoDeBusqueda{
                                                                     );
 
    return($busquedas_count,$busquedas);
+
 }
 
 sub historicoPrestamos{
@@ -268,19 +266,30 @@ sub prestamosAnual{
 
     use C4::Modelo::CircPrestamo::Manager;
 
-    push ( @filtros, ('year(fecha_prestamo)' => { eq => $params->{'year'} }));
+    push ( @filtros, ('fecha_prestamo' => { like => $params->{'year'}.'%' }));
 
     my $prestamos_anual_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
                                                                                 query => \@filtros,
-                                                                                group_by => ['fecha_prestamo'],
+                                                                                group_by => ['month(fecha_prestamo)'],
                                                                                 require_objects => ['nivel3','socio','tipo','ui','ui_prestamo'],
                                                                                );
 
     my $prestamos_anual = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                                 query => \@filtros,
-                                                                                group_by => ['fecha_prestamo'],
+                                                                                group_by => ['month(fecha_prestamo)'],
+                                                                                select => ['*','COUNT(*) AS agregacion_temp'],
                                                                                 require_objects => ['nivel3','socio','tipo','ui','ui_prestamo'],
                                                                                );
+
+    push ( @filtros, ('fecha_devolucion' => {ne => undef} ));
+
+    my $prestamos_anual_devueltos = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                                query => \@filtros,
+                                                                                group_by => ['month(fecha_prestamo)'],
+                                                                                select => ['*','COUNT(*) AS agregacion_temp'],
+                                                                                require_objects => ['nivel3','socio','tipo','ui','ui_prestamo'],
+                                                                               );
+
     return ($prestamos_anual_count,$prestamos_anual);
 
 }
