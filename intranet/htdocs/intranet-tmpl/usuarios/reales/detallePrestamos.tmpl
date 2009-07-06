@@ -1,8 +1,10 @@
 		
 [% IF prestamos_cant %]
-	[% USE HTML %]
-<span class="tituloArribaTabla">[% "EJEMPLARES PRESTADOS" | i18n %]</span>
-	<table class="prestamosResult" cellspacing=0  cellpadding=0 border=0  width="100%" > 
+
+[% USE HTML %]
+
+<div class="titulo_arriba_tabla">[% "EJEMPLARES PRESTADOS" | i18n %]</div>
+	<table class="prestamosResult tabla_datos" cellspacing=0  cellpadding=0 border=0  width="100%" > 
 	
 		<tr valign=middle class="tablaresultadoTitle">
 	
@@ -25,7 +27,7 @@
 	
 		</tr>
 	[% FOREACH prestamo IN PRESTAMOS %]
-		<tr class="inputFontNormal" align="center">
+		<tralign="center">
 	
 			<td>
 		[% IF circularDesdeDetalleUsuario %]

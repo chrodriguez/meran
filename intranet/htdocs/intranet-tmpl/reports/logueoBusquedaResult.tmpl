@@ -1,4 +1,6 @@
 
+[% USE HTML %]
+
 <div class="resultados_consulta">[% "La cantidad de logueos es :" | i18n %] [% cantidad %]</div>
 
 <div class="contenedor_paginador">[% paginador %]</div>
@@ -7,10 +9,7 @@
  	<tr class="tablaresultadoTitle">
 	
 		<th class="click" onclick="ordenar('surname')" Title="[% 'Ordenar por Apellido' | i18n %]">
-            [% "Apellido" | i18n %]
-        </th>
-		<th class="click" onclick="ordenar('firstname')" Title="[% 'Ordenar por Nombre' | i18n %]">
-            [% "Nombre" | i18n %]
+            [% "Apellido y Nombres" | i18n %]
         </th>
 		<th class="click" onclick="ordenar('cardnumber')" Title="[% 'Ordenar por Socio' | i18n %]">
             [% "N&uacute;mero de socio" | i18n %]
@@ -34,17 +33,26 @@
 	</tr>
 [% FOREACH busqueda IN resulsloop %]
 	<tr align='center'>
-
 		<td>
-        		<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">[% surname %]</a>
+            [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     "[% busqueda.busqueda.socio.persona.getApeYNom %]",
+                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                params =>   ["nro_socio=[% busqueda.busqueda.socio.getNro_socio %]"],
+                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                            ) ;
+            [% END %]
 		</td>
-		<td>[% busqueda.busqueda.socio.persona.getNombre %]</td>
-		<td>[% busqueda.busqueda.socio.getNro_socio %]</td>
-		<td>[% busqueda.busqueda.descripcion %]</td>
+		<td>[% IF busqueda.busqueda.socio.getNro_socio %]
+                [% busqueda.busqueda.socio.getNro_socio %]
+            [% ELSE %]
+                [% 'Usuario no logueado' | i18n %]
+            [% END %]
+        </td>
+		<td>[% busqueda.busqueda.socio.getCod_categoria %]</td>
 		<td>[% busqueda.busqueda.fecha %]</td>
 		<td>[% busqueda.campo %]</td>
-		<td>[% HTML.escape(busqueda.valor) %]</td>
-		<td>[% busqueda.tipo %]</td>
+		<td>[% HTML.escape(busqueda.getValor) %]</td>
+		<td>[% busqueda.getTipo %]</td>
 
 	</tr>
 [% END %]

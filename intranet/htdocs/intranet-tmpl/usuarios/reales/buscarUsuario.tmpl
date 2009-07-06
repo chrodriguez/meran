@@ -13,44 +13,38 @@ $(document).ready(function() {
 
 <div class="titulos_interior" >[% "B&uacute;squeda de Usuarios Reales" | i18n %]</div>
 
-<center>
-<br><br><br>
-<table>
-	<tr>
- 		<td>
-			<input id="socio" class="inputFontNormal" type=text name="socio" onFocus="checkFilter('focus')" 
+<div class="buttonContainerHorizontal">
+<ul>
+    <li class="horizontal">
+			<input id="socio" type=text name="socio" onFocus="checkFilter('focus')" 
                 onBlur="checkFilter('blur')" value="[% socio %]">
-		</td>
- 		<td>
-           <div class="buttonContainerHorizontal">
-                 <ul class="horizontal-list" >
-                    [% PERL %]
-                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                            boton   => "boton_buscar",
-                                                                            onClick => "consultar('');",
-                                                                            title   => "[% 'Buscar' | i18n %]",
-                                                ) ;
-                    [% END %]
-                    [% PERL %]
-                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                            boton   => "boton_buscar",
-                                                                            onClick => "Borrar();",
-                                                                            title   => "[% 'Limpiar' | i18n %]",
-                                                ) ;
-                    [% END %]
-                </ul>
-            </div>
-		</td>
-	</tr>
-	<tr>
-		<td class="inputFontNormal" colspan=2>
-			<p class="recuadroAyuda">
-			[% "Tipear el apellido, DNI o legajo del usuario. Presionar buscar" | i18n %]
-			</p>
-		</td>
-	</tr>
-</table>
-</center>
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "consultar('');",
+                                                                    title   => "[% 'Buscar' | i18n %]",
+                                        ) ;
+            [% END %]
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "Borrar();",
+                                                                    title   => "[% 'Limpiar' | i18n %]",
+                                        ) ;
+            [% END %]
+    </li>
+</ul>
+</div>
+<ul>
+    <li style="text-align:center">
+			    <p class="recuadroAyuda">
+			    [% "Tipear el apellido, DNI o legajo del usuario. Presionar buscar" | i18n %]
+			    </p>
+    </li>
+</ul>
+
+
+
 <div id="filterBar" style="text-align:center">
 		<a href="#tablaResult" onClick="consultar('A')"> A |</a>
 		<a href="#tablaResult" onClick="consultar('B')"> B |</a>

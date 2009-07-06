@@ -9,36 +9,32 @@
 [% END %]
 
 
-<p align="center">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %]<b> [% buscoPor %]</b>
-<br>[% "Total de registros:" | i18n %] <b>[% cantidad %]</b>  en (<b>[% timeSeg %]</b> segundos)</p>
-</div>
+<div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
+<div class="resultados_consulta">[% "Total de registros:" | i18n %] [% cantidad %]  en ([% timeSeg %] segundos)</div>
 
-<center>
-[% paginador %]
-</center>
-<table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width=100%>
+<div class="contenedor_paginador">[% paginador %]</div>
+
+<table id="tablaResult" class="tablaResult tabla_datos" border=0 cellspacing=0 cellpadding=0 width=100%>
 	<tr class="tablaresultadoTitle">
 
-		<td width="35%" class="tablaresultadoTitle click" 
-			onClick="ordenar('titulo')" Title='[% "Ordenar por T&iacute;tulo" | i18n %]'>
+		<td width="35%" class="click" onClick="ordenar('titulo')" Title='[% "Ordenar por T&iacute;tulo" | i18n %]'>
 			T&iacute;tulo
 		</td>
-		<td width="35%" class="tablaresultadoTitle click" 
-			onClick="ordenar('nomCompleto')" Title='[% "Ordenar por Autor" | i18n %]'>
+		<td width="35%" class="click" onClick="ordenar('nomCompleto')" Title='[% "Ordenar por Autor" | i18n %]'>
 			Autor
 		</td>
-		<td width="12%" class="tablaresultadoTitle">[% "Edici&oacute;n/A&ntilde;o" | i18n %]</td>
-		<td width="15%" class="tablaresultadoTitle"> [% "Disponibilidad" | i18n %] </td>
+		<td width="12%">[% "Edici&oacute;n/A&ntilde;o" | i18n %]</td>
+		<td width="15%"> [% "Disponibilidad" | i18n %] </td>
 
 	</tr>
 <!-- Actual Resultados de la b&uacute;squeda -->
 [% FOREACH SEARCH_RESULTS %]
 	<tr class="inputFontNormal">
-		<td>
+	<!--	<td>
 		[% IF amazon_cover %]
 			<img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% amazon_cover %]" title="Tapa">
 		[% END %]
-		</td>
+		</td>-->
 		<td class="titulo_result">
 
             [% PERL %]
@@ -76,12 +72,12 @@
 				<b>[% tipoPrestamo %]</b> [% cantTotal %]
 				<br>
 				<div style="margin-right:4px">
-                                    [% reservados %]
-                                    <br> 
-                                    [% prestados %]
-                                    <br>
+                        [% reservados %]
+                        <br> 
+                        [% prestados %]
+                        <br>
 				</div>
-         		[% END %]
+         	[% END %]
 		</td>	
 
 	</tr>

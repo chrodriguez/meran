@@ -1,45 +1,36 @@
-<br><br>
-<br><br>
-<p class="inputFontNormal">[% "La cantidad de ejemplares en estado" | i18n %] 
-                    <b>
-                        [% availD %]
-                    </b>  [% "es:" | i18n %] [% cantidad %]
-</p>
-<br>
 
-[% paginador %]
+<div class="resultados_consulta">[% "La cantidad de ejemplares en estado" | i18n %]  [% availD %] [% "es:" | i18n %] [% cantidad %]</div> 
 
-<br><br>
+<div class="contenedor_paginador">[% paginador %]</div>
 
 <table id="tablaResult" class="tablaResult" cellspacing="0" cellpadding="0" border="0" align="left" width="100%">
 	<tr height="24">
 
-	<!-- ver si va esta clase ????, falta q se vea la manito-->
-		<td class="tablaresultadoTitle click" onClick="ordenar('completo');" title="[% 'Ordenar por autor' | i18n %]">
+		<td class="click" onClick="ordenar('completo');" title="[% 'Ordenar por autor' | i18n %]">
             [% "Autor" | i18n %]
         </td>
-		<td class="tablaresultadoTitle click" onClick="ordenar('titulo');" title="[% 'Ordenar por titulo' | i18n %]">
+		<td class="click" onClick="ordenar('titulo');" title="[% 'Ordenar por titulo' | i18n %]">
             [% "T&iacute;tulo" | i18n %]
         </td>
-		<td class="tablaresultadoTitle click" onClick="ordenar('signatura_topografica');" title="[% 'Ordenar por Sig. Topografica' | i18n %]">
+		<td class="click" onClick="ordenar('signatura_topografica');" title="[% 'Ordenar por Sig. Topografica' | i18n %]">
             [% "Signatura Topogr&aacute;fica" | i18n %]
         </td>
-		<td class="tablaresultadoTitle click" onClick="ordenar('barcode');" title="[% 'Ordenar por cod. de barras' | i18n %]">
+		<td class="click" onClick="ordenar('barcode');" title="[% 'Ordenar por cod. de barras' | i18n %]">
             [% "C&oacute;digo de barras" | i18n %]
         </td>
-		<td class="tablaresultadoTitle click" onClick="ordenar('number');" title="[% 'Ordenar por edicion' | i18n %]">
+		<td class="click" onClick="ordenar('number');" title="[% 'Ordenar por edicion' | i18n %]">
             [% "Edici&oacute;n" | i18n %]
         </td>
-		<td class="tablaresultadoTitle click" onClick="ordenar('anio_publicacion');" title="[% 'Ordenar por a&ntilde;o de publicacion' | i18n %]">
+		<td class="click" onClick="ordenar('anio_publicacion');" title="[% 'Ordenar por a&ntilde;o de publicacion' | i18n %]">
             [% "A&ntilde;o de Publicaci&oacute;n" | i18n %]
         </td>
-		<td class="tablaresultadoTitle click" onClick="ordenar('date');" title="[% 'Ordenar por fecha' | i18n %]">
+		<td class="click" onClick="ordenar('date');" title="[% 'Ordenar por fecha' | i18n %]">
             [% "Fecha" | i18n %]
         </th>
 
 	</tr>
 [% FOREACH historico IN resultsloop %]
-	<tr align="center" class="inputFontNormal">
+	<tr align="center">
   		
   		<td align="left"> [% historico.nivel3.nivel2.nivel1.cat_autor.getNombre %]</td>
   		<td> [% HTML.escape(historico.nivel3.nivel2.nivel1.getTitulo) %] </td>
@@ -63,13 +54,9 @@
 	<input type="hidden" name="ui" value="[% ui %]">
     <input type="hidden" name="token" value="[% token %]">
 	<input type="hidden" name="type" value="pdf"> 
-		<!--<a  onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
-		<input onClick="uinidadInformacion.action='/cgi-bin/koha/reports/print.pl';uinidadInformacion.target='_blank';uinidadInformacion.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="[% themelang %]/images/menu-imprimir.png" border="0" title=[% "Imprimir Resultados" | i18n %]>
-		</a>
 
-		<a  onMouseOut="swap('pdf','[% themelang %]/images/pdf.png')" onMouseOver="swap('pdf','[% themelang %]/images/pdfbis.png')">
-		<input onClick="uinidadInformacion.action='/cgi-bin/koha/reports/print.pl';uinidadInformacion.target='_self'; uinidadInformacion.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value=[% "Generar PDF" | i18n %] src="[% themelang %]/images/pdf.png" border="0" title=[% "Generar archivo PDF" | i18n %]>
-		</a>-->
+<div class="buttonContainerHorizontal">
+
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                 boton   => "icon_imprimir",
@@ -85,5 +72,7 @@
                                                                 title   => "[% "Generar PDF" | i18n %]",
                                         ) ;
             [% END %]
+</div>
+
 <form>
 

@@ -1690,10 +1690,9 @@ sub filtrarPorAutor{
 
 
 sub t_loguearBusqueda {
-
     my($loggedinuser,$desde,$http_user_agent,$search_array)=@_;
-    my $paramsReserva;
-    my ($error, $codMsg,$paraMens);
+
+    my $msg_object= C4::AR::Mensajes::create();
     $desde = $desde || 'SIN_TIPO';
     my $historial = C4::Modelo::RepHistorialBusqueda->new();
     my $db = $historial->db;
@@ -1713,9 +1712,7 @@ sub t_loguearBusqueda {
         $db->rollback;
     }
     $db->{connect_options}->{AutoCommit} = 1;
-    # FIXME este mensaje de error no va mas asi
-    my $message= &C4::AR::Mensajes::getMensaje($codMsg,$desde,$paraMens);
-    return ($error, $codMsg, $message);
+    return ($msg_object);
 }
 
 

@@ -1,17 +1,13 @@
 [% USE HTML %]
 [% IF reservas_asignadas_count %]
-<br>
-<b>El usuario tiene [% reservas_asignadas_count %] ejemplar(es) reservado(s) esperando para ser retirado(s).</b>
-<br>
 
-<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
-	<tr>
-		<td colspan="9" class="inputFontNormal" align="center">
-			<b>EJEMPLARES ASIGNADOS</b>
-		</td>
-	</tr>
-</table>
-<table class="tablaReservas" border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
+<div class="resultados_consulta">[% 'El usuario tiene' | i18n %] [% reservas_asignadas_count %] 
+                                 [% 'ejemplar(es) reservado(s) esperando para ser retirado(s)' | i18n %]
+</div>
+
+<div class="titulo_arriba_tabla">[% "EJEMPLARES ASIGNADOS" | i18n %]</div>
+
+<table class="tablaReservas tabla_datos" border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
 
 	<tr class="tablaresultadoTitle">
 		<td>
@@ -81,19 +77,19 @@
      <input type="image" name="borrowD"  value="prestar" src="[% themelang %]/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
     </p>
 [% ELSE %]
-<br>
-<b>El usuario no tiene ejemplar(es) reservado(s) esperando para ser retirado(s).</b>
+
+    <div class="resultados_consulta">[% 'El usuario no tiene ejemplar(es) reservado(s) esperando para ser retirado(s).' | i18n %] </div>
+
 [% END %]
 
 [% IF reservas_espera_count %]
-<br>
-<b>El usuario tiene [% reservas_espera_count %] reserva(s) en espera.</b>
-<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="">
-	<tr>
-		<td colspan="6" class="inputFontNormal" align="center"><b>RESERVAS EN ESPERA</b></td>
-	</tr>
-</table>
-<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="tablaReservas">
+
+
+<div class="resultados_consulta">[% 'El usuario tiene' | i18n %] [% reservas_espera_count %] [% 'reserva(s) en espera' | i18n %]</div>
+
+<div class="titulo_arriba_tabla">[% "RESERVAS EN ESPERA" | i18n %]</div>
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="tablaReservas tabla_datos">
 	<tr class="tablaresultadoTitle">
 
 		<td>T&iacute;tulo</td>
@@ -143,7 +139,7 @@
 
 <br>
 [% ELSE %]
-<br>
-<b>El usuario no tiene reserva(s) en espera.
-</b>
+
+    <div class="resultados_consulta">El usuario no tiene reserva(s) en espera.</div>
+
 [% END %]

@@ -214,16 +214,16 @@ sub agregar {
     my ($data_hash)=@_;
 
     if ($data_hash->{'tipo'}){
-	$self->setTipo($data_hash->{'tipo'});
+	$self->setTipo_operacion($data_hash->{'tipo'});
   	}
 	else{
     	#Asignando data...
     	if($data_hash->{'estado'} eq 'E'){
 		#es una reserva sobre el ITEM
-		$self->setTipo('reserve');
+		$self->setTipo_operacion('reserve');
 		}else{
 		#es una reserva sobre el GRUPO
-		$self->setTipo('queue');
+		$self->setTipo_operacion('queue');
 		$data_hash->{'id3'}= 0;
 		}
    	}

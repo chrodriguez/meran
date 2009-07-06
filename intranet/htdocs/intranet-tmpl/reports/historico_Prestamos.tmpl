@@ -13,32 +13,46 @@
 
 <script language="javascript">
 
-    var objAH;
-    function ordenar(orden){
-        objAH.sort(orden);
-    }
+var objAH;
+function ordenar(orden){
+    objAH.sort(orden);
+}
 
-    function updateInfo(responseText){
-        $("#result").html(responseText);
-        zebra("tablaResult");
-    }
+function updateInfo(responseText){
+    $("#result").html(responseText);
+    zebra("tablaResult");
+}
 
-    function changePage(ini){
-        objAH.changePage(ini);
-    }
+function changePage(ini){
+    objAH.changePage(ini);
+}
 
-    function consultar(){
-        objAH=new AjaxHelper(updateInfo);
-        objAH.debug= true;
-        objAH.f_ini= $('#f_ini').val();
-        objAH.f_fin= $('#f_fin').val();
-        objAH.tiposItems= $('#tiposItems').val();
-        objAH.tipoPrestamos=$('#tipoPrestamos').val();
-        objAH.catUsuarios=$('#categoria_socio_id').val();
-        objAH.url= "/cgi-bin/koha/reports/historico_PrestamosResult.pl";
-        objAH.funcion="changePage";
-        objAH.sendToServer();
-    }
+function consultar(){
+    objAH=new AjaxHelper(updateInfo);
+    objAH.debug= true;
+    objAH.f_ini= $('#f_ini').val();
+    objAH.f_fin= $('#f_fin').val();
+    objAH.tiposItems= $('#tiposItems').val();
+    objAH.tipoPrestamos=$('#tipoPrestamos').val();
+    objAH.catUsuarios=$('#categoria_socio_id').val();
+    objAH.url= "/cgi-bin/koha/reports/historico_PrestamosResult.pl";
+    objAH.funcion="changePage";
+    objAH.sendToServer();
+}
+
+function generarPDF(){
+    $('#prestamos')[0].action= "/cgi-bin/koha/reports/printHistPrestamos.pl";
+    $('#prestamos')[0].target= "_self";
+    $('#prestamos')[0].type.value= "pdf";
+    $('#prestamos')[0].submit();
+}
+
+function imprimir(){
+    $('#prestamos')[0].action= "/cgi-bin/koha/reports/printHistPrestamos.pl";
+    $('#prestamos')[0].target= "_blank";
+    $('#prestamos')[0].type.value= "print";
+    $('#prestamos')[0].submit();
+}
 
 </script>
 

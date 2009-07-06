@@ -2,9 +2,9 @@
 [% USE HTML %] 
 
 [% IF reservas_asignadas_count %]
-	<br>
-	<span class="tituloArribaTabla">[% "EJEMPLARES ASIGNADOS" | i18n %]</span>
-	<table class="reseravsAsignadasResult" cellspacing=0  cellpadding=0  border=0   width="100%">
+
+	<div class="titulo_arriba_tabla">[% "EJEMPLARES ASIGNADOS" | i18n %]</div>
+	<table class="reseravsAsignadasResult tabla_datos" cellspacing=0  cellpadding=0  border=0   width="100%">
 		<tr class="tablaresultadoTitle">
 			<th>
 				<a class="click" id="checkAllReservas">
@@ -23,7 +23,7 @@
 			<th width="10%">[% "Cancelar" | i18n %]</th>
 		</tr>
 	[% FOREACH reserva IN RESERVAS_ASIGNADAS %]
-		<tr class="inputFontNormal" align="center">
+		<tr align="center">
 		
 			<td>
 		[% IF circularDesdeDetalleUsuario %]
@@ -124,12 +124,9 @@
 [% END %]
 
 
-[% IF reservas_espera_count %]
-
-<br>
-<span class="tituloArribaTabla">[% "RESERVAS EN ESPERA" | i18n %]</span>
+<div class="titulo_arriba_tabla">[% "RESERVAS EN ESPERA" | i18n %]</div>
 	
-	<table class="reservasEnEsperaResult" cellspacing=0  cellpadding=0  border=0   width="100%">
+	<table class="reservasEnEsperaResult tabla_datos" cellspacing=0  cellpadding=0  border=0   width="100%">
 		<tr valign=middle class="tablaresultadoTitle">
 			<th>[% "T&iacute;tulo" | i18n %]</th>
 			<th>[% "Autor" | i18n %]</th>
@@ -138,7 +135,7 @@
 			<th>[% "Cancelar" | i18n %]</th>
 		</tr>
     [% FOREACH reserva IN RESERVAS_ESPERA %]
-		<tr align="center" class="inputFontNormal">
+		<tr align="center">
 		
 			<td width="16%"> 
 			[% PERL %]

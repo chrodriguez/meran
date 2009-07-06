@@ -1,31 +1,28 @@
 
-<center>
-<p class="inputFontNormal"> 
-	<b>[% "La cantidad de operaciones hechas fueron:" | i18n %] &nbsp;[% cant %]<br>
-	[% "P&aacute;gina n&uacute;mero:" | i18n %] [% actual %] [% "de un total de:" | i18n %] [% paginas %]</b>
-</p><br>
+<div class="resultados_consulta">[% "La cantidad de operaciones hechas fueron:" | i18n %] [% cant %]</div>
+<div class="resultados_consulta">[% "P&aacute;gina n&uacute;mero:" | i18n %] [% actual %] [% "de un total de:" | i18n %] [% paginas %]</div>  
 
-[% paginador %]
+<div class="contenedor_paginador">[% paginador %]</div>
 
 <table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%">
 	<tr class="tablaresultadoTitle">
 
-		<th class="tablaresultadoTitle click" onclick="ordenar('surnameBor')" Title="[% 'Ordenar por Usuario' | i18n %]" >
+		<th class="click" onclick="ordenar('surnameBor')" Title="[% 'Ordenar por Usuario' | i18n %]" >
 			[% "Usuario" | i18n %]
 		</th>
-		<th class="tablaresultadoTitle click" onclick="ordenar('surnameResp')" Title="[% 'Ordenar por Usuario' | i18n %]" >
+		<th class="click" onclick="ordenar('surnameResp')" Title="[% 'Ordenar por Usuario' | i18n %]" >
 			[% "Responsable" | i18n %]
 		</th>
-		<th class="tablaresultadoTitle click" onclick="ordenar('date')" Title="[% 'Ordenar por Fecha' | i18n %]" >
+		<th class="click" onclick="ordenar('date')" Title="[% 'Ordenar por Fecha' | i18n %]" >
 			[% "Fecha" | i18n %]
 		</th>
-		<th class="tablaresultadoTitle click" onclick="ordenar('end_date')" Title="[% 'Ordenar por Fecha Fin' | i18n %] " >
+		<th class="click" onclick="ordenar('end_date')" Title="[% 'Ordenar por Fecha Fin' | i18n %] " >
 			[% "Fecha Fin" | i18n %]
 		</th>
-		<th class="tablaresultadoTitle click" onclick="ordenar('type')" Title="[% 'Ordenar por Operacion' | i18n %]" >
+		<th class="click" onclick="ordenar('type')" Title="[% 'Ordenar por Operacion' | i18n %]" >
 			[% "Operaci&oacute;n" | i18n %]
 		</th>
-		<th class="tablaresultadoTitle click" onclick="ordenar('tipoPrestamo')" Title="[% 'Ordenar por tipo de prestamo' | i18n %]" >
+		<th class="click" onclick="ordenar('tipoPrestamo')" Title="[% 'Ordenar por tipo de prestamo' | i18n %]" >
 			[% "Tipo Pr&eacute;stamo" | i18n %]
 		<th>
 
@@ -34,24 +31,24 @@
 
   	<tr align='center'>
 
-		<td  class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">
+		<td> 
+			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">
 				[% IF sancion.usr_nro_socio.getNro_socio %]
                [% sancion.usr_nro_socio.getApeYNom %]
             [% END %]
 			</a>
 		</td>
-  		<td  class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% responsable %]">
-				[% IF sancion.responsable %]
+  		<td> 
+			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% responsable %]">
+            [% IF sancion.responsable %]
                [% sancion.responsable.getApeYNom %]
             [% END %]
 			</a>
 		</td>
-  		<td  class="inputFontNormal">[% date %]</td>
-		<td  class="inputFontNormal">[% end_date%]</td>
-  		<td  class="inputFontNormal">[% operacion %]</td>
-		<td  class="inputFontNormal"> 
+  		<td>[% date %]</td>
+		<td>[% end_date%]</td>
+  		<td>[% operacion %]</td>
+		<td> 
 		[% IF sancion.circ_tipo_sancion %] 
 			[% sancion.circ_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
 		[% ELSE %]
@@ -65,4 +62,4 @@
         	<td class="lineafinaltabla"  align="left" colspan="8"></td>
         </tr>
 </table>
-</center>
+

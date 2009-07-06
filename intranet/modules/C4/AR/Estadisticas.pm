@@ -226,7 +226,6 @@ sub historicoDeBusqueda{
 
    my $busquedas = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda(
                                                                                 query => \@filtros,
-                                                                                select => ['*','usr_socio.*'],
                                                                                 with_objects => ['busqueda','busqueda.socio'],
                                                                                 limit   => $params_obj->{'cantR'},
                                                                                 offset  => $params_obj->{'ini'},
@@ -252,12 +251,14 @@ sub historicoPrestamos{
    my $prestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
                                                                         query => \@filtros,
                                                                         require_objects => ['nivel3','socio','ui','ui_prestamo'],
-                                                                        ); 
+                                                                    ); 
 
    my $prestamos = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                         query => \@filtros,
                                                                         require_objects => ['nivel3','socio','ui','ui_prestamo'],
-                                                                        ); 
+                                                                        limit   => $params_obj->{'cantR'},
+                                                                        offset  => $params_obj->{'ini'},
+                                                                     ); 
 
    return($prestamos_count,$prestamos);
 }

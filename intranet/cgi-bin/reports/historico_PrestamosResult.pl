@@ -35,17 +35,19 @@ $obj->{'f_fin'}=$obj->{'f_fin'}||'';
 
 my $ini= ($obj->{'ini'});
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+$obj->{'ini'} = $ini;
+$obj->{'cantR'} = $cantR;
 
 my $dateformat = C4::Date::get_date_format();
 my $fechaIni = C4::Date::format_date_in_iso($obj->{'f_ini'},$dateformat);
 my $fechaFin = C4::Date::format_date_in_iso($obj->{'f_fin'},$dateformat);
 #obtengo el Historico de los Prestamos, esta en C4::AR::Estadisticas
-my ($cantidad,@resultsdata)= C4::AR::Estadisticas::historicoPrestamos($obj);
+my ($cantidad, $historico_prestamos_array_ref)= C4::AR::Estadisticas::historicoPrestamos($obj);
 
-C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+$t_params->{'paginador'}=  C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
 
-$t_params->{'resultsloop'}= \@resultsdata;
+$t_params->{'RESULTSLOOP'}= $historico_prestamos_array_ref;
 $t_params->{'tipoItem'}= $tipoItem;
 $t_params->{'tipoPrestamo'}= $tipoPrestamo;
 $t_params->{'catUsuarios'}= $catUsuarios;

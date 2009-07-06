@@ -1,37 +1,25 @@
-<table border=0 cellspacing=0 cellpadding=2 width=90%>
-	<tr align="center">
-		<b>
-                    [% "La cantidad de usuarios es :" | i18n %] 
-                    [% cantidad %]
-                </b>
-	</tr>
+[% USE HTML %]
 
-	<tr align="center">
-		<b>
-                    [% "Ha buscado por :" | i18n %] [% socio %]
-                </b>
-	</tr>
-</table>
+<div class="resultados_consulta">[% "La cantidad de usuarios es :" | i18n %] [% cantidad %]</div> 
+<div class="resultados_consulta">[% "Ha buscado por :" | i18n %] [% HTML.escape(socio) %]</div>
 
-<center>
-    [% paginador %]
-</center>
+<div class="contenedor_paginador">[% paginador %]</div>
 
-<table id="tablaResult" class="tablaResult" width="100%" cellspacing=0 cellpadding=0>
+<table id="tablaResult" class="tablaResult tabla_datos" width="100%" cellspacing=0 cellpadding=0>
 	<thead>
-  	<tr>
-    		<th class="tablaresultadoTitle">&nbsp;</th>
+  	<tr class="tablaresultadoTitle">
+    		<th>&nbsp;</th>
 
-    		<th align="left" width="28%" class="tablaresultadoTitle click" onClick="ordenar('apellido')">
+    		<th align="left" width="28%" class="click" onClick="ordenar('apellido')">
                     [% "Apellido y Nombres" | i18n %]
                 </th>
-    		<th align="left" width="15%" class="tablaresultadoTitle click" onClick="ordenar('nro_documento')">
+    		<th align="left" width="15%" class="click" onClick="ordenar('nro_documento')">
                     [% "Documento" | i18n %]
                 </th>
-    		<th class="tablaresultadoTitle">
+    		<th>
                     [% "Cat." | i18n %]
                 </th>
-    		<th class="tablaresultadoTitle">  
+    		<th>  
                     [% "Habilitado?" | i18n %]
                 </th>
 
@@ -40,7 +28,7 @@
 	<tbody>
 
 [% FOREACH resultsloop %]
-      	<tr align="center" class="inputFontNormal">
+      	<tr align="center">
       	
      		<td valign="middle" align="center">
 			[% IF nomodificable %]
@@ -91,13 +79,13 @@
 	<tr>
 		<td class="inputFontNormal">
 			<label for="accion" accesskey="t"></label>
-			<select class="inputFontNormal" id="accion" name="accion">
+			<selectid="accion" name="accion">
 				<option value="HABILITAR_PERSON" selected="selected">
-                                    [% "Habilitar Seleccionados" | i18n %]
-                                </option>
+                    [% "Habilitar Seleccionados" | i18n %]
+                </option>
 				<option value="DESHABILITAR_PERSON">
-                                    [% "Deshabilitar Seleccionados" | i18n %]
-                                </option>
+                    [% "Deshabilitar Seleccionados" | i18n %]
+                </option>
 			</select>
 		</td>
 		<td>

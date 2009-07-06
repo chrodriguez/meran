@@ -266,6 +266,11 @@ border:0px;
 	  margin-left: 20px;
 	  padding-left: 20px;
 }
+
+.titulo_arriba_tabla {
+    font-size : 18px;
+    text-align: center;
+}
 /*                                 fin de titulos                                      */
 
 /*                                        estilos para los botones                                     */
@@ -459,7 +464,11 @@ tr.impar {
     font-weight: bold;
 	height:30px;
 	border-left: 1px solid #ccc;
- }
+}
+
+.tabla_datos {
+    font-size: 9pt;
+}
 /*                                     Fin   para los resultados en tablas                                             */
 
 

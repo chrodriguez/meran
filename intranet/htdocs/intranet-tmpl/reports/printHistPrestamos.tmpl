@@ -1,8 +1,7 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title>Formato de Impresi&oacute;n</title>
-
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>[% 'Formato de Impresi&oacute;n' | i18n %]</title>
 </head>
 
 <body>
@@ -11,66 +10,49 @@
 	
 	<tr>
 	   	<td align="center" colspan=4>
-        		<font class="titulo" >Biblioteca:</font><br>
-        		<font class="subtitulo">Facultad de Ciencias Econ&oacute;micas</font>
+<!-- FIXME esto esta fijo, cambiar -->
+        		<font class="titulo" >[% 'Biblioteca:' | i18n %]</font><br>
+        		<font class="subtitulo">[% 'Facultad de Ciencias Econ&oacute;micas' | i18n %]</font>
         	</td>
 		<td align="right" colspan=3>
+<!-- FIXME esto esta fijo, cambiar -->
 			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/escudo.png" border="0" alt="Facultad de Ciencias Econ&oacute;micas" >
 		</td>
 	</tr>
 	<tr> 
-		<td align="center" colspan="7"> <!-- TMPL_VAR NAME="msg" --> 
+		<td align="center" colspan="7"> [% msg %]
                 </td> 
 	</tr>
 	<tr>
-		<th colspan="9" align="center">Historial de Prestamos</th>
+		<th colspan="9" align="center">[% 'Historial de Prestamos' | i18n %]</th>
 	</tr>
-	<tr>
-		<td align="center" colspan="9">
-			<br>
-			<a onMouseOut="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimirbis.png')">
-			<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
-			</a>
-		</td>
-	</tr>
-
 
 	<tr height="24">
-		<th width="15%">Apellido</th>
-		<th width="5%">Nombre</th>
-		<th width="12%">DNI</th>
-		<th width="12%">Categor&iacute;a</th>
-		<th>Tipo Pr&eacute;stamo</th>
-		<th>C&otilde;digo de Barras</th>
-		<th>Fecha Pr&eacute;stamo</th>
-		<th>Fecha Devoluci&oacute;n</th>
-		<th>T&iacute;po</th>
+		<th width="15%">[% 'Apellido' | i18n %]</th>
+		<th width="5%">[% 'Nombre' | i18n %]</th>
+		<th width="12%">[% 'DNI' | i18n %]</th>
+		<th width="12%">[% 'Categor&iacute;a' | i18n %]</th>
+		<th>[% 'Tipo Pr&eacute;stamo' | i18n %]</th>
+		<th>[% 'C&otilde;digo de Barras' | i18n %]</th>
+		<th>[% 'Fecha Pr&eacute;stamo' | i18n %]</th>
+		<th>[% 'Fecha Devoluci&oacute;n' | i18n %]</th>
+		<th>[% 'T&iacute;po' | i18n %]</th>
 	</tr>
-	<br><br>
-<!-- TMPL_LOOP NAME=RESULTSLOOP -->
-       <tr align="center" height="24">
-  		<td> <!-- TMPL_VAR NAME=surname ESCAPE=HTML--></td>
-  		<td> <!-- TMPL_VAR NAME=firstname --> </td>
-  		<td> <!-- TMPL_VAR NAME=DNI --> </td>
-  		<td> <!-- TMPL_VAR NAME=CatUsuario --> </td>
-  		<td> <!-- TMPL_VAR NAME=tipoPrestamo --> </td>
-  		<td> <!-- TMPL_VAR NAME=barcode --> </td>
-		<td> <!-- TMPL_VAR NAME=fechaPrestamo --> </td>  
-  		<td> <!-- TMPL_VAR NAME=fechaDevolucion --> </td>  
-		<td> <!-- TMPL_VAR NAME=tipoItem --> </td>  
-       </tr>
-<!-- /TMPL_LOOP -->
-       <tr valign=bottom>
-       		<td class="lineafinaltabla"  align="left" colspan="9"><hr></td>
-       </tr>
-	
-	<tr>
-		<td align="center" colspan="9">
-			<a onMouseOut="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimir.png')" onMouseOver="swap('print','<!-- TMPL_VAR NAME="themelang" -->/images/menu-imprimirbis.png')">
-			<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
-			</a>
-		</td>
-	</tr>
+[% FOREACH historico_pretamo IN RESULTSLOOP %]
+    <tr align="center">
+
+            <td align="left">[% historico_pretamo.socio.persona.getApellido %]</td>
+            <td>[% historico_pretamo.socio.persona.getNombre %]</td>
+            <td>[% historico_pretamo.socio.persona.getNro_documento %]</td>
+            <td>[% historico_pretamo.socio.getCod_categoria %]</td>
+            <td>[% historico_pretamo.tipo.getDescripcion %]</td>
+            <td>[% historico_pretamo.nivel3.getBarcode %]</td>
+            <td>[% historico_pretamo.getFecha_prestamo_formateada %]</td>
+            <td>[% historico_pretamo.getFecha_devolucion_formateada %]</td>
+            <td>[% historico_pretamo.nivel3.nivel2.cat_ref_tipo_nivel3.getNombre %]</td>
+    
+    </tr>
+[% END %]
 
 </table>
 

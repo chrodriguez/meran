@@ -845,4 +845,10 @@ ALTER TABLE `perm_catalogo` ADD `undefined` VARCHAR( 8 ) NOT NULL DEFAULT '00000
 ALTER TABLE `rep_historial_circulacion` CHANGE `tipo` `tipo_operacion` VARCHAR( 15 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `rep_historial_circulacion` CHANGE `responsable` `responsable` VARCHAR( 16 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `rep_historial_circulacion` CHANGE `nota` `nota` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
-ALTER TABLE `cat_nivel1` CHANGE `titulo` `titulo` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+
+--se modifico el campo rep_busqueda
+
+ ALTER TABLE `rep_busqueda` CHANGE `id_socio` `nro_socio` VARCHAR( 16 ) NULL DEFAULT NULL  
+
+ALTER TABLE `cat_nivel1` CHANGE `titulo` `titulo` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;>>>>>>> .r1754

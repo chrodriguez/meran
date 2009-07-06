@@ -1,40 +1,33 @@
 [% USE HTML %]
 
-<table border=0 cellspacing=0 cellpadding=2 width=90%>
-	<tr align="center">
-		<b>[% "La cantidad de usuarios es :" | i18n %] [% cantidad %]</b>
-	</tr>
 
-	<tr align="center">
-		<b>[% "Ha buscado por :" | i18n %] [% HTML.escape(socio) %]</b>
-	</tr>
-</table>
-<br>
-<center>
-[% paginador %]
-</center>
-<table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width=100%>
+<div class="resultados_consulta">[% "La cantidad de usuarios es :" | i18n %] [% cantidad %]</div> 
+<div class="resultados_consulta">[% "Ha buscado por :" | i18n %] [% HTML.escape(socio) %]</div> 
+
+<div class="contenedor_paginador">[% paginador %]</div>
+
+<table id="tablaResult" class="tablaResult tabla_datos" border=0 cellspacing=0 cellpadding=0 width=100%>
 	<thead>
-  	<tr>
+  	<tr class="tablaresultadoTitle">
 
-		<th class="tablaresultadoTitle click" onclick="ordenar('nro_socio')" 
-			Title="Ordenar por tarjeta de Id." width="12%">[% "Tarjeta de Id." | i18n %]
+		<th class="click" onclick="ordenar('nro_socio')" 
+			Title="[% 'Ordenar por tarjeta de Id.' | i18n %]" width="12%">[% "Tarjeta de Id." | i18n %]
 		</th>
-    	<th class="tablaresultadoTitle click" onclick="ordenar('apellido')" 
-			Title="Ordenar por apellido" align="left" width="30%">[% "Apellido y Nombres" | i18n %]
+    	<th class="click" onclick="ordenar('apellido')" 
+			Title="[% 'Ordenar por apellido' | i18n %]" align="left" width="30%">[% "Apellido y Nombres" | i18n %]
 		</th>
-    	<th class="tablaresultadoTitle click" onclick="ordenar('nro_documento')" 
-			Title="Ordenar por DNI" width="15%">[% "Documento" | i18n %]
+    	<th class="click" onclick="ordenar('nro_documento')" 
+			Title="[% 'Ordenar por DNI' | i18n %]" width="15%">[% "Documento" | i18n %]
 		</th>
-    	<th class="tablaresultadoTitle click" onclick="ordenar('legajo')" 
-			Title="Ordenar por legajo" align="left">[% "Legajo" | i18n %]
+    	<th class="click" onclick="ordenar('legajo')" 
+			Title="[% 'Ordenar por legajo' | i18n %]" align="left">[% "Legajo" | i18n %]
 		</th>
-    	<th class="tablaresultadoTitle click" onclick="ordenar('cod_categoria')" 
-			Title="Ordenar por categoria">[% "Cat." | i18n %]
+    	<th class="click" onclick="ordenar('cod_categoria')" 
+			Title="[% 'Ordenar por categoria' | i18n %]">[% "Cat." | i18n %]
 		</th>
-    	<th class="tablaresultadoTitle">[% "Prest." | i18n %]</th>
-    	<th class="tablaresultadoTitle">[% "Ven." | i18n %]</th>
-    	<th class="tablaresultadoTitle">[% "Estado" | i18n %]</th>
+    	<th>[% "Prest." | i18n %]</th>
+    	<th>[% "Ven." | i18n %]</th>
+    	<th>[% "Estado" | i18n %]</th>
 
   	</tr>
    	</thead>

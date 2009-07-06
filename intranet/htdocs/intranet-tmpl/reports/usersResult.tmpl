@@ -1,30 +1,28 @@
-<center>
-<p>
-<b>[% "La cantidad de usuarios es :" | i18n %] [% cantidad %]<br>
-</p>
-<br>
 
-[% paginador %]
-</center>
+<div class="resultados_consulta">[% "La cantidad de usuarios es :" | i18n %] [% cantidad %]</div> 
+
+<div class="contenedor_paginador">[% paginador %]</div>
 
 
-<table id="tablaResult" class="tablaResult" border="0" cellspacing="0" cellpadding="0"  width="100%">
+<table id="tablaResult" class="tablaResult tabla_datos" border="0" cellspacing="0" cellpadding="0"  width="100%">
 	<tr class="tablaresultadoTitle">
 
-		<td class="tablaresultadoTitle click" onclick="ordenar('surname')" Title="[% 'Ordenar por Apellido' | i18n %]">[% "Apellido" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('firstname')" Title="[% 'Ordenar por Nombre' | i18n %]">[% "Nombre" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('streetaddress')" Title="[% 'Ordenar por Direcci&oacute;n' | i18n %]">[% "Direcci&oacute;n" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('cardnumber')" Title="[% 'Ordenar por Socio' | i18n %]">[% "Socio" | i18n %]</td>
-		<td class="tablaresultadoTitle">[% "Ciudad" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('phone')" Title="[% 'Ordenar por Tel&eacute;fono' | i18n %]">[% "Telefono" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('emailaddress')" Title="[% 'Ordenar por e-mail' | i18n %]">[% "E-mail" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('dateenrolled')" Title="[% 'Ordenar por Ingreso' | i18n %]">[% "Ingreso" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('categoria')" Title="[% 'Ordenar por Categor&iacute;a' | i18n %]">[% "Categoria" | i18n %]</td>
+		<td class="click" onclick="ordenar('surname')" Title="[% 'Ordenar por Apellido' | i18n %]">[% "Apellido" | i18n %]</td>
+		<td class="click" onclick="ordenar('firstname')" Title="[% 'Ordenar por Nombre' | i18n %]">[% "Nombre" | i18n %]</td>
+		<td class="click" onclick="ordenar('streetaddress')" Title="[% 'Ordenar por Direcci&oacute;n' | i18n %]">
+            [% "Direcci&oacute;n" | i18n %]
+        </td>
+		<td class="click" onclick="ordenar('cardnumber')" Title="[% 'Ordenar por Socio' | i18n %]">[% "Socio" | i18n %]</td>
+		<td>[% "Ciudad" | i18n %]</td>
+		<td class="click" onclick="ordenar('phone')" Title="[% 'Ordenar por Tel&eacute;fono' | i18n %]">[% "Telefono" | i18n %]</td>
+		<td class="click" onclick="ordenar('emailaddress')" Title="[% 'Ordenar por e-mail' | i18n %]">[% "E-mail" | i18n %]</td>
+		<td class="click" onclick="ordenar('dateenrolled')" Title="[% 'Ordenar por Ingreso' | i18n %]">[% "Ingreso" | i18n %]</td>
+		<td class="click" onclick="ordenar('categoria')" Title="[% 'Ordenar por Categor&iacute;a' | i18n %]">[% "Categoria" | i18n %]</td>
 
 	</tr>
 
 [% FOREACH resultsloop %]
-	<tr class="inputFontNormal">
+	<tr>
 		
 		<td> [% surname %] </td>
 		<td> [% firstname %] </td>
@@ -35,7 +33,7 @@
   		<td> [% IF ok %] 
                         [% emailaddress %]
                      [% ELSE %]
-                        <a class="inputFontNormal" href="mailto:[% emailaddress %]">[% emailaddress %] </a>
+                        <a href="mailto:[% emailaddress %]">[% emailaddress %] </a>
                     [% END %]</td>
   		<td> [% dateenrolled %] </td>
   		<td> [% categoria %]</td>

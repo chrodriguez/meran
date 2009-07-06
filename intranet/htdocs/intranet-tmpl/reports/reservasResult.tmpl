@@ -1,50 +1,55 @@
-<center>
-<p class="inputFontNormal">
-[% "La cantidad de reservas es : " | i18n %]
-                    [% cantidad %]
-</p>
-<br>
-[% paginador %]
 
-<table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+<div class="resultados_consulta">[% "La cantidad de reservas es : " | i18n %] [% cantidad %]</div> 
+
+<div class="contenedor_paginador">[% paginador %]</div>
+
+<table id="tablaResult" class="tablaResult tabla_datos" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
 	<tr class="tablaresultadoTitle">
 
-		<td class="tablaresultadoTitle click" onclick="ordenar('surname')" title=[% "Ordenar por apellido" | i18n %]> [% "Apellido" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('firstname')" title=[% "Ordenar por nombre" | i18n %]> [% "Nombre" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('cardnumber')" title=[% "Ordenar por numero de socio" | i18n %]> [% "N&uacute;mero de socio" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('emailaddress')" title=[% "Ordenar por mial" | i18n %]>[% "E-mail" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('reservedate')" title=[% "Ordenar por fecha de reserva" | i18n %]> [% "Fecha de reserva" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('reminderdate')" title=[% "Ordenar por fecha de vencimiento" | i18n %]> [% "Fecha de vencimiento" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('barcode')" title=[% "Ordenar por codigo de barra" | i18n %]> [% "C&oacute;digo de barra" | i18n %]</td>
+		<td class="click" onclick="ordenar('surname')" title="[% 'Ordenar por apellido' | i18n %]"> [% "Apellido" | i18n %]</td>
+		<td class="click" onclick="ordenar('firstname')" title="[% 'Ordenar por nombre' | i18n %]"> [% "Nombre" | i18n %]</td>
+		<td class="click" onclick="ordenar('cardnumber')" title="[% 'Ordenar por numero de socio' | i18n %]">
+            [% "N&uacute;mero de socio" | i18n %]
+        </td>
+		<td class="click" onclick="ordenar('emailaddress')" title="[% 'Ordenar por mial' | i18n %]">[% "E-mail" | i18n %]</td>
+		<td class="click" onclick="ordenar('reservedate')" title="[% 'Ordenar por fecha de reserva' | i18n %]">[% "Fecha de reserva" | i18n %]</td>
+		<td class="click" onclick="ordenar('reminderdate')" title="[% 'Ordenar por fecha de vencimiento' | i18n %]">
+            [% "Fecha de vencimiento" | i18n %]
+        </td>
+		<td class="click" onclick="ordenar('barcode')" title="[% 'Ordenar por codigo de barra' | i18n %]">
+            [% "C&oacute;digo de barra" | i18n %]
+        </td>
 
 	</tr>
 [% FOREACH reserva IN reservas %]
 	<tr align='center'>
 		
-		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% reserva.socio.getNro_socio %]">[% reserva.socio.persona.getApellido %]</a>
+		<td> 
+			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% reserva.socio.getNro_socio %]">
+                [% reserva.socio.persona.getApellido %]
+            </a>
 		</td>
-		<td class="inputFontNormal"> 
+		<td> 
 			[% reserva.socio.persona.getNombre%]
 		</td>
-		<td class="inputFontNormal"> 
+		<td> 
 			[% reserva.socio.getNro_socio%]
 		</td>
-		<td class="inputFontNormal"> 
+		<td> 
 			[% IF mail %]
 				[% reserva.socio.persona.getEmail %]
 			[% ELSE %]
-				<a class="inputFontNormal" href="mailto:[% reserva.socio.persona.getEmail %]">[% reserva.socio.persona.getEmail %] </a>
+				<a  href="mailto:[% reserva.socio.persona.getEmail %]">[% reserva.socio.persona.getEmail %] </a>
 			[% END %]
 		</td>
-		<td class="inputFontNormal"> 
+		<td> 
 			[% reserva.getFecha_reserva_formateada %]
 		</td>
-		<td class="inputFontNormal"> 
+		<td> 
 			[% reserva.getFecha_recordatorio_formateada %]
 		</td>
-		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/detail.pl?bib=[% biblionumber %]">[% reserva.nivel3.getBarcode %]</a>
+		<td> 
+			<a href="/cgi-bin/koha/detail.pl?bib=[% biblionumber %]">[% reserva.nivel3.getBarcode %]</a>
 		</td>
 		
 	</tr>
@@ -54,7 +59,7 @@
 <br>
 
 
-<a class="inputFontNormal" href="mail.pl?branch=[% branch %]&tipo=1"> 
-<input id="contacto" type="image" src="[% themelang %]/images/contactar.png" title=[% "Enviar mail a usuarios con reservas asignadas" | i18n %] >
+<a href="mail.pl?branch=[% branch %]&tipo=1"> 
+<input id="contacto" type="image" src="[% themelang %]/images/contactar.png" title="[% 'Enviar mail a usuarios con reservas asignadas' | i18n %]" >
 </a> 
-</center>
+

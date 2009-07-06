@@ -3,7 +3,7 @@
 
 <div class="contenedor_paginador">[% paginador %]</div>
 
-<table id="tablaResult" class="tablaResult" cellspacing="0" cellpadding="0" border="0" width="100%">
+<table id="tablaResult" class="tablaResult tabla_datos" cellspacing="0" cellpadding="0" border="0" width="100%">
 <tr height="24" class="tablaresultadoTitle">
 
 	<td class="click" onclick="ordenar('surname')" title="[% 'Ordenar por apellido' | i18n %]">
@@ -36,18 +36,18 @@
 
 </tr>
 	
-[% FOREACH RESULTSLOOP %]
+[% FOREACH historico_pretamo IN RESULTSLOOP %]
     <tr align="center">
 
-            <td align="left">[% surname %]</td>
-            <td> [% firstname %]</td>
-            <td> [% DNI %]</td>
-            <td> [% CatUsuario %]</td>
-            <td> [% tipoPrestamo %]</td>
-            <td> [% barcode %]</td>
-            <td> [% fechaPrestamo %]</td>
-            <td> [% fechaDevolucion %]</td>
-            <td> [% tipoItem %]</td>
+            <td align="left">[% historico_pretamo.socio.persona.getApellido %]</td>
+            <td>[% historico_pretamo.socio.persona.getNombre %]</td>
+            <td>[% historico_pretamo.socio.persona.getNro_documento %]</td>
+            <td>[% historico_pretamo.socio.getCod_categoria %]</td>
+            <td>[% historico_pretamo.tipo.getDescripcion %]</td>
+            <td>[% historico_pretamo.nivel3.getBarcode %]</td>
+            <td>[% historico_pretamo.getFecha_prestamo_formateada %]</td>
+            <td>[% historico_pretamo.getFecha_devolucion_formateada %]</td>
+            <td>[% historico_pretamo.nivel3.nivel2.cat_ref_tipo_nivel3.getNombre %]</td>
     
     </tr>
 [% END %]
@@ -55,7 +55,7 @@
 
 <div align="center">
 		<br><br>
-		<form name="branches" method="post">
+	<form name="prestamos" id="prestamos" method="post">
 		<!-- Para imprimir correctamentes los datos -->
 		<input type="hidden" name="tiposItems" value="[% tipoItem %]">
 		<input type="hidden" name="catUsuarios" value="[% catUsuarios %]">
@@ -64,19 +64,31 @@
 		<input type="hidden" name="ini" value="[% ini %]">
 		<input type="hidden" name="fin" value="[% fin %]">
 		<input type="hidden" name="orden" value="[% orden %]">
-
+        <input type="hidden" name="token" value="[% token %]">
 		<!-- Para ver que se hace, imprimir o generar un pdf -->
 		<input TYPE="hidden" VALUE="pdf" NAME="type" > 
-		<a 	onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" 
-			onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
-<input onClick="branches.action='/cgi-bin/koha/reports/printHistPrestamos.pl';branches.target='_blank';branches.type.value='print';submit();"  
-			name="print" id="print" type="image" value=[% "Imprimir" | i18n %] 
-			src="[% themelang %]/images/menu-imprimir.png" border="0" title=[% "Imprimir Resultados" | i18n %]>
-		</a>
-	
-		<a  onMouseOut="swap('pdf','[% themelang %]/images/pdf.png')" onMouseOver="swap('pdf','[% themelang %]/images/pdfbis.png')">
-		<input onClick="branches.action='/cgi-bin/koha/reports/printHistPrestamos.pl';branches.target='_self'; branches.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value=[% "Generar PDF" | i18n %]  src="[% themelang %]/images/pdf.png" border="0" title=[% "Generar archivo PDF" | i18n %]>
-		</a>
-		</form>
+
+
+<div class="buttonContainerHorizontal">
+
+        [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                boton   => "icon_imprimir",
+                                                                onClick => "imprimir();",
+                                                                title   => "[% "Imprimir Resultados" | i18n %]",
+                                        ) ;
+        [% END %]
+
+        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(
+                                                            boton   => "icon_pdf",
+                                                            onClick => "generarPDF();",
+                                                            title   => "[% "Generar PDF" | i18n %]",
+                                    ) ;
+        [% END %]
+
+</div>
+
+	</form>
 </div>
 <br>

@@ -168,29 +168,40 @@ $(document).ready(function() {
 
 <p id="msj" style="font-size:12pt; color:red"></p>
 
-<table>
-	<tr>
-  		<td>
+<div class="buttonContainerHorizontal">
+<ul>
+    <li class="horizontal">
 			<input id="persona" type=text name="persona" value="[% persona %]" onFocus="checkFilter('focus')" 
                 onBlur="checkFilter('blur')">
-		</td>
- 		<td>
-			<input id="buscar" type="image" onClick="buscarUsuariosPotenciales();" 
-                               src="[% themelang %]/images/boton-buscar.png" border='0'>
 
-			<input type="image" onClick="Borrar();" alt="Limpiar" 
-                               src="[% themelang %]/images/borrar2.png" border="0" >
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "buscarUsuariosPotenciales();",
+                                                                    title   => "[% 'Buscar' | i18n %]",
+                                        ) ;
+            [% END %]
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "Borrar();",
+                                                                    title   => "[% 'Limpiar' | i18n %]",
+                                        ) ;
+            [% END %]
 
-		</td>
-	</tr>
-		<tr>
-		<td class="inputFontNormal" colspan=2>
+
+    </li>
+</ul>
+</div>
+<ul>
+    <li style="text-align:center">
 			<p class="recuadroAyuda">
 			 [% "Tipear el apellido, DNI o legajo del usuario. Presionar buscar." | i18n %]
 			</p>
-		</td>
-	</tr>
-</table>
+    </li>
+</ul>
+
+
 <div id="filterBar" style="text-align:center">
         <a href="#tablaResult" onClick="consultar('A')"> A |</a>
         <a href="#tablaResult" onClick="consultar('B')"> B |</a>
@@ -223,7 +234,7 @@ $(document).ready(function() {
 </div>
 
 <div>
-    <input type="checkbox" name="habilitados_filter" id="habilitados_filter"> S&oacute;lo habilitados 
+    <input type="checkbox" name="habilitados_filter" id="habilitados_filter">[% 'S&oacute;lo habilitados' | i18n %]
 </div>
 
 <br>
