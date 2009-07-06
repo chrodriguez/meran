@@ -926,6 +926,16 @@ ul#horizontal-list li {
     overflow:auto;
 }
 
+.permissionHigh{
+    background-color:#d40e2a;
+}
+.permissionMedium{
+    background-color:#ffdd00;
+}
+.permissionLow{
+    background-color:#68a928;
+}
+
 /*                                              fin estilos para los reportes                           */
 
 

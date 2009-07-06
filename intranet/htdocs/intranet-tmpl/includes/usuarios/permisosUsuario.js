@@ -23,19 +23,21 @@ function profileSelection(combo){
 
 function adviceGrant(checkBox,divID,risk,dontCallChecks){
     array = new Array();
-    array['low']="#68a928";
-    array['medium']="#ffdd00";
-    array['high']=" #d40e2a";
+    array['low']="permissionLow";
+    array['medium']="permissionMedium";
+    array['high']="permissionHigh";
     dontCallChecks = dontCallChecks?dontCallChecks:false;
     returnValue = false;
 
     isChecked = ($(checkBox).is(':checked'))?true:false;
 
     if (isChecked){
-        $('#'+divID).css("background-color",array[risk]);
+//         $('#'+divID).css("background-color",array[risk]);
+        $('#'+divID).addClass(array[risk]);
         returnValue = true;
     }else{
-        $('#'+divID).css("background-color","");
+//         $('#'+divID).css("background-color","");
+        $('#'+divID).removeClass(array[risk]);
     }
     if (!dontCallChecks){
         checkChecks();
