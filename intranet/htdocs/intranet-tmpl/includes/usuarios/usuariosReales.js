@@ -69,67 +69,6 @@ function updateGuardarModificacioUsuario(responseText){
 //*********************************************Fin***Modificar Datos Usuario***************************************
 
 
-
-//*******************************************Para cambiar permisos***********************************************
-
-function modificarPermisos(){
-	objAH=new AjaxHelper(updateModificarPermisos);
-	objAH.debug= true;
-	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-	objAH.usuario= USUARIO.ID;
-	objAH.tipoAccion= 'MOSTRAR_PERMISOS';
-	objAH.sendToServer();
-}
-
-function updateModificarPermisos(responseText){
-//se crea el objeto que maneja la ventana para modificar los permisos
-        if (!verificarRespuesta(responseText))
-            return(0);
-	    vModificarPermisos=new WindowHelper({draggable: true, opacity: true});
-	    vModificarPermisos.debug= true;
-	    vModificarPermisos.html=responseText;
-	    vModificarPermisos.titulo= PERMISOS_DE_ACCESO;
-	    vModificarPermisos.create();
-	    vModificarPermisos.height('220px');
-	    vModificarPermisos.width('550px');
-	    vModificarPermisos.open();
-}
-
-function guardarPermisos(){
-
-	var chck= $("input[@name=chkpermisos]:checked"); //obtengo todos los check seleccionados
-	var array= new Array;
-	var long=chck.length;
- 	if ( long == 0){
- 		alert(ELIJA_AL_MENOS_UN_PERMISO);
- 	}
- 	else{
-
-		for(var i=0; i< long; i++){
-			array[i]=chck[i].value;
-		}
-
-		objAH=new AjaxHelper(updateGuardarPermisos);
-		objAH.debug= true;
-		objAH.tipoAccion= 'GUARDAR_PERMISOS';
-		objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-		objAH.nro_socio= USUARIO.ID;
-		objAH.array_permisos= array;
-		objAH.sendToServer();
- 	}
-}
-
-function updateGuardarPermisos(responseText){
-
-	vModificarPermisos.close();
-	var Messages=JSONstring.toObject(responseText);
-	setMessages(Messages);
-}
-
-//****************************************Fin para cambiar permisos*********************************************
-
-
-
 // ***************************************** Validaciones ******************************************************
 
 

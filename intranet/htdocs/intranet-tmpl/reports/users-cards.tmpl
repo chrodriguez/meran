@@ -1,91 +1,119 @@
 [% INCLUDE "intranet-top.inc" %]
 <script language="javascript">
+    var objAH;
 
-function ordenar(orden){
-	objAH.orden=orden;
-	objAH.sendToServer();
-}
+    function changePage(ini){
+        objAH.changePage(ini);
+    }
 
-function consultar(op,orden){
-	var sur1=$("#surname1").val();
-	var sur2=$("#surname2").val();
-	var leg1=$("#legajo1").val();
-	var leg2=$("#legajo2").val();
-	var cat=$("#categoria_socio_id").val();
-	var reg=$("#regular").val();
-	var ui=$("#ui_id").val();
-	var params="surname1="+sur1+"&surname2="+sur2+"&legajo1="+leg1+"&legajo2="+leg2+"&categoria_socio="+cat+
-	"&regular="+reg+"&ui="+ui+"&op="+op+"&orden="+orden;
-	if(op == "pdf"){
-		var url= "/cgi-bin/koha/reports/users-cards.pl";
-		crearForm(url,params);//Funcion en util.js
-	}
-	else{
-		objAH=new AjaxHelper(updateInfo);
-        objAH.debug= true;
-		objAH.url= "/cgi-bin/koha/reports/users-cardsResult.pl";
-		objAH.surname1= sur1;
-		objAH.surname2= sur2;
-		objAH.legajo1= leg1;
-		objAH.legajo2= leg2;
-		objAH.categoria_socio=cat;
-		objAH.ui=ui;
-		objAH.op=op;
-		//se envia la consulta
-		objAH.sendToServer();
-	}
-}
+    function ordenar(orden){
+        objAH.orden=orden;
+        objAH.sendToServer();
+    }
 
-function updateInfo(responseText){
-	$("#result").html(responseText);
-	zebra("tablaResult");
-}
+    function consultar(op,orden){
+        var sur1=$("#surname1").val();
+        var sur2=$("#surname2").val();
+        var leg1=$("#legajo1").val();
+        var leg2=$("#legajo2").val();
+        var cat=$("#categoria_socio_id").val();
+        var reg=$("#regular").val();
+        var ui=$("#ui_id").val();
+        var params="surname1="+sur1+"&surname2="+sur2+"&legajo1="+leg1+"&legajo2="+leg2+"&categoria_socio="+cat+
+        "&regular="+reg+"&ui="+ui+"&op="+op+"&orden="+orden;
+        if(op == "pdf"){
+            var url= "/cgi-bin/koha/reports/users-cards.pl";
+            crearForm(url,params);//Funcion en util.js
+        }
+        else{
+            objAH=new AjaxHelper(updateInfo);
+            objAH.debug= true;
+            objAH.url= "/cgi-bin/koha/reports/users-cardsResult.pl";
+            objAH.surname1= sur1;
+            objAH.surname2= sur2;
+            objAH.legajo1= leg1;
+            objAH.legajo2= leg2;
+            objAH.categoria_socio=cat;
+            objAH.ui=ui;
+            objAH.funcion = 'changePage';
+            objAH.op=op;
+            inicial = '0';
+            //se envia la consulta
+            objAH.sendToServer();
+        }
+    }
 
+    function updateInfo(responseText){
+        $("#result").html(responseText);
+        zebra("tablaResult");
+    }
+
+    $(document).ready(function() {
+        onEnter('surname1',consultar);
+        onEnter('surname2',consultar);
+        onEnter('legajo1',consultar);
+        onEnter('legajo2',consultar);
+    });
 </script>
 
 <div class="titulos_interior" >[% "Generar Carnets de Usuarios" | i18n %]</div>
 
 <center>
 
-<table border="0" cellspacing="0" cellpadding="0">
-<tr valign="top"><td>
-<table border="0" cellspacing="0" cellpadding="0">
-	
-	<tr class="inputFontNormal">
-	<td>[% "Apellido:" | i18n %]</td>
-	<td colspan="2">
-	[% "Desde:" | i18n %]&nbsp; <input type='text' id='surname1' name='surname1' value='[% surname1 %]'><br>
-	[% "Hasta:" | i18n %]&nbsp; <input type='text' id='surname2' name='surname2' value='[% surname2 %]'></td>
-	</tr>
-	 <tr class="inputFontNormal">
-	 <td>[% "Unidad de informaci&oacute;n:" | i18n %]</td>
-	 <td colspan="2">[% unidades %]</td>
-	 </tr>
-	<tr class="inputFontNormal">
-	<td>[% "Categor&iacute;as:" | i18n %]</td>
-	<td colspan="2">[% categories %]</td>
-	</tr>
-</table>
-</td>
-<td>&nbsp;</td>
-<td>
-<table border="0" cellspacing="0" cellpadding="0">
-	<tr class="inputFontNormal">
-	<td>[% "Legajo:" | i18n %]</td>
-	<td colspan="2">
-	[% "Desde:" | i18n %]&nbsp; <input type='text' id='legajo1' name='legajo1' value='[% legajo1 %]'><br>
-	[% "Hasta:" | i18n %]&nbsp; <input type='text' id='legajo2' name='legajo2' value='[% legajo2 %]'></td>
-	</tr>
-	<tr class="inputFontNormal">
-	<td>[% "Regularidad:" | i18n %]</td>
-	<td colspan="2"> [% regulares %]</td>
-	</tr>
-</table>
-</td></tr></table>
-<br>
-<input type="image" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="consultar('search','');">
+<div class="filtros_reportes">
 
-<br><br>
+    <ul class="filtros_reportes_izq">
+        <li>
+            <b>[% "Apellido:" | i18n %]</td>
+        </li>
+
+        <li>
+            [% "Desde:" | i18n %]&nbsp; 
+            <input type='text' id='surname1' name='surname1' value='[% surname1 %]'>
+        </li>
+        <li>
+            [% "Hasta:" | i18n %]&nbsp; 
+            <input type='text' id='surname2' name='surname2' value='[% surname2 %]'>
+        </li>
+        <li>
+            [% "Unidad de informaci&oacute;n:" | i18n %]
+            [% unidades %]
+        </li>
+        <li>
+            [% "Categor&iacute;as:" | i18n %]
+            [% categories %]
+        </li>
+    </ul>
+    <ul class="filtros_reportes_der">
+        <li>
+            [% "Legajo:" | i18n %]
+        </li>
+        <li>
+            [% "Desde:" | i18n %]&nbsp; 
+            <input type='text' id='legajo1' name='legajo1' value='[% legajo1 %]'>
+        </li>
+        <li>
+            [% "Hasta:" | i18n %]&nbsp; 
+            <input type='text' id='legajo2' name='legajo2' value='[% legajo2 %]'>
+        </li>
+        <li>
+            [% "Regularidad:" | i18n %]
+            [% regulares %]
+        </li>
+    </ul>
+</div>
+
+<div class="buttonContainerHorizontal">
+    [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Buscar' | i18n %]",
+                                                title    =>  "[% 'Buscar' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "consultar('search','');",
+                                            );
+    [% END %]
+</div>
+
 <div id="result"></div>
 
 <!-- Formulario para poder crear el pdf -->

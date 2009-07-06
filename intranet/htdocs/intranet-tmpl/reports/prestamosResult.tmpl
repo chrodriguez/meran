@@ -1,12 +1,12 @@
 
-<p class="inputFontNormal">
+<p >
     [% "La cantidad de prestamos es :" | i18n %] [% cantidad %]</p>
 <p align="center">
     [% paginador %]
 </p>
 
 
-<table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+<table id="tablaResult" class="tabla_datos" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
  	<tr class="tablaresultadoTitle">
 		
 		<th>
@@ -48,13 +48,13 @@
 
 	<tr align='center'>
 		
-		<td class="inputFontNormal"> 
+		<td > 
 		      [% IF prestamo.vencido %]
                <input type="checkbox" name="chkboxPrestamos" value="[% prestamo.socio.getNro_socio %]" id="[% prestamo.socio.getNro_socio %]">
             [% END %]
 		</td>
 
-    	<td class="inputFontNormal"> 
+    	<td > 
             [% PERL %]
                 print C4::AR::Filtros::link_to( text =>     "[%  prestamo.socio.persona.getNombre %]",
                                                 url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
@@ -64,17 +64,17 @@
             [% END %]
 		</td>
 
-		<td class="inputFontNormal"> 
+		<td > 
 			[% prestamo.socio.persona.getNombre %] 
 		</td>
 
-		<td class="inputFontNormal"> 
+		<td > 
 			[% prestamo.socio.getNro_socio %]
 		</td>
 
-		<td class="inputFontNormal"> 
+		<td > 
 			[% IF prestamo.socio.persona.getEmail %]
-               <a class="inputFontNormal" href="mailto:[% prestamo.socio.persona.getEmail %]">
+               <a  href="mailto:[% prestamo.socio.persona.getEmail %]">
                     [% prestamo.socio.persona.getEmail %]
               </a>
    		[% ELSE %]
@@ -82,22 +82,22 @@
         [% END %]
 		</td>
 
-		<td class="inputFontNormal"> 
+		<td > 
 			[% prestamo.getFecha_prestamo %]
 		</td>
 
-		<td class="inputFontNormal"> 
+		<td > 
 			[% prestamo.getFecha_vencimiento %]
 		</td>
 
-		<td class="inputFontNormal"> 
+		<td > 
 			<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% prestamo.getId3 %]&barcode=[% prestamo.nivel3.getBarcode %]&signatura_topografica=[% prestamo.nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'>
             [% prestamo.nivel3.getBarcode %]
          </a>
 		</td>
 
-		<td class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/detalle.pl?id1=[% prestamo.nivel3.getId1 %]">
+		<td > 
+			<a  href="/cgi-bin/koha/detalle.pl?id1=[% prestamo.nivel3.getId1 %]">
             [% prestamo.nivel3.getSignatura_topografica %]
          </a>
 		</td>
@@ -113,7 +113,7 @@
 <input id="contacto" type="image" src="[% themelang %]/images/contactar.png" title=[% "Enviar mail a usuarios con ejemplares atrasados" | i18n %]>
 </a>
 &nbsp;&nbsp;&nbsp;
-<a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% planilla %]">[% "Generar planilla" | i18n %] 
+<a  href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% planilla %]">[% "Generar planilla" | i18n %] 
 <img src="[% themelang %]/images/sxc.png" border="0">
 </a>
 <br>

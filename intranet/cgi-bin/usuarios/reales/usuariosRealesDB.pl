@@ -50,32 +50,6 @@ if($tipoAccion eq "CAMBIAR_PASSWORD"){
     print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "CAMBIAR_PASSWORD")
-=item
-Aca se maneja el cambio de permisos para el usuario
-=cut
-elsif($tipoAccion eq "GUARDAR_PERMISOS"){
-    my ($userid, $session, $flags) = checkauth( $input, 
-                                        $authnotrequired,
-                                        {   ui => 'ANY', 
-                                            tipo_documento => 'ANY', 
-                                            accion => 'MODIFICACION', 
-                                            entorno => 'usuarios'},
-                                        "intranet"
-                            );
-
-    my %params;
-    $params{'nro_socio'}= $obj->{'nro_socio'};
-    $params{'array_permisos'}= $obj->{'array_permisos'};
-
-    C4::AR::Validator::validateParams('U389',$obj,['nro_socio','array_permisos'] );
-
-    my ($Message_arrayref)= C4::AR::Usuarios::t_cambiarPermisos(\%params);
-    my $infoOperacionJSON=to_json $Message_arrayref;
-
-    C4::Output::printHeader($session);
-    print $infoOperacionJSON;
-
-} #end if($tipoAccion eq "GUARDAR_PERMISOS")
 
 
 =item
@@ -167,58 +141,6 @@ elsif($tipoAccion eq "ELIMINAR_AUTORIZADO"){
     print $infoOperacionJSON;
 
 } 
-=item
-Se buscan los permisos del usuario y se muestran por pantalla
-=cut
-elsif($tipoAccion eq "MOSTRAR_PERMISOS"){
-    my $flagsrequired;
-    $flagsrequired->{permissions}=1;
-
-    my ($template, $session, $t_params) = get_template_and_user({
-                                    template_name => "usuarios/reales/permisos-usuario.tmpl",
-                                    query => $input,
-                                    type => "intranet",
-                                    authnotrequired => 0,
-                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
-                                    debug => 1,
-    });
-    C4::AR::Validator::validateParams('U389',$obj,['usuario'] );
-
-
-    my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'usuario'});
-    #SI NO EXISTE EL SOCIO IMPRIME 0, PARA INFORMAR AL CLIENTE QUE ACCION REALIZAR
-    C4::AR::Validator::validateObjectInstance($socio);
-
-    #Obtengo los permisos del socio
-    my $flags_hashref= $socio->getPermisos;
-
-    #Obtengo todos los permisos
-    my $permisos_array_ref = C4::Modelo::UsrPermiso::Manager->get_usr_permiso();
-
-    my @loop;
-
-    foreach my $permiso (@$permisos_array_ref){
-        my $checked='';
-
-        if ( $flags_hashref->{ $permiso->{'flag'} } ) {
-            $checked='checked';
-        }
-
-        my %row = (     bit => $permiso->{'bit'},
-                        flag =>  $permiso->{'flag'},
-                        checked => $checked,
-                        flagdesc => $permiso->{'flagdesc'} );
-
-        push @loop, \%row;
-    }
-
-    $t_params->{'loop'}= \@loop;
-    $t_params->{'tiene'}=$socio->tienePermisos($flagsrequired);
-
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
-
-} #end if($tipoAccion eq "MOSTRAR_PERMISOS")
-
 
 =item
 Se elimina el usuario
@@ -230,7 +152,7 @@ elsif($tipoAccion eq "ELIMINAR_USUARIO"){
                                             tipo_documento => 'ANY', 
                                             accion => 'BAJA', 
                                             entorno => 'usuarios'},
-                                        "intranet"
+                                            "intranet"
                             );
 
     my %params;

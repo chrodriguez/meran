@@ -1,5 +1,5 @@
 [% paginador %]
-<table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%">
+<table id="tablaResult" class="tabla_datos" border=0 cellspacing=0 cellpadding=0 width="100%">
     <tr class="tablaresultadoTitle">
         <th>[% "Mes" | i18n %]</th>
         <th>[% "Prestamos" | i18n %]</th>
@@ -14,44 +14,44 @@
 [% FOREACH prestamo IN estadisticas_anuales %]
 	<tr align='center'>
 		
-		<td class="inputFontNormal"> 
+		<td > 
             [% prestamo.getFecha_prestamo_formateada %]
 		</td>
-		<td class="inputFontNormal"> 
+		<td > 
             [% prestamo.agregacion_temp %]
 		</td>
-		<td class="inputFontNormal"> 
+		<td > 
 			[% IF renovaciones %] 
                             [% renovaciones %]
 			[% ELSE %]
                             -- 
                         [% END %]
 		</td>
-		<td class="inputFontNormal"> 
+		<td > 
             [% prestamo.getDevoluciones %]
         </td>
-		<td class="inputFontNormal">
+		<td >
 			[% IF DO %] 
                             [% DO %]
 			[% ELSE %]
                             -- 
                         [% END %]
 		</td> 
-		<td class="inputFontNormal">
+		<td >
 			[% IF FO %]
                             [% FO %]
 			[% ELSE %]
                             -- 
                         [% END %]
 		</td> 
-		<td class="inputFontNormal">
+		<td >
 			[% IF SA %]
                             [% SA %]
 			[% ELSE %]
                             -- 
                         [% END %]
 		</td>
-		<td class="inputFontNormal">
+		<td >
 			[% IF ES %]
                              [% ES %]
 			[% ELSE %]

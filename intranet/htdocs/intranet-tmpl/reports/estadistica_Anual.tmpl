@@ -21,19 +21,14 @@ function updateInfo(responseText){
 
 <div class="titulos_interior" >[% "Actividades anuales" | i18n %]</div>
 
-<table border="0" cellspacing="0" cellpadding="0">
-	<tr>
-		<td class="inputFontNormal">[% "Seleccione un a&ntilde;o:  " | i18n %]</td>
-		<td class="inputFontNormal">[% year %]</td>
-	</tr>
-</table>
-
+<div class="filtros_reportes">
+    <ul class="filtros_reportes_izq">
+        <li>[% "Seleccione un a&ntilde;o:  " | i18n %] [% year %]</li>
+    </ul>
+</div>
 
 <br>
 
-<center>
 <div id="result"></div>
-</center>
 
-<br><br>
 [% INCLUDE "intranet-bottom.inc" %]

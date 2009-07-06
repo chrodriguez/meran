@@ -1361,25 +1361,25 @@ sub signaturamin {
 SE USA EN EL REPORTE Generar Etiquetas
 =cut
 
+=item
 sub listaDeEjemplares {
-	my ($minbarcode,$maxbarcode,$minlocation,$maxlocation,$beginlocation,$branch,$ini,$fin,$orden) = @_;
-	my @bind;
-	my $branchcode=  $branch || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
-	my $dbh = C4::Context->dbh;
-	my $query="SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id2, homebranch
-	FROM ((cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2)
-	INNER JOIN cat_nivel1 n1 ON n1.id1 = n2.id1)
-	WHERE ";
-	
-	if ($beginlocation ne '') {
-		$query.=" (signatura_topografica LIKE '".$beginlocation."%') ";
-	}
-	else {
-	
-		if (($minbarcode ne '') and ($maxbarcode ne '')) {
-			$query.=" (barcode BETWEEN ? AND ?) ";
-			push(@bind,$minbarcode);
-			push(@bind,$maxbarcode);
+    my ($minbarcode,$maxbarcode,$minlocation,$maxlocation,$beginlocation,$branch,$ini,$fin,$orden) = @_;
+    my @bind;
+    my $branchcode=  $branch || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
+    my $dbh = C4::Context->dbh;
+    my $query="SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id2, homebranch
+    FROM ((cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2)
+    INNER JOIN cat_nivel1 n1 ON n1.id1 = n2.id1)
+    WHERE ";
+
+    if ($beginlocation ne '') {
+        $query.=" (signatura_topografica LIKE '".$beginlocation."%') ";
+    }
+    else {
+        if (($minbarcode ne '') and ($maxbarcode ne '')) {
+            $query.=" (barcode BETWEEN ? AND ?) ";
+            push(@bind,$minbarcode);
+            push(@bind,$maxbarcode);
 		}
 		if (($minlocation ne '') and ($maxlocation ne '')) {
 			if (($minbarcode ne '') and ($maxbarcode ne '')) {$query.=" AND ";} #Se van a hacer las 2 consultas
@@ -1437,5 +1437,53 @@ sub listaDeEjemplares {
 		return (0,@results);
 	}	
 }
+=cut
+sub listaDeEjemplares {
+    my ($params) = @_;
 
+    my $id_ui=  $params->{'id_ui'} || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
+
+    my $query="SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id2, homebranch
+    FROM ((cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2)
+    INNER JOIN cat_nivel1 n1 ON n1.id1 = n2.id1)
+    WHERE ";
+
+    my @filtros;
+
+    if (C4::AR::Utilidades::validateString($params->{'beginLocation'})){
+        push (@filtros,( signatura_topografica => { like => $params->{'beginLocation'}.'%'}));
+    }
+    else {
+        if ((C4::AR::Utilidades::validateString($params->{'minbarcode'})) & (C4::AR::Utilidades::validateString($params->{'maxbarcode'})) ){
+            push (@filtros,(barcode => {eq => $params->{'minBarcode'},
+                                        gt => $params->{'minBarcode'},
+                                        }));
+            push (@filtros,(barcode => {eq => $params->{'maxBarcode'},
+                                        lt => $params->{'maxBarcode'},
+                                        }));
+        }
+        if ( (C4::AR::Utilidades::validateString($params->{'minBarcode'})) and (C4::AR::Utilidades::validateString($params->{'maxBarcode'})) ){
+                push (@filtros,(signatura_topografica => {eq => $params->{'minBarcode'},
+                                            gt => $params->{'minBarcode'},
+                                            }));
+                push (@filtros,(signatura_topografica => {eq => $params->{'maxBarcode'},
+                                            lt => $params->{'maxBarcode'},
+                                            }));
+        }
+    }
+
+    push (@filtros,( id_ui_origen => { eq => $params->{'id_ui'}.'%'}));
+
+    my $results_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count( query => \@filtros,
+                                                                              require_objects => ['nivel2','nivel1'],
+                                                                            );
+
+    my $results = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( query => \@filtros,
+#                                                                   limit => $params->{'cantR'},
+#                                                                   offset => $params->{'ini'},
+                                                                  require_objects => ['nivel2','nivel1'],
+                                                                 );
+
+    return ($results_count,$results);
+}
 1;

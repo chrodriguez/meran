@@ -1,48 +1,49 @@
 
 <b>[% "La cantidad de usuarios es :" | i18n %] [% cantidad %]</b><br>
-<table id="tablaResult" class="tablaResult" border="0" cellspacing="0" cellpadding="0"  width="100%">
-	<tr>
+[% paginador %]
+<table id="tablaResult" class="tabla_datos" border="0" cellspacing="0" cellpadding="0"  width="100%">
+    <tr>
+        <td class="tablaresultadoTitle click" onclick="ordenar('apellido')" title=[% "Ordenar por apellido" | i18n %]>[% "Apellido" | i18n %]</td>
+        <td class="tablaresultadoTitle click" onclick="ordenar('nombre')" title=[% "Ordenar por nombre" | i18n %]>[% "Nombre" | i18n %]</td>
+        <td class="tablaresultadoTitle click" onclick="ordenar('direccion')" title=[% "Ordenar por direccion" | i18n %]>[% "Direcci&oacute;n" | i18n %]</td>
+        <td class="tablaresultadoTitle click" onclick="ordenar('nro_socio')" title=[% "Ordenar por tarjeta de id." | i18n %]>[% "Tarjeta de Id." | i18n %]</td>
+        <td class="tablaresultadoTitle click" onclick="ordenar('legajo')" title=[% "Ordenar por legajo" | i18n %]>[% "Legajo" | i18n %]</td>
+        <td class="tablaresultadoTitle">[% "Ciudad" | i18n %]</td>
+        <td class="tablaresultadoTitle click" onclick="ordenar('telefono')" title=[% "Ordenar por telefono" | i18n %]>[% "Telefono" | i18n %]</td>
+        <td class="tablaresultadoTitle click" onclick="ordenar('email')" title=[% "Ordenar por mail" | i18n %]>[% "E-mail" | i18n %]</td>
+        <td class="tablaresultadoTitle click" onclick="ordenar('nacimiento')" title=[% "Ordenar por fecha de ingreso" | i18n %]>[% "Ingreso" | i18n %]</td>
+        <td class="tablaresultadoTitle click" onclick="ordenar('cod_categoria')" title=[% "Ordenar por categoria" | i18n %]>[% "Categoria" | i18n %]</td>
+        <td class="tablaresultadoTitle">Regularidad</td>
+    </tr>
 
-		<td class="tablaresultadoTitle click" onclick="ordenar('apellido')" title=[% "Ordenar por apellido" | i18n %]>[% "Apellido" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('nombre')" title=[% "Ordenar por nombre" | i18n %]>[% "Nombre" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('direccion')" title=[% "Ordenar por direccion" | i18n %]>[% "Direcci&oacute;n" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('nro_socio')" title=[% "Ordenar por tarjeta de id." | i18n %]>[% "Tarjeta de Id." | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('legajo')" title=[% "Ordenar por legajo" | i18n %]>[% "Legajo" | i18n %]</td>
-		<td class="tablaresultadoTitle">[% "Ciudad" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('telefono')" title=[% "Ordenar por telefono" | i18n %]>[% "Telefono" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('email')" title=[% "Ordenar por mail" | i18n %]>[% "E-mail" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('nacimiento')" title=[% "Ordenar por fecha de ingreso" | i18n %]>[% "Ingreso" | i18n %]</td>
-		<td class="tablaresultadoTitle click" onclick="ordenar('cod_categoria')" title=[% "Ordenar por categoria" | i18n %]>[% "Categoria" | i18n %]</td>
-		<td class="tablaresultadoTitle">Regularidad</td>
-
-	</tr>
-
-[% FOREACH RESULTSLOOP %]
-	<tr class="inputFontNormal" align="center">
-		
-		<td> 
-			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">
-                            [% socio.persona.getApellido %]</a>
-		</td>
-		<td> [% socio.persona.getNombre %] </td>
-  		<td> [% socio.persona.getDireccion %]</td>
-  		<td> [% socio.getNro_socio %]</td>
-  		<td> [% socio.persona.legajo %]</td>
-  		<td> [% socio.persona.ciudad.getNombre %] </td>
-  		<td> [% socio.persona.getTelefono %] </td>
-  		<td> 
-                      [% IF ok %] 
-                            [% socio.persona.getEmail %]
-                      [% ELSE %]
-                            <a href="mailto:[% socio.persona.getEmail %]">[% socio.persona.getEmail %] </a>
-                      [% END %]
-                </td>
-  		<td> [% socio.persona.getNacimiento %]</td>
-  		<td> [% socio.persona.categoria.getDescription %]</td>
-  		<td><b>[% socio.estado.getRegular %]</b></td>
- 		
-  	</tr>
-
+[% FOREACH socio IN RESULTSLOOP %]
+    <tr align="center">
+        <td> 
+            [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     "[% socio.persona.getApeYNom %]",
+                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                params =>   ["nro_socio=[% socio.getNro_socio %]"],
+                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                            ) ;
+            [% END %]
+        </td>
+        <td> [% socio.persona.getNombre %] </td>
+        <td> [% socio.persona.getDireccion %]</td>
+        <td> [% socio.getNro_socio %]</td>
+        <td> [% socio.persona.legajo %]</td>
+        <td> [% socio.persona.ciudad.getNombre %] </td>
+        <td> [% socio.persona.getTelefono %] </td>
+        <td> 
+            [% IF ok %] 
+                [% socio.persona.getEmail %]
+            [% ELSE %]
+                <a href="mailto:[% socio.persona.getEmail %]">[% socio.persona.getEmail %] </a>
+            [% END %]
+        </td>
+        <td> [% socio.persona.getNacimiento %]</td>
+        <td> [% socio.persona.categoria.getDescription %]</td>
+        <td><b>[% socio.estado.getRegular %]</b></td>
+    </tr>
 [% END %]
 
 </table>
@@ -50,7 +51,16 @@
 <p>
 <b>[% "La cantidad de usuarios es :" | i18n %] [% cantidad %] </b><br>
 
-<img border="0" src="/intranet-tmpl/images/generarcarnet.png" alt=[% "Generar Carnets" | i18n %] onClick="consultar('pdf','');">
+<div class="buttonContainerHorizontal">
+    [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Carnets' | i18n %]",
+                                                title    =>  "[% 'Carnets' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "consultar('pdf','');",
+                                            );
+    [% END %]
+</div>
 
 </p>
 

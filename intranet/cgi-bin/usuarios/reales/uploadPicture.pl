@@ -2,6 +2,7 @@
 use CGI;
 use C4::Context;
 use C4::AR::UploadFile;
+use C4::Auth;
 use JSON;
 
 my $query=new CGI;
@@ -21,9 +22,9 @@ my ($error,$codMsg,$message)= &C4::AR::UploadFile::uploadPhoto($bornum,$filepath
 
 
 my %infoOperacion = (
-			codMsg	=> $codMsg,
-			error 	=> $error,
-			message => $message,
+        codMsg	=> $codMsg,
+        error 	=> $error,
+        message => $message,
 );
 
 my $infoOperacionJSON=to_json \%infoOperacion;

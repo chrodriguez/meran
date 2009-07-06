@@ -2,7 +2,7 @@
 <br>
 <br>
 <center>
-<p class="inputFontNormal"> 
+<p > 
 	<b>[% "La cantidad de operaciones hechas fueron: " | i18n %]&nbsp;[% cantidad %]<br>
 </p><br>
 
@@ -28,7 +28,7 @@
 	</tr>
 
     [% FOREACH hist IN historico %]
-        <tr align='center' class="inputFontNormal">
+        <tr align='center' >
         <br><br>
 		    <td>
                 [% PERL %]
@@ -94,7 +94,7 @@
 			    [% END %]
 		    </td>
             <td>
-			    <textarea id="[% hist.getId %]" class="inputFontNormal" name="notas" cols="15" rows="4">
+			    <textarea id="[% hist.getId %]"  name="notas" cols="15" rows="4">
                                     [% hist.getNota %]
                 </textarea>
 		        <br>

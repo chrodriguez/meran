@@ -1,14 +1,14 @@
 [% USE HTML %]
 <br>
 
-<p class="inputFontNormal" align="center">
+<p  align="center">
     [% "La cantidad Total de ejemplares es:" | i18n %] [% cantidad %]
 </p>
 
 <br>
 
 
-<table id="tablaResult" class="tablaResult" border="0" cellspacing="0" cellpadding="0" width="100%">
+<table id="tablaResult" class="tabla_datos" border="0" cellspacing="0" cellpadding="0" width="100%">
     <tr class="tablaresultadoTitle click">
 
         <th onClick="ordenar('barcode');">[% "Nro. de Inventario" | i18n %]</th>
@@ -22,7 +22,7 @@
     </tr>
 
     [% FOREACH cat_nivel3 IN results %]
-            <tr class="inputFontNormal">
+            <tr >
                     <td  align="center">
                             [% cat_nivel3.getBarcode %]
                     </td>
@@ -55,7 +55,7 @@
 <br><br>
 
 <center>
-    <a class="inputFontNormal" href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% name %]">[% "Generar planilla " | i18n %]
+    <a  href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% name %]">[% "Generar planilla " | i18n %]
         <img src="[% interface %]/[% themelang %]/images/sxc.png" border="0">
     </a>
 </center>

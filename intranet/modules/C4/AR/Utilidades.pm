@@ -116,6 +116,30 @@ sub generarComboDeAnios{
                                 );
     return ($year_select);
 }
+
+
+sub generarComboRegular{
+
+    my @select_regular;
+    my %select_regular;
+
+    push @select_regular, '1';
+    push @select_regular, '0';
+    push @select_regular, 'Todos';
+    $select_regular{'1'} = 'Regular';
+    $select_regular{'0'} = 'Irregular';
+    $select_regular{'Todos'} = 'Todos';
+
+    my $CGIregular=CGI::scrolling_list(  -name      => 'regular',
+                                            -id        => 'regular',
+                                            -values    => \@select_regular,
+                                            -defaults  => 'Todos',
+                                            -labels    => \%select_regular,
+                                            -size      => 1,
+                                      );
+    return ($CGIregular);
+}
+
 sub crearComponentes{
 
     my ($tipoInput,$id,$values,$labels,$valor)=@_;
@@ -881,7 +905,7 @@ sub InitPaginador{
     my $ini;
     my $cantR=cantidadRenglones();
 
-    if (($iniParam eq "")){
+    if (($iniParam eq "")|($iniParam <= 0)){
             $ini=0;
         $pageNumber=1;
     } else {

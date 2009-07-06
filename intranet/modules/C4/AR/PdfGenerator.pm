@@ -4,6 +4,7 @@ use strict;
 require Exporter;
 use C4::Context;
 use PDF::Report;
+# use PDF::API2;
 use C4::AR::Usuarios;
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -306,34 +307,32 @@ sub cardGenerator {
 #  Genera los carnets a partir de una busqueda
 
 sub batchCardsGenerator {
-        my ($count,$socios) = @_;
+    my ($count,$socios) = @_;
 #   my $cantidad=$count;
 #   my $hojas= $count / 8;
     my $i=0;
     my $pag=1;
-    my $pdf = newPdf();
-        
-    while ($i<$count)
-    {
-    $pdf->newpage($pag);
+    my $pdf = newPdf;
+
+    while ($i<$count){
+        $pdf->newpage($pag);
         $pdf->openpage($pag);
     #Hoja A4 :  X diferencia 254 - Y diferencia 160 
-    
-    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,14,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,174,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,334,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,494,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,654,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,14,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,174,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,334,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,494,$pdf);$i++;}
-    if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,654,$pdf);$i++;}
-    $pag++;
+        if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,14,$pdf);$i++;}
+        if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,174,$pdf);$i++;}
+        if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,334,$pdf);$i++;}
+        if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,494,$pdf);$i++;}
+        if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,14,654,$pdf);$i++;}
+        if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,14,$pdf);$i++;}
+        if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,174,$pdf);$i++;}
+        if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,334,$pdf);$i++;}
+        if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,494,$pdf);$i++;}
+        if ($i<$count){ generateCard(@$socios[$i]->getNro_socio,270,654,$pdf);$i++;}
+        $pag++;
     }
     my $tmpFileName= "carnets.pdf";
     &imprimirFinal($pdf,$tmpFileName);
-    }   
+}
 
 
 #genera a partir de una coordenada
@@ -351,18 +350,18 @@ sub generateCard {
 
     my ($pagewidth, $pageheight) = $pdf->getPageDimensions();
     $pdf->setSize(7);
-                                                                          #Insert a picture of the borrower if 
-        my $picturesDir= C4::Context->config("picturesdir");
-        my $foto= undef;
+    my $picturesDir= C4::Context->config("picturesdir");
+    C4::AR::Debug::debug("PICTURES DIR: ".$picturesDir);
+    my $foto= undef;
     if (opendir(DIR, $picturesDir)) {
         my $pattern= $nro_socio.".*";
         my @file = grep { /$pattern/ } readdir(DIR);
         $foto= join("",@file) if scalar(@file);
         closedir DIR;
     }
-     #if ($foto){
-    #   $pdf->addImg($picturesDir.'/'.$foto, $x+154, $pageheight - ($y+75));
-    #   } else {
+#    if ($foto){
+#         $pdf->addImg($picturesDir.'/'.$foto, $x+154, $pageheight - ($y+75));
+#    } else {
         $pdf->drawRect($x+154, $pageheight - ($y-10), $x+239 , $pageheight - ($y+75));
         $pdf->addRawText("3 x 3 cm.",$x+176,$pageheight - ($y+36));
     #   }
@@ -378,7 +377,7 @@ sub generateCard {
      #Write the borrower data into the pdf file
      $pdf->setSize(7);
      $pdf->setFont("Arial-Bold");
-         $pdf->addRawText(uc($socio->categoria->getDescription),$x,$pageheight - ($y+4));
+     $pdf->addRawText(uc($socio->categoria->getDescription),$x,$pageheight - ($y+4));
      $pdf->addRawText(uc($socio->ui->getNombre),$x,$pageheight - ($y+11));
      $pdf->addRawText("BIBLIOTECA",$x,$pageheight - ($y+18));
      $pdf->setFont("Arial");

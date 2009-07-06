@@ -125,14 +125,28 @@
                         </li>
                      </ul>
                   </li>
-                  <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Importaci&oacute;n' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/importacion.pl", 
-                                                                title =>    "[% 'Importaci&oacute;n' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                  </li>
+
+                  <li><h3 class="menu_intermedio">[% 'Herramientas' | i18n %]</h3>
+                    <ul>
+                        <li>
+                                    [% PERL %]
+                                        print C4::AR::Filtros::link_to( text =>     "[% 'Importar' | i18n %]",
+                                                                        url =>      "/cgi-bin/koha/importacion.pl", 
+                                                                        title =>    "[% 'Importaci&oacute;n' | i18n %]"
+                                                                    ) ;
+                                    [% END %]
+                        </li>
+                        <li>
+                                    [% PERL %]
+                                        print C4::AR::Filtros::link_to( text =>     "[% 'Exportar' | i18n %]",
+                                                                        url =>      "/cgi-bin/koha/Exportacion.pl", 
+                                                                        title =>    "[% 'Exportaci&oacute;n' | i18n %]"
+                                                                    ) ;
+                                    [% END %]
+                        </li>
+                   </ul>
+                 </li>
+
                   <li><h3 class="menu_intermedio">[% 'Control de autoridades' | i18n %]</h3>
 					<ul>
 						<li>
@@ -153,7 +167,6 @@
                         </li>
 					</ul>
                   </li>
-
 
                 </ul>
            

@@ -1,10 +1,10 @@
 <center>
-<p class="inputFontNormal"> 
+<p > 
 	<b>[% "La cantidad de modificaciones hechas fueron:" | i18n %] &nbsp;[% cant %]</b>
 </p><br>
 
 [% paginador %]
-<table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=0 width="100%">
+<table id="tablaResult" class="tabla_datos" border=0 cellspacing=0 cellpadding=0 width="100%">
 	<tr>
 		<th class="tablaresultadoTitle click" onclick="ordenar('surname')" title=[% "Ordenar por usuario" | i18n %]>[% "Usuario" | i18n %]</th>
 		<th class="tablaresultadoTitle click" onclick="ordenar('fecha')" title=[% "Ordenar por fecha" | i18n %]>[% "Fecha" | i18n %]</th>
@@ -17,7 +17,7 @@
 
 [% FOREACH registro IN registros %]
 	
-  	<tr align='center' class="inputFontNormal">
+  	<tr align='center' >
 
         <td> 
             [% PERL %]
@@ -36,7 +36,7 @@
 		<td><a href="/cgi-bin/koha/reports/moredetail2.pl?tipo=[% registro.tipo %]&bib=[% registro.numero %]">[% registro.numero %]</a></td>
 		
   		<td> 
-			<textarea class="inputFontNormal" id="[% registro.idModificacion %]" name="notas2" cols="20" rows="6">[% registro.nota %]</textarea>
+			<textarea  id="[% registro.idModificacion %]" name="notas2" cols="20" rows="6">[% registro.nota %]</textarea>
 		</td>
 		<!-- Aca se guarda la nota de la modificacion con la funcion nota(id) que esta declarada en el archivo registro.tmpl -->
   		<td> 

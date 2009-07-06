@@ -123,55 +123,55 @@
 
 [% END %]
 
-
-<div class="titulo_arriba_tabla">[% "RESERVAS EN ESPERA" | i18n %]</div>
-	
-	<table class="reservasEnEsperaResult tabla_datos" cellspacing=0  cellpadding=0  border=0   width="100%">
-		<tr valign=middle class="tablaresultadoTitle">
-			<th>[% "T&iacute;tulo" | i18n %]</th>
-			<th>[% "Autor" | i18n %]</th>
-			<th>[% "Edici&oacute;n" | i18n %]</th>
-			<th>[% "Volumen" | i18n %]</th>
-			<th>[% "Cancelar" | i18n %]</th>
-		</tr>
-    [% FOREACH reserva IN RESERVAS_ESPERA %]
-		<tr align="center">
-		
-			<td width="16%"> 
-			[% PERL %]
-				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
-												url => 		"/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
-												params =>	["id1=[% reserva.nivel2.nivel1.getId1 %]"],
-											) ;
-			[% END %]
-			</td>
-			<td>
-                [% IF reserva.nivel3.nivel1.getAutor %]
-                    [% reserva.nivel3.nivel1.cat_autor.getCompleto %]
-                [% ELSE %]
-                    &nbsp;
+[% IF RESERVAS_ESPERA %]
+    <div class="titulo_arriba_tabla">[% "RESERVAS EN ESPERA" | i18n %]</div>
+	    
+	    <table class="reservasEnEsperaResult tabla_datos" cellspacing=0  cellpadding=0  border=0   width="100%">
+		    <tr valign=middle class="tablaresultadoTitle">
+			    <th>[% "T&iacute;tulo" | i18n %]</th>
+			    <th>[% "Autor" | i18n %]</th>
+			    <th>[% "Edici&oacute;n" | i18n %]</th>
+			    <th>[% "Volumen" | i18n %]</th>
+			    <th>[% "Cancelar" | i18n %]</th>
+		    </tr>
+        [% FOREACH reserva IN RESERVAS_ESPERA %]
+		    <tr align="center">
+		    
+			    <td width="16%"> 
+			    [% PERL %]
+				    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+												    url => 		"/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
+												    params =>	["id1=[% reserva.nivel2.nivel1.getId1 %]"],
+											    ) ;
+			    [% END %]
+			    </td>
+			    <td>
+                    [% IF reserva.nivel3.nivel1.getAutor %]
+                        [% reserva.nivel3.nivel1.cat_autor.getCompleto %]
+                    [% ELSE %]
+                        &nbsp;
+                    [% END %]
+			    </td>
+            <td>  
+                [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
+                </td>
+        
+                <td> 
+                [% IF reserva.nivel3.nivel2.getVolumen %] t [% reserva.nivel3.nivel2.getVolumen %] 
+                    [% IF reserva.nivel3.nivel2.getVolumenDesc %] ([% reserva.nivel3.nivel2.getVolumenDesc %])  [% END %] 
                 [% END %]
-			</td>
-           <td>  
-            [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
-            </td>
-    
-            <td> 
-            [% IF reserva.nivel3.nivel2.getVolumen %] t [% reserva.nivel3.nivel2.getVolumen %] 
-                [% IF reserva.nivel3.nivel2.getVolumenDesc %] ([% reserva.nivel3.nivel2.getVolumenDesc %])  [% END %] 
-            [% END %]
-            </td>
-		[% IF circularDesdeDetalleUsuario %]
-			<td> 
-				<input 	type="image" name="cancel"  value='[% "Cancelar" | i18n %]' border=0 
-						src="[% themelang %]/images/borrar.png" 
-						onClick="cancelarReserva('[% reserva.getId_reserva %]')" title="[% 'Cancelar' | i18n %]">
-			</td>
-		[% ELSE %]
-			[% 'NO SE PERMITE CIRCULAR' | i18n %]
-		[% END %] <!--END IF permiso_para_circular -->
-			
-		</tr>
-	[% END %]
-	</table>
+                </td>
+		    [% IF circularDesdeDetalleUsuario %]
+			    <td> 
+				    <input 	type="image" name="cancel"  value='[% "Cancelar" | i18n %]' border=0 
+						    src="[% themelang %]/images/borrar.png" 
+						    onClick="cancelarReserva('[% reserva.getId_reserva %]')" title="[% 'Cancelar' | i18n %]">
+			    </td>
+		    [% ELSE %]
+			    [% 'NO SE PERMITE CIRCULAR' | i18n %]
+		    [% END %] <!--END IF permiso_para_circular -->
+			    
+		    </tr>
+	    [% END %]
+	    </table>
 [% END %]

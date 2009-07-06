@@ -19,32 +19,29 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
-my $orden=$obj->{'orden'}||'apellido';
-my $op=$obj->{'op'};
-my $surname1=$obj->{'surname1'};
-my $surname2=$obj->{'surname2'};
-my $legajo1=$obj->{'legajo1'};
-my $legajo2=$obj->{'legajo2'};
-my $categoria_socio=$obj->{'categoria_socio'};
-my $regular=$obj->{'regular'};
-my $ui=$obj->{'ui'};
-my $count=0;
-my $results;
-my @resultsdata = ();
 
 
-if ($op ne ''){
- ($count,$results)=C4::AR::Usuarios::BornameSearchForCard($surname1,$surname2,$categoria_socio,$ui,$orden,$regular,$legajo1,$legajo2);
-}
-for (my $i=0; $i < $count; $i++){
-    my %row = (
-            socio => $results->[$i],
-    );
-    push(@resultsdata, \%row);
-}
+my $ini = $obj->{'inicial'} || 0;
+
+$obj->{'orden'}=$obj->{'orden'}||'apellido';
+$obj->{'apellido1'}=$obj->{'surname1'};
+$obj->{'apellido2'}=$obj->{'surname2'};
+
+my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+
+$obj->{'cantR'} = $cantR;
+$obj->{'pageNumber'} = $pageNumber;
+$obj->{'ini'} = $ini;
+
+my $funcion = $obj->{'funcion'};
+
+my ($cantidad,$results)=C4::AR::Usuarios::BornameSearchForCard($obj);
+
+$t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+
 #Se realiza la busqueda si al algun campo no vacio
-$t_params->{'RESULTSLOOP'}=\@resultsdata;
-$t_params->{'cantidad'}=$count;
+$t_params->{'RESULTSLOOP'}=$results;
+$t_params->{'cantidad'}=$cantidad;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
