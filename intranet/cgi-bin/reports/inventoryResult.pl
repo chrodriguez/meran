@@ -43,7 +43,7 @@ my ($res) = C4::AR::Estadisticas::listadoDeInventorio($t_params);
 
 $t_params->{'results'} = $res,
 # $t_params->{'name'} => $planilla;
-# $t_params->{'cantidad'}=> $cant;
+$t_params->{'cantidad'}=> scalar(@$res);
 $t_params->{'desde'} = $desde;
 $t_params->{'hasta'} = $hasta;
 

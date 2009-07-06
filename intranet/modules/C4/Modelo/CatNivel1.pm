@@ -10,7 +10,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id1       => { type => 'serial', not_null => 1 },
-        titulo    => { type => 'varchar', length => 100, not_null => 1 },
+        titulo    => { type => 'varchar', length => 255, not_null => 1 },
         autor     => { type => 'integer', not_null => 1 },
         timestamp => { type => 'timestamp' },
     ],

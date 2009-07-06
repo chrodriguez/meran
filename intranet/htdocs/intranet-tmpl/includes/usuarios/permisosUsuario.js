@@ -23,9 +23,9 @@ function profileSelection(combo){
 
 function adviceGrant(checkBox,divID,risk,dontCallChecks){
     array = new Array();
-    array['low']="#9ACD32";
-    array['medium']="#FFA500";
-    array['high']=" #B00000";
+    array['low']="#68a928";
+    array['medium']="#ffdd00";
+    array['high']=" #d40e2a";
     dontCallChecks = dontCallChecks?dontCallChecks:false;
     returnValue = false;
 

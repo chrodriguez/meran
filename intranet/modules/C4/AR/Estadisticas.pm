@@ -178,13 +178,17 @@ sub listadoDeInventorio{
     push (@filtros,(barcode => {eq => $params_obj->{'maxBarcode'},
                                 lt => $params_obj->{'maxBarcode'},
                                 }));
-    push (@filtros,(id_ui_origen => {eq => $params_obj->{'id_ui_origen'}}));
+#     push (@filtros,(id_ui_origen => {eq => $params_obj->{'id_ui_origen'}}));
+    my $inventorio = 0;
 
-    my $inventorio = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-                                                                    query => \@filtros,
-                                                                    require_objects => ['nivel2','nivel1'],
-                                                                    sort_by => ['nivel1.titulo'],
-                                                                    );
+    eval{
+        $inventorio = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                                        query => \@filtros,
+                                                                        require_objects => ['nivel2','nivel1'],
+                                                                        sort_by => ['nivel1.titulo'],
+                                                                        );
+    };
+
     return ($inventorio);
 }
 

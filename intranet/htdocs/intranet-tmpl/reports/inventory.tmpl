@@ -1,25 +1,31 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <script>
-function ordenar(orden){
-    objAH.sort=orden;
-    objAH.sendToServer();
-}
 
-function consultar(){
-    objAH=new AjaxHelper(updateInfo);
-    objAH.url= "/cgi-bin/koha/reports/inventoryResult.pl";
-    objAH.desde= $("#desde").val();
-    objAH.hasta= $("#hasta").val();
-    //se envia la consulta
-    objAH.sendToServer();
-}
+    function ordenar(orden){
+        objAH.sort=orden;
+        objAH.sendToServer();
+    }
 
-function updateInfo(responseText){
-    $("#result").html(responseText);
-    zebra("tablaResult");
-}
+    function consultar(){
+        objAH=new AjaxHelper(updateInfo);
+        objAH.url= "/cgi-bin/koha/reports/inventoryResult.pl";
+        objAH.desde= $("#desde").val();
+        objAH.hasta= $("#hasta").val();
+        //se envia la consulta
+        objAH.sendToServer();
+    }
 
+    function updateInfo(responseText){
+        $("#result").html(responseText);
+        zebra("tablaResult");
+    }
+    $(document).ready(function() {
+        //onEnter con foco en input, ejecuta la busqueda
+        onEnter("desde",consultar);
+        onEnter("hasta",consultar);
+
+    });
 </script>
 
 <div class="titulos_interior" >[% "Inventario:" | i18n %]</div>
@@ -45,37 +51,41 @@ function updateInfo(responseText){
 [% END %]
 </table>
 </center>
-<br>
-<table border="0" cellspacing="0" cellpadding="0" align="left">
-    <tr>
-        <div class="titulos_interior">[% "Localizaci&oacute;n del ejemplar entre &nbsp;" | i18n %]</div>
-        <div class="filtros_reportes">
-            <ul class="filtros_reportes_izq">
-                <li><input class="inputFontNormal" type="text" id="desde" value="[% desde %]">&nbsp;</li>
-                <li>Y</li>
-                <li><input  class="inputFontNormal" type="text" id="hasta" value="[% hasta %]">&nbsp;</li>
-            </ul>
-        </div>
-        <ul class="filtros_reportes_der">
-            <li>
-                [% PERL %]
-                                print C4::AR::Filtros::to_Button( 
-                                                                    text    =>  "[% 'Buscar' | i18n %]",
-                                                                    boton   =>  "boton_buscar",
-                                                                    onClick =>  "consultar(0,'barcode')",
-                                        ) ;
-                [% END %]
-            </li>
-        </ul>
-    </tr>
-</table>
 
 <br>
+
+<div class="titulos_interior">
+    [% "Localizaci&oacute;n del ejemplar entre &nbsp;" | i18n %]
+</div>
+
+<div class="filtros_reportes">
+    <ul class="filtros_reportes_izq">
+        <li><input class="inputFontNormal" type="text" id="desde" value="[% desde %]">&nbsp;
+            Y
+            <input  class="inputFontNormal" type="text" id="hasta" value="[% hasta %]">&nbsp;
+        </li>
+    </ul>
+</div>
+
+<div class="buttonContainerHorizontal">
+    [% PERL %]
+                    print C4::AR::Filtros::to_Button( 
+                                                        text    =>  "[% 'Buscar' | i18n %]",
+                                                        boton   =>  "boton_buscar",
+                                                        onClick =>  "consultar()",
+                                                    );
+    [% END %]
+</div>
+<div class="filtros_reportes">
 <ul class="filtros_reportes_der">
     <li>
-        [% "El m&iacute;nimo inventario existente es:" | i18n %] <b>[% MIN %] </b>[% " y el m&aacute;ximo es:" | i18n %] <b>[% MAX %]</b>
+        [% "El m&iacute;nimo inventario existente es:" | i18n %] 
+                <b>[% MIN %] </b>
+                [% " y el m&aacute;ximo es:" | i18n %]
+                <b>[% MAX %]</b>
     </li>
 </ul>
+</div>
 <div id="result"></div>
 
 [% INCLUDE "intranet-bottom.inc" %]
