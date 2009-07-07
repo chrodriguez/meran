@@ -52,14 +52,32 @@
                     "[% 'Noviembre' | i18n %]",
                     "[% 'Diciembre' | i18n %]",
                 ];
+    
 
     function crearDatePicker(idElem){
     
-            $('#'+idElem).datepicker({  dateFormat: 'dd/mm/yy', 
+            $('#'+idElem).datepicker({  dateFormat: DATE_FORMAT, 
                                         dayNamesMin: dayNamesMin, 
                                         dayNames: dayNames,
                                         monthNamesMin: monthNamesMin,
                                         monthNames: monthNames,
+                                        clearText: CLEAR_TEXT,
+                                        clearStatus: CLEAR_STATUS,
+                                        closeText: CLOSE_TEXT,
+                                        closeStatus: CLOSE_STATUS,
+                                        prevText: PREV_TEXT,
+                                        prevStatus: PREV_STATUS,
+                                        nextText: NEXT_TEXT,
+                                        nextStatus: NEXT_STATUS,
+                                        currentText: CURRENT_TEXT,
+                                        currentStatus: CURRENT_STATUS,
+                                        monthStatus: MONTH_STATUS,
+                                        yearStatus: YEAR_STATUS,
+                                        weekHeader: WEEK_HEADER,
+                                        weekStatus: WEEK_STATUS,
+                                        dayStatus: DAY_STATUS,
+                                        dateStatus: DATE_STATUS,
+                                        initStatus: INIT_STATUS,
                                     });
     }
 </script>
