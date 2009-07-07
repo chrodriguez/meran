@@ -402,17 +402,19 @@ datosBiblio
 Busca todos los datos de la biblioteca en que se encuentra asociado el usuario.
 Nota: branchaddress3, se va usar para guardar la direccion web de la biblioteca.
 =cut
-sub datosBiblio(){
+sub datosBiblio{
+
     my ($branchcode)=@_;
-    my $dbh = C4::Context->dbh;
-    my $biblio;
-    my $sth=$dbh->prepare("SELECT branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail, pref_categoria_unidad_informacion.categoryname as categ
-    FROM pref_unidad_informacion inner join pref_relacion_unidad_informacion on pref_unidad_informacion.branchcode=pref_relacion_unidad_informacion.branchcode inner join pref_categoria_unidad_informacion on pref_categoria_unidad_informacion.categorycode = pref_relacion_unidad_informacion.categorycode WHERE pref_unidad_informacion.id_ui=?");
-    $sth->execute($branchcode);
-    $biblio=$sth->fetchrow_hashref();
-    $sth->finish;
+    my $biblio=0;
+
+    eval{
+        $biblio = C4::Modelo::PrefUnidadInformacion->new(id_ui => $branchcode);
+        $biblio->load();
+    };
+
     return($biblio);
 }
+
 
 =item
 libreDeuda
@@ -661,30 +663,23 @@ sub imprimirPiePag(){
 #  Genera los carnets a partir de una busqueda
 
 sub batchBookLabelGenerator {
-        my ($count,@results) = @_;
+    my ($count,$results) = @_;
     my $i=0;
     my $pag=1;
     my $pdf = new PDF::Report();
     $pdf->{PageWidth}='270';
     $pdf->{PageHeight}='190';
 
-    while ($i<$count)
-    {
-    $pdf->newpage($pag);
+    foreach my $nivel3 (@$results){
+        $pdf->newpage($pag);
         $pdf->openpage($pag);
-    if ($i<$count){
-    &generateBookLabel($results[$i]->{'bulk'},$results[$i]->{'barcode'},$results[$i]->{'homebranch'},0,97,$pdf);
-    #$i++;  Se imprimen 2 por ejemplar
-    }
-    if ($i<$count){
-    &generateBookLabel($results[$i]->{'bulk'},$results[$i]->{'barcode'},$results[$i]->{'homebranch'},0,0,$pdf);$i++;
-    }
-    $pag++;
+        &generateBookLabel($nivel3->getSignatura_topografica,$nivel3->getBarcode,$nivel3->getId_ui_origen,0,97,$pdf);
+        &generateBookLabel($nivel3->getSignatura_topografica,$nivel3->getBarcode,$nivel3->getId_ui_origen,0,97,$pdf);
+        $pag++;
     }
     my $tmpFileName= "etiquetas.pdf";
     &imprimirFinal($pdf,$tmpFileName);
-#   return ($pdf);
-}   
+}
 
 
 #genera a partir de una coordenada
@@ -711,43 +706,35 @@ sub generateBookLabel {
         $escudo = C4::Context->config('intrahtdocs').'/'.C4::AR::Preferencias->getValorPreferencia('template').'/'.C4::AR::Preferencias->getValorPreferencia('opaclanguages').'/images/escudo-uni.png';
     }
 
-     $pdf->addImgScaled($escudo, $x + 96 , $pageheight + ($y-30-$posy) , 32/100);
+#      $pdf->addImgScaled($escudo, $x + 96 , $pageheight + ($y-30-$posy) , 32/100);
 
-    
      #Write the borrower data into the pdf file
      $pdf->setSize(7);
      $pdf->setFont("Arial-Bold");
-         $pdf->addRawText($branch->{'categ'},$x+135,$pageheight + ($y-$posy));
+#      $pdf->addRawText($branch->{'categ'},$x+135,$pageheight + ($y-$posy));
      $posy=$posy+7;
-     $pdf->addRawText($branch->{'branchname'},$x+135,$pageheight + ($y-$posy));
+     $pdf->addRawText($branch->getNombre,$x+135,$pageheight + ($y-$posy));
      $posy=$posy+7;
      $pdf->setSize(6);
      $pdf->addRawText("Biblioteca",$x+135,$pageheight + ($y-$posy));
      $posy=$posy+7;
      $pdf->setFont("Arial");
-    
+
      my $cantdir=1; #Cuantas direcciones tiene?
-     my $address=$branch->{'branchaddress1'};
-     if($branch->{'branchaddress2'} ne ''){$address.="\n".$branch->{'branchaddress2'};$cantdir++;}
-     if($branch->{'branchaddress3'} ne ''){$address.="\n".$branch->{'branchaddress3'};$cantdir++;}
+     my $address=$branch->getDireccion;
+     $address.="\n".$branch->getAlt_direccion;
      $pdf->addRawText($address,$x+135,$pageheight + ($y-$posy));
      $posy=$posy+(7*$cantdir);
-     
-    if ($branch->{'branchemail'} ne ''){
-     my $mail=$branch->{'branchemail'};
+
+     my $mail=$branch->getEmail;
      $pdf->addRawText($mail,$x+135,$pageheight + ($y-$posy));
      $posy=$posy+7;
-    }
-    
-     if (($branch->{'branchphone'} ne '')||( $branch->{'branchfax'}  ne '')){
-     my $aux="";
-     if ($branch->{'branchphone'} eq $branch->{'branchfax'}){$aux="Tel/Fax ".$branch->{'branchphone'};}
-        else{
-            if ($branch->{'branchphone'} ne '') { $aux=" Tel ".$branch->{'branchphone'};}
-            if ($branch->{'branchfax'} ne '') { $aux=" Fax ".$branch->{'branchfax'};}
-            }
-     $pdf->addRawText($aux,$x+135,$pageheight + ($y-$posy));
-     }
+
+    my $phone_fax="";
+    $phone_fax=" Tel ".$branch->getTelefono || 'No dispone';
+    $phone_fax=" Fax ".$branch->getFax || 'No dispone';
+
+    $pdf->addRawText($phone_fax,$x+135,$pageheight + ($y-$posy));
 
     #AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
     $pdf->setSize(14);

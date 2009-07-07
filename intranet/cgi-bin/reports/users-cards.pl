@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
@@ -44,6 +43,7 @@ if ($op eq 'pdf') {
     $params{'default'}= 'SIN SELECCIONAR';
     my $comboCategoriasDeSocio= C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
     my $CGIregular = C4::AR::Utilidades::generarComboRegular();
+
     $t_params->{'unidades'}= $ComboUI;
     $t_params->{'categories'}= $comboCategoriasDeSocio;
     $t_params->{'regulares'}=$CGIregular;

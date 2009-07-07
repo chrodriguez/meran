@@ -14,14 +14,21 @@
     function consultar(accion){
         objAH=new AjaxHelper(updateInfo);
         objAH.url= "/cgi-bin/koha/reports/generarEtiquetas-result.pl";
-        objAH.inv_desde= $("#inv_desde").val();
-        objAH.id_ui= $("#id_ui").val();
-        objAH.inv_hasta= $("#inv_hasta").val();
-        objAH.sig_top_desde= $("#sig_top_desde").val();
-        objAH.sig_top_hasta= $("#sig_top_hasta").val();
+        objAH.inv_desde= $.trim($("#inv_desde").val());
+        objAH.id_ui= $.trim($("#id_ui").val());
+        objAH.inv_hasta= $.trim($("#inv_hasta").val());
+        objAH.sig_top_desde= $.trim($("#sig_top_desde").val());
+        objAH.sig_top_hasta= $.trim($("#sig_top_hasta").val());
+        objAH.sig_top_begin= $.trim($("#sig_top_begin").val());
         objAH.accion = accion;
-        //se envia la consulta
-        objAH.sendToServer();
+        objAH.funcion = "changePage";
+        if (accion == "pdf"){
+            params = "accion=pdf&inv_hasta="+objAH.inv_hasta+"&sig_top_desde="+objAH.sig_top_desde+"&sig_top_hasta="+objAH.sig_top_hasta+"&sig_top_begin="+objAH.sig_top_begin+"&id_ui="+escape(objAH.id_ui);
+            crearForm(objAH.url,params);//Funcion en util.js
+        }else{
+            //se envia la consulta
+            objAH.sendToServer();
+        }
     }
 
     function updateInfo(responseText){
@@ -34,6 +41,7 @@
         onEnter("inv_hasta",consultar);
         onEnter("sig_top_desde",consultar);
         onEnter("sig_top_hasta",consultar);
+        onEnter("sig_top_begin",consultar);
     });
 
 </script>
@@ -69,6 +77,11 @@
                     <b>[% MAXS %]</b>
 
         </li>
+        <li>
+            <b>[% "Comienzo de Signatura Topogr&aacute;fica:" | i18n %]</b>
+            <input type='text' id='sig_top_begin' name='sig_top_begin' value='[% sig_top_begin %]'>
+        </li>
+
     </ul>
 
     <ul class="filtros_reportes_der">
@@ -85,6 +98,9 @@
                                             );
     [% END %]
 </div>
+
+<br>
+<br>
 
 <div id="result"> </div>
 

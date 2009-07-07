@@ -1,30 +1,4 @@
 [% paginador %]
-<table border="0" cellspacing="0" cellpadding="0" width="80%">
-<tr class="inputFontNormal">
-<td>
-[% IF ok2 %]
-    <a class="inputFontNormal" href="book-labels.pl?ini=[% ant %]&orden=[% orden %]&op=search&barcode1=[% barcode1 %]&barcode2=[% barcode2 %]&ui=[% ui %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]"><img src=[% themelang %]/images/numbers/ant.gif border=0></a>
-[% END %]
-
-[% FOREACH numeros %]
-    [% IF actual %]
-        <a class="inputFontNormal" href="book-labels.pl?ini=[% number %]&orden=[% orden %]&op=search&barcode1=[% barcode1 %]&barcode2=[% barcode2 %]&ui=[% ui %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]" > 
-                    <u>[% number %]</u>
-                </a>
-    [% ELSE %]
-            <u>[% number %]</u>
-    [% END %]
-[% END %]
-
-[% IF ok %]
-    <a class="inputFontNormal" href="book-labels.pl?ini=[% sig %]&orden=[% orden %]&op=search&barcode1=[% barcode1 %]&barcode2=[% barcode2 %]&ui=[% ui %]&bulk1=[% bulk1 %]&bulk2=[% bulk2 %]&bulkbegin=[% bulkbegin %]"><img src=[% themelang %]/images/numbers/next.gif border=0></a>
-[% END %]
-
-</td>
-</tr>
-</table>
-
-
 <table border="0" cellspacing="0" cellpadding="0"  width="90%" align="center">
     <tr class="tablaresultadoTitle">
 
@@ -38,48 +12,55 @@
 
     </tr>
 
-[% FOREACH nivel3 IN RESULTSLOOP %]
+    [% FOREACH nivel3 IN RESULTSLOOP %]
+        <tr>
+                <td  align="center" class="[% clase %]" >
+                        [% nivel3.getBarcode %]
+                </td>
+                <td class="[% clase %]"  align="center">
+                        [% IF !nive3.nive2.nivel1.cat_autor.getCompleto %]
+                            ----
+                        [% ELSE %]
+                            [% nive3.nivel1.cat_autor.getCompleto %]
+                        [% END %]
+                </td>
+                <td class="[% clase %]"  align="center">
+                    <a class="inputFontNormal" href='/cgi-bin/koha/detail.pl?type=intra&bib=[% HTML.escape(biblionumber) %]'>
+                        [% nivel3.nivel1.getTitulo %]
+                    </a>
+                </td>
+                <td class="[% clase %]"  align="center">
+                        [% number %]
+                </td>
+                <td class="[% clase %]"  align="center">
+                        [% publisher %]
+                </td>
+                <td class="[% clase %]"  align="center">
+                        [% anio_publicacion %]
+                </td>
+                <td class="[% clase %]" align="center">
+                        [% nivel3.getSignatura_topografica %]
+                </td>
+        </tr>
+
+    [% END %]
+
     <tr>
-            <td class="[% clase %] width="1%">&nbsp;</td>
-            <td  align=left class="[% clase %]" >
-                    [% nivel3.getBarcode %]
-            </td>
-            <td class="[% clase %]  align="center">
-                    [% nive3.nive2.nivel1.cat_autor.getCompleto %]
-            </td>
-            <td class="[% clase %]  align="center">
-                <a class="inputFontNormal" href='/cgi-bin/koha/detail.pl?type=intra&bib=[% HTML.escape(biblionumber) %]'>[% HTML.escape(titulo) %]
-                    [% nivel3.nive2.nivel1.getTitulo %]
-                </a>
-            </td>
-            <td class="[% clase %]  align="center">
-                    [% number %]
-            </td>
-            <td class="[% clase %]  align="center">
-                    [% publisher %]
-            </td>
-            <td class="[% clase %]  align="center">
-                    [% anio_publicacion %]
-            </td>
-            <td class="[% clase %]" align="center">
-                    [% nivel3.getSignatura_topografica %]
-            </td>
-            <td class="[% clase %] width="1%">&nbsp;</td>
+    <td colspan="9">
+        <p class="inputFontNormal" align="left">[% "La cantidad de ejemplares es:" | i18n %] <b>[% cantidad %]</b></p>
+    </td>
     </tr>
-
-[% END %]
-
-<tr>
-<td colspan="9">
-    <p class="inputFontNormal" align="left">[% "La cantidad de ejemplares es:" | i18n %] <b>[% cantidad %]</b></p>
-</td>
-</tr>
 
 </table>
 
-<p>
-<a href="#" onClick="generarEtiquetas();" class="inputFontNormal" onMouseOut="swap('etiquetas','[% themelang %]/images/etiquetas.png')" onMouseOver="swap('etiquetas','[% themelang %]/images/etiquetasbis.png')" >
-<input  name="etiquetas" id="etiquetas" alt=[% "Generar etiquetas" | i18n %] type="image" value= [% "Generar etiquetas" | i18n %]  src="[% themelang %]/images/etiquetas.png" border="0" title=[% "Generar etiquetas" | i18n %] >
-</a>
+<div class="buttonContainerHorizontal">
+    [% PERL %]
+                    print C4::AR::Filtros::to_Button( 
+                                                        text    =>  "[% 'a PDF' | i18n %]",
+                                                        boton   =>  "boton_buscar",
+                                                        onClick =>  "consultar('pdf')",
+                                                    );
+    [% END %]
+</div>
 
-</p>
+<div id="formulario"></div>

@@ -195,18 +195,19 @@ sub listadoDeInventorio{
 sub historicoDeBusqueda{
    my ($params_obj)=@_;
 
+   my $dateformat = C4::Date::get_date_format();
    my @filtros;
 
    if ($params_obj->{'fechaIni'} ne ""){
-    push(@filtros, ( fecha => {     eq => $params_obj->{'fechaIni'},
-                                    gt => $params_obj->{'fechaIni'},
+      push(@filtros, ( 'busqueda.fecha' => {       eq => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
+                                                   gt => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
                                  }
                       ) );
    }
 
    if ($params_obj->{'fechaFin'} ne ""){
-        push(@filtros, ( fecha => {     eq => $params_obj->{'fechaFin'}, 
-                                        lt => $params_obj->{'fechaFin'}, 
+      push(@filtros, ( 'busqueda.fecha' => {       eq => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
+                                                   lt => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
                                 }
                      ) );
    }
@@ -219,11 +220,11 @@ sub historicoDeBusqueda{
 
    my $busquedas_count = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda_count(
                                                                                           query => \@filtros,
-                                                                                           with_objects => ['busqueda','busqueda.socio'],
+#                                                                                           with_objects => ['busqueda','busqueda.socio'],
                                                                                      );
 
 
-   my $busquedas_array_ref = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda(
+   my $busquedas = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda(
                                                                                 query => \@filtros,
                                                                                 with_objects => ['busqueda','busqueda.socio'],
                                                                                 limit   => $params_obj->{'cantR'},
@@ -231,7 +232,8 @@ sub historicoDeBusqueda{
                                                                                 sorty_by => $params_obj->{'orden'},
                                                                     );
 
-   return($busquedas_count, $busquedas_array_ref);
+   return($busquedas_count,$busquedas);
+
 }
 
 sub historicoPrestamos{
@@ -239,52 +241,26 @@ sub historicoPrestamos{
    #Apellido y Nombre, DNI,Categoria del Usuario, Tipo de Prestamo, Codigo de Barras, 
    #Fecha de Prestamo, Fecha de Devolucion, Tipo de Item
    
-    my ($params_obj)=@_;
+   my ($params_obj)=@_;
 
-    use C4::Modelo::RepHistorialPrestamo::Manager;
-    
-    my @filtros;
+   my $dateformat = C4::Date::get_date_format();
 
-    if ($params_obj->{'f_ini'} ne ""){
-    push(@filtros, ( fecha_prestamo => {    eq => $params_obj->{'f_ini'},
-                                            gt => $params_obj->{'f_ini'},
-                                 }
-                      ) );
-   }
-
-    if ($params_obj->{'f_fin'} ne ""){
-        push(@filtros, ( fecha_prestamo => {    eq => $params_obj->{'f_fin'}, 
-                                                lt => $params_obj->{'f_fin'}, 
-                                }
-                        ) );
-    }
-
-    if ($params_obj->{'catUsuario'} ne ""){
-        push(@filtros, ( 'socio.cod_categoria' => {    eq => $params_obj->{'catUsuario'} } ) );
-    }
-
-    if ($params_obj->{'tipo_prestamo'} ne ""){
-        push(@filtros, ( 'tipo_prestamo' => {    eq => $params_obj->{'tipo_prestamo'} } ) );
-    }
-
-    if ($params_obj->{'tipo_nivel3_id'} ne ""){
-        push(@filtros, ( 'nivel3.nivel2.tipo_documento' => {    eq => $params_obj->{'tipo_nivel3_id'} } ) );
-    }
+   my @filtros;
 
   
-    my $prestamos_count = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo_count(
-                                                            query => \@filtros,
-                                                            require_objects => ['nivel3','nivel3.nivel2','socio','ui','ui_prestamo'],
-                                                    ); 
-    
-    my $prestamos_array_ref = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo(
-                                                        query => \@filtros,
-                                                        require_objects => ['nivel3','nivel3.nivel2','socio','ui','ui_prestamo'],
-                                                        limit   => $params_obj->{'cantR'},
-                                                        offset  => $params_obj->{'ini'},
-                                                ); 
+   my $prestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
+                                                                        query => \@filtros,
+                                                                        require_objects => ['nivel3','socio','ui','ui_prestamo'],
+                                                                    ); 
 
-    return($prestamos_count, $prestamos_array_ref);
+   my $prestamos = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                        query => \@filtros,
+                                                                        require_objects => ['nivel3','socio','ui','ui_prestamo'],
+                                                                        limit   => $params_obj->{'cantR'},
+                                                                        offset  => $params_obj->{'ini'},
+                                                                     ); 
+
+   return($prestamos_count,$prestamos);
 }
 
 
@@ -1463,6 +1439,7 @@ sub listaDeEjemplares {
 }
 =cut
 sub listaDeEjemplares {
+# FIXME falta el tema de paginar cuando es pdf (o sea, no hay que paginar)
     my ($params) = @_;
 
     my $id_ui=  $params->{'id_ui'} || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
@@ -1491,17 +1468,26 @@ sub listaDeEjemplares {
         }
     }
 
-    push (@filtros,( id_ui_origen => { eq => $params->{'id_ui'}.'%'}));
+    if (substr($params->{'id_ui'},0,3) ne "SIN"){
+        push (@filtros,( id_ui_origen => { eq => $params->{'id_ui'}.'%'}));
+    }
 
     my $results_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count( query => \@filtros,
                                                                               require_objects => ['nivel2','nivel1'],
-                                                                            );
+                                                                    );
+    my $results;
 
-    my $results = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( query => \@filtros,
-#                                                                   limit => $params->{'cantR'},
-#                                                                   offset => $params->{'ini'},
-                                                                  require_objects => ['nivel2','nivel1'],
-                                                                 );
+    if ($params->{'accion'} ne "pdf"){
+        $results = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( query => \@filtros,
+                                                                      limit => $params->{'cantR'},
+                                                                      offset => $params->{'ini'},
+                                                                      require_objects => ['nivel2','nivel1'],
+                                                                     );
+    }else{
+        $results = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( query => \@filtros,
+                                                                      require_objects => ['nivel2','nivel1'],
+                                                                    );
+    }
 
     return ($results_count,$results);
 }
