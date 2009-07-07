@@ -1,0 +1,91 @@
+[% USE HTML %]
+
+[% INCLUDE "intranet-top.inc" %]
+
+<script language="javascript">
+
+    var objAH;
+
+    function ordenar(orden){
+        objAH.sort=orden;
+        objAH.sendToServer();
+    }
+
+    function consultar(accion){
+        objAH=new AjaxHelper(updateInfo);
+        objAH.url= "/cgi-bin/koha/reports/generarEtiquetas-result.pl";
+        objAH.inv_desde= $("#inv_desde").val();
+        objAH.id_ui= $("#id_ui").val();
+        objAH.inv_hasta= $("#inv_hasta").val();
+        objAH.sig_top_desde= $("#sig_top_desde").val();
+        objAH.sig_top_hasta= $("#sig_top_hasta").val();
+        objAH.accion = accion;
+        //se envia la consulta
+        objAH.sendToServer();
+    }
+
+    function updateInfo(responseText){
+        $("#result").html(responseText);
+        zebra("tablaResult");
+    }
+    $(document).ready(function() {
+        //onEnter con foco en input, ejecuta la busqueda
+        onEnter("inv_desde",consultar);
+        onEnter("inv_hasta",consultar);
+        onEnter("sig_top_desde",consultar);
+        onEnter("sig_top_hasta",consultar);
+    });
+
+</script>
+
+<div class="titulos_interior">[% "Generar Etiquetas" | i18n %]</div>
+
+<div class="filtros_reportes">
+    <ul class="filtros_reportes_izq">
+        <li>
+            <b>[% 'Unidad de informacion' | i18n %]:</b> 
+               [% ui_Select %]
+        </li>
+
+        <li>
+            <b>[% "Inventario:" | i18n %]</b>
+            <input class="inputFontNormal" type="text" id="inv_desde" value="[% inv_desde %]">&nbsp;
+            Y
+            <input  class="inputFontNormal" type="text" id="inv_hasta" value="[% inv_hasta %]">&nbsp;
+            &nbsp;&nbsp;&nbsp;
+            [% "El m&iacute;nimo inventario existente es:" | i18n %] 
+                    <b>[% MIN %] </b>
+                    [% " y el m&aacute;ximo es:" | i18n %]
+                    <b>[% MAX %]</b>
+        </li>
+        <li>
+            <b>[% "Signatura Topogr&aacute;fica:" | i18n %]</b>
+            [% "Desde:" | i18n %]&nbsp; <input type='text' id='sig_top_desde' name='sig_top_desde' value='[% sig_top_desde %]'>
+            [% "Hasta:" | i18n %]&nbsp; <input type='text' id='sig_top_hasta' name='sig_top_hasta' value='[% sig_top_hasta %]'>
+            &nbsp;&nbsp;&nbsp;
+            [% "La m&iacute;nima signatura existente es:" | i18n %] 
+                    <b>[% MINS %] </b>
+                    [% " y la m&aacute;xima es:" | i18n %]
+                    <b>[% MAXS %]</b>
+
+        </li>
+    </ul>
+
+    <ul class="filtros_reportes_der">
+    </ul>
+
+</div>
+
+<div class="buttonContainerHorizontal">
+    [% PERL %]
+            print C4::AR::Filtros::to_Button(
+                                                text    =>  "[% 'Buscar' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "consultar('filtrar')",
+                                            );
+    [% END %]
+</div>
+
+<div id="result"> </div>
+
+[% INCLUDE "intranet-bottom.inc" %]

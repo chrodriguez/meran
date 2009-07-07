@@ -1467,31 +1467,26 @@ sub listaDeEjemplares {
 
     my $id_ui=  $params->{'id_ui'} || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
 
-    my $query="SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id2, homebranch
-    FROM ((cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2)
-    INNER JOIN cat_nivel1 n1 ON n1.id1 = n2.id1)
-    WHERE ";
-
     my @filtros;
 
-    if (C4::AR::Utilidades::validateString($params->{'beginLocation'})){
-        push (@filtros,( signatura_topografica => { like => $params->{'beginLocation'}.'%'}));
+    if (C4::AR::Utilidades::validateString($params->{'sig_top_begin'})){
+        push (@filtros,( signatura_topografica => { like => $params->{'sig_top_begin'}.'%'}));
     }
     else {
-        if ((C4::AR::Utilidades::validateString($params->{'minbarcode'})) & (C4::AR::Utilidades::validateString($params->{'maxbarcode'})) ){
-            push (@filtros,(barcode => {eq => $params->{'minBarcode'},
-                                        gt => $params->{'minBarcode'},
+        if ((C4::AR::Utilidades::validateString($params->{'inv_desde'})) & (C4::AR::Utilidades::validateString($params->{'inv_hasta'})) ){
+            push (@filtros,(barcode => {eq => $params->{'inv_desde'},
+                                        gt => $params->{'inv_desde'},
                                         }));
-            push (@filtros,(barcode => {eq => $params->{'maxBarcode'},
-                                        lt => $params->{'maxBarcode'},
+            push (@filtros,(barcode => {eq => $params->{'inv_hasta'},
+                                        lt => $params->{'inv_hasta'},
                                         }));
         }
-        if ( (C4::AR::Utilidades::validateString($params->{'minBarcode'})) and (C4::AR::Utilidades::validateString($params->{'maxBarcode'})) ){
-                push (@filtros,(signatura_topografica => {eq => $params->{'minBarcode'},
-                                            gt => $params->{'minBarcode'},
+        if ( (C4::AR::Utilidades::validateString($params->{'sig_top_desde'})) and (C4::AR::Utilidades::validateString($params->{'sig_top_hasta'})) ){
+                push (@filtros,(signatura_topografica => {eq => $params->{'sig_top_desde'},
+                                            gt => $params->{'sig_top_desde'},
                                             }));
-                push (@filtros,(signatura_topografica => {eq => $params->{'maxBarcode'},
-                                            lt => $params->{'maxBarcode'},
+                push (@filtros,(signatura_topografica => {eq => $params->{'sig_top_hasta'},
+                                            lt => $params->{'sig_top_hasta'},
                                             }));
         }
     }

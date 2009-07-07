@@ -516,7 +516,7 @@
                   <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Generar Etiquetas' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/book-labels.pl",
+                                                                url =>      "/cgi-bin/koha/reports/generarEtiquetas.pl",
                                                                 title =>    "[% 'Generar Etiquetas' | i18n %]"
                                                             ) ;
                             [% END %]
