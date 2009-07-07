@@ -278,7 +278,7 @@
                 <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Reportes Gene&eacute;ricos' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/admin/generic_reports.pl", 
+                                                                url =>      "#", 
                                                                 title =>    "[% 'Reportes Gene&eacute;ricos' | i18n %]"
                                                             ) ;
                             [% END %]
@@ -428,7 +428,7 @@
                   <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Reportes gen&eacute;ricos (FALTA)' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/generic_reports.pl",
+                                                                url =>      "#",
                                                                 title =>    "[% 'Reportes gen&eacute;ricos (FALTA)' | i18n %]"
                                                             ) ;
                             [% END %]
@@ -452,7 +452,7 @@
                   <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Estantes Virtuales (FALTA DB MODEL)' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/estantes.pl",
+                                                                url =>      "#",
                                                                 title =>    "[% 'Estantes Virtuales (FALTA DB MODEL)' | i18n %]"
                                                             ) ;
                             [% END %]
@@ -460,7 +460,7 @@
                   <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Usuarios (PREGUNTALE A FER)' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/users.pl",
+                                                                url =>      "#",
                                                                 title =>    "[% 'Usuarios (PREGUNTALE A FER)' | i18n %]"
                                                             ) ;
                             [% END %]
