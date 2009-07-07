@@ -262,19 +262,19 @@ sub historicoPrestamos{
 
 
   
-    my $prestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
+    my $prestamos_count = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo_count(
                                                                             query => \@filtros,
                                                                             require_objects => ['nivel3','socio','ui','ui_prestamo'],
                                                                         ); 
     
-    my $prestamos = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+    my $prestamos_array_ref = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo(
                                                                             query => \@filtros,
                                                                             require_objects => ['nivel3','socio','ui','ui_prestamo'],
                                                                             limit   => $params_obj->{'cantR'},
                                                                             offset  => $params_obj->{'ini'},
                                                                         ); 
 
-    return($prestamos_count,$prestamos);
+    return($prestamos_count, $prestamos_array_ref);
 }
 
 
