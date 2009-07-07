@@ -350,8 +350,10 @@ sub disponibilidad{
                                 }
                      ) );
    }
-
-   push(@filtros, ( id_ui => { eq => $params_obj->{'ui'} } ) );
+    
+    if (substr($params_obj->{'ui'},0,3) ne "SIN"){
+        push (@filtros,( id_ui => { eq => $params_obj->{'ui'}.'%'}));
+    }
 
    push(@filtros, ( tipo_prestamo => { eq => $params_obj->{'disponibilidad'} } ) );
 

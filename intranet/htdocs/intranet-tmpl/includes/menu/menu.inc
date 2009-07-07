@@ -530,7 +530,7 @@
                         <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Disp. de Ejemplares' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/availability.pl",
+                                                                url =>      "/cgi-bin/koha/reports/disponibilidad_ejemplares.pl",
                                                                 title =>    "[% 'Disp. de Ejemplares' | i18n %]"
                                                             ) ;
                             [% END %]

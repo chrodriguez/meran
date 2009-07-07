@@ -52,10 +52,9 @@
                     "[% 'Noviembre' | i18n %]",
                     "[% 'Diciembre' | i18n %]",
                 ];
-    
 
     function crearDatePicker(idElem){
-    
+
             $('#'+idElem).datepicker({  dateFormat: DATE_FORMAT, 
                                         dayNamesMin: dayNamesMin, 
                                         dayNames: dayNames,
