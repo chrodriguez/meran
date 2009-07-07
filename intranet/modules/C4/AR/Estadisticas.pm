@@ -199,15 +199,15 @@ sub historicoDeBusqueda{
    my @filtros;
 
    if ($params_obj->{'fechaIni'} ne ""){
-      push(@filtros, ( 'busqueda.fecha' => {       eq => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
-                                                   gt => format_date_in_iso($params_obj->{'fechaIni'},$dateformat),
+    push(@filtros, ( fecha => {     eq => $params_obj->{'fechaIni'},
+                                    gt => $params_obj->{'fechaIni'},
                                  }
                       ) );
    }
 
    if ($params_obj->{'fechaFin'} ne ""){
-      push(@filtros, ( 'busqueda.fecha' => {       eq => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
-                                                   lt => format_date_in_iso($params_obj->{'fechaFin'},$dateformat), 
+        push(@filtros, ( fecha => {     eq => $params_obj->{'fechaFin'}, 
+                                        lt => $params_obj->{'fechaFin'}, 
                                 }
                      ) );
    }
@@ -220,11 +220,11 @@ sub historicoDeBusqueda{
 
    my $busquedas_count = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda_count(
                                                                                           query => \@filtros,
-#                                                                                           with_objects => ['busqueda','busqueda.socio'],
+                                                                                           with_objects => ['busqueda','busqueda.socio'],
                                                                                      );
 
 
-   my $busquedas = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda(
+   my $busquedas_array_ref = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda(
                                                                                 query => \@filtros,
                                                                                 with_objects => ['busqueda','busqueda.socio'],
                                                                                 limit   => $params_obj->{'cantR'},
@@ -232,8 +232,7 @@ sub historicoDeBusqueda{
                                                                                 sorty_by => $params_obj->{'orden'},
                                                                     );
 
-   return($busquedas_count,$busquedas);
-
+   return($busquedas_count, $busquedas_array_ref);
 }
 
 sub historicoPrestamos{
@@ -241,26 +240,41 @@ sub historicoPrestamos{
    #Apellido y Nombre, DNI,Categoria del Usuario, Tipo de Prestamo, Codigo de Barras, 
    #Fecha de Prestamo, Fecha de Devolucion, Tipo de Item
    
-   my ($params_obj)=@_;
+    my ($params_obj)=@_;
+    
+    my $dateformat = C4::Date::get_date_format();
+    
+    my @filtros;
 
-   my $dateformat = C4::Date::get_date_format();
+    if ($params_obj->{'f_ini'} ne ""){
+    push(@filtros, ( fecha => {     eq => $params_obj->{'f_ini'},
+                                    gt => $params_obj->{'f_ini'},
+                                 }
+                      ) );
+   }
 
-   my @filtros;
+   if ($params_obj->{'f_fin'} ne ""){
+        push(@filtros, ( fecha => {     eq => $params_obj->{'f_fin'}, 
+                                        lt => $params_obj->{'f_fin'}, 
+                                }
+                     ) );
+   }
+
 
   
-   my $prestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
-                                                                        query => \@filtros,
-                                                                        require_objects => ['nivel3','socio','ui','ui_prestamo'],
-                                                                    ); 
+    my $prestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
+                                                                            query => \@filtros,
+                                                                            require_objects => ['nivel3','socio','ui','ui_prestamo'],
+                                                                        ); 
+    
+    my $prestamos = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                            query => \@filtros,
+                                                                            require_objects => ['nivel3','socio','ui','ui_prestamo'],
+                                                                            limit   => $params_obj->{'cantR'},
+                                                                            offset  => $params_obj->{'ini'},
+                                                                        ); 
 
-   my $prestamos = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
-                                                                        query => \@filtros,
-                                                                        require_objects => ['nivel3','socio','ui','ui_prestamo'],
-                                                                        limit   => $params_obj->{'cantR'},
-                                                                        offset  => $params_obj->{'ini'},
-                                                                     ); 
-
-   return($prestamos_count,$prestamos);
+    return($prestamos_count,$prestamos);
 }
 
 

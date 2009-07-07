@@ -53,42 +53,38 @@
 [% END %]
 </table>
 
-<div align="center">
-		<br><br>
-	<form name="prestamos" id="prestamos" method="post">
-		<!-- Para imprimir correctamentes los datos -->
-		<input type="hidden" name="tiposItems" value="[% tipoItem %]">
-		<input type="hidden" name="catUsuarios" value="[% catUsuarios %]">
-		<input type="hidden" name="tipoPrestamos" value="[% tipoPrestamo %]">
-		
-		<input type="hidden" name="ini" value="[% ini %]">
-		<input type="hidden" name="fin" value="[% fin %]">
-		<input type="hidden" name="orden" value="[% orden %]">
-        <input type="hidden" name="token" value="[% token %]">
-		<!-- Para ver que se hace, imprimir o generar un pdf -->
-		<input TYPE="hidden" VALUE="pdf" NAME="type" > 
+<form name="prestamos" id="prestamos" method="post">
+	<!-- Para imprimir correctamentes los datos -->
+	<input type="hidden" name="tiposItems" value="[% tipoItem %]">
+	<input type="hidden" name="catUsuarios" value="[% catUsuarios %]">
+	<input type="hidden" name="tipoPrestamos" value="[% tipoPrestamo %]">
+	
+	<input type="hidden" name="ini" value="[% ini %]">
+	<input type="hidden" name="fin" value="[% fin %]">
+	<input type="hidden" name="orden" value="[% orden %]">
+    <input type="hidden" name="token" value="[% token %]">
+	<!-- Para ver que se hace, imprimir o generar un pdf -->
+	<input TYPE="hidden" VALUE="pdf" NAME="type" > 
 
 
-<div class="buttonContainerHorizontal">
-
-        [% PERL %]
+    <div class="buttonContainerHorizontal">
+    
+            [% PERL %]
+                                    print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_imprimir",
+                                                                    onClick => "imprimir();",
+                                                                    title   => "[% "Imprimir Resultados" | i18n %]",
+                                            ) ;
+            [% END %]
+    
+            [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
-                                                                boton   => "icon_imprimir",
-                                                                onClick => "imprimir();",
-                                                                title   => "[% "Imprimir Resultados" | i18n %]",
+                                                                boton   => "icon_pdf",
+                                                                onClick => "generarPDF();",
+                                                                title   => "[% "Generar PDF" | i18n %]",
                                         ) ;
-        [% END %]
+            [% END %]
+    
+    </div>
 
-        [% PERL %]
-                            print C4::AR::Filtros::to_Icon(
-                                                            boton   => "icon_pdf",
-                                                            onClick => "generarPDF();",
-                                                            title   => "[% "Generar PDF" | i18n %]",
-                                    ) ;
-        [% END %]
-
-</div>
-
-	</form>
-</div>
-<br>
+</form>

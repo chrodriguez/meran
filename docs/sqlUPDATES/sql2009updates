@@ -852,3 +852,33 @@ ALTER TABLE `rep_historial_circulacion` CHANGE `nota` `nota` VARCHAR( 255 ) CHAR
  ALTER TABLE `rep_busqueda` CHANGE `id_socio` `nro_socio` VARCHAR( 16 ) NULL DEFAULT NULL  
 
 ALTER TABLE `cat_nivel1` CHANGE `titulo` `titulo` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;>>>>>>> .r1754
+
+
+
+
+--el historico de prestamos se va a manejar en otra tabla, cuando se devuelve un prestamo, la info del prestamo se pasa a rep_historial_prestamo,
+--en vez de quedar en circ_prestamo q crece mucho y es necesaria para manejar los prestamos activos
+ DROP TABLE `rep_historial_prestamo`  ;
+
+CREATE TABLE IF NOT EXISTS `rep_historial_prestamo` (
+  `id_historial_prestamo` int(11) NOT NULL auto_increment,
+  `id3` int(11) NOT NULL,
+  `nro_socio` int(11) NOT NULL default '0',
+  `tipo_prestamo` char(2) NOT NULL default 'DO',
+  `fecha_prestamo` varchar(20) default NULL,
+  `id_ui_origen` char(4) default NULL,
+  `id_ui_prestamo` char(4) default NULL,
+  `fecha_devolucion` varchar(20) default NULL,
+  `renovaciones` tinyint(4) default NULL,
+  `fecha_ultima_renovacion` varchar(20) default NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `agregacion_temp` varchar(255) default NULL,
+  PRIMARY KEY  (`id_historial_prestamo`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+
+
+
+
+
