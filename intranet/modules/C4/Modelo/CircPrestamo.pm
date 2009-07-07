@@ -10,11 +10,11 @@ __PACKAGE__->meta->setup(
     columns => [
         id_prestamo              => { type => 'serial', not_null => 1 },
         id3                      => { type => 'integer' },
-        nro_socio	             => { type => 'integer', default => '0', not_null => 1 },
-	    tipo_prestamo            => { type => 'character', length => 2, default => 'DO', not_null => 1 },
+        nro_socio	         => { type => 'varchar', length => 16, not_null => 1 },
+	tipo_prestamo            => { type => 'character', length => 2, default => 'DO', not_null => 1 },
         fecha_prestamo           => { type => 'varchar', not_null => 1 },
         id_ui_origen             => { type => 'varchar', length => 4 },
-	    id_ui_prestamo	         => { type => 'varchar', length => 4 },
+	id_ui_prestamo	         => { type => 'varchar', length => 4 },
         fecha_devolucion         => { type => 'varchar' },
         renovaciones             => { type => 'integer', default => '0', not_null => 1},
         fecha_ultima_renovacion  => { type => 'varchar' },
@@ -460,7 +460,7 @@ sub sePuedeRenovar{
 
 
 =item 
-la funcion devolver recibe una hash y actualiza la tabla de CircPrestamo,la tabla de CircReserva y de RepHistorialCirculacion. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail al socio correspondiente.
+la funcion devolver recibe una hash y actualiza la tabla de CircPrestamo,la tabla de CircReserva , de RepHistorialCirculacion y RepHistorialPrestamo. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail al socio correspondiente.
 =cut 
 
 sub devolver {
@@ -489,6 +489,7 @@ sub devolver {
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(db => $self->db,
                                                 query => [ id3 => { eq => $id3 }, estado => {eq => 'P'}]);
     my $reserva=$reservas_array_ref->[0];
+
     if($reserva){
     #Si la reserva que voy a borrar existia realmente sino hubo un error
     $self->debug("Si la reserva que voy a borrar existia realmente sino hubo un error");
@@ -520,7 +521,7 @@ C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
    $historial_circulacion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 
-### Se sanciona al usuario si es necesario, solo si se devolvio el item correctamente
+### SANCIONES  Se sanciona al usuario si es necesario, solo si se devolvio el item correctamente
         my $hasdebts=0;
         my $sanction=0;
         my $fechaFinSancion;
@@ -578,18 +579,18 @@ C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
                 $reserva->cancelar_reservas_socio($loggedinuser,$nro_socio);
             }
         }
-### Final del tema sanciones
-#         # Si la devolucion se pudo realizar
-#         $msg_object->{'error'}= 0;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P109', 'params' => [$params->{'barcode'}]} ) ;
-    }
-    else {
-#         # Si la devolucion dio error
-#         $msg_object->{'error'}= 1;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P110', 'params' => [$params->{'barcode'}]} ) ;
+### FIN SANCIONES
+
+#**********************************Se registra el movimiento en rep_historial_prestamo***************************
+	my $historial_prestamo = C4::Modelo::RepHistorialPrestamo->new(db=>$self->db);
+	$historial_prestamo->agregarPrestamo($self);
+
+#AHORA SE BORRA EL PRESTAMO DEVUELTO PASADO AL HISTORICO DE PRESTAMOS
+	$self->delete();
+#**********************************Se registra el movimiento en rep_historial_prestamo***************************
+
     }
 
-#     return ($msg_object);
 }
 
 

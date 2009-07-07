@@ -13,7 +13,7 @@ __PACKAGE__->meta->setup(
         id2              => { type => 'integer', not_null => 1 },
         id3              => { type => 'integer' },
         id_reserva       => { type => 'serial', not_null => 1 },
-        nro_socio    	 => { type => 'integer', default => '0', not_null => 1 },
+        nro_socio    	 => { type => 'varchar', length => 16, not_null => 1 },
         fecha_reserva    => { type => 'varchar', default => '0000-00-00', not_null => 1 },
         estado           => { type => 'character', length => 1 },
         id_ui	      	 => { type => 'varchar', length => 4 },

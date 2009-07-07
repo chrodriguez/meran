@@ -515,7 +515,13 @@ C4::AR::Debug::debug("Corresponde una sancion vamos a calcular de cuantos dias!"
                                                                         ],
                                     );
 
-C4::AR::Debug::debug("REGLAS? ");
+ C4::AR::Debug::debug("HAY REGLAS? ");
+
+ if (!$tipo_sancion_array_ref->[0]){
+	C4::AR::Debug::debug("NO HAY REGLAS!!!! DIAS DE SANCION 0!!! ");	
+	return 0;
+ }
+
   my $reglas_tipo_array_ref=$tipo_sancion_array_ref->[0]->ref_regla_tipo_sancion;
 
   my $err;
@@ -534,7 +540,7 @@ C4::AR::Debug::debug("DIAS Excedido -->>> ".$dias);
         if($diasExcedido > 0){
             #($regla_tipo->getCantidad == 0) ===> INFINITO
             for (my $i=0; (($i < $regla_tipo->getCantidad) || ($regla_tipo->getCantidad == 0)) && ($diasExcedido > 0); $i++) {
-                $diasExcedido-= $regla_tipo->ref_regla->getDias_demora;    
+                $diasExcedido-= $regla_tipo->ref_regla->getDias_demora;
                C4::AR::Debug::debug("DIAS Excedido -->>> ".$diasExcedido);
                 $cantidadDeDias+= $regla_tipo->ref_regla->getDias_sancion;
                C4::AR::Debug::debug("CANTIDAD DE DIAS -->>> ".$cantidadDeDias);

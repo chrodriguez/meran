@@ -879,6 +879,16 @@ CREATE TABLE IF NOT EXISTS `rep_historial_prestamo` (
 
 
 
+#RETOMANDO CIRCULACION NRO DE SOCIO EN TODOS LADOS (DECISION UNILATERAL) - MATIAS 
+ ALTER TABLE `rep_historial_prestamo` CHANGE `nro_socio` `nro_socio` VARCHAR( 16 ) NOT NULL ;
+ ALTER TABLE `circ_sancion` CHANGE `nro_socio` `nro_socio` VARCHAR( 16 ) NOT NULL ;
+ ALTER TABLE `circ_prestamo` CHANGE `nro_socio` `nro_socio` VARCHAR( 16 ) NOT NULL ;
+ ALTER TABLE `rep_historial_circulacion` CHANGE `nro_socio` `nro_socio` VARCHAR( 16 ) NOT NULL ;
+
+
+
+
+
 
 
 

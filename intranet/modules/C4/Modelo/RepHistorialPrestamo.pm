@@ -10,11 +10,11 @@ __PACKAGE__->meta->setup(
     columns => [
         id_historial_prestamo    => { type => 'serial', not_null => 1 },
         id3                      => { type => 'integer' },
-        nro_socio	             => { type => 'integer', default => '0', not_null => 1 },
-	    tipo_prestamo            => { type => 'character', length => 2, default => 'DO', not_null => 1 },
+        nro_socio	          => { type => 'varchar', length => 16, not_null => 1 },
+	tipo_prestamo            => { type => 'character', length => 2, default => 'DO', not_null => 1 },
         fecha_prestamo           => { type => 'varchar', not_null => 1 },
         id_ui_origen             => { type => 'varchar', length => 4 },
-	    id_ui_prestamo	         => { type => 'varchar', length => 4 },
+	id_ui_prestamo	         => { type => 'varchar', length => 4 },
         fecha_devolucion         => { type => 'varchar' },
         renovaciones             => { type => 'integer', default => '0', not_null => 1},
         fecha_ultima_renovacion  => { type => 'varchar' },
@@ -195,6 +195,26 @@ sub setFecha_ultima_renovacion{
 sub getTimestamp{
     my ($self) = shift;
     return ($self->timestamp);
+}
+
+sub agregarPrestamo{
+    my ($self) = shift;
+    my ($prestamo) = @_;
+
+    $self->debug("SE AGREGO EL PRESTAMO AL HISTORIAL DE PRESTAMO!!!!");
+    #Asignando data...
+
+    $self->setId3($prestamo->getId3);
+    $self->setNro_socio($prestamo->getNro_socio);
+    $self->setFecha_prestamo($prestamo->getFecha_prestamo);
+    $self->setTipo_prestamo($prestamo->getTipo_prestamo);
+    $self->setId_ui_origen($prestamo->getId_ui_origen);
+    $self->setId_ui_prestamo($prestamo->getId_ui_prestamo);
+    $self->setFecha_devolucion($prestamo->getFecha_devolucion);
+    $self->setRenovaciones($prestamo->getRenovaciones);
+    $self->setFecha_ultima_renovacion($prestamo->getFecha_ultima_renovacion);
+    $self->save();
+
 }
 
 

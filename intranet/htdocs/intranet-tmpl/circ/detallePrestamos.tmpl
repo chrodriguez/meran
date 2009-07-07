@@ -74,16 +74,16 @@
         src="[% themelang %]/images/item-return.png" 
         title="Devolver" 
         onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevolucion);">
-    [% END %]
+  
 
-    [% IF socio.esRegular %]
-        [% UNLESS socio.estaSancionado %]
+     [% IF socio.esRegular %] 
+        [% UNLESS socio.estaSancionado %] 
             <input type="image" 
             src="[% themelang %]/images/renew.png" title="Renovar" 
             onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivRenovacion);">
-        [% END %]
-    [% END %]
-    </p>
+        [% END %] 
+       [% END %] 
+	</p>
 
 <br>
 [% END %]
