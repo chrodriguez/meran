@@ -53,6 +53,7 @@ if ($input->param('type') eq 'pdf') {
 
     $t_params->{'RESULTSLOOP'}= $historico_prestamos_array_ref;
     $t_params->{'numrecords'}=	$cantidad;
+    $t_params->{'UI'}=  C4::AR::Preferencias->getValorPreferencia("defaultUI");
     $t_params->{'msg'}=	$msg;
     
     

@@ -35,20 +35,20 @@
 	<input type="hidden" name="op" value="add_validate">
 	<table>
 		<tr>
-			<td class="inputFontNormal">C&oacute;digo de unidad de informaci&oacute;n </td>
-			<td class="inputFontNormal">
+			<td>C&oacute;digo de unidad de informaci&oacute;n </td>
+			<td>
 				[% IF branchcode %]
 					<input type="hidden" name="branchcode" value="[% HTML.escape(branchcode ) %]">"
 					[% branchcode %]
 				[% ELSE %]
-					<input class="inputFontNormal" type="text" name="branchcode" size="4" maxlength="4" value="[% HTML.escape(branchcode) %]">
+					<input type="text" name="branchcode" size="4" maxlength="4" value="[% HTML.escape(branchcode) %]">
 				[% END %]
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Nombre</td>
+			<td>Nombre</td>
 			<td>
-				<input class="inputFontNormal" type="text" name="branchname" size="40" maxlength="80" value="[% HTML.escape(branchname) %]">&nbsp;
+				<input type="text" name="branchname" size="40" maxlength="80" value="[% HTML.escape(branchname) %]">&nbsp;
 			</td>
 		</tr>
 	
@@ -56,50 +56,50 @@
 			<td>
 				[% FOREACH categoryloop %]
 					<tr>
-						<td class="inputFontNormal">
+						<td>
 							[% categoryname %]
 						</td>
-						<td class="inputFontNormal">
-							<INPUT class="inputFontNormal" TYPE="checkbox" NAME="[% categorycode %]" [% checked %]>[% codedescription %]
+						<td>
+							<INPUT TYPE="checkbox" NAME="[% categorycode %]" [% checked %]>[% codedescription %]
 						</td>
 					</tr>
 				[% END %]
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Direcci&oacute;n</td>
+			<td>Direcci&oacute;n</td>
 			<td>
-				<input class="inputFontNormal" type="text" name="branchaddress1" value="[% HTML.escape(branchaddress1) %]">
+				<input type="text" name="branchaddress1" value="[% HTML.escape(branchaddress1) %]">
 			</td>
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
 			<td>
-				<input class="inputFontNormal" type="text" name="branchaddress2" value="[% HTML.escape(branchaddress2) %]">
+				<input type="text" name="branchaddress2" value="[% HTML.escape(branchaddress2) %]">
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Direccion Web</td>
+			<td>Direccion Web</td>
 			<td>
-				<input class="inputFontNormal" type="text" name="branchaddress3" value="[% HTML.escape(branchaddress3) %]">
+				<input type="text" name="branchaddress3" value="[% HTML.escape(branchaddress3) %]">
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Tel&eacute;fono</td>
+			<td>Tel&eacute;fono</td>
 			<td>
-				<input class="inputFontNormal" type="text" name="branchphone" value="[% HTML.escape(branchphone) %]">
+				<input type="text" name="branchphone" value="[% HTML.escape(branchphone) %]">
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Fax</td>
+			<td>Fax</td>
 			<td>
-				<input class="inputFontNormal" type="text" name="branchfax" value="[% HTML.escape(branchfax) %]">
+				<input type="text" name="branchfax" value="[% HTML.escape(branchfax) %]">
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">E-mail</td>
+			<td>E-mail</td>
 			<td>
-				<input class="inputFontNormal" size=40 type="text" name="branchemail" value="[% HTML.escape(branchemail) %]">
+				<input size=40 type="text" name="branchemail" value="[% HTML.escape(branchemail) %]">
 			</td>
 		</tr>
 		<tr>
@@ -154,7 +154,7 @@
 	
 	<font color="red">[% message %]</font>
 	<table border="0" cellpadding="0" cellspacing="0">
-		<tr class="inputFontNormal">
+		<tr>
 			<td colspan="9" align="left">
 				<b>Unidades de Informaci&oacute;n</b>
 			</td>
@@ -173,9 +173,9 @@
 		[% FOREACH branches %]M;
 			<tr valign="middle">
 	
-				<td  class="[% clase %]"class="inputFontNormal" align="left" valign="top">[% HTML.escape(branch_name) %]</td>
-				<td  class="[% clase %]" class="inputFontNormal" align="left" valign="top">[% HTML.escape(branch_code) %]</td>
-				<td  class="[% clase %]" class="inputFontNormal" align="left" valign="top">
+				<td  class="[% clase %]" align="left" valign="top">[% HTML.escape(branch_name) %]</td>
+				<td  class="[% clase %]" align="left" valign="top">[% HTML.escape(branch_code) %]</td>
+				<td  class="[% clase %]" align="left" valign="top">
 					[% IF address-empty-p %]
 						(no hay nada ingresado)
 					[% ELSE %]
@@ -204,7 +204,7 @@
 						[% END %]
 					[% END %]
 				</td>
-				<td class="[% clase %]"  class="inputFontNormal" align="left" valign="top">
+				<td class="[% clase %]"  align="left" valign="top">
 					[% IF no-categories-p %]
 						(no hay categor&iacute;as seteadas)
 					[% ELSE %]
@@ -214,11 +214,11 @@
 						[% END %]
 					[% END %]
 				</td>
-				<td  class="[% clase %]" class="inputFontNormal" valign="middle" align="center">
+				<td  class="[% clase %]" valign="middle" align="center">
 					<form action="[% action %]ss" method="post" name=form1>
 						<input type="hidden" name="op" value="edit">
 						<input type="hidden" name="branchcode" value="[% HTML.escape(value) %]ss">
-					<td  align="center" class="[% clase %]"class="inputFontNormal">
+					<td  align="center" class="[% clase %]">
 						<input type="hidden" name="op" value="add">
 						<input type="image" ALT="Editar"  src="[% interface %]/[% theme %]/images/editar.png" onclick="form1.submit">
 					</form>
@@ -249,7 +249,7 @@
 	
 	<table width="100%"  border="0" cellpadding="0" cellspacing="0">
 		<tr>
-			<td colspan="7" class="inputFontNormal" align="left">
+			<td colspan="7" align="left">
 				<b>Categor&iacute;as de Unidades de Informaci&oacute;n</b>
 			</td>
 		</tr>
@@ -267,10 +267,10 @@
 		[% FOREACH branchcategories %]
 			<tr>
 		
-				<td class="[% clase %]"class="inputFontNormal" align="left" valign="top">[% categoryname %]</td>
-				<td class="[% clase %]"class="inputFontNormal" align="center" valign="top"> [%categorycode %]</td>
-				<td class="[% clase %]"class="inputFontNormal" align="left" valign="top">[% codedescription %]</td>
-				<td class="[% clase %]"class="inputFontNormal" align="center" valign="center">
+				<td class="[% clase %]" align="left" valign="top">[% categoryname %]</td>
+				<td class="[% clase %]" align="center" valign="top"> [%categorycode %]</td>
+				<td class="[% clase %]" align="left" valign="top">[% codedescription %]</td>
+				<td class="[% clase %]" align="center" valign="center">
 					<form action="[% action %]" method="post" name=form3>
 					<input type="hidden" name="op" value="editcategory">
 					<input type="hidden" name="categorycode" value="[% HTML.escape(categorycode) %]">
@@ -336,7 +336,7 @@
 	
 	<table border="0" cellpadding="5" cellspacing="0" >
 		<tr>
-			<td class="inputFontNormal"><b>C&oacute;digo de categor&iacute;a</b></td>
+			<td><b>C&oacute;digo de categor&iacute;a</b></td>
 			<td>
 		<!-- FIXME QUE ES ESTO??? UN IF DE UNA VARIABLE Y ELSE DE LA MISMA???????  -->
 				[% IF categorycode %]
@@ -348,12 +348,12 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Nombre</td>
-			<td><input class="inputFontNormal" type="text" name="categoryname" size="40" maxlength="80" value="[% HTML.escape(categorycode) %]">&nbsp;</td>
+			<td>Nombre</td>
+			<td><input type="text" name="categoryname" size="40" maxlength="80" value="[% HTML.escape(categorycode) %]">&nbsp;</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">Descripci&oacute;n</td>
-			<td><input class="inputFontNormal" type="text" name="codedescription" size="40" maxlength="80" value="[% HTML.escape(codedescription) %]">&nbsp;</td>
+			<td >Descripci&oacute;n</td>
+			<td><input type="text" name="codedescription" size="40" maxlength="80" value="[% HTML.escape(codedescription) %]">&nbsp;</td>
 		</tr>
 		<tr>
 			<td colspan="2">

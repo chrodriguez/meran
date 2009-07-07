@@ -73,8 +73,9 @@
 	</tr>
     [% END %] 
 </table>
-    <p colspan="10" class="inputFontNormal" align=center>
-     <input type="image" name="borrowD"  value="prestar" src="[% themelang %]/images/item-prestar.png" title="Realizar pr&eacute;stamo" onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
+    <p colspan="10" align=center>
+     <input type="image" name="borrowD"  value="prestar" src="[% themelang %]/images/item-prestar.png" 
+            title="[% 'Realizar pr&eacute;stamo' | i18n %]" onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
     </p>
 [% ELSE %]
 
@@ -101,7 +102,7 @@
 	</tr>
 	<!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
     [% FOREACH reserva IN RESERVAS_ESPERA %]
-		<tr valign="top" class="inputFontNormal">
+		<tr valign="top">
 			<td width="1%">&nbsp;</td>
 			<td>
 			[% PERL %]

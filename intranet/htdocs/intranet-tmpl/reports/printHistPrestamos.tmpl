@@ -1,28 +1,19 @@
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>[% 'Formato de Impresi&oacute;n' | i18n %]</title>
 </head>
 
 <body>
 
-<table cellspacing="0" cellpadding="0" border="0" align="left" width="100%">
+<div class="logo_Superior"></div>
+
+<div class="titulo_arriba_tabla" >[% 'Biblioteca:' | i18n %]</div>
+<div class="titulo_arriba_tabla">[% UI %]</div>
+
+<table class="tabla_datos" cellspacing="0" cellpadding="0" border="0" align="left" width="100%">
 	
-	<tr>
-	   	<td align="center" colspan=4>
-<!-- FIXME esto esta fijo, cambiar -->
-        		<font class="titulo" >[% 'Biblioteca:' | i18n %]</font><br>
-        		<font class="subtitulo">[% 'Facultad de Ciencias Econ&oacute;micas' | i18n %]</font>
-        	</td>
-		<td align="right" colspan=3>
-<!-- FIXME esto esta fijo, cambiar -->
-			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/escudo.png" border="0" alt="Facultad de Ciencias Econ&oacute;micas" >
-		</td>
-	</tr>
-	<tr> 
-		<td align="center" colspan="7"> [% msg %]
-                </td> 
-	</tr>
 	<tr>
 		<th colspan="9" align="center">[% 'Historial de Prestamos' | i18n %]</th>
 	</tr>

@@ -17,38 +17,38 @@ document.getElementById(id).src=src;
 	<tr>
   		<td  valign="top" class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" align="right" width="30%">
                 	<b>B&uacute;squeda combinada</b>
-                	<input type="text" name="keyword" size="25" class="inputFontNormal">
+                	<input type="text" name="keyword" size="25">
     		</td>
 		<td width="10%">&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; </td>
 
 		<td  valign="top"  align="right" class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" width="30%">
  			<b>T&iacute;tulo</b>
 			<br>
-      			<input class="inputFontNormal" type="text"  size="25" name="title">
+      			<input type="text"  size="25" name="title">
     			<p valign="top" align="right">
-    			<input class="inputFontNormal" type=radio name=ttype value=normal checked>Normal
-    			<input class="inputFontNormal" type=radio name=ttype value=exact>Exacto
+    			<input type=radio name=ttype value=normal checked>Normal
+    			<input type=radio name=ttype value=exact>Exacto
    			 </p> 	
     		</td>
 	</tr>
 	<tr>
     		<td  valign="top"   align="right" class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
     			<b>B&uacute;squeda por diccionario</b><br>
-         		<input class="inputFontNormal" type="text" size="25" name="dictionary">
+         		<input type="text" size="25" name="dictionary">
     		</td>
 		<td >&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; </td>
  
     		<td valign="top" align="right" class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';"> 
    		<b>Autor</b><br>
-   		<input class="inputFontNormal" type="text" size="25" name="author">
+   		<input type="text" size="25" name="author">
 		</td>
 	</tr>
 	<tr>
        
       		<td valign="top"  align="right" class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
           		<b>Tipo de documento</b> <br>
-	  		<select class="inputFontNormal" name="class" size="1">
-	  			<option class="inputFontNormal" value="" > Cualquiera
+	  		<select name="class" size="1">
+	  			<option value="" > Cualquiera
 	  			<!-- TMPL_VAR name="classlist" -->
 	  		</select>
 	  	</td>
@@ -56,7 +56,7 @@ document.getElementById(id).src=src;
 				    
     		<td  valign="top"  align="right"class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
       			<b>Tema</b><br>
-   			<input class="inputFontNormal" type="text" size="25" name="subjectitems">
+   			<input type="text" size="25" name="subjectitems">
  
    		</td>
 	</tr>
@@ -64,32 +64,32 @@ document.getElementById(id).src=src;
    
   		<td valign="top"   align="right" class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
   			<b>C&oacute;digo de barras</b><br>
- 			<input class="inputFontNormal" type="text" size="25" name="itemnumber">
+ 			<input type="text" size="25" name="itemnumber">
   		</td>
 		<td >&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; </td>
  
 		<td valign="top"  align="right" class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
             		<b>ISBN</b><br>
-                	<input type="text" name="isbn" size="25" class="inputFontNormal">
+                	<input type="text" name="isbn" size="25">
     		</td>
 	</tr>
 	<tr >
   		<td  valign="top" class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" align="right" width="30%">
      			<b>Signatura Topogr&aacute;fica</b><br>
-         		<input class="inputFontNormal" type="text" size="25" name="signature">
+         		<input type="text" size="25" name="signature">
 	    	</td>
 	    	<td width="10%">&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; </td>
 
 	    	<td  valign="top"  align="right" class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" width="30%">
 	      		<b>Estantes Virtuales </b><br>
-	         	<input class="inputFontNormal" type="text" size="25" name="shelves">
+	         	<input type="text" size="25" name="shelves">
 		</td>
 	</tr>
 		 
 	<tr >
   		<td  valign="top" class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" align="right" width="30%">
    			<b>Anal&iacute;ticas</b><br>
-    			<input class="inputFontNormal" type="text" size="25" name="analytical">
+    			<input type="text" size="25" name="analytical">
    		</td>
 		<td width="10%">&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; </td>
 		<td  valign="top"  align="right" class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" width="30%">
@@ -102,7 +102,7 @@ document.getElementById(id).src=src;
     		<td  valign="top" align="right" class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
 		<!-- TMPL_IF name="virtuallibrary" -->
 			<b>Biblioteca Virtual</b><br>
- 			<INPUT class="inputFontNormal" TYPE="text" SIZE="25" NAME="virtual">
+ 			<INPUT TYPE="text" SIZE="25" NAME="virtual">
 		<!-- /TMPL_IF -->
 		</td>
 	</tr>

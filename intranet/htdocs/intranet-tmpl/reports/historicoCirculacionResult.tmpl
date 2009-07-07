@@ -1,15 +1,10 @@
 [% USE HTML %]
-<br>
-<br>
-<center>
-<p > 
-	<b>[% "La cantidad de operaciones hechas fueron: " | i18n %]&nbsp;[% cantidad %]<br>
-</p><br>
 
-[% paginador %]
-<br>
-<br>
-<table id="tablaResult" class="tablaResult tabla_datos" border=0 cellspacing=0 cellpadding=0 width="100%">
+<div class="resultados_consulta">[% "La cantidad de operaciones hechas fueron: " | i18n %]&nbsp;[% cantidad %]</div> 
+
+<div class="contenedor_paginador">[% paginador %]</div>
+
+<table id="tablaResult" class="tabla_datos" border=0 cellspacing=0 cellpadding=0 width="100%">
 	<tr class="tablaresultadoTitle">
 		<td width="1%" align="left" valign="top">
 			<img src="[% themelang %]/images/izquierda.png">

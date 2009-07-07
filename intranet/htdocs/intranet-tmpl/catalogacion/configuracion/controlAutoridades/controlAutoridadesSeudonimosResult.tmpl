@@ -14,9 +14,9 @@
 
 	<tbody>
 [% FOREACH seudonimo IN RESULTSLOOP %]
-	<tr align='center' class="tablaresultadoTitle">
+	<tr align='center'>
 
-		<td class="[% clase %]" class="inputFontNormal"> 
+		<td class="[% clase %]"> 
             [% IF seudonimo.seudonimo.getApellido %]
 			    [% seudonimo.seudonimo.getApellido %], [% seudonimo.seudonimo.getNombre %] <!-- PARA AUTOR -->
             [% END %]

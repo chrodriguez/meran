@@ -3,7 +3,7 @@
 
 <div class="contenedor_paginador">[% paginador %]</div>
 
-<table id="tablaResult" class="tablaResult tabla_datos" cellspacing="0" cellpadding="0" border="0" width="100%">
+<table id="tablaResult" class="tabla_datos" cellspacing="0" cellpadding="0" border="0" width="100%">
 <tr height="24" class="tablaresultadoTitle">
 
 	<td class="click" onclick="ordenar('surname')" title="[% 'Ordenar por apellido' | i18n %]">
@@ -70,11 +70,11 @@
     <div class="buttonContainerHorizontal">
     
             [% PERL %]
-                                    print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_imprimir",
-                                                                    onClick => "imprimir();",
-                                                                    title   => "[% "Imprimir Resultados" | i18n %]",
-                                            ) ;
+                                print C4::AR::Filtros::to_Icon(
+                                                                boton   => "icon_imprimir",
+                                                                onClick => "imprimir();",
+                                                                title   => "[% "Imprimir Resultados" | i18n %]",
+                                        ) ;
             [% END %]
     
             [% PERL %]

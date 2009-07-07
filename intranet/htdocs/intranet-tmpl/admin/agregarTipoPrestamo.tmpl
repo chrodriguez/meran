@@ -72,94 +72,94 @@ function Check(f) {
 [% END %]
 </div>
 
-            <table class="tablaresultado tabla_datos" width="95%">
+            <table class="tabla_datos" width="95%">
                 [% IF tipo_prestamo %]
                         <tr>
-                                <td class="inputFontNormal">[% "Tipo de pr&eacute;stamo" | i18n %]</td>
-                                <td class="inputFontNormal">
+                                <td>[% "Tipo de pr&eacute;stamo" | i18n %]</td>
+                                <td>
                                 <input type=hidden id='id_tipo_prestamo'  value='[% tipo_prestamo.getId_tipo_prestamo %]'>
                                 [% tipo_prestamo.getId_tipo_prestamo %]
                                 </td>
                         </tr>
                 [% ELSE %]
                         <tr>
-                                <td  class="inputFontNormal">[% "Tipo de pr&eacute;stamo" | i18n %]</td>
+                                <td>[% "Tipo de pr&eacute;stamo" | i18n %]</td>
                                 <td><input type=text id='id_tipo_prestamo' size=6 maxlength=4 onBlur="toUC(this)"></td>
                         </tr>
                 [% END %]
                 <tr>
-                        <td  class="inputFontNormal">[% "Descripci&oacute;n" | i18n %]</td>
-                        <td><input  class="inputFontNormal"type=text id='descripcion' size=40 maxlength=80 value='[% tipo_prestamo.getDescripcion %]'>&nbsp;</td>
+                        <td>[% "Descripci&oacute;n" | i18n %]</td>
+                        <td><input type=text id='descripcion' size=40 maxlength=80 value='[% tipo_prestamo.getDescripcion %]'>&nbsp;</td>
                 </tr>
 
                 <tr>
-                        <td  class="inputFontNormal">[% "Para Sala" | i18n %]</td>
-                        <td  class="inputFontNormal">
+                        <td>[% "Para Sala" | i18n %]</td>
+                        <td>
                                 [% IF tipo_prestamo.disponibilidad.getCodigo %]
-                                    <input  class="inputFontNormal" type=checkbox id='disponibilidad' checked value=1>
+                                    <input type=checkbox id='disponibilidad' checked value=1>
                                 [% ELSE %]
-                                    <input  class="inputFontNormal" type=checkbox id='disponibilidad' value=1>
+                                    <input type=checkbox id='disponibilidad' value=1>
                                 [% END %]
                         </td>
                 </tr>
                 <tr>
-                        <td  class="inputFontNormal">[% "Habilitado" | i18n %]</td>
-                        <td  class="inputFontNormal">
+                        <td>[% "Habilitado" | i18n %]</td>
+                        <td>
                                  [% IF tipo_prestamo.getHabilitado %]
-                                    <input  class="inputFontNormal" type=checkbox id='habilitado' checked value=1>
+                                    <input  type=checkbox id='habilitado' checked value=1>
                                 [% ELSE %]
-                                  <input  class="inputFontNormal" type=checkbox id='habilitado' value=1>
+                                  <input  type=checkbox id='habilitado' value=1>
                                 [% END %]
                         </td>
                 </tr>
                 <tr>
-                        <td  class="inputFontNormal">
+                        <td>
                                 [% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]
                         </td>
-                        <td  class="inputFontNormal">
-                                <input type=text  class="inputFontNormal" id='prestamos' size=10 value='[% tipo_prestamo.getPrestamos %]'>
+                        <td>
+                                <input type=text  id='prestamos' size=10 value='[% tipo_prestamo.getPrestamos %]'>
                         </td>
                 </tr>
         
                 
                 <tr>
-                        <td  class="inputFontNormal">
+                        <td>
                                 [% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]
                         </td>
                         <td>
-                                <input  class="inputFontNormal" type=text id='dias_prestamo' size=40 maxlength=80 value='[% tipo_prestamo.getDias_prestamo %]'>&nbsp;
+                                <input type=text id='dias_prestamo' size=40 maxlength=80 value='[% tipo_prestamo.getDias_prestamo %]'>&nbsp;
                         </td>
                 </tr>
 
                 <tr>
-                        <td  class="inputFontNormal">
+                        <td>
                                 [% "Renovaciones" | i18n %]
                         </td>
                         <td>
-                                <input  class="inputFontNormal" type=text id='renovaciones' size=40 maxlength=80 value='[% tipo_prestamo.getRenovaciones %]'>&nbsp;
+                                <input type=text id='renovaciones' size=40 maxlength=80 value='[% tipo_prestamo.getRenovaciones %]'>&nbsp;
                         </td>
                 </tr>
 
                 <tr>
-                        <td  class="inputFontNormal">
+                        <td>
                                 [% "D&iacute;as de Renovaci&oacute;n" | i18n %]
                         </td>
                         <td>
-                                <input  class="inputFontNormal" type=text id='dias_renovacion' size=40 maxlength=80 value='[% tipo_prestamo.getDias_renovacion %]'>&nbsp;
+                                <input type=text id='dias_renovacion' size=40 maxlength=80 value='[% tipo_prestamo.getDias_renovacion %]'>&nbsp;
                         </td>
                 </tr>
 
                 <tr>
-                        <td  class="inputFontNormal">
+                        <td>
                                 [% "Cuantos d&iacute;as antes se puede renovar" | i18n %]
                         </td>
                         <td>
-                                <input  class="inputFontNormal" type=text id='dias_antes_renovacion' size=40 maxlength=80 value='[% tipo_prestamo.getDias_antes_renovacion %]'>&nbsp;
+                                <input type=text id='dias_antes_renovacion' size=40 maxlength=80 value='[% tipo_prestamo.getDias_antes_renovacion %]'>&nbsp;
                         </td>
                 </tr>
 
                 <tr>
-                        <td  class="inputFontNormal">&nbsp;</td>
+                        <td>&nbsp;</td>
                         <td>
                            [% IF tipo_prestamo %]
                             [% PERL %]
