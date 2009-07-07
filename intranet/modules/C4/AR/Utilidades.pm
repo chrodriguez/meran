@@ -1564,8 +1564,8 @@ sub generarComboTipoPrestamo{
       $options_hash{'onBlur'}= $params->{'onBlur'};
     }
 
-    $options_hash{'name'}= $params->{'name'}||'tipo_nivel3_name';
-    $options_hash{'id'}= $params->{'id'}||'tipo_nivel3_id';
+    $options_hash{'name'}= $params->{'name'}||'tipo_prestamo_name';
+    $options_hash{'id'}= $params->{'id'}||'tipo_prestamo_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
 

@@ -195,7 +195,6 @@ sub listadoDeInventorio{
 sub historicoDeBusqueda{
    my ($params_obj)=@_;
 
-   my $dateformat = C4::Date::get_date_format();
    my @filtros;
 
    if ($params_obj->{'fechaIni'} ne ""){
@@ -241,38 +240,49 @@ sub historicoPrestamos{
    #Fecha de Prestamo, Fecha de Devolucion, Tipo de Item
    
     my ($params_obj)=@_;
-    
-    my $dateformat = C4::Date::get_date_format();
+
+    use C4::Modelo::RepHistorialPrestamo::Manager;
     
     my @filtros;
 
     if ($params_obj->{'f_ini'} ne ""){
-    push(@filtros, ( fecha => {     eq => $params_obj->{'f_ini'},
-                                    gt => $params_obj->{'f_ini'},
+    push(@filtros, ( fecha_prestamo => {    eq => $params_obj->{'f_ini'},
+                                            gt => $params_obj->{'f_ini'},
                                  }
                       ) );
    }
 
-   if ($params_obj->{'f_fin'} ne ""){
-        push(@filtros, ( fecha => {     eq => $params_obj->{'f_fin'}, 
-                                        lt => $params_obj->{'f_fin'}, 
+    if ($params_obj->{'f_fin'} ne ""){
+        push(@filtros, ( fecha_prestamo => {    eq => $params_obj->{'f_fin'}, 
+                                                lt => $params_obj->{'f_fin'}, 
                                 }
-                     ) );
-   }
+                        ) );
+    }
 
+    if ($params_obj->{'catUsuario'} ne ""){
+        push(@filtros, ( 'socio.cod_categoria' => {    eq => $params_obj->{'catUsuario'} } ) );
+    }
+
+    if ($params_obj->{'tipo_prestamo'} ne ""){
+        push(@filtros, ( 'tipo_prestamo' => {    eq => $params_obj->{'tipo_prestamo'} } ) );
+    }
+
+    if ($params_obj->{'tipo_nivel3_id'} ne ""){
+        push(@filtros, ( 'nivel3.nivel2.tipo_documento' => {    eq => $params_obj->{'tipo_nivel3_id'} } ) );
+    }
 
   
     my $prestamos_count = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo_count(
-                                                                            query => \@filtros,
-                                                                            require_objects => ['nivel3','socio','ui','ui_prestamo'],
-                                                                        ); 
+                                                            query => \@filtros,
+                                                            require_objects => ['nivel3','nivel3.nivel2','socio','ui','ui_prestamo'],
+                                                    ); 
     
     my $prestamos_array_ref = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo(
-                                                                            query => \@filtros,
-                                                                            require_objects => ['nivel3','socio','ui','ui_prestamo'],
-                                                                            limit   => $params_obj->{'cantR'},
-                                                                            offset  => $params_obj->{'ini'},
-                                                                        ); 
+                                                        query => \@filtros,
+                                                        require_objects => ['nivel3','nivel3.nivel2','socio','ui','ui_prestamo'],
+                                                        limit   => $params_obj->{'cantR'},
+                                                        offset  => $params_obj->{'ini'},
+                                                ); 
 
     return($prestamos_count, $prestamos_array_ref);
 }
