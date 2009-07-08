@@ -15,24 +15,24 @@
 
 <!-- TMPL_LOOP NAME=HISTORICO -->
 
-  	<tr align='center' class="inputFontNormal">
+  	<tr align='center'>
   		<td height=25 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
 
-		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
-			<a class="inputFontNormal" href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->">
+		<td class="<!-- TMPL_VAR NAME='clase'-->"> 
+			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->">
 				<!-- TMPL_VAR NAME=userCompleto -->
 			</a>
 		</td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
-			<a class="inputFontNormal" 
+  		<td class="<!-- TMPL_VAR NAME='clase'-->">
+			<a 
 			href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=<!-- TMPL_VAR NAME=responsable -->">
 				<!-- TMPL_VAR NAME=nomCompleto -->
 			</a> 
 		</td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal"> 
+  		<td class="<!-- TMPL_VAR NAME='clase'-->"> 
 			<!-- TMPL_VAR NAME=fecha -->
 		</td>
-  		<td class="<!-- TMPL_VAR NAME='clase'-->" class="inputFontNormal">
+  		<td class="<!-- TMPL_VAR NAME='clase'-->">
 			<!-- TMPL_VAR NAME=operacion -->
 			<!-- TMPL_IF NAME=description -->
 				<br>(<!-- TMPL_VAR NAME=description -->) 

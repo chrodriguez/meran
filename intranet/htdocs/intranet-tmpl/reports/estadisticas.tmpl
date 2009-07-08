@@ -42,21 +42,21 @@ function updateInfo(responseText){
 
 	<table border="0" cellspacing="0" cellpadding="0">
   		<tr>
-			<td valign= "top" class=inputFontNormal>
-			<input id="chkfecha" class="inputFontNormal" type="checkbox" name="chkfecha" 
+			<td valign= "top">
+			<input id="chkfecha" type="checkbox" name="chkfecha" 
 			[% IF chkfecha %]checked[% END %]>
 			<b>[% "Seleccione para buscar por fecha." | i18n %]</b><br><br>
 			[% "Seleccione una fecha de inicio:" | i18n %]<br><br>
 			[% "Seleccione una fecha de Fin:" | i18n %]
 			</td>
 
-			<td valign= "top" class=inputFontNormal>
+			<td valign= "top">
 				<br><br>
-			<input id="dateselected" class="inputFontNormal" name="dateselected" value="
+			<input id="dateselected" name="dateselected" value="
 			[% IF fechaInicio %][% dateselected  %][% ELSE %][% todaydate %][% END %]"
 			
 				<br><br>
-			<input id="dateselectedEnd" class="inputFontNormal" name="dateselectedEnd" value="
+			<input id="dateselectedEnd" name="dateselectedEnd" value="
                             [% IF fechaFin %]
                                 [% dateselectedEnd  %]
                             [% ELSE %]
@@ -64,14 +64,14 @@ function updateInfo(responseText){
                             [% END %]"			
                         
 			</td>
-			<td class="inputFontNormal" rowspan=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-			<td rowspan=3 class="inputFontNormal"> <b>[% "Buscar por:" | i18n %]</b> <br>
+			<td rowspan=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td rowspan=3> <b>[% "Buscar por:" | i18n %]</b> <br>
 				<p>Prestamos:</p>
-				<input id="chck" class="inputFontNormal" type="checkbox"  value="DO" name="chck">[% "Domiciliario" | i18n %]
-				<input id="chck" class="inputFontNormal" type="checkbox"  value="SA" name="chck">[% "Sala de lectura" | i18n %]
-				<input id="chck" class="inputFontNormal" type="checkbox"  value="FO" name="chck">[% "Para fotocopia" | i18n %]
-				<input id="chck" class="inputFontNormal" type="checkbox"  value="ES" name="chck">[% "Especial" | i18n %] <br><br>
-				<input id="chkuser" class="inputFontNormal" type="checkbox"  value="US" name="chkuser">[% "Usuario" | i18n %]
+				<input id="chck" type="checkbox"  value="DO" name="chck">[% "Domiciliario" | i18n %]
+				<input id="chck" type="checkbox"  value="SA" name="chck">[% "Sala de lectura" | i18n %]
+				<input id="chck" type="checkbox"  value="FO" name="chck">[% "Para fotocopia" | i18n %]
+				<input id="chck" type="checkbox"  value="ES" name="chck">[% "Especial" | i18n %] <br><br>
+				<input id="chkuser" type="checkbox"  value="US" name="chkuser">[% "Usuario" | i18n %]
 				<br><br>
 
                 [% PERL %]

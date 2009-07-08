@@ -1,8 +1,8 @@
 <center>
 
-        <p class="inputFontNormal">[% "Resultados de la B&uacute;squeda de un ejemplar" | i18n %]</p>
+        <p>[% "Resultados de la B&uacute;squeda de un ejemplar" | i18n %]</p>
         
-        <p class="inputFontNormal">
+        <p>
         [% "Ha buscado por" | i18n %] 
             <b>
                 [% IF isbn %]
@@ -35,7 +35,7 @@
                 </tr>
                 [% IF result %]
                     [% FOREACH result %]
-                        <tr class="inputFontNormal">
+                        <tr>
                                 
                                 <td>
                                     [% titulo %]
@@ -45,13 +45,13 @@
                                 </td>
                                 <td> [% autor %]</td>
                                 <td>[% combo %]</td>
-                                <td><a  class="click" class="inputFontNormal" onClick="agregarEjemplar('[% id1 %]')">[% "Agregar grupo" | i18n %]</a></td>
+                                <td><a  class="click" onClick="agregarEjemplar('[% id1 %]')">[% "Agregar grupo" | i18n %]</a></td>
                                 
                         </tr>
                     [% END %]
                 [% ELSE %]
                         <tr>
-                        <td  class="inputFontNormal" align="center" colspan="6">
+                        <td align="center" colspan="6">
                                     [% "No se encontr&oacute; nada" | i18n %]
                         </td>
                         </tr>
@@ -77,18 +77,18 @@
                     [% FOREACH breeding_loop %]
                             <tr valign="middle">
                                
-                                <td class="inputFontNormal">
+                                <td>
                                     [% title %]
                                     [% IF unititle %] 
                                         :&nbsp;[% unititle %]
                                     [% END %]
                                 </td>
-                                <td class="inputFontNormal"> [% author %]</td>
-                                <td class="inputFontNormal">[% isbn %]</td>
-                                <td class="inputFontNormal">[% file %]</td>
+                                <td> [% author %]</td>
+                                <td>[% isbn %]</td>
+                                <td>[% file %]</td>
                                 [% IF ! NOTMARC %]
                                     <td>
-                                        <a  class="inputFontNormal" href="addbiblio.pl?breedingid=[% id %]">
+                                        <a href="addbiblio.pl?breedingid=[% id %]">
                                             [% "Agregar&nbsp;ejemplar" | i18n %]
                                         </a>
                                     </td>
@@ -98,7 +98,7 @@
                     [% END %]
                 [% ELSE %]
                         <tr>
-                                <td  class="inputFontNormal" align="center" colspan="8">
+                                <td align="center" colspan="8">
                                     [% "No se encontr&oacute; nada" | i18n %]
                                 </td>
                         </tr>
@@ -106,7 +106,7 @@
         
         </table>
         <br>
-        <a  class="inputFontNormal" href="../catalogacion/estructura/agregarItem.pl" class="button">
+        <a  href="../catalogacion/estructura/agregarItem.pl" class="button">
             [% "Crear descripci&oacute;n bibliogr&aacute;fica vac&iacute;a" | i18n %]
         </a>
         <br>

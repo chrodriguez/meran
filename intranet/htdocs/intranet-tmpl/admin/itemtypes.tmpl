@@ -79,49 +79,49 @@ function Check(f) {
 		<input type=hidden name=checked value=0>
 		<table class="tablaresultado" width="95%">
 			[% IF itemtype %]
-				<tr><td class="inputFontNormal">[% "Tipo de documento" | i18n %]</td><td class="inputFontNormal"><input type=hidden name=itemtype value=[% itemtype %]>[% itemtype %]</td></tr>
+				<tr><td>[% "Tipo de documento" | i18n %]</td><td><input type=hidden name=itemtype value=[% itemtype %]>[% itemtype %]</td></tr>
 			[% ELSE %]
-				<tr><td  class="inputFontNormal">[% "Tipo de documento" | i18n %]</td><td><input type=text name=itemtype size=6 maxlength=4 onBlur="toUC(this)"></td></tr>
+				<tr><td>[% "Tipo de documento" | i18n %]</td><td><input type=text name=itemtype size=6 maxlength=4 onBlur="toUC(this)"></td></tr>
 			[% END %]
 			<tr>
-				<td  class="inputFontNormal">[% "Descripci&oacute;n" | i18n %]</td>
-				<td><input  class="inputFontNormal" type=text name=description size=40 maxlength=80 value='[% HTML.escape(description) %]'>&nbsp;</td>
+				<td>[% "Descripci&oacute;n" | i18n %]</td>
+				<td><input type=text name=description size=40 maxlength=80 value='[% HTML.escape(description) %]'>&nbsp;</td>
 			</tr>
 			<tr>
-				<td  class="inputFontNormal">[% "Para Sala" | i18n %]</td>
-				<td  class="inputFontNormal">
+				<td>[% "Para Sala" | i18n %]</td>
+				<td>
 					[% IF notforloan %]
-						<input  class="inputFontNormal" type=checkbox name=notforloan checked value=1>
+						<input type=checkbox name=notforloan checked value=1>
 					[% ELSE %]
-						<input  class="inputFontNormal" type=checkbox name=notforloan value=1>
+						<input type=checkbox name=notforloan value=1>
 					[% END %]
 				si esta seleccionado todos los items de este tipo sera "para sala"
 				</td>
 			</tr>
 			<tr>
-				<td  class="inputFontNormal">[% "Duraci&oacute;n del pr&eacute;stamo" | i18n %]</td>
-				<td  class="inputFontNormal">
-					<input type=text  class="inputFontNormal" name=loanlength size=10 value='[% loanlength %]'>
+				<td>[% "Duraci&oacute;n del pr&eacute;stamo" | i18n %]</td>
+				<td>
+					<input type=text name=loanlength size=10 value='[% loanlength %]'>
 					significativo solo si no esta seteado "para sala"
 				</td>
 			</tr>
 			<tr>
-				<td  class="inputFontNormal">[% "Renovaciones permitidas" | i18n %]</td>
-				<td><input  class="inputFontNormal" type=checkbox name=renewalsallowed [% IF renewalsallowed %] checked [% END %] value=1></td>
+				<td>[% "Renovaciones permitidas" | i18n %]</td>
+				<td><input type=checkbox name=renewalsallowed [% IF renewalsallowed %] checked [% END %] value=1></td>
 			</tr>
 			<tr>
-				<td  class="inputFontNormal">[% "Costo de pr&eacute;stamo" | i18n %]</td>
-				<td><input  class="inputFontNormal" type=text name=rentalcharge size=10 value='[% rentalcharge %]'></td>
-			</tr>
-
-			<tr>
-				<td  class="inputFontNormal">[% "Agrupaci&oacute;n en la b&uacute;squeda" | i18n %]</td>
-				<td><input  class="inputFontNormal" type=text name=search size=40 value='[% search %]'></td>
+				<td>[% "Costo de pr&eacute;stamo" | i18n %]</td>
+				<td><input type=text name=rentalcharge size=10 value='[% rentalcharge %]'></td>
 			</tr>
 
 			<tr>
-				<td  class="inputFontNormal">[% "detalle" | i18n %]</td>
-				<td><input  class="inputFontNormal" type=text name=detail size=40 value='[% detail %]'></td>
+				<td>[% "Agrupaci&oacute;n en la b&uacute;squeda" | i18n %]</td>
+				<td><input type=text name=search size=40 value='[% search %]'></td>
+			</tr>
+
+			<tr>
+				<td>[% "detalle" | i18n %]</td>
+				<td><input type=text name=detail size=40 value='[% detail %]'></td>
 			</tr>
 
 		       [% IF virtuallibrary %]
@@ -129,15 +129,15 @@ function Check(f) {
                                     <td colspan=2><hr></td>
                             </tr>
                             <tr>
-                                    <td  class="inputFontNormal">[% "Biblioteca Virtual" | i18n %]</td>
-                                    <td><input  class="inputFontNormal" type=checkbox name=virtual [% IF virtual %]checked [% END %]> value=1></td>
+                                    <td>[% "Biblioteca Virtual" | i18n %]</td>
+                                    <td><input  type=checkbox name=virtual [% IF virtual %]checked [% END %]> value=1></td>
                             </tr>
                             <tr>
-                                <td  class="inputFontNormal">[% "Tipo de pedido" | i18n %]</td>
+                                <td>[% "Tipo de pedido" | i18n %]</td>
                                 <td>	
-                                <select  class="inputFontNormal" name="requesttype" size="1">
-                                <option  class="inputFontNormal" value="copy" [% IF copy %]selected[% END %]>[% "Para Copia" | i18n %]</option>
-                                <option  class="inputFontNormal" value="print" [% IF print %]selected[% END %]>[% "Para Impresi&oacute;n" | i18n %]</option>
+                                <select name="requesttype" size="1">
+                                <option value="copy" [% IF copy %]selected[% END %]>[% "Para Copia" | i18n %]</option>
+                                <option value="print" [% IF print %]selected[% END %]>[% "Para Impresi&oacute;n" | i18n %]</option>
                                 </select>	
                                 </td>
                             </tr>
@@ -145,7 +145,7 @@ function Check(f) {
 		       [% END %]
 
 			<tr>
-				<td  class="inputFontNormal">&nbsp;</td>
+				<td>&nbsp;</td>
 				<td>
                 [% PERL %]
                                 print C4::AR::Filtros::to_Button( 
@@ -165,22 +165,22 @@ function Check(f) {
 [% IF delete_confirm %]
 	<TABLE width="90%">
 		<tr>
-			<td  class="inputFontNormal">[% "Tipo de documento" | i18n %]</td>
+			<td>[% "Tipo de documento" | i18n %]</td>
 			<td>[% itemtype %]</td>
 		</tr>
 		<form action='[% script_name %]' method=post>
 			<input type=hidden name=op value=delete_confirmed>
 			<input type=hidden name=itemtype value='[% itemtype %]'>
 		<tr>
-			<td  class="inputFontNormal">[% "Descripci&oacute;n" | i18n %]</td>
+			<td>[% "Descripci&oacute;n" | i18n %]</td>
 			<td>[% description %]</td>
 		</tr>
 		<tr>
-			<td  class="inputFontNormal">[% "Duraci&oacute;n del pr&eacute;stamo" | i18n %]</td>
+			<td>[% "Duraci&oacute;n del pr&eacute;stamo" | i18n %]</td>
 			<td>[% loanlength %]</td>
 		</tr>
 		<tr>
-			<td  class="inputFontNormal">[% "Renovaciones" | i18n %]</td>
+			<td>[% "Renovaciones" | i18n %]</td>
 			<td>[% IF renewalsallowed %]
 				[%" Permitido" | i18n %]
                             [% ELSE %]
@@ -189,11 +189,11 @@ function Check(f) {
 			</td>
 		</tr>
 		<tr>
-			<td  class="inputFontNormal">[% "Costo de pr&eacute;stamo" | i18n %]</td>
+			<td>[% "Costo de pr&eacute;stamo" | i18n %]</td>
 			<td>[% rentalcharge %]</td>
 		</tr>
 	 	<tr>
-			<td  class="inputFontNormal">[% "Agrupaci&oacute;n en la b&uacute;squeda" | i18n %]</td>
+			<td>[% "Agrupaci&oacute;n en la b&uacute;squeda" | i18n %]</td>
 			<td>[% search %]</td>
 		</tr>
 		 
@@ -202,15 +202,15 @@ function Check(f) {
                                 <td colspan=2><hr></td>
                         </tr>
                         <tr>
-                                <td  class="inputFontNormal">[% "Biblioteca Virtual" | i18n %]</td>
+                                <td>[% "Biblioteca Virtual" | i18n %]</td>
                                 <td>
                                 [% IF virtual %]
                                         [% "Si" | i18n %]
                                                 </td> 
                                         </tr> 
                                         <tr>
-                                                <td  class="inputFontNormal">[% "Tipo de pedido" | i18n %]</td>
-                                                <td  class="inputFontNormal">
+                                                <td>[% "Tipo de pedido" | i18n %]</td>
+                                                <td>
                                                 [% IF copy %]
                                                     [% "Para Copia" | i18n %]
                                                 [% END %]
@@ -230,12 +230,12 @@ function Check(f) {
 
 <!-- KASDBNFJKBDSLJBFJLSDBFJLSDBFDSLHBFHDSBFLBDSFBDSLFBDSBFLDSBFLDSBFDSLFBDLS -->
 		<tr>
-			<td colspan=2 align=center  class="inputFontNormal">
+			<td colspan=2 align=center>
 				<b>[% "El registro esta en siendo utilizado" | i18n %] [% total %] [% "veces. No se puede borrar." | i18n %]</b>
 			</td>
 		</tr>
 		<tr>
-			<td colspan=2  class="inputFontNormal">
+			<td colspan=2>
 		</form>
 		<form action='[% script_name %]' method=post>
 			<input type=submit value=OK>
@@ -244,14 +244,14 @@ function Check(f) {
 		</tr>
 [% ELSE %]
 		<tr>
-			<td colspan=2  class="inputFontNormal" align=center>
+			<td colspan=2 align=center>
 				[% "CONFIRME BORRADO" | i18n %]
 			</td>
 		</tr>
 		<tr>
 			<td>
 				<form action='[% script_name %]' method=post>
-					<INPUT  class="inputFontNormal" type=submit value='SI'>
+					<INPUT  type=submit value='SI'>
 				</form>
 			</td>
 			<td>

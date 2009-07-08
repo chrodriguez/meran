@@ -68,7 +68,7 @@
 	<td  class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>
 
 	<td class="<!-- TMPL_VAR name="clase" -->">
-	<a class="inputFontNormal" href=/cgi-bin/koha/opac-analysis.pl?bibnum=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->&bibnumitems=<!-- TMPL_VAR NAME=biblioitemnumber ESCAPE=URL -->#<!-- TMPL_VAR NAME=analyticalnumber -->><!-- TMPL_VAR NAME=analyticaltitle ESCAPE=HTML --></a>
+	<a href=/cgi-bin/koha/opac-analysis.pl?bibnum=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->&bibnumitems=<!-- TMPL_VAR NAME=biblioitemnumber ESCAPE=URL -->#<!-- TMPL_VAR NAME=analyticalnumber -->><!-- TMPL_VAR NAME=analyticaltitle ESCAPE=HTML --></a>
 	</td>
 
 	<td class="<!-- TMPL_VAR name="clase" -->">
@@ -78,8 +78,8 @@
 	<!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --></a><br>
 	<!-- /TMPL_LOOP -->                                                                                                                           <!-- /TMPL_IF -->
 	</td>
-	<td class="<!-- TMPL_VAR name="clase" -->" class="inputFontNormal">
-	EN:  <a href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME="autorppal" ESCAPE="URL" -->&type=opac"><!-- TMPL_VAR NAME="apellidoppal" --><!-- TMPL_IF name="nombreppal" -->, <!-- TMPL_VAR NAME="nombreppal" --><!-- /TMPL_IF --></a>. <a class="inputFontNormal" href=/cgi-bin/koha/opac-detail.pl?type=opac&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a>. <!-- TMPL_VAR NAME="number" --> <!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" -->
+	<td class="<!-- TMPL_VAR name="clase" -->">
+	EN:  <a href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME="autorppal" ESCAPE="URL" -->&type=opac"><!-- TMPL_VAR NAME="apellidoppal" --><!-- TMPL_IF name="nombreppal" -->, <!-- TMPL_VAR NAME="nombreppal" --><!-- /TMPL_IF --></a>. <a  href=/cgi-bin/koha/opac-detail.pl?type=opac&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME="title" ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a>. <!-- TMPL_VAR NAME="number" --> <!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" -->
 	</td>
 
 	<td height=25 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>

@@ -1238,38 +1238,51 @@ sub historicoCirculacion{
 }
 
 sub historicoSanciones{
-   my ($params_obj)=@_;
-   use C4::Modelo::RepHistorialSancion::Manager;
-   my @filtros;
-   my @results;
+    my ($params_obj)=@_;
+    use C4::Modelo::RepHistorialSancion::Manager;
+    my @filtros;
+    my @results;
 
-   push (@filtros, ( fecha => {  eq => format_date_in_iso($params_obj->{'fechaIni'}),
-                                 gt => format_date_in_iso($params_obj->{'fechaIni'}) }) );
+    if ($params_obj->{'fechaIni'} ne ''){
+        push (@filtros, ( fecha => {  eq => $params_obj->{'fechaIni'},
+                                        gt => $params_obj->{'fechaIni'} }) );
+    }
+     
+    if ($params_obj->{'fechaFin'} ne ''){   
+        push (@filtros, ( fecha => {  eq => $params_obj->{'fechaFin'},
+                                        lt => $params_obj->{'fechaFin'} }) );
+    }
+    
+    if ( ($params_obj->{'socio'}) && ($params_obj->{'socio'} ne '-1') ){
+        push (@filtros, ( responsable => { eq => $params_obj->{'socio'} },) );
+    }
+    
+    if( ($params_obj->{'tipoOperacion'}) && ($params_obj->{'tipoOperacion'} ne '-1') ){
+        push (@filtros, ( tipo_operacion => { eq => $params_obj->{'tipoOperacion'} },) );
+    }
+    # FIXME de donde saco el tipo de prestao
+=item
+    if ( ($params_obj->{'tipoPrestamo'}) && ($params_obj->{'tipoPrestamo'} ne '-1') ){
+        push (@filtros, ( 'circ_tipo_sancion.tipo_operacion' => { eq => $params_obj->{'tipoPrestamo'} },) );
+    }
+=cut
 
-   push (@filtros, ( fecha => {  eq => format_date_in_iso($params_obj->{'fechaFin'}),
-                                 lt => format_date_in_iso($params_obj->{'fechaFin'}) }) );
 
-
-   if ( ($params_obj->{'user'}) && ($params_obj->{'user'} ne '-1') ){
-      push (@filtros, ( responsable => { eq => $params_obj->{'user'} },) );
-   }
-
-   if( ($params_obj->{'tipoOperacion'}) && ($params_obj->{'tipoOperacion'} ne '-1') ){
-      push (@filtros, ( tipo_operacion => { eq => $params_obj->{'tipoOperacion'} },) );
-   }
-   if ( ($params_obj->{'tipoPrestamo'}) && ($params_obj->{'tipoPrestamo'} ne '-1') ){
-      push (@filtros, ( 'circ_tipo_sancion.tipo_operacion' => { eq => $params_obj->{'tipoPrestamo'} },) );
-   }
-
-   my $sanciones = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion(
-                                                                              query => \@filtros,
-                                                                              sorty_by => $params_obj->{'orden'},
-                                                                              limit => $params_obj->{'cantR'},
-                                                                              offset => $params_obj->{'ini'},
-                                                                              #FIXME falta circ_tipo_sancion
-                                                                              with_objects => ['usr_responsable','usr_nro_socio'],
-                                                                           );
-   return (scalar(@$sanciones),$sanciones);
+    my $sanciones_count = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion_count(
+                                                                                query => \@filtros,
+                                                                                #FIXME falta circ_tipo_sancion
+                                                                                with_objects => ['usr_responsable','usr_nro_socio'],
+                                                                            );
+    
+    my $sanciones_array_ref = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion(
+                                                                                query => \@filtros,
+                                                                                #FIXME falta circ_tipo_sancion
+                                                                                with_objects => ['usr_responsable','usr_nro_socio'],
+                                                                                sorty_by => $params_obj->{'orden'},
+                                                                                limit => $params_obj->{'cantR'},
+                                                                                offset => $params_obj->{'ini'},
+                                                                            );
+    return ($sanciones_count,$sanciones_array_ref);
 }
 
 

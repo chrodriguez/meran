@@ -69,11 +69,11 @@ $(document).ready(function() {
     <ul class="filtros_reportes_izq">
         <li>
             <b>[% "Seleccione para buscar por fecha." | i18n %]</b>
-            <input class="inputFontNormal" type="checkbox" id="chkfecha">
+            <input type="checkbox" id="chkfecha">
         </li>
         <li>
             [% "Seleccione una fecha de inicio:" | i18n %]
-            <input id="fechaIni" class="inputFontNormal" name="dateselected" value="
+            <input id="fechaIni" name="dateselected" value="
                                 [% IF fechaInicio %]
                                     [% dateselected %]
                                 [% ELSE %]
@@ -83,7 +83,7 @@ $(document).ready(function() {
         </li>
         <li>
             [% "Seleccione una fecha de Fin:" | i18n %]
-            <input id="fechaFin" class="inputFontNormal" name="dateselectedEnd" value="
+            <input id="fechaFin" name="dateselectedEnd" value="
                     [% IF fechaFin %]
                         [% dateselectedEnd %]
                     [% ELSE %]

@@ -1,23 +1,5 @@
 #!/usr/bin/perl
 
-# Copyright 2000-2002 Katipo Communications
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-#
-
 use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
@@ -45,27 +27,24 @@ my $ini= $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #FIN inicializacion
 
-my $dateformat = C4::Date::get_date_format();
-#Tomo las fechas que setea el usuario y las paso a formato ISO
-$obj->{'fechaIni'} =  C4::Date::format_date_in_iso($obj->{'fechaIni'},$dateformat);
-$obj->{'fechaFin'} =  C4::Date::format_date_in_iso($obj->{'fechaFin'},$dateformat);
-
 $obj->{'orden'}= $obj->{'orden'} ||'date';
-my $user= $obj->{'user'};
-my $tipoPrestamo= $obj->{'tiposPrestamos'};
+my $socio= $obj->{'user'};
+my $tipoPrestamo= $obj->{'tiposPrestamo'};
 my $tipoOperacion= $obj->{'tipoOperacion'};
 my $funcion=$obj->{'funcion'};
 $obj->{'cantR'} = $cantR;
 $obj->{'ini'} = $ini;
 
 my ($cant,$resultsdata)=C4::AR::Estadisticas::historicoSanciones($obj);
-C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
 
 
-$t_params->{'resultsloop'}=$resultsdata;
-$t_params->{'cant'}=$cant;
-$t_params->{'user'}=$user;
-$t_params->{'tiposPrestamos'}=$tipoPrestamo;
-$t_params->{'tipoOperacion'}=$tipoOperacion;
+$t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
+
+
+$t_params->{'resultsloop'}= $resultsdata;
+$t_params->{'cant'}= $cant;
+$t_params->{'socio'}= $socio;
+$t_params->{'tiposPrestamos'}= $tipoPrestamo;
+$t_params->{'tipoOperacion'}= $tipoOperacion;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

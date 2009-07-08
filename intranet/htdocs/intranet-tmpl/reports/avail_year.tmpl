@@ -26,25 +26,23 @@ function hacerSubmit(){
 <form name="unidadInformacion" action=/cgi-bin/koha/reports/avail_year.pl method=post >
 <table border=0 cellspacing=0 cellpadding=0 width="100%" align="left">
 <tr>
-<td class="inputFontNormal">[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</td>
-<td class="inputFontNormal">[% unidades %]</td>
+<td>[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</td>
+<td>[% unidades %]</td>
 <td>&nbsp;</td>
 </tr>
 <tr>
-<td class="inputFontNormal">[% "Seleccione una fecha de inicio:" | i18n %]</td>
-<td class="inputFontNormal"> 
+<td>[% "Seleccione una fecha de inicio:" | i18n %]</td>
+<td> 
 		<input id="ini" name="ini" value="[% ini %]">
-	     	
 </td>
 <td>&nbsp;</td>
 </tr>
 <tr>
-<td class="inputFontNormal">[% "Seleccione una fecha de Fin:" | i18n %]</td>
-<td class="inputFontNormal"> 
+<td>[% "Seleccione una fecha de Fin:" | i18n %]</td>
+<td> 
 		<input  id="fin" name="fin" value="[% fin %]">
-		
 </td>
-<td class="inputFontNormal"> 
+<td> 
                 [% PERL %]
                                 print C4::AR::Filtros::to_Button( 
                                                                     text    =>  "[% 'Buscar' | i18n %]",

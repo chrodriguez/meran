@@ -57,7 +57,7 @@ function consultar(){
 		</td>
 	</tr>
 
-	<tr class="inputFontNormal">
+	<tr>
 		<td>
  			<br><input type="checkbox" name="chck" value="USO" id="chck"> 
 			[% "Seleccione la cantidad de uso:" | i18n %]
@@ -70,7 +70,7 @@ function consultar(){
 			</select>
 		</td>
 	</tr>
-	<tr class="inputFontNormal">
+	<tr>
 		<td>
 			<br><input type="checkbox" name="chck" value="CAT" id="CAT">
 			[% "Seleccione la categor&iacute;a:" | i18n %]
@@ -79,7 +79,7 @@ function consultar(){
 			<br>[% categorias %]
 		</td>
 	</tr>
-	<tr class="inputFontNormal">
+	<tr>
 		<td>
 			<br>[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]
 		</td>
@@ -88,10 +88,10 @@ function consultar(){
 		</td>
 	</tr>
 
-	<tr class="inputFontNormal">
+	<tr>
 		<td colspan="2">
 			<br>
-			<a href="listaMailUsuarios.pl" class="inputFontNormal" onMouseOut="swap('mails','<[% themelang %] /images/lista-mails.png')" onMouseOver="swap('mails','[% themelang %]/images/lista-mailsbis.png')" >
+			<a href="listaMailUsuarios.pl" onMouseOut="swap('mails','<[% themelang %] /images/lista-mails.png')" onMouseOver="swap('mails','[% themelang %]/images/lista-mailsbis.png')" >
 			<input  name="mails" id="mails" alt="Generar lista de mails" type="image" value="Lista de Mails"  src="[% themelang %] /images/lista-mails.png" border="0" title="Lista de mails" >
 			</a>
 		</td>

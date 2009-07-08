@@ -86,7 +86,9 @@ sub setResponsable{
 
 sub getFecha{
     my ($self) = shift;
-    return ($self->fecha);
+    my $dateformat = C4::Date::get_date_format();
+
+    return ( C4::Date::format_date($self->fecha, $dateformat) );
 }
 
 sub setFecha{
@@ -97,7 +99,10 @@ sub setFecha{
 
 sub getFecha_final{
     my ($self) = shift;
-    return ($self->fecha_final);
+  
+    my $dateformat = C4::Date::get_date_format();
+
+    return ( C4::Date::format_date($self->fecha_final, $dateformat) );
 }
 
 sub setFecha_final{

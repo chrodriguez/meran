@@ -83,7 +83,7 @@ function AddStatement() {
                                     [% IF first %]
                                             <input type="hidden" name="and_or" value="">&nbsp;
                                     [% ELSE %]
-                                            <select class="inputFontNormal"name="and_or" size="1" onchange="sql_update()">
+                                            <select name="and_or" size="1" onchange="sql_update()">
                                                     <option value="and">y</option>
                                                     <option [% IF or %]selected [% END %]value="or">o</option>
                                             </select>
@@ -92,13 +92,13 @@ function AddStatement() {
                             <td>[% fieldlist%]</td>
                             <td>
                             
-                                    <select name="excluding" size="1" class="inputFontNormal"onchange="sql_update()">
+                                    <select name="excluding" size="1" onchange="sql_update()">
                                             <option value="0"> </option>
                                             <option [% IF not %]selected [% END %]value="1">not</option>
                                     </select>
                             </td>
                             <td>
-                                    <select name="operator" size="1" onchange="sql_update()"class="inputFontNormal">
+                                    <select name="operator" size="1" onchange="sql_update()">
                                             [% IF contains %]
                                                     <option selected value="contains">Contiene</option>
                                             [% ELSE %]

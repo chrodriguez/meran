@@ -18,9 +18,9 @@ function ordenar(orden){
 	objAH.sort(orden);
 }
 
-function updateInfo(responseText){
+function updateConsultar(responseText){
 	$("#result").html(responseText);
-	zebra("tablaResult");
+	zebra("tabla_datos");
 }
 
 function changePage(ini){
@@ -28,12 +28,13 @@ function changePage(ini){
 }
 
 function consultar(){
-	objAH=new AjaxHelper(updateInfo);
-	objAH.fechaIni= $('#fechaIni').val();
-	objAH.fechaFin= $('#fechaFin').val();
-	objAH.user= $('#user').val();
-	objAH.tipoPrestamos=$('#tipoPrestamos').val();
-	objAH.tipoOperacion=$('#tipoOperacion').val();
+	objAH=new AjaxHelper(updateConsultar);
+    objAH.debug= true;
+	objAH.fechaIni= $.trim($('#fechaIni').val());
+	objAH.fechaFin= $.trim($('#fechaFin').val());
+	objAH.socio= $('#socios').val();
+	objAH.tipoPrestamo= $('#tipo_prestamo_id').val();
+	objAH.tipoOperacion= $('#tipoOperacion').val();
 	objAH.url= "/cgi-bin/koha/reports/historicoSancionesResult.pl";
 	objAH.funcion="changePage";
 	objAH.sendToServer();
@@ -43,53 +44,44 @@ function consultar(){
 
 <div class="titulos_interior">[% "Hist&oacute;rico de Sanciones" | i18n %]</div>
 
-<form  id="unidad" name="unidad"  method=post action="historicoSanciones.pl">
-	<table border="0" cellspacing="0" cellpadding="0">
-  		<tr>
-			<td valign= "top" class=inputFontNormal>
-			<b>[% "Seleccione para buscar por fecha." | i18n %]</b><br><br>
-			[% "Seleccione una fecha de inicio:" | i18n %]<br><br>
-			[% "Seleccione una fecha de Fin:" | i18n %]
-			</td>
-
-			<td valign= "top" class=inputFontNormal><br><br>
-				<input type="text" id="fechaIni" class="inputFontNormal" name="fechaIni" value="
-			             [% IF fechaIni %]
+<div class="filtros_reportes">
+    <ul class="filtros_reportes_izq">
+		<li>[% "Seleccione una fecha de inicio:" | i18n %]</li>
+        <li><input type="text" id="fechaIni" name="fechaIni" value="
+                         [% IF fechaIni %]
                                         [% fechaIni  %]
                                      [% ELSE %]
                                         [% todaydate %]
                                      [% END %]">
-				<br><br>
-				<input type="text" id="fechaFin" class="inputFontNormal" name="fechaFin" value="
+        </li>               
+		<li>[% "Seleccione una fecha de Fin:" | i18n %]</li>
+        <li><input type="text" id="fechaFin" name="fechaFin" value="
                                     [% IF fechaIni %]
                                         [% fechaIni  %]
                                     [% ELSE %]
                                         [% todaydate %]
                                     [% END %]">
 				
-			</td>
+		</li>
+    </ul>
+    <ul class="filtros_reportes_der">
+        <li>[% "Filtrar por:" | i18n %]</li>
+        <!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
+		<li>[% "Responsable:" | i18n %] [% selectusuarios %]</li> 
+		<li>[% "Tipo de Pr&eacute;stamo:" | i18n %] [% selectTiposPrestamos %]</li> 
+		<li>[% "Tipo de Operaci&oacute;n:" | i18n %] [% selectTipoOperacion %]</li> 
+    </ul>
+</div>
 
-			<td class="inputFontNormal" rowspan=4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-			<td rowspan="4" valign="top" class="inputFontNormal"> 
-                                <b>[% "Filtrar por:" | i18n %]</b> <br>
-        			<!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
-				<b>[% "Responsable:" | i18n %] </b>[% selectusuarios %]
-				<br><br>
-				<b>[% "Tipo de Pr&eacute;stamo:" | i18n %] </b>[% selectTiposPrestamos %]
-				<br><br>
-				<b>[% "Tipo de Operaci&oacute;n:" | i18n %] </b>[% selectTipoOperacion %]
-			</td>
-			<td>
-			<td>
-		</tr>
-		<tr>
-			<td colspan="4" align="center">
-				<br><br>
-				<a  onClick="consultar('')"><img   src="[% themelang %]/images/boton-buscar.png" border="0"></a>
-			</td>
-   		</tr>
-	</table>
-</form>
+<div class="buttonContainerHorizontal">
+    [% PERL %]
+                    print C4::AR::Filtros::to_Button( 
+                                                        text    =>  "[% 'Buscar' | i18n %]",
+                                                        boton   =>  "boton_buscar",
+                                                        onClick =>  "consultar('');",
+                            ) ;
+    [% END %]   
+</div>
 
 <div id="result"></div>
 

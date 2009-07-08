@@ -106,26 +106,26 @@
         <td width="5%">&nbsp;</td>
     </tr>
     <tr>
-        <td width="35%" class="inputFontNormal" align="left">
+        <td width="35%" align="left">
                 <b> [% "Apellido" | i18n %] *</b><br>
                 <input id="apellido" name="apellido" class="required" type=text size=50 value="[% socio.persona.getApellido %]">
         </td>
-        <td width="35%" class="inputFontNormal" align="left">
+        <td width="35%" align="left">
             <b> [% "Nombres" | i18n %] *</b><br>
                     <input  id="nombre" name="nombre" class="required" type=text size=50 value="[% socio.persona.getNombre %]">
         </td>
         <td width="5%">&nbsp;</td>
     </tr>
     <tr>
-        <td width="35%" class="inputFontNormal" align="left">
+        <td width="35%" align="left">
             <b>[% "Documento" | i18n %] ([% "solo digitos" | i18n %]) *</b><br>
                     [% combo_tipo_documento %]
             <input 	id="nro_documento" name="nro_documento" class="required" type=text size=41 
                 value="[% socio.persona.getNro_documento %]">
         </td>
-        <td width="35%" class="inputFontNormal" align="left">
+        <td width="35%" align="left">
             <b>[% "Legajo" | i18n %]</b><br>
-                <input  class="inputFontNormal" type=text name="legajo" id="legajo" size=50 value="[% socio.persona.getLegajo %]">
+                <input type=text name="legajo" id="legajo" size=50 value="[% socio.persona.getLegajo %]">
         </td>
         <td width="5%">&nbsp;</td>
     </tr>
@@ -134,8 +134,8 @@
     <br>
 <table width=100%>
     <tr valign=top >
-        <td   width="60%" class="inputFontNormal">
-            <input  class="inputFontNormal" type="checkbox" id="changepassword" [% socio.getChange_password %] checked>
+        <td   width="60%">
+            <input type="checkbox" id="changepassword" [% socio.getChange_password %] checked>
             &nbsp;[% "Forzar al usuario a cambiar su contrase&ntilde;a periodicamente" | i18n %]
         </td>
         <td>
@@ -154,7 +154,7 @@
 
     [% IF course %]
         <tr>
-            <td   width="60%" class="inputFontNormal">
+            <td   width="60%">
                 <input  class="required" type="checkbox" id="usercourse" 
                     [% usercourse %] 
                         checked 
@@ -169,7 +169,7 @@
     [% END %]
 
     <tr>
-        <td class="inputFontNormal">
+        <td>
             <b>
                 [% "Incorporaci&oacute;n a Unidad de Informaci&oacute;n" | i18n %]
                         </b>&nbsp;
@@ -204,9 +204,9 @@
     </tr>
     <tr>
         <td height=25 class="[% clase %]">&nbsp;</td>
-            <td width="40%" class="inputFontNormal" align="left" valign="top">
+            <td width="40%" align="left" valign="top">
             <b>[% "Tel&eacute;fono particular" | i18n %]</b><br>
-                <input class="inputFontNormal" type=text id="telefono" name="telefono" size=50 value="[% socio.persona.getTelefono %]">
+                <input type=text id="telefono" name="telefono" size=50 value="[% socio.persona.getTelefono %]">
         </td>
         <td width="40%" class="required" align="left" valign="top">
             <b>[% "Ciudad" | i18n %] *</b><br>
@@ -217,55 +217,55 @@
     <tr>
         <td height=25 class="[% clase %]">&nbsp;</td>
             <td width="15%">&nbsp;</td>
-            <td width="40%" class="inputFontNormal" align="left" valign="top">
+            <td width="40%" align="left" valign="top">
             <b>[% "Tel&eacute;fono del trabajo" | i18n %]</b><br>
-                <input 	class="inputFontNormal" type=text id="telefono_laboral" name="telefono_laboral" size=50 
+                <input type=text id="telefono_laboral" name="telefono_laboral" size=50 
                     value="[% socio.persona.getTelefono_laboral %]">
         </td>
     </tr>
     <tr>
             <td height=25 class="[% clase %]">&nbsp;</td>
-            <td width="40%" class="inputFontNormal" align="left" valign="top">
+            <td width="40%" align="left" valign="top">
             <b>[% "Direcci&oacute;n de origen" | i18n %]</b><br>
-                <input  class="inputFontNormal" type=text id="alt_calle" name="alt_calle" size=50 value="[% socio.persona.getAlt_calle %]">
+                <input type=text id="alt_calle" name="alt_calle" size=50 value="[% socio.persona.getAlt_calle %]">
         </td>
-            <td width="40%" class="inputFontNormal" align="left" valign="top">
+            <td width="40%" align="left" valign="top">
             <b>[% "Ciudad de origen" | i18n %]</b><br>
-            <input  class="InputFontNormal" type=text id="alt_ciudad" name="alt_ciudad" 
+            <input  type=text id="alt_ciudad" name="alt_ciudad" 
                 value="[% socio.persona.alt_ciudad_ref.getNombre%]" size='50'>
-            <input class="InputFontNormal" type=hidden id="id_alt_ciudad" value="[% socio.persona.alt_ciudad_ref.LOCALIDAD %]"> 
+            <input type=hidden id="id_alt_ciudad" value="[% socio.persona.alt_ciudad_ref.LOCALIDAD %]"> 
         </td>
             <tr>
 
                 <td height=25 class="[% clase %]">&nbsp;</td>
                 <td width="15%">&nbsp;</td>
-                <td width="40%" class="inputFontNormal" align="left" valign="top">
+                <td width="40%" align="left" valign="top">
                 <b>E-Mail</b><br>
                 <input class="required" type=text id="email" name="email" size=50 value="[% socio.persona.getEmail %]">
         </td>
-            <td width="40%" class="inputFontNormal" align="left" valign="top">&nbsp;</td>
+            <td width="40%" align="left" valign="top">&nbsp;</td>
         </tr>
 
 [% IF socio.tieneAutorizado %]
 <table>
 <hr>
     <tr colspan=2>
-                <td width="40%" class="inputFontNormal" align="left" valign="top">
+                <td width="40%" align="left" valign="top">
                     <b>[% "Apellido y Nombre del autorizado" | i18n %]</b><br>
-                    <input  class="InputFontNormal" type=text id="auth_nombre" name="auth_nombre" 
+                    <input  type=text id="auth_nombre" name="auth_nombre" 
                             value="[% socio.getNombre_apellido_autorizado %]" size='50'>
                 </td>
 
         <br>
-                <td width="40%" class="inputFontNormal" align="left" valign="top">
+                <td width="40%" align="left" valign="top">
                     <b>[% "DNI del autorizado" | i18n %]</b><br>
-                    <input  class="InputFontNormal" type=text id="auth_dni" name="auth_dni" 
+                    <input  type=text id="auth_dni" name="auth_dni" 
                             value="[% socio.getDni_autorizado %]" size='50'>
                 </td>
     </tr>
-                <td width="40%" class="inputFontNormal" align="left" valign="top">
+                <td width="40%" align="left" valign="top">
                     <b>[% "Tel&eacute;fono del autorizado" | i18n %]</b><br>
-                    <input  class="InputFontNormal" type=text id="auth_telefono" name="auth_telefono" 
+                    <input  type=text id="auth_telefono" name="auth_telefono" 
                             value="[% socio.getTelefono_autorizado %]" size='50'>
                 </td>
     </tr>
@@ -311,7 +311,7 @@
                 [% END %]
     </ul>
 </div>
-        <td  align="left" class="inputFontNormal">
+        <td  align="left">
             <b>(*) [% "Obligatorio " | i18n %]</b>
         </td>
 

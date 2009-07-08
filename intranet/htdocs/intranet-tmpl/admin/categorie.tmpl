@@ -77,78 +77,78 @@
 	<table>
 	[% IF categorycode %]
 		<tr>
-			<td class="inputFontNormal">[% "C&oacute;digo de categor&iacute;a" | i18n %]</td>
-			<td class="inputFontNormal">
+			<td>[% "C&oacute;digo de categor&iacute;a" | i18n %]</td>
+			<td>
 				[% categorycode %]
 				<input type=hidden name=categorycode value=[% categorycode %]>
 			</td>
 		</tr>
 	[% ELSE %]
 		<tr>
-			<td class="inputFontNormal">[% "C&oacute;digo de categor&iacute;a" | i18n %]</td>
+			<td>[% "C&oacute;digo de categor&iacute;a" | i18n %]</td>
 			<td>
-				<input class="inputFontNormal"type=text name=categorycode size=3 maxlength=2 onBlur=toUC(this)>
+				<input type=text name=categorycode size=3 maxlength=2 onBlur=toUC(this)>
 			</td>
 		</tr>
 	[% END %]
 
 		<tr>
-			<td class="inputFontNormal">[% "Descripci&oacute;n" | i18n %]</td>
-			<td class="inputFontNormal">
-				<input class="inputFontNormal"type=text name=description size=40 maxlength=80 value="[% HTML.escape(description) %]">
+			<td>[% "Descripci&oacute;n" | i18n %]</td>
+			<td>
+				<input type=text name=description size=40 maxlength=80 value="[% HTML.escape(description) %]">
 				&nbsp;
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[% "Per&iacute;odo de inscripci&oacute;n" | i18n %]</td>
+			<td>[% "Per&iacute;odo de inscripci&oacute;n" | i18n %]</td>
 			<td>
-				<input type=text class="inputFontNormal"name=enrolmentperiod size=3 maxlength=2 value="[% enrolmentperiod %]">
+				<input type=text name=enrolmentperiod size=3 maxlength=2 value="[% enrolmentperiod %]">
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[% "L&iacute;mite superior de edad "| i18n %]</td>
+			<td>[% "L&iacute;mite superior de edad "| i18n %]</td>
 			<td>
-				<input class="inputFontNormal" type=text name=upperagelimit size=3 maxlength=3 value="[% upperagelimit %]">
+				<input type=text name=upperagelimit size=3 maxlength=3 value="[% upperagelimit %]">
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[% "Edad Requerida" | i18n %]</td>
+			<td>[% "Edad Requerida" | i18n %]</td>
 			<td>
-				<input type=text class="inputFontNormal" name=dateofbirthrequired value="[% dateofbirthrequired %]" size=3 maxlength=2>
+				<input type=text name=dateofbirthrequired value="[% dateofbirthrequired %]" size=3 maxlength=2>
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[% "Tarifa de inscripci&oacute;n" | i18n %]</td>
+			<td>[% "Tarifa de inscripci&oacute;n" | i18n %]</td>
 			<td>
-				<input class="inputFontNormal" type=text name=enrolmentfee value="[% enrolmentfee  %]">
+				<input type=text name=enrolmentfee value="[% enrolmentfee  %]">
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[ "Se necesita nota de atraso" | i18n %]</td>
-			<td class="inputFontNormal">
-				<select class="inputFontNormal" name="overduenoticerequired">
+			<td>[ "Se necesita nota de atraso" | i18n %]</td>
+			<td>
+				<select name="overduenoticerequired">
 					<option [% UNLESS overduenoticerequired %] selected [% END %] value="0">No</option>
 					<option [% IF overduenoticerequired %] selected [% END %] value="1">Si</option>
 				</select>
 			</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[% "L&iacute;mite de pr&eacute;stamo" | i18n %]</td>
-			<td class="inputFontNormal">
-				<input type=text class="inputFontNormal" name=issuelimit size=2 maxlength=2 value="[% issuelimit %]">
+			<td>[% "L&iacute;mite de pr&eacute;stamo" | i18n %]</td>
+			<td>
+				<input type=text name=issuelimit size=2 maxlength=2 value="[% issuelimit %]">
 			</td>
 		</tr>
-		<tr class="inputFontNormal">
-			<td class="inputFontNormal">[% "D&iacute;as de pr&eacute;stamo" | i18n %]</td>
-			<td class="inputFontNormal">
-				<input type=text class="inputFontNormal"name=borrowingdays value="[% borrowingdays %]">
+		<tr>
+			<td>[% "D&iacute;as de pr&eacute;stamo" | i18n %]</td>
+			<td>
+				<input type=text name=borrowingdays value="[% borrowingdays %]">
 			</td>
 		</tr>
 
 		<tr>
-			<td class="inputFontNormal">[% "Costo de reserva" | i18n %]</td>
-			<td class="inputFontNormal">
-				<input class="inputFontNormal" type=text name=reservefee value="[% reservefee %]">
+			<td>[% "Costo de reserva" | i18n %]</td>
+			<td>
+				<input type=text name=reservefee value="[% reservefee %]">
 			</td>
 		</tr>
 		<tr>
@@ -182,10 +182,10 @@
 
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr class="tablaresultadoTitle">
-			<td class="inputFontNormal">
+			<td>
 				<b>[% "C&oacute;digo de categor&iacute;a" | i18n %]</b>
 			</td>
-			<td class="inputFontNormal">
+			<td>
 				[% categorycode %]
 			</td>
 		</tr>
@@ -193,32 +193,32 @@
 			<input type=hidden name=op value=[% delete_confirmed %]>
 			<input type=hidden name=categorycode value=[% categorycode %]>        
 		<tr class="tablaresultadoTitle">
-			<td class="inputFontNormal">[% "Descripci&oacute;n" | i18n %]</td>
-			<td class="inputFontNormal">[% description %]</td>
+			<td>[% "Descripci&oacute;n" | i18n %]</td>
+			<td>[% description %]</td>
 		</tr>
 		<tr >
-			<td class="inputFontNormal">[% "Per&iacute;odo de inscripci&oacute;n" | i18n %]</td>
-			<td class="inputFontNormal">[% enrolmentperiod %]</td>
+			<td>[% "Per&iacute;odo de inscripci&oacute;n" | i18n %]</td>
+			<td>[% enrolmentperiod %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[% "Upperage limit" | i18n %]</td>
+			<td>[% "Upperage limit" | i18n %]</td>
 			<td>[% upperagelimit %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[% "Edad Requerida" | i18n %]</td>
-			<td class="inputFontNormal">[% dateofbirthrequired %]</td>
+			<td>[% "Edad Requerida" | i18n %]</td>
+			<td>[% dateofbirthrequired %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[% "Tipo de multa" | i18n %]</td>
-			<td class="inputFontNormal">[% finetype %]</td>
+			<td>[% "Tipo de multa" | i18n %]</td>
+			<td>[% finetype %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[% "Tarifa de inscripci&oacute;n" | i18n %]</td>
-			<td class="inputFontNormal">[% enrolmentfee %]</td>
+			<td>[% "Tarifa de inscripci&oacute;n" | i18n %]</td>
+			<td>[% enrolmentfee %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[% "Se necesita nota de atraso" | i18n %]</td>
-			<td class="inputFontNormal">[% IF overduenoticerequired %]
+			<td>[% "Se necesita nota de atraso" | i18n %]</td>
+			<td>[% IF overduenoticerequired %]
                                                         Si
                                                     [% ELSE %]
                                                         No
@@ -226,20 +226,20 @@
                         </td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[% "L&iacute;mite de pr&eacute;stamo" | i18n %]</td>
-			<td class="inputFontNormal">[% issuelimit %]</td>
+			<td>[% "L&iacute;mite de pr&eacute;stamo" | i18n %]</td>
+			<td>[% issuelimit %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[% "D&iacute;s de pr&eacute;stamo" | i18n %]</td>
-			<td class="inputFontNormal">[% borrowingdays %]</td>
+			<td>[% "D&iacute;s de pr&eacute;stamo" | i18n %]</td>
+			<td>[% borrowingdays %]</td>
 		</tr>
 		<tr>
-			<td class="inputFontNormal">[% "Costo de reserva" | i18n %]</td>
-			<td class="inputFontNormal">[% reservefee %]</td>
+			<td>[% "Costo de reserva" | i18n %]</td>
+			<td>[% reservefee %]</td>
 		</tr>
 		[% IF totalgtzero %]
                         <tr>
-                                <td class="inputFontNormal" colspan=2 align=center><b>This record is used [% total %] times. Deletion not possible</b></td>
+                                <td colspan=2 align=center><b>This record is used [% total %] times. Deletion not possible</b></td>
                         </tr>
                         </form>
                         <tr>
@@ -254,7 +254,7 @@
                         </tr>
                         [% ELSE %]
                         <tr>
-                                <td class="inputFontNormal" colspan=2 align=center>[% "CONFIRME BORRADO" | i18n %]</td>
+                                <td colspan=2 align=center>[% "CONFIRME BORRADO" | i18n %]</td>
                         </tr>
                         <tr>
                                 <td><INPUT type=submit value='SI'></form></td>
@@ -284,7 +284,7 @@
                 <tr>
                 <form action='[% script_name %]' method=post name="form1">
                         <td>
-                                <input type=text class="inputFontNormal" name=description value=[% searchfield %]>
+                                <input type=text name=description value=[% searchfield %]>
                         </td>
                         <td> 
                                 <input type="image" name="go" id="go" alt="Comenzar b&uacute;squeda" src="[% themelang %]/images/boton-buscar.png" border="0" onClick="form1.submit()">
@@ -314,28 +314,28 @@
                [% FOREACH loop %]
                         <tr valign="middle">
                                
-                                <td class="[% clase %]" class="inputFontNormal">[% categorycode %]</td>
-                                <td class="[% clase %]" class="inputFontNormal">[% description %]</td>
-                                <td class="[% clase %]" class="inputFontNormal">[% enrolmentperiod %]</td>
-                                <td class="[% clase %]" class="inputFontNormal">[% enrolmentfee %]</td>
-                                <td class="[% clase %]" class="inputFontNormal">[% upperagelimit %]</td>
-                                <td class="[% clase %]" class="inputFontNormal">[% dateofbirthrequired %]</td>
-                                <td class="[% clase %]" class="inputFontNormal">[% finetype %]</td>
-                                <td class="[% clase %]" class="inputFontNormal">
+                                <td class="[% clase %]" >[% categorycode %]</td>
+                                <td class="[% clase %]" >[% description %]</td>
+                                <td class="[% clase %]" >[% enrolmentperiod %]</td>
+                                <td class="[% clase %]" >[% enrolmentfee %]</td>
+                                <td class="[% clase %]" >[% upperagelimit %]</td>
+                                <td class="[% clase %]" >[% dateofbirthrequired %]</td>
+                                <td class="[% clase %]" >[% finetype %]</td>
+                                <td class="[% clase %]" >
                                 [% IF overduenoticerequired %]
                                         <i>[% "Si" | i18n %]</i>
                                 [% ELSE %]
                                         <i>[% "No" | i18n %]</i>
                                 [% END %]
                                 </td>
-                                <td class="[% clase %]" class="inputFontNormal">[% issuelimit %]</td>
-                                <td class="[% clase %]" class="inputFontNormal">[% borrowingdays %]</td>
-                                <td class="[% clase %]" class="inputFontNormal">[% reservefee %]</td>
+                                <td class="[% clase %]">[% issuelimit %]</td>
+                                <td class="[% clase %]">[% borrowingdays %]</td>
+                                <td class="[% clase %]">[% reservefee %]</td>
                                 <td align="center"class="[% clase %]">
-                                    <a class="inputFontNormal" href="[% script_name %]?op=add_form&categorycode=[% categorycode %]"><img src="[% interface %]/[% themelang %]/images/editar.png"  ALT="Editar" hspace=0 vspace=0 border=0></a>
+                                    <a  href="[% script_name %]?op=add_form&categorycode=[% categorycode %]"><img src="[% interface %]/[% themelang %]/images/editar.png"  ALT="Editar" hspace=0 vspace=0 border=0></a>
                                 </td>
                                 <td align="center"class="[% clase %]">
-                                    <a class="inputFontNormal" href="[% script_name %]?op=delete_confirm&categorycode=[% categorycode %]"><img src="[% interface  %]/[% themelang %]/images/borrar.png" ALT="Eliminar" border="0"></a>
+                                    <a  href="[% script_name %]?op=delete_confirm&categorycode=[% categorycode %]"><img src="[% interface  %]/[% themelang %]/images/borrar.png" ALT="Eliminar" border="0"></a>
                                 </td>
                                
                         </tr>

@@ -89,7 +89,7 @@ function limpiarCampos(side){
 		<ul id="simple">
 			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
 			<b>[% "B&uacute;squeda combinada" | i18n %]</b><br>
-                	<input type="text" id="keyword" size="25" class="inputFontNormal" onkeypress="limpiarCampos('derecha')">
+                	<input type="text" id="keyword" size="25" onkeypress="limpiarCampos('derecha')">
 			<p valign="top" align="right">&nbsp;</p>
 			</li>
     </fieldset>
@@ -98,27 +98,27 @@ function limpiarCampos(side){
         <legend>[% "Busqueda simple" | i18n %]</legend>
 			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';" >
 			<b>ISBN</b><br>
-                	<input type="text" id="isbn" size="25" class="inputFontNormal" readonly onkeypress="limpiarCampos('derecha')">
+                	<input type="text" id="isbn" size="25"readonly onkeypress="limpiarCampos('derecha')">
 			</li>
 			
 			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
     			<b>[% "B&uacute;squeda por diccionario" | i18n %]</b><br>
-         		<input class="inputFontNormal" type="text" size="25" id="dictionary" readonly onkeypress="limpiarCampos('derecha')">
+         		<input type="text" size="25" id="dictionary" readonly onkeypress="limpiarCampos('derecha')">
 			</li>		
 
 			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
 			<b>[% "C&oacute;digo de barras" | i18n %]</b><br>
-			<input class="inputFontNormal" type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">
+			<input type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
 
 			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
 			<b>Tema</b><br>
-			<input class="inputFontNormal" type="text" size="25" id="tema" readonly onkeypress="limpiarCampos('derecha')">
+			<input type="text" size="25" id="tema" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
 
 			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
 			<b>[% "Estantes Virtuales" | i18n %]</b><br>
-			<input class="inputFontNormal" type="text" size="25" id="estante" readonly onkeypress="limpiarCampos('derecha')">
+			<input type="text" size="25" id="estante" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
 
 		</ul>
@@ -137,22 +137,22 @@ function limpiarCampos(side){
     
 			    <li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
 			    <b>T&iacute;tulo</b><br>
-			    <input class="inputFontNormal" type="text"  size="25" id="titulo" onkeypress="limpiarCampos('izquierda')">
+			    <input type="text"  size="25" id="titulo" onkeypress="limpiarCampos('izquierda')">
 			    <p valign="top" align="right">
-			    <input class="inputFontNormal" name="tipo" type=radio id=tipo value="normal" checked>
+			    <input name="tipo" type=radio id=tipo value="normal" checked>
                                     [% "Normal" | i18n %]
-			    <input class="inputFontNormal" name="tipo" type=radio id=tipo value="exacto">
+			    <input name="tipo" type=radio id=tipo value="exacto">
                                     [% "Exacto" | i18n %]
 			    </p>
 			    </li>
 			    <li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
 			    <b>Autor</b><br>
-			    <input class="inputFontNormal" type="text" size="25" id="autor" onkeypress="limpiarCampos('izquierda')">
+			    <input type="text" size="25" id="autor" onkeypress="limpiarCampos('izquierda')">
 			    </li>
     
 			    <li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
 			    <b>[% "Signatura Topogr&aacute;fica" | i18n %]</b><br>
-			    <input class="inputFontNormal" type="text" size="25" id="signatura" onkeypress="limpiarCampos('izquierda')">
+			    <input type="text" size="25" id="signatura" onkeypress="limpiarCampos('izquierda')">
 			    </li>
 	                
 		    </ul>

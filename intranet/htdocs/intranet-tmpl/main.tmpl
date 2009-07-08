@@ -25,7 +25,7 @@ $(document).ready(function() {
 		<td width="15%" >&nbsp;</td>
 		<td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" valign="top">
 			[% "B&uacute;squeda combinada" | i18n %]
-			<input type="text" id="keyword" size="20" class="inputFontNormal" tabindex=1>
+			<input type="text" id="keyword" size="20" tabindex=1>
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
                                                                     boton   => "boton_buscar",
@@ -58,7 +58,7 @@ $(document).ready(function() {
 		<td width="15%">&nbsp;</td>
 		<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" valign="top">
 		    	B&uacute;squeda de usuarios &nbsp;
-                <input id="socio" class="inputFontNormal" type=text name="socio" onFocus="checkFilter('focus')" 
+                <input id="socio" type=text name="socio" onFocus="checkFilter('focus')" 
                    onBlur="checkFilter('blur')" value="[% socio %]" tabindex=2>		
                 [% PERL %]
                                 print C4::AR::Filtros::to_Button( 

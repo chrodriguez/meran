@@ -16,35 +16,35 @@
     </tr>
 [% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS_LOOP %]
     <tr align="middle">    
-        <td   class="inputFontNormal">
+        <td>
                 [% tipo_prestamo.getId_tipo_prestamo %]
         </td>
-        <td   class="inputFontNormal">
+        <td>
                 [% tipo_prestamo.getDescripcion %]
         </td>
-        <td   class="inputFontNormal" align="center">
+        <td align="center">
                 [% tipo_prestamo.getPrestamos %]
         </td>
-        <td   class="inputFontNormal" align="center">
+        <td align="center">
                 [% tipo_prestamo.getDias_prestamo %]
         </td>
-        <td   class="inputFontNormal" align="center">
+        <td align="center">
                 [% tipo_prestamo.getRenovaciones %]
         </td>
-        <td   class="inputFontNormal" align="center">
+        <td align="center">
                 [% tipo_prestamo.getDias_renovacion %]
         </td>
-        <td   class="inputFontNormal" align="center">
+        <td align="center">
                 [% tipo_prestamo.getDias_antes_renovacion %]
         </td>
-        <td   class="inputFontNormal" align="center">
+        <td align="center">
                 [% IF tipo_prestamo.disponibilidad.getCodigo %]
                         [% "Si" | i18n %]
                 [% ELSE %]
                         [% "No" | i18n %]
                 [% END %]
         </td>
-        <td class='inputFontNormal' class="inputFontNormal" align="center">
+        <td align="center">
                 [% IF tipo_prestamo.getHabilitado %]
                         [% "Si" | i18n %]
                 [% ELSE %]

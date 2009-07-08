@@ -2,13 +2,13 @@
 <table border="0" cellspacing="0" cellpadding="0"  width="90%" align="center">
     <tr class="tablaresultadoTitle">
 
-        <td><a class="inputFontNormal" href="#" onclick="ordenar('barcode')">[% "Nro. de Inventario" | i18n %]</a></td>
-        <td><a class="inputFontNormal" href="#" onclick="ordenar('completo')">[% "Autor" | i18n %]</a></td>
-        <td><a class="inputFontNormal" href="#" onclick="ordenar('titulo')">[% "T&iacute;tulo" | i18n %]</a></td>
-        <td><a class="inputFontNormal" href="#" onclick="ordenar('number')">[% "Edic." | i18n %]</a></td>
-        <td><a class="inputFontNormal" href="#" onclick="ordenar('publisher')">[% "Editor" | i18n %]</a></td>
-        <td><a class="inputFontNormal" href="#" onclick="ordenar('anio_publicacion')">[% "A&ntilde;o" | i18n %]</a></td>
-        <td><a class="inputFontNormal" href="#" onclick="ordenar('signatura_topografica')">[% "Signatura Topogr&aacute;fica" | i18n %]</a></td>
+        <td><a href="#" onclick="ordenar('barcode')">[% "Nro. de Inventario" | i18n %]</a></td>
+        <td><a href="#" onclick="ordenar('completo')">[% "Autor" | i18n %]</a></td>
+        <td><a href="#" onclick="ordenar('titulo')">[% "T&iacute;tulo" | i18n %]</a></td>
+        <td><a href="#" onclick="ordenar('number')">[% "Edic." | i18n %]</a></td>
+        <td><a href="#" onclick="ordenar('publisher')">[% "Editor" | i18n %]</a></td>
+        <td><a href="#" onclick="ordenar('anio_publicacion')">[% "A&ntilde;o" | i18n %]</a></td>
+        <td><a href="#" onclick="ordenar('signatura_topografica')">[% "Signatura Topogr&aacute;fica" | i18n %]</a></td>
 
     </tr>
 
@@ -25,7 +25,7 @@
                         [% END %]
                 </td>
                 <td class="[% clase %]"  align="center">
-                    <a class="inputFontNormal" href='/cgi-bin/koha/detail.pl?type=intra&bib=[% HTML.escape(biblionumber) %]'>
+                    <a href='/cgi-bin/koha/detail.pl?type=intra&bib=[% HTML.escape(biblionumber) %]'>
                         [% nivel3.nivel1.getTitulo %]
                     </a>
                 </td>
@@ -47,7 +47,7 @@
 
     <tr>
     <td colspan="9">
-        <p class="inputFontNormal" align="left">[% "La cantidad de ejemplares es:" | i18n %] <b>[% cantidad %]</b></p>
+        <p align="left">[% "La cantidad de ejemplares es:" | i18n %] <b>[% cantidad %]</b></p>
     </td>
     </tr>
 

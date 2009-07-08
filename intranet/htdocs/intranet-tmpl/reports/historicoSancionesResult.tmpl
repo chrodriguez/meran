@@ -1,6 +1,5 @@
 
 <div class="resultados_consulta">[% "La cantidad de operaciones hechas fueron:" | i18n %] [% cant %]</div>
-<div class="resultados_consulta">[% "P&aacute;gina n&uacute;mero:" | i18n %] [% actual %] [% "de un total de:" | i18n %] [% paginas %]</div>  
 
 <div class="contenedor_paginador">[% paginador %]</div>
 
@@ -32,22 +31,31 @@
   	<tr align='center'>
 
 		<td> 
-			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% borrowernumber %]">
-				[% IF sancion.usr_nro_socio.getNro_socio %]
-               [% sancion.usr_nro_socio.getApeYNom %]
+			
+            [% PERL %]
+                    print C4::AR::Filtros::link_to( text    => "[% sancion.usr_nro_socio.persona.getApeYNom %]",
+                                                    url     =>  "/cgi-bin/koha/usuarios/reales/datosUsuario.pl",
+                                                    title   =>  "[% 'Detalle Usuario' | i18n %]",
+                                                    params  =>  ["nro_socio=[% sancion.usr_nro_socio.getNro_socio %]"],
+                            ) ;
             [% END %]
-			</a>
+<!-- FIXME falta -->
+			[% IF sancion.usr_nro_socio.getNro_socio %]
+               [% sancion.usr_nro_socio.persona.getApeYNom %]
+            [% END %]
 		</td>
   		<td> 
-			<a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?bornum=[% responsable %]">
-            [% IF sancion.responsable %]
-               [% sancion.responsable.getApeYNom %]
+            [% PERL %]
+                    print C4::AR::Filtros::link_to( text    => "[% sancion.usr_responsable.persona.getApeYNom %]",
+                                                    url     =>  "/cgi-bin/koha/usuarios/reales/datosUsuario.pl",
+                                                    title   =>  "[% 'Detalle Usuario' | i18n %]",
+                                                    params  =>  ["nro_socio=[% sancion.usr_responsable.getNro_socio %]"],
+                            ) ;
             [% END %]
-			</a>
 		</td>
-  		<td>[% date %]</td>
-		<td>[% end_date%]</td>
-  		<td>[% operacion %]</td>
+  		<td>[% sancion.getFecha %]</td>
+		<td>[% sancion.getFecha_final %]</td>
+  		<td>[% sancion.getTipo_operacion %]</td>
 		<td> 
 		[% IF sancion.circ_tipo_sancion %] 
 			[% sancion.circ_tipo_sancion.ref_tipo_prestamo.getDescripcion %]

@@ -1369,6 +1369,7 @@ sub generarComboPerfiles{
 
 }
 
+
 sub generarComboDeDisponibilidad{
 
     my ($params) = @_;
@@ -1705,26 +1706,34 @@ sub generarComboCampoX{
 
 sub generarComboTipoDeOperacion{
 
-   my ($params) = @_;
+    my ($params) = @_;
+    
+    use C4::Modelo::RefTipoOperacion::Manager;
+    
+    my @select_tipoOperacion_Values;
+    my %select_tipoOperacion_Labels;
+    my $result = C4::Modelo::RefTipoOperacion::Manager->get_ref_tipo_operacion();
+    
+    foreach my $tipoOperacion (@$result) {
+        if ( $params->{'clone_values'} ){
+        #si el label y el ID son iguales
+            push (@select_tipoOperacion_Values, $tipoOperacion->descripcion);
+            $select_tipoOperacion_Labels{$tipoOperacion->descripcion} = $tipoOperacion->descripcion;
+        }else{
+            push (@select_tipoOperacion_Values, $tipoOperacion->id);
+            $select_tipoOperacion_Labels{$tipoOperacion->id} = $tipoOperacion->descripcion;
+        }
+    }
+    
+    my $CGISelectTipoOperacion=CGI::scrolling_list(    -name      => 'tipoOperacion',
+                                                        -id        => 'tipoOperacion',
+                                                        -values    => \@select_tipoOperacion_Values,
+                                                        -labels    => \%select_tipoOperacion_Labels,
+                                                        -size      => 1,
+                                                        -defaults  => 'SIN SELECCIONAR'
+                                                    );
 
-   use C4::Modelo::RefTipoOperacion::Manager;
-
-   my @select_tipoOperacion_Values;
-   my %select_tipoOperacion_Labels;
-   my $result = C4::Modelo::RefTipoOperacion::Manager->get_ref_tipo_operacion();
-
-   foreach my $tipoOperacion (@$result) {
-      push (@select_tipoOperacion_Values, $tipoOperacion->id);
-      $select_tipoOperacion_Labels{$tipoOperacion->id} = $tipoOperacion->descripcion;
-   }
-
-   my $CGISelectTipoOperacion=CGI::scrolling_list(    -name      => 'tipoOperacion',
-                                                      -id        => 'tipoOperacion',
-                                                      -values    => \@select_tipoOperacion_Values,
-                                                      -labels    => \%select_tipoOperacion_Labels,
-                                                      -size      => 1,
-                                                      -defaults  => 'SIN SELECCIONAR'
-                                                 );
+    return $CGISelectTipoOperacion;
 }
 
 sub generarComboNiveles{
