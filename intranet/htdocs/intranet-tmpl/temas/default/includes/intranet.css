@@ -83,14 +83,14 @@ body {
    height:104px;
 }
 #login {
-	background-image:url(../imagenes/meranLogin.png);
-	font-family: "Trebuchet MS", "Verdana", "Arial";
-	font-size: 14px;
-	position: static;
-	height: 261px;
-	width: 362px;
-	text-align: left ; 
-	font-weight: bold;
+    background-image:url(../imagenes/meranLogin.png);
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 14px;
+    position: static;
+    height: 261px;
+    width: 362px;
+    text-align: left ; 
+    font-weight: bold;
 }
 
 #login span {

@@ -3,7 +3,7 @@
 <html>
 [% INCLUDE 'localized_messages.inc' %]
 <script language="javascript" type="text/javascript">
- token= '[% token %]';
+    token= '[% token %]';
 
 </script>
 
