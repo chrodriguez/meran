@@ -1931,6 +1931,8 @@ sub paginarArreglo{
 
     #La variable $ini, no es el numero de pagina, sino es la posicion ya calculada (la que devuelve InitPaginador)
     my ($ini,$fin,@array) = @_;
+        C4::AR::Debug::debug(" INI: ".$ini." FIN: ".$fin);
+
     my $cant_total = scalar(@array);
     my $division_temp  = floor ($cant_total / $fin);
     my $resto = $cant_total - ($division_temp * $fin);

@@ -41,6 +41,7 @@ function busquedaReAvanzada(){
 // Hace una busqueda por el id del autor cuando se toca en el link del mismo.
 function buscarPorAutor(idAutor){
 	objAH=new AjaxHelper(updateInfo);
+    alert();
 	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
 	objAH.idAutor= idAutor;
 	objAH.sendToServer();

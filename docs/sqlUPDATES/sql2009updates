@@ -887,9 +887,11 @@ CREATE TABLE IF NOT EXISTS `rep_historial_prestamo` (
  ALTER TABLE `rep_historial_circulacion` CHANGE `nro_socio` `nro_socio` VARCHAR( 16 ) NOT NULL ;
 
 
- DELETE FROM `pref_preferencia_sistema` WHERE CONVERT(`pref_preferencia_sistema`.`variable` USING utf8) = 'defaultbranch'
+DELETE FROM `pref_preferencia_sistema` WHERE CONVERT(`pref_preferencia_sistema`.`variable` USING utf8) = 'defaultbranch';
 
 
- DELETE FROM `pref_preferencia_sistema` WHERE CONVERT(`pref_preferencia_sistema`.`variable` USING utf8) = 'defaultbranch'
+DELETE FROM `pref_preferencia_sistema` WHERE CONVERT(`pref_preferencia_sistema`.`variable` USING utf8) = 'defaultbranch';
+
+ALTER TABLE `rep_busqueda` CHANGE `id_socio` `nro_socio` VARCHAR( 16 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
 

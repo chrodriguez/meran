@@ -27,9 +27,9 @@ my $ini= $obj->{'ini'};
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-$obj->{'ini'}= $ini;
+$t_params->{'ini'} = $obj->{'ini'}= $ini;
 
-$obj->{'cantR'}= $cantR;
+$t_params->{'cantR'} = $obj->{'cantR'}= $cantR;
 $obj->{'type'} = 'INTRA';
 
 =item
@@ -42,9 +42,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
     
 	    $t_params->{'idAutor'}= $obj->{'idAutor'};
         $t_params->{'session'}= $session;
-    
         my ($cantidad, $resultId1)= C4::AR::Busquedas::filtrarPorAutor($t_params);
-    
         $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
     
         $t_params->{'SEARCH_RESULTS'}= $resultId1;
