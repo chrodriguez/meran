@@ -39,10 +39,7 @@
                                                     params  =>  ["nro_socio=[% sancion.usr_nro_socio.getNro_socio %]"],
                             ) ;
             [% END %]
-<!-- FIXME falta -->
-			[% IF sancion.usr_nro_socio.getNro_socio %]
-               [% sancion.usr_nro_socio.persona.getApeYNom %]
-            [% END %]
+
 		</td>
   		<td> 
             [% PERL %]
