@@ -82,37 +82,39 @@ body {
    margin-bottom:12px;
    height:104px;
 }
+
 #login {
     background-image:url(../imagenes/meranLogin.png);
     font-family: "Trebuchet MS", "Verdana", "Arial";
-    font-size: 14px;
+    font-size: 12px;
     position: static;
-    height: 261px;
-    width: 362px;
+    height: 185px;
+    width: 307px;
     text-align: left ; 
     font-weight: bold;
 }
 
 #login span {
-display:block;
-margin-bottom:12%;
+    display:block;
+    margin-bottom:12%;
 }
 
 #login input {
-float:right;
+    float:right;
 }
+
 #login label {
-float:left;
+    float:left;
 }
 
 #contenido_login  {
-display:block;
-padding: 14% 12%; 
-margin-top:50%;
+    display:block;
+    padding: 21% 12%;
+    margin-top:50%;
 }
 #boton_login  {
-display:block;
-padding: 11% 32%; 
+    display:block;
+    padding: 11% 32%; 
 }
 
 
