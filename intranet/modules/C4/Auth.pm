@@ -39,6 +39,7 @@ use CGI::Session qw/-ip-match/;
 use C4::Modelo::SistSesion;
 use C4::Modelo::SistSesion::Manager;
 use JSON;
+use Digest::SHA  qw(sha1 sha1_hex sha1_base64);
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -827,12 +828,24 @@ sub _generarNroRandom {
 }
 
 sub _generarToken {
+
 	my $session = CGI::Session->load();
+
+   my $digest;
+#     $digest = sha1($session);
+# C4::AR::Debug::debug("_generarToken => sha1: ".$digest);
+    $digest = sha1_hex($session);
+# C4::AR::Debug::debug("_generarToken => sha1_hex: ".$digest);
+#     $digest = sha1_base64($session);
+# C4::AR::Debug::debug("_generarToken => sha1_base64: ".$digest);
+
+
 # 	my $token= md5_base64($session->param('sessionID') + _generarNroRandom());
 # FIXME parece q md5 genera hashes con signo '+' y se rompen
-	my $token= $session->param('sessionID');
+	my $token= $digest;#$session->param('sessionID');
 
-C4::AR::Debug::debug("_generarToken => token: ".$token);	
+C4::AR::Debug::debug("_generarToken => token: ".$digest);	
+C4::AR::Debug::debug("_generarToken => sessionID: ".$session->param('sessionID'));   
 
 	return $token;
 }

@@ -8,3 +8,4 @@ cpan -i Locale::Maketext::Gettext::Functions
 cpan -i Rose::DB
 cpan -i Rose::DB::Object
 cpan -i Rose::DB::Object::Helpers
+cpan -i Digest::SHA
