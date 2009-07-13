@@ -50,56 +50,6 @@ function cambiarIdioma() {
     </div>
 </noscript>
 
-[% INCLUDE "opac-search.inc" %]
-
-<div class="titulos_interior" valign="middle">[% pagetitle %]</div>
-
-<div id="menu-container" class="main-header">
-
-[% IF loggedinusername %]
-    [% PERL %]
-            print C4::AR::Filtros::to_Icon(     boton   => "icon_favorito_ver",
-                                                onClick => "consultarFavoritos();",
-                                                title   => "[% 'Ver mis favoritos' | i18n %]"
-            ) ;
-    [% END %]
-    
-    [% PERL %]
-        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_menu-join" ),
-                                        url =>      "/join.html", 
-                                        title =>    "[% 'Registrarse' | i18n %]"
-                                    ) ;
-    [% END %]
-<!--*******************************************************************************************************-->
-[% ELSE %]
-     [% PERL %]
-        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_menu-join" ),
-                                        url =>      "/join.html", 
-                                        title =>    "[% 'Registrarse' | i18n %]"
-                                    ) ;
-    [% END %]
-[% END %]   
-
-
-    [% IF hiddesearch %]
-    [% ELSE %]
-        [% PERL %]
-            print C4::AR::Filtros::link_to( text =>     "<img src='[% themelang %]/images/menu-catalogo.png' name='cat' id='cat' 
-                                                        title='Buscar' hspace=0 cspace=0 border=0 name='menu-search' align='absbottom'>",
-                                            url =>      "/cgi-bin/koha/opac-search.pl", 
-                                    ) ;
-        [% END %]
-    [% END %]
-
-    [% PERL %]
-        print C4::AR::Filtros::link_to( text =>     '<img src="[% themelang %]/images/menu-home.png" name="home" id="home"
-                                                        title="Inicio" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  >',
-                                        url =>      "/cgi-bin/koha/opac-main.pl", 
-                                    ) ;
-    [% END %]
-
-</div>
-
 <div id="login-container">
 [% IF loggedinusername %]
     [% "Ingres&oacute; como:" | i18n %]<b> [% loggedinusername %]</b>
@@ -126,10 +76,56 @@ function cambiarIdioma() {
 </div>
 
 <div id="marco_principal">
-    <div id="marco_superior"> <div></div></div>
+    <div id="marco_superior">  <div></div></div>
 
 <div id="marco_contenido" class="contenido">
-
+    <div id="marco_busqueda">[% INCLUDE "opac-search.inc" %]</div>
+    
+    <div id="menu-container" class="main-header">
+    
+    [% IF loggedinusername %]
+        [% PERL %]
+                print C4::AR::Filtros::to_Icon(     boton   => "icon_favorito_ver",
+                                                    onClick => "consultarFavoritos();",
+                                                    title   => "[% 'Ver mis favoritos' | i18n %]"
+                ) ;
+        [% END %]
+        
+        [% PERL %]
+            print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_menu-join" ),
+                                            url =>      "/join.html", 
+                                            title =>    "[% 'Registrarse' | i18n %]"
+                                        ) ;
+        [% END %]
+    <!--*******************************************************************************************************-->
+    [% ELSE %]
+        [% PERL %]
+            print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_menu-join" ),
+                                            url =>      "/join.html", 
+                                            title =>    "[% 'Registrarse' | i18n %]"
+                                        ) ;
+        [% END %]
+    [% END %]   
+    
+    
+        [% IF hiddesearch %]
+        [% ELSE %]
+            [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     "<img src='[% themelang %]/images/menu-catalogo.png' name='cat' id='cat' 
+                                                            title='Buscar' hspace=0 cspace=0 border=0 name='menu-search' align='absbottom'>",
+                                                url =>      "/cgi-bin/koha/opac-search.pl", 
+                                        ) ;
+            [% END %]
+        [% END %]
+    
+        [% PERL %]
+            print C4::AR::Filtros::link_to( text =>     '<img src="[% themelang %]/images/menu-home.png" name="home" id="home"
+                                                            title="Inicio" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  >',
+                                            url =>      "/cgi-bin/koha/opac-main.pl", 
+                                        ) ;
+        [% END %]
+    
+    </div>
 
 <div id="marco_contenido_datos" class="contenido">
 

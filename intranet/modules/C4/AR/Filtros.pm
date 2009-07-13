@@ -149,13 +149,15 @@ sub to_Icon{
     my $title= $params_hash_ref{'title'}; #obtengo el title de la componete
     
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
-    $button .=  "<span id='".$boton."' class='click ".$alternClass. "' onClick=".$onClick;
+#     $button .=  "<span id='".$boton."' class='click ".$alternClass. "' onClick=".$onClick;
+    $button .=  "<div id='".$boton."' class='click ".$alternClass. "' onClick=".$onClick;
     if($title){
         $button .= " title='".$title."'";
     }
     
     $button .= "> ";
-    $button .=  "</span> ";
+#     $button .=  "</span> ";
+    $button .=  "</div> ";
 
     return $button;
 }

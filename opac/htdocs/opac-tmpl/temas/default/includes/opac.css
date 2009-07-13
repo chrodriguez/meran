@@ -55,6 +55,11 @@ body {
     background:#f7f6f6 url(../imagenes/medio.png) repeat;
 
 }
+
+#marco_busqueda{
+    text-align:right;
+}
+
 #marca{
     background-image:url(../imagenes/fondo_footer.png);
     background-color:#f7f6f6;
@@ -67,7 +72,8 @@ body {
     -moz-border-radius-bottomright:8px;
     background-repeat: repeat-x;
     height:10px;
-    }
+}
+
 #marca div{
     background-image:url(../imagenes/logo_meran.png);
     padding:1%;
@@ -76,8 +82,14 @@ body {
     text-align:center;
     background-repeat: no-repeat;
     height:30px;
-    }
+}
 
+#boton_buscar {
+    background: transparent  url(../imagenes/botones/boton_buscar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
 
 #boton_salir {
     background: transparent  url(../imagenes/botones/boton_salir.png) no-repeat;
@@ -107,6 +119,7 @@ body {
     padding-bottom:0;
     padding-left:0;
     padding-right:0;
+    cursor: pointer;
 /*     padding-top:6px; */
 /*     margin-left: 25px;*/
 }
@@ -122,6 +135,12 @@ body {
 
 #icon_favorito_ver {
     background: transparent url(../imagenes/iconos/icon_favorito_ver.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_buscar {
+    background: transparent url(../imagenes/iconos/icon_buscar.png) no-repeat;
     height: 25px;
     width: 25px;
 }
