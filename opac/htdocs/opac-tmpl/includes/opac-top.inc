@@ -108,7 +108,7 @@ function cambiarIdioma() {
                 [% PERL %]
                     print C4::AR::Filtros::link_to( text    => "[% 'Registrarse' | i18n %]",
                                                     boton   => "boton_registrarse", 
-                                                    width   => "125",
+                                                    width   => "95",
                                                     class   => "horizontal",
                                                     url     => "/join.html", 
                                                     title   => "[% 'Registrarse' | i18n %]"
@@ -120,7 +120,7 @@ function cambiarIdioma() {
                     [% PERL %]
                                 print C4::AR::Filtros::link_to( text    => "[% 'Buscar' | i18n %]",
                                                                 boton   => "boton_buscar", 
-                                                                width   => "125",
+                                                                width   => "95",
                                                                 url     => "/cgi-bin/koha/opac-search.pl", 
                                                                 class   => "horizontal",
                                                                 title   => "[% 'Buscar' | i18n %]"
@@ -131,7 +131,7 @@ function cambiarIdioma() {
                 [% PERL %]
                             print C4::AR::Filtros::link_to( text    => "[% 'Inicio' | i18n %]",
                                                             boton   => "boton_inicio", 
-                                                            width   => "125",
+                                                            width   => "95",
                                                             class   => "horizontal",
                                                             url     => "/join.html", 
                                                             title   => "[% 'Registrarse' | i18n %]"

@@ -70,8 +70,10 @@ sub link_to {
 	}
 
 	$link= "<a href=".$url;
-	if($class ne ''){
-		$link .= " class=".$class;
+	if ($class ne ''){
+        if (!$boton){ #Porque si es con boton, la clase la lleva el li
+		    $link .= " class=".$class;
+        }
 	}
 
 	if($title ne ''){
@@ -90,7 +92,7 @@ sub link_to {
     my $button;
 
     if($boton){
-        $button .=  "<li id='boton_medio' style='width:".$width."px' > ";
+        $button .=  "<li id='boton_medio' style='width:".$width."px' class='".$class."' > ";
         $button .=  $link;
         $button .=  "   <div id=".$boton."> ";
         $button .=  "   </div> ";
