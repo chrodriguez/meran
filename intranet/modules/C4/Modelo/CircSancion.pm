@@ -181,14 +181,9 @@ sub insertar_sancion {
  #Si existe se sanciona con la mayor cantidad de dias
 
  #Busco si tiene una sancion pendiente
-    use C4::Modelo::CircSancion::Manager;
-    my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion( db=>$self->db,
-							query => [ nro_socio => { eq => $data_hash->{'nro_socio'} },
-									   fecha_comienzo => { eq => undef },
-									   fecha_final => { eq => undef }] 
-							);
-	
-	if (my $sancion_existente=@$sanciones_array_ref[0]){
+my $sancion_existente=C4::AR::Sanciones::tieneSancionPendiente($data_hash->{'nro_socio'},$self->db);
+
+	if ($sancion_existente){
 	#Hay sancion pendiente
 		if ( $sancion_existente->getDias_sancion < $data_hash->{'dias_sancion'}) {
 		#La Sancion pendiente es menor a la actual, recalculo la fecha de fin
@@ -234,15 +229,9 @@ sub insertar_sancion_pendiente {
  #Si ya existe una posible sancion se deja la mayor
 
  #Busco si tiene una sancion pendiente
-    use C4::Modelo::CircSancion::Manager;
-    my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion( db=>$self->db,
-                            query => [ nro_socio => { eq => $data_hash->{'nro_socio'} },
-                                       fecha_comienzo => { eq => undef },
-                                       fecha_final => { eq => undef }] 
-                            );
+my $sancion_existente=C4::AR::Sanciones::tieneSancionPendiente($data_hash->{'nro_socio'},$self->db);
 
-
-    if (my $sancion_existente=@$sanciones_array_ref[0]){
+    if ($sancion_existente){
     #Hay sancion pendiente
 
         if ( $sancion_existente->getDias_sancion < $data_hash->{'dias_sancion'}) {

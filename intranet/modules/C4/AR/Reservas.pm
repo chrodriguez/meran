@@ -578,6 +578,34 @@ sub reservasVencidas{
 
 }
 
+
+
+
+=item
+reservasEnEspera
+Funcion que trae las reservas en espera de un grupo
+=cut
+sub reservasEnEspera {
+    my($id2)=@_;
+
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
+
+    use C4::Modelo::CircReserva::Manager;
+    my @filtros;
+    push(@filtros, ( id2 => { eq => $id2}));
+    push(@filtros, ( id3 => undef ));
+
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, sort_by => 'timestamp');
+
+  if (scalar(@$reservas_array_ref) == 0){
+        return 0;
+  }else{
+    return(\@$reservas_array_ref);
+  }
+}
+
+
 #VERIFICACIONES PREVIAS tanto para reservas desde el OPAC como para PRESTAMO de la INTRANET
 sub _verificaciones {
 	my($params)=@_;
@@ -746,10 +774,10 @@ sub t_cancelar_reserva{
 	my $msg_object= C4::AR::Mensajes::create();
 	$msg_object->{'tipo'}=$tipo;
 
-		my ($reserva) = C4::Modelo::CircReserva->new(id_reserva => $params->{'id_reserva'});
-		$reserva->load();
+	my ($reserva) = C4::Modelo::CircReserva->new(id_reserva => $params->{'id_reserva'});
+	$reserva->load();
         my $db = $reserva->db;
-		$db->{connect_options}->{AutoCommit} = 0;
+	$db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
 
 	eval{
@@ -776,154 +804,7 @@ sub t_cancelar_reserva{
 
 
 ##########DEPRECATED######################DEPRECATED######################DEPRECATED######################DEPRECATED############
-##########DEPRECATED######################DEPRECATED######################DEPRECATED######################DEPRECATED############
-##########DEPRECATED######################DEPRECATED######################DEPRECATED######################DEPRECATED############
-##########DEPRECATED######################DEPRECATED######################DEPRECATED######################DEPRECATED############
-##########DEPRECATED######################DEPRECATED######################DEPRECATED######################DEPRECATED############
-##########DEPRECATED######################DEPRECATED######################DEPRECATED######################DEPRECATED############
-##########DEPRECATED######################DEPRECATED######################DEPRECATED######################DEPRECATED############
 
-# #DEPRECATED ---> paso a CircReserva
-# sub cancelar_reservas{
-# # Este procedimiento cancela todas las reservas de los usuarios recibidos como parametro
-#   my ($loggedinuser,@borrowersnumbers)= @_;
-# 
-#   my $params;
-#   
-#   $params->{'loggedinuser'}= $loggedinuser;
-#   $params->{'tipo'}= 'INTRA';
-# 
-#   foreach (@borrowersnumbers) {
-#       
-#       my $reservas_array_ref=obtenerReservasDeSocio($_);
-#       foreach my $reserva (@$reservas_array_ref){
-#           $reserva->cancelar_reserva($params);
-#       }
-#   }
-# }
-
-=item
-borrarReserva
-Funcion que elimina la reserva de la base de datos.
-=cut
-# sub borrarReserva{
-#   my ($reservenumber)=@_;
-#   my $dbh=C4::Context->dbh;
-#   my $sth=$dbh->prepare("DELETE FROM circ_reserva WHERE reservenumber=?");
-#   $sth->execute($reservenumber);
-# }
-
-=item
-DEPRECATED  -- se usa directamente obtenerReservasDeSocio
-DatosReservas
-Busca todas las reservas que tiene el usuario que llega como parametro, trae todo los datos de los documentos asociados a la reserva.
-=cut
-# sub DatosReservas {
-#   my ($nro_socio)=@_;
-# 
-#   my $reservas_array_ref =obtenerReservasDeSocio($nro_socio);
-#   
-# my $dateformat = C4::Date::get_date_format();
-#   my @results;
-# 
-#   foreach my $reserva (@$reservas_array_ref){
-#       my $data;
-# 
-#       $data->{'rid3'}=$reserva->getId3;
-#       $data->{'rbranch'}=$reserva->getId_ui;
-#       $data->{'id_reserva'}=$reserva->getId_reserva;
-#       $data->{'estado'}=$reserva->getEstado;
-#       $data->{'rtitulo'}=$reserva->nivel2->nivel1->getTitulo;
-#       $data->{'rid1'}=$reserva->nivel2->nivel1->getId1;
-#       $data->{'rid2'}=$reserva->nivel2->getId2;
-#       $data->{'anio_publicacion'}=$reserva->nivel2->getAnio_publicacion;
-#       $data->{'rautor'}=$reserva->nivel2->nivel1->cat_autor->getId;
-#       $data->{'nomCompleto'}=$reserva->nivel2->nivel1->cat_autor->getCompleto;
-# 
-#       $data->{'fecha_recordatorio'}=C4::Date::format_date($reserva->getFecha_recordatorio,$dateformat);
-#       $data->{'rreservedate'}=C4::Date::format_date($reserva->getFecha_reserva,$dateformat);
-#       $data->{'rnotificationdate'}= C4::Date::format_date($reserva->getFecha_notificacion,$dateformat);
-#       $data->{'redicion'}=C4::AR::Nivel2::getEdicion($reserva->getId2);
-# 
-#       push (@results,$data);
-#   }
-# 
-# 
-#   return(scalar(@$reservas_array_ref),$reservas_array_ref);
-# }
-
-# =item
-# datosReservaRealizada
-# Trae los datos de todo el nivel2 (y nivel2_repetibles) con el nivel1 para la reserva que realizo el usuario.
-# =cut
-# sub datosReservaRealizada{
-#   my ($id2)=@_;
-#   my $dbh = C4::Context->dbh;
-# 
-#   my $query="SELECT * FROM cat_nivel2 n2 INNER JOIN cat_nivel1 n1 ON (n2.id1=n1.id1)
-#          LEFT JOIN cat_nivel2_repetible n2r ON (n2.id2=n2r.id2) 
-#          WHERE n2.id2=?";
-# 
-#   my $sth=$dbh->prepare($query);
-#   $sth->execute($id2);
-#   my @results;
-#   while (my $data=$sth->fetchrow_hashref){
-# 
-#       push (@results,$data);
-#   }
-#   
-#   $sth->finish;
-# }
-
-
-
-# =item
-# Esta funcion devuelve la reserva (si existe) de grupo
-# =cut
-# sub getReservasDeBorrower {
-# #devuelve las reservas de grupo del usuario
-# #DEPRECATED!!! se usa getReservasDeSocio
-#   my ($borrowernumber, $id2)=@_;
-#   my $dbh = C4::Context->dbh;
-#   my $query= "SELECT *
-#           FROM circ_reserva
-#           WHERE (nro_socio = ?) AND (id2 = ?)
-#           AND (estado <> 'P')";
-#   my $sth=$dbh->prepare($query);
-#   $sth->execute($borrowernumber, $id2);
-# 
-#   my @results;
-#   my $cant= 0;
-#   while (my $data=$sth->fetchrow_hashref){
-#       push (@results,$data);
-#       $cant++;
-#   }
-#   $sth->finish;
-#   return($cant,\@results);
-# }
-    
-
-=item
-DEPRECATED!!!!
-Esta funcion devuelve la informacion de la reserva sobre un item
-=cut
-# sub getDatosReservaDeId3{
-# 
-#   my ($id3)=@_;
-#   my $dbh = C4::Context->dbh;
-# 
-#   my $query= "    SELECT  * 
-#           FROM circ_reserva LEFT JOIN  usr_socio ON
-#           circ_reserva.nro_socio=usr_socio.id_socio  
-#           WHERE circ_reserva.id3 = ? AND estado <> 'P' ";
-# 
-#   my $sth=$dbh->prepare($query);
-#   $sth->execute($id3);
-#           my $result=$sth->fetchrow_hashref;
-#         $sth->finish;
-# 
-#         return($result);
-# 
 # }
 # ## FIXME reservas por Nivel 1 ?????????????, SE ESTA USANDO ARREGLAR O PASAR
 sub cantReservasPorNivel1{
@@ -938,329 +819,6 @@ sub cantReservasPorNivel1{
    return $sth->fetchrow;
 }
 
-## FIXME esto viene mal de la V2, ver!!!!
-#PASA a CircReserve
-# sub intercambiarId3{
-#   my ($borrowernumber, $id2, $id3, $oldid3, $msg_object)= @_;
-#         my $dbh = C4::Context->dbh;
-# 
-#   my $sth=$dbh->prepare("SELECT id3, estado FROM circ_reserva WHERE id3=? FOR UPDATE ");
-#   $sth->execute($id3);
-#   my $data= $sth->fetchrow_hashref;
-# 
-#   if ($data && $data->{'estado'} eq "E"){ 
-#       #quiere decir que hay una reserva sobre el itemnumber y NO esta prestado el item
-#       $sth=$dbh->prepare("UPDATE circ_reserva SET id3= ? WHERE id3 = ?");
-#       $sth->execute($oldid3, $id3);
-#       #actualizo la reserva con el viejo id3 para la reserva del otro usuario.
-#   }
-#   if($data->{'estado'} eq "P"){
-#       $msg_object->{'error'}= 1;
-#       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P107', 'params' => []} ) ;
-#   }
-#   else{
-#       #el item con id3 esta libre se actualiza la reserva del usuario al que se va a prestar el item.
-#       $sth=$dbh->prepare("UPDATE circ_reserva SET id3= ? WHERE id2=? AND nro_socio=?");
-#       $sth->execute($id3, $id2, $borrowernumber);
-#   }
-# 
-# }
-
-# sub cambiarId3 {
-#   my ($id3Libre,$reservenumber)=@_;
-#   my $dbh = C4::Context->dbh;
-#   my $query="UPDATE circ_reserva SET id3= ? WHERE id_reserva = ?";
-#   my $sth=$dbh->prepare($query);
-#   $sth->execute($id3Libre,$reservenumber);
-# }
-
-=item
-DEPRECATED pasa a CircReserva
-eliminarReservasVencidas
-Elimina las reservas vencidas al dia de la fecha y actualiza la reservas de grupo, si es que exiten, para los item liberados.
-=cut
-# sub eliminarReservasVencidas{
-#   my ($loggedinuser)=@_;
-# 
-#   my $reservasVencidas=reservasVencidas();
-#   #Se buscan si hay reservas esperando sobre el grupo que se va a elimninar la reservas vencidas
-# 
-#   foreach my $reserva (@$reservasVencidas){
-# 
-#       reasignarReservaEnEspera($reserva,$loggedinuser);
-# 
-#       #Actualizo la sancion para que refleje el id3 del item y asi poder informalo
-#       my %params;
-#       $params{'id3'}=$reserva->getId3;
-#       $params{'reservenumber'}=$reserva->getId;
-#       $params{'loggedinuser'}= $loggedinuser;
-#       C4::AR::Sanciones::actualizarSancion(\%params);
-# 
-#       #Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
-#       $reserva->delete();
-#   }
-# 
-# }
-
-=item
-Esta funcion retorna la cantidad de reservas en espera
-=cut
-# sub cant_waiting{
-#         my ($borrowernumber)=@_;
-#         my $dbh = C4::Context->dbh;
-#         my $query="   SELECT count(*) as cant FROM circ_reserva
-#               WHERE nro_socio = ?
-#           AND estado <> 'P'
-#           AND id3 IS NULL ";
-#         my $sth=$dbh->prepare($query);
-#         $sth->execute($borrowernumber);
-# 
-#         my $result=$sth->fetchrow_hashref;
-#         $sth->finish;
-#         return($result);
-# }
-
-# FIXME falta pasar CheckWaiting
-# sub CheckWaiting {
-#       my ($nro_socio)=@_;
-# 
-#       my $dbh = C4::Context->dbh;
-#       my @itemswaiting;
-# 
-#   my $sth=$dbh->prepare(" SELECT n3.barcode, n1.titulo, b.nombre, n2.id2, it.nombre, r. * 
-#               FROM circ_reserva r
-#               INNER JOIN cat_nivel3 n3 ON r.id3 = n3.id3
-#               INNER JOIN cat_nivel1 n1 ON n1.id1 = n3.id1
-#               INNER JOIN cat_nivel2 n2 ON n1.id1 = n2.id1 AND n3.id2 = n2.id2
-#               INNER JOIN cat_ref_tipo_nivel3 it ON it.id_tipo_doc = n2.tipo_documento
-#               INNER JOIN pref_unidad_informacion b ON b.id_ui = r.id_ui
-#               WHERE nro_socio =?");
-# 
-# 
-#   $sth->execute($nro_socio);
-# 
-#   while (my $data=$sth->fetchrow_hashref) {
-#       push(@itemswaiting,$data);
-#   }
-#   $sth->finish;
-# 
-#   return (scalar(@itemswaiting),\@itemswaiting);
-# }
-
-=item
-getReservaEnEspera #DEPRECATED paso a CircReserva
-Funcion que trae los datos de la primer reserva de la cola que estaba esperando que se desocupe un ejemplar del grupo devuelto o cancelado.
-=cut
-# sub getReservaEnEspera{
-#     my ($id2)=@_;
-# 
-#     use C4::Modelo::CircReserva;
-#     use C4::Modelo::CircReserva::Manager;
-#     my ($id2)=@_;
-#     my @filtros;
-#     push(@filtros, ( id2 => { eq => $id2}));
-#     push(@filtros, ( id3 => undef ));
-# 
-#     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros,
-#                                                                             sort_by => 'timestamp',
-#                                                                             limit   => 1,
-#                                   ); 
-#     return ($reservas_array_ref->[0]);
-# }
-
-
-=item
-tiene_reservas
-Verifica si el item tiene reservas, se saco de C4::AR::Reserves, solo es llamada de delitem.pl, creo q no se va
-a usar mas
-=cut
-# sub tiene_reservas {
-#   my ($id3)=@_;
-# 
-#       my $dbh = C4::Context->dbh;
-#       my $query= "    SELECT * FROM circ_reserva  
-#           WHERE estado <> 'P'
-#           AND id3 = ?";
-# 
-#   my $sth=$dbh->prepare($query);
-# 
-#   $sth->execute($id3);
-# 
-#   my $result="";
-#         if (my $data = $sth->fetchrow_hashref){ 
-#       $result=1
-#   } else {
-#        $result=0
-#   }
-# 
-#         return($result);
-# }
-# # DEPRECATED pasa a CircReserva
-# sub FindNotRegularUsersWithReserves {
-#   my $dbh = C4::Context->dbh;
-#   my $query=" SELECT circ_reserva.nro_socio 
-#           FROM circ_reserva INNER JOIN usr_socio ON circ_reserva.nro_socio = usr_socio.id_socio
-#           INNER JOIN usr_estado ON usr_estado.id_estado = usr_socio.id_estado
-#           WHERE usr_estado.regular = '0'
-#           AND circ_reserva.estado IS NULL";
-# 
-#         my $sth=$dbh->prepare($query);
-#         $sth->execute();
-#         my @results;
-# 
-#         while (my $data=$sth->fetchrow){
-#       push (@results,$data);
-#         }
-# 
-#         $sth->finish;
-#         return(@results);
-# }
-
-=item
-mailReservas
-Busca todas las reservas que no estan prestadas de una biblioteca, con los usarios que las hicieron.
-Para poder mandarles un mail.
-=cut
-# sub mailReservas{
-#   my ($branch)=@_;
-#   my $dbh = C4::Context->dbh;
-#   my $sth=$dbh->prepare("SELECT * FROM circ_reserva 
-#       INNER JOIN usr_socio ON (circ_reserva.nro_socio=usr_socio.id_socio) 
-#       LEFT JOIN cat_nivel3 n3 ON (circ_reserva.id3 = n3.id3 )
-#       INNER JOIN cat_nivel1 n1 ON (n3.id1 = n1.id1)
-#       WHERE circ_reserva.id_ui=? AND estado <> 'P'");
-#   $sth->execute($branch);
-#   my @result;
-#   while (my $data = $sth->fetchrow_hashref) {
-#       my $author=getautor($data->{'author'});
-#       $author=$author->{'completo'};
-#       $data->{'author'}=$author;
-#       push @result, $data;
-#   }
-#   $sth->finish;
-#   return(scalar(@result), \@result);
-# 
-# }
-
-
-=item
-Esta funcion ....
-Se usa cuando ...
-=cut
-
-## FIXME esta funcion se trae de la V2, tratar de modularizar mas y reusar funciones, puede que haya
-# # consultas repetidas..
-# sub cambiarReservaEnEspera {
-# my ($id2,$id3,$responsable)=@_;
-#   my $dbh=C4::Context->dbh;
-# 
-#   #Tiene una reserva asignada??
-#   my $query=" SELECT * FROM circ_reserva WHERE (estado <> 'P') AND (id3 = ?) ";
-#   my $sth=$dbh->prepare($query);
-#   $sth->execute($id3);
-#   my $reserva=$sth->fetchrow_hashref;
-#   
-#   if($reserva){
-#   #Tenia una reserva asignada hay que cambiarla
-#       my $item= getItemsParaReserva($id2); #busco un item libre del grupo
-#       if ($item) {
-#       #Hay un ejemplar libre para el usuario
-#           my $sth2=$dbh->prepare("UPDATE circ_reserva SET id3= ? WHERE id_reserva= ?; ");
-#           $sth2->execute($item->{'id3'},$reserva->{'reservenumber'});
-# 
-#       }else {
-#       #NO hay ejemplares libres!!! 
-#       #Queda algun ejemplar Disponible?? (wthdrawn = 0) y (notforloan = 0)
-# #         my $query2="SELECT * FROM nivel3 WHERE id2 = ? and wthdrawn='0' and notforloan = '0'";
-#       my $query2="SELECT * FROM cat_nivel3 WHERE id2 = ? AND wthdrawn='0' AND notforloan = 'DO'";
-#       my $sth4=$dbh->prepare($query2);
-#       $sth4->execute($id2);
-#       my $disponibles=$sth4->fetchrow_hashref;
-#           if ($disponibles){
-#       #Si hay algun ejemplar que se pueda prestar, se debe agregar al principio de la cola de reservas.
-#               my $query3="UPDATE circ_reserva SET timestamp='0000-00-00 00:00:00', id3 = NULL
-#                       WHERE id_reserva=? ";
-#               my $sth5=$dbh->prepare($query3);
-#               $sth5->execute($reserva->{'reservenumber'});
-#           }
-#           else {
-#           #Cancelar TODAS las reservas!!! No hay mas ejemplares disponibles
-#           cancelar_todas_las_reservas_de_un_grupo($id2,$responsable);
-#           }
-#       }
-#   
-#   }
-# 
-# }
-
-=item
-Esta funcion cancela todas las reservas que existan sobre el grupo.
-Se usa cuando por ej. se elimina o cambia la disponibilidad de los items de un grupo, de manera tal que
-ya no queden itemes disponibles en el grupo, entonces se deben cancelar todas las reservas sobre el grupo
-=cut
-
-## FIXME esta funcion se trae de la V2, tratar de modularizar mas y reusar funciones, puede que haya
-# consultas repetidas..
-# sub cancelar_todas_las_reservas_de_un_grupo{
-# my ($id2,$loggedinuser)=@_;
-# 
-#   my $dbh = C4::Context->dbh;
-# 
-#         #Primero busco los datos de las reservas que se quieren borrar
-#   my $sth=$dbh->prepare("SELECT * FROM circ_reserva WHERE id2 = ? ");
-#   $sth->execute($id2);
-#   my @resultado;
-# 
-#   while (my $data=$sth->fetchrow_hashref){
-#       push (@resultado,$data);
-#   }
-# 
-#   #Elimino las reservas se estan cancelando
-#   $sth=$dbh->prepare(" DELETE FROM circ_reserva WHERE id2 = ? ");
-#   $sth->execute($id2);
-# 
-#   foreach my $data (@resultado){
-# #**********************************Se registra el movimiento en historicCirculation***************************
-#       my $id1;
-#       my $branchcode;
-# 
-#       if($data->{'id3'}){
-# #ES UNA RESERVA ASIGNADA
-# # Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
-#           my $sth4=$dbh->prepare("    DELETE FROM circ_sancion 
-#                           WHERE reservenumber=? AND (now() < startdate) ");
-# 
-#           $sth4->execute($data->{'reservenumber'});
-#   
-#           my $dataItems= C4::AR::Nivel3::getDataNivel3($data->{'id3'});
-#           $id1= $dataItems->{'id1'};
-#           $branchcode= $dataItems->{'homebranch'};
-#       }else{
-#           my $dataBiblioItems= C4::Circulation::Circ2::getDataBiblioItems($id2);
-#           $id1= $dataBiblioItems->{'id1'};
-#           $branchcode= 0;
-#       }
-#       
-#       my $tipo_prestamo= '-';
-#       my $borrowernumber= $loggedinuser;
-# #         my $end_date = 'null';
-#       my $end_date = undef;
-#       C4::Circulation::Circ2::insertHistoricCirculation(
-#                                   'cancel',
-#                                   $borrowernumber,
-#                                   $loggedinuser,
-#                                   $id1,
-#                                   $id2,
-#                                   $data->{'id3'},
-#                                   $branchcode,
-#                                   $tipo_prestamo,
-#                                   $end_date
-#       ); 
-# 
-#   }# end foreach my $data (@resultado)
-# #******************************Fin****Se registra el movimiento en historicCirculation*************************
-# 
-# }#end sub cancelar_todas_las_reservas_de_un_grupo{
 
 
 1;

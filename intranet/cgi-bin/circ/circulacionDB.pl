@@ -35,6 +35,7 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 	my $loop=scalar(@$array_ids);
 
 	my @infoDevRen=();
+	$infoDevRen[0]->{'nro_socio'}=$user;
 	$infoDevRen[0]->{'accion'}=$tipoAccion;
 	for(my $i=0;$i<$loop;$i++){
  		my $id_prestamo=$array_ids->[$i];

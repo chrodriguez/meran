@@ -594,6 +594,107 @@ C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
 
 }
 
+=item
+Se verifica que se cumplan las condiciones para poder renovar
+=cut
+
+sub _verificarParaRenovar{
+	my ($self)=shift;
+	my($msg_object)=@_;
+
+	#Se que estemos dentro de la fecha en que se puede realizar la renovacion
+	if(!$self->sePuedeRenovar){
+			$self->debug("_verificarParaRenovar - NO estamos en fecha de renovacion");
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P108', 'params' => []});
+	}
+
+	if(!($msg_object->{'error'})&&(!$self->socio->esRegular)){
+	# El usuario es regular? 
+			$self->debug("_verificarParaRenovar - socio no es regular");
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U300', 'params' => []} ) ;
+		}
+
+	if(!($msg_object->{'error'})&&(!$self->socio->getCumple_requisito)){
+	# El usuario cumple condicion? 
+			$self->debug("_verificarParaRenovar - socio no cumple condicion");
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P114', 'params' => []} ) ;
+		}
+
+ 	#Busco si tiene una sancion pendiente
+	my $sancion_pendiente=C4::AR::Sanciones::tieneSancionPendiente($self->getNro_socio,$self->db);
+
+	if(!($msg_object->{'error'})&&($sancion_pendiente)){
+	# El usuario tiene una sancion pendiente?
+			$self->debug("_verificarParaRenovar - socio con sancion pendiente");
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S201', 'params' => []} ) ;
+		}
+	
+	my $sancion = C4::AR::Sanciones::estaSancionado($self->getNro_socio, $self->getTipo_prestamo);
+	if(!($msg_object->{'error'})&&($sancion)){
+	# El usuario tiene una sancion ?
+			$self->debug("_verificarParaRenovar - socio sancionado");
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S200', 'params' => [$sancion->getFecha_final_formateada]} ) ;
+		}
+
+	if(!($msg_object->{'error'})&&(C4::AR::Reservas::reservasEnEspera($self->nivel3->nivel2->getId2))){
+	#Hay alguna reserva pendiente?
+			$self->debug("_verificarParaRenovar - grupo con reserva pendiente");
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P103', 'params' => []} ) ;
+		}
+
+	if(!($msg_object->{'error'})&&( ($self->getRenovaciones + 1 ) ==  $self->tipo->getRenovaciones )){
+	# Se llego al maximo de renovaciones? 
+			$self->debug("_verificarParaRenovar - Se llego al maximo de renovaciones");
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R012', 'params' => []} ) ;
+		}
+
+	if(!($msg_object->{'error'})&&( $self->estaVencido)){
+	# Esta vencido? 
+			$self->debug("_verificarParaRenovar - esta vencido");
+			$msg_object->{'error'}= 1;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P117', 'params' => []} ) ;
+		}
+
+	return ($msg_object);
+}
+
+
+=item 
+renovar
+=cut
+sub renovar {
+    	my ($self)=shift;
+    	my ($loggedinuser)= @_;
+
+	$self->setRenovaciones($self->getRenovaciones + 1);
+	$self->setFecha_ultima_renovacion(ParseDate("today"));
+	$self->save();
+
+	#**********************************Se registra el movimiento en rep_historial_circulacion***************************
+	my $data_hash;
+	$data_hash->{'id1'}= $self->nivel3->nivel2->nivel1->getId1;
+	$data_hash->{'id2'}= $self->nivel3->nivel2->getId2;
+	$data_hash->{'id3'}= $self->getId3;
+	$data_hash->{'nro_socio'}= $self->getNro_socio;
+	$data_hash->{'responsable'}= $loggedinuser;
+	C4::AR::Debug::debug("CircPrestamo=> renovar => responsable".$loggedinuser);
+	$data_hash->{'hasta'}= $self->getFecha_vencimiento;
+	$data_hash->{'tipo_prestamo'}= $self->getTipo_prestamo;
+	$data_hash->{'id_ui'}= $self->getId_ui_prestamo;
+	$data_hash->{'tipo'}= 'renovacion';
+	use C4::Modelo::RepHistorialCirculacion;
+	my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
+	$historial_circulacion->agregar($data_hash);
+	#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
+}
+
 
 1;
 

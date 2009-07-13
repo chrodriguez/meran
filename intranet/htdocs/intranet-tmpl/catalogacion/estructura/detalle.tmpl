@@ -122,8 +122,7 @@ var grupo;
 
 function renovarPrestamo(userId,userNom,id2,id_prestamo){
 	
-	array=new Array;
-	array[0]= id_prestamo;
+
 	USUARIO=new objeto_usuario();
 	USUARIO.ID=userId;
 	USUARIO.text=userNom;
@@ -132,9 +131,10 @@ function renovarPrestamo(userId,userNom,id2,id_prestamo){
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'RENOVACION';
+	array=new Array;
+	array[0]= id_prestamo;
 	objAH.datosArray= array;
 	objAH.nro_socio= USUARIO.ID;
-    	objAH.id_prestamo = id_prestamo;
 	//se envia la consulta
 	objAH.sendToServer();
 	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!
@@ -159,6 +159,20 @@ function devolverPrestamo(userId,userNom,id2,id_prestamo){
 	objAH.sendToServer();
 	//guardo el id2 para actualizar los ejemplares del grupo, por ahora lo hago asi!!!!!!!
 	ID_N2= id2;
+}
+
+/*
+* REDEFINIDA, se encuentra definida en circulacion.js
+*/
+function updateInfoRenovar(responseText){
+	cancelarDiv();
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.messages.messages;
+	setMessages(messageArray);
+
+	ejemplaresDelGrupo(ID_N2);
+	inicializar();
 }
 
 /*
@@ -208,6 +222,7 @@ function updateInfoPrestarReserva(responseText){
 	}
 	ejemplaresDelGrupo(ID_N2);
 }
+
 
 /************************************************FIN CIRCULACUION************************************************/
 

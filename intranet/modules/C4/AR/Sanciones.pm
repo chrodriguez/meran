@@ -51,6 +51,25 @@ sub tieneSanciones {
 }
 
 
+sub tieneSancionPendiente {
+  #Se buscan todas las sanciones pendientes de un socio
+  my ($nro_socio,$db)=@_;
+
+    use C4::Modelo::CircSancion::Manager;
+    my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion( db=> $db,
+                            query => [ nro_socio => { eq => $nro_socio },
+                                       fecha_comienzo => { eq => undef },
+                                       fecha_final => { eq => undef }] 
+                            );
+
+  if (scalar(@$sanciones_array_ref) == 0){
+        return 0;
+  }else{
+    return(\@$sanciones_array_ref);
+  }
+}
+
+
 sub permisoParaPrestamo {
 #Esta funcion retorna un par donde el primer parametro indica si el usuario puede realizar una reserva o se le puede realizar un prestamo y el segundo indica en caso de estar sancionado la fecha en la que la sancion finaliza
   	my ($nro_socio, $tipo_prestamo)=@_;
