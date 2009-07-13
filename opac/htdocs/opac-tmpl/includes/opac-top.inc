@@ -3,19 +3,20 @@
 <title>[% titulo_nombre_ui %]</title>
 
 <script language="javascript" type="text/javascript">
-token= '[% token %]';
+    token= '[% token %]';
 </script>
+
 <script src="/includes/jquery/jquery.js"></script>
 <script src="/includes/AjaxHelper.js"></script>
 <script src="/includes/MessageHelper.js"></script>
 <script src="/includes/json/jsonStringify.js"></script>
-<script src="/opac-tmpl/default/includes/navegador.js"></script>
+<script src="/opac-tmpl/includes/navegador.js"></script>
 <script src="/includes/jquery/jquery-highlight.js"></script>
 <script src="/includes/util.js"></script>
-<script src="/opac-tmpl/default/includes/opac-searchFunciones.js"></script>
-<script src="/opac-tmpl/default/includes/circulacionOPAC.js"></script>
-<script src="/opac-tmpl/default/includes/favoritos.js"></script>
-<script src="/opac-tmpl/default/includes/message_OPAC.inc"></script>
+<script src="/opac-tmpl/includes/opac-searchFunciones.js"></script>
+<script src="/opac-tmpl/includes/circulacionOPAC.js"></script>
+<script src="/opac-tmpl/includes/favoritos.js"></script>
+<script src="/opac-tmpl/includes/message_OPAC.inc"></script>
 <script src="/includes/AutocompleteHelper.js"></script>
 
 

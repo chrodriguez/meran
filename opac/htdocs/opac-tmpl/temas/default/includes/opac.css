@@ -129,3 +129,30 @@ body {
 li {
     list-style-type:none;
 }
+
+.filtros_reportes{
+    font-size: 13px;
+/*     overflow: auto; */
+    display:table;
+    margin:0 auto;
+    width:auto;
+}
+
+.filtros_reportes li{
+    padding-top: 5px;
+}
+
+.filtros_reportes_izq{
+    float: left;
+    padding-right: 70px;
+}
+
+.filtros_reportes_der{
+    float: right;
+    overflow:auto;
+}
+
+.buttonContainerHorizontal{
+    display: table;   /* Allow the centering to work */
+    margin: 0 auto;
+}

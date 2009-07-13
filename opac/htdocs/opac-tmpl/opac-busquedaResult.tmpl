@@ -1,5 +1,3 @@
-
-
 <p align="center">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %]<b> [% buscoPor %]</b></br>
 		[% "Cantidad de Registros:" | i18n %] <b>[% cantidad %]</b> en (<b>[% timeSeg %]</b> segundos)
 </p>
@@ -8,7 +6,7 @@
 [% paginador %]
 </center>
 
-<table id="tablaResult" class="tablaResult" border=1 align="center" cellspacing=0 cellpadding=0 width=100%>
+<table id="tablaResult" class="tabla_datos" border=1 align="center" cellspacing=0 cellpadding=0 width=100%>
 	<thead>
 	<tr class="bordetabla" >
 	[% IF loggedinusername %]
@@ -91,17 +89,15 @@
 		</td>	
 	</tr>
 [% END %]
-	</tbody>
+    </tbody>
 </table>
 <br>
 
 [% IF loggedinusername %]
-<input type="hidden" value="" name="bookmarks" id="bookmarks">
-
-<a  onMouseOut="swap('ps','[% themelang %]/images/favoritos.png')" 		
-	onMouseOver="swap('ps','[% themelang %]/images/favoritosbis.png')">
-
-	<input onClick="agregarAFavoritos();" name="ps" id="ps" type="image" value="publicshelf"  
-	src="[% themelang %]/images/favoritos.png" border="0" title="Agregar a favoritos">
-</a>
+    <input type="hidden" value="" name="bookmarks" id="bookmarks">
+    <a  onMouseOut="swap('ps','[% themelang %]/images/favoritos.png')" 		
+        onMouseOver="swap('ps','[% themelang %]/images/favoritosbis.png')">
+        <input onClick="agregarAFavoritos();" name="ps" id="ps" type="image" value="publicshelf"  
+               src="[% themelang %]/images/favoritos.png" border="0" title="Agregar a favoritos">
+    </a>
 [% END %]
