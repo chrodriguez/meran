@@ -90,15 +90,18 @@ sub gettemplate {
 	my ($tmplbase, $opac) = @_;
 
 	my $htdocs;
+    my $tema = C4::Context->config('tema');
+    my $temas = C4::Context->config('temas');
+
 	if ($opac ne "intranet") {
 		$htdocs = C4::Context->config('opachtdocs');
+        $temas = C4::Context->config('temasOPAC');
 	} else {
 		$htdocs = C4::Context->config('intrahtdocs');
 	}
 
-	my $tema = C4::Context->config('tema');
-	my $temas = C4::Context->config('temas');
-	C4::AR::Debug::debug($htdocs);
+# 	C4::AR::Debug::debug($temas);
+# 	C4::AR::Debug::debug($htdocs);
 
 	my $filter= Template::Filters->new({
 						FILTERS => {	'i18n' =>  \&C4::AR::Filtros::i18n, #se carga el filtro i18n
@@ -128,7 +131,9 @@ sub gettemplate {
 
 	#se asignan los parametros que son necesarios para todos los templates
 	%params= (
+# FIXME DEPRECATED
 			themelang => ($opac ne 'intranet'? '/opac-tmpl/': '/intranet-tmpl/') ,
+# FIXME DEPRECATED
 			interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
 			tema => $tema,
 			temas => $temas,

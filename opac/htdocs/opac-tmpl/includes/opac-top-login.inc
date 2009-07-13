@@ -12,7 +12,8 @@ token= '[% token %]';
 <script src="/includes/AjaxHelper.js"></script>
 <script src="/includes/MessageHelper.js"></script>
 
-<link rel="stylesheet" type="text/css" href="[% themelang %]/includes/opac.css">
+<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/opac.css">
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/opac.css">
 </head>
 <script language="javascript" type="text/javascript">
 function swap(id,src){

@@ -2,8 +2,6 @@
 <head>
 <title>Biblioteca - Facultad de Ciencias Econ&oacute;micas - U.N.L.P.</title>
 
-<link rel="stylesheet" type="text/css" href="[% themelang %]/includes/opac.css">
-
 <script language="javascript" type="text/javascript">
 token= '[% token %]';
 </script>
@@ -25,6 +23,8 @@ token= '[% token %]';
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
+<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/opac.css">
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/opac.css">
 </head>
 <script language="javascript" type="text/javascript">
 
