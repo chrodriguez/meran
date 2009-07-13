@@ -87,52 +87,57 @@ function cambiarIdioma() {
 <div id="marco_contenido" class="contenido">
     <div id="marco_busqueda">[% INCLUDE "opac-search.inc" %]</div>
 
-    <div id="menu-container" class="main-header">
+<!--     <div id="menu-container" class="main-header"> -->
 
-    [% IF nro_socio %]
+        <div class="buttonContainerHorizontal">
+            <ul class="horizontal-list" >
 
-            [% PERL %]
-                print C4::AR::Filtros::to_Button(   text    => "[% 'Ver mis favoritos' | i18n %]",
-                                                    boton   => "boton_favoritos", 
-                                                    width   => "125",
-                                                    onClick => "consultarFavoritos();",
-                                                    title   => "[% 'Ver mis favoritos' | i18n %]"
-                                            ) ;
-            [% END %]
-
-    [% END %]  
-
-        [% PERL %]
-            print C4::AR::Filtros::link_to( text    => "[% 'Registrarse' | i18n %]",
-                                            boton   => "boton_registrarse", 
-                                            width   => "95",
-                                            url     => "/join.html", 
-                                            title   => "[% 'Registrarse' | i18n %]"
-                                        ) ;
-        [% END %]  
-
-        [% IF hiddesearch %]
-        [% ELSE %]
-            [% PERL %]
-                        print C4::AR::Filtros::link_to( text    => "[% 'Buscar' | i18n %]",
-                                                        boton   => "boton_buscar", 
-                                                        width   => "95",
-                                                        url     => "/cgi-bin/koha/opac-search.pl", 
-                                                        title   => "[% 'Buscar' | i18n %]"
-                                                    ) ;
-            [% END %]  
-        [% END %]
-
-        [% PERL %]
-                    print C4::AR::Filtros::link_to( text    => "[% 'Inicio' | i18n %]",
-                                                    boton   => "boton_inicio", 
+                [% IF nro_socio %]
+            
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Button(   text    => "[% 'Ver mis favoritos' | i18n %]",
+                                                                boton   => "boton_favoritos", 
+                                                                width   => "125",
+                                                                onClick => "consultarFavoritos();",
+                                                                title   => "[% 'Ver mis favoritos' | i18n %]"
+                                                        ) ;
+                        [% END %]
+            
+                [% END %]  
+            
+                [% PERL %]
+                    print C4::AR::Filtros::link_to( text    => "[% 'Registrarse' | i18n %]",
+                                                    boton   => "boton_registrarse", 
                                                     width   => "95",
-                                                    url     => "/cgi-bin/koha/opac-main.pl", 
-                                                    title   => "[% 'Inicio' | i18n %]"
+                                                    url     => "/join.html", 
+                                                    title   => "[% 'Registrarse' | i18n %]"
                                                 ) ;
-        [% END %]  
+                [% END %]  
 
-    </div>
+                [% IF hiddesearch %]
+                [% ELSE %]
+                    [% PERL %]
+                                print C4::AR::Filtros::link_to( text    => "[% 'Buscar' | i18n %]",
+                                                                boton   => "boton_buscar", 
+                                                                width   => "95",
+                                                                url     => "/cgi-bin/koha/opac-search.pl", 
+                                                                title   => "[% 'Buscar' | i18n %]"
+                                                            ) ;
+                    [% END %]  
+                [% END %]
+
+                [% PERL %]
+                            print C4::AR::Filtros::link_to( text    => "[% 'Inicio' | i18n %]",
+                                                            boton   => "boton_inicio", 
+                                                            width   => "95",
+                                                            url     => "/join.html", 
+                                                            title   => "[% 'Registrarse' | i18n %]"
+                                                        ) ;
+                [% END %]
+        
+            </ul>
+        </div>
+<!--     </div> -->
 
 <div id="marco_contenido_datos" class="contenido">
 

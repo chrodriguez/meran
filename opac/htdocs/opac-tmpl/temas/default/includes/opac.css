@@ -175,3 +175,29 @@ body {
 li {
     list-style-type:none;
 }
+
+.horizontal{
+    float:left;
+    margin-right: 10px;
+}
+.buttonContainerHorizontal{
+    display: table;   /* Allow the centering to work */
+    margin: 0 auto;
+}
+
+ul.horizontal-list {
+    min-width: 696px;
+    list-style: none;
+    padding-top: 20px;
+}
+
+ul.horizontal-list li {
+    display: inline;
+}
+
+
+/*                                       para los resultados de las tablas                                     */
+.tabla_datos {
+    font-size: 9pt;
+}
+/*                                     fin  para los resultados de las tablas                                  */
