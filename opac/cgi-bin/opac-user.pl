@@ -55,6 +55,8 @@ if (C4::AR::Preferencias->getValorPreferencia("UploadPictureFromOPAC")) {
 	$t_params->{'UploadPictureFromOPAC'}=0;
 }
 
+# FIXME falta 
+=item
 my $sanc= C4::AR::Sanciones::hasSanctions($session->param('userid'));
 
 foreach my $san (@$sanc) {
@@ -65,6 +67,7 @@ if ($san->{'id3'}) {
 	$san->{'fecha_comienzo'}=format_date($san->{'fecha_comienzo'},$dateformat);
 }
 if (scalar(@$sanc) > 0){$t_params->{'sanciones_loop'}= $sanc;}
+=cut
 $t_params->{'updatedata'}= (!C4::AR::Preferencias->getValorPreferencia('CheckUpdateDataEnabled'));
 $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 $t_params->{'pagetitle'}= "Usuarios";

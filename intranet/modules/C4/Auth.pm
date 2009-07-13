@@ -207,6 +207,7 @@ sub get_template_and_user {
 		$nro_socio = $session->param('userid');
 # FIXME sacar luego de pasar todo a los nombre nuevos
 		$session->param('borrowernumber',$nro_socio);#se esta pasadon por ahora despues sacar
+        $params->{'nro_socio'}= $nro_socio;
 
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
         $socio->load();

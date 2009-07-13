@@ -51,19 +51,17 @@ function cambiarIdioma() {
 </noscript>
 
 <div id="login-container">
-<<<<<<< .mine
-[% IF 1 %]
-    [% "Ingres&oacute; como:" | i18n %]<b> [% loggedinusername %]</b>
-=======
 [% IF nro_socio %]
-    [% "Ingres&oacute; como:" | i18n %]<b> [% nro_socio %]</b>
->>>>>>> .r1790
     [%  "OPAC" | setComboLang %]
 
+    [% "Ingres&oacute; como:" | i18n %]<b> [% nro_socio %]</b>
+
     [% PERL %]
-        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_miembros" ),
-                                        url =>      "/cgi-bin/koha/opac-user.pl", 
-                                        title =>    "[% 'Miembros' | i18n %]"
+        print C4::AR::Filtros::link_to( text    => "[% 'Miembros' | i18n %]",
+                                        boton   => "boton_miembros",
+                                        width   => "95",
+                                        url     => "/cgi-bin/koha/opac-user.pl", 
+                                        title   => "[% 'Miembros' | i18n %]"
                                     ) ;
     [% END %]
 
