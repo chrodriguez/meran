@@ -96,8 +96,8 @@ function searchinc(){
         case 'shelves':
 //             buscarPorEstante();
             break;
-        default 'autor':
-            buscarCombinada();
+        default:
+            busquedaCombinable();
             break;
 
 
@@ -109,7 +109,7 @@ function buscarPorAutor(){
 	objAH=new AjaxHelper(updateBuscarPorAutor);
   	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
-	objAH.searchinc= $('#searchinc').val();
+	objAH.searchField= $('#searchField').val();
 	objAH.tipo= 'normal';
 	objAH.tipoAccion= 'BUSQUEDA_SIMPLE_POR_AUTOR';
 	//se setea la funcion para cambiar de pagina
@@ -122,8 +122,8 @@ function highlightBuscarPorAutor(){
 	var string = [];
     var classes = [];
 	
-	if($('#searchinc').val() != ''){
-		var combinables= ['searchinc'];
+	if($('#searchField').val() != ''){
+		var combinables= ['searchField'];
 		classes.push('autor_result');
 		highlight(classes,combinables);
 	}
@@ -138,7 +138,7 @@ function buscarPorTitulo(){
     objAH=new AjaxHelper(updateBuscarPorTitulo);
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
-    objAH.searchinc= $('#searchinc').val();
+    objAH.searchinc= $('#searchField').val();
     objAH.tipo= 'normal';
     objAH.tipoAccion= 'BUSQUEDA_SIMPLE_POR_TITULO';
     //se setea la funcion para cambiar de pagina
@@ -151,9 +151,9 @@ function highlightBuscarPorTitulo(){
     var string = [];
     var classes = [];
 
-	if($('#searchinc').val() != ''){
+	if($('#searchField').val() != ''){
 		classes.push('titulo_result');
-		var combinables= ['searchinc'];
+		var combinables= ['searchField'];
     	highlight(classes,combinables);
 	}
 }
@@ -327,7 +327,7 @@ function buscar(){
 	if ($('#tema').val() != '') {
 		buscarPorTema();
 	}
-	if ($('#searchinc').val() != '') {
+	if ($('#searchField').val() != '') {
 		searchinc();
 	}
 	else {

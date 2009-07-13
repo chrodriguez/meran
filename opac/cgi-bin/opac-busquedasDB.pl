@@ -66,7 +66,7 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
 #se arma el arreglo con la info para mostrar en el template
 $obj->{'cantidad'}= $cantidad;
-$obj->{'loggedinuser'}= $session->param('nro_socio');
+$obj->{'nro_socio'}= $session->param('nro_socio');
 $t_params->{'SEARCH_RESULTS'}= $resultsarray;
 #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
 $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);

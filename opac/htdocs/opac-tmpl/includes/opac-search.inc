@@ -11,7 +11,7 @@
         </li>
         &nbsp;
         <li>
-            <input type="text" id="searchinc" size="25" name="searchinc">
+            <input type="text" id="searchField" size="25" name="searchField">
         </li>
         &nbsp;
         <li>

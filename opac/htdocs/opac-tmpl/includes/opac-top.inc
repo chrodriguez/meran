@@ -51,8 +51,8 @@ function cambiarIdioma() {
 </noscript>
 
 <div id="login-container">
-[% IF loggedinusername %]
-    [% "Ingres&oacute; como:" | i18n %]<b> [% loggedinusername %]</b>
+[% IF nro_socio %]
+    [% "Ingres&oacute; como:" | i18n %]<b> [% nro_socio %]</b>
     [%  "OPAC" | setComboLang %]
 
     [% PERL %]
@@ -83,7 +83,7 @@ function cambiarIdioma() {
     
     <div id="menu-container" class="main-header">
     
-    [% IF loggedinusername %]
+    [% IF nro_socio %]
         [% PERL %]
                 print C4::AR::Filtros::to_Icon(     boton   => "icon_favorito_ver",
                                                     onClick => "consultarFavoritos();",
