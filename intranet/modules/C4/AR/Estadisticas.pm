@@ -1457,7 +1457,7 @@ sub listaDeEjemplares {
 # FIXME falta el tema de paginar cuando es pdf (o sea, no hay que paginar)
     my ($params) = @_;
 
-    my $id_ui=  $params->{'id_ui'} || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
+    my $id_ui=  $params->{'id_ui'} || C4::AR::Preferencias->getValorPreferencia('defaultUI');
 
     my @filtros;
 

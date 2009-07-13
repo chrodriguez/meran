@@ -119,7 +119,7 @@ SE USA EN EL REPORTE DEL INVENTARIO, SE PODRIA PASAR AL PM ESTADISTICAS
 
 sub listitemsforinventory {
     my ($minlocation,$maxlocation,$branch,$ini,$fin,$orden) = @_;
-    my $branchcode=  $branch || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
+    my $branchcode=  $branch || C4::AR::Preferencias->getValorPreferencia('defaultUI');
     my $dbh = C4::Context->dbh;
     # unititle,number,
     my $sth = $dbh->prepare("SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id1, n3.homebranch

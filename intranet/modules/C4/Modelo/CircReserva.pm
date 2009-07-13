@@ -234,7 +234,7 @@ sub reservar {
 	$paramsReserva{'responsable'}= $params->{'loggedinuser'};
 	$paramsReserva{'fecha_reserva'}= $desde;
 	$paramsReserva{'fecha_recordatorio'}= $hasta;
-	$paramsReserva{'id_ui'}= C4::AR::Preferencias->getValorPreferencia("defaultbranch");
+	$paramsReserva{'id_ui'}= C4::AR::Preferencias->getValorPreferencia("defaultUI");
 	$paramsReserva{'estado'}= ($id3 ne '')?'E':'G';
 	$paramsReserva{'hasta'}= C4::Date::format_date($hasta,$dateformat);
 	$paramsReserva{'desde'}= C4::Date::format_date($desde,$dateformat);

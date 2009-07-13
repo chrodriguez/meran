@@ -7,20 +7,30 @@
     <tr valign="top">
     
 	    <td>
-	        <ul><font class="fontmsg">
+	        <ul>
+		<font class="fontmsg">
 	        [% FOREACH sancion IN SANCIONES %]
 		        <li>
-		        [% IF sancion.tipo_sancion %] [% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %]* ts.getTipo_prestamo *[% END %]
+			<div>
+			<div>
+		        [% IF sancion.tipo_sancion %]
+				<ul> 
+				[% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %] 
+				<li>[% ts.ref_tipo_prestamo.descripcion %]</li>
+				[% END %]
+				</ul>
 		        [% ELSE %]
 		        [% "Reserva no retirada" | i18n %]
-		        [% END %] - 
-        
+		        [% END %] 
+        		</div>
+			<div>
 		        [% "Desde el" | i18n %] [% sancion.getFecha_comienzo_formateada %] 
 		        [% "hasta el" | i18n %] [% sancion.getFecha_final_formateada %]
-		        </li>
+			</div>
+			</li>
 	        [% END %]
 		        </font>
-	        </ul>
+	        </ul>	
 	    </td>
     </tr>
 </table>

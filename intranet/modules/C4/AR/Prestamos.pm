@@ -318,8 +318,8 @@ C4::AR::Debug::debug("id1: ".$nivel3aPrestar->nivel1->getId1);
 C4::AR::Debug::debug("id2: ".$nivel3aPrestar->nivel2->getId2);
 C4::AR::Debug::debug("id3: ".$id3);
 	$params->{'id3'}= $id3;
-	$params->{'id_ui'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
-	$params->{'id_ui_prestamo'}=C4::AR::Preferencias->getValorPreferencia('defaultbranch');
+	$params->{'id_ui'}=C4::AR::Preferencias->getValorPreferencia('defaultUI');
+	$params->{'id_ui_prestamo'}=C4::AR::Preferencias->getValorPreferencia('defaultUI');
 	$params->{'tipo'}="INTRA";
 
 	my ($msg_object)= &C4::AR::Prestamos::t_realizarPrestamo($params);
@@ -445,8 +445,6 @@ sub t_devolver {
     my $ticketObj;
     my @infoTickets;
     my @infoMessages;
-    my %messageObj;
-    my $Message_arrayref;
     my $print_renew= C4::AR::Preferencias->getValorPreferencia("print_renew");
 	my $prestamo = C4::Modelo::CircPrestamo->new();
 	my $db = $prestamo->db;
@@ -858,29 +856,29 @@ t_renovar
 Transaccion que renueva un prestamo.
 @params: $params-->Hash con los datos necesarios para poder renovar un prestamo.
 =cut
-sub t_renovar{
-    my ($params)=@_;
-    my $dbh = C4::Context->dbh;
-    $dbh->{AutoCommit} = 0;
-    $dbh->{RaiseError} = 1;
-    my $tipo=$params->{'tipo'};
-    my $msg_object;
-    eval{
-        ($msg_object)= renovar($params);
-        $dbh->commit;
-    };
-    if ($@){
-        #Se loguea error de Base de Datos
-        C4::AR::Mensajes::printErrorDB($@, 'B405',$tipo);
-        eval {$dbh->rollback};
-        #Se setea error para el usuario
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P113', 'params' => []} ) ;
-    }
-    $dbh->{AutoCommit} = 1;
-
-    return ($msg_object);
-}
+# sub t_renovar{
+#     my ($params)=@_;
+#     my $dbh = C4::Context->dbh;
+#     $dbh->{AutoCommit} = 0;
+#     $dbh->{RaiseError} = 1;
+#     my $tipo=$params->{'tipo'};
+#     my $msg_object;
+#     eval{
+#         ($msg_object)= renovar($params);
+#         $dbh->commit;
+#     };
+#     if ($@){
+#         #Se loguea error de Base de Datos
+#         C4::AR::Mensajes::printErrorDB($@, 'B405',$tipo);
+#         eval {$dbh->rollback};
+#         #Se setea error para el usuario
+#         $msg_object->{'error'}= 1;
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P113', 'params' => []} ) ;
+#     }
+#     $dbh->{AutoCommit} = 1;
+# 
+#     return ($msg_object);
+# }
 
 
 sub t_agregarTipoPrestamo {

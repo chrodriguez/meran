@@ -1,5 +1,7 @@
 [% INCLUDE "intranet-top.inc" %]
 
+<script src="/intranet-tmpl/includes/circulacion.js"></script>
+
 <script language=javascript>
 function todos(){
 	var checks=document.getElementsByTagName("input");
@@ -14,10 +16,27 @@ function todos(){
 }
 
 var objAH;//Objeto AjaxHelper.
+
 /*
- * detalleUsuario
- * Funcion que hace la consulta Ajax para buscar los datos del usuario seleccionado, con el autocomplete.
+ * borrarDiv
+ * Borra el div 
  */
+function borrarDiv(){$("#divResultado").html("");}
+
+/*
+ * buscarSanciones
+ * Busca todas las sanciones.
+ */
+function buscarSanciones(){
+	objAH=new AjaxHelper(updateBuscarSanciones);
+	objAH.debug= true;
+	objAH.url= "/cgi-bin/koha/circ/sancionesDB.pl";
+	objAH.sendToServer();
+}
+function updateBuscarSanciones(responseText){
+	$("#divResultado").html(responseText);
+}
+
 function borrarSanciones(chck){
 
     var chck=$("input[@name="+chck+"]:checked");
@@ -35,7 +54,7 @@ function borrarSanciones(chck){
             array[i]=chck[i].value;
             }
 
-            objAH=new AjaxHelper();
+            objAH=new AjaxHelper(updateSanciones);
             objAH.debug= true;
             objAH.url= '/cgi-bin/koha/circ/borrarsanciones.pl';
             objAH.datosArray= array;
@@ -45,67 +64,31 @@ function borrarSanciones(chck){
         }
 }
 
+
+function updateSanciones(responseText){
+
+	borrarDiv();
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.Messages_arrayref;
+	setMessages(messageArray);
+
+	buscarSanciones();
+}
+
+
+$(document).ready( function() {
+	buscarSanciones();
+});
+
+
+
 </script>
 
 <center>
 
 <div class="titulos_interior" >[% "Sanciones" | i18n %]</div>
 
-<table class="tabla_datos" border="0" cellpadding="0" cellspacing="0" width="99%">
-	<tr class="tablaresultadoTitle">
-  
-  		<td align="center"><a href="#" onclick="todos();">
-			<img src="[% themelang %]/images/check.png" title="Invertir la selecci&oacute;n"  border=0></a>
-		</td>
+<div id="divResultado"></div>
 
-  
-		<td>[% "Tarjeta de Id." | i18n %]</td>
-  		<td>[% "Socio" | i18n %]</td>
-  		<td>[% "Legajo" | i18n %]</td>
-  		<td>[% "Cat." | i18n %]</td>
-  		<td>[% "Tipo de pr&eacute;stamo" | i18n %]</td>
-  		<td>[% "Fecha inicio" | i18n %]</td>
-  		<td>[% "Fecha fin" | i18n %]</td>
-
-	</tr>
-  [% FOREACH sancion IN SANCIONES %]
-	<tr align="center">
-		
-			<td >
-             <input type="checkbox" name="chkboxSanciones" value="[% sancion.getId_sancion %]" 
-					id="[% sancion.getId_sancion %]">
-    		</td>
-	
-		<td>[% sancion.getNro_socio %]</td>
-		<td>
-		[% sancion.socio.persona.getApeYNom %]
-		</td>
-		<td>[% sancion.socio.persona.getLegajo %]</td>
-		<td>[% sancion.socio.categoria.getDescription %]</td>
-		<td>
-			[% IF sancion.getTipo_sancion %]
-				[% sancion.ref_tipo_sancion.getTipo_prestamo %]
-			[% ELSE %]
-				Reserva no retirada
-			[% END %]
-		</td>
-		<td>[% sancion.getFecha_comienzo_formateada %]</td>
-		<td>[% sancion.getFecha_final_formateada %]</td>
-		<td width="1%" >&nbsp;</td>
-	</tr>
-  [% END %]
-    <tr>
-	<td colspan="12" >&nbsp;</td>
-    </tr>
-	<tr><td colspan="12" align="center" >
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Sanciones' | i18n %]",
-                                                                    boton   => "boton_borrar",
-                                                                    onClick => "borrarSanciones('chkboxSanciones');",
-                                                                    title   => "[% 'Borrar Sanciones' | i18n %]",
-                                        ) ;
-            [% END %]
-	</td></tr>
-	</form>
-</table>
 [% INCLUDE "intranet-bottom.inc" %]

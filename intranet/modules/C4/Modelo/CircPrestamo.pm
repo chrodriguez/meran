@@ -582,6 +582,7 @@ C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
 ### FIN SANCIONES
 
 #**********************************Se registra el movimiento en rep_historial_prestamo***************************
+	use C4::Modelo::RepHistorialPrestamo;
 	my $historial_prestamo = C4::Modelo::RepHistorialPrestamo->new(db=>$self->db);
 	$historial_prestamo->agregarPrestamo($self);
 

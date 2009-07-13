@@ -18,7 +18,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 			    });
 
 
-my $branch= $input->param('branch') || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
+my $branch= $input->param('branch') || C4::AR::Preferencias->getValorPreferencia('defaultUI');
 
 my $obj= C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $year= $obj->{'year'};

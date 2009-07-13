@@ -26,25 +26,30 @@ use C4::Interface::CGI::Output;
 use Date::Manip;
 use C4::Date;
 use C4::AR::Sanciones;
+use JSON;
 
 
 my $input=new CGI;
 
-my ($userid, $session, $flags) = checkauth($input, 0,{circulate=> 1,updatesanctions=> 1},"intranet");
+my $authnotrequired= 0;
+my ($userid, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'BAJA', 
+                                                    entorno => 'undefined'}, 
+                                                'intranet'
+                                );
 
 C4::AR::Debug::debug("CirculacionDB:: responsable -> ".$userid);
 
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
-my $array_ids=$obj->{'datosArray'};
-my $loop=scalar(@$array_ids);
-for(my $i=0;$i<$loop;$i++){
-        my $id_sancion=$array_ids->[$i];
-        my $sancion = C4::Modelo::CircSancion->new(id_sancion => $id_sancion);
-        $sancion->load();
-        $sancion->eliminar_sancion($userid);
-}
+my $sanciones_ids=$obj->{'datosArray'};
 
-print $input->redirect("sanciones.pl");
+my $Message_arrayref = C4::AR::Sanciones::eliminarSanciones($userid,$sanciones_ids);
+my $infoOperacionJSON=to_json $Message_arrayref;
+C4::Output::printHeader($session);
+print $infoOperacionJSON;
 

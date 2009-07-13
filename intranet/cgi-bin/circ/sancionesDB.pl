@@ -27,11 +27,15 @@ use C4::Interface::CGI::Output;
 my $input = new CGI;
 
 my ($template, $session, $t_params) =  get_template_and_user ({
-            template_name   => 'circ/sanciones.tmpl',
+            template_name   => 'circ/sancionesResult.tmpl',
             query       => $input,
             type        => "intranet",
             authnotrequired => 0,
             flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
     });
+
+my $sanciones= C4::AR::Sanciones::sanciones();
+$t_params->{'CANT_SANCIONES'}=scalar(@$sanciones);
+$t_params->{'SANCIONES'}= $sanciones;
 
 C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

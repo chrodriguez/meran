@@ -20,6 +20,12 @@ __PACKAGE__->meta->setup(
             column_map => { tipo_sancion => 'tipo_sancion' },
             type       => 'one to one',
         },
+	    ref_tipo_prestamo => {
+            class      => 'C4::Modelo::CircRefTipoPrestamo',
+            column_map => { tipo_prestamo => 'id_tipo_prestamo' },
+            type       => 'one to one',
+        },
+
     ],
 
 );
