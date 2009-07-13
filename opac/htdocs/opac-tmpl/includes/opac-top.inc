@@ -86,9 +86,9 @@ function cambiarIdioma() {
 
 <div id="marco_contenido" class="contenido">
     <div id="marco_busqueda">[% INCLUDE "opac-search.inc" %]</div>
-    
+
     <div id="menu-container" class="main-header">
-    
+
     [% IF nro_socio %]
 
             [% PERL %]
@@ -101,7 +101,7 @@ function cambiarIdioma() {
             [% END %]
 
     [% END %]  
-        
+
         [% PERL %]
             print C4::AR::Filtros::link_to( text    => "[% 'Registrarse' | i18n %]",
                                             boton   => "boton_registrarse", 
@@ -110,7 +110,7 @@ function cambiarIdioma() {
                                             title   => "[% 'Registrarse' | i18n %]"
                                         ) ;
         [% END %]  
-    
+
         [% IF hiddesearch %]
         [% ELSE %]
             [% PERL %]
@@ -122,7 +122,7 @@ function cambiarIdioma() {
                                                     ) ;
             [% END %]  
         [% END %]
-    
+
         [% PERL %]
                     print C4::AR::Filtros::link_to( text    => "[% 'Inicio' | i18n %]",
                                                     boton   => "boton_inicio", 
@@ -131,7 +131,7 @@ function cambiarIdioma() {
                                                     title   => "[% 'Inicio' | i18n %]"
                                                 ) ;
         [% END %]  
-    
+
     </div>
 
 <div id="marco_contenido_datos" class="contenido">

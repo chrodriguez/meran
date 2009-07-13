@@ -21,8 +21,8 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 my $obj=$input->param('obj');
 
-if($obj ne ""){
-	$obj= C4::AR::Utilidades::from_json_ISO($obj);
+if($obj){
+    $obj= C4::AR::Utilidades::from_json_ISO($obj);
 }
 
 my $ini= $obj->{'ini'};
@@ -38,14 +38,16 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 $obj->{'ini'}= $ini;
 $obj->{'cantR'}= $cantR;
 
+C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
+
 if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 
-    $obj->{'autor'}= $obj->{'searchinc'};
+    $obj->{'autor'}= $obj->{'searchField'};
     ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaSimplePorAutor($obj,$session);
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_TITULO'){
 
-    $obj->{'titulo'}= $obj->{'searchinc'};
+    $obj->{'titulo'}= $obj->{'searchField'};
     ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaSimplePorTitulo($obj,$session);
 
 }elsif($obj->{'tipoAccion'} eq 'FILTRAR_POR_AUTOR'){
@@ -54,7 +56,7 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_TEMA'){
 
-    $obj->{'tema'}= $obj->{'searchinc'};
+    $obj->{'tema'}= $obj->{'searchField'};
 # FIXME falta implementar
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
@@ -70,7 +72,7 @@ $obj->{'nro_socio'}= $session->param('nro_socio');
 $t_params->{'SEARCH_RESULTS'}= $resultsarray;
 #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
 $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
-$t_params->{'cantidad'}= $cantidad;
+$t_params->{'cantidad'}= $cantidad || 0;
 
 my $elapsed = Time::HiRes::tv_interval( $start );
 $t_params->{'timeSeg'}= $elapsed;

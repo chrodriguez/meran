@@ -164,7 +164,6 @@ function updateBuscarPorTitulo(responseText){
 }
 
 function updateInfo(responseText){
-	//si estoy logueado, oculta la informacion del usuario
 	$('#datosUsuario').slideUp('slow');
 	$('#result').html(responseText);
 	$('#result').slideDown('slow');

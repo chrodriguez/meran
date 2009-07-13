@@ -1,3 +1,9 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        onEnter("searchField",searchinc);
+    });
+</script>
+
 <div class="filtros_reportes">
     <ul class="filtros_reportes_der">
         <li>
