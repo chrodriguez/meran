@@ -106,9 +106,10 @@ function cambiarIdioma() {
                 [% END %]
 
                 [% PERL %]
-                    print C4::AR::Filtros::to_Button( text    => "[% 'Registrarse' | i18n %]",
+                    print C4::AR::Filtros::link_to( text    => "[% 'Registrarse' | i18n %]",
                                                     boton   => "boton_registrarse", 
-                                                    width   => "95",
+                                                    width   => "125",
+                                                    class   => "horizontal",
                                                     url     => "/join.html", 
                                                     title   => "[% 'Registrarse' | i18n %]"
                                                 ) ;
@@ -117,19 +118,21 @@ function cambiarIdioma() {
                 [% IF hiddesearch %]
                 [% ELSE %]
                     [% PERL %]
-                                print C4::AR::Filtros::to_Button( text    => "[% 'Buscar' | i18n %]",
+                                print C4::AR::Filtros::link_to( text    => "[% 'Buscar' | i18n %]",
                                                                 boton   => "boton_buscar", 
-                                                                width   => "95",
+                                                                width   => "125",
                                                                 url     => "/cgi-bin/koha/opac-search.pl", 
+                                                                class   => "horizontal",
                                                                 title   => "[% 'Buscar' | i18n %]"
                                                             ) ;
                     [% END %]  
                 [% END %]
 
                 [% PERL %]
-                            print C4::AR::Filtros::to_Button( text    => "[% 'Inicio' | i18n %]",
+                            print C4::AR::Filtros::link_to( text    => "[% 'Inicio' | i18n %]",
                                                             boton   => "boton_inicio", 
-                                                            width   => "95",
+                                                            width   => "125",
+                                                            class   => "horizontal",
                                                             url     => "/join.html", 
                                                             title   => "[% 'Registrarse' | i18n %]"
                                                         ) ;
