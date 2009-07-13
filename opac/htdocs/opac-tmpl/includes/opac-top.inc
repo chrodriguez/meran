@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Biblioteca - Facultad de Ciencias Econ&oacute;micas - U.N.L.P.</title>
+<title>[% Nombre_UO %]</title>
 
 <script language="javascript" type="text/javascript">
 token= '[% token %]';

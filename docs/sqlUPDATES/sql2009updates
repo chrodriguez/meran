@@ -898,3 +898,4 @@ ALTER TABLE `rep_busqueda` CHANGE `id_socio` `nro_socio` VARCHAR( 16 ) CHARACTER
 
 install Digest::SHA
 
+
