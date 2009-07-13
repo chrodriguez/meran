@@ -98,6 +98,27 @@ body {
     float: left;
 }
 
+#boton_favoritos {
+    background: transparent  url(../imagenes/botones/boton_favoritos.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_inicio {
+    background: transparent  url(../imagenes/botones/boton_inicio.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_registrarse {
+    background: transparent  url(../imagenes/botones/boton_registrarse.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
 #boton_miembros {
     background: transparent  url(../imagenes/botones/boton_miembros.png) no-repeat;
     height: 22px;

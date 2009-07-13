@@ -90,46 +90,47 @@ function cambiarIdioma() {
     <div id="menu-container" class="main-header">
     
     [% IF nro_socio %]
-        [% PERL %]
-                print C4::AR::Filtros::to_Icon(     boton   => "icon_favorito_ver",
+
+            [% PERL %]
+                print C4::AR::Filtros::to_Button(   text    => "[% 'Ver mis favoritos' | i18n %]",
+                                                    boton   => "boton_favoritos", 
+                                                    width   => "125",
                                                     onClick => "consultarFavoritos();",
                                                     title   => "[% 'Ver mis favoritos' | i18n %]"
-                ) ;
-        [% END %]
+                                            ) ;
+            [% END %]
+
+    [% END %]  
         
         [% PERL %]
-            print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_menu-join" ),
-                                            url =>      "/join.html", 
-                                            title =>    "[% 'Registrarse' | i18n %]"
+            print C4::AR::Filtros::link_to( text    => "[% 'Registrarse' | i18n %]",
+                                            boton   => "boton_registrarse", 
+                                            width   => "95",
+                                            url     => "/join.html", 
+                                            title   => "[% 'Registrarse' | i18n %]"
                                         ) ;
-        [% END %]
-    <!--*******************************************************************************************************-->
-    [% ELSE %]
-        [% PERL %]
-            print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_menu-join" ),
-                                            url =>      "/join.html", 
-                                            title =>    "[% 'Registrarse' | i18n %]"
-                                        ) ;
-        [% END %]
-    [% END %]   
-    
+        [% END %]  
     
         [% IF hiddesearch %]
         [% ELSE %]
             [% PERL %]
-                print C4::AR::Filtros::link_to( text =>     "<img src='[% themelang %]/images/menu-catalogo.png' name='cat' id='cat' 
-                                                            title='Buscar' hspace=0 cspace=0 border=0 name='menu-search' align='absbottom'>",
-                                                url =>      "/cgi-bin/koha/opac-search.pl", 
-                                        ) ;
-            [% END %]
+                        print C4::AR::Filtros::link_to( text    => "[% 'Buscar' | i18n %]",
+                                                        boton   => "boton_buscar", 
+                                                        width   => "95",
+                                                        url     => "/cgi-bin/koha/opac-search.pl", 
+                                                        title   => "[% 'Buscar' | i18n %]"
+                                                    ) ;
+            [% END %]  
         [% END %]
     
         [% PERL %]
-            print C4::AR::Filtros::link_to( text =>     '<img src="[% themelang %]/images/menu-home.png" name="home" id="home"
-                                                            title="Inicio" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  >',
-                                            url =>      "/cgi-bin/koha/opac-main.pl", 
-                                        ) ;
-        [% END %]
+                    print C4::AR::Filtros::link_to( text    => "[% 'Inicio' | i18n %]",
+                                                    boton   => "boton_inicio", 
+                                                    width   => "95",
+                                                    url     => "/cgi-bin/koha/opac-main.pl", 
+                                                    title   => "[% 'Inicio' | i18n %]"
+                                                ) ;
+        [% END %]  
     
     </div>
 

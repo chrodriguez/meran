@@ -42,9 +42,9 @@ function cambiarIdioma() {
 <table class="tope" align="center" cellpadding=0 cellspacing=0 width="90%"  border=0> 
 
 <tr>
-[% IF loggedinusername %]
+[% IF nro_socio %]
     <td align="left" valign="middle">
-    &nbsp;Ingres&oacute; como:<b> [% loggedinusername %]</b>
+    &nbsp;Ingres&oacute; como:<b> [% nro_socio %]</b>
         <!-- <a href="/cgi-bin/koha/opac-user.pl"  onMouseOut="swap('mem','[% themelang %]/images/areamiembros.png ')" 
 	onMouseOver="swap('mem','[% themelang %]/images/areamiembrosbis.png ')">
          <img src="[% themelang %]/images/areamiembros.png"  id="mem" title="Miembros" hspace=0 cspace=0 border=0 name="mem" align="absmiddle">
