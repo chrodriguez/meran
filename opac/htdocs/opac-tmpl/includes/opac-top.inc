@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>[% Nombre_UO %]</title>
+<title>[% titulo_nombre_ui %]</title>
 
 <script language="javascript" type="text/javascript">
 token= '[% token %]';
@@ -48,116 +48,90 @@ function cambiarIdioma() {
         </font>
     </div>
 </noscript>
-<table class="tope" align="center" cellpadding=0 cellspacing=0 width="95%"  border=0> 
-<tr>
-[% IF loggedinusername %]
-        <td align="left" valign="middle">
-  	[% "&nbsp;Ingres&oacute; como:" | i18n %]<b> [% loggedinusername %]</b>
-	[%  "OPAC" | setComboLang %]
 
-	<a href="/cgi-bin/koha/opac-user.pl?token=[% token %]"  onMouseOut="swap('mem','[% themelang %]/images/areamiembros.png ')" 
-		onMouseOver="swap('mem','[% themelang %]/images/areamiembrosbis.png ')">
-	 <img src="[% themelang %]/images/areamiembros.png"  id="mem" title="Miembros" hspace=0 cspace=0 border=0 name="mem" align="absmiddle">
-	</a>
+[% INCLUDE "opac-search.inc" %]
 
-  	<a href="/cgi-bin/koha/opac-main.pl?logout.x=1"  onMouseOut="swap('exit','[% themelang %]/images/exit.png ')" 
-		onMouseOver="swap('exit','[% themelang %]/images/exitbis.png ')">
-	<img src="[% themelang %]/images/exit.png" name="exit" id="exit" title="Salir" hspace=0 cspace=0 border=0  name="exit" align="absmiddle">
-        </a>
-       </td>
-[% ELSE %]
+<div class="titulos_interior" valign="middle">[% pagetitle %]</div>
 
-	[%  "OPAC" | setComboLang %]
-
-[% END %]
-</tr>
-<tr>
-<tr>
-<tr><td>&nbsp; </td></tr>
-<tr>
-	<td align="center">
-	<table width="100%"  border="0">
-  	<tr>
-    	<td><table width="100%"  border="0" cellpadding="0" cellspacing="0">
-      	<tr>
-		<td align="center">
-			<h4>
-			<img class="banner" src="[% themelang %]/images/nuevas/banner.png" 
-			title="Biblioteca, Facultad de Ciencias Econ&oacute;micas">
-			</h4>
-		</td>
-
-      	</tr>
-    	</table>
-</td>
-</tr>
-</table>
-
-<table class="tope" align="center" cellpadding=0 cellspacing=0 width="100%"  border="0">
-<tr align="right">
-	<td> [% INCLUDE "opac-search.inc" %]</td>
-        <td >&nbsp;</td>
-</tr>
-</table>
-
-<table cellpadding="0" cellspacing="0" width="100%" border="0"  class="top" align="center">
-<tr><td><br></td></tr>
-<tr class="tope" >  
-
-	<td >&nbsp;</td>
-	<td class="titulos_interior" valign="middle">[% pagetitle %]</td>
-        <td align="right" valign="middle">
+<div id="menu-container" class="main-header">
 
 [% IF loggedinusername %]
-<input type="hidden" value="" name="bookmarks" id="bookmarks">
-
-<!-- *******************************************Favoritos************************************************* -->
-<a class="click" onClick="consultarFavoritos();"
-	onMouseOut="swap('pstop','[% themelang %]/images/favorito.png')" 
-	onMouseOver="swap('pstop','[% themelang %]/images/favoritobis.png')">
-<input id="pstop" type="image" value="publicshelf"  
-src="[% themelang %]/images/favorito.png" title="Ver mis favoritos" hspace=0 cspace=0 border=0 name="pstop" align="absbottom">
-</a>
+    [% PERL %]
+            print C4::AR::Filtros::to_Icon(     boton   => "icon_favorito_ver",
+                                                onClick => "consultarFavoritos();",
+                                                title   => "[% 'Ver mis favoritos' | i18n %]"
+            ) ;
+    [% END %]
+    
+    [% PERL %]
+        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_menu-join" ),
+                                        url =>      "/join.html", 
+                                        title =>    "[% 'Registrarse' | i18n %]"
+                                    ) ;
+    [% END %]
 <!--*******************************************************************************************************-->
 [% ELSE %]
-<a href="/join.html"  onMouseOut="swap('join','[% themelang %]/images/menu-join.png')" 
-	onMouseOver="swap('join','[% themelang %]/images/menu-joinbis.png')" >
-        <img name="join" src="[% themelang %]/images/menu-join.png"
-	        title="Registrarse" hspace=0 vspace=0 border=0 name="menu-join" id="join" align="absbottom" ></a>
-[% END %]	
-
-
-[% IF hiddesearch %]
-[% ELSE %]
-    [% PERL %]
-		print C4::AR::Filtros::link_to(	text => 	"<img src='[% themelang %]/images/menu-catalogo.png' name='cat' id='cat' 
-													title='Buscar' hspace=0 cspace=0 border=0 name='menu-search' align='absbottom'>",
-										url => 		"/cgi-bin/koha/opac-search.pl", 
-								) ;
+     [% PERL %]
+        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_menu-join" ),
+                                        url =>      "/join.html", 
+                                        title =>    "[% 'Registrarse' | i18n %]"
+                                    ) ;
     [% END %]
+[% END %]   
+
+
+    [% IF hiddesearch %]
+    [% ELSE %]
+        [% PERL %]
+            print C4::AR::Filtros::link_to( text =>     "<img src='[% themelang %]/images/menu-catalogo.png' name='cat' id='cat' 
+                                                        title='Buscar' hspace=0 cspace=0 border=0 name='menu-search' align='absbottom'>",
+                                            url =>      "/cgi-bin/koha/opac-search.pl", 
+                                    ) ;
+        [% END %]
+    [% END %]
+
+    [% PERL %]
+        print C4::AR::Filtros::link_to( text =>     '<img src="[% themelang %]/images/menu-home.png" name="home" id="home"
+                                                        title="Inicio" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  >',
+                                        url =>      "/cgi-bin/koha/opac-main.pl", 
+                                    ) ;
+    [% END %]
+
+</div>
+
+<div id="login-container">
+[% IF loggedinusername %]
+    [% "Ingres&oacute; como:" | i18n %]<b> [% loggedinusername %]</b>
+    [%  "OPAC" | setComboLang %]
+
+    [% PERL %]
+        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_miembros" ),
+                                        url =>      "/cgi-bin/koha/opac-user.pl", 
+                                        title =>    "[% 'Miembros' | i18n %]"
+                                    ) ;
+    [% END %]
+
+    [% PERL %]
+        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_salir" ),
+                                        url =>      "/cgi-bin/koha/opac-main.pl?logout.x=1", 
+                                        title =>    "[% 'Salir' | i18n %]"
+                                    ) ;
+    [% END %]
+[% ELSE %]
+
+    [%  "OPAC" | setComboLang %]
+
 [% END %]
+</div>
 
-<!-- ********************se deshabilita hasta q se complete para la V3************************************ -->
-<a class="click" onClick="consultarEstanteVirtual();"
- onMouseOut="swap('estantes','[% themelang %]/images/estantes.png ')" onMouseOver="swap('estantes','[% themelang %]/images/estantesbis.png ')" >
-        <img src="[% themelang %]/images/estantes.png" name="estantes" id="estantes"
-        title="Estantes Virtuales" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  >
-</a>
-<!--*******************************************************************************************************-->
+<div id="marco_principal">
+    <div id="marco_superior"> <div></div></div>
 
-    [% PERL %]
-		print C4::AR::Filtros::link_to( text =>     '<img src="[% themelang %]/images/menu-home.png" name="home" id="home"
-														title="Inicio" hspace=0 vspace=0 border=0 name="menu-home" align="absbottom"  >',
-										url =>      "/cgi-bin/koha/opac-main.pl", 
-									) ;
-    [% END %]
+<div id="marco_contenido" class="contenido">
 
-</td>
-	 <td>&nbsp; </td>
-  </tr>
-</table>
+
+<div id="marco_contenido_datos" class="contenido">
 
 <!-- usado como referencia por el MessageHelper     -->
 <div id="end_top"></div>
 	
-<!-------------------------MAIN BODY OF PAGE-------------------------->

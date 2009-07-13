@@ -897,5 +897,17 @@ ALTER TABLE `rep_busqueda` CHANGE `id_socio` `nro_socio` VARCHAR( 16 ) CHARACTER
 --nuevo PM
 
 install Digest::SHA
+--preferencia nueva para los titulos en el OPAC
+
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'titulo_nombre_ui', 'Biblioteca - Facultad de Ciencias Econ&oacute;micas - U.N.L.P.', '', NULL , 'text'
+);
 
 

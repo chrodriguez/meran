@@ -1,254 +1,131 @@
-.bordetabla{
-	background-color: #A63D3F; 
-	color:#e3e3db;
-}
-table.top{
-	background-color: #ececec;
-	}
 
-td.number{
 
-	border-color: #FFFFFF; 
-}
 
-td.highnumber{
-	border-color: #FFFFFF;
-	font-weight: bold;
-	text-decoration: underline;
 
-}
 
-h4{
-	background-color: #9C2029;
-	color:#e3e3db;
-}
 
-.pagetitulo{
+ 
 
- text-decoration: none;
-        font-size:12pt;
-        font-family:sans-serif;
-        color:black;
-	font-weight: bold;
+body {
+    background-image: url(../imagenes/fondo.jpg);
+    color : #000000;
+    margin : 5px;
+    text-decoration: none;
+    font-size:10pt;
+    font-family:sans-serif;
+    color:black;
 
 }
 
-.tope { Background-color: #f2f2f2; 
-	color:#000000;
+
+#marco_superior {
+    background: transparent  url(../imagenes/banner.png) no-repeat top left;
+    width: 100%;
+    height: 167px;
+    font-size: 1px;
 }
 
-.fonttitulo{
-	text-decoration: none;
-        font-size:14pt;
-        font-family:sans-serif;
-	color:#606060;
+/*#marco_superior div {
+    background: transparent url(../imagenes/arriba_der.png) no-repeat top right;
+    width: 100%;
+    height: 7px;
+    font-size: 1px;
+}*/
 
+#marco_inferior {
+    background: transparent  url(../imagenes/abajo_izq.png) no-repeat bottom left;
+    width: 100%;
+    height: 7px;
+    font-size: 1px;
 }
 
-.tablemsg{
-
-	Background-color: #000000;
-	border:0;
+#marco_inferior div {
+    background: transparent url(../imagenes/abajo_der.png) no-repeat bottom right;
+    width: 100%;
+    height: 7px;
+    font-size: 1px;
 }
 
-.fontmsg{
-
-        text-decoration: none;
-        font-size:12pt;
-        font-family:verdana;
-        color:#f2f2f2;
-	font-weight:bold;
+#marco_contenido{
+    clear:both;
+    margin-bottom:3%;
+}
+#marco_principal{
+    clear:both;
+    background:#f7f6f6 url(../imagenes/medio.png) repeat;
 
 }
+#marca{
+    background-image:url(../imagenes/fondo_footer.png);
+    background-color:#f7f6f6;
+    text-align:center;
+    padding:1%;
+    margin-top:1%;
+    -moz-border-radius-topleft:8px;
+    -moz-border-radius-topright:8px;
+    -moz-border-radius-bottomleft:8px;
+    -moz-border-radius-bottomright:8px;
+    background-repeat: repeat-x;
+    height:10px;
+    }
+#marca div{
+    background-image:url(../imagenes/logo_meran.png);
+    padding:1%;
+    margin-top:-21px;
+    background-position:center;
+    text-align:center;
+    background-repeat: no-repeat;
+    height:30px;
+    }
 
-.fontresultado{
-	text-decoration: none;
-        font-size:12pt;
-        font-family:sans-serif;
-        color:#000000;
-		}
 
-/*
-td.impar {Background-color: #dddcd9;}
-
-td.par {Background-color: #dddcd9;}
-*/
-
-/*Miguel lo agregue para hacer la zebra*/
-tr.par {
-/* font-family: "Trebuchet MS", "Verdana", "Arial"; */
-/* color: #000000 ; */
-/* font-size: 10pt;  */
-background-color:#F4F4F4;
-}
-tr.impar {
-/* font-family: "Trebuchet MS", "Verdana", "Arial"; */
-/* color:#000000;     */
-/* font-size: 10pt; */
-background-color:#FFFFFF;  
-}
-/*      Fin estilo zebra         */
-
-a{text-decoration: none;
-	font-size:10pt;
-	font-family:sans-serif;
-	color:black;
-	}
-tr{
-	font-size:10pt;
-	font-family:sans-serif;
-	}
-
-a:link {
-	color : #000000;
+#boton_salir {
+    background: transparent  url(../imagenes/botones/boton_salir.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
 }
 
-a:visited {
-	color : #7d7d7d;
-}
-
-a:hover {
-	color : #AAAAAA;
-}
-
-a:active {
-	color : #ffffff;
-}
-
-a.white {
-	font-weight : normal;
-	text-decoration : none;
-	cursor : hand;
-	color : #FFFFFF;
-	padding : 4px;
-	}
-
-p {font-family:sans-serif; 
-}
-body { background-image: url(../images/patern.jpg);
-	color : #000000;
-	margin : 5px;
-	text-decoration: none;
-        font-size:10pt;
-        font-family:sans-serif;
-        color:black;
-
-}
-
-.lineaPunteada {
-   border: #FFFFFF;
-   border-style: dotted;
-   border-top-width: 0px;
-   border-right-width: 0px;
-   border-bottom-width: 1px;
-   border-left-width: 0px;
-   padding: 2px;
-      }
-
-
-/*PARA EL PAGINAGOR*/
-
-.paginaNormal{
-	font-family: "Trebuchet MS", "Verdana", "Arial";
-	font-size: 10pt;
-	color: #000000;
-	font-weight: normal;
-	cursor: pointer;
-}
-
-.paginaActual{
-	font-family: "Trebuchet MS", "Verdana", "Arial";
-	font-size: 10pt;
-	color: red;
-	font-weight: bold;
-	cursor: pointer;
-}
-
-
-/*FIN PARA EL PAGINAGOR*/
-
-.click {
-	 cursor: pointer;
-}
-
-/*Agregado Miguel*/
-ul li {
-      list-style-type:none;
-      display:block;
-      margin:0;
-      padding:2px;
-      text-align: left;
-}
-
-ul li.sancionesOPAC {
-      list-style-type:disc;	
-      display:list-item;
-      color:red;
-      font-weight:bold;
-      margin:0;
-      font-size:10pt;
-      padding:2px;
-      text-align: left;
-}
-
-/* para MARC */
-
-.MARCResult li{
-		border-top:1px dotted #CCCCCC;
-		color:#000000;
-		font-family:'lucida console','courier new',monospace;
-		line-height:1.5em;
-/* 		margin:0; */
-		margin-left:32px;	
-		table-layout:fixed;
-}
-
-
-.detalleMARC {
-      list-style-type:none;
-      display:block;
-      padding:5px;
-      text-align: left;
-      width: 90%; 
-}
-
-li.MARCHeader{
-	margin:0;
-	padding:5px;
-	background-color:#FFFFFF;
-	width: 99%;
-	list-style-type:none;
-}
-/* FIN MARC */
-
-.Encabezados{
-	text-align: left;
-	margin:10;
-	padding:0px;
-	font-family:"Trebuchet MS","Verdana";
-	font-size:12pt;
-	font-weight:bold;
-}
-
-.tablaDetalle{
-	background-color:#DDDCD9;
-}
-
-.banner{
-	background-color:#A63D3F;
-}
-
-.highlight { background-color: yellow }
-
-.fecha_critica{
-
-    color: red;
+/*              parte del boton generica                  */
+#boton_texto {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
     font-weight: bold;
-    font-style: italic;
+    color: #000000;
+    background-position: center;
+    margin-left: 27px;
+    margin-top: 5px;
+    text-align:center;
+/*     margin-top: 3px; */
 }
 
-.fecha_cumple{
+#boton_medio {
+    background:url(../imagenes/botones/boton_medio.png) repeat-x scroll center ;
+    height: 22px;
+    /*width: 7%;*//*se debe modificar dinamicamente*/
+    position: relative;
+    padding-bottom:0;
+    padding-left:0;
+    padding-right:0;
+/*     padding-top:6px; */
+/*     margin-left: 25px;*/
+}
 
-    color: green;
-    font-weight: bold;
+#boton_der {
+    float:right;
+    background: transparent url(../imagenes/botones/boton_der.png) no-repeat;
+    height: 22px;
+    width: 3px;
+}
+/*            fin  parte del boton generica                */
+
+
+#icon_favorito_ver {
+    background: transparent url(../imagenes/iconos/icon_favorito_ver.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+li {
+    list-style-type:none;
 }

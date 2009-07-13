@@ -2,7 +2,7 @@
 <html>
 <head>
 
-<title>Biblioteca - Facultad de Ciencias Econ&oacute;micas - U.N.L.P.</title>
+<title>[% titulo_nombre_ui %]</title>
 
 <script language="javascript" type="text/javascript">
 token= '[% token %]';
@@ -43,18 +43,31 @@ function cambiarIdioma() {
 
 <tr>
 [% IF loggedinusername %]
-      <td align="left" valign="middle">
-  &nbsp;      Ingres&oacute; como:<b> [% loggedinusername %]</b>
-         <a href="/cgi-bin/koha/opac-user.pl"  onMouseOut="swap('mem','[% themelang %]/images/areamiembros.png ')" 
+    <td align="left" valign="middle">
+    &nbsp;Ingres&oacute; como:<b> [% loggedinusername %]</b>
+        <!-- <a href="/cgi-bin/koha/opac-user.pl"  onMouseOut="swap('mem','[% themelang %]/images/areamiembros.png ')" 
 	onMouseOver="swap('mem','[% themelang %]/images/areamiembrosbis.png ')">
          <img src="[% themelang %]/images/areamiembros.png"  id="mem" title="Miembros" hspace=0 cspace=0 border=0 name="mem" align="absmiddle">
-        </a>
+        </a>-->
 
-  <a href="/cgi-bin/koha/opac-main.pl?logout.x=1"  onMouseOut="swap('exit','[% themelang %]/images/exit.png ')" 
+    [% PERL %]
+        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_miembros" ),
+                                        url =>      "/cgi-bin/koha/opac-user.pl", 
+                                        title =>    "[% 'Miembros' | i18n %]"
+                                    ) ;
+    [% END %]
+
+ <!-- <a href="/cgi-bin/koha/opac-main.pl?logout.x=1"  onMouseOut="swap('exit','[% themelang %]/images/exit.png ')" 
 	onMouseOver="swap('exit','[% themelang %]/images/exitbis.png ')">
 	<img src="[% themelang %]/images/exit.png" name="exit" id="exit" title="Salir" hspace=0 cspace=0 border=0  name="exit" align="absmiddle">
-  </a>
-       </td>
+  </a>-->
+    [% PERL %]
+        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_salir" ),
+                                        url =>      "/cgi-bin/koha/opac-main.pl?logout.x=1", 
+                                        title =>    "[% 'Salir' | i18n %]"
+                                    ) ;
+    [% END %]
+    </td>
 [% ELSE %]
 	[%  "OPAC" | setComboLang %]
 [% END %]
