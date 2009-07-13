@@ -93,7 +93,7 @@ function cambiarIdioma() {
             <ul class="horizontal-list" >
 
                 [% IF nro_socio %]
-            
+
                         [% PERL %]
                             print C4::AR::Filtros::to_Button(   text    => "[% 'Ver mis favoritos' | i18n %]",
                                                                 boton   => "boton_favoritos", 
@@ -102,11 +102,11 @@ function cambiarIdioma() {
                                                                 title   => "[% 'Ver mis favoritos' | i18n %]"
                                                         ) ;
                         [% END %]
-            
-                [% END %]  
-            
+
+                [% END %]
+
                 [% PERL %]
-                    print C4::AR::Filtros::link_to( text    => "[% 'Registrarse' | i18n %]",
+                    print C4::AR::Filtros::to_Button( text    => "[% 'Registrarse' | i18n %]",
                                                     boton   => "boton_registrarse", 
                                                     width   => "95",
                                                     url     => "/join.html", 
@@ -117,7 +117,7 @@ function cambiarIdioma() {
                 [% IF hiddesearch %]
                 [% ELSE %]
                     [% PERL %]
-                                print C4::AR::Filtros::link_to( text    => "[% 'Buscar' | i18n %]",
+                                print C4::AR::Filtros::to_Button( text    => "[% 'Buscar' | i18n %]",
                                                                 boton   => "boton_buscar", 
                                                                 width   => "95",
                                                                 url     => "/cgi-bin/koha/opac-search.pl", 
@@ -127,7 +127,7 @@ function cambiarIdioma() {
                 [% END %]
 
                 [% PERL %]
-                            print C4::AR::Filtros::link_to( text    => "[% 'Inicio' | i18n %]",
+                            print C4::AR::Filtros::to_Button( text    => "[% 'Inicio' | i18n %]",
                                                             boton   => "boton_inicio", 
                                                             width   => "95",
                                                             url     => "/join.html", 

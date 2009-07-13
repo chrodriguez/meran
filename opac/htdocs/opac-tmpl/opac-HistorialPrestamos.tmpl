@@ -2,85 +2,85 @@
 
 <br>
 <center>
-<p> 
-	<b>[% "Cantidad de pr&eacute;stamos realizadas:" | i18n %]&nbsp;[% cantidad %]<br>
-</p>
-<br>
-
-[% paginador %]
-
+    <p>
+        <b>[% "Cantidad de pr&eacute;stamos realizadas:" | i18n %]&nbsp;[% cantidad %]<br>
+    </p>
+    <br>
+    [% paginador %]
 </center>
 
 <table width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
 
-	<tr bordercolor="#f2f2f2">    
- 		<td colspan="5" align="center" class="bordetabla" borde=1>
-		<b>[% "Historial de Pr&eacute;stamos" | i18n %]</b>
+    <tr bordercolor="#f2f2f2">
+        <td colspan="5" align="center" class="bordetabla" borde=1>
+            <b>[% "Historial de Pr&eacute;stamos" | i18n %]</b>
 
- 		</td>
-	</tr> 	
+        </td>
+    </tr>
 
 </table>
 
-<table id="tablaHistorial" width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
-
-	<tr class="bordetabla"  bordercolor="#f2f2f2">
- 		<th>[% "T&iacute;tulo" | i18n %]</th>
-		<th>[% "Autor" | i18n %]</th>
-		<th>[% "Edici&oacute;n" | i18n %]</th>
-		<th>[% "Pr&eacute;stamo" | i18n %]</th>
-		<th>[% "Dev" | i18n %]</th>
-	</tr>
-<!-- ESTE LOOP MUESTRA LOS PRESTAMOS -->
-[% FOREACH loop_reading %]
-	<tr border="1" bordercolor="#f2f2f2">
- 		<td> 
-	[% IF id1 %]
-        [% PERL %]
-                print C4::AR::Filtros::link_to( text =>     "[% titulo | i18n %]",
-                                                url =>      "/cgi-bin/koha/opac-detail.pl", 
-                                                params => [ "id1=[% id1 %]", ],
-                                            ) ;
-        [% END %]
-	[% ELSE %]
-		&nbsp;
-	[% END %]
- 		</td>
- 		<td>
-	[% IF autor %]
-		<a class="click" onClick="buscarPorAutor([% id %])" title="[% 'Mostrar Detalle por autor' | i18n %]">
-	  [% autor %]
-		</a> 
-	[% ELSE %]
-		&nbsp;
-	[% END %]
- 		</td>
- 		<td align=center>  
-	[% IF edicion %]
-		[% edicion %]
-	[% ELSE %]
-		- 
-	[% END %]
- 		</td>
- 		<td align=center>
-		[% date_due %]&nbsp;
- 		</td>
-		<td align=center>
-		[% returndate %]&nbsp;
- 		</td>
-	</tr>
- [% END %]
+<table id="tablaHistorial" width="98%" border="1" class="tabla_datos" cellspacing="0" cellpadding="4" align="center">
+    <tr class="bordetabla" >
+        <th>[% "T&iacute;tulo" | i18n %]</th>
+        <th>[% "Autor" | i18n %]</th>
+        <th>[% "Edici&oacute;n" | i18n %]</th>
+        <th>[% "Pr&eacute;stamo" | i18n %]</th>
+        <th>[% "Dev" | i18n %]</th>
+    </tr>
+    <!-- ESTE LOOP MUESTRA LOS PRESTAMOS -->
+    [% FOREACH loop_reading %]
+        <tr class="bordetabla" >
+        <td> 
+                [% IF id1 %]
+                    [% PERL %]
+                            print C4::AR::Filtros::link_to( text =>     "[% titulo | i18n %]",
+                                                            url =>      "/cgi-bin/koha/opac-detail.pl", 
+                                                            params => [ "id1=[% id1 %]", ],
+                                                        ) ;
+                    [% END %]
+                [% ELSE %]
+                    &nbsp;
+                [% END %]
+            </td>
+            <td>
+                [% IF autor %]
+                    <a class="click" onClick="buscarPorAutor([% id %])" title="[% 'Mostrar Detalle por autor' | i18n %]">
+                        [% autor %]
+                    </a> 
+                [% ELSE %]
+                    &nbsp;
+                [% END %]
+            </td>
+            <td align="center">
+                [% IF edicion %]
+                    [% edicion %]
+                [% ELSE %]
+                    -
+                [% END %]
+            </td>
+            <td align=center>
+                [% date_due %]&nbsp;
+            </td>
+            <td align=center>
+                [% returndate %]&nbsp;
+            </td>
+        </tr>
+    [% END %]
 
 </table>
 
 
 <br>
 
-<a class="click" onClick="volverDesdeHistorial()">[% "Volver" | i18n %]</a>
+<a class="click" onClick="volverDesdeHistorial()">
+    [% "Volver" | i18n %]
+</a>
+
 <p align="center">
-	<a  	onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" 
-		onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
-	<input 	onClick="print();return false;"  name="print" id="print" type="image" value="[% 'Imprimir' | i18n %]" 
-		src="[% themelang %]/images/menu-imprimir.png" border="0">
-	</a>
+    <a  onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" 
+        onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
+        <input  onClick="print();return false;"  name="print" id="print" type="image" value="[% 'Imprimir' | i18n %]" 
+                src="[% themelang %]/images/menu-imprimir.png" border="0">
+    </a>
 </p>
