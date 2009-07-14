@@ -163,7 +163,22 @@ sub modificar{
     $self->setFecha_alta($data_hash->{'fecha_alta'});
     $self->setSexo($data_hash->{'sexo'});
     $self->setTelefono_laboral($data_hash->{'telefono_laboral'});
- 
+
+   $self->save();
+}
+
+sub modificarVisibilidadOPAC{
+    my ($self)=shift;
+    my ($data_hash)=@_;
+    #Asignando data...
+    $self->setNombre($data_hash->{'nombre'});
+    $self->setApellido($data_hash->{'apellido'});
+    $self->setCalle($data_hash->{'direccion'});
+    $self->setCiudad($data_hash->{'id_ciudad'});
+    $self->setTelefono($data_hash->{'numero_telefono'});
+    $self->setEmail($data_hash->{'email'});
+    $self->setFax($data_hash->{'numero_fax'});
+
    $self->save();
 }
 

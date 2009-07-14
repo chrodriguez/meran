@@ -10,6 +10,8 @@ use C4::Date;
 
 my $query = new CGI;
 
+my $input = $query;
+
 my ($template, $session, $t_params)= get_template_and_user({
                                     template_name => "opac-userupdate.tmpl",
                                     query => $query,
@@ -23,6 +25,23 @@ my $nro_socio = $session->param('nro_socio');
 
 # get borrower information ....
 my ($socio, $flags) = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+
+C4::AR::Validator::validateObjectInstance($socio);
+
+my %data_hash;
+
+$data_hash{'nombre'} = $input->param('nombre');
+$data_hash{'apellido'} = $input->param('apellido');
+$data_hash{'direccion'} = $input->param('direccion');
+$data_hash{'numero_telefono'} = $input->param('numero_telefono');
+$data_hash{'numero_fax'} = $input->param('numero_fax');
+$data_hash{'id_ciudad'} = $input->param('id_ciudad');
+$data_hash{'email'} = $input->param('email');
+
+C4::AR::Validator::validateParams('VT001',\%data_hash,['nombre','apellido','direccion','numero_telefono','numero_fax','id_ciudad','email']);
+
+$socio->persona->modificarVisibilidadOPAC(\%data_hash);
+
 my $dateformat = C4::Date::get_date_format();
 # handle the new information....
 # collect the form values and send an email.
