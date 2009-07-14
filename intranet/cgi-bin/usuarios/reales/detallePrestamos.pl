@@ -30,12 +30,16 @@ C4::AR::Validator::validateObjectInstance($prestamos);
 $t_params->{'PRESTAMOS'}= $prestamos;
 $t_params->{'prestamos_cant'}= scalar(@$prestamos);
 
+my $algunoSeRenueva=0;
 my $vencidos=0;
 foreach my $prestamo (@$prestamos) {
 	if($prestamo->estaVencido){$vencidos++;}
+	if($prestamo->sePuedeRenovar){$algunoSeRenueva=1;}
 }
 
 $t_params->{'vencidos'}= $vencidos;
+$t_params->{'algunoSeRenueva'}= $algunoSeRenueva;
+
 #se ferifica si la preferencia "circularDesdeDetalleUsuario" esta seteada
 $t_params->{'circularDesdeDetalleUsuario'}= C4::AR::Preferencias->getValorPreferencia('circularDesdeDetalleUsuario');
 

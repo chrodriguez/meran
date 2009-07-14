@@ -185,87 +185,6 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 
 }
 #**********************************************FIN*****PRESTAMO**********************************************
-
-#*********************************************DEVOLVER_RENOVAR***********************************************
-# FIXME DEPRECATEDDDDDDDD
-elsif($tipoAccion eq "DEVOLVER_RENOVAR"){
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
-                                                'intranet'
-                                );
-
-	
-	my $array_ids3=$obj->{'datosArray'};
-    my $loop=scalar(@$array_ids3);
-    my $accion=$obj->{'accion'};
-    my $id3;
-    my $barcode;
-    my $id_prestamo;
-    my $ticketObj;
-    my @infoTickets;
-    my @infoMessages;
-    my %params;
-    my %messageObj;
-    $params{'loggedinuser'}= $user;
-    $params{'nro_socio'}= $nro_socio;
-    $params{'tipo'}= 'INTRA';
-    my $Message_arrayref;
-    my $print_renew= C4::AR::Preferencias->getValorPreferencia("print_renew");
-
-    C4::AR::Debug::debug("LOOP --> $loop");
-    for(my $i=0;$i<$loop;$i++){
-        $id3= $array_ids3->[$i]->{'id3'};
-        $barcode= $array_ids3->[$i]->{'barcode'};
-        $id_prestamo= $array_ids3->[$i]->{'id_prestamo'};
-        $ticketObj=0;
-        $params{'id3'}= $id3;
-        $params{'barcode'}= $barcode;
-        $params{'id_prestamo'}= $id_prestamo;
-        
-        if ($accion eq 'DEVOLUCION') {
-        C4::AR::Debug::debug("DEVOLUCION");
-        C4::AR::Debug::debug("USUARIO $nro_socio");
-        C4::AR::Debug::debug("ID3: $id3");
-
-            ($Message_arrayref) = C4::AR::Prestamos::t_devolver(\%params);
-
-            #guardo los errores
-          push (@infoMessages, $Message_arrayref);
-
-        }elsif($accion eq 'RENOVACION') {
-        C4::AR::Debug::debug("RENOVACION");
-        C4::AR::Debug::debug("ID3: $id3");
-            $Message_arrayref = C4::AR::Prestamos::t_renovar(\%params);
-
-            #guardo los errores
-            if($print_renew && !$Message_arrayref->{'error'}){
-            #IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
-                $ticketObj=C4::AR::Prestamos::crearTicket($id3,$nro_socio,$user);
-            }
-        }# end elsif($accion eq 'RENOVACION')
-
-        #se genera info para enviar al cliente  
-        my %infoOperacion = (
-                    ticket  => $ticketObj,
-        );
-
-        push (@infoTickets, \%infoOperacion);
-    }
-
-    my %infoOperaciones;
-    $infoOperaciones{'tickets'}= \@infoTickets;
-    $infoOperaciones{'messages'}= \@infoMessages;
-    
-    my $infoOperacionJSON = to_json \%infoOperaciones;
-
-    C4::Output::printHeader($session);
-    print $infoOperacionJSON;
-}
-
 elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
     my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
@@ -297,9 +216,10 @@ elsif($tipoAccion eq "REALIZAR_RENOVACION"){
                                                 'intranet'
                                 );
 
-    my ($Message_arrayref) = C4::AR::Prestamos::t_renovar($obj);
-	my $infoOperacionJSON=to_json $Message_arrayref;
-    	C4::Output::printHeader($session);
+    my $infoOperaciones = C4::AR::Prestamos::t_renovar($obj);
+
+    my $infoOperacionJSON = to_json $infoOperaciones;
+    C4::Output::printHeader($session);
 	print $infoOperacionJSON;
 }
 #******************************************FIN***DEVOLVER_RENOVAR*********************************************
@@ -439,7 +359,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
 	my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($params{'nro_socio'});
 	my $flag=0;
 	if($socio){
-		$flag= $socio->tieneAutorizado;	
+		$flag= $socio->tieneAutorizado;
 	}
     C4::Output::printHeader($session);
 	print $flag;
@@ -451,7 +371,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_ES_REGULAR"){
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
+                                                    entorno => 'undefined'},
                                                 'intranet'
                                 );
 
@@ -461,7 +381,6 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_ES_REGULAR"){
     if ($socio){
 		$regular= $socio->esRegular;
 	}
-		
 	
     C4::Output::printHeader($session);
 	print $regular;

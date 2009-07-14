@@ -354,7 +354,7 @@ function generaDivRenovacion(responseText){
 	
 		var infoDevRenObj= new infoPrestamo();
 		infoDevRenObj.nro_socio= infoArray[0].nro_socio;
-        	infoDevRenObj.id_prestamo= infoArray[i].id_prestamo;
+        infoDevRenObj.id_prestamo= infoArray[i].id_prestamo;
 		infoDevRenObj.id3= infoArray[i].id3;
 		infoDevRenObj.barcode=infoArray[i].barcode;
 		INFO_PRESTAMOS_ARRAY[i]= infoDevRenObj;
@@ -392,7 +392,7 @@ function renovar(){
 
 
 /*
- * updateInfoDevRen
+ * updateInfoRenovar
  * Funcion que se ejecuta cuando se realiza devoluviones o renovaciones y actualiza la tabla de prestamos.
  * IGUAL A updateInfoPrestarReserva SALVO POR EL LLAMADO A LOS DETALLES.
  */
@@ -400,7 +400,7 @@ function updateInfoRenovar(responseText){
 	cancelarDiv();
 
 	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.messages.messages;
+	var messageArray= infoHash.messages;
 	var ticketsArray= infoHash.tickets;
 	
 	for(i=0; i<messageArray.length;i++){
@@ -409,7 +409,7 @@ function updateInfoRenovar(responseText){
 	}
 
 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
-    	ejemplaresDelGrupo(ID_N2);
+    ejemplaresDelGrupo(ID_N2);
 }
 
 

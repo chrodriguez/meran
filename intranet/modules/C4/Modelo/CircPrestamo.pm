@@ -437,27 +437,6 @@ sub getFecha_vencimiento_formateada{
 	return C4::Date::format_date($self->getFecha_vencimiento,$dateformat);
 }
 
-sub sePuedeRenovar{
-	my ($self)=shift;
-    
-    my $err;
-    my $dateformat = C4::Date::get_date_format();
-    my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);
-    my $desde=C4::Date::format_date_in_iso(DateCalc($self->getFecha_vencimiento,"- ".$self->tipo->getDias_antes_renovacion." days",\$err,2),$dateformat);
-    my $flag = Date_Cmp($desde,$hoy);
-    #comparo la fecha de hoy con el inicio del plazo de renovacion  
-    if (!($flag gt 0)){ 
-        #quiere decir que la fecha de hoy es mayor o igual al inicio del plazo de renovacion
-        #ahora tengo que ver que la fecha de hoy sea anterior al vencimiento
-        my $flag2=Date_Cmp($self->getFecha_vencimiento,$hoy);
-        if (!($flag2 lt 0)){
-            #la fecha esta ok, se puede renovar
-            return 1;
-        }
-    }
-    return 0;
-}
-
 
 =item 
 la funcion devolver recibe una hash y actualiza la tabla de CircPrestamo,la tabla de CircReserva , de RepHistorialCirculacion y RepHistorialPrestamo. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail al socio correspondiente.
@@ -594,6 +573,29 @@ C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
 
 }
 
+
+sub estaEnFechaDeRenovacion{
+	my ($self)=shift;
+    
+    my $err;
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);
+    my $desde=C4::Date::format_date_in_iso(DateCalc($self->getFecha_vencimiento,"- ".$self->tipo->getDias_antes_renovacion." days",\$err,2),$dateformat);
+    my $flag = Date_Cmp($desde,$hoy);
+    #comparo la fecha de hoy con el inicio del plazo de renovacion  
+    if (!($flag gt 0)){ 
+        #quiere decir que la fecha de hoy es mayor o igual al inicio del plazo de renovacion
+        #ahora tengo que ver que la fecha de hoy sea anterior al vencimiento
+        my $flag2=Date_Cmp($self->getFecha_vencimiento,$hoy);
+        if (!($flag2 lt 0)){
+            #la fecha esta ok, se puede renovar
+            return 1;
+        }
+    }
+    return 0;
+}
+
+
 =item
 Se verifica que se cumplan las condiciones para poder renovar
 =cut
@@ -603,7 +605,7 @@ sub _verificarParaRenovar{
 	my($msg_object)=@_;
 
 	#Se que estemos dentro de la fecha en que se puede realizar la renovacion
-	if(!$self->sePuedeRenovar){
+	if(!$self->estaEnFechaDeRenovacion){
 			$self->debug("_verificarParaRenovar - NO estamos en fecha de renovacion");
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P108', 'params' => []});
@@ -662,9 +664,17 @@ sub _verificarParaRenovar{
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P117', 'params' => []} ) ;
 		}
 
-	return ($msg_object);
 }
 
+
+sub sePuedeRenovar{
+	my ($self)=shift;
+#Si no dan errores las verificaciones, se puede renovar
+    my ($msg_object)= C4::AR::Mensajes::create();
+    $msg_object->{'error'}= 0;
+	$self->_verificarParaRenovar($msg_object);
+	return (!$msg_object->{'error'});
+}
 
 =item 
 renovar

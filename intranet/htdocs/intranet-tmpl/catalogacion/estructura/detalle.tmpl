@@ -127,7 +127,7 @@ function renovarPrestamo(userId,userNom,id2,id_prestamo){
 	USUARIO.ID=userId;
 	USUARIO.text=userNom;
 
-	objAH=new AjaxHelper(generaDivRenovacion);
+	objAH=new AjaxHelper(generaDivRenovacion); //generaDivRenovacion esta en circulacion.js
 	objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion= 'RENOVACION';
@@ -168,8 +168,18 @@ function updateInfoRenovar(responseText){
 	cancelarDiv();
 
 	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.messages.messages;
-	setMessages(messageArray);
+	alert(infoHash);
+	var messageArray= infoHash.messages;
+	var ticketsArray= infoHash.tickets;
+alert(messageArray);alert(ticketsArray);
+	//Mensajes 
+	for(i=0; i<messageArray.length;i++){
+  		setMessages(messageArray[i]);
+	}
+	//Tickets si hay
+	for(i=0; i<ticketsArray.length;i++){
+		imprimirTicket(ticketsArray[i].ticket,i);
+	}
 
 	ejemplaresDelGrupo(ID_N2);
 	inicializar();

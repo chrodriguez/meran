@@ -40,8 +40,8 @@ function updateMostrarHistorialDePrestamos(responseText){
 
 //************************************Para manejar la circulacion**********************************************
 //REDEFINIDO, se encuentra en circulacion.js
-function updateInfoDevRen(responseText){
-// 	alert("ejecuto updateInfoDevRen LOCAL!!!");
+function updateInfoRenovar(responseText){
+	//alert("ejecuto updateInfoRenovar LOCAL!!!");
 	cancelarDiv();
 
 	var infoHash= JSONstring.toObject(responseText);
@@ -187,7 +187,10 @@ function updateInfoDevolver(responseText){
 	var messageArray= infoHash.Messages_arrayref;
 	setMessages(messageArray);
 
-	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+	detallePrestamos(USUARIO.ID);
+	detalleReservas(USUARIO.ID);
+	//puede que luego de devolver el usuario sea sancionado
+	detalleSanciones(USUARIO.ID);
 }
 
 

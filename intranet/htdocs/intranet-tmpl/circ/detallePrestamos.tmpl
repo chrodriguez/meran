@@ -1,5 +1,5 @@
-
 [% IF prestamos_cant %]
+
 [% USE HTML %]
 
 <div class="titulo_arriba_tabla">[% "PR&Eacute;STAMOS" | i18n %]</div>
@@ -23,7 +23,7 @@
 
 	</tr>
      [% FOREACH prestamo IN PRESTAMOS %]
-	<tr>
+	<tr align="center">
 	
 		<td>
 			 <input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.getId_prestamo %]">
@@ -53,7 +53,9 @@
 		</td>
            	<td align="center">
                 [% IF prestamo.getFecha_vencimiento %]
-                <font color="[% IF prestamo.estaVencido %]red[% END %]">[% prestamo.getFecha_vencimiento_formateada %]</font>
+				<span class="[% IF prestamo.estaVencido %]fecha_vencida[% ELSE %]fecha_cumple[% END %]">
+				[% prestamo.getFecha_vencimiento_formateada %]
+				</span>
                 [% ELSE %]
                     - 
                 [% END %]
@@ -65,24 +67,20 @@
 		</td>
         	
 	</tr>
-        [% END %]
+     [% END %]
 </table>
 
     <p align="center">
-    [% IF prestamos_cant %] 
         <input type="image" BORDER=0 
         src="[% themelang %]/images/item-return.png" 
         title="Devolver" 
         onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevolucion);">
-  
 
-     [% IF socio.esRegular %] 
-        [% UNLESS socio.estaSancionado %] 
-            <input type="image" 
+        [% IF algunoSeRenueva %]
+            <input type="image"
             src="[% themelang %]/images/renew.png" title="Renovar" 
             onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivRenovacion);">
-        [% END %] 
-       [% END %] 
+        [% END %]
 	</p>
 
 <br>

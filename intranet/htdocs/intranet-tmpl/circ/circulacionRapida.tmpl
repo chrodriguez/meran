@@ -181,7 +181,7 @@ function mostrarBotonAceptar(){
 
 function onCompleteUsuarios(){
 	tieneApoderado();
-	if($('#operacion').val() == 'devolver'){
+	if (($('#operacion').val() == 'devolver') || ($('#operacion').val() == 'renovar')) {
 	//se va a devolver algo, se muestra la info de los prestamos del usuario
 		detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
 		
@@ -257,7 +257,7 @@ $(document).ready(function() {
 		<select id='operacion' tabindex='1' onChange='onChangeOperacion()'>	
 			<option value="prestar">Pr&eacute;stamo</option>
 			<option value="devolver">Devoluci&oacute;n</option>
-<!-- 			<option value="renovar">Renovaci&oacute;n</option> -->
+			<option value="renovar">Renovaci&oacute;n</option> 
 		</select><span id="spanComboTipoPrestamo"></span>
 	</li>
 	<li>

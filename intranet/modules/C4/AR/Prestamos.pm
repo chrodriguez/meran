@@ -45,16 +45,14 @@ $VERSION = 3;
 	&t_devolver
 	&t_renovar
 	&t_realizarPrestamo
-
-    &_verificarMaxTipoPrestamo
-
+    	&_verificarMaxTipoPrestamo
 	&chequeoDeFechas
 	&prestamosHabilitadosPorTipo	
 	&getTipoPrestamo
 	&getPrestamoDeId3
 	&getPrestamosDeSocio
 	&getTipoPrestamo
-    &obtenerPrestamosDeSocio
+    	&obtenerPrestamosDeSocio
 	&cantidadDePrestamosPorUsuario
 	&crearTicket
     
@@ -291,9 +289,9 @@ C4::AR::Debug::debug("barcode a prestar: ".$params->{'barcode'});
 	my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3);
 	$params->{'id1'}= $nivel3aPrestar->nivel2->nivel1->getId1;
 	$params->{'id2'}= $nivel3aPrestar->nivel2->getId2;
-C4::AR::Debug::debug("id1: ".$nivel3aPrestar->nivel1->getId1);
-C4::AR::Debug::debug("id2: ".$nivel3aPrestar->nivel2->getId2);
-C4::AR::Debug::debug("id3: ".$id3);
+	C4::AR::Debug::debug("id1: ".$nivel3aPrestar->nivel1->getId1);
+	C4::AR::Debug::debug("id2: ".$nivel3aPrestar->nivel2->getId2);
+	C4::AR::Debug::debug("id3: ".$id3);
 	$params->{'id3'}= $id3;
 	$params->{'id_ui'}=C4::AR::Preferencias->getValorPreferencia('defaultUI');
 	$params->{'id_ui_prestamo'}=C4::AR::Preferencias->getValorPreferencia('defaultUI');
@@ -416,13 +414,7 @@ sub t_devolver {
 
     my $array_id_prestamos= $params->{'datosArray'};
     my $loop=scalar(@$array_id_prestamos);
-    my $id3;
-    my $barcode;
     my $id_prestamo;
-    my $ticketObj;
-    my @infoTickets;
-    my @infoMessages;
-    my $print_renew= C4::AR::Preferencias->getValorPreferencia("print_renew");
 	my $prestamo = C4::Modelo::CircPrestamo->new();
 	my $db = $prestamo->db;
 	$db->{connect_options}->{AutoCommit} = 0;
@@ -470,10 +462,11 @@ sub t_devolver {
 sub t_renovar {
   my ($params)=@_;
 
+  my $ticketObj;
+  my @infoTickets;
+  my @infoMessages;
+  my $print_renew= C4::AR::Preferencias->getValorPreferencia("print_renew");
   my $array_id_prestamos= $params->{'datosArray'};
-  
-  my ($msg_object)= C4::AR::Mensajes::create();
-   $msg_object->{'error'}= 0;
 
   my $prestamoTEMP = C4::Modelo::CircPrestamo->new();
   my $db = $prestamoTEMP->db;
@@ -481,27 +474,39 @@ sub t_renovar {
      $db->begin_work;
 
     foreach my $data (@$array_id_prestamos){
-
-	C4::AR::Debug::debug("T_Renovar ".$data->{'barcode'});
+		my ($msg_object)= C4::AR::Mensajes::create();
+   		$msg_object->{'error'}= 0;
+		C4::AR::Debug::debug("T_Renovar ".$data->{'barcode'});
         my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $data->{'id_prestamo'}, db => $db);
-	$prestamo->load();
-	$prestamo->_verificarParaRenovar($msg_object);
+		$prestamo->load();
+		$prestamo->_verificarParaRenovar($msg_object);
 
         if(!$msg_object->{'error'}){
                 eval{
                     $prestamo->renovar($params->{'nro_socio'});
                     $db->commit;
-		# Si la renovacion se pudo realizar
-		    $msg_object->{'error'}= 0;
+				# Si la renovacion se pudo realizar
+				
+					if($print_renew && (!$msg_object->{'error'})){ 	
+						#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
+        				$ticketObj=C4::AR::Prestamos::crearTicket($prestamo->getId3,$prestamo->getNro_socio,$params->{'nro_socio'});
+						 #se genera info para enviar al cliente  
+        				my %infoOperacion = (ticket  => $ticketObj,);
+        				push (@infoTickets, \%infoOperacion);
+      				}
+
+		    		$msg_object->{'error'}= 0;
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P111', 'params' => [$data->{'barcode'}]} ) ;
+					
+					push (@infoMessages, $msg_object);
                 };
                 if ($@){
-		   #Se loguea error de Base de Datos
-		   &C4::AR::Mensajes::printErrorDB($@, 'B405',"INTRA");
-		   $db->rollback;
-		   #Se setea error para el usuario
-                   $msg_object->{'error'}= 1;
-                   C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P112', 'params' => [$data->{'barcode'}]} ) ;
+		   		#Se loguea error de Base de Datos
+		   			&C4::AR::Mensajes::printErrorDB($@, 'B405',"INTRA");
+		   			$db->rollback;
+		   		#Se setea error para el usuario
+                   	$msg_object->{'error'}= 1;
+                   	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P112', 'params' => [$data->{'barcode'}]} ) ;
                 }
         }else{
             $msg_object->{'error'}= 1;
@@ -509,7 +514,12 @@ sub t_renovar {
         }
   }
   $db->{connect_options}->{AutoCommit} = 1;
-  return ($msg_object);
+
+	my %infoOperaciones;
+	$infoOperaciones{'tickets'}= \@infoTickets;
+	$infoOperaciones{'messages'}= \@infoMessages;
+
+	return (\%infoOperaciones);
 }
 
 sub getPrestamoPorBarcode {
@@ -839,36 +849,6 @@ sub getHistorialPrestamosParaTemplate {
 
     return ($cant,$presmamos_array_ref,\@loop_reading);
 }
-# }
-
-=item
-t_renovar
-Transaccion que renueva un prestamo.
-@params: $params-->Hash con los datos necesarios para poder renovar un prestamo.
-=cut
-# sub t_renovar{
-#     my ($params)=@_;
-#     my $dbh = C4::Context->dbh;
-#     $dbh->{AutoCommit} = 0;
-#     $dbh->{RaiseError} = 1;
-#     my $tipo=$params->{'tipo'};
-#     my $msg_object;
-#     eval{
-#         ($msg_object)= renovar($params);
-#         $dbh->commit;
-#     };
-#     if ($@){
-#         #Se loguea error de Base de Datos
-#         C4::AR::Mensajes::printErrorDB($@, 'B405',$tipo);
-#         eval {$dbh->rollback};
-#         #Se setea error para el usuario
-#         $msg_object->{'error'}= 1;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P113', 'params' => []} ) ;
-#     }
-#     $dbh->{AutoCommit} = 1;
-# 
-#     return ($msg_object);
-# }
 
 
 sub t_agregarTipoPrestamo {
