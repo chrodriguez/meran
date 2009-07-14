@@ -191,6 +191,18 @@ ul.horizontal-list {
     padding-top: 20px;
 }
 
+ul.horizontal-list-default {
+    list-style: none;
+    min-width: 20%;
+    width:auto;
+    padding-top: 20px;
+}
+ul.horizontal-list-default li {
+    display: inline;
+    float:left;
+    margin:2px;
+}
+
 ul.horizontal-list li {
     display: inline;
     float:left;

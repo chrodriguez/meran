@@ -1,6 +1,12 @@
 <html>
 <head>
-<title>[% titulo_nombre_ui %]</title>
+<title>
+    [% IF titulo_nombre_ui %]
+        [% titulo_nombre_ui %]
+    [% ELSE %]
+        Meran - OPAC
+    [% END %]
+</title>
 
 <script language="javascript" type="text/javascript">
     token= '[% token %]';
@@ -52,16 +58,18 @@ function cambiarIdioma() {
 
 <div id="login-container">
     <div class="buttonContainerHorizontal" style="width:100%">
-        <ul class="horizontal-list" >
-            [% IF nro_socio %]
-                    <li>
-                        [%  "OPAC" | setComboLang %]
-                    </li>
-                    &nbsp;
-                    <li>
-                        [% "Ingres&oacute; como:" | i18n %]<b> [% nro_socio %]</b>
-                    </li>
-                    &nbsp;
+        [% IF nro_socio %]
+            <ul class="horizontal-list-default" style="float:right" >
+                        <li>
+                            [%  "OPAC" | setComboLang %]
+                        </li>
+                        &nbsp;
+                        <li>
+                            [% "Ingres&oacute; como:" | i18n %]<b> [% nro_socio %]</b>
+                        </li>
+                        &nbsp;
+            </ul>
+            <ul class="horizontal-list-default" style="float:left" >
                     [% PERL %]
                         print C4::AR::Filtros::link_to( text    => "[% 'Miembros' | i18n %]",
                                                         boton   => "boton_miembros",
@@ -81,11 +89,11 @@ function cambiarIdioma() {
                     [% END %]
 
             [% ELSE %]
-
-                [%  "OPAC" | setComboLang %]
-
-            [% END %]
-        </ul>
+                <li>
+                    [%  "OPAC" | setComboLang %]
+                </li>
+            </ul>
+        [% END %]
     </div>
 </div>
 
@@ -142,8 +150,8 @@ function cambiarIdioma() {
                                                             boton   => "boton_inicio", 
                                                             width   => "95",
                                                             class   => "horizontal",
-                                                            url     => "/join.html", 
-                                                            title   => "[% 'Registrarse' | i18n %]"
+                                                            url     => "/cgi-bin/koha/opac-user.pl", 
+                                                            title   => "[% 'Inicio' | i18n %]"
                                                         ) ;
                 [% END %]
         
