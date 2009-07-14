@@ -61,171 +61,159 @@
 
 
 <table width="98%" cellspacing="0" cellpadding="0" border="0" align="center">
-<tbody>
-  <tr>
-	<td valign="top">
-	<table class="tope" width="98%" cellspacing="0" cellpadding="4" border="0" align="center" valign="top">
-	  <tr><td>
-		<div id="detallePrestamos"></div>
-	  <tr><td>
-		<div id="detalleReservas"></div>
-	  <tr><td>
-	</table>
-	</td>
-	<td width="20%" valign="top" >
+    <tbody>
+        <tr>
+            <td valign="top">
+                <table class="tope" width="98%" cellspacing="0" cellpadding="4" border="0" align="center" valign="top">
 
-	<div class="divDatosUsuario" >
-		<div class="bordetabla" align="Center"> 
-		<b>[% "Datos del usuario:" | i18n %]</b><br>
-		</div>
+                    <tr>
 
-	<div id="divFoto" align="Center"> 
-	[% IF foto_name %]
-	<img border="1" width="96" height="96"  src="/pictures/[% foto_name %]">
-	[% END %]
-	</div> 
-	
+                    <td>
+                        <div id="detallePrestamos"></div>
+                    </td>
 
-        [% "Tarjeta de la biblioteca:" | i18n %]
-		<b>[% socio.getNro_socio %]</b><br>
-	[% "Categor&iacute;a:" | i18n %] 
-		<b>[% socio.categoria.getDescription %]</b><br>
-        [% "Apellido:" | i18n %]
-                <b> [% socio.persona.getApellido %] </b><br>
+                    <tr>
 
-        [% "Nombre:" | i18n %]
-                <b> [% socio.persona.getNombre %] </b><br>
+                    <td>
+                        <div id="detalleReservas"></div>
+                    </td>
+                </table>
+            </td>
 
-        [% "Documento:" | i18n %]
-                <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
+            <td width="20%" valign="top" >
+                <div class="divDatosUsuario" >
+                    <div class="bordetabla" align="Center"> 
+                        <b>[% "Datos del usuario:" | i18n %]</b><br>
+                    </div>
 
-        [% "Fecha de nacimiento:" | i18n %]
-                <b> [% socio.persona.getNacimiento %]</b><br>
-        [% "Sexo:" | i18n %]    
-                <b> [% socio.persona.getSexo %]</b><br>
-                                    
-        [% IF socio.persona.getTelefono %]
-                <div class="tel">
-                        <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
-                                <b>[% socio.persona.getTelefono %]</b><br>
-                </div>	
-        [% END %]
+                    <div id="divFoto" align="Center"> 
+                        [% IF foto_name %]
+                            <img border="1" width="96" height="96"  src="/pictures/[% foto_name %]">
+                        [% END %]
+                    </div> 
 
-        [% IF socio.persona.getAlt_telefono %]
-        <div class="tel">
-                <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
+                    [% "Tarjeta de la biblioteca:" | i18n %]
+                        <b>[% socio.getNro_socio %]</b><br>
+                    [% "Categor&iacute;a:" | i18n %] 
+                        <b>[% socio.categoria.getDescription %]</b><br>
+                    [% "Apellido:" | i18n %]
+                        <b> [% socio.persona.getApellido %] </b><br>
+                    [% "Nombre:" | i18n %]
+                            <b> [% socio.persona.getNombre %] </b><br>
+                    [% "Documento:" | i18n %]
+                            <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
+                    [% "Fecha de nacimiento:" | i18n %]
+                            <b> [% socio.persona.getNacimiento %]</b><br>
+                    [% "Sexo:" | i18n %]    
+                            <b> [% socio.persona.getSexo %]</b><br>
+                    [% IF socio.persona.getTelefono %]
+                        <div class="tel">
+                            <span class="type">
+                                [% "Tel&eacute;fono:" | i18n %]
+                            </span>
+                            <b>[% socio.persona.getTelefono %]</b>
+                        </div>	
+                    [% END %]
+
+                    [% IF socio.persona.getAlt_telefono %]
+                        <div class="tel">
+                            <span class="type">
+                                [% "Tel&eacute;fono Alt:" | i18n %]
+                            </span>
                             <b>[% socio.persona.getAlt_telefono %]</b><br>
-        </div>	
-        [% END %]
-        
-        [% IF socio.persona.getEmail %]
-                E-mail: <b><a href="mailto:[% emailaddress %]">
-                        <span class="email"> [% socio.persona.getEmail %]</span></a></b><br>
-        [% END %]
-            
-        [% "Legajo :" | i18n %]
+                        </div>	
+                    [% END %]
+
+                    [% IF socio.persona.getEmail %]
+                        E-mail: <b><a href="mailto:[% emailaddress %]">
+                                        <span class="email"> [% socio.persona.getEmail %]</span>
+                                    </a>
+                                </b>
+                    [% END %]
+
+                    [% "Legajo :" | i18n %]
                         <b> [%  socio.persona.getLegajo %]</b><br>
 
-        [% "Ciudad :" | i18n %]
+                    [% "Ciudad :" | i18n %]
                         <b> [%  socio.persona.ciudad_ref.getNombre %]</b><br>
-        [% "Calle :" | i18n %]
-                        <b> [%  socio.persona.getCalle %]</b><br>
+                    [% "Calle :" | i18n %]
+                        <b> [%  socio.persona.getCalle %]</b>
 
-	<br>
-	[% IF updatedata %]
-	[% "Si alg&uacute;n dato es incorrecto o debe ser modificado, avisar al personal de la Biblioteca." | i18n %]<br>
-	[% ELSE %]
-	[% "Alguno de nuestros registros es incorrecto? Para solucionarlo:" | i18n %]<br> 
-<!-- 	<a href="/cgi-bin/koha/opac-userupdate.pl">[% "Actualizar Registro" | i18n %]</a> -->
+                <br>
+                [% IF updatedata %]
+                    [% "Si alg&uacute;n dato es incorrecto o debe ser modificado, avisar al personal de la Biblioteca." | i18n %]<br>
+                [% ELSE %]
+                    [% "Alguno de nuestros registros es incorrecto? Para solucionarlo:" | i18n %]<br> 
 
+                    [% PERL %]
+                            print C4::AR::Filtros::link_to( text =>     "[% 'Actualizar Registro' | i18n %]",
+                                                            url =>      "/cgi-bin/koha/opac-userupdate.pl", 
+                                                        ) ;
+                    [% END %]
 
-        [% PERL %]
-                print C4::AR::Filtros::link_to( text =>     "[% 'Actualizar Registro' | i18n %]",
-                                                url =>      "/cgi-bin/koha/opac-userupdate.pl", 
-                                            ) ;
-        [% END %]
-        
-	</br>
-	[% END %]
+                </br>
+                [% END %]
 
-	[% IF UploadPictureFromOPAC %]
-         [% IF mensaje_error_foto %]
-         <div>
-                <font color="red">[% mensaje_error_foto %]</font>
-         </div>
-         [% END %]
-        [% IF foto_name %]
-               <form  action="/cgi-bin/koha/upload.pl" method=post>
-                        <input type=hidden name=foto_name value=[% foto_name %] >
-                        <input type=hidden name="nro_socio" value='[% socio.getNro_socio %]'>
-		<center>
-		<a onMouseOut="swap('delpic','[% themelang %]/images/boton-eliminar-foto.png')"  onMouseOver="swap('delpic','[% themelang %]/images/boton-eliminar-fotobis.png')" >
-		<input 	name="delpic" id="delpic" type="image" 
-	onClick="eliminarFoto();" value="[% 'Eliminar' | i18n %]"  src="[% themelang %]/images/boton-eliminar-foto.png" border="0"  >
-		</a>
-	</center>
-               </form>
-          <br>
-        [% ELSE %]
-                <form name="foto" method=post enctype="multipart/form-data"  action="/cgi-bin/koha/upload.pl" >
-                <input type=file name="filepath" id="filepath">
-		<input type=hidden name="nro_socio" value='[% socio.getNro_socio %]'>
+                [% IF UploadPictureFromOPAC %]
+                    [% IF mensaje_error_foto %]
+                        <div>
+                            <font color="red">[% mensaje_error_foto %]</font>
+                        </div>
+                    [% END %]
+                    [% IF foto_name %]
+                        <form  action="/cgi-bin/koha/upload.pl" method=post>
+                            <input type=hidden name=foto_name value=[% foto_name %] >
+                            <input type=hidden name="nro_socio" value='[% socio.getNro_socio %]'>
+                            <center>
+                                <a  onMouseOut="swap('delpic','[% themelang %]/images/boton-eliminar-foto.png')"  
+                                    onMouseOver="swap('delpic','[% themelang   %]/images/boton-eliminar-fotobis.png')" >
+                                    <input 	name="delpic" id="delpic" type="image" 
+                                            onClick="eliminarFoto();" value="[% 'Eliminar' | i18n %]"  src="[% themelang %]/images/boton-eliminar-foto.png" border="0"  >
+                                </a>
+                            </center>
+                        </form>
+                    [% ELSE %]
+                        <form name="foto" method=post enctype="multipart/form-data"  action="/cgi-bin/koha/upload.pl" >
+                            <input type=file name="filepath" id="filepath">
+                            <input type=hidden name="nro_socio" value='[% socio.getNro_socio %]'>
 
-		<a  onMouseOut="swap('up','[% themelang %]/images/upload.png')" onMouseOver="swap('up','[% themelang %]/images/uploadbis.png')" onClick="document.foto.submit();">
-		<input name="up" id="up" type="image" value="[% 'Subir Foto' | i18n %]"  src="[% themelang %]/images/upload.png" border="0">
-		</a>
-                </form>
-           <br>
-         [% END %]
-  [% END %]
-
-</div>
-
-</td>
-</tr>
-
-</tbody>
+                                <a  onMouseOut="swap('up','[% themelang %]/images/upload.png')" 
+                                    onMouseOver="swap('up','[% themelang %]/images/uploadbis.png')" onClick="document.foto.submit();">
+                                    <input name="up" id="up" type="image" value="[% 'Subir Foto' | i18n %]"  src="[% themelang %]/images/upload.png" border="0">
+                                </a>
+                        </form>
+                    [% END %]
+            [% END %]
+            </div>
+        </td>
+        </tr>
+    </tbody>
 </table>
 
+[% IF socio.getNro_socio %]
+    <div class="buttonContainerHorizontal">
+        <ul class="horizontal-list" >
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Button( text    => "[% 'Historial de Prestamos' | i18n %]",
+                                                        boton   => "boton_miembros",
+                                                        width   => "150",
+                                                        onClick => "mostrarHistorialPrestamos([% socio.getNro_socio %]);",
+                                                        title   => "[% 'Mostrar Historial de Prestamos' | i18n %]"
+                                                    ) ;
+                    [% END %]
 
-
-<table width="100%" align="center" class="top" valign="top">
-<tr>
-<td width="80%"  valign="top">
-
-<table width="98%" align="center"  border="0" cellpadding="0" cellspacing="0" >
-<tr>
-<td valign="top">
-
-<p align="center">
-	<a  class="click" onClick="mostrarHistorialPrestamos('[% socio.getNro_socio %]');">
-          [% "Historial de Pr&eacute;stamos" | i18n %]
-  	</a>
-</p>
-
-[% IF showHistoricReserves %]
-<p align="center">
-  	<a  class="click" onClick="mostrarHistorialReservas('[% socio.getNro_socio %]');">
-         	[% "Historial de Reservas" | i18n %]
-  	</a>
-</p>
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Historial de Reservas' | i18n %]",
+                                                            boton   => "boton_favoritos", 
+                                                            width   => "150",
+                                                            onClick => "mostrarHistorialReservas([% socio.getNro_socio %]);",
+                                                            title   => "[% 'Mostrar Historial de Reservas' | i18n %]"
+                                                    ) ;
+                    [% END %]
+        </ul>
+    </div>
 [% END %]
-	
-<p align="center">
 
-<a  	onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" 	
-	onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
-	<input onClick="print();return false;"  name="print" id="print" type="image" value="['Imprimir' | i18n %]" 
-	src="[% themelang %]/images/menu-imprimir.png" border="0">
-</a>
-
-</p>
-
-</td><td width="20%" valign="top">
-
-    </td>
-  </tr>
-</table>
 
 </div>
 

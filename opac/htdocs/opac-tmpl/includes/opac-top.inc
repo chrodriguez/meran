@@ -51,34 +51,42 @@ function cambiarIdioma() {
 </noscript>
 
 <div id="login-container">
-[% IF nro_socio %]
-    [%  "OPAC" | setComboLang %]
+    <div class="buttonContainerHorizontal" style="width:100%">
+        <ul class="horizontal-list" >
+            [% IF nro_socio %]
+                    <li>
+                        [%  "OPAC" | setComboLang %]
+                    </li>
+                    &nbsp;
+                    <li>
+                        [% "Ingres&oacute; como:" | i18n %]<b> [% nro_socio %]</b>
+                    </li>
+                    &nbsp;
+                    [% PERL %]
+                        print C4::AR::Filtros::link_to( text    => "[% 'Miembros' | i18n %]",
+                                                        boton   => "boton_miembros",
+                                                        width   => "95",
+                                                        url     => "/cgi-bin/koha/opac-user.pl", 
+                                                        title   => "[% 'Miembros' | i18n %]"
+                                                    ) ;
+                    [% END %]
 
-    [% "Ingres&oacute; como:" | i18n %]<b> [% nro_socio %]</b>
+                    [% PERL %]
+                            print C4::AR::Filtros::link_to( text    => "[% 'Salir' | i18n %]",
+                                                            boton   => "boton_salir", 
+                                                            width   => "95",
+                                                            url     => "/cgi-bin/koha/opac-main.pl?logout.x=1", 
+                                                            title   => "[% 'Salir' | i18n %]"
+                                                    ) ;
+                    [% END %]
 
-    [% PERL %]
-        print C4::AR::Filtros::link_to( text    => "[% 'Miembros' | i18n %]",
-                                        boton   => "boton_miembros",
-                                        width   => "95",
-                                        url     => "/cgi-bin/koha/opac-user.pl", 
-                                        title   => "[% 'Miembros' | i18n %]"
-                                    ) ;
-    [% END %]
+            [% ELSE %]
 
-    [% PERL %]
-            print C4::AR::Filtros::link_to( text    => "[% 'Salir' | i18n %]",
-                                            boton   => "boton_salir", 
-                                            width   => "95",
-                                            url     => "/cgi-bin/koha/opac-main.pl?logout.x=1", 
-                                            title   => "[% 'Salir' | i18n %]"
-                                    ) ;
-    [% END %]
+                [%  "OPAC" | setComboLang %]
 
-[% ELSE %]
-
-    [%  "OPAC" | setComboLang %]
-
-[% END %]
+            [% END %]
+        </ul>
+    </div>
 </div>
 
 <div id="marco_principal">

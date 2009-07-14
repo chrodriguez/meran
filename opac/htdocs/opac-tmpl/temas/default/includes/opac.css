@@ -193,6 +193,7 @@ ul.horizontal-list {
 
 ul.horizontal-list li {
     display: inline;
+    float:left;
 }
 
 
