@@ -124,6 +124,7 @@ function cambiarIdioma() {
                 [% END %]  
 
                 [% IF hiddesearch %]
+                    <!-- Y ACA?????? DO NOTHING????? -->
                 [% ELSE %]
                     [% PERL %]
                                 print C4::AR::Filtros::link_to( text    => "[% 'Buscar' | i18n %]",

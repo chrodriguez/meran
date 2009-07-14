@@ -202,3 +202,12 @@ ul.horizontal-list li {
     font-size: 9pt;
 }
 /*                                     fin  para los resultados de las tablas                                  */
+
+.divDatosUsuario{
+    width: 25%;
+    float:right;
+}
+.common-vertical-list{
+    float:right;
+    margin: 10px;
+}
