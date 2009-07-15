@@ -31,6 +31,7 @@ use vars qw(@EXPORT @ISA);
     &isValidMail,
     &isValidDocument
     &validateParams
+    &checkParams
     &validateObjectInstance
 );
 
@@ -329,6 +330,19 @@ sub validateParams {
         C4::AR::Utilidades::redirectAndAdvice($cod_msg);
     }
 
+}
+
+sub checkParams {
+    my ($cod_msg,$params_hash_ref,$array_params_name) = @_;
+
+    my $flag = ($params_hash_ref != 0);
+    if ($flag){
+        foreach my $nombreParam (@$array_params_name){
+            $flag = $flag && C4::AR::Utilidades::validateString($params_hash_ref->{$nombreParam});
+            C4::AR::Debug::debug("Analizando (checkParams)".$nombreParam.", con resultado ".$flag);
+        }
+    }
+    return $flag;
 }
 
 sub validateObjectInstance{

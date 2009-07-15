@@ -48,36 +48,41 @@
 </tr>
 
 <tr>
-<td align="right"></td>
-<td align="absbottom">
-</td>
-<td align="right">[% "Anal&iacute;ticas:" | i18n %]</td>
- <td align="absbottom"><input type="text"  size="25" id="analytical" name="analytical">
-</tr>
-																		
-<tr><td colspan="5" align="center">[% "Filas a Mostrar:&nbsp;" | i18n %]<input type="text" size="5" name="cantidad" value="15"></td>
+    <td align="right"></td>
+    <td align="absbottom"></td>
+    <td align="right">[% "Anal&iacute;ticas:" | i18n %]</td>
+    <td align="absbottom"><input type="text"  size="25" id="analytical" name="analytical"></td>
 </tr>
 
 <tr>
-	<td colspan="5" align="center">
-	<a  	onMouseOut="swap('bus','[% themelang %]/images/search-button.png')" 
-		onMouseOver="swap('bus','[% themelang %]/images/search-buttonbis.png')">
-
-	<input onClick="buscar('', 1);" type="image" name="bus" id="bus" src="[% themelang %]/images/search-button.png"  
-		value="Buscar" border="0">
-	</a>
-   	<a href="#" 	onMouseOut="swap('clear','[% themelang %]/images/search-borrar.png')" 
-			onMouseOver="swap('clear','[% themelang %]/images/search-borrarbis.png')" onClick="clearAll();">
-	<img name="clear" id="clear"  alt="Limpiar" src="[% themelang %]/images/search-borrar.png" border="0">
-	</a>
-
-   	<a 	target="_blank" href="[% themelang %]/help/help.htm" onMouseOut="swap('help','[% themelang %]/images/help.png')" 
-		onMouseOver="swap('help','[% themelang %]/images/helpbis.png')">
-        <img alt="Ayuda" src="[% themelang %]/images/help.png" border="0" name="help" id="help">
-	</a>
-
+    <td colspan="5" align="center">
+                [% "Filas a Mostrar:&nbsp;" | i18n %]
+                <select size="1" name="cantidad">
+                    <option value=5>5</option>
+                    <option value=10>10</option>
+                    <option value=15>15</option>
+                    <option value=20>20</option>
+                    <option value=25>25</option>
+                    <option value=30>30</option>
+                    <option value=50>50</option>
+                    <option value=100>100</option>
+                </select>
+    </td>
 </tr>
 </table>
+
+        <div class="buttonContainerHorizontal">
+            <ul class="horizontal-list-default" style="float:center" >
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Button( text    => "[% 'Buscar' | i18n %]",
+                                                            boton   => "boton_miembros",
+                                                            width   => "150",
+                                                            onClick => "buscar(null,1);",
+                                                            title   => "[% 'Buscar en el catalogo' | i18n %]"
+                                                        ) ;
+                        [% END %]
+            </ul>
+        </div>
 <br>
 <div id="nevegador"></div>
 <div id="result"></div>

@@ -38,30 +38,31 @@ $data_hash{'numero_fax'} = $input->param('numero_fax');
 $data_hash{'id_ciudad'} = $input->param('id_ciudad');
 $data_hash{'email'} = $input->param('email');
 
-C4::AR::Validator::validateParams('VT001',\%data_hash,['nombre','apellido','direccion','numero_telefono','numero_fax','id_ciudad','email']);
+if (C4::AR::Validator::checkParams('VT001',\%data_hash,['nombre','apellido','direccion','numero_telefono','numero_fax','id_ciudad','email'])){
 
-$socio->persona->modificarVisibilidadOPAC(\%data_hash);
+    $socio->persona->modificarVisibilidadOPAC(\%data_hash);
 
-my $dateformat = C4::Date::get_date_format();
-# handle the new information....
-# collect the form values and send an email.
-my @fields = ('surname', 'firstname', 'phone', 'faxnumber', 'streetaddress','city', 'emailaddress');
-my $update;
-$update->{'nro_socio'}=$nro_socio;
-my $updateemailaddress= C4::AR::Preferencias->getValorPreferencia('KohaAdminEmailAddress');
-if ($updateemailaddress eq '') {
-    warn "La preferencia KohaAdminEmailAddress no esta seteada. No se puede enviar la informacion de actualizacion de $socio->persona->getApellido, $socio->persona->getNombre (#$nro_socio)\n";
-    my ($template, $session, $t_params)= get_template_and_user({
-                                            template_name => "kohaerror.tmpl",
-                                            query => $query,
-                                            type => "opac",
-                                            authnotrequired => 1,
-                                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-                });
-
-    $t_params->{'errormessage'} = 'La preferencia KohaAdminEmailAddress no esta seteada. Por favor visite la biblioteca para actualizar sus datos';
-
-    C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+    my $dateformat = C4::Date::get_date_format();
+    # handle the new information....
+    # collect the form values and send an email.
+    my @fields = ('surname', 'firstname', 'phone', 'faxnumber', 'streetaddress','city', 'emailaddress');
+    my $update;
+    $update->{'nro_socio'}=$nro_socio;
+    my $updateemailaddress= C4::AR::Preferencias->getValorPreferencia('KohaAdminEmailAddress');
+    if ($updateemailaddress eq '') {
+        warn "La preferencia KohaAdminEmailAddress no esta seteada. No se puede enviar la informacion de actualizacion de $socio->persona->getApellido, $socio->persona->getNombre (#$nro_socio)\n";
+        my ($template, $session, $t_params)= get_template_and_user({
+                                                template_name => "kohaerror.tmpl",
+                                                query => $query,
+                                                type => "opac",
+                                                authnotrequired => 1,
+                                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    });
+    
+        $t_params->{'errormessage'} = 'La preferencia KohaAdminEmailAddress no esta seteada. Por favor visite la biblioteca para actualizar sus datos';
+    
+        C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+    }
 }
 
 if ( C4::AR::Preferencias->getValorPreferencia('CheckUpdateDataEnabled')) {

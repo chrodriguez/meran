@@ -12,8 +12,8 @@
 </script>
 
 <div id="navegador">
-<input onClick="ant('result', zebra);" id="ant" type="image" value="<<" src="[% themelang %]/images/1leftarrow.png" border="0" title="Anterior" style="display:none">
-<input onClick="sig('result', zebra);" id="sig" type="image" value=">>" src="[% themelang %]/images/1rightarrow.png" border="0" title="Siguiente" style="display:none">
+    <input onClick="ant('result', zebra);" id="ant" type="image" value="<<" src="[% themelang %]/images/1leftarrow.png" border="0" title="Anterior" style="display:none">
+    <input onClick="sig('result', zebra);" id="sig" type="image" value=">>" src="[% themelang %]/images/1rightarrow.png" border="0" title="Siguiente" style="display:none">
 </div>
 
 
@@ -116,7 +116,7 @@
                                 <b> [% socio.persona.getNacimiento %]</b><br>
                     </li>
                     <li>
-                        [% "Sexo:" | i18n %]    
+                        [% "Sexo:" | i18n %]
                                 <b> [% socio.persona.getSexo %]</b><br>
                     </li>
                     <li>
@@ -141,7 +141,7 @@
                     </li>
                     <li>
                         [% IF socio.persona.getEmail %]
-                            E-mail: <b><a href="mailto:[% emailaddress %]">
+                            E-mail: <b><a href="mailto:[% socio.persona.getEmail %]">
                                             <span class="email"> [% socio.persona.getEmail %]</span>
                                         </a>
                                     </b>
@@ -213,33 +213,10 @@
     </tbody>
 </table>
 
-[% IF socio.getNro_socio %]
-    <div class="buttonContainerHorizontal">
-        <ul class="horizontal-list" >
-                    [% PERL %]
-                        print C4::AR::Filtros::to_Button( text    => "[% 'Historial de Prestamos' | i18n %]",
-                                                        boton   => "boton_miembros",
-                                                        width   => "150",
-                                                        onClick => "mostrarHistorialPrestamos([% socio.getNro_socio %]);",
-                                                        title   => "[% 'Mostrar Historial de Prestamos' | i18n %]"
-                                                    ) ;
-                    [% END %]
-
-                    [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Historial de Reservas' | i18n %]",
-                                                            boton   => "boton_favoritos", 
-                                                            width   => "150",
-                                                            onClick => "mostrarHistorialReservas([% socio.getNro_socio %]);",
-                                                            title   => "[% 'Mostrar Historial de Reservas' | i18n %]"
-                                                    ) ;
-                    [% END %]
-        </ul>
-    </div>
-[% END %]
 </div>
 [% IF foto_name %]
     <form action="/cgi-bin/koha/upload.pl" method=post style="display:none">
-        <input type="hidden" name="foto_name" value=[% foto_name %] >
+        <input type="hidden" name="foto_name" value='[% foto_name %]' >
         <input type="hidden" name="nro_socio" value='[% socio.getNro_socio %]'>
     </form>
 [% END %]
