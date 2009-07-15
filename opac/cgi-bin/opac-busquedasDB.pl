@@ -36,7 +36,7 @@ $obj->{'session'}= $session;
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 $obj->{'ini'}= $ini;
-$obj->{'cantR'}= $cantR;
+$obj->{'cantR'}= $obj->{'cantR'} || $cantR;
 
 C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
 
@@ -60,8 +60,11 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 # FIXME falta implementar
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
-
-    ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
+    if ($obj->{'tipoBusqueda'} eq 'all'){
+        ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj);
+    }else{
+        ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
+    }
 }
 
 

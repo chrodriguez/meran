@@ -900,7 +900,7 @@ sub verificarValor{
 
 sub InitPaginador{
 
-    my ($iniParam)=@_;
+    my ($iniParam,$obj)=@_;
     my $pageNumber;
     my $ini;
     my $cantR=cantidadRenglones();

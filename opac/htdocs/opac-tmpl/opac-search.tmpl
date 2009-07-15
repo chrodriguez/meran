@@ -57,7 +57,7 @@
 <tr>
     <td colspan="5" align="center">
                 [% "Filas a Mostrar:&nbsp;" | i18n %]
-                <select size="1" name="cantidad">
+                <select size="1" name="cantidad" id="cantidad">
                     <option value=5>5</option>
                     <option value=10>10</option>
                     <option value=15>15</option>
@@ -79,7 +79,7 @@
                                                             width   => "150",
                                                             onClick => "buscar(null,1);",
                                                             title   => "[% 'Buscar en el catalogo' | i18n %]"
-                                                        ) ;
+                                                        );
                         [% END %]
             </ul>
         </div>

@@ -23,7 +23,7 @@
                             print C4::AR::Filtros::to_Button(
                                                                 text    =>  "[% 'Buscar' | i18n %]",
                                                                 boton   =>  "boton_buscar",
-                                                                onClick =>  "searchinc()",
+                                                                onClick =>  'searchinc("all")',
                                                             );
             [% END %]
         </li>

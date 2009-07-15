@@ -1353,7 +1353,6 @@ sub busquedaAvanzada_newTemp{
 	while(my $data = $sth->fetchrow_hashref){
 		push (@id1_array,$data);
 	}
-	
 	#arma y ordena el arreglo para enviar al cliente
    	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array, @id1_array);
 	#se loquea la busqueda

@@ -97,7 +97,7 @@ function searchinc(){
 //             buscarPorEstante();
             break;
         default:
-            busquedaCombinable();
+            busquedaCombinable('all');
             break;
 
 
@@ -113,6 +113,8 @@ function buscarPorAutor(){
 	objAH.tipo= 'normal';
 	objAH.tipoAccion= 'BUSQUEDA_SIMPLE_POR_AUTOR';
 	//se setea la funcion para cambiar de pagina
+    objAH.cantR = $('#cantidad').val();
+
 	objAH.funcion= 'changePage';
 	//se envia la consulta
 	objAH.sendToServer();
@@ -141,6 +143,8 @@ function buscarPorTitulo(){
     objAH.searchinc= $('#searchField').val();
     objAH.tipo= 'normal';
     objAH.tipoAccion= 'BUSQUEDA_SIMPLE_POR_TITULO';
+    objAH.cantR = $('#cantidad').val();
+
     //se setea la funcion para cambiar de pagina
     objAH.funcion= 'changePage';
     //se envia la consulta
@@ -174,7 +178,7 @@ function updateInfo(responseText){
 }
 
 
-function busquedaCombinable(){
+function busquedaCombinable(typeSearch){
 
     //seteo normal
     var tipo= $("#checkNormal").val();
@@ -187,14 +191,20 @@ function busquedaCombinable(){
     objAH.debug= true;
     //para busquedas combinables
     objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
-    objAH.codBarra= $('#codBarra').val();
-    objAH.tema=  $('#tema').val();
-    objAH.autor= $('#autor').val();
-    objAH.titulo= $('#titulo').val();
     objAH.tipoAccion= 'BUSQUEDA_COMBINABLE';
-    objAH.tipo= tipo;
-    objAH.tipo_nivel3_name= $('#id_tipo_documento').val();
-
+    if (typeSearch != 'all'){
+        objAH.codBarra= $('#codBarra').val();
+        objAH.tema=  $('#tema').val();
+        objAH.autor= $('#autor').val();
+        objAH.titulo= $('#titulo').val();
+        objAH.tipo= tipo;
+        objAH.cantR = $('#cantidad').val();
+        objAH.tipo_nivel3_name= $('#id_tipo_documento').val();
+    }else
+    {
+            objAH.string=  $('#searchField').val();
+            objAH.tipoBusqueda= 'all';
+    }
     //se setea la funcion para cambiar de pagina
     objAH.funcion= 'changePage';
     //se envia la consulta
