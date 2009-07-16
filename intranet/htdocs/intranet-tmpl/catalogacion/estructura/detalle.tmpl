@@ -168,10 +168,8 @@ function updateInfoRenovar(responseText){
 	cancelarDiv();
 
 	var infoHash= JSONstring.toObject(responseText);
-	alert(infoHash);
 	var messageArray= infoHash.messages;
 	var ticketsArray= infoHash.tickets;
-alert(messageArray);alert(ticketsArray);
 	//Mensajes 
 	for(i=0; i<messageArray.length;i++){
   		setMessages(messageArray[i]);

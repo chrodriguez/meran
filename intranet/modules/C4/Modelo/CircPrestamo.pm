@@ -650,7 +650,7 @@ sub _verificarParaRenovar{
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P103', 'params' => []} ) ;
 		}
 
-	if(!($msg_object->{'error'})&&( ($self->getRenovaciones + 1 ) ==  $self->tipo->getRenovaciones )){
+	if(!($msg_object->{'error'})&&( $self->getRenovaciones == $self->tipo->getRenovaciones )) {
 	# Se llego al maximo de renovaciones? 
 			$self->debug("_verificarParaRenovar - Se llego al maximo de renovaciones");
 			$msg_object->{'error'}= 1;
