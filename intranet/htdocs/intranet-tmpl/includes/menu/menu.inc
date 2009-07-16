@@ -21,11 +21,11 @@
 
       <ul id="menu" tabindex="-1">
           <!-- Navigation item -->
-            <li> <h3 class="menu_superior_sin_sub">
+            <li> <h3 class="menu_superior">
                 [% PERL %]
                     print C4::AR::Filtros::link_to( text =>     "[% 'Inicio' | i18n %]",
                                                     url =>      "/cgi-bin/koha/mainpage.pl", 
-                                                    class =>    "menu-alone-link",
+                                                    class =>    "menu_superior",
                                                     title =>    "[% 'Ir al Inicio' | i18n %]"
                                                 ) ;
                 [% END %]

@@ -21,7 +21,7 @@
                 [% PERL %]
                     print C4::AR::Filtros::link_to( text =>     "[% 'Inicio' | i18n %]",
                                                     url =>      "/cgi-bin/koha/mainpage.pl", 
-                                                    class =>    "menu-alone-link",
+                                                    class =>    "menu_superior",
                                                     title =>    "[% 'Ir al Inicio' | i18n %]"
                                                 ) ;
                 [% END %]
