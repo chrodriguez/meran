@@ -25,11 +25,29 @@ use vars qw(@EXPORT @ISA);
 
 
 
+=head1 NAME
 
+C4::AR::Nivel1 - Funciones que manipulan datos del catálogo de nivel 1
 
-=item
-buscarNivel1PorId3
-Devuelve los datos del nivel 1 a partir de un id3
+=head1 SYNOPSIS
+
+  use C4::AR::Nivel1;
+
+=head1 DESCRIPTION
+
+  Descripción del modulo COMPLETAR
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
+=item buscarNivel1PorId3
+
+	$id_Nivel1=buscarNivel1PorId3($id3);
+
+Devuelve los datos del nivel 1 a partir de un id de nivel 3
 =cut
 # FIXME DEPRECATED
 sub buscarNivel1PorId3{
@@ -63,13 +81,16 @@ sub getColaboradores(){
 # 	falta implementar, seria un campo de nivel 1 repetibles
 }
 
-=item
-Esta funcion retorna el untitle segun un id1
+=item getUnititle
+
+	$titulo_unico=getUnititle($id_nivel1);
+	Esta funcion retorna el untitle segun un id1
 =cut
 sub getUnititle {
 	my($id1)= @_;
 	return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id1,"245","b","1");
 }
+
 
 sub detalleNivel1MARC{
 	my ($id1, $nivel1,$tipo)= @_;
@@ -147,9 +168,10 @@ sub detalleNivel1OPAC{
 	return @nivel1Comp;
 }
 
-=item
-detalleNivel1
-Trae todo los datos del nivel 1 para poder verlos en el template.
+=item detalleNivel1
+     
+     detalleNivel1 DEPRECATED??
+Devuelve  todos los datos del nivel 1 para poder verlos en el template.
 =cut
 sub detalleNivel1{
 	my ($id1, $nivel1,$tipo)= @_;
@@ -201,7 +223,7 @@ sub detalleNivel1{
 
 
 
-=item
+=item getNivel1FromId1
 Recupero un nivel 1 a partir de un id1
 retorna un objeto o 0 si no existe
 =cut
@@ -224,6 +246,10 @@ sub getNivel1FromId1{
 
 
 #=======================================================================ABM Nivel 1=======================================================
+=item t_guardarNivel1
+	guardar datos de nivel1
+=cut
+
 sub t_guardarNivel1 {
     my($params)=@_;
 
@@ -352,3 +378,16 @@ sub t_eliminarNivel1{
     return ($msg_object);
 }
 #===================================================================Fin====ABM Nivel 1====================================================
+#
+=back
+
+=head1 AUTHOR
+
+Grupo de Desarrollo Meran <koha@linti.unlp.edu.ar>
+
+=head1 SEE ALSO
+
+C4::AR::Nivel2 C4::AR::Nivel3
+
+=cut
+
