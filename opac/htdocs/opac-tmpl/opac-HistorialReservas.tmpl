@@ -2,29 +2,18 @@
 <br>
 
 [% IF cantidad %]
-<center>
-<p> 
-	<b>[% "Cantidad de reservas realizadas:" | i18n %]&nbsp;[% cantidad %]<br>
-</p>
-<br>
+    <div class="resultados_consulta">[% "Cantidad de reservas realizadas:" | i18n %]&nbsp;[% cantidad %]</div>
 [% END %]
 
-[% paginador %]
-<center>
 
-<table width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
+<div class="contenedor_paginador">[% paginador %]</div>
 
-	<tr bordercolor="#f2f2f2">    
- 		<td colspan="5" align="center" class="bordetabla" borde=1>
-			<b> [% "Historial de Reservas" | i18n %] </b>
-		</td>
-	</tr> 
+<div class="tablaResultadoTitulo">[% "Historial de Reservas" | i18n %]</div>
 
-</table>
 
-<table id="tablaHistorial" width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">	
+<table id="tablaHistorial" width="98%" cellspacing="0" cellpadding="4" align="center">	
 
-	<tr class="bordetabla"  bordercolor="#f2f2f2">
+	<tr class="tablaResultadoTitulo"  bordercolor="#f2f2f2">
 		<th>[% "T&iacute;tulo" | i18n %]</th>
 		<th>[% "Autor" | i18n %]</th>
 		<th>[% "Estado" | i18n %]</th>
@@ -34,7 +23,7 @@
 
 <!-- ESTE LOOP MUESTRA LAS RESERVAS -->
 [% FOREACH loop_reservas %]
-	<tr border="1" bordercolor="#f2f2f2">
+	<tr>
  		<td> 
 	[% IF id1 %]
 		<a class="click" onClick="detalle('[% id1 %]')" title="[% 'Mostrar Detalle' | i18n %]">

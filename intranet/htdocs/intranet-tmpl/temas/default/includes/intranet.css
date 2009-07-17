@@ -685,68 +685,80 @@ tr.impar {
     background: transparent url(../imagenes/iconos/borrar.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_cambiarlibro {
     background: transparent url(../imagenes/iconos/cambiarlibro.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_der {
     background: transparent url(../imagenes/iconos/der.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_devolverlibro {
     background: transparent url(../imagenes/iconos/buscar.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 #icon_buscar {
     background: transparent url(../imagenes/iconos/devolverlibro.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_edicion {
     background: transparent url(../imagenes/iconos/edicion.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 #icon_entrar {
     background: transparent url(../imagenes/iconos/entrar.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 #icon_enviar {
     background: transparent url(../imagenes/iconos/enviar.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 #icon_estvirtuales {
     background: transparent url(../imagenes/iconos/estvirtuales.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_favoritos {
     background: transparent url(../imagenes/iconos/favoritos.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_guardar {
     background: transparent url(../imagenes/iconos/guardar.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_imprimir {
     background: transparent url(../imagenes/iconos/imprimir.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_indice {
@@ -759,66 +771,77 @@ tr.impar {
     background: transparent url(../imagenes/iconos/inicio.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_ir {
     background: transparent url(../imagenes/iconos/ir.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_izq {
     background: transparent url(../imagenes/iconos/izq.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_micuenta {
     background: transparent url(../imagenes/iconos/micuenta.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_miembros {
     background: transparent url(../imagenes/iconos/miembros.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_pdf {
     background: transparent url(../imagenes/iconos/pdf.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_prestarlibro {
     background: transparent url(../imagenes/iconos/prestarlibro.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_sacar {
     background: transparent url(../imagenes/iconos/sacar.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_salir {
     background: transparent url(../imagenes/iconos/salir.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_seleccionar {
     background: transparent url(../imagenes/iconos/seleccionar.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_subir {
     background: transparent url(../imagenes/iconos/subir.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 /*                 Fin estilos para los iconos  */     
                           

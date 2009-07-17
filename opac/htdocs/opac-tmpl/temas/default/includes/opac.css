@@ -143,6 +143,7 @@ input[type=text]:focus{
     padding-bottom:0;
     padding-left:0;
     padding-right:0;
+    cursor: pointer;
 /*     padding-top:6px; */
 /*     margin-left: 25px;*/
 }
@@ -167,12 +168,14 @@ input[type=text]:focus{
     background: transparent url(../imagenes/iconos/icon_favorito_ver.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 #icon_buscar {
     background: transparent url(../imagenes/iconos/icon_buscar.png) no-repeat;
     height: 25px;
     width: 25px;
+    cursor: pointer;
 }
 
 li {
@@ -213,10 +216,35 @@ ul.horizontal-list li {
 
 
 /*                                       para los resultados de las tablas                                     */
+.tablaResultadoTitulo { 
+    font-Family : normal tahoma,arial,helvetica,sans-serif ;
+    color: #fff;
+    font-size: 9pt;
+    background: url(../imagenes/tablaresultado.png) repeat-x ;
+   /* background-color:#3c9eb4;*/
+    text-align: center;
+    font-weight: bold;
+    height:30px;
+    border-left: 1px solid #ccc;
+}
+
 .tabla_datos {
     font-size: 9pt;
 }
 /*                                     fin  para los resultados de las tablas                                  */
+
+.resultados_consulta{
+    text-align:center;
+    font-size: 13px;  
+    font-weight:bold;  
+    padding: 5px;
+}
+
+.contenedor_paginador{
+    text-align:center;
+    padding: 5px;
+}
+
 
 .divDatosUsuario{
     width: 25%;
