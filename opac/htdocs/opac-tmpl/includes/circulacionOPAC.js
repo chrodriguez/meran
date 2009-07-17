@@ -138,9 +138,7 @@ function DetallePrestamos(){
 
 	objAH=new AjaxHelper(updateDetallePrestamo);
   	objAH.debug= true;
-	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/opac-DetallePrestamos.pl';
-// 	objAH.borrowernumber= borrowernumber;
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -153,6 +151,7 @@ function updateDetallePrestamo(responseText){
 	//si estoy logueado, oculta la informacion del usuario
 	$('#detallePrestamos').html(responseText);
 	$('#detallePrestamos').slideDown('slow');	
+    zebra('tabla_datos');
 
 }
 

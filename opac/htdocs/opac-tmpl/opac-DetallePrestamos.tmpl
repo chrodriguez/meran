@@ -9,33 +9,20 @@
 
 </script>
 
-<table width="100%" align="center" class="top" valign="top">
-<tr>
-<td width="80%"  valign="top">
-
-<table width="100%" align="center"  border="0" cellpadding="0" cellspacing="0" >
-<tr>
-<td valign="top">
-
 [% IF vencidos %]
-        <table cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                        <td>
-              <font color="red" size="3"><b>[% "Usted tiene "| i18n %][% vencidos %][% " ejemplares vencidos" | i18n %]</b></font>
-                        </td>
-                </tr>
-        </table>
+
+    <div class="resultados_consulta">[% "Usted tiene "| i18n %][% vencidos %][% " ejemplares vencidos" | i18n %]</div>
+
 [% END %]
 
 [% IF prestamos_cant %]
 
-<table  width="100%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
-  <tr bordercolor="#f2f2f2">
-	<td colspan=7 align="center" class="bordetabla" borde=1><b>[% "Pr&eacute;stamos" | i18n %]</b>
- 	</td>
+<table class="tabla_datos" width="100%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
+  <tr class="tablaResultadoTitulo">
+	<td colspan=7 align="center" borde=1>[% "Pr&eacute;stamos" | i18n %]</td>
   </tr>
 
-  <tr class="bordetabla" bordercolor="#f2f2f2">
+  <tr class="tablaResultadoTitulo">
 	<th>[% "T&iacute;tulo" | i18n %]</th>
 	<th>[% "Autor" | i18n %]</th>
 	<th>[% "C&oacute;digo de Barras" | i18n %]</th>
