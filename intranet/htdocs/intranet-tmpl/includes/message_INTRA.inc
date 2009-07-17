@@ -95,6 +95,11 @@ AGREGAR_ENCABEZADO= "[% 'Agregar Encabezado' | i18n %]";
 SELECCIONE_AL_MENOS_UN_CAMPO_PARA_BUSCAR= "[% 'Seleccione al menos un campo para buscar' | i18n %]";
 //=============================================Fin===Busquedas===========================================
 
+//================================================Reglas Sanciones==============================================
+POR_FAVOR_SELECCIONE_TIPO_PRESTAMO= "[% 'Por favor, seleccione un tipo de préstamo' | i18n %]";
+POR_FAVOR_SELECCIONE_CATEGORIA_SOCIO= "[% 'Por favor, seleccione una categoría de socio' | i18n %]"
+//=============================================Fin===Reglas Sanciones===========================================
+
 //================================================Sanciones==============================================
 ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION= [% "Esta seguro que desea cancelar la sancion?" | i18n %]
 SANCIONES_TITLE= "[% 'Advertencia de Sanciones' | i18n %]";

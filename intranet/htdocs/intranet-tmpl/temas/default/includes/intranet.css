@@ -114,6 +114,7 @@ body {
     margin-top:50%;
     width: 80%;
 }
+
 #boton_login  {
     display:block;
     padding: 11% 32%; 
@@ -130,6 +131,8 @@ body {
 	
 	
    }
+
+
 
 /* MENU*/ 
 
@@ -961,3 +964,20 @@ ul#horizontal-list li {
 /*                                              fin estilos para los reportes                           */
 
 
+/* 												ESTILO SANCIONES										*/
+
+#divSancionesTiposSocios {
+    float: left;
+    padding: 35px 70px 70px;
+ 	width: 25%;
+}
+
+#divSancionesTiposPrestamos {
+    float: left;
+    padding: 35px 70px 70px;
+ 	width: 25%
+}
+#divSancionesReglas {
+    display:block;
+    padding: 3% 12%;
+}

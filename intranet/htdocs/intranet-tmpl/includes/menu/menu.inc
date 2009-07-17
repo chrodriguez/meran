@@ -350,7 +350,7 @@
                 <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Sanciones' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/admin/sanctions.pl",
+                                                                url =>      "/cgi-bin/koha/admin/sanciones.pl",
                                                                 title =>    "[% 'Sanciones' | i18n %]"
                                                             ) ;
                             [% END %]

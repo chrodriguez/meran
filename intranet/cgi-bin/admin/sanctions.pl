@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#script to administer the senction rules
+#script to administer the senction regla_sancion
 #written 25/07/2005 by Luciano Iglesias (li@info.unlp.edu.ar)
 #
 # This file is part of Koha.
@@ -26,8 +26,8 @@ use C4::AR::Utilidades;
 use Template;
 
 my $input = new CGI;
-my $issue= $input->param('issuetypes') || undef;
-my $category= $input->param('categories') || undef;
+my $issue= $input->param('circ_ref_tipo_prestamo') || undef;
+my $category= $input->param('usr_ref_categoria_socio') || undef;
 my @issuestypes= $input->param('issuestypes');
 
 #FIXME salvar los valores enviados y ver que se hizo clic en Guardar
@@ -46,22 +46,22 @@ sub in_array() {
 }
 
 my $sugestedOrder= 1;
-my $sanctiontypecode= undef;
+my $tipo_sancion= undef;
 my $dbh = C4::Context->dbh;
 
 my $action= $input->param('accion') || undef;
 if ($action eq 'delete') {
-	my $sanctiontypecode1= $input->param('sanctiontypecode');
-	my $sanctionrulecode= $input->param('sanctionrulecode');
-	my $sth = $dbh->prepare("delete from sanctiontypesrules where sanctiontypecode = ? and sanctionrulecode = ?");
-	$sth->execute($sanctiontypecode1, $sanctionrulecode);
+	my $tipo_sancion1= $input->param('tipo_sancion');
+	my $regla_sancion= $input->param('regla_sancion');
+	my $sth = $dbh->prepare("delete from circ_regla_tipo_sancion where tipo_sancion = ? and regla_sancion = ?");
+	$sth->execute($tipo_sancion1, $regla_sancion);
 } elsif ($action eq 'add') {
-	my $order= $input->param('orders');
-	my $amount= $input->param('amounts');
-	my $sanctiontypecode1= $input->param('sanctiontypecode');
-	my $sanctionrulecode= $input->param('rules');
-	my $sth = $dbh->prepare("insert into sanctiontypesrules (sanctiontypecode,sanctionrulecode,orden,amount) values (?,?,?,?)");
-	$sth->execute($sanctiontypecode1, $sanctionrulecode, $order, $amount);
+	my $order= $input->param('orden');
+	my $amount= $input->param('cantidad');
+	my $tipo_sancion1= $input->param('tipo_sancion');
+	my $regla_sancion= $input->param('regla_sancion');
+	my $sth = $dbh->prepare("insert into circ_regla_tipo_sancion (tipo_sancion,regla_sancion,orden,amount) values (?,?,?,?)");
+	$sth->execute($tipo_sancion1, $regla_sancion, $order, $amount);
 }
 
 my ($template, $session, $params) = get_template_and_user({
@@ -73,22 +73,22 @@ my ($template, $session, $params) = get_template_and_user({
 									debug => 1,
 			    });
 
-my $sth = $dbh->prepare("select * from issuetypes order by description");
+my $sth = $dbh->prepare("select * from circ_ref_tipo_prestamo order by descripcion");
 $sth->execute();
 my %issueslabels;
 my @issuesvalues;
 while (my $res = $sth->fetchrow_hashref) {
-	$issue= $res->{'issuecode'} unless $issue;
-	push @issuesvalues, $res->{'issuecode'};
-	$issueslabels{$res->{'issuecode'}} = $res->{'description'};
+	$issue= $res->{'tipo_prestamo'} unless $issue;
+	push @issuesvalues, $res->{'tipo_prestamo'};
+	$issueslabels{$res->{'tipo_prestamo'}} = $res->{'descripcion'};
 }
 $sth->finish;
 
 
 # FIXME esta lista se puede armar con lo que se hizo???????
 
-my $CGIissuetypes=CGI::scrolling_list( 
-			-name => 'issuetypes',
+my $CGIcirc_ref_tipo_prestamo=CGI::scrolling_list( 
+			-name => 'circ_ref_tipo_prestamo',
                         -values   => \@issuesvalues,
                         -labels   => \%issueslabels,
 			-default => $issue,
@@ -96,145 +96,145 @@ my $CGIissuetypes=CGI::scrolling_list(
                         -size     => 1,
                         -multiple => 0 );
 
-my $sth = $dbh->prepare("select * from categories order by description");
+my $sth = $dbh->prepare("select * from usr_ref_categoria_socio order by description");
 $sth->execute();
-my %categorieslabels;
-my @categoriesvalues;
+my %usr_ref_categoria_sociolabels;
+my @usr_ref_categoria_sociovalues;
 while (my $res = $sth->fetchrow_hashref) {
-	$category= $res->{'categorycode'} unless $category;
-        push @categoriesvalues, $res->{'categorycode'};
-        $categorieslabels{$res->{'categorycode'}} = $res->{'description'};
+	$category= $res->{'categoria_socio'} unless $category;
+        push @usr_ref_categoria_sociovalues, $res->{'categoria_socio'};
+        $usr_ref_categoria_sociolabels{$res->{'categoria_socio'}} = $res->{'descripcion'};
 }
 $sth->finish;
 
 # FIXME esta lista se puede armar con lo que se hizo???????
-my $CGIcategories=C4::AR::Utilidades::generarComboCategoriasDeSocio();
+my $CGIusr_ref_categoria_socio=C4::AR::Utilidades::generarComboCategoriasDeSocio();
 
 
-my $sth = $dbh->prepare("select *,issuetypes.description as descissuetype, categories.description as desccategory from sanctiontypes inner join sanctiontypesrules on sanctiontypes.sanctiontypecode = sanctiontypesrules.sanctiontypecode inner join sanctionrules on sanctiontypesrules.sanctionrulecode = sanctionrules.sanctionrulecode inner join issuetypes on sanctiontypes.issuecode = issuetypes.issuecode inner join categories on categories.categorycode = sanctiontypes.categorycode where sanctiontypes.issuecode = ? and sanctiontypes.categorycode = ? order by sanctiontypesrules.orden");
+my $sth = $dbh->prepare("select *,circ_ref_tipo_prestamo.descripcion as descissuetype, usr_ref_categoria_socio.description as desccategory from circ_tipo_sancion inner join circ_regla_tipo_sancion on circ_tipo_sancion.tipo_sancion = circ_regla_tipo_sancion.tipo_sancion inner join circ_regla_sancion on circ_regla_tipo_sancion.regla_sancion = circ_regla_sancion.regla_sancion inner join circ_ref_tipo_prestamo on circ_tipo_sancion.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo inner join usr_ref_categoria_socio on usr_ref_categoria_socio.categorycode = circ_tipo_sancion.categoria_socio where circ_tipo_sancion.tipo_prestamo = ? and circ_tipo_sancion.categoria_socio = ? order by circ_regla_tipo_sancion.orden");
 $sth->execute($issue, $category);
 my @sanctionsarray;
 while (my $res = $sth->fetchrow_hashref) {
-	$sanctiontypecode= $res->{'sanctiontypecode'} unless $sanctiontypecode;
+	$tipo_sancion= $res->{'tipo_sancion'} unless $tipo_sancion;
 	($res->{'amount'} eq '0')?$res->{'amount'}='Infinito':undef;
         push (@sanctionsarray, $res);
 }
 $sth->finish;
 
-unless ($sanctiontypecode) {
-	my $sth = $dbh->prepare("select * from sanctiontypes where issuecode = ? and categorycode = ?");
+unless ($tipo_sancion) {
+	my $sth = $dbh->prepare("select * from circ_tipo_sancion where tipo_prestamo = ? and categoria_socio = ?");
 	$sth->execute($issue, $category);
 	my $res;
 	if ($res= $sth->fetchrow_hashref) {
-		$sanctiontypecode= $res->{'sanctiontypecode'};
+		$tipo_sancion= $res->{'tipo_sancion'};
 	} else {
-		my $sth = $dbh->prepare("insert into sanctiontypes (issuecode,categorycode) values (?,?)");
+		my $sth = $dbh->prepare("insert into circ_tipo_sancion (tipo_prestamo,categoria_socio) values (?,?)");
 		$sth->execute($issue, $category);
-		my $sth = $dbh->prepare("select * from sanctiontypes where issuecode = ? and categorycode = ?");
+		my $sth = $dbh->prepare("select * from circ_tipo_sancion where tipo_prestamo = ? and categoria_socio = ?");
 		$sth->execute($issue, $category);
 		$res= $sth->fetchrow_hashref;
-		$sanctiontypecode= $res->{'sanctiontypecode'};
+		$tipo_sancion= $res->{'tipo_sancion'};
 	}
 }
 
 if ($action eq 'issuestypes') {
-	my $sth = $dbh->prepare("delete from sanctionissuetypes where sanctiontypecode = ?");
-	$sth->execute($sanctiontypecode);
+	my $sth = $dbh->prepare("delete from circ_tipo_prestamo_sancion where tipo_sancion = ?");
+	$sth->execute($tipo_sancion);
 	my $i;
 	foreach $i (@issuestypes) { 
-		my $sth = $dbh->prepare("insert into sanctionissuetypes (sanctiontypecode,issuecode) values (?,?)");
-		$sth->execute($sanctiontypecode,$i);
+		my $sth = $dbh->prepare("insert into circ_tipo_prestamo_sancion (tipo_sancion,tipo_prestamo) values (?,?)");
+		$sth->execute($tipo_sancion,$i);
 	}
 }
 
 
-my $sth = $dbh->prepare("select * from sanctionrules order by delaydays, sanctiondays");
+my $sth = $dbh->prepare("select * from circ_regla_sancion order by dias_demora, dias_sancion");
 $sth->execute();
-my %ruleslabels;
-my @rulesvalues;
+my %regla_sancionlabels;
+my @regla_sancionvalues;
 while (my $res = $sth->fetchrow_hashref) {
-	push @rulesvalues, $res->{'sanctionrulecode'};
-	$ruleslabels{$res->{'sanctionrulecode'}} = "Dias de demora: ".$res->{'delaydays'}.". Dias de sancion: ".$res->{'sanctiondays'};
+	push @regla_sancionvalues, $res->{'regla_sancion'};
+	$regla_sancionlabels{$res->{'regla_sancion'}} = "Dias de demora: ".$res->{'dias_demora'}.". Dias de sancion: ".$res->{'dias_sancion'};
 }
 $sth->finish;
 
 # FIXME esta???
-my $CGIrules=CGI::scrolling_list(
-                        -name => 'rules',
-                        -values   => \@rulesvalues,
-                        -labels   => \%ruleslabels,
+my $CGIregla_sancion=CGI::scrolling_list(
+                        -name => 'regla_sancion',
+                        -values   => \@regla_sancionvalues,
+                        -labels   => \%regla_sancionlabels,
                         -size     => 1,
                         -multiple => 0 );
 
-if ($sanctiontypecode) {
-	my $sth= $dbh->prepare("select max(sanctiontypesrules.orden) from sanctiontypesrules where sanctiontypecode = ?");
-	$sth->execute($sanctiontypecode);
+if ($tipo_sancion) {
+	my $sth= $dbh->prepare("select max(circ_regla_tipo_sancion.orden) from circ_regla_tipo_sancion where tipo_sancion = ?");
+	$sth->execute($tipo_sancion);
 	my $data= $sth->fetchrow_array;
 	$sugestedOrder=  $data + 1;
 }
 
-my %orders;
-my @orders;
+my %orden;
+my @orden;
 for (my $i=1; $i < 21; $i++) {
-        push @orders, $i;
-        $orders{$i} = $i;
+        push @orden, $i;
+        $orden{$i} = $i;
 }
 $sth->finish;
 
 
 # FIXME esta???
-my $CGIorders=CGI::scrolling_list(
-                        -name => 'orders',
-                        -values   => \@orders,
-                        -labels   => \%orders,
+my $CGIorden=CGI::scrolling_list(
+                        -name => 'orden',
+                        -values   => \@orden,
+                        -labels   => \%orden,
 			-default => $sugestedOrder,
                         -size     => 1,
                         -multiple => 0 );
 
-my %amounts;
-my @amounts;
-push @amounts, 0;
-$amounts{0} = "Infinito";
+my %cantidad;
+my @cantidad;
+push @cantidad, 0;
+$cantidad{0} = "Infinito";
 for (my $i=1; $i < 21; $i++) {
-        push @amounts, $i;
-        $amounts{$i} = $i;
+        push @cantidad, $i;
+        $cantidad{$i} = $i;
 }
 $sth->finish;
 
 
 # FIXME esta???
-my $CGIamounts=CGI::scrolling_list(
-                        -name => 'amounts',
-                        -values   => \@amounts,
-                        -labels   => \%amounts,
+my $CGIcantidad=CGI::scrolling_list(
+                        -name => 'cantidad',
+                        -values   => \@cantidad,
+                        -labels   => \%cantidad,
                         -default => 1,
                         -size     => 1,
                         -multiple => 0 );
 
 
-my $sth= $dbh->prepare("SELECT * FROM sanctionissuetypes where sanctiontypecode = ?");
-$sth->execute($sanctiontypecode);
+my $sth= $dbh->prepare("SELECT * FROM circ_tipo_prestamo_sancion where tipo_sancion = ?");
+$sth->execute($tipo_sancion);
 my @issuescodes;
 while (my $res = $sth->fetchrow_hashref) {
-        push @issuescodes, $res->{'issuecode'};
+        push @issuescodes, $res->{'tipo_prestamo'};
 }
 
-my $sth= $dbh->prepare("SELECT * FROM issuetypes ORDER BY description");
+my $sth= $dbh->prepare("SELECT * FROM circ_ref_tipo_prestamo ORDER BY descripcion");
 $sth->execute();
 my @issues;
 while (my $res = $sth->fetchrow_hashref) {
-	$res->{'checked'}= &in_array($res->{'issuecode'}, @issuescodes);
+	$res->{'checked'}= &in_array($res->{'tipo_prestamo'}, @issuescodes);
         push @issues, $res;
 }
 $sth->finish;
 
 $params->{'issues'}= \@issues;
-$params->{'amounts'}= $CGIamounts;
-$params->{'orders'}= $CGIorders;
-$params->{'sanctiontypecode'}= $sanctiontypecode;
+$params->{'cantidad'}= $CGIcantidad;
+$params->{'orden'}= $CGIorden;
+$params->{'tipo_sancion'}= $tipo_sancion;
 $params->{'loop_sanctions_types'}= \@sanctionsarray;
-$params->{'sanctions_rules'}= $CGIrules;
-$params->{'issues_types'}= $CGIissuetypes;
-$params->{'categories'}= $CGIcategories;
+$params->{'sanctions_regla_sancion'}= $CGIregla_sancion;
+$params->{'issues_types'}= $CGIcirc_ref_tipo_prestamo;
+$params->{'usr_ref_categoria_socio'}= $CGIusr_ref_categoria_socio;
 
 C4::Auth::output_html_with_http_headers($input, $template, $params);

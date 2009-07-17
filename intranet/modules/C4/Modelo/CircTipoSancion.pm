@@ -26,7 +26,7 @@ __PACKAGE__->meta->setup(
 
 		ref_tipo_prestamo_sancion => {
             class      => 'C4::Modelo::CircTipoPrestamoSancion',
-            column_map => { tipo_prestamo => 'tipo_prestamo' },
+            column_map => { tipo_sancion => 'tipo_sancion' },
             type       => 'one to many',
         },
 
@@ -80,6 +80,17 @@ sub setCategoria_socio{
     my ($self) = shift;
     my ($categoria_socio) = @_;
     $self->categoria_socio($categoria_socio);
+}
+
+sub aplicaAlTipoDePrestamo{
+    my ($self) = shift;
+    my ($tipo_prestamo) = @_;
+	
+	foreach my $tps ($self->ref_tipo_prestamo_sancion) {
+		if($tps->getTipo_prestamo eq $tipo_prestamo){ return 1; }
+	}
+
+    return 0;
 }
 1;
 

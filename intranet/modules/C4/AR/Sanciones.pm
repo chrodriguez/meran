@@ -243,7 +243,7 @@ sub getTipoSancion{
                                     );
     my $tipo_sancion=undef;
     if ($tipo_sanciones_array_ref->[0])
-    {$tipo_sancion=$tipo_sanciones_array_ref->[0]->getTipo_sancion;}
+    {$tipo_sancion=$tipo_sanciones_array_ref->[0];}
 
   return($tipo_sancion);
 

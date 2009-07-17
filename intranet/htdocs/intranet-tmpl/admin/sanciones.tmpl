@@ -1,0 +1,115 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script language="JavaScript" type="text/javascript">
+
+var objAH;//Objeto AjaxHelper.
+
+/*
+ * updateInfoConsultaJSON
+ * Actualizacion de los datos despues de una consulta ajax que trae un string json.
+ * El resultado se procesa, para mostrar lo que corresponda.
+ */
+function updateInfoConsultaJSON(responseText){
+    procesarJSON(responseText,objAH.idComp,objAH.funcionChange,objAH.tipo);
+}
+
+/*
+ * borrarDiv
+ * Borra el div que contiene la parte de agregado de variables.
+ */
+function borrarDiv(){$("#divResultado").html("");}
+
+/*
+ * agregarReglaSancion
+ * Muestra la parte de agregado de una regla de sancion
+ */
+function agregarReglaSancion(tipo_sancion){
+    objAH=new AjaxHelper(updateAgregarReglaSancion);
+    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+    objAH.tipo_sancion=tipo_sancion;
+    objAH.tipoAccion= "AGREGAR_REGLA_SANCION";
+    objAH.sendToServer();
+}
+
+function updateAgregarReglaSancion(responseText){
+    $("#divResultado").html(responseText);
+}
+
+/*
+ *  eliminarReglaSancion
+ */
+function eliminarReglaSancion(tipo_sancion, regla_sancion){
+    if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO) ){
+    objAH=new AjaxHelper(updateEliminarReglaSancion);
+    objAH.debug= true;
+    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+    objAH.tipo_sancion=tipo_sancion;
+    objAH.regla_sancion=regla_sancion;
+    objAH.tipoAccion= "BORRAR_REGLA_SANCION";
+    borrarDiv();
+    objAH.sendToServer();
+    }
+}
+
+function updateEliminarReglaSancion(responseText){
+    borrarDiv();
+    respuesta(responseText);
+  //  buscarTiposPrestamos();
+}
+
+/*
+ * respuesta
+ * Cuando se guarda una variable nueva se verifica si esta ya exite, si es asi se devuelve un error y se muestra
+ * en la pantalla, de lo contrario se guarda la variable.
+ */
+function respuesta(responseText){
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+}
+
+/*
+ * buscarTiposPrestamosSancionados
+ */
+
+function buscarTiposPrestamosSancionados(){
+    
+	if( ( $("#tipo_prestamo_id").val() != 'SIN SELECCIONAR') && ( $("#categoria_socio_id").val() != 'SIN SELECCIONAR')) {
+			objAH=new AjaxHelper(updateTiposPrestamosSancionados);
+			objAH.debug= true;
+			objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+			objAH.tipo_prestamo=$("#tipo_prestamo_id").val();
+			objAH.categoria_socio=$("#categoria_socio_id").val();
+			objAH.tipoAccion= "TIPOS_PRESTAMOS_SANCIONADOS";
+			objAH.sendToServer();
+		}
+	}
+
+function updateTiposPrestamosSancionados(responseText){
+    $("#divSancionesTiposPrestamos").html(responseText);
+}
+
+$(document).ready( function() {
+   buscarTiposPrestamosSancionados();
+});
+
+</script>
+
+<div class="titulos_interior">[% 'Tipos de sanciones' | i18n %]</div>
+<div >
+<div id="divSancionesTiposSocios">
+<table border=0 cellspacing=0 cellpadding=0 width="100%" align='center'>
+	<tr class="tablaresultadoTitle">
+                <td>[% "Tipos de pr&eacute;stamo" | i18n %]</td>
+                <td>[% "Categorias de socio" | i18n %]</td>
+	</tr>
+    <tr valign=middle align='center'>
+				<td>[% tipos_de_prestamos %]</td>
+				<td>[% categorias_de_socio %]</td>
+	</tr>
+</table>
+</div>
+ <div id="divSancionesTiposPrestamos"></div>
+ <div id="divSancionesReglas"></div>
+</div>
+
+[% INCLUDE "intranet-bottom.inc" %]

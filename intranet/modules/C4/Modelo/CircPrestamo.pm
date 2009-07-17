@@ -524,7 +524,7 @@ C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
                 my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
                 my %paramsSancion;
                 $paramsSancion{'loggedinuser'}= $loggedinuser;
-                $paramsSancion{'tipo_sancion'}= $tipo_sancion;
+                $paramsSancion{'tipo_sancion'}= $tipo_sancion->getTipo_sancion;
                 $paramsSancion{'id_reserva'}= undef;
                 $paramsSancion{'fecha_comienzo'}= undef;
                 $paramsSancion{'fecha_final'}= undef;
