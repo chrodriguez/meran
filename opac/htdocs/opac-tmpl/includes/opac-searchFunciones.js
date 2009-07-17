@@ -49,13 +49,11 @@ function mostrarHistorialUpdate(responseText){
 	zebra('tablaHistorial');
 }
 
-function mostrarHistorialPrestamos(bornum){
+function mostrarHistorialPrestamos(){
 
 	objAH=new AjaxHelper(mostrarHistorialUpdate);
   	objAH.debug= true;
-	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/opac-HistorialPrestamos.pl';
-	objAH.bornum= bornum;
 	//se setea la funcion para cambiar de pagina
 	objAH.funcion= 'changePage';
 	//se envia la consulta

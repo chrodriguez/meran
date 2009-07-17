@@ -296,3 +296,13 @@ ul.horizontal-list li {
     padding: 11% 32%; 
 }
 /*                                                Fin     estilos para el login                                 */
+
+/*                                     estilos para la zebra                                            */
+tr.par {
+    background-color:#FFFFFF;
+}
+
+tr.impar {
+    background-color:#F4F4F4;
+}
+/*                                   Fin  estilos para la zebra                                         */

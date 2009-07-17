@@ -1,27 +1,13 @@
 [% USE HTML %]
 
-<br>
-<center>
-    <p>
-        <b>[% "Cantidad de pr&eacute;stamos realizadas:" | i18n %]&nbsp;[% cantidad %]<br>
-    </p>
-    <br>
-    [% paginador %]
-</center>
+<div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos realizadas:" | i18n %]&nbsp;[% cantidad %]</div>
 
-<table width="98%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
+<div class="contenedor_paginador">[% paginador %]</div>
 
-    <tr bordercolor="#f2f2f2">
-        <td colspan="5" align="center" class="bordetabla" borde=1>
-            <b>[% "Historial de Pr&eacute;stamos" | i18n %]</b>
+<div class="tablaResultadoTitulo">[% "Historial de Pr&eacute;stamos" | i18n %]</div>
 
-        </td>
-    </tr>
-
-</table>
-
-<table id="tablaHistorial" width="98%" border="1" class="tabla_datos" cellspacing="0" cellpadding="4" align="center">
-    <tr class="bordetabla" >
+<table id="tablaHistorial" class="tablaHistorial" width="98%" border="1" class="tabla_datos" cellspacing="0" cellpadding="4" align="center">
+    <tr class="tablaResultadoTitulo" >
         <th>[% "T&iacute;tulo" | i18n %]</th>
         <th>[% "Autor" | i18n %]</th>
         <th>[% "Edici&oacute;n" | i18n %]</th>
@@ -30,7 +16,7 @@
     </tr>
     <!-- ESTE LOOP MUESTRA LOS PRESTAMOS -->
     [% FOREACH loop_reading %]
-        <tr class="bordetabla" >
+        <tr>
         <td> 
                 [% IF id1 %]
                     [% PERL %]
@@ -70,17 +56,15 @@
 
 </table>
 
-
-<br>
-
 <a class="click" onClick="volverDesdeHistorial()">
     [% "Volver" | i18n %]
 </a>
 
 <p align="center">
-    <a  onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" 
+<!-- FIXME falta -->
+<!--    <a  onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" 
         onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
         <input  onClick="print();return false;"  name="print" id="print" type="image" value="[% 'Imprimir' | i18n %]" 
                 src="[% themelang %]/images/menu-imprimir.png" border="0">
-    </a>
+    </a>-->
 </p>

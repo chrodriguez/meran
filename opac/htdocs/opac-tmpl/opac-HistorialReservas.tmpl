@@ -1,6 +1,4 @@
 
-<br>
-
 [% IF cantidad %]
     <div class="resultados_consulta">[% "Cantidad de reservas realizadas:" | i18n %]&nbsp;[% cantidad %]</div>
 [% END %]
@@ -13,7 +11,7 @@
 
 <table id="tablaHistorial" width="98%" cellspacing="0" cellpadding="4" align="center">	
 
-	<tr class="tablaResultadoTitulo"  bordercolor="#f2f2f2">
+	<tr class="tablaResultadoTitulo">
 		<th>[% "T&iacute;tulo" | i18n %]</th>
 		<th>[% "Autor" | i18n %]</th>
 		<th>[% "Estado" | i18n %]</th>
@@ -26,15 +24,30 @@
 	<tr>
  		<td> 
 	[% IF id1 %]
+        [% PERL %]
+            print C4::AR::Filtros::link_to( text    => "[% 'Mostrar Detalle' | i18n %]",
+                                            boton   => "boton_registrarse", 
+                                            width   => "95",
+                                            class   => "horizontal",
+                                            url     => "/join.html", 
+                                            title   => "[% 'Mostrar Detalle' | i18n %]"
+                                        ) ;
+        [% END %]  
 		<a class="click" onClick="detalle('[% id1 %]')" title="[% 'Mostrar Detalle' | i18n %]">
 	[% titulo %][% IF unititle %]:&nbsp;[% unititle %][% END %]
 		</a> [% ELSE %]&nbsp;[% END %]
  		</td>
  		<td>
 	[% IF idAutor %]
-	<a   href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% idAutor %]" >
-	[% completo %]
-	</a> [% ELSE %]&nbsp;[% END %]
+        [% PERL %]
+            print C4::AR::Filtros::link_to( text    => [% completo %],
+                                            params  => "[authorid=[% idAutor %]]", 
+                                            url     => "/cgi-bin/koha/opac-searchresults.pl", 
+                                            title   => "[% 'Mostrar Detalle' | i18n %]"
+                                        ) ;
+        [% END %]  
+
+        [% ELSE %]&nbsp;[% END %]
  		</td>
  		<td align=center>  
 	[% IF estado %]

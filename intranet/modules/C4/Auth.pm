@@ -115,7 +115,7 @@ C4::Auth - Authenticates Koha users
 sub getSessionLoggedUser {
 	my ($session) = @_;
 
-	return $session->param('loggedinusername');
+	return $session->param('nro_socio');
 }
 
 sub getSessionUserID {
