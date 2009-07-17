@@ -83,8 +83,9 @@ body {
    height:50px;
 }
 
+/*                                                     estilos para el login                                   */
 #login {
-    background-image:url(../imagenes/meranLogin.png);
+    background-image: url(../imagenes/meranLogin.png);
     font-family: "Trebuchet MS", "Verdana", "Arial";
     font-size: 12px;
     position: static;
@@ -116,7 +117,7 @@ body {
     display:block;
     padding: 11% 32%; 
 }
-
+/*                                                Fin     estilos para el login                                 */
 
 
 .idioma_y_login{

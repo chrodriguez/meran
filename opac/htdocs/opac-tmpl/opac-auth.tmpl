@@ -37,29 +37,27 @@
 </script>
 
 <form method="post" name="datos">
-<table border="0" cellpadding="10" cellspacing="0" width="60%">
-    <tr><td align="center" valign="top">
 
-
-    <table border="0" cellpadding="10" cellspacing="0" >
-    	<tr><th colspan="2" class="bordetabla"><h3>Entrar en Koha</h3></th></tr>
-    	<tr><td class="tope"> [% "Tarjeta de identificaci&oacute;n:" | i18n %]</td><td class="tope">
-		<input type="text" name="userid" onKeyPress="javascript:onEnterSubmit();"></td></tr>
-    	<tr><td class="tope">[% "Contrase&ntilde;a: " | i18n %]</td><td class="tope">
-		<input type="password" name="password" onKeyPress="javascript:onEnterSubmit();">
-	</td>
-   	 </tr>
-    	<tr><td colspan="2" align="center" class="tope">
-
-		<a 	href="#" onClick="enviar(); return(false);" onMouseOut="swap('enter','[% themelang %]/images/menu-entrar.png')" 
-		onMouseOver="swap('enter','[% themelang %]/images/menu-entrarbis.png')">
-		<img name="enter" id="enter" src="[% themelang %]/images/menu-entrar.png" border="0"></a>
-
-	</td></tr>
-    </table>
-
-   </td></tr>
-</table>
+    <div id="login">
+            <div id="contenido_login">
+            <span>      
+                    <label>Identificaci&oacute;n:</label>
+                    <input size=15  name="userid" id="userid" onKeyPress="javascript:onEnterSubmit();" >
+            </span>
+            <span>
+                    <label>Contrase&ntilde;a:</label>
+                    <input size=15 type="password" name="password" id="password" onKeyPress="javascript:onEnterSubmit();">
+            </span>
+            <div id="boton_login">
+                [% PERL %]
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Ingresar' | i18n %]",
+                                                        boton   => "boton_entrar", 
+                                                        width   => "150",
+                                                        onClick => "enviar();",
+                                                        title   => "[% 'Ingresar' | i18n %]"
+                                                ) ;
+                [% END %]
+            </div>
+            </div>
+        </div>
 </form>
-
-</td></tr></table>

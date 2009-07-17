@@ -153,6 +153,13 @@ input[type=text]:focus{
     height: 22px;
     width: 3px;
 }
+
+#boton_entrar {
+    float:right;
+    background: transparent url(../imagenes/botones/boton_entrar.png) no-repeat;
+    height: 22px;
+    width: 3px;
+}
 /*            fin  parte del boton generica                */
 
 
@@ -224,3 +231,40 @@ ul.horizontal-list li {
     height:50%;
 
 }
+
+
+/*                                                     estilos para el login                                   */
+#login {
+    background-image: url(../imagenes/meranLogin.png);
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 12px;
+    position: static;
+    height: 185px;
+    width: 307px;
+    text-align: left ; 
+    font-weight: bold;
+}
+
+#login span {
+    display:block;
+    margin-bottom:12%;
+}
+
+#login input {
+    float:right;
+}
+
+#login label {
+    float:left;
+}
+
+#contenido_login  {
+    display:block;
+    padding: 21% 12%;
+    margin-top: 22%;
+}
+#boton_login  {
+    display:block;
+    padding: 11% 32%; 
+}
+/*                                                Fin     estilos para el login                                 */

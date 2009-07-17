@@ -316,8 +316,9 @@ function binl2b64(binarray)
     </SCRIPT>
 
   <SCRIPT language=javascript> 
+// FIXME esto es viejo
     	function enviar(){
-		nroRandom= 61194;
+// 		nroRandom= 61194;
 		document.datosAEnviar.nroRandom.value= nroRandom;
 		hash= b64_md5(b64_md5(document.datos.password.value)+nroRandom);
 		document.datosAEnviar.password.value= hash;

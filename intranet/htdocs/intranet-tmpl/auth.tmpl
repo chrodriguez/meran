@@ -63,11 +63,11 @@
 		<div id="login">
 			<div id="contenido_login">
 			<span>		
-					<label>Identificaci&oacute;n:</label>
+					<label>[% 'Identificaci&oacute;n:' | i18n %]</label>
 					<input size=15  name="userid" id="userid" onKeyPress="javascript:onEnterSubmit();" >
 			</span>
 			<span>
-					<label>Contrase&ntilde;a:</label>
+					<label>[% 'Contrase&ntilde;a:' | i18n %]</label>
 					<input size=15 type="password" name="password" id="password" onKeyPress="javascript:onEnterSubmit();">
 			</span>
 			<div id="boton_login">
@@ -77,7 +77,7 @@
                                                                     onClick => "enviar(); return(false);",
                                                                     title   => "[% 'Entrar' | i18n %]",
                                         ) ;
-            		[% END %]
+            [% END %]
 			</div>
 			</div>
 		</div>

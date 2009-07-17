@@ -82,13 +82,6 @@ sub link_to {
 
 	$link .= " tabindex='-1'>";
 
-# <li id="boton_medio" class="click horizontal" onclick="style='width:25px'">
-# <a tabindex="-1" title="Salir" href="/cgi-bin/koha/opac-main.pl?logout.x=1?token=fda23d4dd84b17b244b2dc1044fa80722ece0334">
-# <div id="boton_salir"> </div>
-# <div id="boton_der"> </div>
-# <div id="boton_texto">Salir</div>
-# </a>
-# </li>
     my $button;
 
     if($boton){

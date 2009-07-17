@@ -35,10 +35,6 @@
 </head>
 <script language="javascript" type="text/javascript">
 
-function swap(id,src){
-	document.getElementById(id).src=src;
-}
-
 function cambiarIdioma() {
 	$('#lang_server').val($('#language').val());
 	$('#url').val(location.pathname);
