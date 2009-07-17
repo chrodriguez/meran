@@ -168,9 +168,10 @@ function updateGuadarDatos(responseText){
 
 function deleteSinonimo(idDelete, sinonimo_string){
 
-	var is_confirmed = confirm(CONFIRMA_LA_BAJA_DEL_SINONIMO);
+// 	var is_confirmed = confirm(CONFIRMA_LA_BAJA_DEL_SINONIMO);
 
-	if (is_confirmed) {
+// 	if (is_confirmed) {
+jConfirm(CONFIRMA_LA_BAJA_DEL_SINONIMO,CONTROL_AUTORIDADES_TITLE, function(confirmStatus){if (confirmStatus) {
 
 		objAH=new AjaxHelper(updateDeleteSinonimo);
 		objAH.debug= true;
@@ -182,6 +183,8 @@ function deleteSinonimo(idDelete, sinonimo_string){
 		//se envia la consulta
 		objAH.sendToServer();
 	}
+
+    });
 }
 
 function updateDeleteSinonimo(responseText){

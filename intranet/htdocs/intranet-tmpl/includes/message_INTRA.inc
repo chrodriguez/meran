@@ -27,6 +27,7 @@ ESTA_SEGURO_QUE_DESEA_BORRARLO= "[% 'Esta seguro que desea borrarlo?' | i18n %]"
 HAY_BARCODES_REPETIDOS= "[% 'Hay barcodes repetidos' | i18n %]";
 ELIJA_AL_MENOS_UN_EJEMPLAR= "[% 'Elija al menos un ejemplar para realizar la acción' | i18n %]";
 FALTA_PARAMETRO_PARA_REFERENCIA= "[% 'Falta parámetro para referencia' | i18n %]";
+CATALOGO_TITLE= "[% 'Advertencia de Catalogo' | i18n %]";
 //=============================================Fin===Catalogacion=================================================
 
 //================================================Usuarios========================================================
@@ -84,6 +85,7 @@ ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA= "[% 'Esta seguro que desea cancelar l
 YA_EXISTE_EL_ELEMENTO= "[% 'Ya existe el elemento' | i18n %]";
 CONFIRMA_LA_BAJA_DEL_SEUDONIMO= "[% 'Confirma la baja del seudonimo?' | i18n %]";
 CONFIRMA_LA_BAJA_DEL_SINONIMO= "[% 'Confirma la baja del sinonimo?' | i18n %]";
+CONTROL_AUTORIDADES_TITLE= "[% 'Advertencia de Control de Autoridades' | i18n %]";
 //=============================================Fin===Control Autoridades===========================================
 
 //================================================Visualizacion Opac==============================================
@@ -92,5 +94,10 @@ AGREGAR_ENCABEZADO= "[% 'Agregar Encabezado' | i18n %]";
 //================================================Busquedas==============================================
 SELECCIONE_AL_MENOS_UN_CAMPO_PARA_BUSCAR= "[% 'Seleccione al menos un campo para buscar' | i18n %]";
 //=============================================Fin===Busquedas===========================================
+
+//================================================Sanciones==============================================
+ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION= [% "Esta seguro que desea cancelar la sancion?" | i18n %]
+SANCIONES_TITLE= "[% 'Advertencia de Sanciones' | i18n %]";
+//===============================================Fin=Sanciones===========================================
 
 </script>

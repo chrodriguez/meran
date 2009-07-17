@@ -16,7 +16,8 @@ function inicializar(){
 }
 
 function borrarN3(id2, id3){
-	if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRAROLO) ){
+
+    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_TITLE, function(confirmStatus){if (confirmStatus) {
 		ID_N2= id2;
 		objAH=new AjaxHelper(updateBorrarN3);
 		objAH.debug= true;
@@ -27,6 +28,7 @@ function borrarN3(id2, id3){
 		objAH.tipoAccion="ELIMINAR_NIVEL";
 		objAH.sendToServer();
 	}
+});
 }
 
 function updateBorrarN3(responseText){
@@ -235,8 +237,8 @@ function updateInfoPrestarReserva(responseText){
 /************************************************FIN CIRCULACUION************************************************/
 
 function borrarGrupo(id1,id2){
-    confirmaBorrar = window.confirm(ESTA_SEGURO_QUE_DESEA_BORRAROLO);
-    if (confirmaBorrar) {
+
+    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_TITLE, function(confirmStatus){if (confirmStatus) {
 	    objAH=new AjaxHelper(updateBorrarGrupo);
 	    objAH.debug= true;
 	    objAH.url= "/cgi-bin/koha/busquedas/detalleDB.pl";
@@ -245,7 +247,8 @@ function borrarGrupo(id1,id2){
 	    objAH.accion="BORRAR_GRUPO";
 	    //se envia la consulta
 	    objAH.sendToServer();
-    }
+        }
+    });
 }
 
 function updateBorrarGrupo(responseText){
@@ -260,8 +263,8 @@ function updateBorrarGrupo(responseText){
 
 
 function borrarNivel1(id1){
-    confirmaBorrar = window.confirm(ESTA_SEGURO_QUE_DESEA_BORRAROLO);
-    if (confirmaBorrar){
+
+    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_TITLE, function(confirmStatus){if (confirmStatus) {
 	    objAH=new AjaxHelper(updateBorrarNivel1);
 	    objAH.debug= true;
 	    objAH.url= "/cgi-bin/koha/busquedas/detalleDB.pl";
@@ -270,6 +273,7 @@ function borrarNivel1(id1){
 	    //se envia la consulta
 	    objAH.sendToServer();
     }
+    });
 }
 
 function updateBorrarNivel1(responseText){

@@ -164,10 +164,8 @@ function guardarDatos(){
 function deleteSeudonimo(idDelete){
 	var tabla= $('#tabla').val();
 
-	var is_confirmed = confirm(CONFIRMA_LA_BAJA_DEL_SEUDONIMO);
+	jConfirm(CONFIRMA_LA_BAJA_DEL_SEUDONIMO,CONTROL_AUTORIDADES_TITLE, function(confirmStatus){if (confirmStatus) {
 
-	if (is_confirmed) {
-	
 		objAH=new AjaxHelper(updateDeleteSeudonimo);
 		objAH.debug= true;
 		objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
@@ -178,6 +176,8 @@ function deleteSeudonimo(idDelete){
 		//se envia la consulta
 		objAH.sendToServer();
 	}
+
+    });
 
 }
 
