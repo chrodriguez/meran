@@ -11,6 +11,13 @@ token= '[% token %]';
 <script src="/includes/jquery/jquery.js"></script>
 <script src="/includes/AjaxHelper.js"></script>
 <script src="/includes/MessageHelper.js"></script>
+<script src="/includes/json/jsonStringify.js"></script>
+<script src="/includes/jquery/jquery-highlight.js"></script>
+<script src="/includes/util.js"></script>
+<script src="/opac-tmpl/includes/opac-searchFunciones.js"></script>
+<script src="/opac-tmpl/includes/favoritos.js"></script>
+<script src="/opac-tmpl/includes/message_OPAC.inc"></script>
+<script src="/includes/AutocompleteHelper.js"></script>
 
 <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/opac.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/opac.css">
@@ -40,18 +47,22 @@ function cambiarIdioma() {
     &nbsp;Ingres&oacute; como:<b> [% nro_socio %]</b>
 
     [% PERL %]
-        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_miembros" ),
-                                        url =>      "/cgi-bin/koha/opac-user.pl", 
-                                        title =>    "[% 'Miembros' | i18n %]"
+        print C4::AR::Filtros::link_to( text    => "[% 'Miembros' | i18n %]",
+                                        url     => "/cgi-bin/koha/opac-user.pl", 
+                                        title   => "[% 'Miembros' | i18n %]",
+                                        boton   => "boton_miembros",
+                                        width   => "95",
                                     ) ;
-    [% END %]
-
+    [% END %]    
+   
     [% PERL %]
-        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Button( boton   => "boton_salir" ),
-                                        url =>      "/cgi-bin/koha/opac-main.pl?logout.x=1", 
-                                        title =>    "[% 'Salir' | i18n %]"
+        print C4::AR::Filtros::link_to( text    => "[% 'Salir' | i18n %]",
+                                        url     => "/cgi-bin/koha/opac-main.pl?logout.x=1", 
+                                        title   => "[% 'Salir' | i18n %]",
+                                        boton   => "boton_salir",
+                                        width   => "95",
                                     ) ;
-    [% END %]
+    [% END %]    
 
 [% ELSE %]
 	[%  "OPAC" | setComboLang %]
