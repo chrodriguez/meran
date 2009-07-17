@@ -7,43 +7,37 @@ use C4::AR::Utilidades;
 use JSON;
 
 my $input = new CGI;
-
-my ($userid, $session, $flags) = checkauth( $input, 
+my $authnotrequired= 0;
+my ($nro_socio, $session, $flags) = checkauth( $input, 
                                         $authnotrequired,
                                         {   ui => 'ANY', 
                                             tipo_documento => 'ANY', 
                                             accion => 'MODIFICACION', 
                                             entorno => 'usuarios'
                                         },
-                                            "intranet"
+                                        "intranet"
                             );
 
 my $session = CGI::Session->load();
 
-my $objJSON=$input->param('obj');
-my $obj=from_json_ISO($objJSON);
+my $obj=$input->param('obj');
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my %params;
 $params{'id_reserva'}=$obj->{'id_reserva'};
-$params{'nro_socio'}=$userid;
-$params{'loggedinuser'}=$userid;
-# $params{'tipo'}="OPAC";
+$params{'nro_socio'}=$nro_socio;
+$params{'loggedinuser'}=$nro_socio;
 $params{'type'}= "opac";
 
-# my ($error,$codMsg,$message);
 my $msg_object;
 
-if($obj->{'accion'} eq 'CANCELAR'){
-
-	($msg_object)=C4::AR::Reservas::t_cancelar_reserva(\%params);
+if ($obj->{'accion'} eq 'CANCELAR_RESERVA'){
+    ($msg_object)=C4::AR::Reservas::t_cancelar_reserva(\%params);
 }
-
-if($obj->{'accion'} eq 'CANCELAR_Y_RESERVAR'){
-	#parametros necesarios para cancelar y reservar
-	$params{'id1'}=$obj->{'id1Nuevo'};
-	$params{'id2'}=$obj->{'id2Nuevo'};
-
-	($msg_object)=C4::AR::Reservas::t_cancelar_y_reservar(\%params);
+elsif ($obj->{'accion'} eq 'CANCELAR_Y_RESERVAR'){
+    $params{'id1'}=$obj->{'id1Nuevo'};
+    $params{'id2'}=$obj->{'id2Nuevo'};
+    ($msg_object)=C4::AR::Reservas::t_cancelar_y_reservar(\%params);
 }
 
 my $infoOperacionJSON = to_json $msg_object;	

@@ -36,14 +36,14 @@ function updateInfoReserva(responseText){
 */
 function cancelarReserva(id_reserva){
 
-	objAH=new AjaxHelper(updateInfoCancelarReserva);
-//  	objAH.debug= true;
-	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/reservasDB.pl';
-	objAH.id_reserva= id_reserva;
-	objAH.accion= 'CANCELAR_RESERVA';
-	//se envia la consulta
-	objAH.sendToServer();
+    objAH=new AjaxHelper(updateInfoCancelarReserva);
+
+    objAH.debug= true;
+    objAH.url= '/cgi-bin/koha/reservasDB.pl';
+    objAH.id_reserva= id_reserva;
+    objAH.accion= 'CANCELAR_RESERVA';
+
+    objAH.sendToServer();
 }
 
 
@@ -52,16 +52,16 @@ function cancelarReserva(id_reserva){
 */
 function cancelarYReservar(reserveNumber,id1Nuevo,id2Nuevo){
 
-	objAH=new AjaxHelper(updateInfoCancelarReserva);
-//  	objAH.debug= true;
-	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/opac-cancelreserv.pl';
-	objAH.reserveNumber= reserveNumber;
-	objAH.id1Nuevo= id1Nuevo;
-	objAH.id2Nuevo= id2Nuevo;
-	objAH.accion= 'CANCELAR_Y_RESERVAR';
-	//se envia la consulta
-	objAH.sendToServer();
+    objAH=new AjaxHelper(updateInfoCancelarReserva);
+
+    objAH.debug= true;
+    objAH.url= '/cgi-bin/koha/reservasDB.pl';
+    objAH.reserveNumber= reserveNumber;
+    objAH.id1Nuevo= id1Nuevo;
+    objAH.id2Nuevo= id2Nuevo;
+    objAH.accion= 'CANCELAR_Y_RESERVAR';
+
+    objAH.sendToServer();
 }
 
 /*
@@ -138,7 +138,9 @@ function DetallePrestamos(){
 
 	objAH=new AjaxHelper(updateDetallePrestamo);
   	objAH.debug= true;
+	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/opac-DetallePrestamos.pl';
+// 	objAH.borrowernumber= borrowernumber;
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -151,7 +153,6 @@ function updateDetallePrestamo(responseText){
 	//si estoy logueado, oculta la informacion del usuario
 	$('#detallePrestamos').html(responseText);
 	$('#detallePrestamos').slideDown('slow');	
-    zebra('tabla_datos');
 
 }
 

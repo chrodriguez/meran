@@ -94,6 +94,7 @@ function cambiarIdioma() {
 
 <div id="marco_principal">
     <div id="marco_superior">  <div></div></div>
+    <div id="end_top"></div>
 
 <div id="marco_contenido" class="contenido">
     <div id="marco_busqueda">[% INCLUDE "opac-search.inc" %]</div>
@@ -172,5 +173,4 @@ function cambiarIdioma() {
     </div>
 </div>
 <!-- usado como referencia por el MessageHelper     -->
-<div id="end_top"></div>
 
