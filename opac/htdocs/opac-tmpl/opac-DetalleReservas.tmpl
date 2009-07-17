@@ -10,13 +10,6 @@
 </script>
 
 
-<table width="100%" align="center" class="top" valign="top">
-  <tr>
-	<td width="80%"  valign="top">
-
-<table width="100%" align="center"  border="0" cellpadding="0" cellspacing="0" >
-<tr>
-<td valign="top">
 
 [% IF reservas_asignadas_count %]
 
@@ -40,13 +33,13 @@
 [% IF reservas_asignadas_count > 0 %]
     [% FOREACH reserva IN RESERVAS_ASIGNADAS %]
         <tr bordercolor="#f2f2f2">
-	        <td class="impar">
+	        <td >
 		        <b><a class="click" onClick="detalle([% reserva.nivel2.nivel1.getId1 %])" title="[% 'Mostrar Detalle' | i18n %]">
 		        [% reserva.nivel2.nivel1.getTitulo %]
 	        <!--	[% IF runititle %]:&nbsp;[% runititle %][% END %]-->
 		        </a></b>
 	        </td>
-	        <td class="impar">
+	        <td >
             [% IF reserva.nivel2.nivel1.getAutor %]
 		        <a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor %]" >
 		        [% reserva.nivel2.nivel1.cat_autor.getCompleto %]
@@ -55,21 +48,21 @@
 		        &nbsp;
             [% END %]
 	        </td> 
-	        <td align=center class="impar">  
+	        <td align=center >  
 	        [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
         <!--	[% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]-->
 	        [% IF reserva.nivel2.getVolumen %] t [% reserva.nivel2.getVolumen %] 
 		        [% IF reserva.nivel2.getVolumenDesc %] ([% reserva.nivel2.getVolumenDesc %])  [% END %] 
 	        [% END %]
 	        </td>
-	        <td class="impar" align="center">
+	        <td  align="center">
 	        [% IF reserva.getFecha_reserva_formateada %] 
 		        [% reserva.getFecha_reserva_formateada %]
 	        [% ELSE %]
 		        - 
 	        [% END %]
 	        </td>
-	        <td class="impar" align="center">
+	        <td  align="center">
 	        [% IF reserva.getFecha_recordatorio_formateada %]
 		        <font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
 	        [% ELSE %]
@@ -77,10 +70,10 @@
 	        [% END %]
 	        </td>
         
-	        <td class="impar">
+	        <td >
 		        <b>[% reserva.ui.getNombre %]</b>
 	        </td>
-	        <td class="impar" align="center"> 
+	        <td  align="center"> 
 	        [% IF CirculationEnabled %]
 		        <a class="click"
 		        onClick="cancelar([% reserva.getId_reserva %])">[% "Cancelar" | i18n %]</a>
@@ -115,7 +108,7 @@
 <!-- ESTE LOOP MUESTRA LAS RESERVAS -->
 [% FOREACH reserva IN RESERVAS_ESPERA %]
   <tr border="1" bordercolor="#f2f2f2">
-	<td class="impar">
+	<td>
 	<a class="click" onClick="detalleMaterialEnEspera([% reserva.nivel2.nivel1.getId1  %])" title="[% 'Mostrar Detalle' | i18n %]">
 		[% reserva.nivel2.nivel1.getTitulo %]
 <!--		[% IF runititle %]
@@ -123,7 +116,7 @@
 		[% END %]-->
   	</a>
  	</td>
- 	<td class="impar">
+ 	<td >
 	[% IF reserva.nivel2.nivel1.getAutor %]
 		<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor %]" >
 		[% reserva.nivel2.nivel1.cat_autor.getCompleto %]
@@ -132,16 +125,26 @@
 		&nbsp;
 	[% END %]
  	</td>
-	<td align=center class="impar"> 
+	<td align=center > 
 [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
 	</td>
-	<td class="impar" align="center">
-	[% IF CirculationEnabled %]
-		<a class="click"
-		onClick="cancelar([% reserva.getId_reserva %])">[% "Cancelar" | i18n %]</a>
-	[% ELSE %]
-		[% "No disponible" | i18n %]
-	[% END %]
+	<td  align="center">
+        [% IF CirculationEnabled %]
+<div class="buttonContainerHorizontal" style="width:100%">
+            <ul class="horizontal-list-default" style="float:center" >
+                [% PERL %]
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar' | i18n %]",
+                                                        boton   => "boton_buscar",
+                                                        width   => "100",
+                                                        onClick => "cancelarReserva([% reserva.getId_reserva %])",
+                                                        title   => "[% 'Cancelar Reserva' | i18n %]"
+                                                );
+                [% END %]
+            </ul>
+</div>
+        [% ELSE %]
+	        [% "No disponible" | i18n %]
+        [% END %]
 	</td>
   </tr>
  [% END %]
@@ -149,8 +152,6 @@
 <br>
 [% END %]
 
-</td>
-  </tr>
-</table>
+
 
 

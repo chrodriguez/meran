@@ -34,14 +34,14 @@ function updateInfoReserva(responseText){
 /*
 * Funcion Ajax que cancela una reserva
 */
-function cancelar(id_reserva){
+function cancelarReserva(id_reserva){
 
 	objAH=new AjaxHelper(updateInfoCancelarReserva);
 //  	objAH.debug= true;
 	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/opac-cancelreserv.pl';
+	objAH.url= '/cgi-bin/koha/reservasDB.pl';
 	objAH.id_reserva= id_reserva;
-	objAH.accion= 'CANCELAR';
+	objAH.accion= 'CANCELAR_RESERVA';
 	//se envia la consulta
 	objAH.sendToServer();
 }

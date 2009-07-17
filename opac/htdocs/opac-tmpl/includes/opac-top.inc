@@ -167,13 +167,10 @@ function cambiarIdioma() {
                                                             title   => "[% 'Inicio' | i18n %]"
                                                         ) ;
                 [% END %]
-        
+
             </ul>
-        </div>
-<!--     </div> -->
-
-<div id="marco_contenido_datos" class="contenido">
-
+    </div>
+</div>
 <!-- usado como referencia por el MessageHelper     -->
 <div id="end_top"></div>
-	
+

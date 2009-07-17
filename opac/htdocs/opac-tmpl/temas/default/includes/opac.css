@@ -48,12 +48,13 @@ input[type=text]:focus{
 }
 #marco_principal{
     clear:both;
-    background:#f7f6f6 url(../imagenes/medio.png) repeat;
+    background:#f7f6f6 url(../imagenes/fondo.jpg) repeat;
 
 }
 
 #marco_busqueda{
     text-align:right;
+    width:50%;
 }
 
 #marca{
@@ -132,6 +133,7 @@ input[type=text]:focus{
     margin-left: 27px;
     margin-top: 5px;
     text-align:center;
+    cursor: pointer;
 /*     margin-top: 3px; */
 }
 
@@ -153,6 +155,7 @@ input[type=text]:focus{
     background: transparent url(../imagenes/botones/boton_der.png) no-repeat;
     height: 22px;
     width: 3px;
+    cursor: pointer;
 }
 
 #boton_entrar {
@@ -160,6 +163,7 @@ input[type=text]:focus{
     background: transparent url(../imagenes/botones/boton_entrar.png) no-repeat;
     height: 22px;
     width: 3px;
+    cursor: pointer;
 }
 /*            fin  parte del boton generica                */
 
@@ -230,7 +234,13 @@ ul.horizontal-list li {
 
 .tabla_datos {
     font-size: 9pt;
+    float:left;
+    width:100%;
 }
+.tabla_datos tbody td {
+    height: 5%;
+}
+
 /*                                     fin  para los resultados de las tablas                                  */
 
 .resultados_consulta{
@@ -256,8 +266,8 @@ ul.horizontal-list li {
 }
 
 .contenido{
-    height:50%;
-
+    width:75%;
+    float:left;
 }
 
 

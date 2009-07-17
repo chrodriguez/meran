@@ -8,7 +8,17 @@ use JSON;
 
 my $input = new CGI;
 
-my ($userid, $session, $flags) = checkauth($input, 0,{borrow => 1});
+my ($userid, $session, $flags) = checkauth( $input, 
+                                        $authnotrequired,
+                                        {   ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'MODIFICACION', 
+                                            entorno => 'usuarios'
+                                        },
+                                            "intranet"
+                            );
+
+my $session = CGI::Session->load();
 
 my $objJSON=$input->param('obj');
 my $obj=from_json_ISO($objJSON);

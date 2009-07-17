@@ -9,21 +9,30 @@
 
 </script>
 
-<table class="tabla_datos" width="98%" cellspacing="0" cellpadding="4" border="0" align="center" valign="top">
-    <tr>
-        <td>
-            <div id="detallePrestamos"></div>
-        </td>
-    <tr>
-        <td>
-            <div id="detalleReservas"></div>
-        </td>
-    </tr>
-</table>
-
-[% INCLUDE "sanciones.inc"%]
-
 [% INCLUDE "datos-usuario.inc" %]
+
+
+<div id="marco_contenido_datos" class="contenido">
+
+    <table class="tabla_datos" width="98%" cellspacing="0" cellpadding="4" border="0" align="center" valign="top">
+        <tr>
+            <td>
+                <div id="detallePrestamos"></div>
+            </td>
+        <tr>
+            <td>
+                <div id="detalleReservas"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                [% INCLUDE "sanciones.inc"%]
+            </td>
+        </tr>
+    </table>
+
+</div>
+
 
 <!-- para mostrar los resultados de las busquedas -->
 <div id="result"></div>
