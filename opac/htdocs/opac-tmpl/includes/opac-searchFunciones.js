@@ -80,7 +80,8 @@ function mostrarHistorialReservas(bornum){
 function searchinc(){
 
     criteriaSelected = $('#criteria').val();
-
+    $('#detalleReservas').html("");
+    $('#detallePrestamos').html("");
     switch (criteriaSelected){
         case 'autor':
             buscarPorAutor();

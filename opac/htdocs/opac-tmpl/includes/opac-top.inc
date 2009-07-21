@@ -34,11 +34,11 @@
 </head>
 <script language="javascript" type="text/javascript">
 
-function cambiarIdioma() {
-	$('#lang_server').val($('#language').val());
-	$('#url').val(location.pathname);
-	$('#formLang').submit();
-}
+    function cambiarIdioma() {
+        $('#lang_server').val($('#language').val());
+        $('#url').val(location.pathname);
+        $('#formLang').submit();
+    }
 
 </script>
 <body>

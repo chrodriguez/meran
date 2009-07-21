@@ -2,10 +2,15 @@
 <html>
 <head>
 
-<title>[% titulo_nombre_ui %]</title>
+<title> [% IF titulo_nombre_ui %]
+            [% titulo_nombre_ui %]
+        [% ELSE %]
+            [% "Bienvenido a Meran - Catalogo Publico" | i18n %]
+        [% END %]
+</title>
 
 <script language="javascript" type="text/javascript">
-token= '[% token %]';
+    token= '[% token %]';
 </script>
 
 <script src="/includes/jquery/jquery.js"></script>
@@ -23,14 +28,12 @@ token= '[% token %]';
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/opac.css">
 </head>
 <script language="javascript" type="text/javascript">
-
-// FIXME esto esta repetido en el opac-top.inc, ver si se puede unificar
-function cambiarIdioma() {
-	$('#lang_server').val($('#language').val());
-	$('#url').val(location.pathname);
-	$('#formLang').submit();
-}
-
+    // FIXME esto esta repetido en el opac-top.inc, ver si se puede unificar
+    function cambiarIdioma() {
+        $('#lang_server').val($('#language').val());
+        $('#url').val(location.pathname);
+        $('#formLang').submit();
+    }
 </script>
 
 <body>
@@ -53,8 +56,8 @@ function cambiarIdioma() {
                                         boton   => "boton_miembros",
                                         width   => "95",
                                     ) ;
-    [% END %]    
-   
+    [% END %]
+
     [% PERL %]
         print C4::AR::Filtros::link_to( text    => "[% 'Salir' | i18n %]",
                                         url     => "/cgi-bin/koha/opac-main.pl?logout.x=1", 
@@ -62,10 +65,10 @@ function cambiarIdioma() {
                                         boton   => "boton_salir",
                                         width   => "95",
                                     ) ;
-    [% END %]    
+    [% END %]
 
 [% ELSE %]
-	[%  "OPAC" | setComboLang %]
+    [%  "OPAC" | setComboLang %]
 [% END %]
 
 
@@ -118,5 +121,3 @@ function cambiarIdioma() {
     [% END %]
 </ul> 
 </div>
-	
-<!-------------------------MAIN BODY OF PAGE-------------------------->

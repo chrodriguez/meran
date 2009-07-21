@@ -1,63 +1,72 @@
 [% INCLUDE 'opac-top-login.inc' %]
 
-<div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes'>[% mensaje %]</div></b></font></div>
-
-<table align="center" border="0" class="top" width="90%"><tr><td align="center">
-
-<form method="post" name="datosAEnviar">
-	<input type="hidden" name="userid">
-	<input type="hidden" name="password">
-</form>
+<div class='tableMsgUser'>
+    <font class='fontMsgUser'>
+        <b>
+            <div id='mensajes'>
+                [% mensaje %]
+            </div>
+        </b>
+    </font>
+</div>
 
 <script language="javascript">
-	[% INCLUDE md5.js %]
+    [% INCLUDE md5.js %]
 </script>
 <script language="javascript"> 
 
     function enviar(){
-		document.datosAEnviar.action= '/cgi-bin/koha/opac-user.pl';
-		nroRandom= [% RANDOM_NUMBER %];
-		hash= b64_md5(b64_md5(document.datos.password.value)+nroRandom);
-		document.datosAEnviar.password.value= hash;
-		document.datosAEnviar.userid.value= document.datos.userid.value;
-		document.datosAEnviar.submit();
-	}
-
-	function onEnterSubmit() {
-	  /*Esta Funcion verifica si se presion ENTER y si es asi hace un submit del form*/
-	  /*Importante: SOLO FUNCIONA EN EL INTERNET EXPLORER*/
-  		if (window.event && window.event.keyCode == 13) {
-			enviar();
-			return false;
-		} else {
-				return true;
-		}
-	}
-
+        var nro_socio = $.trim($("#nro_socio").val());
+        var password = $.trim($("#password_user").val());
+        if ( (nro_socio != "") && (password != "") ){
+            document.datosAEnviar.action= '/cgi-bin/koha/opac-user.pl';
+            nroRandom= [% RANDOM_NUMBER %];
+            hash= b64_md5(b64_md5(password)+nroRandom);
+            document.datosAEnviar.password.value= hash;
+            document.datosAEnviar.userid.value= nro_socio;
+            document.datosAEnviar.submit(); 
+        }
+    }
 </script>
 
-<form method="post" name="datos">
+<script>
+    $(document).ready(function() {
+        onEnter("nro_socio",enviar);
+        onEnter("password_user",enviar);
+    });
+</script>
+<table align="center" border="0" class="top" width="90%">
+    <tr>
+        <td align="center">
+            <form method="post" name="datos">
+                <div id="login">
+                    <div id="contenido_login">
+                        <span>
+                                <label>Identificaci&oacute;n:</label>
+                                <input size=15  name="nro_socio" id="nro_socio" >
+                        </span>
+                        <span>
+                                <label>Contrase&ntilde;a:</label>
+                                <input size=15 type="password" name="password_user" id="password_user">
+                        </span>
+                        <div id="boton_login">
+                            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Ingresar' | i18n %]",
+                                                                    boton   => "boton_entrar", 
+                                                                    width   => "150",
+                                                                    onClick => "enviar()",
+                                                                    title   => "[% 'Ingresar' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </td>
+    </tr>
+</table>
 
-    <div id="login">
-            <div id="contenido_login">
-            <span>      
-                    <label>Identificaci&oacute;n:</label>
-                    <input size=15  name="userid" id="userid" onKeyPress="javascript:onEnterSubmit();" >
-            </span>
-            <span>
-                    <label>Contrase&ntilde;a:</label>
-                    <input size=15 type="password" name="password" id="password" onKeyPress="javascript:onEnterSubmit();">
-            </span>
-            <div id="boton_login">
-                [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Ingresar' | i18n %]",
-                                                        boton   => "boton_entrar", 
-                                                        width   => "150",
-                                                        onClick => "enviar();",
-                                                        title   => "[% 'Ingresar' | i18n %]"
-                                                ) ;
-                [% END %]
-            </div>
-            </div>
-        </div>
+<form method="post" name="datosAEnviar">
+    <input type="hidden" name="userid">
+    <input type="hidden" name="password">
 </form>

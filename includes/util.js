@@ -114,7 +114,7 @@ function checkedAll(id,nombreCheckbox){
 function onEnter(idInput,funcion){
 	var result_array= $("#"+idInput);
 	//se verifica la existencia de la componente
-	if(result_array.length == 0)return alert('util.js=> onEnter => No existe la componte con ID: '+idInput);
+	if(result_array.length == 0)return;  //alert('util.js=> onEnter => No existe la componte con ID: '+idInput);
 
 	$("#"+idInput).keypress(function (e) {
  		if(e.which == 13){
@@ -134,7 +134,7 @@ function registrarKeypress(typeObject){
 	var componentes=["input", "INPUT"]; //se pueden agregar mas componetes
 	var result= componentes.indexOf(typeObject);
 
-	if(result == -1)return alert('util.js=> registrarKeypress => Componente Inválida');
+	if(result == -1)return; // alert('util.js=> registrarKeypress => Componente Inválida');
 
     $(typeObject).keypress(function (e) {
         if(e.which == 13){
@@ -153,7 +153,7 @@ function registrarKeypress(typeObject){
 function scrollTo(idObj){
 	var result_array= $("#"+idObj);
 	//se verifica la existencia de la componente
-	if(result_array.length == 0)return alert('util.js=> scrollTo => No existe la componte con ID: '+idObj);
+	if(result_array.length == 0)return; //alert('util.js=> scrollTo => No existe la componte con ID: '+idObj);
 
 	var divOffset = $('#'+idObj).offset().top;
 	$('html,body').animate({scrollTop: divOffset}, 1000);

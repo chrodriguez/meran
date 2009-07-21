@@ -122,12 +122,14 @@ function DetalleReservas(){
 * Funcion que muestra el detalle de las reservas del usuario
 */
 function updateDetalleReserva(responseText){
-	
-	//si estoy logueado, oculta la informacion del usuario
-	$('#detalleReservas').html(responseText);
-	$('#detalleReservas').slideDown('slow');
-	$('#datosUsuario').slideDown('slow');
-	$('#result').slideUp('slow');		
+
+    //si estoy logueado, oculta la informacion del usuario
+    if (responseText != 0){
+        $('#detalleReservas').html(responseText);
+        $('#detalleReservas').slideDown('slow');
+        $('#datosUsuario').slideDown('slow');
+        $('#result').slideUp('slow');
+    }
 
 }
 

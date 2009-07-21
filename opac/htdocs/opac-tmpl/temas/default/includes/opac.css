@@ -315,4 +315,27 @@ tr.par {
 tr.impar {
     background-color:#F4F4F4;
 }
-/*                                   Fin  estilos para la zebra                                         */
+.formUpdateUsuario{
+    padding:0; 
+    width:32%;
+    overflow:hidden;
+    margin: 0 auto;
+} 
+.formUpdateUsuario input{
+    border:2px solid gray; 
+    width:55%; 
+    float: right;
+    height: 29px;
+} 
+.inputFormLabel {
+    float:left; 
+    width:36%;
+    height:auto;
+    display:inline;
+    padding: 6px;
+} 
+.formUpdateUsuario button {float:left; margin-top:1.5em;}
+
+
+
+/*             Fin  estilos para la zebra                                         */
