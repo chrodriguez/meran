@@ -101,7 +101,7 @@ POR_FAVOR_SELECCIONE_CATEGORIA_SOCIO= "[% 'Por favor, seleccione una categoría 
 //=============================================Fin===Reglas Sanciones===========================================
 
 //================================================Sanciones==============================================
-ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION= [% "Esta seguro que desea cancelar la sancion?" | i18n %]
+ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION= "[% 'Esta seguro que desea cancelar la sancion?' | i18n %]";
 SANCIONES_TITLE= "[% 'Advertencia de Sanciones' | i18n %]";
 //===============================================Fin=Sanciones===========================================
 
