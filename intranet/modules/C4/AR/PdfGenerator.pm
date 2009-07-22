@@ -423,9 +423,7 @@ Genera y muestar la ventana para imprimir el documento de libre deuda.
 sub libreDeuda{
     my ($socio) = shift;
     my $tmpFileName= "libreDeuda_".$socio->getNro_socio.".pdf";
-    open F,">>/tmp/debug.txt";
-    print F "KJNKJ                   ".$socio->persona->getNombre;
-    close F;
+  
     my $nombre = $socio->persona->getApeYNom;
     my $dni= $socio->persona->getNro_documento;
     
@@ -442,9 +440,9 @@ sub libreDeuda{
     $titulo{'posx'}=170;
     my @parrafo;
     $parrafo[0]="       Certificamos que ".$nombre.", de la ".$branchname.", ";
-    $parrafo[1]=" con n�mero de documento ".$dni.", no adeuda material bibliogr�fico en esta Biblioteca.";
+    $parrafo[1]=" con número de documento ".$dni.", no adeuda material bibliográfico en esta Biblioteca.";
     $parrafo[2]="       Se extiende el presente certificado para ser presentado ante quien corresponda, con una";
-    $parrafo[3]=" validez de 10 d�as corridos a partir de su fecha de emisi�n.";
+    $parrafo[3]=" validez de 10 días corridos a partir de su fecha de emisión.";
 
     ($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo,);
     ($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
@@ -538,7 +536,8 @@ sub imprimirEncabezado{
     my $dia=$datearr[3];
 #fin fecha
     C4::AR::Debug::debug(C4::Context->config('intrahtdocs').'/'.C4::AR::Preferencias->getValorPreferencia('template').'/images/escudo-uni.png');
-        $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::AR::Preferencias->getValorPreferencia('template').'/images/escudo-uni.png', $x, $pageheight - 160);
+# FIXME si le dejo esto se rompe, como se va a cambiar el manejador de PDFs lo dejo asi
+#         $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::AR::Preferencias->getValorPreferencia('template').'/images/escudo-uni.png', $x, $pageheight - 160);
     $pdf->setFont("Arial-Bold");
         $pdf->setSize(10);
     $pdf->addRawText(uc($categ), $x,$pageheight - 180);
