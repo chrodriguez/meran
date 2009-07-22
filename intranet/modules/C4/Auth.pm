@@ -490,12 +490,12 @@ C4::AR::Debug::debug("checkauth=> authnotrequired: ".$authnotrequired."\n");
         #Se verifica si el usuario tiene que cambiar la password
         if ( ($userid) && ( new_password_is_needed($userid) ) ) {
 
-C4::AR::Debug::debug("checkauth=> changePassword \n");
+            C4::AR::Debug::debug("checkauth=> changePassword \n");
             _change_Password_Controller($dbh, $query, $userid, $type,\%info);
             #EXIT
         }#end if (($userid) && (new_password_is_needed($dbh,getborrowernumber($userid))))
 
-        C4::AR::Debug::debug("desde CHECKAUTH SESSION URL: ".$session->param('redirectTo'));
+#         C4::AR::Debug::debug("desde CHECKAUTH SESSION URL: ".$session->param('redirectTo'));
 
 C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID: ".$query->cookie('sessionID')." sessionID: ".$sessionID."\n");
         return ($userid, $session, $flags);

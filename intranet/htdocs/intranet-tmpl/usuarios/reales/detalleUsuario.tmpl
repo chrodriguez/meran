@@ -120,9 +120,7 @@
         <div class="divDatosUsuario" style="margin-top: 3%;margin-bottom: 5%">
                 <ul class = "listaMenuBotones" >
 					    <li>
-						   <!-- <img  class="botonBehindText"  alt="Modificar Caracter&iacute;stica" 
-								    src="[% themelang %]/images/botone.png" border="0"">
-						    <a class="textOverBoton" onClick="modificarDatosDeUsuario()">Modificar Datos</a>-->
+
                         [% PERL %]
                                             print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar Datos' | i18n %]",
                                                                                 boton   => "boton_buscar",
@@ -134,10 +132,6 @@
                         <br><br>
 					    </li>
                         <li>
-				<!--		    <img class="botonBehindText" alt='[% "Eliminar Usuario" | i18n %]' 
-						    src="[% themelang %]/images/botone.png" border="0">
-    
-						    <a class="textOverBoton" href="#" onClick="eliminarUsuario()" >Eliminar Usuario</a>-->
                         [% PERL %]
                                             print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Usuario' | i18n %]",
                                                                                 boton   => "boton_buscar",
@@ -150,9 +144,7 @@
                         </li>
                     [% IF !socio.tieneAutorizado %]
                         <li>
-                            <!--<img  class="botonBehindText"  alt="Agregar Autorizado" 
-                                    src="[% themelang %]/images/botone.png" border="0"">
-                            <a class="textOverBoton" onClick="agregarAutorizado()">Agregar Autorizado</a>-->
+                            
                         [% PERL %]
                                             print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Autorizado' | i18n %]",
                                                                                 boton   => "boton_buscar",
@@ -164,9 +156,7 @@
                         </li>
                     [% ELSE %]
                         <li>
-                      <!--      <img  class="botonBehindText"  alt="Eliminar Autorizado" 
-                                    src="[% themelang %]/images/botone.png" border="0"">
-                            <a class="textOverBoton" onClick="desautorizarTercero()">Eliminar Autorizado</a>-->
+             
                         [% PERL %]
                                             print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Autorizado' | i18n %]",
                                                                                 boton   => "boton_buscar",
@@ -178,10 +168,8 @@
                         </li>
                     [% END %]
 
-    <!-- FIXME falta cambiar el boton Ariiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii -->
 				    [% IF nroSocioLoggeado != loggedinusername%]
 					    <li>
-<!-- 							    <input type="button" value="Reset Password" onClick="resetPassword()"> -->
                         [% PERL %]
                                             print C4::AR::Filtros::to_Button(   text    => "[% 'Reset Password' | i18n %]",
                                                                                 boton   => "boton_buscar",
@@ -193,10 +181,7 @@
 					    </li>
 				    [% ELSE %]
 					    <li>
-							 <!--   <img class="botonBehindText" alt='[% "Cambio de Contrase&ntilde;a" | i18n %]'
-									    src="[% themelang %]/images/botone.png" border=0>
-    
-							    <a class="textOverBoton" onClick="cambiarPassword()">Cambiar Password</a>-->
+	
                         [% PERL %]
                                             print C4::AR::Filtros::to_Button(   text    => "[% 'Cambio de Contrase&ntilde;a' | i18n %]",
                                                                                 boton   => "boton_buscar",
@@ -208,32 +193,28 @@
 					    </li>
 				    [% END %]
                     <li>
-						<form action=/cgi-bin/koha/cardGenerator.pl method=post name="formCarnet">
-								<!--    <img class="botonBehindText" alt='[% "Generar Carnet" | i18n %]'
-								src="[% themelang %]/images/botone.png" border="0""> 
-								
-								<a class="textOverBoton" href="#" onClick="formCarnet.submit()" >Generar Carnet</a>-->
+						<form action=/cgi-bin/koha/usuarios/cardGenerator.pl method=get name="formCarnet">
+                                <input type=hidden name="nro_socio" value="[% socio.getNro_socio %]" >
+                                <input type=hidden name="token" value="[% token %]" >
+                        </form>
+		
                     [% PERL %]
                                         print C4::AR::Filtros::to_Button(   text    => "[% 'Generar Carnet' | i18n %]",
                                                                             boton   => "boton_buscar",
                                                                             onClick => "formCarnet.submit();",
                                                                             width   => "173"
                                                 ) ;
+
                     [% END %]
                     <br><br>
 		
-								<input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
-								<input type=hidden name=token value="[% token %]" >
-		
-						</form>
                     </li>
                     <li>
-						<form action=/cgi-bin/koha/libreDeuda.pl method=post name="formLibre">
-				<!--			    <img class="botonBehindText" alt='[% "Generar Libre Deuda" | i18n %]' 
-								src="[% themelang %]/images/botone.png" border="0">
-								
-
-								<a class="textOverBoton" href="#" onClick="formLibre.submit()" >Libre Deuda</a>-->
+						<form action=/cgi-bin/koha/usuarios/libreDeuda.pl method=get name="formLibre">
+                                <input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
+                                <input type=hidden name=token value="[% token %]" >
+                        </form>    
+		
                     [% PERL %]
                                         print C4::AR::Filtros::to_Button(   text    => "[% 'Libre Deuda' | i18n %]",
                                                                             boton   => "boton_buscar",
@@ -242,16 +223,9 @@
                                                 ) ;
                     [% END %]
 		            <br><br>
-								<input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
-								<input type=hidden name=token value="[% token %]" >
-						</form>
                     </li>
                     <li>
             
-			    <!--		    <img class="botonBehindText" alt='[% "Generar Prestamo Interbibliotecario" | i18n %]' 
-						    src="[% themelang %]/images/botone.png" border="0">
-						    
-						    <a class="textOverBoton" href="#" onClick="prestamosInterBibliotecarios()">Prest. Interbibliotecario</a>-->
                         [% PERL %]
                                             print C4::AR::Filtros::to_Button(   text    => "[% 'Prest. Interbibliotecario' | i18n %]",
                                                                                 boton   => "boton_buscar",

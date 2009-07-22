@@ -326,7 +326,7 @@ function clearInput(){
 
 function cambiarPassword(){
 	objAH=new AjaxHelper(updateCambiarPassword);
-	objAH.url='/intranet-tmpl/blue/includes/popups/cambiarPassword.inc';
+	objAH.url='/intranet-tmpl/includes/popups/cambiarPassword.inc';
 	objAH.debug= true;
 	objAH.sendToServer();
 }

@@ -15,8 +15,6 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
-my $dateformat = C4::Date::get_date_format();
-
 =item
 Aca se maneja el cambio de la password para el usuario
 =cut

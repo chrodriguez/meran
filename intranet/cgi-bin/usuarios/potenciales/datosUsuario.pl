@@ -21,7 +21,7 @@ my $mensaje=$input->param('mensaje');#Mensaje que viene desde libreDeuda si es q
 
 $t_params->{'nro_socio'}= $nro_socio;
 
-C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
+C4::AR::Validator::validateParams('U389',$t_params,['nro_socio'] );
 
 my $socio=C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 

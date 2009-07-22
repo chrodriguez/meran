@@ -46,7 +46,7 @@ function mostrarHistorialUpdate(responseText){
 	$('#result').slideUp('slow');
 	$('#resultHistoriales').html(responseText);
 	$('#resultHistoriales').slideDown('slow');
-	zebra('tablaHistorial');
+	zebra('tabla_datos');
 }
 
 function mostrarHistorialPrestamos(){
@@ -170,7 +170,7 @@ function updateInfo(responseText){
 	$('#datosUsuario').slideUp('slow');
 	$('#result').html(responseText);
 	$('#result').slideDown('slow');
-	zebra('tablaResult');
+    zebra('tabla_datos');
 
 	checkedAll('todos','checkbox');
 	scrollTo('tablaResult');
