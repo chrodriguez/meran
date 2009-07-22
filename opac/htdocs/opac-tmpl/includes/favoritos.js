@@ -19,8 +19,9 @@ function consultarFavoritos(){
 function updateConsultarFavoritos(responseText){
 
 	$('#datosUsuario').slideUp('slow');
-	$('#result').show();
+    $('#resultHistoriales').slideUp('slow');
 	$('#result').html(responseText);
+    $('#result').show();
 // 	pushCache(responseText, 'result');
 	zebra('zebra');
 

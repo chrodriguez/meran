@@ -177,6 +177,7 @@
             </ul>
     </div>
 </div>
+<div id="resultHistoriales"> </div>
 <div id="result"> </div>
 <!-- usado como referencia por el MessageHelper     -->
 
