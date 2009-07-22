@@ -78,6 +78,16 @@
             [% "Calle :" | i18n %]
                 <b> [%  socio.persona.getCalle %]</b>
         </li>
+        [% PERL %]
+            print C4::AR::Filtros::to_Button( text    => "[% 'Cambiar Password' | i18n %]",
+                                            boton   => "boton_miembros",
+                                            width   => "150",
+                                            onClick => "cambiarPassword();",
+                                            class   => "",
+                                            title   => "[% 'Cambiar Password' | i18n %]"
+                                        ) ;
+        [% END %]
+
         <li>
             [% IF foto_name %]
                         [% PERL %]
