@@ -98,7 +98,7 @@
 </div>
 
 <div id="marco_principal">
-    <div id="marco_superior">  <div></div></div>
+    <div id="marco_superior"></div>
     <div id="end_top"></div>
 
 <div id="marco_contenido" class="contenido">
@@ -177,5 +177,6 @@
             </ul>
     </div>
 </div>
+<div id="result"> </div>
 <!-- usado como referencia por el MessageHelper     -->
 
