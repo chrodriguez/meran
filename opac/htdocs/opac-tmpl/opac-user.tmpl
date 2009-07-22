@@ -54,12 +54,11 @@
         objAH.debug= true;
         objAH.sendToServer();
     }
-    
+
     function updateCambiarPassword(responseText){
         if (!verificarRespuesta(responseText))
                 return(0);
-    
-        vModificarPassword=new WindowHelper({draggable: true, opacity: true});
+        vModificarPassword=new WindowHelper({draggable: false, opacity: true});
         vModificarPassword.debug= true;
         vModificarPassword.html=responseText;
         vModificarPassword.titulo= CAMBIO_DE_CONTRASENIA;
