@@ -8,18 +8,21 @@ my $directory = $ARGV[0]; #Directorios a escanear
 my $output_po = $ARGV[1]; #Archivo PO resultado 
 my @outLines;  #Arreglo de POs
 
-find (\&process, $directory);
+#Levantamos el archivo
+my $ot = Locale::PO->load_file_asarray($output_po);
+@outLines=@$ot;
 
+#Procesamos
+find (\&process, $directory);
 
 #Salvamos el po
 Locale::PO->save_file_fromarray($output_po,\@outLines);
 
-#open( OUT, ">>$output_po" ) or return undef;
-#foreach (@outLines)  { print OUT $_->dump();}
-#close OUT;
+# open( OUT, ">>$output_po" ) or return undef;
+# foreach (@outLines)  { print OUT $_->dump();}
+# close OUT;
 
 undef( @outLines );
-
 
 sub trim
 {
@@ -52,7 +55,10 @@ sub process
 	#Reviso si no existe!!!
 	my $i=0;
 	while ($i<@outLines)
-  	{	if ($outLines[$i]->msgid() eq $po->msgid()) {$exists=1;}
+  	{	if ($outLines[$i]->msgid() eq $po->msgid()) {
+			$exists=1; 
+# 			print $outLines[$i]->msgid()." ya existe \n";
+		}
 		$i++;
 	}
 	 if($exists == 0){ push(@outLines, $po);}
