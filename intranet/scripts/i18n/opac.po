@@ -1,0 +1,372 @@
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialReservas.tmpl
+msgid "Cantidad de reservas realizadas:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialReservas.tmpl
+msgid "Historial de Reservas"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialReservas.tmpl
+msgid "T&iacute;tulo"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialReservas.tmpl
+msgid "Autor"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialReservas.tmpl
+msgid "Estado"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialReservas.tmpl
+msgid "F. Reserva"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialReservas.tmpl
+msgid "F. Vto"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialReservas.tmpl
+msgid "Mostrar Detalle"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialReservas.tmpl
+msgid "Volver"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialReservas.tmpl
+msgid "Imprimir"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "C&oacute;digo"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Signatura Topogr&aacute;fica"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Biblioteca que lo posee"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Biblioteca de origen"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Disponibilidad"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "MARC"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Detalle MARC"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Estantes Virtuales"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Anal&iacute;ticas"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Indice"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Disponibilidad Actual Para Pr&eacute;stamo:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Disponibilidad Actual Para Sala de Lectura:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Cantidad Actual de Reservas:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Ejemplares compartidos"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Solicitar copia"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Reservar"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Disponible para Reservar"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-detail.tmpl
+msgid "Disponible s&oacute;lo para consulta en Sala de Lectura"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
+msgid "Usted tiene"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
+msgid "ejemplares vencidos"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
+msgid "Pr&eacute;stamos"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
+msgid "C&oacute;digo de Barras"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
+msgid "Volumen"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
+msgid "Fecha de Pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
+msgid "Vencimiento"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
+msgid "prestamo.nivel3.nivel1.getTitulo"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
+msgid "prestamo.nivel3.nivel1.cat_autor.getCompleto"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
+msgid "Renovar"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
+msgid "No tiene ejemplares prestados"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-main.tmpl
+msgid "Su navegador no soporta o no tiene habilidato Javascript"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-main.tmpl
+msgid "Mi Cuenta"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetalleReservas.tmpl
+msgid "Material para retirar"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetalleReservas.tmpl
+msgid "Edici&oacute;n"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetalleReservas.tmpl
+msgid "Disponible desde"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetalleReservas.tmpl
+msgid "Disponible hasta"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetalleReservas.tmpl
+msgid "Retira en"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetalleReservas.tmpl
+msgid "Acci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetalleReservas.tmpl
+msgid "Cancelar"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetalleReservas.tmpl
+msgid "No disponible"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetalleReservas.tmpl
+msgid "Material en espera"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetalleReservas.tmpl
+msgid "Cancelar Reserva"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-reserve.tmpl
+msgid "Modificar"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-reserve.tmpl
+msgid "Reservas actuales"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-reserve.tmpl
+msgid "Fecha de Vencimiento"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-auth.tmpl
+msgid "Ingresar"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "B&uacute;squeda Avanzada"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "Autor:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "Diccionario:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "T&iacute;tulo:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "Tema:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "Normal"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "Exacto"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "C&oacute;digo de Barras:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "Tipo de Documento:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "Estante Virtual:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "Anal&iacute;ticas:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "Filas a Mostrar:&nbsp;"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "Buscar"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
+msgid "Buscar en el catalogo"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
+msgid "Apellido"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
+msgid "Nombre"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
+msgid "Calle"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
+msgid "Ciudad"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
+msgid "Tel&eacute;fono Personal"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
+msgid "Tel&eacute;fono/Fax del trabajo"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
+msgid "Mail"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-changepassword.tmpl
+msgid "BIENVENIDO AL OPAC DE KOHA"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-changepassword.tmpl
+msgid "Miembros"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-changepassword.tmpl
+msgid "La contrase&ntilde;a no puede ser la misma que ten&iacute;a"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-changepassword.tmpl
+msgid "Cambio de contrase&ntilde;a obligatorio"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-changepassword.tmpl
+msgid "Nueva Contrase&ntilde;a"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-user.tmpl
+msgid "Cambio de Contrase&ntilde;a"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-busquedaResult.tmpl
+msgid "T&eacute;rmino de b&uacute;squeda:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-busquedaResult.tmpl
+msgid "Cantidad de Registros:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-busquedaResult.tmpl
+msgid "Edici&oacute;n/A&ntilde;o"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-busquedaResult.tmpl
+msgid "Mostrar Detalle del Ejemplar"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-busquedaResult.tmpl
+msgid "Filtrar por Autor"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialPrestamos.tmpl
+msgid "Cantidad de pr&eacute;stamos realizadas:"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialPrestamos.tmpl
+msgid "Historial de Pr&eacute;stamos"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialPrestamos.tmpl
+msgid "Pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialPrestamos.tmpl
+msgid "Dev"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialPrestamos.tmpl
+msgid "titulo"
+msgstr ""
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialPrestamos.tmpl
+msgid "Mostrar Detalle por autor"
+msgstr ""
+
