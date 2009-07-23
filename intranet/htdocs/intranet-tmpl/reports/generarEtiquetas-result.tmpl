@@ -54,11 +54,12 @@
 </table>
 
 <div class="buttonContainerHorizontal">
+    <script> filtrar = 'filtrar'; </script>
     [% PERL %]
                     print C4::AR::Filtros::to_Button( 
                                                         text    =>  "[% 'a PDF' | i18n %]",
                                                         boton   =>  "boton_buscar",
-                                                        onClick =>  "consultar('pdf')",
+                                                        onClick =>  "consultar(filtrar)",
                                                     );
     [% END %]
 </div>

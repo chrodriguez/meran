@@ -317,6 +317,12 @@ input[type=text]:focus{
     cursor: pointer;
 }
 
+#paginador{
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+}
+
 .paginaActual{
     font-family: "Trebuchet MS", "Verdana", "Arial";
     font-size: 10pt;

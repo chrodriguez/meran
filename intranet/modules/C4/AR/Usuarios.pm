@@ -706,14 +706,22 @@ sub BornameSearchForCard {
      push (@filtros, (activo => { eq => 1}) );
      $params->{'cantR'} = $params->{'cantR'} || 0;
      $params->{'ini'} = $params->{'cantR'} || 0;
-     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
+     my $socios_array_ref=0;
+     my $socios_array_ref_count=0;
+    eval{
+        $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count(   query => \@filtros,
+                                                                            sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
+                                                                            require_objects => [ 'persona','persona.documento' ]
+        );
+        $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                             sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
 #                                                                             limit => $params->{'cantR'},
 #                                                                             offset => $params->{'ini'},
-                                                                            require_objects => [ 'persona' ]
-     );
+                                                                            require_objects => [ 'persona','persona.documento' ]
+        );
+    };
 
-    return (scalar(@$socios_array_ref), $socios_array_ref);
+    return ($socios_array_ref_count, $socios_array_ref);
 }
 
 =item

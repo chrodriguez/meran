@@ -180,16 +180,24 @@ sub listadoDeInventorio{
                                 }));
 #     push (@filtros,(id_ui_origen => {eq => $params_obj->{'id_ui_origen'}}));
     my $inventorio = 0;
+    my $inventorio_count = 0;
 
     eval{
+        $inventorio_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count(
+                                                                        query => \@filtros,
+                                                                        require_objects => ['nivel2','nivel1','nivel1.cat_autor'],
+                                                                        );
+
         $inventorio = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
                                                                         query => \@filtros,
-                                                                        require_objects => ['nivel2','nivel1'],
+                                                                        require_objects => ['nivel2','nivel1','nivel1.cat_autor'],
                                                                         sort_by => ['nivel1.titulo'],
+                                                                        limit => $params_obj->{'cantR'},
+                                                                        offset => $params_obj->{'ini'},
                                                                         );
     };
 
-    return ($inventorio);
+    return ($inventorio_count,$inventorio);
 }
 
 sub historicoDeBusqueda{
@@ -976,10 +984,10 @@ sub disponibilidadAnio {
    my $detalle_disponibilidad =
                      C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad(
                                                                                                 query => \@filtros,
-                                                                                                select => [ 'estado',
+                                                                                                select => [ 'detalle',
                                                                                                             'YEAR(fecha) AS anio_agregacion',  
                                                                                                             'MONTH(fecha) AS mes_agregacion',
-                                                                                                            'COUNT(estado) AS agregacion_temp'],
+                                                                                                            'COUNT(detalle) AS agregacion_temp'],
                                                                                                 group_by => ['YEAR(fecha), MONTH(fecha)'],
                                                                                                 sort_by => ['MONTH(fecha), YEAR(fecha)'],
                                                                                                   );
@@ -1012,7 +1020,7 @@ sub estadisticasGenerales{
                                        gt => $params_obj->{'fechaInicio'}, 
                                  }
                         ) );
-      
+
       push(@filtros, ( fecha => {      eq => $params_obj->{'fechaFin'},
                                        lt => $params_obj->{'fechaFin'},
                                  }
@@ -1091,21 +1099,21 @@ if ($prestamos->[0]){
          } # Si no es una busqueda por domiciliario para que no muestre 0 en el tmpl
 
 
-return ($domiTotal,$renovados,$devueltos,$sala,$foto,$especial); 
+    return ($domiTotal,$renovados,$devueltos,$sala,$foto,$especial); 
 }
 
 
 sub cantidadUsuariosPrestamos{
    my ($fechaInicio, $fechaFin, $chkfecha)=@_;
    my $dbh = C4::Context->dbh;
-        my $query="SELECT borrowernumber FROM  circ_prestamo ";
+        my $query="SELECT nro_socio FROM  circ_prestamo ";
    my @bind;
    if ($chkfecha ne "false"){
-      $query.=" WHERE (date_due>=?) AND (date_due<=?)";
+      $query.=" WHERE (fecha_prestamo >=?) AND (fecha_prestamo <=?)";
       push(@bind,$fechaInicio);
       push(@bind,$fechaFin);
    }
-   $query .=" GROUP BY borrowernumber";
+   $query .=" GROUP BY nro_socio";
 
    my $sth=$dbh->prepare($query);
         $sth->execute(@bind);
@@ -1120,14 +1128,14 @@ return ($cant);
 sub cantidadUsuariosRenovados{
    my ($fechaInicio, $fechaFin, $chkfecha)=@_;
    my $dbh = C4::Context->dbh;
-        my $query="SELECT borrowernumber FROM  circ_prestamo WHERE renewals <> 0 ";
+        my $query="SELECT nro_socio FROM  circ_prestamo WHERE renovaciones <> 0 ";
    my @bind;
    if ($chkfecha ne "false"){
-      $query.=" AND (date_due>=?) AND (date_due<=?)";
+      $query.=" AND (fecha_prestamo >=?) AND (fecha_prestamo <=?)";
       push(@bind,$fechaInicio);
       push(@bind,$fechaFin);
    }
-   $query .=" GROUP BY borrowernumber";
+   $query .=" GROUP BY nro_socio";
 
    my $sth=$dbh->prepare($query);
         $sth->execute(@bind);
@@ -1142,14 +1150,14 @@ return ($cant);
 sub cantidadUsuariosReservas{
    my ($fechaInicio, $fechaFin, $chkfecha)=@_;
    my $dbh = C4::Context->dbh;
-        my $query="SELECT borrowernumber FROM circ_reserva ";
+        my $query="SELECT nro_socio FROM circ_reserva ";
    my @bind;
    if ($chkfecha ne "false"){
-      $query.=" WHERE (reservedate>=?) AND (reservedate<=?)";
+      $query.=" WHERE (fecha_reserva >=?) AND (fecha_reserva <=?)";
       push(@bind,$fechaInicio);
       push(@bind,$fechaFin);
    }
-   $query .=" GROUP BY borrowernumber";
+   $query .=" GROUP BY nro_socio";
 
    my $sth=$dbh->prepare($query);
         $sth->execute(@bind);

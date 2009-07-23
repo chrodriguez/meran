@@ -52,12 +52,13 @@
 <b>[% "La cantidad de usuarios es :" | i18n %] [% cantidad %] </b><br>
 
 <div class="buttonContainerHorizontal">
+    <script> search = 'pdf'; </script>
     [% PERL %]
             print C4::AR::Filtros::to_Button( 
                                                 text    =>  "[% 'Carnets' | i18n %]",
                                                 title    =>  "[% 'Carnets' | i18n %]",
                                                 boton   =>  "boton_buscar",
-                                                onClick =>  "consultar('pdf','');",
+                                                onClick =>  "consultar(search);",
                                             );
     [% END %]
 </div>

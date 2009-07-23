@@ -1,8 +1,7 @@
 <!-- A.3 HEADER BOTTOM -->
       <div class="header-bottom">
-       <div class="logo_Superior">
-         
-	 </div>
+      <div class="logo_Superior">
+  </div>
 
  <div class="idioma_y_login">
             [% IF loggedinusername %]

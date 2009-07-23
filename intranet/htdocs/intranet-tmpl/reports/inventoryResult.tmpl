@@ -1,11 +1,11 @@
-
 <p  align="center">
-        [% "La cantidad de ejemplares es:" | i18n %] [% cantidad %]
+    [% "La cantidad de ejemplares es:" | i18n %] [% cantidad %]
 </p>
-
+<div id="paginador">
+    [% paginador %]
+</div>
 <table id="tablaResult" class="tabla_datos" border="0" cellspacing="0" cellpadding="0" width="100%">
     <tr class="tablaresultadoTitle">
-
             <th onClick="ordenar('barcode');">[% "Nro. de Inventario" | i18n %]</th>
             <th onClick="ordenar('completo');">[% "Autor" | i18n %]</th> 
             <th onClick="ordenar('titulo');">[% "T&iacute;tulo" | i18n %]</th>
@@ -13,7 +13,6 @@
             <th onClick="ordenar('publisher');">[% "Editor" | i18n %]</th>-->
             <th onClick="ordenar('anio_publicacion');">[% "A&ntilde;o" | i18n %]</th>
             <th onClick="ordenar('signatura_topografica');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
-
     </tr>
     [% FOREACH nivel3 IN results %]
         <tr>
@@ -44,7 +43,6 @@
             </td>
             <td width="1%">&nbsp;</td>
         </tr>
-
     [% END %]
 </table>
 

@@ -104,12 +104,13 @@
 </div>
 
 <div class="buttonContainerHorizontal">
+    <script> search = 'search'; </script>
     [% PERL %]
             print C4::AR::Filtros::to_Button( 
                                                 text    =>  "[% 'Buscar' | i18n %]",
                                                 title    =>  "[% 'Buscar' | i18n %]",
                                                 boton   =>  "boton_buscar",
-                                                onClick =>  "consultar('search','');",
+                                                onClick =>  "consultar(search);",
                                             );
     [% END %]
 </div>

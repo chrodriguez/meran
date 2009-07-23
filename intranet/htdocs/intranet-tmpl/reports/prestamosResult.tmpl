@@ -113,8 +113,17 @@
 <input id="contacto" type="image" src="[% themelang %]/images/contactar.png" title=[% "Enviar mail a usuarios con ejemplares atrasados" | i18n %]>
 </a>
 &nbsp;&nbsp;&nbsp;
-<a  href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% planilla %]">[% "Generar planilla" | i18n %] 
-<img src="[% themelang %]/images/sxc.png" border="0">
-</a>
+<center>
+  [% IF cantidad > 0%]
+    [% PERL %]
+        print C4::AR::Filtros::link_to(  text    => "[% 'Generar Planilla' | i18n %]",
+                                         title    => "[% 'Generar Planilla' | i18n %]",
+                                         boton   => "boton_buscar",
+                                         url => "/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% planilla %]",
+                                        width => 150,
+                ) ;
+    [% END %]
+  [% END %]
+<center>
 <br>
 

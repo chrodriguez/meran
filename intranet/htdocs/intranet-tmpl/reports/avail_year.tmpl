@@ -23,40 +23,46 @@ function hacerSubmit(){
 <center>
 <br>
 <br>
-<form name="unidadInformacion" action=/cgi-bin/koha/reports/avail_year.pl method=post >
 <table border=0 cellspacing=0 cellpadding=0 width="100%" align="left">
-<tr>
-<td>[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</td>
-<td>[% unidades %]</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>[% "Seleccione una fecha de inicio:" | i18n %]</td>
+
+  <form name="unidadInformacion" action=/cgi-bin/koha/reports/avail_year.pl method=post >
+    <input type="hidden" name="token" value="[% token %]">
+    <tr>
+    <td>[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</td>
+    <td>[% unidades %]</td>
+    <td>&nbsp;</td>
+    </tr>
+    <tr>
+    <td>[% "Seleccione una fecha de inicio:" | i18n %]</td>
+    <td> 
+		    <input id="ini" name="ini" value="[% ini %]">
+    </td>
+    <td>&nbsp;</td>
+    </tr>
+    <tr>
+    <td>[% "Seleccione una fecha de Fin:" | i18n %]</td>
+    <td> 
+		    <input  id="fin" name="fin" value="[% fin %]">
+    </td>
+  </form>
+
 <td> 
-		<input id="ini" name="ini" value="[% ini %]">
-</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>[% "Seleccione una fecha de Fin:" | i18n %]</td>
-<td> 
-		<input  id="fin" name="fin" value="[% fin %]">
-</td>
-<td> 
-                [% PERL %]
-                                print C4::AR::Filtros::to_Button( 
-                                                                    text    =>  "[% 'Buscar' | i18n %]",
-                                                                    boton   =>  "boton_buscar",
-                                                                    onClick =>  "unidadInformacion.submit()",
-                                        ) ;
-                [% END %]
+  <center>
+    [% PERL %]
+                    print C4::AR::Filtros::to_Button( 
+                                                        text    =>  "[% 'Buscar' | i18n %]",
+                                                        boton   =>  "boton_buscar",
+                                                        onClick =>  "unidadInformacion.submit()",
+                            ) ;
+    [% END %]
+  </center>
 </td>	
    </tr>
 <tr><td colspan="3">&nbsp;</td></tr>
 </table>
 <br>
 <br>
-<table border=0 cellspacing=0 cellpadding=0 width="100%"  align="left">
+<table id="tablaResult" class="tablaResult" border="0" cellspacing="0" cellpadding="0" width="100%">
 <tr class="tablaresultadoTitle">
 
 <td>[% "Mes" | i18n %]</td>
@@ -67,14 +73,13 @@ function hacerSubmit(){
 </tr>
 [% FOREACH disponibilidad IN resultsloop %]
   <tr align='center'>
-    <td class="[% clase %]"> [% disponibilidad.mes_agregacion %] </td>
-    <td class="[% clase %]"> [% disponibilidad.anio_agregacion %] </td>
-    <td class="[% clase %]"> [% disponibilidad.estado %] </td>
-    <td class="[% clase %]"> [% disponibilidad.agregacion_temp %] </td>
+    <td > [% disponibilidad.mes_agregacion %] </td>
+    <td > [% disponibilidad.anio_agregacion %] </td>
+    <td > [% disponibilidad.detalle %] </td>
+    <td > [% disponibilidad.agregacion_temp %] </td>
   </tr>
 [% END %]
 </table>
-</form>
 
 <br><br>
 <br>

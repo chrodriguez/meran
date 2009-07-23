@@ -18,6 +18,7 @@
 	<th>[% "Seleccione una unidad de informaci&oacute;n :" | i18n %]</th>
 	<th>
 		<form name="id_ui_form" action=/cgi-bin/koha/reports/itemtypes.pl method=post >
+          <input type="hidden" name="token" value="[% token %]" />
          [% unidades %]
 		</form>
 	</th>

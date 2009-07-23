@@ -33,7 +33,7 @@ my ($template, $session, $t_params)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
+           flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 			     debug => 1,
 			     });
 

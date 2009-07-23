@@ -906,4 +906,7 @@ VALUES (
 'titulo_nombre_ui', 'Biblioteca - Facultad de Ciencias Econ&oacute;micas - U.N.L.P.', '', NULL , 'text'
 );
 
+ALTER TABLE `cat_historico_disponibilidad` ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ,
+      ADD `anio_agregacion` VARCHAR( 255 ) NOT NULL ,
+      ADD `mes_agregacion` VARCHAR( 255 ) NOT NULL ;
 

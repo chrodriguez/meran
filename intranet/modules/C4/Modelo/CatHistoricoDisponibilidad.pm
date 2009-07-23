@@ -15,6 +15,9 @@ __PACKAGE__->meta->setup(
          fecha          => { type => 'varchar', length => 10, not_null => 1, default => '0000-00-00' },
          tipo_prestamo  => { type => 'varchar', length => 40, not_null => 1},
          id_ui          => {type => 'varchar', length => 5, not_null => 1},
+         anio_agregacion=> {type => 'varchar', length => 255, not_null => 1},
+         mes_agregacion => {type => 'varchar', length => 255, not_null => 1},
+         agregacion_temp=> {type => 'varchar', length => 255, not_null => 1},
     ],
 
     primary_key_columns => ['id_detalle'],

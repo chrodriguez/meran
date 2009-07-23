@@ -1707,13 +1707,12 @@ sub generarComboCampoX{
 sub generarComboTipoDeOperacion{
 
     my ($params) = @_;
-    
+
     use C4::Modelo::RefTipoOperacion::Manager;
-    
     my @select_tipoOperacion_Values;
     my %select_tipoOperacion_Labels;
     my $result = C4::Modelo::RefTipoOperacion::Manager->get_ref_tipo_operacion();
-    
+
     foreach my $tipoOperacion (@$result) {
         if ( $params->{'clone_values'} ){
         #si el label y el ID son iguales
@@ -1724,7 +1723,7 @@ sub generarComboTipoDeOperacion{
             $select_tipoOperacion_Labels{$tipoOperacion->id} = $tipoOperacion->descripcion;
         }
     }
-    
+
     my $CGISelectTipoOperacion=CGI::scrolling_list(    -name      => 'tipoOperacion',
                                                         -id        => 'tipoOperacion',
                                                         -values    => \@select_tipoOperacion_Values,
