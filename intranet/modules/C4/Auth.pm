@@ -1080,7 +1080,7 @@ sub redirectToHTTPS {
     C4::AR::Debug::debug("\n");
     C4::AR::Debug::debug("redirectToHTTPS=> \n");
 
-    my $puerto= C4::AR::Preferencias->getValorPreferencia("puerto_para_https")||'444';
+    my $puerto= C4::AR::Preferencias->getValorPreferencia("puerto_para_https")||'80';
 
     #para saber si fue un llamado con AJAX
     if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
@@ -1099,7 +1099,7 @@ sub redirectToHTTPS {
 
         my $input = CGI->new(); 
         print $input->redirect( 
-                    -location => "https://".$ENV{'SERVER_NAME'}.":".$puerto.$url, 
+                    -location => "http://".$ENV{'SERVER_NAME'}.":".$puerto.$url, 
                     -status => 301,
         ); 
 
