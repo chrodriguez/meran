@@ -15,9 +15,7 @@ my %infoOperacion;
 my $id3= $obj->{'id3'};;
 my %params;
 
-
-my $borrowernumber= C4::Auth::getborrowernumber($userid);
-$params{'borrowernumber'}= $borrowernumber;
+$params{'nro_socio'}= $userid;
 $params{'id3'}= $id3;
 $params{'loggedinuser'}= $userid;
 $params{'tipo'}= 'OPAC';

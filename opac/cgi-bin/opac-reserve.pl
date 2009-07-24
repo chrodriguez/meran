@@ -4,7 +4,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;         # checkauth, getborrowernumber.
+use C4::Auth;        
 use C4::AR::Reservas;
 use C4::Interface::CGI::Output;
 use C4::AR::Mensajes;

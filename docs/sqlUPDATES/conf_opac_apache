@@ -1,0 +1,35 @@
+Agregue esto al final, hay q ver si hay cosas q se pueden sacar
+
+<VirtualHost *:443>
+#ScriptAlias /cgi-bin/ /usr/local/koha/opac/cgi-bin/
+ScriptAlias /cgi-bin/koha/login/ "/usr/local/koha/opac/cgi-bin/login/"
+#Alias /cgi-bin/koha/login/ /usr/local/koha/opac/cgi-bin/login/
+ServerAdmin einar@info.unlp.edu.ar
+DocumentRoot /usr/local/koha/opac/htdocs
+#DocumentRoot /usr/local/koha/opac/htdocs/opac-tmpl/login
+ServerName opac.redes.info.unlp.edu.ar
+Alias /images/ "/usr/local/koha/opac/htdocs/opac-tmpl/default/es/images/"
+<Directory /usr/local/koha/opac/htdocs/opac-tmpl/default/es/images/ >
+ Order allow,deny
+ Allow from all
+</Directory>
+Alias /pictures/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/pictures/"
+<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/pictures/ >
+  Order allow,deny
+  Allow from all
+</Directory>
+ErrorLog /var/log/apache2/error_log
+TransferLog /var/log/apache2/access_log
+SetEnv KOHA_CONF "/etc/koha/koha.conf"
+SSLEngine On
+SSLCertificateFile /etc/apache2/ssl/apacheINT.pem
+
+SetEnv PERL5LIB "/usr/local/koha/intranet/modules"
+
+Alias /includes/ "/usr/local/koha/includes/"
+<Directory /usr/local/koha/includes/ >
+ Options  -Indexes
+  Order allow,deny
+  Allow from all
+</Directory>
+</VirtualHost>

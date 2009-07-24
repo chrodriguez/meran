@@ -9,7 +9,6 @@ use C4::AR::Utilidades;
 
 my $input=new CGI;
 my ($userid, $session, $flags) = checkauth($input, 0,{borrow => 1});
-my $borrowernumber=getborrowernumber($userid);
 
 
 my $obj=$input->param('obj');
@@ -20,12 +19,12 @@ my $shelfvalues=$obj->{'datosArray'};
 
 
 #Se verifica la existencia del contenedor de favoritos
-my $pshelf=gotShelf($borrowernumber);
+my $pshelf=gotShelf($userid);
 
 #***********************************ADD PrivateShelfs*************************************
 if ($op eq 'ADD'){ 
 
-	my ($error, $codMsg, $message)= C4::BookShelves::t_addPrivateShelfs(	$borrowernumber,
+	my ($error, $codMsg, $message)= C4::BookShelves::t_addPrivateShelfs(	$userid,
 										$pshelf,
 										$shelfvalues
 									);

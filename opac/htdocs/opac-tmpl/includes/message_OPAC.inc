@@ -9,6 +9,6 @@
 
     LAS_CLAVES_SON_DISTINTAS= "[% 'Las claves son distintas.\nIngreselas nuevamente.' | i18n %]";
 
-    CAMBIO_DE_CONTRASENIA= "[% 'Cambio de Contrase&ntilde;a' | i18n %]";
+    CAMBIO_DE_CONTRASENIA= "[% 'Cambio de Contraseña' | i18n %]";
 
 </script>

@@ -67,6 +67,7 @@
                                     ) ;
     [% END %]
 
+
 [% ELSE %]
     [%  "OPAC" | setComboLang %]
 [% END %]
