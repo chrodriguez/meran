@@ -191,7 +191,7 @@ function updateModificarVisualizacion(responseText){
 
 function validarDatosEncabezado(){
 	if($('#nomEncabezadoAlta')[0].value == ""){
-		alert('Ingrese el encabezado');
+		jAlert('Ingrese el encabezado');
 		$('#nomEncabezadoAlta')[0].focus();
 	}else {
 		saveEncabezado();
@@ -244,20 +244,16 @@ function updateGuardarConfVisualizacion(responseText){
 
 function deleteRowVisualizacion(id){
 
-	var is_confirmed = confirm(CONFIRMA_LA_BAJA);
-
-	if (is_confirmed) {
-
-		objAH=new AjaxHelper(updateDeleteRowVisualizacion);
-		objAH.debug= true;
-		objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
-		objAH.tipoAccion= 'DELETE';
-		objAH.tabla= 'ESTRUCTURA_VISUALIZACION';
-		objAH.idestcatopac= id;
-		//se envia la consulta
-		objAH.sendToServer();
-	}
-
+    jConfirm(CONFIRMA_LA_BAJA,CONFIRMA_LA_BAJA,function(){
+        objAH=new AjaxHelper(updateDeleteRowVisualizacion);
+        objAH.debug= true;
+        objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
+        objAH.tipoAccion= 'DELETE';
+        objAH.tabla= 'ESTRUCTURA_VISUALIZACION';
+        objAH.idestcatopac= id;
+        //se envia la consulta
+        objAH.sendToServer();
+  });
 }
 
 function updateDeleteRowVisualizacion(responseText){
@@ -290,37 +286,37 @@ function validarDatos(){
 // y esto para que esta!!!!!!!
 	seleccionarEncabezado
 	if($('#campoX').selectedIndex == 0){
-		alert("Seleccione el filtro para campos");
+		jAlert("Seleccione el filtro para campos");
 		$('#campoX').focus();
 		ok= false;
 	}
 
 	if(($('#campo').selectedIndex == 1)&&(ok)){
-		alert("Seleccione el campo");
+		jAlert("Seleccione el campo");
 		$('#campo').focus();
 		ok= false;
 	}
 
 	if(($('#subcampo').selectedIndex == 1)&&(ok)){
-		alert("Seleccione el subcampo");
+		jAlert("Seleccione el subcampo");
 		$('#subcampo').focus();
 		ok= false;
 	}
 
 	if(($('#textoPredecesor').value == "")&&(ok)){
-		alert("Ingrese el texto predecesor");
+		jAlert("Ingrese el texto predecesor");
 		$('#textoPredecesor').focus();
 		ok= false;
 	}
 
 	if(($('#textoSucesor').value == "")&&(ok)){
-		alert("Ingrese el texto sucesor");
+		jAlert("Ingrese el texto sucesor");
 		$('#textoSucesor').focus();
 		ok= false;
 	}
 
 	if(($('#separador').value == "")&&(ok)){
-		alert("Ingrese el separador");
+		jAlert("Ingrese el separador");
 		$('#separador').focus();
 		ok= false;
 	}
@@ -451,19 +447,16 @@ function updateCargarTablaEncabezados(responseText){
 
 function deleteEncabezado(idEncabezado){
 
-	var is_confirmed = confirm('Confirma la baja del Encabezado?');
-
-	if (is_confirmed) {
-
-		objAH=new AjaxHelper(updateDeleteEncabezado);
-		objAH.debug= true;
-		objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
-		objAH.encabezado= idEncabezado;
-		objAH.tipoAccion= 'DELETE';
-		objAH.tabla= 'ENCABEZADO_CAMPO_OPAC';
-		//se envia la consulta
-		objAH.sendToServer();
-	}
+    jConfirm('Confirma la baja del Encabezado?','Confirma la baja del Encabezado?',function(){
+        objAH=new AjaxHelper(updateDeleteEncabezado);
+        objAH.debug= true;
+        objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
+        objAH.encabezado= idEncabezado;
+        objAH.tipoAccion= 'DELETE';
+        objAH.tabla= 'ENCABEZADO_CAMPO_OPAC';
+        //se envia la consulta
+        objAH.sendToServer();
+  });
 }
 
 function updateDeleteEncabezado(responseText){
@@ -478,7 +471,7 @@ function updateDeleteEncabezado(responseText){
 function modificarOrden(encabezado, antOrden, action){
 	
 	if((antOrden == 1)&&(action == 'up')){
-		alert("no se puede subir mas");
+		jAlert("No se puede subir más");
 	}else{
 
 		objAH=new AjaxHelper(cargarTablaEncabezados);

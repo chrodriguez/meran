@@ -33,7 +33,7 @@ function busquedaReAvanzada(){
 		objAH.sendToServer();
 	}
 	else{
-		alert('[% "No ingreso datos para consultar" | i18n %]');
+		jAlert('[% "No ingreso datos para consultar" | i18n %]');
 	}
 
 }
@@ -41,7 +41,7 @@ function busquedaReAvanzada(){
 // Hace una busqueda por el id del autor cuando se toca en el link del mismo.
 function buscarPorAutor(idAutor){
 	objAH=new AjaxHelper(updateInfo);
-    alert();
+    jAlert();
 	objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
 	objAH.idAutor= idAutor;
 	objAH.sendToServer();
@@ -193,7 +193,7 @@ function agregarConsulta(tipo){
 		textarea[0].appendChild(document.createTextNode(string));
 	}
 	else{
-		alert("Datos incorrectos");
+		jAlert("Datos incorrectos");
 		valor[0].focus();
 	}
 	

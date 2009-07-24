@@ -28,6 +28,7 @@ HAY_BARCODES_REPETIDOS= "[% 'Hay barcodes repetidos' | i18n %]";
 ELIJA_AL_MENOS_UN_EJEMPLAR= "[% 'Elija al menos un ejemplar para realizar la acción' | i18n %]";
 FALTA_PARAMETRO_PARA_REFERENCIA= "[% 'Falta parámetro para referencia' | i18n %]";
 CATALOGO_TITLE= "[% 'Advertencia de Catalogo' | i18n %]";
+CATALOGO_ALERT_TITLE= "[% 'Advertencia de Catalogo' | i18n %]";
 //=============================================Fin===Catalogacion=================================================
 
 //================================================Usuarios========================================================
@@ -72,6 +73,7 @@ FILTRO_POR= "[% 'filtro: ' | i18n %]";
 SOLO_SERA_NUMERICO= "[% 'Solo sera numerico' | i18n %]";
 CONFIRMAR_ELIMINAR_AFILIADO= "[% 'Desea eliminar el autorizado para este usuario?' | i18n %]";
 GRANT_PERMISSION_TITLE= "[% 'Advertencia de cesion de Permisos' | i18n %]";
+USUARIOS_ALERT_TITLE= "[% 'Advertencia de Usuarios' | i18n %]";
 //================================================Fin==Usuarios==================================================
 
 //================================================Catalogo=======================================================

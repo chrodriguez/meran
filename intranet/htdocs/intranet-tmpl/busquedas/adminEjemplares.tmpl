@@ -23,7 +23,7 @@ function consultar(){
 		objAH.sendToServer();
 	}
 	else{
-		alert('[% "Ingrese un dato para realizar la busqueda" | i18n %]');
+		jAlert('[% "Ingrese un dato para realizar la busqueda" | i18n %]');
 	}
 
 }
@@ -50,7 +50,7 @@ function agregarEjemplar(id1){
 		location.href="../catalogacion/estructura/agregarItem.pl?origen=adminEj&id1="+id1+"&itemtype="+itemtype;
 	}
 	else{
-		alert('[% "Eliga el esquema de catalogo para agregar un item" | i18n %]');
+		jAlert('[% "Eliga el esquema de catalogo para agregar un item" | i18n %]');
 	}
 }
 

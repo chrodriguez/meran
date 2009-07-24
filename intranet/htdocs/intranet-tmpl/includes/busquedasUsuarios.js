@@ -35,10 +35,8 @@ function consultar(filtro){
                 consultar(busqueda);
             }
            }
-
-            
     }
-    if(busqueda.length > 0){
+    if(jQuery.trim(busqueda).length > 0){
         objAH.url= '/cgi-bin/koha/usuarios/reales/buscarUsuarioResult.pl';
         objAH.debug= true;
 //      objAH.cache= true;
@@ -47,7 +45,7 @@ function consultar(filtro){
         objAH.sendToServer();
     }
     else{
-        alert(INGRESE_UN_DATO);
+        jAlert(INGRESE_UN_DATO,USUARIOS_ALERT_TITLE);
         $('#socio').focus();
     }
 

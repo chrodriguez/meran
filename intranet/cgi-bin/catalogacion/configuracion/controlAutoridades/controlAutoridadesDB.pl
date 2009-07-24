@@ -28,12 +28,17 @@ my $accion = $obj->{'accion'};
 my $sinonimoDelete_string = $obj->{'sinonimoDelete_string'};
 my %infoRespuesta;
 
+my ($template, $session, $t_params);
+my ($user,$flags);
+my ($msg_object);
+
+C4::AR::Validator::validateParams('U389',$obj,['tipo','tabla']);
 
 if($tabla eq 'autores'){
 #****************************SEUDONIMOS***************************************
 	if($tipo eq 'eliminarSeudonimos'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -42,7 +47,7 @@ if($tabla eq 'autores'){
                                                 'intranet'
                                     );
 
-		my ($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSeudonimosAutor(
+		($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSeudonimosAutor(
 												$id,
 												$seudonimoDelete
 							);
@@ -55,7 +60,7 @@ if($tabla eq 'autores'){
 
 	if($tipo eq 'insertarSeudonimos'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -66,7 +71,7 @@ if($tabla eq 'autores'){
 
 		my $id=  $obj->{'id'};
 		my $seudonimos_arrayref=  $obj->{'seudonimos'};
-		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSeudonimosAutor(
+		($msg_object)=&C4::AR::ControlAutoridades::t_insertSeudonimosAutor(
 										$seudonimos_arrayref, 
 										$id
 							);
@@ -80,7 +85,7 @@ if($tabla eq 'autores'){
 
 	if($tipo eq 'eliminarSinonimos'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -91,7 +96,7 @@ if($tabla eq 'autores'){
 
 		my $id=  $obj->{'id'};
 		my $sinonimoDelete_string=  $obj->{'sinonimoDelete_string'};
-		my ($msg_object)= &C4::AR::ControlAutoridades::t_eliminarSinonimosAutor(
+		($msg_object)= &C4::AR::ControlAutoridades::t_eliminarSinonimosAutor(
 											$id,
 											$sinonimoDelete_string
 								);
@@ -104,7 +109,7 @@ if($tabla eq 'autores'){
 	}
 	if($tipo eq 'insertarSinonimos'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -116,7 +121,7 @@ if($tabla eq 'autores'){
 		my $sinonimos_arrayref= $obj->{'sinonimos'};
 		my $id= $obj->{'id'};
 
-		my ($msg_object)= &C4::AR::ControlAutoridades::t_insertSinonimosAutor(
+		($msg_object)= &C4::AR::ControlAutoridades::t_insertSinonimosAutor(
 											$sinonimos_arrayref, 
 											$id
 							);
@@ -129,7 +134,7 @@ if($tabla eq 'autores'){
 	}
 	if($tipo eq 'UpdateSinonimo'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -142,7 +147,7 @@ if($tabla eq 'autores'){
 		my $nombre= $obj->{'nombre'};
 		my $nombreViejo= $obj->{'nombreViejo'};
 
-		my ($msg_object)= &C4::AR::ControlAutoridades::t_updateSinonimosAutores(
+		($msg_object)= &C4::AR::ControlAutoridades::t_updateSinonimosAutores(
 											$idSinonimo, 
 											$nombre, 
 											$nombreViejo
@@ -161,7 +166,7 @@ if($tabla eq 'temas'){
 #****************************SEUDONIMOS***************************************
 	if($tipo eq 'eliminarSeudonimos'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -170,7 +175,7 @@ if($tabla eq 'temas'){
                                                 'intranet'
                                     );
 
-		my ($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSeudonimosTema(
+		($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSeudonimosTema(
 											$id,
 											$seudonimoDelete
 							);
@@ -184,7 +189,7 @@ if($tabla eq 'temas'){
 
 	if($tipo eq 'insertarSeudonimos'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -195,7 +200,7 @@ if($tabla eq 'temas'){
 
 		my $id=  $obj->{'id'};
 		my $seudonimos_arrayref=  $obj->{'seudonimos'};
-		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSeudonimosTemas(
+		($msg_object)=&C4::AR::ControlAutoridades::t_insertSeudonimosTemas(
 										$seudonimos_arrayref, 
 										$id
 								);
@@ -207,7 +212,7 @@ if($tabla eq 'temas'){
 #******************************SINONIMOS**************************************
 	if($tipo eq 'eliminarSinonimos'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -216,7 +221,7 @@ if($tabla eq 'temas'){
                                                 'intranet'
                                     );
 
-		my ($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSinonimosTema(
+		($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSinonimosTema(
 											$id,
 											$sinonimoDelete_string
 								);
@@ -229,7 +234,7 @@ if($tabla eq 'temas'){
 
 	if($tipo eq 'insertarSinonimos'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -240,7 +245,7 @@ if($tabla eq 'temas'){
 
 		my $id= $obj->{'id'};
 		my $sinonimos_arrayref= $obj->{'sinonimos'};
-		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSinonimosTemas(
+		($msg_object)=&C4::AR::ControlAutoridades::t_insertSinonimosTemas(
 											$sinonimos_arrayref, 
 											$id
 								);
@@ -252,7 +257,7 @@ if($tabla eq 'temas'){
 	}
 	if($tipo eq 'UpdateSinonimo'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -264,7 +269,7 @@ if($tabla eq 'temas'){
 		my $idSinonimo= $obj->{'idSinonimo'}||" ";
 		my $nombre= $obj->{'nombre'};
 		my $nombreViejo= $obj->{'nombreViejo'};
-		my ($msg_object)=&C4::AR::ControlAutoridades::t_updateSinonimosTemas(
+		($msg_object)=&C4::AR::ControlAutoridades::t_updateSinonimosTemas(
 										$idSinonimo, 
 										$nombre, 
 										$nombreViejo
@@ -283,7 +288,7 @@ if($tabla eq 'editoriales'){
 #****************************SEUDONIMOS***************************************
 	if($tipo eq 'eliminarSeudonimos'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -292,7 +297,7 @@ if($tabla eq 'editoriales'){
                                                 'intranet'
                                     );
 
-		my ($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSeudonimosEditorial(
+		($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSeudonimosEditorial(
 											$id,
 											$seudonimoDelete
 								);
@@ -306,7 +311,7 @@ if($tabla eq 'editoriales'){
 
 	if($tipo eq 'insertarSeudonimos'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -317,7 +322,7 @@ if($tabla eq 'editoriales'){
 
 		my $id=  $obj->{'id'};
 		my $seudonimos_arrayref=  $obj->{'seudonimos'};
-		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSeudonimosEditoriales(
+		($msg_object)=&C4::AR::ControlAutoridades::t_insertSeudonimosEditoriales(
 										$seudonimos_arrayref, 
 										$id
 								);
@@ -330,7 +335,7 @@ if($tabla eq 'editoriales'){
 #******************************SINONIMOS**************************************
 	if($tipo eq 'eliminarSinonimos'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -339,7 +344,7 @@ if($tabla eq 'editoriales'){
                                                 'intranet'
                                     );
 
-		my ($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSinonimosEditorial(
+		($msg_object)=&C4::AR::ControlAutoridades::t_eliminarSinonimosEditorial(
 																						$id,
 																						$sinonimoDelete_string
 										);
@@ -352,7 +357,7 @@ if($tabla eq 'editoriales'){
 	}
 	if($tipo eq 'insertarSinonimos'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -363,7 +368,7 @@ if($tabla eq 'editoriales'){
 
 		my $sinonimos= $obj->{'sinonimos'}||" ";
 		my $sinonimos_arrayref= from_json_ISO($sinonimos);
-		my ($msg_object)=&C4::AR::ControlAutoridades::t_insertSinonimosEditoriales(
+		($msg_object)=&C4::AR::ControlAutoridades::t_insertSinonimosEditoriales(
 											$sinonimos_arrayref, 
 											$id
 								);
@@ -377,7 +382,7 @@ if($tabla eq 'editoriales'){
 	}
 	if($tipo eq 'UpdateSinonimo'){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
+    ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
@@ -389,7 +394,7 @@ if($tabla eq 'editoriales'){
 		my $idSinonimo= $obj->{'idSinonimo'}||" ";
 		my $nombre= $obj->{'nombre'};
 		my $nombreViejo= $obj->{'nombreViejo'};
-		my ($msg_object)=&C4::AR::ControlAutoridades::t_updateSinonimosEditoriales(
+		($msg_object)=&C4::AR::ControlAutoridades::t_updateSinonimosEditoriales(
 											$idSinonimo, 
 											$nombre, 
 											$nombreViejo
@@ -410,7 +415,7 @@ my $sinonimo= $obj->{'sinonimo'};
 # if( (($tipo eq 'consultaTablasSinonimos')||($tipo eq 'eliminarSinonimos'))&&($tabla eq 'autores')){
 if( ($tipo eq 'consultaTablasSinonimos') && ($tabla eq 'autores') ){
 
-my ($template, $session, $t_params) = get_template_and_user({
+($template, $session, $t_params) = get_template_and_user({
             template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimosResult.tmpl",
 			query => $input,
 			type => "intranet",
@@ -423,15 +428,12 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 $t_params->{'RESULTSLOOP'}= $results,
 
-
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
-
 }
 #Para consultar los sinonimos de un Autor
 # if((($tipo eq 'consultaTablasSinonimos')||($tipo eq 'eliminarSinonimos'))&&($tabla eq 'temas')){
 if( ($tipo eq 'consultaTablasSinonimos')&&($tabla eq 'temas') ){
 
-my ($template, $session, $t_params) = get_template_and_user({
+($template, $session, $t_params) = get_template_and_user({
             template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimosResult.tmpl",
             query => $input,
             type => "intranet",
@@ -445,7 +447,6 @@ my ($cant, $results) = C4::AR::ControlAutoridades::traerSinonimosTemas($sinonimo
 
 $t_params->{'RESULTSLOOP'}= $results,
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 }
 
@@ -454,7 +455,7 @@ C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 # if( (($tipo eq 'consultaTablasSinonimos')||($tipo eq 'eliminarSinonimos'))&&($tabla eq 'editoriales')){
 if( ($tipo eq 'consultaTablasSinonimos')&&($tabla eq 'editoriales') ){
 
-my ($template, $session, $t_params) = get_template_and_user({
+($template, $session, $t_params) = get_template_and_user({
             template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimosResult.tmpl",
             query => $input,
             type => "intranet",
@@ -468,8 +469,6 @@ my ($template, $session, $t_params) = get_template_and_user({
 	my ($cant, $results) = C4::AR::ControlAutoridades::traerSinonimosEditoriales($sinonimo);
 
     $t_params->{'RESULTSLOOP'}= $results,
-    
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 
 #***********************************************************************************************
@@ -482,7 +481,7 @@ my $idSeudonimo= $obj->{'seudonimo'};
 # if( (($tipo eq 'consultaTablasSeudonimos')||($tipo eq 'eliminarSeudonimos'))&&($tabla eq 'autores')){
 if( ($tipo eq 'consultaTablasSeudonimos') && ($tabla eq 'autores') ){
 
-    my ($template, $session, $t_params) = get_template_and_user({
+    ($template, $session, $t_params) = get_template_and_user({
                 template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimosResult.tmpl",
                 query => $input,
                 type => "intranet",
@@ -494,16 +493,13 @@ if( ($tipo eq 'consultaTablasSeudonimos') && ($tabla eq 'autores') ){
     my ($cant, $results) = C4::AR::ControlAutoridades::traerSeudonimosAutor($idSeudonimo);
     
     $t_params->{'RESULTSLOOP'}= $results,
-    
-    
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 
 #Para consultar los seudonimos de un Tema
 # if((($tipo eq 'consultaTablasSeudonimos')||($tipo eq 'eliminarSeudonimos'))&&($tabla eq 'temas')){
 if( ($tipo eq 'consultaTablasSeudonimos')&&($tabla eq 'temas') ){
 
-    my ($template, $session, $t_params) = get_template_and_user({
+    ($template, $session, $t_params) = get_template_and_user({
                 template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimosResult.tmpl",
                 query => $input,
                 type => "intranet",
@@ -515,9 +511,6 @@ if( ($tipo eq 'consultaTablasSeudonimos')&&($tabla eq 'temas') ){
     my ($cant, $results) = C4::AR::ControlAutoridades::traerSeudonimosTema($idSeudonimo);
     
     $t_params->{'RESULTSLOOP'}= $results,
-    
-    
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 }
 
@@ -526,7 +519,7 @@ if( ($tipo eq 'consultaTablasSeudonimos')&&($tabla eq 'temas') ){
 # if( (($tipo eq 'consultaTablasSeudonimos')||($tipo eq 'eliminarSeudonimos'))&&($tabla eq 'editoriales')){
 if( ($tipo eq 'consultaTablasSeudonimos')&&($tabla eq 'editoriales') ){	
 
-    my ($template, $session, $t_params) = get_template_and_user({
+    ($template, $session, $t_params) = get_template_and_user({
                 template_name => "catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimosResult.tmpl",
                 query => $input,
                 type => "intranet",
@@ -538,9 +531,8 @@ if( ($tipo eq 'consultaTablasSeudonimos')&&($tabla eq 'editoriales') ){
     my ($cant, $results) = C4::AR::ControlAutoridades::traerSeudonimosEditoriales($idSeudonimo);
     
     $t_params->{'RESULTSLOOP'}= $results,
-    
-    
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 
 #***********************************************************************************************
+
+C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);

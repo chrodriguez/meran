@@ -21,7 +21,7 @@ $(document).ready(function() {
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
                                                                     boton   => "boton_buscar",
-                                                                    onClick => "consultar('');",
+                                                                    onClick => "consultar();",
                                                                     title   => "[% 'Buscar' | i18n %]",
                                         ) ;
             [% END %]

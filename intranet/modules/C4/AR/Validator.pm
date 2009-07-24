@@ -321,7 +321,7 @@ sub validateParams {
     my $flag = ($params_hash_ref != 0);
     if ($flag){
         foreach my $nombreParam (@$array_params_name){
-            $flag = $flag && C4::AR::Utilidades::validateString($params_hash_ref->{$nombreParam});
+            $flag = $flag && C4::AR::Utilidades::validateString($params_hash_ref->{$nombreParam}) && (uc($params_hash_ref->{$nombreParam}) ne "SIN SELECCIONAR");
             C4::AR::Debug::debug("Analizando ".$nombreParam.", con resultado ".$flag);
         }
     }

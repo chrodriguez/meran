@@ -26,7 +26,7 @@ function updateInfoConsulta(responseText){
  * El resultado se procesa, para mostrar lo que corresponda.
  */
 function updateInfoConsultaJSON(responseText){
-// 	alert(responseText);
+// 	jAlert(responseText);
 	procesarJSON(responseText,objAH.idComp,objAH.funcionChange,objAH.tipo);
 }
 
@@ -66,12 +66,12 @@ function agregarPreferencia(){
 	objAH.tipo=tipo;
  	objAH.accion= "NUEVA_VARIABLE";
 	
-	if(tipo == "0"){ok=0;alert("Debe seleccionar al menos una opcion");}
+	if(tipo == "0"){ok=0;jAlert("Debe seleccionar al menos una opcion");}
 
 	if(tipo == "referencia"){
 		var tabla=$("#tabla").val();
 		var campo=$("#campo").val();
-		if(tabla == -1 || campo == -1){ok=0;alert("Debe seleccionar una tabla de referencia");}
+		if(tabla == -1 || campo == -1){ok=0;jAlert("Debe seleccionar una tabla de referencia");}
 		else{objAH.tabla=tabla;
 		     objAH.campo=campo;
 		}
@@ -79,7 +79,7 @@ function agregarPreferencia(){
 
 	if(tipo == "valAuto"){
 		var cat=$("#categoria").val();
-		if(cat == -1){ok=0;alert("Debe seleccionar un valor autorizado");}
+		if(cat == -1){ok=0;jAlert("Debe seleccionar un valor autorizado");}
 		else{objAH.categoria=cat;}
 	}
 

@@ -37,7 +37,7 @@ function consultar(filtro){
 		buscarUsuariosPotenciales();
     }
     else{
-        alert(INGRESE_UN_DATO);
+        jAlert(INGRESE_UN_DATO);
         $('#persona').focus();
     }
 
@@ -109,7 +109,7 @@ function buscarUsuariosPotenciales(){
 		    objAH.persona= busqueda;
 	    }
 	    else{
-		    alert(INGRESE_UN_DATO);
+		    jAlert(INGRESE_UN_DATO);
             $("#persona").focus();
 	    }
     }

@@ -1,7 +1,7 @@
 var objAH;
 
 function updateInfo(responseText){
-    
+
     $("#volver").hide();
     $("#filtrosBusqueda").slideUp('slow');  
     $('#resultBusqueda').html(responseText);
@@ -63,27 +63,29 @@ function ordenarPor(ord){
 
 function buscar(){
     //primero verifico las busquedas individuales
-        if ($('#keyword').val() != ''){
-            busquedaPorKeyword();
-        }else 
-        if ($('#estante').val() != ''){
+    if ($.trim($('#keyword').val()) != '') {
+        busquedaPorKeyword();
+      }else 
+        if (jQuery.trim($('#estante').val()) != '') {
             buscarEstante();
         }else 
-        if ($('#dictionary').val() != '') {
-            buscarPorDiccionario(ini);
-        }else 
-        if ($('#codBarra').val() != '') {
-            buscarPorCodigoBarra();
-        }else 
-        if ($('#isbn').val() != '') {
-            buscarPorISBN();
-        }else 
-        if ($('#tema').val() != '') {
-            buscarPorTema();
-        }else 
-        if( ($('#titulo').val() != '') || ($('#autor').val() != '') || ( $('#signatura').val() != '') ){
-            busquedaCombinable();
-        }else{alert(SELECCIONE_AL_MENOS_UN_CAMPO_PARA_BUSCAR)}
+          if (jQuery.trim($('#dictionary').val()) != '') {
+              buscarPorDiccionario(ini);
+          }else 
+            if (jQuery.trim($('#codBarra').val()) != '') {
+                buscarPorCodigoBarra();
+          }else 
+            if (jQuery.trim($('#isbn').val()) != '') {
+                buscarPorISBN();
+            }else 
+              if (jQuery.trim($('#tema').val()) != '') {
+                  buscarPorTema();
+              }else 
+                if( (jQuery.trim($('#titulo').val()) != '') || (jQuery.trim($('#autor').val()) != '') || (jQuery.trim($('#signatura').val()) != '') ){
+                    busquedaCombinable();
+                }else{
+                  jAlert(SELECCIONE_AL_MENOS_UN_CAMPO_PARA_BUSCAR,CATALOGO_ALERT_TITLE)
+                }
 }
 
 function buscarPorCodigoBarra(){

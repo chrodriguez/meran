@@ -321,7 +321,7 @@ function eleccionSubCampo(){
 function verificarCamposParaReferencia(){
 	var ok= 1;
 	if($('#camposSelect').val() == '-1' || $('#camposRef').val() == '-1'){
-		alert(FALTA_PARAMETRO_PARA_REFERENCIA);
+		jAlert(FALTA_PARAMETRO_PARA_REFERENCIA);
 		ok= 0;
 	}
 

@@ -35,12 +35,12 @@
         var actualPassword= $('#actualPassword').val();
 
         if (claveUsuario == ''){
-            alert(POR_FAVOR_INGRESE_UNA_CONTRASENIA);
+            jAlert(POR_FAVOR_INGRESE_UNA_CONTRASENIA);
             clearInput();
             $('#newpassword').focus();
         }else{
             if (claveUsuario != confirmeClave){
-                alert(LAS_CLAVES_SON_DISTINTAS);
+                jAlert(LAS_CLAVES_SON_DISTINTAS);
                 clearInput();
                 $('#newpassword').focus();
             }else{

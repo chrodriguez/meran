@@ -23,11 +23,11 @@ function ValidarDatos(){
 	var subcampo= $('#subcampoMARC').val();
 
 	if(campo == ""){
-		alert("Ingrese el nombre del campo");
+		jAlert("Ingrese el nombre del campo");
 		$('#campoMARC').focus();
 		return false;
 	}else if(subcampo == ""){
-			alert("Ingrese el subcampo");
+			jAlert("Ingrese el subcampo");
 			$('#subcampoMARC').focus();
 			return false;
 		}else return true;

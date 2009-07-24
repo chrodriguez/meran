@@ -46,7 +46,7 @@
 		if (f.categorycode.value.length==0) {
 			_alertString += "\n- " + _("falta el codigo de categoria");
 		}
-//		alert(window.document.Aform.description.value);
+//		jAlert(window.document.Aform.description.value);
 		if (!(isNotNull(window.document.Aform.description,1))) {
 			_alertString += "\n- " + _("falta la descripcion");
 		}
@@ -59,7 +59,7 @@
 			alertString2  = _("El formulario no puede ser enviado por alguno de los siguientes problemas");
 			alertString2 += "\n------------------------------------------------------------------------------------\n";
 			alertString2 += _alertString;
-			alert(alertString2);
+			jAlert(alertString2);
 		}
 	}
 	</SCRIPT>
