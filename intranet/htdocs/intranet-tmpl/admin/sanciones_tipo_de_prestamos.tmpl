@@ -1,6 +1,6 @@
   	<table border=0 cellspacing=0 cellpadding=0 width="100%" align='center'>
 	<tr class="tablaresultadoTitle">
-                <td>[% "Tipos de pr&eacute;stamo sobre el que se aplica" | i18n %]</td>
+                <td>[% "Se aplica a" | i18n %]</td>
 	</tr>
 	</table>
 
@@ -9,10 +9,19 @@
 	[% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS %]
 		<tr valign="middle">
 		<li>
-			<input type="checkbox" name="chk" value="[% tipo_prestamo.getId_tipo_prestamo %]" [% IF tipo_sancion.aplicaAlTipoDePrestamo( tipo_prestamo.getId_tipo_prestamo ) %] checked="checked" [% END %] > [% tipo_prestamo.getDescripcion %]
+			<input type="checkbox" name="chkTP" id="chkTP" value="[% tipo_prestamo.getId_tipo_prestamo %]" [% IF tipo_sancion.aplicaAlTipoDePrestamo( tipo_prestamo.getId_tipo_prestamo ) %] checked="checked" [% END %] > [% tipo_prestamo.getDescripcion %]
 		</li>
 	[% END %]
 	</ul>
 
-<FONT SIZE=2  face="arial, helvetica"><a href="#" onClick="actualizar();">[% "Guardar" | i18n %]</a></FONT>
+            <center>
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                                    boton   => "boton_guardar",
+                                                                    onClick => "guardarTiposQueAplica();",
+                                                                    title   => "[% 'Guardar' | i18n %]",
+                                        ) ;
+            [% END %]
+            </center>
+
 	[% END %]

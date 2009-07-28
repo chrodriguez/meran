@@ -273,8 +273,8 @@ Elimina las sanciones
 sub eliminarSanciones{
  	my ($userid,$sanciones_ids)=@_;
 
-    	my @infoMessages;
-    	my %messageObj;
+    my @infoMessages;
+    my %messageObj;
 	my ($msg_object)= C4::AR::Mensajes::create();
 	my $sancionTEMP = C4::Modelo::CircSancion->new();
 	my $db = $sancionTEMP->db;
@@ -308,6 +308,38 @@ sub eliminarSanciones{
   return ($msg_object);
  }
 
+
+sub actualizarTiposPrestamoQueAplica {
+#Esta funcion actualiza los tipos de prestamo sobre los cuales se aplica la sancion de un determinado tipo de prestamo y categoria de usuario
+ my ($tipo_prestamo,$categoria_socio,$tiposQueAplica)=@_;
+
+    my @infoMessages;
+    my %messageObj;
+	my ($msg_object)= C4::AR::Mensajes::create();
+	my $sancionTEMP = C4::Modelo::CircSancion->new();
+	my $db = $sancionTEMP->db;
+	$db->{connect_options}->{AutoCommit} = 0;
+	$db->begin_work;
+	#Busco el tipo de sanción
+	my $tipo_sancion=&C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio);
+
+	eval{	
+ 		 $tipo_sancion->actualizarTiposPrestamoQueAplica($tiposQueAplica,$db);
+         $db->commit;
+		 $msg_object->{'error'}= 0;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP013', 'params' => []} ) ;
+         };
+         if ($@){
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP014', 'params' => []} ) ;
+                }
+
+
+   
+    $db->{connect_options}->{AutoCommit} = 1;
+
+    return ($msg_object);
+}
 
 
 # DEPRECATED  DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED 

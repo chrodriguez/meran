@@ -19,6 +19,7 @@ function updateInfoConsultaJSON(responseText){
  */
 function borrarDiv(){$("#divResultado").html("");}
 
+
 /*
  * agregarReglaSancion
  * Muestra la parte de agregado de una regla de sancion
@@ -33,6 +34,33 @@ function agregarReglaSancion(tipo_sancion){
 
 function updateAgregarReglaSancion(responseText){
     $("#divResultado").html(responseText);
+}
+
+
+
+/*
+ * guardarTiposQueAplica
+ * Agrega los tipos de prestamos al prestamo y categoria seleccionada
+ */
+function guardarTiposQueAplica(){
+    objAH=new AjaxHelper(updateGuardarTiposQueAplica);
+    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+
+    objAH.tipo_prestamo=$("#tipo_prestamo_id").val();
+    objAH.categoria_socio=$("#categoria_socio_id").val();
+    TPArray = new Array();
+	 $("input[name=chkTP]").each(
+		function() { if(this.checked){TPArray[TPArray.length] = this.value;}}
+	 );
+
+    objAH.tipos_que_aplica=TPArray;
+    objAH.tipoAccion= "GUARDAR_TIPOS_PRESTAMOS_QUE_APLICA";
+    objAH.sendToServer();
+}
+
+function updateGuardarTiposQueAplica(responseText){
+     respuesta(responseText);
+	buscarTiposPrestamosSancionados();
 }
 
 /*
@@ -52,9 +80,10 @@ function eliminarReglaSancion(tipo_sancion, regla_sancion){
 }
 
 function updateEliminarReglaSancion(responseText){
-    borrarDiv();
+
+	buscarTiposPrestamosSancionados();
     respuesta(responseText);
-  //  buscarTiposPrestamos();
+  
 }
 
 /*
@@ -109,7 +138,8 @@ $(document).ready( function() {
 </table>
 </div>
  <div id="divSancionesTiposPrestamos"></div>
- <div id="divSancionesReglas"></div>
+<br>
+ <div id="divSancionesReglas">elll</div>
 </div>
 
 [% INCLUDE "intranet-bottom.inc" %]

@@ -37,6 +37,26 @@ if($accion eq "TIPOS_PRESTAMOS_SANCIONADOS"){
 		C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }#end if($accion eq "TIPOS_PRESTAMOS_SANCIONADOS")
 
+if ($accion eq "GUARDAR_TIPOS_PRESTAMOS_QUE_APLICA") {
+
+	my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'BAJA', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
+
+	my $tipos_que_aplica=$obj->{'tipos_que_aplica'};
+	my $tipo_prestamo=$obj->{'tipo_prestamo'};
+	my $categoria_socio=$obj->{'categoria_socio'};
+
+    my $Message_arrayref = &C4::AR::Sanciones::actualizarTiposPrestamoQueAplica($tipo_prestamo,$categoria_socio,$tipos_que_aplica);
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    C4::Output::printHeader($session);
+    print $infoOperacionJSON;
+}
 
 
 # 

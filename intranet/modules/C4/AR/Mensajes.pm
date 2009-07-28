@@ -297,6 +297,8 @@ my %mensajesINTRA = (
     'SP010' => 'El tipo de pr&eacute;stamo ha sido modificado con &eacute;xito.',
     'SP011' => 'El tipo de pr&eacute;stamo ha sido agregado al sistema con &eacute;xito.',
     'SP012' => 'El tipo de pr&eacute;stamo no pudo ser eliminado ya que se encuentra en uso por *?* pr&eacute;stamos.',
+    'SP013' => 'Los tipos de prestamo sobre el cual se aplican las sanciones se actualizaron con &eacute;xito.',
+    'SP014' => 'No se pudieron actualizar los tipos de prestamo sobre el cual se aplican las sanciones.',
     'UT001' => 'Se rompio Utilidades::from_json_ISO',
     'VA001' => 'Error de parametros, inconsistentes o faltantes, don\'t HACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
 	
