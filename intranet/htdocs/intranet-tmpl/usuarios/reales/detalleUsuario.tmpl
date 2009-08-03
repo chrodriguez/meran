@@ -46,13 +46,13 @@
                 [% IF socio.tieneAutorizado %]
                     <br><br>
                     <div class="authorizedBack">
-                                <span class="type">Nombre y Apellido del autorizado:</span>
+                                <span class="type">[% "Nombre y Apellido del autorizado" | i18n %]:</span>
                                     <b> [% socio.getNombre_apellido_autorizado%]</b>
                                 <br>
-                                <span class="type">DNI del autorizado:</span>
+                                <span class="type">[% "DNI del autorizado" | i18n %]:</span>
                                     <b> [% socio.getDni_autorizado %]</b>
                                 <br>
-                                <span class="type">Tel&eacute;fono del autorizado:</span>
+                                <span class="type">[% "Tel&eacute;fono del autorizado" | i18n %]:</span>
                                     <b> [% socio.getTelefono_autorizado %]</b>
                                 <br>
                     </div>
@@ -74,14 +74,14 @@
                                                 <b>[% socio.persona.getTelefono %]</b><br>
                                 </div>	
                         [% END %]
-                
+
                         [% IF socio.persona.getAlt_telefono %]
                         <div class="tel">
                                 <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
                                             <b>[% socio.persona.getAlt_telefono %]</b><br>
                         </div>	
                         [% END %]
-                        
+
                         [% IF socio.persona.getEmail %]
                                 E-mail: <b><a href="mailto:[% socio.persona.getEmail %]">
                                         <span class="email"> [% socio.persona.getEmail %]</span></a></b><br>
@@ -144,7 +144,7 @@
                         </li>
                     [% IF !socio.tieneAutorizado %]
                         <li>
-                            
+
                         [% PERL %]
                                             print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Autorizado' | i18n %]",
                                                                                 boton   => "boton_buscar",
