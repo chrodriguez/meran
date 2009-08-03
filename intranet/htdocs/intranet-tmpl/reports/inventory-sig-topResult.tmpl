@@ -12,12 +12,12 @@
     <tr class="tablaresultadoTitle click">
 
         <th onClick="ordenar('barcode');">[% "Nro. de Inventario" | i18n %]</th>
+        <th onClick="ordenar('bulk');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
         <th onClick="ordenar('completo');">[% "Autor" | i18n %]</th>
         <th onClick="ordenar('title');">[% "T&iacute;tulo" | i18n %]</th>
         <th onClick="ordenar('number');">[% "Edic." | i18n %]</th>
         <th onClick="ordenar('publisher');">[% "Editor" | i18n %]</th>
         <th onClick="ordenar('publicationyear');">[% "A&ntilde;o" | i18n %]</th>
-        <th onClick="ordenar('bulk');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
 
     </tr>
 
@@ -25,6 +25,9 @@
             <tr >
                     <td  align="center">
                             [% cat_nivel3.getBarcode %]
+                    </td>
+                    <td align="center">
+                            [% cat_nivel3.getSignatura_topografica %]
                     </td>
                     <td align="center">
                             [% cat_nivel3.nivel2.nivel1.cat_autor.getNombre %]
@@ -43,9 +46,6 @@
                     </td>
                     <td align="center">
                             [% cat_nivel3.nivel2.getAnio_publicacion %]
-                    </td>
-                    <td align="center">
-                            [% cat_nivel3.getSignatura_topografica %]
                     </td>
             </tr>
 

@@ -259,6 +259,15 @@
                                                             ) ;
                             [% END %]
                   </li>
+                  <li>
+                      [% PERL %]
+                          print C4::AR::Filtros::link_to( text =>     "[% 'Disp. de Ejemplares' | i18n %]",
+                                                          url =>      "/cgi-bin/koha/reports/disponibilidad_ejemplares.pl",
+                                                          title =>    "[% 'Disp. de Ejemplares' | i18n %]"
+                                                      ) ;
+                      [% END %]
+                  </li>
+
                 </ul>
             </li>
 
@@ -434,17 +443,9 @@
                    </li>
                   <li>
                             [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Inventario' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/inventory.pl",
-                                                                title =>    "[% 'Inventario' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                  </li>
-                  <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Signatura Topogr&aacute;fica' | i18n %]",
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Inventario y Signatura' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/reports/inventory-sig-top.pl",
-                                                                title =>    "[% 'Signatura Topogr&aacute;fica' | i18n %]"
+                                                                title =>    "[% 'Inventario y Signatura' | i18n %]"
                                                             ) ;
                             [% END %]
                   </li>
@@ -528,14 +529,6 @@
                   <ul>
                         <li>
                             [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Disp. de Ejemplares' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/disponibilidad_ejemplares.pl",
-                                                                title =>    "[% 'Disp. de Ejemplares' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </li>
-                        <li>
-                            [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Hist&oacute;rico de Pr&eacute;stamos' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/reports/historico_Prestamos.pl",
                                                                 title =>    "[% 'Hist&oacute;rico de Pr&eacute;stamos' | i18n %]"
@@ -579,22 +572,6 @@
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de Ejemplares' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/reports/itemtypes.pl",
                                                                 title =>    "[% 'Tipos de Ejemplares' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </li>
-                        <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Niveles Bibliogr&aacute;ficos' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/levels.pl",
-                                                                title =>    "[% 'Niveles Bibliogr&aacute;ficos' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </li>
-                        <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Disponibilidad' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/avail_year.pl",
-                                                                title =>    "[% 'Disponibilidad' | i18n %]"
                                                             ) ;
                             [% END %]
                         </li>
