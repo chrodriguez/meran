@@ -1,3 +1,14 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Matías Pagano <matiasp@mail.linti.unlp.edu.ar>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/main.tmpl
 msgid "Cat&aacute;logo:"
 msgstr "Catalogue:"
@@ -12,7 +23,7 @@ msgstr "Advanced search"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/main.tmpl
 msgid "Usuarios:"
-msgstr "Users"
+msgstr "Users:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarItem.tmpl
 msgid "Por favor complete los campos del formulario que son obligatorios"
@@ -24,7 +35,7 @@ msgstr "Add item"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarItem.tmpl
 msgid "Esquema de ingreso de datos tipo:"
-msgstr ""
+msgstr "Scheme of entry of type data:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarItemResults.tmpl
 msgid "Autor:"
@@ -108,7 +119,7 @@ msgstr "Required fields"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarItemResults.tmpl
 msgid "Guardar Item nivel 1"
-msgstr "Save "
+msgstr "Save item level 1"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/itemtypes.tmpl
 msgid "Seleccione una unidad de informaci&oacute;n :"
@@ -156,7 +167,7 @@ msgstr "Call number:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/book-labels.tmpl
 msgid "La m&iacute;nima signatura existente es:"
-msgstr "The minimum call number is:"
+msgstr "The minimum existing call number is:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/book-labels.tmpl
 msgid "y la m&aacute;xima es:"
@@ -228,7 +239,7 @@ msgstr "Filter by:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoSanciones.tmpl
 msgid "Responsable:"
-msgstr ""
+msgstr "Person in charge:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoSanciones.tmpl
 msgid "Tipo de Pr&eacute;stamo:"
@@ -356,7 +367,7 @@ msgstr "Category"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/users-cardsResult.tmpl
 msgid "Generar Carnets"
-msgstr "Generate carnet"
+msgstr "Generate card"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historico_PrestamosResult.tmpl
 msgid "La cantidad de pr&eacute;stamos es:"
@@ -480,7 +491,7 @@ msgstr "Barcode"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reservasResult.tmpl
 msgid "Enviar mail a usuarios con reservas asignadas"
-msgstr "Send e-mail to users with asigned reserves"
+msgstr "Send e-mail to users with assigned reserves"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/estadistica_AnualResult.tmpl
 msgid "Prestamos"
@@ -548,7 +559,7 @@ msgstr "Not available"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/estantesResult.tmpl
 msgid "Para Pr&eacute;stamo"
-msgstr "For loan"
+msgstr "For loans"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/estantesResult.tmpl
 msgid "Para Sala"
@@ -604,23 +615,23 @@ msgstr "Search call number: &nbsp;"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historico_Prestamos.tmpl
 msgid "Historial de Pr&eacute;stamos"
-msgstr ""
+msgstr "Loan history"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historico_Prestamos.tmpl
 msgid "Tipo de Item:"
-msgstr ""
+msgstr "Item type"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/availability.tmpl
 msgid "Disponibilidad de Ejemplares"
-msgstr ""
+msgstr "Item availability"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/perdidos.tmpl
 msgid "Ejemplares perdidos"
-msgstr ""
+msgstr "Missing items"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/perdidos.tmpl
 msgid "La cantidad de ejemplares perdidos es :"
-msgstr ""
+msgstr "The amount of missing items is:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/perdidos.tmpl
 msgid "Titulo"
@@ -644,7 +655,7 @@ msgstr "Library:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/printEstadisticas.tmpl
 msgid "Facultad de Ciencias Econ&oacute;micas"
-msgstr "Faculty of Economic Sciences"
+msgstr "Economic Sciences School"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/printEstadisticas.tmpl
 msgid "Domciliarios"
@@ -724,59 +735,59 @@ msgstr "Note"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/registroResult.tmpl
 msgid "Agregar nota"
-msgstr ""
+msgstr "Add note"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/registroResult.tmpl
 msgid "Guardar Nota"
-msgstr ""
+msgstr "Save note"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Reportes y Estad&iacute;sticas"
-msgstr ""
+msgstr "Reports and statistics"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Reportes"
-msgstr ""
+msgstr "Reports"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Reportes gen&eacute;ricos"
-msgstr ""
+msgstr "Generic reports"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Inventario"
-msgstr ""
+msgstr "Inventory"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Estantes Virtuales"
-msgstr ""
+msgstr "Virtual shelves"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Pr&eacute;stamos"
-msgstr ""
+msgstr "Loans"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Registro de Actividades"
-msgstr ""
+msgstr "Activity log"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Actividades anuales"
-msgstr ""
+msgstr "Annual activities"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Ver Biblios"
-msgstr ""
+msgstr "See Biblios"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Ver BiblioItems"
-msgstr ""
+msgstr "See BiblioItems"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Ver Items"
-msgstr ""
+msgstr "See Items"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Ver cantidades por tipo"
-msgstr ""
+msgstr "See amount by type"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Ver cantidades de anal&iacute;ticas"
@@ -784,111 +795,111 @@ msgstr ""
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "C&oacute;digos de Barra por Tipo"
-msgstr ""
+msgstr "Barcodes by type"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Biblioteca  Virtual"
-msgstr ""
+msgstr "Virtual library"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Estad&iacute;sticas B&aacute;sicas"
-msgstr ""
+msgstr "Basic statistics"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Hist&oacute;rico de pr&eacute;stamos"
-msgstr ""
+msgstr "Loan history"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Hist&oacute;rico de sanciones"
-msgstr ""
+msgstr "Sanction history"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Estad. de pr&eacute;stamos"
-msgstr ""
+msgstr "Loan status"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Logueo de b&uacute;squedas"
-msgstr ""
+msgstr "Search login"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Usuarios por Categor&iacute;a"
-msgstr ""
+msgstr "Users by category"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Tipos de Ejemplares"
-msgstr ""
+msgstr "Item types"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Niveles bibliogr&aacute;ficos"
-msgstr ""
+msgstr "Bibliographic levels"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reports-home.tmpl
 msgid "Disponibilidad (Anual)"
-msgstr ""
+msgstr "Availability (annual)"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamos.tmpl
 msgid "Mail enviado a usuarios con pr&eacute;stamos vencidos."
-msgstr ""
+msgstr "E-mail sent to users with overdue loans"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamos.tmpl
 msgid "Fecha de Vencimiento"
-msgstr ""
+msgstr "Due date"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamos.tmpl
 msgid "Filtrar por"
-msgstr ""
+msgstr "Filter by"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamos.tmpl
 msgid "Seleccione estado de prestamo:&nbsp;"
-msgstr ""
+msgstr "Select loan status:&nbsp;"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamos.tmpl
 msgid "Vencidos"
-msgstr ""
+msgstr "Overdue"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamos.tmpl
 msgid "No vencidos"
-msgstr ""
+msgstr "Not overdue"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamos.tmpl
 msgid "Todos"
-msgstr ""
+msgstr "All"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamos.tmpl
 msgid "Seleccione una fecha de fin:"
-msgstr ""
+msgstr "Select an end date:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamos.tmpl
 msgid "Seleccione una unidad de informaci&oacute;n:&nbsp;"
-msgstr ""
+msgstr "Select an information unit:&nbsp;"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamos.tmpl
 msgid "Cantidad de resultados por p&aacute;gina:"
-msgstr ""
+msgstr "Amount of results by page:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/availabilityResult.tmpl
 msgid "La cantidad de ejemplares en estado"
-msgstr ""
+msgstr "The amount of items in state"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/availabilityResult.tmpl
 msgid "es:"
-msgstr ""
+msgstr "is:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/availabilityResult.tmpl
 msgid "Ordenar por autor"
-msgstr ""
+msgstr "List by author"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/availabilityResult.tmpl
 msgid "Ordenar por titulo"
-msgstr ""
+msgstr "List by title"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/availabilityResult.tmpl
 msgid "Ordenar por Sig. Topografica"
-msgstr ""
+msgstr "List by call number"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/availabilityResult.tmpl
 msgid "Ordenar por cod. de barras"
-msgstr ""
+msgstr "List by barcode"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/availabilityResult.tmpl
 msgid "C&oacute;digo de barras"
@@ -896,55 +907,55 @@ msgstr "Barcode"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/availabilityResult.tmpl
 msgid "Ordenar por edicion"
-msgstr ""
+msgstr "List by edition"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/availabilityResult.tmpl
 msgid "Edici&oacute;n"
-msgstr ""
+msgstr "Edition"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/availabilityResult.tmpl
 msgid "Ordenar por a&ntilde;o de publicacion"
-msgstr ""
+msgstr "List by year of publication"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/availabilityResult.tmpl
 msgid "A&ntilde;o de Publicaci&oacute;n"
-msgstr ""
+msgstr "Year of publication"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoSancionesResult.tmpl
 msgid "La cantidad de operaciones hechas fueron:"
-msgstr ""
+msgstr "The amount of operations is:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoSancionesResult.tmpl
 msgid "P&aacute;gina n&uacute;mero:"
-msgstr ""
+msgstr "Page number:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoSancionesResult.tmpl
 msgid "de un total de:"
-msgstr ""
+msgstr "of a total of:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoSancionesResult.tmpl
 msgid "Ordenar por Usuario"
-msgstr ""
+msgstr "List by user"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoSancionesResult.tmpl
 msgid "Responsable"
-msgstr ""
+msgstr "Person in charge"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoSancionesResult.tmpl
 msgid "Ordenar por Fecha"
-msgstr ""
+msgstr "List by date"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoSancionesResult.tmpl
 msgid "Ordenar por Fecha Fin"
-msgstr ""
+msgstr "List by end date"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoSancionesResult.tmpl
 msgid "Fecha Fin"
-msgstr ""
+msgstr "End date"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoSancionesResult.tmpl
 msgid "Ordenar por Operacion"
-msgstr ""
+msgstr "List by operation"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoSancionesResult.tmpl
 msgid "Reserva no Retirada"
@@ -952,167 +963,167 @@ msgstr ""
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/estadisticas.tmpl
 msgid "Estadisticas"
-msgstr ""
+msgstr "Statistics"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/estadisticas.tmpl
 msgid "Buscar por:"
-msgstr ""
+msgstr "Search by:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/estadisticas.tmpl
 msgid "Domiciliario"
-msgstr ""
+msgstr "Domiciliary"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/userEst.tmpl
 msgid "Categor&iacute;as"
-msgstr ""
+msgstr "Categories"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/userEst.tmpl
 msgid "Cant de usuarios reales"
-msgstr ""
+msgstr "Amount of real users"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/userEst.tmpl
 msgid "Cant de usuarios potenciales"
-msgstr ""
+msgstr "Amount of potential users"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/registro.tmpl
 msgid "eleccione para buscar por fecha."
-msgstr ""
+msgstr "Select to search by date."
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/registro.tmpl
 msgid "Alta"
-msgstr ""
+msgstr "High"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/registro.tmpl
 msgid "Actualizado"
-msgstr ""
+msgstr "Updated"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/registro.tmpl
 msgid "Borrado"
-msgstr ""
+msgstr "Erased"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/registro.tmpl
 msgid "Libro"
-msgstr ""
+msgstr "Book"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/registro.tmpl
 msgid "Grupo"
-msgstr ""
+msgstr "Group"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/registro.tmpl
 msgid "Ejemplar"
-msgstr ""
+msgstr "Item"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/registro.tmpl
 msgid "&nbsp;Ejemplar"
-msgstr ""
+msgstr "&nbsp;Item"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/registro.tmpl
 msgid "Nombre de usuario:"
-msgstr ""
+msgstr "Username:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/registro.tmpl
 msgid "desde:"
-msgstr ""
+msgstr "from:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/registro.tmpl
 msgid "hasta:"
-msgstr ""
+msgstr "to:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/logueoBusquedaResult.tmpl
 msgid "Campo"
-msgstr ""
+msgstr "Field"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/logueoBusquedaResult.tmpl
 msgid "Valor"
-msgstr ""
+msgstr "Value"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/estantes.tmpl
 msgid "Seleccione un estante: &nbsp;&nbsp;"
-msgstr ""
+msgstr "Select a shelf: &nbsp;&nbsp;"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/usersResult.tmpl
 msgid "Ordenar por Apellido"
-msgstr ""
+msgstr "List by surname"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/usersResult.tmpl
 msgid "Ordenar por Nombre"
-msgstr ""
+msgstr "List by name"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/usersResult.tmpl
 msgid "Ordenar por Direcci&oacute;n"
-msgstr ""
+msgstr "List by address"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/usersResult.tmpl
 msgid "Ordenar por Socio"
-msgstr ""
+msgstr "List by member"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/usersResult.tmpl
 msgid "Socio"
-msgstr ""
+msgstr "Member"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/usersResult.tmpl
 msgid "Ordenar por Tel&eacute;fono"
-msgstr ""
+msgstr "List by telephone number"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/usersResult.tmpl
 msgid "Ordenar por e-mail"
-msgstr ""
+msgstr "List by e-mail account"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/usersResult.tmpl
 msgid "Ordenar por Ingreso"
-msgstr ""
+msgstr "List by entry"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/usersResult.tmpl
 msgid "Ordenar por Categor&iacute;a"
-msgstr ""
+msgstr "List by category"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/estadistica_Anual.tmpl
 msgid "Seleccione un a&ntilde;o:"
-msgstr ""
+msgstr "Select a year:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/print.tmpl
 msgid "resultados encontrados"
-msgstr ""
+msgstr "Results found"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/print.tmpl
 msgid "Signatura Topografica"
-msgstr ""
+msgstr "Call number"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reservas.tmpl
 msgid "Seleccione el tipo de reserva:"
-msgstr ""
+msgstr "Select type of reserve:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reservas.tmpl
 msgid "Por ejemplar"
-msgstr ""
+msgstr "By item"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reservas.tmpl
 msgid "Por grupo"
-msgstr ""
+msgstr "By group"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/reservas.tmpl
 msgid "Todas"
-msgstr ""
+msgstr "All"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamosResult.tmpl
 msgid "La cantidad de prestamos es :"
-msgstr ""
+msgstr "The amount of loans is:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamosResult.tmpl
 msgid "Fecha de prestamo"
-msgstr ""
+msgstr "Loan date"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamosResult.tmpl
 msgid "Tipo de pr&eacute;stamo"
-msgstr ""
+msgstr "Loan type"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/prestamosResult.tmpl
 msgid "Enviar mail a usuarios con ejemplares atrasados"
-msgstr ""
+msgstr "Send e-mail to users with overdue items"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoCirculacionResult.tmpl
 msgid "C. Barra"
-msgstr ""
+msgstr "Barcode"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/analiticas.tmpl
 msgid "Anal&iacute;ticas"
@@ -1124,259 +1135,259 @@ msgstr ""
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detallePrestamos.tmpl
 msgid "EJEMPLARES PRESTADOS"
-msgstr ""
+msgstr "LOANED ITEMS"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detallePrestamos.tmpl
 msgid "Seleccionar todos"
-msgstr ""
+msgstr "Select all"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detallePrestamos.tmpl
 msgid "Sig. Top."
-msgstr ""
+msgstr "Call No."
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detallePrestamos.tmpl
 msgid "Ed."
-msgstr ""
+msgstr "Ed."
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detallePrestamos.tmpl
 msgid "Vol."
-msgstr ""
+msgstr "Vol."
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detallePrestamos.tmpl
 msgid "Pr&eacute;stamo"
-msgstr ""
+msgstr "Loan"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detallePrestamos.tmpl
 msgid "Vencimiento"
-msgstr ""
+msgstr "Due date"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "REGISTRO DEL USUARIO"
-msgstr ""
+msgstr "USER LOG"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Documento:"
-msgstr ""
+msgstr "ID number:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Fecha de nacimiento:"
-msgstr ""
+msgstr "Birthdate"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Sexo:"
-msgstr ""
+msgstr "Sex:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Contacto Alternativo:"
-msgstr ""
+msgstr "Alternative contact:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Tel&eacute;fono:"
-msgstr ""
+msgstr "Telephone No."
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Tel&eacute;fono Alt:"
-msgstr ""
+msgstr "Alt. Telephone No."
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Relaci&oacute;n:"
-msgstr ""
+msgstr "Relation:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Tarjeta de identificaci&oacute;n :"
-msgstr ""
+msgstr "ID Card:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Legajo :"
-msgstr ""
+msgstr "File number:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "ID de usuario:"
-msgstr ""
+msgstr "User ID:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Categor&iacute;a del usuario:"
-msgstr ""
+msgstr "User category:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Incorporaci&oacute;n a Biblioteca:"
-msgstr ""
+msgstr "Incorporation to library:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Realiz&oacute; el curso para usuarios. Dado de alta el d&iacute;a"
-msgstr ""
+msgstr "Has completed the user course. Registered on:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Notas:"
-msgstr ""
+msgstr "Notes:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Notas generales:"
-msgstr ""
+msgstr "General notes:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Cambio de Contrase&ntilde;a"
-msgstr ""
+msgstr "Password change"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Modificar Permisos"
-msgstr ""
+msgstr "Modify priviledges"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Generar Carnet"
-msgstr ""
+msgstr "Generate card"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Generar Libre Deuda"
-msgstr ""
+msgstr "Generate library clearance certificate"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Generar Prestamo Interbibliotecario"
-msgstr ""
+msgstr "Generate interlibrary loan"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/historialPrestamos.tmpl
 msgid "Cantidad de pr&eacute;stamos realizadas:"
-msgstr ""
+msgstr "Amount of loans:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/historialPrestamos.tmpl
 msgid "Ordenar por Titulo"
-msgstr ""
+msgstr "List by title"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/historialPrestamos.tmpl
 msgid "Ordenar por Autor"
-msgstr ""
+msgstr "List by author"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/historialPrestamos.tmpl
 msgid "Ordenar por C&oacute;digo"
-msgstr ""
+msgstr "List by code"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/historialPrestamos.tmpl
 msgid "C&oacute;digo"
-msgstr ""
+msgstr "Code"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/historialPrestamos.tmpl
 msgid "Renovaci&oacute;n"
-msgstr ""
+msgstr "Renewal"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/historialPrestamos.tmpl
 msgid "Ordenar por Fecha de devoluci&oacute;n"
-msgstr ""
+msgstr "List by return date"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/historialPrestamos.tmpl
 msgid "Devoluci&oacute;n"
-msgstr ""
+msgstr "Return date"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/historialPrestamos.tmpl
 msgid "Detalle de disponibilidad"
-msgstr ""
+msgstr "Availability"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleSanciones.tmpl
 msgid "Desde el"
-msgstr ""
+msgstr "From"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleSanciones.tmpl
 msgid "hasta el"
-msgstr ""
+msgstr "to"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/buscarUsuario.tmpl
 msgid "B&uacute;squeda de Usuarios Reales"
-msgstr ""
+msgstr "Real users search"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/buscarUsuario.tmpl
 msgid "TODOS"
-msgstr ""
+msgstr "ALL"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/datosUsuario.tmpl
 msgid "Prestamos interbibliotecarios"
-msgstr ""
+msgstr "Interlibrary loans"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Agregar usuario real"
-msgstr ""
+msgstr "Add real user"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Usuarios Reales - Modificar Datos"
-msgstr ""
+msgstr "Real users - modify data"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Tarjeta de identificaci&oacute;n"
-msgstr ""
+msgstr "ID card"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "DATOS PERSONALES DEL USUARIO"
-msgstr ""
+msgstr "USER PERSONAL DATA"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Fecha de nacimiento"
-msgstr ""
+msgstr "Birthdate"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Categor&iacute;a del usuario"
-msgstr ""
+msgstr "User category"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Nombres"
-msgstr ""
+msgstr "Names"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Documento"
-msgstr ""
+msgstr "ID"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "solo digitos"
-msgstr ""
+msgstr "digits only"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Forzar al usuario a cambiar su contrase&ntilde;a periodicamente"
-msgstr ""
+msgstr "Force user to change password periodically"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Realiz&oacute; el curso de usuario?"
-msgstr ""
+msgstr "Has user attended user course?"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Incorporaci&oacute;n a Unidad de Informaci&oacute;n"
-msgstr ""
+msgstr "Incorporation to information unit"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "DIRECCI&Oacute;N DEL USUARIO"
-msgstr ""
+msgstr "USER ADDRESS"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "C&oacute;digo Postal"
-msgstr ""
+msgstr "Zipcode"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Tel&eacute;fono particular"
-msgstr ""
+msgstr "Home telephone number"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Tel&eacute;fono del trabajo"
-msgstr ""
+msgstr "Work telephone number"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "C&oacute;digo Postal de origen"
-msgstr ""
+msgstr "Zipcode of origin"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Direcci&oacute;n de origen"
-msgstr ""
+msgstr "Address of origin"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Ciudad de origen"
-msgstr ""
+msgstr "City of origin"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "NOTAS DE LA UNIDAD DE INFORMACI&Oacute;N"
-msgstr ""
+msgstr "INFORMATION UNIT NOTES"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Obligatorio"
-msgstr ""
+msgstr "Mandatory"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleReservas.tmpl
 msgid "EJEMPLARES ASIGNADOS"
-msgstr ""
+msgstr "ASSIGNED ITEMS"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleReservas.tmpl
 msgid "Retira en"
@@ -1384,943 +1395,943 @@ msgstr ""
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleReservas.tmpl
 msgid "Cancelar"
-msgstr ""
+msgstr "Cancel"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleReservas.tmpl
 msgid "prestar"
-msgstr ""
+msgstr "loan"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleReservas.tmpl
 msgid "RESERVAS"
-msgstr ""
+msgstr "RESERVES"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleReservas.tmpl
 msgid "Volumen"
-msgstr ""
+msgstr "Volume"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/printPrestInterBiblio.tmpl
 msgid "Nombre Director:"
-msgstr ""
+msgstr "Name of director:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/printPrestInterBiblio.tmpl
 msgid "DATOS DE LOS DOCUMENTOS"
-msgstr ""
+msgstr "DOCUMENT DATA"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/printPrestInterBiblio.tmpl
 msgid "Otros Datos"
-msgstr ""
+msgstr "Other data"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/buscarUsuario2.tmpl
 msgid "2 years"
-msgstr ""
+msgstr "2 years"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/buscarUsuarioResult.tmpl
 msgid "Ha buscado por :"
-msgstr ""
+msgstr "You have searched by:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/buscarUsuarioResult.tmpl
 msgid "Apellido y Nombres"
-msgstr ""
+msgstr "Surname and names"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/buscarUsuarioResult.tmpl
 msgid "Cat."
-msgstr ""
+msgstr "Cat."
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/buscarUsuarioResult.tmpl
 msgid "Prest."
-msgstr ""
+msgstr "Loan"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/buscarUsuarioResult.tmpl
 msgid "Ven."
-msgstr ""
+msgstr "Due"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/buscarUsuarioResult.tmpl
 msgid "Estado"
-msgstr ""
+msgstr "Status"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/potenciales/buscarUsuario.tmpl
 msgid "Ingrese un dato"
-msgstr ""
+msgstr "Enter data"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/potenciales/buscarUsuario.tmpl
 msgid "B&uacute;squeda de Usuarios Potenciales"
-msgstr ""
+msgstr "Potential users search"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/potenciales/buscarUsuarioResult.tmpl
 msgid "Tarjeta de ID"
-msgstr ""
+msgstr "ID card"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/potenciales/buscarUsuarioResult.tmpl
 msgid "Habilitado?"
-msgstr ""
+msgstr "Enabled?"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/potenciales/buscarUsuarioResult.tmpl
 msgid "Imposible"
-msgstr ""
+msgstr "Impossible"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/potenciales/buscarUsuarioResult.tmpl
 msgid "Si"
-msgstr ""
+msgstr "Yes"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/potenciales/buscarUsuarioResult.tmpl
 msgid "No"
-msgstr ""
+msgstr "No"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/potenciales/buscarUsuarioResult.tmpl
 msgid "Habilitar Seleccionados"
-msgstr ""
+msgstr "Enable selected"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/potenciales/buscarUsuarioResult.tmpl
 msgid "Deshabilitar Seleccionados"
-msgstr ""
+msgstr "Disable selected"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/feriados.tmpl
 msgid "Actualiza los d&iacute;as de inactividad"
-msgstr ""
+msgstr "Updates inactivity days"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "Modificar Tipo de Documento"
-msgstr ""
+msgstr "Modifies document type"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "Agregar Tipo de Documento"
-msgstr ""
+msgstr "Adds document type"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "Tipo de documento"
-msgstr ""
+msgstr "Document type"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "Descripci&oacute;n"
-msgstr ""
+msgstr "Description"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "Duraci&oacute;n del pr&eacute;stamo"
-msgstr ""
+msgstr "Loan length"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "Renovaciones permitidas"
-msgstr ""
+msgstr "Renewals allowed"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "Costo de pr&eacute;stamo"
-msgstr ""
+msgstr "Cost of loan"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "Agrupaci&oacute;n en la b&uacute;squeda"
-msgstr ""
+msgstr "Group search"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "detalle"
-msgstr ""
+msgstr "detail"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "Biblioteca Virtual"
-msgstr ""
+msgstr "Virtual library"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "Tipo de pedido"
-msgstr ""
+msgstr "Request type"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "Para Copia"
-msgstr ""
+msgstr "For copy"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "Para Impresi&oacute;n"
-msgstr ""
+msgstr "For printing"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "Permitido"
-msgstr ""
+msgstr "Allowed"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "No Permitidas"
-msgstr ""
+msgstr "Not allowed"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "El registro esta en siendo utilizado"
-msgstr ""
+msgstr "The register is being used"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "veces. No se puede borrar."
-msgstr ""
+msgstr "times. Cannot be erased."
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/itemtypes.tmpl
 msgid "CONFIRME BORRADO"
-msgstr ""
+msgstr "CONFIRM DELETION"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "Tipos de pr&eacute;stamo"
-msgstr ""
+msgstr "Loan types"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "Categorias de usuario"
-msgstr ""
+msgstr "User categories"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "Tipos de pr&eacute;stamo sobre el que se aplica"
-msgstr ""
+msgstr "Types of loans it applies to"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "Guardar"
-msgstr ""
+msgstr "Save"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "Orden"
-msgstr ""
+msgstr "Order"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "Tipo de usuario"
-msgstr ""
+msgstr "Type of user"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "D&iacute;as de demora"
-msgstr ""
+msgstr "Overdue days"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "D&iacute;as de sanci&oacute;n"
-msgstr ""
+msgstr "Sanction days"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "Eliminar"
-msgstr ""
+msgstr "Delete"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "Agregar"
-msgstr ""
+msgstr "Add"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "Orden:"
-msgstr ""
+msgstr "Order:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "Regla:"
-msgstr ""
+msgstr "Rule:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "Para editar las reglas haga clic"
-msgstr ""
+msgstr "To edit rules click"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "aqu&iacute;"
-msgstr ""
+msgstr "here"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/issuetypes.tmpl
 msgid "Modificar Tipo de Pr&eacute;stamo"
-msgstr ""
+msgstr "Modify loan type"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/issuetypes.tmpl
 msgid "Agregar Tipo de Pr&eacute;stamo"
-msgstr ""
+msgstr "Add loan type"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/issuetypes.tmpl
 msgid "Habilitado"
-msgstr ""
+msgstr "Enabled"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/issuetypes.tmpl
 msgid "M&aacute;xima cantidad de pr&eacute;stamos"
-msgstr ""
+msgstr "Maximum amount of loans"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/issuetypes.tmpl
 msgid "D&iacute;as de duraci&oacute;n del pr&eacute;stamo"
-msgstr ""
+msgstr "Loan length"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/issuetypes.tmpl
 msgid "D&iacute;as de Renovaci&oacute;n"
-msgstr ""
+msgstr "Renewal days"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/issuetypes.tmpl
 msgid "Cuantos d&iacute;as antes se puede renovar"
-msgstr ""
+msgstr "Days in advance a renewal must be made"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/issuetypes.tmpl
 msgid "Administraci&oacute;n de Tipos de Pr&eacute;stamo"
-msgstr ""
+msgstr "Administration of loan types"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/issuetypes.tmpl
 msgid "Cantidad de d&iacute;as para renovar"
-msgstr ""
+msgstr "Amount of days to renew"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/issuetypes.tmpl
 msgid "Editar"
-msgstr ""
+msgstr "Edit"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/adminLibreDeuda.tmpl
 msgid "Administraci&oacute;n de Libre Deuda"
-msgstr ""
+msgstr "Library clearance certificate administration"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/adminLibreDeuda.tmpl
 msgid "Elija por quï¿½ causa no se puede realizar la impresi&oacute;n del certificado de libre deuda"
-msgstr ""
+msgstr "Choose why library clearance certificate cannot be printed"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/adminLibreDeuda.tmpl
 msgid "Por tener:"
-msgstr ""
+msgstr "Because of:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/adminLibreDeuda.tmpl
 msgid "reservas adjudicadas"
-msgstr ""
+msgstr "alloted reserves"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/adminLibreDeuda.tmpl
 msgid "reservas en espera"
-msgstr ""
+msgstr "pending reserves"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/adminLibreDeuda.tmpl
 msgid "prestamos vencidos"
-msgstr ""
+msgstr "overdue loans"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/adminLibreDeuda.tmpl
 msgid "prestamos en curso"
-msgstr ""
+msgstr "current loans"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/adminLibreDeuda.tmpl
 msgid "sanciones"
-msgstr ""
+msgstr "sanctions"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/adminLibreDeuda.tmpl
 msgid "todas"
-msgstr ""
+msgstr "all of the above"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Modificar Categor&iacute;a"
-msgstr ""
+msgstr "Modify category"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Agregar Categor&iacute;a"
-msgstr ""
+msgstr "Add category"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "C&oacute;digo de categor&iacute;a"
-msgstr ""
+msgstr "Category code"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Per&iacute;odo de inscripci&oacute;n"
-msgstr ""
+msgstr "Registration period"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "L&iacute;mite superior de edad"
-msgstr ""
+msgstr "Upper age limit"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Edad Requerida"
-msgstr ""
+msgstr "Required age"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Tarifa de inscripci&oacute;n"
-msgstr ""
+msgstr "Registration fee"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "L&iacute;mite de pr&eacute;stamo"
-msgstr ""
+msgstr "Loan limit"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "D&iacute;as de pr&eacute;stamo"
-msgstr ""
+msgstr "Loan days"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Costo de reserva"
-msgstr ""
+msgstr "Reserve cost"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Registro de datos"
-msgstr ""
+msgstr "Data log"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "TOTAL"
-msgstr ""
+msgstr "TOTAL"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Upperage limit"
-msgstr ""
+msgstr "Límite superior de edad"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Tipo de multa"
-msgstr ""
+msgstr "Fine type"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Se necesita nota de atraso"
-msgstr ""
+msgstr "Delay note needed"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "D&iacute;s de pr&eacute;stamo"
-msgstr ""
+msgstr "Loan days"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Borrado de datos"
-msgstr ""
+msgstr "Data deletion"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Administraci&oacute;n de Categor&iacute;as"
-msgstr ""
+msgstr "Categories administration"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Ha Buscado por"
-msgstr ""
+msgstr "You have searched by"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Multa"
-msgstr ""
+msgstr "Fine"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Atrasado"
-msgstr ""
+msgstr "Delayed"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Reserva"
-msgstr ""
+msgstr "Reserve"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/authorised_values.tmpl
 msgid "Modificar Valores Autorizados"
-msgstr ""
+msgstr "Modify authorized values"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/authorised_values.tmpl
 msgid "Agregar Valores Autorizados"
-msgstr ""
+msgstr "Add authorized values"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/authorised_values.tmpl
 msgid "Valor Autorizado"
-msgstr ""
+msgstr "Authorized value"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/authorised_values.tmpl
 msgid "Lib"
-msgstr ""
+msgstr "Lib"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/authorised_values.tmpl
 msgid "Variable"
-msgstr ""
+msgstr "Variable"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/authorised_values.tmpl
 msgid "Administraci&oacute;n de Valores Autorizados"
-msgstr ""
+msgstr "Administration of authorized values"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/authorised_values.tmpl
 msgid "Comenzar b&uacute;squeda"
-msgstr ""
+msgstr "Begin search"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/authorised_values.tmpl
 msgid "Nueva Categor&iacute;a"
-msgstr ""
+msgstr "New category"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/refs.tmpl
 msgid "Seleccione la tabla de referencia sobre la que quiere trabajar"
-msgstr ""
+msgstr "Select reference table you wish to work on"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/estante.tmpl
 msgid "T&eacute;rmino de b&uacute;squeda:"
-msgstr ""
+msgstr "Search term:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busqEjemplar.tmpl
 msgid "Resultados de la B&uacute;squeda de un ejemplar"
-msgstr ""
+msgstr "Results of item search"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busqEjemplar.tmpl
 msgid "Ha buscado por"
-msgstr ""
+msgstr "You have searched by"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busqEjemplar.tmpl
 msgid "t&iacute;tulo"
-msgstr ""
+msgstr "title"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busqEjemplar.tmpl
 msgid "Resultados encontrados:"
-msgstr ""
+msgstr "Results found:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busqEjemplar.tmpl
 msgid "Descripciones bibliogr&aacute;ficas"
-msgstr ""
+msgstr "Bibliographic descriptions:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busqEjemplar.tmpl
 msgid "Esquema de catalogo"
-msgstr ""
+msgstr "Catalogue Scheme"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busqEjemplar.tmpl
 msgid "Agregar grupo"
-msgstr ""
+msgstr "Add group"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busqEjemplar.tmpl
 msgid "No se encontr&oacute; nada"
-msgstr ""
+msgstr "No results found"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busqEjemplar.tmpl
 msgid "Descripciones bibliogr&aacute;ficas en breeding farm"
-msgstr ""
+msgstr "Breeding farm bibliographic descriptions"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busqEjemplar.tmpl
 msgid "ISBN"
-msgstr ""
+msgstr "ISBN"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busqEjemplar.tmpl
 msgid "Viene desde"
-msgstr ""
+msgstr "Comes from"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busqEjemplar.tmpl
 msgid "Agregar&nbsp;ejemplar"
-msgstr ""
+msgstr "Add&nbsp;item"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busqEjemplar.tmpl
 msgid "Crear descripci&oacute;n bibliogr&aacute;fica vac&iacute;a"
-msgstr ""
+msgstr "Create empty bibliographic description"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/adminEjemplares.tmpl
 msgid "Ingrese un dato para realizar la busqueda"
-msgstr ""
+msgstr "Enter data to begin search"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/adminEjemplares.tmpl
 msgid "Eliga el esquema de catalogo para agregar un item"
-msgstr ""
+msgstr "Choose the catalogue scheme to add an item"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/adminEjemplares.tmpl
 msgid "Administraci&oacute;n de ejemplares"
-msgstr ""
+msgstr "Item administration"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/adminEjemplares.tmpl
 msgid "T&iacute;tulo:"
-msgstr ""
+msgstr "Title:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "No ingreso datos para consultar"
-msgstr ""
+msgstr "Did not enter data to consult"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "B&uacute;squeda Experta en el cat&aacute;logo"
-msgstr ""
+msgstr "Expert search in catalogue"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Campo:"
-msgstr ""
+msgstr "Field:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Condici&oacute;n:"
-msgstr ""
+msgstr "Condition:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Igual"
-msgstr ""
+msgstr "Same"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Distinto"
-msgstr ""
+msgstr "Different"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Mayor"
-msgstr ""
+msgstr "Larger than"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Menor"
-msgstr ""
+msgstr "Less than"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Empieza"
-msgstr ""
+msgstr "Begins"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Contiene"
-msgstr ""
+msgstr "Contains"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Finaliza"
-msgstr ""
+msgstr "Ends"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Valor:"
-msgstr ""
+msgstr "Value:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Campo Marc:"
-msgstr ""
+msgstr "MARC field:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Elegir"
-msgstr ""
+msgstr "Choose"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Consulta:"
-msgstr ""
+msgstr "Query:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busquedaResult.tmpl
 msgid "Total de registros:"
-msgstr ""
+msgstr "Search results"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busquedaResult.tmpl
 msgid "Ordenar por T&iacute;tulo"
-msgstr ""
+msgstr "List by title:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busquedaResult.tmpl
 msgid "Edici&oacute;n/A&ntilde;o"
-msgstr ""
+msgstr "Edition/Year"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busquedaResult.tmpl
 msgid "Filtrar por Autor"
-msgstr ""
+msgstr "Filter by Author"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtrado.tmpl
 msgid "B&uacute;squeda Avanzada en el cat&aacute;logo"
-msgstr ""
+msgstr "Advanced catalogue search"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtrado.tmpl
 msgid "B&uacute;squeda por diccionario"
-msgstr ""
+msgstr "Search by dictionary"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtrado.tmpl
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtrado.tmpl
 msgid "Exacto"
-msgstr ""
+msgstr "Exact"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/sanctions.tmpl
 msgid "Sanciones"
-msgstr ""
+msgstr "Sanctions"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/sanctions.tmpl
 msgid "Fecha inicio"
-msgstr ""
+msgstr "Start date"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/sanctions.tmpl
 msgid "Fecha fin"
-msgstr ""
+msgstr "End date"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/auth.tmpl
 msgid "Su navegador no soporta o no tiene habilidato Javascript"
-msgstr "Your browser does not support JavaScript!"
+msgstr "Your browser does not support JavaScript"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/changepassword.tmpl
 msgid "Cambio de contrase&ntilde;a obligatorio"
-msgstr ""
+msgstr "Mandatory password change"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/auth.tmpl
 msgid "Identificaci&oacute;n:"
-msgstr ""
+msgstr "Identification"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/auth.tmpl
 msgid "Contrase&ntilde;a:"
-msgstr ""
+msgstr "Password"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/auth.tmpl
 msgid "Entrar"
-msgstr ""
+msgstr "Enter"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/printPrestInterBiblio.tmpl
 msgid "Completar Datos"
-msgstr ""
+msgstr "Complete data"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/main.tmpl
 msgid "Buscar"
-msgstr ""
+msgstr "Search"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/main.tmpl
 msgid "Buscar en el cat&aacute;logo"
-msgstr ""
+msgstr "Search in catalogue"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/main.tmpl
 msgid "Buscar usuario"
-msgstr ""
+msgstr "Search user"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/main.tmpl
 msgid "Devoluciones y Renovaciones"
-msgstr ""
+msgstr "Returns and renewals"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/main.tmpl
 msgid "Par&aacute;metros"
-msgstr ""
+msgstr "Parameters"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/agregarTipoPrestamo.tmpl
 msgid "Guardar Cambios"
-msgstr ""
+msgstr "Save changes"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanctions.tmpl
 msgid "Tipos de sanciones"
-msgstr ""
+msgstr "Types of sanctions"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/agregarPreferencia.tmpl
 msgid "Explicaci&oacute;n"
-msgstr ""
+msgstr "Explanation"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/preferencias.tmpl
 msgid "Administraci&oacute;n de Preferencias del Sistema"
-msgstr ""
+msgstr "System preferences administration"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/preferencias.tmpl
 msgid "Limpiar"
-msgstr ""
+msgstr "Clean"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/preferencias.tmpl
 msgid "Seleccionar ..."
-msgstr ""
+msgstr "Select ..."
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/preferencias.tmpl
 msgid "Si-No"
-msgstr ""
+msgstr "Yes-No"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/preferencias.tmpl
 msgid "Texto grande"
-msgstr ""
+msgstr "Large text"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/preferencias.tmpl
 msgid "Texto com&uacute;n"
-msgstr ""
+msgstr "Normal text"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/preferencias.tmpl
 msgid "Referencia"
-msgstr ""
+msgstr "Reference"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/preferencias.tmpl
 msgid "Valores autorizados"
-msgstr ""
+msgstr "Authorized values"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanciones.tmpl
 msgid "Categorias de socio"
-msgstr ""
+msgstr "Member categories"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/detalle_permisos.tmpl
 msgid "ATENCION: DANDO DE ALTA UN NUEVO PERMISO YA QUE EL USUARIO NO CUENTA CON PRIVILEGIOS PARA TAL COMBINACION"
-msgstr ""
+msgstr "ATTENTION: GRANTING NEW PERMISSION AS USER DOES NOT HAVE PRIVILEDGES FOR SUCH COMBINATION"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/detalle_permisos.tmpl
 msgid "Guardar Permisos"
-msgstr ""
+msgstr "Save priviledges"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtrado.tmpl
 msgid "Busqueda combinada"
-msgstr ""
+msgstr "Combined search"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtrado.tmpl
 msgid "Busqueda simple"
-msgstr ""
+msgstr "Simple search"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtrado.tmpl
 msgid "Busqueda espec&iacute;fica"
-msgstr ""
+msgstr "Specific search"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtrado.tmpl
 msgid "Mostrar Estantes"
-msgstr ""
+msgstr "Show shelves"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/busquedaResult.tmpl
 msgid "Mostrar Detalle del Ejemplar"
-msgstr ""
+msgstr "Show item details"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/busquedas/filtradoExperto.tmpl
 msgid "Limpiar el formulario"
-msgstr ""
+msgstr "Clean form"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/detallePrestamos.tmpl
 msgid "PR&Eacute;STAMOS"
-msgstr ""
+msgstr "LOANS"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/detallePrestamos.tmpl
 msgid "Invertir la selecci&oacute;n"
-msgstr ""
+msgstr "Invert selection"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/detalleReservas.tmpl
 msgid "El usuario tiene"
-msgstr ""
+msgstr "User has"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/detalleReservas.tmpl
 msgid "ejemplar(es) reservado(s) esperando para ser retirado(s)"
-msgstr ""
+msgstr "pending reserved item(s)"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/detalleReservas.tmpl
 msgid "Reservado desde"
-msgstr ""
+msgstr "Reserved since"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/detalleReservas.tmpl
 msgid "Reservado hasta"
-msgstr ""
+msgstr "Reserved until"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/detalleReservas.tmpl
 msgid "Realizar pr&eacute;stamo"
-msgstr ""
+msgstr "Lend item"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/detalleReservas.tmpl
 msgid "El usuario no tiene ejemplar(es) reservado(s) esperando para ser retirado(s)."
-msgstr ""
+msgstr "User has no pending reserved item(s)"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/detalleReservas.tmpl
 msgid "reserva(s) en espera"
-msgstr ""
+msgstr "Waiting reserve"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/detalleReservas.tmpl
 msgid "RESERVAS EN ESPERA"
-msgstr ""
+msgstr "PENDING RESERVES"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/circulacionRapida.tmpl
 msgid "Circulaci&oacute;n R&aacute;pida"
-msgstr ""
+msgstr "Quick circulation"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/circulacionRapida.tmpl
 msgid "Agregar Autorizado"
-msgstr ""
+msgstr "Add authorized person"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/sancionesResult.tmpl
 msgid "Borrar Sanciones"
-msgstr ""
+msgstr "Erase sanctions"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/sancionesResult.tmpl
 msgid "No Hay Sanciones"
-msgstr ""
+msgstr "No sanctions found"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/devoluciones.tmpl
 msgid "Ingrese el c&oacute;digo de barras"
-msgstr ""
+msgstr "Enter barcode"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/detalleUsuario.tmpl
 msgid "Nombre:"
-msgstr ""
+msgstr "Name:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/detalleUsuario.tmpl
 msgid "Ciudad :"
-msgstr ""
+msgstr "City:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/circ/detalleUsuario.tmpl
 msgid "Calle :"
-msgstr ""
+msgstr "Street:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarDocumento.tmpl
 msgid "Guardar Nivel 1"
-msgstr ""
+msgstr "Save Level 1"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarDocumento.tmpl
 msgid "Guardar el nivel 1"
-msgstr ""
+msgstr "Save level 1"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarDocumento.tmpl
 msgid "Agregar Grupo:"
-msgstr ""
+msgstr "Add group:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarDocumento.tmpl
 msgid "Guardar Nivel 2"
-msgstr ""
+msgstr "Save Level 2"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarDocumento.tmpl
 msgid "Guardar el nivel 2"
-msgstr ""
+msgstr "Save level 2"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarDocumento.tmpl
 msgid "Agregar Ejemplar:"
-msgstr ""
+msgstr "Add item:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarDocumento.tmpl
 msgid "Guardar Nivel 3"
-msgstr ""
+msgstr "Save Level 3"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarDocumento.tmpl
 msgid "Guardar el nivel 3"
-msgstr ""
+msgstr "Save level 3"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel2.tmpl
 msgid "Modificar Nivel 2"
-msgstr ""
+msgstr "Modify Level 2"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel2.tmpl
 msgid "Modificar nivel 2"
-msgstr ""
+msgstr "Modify level 2"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel2.tmpl
 msgid "Agregar Nivel 3"
-msgstr ""
+msgstr "Add Level 3"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel2.tmpl
 msgid "Agregar nivel 3"
-msgstr ""
+msgstr "Add level 3"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel2.tmpl
 msgid "Borrar nivel 2"
-msgstr ""
+msgstr "Erase level 2"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/detalle.tmpl
 msgid "Editar Nivel 1"
-msgstr ""
+msgstr "Edit Level 1"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/detalle.tmpl
 msgid "Editar Nivel 2"
-msgstr ""
+msgstr "Edit Level 2"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel3.tmpl
 msgid "Modificar Nivel 3"
-msgstr ""
+msgstr "Modify Level 3"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel3.tmpl
 msgid "Modificar nivel 3"
-msgstr ""
+msgstr "Modify level 3"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel3.tmpl
 msgid "Borrar Nivel 3"
-msgstr ""
+msgstr "Erase Level 3"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel3.tmpl
 msgid "Borrar nivel 3"
-msgstr ""
+msgstr "Erase level 3"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel3.tmpl
 msgid "Para los elementos que est&acute;n marcados:"
-msgstr ""
+msgstr "For the items marked:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel3.tmpl
 msgid "Modificar Ejemplares"
-msgstr ""
+msgstr "Modify items"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel3.tmpl
 msgid "Borrar Ejemplares"
-msgstr ""
+msgstr "Erase items"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarCampoMARC.tmpl
 msgid "Guardar Campo temporal"
-msgstr ""
+msgstr "Save temporal field"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/agregarCampoMARC.tmpl
 msgid "Cancelar Campo temporal"
-msgstr ""
+msgstr "Cancel temporal field"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ejemplaresDelGrupo.tmpl
 msgid "Editar Ejemplar"
-msgstr ""
+msgstr "Edit item"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ejemplaresDelGrupo.tmpl
 msgid "Borrar Ejemplar"
-msgstr ""
+msgstr "Erase item"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ejemplaresDelGrupo.tmpl
 msgid "Devolver"
-msgstr ""
+msgstr "Return"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ejemplaresDelGrupo.tmpl
 msgid "Renovar"
-msgstr ""
+msgstr "Renew"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ejemplaresDelGrupo.tmpl
 msgid "NO SE PERMITE CIRCULAR"
-msgstr ""
+msgstr "NOT FOR CIRCULATION"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ejemplaresDelGrupo.tmpl
 msgid "Detalle MARC"
-msgstr ""
+msgstr "MARC detail"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel1.tmpl
 msgid "Modificar nivel 1"
-msgstr ""
+msgstr "Modify level 1"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel1.tmpl
 msgid "Agregar Nivel 2"
-msgstr ""
+msgstr "Add Level 2"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel1.tmpl
 msgid "Agregar nivel 2"
-msgstr ""
+msgstr "Add level 2"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/estructura/ADInfoNivel1.tmpl
 msgid "Borrar nivel 1"
-msgstr ""
+msgstr "Erase level 1"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl
 msgid "Encabezado"
-msgstr ""
+msgstr "Heading"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl
 msgid "Visible"
-msgstr ""
+msgstr "Visible"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl
 msgid "En Linea"
@@ -2328,7 +2339,7 @@ msgstr ""
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl
 msgid "Mostrar"
-msgstr ""
+msgstr "Show"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl
 msgid "Subir en el Orden"
@@ -2348,7 +2359,7 @@ msgstr ""
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl
 msgid "Cambiar la visibilidad del Encabezado"
-msgstr ""
+msgstr "Change heading visibility"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl
 msgid "para indicar si la salida es en linea"
@@ -2356,11 +2367,11 @@ msgstr ""
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpacTablaEncabezados.tmpl
 msgid "Mostrar informaci&oacute;n"
-msgstr ""
+msgstr "Show information"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpacTabla.tmpl
 msgid "Subcampo"
-msgstr ""
+msgstr "Subfield"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpacTabla.tmpl
 msgid "Texto Pred"
@@ -2376,43 +2387,43 @@ msgstr ""
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpacTabla.tmpl
 msgid "Cambiar la visibilidad"
-msgstr ""
+msgstr "Change visibility"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpac.tmpl
 msgid "Descripcion breve para lo q sirve la ventana...."
-msgstr ""
+msgstr "Brief description of what this window does"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpac.tmpl
 msgid "Visualizaci&oacute;n de campos MARC en OPAC"
-msgstr ""
+msgstr "MARC fields visualization in OPAC"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpac.tmpl
 msgid "Agregar Encabezado"
-msgstr ""
+msgstr "Add heading"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/visualizacionOPAC/visualizacionOpac.tmpl
 msgid "Agregar un Encabezado"
-msgstr ""
+msgstr "Add a heading"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimos.tmpl
 msgid "Guardar SeudÃ³nimo"
-msgstr ""
+msgstr "Save pseudonym"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimos.tmpl
 msgid "Guardar Sinonimos"
-msgstr ""
+msgstr "Save synonyms"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/potenciales/buscarUsuarioResult.tmpl
 msgid "Mostrar Detalle del Usuario"
-msgstr ""
+msgstr "Show user details"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/potenciales/buscarUsuario.tmpl
 msgid "S&oacute;lo habilitados"
-msgstr ""
+msgstr "Only enabled"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleSanciones.tmpl
 msgid "SANCIONES"
-msgstr ""
+msgstr "SANCTIONS"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleSanciones.tmpl
 msgid "Reserva no retirada"
@@ -2420,117 +2431,117 @@ msgstr ""
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleReservas.tmpl
 msgid "Mostrar Detalle de Disponibilidad"
-msgstr ""
+msgstr "Show availability"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/buscarUsuarioResult.tmpl
 msgid "Ordenar por tarjeta de Id."
-msgstr ""
+msgstr "List by ID card"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Apellido y Nombre del autorizado"
-msgstr ""
+msgstr "Name and surname of authorized person"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "DNI del autorizado"
-msgstr ""
+msgstr "ID of authorized person"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Tel&eacute;fono del autorizado"
-msgstr ""
+msgstr "Telephone number of authorized person "
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/agregarUsuario.tmpl
 msgid "Guardar Modificacion"
-msgstr ""
+msgstr "Save changes"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Datos secundarios"
-msgstr ""
+msgstr "Secondary data"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Modificar Datos"
-msgstr ""
+msgstr "Modify data"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Eliminar Usuario"
-msgstr ""
+msgstr "Delet user"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Eliminar Autorizado"
-msgstr ""
+msgstr "Delet authorized person"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Reset Password"
-msgstr ""
+msgstr "Reset Password"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Libre Deuda"
-msgstr ""
+msgstr "Library clearance"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/usuarios/reales/detalleUsuario.tmpl
 msgid "Prest. Interbibliotecario"
-msgstr ""
+msgstr "Interlibrary loan"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/users-cardsResult.tmpl
 msgid "Carnets"
-msgstr ""
+msgstr "Cards"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoSancionesResult.tmpl
 msgid "Detalle Usuario"
-msgstr ""
+msgstr "User detail"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/logueoBusquedaResult.tmpl
 msgid "La cantidad de logueos es :"
-msgstr ""
+msgstr "The amount of logins is:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/logueoBusquedaResult.tmpl
 msgid "Ordenar por Campo"
-msgstr ""
+msgstr "List by field"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/logueoBusquedaResult.tmpl
 msgid "Ordenar por Valor"
-msgstr ""
+msgstr "List by value"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/logueoBusquedaResult.tmpl
 msgid "Ordenar por Tipo"
-msgstr ""
+msgstr "List by type"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/logueoBusquedaResult.tmpl
 msgid "Usuario no logueado"
-msgstr ""
+msgstr "User not logged in"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/generarEtiquetas-result.tmpl
 msgid "a PDF"
-msgstr ""
+msgstr "to PDF"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/logueoBusqueda.tmpl
 msgid "Logueo de B&uacute;squedas"
-msgstr ""
+msgstr "Search login"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/generarEtiquetas.tmpl
 msgid "Unidad de informacion"
-msgstr ""
+msgstr "Information unit"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/generarEtiquetas.tmpl
 msgid "Comienzo de Signatura Topogr&aacute;fica:"
-msgstr ""
+msgstr "Call number beginning:"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/printHistPrestamos.tmpl
 msgid "Historial de Prestamos"
-msgstr ""
+msgstr "Loan history"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/printHistPrestamos.tmpl
 msgid "C&otilde;digo de Barras"
-msgstr ""
+msgstr "Barcode"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoCirculacionResult.tmpl
 msgid "Mostrar Detalle"
-msgstr ""
+msgstr "Show details"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoCirculacionResult.tmpl
 msgid "Mostrar Detalle del Item"
-msgstr ""
+msgstr "Show item details"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoCirculacionResult.tmpl
 msgid "Mostrar Detalle del Usuario Responsable"
-msgstr ""
+msgstr "Show details of user in charge"
 

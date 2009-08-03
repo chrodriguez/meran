@@ -96,18 +96,18 @@ sub aplicaAlTipoDePrestamo{
 sub actualizarTiposPrestamoQueAplica {
     my ($self) = shift;
     my ($tiposQueAplica,$db) = @_;
-
-	$self->db=$db;
-
+$self->debug("en actualizarTiposPrestamoQueAplica ");
 	foreach my $tps ($self->ref_tipo_prestamo_sancion) {
+		$self->debug($tps->getTipo_prestamo);
 		$tps->delete();
 	}
 
     foreach my $tpa (@$tiposQueAplica) {
-		my $ta = C4::Modelo::CircTipoPrestamoSancion->new(db => $db);
+		$self->debug("tipo tipo ".$tpa);
+		my $ta = C4::Modelo::CircTipoPrestamoSancion->new(db=>$db);
 		$ta->setTipo_prestamo($tpa);
 		$ta->setTipo_sancion($self->getTipo_sancion);
-		$ta->save();
+   		$ta->save();
     }
 }
 

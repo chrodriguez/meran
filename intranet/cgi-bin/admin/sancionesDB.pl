@@ -49,6 +49,7 @@ if ($accion eq "GUARDAR_TIPOS_PRESTAMOS_QUE_APLICA") {
                                 );
 
 	my $tipos_que_aplica=$obj->{'tipos_que_aplica'};
+C4::AR::Debug::debug("tipossss : ".$tipos_que_aplica->[0]);
 	my $tipo_prestamo=$obj->{'tipo_prestamo'};
 	my $categoria_socio=$obj->{'categoria_socio'};
 

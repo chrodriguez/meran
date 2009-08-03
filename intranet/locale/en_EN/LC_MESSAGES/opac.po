@@ -1,3 +1,14 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Aldana <aldanagomezrios@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
 msgid "Usted tiene ejemplares vencidos"
 msgstr "You have overdue copies"
@@ -360,15 +371,15 @@ msgstr "Your browser does not support JavaScript!"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
 msgid "Usted tiene"
-msgstr ""
+msgstr "You have"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
 msgid "ejemplares vencidos"
-msgstr ""
+msgstr "overdue items"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
 msgid "Fecha de Pr&eacute;stamo"
-msgstr ""
+msgstr "Loan date"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetallePrestamos.tmpl
 msgid "prestamo.nivel3.nivel1.getTitulo"
@@ -380,85 +391,85 @@ msgstr ""
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-main.tmpl
 msgid "Mi Cuenta"
-msgstr ""
+msgstr "My account"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-DetalleReservas.tmpl
 msgid "Cancelar Reserva"
-msgstr ""
+msgstr "Cancel reserve"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-auth.tmpl
 msgid "Ingresar"
-msgstr ""
+msgstr "Enter"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
 msgid "Buscar"
-msgstr ""
+msgstr "Search"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-search.tmpl
 msgid "Buscar en el catalogo"
-msgstr ""
+msgstr "Search in the catalogue"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
 msgid "Apellido"
-msgstr ""
+msgstr "Surname"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
 msgid "Nombre"
-msgstr ""
+msgstr "Name"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
 msgid "Calle"
-msgstr ""
+msgstr "Street"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
 msgid "Ciudad"
-msgstr ""
+msgstr "City"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
 msgid "Tel&eacute;fono Personal"
-msgstr ""
+msgstr "Personal telephone number"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
 msgid "Tel&eacute;fono/Fax del trabajo"
-msgstr ""
+msgstr "Work telephone/fax"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
 msgid "Mail"
-msgstr ""
+msgstr "E-mail"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-changepassword.tmpl
 msgid "BIENVENIDO AL OPAC DE KOHA"
-msgstr ""
+msgstr "WELCOME TO THE KOHA OPAC"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-changepassword.tmpl
 msgid "Miembros"
-msgstr ""
+msgstr "Members"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-changepassword.tmpl
 msgid "La contrase&ntilde;a no puede ser la misma que ten&iacute;a"
-msgstr ""
+msgstr "The password cannot be the same you had"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-changepassword.tmpl
 msgid "Cambio de contrase&ntilde;a obligatorio"
-msgstr ""
+msgstr "Mandatory password change"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-changepassword.tmpl
 msgid "Nueva Contrase&ntilde;a"
-msgstr ""
+msgstr "New password"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-user.tmpl
 msgid "Cambio de Contrase&ntilde;a"
-msgstr ""
+msgstr "Change password"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-busquedaResult.tmpl
 msgid "Mostrar Detalle del Ejemplar"
-msgstr ""
+msgstr "Show item details"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-busquedaResult.tmpl
 msgid "Filtrar por Autor"
-msgstr ""
+msgstr "Filter by author"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialPrestamos.tmpl
 msgid "titulo"
-msgstr ""
+msgstr "title"
 
