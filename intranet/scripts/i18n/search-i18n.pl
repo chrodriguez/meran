@@ -11,6 +11,11 @@ my @outLines;  #Arreglo de POs
 #Levantamos el archivo
 my $ot = Locale::PO->load_file_asarray($output_po);
 @outLines=@$ot;
+my $i=0;
+    while ($i<@outLines)
+    {  print $outLines[$i]->msgid()." \n";
+        $i++;
+    }
 
 #Procesamos
 find (\&process, $directory);
@@ -37,7 +42,7 @@ sub process
     my $line;      #Linea leida.
     my @matches;
     #Buscamos solo los  .tmpl
-    if ( $File::Find::name =~ /\.tmpl$/ ) {
+    if (( $File::Find::name =~ /\.tmpl$/ ) or( $File::Find::name =~ /\.inc$/)) {
 	print "Procesando $File::Find::name\n";
         open (FILE, $File::Find::name ) or die "No se pudo abrir el archivo: $!";
 
@@ -57,7 +62,7 @@ sub process
 	while ($i<@outLines)
   	{	if ($outLines[$i]->msgid() eq $po->msgid()) {
 			$exists=1; 
-# 			print $outLines[$i]->msgid()." ya existe \n";
+ 			print $outLines[$i]->msgid()." ya existe \n";
 		}
 		$i++;
 	}

@@ -354,6 +354,24 @@ sub actualizarTiposPrestamoQueAplica {
 }
 
 
+sub getReglasTipoSancion{
+  #Esta funcion recupera las reglas de un tipo de sancion
+   my ($tipo_sancion)=@_;
+
+   use C4::Modelo::CircReglaTipoSancion::Manager;
+   my $reglas_sanciones_array_ref = C4::Modelo::CircReglaTipoSancion::Manager->get_circ_regla_tipo_sancion(
+                                                                    query => [ 
+                                                                            tipo_sancion => { eq => $tipo_sancion->getTipo_sancion},
+                                                                        ],
+                                                                    sort_by      => 'orden ASC',
+                                    );
+
+    if ($reglas_sanciones_array_ref->[0]) {return $reglas_sanciones_array_ref;}
+
+  return 0;
+
+}
+
 # DEPRECATED  DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED DEPRECATED 
 # =item
 # Esta funcion elimina todas las del borrower pasado por parametro

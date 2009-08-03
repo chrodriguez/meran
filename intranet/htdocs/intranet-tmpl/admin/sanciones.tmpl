@@ -17,32 +17,18 @@ function updateInfoConsultaJSON(responseText){
  * borrarDiv
  * Borra el div que contiene la parte de agregado de variables.
  */
-function borrarDiv(){$("#divResultado").html("");}
-
-
-/*
- * agregarReglaSancion
- * Muestra la parte de agregado de una regla de sancion
- */
-function agregarReglaSancion(tipo_sancion){
-    objAH=new AjaxHelper(updateAgregarReglaSancion);
-    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
-    objAH.tipo_sancion=tipo_sancion;
-    objAH.tipoAccion= "AGREGAR_REGLA_SANCION";
-    objAH.sendToServer();
+function borrarDiv(){
+$("divSancionesTiposPrestamos").html("");
+$("divSancionesReglas").html("");
 }
-
-function updateAgregarReglaSancion(responseText){
-    $("#divResultado").html(responseText);
-}
-
-
 
 /*
  * guardarTiposQueAplica
  * Agrega los tipos de prestamos al prestamo y categoria seleccionada
  */
 function guardarTiposQueAplica(){
+
+
     objAH=new AjaxHelper(updateGuardarTiposQueAplica);
     objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
 
@@ -56,35 +42,13 @@ function guardarTiposQueAplica(){
 
     objAH.tipos_que_aplica=TPArray;
     objAH.tipoAccion= "GUARDAR_TIPOS_PRESTAMOS_QUE_APLICA";
+    borrarDiv();
     objAH.sendToServer();
 }
 
 function updateGuardarTiposQueAplica(responseText){
      respuesta(responseText);
 	buscarTiposPrestamosSancionados();
-}
-
-/*
- *  eliminarReglaSancion
- */
-function eliminarReglaSancion(tipo_sancion, regla_sancion){
-    if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO) ){
-    objAH=new AjaxHelper(updateEliminarReglaSancion);
-    objAH.debug= true;
-    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
-    objAH.tipo_sancion=tipo_sancion;
-    objAH.regla_sancion=regla_sancion;
-    objAH.tipoAccion= "BORRAR_REGLA_SANCION";
-    borrarDiv();
-    objAH.sendToServer();
-    }
-}
-
-function updateEliminarReglaSancion(responseText){
-
-    buscarTiposPrestamosSancionados();
-    respuesta(responseText);
-  
 }
 
 /*
@@ -119,7 +83,75 @@ function buscarTiposPrestamosSancionados(){
 
 function updateTiposPrestamosSancionados(responseText){
     $("#divSancionesTiposPrestamos").html(responseText);
+       buscarSancionesReglas();
 }
+
+function buscarSancionesReglas(){
+    
+    if( ( $("#tipo_prestamo_id").val() != 'SIN SELECCIONAR') && ( $("#categoria_socio_id").val() != 'SIN SELECCIONAR')) {
+            
+            $("#divSancionesReglas").html("");
+
+            objAH=new AjaxHelper(updateSancionesReglas);
+            objAH.debug= true;
+            objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+            objAH.tipo_prestamo=$("#tipo_prestamo_id").val();
+            objAH.categoria_socio=$("#categoria_socio_id").val();
+            objAH.tipoAccion= "REGLAS_SANCIONES";
+            objAH.sendToServer();
+        }
+    }
+
+function updateSancionesReglas(responseText){
+    $("#divSancionesReglas").html(responseText);
+}
+
+
+
+
+/*
+ * agregarReglaSancion
+ * Muestra la parte de agregado de una regla de sancion
+ */
+function agregarReglaSancion(tipo_sancion){
+    objAH=new AjaxHelper(updateAgregarReglaSancion);
+    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+    objAH.tipo_sancion=tipo_sancion;
+    objAH.tipoAccion= "AGREGAR_REGLA_SANCION";
+    objAH.sendToServer();
+}
+
+function updateAgregarReglaSancion(responseText){
+    $("#divResultado").html(responseText);
+}
+
+
+
+/*
+ *  eliminarReglaSancion
+ */
+function eliminarReglaSancion(tipo_sancion, regla_sancion){
+    if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO) ){
+    objAH=new AjaxHelper(updateEliminarReglaSancion);
+    objAH.debug= true;
+    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+    objAH.tipo_sancion=tipo_sancion;
+    objAH.regla_sancion=regla_sancion;
+    objAH.tipoAccion= "BORRAR_REGLA_SANCION";
+    borrarDiv();
+    objAH.sendToServer();
+    }
+}
+
+function updateEliminarReglaSancion(responseText){
+
+    buscarTiposPrestamosSancionados();
+    respuesta(responseText);
+  
+}
+
+
+
 
 $(document).ready( function() {
    buscarTiposPrestamosSancionados();
@@ -141,9 +173,10 @@ $(document).ready( function() {
 	</tr>
 </table>
 </div>
+
  <div id="divSancionesTiposPrestamos"></div>
 <br>
- <div id="divSancionesReglas">elll</div>
+ <div id="divSancionesReglas"></div>
 </div>
 
 [% INCLUDE "intranet-bottom.inc" %]

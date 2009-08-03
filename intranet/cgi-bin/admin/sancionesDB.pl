@@ -59,6 +59,27 @@ C4::AR::Debug::debug("tipossss : ".$tipos_que_aplica->[0]);
     print $infoOperacionJSON;
 }
 
+if($accion eq "REGLAS_SANCIONES"){
+        my ($template, $session, $t_params)  = get_template_and_user({
+                                template_name => "admin/sanciones_reglas.tmpl",
+                                query => $input,
+                                type => "intranet",
+                                authnotrequired => 0,
+                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                debug => 1,
+                    });
+    
+        my $tipo_prestamo=$obj->{'tipo_prestamo'};
+        my $categoria_socio=$obj->{'categoria_socio'};
+        my $tipo_sancion=&C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio);
+        $t_params->{'tipo_sancion'}= $tipo_sancion;
+
+        my $reglas_tipo_sancion=&C4::AR::Sanciones::getReglasTipoSancion($tipo_sancion);
+        $t_params->{'REGLAS_TIPOS_SANCIONES'}= $reglas_tipo_sancion;
+
+        C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}#end if($accion eq "REGLAS_SANCIONES")
+
 
 # 
 # my $input = new CGI;

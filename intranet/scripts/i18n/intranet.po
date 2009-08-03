@@ -1,14 +1,3 @@
-msgid ""
-msgstr ""
-"Project-Id-Version: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Matías Pagano <matiasp@mail.linti.unlp.edu.ar>\n"
-"Language-Team: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
-"Content-Transfer-Encoding: 8bit\n"
-
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/main.tmpl
 msgid "Cat&aacute;logo:"
 msgstr "Catalogue:"
@@ -1743,7 +1732,7 @@ msgstr "TOTAL"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Upperage limit"
-msgstr "Límite superior de edad"
+msgstr "Lï¿½mite superior de edad"
 
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/categorie.tmpl
 msgid "Tipo de multa"
@@ -2544,4 +2533,389 @@ msgstr "Show item details"
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/historicoCirculacionResult.tmpl
 msgid "Mostrar Detalle del Usuario Responsable"
 msgstr "Show details of user in charge"
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/reports/inventory-sig-topResult.tmpl
+msgid "Generar Planilla"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/admin/sanciones_tipo_de_prestamos.tmpl
+msgid "Se aplica a"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "La nota no se ha podido guardar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "La nota se actualizo correctamente"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "El campo no puede estar en blanco"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Esta seguro que desea borrarlo?"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Hay barcodes repetidos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Elija al menos un ejemplar para realizar la acciÃ³n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Falta parÃ¡metro para referencia"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Advertencia de Catalogo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "No selecciono ningun usuario"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid ""
+"\n"
+"\n"
+"Esta seguro?"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "-  Tarjeta nro"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Usted esta a punto de"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "a los propietarios de:\n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Permisos de Acceso"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Elija al menos un permiso"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "La longitud del documento debe ser de 8 d&iacute;gitos (ha ingresado menos)"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "La longitud del documento debe ser de 8 d&iacute;gitos (ha ingersado m&aacute;s)"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid ""
+"Las claves son distintas.\n"
+"Ingreselas nuevamente."
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Prestamo Interbibliotecario"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Confirma la baja ?"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "filtro:"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Solo sera numerico"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Desea eliminar el autorizado para este usuario?"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Advertencia de cesion de Permisos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Advertencia de Usuarios"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Ingrese el Usuario"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Error"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Esta seguro que desea cancelar la reserva?"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Ya existe el elemento"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Confirma la baja del seudonimo?"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Confirma la baja del sinonimo?"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Advertencia de Control de Autoridades"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Seleccione al menos un campo para buscar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Esta seguro que desea cancelar la sancion?"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/message_INTRA.inc
+msgid "Advertencia de Sanciones"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Inicio"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Ir al Inicio"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Cat&aacute;logo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "B&uacute;squedas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "B&uacute;squeda experta"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Agregar documento"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "B&uacute;squeda ejemplar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Estante virtual"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "MARC"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Mapeo KOHA a MARC"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Servidores Z39.50"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Creaci&oacute;n cat&aacute;logo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Tipos de documento"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Visualizaci&oacute;n del OPAC"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Herramientas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Importar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Importaci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Exportar"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Exportaci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Control de autoridades"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Sin&oacute;nimos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Seud&oacute;nimos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Sued&oacute;nimos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Usuarios Reales"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Usuarios Potenciales"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Agregar Usuarios"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Permisos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Circulaci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Devol. y Renov."
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Preferencias"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Reportes Gene&eacute;ricos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Unid. de Informaci&oacute;n"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Tablas de Referencia"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Tipos de Documento"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Categor&iacute;s de Usuario"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Tipos de Pr&eacute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Tipos de Pr&acute;stamo"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Valores Autorizados"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Admin. libre Deuda"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Feriados"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Admin. permisos Tablas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Links KOHA - MARC DB"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Estructuras de MARC"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Chequeo MARC"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Reportes gen&eacute;ricos (FALTA)"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Estantes Virtuales (FALTA DB MODEL)"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Usuarios (PREGUNTALE A FER)"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Prest&aacute;mos no Devueltos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Actividades Anuales"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Estad&iacute;sticas"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Disp. de Ejemplares"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Hist&oacute;rico de Pr&eacute;stamos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Estad. de Pr&eacute;stamos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Usuarios por Categor&iacute;as"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Niveles Bibliogr&aacute;ficos"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Ayuda"
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/includes/menu/menu.inc
+msgid "Acerca De..."
+msgstr ""
+
+# /usr/local/koha/intranet/htdocs/intranet-tmpl/temas/default/includes/menu/menu.inc
+msgid "Thesaurus"
+msgstr ""
 
