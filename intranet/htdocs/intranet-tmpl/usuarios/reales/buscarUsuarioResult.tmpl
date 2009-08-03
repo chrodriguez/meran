@@ -1,8 +1,8 @@
 [% USE HTML %]
 
 
-<div class="resultados_consulta">[% "La cantidad de usuarios es :" | i18n %] [% cantidad %]</div> 
-<div class="resultados_consulta">[% "Ha buscado por :" | i18n %] [% HTML.escape(socio) %]</div> 
+<div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: [% cantidad %]</div> 
+<div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% HTML.escape(socio) %]</div> 
 
 <div class="contenedor_paginador">[% paginador %]</div>
 
@@ -36,36 +36,36 @@
 [% FOREACH resultsloop %]	
   	<tr  align="center">
 
-		<td align='left'>
-			[% socio.getNro_socio %]
-		</td>
-		<td width=250 align="left" class="nomCompleto">
-		[% PERL %]
-			print C4::AR::Filtros::link_to(	text => 	"[% socio.persona.getApeYNom %]",
-											url => 		"/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
-											params =>	["nro_socio=[% socio.getNro_socio %]"],
-											title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]"
-										) ;
-		[% END %]
-		</td>
-		<td align="left" class="documento">
-			[% socio.persona.getVersion_documento %]&nbsp;[% socio.persona.getNro_documento %]
-		</td>
-		<td align="left" class="legajo">
-			[% socio.persona.getLegajo %]
-		</td>
-		<td align=center>
-			[% socio.categoria.getDescription %]
-		</td>
-		<td align=center>
-			[% issue %]
-		</td>
-		<td align=center>
-			[% od %]
-		</td>
-		<td align="center">
-		<span class="[% clase %]"><b>[% regular %]</b></span>
-		</td>
+		  <td align='left'>
+			  [% socio.getNro_socio %]
+		  </td>
+		  <td width=250 align="left" class="nomCompleto">
+		  [% PERL %]
+			  print C4::AR::Filtros::link_to(	text => 	"[% socio.persona.getApeYNom %]",
+											  url => 		"/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+											  params =>	["nro_socio=[% socio.getNro_socio %]"],
+											  title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]"
+										  );
+		  [% END %]
+		  </td>
+		  <td align="left" class="documento">
+			  [% socio.persona.getVersion_documento %]&nbsp;[% socio.persona.getNro_documento %]
+		  </td>
+		  <td align="left" class="legajo">
+			  [% socio.persona.getLegajo %]
+		  </td>
+		  <td align=center>
+			  [% socio.categoria.getDescription %]
+		  </td>
+		  <td align=center>
+			  [% issue %]
+		  </td>
+		  <td align=center>
+			  [% od %]
+		  </td>
+		  <td align="center">
+		  <span class="[% clase %]"><b>[% regular %]</b></span>
+		  </td>
 
     </tr>
 

@@ -77,10 +77,11 @@ $(document).ready(function() {
 	<tr>
     		<td  class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';">
     			        [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Pr&eacute;stamos' | i18n %]",
-                                            url =>      "/cgi-bin/koha/circ/prestamos.pl", 
-                                            title =>    "[% 'Pr&eacute;stamos' | i18n %]"
-                                        ) ;
+                                print C4::AR::Filtros::link_to( 
+                                                                text =>     "[% 'Pr&eacute;stamos' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/circ/prestamos.pl", 
+                                                                title =>    "[% 'Pr&eacute;stamos' | i18n %]"
+                                                              );
                         [% END %]
     		</td>
   	</tr>
