@@ -36,7 +36,7 @@
 	<td class="impar">
 
         [% PERL %]
-                print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.getTitulo | i18n %]",
+                print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.getTitulo%]",
                                                 url =>      "/cgi-bin/koha/opac-detail.pl", 
                                                 params => [ "id1=[% prestamo.nivel3.nivel1.getId1 %]", ],
                                             ) ;
@@ -49,7 +49,7 @@
 		[% prestamo.nivel3.nivel1.cat_autor.getCompleto %]
 		</a>-->
         [% PERL %]
-                print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.cat_autor.getCompleto | i18n %]",
+                print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.cat_autor.getCompleto%]",
                                                 url =>      "/cgi-bin/koha/opac-searchresults.pl", 
                                                 params => [ "authorid=[% prestamo.nivel3.nivel1.getAutor %]", ],
                                             ) ;

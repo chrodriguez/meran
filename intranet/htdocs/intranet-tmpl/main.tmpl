@@ -57,7 +57,7 @@ $(document).ready(function() {
 	<tr>
 		<td width="15%">&nbsp;</td>
 		<td class="tdout" onmouseout="this.className='tdout';" onmouseover="this.className='tdhover';" valign="top">
-		    	B&uacute;squeda de usuarios &nbsp;
+		    	[% "B&uacute;squeda de usuarios &nbsp;" | i18n %]
                 <input id="socio" type=text name="socio" onFocus="checkFilter('focus')" 
                    onBlur="checkFilter('blur')" value="[% socio %]" tabindex=2>		
                 [% PERL %]

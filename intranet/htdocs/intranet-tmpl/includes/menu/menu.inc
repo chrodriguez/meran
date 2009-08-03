@@ -16,8 +16,6 @@
             [%  "INTRA" | setComboLang %]
          </div>
 
-
-
       <ul id="menu" tabindex="-1">
           <!-- Navigation item -->
             <li> <h3 class="menu_superior">
@@ -217,13 +215,13 @@
                   </li>
 
                 </ul>
-           
+
             </li>
 
           <!-- Navigation item -->
             <li><h3 class="menu_superior">[% 'Circulaci&oacute;n' | i18n %]</h3>
                 <ul>
-				  <li>
+				          <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/circ/circulacionRapida.pl", 
