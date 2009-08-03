@@ -9,22 +9,22 @@
 
 <div class="divDatosUsuario">
         
-        [% "Apellido:" | i18n %]
+        [% "Apellido" | i18n %]:
                 <b> [% socio.persona.getApellido %] </b><br>
 
-        [% "Nombre:" | i18n %]
+        [% "Nombre" | i18n %]:
                 <b> [% socio.persona.getNombre %] </b><br>
 
-        [% "Documento:" | i18n %]
+        [% "Documento" | i18n %]:
                 <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
 
-        [% "Fecha de nacimiento:" | i18n %]
+        [% "Fecha de nacimiento" | i18n %]:
                 <b> [% socio.persona.getNacimiento %]</b><br>
-        [% "Sexo:" | i18n %]
+        [% "Sexo" | i18n %]:
                 <b> [% socio.persona.getSexo %]</b><br>
         [% IF socio.persona.getTelefono %]
                 <div class="tel">
-                        <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
+                        <span class="type">[% "Tel&eacute;fono" | i18n %]:</span>
                                 <b>[% socio.persona.getTelefono %]</b><br>
                 </div>	
         [% END %]
@@ -42,12 +42,12 @@
         [% END %]
         <br>
             
-        [% "Legajo :" | i18n %]
+        [% "Legajo" | i18n %]:
                         <b> [%  socio.persona.getNro_documento %]</b><br>
 
-        [% "Ciudad :" | i18n %]
+        [% "Ciudad" | i18n %]:
                         <b> [%  socio.persona.ciudad_ref.getNombre %]</b><br>
-        [% "Calle :" | i18n %]
+        [% "Calle" | i18n %]:
                         <b> [%  socio.persona.getCalle %]</b><br>
                     
 
