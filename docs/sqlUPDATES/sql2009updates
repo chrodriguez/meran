@@ -910,3 +910,20 @@ ALTER TABLE `cat_historico_disponibilidad` ADD `agregacion_temp` VARCHAR( 255 ) 
       ADD `anio_agregacion` VARCHAR( 255 ) NOT NULL ,
       ADD `mes_agregacion` VARCHAR( 255 ) NOT NULL ;
 
+CREATE TABLE `perm_general` (
+`nro_socio` VARCHAR( 16 ) NOT NULL ,
+`ui` VARCHAR( 4 ) NOT NULL ,
+`tipo_documento` VARCHAR( 4 ) NOT NULL ,
+`preferencias` VARBINARY( 8 ) NOT NULL ,
+PRIMARY KEY ( `nro_socio` , `ui` , `tipo_documento` )
+) ENGINE = INNODB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `perm_reporte` (
+  `nro_socio` varchar(16) NOT NULL,
+  `ui` varchar(4) NOT NULL,
+  `tipo_documento` varchar(4) NOT NULL,
+  `catalogo` varbinary(8) NOT NULL,
+  `circulacion` varbinary(8) NOT NULL,
+  PRIMARY KEY  (`nro_socio`,`ui`,`tipo_documento`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
