@@ -575,8 +575,6 @@ sub verificar_permisos_por_nivel{
 #         }
     }
 
-    C4::AR::Debug::debug("");
-
     return 0;
 }
 
@@ -665,7 +663,9 @@ sub setNombre_apellido_autorizado{
     my ($self) = shift;
     my ($nombre_apellido_autorizado) = @_;
     utf8::encode($nombre_apellido_autorizado);
-    $self->nombre_apellido_autorizado($nombre_apellido_autorizado);
+    if (C4::AR::Utilidades::validateString($nombre_apellido_autorizado)){
+      $self->nombre_apellido_autorizado($nombre_apellido_autorizado);
+    }
 }
 
 sub getTelefono_autorizado{
@@ -677,7 +677,9 @@ sub setTelefono_autorizado{
     my ($self) = shift;
     my ($telefono_autorizado) = @_;
     utf8::encode($telefono_autorizado);
-    $self->telefono_autorizado($telefono_autorizado);
+    if (C4::AR::Utilidades::validateString($telefono_autorizado)){
+      $self->telefono_autorizado($telefono_autorizado);
+    }
 }
 
 sub getDni_autorizado{
@@ -689,6 +691,8 @@ sub setDni_autorizado{
     my ($self) = shift;
     my ($dni_autorizado) = @_;
     utf8::encode($dni_autorizado);
-    $self->dni_autorizado($dni_autorizado);
+    if (C4::AR::Utilidades::validateString($dni_autorizado)){
+      $self->dni_autorizado($dni_autorizado);
+    }
 }
 1;
