@@ -71,16 +71,125 @@ if($accion eq "REGLAS_SANCIONES"){
     
         my $tipo_prestamo=$obj->{'tipo_prestamo'};
         my $categoria_socio=$obj->{'categoria_socio'};
+
         my $tipo_sancion=&C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio);
         $t_params->{'tipo_sancion'}= $tipo_sancion;
 
         my $reglas_tipo_sancion=&C4::AR::Sanciones::getReglasTipoSancion($tipo_sancion);
         $t_params->{'REGLAS_TIPOS_SANCIONES'}= $reglas_tipo_sancion;
 
+        ######################Combos de las reglas de sancion##################################
+        my $reglas_sancion=&C4::AR::Sanciones::getReglasSancion();
+        if ($reglas_sancion) {
+        my %regla_sancionlabels;
+        my @regla_sancionvalues;
+        foreach my $regla (@$reglas_sancion) {
+            push @regla_sancionvalues, $regla->getRegla_sancion;
+            $regla_sancionlabels{$regla->getRegla_sancion} = "Dias de demora: ".$regla->getDias_demora.". Dias de sancion: ".$regla->getDias_sancion;
+        }
+        my $CGIregla_sancion=CGI::scrolling_list(
+                                -name => 'regla_sancion',
+                                -id => 'regla_sancion',
+                                -values   => \@regla_sancionvalues,
+                                -labels   => \%regla_sancionlabels,
+                                -size     => 1,
+                                -multiple => 0 );
+
+        $t_params->{'reglas_de_sancion'}= $CGIregla_sancion;
+        }
+        ######################Combos Orden##################################
+        my %orden;
+        my @orden;
+        for (my $i=1; $i < 21; $i++) {
+                push @orden, $i;
+                $orden{$i} = $i;
+        }
+        my $sugestedOrder= 0; #Maximo +1
+        foreach my $mi_regla (@$reglas_tipo_sancion) { 
+            if($mi_regla->getOrden > $sugestedOrder){
+                $sugestedOrder=$mi_regla->getOrden;
+            } 
+        }
+        $sugestedOrder++;
+
+        my $CGIorden=CGI::scrolling_list(
+                                -name => 'orden',
+                                -id => 'orden',
+                                -values   => \@orden,
+                                -labels   => \%orden,
+                                -default => $sugestedOrder,
+                                -size     => 1,
+                                -multiple => 0 );
+
+        $t_params->{'ordenes'}= $CGIorden;
+
+        ######################Combos Cantidades##################################
+        my %cantidad;
+        my @cantidad;
+        push @cantidad, 0;
+        $cantidad{0} = "Infinito";
+        for (my $i=1; $i < 21; $i++) {
+                push @cantidad, $i;
+                $cantidad{$i} = $i;
+        }
+
+        my $CGIcantidad=CGI::scrolling_list(
+                                -name => 'cantidad', 
+                                -id => 'cantidad',
+                                -values   => \@cantidad,
+                                -labels   => \%cantidad,
+                                -default => 1,
+                                -size     => 1,
+                                -multiple => 0 );
+
+        $t_params->{'cantidades'}= $CGIcantidad;
+
+
         C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
-}#end if($accion eq "REGLAS_SANCIONES")
+        }#end if($accion eq "REGLAS_SANCIONES")
 
 
+if ($accion eq "ELIMINAR_REGLA_TIPO_SANCION") {
+
+    my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'BAJA', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
+
+    my $tipo_sancion=$obj->{'tipo_sancion'};
+    my $regla_sancion=$obj->{'regla_sancion'};
+
+    my $Message_arrayref = &C4::AR::Sanciones::eliminarReglaTipoSancion($tipo_sancion,$regla_sancion);
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    C4::Output::printHeader($session);
+    print $infoOperacionJSON;
+}
+
+if ($accion eq "AGREGAR_REGLA_TIPO_SANCION") {
+
+    my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'BAJA', 
+                                                entorno => 'undefined'},
+                                            "intranet"
+                                );
+
+    my $tipos_que_aplica=$obj->{'tipos_que_aplica'};
+C4::AR::Debug::debug("tipossss : ".$tipos_que_aplica->[0]);
+    my $tipo_prestamo=$obj->{'tipo_prestamo'};
+    my $categoria_socio=$obj->{'categoria_socio'};
+
+    my $Message_arrayref = &C4::AR::Sanciones::actualizarTiposPrestamoQueAplica($tipo_prestamo,$categoria_socio,$tipos_que_aplica);
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    C4::Output::printHeader($session);
+    print $infoOperacionJSON;
+}
 # 
 # my $input = new CGI;
 # my $issue= $input->param('circ_ref_tipo_prestamo') || undef;

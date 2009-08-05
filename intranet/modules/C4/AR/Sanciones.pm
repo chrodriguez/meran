@@ -354,6 +354,21 @@ sub actualizarTiposPrestamoQueAplica {
 }
 
 
+sub getReglasSancion{
+  #Esta funcion recupera todas las reglas 
+
+   use C4::Modelo::CircReglaSancion::Manager;
+   my $reglas_sancion_array_ref = C4::Modelo::CircReglaSancion::Manager->get_circ_regla_sancion(
+                                                              sort_by => 'dias_demora , dias_sancion'
+                                                                        );
+
+    if ($reglas_sancion_array_ref->[0]) {return $reglas_sancion_array_ref;}
+
+  return 0;
+
+}
+
+
 sub getReglasTipoSancion{
   #Esta funcion recupera las reglas de un tipo de sancion
    my ($tipo_sancion)=@_;

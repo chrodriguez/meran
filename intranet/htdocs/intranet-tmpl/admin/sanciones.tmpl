@@ -69,7 +69,7 @@ function buscarTiposPrestamosSancionados(){
     
 	if( ( $("#tipo_prestamo_id").val() != 'SIN SELECCIONAR') && ( $("#categoria_socio_id").val() != 'SIN SELECCIONAR')) {
 			
-			$("#divSancionesTiposPrestamos").html("");
+			 borrarDiv();
 
 			objAH=new AjaxHelper(updateTiposPrestamosSancionados);
 			objAH.debug= true;
@@ -114,41 +114,41 @@ function updateSancionesReglas(responseText){
  * agregarReglaSancion
  * Muestra la parte de agregado de una regla de sancion
  */
-function agregarReglaSancion(tipo_sancion){
-    objAH=new AjaxHelper(updateAgregarReglaSancion);
+function agregarReglaTipoSancion(tipo_sancion){
+    objAH=new AjaxHelper(updateAgregarReglaTipoSancion);
     objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
-    objAH.tipo_sancion=tipo_sancion;
-    objAH.tipoAccion= "AGREGAR_REGLA_SANCION";
+    objAH.regla_sancion=$("#regla_sancion").val();
+    objAH.orden=$("#orden").val();
+    objAH.cantidad=$("#cantidad").val();
+    alert (objAH.regla_sancion ." - ". objAH.orden ." - ". objAH.cantidad);
+    objAH.tipoAccion= "AGREGAR_REGLA_TIPO_SANCION";
     objAH.sendToServer();
 }
 
-function updateAgregarReglaSancion(responseText){
-    $("#divResultado").html(responseText);
+function updateAgregarReglaTipoSancion(responseText){
+     buscarSancionesReglas();
+     respuesta(responseText);
 }
 
-
-
 /*
- *  eliminarReglaSancion
+ *  eliminarReglaTipoSancion
  */
-function eliminarReglaSancion(tipo_sancion, regla_sancion){
+function eliminarReglaTipoSancion(tipo_sancion, regla_sancion){
     if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO) ){
-    objAH=new AjaxHelper(updateEliminarReglaSancion);
+    objAH=new AjaxHelper(updateEliminarReglaTipoSancion);
     objAH.debug= true;
     objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
     objAH.tipo_sancion=tipo_sancion;
     objAH.regla_sancion=regla_sancion;
-    objAH.tipoAccion= "BORRAR_REGLA_SANCION";
-    borrarDiv();
+    objAH.tipoAccion= "ELIMINAR_REGLA_TIPO_SANCION";
+    $("divSancionesReglas").html("");
     objAH.sendToServer();
     }
 }
 
-function updateEliminarReglaSancion(responseText){
-
-    buscarTiposPrestamosSancionados();
-    respuesta(responseText);
-  
+function updateEliminarReglaTipoSancion(responseText){
+     buscarSancionesReglas();
+     respuesta(responseText);
 }
 
 
@@ -161,9 +161,9 @@ $(document).ready( function() {
 </script>
 
 <div class="titulos_interior">[% 'Tipos de sanciones' | i18n %]</div>
-<div >
+<div id="divSanciones">
 <div id="divSancionesTiposSocios">
-<table border=0 cellspacing=0 cellpadding=0 width="100%" align='center'>
+<table border=0 cellspacing=0 cellpadding=0 align='center' width="100%" >
 	<tr class="tablaresultadoTitle">
                 <td>[% "Tipos de pr&eacute;stamo" | i18n %]</td>
                 <td>[% "Categorias de socio" | i18n %]</td>
@@ -174,10 +174,9 @@ $(document).ready( function() {
 	</tr>
 </table>
 </div>
-
  <div id="divSancionesTiposPrestamos"></div>
-<br>
- <div id="divSancionesReglas"></div>
 </div>
+ <div id="divSancionesReglas"></div>
+
 
 [% INCLUDE "intranet-bottom.inc" %]

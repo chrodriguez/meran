@@ -9,25 +9,46 @@
 
         </tr>
         [% FOREACH regla_tipo IN REGLAS_TIPOS_SANCIONES %]
-		<tr valign=middle>
+		<tr valign=middle align=center>
 
 			<td>[% regla_tipo.getOrden %]</td>
 			<td>[% regla_tipo.ref_regla.getDias_demora %]</td>
 			<td>[% regla_tipo.ref_regla.getDias_sancion %]</td>
-			<td>[% regla_tipo.getCantidad %]</td>
-			<td><FONT SIZE=2 face="arial, helvetica"><a href="#" onClick="borrar('[% sanctiontypecode %]','[% sanctionrulecode %]');">[% "Eliminar" | i18n %]</a></FONT>
+			<td>[% IF regla_tipo.getCantidad %] [% regla_tipo.getCantidad %]  [% ELSE %] Infinito [% END %]</td>
+			<td>
+            <div>
+            [% PERL %]
+                    print C4::AR::Filtros::to_Icon(  
+                                                        boton   => "icon_borrar",
+                                                        onClick => "eliminarReglaTipoSancion([% regla_tipo.getTipo_sancion %],[% regla_tipo.getRegla_sancion %]);",
+                                                        title   => "[% 'Eliminar' | i18n %]",
+                            ) ;
+            [% END %]
+            </div>
 			</td>
 
 		</tr>
 	[% END %]
-	<tr valign=bottom>
-	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
+	<tr class="tablaresultadoTitle">
+        <td>[% "Orden" | i18n %]</td>
+        <td colspan="2">[% "Regla" | i18n %]</td>
+        <td>[% "Cantidad" | i18n %]</td>
+        <td> [% "Agregar" | i18n %]</td>
         </tr>
-
-        <tr>
-        	<td colspan="7"><FONT SIZE=2  face="arial, helvetica"><a href="#" onClick="agregar('[% sanctiontypecode %]');">[% "Agregar" | i18n %]</a>&nbsp;[% "Orden: " | i18n %][% orders %]&nbsp;[% "Cantidad: " | i18n %][% amounts  %]&nbsp;[% "Regla: " | i18n %][% sanctions_rules %]</FONT>
-		</td>
+        <tr valign=middle align=center>
+        	<td>[% ordenes %]</td>
+            <td colspan="2">[% reglas_de_sancion %]</td>
+            <td>[% cantidades %]</td>
+            <td >
+            <div>
+            [% PERL %]
+                    print C4::AR::Filtros::to_Icon(  
+                                                        boton   => "icon_añadir",
+                                                        onClick => "agregarReglaTipoSancion();",
+                                                        title   => "[% 'Agregar' | i18n %]",
+                            ) ;
+            [% END %]
+            </div>
+		    </td>
         </tr>
 </table>
-
-<p>[% "Para editar las reglas haga clic " | i18n %]<A HREF="/cgi-bin/koha/admin/sanctionrules.pl">[% "aqu&iacute;" | i18n %]</a></p>

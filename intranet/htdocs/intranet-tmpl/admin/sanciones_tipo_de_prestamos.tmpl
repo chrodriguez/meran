@@ -2,26 +2,21 @@
 	<tr class="tablaresultadoTitle">
                 <td>[% "Se aplica a" | i18n %]</td>
 	</tr>
-	</table>
 
-    <ul>
 	[% IF tipo_sancion %]
-	[% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS %]
-		<tr valign="middle">
-		<li>
-			<input type="checkbox" name="chkTP" id="chkTP" value="[% tipo_prestamo.getId_tipo_prestamo %]" [% IF tipo_sancion.aplicaAlTipoDePrestamo( tipo_prestamo.getId_tipo_prestamo ) %] checked="checked" [% END %] > [% tipo_prestamo.getDescripcion %]
-		</li>
-	[% END %]
-	</ul>
-
-            <center>
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
-                                                                    boton   => "boton_guardar",
-                                                                    onClick => "guardarTiposQueAplica();",
-                                                                    title   => "[% 'Guardar' | i18n %]",
-                                        ) ;
-            [% END %]
-            </center>
-
-	[% END %]
+	    [% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS %]
+		<tr><td>
+			    <input type="checkbox" name="chkTP" id="chkTP" value="[% tipo_prestamo.getId_tipo_prestamo %]" [% IF tipo_sancion.aplicaAlTipoDePrestamo( tipo_prestamo.getId_tipo_prestamo ) %] checked="checked" [% END %] > [% tipo_prestamo.getDescripcion %]
+		</td></tr>
+	    [% END %]
+    [% END %]
+    <tr><td>
+    [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                            boton   => "boton_guardar",
+                                                            onClick => "guardarTiposQueAplica();",
+                                                            title   => "[% 'Guardar' | i18n %]",
+                                ) ;
+    [% END %]
+     </td></tr>
+    </table>
