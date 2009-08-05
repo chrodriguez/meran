@@ -268,7 +268,8 @@
                     <li>
                               [% PERL %]
                                   print C4::AR::Filtros::link_to( text =>     "[% 'Permisos Cat&aacute;logo' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/admin/permisosDB.pl?action=catalogo", 
+                                                                  url =>      "/cgi-bin/koha/admin/permisosDB.pl",
+                                                                  params =>   ["action=catalogo"],
                                                                   title =>    "[% 'Permisos Cat&aacute;logo' | i18n %]"
                                                               ) ;
                               [% END %]
@@ -276,7 +277,8 @@
                     <li>
                               [% PERL %]
                                   print C4::AR::Filtros::link_to( text =>     "[% 'Permisos Circulaci&oacute;n' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/admin/permisosDB.pl?action=circulacion", 
+                                                                  url =>      "/cgi-bin/koha/admin/permisosDB.pl", 
+                                                                  params =>   ["action=circulacion"],
                                                                   title =>    "[% 'Permisos Circulaci&oacute;n' | i18n %]"
                                                               ) ;
                               [% END %]
@@ -284,7 +286,8 @@
                     <li>
                               [% PERL %]
                                   print C4::AR::Filtros::link_to( text =>     "[% 'Permisos Generales' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/admin/permisosDB.pl?action=general", 
+                                                                  url =>      "/cgi-bin/koha/admin/permisosDB.pl", 
+                                                                  params =>   ["action=general"],
                                                                   title =>    "[% 'Permisos Generales' | i18n %]"
                                                               ) ;
                               [% END %]

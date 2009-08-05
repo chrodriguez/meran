@@ -1,0 +1,39 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script src="/intranet-tmpl/includes/usuarios/permisosUsuario.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#usuario').focus();
+        CrearAutocompleteUsuarios({ IdInput: 'usuario', 
+                                    IdInputHidden: 'nro_socio_hidden', 
+                            });
+
+    });
+</script>
+<div class="permisos">
+    <br><br>
+    <div class="permisos_selector">
+        <label for="usuario"> Usuario: </label>
+        <input type="text" name="usuario" id="usuario" />
+        <input type="hidden" name="nro_socio_hidden" id="nro_socio_hidden" />
+        <label for="tipo_documento_id"> Tipo de Documento: </label>
+        [% combo_tipoDoc %]
+        <label for="id_ui"> Unid. Info.: </label>
+        [% combo_UI %]
+        <div style="float:right;margin-right: 10%;">
+          <!--  <label for="permiso"> Permiso: </label>
+            [% combo_permisos %]-->
+            <input type="button" value="Obtener" onClick="obtenerPermisos();" />
+        </div>
+        <label for="perfiles"> Perfil: </label>
+        [% combo_perfiles %]
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="permisos_assign_chk" id="permisos_assign_chk"> </div>
+</div>
+
+
+[% INCLUDE "intranet-bottom.inc" %]

@@ -17,12 +17,12 @@ my $accion;
 if ($obj != 0){
     $accion = $obj->{'accion'};
 }else{
-    $accion = $input->param('accion') || undef;
+    $accion = $input->param('action') || undef;
 }
 
 
 # my ($userid, $session, $flags) = checkauth($input, 0,{});
-if(!$accion){
+if ($accion eq "catalogo"){
     #Busca las preferencias segun lo ingresado como parametro y luego las muestra
 
     my ($template, $session, $t_params)  = get_template_and_user({	
@@ -47,6 +47,58 @@ if(!$accion){
     $t_params->{'combo_perfiles'}= $combo_perfiles;
 
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
+elsif ($accion eq "general"){
+    #Busca las preferencias segun lo ingresado como parametro y luego las muestra
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                        template_name => "admin/permisos_general.tmpl",
+            query => $input,
+            type => "intranet",
+            authnotrequired => 0,
+            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+            debug => 1,
+              });
+# FIXME no se ui poner
+
+    my $combo_tipoDoc = C4::AR::Utilidades::generarComboTipoNivel3();
+    $t_params->{'combo_tipoDoc'} = $combo_tipoDoc;
+    my %params_options;
+    $params_options{'optionALL'} = 1;
+    my $combo_UI = C4::AR::Utilidades::generarComboUI(\%params_options);
+    $t_params->{'combo_UI'}=$combo_UI;
+    my $combo_permisos = C4::AR::Utilidades::generarComboPermisos();
+    $t_params->{'combo_permisos'}= $combo_permisos;
+    my $combo_perfiles = C4::AR::Utilidades::generarComboPerfiles();
+    $t_params->{'combo_perfiles'}= $combo_perfiles;
+
+  C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
+elsif ($accion eq "circulacion"){
+    #Busca las preferencias segun lo ingresado como parametro y luego las muestra
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                        template_name => "admin/permisos_circulacion.tmpl",
+            query => $input,
+            type => "intranet",
+            authnotrequired => 0,
+            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+            debug => 1,
+              });
+# FIXME no se ui poner
+
+    my $combo_tipoDoc = C4::AR::Utilidades::generarComboTipoNivel3();
+    $t_params->{'combo_tipoDoc'} = $combo_tipoDoc;
+    my %params_options;
+    $params_options{'optionALL'} = 1;
+    my $combo_UI = C4::AR::Utilidades::generarComboUI(\%params_options);
+    $t_params->{'combo_UI'}=$combo_UI;
+    my $combo_permisos = C4::AR::Utilidades::generarComboPermisos();
+    $t_params->{'combo_permisos'}= $combo_permisos;
+    my $combo_perfiles = C4::AR::Utilidades::generarComboPerfiles();
+    $t_params->{'combo_perfiles'}= $combo_perfiles;
+
+  C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
 elsif ($accion eq "OBTENER_PERMISOS_CATALOGO"){
 
