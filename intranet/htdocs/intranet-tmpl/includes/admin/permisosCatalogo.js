@@ -185,6 +185,8 @@ function actualizarPermisos(){
     confirmMessage = "\n\n";
     if (superUserGranted == 1)
         confirmMessage += SUPER_USER_GRANTED;
+    else
+        confirmMessage += PERMISSION_GRANTED;
     jConfirm(confirmMessage,GRANT_PERMISSION_TITLE, function(confirmStatus){if (confirmStatus) objAH.sendToServer();});
 }
 

@@ -1,4 +1,5 @@
 <!-- Aca se definen todos los mensajes de catalogacion -->
+[% INCLUDE 'localized_messages.inc' %]
 
 <!--\u00e1 -> á
 \u00e9 -> é
@@ -41,6 +42,7 @@ DATOS_ENVIADOS_INCORRECTOS= "[% 'No se recibieron datos del servidor, posiblemen
 // fin mensaje compuesto
 
 SUPER_USER_GRANTED = "[% 'Ha concedido algunos permisos de super usuario, esta seguro que quiere continuar?' | i18n %]";
+PERMISSION_GRANTED = "[% 'Ha concedido permisos, esta seguro que quiere continuar?' | i18n %]";
 
 NEW_GRANT = "[% 'ATENCION: DANDO DE ALTA UN NUEVO PERMISO YA QUE EL USUARIO NO CUENTA CON PRIVILEGIOS PARA TAL COMBINACION ' | i18n %]";
 // mensaje compuesto
