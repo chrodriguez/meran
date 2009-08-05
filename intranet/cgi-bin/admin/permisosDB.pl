@@ -63,7 +63,7 @@ elsif ($accion eq "OBTENER_PERMISOS_CATALOGO"){
                         debug => 1,
                     });
     my $perfil = $obj->{'perfil'} || 0;
-    my ($permisos,$newUpdate) = C4::AR::Permisos::obtenerPermisos($nro_socio,$id_ui,$tipo_documento,$perfil);
+    my ($permisos,$newUpdate) = C4::AR::Permisos::obtenerPermisosCatalogo($nro_socio,$id_ui,$tipo_documento,$perfil);
     $t_params->{'permisos'}=$permisos;
     if ($newUpdate){
         $t_params->{'nuevoPermiso'}=1;
@@ -87,8 +87,8 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_CATALOGO"){
                             debug => 1,
                     });
 
-    my $updateStatus = C4::AR::Permisos::actualizarPermisos($nro_socio,$id_ui,$tipo_documento,$permisos);
-    my $permisos = C4::AR::Permisos::obtenerPermisos($nro_socio,$id_ui,$tipo_documento);
+    my $updateStatus = C4::AR::Permisos::actualizarPermisosCatalogo($nro_socio,$id_ui,$tipo_documento,$permisos);
+    my $permisos = C4::AR::Permisos::obtenerPermisosCatalogo($nro_socio,$id_ui,$tipo_documento);
     $t_params->{'permisos'}=$permisos;
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
@@ -108,8 +108,8 @@ elsif ($accion eq "NUEVO_PERMISO_CATALOGO"){
                             debug => 1,
                     });
 
-    C4::AR::Permisos::nuevoPermiso($nro_socio,$id_ui,$tipo_documento,$permisos);
-    my $permisos = C4::AR::Permisos::obtenerPermisos($nro_socio,$id_ui,$tipo_documento);
+    C4::AR::Permisos::nuevoPermisoCatalogo($nro_socio,$id_ui,$tipo_documento,$permisos);
+    my $permisos = C4::AR::Permisos::obtenerPermisosCatalogo($nro_socio,$id_ui,$tipo_documento);
     $t_params->{'permisos'}=$permisos;
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
@@ -157,8 +157,85 @@ elsif ($accion eq "general"){
 
   C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
+elsif ($accion eq "OBTENER_PERMISOS_GENERAL"){
 
+    my $nro_socio = $obj->{'nro_socio'};
+    my $id_ui = $obj->{'id_ui'};
+    my $tipo_documento = $obj->{'tipo_documento'};
 
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                        template_name => "admin/detalle_permisos_general.tmpl",
+                        query => $input,
+                        type => "intranet",
+                        authnotrequired => 0,
+                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+                        debug => 1,
+                    });
+    my $perfil = $obj->{'perfil'} || 0;
+    my ($permisos,$newUpdate) = C4::AR::Permisos::obtenerPermisosGenerales($nro_socio,$id_ui,$tipo_documento,$perfil);
+    $t_params->{'permisos'}=$permisos;
+    if ($newUpdate){
+        $t_params->{'nuevoPermiso'}=1;
+    }
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+
+}
+elsif ($accion eq "ACTUALIZAR_PERMISOS_GENERAL"){
+
+    my $nro_socio = $obj->{'nro_socio'};
+    my $id_ui = $obj->{'id_ui'};
+    my $tipo_documento = $obj->{'tipo_documento'};
+    my $permisos = $obj->{'permisos'};
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "admin/detalle_permisos_catalogo.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+                            debug => 1,
+                    });
+
+    my $updateStatus = C4::AR::Permisos::actualizarPermisosGeneral($nro_socio,$id_ui,$tipo_documento,$permisos);
+    my $permisos = C4::AR::Permisos::obtenerPermisosGenerales($nro_socio,$id_ui,$tipo_documento);
+    $t_params->{'permisos'}=$permisos;
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
+elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
+
+    my $nro_socio = $obj->{'nro_socio'};
+    my $id_ui = $obj->{'id_ui'};
+    my $tipo_documento = $obj->{'tipo_documento'};
+    my $permisos = $obj->{'permisos'};
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "admin/detalle_permisos_catalogo.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+                            debug => 1,
+                    });
+
+    C4::AR::Permisos::nuevoPermisoGeneral($nro_socio,$id_ui,$tipo_documento,$permisos);
+    my $permisos = C4::AR::Permisos::obtenerPermisosGenerales($nro_socio,$id_ui,$tipo_documento);
+    $t_params->{'permisos'}=$permisos;
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
+elsif ($accion eq "SHOW_NUEVO_PERMISO_GENERAL"){
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "admin/detalle_permisos_catalogo.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+                            debug => 1,
+                    });
+
+    $t_params->{'nuevoPermiso'}=1;
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
 # PERMISOS PARA CIRCULAR
 
 elsif ($accion eq "circulacion"){

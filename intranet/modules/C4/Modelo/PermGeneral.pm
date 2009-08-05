@@ -11,7 +11,8 @@ __PACKAGE__->meta->setup(
         nro_socio       => { type => 'varchar', length => 16, not_null => },
         ui              => { type => 'varchar', length => 4, not_null => 1 },
         tipo_documento  => { type => 'varchar', length => 4, not_null => 1 }, 
-        preferencias    => { type => 'varbinary', length => 8, not_null => 1 },
+        preferencias    => { type => 'varchar', length => 8, not_null => 1 },
+        reportes    => { type => 'varchar', length => 8, not_null => 1 },
     ],
 
     primary_key_columns => [ 'nro_socio','ui','tipo_documento' ],
@@ -26,7 +27,8 @@ sub agregar{
     $self->setNro_socio($permisos_hash->{'nro_socio'});
     $self->setUI($permisos_hash->{'id_ui'});
     $self->setTipo_documento($permisos_hash->{'tipo_documento'});
-
+    $self->setReportes($permisos_hash->{'reportes'});
+    $self->setPreferencias($permisos_hash->{'preferencias'});
     $self->save();
 }
 
@@ -34,7 +36,8 @@ sub setAll{
 
     my ($self) = shift;
     my ($permisosByte) = @_;
-
+    $self->setReportes($permisosByte);
+    $self->setPreferencias($permisosByte);
 }
 
 sub modificar{
@@ -90,6 +93,36 @@ sub setTipo_documento{
     $self->tipo_documento($tipo_documento);
 }
 
+
+sub getPreferencias{
+
+    my ($self) = shift;
+    
+    return ($self->preferencias);
+}
+
+sub setPreferencias{
+
+    my ($self) = shift;
+    my ($preferencias) = @_;
+    
+    $self->preferencias($preferencias);
+}
+
+sub getReportes{
+
+    my ($self) = shift;
+    
+    return ($self->reportes);
+}
+
+sub setReportes{
+
+    my ($self) = shift;
+    my ($reportes) = @_;
+    
+    $self->reportes($reportes);
+}
 
 1;
 

@@ -1,11 +1,11 @@
-package C4::Modelo::PermReporte;
+package C4::Modelo::PermCirculacion;
 
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
-    table   => 'perm_reporte',
+    table   => 'perm_circulacion',
 
     columns => [
         nro_socio => { type => 'varchar', length => 16, not_null => },

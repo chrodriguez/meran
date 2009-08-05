@@ -927,3 +927,6 @@ CREATE TABLE IF NOT EXISTS `perm_reporte` (
   `circulacion` varbinary(8) NOT NULL,
   PRIMARY KEY  (`nro_socio`,`ui`,`tipo_documento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+RENAME TABLE `perm_reporte` TO `perm_circulacion` ;
+ALTER TABLE `perm_general` ADD `reportes` VARCHAR( 8 ) NOT NULL DEFAULT '00000000';
