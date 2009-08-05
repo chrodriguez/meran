@@ -161,9 +161,27 @@ span.as300250{float:right;margin:0 1.0em .2em 1.0em;}
 span.as300250l{float:left;margin:0 1.0em .2em 1.0em;}
 span.as120240{float:right;margin:0 1.0em .2em 1.0em;}
 span.as120240l{float:left;margin:0 1.0em .2em 1.0em;}
-.selectLang{
 
+.selectLang{
    width: 55px;
    display:inline;
 }
+
+.permission_grant{
+  float:right;
+}
+
+.permisos_assign_chk div{
+  width: 60%;
+  float: auto;
+}
+
+.permisos_assign_chk div h2{
+  float:left;
+}
+
+.permisos_selector{
+  width:100%;
+}
+
 /* FIN MENU */

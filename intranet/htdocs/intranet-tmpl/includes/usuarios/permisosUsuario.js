@@ -96,7 +96,7 @@ function obtenerPermisos(){
     if (seleccionoPerfil(comboPerfiles)){
         objAH.perfil=comboPerfiles.val();
     }
-    objAH.accion="OBTENER_PERMISOS";
+    objAH.accion="OBTENER_PERMISOS_CATALOGO";
     objAH.tipo_documento = $('#tipo_nivel3_id').val();
     objAH.permiso = $('#permisos').val();
     objAH.sendToServer();
@@ -126,7 +126,7 @@ function nuevoPermisoSHOW(){
     objAH=new AjaxHelper(updateNuevoPermisoSHOW);
     objAH.url= '/cgi-bin/koha/admin/permisosDB.pl';
     objAH.cache = false;
-    objAH.accion="SHOW_NUEVO_PERMISO";
+    objAH.accion="SHOW_NUEVO_PERMISO_CATALOGO";
     objAH.sendToServer();
 }
 
@@ -179,7 +179,7 @@ function actualizarPermisos(){
     else
         objAH.id_ui = 0;
 
-    objAH.accion="ACTUALIZAR_PERMISOS";
+    objAH.accion="ACTUALIZAR_PERMISOS_CATALOGO";
     objAH.tipo_documento = $('#tipo_nivel3_id').val();
     objAH.permisos = armarArregloDePermisos();
     confirmMessage = "\n\n";
@@ -206,7 +206,7 @@ function nuevoPermiso(){
         else
             objAH.id_ui = 0;
 
-        objAH.accion="NUEVO_PERMISO";
+        objAH.accion="NUEVO_PERMISO_CATALOGO";
         objAH.tipo_documento = $('#tipo_nivel3_id').val();
         objAH.permisos = armarArregloDePermisos();
         confirmMessage = NEW_GRANT+"\n\n";

@@ -17,7 +17,7 @@ my $accion;
 if ($obj != 0){
     $accion = $obj->{'accion'};
 }else{
-    $accion = undef;
+    $accion = $input->param('accion') || undef;
 }
 
 
@@ -26,7 +26,7 @@ if(!$accion){
     #Busca las preferencias segun lo ingresado como parametro y luego las muestra
 
     my ($template, $session, $t_params)  = get_template_and_user({	
-                        template_name => "admin/permisos.tmpl",
+                        template_name => "admin/permisos_catalogo.tmpl",
 						query => $input,
 						type => "intranet",
 						authnotrequired => 0,
@@ -48,14 +48,14 @@ if(!$accion){
 
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
-elsif ($accion eq "OBTENER_PERMISOS"){
+elsif ($accion eq "OBTENER_PERMISOS_CATALOGO"){
 
     my $nro_socio = $obj->{'nro_socio'};
     my $id_ui = $obj->{'id_ui'};
     my $tipo_documento = $obj->{'tipo_documento'};
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "admin/detalle_permisos.tmpl",
+                        template_name => "admin/detalle_permisos_catalogo.tmpl",
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
@@ -71,7 +71,7 @@ elsif ($accion eq "OBTENER_PERMISOS"){
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 
 }
-elsif ($accion eq "ACTUALIZAR_PERMISOS"){
+elsif ($accion eq "ACTUALIZAR_PERMISOS_CATALOGO"){
 
     my $nro_socio = $obj->{'nro_socio'};
     my $id_ui = $obj->{'id_ui'};
@@ -79,7 +79,7 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS"){
     my $permisos = $obj->{'permisos'};
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                            template_name => "admin/detalle_permisos.tmpl",
+                            template_name => "admin/detalle_permisos_catalogo.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
@@ -92,7 +92,7 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS"){
     $t_params->{'permisos'}=$permisos;
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
-elsif ($accion eq "NUEVO_PERMISO"){
+elsif ($accion eq "NUEVO_PERMISO_CATALOGO"){
 
     my $nro_socio = $obj->{'nro_socio'};
     my $id_ui = $obj->{'id_ui'};
@@ -100,7 +100,7 @@ elsif ($accion eq "NUEVO_PERMISO"){
     my $permisos = $obj->{'permisos'};
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                            template_name => "admin/detalle_permisos.tmpl",
+                            template_name => "admin/detalle_permisos_catalogo.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
@@ -114,10 +114,10 @@ elsif ($accion eq "NUEVO_PERMISO"){
 
     C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
-elsif ($accion eq "SHOW_NUEVO_PERMISO"){
+elsif ($accion eq "SHOW_NUEVO_PERMISO_CATALOGO"){
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                            template_name => "admin/detalle_permisos.tmpl",
+                            template_name => "admin/detalle_permisos_catalogo.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
