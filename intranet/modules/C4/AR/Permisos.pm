@@ -8,8 +8,8 @@ use C4::Modelo::PermCatalogo;
 use C4::Modelo::PermCatalogo::Manager;
 use C4::Modelo::PermGeneral;
 use C4::Modelo::PermGeneral::Manager;
-# use C4::Modelo::PermCirculacion;
-# use C4::Modelo::PermCirculacion::Manager;
+use C4::Modelo::PermCirculacion;
+use C4::Modelo::PermCirculacion::Manager;
 use CGI;
 use Encode;
 use JSON;
@@ -372,5 +372,127 @@ sub armarPerfilGeneral{
 
 
 
+# FUNCIONES DE PERMISOS PARA CIRCULACION
+
+sub actualizarPermisosCirculacion{
+
+    my ($nro_socio,$id_ui,$tipo_documento,$permisos_array)= @_;
+
+    my @filtros;
+
+    my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
+
+    my $permisos = C4::Modelo::PermCirculacion->new(nro_socio => $nro_socio, ui => $id_ui, tipo_documento => $tipo_documento);
+    eval{
+        $permisos->load();
+        $hash_permisos->{'tipo_documento'} = $tipo_documento;
+        $hash_permisos->{'nro_socio'} = $nro_socio;
+        $id_ui = $id_ui || 'ALL';
+        $hash_permisos->{'id_ui'} = $id_ui;
+
+        $permisos->agregar($hash_permisos);
+
+        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+
+        return ($permisos);
+    };
+    return (0);
+
+}
+
+sub obtenerPermisosCirculacion{
+
+    my ($nro_socio,$id_ui,$tipo_documento,$perfil)= @_;
+    my $permisos;
+    my @filtros;
+    my $newUpdate;
+    push (@filtros, (nro_socio => {eq => $nro_socio}));
+    $id_ui = $id_ui || 'ANY';
+    push (@filtros, (ui => {eq => $id_ui}));
+    push (@filtros, (tipo_documento => {eq => $tipo_documento}));
+
+    $permisos = C4::Modelo::PermCirculacion::Manager::get_perm_circulacion( query => \@filtros,
+                                                                        );
+    if ($permisos->[0]){
+        $permisos = C4::AR::Permisos::parsearPermisos($permisos->[0]);
+        $newUpdate = 0;
+    }else{
+        if ($perfil){
+            $permisos = C4::AR::Permisos::armarPerfilCirculacion($perfil);
+            $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+        }else{
+            $permisos = 0;
+        }
+        $newUpdate = 1;
+    }
+    return ($permisos,$newUpdate);
+}
+
+sub nuevoPermisoCirculacion{
+
+    my ($nro_socio,$id_ui,$tipo_documento,$permisos_array)= @_;
+
+    my @filtros;
+
+    my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
+
+    my $permisos = C4::Modelo::PermCirculacion->new();
+    $hash_permisos->{'tipo_documento'} = $tipo_documento;
+    $hash_permisos->{'nro_socio'} = $nro_socio;
+    $hash_permisos->{'id_ui'} = $id_ui || 'ALL';
+
+    $permisos->agregar($hash_permisos);
+
+    $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+
+    return ($permisos);
+}
+
+
+sub get_permisos_circulacion {
+    my ($params) = @_;
+
+    my @filtros;
+
+    if($params->{'ui'} ne 'ANY'){
+        #interesa la UI
+        push (@filtros, ( 'ui' => { eq => $params->{'ui'} }) );
+    }
+
+    if($params->{'tipo_documento'} ne 'ANY'){
+        #interesa el tipo_documento
+        push (@filtros, ( 'tipo_documento' => { eq => $params->{'tipo_documento'} }) );
+    }
+
+    push (@filtros, ( 'nro_socio' => { eq => $params->{'nro_socio'} }) );
+
+
+    my $permisos_circulacion_array_ref = C4::Modelo::PermCirculacion::Manager::get_perm_circulacion( 
+                                                                                            query => \@filtros,
+                                                                                          );
+    if(scalar(@$permisos_circulacion_array_ref) > 0){
+        return $permisos_circulacion_array_ref;
+    }else{
+        return 0;
+    }
+}
+
+sub armarPerfilCirculacion{
+
+    my ($perfil) = @_;
+
+    use C4::Modelo::PermCirculacion;
+    my $permisoTemp = C4::Modelo::PermCirculacion->new();
+
+    if ($perfil eq 'SL'){
+        $permisoTemp->setAll(TODOS);
+    }
+    elsif ($perfil eq 'L'){
+        $permisoTemp->setAll(ALTA | MODIFICACION | CONSULTA);
+
+    }
+    return $permisoTemp;
+
+}
 
 1;

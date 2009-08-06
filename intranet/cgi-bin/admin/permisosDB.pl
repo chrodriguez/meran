@@ -264,3 +264,82 @@ elsif ($accion eq "circulacion"){
 
   C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }
+elsif ($accion eq "OBTENER_PERMISOS_CIRCULACION"){
+
+    my $nro_socio = $obj->{'nro_socio'};
+    my $id_ui = $obj->{'id_ui'};
+    my $tipo_documento = $obj->{'tipo_documento'};
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                        template_name => "admin/detalle_permisos_circulacion.tmpl",
+                        query => $input,
+                        type => "intranet",
+                        authnotrequired => 0,
+                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+                        debug => 1,
+                    });
+    my $perfil = $obj->{'perfil'} || 0;
+    my ($permisos,$newUpdate) = C4::AR::Permisos::obtenerPermisosCirculacion($nro_socio,$id_ui,$tipo_documento,$perfil);
+    $t_params->{'permisos'}=$permisos;
+    if ($newUpdate){
+        $t_params->{'nuevoPermiso'}=1;
+    }
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+
+}
+elsif ($accion eq "ACTUALIZAR_PERMISOS_CIRCULACION"){
+
+    my $nro_socio = $obj->{'nro_socio'};
+    my $id_ui = $obj->{'id_ui'};
+    my $tipo_documento = $obj->{'tipo_documento'};
+    my $permisos = $obj->{'permisos'};
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "admin/detalle_permisos_circulacion.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+                            debug => 1,
+                    });
+
+    my $updateStatus = C4::AR::Permisos::actualizarPermisosCirculacion($nro_socio,$id_ui,$tipo_documento,$permisos);
+    my $permisos = C4::AR::Permisos::obtenerPermisosCirculacion($nro_socio,$id_ui,$tipo_documento);
+    $t_params->{'permisos'}=$permisos;
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
+elsif ($accion eq "NUEVO_PERMISO_CIRCULACION"){
+
+    my $nro_socio = $obj->{'nro_socio'};
+    my $id_ui = $obj->{'id_ui'};
+    my $tipo_documento = $obj->{'tipo_documento'};
+    my $permisos = $obj->{'permisos'};
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "admin/detalle_permisos_circulacion.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+                            debug => 1,
+                    });
+
+    C4::AR::Permisos::nuevoPermisoCirculacion($nro_socio,$id_ui,$tipo_documento,$permisos);
+    my $permisos = C4::AR::Permisos::obtenerPermisosCirculacion($nro_socio,$id_ui,$tipo_documento);
+    $t_params->{'permisos'}=$permisos;
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}
+elsif ($accion eq "SHOW_NUEVO_PERMISO_CIRCULACION"){
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "admin/detalle_permisos_circulacion.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'sistema'},
+                            debug => 1,
+                    });
+
+    $t_params->{'nuevoPermiso'}=1;
+    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+}

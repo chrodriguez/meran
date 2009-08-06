@@ -513,6 +513,36 @@ si el entorno existe y ademas para buscar el permiso en el entorno (TABLA) corre
 cualquier entorno ingresado a la funcion que no exista en alguno de los arreglos de entornos será descartado e inmediatamente se
 retornará SIN PERMISOS.
 =cut
+
+sub checkEntorno{
+
+    my ($flagsrequired,@entornos_perm_catalogo,@entornos_perm_general,@entornos_perm_circulacion) = @_; 
+    
+    my @entornos_chosen;
+    
+
+    if ($flagsrequired->{'tipo_permiso'} eq "catalogo"){
+      @entornos_chosen = @entornos_perm_catalogo;
+    }
+    elsif ($flagsrequired->{'tipo_permiso'} eq "general"){
+      @entornos_chosen = @entornos_perm_general;
+    }
+    elsif ($flagsrequired->{'tipo_permiso'} eq "circulacion"){
+      @entornos_chosen = @entornos_perm_circulacion;
+    }
+    
+    if( (C4::AR::Utilidades::existeInArray($flagsrequired->{'entorno'}, @entornos_chosen)) ){
+        my $permisos_array_hash_ref= C4::AR::Permisos::get_permisos_catalogo({
+                                                            ui => $flagsrequired->{'ui'}, 
+                                                            tipo_documento => $flagsrequired->{'tipo_documento'}, 
+                                                            nro_socio => $flagsrequired->{'nro_socio'},
+                                                });
+        return ($permisos_array_hash_ref);
+    }else{
+        return 0;
+    }
+}
+
 sub verificar_permisos_por_nivel{
     my ($flagsrequired) = @_;
     use C4::Modelo::PermCatalogo::Manager;
@@ -521,9 +551,14 @@ sub verificar_permisos_por_nivel{
     my $permisos_array_hash_ref;
 #     my @entornos_datos_nivel = ('datos_nivel1','datos_nivel2','datos_nivel3'); 
 #     my @entornos_estructura_catalogacion= ('estructura_catalogacion_n1','estructura_catalogacion_n2','estructura_catalogacion_n3');
-    my @entornos_perm_catalogo= (   'datos_nivel1','datos_nivel2','datos_nivel3', 'estructura_catalogacion_n1',
+    my @entornos_perm_catalogo= ( 'datos_nivel1','datos_nivel2','datos_nivel3', 'estructura_catalogacion_n1',
                                     'estructura_catalogacion_n2','estructura_catalogacion_n3', 'sistema', 'undefined', 'usuarios');
-    my @entornos_manejo_usuario = ('usuarios');
+    
+    my @entornos_perm_general= ( 'reportes','preferencias' );
+    
+    my @entornos_perm_circulacion= ( 'prestamos' );
+
+    my @entornos_manejo_usuario = ( 'usuarios' );
 #     my @entornos_circulacion = ('');
 
 # FIXME falta verificar los parametros de entrada, que sean numeros y ademas q sean validos
@@ -535,17 +570,12 @@ sub verificar_permisos_por_nivel{
     C4::AR::Debug::debug("verificar_permisos_por_nivel => entorno=================: ".$flagsrequired->{'entorno'});
     C4::AR::Debug::debug("verificar_permisos_por_nivel => accion=================: ".$flagsrequired->{'accion'});
 
-    if( (C4::AR::Utilidades::existeInArray($flagsrequired->{'entorno'}, @entornos_perm_catalogo)) ){
-   
-        $permisos_array_hash_ref= C4::AR::Permisos::get_permisos_catalogo({
-                                                            ui => $flagsrequired->{'ui'}, 
-                                                            tipo_documento => $flagsrequired->{'tipo_documento'}, 
-                                                            nro_socio => $flagsrequired->{'nro_socio'},
-                                                });
-    }else{
-     #el entorno pasado por parametro no existe, NO TIENE PERMISOS
+    $permisos_array_hash_ref = C4::Modelo::UsrSocio::checkEntorno($flagsrequired,@entornos_perm_catalogo,@entornos_perm_general,@entornos_perm_circulacion);
+    
+    if (!$permisos_array_hash_ref){
+        #el entorno pasado por parametro no existe, NO TIENE PERMISOS
         C4::AR::Debug::debug("verificar_permisos_por_nivel => NO EXISTE EL ENTORNO: ".$flagsrequired->{'entorno'});
-        return 0;
+        return (0);
     }
 
     foreach my $permisos_hash_ref (@$permisos_array_hash_ref){
@@ -579,7 +609,7 @@ sub verificar_permisos_por_nivel{
 }
 
 sub tienePermisos {
-#     00000000 8bits los primeros 4 esta para uso futuro
+#     00000000 8bits los 3 más significativos esta para uso futuro
 #     000TABMC TODOS, ALTA, BAJA, MODIFICACION, CONSULTA 
 
 #     $flagsrequired->{'tipo_documento'}
@@ -592,6 +622,7 @@ sub tienePermisos {
 
     # Se setean los flags requeridos
     $flagsrequired->{'nro_socio'}= $self->getNro_socio;
+    $flagsrequired->{'tipo_permiso'} = $flagsrequired->{'tipo_permiso'} || "catalogo";
 
     #se verifican permisos level1
     C4::AR::Debug::debug("tienePermisos??? => intento level1");
@@ -601,7 +632,7 @@ sub tienePermisos {
     #se verifican permisos level2
     C4::AR::Debug::debug("tienePermisos??? => intento level2");
     if(verificar_permisos_por_nivel($flagsrequired)){return 1}
-    
+
     $flagsrequired->{'ui'}= 'ALL';
     #se verifican permisos level3
     C4::AR::Debug::debug("tienePermisos??? => intento level3");

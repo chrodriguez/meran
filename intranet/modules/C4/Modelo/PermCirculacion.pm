@@ -11,8 +11,7 @@ __PACKAGE__->meta->setup(
         nro_socio => { type => 'varchar', length => 16, not_null => },
         ui  => { type => 'varchar', length => 4, not_null => 1 },
         tipo_documento => { type => 'varchar', length => 4, not_null => 1 }, 
-        catalogo => { type => 'varbinary', length => 8, not_null => 1 },
-        ui  => { type => 'varbinary', length => 8, not_null => 1 },
+        prestamos => { type => 'varchar', length => 8, not_null => 1 },
     ],
 
     primary_key_columns => [ 'nro_socio','ui','tipo_documento' ],
@@ -27,7 +26,8 @@ sub agregar{
     $self->setNro_socio($permisos_hash->{'nro_socio'});
     $self->setUI($permisos_hash->{'id_ui'});
     $self->setTipo_documento($permisos_hash->{'tipo_documento'});
-
+    $self->setPrestamos($permisos_hash->{'prestamos'});
+    
     $self->save();
 }
 
@@ -35,7 +35,8 @@ sub setAll{
 
     my ($self) = shift;
     my ($permisosByte) = @_;
-
+    
+    $self->setPrestamos($permisosByte);
 }
 
 sub modificar{
@@ -91,6 +92,20 @@ sub setTipo_documento{
     $self->tipo_documento($tipo_documento);
 }
 
+sub getPrestamos{
+
+    my ($self) = shift;
+    
+    return ($self->prestamos);
+}
+
+sub setPrestamos{
+
+    my ($self) = shift;
+    my ($prestamos) = @_;
+    
+    $self->prestamos($prestamos);
+}
 
 1;
 
