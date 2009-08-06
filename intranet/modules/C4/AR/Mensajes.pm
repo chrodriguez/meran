@@ -299,6 +299,10 @@ my %mensajesINTRA = (
     'SP012' => 'El tipo de pr&eacute;stamo no pudo ser eliminado ya que se encuentra en uso por *?* pr&eacute;stamos.',
     'SP013' => 'Los tipos de prestamo sobre el cual se aplican las sanciones se actualizaron con &eacute;xito.',
     'SP014' => 'No se pudieron actualizar los tipos de prestamo sobre el cual se aplican las sanciones.',
+    'SP015' => 'Se agrego una nueva regla de sanci&oacute;n.',
+    'SP016' => 'No se pudo agregar la regla de sanci&oacute;n.',
+    'SP017' => 'Se elimin&oacute; la regla de sanci&oacute;n.',
+    'SP018' => 'No se pudo eliminar la regla de sanci&oacute;n.',
     'UT001' => 'Se rompio Utilidades::from_json_ISO',
     'VA001' => 'Error de parametros, inconsistentes o faltantes, don\'t HACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
 	

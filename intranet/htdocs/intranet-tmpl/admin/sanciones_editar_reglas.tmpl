@@ -1,0 +1,58 @@
+
+<script language="JavaScript">
+        function borrar(sanctionrulecode){
+                document.frm.sanctionrulecode.value= sanctionrulecode;
+                document.frm.accion.value= 'delete';
+                document.frm.submit();
+        }
+
+        function agregar(){
+                document.frm.accion.value= 'add';
+                document.frm.submit();
+        }
+</script>
+
+<div class="titulos_interior">Reglas para sancionar</div>
+
+<div class="divSancionesEdicionReglas">
+	<table border=0 cellspacing=0 cellpadding=0 align='center' width="80%">
+                <tr class="tablaresultadoTitle">	
+                        <td>[% "D&iacute;as de demora" | i18n %]</td>
+                        <td>[% "D&iacute;as de sanci&oacute;n" | i18n %]</td>
+                        <td>[% "Eliminar" | i18n %]</td>
+                </tr>
+               [% FOREACH regla IN REGLAS_SANCIONES %]
+                <tr valign=middle align='center'>
+                <td>[% regla.getDias_demora %]</td>
+                <td>[% regla.getDias_sancion %]</td>
+                <td>
+                    [% PERL %]
+                            print C4::AR::Filtros::to_Icon(  
+                                                                boton   => "icon_borrar",
+                                                                onClick => "eliminarReglaSancion([% regla.getRegla_sancion %]);",
+                                                                title   => "[% 'Eliminar Regla' | i18n %]",
+                                    ) ;
+                    [% END %]
+               </td>
+               </tr>
+               [% END %]
+                <tr class="tablaresultadoTitle">
+                        <td>[% "D&iacute;as de demora" | i18n %]</td>
+                        <td>[% "D&iacute;as de sanci&oacute;n" | i18n %]</td>
+                        <td>[% "Agregar" | i18n %]</td>
+                </tr>
+		        <tr>
+                <td><input type="text" id="dias_demora" name="dias_demora"></td>
+                <td><input type="text" id="dias_sancion" name="dias_sancion"></td>
+                <td>
+                    [% PERL %]
+                            print C4::AR::Filtros::to_Icon(  
+                                                                boton   => "icon_añadir",
+                                                                onClick => "agregarReglaSancion();",
+                                                                title   => "[% 'Agregar Regla' | i18n %]",
+                                    ) ;
+                    [% END %]
+               </td>
+		        </tr>
+	  </table>
+</div>

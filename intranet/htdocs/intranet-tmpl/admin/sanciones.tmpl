@@ -107,9 +107,6 @@ function updateSancionesReglas(responseText){
     $("#divSancionesReglas").html(responseText);
 }
 
-
-
-
 /*
  * agregarReglaSancion
  * Muestra la parte de agregado de una regla de sancion
@@ -117,10 +114,13 @@ function updateSancionesReglas(responseText){
 function agregarReglaTipoSancion(tipo_sancion){
     objAH=new AjaxHelper(updateAgregarReglaTipoSancion);
     objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+
     objAH.regla_sancion=$("#regla_sancion").val();
     objAH.orden=$("#orden").val();
     objAH.cantidad=$("#cantidad").val();
-    alert (objAH.regla_sancion ." - ". objAH.orden ." - ". objAH.cantidad);
+    objAH.tipo_prestamo=$("#tipo_prestamo_id").val();
+    objAH.categoria_socio=$("#categoria_socio_id").val();
+
     objAH.tipoAccion= "AGREGAR_REGLA_TIPO_SANCION";
     objAH.sendToServer();
 }
@@ -152,6 +152,70 @@ function updateEliminarReglaTipoSancion(responseText){
 }
 
 
+//*********************************************Modificar Datos Usuario*********************************************
+function editarReglas(){
+    objAH=new AjaxHelper(updateEditarReglas);
+    objAH.debug= true;
+    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+    objAH.tipoAccion= "MODIFICAR_REGLAS";
+    objAH.sendToServer();
+}
+
+function updateEditarReglas(responseText){
+
+        vReglasSanciones=new WindowHelper({draggable: true, opacity: true});
+        vReglasSanciones.debug= true;
+        vReglasSanciones.html=responseText;
+        vReglasSanciones.create();
+        vReglasSanciones.height('80%');
+        vReglasSanciones.width('60%');
+        vReglasSanciones.open();
+
+}
+
+
+
+/*
+ *  eliminarReglaSancion
+ */
+function eliminarReglaSancion(regla_sancion){
+    if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO) ){
+    objAH=new AjaxHelper(updateEliminarReglaSancion);
+    objAH.debug= true;
+    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+    objAH.tipo_sancion=tipo_sancion;
+    objAH.regla_sancion=regla_sancion;
+    objAH.tipoAccion= "ELIMINAR_REGLA_SANCION";
+    objAH.sendToServer();
+    }
+}
+
+function updateEliminarReglaSancion(responseText){
+     buscarSancionesReglas();
+     respuesta(responseText);
+}
+
+/*
+ * agregarReglaSancion
+ * Muestra la parte de agregado de una regla de sancion
+ */
+function agregarReglaSancion(){
+    objAH=new AjaxHelper(updateAgregarReglaSancion);
+    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+
+    objAH.dias_sancion=$("#dias_sancion").val();
+    objAH.dias_demora=$("#dias_demora").val();
+
+    objAH.tipoAccion= "AGREGAR_REGLA_SANCION";
+    objAH.sendToServer();
+}
+
+function updateAgregarReglaSancion(responseText){
+     buscarSancionesReglas();
+     respuesta(responseText);
+}
+
+
 
 
 $(document).ready( function() {
@@ -161,6 +225,7 @@ $(document).ready( function() {
 </script>
 
 <div class="titulos_interior">[% 'Tipos de sanciones' | i18n %]</div>
+<div>
 <div id="divSanciones">
 <div id="divSancionesTiposSocios">
 <table border=0 cellspacing=0 cellpadding=0 align='center' width="100%" >
@@ -177,6 +242,6 @@ $(document).ready( function() {
  <div id="divSancionesTiposPrestamos"></div>
 </div>
  <div id="divSancionesReglas"></div>
-
+</div>
 
 [% INCLUDE "intranet-bottom.inc" %]

@@ -16,7 +16,6 @@
 			<td>[% regla_tipo.ref_regla.getDias_sancion %]</td>
 			<td>[% IF regla_tipo.getCantidad %] [% regla_tipo.getCantidad %]  [% ELSE %] Infinito [% END %]</td>
 			<td>
-            <div>
             [% PERL %]
                     print C4::AR::Filtros::to_Icon(  
                                                         boton   => "icon_borrar",
@@ -24,7 +23,6 @@
                                                         title   => "[% 'Eliminar' | i18n %]",
                             ) ;
             [% END %]
-            </div>
 			</td>
 
 		</tr>
@@ -36,11 +34,25 @@
         <td> [% "Agregar" | i18n %]</td>
         </tr>
         <tr valign=middle align=center>
-        	<td>[% ordenes %]</td>
-            <td colspan="2">[% reglas_de_sancion %]</td>
+        	<td >[% ordenes %]</td>
+            <td colspan="2">
+            <div width='20%'>
+            <div style="float: left">
+            [% reglas_de_sancion %]
+            </div>
+            <div style="float: left">
+                [% PERL %]
+                    print C4::AR::Filtros::to_Icon(  
+                                                        boton   => "icon_edicion",
+                                                        onClick => "editarReglas();",
+                                                        title   => "[% 'Editar Reglas' | i18n %]",
+                            ) ;
+                [% END %]
+            </div>
+            </div>
+            </td>
             <td>[% cantidades %]</td>
             <td >
-            <div>
             [% PERL %]
                     print C4::AR::Filtros::to_Icon(  
                                                         boton   => "icon_añadir",
@@ -48,7 +60,6 @@
                                                         title   => "[% 'Agregar' | i18n %]",
                             ) ;
             [% END %]
-            </div>
 		    </td>
         </tr>
 </table>

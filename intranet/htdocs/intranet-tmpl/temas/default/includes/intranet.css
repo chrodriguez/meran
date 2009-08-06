@@ -981,15 +981,21 @@ ul#horizontal-list li {
 #divSancionesTiposSocios {
     float: left;
     padding: 5px;
-    width: 30%;
+    width: 100%;
 }
 
 #divSancionesTiposPrestamos {
     padding: 5px;
-    width: 30%
+    width: 100%
 }
 #divSancionesReglas {
-    padding: 0px 30px;
+    padding: 0px 5px;
+    width:50%;
 }
 #divSanciones{
+    width:50%;
+}
+
+#divSancionesEdicionReglas{
+    width:50%;
 }
