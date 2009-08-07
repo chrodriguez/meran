@@ -1,5 +1,25 @@
 package C4::AR::Usuarios;
 
+=head1 NAME
+
+C4::AR::Usuarios 
+
+=head1 SYNOPSIS
+
+  use C4::AR::Usuarios;
+
+=head1 DESCRIPTION
+
+  Descripción del modulo COMPLETAR
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
+
+
 =item
 ####################################### About PM ########################################################
     Author: Heredado de KOHA V2
@@ -126,10 +146,12 @@ sub agregarPersona {
     return ($msg_object);
 }
 
-=item
+=item sub habilitarPersona
+
     Este modulo habilita un socio, para que pueda operar en la biblioteca.
     Parametros: 
-                ARRAY: con los id de los socios a habilitar
+    ARRAY: con los id de los socios a habilitar
+
 =cut 
 sub habilitarPersona {
 
@@ -764,3 +786,17 @@ sub esRegular {
 
 
 1;
+=back
+
+=head1 AUTHOR
+
+Grupo de Desarrollo Meran <grupomeran@linti.unlp.edu.ar>
+
+=head1 SEE ALSO
+
+C4::AR::Reservas 
+
+=cut
+
+
+

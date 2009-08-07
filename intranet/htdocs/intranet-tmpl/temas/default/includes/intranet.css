@@ -2,10 +2,10 @@ body {
 	margin : 25px;
 	background-color: #FFFFFF;	
 	font-family: "Trebuchet MS", "Verdana", "Arial" ;
-	font-size: 13px;
+	font-size: 10px;
 	font-style: normal;
 	color: #000000;
-/*	behavior: url("http://www.xs4all.nl/~peterned/htc/csshover3.htc");*/
+	behavior: url("http://www.xs4all.nl/~peterned/htc/csshover3.htc");
 	width:95%;
 }
 
@@ -77,15 +77,14 @@ body {
 /*PARTE SUPERIOR*/
 .logo_Superior{
    background-image:  url(../imagenes/logo.jpeg);
-   width: 500px;
+   width: 317px;
    float: left;
    margin-bottom:12px;
-   height:50px;
+   height:85px;
 }
 
-/*                                                     estilos para el login                                   */
 #login {
-    background-image: url(../imagenes/meranLogin.png);
+    background-image:url(../imagenes/meranLogin.png);
     font-family: "Trebuchet MS", "Verdana", "Arial";
     font-size: 12px;
     position: static;
@@ -112,14 +111,12 @@ body {
     display:block;
     padding: 21% 12%;
     margin-top:50%;
-    width: 80%;
 }
-
 #boton_login  {
     display:block;
     padding: 11% 32%; 
 }
-/*                                                Fin     estilos para el login                                 */
+
 
 
 .idioma_y_login{
@@ -131,8 +128,6 @@ body {
 	
 	
    }
-
-
 
 /* MENU*/ 
 
@@ -183,30 +178,32 @@ border:0px;
    white-space:nowrap;
    margin:0;
    padding:0 5px;
-   height:20px;
- 
+   height:21px;
+  
 
 }
 
 .menu_superior{
-   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
-   color:#fff;
-   background: url(../imagenes/menu.png) repeat 100% 100%;
-   text-transform:uppercase;
-   text-align:center;
-   cursor: pointer;
-   display:block;
-   white-space:nowrap;
-   margin:0;
-   border-left:1px solid #ccc;
-
-
+	font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+	color:#fff;
+	background: url(../imagenes/menu.png) repeat 100% 100%;
+	text-transform:uppercase;
+	text-align:center;
+	cursor: pointer;
+	display:block;
+	white-space:nowrap;
+	margin:0;
+	font-size:11px;
+	height:21px;
+	border-right-width: thin;
+	border-right-style: solid;
+	border-right-color: #FFFFFF;
 
 
 }
 .menu_intermedio{
 	color:#fff;
-	background:#147273 url(../imagenes/expand3.gif) no-repeat right;
+	background:#416ca5 url(../imagenes/expand3.gif) no-repeat right;
 	text-transform:uppercase;
 	cursor: pointer;
 	display:block;
@@ -262,16 +259,16 @@ border:0px;
 .titulos_interior { /*esto era pagetitle, cambiar en templates*/
 	  font-weight: bold;
 	  font-Family : tahoma, arial, helvetica, sans-serif;
-	  font-size : 20px;
-	  color: #147273;
+	  font-size : 25px;
+	  color: #416ca5;
 	  text-align: left;
 	  margin-left: 20px;
 	  padding-left: 20px;
 }
 
 .titulo_arriba_tabla {
-    font-size : 20px;
-    text-alitablaresultadoTitlegn: center;
+    font-size : 18px;
+    text-align: center;
 }
 /*                                 fin de titulos                                      */
 
@@ -287,12 +284,13 @@ border:0px;
    margin-bottom:-3px
 }
 /*.inputFontNormal{
-    font-family: "Verdana","Trebuchet MS", "Arial";
-    font-size: 10pt;
-    color: #000000;
-    font-weight: normal;
-    overflow:auto; 
-    padding-left:20px;
+	font-family: "Verdana","Trebuchet MS", "Arial";
+	font-size: 10pt;
+	color: #000000;
+	font-weight: normal;
+	overflow:auto; 
+	padding-left:20px;
+	            
 }*/
 /*                                      Fin  estilos para los botones                                  */
 
@@ -317,16 +315,10 @@ input[type=text]:focus{
     cursor: pointer;
 }
 
-#paginador{
-  width: 50%;
-  margin: 0 auto;
-  text-align: center;
-}
-
 .paginaActual{
     font-family: "Trebuchet MS", "Verdana", "Arial";
     font-size: 10pt;
-    color: #147273;
+    color: red;
     font-weight: bold;
     cursor: pointer;
 }
@@ -337,7 +329,7 @@ input[type=text]:focus{
 .tdout{
       font-family: "Verdana","Trebuchet MS", "Arial";
     font-size: 8pt;
-    color: #147273;
+    color: #416ca5;
     list-style: none;
     font-weight: normal;
     padding: 0px;
@@ -360,7 +352,7 @@ li {
 .itemLI{
     font-family: "Verdana","Trebuchet MS", "Arial";
     font-size: 8pt;
-    color: #147273;
+    color: #365989;
     list-style: none;
     font-weight: normal;
 	text-decoration:none;
@@ -462,7 +454,7 @@ tr.impar {
 
 /*                                        para los resultados en tablas                                                */
 .tablaresultadoTitle { 
-    font-Family : normal tahoma,arial,helvetica,sans-serif ;
+    font-Family : "Verdana" ;
     color: #fff;
     font-size: 9pt;
     background: url(../imagenes/tablaresultado.png) repeat-x ;
@@ -674,7 +666,6 @@ tr.impar {
     padding-bottom:0;
     padding-left:0;
     padding-right:0;
-    cursor: pointer;
 /*     padding-top:6px; */
 /*     margin-left: 25px;*/
 }
@@ -695,7 +686,6 @@ tr.impar {
     background: transparent url(../imagenes/iconos/borrar.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 #icon_añadir {
     background: transparent url(../imagenes/iconos/añadir.png) no-repeat;
@@ -708,73 +698,62 @@ tr.impar {
     background: transparent url(../imagenes/iconos/cambiarlibro.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_der {
     background: transparent url(../imagenes/iconos/der.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_devolverlibro {
     background: transparent url(../imagenes/iconos/buscar.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 #icon_buscar {
     background: transparent url(../imagenes/iconos/devolverlibro.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_edicion {
     background: transparent url(../imagenes/iconos/edicion.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 #icon_entrar {
     background: transparent url(../imagenes/iconos/entrar.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 #icon_enviar {
     background: transparent url(../imagenes/iconos/enviar.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 #icon_estvirtuales {
     background: transparent url(../imagenes/iconos/estvirtuales.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_favoritos {
     background: transparent url(../imagenes/iconos/favoritos.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_guardar {
     background: transparent url(../imagenes/iconos/guardar.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_imprimir {
     background: transparent url(../imagenes/iconos/imprimir.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_indice {
@@ -787,77 +766,66 @@ tr.impar {
     background: transparent url(../imagenes/iconos/inicio.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_ir {
     background: transparent url(../imagenes/iconos/ir.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_izq {
     background: transparent url(../imagenes/iconos/izq.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_micuenta {
     background: transparent url(../imagenes/iconos/micuenta.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_miembros {
     background: transparent url(../imagenes/iconos/miembros.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_pdf {
     background: transparent url(../imagenes/iconos/pdf.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_prestarlibro {
     background: transparent url(../imagenes/iconos/prestarlibro.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_sacar {
     background: transparent url(../imagenes/iconos/sacar.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_salir {
     background: transparent url(../imagenes/iconos/salir.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_seleccionar {
     background: transparent url(../imagenes/iconos/seleccionar.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 
 #icon_subir {
     background: transparent url(../imagenes/iconos/subir.png) no-repeat;
     height: 25px;
     width: 25px;
-    cursor: pointer;
 }
 /*                 Fin estilos para los iconos  */     
                           
@@ -974,7 +942,6 @@ ul#horizontal-list li {
 }
 
 /*                                              fin estilos para los reportes                           */
-
 
 /* 												ESTILO SANCIONES										*/
 
