@@ -37,12 +37,21 @@
 
 <form action='/cgi-bin/koha/mainpage.pl' method="post" name="datos">
     <script language="javascript">
-	 [% INCLUDE "md5.js" %]
+    [% INCLUDE "md5.js" %]
+    [% INCLUDE "sha1.js" %]
     </script>
     <script language="javascript">
         function enviar(){
-		    nroRandom=[% RANDOM_NUMBER %];
-            hash= b64_md5(b64_md5(document.datos.password.value)+nroRandom);
+//             var metodo= '[% METODO %]';
+		    var nroRandom= [% RANDOM_NUMBER %];
+//  alert ("b64_sha256: " + b64_sha256(document.datos.password.value) + "\n b64_sha256 + nroRandom: " + b64_sha256(b64_sha256(document.datos.password.value)+nroRandom ) );
+//             if( metodo == 'MD5' ){
+//                 hash= b64_md5(b64_md5(document.datos.password.value)+nroRandom);
+//             }else{
+//                 hash=  b64_sha256(b64_sha256(document.datos.password.value)+nroRandom);
+//             }
+
+            hash= b64_sha256(b64_sha256(b64_md5(document.datos.password.value))+nroRandom);
             document.datosAEnviar.password.value= hash;
             document.datosAEnviar.userid.value= document.datos.userid.value;
             document.datosAEnviar.submit();

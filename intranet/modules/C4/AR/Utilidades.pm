@@ -21,6 +21,7 @@ use CGI;
 use Encode;
 use JSON;
 use POSIX qw(ceil floor); #para redondear cuando divido un numero
+use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
 #use C4::Date;
 use vars qw(@EXPORT @ISA);
@@ -2375,5 +2376,33 @@ sub dec2bin {
     return $str;
 }
 ####################################FIN###FUNCIONES PARA TRABAJAR CON BINARIOS#######################################
+
+=item sub isAjaxRequest
+
+    verifica si el request fue realizado con AJAX
+    Parametros:
+
+=cut
+sub isAjaxRequest {
+    if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
+        return 1;
+    }else { return 0}
+}
+
+=item sub md5ToSHA_B64_256
+
+    Esta funcion se utiliza para actualizar las passwords de los socios de MD5 a SHA256_base64
+=cut
+sub md5ToSHA_B64_256 {
+       
+    my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( );
+
+    foreach my $socio (@$socios_array_ref){
+        if($socio->getPassword() ne undef){
+            $socio->setPassword(sha256_base64($socio->getPassword()));
+        }
+        $socio->save();
+    }
+}
 
 1;

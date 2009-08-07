@@ -37,7 +37,7 @@ use CGI::Session qw/-ip-match/;
 use C4::Modelo::SistSesion;
 use C4::Modelo::SistSesion::Manager;
 use JSON;
-use Digest::SHA  qw(sha1 sha1_hex sha1_base64);
+use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -345,12 +345,14 @@ sub checkauth {
     my $authnotrequired = shift;
     my $flagsrequired = shift;
     my $type = shift;
+
     $type = 'opac' unless $type;
 C4::AR::Debug::debug("desde checkauth================================================================================================== \n");
     my $dbh = C4::Context->dbh;
     my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout');
     $timeout = 600 unless $timeout;
 # C4::AR::Debug::_printHASH(\%ENV);
+
     my $template_name;
     if ($type eq 'opac') {
         $template_name = "opac-auth.tmpl";
@@ -362,7 +364,6 @@ C4::AR::Debug::debug("desde checkauth===========================================
 	if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
 		my $obj=$query->param('obj');
 
-#         if (defined($obj) && ($obj != 0)){
 		if ( defined($obj) ){
 			$obj=C4::AR::Utilidades::from_json_ISO($obj);
             #ESTO ES PARA LAS LLAMADAS AJAX QUE PASSAN UN OBJETO JSON (HELPER DE AJAX)
@@ -391,8 +392,6 @@ C4::AR::Debug::debug("checkauth=> authnotrequired: ".$authnotrequired."\n");
 
    if ($sessionID=$session->param('sessionID')) {
 C4::AR::Debug::debug("checkauth=> sessionID seteado \n");
-# C4::AR::Debug::debug("checkauth=> recupero de la cookie con sessionID (desde query->cookie): ".$query->cookie('sessionID')."\n");
-# C4::AR::Debug::debug("checkauth=> recupero de la cookie con sessionID (desde session->param): ".$session->param('sessionID')."\n");
 
         #Se recupera la info de la session guardada en la base segun el sessionID
         my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
@@ -565,7 +564,6 @@ C4::AR::Debug::debug("checkauth=> Usuario no logueado, intento de autenticacion 
 C4::AR::Debug::debug("checkauth=> busco el sessionID: ".$sessionID." de la base \n");
         my $random_number= $sist_sesion->getNroRandom;
 C4::AR::Debug::debug("checkauth=> random_number desde la base: ".$random_number."\n");
-
         #se verifica la password ingresada
         my ($passwordValida, $cardnumber, $branch)= _verificarPassword($dbh,$userid,$password,$random_number);
 
@@ -700,7 +698,7 @@ sub _save_session_db{
     $sist_sesion->setLasttime(time());
     $sist_sesion->setNroRandom($random_number);
 	$sist_sesion->setToken($token);
-    C4::AR::Debug::debug("_save_session_db => token: ".$token);
+#     C4::AR::Debug::debug("_save_session_db => token: ".$token);
     $sist_sesion->save();
 
 }
@@ -876,6 +874,7 @@ sub inicializarAuth{
     C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number, $params{'token'});
 # FIXME y esto para que se setea si no se pasa a ningun template
     $t_params->{'RANDOM_NUMBER'}= $random_number;
+    $t_params->{'METODO'}= 'SHA_256_B64';
     
 
     return ($session);
@@ -960,18 +959,18 @@ sub _verificarPassword {
 
 	my ($passwordValida, $cardnumber);
 ## FIXME falta verificar la pass en LDAP si esta esta usando
-	my $branch;
+	my $ui;
 	if ( C4::AR::Preferencias->getValorPreferencia('ldapenabled')) {
 	#se esta usando LDAP
-		($passwordValida, $cardnumber,$branch) = checkpwldap($dbh,$userid,$password,$random_number);
+		($passwordValida, $cardnumber, $ui) = checkpwldap($dbh,$userid,$password,$random_number);
 	} else {
-         ($passwordValida, $cardnumber,$branch) = _checkpw($userid,$password,$random_number); 
+         ($passwordValida, $cardnumber, $ui) = _checkpw($userid,$password,$random_number); 
 	}
 
     C4::AR::Debug::debug("_verificarPassword=> password valida?: ".$passwordValida);
     C4::AR::Debug::debug("\n");
 
-	return ($passwordValida, $cardnumber, $branch);
+	return ($passwordValida, $cardnumber, $ui);
 }
 
 =item sub printSession
@@ -1011,7 +1010,7 @@ sub redirectTo {
     C4::AR::Debug::debug("redirectTo=> \n");
 
 	#para saber si fue un llamado con AJAX
-	if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
+    if(C4::AR::Utilidades::isAjaxRequest()){
 	#redirijo en el cliente
         C4::AR::Debug::debug("redirectTo=> CLIENT_REDIRECT\n"); 		
   		my $session = CGI::Session->load();
@@ -1043,7 +1042,7 @@ sub redirectToNoHTTPS {
     C4::AR::Debug::debug("redirectToNoHTTPS=> \n");
 
     #para saber si fue un llamado con AJAX
-    if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
+    if(C4::AR::Utilidades::isAjaxRequest()){
     #redirijo en el cliente
         C4::AR::Debug::debug("redirectToNoHTTPS=> CLIENT_REDIRECT\n");         
         my $session = CGI::Session->load();
@@ -1080,10 +1079,11 @@ sub redirectToHTTPS {
     C4::AR::Debug::debug("\n");
     C4::AR::Debug::debug("redirectToHTTPS=> \n");
 
-    my $puerto= C4::AR::Preferencias->getValorPreferencia("puerto_para_https")||'80';
+#     my $puerto= C4::AR::Preferencias->getValorPreferencia("puerto_para_https")||'444';
+my $puerto= C4::AR::Preferencias->getValorPreferencia("puerto_para_https")||'80';
 
     #para saber si fue un llamado con AJAX
-    if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
+    if(C4::AR::Utilidades::isAjaxRequest()){
     #redirijo en el cliente
         C4::AR::Debug::debug("redirectToHTTPS=> CLIENT_REDIRECT\n");         
         my $session = CGI::Session->load();
@@ -1099,7 +1099,8 @@ sub redirectToHTTPS {
 
         my $input = CGI->new(); 
         print $input->redirect( 
-                    -location => "http://".$ENV{'SERVER_NAME'}.":".$puerto.$url, 
+#                     -location => "https://".$ENV{'SERVER_NAME'}.":".$puerto.$url,
+                    -location => "http://".$ENV{'SERVER_NAME'}.":".$puerto.$url,  
                     -status => 301,
         ); 
 
@@ -1203,6 +1204,7 @@ sub t_operacionesDeINTRA{
 =cut
 # FIXME esto va a quedar DEPRECATED, pq se va a autenticar desde OPAC por HTTPS asi q no seria necesario el nroRandom y tampoco se usará mas
 # MD5 se usará SHA
+=item
 sub _checkpw {
     my ($userid, $password, $random_number) = @_;
     C4::AR::Debug::debug("_checkpw=> \n");
@@ -1236,6 +1238,78 @@ sub _checkpw {
 
     return 0;
 }
+=cut
+
+sub _checkpw {
+    my ($userid, $password, $random_number) = @_;
+    C4::AR::Debug::debug("_checkpw=> \n");
+
+    my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
+    $socio->load();
+    C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
+      if ( ($socio->persona)&&($socio->getActivo) ) {
+        C4::AR::Debug::debug("_checkpw=> tengo persona y socio\n");
+        #existe el socio y se encuentra activo
+        my $hashed_password= $socio->getPassword;
+        my $ui= $socio->getId_ui;
+        my $dni= $socio->persona->getNro_documento;
+
+        my $metodo= 'SHA_256_B64';#'MD5'
+        return _verificar_passwod_con_metodo($hashed_password, $password, $dni, $random_number, $metodo), $userid, $ui;
+     }# END  if ( ($socio->persona)&&($socio->getActivo) )
+
+
+    C4::AR::Debug::debug("_checkpw=> las pass son <> \n");
+
+    return 0;
+}
+
+
+sub _verificar_passwod_con_metodo {
+    my ($hashed_password, $password, $dni, $random_number, $metodo) = @_;
+
+    if ($hashed_password eq ''){
+    # La 1ra vez esta vacio se usa el dni o password reseteada
+        $hashed_password= _hashear_password($dni, $metodo);
+        C4::AR::Debug::debug("_verificar_passwod_con_metodo=> es la 1era vez que se loguea, se usa el DNI\n");
+    }
+
+    C4::AR::Debug::debug("_verificar_passwod_con_metodo=> password del cliente: ".$password."\n");
+    C4::AR::Debug::debug("_verificar_passwod_con_metodo=> password de la base: ".$hashed_password."\n");
+    C4::AR::Debug::debug("_verificar_passwod_con_metodo=> password_hasheada_con_metodo.random_number: "._hashear_password($hashed_password.$random_number, $metodo)."\n");
+
+    if ($password eq _hashear_password($hashed_password.$random_number, $metodo)) {
+        C4::AR::Debug::debug("_verificar_passwod_con_metodo=> las pass son = todo OK\n");
+        #PASSWORD VALIDA
+        return 1;
+    }else {
+        #PASSWORD INVALIDA
+        return 0;
+    }
+}
+
+
+=item sub hashear_password
+
+    Hashea una password segun el metodo pasado por parametro
+    si se agrega otro metodo de encriptacion se debe agregar aca
+    
+    Parametros:
+    $password: password del usuario a hashear
+    $metodo: MD5, SHA
+
+=cut
+sub _hashear_password {
+    my ($password, $metodo) = @_;
+
+    if($metodo eq 'SHA'){
+        return sha1_hex($password);
+    }elsif($metodo eq 'SHA_256_B64'){
+        return sha256_base64($password);
+    }elsif($metodo eq 'MD5'){
+        return md5_base64($password);
+    }
+}
 
 
 =item sub new_password_is_needed
@@ -1252,6 +1326,7 @@ sub _checkpw {
 =cut
 sub new_password_is_needed {
     my ($nro_socio) = @_;
+
     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
     my $days = C4::AR::Preferencias->getValorPreferencia("keeppasswordalive");

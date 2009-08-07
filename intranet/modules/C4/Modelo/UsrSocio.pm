@@ -17,7 +17,7 @@ __PACKAGE__->meta->setup(
         fecha_alta                       => { type => 'date' },
         expira                           => { type => 'date' },
         flags                            => { type => 'integer' },
-        password                         => { type => 'varchar', length => 30 },
+        password                         => { type => 'varchar', length => 255 },
         last_login                       => { type => 'datetime' },
         last_change_password             => { type => 'date' },
         change_password                  => { type => 'integer', default => '0', not_null => 1 },
@@ -584,6 +584,7 @@ sub verificar_permisos_por_nivel{
     C4::AR::Debug::debug("verificar_permisos_por_nivel => nro_socio=================: ".$flagsrequired->{'nro_socio'});
     C4::AR::Debug::debug("verificar_permisos_por_nivel => entorno=================: ".$flagsrequired->{'entorno'});
     C4::AR::Debug::debug("verificar_permisos_por_nivel => accion=================: ".$flagsrequired->{'accion'});
+
 
     $permisos_array_hash_ref = C4::Modelo::UsrSocio::checkEntorno($flagsrequired,\@entornos_perm_catalogo,\@entornos_perm_general,\@entornos_perm_circulacion);
     
