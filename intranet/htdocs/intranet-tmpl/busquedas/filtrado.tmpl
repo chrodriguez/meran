@@ -87,7 +87,7 @@ function limpiarCampos(side){
     <fieldset>
         <legend>[% "Busqueda combinada" | i18n %]</legend>
 		<ul id="simple">
-			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
+			<li class="sub_item">
 			<b>[% "B&uacute;squeda combinada" | i18n %]</b><br>
                 	<input type="text" id="keyword" size="25" onkeypress="limpiarCampos('derecha')">
 			<p valign="top" align="right">&nbsp;</p>
@@ -96,27 +96,27 @@ function limpiarCampos(side){
     <br><br>
     <fieldset>
         <legend>[% "Busqueda simple" | i18n %]</legend>
-			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';" >
+			<li class="sub_item">
 			<b>ISBN</b><br>
                 	<input type="text" id="isbn" size="25"readonly onkeypress="limpiarCampos('derecha')">
 			</li>
 			
-			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
+			<li class="sub_item">
     			<b>[% "B&uacute;squeda por diccionario" | i18n %]</b><br>
          		<input type="text" size="25" id="dictionary" readonly onkeypress="limpiarCampos('derecha')">
 			</li>		
 
-			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
+			<li class="sub_item">
 			<b>[% "C&oacute;digo de barras" | i18n %]</b><br>
 			<input type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
 
-			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
+			<li class="sub_item">
 			<b>Tema</b><br>
 			<input type="text" size="25" id="tema" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
 
-			<li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
+			<li class="sub_item">
 			<b>[% "Estantes Virtuales" | i18n %]</b><br>
 			<input type="text" size="25" id="estante" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
@@ -129,13 +129,12 @@ function limpiarCampos(side){
     <fieldset>
             <legend>[% "Busqueda espec&iacute;fica" | i18n %]</legend>
 		    <ul id="combinada">
-			    
-			    <li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
+			   <li class="sub_item"> 
                     <b>[% "Tipo de documento" | i18n %]</b> <br>
                         [% comboTipoDocumento %]
 			    </li>
     
-			    <li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
+			   <li class="sub_item"> 
 			    <b>T&iacute;tulo</b><br>
 			    <input type="text"  size="25" id="titulo" onkeypress="limpiarCampos('izquierda')">
 			    <p valign="top" align="right">
@@ -145,12 +144,12 @@ function limpiarCampos(side){
                                     [% "Exacto" | i18n %]
 			    </p>
 			    </li>
-			    <li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
+			   <li class="sub_item"> 
 			    <b>Autor</b><br>
 			    <input type="text" size="25" id="autor" onkeypress="limpiarCampos('izquierda')">
 			    </li>
     
-			    <li class="itemLI" onmouseout="this.className='itemLI';" onmouseover="this.className='tdhover';">
+			   <li class="sub_item"> 
 			    <b>[% "Signatura Topogr&aacute;fica" | i18n %]</b><br>
 			    <input type="text" size="25" id="signatura" onkeypress="limpiarCampos('izquierda')">
 			    </li>
