@@ -5,7 +5,7 @@
 [% IF ! add_form %]
 <!---------------------------------------------------------------------------->
 
-<div class="titulos_interior">
+<div class="titulos">
 
  	[% IF use-heading-flags-p %]
  		[% IF heading-modify-authorized-value-p %]
@@ -86,7 +86,7 @@
 <!---------------------------------------------------------------------------->
 [% IF else %]
 
-<div class="titulos_interior">[% "Administraci&oacute;n de Valores Autorizados" | i18n %]</div>
+<div class="titulos">[% "Administraci&oacute;n de Valores Autorizados" | i18n %]</div>
 		
 <p class="inputFontNormal">[% "Esta tabla es utilizada en la definici&oacute;n de MARC. Usted puede definir tantas categor&iacute;as como quiera, y tantos valores autorizados como necesite en cada categor&iacute;a." | i18n %] </p>
 <p class="inputFontNormal" >[% "Cuando defina la estructura del subcampo MARC, puede vincular un subcampo con una categor&iacute;a permitida. Cuando el usuario agrega o modifica un libro, el subcampo no se ingresa manualmente, se selecciona de una lista de valores permitidos." | i18n %]</p>

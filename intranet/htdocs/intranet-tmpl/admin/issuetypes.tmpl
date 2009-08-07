@@ -65,11 +65,11 @@ function Check(f) {
 <!-- EL NOT DEL IF NO VA, ESTA AHORA SOLO PARA VER EL TEMPLATE COMPILADO -->
 [% IF !add_form %]     
 	[% IF itemtype %]
-            <div class="titulos_interior">
+            <div class="titulos">
                 [% "Modificar Tipo de Pr&eacute;stamo" | i18n %]
             </div>
 	[% ELSE %]
-            <div class="titulos_interior">
+            <div class="titulos">
                 [% "Agregar Tipo de Pr&eacute;stamo" | i18n %]
             </div>
     [% END %]
@@ -239,7 +239,7 @@ function Check(f) {
 [% END %]
 
 [% IF else %]
-            <div class="titulos_interior">
+            <div class="titulos">
                 [% "Administraci&oacute;n de Tipos de Pr&eacute;stamo" | i18n %]
             </div>
             
