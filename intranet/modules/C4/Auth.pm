@@ -1254,7 +1254,7 @@ sub _checkpw {
         my $ui= $socio->getId_ui;
         my $dni= $socio->persona->getNro_documento;
 
-        my $metodo= 'SHA_256_B64';#'MD5'
+        my $metodo= 'SHA_256_B64';#'MD5'dfasd
         return _verificar_passwod_con_metodo($hashed_password, $password, $dni, $random_number, $metodo), $userid, $ui;
      }# END  if ( ($socio->persona)&&($socio->getActivo) )
 
