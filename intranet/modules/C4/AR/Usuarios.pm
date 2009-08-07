@@ -43,6 +43,9 @@ use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrPersona::Manager;
 use C4::Modelo::UsrEstado;
 use C4::Modelo::UsrEstado::Manager;
+use Digest::MD5 qw(md5_base64);
+use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
+
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -425,25 +428,26 @@ sub cambiarPassword {
         if ($socio->load()){
             my $actualPassword = $socio->getPassword;
             my $cambioDePasswordForzado;
+C4::AR::Debug::debug("changePassword: ".$params->{'changePassword'});
             if( ($params->{'changePassword'} eq 1) && ($socio->getChange_password) ){
                 $cambioDePasswordForzado= 1;
             }
             if ( $cambioDePasswordForzado ){
+C4::AR::Debug::debug("cambioForzado ");
                 #es un cambio forzado de la password, se obliga al usuario a cambiar la password, no se compara con la pass actual
                 my $newPassword = $params->{'newpassword'};
                 $socio->cambiarPassword($newPassword);
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
             }
-            elsif ( $actualPassword eq C4::Auth::md5_base64($params->{'actualPassword'}) && !$cambioDePasswordForzado ){
+            elsif ( $actualPassword eq sha256_base64(md5_base64($params->{'actualPassword'}) && !$cambioDePasswordForzado )){
             #es un cambio voluntario de la password
                 my $newPassword = $params->{'newpassword'};
                 $socio->cambiarPassword($newPassword);
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
+            }else{
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U361', 'params' => [$params->{'nro_socio'}]} ) ;
             }
-            else{
-                    $msg_object->{'error'}= 1;
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U361', 'params' => [$params->{'nro_socio'}]} ) ;
-                }
         }
         else{
                 #Se setea error para el usuario

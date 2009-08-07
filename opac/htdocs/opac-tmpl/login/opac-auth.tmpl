@@ -18,6 +18,8 @@
 <script src="/includes/json/jsonStringify.js"></script>
 <script src="/includes/jquery/jquery-highlight.js"></script>
 <script src="/includes/util.js"></script>
+<script src="/includes/md5.js"></script>
+<script src="/includes/sha1.js"></script>
 <script src="/opac-tmpl/includes/opac-searchFunciones.js"></script>
 <script src="/opac-tmpl/includes/favoritos.js"></script>
 <script src="/opac-tmpl/includes/message_OPAC.inc"></script>
@@ -60,10 +62,6 @@
     </font>
 </div>
 
-<script language="javascript">
-    [% INCLUDE md5.js %]
-    [% INCLUDE sha1.js %]
-</script>
 <script language="javascript"> 
 
     function enviar(){
@@ -71,9 +69,8 @@
         var password = $.trim($("#password_user").val());
         if ( (nro_socio != "") && (password != "") ){
             document.datosAEnviar.action= '/cgi-bin/koha/login/login.pl';
-            nroRandom= [% RANDOM_NUMBER %];
-//             hash= b64_md5(b64_md5(password)+nroRandom);
-            hash= b64_sha256(b64_sha256(b64_md5(document.datos.password.value))+nroRandom);
+            var nroRandom= [% RANDOM_NUMBER %];
+            var hash= b64_sha256(b64_sha256(b64_md5(password))+nroRandom);
             document.datosAEnviar.password.value= hash;
             document.datosAEnviar.userid.value= nro_socio;
             document.datosAEnviar.submit(); 

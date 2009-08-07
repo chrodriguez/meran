@@ -229,7 +229,8 @@ sub cambiarPassword{
     my ($self)=shift;
     my ($password)=@_;
 
-    $self->setPassword( C4::Auth::md5_base64($password) );
+    #primero se hashea la pass con MD5 (esto se mantiene por compatibilidad hacia atras KOHA V2), luego con SHA_256_B64
+    $self->setPassword( C4::Auth::_hashear_password(C4::Auth::_hashear_password($password, 'MD5'), 'SHA_256_B64') );
     my $today = Date::Manip::ParseDate("today");
     $self->setLast_change_password($today);
     $self->setChange_password(0);

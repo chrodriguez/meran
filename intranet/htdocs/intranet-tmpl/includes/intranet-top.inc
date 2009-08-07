@@ -10,7 +10,9 @@
 <script src="/includes/jquery/jquery.js"></script>
 <script src="/includes/jquery/jquery.scrollTo.js"></script>
 <script src="/includes/jquery/jquery.menu.js"></script>
-<script src="/includes/md5.js"></script> 
+<!-- FIXME esto no deberia estar aca, solo se usa cuando se cambia la pass o cuando se loguea -->
+<script src="/includes/md5.js"></script>
+<script src="/includes/sha1.js"></script>  
 <!-- para generar la hash de la cache -->
 <script src="/includes/jquery/jquery.jCache.js"></script>
 <script src="/includes/json/jsonStringify.js"></script>

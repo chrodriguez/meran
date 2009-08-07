@@ -5,6 +5,8 @@
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/intranet.css">
 <script src="/includes/jquery/jquery.js"></script>
 <script src="/includes/util.js"></script>
+<script src="/includes/md5.js"></script>
+<script src="/includes/sha1.js"></script>
 <script language="javascript" type="text/javascript">
 
     $(document).ready(function() {
@@ -36,21 +38,10 @@
 </form>
 
 <form action='/cgi-bin/koha/mainpage.pl' method="post" name="datos">
-    <script language="javascript">
-    [% INCLUDE "md5.js" %]
-    [% INCLUDE "sha1.js" %]
-    </script>
+
     <script language="javascript">
         function enviar(){
-//             var metodo= '[% METODO %]';
 		    var nroRandom= [% RANDOM_NUMBER %];
-//  alert ("b64_sha256: " + b64_sha256(document.datos.password.value) + "\n b64_sha256 + nroRandom: " + b64_sha256(b64_sha256(document.datos.password.value)+nroRandom ) );
-//             if( metodo == 'MD5' ){
-//                 hash= b64_md5(b64_md5(document.datos.password.value)+nroRandom);
-//             }else{
-//                 hash=  b64_sha256(b64_sha256(document.datos.password.value)+nroRandom);
-//             }
-
             hash= b64_sha256(b64_sha256(b64_md5(document.datos.password.value))+nroRandom);
             document.datosAEnviar.password.value= hash;
             document.datosAEnviar.userid.value= document.datos.userid.value;

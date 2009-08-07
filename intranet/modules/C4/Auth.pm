@@ -22,7 +22,6 @@ C4::Auth
 
 
 use strict;
-use Digest::MD5 qw(md5_base64);
 
 require Exporter;
 use C4::AR::Authldap;
@@ -37,6 +36,7 @@ use CGI::Session qw/-ip-match/;
 use C4::Modelo::SistSesion;
 use C4::Modelo::SistSesion::Manager;
 use JSON;
+use Digest::MD5 qw(md5_base64);
 use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -820,9 +820,12 @@ sub _change_Password_Controller {
         $t_params->{'userid'}= $userid;
         $t_params->{'id_socio'}= $socio->getId_socio;
         $t_params->{'loggedinusername'}= $userid;
+C4::AR::Debug::debug("nro_socio:??????????: ".$userid);
+        $t_params->{'nro_socio'}= $userid;
 	
         my $session = CGI::Session->load();
  		my $sessionID= $session->param('sessionID');
+        $t_params->{'token'}= $session->param('token');
         C4::AR::Debug::debug("_change_Password_Controller=> genero cookie:".$sessionID);	
         C4::AR::Debug::debug("\n");
 
@@ -874,8 +877,6 @@ sub inicializarAuth{
     C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number, $params{'token'});
 # FIXME y esto para que se setea si no se pasa a ningun template
     $t_params->{'RANDOM_NUMBER'}= $random_number;
-    $t_params->{'METODO'}= 'SHA_256_B64';
-    
 
     return ($session);
 }
@@ -1202,44 +1203,6 @@ sub t_operacionesDeINTRA{
     $userid, $password, $random_number
 
 =cut
-# FIXME esto va a quedar DEPRECATED, pq se va a autenticar desde OPAC por HTTPS asi q no seria necesario el nroRandom y tampoco se usará mas
-# MD5 se usará SHA
-=item
-sub _checkpw {
-    my ($userid, $password, $random_number) = @_;
-    C4::AR::Debug::debug("_checkpw=> \n");
-
-    my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
-    $socio->load();
-    C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
-      if ( ($socio->persona)&&($socio->getActivo) ) {
-        C4::AR::Debug::debug("_checkpw=> tengo persona y socio\n");
-        #existe el socio y se encuentra activo
-        my $md5password= $socio->getPassword;
-        my $branchcode= $socio->getId_ui;
-        my $dni= $socio->persona->getNro_documento;
-
-        if ($md5password eq ''){# La 1ra vez esta vacio se usa el dni
-            $md5password=md5_base64($dni);
-            C4::AR::Debug::debug("_checkpw=> es la 1era vez que se loguea, se usa el DNI\n");
-        }
-
-        if ($password eq md5_base64($md5password.$random_number)) {
-            C4::AR::Debug::debug("_checkpw=> password del cliente: ".$password."\n");
-            C4::AR::Debug::debug("_checkpw=> md5password.random_number: ".$md5password.$random_number."\n");
-            C4::AR::Debug::debug("_checkpw=> md5_base64(md5password.random_number): ".md5_base64($md5password.$random_number)."\n");
-            C4::AR::Debug::debug("_checkpw=> md5password de la base: ".$md5password."\n");
-            C4::AR::Debug::debug("_checkpw=> las pass son = todo OK\n");
-            return 1,$userid,$branchcode;
-        }
-     }# END  if ( ($socio->persona)&&($socio->getActivo) )
-
-    C4::AR::Debug::debug("_checkpw=> las pass son <> \n");
-
-    return 0;
-}
-=cut
-
 sub _checkpw {
     my ($userid, $password, $random_number) = @_;
     C4::AR::Debug::debug("_checkpw=> \n");
@@ -1254,8 +1217,7 @@ sub _checkpw {
         my $ui= $socio->getId_ui;
         my $dni= $socio->persona->getNro_documento;
 
-        my $metodo= 'SHA_256_B64';#'MD5'dfasd
-        return _verificar_passwod_con_metodo($hashed_password, $password, $dni, $random_number, $metodo), $userid, $ui;
+        return _verificar_passwod_con_metodo($hashed_password, $password, $dni, $random_number, _getMetodoEncriptacion()), $userid, $ui;
      }# END  if ( ($socio->persona)&&($socio->getActivo) )
 
 
@@ -1265,18 +1227,32 @@ sub _checkpw {
 }
 
 
+sub _getMetodoEncriptacion {
+    return 'SHA_256_B64';#'MD5'
+}
+
+=item sub _verificar_passwod_con_metodo
+
+    Verifica la password ingresada por el usuario con la password recuperada de la base, todo esto con el metodo indicado por parametros    
+    
+    Parametros:
+    $hashed_password: password recuperada de la base
+    $metodo: MD5, SHA
+    $password: ingresada por el usuario
+
+=cut
 sub _verificar_passwod_con_metodo {
     my ($hashed_password, $password, $dni, $random_number, $metodo) = @_;
 
-    if ($hashed_password eq ''){
+    if ($hashed_password eq undef){
     # La 1ra vez esta vacio se usa el dni o password reseteada
-        $hashed_password= _hashear_password($dni, $metodo);
+        $hashed_password= _hashear_password(md5_base64($dni), $metodo);
         C4::AR::Debug::debug("_verificar_passwod_con_metodo=> es la 1era vez que se loguea, se usa el DNI\n");
     }
 
-    C4::AR::Debug::debug("_verificar_passwod_con_metodo=> password del cliente: ".$password."\n");
-    C4::AR::Debug::debug("_verificar_passwod_con_metodo=> password de la base: ".$hashed_password."\n");
-    C4::AR::Debug::debug("_verificar_passwod_con_metodo=> password_hasheada_con_metodo.random_number: "._hashear_password($hashed_password.$random_number, $metodo)."\n");
+C4::AR::Debug::debug("_verificar_passwod_con_metodo=> password del cliente: ".$password."\n");
+C4::AR::Debug::debug("_verificar_passwod_con_metodo=> password de la base: ".$hashed_password."\n");
+C4::AR::Debug::debug("_verificar_passwod_con_metodo=> password_hasheada_con_metodo.random_number: "._hashear_password($hashed_password.$random_number, $metodo)."\n");
 
     if ($password eq _hashear_password($hashed_password.$random_number, $metodo)) {
         C4::AR::Debug::debug("_verificar_passwod_con_metodo=> las pass son = todo OK\n");
@@ -1314,7 +1290,6 @@ sub _hashear_password {
 
 =item sub new_password_is_needed
 
-    Added by Luciano
     Verifica si el usuario tiene que cambiar o no la password
     
     Hay dos campos (lastchangepassword, changepassword) en urs_socio 

@@ -19,6 +19,8 @@
 <script src="/includes/json/jsonStringify.js"></script>
 <script src="/includes/jquery/jquery-highlight.js"></script>
 <script src="/includes/util.js"></script>
+<script src="/includes/md5.js"></script>
+<script src="/includes/sha1.js"></script>
 <script src="/opac-tmpl/includes/opac-searchFunciones.js"></script>
 <script src="/opac-tmpl/includes/favoritos.js"></script>
 <script src="/opac-tmpl/includes/message_OPAC.inc"></script>
