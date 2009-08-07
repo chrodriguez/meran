@@ -353,6 +353,24 @@ sub actualizarTiposPrestamoQueAplica {
     return ($msg_object);
 }
 
+sub getReglaSancion{
+  #Esta funcion recupera una regla si existe    
+    my ($dias_sancion,$dias_demora)=@_;
+
+   use C4::Modelo::CircReglaSancion::Manager;
+   my $regla_sancion_array_ref = C4::Modelo::CircReglaSancion::Manager->get_circ_regla_sancion(
+                                                              query => [ 
+                                                                      dias_sancion  => { eq => $dias_sancion },
+                                                                      dias_demora     => { eq => $dias_demora},
+                                                                        ],
+                                                                        );
+
+    if ($regla_sancion_array_ref->[0]) {return $regla_sancion_array_ref->[0];}
+
+  return 0;
+
+}
+
 
 sub getReglasSancion{
   #Esta funcion recupera todas las reglas 
@@ -474,6 +492,97 @@ sub eliminarReglaTipoSancion {
                 }
 
     $db->{connect_options}->{AutoCommit} = 1;
+
+    return ($msg_object);
+}
+
+
+
+sub agregarReglaSancion {
+#Esta funcion agrega una regla 
+ my ($dias_sancion,$dias_demora)=@_;
+
+    my @infoMessages;
+    my %messageObj;
+    my ($msg_object)= C4::AR::Mensajes::create();
+    my $regla=&C4::AR::Sanciones::getReglaSancion($dias_sancion, $dias_demora);
+    if ($regla){
+    #Ya existe la regla
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP019', 'params' => []} ) ;
+    }
+    else{
+        my $regla_sancion = C4::Modelo::CircReglaSancion->new();
+        my $db = $regla_sancion->db;
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+        eval{
+         $regla_sancion->setDias_sancion($dias_sancion);
+         $regla_sancion->setDias_demora($dias_demora);
+         $regla_sancion->save;
+         $db->commit;
+         $msg_object->{'error'}= 0;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP020', 'params' => []} ) ;
+         };
+         if ($@){
+                C4::AR::Mensajes::printErrorDB($@, '',"INTRA");
+                $db->rollback;
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP021', 'params' => []} ) ;
+                }
+        $db->{connect_options}->{AutoCommit} = 1;
+        }
+
+    return ($msg_object);
+}
+sub cantUtilizacionReglaSancion {
+#Esta funcion retorna si se esta utilizando o no una regla en particular
+ my ($regla_sancion)=@_;
+
+  use C4::Modelo::CircReglaTipoSancion::Manager;
+  my $reglas = C4::Modelo::CircReglaTipoSancion::Manager->get_circ_regla_tipo_sancion_count (
+                                                                    query => [ 
+                                                                         regla_sancion => { eq => $regla_sancion},
+                                                                        ],
+                                    );
+
+  return $reglas;
+}
+
+sub eliminarReglaSancion {
+#Esta funcion elimina una regla
+ my ($regla_sancion)=@_;
+
+    my @infoMessages;
+    my %messageObj;
+    my ($msg_object)= C4::AR::Mensajes::create();
+    my $cant_regla=C4::AR::Sanciones::cantUtilizacionReglaSancion($regla_sancion);
+
+    if ($cant_regla > 0 ) {
+    #Esta siendo utilizada!!
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP022', 'params' => [$cant_regla]} ) ;
+    }
+    else {
+        my $regla = C4::Modelo::CircReglaSancion->new(regla_sancion=>$regla_sancion);
+        $regla->load();
+        my $db = $regla->db;
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+        eval{
+            $regla->delete;
+            $db->commit;
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP023', 'params' => []} ) ;
+            };
+            if ($@){
+                    C4::AR::Mensajes::printErrorDB($@, '',"INTRA");
+                    $db->rollback;
+                    $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP024', 'params' => []} ) ;
+                    }
+        $db->{connect_options}->{AutoCommit} = 1;
+    }
 
     return ($msg_object);
 }

@@ -59,8 +59,7 @@ function updateGuardarTiposQueAplica(responseText){
 function respuesta(responseText){
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
-}
-
+                }
 /*
  * buscarTiposPrestamosSancionados
  */
@@ -134,16 +133,18 @@ function updateAgregarReglaTipoSancion(responseText){
  *  eliminarReglaTipoSancion
  */
 function eliminarReglaTipoSancion(tipo_sancion, regla_sancion){
-    if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO) ){
-    objAH=new AjaxHelper(updateEliminarReglaTipoSancion);
-    objAH.debug= true;
-    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
-    objAH.tipo_sancion=tipo_sancion;
-    objAH.regla_sancion=regla_sancion;
-    objAH.tipoAccion= "ELIMINAR_REGLA_TIPO_SANCION";
-    $("divSancionesReglas").html("");
-    objAH.sendToServer();
-    }
+    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,'Confirme', function(confirmStatus){ 
+        if (confirmStatus) {
+            objAH=new AjaxHelper(updateEliminarReglaTipoSancion);
+            objAH.debug= true;
+            objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+            objAH.tipo_sancion=tipo_sancion;
+            objAH.regla_sancion=regla_sancion;
+            objAH.tipoAccion= "ELIMINAR_REGLA_TIPO_SANCION";
+            $("divSancionesReglas").html("");
+            objAH.sendToServer();
+                }
+    });
 }
 
 function updateEliminarReglaTipoSancion(responseText){
@@ -161,14 +162,15 @@ function editarReglas(){
     objAH.sendToServer();
 }
 
+ vReglasSanciones=new WindowHelper({draggable: true, opacity: true});
+
 function updateEditarReglas(responseText){
 
-        vReglasSanciones=new WindowHelper({draggable: true, opacity: true});
         vReglasSanciones.debug= true;
         vReglasSanciones.html=responseText;
         vReglasSanciones.create();
-        vReglasSanciones.height('80%');
-        vReglasSanciones.width('60%');
+        vReglasSanciones.height('70%');
+        vReglasSanciones.width('50%');
         vReglasSanciones.open();
 
 }
@@ -179,15 +181,19 @@ function updateEditarReglas(responseText){
  *  eliminarReglaSancion
  */
 function eliminarReglaSancion(regla_sancion){
-    if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO) ){
-    objAH=new AjaxHelper(updateEliminarReglaSancion);
-    objAH.debug= true;
-    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
-    objAH.tipo_sancion=tipo_sancion;
-    objAH.regla_sancion=regla_sancion;
-    objAH.tipoAccion= "ELIMINAR_REGLA_SANCION";
-    objAH.sendToServer();
-    }
+
+    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,'Confirme', function(confirmStatus){ 
+        if (confirmStatus) {
+            objAH=new AjaxHelper(updateEliminarReglaSancion);
+            objAH.debug= true;
+            objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+            objAH.regla_sancion=regla_sancion;
+            objAH.tipoAccion= "ELIMINAR_REGLA_SANCION";
+            objAH.sendToServer();
+            //Cierro la ventana
+            vReglasSanciones.close();
+            }
+    });
 }
 
 function updateEliminarReglaSancion(responseText){
@@ -208,6 +214,8 @@ function agregarReglaSancion(){
 
     objAH.tipoAccion= "AGREGAR_REGLA_SANCION";
     objAH.sendToServer();
+    //Cierro la ventana
+    vReglasSanciones.close();
 }
 
 function updateAgregarReglaSancion(responseText){

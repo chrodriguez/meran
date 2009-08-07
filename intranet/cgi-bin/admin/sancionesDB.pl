@@ -218,10 +218,9 @@ if ($accion eq "ELIMINAR_REGLA_SANCION") {
                                             "intranet"
                                 );
 
-    my $tipo_sancion=$obj->{'tipo_sancion'};
     my $regla_sancion=$obj->{'regla_sancion'};
 
-    my $Message_arrayref = &C4::AR::Sanciones::eliminarReglaTipoSancion($tipo_sancion,$regla_sancion);
+    my $Message_arrayref = &C4::AR::Sanciones::eliminarReglaSancion($regla_sancion);
     my $infoOperacionJSON=to_json $Message_arrayref;
     C4::Output::printHeader($session);
     print $infoOperacionJSON;

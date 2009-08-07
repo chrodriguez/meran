@@ -303,6 +303,12 @@ my %mensajesINTRA = (
     'SP016' => 'No se pudo agregar la regla de sanci&oacute;n.',
     'SP017' => 'Se elimin&oacute; la regla de sanci&oacute;n.',
     'SP018' => 'No se pudo eliminar la regla de sanci&oacute;n.',
+    'SP019' => 'La regla ya existe!!',
+    'SP020' => 'Se creo la regla con &eacute;xito.',
+    'SP021' => 'No se pudo agregar la regla.',
+    'SP022' => 'La regla esta siendo utilizada *?* veces. No se puede eliminar.',
+    'SP023' => 'Se elimin&oacute; la regla con &eacute;xito.',
+    'SP024' => 'No se pudo eliminar la regla.',
     'UT001' => 'Se rompio Utilidades::from_json_ISO',
     'VA001' => 'Error de parametros, inconsistentes o faltantes, don\'t HACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
 	
