@@ -12,6 +12,7 @@
 
 <script language="javascript">
     [% INCLUDE md5.js %]
+    [% INCLUDE sha1.js %]
 </script>
 <script language="javascript"> 
 
@@ -21,7 +22,8 @@
         if ( (nro_socio != "") && (password != "") ){
             document.datosAEnviar.action= '/cgi-bin/koha/opac-user.pl';
             nroRandom= [% RANDOM_NUMBER %];
-            hash= b64_md5(b64_md5(password)+nroRandom);
+//             hash= b64_md5(b64_md5(password)+nroRandom);
+            hash= b64_sha256(b64_sha256(b64_md5(document.datos.password.value))+nroRandom);
             document.datosAEnviar.password.value= hash;
             document.datosAEnviar.userid.value= nro_socio;
             document.datosAEnviar.submit(); 
