@@ -1,0 +1,35 @@
+body {
+	}
+
+#marco_superior {
+	background: transparent  url(../imagenes/arriba_izq.png) no-repeat top left;
+		   }
+#marco_superior div {
+	background: transparent url(../imagenes/arriba_der.png) no-repeat top right;
+			}
+#marco_inferior {
+	background: transparent  url(../imagenes/abajo_izq.png) no-repeat bottom left;
+		   }
+#marco_inferior div {
+	background: transparent url(../imagenes/abajo_der.png) no-repeat bottom right;
+			}
+#marco_contenido{
+	clear:both;
+	margin-bottom:3%;
+}
+#marco_principal{
+	background:#f7f6f6 url(../imagenes/medio.gif) repeat ;
+	}
+	
+-->menu ver en default menu.css<--	
+	
+-->menu<--
+.filtros_reportes_izq{
+    float: left;
+    padding-right: 70px;
+}
+
+.filtros_reportes_der{
+    float: right;
+    overflow:auto;
+}
