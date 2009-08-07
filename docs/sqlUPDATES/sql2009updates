@@ -931,3 +931,4 @@ CREATE TABLE IF NOT EXISTS `perm_reporte` (
 RENAME TABLE `perm_reporte` TO `perm_circulacion` ;
 ALTER TABLE `perm_general` ADD `reportes` VARCHAR( 8 ) NOT NULL DEFAULT '00000000';
 ALTER TABLE `perm_circulacion` CHANGE `circulacion` `prestamos` VARBINARY( 8 ) NOT NULL;
+ALTER TABLE `perm_general` ADD `permisos` VARCHAR( 8 ) NOT NULL DEFAULT '00000000';

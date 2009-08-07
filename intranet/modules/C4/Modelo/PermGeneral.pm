@@ -13,6 +13,7 @@ __PACKAGE__->meta->setup(
         tipo_documento  => { type => 'varchar', length => 4, not_null => 1 }, 
         preferencias    => { type => 'varchar', length => 8, not_null => 1 },
         reportes    => { type => 'varchar', length => 8, not_null => 1 },
+        permisos    => { type => 'varchar', length => 8, not_null => 1 },
     ],
 
     primary_key_columns => [ 'nro_socio','ui','tipo_documento' ],

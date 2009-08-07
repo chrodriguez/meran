@@ -60,6 +60,29 @@
     <br><br>
 </div>
 
+<hr>
+<div style="height:50px;" id="permisos">
+    <h2> Preferencias </h2>
+    <span class="permission_grant" >
+        <label for="permission_5"> TODOS </label>
+            <input type="checkbox" id="permisos_todos" name="permisos_todos" onChange="adviceGrant(this,'permisos','high');"
+                [% IF permisos.permisos.TODOS %] "checked" [% END %] />
+        <label for="permission_2"> Baja </label>
+            <input type="checkbox" id="permisos_baja" name="permisos_baja" onChange="adviceGrant(this,'permisos','high');"
+                [% IF permisos.permisos.BAJA %] "checked" [% END %]/> /
+        <label for="permission_3"> Modificaci&oacute;n </label>
+            <input type="checkbox" id="permisos_modif" name="permisos_modif" onChange="adviceGrant(this,'permisos','high');"
+                [% IF permisos.permisos.MODIFICACION %] "checked" [% END %] /> /
+        <label for="permission_1"> Alta </label>
+            <input type="checkbox" id="permisos_alta" name="permisos_alta" onChange="adviceGrant(this,'permisos','medium');"
+                [% IF permisos.permisos.ALTA %] "checked" [% END %] /> /
+        <label for="permission_4"> Consulta </label>
+            <input type="checkbox" id="permisos_consulta" name="permisos_consulta" onChange="adviceGrant(this,'permisos','low');"
+                [% IF permisos.permisos.CONSULTA %] "checked" [% END %]/>
+    </span>
+    <br><br>
+</div>
+
 <div class="buttonContainerHorizontal">
     <ul class="horizontal-list" >
         [% IF nuevoPermiso != 1%]

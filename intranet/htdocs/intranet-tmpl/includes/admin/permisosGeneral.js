@@ -49,7 +49,7 @@ function checkChecks(){
     arreglo = new Array();
     arreglo[0] = 'reportes';
     arreglo[1] = 'preferencias';
-//     arreglo[2] = 'datos_nivel3';
+    arreglo[2] = 'permisos';
 //     arreglo[3] = 'estantes_virtuales';
 //     arreglo[4] = 'estructura_catalogacion_n1';
 //     arreglo[5] = 'estructura_catalogacion_n2';
@@ -151,7 +151,7 @@ function armarArregloDePermisos(){
     arreglo = new Array();
     arreglo[0] = new permiso('preferencias');
     arreglo[1] = new permiso('reportes');
-//     arreglo[2] = new permiso('datos_nivel3');
+    arreglo[2] = new permiso('permisos');
 //     arreglo[3] = new permiso('estantes_virtuales');
 //     arreglo[4] = new permiso('estructura_catalogacion_n1');
 //     arreglo[5] = new permiso('estructura_catalogacion_n2');

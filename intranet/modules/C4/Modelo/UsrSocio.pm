@@ -516,27 +516,44 @@ retornará SIN PERMISOS.
 
 sub checkEntorno{
 
-    my ($flagsrequired,@entornos_perm_catalogo,@entornos_perm_general,@entornos_perm_circulacion) = @_; 
+    my ($flagsrequired,$entornos_perm_catalogo,$entornos_perm_general,$entornos_perm_circulacion) = @_; 
     
-    my @entornos_chosen;
+    my $entornos_chosen;
     
+    my $permisos_array_hash_ref;
 
     if ($flagsrequired->{'tipo_permiso'} eq "catalogo"){
-      @entornos_chosen = @entornos_perm_catalogo;
+      $entornos_chosen = $entornos_perm_catalogo;
     }
     elsif ($flagsrequired->{'tipo_permiso'} eq "general"){
-      @entornos_chosen = @entornos_perm_general;
+      $entornos_chosen = $entornos_perm_general;
     }
     elsif ($flagsrequired->{'tipo_permiso'} eq "circulacion"){
-      @entornos_chosen = @entornos_perm_circulacion;
+      $entornos_chosen = $entornos_perm_circulacion;
     }
-    
-    if( (C4::AR::Utilidades::existeInArray($flagsrequired->{'entorno'}, @entornos_chosen)) ){
-        my $permisos_array_hash_ref= C4::AR::Permisos::get_permisos_catalogo({
-                                                            ui => $flagsrequired->{'ui'}, 
-                                                            tipo_documento => $flagsrequired->{'tipo_documento'}, 
-                                                            nro_socio => $flagsrequired->{'nro_socio'},
-                                                });
+    if( (C4::AR::Utilidades::existeInArray($flagsrequired->{'entorno'}, @$entornos_chosen)) ){
+        if ($flagsrequired->{'tipo_permiso'} eq "catalogo"){
+            $permisos_array_hash_ref= C4::AR::Permisos::get_permisos_catalogo({
+                                                                ui => $flagsrequired->{'ui'}, 
+                                                                tipo_documento => $flagsrequired->{'tipo_documento'}, 
+                                                                nro_socio => $flagsrequired->{'nro_socio'},
+                                                    });
+        }
+        elsif($flagsrequired->{'tipo_permiso'} eq "general"){
+        C4::AR::Debug::debug("ENTORNOS CHOSEN: ".$entornos_chosen->[2]);
+            $permisos_array_hash_ref= C4::AR::Permisos::get_permisos_general({
+                                                                ui => $flagsrequired->{'ui'}, 
+                                                                tipo_documento => $flagsrequired->{'tipo_documento'}, 
+                                                                nro_socio => $flagsrequired->{'nro_socio'},
+                                                    });
+        }
+        elsif($flagsrequired->{'tipo_permiso'} eq "circulacion"){
+            $permisos_array_hash_ref= C4::AR::Permisos::get_permisos_circulacion({
+                                                                ui => $flagsrequired->{'ui'}, 
+                                                                tipo_documento => $flagsrequired->{'tipo_documento'}, 
+                                                                nro_socio => $flagsrequired->{'nro_socio'},
+                                                    });
+        }
         return ($permisos_array_hash_ref);
     }else{
         return 0;
@@ -545,8 +562,6 @@ sub checkEntorno{
 
 sub verificar_permisos_por_nivel{
     my ($flagsrequired) = @_;
-    use C4::Modelo::PermCatalogo::Manager;
-
     my @filtros;
     my $permisos_array_hash_ref;
 #     my @entornos_datos_nivel = ('datos_nivel1','datos_nivel2','datos_nivel3'); 
@@ -554,7 +569,7 @@ sub verificar_permisos_por_nivel{
     my @entornos_perm_catalogo= ( 'datos_nivel1','datos_nivel2','datos_nivel3', 'estructura_catalogacion_n1',
                                     'estructura_catalogacion_n2','estructura_catalogacion_n3', 'sistema', 'undefined', 'usuarios');
     
-    my @entornos_perm_general= ( 'reportes','preferencias' );
+    my @entornos_perm_general= ( 'reportes','preferencias','permisos' );
     
     my @entornos_perm_circulacion= ( 'prestamos' );
 
@@ -570,7 +585,7 @@ sub verificar_permisos_por_nivel{
     C4::AR::Debug::debug("verificar_permisos_por_nivel => entorno=================: ".$flagsrequired->{'entorno'});
     C4::AR::Debug::debug("verificar_permisos_por_nivel => accion=================: ".$flagsrequired->{'accion'});
 
-    $permisos_array_hash_ref = C4::Modelo::UsrSocio::checkEntorno($flagsrequired,@entornos_perm_catalogo,@entornos_perm_general,@entornos_perm_circulacion);
+    $permisos_array_hash_ref = C4::Modelo::UsrSocio::checkEntorno($flagsrequired,\@entornos_perm_catalogo,\@entornos_perm_general,\@entornos_perm_circulacion);
     
     if (!$permisos_array_hash_ref){
         #el entorno pasado por parametro no existe, NO TIENE PERMISOS
@@ -594,7 +609,7 @@ sub verificar_permisos_por_nivel{
                 C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================TODOS");
                 return 1;
             }
-        
+            
             C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: ".$permiso_bin_del_usuario);
             C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS REQUERIDOS=================bin: ".$permiso_bin_requerido);
             C4::AR::Debug::debug("verificar_permisos_por_nivel => ENTORNO=================: ".$flagsrequired->{'entorno'});
@@ -623,7 +638,7 @@ sub tienePermisos {
     # Se setean los flags requeridos
     $flagsrequired->{'nro_socio'}= $self->getNro_socio;
     $flagsrequired->{'tipo_permiso'} = $flagsrequired->{'tipo_permiso'} || "catalogo";
-
+    C4::AR::Debug::debug("TIPO_PERMISO => ".$flagsrequired->{'tipo_permiso'});
     #se verifican permisos level1
     C4::AR::Debug::debug("tienePermisos??? => intento level1");
     if(verificar_permisos_por_nivel($flagsrequired)){return 1}
