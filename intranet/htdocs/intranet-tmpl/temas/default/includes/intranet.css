@@ -999,3 +999,13 @@ ul#horizontal-list li {
 #divSancionesEdicionReglas{
     width:50%;
 }
+
+.divDatosUsuario{
+  display:block;
+  float:left;
+}
+
+#divDatosUsuario{
+  display:block;
+/*   float:left; */
+}

@@ -392,6 +392,14 @@
                                                                 ) ;
                                 [% END %]
                     </li>
+                    <li>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'RE-HASH PASSWORDS (CUIDADO!!!!!)' | i18n %]",
+                                                                    url =>      "/cgi-bin/koha/admin/rehashPasswd.pl", 
+                                                                    title =>    "[% 'RE-HASH PASSWORDS (CUIDADO!!!!!)' | i18n %]"
+                                                                ) ;
+                                [% END %]
+                    </li>
                   </ul>
                 </li>
                 <li><h3 class="menu_intermedio">[% 'MARC' | i18n %]</h3>
