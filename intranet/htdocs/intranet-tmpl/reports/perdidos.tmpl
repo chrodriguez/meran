@@ -37,10 +37,10 @@ function hacerSubmit(){
 <br><br>
 <center>
 <table border=2 cellspacing=0 cellpadding=2>
-    <th class="tablaresultadoTitle"><a href=perdidos.pl?orden=title&branch=[% branch  %]>[% "Titulo" | i18n %]</a></th>
-    <th class="tablaresultadoTitle"><a href=perdidos.pl?orden=author&branch=[% branch %]>[% "Autor" | i18n %]</a></th>
-    <th class="tablaresultadoTitle"><a href=perdidos.pl?orden=bulk&branch=[% branch %]>[% "Sigantura Topografica" | i18n %]</a></th>
-    <th class="tablaresultadoTitle"><a href=perdidos.pl?orden=barcode&branch=[% branch %]>[% "Codigo de barras" | i18n %]</a></th>
+    <th class="titulo_tabla_resultado"><a href=perdidos.pl?orden=title&branch=[% branch  %]>[% "Titulo" | i18n %]</a></th>
+    <th class="titulo_tabla_resultado"><a href=perdidos.pl?orden=author&branch=[% branch %]>[% "Autor" | i18n %]</a></th>
+    <th class="titulo_tabla_resultado"><a href=perdidos.pl?orden=bulk&branch=[% branch %]>[% "Sigantura Topografica" | i18n %]</a></th>
+    <th class="titulo_tabla_resultado"><a href=perdidos.pl?orden=barcode&branch=[% branch %]>[% "Codigo de barras" | i18n %]</a></th>
     
     [% FOREACH RESULTSLOOP %]
         <tr align='center'>

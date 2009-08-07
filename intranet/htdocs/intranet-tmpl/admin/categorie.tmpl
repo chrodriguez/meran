@@ -65,9 +65,9 @@
 	</SCRIPT>
 
 	[% IF categorycode %]
-        <div class="titulos_interior">[% "Modificar Categor&iacute;a" | i18n %]</div>
+        <div class="titulo">[% "Modificar Categor&iacute;a" | i18n %]</div>
 	[% ELSE %]
-        <div class="titulos_interior">[% "Agregar Categor&iacute;a" | i18n %]</div>
+        <div class="titulo">[% "Agregar Categor&iacute;a" | i18n %]</div>
 	[% END %]
 	
 	<form action=[% script_name %] name=Aform method=post>
@@ -181,7 +181,7 @@
 	[% "TOTAL"  | i18n %]: [% categorycode %] : [% total %]<br>
 
 	<table border=0 cellspacing=0 cellpadding=5>
-		<tr class="tablaresultadoTitle">
+		<tr class="titulo_tabla_resultadotitulo">
 			<td>
 				<b>[% "C&oacute;digo de categor&iacute;a" | i18n %]</b>
 			</td>
@@ -192,7 +192,7 @@
         	<form action='[% script_name %]' method=post>
 			<input type=hidden name=op value=[% delete_confirmed %]>
 			<input type=hidden name=categorycode value=[% categorycode %]>        
-		<tr class="tablaresultadoTitle">
+		<tr class="titulo_tabla_resultadotitulo">
 			<td>[% "Descripci&oacute;n" | i18n %]</td>
 			<td>[% description %]</td>
 		</tr>
@@ -274,7 +274,7 @@
 [% END %]
 
 [% IF else %]
-<div class="titulos_interior">[% "Administraci&oacute;n de Categor&iacute;as"  | i18n %]</div>
+<div class="titulo">[% "Administraci&oacute;n de Categor&iacute;as"  | i18n %]</div>
 
 [% IF searchfield %]
 <!-- FIXME posible XSS -->
@@ -294,7 +294,7 @@
                 </tr>
         </table>
         <table border=0 cellspacing=0 cellpadding="0" width="100%">
-                <tr class="tablaresultadoTitle">
+                <tr class="titulo_tabla_resultadotitulo">
 
                         <td >[% "Categor&iacute;a" | i18n %]</td>
                         <td width="10%">[% "Descripci&oacute;n" | i18n %]</td>

@@ -949,7 +949,7 @@ sub armarPaginas{
     my $themelang= $t_params->{'themelang'};
 
     my $paginador= "<div id=paginador>";
-    my $class="paginaNormal";
+    my $class="paginador";
 
     if($actual > 1){
         #a la primer pagina
@@ -964,8 +964,8 @@ sub armarPaginas{
     }
 
     for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
-        if($actual == $i){$class="paginaActual"}
-            else{$class="paginaNormal"}
+        if($actual == $i){$class="paginador_seleccionado"}
+            else{$class="paginador"}
         $paginador .= "<span class='".$class."' onClick='".$funcion."(".$i.")'> ".$i." </span>";
     }
 

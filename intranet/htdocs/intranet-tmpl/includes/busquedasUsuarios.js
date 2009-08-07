@@ -53,7 +53,7 @@ function consultar(filtro){
 
 function updateInfo(responseText){
     $('#result').html(responseText);
-    zebra('tabla_datos');
+    zebra('datos_tabla');
     var idArray = [];
     var classes = [];
     idArray[0] = 'socio';
