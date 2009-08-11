@@ -25,31 +25,25 @@ $(document).ready(function() {
 
 </script>
 
-<div class="titulos">[% 'Pr&eacute;stamos' | i18n %]</div>
+<label for="usuarioAutocomplete" class="titulos">[% 'Pr&eacute;stamos' | i18n %]</label>
 
 <div id="confirmar_div"></div>
 <br>
 
 <div id="buscarUsuario">
-	<table border="0" cellpadding="0" cellspacing="0"  align="center" width="100%">
-		<tr class="titulo_tabla_resultado">
-		
-			<td>
-				<b>[% 'Ingrese Apellido y Nombres, DNI o Legajo del usuario' | i18n %]</b>
-			</td>
-
-		</tr>
-		<tr><td colspan="3">&nbsp;</td></tr>
-		<tr>
-			<td align="center">
+		<fieldset>
+		<ul>
+			<li>
+				<strong>[% 'Ingrese Apellido y Nombres, DNI o Legajo del usuario' | i18n %]</strong>
+			</li>
+		<li>
 				<input id="usuarioAutocomplete" type="text" size="40">
 				<input id="nro_socio_hidden" type="hidden">
-			</td>
-		</tr>
-	</table>
-</div> 
-<br>
+			</li>
+        </ul>
+        </fieldset>
 
+</div> 
 
 <!-- DELTALLE DEL USUARIO -->
 <div id="detalleUsuario"></div>

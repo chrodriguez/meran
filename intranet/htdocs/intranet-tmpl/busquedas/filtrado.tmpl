@@ -79,63 +79,58 @@ function limpiarCampos(side){
 
 <div id="filtrosBusqueda">
 	<span class="titulos">[% "B&uacute;squeda Avanzada en el cat&aacute;logo" | i18n %]</span>
-	<br>
 	<div class="formElemets">
-		<table width="70%" height="88%" valign="top"  border="0" align="center" cellpadding="0" cellspacing="0" >
-		<tr>
-		<td  valign="top"  align="right"  width="30%">
-    <fieldset>
-        <legend>[% "Busqueda combinada" | i18n %]</legend>
-		<ul id="simple">
-			<li class="sub_item">
-			<b>[% "B&uacute;squeda combinada" | i18n %]</b><br>
-                	<input type="text" id="keyword" size="25" onkeypress="limpiarCampos('derecha')">
-			<p valign="top" align="right">&nbsp;</p>
-			</li>
-    </fieldset>
-    <br><br>
-    <fieldset>
-        <legend>[% "Busqueda simple" | i18n %]</legend>
-			<li class="sub_item">
-			<b>ISBN</b><br>
-                	<input type="text" id="isbn" size="25"readonly onkeypress="limpiarCampos('derecha')">
-			</li>
+        <div id="busqueda_combinada">
+        <fieldset>
+            <legend><strong>[% "B&uacute;squeda combinada" | i18n %]</strong></legend>
+            <ul id="simple">
+                <li class="sub_item">
+                <strong>[% "B&uacute;squeda combinada" | i18n %]</strong>
+                <input type="text" id="keyword" size="25" onkeypress="limpiarCampos('derecha')">
+			    </li>
+            </ul>
+        </fieldset>
+       </div> 
+        <div id="busqueda_simple">
+        <fieldset>
+        <legend><strong>[% "B&uacute;squeda simple" | i18n %]</strong></legend>
+			<ul>
+             <li class="sub_item">
+			    <strong>ISBN</strong>
+             	<input type="text" id="isbn" size="25"readonly onkeypress="limpiarCampos('derecha')">
+			 </li>
 			
-			<li class="sub_item">
-    			<b>[% "B&uacute;squeda por diccionario" | i18n %]</b><br>
+			 <li class="sub_item">
+    			<strong>[% "B&uacute;squeda por diccionario" | i18n %]</strong>
          		<input type="text" size="25" id="dictionary" readonly onkeypress="limpiarCampos('derecha')">
-			</li>		
-
-			<li class="sub_item">
-			<b>[% "C&oacute;digo de barras" | i18n %]</b><br>
-			<input type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">
-			</li>
-
-			<li class="sub_item">
-			<b>Tema</b><br>
+			 </li>		
+			 <li class="sub_item">
+    			<strong>[% "C&oacute;digo de barras" | i18n %]</strong>
+	    		<input type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">
+			 </li>
+             <li class="sub_item">
+			<strong>Tema</strong>
 			<input type="text" size="25" id="tema" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
-
 			<li class="sub_item">
-			<b>[% "Estantes Virtuales" | i18n %]</b><br>
+			<strong>[% "Estantes Virtuales" | i18n %]</strong>
 			<input type="text" size="25" id="estante" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
+           </ul>
+        </fieldset>
+       </div>
 
-		</ul>
-    </fieldset>
-		</td>
-		<td width="10%">&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; </td>
-  		<td  valign="top" align="right" width="30%">
-    <fieldset>
-            <legend>[% "Busqueda espec&iacute;fica" | i18n %]</legend>
+      <div id="busqueda_especifica">
+      <fieldset>
+            <legend><strong>[% "B&uacute;squeda espec&iacute;fica" | i18n %]</strong></legend>
 		    <ul id="combinada">
 			   <li class="sub_item"> 
-                    <b>[% "Tipo de documento" | i18n %]</b> <br>
+                <strong>[% "Tipo de documento" | i18n %]</strong> 
                         [% comboTipoDocumento %]
 			    </li>
     
 			   <li class="sub_item"> 
-			    <b>T&iacute;tulo</b><br>
+			    <strong>T&iacute;tulo</strong>
 			    <input type="text"  size="25" id="titulo" onkeypress="limpiarCampos('izquierda')">
 			    <p valign="top" align="right">
 			    <input name="tipo" type=radio id=tipo value="normal" checked>
@@ -145,21 +140,19 @@ function limpiarCampos(side){
 			    </p>
 			    </li>
 			   <li class="sub_item"> 
-			    <b>Autor</b><br>
+			    <strong>Autor</strong>
 			    <input type="text" size="25" id="autor" onkeypress="limpiarCampos('izquierda')">
 			    </li>
     
 			   <li class="sub_item"> 
-			    <b>[% "Signatura Topogr&aacute;fica" | i18n %]</b><br>
+			    <strong>[% "Signatura Topogr&aacute;fica" | i18n %]</strong>
 			    <input type="text" size="25" id="signatura" onkeypress="limpiarCampos('izquierda')">
 			    </li>
 	                
 		    </ul>
-		    <td>
-		    <tr>
-		    </table>
-		    <div align ="center">
-    
+      </fieldset>
+	  </div>
+      <div align ="center">
 		    <ul>
 			    <li>
 			    <input type="hidden" name="type" value="intra">
@@ -172,7 +165,6 @@ function limpiarCampos(side){
                                         ) ;
                         [% END %]
                     </div>
-                <br><br>
                     <div>
                         [% PERL %]
                                     print C4::AR::Filtros::to_Button(   text    => "[% 'Mostrar Estantes' | i18n %]",
@@ -184,10 +176,12 @@ function limpiarCampos(side){
 		            </div>
 			    </li>
 		    </ul>
-		    </div>
-    
 	    </div>
-    </div>
+   </div><!--formElementos-->
+
+</div><!--filtrosBusqueda-->
+
+
 </fieldset> <!-- countournDiv -->
 <div id="resultBusqueda"></div>
 
@@ -195,4 +189,4 @@ function limpiarCampos(side){
 	<span id="volver">Volver</span>
 </div>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+[% INCLUDE "intranet-bottom.inc" %]

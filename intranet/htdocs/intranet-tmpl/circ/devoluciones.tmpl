@@ -122,60 +122,30 @@ function updateInfoDevolver(responseText){
 
 
 </script>
+<label for="usuarioAutocomplete" class="titulos">[% 'Devoluciones y Renovaciones' | i18n %]</label>
 
-<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
-	<tr>
-		<td class="pagetitle" >
-			Devoluciones y Renovaciones
-		</td>
-	</tr>
-	<tr>
-		<td class="lineagruesa"  align="left" colspan="3"></td>
-	</tr>
-</table>
-
-<br>
 <div id="confirmar_div"></div>
-<br>
 
+<fieldset class="formulario_busqueda">
+<legend class="titulo_tabla"><strong>[% 'Formulario de B&uacute;squeda' | i18n %]</strong></legend>	
+<ul>
+<li>
 <div id="buscarUsuario">
-<table class="datos_tabla" border="0" cellpadding="0" cellspacing="0"  align="center" width="100%">
-	<tr class="titulo_tabla_resultado">
-
-		<td>
-			<b>[% 'Ingrese Apellido y Nombres, DNI o Legajo del usuario' | i18n %]</b>
-		</td>
-
-	</tr>
-	<tr><td colspan="3">&nbsp;</td></tr>
-	<tr>
-		<td align="center">
-			<input id="usuarioAutocomplete" type="text" size="40" onClick="inicializar();">
-			<input id="nro_socio_hidden" type="hidden">
-		</td>
-	</tr>
-</table>
+		<strong><label for="usuarioAutocomplete">[% 'Ingrese Apellido y Nombres, DNI o Legajo del usuario' | i18n %]</label></strong>
+		<input id="usuarioAutocomplete" type="text" size="40" onClick="inicializar();">
+		<input id="nro_socio_hidden" type="hidden">
 </div>
-
+</li>
+<li>
 <div id="buscarCodigoDeBarras">
-<table class="datos_tabla" border="0" cellpadding="0" cellspacing="0"  align="center" width="100%">
-	<tr class="titulo_tabla_resultado">
-
-		<td>
-			<b>[% 'Ingrese el c&oacute;digo de barras' | i18n %]</b>
-		</td>
-
-	</tr>
-	<tr><td colspan="3">&nbsp;</td></tr>
-	<tr>
-		<td align="center">
-			<input id="barcode" type="text" size="40" onClick="inicializar();">
-			<input id="barcode_hidden" type="hidden">
-			<input id="prestamo_hidden" type="hidden">
-		</td>
-	</tr>
-</table>
+		<strong><label for="barcode">[% 'Ingrese el c&oacute;digo de barras' | i18n %]</label></strong>
+		<input id="barcode" type="text" size="40" onClick="inicializar();">
+		<input id="barcode_hidden" type="hidden">
+		<input id="prestamo_hidden" type="hidden">
 </div>
+</li>
+</ul>
+</fieldset>
 
 <div id="botonDevolver">
  <p align="center">

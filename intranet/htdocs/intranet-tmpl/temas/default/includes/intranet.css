@@ -170,8 +170,13 @@ font-style:normal;
 	margin-bottom:3%;
 }
 #marco_contenido_datos{
-margin-left:20%;
-margin-right:20%;
+    margin-left:20%;
+    margin-right:20%;
+}
+
+#marco_contenido_datos li.item{
+clear:left;
+float:left;
 }
 #marco_principal{
 	clear:both;
