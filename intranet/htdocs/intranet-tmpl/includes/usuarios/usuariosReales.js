@@ -201,6 +201,7 @@ function agregarUsuario(){
       objAH.apellido= $('#apellido').val();
       objAH.id_ui= $('#id_ui').val();
       objAH.tipo_documento= $('#tipo_documento_id').val();
+      objAH.credential_type= $('#credential').val();
       objAH.nro_documento= $('#nro_documento').val();
       objAH.legajo= $('#legajo').val();
       objAH.changepassword= ( $('#changepassword').attr('checked') )?1:0;

@@ -124,10 +124,10 @@ sub agregar{
     my ($data_hash)=@_;
     
     $self->setId_persona($data_hash->{'id_persona'});
-
     if ($data_hash->{'auto_nro_socio'}){
         if (C4::AR::Preferencias->getValorPreferencia("auto-nro_socio_from_dni")){
             $self->setNro_socio( $self->setNro_socio($self->persona->getNro_documento) );
+            C4::AR::Debug::debug("NRO SOCIO: ".$self->getNro_socio);
         }else{
              $self->setNro_socio( $self->nextNro_socio )
         }
@@ -151,6 +151,8 @@ sub agregar{
         $self->activar();
     }
     $self->save();
+    C4::AR::Debug::debug("CREDENTIAL_TYPE: ".$data_hash->{'credential_type'});
+    $self->setCredentials($data_hash->{'credential_type'});
 
 }
 
@@ -179,8 +181,9 @@ sub desautorizarTercero{
 }
 
 sub tieneAutorizado{
-    
+
     my ($self)=shift;
+
     return (
             C4::AR::Utilidades::validateString($self->getNombre_apellido_autorizado)
                             &&
@@ -207,6 +210,7 @@ sub modificar{
 
     my ($self)=shift;
     my ($data_hash)=@_;
+
     $self->setId_ui($data_hash->{'id_ui'});
     $self->setCod_categoria($data_hash->{'cod_categoria'});
     $self->persona->modificar($data_hash);
@@ -215,10 +219,11 @@ sub modificar{
 }
 
 sub defaultSort{
-    my ($campo)=@_;
 
+    my ($campo)=@_;
     my $personaTemp = C4::Modelo::UsrPersona->new();
-	C4::AR::Debug::debug("UsrSocio => defaultSort => return: ".$personaTemp->sortByString($campo));
+
+    C4::AR::Debug::debug("UsrSocio => defaultSort => return: ".$personaTemp->sortByString($campo));
     return ($personaTemp->sortByString($campo));
 }
 
@@ -262,6 +267,7 @@ sub resetPassword{
     $self->save();
 }
 
+# FIXME DEPRECATED
 sub cambiarPermisos{
     my ($self)=shift;
     my ($params) = @_;
@@ -561,7 +567,106 @@ sub checkEntorno{
     }
 }
 
+sub setCredentials{
+
+    my ($self) = shift;
+    my ($credential_type) = @_;
+
+    use Switch;
+
+    switch ($credential_type){
+
+      case 'estudiante'      {$self->convertirEnEstudiante}
+      case 'librarian'       {$self->convertirEnLibrarian}
+      case 'superLibrarian'  {$self->convertirEnSuperLibrarian}
+      else                   {$self->convertirEnEstudiante} # estudiante debería ser default?
+    }
+
+}
+sub convertirEnEstudiante{
+
+    my ($self) = shift;
+    my ($perm_catalogo, $perm_general, $perm_circulacion);
+    
+    $perm_catalogo = C4::Modelo::PermCatalogo->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
+    unless($perm_catalogo->load(speculative => 1))
+    {
+      $perm_catalogo = C4::Modelo::PermCatalogo->new(db => $self->db);
+    }
+    $perm_catalogo->convertirEnEstudiante($self);
+
+    $perm_general = C4::Modelo::PermGeneral->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
+    unless($perm_general->load(speculative => 1))
+    {
+      $perm_general = C4::Modelo::PermGeneral->new(db => $self->db);
+    }
+    $perm_general->convertirEnEstudiante($self);
+
+    $perm_circulacion = C4::Modelo::PermCirculacion->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
+    unless($perm_circulacion->load(speculative => 1))
+    {
+      $perm_circulacion = C4::Modelo::PermCirculacion->new(db => $self->db);
+    }
+    $perm_circulacion->convertirEnEstudiante($self);
+}
+
+sub convertirEnLibrarian{
+
+    my ($self) = shift;
+    my ($perm_catalogo, $perm_general, $perm_circulacion);
+    
+    $perm_catalogo = C4::Modelo::PermCatalogo->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
+    unless($perm_catalogo->load(speculative => 1))
+    {
+      $perm_catalogo = C4::Modelo::PermCatalogo->new(db => $self->db);
+    }
+    $perm_catalogo->convertirEnLibrarian($self);
+
+    $perm_general = C4::Modelo::PermGeneral->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
+    unless($perm_general->load(speculative => 1))
+    {
+      $perm_general = C4::Modelo::PermGeneral->new(db => $self->db);
+    }
+    $perm_general->convertirEnLibrarian($self);
+
+    $perm_circulacion = C4::Modelo::PermCirculacion->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
+    unless($perm_circulacion->load(speculative => 1))
+    {
+      $perm_circulacion = C4::Modelo::PermCirculacion->new(db => $self->db);
+    }
+    $perm_circulacion->convertirEnLibrarian($self);
+}
+
+sub convertirEnSuperLibrarian{
+
+    my ($self) = shift;
+    my ($perm_catalogo, $perm_general, $perm_circulacion);
+    
+    $perm_catalogo = C4::Modelo::PermCatalogo->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
+    unless($perm_catalogo->load(speculative => 1))
+    {
+      $perm_catalogo = C4::Modelo::PermCatalogo->new(db => $self->db);
+    }
+    $perm_catalogo->convertirEnSuperLibrarian($self);
+
+    $perm_general = C4::Modelo::PermGeneral->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
+    unless($perm_general->load(speculative => 1))
+    {
+      $perm_general = C4::Modelo::PermGeneral->new(db => $self->db);
+    }
+    $perm_general->convertirEnSuperLibrarian($self);
+
+    $perm_circulacion = C4::Modelo::PermCirculacion->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
+    unless($perm_circulacion->load(speculative => 1))
+    {
+      $perm_circulacion = C4::Modelo::PermCirculacion->new(db => $self->db);
+    }
+    $perm_circulacion->convertirEnSuperLibrarian($self);
+}
+
+
 sub verificar_permisos_por_nivel{
+
     my ($flagsrequired) = @_;
     my @filtros;
     my $permisos_array_hash_ref;

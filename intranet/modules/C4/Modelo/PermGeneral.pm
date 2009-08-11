@@ -39,6 +39,7 @@ sub setAll{
     my ($permisosByte) = @_;
     $self->setReportes($permisosByte);
     $self->setPreferencias($permisosByte);
+    $self->setPermisos($permisosByte);
 }
 
 sub modificar{
@@ -123,6 +124,61 @@ sub setReportes{
     my ($reportes) = @_;
     
     $self->reportes($reportes);
+}
+
+sub getPermisos{
+
+    my ($self) = shift;
+    
+    return ($self->permisos);
+}
+
+sub setPermisos{
+
+    my ($self) = shift;
+    my ($permisos) = @_;
+    
+    $self->permisos($permisos);
+}
+
+sub convertirEnEstudiante{
+
+    my ($self) = shift;
+    my ($socio) = @_;
+    $self->setAll(C4::AR::Permisos::getConsultaByte());
+    $self->setNro_socio($socio->getNro_socio);
+    $self->setUI($socio->getId_ui);
+    $self->setTipo_documento('ALL');
+    $self->save();
+
+}
+
+sub convertirEnLibrarian{
+
+    my ($self) = shift;
+    my ($socio) = @_;
+
+    $self->setAll(C4::AR::Permisos::getConsultaByte() | C4::AR::Permisos::getAltaByte() | C4::AR::Permisos::getModificacionByte() );
+    $self->setNro_socio($socio->getNro_socio);
+    $self->setUI($socio->getId_ui);
+    $self->setTipo_documento('ALL');
+
+    $self->save();
+
+}
+
+sub convertirEnSuperLibrarian{
+
+    my ($self) = shift;
+    my ($socio) = @_;
+
+    $self->setAll(C4::AR::Permisos::getTodosByte());
+    $self->setNro_socio($socio->getNro_socio);
+    $self->setUI($socio->getId_ui);
+    $self->setTipo_documento('ALL');
+
+    $self->save();
+
 }
 
 1;

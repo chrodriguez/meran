@@ -107,5 +107,46 @@ sub setPrestamos{
     $self->prestamos($prestamos);
 }
 
+
+sub convertirEnEstudiante{
+
+    my ($self) = shift;
+    my ($socio) = @_;
+    $self->setAll(C4::AR::Permisos::getConsultaByte());
+    $self->setNro_socio($socio->getNro_socio);
+    $self->setUI($socio->getId_ui);
+    $self->setTipo_documento('ALL');
+    $self->save();
+
+}
+
+sub convertirEnLibrarian{
+
+    my ($self) = shift;
+    my ($socio) = @_;
+
+    $self->setAll(C4::AR::Permisos::getConsultaByte() | C4::AR::Permisos::getAltaByte() | C4::AR::Permisos::getModificacionByte() );
+    $self->setNro_socio($socio->getNro_socio);
+    $self->setUI($socio->getId_ui);
+    $self->setTipo_documento('ALL');
+
+    $self->save();
+
+}
+
+sub convertirEnSuperLibrarian{
+
+    my ($self) = shift;
+    my ($socio) = @_;
+
+    $self->setAll(C4::AR::Permisos::getTodosByte());
+    $self->setNro_socio($socio->getNro_socio);
+    $self->setUI($socio->getId_ui);
+    $self->setTipo_documento('ALL');
+
+    $self->save();
+
+}
+
 1;
 

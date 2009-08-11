@@ -31,6 +31,29 @@ use vars qw(@EXPORT @ISA @EXPORT_OK);
 our @EXPORT_OK= ('TODOS', 'ALTA', 'BAJA', 'MODIFICACION', 'CONSULTA');
 
 
+sub getAltaByte{
+  return ALTA;
+}
+
+sub getBajaByte{
+  return BAJA;
+}
+
+sub getModificacionByte{
+  return MODIFICACION;
+}
+
+sub getConsultaByte{
+  return CONSULTA;
+}
+
+sub getTodosByte{
+  return TODOS;
+}
+
+
+
+
 # FUNCIONES COMUNES A TODOS LOS PERMISOS
 
 sub checkTipoPermiso{

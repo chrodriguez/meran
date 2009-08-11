@@ -87,6 +87,7 @@ use vars qw(@EXPORT @ISA);
     &ciudadesAutocomplete
     &redirectAndAdvice
     &generarComboDeAnios
+    &generarComboDeCredentials
 
 );
 
@@ -118,6 +119,27 @@ sub generarComboDeAnios{
     return ($year_select);
 }
 
+sub generarComboDeCredentials{
+
+    my @select_credentials;
+    my %select_credentials;
+
+    push @select_credentials, 'estudiante';
+    push @select_credentials, 'librarian';
+    push @select_credentials, 'superLibrarian';
+    $select_credentials{'estudiante'} = 'Estudiante';
+    $select_credentials{'librarian'} = 'Librarian';
+    $select_credentials{'superLibrarian'} = 'SuperLibrarian';
+
+    my $CGIregular=CGI::scrolling_list(  -name      => 'credential',
+                                            -id        => 'credential',
+                                            -values    => \@select_credentials,
+                                            -defaults  => 'Estudiante',
+                                            -labels    => \%select_credentials,
+                                            -size      => 1,
+                                      );
+    return ($CGIregular);
+}
 
 sub generarComboRegular{
 

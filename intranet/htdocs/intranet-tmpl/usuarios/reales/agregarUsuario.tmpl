@@ -106,6 +106,14 @@
         <td width="5%">&nbsp;</td>
     </tr>
     <tr>
+        <td align="left">
+        <b>[% "Tipo de usuario" | i18n %] *</b>
+        <br>
+                [% comboDeCredentials %]
+        </td>
+        <td width="5%">&nbsp;</td>
+    </tr>
+    <tr>
         <td width="35%" align="left">
                 <b> [% "Apellido" | i18n %] *</b><br>
                 <input id="apellido" name="apellido" class="required" type=text size=50 value="[% socio.persona.getApellido %]">
