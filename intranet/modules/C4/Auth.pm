@@ -158,7 +158,9 @@ sub getSessionIdSocio {
 =cut
 sub getSessionNroSocio {
     my ($session) = @_;
-
+    if (!$session){
+      $session = CGI::Session->load();
+    }
     return $session->param('nro_socio');
 }
 

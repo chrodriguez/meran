@@ -28,6 +28,7 @@ __PACKAGE__->meta->setup(
         nombre_apellido_autorizado       => { type => 'varchar', length => 255, not_null => 0 },
         dni_autorizado                   => { type => 'varchar', length => 255, not_null => 0 },
         telefono_autorizado              => { type => 'varchar', length => 255, not_null => 0 },
+        is_super_user                    => { type => 'integer', default => 0, not_null => 1 },
 
     ],
 
@@ -127,7 +128,6 @@ sub agregar{
     if ($data_hash->{'auto_nro_socio'}){
         if (C4::AR::Preferencias->getValorPreferencia("auto-nro_socio_from_dni")){
             $self->setNro_socio( $self->setNro_socio($self->persona->getNro_documento) );
-            C4::AR::Debug::debug("NRO SOCIO: ".$self->getNro_socio);
         }else{
              $self->setNro_socio( $self->nextNro_socio )
         }
@@ -506,6 +506,24 @@ sub esRegular{
     return $estado->getRegular;
 }
 
+sub getIs_super_user{
+    my ($self) = shift;
+
+    return ($self->is_super_user);
+}
+
+sub setIs_super_user{
+    my ($self) = shift;
+    my ($is_super_user) = @_;
+
+    $self->is_super_user($is_super_user);
+}
+
+sub isSuperUser{
+    my ($self) = shift;
+    
+    return ($self->getIs_super_user);
+}
 =item
 Esta funcion se encarga de verificar los permisos para un entorno dado
 Entorno de datos de nivel, para ABM de datos de nivel 1, 2 y 3
@@ -578,7 +596,7 @@ sub setCredentials{
 
       case 'estudiante'      {$self->convertirEnEstudiante}
       case 'librarian'       {$self->convertirEnLibrarian}
-      case 'superLibrarian'  {$self->convertirEnSuperLibrarian}
+      case 'superLibrarian'  {$self->convertirEnSuperLibrarian; $self->setIs_super_user(1);}
       else                   {$self->convertirEnEstudiante} # estudiante debería ser default?
     }
 

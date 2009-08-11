@@ -468,6 +468,15 @@ sub _verificarDatosBorrower {
     my $actionType = $data->{'actionType'};
     my $checkStatus;
     my $emailAddress = $data->{'email'};
+    my $credential_type = lc $data->{'credential_type'};
+    if (!($msg_object->{'error'}) && ($credential_type eq "superlibrarian") ){
+        my $socio = C4::Modelo::UsrSocio->new(nro_socio => C4::Auth::getSessionNroSocio());
+           $socio->load();
+        if (!($socio->isSuperUser())){
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U399', 'params' => []} ) ;
+        }
+    }
 
     if (!($msg_object->{'error'}) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
         $msg_object->{'error'}= 1;

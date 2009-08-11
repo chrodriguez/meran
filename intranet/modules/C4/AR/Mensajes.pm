@@ -217,6 +217,7 @@ my %mensajesINTRA = (
     'U396' => 'Se elimin&oacute; correctamente el autorizado.',
     'U397' => 'Se carg&oacute; correctamente el autorizado.',
     'U398' => 'No se pudo realizar la modificaci&oacute;n del autorizado.',
+    'U399' => 'UD. no puede dar de alta administradores de sistema.',
 	'B400' => '',
 	'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
 	'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',
