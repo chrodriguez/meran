@@ -14,50 +14,39 @@ $(document).ready(function() {
 });
 
 </script>
-
-<table width="50%" border="0"  align="center"  cellpadding="0" cellspacing="0" bordercolor="#FFFFFF">
-	<tr>
-		<td class="item" colspan="2">
-			<b>[% "Cat&aacute;logo:" | i18n %]</b>
-		</td>
-	</tr>
-	<tr>
-		<td width="15%" >&nbsp;</td>
-		<td  class="item" valign="top">
+<div class="main">
+<fieldset class="main">
+<legend><strong>[% "Cat&aacute;logo:" | i18n %]</strong></legend>
+	<ul>
+    <li class="item" >
+			
+		<div  class="item" >
 			[% "B&uacute;squeda combinada" | i18n %]
 			<input type="text" id="keyword" size="20" tabindex=1>
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "buscar();",
-                                                                    title   => "[% 'Buscar en el cat&aacute;logo' | i18n %]",
-                                        ) ;
+         </div>
+         [% PERL %]
+                     print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                             boton   => "boton_buscar",
+                             onClick => "buscar();",
+                             title   => "[% 'Buscar en el cat&aacute;logo' | i18n %]",
+                             ) ;
             [% END %]
-    	</td>
-  	</tr>
-  	<tr>
-		<td width="15%" >&nbsp;</td>
-      		<td class="item">
-                        [% PERL %]
-                                print C4::AR::Filtros::link_to( text    =>  "[% 'B&uacute;squeda avanzada' | i18n %]",
-                                                                url     =>  "/cgi-bin/koha/busquedas/filtrado.pl",
-                                                                title   =>  "[% 'B&uacute;squeda avanzada' | i18n %]"
-                                        ) ;
-                        [% END %]
-      		</td>
-	</tr>
-</table>
-
-<table width="50%" border="0"  align="center"  cellpadding="0" cellspacing="0" bordercolor="#FFFFFF">
-	<tr>
-		<td class="item" colspan="2">
-			<b>[% "Usuarios:"| i18n %]</b>
-		</td>
-	</tr>
-	<tr>
-		<td width="15%">&nbsp;</td>
-		<td class="item" valign="top">
-		    	[% "B&uacute;squeda de usuarios &nbsp;" | i18n %]
+  	</li>
+    <li class="item">
+    [% PERL %]
+            print C4::AR::Filtros::link_to( text    =>  "[% 'B&uacute;squeda avanzada' | i18n %]",
+                    url     =>  "/cgi-bin/koha/busquedas/filtrado.pl",
+                    title   =>  "[% 'B&uacute;squeda avanzada' | i18n %]"
+                    ) ;
+    [% END %]
+    </li>
+    </ul>
+</fieldset>
+<fieldset class="main">
+<legend><strong>[% "Usuarios:" | i18n %]</strong></legend>
+	<ul>
+    <li class="item" >
+    [% "B&uacute;squeda de usuarios &nbsp;" | i18n %]
                 <input id="socio" type=text name="socio" onFocus="checkFilter('focus')" 
                    onBlur="checkFilter('blur')" value="[% socio %]" tabindex=2>		
                 [% PERL %]
@@ -69,53 +58,46 @@ $(document).ready(function() {
                                         ) ;
                 [% END %]
 
-        </td>
- 	 </tr>
-</table>
-
-<table width="50%" border="0"  align="center"  cellpadding="0" cellspacing="0" bordercolor="#FFFFFF">
-	<tr>
-    		<td  class="item">
-    			        [% PERL %]
-                                print C4::AR::Filtros::link_to( 
-                                                                text =>     "[% 'Pr&eacute;stamos' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/circ/prestamos.pl", 
-                                                                title =>    "[% 'Pr&eacute;stamos' | i18n %]"
-                                                              );
-                        [% END %]
-    		</td>
-  	</tr>
-  	<tr>
-    		<td  class="item">
-                        [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Devoluciones y Renovaciones' | i18n %]",
-                                            url =>      "/cgi-bin/koha/circ/devoluciones.pl", 
-                                            title =>    "[% 'Devoluciones y Renovaciones' | i18n %]"
-                                        ) ;
-                        [% END %]
-    		</td>
-  	</tr>
-  	<tr>
-  		<td   class="item">
-                        [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Reportes' | i18n %]",
-                                            url =>      "/cgi-bin/koha/reports/reports-home.pl", 
-                                            title =>    "[% 'Reportes' | i18n %]"
-                                        ) ;
-                        [% END %]
-  		</td>
-  	</tr>
-  	<tr>
-    		<td  class="item">
-                        [% PERL %]
-                        print C4::AR::Filtros::link_to( text =>     "[% 'Par&aacute;metros' | i18n %]",
-                                            url =>      "/cgi-bin/koha/admin-home.pl", 
-                                            title =>    "[% 'Par&aacute;metros' | i18n %]"
-                                        ) ;
-                        [% END %]
-   		   </td>
-  	</tr>
-</table>
+    </li>
+    </ul>
+</fieldset>
+<fieldset class="main">
+<ul>
+<li class="item">
+            [% PERL %]
+            print C4::AR::Filtros::link_to( 
+                   text =>     "[% 'Pr&eacute;stamos' | i18n %]",
+                   url =>      "/cgi-bin/koha/circ/prestamos.pl", 
+                   title =>    "[% 'Pr&eacute;stamos' | i18n %]"
+                   );
+            [% END %]
+</li>
+<li class="item">
+            [% PERL %]
+            print C4::AR::Filtros::link_to( text =>     "[% 'Devoluciones y Renovaciones' | i18n %]",
+                    url =>      "/cgi-bin/koha/circ/devoluciones.pl", 
+                    title =>    "[% 'Devoluciones y Renovaciones' | i18n %]"
+                    ) ;
+            [% END %]
+</li>
+<li class="item">
+            [% PERL %]
+            print C4::AR::Filtros::link_to( text =>     "[% 'Reportes' | i18n %]",
+                    url =>      "/cgi-bin/koha/reports/reports-home.pl", 
+                    title =>    "[% 'Reportes' | i18n %]"
+                    ) ;
+            [% END %]
+</li>
+<li class="item">
+            [% PERL %]
+            print C4::AR::Filtros::link_to( text =>     "[% 'Par&aacute;metros' | i18n %]",
+                    url =>      "/cgi-bin/koha/admin-home.pl", 
+                    title =>    "[% 'Par&aacute;metros' | i18n %]"
+                    ) ;
+            [% END %]
+</li>
+</fieldset>
+</div>
 <div id="resultBusqueda"></div>
 <div id="result"></div>
 [% INCLUDE 'intranet-bottom.inc' %]

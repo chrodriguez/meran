@@ -144,7 +144,7 @@ sub to_Button{
     }
     
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
-    $button .=  "<li id='boton_medio' class='click ".$alternClass. "' onClick='".$onClick."' style='width:".$width."px'";
+    $button .=  "<li  id='boton_medio' class='click ".$alternClass. "' onClick='".$onClick."' style='width:".$width."px'";
     if($title){
         $button .= " title='".$title."'";
     }
@@ -158,6 +158,9 @@ sub to_Button{
     $button .=  "</li> ";
     return $button;
 }
+
+
+
 
 sub to_Icon{
     my (%params_hash_ref) = @_;
