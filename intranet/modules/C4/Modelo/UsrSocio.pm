@@ -245,22 +245,6 @@ sub cambiarPassword{
 sub resetPassword{
     my ($self)=shift;
 
-#     use Switch;
-#     if ( C4::Context->preference("defaultPassword") ){
-#         my $defaultPassword = C4::Context->preference("defaultPassword");
-#         
-#         switch ($defaultPassword) {
-# 
-#         case "documento"      { $self->setPassword(""); }
-# 
-#         else                 { $self->cambiarPassword($defaultPassword); }
-# 
-#         }
-#     } 
-#     else
-#         {
-#             $self->setPassword("");
-#         }
     $self->setPassword("");
     $self->setChange_password(1);
     $self->save();

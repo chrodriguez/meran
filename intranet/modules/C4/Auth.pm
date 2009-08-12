@@ -542,7 +542,8 @@ C4::AR::Debug::debug("checkauth=> authnotrequired: ".$authnotrequired."\n");
         if ( ($userid) && ( new_password_is_needed($userid) ) ) {
 
             C4::AR::Debug::debug("checkauth=> changePassword \n");
-            _change_Password_Controller($dbh, $query, $userid, $type,\%info);
+#             _change_Password_Controller($dbh, $query, $userid, $type,\%info);
+            redirectTo('/cgi-bin/koha/usuarios/change_password.pl');
             #EXIT
         }#end if (($userid) && (new_password_is_needed($userid)))
 
@@ -1289,6 +1290,8 @@ sub _checkpw {
     my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
     $socio->load();
     C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
+    C4::AR::Debug::debug("_checkpw=> socio->getActivo ".$socio->getActivo."\n");
+    C4::AR::Debug::debug("_checkpw=> socio->persona ".$socio->persona."\n");
       if ( ($socio->persona)&&($socio->getActivo) ) {
         C4::AR::Debug::debug("_checkpw=> tengo persona y socio\n");
         #existe el socio y se encuentra activo
@@ -1296,7 +1299,7 @@ sub _checkpw {
         my $ui= $socio->getId_ui;
         my $dni= $socio->persona->getNro_documento;
 
-        return _verificar_passwod_con_metodo($hashed_password, $password, $dni, $random_number, _getMetodoEncriptacion()), $userid, $ui;
+        return _verificar_password_con_metodo($hashed_password, $password, $dni, $random_number, _getMetodoEncriptacion()), $userid, $ui;
      }# END  if ( ($socio->persona)&&($socio->getActivo) )
 
 
@@ -1310,7 +1313,7 @@ sub _getMetodoEncriptacion {
     return 'SHA_256_B64';#'MD5'
 }
 
-=item sub _verificar_passwod_con_metodo
+=item sub _verificar_password_con_metodo
 
     Verifica la password ingresada por el usuario con la password recuperada de la base, todo esto con el metodo indicado por parametros    
     
@@ -1320,21 +1323,21 @@ sub _getMetodoEncriptacion {
     $password: ingresada por el usuario
 
 =cut
-sub _verificar_passwod_con_metodo {
+sub _verificar_password_con_metodo {
     my ($hashed_password, $password, $dni, $random_number, $metodo) = @_;
 
     if ($hashed_password eq undef){
     # La 1ra vez esta vacio se usa el dni o password reseteada
         $hashed_password= _hashear_password(md5_base64($dni), $metodo);
-        C4::AR::Debug::debug("_verificar_passwod_con_metodo=> es la 1era vez que se loguea, se usa el DNI\n");
+        C4::AR::Debug::debug("_verificar_password_con_metodo=> es la 1era vez que se loguea, se usa el DNI\n");
     }
 
-C4::AR::Debug::debug("_verificar_passwod_con_metodo=> password del cliente: ".$password."\n");
-C4::AR::Debug::debug("_verificar_passwod_con_metodo=> password de la base: ".$hashed_password."\n");
-C4::AR::Debug::debug("_verificar_passwod_con_metodo=> password_hasheada_con_metodo.random_number: "._hashear_password($hashed_password.$random_number, $metodo)."\n");
+C4::AR::Debug::debug("_verificar_password_con_metodo=> password del cliente: ".$password."\n");
+C4::AR::Debug::debug("_verificar_password_con_metodo=> password de la base: ".$hashed_password."\n");
+C4::AR::Debug::debug("_verificar_password_con_metodo=> password_hasheada_con_metodo.random_number: "._hashear_password($hashed_password.$random_number, $metodo)."\n");
 
     if ($password eq _hashear_password($hashed_password.$random_number, $metodo)) {
-        C4::AR::Debug::debug("_verificar_passwod_con_metodo=> las pass son = todo OK\n");
+        C4::AR::Debug::debug("_verificar_password_con_metodo=> las pass son = todo OK\n");
         #PASSWORD VALIDA
         return 1;
     }else {
