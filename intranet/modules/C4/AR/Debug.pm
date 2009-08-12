@@ -41,7 +41,8 @@ sub debugObject{
     my $context = new C4::Context;
 
     if($context->config('debug')){
-		open(Z, ">>/tmp/debug.txt");
+        my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
+        open(Z, ">>".$debug_file);
 		print Z "\n";
 		if($object){
 			print Z "Object: ".$object->toString."=> ".$data."\n";
@@ -60,7 +61,8 @@ sub debug{
     my $context = new C4::Context;
 
     if($context->config('debug')){
-		open(Z, ">>/tmp/debug.txt");
+        my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
+        open(Z, ">>".$debug_file);
 		print Z "DEBUG=> ".$data."\n";
 		close(Z);        
     }

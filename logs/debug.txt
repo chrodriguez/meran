@@ -1,0 +1,39 @@
+DEBUG=> AutoBase1 => type: intranet
+DEBUG=> AutoBase1 => userINTRA
+DEBUG=> desde checkauth================================================================================================== 
+
+DEBUG=> _new_dbh => type: intranet
+DEBUG=> _new_dbh => userINTRA
+DEBUG=> checkauth=> Token desde GET: fc5d45f8a824ce1fd43a9da545c116b465a1a664
+DEBUG=> checkauth=> template_name: auth.tmpl
+
+DEBUG=> checkauth=> authnotrequired: 0
+
+DEBUG=> checkauth=> sessionID seteado 
+
+DEBUG=> checkauth=> El usuario se encuentra logueado 
+
+DEBUG=> checkauth=> continua logueado, actualizo lasttime de sessionID: 18e774a1bf68d7b09bc475159803885d_CD
+
+DEBUG=> TIPO_PERMISO => catalogo
+DEBUG=> tienePermisos??? => intento level1
+DEBUG=> 
+DEBUG=> verificar_permisos_por_nivel => permisos requeridos
+DEBUG=> verificar_permisos_por_nivel => ui=================: ANY
+DEBUG=> verificar_permisos_por_nivel => tipo_documento=================: ANY
+DEBUG=> verificar_permisos_por_nivel => nro_socio=================: 26320
+DEBUG=> verificar_permisos_por_nivel => entorno=================: undefined
+DEBUG=> verificar_permisos_por_nivel => accion=================: CONSULTA
+DEBUG=> verificar_permisos_por_nivel
+DEBUG=> verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: 00010001
+DEBUG=> verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================TODOS
+DEBUG=> checkauth=> TIENE PERMISOS: 
+
+DEBUG=> checkauth=> if (loggedin || authnotrequired || (defined(insecure) && insecure)) 
+
+DEBUG=> checkauth=> insecure: 0
+
+DEBUG=> checkauth=> authnotrequired: 0
+
+DEBUG=> checkauth=> EXIT => userid: 26320 cookie=> sessionID:  sessionID: 18e774a1bf68d7b09bc475159803885d_CD
+
