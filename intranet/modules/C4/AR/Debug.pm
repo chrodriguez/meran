@@ -20,13 +20,14 @@ sub log{
     my $context = new C4::Context;
 
     if($context->config('debug')){
-         open(Z, ">>/tmp/debug.txt");
-         print Z "\n";
-         print Z "Object: ".$object->toString."=> ".$metodoLlamador."\n";
-         ## FIXME falta ver si se le pasa un arreglo en vez de una HASH
-               _printHASH($data);
-         print Z "\n";
-         close(Z);
+        my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
+        open(Z, ">>".);
+        print Z "\n";
+        print Z "Object: ".$object->toString."=> ".$metodoLlamador."\n";
+        ## FIXME falta ver si se le pasa un arreglo en vez de una HASH
+        _printHASH($data);
+        print Z "\n";
+        close(Z);
     }
 }
 
