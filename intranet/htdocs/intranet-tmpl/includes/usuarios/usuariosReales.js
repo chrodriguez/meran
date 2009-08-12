@@ -245,9 +245,7 @@ function guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword){
                 type: "POST",
                 url: "/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl",
                 data: "name=John&location=Boston",
-                success: function(msg){
-                    alert( "Data Saved: " + msg );
-                }
+                complete: updateGuardarCambiarPassword,
     });
 
 }
