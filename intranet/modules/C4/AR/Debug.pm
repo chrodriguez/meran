@@ -21,7 +21,7 @@ sub log{
 
     if($context->config('debug')){
         my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
-        open(Z, ">>".);
+        open(Z, ">>".$debug_file);
         print Z "\n";
         print Z "Object: ".$object->toString."=> ".$metodoLlamador."\n";
         ## FIXME falta ver si se le pasa un arreglo en vez de una HASH
