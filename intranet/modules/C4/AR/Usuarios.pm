@@ -462,7 +462,7 @@ C4::AR::Debug::debug("nueva password=> ".$newPassword);
             my $newPassword = $params->{'newpassword'};
 C4::AR::Debug::debug("nueva password=> ".$newPassword);
 C4::AR::Debug::debug("actualPassword=> ".$actualPassword);
-C4::AR::Debug::debug("".sha256_base64(md5_base64($params->{'actualPassword'}));
+C4::AR::Debug::debug("sha256_base64(md5_base64 actualpassword ".sha256_base64(md5_base64($params->{'actualPassword'})));
             $socio->cambiarPassword($newPassword);
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
         }else{
