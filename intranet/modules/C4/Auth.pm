@@ -1292,6 +1292,7 @@ sub _checkpw {
     C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
     C4::AR::Debug::debug("_checkpw=> socio->getActivo ".$socio->getActivo."\n");
     C4::AR::Debug::debug("_checkpw=> socio->persona ".$socio->persona."\n");
+    C4::AR::Debug::debug("_checkpw=> socio->nombre ".$socio->persona->nombre."\n");
       if ( ($socio->persona)&&($socio->getActivo) ) {
         C4::AR::Debug::debug("_checkpw=> tengo persona y socio\n");
         #existe el socio y se encuentra activo
