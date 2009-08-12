@@ -8,7 +8,7 @@ cpan -i Locale::Maketext::Gettext::Functions
 cpan -i Rose::DB
 cpan -i Rose::DB::Object
 cpan -i Rose::DB::Object::Helpers
-cpan -i Crypt::CBC
 
 
 apt-get install libdigest-sha-perl  #cpan -i Digest::SHA
+apt-get install libcrypt-cbc-perl   #cpan -i Crypt::CBC
