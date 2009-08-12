@@ -157,10 +157,13 @@ sub getSessionIdSocio {
 
 =cut
 sub getSessionNroSocio {
-    my ($session) = @_;
+#     my ($session) = @_;
     if (!$session){
       $session = CGI::Session->load();
     }
+    my $session= CGI::Session->load();
+#     C4::AR::Debug::debug("getSessionNroSocio=> ".$session->param('nro_socio'));
+
     return $session->param('nro_socio');
 }
 
@@ -682,6 +685,80 @@ C4::AR::Debug::debug("checkauth=> eliminino la sesssion ".$sessionID."\n");
     }# end unless ($userid) 
 }# end checkauth
 
+
+=item sub prepare_password
+
+    Esta funcion "prepara" la password para ser guardada en la base de datos
+    este es el tratamiento actual que se le esta dando a la password antes de guardar en la base de datos,
+    si cambia, solo deberia cambiarse este metodo
+
+    Parametros: 
+    $password
+
+=cut
+sub prepare_password{
+    my ($password) = @_;
+
+    #primero se hashea la pass con MD5 (esto se mantiene por compatibilidad hacia atras KOHA V2), luego con SHA_256_B64
+    $password = C4::AR::Utilidades::trim($password);
+#     C4::AR::Debug::debug("md5_base64=> 123 ".md5_base64($password));
+#     C4::AR::Debug::debug("sha256_base64 md5_base64=> 123 ".sha256_base64(md5_base64($password)));
+    C4::AR::Debug::debug("_hashear_password=> "._hashear_password(_hashear_password($password, 'MD5_B64'), 'SHA_256_B64'));
+
+    return _hashear_password(_hashear_password($password, 'MD5_B64'), 'SHA_256_B64');
+}
+
+=item sub _getEncriptionKey
+
+    Esta funcion retorna la key para el cifrado simétrico
+    en este momento, la key se esta generando con SHA_256_B64(MD5_B64(password))
+    si cambia, modificar esta funcion
+
+    Parametros: 
+    $password
+
+=cut
+sub _getEncriptionKey{
+    my ($texto) = @_;
+
+    return prepare_password($texto);
+}
+
+
+=item sub desencriptar
+
+    Esta funcion desencripta el texto_a_desencriptar con la clave $key usando AES
+    Parametros: 
+    $texto_a_desencriptar
+    $key= clave para desencriptar
+
+=cut
+sub desencriptar{
+    my ($texto_a_desencriptar, $key) = @_;
+
+    use Crypt::CBC;
+    use MIME::Base64;
+# The encryption/decryption key (required)
+# key= sha256_base64(md5_base64(pass_user))
+
+# my $key = 'nEEhnZwM8ZdiFYYZpcixWnOUmCG57lvr6ksUJuiMXpo';
+
+    my  $cipher = Crypt::CBC->new( 
+                                    -key    => $key,
+                                    -cipher => 'Rijndael',
+                                    -salt   => 1,
+                            );
+
+# my  $plaintext  = $cipher->decrypt(decode_base64('U2FsdGVkX18iBb+ybODTlgIIUOEwLSoBnARvzmRZFvU='));
+# C4::AR::Debug::debug("plaintext fijo: ".$plaintext);
+
+
+    my $plaintext = $cipher->decrypt(decode_base64($texto_a_desencriptar));    
+    C4::AR::Debug::debug("plaintext: ".$plaintext);
+
+    return $plaintext;
+}
+
 =item sub _save_session_db
 
     Esta funcion guarda una session en la base
@@ -809,7 +886,7 @@ sub _change_Password_Controller {
 		}
         C4::AR::Debug::debug("_change_Password_Controller=> template_name: ".$template_name);
 
-		my ($template, $t_params) = gettemplate($template_name, $type);
+		my ($template, $t_params) = C4::Output::gettemplate($template_name, $type);
         C4::AR::Debug::debug("_change_Password_Controller=> template_name: ".$template_name);	
 		$t_params->{'passwordrepetedv'}= $passwordrepeted;
 
@@ -822,7 +899,6 @@ sub _change_Password_Controller {
         $t_params->{'userid'}= $userid;
         $t_params->{'id_socio'}= $socio->getId_socio;
         $t_params->{'loggedinusername'}= $userid;
-C4::AR::Debug::debug("nro_socio:??????????: ".$userid);
         $t_params->{'nro_socio'}= $userid;
 	
         my $session = CGI::Session->load();
@@ -927,6 +1003,7 @@ sub _generarSession {
     my $session = new CGI::Session(undef, undef, undef);
     #se setea toda la info necesaria en la sesion
 	$session->param('userid', $params->{'userid'});
+    $session->param('nro_socio', $params->{'userid'});
 	$session->param('sessionID', $session->id());
 	$session->param('loggedinusername', $params->{'userid'});
 	$session->param('password', $params->{'password'});
@@ -1284,9 +1361,11 @@ sub _hashear_password {
         return sha1_hex($password);
     }elsif($metodo eq 'SHA_256_B64'){
         return sha256_base64($password);
-    }elsif($metodo eq 'MD5'){
+    }elsif($metodo eq 'MD5_B64'){
         return md5_base64($password);
     }
+
+    C4::AR::Debug::debug("C4::Auth::_hashear_password => Error al intentar hashear password, falta METODO de encriptacion");
 }
 
 

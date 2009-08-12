@@ -229,18 +229,17 @@ sub defaultSort{
 
 
 sub cambiarPassword{
-    
-    use C4::Date;
     my ($self)=shift;
     my ($password)=@_;
+    use C4::Date;
 
-    #primero se hashea la pass con MD5 (esto se mantiene por compatibilidad hacia atras KOHA V2), luego con SHA_256_B64
-    $self->setPassword( C4::Auth::_hashear_password(C4::Auth::_hashear_password($password, 'MD5'), 'SHA_256_B64') );
+    C4::AR::Debug::debug("UsrSocio => cambiarPassword => ".C4::Auth::prepare_password(C4::AR::Utilidades::trim($password)) );
+    $self->setPassword( C4::Auth::prepare_password(C4::AR::Utilidades::trim($password)) );
     my $today = Date::Manip::ParseDate("today");
     $self->setLast_change_password($today);
     $self->setChange_password(0);
     
-    $self->save();
+#     $self->save();
 }
 
 sub resetPassword{

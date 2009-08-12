@@ -421,20 +421,15 @@ sub create {
 #Esta funcion agrega un mensaje al arreglo de objetos mensajes
 sub add {
 	my($Message_hashref, $msg_hashref)=@_;
-#@param $Message_hashref es el objeto mensaje contenedor de los mensajes
-#@param $msg_hashref es un mensaje
+    #@param $Message_hashref es el objeto mensaje contenedor de los mensajes
+    #@param $msg_hashref es un mensaje
 	#se obtiene el texto del mensaje
   	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});	
 	$msg_hashref->{'message'}= $messageString;
 C4::AR::Debug::debug("Mensajes::add => message: ".$messageString."\n");
 C4::AR::Debug::debug("Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n");
-# print A "Mensajes::add => message: ".$messageString."\n";
-# print A "Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n";
 
  	push (@{$Message_hashref->{'messages'}}, $msg_hashref);
-
-# print A "Mensajes::add => cant: ".scalar(@{$Message_hashref->{'messages'}})."\n";
-# close(A);
 }
 
 1;
