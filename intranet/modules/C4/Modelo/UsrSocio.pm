@@ -239,7 +239,7 @@ sub cambiarPassword{
     $self->setLast_change_password($today);
     $self->setChange_password(0);
     
-#     $self->save();
+    $self->save();
 }
 
 sub resetPassword{

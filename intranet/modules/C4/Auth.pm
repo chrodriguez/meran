@@ -158,9 +158,9 @@ sub getSessionIdSocio {
 =cut
 sub getSessionNroSocio {
 #     my ($session) = @_;
-    if (!$session){
-      $session = CGI::Session->load();
-    }
+#     if (!$session){
+#       $session = CGI::Session->load();
+#     }
     my $session= CGI::Session->load();
 #     C4::AR::Debug::debug("getSessionNroSocio=> ".$session->param('nro_socio'));
 
