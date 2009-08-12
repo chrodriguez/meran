@@ -1,6 +1,4 @@
-<script language="javascript">
-   $.getScript("/includes/md5.js");
-</script>
+[% INCLUDE   'ChangePasswordHelper.inc'  %]
 
 <!-- ************************************Window Cambiar Password***************************************** -->
 <div id="contentWindow" class="formElemets">

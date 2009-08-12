@@ -239,6 +239,17 @@ function guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword){
 	objAH.tipoAccion= 'CAMBIAR_PASSWORD';
 	//se envia la consulta
 	objAH.sendToServer();
+
+    
+    $.ajax({
+                type: "POST",
+                url: "/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl",
+                data: "name=John&location=Boston",
+                success: function(msg){
+                    alert( "Data Saved: " + msg );
+                }
+    });
+
 }
 
 function updateGuardarCambiarPassword(responseText){
