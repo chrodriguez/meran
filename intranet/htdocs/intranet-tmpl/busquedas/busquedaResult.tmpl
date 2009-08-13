@@ -1,12 +1,13 @@
 [% USE HTML %]
 [% IF HEADERS %]
-
-    [% INCLUDE "intranet-top.inc" %]
+[% INCLUDE "intranet-top.inc" %]
 
     <!-- PARA PODER CREAR EL FORMULARIO -->
     <div id="formulario"></div>
 
 [% END %]
+<fieldset class="resultados_busqueda">
+<strong><legend>[% "Resultados de la b&uacute;squeda:" | i18n %]</legend></strong>
 
 
 <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
@@ -84,7 +85,7 @@
 [% END %]
 </table>
 
-<br>
+<fieldset class="resultados_busqueda">
 
 [% IF HEADERS %]
     [% INCLUDE "intranet-bottom.inc" %]

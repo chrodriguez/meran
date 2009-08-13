@@ -312,11 +312,11 @@ $(document).ready(function(){
 </div>
 
 <!-- ---------------Registro de libro TABLE------- -->
-<table cellspacing="0" cellpadding="0" border="0" align="left"  class="tablaresultado datos_tabla" width="100%">
-	<tr valign="top" height="24" class="titulo_tabla_resultado">
-		  <td  valign="middle" height="24"><b>Registro de Documento</b> [% id1 %]</td>
-	</tr>
-</table>
+
+
+
+<fieldset>
+<strong><legend>[% "Detalles de Nivel 1 registro" | i18n %] [% id1 %]</legend></strong>
 
 <div class="detalle">
 
@@ -336,27 +336,24 @@ $(document).ready(function(){
                                 ) ;
     [% END %]
     
-	<br>
-	[% FOREACH nivel1 %]
+	<ul>
+    [% FOREACH nivel1 %]
 		[% IF liblibrarian %]
 			[% IF dato %]
-				[% liblibrarian %]: <b>[% dato %]</b><br>
+			<li>	[% liblibrarian %]: <strong>[% dato %]</strong></li>
 			[% END %]
 		[% END %]
 
 	[% END %]
-	<hr>
+	</ul>
 	N&uacute;mero Total de Ejemplares:<b> [% cantItemN1 %]</b> 
 </div>
-
+</fieldset>
 [% FOREACH nivel2 %]
+<fieldset>
+<strong><legend>[% "Detalles de Nivel 2 para registro" | i18n %] [% id2 %] GRUPO - [% tipo_documento %]</legend></strong>
 
         <div id="grupo[% id2 %]">
-	        <div>
-		        <p style="font-size: 11pt" align="center" class="titulo_tabla_resultado">
-				        [% id2 %] GRUPO - [% tipo_documento %]
-			        </p>
-	        </div>
         
         <div class="detalle">
         <!-- NIVEL 2 -->
@@ -385,28 +382,25 @@ $(document).ready(function(){
 		        </div>
 		        <br>
 	        [% END %]
-        
+            <ul> 
 	        [% FOREACH nivel2_array %]
 			        [% IF liblibrarian %]
 				        [% IF dato %]
-					        [% liblibrarian %]: <b>[% dato %]</b><br>
+					       <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
 				        [% END %]
 			        [% END %]
         
 	        [% END %] <!-- END FOREACH nivel2_array -->
-
-		<div id="ejemplaresDelGrupo[% id2 %]" >
-        [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
-
-		<br><hr class="lineagruesa"><br>
-			        
-		 </div> <!--end <div id="ejemplaresDelGrupo -->
-	    </div>
-        
+            <li>
+            <fieldset>
+            <strong><legend>[% "Ejemplares del grupo" | i18n %] [% id2 %]</legend></strong>
+            <div id="ejemplaresDelGrupo[% id2 %]" >
+            [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
+            </div> <!--end <div id="ejemplaresDelGrupo -->
+            </fieldset></li>
+            </div>
        </div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->
 
 [% END %]<!-- END FOREACH Nivel 2-->
 
 </div> <!-- Fin DIV detalleComun -->
-
-[% INCLUDE "intranet-bottom.inc" %]
