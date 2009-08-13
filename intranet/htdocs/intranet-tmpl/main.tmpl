@@ -61,6 +61,7 @@ $(document).ready(function() {
     </ul>
 </fieldset>
 <fieldset class="main">
+<legend><strong>[% "Circulaci&oacute;n:" | i18n %]</strong></legend>
 <ul>
 <li class="item">
             [% PERL %]
@@ -79,22 +80,20 @@ $(document).ready(function() {
                     ) ;
             [% END %]
 </li>
+</ul>
+</fieldset>
+<fieldset class="main">
+<legend><strong>[% "Personal:" | i18n %]</strong></legend>
+<ul>
 <li class="item">
             [% PERL %]
-            print C4::AR::Filtros::link_to( text =>     "[% 'Reportes' | i18n %]",
-                    url =>      "/cgi-bin/koha/reports/reports-home.pl", 
+            print C4::AR::Filtros::link_to( text =>     "[% 'Mis datos' | i18n %]",
+                    url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
                     title =>    "[% 'Reportes' | i18n %]"
                     ) ;
             [% END %]
 </li>
-<li class="item">
-            [% PERL %]
-            print C4::AR::Filtros::link_to( text =>     "[% 'Par&aacute;metros' | i18n %]",
-                    url =>      "/cgi-bin/koha/admin-home.pl", 
-                    title =>    "[% 'Par&aacute;metros' | i18n %]"
-                    ) ;
-            [% END %]
-</li>
+</ul>
 </fieldset>
 <div id="resultBusqueda"></div>
 <div id="result"></div>
