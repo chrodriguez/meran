@@ -274,7 +274,8 @@ float:left;
 	font-size:10pt;
 	font-weight: bold;
 }
-.tablaresultadoTitle { 
+
+.titulo_tabla_resultado { 
     font-Family:Arial, Helvetica, sans-serif;
     color: #FFFFFF;
     font-size: 9pt;

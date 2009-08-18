@@ -1,6 +1,6 @@
 [% FOREACH nivel2 IN nivel2_array %]    
     <p class="nivel2Selected" onClick="mostrarInfoAltaNivel3( '[% nivel2.getId1 %]',  '[% nivel2.getId2 %]'); toggleClass(this);">
-    <b>Grupo: [% nivel2.getId2 %] - [% nivel2.cat_ref_tipo_nivel3.getNombre %]</b>
+    <b>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.cat_ref_tipo_nivel3.getNombre %]</b>
     <br/>
     <div>
         [% PERL %]
@@ -31,16 +31,16 @@
     </div>
 
 
-    Nivel bibliogr&aacute;fico: [% nivel2.ref_nivel_bibliografico.getDescription %]
+    [% 'Nivel bibliogr&aacute;fico:' | i18n %] [% nivel2.ref_nivel_bibliografico.getDescription %]
     <br/>
-    Soporte: [% nivel2.ref_soporte.getDescription %]
+    [% 'Soporte:' | i18n %] [% nivel2.ref_soporte.getDescription %]
     <br/>
-    Lugar: [% nivel2.pais_publicacion.getNombre_largo %]
+    [% 'Lugar:' | i18n %] [% nivel2.pais_publicacion.getNombre_largo %]
     <br/>
-    Idioma: [% nivel2.ref_idioma.getDescription %]
+    [% 'Idioma:' | i18n %] [% nivel2.ref_idioma.getDescription %]
     <br/>
-    Fecha: [% nivel2.getAnio_publicacion %]
+    [% 'Fecha:' | i18n %] [% nivel2.getAnio_publicacion %]
     <br/>
-    Cantidad Ejemplares: [% cant_ejemplares %]
+    [% 'Cantidad Ejemplares:' | i18n %] [% cant_ejemplares %]
     </p>
 [% END %]
