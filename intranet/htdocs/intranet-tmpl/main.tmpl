@@ -88,8 +88,9 @@ $(document).ready(function() {
 <li class="item">
             [% PERL %]
             print C4::AR::Filtros::link_to( text =>     "[% 'Mis datos' | i18n %]",
-                    url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
-                    title =>    "[% 'Reportes' | i18n %]"
+                                            url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                            title =>    "[% 'Reportes' | i18n %]",
+                                            params =>   ["nro_socio=[% nro_socio %]"],    
                     ) ;
             [% END %]
 </li>
@@ -97,5 +98,6 @@ $(document).ready(function() {
 </fieldset>
 <div id="resultBusqueda"></div>
 <div id="result"></div>
+
 [% INCLUDE 'intranet-bottom.inc' %]
 
