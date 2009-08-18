@@ -14,7 +14,7 @@ use C4::Date;
 
 my $input = new CGI;
 my ($template, $session, $t_params)= get_template_and_user({
-									template_name => "opac-reserve.tmpl",
+									template_name => "opac-reservar.tmpl",
 									query => $input,
 									type => "opac",
 									authnotrequired => 0,
@@ -35,7 +35,7 @@ my $socio= $session->param('userid');
 
 my %params;
 # $params{'tipo'}= 'OPAC';
-$params{'type'}= 'opac';  
+$params{'tipo'}= 'OPAC';
 $params{'id1'}= $id1;
 $params{'id2'}= $id2;
 $params{'nro_socio'}= $socio;

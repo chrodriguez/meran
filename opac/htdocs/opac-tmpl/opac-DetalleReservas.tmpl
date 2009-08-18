@@ -75,8 +75,15 @@
 	        </td>
 	        <td  align="center"> 
 	        [% IF CirculationEnabled %]
-		        <a class="click"
-		        onClick="cancelar([% reserva.getId_reserva %])">[% "Cancelar" | i18n %]</a>
+                [% PERL %]
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar' | i18n %]",
+                                                        boton   => "boton_buscar",
+                                                        width   => "100",
+                                                        onClick => "cancelarReserva([% reserva.getId_reserva %])",
+                                                        title   => "[% 'Cancelar Reserva' | i18n %]"
+                                                );
+                [% END %]
+
 	        [% ELSE %]
 		        [% "No disponible" | i18n %]
 	        [% END %]
