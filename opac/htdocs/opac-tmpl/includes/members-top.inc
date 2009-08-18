@@ -67,8 +67,8 @@
 
 
 <!-------------------------MAIN BODY OF PAGE-------------------------->
-<!-- TMPL_IF NAME="loggedinusername" -->
-    <p align="left">Ingres&oacute; como: <!-- TMPL_VAR NAME="loggedinusername" --> [<a
+<!-- TMPL_IF NAME="loggedinuser" -->
+    <p align="left">Ingres&oacute; como: <!-- TMPL_VAR NAME="loggedinuser" --> [<a
 href="/cgi-bin/koha/opac-user.pl">&Aacute;rea Miembros</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Salir</a>]</p>
 <!-- /TMPL_IF -->
 

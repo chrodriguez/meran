@@ -229,23 +229,35 @@ function updateAgregarUsuario(responseText){
 //muestra los ejemplares del grupo
 function guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword){
 
-	objAH=new AjaxHelper(updateGuardarCambiarPassword);
-	//objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-	objAH.newpassword= claveUsuario;
-	objAH.newpassword1= confirmeClave;
-    objAH.actualPassword= actualPassword;
-	objAH.usuario= USUARIO.ID;
-	objAH.tipoAccion= 'CAMBIAR_PASSWORD';
-	//se envia la consulta
-	objAH.sendToServer();
+// 	objAH=new AjaxHelper(updateGuardarCambiarPassword);
+// 	//objAH.debug= true;
+// 	objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+// 	objAH.newpassword= claveUsuario;
+// 	objAH.newpassword1= confirmeClave;
+//     objAH.actualPassword= actualPassword;
+// 	objAH.usuario= USUARIO.ID;
+// 	objAH.tipoAccion= 'CAMBIAR_PASSWORD';
+// 	//se envia la consulta
+// 	objAH.sendToServer();
+
+    var key= b64_sha256(b64_md5(actualPassword));
+// alert("key: "+key);
+
+    var actual_password = encriptar(actualPassword, key);
+//  alert("actualPassword: "+actual_password);
+    var new_password1 = encriptar(claveUsuario, key);
+    var new_password2 = encriptar(confirmeClave, key);
+    var socio = USUARIO.ID;
+    var changePassword = 0;
+    var tipoAccion = 'CAMBIAR_PASSWORD';
 
     
     $.ajax({
-                type: "POST",
-                url: "/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl",
-                data: "name=John&location=Boston",
-                complete: updateGuardarCambiarPassword,
+            type: "POST",
+            url: "/cgi-bin/koha/usuarios/change_passwordDB.pl",
+            contentType: "text/*",
+            data: "newpassword='"+new_password1+"'&newpassword1='"+new_password2+"'&actualPassword='"+actual_password+"'&usuario="+socio+"&tipoAccion="+tipoAccion+"&changePassword="+changePassword+"&token="+token,
+            complete: updateGuardarCambiarPassword,
     });
 
 }

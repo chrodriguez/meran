@@ -218,6 +218,7 @@ my %mensajesINTRA = (
     'U397' => 'Se carg&oacute; correctamente el autorizado.',
     'U398' => 'No se pudo realizar la modificaci&oacute;n del autorizado.',
     'U399' => 'UD. no puede dar de alta administradores de sistema.',
+    'U400' => 'UD. acaba de cambiar la password, debe ingresar nuevamente.',
 	'B400' => '',
 	'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
 	'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',
@@ -416,6 +417,22 @@ sub create {
 	$msg_object{'tipo'}='INTRA';
 
 	return \%msg_object;
+}
+
+sub hayError {
+    my($msg_object)=@_;
+
+    if($msg_object->{'error'}){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+sub getFirstCodeError {
+    my($msg_object)=@_;
+
+    return $msg_object->{'messages'}->[0]->{'codMsg'};
 }
 
 #Esta funcion agrega un mensaje al arreglo de objetos mensajes

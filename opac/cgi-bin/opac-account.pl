@@ -20,7 +20,8 @@ my ($template, $borrowernumber, $cookie)
 			     debug => 1,
 			     });
 
-# get borrower information ....
+# get borrower information ..
+# getpatroninformation DEPRECATED..
 my ($borr, $flags) = getpatroninformation($borrowernumber,"");
 
 my @bordat;

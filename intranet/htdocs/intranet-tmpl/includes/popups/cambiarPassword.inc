@@ -1,4 +1,3 @@
-[% INCLUDE   'ChangePasswordHelper.inc'  %]
 
 <!-- ************************************Window Cambiar Password***************************************** -->
 <div id="contentWindow" class="formElemets">

@@ -35,7 +35,6 @@ my ($template, $session, $t_params)= get_template_and_user({
 									debug => 1,
 			});
 
-# my $bornum= $session->param('loggedinusername');
 my $bornum= C4::Auth::getSessionLoggedUser($session);
 
 my $obj=$input->param('obj');

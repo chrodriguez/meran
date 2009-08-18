@@ -28,6 +28,7 @@ print A "opac-estantevirtual themeland $themelang \n";
 close(A);
 
 #Para mandar la dir de mail
+# getpatroninformation DEPRECATED
 my ($borr, $flags) = getpatroninformation(undef, $loggedinuser);
 if ($borr and ($borr->{'emailaddress'})){  $template->param(MAIL =>$borr->{'emailaddress'} ); }
 

@@ -109,7 +109,7 @@
                             </li>
                         [% END %]
     
-                [% IF nroSocioLoggeado != loggedinusername%]
+                [% IF nroSocioLoggeado != loggedinuser%]
                   <li>
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Reset Password' | i18n %]",

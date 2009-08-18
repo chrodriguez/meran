@@ -16,7 +16,7 @@
   	
 	<tr  class="bordetabla" bordercolor="#f2f2f2">
 
-[% IF loggedinusername %]
+[% IF loggedinuser %]
 	  <th>
 		<a id="todos" class="click">
 		<img src="[% themelang %]/images/check.png" title="Invertir la selecci&oacute;n" border=0>
@@ -40,7 +40,7 @@
 [% FOREACH SEARCH_RESULTS %]
 	<tr  bordercolor="#f2f2f2">
 
-	[% IF loggedinusername %]
+	[% IF loggedinuser %]
           <td valign="middle" align="center">
 		<input type=checkbox id="[% id1 %]" name=checkbox value="[% id1 %]">
 	  </td>
@@ -108,7 +108,7 @@
   <tr>
 	<td align="center">
 
-[% IF loggedinusername %]
+[% IF loggedinuser %]
  	  <input type="hidden" value="" name="bookmarks" id="bookmarks">
 	  <input type="hidden" value="del" name="bookmarkOp" id="bookmarkOp">
 

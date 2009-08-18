@@ -87,9 +87,7 @@ C4::Auth - Authenticates Koha users
 #
 @ISA = qw(Exporter);
 @EXPORT = qw(
-		&checkauth
-		&t_operacionesDeINTRA
-		&t_operacionesDeOPAC		
+		&checkauth		
 		&get_template_and_user
 		&get_templateexpr_and_user
 		&getborrowernumber
@@ -238,25 +236,27 @@ sub get_template_and_user {
 	my $in = shift;
 
 	my ($template, $params) = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'});
-	my ($user, $session, $flags)= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
+	my ($user, $session, $flags)= checkauth(    $in->{'query'}, 
+                                                $in->{'authnotrequired'}, 
+                                                $in->{'flagsrequired'}, 
+                                                $in->{'type'}, 
+                                                $in->{'changepassword'}
+                                            );
 
 	my $nro_socio;
 	if ( $session->param('userid') ) {
-		$params->{'loggedinusername'}= $session->param('userid');
 		$params->{'loggedinuser'}= $session->param('userid');
 		$nro_socio = $session->param('userid');
 # FIXME sacar luego de pasar todo a los nombre nuevos
-		$session->param('borrowernumber',$nro_socio);#se esta pasadon por ahora despues sacar
+# 		$session->param('borrowernumber',$nro_socio);#se esta pasadon por ahora despues sacar
+# FIXME dos asignaciones de nro_socio???
         $params->{'nro_socio'}= $nro_socio;
 
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
         $socio->load();
         $session->param('nro_socio',$nro_socio);
-        $session->param('id_socio',$socio->getId_socio);
-		my ($borr, $flags) = getpatroninformation($nro_socio,"");
-		my @bordat;
-		$bordat[0] = $borr;
-		$session->param('USER_INFO', \@bordat);	
+# DEPRECATED no se usa mas el id_socio, cambiar por nro_socio
+#         $session->param('id_socio',$socio->getId_socio);
 		$params->{'token'}= $session->param('token');
 		#para mostrar o no algun submenu del menu principal
  		$params->{'menu_preferences'}= C4::AR::Preferencias::getMenuPreferences();
@@ -345,11 +345,13 @@ has authenticated.
 
 sub checkauth {
     
-    my $query=shift;
+    my $query= shift;
     # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired = shift;
     my $type = shift;
+#     my $change_password = shift || $query->param('change_password') || 0;
+    my $change_password = shift || 0;
 
     $type = 'opac' unless $type;
 C4::AR::Debug::debug("desde checkauth================================================================================================== \n");
@@ -534,16 +536,18 @@ C4::AR::Debug::debug("checkauth=> NO TIENE PERMISOS: \n");
     #por aca se permite llegar a paginas que no necesitan autenticarse
     my $insecure = C4::AR::Preferencias->getValorPreferencia('insecure');
     # finished authentification, now respond
+
     if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
 C4::AR::Debug::debug("checkauth=> if (loggedin || authnotrequired || (defined(insecure) && insecure)) \n");
 C4::AR::Debug::debug("checkauth=> insecure: ".$insecure."\n");
 C4::AR::Debug::debug("checkauth=> authnotrequired: ".$authnotrequired."\n");
+C4::AR::Debug::debug("checkauth=> change_password: ".$change_password."\n");
         #Se verifica si el usuario tiene que cambiar la password
-        if ( ($userid) && ( new_password_is_needed($userid) ) ) {
+        if ( ($userid) && ( new_password_is_needed($userid) ) && !$change_password ) {
 
-            C4::AR::Debug::debug("checkauth=> changePassword \n");
+            C4::AR::Debug::debug("checkauth=> redirectTo desde el servidor \n");
 #             _change_Password_Controller($dbh, $query, $userid, $type,\%info);
-            redirectTo('/cgi-bin/koha/usuarios/change_password.pl');
+            redirectTo('/cgi-bin/koha/usuarios/change_password.pl?token='.$token);
             #EXIT
         }#end if (($userid) && (new_password_is_needed($userid)))
 
@@ -644,16 +648,7 @@ C4::AR::Debug::debug("checkauth=> elimino el sessionID de la base: ".$sessionID.
                     C4::AR::Utilidades::savedatemanip(@holidays);
                 }
                 
-                #Se borran las reservas de los usuarios sancionados         
-                if ($type eq 'opac') {
-                #Si es un usuario de opac que esta sancionado entonces se borran sus reservas
-C4::AR::Debug::debug("checkauth=> t_operacionesDeOPAC\n");
-                    t_operacionesDeOPAC($userid, $socio);
-                } else {
-                ##Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
-C4::AR::Debug::debug("checkauth=> t_operacionesDeINTRA\n");
-                    t_operacionesDeINTRA($userid, $cardnumber, $socio);
-                }# end if ($type eq 'opac')
+                _realizarOperaciones({ type => $type , socio => $socio });
     
             }# end if ($flags = haspermission($dbh, $userid, $flagsrequired))
              if ($type eq 'opac') {
@@ -686,6 +681,33 @@ C4::AR::Debug::debug("checkauth=> eliminino la sesssion ".$sessionID."\n");
     }# end unless ($userid) 
 }# end checkauth
 
+
+
+=item sub _realizarOperaciones
+
+    Esta funcion realiza las operaciones necesarias para la INTRA u OPAC
+    este es el tratamiento actual que se le esta dando a la password antes de guardar en la base de datos,
+    si cambia, solo deberia cambiarse este metodo
+
+    Parametros: 
+    $type: INTRA | OPAC
+    $socio
+
+=cut
+sub _realizarOperaciones {
+    my ($params) = @_;
+    
+    #Se borran las reservas de los usuarios sancionados         
+    if ($params->{'type'} eq 'opac') {
+    #Si es un usuario de opac que esta sancionado entonces se borran sus reservas
+        C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeOPAC\n");
+        t_operacionesDeOPAC($params->{'socio'});
+    } else {
+    ##Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
+        C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeINTRA\n");
+        t_operacionesDeINTRA($params->{'socio'});
+    }# end if ($type eq 'opac')
+}
 
 =item sub prepare_password
 
@@ -755,9 +777,9 @@ sub desencriptar{
 
 
     my $plaintext = $cipher->decrypt(decode_base64($texto_a_desencriptar));    
-    C4::AR::Debug::debug("plaintext: ".$plaintext);
+#     C4::AR::Debug::debug("plaintext: ".$plaintext);
 
-    return $plaintext;
+    return C4::AR::Utilidades::trim($plaintext);
 }
 
 =item sub _save_session_db
@@ -930,6 +952,7 @@ sub inicializarAuth{
     
     #genero una nueva session
     my $session = CGI::Session->load();
+    #se pasa el mensaje al cliente, $t_params es una REFERENCIA
     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param('codMsg'),'INTRA',[]);
     #se destruye la session anterior
     $session->clear();
@@ -954,7 +977,7 @@ sub inicializarAuth{
     my $userid= undef;
     #guardo la session en la base
     C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number, $params{'token'});
-# FIXME y esto para que se setea si no se pasa a ningun template
+    #se pasa el RANDOM_NUMBER al cliente, $t_params es una REFERENCIA
     $t_params->{'RANDOM_NUMBER'}= $random_number;
 
     return ($session);
@@ -1021,6 +1044,12 @@ sub _generarSession {
 }
 
 
+sub session_destroy {
+    my $session = new CGI::Session(undef, undef, undef);
+
+    return $session;
+}
+
 =item sub _generarSession
 
     Esta funcion verifica si el usuario y la password ingresada son valida, ya se en LDAP o en la base, segun configuracion de preferencia
@@ -1038,9 +1067,9 @@ sub _verificarPassword {
 # Si se quiere dejar de usar el servidor ldap para hacer la autenticacion debe cambiarse 
 # la llamada a la funcion checkpwldap por checkpw
 
-	my ($passwordValida, $cardnumber);
+	my ($passwordValida, $cardnumber, $ui);
 ## FIXME falta verificar la pass en LDAP si esta esta usando
-	my $ui;
+	
 	if ( C4::AR::Preferencias->getValorPreferencia('ldapenabled')) {
 	#se esta usando LDAP
 		($passwordValida, $cardnumber, $ui) = checkpwldap($dbh,$userid,$password,$random_number);
@@ -1204,49 +1233,46 @@ sub _session_log {
 
 # FIXME fatal acomodar
 sub t_operacionesDeOPAC{
+	my ($socio) = @_;
 
-	my ($userid, $socio) = @_;
-## FIXME mantengo userid para q no se rompa, cuando se termine circulacion, sacar
+    my $msg_object= C4::AR::Mensajes::create();
 	my $db= $socio->db;
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
 
-	my ($error,$codMsg,$paraMens);
-	my $tipo= 'OPAC';
-
 	eval{
 		#Si es un usuario de opac que esta sancionado entonces se borran sus reservas
 		my ($isSanction,$endDate)= C4::AR::Sanciones::permitionToLoan($socio, C4::AR::Preferencias->getValorPreferencia("defaultissuetype"));
-        my $regular= $socio->esRegular;
+        my $regular = $socio->esRegular;
+        my $userid = $socio->getNro_socio();
 				
 		if ($isSanction || !$regular ){
-			&C4::AR::Reservas::cancelar_reserva_socio($userid,$socio);
+			&C4::AR::Reservas::cancelar_reserva_socio($userid, $socio);
 		}
+
 		$db->commit;
 	};
 	if ($@){
-		#Se loguea error de Base de Datos
-		$codMsg= 'B408';
-		C4::AR::Mensajes::printErrorDB($@, $codMsg,$tipo);
-		eval {$db->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'R010';
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'B408',"OPAC");
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
+        $db->rollback;
 	}
+
 	$db->{connect_options}->{AutoCommit} = 1;
 }
 
 # FIXME fata acomodar
 sub t_operacionesDeINTRA{
+	my ($socio) = @_;
 
-	my ($userid, $cardnumber, $socio) = @_;
-## FIXME mantengo userid y cardnumber para q no se rompa, cuando se termine circulacion, sacar
-
-	my ($error,$codMsg,$paraMens);
-	my $tipo= 'INTRA';
+    my $msg_object= C4::AR::Mensajes::create();
     my $db= $socio->db;
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
+    my $userid = $socio->getNro_socio();
 
 	eval{
 		use C4::Modelo::CircReserva;
@@ -1261,17 +1287,18 @@ sub t_operacionesDeINTRA{
         my $today = Date::Manip::ParseDate("today");
         $socio->setLast_login($today);
         $socio->save();
+
 		$db->commit;
 	};
 	if ($@){
 		#Se loguea error de Base de Datos
-		$codMsg= 'B409';
-		C4::AR::Mensajes::printErrorDB($@, $codMsg,$tipo);
-		eval {$db->rollback};
-		#Se setea error para el usuario
-		$error= 1;
-		$codMsg= 'R010';
+        &C4::AR::Mensajes::printErrorDB($@, 'B409',"INTRA");
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
+        $db->rollback;
 	}
+
     $db->{connect_options}->{AutoCommit} = 1;
 }
 
@@ -1385,9 +1412,8 @@ sub new_password_is_needed {
     my ($nro_socio) = @_;
 
     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
-
     my $days = C4::AR::Preferencias->getValorPreferencia("keeppasswordalive");
-
+    
     if ($days ne '0') {
         my $err;
         my $today = Date::Manip::DateCalc("today","- ".$days." days",\$err);
@@ -1396,6 +1422,7 @@ sub new_password_is_needed {
     } else {
         return ( $socio->getChange_password && $socio->getLast_change_password eq '0000-00-00');
     }
+
 }
 
 

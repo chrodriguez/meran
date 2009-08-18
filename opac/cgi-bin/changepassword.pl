@@ -21,7 +21,7 @@ print F "numero random: ".$random_number."\n";
 # my $sessionID= C4::Auth::_generarSessionID();
 my %params;
 $params{'userid'}= '';
-$params{'loggedinusername'}= '';
+$params{'loggedinuser'}= '';
 $params{'password'}= '';
 $params{'nroRandom'}= '';
 $params{'borrowernumber'}= '';

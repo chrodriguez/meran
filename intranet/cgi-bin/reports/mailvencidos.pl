@@ -65,6 +65,7 @@ my $mensajeActual=C4::AR::Preferencias->getValorPreferencia("mailMensajeVencido"
 for(my $i=0;$i<scalar(@borrowers);$i++){
 	my $bornum=$borrowers[$i];
 	my $env;
+# getpatroninformation DEPRECATED
 	my ($borrower, $flags)=C4::Circulation::Circ2::getpatroninformation($env,$bornum);
 	if ( $borrower->{'emailaddress'} ne ''){# Si tiene mail se envia la info de sus prestamos vencidos
 		my $mailMessage = $mensaje;

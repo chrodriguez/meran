@@ -15,41 +15,6 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
-=item
-Aca se maneja el cambio de la password para el usuario
-=cut
-if($tipoAccion eq "CAMBIAR_PASSWORD"){
-#     my ($userid, $session, $flags) = checkauth( $input, 
-#                                                 $authnotrequired,
-#                                                 {   ui => 'ANY', 
-#                                                     tipo_documento => 'ANY', 
-#                                                     accion => 'MODIFICACION', 
-#                                                     entorno => 'usuarios'
-#                                                 },
-#                                                 "intranet"
-#                                 );
-
-    my $session = CGI::Session->load();
-
-    my %params;
-    $params{'nro_socio'}= $obj->{'usuario'};
-    $params{'actualPassword'}= $obj->{'actualPassword'};
-    $params{'changePassword'}= $obj->{'changePassword'};
-    $params{'newpassword'}= $obj->{'newpassword'};
-    $params{'newpassword1'}= $obj->{'newpassword1'};
-    $params{'session'}= $session;
-
-#     C4::AR::Validator::validateParams('U389',\%params,['nro_socio','actualPassword','newpassword','newpassword1']);
-
-    my ($Message_arrayref)= C4::AR::Usuarios::cambiarPassword(\%params);
-
-    my $infoOperacionJSON=to_json $Message_arrayref;
-
-    C4::Output::printHeader($session);
-    print $infoOperacionJSON;
-
-} #end if($tipoAccion eq "CAMBIAR_PASSWORD")
-
 
 =item
 Aca se maneja el resteo de password del usuario

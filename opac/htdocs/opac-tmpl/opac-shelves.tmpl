@@ -117,7 +117,7 @@ function mandarArreglo(valores){
 <a name="aResultSearch"></a>
         <table width=100%  align="center" cellpadding="4" cellspacing="0" border="1">
                 <tr class="bordetabla"  bordercolor="#f2f2f2" >
-		<!-- TMPL_IF NAME='loggedinusername' -->
+		<!-- TMPL_IF NAME='loggedinuser' -->
 		<th><a href="#" onclick="todos();"><img src="<!-- TMPL_VAR NAME='themelang' -->/images/check.png" title="Invertir la selecci&oacute;n" border=0></a></th>
 		<!-- /TMPL_IF  -->
 		<!--<th align="center" width=40%><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME='shelfnumber' -->&orden=title">T&iacute;tulo</a></th>-->
@@ -135,7 +135,7 @@ function mandarArreglo(valores){
                 </tr>
 		
 		<!-- TMPL_LOOP Name="bitemsloop" -->
-        	<tr><!-- TMPL_IF NAME='loggedinusername' -->
+        	<tr><!-- TMPL_IF NAME='loggedinuser' -->
                 	<td <!-- TMPL_IF name='even' --> class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle" align="center"><input type=checkbox name="<!-- TMPL_VAR Name='biblionumber'-->" id="<!-- TMPL_VAR NAME=biblionumber -->"></td>
 		    <!-- /TMPL_IF  -->
 			<!--<td <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><a href=/cgi-bin/koha/<!-- TMPL_VAR name="script" -->?bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME=title ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a></td>-->
@@ -178,7 +178,7 @@ function mandarArreglo(valores){
 
 <!-- hasta aca -->
 
-		<!-- TMPL_IF NAME='loggedinusername' -->
+		<!-- TMPL_IF NAME='loggedinuser' -->
 		<input type="hidden" value="" name="bookmarks" id="bookmarks"><a  onMouseOut="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png')" onMouseOver="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritosbis.png')">  
 		<input onClick="printform.target='_self';printform.action='/cgi-bin/koha/opac-privateshelfs.pl'; mandarArreglo(printform.bookmarks);submit();"  name="ps" id="ps" type="image" value="publicshelf"  src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos"></a>
 		<!-- /TMPL_IF -->

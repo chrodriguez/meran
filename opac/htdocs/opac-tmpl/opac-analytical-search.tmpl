@@ -125,7 +125,7 @@
 <input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME="value" -->" NAME="<!-- TMPL_VAR NAME="field" -->">
  <!-- /TMPL_LOOP -->
 
-<!-- TMPL_IF NAME='loggedinusername' -->
+<!-- TMPL_IF NAME='loggedinuser' -->
 <input type="hidden" value="" name="bookmarks" id="bookmarks">
 <a  onMouseOut="swap('ps','<!-- TMPL_VAR NAME="themelang" -->/images/favoritos.png')" onMouseOver="swap('ps','<!-- TMPL_VAR NAME="themelang" -->/images/favoritosbis.png')">
 <input onClick="printform.target='_self';printform.action='/cgi-bin/koha/opac-privateshelfs.pl'; mandarArreglo(printform.bookmarks);submit();"  name="ps" id="ps" type="image" value="publicshelf"  src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos">

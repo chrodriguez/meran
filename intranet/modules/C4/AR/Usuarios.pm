@@ -59,7 +59,6 @@ use vars qw(@EXPORT @ISA);
     &eliminarUsuario
     &_verficarEliminarUsuario
     &t_cambiarPermisos
-    &_verificarPassword
     &cambiarPassword
     &_verificarDatosBorrower
     &actualizarSocio
@@ -419,18 +418,20 @@ sub _verificarPassword {
                 HASH: con los datos de un socio.
 =cut
 sub cambiarPassword {
-
     my ($params)=@_;
-    my $msg_object;    
 
+    my $msg_object;    
     my  $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
 
     if ($socio){
-#         C4::AR::Debug::debug("newpassword cifrada: ".$params->{'newpassword'});
-#         C4::AR::Debug::debug("key: ".$socio->getPassword());
-        $params->{'actualpassword'}= C4::Auth::desencriptar($params->{'newpassword'}, $socio->getPassword());
+    #si la password actual ingresada desde el cliente no es igual a la que se encuentra en la base las key seran <>
+    #password1 y password seran distintas siempre, recordar que la key es sha256_base64(md5_base64( password))
+        $params->{'actualPassword'}= C4::Auth::desencriptar($params->{'actualPassword'}, $socio->getPassword());
         $params->{'newpassword'}= C4::Auth::desencriptar($params->{'newpassword'}, $socio->getPassword());
         $params->{'newpassword1'}= C4::Auth::desencriptar($params->{'newpassword1'}, $socio->getPassword());
+        C4::AR::Debug::debug("newpassword=> ".$params->{'newpassword'});
+        C4::AR::Debug::debug("newpassword1=> ".$params->{'newpassword1'});
+        C4::AR::Debug::debug("actualpassword=> ".$params->{'actualPassword'});
 
         ($msg_object) = _verificarPassword($params);
     }else{
@@ -442,32 +443,30 @@ sub cambiarPassword {
 
     if(!$msg_object->{'error'}){
     #No hay error
-        my $actualPassword = $socio->getPassword;
-        my $cambioDePasswordForzado;
-        C4::AR::Debug::debug("changePassword: ".$params->{'changePassword'});
+# FIXME si cambia la pass que pasa con LDAP??
+        my $password_actual_desde_DB = $socio->getPassword;
+        my $cambioDePasswordForzado;      
+        my $password_actual_desde_cliente_hasheada = C4::Auth::prepare_password($params->{'actualPassword'});
 
         if( ($params->{'changePassword'} eq 1) && ($socio->getChange_password) ){
             $cambioDePasswordForzado= 1;
         }
-        if ( $cambioDePasswordForzado ){
-            C4::AR::Debug::debug("cambioForzado ");
+
+        if ( $cambioDePasswordForzado && ( $password_actual_desde_DB eq $password_actual_desde_cliente_hasheada) ){
+            C4::AR::Debug::debug("Auth => cambiarPassword => cambioForzado ");
             #es un cambio forzado de la password, se obliga al usuario a cambiar la password, no se compara con la pass actual
             my $newPassword = $params->{'newpassword'};
-C4::AR::Debug::debug("nueva password=> ".$newPassword);
-            $socio->cambiarPassword($newPassword);
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
-        }
-        elsif ( $actualPassword eq sha256_base64(md5_base64($params->{'actualPassword'}) && !$cambioDePasswordForzado )){
-            #es un cambio voluntario de la password
-            my $newPassword = $params->{'newpassword'};
-C4::AR::Debug::debug("nueva password=> ".$newPassword);
-C4::AR::Debug::debug("actualPassword=> ".$actualPassword);
-C4::AR::Debug::debug("sha256_base64(md5_base64 actualpassword ".sha256_base64(md5_base64($params->{'actualPassword'})));
+            C4::AR::Debug::debug("Auth => cambiarPassword => nueva password=> ".$newPassword);
+            C4::AR::Debug::debug("Auth => cambiarPassword => sha256_base64(md5_base64 actualpassword ".$password_actual_desde_cliente_hasheada);
             $socio->cambiarPassword($newPassword);
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
         }else{
+            #El password actual NO coincide con el suyo    
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U361', 'params' => [$params->{'nro_socio'}]} ) ;
+            C4::AR::Debug::debug("Auth => cambiarPassword => la password son <> ");
+            C4::AR::Debug::debug("Auth => cambiarPassword => password_actual_desde_cliente_hasheada=> ".$password_actual_desde_cliente_hasheada);
+            C4::AR::Debug::debug("Auth => cambiarPassword => password_actual_desde_DB=> ".$password_actual_desde_DB);
         }
     }
 

@@ -198,11 +198,12 @@ sub nextNro_socio{
      my ($self)=shift;
 
      my $nro_socio = C4::Modelo::UsrSocio::Manager->get_usr_socio(
-                                                                   query => [ nro_socio => { regexp => '^(-|\\+){0,1}([0-9]+\\.[0-9]*|[0-9]*\\.[0-9]+|[0-9]+)$' },
-                                                                   ],
-                                                                   select => ['nro_socio'],
-                                                                   sort_by => ['nro_socio DESC'],
-                                                                    );
+                                query => [ nro_socio => { regexp => '^(-|\\+){0,1}([0-9]+\\.[0-9]*|[0-9]*\\.[0-9]+|[0-9]+)$' },
+                                ],
+                                select => ['nro_socio'],
+                                sort_by => ['nro_socio DESC'],
+                                );
+
     return ($nro_socio->[0]->nro_socio + 1);
 }
 

@@ -1,8 +1,8 @@
 <!-- A.3 HEADER BOTTOM -->
       <div class="header-bottom">
         <div class="tdRight">
-            [% IF loggedinusername %]
-                  <h2 class="login" id="login">Ingres&oacute; como:<b> [% loggedinusername %]</b> 
+            [% IF loggedinuser %]
+                  <h2 class="login" id="login">Ingres&oacute; como:<b> [% loggedinuser %]</b> 
                            [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1 tabindex="-1">Salir</a>]
                   </h2>
             [% ELSE %]
