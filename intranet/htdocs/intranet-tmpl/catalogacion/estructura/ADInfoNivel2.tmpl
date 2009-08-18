@@ -4,8 +4,8 @@
     <br/>
     <div>
         [% PERL %]
-                print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar Nivel 2' | i18n %]",
-                                                    boton   => "boton_buscar",
+                print C4::AR::Filtros::to_Icon(   
+                                                    boton   => "icon_edicion",
                                                     onClick => "modificarN2('[% nivel2.getId2 %]');",
                                                     title   => "[% 'Modificar nivel 2' | i18n %]",
                         ) ;
@@ -13,8 +13,8 @@
     </div>
     <div>
         [% PERL %]
-                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Nivel 3' | i18n %]",
-                                                    boton   => "boton_buscar",
+                print C4::AR::Filtros::to_Icon(   
+                                                    boton   => "icon_agregar",
                                                     onClick => "agregarN3();",
                                                     title   => "[% 'Agregar nivel 3' | i18n %]",
                         ) ;
@@ -22,8 +22,8 @@
     </div>
     <div>
         [% PERL %]
-                print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Nivel 1' | i18n %]",
-                                                    boton   => "boton_buscar",
+                print C4::AR::Filtros::to_Icon( 
+                                                    boton   => "icon_borrar",
                                                     onClick => "borrarN2('[% nivel2.getId2 %]');",
                                                     title   => "[% 'Borrar nivel 2' | i18n %]",
                         ) ;

@@ -410,7 +410,6 @@ tr.impar {
 	font-weight:normal;
 	text-align:center;
 	margin:2px;
-
 }
 
 .paginador_seleccionado{
@@ -620,6 +619,13 @@ tr.impar {
     cursor: pointer;
 }
 
+#icon_agregar {
+    background: transparent url(../imagenes/iconos/agregar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+}
+
 #icon_cambiarlibro {
     background: transparent url(../imagenes/iconos/cambiarlibro.png) no-repeat;
     height: 25px;
@@ -635,13 +641,14 @@ tr.impar {
 }
 
 #icon_devolverlibro {
-    background: transparent url(../imagenes/iconos/buscar.png) no-repeat;
+    background: transparent url(../imagenes/iconos/devolverlibro.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
+
 #icon_buscar {
-    background: transparent url(../imagenes/iconos/devolverlibro.png) no-repeat;
+    background: transparent url(../imagenes/iconos/buscar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
