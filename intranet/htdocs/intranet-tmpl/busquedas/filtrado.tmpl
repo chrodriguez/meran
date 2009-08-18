@@ -85,7 +85,9 @@ function limpiarCampos(side){
             <legend><strong>[% "B&uacute;squeda combinada" | i18n %]</strong></legend>
             <ul id="simple">
                 <li class="sub_item">
-                <strong>[% "B&uacute;squeda combinada" | i18n %]</strong>
+                <label for="keyword">
+                    <strong>[% "B&uacute;squeda combinada" | i18n %]</strong>
+                </label>
                 <input type="text" id="keyword" size="25" onkeypress="limpiarCampos('derecha')">
 			    </li>
             </ul>
@@ -96,25 +98,35 @@ function limpiarCampos(side){
         <legend><strong>[% "B&uacute;squeda simple" | i18n %]</strong></legend>
 			<ul>
              <li class="sub_item">
-			    <strong>ISBN</strong>
-             	<input type="text" id="isbn" size="25"readonly onkeypress="limpiarCampos('derecha')">
+                <label for="isbn">
+			        <strong>ISBN</strong>   
+                </label>
+             	<input type="text" id="isbn" size="25" readonly onkeypress="limpiarCampos('derecha')">
 			 </li>
 			
 			 <li class="sub_item">
-    			<strong>[% "B&uacute;squeda por diccionario" | i18n %]</strong>
+                <label for="dictionary">
+    			    <strong>[% "B&uacute;squeda por diccionario" | i18n %]</strong>
+                </label>
          		<input type="text" size="25" id="dictionary" readonly onkeypress="limpiarCampos('derecha')">
 			 </li>		
 			 <li class="sub_item">
-    			<strong>[% "C&oacute;digo de barras" | i18n %]</strong>
+                <label for="codBarra">
+    			    <strong>[% "C&oacute;digo de barras" | i18n %]</strong>
+                </label>
 	    		<input type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">
 			 </li>
              <li class="sub_item">
-			<strong>Tema</strong>
-			<input type="text" size="25" id="tema" readonly onkeypress="limpiarCampos('derecha')">
+                <label for="tema">
+			        <strong>Tema</strong>
+                </label>
+			    <input type="text" size="25" id="tema" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
 			<li class="sub_item">
-			<strong>[% "Estantes Virtuales" | i18n %]</strong>
-			<input type="text" size="25" id="estante" readonly onkeypress="limpiarCampos('derecha')">
+                <label for="estante">
+			        <strong>[% "Estantes Virtuales" | i18n %]</strong>
+                </label>
+			    <input type="text" size="25" id="estante" readonly onkeypress="limpiarCampos('derecha')">
 			</li>
            </ul>
         </fieldset>
@@ -125,28 +137,36 @@ function limpiarCampos(side){
             <legend><strong>[% "B&uacute;squeda espec&iacute;fica" | i18n %]</strong></legend>
 		    <ul id="combinada">
 			   <li class="sub_item"> 
-                <strong>[% "Tipo de documento" | i18n %]</strong> 
+                <label for="tipo_nivel3_id">
+                    <strong>[% "Tipo de documento" | i18n %]</strong> 
+                </label>
                         [% comboTipoDocumento %]
 			    </li>
     
-			   <li class="sub_item"> 
-			    <strong>T&iacute;tulo</strong>
-			    <input type="text"  size="25" id="titulo" onkeypress="limpiarCampos('izquierda')">
-			    <p valign="top" align="right">
-			    <input name="tipo" type=radio id=tipo value="normal" checked>
+			   <li class="sub_item">
+                    <label for="titulo"> 
+			            <strong>T&iacute;tulo</strong>
+                    </label>
+			        <input type="text"  size="25" id="titulo" onkeypress="limpiarCampos('izquierda')">
+			        <p valign="top" align="right">
+			        <input name="tipo" type=radio id=tipo value="normal" checked>
                                     [% "Normal" | i18n %]
-			    <input name="tipo" type=radio id=tipo value="exacto">
+			        <input name="tipo" type=radio id=tipo value="exacto">
                                     [% "Exacto" | i18n %]
 			    </p>
 			    </li>
 			   <li class="sub_item"> 
-			    <strong>Autor</strong>
-			    <input type="text" size="25" id="autor" onkeypress="limpiarCampos('izquierda')">
+                    <label for="autor">
+			            <strong>Autor</strong>
+                    </label>
+			        <input type="text" size="25" id="autor" onkeypress="limpiarCampos('izquierda')">
 			    </li>
     
 			   <li class="sub_item"> 
-			    <strong>[% "Signatura Topogr&aacute;fica" | i18n %]</strong>
-			    <input type="text" size="25" id="signatura" onkeypress="limpiarCampos('izquierda')">
+                    <label for="signatura">
+			            <strong>[% "Signatura Topogr&aacute;fica" | i18n %]</strong>
+                    </label>
+			        <input type="text" size="25" id="signatura" onkeypress="limpiarCampos('izquierda')">
 			    </li>
 	                
 		    </ul>

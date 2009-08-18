@@ -963,3 +963,14 @@ fieldset.main{
 ul.listado_sin_margen{
    padding-left:0px;
 }
+
+
+label {
+    display:block;
+    float:left;
+    margin-right:13px;
+    padding-right:10px;
+    position:relative;
+    text-align:right;
+    width:150px;
+}
