@@ -378,7 +378,7 @@ tr.impar {
 
 /*---------------------------------------------------PAGINADOR------------------------------------------------------------------------*/
 
-.paginador{
+#paginador{
     color:#000000;
 	cursor:pointer;
 	font-family: Arial, Helvetica, sans-serif;
