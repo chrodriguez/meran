@@ -1,11 +1,10 @@
-<div id="infoLaterarNivel2">
-    <p class="titulos"> [% nivel1.getTitulo %] </p>
-    <b>Autor: </b>
-    [% nivel1.cat_autor.getCompleto %]
-    <br/>
+    <ul class="listado_sin_margen">
+    <li class="titulos"> [% nivel1.getTitulo %] </li>
+    <li> <strong>[% "Autor:" | i18n %] </strong> [% nivel1.cat_autor.getCompleto %]  </li>
+    <li>
     Regitro de Nivel 1: [% nivel1.getId1 %]
-    <br/>
-    <div>
+    </li>
+    <li class="botonera">
         [% PERL %]
                 print C4::AR::Filtros::to_Icon(  
                                                     boton   => "icon_edicion",
@@ -13,8 +12,6 @@
                                                     title   => "[% 'Modificar nivel 1' | i18n %]",
                         ) ;
         [% END %]
-    </div>
-    <div>
         [% PERL %]
                 print C4::AR::Filtros::to_Icon(  
                                                     boton   => "icon_agregar",
@@ -22,8 +19,6 @@
                                                     title   => "[% 'Agregar nivel 2' | i18n %]",
                         ) ;
         [% END %]
-    </div>
-    <div>
         [% PERL %]
                 print C4::AR::Filtros::to_Icon(   
                                                     boton   => "icon_borrar",
@@ -31,7 +26,7 @@
                                                     title   => "[% 'Borrar nivel 1' | i18n %]",
                         ) ;
         [% END %]
-    </div>
+    </li>
+    </ul>
 
-</div>
 <!-- FIXME FALTA TERMINAR ESTE TMPL -->

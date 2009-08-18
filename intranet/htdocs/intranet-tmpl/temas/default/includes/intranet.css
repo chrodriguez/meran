@@ -960,3 +960,6 @@ fieldset.main{
     width:70%;
     margin-left:14%;
 }
+ul listado_sin_margen{
+   padding-left:0px;
+}
