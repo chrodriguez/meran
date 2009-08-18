@@ -132,14 +132,9 @@ a:link {
 	color: #000000;
 	text-decoration: none;
 }
-a:visited {
-	color: #991D1D;
-	text-decoration: none;
-}
-a:hover {
-	color: #BC3131;
-	text-decoration: none;
-}
+
+
+
 a:active {
  	color: #000000;
 	text-decoration: none;
@@ -276,20 +271,7 @@ td.abc{
 	
 		}
 		
-.recuadroAyuda{
-        background-color: #F0F0F0;
-	border: #999999;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px;
-		  
-	font-family: "Trebuchet MS", "Verdana", "Arial";
-        font-size: 10pt;
-	color: #000000;
-	font-weight: normal;
-	}
-							
+
 
 .inputFont{
 font-family: "Trebuchet MS", "Verdana", "Arial";
@@ -619,10 +601,7 @@ background:#000 url(../imagenes/expand3.gif) no-repeat 100% 100%;
 text-transform:uppercase
 }
 
-#menu a{
-background:#eee;
-text-decoration:none;
-}
+
 
 #menu a, #menu a:visited{
 color:#000;
