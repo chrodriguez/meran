@@ -941,7 +941,7 @@ ALTER TABLE `usr_socio` ADD `is_super_user` INT( 1 ) NOT NULL DEFAULT '0';
 
  ALTER TABLE `usr_socio` CHANGE `is_super_user` `is_super_user` INT UNSIGNED NOT NULL DEFAULT '0';
 
---nueva preferencia para permitir o no el cambio de password desde el OPAC
+--18/08/09 nueva preferencia para permitir o no el cambio de password desde el OPAC
 INSERT INTO `pref_preferencia_sistema` (
 `variable` ,
 `value` ,
