@@ -66,6 +66,7 @@ my %mensajesOPAC = (
 	<br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
 	'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.',
 	'U308' => 'Se cancel&oacute; la reserva con &eacute;xito.',
+    'U400' => 'UD. acaba de cambiar la password, debe ingresar nuevamente.',
 	'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.',
 	'B401' => '',
 	'B402' => '',

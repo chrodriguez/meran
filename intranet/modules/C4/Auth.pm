@@ -546,8 +546,7 @@ C4::AR::Debug::debug("checkauth=> change_password: ".$change_password."\n");
         if ( ($userid) && ( new_password_is_needed($userid) ) && !$change_password ) {
 
             C4::AR::Debug::debug("checkauth=> redirectTo desde el servidor \n");
-#             _change_Password_Controller($dbh, $query, $userid, $type,\%info);
-            redirectTo('/cgi-bin/koha/usuarios/change_password.pl?token='.$token);
+             _change_Password_Controller($dbh, $query, $userid, $type,\%info, $token);
             #EXIT
         }#end if (($userid) && (new_password_is_needed($userid)))
 
@@ -761,19 +760,12 @@ sub desencriptar{
 
     use Crypt::CBC;
     use MIME::Base64;
-# The encryption/decryption key (required)
-# key= sha256_base64(md5_base64(pass_user))
-
-# my $key = 'nEEhnZwM8ZdiFYYZpcixWnOUmCG57lvr6ksUJuiMXpo';
 
     my  $cipher = Crypt::CBC->new( 
                                     -key    => $key,
                                     -cipher => 'Rijndael',
                                     -salt   => 1,
                             );
-
-# my  $plaintext  = $cipher->decrypt(decode_base64('U2FsdGVkX18iBb+ybODTlgIIUOEwLSoBnARvzmRZFvU='));
-# C4::AR::Debug::debug("plaintext fijo: ".$plaintext);
 
 
     my $plaintext = $cipher->decrypt(decode_base64($texto_a_desencriptar));    
@@ -861,8 +853,16 @@ sub _logOut_Controller {
 
 =cut
 sub _change_Password_Controller {
-	my ($dbh, $query, $userid, $type, $info) = @_;
+	my ($dbh, $query, $userid, $type, $info, $token) = @_;
 
+
+    if ($type eq 'opac') {
+            redirectTo('/cgi-bin/koha/change_password.pl?token='.$token);
+    } else {
+            redirectTo('/cgi-bin/koha/usuarios/change_password.pl?token='.$token);
+    }
+   
+=item
     C4::AR::Debug::debug("\n");
     C4::AR::Debug::debug("_change_Password_Controller=> ");
 	my $input = new CGI;
@@ -933,6 +933,7 @@ sub _change_Password_Controller {
         C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
 	
 	}#end  if ($newpassword && !$passwordrepeted)
+=cut
 }
 
 

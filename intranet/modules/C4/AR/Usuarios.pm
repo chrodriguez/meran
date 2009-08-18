@@ -452,7 +452,8 @@ sub cambiarPassword {
             $cambioDePasswordForzado= 1;
         }
 
-        if ( $cambioDePasswordForzado && ( $password_actual_desde_DB eq $password_actual_desde_cliente_hasheada) ){
+#         if ( $cambioDePasswordForzado && ( $password_actual_desde_DB eq $password_actual_desde_cliente_hasheada) ){
+        if ( $password_actual_desde_DB eq $password_actual_desde_cliente_hasheada){
             C4::AR::Debug::debug("Auth => cambiarPassword => cambioForzado ");
             #es un cambio forzado de la password, se obliga al usuario a cambiar la password, no se compara con la pass actual
             my $newPassword = $params->{'newpassword'};

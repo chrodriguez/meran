@@ -78,6 +78,10 @@
             [% "Calle :" | i18n %]
                 <b> [%  socio.persona.getCalle %]</b>
         </li>
+<!-- FIXME hacer preferencia para el cambio de password, para permitir o no cambio de pass desde OPAC-->
+        <form action=/cgi-bin/koha/change_password.pl method=get id="formCambioPassword">
+            <input type=hidden name="token" value="[% token %]" >
+        </form>
         [% PERL %]
             print C4::AR::Filtros::to_Button( text    => "[% 'Cambiar Password' | i18n %]",
                                             boton   => "boton_miembros",

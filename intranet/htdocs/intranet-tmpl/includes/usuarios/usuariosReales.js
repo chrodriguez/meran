@@ -226,52 +226,6 @@ function updateAgregarUsuario(responseText){
 
 //*************************************************Cambiar Password*******************************************
 
-//muestra los ejemplares del grupo
-function guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword){
-
-// 	objAH=new AjaxHelper(updateGuardarCambiarPassword);
-// 	//objAH.debug= true;
-// 	objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-// 	objAH.newpassword= claveUsuario;
-// 	objAH.newpassword1= confirmeClave;
-//     objAH.actualPassword= actualPassword;
-// 	objAH.usuario= USUARIO.ID;
-// 	objAH.tipoAccion= 'CAMBIAR_PASSWORD';
-// 	//se envia la consulta
-// 	objAH.sendToServer();
-
-    var key= b64_sha256(b64_md5(actualPassword));
-// alert("key: "+key);
-
-    var actual_password = encriptar(actualPassword, key);
-//  alert("actualPassword: "+actual_password);
-    var new_password1 = encriptar(claveUsuario, key);
-    var new_password2 = encriptar(confirmeClave, key);
-    var socio = USUARIO.ID;
-    var changePassword = 0;
-    var tipoAccion = 'CAMBIAR_PASSWORD';
-
-    
-    $.ajax({
-            type: "POST",
-            url: "/cgi-bin/koha/usuarios/change_passwordDB.pl",
-            contentType: "text/*",
-            data: "newpassword='"+new_password1+"'&newpassword1='"+new_password2+"'&actualPassword='"+actual_password+"'&usuario="+socio+"&tipoAccion="+tipoAccion+"&changePassword="+changePassword+"&token="+token,
-            complete: updateGuardarCambiarPassword,
-    });
-
-}
-
-function updateGuardarCambiarPassword(responseText){
-    if (!verificarRespuesta(responseText))
-            return(0);
-
-	clearInput();
-	vModificarPassword.close();
-	var Messages= JSONstring.toObject(responseText);
-	setMessages(Messages);
-}
-
 function desautorizarTercero(claveUsuario, confirmeClave){
 
     var is_confirmed = confirm(CONFIRMAR_ELIMINAR_AFILIADO);
@@ -302,8 +256,8 @@ function resetPassword(claveUsuario, confirmeClave){
     objAH=new AjaxHelper(updateResetPassword);
     //objAH.debug= true;
     objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-    objAH.newpassword= claveUsuario;
-    objAH.newpassword1= confirmeClave;
+//     objAH.newpassword= claveUsuario;
+//     objAH.newpassword1= confirmeClave;
     objAH.nro_socio= USUARIO.ID;
     objAH.tipoAccion= 'RESET_PASSWORD';
     //se envia la consulta
@@ -318,55 +272,15 @@ function updateResetPassword(responseText){
     setMessages(Messages);
 }
 
-function verificarClaveUsuario(){
-	var claveUsuario= $('#newpassword').val();
-	var confirmeClave= $('#newpassword1').val();
-    var actualPassword= $('#actualPassword').val();
-	
-
-	if (claveUsuario == ''){
-		alert(POR_FAVOR_INGRESE_UNA_CONTRASENIA);
-		clearInput();
-		$('#newpassword').focus();
-
-	}else{
-		if (claveUsuario != confirmeClave){
-			alert(LAS_CLAVES_SON_DISTINTAS);
-			clearInput();
-			$('#newpassword').focus();
-	
-		}else{
-			guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword);
-		}
-	}
-}
-
 function clearInput(){
 	$('#newpassword').val('');
 	$('#newpassword1').val('');
 }
 
 function cambiarPassword(){
-	objAH=new AjaxHelper(updateCambiarPassword);
-	objAH.url='/intranet-tmpl/includes/popups/cambiarPassword.inc';
-	objAH.debug= true;
-	objAH.sendToServer();
+    $('#formCambioPassword').submit();
 }
 
-function updateCambiarPassword(responseText){
-    if (!verificarRespuesta(responseText))
-            return(0);
-
-	vModificarPassword=new WindowHelper({draggable: true, opacity: true});
-	vModificarPassword.debug= true;
-	vModificarPassword.html=responseText;
- 	vModificarPassword.titulo= CAMBIO_DE_CONTRASENIA;
-	vModificarPassword.create();
-	vModificarPassword.height('220px');
-	vModificarPassword.width('550px');
-	vModificarPassword.open();
-	clearInput();
-}
 
 //***********************************************Fin**Cambiar Password*****************************************
 
@@ -389,36 +303,6 @@ function updateEliminarFoto(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 }
-
-/*
-function agregarAutorizado(){
-
-    var is_confirmed = confirm(CONFIRMAR_AFILIADO);
-
-    if (is_confirmed) {
-
-        objAH=new AjaxHelper(updateAgregarAutorizado);
-        objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-        objAH.debug= true;
-        objAH.nro_socio= USUARIO.ID;
-        alert(nro_socio);
-        objAH.tipoAccion= 'AGREGAR_AUTORIZADO';
-        objAH.sendToServer();
-
-    }
-}
-*/
-
-
-// function updateAgregarAutorizado(responseText){
-//     if (!verificarRespuesta(responseText))
-//             return(0);
-// 
-//     var Messages=JSONstring.toObject(responseText);
-//     setMessages(Messages);
-//     if (!(hayError(Messages))){
-//     }
-// }
 
 function agregarAutorizado(){
     objAH=new AjaxHelper(updateAgregarAutorizado);

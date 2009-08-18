@@ -940,3 +940,16 @@ ALTER TABLE `perm_general` ADD `permisos` VARCHAR( 8 ) NOT NULL DEFAULT '0000000
 ALTER TABLE `usr_socio` ADD `is_super_user` INT( 1 ) NOT NULL DEFAULT '0';
 
  ALTER TABLE `usr_socio` CHANGE `is_super_user` `is_super_user` INT UNSIGNED NOT NULL DEFAULT '0';
+
+--nueva preferencia para permitir o no el cambio de password desde el OPAC
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'permite_cambio_password_desde_opac', '1', 'permite (=1) o no (=0) el cambio de password desde el OPAC', NULL , 'bool'
+);
+

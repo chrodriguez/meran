@@ -122,6 +122,9 @@
                   </li>
                 [% ELSE %]
                   <li>
+                <form action=/cgi-bin/koha/usuarios/change_password.pl method=get id="formCambioPassword">
+                    <input type=hidden name="token" value="[% token %]" >
+                </form>        
       
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Cambio de Contrase&ntilde;a' | i18n %]",
