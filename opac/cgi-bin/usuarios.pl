@@ -24,7 +24,9 @@ my $msg_object;
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
-if ($obj->{'tipoAccion'} eq 'CAMBIAR_PASSWORD'){
+my $tipoAccion= $obj->{'tipoAccion'}||"";
+
+if ($tipoAccion eq 'CAMBIAR_PASSWORD'){
     my ($userid, $session, $flags) = checkauth( $input, 
                                             $authnotrequired,
                                             {   ui => 'ANY', 
@@ -43,8 +45,7 @@ if ($obj->{'tipoAccion'} eq 'CAMBIAR_PASSWORD'){
     $params{'newpassword'}= $obj->{'newpassword'};
     $params{'newpassword1'}= $obj->{'newpassword1'};
     $params{'session'}= $session;
-
-    C4::AR::Validator::validateParams('U389',\%params,['nro_socio','actualPassword','newpassword','newpassword1']);
+#     C4::AR::Validator::validateParams('U389',\%params,['nro_socio','actualPassword','newpassword','newpassword1']);
 
     my ($Message_arrayref)= C4::AR::Usuarios::cambiarPassword(\%params);
 

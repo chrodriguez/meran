@@ -1,9 +1,61 @@
 [% INCLUDE 'opac-top.inc' %]
-
+[% INCLUDE 'ChangePasswordHelper.inc' %]
 <script language=javascript>
 
     CAMBIO_DE_CONTRASENIA= "[% 'Cambio de Contrase&ntilde;a' | i18n %]";
 
+    function updateGuardarCambiarPassword(responseText){
+        if (!verificarRespuesta(responseText))
+                return(0);
+
+        clearInput();
+        vModificarPassword.close();
+        var Messages= JSONstring.toObject(responseText);
+        setMessages(Messages);
+    }
+
+
+    function guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword){
+
+        key= b64_sha256(b64_md5(actualPassword));
+        actualPassword = encriptar(actualPassword, key);
+        confirmeClave = encriptar(confirmeClave, key);
+        claveUsuario = encriptar(claveUsuario, key);
+
+        $.ajax({
+                    type: "POST",
+                    url: "/cgi-bin/koha/change_password.pl",
+                    contentType: "text/x-www",
+                    data: ({actualPassword:'ago'}),
+                    success: function(msg){
+//                         alert( "Data Saved: " + msg );
+                    }
+        });
+    
+        
+    }
+    function verificarClaveUsuario(){
+        var claveUsuario= $('#newpassword').val();
+        var confirmeClave= $('#newpassword1').val();
+        var actualPassword= $('#actualPassword').val();
+        
+    
+        if (claveUsuario == ''){
+            alert(POR_FAVOR_INGRESE_UNA_CONTRASENIA);
+            clearInput();
+            $('#newpassword').focus();
+    
+        }else{
+            if (claveUsuario != confirmeClave){
+                alert(LAS_CLAVES_SON_DISTINTAS);
+                clearInput();
+                $('#newpassword').focus();
+        
+            }else{
+                guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword);
+            }
+        }
+    }
     function cambiarPassword(){
          $('#formCambioPassword').submit();
     }
