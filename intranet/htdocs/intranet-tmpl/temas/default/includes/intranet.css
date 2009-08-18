@@ -286,6 +286,10 @@ float:left;
 	border-left: 1px solid #ccc;
 }
 
+.click{
+    cursor: pointer;
+}
+
 .tabla_datos {
     font-size:9pt;
 	color:#000000;

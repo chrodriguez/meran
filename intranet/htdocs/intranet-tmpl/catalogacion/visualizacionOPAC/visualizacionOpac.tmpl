@@ -535,7 +535,10 @@ $(document).ready(function() {
 });
 
 </script>
-<div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
+
+[% PERL %]
+    print C4::AR::Filtros::ayuda_marc() ;
+[% END %]
 
 <input type="hidden" id="idEncabezado">
 <div style="position: static;" id="tophelper">

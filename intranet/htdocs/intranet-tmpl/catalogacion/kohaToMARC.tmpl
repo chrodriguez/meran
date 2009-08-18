@@ -100,7 +100,10 @@ $(document).ready(function() {
 });
 
 </script>
-<div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
+
+[% PERL %]
+    print C4::AR::Filtros::ayuda_marc() ;
+[% END %]
 
 <div style="position: static;" id="tophelper">
 <img class="showhelp" src="/intranet-tmpl/images/help.gif" alt="Descricion de la Ventana">

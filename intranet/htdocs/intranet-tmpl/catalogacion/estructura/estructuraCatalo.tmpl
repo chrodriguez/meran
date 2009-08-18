@@ -414,7 +414,11 @@ function updateModificarEstructuraCatalogacion(responseText){
 
 
 </script>
-<div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">Ayuda MARC</span></div>
+
+[% PERL %]
+    print C4::AR::Filtros::ayuda_marc() ;
+[% END %]
+
 <div class="titulos" >Estructura de Catalogaci&oacute;n</div>
 
 

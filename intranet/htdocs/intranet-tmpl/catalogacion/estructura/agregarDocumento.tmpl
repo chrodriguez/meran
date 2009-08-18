@@ -54,7 +54,9 @@ $(document).ready( function() {
 
 </script>
 
-<div style="text-align: right;"><span class="click" onClick="abrirVentanaHelperMARC();">[% "Ayuda MARC" | i18n %]</span></div>
+[% PERL %]
+    print C4::AR::Filtros::ayuda_marc() ;
+[% END %]
 
 <p class="titulos" >[% "Agregar Documento" | i18n %]</p>
 

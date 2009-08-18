@@ -184,6 +184,11 @@ sub to_Icon{
     return $button;
 }
 
+sub ayuda_marc{
+
+    return "<div style='text-align: right;'><span class='click' onClick='abrirVentanaHelperMARC();'>".i18n('Ayuda MARC')."</span></div>";
+}
+
 =item
 Este filtro sirve para generar dinamicamente le combo para seleccionar el idioma.
 Este es llamado desde el opac-top.inc o intranet-top.inc (solo una vez).
