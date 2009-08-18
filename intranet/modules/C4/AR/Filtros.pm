@@ -186,7 +186,13 @@ sub to_Icon{
 
 sub ayuda_marc{
 
-    return "<div style='text-align: right;'><span class='click' onClick='abrirVentanaHelperMARC();'>".i18n('Ayuda MARC')."</span></div>";
+    my $icon= to_Icon(  
+                boton   => "icon_ayuda",
+                onClick => "abrirVentanaHelperMARC();",
+                title   => i18n("Ayuda MARC"),
+            ) ;
+
+    return "<div style='text-align: right;'><span class='click'>".$icon."</span></div>";
 }
 
 =item
