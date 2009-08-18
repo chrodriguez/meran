@@ -553,8 +553,8 @@ p.nivel2Selected:hover{
    font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
    display:block;
    background:grey;
-   width:140px;
-/*    margin:0 0 0 -40px; */
+ /*   width:140px;
+   margin:0 0 0 -40px; */
    text-transform:uppercase;
 }
 
