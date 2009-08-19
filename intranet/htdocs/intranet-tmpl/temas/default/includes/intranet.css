@@ -387,7 +387,9 @@ tr.impar {
 	}
 							
 .botonCentrado {
-    margin-left:50%;
+    /*margin-left:50%;*/
+    margin-left:37%;
+    clear:both;
 }
 /*------------------------------------------------Fin   estilos para Circulacion------------------------------------------------*/
 /* para agregar documento */
@@ -1066,4 +1068,18 @@ h2.trigger {
 }
 #sanciones{
     clear:both;
+}
+
+/* -------------------------------------------------------Informacion para el Usuario---------------------------------------------- */
+
+.mensajes_informacion{
+
+    background-color: #000000;
+    border:0;
+    text-decoration: none;
+    font-size:12pt;
+    font-family:verdana;
+    color:#f2f2f2;
+    font-weight:bold;
+
 }

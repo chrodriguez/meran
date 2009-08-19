@@ -329,11 +329,11 @@ $(document).ready(function(){
     [% END %]
 
     [% PERL %]
-                        print C4::AR::Filtros::to_Icon(    
-                                                            boton   => "icon_borrar",
-                                                            onClick => "borrarNivel1([% id1 %]);",
-                                                            title   => "[% 'Borrar Nivel 1' | i18n %]",
-                                ) ;
+        print C4::AR::Filtros::to_Icon(    
+                                            boton   => "icon_borrar",
+                                            onClick => "borrarNivel1([% id1 %]);",
+                                            title   => "[% 'Borrar Nivel 1' | i18n %]",
+                ) ;
     [% END %]
     
 	<ul class="listado_sin_margen">
