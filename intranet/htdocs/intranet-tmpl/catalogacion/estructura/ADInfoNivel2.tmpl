@@ -1,5 +1,5 @@
 [% FOREACH nivel2 IN nivel2_array %]    
-<legend class="nivel2Selected" onClick="mostrarInfoAltaNivel3( '[% nivel2.getId1 %]',  '[% nivel2.getId2 %]'); toggleClass(this);">
+<fieldset><legend class="nivel2Selected" onClick="mostrarInfoAltaNivel3( '[% nivel2.getId1 %]',  '[% nivel2.getId2 %]'); toggleClass(this);">
     <strong>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.cat_ref_tipo_nivel3.getNombre %]</strong>
     </legend>
 <ul class="listado_sin_margen">
@@ -50,4 +50,5 @@
     [% 'Cantidad Ejemplares:' | i18n %] [% cant_ejemplares %]
     </li>
 </ul>
+</fieldset>
 [% END %]

@@ -992,7 +992,6 @@ label {
     width:150px;
     margin-top:5px;
 }
-<<<<<<< .mine
 
 /* --------------------------------------------------------------------USUARIO-------------------------------------------------- */
 .toggle_container{
@@ -1018,7 +1017,6 @@ h2.trigger {
 /*     padding:0 0 0 50px; */
 /*     width:185px; */
 }
-=======
 
 .botonera_horizontal {
     display:inline-table;
@@ -1034,6 +1032,6 @@ h2.trigger {
 .nivel2Barra {
     border:1px solid;
     overflow:auto;
+    height:65%;
     width:100%;
 }
->>>>>>> .r1927

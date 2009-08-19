@@ -449,12 +449,12 @@ div.detalle{
     width: 20%;
 }
 
-.nivel2Barra {
+/*.nivel2Barra {
 	border:1px solid;
     height: 50%;
     overflow: auto;
     width: 100%;
-}
+}*/
 
 .nivel1Lateral {
     border:1px solid #999999;
