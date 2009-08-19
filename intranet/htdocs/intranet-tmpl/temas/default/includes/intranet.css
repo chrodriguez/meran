@@ -198,15 +198,17 @@ font-style:normal;
 	clear:both;
 	margin-bottom:3%;
 }
+
 #marco_contenido_datos{
-    margin-left:10%;
-    margin-right:10%;
+    margin-left:5%;
+    margin-right:5%;
 }
 
 #marco_contenido_datos li.item{
-clear:left;
-float:left;
+    clear:left;
+    float:left;
 }
+
 #marco_principal{
 	clear:both;
 	background:#f7f6f6 url(../imagenes/medio.png) repeat;
@@ -221,8 +223,6 @@ float:left;
 	  font-size : 20px;
 	  color: #4B6D22;
 	  text-align: left;
-
-
 }
 
 .item{
@@ -984,12 +984,13 @@ ul.listado_sin_margen{
 
 label {
     display:block;
+    clear:both;
     float:left;
     margin-right:13px;
     padding-right:10px;
     position:relative;
     text-align:right;
-    width:150px;
+/*     width:150px; */
     margin-top:5px;
 }
 
@@ -1051,3 +1052,12 @@ h2.trigger {
     margin-bottom:15px;
 }
 
+.centro {
+    margin-bottom:10px;
+    margin-left:1%;
+    text-align:justify;
+    width: 79%;
+/*     overflow: auto; */
+    float:right;
+/*     clear:both; */
+}

@@ -686,7 +686,7 @@ function procesarObjeto(objeto){
     var unoLinea=0;
     var idDiv="div"+idComp;
     var divComp= crearDivComponente(idDiv);
-    var divLabel= crearDivLabel(libtext);
+    var divLabel= crearDivLabel(libtext, idComp);
     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
     $(strComp).appendTo("#"+getDivDelNivel());
     switch(tipo){
@@ -791,7 +791,7 @@ function crearComponente(tipo,id,objeto,valor){
 	TAB_INDEX++;
 
     switch(tipo){
-        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='80' tabindex="+TAB_INDEX+" name=''>";
+        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='60' tabindex="+TAB_INDEX+" name=''>";
         break;
         case "combo": comp="<select id='"+id+"' tabindex="+TAB_INDEX+">\n<option value=''>Elegir opci&oacute;n</option>\n";
             var op="";
@@ -836,8 +836,9 @@ function crearDivComponente(idObj){
 }
 
 // Esta funcion crea un divLabel con un Label segun parametro
-function crearDivLabel(label){
-    return "<div class='divLabelComponente'>  "+label+": </div>";
+function crearDivLabel(label, idComp){
+//     return "<label for='div"+ idComp +"'><div class='divLabelComponente'>  "+label+": </div></label>";
+    return "<label for='"+ idComp +"'> " +label + " </label>";
 }
 
 

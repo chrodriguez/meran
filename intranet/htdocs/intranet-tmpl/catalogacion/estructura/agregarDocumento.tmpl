@@ -63,6 +63,11 @@ $(document).ready( function() {
 [% "Esquema de ingreso de datos tipo:" | i18n %] [% comboTipoDocumento %]
 <br><br>
 
+<label for="keyword">
+                [% "B&uacute;squeda combinada" | i18n %]
+</label>
+<input type="text" id="keyword" size="20" tabindex=1>
+
 <div class="todo">
 
 <div class="lateral">
@@ -89,7 +94,9 @@ $(document).ready( function() {
 
 </form>
     <br>
-    <p><br><br><br><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+    <div clsss="botonCentrado">
+    &nbsp;* [% "Campos obligatorios" | i18n %]
+    </div>
     
     <center>
                     <div>
