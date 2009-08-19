@@ -463,8 +463,9 @@ div.detalle{
 /*     height:30%; */
 }
 
+/* 
 .nivel2Lateral {
-    /*overflow: auto;*/
+    /*overflow: auto;
     height: 100%;
     padding:11px;
     cursor: pointer;
@@ -473,7 +474,7 @@ div.detalle{
     color: #000000;
     font-weight: normal;
     padding: 22px;
-}
+}*/
 
 p.nivel2Selected:hover{
     color: #BC3131;

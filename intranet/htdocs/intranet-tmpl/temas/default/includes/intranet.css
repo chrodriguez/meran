@@ -996,3 +996,16 @@ label {
 .botonera_horizontal {
     display:inline-table;
 }
+.nivel2Lateral {
+        /*overflow: auto;*/
+    cursor: pointer;
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 10pt;
+    color: #000000;
+    font-weight: normal;
+}
+.nivel2Barra {
+    border:1px solid;
+    overflow:auto;
+    width:100%;
+}
