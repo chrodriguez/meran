@@ -89,7 +89,7 @@ $(document).ready( function() {
 
 </form>
     <br>
-    <div clsss="botonCentrado">
+    <div class="botonCentrado">
     &nbsp;* [% "Campos obligatorios" | i18n %]
             [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 1' | i18n %]",
@@ -114,10 +114,8 @@ $(document).ready( function() {
     <div id= "estructuraDelNivel2"></div>
     <input type="hidden" name="token" value="[% token %]" />
 </form>
-    <br>
-    <p><br><br><br><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
-    
-    <center>
+    <div class="botonCentrado">
+    &nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
                         [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 2' | i18n %]",
                                                                     boton   => "boton_buscar",
@@ -125,7 +123,7 @@ $(document).ready( function() {
                                                                     title   => "[% 'Guardar el nivel 2' | i18n %]",
                                         ) ;
                         [% END %]
-    </center>
+    </div>
 </span>
 
 <span id="nivel3Tabla">
@@ -147,9 +145,9 @@ $(document).ready( function() {
     <input type="hidden" name="token" value="[% token %]" />
 
 </form>
-    <p><br><br><br><b>&nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
-    
-    <center>
+    <div class="botonCentrado">
+        &nbsp;* [% "Campos obligatorios" | i18n %]</b></p>
+     
                         [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 3' | i18n %]",
                                                                     boton   => "boton_buscar",
@@ -158,7 +156,7 @@ $(document).ready( function() {
                                         ) ;
                         [% END %]
 
-    </center>
+    </div>
 </span>
 
 </div> <!--END <div class="centro">-->
