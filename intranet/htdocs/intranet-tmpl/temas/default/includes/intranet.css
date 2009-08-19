@@ -20,10 +20,13 @@
 
 #login input {
     float:right;
+
 }
 
 #login label {
     float:left;
+    margin-right: 0px;
+
 }
 
 #contenido_login  {
@@ -35,7 +38,7 @@
 
 #boton_login  {
     display:block;
-    padding: 11% 32%;
+    padding: 15% 11% 32%;
     list-style-type:none;
 }
 /*---------------------------------------------------------------- HEADER--------------------------------------------------*/
