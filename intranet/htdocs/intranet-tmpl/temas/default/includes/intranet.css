@@ -1,6 +1,7 @@
 /*---------------------------------------------------------------- LOGIN-------------------------------------------------*/                        body input[type="text"]:focus{
   background: InfoBackground;
 }
+
 #login {
     background-image: url(../imagenes/meranLogin.png);
     font-family: "Arial", "Verdana";
@@ -69,7 +70,7 @@ color:#4b6d22;
 border:0px;
 text-decoration:none;
 }
-.menu_superior{
+#menu .menu_superior{
 font:bold 100%/205% " Arial ","Verdana"," sans-serif ";
 color:#4b6d22;
 background: url(../imagenes/menu.png) repeat 100% 100%;
@@ -85,7 +86,7 @@ height:20px;
 	-moz-border-radius-topleft:8px;
     -moz-border-radius-topright:8px;
 }
-.menu_superior a:hover{
+#menu .menu_superior a:hover{
 font:bold 100%/205% " Arial ","Verdana"," sans-serif ";
 color:#FFFFFF;/*#4b6d22;*/
 background: url(../imagenes/menu.png) repeat 100% 100%;
@@ -103,7 +104,7 @@ height:20px;
 
 
 }
-.menu_intermedio {
+#menu .menu_intermedio {
 	font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
 	cursor: pointer;
 	display:block;
@@ -116,7 +117,7 @@ height:20px;
 	background:#548d30 url(../imagenes/expand3.gif) no-repeat 100% 100%;
 	color: #FFFFFF;	
 }
-.menu-item {
+#menu .menu-item {
    font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
 	background:#a1c162;
 	color: #FFFFFF;
@@ -125,7 +126,7 @@ height:20px;
 	padding:0 2px;
 
 }
-.menu-item a:hover{
+#menu .menu-item a:hover{
     font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
 	background:#c4d872;
 	color: #548d30;
@@ -133,7 +134,7 @@ height:20px;
 	display:block;
 	padding:0 2px;
 }
-.menu-item a {
+#menu .menu-item a {
 	font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
 	color: #FFF;
 	width:auto;
