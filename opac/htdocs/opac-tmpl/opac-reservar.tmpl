@@ -66,7 +66,14 @@
 
 		<td class="impar">
 		[% IF CirculationEnabled %]
-			<a class="click" onClick="cancelarYReservar([% reserva.getId_reserva %],[% reserva.nivel2.nivel1.getId1 %],[% reserva.nivel2.getId2 %])">[% "Cancelar" | i18n %]</a> 
+                [% PERL %]
+                    print C4::AR::Filtros::to_Icon(   text    => "[% 'Cancelar' | i18n %]",
+                                                        boton   => "icon_cancelar",
+                                                        width   => "100",
+                                                        onClick => "cancelarYReservar([% reserva.getId_reserva %],[% reserva.nivel2.nivel1.getId1 %],[% reserva.nivel2.getId2 %])",
+                                                        title   => "[% 'Cancelar' | i18n %]"
+                                                );
+                [% END %]
 		[% ELSE %]
 			[% "No disponible" | i18n %]
 		[% END %]
@@ -119,8 +126,15 @@
 	</td>
 	<td class="impar" align="center">
 	[% IF CirculationEnabled %]
-		<a class="click"
-		onClick="cancelar([% reserva.getId_reserva %])">[% "Cancelar" | i18n %]</a>
+                [% PERL %]
+                    print C4::AR::Filtros::to_Icon(   text    => "[% 'Cancelar' | i18n %]",
+                                                        boton   => "icon_cancelar",
+                                                        width   => "100",
+                                                        onClick => "cancelarReserva([% reserva.getId_reserva %])",
+                                                        title   => "[% 'Cancelar' | i18n %]"
+                                                );
+                [% END %]
+
 	[% ELSE %]
 		[% "No disponible" | i18n %]
 	[% END %]
@@ -195,8 +209,15 @@
 	</td>
 	<td class="impar" align="center"> 
 	[% IF CirculationEnabled %]
-		<a class="click"
-		onClick="cancelar([% reserva.getId_reserva %])">[% "Cancelar" | i18n %]</a>
+                [% PERL %]
+                    print C4::AR::Filtros::to_Icon(   text    => "[% 'Cancelar' | i18n %]",
+                                                        boton   => "icon_cancelar",
+                                                        width   => "100",
+                                                        onClick => "cancelarReserva([% reserva.getId_reserva %])",
+                                                        title   => "[% 'Cancelar' | i18n %]"
+                                                );
+                [% END %]
+
 	[% ELSE %]
 		[% "No disponible" | i18n %]
 	[% END %]

@@ -6,9 +6,9 @@
 
 function detalleDelUsuario(){
 	var nro_socio= $('#nro_socio_hidden').val();
-	usuario= new objeto_usuario();
-	usuario.text= $('#usuarioAutocomplete').val();
-	usuario.ID= nro_socio;
+	USUARIO= new objeto_usuario();
+	USUARIO.text= $('#usuarioAutocomplete').val();
+	USUARIO.ID= nro_socio;
 	//detalleUsuario esta implementado en circulacion,js
 	detalleUsuario(nro_socio);
 	detalleReservas(nro_socio, updateInfoReservas);

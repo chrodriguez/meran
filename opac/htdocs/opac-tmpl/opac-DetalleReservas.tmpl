@@ -75,14 +75,17 @@
 	        </td>
 	        <td  align="center"> 
 	        [% IF CirculationEnabled %]
+
+                <div class="botonCentrado">
                 [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar' | i18n %]",
-                                                        boton   => "boton_buscar",
+                    print C4::AR::Filtros::to_Icon(   text    => "[% 'Cancelar' | i18n %]",
+                                                        boton   => "icon_cancelar",
                                                         width   => "100",
                                                         onClick => "cancelarReserva([% reserva.getId_reserva %])",
                                                         title   => "[% 'Cancelar Reserva' | i18n %]"
                                                 );
                 [% END %]
+                </div>
 
 	        [% ELSE %]
 		        [% "No disponible" | i18n %]
@@ -134,18 +137,16 @@
 	</td>
 	<td  align="center">
         [% IF CirculationEnabled %]
-<div class="buttonContainerHorizontal" style="width:100%">
-            <ul class="horizontal-list-default" style="float:center" >
+            <div class="botonCentrado">
                 [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar' | i18n %]",
-                                                        boton   => "boton_buscar",
+                                                        boton   => "boton_cancelar",
                                                         width   => "100",
                                                         onClick => "cancelarReserva([% reserva.getId_reserva %])",
                                                         title   => "[% 'Cancelar Reserva' | i18n %]"
                                                 );
                 [% END %]
-            </ul>
-</div>
+            </div>
         [% ELSE %]
 	        [% "No disponible" | i18n %]
         [% END %]

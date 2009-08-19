@@ -170,13 +170,14 @@
 					[% IF cantParaPrestamo %]
 			
 						[% IF CirculationEnabled %]  <!-- si es 0 -->
-		
-					<p align="right">
-					<a class="click" 
-					onClick="reservar([% id1 %],[% id2 %])">
-					<b>[% "Reservar" | i18n %]</b>
-					</a></p>
-		
+                            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(   text    => "[% 'Reservar' | i18n %]",
+                                                                    boton   => "icon_reservar",
+                                                                    width   => "100",
+                                                                    onClick => "reservar([% id1 %],[% id2 %])",
+                                                                    title   => "[% 'Reservar' | i18n %]"
+                                                            );
+                            [% END %]
 					[% ELSE %]
 					<!-- Si el usuario no esta logueado, se le da la siguiente informacion-->
 					<p align="right"><b>[% "Disponible para Reservar" | i18n %]</b></p>

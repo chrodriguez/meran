@@ -90,9 +90,18 @@
 	[% IF prestamo.nivel3.getBarcode %]
 		<font color="[% IF prestamo.estaVencido %]red[% END %]">[% prestamo.getFecha_vencimiento_formateada %]</font>
 		[% IF CirculationEnabled %]
-       			[% IF prestamo.sePuedeRenovar %]<br>
-				<a class="click" onClick="renovar([% prestamo.getId3 %]);">[% "Renovar" | i18n %]</a>
-			[% END %]
+       			[% IF prestamo.sePuedeRenovar %]
+                   <div class="botonCentrado">
+                            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(   text    => "[% 'Renovar' | i18n %]",
+                                                                    boton   => "icon_renovar",
+                                                                    width   => "100",
+                                                                    onClick => "renovar([% prestamo.getId3 %]);",
+                                                                    title   => "[% 'Renovar' | i18n %]"
+                                                            );
+                            [% END %]
+                   </div>
+			    [% END %]
 		[% END %]
 	[% ELSE %]
 		- 

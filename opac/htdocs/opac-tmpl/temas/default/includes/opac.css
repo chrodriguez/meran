@@ -298,6 +298,9 @@ ul.horizontal-list li {
     float:left;
 }
 
+.botonCentrado {
+    margin-left:50%;
+}
 
 /*                                                     estilos para el login                                   */
 #login {

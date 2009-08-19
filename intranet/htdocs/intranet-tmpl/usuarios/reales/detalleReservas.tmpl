@@ -116,7 +116,7 @@
 	[% END %]
 	</table>
 	[% IF circularDesdeDetalleUsuario %]
-		<p align=center>
+		<div class="botonCentrado">
             [% PERL %]
                 print C4::AR::Filtros::to_Icon(  
                                                     boton   => "icon_prestar",
@@ -124,7 +124,7 @@
                                                     title   => "[% 'Prestar' | i18n %]",
                         ) ;
             [% END %]
-		</p>
+		</div>
 	[% ELSE %]
 			[% 'NO SE PERMITE CIRCULAR' | i18n %]
 	[% END %] <!--END IF permiso_para_circular -->
