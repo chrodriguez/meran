@@ -123,7 +123,7 @@ color:black;
 
 .listaMenuBotones {
    width: 160px;
-   height: 160px; 
+/*    height: 160px;  */
    list-style:none;
 }
 

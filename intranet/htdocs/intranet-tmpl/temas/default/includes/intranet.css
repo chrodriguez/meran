@@ -224,8 +224,9 @@ float:left;
 
 
 }
+
 .item{
-      font-family: "Verdana", "Trebuchet MS", "Arial";
+    font-family: "Verdana", "Trebuchet MS", "Arial";
     font-size: 8pt;
     color: #a9b41a;
     list-style: none;
@@ -233,7 +234,7 @@ float:left;
     padding: 0px;
     margin: 2px;
 	text-decoration:none;
-	
+	margin:0 10px 0 9px;
 }
 .item a{
       font-family: "Verdana", "Trebuchet MS", "Arial";
@@ -973,4 +974,5 @@ label {
     position:relative;
     text-align:right;
     width:150px;
+    margin-top:5px;
 }
