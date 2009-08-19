@@ -274,6 +274,8 @@ float:left;
 	text-align:center;
 	font-size:10pt;
 	font-weight: bold;
+    clear:both;
+    padding:10px;
 }
 
 .titulo_tabla_resultado { 
@@ -382,6 +384,8 @@ tr.impar {
 	font-weight: normal;
 	}
 							
+.botonCentrado {
+    margin-left:50%;
 }
 /*------------------------------------------------Fin   estilos para Circulacion------------------------------------------------*/
 /* para agregar documento */

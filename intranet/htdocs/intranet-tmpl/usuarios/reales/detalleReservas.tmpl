@@ -97,10 +97,16 @@
             [% END %]
 			</td>
 		[% IF circularDesdeDetalleUsuario %]
-			<td>
-				<inpuT 	type="image" name="cancel"  VALUE="Cancelar" BORDER=0 
-						src="[% themelang %]/images/borrar.png" 
-						onClick="cancelarReserva('[% reserva.getId_reserva %]')" title='[% "Cancelar" | i18n %]'>
+			<td width="10%">
+            <div class="botonCentrado">
+                [% PERL %]
+                    print C4::AR::Filtros::to_Icon(  
+                                                        boton   => "icon_cancelar",
+                                                        onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
+                                                        title   => "[% 'Cancelar' | i18n %]",
+                            ) ;
+                [% END %]
+            </div>
 			</td>
 		[% ELSE %]
 			[% 'NO SE PERMITE CIRCULAR' | i18n %]
@@ -111,10 +117,13 @@
 	</table>
 	[% IF circularDesdeDetalleUsuario %]
 		<p align=center>
-			<input 	type="image" name="borrowD"  VALUE='[% "prestar" | i18n %]' BORDER=0 
-					src="[% themelang %]/images/item-prestar.png" 
-					title="Realizar pr&eacute;stamo" 
-					onClick="realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);">
+            [% PERL %]
+                print C4::AR::Filtros::to_Icon(  
+                                                    boton   => "icon_prestar",
+                                                    onClick => "realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);",
+                                                    title   => "[% 'Prestar' | i18n %]",
+                        ) ;
+            [% END %]
 		</p>
 	[% ELSE %]
 			[% 'NO SE PERMITE CIRCULAR' | i18n %]
@@ -137,7 +146,7 @@
         [% FOREACH reserva IN RESERVAS_ESPERA %]
 		    <tr align="center">
 		    
-			    <td width="16%"> 
+			    <td width="10%"> 
 			    [% PERL %]
 				    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
 												    url => 		"/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
@@ -162,10 +171,16 @@
                 [% END %]
                 </td>
 		    [% IF circularDesdeDetalleUsuario %]
-			    <td> 
-				    <input 	type="image" name="cancel"  value='[% "Cancelar" | i18n %]' border=0 
-						    src="[% themelang %]/images/borrar.png" 
-						    onClick="cancelarReserva('[% reserva.getId_reserva %]')" title="[% 'Cancelar' | i18n %]">
+			    <td width="10%"> 
+                <div class="botonCentrado">
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                                            boton   => "icon_cancelar",
+                                                            onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
+                                                            title   => "[% 'Cancelar' | i18n %]",
+                                ) ;
+                    [% END %]
+                </div>
 			    </td>
 		    [% ELSE %]
 			    [% 'NO SE PERMITE CIRCULAR' | i18n %]

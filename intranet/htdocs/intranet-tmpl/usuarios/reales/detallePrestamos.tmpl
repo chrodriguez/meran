@@ -111,22 +111,29 @@
 	
 	</table>
 	
-<p align="center">
+<div class="botonCentrado">
 	[% IF circularDesdeDetalleUsuario %]	
 		[% IF prestamos_cant %]	
-			<input type="image" BORDER=0 
-			src="[% themelang %]/images/item-return.png" 
-			title="Devolver" 
-			onClick="realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevolucion);">
+            [% PERL %]
+                print C4::AR::Filtros::to_Icon(  
+                                                    boton   => "icon_devolver",
+                                                    onClick => "realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevolucion);",
+                                                    title   => "[% 'Devolver' | i18n %]",
+                        ) ;
+            [% END %]
 		[% END %]	
 		[% IF algunoSeRenueva %]
-				<input type="image" 
-				src="[% themelang %]/images/renew.png" title="Renovar" 
-				onClick="realizarAccion('RENOVACION','chkboxPrestamos',generaDivRenovacion);">
+            [% PERL %]
+                print C4::AR::Filtros::to_Icon(  
+                                                    boton   => "icon_prestar",
+                                                    onClick => "realizarAccion('RENOVACION','chkboxPrestamos',generaDivRenovacion);",
+                                                    title   => "[% 'Renovar' | i18n %]",
+                        ) ;
+            [% END %]
 		[% END %]
 	[% ELSE %]
 			[% 'NO SE PERMITE CIRCULAR' | i18n %]
 	[% END %] <!--END IF permiso_para_circular -->
-</p>
+</div>
 
 [% END %]
