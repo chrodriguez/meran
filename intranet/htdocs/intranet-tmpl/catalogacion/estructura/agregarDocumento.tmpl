@@ -96,19 +96,14 @@ $(document).ready( function() {
     <br>
     <div clsss="botonCentrado">
     &nbsp;* [% "Campos obligatorios" | i18n %]
+            [% PERL %]
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 1' | i18n %]",
+                                                        boton   => "boton_buscar",
+                                                        onClick => "guardar(1);",
+                                                        title   => "[% 'Guardar el nivel 1' | i18n %]",
+                            ) ;
+            [% END %]
     </div>
-    
-    <center>
-                    <div>
-                        [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 1' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "guardar(1);",
-                                                                    title   => "[% 'Guardar el nivel 1' | i18n %]",
-                                        ) ;
-                        [% END %]
-                    </div>
-    </center>
 </span>
 <span id="nivel2Tabla">
     <table width="100%" cellspacing="0" cellpadding="0" border="0">
