@@ -48,7 +48,7 @@
             </td>
         <div>
             [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar Nivel 3' | i18n %]",
+                 print C4::AR::Filtros::to_Icon(   
                                                         boton   => "boton_buscar",
                                                         onClick => "modificarN3('[% nivel3.getId3 %]');",
                                                         title   => "[% 'Modificar nivel 3' | i18n %]",
@@ -57,7 +57,7 @@
         </div>
         <div>
             [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Nivel 3' | i18n %]",
+                    print C4::AR::Filtros::to_Icon( 
                                                         boton   => "boton_buscar",
                                                         onClick => "borrarN3('[% nivel3.getId3 %]');",
                                                         title   => "[% 'Borrar nivel 3' | i18n %]",
@@ -73,7 +73,7 @@
 <i>[% "Para los elementos que est&acute;n marcados:" | i18n %]</i>
 <div>
     [% PERL %]
-            print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar Ejemplares' | i18n %]",
+            print C4::AR::Filtros::to_Icon(  
                                                 boton   => "boton_buscar",
                                                 onClick => "modificarEjemplaresN3('[% nivel3.getId3 %]');",
                                                 title   => "[% 'Modificar Ejemplares' | i18n %]",
@@ -82,7 +82,7 @@
 </div>
 <div>
     [% PERL %]
-            print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Ejemplares' | i18n %]",
+            print C4::AR::Filtros::to_Icon(   
                                                 boton   => "boton_buscar",
                                                 onClick => "borrarEjemplaresN3('[% nivel3.getId3 %]');",
                                                 title   => "[% 'Borrar Ejemplares' | i18n %]",
