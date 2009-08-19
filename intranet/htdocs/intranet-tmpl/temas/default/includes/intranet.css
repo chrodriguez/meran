@@ -992,6 +992,33 @@ label {
     width:150px;
     margin-top:5px;
 }
+<<<<<<< .mine
+
+/* --------------------------------------------------------------------USUARIO-------------------------------------------------- */
+.toggle_container{
+    background:#F0F0F0;
+/*  url(../images/toggle_block_stretch.gif) repeat-y scroll left top; */
+    border-top:1px solid #D6D6D6;
+    clear:both;
+    font-size:1.1em;
+    margin:0 0 5px;
+    overflow:hidden;
+    padding:0;
+/*     width:800px; */
+}
+
+h2.trigger {
+/*     background:transparent url(../imagenes/h2_trigger_a.gif) no-repeat scroll 0 0; */
+    float:left;
+    font-size:2em;
+    font-weight:normal;
+    height:20px;
+    line-height:20px;
+    margin:0 0 5px;
+/*     padding:0 0 0 50px; */
+/*     width:185px; */
+}
+=======
 
 .botonera_horizontal {
     display:inline-table;
@@ -1009,3 +1036,4 @@ label {
     overflow:auto;
     width:100%;
 }
+>>>>>>> .r1927

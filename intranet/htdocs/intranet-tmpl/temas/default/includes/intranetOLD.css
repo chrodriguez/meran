@@ -751,17 +751,6 @@ ul li {
     background-color: infoBackground;
 }
 
-h2.trigger{
-    background:transparent url(../imagenes/h2_trigger_a.gif) no-repeat scroll 0 0;
-    float:left;
-    font-size:2em;
-    font-weight:normal;
-    height:20px;
-    line-height:20px;
-    margin:0 0 5px;
-    padding:0 0 0 50px;
-    width:450px;
-}
 
 
 
@@ -809,17 +798,7 @@ h1 small {
     line-height:normal;
     text-transform:uppercase;
 }
-h2.trigger {
-    background:transparent url(../imagenes/h2_trigger_a.gif) no-repeat scroll 0 0;
-    float:left;
-    font-size:2em;
-    font-weight:normal;
-    height:20px;
-    line-height:20px;
-    margin:0 0 5px;
-    padding:0 0 0 50px;
-    width:185px;
-}
+
 h2.trigger a {
     color:#FFFFFF;
     display:block;
@@ -834,17 +813,7 @@ h2.active {
     background-position:left bottom;
     height: 20px;
 }
-.toggle_container{
-    background:#F0F0F0;
-/*  url(../images/toggle_block_stretch.gif) repeat-y scroll left top; */
-    border-top:1px solid #D6D6D6;
-    clear:both;
-    font-size:1.1em;
-    margin:0 0 5px;
-    overflow:hidden;
-    padding:0;
-    width:800px;
-}
+
 .toggle_container_block{
     background:#F0F0F0;
 /*  url(../images/toggle_block_stretch.gif) repeat-y scroll left top; */
