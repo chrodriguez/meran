@@ -639,8 +639,8 @@ tr.impar {
     cursor: pointer;
 }
 
-#icon_cambiarlibro {
-    background: transparent url(../imagenes/iconos/cambiarlibro.png) no-repeat;
+#icon_renovar {
+    background: transparent url(../imagenes/iconos/renovar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
@@ -653,8 +653,8 @@ tr.impar {
     cursor: pointer;
 }
 
-#icon_devolverlibro {
-    background: transparent url(../imagenes/iconos/devolverlibro.png) no-repeat;
+#icon_devolver {
+    background: transparent url(../imagenes/iconos/devolver.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
@@ -761,8 +761,15 @@ tr.impar {
     cursor: pointer;
 }
 
-#icon_prestarlibro {
-    background: transparent url(../imagenes/iconos/prestarlibro.png) no-repeat;
+#icon_prestar {
+    background: transparent url(../imagenes/iconos/prestar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+}
+
+#icon_cancelar {
+    background: transparent url(../imagenes/iconos/cancelar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
