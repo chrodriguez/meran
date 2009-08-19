@@ -839,6 +839,11 @@ li.MARCHeader{
     float:left;
     margin-right: 10px;
 }
+
+.horizontal_final{
+    clear:right;
+    margin-right: 10px;
+}
 .buttonContainerHorizontal{
     display: table;   /* Allow the centering to work */
     margin: 0 auto;
@@ -986,4 +991,8 @@ label {
     text-align:right;
     width:150px;
     margin-top:5px;
+}
+
+.botonera_horizontal {
+    display:inline-table;
 }
