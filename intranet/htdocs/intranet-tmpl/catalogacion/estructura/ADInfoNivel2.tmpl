@@ -1,8 +1,8 @@
 [% FOREACH nivel2 IN nivel2_array %]    
-    <p class="nivel2Selected" onClick="mostrarInfoAltaNivel3( '[% nivel2.getId1 %]',  '[% nivel2.getId2 %]'); toggleClass(this);">
-    <b>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.cat_ref_tipo_nivel3.getNombre %]</b>
-    <br/>
-    <div>
+<ul class="listado_sin_margen">
+    <li class="nivel2Selected" onClick="mostrarInfoAltaNivel3( '[% nivel2.getId1 %]',  '[% nivel2.getId2 %]'); toggleClass(this);">
+    <strong>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.cat_ref_tipo_nivel3.getNombre %]</strong>
+    <li class="botonera" style="clear:both">
         [% PERL %]
                 print C4::AR::Filtros::to_Icon(   
                                                     boton   => "icon_edicion",
@@ -10,8 +10,6 @@
                                                     title   => "[% 'Modificar nivel 2' | i18n %]",
                         ) ;
         [% END %]
-    </div>
-    <div>
         [% PERL %]
                 print C4::AR::Filtros::to_Icon(   
                                                     boton   => "icon_agregar",
@@ -19,8 +17,6 @@
                                                     title   => "[% 'Agregar nivel 3' | i18n %]",
                         ) ;
         [% END %]
-    </div>
-    <div>
         [% PERL %]
                 print C4::AR::Filtros::to_Icon( 
                                                     boton   => "icon_borrar",
@@ -28,19 +24,24 @@
                                                     title   => "[% 'Borrar nivel 2' | i18n %]",
                         ) ;
         [% END %]
-    </div>
-
-
+    </li>
+<li>
     [% 'Nivel bibliogr&aacute;fico:' | i18n %] [% nivel2.ref_nivel_bibliografico.getDescription %]
-    <br/>
+    </li>
+    <li>
     [% 'Soporte:' | i18n %] [% nivel2.ref_soporte.getDescription %]
-    <br/>
+    </li>
+    <li>
     [% 'Lugar:' | i18n %] [% nivel2.pais_publicacion.getNombre_largo %]
-    <br/>
+    </li>
+    <li>
     [% 'Idioma:' | i18n %] [% nivel2.ref_idioma.getDescription %]
-    <br/>
+    </li>
+    <li>
     [% 'Fecha:' | i18n %] [% nivel2.getAnio_publicacion %]
-    <br/>
+    </li>
+    <li>
     [% 'Cantidad Ejemplares:' | i18n %] [% cant_ejemplares %]
-    </p>
+    </li>
+</ul>
 [% END %]
