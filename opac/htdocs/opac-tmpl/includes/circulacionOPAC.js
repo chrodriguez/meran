@@ -78,13 +78,13 @@ function updateInfoCancelarReserva(responseText){
 /*
 * Funcion que hace consulta Ajax para renovar un prestamo del usuario
 */
-function renovar(id3){
+function renovar(id_prestamo){
 
 	objAH=new AjaxHelper(updateInfoRenovar);
   	objAH.debug= true;
 	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/opac-renew.pl';
-	objAH.id3= id3;
+	objAH.url= '/cgi-bin/koha/opac-renovar.pl';
+	objAH.id_prestamo= id_prestamo;
 	//se envia la consulta
 	objAH.sendToServer();
 }

@@ -608,7 +608,7 @@ sub _verificarParaRenovar{
 	if(!$self->estaEnFechaDeRenovacion){
 			$self->debug("_verificarParaRenovar - NO estamos en fecha de renovacion");
 			$msg_object->{'error'}= 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P108', 'params' => []});
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P119', 'params' => []});
 	}
 
 	if(!($msg_object->{'error'})&&(!$self->socio->esRegular)){
@@ -647,7 +647,7 @@ sub _verificarParaRenovar{
 	#Hay alguna reserva pendiente?
 			$self->debug("_verificarParaRenovar - grupo con reserva pendiente");
 			$msg_object->{'error'}= 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P103', 'params' => []} ) ;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P120', 'params' => []} ) ;
 		}
 
 	if(!($msg_object->{'error'})&&( $self->getRenovaciones == $self->tipo->getRenovaciones )) {
@@ -661,7 +661,7 @@ sub _verificarParaRenovar{
 	# Esta vencido? 
 			$self->debug("_verificarParaRenovar - esta vencido");
 			$msg_object->{'error'}= 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P117', 'params' => []} ) ;
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P118', 'params' => []} ) ;
 		}
 
 }

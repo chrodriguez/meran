@@ -44,18 +44,18 @@ $VERSION = 3;
 
 	&t_devolver
 	&t_renovar
+    &t_renovarOPAC
 	&t_realizarPrestamo
-    	&_verificarMaxTipoPrestamo
+    &_verificarMaxTipoPrestamo
 	&chequeoDeFechas
 	&prestamosHabilitadosPorTipo	
 	&getTipoPrestamo
 	&getPrestamoDeId3
 	&getPrestamosDeSocio
 	&getTipoPrestamo
-    	&obtenerPrestamosDeSocio
+    &obtenerPrestamosDeSocio
 	&cantidadDePrestamosPorUsuario
 	&crearTicket
-    
     &t_eliminarTipoPrestamo
     &t_agregarTipoPrestamo
     &t_modificarTipoPrestamo
@@ -486,19 +486,10 @@ sub t_renovar {
                     $prestamo->renovar($params->{'nro_socio'});
                     $db->commit;
 				# Si la renovacion se pudo realizar
-				
-					if($print_renew && (!$msg_object->{'error'})){ 	
-						#IF PARA LA CONDICION SI SE QUIERE O NO IMPRIMIR EL TICKET
-        				$ticketObj=C4::AR::Prestamos::crearTicket($prestamo->getId3,$prestamo->getNro_socio,$params->{'nro_socio'});
-						 #se genera info para enviar al cliente  
-        				my %infoOperacion = (ticket  => $ticketObj,);
-        				push (@infoTickets, \%infoOperacion);
-      				}
 
 		    		$msg_object->{'error'}= 0;
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P111', 'params' => [$data->{'barcode'}]} ) ;
-					
-					push (@infoMessages, $msg_object);
+
                 };
                 if ($@){
 		   		#Se loguea error de Base de Datos
@@ -520,6 +511,49 @@ sub t_renovar {
 	$infoOperaciones{'messages'}= \@infoMessages;
 
 	return (\%infoOperaciones);
+}
+
+sub t_renovarOPAC {
+  my ($params)=@_;
+
+  my $prestamoTEMP = C4::Modelo::CircPrestamo->new();
+  my $db = $prestamoTEMP->db;
+     $db->{connect_options}->{AutoCommit} = 0;
+     $db->begin_work;
+
+        my ($msg_object)= C4::AR::Mensajes::create();
+        $msg_object->{'error'}= 0;
+        $msg_object->{'tipo'}= "OPAC";
+
+        C4::AR::Debug::debug("T_Renovar OPAC ".$params->{'id_prestamo'});
+        my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $params->{'id_prestamo'}, db => $db);
+        $prestamo->load();
+        $prestamo->_verificarParaRenovar($msg_object);
+
+        if(!$msg_object->{'error'}){
+                eval{
+                    $prestamo->renovar($params->{'nro_socio'});
+                    $db->commit;
+                # Si la renovacion se pudo realizar
+                    $msg_object->{'error'}= 0;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P111', 'params' => [$prestamo->nivel3->getBarcode]} ) ;
+                };
+                if ($@){
+                #Se loguea error de Base de Datos
+                    &C4::AR::Mensajes::printErrorDB($@, 'B405',"OPAC");
+                    $db->rollback;
+                #Se setea error para el usuario
+                    $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P112', 'params' => [$prestamo->nivel3->getBarcode]} ) ;
+                }
+        }else{
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P112', 'params' => [$prestamo->nivel3->getBarcode]} ) ;
+        }
+
+  $db->{connect_options}->{AutoCommit} = 1;
+
+    return ($msg_object);
 }
 
 sub getPrestamoPorBarcode {
