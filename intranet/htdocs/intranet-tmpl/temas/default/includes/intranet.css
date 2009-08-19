@@ -57,108 +57,6 @@
 	font:bold 7px tahoma,arial,helvetica,sans-serif;
 	text-align:right;
 }
-/*---------------------------------------------------MENU-------------------------------------------------------------------------*/
-#menu{
-   width:1024px;
-   float:left;
-   margin:2px;  
-}
-
-#menu a, #menu a:visited{
-font:bold 100%/205% arial,helvetica,sans-serif;
-color:#4b6d22;
-border:0px;
-text-decoration:none;
-}
-#menu .menu_superior{
-font:bold 100%/205% " Arial ","Verdana"," sans-serif ";
-color:#4b6d22;
-background: url(../imagenes/menu.png) repeat 100% 100%;
-text-transform:uppercase;
-text-align:center;
-cursor: pointer;
-display:block;
-white-space:nowrap;
-margin:0;
-border-left:1px solid #ccc;
-font-size:11px;
-height:20px;
-	-moz-border-radius-topleft:8px;
-    -moz-border-radius-topright:8px;
-}
-#menu .menu_superior a:hover{
-font:bold 100%/205% " Arial ","Verdana"," sans-serif ";
-color:#FFFFFF;/*#4b6d22;*/
-background: url(../imagenes/menu.png) repeat 100% 100%;
-text-transform:uppercase;
-text-align:center;
-cursor: pointer;
-display:block;
-white-space:nowrap;
-margin:0;
-border-left:1px solid #ccc;
-font-size:11px;
-height:20px;
-	-moz-border-radius-topleft:8px;
-    -moz-border-radius-topright:8px;
-
-
-}
-#menu .menu_intermedio {
-	font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
-	cursor: pointer;
-	display:block;
-	border-width:1px;
-	border-style:solid;
-	border-color:#ccc #888 #555 #bbb;
-	white-space:nowrap;
-	margin:0;
-	padding:0 11px;
-	background:#548d30 url(../imagenes/expand3.gif) no-repeat 100% 100%;
-	color: #FFFFFF;	
-}
-#menu .menu-item {
-   font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
-	background:#a1c162;
-	color: #FFFFFF;
-	cursor: pointer;
-	display:block;
-	padding:0 2px;
-
-}
-#menu .menu-item a:hover{
-    font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
-	background:#c4d872;
-	color: #548d30;
-	cursor: pointer;
-	display:block;
-	padding:0 2px;
-}
-#menu .menu-item a {
-	font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
-	color: #FFF;
-	width:auto;
-	cursor: pointer;
-	display:block;
-	padding:0 2px;
-	border-bottom-width: thin;
-	border-bottom-style: solid;
-	border-bottom-color: #A1C162;	
-}
-
-/*h3{
-font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
-cursor: pointer;
-display:block;
-border-width:1px;
-border-style:solid;
-border-color:#ccc #888 #555 #bbb;
-white-space:nowrap;
-margin:0;
-padding:0 5px;
-/* width: 104px; */
-
-
 
  /*---------------------------------------------------CONTENIDO-------------------------------------------------------------------------*/
 body{
@@ -996,7 +894,6 @@ label {
     text-align:right;
 /*     width:150px; */
     margin-top:5px;
-    width:14%;
 }
 
 

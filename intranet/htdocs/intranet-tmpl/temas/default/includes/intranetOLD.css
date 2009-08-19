@@ -502,137 +502,6 @@ p.nivel2Selected:hover{
 
 
 
-/* Begin CSS Popout Menu */
-.menu-alone-link{
-   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
-   display:block;
-   border-width:1px;
-   border-style:solid;
-   border-color:#ccc #888 #555 #bbb;
-   white-space:nowrap;
-   margin:0;color:#fff;
-   background:black;
-   text-transform:uppercase;
-   padding:0 5px; 
-}
-
-#menu{
-   width:1024px;
-   float:left;
-}
-
-.menu-div{
-   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
-   margin:0;
-   text-align:center;
-   text-transform:uppercase;
-}
-
-.menu-div ul{
-   top: 84px;
-}
-
-.menu-ul {
-   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
-   display:block;
-   background:grey;
-   margin:0;
-   padding:0;
-   text-transform:uppercase;
-	list-style-type:none;
-}
-
-.menu-item {
-   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
-   display:block;
-   background:grey;
- /*   width:140px;
-   margin:0 0 0 -40px; */
-   text-transform:uppercase;
-}
-
-.menu-item a{
-   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
-   display:block;
-   background:grey;
-/*    margin:0 0 0 -40px; */
-   text-transform:uppercase;
-}
-
-.menu-item a:hover{
-   background: #FFE4B5;
-}
-
-#menu a{
-   font:normal 100%/205% tahoma,arial,helvetica,sans-serif;
-   display:block;
-   border-width:1px;
-   border-style:solid;
-   border-color:#ccc #888 #555 #bbb;
-   white-space:nowrap;
-   margin:0;
-   padding:0 1px;
-/*    width:112px; */
-}
-
-h3{
-font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
-cursor: pointer;
-display:block;
-border-width:1px;
-border-style:solid;
-border-color:#ccc #888 #555 #bbb;
-white-space:nowrap;
-margin:0;
-padding:0 5px;
-/* width: 104px; */
-}
-
-h3{
-color:#fff;
-background:#000 url(../imagenes/expand3.gif) no-repeat 100% 100%;
-text-transform:uppercase
-}
-
-
-
-#menu a, #menu a:visited{
-color:#000;
-}
-
-
-#menu ul{
-margin:0;
-padding:0;
-float:left;
-width:11.5em;
-}
-
-#menu li{
-position:relative;
-list-style-type:none;
-float:left;
-width:112px;
-}
-
-#menu ul ul{
-position:absolute;
-list-style-type:none;
-z-index:500;
-/* top:auto; */
-display:none;
-}
-
-#menu ul ul ul{
-top:0;
-
-}
-
-#menu ul li{
-   float:left;
-   width:100px;   
-}
-
 
 /* Begin non-anchor hover selectors */
 
@@ -641,30 +510,6 @@ on non-anchor hovers for IE5.x to comply with the
 older version of csshover.htc - V1.21.041022. It
 improves IE's performance speed to use the older
 file and this method */
-
-div#menu h3:hover{
-background:#000 url(../imagenes/expand3.gif) no-repeat -999px -9999px;
-}
-
-
-/* End of non-anchor hover selectors */
-
-/* Styling for Expand */
-
-#menu a.x, #menu a.x:visited{
-font-weight:normal;
-color:#000;
-background:#eee url(../imagenes/expand3.gif) no-repeat 100% 100%;
-}
-
-/* FIXME esto esta rompiendo todo */
-#menu ul li {
-      list-style-type:none;
-      display:block;
-      margin:0;
-   float:left;
-   width:100px;  
-}
 
 
 .main-header{
@@ -675,26 +520,6 @@ background:#eee url(../imagenes/expand3.gif) no-repeat 100% 100%;
 
 /* End CSS Popout Menu */
 
-/* Begin Content Area - Not Part of CSS Popout Menu */
-
-#content{position:absolute;top:3.0em;left:0;margin:0 .5em .5em .5em;padding:0.5em;border:1px solid #000;clear:both;}
-#content a:link{color:#a00;}
-#content a:visited{color:#a00;}
-#content a:hover{color:#a00;background:#eee;}
-#content a:active{color:#060;background:#ddd;}
-#content h1, #content h2, #content h3{font:bold 1.0em arial,sans-serif;margin:0.5em 0.25em;padding:0;}
-#content img{border:none;}
-#content p{font:normal 0.9em/1.5em verdana,sans-serif;margin:1.0em;}
-#content ul, #content ul ul{font:normal 0.95em/1.45em verdana,tahoma,arial,sans-serif;margin:1.0em 4.0em 1.5em 4.0em;}
-#content ul li{font:normal 0.9em/1.4em verdana,tahoma,arial,sans-serif;margin:1.0em 0;}
-#content ul ul li{font:normal 1.1em/1.6em verdana,tahoma,arial,sans-serif;margin:0;}
-#content .fr{float:right;margin:0 0 1.0em 1.0em;}
-#content .mod{font:normal .7em arial,sans-serif;margin:.25em;}
-div.vv{position:relative;top:0;float:right;margin:0 0 15px 15px;}
-span.as300250{float:right;margin:0 1.0em .2em 1.0em;}
-span.as300250l{float:left;margin:0 1.0em .2em 1.0em;}
-span.as120240{float:right;margin:0 1.0em .2em 1.0em;}
-span.as120240l{float:left;margin:0 1.0em .2em 1.0em;}
 .selectLang{
 
    width: 55px;
