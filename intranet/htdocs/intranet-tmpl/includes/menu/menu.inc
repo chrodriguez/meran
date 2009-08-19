@@ -5,7 +5,14 @@
 
  <div class="idioma_y_login">
             [% IF loggedinuser %]
-                  <h2 id="logout">Ingres&oacute; como:<b> [% loggedinuser %]</b> 
+                  <h2 id="logout">Ingres&oacute; como:
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to(   text =>     "[% loggedinuser %]",
+                                                                  url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                                  params =>   ["nro_socio=[% loggedinuser %]"],
+                                                                  title =>    "[% 'Mis datos' | i18n %]"
+                                                            );
+                            [% END %]
                            [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1 tabindex="-1">Salir</a>]
                   </h2>
             [% ELSE %]

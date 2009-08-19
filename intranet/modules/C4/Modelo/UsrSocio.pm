@@ -247,7 +247,15 @@ sub resetPassword{
     my ($self)=shift;
 
     $self->setPassword("");
+    $self->forzarCambioDePassword();
+    $self->save();
+}
+
+sub forzarCambioDePassword{
+    my ($self)=shift;
+
     $self->setChange_password(1);
+    $self->setLast_change_password('0000-00-00');
     $self->save();
 }
 
