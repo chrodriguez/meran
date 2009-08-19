@@ -5,11 +5,13 @@
     Regitro de Nivel 1: [% nivel1.getId1 %]
     </li>
     <li class="botonera_horizontal">
+        <ul class="listado_sin_margen">
         [% PERL %]
                 print C4::AR::Filtros::to_Icon(  
                                                     boton   => "icon_edicion",
                                                     onClick => "modificarN1('[% nivel1.getId1 %]');",
                                                     title   => "[% 'Modificar nivel 1' | i18n %]",
+                                                    li => 1,
                         ) ;
         [% END %]
         [% PERL %]
@@ -17,6 +19,7 @@
                                                     boton   => "icon_agregar",
                                                     onClick => "agregarN2();",
                                                     title   => "[% 'Agregar nivel 2' | i18n %]",
+                                                    li => 1,
                         ) ;
         [% END %]
         [% PERL %]
@@ -24,8 +27,10 @@
                                                     boton   => "icon_borrar",
                                                     onClick => "borrarN1('[% nivel1.getId1 %]');",
                                                     title   => "[% 'Borrar nivel 1' | i18n %]",
+                                                    li => 1,
                         ) ;
         [% END %]
+    </ul>
     </li>
     </ul>
 
