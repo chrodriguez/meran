@@ -441,14 +441,14 @@ div.detalle{
     float:right;
 }
 
-.lateral {
+/*.lateral {
     clear: left;
     float: left;
     height: 600px;
-/*     overflow: auto; */
+/*     overflow: auto; 
     width: 20%;
 }
-
+*/
 /*.nivel2Barra {
 	border:1px solid;
     height: 50%;

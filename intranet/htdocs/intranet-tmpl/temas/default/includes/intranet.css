@@ -1032,16 +1032,22 @@ h2.trigger {
     font-size: 10pt;
     color: #000000;
     font-weight: normal;
+    height:300px;
 }
 .nivel2Barra {
     border:1px solid;
     overflow:auto;
-    height:55%;
     width:100%;
 }
 .nivel1Lateral {
     border:1px solid #999999;
-    height:30%;
     margin-bottom:15px;
     padding:11px;
 }
+.lateral {
+    clear:left;
+    float:left;
+    width:20%;
+    margin-bottom:15px;
+}
+
