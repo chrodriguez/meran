@@ -1,4 +1,6 @@
-/*---------------------------------------------------------------- LOGIN-------------------------------------------------*/                                      
+/*---------------------------------------------------------------- LOGIN-------------------------------------------------*/                        body input[type="text"]:focus{
+  background: InfoBackground;
+}
 #login {
     background-image: url(../imagenes/meranLogin.png);
     font-family: "Arial", "Verdana";

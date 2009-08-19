@@ -420,7 +420,11 @@ sub setFlags{
 
 sub getPassword{
     my ($self) = shift;
-    return ($self->password);
+    if (C4::AR::Utilidades::validateString($self->password)){
+      return ($self->password);
+    }else{
+      return (C4::Auth::prepare_password($self->persona->getNro_documento));
+    }
 }
 
 sub setPassword{
