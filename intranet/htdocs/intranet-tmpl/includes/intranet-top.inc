@@ -39,7 +39,6 @@
 [% END %]
 
 <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranetOLD.css">
-<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/intranet.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/menu.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/jquery.alerts.css">
