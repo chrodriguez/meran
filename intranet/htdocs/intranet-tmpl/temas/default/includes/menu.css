@@ -118,7 +118,7 @@ height:20px;
     color: #548d30;
     cursor: pointer;
     display:block;
-    padding:0 2px;
+/*     padding:0 2px; */
 }
 .menu-item a {
     font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
