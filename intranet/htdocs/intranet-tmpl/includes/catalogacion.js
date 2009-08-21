@@ -90,7 +90,7 @@ function verificarAgregarDocumentoN3(){
 		}
 	
 		if(existe){
-			alert(HAY_BARCODES_REPETIDOS);
+			jAlert(HAY_BARCODES_REPETIDOS,CATALOGO_ALERT_TITLE);
 			return 0;
 		}
 	}
@@ -110,7 +110,7 @@ function _recuperarSeleccionados(chckbox){
 	var array= new Array;
 	var long=chck.length;
 	if ( long == 0){
-		alert(ELIJA_AL_MENOS_UN_EJEMPLAR);
+		jAlert(ELIJA_AL_MENOS_UN_EJEMPLAR,CATALOGO_ALERT_TITLE);
 	}
 	else{
 
@@ -268,7 +268,7 @@ function mostrarDataNivel3(){
 }
 
 function updateMostrarEstructuraDelNivel1(responseText){
-//   alert('responseText: '+htmlentities(responseText,'ENT_NOQUOTES','UTF-8 '));
+//   jAlert('responseText: '+htmlentities(responseText,'ENT_NOQUOTES','UTF-8 '));
     _clearContentsEstructuraDelNivel();
     _showAndHiddeEstructuraDelNivel(1);
     //proceso la info del servidor y se crean las componentes en el cliente
