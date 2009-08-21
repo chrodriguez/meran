@@ -55,7 +55,7 @@ function eleccionDeNivel(){
 function updateEleccionDeNivel(responseText){
     inicializar();
     $("#resultCatalogacion").html(responseText);
-    zebra("tablaResult");
+    zebra("tabla_datos");
 }
 
 function modificarOrden(id, accion){
@@ -79,12 +79,16 @@ function visibilidad(id){
 
 //Elimina el campo en la estructura inicial del catalogo
 function eliminarCampo(id){
-    objAH=new AjaxHelper(eleccionDeNivel);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.idMod=id;
-    objAH.tipoAccion= 'ELIMINAR_CAMPO';
-    objAH.sendToServer();
+    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_TITLE, function(confirmStatus){
+        if (confirmStatus){
+            objAH=new AjaxHelper(eleccionDeNivel);
+            objAH.debug= true;
+            objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+            objAH.idMod=id;
+            objAH.tipoAccion= 'ELIMINAR_CAMPO';
+            objAH.sendToServer();
+        }
+    });
 }
 
 function mostrarAgregarCampo(id){

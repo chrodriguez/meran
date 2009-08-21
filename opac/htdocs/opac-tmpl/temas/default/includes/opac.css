@@ -299,7 +299,15 @@ ul.horizontal-list li {
 }
 
 .botonCentrado {
-    margin-left:50%;
+    margin-left:37%;
+    clear:both;
+    padding-top:10px;
+    padding-bottom:10px;
+}
+
+.botonCentradoTabla {
+    margin-left:37%;
+    clear:both;
 }
 
 /*                                                     estilos para el login                                   */

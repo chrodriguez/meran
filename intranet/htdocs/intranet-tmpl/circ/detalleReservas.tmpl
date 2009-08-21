@@ -61,7 +61,7 @@
             [% END %]
 		</td>
 		<td align="middle"> 
-            <div class="botonCentrado">
+            <div class="botonCentradoTabla">
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(   text    => "[% 'Cancelar' | i18n %]",
                                                                     boton   => "icon_cancelar",
@@ -76,7 +76,7 @@
     [% END %] 
 </table>
     <p colspan="10" align=center>
-        <div class="botonCentrado">
+        <div class="botonCentradoTabla">
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(   text    => "[% 'Realizar pr&eacute;stamo' | i18n %]",
                                                                     boton   => "icon_prestar",
@@ -136,7 +136,7 @@
             [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
 			</td>
 			<td>
-            <div class="botonCentrado">
+            <div class="botonCentradoTabla">
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(   text    => "[% 'Cancelar' | i18n %]",
                                                                     boton   => "icon_cancelar",

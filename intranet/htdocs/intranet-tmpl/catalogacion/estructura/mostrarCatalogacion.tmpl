@@ -2,7 +2,7 @@
     <br>
 
     [% IF cant != 0 %]
-        <table id="tablaCamposMod" class="datos_tabla" width="100%" cellspacing="0" cellpadding="0" border="0">
+        <table id="tablaCamposMod" class="tabla_datos" width="100%" cellspacing="0" cellpadding="0" border="0">
 	        <tr>
 		        
 		        <td colspan="7"> 
@@ -18,6 +18,7 @@
 		        <td >Visible</td>
 		        <td >Editar</td>
 		        <td >Deshabilitar</td>
+                <td >Debug</td>
 	        </tr>
         [% FOREACH catalogacion IN catalogaciones %]
 	        <tr align="center">
@@ -50,16 +51,30 @@
 				[% END %]
 		        </td>
 		        <td>
+                <div class="botonCentradoTabla">
                 [% IF catalogacion.soyFijo != 1 %]
-			        <input  src="[% themelang %]/images/modificar.png" type="image"  value="Modificar Campo" title="Modificar Campo" 
-                    onClick="mostrarModificarCampo('[% catalogacion.getId %]')">
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                                                boton   => "icon_edicion",
+                                                                onClick => "mostrarModificarCampo('[% catalogacion.getId %]');",
+                                                                title   => "[% 'Modificar Campo' | i18n %]",
+                                    ) ;
+                        [% END %]
                 [% END %]
+                </div>
 		        </td>
 		        <td>
+                <div class="botonCentradoTabla">
                 [% IF catalogacion.soyFijo != 1 %]
-			        <input  src="[% themelang %]/images/eliminar.png" type="image"  value="Eliminar Campo" title="Eliminar Campo" 
-                    onClick="eliminarCampo('[% catalogacion.getId %]')">
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                                                boton   => "icon_borrar",
+                                                                onClick => "eliminarCampo('[% catalogacion.getId %]');",
+                                                                title   => "[% 'Eliminar Campo' | i18n %]",
+                                    ) ;
+                        [% END %]
                 [% END %]
+                </div>
 		        </td>
 		        <td>    
                         <!-- AGREGADO SOLO PARA DEBUGUEAR -->
@@ -77,9 +92,15 @@
     
     [% END %]
     
-    <br>
-    <center>
-    <input src="[% themelang %]/images/agregar.png" type="image"  value="Agregar Campo" title="Agregar Campo" onClick="mostrarAgregarCampo()">
-    </center>
+    <div class="botonCentrado">
+            [% PERL %]
+                     print C4::AR::Filtros::to_Button(      text    => "[% 'Agregar Campo' | i18n %]",
+                                                            boton   => "boton_agregar",
+                                                            onClick => "mostrarAgregarCampo();",
+                                                            title   => "[% 'Agregar Campo' | i18n %]",
+                                                            width   => "135",
+                             ) ;
+            [% END %]
+    </div>
        
 [% END %] <!-- END IF niveles -->

@@ -38,20 +38,17 @@ $(document).ready(function() {
 	<div id="contentWindow" class="formElemets">
 		<ul>
 		<li>
-			<label for="campoHelp" style="float: left; width:25%" >
+			<label for="campoHelp">
 			Ingrese el campo o palabra:
-			</label><br>
-			<input	type="text" id="campoHelp" class="campoHelp" onClick="clearInput();"
-				name="campoHelp" style="width:90%;">
+			</label>
+			<input	type="text" id="campoHelp" class="campoHelp" onClick="clearInput();" name="campoHelp" style="width:70%;">
 			<input type="hidden" id="campoHelpId" name="campoHelpId">
 		</li>
 		<li>
-			<label for="subcampo" style="float: left; width:25%" >
+			<label for="subcampo">
 			Sub Campo:
 			</label>
-			<br>
-			<textarea 	id="subcampos" name="subcampos" rows="7" style="width:90%;"
-					readonly=readonly></textarea>
+			<textarea 	id="subcampos" name="subcampos" rows="7" style="width:70%;" readonly=readonly></textarea>
 		</li>
 		<li>
 			<a href="http://www.loc.gov/marc/classification/eccdspa.html" target="_blanc">

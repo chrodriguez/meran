@@ -29,7 +29,7 @@ $(document).ready(function() {
 <div id="contentWindow" class="formElemets">
 	<ul>
 	<li>
-		<label for="campoUsuario" style="float: left;" >
+		<label for="campoUsuario">
 		<b>Ingrese Apellido y Nombres, DNI o Legajo del usuario</b>
 		</label><br>
 		<input 	type="text" id="campoUsuario" onClick="clearInput();" 
@@ -40,7 +40,9 @@ $(document).ready(function() {
 		<div id="detalleUsuario"></div>
 	</li>
 	<li>
+<!--     <div class="botonCentrado"> -->
 		<input type="button" value="Aceptar" onClick="confirmarPrestamo()">
+<!--     </div> -->
 	</li>
 	</ul>
 </div> <!--end div id="contentWindow"-->
