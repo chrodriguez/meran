@@ -7,8 +7,34 @@
 se le debe asigna el nro de socio a nro_socio_auth
 */
 
+function verificarDatos(){
+    if($('#nombreAutorizado').val() == ''){
+        $('#nombreAutorizado').focus();
+        jAlert(FALTA_INGRESAR_EL_NOMBRE_DEL_AUTORIZADO);
+       
+        return 0;
+    }
+
+    if($('#dniAutorizado').val() == ''){
+        $('#dniAutorizado').focus();
+        jAlert(FALTA_INGRESAR_EL_DNI_DEL_AUTORIZADO);
+        
+        return 0;
+    }
+
+    if($('#telefonoAutorizado').val() == ''){
+        $('#telefonoAutorizado').focus();
+        jAlert(FALTA_INGRESAR_EL_TELEFONO_DEL_AUTORIZADO);
+        
+        return 0;
+    }
+
+    return 1;
+}
+
 function confirmarAgregarAutorizado(){
 
+    if (verificarDatos()){
         objAH=new AjaxHelper(updateConfirmarAgregarAutorizado);
         objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
         objAH.debug= true;
@@ -18,7 +44,8 @@ function confirmarAgregarAutorizado(){
         objAH.auth_telefono = $('#telefonoAutorizado').val();
         objAH.tipoAccion= 'AGREGAR_AUTORIZADO';
         objAH.sendToServer();
-
+    }
+      
 }
 
 function updateConfirmarAgregarAutorizado(responseText){

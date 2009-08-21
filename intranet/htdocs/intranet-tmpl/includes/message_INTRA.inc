@@ -76,6 +76,9 @@ SOLO_SERA_NUMERICO= "[% 'Solo sera numerico' | i18n %]";
 CONFIRMAR_ELIMINAR_AFILIADO= "[% 'Desea eliminar el autorizado para este usuario?' | i18n %]";
 GRANT_PERMISSION_TITLE= "[% 'Advertencia de cesion de Permisos' | i18n %]";
 USUARIOS_ALERT_TITLE= "[% 'Advertencia de Usuarios' | i18n %]";
+FALTA_INGRESAR_EL_NOMBRE_DEL_AUTORIZADO= "[% 'Falta ingresar el nombre del autorizado' | i18n %]";
+FALTA_INGRESAR_EL_DNI_DEL_AUTORIZADO= "[% 'Falta ingresar el DNI del autorizado' | i18n %]";
+FALTA_INGRESAR_EL_TELEFONO_DEL_AUTORIZADO= "[% 'Falta ingresar el Tel&eacute;fono del autorizado' | i18n %]";
 //================================================Fin==Usuarios==================================================
 
 //================================================Catalogo=======================================================
