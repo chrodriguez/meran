@@ -144,18 +144,20 @@ sub to_Button{
     }
     
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
-    $button .=  "<li  id='boton_medio' class='click ".$alternClass. "' onClick='".$onClick."' style='width:".$width."px'";
+    $button .=  '<li  id="boton_medio" class="click '.$alternClass.'" onClick="'.$onClick.'" style=width:"'.$width.'px"';
+
     if($title){
-        $button .= " title='".$title."'";
+        $button .= ' title="'.$title.'"';
     }
     
-    $button .= "> ";
-    $button .=  "    <div id=".$boton."> ";
-    $button .=  "   </div> ";
-    $button .=  "   <div id='boton_der'> ";
-    $button .=  "   </div> ";
-    $button .=  "   <div id='boton_texto'>".$text."</div> ";
-    $button .=  "</li> ";
+    $button .=  '> ';
+    $button .=  '    <div id="'.$boton.'"> ';
+    $button .=  '   </div> ';
+    $button .=  '   <div id="boton_der"> ';
+    $button .=  '   </div> ';
+    $button .=  '   <div id="boton_texto">'.$text.'</div> ';
+    $button .=  '</li> ';
+
     return $button;
 }
 
@@ -173,20 +175,20 @@ sub to_Icon{
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
 
     if($params_hash_ref{'li'}){
-        $button .=  "<li id='".$boton."' class='click ".$alternClass. "' onClick=".$onClick;
+        $button .=  '<li id="'.$boton.'" class="click '.$alternClass.'" onClick="'.$onClick.'"';
     }else{
-        $button .=  "<div id='".$boton."' class='click ".$alternClass. "' onClick=".$onClick;
+        $button .=  '<div id="'.$boton.'" class="click '.$alternClass.'" onClick="'.$onClick.'"';
     }
 
     if($title){
-        $button .= " title='".$title."'";
+        $button .= ' title="'.$title.'"';
     }
     
-    $button .= "> ";
+    $button .= '> ';
     if($params_hash_ref{'li'}){
-        $button .=  "</li> ";
+        $button .=  '</li> ';
     }else{
-        $button .=  "</div> ";
+        $button .=  '</div> ';
     }
 
     return $button;

@@ -427,8 +427,8 @@ function updateModificarEstructuraCatalogacion(responseText){
 
 
 <br><br>
-<label for="niveles_id" style="float: left; width:13%" >
-	Nivel:
+<label for="niveles_id">
+	[% 'Nivel:' | i18n %]
 </label>
 [% selectNivel %]
 
@@ -436,8 +436,8 @@ function updateModificarEstructuraCatalogacion(responseText){
 <div id="divitemtype" style="display:none;">
 
     <p>
-    <label for="itemtype" style="float: left; width:13%;">
-	    Tipo de item: 
+    <label for="itemtype">
+	    [% 'Tipo de item:' | i18n %] 
     </label>
     [% selectItemType %]
     </p>

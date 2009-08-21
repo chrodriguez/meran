@@ -44,7 +44,10 @@ $(document).ready(function() {
          </select>-->
 
         <input id="obligatorio" type="hidden" value="">
-        Liblibrarian: <input id="liblibrarian" type="text" value="[% catalogacion.getLiblibrarian %]" size="90"> 
+        <label for="liblibrarian">
+            [% 'Liblibrarian:' | i18n %] 
+        </label>
+        <input id="liblibrarian" type="text" value="[% catalogacion.getLiblibrarian %]" size="90"> 
         </p>
 <!-- TODO por el momento solo se permite modificar el liblibrarian -->
        <!-- <label for="tipoInput" style="float:left; width:13%">Tipo de input:  </label>
@@ -82,26 +85,23 @@ $(document).ready(function() {
     </div>  <!--END subcontent-->
 </div> <!--END <div id="content">-->
 
-<br>
-<div align="center">
-        <div>
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo temporal' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "modificarEstructuraCatalogacion([% catalogacion.getId %]);",
-                                                                    title   => "[% 'Guardar Campo temporal' | i18n %]",
-                                        ) ;
-            [% END %]
-        </div>
-        <div>
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo temporal' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "cancelarEstructuraCatalogacion();",
-                                                                    title   => "[% 'Cancelar Campo temporal' | i18n %]",
-                                        ) ;
-            [% END %]
-        </div>
 
+<div class="botonCentrado">
+    [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo temporal' | i18n %]",
+                                                            boton   => "boton_buscar",
+                                                            onClick => "modificarEstructuraCatalogacion([% catalogacion.getId %]);",
+                                                            title   => "[% 'Guardar Campo temporal' | i18n %]",
+                                                            width   => "170"        
+                                ) ;
+    [% END %]
 
+    [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo temporal' | i18n %]",
+                                                            boton   => "boton_buscar",
+                                                            onClick => "cancelarEstructuraCatalogacion();",
+                                                            title   => "[% 'Cancelar Campo temporal' | i18n %]",
+                                                            width   => "170"        
+                                ) ;
+    [% END %]
 </div>

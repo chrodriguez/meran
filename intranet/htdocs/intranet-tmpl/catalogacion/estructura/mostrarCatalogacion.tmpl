@@ -30,16 +30,32 @@
 			        [% catalogacion.getLiblibrarian %]
 		        </td>
 		        <td>
+                <div class="botonCentradoTabla">
 <!--                 Si no soy el prmiero muestro el boton para subir el orden -->
                 [% IF ! catalogacion.primeroDelTipo(itemType) %]  
-			        <input  src="[% themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" 
-                    onClick="modificarOrden('[% catalogacion.getId %]', 'SUBIR_ORDEN')"> 
+<!--			        <input  src="[% themelang %]/images/1uparrow.png" type="image"  value="Subir en el Orden" title="Subir Orden" 
+                    onClick="modificarOrden('[% catalogacion.getId %]', 'SUBIR_ORDEN')"> -->
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                                                boton   => "icon_subir",
+                                                                onClick => "modificarOrden('[% catalogacion.getId %]', 'SUBIR_ORDEN');",
+                                                                title   => "[% 'Subir en el Orden' | i18n %]",
+                                    ) ;
+                        [% END %]
                 [% END %]
 <!--                 Si no soy el ultimo muestro el boton para bajar el orden -->
                 [% IF ! catalogacion.ultimoDelTipo(itemType) %]  
-			        <input  src="[% themelang %]/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" 
-                    onClick="modificarOrden('[% catalogacion.getId %]', 'BAJAR_ORDEN')">
+			        <!--<input  src="[% themelang %]/images/1downarrow.png" type="image"  value="Bajar en el Orden" title="Bajar Orden" 
+                    onClick="modificarOrden('[% catalogacion.getId %]', 'BAJAR_ORDEN')">-->
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                                                boton   => "icon_bajar",
+                                                                onClick => "modificarOrden('[% catalogacion.getId %]', 'BAJAR_ORDEN');",
+                                                                title   => "[% 'Bajar en el Orden' | i18n %]",
+                                    ) ;
+                        [% END %]
                 [% END %]
+                </div>
 		        </td>
 		        <td>
 				[% IF catalogacion.getObligatorio != 1 %]
