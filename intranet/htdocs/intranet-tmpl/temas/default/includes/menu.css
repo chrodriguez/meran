@@ -126,11 +126,14 @@ height:20px;
     width:auto;
     cursor: pointer;
     display:block;
-    padding:0 2px;
+    padding:0 11px;
+    margin: 0;
     background:grey;
     border-bottom-width: thin;
     border-bottom-style: solid;
-    border-bottom-color: #A1C162;   
+    border-bottom-color: #A1C162;  
+    white-space: nowrap;
+     
    text-transform:uppercase;
 }
 
