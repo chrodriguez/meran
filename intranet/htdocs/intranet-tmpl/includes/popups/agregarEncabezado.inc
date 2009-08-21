@@ -2,19 +2,6 @@
 
 <script>
 
-// function openWindow(){
-// 	$('.windowBlur').show();
-// 	$('#window').draggable({opacity: 0.7777});
-//  	$('#window').show();
-// 	
-// }
-
-// function closeWindow(){
-// 	$('.windowBlur').hide();
-// 	$('#window').hide();
-// 	clearDataTextArea();
-// }
-
 /******************************************Manejador para TextArea*********************************************/
 
 function dataO(ID, text){

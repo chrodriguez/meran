@@ -78,7 +78,13 @@ $(document).ready(function() {
 	</li>
 
 	<li>
-		<input type="button" value="Aceptar" onClick="confirmarAgregarAutorizado()">
+            [% PERL %]
+                     print C4::AR::Filtros::to_Button(      text    => "[% 'Aceptar' | i18n %]",
+                                                            boton   => "boton_buscar",
+                                                            onClick => "confirmarAgregarAutorizado();",
+                                                            title   => "[% 'Agregar Autorizado' | i18n %]",
+                             ) ;
+            [% END %]
 	</li>
 	</ul>
 </div> <!--end div id="contentWindow"-->

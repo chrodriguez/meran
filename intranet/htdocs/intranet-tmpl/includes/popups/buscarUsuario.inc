@@ -29,9 +29,9 @@ $(document).ready(function() {
 <div id="contentWindow" class="formElemets">
 	<ul>
 	<li>
-		<label for="campoUsuario">
+<!-- 		<label for="campoUsuario"> -->
 		<b>Ingrese Apellido y Nombres, DNI o Legajo del usuario</b>
-		</label><br>
+<!-- 		</label><br> -->
 		<input 	type="text" id="campoUsuario" onClick="clearInput();" 
 				id="campoUsuario" name="campoUsuario" style="width:90%;" tabindex="1">
 				<input id="nro_socio_hidden" type="hidden">
@@ -41,7 +41,13 @@ $(document).ready(function() {
 	</li>
 	<li>
 <!--     <div class="botonCentrado"> -->
-		<input type="button" value="Aceptar" onClick="confirmarPrestamo()">
+            [% PERL %]
+                     print C4::AR::Filtros::to_Button(      text    => "[% 'Aceptar' | i18n %]",
+                                                            boton   => "boton_buscar",
+                                                            onClick => "confirmarPrestamo();",
+                                                            title   => "[% 'Aceptar' | i18n %]",
+                             ) ;
+            [% END %]
 <!--     </div> -->
 	</li>
 	</ul>

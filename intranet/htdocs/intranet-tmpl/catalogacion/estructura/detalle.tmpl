@@ -60,7 +60,8 @@ function updateEjemplaresDelGrupo(responseText){
 function buscarUsuario(id2, id3){
 	objAH=new AjaxHelper(updateBuscarUsuario);
 	objAH.debug= true;
-	objAH.url='/intranet-tmpl/includes/popups/buscarUsuario.inc';
+    objAH.url='/cgi-bin/koha/utils/pop_ups.pl';
+    objAH.pop_up_template= 'buscar_usuario'; 
 	objAH.debug= true;
 	objAH.sendToServer();
 
