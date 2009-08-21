@@ -1935,7 +1935,6 @@ sub _obtenerEstructuraYDatos{
 
 	my @result;
 	my $nivel;
-
 	if( $params->{'nivel'} eq '1'){
 		$nivel= C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
 C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel1FromId1\n");
@@ -1950,42 +1949,47 @@ C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel3FromId3\n");
 	}
 
 	#paso todo a MARC
-	my $nivel_info_marc_array = $nivel->toMARC;
+    
+	my $nivel_info_marc_array = undef;
+    eval{
+      $nivel_info_marc_array = $nivel->toMARC;
+    };
 
 	#se genera la estructura de catalogacion para envia al cliente
-	for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++){
-
-		my $cat_estruct_array = _getEstructuraFromCampoSubCampo(	
-																	$nivel_info_marc_array->[$i]->{'campo'}, 
-																	$nivel_info_marc_array->[$i]->{'subcampo'}
-											);
-	
-		my %hash;
-
-		if(scalar(@$cat_estruct_array) > 0){		
-
-			$hash{'campo'}= $nivel_info_marc_array->[$i]->{'campo'};
-			$hash{'subcampo'}= $nivel_info_marc_array->[$i]->{'subcampo'};
-			$hash{'dato'}= $nivel_info_marc_array->[$i]->{'dato'};
-
-			if($cat_estruct_array->[0]->getReferencia){
-				$hash{'datoReferencia'}= $nivel_info_marc_array->[$i]->{'datoReferencia'};
-			}
-	
-			$hash{'idCompCliente'}= $cat_estruct_array->[0]->getIdCompCliente;	 
-			$hash{'nivel'}= $cat_estruct_array->[0]->getNivel;
-			$hash{'liblibrarian'}= $cat_estruct_array->[0]->getLiblibrarian;
-			$hash{'itemtype'}= $cat_estruct_array->[0]->getItemType;
-			$hash{'repetible'}= $cat_estruct_array->[0]->getRepetible;
-			$hash{'fijo'}= $cat_estruct_array->[0]->getFijo;
-			$hash{'tipo'}= $cat_estruct_array->[0]->getTipo;
-			$hash{'referencia'}= $cat_estruct_array->[0]->getReferencia;
-			$hash{'obligatorio'}= $cat_estruct_array->[0]->getObligatorio;
-				
-			push(@result, \%hash);
-		}
-	}
-
+    if ($nivel_info_marc_array ){
+      for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++){
+  
+          my $cat_estruct_array = _getEstructuraFromCampoSubCampo(	
+                                                                      $nivel_info_marc_array->[$i]->{'campo'}, 
+                                                                      $nivel_info_marc_array->[$i]->{'subcampo'}
+                                              );
+      
+          my %hash;
+  
+          if(scalar(@$cat_estruct_array) > 0){		
+  
+              $hash{'campo'}= $nivel_info_marc_array->[$i]->{'campo'};
+              $hash{'subcampo'}= $nivel_info_marc_array->[$i]->{'subcampo'};
+              $hash{'dato'}= $nivel_info_marc_array->[$i]->{'dato'};
+  
+              if($cat_estruct_array->[0]->getReferencia){
+                  $hash{'datoReferencia'}= $nivel_info_marc_array->[$i]->{'datoReferencia'};
+              }
+      
+              $hash{'idCompCliente'}= $cat_estruct_array->[0]->getIdCompCliente;	 
+              $hash{'nivel'}= $cat_estruct_array->[0]->getNivel;
+              $hash{'liblibrarian'}= $cat_estruct_array->[0]->getLiblibrarian;
+              $hash{'itemtype'}= $cat_estruct_array->[0]->getItemType;
+              $hash{'repetible'}= $cat_estruct_array->[0]->getRepetible;
+              $hash{'fijo'}= $cat_estruct_array->[0]->getFijo;
+              $hash{'tipo'}= $cat_estruct_array->[0]->getTipo;
+              $hash{'referencia'}= $cat_estruct_array->[0]->getReferencia;
+              $hash{'obligatorio'}= $cat_estruct_array->[0]->getObligatorio;
+                  
+              push(@result, \%hash);
+          }
+      }
+    }
 	return @result;
 }
 
