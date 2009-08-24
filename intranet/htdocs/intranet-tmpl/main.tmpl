@@ -51,7 +51,7 @@ $(document).ready(function() {
             [% "B&uacute;squeda de usuarios &nbsp;" | i18n %]
         </label>
                 <input id="socio" type=text name="socio" onFocus="checkFilter('focus')" 
-                   onBlur="checkFilter('blur')" value="[% socio %]" tabindex=2>		
+                   onBlur="checkFilter('blur')" value="[% socio %]" size="20" tabindex=2>		
                 [% PERL %]
                                 print C4::AR::Filtros::to_Button( 
                                                                     text    =>  "[% 'Buscar' | i18n %]",
