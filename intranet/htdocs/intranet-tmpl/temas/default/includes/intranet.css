@@ -1044,3 +1044,7 @@ h2.trigger {
     cursor: pointer;
     float:right;
 }
+.titulo_legend{
+  font-weight:bold;
+}
+

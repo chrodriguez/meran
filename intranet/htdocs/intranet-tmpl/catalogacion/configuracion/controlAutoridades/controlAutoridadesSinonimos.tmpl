@@ -304,8 +304,10 @@ $(document).ready(function(){
 
 <div class="formElemets">
 <ul>
-	<li>[% "Seleccione la tabla" | i18n %]</li>
-	<li>
+<fieldset>
+<legend class="titulo_legend">[% 'Datos a modificar'| i18n %]</legend>
+<li>[% "Seleccione autoridad: " | i18n %]
+
 		<Select id="tabla" name="tabla" onChange="OnChangeComboTablasSinonimos();">
 			<option value="Sin Seleccionar">[% "Sin Seleccionar" | i18n %]</option>
 			<option value="autores">[% "Autores" | i18n %]</option>
@@ -345,15 +347,20 @@ $(document).ready(function(){
             <div>
                 [% PERL %]
                                 print C4::AR::Filtros::to_Button( 
-                                                                    text    =>  "[% 'Guardar Sinonimos' | i18n %]",
+                                                                    text    =>  "[% 'Guardar' | i18n %]",
                                                                     boton   =>  "boton_guardar",
                                                                     onClick =>  "guardarDatos();",
-                                                                    title   =>  "[% 'Guardar Sinonimos' | i18n %]",
+                                                                    title   =>  "[% 'Guardar Sin&oacute;nimos' | i18n %]",
+                                                                    alternClass => 'botonCentrado',
                                         ) ;
                 [% END %]
             </div>
 	</li>
-	<li><div id="resultSinonimos"></div></li>
+</fieldset>
+    <li>
+	<div id="resultSinonimos" class="resultados"></div>
+    </li>
+
 </ul>
 </div>
 
