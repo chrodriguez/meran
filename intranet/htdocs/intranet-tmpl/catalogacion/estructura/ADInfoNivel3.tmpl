@@ -71,14 +71,13 @@
 </table>
 
 <img class="selectallarrow" height="22" width="38" alt="Para los elementos que están marcados:" src="[% themelang %]/images/arrow_ltr.png"/>
-<i>[% "Para los elementos que est&acute;n marcados:" | i18n %]</i>
+<div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
 
     [% PERL %]
             print C4::AR::Filtros::to_Icon(  
                                                 boton   => "icon_edicion",
                                                 onClick => "modificarEjemplaresN3('[% nivel3.getId3 %]');",
                                                 title   => "[% 'Modificar Ejemplares' | i18n %]",
-                                                alternClass => "botonCentrado"
                     ) ;
     [% END %]
 
@@ -87,7 +86,6 @@
                                                 boton   => "icon_borrar",
                                                 onClick => "borrarEjemplaresN3('[% nivel3.getId3 %]');",
                                                 title   => "[% 'Borrar Ejemplares' | i18n %]",
-                                                alternClass => "botonCentrado"
                     ) ;
     [% END %]
 
