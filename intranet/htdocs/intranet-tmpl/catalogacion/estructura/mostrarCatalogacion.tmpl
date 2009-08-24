@@ -16,8 +16,8 @@
 		        <td width="20%"> Vista en Intranet</td>
 		        <td width="10%">Orden</td>
 		        <td >Visible</td>
-		        <td >Editar</td>
-		        <td >Deshabilitar</td>
+		        <td width="10%">Editar</td>
+		        <td width="10%">Deshabilitar</td>
                 <td >Debug</td>
 	        </tr>
         [% FOREACH catalogacion IN catalogaciones %]
@@ -49,6 +49,7 @@
                                                                 boton   => "icon_bajar",
                                                                 onClick => "modificarOrden('[% catalogacion.getId %]', 'BAJAR_ORDEN');",
                                                                 title   => "[% 'Bajar en el Orden' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
                                     ) ;
                         [% END %]
                 [% END %]
