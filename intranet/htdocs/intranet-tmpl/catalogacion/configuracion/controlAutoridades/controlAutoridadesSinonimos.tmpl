@@ -85,7 +85,7 @@ function pushSinonimo(){
 		
 	if ( (!exist(sinonimo, OBJECTS_ARRAY)) && (sinonimo.length > 0) ){
 	
-		d= new object_sinonimo(sinonimo, null);
+        var	d= new object_sinonimo(sinonimo, null);
 		OBJECTS_ARRAY.push(d);
 		mapToTextArea('textAreaSinonimos', OBJECTS_ARRAY);
         $('#sinonimo').val('');
@@ -138,7 +138,7 @@ function clearDataTextArea(){
 	//clear inputs
 	$('#sinonimo').val('');
 	//clear data
-	OBJECTS_ARRAY= new Array();
+	var OBJECTS_ARRAY= new Array();
 	//actualizo el textarea
 	mapToTextArea('textAreaSinonimos', OBJECTS_ARRAY);
 }
@@ -241,11 +241,11 @@ function crearObjeto(idInput, idInputHidden, flag){
 	var id= $('#'+idInputHidden).val();
 	var text= $('#'+idInput).val();
 	//creo un objeto para la autoridad con la q se va a trabajar
-	SINONIMO= new object_sinonimo(text, id);
+	var SINONIMO= new object_sinonimo(text, id);
 
 	if(flag != 'sinonimo'){
 		//creo un objeto para la autoridad con la q se va a trabajar
-		SINONIMO_SELECTED= new object_sinonimo(text, id);
+		var SINONIMO_SELECTED= new object_sinonimo(text, id);
 		//traigo info de sinonimos de la autoridad con la que se esta trabajando
 		consultarTablaSinonimos(id);
 	}
@@ -299,45 +299,45 @@ $(document).ready(function(){
 
 </script>
 
-<div style="position: static;" id="tophelper">
-<img class="showhelp" src="/intranet-tmpl/images/help.gif" alt="Descripcion de la Ventana">
-    <div style="display: block;" id="topichelp">
+<div id="tophelper">
+
+<img class="showhelp" alt=[% "Ayuda"| i18n %] >
+    <div id="topichelp">
         <p>Descripcion breve para lo q sirve la ventana....</p>
     </div>
 </div>
 
-<div class="titulos" >Control de Autoridades - Sin&oacute;nimos</div>
+<div class="titulos" >[% "Control de Autoridades - Sin&oacute;nimos" | i18n %]</div>
 
-<br>
 <div class="formElemets">
 <ul>
-	<li>Seleccione la tabla</li>
+	<li>[% "Seleccione la tabla" | i18n %]</li>
 	<li>
 		<Select id="tabla" name="tabla" onChange="OnChangeComboTablasSinonimos();">
-			<option value="Sin Seleccionar">Sin Seleccionar</option>
-			<option value="autores">Autores</option>
-			<option value="temas">Temas</option>
-			<option value="editoriales">Editoriales</option>
+			<option value="Sin Seleccionar">[% "Sin Seleccionar" | i18n %]</option>
+			<option value="autores">[% "Autores" | i18n %]</option>
+			<option value="temas">[% "Temas" | i18n %]</option>
+			<option value="editoriales">[% "Editoriales" | i18n %]</option>
 		</Select>
 	</li>
 
 	<div id="content_search_autores">
-		<li>Autores:</li>
+		<li>[% "Autores:" | i18n %]</li>
 		<li><input id="search_autores" type="text" size="50"></li>
 			<input id="search_autores_hidden" type="hidden">
 	</div>
 	<div id="content_search_temas">
-		<li>Temas:</li>
+		<li>[% "Temas:" | i18n %]</li>
 		<li><input id="search_temas" type="text" size="50"></li>
 			<input id="search_temas_hidden" type="hidden">
 	</div>
 	<div id="content_search_editoriales">
-		<li>Editoriales:</li>
+		<li>[% "Editoriales:" | i18n %]</li>
 		<li><input id="search_editoriales" type="text" size="50"></li>
 			<input id="search_editoriales_hidden" type="hidden">
 	</div>
 
-	<li>Ingrese Sin&oacute;nimo:</li>
+	<li>[% "Ingrese Sin&oacute;nimo:" | i18n %]</li>
 	<li><input id="sinonimo" name="sinonimo" type="text" value="" size="50">
 	</li>
 	<li>
