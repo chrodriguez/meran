@@ -29,6 +29,7 @@ $(document).ready( function() {
 		params.id3= [% id3 %];
 		params.tipoAccion= '[% tipoAccion %]';
 		cargarNivel1(params);
+        $('#div_combo_tipo_documento').hide();
 	[% ELSE %]
 		[% IF tipoAccion == "MODIFICAR_NIVEL_2" %]
 			params= new objeto_params();
@@ -37,6 +38,7 @@ $(document).ready( function() {
 			params.id3= [% id3 %];
 			params.tipoAccion= '[% tipoAccion %]';
 			cargarNivel1(params);
+            $('#div_combo_tipo_documento').hide();
 		[% ELSE %]	
 			[% IF tipoAccion == "MODIFICAR_NIVEL_3" %]
 				params= new objeto_params();
@@ -45,6 +47,7 @@ $(document).ready( function() {
 				params.id3= [% id3 %];
 				params.tipoAccion= '[% tipoAccion %]';
 				cargarNivel1(params);
+                $('#div_combo_tipo_documento').hide();
 			[% END %]
 		[% END %]
 	[% END %]
@@ -60,8 +63,9 @@ $(document).ready( function() {
 
 <p class="titulos" >[% "Agregar Documento" | i18n %]</p>
 
+<div id="div_combo_tipo_documento">
 [% "Esquema de ingreso de datos tipo:" | i18n %] [% comboTipoDocumento %]
-<br><br>
+</div>
 
 <div class="todo">
 
