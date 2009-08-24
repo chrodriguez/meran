@@ -1029,3 +1029,10 @@ h2.trigger {
     font-weight:bold;
     text-align:center;
 }
+.showhelp{
+    background: transparent url(../imagenes/iconos/ayuda.png) no-repeat;
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+    float:right;
+}
