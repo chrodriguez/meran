@@ -23,7 +23,7 @@ function updateAbrirVentanaHelperMARC(responseText){
     vHelperMARC.draggable= true;
     vHelperMARC.dimmer_On= false;
     vHelperMARC.create(); 
-    vHelperMARC.height('60%');
+    vHelperMARC.height('40%');
     vHelperMARC.width('50%');
     vHelperMARC.open();
 }
