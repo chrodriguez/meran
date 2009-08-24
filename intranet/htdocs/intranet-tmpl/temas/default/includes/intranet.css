@@ -388,7 +388,8 @@ tr.impar {
     height: 22px;
     /*width: 7%;*//*se debe modificar dinamicamente*/
     position: relative;
-    padding-bottom:0;
+/*     padding-bottom:0; */
+    margin: 5px auto;
     padding-left:0;
     padding-right:0;
     cursor: pointer;
