@@ -952,4 +952,14 @@ INSERT INTO `pref_preferencia_sistema` (
 VALUES (
 'permite_cambio_password_desde_opac', '1', 'permite (=1) o no (=0) el cambio de password desde el OPAC', NULL , 'bool'
 );
+INSERT INTO `V3`.`cat_autor` (
+`id` ,
+`nombre` ,
+`apellido` ,
+`nacionalidad` ,
+`completo`
+)
+VALUES (
+'0', 'UNDEFINED', 'UNDEFINED', 'UND', 'UNDEFINED'
+);
 
