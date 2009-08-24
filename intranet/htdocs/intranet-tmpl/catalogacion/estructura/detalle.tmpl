@@ -323,7 +323,7 @@ $(document).ready(function(){
 
     [% PERL %]
         print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-                                        url =>      "agregarDocumento.pl", 
+                                        url =>      "datosDocumento.pl", 
                                         params =>   ["id1=[% id1 %]","tipoAccion=MODIFICAR_NIVEL_1"],
                                         title =>    "[% 'Editar Nivel 1' | i18n %]"
                                     ) ;
@@ -361,7 +361,7 @@ $(document).ready(function(){
 	        <div id="[% id2 %]" style="position: relative; float:right;"></div>
 	        [% PERL %]
 		        print C4::AR::Filtros::link_to(	text => 	C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-										        url => 		"agregarDocumento.pl", 
+										        url => 		"datosDocumento.pl", 
 										        params =>	["id1=[% id1 %]","id2=[% id2 %]","tipoAccion=MODIFICAR_NIVEL_2"],
 										        title =>	"[% 'Editar Nivel 2' | i18n %]"
 									        ) ;

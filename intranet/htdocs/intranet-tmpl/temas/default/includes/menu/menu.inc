@@ -55,7 +55,7 @@
                         <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Agregar documento' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/catalogacion/estructura/agregarDocumento.pl", 
+                                                                url =>      "/cgi-bin/koha/catalogacion/estructura/datosDocumento.pl", 
                                                                 title =>    "[% 'Agregar documento' | i18n %]"
                                                             ) ;
                             [% END %]                        </li>

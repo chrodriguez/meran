@@ -17,7 +17,7 @@
 				<strong>[% "Edici&oacute;n" |i18n %]</strong>
 				[% PERL %]
 					print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-													url =>      "agregarDocumento.pl", 
+													url =>      "datosDocumento.pl", 
 													params =>   ["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
 													title =>    "[% 'Editar Nivel 2' | i18n %]"
 												) ;
@@ -41,7 +41,7 @@
         <!-- Si se puede Editar ??? -->
 			[% PERL %]
 				print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-												url =>      "/cgi-bin/koha/catalogacion/estructura/agregarDocumento.pl", 
+												url =>      "/cgi-bin/koha/catalogacion/estructura/datosDocumento.pl", 
 												params =>   ["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
 												title =>    "[% 'Editar Ejemplar' | i18n %]"
 											) ;
