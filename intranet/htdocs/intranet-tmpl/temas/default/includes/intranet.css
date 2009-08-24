@@ -316,6 +316,11 @@ tr.impar {
     margin-bottom:0;
     clear:both;
 }
+
+.textoCentrado {
+    clear:both;
+    text-align: center;
+}
 /*------------------------------------------------Fin   estilos para Circulacion------------------------------------------------*/
 /* para agregar documento */
 .divContentComponente{
