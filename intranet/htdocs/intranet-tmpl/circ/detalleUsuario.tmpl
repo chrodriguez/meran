@@ -2,56 +2,63 @@
 <legend class="titulo_tabla"><strong>[% 'Detalle de Usuario' | i18n %]</strong></legend>
 <div id="datosUsuario">
 	<div class="vcard">
-                    [% "Apellido:" | i18n %]
-                            <b> [% socio.persona.getApellido %] </b><br>
-
-                    [% "Nombre:" | i18n %]
-                            <b> [% socio.persona.getNombre %] </b><br>
-
-                    [% "Documento:" | i18n %]
-                            <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
-            
-                    [% "Fecha de nacimiento:" | i18n %]
-                            <b> [% socio.persona.getNacimiento %]</b><br>
-                    [% "Sexo:" | i18n %]    
-                            <b> [% socio.persona.getSexo %]</b><br>
-                                                
-                    [% IF socio.persona.getTelefono %]
-                            <div class="tel">
-                                    <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
-                                            <b>[% socio.persona.getTelefono %]</b><br>
-                            </div>  
-                    [% END %]
-            
-                    [% IF socio.persona.getAlt_telefono %]
-                    <div class="tel">
-                            <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
-                                        <b>[% socio.persona.getAlt_telefono %]</b><br>
-                    </div>  
-                    [% END %]
-                    
-                    [% IF socio.persona.getEmail %]
-                            E-mail: <b><a href="mailto:[% socio.persona.getEmail %]">
-                                    <span class="email"> [% socio.persona.getEmail %]</span></a></b><br>
-                    [% END %]
-            
-                    [% "Tarjeta de identificaci&oacute;n :" | i18n %]
-                                    <b> [% socio.getNro_socio %]</b><br>
-            
-                    [% "Legajo :" | i18n %]
-                                    <b> [%  socio.persona.getNro_documento %]</b><br>
-
-                    [% "Ciudad :" | i18n %]
-                                    <b> [%  socio.persona.ciudad_ref.getNombre %]</b><br>
-                    [% "Calle :" | i18n %]
-                                    <b> [%  socio.persona.getCalle %]</b><br>
-                    
-                    [% "ID de usuario:" | i18n %]
-                                    <b> [%  socio.nro_socio %]</b><br>
-            
-                    [% "Categor&iacute;a del usuario:" | i18n %]
-                                    <b> [%  socio.categoria.getDescription %]</b><br>
-	
+    <ul>
+        <li>
+            [% "Apellido:" | i18n %]<b> [% socio.persona.getApellido %] </b>
+        </li>
+        <li>
+            [% "Nombre:" | i18n %]<b> [% socio.persona.getNombre %] </b>
+        </li>
+        <li>
+            [% "Documento:" | i18n %]<b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b>
+        </li>
+        <li>
+            [% "Fecha de nacimiento:" | i18n %]<b> [% socio.persona.getNacimiento %]</b>
+        </li>
+        <li>
+            [% "Sexo:" | i18n %] <b> [% socio.persona.getSexo %]</b>
+        </li>
+        [% IF socio.persona.getTelefono %]
+        <li>
+                <div class="tel">
+                        <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
+                                <b>[% socio.persona.getTelefono %]</b><br>
+                </div>  
+        </li>
+        [% END %]
+        [% IF socio.persona.getAlt_telefono %]
+        <li>
+            <div class="tel">
+                    <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
+                                <b>[% socio.persona.getAlt_telefono %]</b><br>
+            </div>  
+        </li>
+        [% END %]
+        [% IF socio.persona.getEmail %]
+        <li>
+                E-mail: <b><a href="mailto:[% socio.persona.getEmail %]">
+                        <span class="email"> [% socio.persona.getEmail %]</span></a></b>
+        </li>
+        [% END %]
+        <li>    
+            [% "Tarjeta de identificaci&oacute;n :" | i18n %]<b> [% socio.getNro_socio %]</b>
+        </li>
+        <li>
+            [% "Legajo :" | i18n %]<b> [%  socio.persona.getNro_documento %]</b>
+        </li>
+        <li>
+            [% "Ciudad :" | i18n %]<b> [%  socio.persona.ciudad_ref.getNombre %]</b>
+        </li>
+        <li>
+            [% "Calle :" | i18n %]<b> [%  socio.persona.getCalle %]</b>
+        </li>
+        <li>
+            [% "ID de usuario:" | i18n %]<b> [%  socio.nro_socio %]</b>
+        </li>
+        <li>
+            [% "Categor&iacute;a del usuario:" | i18n %]<b> [%  socio.categoria.getDescription %]</b>
+        </li>
+	</ul>
 	</div> <!--end vcard-->
 </div>  
 </frameset>

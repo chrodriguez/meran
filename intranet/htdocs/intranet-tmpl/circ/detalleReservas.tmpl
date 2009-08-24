@@ -76,18 +76,16 @@
 	</tr>
     [% END %] 
 </table>
-    <p colspan="10" align=center>
 
-            [% PERL %]
-                                print C4::AR::Filtros::to_Icon(   text    => "[% 'Realizar pr&eacute;stamo' | i18n %]",
-                                                                    boton   => "icon_prestar",
-                                                                    onClick => "realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);",
-                                                                    title   => "[% 'Realizar pr&eacute;stamo' | i18n %]",
-                                                                    alternClass => "botonCentradoTabla"
-                                        ) ;
-            [% END %]
+        [% PERL %]
+            print C4::AR::Filtros::to_Icon(   text    => "[% 'Realizar pr&eacute;stamo' | i18n %]",
+                                                boton   => "icon_prestar",
+                                                onClick => "realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);",
+                                                title   => "[% 'Realizar pr&eacute;stamo' | i18n %]",
+                                                alternClass => "botonCentradoTabla"
+                    ) ;
+        [% END %]
 
-    </p>
 [% ELSE %]
 
     <div class="resultados_consulta">[% 'El usuario no tiene ejemplar(es) reservado(s) esperando para ser retirado(s).' | i18n %] </div>
@@ -107,9 +105,9 @@
 <table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="tablaReservas datos_tabla">
 	<tr class="titulo_tabla_resultado">
 
-		<td>T&iacute;tulo</td>
-		<td>Autor</td>
-		<td>Edici&oacute;n</td>
+		<td>[% 'T&iacute;tulo' | i18n %]</td>
+		<td>[% 'Autor' | i18n %]</td>
+		<td>[% 'Edici&oacute;n' | i18n %]</td>
 		<td>&nbsp;</td>
 		<td>&nbsp;</td>
 
