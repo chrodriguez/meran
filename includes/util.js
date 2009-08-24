@@ -184,5 +184,11 @@ function highlight(classesArray,idKeywordsArray){
 			}//END if($.trim(stringArray[y]).length != 0){
         }
     }
+}
 
+function toggle_ayuda_in_line(){
+
+    $("#ayuda").click(function () {
+      $("#ayuda_in_line").toggle("slow");
+    });    
 }

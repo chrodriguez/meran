@@ -266,11 +266,8 @@ function onCompleteEditoriales(){
 
 $(document).ready(function(){
 
-	// Help
-	$("#topichelp").hide();
-	$("#tophelper img.showhelp ").click(function(){
-						$("#topichelp").slideToggle('fast');
-					});
+
+    toggle_ayuda_in_line();
 
 	CrearAutocompleteAutores({	IdInput: 'search_autores', 
 								IdInputHidden: 'search_autores_hidden', 
@@ -299,13 +296,9 @@ $(document).ready(function(){
 
 </script>
 
-<div id="tophelper">
-
-<img id="showhelp" class="showhelp" alt="[% 'Ayuda' | i18n %]" />
-    <div id="topichelp">
-        <p>Descripcion breve para lo q sirve la ventana....</p>
-    </div>
-</div>
+[% PERL %]
+                print C4::AR::Filtros::ayuda_in_line("[% 'ayudaaaaa' | i18n %]") ;
+[% END %]
 
 <div class="titulos" >[% "Control de Autoridades - Sin&oacute;nimos" | i18n %]</div>
 

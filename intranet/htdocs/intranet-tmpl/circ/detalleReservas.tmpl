@@ -12,7 +12,7 @@
 
 	<tr class="titulo_tabla_resultado">
 		<td>
-			<input type="image" id="checkAllReservas" src="[% themelang %]/images/check.png" title="Seleccionar todos">
+			<input type="image" id="checkAllReservas" src="[% themelang %]/images/check.png" title="[% 'Seleccionar todos' | i18n %]">
 		</td>
 		<td>[% 'T&iacute;tulo' | i18n %]</td>
 		<td>[% 'Autor' | i18n %]</td>
@@ -114,8 +114,8 @@
 	</tr>
 	<!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
     [% FOREACH reserva IN RESERVAS_ESPERA %]
-		<tr valign="top">
-			<td width="1%">&nbsp;</td>
+		<tr valign="top"><!--
+			<td width="1%">&nbsp;</td>-->
 			<td>
 			[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
@@ -148,7 +148,7 @@
             
 			</td>
 			<td width="1%">&nbsp;</td>
-			<td width="1%">&nbsp;</td>
+<!-- 			<td width="1%">&nbsp;</td> -->
 		</tr>
 	[% END %]
 </table>

@@ -111,8 +111,8 @@ Esta funcion es utilizada para la Internacionalizacion, lo que hace es tomar el 
 y hacer la traduccion del mismo, obteniedola del binario correspondiente, por ej. en_EN/LC_MESSAGES/intranet.mo
 =cut
 sub i18n {
-
 	my ($text) = @_;
+
 	my $session = CGI::Session->load();#si esta definida
 	my $type= $session->param('type') || 'opac';
 
@@ -203,6 +203,20 @@ sub ayuda_marc{
             ) ;
 
     return "<div style='text-align: right;'><span class='click'>".$icon."</span></div>";
+}
+
+sub ayuda_in_line{
+    my ($text) = @_;
+    
+    my $icon= to_Icon(  
+                boton   => "icon_ayuda",
+                title   => i18n("Ayuda"),
+            ) ;
+
+    my $ayuda = "<div id='ayuda' style='text-align: left;'><span class='click'>".$icon."</span>";
+    $ayuda .= "<div id='ayuda_in_line' style='display:none'>".$text."</div></div>";
+
+    return $ayuda;
 }
 
 =item
