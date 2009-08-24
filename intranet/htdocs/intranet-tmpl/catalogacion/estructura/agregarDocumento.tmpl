@@ -21,6 +21,7 @@
 $(document).ready( function() {
 	//oculto todas las tabls
 	_showAndHiddeEstructuraDelNivel(0);
+    var _modificar = false;
 
 	[% IF tipoAccion == "MODIFICAR_NIVEL_1" %]
 		params= new objeto_params();
@@ -29,8 +30,8 @@ $(document).ready( function() {
 		params.id3= [% id3 %];
 		params.tipoAccion= '[% tipoAccion %]';
 		cargarNivel1(params);
-        $('#div_combo_tipo_documento').hide();
-	[% ELSE %]
+        _modificar = true;
+	[% ELSE %] 
 		[% IF tipoAccion == "MODIFICAR_NIVEL_2" %]
 			params= new objeto_params();
 			params.id1= [% id1 %];
@@ -38,7 +39,7 @@ $(document).ready( function() {
 			params.id3= [% id3 %];
 			params.tipoAccion= '[% tipoAccion %]';
 			cargarNivel1(params);
-            $('#div_combo_tipo_documento').hide();
+            _modificar = true;
 		[% ELSE %]	
 			[% IF tipoAccion == "MODIFICAR_NIVEL_3" %]
 				params= new objeto_params();
@@ -47,10 +48,18 @@ $(document).ready( function() {
 				params.id3= [% id3 %];
 				params.tipoAccion= '[% tipoAccion %]';
 				cargarNivel1(params);
-                $('#div_combo_tipo_documento').hide();
+                _modificar = true;
 			[% END %]
 		[% END %]
 	[% END %]
+
+    if(_modificar){
+        $('#div_combo_tipo_documento').hide();
+        $('#titulo_modificar').show();
+    }else{
+        $('#titulo_agregar').show();
+        $('#div_combo_tipo_documento').show();
+    }
 
 } );
 
@@ -61,7 +70,12 @@ $(document).ready( function() {
     print C4::AR::Filtros::ayuda_marc() ;
 [% END %]
 
-<p class="titulos" >[% "Agregar Documento" | i18n %]</p>
+<div id="titulo_agregar" style="display:none">
+    <p class="titulos" >[% "Agregar Documento" | i18n %]</p>
+</div>
+<div id="titulo_modificar" style="display:none">
+    <p class="titulos" >[% "Modificar Documento" | i18n %]</p>
+</div>
 
 <div id="div_combo_tipo_documento">
 [% "Esquema de ingreso de datos tipo:" | i18n %] [% comboTipoDocumento %]
