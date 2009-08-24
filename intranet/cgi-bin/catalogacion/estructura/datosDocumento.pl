@@ -9,7 +9,7 @@ use JSON;
 my $input = new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user ({
-                            template_name	=> 'catalogacion/estructura/agregarDocumento.tmpl',
+                            template_name	=> 'catalogacion/estructura/datosDocumento.tmpl',
                             query		=> $input,
                             type		=> "intranet",
                             authnotrequired	=> 0,
