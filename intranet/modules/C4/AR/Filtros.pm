@@ -142,11 +142,9 @@ sub to_Button{
     }else{
         $width += 90;
     }
-
-    my $margin_left = $width / 2;
     
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
-    $button .=  '<li  id="boton_medio" class="click '.$alternClass.'" onClick="'.$onClick.'" style="width:'.$width.'px; margin-left:-'.$margin_left.'px;"';
+    $button .=  '<li  id="boton_medio" class="click '.$alternClass.'" onClick="'.$onClick.'" style="width:'.$width.'px"';
 
     if($title){
         $button .= ' title="'.$title.'"';
