@@ -93,7 +93,7 @@
 				</span>
 			</td>
 			<td valign="middle" colspan="2">
-            <div class="botonCentradoTabla">
+
 	[% IF circularDesdeDetalleDelRegistro %]
 		[% IF disponible %]
 			[% IF paraPrestamo %]
@@ -103,7 +103,7 @@
                                                             boton   =>  "icon_devolver",
                                                             onClick =>   "devolverPrestamo('[% socio.getNro_socio %]','[% socio.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
                                                             title   =>   "[% 'Devolver' | i18n %]"
-                                                            alternClass=> "botonCentrado",
+                                                            alternClass=> "botonCentradoTabla",
                                                             ) ;
                     [% END %]
 				[% IF prestamo.sePuedeRenovar %]
@@ -112,7 +112,7 @@
                                                             boton   =>  "icon_renovar",
                                                             onClick =>   "renovarPrestamo('[% socio.getNro_socio %]','[% socio.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
                                                             title   =>   "[% 'Renovar' | i18n %]",
-                                                            alternClass=> "botonCentrado",
+                                                            alternClass=> "botonCentradoTabla",
                                                     ) ;
                     [% END %]
 				[% END %]
@@ -122,7 +122,7 @@
                                                         boton   =>  "icon_prestar",
                                                         onClick =>   "buscarUsuario('[% id2 %]','[% id3 %]');", 
                                                         title   =>   "[% 'Realizar pr&eacute;stamo' | i18n %]",
-                                                            alternClass=> "botonCentrado",
+                                                            alternClass=> "botonCentradoTabla",
                                                     ) ;
                 [% END %]
 			[% END %]
@@ -130,7 +130,7 @@
 	[% ELSE %]
 		[% 'NO SE PERMITE CIRCULAR' | i18n %]
 	[% END %] <!--END IF permiso_para_circular -->
-            </div>
+            
 			</td>
                 
 			<td colspan="2">

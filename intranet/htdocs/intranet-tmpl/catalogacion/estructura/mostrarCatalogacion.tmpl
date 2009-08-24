@@ -30,7 +30,7 @@
 			        [% catalogacion.getLiblibrarian %]
 		        </td>
 		        <td>
-                <div class="botonCentradoTabla">
+
 <!--                 Si no soy el prmiero muestro el boton para subir el orden -->
                 [% IF ! catalogacion.primeroDelTipo(itemType) %]  
                         [% PERL %]
@@ -38,6 +38,7 @@
                                                                 boton   => "icon_subir",
                                                                 onClick => "modificarOrden('[% catalogacion.getId %]', 'SUBIR_ORDEN');",
                                                                 title   => "[% 'Subir en el Orden' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
                                     ) ;
                         [% END %]
                 [% END %]
@@ -51,7 +52,7 @@
                                     ) ;
                         [% END %]
                 [% END %]
-                </div>
+                
 		        </td>
 		        <td>
 				[% IF catalogacion.getObligatorio != 1 %]
@@ -63,30 +64,32 @@
 				[% END %]
 		        </td>
 		        <td>
-                <div class="botonCentradoTabla">
+                
                 [% IF catalogacion.soyFijo != 1 %]
                         [% PERL %]
                             print C4::AR::Filtros::to_Icon(    
                                                                 boton   => "icon_edicion",
                                                                 onClick => "mostrarModificarCampo('[% catalogacion.getId %]');",
                                                                 title   => "[% 'Modificar Campo' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
                                     ) ;
                         [% END %]
                 [% END %]
-                </div>
+                
 		        </td>
 		        <td>
-                <div class="botonCentradoTabla">
+                
                 [% IF catalogacion.soyFijo != 1 %]
                         [% PERL %]
                             print C4::AR::Filtros::to_Icon(    
                                                                 boton   => "icon_borrar",
                                                                 onClick => "eliminarCampo('[% catalogacion.getId %]');",
                                                                 title   => "[% 'Eliminar Campo' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
                                     ) ;
                         [% END %]
                 [% END %]
-                </div>
+                
 		        </td>
 		        <td>    
                         <!-- AGREGADO SOLO PARA DEBUGUEAR -->
@@ -104,15 +107,16 @@
     
     [% END %]
     
-    <div class="botonCentrado">
-            [% PERL %]
-                     print C4::AR::Filtros::to_Button(      text    => "[% 'Agregar Campo' | i18n %]",
-                                                            boton   => "boton_agregar",
-                                                            onClick => "mostrarAgregarCampo();",
-                                                            title   => "[% 'Agregar Campo' | i18n %]",
-                                                            width   => "135",
-                             ) ;
-            [% END %]
-    </div>
+    
+    [% PERL %]
+                print C4::AR::Filtros::to_Button(      text    => "[% 'Agregar Campo' | i18n %]",
+                                                    boton   => "boton_agregar",
+                                                    onClick => "mostrarAgregarCampo();",
+                                                    title   => "[% 'Agregar Campo' | i18n %]",
+                                                    width   => "135",
+                                                    alternClass => "botonCentrado"
+                        ) ;
+    [% END %]
+    
        
 [% END %] <!-- END IF niveles -->

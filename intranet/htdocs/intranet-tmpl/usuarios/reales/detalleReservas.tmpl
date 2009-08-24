@@ -98,15 +98,16 @@
 			</td>
 		[% IF circularDesdeDetalleUsuario %]
 			<td width="10%">
-            <div class="botonCentradoTabla">
+
                 [% PERL %]
                     print C4::AR::Filtros::to_Icon(  
                                                         boton   => "icon_cancelar",
                                                         onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
                                                         title   => "[% 'Cancelar' | i18n %]",
+                                                        alternClass => "botonCentradoTabla"
                             ) ;
                 [% END %]
-            </div>
+
 			</td>
 		[% ELSE %]
 			[% 'NO SE PERMITE CIRCULAR' | i18n %]
@@ -116,15 +117,16 @@
 	[% END %]
 	</table>
 	[% IF circularDesdeDetalleUsuario %]
-		<div class="botonCentrado">
+
             [% PERL %]
                 print C4::AR::Filtros::to_Icon(  
                                                     boton   => "icon_prestar",
                                                     onClick => "realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);",
                                                     title   => "[% 'Prestar' | i18n %]",
+                                                    alternClass => "botonCentrado"
                         ) ;
             [% END %]
-		</div>
+
 	[% ELSE %]
 			[% 'NO SE PERMITE CIRCULAR' | i18n %]
 	[% END %] <!--END IF permiso_para_circular -->
@@ -172,15 +174,16 @@
                 </td>
 		    [% IF circularDesdeDetalleUsuario %]
 			    <td width="10%"> 
-                <div class="botonCentradoTabla">
+
                     [% PERL %]
                         print C4::AR::Filtros::to_Icon(  
                                                             boton   => "icon_cancelar",
                                                             onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
                                                             title   => "[% 'Cancelar' | i18n %]",
+                                                            alternClass => "botonCentradoTabla"
                                 ) ;
                     [% END %]
-                </div>
+
 			    </td>
 		    [% ELSE %]
 			    [% 'NO SE PERMITE CIRCULAR' | i18n %]

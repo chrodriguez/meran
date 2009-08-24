@@ -111,7 +111,6 @@
 	
 	</table>
 	
-<div class="botonCentrado">
 	[% IF circularDesdeDetalleUsuario %]	
 		[% IF prestamos_cant %]	
             [% PERL %]
@@ -119,6 +118,7 @@
                                                     boton   => "icon_devolver",
                                                     onClick => "realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevolucion);",
                                                     title   => "[% 'Devolver' | i18n %]",
+                                                    alternClass => "botonCentrado"
                         ) ;
             [% END %]
 		[% END %]	
@@ -128,12 +128,13 @@
                                                     boton   => "icon_renovar",
                                                     onClick => "realizarAccion('RENOVACION','chkboxPrestamos',generaDivRenovacion);",
                                                     title   => "[% 'Renovar' | i18n %]",
+                                                    alternClass => "botonCentrado"
                         ) ;
             [% END %]
 		[% END %]
 	[% ELSE %]
 			[% 'NO SE PERMITE CIRCULAR' | i18n %]
 	[% END %] <!--END IF permiso_para_circular -->
-</div>
+
 
 [% END %]

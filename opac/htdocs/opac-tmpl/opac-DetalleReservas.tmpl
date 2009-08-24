@@ -76,16 +76,16 @@
 	        <td  align="center"> 
 	        [% IF CirculationEnabled %]
 
-                <div class="botonCentradoTabla">
                 [% PERL %]
                     print C4::AR::Filtros::to_Icon(   text    => "[% 'Cancelar' | i18n %]",
                                                         boton   => "icon_cancelar",
                                                         width   => "100",
                                                         onClick => "cancelarReserva([% reserva.getId_reserva %])",
-                                                        title   => "[% 'Cancelar Reserva' | i18n %]"
+                                                        title   => "[% 'Cancelar Reserva' | i18n %]",
+                                                        alternClass => "botonCentradoTabla"
                                                 );
                 [% END %]
-                </div>
+
 
 	        [% ELSE %]
 		        [% "No disponible" | i18n %]
@@ -137,16 +137,17 @@
 	</td>
 	<td  align="center">
         [% IF CirculationEnabled %]
-            <div class="botonCentradoTabla">
+
                 [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar' | i18n %]",
                                                         boton   => "boton_cancelar",
                                                         width   => "100",
                                                         onClick => "cancelarReserva([% reserva.getId_reserva %])",
-                                                        title   => "[% 'Cancelar Reserva' | i18n %]"
+                                                        title   => "[% 'Cancelar Reserva' | i18n %]",
+                                                        alternClass => "botonCentradoTabla"
                                                 );
                 [% END %]
-            </div>
+
         [% ELSE %]
 	        [% "No disponible" | i18n %]
         [% END %]

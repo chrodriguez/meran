@@ -74,12 +74,12 @@
      [% END %]
 </table>
 
-    <div class="botonCentrado">
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon( text    => "[% 'Devolver' | i18n %]",
                                                                 boton   => "icon_devolver",
                                                                 onClick => "realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevolucion);",
                                                                 title   => "[% 'Devolver' | i18n %]",
+                                                                alternClass => "botonCentrado"
                                         ) ;
             [% END %]
 
@@ -92,7 +92,7 @@
                                         ) ;
             [% END %]
         [% END %]
-	</div>
+
     [% ELSE %]
 
 <div class="resultados_consulta">[% "El usuario no tiene ejemplares asignados"| i18n %]</div>

@@ -161,12 +161,13 @@ function limpiarCampos(side){
 			    <li>
 <!-- FIXME esto no se usa??? -->
 			    <input type="hidden" name="type" value="intra">
-                    <div class="botonCentrado">
+                    
                         [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
                                                                     boton   => "boton_buscar",
                                                                     onClick => "buscar();",
                                                                     title   => "[% 'Buscar en el cat&aacute;logo' | i18n %]",
+                                                                    alternClass => "botonCentrado"
                                         ) ;
                         [% END %]
 
@@ -175,10 +176,11 @@ function limpiarCampos(side){
                                                                         boton   => "boton_buscar",
                                                                         onClick => "mostrarEstantes();",
                                                                         title   => "[% 'Mostrar Estantes' | i18n %]",
-                                                                        width   => "145"
+                                                                        width   => "145",
+                                                                        alternClass => "botonCentrado"
                                             ) ;
-                            [% END %]
-		            </div>
+                        [% END %]
+		            
 			    </li>
 		    </ul>
 	    </div>

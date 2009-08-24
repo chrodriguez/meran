@@ -86,13 +86,14 @@ $(document).ready(function() {
 </div> <!--END <div id="content">-->
 
 
-<div class="botonCentrado">
+
     [% PERL %]
                         print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo temporal' | i18n %]",
                                                             boton   => "boton_buscar",
                                                             onClick => "modificarEstructuraCatalogacion([% catalogacion.getId %]);",
                                                             title   => "[% 'Guardar Campo temporal' | i18n %]",
-                                                            width   => "170"        
+                                                            width   => "170",        
+                                                            alternClass => "botonCentrado"
                                 ) ;
     [% END %]
 
@@ -101,7 +102,8 @@ $(document).ready(function() {
                                                             boton   => "boton_buscar",
                                                             onClick => "cancelarEstructuraCatalogacion();",
                                                             title   => "[% 'Cancelar Campo temporal' | i18n %]",
-                                                            width   => "170"        
+                                                            width   => "170",
+                                                            alternClass => "botonCentrado"       
                                 ) ;
     [% END %]
-</div>
+

@@ -61,30 +61,32 @@
             [% END %]
 		</td>
 		<td align="middle"> 
-            <div class="botonCentradoTabla">
+
             [% PERL %]
-                                print C4::AR::Filtros::to_Icon(   text    => "[% 'Cancelar' | i18n %]",
+                                print C4::AR::Filtros::to_Icon(     text    => "[% 'Cancelar' | i18n %]",
                                                                     boton   => "icon_cancelar",
                                                                     onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
                                                                     title   => "[% 'Cancelar' | i18n %]",
+                                                                    alternClass => "botonCentradoTabla"
                                         ) ;
             [% END %]
-            </div>
+
 		</td>
 
 	</tr>
     [% END %] 
 </table>
     <p colspan="10" align=center>
-        <div class="botonCentradoTabla">
+
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(   text    => "[% 'Realizar pr&eacute;stamo' | i18n %]",
                                                                     boton   => "icon_prestar",
                                                                     onClick => "realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);",
                                                                     title   => "[% 'Realizar pr&eacute;stamo' | i18n %]",
+                                                                    alternClass => "botonCentradoTabla"
                                         ) ;
             [% END %]
-        </div>
+
     </p>
 [% ELSE %]
 
@@ -136,15 +138,16 @@
             [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
 			</td>
 			<td>
-            <div class="botonCentradoTabla">
+
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(   text    => "[% 'Cancelar' | i18n %]",
                                                                     boton   => "icon_cancelar",
                                                                     onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
                                                                     title   => "[% 'Cancelar' | i18n %]",
+                                                                    alternClass => "botonCentradoTabla"
                                         ) ;
             [% END %]
-            </div>
+            
 			</td>
 			<td width="1%">&nbsp;</td>
 			<td width="1%">&nbsp;</td>
