@@ -399,14 +399,6 @@ msgid "Nombre"
 msgstr "Name"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
-msgid "Calle"
-msgstr "Street"
-
-# /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
-msgid "Ciudad"
-msgstr "City"
-
-# /usr/local/koha/opac/htdocs/opac-tmpl/opac-userupdate.tmpl
 msgid "Tel&eacute;fono Personal"
 msgstr "Personal telephone number"
 
@@ -452,91 +444,97 @@ msgstr "Filter by author"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/opac-HistorialPrestamos.tmpl
 msgid "titulo"
-msgstr "\"title"
+msgstr "title"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/login/opac-auth.tmpl
-msgid "Bienvenido a Meran - Catalogo Publico"
-msgstr ""
+msgid "Bienvenido a Meran - Cat&aacute;logo P&uacute;blico"
+msgstr "Welcome to Meran - Public Catalog"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/datos-usuario.inc
 msgid "Apellido:"
-msgstr ""
+msgstr "Surname:"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/datos-usuario.inc
 msgid "Nombre:"
-msgstr ""
+msgstr "Name:"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/datos-usuario.inc
 msgid "Fecha de nacimiento:"
-msgstr ""
+msgstr "Birthdate:"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/datos-usuario.inc
 msgid "Sexo:"
-msgstr ""
+msgstr "Sex:"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/datos-usuario.inc
 msgid "Tel&eacute;fono Alt:"
-msgstr ""
+msgstr "Alt. Telephone No.:"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/datos-usuario.inc
-msgid "Legajo :"
-msgstr ""
+msgid "Legajo"
+msgstr "File"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/datos-usuario.inc
-msgid "Ciudad :"
-msgstr ""
+msgid "Ciudad"
+msgstr "City"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/datos-usuario.inc
-msgid "Calle :"
-msgstr ""
+msgid "Calle"
+msgstr "Street"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/datos-usuario.inc
 msgid "Cambiar Password"
-msgstr ""
+msgstr "Change password"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/datos-usuario.inc
 msgid "Eliminar Foto"
-msgstr ""
+msgstr "Delete photograph"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/message_OPAC.inc
 msgid ""
 "Las claves son distintas.\n"
 "Ingreselas nuevamente."
 msgstr ""
+"The passwords are different.\n"
+"Please try again."
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/message_OPAC.inc
 msgid "Cambio de Contraseña"
-msgstr ""
+msgstr "Change password."
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/opac-top.inc
 msgid "Ingres&oacute; como:"
-msgstr ""
+msgstr "Entered as:"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/opac-top.inc
 msgid "Salir"
-msgstr ""
+msgstr "Exit"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/opac-top.inc
 msgid "Ver mis favoritos"
-msgstr ""
+msgstr "See my favorites"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/opac-top.inc
 msgid "Historial de Prestamos"
-msgstr ""
+msgstr "Loan history"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/opac-top.inc
 msgid "Mostrar Historial de Prestamos"
-msgstr ""
+msgstr "Show loan history"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/opac-top.inc
 msgid "Mostrar Historial de Reservas"
-msgstr ""
+msgstr "Show reserve history"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/opac-top.inc
 msgid "Registrarse"
-msgstr ""
+msgstr "Register"
 
 # /usr/local/koha/opac/htdocs/opac-tmpl/includes/opac-top.inc
 msgid "Inicio"
+msgstr "Start"
+
+# /usr/local/koha/opac/htdocs/opac-tmpl/includes/message_OPAC.inc
+msgid "Las claves son distintas. Ingreselas nuevamente."
 msgstr ""
 

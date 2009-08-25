@@ -17,8 +17,7 @@ function search(){
 							   
 
 	[% IF searchfield %]
-	<!-- TMPL_IF NAME=searchfield -->
-		Ha Buscado por [% searchfield %]
+        [% "Ha buscado por"  | i18n %][% searchfield %]
 	[% END %]
 	<FORM id="editandoCONTENIDO" method="POST">
 	<input type="hidden" name="editandotabla" value="[% editandotabla %]" >

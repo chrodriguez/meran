@@ -45,13 +45,13 @@ $sheet->oooSet("bold", "on");
 #Titulos
 my @campos=(C4::AR::Filtros::i18n("Apellido"),
             C4::AR::Filtros::i18n("Nombre"),
-            C4::AR::Filtros::i18n("N�mero de socio"),
+            C4::AR::Filtros::i18n("Número de socio"),
             C4::AR::Filtros::i18n("E-mail"),
             C4::AR::Filtros::i18n("Fecha de prestamo"),
             C4::AR::Filtros::i18n("Fecha de vencimiento"),
-            C4::AR::Filtros::i18n("C�digo de barra"),
-            C4::AR::Filtros::i18n("Signatura Topogr�fica"),
-            C4::AR::Filtros::i18n("Tipo de pr�stamo")
+            C4::AR::Filtros::i18n("Código de barra"),
+            C4::AR::Filtros::i18n("Signatura Topográfica"),
+            C4::AR::Filtros::i18n("Tipo de préstamo")
            );
 
 $sheet->oooSet("bold", "on");

@@ -7,7 +7,7 @@
 
     PASSWORD_EN_BLANCO = "[% 'Las clave no puede estar en blanco, ingreselas nuevamente.' | i18n %]";
 
-    LAS_CLAVES_SON_DISTINTAS= "[% 'Las claves son distintas.\nIngreselas nuevamente.' | i18n %]";
+    LAS_CLAVES_SON_DISTINTAS= "[% 'Las claves son distintas. Ingreselas nuevamente.' | i18n %]";
 
     CAMBIO_DE_CONTRASENIA= "[% 'Cambio de Contraseña' | i18n %]";
 

@@ -142,7 +142,7 @@
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Seud&oacute;nimos' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimos.pl", 
-                                                                title =>    "[% 'Sued&oacute;nimos' | i18n %]"
+                                                                title =>    "[% 'Seud&oacute;nimos' | i18n %]"
                                                             ) ;
                             [% END %]
                         </li>
@@ -290,9 +290,9 @@
                 </li>
                 <li>
                             [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de Pr&eacute;stamo' | i18n %]",
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de pr&eacute;stamo' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/admin/issuetypes.pl",
-                                                                title =>    "[% 'Tipos de Pr&acute;stamo' | i18n %]"
+                                                                title =>    "[% 'Tipos de pr&eacute;stamo' | i18n %]"
                                                             ) ;
                             [% END %]
                 </li>

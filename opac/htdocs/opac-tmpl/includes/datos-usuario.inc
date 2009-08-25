@@ -67,15 +67,16 @@
             [% END %]
         </li>
         <li>
-            [% "Legajo :" | i18n %]
+            [% "Legajo" | i18n %]:
                 <b> [%  socio.persona.getLegajo %]</b><br>
         </li>
         <li>
-            [% "Ciudad :" | i18n %]
+            [% "Ciudad" | i18n %]:
                 <b> [%  socio.persona.ciudad_ref.getNombre %]</b><br>
         </li>
         <li>
-            [% "Calle :" | i18n %]
+            [% END %]
+            [% "Calle" | i18n %]:
                 <b> [%  socio.persona.getCalle %]</b>
         </li>
 <!-- FIXME hacer preferencia para el cambio de password, para permitir o no cambio de pass desde OPAC-->

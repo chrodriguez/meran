@@ -502,9 +502,9 @@
                     </li>
                     <li>
                                 [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de Pr&eacute;stamo' | i18n %]",
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de pr&eacute;stamo' | i18n %]",
                                                                     url =>      "/cgi-bin/koha/admin/tipos_de_prestamos.pl",
-                                                                    title =>    "[% 'Tipos de Pr&acute;stamo' | i18n %]"
+                                                                    title =>    "[% 'Tipos de pr&eacute;stamo' | i18n %]"
                                                                 ) ;
                                 [% END %]
                     </li>

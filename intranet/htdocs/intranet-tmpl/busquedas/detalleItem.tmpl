@@ -75,14 +75,13 @@ $(document).ready(function() {
 <br>
 <p align="center"><b>Historico de circulaci&oacute;n</b></p>
 
-		<p><b>Seleccione para buscar por fecha.</b></p>
-		<p>
-			Seleccione una fecha de inicio: <input id="fechaIni" value="<!-- TMPL_VAR NAME='today' -->"> 
+		<p><b>[% "Seleccione para buscar por fecha" | i18n %].</b></p>
+		<p>[% "Seleccione una fecha de inicio:" | i18n %] <input id="fechaIni" value="<!-- TMPL_VAR NAME='today' -->"> 
 			<a href="javascript:dp_ini.toggle();">
 			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha">
 			</a>
 		</p>
-		<p>Seleccione una fecha de fin: &nbsp;&nbsp;&nbsp;
+		<p>[% "Seleccione una fecha de fin" | i18n %]:
 			<input id="fechaFin" name="dateselectedEnd" value="<!-- TMPL_VAR NAME='today' -->"> 
 			<a href="javascript:dp_fin.toggle();">
 			<img src="<!-- TMPL_VAR NAME='themelang' -->/images/cal.gif" width="16" height="16" border="0" alt="Selecciona una fecha">

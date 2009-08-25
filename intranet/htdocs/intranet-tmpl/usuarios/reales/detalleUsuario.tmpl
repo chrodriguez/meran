@@ -40,7 +40,7 @@
                           <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
   
                   [% IF !(socio.getNro_socio == socio.getNro_documento) %]
-                      [% "Tarjeta de identificaci&oacute;n :" | i18n %]
+                      [% "Tarjeta de identificaci&oacute;n" | i18n %]:
                               <b> [% socio.getNro_socio %]</b><br>
                   [% END %]
                   [% IF socio.tieneAutorizado %]
@@ -230,12 +230,12 @@
           [% END %]
           <br>
   
-          [% "Legajo :" | i18n %]
+          [% "Legajo" | i18n %]:
                           <b> [%  socio.persona.getNro_documento %]</b><br>
   
-          [% "Ciudad :" | i18n %]
+          [% "Ciudad" | i18n %]:
                           <b> [%  socio.persona.ciudad_ref.getNombre %]</b><br>
-          [% "Calle :" | i18n %]
+          [% "Calle" | i18n %]:
                           <b> [%  socio.persona.getCalle %]</b><br>
           
           [% "ID de usuario:" | i18n %]
