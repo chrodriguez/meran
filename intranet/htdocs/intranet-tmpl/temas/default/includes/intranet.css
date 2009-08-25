@@ -1024,6 +1024,14 @@ h2.trigger {
     clear:both;
 }
 
+fieldset.accionesUsuarios{
+    float:right;
+    margin-left:5%;
+    width:30%;
+}
+.divDatosUsuario{
+    float:left;
+}
 /* -------------------------------------------------------Informacion para el Usuario---------------------------------------------- */
 
 .mensajes_informacion{
@@ -1047,4 +1055,7 @@ h2.trigger {
 .titulo_legend{
   font-weight:bold;
 }
-
+.columna_izq{
+  float:left;
+  width:50%;
+}

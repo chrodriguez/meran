@@ -7,61 +7,78 @@
 </script>
 
 <div class="vcard">
-
-    <div width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
-      <p class="titulos" >
-            <span class="fn">[% firstname %] [% surname %]</span>
-        </p>
-    </div>
-
-    <div class="titulo_tabla_resultado">[% "REGISTRO DEL USUARIO" | i18n %]</div>
-<div style="width:100%">
-      <div class="divDatosUsuario" style="float:left">
-      <!-- FIXME y esto??????????????????? -->
-        [% IF error %]
-            <h2>  [% error_msg %]  </h2>
-          <br>
-            <a href="/cgi-bin/koha/usuarios/reales/buscarUsuario.pl"> 
-                          [% "Por favor, repita la b&uacute;squeda" | i18n %]
-              </a>  
-        [% ELSE %]
-      
+<fieldset>
+<legend class="titulo_tabla_resultado">[% 'Datos del Usuario' | i18n %]</legend>
+     <div class="columna_izq" >
+          <fieldset>
+            <legend class="titulo_legend">[% 'Datos Escenciales' | i18n %]</legend>
+                <ul class="listado_sin_margen">
                   [% IF foto_name %]
-                          <img width="96px" height="96px" border="0" src="  [% themelang %]/pictures/[% foto_name %]"><br>
+                <li> <img width="96px" height="96px" border="0" src="  [% themelang %]/pictures/[% foto_name %]"></li>
                   [% END %]
-      
-                  [% "Apellido:" | i18n %]
-                          <b> [% socio.persona.getApellido %] </b><br>
-  
-                  [% "Nombre:" | i18n %]
-                          <b> [% socio.persona.getNombre %] </b><br>
-  
-                  [% "Documento:" | i18n %]
-                          <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
-  
-                  [% IF !(socio.getNro_socio == socio.getNro_documento) %]
-                      [% "Tarjeta de identificaci&oacute;n" | i18n %]:
-                              <b> [% socio.getNro_socio %]</b><br>
-                  [% END %]
+                <li> [% "Apellido:" | i18n %]<strong> [% socio.persona.getApellido %]</strong> </li>
+                <li> [% "Nombre:" | i18n %]<strong> [% socio.persona.getNombre %]</strong> </li>
+                <li> [% "Documento:" | i18n %]<strong> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</strong></li>
+                 [% IF !(socio.getNro_socio == socio.getNro_documento) %]
+                     <li> [% "Tarjeta de identificaci&oacute;n :" | i18n %] <strong> [% socio.getNro_socio %]</strong></li>
+                </ul>
+          </fieldset>
                   [% IF socio.tieneAutorizado %]
-                      <br><br>
+                    <fieldset>
+                    <legend class="titulo_legend">[% 'Usuarios autorizados' | i18n %]</legend>
                       <div class="authorizedBack">
-                                  <span class="type">[% "Nombre y Apellido del autorizado" | i18n %]:</span>
-                                      <b> [% socio.getNombre_apellido_autorizado%]</b>
-                                  <br>
-                                  <span class="type">[% "DNI del autorizado" | i18n %]:</span>
-                                      <b> [% socio.getDni_autorizado %]</b>
-                                  <br>
-                                  <span class="type">[% "Tel&eacute;fono del autorizado" | i18n %]:</span>
-                                      <b> [% socio.getTelefono_autorizado %]</b>
-                                  <br>
+                        <ul class="listado_sin_margen">
+                                  <li>[% "Nombre y Apellido del autorizado" | i18n %]:<strong> [% socio.getNombre_apellido_autorizado%]</strong></li>
+                                  <li>[% "DNI del autorizado" | i18n %]:<strong> [% socio.getDni_autorizado %]</strong></li>
+                                  <li>[% "Tel&eacute;fono del autorizado" | i18n %]:<strong> [% socio.getTelefono_autorizado %]</strong></li>
+                        </ul>
                       </div>
+                    </fieldset>            
                   [% END %]
-          </div>
-          <div class="divDatosUsuario" style="float:right">
-                <ul class = "listaMenuBotones" >
-                  <li>
-    
+        <div id="datos_Secundarios">
+        <fieldset>
+            <legend class="titulo_legend">[% "Datos secundarios" | i18n %]</legend>
+            <h2 class="trigger"><a href="#">[% "ver" | i18n %]</a></h2>
+            <div class="toggle_container">
+                <ul class="listado_sin_margen">
+                    <li>[% "Fecha de nacimiento:" | i18n %] <strong> [% socio.persona.getNacimiento %]</strong></li>
+                    <li>[% "Sexo:" | i18n %] <strong> [% socio.persona.getSexo %]</strong> </li>
+                    [% IF socio.persona.getTelefono %]
+                    <li> <div class="tel">[% "Tel&eacute;fono:" | i18n %]<strong>[% socio.persona.getTelefono %]</strong></div></li>  
+                    [% END %]
+                    [% IF socio.persona.getAlt_telefono %]
+                    <li> <div class="tel">[% "Tel&eacute;fono Alt:" | i18n %] <strong>[% socio.persona.getAlt_telefono %]</strong></div></li>  
+                    [% END %]
+                    [% IF socio.persona.getEmail %]
+                    <li>E-mail: <strong><a href="mailto:[% socio.persona.getEmail %]">[% socio.persona.getEmail %]</a></strong></li>
+                    [% END %]
+                    <li>[% "Legajo :" | i18n %] <strong> [%  socio.persona.getNro_documento %]</strong></li>
+                    <li>[% "Ciudad :" | i18n %] <strong> [%  socio.persona.ciudad_ref.getNombre %]</strong></li>
+                    <li>[% "Calle :" | i18n %]  <strong> [%  socio.persona.getCalle %]</strong></li>
+                    <li>[% "ID de usuario:" | i18n %] <strong> [%  socio.nro_socio %]</strong></li>
+                    <li>[% "Categor&iacute;a del usuario:" | i18n %] <strong> [%  socio.categoria.getDescription %]</strong></li>
+                    <li>[% "Incorporaci&oacute;n a Biblioteca:" | i18n %] <strong> [%  socio.ui.getNombre %]</strong></li>
+                    [% IF usercourse %]
+                    <li>
+                    <center>
+                      <strong>
+                          [% "Realiz&oacute; el curso para usuarios. Dado de alta el d&iacute;a" | i18n %]
+                          [% usercourse %]
+                      </strong>
+                    </center>
+                    </li>
+                    [% END %]
+                </ul>
+            </div>
+        </fieldset>
+        </div>
+</div><!--columna izq -->
+
+<div class="columna_der" >
+          <fieldset  class="accionesUsuarios" >
+                <legend class="titulo_legend">[% 'Acciones' | i18n %]</legend>
+                    <ul class = "listaMenuBotones" >
+                        <li>
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar Datos' | i18n %]",
                                                                                     boton   => "boton_buscar",
@@ -69,10 +86,8 @@
                                                                                     width   => "173"
                                                         ) ;
                             [% END %]
-    <!-- FIXME dos br, para separar los divs -->
-                            <br><br>
-                  </li>
-                            <li>
+                        </li>
+                        <li>
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Usuario' | i18n %]",
                                                                                     boton   => "boton_buscar",
@@ -80,8 +95,6 @@
                                                                                     width   => "173"
                                                         ) ;
                             [% END %]
-                            <br>
-                            <br>
                             </li>
                         [% IF !socio.tieneAutorizado %]
                             <li>
@@ -93,11 +106,9 @@
                                                                                     width   => "173"
                                                         ) ;
                             [% END %]
-                            <br><br>
                             </li>
                         [% ELSE %]
                             <li>
-                
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Autorizado' | i18n %]",
                                                                                     boton   => "boton_buscar",
@@ -105,12 +116,10 @@
                                                                                     width   => "173"
                                                         ) ;
                             [% END %]
-                            <br><br>
                             </li>
                         [% END %]
-    
-                [% IF nroSocioLoggeado != loggedinuser%]
-                  <li>
+                        [% IF nroSocioLoggeado != loggedinuser%]
+                            <li>
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Reset Password' | i18n %]",
                                                                                     boton   => "boton_buscar",
@@ -118,13 +127,12 @@
                                                                                     width   => "173"
                                                         ) ;
                             [% END %]
-                            <br><br>
-                  </li>
-                [% ELSE %]
-                  <li>
-                <form action=/cgi-bin/koha/usuarios/change_password.pl method=get id="formCambioPassword">
-                    <input type=hidden name="token" value="[% token %]" >
-                </form>        
+                            </li>
+                        [% ELSE %]
+                            <li>  
+                                    <form action=/cgi-bin/koha/usuarios/change_password.pl method=get id="formCambioPassword">
+                                        <input type=hidden name="token" value="[% token %]" >
+                                    </form>        
       
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Cambio de Contrase&ntilde;a' | i18n %]",
@@ -133,129 +141,64 @@
                                                                                     width   => "173"
                                                         ) ;
                             [% END %]
-                            <br><br>
-                  </li>
-                [% END %]
-                        <li>
-                <form action=/cgi-bin/koha/usuarios/cardGenerator.pl method=get name="formCarnet">
+                            </li>
+                        [% END %]
+                            <li>
+                                <form action=/cgi-bin/koha/usuarios/cardGenerator.pl method=get name="formCarnet">
                                     <input type=hidden name="nro_socio" value="[% socio.getNro_socio %]" >
                                     <input type=hidden name="token" value="[% token %]" >
-                </form>
+                                </form>
         
-                [% PERL %]
+                            [% PERL %]
                                     print C4::AR::Filtros::to_Button(   text    => "[% 'Generar Carnet' | i18n %]",
                                                                         boton   => "boton_buscar",
                                                                         onClick => "formCarnet.submit();",
                                                                         width   => "173"
                                             ) ;
 
-                [% END %]
-                <br><br>
-
-                </li>
-                <li>
-                    <form action=/cgi-bin/koha/usuarios/libreDeuda.pl method=get name="formLibre">
+                            [% END %]
+                        </li>
+                        <li>
+                            <form action=/cgi-bin/koha/usuarios/libreDeuda.pl method=get name="formLibre">
                                         <input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
                                         <input type=hidden name=token value="[% token %]" >
-                    </form>    
-                    [% PERL %]
+                            </form>    
+                            [% PERL %]
                                         print C4::AR::Filtros::to_Button(   text    => "[% 'Libre Deuda' | i18n %]",
                                                                             boton   => "boton_buscar",
                                                                             onClick => "formLibre.submit();",
                                                                             width   => "173"
                                                 ) ;
-                    [% END %]
-                    <br><br>
-                </li>
-                <li>
-                    [% PERL %]
+                            [% END %]
+                       </li>
+                       <li>
+                            [% PERL %]
                                         print C4::AR::Filtros::to_Button(   text    => "[% 'Prest. Interbibliotecario' | i18n %]",
                                                                             boton   => "boton_buscar",
                                                                             onClick => "prestamosInterBibliotecarios();",
                                                                             width   => "173"
                                                 ) ;
-                    [% END %]
-                    <br><br>
-                </li>
+                            [% END %]
+                      </li>
 
-                [% IF mensaje_error_foto %] 
+                      [% IF mensaje_error_foto %] 
                         <li>
                                 <font color="red">[% mensaje_error_foto %]</font>
                         </li>
-                [% END %]
+                      [% END %]
 
-                [% IF foto_name %]
+                        [% IF foto_name %]
                         <li>
                             <input type=button class="button" value="Eliminar foto" 
                                 align=center onClick="eliminarFoto('[% foto_name %] ')">
                         </li>
-                [% ELSE %]
+                        [% ELSE %]
                         <li>
                                 <div id="uploader"></div>
                         </li>
-                [% END %]
-            </ul>
-          </div>
-          <br>
-      [% END %]
-
-
-<div class="divDatosUsuario">
-<fieldset>
-    <legend>[% "Datos secundarios" | i18n %]</legend>
-
-    <h2 class="trigger"><a href="#">[% "ver" | i18n %]</a></h2>
-    <div class="toggle_container">
-          [% "Fecha de nacimiento:" | i18n %]
-                  <b> [% socio.persona.getNacimiento %]</b><br>
-          [% "Sexo:" | i18n %]
-                  <b> [% socio.persona.getSexo %]</b>
-          [% IF socio.persona.getTelefono %]
-                  <div class="tel">
-                          <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
-                                  <b>[% socio.persona.getTelefono %]</b><br>
-                  </div>  
-          [% END %]
-  
-          [% IF socio.persona.getAlt_telefono %]
-          <div class="tel">
-                  <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
-                              <b>[% socio.persona.getAlt_telefono %]</b><br>
-          </div>  
-          [% END %]
-  
-          [% IF socio.persona.getEmail %]
-                  E-mail: <b><a href="mailto:[% socio.persona.getEmail %]">
-                          <span class="email"> [% socio.persona.getEmail %]</span></a></b><br>
-          [% END %]
-          <br>
-  
-          [% "Legajo" | i18n %]:
-                          <b> [%  socio.persona.getNro_documento %]</b><br>
-  
-          [% "Ciudad" | i18n %]:
-                          <b> [%  socio.persona.ciudad_ref.getNombre %]</b><br>
-          [% "Calle" | i18n %]:
-                          <b> [%  socio.persona.getCalle %]</b><br>
-          
-          [% "ID de usuario:" | i18n %]
-                          <b> [%  socio.nro_socio %]</b><br>
-  
-          [% "Categor&iacute;a del usuario:" | i18n %]
-                          <b> [%  socio.categoria.getDescription %]</b><br>
-  
-          [% "Incorporaci&oacute;n a Biblioteca:" | i18n %]
-                          <b> [%  socio.ui.getNombre %]</b><br>
-  
-  
-          [% IF usercourse %]
-                  <center>
-                      <b>
-                          [% "Realiz&oacute; el curso para usuarios. Dado de alta el d&iacute;a" | i18n %]
-                          [% usercourse %]
-                      </b>
-                  </center>
-          [% END %]
-      </div>
+                        [% END %]
+                    </ul>
+                </fieldset>
+              </div><!--columna_der -->
 </fieldset>
 </div>

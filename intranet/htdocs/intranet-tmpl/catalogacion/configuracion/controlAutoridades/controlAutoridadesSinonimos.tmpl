@@ -306,7 +306,7 @@ $(document).ready(function(){
 <ul>
 <fieldset>
 <legend class="titulo_legend">[% 'Datos a modificar'| i18n %]</legend>
-<li>[% "Seleccione autoridad: " | i18n %]
+<li class="sub_item"><label for="tabla"> [% "Seleccione autoridad: " | i18n %]</label>
 
 		<Select id="tabla" name="tabla" onChange="OnChangeComboTablasSinonimos();">
 			<option value="Sin Seleccionar">[% "Sin Seleccionar" | i18n %]</option>
@@ -317,31 +317,34 @@ $(document).ready(function(){
 	</li>
 
 	<div id="content_search_autores">
-		<li>[% "Autores:" | i18n %]</li>
-		<li><input id="search_autores" type="text" size="50"></li>
+<li class="sub_item"  ><label for="search_autores">[% "Autores:" | i18n %] </label> 
+		<input id="search_autores" type="text" size="50"></li>
 			<input id="search_autores_hidden" type="hidden">
 	</div>
 	<div id="content_search_temas">
-		<li>[% "Temas:" | i18n %]</li>
-		<li><input id="search_temas" type="text" size="50"></li>
+<li class="sub_item"><label for="search_temas">[% "Temas:" | i18n %] </label> 
+		<input id="search_temas" type="text" size="50"></li>
 			<input id="search_temas_hidden" type="hidden">
 	</div>
 	<div id="content_search_editoriales">
-		<li>[% "Editoriales:" | i18n %]</li>
-		<li><input id="search_editoriales" type="text" size="50"></li>
+<li class="sub_item"><label for="search_editoriales">[% "Editoriales:" | i18n %] </label> 
+		<input id="search_editoriales" type="text" size="50"></li>
 			<input id="search_editoriales_hidden" type="hidden">
 	</div>
 
-	<li>[% "Ingrese Sin&oacute;nimo:" | i18n %]</li>
-	<li><input id="sinonimo" name="sinonimo" type="text" value="" size="50">
+<li class="sub_item"><label for="sinonimo">[% "Ingrese Sin&oacute;nimo:" | i18n %] </label> 
+	<input id="sinonimo" name="sinonimo" type="text" value="" size="50">
 	</li>
-	<li>
+<li class="sub_item">
+<ul><li>
 		<input id="push" type="button" onClick="pushSinonimo();" value=">>" title="Agregar Sin&oacute;nimo"> 
 		<input id="pop" type="button" onClick="popSinonimo();" value="<<" title="Sacar Sin&oacute;nimo" disabled=true>
 	</li>
 	<li>
 		<textarea id="textAreaSinonimos" style="height:60px; width:230px;" readonly></textarea>
-	</li>
+</li>
+</ul>
+</li>
 
 	<li><hr></hr></li>
             <div>
