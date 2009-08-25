@@ -75,7 +75,6 @@
                 <b> [%  socio.persona.ciudad_ref.getNombre %]</b><br>
         </li>
         <li>
-            [% END %]
             [% "Calle" | i18n %]:
                 <b> [%  socio.persona.getCalle %]</b>
         </li>
