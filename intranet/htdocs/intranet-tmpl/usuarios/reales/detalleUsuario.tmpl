@@ -21,6 +21,7 @@
                 <li> [% "Documento:" | i18n %]<strong> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</strong></li>
                  [% IF !(socio.getNro_socio == socio.getNro_documento) %]
                      <li> [% "Tarjeta de identificaci&oacute;n :" | i18n %] <strong> [% socio.getNro_socio %]</strong></li>
+                  [% END %]
                 </ul>
           </fieldset>
                   [% IF socio.tieneAutorizado %]
@@ -201,4 +202,4 @@
                 </fieldset>
               </div><!--columna_der -->
 </fieldset>
-</div>
+</div><!--vcard -->
