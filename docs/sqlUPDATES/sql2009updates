@@ -963,3 +963,28 @@ VALUES (
 '0', 'UNDEFINED', 'UNDEFINED', 'UND', 'UNDEFINED'
 );
 
+
+--
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'puerto_para_https', '444', 'puerto para https', NULL , 'text'
+);
+
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'habilitar_https', 1, 'habilita https (=1) o no (=0)', NULL , 'bool'
+);
+
+

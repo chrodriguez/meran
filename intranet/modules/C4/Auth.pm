@@ -415,7 +415,7 @@ C4::AR::Debug::debug("checkauth=> sessionID seteado \n");
 
         if ($logout) {
             #se maneja el logout del usuario
-            _logOut_Controller($query, $userid, $ip, $sessionID, $sist_sesion);
+            _logout_Controller($userid, $ip, $sessionID, $sist_sesion);
             $sessionID = undef;
             $userid = undef;
 
@@ -425,7 +425,7 @@ C4::AR::Debug::debug("checkauth=> sessionID en logout: ". $session->param('sessi
             $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
 # FIXME parche feo parametrizar o dejar logica dentro del redirectTo
             if ($type eq 'opac') {
-                redirectToHTTPS('/cgi-bin/koha/login/auth.pl');
+                _opac_logout();
             }else{
                 redirectTo('/cgi-bin/koha/auth.pl');
             }
@@ -435,13 +435,13 @@ C4::AR::Debug::debug("checkauth=> sessionID en logout: ". $session->param('sessi
         if ($userid) {
         #la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
         #se verifican algunas condiciones de finalizacion de session
-C4::AR::Debug::debug("checkauth=> El usuario se encuentra logueado \n");
+          C4::AR::Debug::debug("checkauth=> El usuario se encuentra logueado \n");
           if ($lasttime<time()-$timeout) {
             # timed logout
             $info{'timed_out'} = 1;
             #elimino la session del usuario porque caduco
             $sist_sesion->delete;
-C4::AR::Debug::debug("checkauth=> caduco la session \n");
+            C4::AR::Debug::debug("checkauth=> caduco la session \n");
             #Logueo la sesion que se termino por timeout
             my $time=localtime(time());
             _session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time);
@@ -453,9 +453,9 @@ C4::AR::Debug::debug("checkauth=> caduco la session \n");
             redirectTo('/cgi-bin/koha/auth.pl');
             #EXIT
 			}elsif ($tokenDB ne $token){
-C4::AR::Debug::debug("Token <> o no existe, posible CSRF");
-C4::AR::Debug::debug("tokenDB: ".$tokenDB);
-C4::AR::Debug::debug("query->param('token'): ".$query->param('token'));
+                C4::AR::Debug::debug("Token <> o no existe, posible CSRF");
+                C4::AR::Debug::debug("tokenDB: ".$tokenDB);
+                C4::AR::Debug::debug("query->param('token'): ".$query->param('token'));
 				$session->param('codMsg', 'U354');
 				$session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
 				redirectTo('/cgi-bin/koha/informacion.pl');
@@ -468,7 +468,7 @@ C4::AR::Debug::debug("query->param('token'): ".$query->param('token'));
             $info{'different_ip'} = 1;
             #elimino la session del usuario porque caduco
             $sist_sesion->delete;
-C4::AR::Debug::debug("checkauth=> cambio la IP, se elimina la session\n");
+            C4::AR::Debug::debug("checkauth=> cambio la IP, se elimina la session\n");
             #Logueo la sesion que se cambio la ip
             my $time=localtime(time());
             _session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
@@ -490,7 +490,7 @@ C4::AR::Debug::debug("checkauth=> cambio la IP, se elimina la session\n");
             $info{'loguin_duplicado'} = 1;
             #elimino la session del usuario porque caduco
             $sist_sesion->delete;
-C4::AR::Debug::debug("checkauth=> se loguearon con el mismo userid desde otro lado\n");
+            C4::AR::Debug::debug("checkauth=> se loguearon con el mismo userid desde otro lado\n");
             #Logueo la sesion que se cambio la ip
             my $time=localtime(time());
             _session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
@@ -508,7 +508,7 @@ C4::AR::Debug::debug("checkauth=> se loguearon con el mismo userid desde otro la
             #EXIT
             } else {
             #esta todo OK, continua logueado y se actualiza la session, lasttime
-C4::AR::Debug::debug("checkauth=> continua logueado, actualizo lasttime de sessionID: ".$sessionID."\n");
+                C4::AR::Debug::debug("checkauth=> continua logueado, actualizo lasttime de sessionID: ".$sessionID."\n");
                 $sist_sesion->setLasttime(time());
                 $sist_sesion->save();
 
@@ -518,10 +518,10 @@ C4::AR::Debug::debug("checkauth=> continua logueado, actualizo lasttime de sessi
 
                 if ($flags) {
                     $loggedin = 1;
-C4::AR::Debug::debug("checkauth=> TIENE PERMISOS: \n");
+                    C4::AR::Debug::debug("checkauth=> TIENE PERMISOS: \n");
                 } else {
                     $info{'nopermission'} = 1;
-C4::AR::Debug::debug("checkauth=> NO TIENE PERMISOS: \n");
+                    C4::AR::Debug::debug("checkauth=> NO TIENE PERMISOS: \n");
                     #redirecciono a una pagina informando q no tiene  permisos
                     $session->param('codMsg', 'U354');
                     $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
@@ -538,10 +538,10 @@ C4::AR::Debug::debug("checkauth=> NO TIENE PERMISOS: \n");
     # finished authentification, now respond
 
     if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
-C4::AR::Debug::debug("checkauth=> if (loggedin || authnotrequired || (defined(insecure) && insecure)) \n");
-C4::AR::Debug::debug("checkauth=> insecure: ".$insecure."\n");
-C4::AR::Debug::debug("checkauth=> authnotrequired: ".$authnotrequired."\n");
-C4::AR::Debug::debug("checkauth=> change_password: ".$change_password."\n");
+        C4::AR::Debug::debug("checkauth=> if (loggedin || authnotrequired || (defined(insecure) && insecure)) \n");
+        C4::AR::Debug::debug("checkauth=> insecure: ".$insecure."\n");
+        C4::AR::Debug::debug("checkauth=> authnotrequired: ".$authnotrequired."\n");
+        C4::AR::Debug::debug("checkauth=> change_password: ".$change_password."\n");
         #Se verifica si el usuario tiene que cambiar la password
         if ( ($userid) && ( new_password_is_needed($userid) ) && !$change_password ) {
 
@@ -549,8 +549,6 @@ C4::AR::Debug::debug("checkauth=> change_password: ".$change_password."\n");
              _change_Password_Controller($dbh, $query, $userid, $type,\%info, $token);
             #EXIT
         }#end if (($userid) && (new_password_is_needed($userid)))
-
-#         C4::AR::Debug::debug("desde CHECKAUTH SESSION URL: ".$session->param('redirectTo'));
 
 C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID: ".$query->cookie('sessionID')." sessionID: ".$sessionID."\n");
         return ($userid, $session, $flags);
@@ -821,15 +819,15 @@ sub _setLoguinDuplicado {
     }
 }
 
-=item sub _logOut_Controller
+=item sub _logout_Controller
 
     Esta funcion se encarga del logout del usuario
     Parametros: 
     $query, $userid, $ip, $sessionID, $sist_sesion
 
 =cut
-sub _logOut_Controller {
-	my ($query, $userid, $ip, $sessionID, $sist_sesion) = @_;
+sub _logout_Controller {
+	my ($userid, $ip, $sessionID, $sist_sesion) = @_;
 	# voluntary logout the user
     C4::AR::Debug::debug("\n");
     C4::AR::Debug::debug("_logOut_Controller=> LOGOUT:");
@@ -845,7 +843,7 @@ sub _logOut_Controller {
     C4::AR::Debug::debug("\n");
 }
 
-=item sub _logOut_Controller
+=item sub _change_Password_Controller
 
     Esta funcion se encarga de manejar el cambio de la password
     Parametros: 
@@ -1184,14 +1182,33 @@ sub redirectToNoHTTPS {
     C4::AR::Debug::debug("\n");
 }
 
+=item sub _opac_logout
+
+    redirecciona a al login correspondiente
+
+=cut
+sub _opac_logout{
+
+    if ( C4::AR::Preferencias->getValorPreferencia("habilitar_https") ){
+    #se encuentra habilitado https
+        redirectToHTTPS('/cgi-bin/koha/login/auth.pl');
+    }else{
+        redirectTo('/cgi-bin/koha/auth.pl');
+    }
+}
+
 sub redirectToHTTPS {
     my ($url) = @_;
 
     C4::AR::Debug::debug("\n");
     C4::AR::Debug::debug("redirectToHTTPS=> \n");
 
-#     my $puerto= C4::AR::Preferencias->getValorPreferencia("puerto_para_https")||'444';
-my $puerto= C4::AR::Preferencias->getValorPreferencia("puerto_para_https")||'80';
+    my $puerto = C4::AR::Preferencias->getValorPreferencia("puerto_para_https")||'80';
+    my $protocolo = "https";
+
+    if($puerto eq "80"){
+        $protocolo = "http";
+    }
 
     #para saber si fue un llamado con AJAX
     if(C4::AR::Utilidades::isAjaxRequest()){
@@ -1210,8 +1227,7 @@ my $puerto= C4::AR::Preferencias->getValorPreferencia("puerto_para_https")||'80'
 
         my $input = CGI->new(); 
         print $input->redirect( 
-#                     -location => "https://".$ENV{'SERVER_NAME'}.":".$puerto.$url,
-                    -location => "http://".$ENV{'SERVER_NAME'}.":".$puerto.$url,  
+                    -location => $protocolo."://".$ENV{'SERVER_NAME'}.":".$puerto.$url,  
                     -status => 301,
         ); 
 

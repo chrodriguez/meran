@@ -375,31 +375,34 @@ $(document).ready( function() {
 
 </script>
 
-<p class="titulo">[% "Administraci&oacute;n de Preferencias del Sistema" | i18n %]</p>
+<div class="titulos">[% "Administraci&oacute;n de Preferencias del Sistema" | i18n %]</div>
 <!-- PARA BUSCAR -->
 <br>
-<p>
-	<input type="text" id="buscar" name="buscar" value="">
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "buscarPreferencia();",
-                                                                    title   => "[% 'Buscar' | i18n %]",
-                                        ) ;
-            [% END %]
+<ul>
+    <li class="item">
+	    <input type="text" id="buscar" name="buscar" value="">
+        [% PERL %]
+                            print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                boton   => "boton_buscar",
+                                                                onClick => "buscarPreferencia();",
+                                                                title   => "[% 'Buscar' | i18n %]",
+                                    ) ;
+        [% END %]
+    
+        [% PERL %]
+                            print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                boton   => "boton_borrar",
+                                                                onClick => "limpiar();",
+                                                                title   => "[% 'Limpiar' | i18n %]",
+                                    ) ;
+        [% END %]
+    </li>
+</ul>
 
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                    boton   => "boton_borrar",
-                                                                    onClick => "limpiar();",
-                                                                    title   => "[% 'Limpiar' | i18n %]",
-                                        ) ;
-            [% END %]
-</p>
-
-<div id="divCombos">
+<div id="divCombos" style="clear: both;">
 <!-- PARA AGREGAR -->
-<p>
+<ul>
+    <li class="item">
 	<select id="tipoVar" onChange="selectOpcion()">
 		<option value="0">[% "Seleccionar ..." | i18n %]</option>
 		<option value="bool">[% "Si-No" | i18n %]</option>
@@ -408,18 +411,22 @@ $(document).ready( function() {
 		<option value="referencia">[% "Referencia" | i18n %]</option>
 		<option value="valAuto">[% "Valores autorizados" | i18n %]</option>
 	</select>
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
-                                                                    boton   => "boton_agregar",
-                                                                    onClick => "agregarPreferencia();",
-                                                                    title   => "[% 'Agregar' | i18n %]",
-                                        ) ;
-            [% END %]
+    </li>
+</ul>
+
+    [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
+                                                            boton   => "boton_agregar",
+                                                            onClick => "agregarPreferencia();",
+                                                            title   => "[% 'Agregar' | i18n %]",
+                                                            alternClass => "botonCentrado"
+                                ) ;
+    [% END %]
 </p>
-<div id="divAgregar"></div>
+<div id="divAgregar" style="clear: both;"></div>
 </div>
 
-<div id="divResultado"></div>
+<div id="divResultado" style="clear: both;"></div>
 
 
 [% INCLUDE "intranet-bottom.inc" %]
