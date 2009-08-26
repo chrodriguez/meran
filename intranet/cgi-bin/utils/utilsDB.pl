@@ -16,12 +16,23 @@ my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $authnotrequired= 0;
-my ($user, $session, $flags)= checkauth($input, $authnotrequired, { editcatalogue => 1}, 'intranet');
 
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
 
 if($tipoAccion eq "GENERAR_ARREGLO_TABLA_REF"){
+
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1',
+                                                    tipo_permiso => 'catalogo'
+                                                    
+                                                }, 
+                                                'intranet'
+                                    );
 
     my ($tablaRef_array) = C4::AR::Referencias::obtenerTablasDeReferenciaAsString();
     
@@ -34,6 +45,19 @@ if($tipoAccion eq "GENERAR_ARREGLO_TABLA_REF"){
 }
 
 elsif($tipoAccion eq "GENERAR_ARREGLO_UI"){
+
+
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1',
+                                                    tipo_permiso => 'catalogo'
+                                                    
+                                                }, 
+                                                'intranet'
+                                    );
 
     my ($ui_array_ref) = C4::AR::Referencias::obtenerUnidadesDeInformacion();
     my %select_ui;

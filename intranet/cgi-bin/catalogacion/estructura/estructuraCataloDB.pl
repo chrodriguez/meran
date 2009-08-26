@@ -117,7 +117,10 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_TABLA_REF"){
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
-                                                    entorno => 'datos_nivel1'}, 
+                                                    entorno => 'datos_nivel1',
+                                                    tipo_permiso => 'catalogo'
+                                                    
+                                                }, 
                                                 'intranet'
                                     );
 
