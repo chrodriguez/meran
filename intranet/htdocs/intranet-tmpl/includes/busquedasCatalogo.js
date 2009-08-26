@@ -1,5 +1,9 @@
 var objAH;
 
+combinables= ['titulo', 'autor', 'tipo', 'signatura', 'tipo_nivel3_id'];
+noCombinables= ['keyword', 'isbn', 'dictionary', 'codBarra', 'estante', 'tema'];
+
+
 function updateInfo(responseText){
 
     $("#volver").hide();
@@ -248,8 +252,6 @@ function verTema(idtema,tema){
     objAH.sendToServer();
 }
 
-combinables= ['titulo', 'autor', 'tipo', 'signatura', 'tipo_nivel3_id'];
-noCombinables= ['keyword', 'isbn', 'dictionary', 'codBarra', 'estante', 'tema'];
 
 
 function cambiarEstadoCampos(campos, clase){

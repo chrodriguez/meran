@@ -323,10 +323,10 @@ function eleccionSubCampo(){
 
 
 function verificarCamposParaReferencia(){
-	var ok= 1;
+	var ok= true;
 	if($('#camposSelect').val() == '-1' || $('#camposRef').val() == '-1'){
-		jAlert(FALTA_PARAMETRO_PARA_REFERENCIA);
-		ok= 0;
+		jAlert(FALTA_PARAMETRO_PARA_REFERENCIA,CATALOGO_ALERT_TITLE);
+		ok= false;
 	}
 
 	return ok;
@@ -336,7 +336,7 @@ function verificarCamposParaReferencia(){
  * agregarEstructuraCatalogacion
  */
 function agregarEstructuraCatalogacion(){ 
-	var ok= 0;
+	var ok= true;
 
     objAH=new AjaxHelper(updateAgregarEstructuraCatalogacion);
     objAH.debug= true;
@@ -352,18 +352,22 @@ function agregarEstructuraCatalogacion(){
     objAH.liblibrarian= $('#liblibrarian').val();
     objAH.tipoInput= $('#tipoInput').val();
     objAH.tabla= $('#tablaRef').val();
-    
-    if ($('#tablaRef').val() != -1){
-        objAH.referencia=1;
-        objAH.orden= $('#camposSelect').val();
-        objAH.campos= $('#camposRef').val();
-        objAH.separador= $('#separador').val();
-		ok= verificarCamposParaReferencia();
-    }else{
-		
-         objAH.referencia=0;
+        
+    if ($('#tipoInput').val() != -1){
+        if ( ($('#tipoInput').val() == "auto") || ($('#tipoInput').val() == "combo") ){
+          if ($('#tablaRef').val() != -1){
+              objAH.referencia=1;
+              objAH.orden= $('#camposSelect').val();
+              objAH.campos= $('#camposRef').val();
+              objAH.separador= $('#separador').val();
+              ok= verificarCamposParaReferencia();
+          }else{
+              ok = false;
+              objAH.referencia=0;
+              jAlert("Debe seleccionar una tabla de referencia.",CATALOGO_ALERT_TITLE);
+          }
+        }
     }
-
 	if(ok){
     	objAH.tipoAccion= "GUARDAR_ESTRUCTURA_CATALOGACION";
     	objAH.sendToServer();
