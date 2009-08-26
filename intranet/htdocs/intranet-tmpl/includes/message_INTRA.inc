@@ -3,7 +3,7 @@
 
 <!--\u00e1 -> á
 \u00e9 -> é
-\u00ed -> í
+u\00ed -> í
 \u00f3 -> ó
 \u00fa -> ú
 \u00c1 -> Á
@@ -24,17 +24,17 @@ NOTA_GUARDADA = "[% 'La nota se actualizo correctamente' | i18n %]";
 //================================================Catalogacion===================================================
 CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'El campo no puede estar en blanco' | i18n %]";
 ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'Este campo es requerido, no lo deje en blanco' | i18n %]";
-ESTA_SEGURO_QUE_DESEA_BORRARLO= "&iquery;[% 'Est&aacute; seguro que desea borrarlo' | i18n %]?";
+ESTA_SEGURO_QUE_DESEA_BORRARLO= "&iquery;[% 'Est\u00e1 seguro que desea borrarlo' | i18n %]?";
 HAY_BARCODES_REPETIDOS= "[% 'Hay barcodes repetidos' | i18n %]";
 ELIJA_AL_MENOS_UN_EJEMPLAR= "[% 'Elija al menos un ejemplar para realizar la acción' | i18n %]";
 FALTA_PARAMETRO_PARA_REFERENCIA= "[% 'Falta parámetro para referencia' | i18n %]";
-CATALOGO_TITLE= "[% 'Advertencia de cat&aacute;logo' | i18n %]";
-CATALOGO_ALERT_TITLE= "[% 'Advertencia de cat&aacute;logo' | i18n %]";
+CATALOGO_TITLE= "[% 'Advertencia de cat\u00e1logo' | i18n %]";
+CATALOGO_ALERT_TITLE= "[% 'Advertencia de cat\u00e1logo' | i18n %]";
 //=============================================Fin===Catalogacion=================================================
 
 //================================================Usuarios========================================================
 INGRESE_UN_DATO= "[% 'Ingrese un dato' | i18n %]";
-NO_SE_SELECCIONO_NINGUN_USUARIO= "[% 'No seleccion&oacute; ning&uacute;n usuario' | i18n %]";
+NO_SE_SELECCIONO_NINGUN_USUARIO= "[% 'No seleccion\u00f3 ning\u00fan usuario' | i18n %]";
 // mensaje compuesto
 ESTA_SEGURO= "[% 'Esta seguro' | i18n %]";
 TARJETA_NRO= "[% ' -  Tarjeta nro ' | i18n %]";
@@ -46,7 +46,7 @@ PERMISSION_GRANTED = "[% 'Ha concedido permisos, esta seguro que quiere continua
 
 NEW_GRANT = "[% 'ATENCION: DANDO DE ALTA UN NUEVO PERMISO YA QUE EL USUARIO NO CUENTA CON PRIVILEGIOS PARA TAL COMBINACION ' | i18n %]";
 // mensaje compuesto
-UD_ESTA_A_PUNTO= "[% 'Usted est&aacute; a punto de' | i18n %]";
+UD_ESTA_A_PUNTO= "[% 'Usted est\u00e1 a punto de' | i18n %]";
 A_LOS_PROPIETARIOS= "[% 'a los propietarios de' | i18n %]:";
 // fin mensaje compuesto
 
@@ -60,25 +60,25 @@ POR_FAVOR_INGRESE_EL_SEXO= "[% 'Por favor, ingrese el sexo.' | i18n %]";
 POR_FAVOR_INGRESE_LA_CALLE_DONDE_VIVE= "[% 'Por favor, ingrese la calle en donde vive.' | i18n %]";
 POR_FAVOR_INGRESE_LA_CIUDAD_EN_DONDE_VIVE= "[% 'Por favor, ingrese La ciudad en donde vive.' | i18n %]";
 POR_FAVOR_INGRESE_LA_FECHA_DE_NACIMIENTO= "[% 'Por favor, ingrese la fecha de nacimiento.' | i18n %]";
-POR_FAVOR_INGRESE_EL_TELEFONO= "[% 'Por favor, ingrese el tel&eacute;fono.' | i18n %]";
+POR_FAVOR_INGRESE_EL_TELEFONO= "[% 'Por favor, ingrese el tel\u00e9fono.' | i18n %]";
 POR_FAVOR_INGRESE_SU_NRO_DE_DNI= "[% 'Por favor, ingrese su nro. de documento' | i18n %]";
-POR_FAVOR_INGRESE_SOLO_DIGITOS= "[% 'Por favor, ingrese s&oacute;lo d&iacute;gitos' | i18n %]";
-LA_LONG_DEL_DNI_DEBE_SER_DE_8_DIGITOS_INGRESO_MAS= "[% 'La longitud del documento debe ser de 8 d&iacute;gitos (ha ingresado menos)' | i18n %]";
-LA_LONG_DEL_DNI_DEBE_SER_DE_8_DIGITOS_INGRESO_MENOS= "[% 'La longitud del documento debe ser de 8 d&iacute;gitos (ha ingresado m&aacute;s)' | i18n %]";
-POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA= "[% 'Por favor, ingrese una direcci&oacute;n de email v&aacute;lida' | i18n %]";
+POR_FAVOR_INGRESE_SOLO_DIGITOS= "[% 'Por favor, ingrese s\u00f3lo d\u00edgitos' | i18n %]";
+LA_LONG_DEL_DNI_DEBE_SER_DE_8_DIGITOS_INGRESO_MAS= "[% 'La longitud del documento debe ser de 8 d\u00edgitos (ha ingresado menos)' | i18n %]";
+LA_LONG_DEL_DNI_DEBE_SER_DE_8_DIGITOS_INGRESO_MENOS= "[% 'La longitud del documento debe ser de 8 d\u00edgitos (ha ingresado m\u00e1s)' | i18n %]";
+POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA= "[% 'Por favor, ingrese una direcci\u00f3n de email v\u00e1lida' | i18n %]";
 POR_FAVOR_INGRESE_UNA_CONTRASENIA= "[% 'Por favor, ingrese ingrese una contraseña.' | i18n %]";
 LAS_CLAVES_SON_DISTINTAS= "[% 'Las claves son distintas.\nIngreselas nuevamente.' | i18n %]";
 CAMBIO_DE_CONTRASENIA= "[% 'Cambio de Contrase&ntilde;a' | i18n %]";
-PRESTAMO_INTER_BIBLIO= "[% 'Pr&eacute;stamo Interbibliotecario' | i18n %]";
+PRESTAMO_INTER_BIBLIO= "[% 'Pr\u00e9stamo Interbibliotecario' | i18n %]";
 CONFIRMA_LA_BAJA= "[% 'Confirma la baja ?' | i18n %]";
 FILTRO_POR= "[% 'filtro: ' | i18n %]";
-SOLO_SERA_NUMERICO= "[% 'S&oacute;lo ser&aacute; num&eacute;rico' | i18n %]";
+SOLO_SERA_NUMERICO= "[% 'S\u00f3lo ser\u00e1 num\u00e9rico' | i18n %]";
 CONFIRMAR_ELIMINAR_AFILIADO= "[% 'Desea eliminar el autorizado para este usuario?' | i18n %]";
 GRANT_PERMISSION_TITLE= "[% 'Advertencia de cesion de Permisos' | i18n %]";
 USUARIOS_ALERT_TITLE= "[% 'Advertencia de Usuarios' | i18n %]";
 FALTA_INGRESAR_EL_NOMBRE_DEL_AUTORIZADO= "[% 'Falta ingresar el nombre del autorizado' | i18n %]";
 FALTA_INGRESAR_EL_DNI_DEL_AUTORIZADO= "[% 'Falta ingresar el DNI del autorizado' | i18n %]";
-FALTA_INGRESAR_EL_TELEFONO_DEL_AUTORIZADO= "[% 'Falta ingresar el Tel&eacute;fono del autorizado' | i18n %]";
+FALTA_INGRESAR_EL_TELEFONO_DEL_AUTORIZADO= "[% 'Falta ingresar el Tel\u00e9fono del autorizado' | i18n %]";
 //================================================Fin==Usuarios==================================================
 
 //================================================Catalogo=======================================================
@@ -108,7 +108,7 @@ POR_FAVOR_SELECCIONE_CATEGORIA_SOCIO= "[% 'Por favor, seleccione una categoría 
 //=============================================Fin===Reglas Sanciones===========================================
 
 //================================================Sanciones==============================================
-ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION= "&iquery;[% 'Est&aacute; seguro que desea cancelar la sanci&oacute;n' | i18n %]?";
+ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION= "&iquery;[% 'Est\u00e1 seguro que desea cancelar la sanci\u00f3n' | i18n %]?";
 SANCIONES_TITLE= "[% 'Advertencia de Sanciones' | i18n %]";
 //===============================================Fin=Sanciones===========================================
 
