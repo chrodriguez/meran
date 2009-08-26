@@ -212,7 +212,7 @@ sub nuevoPermisoCatalogo{
     my $permisos = C4::Modelo::PermCatalogo->new();
     $hash_permisos->{'tipo_documento'} = $tipo_documento;
     $hash_permisos->{'nro_socio'} = $nro_socio;
-    $hash_permisos->{'id_ui'} = $id_ui || 'ALL';
+    $hash_permisos->{'id_ui'} = $id_ui || 'ANY';
 
     $permisos->agregar($hash_permisos);
 
