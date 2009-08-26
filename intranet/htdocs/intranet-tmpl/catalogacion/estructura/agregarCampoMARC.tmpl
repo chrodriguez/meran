@@ -1,94 +1,83 @@
 <!-- TEMPLATE DE CAMPOS TEMPORALES -->
-<hr>
-<div width="100%">
-        <strong>[% 'Agregar campo Marc para el nivel' | i18n %] [% nivel %]:</strong>
-        <div id="div1">
-    <p>
-    <label for="campoX">[% 'Seleccion' | i18n %]: </label> 
-    [% selectCampoX %]
-    </p>
-</div>
 
-<div id="id2">
-        <p>
-        <label for="campo">[% 'Campo' | i18n %]: </label>
+<fieldset>
+<legend><strong>[% 'Agregar campo Marc para el nivel' | i18n %] [% nivel %]:</strong></legend>
+    
+<ul>
+    <li class="sub_item">
+        <label for="campoX">[% 'Seleccion' | i18n %]:</label> 
+        [% selectCampoX %]
+    </li>
+    <li class="sub_item">
+        <label for="campo">[% 'Campo' | i18n %]:</label>
             <select name="campo" id="campo" onChange="eleccionCampo()">
                 <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
             </select>
-        [% 'Nombre' | i18n %]: <span id="nombre_campo"></span>
-        </p>
-    </div>
-
-        <p align="left">
+        [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span><strong>
+    </li>
+    <li class="sub_item">
         <label for="subcampo">[% 'Subcampo' | i18n %]:</label>
         <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
                 <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
-         </select>
-        <input id="obligatorio" type="hidden" value="">
-        Liblibrarian: <input id="liblibrarian" type="text" value="" size="90"> 
-        </p>
-        <label for="tipoInput">[% 'Tipo de input' | i18n %]:  </label>
-        <p>
-            <select name="tipoInput" id="tipoInput">
-                <option value="-1">[% 'Seleccione tipo' | i18n %]</option>
-                <option value="text">[% 'Texto' | i18n %]</option>
-                <option value="texta">[% 'Texto Area' | i18n %]</option>
-                <option value="texa2">[% 'Texto 1 por linea' | i18n %]</option>
-                <option value="combo">[% 'Combo Box' | i18n %]</option>
-				<option value="auto">[% 'Autocompletable' | i18n %]</option>
-				<option value="calendar">[% 'Calendario' | i18n %]</option>
             </select>
-        </p>
-        <p>
-        <label for="tabla">Tabla de refencia: </label>
-         <select name="tablaRef" id="tablaRef" onChange="eleccionTablaRef()">
-                <option value="-1">Seleccionar TablaRef</option>
-         </select>
-        </p>
+        <input id="obligatorio" type="hidden" value="">
+    </li>
+    <li class="sub_item">
+        <label for="liblibrarian">[% 'Liblibrarian' | i18n %]:</label> 
+        <input id="liblibrarian" type="text" value="" size="90">
+    </li> 
+    <li class="sub_item">
+        <label for="tipoInput">[% 'Tipo de input' | i18n %]:</label>
+        <select name="tipoInput" id="tipoInput">
+            <option value="-1">[% 'Seleccione tipo' | i18n %]</option>
+            <option value="text">[% 'Texto' | i18n %]</option>
+            <option value="texta">[% 'Texto Area' | i18n %]</option>
+            <option value="texa2">[% 'Texto 1 por linea' | i18n %]</option>
+            <option value="combo">[% 'Combo Box' | i18n %]</option>
+		    <option value="auto">[% 'Autocompletable' | i18n %]</option>
+		    <option value="calendar">[% 'Calendario' | i18n %]</option>
+        </select>
+    </li>
+    <li class="sub_item">
+        <label for="tablaRef">[% 'Tabla de refencia' | i18n %]: </label>
+        <select name="tablaRef" id="tablaRef" onChange="eleccionTablaRef()">
+            <option value="-1">[% 'Seleccionar TablaRef' | i18n %]</option>
+        </select>
+    </li>
 
     <div id="divCamposRef" valign="top" style="display:none">
-        <p>
-        <label for="orden" style="float:left; width:13%">Orden: </label>
-        <select name="camposSelect" id="camposSelect">
-<!--             <option value="-1">Seleccione anteriores</option> -->
-        </select>
-
-<!--         Campos: <input size="43" id="camposRef" name="camposRef" value=""> -->
-		Campos: <select name="camposRef" id="camposRef">
-<!--             		<option value="-1">Seleccione anteriores</option> -->
-        		</select>
-<!--         separador: <input type="text" id="separador" name="separador"> -->
-        </p>
-        <p>Ejemplo: [% ejemplo %]</p>
-        <p>NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero</p>
+    <li class="sub_item">
+        <label for="orden">[% 'Orden' | i18n %]:</label>
+        <select name="camposSelect" id="camposSelect"></select>
+    </li>
+    <li class="sub_item">
+		<label for="camposRef">[% 'Campos' | i18n %]:</label> 
+        <select name="camposRef" id="camposRef"></select>
+    </li>
+        <p>[% 'Ejemplo' | i18n %]: [% ejemplo %]</p>
+        <p>[% 'NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero' | i18n %]</p>
 
     </div>
+</ul>
 
-</div>
+    [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo temporal' | i18n %]",
+                                                            boton   => "boton_buscar",
+                                                            onClick => "agregarEstructuraCatalogacion([% nivel %]);",
+                                                            title   => "[% 'Guardar Campo temporal' | i18n %]",
+                                                            alternClass => "botonCentrado",
+                                                            width   => "172"
+                                ) ;
+    [% END %]
 
-<br>
-<div align="center">
-    <input type="image" src="[% themelang %]/images/guardar.png" value="Guardar Campo temporal" title="Guardar Campo Temp"      
-            onClick="agregarEstructuraCatalogacion([% nivel %])">
-    <input type="image" src="[% themelang %]/images/borrar2.png" value="Cancelar" title="Cancelar Campo Temp" 
-            onClick="cancelarEstructuraCatalogacion()">
-    <div>
-        [% PERL %]
-                            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo temporal' | i18n %]",
-                                                                boton   => "boton_buscar",
-                                                                onClick => "agregarEstructuraCatalogacion([% nivel %]);",
-                                                                title   => "[% 'Guardar Campo temporal' | i18n %]",
-                                    ) ;
-        [% END %]
-    </div>
-    <div>
-        [% PERL %]
-                            print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo temporal' | i18n %]",
-                                                                boton   => "boton_buscar",
-                                                                onClick => "cancelarEstructuraCatalogacion();",
-                                                                title   => "[% 'Cancelar Campo temporal' | i18n %]",
-                                    ) ;
-        [% END %]
-    </div>
+    [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo temporal' | i18n %]",
+                                                            boton   => "boton_buscar",
+                                                            onClick => "cancelarEstructuraCatalogacion();",
+                                                            title   => "[% 'Cancelar Campo temporal' | i18n %]",
+                                                            alternClass => "botonCentrado",
+                                                            width   => "172"
+                                ) ;
+    [% END %]
 
-</div>
+</fieldset>
