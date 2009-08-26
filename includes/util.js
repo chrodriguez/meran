@@ -13,7 +13,7 @@
 /*
  * esta variable ancla se setea cuando se crea el ancla con el string correspondiente al tag <a>
  */
-var ancla="";
+ancla="";
 
 /*
  * Esta funcion crea un ancla antes del elemento con el id que viene como parametro
@@ -132,9 +132,11 @@ tipos de componentes = [input, etc]
 */
 function registrarKeypress(typeObject){
 	var componentes=["input", "INPUT"]; //se pueden agregar mas componetes
-	var result= componentes.indexOf(typeObject);
-
-	if(result == -1)return; // alert('util.js=> registrarKeypress => Componente Inválida');
+    var bool1= componentes[0]==typeObject;
+    var bool2= componentes[1]==typeObject;
+	var result= bool1 || bool2;
+	if(result == -1)
+        return; // alert('util.js=> registrarKeypress => Componente Inválida');
 
     $(typeObject).keypress(function (e) {
         if(e.which == 13){
@@ -191,4 +193,18 @@ function toggle_ayuda_in_line(){
     $("#ayuda").click(function () {
       $("#ayuda_in_line").toggle("slow");
     });    
+}
+
+
+
+
+function esBrowser(browser){
+
+  browser = browser.toLowerCase();
+  ok = false;
+  jQuery.each(jQuery.browser, function(i, val) {
+    if ( (val) && (i==browser))
+        ok = true;
+  });
+  return (ok);
 }
