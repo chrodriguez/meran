@@ -15,75 +15,17 @@ $(document).ready(function() {
 [% USE HTML %]
 
 <!-- TEMPLATE DE CAMPOS TEMPORALES -->
-    <hr>
-<!--DEBUG=> Se esta modificando=>  campo: [% catalogacion.getCampo %] subcampo: [% catalogacion.getSubCampo %] liblibrarian [% catalogacion.getLiblibrarian %] infoReferencia=> referencia: [% catalogacion.infoReferencia.getReferencia %] -->
-<!--<div width="100%">
-    <b>Modificar campo Marc para el nivel [% nivel %]:</b>
-    <p>
-    <label for="campoX" style="float:left; width:13%">Seleccion: </label> 
-    [% selectCampoX %]
-    </p>
-</div>-->
+<hr>
+<input id="obligatorio" type="hidden" value="">
 
-<div>
-<!-- TODO por el momento solo se permite modificar el liblibrarian -->
-   <!-- <p>
-    <label for="tagField" style="float:left; width:13%">Campo: </label>
-        <select name="campo" id="campo" onChange="eleccionCampo()">
-            <option value='[% catalogacion.getCampo %]'>[% catalogacion.getCampo %]</option>
-        </select>
-        Nombre: <span id="nombre_campo"></span>
-    </p>-->
-
-    <div id="subcontent">
-        <p align="left">
-<!-- TODO por el momento solo se permite modificar el liblibrarian -->
-       <!-- <label for="tagsubField" style="float:left; width:13%">Subcampo: </label>
-        <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
-                <option value='[% catalogacion.getSubCampo %]'>[% catalogacion.getSubCampo %]</option>
-         </select>-->
-
-        <input id="obligatorio" type="hidden" value="">
+<ul>
+    <li class="sub_item">
         <label for="liblibrarian">
             [% 'Liblibrarian:' | i18n %] 
         </label>
         <input id="liblibrarian" type="text" value="[% catalogacion.getLiblibrarian %]" size="90"> 
-        </p>
-<!-- TODO por el momento solo se permite modificar el liblibrarian -->
-       <!-- <label for="tipoInput" style="float:left; width:13%">Tipo de input:  </label>
-        <p>
-            <select name="tipoInput" id="tipoInput">
-                <option value="-1">Seleccione tipo</option>
-                <option value="text" [% IF catalogacion.getTipo == 'text' %] selected [% END %]>Texto</option>
-                <option value="texta" [% IF catalogacion.getTipo == 'texta' %] selected [% END %]>Texto Area</option>
-                <option value="texa2" [% IF catalogacion.getTipo == 'texta2' %] selected [% END %]>Texto 1 por linea</option>
-                <option value="combo" [% IF catalogacion.getTipo == 'combo' %] selected [% END %]>Combo Box</option>
-				<option value="auto" [% IF catalogacion.getTipo == 'auto' %] selected [% END %]>Autocompletable</option>
-				<option value="calendar" [% IF catalogacion.getTipo == 'calendar' %] selected [% END %]>Calendario</option>
-            </select>
-        </p>-->
-
-	[% IF catalogacion.infoReferencia.tieneReferencia %]
-<!-- TODO por el momento solo se permite modificar el liblibrarian -->
-       <!--  <p>
-       <label for="tabla" style="float:left; width:13%">Tabla de refencia: </label>
-            <input type="text" id="tablaRef" value="[% catalogacion.infoReferencia.getReferencia %]" readonly>
-        </p>
-        
-        <div id="divCamposReferencia" valign="top">
-            <label for="orden" style="float:left; width:13%">Orden: </label>
-            <select name="camposSelect" id="camposSelect">
-                <option value="[% catalogacion.infoReferencia.getOrden %]">[% catalogacion.infoReferencia.getOrden %]</option>
-            </select>
-    
-            Campos: <input size="43" id="camposRef" name="camposRef" value="[% catalogacion.infoReferencia.getCampos %]">
-            separador: <input type="text" id="separador" name="separador" value="[% catalogacion.infoReferencia.getSeparador %]">
-            </p>
-            <p>NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero</p>
-        </div>  -->
-	[% END %]
-    </div>  <!--END subcontent-->
-</div> <!--END <div id="content">-->
+   </li>
+</ul>
 
 
 
