@@ -66,14 +66,14 @@
 
     function enviar(){
         var nro_socio = $.trim($("#nro_socio").val());
-        var password = $.trim($("#password_user").val());
+        var password = $("#password_user").val();
+
         if ( (nro_socio != "") && (password != "") ){
-            document.datosAEnviar.action= '/cgi-bin/koha/login/login.pl';
             var nroRandom= [% RANDOM_NUMBER %];
-            var hash= b64_sha256(b64_sha256(b64_md5(password))+nroRandom);
-            document.datosAEnviar.password.value= hash;
-            document.datosAEnviar.userid.value= nro_socio;
-            document.datosAEnviar.submit(); 
+            hash= b64_sha256(b64_sha256(b64_md5(password))+nroRandom);
+            $("#password").val(hash);
+            $("#userid").val(nro_socio);
+            $("#datosAEnviar").submit();
         }
     }
 
@@ -81,6 +81,7 @@
         onEnter("nro_socio",enviar);
         onEnter("password_user",enviar);
     });
+
 </script>
 
 <table align="center" border="0" class="top" width="90%">
@@ -115,7 +116,7 @@
 </table>
 
 
-<form method="post" name="datosAEnviar">
-    <input type="hidden" name="userid">
-    <input type="hidden" name="password">
+<form method="post" name="datosAEnviar" id="datosAEnviar" action='/cgi-bin/koha/login/login.pl'>
+    <input type="hidden" name="userid" id="userid">
+    <input type="hidden" name="password" id="password">
 </form>

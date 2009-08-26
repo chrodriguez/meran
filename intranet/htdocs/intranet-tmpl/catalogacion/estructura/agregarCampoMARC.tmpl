@@ -1,46 +1,46 @@
 <!-- TEMPLATE DE CAMPOS TEMPORALES -->
 <hr>
 <div width="100%">
-        <b>Agregar campo Marc para el nivel [% nivel %]:</b>
+        <strong>[% 'Agregar campo Marc para el nivel' | i18n %] [% nivel %]:</strong>
         <div id="div1">
     <p>
-    <label for="campoX" style="float:left; width:13%">Seleccion: </label> 
+    <label for="campoX">[% 'Seleccion' | i18n %]: </label> 
     [% selectCampoX %]
     </p>
 </div>
 
 <div id="id2">
         <p>
-        <label for="campo" style="float:left; width:13%">Campo: </label>
+        <label for="campo">[% 'Campo' | i18n %]: </label>
             <select name="campo" id="campo" onChange="eleccionCampo()">
-                <option value="-1">Seleccionar CampoX</option>
+                <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
             </select>
-        Nombre: <span id="nombre_campo"></span>
+        [% 'Nombre' | i18n %]: <span id="nombre_campo"></span>
         </p>
     </div>
 
         <p align="left">
-        <label for="subcampo" style="float:left; width:13%">Subcampo: </label>
+        <label for="subcampo">[% 'Subcampo' | i18n %]:</label>
         <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
-                <option value="-1">Seleccionar SubCampo</option>
+                <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
          </select>
         <input id="obligatorio" type="hidden" value="">
         Liblibrarian: <input id="liblibrarian" type="text" value="" size="90"> 
         </p>
-        <label for="tipoInput" style="float:left; width:13%">Tipo de input:  </label>
+        <label for="tipoInput">[% 'Tipo de input' | i18n %]:  </label>
         <p>
             <select name="tipoInput" id="tipoInput">
-                <option value="-1">Seleccione tipo</option>
-                <option value="text">Texto</option>
-                <option value="texta">Texto Area</option>
-                <option value="texa2">Texto 1 por linea</option>
-                <option value="combo">Combo Box</option>
-				<option value="auto">Autocompletable</option>
-				<option value="calendar">Calendario</option>
+                <option value="-1">[% 'Seleccione tipo' | i18n %]</option>
+                <option value="text">[% 'Texto' | i18n %]</option>
+                <option value="texta">[% 'Texto Area' | i18n %]</option>
+                <option value="texa2">[% 'Texto 1 por linea' | i18n %]</option>
+                <option value="combo">[% 'Combo Box' | i18n %]</option>
+				<option value="auto">[% 'Autocompletable' | i18n %]</option>
+				<option value="calendar">[% 'Calendario' | i18n %]</option>
             </select>
         </p>
         <p>
-        <label for="tabla" style="float:left; width:13%">Tabla de refencia: </label>
+        <label for="tabla">Tabla de refencia: </label>
          <select name="tablaRef" id="tablaRef" onChange="eleccionTablaRef()">
                 <option value="-1">Seleccionar TablaRef</option>
          </select>
