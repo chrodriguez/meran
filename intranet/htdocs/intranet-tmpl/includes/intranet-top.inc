@@ -29,6 +29,8 @@
 [% INCLUDE  'AutocompleteHelper.inc'  %]
 
 [% INCLUDE  'WindowHelper.inc'  %]
+
+[% INCLUDE  'SmallPlugins.inc'  %]
 <!-- Se incluyen los mensajes para la catalogacion -->
 
 <head>
