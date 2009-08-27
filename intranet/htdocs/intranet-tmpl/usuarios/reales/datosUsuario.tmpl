@@ -212,7 +212,8 @@ function updateDetalleSanciones(responseText){
 function makeToggle(container_class,trigger,afterToggleFunction){
 
     $("."+container_class).hide();
-    $("h2."+trigger).toggle(function(){
+
+    $("legend."+trigger).toggle(function(){
         if (afterToggleFunction != null)
             afterToggleFunction();
         $(this).addClass("active"); 
@@ -221,7 +222,7 @@ function makeToggle(container_class,trigger,afterToggleFunction){
     });
 
 
-    $("h2."+trigger).click(function(){
+    $("legend."+trigger).click(function(){
         $(this).next("."+container_class).slideToggle("fast");
     });
 
@@ -261,9 +262,9 @@ $(document).ready(function(){
 
     <div>
         <fieldset>
-        <legend class="trigger click titulo_legend"><h2 class="trigger click"> [% "Historial de Pr&eacute;stamos" | i18n %]</h2> </legend>
-	    <!-- DETALLE DEL HISTORICO DE PRESTAMOS DEL USUARIO -->
-	    <div id="historialPrestamos" class="toggle_container_block" style="display:none"></div>
+            <legend class="trigger click titulo_legend">[% "Historial de Pr&eacute;stamos" | i18n %]</legend>
+	        <!-- DETALLE DEL HISTORICO DE PRESTAMOS DEL USUARIO -->
+	        <div id="historialPrestamos" class="toggle_container_block" style="display:none"></div>
         </fieldset>
     </div>
 
