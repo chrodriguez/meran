@@ -1,5 +1,7 @@
+
 <fieldset class="detalle_sanciones"> 
-<legend class="titulo_tabla"><strong>[% 'Detalle de sanciones' | i18n %]</strong></legend>
+<legend class="titulo_legend">[% 'Detalle de sanciones' | i18n %]</legend>
+
 [% IF SANCIONES %]
 
 <table class="tablaSanciones datos_tabla" border=0  width="100%"  cellpadding='0' cellspacing='0'>    
@@ -35,7 +37,7 @@
 </table>
 [% ELSE %]
 
-    <div class="resultados_consulta">El usuario no tiene sanciones actualmente.</div>
+    <div class="resultados_consulta">[% 'El usuario no tiene sanciones actualmente' | i18n %]</div>
 
 [% END %]
 </fieldset>

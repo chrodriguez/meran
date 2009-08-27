@@ -2,7 +2,7 @@
 
 [% USE HTML %]
 
-<div class="titulo_tabla">[% "EJEMPLARES PRESTADOS" | i18n %]</div>
+<fieldset> <legend class="titulo_legend">[% "Ejemplares Prestados" | i18n %]</legend>
 	<table class="prestamosResult datos_tabla" cellspacing=0  cellpadding=0 border=0  width="100%" > 
 	
 		<tr valign=middle class="titulo_tabla_resultado">
@@ -136,5 +136,5 @@
 			[% 'NO SE PERMITE CIRCULAR' | i18n %]
 	[% END %] <!--END IF permiso_para_circular -->
 
-
+</fieldset>
 [% END %]
