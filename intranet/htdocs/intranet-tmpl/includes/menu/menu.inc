@@ -361,7 +361,6 @@
                     </li>
                 </ul>
               </li>
-            </li>
           <!-- Navigation item -->
               <li><h3 class="menu_intermedio">[% 'Estad&iacute;sticas' | i18n %]</h3>
                   <ul>
@@ -416,6 +415,7 @@
                   </ul>
             </li>
           </ul>
+        </li>
           <!-- Navigation item -->
             <li><h3 class="menu_superior">[% 'Administraci&oacute;n' | i18n %]</h3>
               <ul>

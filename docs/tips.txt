@@ -17,4 +17,5 @@ Los pedidos por AJAX, que se hacen siempre, que sean informativos si hubo o no r
 
 El chat sera como este???? http://anantgarg.com/2009/05/13/gmail-facebook-style-jquery-chat/
 
+Problemas de focus (javascript) en devoluciones (circulacion rapida)
 

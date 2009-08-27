@@ -121,7 +121,7 @@ function WindowHelper(options){
 			$('#ventana').hide();
 			$('#dimmer').hide();
 			//se elimina el objeto
-			delete this;
+/*			delete this;*/
 	}//end hide
 
 	this.height= function(height){

@@ -952,7 +952,7 @@ INSERT INTO `pref_preferencia_sistema` (
 VALUES (
 'permite_cambio_password_desde_opac', '1', 'permite (=1) o no (=0) el cambio de password desde el OPAC', NULL , 'bool'
 );
-INSERT INTO `V3`.`cat_autor` (
+INSERT INTO `cat_autor` (
 `id` ,
 `nombre` ,
 `apellido` ,
@@ -963,8 +963,10 @@ VALUES (
 '0', 'UNDEFINED', 'UNDEFINED', 'UND', 'UNDEFINED'
 );
 
+ALTER TABLE `cat_historico_disponibilidad` ADD `anio_agregacion` VARCHAR( 255 ) NOT NULL ,
+ADD `mes_agregacion` VARCHAR( 255 ) NOT NULL ,
+ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ;
 
---
 INSERT INTO `pref_preferencia_sistema` (
 `variable` ,
 `value` ,
@@ -986,5 +988,3 @@ INSERT INTO `pref_preferencia_sistema` (
 VALUES (
 'habilitar_https', 1, 'habilita https (=1) o no (=0)', NULL , 'bool'
 );
-
-

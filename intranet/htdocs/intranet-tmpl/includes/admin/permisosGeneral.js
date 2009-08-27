@@ -6,7 +6,7 @@ superUserGranted = 0;
 
 function seleccionoPerfil(combo){
 
-    valueSelected = $(combo).val();
+    var valueSelected = $(combo).val();
     return (valueSelected != 'custom');
 }
 
@@ -16,20 +16,20 @@ function armarPermisos(){
 
 function profileSelection(combo){
 
-    valueSelected = $(combo).val();
+    var valueSelected = $(combo).val();
     if (seleccionoPerfil(combo))
         armarPermisos(valueSelected);
 }
 
 function adviceGrant(checkBox,divID,risk,dontCallChecks){
-    array = new Array();
+    var array = new Array();
     array['low']="permissionLow";
     array['medium']="permissionMedium";
     array['high']="permissionHigh";
-    dontCallChecks = dontCallChecks?dontCallChecks:false;
-    returnValue = false;
+    var dontCallChecks = dontCallChecks?dontCallChecks:false;
+    var returnValue = false;
 
-    isChecked = ($(checkBox).is(':checked'))?true:false;
+    var isChecked = ($(checkBox).is(':checked'))?true:false;
 
     if (isChecked){
         $('#'+divID).addClass(array[risk]);
@@ -46,7 +46,7 @@ function adviceGrant(checkBox,divID,risk,dontCallChecks){
 
 function checkChecks(){
 
-    arreglo = new Array();
+    var arreglo = new Array();
     arreglo[0] = 'reportes';
     arreglo[1] = 'preferencias';
     arreglo[2] = 'permisos';
@@ -60,7 +60,7 @@ function checkChecks(){
 //     arreglo[10] = 'sistema';
 //     arreglo[11] = 'undefined';
 
-    riskArray = new Array();
+    var riskArray = new Array();
     riskArray['consulta'] = "low";
     riskArray['alta'] = "medium";
     riskArray['modif'] = "high";
@@ -82,7 +82,7 @@ function checkChecks(){
 
 
 function obtenerPermisos(){
-    objAH=new AjaxHelper(updateObtenerPermisos);
+    var objAH=new AjaxHelper(updateObtenerPermisos);
     objAH.url= '/cgi-bin/koha/admin/permisosDB.pl';
     objAH.cache = false;
     objAH.nro_socio = $('#nro_socio_hidden').val();
@@ -103,7 +103,7 @@ function obtenerPermisos(){
 
 function toggleGrantsDiv(state){
 
-    checkBoxItems = $('#permisos_assign_chk > div > span > input');
+    var checkBoxItems = $('#permisos_assign_chk > div > span > input');
     for (y=0; y<checkBoxItems.length; y++){
         riskPart = $(checkBoxItems[y]).attr("disabled",state);
     }
@@ -121,7 +121,7 @@ function updateObtenerPermisos(responseText){
 }
 
 function nuevoPermisoSHOW(){
-    objAH=new AjaxHelper(updateNuevoPermisoSHOW);
+    var objAH=new AjaxHelper(updateNuevoPermisoSHOW);
     objAH.url= '/cgi-bin/koha/admin/permisosDB.pl';
     objAH.cache = false;
     objAH.accion="SHOW_NUEVO_PERMISO_GENERAL";
@@ -147,8 +147,8 @@ function permiso(nombre){
 
 
 function armarArregloDePermisos(){
-    superUserGranted = 0;
-    arreglo = new Array();
+    var superUserGranted = 0;
+    var arreglo = new Array();
     arreglo[0] = new permiso('preferencias');
     arreglo[1] = new permiso('reportes');
     arreglo[2] = new permiso('permisos');
@@ -167,7 +167,7 @@ function armarArregloDePermisos(){
 
 
 function actualizarPermisos(){
-    objAH=new AjaxHelper(updateActualizarPermisos);
+    var objAH=new AjaxHelper(updateActualizarPermisos);
     objAH.url= '/cgi-bin/koha/admin/permisosDB.pl';
     objAH.cache = false;
     objAH.nro_socio = $('#nro_socio_hidden').val();
@@ -194,7 +194,8 @@ function updateActualizarPermisos(responseText){
 
 function nuevoPermiso(){
 
-    usuario = $('#nro_socio_hidden').val();
+    var usuario = $('#nro_socio_hidden').val();
+
     if ($.trim(usuario) != ""){
         objAH=new AjaxHelper(updateNuevoPermiso);
         objAH.url= '/cgi-bin/koha/admin/permisosDB.pl';

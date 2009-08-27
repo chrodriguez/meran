@@ -9,15 +9,14 @@
 <script src="/includes/sha1.js"></script>
 
 <script language="javascript">
-
     function enviar(){
         var nroRandom= [% RANDOM_NUMBER %];
+        var username = $.trim($("#username").val());
         hash= b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
         $("#password").val(hash);
-        $("#userid").val($("#username").val());
+        $("#userid").val(username);
         $("#datosAEnviar").submit();
     }
-
 </script>
 
 <script language="javascript" type="text/javascript">
@@ -56,8 +55,8 @@
                 <input size=15  name="username" id="username" >
         </div>
         <div class="entry">
-                <label for="password_plain" class="login">[% 'Contrase&ntilde;a:' | i18n %]</label>
-                <input  size=200 type="password" name="password_plain" id="password_plain">
+                <label for="password_plain" class=login">[% 'Contrase&ntilde;a:' | i18n %]</label>
+                <input  size=15 type="password" name="password_plain" id="password_plain">
         </div>
         <div id="boton_login">
             [% PERL %]

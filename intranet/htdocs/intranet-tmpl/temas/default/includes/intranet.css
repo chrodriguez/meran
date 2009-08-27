@@ -4,22 +4,26 @@
 
 #login {
     background-image: url(../imagenes/meranLogin.png);
-    font-family: "Arial", "Verdana";
-    font-size: 12px;
-    position: static;
-    height: 185px;
-    width: 307px;
-    text-align: left ; 
-    font-weight: bold;
+    background-repeat: no-repeat;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 200px;
+    margin-top: -100px;
+    width: 330px;
+    margin-left: -150px; 
 }
 
 #login span {
-    display:block;
-    margin-bottom:12%;
+    display:inline;
+    padding:10px;
 }
 
 #login input {
     float:right;
+    width: 57%;
+    margin-top: 4px;
 
 }
 
@@ -29,17 +33,37 @@
 
 }
 
+#test{
+padding-left: 12px;
+padding-top: 65px;
+width:90%;
+height:70%;
+}
+
+.entry{
+  padding-bottom: 2%;
+  margin: 0 auto;
+  float: left;
+  padding-left: 5%;
+  width: 20em;
+}
+
 #contenido_login  {
     display:block;
-    padding: 21% 12%;
-    margin-top:50%;
+    height: 70px;
     width: 80%;
+    padding-top: 70px;
+    padding-left: 10px;
+    position: relative;
+    margin: 0 auto;
+    float: left;
 }
 
 #boton_login  {
     display:block;
-    padding: 15% 31% 32%;
     list-style-type:none;
+    margin: 0 auto;
+    width: 75px;
 }
 /*---------------------------------------------------------------- HEADER--------------------------------------------------*/
 .header{

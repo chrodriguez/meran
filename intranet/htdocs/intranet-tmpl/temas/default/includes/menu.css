@@ -56,6 +56,10 @@ color:#4b6d22;
 border:0px;
 text-decoration:none;
 }
+ul li a:visited{
+  text-decoration:none;
+}
+
 .menu_superior{
 font:bold 100%/205% " Arial ","Verdana"," sans-serif ";
 color:#4b6d22;
