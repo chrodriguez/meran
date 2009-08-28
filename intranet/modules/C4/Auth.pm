@@ -399,6 +399,12 @@ C4::AR::Debug::debug("checkauth=> authnotrequired: ".$authnotrequired."\n");
     my $logout = $query->param('logout.x')||0;
 
    if ($sessionID=$session->param('sessionID')) {
+         if(!$session->param('SERVER_GENERATED_SID')){
+            undef($session);
+            C4::AR::Debug::debug("checkauth=> COOKIE FIXATION \n");
+#             $session= C4::Auth::_generarSession(\%params);
+        }
+
         C4::AR::Debug::debug("checkauth=> sessionID seteado \n");
 
         #Se recupera la info de la session guardada en la base segun el sessionID
