@@ -15,7 +15,12 @@
             <legend class="titulo_legend">[% 'Datos Escenciales' | i18n %]</legend>
                 <ul class="listado_sin_margen">
                   [% IF foto_name %]
-                <li> <img width="96px" height="96px" border="0" src="  [% themelang %]/pictures/[% foto_name %]"></li>
+                  <li> 
+                      <img width="96px" height="96px" border="0" src="[% themelang %]/pictures/[% foto_name %]" 
+                            alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                            title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                      >
+                  </li>
                   [% END %]
                 <li> [% "Apellido:" | i18n %]<strong> [% socio.persona.getApellido %]</strong> </li>
                 <li> [% "Nombre:" | i18n %]<strong> [% socio.persona.getNombre %]</strong> </li>
