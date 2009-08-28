@@ -503,16 +503,6 @@ function updateCambiarLineaEncabezado(){
 	cargarTablaEncabezados();
 }
 
-
-//al seleccionar una fila se cambia el estilo para que se vea cual es la que se selecciona
-// function seleccionarFilaEncabezado(){
-// 	$("#tablaEncabezados tr:not([tr.titulo_tabla_resultado])").click(
-// 				function () {
-// 					zebra('tablaEncabezados');
-// 				}
-//     	);
-// }
-
 //*************************************Fin**Encabezados********************************************************
 
 function inicializar(){
@@ -527,10 +517,7 @@ $(document).ready(function() {
 	
 	changeNivel();
 	// Help
-	$("#topichelp").hide();
-	$("#tophelper img.showhelp ").click(function(){
-						$("#topichelp").slideToggle('fast');
-					});
+    toggle_ayuda_in_line();
 
 });
 
@@ -540,15 +527,11 @@ $(document).ready(function() {
     print C4::AR::Filtros::ayuda_marc() ;
 [% END %]
 
-<input type="hidden" id="idEncabezado">
-<div style="position: static;" id="tophelper">
-<img class="showhelp" src="/intranet-tmpl/images/help.gif" alt="Descricion de la Ventana">
-    <div style="display: block;" id="topichelp">
-        <p>[% 'Descripcion breve para lo q sirve la ventana....' | i18n %]</p>
-    </div>
-</div>
+[% PERL %]
+    print C4::AR::Filtros::ayuda_in_line("[% 'ayudaaaaa' | i18n %]") ;
+[% END %]
 
-<br>
+<input type="hidden" id="idEncabezado">
 
 <div class="titulos" >[% 'Visualizaci&oacute;n de campos MARC en OPAC' | i18n %]</div>
 
@@ -556,26 +539,26 @@ $(document).ready(function() {
   <div>
 <!-- contenedor superior -->
 <ul>
-	<li>
+	<li class="sub_item">
+        <label for="niveles_id">[% 'Nivel' | i18n %]:</label>
 		<select id="niveles_id" onChange="changeNivel();">
-		<option value="1">Nivel1</option>
-		<option value="2">Nivel2</option>
-		<option value="3">Nivel3</option>
+		<option value="1">[% 'Nivel1' | i18n %]</option>
+		<option value="2">[% 'Nivel2' | i18n %]</option>
+		<option value="3">[% 'Nivel3' | i18n %]</option>
 		</select>
-		Tipo de item: [% selectItemType %]
+    </li>
+    <li class="sub_item">
+        <label for="comboTiposItems">
+		    [% 'Tipo de item' | i18n %]:
+        </label> [% selectItemType %]
 		<input 	type="button" Title="[% 'Agregar Encabezado' | i18n %]" onClick="agregarEncabezado()" value="[% 'Agregar' | i18n %]"
 				 Title="[% 'Agregar un Encabezado' | i18n %]">
 	</li>
-	<li>
-		<div id="divTablaEncabezados">
-		</div>
-	</li>
-	<li>
+		<div id="divTablaEncabezados"></div>
+
 		<div id="divAgregarModificarVisualizacion"></div>
-	</li>
-	<li>
+
 		<div id="divTablaVisualizacion"></div>
-	</li>
 </ul>
 </div>
 

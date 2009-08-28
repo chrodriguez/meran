@@ -395,10 +395,11 @@ C4::AR::Debug::debug("checkauth=> authnotrequired: ".$authnotrequired."\n");
     my %info;
     my $session = CGI::Session->load();
     my ($userid, $cookie, $sessionID, $flags);
+# FIXME esto esta re feo, te pueden sacar desde cualquier .pl
     my $logout = $query->param('logout.x')||0;
 
    if ($sessionID=$session->param('sessionID')) {
-C4::AR::Debug::debug("checkauth=> sessionID seteado \n");
+        C4::AR::Debug::debug("checkauth=> sessionID seteado \n");
 
         #Se recupera la info de la session guardada en la base segun el sessionID
         my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
@@ -433,6 +434,12 @@ C4::AR::Debug::debug("checkauth=> sessionID en logout: ". $session->param('sessi
         }
 
         if ($userid) {
+
+        if(!$session->param('SERVER_GENERATED_SID');){
+            undef($session);
+            $session= C4::Auth::_generarSession(\%params);
+        }
+
         #la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
         #se verifican algunas condiciones de finalizacion de session
           C4::AR::Debug::debug("checkauth=> El usuario se encuentra logueado \n");
@@ -452,63 +459,66 @@ C4::AR::Debug::debug("checkauth=> sessionID en logout: ". $session->param('sessi
             $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
             redirectTo('/cgi-bin/koha/auth.pl');
             #EXIT
-			}elsif ($tokenDB ne $token){
-                C4::AR::Debug::debug("Token <> o no existe, posible CSRF");
-                C4::AR::Debug::debug("tokenDB: ".$tokenDB);
-                C4::AR::Debug::debug("query->param('token'): ".$query->param('token'));
-				$session->param('codMsg', 'U354');
-				$session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
-				redirectTo('/cgi-bin/koha/informacion.pl');
-				#EXIT
-			} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
-#              } elsif ($ip ne '127.0.0.2') {
-            # Different ip than originally logged in from
-            $info{'oldip'} = $ip;
-            $info{'newip'} = $ENV{'REMOTE_ADDR'};
-            $info{'different_ip'} = 1;
-            #elimino la session del usuario porque caduco
-            $sist_sesion->delete;
-            C4::AR::Debug::debug("checkauth=> cambio la IP, se elimina la session\n");
-            #Logueo la sesion que se cambio la ip
-            my $time=localtime(time());
-            _session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
-                                                        $userid, 
-                                                        $time, 
-                                                        $ip, 
-                                                        $info{'newip'}
-                  );
-            $sessionID = undef;
-            $userid = undef;    
-            #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
-            $session->param('codMsg', 'U356');
-            $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-            redirectTo('/cgi-bin/koha/auth.pl');
+        }elsif ($tokenDB ne $token){
+            C4::AR::Debug::debug("Token <> o no existe, posible CSRF");
+            C4::AR::Debug::debug("tokenDB: ".$tokenDB);
+            C4::AR::Debug::debug("query->param('token'): ".$query->param('token'));
+			$session->param('codMsg', 'U354');
+			$session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
+			redirectTo('/cgi-bin/koha/informacion.pl');
+			#EXIT
+        } elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
+    #              } elsif ($ip ne '127.0.0.2') {
+                # Different ip than originally logged in from
+                $info{'oldip'} = $ip;
+                $info{'newip'} = $ENV{'REMOTE_ADDR'};
+                $info{'different_ip'} = 1;
+                #elimino la session del usuario porque caduco
+                $sist_sesion->delete;
+                C4::AR::Debug::debug("checkauth=> cambio la IP, se elimina la session\n");
+                #Logueo la sesion que se cambio la ip
+                my $time=localtime(time());
+                _session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
+                                                            $userid, 
+                                                            $time, 
+                                                            $ip, 
+                                                            $info{'newip'}
+                    );
+                $sessionID = undef;
+                $userid = undef;    
+                #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
+                $session->param('codMsg', 'U356');
+                $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
+                redirectTo('/cgi-bin/koha/auth.pl');
             #EXIT
             } elsif ($flag eq 'LOGUIN_DUPLICADO') {
-            #Se encuentra una session activa con el mismo userid
-            #se eliminan las sessiones, solo se permite una session activa a la vez
-            $info{'loguin_duplicado'} = 1;
-            #elimino la session del usuario porque caduco
-            $sist_sesion->delete;
-            C4::AR::Debug::debug("checkauth=> se loguearon con el mismo userid desde otro lado\n");
-            #Logueo la sesion que se cambio la ip
-            my $time=localtime(time());
-            _session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
-                                                        $userid, 
-                                                        $time, 
-                                                        $ip, 
-                                                        $info{'newip'}
-                  );
-            $sessionID = undef;
-            $userid = undef;    
-            #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
-            $session->param('codMsg', 'U359');
-            $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-            redirectTo('/cgi-bin/koha/auth.pl');
-            #EXIT
+                #Se encuentra una session activa con el mismo userid
+                #se eliminan las sessiones, solo se permite una session activa a la vez
+                $info{'loguin_duplicado'} = 1;
+                #elimino la session del usuario porque caduco
+                $sist_sesion->delete;
+                C4::AR::Debug::debug("checkauth=> se loguearon con el mismo userid desde otro lado\n");
+                #Logueo la sesion que se cambio la ip
+                my $time=localtime(time());
+                _session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
+                                                            $userid, 
+                                                            $time, 
+                                                            $ip, 
+                                                            $info{'newip'}
+                    );
+                $sessionID = undef;
+                $userid = undef;    
+                #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
+                $session->param('codMsg', 'U359');
+                $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
+                redirectTo('/cgi-bin/koha/auth.pl');
+                #EXIT
             } else {
             #esta todo OK, continua logueado y se actualiza la session, lasttime
                 C4::AR::Debug::debug("checkauth=> continua logueado, actualizo lasttime de sessionID: ".$sessionID."\n");
+                C4::AR::Debug::debug_date_time();
+                
+
                 $sist_sesion->setLasttime(time());
                 $sist_sesion->save();
 
@@ -559,7 +569,7 @@ C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID
     unless ($userid) { 
         #si no hay userid, hay que autentificarlo y no existe sesion
 C4::AR::Debug::debug("checkauth=> Usuario no logueado, intento de autenticacion \n");     
-        #No genero un nuevo sessionID, tomo el que viene del cliente
+        #No genero un nuevo sessionID
         #con este sessionID puedo recuperar el nroRandom (si existe) guardado en la base, para verificar la password
         my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
         $sist_sesion->load();
@@ -578,8 +588,9 @@ C4::AR::Debug::debug("checkauth=> random_number desde la base: ".$random_number.
            #se valido la password y es valida
            # setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
             _setLoguinDuplicado($userid,  $ENV{'REMOTE_ADDR'});
-C4::AR::Debug::debug("checkauth=> password valida de sessionID: ".$sessionID."\n");
-C4::AR::Debug::debug("checkauth=> elimino el sessionID de la base: ".$sessionID."\n");
+            C4::AR::Debug::debug("checkauth=> password valida de sessionID: ".$sessionID."\n");
+            C4::AR::Debug::debug("checkauth=> elimino el sessionID de la base: ".$sessionID."\n");
+            C4::AR::Debug::debug_date_time();
             #el usuario se logueo bien, se elimina la session de logueo y se genera un sessionID nuevo
             $sist_sesion->delete;
 
@@ -678,6 +689,26 @@ C4::AR::Debug::debug("checkauth=> eliminino la sesssion ".$sessionID."\n");
     }# end unless ($userid) 
 }# end checkauth
 
+
+
+=item sub _clear_session_table
+
+    Limpia la tabla sist_sesion, todas las sesiones "colgadas" que queraron por ej. cuando se cierra el navegador y no se sale de 
+    la sesion.
+
+    Parametros: 
+
+=cut
+sub _clear_session_table {
+    my ($params) = @_;
+
+    my ($sec,$min,$hour,$mday_actual,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+#     my ($sec,$min,$hour,$mday_,$mon,$year,$wday,$yday,$isdst) = localtime($params->{'lasttime'});
+
+#     if ($params->{'lasttime'} < time()-$timeout) {
+#     }
+
+}
 
 
 =item sub _realizarOperaciones
@@ -968,6 +999,7 @@ sub inicializarAuth{
 	$params{'type'}= $t_params->{'type'}; #OPAC o INTRA
     $params{'flagsrequired'}= '';
     $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
+    $params{'SERVER_GENERATED_SID'}= 1;
     
     #esto realmente destruye la session
     undef($session);
@@ -1037,6 +1069,7 @@ sub _generarSession {
 	$session->param('locale', C4::Context->config("defaultLang")|'es_ES');
  	$session->param('charset', C4::Context->config("charset")||'utf-8'); #se guarda el juego de caracteres
 	$session->param('token', $params->{'token'}); #se guarda el token
+    $session->param('SERVER_GENERATED_SID', 1);
 	$session->expire(0); #para Desarrollar, luego pasar a 3m
 
 	return $session;
