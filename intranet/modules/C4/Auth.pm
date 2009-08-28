@@ -398,12 +398,14 @@ C4::AR::Debug::debug("checkauth=> authnotrequired: ".$authnotrequired."\n");
 # FIXME esto esta re feo, te pueden sacar desde cualquier .pl
     my $logout = $query->param('logout.x')||0;
 
+    C4::AR::Debug::debug("checkauth=> SERVER_GENERATED_SID \n".$session->param('SERVER_GENERATED_SID'));
+
    if ($sessionID=$session->param('sessionID')) {
-         if(!$session->param('SERVER_GENERATED_SID')){
-            undef($session);
-            C4::AR::Debug::debug("checkauth=> COOKIE FIXATION \n");
-#             $session= C4::Auth::_generarSession(\%params);
-        }
+#         if(!$session->param('SERVER_GENERATED_SID')){
+#             undef($session);
+#             C4::AR::Debug::debug("checkauth=> COOKIE FIXATION \n");
+# #             $session= C4::Auth::_generarSession(\%params);
+#         }
 
         C4::AR::Debug::debug("checkauth=> sessionID seteado \n");
 
