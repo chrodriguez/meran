@@ -435,7 +435,7 @@ C4::AR::Debug::debug("checkauth=> sessionID en logout: ". $session->param('sessi
 
         if ($userid) {
 
-        if(!$session->param('SERVER_GENERATED_SID');){
+        if(!$session->param('SERVER_GENERATED_SID')){
             undef($session);
             $session= C4::Auth::_generarSession(\%params);
         }
