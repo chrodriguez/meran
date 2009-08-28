@@ -187,15 +187,19 @@
                                 <font color="red">[% mensaje_error_foto %]</font>
                         </li>
                       [% END %]
-
                         [% IF foto_name %]
-                        <li>
-                            <input type=button class="button" value="Eliminar foto" 
-                                align=center onClick="eliminarFoto('[% foto_name %] ')">
-                        </li>
+                          <li>
+                                [% PERL %]
+                                            print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Foto' | i18n %]",
+                                                                                boton   => "boton_borrar",
+                                                                                onClick => "eliminarFoto('[% foto_name %] ');",
+                                                                                width   => "173"
+                                                    ) ;
+                                [% END %]
+                          </li>
                         [% ELSE %]
                         <li>
-                                <div id="uploader"></div>
+                            <div id="uploader"></div>
                         </li>
                         [% END %]
                     </ul>

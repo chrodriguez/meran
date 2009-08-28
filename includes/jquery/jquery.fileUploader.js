@@ -2,6 +2,12 @@
  *
  *
 */
+var fake_file = "fake_file";
+
+function assignFileName(idInput){
+  $("#"+idInput).val($("#myUploadFile").val());
+}
+
 ; (function($) {
 
     $.fn.extend({
@@ -20,9 +26,16 @@
             .append(
 	    $('<input type="hidden" name="nro_socio" value="' + opt.nro_socio + '" />'),	
             $('<input type="hidden" name="upload" value="' + opt.uploadFolder + '" />'),
-            $('<div class="select" title="Subir una foto"></div>').append($('<input id="myUploadFile" class="myUploadFile file" type="file" value="" name="picture"/> Subir foto')), 
+            $('<div class="select" title="Subir una foto"></div>').append($(
+                  '<div class="fileinputs">'+
+                            '<input id="myUploadFile" class="file" type="file" value="" name="picture"/>'+
+                            '<div class="fakefile">'+
+                                '<input id="fake_file"/>'+
+                                '<img src="/imagenes/logo.jpeg" />'+
+                            '</div>'+
+                          '</div>')), 
             $('<ul id="ul_files"></ul>'))
-	);
+	     );
         init();
     };
 
@@ -40,7 +53,7 @@
     function init() {
 
         // if file type is allowed, submit form
-        $('#myUploadFile').livequery('change', function() { 
+        $('#myUploadFile').livequery('change', function() {
         	if (checkFileType(this.value)) 
         		$('#myUploadForm').submit(); 
         });
@@ -64,6 +77,7 @@
             },
             // call event.submit after submit
             submit: function(_form) {
+                assignFileName(fake_file);
                 $('.select').addClass('waiting');
                 event.frame(_form);
             },

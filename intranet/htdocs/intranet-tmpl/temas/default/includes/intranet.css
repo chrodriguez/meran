@@ -1084,3 +1084,23 @@ fieldset.accionesUsuarios{
   float:left;
   width:50%;
 }
+
+
+div.fileinputs {
+    float:left;
+}
+
+div.fakefile {
+  margin-top:-24px;
+  z-index: 1;
+}
+
+input.file {
+    position: relative;
+    text-align: right;
+    -moz-opacity:0 ;
+    filter:alpha(opacity: 0);
+    opacity: 0;
+    z-index: 2;
+}
+
