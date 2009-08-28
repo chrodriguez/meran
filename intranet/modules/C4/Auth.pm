@@ -437,7 +437,8 @@ C4::AR::Debug::debug("checkauth=> sessionID en logout: ". $session->param('sessi
 
         if(!$session->param('SERVER_GENERATED_SID')){
             undef($session);
-            $session= C4::Auth::_generarSession(\%params);
+            C4::AR::Debug::debug("checkauth=> COOKIE FIXATION \n");
+#             $session= C4::Auth::_generarSession(\%params);
         }
 
         #la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
