@@ -444,7 +444,7 @@ C4::AR::Debug::debug("checkauth=> sessionID en logout: ". $session->param('sessi
         if ($userid) {
 
         if(!$session->param('SERVER_GENERATED_SID')){
-            undef($session);
+#             undef($session);
             C4::AR::Debug::debug("checkauth=> COOKIE FIXATION \n");
 #             $session= C4::Auth::_generarSession(\%params);
         }

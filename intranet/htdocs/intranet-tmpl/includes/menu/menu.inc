@@ -25,19 +25,30 @@
 
       <ul id="menu" tabindex="-1">
           <!-- Navigation item -->
-            <li> <h3 class="menu_superior">
-                [% PERL %]
-                    print C4::AR::Filtros::link_to( text =>     "[% 'Inicio' | i18n %]",
-                                                    url =>      "/cgi-bin/koha/mainpage.pl", 
-                                                    class =>    "menu_superior",
-                                                    title =>    "[% 'Ir al Inicio' | i18n %]"
-                                                ) ;
-                [% END %]
-		</h3>
+            <li>
+
+                <div class="menu_superior_der">
+                    <div class="menu_superior_izq">
+                        <h3 class="menu_superior">
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to( text =>     "[% 'Inicio' | i18n %]",
+                                                            url =>      "/cgi-bin/koha/mainpage.pl", 
+                                                            class =>    "menu_superior",
+                                                            title =>    "[% 'Ir al Inicio' | i18n %]"
+                                                        ) ;
+                        [% END %]
+        </h3>
+                    </div>
+                </div>
            </li>
           <!-- Navigation item -->
 
-            <li><h3 class="menu_superior">[% 'Cat&aacute;logo' | i18n %]</h3>
+            <li>
+                <div class="menu_superior_der">
+                    <div class="menu_superior_izq">
+                      <h3 class="menu_superior">[% 'Cat&aacute;logo' | i18n %]</h3>
+                    </div>
+                </div>
                 <ul>
                   <li><h3 class="menu_intermedio">[% 'B&uacute;squedas' | i18n %]</h3>
                      <ul>
@@ -177,7 +188,13 @@
             </li>
 
           <!-- Navigation item -->
-            <li><h3 class="menu_superior">[% 'Usuarios' | i18n %]</h3>
+            <li>
+
+                <div class="menu_superior_der">
+                    <div class="menu_superior_izq">
+                        <h3 class="menu_superior">[% 'Usuarios' | i18n %]</h3>
+                    </div>
+                </div>
 
                 <ul>
                   <li>
@@ -216,7 +233,12 @@
             </li>
 
           <!-- Navigation item -->
-            <li><h3 class="menu_superior">[% 'Circulaci&oacute;n' | i18n %]</h3>
+            <li>
+                  <div class="menu_superior_der">
+                    <div class="menu_superior_izq">
+                        <h3 class="menu_superior">[% 'Circulaci&oacute;n' | i18n %]</h3>
+                    </div>
+                  </div>
                 <ul>
 				          <li>
                             [% PERL %]
@@ -267,7 +289,12 @@
             </li>
 
           <!-- Navigation item -->
-            <li><h3 class="menu_superior">[% 'Consultas' | i18n %]</h3>
+            <li>                
+                <div class="menu_superior_der">
+                    <div class="menu_superior_izq">
+                        <h3 class="menu_superior">[% 'Consultas' | i18n %]</h3>
+                    </div>
+                </div>
                 <ul>
                   <li><h3 class="menu_intermedio">[% 'Reportes' | i18n %]</h3>
                     <ul>
@@ -417,7 +444,12 @@
           </ul>
         </li>
           <!-- Navigation item -->
-            <li><h3 class="menu_superior">[% 'Administraci&oacute;n' | i18n %]</h3>
+            <li>
+               <div class="menu_superior_der">
+                  <div class="menu_superior_izq">
+                      <h3 class="menu_superior">[% 'Administraci&oacute;n' | i18n %]</h3>
+                  </div>
+                </div>
               <ul>
                 <li><h3 class="menu_intermedio">[% 'Permisos' | i18n %]</h3>
                   <ul>
@@ -617,7 +649,12 @@
               </ul>
            </li>
           <!-- Navigation item -->
-              <li><h3 class="menu_superior">[% 'Ayuda' | i18n %]</h3>
+              <li>
+                  <div class="menu_superior_der">
+                      <div class="menu_superior_izq">
+                          <h3 class="menu_superior">[% 'Ayuda' | i18n %]</h3>
+                      </div>
+                  </div>
               <ul>
                   <li>
                             [% PERL %]
