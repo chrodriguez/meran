@@ -1113,3 +1113,16 @@ input.file {
 .inline_input{
   float:left;
 }
+
+.inline_input label{
+  float:left;
+  margin: 0;
+  padding: 0;
+}
+
+.inline_input input{
+  float:left;
+}
+
+
+

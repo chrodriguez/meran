@@ -16,26 +16,38 @@
     <h5 style="font-size: 20px; color:red;"> [% "ATENCION: DANDO DE ALTA UN NUEVO PERMISO YA QUE EL USUARIO NO CUENTA CON PRIVILEGIOS PARA TAL COMBINACION " | i18n %] </h5>
 [% END %]
 <hr>
-<div style="height:50px;" id="prestamos">
-    <h2> Reportes </h2>
-    <span class="permission_grant" >
-        <label for="permission_5"> TODOS </label>
-            <input type="checkbox" id="prestamos_todos" name="prestamos_todos" onChange="adviceGrant(this,'prestamos','high');"
-                [% IF permisos.prestamos.TODOS %] "checked" [% END %] />
-        <label for="permission_2"> Baja </label>
-            <input type="checkbox" id="prestamos_baja" name="prestamos_baja" onChange="adviceGrant(this,'prestamos','high');"
-                [% IF permisos.prestamos.BAJA %] "checked" [% END %]/> /
-        <label for="permission_3"> Modificaci&oacute;n </label>
-            <input type="checkbox" id="prestamos_modif" name="prestamos_modif" onChange="adviceGrant(this,'prestamos','high');"
-                [% IF permisos.prestamos.MODIFICACION %] "checked" [% END %] /> /
-        <label for="permission_1"> Alta </label>
-            <input type="checkbox" id="prestamos_alta" name="prestamos_alta" onChange="adviceGrant(this,'prestamos','medium');"
-                [% IF permisos.prestamos.ALTA %] "checked" [% END %] /> /
-        <label for="permission_4"> Consulta </label>
-            <input type="checkbox" id="prestamos_consulta" name="prestamos_consulta" onChange="adviceGrant(this,'prestamos','low');"
-                [% IF permisos.prestamos.CONSULTA %] "checked" [% END %]/>
-    </span>
-<br><br></div>
+<div>
+    <fieldset id="prestamos">
+        <legend class="titulo_legend"> [% "Reportes" | i18n %] </legend>
+        <ul class="permission_grant" >
+            <li class="inline_input">
+                <label for="permission_5"> TODOS </label>
+                <input type="checkbox" id="prestamos_todos" name="prestamos_todos" onChange="adviceGrant(this,'prestamos','high');"
+                    [% IF permisos.prestamos.TODOS %] "checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_2"> Baja </label>
+                <input type="checkbox" id="prestamos_baja" name="prestamos_baja" onChange="adviceGrant(this,'prestamos','high');"
+                    [% IF permisos.prestamos.BAJA %] "checked" [% END %]/>
+            </li>
+            <li class="inline_input">
+                <label for="permission_3"> Modificaci&oacute;n </label>
+                <input type="checkbox" id="prestamos_modif" name="prestamos_modif" onChange="adviceGrant(this,'prestamos','high');"
+                    [% IF permisos.prestamos.MODIFICACION %] "checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_1"> Alta </label>
+                <input type="checkbox" id="prestamos_alta" name="prestamos_alta" onChange="adviceGrant(this,'prestamos','medium');"
+                    [% IF permisos.prestamos.ALTA %] "checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_4"> Consulta </label>
+                <input type="checkbox" id="prestamos_consulta" name="prestamos_consulta" onChange="adviceGrant(this,'prestamos','low');"
+                    [% IF permisos.prestamos.CONSULTA %] "checked" [% END %]/>
+            </li>
+        </ul>
+    </fieldset>
+</div>
 
 <div class="buttonContainerHorizontal">
     <ul class="horizontal-list" >

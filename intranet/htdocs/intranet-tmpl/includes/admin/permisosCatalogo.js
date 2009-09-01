@@ -32,12 +32,13 @@ function adviceGrant(checkBox,divID,risk,dontCallChecks){
     isChecked = ($(checkBox).is(':checked'))?true:false;
 
     if (isChecked){
-//         $('#'+divID).css("background-color",array[risk]);
         $('#'+divID).addClass(array[risk]);
+//         alert("cambio de clase a: "+risk);
         returnValue = true;
     }else{
-//         $('#'+divID).css("background-color","");
+//         alert("remover clase de: "+risk);
         $('#'+divID).removeClass(array[risk]);
+        returnValue = false;
     }
     if (!dontCallChecks){
         checkChecks();
@@ -69,15 +70,16 @@ function checkChecks(){
     riskArray['baja'] = "high";
     riskArray['todos'] = "high";
     for (x=0;x<12;x++){
-        checkBoxItems = $('#'+arreglo[x]+" > span > input");
+        checkBoxItems = $('#'+arreglo[x]+" > ul > li > input");
         checkTouched = false;
         for (y=0; y<checkBoxItems.length; y++){
             riskPart = checkBoxItems[y].id.split("_");
             if (riskPart.length > 2)
                 riskPart[1] = riskPart[riskPart.length-1];
             risk = riskArray[riskPart[1]];
-            if (!checkTouched)
+            if (!checkTouched){
                 checkTouched = adviceGrant(checkBoxItems[y],arreglo[x],risk,true);
+            }
           }
     }
 }
@@ -105,7 +107,7 @@ function obtenerPermisos(){
 
 function toggleGrantsDiv(state){
 
-    checkBoxItems = $('#permisos_assign_chk > div > span > input');
+    checkBoxItems = $('#permisos_assign_chk > div > ul > li > input');
     for (y=0; y<checkBoxItems.length; y++){
         riskPart = $(checkBoxItems[y]).attr("disabled",state);
     }
@@ -142,7 +144,7 @@ function permiso(nombre){
     this.modif = ($('#'+nombre+'_modif').is(':checked'))?1:0;
     this.consulta = ($('#'+nombre+'_consulta').is(':checked'))?1:0;
     this.todos = ($('#'+nombre+'_todos').is(':checked'))?1:0;
-    if (this.todos)
+    if (this.todos || this.baja || this.modif)
         superUserGranted = 1;
 
 }
