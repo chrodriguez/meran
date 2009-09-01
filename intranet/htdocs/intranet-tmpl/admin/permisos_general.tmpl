@@ -2,16 +2,6 @@
 
 <script src="/intranet-tmpl/includes/admin/permisosGeneral.js"></script>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#usuario').focus();
-        CrearAutocompleteUsuarios({ IdInput: 'usuario', 
-                                    IdInputHidden: 'nro_socio_hidden', 
-                            });
-
-    });
-</script>
-
 [% INCLUDE "admin/permisos.inc" %]
 
 [% INCLUDE "intranet-bottom.inc" %]
