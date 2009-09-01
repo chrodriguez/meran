@@ -12,10 +12,8 @@
 <!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
 <!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
 
-[% IF nuevoPermiso %]
-    <h5 style="font-size: 20px; color:red;"> [% "ATENCION: DANDO DE ALTA UN NUEVO PERMISO YA QUE EL USUARIO NO CUENTA CON PRIVILEGIOS PARA TAL COMBINACION " | i18n %] </h5>
-[% END %]
-<hr>
+[% INCLUDE 'partials/_nuevoPermiso.inc' %]
+
 <div>
     <fieldset id="prestamos">
         <legend class="titulo_legend"> [% "Reportes" | i18n %] </legend>
@@ -49,25 +47,4 @@
     </fieldset>
 </div>
 
-<div class="buttonContainerHorizontal">
-    <ul class="horizontal-list" >
-        [% IF nuevoPermiso != 1%]
-                        [% PERL %]
-                                            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Permisos' | i18n %]",
-                                                                                boton   => "boton_buscar",
-                                                                                onClick => "actualizarPermisos();",
-                                                                                title   => "[% 'Guardar Permisos' | i18n %]",
-                                                    );
-                        [% END %]
-        [% ELSE %]
-                [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Permisos' | i18n %]",
-                                                                        boton   => "boton_buscar",
-                                                                        onClick => "nuevoPermiso();",
-                                                                        title   => "[% 'Guardar Permisos' | i18n %]",
-                                            ) ;
-                [% END %]
-        [% END %]
-  </ul>
-  <br>
-</div>
+[% INCLUDE 'partials/_guardarPermisos.inc' %]

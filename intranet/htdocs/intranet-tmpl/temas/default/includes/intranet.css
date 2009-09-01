@@ -424,6 +424,7 @@ tr.impar {
     padding-right:0;
     cursor: pointer;
     height: 21px;
+    white-space: nowrap;
 }
 
 #boton_der {
