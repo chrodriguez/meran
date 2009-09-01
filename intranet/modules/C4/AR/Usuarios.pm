@@ -643,7 +643,8 @@ sub getSocioLike {
             foreach my $s (@searchstring_array){ 
                 push (	@filtros, ( or   => [   apellido => { like => '%'.$s.'%'}, 
                                                 nro_documento => { like => '%'.$s.'%' }, 
-                                                legajo => { like => '%'.$s.'%' }  
+                                                legajo => { like => '%'.$s.'%' },
+                                                nro_socio => { like => '%'.$s.'%' }          
                                             ])
                      );
             }

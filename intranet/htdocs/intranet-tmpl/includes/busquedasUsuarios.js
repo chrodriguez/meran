@@ -60,6 +60,7 @@ function updateInfo(responseText){
     classes[0] = 'nomCompleto';
     classes[1] = 'documento';
     classes[2] = 'legajo';
+    classes[3] = 'tarjetaId';
     busqueda = jQuery.trim($('#socio').val());
     if (busqueda.substr(0,6).toUpperCase() != 'FILTRO') //SI NO SE QUISO FILTRAR POR INICIAL, NO TENDRIA SENTIDO MARCARLO
         highlight(classes,idArray);
