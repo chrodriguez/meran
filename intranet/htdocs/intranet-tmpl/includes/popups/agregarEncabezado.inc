@@ -83,12 +83,14 @@ function saveEncabezado(){
 	itemtypesJSON=JSONstring.make(itemtypes_array);
 
 	objAH=new AjaxHelper(updateSaveEncabezado);
+    objAH.debug= true;
 	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
 	objAH.encabezado= $('#nomEncabezadoAlta').val();
 	objAH.tabla= 'ENCABEZADO';
 	objAH.tipoAccion= 'INSERT';
 	objAH.nivel= $('#nivel').val();
-	objAH.itemtypes= itemtypesJSON;
+// 	objAH.itemtypes= itemtypesJSON;
+    objAH.itemtypes= itemtypes_array;
 	//se envia la consulta
 	objAH.sendToServer();
 }

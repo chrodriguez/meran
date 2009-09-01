@@ -212,7 +212,9 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
     my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc(\%params);
     #se genera el combo de las bibliotecas
     my $comboDeUI= &C4::AR::Utilidades::generarComboUI(\%params);
+    my $comboDeCredentials= &C4::AR::Utilidades::generarComboDeCredentials(\%params);        
 
+    $t_params->{'comboDeCredentials'}= $comboDeCredentials;  
     $t_params->{'combo_tipo_documento'}= $comboDeTipoDeDoc;
     $t_params->{'comboDeCategorias'}= $comboDeCategorias;
     $t_params->{'comboDeUI'}= $comboDeUI;
