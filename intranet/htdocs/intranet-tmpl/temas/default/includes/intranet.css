@@ -188,7 +188,7 @@ font-style:normal;
 }
 .sub_item{
     font-family: "Verdana","Trebuchet MS", "Arial";
-    font-size: 8pt;
+    font-size: 10pt;
     color: #a1c162;
     list-style: none;
     font-weight: normal;
@@ -1105,3 +1105,11 @@ input.file {
     z-index: 2;
 }
 
+.permisos_box{
+    clear:both;
+    display:block;
+}
+
+.inline_input{
+  float:left;
+}

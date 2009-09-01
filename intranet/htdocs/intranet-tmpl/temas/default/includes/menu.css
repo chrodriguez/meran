@@ -2,7 +2,8 @@
 #menu{
    width:auto;
    float:left;
-   margin:2px;  
+   margin:2px;
+   clear:both;
 }
 
 #menu ul{
