@@ -50,28 +50,54 @@
 				checked
 			[% END %] >
 		</td>
-		<td class="click" align="center">
-			<a onClick="agregarConfVisualizacion();">
-			<img 	src="[%themelang %]/images/agregar_mas.png" Title="[% 'Agregar' | i18n %]" alt="[% 'Agregar' | i18n %]" 
-					hspace='0' vspace='0' border='0'>
-			</a>
+		<td>
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                                            boton   => "icon_agregar",
+                                                            onClick => "agregarConfVisualizacion();",
+                                                            title   => "[% 'Agregar Encabezado' | i18n %]",
+                                                            alternClass => "botonCentradoTabla"
+                                ) ;
+                    [% END %]
+
 		</td>
-		<td class="click" align="center">
-			<a onClick="EditCell('encabezado[% encabezado.getIdEncabezado %]', '[% encabezado.getIdEncabezado %]');">
-			<img src="[%themelang %]/images/editar.png" Title="Editar" ALT="[% 'Editar' | i18n %]" hspace='0' vspace='0' border='0'>
-			</a>
+		<td>
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                    boton   => "icon_edicion",
+                                    onClick => "EditCell('encabezado[% encabezado.getIdEncabezado %]', '[% encabezado.getIdEncabezado %]');",
+                                    title   => "[% 'Editar Encabezado' | i18n %]",
+                                    alternClass => "botonCentradoTabla"
+                                ) ;
+                    [% END %]
+
 		</td>
-		<td class="click" align="center">
-			<a onClick="deleteEncabezado([% encabezado.getIdEncabezado %]);">
-			<img src="[%themelang %]/images/borrar.png" Title="Eliminar" ALT="[% 'Eliminar' | i18n %]" hspace='0' vspace='0' border='0'>
-			</a>
+		<td>
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                    boton   => "icon_borrar",
+                                    onClick => "deleteEncabezado([% encabezado.getIdEncabezado %]);",
+                                    title   => "[% 'Eliminar Encabezado' | i18n %]",
+                                    alternClass => "botonCentradoTabla"
+                                ) ;
+                    [% END %]
+
 		</td>
-		<td class="click" align="center">
-			<a onClick="seleccionarEncabezado([% encabezado.getIdEncabezado %]);">
-			<img 	src="[%themelang %]/images/filefind.png" Title="[% 'Mostrar informaci&oacute;n' | i18n %]" 
-					alt="[% 'Mostrar informaci&oacute;n' | i18n %]" 
-					hspace='0' vspace='0' border='0'>
-			</a>
+		<td>
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                    boton   => "icon_buscar",
+                                    onClick => "seleccionarEncabezado([% encabezado.getIdEncabezado %]);",
+                                    title   => "[% 'Mostrar informaci&oacute;n' | i18n %]",
+                                    alternClass => "botonCentradoTabla"
+                                ) ;
+                    [% END %]
+
+
 		</td>
 
 	</tr>

@@ -265,7 +265,7 @@ if($tipoAccion eq "AGREGAR_CONFIGURACION_VISUALIZACION"){
 if($tipoAccion eq "AGREGAR_ENCABEZADO_VISUALIZACION_OPAC"){
 
 	my ($template, $session, $t_params)= get_template_and_user({
-					template_name => "catalogacion/visualizacionOPAC/agregarEncabezado.tmpl",
+					template_name => "includes/popups/agregarEncabezado.inc",
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
@@ -277,8 +277,9 @@ if($tipoAccion eq "AGREGAR_ENCABEZADO_VISUALIZACION_OPAC"){
 	my %params_combo;
 	$params_combo{'default'}= 'LIB';
 	$params_combo{'id'}= 'tipo_documento';
+    $params_combo{'class'}= 'inline_input';    
 	my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
-	$t_params->{'tipo_documento'}= $comboTiposNivel3;
+	$t_params->{'combo_tipos_documento'}= $comboTiposNivel3;
     
 	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
 }

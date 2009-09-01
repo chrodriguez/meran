@@ -1,6 +1,6 @@
 
 
-<table id="tablaVisualizacion" class="tablesorter" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+<table id="tablaVisualizacion" class="tabla_datos" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
 	<thead>
  	<tr class="titulo_tabla_resultado">	
 		<th>[% 'Campo' | i18n %]</th>
@@ -29,16 +29,29 @@
 				checked	
 			[% END %] >
 		</td>
-		<td class="click" align="center">
-			<a onClick="modificarVisualizacion([% idestcatopac %]);">
-			<img src="[%themelang %]/images/editar.png" Title="Editar" ALT="[% 'Editar' | i18n %]" hspace='0' vspace='0' border='0'>
-			</a>
+		<td>
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                                            boton   => "icon_edicion",
+                                                            onClick => "modificarVisualizacion([% idestcatopac %]);",
+                                                            title   => "[% 'Editar' | i18n %]",
+                                                            alternClass => "botonCentradoTabla"
+                                ) ;
+                    [% END %]
+
 		</td>
-		<td class="click" align="center">
-			<a onClick="deleteRowVisualizacion([% idestcatopac %]);">
-			<img src="[% themelang %]/images/borrar.png"
-			Title="[% 'Eliminar' | i18n %]" alt="[% 'Eliminar' | i18n %]" hspace='0' vspace='0' border='0'>
-			</a>
+		<td>
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                                            boton   => "icon_borrar",
+                                                            onClick => "deleteRowVisualizacion([% idestcatopac %]);",
+                                                            title   => "[% 'Eliminar' | i18n %]",
+                                                            alternClass => "botonCentradoTabla"
+                                ) ;
+                    [% END %]
+
 		</td>
 
 	</tr>

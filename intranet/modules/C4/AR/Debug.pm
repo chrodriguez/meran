@@ -55,17 +55,9 @@ sub debugObject{
 
 sub debug_date_time{
 
-
-#     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime('1251474940');#localtime(time);
-#     debug("debug_date_time => ".$mday."-".($mon+1)."-".($year+1900)." ".$hour.":".$min.":".$sec);
-#     debug("year: ".$year);
-
-
-#     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime('1260264065');#localtime(time);
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
     #     dia-mes-año    
     debug("debug_date_time => ".$mday."-".($mon+1)."-".($year+1900)." ".$hour.":".$min.":".$sec);
-#     debug("year: ".$year);
 }
 
 =item

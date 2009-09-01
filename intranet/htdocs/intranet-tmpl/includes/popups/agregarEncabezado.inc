@@ -14,10 +14,10 @@ var itemtypes_array= new Array();
 
 function pushEncabezadoTipoItem(){
 	
-	var id= $('#comboTiposItemsAltaEncabezado').val();	
+	var id= $('#tipo_documento').val();	
 
 	if (!exist(id, itemtypes_array)){
-		var itemtype= $('#comboTiposItemsAltaEncabezado')[0].options[$('#comboTiposItemsAltaEncabezado')[0].selectedIndex].text;
+		var itemtype= $('#tipo_documento')[0].options[$('#tipo_documento')[0].selectedIndex].text;
 
 		$('#textArearTiposItems').val(itemtype + '\n' + $('#textArearTiposItems').val() );
 	
@@ -102,30 +102,53 @@ function updateSaveEncabezado(responseText){
 </script>
 
 <ul>
-	<li>
-		<label for="textoMod" style="float: left; width:25%" >
-		Encabezado:
+	<li class="sub_item">
+		<label for="nomEncabezadoAlta">
+		[% 'Encabezado' | i18n %]:
 		</label>
 		<input type="text" id="nomEncabezadoAlta">
 	</li>
-	<li>
-		Tipo de item: [% selectItemTypeAltaEncabezado %]
+	<li class="sub_item">
+    
+        <label for="tipo_documento">
+		[% 'Tipo de item' | i18n %]: 
+        </label>
+        [% combo_tipos_documento %]
+
+        [% PERL %]
+            print C4::AR::Filtros::to_Icon(  
+                                                boton   => "icon_agregar",
+                                                onClick => "pushEncabezadoTipoItem();",
+                                                title   => "[% 'Agregar Tipo de Item' | i18n %]",
+                    ) ;
+        [% END %]
+
+        [% PERL %]
+            print C4::AR::Filtros::to_Icon(  
+                                                boton   => "icon_borrar",
+                                                onClick => "popEncabezadoTipoItem();",
+                                                title   => "[% 'Sacar Tipo de Item' | i18n %]",
+                    ) ;
+        [% END %]
+
 	</li>
-	<li>
-		<input 	id="push" type="button" onClick="pushEncabezadoTipoItem();" value=">>" 
-			title="Agregar Tipo de Item" > 
-		<input 	id="pop" type="button" onClick="popEncabezadoTipoItem();" value="<<" 
-			title="Sacar Tipo de Item" disabled=true>
-	</li>
-	<li>
+	<li class="sub_item">
+        <label for="textArearTiposItems">[% 'Tipo de Documento' | i18n %]</label>
 		<textarea id="textArearTiposItems" style="height:60px; width:230px;" readonly></textarea>
 	</li>
 
 	<li>
-		<a onClick="validarDatosEncabezado();">
-		<img 	id="save" border="0" src="/intranet-tmpl/images/guardar.png" 
-				alt="Guardar" name="save" title="Guardar Encabezado"/>
-		</a>
+
+         [% PERL %]
+                     print C4::AR::Filtros::to_Button(      text    => "[% 'Agregar un Encabezado' | i18n %]",
+                                                            boton   => "boton_agregar",
+                                                            onClick => "validarDatosEncabezado();",
+                                                            title   => "[% 'Agregar un Encabezado' | i18n %]",
+                                                            width   => "180",
+                                                            alternClass => "botonCentrado"
+                             ) ;
+        [% END %]
+
 	</li>
 </ul>
 <!-- *******************************Fin**Window Agregar Encabezado**************************************** -->

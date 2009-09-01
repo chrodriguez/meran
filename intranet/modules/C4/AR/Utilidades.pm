@@ -1533,6 +1533,10 @@ sub generarComboTipoNivel3{
          $options_hash{'onChange'}= $params->{'onChange'};
     }
 
+    if ( $params->{'class'} ){
+         $options_hash{'class'}= $params->{'class'};
+    }
+
     if ( $params->{'onFocus'} ){
       $options_hash{'onFocus'}= $params->{'onFocus'};
     }

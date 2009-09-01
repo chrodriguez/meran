@@ -3,7 +3,7 @@
 
 <!--\u00e1 -> á
 \u00e9 -> é
-u\00ed -> í
+\u00ed -> í
 \u00f3 -> ó
 \u00fa -> ú
 \u00c1 -> Á
@@ -27,7 +27,7 @@ ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'Este campo es requerido, no lo deje en
 ESTA_SEGURO_QUE_DESEA_BORRARLO= "&iquery;[% 'Est\u00e1 seguro que desea borrarlo' | i18n %]?";
 HAY_BARCODES_REPETIDOS= "[% 'Hay barcodes repetidos' | i18n %]";
 ELIJA_AL_MENOS_UN_EJEMPLAR= "[% 'Elija al menos un ejemplar para realizar la acción' | i18n %]";
-FALTA_PARAMETRO_PARA_REFERENCIA= "[% 'Falta parámetro para referencia' | i18n %]";
+FALTA_PARAMETRO_PARA_REFERENCIA= "[% 'Falta par\u00e1metro para referencia' | i18n %]";
 CATALOGO_TITLE= "[% 'Advertencia de cat\u00e1logo' | i18n %]";
 CATALOGO_ALERT_TITLE= "[% 'Advertencia de cat\u00e1logo' | i18n %]";
 //=============================================Fin===Catalogacion=================================================
@@ -52,7 +52,7 @@ A_LOS_PROPIETARIOS= "[% 'a los propietarios de' | i18n %]:";
 
 PERMISOS_DE_ACCESO= "[% 'Permisos de Acceso' | i18n %]";
 ELIJA_AL_MENOS_UN_PERMISO= "[% 'Elija al menos un permiso' | i18n %]";
-POR_FAVOR_SELECCIONE_LA_CATEGORIA= "[% 'Por favor, seleccione la categoría' | i18n %]";
+POR_FAVOR_SELECCIONE_LA_CATEGORIA= "[% 'Por favor, seleccione la categor\u00eda' | i18n %]";
 POR_FAVOR_INGRESE_SU_APELLIDO= "[% 'Por favor, ingrese su apellido' | i18n %]";
 POR_FAVOR_INGRESE_SU_NOMBRE= "[% 'Por favor, ingrese su/s nombre/s' | i18n %]";
 POR_FAVOR_INGRESE_LA_TARJETA_DE_IDENTIFICACION= "[% 'Por favor, ingrese la tarjeta de id.' | i18n %]";
@@ -97,14 +97,17 @@ CONTROL_AUTORIDADES_TITLE= "[% 'Advertencia de Control de Autoridades' | i18n %]
 
 //================================================Visualizacion Opac==============================================
 AGREGAR_ENCABEZADO= "[% 'Agregar Encabezado' | i18n %]";
+CONFIRMA_LA_BAJA_DEL_ENCABEZADO = "[% 'Confirma la baja del Encabezado?' | i18n %]";
+INGRESE_EL_ENCABEZADO = "[% 'Ingrese el encabezado' | i18n %]";
+VISUALIZACION_OPAC_TITLE= "[% 'Advertencia de Visualizaci\u00f3n del Opac' | i18n %]";
 //=============================================Fin===Visualizacion Opac===========================================
 //================================================Busquedas==============================================
 SELECCIONE_AL_MENOS_UN_CAMPO_PARA_BUSCAR= "[% 'Seleccione al menos un campo para buscar' | i18n %]";
 //=============================================Fin===Busquedas===========================================
 
 //================================================Reglas Sanciones==============================================
-POR_FAVOR_SELECCIONE_TIPO_PRESTAMO= "[% 'Por favor, seleccione un tipo de préstamo' | i18n %]";
-POR_FAVOR_SELECCIONE_CATEGORIA_SOCIO= "[% 'Por favor, seleccione una categoría de socio' | i18n %]"
+POR_FAVOR_SELECCIONE_TIPO_PRESTAMO= "[% 'Por favor, seleccione un tipo de pr\u00e9stamo' | i18n %]";
+POR_FAVOR_SELECCIONE_CATEGORIA_SOCIO= "[% 'Por favor, seleccione una categor\u00eda de socio' | i18n %]"
 //=============================================Fin===Reglas Sanciones===========================================
 
 //================================================Sanciones==============================================

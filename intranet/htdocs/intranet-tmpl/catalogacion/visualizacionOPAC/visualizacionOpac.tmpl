@@ -12,6 +12,8 @@ SUBCAMPOS_ARRAY= new Array();
 //para mantener el encabezado
 ENCABEZADO= 0;
 
+var vAgregarEncabezado;
+
 
 /*
  * eleccionCampoX
@@ -50,7 +52,7 @@ function updateEleccionCampoX(responseText){
 
 
 function eleccionCampo(){
-//     if ($("#campo").val() != -1){
+
         objAH=new AjaxHelper(updateEleccionCampo);
         objAH.debug= true;
         objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
@@ -58,9 +60,6 @@ function eleccionCampo(){
         objAH.nivel=$('#niveles_id').val();
         objAH.tipoAccion="GENERAR_ARREGLO_SUBCAMPOS";
         objAH.sendToServer();
-//     }
-//     else
-//         enable_disableSelects();
 
 }
 
@@ -169,9 +168,6 @@ function seleccionarEncabezado(id){
 }
 
 
-//para guardar el id de la fila seleccionada
-var idestcatopac;
-
 function modificarVisualizacion(id){
 
 	objAH=new AjaxHelper(updateModificarVisualizacion);
@@ -191,7 +187,7 @@ function updateModificarVisualizacion(responseText){
 
 function validarDatosEncabezado(){
 	if($('#nomEncabezadoAlta')[0].value == ""){
-		jAlert('Ingrese el encabezado');
+		jAlert(INGRESE_EL_ENCABEZADO);
 		$('#nomEncabezadoAlta')[0].focus();
 	}else {
 		saveEncabezado();
@@ -244,7 +240,7 @@ function updateGuardarConfVisualizacion(responseText){
 
 function deleteRowVisualizacion(id){
 
-    jConfirm(CONFIRMA_LA_BAJA,CONFIRMA_LA_BAJA,function(){
+    jConfirm(CONFIRMA_LA_BAJA,VISUALIZACION_OPAC_TITLE,function(){
         objAH=new AjaxHelper(updateDeleteRowVisualizacion);
         objAH.debug= true;
         objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
@@ -278,7 +274,7 @@ function armarTablaVisualizacion(){
 function updateArmarTablaVisualizacion(responseText){
 	$('#divTablaVisualizacion').html(responseText);
 	$('#divTablaVisualizacion').slideDown('slow');
-	zebra('tablesorter');
+	zebra('tabla_datos');
 }
 
 function validarDatos(){
@@ -447,7 +443,7 @@ function updateCargarTablaEncabezados(responseText){
 
 function deleteEncabezado(idEncabezado){
 
-    jConfirm('Confirma la baja del Encabezado?','Confirma la baja del Encabezado?',function(){
+    jConfirm(CONFIRMA_LA_BAJA_DEL_ENCABEZADO, VISUALIZACION_OPAC_TITLE,function(){
         objAH=new AjaxHelper(updateDeleteEncabezado);
         objAH.debug= true;
         objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl';
@@ -551,8 +547,17 @@ $(document).ready(function() {
         <label for="comboTiposItems">
 		    [% 'Tipo de item' | i18n %]:
         </label> [% selectItemType %]
-		<input 	type="button" Title="[% 'Agregar Encabezado' | i18n %]" onClick="agregarEncabezado()" value="[% 'Agregar' | i18n %]"
-				 Title="[% 'Agregar un Encabezado' | i18n %]">
+
+         [% PERL %]
+                     print C4::AR::Filtros::to_Button(      text    => "[% 'Agregar un Encabezado' | i18n %]",
+                                                            boton   => "boton_agregar",
+                                                            onClick => "agregarEncabezado();",
+                                                            title   => "[% 'Agregar un Encabezado' | i18n %]",
+                                                            width   => "180",
+                                                            alternClass => "botonCentrado"
+                             ) ;
+        [% END %]
+
 	</li>
 		<div id="divTablaEncabezados"></div>
 

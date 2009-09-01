@@ -19,12 +19,11 @@ $(document).ready(function() {
 	<ul>
     <li class="item" >
 			
-<!-- 		<div  class="item" > -->
             <label for="keyword">
 			    [% "B&uacute;squeda combinada" | i18n %]
             </label>
 			<input type="text" id="keyword" size="20" tabindex=1>
-<!--          </div> -->
+
          [% PERL %]
                      print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
                              boton   => "boton_buscar",

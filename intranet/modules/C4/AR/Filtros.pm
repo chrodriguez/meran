@@ -197,7 +197,7 @@ sub to_Icon{
 sub ayuda_marc{
 
     my $icon= to_Icon(  
-                boton   => "icon_ayuda",
+                boton   => "icon_ayuda_marc",
                 onClick => "abrirVentanaHelperMARC();",
                 title   => i18n("Ayuda MARC"),
             ) ;

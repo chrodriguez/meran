@@ -469,24 +469,26 @@ function updateModificarEstructuraCatalogacion(responseText){
 
 <div class="titulos" >Estructura de Catalogaci&oacute;n</div>
 
-
-<br><br>
-<label for="niveles_id">
-	[% 'Nivel:' | i18n %]
-</label>
-[% selectNivel %]
+<ul>
+    <li class="sub_item">
+        <label for="niveles_id" >
+	        [% 'Nivel:' | i18n %]
+        </label>
+        [% selectNivel %]
+    </li>
 
 
 <div id="divitemtype" style="display:none;">
 
-    <p>
-    <label for="itemtype">
-	    [% 'Tipo de item:' | i18n %] 
-    </label>
-    [% selectItemType %]
-    </p>
+    <li class="sub_item">
+        <label for="itemtype">
+	        [% 'Tipo de item:' | i18n %] 
+        </label>
+        [% selectItemType %]
+    </li>
 
 </div>
+</ul>
 
 <!-- PARA MOSTRAR TEMPLATE PARA MODIFICAR CAMPOS -->
 <div id= "resultModificarCampo"></div>
