@@ -122,29 +122,27 @@ $(document).ready(function() {
 
 
 </script>
-<label for="usuarioAutocomplete" class="titulos">[% 'Devoluciones y Renovaciones' | i18n %]</label>
-
 <div id="confirmar_div"></div>
 
 <fieldset class="formulario_busqueda">
-<legend class="titulo_legend">[% 'Formulario de B&uacute;squeda' | i18n %]</legend>	
-<ul>
-<li>
-<div id="buscarUsuario">
-		<strong><label for="usuarioAutocomplete">[% 'Ingrese Apellido y Nombres, DNI o Legajo del usuario' | i18n %]</label></strong>
-		<input id="usuarioAutocomplete" type="text" size="40" onClick="inicializar();">
-		<input id="nro_socio_hidden" type="hidden">
-</div>
-</li>
-<li>
-<div id="buscarCodigoDeBarras">
-		<strong><label for="barcode">[% 'Ingrese el c&oacute;digo de barras' | i18n %]</label></strong>
-		<input id="barcode" type="text" size="40" onClick="inicializar();">
-		<input id="barcode_hidden" type="hidden">
-		<input id="prestamo_hidden" type="hidden">
-</div>
-</li>
-</ul>
+    <legend class="titulo_legend"><span class="titulos">[% 'Devoluciones y Renovaciones' | i18n %]</span></legend>	
+    <ul class="listado_sin_margen">
+      <li class="sub_item">
+        <div id="buscarUsuario">
+                <strong><label for="usuarioAutocomplete">[% 'Apellido y Nombres, DNI o Legajo' | i18n %]</label></strong>
+                <input id="usuarioAutocomplete" type="text" size="40" onClick="inicializar();">
+                <input id="nro_socio_hidden" type="hidden">
+        </div>
+      </li>
+      <li class="sub_item">
+        <div id="buscarCodigoDeBarras">
+          <strong><label for="barcode">[% 'Ingrese el c&oacute;digo de barras' | i18n %]</label></strong>
+              <input id="barcode" type="text" size="40" onClick="inicializar();">
+          <input id="barcode_hidden" type="hidden">
+          <input id="prestamo_hidden" type="hidden">
+        </div>
+      </li>
+    </ul>
 </fieldset>
 
 <div id="botonDevolver">

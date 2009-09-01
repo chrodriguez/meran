@@ -244,53 +244,54 @@ $(document).ready(function() {
 
 </script>
 
-<div class="titulos" >[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]</div>
-
 <div id="confirmar_div"></div>
-<br>
-
-<ul>
-	<li>
-		<label for="operacion">
-			[% 'Operaci&oacute;n:' | i18n %]
-		</label>
-		<select id='operacion' tabindex='1' onChange='onChangeOperacion()'>	
-			<option value="prestar">[% 'Pr&eacute;stamo' | i18n %]</option>
-			<option value="devolver">[% 'Devoluci&oacute;n' | i18n %]</option>
-			<option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
-		</select><span id="spanComboTipoPrestamo"></span>
-	</li>
-	<li>
-		<div id="divInfoEjemplar">
-			<label for="barcode">
-				[% 'C&oacute;digo de Barras:' | i18n %]
-			</label>
-		 	<input type="text" id="barcode" value="" tabindex='2'>
-			<input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
-			<input type="text" id="barcodePrestado" value="" tabindex='2'>
-			<!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
-			<input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
-		</div>
-	</li>
-	<li>
-		<div id="divInfoUsuario" style="width:55%">
-			<label for="usuario">
-				[% 'Usuario:' | i18n %]
-			</label>
-		 	<input type='text' id='usuario' value='' size=32 tabindex='3' style="float: left">
-			<div id="estadoUsuario"></div>
-			<input type='hidden' id='nro_socio_hidden' value=''>
-			<span id="divAutorizado" style="float:right">[% 'Autorizado:' | i18n %]<input type="checkbox" value="autorizado"></span>
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Autorizado' | i18n %]",
-                                                                    boton   => "boton_agregar",
-                                                                    onClick => "agregarAutorizado();",
-                                                                    title   => "[% 'Agregar Autorizado' | i18n %]",
-                                                                    width   => "150",
-                                        ) ;
-            [% END %]
-		</div>
-	</li>
+<fieldset>
+    <legend class="titulo_legend">[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]</legend>
+    <br>
+    <ul>
+      <fieldset>
+        <li class="sub_item">
+              <label for="operacion">[% 'Operaci&oacute;n:' | i18n %]</label>
+              <select id='operacion' tabindex='1' onChange='onChangeOperacion()'>	
+                  <option value="prestar">[% 'Pr&eacute;stamo' | i18n %]</option>
+                  <option value="devolver">[% 'Devoluci&oacute;n' | i18n %]</option>
+                  <option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
+              </select>
+              <span id="spanComboTipoPrestamo"></span>
+        </li>
+      </fieldset>
+      <fieldset>
+            <li class="sub_item">
+                    <div id="divInfoEjemplar">
+                        <label for="barcode">[% 'C&oacute;digo de Barras:' | i18n %]</label>
+                        <input type="text" id="barcode" value="" tabindex='2'>
+                        <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
+                        <input type="text" id="barcodePrestado" value="" tabindex='2'>
+                        <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
+                        <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+                    </div>
+            </li>
+            <br>
+            <br>
+            <li class="sub_item">
+                    <div id="divInfoUsuario">
+                        <label for="usuario">[% 'Usuario:' | i18n %]</label>
+                        <input type='text' id='usuario' value='' size=32 tabindex='3' style="float: left">
+                        <div id="estadoUsuario"></div>
+                        <input type='hidden' id='nro_socio_hidden' value=''>
+                        <span id="divAutorizado" style="float:right">[% 'Autorizado:' | i18n %]<input type="checkbox" value="autorizado"></span>
+                        [% PERL %]
+                                            print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Autorizado' | i18n %]",
+                                                                                boton   => "boton_agregar",
+                                                                                onClick => "agregarAutorizado();",
+                                                                                title   => "[% 'Agregar Autorizado' | i18n %]",
+                                                                                width   => "150",
+                                                    ) ;
+                        [% END %]
+                    </div>
+            </li>
+          </fieldset>
+</fieldset>
 </ul>
 
 <br>

@@ -193,16 +193,15 @@ font-style:normal;
     list-style: none;
     font-weight: normal;
 	text-decoration:none;
-
 }
 .sub_item label{
-display:block;
-float:left;
-margin-right:13px;
-padding-right:10px;
-position:relative;
-text-align:right;
-width:150px;
+    display:block;
+    float:left;
+    margin-right:13px;
+    padding-right:10px;
+    position:relative;
+    text-align:right;
+    width:220px;
 }
 
 
