@@ -55,7 +55,6 @@
         </b></font>
     </div>
 [% END %]
-<center>
 
 <fieldset>
 <legend class="titulos">
@@ -66,10 +65,10 @@
             [% END %]
 </legend>
 
-<form method=post  name="userDataForm" id="userDataForm" class="validateDataForm" AUTOCOMPLETE='off'>
+<form method=post  name="userDataForm" id="userDataForm" AUTOCOMPLETE='off'>
 <fieldset>
-<legend class="legend_titulo">[% "DATOS PERSONALES DEL USUARIO" | i18n %]</legend>
-        <ul class="sin_margen">
+<legend class="titulo_legend">[% "Datos personales del usuario" | i18n %]</legend>
+        <ul>
             <li class="sub_item"><label for="apellido"> [% "Apellido" | i18n %] *</label>
                 <input id="apellido" name="apellido" class="required" type="text" size="25" value="[% socio.persona.getApellido %]">
             </li>
@@ -92,52 +91,9 @@
             </li>
             </ul>
 </fieldset>
-
 <fieldset>
-<legend class="legend_titulo">[% "DATOS DE USUARIO DEL SISTEMA" | i18n %]</legend>
-<ul class="sin_margen">
-<li class="sub_item">
-        <label for="nro_socio">[% "Tarjeta de identificaci&oacute;n" | i18n %] *</label>
-        [% IF addBorrower %]
-            <input id="nro_socio" type="text" class="required" name="nro_socio" readonly="readonly" size=10 value="Auto-generar">
-        [% ELSE %]
-            <input id="nro_socio" type="text" name="nro_socio" size="10" readonly="readonly" class="partnerNumberHighlight" value=[% socio.getNro_socio %]>
-        [% END %]
-</li>
-<li class="sub_item">
- <label for="categoria_socio_id"> [% "Categor&iacute;a del usuario" | i18n %] * </label>
-                [% comboDeCategorias %]
-</li>
-<li class="sub_item">
-<label for="tipo_socio_id"> [% "Tipo de usuario" | i18n %] *</label>
-                [% comboDeCredentials %]
-</li>
-<li class="sub_item">
-<label for="changepassword">[% "Forzar al usuario a cambiar su contrase&ntilde;a periodicamente" | i18n %] </label>
-<input type="checkbox" id="changepassword" [% socio.getChange_password %] checked>
-            [% IF ethcatpopup %]
-                <select class="required" id="ethnicity" size=1>
-                    [% FOREACH project IN ethnicityloop  %]
-                        <option value=[% project.value %][% project.selected %]>[% project.label %]
-                    [% END %]
-                </select>
-            [% END %]
-</li>
-
-    [% IF course %]
-<li class="sub_item"><label for="usercourse">&iquest;[% "Realiz&oacute; el curso de usuario" | i18n %]?</label>
-                <input  class="required" type="checkbox" id="usercourse" [% usercourse %]  checked>
-</li>
-    [% END %]
-
-<li class="sub_item"><label for="id_ui">[% "Incorporaci&oacute;n a Unidad de Informaci&oacute;n" | i18n %]</label>
-                [% comboDeUI %]
-</li>
-</ul>
-</fieldset>
-<fieldset>
-<legend class="titulo_legend">[% "DIRECCI&Oacute;N DEL USUARIO" | i18n %] </legend>
-<ul class="sin_margen">
+<legend class="titulo_legend">[% "Informaci&oacute;n de contacto" | i18n %] </legend>
+<ul>
 <li class="sub_item">
     <label for="calle"> [% "Direcci&oacute;n" | i18n %] * </label>
             <input class="required" type=text id="calle" name="calle" size="25" value="[% socio.persona.getCalle %]">
@@ -177,39 +133,64 @@
         </ul>
 </fieldset>
 
+<fieldset>
+<legend class="titulo_legend">[% "Datos en el sistema" | i18n %]</legend>
+<ul>
+<li class="sub_item">
+        <label for="nro_socio">[% "Tarjeta de identificaci&oacute;n" | i18n %] *</label>
+        [% IF addBorrower %]
+            <input id="nro_socio" type="text" class="required" name="nro_socio" readonly="readonly" size=10 value="Auto-generar">
+        [% ELSE %]
+            <input id="nro_socio" type="text" name="nro_socio" size="10" readonly="readonly" class="partnerNumberHighlight" value=[% socio.getNro_socio %]>
+        [% END %]
+</li>
+<li class="sub_item">
+ <label for="categoria_socio_id"> [% "Categor&iacute;a del usuario" | i18n %] * </label>
+                [% comboDeCategorias %]
+</li>
+<li class="sub_item">
+<label for="tipo_socio_id"> [% "Tipo de usuario" | i18n %] *</label>
+                [% comboDeCredentials %]
+</li>
+<li class="sub_item">
+<label for="changepassword">[% "Forzar cambio de contrase&ntilde;a " | i18n %] </label>
+<input type="checkbox" id="changepassword" [% socio.getChange_password %] checked>
+</li>
+
+    [% IF course %]
+<li class="sub_item"><label for="usercourse">&iquest;[% "Realiz&oacute; curso" | i18n %]?</label>
+                <input  class="required" type="checkbox" id="usercourse" [% usercourse %]  checked>
+</li>
+    [% END %]
+
+<li class="sub_item"><label for="id_ui">[% "Unidad de Informaci&oacute;n" | i18n %]</label>
+                [% comboDeUI %]
+</li>
+</ul>
+</fieldset>
+
 [% IF socio.tieneAutorizado %]
-<table>
-<hr>
-    <tr colspan=2>
-                <td width="40%" align="left" valign="top">
-                    <b>[% "Apellido y Nombre del autorizado" | i18n %]</b><br>
+<fieldset>
+<legend class="titulo_legend">[% "Informaci&oacute;n de autorizado" | i18n %] </legend>
+<ul>
+<li class="sub_item"> <label for="auth_nombre">[% "Nombre y Apellido" | i18n %]</label>
                     <input  type=text id="auth_nombre" name="auth_nombre" 
                             value="[% socio.getNombre_apellido_autorizado %]" size="25" >
-                </td>
-
-        <br>
-                <td width="40%" align="left" valign="top">
-                    <b>[% "DNI del autorizado" | i18n %]</b><br>
-                    <input  type=text id="auth_dni" name="auth_dni" 
+</li>
+<li class="sub_item">
+<label for="auth_dni">[% "Documento" | i18n %]</label>
+                    <input  type="text" id="auth_dni" name="auth_dni" 
                             value="[% socio.getDni_autorizado %]" size="25" >
-                </td>
-    </tr>
-                <td width="40%" align="left" valign="top">
-                    <b>[% "Tel&eacute;fono del autorizado" | i18n %]</b><br>
-                    <input  type=text id="auth_telefono" name="auth_telefono" 
+</li>
+<li class="sub_item">
+                    <label for="auth_telefono">[% "Tel&eacute;fono" | i18n %]</label>
+                    <input  type="text" id="auth_telefono" name="auth_telefono" 
                             value="[% socio.getTelefono_autorizado %]" size="25" >
-                </td>
-    </tr>
-</table>
-        <br>
-<hr>
+</li>
+</ul>
+</fieldset>
+
 [% END %]
-    <br>
-    <tr>
-        <td colspan="4">&nbsp;</td>
-    </tr>
-<br>
-<br>
 <table width=100%>
     <tr>
 <div class="buttonContainerHorizontal">
