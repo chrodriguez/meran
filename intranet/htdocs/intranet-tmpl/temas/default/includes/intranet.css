@@ -227,7 +227,9 @@ width:150px;
 	border-left: 1px solid #ccc;
     vertical-align:top;
 }
-
+.tabla_der {
+    float:right;
+}
 .click{
     cursor: pointer;
 }

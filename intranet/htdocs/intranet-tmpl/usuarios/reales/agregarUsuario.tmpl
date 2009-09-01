@@ -57,45 +57,43 @@
 [% END %]
 <center>
 
-<div class="titulos">
+<fieldset>
+<legend class="titulos">
             [% IF addBorrower %]
                 [% "Agregar usuario real" | i18n %]
             [% ELSE  %]
                 [% "Usuarios Reales - Modificar Datos" | i18n %]
             [% END %]
-</div>
+</legend>
 
 <form method=post  name="userDataForm" id="userDataForm" class="validateDataForm" AUTOCOMPLETE='off'>
-
-<table border=0  width="100%" class="tablaresultado" align="right">
-    <tr valign=top width="100%">
-        <td  width="50%" ALIGN=RIGHT>
-        [% "Tarjeta de identificaci&oacute;n" | i18n %] *
+<div class="tabla_der">
+        <label for="nro_socio">[% "Tarjeta de identificaci&oacute;n" | i18n %] *</label>
         [% IF addBorrower %]
-            <input id="nro_socio" type=text class="required" name="nro_socio" readonly="readonly" size=10 value="Auto-generar"><br>
+            <input id="nro_socio" type="text" class="required" name="nro_socio" readonly="readonly" size=10 value="Auto-generar">
         [% ELSE %]
-            <label id="nro_socio" name="nro_socio" size=10 class="partnerNumberHighlight">[% socio.getNro_socio %]</label><br>
+            <input id="nro_socio" type="text" name="nro_socio" size="10" readonly="readonly" class="partnerNumberHighlight" value=[% socio.getNro_socio %]>
         [% END %]
-        </td>
-    </tr>
+</div>
 
-</table>
-    <br>
-    <br>
-    <br>
-<table width="100%"  cellpadding='0' cellspacing='0'>
-    <tr valign=middle class="titulo_tabla_resultado">
-
-        <td width="35%" >[% "DATOS PERSONALES DEL USUARIO" | i18n %]</td>
-        <td   width="65%" ALIGN=RIGHT>*
+<fieldset>
+<legend class="legend_titulo">[% "DATOS PERSONALES DEL USUARIO" | i18n %]</legend>
+        <label for="sexo">[% "Sexo" | i18n %] *</label>
             <input type="radio" name="sexo" value="F" [% IF socio.persona.getSexo == "F" %] class="required" checked="checked" F [% END %]> F
             <input type="radio" name="sexo" value="M" [% IF socio.persona.getSexo == "M" %] class="required" checked="checked" M [% END %]> M 
-            &nbsp; &nbsp;  [% "Fecha de nacimiento" | i18n %] ([% socio.persona.getNacimiento %])
+            <label for="nacimiento"> [% "Fecha de nacimiento" | i18n %] ([% socio.persona.getNacimiento %])</label>
             <input type=text id="nacimiento" class="required" name="nacimiento" size=10 value="[% socio.persona.getNacimiento %]">
-        </td>
-
-    </tr>
-</table>
+           <label for="apellido"> <b> [% "Apellido" | i18n %] *</label></b><br>
+                <input id="apellido" name="apellido" class="required" type=text size=50 value="[% socio.persona.getApellido %]">
+          <label for="nombre">  <b> [% "Nombres" | i18n %] *</label></b><br>
+                    <input  id="nombre" name="nombre" class="required" type=text size=50 value="[% socio.persona.getNombre %]">
+           <label for="nro_documento">[% "Documento" | i18n %] *</label></b><br>
+                    [% combo_tipo_documento %]
+            <input 	id="nro_documento" name="nro_documento" class="required" type=text size=41 
+                value="[% socio.persona.getNro_documento %]">
+            <label for="legajo">[% "Legajo" | i18n %]</label></b><br>
+                <input type=text name="legajo" id="legajo" size=50 value="[% socio.persona.getLegajo %]">
+</fieldset>
 
 <table width="100%">
     <tr>
@@ -114,31 +112,7 @@
         </td>
         <td width="5%">&nbsp;</td>
     </tr>
-    <tr>
-        <td width="35%" align="left">
-                <b> [% "Apellido" | i18n %] *</b><br>
-                <input id="apellido" name="apellido" class="required" type=text size=50 value="[% socio.persona.getApellido %]">
-        </td>
-        <td width="35%" align="left">
-            <b> [% "Nombres" | i18n %] *</b><br>
-                    <input  id="nombre" name="nombre" class="required" type=text size=50 value="[% socio.persona.getNombre %]">
-        </td>
-        <td width="5%">&nbsp;</td>
-    </tr>
-    <tr>
-        <td width="35%" align="left">
-            <b>[% "Documento" | i18n %] *</b><br>
-                    [% combo_tipo_documento %]
-            <input 	id="nro_documento" name="nro_documento" class="required" type=text size=41 
-                value="[% socio.persona.getNro_documento %]">
-        </td>
-        <td width="35%" align="left">
-            <b>[% "Legajo" | i18n %]</b><br>
-                <input type=text name="legajo" id="legajo" size=50 value="[% socio.persona.getLegajo %]">
-        </td>
-        <td width="5%">&nbsp;</td>
-    </tr>
-</table>
+    </table>
 
     <br>
 <table width=100%>
@@ -328,6 +302,7 @@
     </tr>
 
 </table>
+</fieldset>
 </form>
 
 [% IF addBorrower %]
