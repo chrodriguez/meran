@@ -1,80 +1,88 @@
 [% USE HTML %]
 
+<script type="text/javascript">
+      $(document).ready(function() {
+        makeToggle('datos_tabla','trigger',null,false);
+      });
+</script>
 
-<div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: [% cantidad %]</div> 
-<div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% HTML.escape(socio) %]</div> 
 
 <div class="contenedor_paginador">[% paginador %]</div>
-
-<table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-	<thead>
-  	<tr class="titulo_tabla_resultado">
-
-		<th class="click" onclick="ordenar('nro_socio')" 
-			Title="[% 'Ordenar por tarjeta de Id.' | i18n %]" width="12%">[% "Tarjeta Id." | i18n %]
-		</th>
-    	<th class="click" onclick="ordenar('apellido')" 
-			Title="[% 'Ordenar por apellido' | i18n %]" align="left" width="30%">[% "Apellido y Nombres" | i18n %]
-		</th>
-    	<th class="click" onclick="ordenar('nro_documento')" 
-			Title="[% 'Ordenar por DNI' | i18n %]" width="15%">[% "Documento" | i18n %]
-		</th>
-    	<th class="click" onclick="ordenar('legajo')" 
-			Title="[% 'Ordenar por legajo' | i18n %]" align="left">[% "Legajo" | i18n %]
-		</th>
-    	<th class="click" onclick="ordenar('cod_categoria')" 
-			Title="[% 'Ordenar por categoria' | i18n %]">[% "Cat." | i18n %]
-		</th>
-    	<th>[% "Prest." | i18n %]</th>
-    	<th>[% "Ven." | i18n %]</th>
-    	<th>[% "Estado" | i18n %]</th>
-
-  	</tr>
-   	</thead>
-	<tbody>
-
-[% FOREACH resultsloop %]	
-  	<tr  align="center">
-
-		  <td align='left' class="tarjetaId">
-			  [% socio.getNro_socio %]
-		  </td>
-		  <td width=250 align="left" class="nomCompleto">
-		  [% PERL %]
-			  print C4::AR::Filtros::link_to(	text => 	"[% socio.persona.getApeYNom %]",
-											    url => 		"/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
-											    params =>	["nro_socio=[% socio.getNro_socio %]"],
-											    title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]"
-										  );
-		  [% END %]
-		  </td>
-		  <td align="left" class="documento">
-			  [% socio.persona.getVersion_documento %]&nbsp;[% socio.persona.getNro_documento %]
-		  </td>
-		  <td align="left" class="legajo">
-			  [% socio.persona.getLegajo %]
-		  </td>
-		  <td align=center>
-			  [% socio.categoria.getDescription %]
-		  </td>
-		  <td align=center>
-			  [% issue %]
-		  </td>
-		  <td align=center>
-			  [% od %]
-		  </td>
-		  <td align="center">
-		  <span class="[% clase %]"><b>[% regular %]</b></span>
-		  </td>
-
-    </tr>
-
-[% END %]
-
-  	<tr>
- 		<td class="lineafinaltabla"  align="left" colspan="14"></td>
-	</tr>
-	</tbody>
-
-</table>
-
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (usuarios):" | i18n %]</legend>
+        <div class="datos_tabla">
+            <div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: [% cantidad %]</div> 
+            <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% HTML.escape(socio) %]</div> 
+            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                <thead>
+                <tr class="titulo_tabla_resultado">
+            
+                    <th class="click" onclick="ordenar('nro_socio')" 
+                        Title="[% 'Ordenar por tarjeta de Id.' | i18n %]" width="12%">[% "Tarjeta Id." | i18n %]
+                    </th>
+                    <th class="click" onclick="ordenar('apellido')" 
+                        Title="[% 'Ordenar por apellido' | i18n %]" align="left" width="30%">[% "Apellido y Nombres" | i18n %]
+                    </th>
+                    <th class="click" onclick="ordenar('nro_documento')" 
+                        Title="[% 'Ordenar por DNI' | i18n %]" width="15%">[% "Documento" | i18n %]
+                    </th>
+                    <th class="click" onclick="ordenar('legajo')" 
+                        Title="[% 'Ordenar por legajo' | i18n %]" align="left">[% "Legajo" | i18n %]
+                    </th>
+                    <th class="click" onclick="ordenar('cod_categoria')" 
+                        Title="[% 'Ordenar por categoria' | i18n %]">[% "Cat." | i18n %]
+                    </th>
+                    <th>[% "Prest." | i18n %]</th>
+                    <th>[% "Ven." | i18n %]</th>
+                    <th>[% "Estado" | i18n %]</th>
+            
+                </tr>
+                </thead>
+                <tbody>
+            
+            [% FOREACH resultsloop %]	
+                <tr  align="center">
+            
+                      <td align='left' class="tarjetaId">
+                          [% socio.getNro_socio %]
+                      </td>
+                      <td width=250 align="left" class="nomCompleto">
+                      [% PERL %]
+                          print C4::AR::Filtros::link_to(	text => 	"[% socio.persona.getApeYNom %]",
+                                                            url => 		"/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                            params =>	["nro_socio=[% socio.getNro_socio %]"],
+                                                            title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                      );
+                      [% END %]
+                      </td>
+                      <td align="left" class="documento">
+                          [% socio.persona.getVersion_documento %]&nbsp;[% socio.persona.getNro_documento %]
+                      </td>
+                      <td align="left" class="legajo">
+                          [% socio.persona.getLegajo %]
+                      </td>
+                      <td align=center>
+                          [% socio.categoria.getDescription %]
+                      </td>
+                      <td align=center>
+                          [% issue %]
+                      </td>
+                      <td align=center>
+                          [% od %]
+                      </td>
+                      <td align="center">
+                      <span class="[% clase %]"><b>[% regular %]</b></span>
+                      </td>
+            
+                </tr>
+            
+            [% END %]
+            
+                <tr>
+                    <td class="lineafinaltabla"  align="left" colspan="14"></td>
+                </tr>
+                </tbody>
+            
+            </table>
+        </div>
+</fieldset>

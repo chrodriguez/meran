@@ -171,7 +171,6 @@ function updateInfo(responseText){
 	$('#result').html(responseText);
 	$('#result').slideDown('slow');
     zebra('tabla_datos');
-
 	checkedAll('todos','checkbox');
 	scrollTo('tablaResult');
 }

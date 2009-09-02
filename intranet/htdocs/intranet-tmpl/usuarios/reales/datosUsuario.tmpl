@@ -209,25 +209,6 @@ function updateDetalleSanciones(responseText){
 }
 //**********************************Fin**Para manejar la circulacion********************************************
 
-function makeToggle(container_class,trigger,afterToggleFunction){
-
-    $("."+container_class).hide();
-
-    $("legend."+trigger).toggle(function(){
-        if (afterToggleFunction != null)
-            afterToggleFunction();
-        $(this).addClass("active"); 
-        }, function(){
-            $(this).removeClass("active");
-    });
-
-
-    $("legend."+trigger).click(function(){
-        $(this).next("."+container_class).slideToggle("fast");
-    });
-
-}
-
 $(document).ready(function(){
 	
 	//definido en circulacion.js
@@ -236,7 +217,7 @@ $(document).ready(function(){
     USUARIO.ID= '[% socio.getNro_socio %]';
 	detalleUsuario();
 
-    makeToggle('toggle_container_block','trigger',mostrarHistorialDePrestamos, 'historialPrestamos');
+    makeToggle('toggle_container_block','trigger',mostrarHistorialDePrestamos, 'historialPrestamos',true);
 
 //     makeNudge('trigger');
 

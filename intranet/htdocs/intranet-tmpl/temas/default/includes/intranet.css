@@ -201,7 +201,7 @@ font-style:normal;
     padding-right:10px;
     position:relative;
     text-align:right;
-    width:220px;
+    width:266px;
 }
 
 
@@ -378,7 +378,8 @@ tr.impar {
 	font-size:10pt;
 	font-weight:normal;
 	text-align:center;
-	margin:2px;
+	margin:0 auto;
+    width: 50%;
 }
 
 .paginador_seleccionado{
@@ -1081,6 +1082,15 @@ fieldset.accionesUsuarios{
 }
 .titulo_legend{
   font-weight:bold;
+}
+
+.titulo_legend_warning{
+  font-weight:bold;
+  color: #CC0033;
+}
+
+#mensajes{
+  color: #666600;
 }
 .columna_izq{
   float:left;

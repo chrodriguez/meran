@@ -1,91 +1,91 @@
 [% USE HTML %]
 [% IF HEADERS %]
-[% INCLUDE "intranet-top.inc" %]
-
+    [% INCLUDE "intranet-top.inc" %]
     <!-- PARA PODER CREAR EL FORMULARIO -->
     <div id="formulario"></div>
 
 [% END %]
+
+<script type="text/javascript">
+      $(document).ready(function() {
+        makeToggle('datos_tabla','trigger',null,false);
+      });
+</script>
 <fieldset class="resultados_busqueda">
-<strong><legend>[% "Resultados de la b&uacute;squeda:" | i18n %]</legend></strong>
-
-
-<div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
-<div class="resultados_consulta">[% "Total de registros:" | i18n %] [% cantidad %]  en ([% timeSeg %] segundos)</div>
-
-<div class="contenedor_paginador">[% paginador %]</div>
-
-<table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-	<tr class="titulo_tabla_resultado">
-
-		<td width="35%" class="click" onClick="ordenar('titulo')" Title='[% "Ordenar por T&iacute;tulo" | i18n %]'>
-			T&iacute;tulo
-		</td>
-		<td width="35%" class="click" onClick="ordenar('nomCompleto')" Title='[% "Ordenar por Autor" | i18n %]'>
-			Autor
-		</td>
-		<td width="12%">[% "Edici&oacute;n/A&ntilde;o" | i18n %]</td>
-		<td width="15%"> [% "Disponibilidad" | i18n %] </td>
-
-	</tr>
-<!-- Actual Resultados de la b&uacute;squeda -->
-[% FOREACH SEARCH_RESULTS %]
-	<tr>
-	<!--	<td>
-		[% IF amazon_cover %]
-			<img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% amazon_cover %]" title="Tapa">
-		[% END %]
-		</td>-->
-		<td class="titulo_result">
-
-            [% PERL %]
-                print C4::AR::Filtros::link_to( text =>     "( [% hits %] ) - [% HTML.escape(titulo) %]",
-                                                url =>      "/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
-                                                params =>   ["id1=[% id1 %]"],
-                                                title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
-                                            ) ;
+    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (cat&aacute;logo):" | i18n %]</legend>
+        <div class="datos_tabla">
+            <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: [% buscoPor %]</div>
+            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %]  en ([% timeSeg %] segundos)</div>
+            <div class="contenedor_paginador">[% paginador %]</div>
+            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                <tr class="titulo_tabla_resultado">
+                    <td width="35%" class="click" onClick="ordenar('titulo')" Title='[% "Ordenar por T&iacute;tulo" | i18n %]'>
+                        [% "T&iacute;tulo" | i18n %]
+                    </td>
+                    <td width="35%" class="click" onClick="ordenar('nomCompleto')" Title='[% "Ordenar por Autor" | i18n %]'>
+                        [% "Autor" | i18n %]
+                    </td>
+                    <td width="12%">[% "Edici&oacute;n/A&ntilde;o" | i18n %]</td>
+                    <td width="15%"> [% "Disponibilidad" | i18n %] </td>
+                </tr>
+            <!-- Actual Resultados de la b&uacute;squeda -->
+            [% FOREACH SEARCH_RESULTS %]
+                <tr>
+                <!--    <td>
+                    [% IF amazon_cover %]
+                        <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% amazon_cover %]" title="Tapa">
+                    [% END %]
+                    </td>-->
+                    <td class="titulo_result">
+            
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to( text =>     "( [% hits %] ) - [% HTML.escape(titulo) %]",
+                                                            url =>      "/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
+                                                            params =>   ["id1=[% id1 %]"],
+                                                            title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                                                        ) ;
+                        [% END %]
+            
+                    </td>
+            
+                    <td class="autor_result">
+                        <a class="click" onClick="buscarPorAutor([% idAutor %])" title="[% 'Filtrar por Autor' | i18n %]">
+                            [% nomCompleto %]
+                        </a>
+                    </td>
+            
+                    <td>
+                        [% FOREACH grupos %]
+                            [% IF edicion %]
+                                [% edicion %] &nbsp;
+                            [% END %]
+                            [% IF anio_publicacion %]
+                                ([% anio_publicacion %])
+                            [% END %]
+                            [% IF volume %]
+                                t [% volume %]
+                            [% END %]<br>
+                        [% END %]
+                    </td>
+            
+                    <td>
+                        [% FOREACH disponibilidad %]
+                            <b>[% tipoPrestamo %]</b> [% cantTotal %]
+                            <br>
+                            <div style="margin-right:4px">
+                                    [% reservados %]
+                                    <br> 
+                                    [% prestados %]
+                                    <br>
+                            </div>
+                        [% END %]
+                    </td>   
+            
+                </tr>
             [% END %]
-
-		</td>
-
-		<td class="autor_result">
-			<a class="click" onClick="buscarPorAutor([% idAutor %])" title="[% 'Filtrar por Autor' | i18n %]">
-				[% nomCompleto %]
-			</a>
-		</td>
-
-		<td>
-			[% FOREACH grupos %]
-				[% IF edicion %]
-					[% edicion %] &nbsp;
-				[% END %]
-				[% IF anio_publicacion %]
-					([% anio_publicacion %])
-				[% END %]
-				[% IF volume %]
-					t [% volume %]
-				[% END %]<br>
-			[% END %]
-		</td>
-
-		<td>
-			[% FOREACH disponibilidad %]
-				<b>[% tipoPrestamo %]</b> [% cantTotal %]
-				<br>
-				<div style="margin-right:4px">
-                        [% reservados %]
-                        <br> 
-                        [% prestados %]
-                        <br>
-				</div>
-         	[% END %]
-		</td>	
-
-	</tr>
-[% END %]
-</table>
-
-<fieldset class="resultados_busqueda">
+            </table>
+        </div>
+</fieldset>
 
 [% IF HEADERS %]
     [% INCLUDE "intranet-bottom.inc" %]

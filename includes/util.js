@@ -111,7 +111,7 @@ function checkedAll(id,nombreCheckbox){
  * Funcion que se asigna el evento onEnter al input que viene el id pasado por parametro y se ejecuta la funcion
  * que se pasa por paramentro.
  */
-function onEnter(idInput,funcion){
+function onEnter(idInput,funcion,param){
 	var result_array= $("#"+idInput);
 	//se verifica la existencia de la componente
 	if(result_array.length == 0)return;  //alert('util.js=> onEnter => No existe la componte con ID: '+idInput);
@@ -120,7 +120,10 @@ function onEnter(idInput,funcion){
  		if(e.which == 13){
 			if(this.value != ''){
 			//si el campo es <> de blanco
- 				funcion();
+                if (param)
+ 				  funcion(param);
+                else
+                  funcion();
 			}
  		}
 	});
@@ -208,3 +211,26 @@ function esBrowser(browser){
   });
   return (ok);
 }
+
+function makeToggle(container_class,trigger,afterToggleFunction,hide){
+
+    if (hide)
+        $("."+container_class).hide();
+
+    $("legend."+trigger).toggle(function(){
+        if (afterToggleFunction != null)
+            afterToggleFunction();
+        $(this).addClass("active"); 
+        }, function(){
+            $(this).removeClass("active");
+    });
+
+
+    $("legend."+trigger).click(function(){
+        $(this).next("."+container_class).slideToggle("fast");
+    });
+
+}
+
+
+

@@ -8,7 +8,7 @@
 
 $(document).ready(function() {
 
-  onEnter('keyword',buscar);
+  onEnter('keyword',buscar,true);
   onEnter('socio',consultar);
   $('#keyword').focus();
 });
@@ -19,48 +19,47 @@ $(document).ready(function() {
 	<ul>
     <li class="item" >
 			
-            <label for="keyword">
-			    [% "B&uacute;squeda combinada" | i18n %]
-            </label>
-			<input type="text" id="keyword" size="20" tabindex=1>
+        <label for="keyword">
+            [% "B&uacute;squeda combinada" | i18n %]
+        </label>
+        <input type="text" id="keyword" size="20" tabindex=1>
 
          [% PERL %]
                      print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
                              boton   => "boton_buscar",
-                             onClick => "buscar();",
+                             onClick => "buscar(true);",
                              title   => "[% 'Buscar en el cat&aacute;logo' | i18n %]",
                              ) ;
-            [% END %]
+          [% END %]
   	</li>
     <li class="item">
-    [% PERL %]
-            print C4::AR::Filtros::link_to( text    =>  "[% 'B&uacute;squeda avanzada' | i18n %]",
-                                            url     =>  "/cgi-bin/koha/busquedas/filtrado.pl",
-                                            title   =>  "[% 'B&uacute;squeda avanzada' | i18n %]"
-                    ) ;
-    [% END %]
+        [% PERL %]
+                print C4::AR::Filtros::link_to( text    =>  "[% 'B&uacute;squeda avanzada' | i18n %]",
+                                                url     =>  "/cgi-bin/koha/busquedas/filtrado.pl",
+                                                title   =>  "[% 'B&uacute;squeda avanzada' | i18n %]"
+                        ) ;
+        [% END %]
     </li>
     </ul>
 </fieldset>
 <fieldset class="main">
 <legend><strong>[% "Usuarios:" | i18n %]</strong></legend>
 	<ul>
-    <li class="item" >
-        <label for="socio">
-            [% "B&uacute;squeda de usuarios &nbsp;" | i18n %]
-        </label>
-                <input id="socio" type=text name="socio" onFocus="checkFilter('focus')" 
-                   onBlur="checkFilter('blur')" value="[% socio %]" size="20" tabindex=2>		
-                [% PERL %]
-                                print C4::AR::Filtros::to_Button( 
-                                                                    text    =>  "[% 'Buscar' | i18n %]",
-                                                                    boton   =>  "boton_buscar",
-                                                                    onClick =>  "consultar();",
-                                                                    title   =>  "[% 'Buscar usuario' | i18n %]",
-                                        ) ;
-                [% END %]
-
-    </li>
+        <li class="item" >
+            <label for="socio">
+                [% "B&uacute;squeda de usuarios &nbsp;" | i18n %]
+            </label>
+            <input id="socio" type=text name="socio" onFocus="checkFilter('focus')" 
+                onBlur="checkFilter('blur')" value="[% socio %]" size="20" tabindex=2>		
+            [% PERL %]
+                            print C4::AR::Filtros::to_Button( 
+                                                                text    =>  "[% 'Buscar' | i18n %]",
+                                                                boton   =>  "boton_buscar",
+                                                                onClick =>  "consultar(true);",
+                                                                title   =>  "[% 'Buscar usuario' | i18n %]",
+                                    ) ;
+            [% END %]
+        </li>
     </ul>
 </fieldset>
 <fieldset class="main">
@@ -86,18 +85,18 @@ $(document).ready(function() {
 </ul>
 </fieldset>
 <fieldset class="main">
-<legend><strong>[% "Personal:" | i18n %]</strong></legend>
-<ul>
-<li class="item">
-            [% PERL %]
-            print C4::AR::Filtros::link_to( text =>     "[% 'Mis datos' | i18n %]",
-                                            url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
-                                            title =>    "[% 'Reportes' | i18n %]",
-                                            params =>   ["nro_socio=[% nro_socio %]"],    
-                    ) ;
-            [% END %]
-</li>
-</ul>
+    <legend class="titulo_legend">[% "Personal:" | i18n %]</legend>
+    <ul>
+    <li class="item">
+                [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     "[% 'Mis datos' | i18n %]",
+                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                title =>    "[% 'Reportes' | i18n %]",
+                                                params =>   ["nro_socio=[% nro_socio %]"],    
+                        ) ;
+                [% END %]
+    </li>
+    </ul>
 </fieldset>
 <div id="resultBusqueda"></div>
 <div id="result"></div>

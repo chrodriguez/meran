@@ -1,5 +1,6 @@
 
 var objAH;
+var shouldScrollUser=true;
 var globalSearchTemp;
 function ordenar(orden){
     objAH.sort(orden);
@@ -9,8 +10,10 @@ function changePage(ini){
     objAH.changePage(ini);
 }
 
-function consultar(filtro){
-    objAH=new AjaxHelper(updateInfo);
+function consultar(filtro,doScroll){
+    if (doScroll)
+      shouldScrollUser = doScroll;
+    objAH=new AjaxHelper(updateInfoUsuarios);
     objAH.cache = true;
     busqueda = jQuery.trim($('#socio').val());
     inicial = '0';
@@ -51,7 +54,7 @@ function consultar(filtro){
 
 }
 
-function updateInfo(responseText){
+function updateInfoUsuarios(responseText){
     $('#result').html(responseText);
     zebra('datos_tabla');
     var idArray = [];
@@ -64,6 +67,8 @@ function updateInfo(responseText){
     busqueda = jQuery.trim($('#socio').val());
     if (busqueda.substr(0,6).toUpperCase() != 'FILTRO') //SI NO SE QUISO FILTRAR POR INICIAL, NO TENDRIA SENTIDO MARCARLO
         highlight(classes,idArray);
+    if (shouldScrollUser)
+        scrollTo('result');
 }
 
 function Borrar(){

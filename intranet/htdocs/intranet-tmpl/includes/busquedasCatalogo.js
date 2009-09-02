@@ -1,16 +1,18 @@
 var objAH;
 
-combinables= ['titulo', 'autor', 'tipo', 'signatura', 'tipo_nivel3_id'];
-noCombinables= ['keyword', 'isbn', 'dictionary', 'codBarra', 'estante', 'tema'];
+var combinables= ['titulo', 'autor', 'tipo', 'signatura', 'tipo_nivel3_id'];
+var noCombinables= ['keyword', 'isbn', 'dictionary', 'codBarra', 'estante', 'tema'];
+var shouldScroll=false;
 
-
-function updateInfo(responseText){
+function updateInfoBusquedas(responseText){
 
     $("#volver").hide();
     $("#filtrosBusqueda").slideUp('slow');  
     $('#resultBusqueda').html(responseText);
     $("#resultBusqueda").slideDown("slow");
     zebra('tablaResult');
+    if (shouldScroll)
+      scrollTo('resultBusqueda');
 }
 
 function highlightBusquedaCombinable(){
@@ -51,7 +53,7 @@ function busquedaCombinable(){
 }
 
 function updateBusquedaCombinable(responseText){
-    updateInfo(responseText);
+    updateInfoBusquedas(responseText);
     highlightBusquedaCombinable();
 }
 
@@ -65,8 +67,10 @@ function ordenarPor(ord){
 }
 
 
-function buscar(){
+function buscar(doScroll){
     //primero verifico las busquedas individuales
+    if (doScroll)
+        shouldScroll = doScroll;
     if ($.trim($('#keyword').val()) != '') {
         busquedaPorKeyword();
       }else 
@@ -93,7 +97,7 @@ function buscar(){
 }
 
 function buscarPorCodigoBarra(){
-    objAH=new AjaxHelper(updateInfo);
+    objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
     objAH.codBarra= $('#codBarra').val();
@@ -110,7 +114,7 @@ function highlightbuscarPorCodigoBarra(){
 }
 
 function buscarPorTema(){
-    objAH=new AjaxHelper(updateInfo);
+    objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/busquedas/tema.pl';
     objAH.tema= $('#tema').val();
@@ -121,7 +125,7 @@ function buscarPorTema(){
 }
 
 function buscarPorISBN(){
-    objAH=new AjaxHelper(updateInfo);
+    objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
     objAH.isbn= $('#isbn').val();
@@ -129,7 +133,7 @@ function buscarPorISBN(){
 }
 
 function buscarPorDiccionario(){
-    objAH=new AjaxHelper(updateInfo);
+    objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/busquedas/diccionario.pl';
     objAH.dictionary= $('#dictionary').val();
@@ -151,7 +155,7 @@ function busquedaPorKeyword(){
 }
 
 function updateBusquedaPorKeyword(responseText){
-    updateInfo(responseText);
+    updateInfoBusquedas(responseText);
     highlightBusquedaPorKeyword();
 }
 
@@ -167,7 +171,7 @@ function highlightBusquedaPorKeyword(){
 
 function buscarEstante(){
 
-    objAH=new AjaxHelper(updateInfo);
+    objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/busquedas/estante.pl';
     objAH.viewShelfName= $('#estante').val();
@@ -241,7 +245,7 @@ function updateVerEstanteVirtual(responseText){
 
 function verTema(idtema,tema){
 
-    objAH=new AjaxHelper(updateInfo);
+    objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
     objAH.idTema= idtema;
@@ -265,7 +269,7 @@ function cambiarEstadoCampos(campos, clase){
 
 
 function buscarPorAutor(idAutor){
-    objAH=new AjaxHelper(updateInfo);
+    objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
     //se setea la funcion para cambiar de pagina
     objAH.funcion= 'changePage';
