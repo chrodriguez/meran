@@ -70,6 +70,11 @@ function zebra(classObj){
 	$("."+ classObj + " tr:gt(0):even").addClass("par");		
 }
 
+function zebraId(idObj){
+
+    $("#"+ idObj + " tr:gt(0):odd").addClass("impar");
+    $("#"+ idObj + " tr:gt(0):even").addClass("par");        
+}
 
 //devuelve la hora en HH:MM:SS
 function tomarTiempo(){

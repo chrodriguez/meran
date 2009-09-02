@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
       $(document).ready(function() {
-        makeToggle('datos_tabla','trigger',null,false);
+        makeToggle('datos_tabla_div','trigger',null,false);
       });
 </script>
 
@@ -10,7 +10,7 @@
 <div class="contenedor_paginador">[% paginador %]</div>
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (usuarios):" | i18n %]</legend>
-        <div class="datos_tabla">
+        <div class="datos_tabla_div">
             <div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: [% cantidad %]</div> 
             <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% HTML.escape(socio) %]</div> 
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>

@@ -10,7 +10,7 @@ function updateInfoBusquedas(responseText){
     $("#filtrosBusqueda").slideUp('slow');  
     $('#resultBusqueda').html(responseText);
     $("#resultBusqueda").slideDown("slow");
-    zebra('tablaResult');
+    zebra('datos_tabla');
     if (shouldScroll)
       scrollTo('resultBusqueda');
 }
