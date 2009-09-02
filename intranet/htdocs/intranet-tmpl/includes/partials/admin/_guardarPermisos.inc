@@ -2,11 +2,11 @@
     <ul class="horizontal-list" >
         [% IF nuevoPermiso != 1%]
                         [% PERL %]
-                                            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Permisos' | i18n %]",
-                                                                                boton   => "boton_buscar",
-                                                                                onClick => "actualizarPermisos();",
-                                                                                title   => "[% 'Guardar Permisos' | i18n %]",
-                                                    );
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Permisos' | i18n %]",
+                                                                        boton   => "boton_buscar",
+                                                                        onClick => "actualizarPermisos();",
+                                                                        title   => "[% 'Guardar Permisos' | i18n %]",
+                                            );
                         [% END %]
         [% ELSE %]
                 [% PERL %]

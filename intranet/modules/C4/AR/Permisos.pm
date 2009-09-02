@@ -153,7 +153,7 @@ sub actualizarPermisosCatalogo{
 
     my @filtros;
 
-    my $hash_permisos = C4::AR::Permisos::procesarPermisosCatalogo($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
+    my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
 
     my $permisos = C4::Modelo::PermCatalogo->new(nro_socio => $nro_socio, ui => $id_ui, tipo_documento => $tipo_documento);
     eval{
@@ -217,7 +217,7 @@ sub nuevoPermisoCatalogo{
     $permisos->agregar($hash_permisos);
 
     $permisos = C4::AR::Permisos::parsearPermisos($permisos);
-
+    
     return ($permisos);
 }
 
