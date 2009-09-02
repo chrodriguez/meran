@@ -15,8 +15,15 @@ my ($template, $session, $t_params)= get_template_and_user({
                                     authnotrequired => 0,
                                     flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                                     changepassword => 1,
-        });
+                              });
 
+
+my $nro_socio = C4::Auth::getSessionNroSocio();
+my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+
+if ( $socio->getChange_password() ){
+    $t_params->{'cambioForzado'}=1;
+}
 
 $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param("codMsg"),'INTRA',[]);
 
