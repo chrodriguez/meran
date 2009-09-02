@@ -80,38 +80,16 @@ function save(){
 
 function validateForm(func){
 
-   if( jQuery.browser.mozilla ) {
-      // do when DOM is ready
-      $( function() {
-         // search form, hide it, search labels to modify, filter classes nocmx and error
-         $( '#userDataForm' ).hide().find( 'p>label:not(.nocmx):not(.error)' ).each( function() {
-            var $this = $(this);
-            var labelContent = $this.html();
-            var labelWidth = document.defaultView.getComputedStyle( this, '' ).getPropertyValue( 'width' );
-            // create block element with width of label
-            var labelSpan = $("<span>")
-               .css("display", "block")
-               .width(labelWidth)
-               .html(labelContent);
-            // change display to mozilla specific inline-box
-            $this.css("display", "-moz-inline-box")
-               // remove children
-               .empty()
-               // add span element
-               .append(labelSpan);
-         // show form again
-         }).end().show();
-      });
-   };
-         $.validator.setDefaults({
-            submitHandler:  func ,
-         });
    
          $().ready(function() {
             // validate signup form on keyup and submit
             $("#userDataForm").validate({
+    
+                debug: true,
+                errorElement: "em",
+                errorClass: "error_adv",
                rules: {
-				  categoria_socio_name: "required",	
+				  categoria_socio_id: "required",	
                   apellido: "required",
                   nombre: "required",
                   nro_socio: "required",
@@ -126,7 +104,7 @@ function validateForm(func){
                   },
                },
                messages: {
-				  categoria_socio_name: POR_FAVOR_SELECCIONE_LA_CATEGORIA,
+				  categoria_socio_id: POR_FAVOR_SELECCIONE_LA_CATEGORIA,
                   apellido: POR_FAVOR_INGRESE_SU_APELLIDO,
                   nombre: POR_FAVOR_INGRESE_SU_NOMBRE,
                   nro_socio: POR_FAVOR_INGRESE_LA_TARJETA_DE_IDENTIFICACION,

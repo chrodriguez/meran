@@ -37,7 +37,6 @@
             validateForm(guardarModificacioUsuario);
         [% END %]
 
-        $("#userDataForm").validate();
         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
         CrearAutocompleteCiudades({IdInput: 'alt_ciudad', IdInputHidden: 'id_alt_ciudad'});
         crearDatePicker('nacimiento');
@@ -65,31 +64,43 @@
             [% END %]
 </legend>
 
-<form method=post  name="userDataForm" id="userDataForm" AUTOCOMPLETE='off'>
-<fieldset>
-<legend class="titulo_legend">[% "Datos personales del usuario" | i18n %]</legend>
-        <ul>
-            <li class="sub_item"><label for="apellido"> [% "Apellido" | i18n %] *</label>
-                <input id="apellido" name="apellido" class="required" type="text" size="25" value="[% socio.persona.getApellido %]">
-            </li>
-            <li class="sub_item"> <label for="nombre"> [% "Nombres" | i18n %] *</label>
-                    <input  id="nombre" name="nombre" class="required" type="text" size="25" value="[% socio.persona.getNombre %]">
-            </li>
-            <li class="sub_item"><label for="nro_documento">[% "Documento" | i18n %] *</label>
-            [% combo_tipo_documento %] <input 	id="nro_documento" name="nro_documento" class="required" type="text" size="15" value="[% socio.persona.getNro_documento %]">
-            </li>
-            <li class="sub_item"><label for="legajo">[% "Legajo" | i18n %]</label>
-                <input type=text name="legajo" id="legajo" size="25" value="[% socio.persona.getLegajo %]">
-            </li>
-            <li class="sub_item"><label for="sexo">[% "Sexo" | i18n %] *</label>
+<form method=post  name="userDataForm" id="userDataForm" >
+    <fieldset>
+    <legend class="titulo_legend">[% "Datos personales del usuario" | i18n %]</legend>
+    <ul>
+        <li class="sub_item">
+            <label for="apellido"> [% "Apellido" | i18n %] *</label>
+            <input id="apellido" name="apellido" class="required" type="text" size="25" value="[% socio.persona.getApellido %]">
+        </li>
+
+        <li class="sub_item"> 
+            <label for="nombre"> [% "Nombres" | i18n %] *</label>
+            <input  id="nombre" name="nombre" class="required" type="text" size="25" value="[% socio.persona.getNombre %]">
+        </li>
+
+        <li class="sub_item">
+            <label for="nro_documento">[% "Documento" | i18n %] *</label>
+            [% combo_tipo_documento %] 
+            <input 	id="nro_documento" name="nro_documento" class="required" type="text" size="15" 
+                    value="[% socio.persona.getNro_documento %]">
+        </li>
+
+        <li class="sub_item">
+            <label for="legajo">[% "Legajo" | i18n %]</label>
+            <input type=text name="legajo" id="legajo" size="25" value="[% socio.persona.getLegajo %]">
+        </li>
+
+        <li class="sub_item">
+            <label for="sexo">[% "Sexo" | i18n %] *</label>
             <input type="radio" name="sexo" value="F" [% IF socio.persona.getSexo == "F" %] class="required" checked="checked" F [% END %]> F
             <input type="radio" name="sexo" value="M" [% IF socio.persona.getSexo == "M" %] class="required" checked="checked" M [% END %]> M 
-            </li>
-            <li class="sub_item">
-             <label for="nacimiento"> [% "Fecha de nacimiento" | i18n %] ([% socio.persona.getNacimiento %])</label>
+        </li>
+
+        <li class="sub_item">
+            <label for="nacimiento"> [% "Fecha de nacimiento" | i18n %] ([% socio.persona.getNacimiento %])</label>
             <input type=text id="nacimiento" class="required" name="nacimiento" size=10 value="[% socio.persona.getNacimiento %]">
-            </li>
-            </ul>
+        </li>
+    </ul>
 </fieldset>
 <fieldset>
 <legend class="titulo_legend">[% "Informaci&oacute;n de contacto" | i18n %] </legend>
@@ -124,7 +135,7 @@
    <label for="id_alt_ciudad">    [% "Ciudad de origen" | i18n %]</label>
             <input  type=text id="alt_ciudad" name="alt_ciudad" 
                 value="[% socio.persona.alt_ciudad_ref.getNombre%]" size="25" >
-            <input type=hidden id="id_alt_ciudad" value="[% socio.persona.alt_ciudad_ref.LOCALIDAD %]"> 
+            <input type=hidden id="id_alt_ciudad" name="id_alt_ciudad" value="[% socio.persona.alt_ciudad_ref.LOCALIDAD %]"> 
 </li>
 <li class="sub_item">
    <label for="email">   [% "E-Mail" | i18n %] *</label>
@@ -154,7 +165,7 @@
 </li>
 <li class="sub_item">
 <label for="changepassword">[% "Forzar cambio de contrase&ntilde;a " | i18n %] </label>
-<input type="checkbox" id="changepassword" [% socio.getChange_password %] checked>
+<input type="checkbox" id="changepassword" name="changepassword" [% socio.getChange_password %] checked>
 </li>
 
     [% IF course %]
