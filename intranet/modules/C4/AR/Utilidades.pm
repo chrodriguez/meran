@@ -1588,6 +1588,10 @@ sub generarComboTipoPrestamo{
       $options_hash{'onFocus'}= $params->{'onFocus'};
     }
 
+    if ( $params->{'class'} ){
+         $options_hash{'class'}= $params->{'class'};
+    }
+
     if ( $params->{'onBlur'} ){
       $options_hash{'onBlur'}= $params->{'onBlur'};
     }
@@ -1632,6 +1636,11 @@ sub generarComboUI{
     if ( $params->{'onFocus'} ){
         $options_hash{'onFocus'}= $params->{'onFocus'};
     }
+
+    if ( $params->{'class'} ){
+         $options_hash{'class'}= $params->{'class'};
+    }
+
     if ( $params->{'onBlur'} ){
         $options_hash{'onBlur'}= $params->{'onBlur'};
     }
@@ -1679,6 +1688,11 @@ sub generarComboDeSocios{
     if ( $params->{'onFocus'} ){
         $options_hash{'onFocus'}= $params->{'onFocus'};
     }
+
+    if ( $params->{'class'} ){
+         $options_hash{'class'}= $params->{'class'};
+    }
+
     if ( $params->{'onBlur'} ){
         $options_hash{'onBlur'}= $params->{'onBlur'};
     }
@@ -1786,6 +1800,9 @@ sub generarComboNiveles{
     }
     if ( $params->{'onFocus'} ){
         $options_hash{'onFocus'}= $params->{'onFocus'};
+    }
+    if ( $params->{'class'} ){
+         $options_hash{'class'}= $params->{'class'};
     }
     if ( $params->{'onBlur'} ){
         $options_hash{'onBlur'}= $params->{'onBlur'};

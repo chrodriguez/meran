@@ -100,9 +100,6 @@ sub gettemplate {
 		$htdocs = C4::Context->config('intrahtdocs');
 	}
 
-# 	C4::AR::Debug::debug($temas);
-# 	C4::AR::Debug::debug($htdocs);
-
 	my $filter= Template::Filters->new({
 						FILTERS => {	'i18n' =>  \&C4::AR::Filtros::i18n, #se carga el filtro i18n
 								        'setComboLang' =>  \&C4::AR::Filtros::setComboLang, #se carga el cambo de lenguajes
@@ -132,13 +129,14 @@ sub gettemplate {
 	#se asignan los parametros que son necesarios para todos los templates
 	%params= (
 # FIXME DEPRECATED
-			themelang => ($opac ne 'intranet'? '/opac-tmpl/': '/intranet-tmpl/') ,
+			themelang           => ($opac ne 'intranet'? '/opac-tmpl/': '/intranet-tmpl/') ,
 # FIXME DEPRECATED
-			interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
-			tema => $tema,
-			temas => $temas,
-            titulo_nombre_ui => C4::AR::Preferencias->getValorPreferencia('titulo_nombre_ui'),
-			template_name => "$htdocs/$tmplbase", #se setea el nombre del tmpl
+			interface           => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
+            sitio               => ($opac ne 'intranet'? 'OPAC': 'INTRANET'),  #indica desde donde se hace el requerimiento
+			tema                => $tema,
+			temas               => $temas,
+            titulo_nombre_ui    => C4::AR::Preferencias->getValorPreferencia('titulo_nombre_ui'),
+			template_name       => "$htdocs/$tmplbase", #se setea el nombre del tmpl
 		);
 
 
