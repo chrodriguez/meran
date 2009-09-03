@@ -68,7 +68,7 @@ sub uploadPhoto{
 				}
 				close(WFD);
                 my  $image = Image::Resize->new($write_file);
-                    $image = $image->resize(120, 120);
+                    $image = $image->resize(250, 250);
                     open(FH, ">".$write_file);
                     print FH $image->jpeg();
                     close(FH);
