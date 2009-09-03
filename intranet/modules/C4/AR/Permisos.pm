@@ -339,7 +339,7 @@ sub nuevoPermisoGeneral{
     $hash_permisos->{'id_ui'} = $id_ui || 'ALL';
 
     $permisos->agregar($hash_permisos);
-
+    C4::AR::Debug::debug("PERMISOS/PERMISOS: ".$hash_permisos->{'permisos'});
     $permisos = C4::AR::Permisos::parsearPermisos($permisos);
 
     return ($permisos);

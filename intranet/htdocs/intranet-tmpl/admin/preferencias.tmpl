@@ -375,45 +375,48 @@ $(document).ready( function() {
 
 </script>
 
-<div class="titulos">[% "Administraci&oacute;n de Preferencias del Sistema" | i18n %]</div>
-<!-- PARA BUSCAR -->
-<br>
-<ul>
-    <li class="item">
-	    <input type="text" id="buscar" name="buscar" value="">
-        [% PERL %]
-                            print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                boton   => "boton_buscar",
-                                                                onClick => "buscarPreferencia();",
-                                                                title   => "[% 'Buscar' | i18n %]",
-                                    ) ;
-        [% END %]
-    
-        [% PERL %]
-                            print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                boton   => "boton_borrar",
-                                                                onClick => "limpiar();",
-                                                                title   => "[% 'Limpiar' | i18n %]",
-                                    ) ;
-        [% END %]
-    </li>
-</ul>
+<div class="titulos"></div>
+    <fieldset id="reportes">
+        <legend class="titulo_legend"> [% "Administraci&oacute;n de Preferencias del Sistema" | i18n %] </legend>
+        <ul>
+            <li class="sub_item">
+                <input type="text" id="buscar" name="buscar" value="">
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                        boton   => "boton_buscar",
+                                                                        onClick => "buscarPreferencia();",
+                                                                        title   => "[% 'Buscar' | i18n %]",
+                                            ) ;
+                [% END %]
+            
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                        boton   => "boton_borrar",
+                                                                        onClick => "limpiar();",
+                                                                        title   => "[% 'Limpiar' | i18n %]",
+                                            ) ;
+                [% END %]
+            </li>
+        </ul>
+    </fieldset>
 
 <div id="divCombos" style="clear: both;">
-<!-- PARA AGREGAR -->
-<ul>
-    <li class="item">
-	<select id="tipoVar" onChange="selectOpcion()">
-		<option value="0">[% "Seleccionar ..." | i18n %]</option>
-		<option value="bool">[% "Si-No" | i18n %]</option>
-		<option value="texta">[% "Texto grande" | i18n %]</option>
-		<option value="text">[% "Texto com&uacute;n" | i18n %]</option>
-		<option value="referencia">[% "Referencia" | i18n %]</option>
-		<option value="valAuto">[% "Valores autorizados" | i18n %]</option>
-	</select>
-    </li>
-</ul>
-
+    <fieldset id="reportes">
+        <legend class="titulo_legend"> [% "Agregar" | i18n %] </legend>
+        <ul>
+            <li class="sub_item">
+                <select id="tipoVar" onChange="selectOpcion()">
+                    <option value="0">[% "Seleccionar ..." | i18n %]</option>
+                    <option value="bool">[% "Si-No" | i18n %]</option>
+                    <option value="texta">[% "Texto grande" | i18n %]</option>
+                    <option value="text">[% "Texto com&uacute;n" | i18n %]</option>
+                    <option value="referencia">[% "Referencia" | i18n %]</option>
+                    <option value="valAuto">[% "Valores autorizados" | i18n %]</option>
+                </select>
+            </li>
+        </ul>
+    </fieldset>
+    
     [% PERL %]
                         print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
                                                             boton   => "boton_agregar",
@@ -422,8 +425,8 @@ $(document).ready( function() {
                                                             alternClass => "botonCentrado"
                                 ) ;
     [% END %]
-</p>
-<div id="divAgregar" style="clear: both;"></div>
+    
+    <div id="divAgregar" style="clear: both;"></div>
 </div>
 
 <div id="divResultado" style="clear: both;"></div>

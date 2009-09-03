@@ -320,7 +320,7 @@ elsif ($accion eq "NUEVO_PERMISO_CIRCULACION"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'permisos', tipo_permiso => 'v'},
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'permisos', tipo_permiso => 'general'},
                             debug => 1,
                     });
 

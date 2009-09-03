@@ -30,6 +30,7 @@ sub agregar{
     $self->setTipo_documento($permisos_hash->{'tipo_documento'});
     $self->setReportes($permisos_hash->{'reportes'});
     $self->setPreferencias($permisos_hash->{'preferencias'});
+    $self->setPermisos($permisos_hash->{'permisos'});
     $self->save();
 }
 

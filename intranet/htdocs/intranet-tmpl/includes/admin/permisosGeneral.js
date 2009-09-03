@@ -66,8 +66,8 @@ function checkChecks(){
     riskArray['modif'] = "high";
     riskArray['baja'] = "high";
     riskArray['todos'] = "high";
-    for (x=0;x<2;x++){
-        checkBoxItems = $('#'+arreglo[x]+" > span > input");
+    for (x=0;x<3;x++){
+        checkBoxItems = $('#'+arreglo[x]+" > ul > li > input");
         checkTouched = false;
         for (y=0; y<checkBoxItems.length; y++){
             riskPart = checkBoxItems[y].id.split("_");
