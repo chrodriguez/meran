@@ -862,4 +862,20 @@ sub setDni_autorizado{
       $self->dni_autorizado($dni_autorizado);
     }
 }
+
+sub tieneFoto{
+    my ($self) = shift;
+    my $picturesDir= C4::Context->config("picturesdir");
+    my $foto;
+    
+    if (opendir(DIR, $picturesDir)) {
+        my $pattern= $self->getNro_socio."[.].";
+        my @file = grep { /$pattern/ } readdir(DIR);
+        $foto= join("",@file);
+        closedir DIR;
+    } else {
+            $foto= 0;
+    }
+    return $foto;
+}
 1;

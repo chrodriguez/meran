@@ -1139,5 +1139,8 @@ input.file {
   float:left;
 }
 
-
+.userImage img{
+  height: 50px;
+  width: 50px;
+}
 

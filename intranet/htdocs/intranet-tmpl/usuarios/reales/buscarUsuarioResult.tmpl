@@ -20,6 +20,9 @@
                     <th class="click" onclick="ordenar('nro_socio')" 
                         Title="[% 'Ordenar por tarjeta de Id.' | i18n %]" width="12%">[% "Tarjeta Id." | i18n %]
                     </th>
+
+                    <th Title="[% 'Imagen para mostrar' | i18n %]" width="12%"></th>
+
                     <th class="click" onclick="ordenar('apellido')" 
                         Title="[% 'Ordenar por apellido' | i18n %]" align="left" width="30%">[% "Apellido y Nombres" | i18n %]
                     </th>
@@ -45,6 +48,19 @@
             
                       <td align='left' class="tarjetaId">
                           [% socio.getNro_socio %]
+                      </td>
+                      <td class="userImage"> 
+                          [% IF socio.tieneFoto %]
+                              <img border="0" src="[% themelang %]/pictures/[% socio.tieneFoto %]" 
+                                    alt="Imagen de [% socio.persona.getApellido %], [% socio.persona.getNombre %]"
+                                    title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                              >
+                          [% ELSE %]
+                              <img border="0" src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 
+                                    alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                                    title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                              >
+                          [% END %]
                       </td>
                       <td width=250 align="left" class="nomCompleto">
                       [% PERL %]

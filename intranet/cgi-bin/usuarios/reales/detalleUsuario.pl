@@ -32,17 +32,7 @@ my $socio=C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 C4::AR::Validator::validateObjectInstance($socio);
 
 #### Verifica si la foto ya esta cargada
-my $picturesDir= C4::Context->config("picturesdir");
-my $foto;
 
-if (opendir(DIR, $picturesDir)) {
-    my $pattern= $socio->getNro_socio."[.].";
-	my @file = grep { /$pattern/ } readdir(DIR);
-    $foto= join("",@file);
-    closedir DIR;
-} else {
-        $foto= 0;
-}
 
 
 #### Verifica si hay problemas para subir la foto
@@ -54,7 +44,7 @@ my $msgFoto=$input->param('msg');
 my $msgError=$input->param('error');
 ($msgError) || ($msgError=0);
 $t_params->{'id_socio'}= $socio->getId_socio;
-$t_params->{'foto_name'}= $foto;
+$t_params->{'foto_name'}= $socio->tieneFoto();
 $t_params->{'mensaje_error_foto'}= $msgFoto;
 $t_params->{'mensaje_error_borrar'}= $msgError;
 $t_params->{'error'}=0;
