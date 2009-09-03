@@ -301,7 +301,7 @@ sub output_html_with_http_headers {
                                 -httponly   => 1, 
                                 -name       =>$session->name, 
                                 -value      =>$session->id, 
-                                -expires    => '+' .$session->expire. 's', 
+#                                 -expires    => '+' .$session->expire. 's', 
                             );
 
     print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'utf-8', "Cache-control: public");
@@ -449,9 +449,10 @@ C4::AR::Debug::debug("desde checkauth===========================================
         $sessionID= $session->param('sessionID');
 =cut
 
-        $session->param('codMsg', 'U355');
-        $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-        redirectTo('/cgi-bin/koha/auth.pl');
+# lo deshabilite hasta q arreglen el CGI::Session
+#         $session->param('codMsg', 'U355');
+#         $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
+#         redirectTo('/cgi-bin/koha/auth.pl');
     }
 
 
@@ -1164,7 +1165,8 @@ sub _generarSession {
  	$session->param('charset', C4::Context->config("charset")||'utf-8'); #se guarda el juego de caracteres
 	$session->param('token', $params->{'token'}); #se guarda el token
     $session->param('SERVER_GENERATED_SID', 1);
-	$session->expire('1m'); #para Desarrollar, luego pasar a 3m
+# 	$session->expire('1m'); #para Desarrollar, luego pasar a 3m
+    $session->expire(0);
 #     $session->expire(_getTimeOut());
 
 	return $session;
