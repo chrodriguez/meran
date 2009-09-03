@@ -438,12 +438,9 @@ C4::AR::Debug::debug("desde checkauth===========================================
   
     if(_session_expired($session)){
 
-# lo deshabilite hasta q arreglen el CGI::Session
-=item
         $session->param('codMsg', 'U355');
         $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
         redirectTo('/cgi-bin/koha/auth.pl');
-=cut
     }
 
 
@@ -776,6 +773,7 @@ sub _session_expired {
 sub _getTimeOut {
     my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout') || C4::Context->config("timeout")||600;
     
+    C4::AR::Debug::debug("_getTimeOut => ".$timeout);
     return $timeout;
 }
 
@@ -1157,7 +1155,7 @@ sub _generarSession {
     $session->param('SERVER_GENERATED_SID', 1);
 # 	$session->expire('1m'); #para Desarrollar, luego pasar a 3m
 #     $session->expire(0);
-    $session->expire(_getTimeOut());
+    $session->expire(_getTimeOut().'s');
 
 	return $session;
 }
