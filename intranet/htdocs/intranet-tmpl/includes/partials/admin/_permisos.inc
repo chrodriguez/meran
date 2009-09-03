@@ -40,7 +40,6 @@
                                                         boton   => "boton_agregar",
                                                         onClick => "obtenerPermisos();",
                                                         title   => "[% 'Obtener Permisos' | i18n %]",
-                                                        width   => "150",
                                                         alternClass => "botonCentrado",
                             ) ;
                 [% END %]

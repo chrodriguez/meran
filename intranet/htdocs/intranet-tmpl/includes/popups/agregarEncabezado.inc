@@ -146,7 +146,6 @@ function updateSaveEncabezado(responseText){
                                                             boton   => "boton_agregar",
                                                             onClick => "validarDatosEncabezado();",
                                                             title   => "[% 'Agregar un Encabezado' | i18n %]",
-                                                            width   => "180",
                                                             alternClass => "botonCentrado"
                              ) ;
         [% END %]

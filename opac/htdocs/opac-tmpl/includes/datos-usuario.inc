@@ -85,7 +85,6 @@
         [% PERL %]
             print C4::AR::Filtros::to_Button( text    => "[% 'Cambiar Password' | i18n %]",
                                             boton   => "boton_miembros",
-                                            width   => "150",
                                             onClick => "cambiarPassword();",
                                             class   => "",
                                             title   => "[% 'Cambiar Password' | i18n %]"
@@ -97,7 +96,6 @@
                         [% PERL %]
                             print C4::AR::Filtros::to_Button( text    => "[% 'Eliminar Foto' | i18n %]",
                                                             boton   => "boton_miembros",
-                                                            width   => "125",
                                                             onClick => "eliminarFoto();",
                                                             class   => "",
                                                             title   => "[% 'Eliminar Foto' | i18n %]"

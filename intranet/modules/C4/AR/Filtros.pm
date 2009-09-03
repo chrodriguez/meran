@@ -140,11 +140,11 @@ sub to_Button{
 #         C4::AR::Debug::debug("to_Button => width: ".$params_hash_ref{'width'});
         $width= $params_hash_ref{'width'};
     }else{
-        $width += 90;
+        $width = "100%";
     }
     
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
-    $button .=  '<li  id="boton_medio" class="click '.$alternClass.'" onClick="'.$onClick.'" style="width:'.$width.'px"';
+    $button .=  '<li  id="boton_medio" class="click '.$alternClass.'" onClick="'.$onClick.'" style="width:'.$width.'"';
 
     if($title){
         $button .= ' title="'.$title.'"';

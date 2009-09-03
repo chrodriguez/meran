@@ -114,7 +114,6 @@
                         [% PERL %]
                             print C4::AR::Filtros::to_Button(   text    => "[% 'Ver mis favoritos' | i18n %]",
                                                                 boton   => "boton_favoritos", 
-                                                                width   => "125",
                                                                 onClick => "consultarFavoritos();",
                                                                 title   => "[% 'Ver mis favoritos' | i18n %]"
                                                         ) ;
@@ -123,7 +122,6 @@
                         [% PERL %]
                             print C4::AR::Filtros::to_Button( text    => "[% 'Historial de Prestamos' | i18n %]",
                                                             boton   => "boton_miembros",
-                                                            width   => "150",
                                                             onClick => "mostrarHistorialPrestamos([% socio.getNro_socio %]);",
                                                             title   => "[% 'Mostrar Historial de Prestamos' | i18n %]"
                                                         ) ;
@@ -132,7 +130,6 @@
                         [% PERL %]
                             print C4::AR::Filtros::to_Button(   text    => "[% 'Historial de Reservas' | i18n %]",
                                                                 boton   => "boton_favoritos", 
-                                                                width   => "150",
                                                                 onClick => "mostrarHistorialReservas([% socio.getNro_socio %]);",
                                                                 title   => "[% 'Mostrar Historial de Reservas' | i18n %]"
                                                         ) ;

@@ -202,21 +202,19 @@
 </fieldset>
 
 [% END %]
-<table width=100%>
-    <tr>
 <div class="buttonContainerHorizontal">
-    <ul class="horizontal-list" >
+    <ul class="listaMenuBotones" >
         [% IF addBorrower %]
             [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
                                                         boton   => "boton_buscar",
                                                         onClick => "save();",
                                                         title   => "[% 'Guardar' | i18n %]",
-                            ) ;
+                                                                ) ;
             [% END %]
         [% ELSE  %]
                 [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Modificacion' | i18n %]",
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Modificaci&oacute;n' | i18n %]",
                                                         boton   => "boton_buscar",
                                                         onClick => "save();",
                                                         title   => "[% 'Guardar' | i18n %]",
@@ -224,24 +222,14 @@
                 [% END %]
         [% END %]
 
-
-                [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                        boton   => "boton_buscar",
-                                                        onClick => "form1.reset();",
-                                                        title   => "[% 'Limpiar' | i18n %]",
-                            ) ;
-                [% END %]
     </ul>
 </div>
-        <td  align="left">
-            <b>(*) [% "Obligatorio" | i18n %]</b>
-        </td>
+        <div>
+            <strong>(*) [% "Obligatorio" | i18n %]</strong>
+        </div>
 
 
-    </tr>
 
-</table>
 </fieldset>
 </form>
 

@@ -14,7 +14,6 @@
                                                                         boton   => "boton_buscar",
                                                                         onClick => "nuevoPermiso();",
                                                                         title   => "[% 'Guardar Permisos' | i18n %]",
-                                                                        width => "150"
                                             ) ;
                 [% END %]
         [% END %]
