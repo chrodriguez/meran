@@ -23,6 +23,7 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::AR::Mensajes;
+use Image::Resize;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
@@ -66,6 +67,11 @@ sub uploadPhoto{
 					print WFD $buff;
 				}
 				close(WFD);
+                my  $image = Image::Resize->new($write_file);
+                    $image = $image->resize(120, 120);
+                    open(FH, ">".$write_file);
+                    print FH $image->jpeg();
+                    close(FH);
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U340', 'params' => []} ) ;	
 			}

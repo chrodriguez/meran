@@ -52,13 +52,13 @@
                       <td class="userImage"> 
                           [% IF socio.tieneFoto %]
                               <img border="0" src="[% themelang %]/pictures/[% socio.tieneFoto %]" 
-                                    alt="Imagen de [% socio.persona.getApellido %], [% socio.persona.getNombre %]"
+                                    alt="[% 'Imagen de' | i18n %] [% socio.persona.getApellido %], [% socio.persona.getNombre %]"
                                     title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
                               >
                           [% ELSE %]
                               <img border="0" src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 
-                                    alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
-                                    title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                                    alt="[% 'Usuario sin foto' | i18n %]"
+                                    title="[% 'Usuario sin foto' | i18n %]"
                               >
                           [% END %]
                       </td>
