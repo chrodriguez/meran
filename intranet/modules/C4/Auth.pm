@@ -301,7 +301,7 @@ sub output_html_with_http_headers {
                                 -httponly   => 1, 
                                 -name       =>$session->name, 
                                 -value      =>$session->id, 
-#                                 -expires    => '+' .$session->expire. 's', 
+                                -expires    => '+' .$session->expire. 's', 
                             );
 
     print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'utf-8', "Cache-control: public");
@@ -437,22 +437,13 @@ C4::AR::Debug::debug("desde checkauth===========================================
     C4::AR::Debug::debug("checkauth=> SERVER_GENERATED_SID ".$session->param('SERVER_GENERATED_SID'));
   
     if(_session_expired($session)){
-=item
-        my %params;
-        $params{'userid'}= $userid;
-        $params{'type'}= $type; #OPAC o INTRA
-        $params{'flagsrequired'}= $flagsrequired;
-        $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
-        $params{'token'}= _generarToken();
-        #genero una nueva session
-        $session= _generarSession(\%params);
-        $sessionID= $session->param('sessionID');
-=cut
 
 # lo deshabilite hasta q arreglen el CGI::Session
-#         $session->param('codMsg', 'U355');
-#         $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-#         redirectTo('/cgi-bin/koha/auth.pl');
+=item
+        $session->param('codMsg', 'U355');
+        $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
+        redirectTo('/cgi-bin/koha/auth.pl');
+=cut
     }
 
 
@@ -783,8 +774,7 @@ sub _session_expired {
 
 =cut
 sub _getTimeOut {
-    my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout');
-    $timeout = 600 unless $timeout;
+    my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout') || C4::Context->config("timeout")||600;
     
     return $timeout;
 }
@@ -1166,8 +1156,8 @@ sub _generarSession {
 	$session->param('token', $params->{'token'}); #se guarda el token
     $session->param('SERVER_GENERATED_SID', 1);
 # 	$session->expire('1m'); #para Desarrollar, luego pasar a 3m
-    $session->expire(0);
-#     $session->expire(_getTimeOut());
+#     $session->expire(0);
+    $session->expire(_getTimeOut());
 
 	return $session;
 }
