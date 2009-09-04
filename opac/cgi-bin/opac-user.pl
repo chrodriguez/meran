@@ -75,4 +75,4 @@ $t_params->{'pagetitle'}= "Usuarios";
 my $showHistoricReserves= C4::AR::Preferencias->getValorPreferencia("showHistoricReserves");
 $t_params->{'showHistoricReserves'}= $showHistoricReserves;
 
-C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -80,4 +80,4 @@ $t_params->{'cantidad'}= $cantidad || 0;
 my $elapsed = Time::HiRes::tv_interval( $start );
 $t_params->{'timeSeg'}= $elapsed;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

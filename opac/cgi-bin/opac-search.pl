@@ -31,4 +31,4 @@ $t_params->{'pagetitle'}= "Buscar bibliograf&iacute;a";
 $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 $t_params->{'hiddesearch'}= 1;
 
-C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

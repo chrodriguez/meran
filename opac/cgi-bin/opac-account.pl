@@ -58,5 +58,5 @@ $template->param( total => $total );
 
 #$template->param(loggeninuser => $loggedinuser);
 $template->param(pagetitle => "Estado de la cuenta");
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $cookie, $template->output;
 

@@ -61,7 +61,7 @@ if (C4::AR::Validator::checkParams('VT001',\%data_hash,['nombre','apellido','dir
     
         $t_params->{'errormessage'} = 'La preferencia KohaAdminEmailAddress no esta seteada. Por favor visite la biblioteca para actualizar sus datos';
     
-        C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
 }
 
@@ -115,4 +115,4 @@ $t_params->{'updatedata'} =(!C4::AR::Preferencias->getValorPreferencia('CheckUpd
 
 $t_params->{'pagetitle'}= "Actualizaci&oacute;n de datos personales";
 
-C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

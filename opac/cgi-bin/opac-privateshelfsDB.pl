@@ -30,7 +30,7 @@ if ($op eq 'ADD'){
 									);
 	
 # 	print $input->header;
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+	C4::Auth::output_html_with_http_headers($template, $t_params, $session, $cookie);
 }
 #********************************Fin***ADD PrivateShelfs**********************************
 
@@ -43,7 +43,7 @@ if ($op eq 'DELETE'){
 									);
 	
 # 	print $input->header;
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+	C4::Auth::output_html_with_http_headers($template, $t_params, $session, $cookie);
 }
 #********************************Fin***DELETE PrivateShelfs**********************************
 

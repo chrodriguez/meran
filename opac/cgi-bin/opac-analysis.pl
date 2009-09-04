@@ -99,5 +99,5 @@ $template->param ( biblionumber => $bibnum,
 # 		    bulk => $bulk, FALTA!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		    );
 
-output_html_with_http_headers $input, $cookie, $template->output;
+output_html_with_http_headers $cookie, $template->output;
 

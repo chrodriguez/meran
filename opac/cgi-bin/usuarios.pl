@@ -96,7 +96,7 @@ else{
 
             $t_params->{'errormessage'} = 'La preferencia KohaAdminEmailAddress no esta seteada. Por favor visite la biblioteca para actualizar sus datos';
 
-            C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+            C4::Auth::output_html_with_http_headers($template, $t_params, $session);
         }
     }
 
@@ -109,7 +109,7 @@ else{
 
     $t_params->{'pagetitle'}= "Actualizaci&oacute;n de datos personales";
 
-    C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }
 

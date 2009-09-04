@@ -51,4 +51,4 @@ $t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($cantidad,$cantR, 
 $t_params->{'cantidad'}= $cantidad;
 $t_params->{'loop_reservas'}= $reservas_hashref;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -155,7 +155,7 @@ my $resultsarray=\@results;
 $template->param(SEARCH_RESULTS => $resultsarray,
                  shelfname =>$query->param('shelfname'));
 
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $cookie, $template->output;
 
 }
 else { #Resultado de Busqueda
@@ -177,5 +177,5 @@ $template->param(SEARCH_RESULTS => $resultsarray,
 		 numrecords => $cant,
 		 viewShelfItems =>$nameShelf);
 
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $cookie, $template->output;
 }}}

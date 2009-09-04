@@ -135,5 +135,5 @@ my $resultsarray=\@results;
 $template->param(SEARCH_RESULTS => $resultsarray,
 		 numrecords => $cant);
 
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $cookie, $template->output;
 }}

@@ -54,4 +54,4 @@ $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryNa
 $t_params->{'pagetitle'}= "Usuarios";
 $t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);
