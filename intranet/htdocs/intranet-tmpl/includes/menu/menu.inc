@@ -5,22 +5,32 @@
 
  <div class="idioma_y_login">
             [% IF loggedinuser %]
-                  <h2 id="logout">Ingres&oacute; como:
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to(   text =>     "[% loggedinuser %]",
-                                                                  url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
-                                                                  params =>   ["nro_socio=[% loggedinuser %]"],
-                                                                  title =>    "[% 'Mis datos' | i18n %]"
-                                                            );
-                            [% END %]
-                           [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1 tabindex="-1">Salir</a>]
-                  </h2>
+                <div class="user_icon">
+                <div class="culture_Select">
+                      [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1 tabindex="-1">[% "Salir" | i18n %]</a>]
+                </div>
+                    <a title="[% socio.persona.getNombre %], [% socio.persona.getApellido %]" rel="contact" class="url" 
+                        href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?token=[% token %]&nro_socio=[% socio.getNro_socio %]">
+                        [% IF socio.tieneFoto %]
+                            <img width="48" height="48" src="[% themelang %]/pictures/[% socio.tieneFoto %]" class="side_thumb photo fn" 
+                                alt="[% socio.persona.getNombre %], [% socio.persona.getApellido %]"/>
+                        [% ELSE %]
+                              <img  width="48" height="48" src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 
+                                    class="side_thumb photo fn"
+                                    alt="[% 'Usuario sin foto' | i18n %]"
+                                    title="[% 'Usuario sin foto' | i18n %]" />
+                        [% END %]
+                        <span id="me_name">[% socio.persona.getNombre %], [% socio.persona.getApellido %]</span>
+                    </a>
+                </div>
+                <div class="culture_Select">
+                    [%  "INTRA" | setComboLang %] 
+                </div>
             [% ELSE %]
                <p id="logout">
                     <a href=/cgi-bin/koha/opac-user.pl>Entrar a Koha</a>
                </p>
             [% END %]
-            [%  "INTRA" | setComboLang %]
          </div>
 
       <ul id="menu" tabindex="-1">
@@ -163,8 +173,8 @@
                  </li>
 
                   <li><h3 class="menu_intermedio">[% 'Control de autoridades' | i18n %]</h3>
-					<ul>
-						<li>
+          <ul>
+            <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Sin&oacute;nimos' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimos.pl", 
@@ -172,7 +182,7 @@
                                                             ) ;
                             [% END %]
                         </li>
-						<li>
+            <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Seud&oacute;nimos' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimos.pl", 
@@ -180,7 +190,7 @@
                                                             ) ;
                             [% END %]
                         </li>
-					</ul>
+          </ul>
                   </li>
 
                 </ul>
@@ -240,15 +250,15 @@
                     </div>
                   </div>
                 <ul>
-				          <li>
+                  <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/circ/circulacionRapida.pl", 
                                                                 title =>    "[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]"
                                                             ) ;
                             [% END %]
-                  </li>	
-			[% IF menu_preferences.showMenuItem_circ_prestamos %]
+                  </li> 
+      [% IF menu_preferences.showMenuItem_circ_prestamos %]
                   <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Pr&eacute;stamos' | i18n %]",
@@ -257,8 +267,8 @@
                                                             ) ;
                             [% END %]
                   </li>
-			[% END %]
-			[% IF menu_preferences.showMenuItem_circ_devolucion_renovacion %]
+      [% END %]
+      [% IF menu_preferences.showMenuItem_circ_devolucion_renovacion %]
                   <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Devol. y Renov.' | i18n %]",
@@ -267,7 +277,7 @@
                                                             ) ;
                             [% END %]
                   </li>
-			[% END %]
+      [% END %]
                   <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Sanciones' | i18n %]",

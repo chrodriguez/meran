@@ -245,7 +245,7 @@ sub get_template_and_user {
 
 	my $nro_socio;
 	if ( $session->param('userid') ) {
-		$params->{'loggedinuser'}= $session->param('userid');
+    $params->{'loggedinuser'}= $session->param('userid');
 		$nro_socio = $session->param('userid');
 # FIXME sacar luego de pasar todo a los nombre nuevos
 # 		$session->param('borrowernumber',$nro_socio);#se esta pasadon por ahora despues sacar
@@ -255,6 +255,7 @@ sub get_template_and_user {
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
         $socio->load();
         $session->param('nro_socio',$nro_socio);
+        $params->{'socio'}= $socio;
 # DEPRECATED no se usa mas el id_socio, cambiar por nro_socio
 #         $session->param('id_socio',$socio->getId_socio);
 		$params->{'token'}= $session->param('token');

@@ -78,11 +78,12 @@ height:70%;
    height:25px;
 }
 .idioma_y_login{
-	width: 18%;
-	float: right;
-	margin-bottom:12px;
-	font:bold 7px tahoma,arial,helvetica,sans-serif;
-	text-align:right;
+    width: 18%;
+    float: right;
+    margin-bottom:12px;
+    font:bold 7px tahoma,arial,helvetica,sans-serif;
+    text-align:right;
+    height:4em;
 }
 
  /*---------------------------------------------------CONTENIDO-------------------------------------------------------------------------*/
@@ -1147,3 +1148,26 @@ input.file {
   width: 50px;
 }
 
+.user_icon {
+  line-height: 1.2;
+  clear: both;
+  float: none;
+}
+.user_icon img{
+  padding-right: 0.8em;
+  vertical-align: middle;
+  margin-bottom: -15px;
+  border: 0;
+}
+#me_name{
+  font-size: 2.35em;
+  vertical-align: middle;
+  color: #BBBBBB;
+}
+.url{
+  border:none;
+  text-decoration:none;
+}
+
+.culture_Select{
+}
