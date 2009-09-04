@@ -502,6 +502,15 @@ sub getSexo{
     return ($self->sexo);
 }
 
+sub getSexoPrint{
+    my ($self) = shift;
+    my %hash_sexo;
+    $hash_sexo{'M'} = "Masculino";
+    $hash_sexo{'F'} = "Femenino";
+    return ($hash_sexo{uc($self->sexo)});
+}
+
+
 sub setSexo{
     my ($self) = shift;
     my ($sexo) = @_;

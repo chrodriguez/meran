@@ -40,6 +40,7 @@
                                   <li>[% "Tel&eacute;fono del autorizado" | i18n %]:<strong> [% socio.getTelefono_autorizado %]</strong></li>
                         </ul>
                       </div>
+                  [% END %]
     </fieldset>            
      [% END %]
         <div id="datos_Secundarios">
@@ -48,7 +49,7 @@
             <div class="toggle_container">
                 <ul class="listado_sin_margen">
                     <li>[% "Fecha de nacimiento:" | i18n %] <strong> [% socio.persona.getNacimiento %]</strong></li>
-                    <li>[% "Sexo:" | i18n %] <strong> [% socio.persona.getSexo %]</strong> </li>
+                    <li>[% "Sexo:" | i18n %] <strong> [% socio.persona.getSexoPrint %]</strong> </li>
                     [% IF socio.persona.getTelefono %]
                     <li> <div class="tel">[% "Tel&eacute;fono:" | i18n %]<strong>[% socio.persona.getTelefono %]</strong></div></li>  
                     [% END %]

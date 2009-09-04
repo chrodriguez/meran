@@ -6,6 +6,7 @@
                                                                         boton   => "boton_buscar",
                                                                         onClick => "actualizarPermisos();",
                                                                         title   => "[% 'Guardar Permisos' | i18n %]",
+                                                                        width   => "150px",
                                             );
                         [% END %]
         [% ELSE %]
@@ -14,6 +15,7 @@
                                                                         boton   => "boton_buscar",
                                                                         onClick => "nuevoPermiso();",
                                                                         title   => "[% 'Guardar Permisos' | i18n %]",
+                                                                        width   => "150px",
                                             ) ;
                 [% END %]
         [% END %]

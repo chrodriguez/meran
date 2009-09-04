@@ -430,6 +430,7 @@ em.error_adv{
     cursor: pointer;
     height: 21px;
     white-space: nowrap;
+    width:120px;
 }
 
 #boton_der {
