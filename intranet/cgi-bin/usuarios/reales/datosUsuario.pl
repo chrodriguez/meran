@@ -22,4 +22,4 @@ my $mensaje=$input->param('mensaje');#Mensaje que viene desde libreDeuda si es q
 
 $t_params->{'socio'}= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::AR::Utilidades::redirectAndAdvice('U353');
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

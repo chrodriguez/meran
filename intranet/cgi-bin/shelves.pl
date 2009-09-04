@@ -226,7 +226,7 @@ foreach my $element (@key) {
 }
 $template->param(shelvesloop => \@shelvesloop);
 
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $cookie, $template->output;
 
 sub shelves {
        checkauth($query,0,{editcatalogue => 1},"intranet");

@@ -23,4 +23,4 @@ my $id1=$input->param('id1');
 #genera el detalle para intra y setea los parametros para el template
 C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -79,7 +79,7 @@ elsif($tipoAccion eq "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO"){
                                     debug => 1,
                 });
 
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 } 
 
@@ -222,7 +222,7 @@ elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 
     #paso el objeto socio al cliente
     $t_params->{'socio'}= $socio;
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 
 elsif($tipoAccion eq "ELIMINAR_FOTO"){
@@ -272,6 +272,6 @@ elsif($tipoAccion eq "PRESTAMO_INTER_BIBLIO"){
     $t_params->{'nro_socio'}= $socio->getNro_socio;
     $t_params->{'id_socio'}= $obj->{'id_socio'};
 
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }

@@ -40,7 +40,7 @@ if($tipoAccion eq "CARGAR_TABLA_ENCABEZADOS"){
 
 	$t_params->{'RESULTSLOOP'}= $encabezados_opac_array_ref;
 
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }
 #**************************************************************************************************
@@ -86,7 +86,7 @@ if($tipoAccion eq "MOSTAR_TABLA_VISUALIZACION"){
 	
 	$t_params->{'RESULTSLOOP'}= \@resultsCatalogacion;	
 	
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 
@@ -259,7 +259,7 @@ if($tipoAccion eq "AGREGAR_CONFIGURACION_VISUALIZACION"){
 	$t_params->{'agregar'}= 1; #seteo flag para indicar que se va a agregar una configuracion
 	$t_params->{'selectCampoX'}= C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
     
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 if($tipoAccion eq "AGREGAR_ENCABEZADO_VISUALIZACION_OPAC"){
@@ -281,7 +281,7 @@ if($tipoAccion eq "AGREGAR_ENCABEZADO_VISUALIZACION_OPAC"){
 	my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 	$t_params->{'combo_tipos_documento'}= $comboTiposNivel3;
     
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 if($tipoAccion eq "MODIFICAR_CONFIGURACION_VISUALIZACION"){
@@ -299,7 +299,7 @@ if($tipoAccion eq "MODIFICAR_CONFIGURACION_VISUALIZACION"){
 	
 	$t_params->{'visualizacion'}= C4::AR::VisualizacionOpac::getVisualizacionOpac($obj);
     
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 #**************** gurado la catalogacion en estructura_catalogacion_opac**************************
 if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){

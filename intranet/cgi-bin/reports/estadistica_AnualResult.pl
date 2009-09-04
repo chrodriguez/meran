@@ -87,4 +87,4 @@ $t_params->{'estadisticas_anuales'}= $prestamos_anual;
 
 
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

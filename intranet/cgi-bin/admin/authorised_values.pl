@@ -200,4 +200,4 @@ $t_params->{'category'}= "<input type=\'hidden\'name=\'category\'value=".$data->
 	}
 } #---- END $OP eq DEFAULT
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

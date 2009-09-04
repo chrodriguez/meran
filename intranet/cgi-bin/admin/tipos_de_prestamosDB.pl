@@ -34,7 +34,7 @@ my ($template, $session, $t_params) = get_template_and_user({
         $t_params->{'tipo_prestamo'}= $tipo_prestamo;
         }
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 } 
 elsif ($tipoAccion eq 'NUEVO_TIPO_PRESTAMO') {
@@ -48,7 +48,7 @@ my ($template, $session, $t_params) = get_template_and_user({
                 debug => 1,
             });
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 } 
 elsif ($tipoAccion eq 'GUARDAR_MODIFICACION_TIPO_PRESTAMO'){
@@ -116,6 +116,6 @@ my ($template, $session, $t_params) = get_template_and_user({
 my $tipos_de_prestamos=C4::AR::Prestamos::getTiposDePrestamos();
 $t_params->{'TIPOS_PRESTAMOS_LOOP'}= $tipos_de_prestamos;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }

@@ -37,4 +37,4 @@ $template->param(
 			mensajeError => $mensajeError,
 );
 
-output_html_with_http_headers $input, $cookie, $template->output;
+output_html_with_http_headers $cookie, $template->output;

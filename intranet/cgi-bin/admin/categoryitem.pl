@@ -193,7 +193,7 @@ if ($op eq 'add_form') {
 
 } #---- END $OP eq DEFAULT
 
-output_html_with_http_headers $input, $cookie, $template->output;
+output_html_with_http_headers $cookie, $template->output;
 
 
 

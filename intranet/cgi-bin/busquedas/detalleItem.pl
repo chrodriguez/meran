@@ -80,4 +80,4 @@ $template->param(DETAIL => \@results,
 		today => $today,
 		);
 
-output_html_with_http_headers $input, $cookie, $template->output;
+output_html_with_http_headers $cookie, $template->output;

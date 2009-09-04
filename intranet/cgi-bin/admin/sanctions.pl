@@ -237,4 +237,4 @@ $params->{'sanctions_regla_sancion'}= $CGIregla_sancion;
 $params->{'issues_types'}= $CGIcirc_ref_tipo_prestamo;
 $params->{'usr_ref_categoria_socio'}= $CGIusr_ref_categoria_socio;
 
-C4::Auth::output_html_with_http_headers($input, $template, $params);
+C4::Auth::output_html_with_http_headers($template, $params);

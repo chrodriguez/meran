@@ -43,5 +43,5 @@ my ($template, $loggedinuser, $cookie)
 $template->param ( shelfname => $shelfname,
 		   shelfnumber => $shelfnumber);
 
-output_html_with_http_headers $input, $cookie, $template->output;
+output_html_with_http_headers $cookie, $template->output;
 

@@ -110,4 +110,4 @@ $t_params->{'bloqueFin'}= $bloqueFin;
 $t_params->{'bloqueIni'}= $bloqueIni;
 $t_params->{'numeros'}= \@numeros;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

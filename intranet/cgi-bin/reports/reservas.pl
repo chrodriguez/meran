@@ -26,4 +26,4 @@ $t_params->{'unidades'}= $ComboUI;
 
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Reservas");
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session, $cookie);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session, $cookie);

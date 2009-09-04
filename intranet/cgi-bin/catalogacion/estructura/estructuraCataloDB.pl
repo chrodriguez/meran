@@ -43,7 +43,7 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
     $t_params->{'nivel'}= $nivel;
     $t_params->{'itemType'}= $itemType;
     
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
@@ -149,7 +149,7 @@ elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_CAMPOS"){
 
     $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
 
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
@@ -172,7 +172,7 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
     $t_params->{'selectCampoX'}= C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
     $t_params->{'catalogacion'}= $catalogacion;
 
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif($tipoAccion eq "GUARDAR_ESTRUCTURA_CATALOGACION"){
      my ($user, $session, $flags)= checkauth(    $input, 
@@ -381,7 +381,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
 
     $t_params->{'nivel1'}= $nivel1;
 
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
@@ -408,7 +408,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
     $t_params->{'nivel2_array'}= $nivel2_array_ref;
 
 
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
@@ -434,7 +434,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
 
     $t_params->{'nivel3_array'}= $nivel3;
 
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 # **********************************************FIN ABM CATALOGACION****************************************************************
 
@@ -617,5 +617,5 @@ elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
 	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
 	$t_params->{'circularDesdeDetalleDelRegistro'}= C4::AR::Preferencias->getValorPreferencia('circularDesdeDetalleDelRegistro');
     
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

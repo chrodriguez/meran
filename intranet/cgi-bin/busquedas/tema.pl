@@ -44,4 +44,4 @@ my ($count,@results)=&buscarTema($search);
   $template->param(numrecords => $count);
   $template->param(value => $tema);
 
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $cookie, $template->output;

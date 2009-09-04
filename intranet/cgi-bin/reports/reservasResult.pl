@@ -39,4 +39,4 @@ C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_par
 $t_params->{'reservas'}= $resultsdata;
 $t_params->{'cantidad'}= $cantidad;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

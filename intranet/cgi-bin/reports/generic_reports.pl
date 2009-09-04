@@ -142,7 +142,7 @@ if ($op eq "do_search") { #HACER LA BUSQUEDA
         }
         $t_params->{'LOOP'}=\@loop;
         #
-        C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 } else {
            my $fieldarray = C4::AR::Generic_Report::getFieldsArray();
            my ($template, $session, $t_params) = get_template_and_user({
@@ -251,7 +251,7 @@ if ($op eq "do_search") { #HACER LA BUSQUEDA
         
                 $t_params->{'statements'}= \@statements, "nbstatements" => 3;
         }
-        C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 

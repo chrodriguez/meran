@@ -42,5 +42,5 @@ $t_params->{'fechaIni'}=$fechaIni;
 $t_params->{'fechaFin'}=$fechaFin;
 $t_params->{'catUsuarios'}=$catUsuarios;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 

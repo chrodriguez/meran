@@ -40,4 +40,4 @@ $t_params->{'perlVersion'}= $perlVersion;
 $t_params->{'mysqlVersion'}= $mysqlVersion;
 $t_params->{'apacheVersion'}= $apacheVersion;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params,$session);
+C4::Auth::output_html_with_http_headers($template, $t_params,$session);

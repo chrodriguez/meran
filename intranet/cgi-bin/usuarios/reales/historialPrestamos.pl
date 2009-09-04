@@ -35,5 +35,5 @@ $t_params->{'cant'}= $cant;
 $t_params->{'nro_socio'}= $nro_socio;
 $t_params->{'loop_reading'}= $loop_reading;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 

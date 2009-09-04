@@ -42,6 +42,6 @@ if ($op eq "export") {
 					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 					debug => 1,
 			});
-	output_html_with_http_headers $query, $cookie, $template->output;
+	output_html_with_http_headers $cookie, $template->output;
 }
 

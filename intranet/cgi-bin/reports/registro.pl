@@ -54,4 +54,4 @@ my $fechaFin    =  format_date_in_iso($input->param('dateselectedEnd'),$dateform
 $t_params->{'select_usuarios'}= C4::AR::Utilidades::generarComboDeSocios();
 $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n('Registro de actividades');
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

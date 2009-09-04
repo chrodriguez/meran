@@ -44,4 +44,4 @@ $t_params->{'results'}= $cat_nivel3;
 # $t_params->{'name'}= $planilla;
 $t_params->{'cantidad'}= $cant;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

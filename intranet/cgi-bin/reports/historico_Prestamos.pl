@@ -41,4 +41,4 @@ $t_params->{'selectCatUsuarios'}= $comboCategoriasDeSocio;
 $t_params->{'selectTiposPrestamos'}= $camboTiposPrestamos;
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Historial de prestamos");
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

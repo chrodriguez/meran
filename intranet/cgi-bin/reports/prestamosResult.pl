@@ -70,4 +70,4 @@ $t_params->{'cantidad'}= $cantidad;
 $t_params->{'renglones'}= $cantR;
 # $t_params->{'planilla'}= $planilla;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

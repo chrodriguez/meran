@@ -47,5 +47,5 @@ my $lista_Refs=CGI::scrolling_list(
                                  );
 $t_params->{'lista'}= $lista_Refs;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 

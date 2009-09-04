@@ -32,4 +32,4 @@ if ($sanciones){
 	$t_params->{'SANCIONES'}= $sanciones;
 }
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

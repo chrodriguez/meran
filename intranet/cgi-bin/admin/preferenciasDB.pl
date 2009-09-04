@@ -37,7 +37,7 @@ my ($template, $session, $t_params)  = get_template_and_user({
 	$t_params->{'preferencias'}= $preferencias;
 	$t_params->{'cant'}= $cant;
 	
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }#end if($accion eq "BUSCAR_PREFERENCIAS")
 
 if($accion eq "MODIFICAR_VARIABLE"){
@@ -123,7 +123,7 @@ my ($template, $session, $t_params) =
 
 
 
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 	}#No existe la variable
 	else{
 	    my $msg_object = C4::AR::Mensajes::create();
@@ -251,7 +251,7 @@ my ($template, $session, $t_params) =
 	$t_params->{'tipo'}= $tipo;
 	$t_params->{'valor'}= $nuevoCampo;
 
-	C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }#end NUEVA_VARIABLE
 
 

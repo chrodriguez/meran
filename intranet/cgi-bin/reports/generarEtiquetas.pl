@@ -21,5 +21,5 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 $t_params->{'ui_Select'} = C4::AR::Utilidades::generarComboUI();
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 

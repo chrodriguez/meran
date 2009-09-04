@@ -28,5 +28,5 @@ my $CGIcirc_ref_tipo_prestamo=C4::AR::Utilidades::generarComboTipoPrestamo($para
 $t_params->{'categorias_de_socio'}= $CGIusr_ref_categoria_socio;
 $t_params->{'tipos_de_prestamos'}= $CGIcirc_ref_tipo_prestamo;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 

@@ -24,4 +24,4 @@ my  $branch=$input->param('branch');
 $t_params->{'year'}= C4::AR::Utilidades::generarComboDeAnios();
 $t_params->{'branch'}= $branch;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

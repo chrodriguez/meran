@@ -34,7 +34,7 @@ if($accion eq "TIPOS_PRESTAMOS_SANCIONADOS"){
 		my $tipo_prestamos=&C4::AR::Prestamos::getTiposDePrestamos();
 		$t_params->{'TIPOS_PRESTAMOS'}= $tipo_prestamos;
 
-		C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+		C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }#end if($accion eq "TIPOS_PRESTAMOS_SANCIONADOS")
 
 if ($accion eq "GUARDAR_TIPOS_PRESTAMOS_QUE_APLICA") {
@@ -145,7 +145,7 @@ if($accion eq "REGLAS_SANCIONES"){
         $t_params->{'cantidades'}= $CGIcantidad;
 
 
-        C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
         }#end if($accion eq "REGLAS_SANCIONES")
 
 
@@ -203,7 +203,7 @@ if($accion eq "MODIFICAR_REGLAS"){
                     });
         my $reglas_sancion=&C4::AR::Sanciones::getReglasSancion();
         $t_params->{'REGLAS_SANCIONES'}= $reglas_sancion;
-        C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }#end if($accion eq "MODIFICAR_REGLAS")
 
 

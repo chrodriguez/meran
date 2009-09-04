@@ -19,4 +19,4 @@ $t_params->{'loggedinuser'}= $session->param('userid');
 #sin destruir la sesion del usuario, permitiendo asi que navegue por donde tiene permisos
 $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param("codMsg"),'INTRA',[]);
 
-&C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
+&C4::Auth::output_html_with_http_headers($template, $t_params, $session);

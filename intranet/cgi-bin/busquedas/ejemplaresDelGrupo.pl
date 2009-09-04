@@ -31,5 +31,5 @@ $template->param(
 	loopnivel3Comp => $nivel3Comp,
 );
 
-output_html_with_http_headers $input, $cookie, $template->output;
+output_html_with_http_headers $cookie, $template->output;
 

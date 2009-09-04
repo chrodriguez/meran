@@ -13,6 +13,6 @@ my $query = new CGI;
 my ($template, $params)= C4::Output::gettemplate("changepassword.tmpl", 'intranet');
 
 
-C4::Auth::output_html_with_http_headers($query, $template, $params);
+C4::Auth::output_html_with_http_headers($template, $params);
 
 

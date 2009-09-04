@@ -56,4 +56,4 @@ $t_params->{'registros'}= $registros;
 $t_params->{'cant'}= $cantidad_registros;
 $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad_registros,$cantR, $pageNumber,$funcion,$t_params);
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

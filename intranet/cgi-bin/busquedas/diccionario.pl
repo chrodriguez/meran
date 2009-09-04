@@ -60,4 +60,4 @@ C4::AR::Utilidades::crearPaginador($template, $cantidad, $cantR, $pageNumber, $f
   $template->param(numrecords => $cantidad);
   $template->param(value => $dictionary);
 
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $cookie, $template->output;

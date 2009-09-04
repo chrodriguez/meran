@@ -78,4 +78,4 @@ for (my $i=0; $i < $cant; $i++){
 $t_params->{'loop'}= \@loop_data;
 $t_params->{'cant'}= $cant;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

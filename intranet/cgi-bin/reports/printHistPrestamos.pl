@@ -57,5 +57,5 @@ if ($input->param('type') eq 'pdf') {
     $t_params->{'msg'}=	$msg;
     
     
-    C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

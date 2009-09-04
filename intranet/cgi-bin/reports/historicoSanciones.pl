@@ -34,4 +34,4 @@ my %params_combo;
 $params_combo{'clone_values'}= 1;
 $t_params->{'selectTipoOperacion'}=C4::AR::Utilidades::generarComboTipoDeOperacion(\%params_combo);
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

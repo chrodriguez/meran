@@ -29,4 +29,4 @@ $t_params->{'comboDeCredentials'}= $comboDeCredentials;
 $t_params->{'comboDeUI'}= $comboDeUI;
 $t_params->{'addBorrower'}= 1;
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

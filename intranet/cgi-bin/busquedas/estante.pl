@@ -61,4 +61,4 @@ $t_params->{'SEARCH_RESULTS'}= \@shelvesloop;
 $t_params->{'buscoPor'}=$buscoPor;
 
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

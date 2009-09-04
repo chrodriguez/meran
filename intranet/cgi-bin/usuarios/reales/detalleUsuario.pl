@@ -53,4 +53,4 @@ $t_params->{'socio'}= $socio;
 $t_params->{'relativePicturesDir'}= C4::Context->config("relativePicturesDir");
 
 
-C4::Auth::output_html_with_http_headers($input, $template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);
