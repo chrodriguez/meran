@@ -135,12 +135,13 @@ sub to_Button{
     my $onClick= $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onClick
     my $title= $params_hash_ref{'title'}; #obtengo el title de la componete
     my $width= length($text);
-
     if($params_hash_ref{'width'}){
-#         C4::AR::Debug::debug("to_Button => width: ".$params_hash_ref{'width'});
-        $width= $params_hash_ref{'width'};
-    }else{
-        $width = "100%";
+        if ($params_hash_ref{'width'}=="auto"){
+            $width =$width*11;
+            $width= $width."px";
+        }
+        else{ $width= $params_hash_ref{'width'};
+        }
     }
     
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';

@@ -30,18 +30,18 @@
                   [% END %]
                 </ul>
           </fieldset>
-                  [% IF socio.tieneAutorizado %]
-                    <fieldset>
-                    <legend class="titulo_legend">[% 'Usuarios autorizados' | i18n %]</legend>
-                      <div class="authorizedBack">
+    [% IF socio.tieneAutorizado %]
+    <fieldset>
+        <legend class="titulo_legend">[% 'Usuarios autorizados' | i18n %]</legend>
+           <div class="authorizedBack">
                         <ul class="listado_sin_margen">
                                   <li>[% "Nombre y Apellido del autorizado" | i18n %]:<strong> [% socio.getNombre_apellido_autorizado%]</strong></li>
                                   <li>[% "DNI del autorizado" | i18n %]:<strong> [% socio.getDni_autorizado %]</strong></li>
                                   <li>[% "Tel&eacute;fono del autorizado" | i18n %]:<strong> [% socio.getTelefono_autorizado %]</strong></li>
                         </ul>
                       </div>
-                    </fieldset>            
-                  [% END %]
+    </fieldset>            
+     [% END %]
         <div id="datos_Secundarios">
         <fieldset>
             <legend class="trigger click titulo_legend">[% "Datos secundarios" | i18n %]</legend>

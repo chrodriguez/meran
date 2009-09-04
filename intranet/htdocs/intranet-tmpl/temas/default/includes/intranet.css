@@ -970,7 +970,9 @@ fieldset.main{
 ul.listado_sin_margen{
    padding-left:0px;
 }
-
+.listaMenuBotones li{
+    width:100%;
+}
 
 label {
     display:block;
