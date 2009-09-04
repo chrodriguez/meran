@@ -283,16 +283,21 @@ sub output_html_with_http_headers {
 
     if(is_OPAC($params)){
         C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE OPAC");
-#         $session->secure(0); #seteo cookie sin flag secure, POR AHORA
-                            #si la conexion no es segura no se envía la cookie, en el OPAC la conexion no es segura
+        #si la conexion no es segura no se envía la cookie, en el OPAC la conexion no es segura
         $secure = 0;
     }else{
         C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE INTRANET");
-#         $session->secure(1); #seteo cookie con flag secure
         $secure = 1;
     }
 
+    #si se usa CGI::Session 4.42 FIXEXED descomentar esto
+#     $session->secure($secure); #seteo cookie con flag secure
+#     $session->httponly(1);
+
+    #si se usa CGI::Session 4.42 FIXEXED descomentar esto
 #     print $session->header(	charset => C4::Context->config("charset")||'utf-8', "Cache-control: public" );
+
+#si se usa CGI::Session 4.42 descomentar esto
 
     my $query = new CGI;
     my $cookie= undef;
@@ -305,6 +310,7 @@ sub output_html_with_http_headers {
                             );
 
     print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'utf-8', "Cache-control: public");
+
 
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
 	exit;
@@ -435,9 +441,11 @@ C4::AR::Debug::debug("desde checkauth===========================================
     my $logout = $query->param('logout.x')||0;
 
     C4::AR::Debug::debug("checkauth=> SERVER_GENERATED_SID ".$session->param('SERVER_GENERATED_SID'));
-  
-    if(_session_expired($session)){
 
+    #si se usa CGI::Session 4.42 descomentar esta linea
+    if(_session_expired($session)){
+#     if($session->is_expired){
+        C4::AR::Debug::debug("_session_expired=> EXPIRO LA SESSION DE LA COOKIE ");
         $session->param('codMsg', 'U355');
         $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
         redirectTo('/cgi-bin/koha/auth.pl');
@@ -525,6 +533,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
 			    redirectTo('/cgi-bin/koha/informacion.pl');
 			    #EXIT
             } elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
+#                 $session->_ip_matches probar
     #              } elsif ($ip ne '127.0.0.2') {
                 # Different ip than originally logged in from
                 $info{'oldip'} = $ip;
@@ -1138,7 +1147,6 @@ sub _generarSession {
 
     my $session = new CGI::Session(undef, undef, undef);
 #     $session->httponly; #seteo flag HTTPONLY para evitar robo de cookie con javascript
-    $session->cookie( -httponly => 1);
     #se setea toda la info necesaria en la sesion
 	$session->param('userid', $params->{'userid'});
     $session->param('nro_socio', $params->{'userid'});
