@@ -137,8 +137,8 @@ sub to_Button{
     my $width= length($text);
     if($params_hash_ref{'width'}){
         if ($params_hash_ref{'width'}=="auto"){
-            $width =$width*11;
-            $width= $width."px";
+            $width =$width+4;
+            $width= $width."ex";
         }
         else{ $width= $params_hash_ref{'width'};
         }

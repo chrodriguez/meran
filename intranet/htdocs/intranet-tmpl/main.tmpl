@@ -28,6 +28,7 @@ $(document).ready(function() {
                      print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
                              boton   => "boton_buscar",
                              onClick => "buscar(true);",
+                             width => "auto",
                              title   => "[% 'Buscar en el cat&aacute;logo' | i18n %]",
                              ) ;
           [% END %]
@@ -55,6 +56,7 @@ $(document).ready(function() {
                             print C4::AR::Filtros::to_Button( 
                                                                 text    =>  "[% 'Buscar' | i18n %]",
                                                                 boton   =>  "boton_buscar",
+                                                                width => "auto",
                                                                 onClick =>  "consultar();",
                                                                 title   =>  "[% 'Buscar usuario' | i18n %]",
                                     ) ;
