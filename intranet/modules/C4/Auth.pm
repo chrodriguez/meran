@@ -270,14 +270,13 @@ sub get_template_and_user {
 
     imprime el header y procesa el template
     Parametros: 
-    $query: CGI
     $template: template que se creo anteriomente
     $params: parametros para el template
     $session: sesion acutal
 
 =cut
 sub output_html_with_http_headers {
-    my($query, $template, $params, $session) = @_;
+    my($template, $params, $session) = @_;
 
     my $secure;
 
