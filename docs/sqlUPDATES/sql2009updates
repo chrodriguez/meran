@@ -912,7 +912,7 @@ ALTER TABLE `cat_historico_disponibilidad` ADD `agregacion_temp` VARCHAR( 255 ) 
 
 
 --se modifica el campo password, para q soporte SHA256
- ALTER TABLE `usr_socio` CHANGE `password` `password` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL  
+ ALTER TABLE `usr_socio` CHANGE `password` `password` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 
 CREATE TABLE `perm_general` (
 `nro_socio` VARCHAR( 16 ) NOT NULL ,

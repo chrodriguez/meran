@@ -5,4 +5,4 @@ use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 
-#C4::AR::Utilidades::md5ToSHA_B64_256();
+C4::AR::Utilidades::md5ToSHA_B64_256();
