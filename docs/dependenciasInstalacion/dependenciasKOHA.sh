@@ -12,4 +12,4 @@ cpan -i Rose::DB::Object::Helpers
 
 apt-get install libdigest-sha-perl  #cpan -i Digest::SHA
 apt-get install libcrypt-cbc-perl   #cpan -i Crypt::CBC
-apt-get install libimage-size-perl #cpan -i Image::Resize
+cpan -i Image::Resize
