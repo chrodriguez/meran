@@ -19,7 +19,10 @@
                     [% END %]
                 </a>
             </div>
+                <a title="[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]" rel="contact"
+                    href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?token=[% token %]&nro_socio=[% socio_data.getNro_socio %]">
                     <span id="me_name">[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]</span>
+                </a>
             <div class="culture_Select">
                   [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1 tabindex="-1">[% "Salir" | i18n %]</a>]
                   [%  "INTRA" | setComboLang %] 
