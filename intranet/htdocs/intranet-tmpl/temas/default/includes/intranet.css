@@ -78,7 +78,8 @@ height:70%;
    height:25px;
 }
 .idioma_y_login{
-    width: 28em;
+    width: auto;
+    min-width: 25em;
     float: right;
     margin-bottom:12px;
     margin-left: 2px;
@@ -1179,7 +1180,6 @@ input.file {
 
 .culture_Select{
   font-size: 9pt;
-  float:left; 
   width: auto; 
   padding-left: 2%;
 }
