@@ -2,37 +2,36 @@
       <div class="header-bottom">
       <div class="logo_Superior">
   </div>
-
  <div class="idioma_y_login">
-            [% IF loggedinuser %]
-                <div class="user_icon">
-                <div class="culture_Select">
-                      [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1 tabindex="-1">[% "Salir" | i18n %]</a>]
-                </div>
-                    <a title="[% socio.persona.getNombre %], [% socio.persona.getApellido %]" rel="contact" class="url" 
-                        href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?token=[% token %]&nro_socio=[% socio.getNro_socio %]">
-                        [% IF socio.tieneFoto %]
-                            <img width="48" height="48" src="[% themelang %]/pictures/[% socio.tieneFoto %]" class="side_thumb photo fn" 
-                                alt="[% socio.persona.getNombre %], [% socio.persona.getApellido %]"/>
-                        [% ELSE %]
-                              <img  width="48" height="48" src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 
-                                    class="side_thumb photo fn"
-                                    alt="[% 'Usuario sin foto' | i18n %]"
-                                    title="[% 'Usuario sin foto' | i18n %]" />
-                        [% END %]
-                        <span id="me_name">[% socio.persona.getNombre %], [% socio.persona.getApellido %]</span>
-                    </a>
-                </div>
-                <div class="culture_Select">
-                    [%  "INTRA" | setComboLang %] 
-                </div>
-            [% ELSE %]
-               <p id="logout">
-                    <a href=/cgi-bin/koha/opac-user.pl>Entrar a Koha</a>
-               </p>
-            [% END %]
-         </div>
-
+    [% IF loggedinuser %]
+        <div class="user_icon">
+            <div style="float:left; height:25px">
+                <a title="[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]" rel="contact" class="url" 
+                    href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?token=[% token %]&nro_socio=[% socio_data.getNro_socio %]">
+                    [% IF socio_data.tieneFoto %]
+                        <img width="48" height="48" src="[% themelang %]/pictures/[% socio_data.tieneFoto %]" class="side_thumb photo fn" 
+                            alt="[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]"/>
+                    [% ELSE %]
+                          <img  width="48" height="48" src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 
+                                class="side_thumb photo fn"
+                                alt="[% 'Usuario sin foto' | i18n %]"
+                                title="[% 'Usuario sin foto' | i18n %]" />
+                    [% END %]
+                </a>
+            </div>
+                    <span id="me_name">[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]</span>
+            <div class="culture_Select">
+                  [<a target="_parent" href=/cgi-bin/koha/mainpage.pl?logout.x=1 tabindex="-1">[% "Salir" | i18n %]</a>]
+                  [%  "INTRA" | setComboLang %] 
+            </div>
+        </div>
+    [% ELSE %]
+        <p id="logout">
+            <a href=/cgi-bin/koha/opac-user.pl>Entrar a Koha</a>
+        </p>
+    [% END %]
+</div>
+  <div>
       <ul id="menu" tabindex="-1">
           <!-- Navigation item -->
             <li>
@@ -676,6 +675,7 @@
                   </li>
               </ul>
             </li>
-    </ul>
+      </ul>
+    </div>
 </div>
       <!-- A.4 HEADER BREADCRUMBS -->

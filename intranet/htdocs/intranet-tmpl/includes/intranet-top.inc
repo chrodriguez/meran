@@ -93,7 +93,8 @@
 </div>
 
 <div id="marco_principal">
-    <div id="marco_superior"> <div></div></div>
+    <div id="marco_superior"> <div>
+</div></div>
 
 <div id="marco_contenido" class="contenido">
 

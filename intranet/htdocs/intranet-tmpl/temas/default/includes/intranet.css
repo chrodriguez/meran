@@ -78,14 +78,14 @@ height:70%;
    height:25px;
 }
 .idioma_y_login{
-    width: 18%;
+    width: 28em;
     float: right;
     margin-bottom:12px;
+    margin-left: 2px;
     font:bold 7px tahoma,arial,helvetica,sans-serif;
     text-align:right;
-    height:4em;
+    height:5em;
 }
-
  /*---------------------------------------------------CONTENIDO-------------------------------------------------------------------------*/
 body{
 	color:#000000;
@@ -1168,8 +1168,9 @@ input.file {
 }
 #me_name{
   font-size: 2.35em;
-  vertical-align: middle;
   color: #BBBBBB;
+  float:left;
+  padding-left: 2px;
 }
 .url{
   border:none;
@@ -1177,4 +1178,8 @@ input.file {
 }
 
 .culture_Select{
+  font-size: 9pt;
+  float:left; 
+  width: auto; 
+  padding-left: 2%;
 }
