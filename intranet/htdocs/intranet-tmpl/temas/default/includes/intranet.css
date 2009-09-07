@@ -975,6 +975,13 @@ ul.listado_sin_margen{
 .listaMenuBotones li{
     width:100%;
 }
+.listaCondicionesHorizontales {
+    display:table;
+}
+.listaCondicionesHorizontales li div{
+    float:left;
+    padding:3px;
+}
 
 label {
     display:block;

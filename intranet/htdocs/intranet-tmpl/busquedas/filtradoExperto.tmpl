@@ -234,29 +234,29 @@ $(document).ready(function() {
 });
 </script>
 
-[% PERL %]
-    print C4::AR::Filtros::ayuda_marc() ;
-[% END %]
 
 <!-- PARA PODER CREAR EL FORMULARIO -->
 <div id="formulario"></div>
 
 
-<div id="busqueda">
-	<span class="titulos">[% "B&uacute;squeda Experta en el cat&aacute;logo" | i18n %]</span>
-	<br>
+<fieldset id="busqueda">
+	<legend class="titulo_legend">[% "B&uacute;squeda Experta en el cat&aacute;logo" | i18n %]</legend>
+[% PERL %]
+    print C4::AR::Filtros::ayuda_marc() ;
+[% END %]
 	<div class="formElemets">
-		<ul>
+		<ul class="listaCondicionesHorizontales">
 			<li>
-			<input name="tipo" type=radio id=tipo value="AND" checked>Y (AND)
-			<input name="tipo" type=radio id=tipo value="OR">O (OR)
+			    <div><input name="tipo" type=radio id=tipo value="AND" checked>Y (AND)</div>
+			    <div><input name="tipo" type=radio id=tipo value="OR">O (OR)</div>
 			</li>
 			
 			<li>
-        		<div style="float:left;">
-			[% "Campo:" | i18n %] [% mapeo %]
-			[% "Condici&oacute;n:" | i18n %]
-                                         <select id="cond1">
+			   <fieldset>
+               <legend class="titulo_legend"><label for="cond1">[% "Campo Meran:" | i18n %]</label></legend>
+               <div>[% mapeo %]</div>
+			    <div><label for="cond1">[% "Condici&oacute;n:" | i18n %]</label> 
+                <select id="cond1">
 						<option value="=">[% "Igual" | i18n %]</option>
 						<option value="<>">[% "Distinto" | i18n %]</option>
 						<option value=">">[% "Mayor" | i18n %]</option>
@@ -264,36 +264,48 @@ $(document).ready(function() {
 						<option value="Empieza">[% "Empieza" | i18n %]</option>
 						<option value="Contiene">[% "Contiene" | i18n %]</option>
 						<option value="Finaliza">[% "Finaliza" | i18n %]</option>
-					  </select>
-			</div>
-			<div id="div1" style="float:left;">
-				&nbsp;[% "Valor:" | i18n %] <input type="text"  id="valor1">
-			</div>
-			&nbsp;<input type="button" id="boton1" value="+" onClick="agregarConsulta('primero')">
+				</select>
+				</div>
+                <div><label for="valor1"> [% "Valor:" | i18n %] </label> 
+                    <input type="text"  id="valor1">
+                </div>
+                <div>
+                <input type="button" id="boton1" value="+" onClick="agregarConsulta('primero')">
+                </div>
+                </fieldset>
 			</li>
 			
 			<li>
-        		[% "Campo Marc:" | i18n %]
-                                     <select id="campoX" onChange="seleccionCampoX()">
-					<option value="-1">[% "Elegir" | i18n %]</option>
-					<option value="0">0XX</option>
-					<option value="1">1XX</option>
-					<option value="2">2XX</option>
-					<option value="3">3XX</option>
-					<option value="4">4XX</option>
-					<option value="5">5XX</option>
-					<option value="6">6XX</option>
-					<option value="7">7XX</option>
-					<option value="8">8XX</option>
-					<option value="9">9XX</option>
-				     </select>
-				     <select id="campo" onChange="seleccionCampo()">
-					<option value="-1">[% "Elegir" | i18n %]</option>
-				     </select>
+			   <fieldset>
+               <legend class="titulo_legend"><label for="campoX">[% "Campo Marc:" | i18n %]</label></legend>
+                <div>
+                    <select id="campoX" onChange="seleccionCampoX()">
+					    <option value="-1">[% "Elegir" | i18n %]</option>
+                        <option value="0">0XX</option>
+                        <option value="1">1XX</option>
+                        <option value="2">2XX</option>
+                        <option value="3">3XX</option>
+                        <option value="4">4XX</option>
+                        <option value="5">5XX</option>
+                        <option value="6">6XX</option>
+                        <option value="7">7XX</option>
+                        <option value="8">8XX</option>
+                        <option value="9">9XX</option>
+                    </select>
+                </div>
+                <div>
+                    <select id="campo" onChange="seleccionCampo()">
+                        <option value="-1">[% "Elegir" | i18n %]</option>
+				    </select>
+                </div>
+                <div>
 				     <select id="subcampo">
 					<option value="-1">[% "Elegir" | i18n %]</option>
 				     </select>
-			Condici&oacute;n: <select id="cond2">
+                </div>
+                <div>
+			 <label for="cond2">[% "Condici&oacute;n:" | i18n %]</label> 
+                      <select id="cond2">
 						<option value="=">[% "Igual" | i18n %]</option>
 						<option value="<>">[% "Distinto" | i18n %]</option>
 						<option value=">">[% "Mayor" | i18n %]</option>
@@ -302,24 +314,26 @@ $(document).ready(function() {
 						<option value=[% "Contiene" | i18n %]>[% "Contiene" | i18n %]</option>
 						<option value=[% "Finaliza" | i18n %]>[% "Finaliza" | i18n %]</option>
 					  </select>
-			Valor: <input type="text"  id="valor2">
+                </div>
+                <div>
+			<label for="valor2">[% "Valor:" | i18n %] </label>
+            <input type="text"  id="valor2">
+                </div>
+                <div>
 			<input type="button"  value="+" onClick="agregarConsulta('segundo')">
+                </div>
+			   </fieldset>
 			</li>
-		</ul>
-
-		<div>
-		
-		<ul>
 			<li>
-				[% "Consulta:" | i18n %] <br>
+			   <fieldset>
+               <legend class="titulo_legend"><label for="consulta">[% "Consulta:" | i18n %]</label></legend>
 				<textarea id="consulta" cols="96" rows="7" readonly="readonly"></textarea>
+			   </fieldset>
 			</li>
 		</ul>
 
-		<ul>
+		<ul class="listaMenuBotones-horizontal">
 			<li>
-			<input type="hidden" name="type" value="intra">
-                    <div>
                         [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
                                                                     boton   => "boton_buscar",
@@ -327,9 +341,6 @@ $(document).ready(function() {
                                                                     title   => "[% 'Buscar en el cat&aacute;logo' | i18n %]",
                                         ) ;
                         [% END %]
-                    </div>
-                    <br><br>
-                    <div>
                         [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
                                                                     boton   => "boton_buscar",
@@ -337,22 +348,22 @@ $(document).ready(function() {
                                                                     title   => "[% 'Limpiar el formulario' | i18n %]",
                                         ) ;
                         [% END %]
-                    </div>
 			</li>
 		</ul>
-		</div>
 
 	</div>
-</div>
+</fieldset>
 <input type="hidden" id="nivel1">
 <input type="hidden" id="nivel2">
 <input type="hidden" id="nivel3">
 <input type="hidden" id="n1r">
 <input type="hidden" id="n2r">
 <input type="hidden" id="n3r">
-
+<fieldset id="busqueda">
+	<legend class="titulo_legend">[% "Resultados de la B&uacute;squeda Experta" | i18n %]</legend>
 <div id="resultBusqueda"></div>
 
+</fieldset>
 
 
 [% INCLUDE "intranet-bottom.inc" %]
