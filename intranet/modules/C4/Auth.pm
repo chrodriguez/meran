@@ -298,16 +298,25 @@ sub output_html_with_http_headers {
 #     print $session->header(	charset => C4::Context->config("charset")||'utf-8', "Cache-control: public" );
 
 #si se usa CGI::Session 4.42 descomentar esto
-
+    use CGI::Cookie;
     my $query = new CGI;
     my $cookie= undef;
-
+=item
     $cookie = $query->cookie(   -secure     => $secure, 
                                 -httponly   => 1, 
                                 -name       =>$session->name, 
                                 -value      =>$session->id, 
                                 -expires    => '+' .$session->expire. 's', 
                             );
+=cut
+
+    $cookie = new CGI::Cookie(  -secure     => $secure, 
+                                -httponly   => 1, 
+                                -name       =>$session->name, 
+                                -value      =>$session->id, 
+                                -expires    => '+' .$session->expire. 's', 
+                            );
+
 
     print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'utf-8', "Cache-control: public");
 
@@ -395,15 +404,11 @@ sub checkauth {
     my $authnotrequired = shift;
     my $flagsrequired = shift;
     my $type = shift;
-#     my $change_password = shift || $query->param('change_password') || 0;
     my $change_password = shift || 0;
 
     $type = 'opac' unless $type;
-C4::AR::Debug::debug("desde checkauth================================================================================================== \n");
+    C4::AR::Debug::debug("desde checkauth==================================================================================================");
     my $dbh = C4::Context->dbh;
-#     my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout');
-#     $timeout = 600 unless $timeout;
-# C4::AR::Debug::_printHASH(\%ENV);
 
     my $template_name;
     if ($type eq 'opac') {
@@ -442,6 +447,10 @@ C4::AR::Debug::debug("desde checkauth===========================================
 
     C4::AR::Debug::debug("checkauth=> SERVER_GENERATED_SID ".$session->param('SERVER_GENERATED_SID'));
 
+
+    #verifica que no haya sesiones "colgadas", las borra de la base
+    _clear_session_table();
+
     #si se usa CGI::Session 4.42 descomentar esta linea
     if(_session_expired($session)){
 #     if($session->is_expired){
@@ -451,7 +460,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
         redirectTo('/cgi-bin/koha/auth.pl');
     }
 
-
+# FIXME esto no me guasta - Miguel
     if ($sessionID=$session->param('sessionID')) {
 
         if(!$session->param('SERVER_GENERATED_SID')){
@@ -498,15 +507,15 @@ C4::AR::Debug::debug("desde checkauth===========================================
 
             if(!$session->param('SERVER_GENERATED_SID')){
     #             undef($session);
-                C4::AR::Debug::debug("checkauth=> COOKIE FIXATION \n");
+                C4::AR::Debug::debug("checkauth=> COOKIE FIXATION");
     #             $session= session_destroy();
     #             redirectTo('/cgi-bin/koha/auth.pl');
             }
 
             #la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
             #se verifican algunas condiciones de finalizacion de session
-            C4::AR::Debug::debug("checkauth=> El usuario se encuentra logueado \n");
-#           if ($lasttime<time()-$timeout) {
+            C4::AR::Debug::debug("checkauth=> El usuario se encuentra logueado");
+#           if ($lasttime<time()-$timeout) {      
             if ($lasttime < time() - _getTimeOut()) {
 
                 # timed logout
@@ -782,7 +791,7 @@ sub _session_expired {
 sub _getTimeOut {
     my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout') || C4::Context->config("timeout")||600;
     
-    C4::AR::Debug::debug("_getTimeOut => ".$timeout);
+#     C4::AR::Debug::debug("_getTimeOut => ".$timeout);
     return $timeout;
 }
 
@@ -795,11 +804,17 @@ sub _getTimeOut {
 
 =cut
 sub _clear_session_table {
-    my ($params) = @_;
+# TODO esto no esta 100% confirmado de que pueda dejar a gente afuera de la sesion    
+    use C4::Context;
+    my $dbh = C4::Context->dbh;
 
-    my ($sec,$min,$hour,$mday_actual,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-
-# FIXME falta limpiar la tabla sist_sesion, todas las sesiones que quedaron "colgadas" pq se cerro el navegador por ej.    
+    my $sth = $dbh->prepare("DELETE FROM sist_sesion WHERE lasttime < ? ");
+    my $tope = time() - _getTimeOut();
+    my $count = $sth->execute($tope);
+    if($count ne '0E0'){
+        C4::AR::Debug::debug("_clear_session_table=> TAREAS DE MANTENIMIENTO DE LA TABLA DE sist_sesion");
+        C4::AR::Debug::debug("_clear_session_table=> se borraron ".$count." sessiones viejas");
+    }
 }
 
 
@@ -1184,7 +1199,7 @@ sub session_destroy {
 =cut
 sub _verificarPassword {
 	my ($dbh, $userid, $password, $random_number) = @_;
-
+    
     C4::AR::Debug::debug("\n");
     C4::AR::Debug::debug("_verificarPassword=> verificarPassword:");
     C4::AR::Debug::debug("_verificarPassword=> userID: ".$userid);
