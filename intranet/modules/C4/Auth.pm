@@ -290,11 +290,11 @@ sub output_html_with_http_headers {
         $secure = 1;
     }
 
-    #si se usa CGI::Session 4.42 FIXEXED descomentar esto
+    #si se usa CGI::Session 4.42 FIXED descomentar esto
 #     $session->secure($secure); #seteo cookie con flag secure
 #     $session->httponly(1);
 
-    #si se usa CGI::Session 4.42 FIXEXED descomentar esto
+    #si se usa CGI::Session 4.42 FIXED descomentar esto
 #     print $session->header(	charset => C4::Context->config("charset")||'utf-8', "Cache-control: public" );
 
 #si se usa CGI::Session 4.42 descomentar esto
@@ -440,35 +440,42 @@ sub checkauth {
     # state variables
     my $loggedin = 0;
     my %info;
-    my $session = CGI::Session->load();
+    my ($session) = CGI::Session->load();
     my ($userid, $cookie, $sessionID, $flags);
 # FIXME esto esta re feo, te pueden sacar desde cualquier .pl
     my $logout = $query->param('logout.x')||0;
 
-    C4::AR::Debug::debug("checkauth=> SERVER_GENERATED_SID ".$session->param('SERVER_GENERATED_SID'));
-
 
     #verifica que no haya sesiones "colgadas", las borra de la base
-    _clear_session_table();
+    _clear_sessions_from_DB();
 
-    #si se usa CGI::Session 4.42 descomentar esta linea
-    if(_session_expired($session)){
+# FIXME esto no esta funcionando - Miguel
+    if( defined $session->param('SERVER_GENERATED_SID') and $session->param('SERVER_GENERATED_SID') eq '1' ){
+        #session generada en el servidor
+        C4::AR::Debug::debug("checkauth=> SERVER_GENERATED_SID = 1");
+    } else {
+    
+#         C4::AR::Debug::debug("checkauth=> COOKIE FIXATION");
+#         $session->param('codMsg', 'U401');
+#         $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
+#         redirectTo('/cgi-bin/koha/auth.pl');
+    }
+
+
+#     #si se usa CGI::Session 4.42 descomentar esta linea
+    if(defined $session and _session_expired($session)){
+    #EXPIRO LA SESION
 #     if($session->is_expired){
-        C4::AR::Debug::debug("_session_expired=> EXPIRO LA SESSION DE LA COOKIE ");
         $session->param('codMsg', 'U355');
         $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
         redirectTo('/cgi-bin/koha/auth.pl');
-    }
+    }else{
+    #NO EXPIRO LA SESION
 
-# FIXME esto no me guasta - Miguel
-    if ($sessionID=$session->param('sessionID')) {
+# FIXME esto no me gusta - Miguel
+#     if ($sessionID=$session->param('sessionID')) {
+        $sessionID=$session->param('sessionID');
 
-        if(!$session->param('SERVER_GENERATED_SID')){
-#             undef($session);
-            C4::AR::Debug::debug("checkauth=> COOKIE FIXATION \n");
-#             $session= C4::Auth::_generarSession(\%params);
-        }
-      
         C4::AR::Debug::debug("checkauth=> sessionID seteado \n");
 
         #Se recupera la info de la session guardada en la base segun el sessionID
@@ -494,7 +501,7 @@ sub checkauth {
             C4::AR::Debug::debug("checkauth=> sessionID en logout: ". $session->param('sessionID')."\n");
             $session->param('codMsg', 'U358');
             $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-# FIXME parche feo parametrizar o dejar logica dentro del redirectTo
+            # FIXME parche feo parametrizar o dejar logica dentro del redirectTo
             if ($type eq 'opac') {
                 _opac_logout();
             }else{
@@ -504,13 +511,6 @@ sub checkauth {
         }
 
         if ($userid) {
-
-            if(!$session->param('SERVER_GENERATED_SID')){
-    #             undef($session);
-                C4::AR::Debug::debug("checkauth=> COOKIE FIXATION");
-    #             $session= session_destroy();
-    #             redirectTo('/cgi-bin/koha/auth.pl');
-            }
 
             #la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
             #se verifican algunas condiciones de finalizacion de session
@@ -773,7 +773,11 @@ C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID
 sub _session_expired {
     my ($session) = @_;
 
-    if( ($session->atime + $session->etime ) <= time() ){
+#     C4::AR::Debug::debug("_session_expired=>  (session->atime + session->etime): ".($session->atime + $session->etime));
+#     C4::AR::Debug::debug("_session_expired=>  time(): ".time());
+#     C4::AR::Debug::debug("_session_expired=>  session->id(): ".$session->id);
+
+    if( ($session->atime + $session->etime) <= time() ){
         C4::AR::Debug::debug("_session_expired=> EXPIRO LA SESSION DE LA COOKIE ");
         return 1;
     }
@@ -795,7 +799,7 @@ sub _getTimeOut {
     return $timeout;
 }
 
-=item sub _clear_session_table
+=item sub _clear_sessions_from_DB
 
     Limpia la tabla sist_sesion, todas las sesiones "colgadas" que queraron por ej. cuando se cierra el navegador y no se sale de 
     la sesion.
@@ -803,7 +807,7 @@ sub _getTimeOut {
     Parametros: 
 
 =cut
-sub _clear_session_table {
+sub _clear_sessions_from_DB {
 # TODO esto no esta 100% confirmado de que pueda dejar a gente afuera de la sesion    
     use C4::Context;
     my $dbh = C4::Context->dbh;
@@ -812,8 +816,8 @@ sub _clear_session_table {
     my $tope = time() - _getTimeOut();
     my $count = $sth->execute($tope);
     if($count ne '0E0'){
-        C4::AR::Debug::debug("_clear_session_table=> TAREAS DE MANTENIMIENTO DE LA TABLA DE sist_sesion");
-        C4::AR::Debug::debug("_clear_session_table=> se borraron ".$count." sessiones viejas");
+        C4::AR::Debug::debug("_clear_sessions_from_DB=> TAREAS DE MANTENIMIENTO DE LA TABLA DE sist_sesion");
+        C4::AR::Debug::debug("_clear_sessions_from_DB=> se borraron ".$count." sessiones viejas");
     }
 }
 
@@ -1079,7 +1083,7 @@ sub _change_Password_Controller {
 
 =cut
 sub inicializarAuth{
-    my ($query, $t_params) = @_;
+    my ($t_params) = @_;
 
     #se genera un nuevo nroRandom para que se autentique el usuario
     my $random_number= C4::Auth::_generarNroRandom();
@@ -1087,6 +1091,7 @@ sub inicializarAuth{
     #genero una nueva session
     my $session = CGI::Session->load();
     #se pasa el mensaje al cliente, $t_params es una REFERENCIA
+    C4::AR::Debug::debug("codMsg: ".$session->param('codMsg'));
     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param('codMsg'),'INTRA',[]);
     #se destruye la session anterior
     $session->clear();
@@ -1200,7 +1205,7 @@ sub session_destroy {
 sub _verificarPassword {
 	my ($dbh, $userid, $password, $random_number) = @_;
     
-    C4::AR::Debug::debug("\n");
+    C4::AR::Debug::debug(" ");
     C4::AR::Debug::debug("_verificarPassword=> verificarPassword:");
     C4::AR::Debug::debug("_verificarPassword=> userID: ".$userid);
     C4::AR::Debug::debug("_verificarPassword=> nroRandom: ".$random_number);
@@ -1218,7 +1223,7 @@ sub _verificarPassword {
 	}
 
     C4::AR::Debug::debug("_verificarPassword=> password valida?: ".$passwordValida);
-    C4::AR::Debug::debug("\n");
+    C4::AR::Debug::debug(" ");
 
 	return ($passwordValida, $cardnumber, $ui);
 }
@@ -1256,33 +1261,31 @@ sub printSession {
 sub redirectTo {
 	my ($url) = @_;
     
-    C4::AR::Debug::debug("\n");
-    C4::AR::Debug::debug("redirectTo=> \n");
-
+    C4::AR::Debug::debug("redirectTo=>");  
 	#para saber si fue un llamado con AJAX
     if(C4::AR::Utilidades::isAjaxRequest()){
 	#redirijo en el cliente
-        C4::AR::Debug::debug("redirectTo=> CLIENT_REDIRECT\n"); 		
-  		my $session = CGI::Session->load();
+        C4::AR::Debug::debug("redirectTo=> CLIENT_REDIRECT"); 		
+   		my $session = CGI::Session->load();
 		# send proper HTTP header with cookies:
         $session->param('redirectTo', $url);
-        C4::AR::Debug::debug("redirectTo=> url: ".$url."\n");
+        C4::AR::Debug::debug("redirectTo=> url: ".$url);
      	print $session->header();
  		print 'CLIENT_REDIRECT';
 		exit;
 	}else{
 	#redirijo en el servidor
-        C4::AR::Debug::debug("redirectTo=> SERVER_REDIRECT\n");       
+        C4::AR::Debug::debug("redirectTo=> SERVER_REDIRECT");       
 		my $input = CGI->new(); 
 		print $input->redirect( 
 					-location => $url, 
 					-status => 301,
 		); 
-        C4::AR::Debug::debug("redirectTo=> url: ".$url."\n");
+        C4::AR::Debug::debug("redirectTo=> url: ".$url);
 		exit;
 	}
 
-    C4::AR::Debug::debug("\n");
+    C4::AR::Debug::debug(" ");
 }
 
 sub redirectToNoHTTPS {
