@@ -764,8 +764,8 @@ sub _session_expired {
 #     C4::AR::Debug::debug("_session_expired=>  (session->atime + session->etime): ".($session->atime + $session->etime));
 #     C4::AR::Debug::debug("_session_expired=>  time(): ".time());
 #     C4::AR::Debug::debug("_session_expired=>  session->id(): ".$session->id);
-
-    if( ($session->atime + $session->etime) <= time() ){
+  
+    if( (($session->atime + $session->etime) <= time()) && (_getExpireStatus()) ){
         C4::AR::Debug::debug("_session_expired=> EXPIRO LA SESSION DE LA COOKIE ");
         return 1;
     }
@@ -781,7 +781,7 @@ sub _session_expired {
 
 =cut
 sub _getTimeOut {
-    my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout') || C4::AR::Context->config('timeout') ||600;
+    my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout') || C4::Context->config('timeout') ||600;
     
     C4::AR::Debug::debug("_getTimeOut => ".$timeout);
     return $timeout;
@@ -1173,20 +1173,24 @@ sub _generarSession {
 #     $session->expire(0);
     my $expire = _getExpireStatus();
     
-# 
-
     if ($expire){
       $session->expire(_getTimeOut().'s');
-    }
-    else{
+    }else{
       $session->expire(0);
-    }    
+    }
 	return $session;
 }
 
 sub _getExpireStatus{
 
-  return ( C4::Context->config("expire") || 1);
+  my $expire = C4::Context->config("expire");
+
+  if (defined($expire)){
+        C4::AR::Debug::debug("EXPIRA".$expire);
+      return ( $expire );
+  }else{
+      return (1);
+  }
 }
 
 sub session_destroy {
