@@ -22,7 +22,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 my %params_combo;
 $params_combo{'onChange'}= 'changeTipoItem()';
-$params_combo{'default'}= 'LIB';
+$params_combo{'default'}= 'SIN SELECCIONAR';
 $params_combo{'id'}= 'comboTiposItems';
 my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'selectItemType'}= $comboTiposNivel3;

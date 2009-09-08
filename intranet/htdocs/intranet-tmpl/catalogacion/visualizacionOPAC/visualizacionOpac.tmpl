@@ -12,7 +12,7 @@ SUBCAMPOS_ARRAY= new Array();
 //para mantener el encabezado
 ENCABEZADO= 0;
 //ventana para el Alta de Encabezados
-vAgregarEncabezado;
+vAgregarEncabezado = 0;
 
 
 /*
@@ -325,8 +325,9 @@ function validarDatos(){
 
 function changeNivel(){
 	$('#divTablaVisualizacion').html('');
-	cargarTablaEncabezados();
-// 	$('#result').html('');
+    if( $('#comboTiposItems').val() != 'SIN SELECCIONAR'){
+        cargarTablaEncabezados();
+    }
 }
 
 function updateNombreEncabezado(idEncabezado, nombre){
@@ -416,8 +417,10 @@ function EditCell(idObj, id){
 }
 
 function changeTipoItem(){
-	//se llama al mismo evento
-	changeNivel();
+    if( $('#niveles_id').val() != '-1'){
+	    //se llama al mismo evento
+	    changeNivel();
+    }
 }
 
 //muestra la tabla de los encabezados, segun nivel e itemtype
@@ -537,6 +540,7 @@ $(document).ready(function() {
 	<li class="sub_item">
         <label for="niveles_id">[% 'Nivel' | i18n %]:</label>
 		<select id="niveles_id" onChange="changeNivel();">
+        <option value="-1">[% 'SIN SELECCIONAR' | i18n %]</option>    
 		<option value="1">[% 'Nivel1' | i18n %]</option>
 		<option value="2">[% 'Nivel2' | i18n %]</option>
 		<option value="3">[% 'Nivel3' | i18n %]</option>

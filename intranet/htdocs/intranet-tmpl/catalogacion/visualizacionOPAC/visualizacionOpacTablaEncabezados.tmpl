@@ -36,10 +36,10 @@
                 [% IF ! catalogacion.primeroDelTipo(itemType) %]  
                         [% PERL %]
                             print C4::AR::Filtros::to_Icon(    
-                                                                boton   => "icon_subir",
-                                                                onClick => "modificarOrden('[% catalogacion.getId %]', 'SUBIR_ORDEN');",
-                                                                title   => "[% 'Subir en el Orden' | i18n %]",
-                                                                alternClass => "botonCentradoTabla"
+                                            boton   => "icon_subir",
+                                            onClick => "modificarOrden([% encabezado.getIdEncabezado %], [% encabezado.getOrden %], 'up');",
+                                            title   => "[% 'Subir en el Orden' | i18n %]",
+                                            alternClass => "botonCentradoTabla"
                                     ) ;
                         [% END %]
                 [% END %]
@@ -47,10 +47,10 @@
                 [% IF ! catalogacion.ultimoDelTipo(itemType) %]  
                         [% PERL %]
                             print C4::AR::Filtros::to_Icon(    
-                                                                boton   => "icon_bajar",
-                                                                onClick => "modificarOrden('[% catalogacion.getId %]', 'BAJAR_ORDEN');",
-                                                                title   => "[% 'Bajar en el Orden' | i18n %]",
-                                                                alternClass => "botonCentradoTabla"
+                                            boton   => "icon_bajar",
+                                            onClick => "modificarOrden([% encabezado.getIdEncabezado %], [% encabezado.getOrden %], 'down');",
+                                            title   => "[% 'Bajar en el Orden' | i18n %]",
+                                            alternClass => "botonCentradoTabla"
                                     ) ;
                         [% END %]
                 [% END %]
