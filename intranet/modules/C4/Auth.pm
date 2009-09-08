@@ -449,18 +449,6 @@ sub checkauth {
     #verifica que no haya sesiones "colgadas", las borra de la base
     _clear_sessions_from_DB();
 
-# FIXME esto no esta funcionando - Miguel
-    if( defined $session->param('SERVER_GENERATED_SID') and $session->param('SERVER_GENERATED_SID') eq '1' ){
-        #session generada en el servidor
-        C4::AR::Debug::debug("checkauth=> SERVER_GENERATED_SID = 1");
-    } else {
-    
-#         C4::AR::Debug::debug("checkauth=> COOKIE FIXATION");
-#         $session->param('codMsg', 'U401');
-#         $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-#         redirectTo('/cgi-bin/koha/auth.pl');
-    }
-
 
 #     #si se usa CGI::Session 4.42 descomentar esta linea
     if(defined $session and _session_expired($session)){
