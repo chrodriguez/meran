@@ -52,47 +52,48 @@
 
 <div class="titulos">[% "Generar Etiquetas" | i18n %]</div>
 
-<div class="filtros_reportes">
-    <ul class="filtros_reportes_izq">
-        <li>
-            <b>[% 'Unidad de informacion' | i18n %]:</b> 
-               [% ui_Select %]
-        </li>
-
-        <li>
-            <b>[% "Inventario:" | i18n %]</b>
-            <input type="text" id="inv_desde" value="[% inv_desde %]">&nbsp;
-            Y
-            <input type="text" id="inv_hasta" value="[% inv_hasta %]">&nbsp;
-            &nbsp;&nbsp;&nbsp;
-            [% "El m&iacute;nimo inventario existente es:" | i18n %] 
-                    <b>[% MIN %] </b>
-                    [% " y el m&aacute;ximo es:" | i18n %]
-                    <b>[% MAX %]</b>
-        </li>
-        <li>
-            <b>[% "Signatura Topogr&aacute;fica:" | i18n %]</b>
-            [% "Desde:" | i18n %]&nbsp; <input type='text' id='sig_top_desde' name='sig_top_desde' value='[% sig_top_desde %]'>
-            [% "Hasta:" | i18n %]&nbsp; <input type='text' id='sig_top_hasta' name='sig_top_hasta' value='[% sig_top_hasta %]'>
-            &nbsp;&nbsp;&nbsp;
-            [% "La m&iacute;nima signatura existente es:" | i18n %] 
-                    <b>[% MINS %] </b>
-                    [% " y la m&aacute;xima es:" | i18n %]
-                    <b>[% MAXS %]</b>
-
-        </li>
-        <li>
-            <b>[% "Comienzo de Signatura Topogr&aacute;fica:" | i18n %]</b>
-            <input type='text' id='sig_top_begin' name='sig_top_begin' value='[% sig_top_begin %]'>
-        </li>
-
-    </ul>
-
-    <ul class="filtros_reportes_der">
-    </ul>
-
-</div>
-
+<fieldset>
+    <legend class="titulo_legend">[% "Generar Etiquetas" | i18n %]</legend>
+        <ul>
+            <li class="sub_item">
+                <label for="id_ui">[% 'Unidad de informacion' | i18n %]:</label> 
+                [% ui_Select %]
+            </li>
+            <li class="sub_item">
+                <label for="id_ui">[% "Inventario:" | i18n %]</label>
+                <input type="text" id="inv_desde" value="[% inv_desde %]">&nbsp;
+                Y
+                <input type="text" id="inv_hasta" value="[% inv_hasta %]">&nbsp;
+                &nbsp;&nbsp;&nbsp;
+                [% "El m&iacute;nimo inventario existente es:" | i18n %] 
+                        <b>[% MIN %] </b>
+                        [% " y el m&aacute;ximo es:" | i18n %]
+                        <b>[% MAX %]</b>
+            </li>
+            <fieldset>
+                <legend class="titulo_legend">[% "Signatura Topogr&aacute;fica" | i18n %]</legend>
+                <ul>
+                    <li class="sub_item">
+                        <label for="sig_top_desde">[% "Desde:" | i18n %]</label>
+                        <input type='text' id='sig_top_desde' name='sig_top_desde' value='[% sig_top_desde %]'>
+                    </li>
+                    <li class="sub_item">
+                        <label for="sig_top_hasta">[% "Hasta:" | i18n %]</label>
+                        <input type='text' id='sig_top_hasta' name='sig_top_hasta' value='[% sig_top_hasta %]'>
+                        &nbsp;&nbsp;&nbsp;
+                        [% "La m&iacute;nima signatura existente es:" | i18n %] 
+                                <b>[% MINS %] </b>
+                                [% " y la m&aacute;xima es:" | i18n %]
+                                <b>[% MAXS %]</b>
+                    </li>
+                    <li class="sub_item">
+                        <label for="sig_top_begin">[% "Comienzo de Signatura Topogr&aacute;fica:" | i18n %]</label>
+                        <input type='text' id='sig_top_begin' name='sig_top_begin' value='[% sig_top_begin %]'>
+                    </li>
+                </ul>
+            </fieldset>
+        </ul>
+</fieldset>
 <div class="buttonContainerHorizontal">
     <script> filtrar = 'filtrar'; </script>
     [% PERL %]
@@ -103,9 +104,6 @@
                                             );
     [% END %]
 </div>
-
-<br>
-<br>
 
 <div id="result"> </div>
 

@@ -1,52 +1,58 @@
-<center>
-<p > 
-	<b>[% "La cantidad de modificaciones hechas fueron:" | i18n %] &nbsp;[% cant %]</b>
-</p><br>
+<script type="text/javascript">
+      $(document).ready(function() {
+        makeToggle('datos_tabla_div','trigger',null,false);
+      });
+</script>
 
-[% paginador %]
-<table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
-	<tr>
-		<th class="titulo_tabla_resultado click" onclick="ordenar('surname')" title=[% "Ordenar por usuario" | i18n %]>[% "Usuario" | i18n %]</th>
-		<th class="titulo_tabla_resultado click" onclick="ordenar('fecha')" title=[% "Ordenar por fecha" | i18n %]>[% "Fecha" | i18n %]</th>
-		<th class="titulo_tabla_resultado click" onclick="ordenar('operacion')" title=[% "Ordenar por operaci&oacute;n" | i18n %]>[% "Operaci&oacute;n" | i18n %]</th>
-		<th class="titulo_tabla_resultado click" onclick="ordenar('tipo')" title=[% "Ordenar por tipo" | i18n %]>[% "Tipo" | i18n %]</th>
-		<th class="titulo_tabla_resultado click" onclick="ordenar('numero')" title=[% "Ordenar por numero de documento" | i18n %]>[% "N&uacute;mero" | i18n %]</th>
-		<th class="titulo_tabla_resultado">[% "Nota" | i18n %]</th>
-		<th class="titulo_tabla_resultado">[% "Agregar nota" | i18n %]</th>
-	</tr>
-
-[% FOREACH registro IN registros %]
-	
-  	<tr align='center' >
-
-        <td> 
-            [% PERL %]
-                print C4::AR::Filtros::link_to( text =>     "[% registro.socio_responsable.getNro_socio %] ([% registro.socio_responsable.persona.getApellido %] [% registro.socio_responsable.persona.getNomre %] )",
-                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
-                                                params =>   ["nro_socio=[% registro.socio_responsable.getNro_socio %]"],
-                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
-                                            ) ;
-            [% END %]
-            <a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?nro_socio=[% registro.socio_responsable.getNro_socio %]">
-            </a>
-        </td>
-  		<td> [% registro.fecha %] </td>
-  		<td> [% registro.operacion %]</td>
-  		<td> [% registro.tipo %]</td>
-		<td><a href="/cgi-bin/koha/reports/moredetail2.pl?tipo=[% registro.tipo %]&bib=[% registro.numero %]">[% registro.numero %]</a></td>
-		
-  		<td> 
-			<textarea  id="[% registro.idModificacion %]" name="notas2" cols="20" rows="6">[% registro.nota %]</textarea>
-		</td>
-		<!-- Aca se guarda la nota de la modificacion con la funcion nota(id) que esta declarada en el archivo registro.tmpl -->
-  		<td> 
-			<input  src="[% themelang %]/images/guardar.png" type="image"  value=[% "Guardar Nota" | i18n %] title=[% "Guardar Nota" | i18n %] onClick="guardarNota('[% registro.idModificacion %]')"> 
-		</td>
- 		
- 	</tr>
-	
-[% END %]
-
-</table>
-
-</center>
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (cat&aacute;logo)" | i18n %]:</legend>
+        <div class="datos_tabla_div" id="datos_tabla_div">
+            <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: [% buscoPor %]</div>
+            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %]  en ([% timeSeg %] segundos)</div>
+            <div class="contenedor_paginador">[% paginador %]</div>
+                <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
+                    <tr>
+                        <th class="titulo_tabla_resultado click" onclick="ordenar('surname')" title=[% "Ordenar por usuario" | i18n %]>[% "Usuario" | i18n %]</th>
+                        <th class="titulo_tabla_resultado click" onclick="ordenar('fecha')" title=[% "Ordenar por fecha" | i18n %]>[% "Fecha" | i18n %]</th>
+                        <th class="titulo_tabla_resultado click" onclick="ordenar('operacion')" title=[% "Ordenar por operaci&oacute;n" | i18n %]>[% "Operaci&oacute;n" | i18n %]</th>
+                        <th class="titulo_tabla_resultado click" onclick="ordenar('tipo')" title=[% "Ordenar por tipo" | i18n %]>[% "Tipo" | i18n %]</th>
+                        <th class="titulo_tabla_resultado click" onclick="ordenar('numero')" title=[% "Ordenar por numero de documento" | i18n %]>[% "N&uacute;mero" | i18n %]</th>
+                        <th class="titulo_tabla_resultado">[% "Nota" | i18n %]</th>
+                        <th class="titulo_tabla_resultado">[% "Agregar nota" | i18n %]</th>
+                    </tr>
+                
+                [% FOREACH registro IN registros %]
+                    
+                    <tr align='center' >
+                
+                        <td> 
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% registro.socio_responsable.getNro_socio %] ([% registro.socio_responsable.persona.getApellido %] [% registro.socio_responsable.persona.getNomre %] )",
+                                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                                params =>   ["nro_socio=[% registro.socio_responsable.getNro_socio %]"],
+                                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                            <a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?nro_socio=[% registro.socio_responsable.getNro_socio %]">
+                            </a>
+                        </td>
+                        <td> [% registro.fecha %] </td>
+                        <td> [% registro.operacion %]</td>
+                        <td> [% registro.tipo %]</td>
+                        <td><a href="/cgi-bin/koha/reports/moredetail2.pl?tipo=[% registro.tipo %]&bib=[% registro.numero %]">[% registro.numero %]</a></td>
+                        
+                        <td> 
+                            <textarea  id="[% registro.idModificacion %]" name="notas2" cols="20" rows="6">[% registro.nota %]</textarea>
+                        </td>
+                        <!-- Aca se guarda la nota de la modificacion con la funcion nota(id) que esta declarada en el archivo registro.tmpl -->
+                        <td> 
+                            <input  src="[% themelang %]/images/guardar.png" type="image"  value=[% "Guardar Nota" | i18n %] title=[% "Guardar Nota" | i18n %] onClick="guardarNota('[% registro.idModificacion %]')"> 
+                        </td>
+                        
+                    </tr>
+                    
+                [% END %]
+                
+                </table>
+        </div>
+</fieldset>

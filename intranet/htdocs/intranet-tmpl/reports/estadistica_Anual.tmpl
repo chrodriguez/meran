@@ -21,13 +21,14 @@ function updateInfo(responseText){
 
 <div class="titulos" >[% "Actividades anuales" | i18n %]</div>
 
-<div class="filtros_reportes">
-    <ul class="filtros_reportes_izq">
-        <li>[% "Seleccione un a&ntilde;o:  " | i18n %] [% year %]</li>
-    </ul>
-</div>
-
-<br>
+<fieldset>
+    <legend class="titulo_legend">[% "Buscar signatura topogr&aacute;fica: &nbsp;" | i18n %]</legend>
+        <ul>
+            <li class="sub_item">
+                <label for="">[% "Seleccione un a&ntilde;o:  " | i18n %] [% year %]</label>
+            </li>
+        </ul>
+</fieldset>
 
 <div id="result"></div>
 

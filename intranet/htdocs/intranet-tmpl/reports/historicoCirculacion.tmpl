@@ -64,50 +64,52 @@ $(document).ready(function() {
 <div class="titulos" >[% "Registro de Circulaci&oacute;n" | i18n %]</div>
 
 
-<div class="filtros_reportes">
-
-    <ul class="filtros_reportes_izq">
-        <li>
-            <b>[% "Seleccione para buscar por fecha" | i18n %].</b>
-            <input type="checkbox" id="chkfecha">
-        </li>
-        <li>
-            [% "Seleccione una fecha de inicio:" | i18n %]
-            <input id="fechaIni" name="dateselected" value="
-                                [% IF fechaInicio %]
-                                    [% dateselected %]
-                                [% ELSE %]
-                                    [% todaydate %]
-                                [% END %] "
-                        >
-        </li>
-        <li>
-            [% "Seleccione una fecha de fin" | i18n %]:
-            <input id="fechaFin" name="dateselectedEnd" value="
-                    [% IF fechaFin %]
-                        [% dateselectedEnd %]
-                    [% ELSE %]
-                        [% todaydate %]
-                    [% END %]"
-            >
-        </li>
-    </ul>
-    <ul class="filtros_reportes_der">
-
-        <li><b>[% "Filtrar por:" | i18n %]</b></li>
-        <li>
-            <b>[% "Responsable:" | i18n %]</b>[% selectusuarios %]
-        </li>
-        <li>
-            <b>[% "Tipo de Pr&eacute;stamo: " | i18n %]</b>
-            [% selectTipoPrestamos %]
-        </li>
-        <li>
-            <b>[% "Tipo de Operaci&oacute;n: " | i18n %]</b>
-            [% selectTipoOperacion %]
-        </li>
-    </ul>
-</div>
+<fieldset>
+    <legend class="titulo_legend">[% "Buscar signatura topogr&aacute;fica: &nbsp;" | i18n %]</legend>
+        <ul>
+            <li class="sub_item">
+                <label for="chkfecha">[% "Seleccione para buscar por fecha" | i18n %]</label>
+                <input type="checkbox" id="chkfecha">
+            </li>
+            <li class="sub_item">
+                <label for="fechaIni">[% "Seleccione una fecha de inicio:" | i18n %]</label>
+                <input id="fechaIni" name="dateselected" value="
+                                    [% IF fechaInicio %]
+                                        [% dateselected %]
+                                    [% ELSE %]
+                                        [% todaydate %]
+                                    [% END %] "
+                >
+            </li>
+            <li class="sub_item">
+                <label for="fechaFin">[% "Seleccione una fecha de fin" | i18n %]:</label>
+                <input id="fechaFin" name="dateselectedEnd" value="
+                        [% IF fechaFin %]
+                            [% dateselectedEnd %]
+                        [% ELSE %]
+                            [% todaydate %]
+                        [% END %]"
+                >
+            </li>
+            <fieldset>
+                <legend class="titulo_legend">[% "Filtrar por:" | i18n %]</legend>
+                <ul>
+                    </li>
+                    <li class="sub_item">
+                        <label for="socios">[% "Responsable:" | i18n %]</label>
+                        [% selectusuarios %]
+                    </li>
+                    <li class="sub_item">
+                        <label for="tipo_prestamo_id">[% "Tipo de Pr&eacute;stamo: " | i18n %]</label>
+                        [% selectTipoPrestamos %]
+                    </li>
+                    <li class="sub_item">
+                        <label for="tipoOperacion">[% "Tipo de Operaci&oacute;n: " | i18n %]</label>
+                        [% selectTipoOperacion %]
+                    </li>
+                </ul>
+      </ul>
+</fieldset>
 <div class="buttonContainerHorizontal">
     [% PERL %]
             print C4::AR::Filtros::to_Button( 

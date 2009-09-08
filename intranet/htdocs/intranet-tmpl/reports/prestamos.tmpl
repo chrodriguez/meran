@@ -83,53 +83,53 @@ function updateInfo(responseText){
 
 [% IF msg %]
     <p>
-        <font color='red' size='2'>[% "Mail enviado a usuarios con pr&eacute;stamos vencidos. " | i18n %]
+        <font color='red' size='2'>
+            [% "Mail enviado a usuarios con pr&eacute;stamos vencidos. " | i18n %]
         </font>
     </p>
 [% END %]
 
-<br>
-<div class="filtros_reportes">
-    <ul class="filtros_reportes_izq">
-        <li><h2>[% "Fecha de Vencimiento" | i18n %]</h2></li>
-		<li>[% "Seleccione una fecha de inicio:" | i18n %]</li>
-		<li>
-			<input id="begindate" name="begindate"></a>
-		</li>
-        <li>[% "Seleccione una fecha de fin" | i18n %]:</li>
-        <li>
-            <input id="enddate" name="enddate">
-        </li>
+<fieldset>
+    <legend class="titulo_legend">[% "Some Title" | i18n %]</legend>
+        <ul>
+            <li class="sub_item">
+            <li class="sub_item">
+                [% "Fecha de Vencimiento" | i18n %]
+            </li>
+            <li class="sub_item">[% "Seleccione una fecha de inicio:" | i18n %]</li>
+            <li class="sub_item">
+                <input id="begindate" name="begindate"></a>
+            </li>
+            <li class="sub_item">[% "Seleccione una fecha de fin" | i18n %]:</li>
+            <li class="sub_item">
+                <input id="enddate" name="enddate">
+            </li>
+            <li class="sub_item">[% "Seleccione una unidad de informaci&oacute;n" | i18n %]:</li>
+            <li class="sub_item">[% unidades %]</li>
+            <li class="sub_item">[% "Seleccione estado de pr&eacute;stamo" | i18n %]</li>
+            <li class="sub_item">
+                <select name="estado" id="estado">
+                    <option value="VE" id="VE">[% "Vencidos" | i18n %]</option>
+                    <option value="NV" id="NV">[% "No vencidos" | i18n %]</option>
+                    <option value="TO" id="TO" selected>[% "Todos" | i18n %]</option>
+                </select>
+            </li>
+    
+            <li class="sub_item">[% "Cantidad de resultados por p&aacute;gina:" | i18n %]</li>
+            <li class="sub_item">
+                <select name="renglones" id="renglones">
+                    <option value="5" id="5">5</option>
+                    <option value="10" id="10">10</option>
+                    <option value="15" id="15">15</option>
+                    <option value="20" id="20">20</option>
+                    <option value="25" id="25">25</option>
+                    <option value="50" id="50">50</option>
+                    <option value="100" id="100">100</option>
+                    <option value="todos" id="todos" selected>[% "Todos" | i18n %]</option>
+                </select>
+            </li>
+      </ul>
 
-    </ul>
-
-    <ul class="filtros_reportes_der">
-		<li>[% "Seleccione una unidad de informaci&oacute;n" | i18n %]:</li>
-		<li>[% unidades %]</li>
-        <li>[% "Seleccione estado de pr&eacute;stamo" | i18n %]</li>
-        <li>
-            <select name="estado" id="estado">
-                <option value="VE" id="VE">[% "Vencidos" | i18n %]</option>
-                <option value="NV" id="NV">[% "No vencidos" | i18n %]</option>
-                <option value="TO" id="TO" selected>[% "Todos" | i18n %]</option>
-            </select>
-        </li>
-
-        <li>[% "Cantidad de resultados por p&aacute;gina:" | i18n %]</li>
-		<li>
-			<select name="renglones" id="renglones">
-				<option value="5" id="5">5</option>
-				<option value="10" id="10">10</option>
-				<option value="15" id="15">15</option>
-				<option value="20" id="20">20</option>
-				<option value="25" id="25">25</option>
-				<option value="50" id="50">50</option>
-				<option value="100" id="100">100</option>
-				<option value="todos" id="todos" selected>[% "Todos" | i18n %]</option>
-			</select>
-		</li>
-    </ul>
-</div>
 <div class="buttonContainerHorizontal">
     [% PERL %]
                     print C4::AR::Filtros::to_Button( 

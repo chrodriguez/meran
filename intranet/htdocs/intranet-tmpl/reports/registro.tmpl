@@ -68,46 +68,48 @@ function updateGuardarNota(responseText){
 
 
 <!-- FIXME para los tipos, el script anda mal, los toma como el check de fecha o el radio operacion -->
-<div class="filtros_reportes">
-    <ul class="filtros_reportes_izq">
-        <li>
-            <b>[% "Seleccione para buscar por fecha" | i18n %].</b>
-            <input id="chkfecha" type="checkbox" name="chkfecha">
-        </li>
-        <li>
-            [% "Seleccione una fecha de inicio:" | i18n %]
-            <input id="dateselected" name="dateselected" value="[% todaydate %]">
-        </li>
-        <li>
-            [% "Seleccione una fecha de fin" | i18n %]:
-            <input id="dateselectedEnd" name="dateselectedEnd" value="[% todaydate %]"> 
-        </li>
-    </ul>
-    <ul class="filtros_reportes_der">
-
-        <li><b>[% "Filtrar por:" | i18n %]</b></li>
-        <li>
-            <input id="operacion" type="radio" name="operacion" value=[% "Alta" | i18n %]>&nbsp;[% "Alta" | i18n %]
-            <input id="operacion" type="radio" name="operacion" value="Actualizado">&nbsp;[% "Actualizado" | i18n %]
-            <input id="operacion" type="radio" name="operacion" value="Borrado">&nbsp;[% "Borrado" | i18n %]
-            <input id="operacion" type="radio" name="operacion" value="" checked>&nbsp;[% "Ninguno" | i18n %]
-        </li>
-        <li>
-            <input id="tipo" type="radio" name="tipo" value=[% "Libro" | i18n %]>&nbsp;[% "Libro" | i18n %]
-            <input id="tipo" type="radio" name="tipo" value=[% "Grupo" | i18n %]>[% "Grupo" | i18n %]
-            <input id="tipo" type="radio" name="tipo" value=[% "Ejemplar" | i18n %]>[% "&nbsp;Ejemplar" | i18n %]
-            <input id="tipo" type="radio" name="tipo" value="" checked>&nbsp;[% "Ninguno" | i18n %]
-        </li>
-            <!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
-        <li>
-            <input id="chkuser" type="checkbox" name="chkuser" value="usuario"><b>[% "Nombre de usuario: " | i18n %]</b>[% select_usuarios %]
-        </li>
-        <li>
-            <input id="chknum" type="checkbox" name="chknum" value="num"><b>[% "N&uacute;mero" | i18n %]
-            [% "desde:" | i18n %] <input id="numDesde" type="text" name="numDesde" size="12">
-            [% "hasta:" | i18n %] </b><input id="numHasta" type="text" name="numHasta" size="12" >
-        </li>
-    </ul>
+<fieldset>
+    <legend class="titulo_legend">[% "Buscar signatura topogr&aacute;fica: &nbsp;" | i18n %]</legend>
+        <ul>
+            <li class="sub_item">
+                <label for="chkfecha">[% "Seleccione para buscar por fecha" | i18n %]</label>
+                <input id="chkfecha" type="checkbox" name="chkfecha">
+            </li>
+            <li class="sub_item">
+                <label for="dateselected">[% "Seleccione una fecha de inicio:" | i18n %]</label>
+                <input id="dateselected" name="dateselected" value="[% todaydate %]">
+            </li>
+            <li class="sub_item">
+                <label for="dateselectedEnd">[% "Seleccione una fecha de fin" | i18n %]:</label>
+                <input id="dateselectedEnd" name="dateselectedEnd" value="[% todaydate %]"> 
+            </li>
+        </ul>
+      <fieldset>
+          <legend class="titulo_legend">[% "Filtrar por:" | i18n %]</legend>
+          <ul>
+            <li class="sub_item">
+                <input id="operacion" type="radio" name="operacion" value=[% "Alta" | i18n %]>&nbsp;[% "Alta" | i18n %]
+                <input id="operacion" type="radio" name="operacion" value="Actualizado">&nbsp;[% "Actualizado" | i18n %]
+                <input id="operacion" type="radio" name="operacion" value="Borrado">&nbsp;[% "Borrado" | i18n %]
+                <input id="operacion" type="radio" name="operacion" value="" checked>&nbsp;[% "Ninguno" | i18n %]
+            </li>
+            <li class="sub_item">
+                <input id="tipo" type="radio" name="tipo" value=[% "Libro" | i18n %]>&nbsp;[% "Libro" | i18n %]
+                <input id="tipo" type="radio" name="tipo" value=[% "Grupo" | i18n %]>[% "Grupo" | i18n %]
+                <input id="tipo" type="radio" name="tipo" value=[% "Ejemplar" | i18n %]>[% "&nbsp;Ejemplar" | i18n %]
+                <input id="tipo" type="radio" name="tipo" value="" checked>&nbsp;[% "Ninguno" | i18n %]
+            </li>
+                <!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
+            <li class="sub_item">
+                <input id="chkuser" type="checkbox" name="chkuser" value="usuario"><b>[% "Nombre de usuario: " | i18n %]</b>[% select_usuarios %]
+            </li>
+            <li class="sub_item">
+                <input id="chknum" type="checkbox" name="chknum" value="num"><b>[% "N&uacute;mero" | i18n %]
+                [% "desde:" | i18n %] <input id="numDesde" type="text" name="numDesde" size="12">
+                [% "hasta:" | i18n %] </b><input id="numHasta" type="text" name="numHasta" size="12" >
+            </li>
+        </ul>
+    </fieldset>
 </div>
 <div class="buttonContainerHorizontal">
         [% PERL %]

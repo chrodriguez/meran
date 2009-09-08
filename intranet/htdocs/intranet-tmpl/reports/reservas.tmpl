@@ -44,32 +44,32 @@ function consultar(){
 
 <div class="titulos" >[% "Reservas" | i18n %]</div>
 
-<div class="filtros_reportes">
-
-    <ul class="filtros_reportes_izq">
-        <li>[% "Seleccione el tipo de reserva:" | i18n %]
-			<select name="tipoReserva" id="tipoReserva">
-				<option selected="selected" value="EJ" id="EJ">[% "Por ejemplar" | i18n %]</option>
-				<option value="GR" id="GR">[% "Por grupo" | i18n %]</option>
-				<option value="TO" id="TO">[% "Todas" | i18n %]</option>
-			</select>
-		</li>
-
-        <li>
-            [% "Seleccione una unidad de informaci&oacute;n:" | i18n %]
+<fieldset>
+    <legend class="titulo_legend">[% "Tipo de reserva" | i18n %]</legend>
+    <ul>
+        <li class="sub_item">
+            <label for="tipoReserva">[% "Seleccione el tipo de reserva" | i18n %]</label>
+            <select name="tipoReserva" id="tipoReserva">
+                <option selected="selected" value="EJ" id="EJ">[% "Por ejemplar" | i18n %]</option>
+                <option value="GR" id="GR">[% "Por grupo" | i18n %]</option>
+                <option value="TO" id="TO">[% "Todas" | i18n %]</option>
+            </select>
+        </li>
+        <li class="sub_item">
+            <label for="id_ui">[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</label>
             [% unidades %]
         </li>
     </ul>
-</div>
-<div class="buttonContainerHorizontal">
-    [% PERL %]
-                    print C4::AR::Filtros::to_Button( 
-                                                        text    =>  "[% 'Buscar' | i18n %]",
-                                                        boton   =>  "boton_buscar",
-                                                        onClick =>  "consultar();",
-                            ) ;
-    [% END %]
-</div>
+    <div class="buttonContainerHorizontal">
+        [% PERL %]
+                        print C4::AR::Filtros::to_Button( 
+                                                            text    =>  "[% 'Buscar' | i18n %]",
+                                                            boton   =>  "boton_buscar",
+                                                            onClick =>  "consultar();",
+                                ) ;
+        [% END %]
+    </div>
+</fieldset>
 
 <div id="result"></div>
 
