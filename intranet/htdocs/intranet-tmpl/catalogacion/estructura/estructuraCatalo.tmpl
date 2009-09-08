@@ -31,7 +31,7 @@ function changePage(ini){
 //Muestra lo catalogado seguen el nivel y el tipo de item seleccionado (nivel > 1)
 function eleccionDeNivel(){
 	var nivel=$("#niveles_id").val();
-	var ObjDiv = $("#divitemtype");
+	var ObjDiv = $("#content_combo_tipo_nivel3_id");
 	if((nivel == '1') || (nivel == 'Niveles')){
         ObjDiv.hide();
     }else{
@@ -469,6 +469,9 @@ function updateModificarEstructuraCatalogacion(responseText){
 
 <div class="titulos" >Estructura de Catalogaci&oacute;n</div>
 
+
+<fieldset>
+<legend><strong>[% "Seleccione el nivel:" | i18n %]</strong></legend>
 <ul>
     <li class="sub_item">
         <label for="niveles_id" >
@@ -477,18 +480,15 @@ function updateModificarEstructuraCatalogacion(responseText){
         [% selectNivel %]
     </li>
 
-
-<div id="divitemtype" style="display:none;">
-
-    <li class="sub_item">
-        <label for="itemtype">
+    <li id="content_combo_tipo_nivel3_id" class="sub_item" style="display:none;">
+        <label for="tipo_nivel3_id">
 	        [% 'Tipo de item:' | i18n %] 
         </label>
         [% selectItemType %]
     </li>
 
-</div>
 </ul>
+</fieldset>
 
 <!-- PARA MOSTRAR TEMPLATE PARA MODIFICAR CAMPOS -->
 <div id= "resultModificarCampo"></div>

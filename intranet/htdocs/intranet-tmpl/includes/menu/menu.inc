@@ -90,14 +90,9 @@
                                                                 url =>      "/cgi-bin/koha/catalogacion/estructura/datosDocumento.pl", 
                                                                 title =>    "[% 'Agregar documento' | i18n %]"
                                                             ) ;
-                            [% END %]                        </li>
-                        <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'B&uacute;squeda ejemplar' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/busquedas/adminEjemplares.pl", 
-                                                                title =>    "[% 'B&uacute;squeda ejemplar' | i18n %]"
-                                                            ) ;
-                            [% END %]                        </li>
+                            [% END %]                        
+                        </li>
+                        
                         <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Estante virtual' | i18n %]",

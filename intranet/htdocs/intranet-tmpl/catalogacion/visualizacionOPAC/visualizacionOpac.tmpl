@@ -531,9 +531,8 @@ $(document).ready(function() {
 
 <div class="titulos" >[% 'Visualizaci&oacute;n de campos MARC en OPAC' | i18n %]</div>
 
-<div class="formElemets">
-  <div>
-<!-- contenedor superior -->
+<fieldset>
+<legend><strong>[% "Seleccione el nivel:" | i18n %]</strong></legend>
 <ul>
 	<li class="sub_item">
         <label for="niveles_id">[% 'Nivel' | i18n %]:</label>
@@ -553,6 +552,7 @@ $(document).ready(function() {
                                                             boton   => "boton_agregar",
                                                             onClick => "agregarEncabezado();",
                                                             title   => "[% 'Agregar un Encabezado' | i18n %]",
+                                                            width   => "auto",
                                                             alternClass => "botonCentrado"
                              ) ;
         [% END %]
@@ -564,6 +564,6 @@ $(document).ready(function() {
 
 		<div id="divTablaVisualizacion"></div>
 </ul>
-</div>
+</fieldset>
 
 [% INCLUDE "intranet-bottom.inc" %]

@@ -13,7 +13,7 @@
             <select name="campo" id="campo" onChange="eleccionCampo()">
                 <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
             </select>
-        [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span><strong>
+        [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span></strong>
     </li>
     <li class="sub_item">
         <label for="subcampo">[% 'Subcampo' | i18n %]:</label>
@@ -65,6 +65,7 @@
                                                             boton   => "boton_buscar",
                                                             onClick => "agregarEstructuraCatalogacion([% nivel %]);",
                                                             title   => "[% 'Guardar Campo temporal' | i18n %]",
+                                                            width => "auto",
                                                             alternClass => "botonCentrado",
                                 ) ;
     [% END %]
@@ -74,6 +75,7 @@
                                                             boton   => "boton_buscar",
                                                             onClick => "cancelarEstructuraCatalogacion();",
                                                             title   => "[% 'Cancelar Campo temporal' | i18n %]",
+                                                            width => "auto",    
                                                             alternClass => "botonCentrado",
                                 ) ;
     [% END %]

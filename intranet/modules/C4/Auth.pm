@@ -1186,7 +1186,7 @@ sub _generarSession {
 
 sub _getExpireStatus{
 
-  return ( C4::Context::Context->config("expire") || 1);
+  return ( C4::Context->config("expire") || 1);
 }
 
 sub session_destroy {

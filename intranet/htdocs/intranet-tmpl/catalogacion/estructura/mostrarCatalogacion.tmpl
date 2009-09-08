@@ -110,11 +110,12 @@
     
     
     [% PERL %]
-                print C4::AR::Filtros::to_Button(      text    => "[% 'Agregar Campo' | i18n %]",
-                                                    boton   => "boton_agregar",
-                                                    onClick => "mostrarAgregarCampo();",
-                                                    title   => "[% 'Agregar Campo' | i18n %]",
-                                                    alternClass => "botonCentrado"
+                print C4::AR::Filtros::to_Button(       text    => "[% 'Agregar Campo' | i18n %]",
+                                                        boton   => "boton_agregar",
+                                                        onClick => "mostrarAgregarCampo();",
+                                                        title   => "[% 'Agregar Campo' | i18n %]",
+                                                        width   => "auto",
+                                                        alternClass => "botonCentrado"
                         ) ;
     [% END %]
     

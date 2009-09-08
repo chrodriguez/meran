@@ -43,7 +43,7 @@ use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 
-
+# TODO esto es una MIERDA hay q arreglarlo
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
 	my $dbh = C4::Context->dbh;
