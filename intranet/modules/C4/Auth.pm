@@ -781,9 +781,9 @@ sub _session_expired {
 
 =cut
 sub _getTimeOut {
-    my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout') || C4::Context->config("timeout")||0;
+    my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout') || C4::AR::Context->config('timeout') ||600;
     
-#     C4::AR::Debug::debug("_getTimeOut => ".$timeout);
+    C4::AR::Debug::debug("_getTimeOut => ".$timeout);
     return $timeout;
 }
 
@@ -1171,18 +1171,23 @@ sub _generarSession {
     $session->param('SERVER_GENERATED_SID', 1);
 # 	$session->expire('1m'); #para Desarrollar, luego pasar a 3m
 #     $session->expire(0);
-    my $timeOut = _getTimeOut();
+    my $expire = _getExpireStatus();
+    
+# 
 
-    if ($timeOut){
-      $session->expire($timeOut.'s');
+    if ($expire){
+      $session->expire(_getTimeOut().'s');
     }
     else{
-      $session->expire($timeOut);
+      $session->expire(0);
     }    
-
 	return $session;
 }
 
+sub _getExpireStatus{
+
+  return ( C4::Context::Context->config("expire") || 1);
+}
 
 sub session_destroy {
     my $session = new CGI::Session(undef, undef, undef);
