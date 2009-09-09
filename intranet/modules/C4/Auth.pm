@@ -783,7 +783,7 @@ sub _session_expired {
 sub _getTimeOut {
     my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout') || C4::Context->config('timeout') ||600;
     
-    C4::AR::Debug::debug("_getTimeOut => ".$timeout);
+#     C4::AR::Debug::debug("_getTimeOut => ".$timeout);
     return $timeout;
 }
 

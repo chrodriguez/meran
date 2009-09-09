@@ -24,27 +24,15 @@
 		</td>
 		<td> 
 
-			<input  src="[%themelang %]/images/1uparrow.png" type="image"  value="[% 'Subir en el Orden' | i18n %]" 
-					title="[% 'Subir Orden' | i18n %]" 
-					onClick="modificarOrden([% encabezado.getIdEncabezado %], [% encabezado.getOrden %], 'up')">
-			
-			<input  src="[%themelang %]/images/1downarrow.png" type="image"  value="[% 'Bajar en el Orden' | i18n %]" 
-					title="[% 'Bajar Orden' | i18n %]" 
-					onClick="modificarOrden([% encabezado.getIdEncabezado %], [% encabezado.getOrden %], 'down')">
-
-<!--                 Si no soy el prmiero muestro el boton para subir el orden -->
-                [% IF ! catalogacion.primeroDelTipo(itemType) %]  
                         [% PERL %]
                             print C4::AR::Filtros::to_Icon(    
                                             boton   => "icon_subir",
-                                            onClick => "modificarOrden([% encabezado.getIdEncabezado %], [% encabezado.getOrden %], 'up');",
+                                            onClick => "modificarOrden([% encabezado.getIdEncabezado %], [% encabezado.getOrden %], 'up')",
                                             title   => "[% 'Subir en el Orden' | i18n %]",
                                             alternClass => "botonCentradoTabla"
                                     ) ;
                         [% END %]
-                [% END %]
-<!--                 Si no soy el ultimo muestro el boton para bajar el orden -->
-                [% IF ! catalogacion.ultimoDelTipo(itemType) %]  
+
                         [% PERL %]
                             print C4::AR::Filtros::to_Icon(    
                                             boton   => "icon_bajar",
@@ -53,7 +41,6 @@
                                             alternClass => "botonCentradoTabla"
                                     ) ;
                         [% END %]
-                [% END %]
 
 		</td>
 <!-- falta el check -->

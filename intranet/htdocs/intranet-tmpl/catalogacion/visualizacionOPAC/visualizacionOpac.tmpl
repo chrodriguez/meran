@@ -83,28 +83,6 @@ function updateEleccionCampo(responseText){
 }
 
 
-
-function eleccionSubCampo(){
-
-// 	objAH=new AjaxHelper(updateEleccionSubCampo);
-// 	objAH.debug= true;
-// 	objAH.url= '/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacResults.pl';
-// 	objAH.campoX= $('#campoX').val();
-// 	objAH.encabezados= $('#encabezados').val();
-// 	objAH.campo= $('#campo').val();
-// 	objAH.accion= 'SELECCION_SUB_CAMPO';
-// 	objAH.nivel= $('#nivel').val();
-// 	objAH.itemtype= $('#comboTiposItems').val();
-// 	//se envia la consulta
-// 	objAH.sendToServer();
-}
-
-// function updateEleccionSubCampo(responseText){
-// 	$('#result').html(responseText);
-// 	$('#guardar')[0].disabled = false;
-// }
-
-
 /*
 * Esta funcion abre una ventan para agregar el encabezado
 */
@@ -282,37 +260,37 @@ function validarDatos(){
 // y esto para que esta!!!!!!!
 	seleccionarEncabezado
 	if($('#campoX').selectedIndex == 0){
-		jAlert("Seleccione el filtro para campos");
+		jAlert(SELECCIONE_EL_FILTRO_PARA_CAMPOS);
 		$('#campoX').focus();
 		ok= false;
 	}
 
 	if(($('#campo').selectedIndex == 1)&&(ok)){
-		jAlert("Seleccione el campo");
+		jAlert(SELECCIONE_EL_CAMPO);
 		$('#campo').focus();
 		ok= false;
 	}
 
 	if(($('#subcampo').selectedIndex == 1)&&(ok)){
-		jAlert("Seleccione el subcampo");
+		jAlert(SELECCIONE_EL_SUBCAMPO);
 		$('#subcampo').focus();
 		ok= false;
 	}
 
 	if(($('#textoPredecesor').value == "")&&(ok)){
-		jAlert("Ingrese el texto predecesor");
+		jAlert(INGRESE_EL_TEXTO_PREDECESOR);
 		$('#textoPredecesor').focus();
 		ok= false;
 	}
 
 	if(($('#textoSucesor').value == "")&&(ok)){
-		jAlert("Ingrese el texto sucesor");
+		jAlert(INGRESE_EL_TEXTO_SUCESOR);
 		$('#textoSucesor').focus();
 		ok= false;
 	}
 
 	if(($('#separador').value == "")&&(ok)){
-		jAlert("Ingrese el separador");
+		jAlert(INGRESE_EL_SEPERADOR);
 		$('#separador').focus();
 		ok= false;
 	}
@@ -470,7 +448,7 @@ function updateDeleteEncabezado(responseText){
 function modificarOrden(encabezado, antOrden, action){
 	
 	if((antOrden == 1)&&(action == 'up')){
-		jAlert("No se puede subir más");
+		jAlert(NO_SE_PUEDE_SUBIR_MAS);
 	}else{
 
 		objAH=new AjaxHelper(cargarTablaEncabezados);
@@ -562,12 +540,19 @@ $(document).ready(function() {
         [% END %]
 
 	</li>
-		<div id="divTablaEncabezados"></div>
-
-		<div id="divAgregarModificarVisualizacion"></div>
-
-		<div id="divTablaVisualizacion"></div>
 </ul>
+</fieldset>
+
+<fieldset>
+<legend><strong>[% "Encabezados:" | i18n %]</strong></legend>
+        <div id="divTablaEncabezados"></div>
+</fieldset>
+
+        <div id="divAgregarModificarVisualizacion"></div>
+
+<fieldset>
+<legend><strong>[% "Configuraci&oacute;n de la Visualizaci&oacute;n:" | i18n %]</strong></legend>
+        <div id="divTablaVisualizacion"></div>
 </fieldset>
 
 [% INCLUDE "intranet-bottom.inc" %]

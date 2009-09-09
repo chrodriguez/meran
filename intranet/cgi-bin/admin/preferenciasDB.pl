@@ -93,7 +93,7 @@ my ($template, $session, $t_params) =
 		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("radio","valor",\@values,\%labels,$valor);
 	}
 	elsif($tipo eq "texta"){
-		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("texta","valor",60,4,$valor);
+		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("texta","valor",58,4,$valor);
 	}
 	elsif($tipo eq "valAuto"){
 		%labels=&C4::AR::Utilidades::obtenerDatosValorAutorizado($categoria);
@@ -114,7 +114,7 @@ my ($template, $session, $t_params) =
 		$t_params->{'campo'}= $campo;
 
 	}	elsif($tipo eq "text"){
-		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("text","valor",60,0,$valor);
+		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("text","valor",50,0,$valor);
 	}
 
 	$t_params->{'tipo'}= $tipo;
@@ -130,8 +130,8 @@ my ($template, $session, $t_params) =
 	    $msg_object->{'error'}= 1;
 	    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP006', 'params' => []} ) ;
 	    my $infoOperacionJSON=to_json $msg_object;
-    C4::Output::printHeader($session);
-    	    print $infoOperacionJSON;
+        C4::Output::printHeader($session);
+    	print $infoOperacionJSON;
 	}
 } #end if($accion eq "MODIFICAR_VARIABLE")
 

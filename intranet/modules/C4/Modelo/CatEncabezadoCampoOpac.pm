@@ -33,6 +33,16 @@ __PACKAGE__->meta->setup(
 
 use utf8;
 
+
+# TODO
+=item
+  orden        => { type => 'integer', not_null => 1 },
+        linea        => { type => 'integer', default => '0', not_null => 1 },
+        visible      => { type => 'integer', default => '1', not_null => 1 },
+        nivel        => { type => 'integer', not_null => 1 },
+=cut
+# va en la tabla cat_encabezado_item_opac, pq si se le configura a un encabezado q sea visible, será para todos los tipos de items
+
 sub agregar{
 	my ($self)=shift;
 	my ($data_hash) = @_;

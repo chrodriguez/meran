@@ -100,6 +100,13 @@ AGREGAR_ENCABEZADO= "[% 'Agregar Encabezado' | i18n %]";
 CONFIRMA_LA_BAJA_DEL_ENCABEZADO = "[% 'Confirma la baja del Encabezado?' | i18n %]";
 INGRESE_EL_ENCABEZADO = "[% 'Ingrese el encabezado' | i18n %]";
 VISUALIZACION_OPAC_TITLE= "[% 'Advertencia de Visualizaci\u00f3n del Opac' | i18n %]";
+NO_SE_PUEDE_SUBIR_MAS= "[% 'No se puede subir m\u00e1s' | i18n %]";
+SELECCIONE_EL_FILTRO_PARA_CAMPOS= "[% 'Seleccione el filtro para campos' | i18n %]";
+SELECCIONE_EL_CAMPO= "[% 'Seleccione el campo' | i18n %]";
+SELECCIONE_EL_SUBCAMPO= "[% 'Seleccione el subcampo' | i18n %]";
+INGRESE_EL_TEXTO_PREDECESOR= "[% 'Ingrese el texto predecesor' | i18n %]";
+INGRESE_EL_TEXTO_SUCESOR= "[% 'Ingrese el texto sucesor' | i18n %]";
+INGRESE_EL_SEPERADOR= "[% 'Ingrese el separador' | i18n %]";
 //=============================================Fin===Visualizacion Opac===========================================
 //================================================Busquedas==============================================
 SELECCIONE_AL_MENOS_UN_CAMPO_PARA_BUSCAR= "[% 'Seleccione al menos un campo para buscar' | i18n %]";
@@ -114,5 +121,13 @@ POR_FAVOR_SELECCIONE_CATEGORIA_SOCIO= "[% 'Por favor, seleccione una categor\u00
 ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION= "&iquery;[% 'Est\u00e1 seguro que desea cancelar la sanci\u00f3n' | i18n %]?";
 SANCIONES_TITLE= "[% 'Advertencia de Sanciones' | i18n %]";
 //===============================================Fin=Sanciones===========================================
+
+//====================================================Admin==========================================================
+DEBE_SELECCIONAR_UNA_OPCION= "[% 'Debe seleccionar al menos una opci\u00f3n' | i18n %]";
+DEBE_SELECCIONAR_UNA_TABLA_DE_REFERENCIA= "[% 'Debe seleccionar una tabla de referencia' | i18n %]";
+DEBE_SELECCIONAR_UN_VALOR_AUTORIZADO= "[% 'Debe seleccionar un valor autorizado' | i18n %]";
+
+ADMIN_TITLE= "[% 'Advertencia de Administraci\u00f3n' | i18n %]";
+//=================================================Fin===Admin=======================================================
 
 </script>

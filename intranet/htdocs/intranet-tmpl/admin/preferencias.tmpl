@@ -66,12 +66,12 @@ function agregarPreferencia(){
 	objAH.tipo=tipo;
  	objAH.accion= "NUEVA_VARIABLE";
 	
-	if(tipo == "0"){ok=0;jAlert("Debe seleccionar al menos una opcion");}
+	if(tipo == "0"){ok=0;jAlert(DEBE_SELECCIONAR_UNA_OPCION);}
 
 	if(tipo == "referencia"){
 		var tabla=$("#tabla").val();
 		var campo=$("#campo").val();
-		if(tabla == -1 || campo == -1){ok=0;jAlert("Debe seleccionar una tabla de referencia");}
+		if(tabla == -1 || campo == -1){ok=0;jAlert(DEBE_SELECCIONAR_UNA_TABLA_DE_REFERENCIA);}
 		else{objAH.tabla=tabla;
 		     objAH.campo=campo;
 		}
@@ -79,7 +79,7 @@ function agregarPreferencia(){
 
 	if(tipo == "valAuto"){
 		var cat=$("#categoria").val();
-		if(cat == -1){ok=0;jAlert("Debe seleccionar un valor autorizado");}
+		if(cat == -1){ok=0;jAlert(DEBE_SELECCIONAR_UN_VALOR_AUTORIZADO);}
 		else{objAH.categoria=cat;}
 	}
 
@@ -331,18 +331,17 @@ function guardarNuevaVariable(){
 	objAH.tipo=$("#tipoVar").val();
 
 	if (objAH.tipo == 'bool'){
-	objAH.valor=(getRadioButtonSelectedValue( $("[name=valor]")));
-	}
-	else
-	{objAH.valor=$("#valor").val();
+	    objAH.valor=(getRadioButtonSelectedValue( $("[name=valor]")));
+	}else{
+        objAH.valor=$("#valor").val();
 	
-	if (objAH.tipo == "valAuto" ){
-			objAH.categoria=$("#categoria").val();
-							}
-	if (objAH.tipo == "referencia"){	
-			objAH.tabla=$("#tabla").val();
-			objAH.campo=$("#campo").val();
-							}
+	    if (objAH.tipo == "valAuto" ){
+			    objAH.categoria=$("#categoria").val();
+        }
+	    if (objAH.tipo == "referencia"){	
+			    objAH.tabla=$("#tabla").val();
+			    objAH.campo=$("#campo").val();
+        }
 	}
 
 
@@ -376,29 +375,29 @@ $(document).ready( function() {
 </script>
 
 <div class="titulos"></div>
-    <fieldset id="reportes">
-        <legend class="titulo_legend"> [% "Administraci&oacute;n de Preferencias del Sistema" | i18n %] </legend>
-        <ul>
-            <li class="sub_item">
-                <input type="text" id="buscar" name="buscar" value="">
-                [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                        boton   => "boton_buscar",
-                                                                        onClick => "buscarPreferencia();",
-                                                                        title   => "[% 'Buscar' | i18n %]",
-                                            ) ;
-                [% END %]
-            
-                [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                        boton   => "boton_borrar",
-                                                                        onClick => "limpiar();",
-                                                                        title   => "[% 'Limpiar' | i18n %]",
-                                            ) ;
-                [% END %]
-            </li>
-        </ul>
-    </fieldset>
+<fieldset id="reportes">
+    <legend class="titulo_legend"> [% "Administraci&oacute;n de Preferencias del Sistema" | i18n %] </legend>
+    <ul>
+        <li class="sub_item">
+            <input type="text" id="buscar" name="buscar" value="">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "buscarPreferencia();",
+                                                                    title   => "[% 'Buscar' | i18n %]",
+                                        ) ;
+            [% END %]
+        
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                    boton   => "boton_borrar",
+                                                                    onClick => "limpiar();",
+                                                                    title   => "[% 'Limpiar' | i18n %]",
+                                        ) ;
+            [% END %]
+        </li>
+    </ul>
+</fieldset>
 
 <div id="divCombos" style="clear: both;">
     <fieldset id="reportes">

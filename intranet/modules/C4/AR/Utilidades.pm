@@ -180,11 +180,15 @@ sub crearComponentes{
     elsif($tipoInput eq 'radio'){
         $inputCampos=CGI::radio_group(
             -name      =>$id,
-            -id    =>$id,
+            -id        =>$id,
             -values    => $values,
             -labels    => $labels,
             -default   => $valor,
         );
+        
+        #el CGI::radio_group devuelve el radio entre tags <label>, se rompe el estilo, asi q se le saca los tags <label>
+        $inputCampos = reemplazarEnString($inputCampos, '<label>', '');
+        $inputCampos = reemplazarEnString($inputCampos, '<\/label>', '');
     }
     elsif($tipoInput eq 'check'){
         $inputCampos=CGI::checkbox_group(
@@ -245,6 +249,18 @@ sub in_array{
     foreach (@array)
             { return 1 if ($val eq $_); }
     return 0;
+}
+
+=item
+Esta funcion reemplaza en string lo indicado por cadena_a_reemplazar por cadena_reemplazo, con expresiones regulares
+tener en cuenta escapar algunos caracteres como <\label> => <\/label>
+=cut
+sub reemplazarEnString{
+    my ($string, $cadena_a_reemplazar, $cadena_reemplazo) = @_;
+
+    $string =~ s/$cadena_a_reemplazar/$cadena_reemplazo/g;  
+
+    return $string;  
 }
 
 sub array_diff{
