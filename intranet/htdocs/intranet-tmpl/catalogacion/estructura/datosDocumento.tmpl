@@ -92,6 +92,7 @@ $(document).ready( function() {
 
 <div class="centro">
 
+<fieldset>
 <span id="nivel1Tabla">
     <table width="100%" cellspacing="0" cellpadding="0" border="0">
         <tr class="titulo_tabla_resultado">
@@ -119,6 +120,9 @@ $(document).ready( function() {
             [% END %]
 
 </span>
+</fieldset>
+
+<fieldset>
 <span id="nivel2Tabla">
     <table width="100%" cellspacing="0" cellpadding="0" border="0">
         <tr class="titulo_tabla_resultado">
@@ -146,7 +150,9 @@ $(document).ready( function() {
                         [% END %]
 
 </span>
+</fieldset>
 
+<fieldset>
 <span id="nivel3Tabla">
     <table width="100%" cellspacing="0" cellpadding="0" border="0">
         <tr class="titulo_tabla_resultado">
@@ -182,9 +188,13 @@ $(document).ready( function() {
 </span>
 
 </div> <!--END <div class="centro">-->
+</fieldset>
 
+<fieldset>
+<legend><strong>[% "Ejemplares" | i18n %]</strong></legend>
 <!-- detalle del Nivel 3, segun Nivel 2 seleccionado -->
 <div id="detalleDelNivel3" class="nivel3Footer"></div>
+</fieldset>
 
 </div> <!--END <div class="todo">-->
 
