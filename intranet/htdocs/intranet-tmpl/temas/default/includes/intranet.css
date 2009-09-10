@@ -3,6 +3,9 @@ body input[type="text"]:focus{
   background: InfoBackground;
 }
 
+fieldset{
+  clear:both;
+}
 #login {
     background-image: url(../imagenes/meranLogin.png);
     background-repeat: no-repeat;
