@@ -12,19 +12,19 @@
 
 //************************************************REVISADO******************************************************************
 
-ID_N1=0; //para saber el id del nivel 1
-ID_N2=0; //para saber el id del nivel 2
-ID_N3=0; //para saber el id del nivel 3
-TAB_INDEX= 0;//tabindex para las componentes
+var ID_N1=0; //para saber el id del nivel 1
+var ID_N2=0; //para saber el id del nivel 2
+var ID_N3=0; //para saber el id del nivel 3
+var TAB_INDEX= 0;//tabindex para las componentes
 //arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
-COMPONENTES_ARRAY= new Array();
+var COMPONENTES_ARRAY= new Array();
 //arreglo con datos del servidor para modificar las componentes
-DATA_ARRAY = new Array();
-MODIFICAR = 0;
-ID3_ARRAY = new Array(); //para enviar 1 o mas ID_N3 para agregar/modificar/eliminar
-BARCODES_ARRAY = new Array(); //para enviar 1 o mas barcodes
+var DATA_ARRAY = new Array();
+var MODIFICAR = 0;
+var ID3_ARRAY = new Array(); //para enviar 1 o mas ID_N3 para agregar/modificar/eliminar
+var BARCODES_ARRAY = new Array(); //para enviar 1 o mas barcodes
 
-_message= CAMPO_NO_PUEDE_ESTAR_EN_BLANCO;
+var _message= CAMPO_NO_PUEDE_ESTAR_EN_BLANCO;
 
 //objeto generico para enviar parametros a cualquier funcion, se le van creando dinamicamente los mismos
 function objeto_params(){
@@ -347,6 +347,48 @@ function updateMostrarEstructuraDelNivel3(responseText){
 	
 	//asigno el handler para el validador
 	validateForm('formNivel3',guardarModificarDocumentoN3);
+    var id = _getIdComponente('995','f');
+    $('#'+id).click(function(){
+        registrarToggleOnChangeForBarcode(id);
+      });
+}
+
+function switchTipoBarcode(chosen, readOnly){
+
+    readOnly.val('');
+    readOnly.attr("readonly",true);
+    chosen.val('');
+    chosen.removeAttr("readonly");
+    chosen.focus();
+}
+
+function registrarToggleOnChangeForBarcode(callFromBarcode){
+        var cantidad_comp = $('#cantEjemplares');
+        var cantidad_val = $.trim(cantidad_comp.val());
+  
+        var id = _getIdComponente('995','f');
+
+        var barcode_comp = $('#'+id);
+        var barcode_val = $.trim(barcode_comp.val());
+
+            if (callFromBarcode){       
+                if ((cantidad_val.length)>0)
+                    jConfirm('Borrar Cantidad de ejemplares?','Cuidado',function(confirmStatus){
+                        if (confirmStatus)
+                            switchTipoBarcode(barcode_comp,cantidad_comp);
+                    })  
+                else
+                    switchTipoBarcode(barcode_comp,cantidad_comp);
+            }
+            else{
+                if ((barcode_val.length)>0)
+                    jConfirm('Borrar lista de codigos de barras?','Cuidado',function(confirmStatus){
+                        if (confirmStatus)
+                            switchTipoBarcode(cantidad_comp,barcode_comp);
+                    })  
+                else
+                    switchTipoBarcode(cantidad_comp,barcode_comp);
+            }
 }
 
 function agregarN2(){
@@ -490,13 +532,17 @@ function updateGuardarDocumentoN2(responseText){
 function guardarDocumentoN3(){
 	if( verificarAgregarDocumentoN3() ){
 		syncComponentesArray();
+        var porBarcode = $("#cantEjemplares").attr("readonly");
 		objAH=new AjaxHelper(updateGuardarDocumentoN3);
 		objAH.debug= true;
 		objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 		objAH.tipoAccion= "GUARDAR_NIVEL_3";
 		objAH.tipo_documento= $("#tipo_nivel3_id").val();
-		objAH.BARCODES_ARRAY= BARCODES_ARRAY;
-		objAH.cantEjemplares= $("#cantEjemplares").val();
+        objAH.esPorBarcode = porBarcode;
+        if (porBarcode)
+            objAH.BARCODES_ARRAY= BARCODES_ARRAY;
+        else
+            objAH.cantEjemplares= $("#cantEjemplares").val();
 		_sacarOpciones();
 		objAH.infoArrayNivel3= COMPONENTES_ARRAY;
 		objAH.id1 = ID_N1;

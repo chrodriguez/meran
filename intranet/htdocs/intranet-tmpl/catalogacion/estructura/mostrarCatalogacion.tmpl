@@ -19,8 +19,11 @@
 		        <td width="10%">[% 'Orden' | i18n %]</td>
 		        <td >[% 'Visible' | i18n %]</td>
 		        <td width="10%">[% 'Editar' | i18n %]</td>
-		        <td width="10%">[% 'Deshabilitar' | i18n %]</td>
-                <td >Debug</td>
+                <td width="10%">[% 'Deshabilitar' | i18n %]</td>
+                <td width="10%">[% 'Tipo' | i18n %]</td>
+                <td width="10%">[% 'Referencia' | i18n %]</td>
+                <td width="10%">[% 'Fijo' | i18n %]</td>
+                <td width="10%">[% 'Obligatorio' | i18n %]</td>
 	        </tr>
         [% FOREACH catalogacion IN catalogaciones %]
 	        <tr align="center">
@@ -94,13 +97,32 @@
                 [% END %]
                 
 		        </td>
-		        <td>    
+
+                <td>    
+                        &nbsp;  [% catalogacion.getTipo %]
+                </td>
+                <td>    
+                        <br>&nbsp;  [% IF catalogacion.tieneReferencia == 1 %]
+                                            [% catalogacion.infoReferencia.getReferencia %]
+                                    [% ELSE %]
+                                            [% "No tiene" | i18n %]
+                                    [% END %]
+                </td>
+
+                <td>    
                         <!-- AGREGADO SOLO PARA DEBUGUEAR -->
                         <br>&nbsp;  [% IF catalogacion.soyFijo == 1 %]
-                                            Campo Fijo
+                                            [% "Si" | i18n %]
+                                    [% ELSE %]
+                                            [% "No" | i18n %]
                                     [% END %]
-						-  [% IF catalogacion.getObligatorio == 1 %]
-                                            Obligatorio
+                </td>
+                <td>    
+                        <!-- AGREGADO SOLO PARA DEBUGUEAR -->
+                        <br>&nbsp;  [% IF catalogacion.getObligatorio == 1 %]
+                                            [% "Si" | i18n %]
+                                    [% ELSE %]
+                                            [% "No" | i18n %]
                                     [% END %]
                 </td>
 	        </tr>

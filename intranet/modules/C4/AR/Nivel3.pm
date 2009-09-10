@@ -737,7 +737,6 @@ sub t_guardarNivel3 {
 				if($params->{'agregarPorBarcodes'} == 1){
 					$params->{'barcode'}= $barcodes_para_agregar->[$i];	
 				}
-				
 				$catNivel3= C4::Modelo::CatNivel3->new(db => $db);
 				$catNivel3->agregar($params);  
 				
@@ -782,6 +781,10 @@ Si el barcode NO es obligatorio:
 	- Si se ingresa un barcode, NO PUEDE EXISTIR
 
 =cut
+
+sub _generateBarcode{
+  return (time());
+}
 sub _verificarBarcodes{
 	
 	my($params, $msg_object)=@_;
@@ -793,8 +796,9 @@ sub _verificarBarcodes{
 	my $existe;
 	#obtengo la info de la estructura de catalogacion del barcode
 	my $cat_estruct_info_array= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo('995', 'f');
+    my $esPorBarcode  =(scalar(@$barcodes_array) > 1);
 
-	if(scalar(@$barcodes_array) > 0){
+	if($esPorBarcode){
 		$cant= scalar(@$barcodes_array);
 		#se intentan agregar varios BARCODES
 		$params->{'agregarPorBarcodes'}= 1;
@@ -802,9 +806,12 @@ sub _verificarBarcodes{
 		$cant= $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
 	}# END if(scalar(@$barcodes_array) > 0)
 
-	for(my $b;$b<$cant;$b++){
+	for(my $b=0;$b<$cant;$b++){
 		$existe= 0;
-		
+        if (!$esPorBarcode){
+            $barcodes_array->[$b] = _generateBarcode().$b;
+            C4::AR::Debug::debug("BARCODE NUEVO: ".$barcodes_array->[$b]." EN VUELTA ".$b);
+        }	
 		if($cat_estruct_info_array->[0]->getObligatorio){
 		#el barcode es OBLIGATORIO
 		#no puede existir, y no puede ser blanco	
