@@ -304,9 +304,18 @@ function updateMostrarEstructuraDelNivel2(responseText){
     
 	//asigno el handler para el validador
 	validateForm('formNivel2',guardarModificarDocumentoN2);
-    _seleccionarTipoDocumentoYDeshabilitarCombo();
+    
+    if( MODIFICAR = 0){  
+    //si se esta agregando....  
+        _seleccionarTipoDocumentoYDeshabilitarCombo();
+    }
 }
 
+
+/*
+    Esta funcion selecciona en el combo de tipo de documento q se crea dinamicamente, el tipo de documento seleccionado en el combo
+    esquema de ingreso de datos.
+*/
 function _seleccionarTipoDocumentoYDeshabilitarCombo(){
     //obtengo el ID de la componente del combo de tipo de nivel3
     id = _getIdComponente('910','a');
