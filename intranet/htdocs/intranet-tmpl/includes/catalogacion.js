@@ -304,6 +304,14 @@ function updateMostrarEstructuraDelNivel2(responseText){
     
 	//asigno el handler para el validador
 	validateForm('formNivel2',guardarModificarDocumentoN2);
+    _seleccionarTipoDocumentoYDeshabilitarCombo();
+}
+
+function _seleccionarTipoDocumentoYDeshabilitarCombo(){
+    //obtengo el ID de la componente del combo de tipo de nivel3
+    id = _getIdComponente('910','a');
+    $('#'+ id).val($('#tipo_nivel3_id').val());    
+    $('#'+ id).attr('disabled', 'true');
 }
 
 function mostrarEstructuraDelNivel3(){
@@ -737,7 +745,7 @@ function procesarObjeto(objeto){
 //     crearRegla(comp,idComp);
    //Se agregan clases para cuando tenga que recuperar los datos.
     if(objeto.obligatorio == "1"){
-        hacerComponenteObbligatoria(idComp);
+        hacerComponenteObligatoria(idComp);
     }
 
 }
@@ -823,7 +831,7 @@ function crearComponente(tipo,id,objeto,valor){
 
 
 // Esta funcion convierte una componete segun idObj en obligatoria, agrega * a la derecha de la misma
-function hacerComponenteObbligatoria(idObj){
+function hacerComponenteObligatoria(idObj){
     $("#"+idObj).addClass("obligatorio");
     $("#"+idObj).addClass("required");
     $("#"+idObj).attr('name','compoCheck');
