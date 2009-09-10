@@ -130,6 +130,11 @@ sub to_Button{
     my (%params_hash_ref) = @_;
 
     my $button= '';
+
+    if ($params_hash_ref{'url'}){
+      $button .="<a href="."$params_hash_ref{'url'}"."> ";
+    }
+
     my $text= $params_hash_ref{'text'}; #obtengo el texto a mostrar
     my $boton= $params_hash_ref{'boton'}; #obtengo el boton
     my $onClick= $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onClick
@@ -158,6 +163,10 @@ sub to_Button{
     $button .=  '   </div> ';
     $button .=  '   <div id="boton_texto">'.$text.'</div> ';
     $button .=  '</li> ';
+
+    if ($params_hash_ref{'url'}){
+      $button .="</a>";
+    }
 
     return $button;
 }

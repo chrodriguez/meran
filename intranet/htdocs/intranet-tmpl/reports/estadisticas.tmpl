@@ -39,23 +39,21 @@ function updateInfo(responseText){
 
 <div class="titulos" >[% "Estadisticas" | i18n %]</div>
 
+<fieldset>
+    <legend class="titulo_legend">[% "Historial de Pr&eacute;stamos" | i18n %]</legend>
+    <ul>
+        <li class="sub_item">
+            <label for="chkfecha">[% "Seleccione para buscar por fecha" | i18n %]</label>
+			<input id="chkfecha" type="checkbox" name="chkfecha" [% IF chkfecha %]checked[% END %]>
+        </li>
 
-	<table border="0" cellspacing="0" cellpadding="0">
-  		<tr>
-			<td valign= "top">
-			<input id="chkfecha" type="checkbox" name="chkfecha" 
-			[% IF chkfecha %]checked[% END %]>
-			<b>[% "Seleccione para buscar por fecha" | i18n %].</b><br><br>
-			[% "Seleccione una fecha de inicio:" | i18n %]<br><br>
-			[% "Seleccione una fecha de fin" | i18n %]:
-			</td>
-
-			<td valign= "top">
-				<br><br>
-			<input id="dateselected" name="dateselected" value="
-			[% IF fechaInicio %][% dateselected  %][% ELSE %][% todaydate %][% END %]"
+        <li class="sub_item">
+            <label for="dateselected">[% "Seleccione una fecha de inicio" | i18n %]:</label>
+			<input id="dateselected" name="dateselected" value="[% IF fechaInicio %][% dateselected  %][% ELSE %][% todaydate %][% END %]">
 			
-				<br><br>
+	    </li>
+        <li class="sub_item">
+            <label for="dateselectedEnd">[% "Seleccione una fecha de fin" | i18n %]:</label>
 			<input id="dateselectedEnd" name="dateselectedEnd" value="
                             [% IF fechaFin %]
                                 [% dateselectedEnd  %]
@@ -63,29 +61,42 @@ function updateInfo(responseText){
                                 [% todaydate %]
                             [% END %]"			
                         
-			</td>
-			<td rowspan=3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-			<td rowspan=3> <b>[% "Buscar por:" | i18n %]</b> <br>
-				<p>Prestamos:</p>
-				<input id="chck" type="checkbox"  value="DO" name="chck">[% "Domiciliario" | i18n %]
-				<input id="chck" type="checkbox"  value="SA" name="chck">[% "Sala de lectura" | i18n %]
-				<input id="chck" type="checkbox"  value="FO" name="chck">[% "Para fotocopia" | i18n %]
-				<input id="chck" type="checkbox"  value="ES" name="chck">[% "Especial" | i18n %] <br><br>
-				<input id="chkuser" type="checkbox"  value="US" name="chkuser">[% "Usuario" | i18n %]
-				<br><br>
+			>
+        </li>
+    </ul>
+<fieldset>
+    <legend class="titulo_legend">[% "Buscar por:" | i18n %]</legend>
+    <ul>
+        <fieldset>
+            <legend class="titulo_legend">[% "Prestamos" | i18n %]:</legend>
+            <li class="sub_item">
+                    <input id="chck" type="checkbox"  value="DO" name="chck">[% "Domiciliario" | i18n %]
+            </li>
+            <li class="sub_item">
+                    <input id="chck" type="checkbox"  value="SA" name="chck">[% "Sala de lectura" | i18n %]
+            </li>
+            <li class="sub_item">
+                    <input id="chck" type="checkbox"  value="FO" name="chck">[% "Para fotocopia" | i18n %]
+            </li>
+            <li class="sub_item">
+                    <input id="chck" type="checkbox"  value="ES" name="chck">[% "Especial" | i18n %]
+            </li>
+            <li class="sub_item">
+                    <input id="chkuser" type="checkbox"  value="US" name="chkuser">[% "Usuario" | i18n %]
+            </li>
+        </fieldset>
+    </ul>
+[% PERL %]
+                print C4::AR::Filtros::to_Button( 
+                                                    text    =>  "[% 'Buscar' | i18n %]",
+                                                    boton   =>  "boton_buscar",
+                                                    onClick =>  "consultar();",
+                        ) ;
+[% END %]
+</fieldset>
 
-                [% PERL %]
-                                print C4::AR::Filtros::to_Button( 
-                                                                    text    =>  "[% 'Buscar' | i18n %]",
-                                                                    boton   =>  "boton_buscar",
-                                                                    onClick =>  "consultar();",
-                                        ) ;
-                [% END %]
-			</td>
-   		</tr>
-	</table>
 
-<br>
+
 <div id="result"></div>
 
 [% INCLUDE "intranet-bottom.inc" %]

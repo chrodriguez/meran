@@ -44,18 +44,21 @@ function consultar(){
 
 <div class="titulos">[% "Hist&oacute;rico de Sanciones" | i18n %]</div>
 
-<div class="filtros_reportes">
-    <ul class="filtros_reportes_izq">
-		<li>[% "Seleccione una fecha de inicio:" | i18n %]</li>
-        <li><input type="text" id="fechaIni" name="fechaIni" value="
+<fieldset>
+    <legend class="titulo_legend">[% "Historial de Sanciones" | i18n %]</legend>
+    </ul>
+        <li class="sub_item">
+            <label for="fechaIni">[% "Seleccione una fecha de inicio:" | i18n %]</label>
+            <input type="text" id="fechaIni" name="fechaIni" value="
                          [% IF fechaIni %]
                                         [% fechaIni  %]
                                      [% ELSE %]
                                         [% todaydate %]
                                      [% END %]">
         </li>               
-		<li>[% "Seleccione una fecha de fin" | i18n %]:</li>
-        <li><input type="text" id="fechaFin" name="fechaFin" value="
+        <li class="sub_item">
+            <label for="fechaFin">[% "Seleccione una fecha de fin:" | i18n %]</label>
+            <input type="text" id="fechaFin" name="fechaFin" value="
                                     [% IF fechaIni %]
                                         [% fechaIni  %]
                                     [% ELSE %]
@@ -63,15 +66,23 @@ function consultar(){
                                     [% END %]">
 				
 		</li>
-    </ul>
-    <ul class="filtros_reportes_der">
-        <li>[% "Filtrar por:" | i18n %]</li>
-        <!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
-		<li>[% "Responsable:" | i18n %] [% selectusuarios %]</li> 
-		<li>[% "Tipo de Pr&eacute;stamo:" | i18n %] [% selectTiposPrestamos %]</li> 
-		<li>[% "Tipo de Operaci&oacute;n:" | i18n %] [% selectTipoOperacion %]</li> 
-    </ul>
-</div>
+        <fieldset>
+            <legend class="titulo_legend">[% "Filtrar por:" | i18n %]</legend>
+            </ul>
+                <li class="sub_item">
+                    <label for="socios">[% "Responsable:" | i18n %] </label>
+                    [% selectusuarios %]
+                </li> 
+                <li class="sub_item">
+                    <label for="tipo_prestamo_id">[% "Tipo de Pr&eacute;stamo:" | i18n %] </label>
+                    [% selectTiposPrestamos %]
+                </li> 
+                <li class="sub_item">
+                    <label for="tipoOperacion">[% "Tipo de Operaci&oacute;n:" | i18n %]</label>
+                    [% selectTipoOperacion %]
+                </li> 
+            </ul>
+</fieldset>
 
 <div class="buttonContainerHorizontal">
     [% PERL %]

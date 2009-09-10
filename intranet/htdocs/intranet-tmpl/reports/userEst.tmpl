@@ -1,4 +1,4 @@
-[% INCLUDE "intranet-top.inc" %]
+ [% INCLUDE "intranet-top.inc" %]
 
 <script>
 [% INCLUDE "util.js" %]
@@ -11,54 +11,64 @@ $(document).ready( function() {
 });
 </script>
 
-<center>
-<table border=0 cellspacing=0 cellpadding=2>
-	<th>[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</th>
+<fieldset>
+    <legend class="titulo_legend">[% "Usuarios por categorias" | i18n %]</legend>
+    <ul>
+        <li class="sub_item">[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</th>
 	<th><form name="unidadInformacion" action="/cgi-bin/koha/reports/userEst.pl" method=post >
           <input type="hidden" name="token" value="[% token %]" />
         	[% unidades %]
       </form>
 	</th>
-</table>
+<fieldset>
 
-<br><br>
+<script type="text/javascript">
+      $(document).ready(function() {
+        makeToggle('datos_tabla_div','trigger',null,false);
+      });
+</script>
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (cat&aacute;logo)" | i18n %]:</legend>
+        <div class="datos_tabla_div" id="datos_tabla_div">
+            <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: [% buscoPor %]</div>
+            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %]  en ([% timeSeg %] segundos)</div>
+            <div class="contenedor_paginador">[% paginador %]</div>
+                
+                <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
+                    <tr class="titulo_tabla_resultado">
+                        <th>
+                            [% "Categor&iacute;as" | i18n %]
+                        </th>
+                        <th>
+                            [% "Cant de usuarios reales" | i18n %]
+                        </th>
+                        <th>
+                            [% "Cant de usuarios potenciales" | i18n %]
+                        </th>
+                        <td width="1%"><img src="[% themelang %]/images/derecha.png"></td>
+                        </tr>
+                
+                [% FOREACH socio IN resultsloop %]
+                    <tr align='center'>
+                        
+                        <td>[% socio.categoria.getDescription %] </td>
+                        <td>[% socio.agregacion_temp %] </td>
+                        <td>[% potenciales %] </td>
+                        
+                    </tr>
+                [% END %]
+                </table>
+        </div>
+</fieldset>
 
-<table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="60%">
-	<tr class="titulo_tabla_resultado">
-		<th>
-			[% "Categor&iacute;as" | i18n %]
-		</th>
-		<th>
-			[% "Cant de usuarios reales" | i18n %]
-		</th>
-		<th>
-			[% "Cant de usuarios potenciales" | i18n %]
-		</th>
- 		<td width="1%"><img src="[% themelang %]/images/derecha.png"></td>
-		</tr>
 
-[% FOREACH socio IN resultsloop %]
-  	<tr align='center'>
-   		
-  		<td>[% socio.categoria.getDescription %] </td>
-  		<td>[% socio.agregacion_temp %] </td>
-		<td>[% potenciales %] </td>
- 		
- 	</tr>
+[% PERL %]
+      print C4::AR::Filtros::to_Button( text    => "[% "Generar Planilla" | i18n %]",
+                                      boton   => "boton_buscar",
+                                      onClick => "null",
+                                      url    => "/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% planilla %]",
+                                      title   => "[% "Generar Planilla" | i18n %]",
+              ) ;
 [% END %]
-</table>
-
-
-<br>
-	<a href="/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% planilla %]">
-		[% "Generar planilla" | i18n %]<img src="[% themelang %]/images/sxc.png" border="0">
-	</a>
-<br><br>
-				<!-- Scripts con los graficos en flash -->
-[% torta %]
-<br>
-[% barras %]
-<br>
-</center>
 
 [% INCLUDE "intranet-bottom.inc" %]

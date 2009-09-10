@@ -43,18 +43,23 @@ function consultar(){
 </script>
 
 <div class="titulos">[% "Logueo de B&uacute;squedas" | i18n %]</div>
-
-
-<div class="filtros_reportes">
-    <ul class="filtros_reportes_izq">
-	    <li>[% "Seleccione una fecha de inicio: " | i18n %]</li>
-	    <li><input id="fechaIni" name="fechaIni" value="[% fechaIni %]"></li>
-	    <li>[% "Seleccione una fecha de fin " | i18n %]:</li>	
-	    <li><input id="fechaFin" name="fechaFin" value="[% fechaFin %]"></li>
-	    <li>[% "Categoria de Usuario:" | i18n %]</li>
-	    <li>[% selectCatUsuarios  %]</li>
-     </ul>
-</div>
+<fieldset>
+    <legend class="titulo_legend">[% "Historial de B&uacute;squedas" | i18n %]</legend>
+    <ul>
+        <li class="sub_item">
+	       <label for="fechaIni">[% "Seleccione una fecha de inicio: " | i18n %]</label>
+	       <input id="fechaIni" name="fechaIni" value="[% fechaIni %]">
+        </li>
+	    <li class="sub_item">
+            <label for="fechaIni">[% "Seleccione una fecha de fin " | i18n %]:</label>
+            <input id="fechaFin" name="fechaFin" value="[% fechaFin %]">
+        </li>
+	    <li class="sub_item">
+            <label for="categoria_socio_id">[% "Categoria de Usuario:" | i18n %]</label>
+	        [% selectCatUsuarios  %]
+        </li>
+    </ul>
+</fieldset>
 
 
 <div class="buttonContainerHorizontal">

@@ -91,32 +91,36 @@ function updateInfo(responseText){
 
 <fieldset>
     <legend class="titulo_legend">[% "Some Title" | i18n %]</legend>
+        <fieldset>
+            <legend class="titulo_legend">[% "Fecha de Vencimiento" | i18n %]</legend>
+            <ul>
+                <li class="sub_item">
+                    <label for="begindate">[% "Seleccione una fecha de inicio:" | i18n %]</label>
+                    <input id="begindate" name="begindate"></a>
+                </li>
+                <li class="sub_item">
+                    <label for="enddate">[% "Seleccione una fecha de fin:" | i18n %]</label>
+                    <input id="enddate" name="enddate">
+                </li>
+            </ul>
+        </fieldset>
         <ul>
             <li class="sub_item">
-            <li class="sub_item">
-                [% "Fecha de Vencimiento" | i18n %]
+                <label for="id_ui">[% "Seleccione una unidad de informaci&oacute;n" | i18n %]:</label>
+                [% unidades %]
             </li>
-            <li class="sub_item">[% "Seleccione una fecha de inicio:" | i18n %]</li>
+
             <li class="sub_item">
-                <input id="begindate" name="begindate"></a>
-            </li>
-            <li class="sub_item">[% "Seleccione una fecha de fin" | i18n %]:</li>
-            <li class="sub_item">
-                <input id="enddate" name="enddate">
-            </li>
-            <li class="sub_item">[% "Seleccione una unidad de informaci&oacute;n" | i18n %]:</li>
-            <li class="sub_item">[% unidades %]</li>
-            <li class="sub_item">[% "Seleccione estado de pr&eacute;stamo" | i18n %]</li>
-            <li class="sub_item">
+                <label for="estado">[% "Seleccione estado de pr&eacute;stamo" | i18n %]</label>
                 <select name="estado" id="estado">
                     <option value="VE" id="VE">[% "Vencidos" | i18n %]</option>
                     <option value="NV" id="NV">[% "No vencidos" | i18n %]</option>
                     <option value="TO" id="TO" selected>[% "Todos" | i18n %]</option>
                 </select>
             </li>
-    
-            <li class="sub_item">[% "Cantidad de resultados por p&aacute;gina:" | i18n %]</li>
+
             <li class="sub_item">
+                <label for="renglones">[% "Cantidad de resultados por p&aacute;gina:" | i18n %]</li>
                 <select name="renglones" id="renglones">
                     <option value="5" id="5">5</option>
                     <option value="10" id="10">10</option>
