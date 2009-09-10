@@ -15,8 +15,11 @@ $(document).ready(function() {
 [% USE HTML %]
 
 <!-- TEMPLATE DE CAMPOS TEMPORALES -->
-<hr>
+<!-- FIXME no se si se usa el hidden -->
 <input id="obligatorio" type="hidden" value="">
+
+<fieldset>
+<legend><strong>[% 'Modificar campo Marc para el nivel' | i18n %] [% nivel %]:</strong></legend>
 
 <ul>
     <li class="sub_item">
@@ -34,7 +37,8 @@ $(document).ready(function() {
                                                             boton   => "boton_buscar",
                                                             onClick => "modificarEstructuraCatalogacion([% catalogacion.getId %]);",
                                                             title   => "[% 'Guardar Campo temporal' | i18n %]",
-                                                            alternClass => "botonCentrado"
+                                                            alternClass => "botonCentrado",
+                                                            width   => "auto"
                                 ) ;
     [% END %]
 
@@ -43,7 +47,9 @@ $(document).ready(function() {
                                                             boton   => "boton_buscar",
                                                             onClick => "cancelarEstructuraCatalogacion();",
                                                             title   => "[% 'Cancelar Campo temporal' | i18n %]",
-                                                            alternClass => "botonCentrado"       
+                                                            alternClass => "botonCentrado",       
+                                                            width   => "auto"
                                 ) ;
     [% END %]
 
+</fieldset>

@@ -1798,7 +1798,7 @@ sub generarComboNiveles{
     my @nivel;
     my $cantNivel=3;
 
-    push(@nivel, "Niveles");
+#     push(@nivel, "Niveles");
     for (my $i=1; $i<=$cantNivel; $i++){
         push(@nivel, $i);
     }
@@ -1828,7 +1828,7 @@ sub generarComboNiveles{
     $options_hash{'id'}= 'niveles_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || 'Niveles';
+    $options_hash{'defaults'}= $params->{'default'} || 'SIN SELECCIONAR';
 
     push (@select_niveles, 'SIN SELECCIONAR');
     $options_hash{'values'}= \@select_niveles;
