@@ -913,14 +913,16 @@ function crearDivLabel(label, idComp){
 function borrarN1(id1){
 	
     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
-		objAH=new AjaxHelper(updateBorrarN1);
-		objAH.debug= true;
-		objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-		objAH.id1=id1;
-		objAH.nivel=1;
-		objAH.itemtype=$("#id_tipo_doc").val();
-		objAH.tipoAccion="ELIMINAR_NIVEL";
-		objAH.sendToServer();
+        if(confirmStatus){
+		    objAH=new AjaxHelper(updateBorrarN1);
+		    objAH.debug= true;
+		    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+		    objAH.id1=id1;
+		    objAH.nivel=1;
+		    objAH.itemtype=$("#id_tipo_doc").val();
+		    objAH.tipoAccion="ELIMINAR_NIVEL";
+		    objAH.sendToServer();
+        }
 	});
 }
 
@@ -938,6 +940,7 @@ function updateBorrarN1(responseText){
 
 function borrarN2(id2){
     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
+        if(confirmStatus){
 		    objAH=new AjaxHelper(updateBorrarN2);
 		    objAH.debug= true;
 		    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
@@ -947,8 +950,8 @@ function borrarN2(id2){
 		    objAH.tipoAccion="ELIMINAR_NIVEL";
 		    objAH.sendToServer();
 	    }
-
-    );
+     
+    });
 }
 
 function updateBorrarN2(responseText){
@@ -964,14 +967,16 @@ function updateBorrarN2(responseText){
 function borrarN3(id3){
 
     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
-		objAH=new AjaxHelper(updateBorrarN3);
-		objAH.debug= true;
-		objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
- 		objAH.id3_array= [id3];
-		objAH.nivel=3;
-		objAH.itemtype=$("#id_tipo_doc").val();
-		objAH.tipoAccion="ELIMINAR_NIVEL";
-		objAH.sendToServer();
+        if(confirmStatus){
+		    objAH=new AjaxHelper(updateBorrarN3);
+		    objAH.debug= true;
+		    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+            objAH.id3_array= [id3];
+		    objAH.nivel=3;
+		    objAH.itemtype=$("#id_tipo_doc").val();
+		    objAH.tipoAccion="ELIMINAR_NIVEL";
+		    objAH.sendToServer();
+        }
 	});
 }
 
@@ -987,15 +992,17 @@ function updateBorrarN3(responseText){
 function borrarEjemplaresN3(id3){
 	
     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
-		objAH=new AjaxHelper(updateBorrarEjemplaresN3);
-		objAH.debug= true;
-		objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-		var id3_array= _recuperarSeleccionados("checkEjemplares");
-		objAH.id3_array= id3_array;
-		objAH.nivel=3;
-		objAH.itemtype=$("#id_tipo_doc").val();
-		objAH.tipoAccion="ELIMINAR_NIVEL";
-		if(id3_array.length > 0){objAH.sendToServer();}
+        if(confirmStatus){
+		    objAH=new AjaxHelper(updateBorrarEjemplaresN3);
+		    objAH.debug= true;
+		    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+		    var id3_array= _recuperarSeleccionados("checkEjemplares");
+		    objAH.id3_array= id3_array;
+		    objAH.nivel=3;
+		    objAH.itemtype=$("#id_tipo_doc").val();
+		    objAH.tipoAccion="ELIMINAR_NIVEL";
+		    if(id3_array.length > 0){objAH.sendToServer();}
+        }
 	});
 }
 
