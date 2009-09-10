@@ -164,8 +164,11 @@ $(document).ready( function() {
 
 <form id="formNivel3" name="formNivel3" class="validateDataForm">
 	<div id="divCantEjemplares" class="divContentComponente">
-		<div class="divLabelComponente"> Cant. Ejemplares: </div>
-			<input id="cantEjemplares" type="text" tabindex="1" size="10" value="1" class="required" onClick="registrarToggleOnChangeForBarcode()"/>
+		<li class="sub_item"> 
+            <label for="cantEjemplares">Cant. Ejemplares: </label>
+		    <input  id="cantEjemplares" type="text" tabindex="1" size="10" value="1" 
+                    class="required" onClick="registrarToggleOnChangeForBarcode()"/>
+        </li>
 	</div>
 <!--     CAMPOS DINAMICOS DEL NIVEL 3 -->
     <div id= "estructuraDelNivel3"></div>

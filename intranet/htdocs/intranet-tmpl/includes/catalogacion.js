@@ -23,7 +23,7 @@ var DATA_ARRAY = new Array();
 var MODIFICAR = 0;
 var ID3_ARRAY = new Array(); //para enviar 1 o mas ID_N3 para agregar/modificar/eliminar
 var BARCODES_ARRAY = new Array(); //para enviar 1 o mas barcodes
-
+var _NIVEL_ACTUAL= 1; //para mantener el nivel que se esta procesando
 var _message= CAMPO_NO_PUEDE_ESTAR_EN_BLANCO;
 
 //objeto generico para enviar parametros a cualquier funcion, se le van creando dinamicamente los mismos
@@ -202,12 +202,9 @@ function syncComponentesArray(){
     }
 }
 
-//para mantener el nivel que se esta procesando
-_nivelActual= 1;
-
 function getDivDelNivel(){
     
-    switch(_nivelActual){
+    switch(_NIVEL_ACTUAL){
         case 1:
             return 'estructuraDelNivel1';   
         break;
@@ -223,13 +220,13 @@ function getDivDelNivel(){
 
 // FIXME esto podria ser generico para los 3 niveles
 function mostrarEstructuraDelNivel1(){
-    _nivelActual= 1;
+    _NIVEL_ACTUAL= 1;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug= true;
 	objAH.cache= false;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
-    objAH.nivel= _nivelActual;
+    objAH.nivel= _NIVEL_ACTUAL;
     
     objAH.id_tipo_doc= 'ALL';
     objAH.sendToServer();
@@ -283,7 +280,7 @@ function updateMostrarEstructuraDelNivel1(responseText){
 }
 
 function mostrarEstructuraDelNivel2(){
-    _nivelActual= 2;
+    _NIVEL_ACTUAL= 2;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug= true;
 	objAH.cache= false;
@@ -324,14 +321,14 @@ function _seleccionarTipoDocumentoYDeshabilitarCombo(){
 }
 
 function mostrarEstructuraDelNivel3(){
-    _nivelActual= 3;
+    _NIVEL_ACTUAL= 3;
 
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel3);
     objAH.debug= true;
 	objAH.cache= false;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
-    objAH.nivel= _nivelActual;
+    objAH.nivel= _NIVEL_ACTUAL;
     objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
     objAH.sendToServer();
 }
@@ -750,7 +747,8 @@ function procesarObjeto(objeto){
     var idDiv="div"+idComp;
     var divComp= crearDivComponente(idDiv);
     var divLabel= crearDivLabel(libtext, idComp);
-    strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+    strComp="<li class='sub_item'> "+divLabel+divComp+"</li>";
     $(strComp).appendTo("#"+getDivDelNivel());
     switch(tipo){
         case "text":
