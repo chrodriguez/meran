@@ -1323,7 +1323,8 @@ sub redirectToNoHTTPS {
         C4::AR::Debug::debug("SESSION url: ".$session->param('redirectTo'));
 
         C4::AR::Debug::debug("redirectToNoHTTPS=> url: ".$url."\n");
-        print $session->header();
+#         print $session->header();
+        _print_header($session, 0);
         print 'CLIENT_REDIRECT';
         exit;
     }else{
@@ -1381,7 +1382,8 @@ sub redirectToHTTPS {
         # send proper HTTP header with cookies:
         $session->param('redirectTo', $url);
         C4::AR::Debug::debug("redirectToHTTPS=> url: ".$url."\n");
-        print $session->header();
+#         print $session->header();
+        _print_header($session, 0);
         print 'CLIENT_REDIRECT';
         exit;
     }else{
