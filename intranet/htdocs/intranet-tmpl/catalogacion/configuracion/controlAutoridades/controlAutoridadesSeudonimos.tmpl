@@ -301,88 +301,84 @@ $(document).ready(function(){
 
 </script>
 
-<div style="position: static;" id="tophelper">
-<img class="showhelp" src="[% themelang %]/images/help.gif" alt="Descricion de la Ventana">
-    <div style="display: block;" id="topichelp">
-        <p>Descripcion breve para lo q sirve la ventana....</p>
-    </div>
-</div>
+[% PERL %]
+                print C4::AR::Filtros::ayuda_in_line("[% 'ayudaaaaa' | i18n %]") ;
+[% END %]
 
-<div class="titulos" >Control de Autoridades - Seud&oacute;nimos</div>
+<div class="titulos" >[% "Control de Autoridades - Seud&oacute;nimos" | i18n %]</div>
 
-<br>
-
-<br>
 <div class="formElemets">
 <ul>
-	<li>Seleccione la tabla</li>
-	<li>
+<fieldset>
+<legend class="titulo_legend">[% 'Datos a modificar'| i18n %]</legend>
+<li class="sub_item"><label for="tabla"> [% "Seleccione autoridad: " | i18n %]</label>
+
 		<Select id="tabla" name="tabla" onChange="OnChangeComboTablasSeudonimos();">
-			<option value="Sin Seleccionar">Sin Seleccionar</option>
-			<option value="autores">Autores</option>
-			<option value="temas">Temas</option>
-			<option value="editoriales">Editoriales</option>
+			<option value="Sin Seleccionar">[% "Sin Seleccionar" | i18n %]</option>
+			<option value="autores">[% "Autores" | i18n %]</option>
+			<option value="temas">[% "Temas" | i18n %]</option>
+			<option value="editoriales">[% "Editoriales" | i18n %]</option>
 		</Select>
 	</li>
 
-	<div id="content_search_autores">
-		<li>Autores:</li>
-		<li>
-				<input id="search_autores" type="text" size="50">
-				<input id="search_autores_hidden" type="hidden">
-		</li>
-		<li>Autor Seud&oacute;nimo:</li>
-		<li>	
+	<div id="content_search_autores" style="display:none">
+        <li class="sub_item"  ><label for="search_autores">[% "Autor:" | i18n %] </label> 
+		<input id="search_autores" type="text" size="50"></li>
+			<input id="search_autores_hidden" type="hidden">
+        <li class="sub_item"  ><label for="search_autores">[% "Seud&oacute;nimo:" | i18n %] </label> 
 				<input id="search_autor_seudonimo" type="text" size="50">
+	            <input id="push" type="button" onClick="pushSeudonimo();" value="+" title="Agregar Sin&oacute;nimo a la lista"> 
+		</li>
 				<input id="search_autor_seudonimo_hidden" type="hidden">
-		</li>
 	</div>
-	<div id="content_search_temas">
-		<li>Temas:</li>
-		<li>
-				<input id="search_temas" type="text" size="50">
-				<input id="search_temas_hidden" type="hidden">
-		</li>
-		<li>Tema Seud&oacute;nimo:</li>
-		<li>
+	<div id="content_search_temas" style="display:none">
+        <li class="sub_item"><label for="search_temas">[% "Tema:" | i18n %] </label> 
+		<input id="search_temas" type="text" size="50"></li>
+			<input id="search_temas_hidden" type="hidden">
+        <li class="sub_item"  ><label for="search_autores">[% "Seud&oacute;nimo:" | i18n %] </label> 
 				<input id="search_tema_seudonimo" type="text" size="50">
+	            <input id="push" type="button" onClick="pushSeudonimo();" value="+" title="Agregar Sin&oacute;nimo a la lista"> 
+		</li>
 				<input id="search_tema_seudonimo_hidden" type="hidden">
-		</li>
 	</div>
-	<div id="content_search_editoriales">
-		<li>Editoriales:</li>
-		<li>
-				<input id="search_editoriales" type="text" size="50">
-				<input id="search_editoriales_hidden" type="hidden">
-		</li>
-		<li>Editorial Seud&oacute;nimo:</li>
-		<li>
+	<div id="content_search_editoriales" style="display:none">
+        <li class="sub_item">
+        <label for="search_editoriales">[% "Editorial:" | i18n %] </label> 
+		<input id="search_editoriales" type="text" size="50"></li>
+			<input id="search_editoriales_hidden" type="hidden">
+        <li class="sub_item"  ><label for="search_autores">[% "Seud&oacute;nimo:" | i18n %] </label> 
 				<input id="search_editorial_seudonimo" type="text" size="50">
+	            <input id="push" type="button" onClick="pushSeudonimo();" value="+" title="Agregar Sin&oacute;nimo a la lista"> 
+	    </li>
 				<input id="search_editorial_seudonimo_hidden" type="hidden">
-		</li>
-	</div>
-	<li>
-		<input id="push" type="button" onClick="pushSeudonimo();" value=">>" title="Agregar Seud&oacute;nimo"> 
-		<input id="pop" type="button" onClick="popSeudonimo();" value="<<" title="Sacar Seud&oacute;nimo" disabled=true>
-	</li>
-	<li>
+    </div>
+
+<li class="sub_item">
+        <label for="textAreaSeudonimosos">[% "Seud&oacute;nimos a Ingresar:" | i18n %] </label> 
 		<textarea id="textAreaSeudonimos" style="height:60px; width:230px;" readonly></textarea>
-	</li>
+		<input id="pop" type="button" onClick="popSeudonimo();" value="-" title="Sacar sin&oacute;nimo de la lista" disabled="true" style="vertical-align:top;">
+</li>
+<li>
+           <div>
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Guardar' | i18n %]",
+                                                                    boton   =>  "boton_guardar",
+                                                                    onClick =>  "guardarDatos();",
+                                                                    title   =>  "[% 'Guardar Seud&oacute;nimos' | i18n %]",
+                                                                    alternClass => 'botonCentrado',
+                                        ) ;
+                [% END %]
+            </div>
+</li>
+</fieldset>
+<li>
+	<div id="resultSeudonimos" class="resultados"></div>
+</li>
 
-	<li><hr></hr></li>
-        <div>
-            [% PERL %]
-                            print C4::AR::Filtros::to_Button( 
-                                                                text    =>  "[% 'Guardar Seudónimo' | i18n %]",
-                                                                boton   =>  "boton_buscar",
-                                                                onClick =>  "guardarDatos();",
-                                                                title   =>  "[% 'Guardar Seudónimo' | i18n %]",
-                                    ) ;
-            [% END %]
-        </div>
-
-	<li><div id="resultSeudonimos"></div></li>
 </ul>
 </div>
 
-[% INCLUDE "intranet-bottom.inc" %]
+[% INCLUDE "intranet-bottom.inc" %]   
+
+
