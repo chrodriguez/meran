@@ -101,39 +101,9 @@
                                                             ) ;
                             [% END %]
                         </li>
-                        <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/catalogacion/estructura/estructuraCatalo.pl", 
-                                                                title =>    "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </li>
-
 
                      </ul>
                   </li>
-
-                  <li><h3 class="menu_intermedio">[% 'Herramientas' | i18n %]</h3>
-                    <ul>
-                        <li>
-                                    [% PERL %]
-                                        print C4::AR::Filtros::link_to( text =>     "[% 'Importar' | i18n %]",
-                                                                        url =>      "/cgi-bin/koha/herramientas/importar.pl", 
-                                                                        title =>    "[% 'Importaci&oacute;n' | i18n %]"
-                                                                    ) ;
-                                    [% END %]
-                        </li>
-                        <li>
-                                    [% PERL %]
-                                        print C4::AR::Filtros::link_to( text =>     "[% 'Exportar' | i18n %]",
-                                                                        url =>      "/cgi-bin/koha/herramientas/exportar.pl", 
-                                                                        title =>    "[% 'Exportaci&oacute;n' | i18n %]"
-                                                                    ) ;
-                                    [% END %]
-                        </li>
-                   </ul>
-                 </li>
 
                   <li><h3 class="menu_intermedio">[% 'Control de autoridades' | i18n %]</h3>
           <ul>
@@ -558,15 +528,105 @@
                         </li>
                         <li>
                             [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/catalogacion/estructura/estructuraCatalo.pl", 
+                                                                title =>    "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </li>
+                        <li>
+                            [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Visualizaci&oacute;n del OPAC' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpac.pl", 
                                                                 title =>    "[% 'Visualizaci&oacute;n del OPAC' | i18n %]"
                                                             ) ;
                             [% END %]
                         </li>
+                        <li><h3 class="menu_intermedio">[% 'Herramientas' | i18n %]</h3>
+                            <ul>
+                                <li>
+                                            [% PERL %]
+                                                print C4::AR::Filtros::link_to( text =>     "[% 'Importar' | i18n %]",
+                                                                                url =>      "/cgi-bin/koha/herramientas/importar.pl", 
+                                                                                title =>    "[% 'Importaci&oacute;n' | i18n %]"
+                                                                            ) ;
+                                            [% END %]
+                                </li>
+                                <li>
+                                            [% PERL %]
+                                                print C4::AR::Filtros::link_to( text =>     "[% 'Exportar' | i18n %]",
+                                                                                url =>      "/cgi-bin/koha/herramientas/exportar.pl", 
+                                                                                title =>    "[% 'Exportaci&oacute;n' | i18n %]"
+                                                                            ) ;
+                                            [% END %]
+                                </li>
+                            </ul>
+                        </li>
                   </ul>
               </li>
 
+              <li><h3 class="menu_intermedio">[% 'Usuarios' | i18n %]</h3>
+                <ul>
+                    <li>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Admin. libre Deuda' | i18n %]",
+                                                                    url =>      "/cgi-bin/koha/admin/adminLibreDeuda.pl",
+                                                                    title =>    "[% 'Admin. libre Deuda' | i18n %]"
+                                                                ) ;
+                                [% END %]
+                    </li>
+                    <li>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'RE-HASH PASSWORDS (CUIDADO!!!!!)' | i18n %]",
+                                                                    url =>      "/cgi-bin/koha/admin/rehashPasswd.pl", 
+                                                                    title =>    "[% 'RE-HASH PASSWORDS (CUIDADO!!!!!)' | i18n %]"
+                                                                ) ;
+                                [% END %]
+                    </li>
+                    <li>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Categor&iacute;s de Usuario' | i18n %]",
+                                                                    url =>      "/cgi-bin/koha/admin/categorie.pl",
+                                                                    title =>    "[% 'Categor&iacute;s de Usuario' | i18n %]"
+                                                                ) ;
+                                [% END %]
+                    </li>
+                </ul>
+              </li>  
+
+              <li><h3 class="menu_intermedio">[% 'Circulaci&oacute;n' | i18n %]</h3>
+                <ul>
+                    <li>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Sanciones' | i18n %]",
+                                                                    url =>      "/cgi-bin/koha/admin/sanciones.pl",
+                                                                    title =>    "[% 'Sanciones' | i18n %]"
+                                                                ) ;
+                                [% END %]
+                    </li>
+                    <li>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de pr&eacute;stamo' | i18n %]",
+                                                                    url =>      "/cgi-bin/koha/admin/tipos_de_prestamos.pl",
+                                                                    title =>    "[% 'Tipos de pr&eacute;stamo' | i18n %]"
+                                                                ) ;
+                                [% END %]
+                    </li>
+                </ul>
+              </li>  
+
+             <li><h3 class="menu_intermedio">[% 'Consultas' | i18n %]</h3>
+                <ul>
+                    <li>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Reportes Gene&eacute;ricos' | i18n %]",
+                                                                    url =>      "#", 
+                                                                    title =>    "[% 'Reportes Gene&eacute;ricos' | i18n %]"
+                                                                ) ;
+                                [% END %]
+                    </li>
+                </ul>
+             </li>
 
                <li><h3 class="menu_intermedio">[% 'Preferencias' | i18n %]</h3>
                   <ul>
@@ -575,14 +635,6 @@
                                     print C4::AR::Filtros::link_to( text =>     "[% 'Preferencias' | i18n %]",
                                                                     url =>      "/cgi-bin/koha/admin/preferencias.pl", 
                                                                     title =>    "[% 'Preferencias' | i18n %]"
-                                                                ) ;
-                                [% END %]
-                    </li>
-                    <li>
-                                [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "[% 'Reportes Gene&eacute;ricos' | i18n %]",
-                                                                    url =>      "#", 
-                                                                    title =>    "[% 'Reportes Gene&eacute;ricos' | i18n %]"
                                                                 ) ;
                                 [% END %]
                     </li>
@@ -612,33 +664,9 @@
                     </li>
                     <li>
                                 [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "[% 'Categor&iacute;s de Usuario' | i18n %]",
-                                                                    url =>      "/cgi-bin/koha/admin/categorie.pl",
-                                                                    title =>    "[% 'Categor&iacute;s de Usuario' | i18n %]"
-                                                                ) ;
-                                [% END %]
-                    </li>
-                    <li>
-                                [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de pr&eacute;stamo' | i18n %]",
-                                                                    url =>      "/cgi-bin/koha/admin/tipos_de_prestamos.pl",
-                                                                    title =>    "[% 'Tipos de pr&eacute;stamo' | i18n %]"
-                                                                ) ;
-                                [% END %]
-                    </li>
-                    <li>
-                                [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% 'Valores Autorizados' | i18n %]",
                                                                     url =>      "/cgi-bin/koha/admin/authorised_values.pl",
                                                                     title =>    "[% 'Valores Autorizados' | i18n %]"
-                                                                ) ;
-                                [% END %]
-                    </li>
-                    <li>
-                                [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "[% 'Admin. libre Deuda' | i18n %]",
-                                                                    url =>      "/cgi-bin/koha/admin/adminLibreDeuda.pl",
-                                                                    title =>    "[% 'Admin. libre Deuda' | i18n %]"
                                                                 ) ;
                                 [% END %]
                     </li>
@@ -650,53 +678,10 @@
                                                                 ) ;
                                 [% END %]
                     </li>
-                    <li>
-                                [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "[% 'Sanciones' | i18n %]",
-                                                                    url =>      "/cgi-bin/koha/admin/sanciones.pl",
-                                                                    title =>    "[% 'Sanciones' | i18n %]"
-                                                                ) ;
-                                [% END %]
-                    </li>
-                    <li>
-                                [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "[% 'Admin. permisos Tablas' | i18n %]",
-                                                                    url =>      "/cgi-bin/koha/admin/permisosTablas.pl",
-                                                                    title =>    "[% 'Admin. permisos Tablas' | i18n %]"
-                                                                ) ;
-                                [% END %]
-                    </li>
-                    <li>
-                                [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "[% 'RE-HASH PASSWORDS (CUIDADO!!!!!)' | i18n %]",
-                                                                    url =>      "/cgi-bin/koha/admin/rehashPasswd.pl", 
-                                                                    title =>    "[% 'RE-HASH PASSWORDS (CUIDADO!!!!!)' | i18n %]"
-                                                                ) ;
-                                [% END %]
-                    </li>
+
                   </ul>
                 </li>
                
-                  <li><h3 class="menu_intermedio">[% 'Herramientas' | i18n %]</h3>
-                      <ul>
-                          <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Exportaci&oacute;n' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/export/marc.pl",
-                                                                  title =>    "[% 'Exportaci&oacute;n' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                          </li>
-                          <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Importaci&oacute;n' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/import/breeding.pl",
-                                                                  title =>    "[% 'Importaci&oacute;n' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                          </li>
-                      </ul>
-                  </li>
               </ul>
            </li>
           <!-- Navigation item -->
