@@ -279,8 +279,9 @@ sub get_template_and_user {
 sub output_html_with_http_headers {
     my($template, $params, $session) = @_;
 
-    my $secure;
+#     my $secure;
 
+=item
     if(is_OPAC($params)){
         C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE OPAC");
         #si la conexion no es segura no se envía la cookie, en el OPAC la conexion no es segura
@@ -289,6 +290,7 @@ sub output_html_with_http_headers {
         C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE INTRANET");
         $secure = 1;
     }
+=cut
 
     #si se usa CGI::Session 4.42 FIXED descomentar esto
 #     $session->secure($secure); #seteo cookie con flag secure
@@ -313,7 +315,7 @@ sub output_html_with_http_headers {
 
     print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'utf-8', "Cache-control: public");
 =cut
-    _print_header($session, $secure);
+    print_header($session);
 
 
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
@@ -321,9 +323,20 @@ sub output_html_with_http_headers {
 }
 
 
-sub _print_header {
-    my($session, $secure) = @_;
+sub print_header {
+    my($session) = @_;
         
+    my $secure;
+
+    if(is_OPAC($session->{'type'})){
+        C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE OPAC");
+        #si la conexion no es segura no se envía la cookie, en el OPAC la conexion no es segura
+        $secure = 0;
+    }else{
+        C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE INTRANET");
+        $secure = 1;
+    }
+
     use CGI::Cookie;
 
     my $query = new CGI;
@@ -1289,7 +1302,7 @@ sub redirectTo {
         $session->param('redirectTo', $url);
         C4::AR::Debug::debug("redirectTo=> url: ".$url);
 #      	print $session->header();
-        _print_header($session, 0);
+        print_header($session);
  		print 'CLIENT_REDIRECT';
 		exit;
 	}else{
@@ -1324,7 +1337,7 @@ sub redirectToNoHTTPS {
 
         C4::AR::Debug::debug("redirectToNoHTTPS=> url: ".$url."\n");
 #         print $session->header();
-        _print_header($session, 0);
+        print_header($session);
         print 'CLIENT_REDIRECT';
         exit;
     }else{
@@ -1383,7 +1396,7 @@ sub redirectToHTTPS {
         $session->param('redirectTo', $url);
         C4::AR::Debug::debug("redirectToHTTPS=> url: ".$url."\n");
 #         print $session->header();
-        _print_header($session, 0);
+        print_header($session);
         print 'CLIENT_REDIRECT';
         exit;
     }else{
