@@ -10,11 +10,11 @@ use CGI;
 my $query = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-									template_name => "main.tmpl",
+									template_name => "exportacion.tmpl",
 									query => $query,
 									type => "intranet",
 									authnotrequired => 0,
-                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'undefined'},
 									debug => 1,
 			});
 

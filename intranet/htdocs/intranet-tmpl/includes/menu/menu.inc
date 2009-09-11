@@ -119,7 +119,7 @@
                         <li>
                                     [% PERL %]
                                         print C4::AR::Filtros::link_to( text =>     "[% 'Importar' | i18n %]",
-                                                                        url =>      "/cgi-bin/koha/importacion.pl", 
+                                                                        url =>      "/cgi-bin/koha/herramientas/importar.pl", 
                                                                         title =>    "[% 'Importaci&oacute;n' | i18n %]"
                                                                     ) ;
                                     [% END %]
@@ -127,7 +127,7 @@
                         <li>
                                     [% PERL %]
                                         print C4::AR::Filtros::link_to( text =>     "[% 'Exportar' | i18n %]",
-                                                                        url =>      "/cgi-bin/koha/Exportacion.pl", 
+                                                                        url =>      "/cgi-bin/koha/herramientas/exportar.pl", 
                                                                         title =>    "[% 'Exportaci&oacute;n' | i18n %]"
                                                                     ) ;
                                     [% END %]
