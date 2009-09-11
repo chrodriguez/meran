@@ -64,7 +64,7 @@ elsif ($tipoAccion eq 'GUARDAR_MODIFICACION_TIPO_PRESTAMO'){
 
     my $Message_arrayref = &C4::AR::Prestamos::t_modificarTipoPrestamo($obj);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 elsif ($tipoAccion eq 'AGREGAR_TIPO_PRESTAMO') {
@@ -80,7 +80,7 @@ elsif ($tipoAccion eq 'AGREGAR_TIPO_PRESTAMO') {
 
     my $Message_arrayref = &C4::AR::Prestamos::t_agregarTipoPrestamo($obj);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 
 }
@@ -97,7 +97,7 @@ elsif ($tipoAccion eq 'BORRAR') {
 
     my $Message_arrayref = &C4::AR::Prestamos::t_eliminarTipoPrestamo($id_tipo_prestamo);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 

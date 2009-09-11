@@ -67,7 +67,7 @@ elsif ($accion eq 'autocomplete_ayuda_marc'){
 }
 
 
-C4::Output::printHeader($session);
+C4::Auth::print_header($session);
 print $result;
 
 1;

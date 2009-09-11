@@ -134,4 +134,4 @@ if($socio->tienePermisos($flagsrequired)){
 }
 
 
-C4::Output::printHeader($session);
+C4::Auth::print_header($session);

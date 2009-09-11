@@ -62,7 +62,7 @@ if($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
 
 	$visualizacionOPAC->cambiarVisibilidad();
 	
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 }
 #**************************************************************************************************
 
@@ -103,7 +103,7 @@ if($tipoAccion eq "CAMBIAR_LINEA_ENCABEZADO"){
 	my  $visualizacionOPAC= C4::AR::VisualizacionOpac::getEncabezadoOpac($obj);
 	$visualizacionOPAC->cambiarLinea();
 	
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 }
 
 if($tipoAccion eq "CAMBIAR_NOMBRE_ENCABEZADO"){
@@ -119,7 +119,7 @@ if($tipoAccion eq "CAMBIAR_NOMBRE_ENCABEZADO"){
 	my  $visualizacionOPAC= C4::AR::VisualizacionOpac::getEncabezadoOpac($obj);
 	$visualizacionOPAC->cambiarNombre($obj->{'nombre'});
 	
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 }
 
 if($tipoAccion eq "CAMBIAR_VISIBILIDAD_ENCABEZADO"){
@@ -136,7 +136,7 @@ if($tipoAccion eq "CAMBIAR_VISIBILIDAD_ENCABEZADO"){
 	my  $visualizacionOPAC= C4::AR::VisualizacionOpac::getEncabezadoOpac($obj);
 	$visualizacionOPAC->cambiarVisibilidad();
 	
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 }
 
 #*********************************se actualiza el campo linea del encabezado*********************************
@@ -155,7 +155,7 @@ if(($tipoAccion eq "UPDATE")&&($tabla eq "ENCABEZADO")){
 	
 	&modificarLineaEncabezado($idencabezado, $linea);
 	
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 }
 
 #*********************************se actualiza el campo linea del encabezado*********************************
@@ -181,7 +181,7 @@ if($tipoAccion eq "CAMBIAR_ORDEN_ENCABEZADO"){
 		&bajarOrden($idencabezado, $orden, $itemtype, $action);
 	}
 	
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 }
 
 if($tipoAccion eq "ESTRUCTURA_VISUALIZACION"){
@@ -198,7 +198,7 @@ if($tipoAccion eq "ESTRUCTURA_VISUALIZACION"){
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
     
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 
@@ -216,7 +216,7 @@ if($tipoAccion eq "GUARDAR_ENCABEZADO_VISUALIZACION_OPAC"){
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
     
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
@@ -233,7 +233,7 @@ if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
     
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 if($tipoAccion eq "AGREGAR_CONFIGURACION_VISUALIZACION"){
@@ -319,7 +319,7 @@ if(($tipoAccion eq "UPDATE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
 	
 	&UpdateCatalogacion($textoPred, $textoSucc, $separador, $idestcatopac);
 	
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 }
 
 #**************** elimino una tupla en estructura_catalogacion_opac**************************
@@ -338,7 +338,7 @@ if(($tipoAccion eq "DELETE")&&($tabla eq "ESTRUCTURA_VISUALIZACION")){
     
     my $infoOperacionJSON=to_json $Message_arrayref;
     
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 
 }
@@ -366,7 +366,7 @@ if(($tipoAccion eq "DELETE")&&($tabla eq "ENCABEZADO_CAMPO_OPAC")){
 
 	#se convierte el arreglo de respuesta en JSON
 	my $infoRespuestaJSON = to_json \%infoRespuesta;
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	#se envia en JSON al cliente
 	print $infoRespuestaJSON;
 }

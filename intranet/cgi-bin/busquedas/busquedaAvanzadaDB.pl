@@ -239,6 +239,6 @@ if($accion eq "buscar"){
 		}
 		$string= &C4::AR::Utilidades::crearComponentes( $tipo,'valor1',\@valuesMapeo,$labels,'');
 	}
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $string;
 }

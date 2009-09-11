@@ -130,7 +130,7 @@ my ($template, $session, $t_params) =
 	    $msg_object->{'error'}= 1;
 	    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP006', 'params' => []} ) ;
 	    my $infoOperacionJSON=to_json $msg_object;
-        C4::Output::printHeader($session);
+        C4::Auth::print_header($session);
     	print $infoOperacionJSON;
 	}
 } #end if($accion eq "MODIFICAR_VARIABLE")
@@ -154,7 +154,7 @@ if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){
 	my $Message_arrayref = &C4::AR::Preferencias::t_modificarVariable($variable,$valor,$expl);
     
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 
 } #end GUARDAR_MODIFICACION_VARIABLE
@@ -191,7 +191,7 @@ if($accion eq "SELECCION_CAMPO"){
 		$strjson=C4::AR::Utilidades::arrayObjectsToJSONString($valAuto);
 
 	}
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $strjson;
 }#end SELECCION_CAMPO
 
@@ -281,7 +281,7 @@ if($accion eq "GUARDAR_NUEVA_VARIABLE"){
  
 	my $infoOperacionJSON=to_json $Message_arrayref;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $infoOperacionJSON;
 
 }#end GUARDAR_NUEVA_VARIABLE

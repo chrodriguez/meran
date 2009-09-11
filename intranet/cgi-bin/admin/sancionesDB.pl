@@ -55,7 +55,7 @@ C4::AR::Debug::debug("tipossss : ".$tipos_que_aplica->[0]);
 
     my $Message_arrayref = &C4::AR::Sanciones::actualizarTiposPrestamoQueAplica($tipo_prestamo,$categoria_socio,$tipos_que_aplica);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 
@@ -165,7 +165,7 @@ if ($accion eq "ELIMINAR_REGLA_TIPO_SANCION") {
 
     my $Message_arrayref = &C4::AR::Sanciones::eliminarReglaTipoSancion($tipo_sancion,$regla_sancion);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 
@@ -188,7 +188,7 @@ if ($accion eq "AGREGAR_REGLA_TIPO_SANCION") {
 
     my $Message_arrayref = &C4::AR::Sanciones::agregarReglaTipoSancion($regla_sancion,$orden,$cantidad,$tipo_prestamo, $categoria_socio);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 
@@ -222,7 +222,7 @@ if ($accion eq "ELIMINAR_REGLA_SANCION") {
 
     my $Message_arrayref = &C4::AR::Sanciones::eliminarReglaSancion($regla_sancion);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 
@@ -242,6 +242,6 @@ if ($accion eq "AGREGAR_REGLA_SANCION") {
 
     my $Message_arrayref = &C4::AR::Sanciones::agregarReglaSancion($dias_sancion,$dias_demora);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }

@@ -53,7 +53,7 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
  		$infoDevRen[$i]->{'edicion'}=$prestamo->nivel3->nivel2->getEdicion;
 	}
 	my $infoDevRenJSON = to_json \@infoDevRen;
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $infoDevRenJSON;
 }
 #*************************************************************************************************************
@@ -95,7 +95,7 @@ elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 
 	my $infoPrestamoJSON = to_json \@infoPrestamo;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $infoPrestamoJSON;
 }
 #*************************************************************************************************************
@@ -180,7 +180,7 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 	
 	my $infoOperacionJSON = to_json \%infoOperaciones;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $infoOperacionJSON;
 
 }
@@ -201,7 +201,7 @@ elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
    	my %info;
      $info{'Messages_arrayref'}= $Message_arrayref;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print to_json \%info;
 }
 
@@ -219,7 +219,7 @@ elsif($tipoAccion eq "REALIZAR_RENOVACION"){
     my $infoOperaciones = C4::AR::Prestamos::t_renovar($obj);
 
     my $infoOperacionJSON = to_json $infoOperaciones;
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $infoOperacionJSON;
 }
 #******************************************FIN***DEVOLVER_RENOVAR*********************************************
@@ -247,7 +247,7 @@ elsif($tipoAccion eq "CANCELAR_RESERVA"){
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $infoOperacionJSON;
 }
 #******************************************FIN***CANCELAR RESERVA*********************************************
@@ -287,7 +287,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $infoOperacionJSON;
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
@@ -311,7 +311,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
 	
 	my $infoOperacionJSON=to_json \%tiposPrestamos;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $infoOperacionJSON;
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_SOCIO"){
@@ -336,7 +336,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_SOCIO"){
 
 	my $infoOperacionJSON=to_json \%infoSocio;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $infoOperacionJSON;
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
@@ -361,7 +361,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
 	if($socio){
 		$flag= $socio->tieneAutorizado;
 	}
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $flag;
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_ES_REGULAR"){
@@ -382,6 +382,6 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_ES_REGULAR"){
 		$regular= $socio->esRegular;
 	}
 	
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $regular;
 }

@@ -40,7 +40,7 @@ if($tipoAccion eq "RESET_PASSWORD"){
     my ($Message_arrayref)= C4::AR::Usuarios::resetPassword(\%params);
     my $infoOperacionJSON=to_json $Message_arrayref;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "RESET_PASSWORD")
@@ -61,7 +61,7 @@ elsif($tipoAccion eq "AGREGAR_AUTORIZADO"){
     my ($Message_arrayref)= C4::AR::Usuarios::agregarAutorizado($obj);
     my $infoOperacionJSON=to_json $Message_arrayref;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 
 }
@@ -101,7 +101,7 @@ elsif($tipoAccion eq "ELIMINAR_AUTORIZADO"){
     my ($Message_arrayref)= C4::AR::Usuarios::desautorizarTercero(\%params);
     my $infoOperacionJSON=to_json $Message_arrayref;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 
 } 
@@ -127,7 +127,7 @@ elsif($tipoAccion eq "ELIMINAR_USUARIO"){
     my ($Message_arrayref)= C4::AR::Usuarios::eliminarUsuario($nro_socio);
     my $infoOperacionJSON=to_json $Message_arrayref;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "ELIMINAR_USUARIO")
@@ -151,7 +151,7 @@ elsif($tipoAccion eq "AGREGAR_USUARIO"){
     my $Message_arrayref=C4::AR::Usuarios::agregarPersona($obj);
     my $infoOperacionJSON=to_json $Message_arrayref;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "AGREGAR_USUARIO")
@@ -176,7 +176,7 @@ elsif($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
     my ($Message_arrayref)= C4::AR::Usuarios::actualizarSocio($obj);
     my $infoOperacionJSON=to_json $Message_arrayref;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO")
@@ -243,7 +243,7 @@ elsif($tipoAccion eq "ELIMINAR_FOTO"){
     my ($Message_arrayref)= &C4::AR::UploadFile::deletePhoto($foto_name);
     my $infoOperacionJSON=to_json $Message_arrayref;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 

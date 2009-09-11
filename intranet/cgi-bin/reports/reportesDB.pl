@@ -40,7 +40,7 @@ if($tipoAccion eq "GUARDAR_NOTA"){
 	
 # 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 # 	print $infoOperacionJSON;
 	
 } #end if($tipoAccion eq "CAMBIAR_PASSWORD")
@@ -57,7 +57,7 @@ my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borro
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
 	print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "GUARDAR_PERMISOS")
