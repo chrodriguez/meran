@@ -298,17 +298,10 @@ sub output_html_with_http_headers {
 #     print $session->header(	charset => C4::Context->config("charset")||'utf-8', "Cache-control: public" );
 
 #si se usa CGI::Session 4.42 descomentar esto
+=item
     use CGI::Cookie;
     my $query = new CGI;
     my $cookie= undef;
-=item
-    $cookie = $query->cookie(   -secure     => $secure, 
-                                -httponly   => 1, 
-                                -name       =>$session->name, 
-                                -value      =>$session->id, 
-                                -expires    => '+' .$session->expire. 's', 
-                            );
-=cut
 
     $cookie = new CGI::Cookie(  -secure     => $secure, 
                                 -httponly   => 1, 
@@ -319,12 +312,33 @@ sub output_html_with_http_headers {
 
 
     print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'utf-8', "Cache-control: public");
+=cut
+    _print_header($session, $secure);
 
 
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
 	exit;
 }
 
+
+sub _print_header {
+    my($session, $secure) = @_;
+        
+    use CGI::Cookie;
+
+    my $query = new CGI;
+    my $cookie= undef;
+
+    $cookie = new CGI::Cookie(  -secure     => $secure, 
+                                -httponly   => 1, 
+                                -name       =>$session->name, 
+                                -value      =>$session->id, 
+                                -expires    => '+' .$session->expire. 's', 
+                            );
+
+
+    print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'utf-8', "Cache-control: public");
+}
 
 =item sub is_OPAC
 
@@ -1274,7 +1288,8 @@ sub redirectTo {
 		# send proper HTTP header with cookies:
         $session->param('redirectTo', $url);
         C4::AR::Debug::debug("redirectTo=> url: ".$url);
-     	print $session->header();
+#      	print $session->header();
+        _print_header($session, 0);
  		print 'CLIENT_REDIRECT';
 		exit;
 	}else{
