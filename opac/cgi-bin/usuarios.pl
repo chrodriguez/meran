@@ -51,7 +51,7 @@ if ($tipoAccion eq 'CAMBIAR_PASSWORD'){
 
     my $infoOperacionJSON=to_json $Message_arrayref;
 
-    C4::Output::printHeader($session);
+    C4::Auth::print_header($session);
     print $infoOperacionJSON;
 
 }
