@@ -800,6 +800,23 @@ em.error_adv{
     cursor: pointer;
 }
 
+
+.cargando {
+    background-image: url(../imagenes/loaders/green.gif);
+    background-repeat: no-repeat;
+    background-position:center center;
+    height: auto;
+    min-height: 30px;
+}
+
+.loading {
+    background-image: url(../imagenes/loaders/big_green.gif);
+    background-repeat: no-repeat;
+    height: 50px;
+    width: 50px;
+    min-height: 50px;
+}
+
                
 /*--------para MARC-------------------------REVISAR NO SE COMO SE USA---*/
 
