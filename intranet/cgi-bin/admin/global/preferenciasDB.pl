@@ -23,7 +23,7 @@ if($accion eq "BUSCAR_PREFERENCIAS"){
 #Busca las preferencias segun lo ingresado como parametro y luego las muestra
 
 my ($template, $session, $t_params)  = get_template_and_user({
-                        	template_name => "admin/preferenciasResults.tmpl",
+                        	template_name => "admin/global/preferenciasResults.tmpl",
 							query => $input,
 							type => "intranet",
 							authnotrequired => 0,
@@ -45,7 +45,7 @@ if($accion eq "MODIFICAR_VARIABLE"){
 
 my ($template, $session, $t_params) = 
 	get_template_and_user({
-				template_name => "admin/modificarPreferencia.tmpl",
+				template_name => "admin/global/modificarPreferencia.tmpl",
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
@@ -200,7 +200,7 @@ if($accion eq "NUEVA_VARIABLE"){
 
 my ($template, $session, $t_params) = 
 	get_template_and_user({
-				template_name => "admin/modificarPreferencia.tmpl",
+				template_name => "admin/global/modificarPreferencia.tmpl",
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,

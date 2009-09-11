@@ -62,7 +62,7 @@ function agregarPreferencia(){
 	var ok=1;
 	objAH=new AjaxHelper(updateAgregarPreferencia);
 	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
+	objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
 	objAH.tipo=tipo;
  	objAH.accion= "NUEVA_VARIABLE";
 	
@@ -106,7 +106,7 @@ function selectOpcion(){
 	borrarDiv();
 	objAH=new AjaxHelper(updateInfoConsultaJSON);
 	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
+	objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
 	objAH.tipo=tipo;
 	objAH.accion= "SELECCION_CAMPO";
  	objAH.json=1;
@@ -150,7 +150,7 @@ function elegirCampo(){
 	if(tipo == "referencia" && tabla.length == 1){
 		campo.remove();
 		objAH=new AjaxHelper(updateInfoConsultaJSON);
-		objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
+		objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
 		objAH.tipo=tipo;
 // 		objAH.json=1;
 		objAH.accion= "SELECCION_CAMPO";
@@ -232,7 +232,7 @@ function guardarModificacion(){
 
 	objAH=new AjaxHelper(updateGuardarModificacion);
 	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
+	objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
 	objAH.variable=$("#variable").val();
 	objAH.valor=$("#valor").val();
 
@@ -269,7 +269,7 @@ function updateGuardarModificacion(responseText){
 function buscarPreferencia(){
 	objAH=new AjaxHelper(updateBuscarPreferencia);
 	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
+	objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
 	objAH.buscar=$("#buscar").val();
 	objAH.accion= "BUSCAR_PREFERENCIAS";
 	objAH.sendToServer();
@@ -307,7 +307,7 @@ function modificarVariable(variable,tipo){
 
 	objAH=new AjaxHelper(updateModificarVariable);
 	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
+	objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
 	objAH.variable=variable;
 	objAH.accion= "MODIFICAR_VARIABLE";
 	objAH.sendToServer();
@@ -325,7 +325,7 @@ function guardarNuevaVariable(){
 
 	objAH=new AjaxHelper(updateGuardarModificacion);
 	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/admin/preferenciasDB.pl";
+	objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
 	objAH.variable=$("#variable").val();
 	objAH.explicacion=$("#explicacion").val();
 	objAH.tipo=$("#tipoVar").val();

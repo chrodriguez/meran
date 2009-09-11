@@ -68,7 +68,7 @@ my $categorycode = $input->param('categorycode');
 my $op = $input->param('op');
 
 my ($template, $session, $params) = get_template_and_user({
-								template_name => "admin/branches.tmpl",
+								template_name => "admin/global/branches.tmpl",
 								query = $input,
 								type => "intranet",
 								authnotrequired => 0,
@@ -322,7 +322,7 @@ sub branchinfotable {
 		$row{'branch_code'} = $branch->{'branchcode'};
 		$row{'clase'} = $color;
 		$row{'value'} = $branch->{'branchcode'};
-		$row{'action'} = '/cgi-bin/koha/admin/branches.pl';
+		$row{'action'} = '/cgi-bin/koha/admin/global/branches.pl';
 
 		push @loop_data, { %row };
 	}

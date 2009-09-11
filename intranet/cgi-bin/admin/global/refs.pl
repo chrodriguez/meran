@@ -28,7 +28,7 @@ use C4::AR::Utilidades;
 
 my $input = new CGI;
 my ($template, $session, $t_params) = C4::Auth::get_template_and_user({
-									template_name => "admin/refs.tmpl",
+									template_name => "admin/global/refs.tmpl",
 									query => $input,
 									type => "intranet",
 									authnotrequired => 0,

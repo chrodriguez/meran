@@ -21,7 +21,7 @@ my $authnotrequired = 0;
 if ($tipoAccion eq 'MODIFICAR_TIPO_PRESTAMO') {
 
 my ($template, $session, $t_params) = get_template_and_user({
-                template_name => "admin/agregarTipoPrestamo.tmpl",
+                template_name => "admin/circulacion/agregarTipoPrestamo.tmpl",
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
@@ -40,7 +40,7 @@ C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 elsif ($tipoAccion eq 'NUEVO_TIPO_PRESTAMO') {
 
 my ($template, $session, $t_params) = get_template_and_user({
-                template_name => "admin/agregarTipoPrestamo.tmpl",
+                template_name => "admin/circulacion/agregarTipoPrestamo.tmpl",
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
@@ -105,7 +105,7 @@ elsif ($tipoAccion eq 'BORRAR') {
 if ($tipoAccion eq 'TIPOS_PRESTAMOS') {
 
 my ($template, $session, $t_params) = get_template_and_user({
-                            template_name => "admin/tipos_de_prestamos_lista.tmpl",
+                            template_name => "admin/circulacion/tipos_de_prestamos_lista.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,

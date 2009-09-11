@@ -471,7 +471,7 @@
                               <li>
                                   [% PERL %]
                                       print C4::AR::Filtros::link_to( text =>     "[% 'Links KOHA - MARC DB' | i18n %]",
-                                                                      url =>      "/cgi-bin/koha/admin/koha2marclinks.pl",
+                                                                      url =>      "/cgi-bin/koha/admin/catalogo/MARC/koha2marclinks.pl",
                                                                       title =>    "[% 'Links KOHA - MARC DB' | i18n %]"
                                                                   ) ;
                                   [% END %]
@@ -479,7 +479,7 @@
                               <li>
                                   [% PERL %]
                                       print C4::AR::Filtros::link_to( text =>     "[% 'Estructuras de MARC' | i18n %]",
-                                                                      url =>      "/cgi-bin/koha/admin/marctagstructure.pl",
+                                                                      url =>      "/cgi-bin/koha/admin/catalogo/MARC/marctagstructure.pl",
                                                                       title =>    "[% 'Estructuras de MARC' | i18n %]"
                                                                   ) ;
                                   [% END %]
@@ -487,7 +487,7 @@
                               <li>
                                   [% PERL %]
                                       print C4::AR::Filtros::link_to( text =>     "[% 'Chequeo MARC' | i18n %]",
-                                                                      url =>      "/cgi-bin/koha/admin/checkmarc.pl",
+                                                                      url =>      "/cgi-bin/koha/admin/catalogo/MARC/checkmarc.pl",
                                                                       title =>    "[% 'Chequeo MARC' | i18n %]"
                                                                   ) ;
                                   [% END %]
@@ -495,7 +495,7 @@
                               <li>
                                   [% PERL %]
                                       print C4::AR::Filtros::link_to( text =>     "[% 'Servidores Z39.50' | i18n %]",
-                                                                      url =>      "/cgi-bin/koha/admin/z3950servers.pl",
+                                                                      url =>      "/cgi-bin/koha/admin/catalogo/MARC/z3950servers.pl",
                                                                       title =>    "[% 'Servidores Z39.50' | i18n %]"
                                                                   ) ;
                                   [% END %]
@@ -578,7 +578,7 @@
                     <li>
                                 [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% 'Admin. libre Deuda' | i18n %]",
-                                                                    url =>      "/cgi-bin/koha/admin/adminLibreDeuda.pl",
+                                                                    url =>      "/cgi-bin/koha/admin/usuarios/adminLibreDeuda.pl",
                                                                     title =>    "[% 'Admin. libre Deuda' | i18n %]"
                                                                 ) ;
                                 [% END %]
@@ -586,15 +586,15 @@
                     <li>
                                 [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% 'RE-HASH PASSWORDS (CUIDADO!!!!!)' | i18n %]",
-                                                                    url =>      "/cgi-bin/koha/admin/rehashPasswd.pl", 
+                                                                    url =>      "/cgi-bin/koha/admin/usuarios/rehashPasswd.pl", 
                                                                     title =>    "[% 'RE-HASH PASSWORDS (CUIDADO!!!!!)' | i18n %]"
                                                                 ) ;
                                 [% END %]
                     </li>
                     <li>
                                 [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "[% 'Categor&iacute;s de Usuario' | i18n %]",
-                                                                    url =>      "/cgi-bin/koha/admin/categorie.pl",
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Categor&iacute;as de Usuario' | i18n %]",
+                                                                    url =>      "/cgi-bin/koha/admin/usuarios/categorie.pl",
                                                                     title =>    "[% 'Categor&iacute;s de Usuario' | i18n %]"
                                                                 ) ;
                                 [% END %]
@@ -607,7 +607,7 @@
                     <li>
                                 [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% 'Sanciones' | i18n %]",
-                                                                    url =>      "/cgi-bin/koha/admin/sanciones.pl",
+                                                                    url =>      "/cgi-bin/koha/admin/circulacion/sanciones.pl",
                                                                     title =>    "[% 'Sanciones' | i18n %]"
                                                                 ) ;
                                 [% END %]
@@ -615,7 +615,7 @@
                     <li>
                                 [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de pr&eacute;stamo' | i18n %]",
-                                                                    url =>      "/cgi-bin/koha/admin/tipos_de_prestamos.pl",
+                                                                    url =>      "/cgi-bin/koha/admin/circulacion/tipos_de_prestamos.pl",
                                                                     title =>    "[% 'Tipos de pr&eacute;stamo' | i18n %]"
                                                                 ) ;
                                 [% END %]
@@ -641,7 +641,7 @@
                     <li>
                                 [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% 'Preferencias' | i18n %]",
-                                                                    url =>      "/cgi-bin/koha/admin/preferencias.pl", 
+                                                                    url =>      "/cgi-bin/koha/admin/global/preferencias.pl", 
                                                                     title =>    "[% 'Preferencias' | i18n %]"
                                                                 ) ;
                                 [% END %]
