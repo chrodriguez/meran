@@ -6,6 +6,7 @@ body input[type="text"]:focus{
 .clearFieldset{
   clear:both;
 }
+
 #login {
     background-image: url(../imagenes/meranLogin.png);
     background-repeat: no-repeat;
@@ -801,22 +802,6 @@ em.error_adv{
 }
 
                
-.cargando {
-    background-image: url(../imagenes/loaders/green.gif);
-    background-repeat: no-repeat;
-    background-position:center center;
-    height: auto;
-    min-height: 30px;
-}
-
-.loading {
-    background-image: url(../imagenes/loaders/big_green.gif);
-    background-repeat: no-repeat;
-    height: 50px;
-    width: 50px;
-    min-height: 50px;
-}
-
 /*--------para MARC-------------------------REVISAR NO SE COMO SE USA---*/
 
 .MARCResult li{
