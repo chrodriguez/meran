@@ -10,7 +10,7 @@ use C4::AR::Prestamos;
 my $input = new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user({
-                        template_name => "admin/tipos_de_prestamos.tmpl",
+                        template_name => "admin/circulacion/tipos_de_prestamos.tmpl",
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
