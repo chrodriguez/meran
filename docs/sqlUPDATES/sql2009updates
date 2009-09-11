@@ -988,3 +988,11 @@ INSERT INTO `pref_preferencia_sistema` (
 VALUES (
 'habilitar_https', 1, 'habilita https (=1) o no (=0)', NULL , 'bool'
 );
+
+
+-- ESTANTES!!!
+
+ ALTER TABLE `cat_estante` CHANGE `shelfnumber` `id` INT( 11 ) NOT NULL DEFAULT '0', 
+    CHANGE `shelfname` `estante` VARCHAR( 512 )  NULL DEFAULT NULL ,
+    CHANGE `type` `tipo` TEXT NOT NULL ,
+    CHANGE `parent` `padre` INT( 11 ) NOT NULL DEFAULT '0';
