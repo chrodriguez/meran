@@ -1,7 +1,5 @@
 package C4::AR::Catalogacion;
 
-#Este modulo sera el encargado del manejo de la carga de datos en las tablas MARC
-#Tambien en la carga de los items en los distintos niveles y de la creacion del catalogo.
 
 #Copyright (C) 2003-2008  Linti, Facultad de Inform�tica, UNLP
 #This file is part of Koha-UNLP
@@ -20,7 +18,10 @@ package C4::AR::Catalogacion;
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-
+=item
+Este modulo sera el encargado del manejo de la carga de datos en las tablas MARC
+Tambien en la carga de los items en los distintos niveles y de la creacion del catalogo.
+=cut
 use strict;
 require Exporter;
 use C4::Context;
@@ -43,9 +44,7 @@ use vars qw(@EXPORT @ISA);
 
 @EXPORT=qw(
 	&crearCatalogo
-
 	&cantidadItem	
-   
 	&buscarCamposObligatorios
 	&buscarCamposMARCdeNivel
 	&buscarSubCampo
@@ -67,24 +66,18 @@ use vars qw(@EXPORT @ISA);
 	&buscarNivel3PorId2
 	&buscarMaximoHabilitado
 	&buscarNombreCampoMarc
-
 	&actualizarCamposModificados
 	&actualizarInfoReferencia
-	
 	&guardarCamposModificados
 	&guardarCampoTemporal
 	&guardarInfoReferencia
-
 	&modificarCampo
 	&modificarNivel1Completo
 	&modificarNivel2Completo
 	&modificarNivel3Completo
-
 	&obtenerCamposTablaRef
 	&obtenerValorTablaRef
  	&obtenerIdentTablaRef2
-
-
     &t_eliminarNivel1
 	&t_eliminarNivel2
 	&t_eliminarNivel3
