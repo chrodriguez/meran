@@ -317,7 +317,6 @@ sub output_html_with_http_headers {
 =cut
     print_header($session);
 
-
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
 	exit;
 }
@@ -363,7 +362,7 @@ sub print_header {
 sub is_OPAC {
     my($template_params) = @_;
 
-    return ($template_params->{'sitio'} ne 'INTRANET'? 1: 0);
+    return ($template_params->{'sitio'} eq 'opac'? 1: 0);
 }
 
 =item checkauth
@@ -1190,6 +1189,7 @@ sub _generarSession {
 	$session->param('password', $params->{'password'});
 	$session->param('nroRandom', $params->{'random_number'});
 	$session->param('type', $params->{'type'}); #OPAC o INTRA
+    $session->param('secure', ($params->{'type'} eq 'intranet')?1:0); #OPAC o INTRA
 	$session->param('flagsrequired', $params->{'flagsrequired'});
  	$session->param('browser', $params->{'browser'} );
 	$session->param('locale', C4::Context->config("defaultLang")|'es_ES');

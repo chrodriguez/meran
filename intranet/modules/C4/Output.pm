@@ -132,7 +132,7 @@ sub gettemplate {
 			themelang           => ($opac ne 'intranet'? '/opac-tmpl/': '/intranet-tmpl/') ,
 # FIXME DEPRECATED
 			interface           => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
-            sitio               => ($opac ne 'intranet'? 'OPAC': 'INTRANET'),  #indica desde donde se hace el requerimiento
+            sitio               => ($opac ne 'intranet'? 'opac': 'intranet'),  #indica desde donde se hace el requerimiento
 			tema                => $tema,
 			temas               => $temas,
             titulo_nombre_ui    => C4::AR::Preferencias->getValorPreferencia('titulo_nombre_ui'),
