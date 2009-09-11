@@ -1027,7 +1027,7 @@ function modificarN1(id1){
 	inicializar();
 	objAH=new AjaxHelper(updateModificarN1);
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.showStatusIn = 'nivel1Tabla';
+    objAH.showStatusIn = 'centro';
 	objAH.debug= true;
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype="ALL";
@@ -1047,6 +1047,7 @@ function modificarN2(id2){
    inicializar();
    objAH=new AjaxHelper(updateModificarN2);
    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+   objAH.showStatusIn = 'centro';
    objAH.debug= true;
    objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
    objAH.itemtype=$("#id_tipo_doc").val();
@@ -1067,6 +1068,7 @@ function modificarN3(id3){
 	objAH=new AjaxHelper(updateModificarN3);
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug= true;
+    objAH.showStatusIn = 'centro';
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype=$("#id_tipo_doc").val();
  	objAH.id3 = id3;
