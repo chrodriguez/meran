@@ -317,37 +317,33 @@ $(document).ready(function(){
 	</li>
 
 	<div id="content_search_autores">
-<li class="sub_item"  ><label for="search_autores">[% "Autores:" | i18n %] </label> 
+        <li class="sub_item"  ><label for="search_autores">[% "Autores:" | i18n %] </label> 
 		<input id="search_autores" type="text" size="50"></li>
 			<input id="search_autores_hidden" type="hidden">
 	</div>
 	<div id="content_search_temas">
-<li class="sub_item"><label for="search_temas">[% "Temas:" | i18n %] </label> 
+        <li class="sub_item"><label for="search_temas">[% "Temas:" | i18n %] </label> 
 		<input id="search_temas" type="text" size="50"></li>
 			<input id="search_temas_hidden" type="hidden">
 	</div>
 	<div id="content_search_editoriales">
-<li class="sub_item"><label for="search_editoriales">[% "Editoriales:" | i18n %] </label> 
+        <li class="sub_item">
+        <label for="search_editoriales">[% "Editoriales:" | i18n %] </label> 
 		<input id="search_editoriales" type="text" size="50"></li>
 			<input id="search_editoriales_hidden" type="hidden">
 	</div>
 
 <li class="sub_item"><label for="sinonimo">[% "Ingrese Sin&oacute;nimo:" | i18n %] </label> 
 	<input id="sinonimo" name="sinonimo" type="text" value="" size="50">
+	<input id="push" type="button" onClick="pushSinonimo();" value="+" title="Agregar Sin&oacute;nimo a la lista"> 
 	</li>
 <li class="sub_item">
-<ul><li>
-		<input id="push" type="button" onClick="pushSinonimo();" value=">>" title="Agregar Sin&oacute;nimo"> 
-		<input id="pop" type="button" onClick="popSinonimo();" value="<<" title="Sacar Sin&oacute;nimo" disabled=true>
-	</li>
-	<li>
+        <label for="textAreaSinonimos">[% "Sin&oacute;nimos a Ingresar:" | i18n %] </label> 
 		<textarea id="textAreaSinonimos" style="height:60px; width:230px;" readonly></textarea>
+		<input id="pop" type="button" onClick="popSinonimo();" value="-" title="Sacar sin&oacute;nimo de la lista" disabled="true" style="vertical-align:top;">
 </li>
-</ul>
-</li>
-
-	<li><hr></hr></li>
-            <div>
+<li>
+           <div>
                 [% PERL %]
                                 print C4::AR::Filtros::to_Button( 
                                                                     text    =>  "[% 'Guardar' | i18n %]",
@@ -358,11 +354,11 @@ $(document).ready(function(){
                                         ) ;
                 [% END %]
             </div>
-	</li>
+</li>
 </fieldset>
-    <li>
+<li>
 	<div id="resultSinonimos" class="resultados"></div>
-    </li>
+</li>
 
 </ul>
 </div>
