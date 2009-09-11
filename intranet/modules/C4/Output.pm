@@ -81,11 +81,6 @@ printable string.
 
 #==========================================================FUNCIONES NUEVAS=================================================
 
-sub printHeader {
-	my ($session) = @_;
-	print $session->header(	charset => C4::Context->config("charset")||'utf-8');
-}
-
 sub gettemplate {
 	my ($tmplbase, $opac) = @_;
 
