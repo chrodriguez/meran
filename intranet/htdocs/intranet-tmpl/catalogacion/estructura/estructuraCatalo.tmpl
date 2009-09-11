@@ -470,24 +470,24 @@ function updateModificarEstructuraCatalogacion(responseText){
 <div class="titulos" >Estructura de Catalogaci&oacute;n</div>
 
 
-<fieldset>
-<legend><strong>[% "Seleccione el nivel:" | i18n %]</strong></legend>
-<ul>
-    <li class="sub_item">
-        <label for="niveles_id" >
-	        [% 'Nivel:' | i18n %]
-        </label>
-        [% selectNivel %]
-    </li>
-
-    <li id="content_combo_tipo_nivel3_id" class="sub_item" style="display:none;">
-        <label for="tipo_nivel3_id">
-	        [% 'Tipo de item:' | i18n %] 
-        </label>
-        [% selectItemType %]
-    </li>
-
-</ul>
+<fieldset class="clearFieldset">
+    <legend><strong>[% "Seleccione el nivel:" | i18n %]</strong></legend>
+    <ul>
+        <li class="sub_item">
+            <label for="niveles_id" >
+                [% 'Nivel:' | i18n %]
+            </label>
+            [% selectNivel %]
+        </li>
+    
+        <li id="content_combo_tipo_nivel3_id" class="sub_item" style="display:none;">
+            <label for="tipo_nivel3_id">
+                [% 'Tipo de item:' | i18n %] 
+            </label>
+            [% selectItemType %]
+        </li>
+    
+    </ul>
 </fieldset>
 
 <!-- PARA MOSTRAR TEMPLATE PARA MODIFICAR CAMPOS -->

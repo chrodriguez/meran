@@ -3,7 +3,7 @@ body input[type="text"]:focus{
   background: InfoBackground;
 }
 
-fieldset{
+.clearFieldset{
   clear:both;
 }
 #login {
