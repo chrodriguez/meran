@@ -224,6 +224,7 @@ function mostrarEstructuraDelNivel1(){
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug= true;
 	objAH.cache= false;
+//     objAH.showStatusIn = 'nivel1Tabla';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel= _NIVEL_ACTUAL;
@@ -265,7 +266,6 @@ function mostrarDataNivel3(){
 }
 
 function updateMostrarEstructuraDelNivel1(responseText){
-//   jAlert('responseText: '+htmlentities(responseText,'ENT_NOQUOTES','UTF-8 '));
     _clearContentsEstructuraDelNivel();
     _showAndHiddeEstructuraDelNivel(1);
     //proceso la info del servidor y se crean las componentes en el cliente
@@ -284,6 +284,7 @@ function mostrarEstructuraDelNivel2(){
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug= true;
 	objAH.cache= false;
+    objAH.showStatusIn = 'estructuraDelNivel2';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel= 2;
@@ -326,6 +327,7 @@ function mostrarEstructuraDelNivel3(){
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel3);
     objAH.debug= true;
 	objAH.cache= false;
+    objAH.showStatusIn = 'estructuraDelNivel3';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel= _NIVEL_ACTUAL;
@@ -402,9 +404,11 @@ function agregarN3(){
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 1 luego de ser guardado
 function mostrarInfoAltaNivel1(id1){
+
 	ID_N1= id1;
     objAH=new AjaxHelper(updateMostrarInfoAltaNivel1);
     objAH.debug= true;
+    objAH.showStatusIn = 'nivel1';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_INFO_NIVEL1_LATERARL";
     objAH.id1= ID_N1;
@@ -421,6 +425,7 @@ function updateMostrarInfoAltaNivel1(responseText){
 function mostrarInfoAltaNivel2(id2){
     objAH=new AjaxHelper(updateMostrarInfoAltaNivel2);
     objAH.debug= true;
+    objAH.showStatusIn = 'nivel2';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_INFO_NIVEL2_LATERARL";
     objAH.id2= id2; //mostrar todos los nivel 2 del nivel1 con el q se esta trabajando, asi este vuela
@@ -687,6 +692,7 @@ function guardar(nivel){
 function mostrarInfoAltaNivel3(id1, idNivel2){
     objAH=new AjaxHelper(updateMostrarInfoAltaNivel3);
     objAH.debug= true;
+    objAH.showStatusIn = 'detalleDelNivel3';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_INFO_NIVEL3_TABLA";
     objAH.id1= id1;
@@ -1021,6 +1027,7 @@ function modificarN1(id1){
 	inicializar();
 	objAH=new AjaxHelper(updateModificarN1);
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.showStatusIn = 'nivel1Tabla';
 	objAH.debug= true;
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype="ALL";
