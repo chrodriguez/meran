@@ -18,7 +18,7 @@ my $authnotrequired= 0;
 
 if($accion eq "TIPOS_PRESTAMOS_SANCIONADOS"){
 		my ($template, $session, $t_params)  = get_template_and_user({
-								template_name => "admin/sanciones_tipo_de_prestamos.tmpl",
+								template_name => "admin/circulacion/sanciones_tipo_de_prestamos.tmpl",
 								query => $input,
 								type => "intranet",
 								authnotrequired => 0,
@@ -61,7 +61,7 @@ C4::AR::Debug::debug("tipossss : ".$tipos_que_aplica->[0]);
 
 if($accion eq "REGLAS_SANCIONES"){
         my ($template, $session, $t_params)  = get_template_and_user({
-                                template_name => "admin/sanciones_reglas.tmpl",
+                                template_name => "admin/circulacion/sanciones_reglas.tmpl",
                                 query => $input,
                                 type => "intranet",
                                 authnotrequired => 0,
@@ -194,7 +194,7 @@ if ($accion eq "AGREGAR_REGLA_TIPO_SANCION") {
 
 if($accion eq "MODIFICAR_REGLAS"){
         my ($template, $session, $t_params)  = get_template_and_user({
-                                template_name => "admin/sanciones_editar_reglas.tmpl",
+                                template_name => "admin/circulacion/sanciones_editar_reglas.tmpl",
                                 query => $input,
                                 type => "intranet",
                                 authnotrequired => 0,

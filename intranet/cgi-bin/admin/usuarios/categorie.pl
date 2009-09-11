@@ -65,7 +65,7 @@ my $categorycode=$input->param('categorycode');
 my $op = $input->param('op');
 
 my ($template, $session, $t_params) = C4::Auth::get_template_and_user({
-								template_name => "admin/categorie.tmpl",
+								template_name => "admin/usuarios/categorie.tmpl",
 								query => $input,
 								type => "intranet",
 								authnotrequired => 0,

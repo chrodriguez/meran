@@ -26,7 +26,7 @@ if ($accion eq "catalogo"){
     #Busca las preferencias segun lo ingresado como parametro y luego las muestra
 
     my ($template, $session, $t_params)  = get_template_and_user({	
-                        template_name => "admin/permisos_catalogo.tmpl",
+                        template_name => "admin/permisos/permisos_catalogo.tmpl",
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
@@ -55,7 +55,7 @@ elsif ($accion eq "OBTENER_PERMISOS_CATALOGO"){
     my $tipo_documento = $obj->{'tipo_documento'};
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "admin/detalle_permisos_catalogo.tmpl",
+                        template_name => "admin/permisos/detalle_permisos_catalogo.tmpl",
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
@@ -79,7 +79,7 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_CATALOGO"){
     my $permisos = $obj->{'permisos'};
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                            template_name => "admin/detalle_permisos_catalogo.tmpl",
+                            template_name => "admin/permisos/detalle_permisos_catalogo.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
@@ -100,7 +100,7 @@ elsif ($accion eq "NUEVO_PERMISO_CATALOGO"){
     my $permisos = $obj->{'permisos'};
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                            template_name => "admin/detalle_permisos_catalogo.tmpl",
+                            template_name => "admin/permisos/detalle_permisos_catalogo.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
@@ -116,7 +116,7 @@ elsif ($accion eq "NUEVO_PERMISO_CATALOGO"){
 elsif ($accion eq "SHOW_NUEVO_PERMISO_CATALOGO"){
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                            template_name => "admin/detalle_permisos_catalogo.tmpl",
+                            template_name => "admin/permisos/detalle_permisos_catalogo.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
@@ -135,7 +135,7 @@ elsif ($accion eq "general"){
     #Busca las preferencias segun lo ingresado como parametro y luego las muestra
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "admin/permisos_general.tmpl",
+                        template_name => "admin/permisos/permisos_general.tmpl",
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
@@ -164,7 +164,7 @@ elsif ($accion eq "OBTENER_PERMISOS_GENERAL"){
     my $tipo_documento = $obj->{'tipo_documento'};
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "admin/detalle_permisos_general.tmpl",
+                        template_name => "admin/permisos/detalle_permisos_general.tmpl",
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
@@ -188,7 +188,7 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_GENERAL"){
     my $permisos = $obj->{'permisos'};
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                            template_name => "admin/detalle_permisos_catalogo.tmpl",
+                            template_name => "admin/permisos/detalle_permisos_catalogo.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
@@ -209,7 +209,7 @@ elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
     my $permisos = $obj->{'permisos'};
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                            template_name => "admin/detalle_permisos_catalogo.tmpl",
+                            template_name => "admin/permisos/detalle_permisos_catalogo.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
@@ -225,7 +225,7 @@ elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
 elsif ($accion eq "SHOW_NUEVO_PERMISO_GENERAL"){
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                            template_name => "admin/detalle_permisos_catalogo.tmpl",
+                            template_name => "admin/permisos/detalle_permisos_catalogo.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
@@ -242,7 +242,7 @@ elsif ($accion eq "circulacion"){
     #Busca las preferencias segun lo ingresado como parametro y luego las muestra
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "admin/permisos_circulacion.tmpl",
+                        template_name => "admin/permisos/permisos_circulacion.tmpl",
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
@@ -271,7 +271,7 @@ elsif ($accion eq "OBTENER_PERMISOS_CIRCULACION"){
     my $tipo_documento = $obj->{'tipo_documento'};
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "admin/detalle_permisos_circulacion.tmpl",
+                        template_name => "admin/permisos/detalle_permisos_circulacion.tmpl",
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
@@ -295,7 +295,7 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_CIRCULACION"){
     my $permisos = $obj->{'permisos'};
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                            template_name => "admin/detalle_permisos_circulacion.tmpl",
+                            template_name => "admin/permisos/detalle_permisos_circulacion.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
@@ -316,7 +316,7 @@ elsif ($accion eq "NUEVO_PERMISO_CIRCULACION"){
     my $permisos = $obj->{'permisos'};
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                            template_name => "admin/detalle_permisos_circulacion.tmpl",
+                            template_name => "admin/permisos/detalle_permisos_circulacion.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
@@ -332,7 +332,7 @@ elsif ($accion eq "NUEVO_PERMISO_CIRCULACION"){
 elsif ($accion eq "SHOW_NUEVO_PERMISO_CIRCULACION"){
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                            template_name => "admin/detalle_permisos_circulacion.tmpl",
+                            template_name => "admin/permisos/detalle_permisos_circulacion.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,

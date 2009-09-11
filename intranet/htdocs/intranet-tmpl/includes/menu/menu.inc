@@ -435,7 +435,7 @@
                     <li>
                               [% PERL %]
                                   print C4::AR::Filtros::link_to( text =>     "[% 'Permisos Cat&aacute;logo' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/admin/permisosDB.pl",
+                                                                  url =>      "/cgi-bin/koha/admin/permisos/permisosDB.pl",
                                                                   params =>   ["action=catalogo"],
                                                                   title =>    "[% 'Permisos Cat&aacute;logo' | i18n %]"
                                                               ) ;
@@ -444,7 +444,7 @@
                     <li>
                               [% PERL %]
                                   print C4::AR::Filtros::link_to( text =>     "[% 'Permisos Circulaci&oacute;n' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/admin/permisosDB.pl", 
+                                                                  url =>      "/cgi-bin/koha/admin/permisos/permisosDB.pl", 
                                                                   params =>   ["action=circulacion"],
                                                                   title =>    "[% 'Permisos Circulaci&oacute;n' | i18n %]"
                                                               ) ;
@@ -453,7 +453,7 @@
                     <li>
                               [% PERL %]
                                   print C4::AR::Filtros::link_to( text =>     "[% 'Permisos Generales' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/admin/permisosDB.pl", 
+                                                                  url =>      "/cgi-bin/koha/admin/permisos/permisosDB.pl", 
                                                                   params =>   ["action=general"],
                                                                   title =>    "[% 'Permisos Generales' | i18n %]"
                                                               ) ;
@@ -539,6 +539,14 @@
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Visualizaci&oacute;n del OPAC' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpac.pl", 
                                                                 title =>    "[% 'Visualizaci&oacute;n del OPAC' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </li>
+                        <li>
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de Documento' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/admin/catalogo/tipos_de_documento.pl", 
+                                                                title =>    "[% 'Tipos de Documento' | i18n %]"
                                                             ) ;
                             [% END %]
                         </li>
@@ -628,7 +636,7 @@
                 </ul>
              </li>
 
-               <li><h3 class="menu_intermedio">[% 'Preferencias' | i18n %]</h3>
+               <li><h3 class="menu_intermedio">[% 'Global' | i18n %]</h3>
                   <ul>
                     <li>
                                 [% PERL %]
