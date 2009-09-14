@@ -1337,6 +1337,14 @@ sub validateString{
     return 1; # TODO OK, TRUE
 }
 
+#FUNCION QUE VALIDA QUE UN STRING NO SEA SOLAMENTE UNA SECUENCIA DE BLANCOS (USA Trim())
+sub validateBarcode{
+    my ($barcode)=@_;
+# TODO recupear desde una preferencia de sistema la expresion regular que indique como es un barcode valido para la UI en particular
+
+    return validateString($barcode);
+}
+
 
 #********************************************************Generacion de Combos****************************************************
 sub generarComboPermisos{

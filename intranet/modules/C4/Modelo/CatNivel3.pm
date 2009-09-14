@@ -75,15 +75,15 @@ __PACKAGE__->meta->setup(
 );
 
 sub agregar{
-
     my ($self)=shift;
-    use C4::Modelo::CatNivel2Repetible;
     my ($data_hash)=@_;
+
+    use C4::Modelo::CatNivel2Repetible;
 
     my @arrayNivel3;
     my @arrayNivel3Repetibles;
-    my $infoArrayNivel3= $data_hash->{'infoArrayNivel3'};
-	#se guardan los datos de Nivel3
+    my $infoArrayNivel3 = $data_hash->{'infoArrayNivel3'}; #seteo el arreglo de campos repetibles y no repetibles
+	#se separa la info en arreglo de repetibles y no repetibles
     foreach my $infoNivel3 (@$infoArrayNivel3){
         if($infoNivel3->{'repetible'}){
             push(@arrayNivel3Repetibles, $infoNivel3);
@@ -93,14 +93,16 @@ sub agregar{
     }
 
     $self->setId1($data_hash->{'id1'});
-    $self->setId2($data_hash->{'id2'});     
+    $self->setId2($data_hash->{'id2'});
 
     #se guardan los datos de Nivel3
     foreach my $infoNivel3 (@arrayNivel3){  
         $self->setDato($infoNivel3);
     } #END foreach my $infoNivel3 (@arrayNivel3)
 
-    $self->save();
+    $self->setBarcode($data_hash->{'barcode'});
+    
+    $self->save(); #guardo un nivel 3
 
     my $id3= $self->getId3;
 
@@ -120,12 +122,12 @@ sub agregar{
         $nivel3Repetible->setId3($infoNivel3->{'id3'});
         $nivel3Repetible->setCampo($infoNivel3->{'campo'});
         $nivel3Repetible->setSubcampo($infoNivel3->{'subcampo'});
-#         $nivel3Repetible->setDato($infoNivel3->{'dato'});
 		if( ($infoNivel3->{'modificado'})&&($data_hash->{'referencia'}) ){
-				$nivel3Repetible->dato($infoNivel3->{'datoReferencia'});
-			}else{
-				$nivel3Repetible->dato($infoNivel3->{'dato'});
+            $nivel3Repetible->dato($infoNivel3->{'datoReferencia'});
+        }else{
+            $nivel3Repetible->dato($infoNivel3->{'dato'});
 		}
+
         $nivel3Repetible->save();
     }
 }
@@ -155,20 +157,24 @@ sub setDato{
 	my ($data_hash)=@_;
 	my $barcode;
 
-	if( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'f') ){
+# 	if( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'f') ){
 	#tipo de documento
+=item
 		if($data_hash->{'agregarPorBarcodes'}){
 		#se esta haciendo un alta de 1 o mas barcodes
 			$barcode= $data_hash->{'barcode'};
 		}else {		
 			$barcode= $data_hash->{'dato'}
 		}
+=cut
 
-		$self->setBarcode($barcode);
-		$self->debug ("Se agrega el BARCODE: ".$barcode);
-	}
+#         $barcode= $data_hash->{'barcode'};
+# 		$self->setBarcode($barcode);
+# 		$self->debug ("Se agrega el BARCODE: ".$barcode);
+# 	}
 
-	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 't') ){
+# 	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 't') ){
+    if( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 't') ){
 	#signatura_topografica
 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
 				$self->setSignatura_topografica($data_hash->{'datoReferencia'});

@@ -25,6 +25,13 @@ var ID3_ARRAY = new Array(); //para enviar 1 o mas ID_N3 para agregar/modificar/
 var BARCODES_ARRAY = new Array(); //para enviar 1 o mas barcodes
 var _NIVEL_ACTUAL= 1; //para mantener el nivel que se esta procesando
 var _message= CAMPO_NO_PUEDE_ESTAR_EN_BLANCO;
+var HASH_RULES = new Array(); //para manejar las reglas de validacion del FORM dinamicamente
+var HASH_MESSAGES = new Array();
+var AGREGAR_COMPLETO = 1; //flag para verificar si se esta por agregar un documento desde el nivel 1 o no
+
+function agrearAHash (HASH, name, value){
+    HASH[name] = value;
+}
 
 //objeto generico para enviar parametros a cualquier funcion, se le van creando dinamicamente los mismos
 function objeto_params(){
@@ -359,34 +366,37 @@ function switchTipoBarcode(chosen, readOnly){
 function registrarToggleOnChangeForBarcode(callFromBarcode){
         var cantidad_comp = $('#cantEjemplares');
         var cantidad_val = $.trim(cantidad_comp.val());
-  
         var id = _getIdComponente('995','f');
-
         var barcode_comp = $('#'+id);
         var barcode_val = $.trim(barcode_comp.val());
 
-            if (callFromBarcode){       
-                if ((cantidad_val.length)>0)
-                    jConfirm('Borrar Cantidad de ejemplares?','Cuidado',function(confirmStatus){
-                        if (confirmStatus)
-                            switchTipoBarcode(barcode_comp,cantidad_comp);
-                    })  
-                else
-                    switchTipoBarcode(barcode_comp,cantidad_comp);
-            }
-            else{
-                if ((barcode_val.length)>0)
-                    jConfirm('Borrar lista de codigos de barras?','Cuidado',function(confirmStatus){
-                        if (confirmStatus)
-                            switchTipoBarcode(cantidad_comp,barcode_comp);
-                    })  
-                else
-                    switchTipoBarcode(cantidad_comp,barcode_comp);
-            }
+        if (callFromBarcode){       
+            if ((cantidad_val.length)>0)
+                jConfirm('Borrar Cantidad de ejemplares?','Cuidado',function(confirmStatus){
+                    if (confirmStatus){
+                        switchTipoBarcode(barcode_comp,cantidad_comp);
+                        $('#cantEjemplares').removeClass('required');
+                    }
+                })  
+            else
+                switchTipoBarcode(barcode_comp,cantidad_comp);
+        }
+        else{
+            if ((barcode_val.length)>0)
+                jConfirm('Borrar lista de codigos de barras?','Cuidado',function(confirmStatus){
+                    if (confirmStatus){
+                        switchTipoBarcode(cantidad_comp,barcode_comp);
+                        $('#cantEjemplares').addClass('required');
+                    }
+                })  
+            else
+                switchTipoBarcode(cantidad_comp,barcode_comp);
+        }
 }
 
 function agregarN2(){
 	MODIFICAR = 0;
+    AGREGAR_COMPLETO = 0;
 	mostrarEstructuraDelNivel2();
     inicializarSideLayers();
 }
@@ -720,7 +730,7 @@ function procesarInfoJson(json){
     }
 	//hago foco en la primer componente
 	_setFoco();
-    if( MODIFICAR == 0 && _NIVEL_ACTUAL == 2){  
+    if( MODIFICAR == 0 && _NIVEL_ACTUAL == 2 && AGREGAR_COMPLETO == 1){  
     //si se esta agregando un NIVEL 2  
         _seleccionarTipoDocumentoYDeshabilitarCombo();
     }    
@@ -856,9 +866,9 @@ function crearComponente(tipo,id,objeto,valor){
 	TAB_INDEX++;
 
     switch(tipo){
-        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='60' tabindex="+TAB_INDEX+" name=''>";
+        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='60' tabindex="+TAB_INDEX+" name='"+id+"'>";
         break;
-        case "combo": comp="<select id='"+id+"' tabindex="+TAB_INDEX+">\n<option value=''>Elegir opci&oacute;n</option>\n";
+        case "combo": comp="<select id='"+id+"' name='"+id+"' tabindex="+TAB_INDEX+">\n<option value=''>Elegir opci&oacute;n</option>\n";
             var op="";
             var def="";
             var opciones= objeto.opciones;
@@ -873,13 +883,13 @@ function crearComponente(tipo,id,objeto,valor){
 
             comp=comp+op+"</select>";
         break;
-        case "texta": comp="<textarea id='"+id+"' "+ opciones +" rows='4' tabindex="+TAB_INDEX+">"+valor+"</textarea>";
+        case "texta": comp="<textarea id='"+id+"' name='"+id+"'" + opciones +" rows='4' tabindex="+TAB_INDEX+">"+valor+"</textarea>";
         break;
-		case "auto": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='60' tabindex="+TAB_INDEX+">";
+		case "auto": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='60' tabindex="+TAB_INDEX+">";
         break;
-		case "hidden": comp="<input type='hidden' id='"+id+"' value=''>";
+		case "hidden": comp="<input type='hidden' id='"+id+"' name='"+id+"' value=''>";
         break;
-		case "calendar": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
+		case "calendar": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
         break;
     }
 
@@ -891,8 +901,9 @@ function crearComponente(tipo,id,objeto,valor){
 function hacerComponenteObligatoria(idObj){
     $("#"+idObj).addClass("obligatorio");
     $("#"+idObj).addClass("required");
-    $("#"+idObj).attr('name','compoCheck');
     $("<b> * </b>").insertAfter($("#"+idObj));
+    agrearAHash(HASH_RULES, idObj, 'required');
+    agrearAHash(HASH_MESSAGES, idObj, ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO);    
 }
 
 // Esta funcion crea un divComponente con un id segun parametro idObj
@@ -1162,40 +1173,56 @@ function cargarNivel1(params){
 
 function validateForm(formID, func){
 
-   if( jQuery.browser.mozilla ) {
+//    if( jQuery.browser.mozilla ) {
       // do when DOM is ready
-      $( function() {
-         // search form, hide it, search labels to modify, filter classes nocmx and error
-        $( '#'+formID ).hide().find( 'p>label:not(.nocmx):not(.error)' ).each( function() {
-            var $this = $(this);
-            var labelContent = $this.html();
-            var labelWidth = document.defaultView.getComputedStyle( this, '' ).getPropertyValue( 'width' );
-            // create block element with width of label
-            var labelSpan = $("<span>")
-               .css("display", "block")
-               .width(labelWidth)
-               .html(labelContent);
-            // change display to mozilla specific inline-box
-            $this.css("display", "-moz-inline-box")
-               // remove children
-               .empty()
-               // add span element
-               .append(labelSpan);
-         // show form again
-         }).end().show();
-      });
-   };
+//       $( function() {
+//          // search form, hide it, search labels to modify, filter classes nocmx and error
+//         $( '#'+formID ).hide().find( 'p>label:not(.nocmx):not(.error)' ).each( function() {
+//             var $this = $(this);
+//             var labelContent = $this.html();
+//             var labelWidth = document.defaultView.getComputedStyle( this, '' ).getPropertyValue( 'width' );
+//             // create block element with width of label
+//             var labelSpan = $("<span>")
+//                .css("display", "block")
+//                .width(labelWidth)
+//                .html(labelContent);
+//             // change display to mozilla specific inline-box
+//             $this.css("display", "-moz-inline-box")
+//                // remove children
+//                .empty()
+//                // add span element
+//                .append(labelSpan);
+//          // show form again
+//          }).end().show();
+//       });
+//    };
          $.validator.setDefaults({
             submitHandler:  func ,
          });
+
+//             var _message= "Llene el campo";
+// //             validate signup form on keyup and submit
+//              $().ready(function() {
+//                 $("#"+formID).validate({
+//                         errorElement: "em",
+//                         errorClass: "error_adv",
+//                         rules: {    compoCheck: "required",
+//                                     compoCheck2: "required",
+//                                },
+//                         messages: {
+//                                         compoCheck: ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO,
+//                                         compoCheck2: ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO,
+//                                 }
+//                 })});
 
             var _message= "Llene el campo";
 //             validate signup form on keyup and submit
              $().ready(function() {
                 $("#"+formID).validate({
-                       rules: { compoCheck: "required",},
-                       messages: {
-                        compoCheck: ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO,}
+                        errorElement: "em",
+                        errorClass: "error_adv",
+                        rules: HASH_RULES,
+                        messages: HASH_MESSAGES,
                 })});
 
 
