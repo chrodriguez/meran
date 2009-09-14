@@ -554,14 +554,6 @@
                     </li>
                     <li>
                                 [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "[% 'RE-HASH PASSWORDS (CUIDADO!!!!!)' | i18n %]",
-                                                                    url =>      "/cgi-bin/koha/admin/usuarios/rehashPasswd.pl", 
-                                                                    title =>    "[% 'RE-HASH PASSWORDS (CUIDADO!!!!!)' | i18n %]"
-                                                                ) ;
-                                [% END %]
-                    </li>
-                    <li>
-                                [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% 'Categor&iacute;as de Usuario' | i18n %]",
                                                                     url =>      "/cgi-bin/koha/admin/usuarios/categorie.pl",
                                                                     title =>    "[% 'Categor&iacute;s de Usuario' | i18n %]"
