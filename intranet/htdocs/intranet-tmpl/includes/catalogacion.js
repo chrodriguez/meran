@@ -302,11 +302,6 @@ function updateMostrarEstructuraDelNivel2(responseText){
     
 	//asigno el handler para el validador
 	validateForm('formNivel2',guardarModificarDocumentoN2);
-    
-    if( MODIFICAR = 0){  
-    //si se esta agregando....  
-        _seleccionarTipoDocumentoYDeshabilitarCombo();
-    }
 }
 
 
@@ -717,7 +712,6 @@ function updateMostrarInfoAltaNivel3(responseText){
 function procesarInfoJson(json){
 
     var objetos=JSONstring.toObject(json);
-// 	var objetos=JSON.parse(json);
 
     for(var i=0; i < objetos.length; i++){
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
@@ -726,6 +720,10 @@ function procesarInfoJson(json){
     }
 	//hago foco en la primer componente
 	_setFoco();
+    if( MODIFICAR == 0 && _NIVEL_ACTUAL == 2){  
+    //si se esta agregando un NIVEL 2  
+        _seleccionarTipoDocumentoYDeshabilitarCombo();
+    }    
 }
 
 /*

@@ -165,7 +165,7 @@ sub setDato{
 		}
 
 		$self->setBarcode($barcode);
-		$self->debug ("Se agrega el BARCODE: ".$barcode."\n");
+		$self->debug ("Se agrega el BARCODE: ".$barcode);
 	}
 
 	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 't') ){
