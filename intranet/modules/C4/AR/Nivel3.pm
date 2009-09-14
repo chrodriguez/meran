@@ -907,7 +907,7 @@ sub t_modificarNivel3 {
 # FIXME no se verificar si se repiten los barcodes
 			my $id3_array= $params->{'ID3_ARRAY'}; 
 			my $cant= scalar(@$id3_array);
-C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: ".$cant);
+            C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: ".$cant);
 			for(my $i=0;$i<$cant;$i++){
 				my $catNivel3;
 
@@ -917,7 +917,7 @@ C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: 
 												);
 
 				$catNivel3->load();
-				$catNivel3->agregar($params);  
+				$catNivel3->agregar($params);  #si es mas de un ejemplar, a todos les setea la misma info
 				
 				#se cambio el permiso con exito
 				$msg_object->{'error'}= 0;

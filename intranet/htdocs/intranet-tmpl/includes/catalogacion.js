@@ -348,10 +348,13 @@ function updateMostrarEstructuraDelNivel3(responseText){
 	
 	//asigno el handler para el validador
 	validateForm('formNivel3',guardarModificarDocumentoN3);
-    var id = _getIdComponente('995','f');
-    $('#'+id).click(function(){
-        registrarToggleOnChangeForBarcode(id);
-      });
+    if(MODIFICAR == 0){
+    //si se esta agregando se muestra el input para la cantidad    
+        var id = _getIdComponente('995','f');
+        $('#'+id).click(function(){
+            registrarToggleOnChangeForBarcode(id);
+        });
+    }
 }
 
 function switchTipoBarcode(chosen, readOnly){
@@ -372,7 +375,7 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
 
         if (callFromBarcode){       
             if ((cantidad_val.length)>0)
-                jConfirm('Borrar Cantidad de ejemplares?','Cuidado',function(confirmStatus){
+                jConfirm(BORRAR_CANTIDAD_DE_EJEMPLARES, CATALOGO_ALERT_TITLE, function(confirmStatus){
                     if (confirmStatus){
                         switchTipoBarcode(barcode_comp,cantidad_comp);
                         $('#cantEjemplares').removeClass('required');
@@ -383,7 +386,7 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
         }
         else{
             if ((barcode_val.length)>0)
-                jConfirm('Borrar lista de codigos de barras?','Cuidado',function(confirmStatus){
+                jConfirm(BORRAR_LISTA_DE_CODIGOS, CATALOGO_ALERT_TITLE, function(confirmStatus){
                     if (confirmStatus){
                         switchTipoBarcode(cantidad_comp,barcode_comp);
                         $('#cantEjemplares').addClass('required');

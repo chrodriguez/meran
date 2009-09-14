@@ -100,7 +100,10 @@ sub agregar{
         $self->setDato($infoNivel3);
     } #END foreach my $infoNivel3 (@arrayNivel3)
 
-    $self->setBarcode($data_hash->{'barcode'});
+
+    if(!$data_hash->{'modificado'}){
+        $self->setBarcode($data_hash->{'barcode'});
+    }
     
     $self->save(); #guardo un nivel 3
 
@@ -172,6 +175,11 @@ sub setDato{
 # 		$self->setBarcode($barcode);
 # 		$self->debug ("Se agrega el BARCODE: ".$barcode);
 # 	}
+    if( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'f') ){
+        if($data_hash->{'modificado'}){
+            $self->setBarcode($data_hash->{'dato'});
+        }
+    }
 
 # 	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 't') ){
     if( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 't') ){
