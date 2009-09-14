@@ -244,12 +244,28 @@
                      <li><h3 class="menu_intermedio">[% 'Usuarios' | i18n %]</h3>
                         <ul>
                             <li>
-                                  [% PERL %]
-                                      print C4::AR::Filtros::link_to( text =>     "[% 'Reportes gen&eacute;ricos (FALTA)' | i18n %]",
-                                                                      url =>      "#",
-                                                                      title =>    "[% 'Reportes gen&eacute;ricos (FALTA)' | i18n %]"
-                                                                  ) ;
-                                  [% END %]
+                                      [% PERL %]
+                                          print C4::AR::Filtros::link_to( text =>     "[% 'Usuarios (PREGUNTALE A FER)' | i18n %]",
+                                                                          url =>      "#",
+                                                                          title =>    "[% 'Usuarios (PREGUNTALE A FER)' | i18n %]"
+                                                                      ) ;
+                                      [% END %]
+                            </li>
+                            <li>
+                                      [% PERL %]
+                                          print C4::AR::Filtros::link_to( text =>     "[% 'Generar Carnets' | i18n %]",
+                                                                          url =>      "/cgi-bin/koha/reports/users-cards.pl",
+                                                                          title =>    "[% 'Generar Carnets' | i18n %]"
+                                                                      ) ;
+                                      [% END %]
+                            </li>
+                            <li>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Usuarios por Categor&iacute;as' | i18n %]",
+                                                                    url =>      "/cgi-bin/koha/reports/userEst.pl",
+                                                                    title =>    "[% 'Usuarios por Categor&iacute;as' | i18n %]"
+                                                                ) ;
+                                [% END %]
                             </li>
                         </ul>
                     </li>
@@ -262,108 +278,116 @@
                                                                       title =>    "[% 'Reportes gen&eacute;ricos (FALTA)' | i18n %]"
                                                                   ) ;
                                   [% END %]
-                            </li>
+                          </li>
+                          <li>
+                                    [% PERL %]
+                                        print C4::AR::Filtros::link_to( text =>     "[% 'Inventario y Signatura' | i18n %]",
+                                                                        url =>      "/cgi-bin/koha/reports/inventory-sig-top.pl",
+                                                                        title =>    "[% 'Inventario y Signatura' | i18n %]"
+                                                                    ) ;
+                                    [% END %]
+                          </li>
+                          <li>
+                                    [% PERL %]
+                                        print C4::AR::Filtros::link_to( text =>     "[% 'Estantes Virtuales (FALTA DB MODEL)' | i18n %]",
+                                                                        url =>      "#",
+                                                                        title =>    "[% 'Estantes Virtuales (FALTA DB MODEL)' | i18n %]"
+                                                                    ) ;
+                                    [% END %]
+                          </li>
+                          <li>
+                                    [% PERL %]
+                                        print C4::AR::Filtros::link_to( text =>     "[% 'Registro de Actividades' | i18n %]",
+                                                                        url =>      "/cgi-bin/koha/reports/registro.pl",
+                                                                        title =>    "[% 'Registro de Actividades' | i18n %]"
+                                                                    ) ;
+                                    [% END %]
+                          </li>
+                          <li>
+                                    [% PERL %]
+                                        print C4::AR::Filtros::link_to( text =>     "[% 'Generar Etiquetas' | i18n %]",
+                                                                        url =>      "/cgi-bin/koha/reports/generarEtiquetas.pl",
+                                                                        title =>    "[% 'Generar Etiquetas' | i18n %]"
+                                                                    ) ;
+                                    [% END %]
+                          </li>
+                          <li>
+                              [% PERL %]
+                                  print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de Ejemplares' | i18n %]",
+                                                                  url =>      "/cgi-bin/koha/reports/itemtypes.pl",
+                                                                  title =>    "[% 'Tipos de Ejemplares' | i18n %]"
+                                                              ) ;
+                              [% END %]
+                          </li>
                         </ul>
                     </li>
                      <li><h3 class="menu_intermedio">[% 'Circulaci&oacute;n' | i18n %]</h3>
                         <ul>
                             <li>
-                                  [% PERL %]
-                                      print C4::AR::Filtros::link_to( text =>     "[% 'Reportes gen&eacute;ricos (FALTA)' | i18n %]",
-                                                                      url =>      "#",
-                                                                      title =>    "[% 'Reportes gen&eacute;ricos (FALTA)' | i18n %]"
-                                                                  ) ;
-                                  [% END %]
+                                      [% PERL %]
+                                          print C4::AR::Filtros::link_to( text =>     "[% 'Prest&aacute;mos no Devueltos' | i18n %]",
+                                                                          url =>      "/cgi-bin/koha/reports/prestamos.pl",
+                                                                          title =>    "[% 'Prest&aacute;mos no Devueltos' | i18n %]"
+                                                                      ) ;
+                                      [% END %]
+                            </li>
+                            <li>
+                                      [% PERL %]
+                                          print C4::AR::Filtros::link_to( text =>     "[% 'Reservas' | i18n %]",
+                                                                          url =>      "/cgi-bin/koha/reports/reservas.pl",
+                                                                          title =>    "[% 'Reservas' | i18n %]"
+                                                                      ) ;
+                                      [% END %]
+                            </li>
+                            <li>
+                                      [% PERL %]
+                                          print C4::AR::Filtros::link_to( text =>     "[% 'Registro de Circulaci&oacute;n' | i18n %]",
+                                                                          url =>      "/cgi-bin/koha/reports/historicoCirculacion.pl",
+                                                                          title =>    "[% 'Registro de Circulaci&oacute;n' | i18n %]"
+                                                                      ) ;
+                                      [% END %]
+                            </li>
+                            <li>
+                                      [% PERL %]
+                                          print C4::AR::Filtros::link_to( text =>     "[% 'Actividades Anuales' | i18n %]",
+                                                                          url =>      "/cgi-bin/koha/reports/estadistica_Anual.pl",
+                                                                          title =>    "[% 'Actividades Anuales' | i18n %]"
+                                                                      ) ;
+                                      [% END %]
+                            </li>
+                            <li>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Hist&oacute;rico de Pr&eacute;stamos' | i18n %]",
+                                                                    url =>      "/cgi-bin/koha/reports/historico_Prestamos.pl",
+                                                                    title =>    "[% 'Hist&oacute;rico de Pr&eacute;stamos' | i18n %]"
+                                                                ) ;
+                                [% END %]
+                            </li>
+                            <li>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Hist&oacute;rico de Sanciones' | i18n %]",
+                                                                    url =>      "/cgi-bin/koha/reports/historicoSanciones.pl",
+                                                                    title =>    "[% 'Hist&oacute;rico de Sanciones' | i18n %]"
+                                                                ) ;
+                                [% END %]
+                            </li>
+                            <li>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Estad. de Pr&eacute;stamos' | i18n %]",
+                                                                    url =>      "/cgi-bin/koha/reports/estadisticas.pl",
+                                                                    title =>    "[% 'Estad. de Pr&eacute;stamos' | i18n %]"
+                                                                ) ;
+                                [% END %]
+                            </li>
+                            <li>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Logueo de B&uacute;squedas' | i18n %]",
+                                                                    url =>      "/cgi-bin/koha/reports/logueoBusqueda.pl",
+                                                                    title =>    "[% 'Logueo de B&uacute;squedas' | i18n %]"
+                                                                ) ;
+                                [% END %]
                             </li>
                         </ul>
-                    </li>
-                      <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Reportes gen&eacute;ricos (FALTA)' | i18n %]",
-                                                                url =>      "#",
-                                                                title =>    "[% 'Reportes gen&eacute;ricos (FALTA)' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                     </li>
-                    <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Inventario y Signatura' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/reports/inventory-sig-top.pl",
-                                                                  title =>    "[% 'Inventario y Signatura' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                    </li>
-                    <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Estantes Virtuales (FALTA DB MODEL)' | i18n %]",
-                                                                  url =>      "#",
-                                                                  title =>    "[% 'Estantes Virtuales (FALTA DB MODEL)' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                    </li>
-                    <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Usuarios (PREGUNTALE A FER)' | i18n %]",
-                                                                  url =>      "#",
-                                                                  title =>    "[% 'Usuarios (PREGUNTALE A FER)' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                    </li>
-                    <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Prest&aacute;mos no Devueltos' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/reports/prestamos.pl",
-                                                                  title =>    "[% 'Prest&aacute;mos no Devueltos' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                    </li>
-                    <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Reservas' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/reports/reservas.pl",
-                                                                  title =>    "[% 'Reservas' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                    </li>
-                    <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Registro de Actividades' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/reports/registro.pl",
-                                                                  title =>    "[% 'Registro de Actividades' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                    </li>
-                    <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Registro de Circulaci&oacute;n' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/reports/historicoCirculacion.pl",
-                                                                  title =>    "[% 'Registro de Circulaci&oacute;n' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                    </li>
-                    <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Actividades Anuales' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/reports/estadistica_Anual.pl",
-                                                                  title =>    "[% 'Actividades Anuales' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                    </li>
-                    <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Generar Carnets' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/reports/users-cards.pl",
-                                                                  title =>    "[% 'Generar Carnets' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                    </li>
-                    <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Generar Etiquetas' | i18n %]",
-                                                                  url =>      "/cgi-bin/koha/reports/generarEtiquetas.pl",
-                                                                  title =>    "[% 'Generar Etiquetas' | i18n %]"
-                                                              ) ;
-                              [% END %]
                     </li>
                 </ul>
               </li>
@@ -372,49 +396,9 @@
                   <ul>
                         <li>
                             [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Hist&oacute;rico de Pr&eacute;stamos' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/historico_Prestamos.pl",
-                                                                title =>    "[% 'Hist&oacute;rico de Pr&eacute;stamos' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </li>
-                        <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Hist&oacute;rico de Sanciones' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/historicoSanciones.pl",
-                                                                title =>    "[% 'Hist&oacute;rico de Sanciones' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </li>
-                        <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Estad. de Pr&eacute;stamos' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/estadisticas.pl",
-                                                                title =>    "[% 'Estad. de Pr&eacute;stamos' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </li>
-                        <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Logueo de B&uacute;squedas' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/logueoBusqueda.pl",
-                                                                title =>    "[% 'Logueo de B&uacute;squedas' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </li>
-                        <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Usuarios por Categor&iacute;as' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/userEst.pl",
-                                                                title =>    "[% 'Usuarios por Categor&iacute;as' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </li>
-                        <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de Ejemplares' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/itemtypes.pl",
-                                                                title =>    "[% 'Tipos de Ejemplares' | i18n %]"
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Estad&iacute;sticas y graficos openFlashChart' | i18n %]",
+                                                                url =>      "#",
+                                                                title =>    "[% 'Estad&iacute;sticas y graficos openFlashChart' | i18n %]"
                                                             ) ;
                             [% END %]
                         </li>
