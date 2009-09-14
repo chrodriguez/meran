@@ -20,3 +20,7 @@ El chat sera como este???? http://anantgarg.com/2009/05/13/gmail-facebook-style-
 Problemas de focus (javascript) en devoluciones (circulacion rapida)
 
 En modifcar docuemtno (datosDocumento.pl), algunos campos hidden no se completan, por ejemplo, se completa el nombre del autor pero el id hidden no.
+
+
+
+
