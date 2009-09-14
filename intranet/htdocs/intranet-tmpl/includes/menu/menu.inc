@@ -517,22 +517,6 @@
                         </li>
                         <li>
                             [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Servidores Z39.50' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/admin/z3950servers.pl", 
-                                                                title =>    "[% 'Servidores Z39.50' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </li>
-                        <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de documento' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/admin/itemtypes.pl", 
-                                                                title =>    "[% 'Tipos de documento' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </li>
-                        <li>
-                            [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/catalogacion/estructura/estructuraCatalo.pl", 
                                                                 title =>    "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]"

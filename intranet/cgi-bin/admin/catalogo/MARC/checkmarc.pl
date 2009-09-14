@@ -27,7 +27,7 @@ use C4::Biblio;
 my $input = new CGI;
 
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "admin/checkmarc.tmpl",
+    = get_template_and_user({template_name => "admin/catalogo/MARC/checkmarc.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
