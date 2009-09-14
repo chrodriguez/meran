@@ -551,7 +551,7 @@
                                                                     title =>    "[% 'Admin. libre Deuda' | i18n %]"
                                                                 ) ;
                                 [% END %]
-                    </li>
+<!--                     </li> -->
                     <li>
                                 [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% 'Categor&iacute;as de Usuario' | i18n %]",
