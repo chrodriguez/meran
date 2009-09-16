@@ -771,8 +771,13 @@ function procesarObjeto(objeto){
     var unoLinea=0;
     var idDiv="div"+idComp;
     var divComp= crearDivComponente(idDiv);
+
+    if(objeto.obligatorio == "1"){  
+        libtext = libtext + "<b> * </b>";
+    }
+
     var divLabel= crearDivLabel(libtext, idComp);
-//     strComp="<div class='divContentComponente'> "+divLabel+divComp+"</div>";
+
     strComp="<li class='sub_item'> "+divLabel+divComp+"</li>";
     $(strComp).appendTo("#"+getDivDelNivel());
     switch(tipo){
@@ -912,7 +917,7 @@ function crearComponente(tipo,id,objeto,valor){
 function hacerComponenteObligatoria(idObj){
     $("#"+idObj).addClass("obligatorio");
     $("#"+idObj).addClass("required");
-    $("<b> * </b>").insertAfter($("#"+idObj));
+//     $("<b> * </b>").insertAfter($("#"+idObj));
     agrearAHash(HASH_RULES, idObj, 'required');
     agrearAHash(HASH_MESSAGES, idObj, ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO);    
 }
