@@ -253,7 +253,13 @@ function mostrarDataNivel1(){
         for (x=0; x<COMPONENTES_ARRAY.length; x++){
             if(x < DATA_ARRAY.length){
             //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"    
+                
                 $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+                if(DATA_ARRAY[x].referencia == 1){
+                    COMPONENTES_ARRAY[x].datoReferencia = DATA_ARRAY[x].datoReferencia;
+                    $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
+                }
+
                 COMPONENTES_ARRAY[x].rep_n1_id = DATA_ARRAY[x].id_rep;
             }
         }
@@ -266,7 +272,15 @@ function mostrarDataNivel2(){
         for (x=0; x<COMPONENTES_ARRAY.length; x++){
             if(x < DATA_ARRAY.length){
                 //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
+//                 $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+//                 COMPONENTES_ARRAY[x].rep_n2_id = DATA_ARRAY[x].id_rep;
+
                 $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+                if(DATA_ARRAY[x].referencia == 1){
+                    COMPONENTES_ARRAY[x].datoReferencia = DATA_ARRAY[x].datoReferencia;
+                    $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
+                }
+
                 COMPONENTES_ARRAY[x].rep_n2_id = DATA_ARRAY[x].id_rep;
             }
         }
@@ -279,7 +293,14 @@ function mostrarDataNivel3(){
         for (x=0; x<COMPONENTES_ARRAY.length; x++){
             if(x < DATA_ARRAY.length){
                 //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
+//                 $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+//                 COMPONENTES_ARRAY[x].rep_n3_id = DATA_ARRAY[x].id_rep;
                 $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+                if(DATA_ARRAY[x].referencia == 1){
+                    COMPONENTES_ARRAY[x].datoReferencia = DATA_ARRAY[x].datoReferencia;
+                    $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
+                }
+
                 COMPONENTES_ARRAY[x].rep_n3_id = DATA_ARRAY[x].id_rep;
             }
         }
@@ -766,18 +787,18 @@ function crearRegla(comp,idComp){
 }
 
 function procesarObjeto(objeto){
-    var libtext= $.trim(objeto.liblibrarian);
-    var tipo= $.trim(objeto.tipo);
-    var ref= objeto.referencia;
-    var valor= objeto.valor;
-    var varios= objeto.varios;
-    var idComp= objeto.idCompCliente;
+    var libtext = $.trim(objeto.liblibrarian);
+    var tipo = $.trim(objeto.tipo);
+    var ref = objeto.referencia;
+    var valor = objeto.valor;         
+    var varios = objeto.varios;
+    var idComp = objeto.idCompCliente;
     var comp;
     var strComp;
-    var auto=0;
-    var unoLinea=0;
-    var idDiv="div"+idComp;
-    var divComp= crearDivComponente(idDiv);
+    var auto = 0;
+    var unoLinea = 0;
+    var idDiv = "div"+idComp;
+    var divComp = crearDivComponente(idDiv);
 
     if(objeto.obligatorio == "1"){  
         libtext = libtext + "<b> * </b>";
@@ -790,7 +811,7 @@ function procesarObjeto(objeto){
     switch(tipo){
         case "text":
             //tipo,id,opciones,valor
-            comp= crearComponente(tipo,idComp,"","");
+            comp = crearComponente(tipo,idComp,"","");
             $(comp).appendTo("#"+idDiv);
             $("#"+idComp).val(objeto.valText);
         break;
@@ -910,7 +931,7 @@ function crearComponente(tipo,id,objeto,valor){
         break;
 		case "auto": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='60' tabindex="+TAB_INDEX+">";
         break;
-		case "hidden": comp="<input type='hidden' id='"+id+"' name='"+id+"' value=''>";
+		case "hidden": comp="<input type='hidden' id='"+id+"' name='"+id+"' value='"+valor+"'>";
         break;
 		case "calendar": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
         break;
