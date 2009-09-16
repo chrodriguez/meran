@@ -998,5 +998,7 @@ VALUES (
     CHANGE `parent` `padre` INT( 11 ) NOT NULL DEFAULT '0';
 
 
---se permite null en cat_nivel3_repetible
- ALTER TABLE `cat_nivel3_repetible` CHANGE `dato` `dato` VARCHAR( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL  
+--se permite null en cat_nivelX_repetible
+ ALTER TABLE `cat_nivel3_repetible` CHANGE `dato` `dato` VARCHAR( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+
+ ALTER TABLE `cat_nivel1_repetible` CHANGE `dato` `dato` VARCHAR( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;

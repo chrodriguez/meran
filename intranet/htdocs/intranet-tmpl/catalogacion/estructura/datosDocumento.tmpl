@@ -97,7 +97,8 @@ $(document).ready( function() {
 <fieldset>
 <legend><strong>[% "Agregar Documento:" | i18n %] [% descripcion %]  [% "(paso: 1 de 3)" | i18n %] </strong></legend>  
 
-<form id="formNivel1" name="formNivel1" class="validateDataForm">
+<!--<form id="formNivel1" name="formNivel1" class="validateDataForm">-->
+<form id="formNivel1" name="formNivel1">
 <!--     CAMPOS DINAMICOS DEL NIVEL1 -->
     <div id= "estructuraDelNivel1"></div>
     <input type="hidden" name="token" value="[% token %]" />
@@ -123,7 +124,8 @@ $(document).ready( function() {
 <fieldset>
 <legend><strong>[% "Agregar Grupo:" | i18n %] [% descripcion %]  [% "(paso: 2 de 3)" | i18n %] </strong></legend>
     
-<form id="formNivel2" name="formNivel2" class="validateDataForm">
+<!--<form id="formNivel2" name="formNivel2" class="validateDataForm">-->
+<form id="formNivel2" name="formNivel2">
 <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
     <div id= "estructuraDelNivel2"></div>
     <input type="hidden" name="token" value="[% token %]" />
@@ -149,7 +151,8 @@ $(document).ready( function() {
 <fieldset>
 <legend><strong>[% "Agregar Ejemplar:" | i18n %] [% descripcion %]  [% "(paso: 3 de 3)" | i18n %] </strong></legend>
 
-<form id="formNivel3" name="formNivel3" class="validateDataForm">
+<!--<form id="formNivel3" name="formNivel3" class="validateDataForm">-->
+<form id="formNivel3" name="formNivel3">
 	<div id="divCantEjemplares" class="divContentComponente">
 		<li class="sub_item"> 
             <label for="cantEjemplares">Cant. Ejemplares: </label>
