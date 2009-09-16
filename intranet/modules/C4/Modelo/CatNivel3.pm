@@ -112,7 +112,6 @@ sub agregar{
     #Se guradan los datos en Nivel 3 repetibles
     foreach my $infoNivel3 (@arrayNivel3Repetibles){
         $infoNivel3->{'id3'}= $id3;
-            
         my $nivel3Repetible;
 
         if ($data_hash->{'modificado'}){

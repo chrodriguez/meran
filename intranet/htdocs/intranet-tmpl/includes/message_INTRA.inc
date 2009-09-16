@@ -29,6 +29,7 @@ HAY_BARCODES_REPETIDOS= "[% 'Hay barcodes repetidos' | i18n %]";
 ELIJA_AL_MENOS_UN_EJEMPLAR= "[% 'Elija al menos un ejemplar para realizar la acción' | i18n %]";
 FALTA_PARAMETRO_PARA_REFERENCIA= "[% 'Falta par\u00e1metro para referencia' | i18n %]";
 CATALOGO_TITLE= "[% 'Advertencia de cat\u00e1logo' | i18n %]";
+LLENE_EL_CAMPO= "[% 'Llene el campo' | i18n %]";
 CATALOGO_ALERT_TITLE= "[% 'Advertencia de cat\u00e1logo' | i18n %]";
 BORRAR_CANTIDAD_DE_EJEMPLARES = "[% 'Borrar Cantidad de ejemplares?' %]";
 BORRAR_LISTA_DE_CODIGOS = "[% 'Borrar lista de codigos de barras?' %]";

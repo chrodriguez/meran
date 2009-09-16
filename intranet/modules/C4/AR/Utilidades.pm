@@ -1950,6 +1950,10 @@ sub arrayClaveValorToJSONString{
     return $infoJSON;
 }
 
+
+=item sub existeInArray
+    Esta funcion busca en el arreglo el string pasado por parametro
+=cut
 sub existeInArray{
 
    my ($string,@array) = @_;

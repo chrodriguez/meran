@@ -116,17 +116,24 @@ function _recuperarSeleccionados(chckbox){
 	var chck=$("input[name="+chckbox+"]:checked");
 	var array= new Array;
 	var long=chck.length;
-	if ( long == 0){
-		jAlert(ELIJA_AL_MENOS_UN_EJEMPLAR,CATALOGO_ALERT_TITLE);
-	}
-	else{
 
-		for(var i=0; i< long; i++){
-			array[i]=chck[i].value;
-		}
+	for(var i=0; i< long; i++){
+		array[i]=chck[i].value;
 	}
 	
 	return array;
+}
+
+function seleccionoAlgo(chckbox){
+    var chck = $("input[name="+chckbox+"]:checked");
+    var array = new Array;
+    var long = chck.length;
+    if ( long == 0){
+        jAlert(ELIJA_AL_MENOS_UN_EJEMPLAR,CATALOGO_ALERT_TITLE);
+        return 0;
+    }
+
+    return 1;
 }
 
 /*
@@ -230,7 +237,7 @@ function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL= 1;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug= true;
-	objAH.cache= false;
+	objAH.cache= true;
 //     objAH.showStatusIn = 'nivel1Tabla';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -290,7 +297,7 @@ function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL= 2;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug= true;
-	objAH.cache= false;
+	objAH.cache= true;
     objAH.showStatusIn = 'estructuraDelNivel2';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -328,7 +335,7 @@ function mostrarEstructuraDelNivel3(){
 
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel3);
     objAH.debug= true;
-	objAH.cache= false;
+	objAH.cache= true;
     objAH.showStatusIn = 'estructuraDelNivel3';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -545,6 +552,7 @@ function guardarDocumentoN3(){
         var porBarcode = $("#cantEjemplares").attr("readonly");
 		objAH=new AjaxHelper(updateGuardarDocumentoN3);
 		objAH.debug= true;
+        objAH.modificado = 0;
 		objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 		objAH.tipoAccion= "GUARDAR_NIVEL_3";
 		objAH.tipo_documento= $("#tipo_nivel3_id").val();
@@ -1037,12 +1045,13 @@ function updateBorrarEjemplaresN3(responseText){
  */
 function modificarN1(id1){
 	inicializar();
-	objAH=new AjaxHelper(updateModificarN1);
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.showStatusIn = 'centro';
-	objAH.debug= true;
-	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
-	objAH.itemtype="ALL";
+	objAH = new AjaxHelper(updateModificarN1);
+	objAH.url = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.showStatusIn = "centro";
+	objAH.debug = true;
+    objAH.cache = true;
+	objAH.tipoAccion = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+	objAH.itemtype = "ALL";
 	objAH.id = id1;
 	objAH.nivel = 1;
 	objAH.sendToServer();
@@ -1057,15 +1066,16 @@ function updateModificarN1(responseText){
 
 function modificarN2(id2){
    inicializar();
-   objAH=new AjaxHelper(updateModificarN2);
-   objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-   objAH.showStatusIn = 'centro';
-   objAH.debug= true;
-   objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
-   objAH.itemtype=$("#id_tipo_doc").val();
-   objAH.id = id2;
-   objAH.nivel = 2;
-   objAH.sendToServer();
+    objAH=new AjaxHelper(updateModificarN2);
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.showStatusIn = "centro";
+    objAH.debug= true;
+    objAH.cache = true;
+    objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+    objAH.itemtype=$("#id_tipo_doc").val();
+    objAH.id = id2;
+    objAH.nivel = 2;
+    objAH.sendToServer();
 }
 
 function updateModificarN2(responseText){
@@ -1080,7 +1090,8 @@ function modificarN3(id3){
 	objAH=new AjaxHelper(updateModificarN3);
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug= true;
-    objAH.showStatusIn = 'centro';
+    objAH.cache = true;
+    objAH.showStatusIn = "centro";
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype=$("#id_tipo_doc").val();
  	objAH.id3 = id3;
@@ -1103,18 +1114,22 @@ que se puede haber seleccionado por ej. 3 ejemplares distintos, luego se envia
 lo modificado al servidor y a los 3 ID_N3 se les modifica esta informacion 
 */
 function modificarEjemplaresN3(id3){
-	inicializar();
-	ID_N3= id3;	
-	objAH=new AjaxHelper(updateModificarEjemplaresN3);
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-	objAH.debug= true;
-	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
-	objAH.itemtype=$("#id_tipo_doc").val();
-	//obtengo todos los ejemplares seleccionados para modificar
-	ID3_ARRAY= _recuperarSeleccionados("checkEjemplares");
-	objAH.id3= ID3_ARRAY[0]; //muestra la info del primer ejemplar en el arreglo de ejemplares
-	objAH.nivel = 3;
-	objAH.sendToServer();
+
+    if(seleccionoAlgo("checkEjemplares")){
+    //si selecciono los ejemplares para editar....
+	    inicializar();
+	    ID_N3= id3;	
+	    objAH=new AjaxHelper(updateModificarEjemplaresN3);
+	    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+	    objAH.debug= true;
+	    objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+	    objAH.itemtype=$("#id_tipo_doc").val();
+	    //obtengo todos los ejemplares seleccionados para modificar
+	    ID3_ARRAY= _recuperarSeleccionados("checkEjemplares");
+	    objAH.id3= ID3_ARRAY[0]; //muestra la info del primer ejemplar en el arreglo de ejemplares
+	    objAH.nivel = 3;
+	    objAH.sendToServer();
+    }
 }
 
 function updateModificarEjemplaresN3(responseText){
@@ -1123,6 +1138,7 @@ function updateModificarEjemplaresN3(responseText){
 	DATA_ARRAY = JSONstring.toObject(responseText);
 	mostrarEstructuraDelNivel3();
 }
+
 /*
  * borrarGrupo
  * Elimina de la base de datos el grupo correspodiente a los parametros que ingresan, y los ejemplares que hay en 
@@ -1140,6 +1156,7 @@ function borrarGrupo(id1,id2){
 }
 
 function updateBorrarGrupo(){
+// TODO
 }
 
 /*
@@ -1154,10 +1171,6 @@ function cargarNivel1(params){
 */
 	ID_N1= params.id1;
 	ID_N2= params.id2;
-// FIXME este funciona pero tarda mucho, ver como ir llamando de a uno por vez asi parece mas rapido
-// 	mostrarInfoAltaNivel1(params.id1);
-// 	mostrarInfoAltaNivel2(params.id2);	
-// 	mostrarInfoAltaNivel3(params.id1, params.id2);	
 
 	if(params.tipoAccion == 'MODIFICAR_NIVEL_2'){
 		modificarN2(params.id2);
@@ -1176,58 +1189,21 @@ function cargarNivel1(params){
 
 function validateForm(formID, func){
 
-//    if( jQuery.browser.mozilla ) {
-      // do when DOM is ready
-//       $( function() {
-//          // search form, hide it, search labels to modify, filter classes nocmx and error
-//         $( '#'+formID ).hide().find( 'p>label:not(.nocmx):not(.error)' ).each( function() {
-//             var $this = $(this);
-//             var labelContent = $this.html();
-//             var labelWidth = document.defaultView.getComputedStyle( this, '' ).getPropertyValue( 'width' );
-//             // create block element with width of label
-//             var labelSpan = $("<span>")
-//                .css("display", "block")
-//                .width(labelWidth)
-//                .html(labelContent);
-//             // change display to mozilla specific inline-box
-//             $this.css("display", "-moz-inline-box")
-//                // remove children
-//                .empty()
-//                // add span element
-//                .append(labelSpan);
-//          // show form again
-//          }).end().show();
-//       });
-//    };
-         $.validator.setDefaults({
-            submitHandler:  func ,
-         });
+    //se setea el handler para el error
+    $.validator.setDefaults({
+        submitHandler:  func ,
+    });
 
-//             var _message= "Llene el campo";
-// //             validate signup form on keyup and submit
-//              $().ready(function() {
-//                 $("#"+formID).validate({
-//                         errorElement: "em",
-//                         errorClass: "error_adv",
-//                         rules: {    compoCheck: "required",
-//                                     compoCheck2: "required",
-//                                },
-//                         messages: {
-//                                         compoCheck: ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO,
-//                                         compoCheck2: ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO,
-//                                 }
-//                 })});
+    var _message= LLENE_EL_CAMPO;
 
-            var _message= "Llene el campo";
-//             validate signup form on keyup and submit
-             $().ready(function() {
-                $("#"+formID).validate({
-                        errorElement: "em",
-                        errorClass: "error_adv",
-                        rules: HASH_RULES,
-                        messages: HASH_MESSAGES,
-                })});
+    $().ready(function() {
+    $("#"+formID).validate({
+            errorElement: "em",
+            errorClass: "error_adv",
+            rules: HASH_RULES,
+            messages: HASH_MESSAGES,
+    })});
 
 
-            $("#"+formID).validate();
+    $("#"+formID).validate();
 }

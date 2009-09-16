@@ -682,24 +682,8 @@ sub getNivel3FromId3{
 	}
 }
 
-=item
-Recupero un nivel 3 a partir de un barcode
-=cut
-# sub getNivel3FromBarcode{
-# 	my ($barcode) = @_;
-# 
-# 	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
-# 																							query => [ 
-# 																										barcode => { eq => $barcode
-#  },
-# 																								], 
-# 																);
-# 
-# 	return ($nivel3_array_ref);
-# }
-
-=item
-Verifica si existe el barcode pasado por parametro
+=item sub existeBarcode
+Verifica si existe el barcode en la base
 =cut
 sub existeBarcode{
 	my($barcode)=@_;
@@ -718,7 +702,7 @@ sub t_guardarNivel3 {
     my $catNivel3;
 	my $db;
 
-    if(!$msg_object->{'error'}){
+#     if(!$msg_object->{'error'}){
     #No hay error
 		my	$catNivel2= C4::Modelo::CatNivel2->new();
 		my	$db= $catNivel2->db;
@@ -727,7 +711,7 @@ sub t_guardarNivel3 {
 	
         eval {
 
-            #se genera el arreglo de barcodes validos para agregar a la base y se setean los mensajes para el usuario
+            #se genera el arreglo de barcodes validos para agregar a la base y se setean los mensajes para el usuario (mensajes de ERROR)
 			my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
 
             foreach my $barcode (@$barcodes_para_agregar){
@@ -757,7 +741,7 @@ sub t_guardarNivel3 {
 
         $db->{connect_options}->{AutoCommit} = 1;
 
-    }
+#     }
 
 	return ($msg_object);
 }
@@ -784,6 +768,13 @@ sub _generateBarcode{
   return (time());
 }
 
+=item sub _generarArreglo
+
+    Esta funcion hace de "distribuidor", chequea q tipo de alta de ejemplares se va hacer, 
+    por cant de ejemplares (llama a _generarArregloDeBarcodesPorCantidad) o 
+    un conjunto de barcodes agregados por el usuario (llama a _generarArregloDeBarcodesPorBarcodes()).
+    Devuelve un arreglo de barcodes validos (autogenerados o ingresados por el usuario)
+=cut
 sub _generarArreglo{	
 	my ($params, $msg_object) = @_;
  
@@ -805,25 +796,22 @@ sub _generarArreglo{
 	return (\@barcodes_para_agregar);
 }
 
-=item
-Esta funcion genera un arreglo de barcodes validos para agregar en la base de datos, ademas setea los mensajes para los usuarios,
-ya sea para informar que se agrego con exito o si se produjo algun error
+=item sub _generarArregloDeBarcodesPorBarcodes
+Esta funcion genera un arreglo de barcodes VALIDOS para agregar en la base de datos, ademas setea los mensajes de ERROR para los usuarios
 =cut
 sub _generarArregloDeBarcodesPorBarcodes{   
     my ($msg_object, $barcodes_array, $barcodes_para_agregar) = @_;
-
-    my $existe = 0;
  
     foreach my $barcode (@$barcodes_array){
         $msg_object->{'error'} = 0;
 
         if(_existeBarcodeEnArray($barcode, $barcodes_para_agregar)){
         #si el barcode existe se informa al usuario y no se agrega en el arreglo de barcodes para agregar
+# C4::AR::Debug::debug("_generarArregloDeBarcodesPorBarcodes => EXISTE EL BARCODE EN EL ARREGLO");
             $msg_object->{'error'} = 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcode]} ) ;
-            $existe = 1;
         }
-
+# C4::AR::Debug::debug("_generarArregloDeBarcodesPorBarcodes => NO EXISTE EL BARCODE EN EL ARREGLO");
         if( !C4::AR::Utilidades::validateBarcode($barcode) ) {
             #el barcode ingresado no es valido
             $msg_object->{'error'}= 1;
@@ -833,19 +821,21 @@ sub _generarArregloDeBarcodesPorBarcodes{
         if( existeBarcode($barcode) ){
             #el barcode existe en la base de datos
             $msg_object->{'error'}= 1;
-            $existe= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcode]} ) ;
         }
 
         if(!$msg_object->{'error'}){
-            C4::AR::Debug::debug("_generarArregloDeBarcodesPorBarcodes => barcode VALIDO ".$barcode);
+        #el barcode es VALIDO, se agrega al arreglo de barcodes para agregar
+# C4::AR::Debug::debug("_generarArregloDeBarcodesPorBarcodes => AGREGO A ARREGLO ".$barcode);
             push (@$barcodes_para_agregar, $barcode);
         }
-    }# END for(my $i;$i<$cant;$i++) 
+    }# END foreach my $barcode (@$barcodes_array)
 
 }
 
-
+=item sub _generarArregloDeBarcodesPorCantidad
+Esta funcion genera un arreglo de barcodes VALIDOS para agregar en la base de datos
+=cut
 sub _generarArregloDeBarcodesPorCantidad{   
     my($cant, $barcodes_para_agregar)=@_;
 
@@ -854,7 +844,7 @@ sub _generarArregloDeBarcodesPorCantidad{
     for(my $i=0;$i<$cant;$i++){
 # FIXME poner la funcion que generar el barcode realmente, esto es una prueba
         $barcode = _generateBarcode($barcodes_para_agregar).$i;
-        C4::AR::Debug::debug("barcode : ".$barcode);
+#         C4::AR::Debug::debug("barcode : ".$barcode);
 
         push (@{$barcodes_para_agregar}, $barcode);
         
@@ -862,14 +852,14 @@ sub _generarArregloDeBarcodesPorCantidad{
 
 }
 
-=item
+=item sub _existeBarcodeEnArray
 Esta funcion verifica si en el arreglo de barcodes no existe 1 o mas barcodes iguales
 =cut
+=item
 sub _existeBarcodeEnArray{
 	my ($barcode, $barcodes_array)= @_;
 
 	my $cant=0;
-	my $existe= 0;
 
 	for(my $i=0;$i<scalar(@$barcodes_array);$i++){
 #         C4::AR::Debug::debug("_existeBarcodeEnArray=> cmp ".$barcodes_array->[$i]." con ".$barcode."\n");
@@ -879,12 +869,18 @@ sub _existeBarcodeEnArray{
 #                 C4::AR::Debug::debug("_existeBarcodeEnArray=> EXISTE: ".$barcodes_array->[$i]."\n");
 				#el barcode ya existe en el arreglo de barcodes que se esta intentando agregar
  				return 1;
-				$existe= 1;
 			}
 		}
 	}
 	#no existe el barcode en el arreglo de barcodes
 	return 0;
+}
+=cut
+
+sub _existeBarcodeEnArray {
+    my ($barcode, $barcodes_array)= @_;
+
+    return C4::AR::Utilidades::existeInArray($barcode, $barcodes_array);
 }
 
 sub t_modificarNivel3 {
