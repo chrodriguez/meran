@@ -318,8 +318,8 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
                                                     entorno => $entorno}, 
                                                 'intranet'
                                     );
-#Se muestran la estructura de catalogacion segun el nivel pasado por parametro
-
+    
+    #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getHashCatalogaciones($obj);
     
     my $infoOperacionJSON= to_json($catalogaciones_array_ref);
@@ -337,7 +337,8 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
                                     );
-#Se muestran la estructura de catalogacion segun el nivel pasado por parametro
+
+    #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
 	my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getHashCatalogacionesConDatos($obj);
     
 	my $infoOperacionJSON= to_json($catalogaciones_array_ref);
