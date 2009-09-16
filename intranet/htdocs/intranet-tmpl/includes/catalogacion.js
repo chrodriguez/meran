@@ -247,14 +247,13 @@ function mostrarEstructuraDelNivel1(){
     objAH.sendToServer();
 }
 
-
-// FIXME ver si se puede hacer solo una funcion
 function mostrarDataNivel1(){
 
     if (MODIFICAR){
-        for (x=0; x<DATA_ARRAY.length; x++){
-			$('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-			COMPONENTES_ARRAY[x].rep_n1_id = DATA_ARRAY[x].id_rep;
+        for (x=0; x<COMPONENTES_ARRAY.length; x++){
+            //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
+            $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+            COMPONENTES_ARRAY[x].rep_n1_id = DATA_ARRAY[x].id_rep;
         }
    }
 }
@@ -262,24 +261,13 @@ function mostrarDataNivel1(){
 function mostrarDataNivel2(){
 
     if (MODIFICAR){
-        for (x=0; x<DATA_ARRAY.length; x++){
-			$('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-				COMPONENTES_ARRAY[x].rep_n2_id = DATA_ARRAY[x].id_rep;
+        for (x=0; x<COMPONENTES_ARRAY.length; x++){
+            //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
+            $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+                COMPONENTES_ARRAY[x].rep_n2_id = DATA_ARRAY[x].id_rep;
         }
    }
 }
-
-/*
-function mostrarDataNivel3(){
-
-    if (MODIFICAR){
-        for (x=0; x<DATA_ARRAY.length; x++){
-			$('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-				COMPONENTES_ARRAY[x].rep_n3_id = DATA_ARRAY[x].id_rep;
-        }
-   }
-}
-*/
 
 function mostrarDataNivel3(){
 

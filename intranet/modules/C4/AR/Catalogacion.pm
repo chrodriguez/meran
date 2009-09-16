@@ -1863,6 +1863,10 @@ sub getHashCatalogacionesConDatos{
 																	$cat->getSubcampo
 											);
 
+C4::AR::Debug::debug("BUSCO ESTRUCTURA PARA DATO: ".$cat->getDato);
+C4::AR::Debug::debug("campo: ".$cat->getCampo);
+C4::AR::Debug::debug("sub campo: ".$cat->getSubCampo);
+
 		if(scalar(@$cat_estruct_array) > 0){	
 	
 			my %hash_temp;
