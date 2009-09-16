@@ -1865,7 +1865,7 @@ sub getHashCatalogacionesConDatos{
 
 C4::AR::Debug::debug("BUSCO ESTRUCTURA PARA DATO: ".$cat->getDato);
 C4::AR::Debug::debug("campo: ".$cat->getCampo);
-C4::AR::Debug::debug("sub campo: ".$cat->getSubCampo);
+C4::AR::Debug::debug("sub campo: ".$cat->getSubcampo);
 
 		if(scalar(@$cat_estruct_array) > 0){	
 	
