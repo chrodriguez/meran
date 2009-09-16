@@ -251,9 +251,11 @@ function mostrarDataNivel1(){
 
     if (MODIFICAR){
         for (x=0; x<COMPONENTES_ARRAY.length; x++){
-            //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
-            $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-            COMPONENTES_ARRAY[x].rep_n1_id = DATA_ARRAY[x].id_rep;
+            if(x < DATA_ARRAY.length){
+            //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"    
+                $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+                COMPONENTES_ARRAY[x].rep_n1_id = DATA_ARRAY[x].id_rep;
+            }
         }
    }
 }
@@ -262,9 +264,11 @@ function mostrarDataNivel2(){
 
     if (MODIFICAR){
         for (x=0; x<COMPONENTES_ARRAY.length; x++){
-            //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
-            $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+            if(x < DATA_ARRAY.length){
+                //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
+                $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
                 COMPONENTES_ARRAY[x].rep_n2_id = DATA_ARRAY[x].id_rep;
+            }
         }
    }
 }
@@ -273,9 +277,11 @@ function mostrarDataNivel3(){
 
     if (MODIFICAR){
         for (x=0; x<COMPONENTES_ARRAY.length; x++){
-            //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
-            $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+            if(x < DATA_ARRAY.length){
+                //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
+                $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
                 COMPONENTES_ARRAY[x].rep_n3_id = DATA_ARRAY[x].id_rep;
+            }
         }
    }
 }

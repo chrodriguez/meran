@@ -102,7 +102,7 @@
                         &nbsp;  [% catalogacion.getTipo %]
                 </td>
                 <td>    
-                        <br>&nbsp;  [% IF catalogacion.tieneReferencia == 1 %]
+                                    [% IF catalogacion.tieneReferencia == 1 %]
                                             [% catalogacion.infoReferencia.getReferencia %]
                                     [% ELSE %]
                                             [% "No tiene" | i18n %]
@@ -111,18 +111,18 @@
 
                 <td>    
                         <!-- AGREGADO SOLO PARA DEBUGUEAR -->
-                        <br>&nbsp;  [% IF catalogacion.soyFijo == 1 %]
-                                            [% "Si" | i18n %]
+                                    [% IF catalogacion.soyFijo == 1 %]
+                                            <span class="verde">[% "Si" | i18n %]</span>
                                     [% ELSE %]
-                                            [% "No" | i18n %]
+                                            <span class="rojo">[% "No" | i18n %]</span>
                                     [% END %]
                 </td>
                 <td>    
                         <!-- AGREGADO SOLO PARA DEBUGUEAR -->
-                        <br>&nbsp;  [% IF catalogacion.getObligatorio == 1 %]
-                                            [% "Si" | i18n %]
+                                    [% IF catalogacion.getObligatorio == 1 %]
+                                            <span class="verde">[% "Si" | i18n %]</span>
                                     [% ELSE %]
-                                            [% "No" | i18n %]
+                                            <span class="rojo">[% "No" | i18n %]</span>
                                     [% END %]
                 </td>
 	        </tr>
