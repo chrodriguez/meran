@@ -1852,7 +1852,6 @@ sub getHashCatalogacionesConDatos{
 	#obtengo la estructura de catalogacion de los NIVELES REPETIBLES
     my ($cant, $catalogaciones_array_ref)= getCatalogacionesConDatos($params);
 
-    
 # MAPEO Y FILTRO DE INFO AL CLIENTE
     my @result;
     foreach my $cat  (@$catalogaciones_array_ref){
@@ -1862,10 +1861,6 @@ sub getHashCatalogacionesConDatos{
 																	$cat->getCampo, 
 																	$cat->getSubcampo
 											);
-
-C4::AR::Debug::debug("BUSCO ESTRUCTURA PARA DATO: ".$cat->getDato);
-C4::AR::Debug::debug("campo: ".$cat->getCampo);
-C4::AR::Debug::debug("sub campo: ".$cat->getSubcampo);
 
 		if(scalar(@$cat_estruct_array) > 0){	
 	
@@ -1934,15 +1929,15 @@ sub _obtenerEstructuraYDatos{
 	my $nivel;
 	if( $params->{'nivel'} eq '1'){
 		$nivel= C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
-C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel1FromId1\n");
+        C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel1FromId1\n");
 	}
 	elsif( $params->{'nivel'} eq '2'){
 		$nivel= C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
-C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel2FromId2\n");
+        C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel2FromId2\n");
 	}
 	elsif( $params->{'nivel'} eq '3'){
 		$nivel= C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
-C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel3FromId3\n");
+        C4::AR::Debug::debug("_obtenerEstructuraYDatos=>  getNivel3FromId3");
 	}
 
 	#paso todo a MARC
