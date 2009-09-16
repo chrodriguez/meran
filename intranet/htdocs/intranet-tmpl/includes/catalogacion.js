@@ -1198,7 +1198,7 @@ function validateForm(formID, func){
 
     $().ready(function() {
     $("#"+formID).validate({
-            errorElement: "label",
+            errorElement: "div",
             errorClass: "error_adv",
             rules: HASH_RULES,
             messages: HASH_MESSAGES,

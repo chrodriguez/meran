@@ -262,6 +262,12 @@ em.error_adv{
   padding-left: 16px;
 }
 
+div.error_adv{
+  background: transparent url(../imagenes/error.gif) no-repeat scroll 0 0;
+  padding-left: 16px;
+}
+
+
 label.error_adv{
     background: transparent url(../imagenes/error.gif) no-repeat scroll 0 0;
     padding-left: 16px;
