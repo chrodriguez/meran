@@ -96,7 +96,7 @@
                         <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Estante virtual' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/busquedas/estante.pl", 
+                                                                url =>      "/cgi-bin/koha/estantes/estante.pl", 
                                                                 title =>    "[% 'Estante virtual' | i18n %]"
                                                             ) ;
                             [% END %]

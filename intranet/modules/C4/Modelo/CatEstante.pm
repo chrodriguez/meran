@@ -15,6 +15,20 @@ __PACKAGE__->meta->setup(
     ],
 
     primary_key_columns => [ 'id' ],
+
+    relationships => [
+        padre => {
+            class       => 'C4::Modelo::CatEstante',
+            key_columns => { padre => 'id' },
+            type        => 'one to one',
+        },
+
+        contenido => {
+            class       => 'C4::Modelo::CatContenidoEstante',
+            key_columns => { id => 'id_estante' },
+            type        => 'one to many',
+        },
+    ],
 );
 
 
@@ -29,6 +43,37 @@ sub setId{
     $self->id($id);
 }
 
+sub getEstante{
+    my ($self) = shift;
+    return ($self->estante);
+}
 
+sub setEstante{
+    my ($self) = shift;
+    my ($estante) = @_;
+    $self->estante($estante);
+}
+
+sub getTipo{
+    my ($self) = shift;
+    return ($self->tipo);
+}
+
+sub setTipo{
+    my ($self) = shift;
+    my ($tipo) = @_;
+    $self->tipo($tipo);
+}
+
+sub getPadre{
+    my ($self) = shift;
+    return ($self->padre);
+}
+
+sub setPadre {
+    my ($self) = shift;
+    my ($padre) = @_;
+    $self->padre($padre);
+}
 1;
 

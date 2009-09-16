@@ -1,0 +1,54 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script>
+        function verEstante(estante){
+
+                objAH=new AjaxHelper(updateVerEstante);
+                objAH.debug= true;
+                objAH.url= 'estanteDB.pl';
+                objAH.estante= estante;
+                objAH.tipo= 'VER_ESTANTE';
+                objAH.sendToServer();
+        }
+
+        function updateVerEstante(responseText){
+                $('#subestante').html(responseText);
+        }
+
+        function verSubEstantes(estante,subestante){
+
+                objAH=new AjaxHelper(updateVerSubEstantes);
+                objAH.debug= true;
+                objAH.url= 'estanteDB.pl';
+                objAH.estante= subestante;
+                objAH.padre= estante;
+                objAH.tipo= 'VER_SUBESTANTE';
+                objAH.sendToServer();
+        }
+
+        function updateVerSubEstantes(responseText){
+            $('#subestante-'+ objAH.padre).html(responseText);
+        }
+
+      $(document).ready(function() {
+        makeToggle('datos_tabla_div_estantes','trigger',null,false);
+      });
+
+</script>
+
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>
+        <div class="datos_tabla_div_estantes">
+           <ul>
+            [% FOREACH estante IN ESTANTES %]
+             <li>
+             <a class="click" onClick="verEstante([% estante.getId %])">[% estante.getEstante %]</a>
+            </li>
+            [% END %]
+                </ul>
+
+        </div>
+</fieldset>
+<div id="subestante">
+</div>
+[% INCLUDE "intranet-bottom.inc" %]

@@ -22,7 +22,7 @@ sub toString{
 	my ($self) = shift;
 
     return ($self->getCompleto);
-}    
+}
 
 sub getObjeto{
 	my ($self) = shift;
@@ -38,7 +38,7 @@ sub getId{
 
     return ($self->id);
 }
-    
+
 sub setId{
     my ($self) = shift;
     my ($id) = @_;
@@ -46,13 +46,12 @@ sub setId{
     $self->id($id);
 }
 
-    
 sub getNombre{
     my ($self) = shift;
 
     return ($self->nombre);
 }
-    
+
 sub setNombre{
     my ($self) = shift;
     my ($nombre) = @_;
@@ -60,13 +59,12 @@ sub setNombre{
     $self->nombre($nombre);
 }
 
-    
 sub getApellido{
     my ($self) = shift;
 
     return ($self->apellido);
 }
-    
+
 sub setApellido{
     my ($self) = shift;
     my ($apellido) = @_;
