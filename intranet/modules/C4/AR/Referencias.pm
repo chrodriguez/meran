@@ -542,6 +542,7 @@ sub mostrarReferencias{
     
     foreach my $tabla (@$tablas_matching){
         my $alias_tabla = $tabla->getAlias_tabla;
+        #NO TIENE ALIAS PORQUE NO ES UNA TABLA DE REFERENCIA, IGUAL ESTA POR VERSE SI LE PONEMOS ALIAS A TODAS O NO
         my ($clave_referente,$tabla_referente) = getTablaInstanceByTableName($tabla->getTabla_referente);
 
         my $involved_count = $tabla_referente->getInvolvedCount($tabla->getCampo_referente,$value_id);
