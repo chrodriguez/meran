@@ -58,12 +58,14 @@ elsif ($accion eq "MOSTRAR_REFERENCIAS"){
                     });
 
     my ($referer_involved,$items_involved) = C4::AR::Referencias::mostrarReferencias($alias_tabla,$value_id);
-    my ($tabla_related,$related_referers) = C4::AR::Referencias::mostrarSimilares($alias_tabla,$value_id);
-
-    $t_params->{'involved'} = $items_involved;
-    $t_params->{'referer_involved'} = $referer_involved;
-    $t_params->{'related_referers'} = $related_referers;
-    $t_params->{'tabla_related'} = $tabla_related;
+    if ($items_involved){
+        my ($tabla_related,$related_referers) = C4::AR::Referencias::mostrarSimilares($alias_tabla,$value_id);
+    
+        $t_params->{'involved'} = $items_involved;
+        $t_params->{'referer_involved'} = $referer_involved;
+        $t_params->{'related_referers'} = $related_referers;
+        $t_params->{'tabla_related'} = $tabla_related;
+    }
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "ASIGNAR_REFERENCIA"){

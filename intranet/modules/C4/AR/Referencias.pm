@@ -536,24 +536,28 @@ sub mostrarReferencias{
                                                                                 );
 
 
-    my ($clave_original,$tabla_original) = getTablaInstanceByAlias($tablas_matching->[0]->getAlias_tabla);
-    #ESTE ES EL REFERIDO ORIGINAL, PARA MOSTRARLO EN EL CLIENTE
-    my $referer_involved = $tabla_original->getByPk($value_id);
+    if (scalar(@$tablas_matching)){
+        my ($clave_original,$tabla_original) = getTablaInstanceByAlias($tablas_matching->[0]->getAlias_tabla);
+        #ESTE ES EL REFERIDO ORIGINAL, PARA MOSTRARLO EN EL CLIENTE
+        my $referer_involved = $tabla_original->getByPk($value_id);
+        
+        foreach my $tabla (@$tablas_matching){
+            my $alias_tabla = $tabla->getAlias_tabla;
+            #NO TIENE ALIAS PORQUE NO ES UNA TABLA DE REFERENCIA, IGUAL ESTA POR VERSE SI LE PONEMOS ALIAS A TODAS O NO
+            my ($clave_referente,$tabla_referente) = getTablaInstanceByTableName($tabla->getTabla_referente);
     
-    foreach my $tabla (@$tablas_matching){
-        my $alias_tabla = $tabla->getAlias_tabla;
-        #NO TIENE ALIAS PORQUE NO ES UNA TABLA DE REFERENCIA, IGUAL ESTA POR VERSE SI LE PONEMOS ALIAS A TODAS O NO
-        my ($clave_referente,$tabla_referente) = getTablaInstanceByTableName($tabla->getTabla_referente);
-
-        my $involved_count = $tabla_referente->getInvolvedCount($tabla->getCampo_referente,$value_id);
-
-        $table_data{"tabla"} = $tabla->getTabla_referente;
-        $table_data{"tabla_object"} = $tabla;
-        $table_data{"cantidad"} = $involved_count;
-        push (@data_array, \%table_data);
+            my $involved_count = $tabla_referente->getInvolvedCount($tabla->getCampo_referente,$value_id);
+    
+            $table_data{"tabla"} = $tabla->getTabla_referente;
+            $table_data{"tabla_object"} = $tabla;
+            $table_data{"cantidad"} = $involved_count;
+            push (@data_array, \%table_data);
+        }
+        
+        return ($referer_involved,\@data_array);
+    }else{
+        return (0,0);
     }
-    
-    return ($referer_involved,\@data_array);
     
 }
 
