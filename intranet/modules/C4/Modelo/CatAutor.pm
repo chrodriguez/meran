@@ -163,55 +163,5 @@ sub getAll{
 #DEVUELVE EL VALOR DE LA CLAVE PRIMARIA
 
 
-sub getByPk{
-
-    my ($self) = shift;
-    my ($value_id)=@_;
-
-    my @filtros;
-
-    push (  @filtros, ( id => { eq => $value_id},) );
-
-    my $autor = C4::Modelo::CatAutor::Manager->get_cat_autor( query => \@filtros);
-
-    return($autor->[0]);
-}
-
-sub getRelated{
-
-    my ($self)=shift;
-    my @filtros;
-
-#     my $related = C4::Modelo::CatAutor::Manager->get_cat_autor( query => \@filtros, )
-
-    my $related = $self->getAll(50,0);
-
-    return ($related);
-}
-
-sub replaceBy{
-
-    my ($self) = shift;
-    my ($new_id)=@_;
-
-    my @filtros;
-
-  
-    
-    my ($referer_involved,$data_array) = C4::AR::Referencias::mostrarReferencias($self->getAlias(),$self->getId());
-
-
-    foreach my $tabla (@$data_array){
-        
-        my $tabla_referente = C4::AR::Referencias::getTablaInstanceByTableName($tabla->{'tabla_object'}->getTabla_referente);
-
-        $tabla_referente->replaceBy($tabla->{'tabla_object'}->getCampo_referente,$self->getId(),$new_id);        
-    }
-
-
-}
-
-
-
 1;
 
