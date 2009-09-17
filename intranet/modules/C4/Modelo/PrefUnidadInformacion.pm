@@ -175,5 +175,17 @@ sub getCampo{
 	return (0);
 }
 
+
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset)=@_;
+    use C4::Modelo::PrefUnidadInformacion::Manager;
+    
+    my $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion( limit => $limit, offset => $offset);
+        
+    return ($ref_valores);
+}
+
 1;
 

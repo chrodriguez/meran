@@ -137,5 +137,17 @@ sub nextMember{
     return(C4::Modelo::RefDisponibilidad->new());
 }
 
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset)=@_;
+    use C4::Modelo::RefPais::Manager;
+    
+    my $ref_valores = C4::Modelo::RefPais::Manager->get_ref_pais( limit => $limit, offset => $offset);
+        
+    return ($ref_valores);
+}
+
+
 1;
 

@@ -102,5 +102,16 @@ sub nextMember{
     return(C4::Modelo::RefNivelBibliografico->new());
 }
 
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset)=@_;
+    use C4::Modelo::RefSoporte::Manager;
+    
+    my $ref_valores = C4::Modelo::RefSoporte::Manager->get_ref_soporte( limit => $limit, offset => $offset);
+        
+    return ($ref_valores);
+}
+
 1;
 

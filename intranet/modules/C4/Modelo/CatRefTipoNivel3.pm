@@ -85,5 +85,16 @@ sub getCampo{
 	return (0);
 }
 
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset)=@_;
+    use C4::Modelo::CatRefTipoNivel3::Manager;
+    
+    my $ref_valores = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3( limit => $limit, offset => $offset);
+        
+    return ($ref_valores);
+}
+
 1;
 

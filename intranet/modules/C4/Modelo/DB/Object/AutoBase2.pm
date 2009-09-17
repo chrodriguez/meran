@@ -10,6 +10,23 @@ sub init_db { C4::Modelo::DB::AutoBase1->new}
 =item
 Imprime el nombre de la clase
 =cut
+
+
+
+
+sub getPkValue{
+
+    my ($self) = shift;
+
+    return ($self->{$self->meta->primary_key});
+}
+
+sub getInvolvedCount{
+ 
+# ESTE METODO LO DEBEN IMPLEMENTAR TODAS LAS CLASES QUE USEN ALGUNA REFERENCIA, SI O SI
+     return (0);
+}
+
 sub toString{
     my ($self)=shift;
 
@@ -51,6 +68,26 @@ sub nextChain{
         }
 }
 
+
+sub printAsTableElement{
+
+    my ($self)=shift;
+    my $classAlias = shift;
+
+
+    my $campos = $self->getCamposAsArray;
+
+    my $th;
+  
+    foreach my $campo (@$campos){
+        
+        $th.="<th>".$self->{$campo}."</th>";
+    }
+    return ($th);
+}
+
+
+
 =item
 Esta funcion devuelve los campos de la tabla del objeto llamador
 =cut
@@ -73,9 +110,17 @@ sub getCamposAsArray{
     my $arreglo;
     my $camposArray = $self->meta->columns;
 
-    return($camposArray);
-}
+    my @campos_sin_id;
 
+    foreach my $campo (@$camposArray){
+      if ($campo ne 'id'){
+          push (@campos_sin_id,$campo);
+      }
+    
+    }    
+
+    return(\@campos_sin_id);
+}
 
 
 sub getCampos{

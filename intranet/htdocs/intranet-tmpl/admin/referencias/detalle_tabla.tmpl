@@ -1,0 +1,39 @@
+[% INCLUDE 'partials/admin/_nuevoPermiso.inc' %]
+
+[% USE HTML %]
+
+<script type="text/javascript">
+      $(document).ready(function() {
+        makeToggle('datos_tabla_div','trigger',null,false);
+      });
+</script>
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Tabla: " | i18n %]: [% tabla %]</legend>
+        <div class="datos_tabla_div" id="datos_tabla_div">
+            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
+                <tr class="titulo_tabla_resultado">
+                    [% FOREACH campo IN campos %]
+                        <th> [% campo %]</th>
+                    [% END %]
+                    <th>[% "Asignar" | i18n %]</th>
+                </tr>
+                    [% FOREACH dato IN datos %]
+                      <tr>
+                        [% dato.printAsTableElement %]
+                        <th>
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(  
+                                                                boton   => "icon_cancelar",
+                                                                onClick => "mostrarReferencias('[% tabla %]', '[% dato.getPkValue %]');",
+                                                                title   => "[% 'Asignar' | i18n %]",
+                                                                alternClass => "botonCentradoTabla",
+                                                                elem => 'span',
+                                                                style => 'float: left;',
+                                    ) ;
+                        [% END %]
+                        </th>
+                      </tr>
+                    [% END %]
+            </table>
+        </div>
+</fieldset>

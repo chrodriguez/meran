@@ -472,4 +472,140 @@ sub getAutor {
 	}
 }
 
+
+sub getTabla{
+    
+    my ($alias) = @_;
+    
+    my $tabla = C4::Modelo::PrefTablaReferencia->new();
+       $tabla = $tabla->createFromAlias($alias);
+
+    my $datos = $tabla->getAll(100,0);
+    my $campos = $tabla->getCamposAsArray();
+    my $clave = $tabla->meta->primary_key;
+
+    $tabla = $tabla->getAlias;
+    return ($clave,$tabla,$datos,$campos);
+}
+
+sub getTablaInstanceByAlias{
+    
+    my ($alias) = @_;
+    
+    my $tabla = C4::Modelo::PrefTablaReferencia->new();
+       $tabla = $tabla->createFromAlias($alias);
+
+    my $clave = $tabla->meta->primary_key;
+
+    return ($clave,$tabla);
+}
+
+sub getTablaInstanceByTableName{
+    
+    my ($name) = @_;
+    
+    use Switch;
+   
+    my $tabla;
+
+   switch ($name) {
+      case "cat_nivel1" { $tabla = C4::Modelo::CatNivel1->new()  }
+
+      else { print "previous case not true" }
+  }
+
+    my $clave = $tabla->meta->primary_key;
+
+    return ($clave,$tabla);
+}
+
+sub mostrarReferencias{
+
+    my ($alias,$value_id) = @_;
+    my @filtros;
+
+    my %table_data = {};
+    my @data_array;
+
+    use C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager;
+    push (  @filtros, ( alias_tabla => { eq => $alias },) );
+
+    my $tablas_matching = C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager->get_pref_tabla_referencia_rel_catalogo(
+                                                                                   query => \@filtros,
+                                                                                );
+
+
+    my ($clave_original,$tabla_original) = getTablaInstanceByAlias($tablas_matching->[0]->getAlias_tabla);
+    #ESTE ES EL REFERIDO ORIGINAL, PARA MOSTRARLO EN EL CLIENTE
+    my $referer_involved = $tabla_original->getByPk($value_id);
+
+    
+    foreach my $tabla (@$tablas_matching){
+        my $alias_tabla = $tabla->getAlias_tabla;
+        my ($clave_referente,$tabla_referente) = getTablaInstanceByTableName($tabla->getTabla_referente);
+
+        my $involved_count = $tabla_referente->getInvolvedCount($tabla->getCampo_referente,$value_id);
+
+        $table_data{"tabla"} = $tabla->getTabla_referente;
+        $table_data{"tabla_object"} = $tabla;
+        $table_data{"cantidad"} = $involved_count;
+        push (@data_array, \%table_data);
+    }
+    
+    return ($referer_involved,\@data_array);
+    
+}
+
+sub mostrarSimilares{
+
+    my ($alias,$value_id) = @_;
+
+    my $tabla = getTablaInstanceByAlias($alias);
+    my $refered = $tabla->getByPk($value_id);
+
+    my $related_referers = $tabla->getRelated;
+    
+    my $tabla_related = $tabla->getAlias();
+
+    return ($tabla_related,$related_referers);
+}
+
+sub asignarReferencia{
+
+    my ($alias_tabla,$related_id,$referer_involved) = @_;
+
+    my $tabla = getTablaInstanceByAlias($alias_tabla);
+
+    my $old_pk = $tabla->getByPk($referer_involved);
+
+    my $status = $old_pk->replaceBy($related_id);
+
+    return ($status);
+}
+
+sub eliminarReferencia{
+
+    my ($alias_tabla,$referer_involved) = @_;
+
+    my $tabla = getTablaInstanceByAlias($alias_tabla);
+
+    my $old_pk = $tabla->getByPk($referer_involved);
+
+    my $status = $old_pk->delete();
+
+    return ($status);
+}
+
+sub asignarYEliminarReferencia{
+
+    my ($alias_tabla,$related_id,$referer_involved) = @_;
+
+    my $status;
+
+    $status = asignarReferencia($alias_tabla,$related_id,$referer_involved);
+    $status = eliminarReferencia($alias_tabla,$referer_involved);
+
+    return ($status);
+}
+
 1;

@@ -998,6 +998,21 @@ VALUES (
     CHANGE `parent` `padre` INT( 11 ) NOT NULL DEFAULT '0';
 
 
+ CREATE TABLE `pref_tabla_referencia_rel_catalogo` (
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`alias_tabla` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+`tabla_referente` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+`campo_referente` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+) ENGINE = InnoDB; 
+
+ CREATE TABLE `pref_tabla_alias` (
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+`nombre` VARCHAR( 32 ) NOT NULL ,
+`alias` VARCHAR( 32 ) NOT NULL ,
+PRIMARY KEY ( `id` )
+) ENGINE = InnoDB;
+
+
  ALTER TABLE `cat_contenido_estante` DROP `flags`;
 
  ALTER TABLE `cat_contenido_estante` CHANGE `id2` `id2` INT( 11 ) NOT NULL ,
@@ -1007,4 +1022,4 @@ CHANGE `shelfnumber` `id_estante` INT( 11 ) NOT NULL DEFAULT '0';
 --se permite null en cat_nivelX_repetible
  ALTER TABLE `cat_nivel3_repetible` CHANGE `dato` `dato` VARCHAR( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
 
- ALTER TABLE `cat_nivel1_repetible` CHANGE `dato` `dato` VARCHAR( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;>>>>>>> .r2137
+ ALTER TABLE `cat_nivel1_repetible` CHANGE `dato` `dato` VARCHAR( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;

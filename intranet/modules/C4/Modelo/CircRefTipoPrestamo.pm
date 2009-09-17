@@ -212,5 +212,16 @@ sub modificar {
 
 }
 
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset)=@_;
+    use C4::Modelo::CircRefTipoPrestamo::Manager;
+    
+    my $ref_valores = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo( limit => $limit, offset => $offset);
+        
+    return ($ref_valores);
+}
+
 1;
 

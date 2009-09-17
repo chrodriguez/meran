@@ -1,0 +1,39 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script src="/intranet-tmpl/includes/admin/tablasDeReferencia.js"></script>
+
+<script type="text/javascript">
+
+</script>
+
+<div class="permisos">
+    <br><br>
+    <fieldset>
+        <legend class="titulo_legend">[% "Selecci&oacute;n de tablas de referencia" | i18n %]</legend>
+        <div class="permisos_selector">
+            <ul>
+                <li class="sub_item">
+                    <label for="id_ui"> Tabla.: </label>
+                    [% combo_tablas %]
+                </li>
+                [% PERL %]
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Obtener Tabla' | i18n %]",
+                                                        boton   => "boton_agregar",
+                                                        onClick => "obtenerTabla();",
+                                                        title   => "[% 'Obtener Tabla' | i18n %]",
+                                                        alternClass => "botonCentrado",
+                            ) ;
+                [% END %]
+            </ul>
+        </div>
+        <br>
+        <br>
+        <br>
+    </fieldset>
+    <div class="detalle_tabla" id="detalle_tabla"> </div>
+</div>
+
+
+
+
+[% INCLUDE "intranet-bottom.inc" %]

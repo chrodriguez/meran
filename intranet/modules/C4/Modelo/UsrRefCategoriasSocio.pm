@@ -217,4 +217,16 @@ sub nextMember{
     use C4::Modelo::CatTema;
     return(C4::Modelo::CatTema->new());
 }
+
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset)=@_;
+    use C4::Modelo::UsrRefCategoriasSocio::Manager;
+    
+    my $ref_valores = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categoria_socio( limit => $limit, offset => $offset);
+        
+    return ($ref_valores);
+}
+
 1;

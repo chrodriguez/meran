@@ -104,5 +104,17 @@ sub nextMember{
     return(C4::Modelo::CircRefTipoPrestamo->new());
 }
 
+
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset)=@_;
+    use C4::Modelo::RefDisponibilidad::Manager;
+    
+    my $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad( limit => $limit, offset => $offset);
+        
+    return ($ref_valores);
+}
+
 1;
 

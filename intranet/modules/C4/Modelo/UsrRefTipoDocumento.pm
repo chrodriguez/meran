@@ -85,6 +85,16 @@ sub nextMember{
     return(C4::Modelo::UsrRefCategoriasSocio->new());
 }
 
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset)=@_;
+    use C4::Modelo::UsrRefTipoDocumento::Manager;
+    
+    my $ref_valores = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento( limit => $limit, offset => $offset);
+        
+    return ($ref_valores);
+}
 
 1;
 

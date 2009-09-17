@@ -105,5 +105,16 @@ sub nextMember{
     return(C4::Modelo::RefPais->new());
 }
 
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset)=@_;
+    use C4::Modelo::RefIdioma::Manager;
+    
+    my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_idioma( limit => $limit, offset => $offset);
+        
+    return ($ref_valores);
+}
+
 1;
 

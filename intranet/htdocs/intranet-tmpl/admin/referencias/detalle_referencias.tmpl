@@ -1,0 +1,85 @@
+[% USE HTML %]
+
+<script type="text/javascript">
+      $(document).ready(function() {
+        makeToggle('datos_tabla_div','trigger',null,false);
+        makeToggle('datos_tabla_div_referenced','trigger',null,false);
+        makeToggle('datos_tabla_div_related','trigger',null,false);
+      });
+</script>
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Registro " | i18n %]: [% tabla %]</legend>
+        <div class="datos_tabla_div_referenced" id="datos_tabla_div">
+            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
+                <tr class="titulo_tabla_resultado">
+                    [% FOREACH campo IN referer_involved.getCamposAsArray %]
+                        <th> [% campo %]</th>
+                    [% END %]
+                </tr>
+                <tr>
+                    [% referer_involved.printAsTableElement %]
+                </tr>
+
+            </table>
+        </div>
+</fieldset>
+
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Relaciones " | i18n %]: [% tabla %]</legend>
+        <div class="datos_tabla_div" id="datos_tabla_div">
+            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
+                <tr class="titulo_tabla_resultado">
+                        <th> [% "Tablas relacionadas " | i18n %]</th>
+                </tr>
+                    [% FOREACH data IN involved %]
+                        <th> [% "El registro tiene " | i18n %][% data.cantidad %][% " tuplas relacionadas en la tabla " | i18n %] [% data.tabla %]</th>
+                    [% END %]
+            </table>
+        </div>
+</fieldset>
+
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Similares " | i18n %]: [% tabla %]</legend>
+        <div class="datos_tabla_div_related" id="datos_tabla_div">
+            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
+                <tr class="titulo_tabla_resultado">
+                    [% FOREACH campo IN referer_involved.getCamposAsArray %]
+                        <th> [% campo %]</th>
+                    [% END %]
+                    <th>[% "Asignar" | i18n %]</th>
+                    <th>[% "Asignar y Eliminar" | i18n %]</th>
+                </tr>
+                    [% FOREACH related IN related_referers %]
+                      <tr>
+                        [% related.printAsTableElement %]                
+                            <th>
+                            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(  
+                                                                    boton   => "icon_cancelar",
+                                                                    onClick => "asignarReferencia('[% tabla_related %]','[% related.getPkValue %]','[% referer_involved.getPkValue %]');",
+                                                                    title   => "[% 'Asignar' | i18n %]",
+                                                                    alternClass => "botonCentradoTabla",
+                                                                    elem => 'span',
+                                                                    style => 'float: left;',
+                                        ) ;
+                            [% END %]
+                            </th>
+                            <th>
+                            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(  
+                                                                    boton   => "icon_cancelar",
+                                                                    onClick => "asignarEliminarReferencia('[% tabla_related %]','[% related.getPkValue %]','[% referer_involved.getPkValue %]');",
+                                                                    title   => "[% 'Asignar y Eliminar' | i18n %]",
+                                                                    alternClass => "botonCentradoTabla",
+                                                                    elem => 'span',
+                                                                    style => 'float: left;',
+                                        ) ;
+                            [% END %]
+                            </th>
+                        </tr>
+                      [% END %]
+                  </tr>
+            </table>
+        </div>
+</fieldset>
+

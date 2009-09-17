@@ -107,5 +107,16 @@ sub nextMember{
     return(C4::Modelo::RefEstado->new());
 }
 
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset)=@_;
+    use C4::Modelo::CatTema::Manager;
+    
+    my $ref_valores = C4::Modelo::CatTema::Manager->get_cat_tema( limit => $limit, offset => $offset);
+        
+    return ($ref_valores);
+}
+
 1;
 

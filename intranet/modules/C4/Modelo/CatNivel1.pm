@@ -258,5 +258,36 @@ C4::AR::Debug::debug("nivel1CompletoToMARC => cant: ".scalar(@$marc_array));
 }
 # ==============================================FIN===SOPORTE=====ESTRUCTURA CATALOGACION================================================
 
+sub getInvolvedCount{
+ 
+    my ($self) = shift;
+
+    my ($campo, $value)= @_;
+    
+    my @filtros;
+
+    push (@filtros, ( $campo => $value ) );
+
+    my $cat_nivel1_count = C4::Modelo::CatNivel1::Manager->get_cat_nivel1_count( query => \@filtros );
+
+    return ($cat_nivel1_count);
+}
+
+sub replaceBy{
+ 
+    my ($self) = shift;
+
+    my ($campo,$value,$new_value)= @_;
+    
+    my @filtros;
+
+    push (  @filtros, ( $campo => { eq => $value},) );
+
+
+    my $replaced = C4::Modelo::CatNivel1::Manager->update_cat_nivel1(   where => \@filtros,
+                                                                        set   => { $campo => $new_value });
+}
+
+
 1;
 

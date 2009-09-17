@@ -99,5 +99,16 @@ sub lastTable{
     return(1);
 }
 
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset)=@_;
+    use C4::Modelo::RefLocalidad::Manager;
+    
+    my $ref_valores = C4::Modelo::RefLocalidad::Manager->get_ref_localidad( limit => $limit, offset => $offset);
+        
+    return ($ref_valores);
+}
+
 1;
 
