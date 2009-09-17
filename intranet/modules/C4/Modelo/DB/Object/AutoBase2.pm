@@ -18,32 +18,30 @@ sub getByPk{
 
     my @filtros;
 
-    push (  @filtros, ( $self->meta->primary_key => { eq => $value_id},) );
-
-    my $autor = C4::Modelo::CatAutor::Manager->get_cat_autor( query => \@filtros);
-
     my $pk = $self->meta->primary_key;
 
     my $self_like = $self->meta->class->new($pk => $value_id);
+  
+    $self_like->load();
 
     return($self_like);
 }
 
-sub replaceBy{
+sub replaceByThis{
 
     my ($self) = shift;
     my ($new_id)=@_;
 
     my @filtros;
 
-    my ($referer_involved,$data_array) = C4::AR::Referencias::mostrarReferencias($self->getAlias(),$self->getId());
+    my ($referer_involved,$data_array) = C4::AR::Referencias::mostrarReferencias($self->getAlias(),$self->getPkValue);
 
 
     foreach my $tabla (@$data_array){
         
         my $tabla_referente = C4::AR::Referencias::getTablaInstanceByTableName($tabla->{'tabla_object'}->getTabla_referente);
 
-        $tabla_referente->replaceBy($tabla->{'tabla_object'}->getCampo_referente,$self->getId(),$new_id);        
+        $tabla_referente->replaceBy($tabla->{'tabla_object'}->getCampo_referente,$self->getPkValue,$new_id);        
     }
 
 }

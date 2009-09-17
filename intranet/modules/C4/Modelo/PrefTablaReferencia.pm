@@ -22,11 +22,14 @@ sub getAliasForTable {
     my ($self) = shift;
     my ($nombre_tabla) = @_;
     
+
     my $db = C4::Modelo::PrefTablaReferencia::Manager->get_pref_tabla_referencia(
                                                                                 query => [
                                                                                            nombre_tabla => { eq  => $nombre_tabla } ,
                                                                                          ],
                                                                             );
+
+    
     return ($db->[0]->getAlias_tabla);
 }
 

@@ -878,4 +878,35 @@ sub tieneFoto{
     }
     return $foto;
 }
+
+sub getInvolvedCount{
+ 
+    my ($self) = shift;
+
+    my ($campo, $value)= @_;
+    
+    my @filtros;
+
+    push (@filtros, ( $campo => $value ) );
+
+    my $count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => \@filtros );
+
+    return ($count);
+}
+
+sub replaceBy{
+ 
+    my ($self) = shift;
+
+    my ($campo,$value,$new_value)= @_;
+    
+    my @filtros;
+
+    push (  @filtros, ( $campo => { eq => $value},) );
+
+
+    my $replaced = C4::Modelo::UsrSocio::Manager->update_usr_socio(     where => \@filtros,
+                                                                        set   => { $campo => $new_value });
+}
+
 1;

@@ -510,6 +510,7 @@ sub getTablaInstanceByTableName{
 
    switch ($name) {
       case "cat_nivel1" { $tabla = C4::Modelo::CatNivel1->new()  }
+      case "usr_socio" { $tabla = C4::Modelo::UsrSocio->new()  }
 
       else { print "previous case not true" }
   }
@@ -538,7 +539,6 @@ sub mostrarReferencias{
     my ($clave_original,$tabla_original) = getTablaInstanceByAlias($tablas_matching->[0]->getAlias_tabla);
     #ESTE ES EL REFERIDO ORIGINAL, PARA MOSTRARLO EN EL CLIENTE
     my $referer_involved = $tabla_original->getByPk($value_id);
-
     
     foreach my $tabla (@$tablas_matching){
         my $alias_tabla = $tabla->getAlias_tabla;
@@ -578,7 +578,7 @@ sub asignarReferencia{
 
     my $old_pk = $tabla->getByPk($referer_involved);
 
-    my $status = $old_pk->replaceBy($related_id);
+    my $status = $old_pk->replaceByThis($related_id);
 
     return ($status);
 }
