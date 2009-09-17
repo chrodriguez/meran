@@ -1005,6 +1005,10 @@ VALUES (
 `campo_referente` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
 ) ENGINE = InnoDB; 
 
+INSERT INTO `pref_tabla_referencia_rel_catalogo` (`id`, `alias_tabla`, `tabla_referente`, `campo_referente`) VALUES
+(1, 'autor', 'cat_nivel1', 'autor');
+
+
  CREATE TABLE `pref_tabla_alias` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
 `nombre` VARCHAR( 32 ) NOT NULL ,
