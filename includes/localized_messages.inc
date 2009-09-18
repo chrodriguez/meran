@@ -27,5 +27,13 @@ SHOW_DIFERENT = "[% 'Mostrar uno diferente' | i18n %]";
 
 // END VARIABLES PARA ui.datepicker.js
 
+//Para DataTables
+
+S_LENGTH_MENU= '[% "Mostrar _MENU_ registros por pagina" | i18n %]';
+S_ZERO_RECORDS= '[% "No se encontraron coincidencias"| i18n %]';
+S_INFO= '[% "Mostrando _START_ a _END_ de _TOTAL_ registros" | i18n %]';
+S_INFO_EMPTY= '[% "Mostrando 0 a 0 de 0 registros" | i18n %]';
+S_INFO_FILTERED= '[% "(filtrados de _MAX_ registros totales)" | i18n %]';
+S_SEARCH= '[% "Buscar" | i18n %]';
 
 </script>

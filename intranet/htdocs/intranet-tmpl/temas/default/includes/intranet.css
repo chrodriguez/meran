@@ -1225,3 +1225,8 @@ input.file {
   width: auto; 
   padding-left: 2%;
 }
+
+/*PARA LAS TABLAS con DataTable */
+.sorting_1{
+  background-color: #999999;
+}

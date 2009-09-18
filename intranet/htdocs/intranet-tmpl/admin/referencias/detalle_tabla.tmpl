@@ -5,35 +5,51 @@
 <script type="text/javascript">
       $(document).ready(function() {
         makeToggle('datos_tabla_div','trigger',null,false);
+        $('#tablaResult').dataTable({
+                                      "bFilter": true,
+                                      "bPaginate": false,
+                                      "oLanguage": {
+                                        "sLengthMenu": S_LENGTH_MENU,
+                                        "sZeroRecords": S_ZERO_RECORDS,
+                                        "sInfo": S_INFO,
+                                        "sInfoEmtpy": S_INFO_EMPTY,
+                                        "sInfoFiltered": S_INFO_FILTERED,
+                                        "sSearch":S_SEARCH,
+                                      }
+                                    });
       });
 </script>
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Tabla: " | i18n %]: [% tabla %]</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
-                <tr class="titulo_tabla_resultado">
-                    [% FOREACH campo IN campos %]
-                        <th> [% campo %]</th>
-                    [% END %]
-                    <th>[% "Asignar" | i18n %]</th>
-                </tr>
-                    [% FOREACH dato IN datos %]
-                      <tr>
-                        [% dato.printAsTableElement %]
-                        <th>
-                        [% PERL %]
-                            print C4::AR::Filtros::to_Icon(  
-                                                                boton   => "icon_cancelar",
-                                                                onClick => "mostrarReferencias('[% tabla %]', '[% dato.getPkValue %]');",
-                                                                title   => "[% 'Asignar' | i18n %]",
-                                                                alternClass => "botonCentradoTabla",
-                                                                elem => 'span',
-                                                                style => 'float: left;',
-                                    ) ;
+                <thead>
+                    <tr class="titulo_tabla_resultado">
+                        [% FOREACH campo IN campos %]
+                            <th class="click"> [% campo %]</th>
                         [% END %]
-                        </th>
-                      </tr>
-                    [% END %]
+                        <th>[% "Asignar" | i18n %]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        [% FOREACH dato IN datos %]
+                          <tr>
+                            [% dato.printAsTableElement %]
+                            <td>
+                            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(  
+                                                                    boton   => "icon_cancelar",
+                                                                    onClick => "mostrarReferencias('[% tabla %]', '[% dato.getPkValue %]');",
+                                                                    title   => "[% 'Asignar' | i18n %]",
+                                                                    alternClass => "botonCentradoTabla",
+                                                                    elem => 'span',
+                                                                    style => 'float: left;',
+                                        ) ;
+                            [% END %]
+                            </td>
+                          </tr>
+                        [% END %]
+                </tbody>
             </table>
         </div>
 </fieldset>

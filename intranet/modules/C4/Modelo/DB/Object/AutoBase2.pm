@@ -122,13 +122,13 @@ sub printAsTableElement{
 
     my $campos = $self->getCamposAsArray;
 
-    my $th;
+    my $td;
   
     foreach my $campo (@$campos){
         
-        $th.="<th>".$self->{$campo}."</th>";
+        $td.="<td>".$self->{$campo}."</td>";
     }
-    return ($th);
+    return ($td);
 }
 
 

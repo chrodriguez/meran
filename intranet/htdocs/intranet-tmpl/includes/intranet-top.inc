@@ -23,6 +23,7 @@
 <script src="/includes/WindowHelper.js"></script>
 <script src="/includes/AutocompleteHelper.js"></script>
 <script src="/includes/jquery/jquery.alerts.js"></script>
+<script src="/includes/jquery/jquery.dataTables.js"></script>
 
 [% INCLUDE 'datePicker.inc' %]
 
