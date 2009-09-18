@@ -5,19 +5,7 @@
         makeToggle('datos_tabla_div','trigger',null,false);
         makeToggle('datos_tabla_div_referenced','trigger',null,false);
         makeToggle('datos_tabla_div_related','trigger',null,false);
-        $('#tablaResult_similares').dataTable({
-                                      "bFilter": true,
-                                      "bPaginate": false,
-                                      "oLanguage": {
-                                        "sLengthMenu": S_LENGTH_MENU,
-                                        "sZeroRecords": S_ZERO_RECORDS,
-                                        "sInfo": S_INFO,
-                                        "sInfoEmtpy": S_INFO_EMPTY,
-                                        "sInfoFiltered": S_INFO_FILTERED,
-                                        "sSearch":S_SEARCH,
-                                      }
-
-                                    });
+        makeDataTable('#tablaResult_similares');
       });
 </script>
 <fieldset class="resultados_busqueda">

@@ -1228,5 +1228,9 @@ input.file {
 
 /*PARA LAS TABLAS con DataTable */
 .sorting_1{
-  background-color: #999999;
+  background-color: #FFFFCC;
+}
+
+.dataTables_info{
+  background-color: #999900;
 }
