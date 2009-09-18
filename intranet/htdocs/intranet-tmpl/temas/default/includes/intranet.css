@@ -826,7 +826,7 @@ label.error_adv{
 
 
 .cargando {
-    background-image: url(../imagenes/loaders/green.gif);
+    background-image: url(../imagenes/loaders/loader_para_div.gif);
     background-repeat: no-repeat;
     background-position:center center;
     height: auto;
@@ -834,7 +834,7 @@ label.error_adv{
 }
 
 .loading {
-    background-image: url(../imagenes/loaders/big_green.gif);
+    background-image: url(../imagenes/loaders/loader_default.gif);
     background-repeat: no-repeat;
     height: 50px;
     width: 50px;

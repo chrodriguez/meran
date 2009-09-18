@@ -175,6 +175,25 @@ sub obtenerAutoresLike {
 }
 
 =item
+Devuelve un arreglo de objetos UI
+=cut
+sub obtenerUILike {
+    my ($nombre) = @_;
+
+    my $uis_array_ref = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(
+                                                                query => [ nombre => { like => '%'.$nombre.'%' } ]
+                                            );
+    my @results;
+
+    foreach my $objeto_ui (@$uis_array_ref) {
+        push (@results, $objeto_ui);
+    }
+
+    return(\@results);
+}
+
+
+=item
 Devuelve un arreglo de objetos Unidades de Informacion
 =cut
 sub obtenerDisponibilidades {

@@ -40,12 +40,10 @@ opac = ususario comun de OPAC (MENOR cant. de permisos sobre la base)
 	$user = $context->config('userOPAC');
 	$pass = $context->config('passOPAC');
 	if($session->param('type') eq 'intranet'){
-	C4::AR::Debug::debug("AutoBase1 => type: ".$session->param('type'));
-	C4::AR::Debug::debug("AutoBase1 => userINTRA");
 		$user = $context->config('userINTRA');
 		$pass = $context->config('passINTRA');
 	}else{
-	C4::AR::Debug::debug("AutoBase1 => userOPAC");	
+	
 	}
 
 #  $user = $context->config('user');

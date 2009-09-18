@@ -108,10 +108,18 @@ sub agregar{
             
         my $nivel2Repetible;
 
-        if ($data_hash->{'modificado'}){
-            $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'rep_n2_id'});
+#         if ($data_hash->{'modificado'}){
+#             $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'rep_n2_id'});
+#             $nivel2Repetible->load();
+#         }else{
+#             $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
+#         }
+        if ( $infoNivel2->{'Id_rep'} != 0 ){
+            C4::AR::Debug::debug("CatNivel1 => agregar => Se va a modificar CatNivel1, Id_rep: ". $infoNivel2->{'Id_rep'});
+            $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'Id_rep'});
             $nivel2Repetible->load();
         }else{
+            C4::AR::Debug::debug("CatNivel2 => agregar => No existe el REPETIBLE se crea uno");
             $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
         }
 
@@ -120,9 +128,9 @@ sub agregar{
         $nivel2Repetible->setSubcampo($infoNivel2->{'subcampo'});
 #         $nivel2Repetible->setDato($infoNivel2->{'dato'});
 		if( ($infoNivel2->{'modificado'})&&($data_hash->{'referencia'}) ){
-				$nivel2Repetible->dato($infoNivel2->{'datoReferencia'});
-			}else{
-				$nivel2Repetible->dato($infoNivel2->{'dato'});
+			$nivel2Repetible->dato($infoNivel2->{'datoReferencia'});
+		}else{
+			$nivel2Repetible->dato($infoNivel2->{'dato'});
 		}
         $nivel2Repetible->save(); 
     }

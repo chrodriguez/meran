@@ -65,6 +65,10 @@ elsif ($accion eq 'autocomplete_ayuda_marc'){
 
      $result = C4::AR::Utilidades::ayudaCampoMARCAutocomplete($string);
 }
+elsif ($accion eq 'autocomplete_UI'){
+
+     $result = C4::AR::Utilidades::uiAutocomplete($string);
+}
 
 
 C4::Auth::print_header($session);

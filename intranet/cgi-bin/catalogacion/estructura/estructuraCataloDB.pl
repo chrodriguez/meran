@@ -36,7 +36,7 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 			                debug => 1,
 			        });
 
-    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getCatalogaciones($nivel,$itemType,$orden);
+    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getEstructuraCatalogacionFromDBCompleta($nivel,$itemType,$orden);
     
     #Se pasa al cliente el arreglo de objetos estructura_catalogacion   
     $t_params->{'catalogaciones'}= $catalogaciones_array_ref;
@@ -320,7 +320,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
                                     );
     
     #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
-    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getHashCatalogaciones($obj);
+    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getEstructuraSinDatos($obj);
     
     my $infoOperacionJSON= to_json($catalogaciones_array_ref);
     
@@ -339,7 +339,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
                                     );
 
     #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
-	my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getHashCatalogacionesConDatos($obj);
+	my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getEstructuraConDatos($obj);
     
 	my $infoOperacionJSON= to_json($catalogaciones_array_ref);
     

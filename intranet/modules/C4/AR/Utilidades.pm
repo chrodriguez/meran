@@ -2236,6 +2236,19 @@ sub ayudaCampoMARCAutocomplete{
     return $textout;
 }
 
+sub uiAutocomplete{
+    my ($uiStr) = @_;
+
+    my $textout;
+    my $autores_array_ref= C4::AR::Referencias::obtenerUILike($uiStr);
+
+    foreach my $ui (@$autores_array_ref){
+        $textout.= $ui->getId_ui."|".$ui->getNombre."\n";
+    }
+
+    return $textout;
+}
+
 
 sub bibliosAutocomplete{
 

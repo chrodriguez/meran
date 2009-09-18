@@ -328,11 +328,11 @@ sub print_header {
     my $secure;
 
     if(is_OPAC($session->{'type'})){
-        C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE OPAC");
+#         C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE OPAC");
         #si la conexion no es segura no se envía la cookie, en el OPAC la conexion no es segura
         $secure = 0;
     }else{
-        C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE INTRANET");
+#         C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE INTRANET");
         $secure = 1;
     }
 

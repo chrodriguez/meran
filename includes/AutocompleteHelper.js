@@ -152,3 +152,11 @@ function CrearAutocompleteAyudaMARC(options){
 					});	
 }
 
+function CrearAutocompleteUI(options){
+    _CrearAutocomplete({
+                            IdInput: options.IdInput, 
+                            IdInputHidden: options.IdInputHidden, 
+                            accion: 'autocomplete_UI', 
+                            callBackFunction: options.callBackFunction,
+                    }); 
+}

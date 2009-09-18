@@ -33,6 +33,7 @@ LLENE_EL_CAMPO= "[% 'Llene el campo' | i18n %]";
 CATALOGO_ALERT_TITLE= "[% 'Advertencia de cat\u00e1logo' | i18n %]";
 BORRAR_CANTIDAD_DE_EJEMPLARES = "[% 'Borrar Cantidad de ejemplares?' %]";
 BORRAR_LISTA_DE_CODIGOS = "[% 'Borrar lista de codigos de barras?' %]";
+SELECCIONE_EL_ESQUEMA = "[% 'Seleccione el esquema' %]";
 //=============================================Fin===Catalogacion=================================================
 
 //================================================Usuarios========================================================

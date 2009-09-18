@@ -28,6 +28,27 @@ __PACKAGE__->meta->setup(
 );
 
 
+sub load{
+    my $self = $_[0]; # Copy, not shift
+
+    eval {
+    
+         unless( $self->SUPER::load(speculative => 1) ){
+                 C4::AR::Debug::debug("CatNivel1=>  dentro del unless, no existe el objeto SUPER load");
+                 return ( 0 );
+         }
+
+        C4::AR::Debug::debug("CatNivel1=>  SUPER load");
+        return $self->SUPER::load(@_);
+    };
+
+    if($@){
+        C4::AR::Debug::debug("CatNivel1=>  no existe el objeto");
+        return ( 0 );
+    }
+}
+
+
 sub agregar{
     my ($self)=shift;
 	
@@ -56,19 +77,22 @@ sub agregar{
 
 	$self->save();
 
-    my $id1= $self->getId1;
+    my $id1 = $self->getId1;
 
     #Se guradan los datos en Nivel 1 repetibles
     foreach my $infoNivel1 (@arrayNivel1Repetibles){
         $infoNivel1->{'id1'}= $id1;
-
+# SI NO EXISTE EL rep_n1_id hay q crear una tupla, puede q sea un registro importado que no tenia este dato
         my $nivel1Repetible;
 
-        if ($data_hash->{'modificado'}){
-C4::AR::Debug::debug('Se va a modificar CatNivel1, rep_n1_id: '. $infoNivel1->{'rep_n1_id'});
-            $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db, rep_n1_id => $infoNivel1->{'rep_n1_id'});
+#         if ($data_hash->{'modificado'} && $infoNivel1->{'rep_n1_id'} != 0){
+#          if ( $infoNivel1->{'rep_n1_id'} != 0 ){
+        if ( $infoNivel1->{'Id_rep'} != 0 ){
+            C4::AR::Debug::debug("CatNivel1 => agregar => Se va a modificar CatNivel1, Id_rep: ". $infoNivel1->{'Id_rep'});
+            $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db, rep_n1_id => $infoNivel1->{'Id_rep'});
             $nivel1Repetible->load();
         }else{
+            C4::AR::Debug::debug("CatNivel1 => agregar => No existe el REPETIBLE se crea uno");
             $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db);
         }
 
@@ -82,6 +106,7 @@ C4::AR::Debug::debug('Se va a modificar CatNivel1, rep_n1_id: '. $infoNivel1->{'
 			}else{
 				$nivel1Repetible->dato($infoNivel1->{'dato'});
 		}
+
         $nivel1Repetible->save(); 
     }
 
@@ -116,7 +141,8 @@ sub setDato{
 
 	if( ($data_hash->{'campo'} eq '245')&&($data_hash->{'subcampo'} eq 'a') ){
 	#titulo
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+        if( $data_hash->{'referencia'} ){
 			$self->setTitulo($data_hash->{'datoReferencia'});
 		}else{
 			$self->setTitulo($data_hash->{'dato'});
@@ -125,10 +151,15 @@ sub setDato{
 	
 	if( ($data_hash->{'campo'} eq '110')&&($data_hash->{'subcampo'} eq 'a') ){  
 	#autor
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+        if( $data_hash->{'referencia'} ){
 			$self->setAutor($data_hash->{'datoReferencia'});
+            C4::AR::Debug::debug("CatNivel1 => agregar => datoReferencia: ".$data_hash->{'datoReferencia'});
 		}else{
 			$self->setAutor($data_hash->{'dato'});
+            C4::AR::Debug::debug("CatNivel1 => agregar => dato: ".$data_hash->{'dato'});
+            C4::AR::Debug::debug("CatNivel1 => agregar => datoReferencia: ".$data_hash->{'datoReferencia'});
+            C4::AR::Debug::debug("CatNivel1 => agregar => modificado: ".$data_hash->{'modificado'});
 		}
 	}
 }
@@ -182,7 +213,8 @@ sub setTimestamp{
 # ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
 
 =item
-Esta funcion devuelve los campos de nivel 1 mapeados en un arreglo de {campo, subcampo, dato}
+Esta funcion devuelve los campos de nivel 1 mapeados en un arreglo de {campo, subcampo, dato},
+ademas si es una referencia, setea el dato referente
 =cut
 sub toMARC{
     my ($self) = shift;
@@ -250,9 +282,10 @@ sub nivel1CompletoToMARC{
 		$hash{'dato'}= $dato;
 
  		push(@$marc_array, \%hash);
-C4::AR::Debug::debug("nivel1CompletoToMARC => ".$campo.", ".$subcampo."  ".$dato);	
+        C4::AR::Debug::debug("CatNivel1 => nivel1CompletoToMARC => nivel1CompletoToMARC => ".$campo.", ".$subcampo."  ".$dato);	
 	}
-C4::AR::Debug::debug("nivel1CompletoToMARC => cant: ".scalar(@$marc_array));
+    
+    C4::AR::Debug::debug("CatNivel1 => nivel1CompletoToMARC => cant: ".scalar(@$marc_array));
 	
 	return ($marc_array);
 }

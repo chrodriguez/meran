@@ -237,14 +237,30 @@ function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL= 1;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug= true;
-	objAH.cache= true;
-//     objAH.showStatusIn = 'nivel1Tabla';
+// 	objAH.cache= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel= _NIVEL_ACTUAL;
     
     objAH.id_tipo_doc= 'ALL';
     objAH.sendToServer();
+}
+
+
+function mostrarDataNivel(){
+
+    if (MODIFICAR){
+        for (x=0; x<COMPONENTES_ARRAY.length; x++){
+            if(x < DATA_ARRAY.length){
+                //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
+                $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+                if(DATA_ARRAY[x].referencia == 1){
+                    COMPONENTES_ARRAY[x].datoReferencia = DATA_ARRAY[x].datoReferencia;
+                    $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
+                }
+            }
+        }
+   }
 }
 
 function mostrarDataNivel1(){
@@ -260,7 +276,8 @@ function mostrarDataNivel1(){
                     $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
                 }
 
-                COMPONENTES_ARRAY[x].rep_n1_id = DATA_ARRAY[x].id_rep;
+// FIXME DEPRECATED, se usa Id_rep
+//                 COMPONENTES_ARRAY[x].rep_n1_id = DATA_ARRAY[x].id_rep;
             }
         }
    }
@@ -280,8 +297,8 @@ function mostrarDataNivel2(){
                     COMPONENTES_ARRAY[x].datoReferencia = DATA_ARRAY[x].datoReferencia;
                     $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
                 }
-
-                COMPONENTES_ARRAY[x].rep_n2_id = DATA_ARRAY[x].id_rep;
+// FIXME DEPRECATED, se usa Id_rep
+//                 COMPONENTES_ARRAY[x].rep_n2_id = DATA_ARRAY[x].id_rep;
             }
         }
    }
@@ -301,7 +318,8 @@ function mostrarDataNivel3(){
                     $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
                 }
 
-                COMPONENTES_ARRAY[x].rep_n3_id = DATA_ARRAY[x].id_rep;
+// FIXME DEPRECATED, se usa Id_rep
+//                 COMPONENTES_ARRAY[x].rep_n3_id = DATA_ARRAY[x].id_rep;
             }
         }
    }
@@ -314,7 +332,8 @@ function updateMostrarEstructuraDelNivel1(responseText){
     //ademas se carga el arreglo COMPONENTES_ARRAY donde se hace el mapeo de componente del cliente y dato
     procesarInfoJson(responseText); 
     //carga los datos en los campos solo si se esta modificando
-    mostrarDataNivel1();
+//     mostrarDataNivel1();
+    mostrarDataNivel();
     scrollTo('nivel1Tabla');
     
 	//asigno el handler para el validador
@@ -325,7 +344,7 @@ function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL= 2;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug= true;
-	objAH.cache= true;
+// 	objAH.cache= true;
     objAH.showStatusIn = 'estructuraDelNivel2';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -339,7 +358,8 @@ function updateMostrarEstructuraDelNivel2(responseText){
     _showAndHiddeEstructuraDelNivel(2);
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
-	mostrarDataNivel2();
+// 	mostrarDataNivel2();
+    mostrarDataNivel();
     scrollTo('nivel2Tabla');
     
 	//asigno el handler para el validador
@@ -363,7 +383,7 @@ function mostrarEstructuraDelNivel3(){
 
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel3);
     objAH.debug= true;
-	objAH.cache= true;
+// 	objAH.cache= true;
     objAH.showStatusIn = 'estructuraDelNivel3';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -378,7 +398,8 @@ function updateMostrarEstructuraDelNivel3(responseText){
 	TAB_INDEX= 0;
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
-	mostrarDataNivel3();
+// 	mostrarDataNivel3();
+    mostrarDataNivel();
     scrollTo('nivel3Tabla');
 	
 	//asigno el handler para el validador
@@ -433,10 +454,15 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
 }
 
 function agregarN2(){
-	MODIFICAR = 0;
-    AGREGAR_COMPLETO = 0;
-	mostrarEstructuraDelNivel2();
-    inicializarSideLayers();
+    if( (TIENE_NIVEL_2 == 0)&&($('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') ){
+        jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
+        $('#tipo_nivel3_id').focus();
+    }else{
+        MODIFICAR = 0;
+        AGREGAR_COMPLETO = 0;
+        mostrarEstructuraDelNivel2();
+        inicializarSideLayers();
+    }
 }
 
 function agregarN3(){
@@ -838,12 +864,7 @@ function procesarObjeto(objeto){
 			//se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
 			comp= crearComponente('hidden',objeto.idCompCliente + '_hidden','','');
 			 $(comp).appendTo("#"+idDiv);
-// FIXME falta recuperar la data y dejar el ID en el input hidden
-// 			if(MODIFICAR != 1){
-				_cambiarIdDeAutocomplete();
-// 			}else{	
-			//busco el dato segun el ID $('#' + objeto.idCompCliente + '_hidden').val() y lo agrego en $('#' + objeto.idCompCliente ).val()
-// 			}
+			_cambiarIdDeAutocomplete();
         break;
 		case "calendar":
             //tipo,id,opciones,valor
@@ -874,6 +895,7 @@ function _cambiarIdDeAutocomplete(){
     }
 }
 
+//crea el Autocomplete segun lo indicado en el parametro "referenciaTabla"
 function _cearAutocompleteParaCamponente(o){
 
 	switch(o.referenciaTabla){
@@ -892,6 +914,9 @@ function _cearAutocompleteParaCamponente(o){
 		case "ciudad": CrearAutocompleteCiudades(	{IdInput: o.idCompCliente, 
 													IdInputHidden: o.idCompCliente + '_hidden' }
 									);
+        case "ui": CrearAutocompleteUI(   {IdInput: o.idCompCliente, 
+                                                    IdInputHidden: o.idCompCliente + '_hidden' }
+                                    );
 
         break;
 	}
@@ -945,8 +970,7 @@ function crearComponente(tipo,id,objeto,valor){
 function hacerComponenteObligatoria(idObj){
     $("#"+idObj).addClass("obligatorio");
     $("#"+idObj).addClass("required");
-//     $("<b> * </b>").insertAfter($("#"+idObj));
-    agrearAHash(HASH_RULES, idObj, 'required');
+    agrearAHash(HASH_RULES, idObj, "required");
     agrearAHash(HASH_MESSAGES, idObj, ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO);    
 }
 
@@ -1078,14 +1102,15 @@ function updateBorrarEjemplaresN3(responseText){
  */
 function modificarN1(id1){
 	inicializar();
+    ID_N1 = id1;
 	objAH = new AjaxHelper(updateModificarN1);
 	objAH.url = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showStatusIn = "centro";
 	objAH.debug = true;
-    objAH.cache = true;
+//     objAH.cache = true;
 	objAH.tipoAccion = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype = "ALL";
-	objAH.id = id1;
+	objAH.id = ID_N1;
 	objAH.nivel = 1;
 	objAH.sendToServer();
 }
@@ -1094,19 +1119,25 @@ function updateModificarN1(responseText){
     MODIFICAR = 1;
     //se genera un arreglo de objetos con la informacion guardada, campo, subcampo    
     DATA_ARRAY = JSONstring.toObject(responseText);
-    mostrarEstructuraDelNivel1();
+//FIXME estoy probado esto
+    _NIVEL_ACTUAL = 1;
+    updateMostrarEstructuraDelNivel1(responseText);
+// fin prueba
+// parece q no es necesario llamar y hacer otro ajax para traer la estructura, se reusa la estructura q viene con los datos
+//     mostrarEstructuraDelNivel1();
 }
 
 function modificarN2(id2){
-   inicializar();
+    inicializar();
+    ID_N2 = id2;
     objAH=new AjaxHelper(updateModificarN2);
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showStatusIn = "centro";
     objAH.debug= true;
-    objAH.cache = true;
+//     objAH.cache = true;
     objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
     objAH.itemtype=$("#id_tipo_doc").val();
-    objAH.id = id2;
+    objAH.id = ID_N2;
     objAH.nivel = 2;
     objAH.sendToServer();
 }
@@ -1114,7 +1145,12 @@ function modificarN2(id2){
 function updateModificarN2(responseText){
    MODIFICAR = 1;
    DATA_ARRAY = JSONstring.toObject(responseText);
-   mostrarEstructuraDelNivel2();
+// parece q no es necesario llamar y hacer otro ajax para traer la estructura, se reusa la estructura q viene con los datos
+//    mostrarEstructuraDelNivel2();
+//FIXME estoy probado esto
+    _NIVEL_ACTUAL = 2;
+    updateMostrarEstructuraDelNivel2(responseText);
+// fin prueba
 }
 
 function modificarN3(id3){
@@ -1123,12 +1159,12 @@ function modificarN3(id3){
 	objAH=new AjaxHelper(updateModificarN3);
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug= true;
-    objAH.cache = true;
+//     objAH.cache = true;
     objAH.showStatusIn = "centro";
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype=$("#id_tipo_doc").val();
- 	objAH.id3 = id3;
- 	ID3_ARRAY[0]= id3;
+ 	objAH.id3 = ID_N3;
+ 	ID3_ARRAY[0]= ID_N3;
 	objAH.nivel = 3;
 	objAH.sendToServer();
 }
@@ -1137,7 +1173,12 @@ function updateModificarN3(responseText){
 	MODIFICAR = 1;
 	$('#divCantEjemplares').hide();	
 	DATA_ARRAY = JSONstring.toObject(responseText);
-	mostrarEstructuraDelNivel3();
+// parece q no es necesario llamar y hacer otro ajax para traer la estructura, se reusa la estructura q viene con los datos
+// 	mostrarEstructuraDelNivel3();
+//FIXME estoy probado esto
+    _NIVEL_ACTUAL = 3;
+    updateMostrarEstructuraDelNivel3(responseText);
+// fin prueba
 }
 
 /*
