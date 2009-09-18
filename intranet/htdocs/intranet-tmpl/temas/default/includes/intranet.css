@@ -1238,3 +1238,8 @@ input.file {
 .datos_tabla td{
   text-align:center;
 }
+
+.warning{
+    background-color: #990000;
+    color: InfoBackground;
+}

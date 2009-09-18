@@ -131,6 +131,13 @@ DEBE_SELECCIONAR_UNA_TABLA_DE_REFERENCIA= "[% 'Debe seleccionar una tabla de ref
 DEBE_SELECCIONAR_UN_VALOR_AUTORIZADO= "[% 'Debe seleccionar un valor autorizado' | i18n %]";
 
 ADMIN_TITLE= "[% 'Advertencia de Administraci\u00f3n' | i18n %]";
+
+TITLE_FIRST_ASSIGN_REFERENCIES = "[% 'Desea asignar el elemento con clave ' | i18n %]";
+
+TITLE_FIRST_ASSIGN_DELETE_REFERENCIES = "[% 'Desea asignar y eliminar el elemento con clave ' | i18n %]";
+
+TITLE_TO_ASSIGN_REFERENCIES = "[% ' a este otro? ' | i18n %]";
+
 //=================================================Fin===Admin=======================================================
 
 </script>

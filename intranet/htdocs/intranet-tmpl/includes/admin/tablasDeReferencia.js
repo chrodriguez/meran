@@ -28,26 +28,36 @@ function mostrarReferencias(tabla,value_id){
 }
 
 
-function asignarReferencia(tabla,referer_involved,related_id){
-    objAH=new AjaxHelper(updateObtenerTabla);
-    objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
-    objAH.cache = false;
+function asignarReferencia(tabla,related_id,referer_involved){
 
-    objAH.accion="ASIGNAR_REFERENCIA";
-    objAH.referer_involved= referer_involved;
-    objAH.alias_tabla = tabla;
-    objAH.related_id = related_id;
-    objAH.sendToServer();
+    jConfirm(TITLE_FIRST_ASSIGN_REFERENCIES+referer_involved+TITLE_TO_ASSIGN_REFERENCIES+related_id,"Titulo",function(confirmed){
+        if (confirmed){
+            objAH=new AjaxHelper(updateObtenerTabla);
+            objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
+            objAH.cache = false;
+            objAH.accion="ASIGNAR_REFERENCIA";
+            objAH.referer_involved= referer_involved;
+            objAH.alias_tabla = tabla;
+            objAH.related_id = related_id;
+            objAH.sendToServer();
+        }
+    });
 }
 
-function asignarEliminarReferencia(tabla,referer_involved,related_id){
-    objAH=new AjaxHelper(updateObtenerTabla);
-    objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
-    objAH.cache = false;
+function asignarEliminarReferencia(tabla,related_id,referer_involved){
+    $('#fieldset_tablaResult_involved').addClass("warning");
+    jConfirm(TITLE_FIRST_ASSIGN_DELETE_REFERENCIES+referer_involved+TITLE_TO_ASSIGN_REFERENCIES+related_id,"Titulo",function(confirmed){
+        if (confirmed){
+            objAH=new AjaxHelper(updateObtenerTabla);
+            objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
+            objAH.cache = false;
+            objAH.accion="ASIGNAR_Y_ELIMINAR_REFERENCIA";
+            objAH.alias_tabla = tabla;
+            objAH.referer_involved= referer_involved;
+            objAH.related_id = related_id;
+            objAH.sendToServer();
+        }
+        $('#fieldset_tablaResult_involved').removeClass("warning");
+    });
 
-    objAH.accion="ASIGNAR_Y_ELIMINAR_REFERENCIA";
-    objAH.alias_tabla = tabla;
-    objAH.referer_involved= referer_involved;
-    objAH.related_id = related_id;
-    objAH.sendToServer();
 }
