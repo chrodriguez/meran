@@ -2,7 +2,6 @@
 
 <script>
         function verEstante(estante){
-
                 objAH=new AjaxHelper(updateVerEstante);
                 objAH.debug= true;
                 objAH.url= 'estanteDB.pl';
@@ -13,10 +12,10 @@
 
         function updateVerEstante(responseText){
                 $('#subestante').html(responseText);
+                makeToggle('datos_tabla_div_estantes','trigger',null,true);
         }
 
         function verSubEstantes(estante,subestante){
-
                 objAH=new AjaxHelper(updateVerSubEstantes);
                 objAH.debug= true;
                 objAH.url= 'estanteDB.pl';
@@ -28,10 +27,13 @@
 
         function updateVerSubEstantes(responseText){
             $('#subestante-'+ objAH.padre).html(responseText);
+            //makeToggle('datos_tabla_div_estantes','trigger',null,true);
+            makeToggle('datos_tabla_div_subestante_'+objAH.padre,'trigger',null,true);
+            zebra('datos_tabla');
         }
 
       $(document).ready(function() {
-        makeToggle('datos_tabla_div_estantes','trigger',null,false);
+        zebrali('datos_tabla_div_estantes');
       });
 
 </script>
