@@ -29,7 +29,7 @@ function mostrarReferencias(tabla,value_id){
 
 
 function asignarReferencia(tabla,related_id,referer_involved){
-
+    $('#fieldset_tablaResult_involved').addClass("warning");
     jConfirm(TITLE_FIRST_ASSIGN_REFERENCIES+referer_involved+TITLE_TO_ASSIGN_REFERENCIES+related_id,"Titulo",function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateObtenerTabla);
@@ -41,6 +41,7 @@ function asignarReferencia(tabla,related_id,referer_involved){
             objAH.related_id = related_id;
             objAH.sendToServer();
         }
+        $('#fieldset_tablaResult_involved').removeClass("warning");
     });
 }
 
