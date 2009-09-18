@@ -16,7 +16,7 @@
         [% PERL %]
                 print C4::AR::Filtros::to_Icon(   
                                                     boton   => "icon_agregar",
-                                                    onClick => "agregarN3();",
+                                                    onClick => "agregarN3('[% nivel2.getId2 %]');",
                                                     title   => "[% 'Agregar nivel 3' | i18n %]",
                                                     li => 1,
                         ) ;

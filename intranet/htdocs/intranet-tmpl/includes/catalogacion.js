@@ -237,7 +237,7 @@ function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL= 1;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug= true;
-// 	objAH.cache= true;
+	objAH.cache= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel= _NIVEL_ACTUAL;
@@ -263,68 +263,6 @@ function mostrarDataNivel(){
    }
 }
 
-function mostrarDataNivel1(){
-
-    if (MODIFICAR){
-        for (x=0; x<COMPONENTES_ARRAY.length; x++){
-            if(x < DATA_ARRAY.length){
-            //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"    
-                
-                $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-                if(DATA_ARRAY[x].referencia == 1){
-                    COMPONENTES_ARRAY[x].datoReferencia = DATA_ARRAY[x].datoReferencia;
-                    $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
-                }
-
-// FIXME DEPRECATED, se usa Id_rep
-//                 COMPONENTES_ARRAY[x].rep_n1_id = DATA_ARRAY[x].id_rep;
-            }
-        }
-   }
-}
-
-function mostrarDataNivel2(){
-
-    if (MODIFICAR){
-        for (x=0; x<COMPONENTES_ARRAY.length; x++){
-            if(x < DATA_ARRAY.length){
-                //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
-//                 $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-//                 COMPONENTES_ARRAY[x].rep_n2_id = DATA_ARRAY[x].id_rep;
-
-                $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-                if(DATA_ARRAY[x].referencia == 1){
-                    COMPONENTES_ARRAY[x].datoReferencia = DATA_ARRAY[x].datoReferencia;
-                    $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
-                }
-// FIXME DEPRECATED, se usa Id_rep
-//                 COMPONENTES_ARRAY[x].rep_n2_id = DATA_ARRAY[x].id_rep;
-            }
-        }
-   }
-}
-
-function mostrarDataNivel3(){
-
-    if (MODIFICAR){
-        for (x=0; x<COMPONENTES_ARRAY.length; x++){
-            if(x < DATA_ARRAY.length){
-                //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
-//                 $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-//                 COMPONENTES_ARRAY[x].rep_n3_id = DATA_ARRAY[x].id_rep;
-                $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-                if(DATA_ARRAY[x].referencia == 1){
-                    COMPONENTES_ARRAY[x].datoReferencia = DATA_ARRAY[x].datoReferencia;
-                    $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
-                }
-
-// FIXME DEPRECATED, se usa Id_rep
-//                 COMPONENTES_ARRAY[x].rep_n3_id = DATA_ARRAY[x].id_rep;
-            }
-        }
-   }
-}
-
 function updateMostrarEstructuraDelNivel1(responseText){
     _clearContentsEstructuraDelNivel();
     _showAndHiddeEstructuraDelNivel(1);
@@ -332,7 +270,6 @@ function updateMostrarEstructuraDelNivel1(responseText){
     //ademas se carga el arreglo COMPONENTES_ARRAY donde se hace el mapeo de componente del cliente y dato
     procesarInfoJson(responseText); 
     //carga los datos en los campos solo si se esta modificando
-//     mostrarDataNivel1();
     mostrarDataNivel();
     scrollTo('nivel1Tabla');
     
@@ -344,7 +281,7 @@ function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL= 2;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug= true;
-// 	objAH.cache= true;
+	objAH.cache= true;
     objAH.showStatusIn = 'estructuraDelNivel2';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -358,7 +295,6 @@ function updateMostrarEstructuraDelNivel2(responseText){
     _showAndHiddeEstructuraDelNivel(2);
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
-// 	mostrarDataNivel2();
     mostrarDataNivel();
     scrollTo('nivel2Tabla');
     
@@ -383,7 +319,7 @@ function mostrarEstructuraDelNivel3(){
 
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel3);
     objAH.debug= true;
-// 	objAH.cache= true;
+	objAH.cache= true;
     objAH.showStatusIn = 'estructuraDelNivel3';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -398,7 +334,6 @@ function updateMostrarEstructuraDelNivel3(responseText){
 	TAB_INDEX= 0;
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
-// 	mostrarDataNivel3();
     mostrarDataNivel();
     scrollTo('nivel3Tabla');
 	
@@ -465,7 +400,8 @@ function agregarN2(){
     }
 }
 
-function agregarN3(){
+function agregarN3( id2){
+    ID_N2 = id2; 
 	MODIFICAR = 0;
 	$('#divCantEjemplares').show();
 	mostrarEstructuraDelNivel3();
@@ -485,8 +421,12 @@ function mostrarInfoAltaNivel1(id1){
 }
 
 function updateMostrarInfoAltaNivel1(responseText){
-    $('#nivel1Tabla').slideUp('slow');
-    $('#estructuraDelNivel1').html('');
+    if((MODIFICAR == 0)&&(_NIVEL_ACTUAL == 1)){
+    //si no se esta modificando y es el NIVEL 1
+        $('#nivel1Tabla').slideUp('slow');
+        $('#estructuraDelNivel1').html('');
+    }
+
     $('#nivel1').html(responseText);
 }
 
@@ -503,8 +443,12 @@ function mostrarInfoAltaNivel2(id2){
 }
 
 function updateMostrarInfoAltaNivel2(responseText){
-    $('#nivel2Tabla').slideUp('slow');
-    $('#estructuraDelNivel2').html('');
+    if((MODIFICAR == 0)&&(_NIVEL_ACTUAL == 2)){
+    //si no se esta modificando y es el NIVEL 1
+        $('#nivel2Tabla').slideUp('slow');
+        $('#estructuraDelNivel2').html('');
+    }
+
     $('#nivel2').html(responseText);
 }
 
@@ -753,8 +697,6 @@ function guardar(nivel){
     }
     if(nivel == 3){
         $('#formNivel3').submit(); //hace el submit
-// FIXME
-// 		guardarDocumentoN3(); //ojo asi no va a validad
     }
 }
 
@@ -1107,7 +1049,7 @@ function modificarN1(id1){
 	objAH.url = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showStatusIn = "centro";
 	objAH.debug = true;
-//     objAH.cache = true;
+    objAH.cache = true;
 	objAH.tipoAccion = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype = "ALL";
 	objAH.id = ID_N1;
@@ -1134,7 +1076,7 @@ function modificarN2(id2){
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showStatusIn = "centro";
     objAH.debug= true;
-//     objAH.cache = true;
+    objAH.cache = true;
     objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
     objAH.itemtype=$("#id_tipo_doc").val();
     objAH.id = ID_N2;
@@ -1159,7 +1101,7 @@ function modificarN3(id3){
 	objAH=new AjaxHelper(updateModificarN3);
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug= true;
-//     objAH.cache = true;
+    objAH.cache = true;
     objAH.showStatusIn = "centro";
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype=$("#id_tipo_doc").val();
