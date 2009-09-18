@@ -13,22 +13,26 @@
         <div class="datos_tabla_div_referenced" id="datos_tabla_div">
             <table id="tablaResult_involved" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
               [% IF referer_involved %]
-                <tr class="titulo_tabla_resultado">
-                    [% FOREACH campo IN referer_involved.getCamposAsArray %]
-                        <th> [% campo %]</th>
+                  <thead>
+                      <tr class="titulo_tabla_resultado">
+                          [% FOREACH campo IN referer_involved.getCamposAsArray %]
+                              <th> [% campo %]</th>
+                          [% END %]
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          [% referer_involved.printAsTableElement %]
+                      </tr>
+                    [% ELSE %]
+                      <tr class="titulo_tabla_resultado">
+                          <td>[% "Campos" | i18n %]</td>
+                      </tr>
+                      <tr>
+                          <td>[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</td>
+                      </tr>
                     [% END %]
-                </tr>
-                <tr>
-                    [% referer_involved.printAsTableElement %]
-                </tr>
-              [% ELSE %]
-                <tr class="titulo_tabla_resultado">
-                    <td>[% "Campos" | i18n %]</td>
-                </tr>
-                <tr>
-                    <td>[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</td>
-                </tr>
-              [% END %]
+                </tbody>
             </table>
         </div>
 </fieldset>
@@ -37,18 +41,22 @@
     <legend class="titulo_legend trigger click">[% "Relaciones " | i18n %]: [% tabla %]</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
             <table id="tablaResult_relacionados" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
-                <tr class="titulo_tabla_resultado">
-                        <th> [% "Tablas relacionadas " | i18n %]</th>
-                </tr>
-                <tr>
-                    [% IF involved %]
-                        [% FOREACH data IN involved %]
-                            <td> [% "El registro tiene " | i18n %][% data.cantidad %][% " tuplas relacionadas en la tabla " | i18n %] [% data.tabla %]</td>
+                <thead>
+                    <tr class="titulo_tabla_resultado">
+                            <th> [% "Tablas relacionadas " | i18n %]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        [% IF involved %]
+                            [% FOREACH data IN involved %]
+                                <td> [% "El registro tiene " | i18n %][% data.cantidad %][% " tuplas relacionadas en la tabla " | i18n %] [% data.tabla %]</td>
+                            [% END %]
+                        [% ELSE %]
+                              <td>[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</td>
                         [% END %]
-                    [% ELSE %]
-                          [% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]
-                    [% END %]
-                </tr>
+                    </tr>
+                </tbody>
             </table>
         </div>
 </fieldset>

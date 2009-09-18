@@ -1234,3 +1234,7 @@ input.file {
 .dataTables_info{
   background-color: #999900;
 }
+
+.datos_tabla td{
+  text-align:center;
+}

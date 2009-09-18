@@ -194,9 +194,9 @@ sub to_Icon{
     }
 
     if($params_hash_ref{'li'}){
-        $button .=  '<li id="'.$boton.'" class="click '.$alternClass.'" onClick="'.$onClick;
+        $button .=  '<li id="'.$boton.'" class="click '.$alternClass.'" onClick="'.$onClick.'"';
     }else{
-        $button .=  $open_elem.' id="'.$boton.'" class="click '.$alternClass.'" onClick="'.$onClick.'"'.'"'.'" style="'.$style.'"';
+        $button .=  $open_elem.' id="'.$boton.'" class="click '.$alternClass.'" onClick="'.$onClick.'"'.' style="'.$style.'"';
     }
 
     if($title){
