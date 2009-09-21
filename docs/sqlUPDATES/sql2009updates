@@ -1027,3 +1027,8 @@ CHANGE `shelfnumber` `id_estante` INT( 11 ) NOT NULL DEFAULT '0';
  ALTER TABLE `cat_nivel3_repetible` CHANGE `dato` `dato` VARCHAR( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
 
  ALTER TABLE `cat_nivel1_repetible` CHANGE `dato` `dato` VARCHAR( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+
+
+--ciudad_publicacion
+
+ALTER TABLE `cat_nivel2` CHANGE `ciudad_publicacion` `ciudad_publicacion` VARCHAR( 255 );

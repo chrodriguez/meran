@@ -15,7 +15,7 @@ __PACKAGE__->meta->setup(
         soporte             => { type => 'varchar', length => 3, not_null => 1 },
         pais_publicacion    => { type => 'character', length => 2, not_null => 1 },
         lenguaje            => { type => 'character', length => 2, not_null => 1 },
-        ciudad_publicacion  => { type => 'varchar', length => 20, not_null => 1 },
+        ciudad_publicacion  => { type => 'varchar', length => 255, not_null => 1 },
         anio_publicacion    => { type => 'varchar', length => 15 },
         timestamp           => { type => 'timestamp' },
     ],

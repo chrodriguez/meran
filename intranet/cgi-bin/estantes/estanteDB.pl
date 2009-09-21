@@ -21,7 +21,7 @@ if(($tipo eq "VER_ESTANTE")||($tipo eq "VER_SUBESTANTE")){
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'estantes_virtuales'},
+					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 					});
 	
 	my $id_estante= $obj->{'estante'};
@@ -38,7 +38,7 @@ elsif($tipo eq "BORRAR_ESTANTES"){
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'BAJA', 
-                                                    entorno => 'estantes_virtuales' },
+                                                    entorno => 'undefined' },
                                                 'intranet'
                                );
 

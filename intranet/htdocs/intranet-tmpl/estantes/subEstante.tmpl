@@ -13,9 +13,16 @@
             <div style="position: relative; float:right;">
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_agregar",
+                                                                    onClick => "agregarEstante();",
+                                                                    title   => "[% 'Agregar subestante' | i18n %]",
+                                        ) ;
+            [% END %]
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_edicion",
                                                                     onClick => "editarEstante([% estante.getId %]);",
-                                                                    title   => "[% 'Editar estante' | i18n %]",
+                                                                    title   => "[% 'Editar estante actual' | i18n %]",
                                         ) ;
             [% END %]
             [% PERL %]
@@ -93,6 +100,23 @@
                 [% END %]
                 </tbody>
             </table>
+            <div style="position: relative; float:right;">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_agregar",
+                                                                    onClick => "agregarContenido();",
+                                                                    title   => "[% 'Agregar contenido' | i18n %]",
+                                        ) ;
+            [% END %]
+
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_borrar",
+                                                                    onClick => "borrarContenidoSeleccionados([% estante.getId %]);",
+                                                                    title   => "[% 'Borrar seleccionados' | i18n %]",
+                                        ) ;
+            [% END %]
+            </div>
         </div>
 </fieldset>
 [% ELSE %]

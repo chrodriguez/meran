@@ -69,14 +69,8 @@ sub getEstante {
 sub borrarEstantes {
     my ($estantes_array_ref)=@_;
 
-    my ($aux_estante) = C4::Modelo::CatEstante->new();
-
     my $msg_object= C4::AR::Mensajes::create();
     $msg_object->{'tipo'}="INTRA";
-
-    my $db = $aux_estante->db;
-    $db->{connect_options}->{AutoCommit} = 0;
-    $db->begin_work;
 
 
         foreach my $id_estante (@$estantes_array_ref){

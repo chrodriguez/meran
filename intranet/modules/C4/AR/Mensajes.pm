@@ -324,8 +324,8 @@ my %mensajesINTRA = (
     'SP024' => 'No se pudo eliminar la regla.',
     'UT001' => 'Se rompio Utilidades::from_json_ISO',
     'VA001' => 'Error de parametros, inconsistentes o faltantes, don\'t HACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
-    'E001' => 'No se pudo borrar el estante "*?*", ya que el mismo posee contenido. Elimine todo contenido antes de borrar el estante actual.',
-    'E002' => 'No se pudo borrar el estante "*?*", ya que el mismo posee subestantes.Elimine todos los subestantes antes de borrar el estante actual.',
+    'E001' => 'No se pudo borrar el estante "*?*", ya que el mismo posee contenido.',
+    'E002' => 'No se pudo borrar el estante "*?*", ya que el mismo posee subestantes.',
 	'E003' => 'Se produjo un error al tratar de eliminar el estante "*?*" .',
     'E004' => 'El estante "*?*" se elimin&oacute; con &eacute;xito.',
 );
