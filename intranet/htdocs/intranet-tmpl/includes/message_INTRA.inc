@@ -141,4 +141,10 @@ TITLE_TO_ASSIGN_REFERENCIES = "[% ' a este otro? ' | i18n %]";
 
 //=================================================Fin===Admin=======================================================
 
+//====================================================Estante==========================================================
+ELIMINAR_ESTANTE_TITLE =  "[% 'Advertencia' | i18n %]";
+ELIMINAR_LOS_ESTANTES = "[% 'Usted est\u00e1 a punto de eliminar los estantes' | i18n %]";
+NO_SE_SELECCIONO_NINGUN_ESTANTE= "[% 'No seleccion\u00f3 ning\u00fan estante' | i18n %]";
+//=================================================Fin===Estante=======================================================
+
 </script>

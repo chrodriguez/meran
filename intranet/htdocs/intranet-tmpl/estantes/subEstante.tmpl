@@ -1,16 +1,40 @@
 
+
+<script>
+      $(document).ready(function() {
+               makeToggle('datos_tabla_div_subestante_[% estante.getId %]','trigger',null,false);
+      });
+</script>
+
 <div id="contenido-[% estante.getId %]">
 <fieldset class="resultados_busqueda">
-<legend class="titulo_legend trigger click"> [% estante.getEstante %]</legend>
+<legend class="titulo_legend trigger click"> [% estante.getEstante %] </legend>
         <div class="datos_tabla_div_subestante_[% estante.getId %]">
+            <div style="position: relative; float:right;">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_edicion",
+                                                                    onClick => "editarEstante([% estante.getId %]);",
+                                                                    title   => "[% 'Editar estante' | i18n %]",
+                                        ) ;
+            [% END %]
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_borrar",
+                                                                    onClick => "borrarEstantesSeleccionados([% estante.getId %]);",
+                                                                    title   => "[% 'Borrar seleccionados' | i18n %]",
+                                        ) ;
+            [% END %]
+            </div>
            <ul>
             [% FOREACH subestante IN SUBESTANTES %]
              <li>
+             <input type=checkbox name="[% subestante.getEstante %]" value="[% subestante.getId %]">
               <a class="click" onClick="verSubEstantes([% estante.getId %],[% subestante.getId %])">[% subestante.getEstante %]</a>
             </li>
             [% END %]
            </ul>
-
+[% IF estante.contenido %]
 <fieldset class="resultados_busqueda">
 <legend class="titulo_legend">[% "Contenido" | i18n %] :</legend>
         <div class="datos_tabla_div">
@@ -71,6 +95,9 @@
             </table>
         </div>
 </fieldset>
+[% ELSE %]
+[% "Sin contenido" | i18n %]
+[% END %]
  </div>
 </fieldset>
 </div>

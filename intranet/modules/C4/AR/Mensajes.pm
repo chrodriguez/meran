@@ -26,6 +26,7 @@ $VERSION = 0.01;
 #CA600 - CA699 para Control de Autoridades
 #F700 - F799 para Favoritos
 #VO800 - VO899 para Visualizacion Opac
+#E900 - E999 para Estantes
 
 # %mensajes mapea codigo de mensaje con la descripcion del mismo
 my %mensajesOPAC = (
@@ -274,7 +275,7 @@ my %mensajesINTRA = (
 	'B442' => 'Error en funcion C4::AR::ControlAutoridades::t_eliminarSinonimosEditoriales',
 	'B443' => 'Error en funcion C4::AR::ControlAutoridades::t_updateSinonimosAutores',
 	'B444' => 'Error en funcion C4::AR::ControlAutoridades::t_updateSinonimosTemas',
-	'B445' => 'Error en funcion C4::AR::ControlAutoridades::t_updateSinonimosEditoriales',
+	'B445' => 'Error en funcion C4::AR::ContR099rolAutoridades::t_updateSinonimosEditoriales',
 	'B446' => 'Error en funcion C4::AR::VisualizacionOpac::t_updateConfVisualizacion',
 	'C500' => 'Los items fueron guardados correctamente.',
 	'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
@@ -323,7 +324,10 @@ my %mensajesINTRA = (
     'SP024' => 'No se pudo eliminar la regla.',
     'UT001' => 'Se rompio Utilidades::from_json_ISO',
     'VA001' => 'Error de parametros, inconsistentes o faltantes, don\'t HACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
-	
+    'E001' => 'No se pudo borrar el estante "*?*", ya que el mismo posee contenido. Elimine todo contenido antes de borrar el estante actual.',
+    'E002' => 'No se pudo borrar el estante "*?*", ya que el mismo posee subestantes.Elimine todos los subestantes antes de borrar el estante actual.',
+	'E003' => 'Se produjo un error al tratar de eliminar el estante "*?*" .',
+    'E004' => 'El estante "*?*" se elimin&oacute; con &eacute;xito.',
 );
 
 sub getMensaje {
