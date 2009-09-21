@@ -79,7 +79,7 @@
                 <tbody>
                     [% IF related_referers %]
                         [% FOREACH related IN related_referers %]
-                            <tr>
+                            <tr  onClick="mostrarReferencias('[% related.getAlias %]','[% related.getPkValue %]')">
                                 [% related.printAsTableElement %]
                                 <td>
                                     [% PERL %]

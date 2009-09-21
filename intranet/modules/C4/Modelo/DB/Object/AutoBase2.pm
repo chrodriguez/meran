@@ -52,7 +52,7 @@ sub getRelated{
     my ($self)=shift;
     my @filtros;
 
-    my $related = $self->getAll(50,0);
+    my $related = $self->getAll(0,0,1);
 
     return ($related);
 }
@@ -78,6 +78,13 @@ sub toString{
     return $self->meta->class;
 }
 
+sub getTableName{
+
+    my ($self)=shift;
+
+    return $self->meta->table;
+
+}
 =item
 
     CHAIN OF RESPONSIBILITY

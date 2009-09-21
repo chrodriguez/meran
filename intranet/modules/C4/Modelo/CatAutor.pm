@@ -152,16 +152,40 @@ sub getCampo{
 sub getAll{
 
     my ($self) = shift;
-    my ($limit,$offset)=@_;
+    my ($limit,$offset,$matchig_or_not)=@_;
     use C4::Modelo::CatAutor::Manager;
-    
-    my $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor( limit => $limit, offset => $offset);
-        
-    return ($ref_valores);
+    use Text::LevenshteinXS;
+    $matchig_or_not = $matchig_or_not || 0;
+    my @filtros;
+    push(@filtros, (id => {ne => $self->getId}) );
+    my $ref_valores;
+    if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
+        $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor(query => \@filtros,);
+    }else{
+        $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor(query => \@filtros,
+                                                                    limit => $limit, 
+                                                                    offset => $offset, 
+                                                                    sort_by => ['nombre'] 
+                                                                   );
+    }
+    my $self_nombre = $self->getNombre;
+    my $self_apellido = $self->getApellido;
+
+    my $match = 0;
+    if ($matchig_or_not){
+        my @matched_array;
+        foreach my $autor (@$ref_valores){
+          $match = ((distance($self_nombre,$autor->getNombre)<=1) or (distance($self_apellido,$autor->getApellido)<=1));
+          if ($match){
+            push (@matched_array,$autor);
+          }
+        }
+        return (\@matched_array);
+    }
+    else{
+      return($ref_valores);
+    }
 }
-
-#DEVUELVE EL VALOR DE LA CLAVE PRIMARIA
-
 
 1;
 

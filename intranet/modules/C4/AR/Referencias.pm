@@ -587,9 +587,9 @@ sub mostrarSimilares{
     my $tabla = getTablaInstanceByAlias($alias);
     my $refered = $tabla->getByPk($value_id);
 
-    my $related_referers = $tabla->getRelated;
+    my $related_referers = $refered->getRelated;
     
-    my $tabla_related = $tabla->getAlias();
+    my $tabla_related = $refered->getAlias();
 
     return ($tabla_related,$related_referers);
 }
