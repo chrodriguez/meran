@@ -1032,3 +1032,48 @@ CHANGE `shelfnumber` `id_estante` INT( 11 ) NOT NULL DEFAULT '0';
 --ciudad_publicacion
 
 ALTER TABLE `cat_nivel2` CHANGE `ciudad_publicacion` `ciudad_publicacion` VARCHAR( 255 );
+
+
+
+
+
+--
+-- Estructura de tabla para la tabla `pref_tabla_referencia_rel_catalogo`
+--
+
+DROP TABLE IF EXISTS `pref_tabla_referencia_rel_catalogo`;
+CREATE TABLE IF NOT EXISTS `pref_tabla_referencia_rel_catalogo` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `alias_tabla` varchar(32) NOT NULL,
+  `tabla_referente` varchar(32) NOT NULL,
+  `campo_referente` varchar(32) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Volcar la base de datos para la tabla `pref_tabla_referencia_rel_catalogo`
+--
+
+INSERT INTO `pref_tabla_referencia_rel_catalogo` (`id`, `alias_tabla`, `tabla_referente`, `campo_referente`) VALUES
+(1, 'autor', 'cat_nivel1', 'autor'),
+(2, 'ui', 'usr_socio', 'id_ui'),
+(3, 'tipo_ejemplar', 'cat_nivel2', 'tipo_documento'),
+(5, 'ui', 'cat_nivel3', 'id_ui_origen'),
+(6, 'ui', 'cat_nivel3', 'id_ui_poseedora'),
+(7, 'idioma', 'cat_nivel2', 'lenguaje'),
+(8, 'pais', 'cat_nivel2', 'pais_publicacion'),
+(9, 'disponibilidad', 'cat_nivel3', 'id_disponibilidad'),
+(10, 'tipo_prestamo', 'circ_prestamo', 'tipo_prestamo'),
+(11, 'soporte', 'cat_nivel2', 'soporte'),
+(12, 'nivel_bibliografico', 'cat_nivel2', 'nivel_bibliografico'),
+(13, 'tipo_socio', 'usr_socio', 'cod_categoria'),
+(14, 'tipo_documento_usr', 'usr_persona', 'tipo_documento'),
+(15, 'estado', 'cat_nivel3', 'id_estado'),
+(16, 'ciudad', 'usr_persona', 'ciudad');
+
+
+
+
+
+
+
