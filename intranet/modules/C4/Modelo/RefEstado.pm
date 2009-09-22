@@ -104,7 +104,7 @@ sub getAll{
         $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado(query => \@filtros,
                                                                     limit => $limit, 
                                                                     offset => $offset, 
-                                                                    sort_by => ['descripcion'] 
+                                                                    sort_by => ['nombre'] 
                                                                    );
     }
     my $self_nombre = $self->getNombre;

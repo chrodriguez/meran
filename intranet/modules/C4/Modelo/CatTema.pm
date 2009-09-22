@@ -102,9 +102,9 @@ sub getCampo{
 
 
 sub nextMember{
-    use C4::Modelo::UsrRefCategoriaSocio;
+    use C4::Modelo::UsrRefCategoriasSocio;
 
-    return(C4::Modelo::UsrRefCategoriaSocio->new());
+    return(C4::Modelo::UsrRefCategoriasSocio->new());
 }
 
 sub getAll{

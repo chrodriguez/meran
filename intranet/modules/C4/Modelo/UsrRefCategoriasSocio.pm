@@ -15,27 +15,6 @@ __PACKAGE__->meta->setup
     relationships => [],
 );
 
-# 
-# categorycode    char(2)     latin1_swedish_ci       No                Navegar los valores distintivos         Cambiar         Eliminar        Primaria        Único       Índice     Texto completo
-#     description     text    latin1_swedish_ci       Sí  NULL        Navegar los valores distintivos     Cambiar     Eliminar    Primaria    Único   Índice  Texto completo
-#     enrolmentperiod     smallint(6)             Sí  NULL        Navegar los valores distintivos     Cambiar     Eliminar    Primaria    Único   Índice  Texto completo
-#     upperagelimit   smallint(6)             Sí  NULL        Navegar los valores distintivos     Cambiar     Eliminar    Primaria    Único   Índice  Texto completo
-#     dateofbirthrequired     tinyint(1)          Sí  NULL        Navegar los valores distintivos     Cambiar     Eliminar    Primaria    Único   Índice  Texto completo
-#     finetype    varchar(30)     latin1_swedish_ci       Sí  NULL        Navegar los valores distintivos     Cambiar     Eliminar    Primaria    Único   Índice  Texto completo
-#     bulk    tinyint(1)          Sí  NULL        Navegar los valores distintivos     Cambiar     Eliminar    Primaria    Único   Índice  Texto completo
-#     enrolmentfee    decimal(28,6)           Sí  NULL        Navegar los valores distintivos     Cambiar     Eliminar    Primaria    Único   Índice  Texto completo
-#     overduenoticerequired   tinyint(1)          Sí  NULL        Navegar los valores distintivos     Cambiar     Eliminar    Primaria    Único   Índice  Texto completo
-#     issuelimit  smallint(6)             Sí  NULL        Navegar los valores distintivos     Cambiar     Eliminar    Primaria    Único   Índice  Texto completo
-#     reservefee  decimal(28,6)           Sí  NULL        Navegar los valores distintivos     Cambiar     Eliminar    Primaria    Único   Índice  Texto completo
-#     borrowingdays   smallint(30)
-# 
-# 
-#   __PACKAGE__->meta->setup
-#   (
-#     table => 'usr_ref_categoria_socio',
-#     auto  => 1,
-#   );
-
 
 sub getCategory_code{
     my ($self) = shift;
