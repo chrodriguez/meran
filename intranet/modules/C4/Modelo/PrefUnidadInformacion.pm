@@ -179,12 +179,39 @@ sub getCampo{
 sub getAll{
 
     my ($self) = shift;
-    my ($limit,$offset)=@_;
+    my ($limit,$offset,$matchig_or_not)=@_;
     use C4::Modelo::PrefUnidadInformacion::Manager;
-    
-    my $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion( limit => $limit, offset => $offset);
-        
-    return ($ref_valores);
+    use Text::LevenshteinXS;
+    $matchig_or_not = $matchig_or_not || 0;
+    my @filtros;
+    push(@filtros, (id_ui => {ne => $self->getId_ui}) );
+    my $ref_valores;
+    if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
+        $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(query => \@filtros,);
+    }else{
+        $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(query => \@filtros,
+                                                                    limit => $limit, 
+                                                                    offset => $offset, 
+                                                                    sort_by => ['nombre'] 
+                                                                   );
+    }
+    my $self_nombre = $self->getNombre;
+    my $self_id_ui = $self->getId_ui;
+
+    my $match = 0;
+    if ($matchig_or_not){
+        my @matched_array;
+        foreach my $autor (@$ref_valores){
+          $match = ((distance($self_nombre,$autor->getNombre)<=1) or (distance($self_id_ui,$autor->getId_ui)<=1));
+          if ($match){
+            push (@matched_array,$autor);
+          }
+        }
+        return (\@matched_array);
+    }
+    else{
+      return($ref_valores);
+    }
 }
 
 

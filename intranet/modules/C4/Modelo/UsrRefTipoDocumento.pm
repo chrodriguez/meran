@@ -81,19 +81,45 @@ sub getCampo{
 
 
 sub nextMember{
-    use C4::Modelo::UsrRefCategoriasSocio;
-    return(C4::Modelo::UsrRefCategoriasSocio->new());
+    use C4::Modelo::RefEstado;
+    return(C4::Modelo::RefEstado->new());
 }
 
 sub getAll{
 
     my ($self) = shift;
-    my ($limit,$offset)=@_;
+    my ($limit,$offset,$matchig_or_not)=@_;
     use C4::Modelo::UsrRefTipoDocumento::Manager;
-    
-    my $ref_valores = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento( limit => $limit, offset => $offset);
-        
-    return ($ref_valores);
+    use Text::LevenshteinXS;
+    $matchig_or_not = $matchig_or_not || 0;
+    my @filtros;
+    push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
+    my $ref_valores;
+    if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
+        $ref_valores = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento(query => \@filtros,);
+    }else{
+        $ref_valores = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento(query => \@filtros,
+                                                                    limit => $limit, 
+                                                                    offset => $offset, 
+                                                                    sort_by => ['descripcion'] 
+                                                                   );
+    }
+    my $self_descripcion = $self->getDescripcion;
+
+    my $match = 0;
+    if ($matchig_or_not){
+        my @matched_array;
+        foreach my $each (@$ref_valores){
+          $match = ((distance($self_descripcion,$each->getDescripcion)<=1));
+          if ($match){
+            push (@matched_array,$each);
+          }
+        }
+        return (\@matched_array);
+    }
+    else{
+      return($ref_valores);
+    }
 }
 
 1;

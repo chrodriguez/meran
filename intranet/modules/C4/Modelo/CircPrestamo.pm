@@ -706,5 +706,38 @@ sub renovar {
 }
 
 
+sub getInvolvedCount{
+ 
+    my ($self) = shift;
+
+    my ($campo, $value)= @_;
+    
+    my @filtros;
+
+    push (@filtros, ( $campo => $value ) );
+
+    my $circ_prestamo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros );
+
+    return ($circ_prestamo_count);
+}
+
+sub replaceBy{
+ 
+    my ($self) = shift;
+
+    my ($campo,$value,$new_value)= @_;
+    
+    my @filtros;
+
+    push (  @filtros, ( $campo => { eq => $value},) );
+
+
+    my $replaced = C4::Modelo::CircPrestamo::Manager->update_circ_prestamo(   where => \@filtros,
+                                                                        set   => { $campo => $new_value });
+}
+
+
+
+
 1;
 

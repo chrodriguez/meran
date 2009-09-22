@@ -69,8 +69,8 @@ __PACKAGE__->meta->setup(
 sub getCategoria{
     my ($self)=shift;
     
-    use C4::Modelo::UsrSocio;
-    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ id_persona => { eq => $self->getId_persona } ]);
+    use C4::Modelo::UsrPersona;
+    my $socio_array_ref = C4::Modelo::UsrPersona::Manager->get_usr_persona( query => [ id_persona => { eq => $self->getId_persona } ]);
 
     return ($socio_array_ref->[0]->categoria->getDescription);
 }
@@ -120,10 +120,10 @@ sub convertirEnSocio{
 
     $self->log($data_hash,'convertirEnSocio');
 
-    use C4::Modelo::UsrSocio;
+    use C4::Modelo::UsrPersona;
     use C4::Modelo::UsrEstado;
     my $db = $self->db;
-    my $socio = C4::Modelo::UsrSocio->new(db => $db);
+    my $socio = C4::Modelo::UsrPersona->new(db => $db);
         $data_hash->{'id_persona'} = $self->getId_persona;
 
     my $estado = C4::Modelo::UsrEstado->new(db => $db);
@@ -537,6 +537,36 @@ sub setCumple_condicion{
     my ($self) = shift;
     my ($cumple_condicion) = @_;
     $self->cumple_condicion($cumple_condicion);
+}
+
+sub getInvolvedCount{
+ 
+    my ($self) = shift;
+
+    my ($campo, $value)= @_;
+    
+    my @filtros;
+
+    push (@filtros, ( $campo => $value ) );
+
+    my $count = C4::Modelo::UsrPersona::Manager->get_usr_persona_count( query => \@filtros );
+
+    return ($count);
+}
+
+sub replaceBy{
+ 
+    my ($self) = shift;
+
+    my ($campo,$value,$new_value)= @_;
+    
+    my @filtros;
+
+    push (  @filtros, ( $campo => { eq => $value},) );
+
+
+    my $replaced = C4::Modelo::UsrPersona::Manager->update_usr_persona(     where => \@filtros,
+                                                                        set   => { $campo => $new_value });
 }
 
 1;

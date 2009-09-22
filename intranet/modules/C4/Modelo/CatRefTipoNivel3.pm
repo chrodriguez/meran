@@ -85,17 +85,43 @@ sub getCampo{
 	return (0);
 }
 
+
 sub getAll{
 
     my ($self) = shift;
-    my ($limit,$offset)=@_;
+    my ($limit,$offset,$matchig_or_not)=@_;
     use C4::Modelo::CatRefTipoNivel3::Manager;
-    
-    my $ref_valores = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3( limit => $limit, offset => $offset);
-        
-    return ($ref_valores);
-}
+    use Text::LevenshteinXS;
+    $matchig_or_not = $matchig_or_not || 0;
+    my @filtros;
+    push(@filtros, (id_tipo_doc => {ne => $self->getId_tipo_doc}) );
+    my $ref_valores;
+    if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
+        $ref_valores = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(query => \@filtros,);
+    }else{
+        $ref_valores = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(query => \@filtros,
+                                                                    limit => $limit, 
+                                                                    offset => $offset, 
+                                                                    sort_by => ['nombre'] 
+                                                                   );
+    }
+    my $self_nombre = $self->getNombre;
 
+    my $match = 0;
+    if ($matchig_or_not){
+        my @matched_array;
+        foreach my $autor (@$ref_valores){
+          $match = ((distance($self_nombre,$autor->getNombre)<=1));
+          if ($match){
+            push (@matched_array,$autor);
+          }
+        }
+        return (\@matched_array);
+    }
+    else{
+      return($ref_valores);
+    }
+}
 
 1;
 

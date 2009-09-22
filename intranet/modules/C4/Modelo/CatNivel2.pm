@@ -24,7 +24,7 @@ __PACKAGE__->meta->setup(
 
     relationships => [
        nivel1 => {
-            class      => 'C4::Modelo::CatNivel1',
+            class      => 'C4::Modelo::CatNivel2',
             column_map => { id1 => 'id1' },
             type       => 'one to one',
         },
@@ -115,7 +115,7 @@ sub agregar{
 #             $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
 #         }
         if ( $infoNivel2->{'Id_rep'} != 0 ){
-            C4::AR::Debug::debug("CatNivel1 => agregar => Se va a modificar CatNivel1, Id_rep: ". $infoNivel2->{'Id_rep'});
+            C4::AR::Debug::debug("CatNivel2 => agregar => Se va a modificar CatNivel2, Id_rep: ". $infoNivel2->{'Id_rep'});
             $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'Id_rep'});
             $nivel2Repetible->load();
         }else{
@@ -567,6 +567,37 @@ sub getCantPrestados{
 # 	C4::AR::Debug::debug("C4::AR::Nivel2::getCantPrestados ".$cantPrestamos_count);
 
 	return $cantPrestamos_count;
+}
+
+
+sub getInvolvedCount{
+ 
+    my ($self) = shift;
+
+    my ($campo, $value)= @_;
+    
+    my @filtros;
+
+    push (@filtros, ( $campo => $value ) );
+
+    my $cat_nivel2_count = C4::Modelo::CatNivel2::Manager->get_cat_nivel2_count( query => \@filtros );
+
+    return ($cat_nivel2_count);
+}
+
+sub replaceBy{
+ 
+    my ($self) = shift;
+
+    my ($campo,$value,$new_value)= @_;
+    
+    my @filtros;
+
+    push (  @filtros, ( $campo => { eq => $value},) );
+
+
+    my $replaced = C4::Modelo::CatNivel2::Manager->update_cat_nivel2(   where => \@filtros,
+                                                                        set   => { $campo => $new_value });
 }
 
 

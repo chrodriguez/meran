@@ -800,7 +800,7 @@ sub traerCampos{
 	return (@results);	
 =cut
 	use C4::Modelo::CatEstructuraCatalogacion::Manager;
-    use C4::Modelo::CatEstructuraCatalogacion;
+#     use C4::Modelo::CatEstructuraCatalogacion;
     my ($nivel,$campo) = @_;
 
     my @filtros;

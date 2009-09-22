@@ -31,7 +31,7 @@ __PACKAGE__->meta->setup(
         },
 
 		nivel1 => {
-            class      => 'C4::Modelo::CatNivel1',
+            class      => 'C4::Modelo::CatNivel3',
             column_map => { id1 => 'id1' },
             type       => 'one to one',
         },
@@ -508,6 +508,38 @@ C4::AR::Debug::debug("nivel3CompletoToMARC => cant: ".scalar(@$marc_array));
 }
 
 # ==============================================FIN===SOPORTE=====ESTRUCTURA CATALOGACION================================================
+
+
+sub getInvolvedCount{
+ 
+    my ($self) = shift;
+
+    my ($campo, $value)= @_;
+    
+    my @filtros;
+
+    push (@filtros, ( $campo => $value ) );
+
+    my $cat_nivel3_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count( query => \@filtros );
+
+    return ($cat_nivel3_count);
+}
+
+sub replaceBy{
+ 
+    my ($self) = shift;
+
+    my ($campo,$value,$new_value)= @_;
+    
+    my @filtros;
+
+    push (  @filtros, ( $campo => { eq => $value},) );
+
+
+    my $replaced = C4::Modelo::CatNivel3::Manager->update_cat_nivel3(   where => \@filtros,
+                                                                        set   => { $campo => $new_value });
+}
+
 
 1;
 

@@ -529,12 +529,16 @@ sub getTablaInstanceByTableName{
 
    switch ($name) {
       case "cat_nivel1" { $tabla = C4::Modelo::CatNivel1->new()  }
+      case "cat_nivel2" { $tabla = C4::Modelo::CatNivel2->new()  }
+      case "cat_nivel3" { $tabla = C4::Modelo::CatNivel3->new()  }
       case "usr_socio" { $tabla = C4::Modelo::UsrSocio->new()  }
+      case "usr_persona" { $tabla = C4::Modelo::UsrPersona->new()  }
+      case "circ_prestamo" { $tabla = C4::Modelo::CircPrestamo->new()  }
 
       else { print "previous case not true" }
   }
 
-    my $clave = $tabla->meta->primary_key;
+    my $clave = $tabla->getPk;
 
     return ($clave,$tabla);
 }
@@ -544,7 +548,6 @@ sub mostrarReferencias{
     my ($alias,$value_id) = @_;
     my @filtros;
 
-    my %table_data = {};
     my @data_array;
 
     use C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager;
@@ -559,8 +562,9 @@ sub mostrarReferencias{
         my ($clave_original,$tabla_original) = getTablaInstanceByAlias($tablas_matching->[0]->getAlias_tabla);
         #ESTE ES EL REFERIDO ORIGINAL, PARA MOSTRARLO EN EL CLIENTE
         my $referer_involved = $tabla_original->getByPk($value_id);
-        
+      
         foreach my $tabla (@$tablas_matching){
+            my %table_data = {};
             my $alias_tabla = $tabla->getAlias_tabla;
             #NO TIENE ALIAS PORQUE NO ES UNA TABLA DE REFERENCIA, IGUAL ESTA POR VERSE SI LE PONEMOS ALIAS A TODAS O NO
             my ($clave_referente,$tabla_referente) = getTablaInstanceByTableName($tabla->getTabla_referente);

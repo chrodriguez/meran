@@ -631,7 +631,7 @@ sub _setearInfoParaAutocomplete{
 sub getEstructuraCatalogacionFromDBCompleta{
     my ($nivel,$itemType)=@_;
 
-    use C4::Modelo::CatEstructuraCatalogacion;
+#     use C4::Modelo::CatEstructuraCatalogacion;
     use C4::Modelo::CatEstructuraCatalogacion::Manager;
 
     my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new();
@@ -661,7 +661,7 @@ sub getEstructuraCatalogacionFromDBCompleta{
 sub getEstructuraCatalogacionFromDBRepetibles{
     my ($nivel,$itemType)=@_;
 
-    use C4::Modelo::CatEstructuraCatalogacion;
+#     use C4::Modelo::CatEstructuraCatalogacion;
     use C4::Modelo::CatEstructuraCatalogacion::Manager;
 
     my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new();

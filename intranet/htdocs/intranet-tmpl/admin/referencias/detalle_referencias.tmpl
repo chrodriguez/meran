@@ -6,6 +6,7 @@
         makeToggle('datos_tabla_div_referenced','trigger',null,false);
         makeToggle('datos_tabla_div_related','trigger',null,false);
         makeDataTable('#tablaResult_similares');
+        zebra('datos_tabla');
       });
 </script>
 <fieldset class="resultados_busqueda" id="fieldset_tablaResult_involved">
@@ -47,13 +48,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
                         [% IF involved %]
                             [% FOREACH data IN involved %]
-                                <td> [% "El registro tiene " | i18n %][% data.cantidad %][% " tuplas relacionadas en la tabla " | i18n %] [% data.tabla %]</td>
+                                <tr>
+                                    <td> [% "El registro tiene " | i18n %][% data.cantidad %][% " tuplas relacionadas en la tabla " | i18n %] [% data.tabla %]</td>
+                                </tr>
                             [% END %]
                         [% ELSE %]
-                              <td>[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</td>
+                              <tr><td>[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</td></tr>
                         [% END %]
                     </tr>
                 </tbody>

@@ -4,13 +4,20 @@ use base 'Rose::DB::Object';
 
 use C4::Modelo::DB::AutoBase1;
 use base qw(Rose::DB::Object::Helpers);
-
+# use C4::AR::Referencias;
 sub init_db { C4::Modelo::DB::AutoBase1->new}
 
 =item
 Imprime el nombre de la clase
 =cut
-  
+ 
+# sub getPk{
+# 
+#     my ($self) = shift;
+# 
+#     return (''.$self->meta->primary_key);
+# }
+
 sub getByPk{
 
     my ($self) = shift;
