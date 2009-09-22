@@ -74,6 +74,30 @@ __PACKAGE__->meta->setup(
     ],
 );
 
+# sub load{
+#     my $self = $_[0]; # Copy, not shift
+# 
+#     my $error = 0;
+# 
+#     eval {
+#     
+#          unless( $self->SUPER::load(speculative => 1) ){
+#                  C4::AR::Debug::debug("CatNivel3=>  dentro del unless, no existe el objeto SUPER load");
+#                 $error = 1;
+#          }
+# 
+#         C4::AR::Debug::debug("CatNivel3=>  SUPER load");
+#         return $self->SUPER::load(@_);
+#     };
+# 
+#     if($@){
+#         C4::AR::Debug::debug("CatNivel3=>  no existe el objeto");
+#         $error = 1;
+#     }
+# 
+#     return $error;
+# }
+
 sub agregar{
     my ($self)=shift;
     my ($data_hash)=@_;
@@ -113,14 +137,8 @@ sub agregar{
     foreach my $infoNivel3 (@arrayNivel3Repetibles){
         $infoNivel3->{'id3'}= $id3;
         my $nivel3Repetible;
+        C4::AR::Debug::debug("CatNivel3 => campo, subcampo: ".$infoNivel3->{'campo'}.", ".$infoNivel3->{'subcampo'});
 
-#         if ($data_hash->{'modificado'} && $infoNivel3->{'rep_n3_id'} != 0){
-#             $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $self->db, rep_n3_id => $infoNivel3->{'rep_n3_id'});
-#             $nivel3Repetible->load();
-#         }else{
-#             C4::AR::Debug::debug('No existe el REPETIBLE se crea uno');
-#             $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $self->db);
-#         }
         if ( $infoNivel3->{'Id_rep'} != 0 ){
             C4::AR::Debug::debug("CatNivel3 => agregar => Se va a modificar CatNivel3, Id_rep: ". $infoNivel3->{'Id_rep'});
             $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $self->db, rep_n3_id => $infoNivel3->{'Id_rep'});
@@ -133,9 +151,11 @@ sub agregar{
         $nivel3Repetible->setId3($infoNivel3->{'id3'});
         $nivel3Repetible->setCampo($infoNivel3->{'campo'});
         $nivel3Repetible->setSubcampo($infoNivel3->{'subcampo'});
-		if( ($infoNivel3->{'modificado'})&&($data_hash->{'referencia'}) ){
+		if ($infoNivel3->{'referencia'}) {
+            C4::AR::Debug::debug("CatNivel3 => REPETIBLE con REFERENCIA: ".$infoNivel3->{'datoReferencia'});
             $nivel3Repetible->dato($infoNivel3->{'datoReferencia'});
         }else{
+            C4::AR::Debug::debug("CatNivel3 => REPETIBLE sin REFERENCIA: ".$infoNivel3->{'dato'});
             $nivel3Repetible->dato($infoNivel3->{'dato'});
 		}
 

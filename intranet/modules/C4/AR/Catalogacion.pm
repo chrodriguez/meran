@@ -435,7 +435,9 @@ sub _setDatos_de_estructura {
 
     }elsif( ($cat->getReferencia) && ($cat->getTipo eq 'auto') ){
         #es un autocomplete
-        $hash_ref->{'referenciaTabla'}= $cat->infoReferencia->getReferencia;
+        $hash_ref->{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
+        #si es un autocomplete y no tengo el dato de la referencia, muestro un blanco
+        if ( ($hash_ref->{'datoReferencia'} eq 0) || not defined($hash_ref->{'datoReferencia'}) ) {$hash_ref->{'dato'} = '';}
         C4::AR::Debug::debug("_setDatos_de_estructura => ======== AUTOCOMPLETE ======== ");
         C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref->{'datoReferencia'});
         C4::AR::Debug::debug("_setDatos_de_estructura => referenciaTabla: ".$hash_ref->{'referenciaTabla'});

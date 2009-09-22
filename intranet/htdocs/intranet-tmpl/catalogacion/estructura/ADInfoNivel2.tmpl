@@ -1,54 +1,61 @@
-[% FOREACH nivel2 IN nivel2_array %]    
-<fieldset><legend class="nivel2Selected" onClick="mostrarInfoAltaNivel3( '[% nivel2.getId1 %]',  '[% nivel2.getId2 %]'); toggleClass(this);">
-    <strong>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.cat_ref_tipo_nivel3.getNombre %]</strong>
-    </legend>
-<ul class="listado_sin_margen">
-   <li class="botonera_horizontal">
-     <ul class="listado_sin_margen">
-     [% PERL %]
-                print C4::AR::Filtros::to_Icon(   
-                                                    boton   => "icon_edicion",
-                                                    onClick => "modificarN2('[% nivel2.getId2 %]');",
-                                                    title   => "[% 'Modificar nivel 2' | i18n %]",
-                                                    li => 1,
-                        ) ;
+ [% IF OK != 1 %]
+
+        [% 'ERROR EN LOS PARAMETROS DE NIVEL 2' | i18n %]
+
+    [% ELSE %]
+
+        [% FOREACH nivel2 IN nivel2_array %]    
+        <fieldset><legend class="nivel2Selected" onClick="mostrarInfoAltaNivel3( '[% nivel2.getId1 %]',  '[% nivel2.getId2 %]'); toggleClass(this);">
+            <strong>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.cat_ref_tipo_nivel3.getNombre %]</strong>
+            </legend>
+        <ul class="listado_sin_margen">
+        <li class="botonera_horizontal">
+            <ul class="listado_sin_margen">
+            [% PERL %]
+                        print C4::AR::Filtros::to_Icon(   
+                                                            boton   => "icon_edicion",
+                                                            onClick => "modificarN2('[% nivel2.getId2 %]');",
+                                                            title   => "[% 'Modificar nivel 2' | i18n %]",
+                                                            li => 1,
+                                ) ;
+                [% END %]
+                [% PERL %]
+                        print C4::AR::Filtros::to_Icon(   
+                                                            boton   => "icon_agregar",
+                                                            onClick => "agregarN3('[% nivel2.getId2 %]');",
+                                                            title   => "[% 'Agregar nivel 3' | i18n %]",
+                                                            li => 1,
+                                ) ;
+                [% END %]
+                [% PERL %]
+                        print C4::AR::Filtros::to_Icon( 
+                                                            boton   => "icon_borrar",
+                                                            onClick => "borrarN2('[% nivel2.getId2 %]');",
+                                                            title   => "[% 'Borrar nivel 2' | i18n %]",
+                                                            li => 1,
+                                ) ;
+                [% END %]
+            </ul>
+            </li>
+            <li>
+            [% 'Nivel bibliogr&aacute;fico:' | i18n %] [% nivel2.ref_nivel_bibliografico.getDescription %]
+            </li>
+            <li>
+            [% 'Soporte:' | i18n %] [% nivel2.ref_soporte.getDescription %]
+            </li>
+            <li>
+            [% 'Lugar:' | i18n %] [% nivel2.ref_ciudad_publicacion.getNombre %]
+            </li>
+            <li>
+            [% 'Idioma:' | i18n %] [% nivel2.ref_idioma.getDescription %]
+            </li>
+            <li>
+            [% 'Fecha:' | i18n %] [% nivel2.getAnio_publicacion %]
+            </li>
+            <li>
+            [% 'Cantidad Ejemplares:' | i18n %] [% cant_ejemplares %]
+            </li>
+        </ul>
+        </fieldset>
         [% END %]
-        [% PERL %]
-                print C4::AR::Filtros::to_Icon(   
-                                                    boton   => "icon_agregar",
-                                                    onClick => "agregarN3('[% nivel2.getId2 %]');",
-                                                    title   => "[% 'Agregar nivel 3' | i18n %]",
-                                                    li => 1,
-                        ) ;
-        [% END %]
-        [% PERL %]
-                print C4::AR::Filtros::to_Icon( 
-                                                    boton   => "icon_borrar",
-                                                    onClick => "borrarN2('[% nivel2.getId2 %]');",
-                                                    title   => "[% 'Borrar nivel 2' | i18n %]",
-                                                    li => 1,
-                        ) ;
-        [% END %]
-    </ul>
-    </li>
-    <li>
-    [% 'Nivel bibliogr&aacute;fico:' | i18n %] [% nivel2.ref_nivel_bibliografico.getDescription %]
-    </li>
-    <li>
-    [% 'Soporte:' | i18n %] [% nivel2.ref_soporte.getDescription %]
-    </li>
-    <li>
-    [% 'Lugar:' | i18n %] [% nivel2.pais_publicacion.getNombre_largo %]
-    </li>
-    <li>
-    [% 'Idioma:' | i18n %] [% nivel2.ref_idioma.getDescription %]
-    </li>
-    <li>
-    [% 'Fecha:' | i18n %] [% nivel2.getAnio_publicacion %]
-    </li>
-    <li>
-    [% 'Cantidad Ejemplares:' | i18n %] [% cant_ejemplares %]
-    </li>
-</ul>
-</fieldset>
-[% END %]
+    [% END %]

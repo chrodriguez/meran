@@ -95,28 +95,34 @@ __PACKAGE__->meta->setup(
 #     }
 # }
 
+=item
+    Returns true (1) if the row was loaded successfully
+    undef if the row could not be loaded due to an error, 
+    zero (0) if the row does not exist.
+=cut
 sub load{
     my $self = $_[0]; # Copy, not shift
-open(Z, ">>/tmp/debug.txt");
-print Z "usr_socio=> \n";
+    
+
+    my $error = 1;
 
     eval {
     
-        unless( $self->SUPER::load(speculative => 1) ){
-                 print Z "usr_socio=>  SUPER load \n";
-            return 0;
-        }
+         unless( $self->SUPER::load(speculative => 1) ){
+                 C4::AR::Debug::debug("UsrSocio=>  dentro del unless, no existe el objeto SUPER load");
+                $error = 0;
+         }
 
+        C4::AR::Debug::debug("UsrSocio=>  SUPER load");
         return $self->SUPER::load(@_);
     };
 
     if($@){
-        print Z "usr_socio=>  no existe el socio \n";
-#         my $socio= C4::Modelo::UsrSocio->new();
-        return ( 0 );
+        C4::AR::Debug::debug("UsrSocio=>  no existe el objeto");
+        $error = undef;
     }
 
-close(Z); 
+    return $error;
 }
 
 sub agregar{
@@ -908,5 +914,6 @@ sub replaceBy{
     my $replaced = C4::Modelo::UsrSocio::Manager->update_usr_socio(     where => \@filtros,
                                                                         set   => { $campo => $new_value });
 }
+
 
 1;

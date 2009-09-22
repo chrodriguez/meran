@@ -66,6 +66,36 @@ __PACKAGE__->meta->setup(
     unique_key => ['tipo_documento','nro_documento'],
 );
 
+=item
+    Returns true (1) if the row was loaded successfully
+    undef if the row could not be loaded due to an error, 
+    zero (0) if the row does not exist.
+=cut
+sub load{
+    my $self = $_[0]; # Copy, not shift
+    
+
+    my $error = 1;
+
+    eval {
+    
+         unless( $self->SUPER::load(speculative => 1) ){
+                 C4::AR::Debug::debug("UsrPersona=>  dentro del unless, no existe el objeto SUPER load");
+                $error = 0;
+         }
+
+        C4::AR::Debug::debug("UsrPersona=>  SUPER load");
+        return $self->SUPER::load(@_);
+    };
+
+    if($@){
+        C4::AR::Debug::debug("UsrPersona=>  no existe el objeto");
+        $error = undef;
+    }
+
+    return $error;
+}
+
 sub getCategoria{
     my ($self)=shift;
     

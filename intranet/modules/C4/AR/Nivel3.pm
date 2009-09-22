@@ -906,6 +906,7 @@ sub t_modificarNivel3 {
             C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: ".$cant);
 			for(my $i=0;$i<$cant;$i++){
 				my $catNivel3;
+                C4::AR::Debug::debug("t_modificarNivel3 => ID3 a modificar: ".$params->{'ID3_ARRAY'}->[$i]);
 
 				$catNivel3= C4::Modelo::CatNivel3->new(
 																db => $db,

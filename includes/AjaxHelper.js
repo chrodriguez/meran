@@ -148,6 +148,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 			if(this.cache){
 				_hash_key= b64_md5(params);
 		        this.log("AjaxHelper => cache element");
+                this.log("AjaxHelper => cache hash_key " + _hash_key);
 				if ( $.jCache.hasItem(_hash_key) ){
 				//antes de hacer la peticion al servidor, se verifica si la info esta en la cache
 					return helper.onComplete($.jCache.getItem(_hash_key));

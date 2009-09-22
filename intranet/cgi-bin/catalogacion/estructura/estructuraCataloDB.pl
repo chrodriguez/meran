@@ -167,10 +167,11 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
     my $id=$obj->{'id'};
 
     my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
-    $catalogacion->load();
+    my $err = $catalogacion->load();
 
-    $t_params->{'selectCampoX'}= C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
-    $t_params->{'catalogacion'}= $catalogacion;
+    $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
+    $t_params->{'catalogacion'} = $catalogacion;
+    $t_params->{'error'} = $err; 
 
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
@@ -377,10 +378,11 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
 
     my $id1=$obj->{'id1'};
 
-    my $nivel1 = C4::Modelo::CatNivel1->new(id1 => $id1);
-    $nivel1->load();
+    my ($nivel1) = C4::Modelo::CatNivel1->new(id1 => $id1);
+    my $err = $nivel1->load();
 
-    $t_params->{'nivel1'}= $nivel1;
+    $t_params->{'nivel1'} = $nivel1;
+    $t_params->{'OK'} = $err;
 
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
@@ -397,17 +399,23 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
                             debug => 1,
                     });
 
-    my $id1=$obj->{'id1'};
+    my $id1 = $obj->{'id1'};
 
-    my $nivel2_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(
-                                                    query => [
-                                                                id1=> { eq => $id1},
-                                                            ]
-                                                );
+    if( $id1 ne 0 ){
 
-    #se envia al cliente todos los objetos nivel2 segun id1
-    $t_params->{'nivel2_array'}= $nivel2_array_ref;
+        my $nivel2_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(
+                                                        query => [
+                                                                    id1=> { eq => $id1},
+                                                                ]
+                                                    );
 
+        #se envia al cliente todos los objetos nivel2 segun id1
+        $t_params->{'nivel2_array'} = $nivel2_array_ref;
+        $t_params->{'OK'} = 1;
+
+    }else{
+        $t_params->{'OK'} = 0;
+    }
 
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
@@ -424,17 +432,17 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
                             debug => 1,
                     });
 
-    my $id1= $obj->{'id1'};
-    my $id2= $obj->{'id2'};
+    my $id1 = $obj->{'id1'};
+    my $id2 = $obj->{'id2'};
 
-#   FIXME trae todos los ejemplares (nivel3) segun un id1 e id2, hacer una funcion en Catalogacion
+    #   FIXME trae todos los ejemplares (nivel3) segun un id1 e id2, hacer una funcion en Catalogacion
     my $nivel3 = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-                                                        query => [ id1 => { eq => $id1 },
-                                                                   id2 => { eq => $id2 } ]      
+                                                        query => [  id1 => { eq => $id1 },
+                                                                    id2 => { eq => $id2 } ]      
                                                 );
-
-    $t_params->{'nivel3_array'}= $nivel3;
-
+    
+    $t_params->{'nivel3_array'} = $nivel3;
+    
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 # **********************************************FIN ABM CATALOGACION****************************************************************
@@ -515,7 +523,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_1"){
     
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
-    $info{'id1'}= $id1;
+    $info{'id1'} = $id1;
 
     C4::Auth::print_header($session);
     print to_json \%info;

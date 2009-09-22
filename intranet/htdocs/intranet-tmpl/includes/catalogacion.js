@@ -212,7 +212,24 @@ function _showAndHiddeEstructuraDelNivel(nivel){
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
 function syncComponentesArray(){
     for(var i=0; i < COMPONENTES_ARRAY.length; i++){
-       COMPONENTES_ARRAY[i].dato= $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
+        window.console.log("COMPONENTES_ARRAY[" + i +"].dato: " + COMPONENTES_ARRAY[i].dato);
+        window.console.log("COMPONENTES_ARRAY[" + i +"].datoReferencia: " + COMPONENTES_ARRAY[i].datoReferencia);
+        if(COMPONENTES_ARRAY[i].referencia == 1){
+            window.console.log("TIENE REFERENCIA");
+            if($('#'+COMPONENTES_ARRAY[i].idCompCliente).val() != '' && COMPONENTES_ARRAY[i].tipo == 'combo'){
+                COMPONENTES_ARRAY[i].datoReferencia = $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
+                window.console.log("COMBO");
+            }else if($('#'+COMPONENTES_ARRAY[i].idCompCliente).val() != '' && COMPONENTES_ARRAY[i].tipo == 'auto'){
+                COMPONENTES_ARRAY[i].datoReferencia = $('#'+COMPONENTES_ARRAY[i].idCompCliente + '_hidden').val();
+                window.console.log("AUTO");
+            }else{
+                COMPONENTES_ARRAY[i].datoReferencia = 0;
+                COMPONENTES_ARRAY[i].dato = '';
+            }
+        }else{  
+            window.console.log("NO TIENE REFERENCIA");
+            COMPONENTES_ARRAY[i].dato = $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
+        }
     }
 }
 
@@ -665,10 +682,10 @@ function guardarModificacionDocumentoN3(){
 
 function updateGuardarModificacionDocumentoN3(responseText){
 
-	//inicializo el arreglo
-	_freeMemory(ID3_ARRAY);
-	ID3_ARRAY= [];
-	MODIFICAR=0;
+// 	//inicializo el arreglo
+// 	_freeMemory(ID3_ARRAY);
+// 	ID3_ARRAY= [];
+// 	MODIFICAR=0;
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
     setMessages(Messages);
@@ -680,6 +697,10 @@ function updateGuardarModificacionDocumentoN3(responseText){
 	}
 
     if (! (hayError(Messages) ) ){
+        //inicializo el arreglo
+        _freeMemory(ID3_ARRAY);
+        ID3_ARRAY= [];
+        MODIFICAR=0;
         //deja la misma estructura, solo borra el campo dato
         _clearDataFromComponentesArray();
         //muestra la tabla con los ejemplares agregados
@@ -806,7 +827,7 @@ function procesarObjeto(objeto){
 			//se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
 			comp= crearComponente('hidden',objeto.idCompCliente + '_hidden','','');
 			 $(comp).appendTo("#"+idDiv);
-			_cambiarIdDeAutocomplete();
+// 			_cambiarIdDeAutocomplete();
         break;
 		case "calendar":
             //tipo,id,opciones,valor
@@ -856,6 +877,7 @@ function _cearAutocompleteParaCamponente(o){
 		case "ciudad": CrearAutocompleteCiudades(	{IdInput: o.idCompCliente, 
 													IdInputHidden: o.idCompCliente + '_hidden' }
 									);
+        break;
         case "ui": CrearAutocompleteUI(   {IdInput: o.idCompCliente, 
                                                     IdInputHidden: o.idCompCliente + '_hidden' }
                                     );
@@ -1049,7 +1071,7 @@ function modificarN1(id1){
 	objAH.url = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showStatusIn = "centro";
 	objAH.debug = true;
-    objAH.cache = true;
+//     objAH.cache = true;
 	objAH.tipoAccion = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype = "ALL";
 	objAH.id = ID_N1;
@@ -1076,7 +1098,7 @@ function modificarN2(id2){
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showStatusIn = "centro";
     objAH.debug= true;
-    objAH.cache = true;
+//     objAH.cache = true;
     objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
     objAH.itemtype=$("#id_tipo_doc").val();
     objAH.id = ID_N2;
@@ -1101,7 +1123,7 @@ function modificarN3(id3){
 	objAH=new AjaxHelper(updateModificarN3);
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug= true;
-    objAH.cache = true;
+//     objAH.cache = true;
     objAH.showStatusIn = "centro";
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype=$("#id_tipo_doc").val();

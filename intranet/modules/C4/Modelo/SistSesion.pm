@@ -23,29 +23,26 @@ __PACKAGE__->meta->setup(
 
 sub load{
     my $self = $_[0]; # Copy, not shift
-open(Z, ">>/tmp/debug.txt");
-print Z "sist_sesion=> \n";
+
+    my $error = 0;
 
     eval {
     
          unless( $self->SUPER::load(speculative => 1) ){
-# #         unless( $self->SUPER::load(@_) ){
-                  print Z "sist_sesion=>  dentro del unless, no existe el objeto SUPER load \n";
-                 return ( 0 );
+                 C4::AR::Debug::debug("SistSesion=>  dentro del unless, no existe el objeto SUPER load");
+                $error = 1;
          }
 
-        print Z "sist_sesion=>  SUPER load \n";
+        C4::AR::Debug::debug("SistSesion=>  SUPER load");
         return $self->SUPER::load(@_);
-#         return ( $self->SUPER::load(speculative => 1) );
     };
 
     if($@){
-        print Z "sist_sesion=>  no existe el sist_sesion \n";
-#         my $socio= C4::Modelo::UsrSocio->new();
-        return ( 0 );
+        C4::AR::Debug::debug("SistSesion=>  no existe el objeto");
+        $error = 1;
     }
 
-close(Z); 
+    return $error;
 }
 
 =item

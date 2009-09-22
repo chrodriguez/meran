@@ -11,7 +11,7 @@ __PACKAGE__->meta->setup(
     columns => [
         id1       => { type => 'serial', not_null => 1 },
         titulo    => { type => 'varchar', length => 255, not_null => 1 },
-        autor     => { type => 'integer', not_null => 1 },
+        autor     => { type => 'integer', not_null => 0 },
         timestamp => { type => 'timestamp' },
     ],
 
@@ -27,15 +27,22 @@ __PACKAGE__->meta->setup(
 
 );
 
-
+=item
+    Returns true (1) if the row was loaded successfully
+    undef if the row could not be loaded due to an error, 
+    zero (0) if the row does not exist.
+=cut
 sub load{
     my $self = $_[0]; # Copy, not shift
+    
+
+    my $error = 1;
 
     eval {
     
          unless( $self->SUPER::load(speculative => 1) ){
                  C4::AR::Debug::debug("CatNivel1=>  dentro del unless, no existe el objeto SUPER load");
-                 return ( 0 );
+                $error = 0;
          }
 
         C4::AR::Debug::debug("CatNivel1=>  SUPER load");
@@ -44,8 +51,10 @@ sub load{
 
     if($@){
         C4::AR::Debug::debug("CatNivel1=>  no existe el objeto");
-        return ( 0 );
+        $error = undef;
     }
+
+    return $error;
 }
 
 
@@ -85,8 +94,8 @@ sub agregar{
 # SI NO EXISTE EL rep_n1_id hay q crear una tupla, puede q sea un registro importado que no tenia este dato
         my $nivel1Repetible;
 
-#         if ($data_hash->{'modificado'} && $infoNivel1->{'rep_n1_id'} != 0){
-#          if ( $infoNivel1->{'rep_n1_id'} != 0 ){
+        C4::AR::Debug::debug("CatNivel1 => campo, subcampo: ".$infoNivel1->{'campo'}.", ".$infoNivel1->{'subcampo'});
+
         if ( $infoNivel1->{'Id_rep'} != 0 ){
             C4::AR::Debug::debug("CatNivel1 => agregar => Se va a modificar CatNivel1, Id_rep: ". $infoNivel1->{'Id_rep'});
             $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db, rep_n1_id => $infoNivel1->{'Id_rep'});
@@ -99,12 +108,13 @@ sub agregar{
         $nivel1Repetible->setId1($infoNivel1->{'id1'});
         $nivel1Repetible->setCampo($infoNivel1->{'campo'});
         $nivel1Repetible->setSubcampo($infoNivel1->{'subcampo'});
-#         $nivel1Repetible->setDato($infoNivel1->{'dato'});
-# FIXME ver si esto es asi, TODAS LAS REFERENCIAS SI SE ESTAN MODIFICANDO SE DEBEN GUARDAR LA REFERENCIA
-		if( ($infoNivel1->{'modificado'})&&($data_hash->{'referencia'}) ){
-				$nivel1Repetible->dato($infoNivel1->{'datoReferencia'});
-			}else{
-				$nivel1Repetible->dato($infoNivel1->{'dato'});
+
+        if ($infoNivel1->{'referencia'}) {
+            C4::AR::Debug::debug("CatNivel1 => REPETIBLE con REFERENCIA: ".$infoNivel1->{'datoReferencia'});
+			$nivel1Repetible->dato($infoNivel1->{'datoReferencia'});
+        }else{
+			$nivel1Repetible->dato($infoNivel1->{'dato'});
+            C4::AR::Debug::debug("CatNivel1 => REPETIBLE sin REFERENCIA: ".$infoNivel1->{'dato'});
 		}
 
         $nivel1Repetible->save(); 
@@ -139,9 +149,10 @@ sub setDato{
 	my ($self) = shift;
 	my ($data_hash) = @_;
 
+    C4::AR::Debug::debug("CatNivel1 => setDato => campo, subcampo: ".$data_hash->{'campo'}.", ".$data_hash->{'subcampo'});
+    
 	if( ($data_hash->{'campo'} eq '245')&&($data_hash->{'subcampo'} eq 'a') ){
 	#titulo
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
         if( $data_hash->{'referencia'} ){
 			$self->setTitulo($data_hash->{'datoReferencia'});
 		}else{
@@ -151,7 +162,6 @@ sub setDato{
 	
 	if( ($data_hash->{'campo'} eq '110')&&($data_hash->{'subcampo'} eq 'a') ){  
 	#autor
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
         if( $data_hash->{'referencia'} ){
 			$self->setAutor($data_hash->{'datoReferencia'});
             C4::AR::Debug::debug("CatNivel1 => agregar => datoReferencia: ".$data_hash->{'datoReferencia'});
@@ -321,6 +331,17 @@ sub replaceBy{
                                                                         set   => { $campo => $new_value });
 }
 
+# sub getNombreCompletoAutor{
+#     my ($self) = shift;
+# 
+#     my $errAutor = $self->has_loaded_related(object => $self, relationship => 'cat_autor');
+# 
+#     if(!$errAutor){
+#         return "NO EXISTE";
+#     }else{
+#         return $self->cat_autor->getCompleto;
+#     }
+# }
 
 1;
 

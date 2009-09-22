@@ -36,6 +36,30 @@ __PACKAGE__->meta->setup(
     ],
 );
 
+sub load{
+    my $self = $_[0]; # Copy, not shift
+
+    my $error = 0;
+
+    eval {
+    
+         unless( $self->SUPER::load(speculative => 1) ){
+                 C4::AR::Debug::debug("CatNivel2Repetible=>  dentro del unless, no existe el objeto SUPER load");
+                $error = 1;
+         }
+
+        C4::AR::Debug::debug("CatNivel2Repetible=>  SUPER load");
+        return $self->SUPER::load(@_);
+    };
+
+    if($@){
+        C4::AR::Debug::debug("CatNivel2Repetible=>  no existe el objeto");
+        $error = 1;
+    }
+
+    return $error;
+}
+
 sub agregar{
 
     my ($self)=shift;

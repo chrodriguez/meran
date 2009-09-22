@@ -11,11 +11,11 @@ __PACKAGE__->meta->setup(
         id2                 => { type => 'serial', not_null => 1 },
         id1                 => { type => 'integer', not_null => 1 },
         tipo_documento      => { type => 'varchar', length => 4, not_null => 1 },
-        nivel_bibliografico => { type => 'varchar', length => 2, not_null => 1 },
-        soporte             => { type => 'varchar', length => 3, not_null => 1 },
-        pais_publicacion    => { type => 'character', length => 2, not_null => 1 },
-        lenguaje            => { type => 'character', length => 2, not_null => 1 },
-        ciudad_publicacion  => { type => 'varchar', length => 255, not_null => 1 },
+        nivel_bibliografico => { type => 'varchar', length => 2, not_null => 0 },
+        soporte             => { type => 'varchar', length => 3, not_null => 0 },
+        pais_publicacion    => { type => 'character', length => 2, not_null => 0 },
+        lenguaje            => { type => 'character', length => 2, not_null => 0 },
+        ciudad_publicacion  => { type => 'varchar', length => 255, not_null => 0 },
         anio_publicacion    => { type => 'varchar', length => 15 },
         timestamp           => { type => 'timestamp' },
     ],
@@ -71,6 +71,30 @@ __PACKAGE__->meta->setup(
     ],
 );
 
+# sub load{
+#     my $self = $_[0]; # Copy, not shift
+# 
+#     my $error = 0;
+# 
+#     eval {
+#     
+#          unless( $self->SUPER::load(speculative => 1) ){
+#                  C4::AR::Debug::debug("CatNivel2=>  dentro del unless, no existe el objeto SUPER load");
+#                 $error = 1;
+#          }
+# 
+#         C4::AR::Debug::debug("CatNivel2=>  SUPER load");
+#         return $self->SUPER::load(@_);
+#     };
+# 
+#     if($@){
+#         C4::AR::Debug::debug("CatNivel2=>  no existe el objeto");
+#         $error = 1;
+#     }
+# 
+#     return $error;
+# }
+
 sub agregar{
 
     my ($self)=shift;
@@ -107,13 +131,8 @@ sub agregar{
         $infoNivel2->{'id2'}= $id2;
             
         my $nivel2Repetible;
+        C4::AR::Debug::debug("CatNivel2 => campo, subcampo: ".$infoNivel2->{'campo'}.", ".$infoNivel2->{'subcampo'});
 
-#         if ($data_hash->{'modificado'}){
-#             $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'rep_n2_id'});
-#             $nivel2Repetible->load();
-#         }else{
-#             $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
-#         }
         if ( $infoNivel2->{'Id_rep'} != 0 ){
             C4::AR::Debug::debug("CatNivel2 => agregar => Se va a modificar CatNivel2, Id_rep: ". $infoNivel2->{'Id_rep'});
             $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'Id_rep'});
@@ -126,12 +145,15 @@ sub agregar{
         $nivel2Repetible->setId2($infoNivel2->{'id2'});
         $nivel2Repetible->setCampo($infoNivel2->{'campo'});
         $nivel2Repetible->setSubcampo($infoNivel2->{'subcampo'});
-#         $nivel2Repetible->setDato($infoNivel2->{'dato'});
-		if( ($infoNivel2->{'modificado'})&&($data_hash->{'referencia'}) ){
+
+        if($infoNivel2->{'referencia'}){
+            C4::AR::Debug::debug("CatNivel2 => REPETIBLE con REFERENCIA: ".$infoNivel2->{'datoReferencia'});
 			$nivel2Repetible->dato($infoNivel2->{'datoReferencia'});
 		}else{
+            C4::AR::Debug::debug("CatNivel2 => REPETIBLE sin REFERENCIA: ".$infoNivel2->{'dato'});
 			$nivel2Repetible->dato($infoNivel2->{'dato'});
 		}
+
         $nivel2Repetible->save(); 
     }
 
@@ -169,7 +191,8 @@ sub setDato{
 
 	 if( ($data_hash->{'campo'} eq '910')&&($data_hash->{'subcampo'} eq 'a') ){
 	#tipo de documento
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+        if ($data_hash->{'referencia'}){
 				$self->setTipo_documento($data_hash->{'datoReferencia'});
 			}else{
 				$self->setTipo_documento($data_hash->{'dato'});
@@ -178,7 +201,8 @@ sub setDato{
 
 	elsif( ($data_hash->{'campo'} eq '245')&&($data_hash->{'subcampo'} eq 'h') ){
 	#soporte
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+        if ($data_hash->{'referencia'}) {
 				$self->setSoporte($data_hash->{'datoReferencia'});
 			}else{
 				$self->setSoporte($data_hash->{'dato'});
@@ -187,7 +211,8 @@ sub setDato{
 
 	elsif( ($data_hash->{'campo'} eq '900')&&($data_hash->{'subcampo'} eq 'b') ){
 	#nivel bibliografico
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+        if ($data_hash->{'referencia'}) {
 				$self->setNivel_bibliografico($data_hash->{'datoReferencia'});
 			}else{
 				$self->setNivel_bibliografico($data_hash->{'dato'});
@@ -196,7 +221,8 @@ sub setDato{
 
 	elsif( ($data_hash->{'campo'} eq '043')&&($data_hash->{'subcampo'} eq 'c') ){
 	#pais publicacion
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+        if ($data_hash->{'referencia'}) {
 				$self->setPais_publicacion($data_hash->{'datoReferencia'});
 			}else{
 				$self->setPais_publicacion($data_hash->{'dato'});
@@ -205,7 +231,8 @@ sub setDato{
 
 	elsif( ($data_hash->{'campo'} eq '041')&&($data_hash->{'subcampo'} eq 'h') ){
 	#lenguaje
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+    if ($data_hash->{'referencia'}) {
 				$self->setLenguaje($data_hash->{'datoReferencia'});
 			}else{
 				$self->setLenguaje($data_hash->{'dato'});
@@ -214,7 +241,8 @@ sub setDato{
 
 	elsif( ($data_hash->{'campo'} eq '260')&&($data_hash->{'subcampo'} eq 'a') ){
 	#ciudad de publicacion
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+        if($data_hash->{'referencia'}){
 				$self->setCiudad_publicacion($data_hash->{'datoReferencia'});
 			}else{
 				$self->setCiudad_publicacion($data_hash->{'dato'});
@@ -223,7 +251,8 @@ sub setDato{
 
 	elsif( ($data_hash->{'campo'} eq '260')&&($data_hash->{'subcampo'} eq 'c') ){
 	#anio de publicacion
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+        if ($data_hash->{'referencia'}){
 				$self->setAnio_publicacion($data_hash->{'datoReferencia'});
 			}else{
 				$self->setAnio_publicacion($data_hash->{'dato'});

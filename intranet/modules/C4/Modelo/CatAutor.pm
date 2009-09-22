@@ -18,6 +18,37 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
+
+=item
+    Returns true (1) if the row was loaded successfully
+    undef if the row could not be loaded due to an error, 
+    zero (0) if the row does not exist.
+=cut
+sub load{
+    my $self = $_[0]; # Copy, not shift
+    
+
+    my $error = 1;
+
+    eval {
+    
+         unless( $self->SUPER::load(speculative => 1) ){
+                 C4::AR::Debug::debug("CatAutor=>  dentro del unless, no existe el objeto SUPER load");
+                $error = 0;
+         }
+
+        C4::AR::Debug::debug("CatAutor=>  SUPER load");
+        return $self->SUPER::load(@_);
+    };
+
+    if($@){
+        C4::AR::Debug::debug("CatAutor=>  no existe el objeto");
+        $error = undef;
+    }
+
+    return $error;
+}
+
 sub toString{
 	my ($self) = shift;
 

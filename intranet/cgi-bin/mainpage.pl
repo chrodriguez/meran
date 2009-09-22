@@ -18,5 +18,10 @@ my ($template, $session, $t_params)= get_template_and_user({
 									debug => 1,
 			});
 
+C4::AR::Debug::debug("antes: ".C4::Modelo::DB::AutoBase1->use_cache_during_apache_startup());
+C4::Modelo::DB::AutoBase1->use_cache_during_apache_startup(1);
+C4::Modelo::DB::AutoBase1->db_cache->prepare_for_apache_fork();
+C4::AR::Debug::debug("despues: ".C4::Modelo::DB::AutoBase1->use_cache_during_apache_startup());
+
 
 C4::Auth::output_html_with_http_headers($template, $t_params,$session);

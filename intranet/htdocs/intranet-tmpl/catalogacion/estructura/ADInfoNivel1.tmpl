@@ -1,37 +1,44 @@
-    <ul class="listado_sin_margen">
-    <li class="titulos"> [% nivel1.getTitulo %] </li>
-    <li> <strong>[% "Autor:" | i18n %] </strong> [% nivel1.cat_autor.getCompleto %]  </li>
-    <li>
-    Regitro de Nivel 1: [% nivel1.getId1 %]
-    </li>
-    <li class="botonera_horizontal">
-        <ul class="listado_sin_margen">
-        [% PERL %]
-                print C4::AR::Filtros::to_Icon(  
-                                                    boton   => "icon_edicion",
-                                                    onClick => "modificarN1('[% nivel1.getId1 %]');",
-                                                    title   => "[% 'Modificar nivel 1' | i18n %]",
-                                                    li => 1,
-                        ) ;
-        [% END %]
-        [% PERL %]
-                print C4::AR::Filtros::to_Icon(  
-                                                    boton   => "icon_agregar",
-                                                    onClick => "agregarN2();",
-                                                    title   => "[% 'Agregar nivel 2' | i18n %]",
-                                                    li => 1,
-                        ) ;
-        [% END %]
-        [% PERL %]
-                print C4::AR::Filtros::to_Icon(   
-                                                    boton   => "icon_borrar",
-                                                    onClick => "borrarN1('[% nivel1.getId1 %]');",
-                                                    title   => "[% 'Borrar nivel 1' | i18n %]",
-                                                    li => 1,
-                        ) ;
-        [% END %]
-    </ul>
-    </li>
-    </ul>
 
-<!-- FIXME FALTA TERMINAR ESTE TMPL -->
+    [% IF OK != 1 %]
+
+        [% 'ERROR EN LOS PARAMETROS DE NIVEL 1' | i18n %]
+
+    [% ELSE %]
+
+        <ul class="listado_sin_margen">
+            <li class="titulos"> [% nivel1.getTitulo %] </li>
+            <li> <strong>[% "Autor:" | i18n %] </strong> [% nivel1.cat_autor.getCompleto %]  </li>
+            <li>
+            Regitro de Nivel 1: [% nivel1.getId1 %]
+            </li>
+            <li class="botonera_horizontal">
+                <ul class="listado_sin_margen">
+                [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                                            boton   => "icon_edicion",
+                                                            onClick => "modificarN1('[% nivel1.getId1 %]');",
+                                                            title   => "[% 'Modificar nivel 1' | i18n %]",
+                                                            li => 1,
+                                ) ;
+                [% END %]
+                [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                                            boton   => "icon_agregar",
+                                                            onClick => "agregarN2();",
+                                                            title   => "[% 'Agregar nivel 2' | i18n %]",
+                                                            li => 1,
+                                ) ;
+                [% END %]
+                [% PERL %]
+                        print C4::AR::Filtros::to_Icon(   
+                                                            boton   => "icon_borrar",
+                                                            onClick => "borrarN1('[% nivel1.getId1 %]');",
+                                                            title   => "[% 'Borrar nivel 1' | i18n %]",
+                                                            li => 1,
+                                ) ;
+                [% END %]
+            </ul>
+            </li>
+        </ul>
+
+    [% END %]
