@@ -8,7 +8,6 @@ use base 'Rose::DB::Object::Cached';
 
 use C4::Modelo::DB::AutoBase1;
 use base qw(Rose::DB::Object::Helpers);
-<<<<<<< .mine
 # sub init_db { C4::Modelo::DB::AutoBase1->new}
 sub init_db {
      if($ENV{'MOD_PERL'})
@@ -24,9 +23,6 @@ sub init_db {
       *init_db = sub { C4::Modelo::DB::AutoBase1->new };
     }
 }
-=======
-sub init_db { C4::Modelo::DB::AutoBase1->new}
->>>>>>> .r2168
 
 =item
 Imprime el nombre de la clase
