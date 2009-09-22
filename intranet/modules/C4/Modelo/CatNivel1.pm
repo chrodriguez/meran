@@ -2,6 +2,7 @@ package C4::Modelo::CatNivel1;
 
 use strict;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
+use base 'Rose::DB::Object::Cached';
 use utf8;
 
 

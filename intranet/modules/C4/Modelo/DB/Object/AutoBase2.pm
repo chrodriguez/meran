@@ -1,7 +1,7 @@
 package C4::Modelo::DB::Object::AutoBase2;
 
-# use base 'Rose::DB::Object';
-use base 'Rose::DB::Object::Cached';
+use base 'Rose::DB::Object';
+# use base 'Rose::DB::Object::Cached';
 # our @ISA = qw(Rose::DB::Cache);
 
 

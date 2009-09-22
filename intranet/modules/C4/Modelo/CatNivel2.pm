@@ -3,6 +3,7 @@ package C4::Modelo::CatNivel2;
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
+use base 'Rose::DB::Object::Cached';
 
 __PACKAGE__->meta->setup(
     table   => 'cat_nivel2',
