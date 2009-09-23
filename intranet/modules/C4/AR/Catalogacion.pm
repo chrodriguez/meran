@@ -664,10 +664,7 @@ sub getEstructuraCatalogacionFromDBCompleta{
 sub getEstructuraCatalogacionFromDBRepetibles{
     my ($nivel,$itemType)=@_;
 
-#     use C4::Modelo::CatEstructuraCatalogacion;
     use C4::Modelo::CatEstructuraCatalogacion::Manager;
-
-#     my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new(); ???
 
     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
                                                                 query => [ 

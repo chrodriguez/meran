@@ -39,9 +39,9 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getEstructuraCatalogacionFromDBCompleta($nivel,$itemType,$orden);
     
     #Se pasa al cliente el arreglo de objetos estructura_catalogacion   
-    $t_params->{'catalogaciones'}= $catalogaciones_array_ref;
-    $t_params->{'nivel'}= $nivel;
-    $t_params->{'itemType'}= $itemType;
+    $t_params->{'catalogaciones'} = $catalogaciones_array_ref;
+    $t_params->{'nivel'} = $nivel;
+    $t_params->{'itemType'} = $itemType;
     
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
@@ -81,9 +81,9 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
 
     my ($campos_array) = C4::AR::Catalogacion::getCamposXLike($nivel,$campoX);
 
-    my $info= C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
+    my $info = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
 
-	my $infoOperacionJSON= $info;
+	my $infoOperacionJSON = $info;
 
     C4::Auth::print_header($session);
     print $infoOperacionJSON;
@@ -103,9 +103,9 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
 
     my ($campos_array) = C4::AR::Catalogacion::getSubCamposLike($nivel,$campo);
 
-    my $info= C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
+    my $info = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
 
-    my $infoOperacionJSON= $info;
+    my $infoOperacionJSON = $info;
 
     C4::Auth::print_header($session);
     print $infoOperacionJSON;
@@ -378,33 +378,10 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
 
     my $id1 = $obj->{'id1'};
 
-#      my ($nivel1) = C4::Modelo::CatNivel1->new(id1 => $id1);
     my ($nivel1) = C4::AR::Nivel1::getNivel1FromId1($id1);
-#     $nivel1->forget;
-    my $err = $nivel1->load();
+
     $t_params->{'nivel1'} = $nivel1;
-    $t_params->{'OK'} = $err;
-
-    my $cat2;
-    my $cat1 = C4::Modelo::CatNivel1->new(id1 => 1949);
-
-    $cat2 = C4::Modelo::CatNivel1->new(id1 => 1949);
-
-    my $socio_data = C4::Modelo::UsrSocio->new(id_socio => 3);
-#         $socio_data->forget;
-        $socio_data->load();
-C4::AR::Debug::debug("nro socio: ".$socio_data->getNro_socio);
-my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio(26320);
-    $socio->load();
-#     C4::AR::Debug::debug("nombre socio: ".$socio_data->persona->getNombre);
-        C4::AR::Debug::debug("nro socio: ".$socio->getNro_socio);
-#     $cat2->save;
-#     $cat2->cached_objects_expire_in('15 minutes');
-
-    # This will load from the memory cache, not the database
-    $cat2->forget;
-    $cat2->load();# or die $cat2->error;
-     $cat2->load();# or die $cat2->error;  
+    $t_params->{'OK'} = ($nivel1?1:0);
 
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

@@ -21,30 +21,6 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'sessionID' ],
 );
 
-sub load{
-    my $self = $_[0]; # Copy, not shift
-
-    my $error = 0;
-
-    eval {
-    
-         unless( $self->SUPER::load(speculative => 1) ){
-                 C4::AR::Debug::debug("SistSesion=>  dentro del unless, no existe el objeto SUPER load");
-                $error = 1;
-         }
-
-        C4::AR::Debug::debug("SistSesion=>  SUPER load");
-        return $self->SUPER::load(@_);
-    };
-
-    if($@){
-        C4::AR::Debug::debug("SistSesion=>  no existe el objeto");
-        $error = 1;
-    }
-
-    return $error;
-}
-
 =item
 Se redefine el metodo delte para poder loguear
 =cut
