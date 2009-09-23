@@ -822,7 +822,7 @@ function procesarObjeto(objeto){
             //tipo,id,opciones,valor
             comp= crearComponente(tipo,idComp,"","");
             $(comp).appendTo("#"+idDiv);
-            $("#"+idComp).val(objeto.valText);
+//             $("#"+idComp).val(objeto.valText);?????
 			_cearAutocompleteParaCamponente(objeto);
 			//se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
 			comp= crearComponente('hidden',objeto.idCompCliente + '_hidden','','');

@@ -35,8 +35,7 @@ __PACKAGE__->meta->setup(
 =cut
 sub load{
     my $self = $_[0]; # Copy, not shift
-    
-
+  
     my $error = 1;
 
     eval {

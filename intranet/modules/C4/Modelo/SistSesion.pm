@@ -3,7 +3,7 @@ package C4::Modelo::SistSesion;
 use strict;
 
 use C4::Context;
-use base qw(C4::Modelo::DB::Object::AutoBase2);
+use base qw(C4::Modelo::DB::Object::AutoBaseSession);
 
 __PACKAGE__->meta->setup(
     table   => 'sist_sesion',

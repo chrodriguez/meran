@@ -603,8 +603,11 @@ sub getSocioInfo {
 sub getSocioInfoPorNroSocio {
     my ($nro_socio)= @_;
 
-    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ nro_socio => { eq => $nro_socio } ]);
-    use C4::Modelo::UsrSocio;
+    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+                                                        query => [ nro_socio => { eq => $nro_socio } ],
+                                                        require_objects => [ 'persona' ]
+                                                    );
+#     use C4::Modelo::UsrSocio;
 
     if($socio_array_ref){
         return ($socio_array_ref->[0]);

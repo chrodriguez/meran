@@ -1,7 +1,7 @@
 package C4::Modelo::DB::Object::AutoBase2;
 
-use base 'Rose::DB::Object';
-# use base 'Rose::DB::Object::Cached';
+# use base 'Rose::DB::Object';
+use base 'Rose::DB::Object::Cached';
 # our @ISA = qw(Rose::DB::Cache);
 
 
@@ -10,18 +10,18 @@ use C4::Modelo::DB::AutoBase1;
 use base qw(Rose::DB::Object::Helpers);
 # sub init_db { C4::Modelo::DB::AutoBase1->new}
 sub init_db {
-     if($ENV{'MOD_PERL'})
-    {
-        C4::AR::Debug::debug("AutoBase2 => init_db => CACHED");
-      *init_db = sub { 
-                C4::Modelo::DB::AutoBase1->new_or_cached; 
-        };
-    }
-    else # act "normally" when not under mod_perl
-    {
-        C4::AR::Debug::debug("AutoBase2 => init_db => NO CACHED");
+#      if($ENV{'MOD_PERL'})
+#     {
+#         C4::AR::Debug::debug("AutoBase2 => init_db => CACHED");
+#       *init_db = sub { 
+#                 C4::Modelo::DB::AutoBase1->new_or_cached; 
+#         };
+#     }
+#     else # act "normally" when not under mod_perl
+#     {
+#         C4::AR::Debug::debug("AutoBase2 => init_db => NO CACHED");
       *init_db = sub { C4::Modelo::DB::AutoBase1->new };
-    }
+#     }
 }
 
 =item

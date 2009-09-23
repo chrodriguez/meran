@@ -384,6 +384,23 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
     $t_params->{'nivel1'} = $nivel1;
     $t_params->{'OK'} = $err;
 
+#     use base 'Rose::DB::Object::Cached';
+    my $cat2;
+    my $cat1 = C4::Modelo::CatNivel1->new(id1 => 1949);
+
+    $cat2 = C4::Modelo::CatNivel1->new(id1 => 1949);
+
+    my $socio_data = C4::Modelo::UsrSocio->new(id_socio => 3);
+        $socio_data->load;
+#     C4::AR::Debug::debug("nombre socio: ".$socio_data->persona->getNombre);
+        C4::AR::Debug::debug("nro socio: ".$socio_data->getNro_socio);
+#     $cat2->save;
+#     $cat2->cached_objects_expire_in('15 minutes');
+
+    # This will load from the memory cache, not the database
+    $cat2->load;# or die $cat2->error;
+     $cat2->load;# or die $cat2->error;  
+
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 

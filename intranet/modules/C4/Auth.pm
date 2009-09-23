@@ -252,12 +252,12 @@ sub get_template_and_user {
 # FIXME dos asignaciones de nro_socio???
         $params->{'nro_socio'}= $nro_socio;
 
-        my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
-        $socio->load();
+        my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
+#         $socio->load( nonlazy => 1);
+C4::AR::Debug::debug("get_template_and_user => nro_socio: ".$socio->getNro_socio);
+C4::AR::Debug::debug("get_template_and_user => apellido: ".$socio->persona->getApellido);
         $session->param('nro_socio',$nro_socio);
         $params->{'socio_data'}= $socio;
-# DEPRECATED no se usa mas el id_socio, cambiar por nro_socio
-#         $session->param('id_socio',$socio->getId_socio);
 		$params->{'token'}= $session->param('token');
 		#para mostrar o no algun submenu del menu principal
  		$params->{'menu_preferences'}= C4::AR::Preferencias::getMenuPreferences();
