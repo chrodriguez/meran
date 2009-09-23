@@ -230,6 +230,7 @@ ademas si es una referencia, setea el dato referente
 =cut
 sub toMARC{
     my ($self) = shift;
+
 	my @marc_array;
 
 	my $campo= '245';

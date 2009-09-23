@@ -376,30 +376,35 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
                             debug => 1,
                     });
 
-    my $id1=$obj->{'id1'};
+    my $id1 = $obj->{'id1'};
 
-    my ($nivel1) = C4::Modelo::CatNivel1->new(id1 => $id1);
+#      my ($nivel1) = C4::Modelo::CatNivel1->new(id1 => $id1);
+    my ($nivel1) = C4::AR::Nivel1::getNivel1FromId1($id1);
+#     $nivel1->forget;
     my $err = $nivel1->load();
-
     $t_params->{'nivel1'} = $nivel1;
     $t_params->{'OK'} = $err;
 
-#     use base 'Rose::DB::Object::Cached';
     my $cat2;
     my $cat1 = C4::Modelo::CatNivel1->new(id1 => 1949);
 
     $cat2 = C4::Modelo::CatNivel1->new(id1 => 1949);
 
     my $socio_data = C4::Modelo::UsrSocio->new(id_socio => 3);
-        $socio_data->load;
+#         $socio_data->forget;
+        $socio_data->load();
+C4::AR::Debug::debug("nro socio: ".$socio_data->getNro_socio);
+my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio(26320);
+    $socio->load();
 #     C4::AR::Debug::debug("nombre socio: ".$socio_data->persona->getNombre);
-        C4::AR::Debug::debug("nro socio: ".$socio_data->getNro_socio);
+        C4::AR::Debug::debug("nro socio: ".$socio->getNro_socio);
 #     $cat2->save;
 #     $cat2->cached_objects_expire_in('15 minutes');
 
     # This will load from the memory cache, not the database
-    $cat2->load;# or die $cat2->error;
-     $cat2->load;# or die $cat2->error;  
+    $cat2->forget;
+    $cat2->load();# or die $cat2->error;
+     $cat2->load();# or die $cat2->error;  
 
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

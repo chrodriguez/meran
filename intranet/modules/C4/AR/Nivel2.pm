@@ -523,10 +523,12 @@ sub t_modificarNivel2 {
     my $id2;
     my $catNivel2;
 
+    $catNivel2 = C4::Modelo::CatNivel2->new(id2 => $params->{'id2'});
+    $catNivel2->load();
+
     if(!$msg_object->{'error'}){
     #No hay error
-		$catNivel2= C4::Modelo::CatNivel2->new(id2 => $params->{'id2'});
-		$catNivel2->load();
+		
 		$params->{'modificado'}=1;
         my $db= $catNivel2->db;
         # enable transactions, if possible

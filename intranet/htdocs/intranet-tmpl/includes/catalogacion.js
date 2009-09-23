@@ -39,7 +39,7 @@ function objeto_params(){
 }
 
 function inicializarSideLayers(){
-    arreglo = $('#nivel2>p');
+    arreglo = $('#nivel2>fieldset legend');
     for (x = 0; x<arreglo.length; x++){
         $(arreglo[x]).removeClass('activeLayer');
         $(arreglo[x]).addClass('nivel2Selected');
@@ -722,16 +722,21 @@ function guardar(nivel){
 }
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 2 luego de ser guardado
+/*
+    Muestra el Nivel 3 para el Nivel 1 (id1) y Nivel 2 (idNivel2)
+*/
 function mostrarInfoAltaNivel3(id1, idNivel2){
-    objAH=new AjaxHelper(updateMostrarInfoAltaNivel3);
-    objAH.debug= true;
-    objAH.showStatusIn = 'detalleDelNivel3';
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tipoAccion= "MOSTRAR_INFO_NIVEL3_TABLA";
-    objAH.id1= id1;
-    objAH.id2= idNivel2;
-    ID_N2= idNivel2;
-    objAH.sendToServer();
+    if(idNivel2 != 0){
+        objAH=new AjaxHelper(updateMostrarInfoAltaNivel3);
+        objAH.debug= true;
+        objAH.showStatusIn = 'detalleDelNivel3';
+        objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.tipoAccion= "MOSTRAR_INFO_NIVEL3_TABLA";
+        objAH.id1= id1;
+        objAH.id2= idNivel2;
+        ID_N2= idNivel2;
+        objAH.sendToServer();
+    }
 }
 
 function updateMostrarInfoAltaNivel3(responseText){

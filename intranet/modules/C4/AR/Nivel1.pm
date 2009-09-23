@@ -231,9 +231,10 @@ sub getNivel1FromId1{
 	my ($id1) = @_;
 
 	my $nivel1_array_ref = C4::Modelo::CatNivel1::Manager->get_cat_nivel1(   
-																							query => [ 
-																										id1 => { eq => $id1 },
-																								], 
+																		query => [ 
+																					id1 => { eq => $id1 },
+																			], 
+                                                                        with_objects => [ 'cat_autor' ]    
 																);
 
 	if( scalar(@$nivel1_array_ref) > 0){

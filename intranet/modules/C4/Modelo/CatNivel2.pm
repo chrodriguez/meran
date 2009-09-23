@@ -72,29 +72,34 @@ __PACKAGE__->meta->setup(
     ],
 );
 
-# sub load{
-#     my $self = $_[0]; # Copy, not shift
-# 
-#     my $error = 0;
-# 
-#     eval {
-#     
-#          unless( $self->SUPER::load(speculative => 1) ){
-#                  C4::AR::Debug::debug("CatNivel2=>  dentro del unless, no existe el objeto SUPER load");
-#                 $error = 1;
-#          }
-# 
-#         C4::AR::Debug::debug("CatNivel2=>  SUPER load");
-#         return $self->SUPER::load(@_);
-#     };
-# 
-#     if($@){
-#         C4::AR::Debug::debug("CatNivel2=>  no existe el objeto");
-#         $error = 1;
-#     }
-# 
-#     return $error;
-# }
+=item
+    Returns true (1) if the row was loaded successfully
+    undef if the row could not be loaded due to an error, 
+    zero (0) if the row does not exist.
+=cut
+sub load{
+    my $self = $_[0]; # Copy, not shift
+  
+    my $error = 1;
+
+    eval {
+    
+         unless( $self->SUPER::load(speculative => 1) ){
+                 C4::AR::Debug::debug("CatNivel2=>  dentro del unless, no existe el objeto SUPER load");
+                $error = 0;
+         }
+
+        C4::AR::Debug::debug("CatNivel2=>  SUPER load");
+        return $self->SUPER::load(@_);
+    };
+
+    if($@){
+        C4::AR::Debug::debug("CatNivel2=>  no existe el objeto");
+        $error = undef;
+    }
+
+    return $error;
+}
 
 sub agregar{
 
@@ -630,6 +635,23 @@ sub replaceBy{
                                                                         set   => { $campo => $new_value });
 }
 
+=item sub getCantEjemplares
+retorna la canitdad de ejemplares del grupo
+=cut
+sub getCantEjemplares{
+    my ($self) = shift;
+
+    my $cantEjemplares_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count(
+
+                                                                query => [  'id1' => { eq => $self->getId1 },
+                                                                            'id2' => { eq => $self->getId2 }
+                                                                         ],
+
+                                        );
+
+
+    return $cantEjemplares_count;
+}
 
 1;
 

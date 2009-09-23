@@ -493,14 +493,15 @@ sub cantNivel2 {
 }
 
 =item
-    Esta funcion genera la estructura de catalogacion con los datos para los REPETIBLES
+    Esta funcion genera la estructura de catalogacion con los datos para los REPETIBLES, al final se agregan los datos 
+    y la estructura de los niveles 1, 2 y 3
 =cut
 sub getEstructuraConDatos{
     my ($params) = @_;
 
     C4::AR::Debug::debug("getEstructuraConDatos => ======================================================================");
-    my $nivel= $params->{'nivel'};
-    my $itemType= $params->{'id_tipo_doc'};
+    my $nivel = $params->{'nivel'};
+    my $itemType = $params->{'id_tipo_doc'};
     #obtengo la estructura_catalogacion configurada solo de los campos REPETIBLES
      my ($cant, $catalogaciones_array_ref_objects)= getEstructuraCatalogacionFromDBRepetibles($nivel,$itemType);
 
@@ -636,7 +637,7 @@ sub getEstructuraCatalogacionFromDBCompleta{
 #     use C4::Modelo::CatEstructuraCatalogacion;
     use C4::Modelo::CatEstructuraCatalogacion::Manager;
 
-    my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new();
+#     my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new(); ????
 
     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
                                                                 query => [ 
@@ -666,7 +667,7 @@ sub getEstructuraCatalogacionFromDBRepetibles{
 #     use C4::Modelo::CatEstructuraCatalogacion;
     use C4::Modelo::CatEstructuraCatalogacion::Manager;
 
-    my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new();
+#     my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new(); ???
 
     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
                                                                 query => [ 
