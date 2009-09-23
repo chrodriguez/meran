@@ -193,6 +193,7 @@ sub modificarEstante  {
         if(!$msg_object->{'error'}){
             C4::AR::Debug::debug("VAMOS A MODIFICAR EL ESTANTE");
             $estante->setEstante($valor);
+            $estante->save();
             $db->commit;
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E007', 'params' => [$valor]} ) ;

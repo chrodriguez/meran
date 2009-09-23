@@ -13,8 +13,21 @@ my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $tipo= $obj->{'tipo'};
 
+if($tipo eq "VER_ESTANTES"){
 
-if($tipo eq "VER_SUBESTANTE"){
+    my ($template, $session, $t_params) = get_template_and_user(
+            {template_name => "estantes/verEstante.tmpl",
+                    query => $input,
+                    type => "intranet",
+                    authnotrequired => 0,
+                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    });
+
+    my $estantes_publicos = C4::AR::Estantes::getListaEstantesPublicos();
+    $t_params->{'ESTANTES'}= $estantes_publicos;
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
+elsif($tipo eq "VER_SUBESTANTE"){
 
 	my ($template, $session, $t_params) = get_template_and_user(
             {template_name => "estantes/subEstante.tmpl",
@@ -25,10 +38,13 @@ if($tipo eq "VER_SUBESTANTE"){
 					});
 	
 	my $id_estante= $obj->{'estante'};
+    if($id_estante ne 0){
     my $estante= C4::AR::Estantes::getEstante($id_estante);
+    $t_params->{'estante'}= $estante;
+    }
+
     my $subEstantes= C4::AR::Estantes::getSubEstantes($id_estante);
 
-	$t_params->{'estante'}= $estante;
     $t_params->{'SUBESTANTES'}= $subEstantes;
     $t_params->{'cant_subestantes'}= @$subEstantes;
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);

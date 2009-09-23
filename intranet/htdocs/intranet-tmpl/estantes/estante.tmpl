@@ -6,6 +6,21 @@
         function ordenar(orden){
             objAH.sort(orden);
         }
+
+        function verEstantes(){
+                objAH=new AjaxHelper(updateVerEstantes);
+                objAH.debug= true;
+                objAH.url= 'estanteDB.pl';
+                objAH.tipo= 'VER_ESTANTES';
+                objAH.sendToServer();
+        }
+
+        function updateVerEstantes(responseText){
+                $('#estante').html(responseText);
+                makeToggle('datos_tabla_div_estantes','trigger',null,false);
+        }
+
+
         function verSubEstantes(estante,subestante){
                 objAH=new AjaxHelper(updateVerSubEstantes);
                 objAH.debug= true;
@@ -131,7 +146,13 @@
             var Messages= JSONstring.toObject(responseText);
             setMessages(Messages);
             if (!(hayError(Messages))){
-                verSubEstantes(objAH.padre,objAH.estante);
+                if (objAH.padre == 0){
+                    verEstantes();
+                    $('.datos_tabla_div_estantes').hide();
+                }
+                else {
+                    verSubEstantes(objAH.padre,objAH.estante);
+                }
             }
             else {
                 $('.editable_'+objAH.estante).html(objAH.valorviejo);
@@ -141,24 +162,12 @@
 
 
       $(document).ready(function() {
-                makeToggle('datos_tabla_div_estantes','trigger',null,false);
+                verEstantes();
       });
 
 </script>
-
-<fieldset class="resultados_busqueda">
-<legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>
-        <div class="datos_tabla_div_estantes">
-           <ul>
-            [% FOREACH estante IN ESTANTES %]
-             <li>
-             <a class="click" onClick="verSubEstantes(0,[% estante.getId %])">[% estante.getEstante %]</a>
-            </li>
-            [% END %]
-                </ul>
-
-        </div>
-</fieldset>
+<div id="estante">
+</div>
 <div id="subestante">
 </div>
 [% INCLUDE "intranet-bottom.inc" %]

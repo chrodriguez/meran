@@ -19,10 +19,4 @@ my ($template, $session, $t_params) = get_template_and_user ({
                                         debug => 1,
                  });
 
-my $obj=$input->param('obj');
-if($obj ne ""){	$obj=C4::AR::Utilidades::from_json_ISO($obj); }
-
-my $estantes_publicos = C4::AR::Estantes::getListaEstantesPublicos();
-$t_params->{'ESTANTES'}= $estantes_publicos;
-
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

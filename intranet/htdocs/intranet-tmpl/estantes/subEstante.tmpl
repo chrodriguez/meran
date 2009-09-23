@@ -92,7 +92,7 @@
                     <td>
                     <input type='checkbox' class="chk_contenido_[% estante.getId %]" name="[% contenido_estante.nivel2.nivel1.getTitulo %] ([% contenido_estante.nivel2.nivel1.cat_autor.getCompleto %])" value="[% contenido_estante.getId2 %]">
                     </td>
-                    <td class="titulo_result">[% contenido_estante.nivel2.nivel1.getTitulo %]
+                    <td class="titulo_result">
                         [% PERL %]
                             print C4::AR::Filtros::link_to( text =>     "[% contenido_estante.nivel2.nivel1.getTitulo %]",
                                                             url =>      "/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
