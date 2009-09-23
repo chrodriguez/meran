@@ -929,7 +929,7 @@ sub _save_session_db{
 	my ($sessionID, $userid, $remote_addr, $random_number, $token) = @_;
 
     my ($sist_sesion)= C4::Modelo::SistSesion->new();
-    $sist_sesion->load();
+
     $sist_sesion->setSessionId($sessionID);
     $sist_sesion->setUserid($userid);
     $sist_sesion->setIp($remote_addr);
@@ -1096,7 +1096,9 @@ sub inicializarAuth{
     my $random_number= C4::Auth::_generarNroRandom();
     
     #genero una nueva session
-    my $session = CGI::Session->load();
+
+    my $session = CGI::Session->new();
+
     #se pasa el mensaje al cliente, $t_params es una REFERENCIA
     C4::AR::Debug::debug("codMsg: ".$session->param('codMsg'));
     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param('codMsg'),'INTRA',[]);
