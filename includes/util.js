@@ -112,6 +112,17 @@ function checkedAll(id,nombreCheckbox){
 }
 
 /*
+ * checkedAllById
+ * Selecciona y deselecciona a todos los checkbox por id, cuando se toca el boton.
+ * primer click selecciona, segundo click deselecciona. 
+ */
+function checkedAllById (id){
+        $("#"+id+" input[type='checkbox']").each(
+                function(){this.checked=!this.checked;}
+        );
+}
+
+/*
  * onEnter
  * Funcion que se asigna el evento onEnter al input que viene el id pasado por parametro y se ejecuta la funcion
  * que se pasa por paramentro.

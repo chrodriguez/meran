@@ -145,6 +145,10 @@ TITLE_TO_ASSIGN_REFERENCIES = "[% ' a este otro? ' | i18n %]";
 ELIMINAR_ESTANTE_TITLE =  "[% 'Advertencia' | i18n %]";
 ELIMINAR_LOS_ESTANTES = "[% 'Usted est\u00e1 a punto de eliminar los estantes' | i18n %]";
 NO_SE_SELECCIONO_NINGUN_ESTANTE= "[% 'No seleccion\u00f3 ning\u00fan estante' | i18n %]";
+
+ELIMINAR_CONTENIDO_TITLE =  "[% 'Advertencia' | i18n %]";
+ELIMINAR_EL_CONTENIDO = "[% 'Usted est\u00e1 a punto de eliminar el contenido' | i18n %]";
+NO_SE_SELECCIONO_NINGUN_CONTENIDO= "[% 'No seleccion\u00f3 ning\u00fan contenido' | i18n %]";
 //=================================================Fin===Estante=======================================================
 
 </script>

@@ -28,6 +28,32 @@ __PACKAGE__->meta->setup(
 
 );
 
+sub getTitulo{
+    my ($self) = shift;
+    return ($self->titulo);
+}
+
+sub setTitulo{
+    my ($self) = shift;
+
+    my ($titulo) = @_;
+    utf8::encode($titulo);
+    $self->titulo($titulo);
+}
+
+sub getAutor{
+    my ($self) = shift;
+    return ($self->autor);
+}
+
+sub setAutor{
+    my ($self) = shift;
+    my ($autor) = @_;
+    $self->autor($autor);
+}
+
+
+
 =item
     Returns true (1) if the row was loaded successfully
     undef if the row could not be loaded due to an error, 
@@ -183,30 +209,6 @@ sub setId1{
     my ($self) = shift;
     my ($id1) = @_;
     $self->id1($id1);
-}
-
-sub getTitulo{
-    my ($self) = shift;
-    return ($self->titulo);
-}
-
-sub setTitulo{
-    my ($self) = shift;
-
-    my ($titulo) = @_;
-	utf8::encode($titulo);
-    $self->titulo($titulo);
-}
-
-sub getAutor{
-    my ($self) = shift;
-    return ($self->autor);
-}
-
-sub setAutor{
-    my ($self) = shift;
-    my ($autor) = @_;
-    $self->autor($autor);
 }
 
 sub getTimestamp{

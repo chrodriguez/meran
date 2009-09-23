@@ -328,6 +328,11 @@ my %mensajesINTRA = (
     'E002' => 'No se pudo borrar el estante "*?*", ya que el mismo posee subestantes.',
 	'E003' => 'Se produjo un error al tratar de eliminar el estante "*?*" .',
     'E004' => 'El estante "*?*" se elimin&oacute; con &eacute;xito.',
+    'E005' => 'Se produjo un error al tratar de eliminar el contenido del estante "*?*" .',
+    'E006' => 'El contenido "*?*" se elimin&oacute; con &eacute;xito.',
+    'E007' => 'El estante fue modificado con &eacute;xito a "*?*".',
+    'E008' => 'Se produjo un error al tratar de modificar el estante "*?*" .',
+    'E009' => 'No se pudo modificar el estante  ya que existe otro con el nombre "*?*".',
 );
 
 sub getMensaje {

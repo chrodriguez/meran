@@ -14,7 +14,7 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $tipo= $obj->{'tipo'};
 
 
-if(($tipo eq "VER_ESTANTE")||($tipo eq "VER_SUBESTANTE")){
+if($tipo eq "VER_SUBESTANTE"){
 
 	my ($template, $session, $t_params) = get_template_and_user(
             {template_name => "estantes/subEstante.tmpl",
@@ -30,6 +30,7 @@ if(($tipo eq "VER_ESTANTE")||($tipo eq "VER_SUBESTANTE")){
 
 	$t_params->{'estante'}= $estante;
     $t_params->{'SUBESTANTES'}= $subEstantes;
+    $t_params->{'cant_subestantes'}= @$subEstantes;
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif($tipo eq "BORRAR_ESTANTES"){
@@ -49,7 +50,42 @@ elsif($tipo eq "BORRAR_ESTANTES"){
 
     C4::Auth::print_header($session);
     print $infoOperacionJSON;
+}
+elsif($tipo eq "BORRAR_CONTENIDO"){
+    my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'BAJA', 
+                                                    entorno => 'undefined' },
+                                                'intranet'
+                               );
+    my $id_estante= $obj->{'estante'};
+    my $contenido_array_ref= $obj->{'contenido'};
+    ($Messages_arrayref)= &C4::AR::Estantes::borrarContenido($id_estante,$contenido_array_ref);
 
+    my $infoOperacionJSON=to_json $Messages_arrayref;
 
+    C4::Auth::print_header($session);
+    print $infoOperacionJSON;
+}
+elsif($tipo eq "MODIFICAR_ESTANTE"){
+    my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'MODIFICACION', 
+                                                    entorno => 'undefined' },
+                                                'intranet'
+                               );
+
+    my $id_estante= $obj->{'estante'};
+    my $valor= $obj->{'valor'};
+    ($Messages_arrayref)= &C4::AR::Estantes::modificarEstante($id_estante,$valor);
+
+    my $infoOperacionJSON=to_json $Messages_arrayref;
+
+    C4::Auth::print_header($session);
+    print $infoOperacionJSON;
 }
 

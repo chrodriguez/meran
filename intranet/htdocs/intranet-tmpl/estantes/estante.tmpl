@@ -1,25 +1,11 @@
 [% INCLUDE "intranet-top.inc" %]
+<script language="javascript" type="text/javascript" src="/includes/jquery/jquery.jeditable.js"></script>
 
 <script>
 
         function ordenar(orden){
             objAH.sort(orden);
         }
-
-        function verEstante(estante){
-                objAH=new AjaxHelper(updateVerEstante);
-                objAH.debug= true;
-                objAH.url= 'estanteDB.pl';
-                objAH.estante= estante;
-                objAH.tipo= 'VER_ESTANTE';
-                objAH.sendToServer();
-        }
-
-        function updateVerEstante(responseText){
-                $('#subestante').html(responseText);
-                $('.datos_tabla_div_estantes').hide();
-        }
-
         function verSubEstantes(estante,subestante){
                 objAH=new AjaxHelper(updateVerSubEstantes);
                 objAH.debug= true;
@@ -31,34 +17,42 @@
         }
 
         function updateVerSubEstantes(responseText){
-            $('#subestante-'+ objAH.padre).html(responseText);
-            zebra('datos_tabla');
-            $('.datos_tabla_div_subestante_'+objAH.padre).hide();
+            if(objAH.padre == 0){
+                $('#subestante').html(responseText);
+                $('.datos_tabla_div_estantes').hide();
+            }
+            else{
+                $('#subestante-'+ objAH.padre).html(responseText);
+                zebra('datos_tabla');
+                $('.datos_tabla_div_subestante_'+objAH.padre).hide();
+            }
         }
 
-        function borrarEstantesSeleccionados(estante) {
-            var checks=$(".datos_tabla_div_subestante_"+estante+" input[@type='checkbox']:checked");
+        function borrarEstantesSeleccionados(estante,padre) {
+            var checks=$(".ul_tabla_div_subestante_"+estante+" input[type='checkbox']:checked");
             var array=checks.get();
             var theStatus="";
             var estantes=new Array();
             var cant=checks.length;
             if (cant>0){
-                theStatus= ELIMINAR_LOS_ESTANTES+":\n"; 
-                for(i=0;i<checks.length;i++){
+                theStatus= ELIMINAR_LOS_ESTANTES+":\n";
+
+                for(i=0;i<checks.length;i++) {
                     theStatus=theStatus+array[i].name+"\n";
                     estantes[i]=array[i].value;
                 }
                 theStatus=theStatus + ESTA_SEGURO+"?";
-                    jConfirm(theStatus,ELIMINAR_ESTANTE_TITLE, function(confirmStatus){if (confirmStatus) borrarEstantes(cant,estantes);});
+                jConfirm(theStatus,ELIMINAR_ESTANTE_TITLE, function(confirmStatus){if (confirmStatus) borrarEstantes(estantes,estante,padre);});
             }
             else{ jAlert(NO_SE_SELECCIONO_NINGUN_ESTANTE,ELIMINAR_ESTANTE_TITLE);}
-
         }
 
-        function borrarEstantes(cant,estantes){
+        function borrarEstantes(estantes,estante,padre) {
                 objAH=new AjaxHelper(updateBorrarEstantesSeleccionados);
                 objAH.debug= true;
                 objAH.url= 'estanteDB.pl';
+                objAH.estante= estante;
+                objAH.padre= padre;
                 objAH.estantes= estantes;
                 objAH.tipo= 'BORRAR_ESTANTES';
                 objAH.sendToServer();
@@ -67,11 +61,44 @@
         function updateBorrarEstantesSeleccionados(responseText){
          var Messages= JSONstring.toObject(responseText);
          setMessages(Messages);
-         if (!(hayError(Messages))){
-            //REFRESH Subestante
-         }
+         verSubEstantes(objAH.padre,objAH.estante);
         }
 
+  function borrarContenidoSeleccionado (estante,padre) {
+            var checks=$(".datos_tabla_div_contenido_"+estante+" input[type='checkbox']:checked");
+            var array=checks.get();
+            var theStatus="";
+            var contenido=new Array();
+            var cant=checks.length;
+            if (cant>0){
+                theStatus= ELIMINAR_EL_CONTENIDO+":\n";
+
+                for(i=0;i<checks.length;i++) {
+                    theStatus=theStatus+array[i].name+"\n";
+                    contenido[i]=array[i].value;
+                }
+                theStatus=theStatus + ESTA_SEGURO+"?";
+                jConfirm(theStatus,ELIMINAR_CONTENIDO_TITLE, function(confirmStatus){if (confirmStatus) borrarContenido(contenido,estante,padre);});
+            }
+            else{ jAlert(NO_SE_SELECCIONO_NINGUN_CONTENIDO ,ELIMINAR_CONTENIDO_TITLE);}
+        }
+
+        function borrarContenido(contenido,estante,padre) {
+                objAH=new AjaxHelper(updateBorrarContenidoSeleccionado);
+                objAH.debug= true;
+                objAH.url= 'estanteDB.pl';
+                objAH.estante= estante;
+                objAH.padre= padre;
+                objAH.contenido= contenido;
+                objAH.tipo= 'BORRAR_CONTENIDO';
+                objAH.sendToServer();
+        }
+
+        function updateBorrarContenidoSeleccionado(responseText){
+         var Messages= JSONstring.toObject(responseText);
+         setMessages(Messages);
+         verSubEstantes(objAH.padre,objAH.estante);
+        }
 
 
         function agregarEstante(estante){
@@ -88,6 +115,30 @@
                 $('.datos_tabla_div_estantes').hide();
         }
 
+        function modificarEstante(padre,estante,valor,valorviejo){
+                objAH=new AjaxHelper(updateModificarEstante);
+                objAH.debug= true;
+                objAH.url= 'estanteDB.pl';
+                objAH.estante= estante;
+                objAH.padre= padre;
+                objAH.valor= valor;
+                objAH.valorviejo= valorviejo;
+                objAH.tipo= 'MODIFICAR_ESTANTE';
+                objAH.sendToServer();
+        }
+
+        function updateModificarEstante(responseText){
+            var Messages= JSONstring.toObject(responseText);
+            setMessages(Messages);
+            if (!(hayError(Messages))){
+                verSubEstantes(objAH.padre,objAH.estante);
+            }
+            else {
+                $('.editable_'+objAH.estante).html(objAH.valorviejo);
+            }
+        }
+
+
 
       $(document).ready(function() {
                 makeToggle('datos_tabla_div_estantes','trigger',null,false);
@@ -101,7 +152,7 @@
            <ul>
             [% FOREACH estante IN ESTANTES %]
              <li>
-             <a class="click" onClick="verEstante([% estante.getId %])">[% estante.getEstante %]</a>
+             <a class="click" onClick="verSubEstantes(0,[% estante.getId %])">[% estante.getEstante %]</a>
             </li>
             [% END %]
                 </ul>
