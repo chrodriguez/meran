@@ -1,0 +1,13 @@
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>
+        <div class="datos_tabla_div_estantes">
+           <ul>
+            [% FOREACH estante IN ESTANTES %]
+             <li>
+             <a class="click" onClick="verSubEstantes(0,[% estante.getId %])">[% estante.getEstante %]</a>
+            </li>
+            [% END %]
+                </ul>
+
+        </div>
+</fieldset>
