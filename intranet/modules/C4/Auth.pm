@@ -1502,21 +1502,20 @@ sub _checkpw {
     my ($userid, $password, $random_number) = @_;
     C4::AR::Debug::debug("_checkpw=> \n");
 
-# FIXME sino se recupera la persona se rompe
-#     my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-    $socio->load();
-    C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
-      if ( ($socio->persona)&&($socio->getActivo) ) {
-        C4::AR::Debug::debug("_checkpw=> tengo persona y socio\n");
-        #existe el socio y se encuentra activo
-        my $hashed_password= $socio->getPassword;
-        my $ui= $socio->getId_ui;
-        my $dni= $socio->persona->getNro_documento;
 
-        return _verificar_password_con_metodo($hashed_password, $password, $dni, $random_number, _getMetodoEncriptacion()), $userid, $ui;
-     }# END  if ( ($socio->persona)&&($socio->getActivo) )
-
+    if ($socio){
+        C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
+          if ( ($socio->persona)&&($socio->getActivo) ) {
+            C4::AR::Debug::debug("_checkpw=> tengo persona y socio\n");
+            #existe el socio y se encuentra activo
+            my $hashed_password= $socio->getPassword;
+            my $ui= $socio->getId_ui;
+            my $dni= $socio->persona->getNro_documento;
+    
+            return _verificar_password_con_metodo($hashed_password, $password, $dni, $random_number, _getMetodoEncriptacion()), $userid, $ui;
+        }# END  if ( ($socio->persona)&&($socio->getActivo) )
+    }
 
     C4::AR::Debug::debug("_checkpw=> las pass son <> \n");
 

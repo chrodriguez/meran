@@ -70,61 +70,6 @@ __PACKAGE__->meta->setup(
 );
 
 
-# 
-# sub new{
-#     my $self = $_[0]; # Copy, not shift
-# open(Z, ">>/tmp/debug.txt");
-# print Z "usr_socio=> new\n";
-# 
-#     eval {
-# print Z "usr_socio=> dentro del eval, intento crear el objeto\n";    
-#           return shift->SUPER::new(@_);
-#     };
-#     
-#     if($@){
-# print Z "usr_socio=>  no existe el socio, creo uno vacio \n";
-#         my $socio= C4::Modelo::UsrSocio->new();
-#         $socio->setId_ui('');
-#         $socio->setActive(0);
-#         $socio->persona->setApellido('');
-#         $socio->persona->setNombre('');
-#         $socio->persona->setNro_documento('');
-#         $socio->setPassword('');
-# 
-#         return ( $socio );
-#     }
-# }
-
-=item
-    Returns true (1) if the row was loaded successfully
-    undef if the row could not be loaded due to an error, 
-    zero (0) if the row does not exist.
-=cut
-sub load{
-    my $self = $_[0]; # Copy, not shift
-    
-
-    my $error = 1;
-
-    eval {
-    
-         unless( $self->SUPER::load(speculative => 1) ){
-                 C4::AR::Debug::debug("UsrSocio=>  dentro del unless, no existe el objeto SUPER load");
-                $error = 0;
-         }
-
-        C4::AR::Debug::debug("UsrSocio=>  SUPER load");
-        return $self->SUPER::load(@_);
-    };
-
-    if($@){
-        C4::AR::Debug::debug("UsrSocio=>  no existe el objeto");
-        $error = undef;
-    }
-
-    return $error;
-}
-
 sub agregar{
 
     my ($self)=shift;
