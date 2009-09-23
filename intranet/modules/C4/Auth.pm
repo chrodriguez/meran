@@ -247,15 +247,9 @@ sub get_template_and_user {
 	if ( $session->param('userid') ) {
     $params->{'loggedinuser'}= $session->param('userid');
 		$nro_socio = $session->param('userid');
-# FIXME sacar luego de pasar todo a los nombre nuevos
-# 		$session->param('borrowernumber',$nro_socio);#se esta pasadon por ahora despues sacar
-# FIXME dos asignaciones de nro_socio???
         $params->{'nro_socio'}= $nro_socio;
 
         my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
-#         $socio->load( nonlazy => 1);
-C4::AR::Debug::debug("get_template_and_user => nro_socio: ".$socio->getNro_socio);
-C4::AR::Debug::debug("get_template_and_user => apellido: ".$socio->persona->getApellido);
         $session->param('nro_socio',$nro_socio);
         $params->{'socio_data'}= $socio;
 		$params->{'token'}= $session->param('token');
@@ -457,7 +451,6 @@ sub checkauth {
             $token= $query->param('token');
             C4::AR::Debug::debug("checkauth=> Token desde Ajax comun: ".$token);
         }
-# C4::AR::Debug::debug("checkauth=> Token desde Ajax: ".$token);
 	}else{
 		$token= $query->param('token');
         C4::AR::Debug::debug("checkauth=> Token desde GET: ".$token);
@@ -657,7 +650,7 @@ C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID
         C4::AR::Debug::debug("checkauth=> Usuario no logueado, intento de autenticacion \n");     
         #No genero un nuevo sessionID
         #con este sessionID puedo recuperar el nroRandom (si existe) guardado en la base, para verificar la password
-        my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
+        my ($sist_sesion) = C4::Modelo::SistSesion->new(sessionID => $sessionID);
         $sist_sesion->load();
 
         my $sessionID= $session->param('sessionID');
@@ -1509,7 +1502,9 @@ sub _checkpw {
     my ($userid, $password, $random_number) = @_;
     C4::AR::Debug::debug("_checkpw=> \n");
 
-    my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
+# FIXME sino se recupera la persona se rompe
+#     my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
+    my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
     $socio->load();
     C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
       if ( ($socio->persona)&&($socio->getActivo) ) {
