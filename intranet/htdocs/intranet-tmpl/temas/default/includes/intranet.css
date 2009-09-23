@@ -1250,3 +1250,8 @@ input.file {
     background-color: #990000;
     color: InfoBackground;
 }
+
+.error_en_parametros {
+    color: red;
+    text-align: center;
+}

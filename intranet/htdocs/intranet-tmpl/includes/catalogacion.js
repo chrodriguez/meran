@@ -650,6 +650,8 @@ function guardarModificacionDocumentoN2(){
 }
 
 function updateGuardarModificacionDocumentoN2(responseText){
+    
+    if (!verificarRespuesta(responseText)) return(0);
 
 	MODIFICAR=0;
     var info=JSONstring.toObject(responseText);

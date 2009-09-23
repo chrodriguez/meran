@@ -1,3 +1,10 @@
+
+
+
+
+
+[% IF OK == 1 %] 
+
 <script>
 
 $(document).ready(function() {
@@ -53,3 +60,10 @@ $(document).ready(function() {
     [% END %]
 
 </fieldset>
+[% ELSE %]
+    [% PERL %]
+            print C4::AR::Filtros::error_en_parametros( 
+                                            debug => "Error de parametros en modificarCampoMARC.tmpl",
+                                );
+    [% END %]
+[% END %]

@@ -224,6 +224,28 @@ sub ayuda_marc{
     return "<div style='text-align: right;'><span class='click'>".$icon."</span></div>";
 }
 
+
+=item   sub error_en_parametros
+    Esta funcion muestra un error en el template cuando falta algun parametros  
+    $params_hash_ref{'debug'}: mensaje para debug 
+    $params_hash_ref{'msg'}: mensaje para el usuario, sino se ingresa nada muesrta mensaje por defecto "ERROR EN LOS PARAMETROS"
+=cut
+sub error_en_parametros{
+    my (%params_hash_ref) = @_;
+
+    my $mensaje = i18n('ERROR EN LOS PARAMETROS');
+
+    if($params_hash_ref{'debug'}){
+        C4::AR::Debug::debug("Filtro => error_en_parametros => ".$params_hash_ref{'debug'});
+    }
+
+    if($params_hash_ref{'msg'}){
+        $mensaje = i18n($params_hash_ref{'msg'});
+    }
+
+    return "<div class='error_en_parametros'>".$mensaje."</div>";
+}
+
 sub ayuda_in_line{
     my ($text) = @_;
     

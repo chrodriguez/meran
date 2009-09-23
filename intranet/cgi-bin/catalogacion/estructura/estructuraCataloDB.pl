@@ -60,7 +60,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
     my ($campos_array) = C4::AR::Referencias::getCamposDeTablaRef($tableAlias);
 
     my $info = to_json($campos_array);
-    my $infoOperacionJSON= $info;
+    my $infoOperacionJSON = $info;
 
     C4::Auth::print_header($session);
     print $infoOperacionJSON;
@@ -164,14 +164,13 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
                         debug => 1,
                     });
 
-    my $id=$obj->{'id'};
+    my $id = $obj->{'id'};
 
-    my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
-    my $err = $catalogacion->load();
+    my $catalogacion = C4::AR::Catalogacion::getEstructuraCatalogacionById($id);
 
     $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
     $t_params->{'catalogacion'} = $catalogacion;
-    $t_params->{'error'} = $err; 
+    $t_params->{'OK'} = ($catalogacion?1:0); 
 
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
@@ -260,7 +259,7 @@ elsif($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
                                                 'intranet'
                                     );
     my $idestcat=$obj->{'id'};
-
+# FIXME no hacer load, hacer get
     my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $idestcat);
     $catalogacion->load();
 
@@ -279,6 +278,7 @@ elsif($tipoAccion eq "ELIMINAR_CAMPO"){
                                                 'intranet'
                                     );
     my $id=$obj->{'idMod'};
+# FIXME no hacer load, hacer get
     my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
     $catalogacion->load();
     $catalogacion->delete();
@@ -520,12 +520,19 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_1"){
 
     my ($Message_arrayref, $id1) = &C4::AR::Nivel1::t_modificarNivel1($obj);
     
-    my %info;
-    $info{'Message_arrayref'}= $Message_arrayref;
-    $info{'id1'} = $id1;
+    if($id1){    
+        my %info;
+        $info{'Message_arrayref'}= $Message_arrayref;
+        $info{'id1'} = $id1;
+    
+        C4::Auth::print_header($session);
+        print to_json \%info;
 
-    C4::Auth::print_header($session);
-    print to_json \%info;
+    }else{
+        #no existe el objeto de nivel1
+        C4::Auth::print_header($session);
+        print 0;
+    }
 }
 
 elsif($tipoAccion eq "MODIFICAR_NIVEL_2"){
@@ -540,13 +547,19 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_2"){
 
     my ($Message_arrayref, $nivel2) = &C4::AR::Nivel2::t_modificarNivel2($obj);
     
-    my %info;
-    $info{'Message_arrayref'}= $Message_arrayref;
-    $info{'id1'}= $nivel2->getId1;
-    $info{'id2'}= $nivel2->getId2;
-
-    C4::Auth::print_header($session);
-    print to_json \%info;
+    if($nivel2){        
+        my %info;
+        $info{'Message_arrayref'}= $Message_arrayref;
+        $info{'id1'}= $nivel2->getId1;
+        $info{'id2'}= $nivel2->getId2;
+    
+        C4::Auth::print_header($session);
+        print to_json \%info;
+    }else{
+        #no existe el objeto de nivel2
+        C4::Auth::print_header($session);
+        print 0;
+    }
 }
 
 elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){

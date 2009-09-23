@@ -1,7 +1,12 @@
 
     [% IF OK != 1 %]
 
-        [% 'ERROR EN LOS PARAMETROS DE NIVEL 1' | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::error_en_parametros( 
+                                            debug   => "Error de parametros en ADInfoNivel1.tmpl",
+                                            msg     => "[% 'ERROR EN LOS PARAMETROS DE NIVEL 1'| i18n %]",
+                                );
+            [% END %]
 
     [% ELSE %]
 

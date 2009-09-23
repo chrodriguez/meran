@@ -634,10 +634,7 @@ sub _setearInfoParaAutocomplete{
 sub getEstructuraCatalogacionFromDBCompleta{
     my ($nivel,$itemType)=@_;
 
-#     use C4::Modelo::CatEstructuraCatalogacion;
     use C4::Modelo::CatEstructuraCatalogacion::Manager;
-
-#     my $catalogacionTemp = C4::Modelo::CatEstructuraCatalogacion->new(); ????
 
     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
                                                                 query => [ 
@@ -834,6 +831,26 @@ sub _getEstructuraFromCampoSubCampo{
 										);	
 
 	return $cat_estruct_info_array;
+}
+
+=item sub getEstructuraCatalogacionById
+Este funcion devuelve la configuracion de la estructura de catalogacion segun id pasado por parametro
+=cut
+sub getEstructuraCatalogacionById{
+    my ($id)=@_;
+
+    my $cat_estructura_catalogacion_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
+                                                                                query => [ 
+                                                                                            id => { eq => $id },
+                                                                                    ], 
+
+                                        );  
+
+    if(scalar(@$cat_estructura_catalogacion_array_ref) > 0){
+        return $cat_estructura_catalogacion_array_ref->[0];
+    }else{
+        return 0;
+    }
 }
 
 #====================================================FIN==SOPORTE PARA ESTRUCTURA CATALOGACION==================================================

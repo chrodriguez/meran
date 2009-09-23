@@ -466,7 +466,7 @@ sub getNivel2FromId2{
 	if( scalar(@$nivel2_array_ref) > 0){
 		return ($nivel2_array_ref->[0]);
 	}else{
-		return 0;
+		return (0);
 	}
 }
 
@@ -521,15 +521,19 @@ sub t_modificarNivel2 {
 ## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object= C4::AR::Mensajes::create();
     my $id2;
-    my $catNivel2;
 
-    $catNivel2 = C4::Modelo::CatNivel2->new(id2 => $params->{'id2'});
-    $catNivel2->load();
+    my ($catNivel2) = getNivel2FromId2($params->{'id2'});
+
+    if(!$catNivel2){
+        #Se setea error para el usuario
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U403', 'params' => []} ) ;
+    }
 
     if(!$msg_object->{'error'}){
     #No hay error
 		
-		$params->{'modificado'}=1;
+		$params->{'modificado'} = 1;
         my $db= $catNivel2->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
@@ -547,7 +551,7 @@ sub t_modificarNivel2 {
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B431',"INTRA");
-            eval {$db->rollback};
+            $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U384', 'params' => [$catNivel2->getId2]} ) ;

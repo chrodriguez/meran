@@ -297,13 +297,22 @@ sub t_modificarNivel1 {
 
 # FIXME falta verificar que no se agregue con barcode repetido
     my $msg_object= C4::AR::Mensajes::create();
-    my $id1;
+    my $id1 = 0;
+
+    my ($catNivel1) = getNivel1FromId1($params->{'id1'});
+
+    if(!$catNivel1){
+        #Se setea error para el usuario
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U404', 'params' => []} ) ;
+    }
 
     if(!$msg_object->{'error'}){
     #No hay error
         my  $catNivel1;
-		$catNivel1= C4::Modelo::CatNivel1->new(id1 => $params->{'id1'});
-		$catNivel1->load();
+# FIXME no hacer load, hacer get
+# 		$catNivel1= C4::Modelo::CatNivel1->new(id1 => $params->{'id1'});
+# 		$catNivel1->load();
 		$params->{'modificado'}=1;
 
         my $db= $catNivel1->db;
