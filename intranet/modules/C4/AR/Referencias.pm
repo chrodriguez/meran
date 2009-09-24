@@ -514,7 +514,13 @@ sub getTablaInstanceByAlias{
     my $tabla = C4::Modelo::PrefTablaReferencia->new();
        $tabla = $tabla->createFromAlias($alias);
 
-    my $clave = $tabla->meta->primary_key;
+
+    my $clave;
+
+    if ($tabla){
+      $clave = $tabla->meta->primary_key;
+    }
+
 
     return ($clave,$tabla);
 }
@@ -569,12 +575,13 @@ sub mostrarReferencias{
             #NO TIENE ALIAS PORQUE NO ES UNA TABLA DE REFERENCIA, IGUAL ESTA POR VERSE SI LE PONEMOS ALIAS A TODAS O NO
             my ($clave_referente,$tabla_referente) = getTablaInstanceByTableName($tabla->getTabla_referente);
     
-            my $involved_count = $tabla_referente->getInvolvedCount($tabla->getCampo_referente,$value_id);
-    
-            $table_data{"tabla"} = $tabla->getTabla_referente;
-            $table_data{"tabla_object"} = $tabla;
-            $table_data{"cantidad"} = $involved_count;
-            push (@data_array, \%table_data);
+            if ($tabla_referente){
+                my $involved_count = $tabla_referente->getInvolvedCount($tabla->getCampo_referente,$value_id);
+                $table_data{"tabla"} = $tabla->getTabla_referente;
+                $table_data{"tabla_object"} = $tabla;
+                $table_data{"cantidad"} = $involved_count;
+                push (@data_array, \%table_data);
+            }
         }
         
         return ($referer_involved,\@data_array);
@@ -589,13 +596,18 @@ sub mostrarSimilares{
     my ($alias,$value_id) = @_;
 
     my $tabla = getTablaInstanceByAlias($alias);
-    my $refered = $tabla->getByPk($value_id);
-
-    my $related_referers = $refered->getRelated;
+  
+    if ($tabla){
+        my $refered = $tabla->getByPk($value_id);
     
-    my $tabla_related = $refered->getAlias();
-
-    return ($tabla_related,$related_referers);
+        my $related_referers = $refered->getRelated;
+        
+        my $tabla_related = $refered->getAlias();
+    
+        return ($tabla_related,$related_referers);
+    }
+    
+    return (undef,undef);
 }
 
 sub asignarReferencia{
@@ -604,9 +616,13 @@ sub asignarReferencia{
 
     my $tabla = getTablaInstanceByAlias($alias_tabla);
 
-    my $old_pk = $tabla->getByPk($referer_involved);
+    my $status = 0;
 
-    my $status = $old_pk->replaceByThis($related_id);
+    if ($tabla){
+        my $old_pk = $tabla->getByPk($referer_involved);
+    
+        $status = $old_pk->replaceByThis($related_id);
+    }
 
     return ($status);
 }
@@ -614,13 +630,14 @@ sub asignarReferencia{
 sub eliminarReferencia{
 
     my ($alias_tabla,$referer_involved) = @_;
-
     my $tabla = getTablaInstanceByAlias($alias_tabla);
+    my $status = 0;
 
-    my $old_pk = $tabla->getByPk($referer_involved);
-
-    my $status = $old_pk->delete();
-
+    if ($tabla){
+        my $old_pk = $tabla->getByPk($referer_involved);
+    
+        $status = $old_pk->delete();
+    }
     return ($status);
 }
 

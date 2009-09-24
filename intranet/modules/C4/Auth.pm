@@ -417,6 +417,31 @@ has authenticated.
 
 =cut
 
+sub _destruirSession{
+    
+    my ($codMsg,$url) = @_;
+
+    $codMsg = $codMsg || 'U405';
+    $url = $url || '/cgi-bin/koha/auth.pl';
+
+    my ($session) = CGI::Session->load();
+#     $session->param('sessionID', undef);
+    #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
+    $session->param('codMsg', $codMsg);
+    C4::AR::Debug::debug("(en _destruirSession) SessionID: ".$session->id." codMSG: ".$session->param('codMsg'));
+    $session->param('redirectTo', $url);
+    $session->expire('-1');
+    $session->save_param('codMsg');
+
+
+    C4::AR::Debug::debug("WARNING: ¡¡¡¡Se destruye la session y la cookie!!!!!");
+
+    redirectTo($url);        
+
+}
+
+
+
 sub checkauth {
     
     my $query= shift;
@@ -468,26 +493,29 @@ sub checkauth {
     #verifica que no haya sesiones "colgadas", las borra de la base
     _clear_sessions_from_DB();
 
-
-#     #si se usa CGI::Session 4.42 descomentar esta linea
     if(defined $session and _session_expired($session)){
     #EXPIRO LA SESION
-#     if($session->is_expired){
         $session->param('codMsg', 'U355');
         $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
         redirectTo('/cgi-bin/koha/auth.pl');
     }else{
     #NO EXPIRO LA SESION
 
-# FIXME esto no me gusta - Miguel
-#     if ($sessionID=$session->param('sessionID')) {
         $sessionID=$session->param('sessionID');
 
         C4::AR::Debug::debug("checkauth=> sessionID seteado \n");
 
         #Se recupera la info de la session guardada en la base segun el sessionID
-        my ($sist_sesion)= C4::Modelo::SistSesion->new(sessionID => $sessionID);
-        $sist_sesion->load();
+        my ($sist_sesion)= C4::Modelo::SistSesion->getActiveSession($sessionID);
+
+        if (!$sist_sesion){
+        #se esta intentando levantar un ID de session que no existe en la BD, puede ser el caso en que se haya borrado
+        #de la base
+            $sessionID = undef;
+            $userid = undef;    
+#             $session->param('codMsg', 'U403');
+            _destruirSession('U405');
+        }
 
         my ($ip , $lasttime, $nroRandom, $flag, $tokenDB);
 
@@ -1097,7 +1125,8 @@ sub inicializarAuth{
     
     #genero una nueva session
 
-    my $session = CGI::Session->new();
+    my ($session) = CGI::Session->load();
+    C4::AR::Debug::debug("(en inicializarAuth) SessionID: ".$session->id." codMSG: ".$session->param('codMsg'));
 
     #se pasa el mensaje al cliente, $t_params es una REFERENCIA
     C4::AR::Debug::debug("codMsg: ".$session->param('codMsg'));

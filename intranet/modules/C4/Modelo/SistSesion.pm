@@ -21,6 +21,24 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'sessionID' ],
 );
 
+
+sub getActiveSession{
+
+    my $self = shift;
+    my ($sessionID) = @_;
+
+    my @filtros;
+    push (@filtros, ( sessionID => {eq => $sessionID} ));
+
+    my $session = C4::Modelo::SistSesion::Manager->get_sist_sesion( query => \@filtros,);
+  
+    if (scalar(@$session)){
+        return ($session->[0]);
+    }else{
+      return (0);
+    }
+}
+
 =item
 Se redefine el metodo delte para poder loguear
 =cut

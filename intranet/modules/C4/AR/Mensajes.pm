@@ -230,6 +230,7 @@ my %mensajesINTRA = (
     'U400' => 'UD. acaba de cambiar la password, debe ingresar nuevamente.',
     'U401' => 'Disculpe, intent&oacute; loguearse de forma inadecuada.',
     'U402' => 'El barcode no cumple con el formato requerido.',
+    'U405' => 'La sesi&oacute;n ha sido eliminada, por favor, inicie sesi&oacute;n nuevamente. Disculpe las molestias.',
     'U403' => 'No existe el Grupo que se intenta modificar.',
     'U404' => 'No existe el Nivel 1 que se intenta modificar.',
 	'B400' => '',
