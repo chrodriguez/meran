@@ -31,6 +31,9 @@ Este módulo provee funciones para manipular estantes virtuales, incluyendo la c
         &borrarEstantes
         &borrarContenido
         &modificarEstante
+        &agregarSubEstante
+        &buscarNombreDuplicado
+        &agregarEstante
 );
 
 sub getListaEstantesPublicos {
@@ -211,11 +214,12 @@ sub modificarEstante  {
 
     return ($msg_object);
 }
+
 #VERIFICACIONES PREVIAS
 sub _verificacionesParaModificar {
     my($msg_object,$estante,$valor)=@_;
 
-    if (buscarNombreDuplicado($estante,$valor)){
+    if (C4::AR::Estantes::buscarNombreDuplicado($estante->getPadre,$estante,$valor)){
     #El estante posee contenido
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E009', 'params' => [$valor]} ) ;
@@ -223,13 +227,24 @@ sub _verificacionesParaModificar {
       }
 
 }
+sub _verificacionesParaAgregar {
+    my($msg_object,$estante,$valor)=@_;
+
+    if (C4::AR::Estantes::buscarNombreDuplicado($estante->getId,0,$valor)){
+    #El estante posee contenido
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E010', 'params' => [$valor]} ) ;
+            C4::AR::Debug::debug("Entro al if de estante duplicado ");
+      }
+}
 
 sub buscarNombreDuplicado {
-    my ($estante,$valor) = @_;
+    my ($padre,$estante,$valor) = @_;
 
  my @filtros;
     push(@filtros, ( tipo    => { eq => 'public'}));
-    push(@filtros, ( id  => { ne => $estante->getId} ));
+    if ($estante){push(@filtros, ( id  => { ne => $estante->getId} ));}
+    push(@filtros, ( padre  => { eq => $padre} ));
     push(@filtros, ( estante  => { eq => $valor} ));
 
     my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros, sort_by => 'estante');
@@ -237,5 +252,84 @@ sub buscarNombreDuplicado {
     return ($estantes_array_ref->[0]);
 }
 
+sub agregarSubEstante  {
+    my ($id_estante,$valor)=@_;
 
+    C4::AR::Debug::debug("Antes de verificar");
+    my $msg_object= C4::AR::Mensajes::create();
+    $msg_object->{'tipo'}="INTRA";
+
+    my ($estante) = C4::Modelo::CatEstante->new(id => $id_estante);
+    $estante->load();
+
+    my $db = $estante->db;
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+
+    eval{
+        C4::AR::Estantes::_verificacionesParaAgregar($msg_object,$estante,$valor);
+        if(!$msg_object->{'error'}){
+            C4::AR::Debug::debug("VAMOS A AGREGAR EL SUBESTANTE");
+            my $nuevo_estante = C4::Modelo::CatEstante->new(db => $db);
+            $nuevo_estante->setEstante($valor);
+            $nuevo_estante->setTipo('public');
+            $nuevo_estante->setPadre($estante->getId);
+            $nuevo_estante->save();
+            $db->commit;
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E011', 'params' => [$valor]} ) ;
+            C4::AR::Debug::debug("SUBESTANTE AGREGADO CON EXITO");
+        }
+        };
+    if ($@){
+        C4::AR::Debug::debug("ERROR");
+        eval {$db->rollback};
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E012', 'params' => [$valor]} ) ;
+    }
+    $db->{connect_options}->{AutoCommit} = 1;
+
+    return ($msg_object);
+}
+
+
+sub agregarEstante  {
+    my ($valor)=@_;
+
+    C4::AR::Debug::debug("Antes de verificar");
+    my $msg_object= C4::AR::Mensajes::create();
+    $msg_object->{'tipo'}="INTRA";
+
+    my ($estante) = C4::Modelo::CatEstante->new(id => 0);
+    my $db = $estante->db;
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+
+    eval{
+        C4::AR::Estantes::_verificacionesParaAgregar($msg_object,$estante,$valor);
+        if(!$msg_object->{'error'}){
+            C4::AR::Debug::debug("VAMOS A AGREGAR EL ESTANTE");
+            my $nuevo_estante = C4::Modelo::CatEstante->new(db => $db);
+            $nuevo_estante->setEstante($valor);
+            $nuevo_estante->setTipo('public');
+            $nuevo_estante->setPadre($estante->getId);
+            $nuevo_estante->save();
+            $db->commit;
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E011', 'params' => [$valor]} ) ;
+            C4::AR::Debug::debug("ESTANTE AGREGADO CON EXITO");
+        }
+        };
+    if ($@){
+        C4::AR::Debug::debug("ERROR");
+        eval {$db->rollback};
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E012', 'params' => [$valor]} ) ;
+    }
+    $db->{connect_options}->{AutoCommit} = 1;
+
+    return ($msg_object);
+}
 1;

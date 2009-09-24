@@ -337,6 +337,9 @@ my %mensajesINTRA = (
     'E007' => 'El estante fue modificado con &eacute;xito a "*?*".',
     'E008' => 'Se produjo un error al tratar de modificar el estante "*?*" .',
     'E009' => 'No se pudo modificar el estante  ya que existe otro con el nombre "*?*".',
+    'E010' => 'No se pudo agregar el estante  ya que existe otro con el nombre "*?*".',
+    'E011' => 'El estante fue agregado con &eacute;xito a "*?*".',
+    'E012' => 'Se produjo un error al tratar de agregar el estante "*?*" .',
 );
 
 sub getMensaje {

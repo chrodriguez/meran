@@ -30,7 +30,7 @@ JSONstring={
 		//acentos FR àèìòù
 // TODO faltarian otros acentos
 		//permite solo lo que indica el patron
-		x =  temp.replace(/[^a-zA-Z 0-9 /\-_.ñÑ@áéíóú àèìòù" ' ?!¡¿ü]+/g,'');
+		x =  temp.replace(/[^a-zA-Z 0-9 /\-_.ñÑ@áéíóú àèìòù" ' ?!¡¿ü:]+/g,'');
 
 		this.log("jsconStringify => clearData: "+x);
 		return x;

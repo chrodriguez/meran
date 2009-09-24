@@ -1072,8 +1072,8 @@ INSERT INTO `pref_tabla_referencia_rel_catalogo` (`id`, `alias_tabla`, `tabla_re
 (16, 'ciudad', 'usr_persona', 'ciudad');
 
 
-
-
+-- ESTANTES AUTOINCREMENTABLES!!!
+ ALTER TABLE `cat_estante` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
 
 
 

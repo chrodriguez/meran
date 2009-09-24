@@ -24,6 +24,7 @@ if($tipo eq "VER_ESTANTES"){
                     });
 
     my $estantes_publicos = C4::AR::Estantes::getListaEstantesPublicos();
+    $t_params->{'cant_estantes'}= @$estantes_publicos;
     $t_params->{'ESTANTES'}= $estantes_publicos;
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
@@ -104,4 +105,40 @@ elsif($tipo eq "MODIFICAR_ESTANTE"){
     C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }
+elsif($tipo eq "AGREGAR_SUBESTANTE"){
+    my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'ALTA', 
+                                                    entorno => 'undefined' },
+                                                'intranet'
+                               );
 
+    my $id_estante= $obj->{'estante'};
+    my $valor= $obj->{'valor'};
+    ($Messages_arrayref)= &C4::AR::Estantes::agregarSubEstante($id_estante,$valor);
+
+    my $infoOperacionJSON=to_json $Messages_arrayref;
+
+    C4::Auth::print_header($session);
+    print $infoOperacionJSON;
+}
+elsif($tipo eq "AGREGAR_ESTANTE"){
+    my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'ALTA', 
+                                                    entorno => 'undefined' },
+                                                'intranet'
+                               );
+
+    my $valor= $obj->{'estante'};
+    ($Messages_arrayref)= &C4::AR::Estantes::agregarEstante($valor);
+
+    my $infoOperacionJSON=to_json $Messages_arrayref;
+
+    C4::Auth::print_header($session);
+    print $infoOperacionJSON;
+}
