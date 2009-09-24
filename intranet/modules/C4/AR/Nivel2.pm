@@ -442,12 +442,12 @@ sub getNivel2FromId1{
 	my ($id1) = @_;
 
 	my $nivel2_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(   
-																							query => [ 
-																										id1 => { eq => $id1 },
-																								], 
+															query => [ 
+																		id1 => { eq => $id1 },
+																], 
 										);
 
-	return ($nivel2_array_ref);
+    return $nivel2_array_ref;
 }
 
 =item

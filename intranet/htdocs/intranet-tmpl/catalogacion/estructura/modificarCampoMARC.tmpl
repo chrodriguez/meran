@@ -62,7 +62,7 @@ $(document).ready(function() {
 </fieldset>
 [% ELSE %]
     [% PERL %]
-            print C4::AR::Filtros::error_en_parametros( 
+            print C4::AR::Filtros::get_error_message( 
                                             debug => "Error de parametros en modificarCampoMARC.tmpl",
                                 );
     [% END %]

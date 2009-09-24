@@ -59,14 +59,21 @@ function updateEleccionDeNivel(responseText){
     zebra("tabla_datos");
 }
 
-function modificarOrden(id, accion){
-    objAH=new AjaxHelper(eleccionDeNivel);
+function modificarOrden(id, accion){    
+    
+    objAH=new AjaxHelper(updateModificarOrden);
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.idMod=id;
     objAH.itemtype_cliente = $('#tipo_nivel3_id').val();
     objAH.tipoAccion= accion; //SUBIR_ORDEN, BAJAR_ORDEN
     objAH.sendToServer();
+}
+
+function updateModificarOrden(responseText){
+
+    if (!verificarRespuesta(responseText)) return(0);
+    eleccionDeNivel();
 }
 
 function visibilidad(id){

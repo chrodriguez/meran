@@ -309,13 +309,9 @@ sub t_modificarNivel1 {
 
     if(!$msg_object->{'error'}){
     #No hay error
-        my  $catNivel1;
-# FIXME no hacer load, hacer get
-# 		$catNivel1= C4::Modelo::CatNivel1->new(id1 => $params->{'id1'});
-# 		$catNivel1->load();
 		$params->{'modificado'}=1;
 
-        my $db= $catNivel1->db;
+        my $db = $catNivel1->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
          $db->begin_work;
@@ -332,7 +328,7 @@ sub t_modificarNivel1 {
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B430',"INTRA");
-            eval {$db->rollback};
+            $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U383', 'params' => [$catNivel1->getId1]} ) ;

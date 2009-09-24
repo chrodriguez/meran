@@ -603,7 +603,8 @@ function updateGuardarDocumentoN3(responseText){
         //deja la misma estructura, solo borra el campo dato
         _clearDataFromComponentesArray();
         //muestra la tabla con los ejemplares agregados
-        mostrarInfoAltaNivel3(ID_N1, ID_N2);
+//         mostrarInfoAltaNivel3(ID_N1, ID_N2);
+        mostrarInfoAltaNivel3(ID_N2);
     }
 }
 
@@ -706,7 +707,8 @@ function updateGuardarModificacionDocumentoN3(responseText){
         //deja la misma estructura, solo borra el campo dato
         _clearDataFromComponentesArray();
         //muestra la tabla con los ejemplares agregados
-        mostrarInfoAltaNivel3(ID_N1, ID_N2);
+//         mostrarInfoAltaNivel3(ID_N1, ID_N2);
+        mostrarInfoAltaNivel3(ID_N2);
     }
 }
 
@@ -727,14 +729,15 @@ function guardar(nivel){
 /*
     Muestra el Nivel 3 para el Nivel 1 (id1) y Nivel 2 (idNivel2)
 */
-function mostrarInfoAltaNivel3(id1, idNivel2){
+// function mostrarInfoAltaNivel3(id1, idNivel2){
+function mostrarInfoAltaNivel3(idNivel2){
     if(idNivel2 != 0){
         objAH=new AjaxHelper(updateMostrarInfoAltaNivel3);
         objAH.debug= true;
         objAH.showStatusIn = 'detalleDelNivel3';
         objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.tipoAccion= "MOSTRAR_INFO_NIVEL3_TABLA";
-        objAH.id1= id1;
+//         objAH.id1= id1;
         objAH.id2= idNivel2;
         ID_N2= idNivel2;
         objAH.sendToServer();
@@ -987,7 +990,8 @@ function updateBorrarN1(responseText){
 	inicializar();
 	mostrarEstructuraDelNivel1();
 	mostrarInfoAltaNivel2(ID_N2);
-	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+// 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+    mostrarInfoAltaNivel3(ID_N2);
 }
 
 function borrarN2(id2){
@@ -1013,7 +1017,8 @@ function updateBorrarN2(responseText){
 	inicializar();
 	mostrarEstructuraDelNivel2();
 	mostrarInfoAltaNivel2(ID_N2);
-	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+// 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+    mostrarInfoAltaNivel3(ID_N2);
 }
 
 function borrarN3(id3){
@@ -1035,7 +1040,8 @@ function borrarN3(id3){
 function updateBorrarN3(responseText){
 	inicializar();
 	mostrarEstructuraDelNivel3();
-	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+// 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+    mostrarInfoAltaNivel3(ID_N2);
 	var info=JSONstring.toObject(responseText);  
     var Messages= info.Message_arrayref;
     setMessages(Messages);
@@ -1064,7 +1070,8 @@ function updateBorrarEjemplaresN3(responseText){
     setMessages(Messages);
 	inicializar();
 	mostrarEstructuraDelNivel3();
-	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+// 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+    mostrarInfoAltaNivel3(ID_N2);
 }
 /*
  * modificarN1
@@ -1229,7 +1236,8 @@ function cargarNivel1(params){
 
 	mostrarInfoAltaNivel1(params.id1);
 	mostrarInfoAltaNivel2(params.id2);	
-	mostrarInfoAltaNivel3(params.id1, params.id2);	
+// 	mostrarInfoAltaNivel3(params.id1, params.id2);	
+    mostrarInfoAltaNivel3(params.id2);  
 }
 
 function validateForm(formID, func){

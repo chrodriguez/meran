@@ -250,10 +250,13 @@ Esta funcion sube el orden como se va a mostrar del campo, subcampo catalogado
 sub subirOrden{
     my ($id,$itemtype) = @_;
 
-    my $catAModificar = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
-    $catAModificar->load();
+    my $catAModificar = getEstructuraCatalogacionById($id);
 
-    $catAModificar->subirOrden($itemtype);
+    if($catAModificar){
+        $catAModificar->subirOrden($itemtype);
+    }else{
+        C4::AR::Debug::debug("Catalogacion => subirOrden => NO EXISTE EL ID DE LA ESTRUCTURA QUE SE INTENTA MODIFICAR");
+    }
 }
 
 =item
@@ -262,13 +265,44 @@ Esta funcion baja el orden como se va a mostrar del campo, subcampo catalogado
 sub bajarOrden{
     my ($id,$itemtype) = @_;
 
-    my $catAModificar = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
-    $catAModificar->load();
+    my $catAModificar = getEstructuraCatalogacionById($id);
 
-    #verifico que no sea el ultimo en la lista, si es el ulitmo no puede bajar mas
+    if($catAModificar){
         $catAModificar->bajarOrden($itemtype);
+     }else{
+        C4::AR::Debug::debug("Catalogacion => subirOrden => NO EXISTE EL ID DE LA ESTRUCTURA QUE SE INTENTA MODIFICAR");
+    }
 }
 
+=item
+Esta funcion cambia la visibilidad de la estructura de catalogacion que se indica segun parametro ID
+=cut
+sub cambiarVisibilidad{
+    my ($id) = @_;
+
+    my $catalogacion = getEstructuraCatalogacionById($id);
+
+    if($catalogacion){
+        $catalogacion->cambiarVisibilidad();
+     }else{
+        C4::AR::Debug::debug("Catalogacion => cambiarVisibilidad => NO EXISTE EL ID DE LA ESTRUCTURA QUE SE INTENTA MODIFICAR");
+    }
+}
+
+=item
+Esta funcion elimina un "campo", estructura de catalogacion, segun parametro ID
+=cut
+sub eliminarCampo{
+    my ($id) = @_;
+
+    my $catalogacion = getEstructuraCatalogacionById($id);
+
+    if($catalogacion){
+        $catalogacion->delete();
+     }else{
+        C4::AR::Debug::debug("Catalogacion => eliminarCampo => NO EXISTE EL ID DE LA ESTRUCTURA QUE SE INTENTA MODIFICAR");
+    }
+}
 
 sub getCamposXLike{
 
@@ -322,7 +356,7 @@ sub t_guardarEnEstructuraCatalogacion {
     if(!$msg_object->{'error'}){
     #No hay error
         my  $estrCatalogacion = C4::Modelo::CatEstructuraCatalogacion->new();
-        my $db= $estrCatalogacion->db;
+        my $db = $estrCatalogacion->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
     
@@ -354,16 +388,22 @@ sub t_guardarEnEstructuraCatalogacion {
 Esta transaccion guarda una estructura de catalogacion configurada por el bibliotecario 
 =cut
 sub t_modificarEnEstructuraCatalogacion {
-    my($params)=@_;
+    my($params) = @_;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
-    my $msg_object= C4::AR::Mensajes::create();
+    my $msg_object = C4::AR::Mensajes::create();
+    
+    my $estrCatalogacion = getEstructuraCatalogacionById($params->{'id'});
+    
+    if(!$estrCatalogacion){
+        #Se setea error para el usuario
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U405', 'params' => []} ) ;
+    }
 
     if(!$msg_object->{'error'}){
     #No hay error
-        my  $estrCatalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $params->{'id'});
-        $estrCatalogacion->load();
-        my $db= $estrCatalogacion->db;
+        my $db = $estrCatalogacion->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
     
@@ -378,7 +418,7 @@ sub t_modificarEnEstructuraCatalogacion {
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B426',"INTRA");
-            eval {$db->rollback};
+            $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U367', 'params' => []} ) ;
@@ -820,14 +860,14 @@ sub getRepetible{
 Este funcion devuelve la informacion de la estructura de catalogacion de un campo, subcampo
 =cut
 sub _getEstructuraFromCampoSubCampo{
-    my ($campo, $subcampo)=@_;
+    my ($campo, $subcampo) = @_;
 
 	my $cat_estruct_info_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
 																				query => [ 
 																							campo => { eq => $campo },
 																							subcampo => { eq => $subcampo },
 																					], 
-
+                                                                                with_objects => ['infoReferencia']
 										);	
 
 	return $cat_estruct_info_array;

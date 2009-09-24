@@ -225,12 +225,12 @@ sub ayuda_marc{
 }
 
 
-=item   sub error_en_parametros
+=item   sub get_error_message
     Esta funcion muestra un error en el template cuando falta algun parametros  
     $params_hash_ref{'debug'}: mensaje para debug 
     $params_hash_ref{'msg'}: mensaje para el usuario, sino se ingresa nada muesrta mensaje por defecto "ERROR EN LOS PARAMETROS"
 =cut
-sub error_en_parametros{
+sub get_error_message{
     my (%params_hash_ref) = @_;
 
     my $mensaje = i18n('ERROR EN LOS PARAMETROS');

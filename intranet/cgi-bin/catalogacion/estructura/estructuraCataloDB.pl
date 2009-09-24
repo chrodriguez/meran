@@ -185,10 +185,10 @@ elsif($tipoAccion eq "GUARDAR_ESTRUCTURA_CATALOGACION"){
                                     );
     # Se guardan los datos en estructura de catalogacion    
     #estan todos habilidatos
-    $obj->{'intranet_habilitado'}= 1;
-    my ($Message_arrayref)= C4::AR::Catalogacion::t_guardarEnEstructuraCatalogacion($obj);
+    $obj->{'intranet_habilitado'} = 1;
+    my ($Message_arrayref) = C4::AR::Catalogacion::t_guardarEnEstructuraCatalogacion($obj);
     
-    my $infoOperacionJSON=to_json $Message_arrayref;
+    my $infoOperacionJSON = to_json $Message_arrayref;
     
     C4::Auth::print_header($session);
     print $infoOperacionJSON;
@@ -205,11 +205,11 @@ elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
                                     );
     # Se guardan los datos en estructura de catalogacion    
     #estan todos habilidatos
-    $obj->{'intranet_habilitado'}= 1;
+    $obj->{'intranet_habilitado'} = 1;
 
-    my ($Message_arrayref)= C4::AR::Catalogacion::t_modificarEnEstructuraCatalogacion($obj);
+    my ($Message_arrayref) = C4::AR::Catalogacion::t_modificarEnEstructuraCatalogacion($obj);
     
-    my $infoOperacionJSON=to_json $Message_arrayref;
+    my $infoOperacionJSON = to_json $Message_arrayref;
     
     C4::Auth::print_header($session);
     print $infoOperacionJSON;
@@ -224,10 +224,12 @@ elsif($tipoAccion eq "SUBIR_ORDEN"){
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
                                     );
-    my $id=$obj->{'idMod'};
-    my $itemtype=$obj->{'itemtype_cliente'};
-    C4::AR::Catalogacion::subirOrden($id,$itemtype);
+    my $id = $obj->{'idMod'};
+    my $itemtype = $obj->{'itemtype_cliente'};
 
+    C4::AR::Validator::validateParams('U389', $obj,['idMod', 'itemtype_cliente']);
+
+    C4::AR::Catalogacion::subirOrden($id,$itemtype);
     C4::Auth::print_header($session);
 }
 
@@ -241,10 +243,12 @@ elsif($tipoAccion eq "BAJAR_ORDEN"){
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
                                     );
-    my $id=$obj->{'idMod'};
+    my $id = $obj->{'idMod'};
+    my $itemtype = $obj->{'itemtype_cliente'};
 
-    C4::AR::Catalogacion::bajarOrden($id);
+    C4::AR::Validator::validateParams('U389', $obj,['idMod', 'itemtype_cliente']);
 
+    C4::AR::Catalogacion::bajarOrden($id,$itemtype);
     C4::Auth::print_header($session);
 }
 
@@ -258,12 +262,10 @@ elsif($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
                                     );
-    my $idestcat=$obj->{'id'};
-# FIXME no hacer load, hacer get
-    my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $idestcat);
-    $catalogacion->load();
 
-    $catalogacion->cambiarVisibilidad;
+    C4::AR::Validator::validateParams('U389', $obj,['id']);
+    C4::AR::Catalogacion::cambiarVisibilidad($obj->{'id'});
+
     C4::Auth::print_header($session);
 }
 
@@ -277,11 +279,9 @@ elsif($tipoAccion eq "ELIMINAR_CAMPO"){
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
                                     );
-    my $id=$obj->{'idMod'};
-# FIXME no hacer load, hacer get
-    my $catalogacion = C4::Modelo::CatEstructuraCatalogacion->new(id => $id);
-    $catalogacion->load();
-    $catalogacion->delete();
+
+    C4::AR::Validator::validateParams('U389', $obj,['idMod']);
+    C4::AR::Catalogacion::eliminarCampo($obj->{'idMod'});
 
     C4::Auth::print_header($session);
 }
@@ -295,8 +295,8 @@ elsif($tipoAccion eq "AGREGAR_CAMPO"){
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
                                     );
-    my $id=$obj->{'idMod'};
 
+    
     my ($Message_arrayref)= C4::AR::Catalogacion::t_guardarEnEstructuraCatalogacion($obj);
     
     my $infoOperacionJSON=to_json $Message_arrayref;
@@ -356,7 +356,7 @@ elsif($tipoAccion eq "MOSTRAR_SUBCAMPOS_DE_CAMPO"){
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
                                     );
-#Se muestran la estructura de catalogacion segun el nivel pasado por parametro
+    
 
     my ($sub_campos_string) = &C4::AR::Utilidades::obtenerDescripcionDeSubCampos($obj->{'campo'});
     
@@ -376,9 +376,9 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
                             debug => 1,
                     });
 
-    my $id1 = $obj->{'id1'};
+    C4::AR::Validator::validateParams('U389', $obj,['id1']);
 
-    my ($nivel1) = C4::AR::Nivel1::getNivel1FromId1($id1);
+    my ($nivel1) = C4::AR::Nivel1::getNivel1FromId1($obj->{'id1'});
 
     $t_params->{'nivel1'} = $nivel1;
     $t_params->{'OK'} = ($nivel1?1:0);
@@ -398,23 +398,14 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
                             debug => 1,
                     });
 
-    my $id1 = $obj->{'id1'};
+    C4::AR::Validator::validateParams('U389', $obj,['id1']);
 
-    if( $id1 ne 0 ){
+    my $nivel2_array_ref = C4::AR::Nivel2::getNivel2FromId1($obj->{'id1'});
 
-        my $nivel2_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(
-                                                        query => [
-                                                                    id1=> { eq => $id1},
-                                                                ]
-                                                    );
-
-        #se envia al cliente todos los objetos nivel2 segun id1
-        $t_params->{'nivel2_array'} = $nivel2_array_ref;
-        $t_params->{'OK'} = 1;
-
-    }else{
-        $t_params->{'OK'} = 0;
-    }
+    #se envia al cliente todos los objetos nivel2 segun id1
+    $t_params->{'nivel2_array'} = $nivel2_array_ref;
+    $t_params->{'OK'} = 1;
+#         $t_params->{'OK'} = 0;
 
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
@@ -431,14 +422,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
                             debug => 1,
                     });
 
-    my $id1 = $obj->{'id1'};
-    my $id2 = $obj->{'id2'};
-
-    #   FIXME trae todos los ejemplares (nivel3) segun un id1 e id2, hacer una funcion en Catalogacion
-    my $nivel3 = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-                                                        query => [  id1 => { eq => $id1 },
-                                                                    id2 => { eq => $id2 } ]      
-                                                );
+    my $nivel3 = C4::AR::Nivel3::getNivel3FromId2($obj->{'id2'});
     
     $t_params->{'nivel3_array'} = $nivel3;
     

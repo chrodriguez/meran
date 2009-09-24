@@ -658,7 +658,8 @@ sub getNivel3FromId2{
 																					id2 => { eq => $id2 },
 																			], 
 										);
-	return ($nivel3_array_ref);
+
+    return $nivel3_array_ref;
 }
 
 
