@@ -4,7 +4,7 @@
 [% INCLUDE "message_INTRA.inc" %]
 <script language="javascript" type="text/javascript">
     token= '[% token %]';
-
+    imagesForJS = '[% temas %]/[% tema %]/imagenes';
 </script>
 
 <script src="/includes/jquery/jquery.js"></script>

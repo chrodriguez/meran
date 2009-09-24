@@ -32,9 +32,9 @@ function updateModificarDatosDeUsuario(responseText){
 	    vDatosUsuario.open();
 }
 
-function guardarModificacioUsuario(){
+function guardarModificacionUsuario(){
 
-	objAH=new AjaxHelper(updateGuardarModificacioUsuario);
+	objAH=new AjaxHelper(updateGuardarModificacionUsuario);
 	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug= true;
 	objAH.nro_socio= nro_socio_temp; 
@@ -59,7 +59,7 @@ function guardarModificacioUsuario(){
 
 }
 
-function updateGuardarModificacioUsuario(responseText){
+function updateGuardarModificacionUsuario(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 	vDatosUsuario.close();
@@ -83,6 +83,9 @@ function validateForm(func){
    
          $().ready(function() {
             // validate signup form on keyup and submit
+            $.validator.setDefaults({
+              submitHandler:  func ,
+            });
             $("#userDataForm").validate({
     
                 debug: true,
