@@ -484,6 +484,12 @@ sub _verificarDatosBorrower {
     my $checkStatus;
     my $emailAddress = $data->{'email'};
     my $credential_type = lc $data->{'credential_type'};
+    my $nro_socio = $data->{'nro_socio'};
+
+    if (!($msg_object->{'error'}) ){
+          $msg_object->{'error'} = (!existeSocio($nro_socio));
+    }
+
     if (!($msg_object->{'error'}) && ($credential_type eq "superlibrarian") ){
         my $socio = C4::Modelo::UsrSocio->new(nro_socio => C4::Auth::getSessionNroSocio());
            $socio->load();
@@ -559,9 +565,7 @@ sub actualizarSocio {
         $dbh->{RaiseError} = 1;
 
         eval {
-#             my $socio = getSocioInfoPorNroSocio($params->{'nro_socio'});
-            my $socio = C4::Modelo::UsrSocio->new(nro_socio => $params->{'nro_socio'});
-            $socio->load();
+            my $socio = getSocioInfoPorNroSocio($params->{'nro_socio'});
             $socio->modificar($params);
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
         };

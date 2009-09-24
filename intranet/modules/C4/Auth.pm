@@ -40,7 +40,7 @@ use Digest::MD5 qw(md5_base64);
 use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
+my $codMSG = 'U000';
 # set the version for version checking
 $VERSION = 0.01;
 
@@ -425,15 +425,13 @@ sub _destruirSession{
     $url = $url || '/cgi-bin/koha/auth.pl';
 
     my ($session) = CGI::Session->load();
-#     $session->param('sessionID', undef);
+    $session->param('sessionID', undef);
     #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
     $session->param('codMsg', $codMsg);
-    C4::AR::Debug::debug("(en _destruirSession) SessionID: ".$session->id." codMSG: ".$session->param('codMsg'));
     $session->param('redirectTo', $url);
+
+    $codMSG = $codMsg;
     $session->expire('-1');
-    $session->save_param('codMsg');
-
-
     C4::AR::Debug::debug("WARNING: ¡¡¡¡Se destruye la session y la cookie!!!!!");
 
     redirectTo($url);        
@@ -513,7 +511,6 @@ sub checkauth {
         #de la base
             $sessionID = undef;
             $userid = undef;    
-#             $session->param('codMsg', 'U403');
             _destruirSession('U405');
         }
 
@@ -1109,6 +1106,13 @@ sub _change_Password_Controller {
 }
 
 
+sub getMsgCode{
+
+    my ($session) = CGI::Session->load();
+    return ($session->param('codMsg') || $codMSG);
+
+}
+
 =item sub inicializarAuth
 
     Esta funcion inicializa la session para autenticar un usuario, se usa en OPAC e INTRA siempre q se quiere autenticar
@@ -1126,11 +1130,10 @@ sub inicializarAuth{
     #genero una nueva session
 
     my ($session) = CGI::Session->load();
-    C4::AR::Debug::debug("(en inicializarAuth) SessionID: ".$session->id." codMSG: ".$session->param('codMsg'));
 
-    #se pasa el mensaje al cliente, $t_params es una REFERENCIA
-    C4::AR::Debug::debug("codMsg: ".$session->param('codMsg'));
-    $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param('codMsg'),'INTRA',[]);
+
+    my $msjCode = getMsgCode();
+    $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
     #se destruye la session anterior
     $session->clear();
     $session->delete();
@@ -1220,8 +1223,6 @@ sub _generarSession {
  	$session->param('charset', C4::Context->config("charset")||'utf-8'); #se guarda el juego de caracteres
 	$session->param('token', $params->{'token'}); #se guarda el token
     $session->param('SERVER_GENERATED_SID', 1);
-# 	$session->expire('1m'); #para Desarrollar, luego pasar a 3m
-#     $session->expire(0);
     my $expire = _getExpireStatus();
     
     if ($expire){
