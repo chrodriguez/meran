@@ -130,11 +130,12 @@
                 $('.datos_tabla_div_estantes').hide();
         }
 
-        function modificarEstante(padre,estante,valor,valorviejo){
+        function modificarEstante(abuelo,padre,estante,valor,valorviejo){
                 objAH=new AjaxHelper(updateModificarEstante);
                 objAH.debug= true;
                 objAH.url= 'estanteDB.pl';
                 objAH.estante= estante;
+		objAH.abuelo= abuelo;
                 objAH.padre= padre;
                 objAH.valor= valor;
                 objAH.valorviejo= valorviejo;
@@ -151,7 +152,7 @@
                     $('.datos_tabla_div_estantes').hide();
                 }
                 else {
-                    verSubEstantes(objAH.padre,objAH.estante);
+                    verSubEstantes(objAH.abuelo,objAH.padre);
                 }
             }
             else {

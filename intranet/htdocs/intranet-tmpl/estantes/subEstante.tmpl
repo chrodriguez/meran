@@ -6,7 +6,7 @@
 
                $('.editable_[% estante.getId %]').editable(
                     function(value, settings){
-                        modificarEstante('[% estante.getPadre %]','[% estante.getId %]',value,'[% estante.getEstante %]');
+                        modificarEstante('[% estante.padre.getPadre %]','[% estante.getPadre %]','[% estante.getId %]',value,'[% estante.getEstante %]');
                         return value;
                     }, 
                     { event : 'editar'});
