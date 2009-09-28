@@ -151,11 +151,12 @@ body{
 
 	   
 .titulos{
-	  font-weight: bold;
-	  font-Family : arial, helvetica, sans-serif;
-	  font-size : 20px;
-	  color: #4B6D22;
-	  text-align: left;
+	font-weight: bold;
+	font-Family : arial, helvetica, sans-serif;
+	font-size : 15px;
+	color: #4B6D22;
+	text-align: left;
+	text-transform: uppercase;
 }
 
 .item{
@@ -192,11 +193,11 @@ body{
 	
 }
 .sub_item{
-    font-family: "Verdana","Trebuchet MS", "Arial";
-    font-size: 10pt;
+    font-family: "Verdana", "Trebuchet MS", "Arial";
+    font-size: 9pt;
     color: #a1c162;
     list-style: none;
-    font-weight: normal;
+    font-weight: bold;
 	text-decoration:none;
 }
 .sub_item label{
@@ -1154,7 +1155,11 @@ fieldset.accionesUsuarios{
     float:right;
 }
 .titulo_legend{
-  font-weight:bold;
+	font-weight:bold;
+	font-size: 13px;
+	color: #666666;
+	text-transform: uppercase;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 .titulo_legend_warning{
