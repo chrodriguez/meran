@@ -1268,3 +1268,7 @@ input.file {
     color: red;
     text-align: center;
 }
+
+.detalle_sanciones_sancionado{
+    background-color: #CC3333;
+}

@@ -1,24 +1,5 @@
 package C4::AR::Reservas;
 
-#Este modulo provee funcionalidades para la reservas de documentos
-#
-#Copyright (C) 2003-2008  Linti, Facultad de Inform�tica, UNLP
-#This file is part of Koha-UNLP
-#
-#This program is free software; you can redistribute it and/or
-#modify it under the terms of the GNU General Public License
-#as published by the Free Software Foundation; either version 2
-#of the License, or (at your option) any later version.
-#
-#This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#GNU General Public License for more details.
-#
-#You should have received a copy of the GNU General Public License
-#along with this program; if not, write to the Free Software
-#Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
 use strict;
 require Exporter;
 
@@ -32,45 +13,44 @@ use C4::Modelo::CircReserva::Manager;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
-# set the version for version checking
-$VERSION = 0.01;
+$VERSION = 3.0;
 
 @ISA = qw(Exporter);
 
 @EXPORT = qw(
-	&t_reservarOPAC
-	&t_cancelar_reserva
-	&t_cancelar_y_reservar
-	&cancelar_reservas
-	&cant_reservas
-	&getReservasDeGrupo
-	&cantReservasPorGrupo
-	&DatosReservas
-	&getDatosReservaDeId3
-	&cant_waiting
-	&CheckWaiting
-	&tiene_reservas
-	&Enviar_Email
-	&FindNotRegularUsersWithReserves
-	&eliminarReservasVencidas
-	&reasignarTodasLasReservasEnEspera
-	&reasignarReservaEnEspera
+    &t_reservarOPAC
+    &t_cancelar_reserva
+    &t_cancelar_y_reservar
+    &cancelar_reservas
+    &cant_reservas
+    &getReservasDeGrupo
+    &cantReservasPorGrupo
+    &DatosReservas
+    &getDatosReservaDeId3
+    &cant_waiting
+    &CheckWaiting
+    &tiene_reservas
+    &Enviar_Email
+    &FindNotRegularUsersWithReserves
+    &eliminarReservasVencidas
+    &reasignarTodasLasReservasEnEspera
+    &reasignarReservaEnEspera
 
-	&t_realizarPrestamo
-	&eliminarReservas
+    &t_realizarPrestamo
+    &eliminarReservas
 );
 
 sub t_cancelar_y_reservar {
-	
-	my($params)=@_;
+    
+    my($params)=@_;
 
-	my $paramsReserva;
-	my ($msg_object);	
+    my $paramsReserva;
+    my ($msg_object);   
 
     my $db = undef;
-	my ($reserva) = getReserva($params->{'id_reserva'});
+    my ($reserva) = getReserva($params->{'id_reserva'});
     if ($reserva){
-       $db = $reserva->db;
+        $db = $reserva->db;
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
     
@@ -87,7 +67,7 @@ sub t_cancelar_y_reservar {
                 if($paramsReserva->{'estado'} eq 'E'){
                 #SE RESERVO CON EXITO UN EJEMPLAR
                     $msg_object->{'error'}= 0;
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [	$paramsReserva->{'desde'}, 
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [    $paramsReserva->{'desde'}, 
                                                         $paramsReserva->{'desdeh'},
                                                         $paramsReserva->{'hasta'},
                                                         $paramsReserva->{'hastah'}
@@ -101,35 +81,36 @@ sub t_cancelar_y_reservar {
                 }
             }
     
-            $db->commit;	
+            $db->commit;    
         };
     }
-	if ($@){
-		#Se loguea error de Base de Datos
-		&C4::AR::Mensajes::printErrorDB($@, 'B407',"OPAC");
-		eval {$db->rollback};
-		#Se setea error para el usuario
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R011', 'params' => []} ) ;
-	}
-	$db->{connect_options}->{AutoCommit} = 1;
-	
-	return ($msg_object);
+    if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'B407',"OPAC");
+        eval {$db->rollback};
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R011', 'params' => []} ) ;
+    }
+    $db->{connect_options}->{AutoCommit} = 1;
+    
+    return ($msg_object);
 }
 
 =item
 Esta funcion elimina todas las del borrower pasado por parametro
 =cut
 sub eliminarReservas{
-	my ($socio)=@_;
+    my ($socio)=@_;
 
-	use C4::Modelo::CircReserva;
-    	use C4::Modelo::CircReserva::Manager;
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
 
-    	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(query => [ nro_socio => { eq => $socio } ]); 
-	foreach my $reserva (@$reservas_array_ref){
-	$reserva->delete();
-	}
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(query => [ nro_socio => { eq => $socio } ]); 
+
+    foreach my $reserva (@$reservas_array_ref){
+       $reserva->delete();
+    }
 }
 
 
@@ -139,13 +120,13 @@ recibe como parametro un borrowernumber y el loggedinuser
 Esta funcion se utiliza por ej. cuando se elimina un usuario
 =cut
 sub reasignarTodasLasReservasEnEspera{
-	my ($params)=@_;
-	my $reservas= _getReservasAsignadas($params->{'borrowernumber'});
+    my ($params)=@_;
+    my $reservas= _getReservasAsignadas($params->{'borrowernumber'});
 
-	foreach my $reserva (@$reservas){
+    foreach my $reserva (@$reservas){
 
-		reasignarReservaEnEspera($reserva,$reserva->{'loggedinuser'});
-	}
+        reasignarReservaEnEspera($reserva,$reserva->{'loggedinuser'});
+    }
 }
 
 
@@ -154,110 +135,110 @@ actualizarDatosReservaEnEspera
 Funcion que actualiza la reserva que estaba esperando por un ejemplar.
 =cut
 sub _actualizarDatosReservaEnEspera{
-	my ($reservaGrupo,$loggedinuser)=@_;
+    my ($reservaGrupo,$loggedinuser)=@_;
 
-	my $dateformat = C4::Date::get_date_format();
-	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
 
 #Se agrega actualiza la reserva
-	my ($desde,$fecha,$apertura,$cierre)=C4::Date::proximosHabiles(C4::AR::Preferencias->getValorPreferencia("reserveGroup"),1);
-	$reservaGrupo->setEstado('E');
-	$reservaGrupo->setFecha_reserva($desde);
-	$reservaGrupo->setFecha_notificacion($hoy);
-	$reservaGrupo->setFecha_recordatorio($fecha);
-	$reservaGrupo->save();
+    my ($desde,$fecha,$apertura,$cierre)=C4::Date::proximosHabiles(C4::AR::Preferencias->getValorPreferencia("reserveGroup"),1);
+    $reservaGrupo->setEstado('E');
+    $reservaGrupo->setFecha_reserva($desde);
+    $reservaGrupo->setFecha_notificacion($hoy);
+    $reservaGrupo->setFecha_recordatorio($fecha);
+    $reservaGrupo->save();
 
 # Se agrega una sancion que comienza el dia siguiente al ultimo dia que tiene el usuario para ir a retirar el libro
-	my $err= "Error con la fecha";
-	my $dateformat=C4::Date::get_date_format();
-	my $startdate= C4::Date::DateCalc($fecha,"+ 1 days",\$err);
-	$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
-	my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
-	my $enddate= C4::Date::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
-	$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
-	C4::AR::Sanciones::insertSanction(undef, $reservaGrupo->getId ,$reservaGrupo->getNro_socio, $startdate, $enddate, undef);
+    my $err= "Error con la fecha";
+    my $dateformat=C4::Date::get_date_format();
+    my $startdate= C4::Date::DateCalc($fecha,"+ 1 days",\$err);
+    $startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
+    my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
+    my $enddate= C4::Date::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
+    $enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
+    C4::AR::Sanciones::insertSanction(undef, $reservaGrupo->getId ,$reservaGrupo->getNro_socio, $startdate, $enddate, undef);
 
-	my $params;
-	$params->{'cierre'}= $cierre;
-	$params->{'fecha'}= $fecha;
-	$params->{'desde'}= $desde;
-	$params->{'apertura'}= $apertura;
-	$params->{'loggedinuser'}= $loggedinuser;
-	#Se envia una notificacion al usuario avisando que se le asigno una reserva
-	Enviar_Email($reservaGrupo,$params);
+    my $params;
+    $params->{'cierre'}= $cierre;
+    $params->{'fecha'}= $fecha;
+    $params->{'desde'}= $desde;
+    $params->{'apertura'}= $apertura;
+    $params->{'loggedinuser'}= $loggedinuser;
+    #Se envia una notificacion al usuario avisando que se le asigno una reserva
+    Enviar_Email($reservaGrupo,$params);
 }
 
 sub cant_reservas{
 #Cantidad de reservas totales de GRUPO y EJEMPLARES
         my ($nro_socio)=@_;
-	
-    	use C4::Modelo::CircReserva;
-    	use C4::Modelo::CircReserva::Manager;
-    	my @filtros;
-    	push(@filtros, ( nro_socio 	=> { eq => $nro_socio}));
-    	push(@filtros, ( estado 	=> { ne => 'P'} ));
+    
+        use C4::Modelo::CircReserva;
+        use C4::Modelo::CircReserva::Manager;
+        my @filtros;
+        push(@filtros, ( nro_socio  => { eq => $nro_socio}));
+        push(@filtros, ( estado     => { ne => 'P'} ));
 
-    	my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
-    	return ($reservas_count);
+        my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
+        return ($reservas_count);
 }
 
 sub cantReservasPorGrupo{
 #Devuelve la cantidad de reservas realizadas (SIN PRESTAR) sobre un GRUPO
-	my ($id2)=@_;
+    my ($id2)=@_;
 
-    	use C4::Modelo::CircReserva;
-    	use C4::Modelo::CircReserva::Manager;
-    	my @filtros;
-    	push(@filtros, ( id2 	=> { eq => $id2}));
-    	push(@filtros, ( estado => { ne => 'P'} ));
+        use C4::Modelo::CircReserva;
+        use C4::Modelo::CircReserva::Manager;
+        my @filtros;
+        push(@filtros, ( id2    => { eq => $id2}));
+        push(@filtros, ( estado => { ne => 'P'} ));
 
-    	my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
-    	return ($reservas_count);
+        my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
+        return ($reservas_count);
 }
 
 #cuenta las reservas pendientes del grupo
 sub cantReservasPorGrupoEnEspera{
-	my ($id2)=@_;
+    my ($id2)=@_;
 
-	use C4::Modelo::CircReserva;
-	use C4::Modelo::CircReserva::Manager;
-	my @filtros;
-	push(@filtros, ( id2 	=> { eq => $id2}));
-	push(@filtros, ( id3 	=> { eq => undef}));
-	push(@filtros, ( estado => { ne => 'P'} ));
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
+    my @filtros;
+    push(@filtros, ( id2    => { eq => $id2}));
+    push(@filtros, ( id3    => { eq => undef}));
+    push(@filtros, ( estado => { ne => 'P'} ));
 
-	my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
+    my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
 
-	return ($reservas_count);
+    return ($reservas_count);
 }
 
 sub getDisponibilidadGrupo{
 #Busca si el grupo tiene solo ejemplares para prestamo en sala o no.
-	my ($id2)=@_;
+    my ($id2)=@_;
 
-	my @filtros;
-	push(@filtros, ( id2 => { eq => $id2}) );
-	push(@filtros, ( id_disponibilidad => { eq => 0}) ); # Es Domiciliario
-	push(@filtros, ( id_estado => { eq => 0}) ); # Esta Disponible
+    my @filtros;
+    push(@filtros, ( id2 => { eq => $id2}) );
+    push(@filtros, ( id_disponibilidad => { eq => 0}) ); # Es Domiciliario
+    push(@filtros, ( id_estado => { eq => 0}) ); # Esta Disponible
 
-	my $cantidad_prestamos= C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count( query => \@filtros);
+    my $cantidad_prestamos= C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count( query => \@filtros);
 
-	return ($cantidad_prestamos > 0)?'DO':'SA';
+    return ($cantidad_prestamos > 0)?'DO':'SA';
 }
 
 sub _chequeoParaPrestamo {
-	my($params,$msg_object)=@_;
-	my $dbh=C4::Context->dbh;
+    my($params,$msg_object)=@_;
+    my $dbh=C4::Context->dbh;
 
-	my $nro_socio= $params->{'nro_socio'};
-	my $id2= $params->{'id2'};
-	my $id3= $params->{'id3'};
+    my $nro_socio= $params->{'nro_socio'};
+    my $id2= $params->{'id2'};
+    my $id3= $params->{'id3'};
 C4::AR::Debug::debug("_chequeoParaPrestamo=> id2: ".$id2);
 C4::AR::Debug::debug("_chequeoParaPrestamo=> id3: ".$id3);
 C4::AR::Debug::debug("_chequeoParaPrestamo=> nro_socio: ".$nro_socio);
 #Se verifica si ya se tiene la reserva sobre el grupo
-	my ($reservas, $cant)= getReservasDeSocio($nro_socio, $id2);# ver lo que sigue.
-# 	$params->{'reservenumber'}= $reservas->[0]->getId_reserva;
+    my ($reservas, $cant)= getReservasDeSocio($nro_socio, $id2);# ver lo que sigue.
+#   $params->{'reservenumber'}= $reservas->[0]->getId_reserva;
 
 # print A "reservenumber de reserva: $reservas->[0]->getId_reserva\n";
 
@@ -267,119 +248,119 @@ C4::AR::Debug::debug("_chequeoParaPrestamo=> nro_socio: ".$nro_socio);
 # Si esta prestado la clase de prestamo que se quiere hacer en este momento. 
 # Si no esta prestado se puede hacer lo de abajo, lo que sigue (estaba pensado para esa situacion).
 # Tener en cuenta los prestamos especiales, $tipo_prestamo ==> ES ---> SA. **** VER!!!!!!
-	my $disponibilidad=getDisponibilidad($id3);
-	if($cant == 1 && $disponibilidad eq "Domiciliario"){
-	#El usuario ya tiene la reserva, se le esta entregando un item que es <> al que se le asigno al relizar la reserva
-	#Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
-		if($id3 != $reservas->[0]->getId3){
-		#Los ids son distintos, se intercambian.
-			&intercambiarId3($nro_socio,$id2,$id3,$reservas->[0]->getId3,$msg_object);
-		}
-	}
-	elsif($cant==1 && $disponibilidad eq "Para Sala"){
-		#FALTA!!! SE PUEDE PONER EN EL ELSE???	
-		#llamar a la funcion verificaciones!!
-		#verificar disponibilidad del item??? ya esta prestado- hay libre para prestamo de SALA.
-		#es un prestamo ES ?????? ****VER****
-	}
-	else{
-		#Se verifca disponibilidad del item;
-		my $data=getReservaDeId3($id3);
-		my $sePermiteReservaGrupo=1;
-		if ($data){
-		#el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
-		    my $datosNivel3= C4::AR::Reservas::getNivel3ParaReserva($params->{'id2'},$disponibilidad);
-			if($datosNivel3){
-				&cambiarId3($datosNivel3->getId3,$data->getId_reserva);
-				# el id3 de params quedo libre para ser reservado
-			}
-			else{
+    my $disponibilidad=getDisponibilidad($id3);
+    if($cant == 1 && $disponibilidad eq "Domiciliario"){
+    #El usuario ya tiene la reserva, se le esta entregando un item que es <> al que se le asigno al relizar la reserva
+    #Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
+        if($id3 != $reservas->[0]->getId3){
+        #Los ids son distintos, se intercambian.
+            &intercambiarId3($nro_socio,$id2,$id3,$reservas->[0]->getId3,$msg_object);
+        }
+    }
+    elsif($cant==1 && $disponibilidad eq "Para Sala"){
+        #FALTA!!! SE PUEDE PONER EN EL ELSE???  
+        #llamar a la funcion verificaciones!!
+        #verificar disponibilidad del item??? ya esta prestado- hay libre para prestamo de SALA.
+        #es un prestamo ES ?????? ****VER****
+    }
+    else{
+        #Se verifca disponibilidad del item;
+        my $data=getReservaDeId3($id3);
+        my $sePermiteReservaGrupo=1;
+        if ($data){
+        #el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
+            my $datosNivel3= C4::AR::Reservas::getNivel3ParaReserva($params->{'id2'},$disponibilidad);
+            if($datosNivel3){
+                &cambiarId3($datosNivel3->getId3,$data->getId_reserva);
+                # el id3 de params quedo libre para ser reservado
+            }
+            else{
 # NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE
 # REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
-				$params->{'id3'}="";
-				if(!C4::AR::Preferencias->getValorPreferencia('intranetGroupReserve')){
-				#NO SE PERMITE LA RESERVA DE GRUPO
-					$sePermiteReservaGrupo=0;
-					#Hay error no se permite realizar una reserva de grupo en intra.
-					$msg_object->{'error'}= 1;
-					C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R004', 'params' => []} ) ;
-				}else{
-				#SE PERMITE LA RESERVA DE GRUPO
-					#No hay error, se realiza una reserva de grupo.
-					$msg_object->{'error'}= 1;
-					C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R005', 'params' => []} ) ;
-				}
-			}
-		}
-		#Se realiza una reserva
-		if($sePermiteReservaGrupo){
-			my ($reserva) = C4::Modelo::CircReserva->new();
-			$reserva->load();
-# 			my $db = $reserva->db;
+                $params->{'id3'}="";
+                if(!C4::AR::Preferencias->getValorPreferencia('intranetGroupReserve')){
+                #NO SE PERMITE LA RESERVA DE GRUPO
+                    $sePermiteReservaGrupo=0;
+                    #Hay error no se permite realizar una reserva de grupo en intra.
+                    $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R004', 'params' => []} ) ;
+                }else{
+                #SE PERMITE LA RESERVA DE GRUPO
+                    #No hay error, se realiza una reserva de grupo.
+                    $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R005', 'params' => []} ) ;
+                }
+            }
+        }
+        #Se realiza una reserva
+        if($sePermiteReservaGrupo){
+            my ($reserva) = C4::Modelo::CircReserva->new();
+            $reserva->load();
+#           my $db = $reserva->db;
 # # FIXME faltan devolver los parametros
-# 			my ($paraReservas)= reservar($params);
-# 			$params->{'reservenumber'}= $paraReservas->{'reservenumber'};
-		}
-	}
-	
-	if(!$msg_object->{'error'}){
-	#No hay error, se realiza el pretamo
-		insertarPrestamo($params);
+#           my ($paraReservas)= reservar($params);
+#           $params->{'reservenumber'}= $paraReservas->{'reservenumber'};
+        }
+    }
+    
+    if(!$msg_object->{'error'}){
+    #No hay error, se realiza el pretamo
+        insertarPrestamo($params);
 
-		#se realizan las verificacioines luego de realizar el prestamo
-		_verificacionesPostPrestamo($params,$msg_object);
-	}
+        #se realizan las verificacioines luego de realizar el prestamo
+        _verificacionesPostPrestamo($params,$msg_object);
+    }
 }
 
 #para enviar un mail cuando al usuario se le vence la reserva
 sub Enviar_Email{
-	my ($reserva,$params)=@_;
+    my ($reserva,$params)=@_;
 
-  	my $desde= $params->{'desde'};
-  	my $fecha= $params->{'fecha'};
- 	my $apertura= $params->{'apertura'};
- 	my $cierre= $params->{'cierre'};
- 	my $loggedinuser= $params->{'loggedinuser'};
+    my $desde= $params->{'desde'};
+    my $fecha= $params->{'fecha'};
+    my $apertura= $params->{'apertura'};
+    my $cierre= $params->{'cierre'};
+    my $loggedinuser= $params->{'loggedinuser'};
 
-	if (C4::AR::Preferencias->getValorPreferencia("EnabledMailSystem")){
+    if (C4::AR::Preferencias->getValorPreferencia("EnabledMailSystem")){
 
-		my $dateformat = C4::Date::get_date_format();
-		my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
-		
-		my $mailFrom=C4::AR::Preferencias->getValorPreferencia("reserveFrom");
-		my $mailSubject =C4::AR::Preferencias->getValorPreferencia("reserveSubject");
-		my $mailMessage =C4::AR::Preferencias->getValorPreferencia("reserveMessage");
-		
-		$mailSubject =~ s/BRANCH/$reserva->ui->getNombre/;
-		$mailMessage =~ s/BRANCH/$reserva->ui->getNombre/;
-		$mailMessage =~ s/FIRSTNAME/$socio->persona->getNombre/;
-		$mailMessage =~ s/SURNAME/$socio->persona->getApellido/;
-		
-		my $unititle=C4::AR::Nivel1::getUnititle($reserva->nivel2->nivel1->getId1);
-		$mailMessage =~ s/UNITITLE/$unititle/;
-		
-		$mailMessage =~ s/TITLE/$reserva->nivel2->nivel1->getTitulo/;
-		$mailMessage =~ s/AUTHOR/$reserva->nivel2->nivel1->cat_autor->getCompleto/;
-		
-		my $edicion=C4::AR::Nivel2::getEdicion($reserva->getId2);
-		$mailMessage =~ s/EDICION/$edicion/;
+        my $dateformat = C4::Date::get_date_format();
+        my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
+        
+        my $mailFrom=C4::AR::Preferencias->getValorPreferencia("reserveFrom");
+        my $mailSubject =C4::AR::Preferencias->getValorPreferencia("reserveSubject");
+        my $mailMessage =C4::AR::Preferencias->getValorPreferencia("reserveMessage");
+        
+        $mailSubject =~ s/BRANCH/$reserva->ui->getNombre/;
+        $mailMessage =~ s/BRANCH/$reserva->ui->getNombre/;
+        $mailMessage =~ s/FIRSTNAME/$socio->persona->getNombre/;
+        $mailMessage =~ s/SURNAME/$socio->persona->getApellido/;
+        
+        my $unititle=C4::AR::Nivel1::getUnititle($reserva->nivel2->nivel1->getId1);
+        $mailMessage =~ s/UNITITLE/$unititle/;
+        
+        $mailMessage =~ s/TITLE/$reserva->nivel2->nivel1->getTitulo/;
+        $mailMessage =~ s/AUTHOR/$reserva->nivel2->nivel1->cat_autor->getCompleto/;
+        
+        my $edicion=C4::AR::Nivel2::getEdicion($reserva->getId2);
+        $mailMessage =~ s/EDICION/$edicion/;
 
-		$mailMessage =~ s/a2/$apertura/;
-		$desde=C4::Date::format_date($desde,$dateformat);
-		$mailMessage =~ s/a1/$desde/;
-		$mailMessage =~ s/a3/$cierre/;
-		$fecha=C4::Date::format_date($fecha,$dateformat);
-		$mailMessage =~ s/a4/$fecha/;
-		my %mail = ( 	To => $socio->persona->getEmail,
-				From => $mailFrom,
-				Subject => $mailSubject,
-				Message => $mailMessage);
+        $mailMessage =~ s/a2/$apertura/;
+        $desde=C4::Date::format_date($desde,$dateformat);
+        $mailMessage =~ s/a1/$desde/;
+        $mailMessage =~ s/a3/$cierre/;
+        $fecha=C4::Date::format_date($fecha,$dateformat);
+        $mailMessage =~ s/a4/$fecha/;
+        my %mail = (    To => $socio->persona->getEmail,
+                From => $mailFrom,
+                Subject => $mailSubject,
+                Message => $mailMessage);
 
-		my $resultado='ok';
-		if ($socio->persona->getEmail && $mailFrom ){
-			if (!sendmail(%mail))
-				{$resultado='error'};
-		}else {$resultado='';}
+        my $resultado='ok';
+        if ($socio->persona->getEmail && $mailFrom ){
+            if (!sendmail(%mail))
+                {$resultado='error'};
+        }else {$resultado='';}
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
    my $dateformat=C4::Date::get_date_format();
@@ -401,60 +382,70 @@ sub Enviar_Email{
    $historial_circulacion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 
-	}#end if (C4::Context->preference("EnabledMailSystem"))
+    }#end if (C4::Context->preference("EnabledMailSystem"))
 }
 
 #Busca un nivel3 sin reservas para los prestamos y nuevas reservas.
 sub getNivel3ParaReserva{
-	my ($id2,$disponibilidad)=@_;
+    my ($id2,$disponibilidad)=@_;
     use C4::Modelo::CatNivel3::Manager;
-	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-																		query => [ 
-																				id2 => { eq => $id2},
-																			'ref_disponibilidad.nombre' => { eq => $disponibilidad},
-																			'ref_estado.nombre' => { eq => "Disponible"},
-																				],
-																		with_objects => ['ref_disponibilidad','ref_estado']
-																);
+    my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+                                                                        query => [ 
+                                                                                id2 => { eq => $id2},
+                                                                            'ref_disponibilidad.nombre' => { eq => $disponibilidad},
+                                                                            'ref_estado.nombre' => { eq => "Disponible"},
+                                                                                ],
+                                                                        with_objects => ['ref_disponibilidad','ref_estado']
+                                                                );
 
-	foreach my $nivel3 (@$nivel3_array_ref)
-	{
-		if(estaLibre($nivel3->getId3)){return($nivel3);}
-	}
+    foreach my $nivel3 (@$nivel3_array_ref)
+    {
+        if(estaLibre($nivel3->getId3)){return($nivel3);}
+    }
 return 0;
 }
 
 sub estaLibre{
 #Devuelve si esta libre: sin prestamos ni reservas
-	my ($id3)=@_;	
+    my ($id3)=@_;   
 
     use C4::Modelo::CircReserva;
     use C4::Modelo::CircReserva::Manager;
     my @filtros;
-    push(@filtros, ( id3 	=> { eq => $id3}));
+    push(@filtros, ( id3    => { eq => $id3}));
     push(@filtros, ( estado => { ne => undef}));
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
-	if ($reservas_array_ref){return 1;}else{return 0;}
+
+    if ($reservas_array_ref){
+        return 1;
+    }else{
+      return 0;
+    }
 }
 
 sub _verificarHorario{
-	my $end = ParseDate(C4::AR::Preferencias->getValorPreferencia("close"));
-	my $begin =C4::Date::calc_beginES();
-	my $actual=ParseDate("today");
-	my $error=0;
-	if ((Date_Cmp($actual, $begin) < 0) || (Date_Cmp($actual, $end) > 0)){$error=1;}
+    my $end = ParseDate(C4::AR::Preferencias->getValorPreferencia("close"));
+    my $begin =C4::Date::calc_beginES();
+    my $actual=ParseDate("today");
+    my $error=0;
 
-	return $error;
+    if ((Date_Cmp($actual, $begin) < 0) || (Date_Cmp($actual, $end) > 0)){
+        $error=1;
+    }
+
+    return $error;
 }
 
 sub getDisponibilidad{
 #Devuelve la disponibilidad del item ('Para Sala', 'Domiciliario')
-	my ($id3)=@_;	
+    my ($id3)=@_;   
+    my  $catNivel3= C4::AR::Nivel3::getNivel3FromId3($id3);
 
-	my  $catNivel3= C4::Modelo::CatNivel3->new(id3 => $id3);
-        $catNivel3->load;
-
-	return C4::AR::Referencias::getNombreDisponibilidad($catNivel3->getId_disponibilidad);
+    if ($catNivel3){
+        return C4::AR::Referencias::getNombreDisponibilidad($catNivel3->getId_disponibilidad);
+    }else{
+      return (0);
+    }
 }
 
 =item
@@ -462,12 +453,12 @@ _verificarTipoReserva
 Verifica que el usuario no reserve un item y que ya tenga una reserva para el mismo grupo
 =cut
 sub _verificarTipoReserva {
-	my ($nro_socio, $id2)=@_;
-	my $error= 0;
-	my ($reservas, $cant)= getReservasDeSocio($nro_socio, $id2);
-	#Se intento reservar desde el OPAC sobre el mismo GRUPO
-	if ($cant == 1){$error= 1;}
-	return ($error);
+    my ($nro_socio, $id2)=@_;
+    my $error= 0;
+    my ($reservas, $cant)= getReservasDeSocio($nro_socio, $id2);
+    #Se intento reservar desde el OPAC sobre el mismo GRUPO
+    if ($cant == 1){$error= 1;}
+    return ($error);
 }
 
 sub getReservasDeSocio {
@@ -477,9 +468,9 @@ sub getReservasDeSocio {
     use C4::Modelo::CircReserva;
     use C4::Modelo::CircReserva::Manager;
     my @filtros;
-    push(@filtros, ( id2 	=> { eq => $id2}));
-    push(@filtros, ( nro_socio 	=> { eq => $nro_socio} ));
-    push(@filtros, ( estado 	=> { ne => 'P'} ));
+    push(@filtros, ( id2    => { eq => $id2}));
+    push(@filtros, ( nro_socio  => { eq => $nro_socio} ));
+    push(@filtros, ( estado     => { ne => 'P'} ));
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
 
@@ -488,28 +479,28 @@ sub getReservasDeSocio {
 
 sub getReservasDeId2 {
 #devuelve las reservas de grupo
-	my ($id2)=@_;
-    	use C4::Modelo::CircReserva;
-    	use C4::Modelo::CircReserva::Manager;
-    	my @filtros;
-    	push(@filtros, ( id2 	=> { eq => $id2}));
-    	push(@filtros, ( estado 	=> { ne => 'P'} ));
+    my ($id2)=@_;
+        use C4::Modelo::CircReserva;
+        use C4::Modelo::CircReserva::Manager;
+        my @filtros;
+        push(@filtros, ( id2    => { eq => $id2}));
+        push(@filtros, ( estado     => { ne => 'P'} ));
 
-    	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros); 
-    	return ($reservas_array_ref,scalar(@$reservas_array_ref));
+        my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros); 
+        return ($reservas_array_ref,scalar(@$reservas_array_ref));
 }
 
 sub getReservaDeId3{
-	#devuelve la reserva del item
-	my ($id3)=@_;
-    	use C4::Modelo::CircReserva;
-    	use C4::Modelo::CircReserva::Manager;
-    	my @filtros;
-    	push(@filtros, ( id3 	=> { eq => $id3}));
-    	push(@filtros, ( estado 	=> { ne => 'P'} ));
+    #devuelve la reserva del item
+    my ($id3)=@_;
+        use C4::Modelo::CircReserva;
+        use C4::Modelo::CircReserva::Manager;
+        my @filtros;
+        push(@filtros, ( id3    => { eq => $id3}));
+        push(@filtros, ( estado     => { ne => 'P'} ));
 
-    	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros); 
-    	return ($reservas_array_ref->[0]);
+        my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros); 
+        return ($reservas_array_ref->[0]);
 }
 
 sub obtenerReservasDeSocio {
@@ -522,16 +513,16 @@ sub obtenerReservasDeSocio {
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
                                                     db => $db,
-													query => [ nro_socio => { eq => $socio }, estado => {ne => 'P'}],
-													require_objects => [ 'nivel3.nivel2' ], # INNER JOIN
-													with_objects => [ 'nivel3' ] #LEFT JOIN
-     							); 
+                                                    query => [ nro_socio => { eq => $socio }, estado => {ne => 'P'}],
+                                                    require_objects => [ 'nivel3.nivel2' ], # INNER JOIN
+                                                    with_objects => [ 'nivel3' ] #LEFT JOIN
+                                ); 
 
-	if(scalar(@$reservas_array_ref) > 0){
-		return ($reservas_array_ref);
-	}else{
-		return 0;
-	}
+    if(scalar(@$reservas_array_ref) > 0){
+        return ($reservas_array_ref);
+    }else{
+        return 0;
+    }
 }
 
 =item
@@ -541,13 +532,13 @@ sub _getReservasAsignadas {
 
     my ($socio,$db)=@_;
     $db = $db || C4::Modelo::CircReserva->new()->db;
-	
+    
     use C4::Modelo::CircReserva;
     use C4::Modelo::CircReserva::Manager;
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(db => $db,
                 query => [ nro_socio => { eq => $socio }, id3 => {ne => undef} ] );
-	return($reservas_array_ref);
+    return($reservas_array_ref);
 }
 
 =item
@@ -564,7 +555,7 @@ sub getReserva{
 
     my ($reserva) = C4::Modelo::CircReserva::Manager->get_circ_reserva(db => $db, query => \@filtros,);
     if (scalar(@$reserva)){
-        return ($reserva);
+        return ($reserva->[0]);
     }else{
         return(0);
     }
@@ -579,14 +570,14 @@ sub reservasVencidas{
     use C4::Modelo::CircReserva;
     use C4::Modelo::CircReserva::Manager;
 
-	my $dateformat = C4::Date::get_date_format();
-	my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
-							query => [ fecha_recordatorio => { lt => $hoy }, 
-								   estado => {ne => 'P'}, 
-								   id3 => {ne => undef}]
-     							); 
+                            query => [ fecha_recordatorio => { lt => $hoy }, 
+                                   estado => {ne => 'P'}, 
+                                   id3 => {ne => undef}]
+                                ); 
     return ($reservas_array_ref);
 
 }
@@ -621,19 +612,19 @@ sub reservasEnEspera {
 
 #VERIFICACIONES PREVIAS tanto para reservas desde el OPAC como para PRESTAMO de la INTRANET
 sub _verificaciones {
-	my($params)=@_;
+    my($params)=@_;
 
-	my $tipo= $params->{'tipo'}; #INTRA u OPAC
-	my $id2= $params->{'id2'};
-	my $id3= $params->{'id3'};
-	my $barcode= $params->{'barcode'};
-	my $nro_socio= $params->{'nro_socio'};
-	my $loggedinuser= $params->{'loggedinuser'};
-	my $tipo_prestamo= $params->{'tipo_prestamo'};
-	my $msg_object= C4::AR::Mensajes::create();
-	$msg_object->{'tipo'}=$tipo;
+    my $tipo= $params->{'tipo'}; #INTRA u OPAC
+    my $id2= $params->{'id2'};
+    my $id3= $params->{'id3'};
+    my $barcode= $params->{'barcode'};
+    my $nro_socio= $params->{'nro_socio'};
+    my $loggedinuser= $params->{'loggedinuser'};
+    my $tipo_prestamo= $params->{'tipo_prestamo'};
+    my $msg_object= C4::AR::Mensajes::create();
+    $msg_object->{'tipo'}=$tipo;
 
-	my $dateformat=C4::Date::get_date_format();
+    my $dateformat=C4::Date::get_date_format();
     my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
     if ($socio){
@@ -645,134 +636,134 @@ C4::AR::Debug::debug("socio: $nro_socio\n");
 C4::AR::Debug::debug("tipo_prestamo: $tipo_prestamo\n");
         
     #Se verifica que el usuario sea Regular
-	    if( !$socio->esRegular ){
-		    $msg_object->{'error'}= 1;
-		    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U300', 'params' => []} ) ;
+        if( !$socio->esRegular ){
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U300', 'params' => []} ) ;
 C4::AR::Debug::debug("Entro al if de regularidad\n");
-	    }
+        }
     }else{
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U321', 'params' => [$nro_socio]} ) ;
     }
 
 #Se verifica que el usuario halla realizado el curso, segun preferencia del sistema.
-	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias->getValorPreferencia("usercourse")) && 
-		(!$socio->getCumple_requisito) ){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U304', 'params' => []} ) ;
+    if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias->getValorPreferencia("usercourse")) && 
+        (!$socio->getCumple_requisito) ){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U304', 'params' => []} ) ;
 C4::AR::Debug::debug("Entro al if de si cumple o no requisito\n");
-	}
+    }
 
 #Se verifica que el usuario no tenga el maximo de prestamos permitidos para el tipo de prestamo.
 #SOLO PARA INTRA, ES UN PRESTAMO INMEDIATO.
-	if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  C4::AR::Prestamos::_verificarMaxTipoPrestamo($nro_socio, $tipo_prestamo) ){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P101', 'params' => [$params->{'descripcionTipoPrestamo'}, $barcode]} ) ;
+    if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  C4::AR::Prestamos::_verificarMaxTipoPrestamo($nro_socio, $tipo_prestamo) ){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P101', 'params' => [$params->{'descripcionTipoPrestamo'}, $barcode]} ) ;
 C4::AR::Debug::debug("Entro al if que verifica la cantidad de prestamos");
-	}
+    }
 
 #Se verifica si es un prestamo especial este dentro de los horarios que corresponde.
 #SOLO PARA INTRA, ES UN PRESTAMO ESPECIAL.
-	if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo eq 'ES' && _verificarHorario()){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P102', 'params' => []} ) ;
+    if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo eq 'ES' && _verificarHorario()){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P102', 'params' => []} ) ;
 C4::AR::Debug::debug("Entro al if de prestamos especiales");
-	}
+    }
 #Se verfica si el usuario esta sancionado
-	my ($sancionado,$fechaFin)= C4::AR::Sanciones::permisoParaPrestamo($nro_socio, $tipo_prestamo);
+    my ($sancionado,$fechaFin)= C4::AR::Sanciones::permisoParaPrestamo($nro_socio, $tipo_prestamo);
 C4::AR::Debug::debug("sancionado: $sancionado ------ fechaFin: $fechaFin\n");
-	if( !($msg_object->{'error'}) && ($sancionado||$fechaFin) ){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'S200', 'params' => [C4::Date::format_date($fechaFin,$dateformat)]} ) ;
+    if( !($msg_object->{'error'}) && ($sancionado||$fechaFin) ){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'S200', 'params' => [C4::Date::format_date($fechaFin,$dateformat)]} ) ;
 C4::AR::Debug::debug("Entro al if de sanciones");
-	}
+    }
 #Se verifica que el usuario no intente reservar desde el OPAC un item para SALA
-	if(!$msg_object->{'error'} && $tipo eq "OPAC" && getDisponibilidadGrupo($id2) eq 'SA'){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R007', 'params' => []} ) ;
+    if(!$msg_object->{'error'} && $tipo eq "OPAC" && getDisponibilidadGrupo($id2) eq 'SA'){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R007', 'params' => []} ) ;
 C4::AR::Debug::debug("Entro al if de prestamos de sala");
-	}
+    }
 
 #Se verifica que el usuario no tenga dos reservas sobre el mismo grupo
-	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (&_verificarTipoReserva($nro_socio, $id2)) ){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R002', 'params' => []} ) ;
+    if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (&_verificarTipoReserva($nro_socio, $id2)) ){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R002', 'params' => []} ) ;
 C4::AR::Debug::debug("Entro al if de reservas iguales, sobre el mismo grupo y tipo de prestamo");
-	}
+    }
 
 #Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema desde OPAC
-	if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Usuarios::llegoMaxReservas($nro_socio))){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R001', 'params' => [C4::AR::Preferencias->getValorPreferencia("maxreserves")]} ) ;
+    if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Usuarios::llegoMaxReservas($nro_socio))){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R001', 'params' => [C4::AR::Preferencias->getValorPreferencia("maxreserves")]} ) ;
 C4::AR::Debug::debug("Entro al if de maximo de reservas desde OPAC");
-	}
+    }
 
 
 #Se verifica que el usuario no tenga dos prestamos sobre el mismo grupo para el mismo tipo prestamo
-	if( !($msg_object->{'error'}) && (&C4::AR::Prestamos::getCountPrestamosDeGrupoPorUsuario($nro_socio, $id2, $tipo_prestamo)) ){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;
+    if( !($msg_object->{'error'}) && (&C4::AR::Prestamos::getCountPrestamosDeGrupoPorUsuario($nro_socio, $id2, $tipo_prestamo)) ){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;
 C4::AR::Debug::debug("Entro al if de prestamos iguales, sobre el mismo grupo y tipo de prestamo");
-	}
+    }
 
 C4::AR::Debug::debug("FIN ".$msg_object->{'error'}." !!!\n\n");
 C4::AR::Debug::debug("FIN VERIFICACION !!!\n\n");
 
-	return ($msg_object);
+    return ($msg_object);
 }
 
 #funcion que realiza la transaccion de la RESERVA
 sub t_reservarOPAC {
-	
-	my($params)=@_;
-	my $reservaGrupo= 0;
-	C4::AR::Debug::debug("Antes de verificar");
-	my ($msg_object)= &_verificaciones($params);
-	
-	if(!$msg_object->{'error'}){
-	#No hay error
-		C4::AR::Debug::debug("No hay error");
-		my ($paramsReserva);
-		my  $reserva = C4::Modelo::CircReserva->new();
+    
+    my($params)=@_;
+    my $reservaGrupo= 0;
+    C4::AR::Debug::debug("Antes de verificar");
+    my ($msg_object)= &_verificaciones($params);
+    
+    if(!$msg_object->{'error'}){
+    #No hay error
+        C4::AR::Debug::debug("No hay error");
+        my ($paramsReserva);
+        my  $reserva = C4::Modelo::CircReserva->new();
         my $db = $reserva->db;
-		   $db->{connect_options}->{AutoCommit} = 0;
+           $db->{connect_options}->{AutoCommit} = 0;
            $db->begin_work;
 
-		eval {
-			($paramsReserva)= $reserva->reservar($params);
-			$db->commit;
-			#Se setean los parametros para el mensaje de la reserva SIN ERRORES
-			if($paramsReserva->{'estado'} eq 'E'){
-			C4::AR::Debug::debug("SE RESERVO CON EXITO UN EJEMPLAR!!! codMsg: U302");
-			#SE RESERVO CON EXITO UN EJEMPLAR
-				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [	$paramsReserva->{'desde'},
-													$paramsReserva->{'desdeh'},
-													$paramsReserva->{'hasta'},
-													$paramsReserva->{'hastah'}
-								]} ) ;
-			}else{
-			#SE REALIZO UN RESERVA DE GRUPO
-				C4::AR::Debug::debug("SE REALIZO UN RESERVA DE GRUPO codMsg: U303");
-				my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
-				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$socio->persona->getEmail]} ) ;
-			}	
-		};
+        eval {
+            ($paramsReserva)= $reserva->reservar($params);
+            $db->commit;
+            #Se setean los parametros para el mensaje de la reserva SIN ERRORES
+            if($paramsReserva->{'estado'} eq 'E'){
+            C4::AR::Debug::debug("SE RESERVO CON EXITO UN EJEMPLAR!!! codMsg: U302");
+            #SE RESERVO CON EXITO UN EJEMPLAR
+                $msg_object->{'error'}= 0;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [    $paramsReserva->{'desde'},
+                                                    $paramsReserva->{'desdeh'},
+                                                    $paramsReserva->{'hasta'},
+                                                    $paramsReserva->{'hastah'}
+                                ]} ) ;
+            }else{
+            #SE REALIZO UN RESERVA DE GRUPO
+                C4::AR::Debug::debug("SE REALIZO UN RESERVA DE GRUPO codMsg: U303");
+                my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
+                $msg_object->{'error'}= 0;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$socio->persona->getEmail]} ) ;
+            }   
+        };
 
-		if ($@){
-			#Se loguea error de Base de Datos
-			&C4::AR::Mensajes::printErrorDB($@, 'B400',"OPAC");
-			eval {$db->rollback};
-			#Se setea error para el usuario
-			$msg_object->{'error'}= 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R009', 'params' => []} ) ;
-		}
-		$db->{connect_options}->{AutoCommit} = 1;
-		
-	}
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B400',"OPAC");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R009', 'params' => []} ) ;
+        }
+        $db->{connect_options}->{AutoCommit} = 1;
+        
+    }
 
-	return ($msg_object);
+    return ($msg_object);
 }
 
 =item
@@ -781,57 +772,55 @@ Transaccion que cancela una reserva.
 @params: $params-->Hash con los datos necesarios para poder cancelar la reserva.
 =cut
 sub t_cancelar_reserva{
-	my ($params)=@_;
-		
-	my $tipo=$params->{'tipo'};
-	my $msg_object= C4::AR::Mensajes::create();
-	$msg_object->{'tipo'}=$tipo;
+    my ($params)=@_;
+        
+    my $tipo=$params->{'tipo'};
+    my $msg_object= C4::AR::Mensajes::create();
+    $msg_object->{'tipo'}=$tipo;
+    my $db = undef;
+    my ($reserva) = getReserva($params->{'id_reserva'});
+    if ($reserva){
+        $db = $reserva->db;
+        $db->{connect_options}->{AutoCommit} = 0;
+            $db->begin_work;
+    
+        eval{
+            C4::AR::Debug::debug("VAMOS A CANCELAR LA RESERVA");
+            $reserva->cancelar_reserva($params);
+            $db->commit;
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U308', 'params' => []} ) ;
+            C4::AR::Debug::debug("LA RESERVA SE CANCELO CON EXITO");
+        };
+    }else{
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
+    }
 
-	my ($reserva) = C4::Modelo::CircReserva->new(id_reserva => $params->{'id_reserva'});
-	$reserva->load();
-        my $db = $reserva->db;
-	$db->{connect_options}->{AutoCommit} = 0;
-        $db->begin_work;
+    if ($@){
+        C4::AR::Debug::debug("ERROR");
+        #Se loguea error de Base de Datos
+        C4::AR::Mensajes::printErrorDB($@, 'B404',$tipo);
+        eval {$db->rollback};
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
+    }
+    $db->{connect_options}->{AutoCommit} = 1;
 
-	eval{
-		C4::AR::Debug::debug("VAMOS A CANCELAR LA RESERVA");
-		$reserva->cancelar_reserva($params);
-		$db->commit;
-		$msg_object->{'error'}= 0;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U308', 'params' => []} ) ;
-		C4::AR::Debug::debug("LA RESERVA SE CANCELO CON EXITO");
-	};
-	if ($@){
-		C4::AR::Debug::debug("ERROR");
-		#Se loguea error de Base de Datos
-		C4::AR::Mensajes::printErrorDB($@, 'B404',$tipo);
-		eval {$db->rollback};
-		#Se setea error para el usuario
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
-	}
-	$db->{connect_options}->{AutoCommit} = 1;
-
-	return ($msg_object);
+    return ($msg_object);
 }
 
-
-##########DEPRECATED######################DEPRECATED######################DEPRECATED######################DEPRECATED############
-
-# }
 # ## FIXME reservas por Nivel 1 ?????????????, SE ESTA USANDO ARREGLAR O PASAR
 sub cantReservasPorNivel1{
 #Devuelve la cantidad de reservas realizadas (SIN PRESTAR) sobre el nivel1
-   my ($id1)=@_;
-   my $dbh = C4::Context->dbh;
-   my $sth=$dbh->prepare("    SELECT  count(*) as reservas
-                              FROM circ_reserva r INNER JOIN cat_nivel2 n2 ON (r.id2 = n2.id2)
-                              WHERE n2.id1 =? AND estado <> 'P' ");
-   $sth->execute($id1);
-
-   return $sth->fetchrow;
+    my ($id1)=@_;
+    
+    my @filtros;
+    
+    push (@filtros, ('nivel2.id1' => {eq => $id1}));    
+    my ($count) = C4::Modelo::CircReserva::Manager->get_circ_reserva_count(query => \@filtros, require_objects => ['nivel2']);
+    return $count;
 }
-
 
 
 1;
