@@ -20,6 +20,7 @@ my $session = CGI::Session->load();
 ##entonces se fijaria el redirectContrller.pl en el AjaxxHelper y este redirige segun
 #lo indicado en el session->param('redirectTo')
 C4::AR::Debug::debug("redirectContrller=> redirect: ".$session->param('redirectTo'));
+# C4::AR::Debug::debug("redirectController=> session->dump(): ".$session->dump());;
 
 # FIXME location esta fijo si no hay session '/cgi-bin/koha/auth.pl'
 

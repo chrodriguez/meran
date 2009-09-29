@@ -14,12 +14,6 @@ use vars qw(@EXPORT @ISA);
 	&getAutoresAdicionales
 	&getColaboradores
 	&getUnititle
-
-	&detalleNivel1
-	&detalleNivel1MARC
-	&detalleNivel1OPAC
-
-
 );
 
 
@@ -92,137 +86,6 @@ sub getUnititle {
 }
 
 
-sub detalleNivel1MARC{
-	my ($id1, $nivel1,$tipo)= @_;
-	my $dbh = C4::Context->dbh;
-	my @nivel1Comp;
-	my $i=0;
-	my $autor= $nivel1->{'autor'};
-	
-	$nivel1Comp[$i]->{'campo'}= "245";
-	$nivel1Comp[$i]->{'subcampo'}= "a";
-	$nivel1Comp[$i]->{'dato'}= $nivel1->{'titulo'};
-	my $librarian= &C4::AR::Busquedas::getLibrarian('245', 'a',$nivel1->{'titulo'},'ALL',$tipo,1);
-	$nivel1Comp[$i]->{'librarian'}=  $librarian->{'liblibrarian'}; 
-	$i++;
-
-	$autor= &C4::AR::Busquedas::getautor($autor);
-	$nivel1Comp[$i]->{'campo'}= "100"; #$autor->{'campo'}; se va a sacar de aca
-	$nivel1Comp[$i]->{'subcampo'}= "a";
-	$nivel1Comp[$i]->{'dato'}= $autor->{'completo'}; 
-	$nivel1Comp[$i]->{'librarian'}= "Autor";
-	$i++;
-
-#trae nive1_repetibles
-	my $query="SELECT * FROM cat_nivel1_repetible WHERE id1=?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id1);
-	while(my $data=$sth->fetchrow_hashref){
-		$nivel1Comp[$i]->{'campo'}= $data->{'campo'};
-		$nivel1Comp[$i]->{'subcampo'}= $data->{'subcampo'};
-		$librarian= &C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'},'ALL',$tipo,1);
-		$nivel1Comp[$i]->{'dato'}= $librarian->{'dato'};
-		$nivel1Comp[$i]->{'librarian'}= $librarian->{'liblibrarian'}; 
-	
-		$i++;
-	}
-	$sth->finish;
-	return @nivel1Comp;
-}
-
-sub detalleNivel1OPAC{
-	my ($id1, $nivel1,$tipo)= @_;
-	my $dbh = C4::Context->dbh;
-	my @nivel1Comp;
-	my $i=0;
-	my $getLib;
-	my $autor= $nivel1->{'autor'};
-	
-	$nivel1Comp[$i]->{'campo'}= "245";
-	$nivel1Comp[$i]->{'subcampo'}= "a";
-	$nivel1Comp[$i]->{'dato'}= $nivel1->{'titulo'};
-	$getLib= &C4::AR::Busquedas::getLibrarian('245', 'a',$nivel1->{'titulo'}, 'ALL',$tipo,0);
-	$nivel1Comp[$i]->{'librarian'}= $getLib->{'textPred'};
-	$i++;
-
-	$autor= &C4::AR::Busquedas::getautor($autor);
-	$nivel1Comp[$i]->{'campo'}= "100"; #$autor->{'campo'}; se va a sacar de aca
-	$nivel1Comp[$i]->{'subcampo'}= "a";
-	$nivel1Comp[$i]->{'dato'}= $autor->{'completo'}; 
-	$nivel1Comp[$i]->{'librarian'}= "Autor";
-	$i++;
-
-#trae nive1_repetibles
-	my $query="SELECT * FROM cat_nivel1_repetible WHERE id1=?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id1);
-	while(my $data=$sth->fetchrow_hashref){
-		$nivel1Comp[$i]->{'campo'}= $data->{'campo'};
-		$nivel1Comp[$i]->{'subcampo'}= $data->{'subcampo'};
-		$getLib= &C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'},$data->{'dato'}, 'ALL',$tipo,0);
-		$nivel1Comp[$i]->{'librarian'}= $getLib->{'textPred'};
-		$nivel1Comp[$i]->{'dato'}= $getLib->{'dato'};
-		$i++;
-	}
-	$sth->finish;
-	return @nivel1Comp;
-}
-
-=item detalleNivel1
-     
-     detalleNivel1 DEPRECATED??
-Devuelve  todos los datos del nivel 1 para poder verlos en el template.
-=cut
-sub detalleNivel1{
-	my ($id1, $nivel1,$tipo)= @_;
-	my $dbh = C4::Context->dbh;
-	my @nivel1Comp;
-	my %llaves;
-	my $i=0;
-	my $autor= $nivel1->{'autor'};
-	my $getLib=&C4::AR::Busquedas::getLibrarian('245', 'a', "",'ALL',$tipo,0);
-	$nivel1Comp[$i]->{'campo'}= "245";
-	$nivel1Comp[$i]->{'subcampo'}= "a";
-	$nivel1Comp[$i]->{'dato'}= $nivel1->{'titulo'};
-	$nivel1Comp[$i]->{'librarian'}= $getLib->{'liblibrarian'};
-	$i++;
-
-	$autor= &C4::AR::Busquedas::getautor($autor);
-	$nivel1Comp[$i]->{'campo'}= "100";
-	$nivel1Comp[$i]->{'subcampo'}= "a";
-	$nivel1Comp[$i]->{'dato'}= $autor->{'completo'}; 
-	$nivel1Comp[$i]->{'librarian'}= "Autor";
-	$i++;
-
-#trae nive1_repetibles
-	my $query="SELECT * FROM cat_nivel1_repetible WHERE id1=? ORDER BY campo,subcampo";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id1);
-	my $llave;
-	while(my $data=$sth->fetchrow_hashref){
-		$llave=$data->{'campo'}.",".$data->{'subcampo'};
-		my $getLib=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'},'ALL',$tipo,0);
-		if(not exists($llaves{$llave})){
-			$llaves{$llave}=$i;
-			$nivel1Comp[$i]->{'campo'}= $data->{'campo'};
-			$nivel1Comp[$i]->{'subcampo'}= $data->{'subcampo'};
-			$nivel1Comp[$i]->{'dato'}= $getLib->{'dato'};
-			$nivel1Comp[$i]->{'librarian'}=$getLib->{'liblibrarian'};
-			$i++;
-		}
-		else{
-			my $separador=" ".$getLib->{'separador'}." " ||", ";
-			my $pos=$llaves{$llave};
-			$nivel1Comp[$pos]->{'dato'}.=$separador.$getLib->{'dato'};
-		}
-	}
-	$sth->finish;
-	return @nivel1Comp;
-}
-
-
-
-
 =item getNivel1FromId1
 Recupero un nivel 1 a partir de un id1
 retorna un objeto o 0 si no existe
@@ -279,7 +142,7 @@ sub t_guardarNivel1 {
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B427',"INTRA");
-            eval {$db->rollback};
+            $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U371', 'params' => []} ) ;
@@ -343,19 +206,23 @@ sub t_modificarNivel1 {
 
 
 sub t_eliminarNivel1{
-   
-   my($id1)=@_;
+   my ($id1) = @_;
    
    my $msg_object= C4::AR::Mensajes::create();
 
 # FIXME falta verificar si es posible eliminar el nivel 1
 
+    my ($catNivel1) = getNivel1FromId1($id1);
+
+    if(!$catNivel1){
+        #Se setea error para el usuario
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U404', 'params' => []} ) ;
+    }
+
     if(!$msg_object->{'error'}){
     #No hay error
-        my  $catNivel1= C4::Modelo::CatNivel1->new(id1 => $id1);
-            $catNivel1->load;
-		my $id1= $catNivel1->getId1;
-        my $db= $catNivel1->dbh; #SI SE PONE ->db QUEDA EN LOCK, ES MUY RARO, ASI ANDA, Y LAS TRANSACCIONES ANDAN BIEN
+        my $db = $catNivel1->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
@@ -371,7 +238,7 @@ sub t_eliminarNivel1{
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
-            eval {$db->rollback};
+            $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U377', 'params' => [$id1]} ) ;

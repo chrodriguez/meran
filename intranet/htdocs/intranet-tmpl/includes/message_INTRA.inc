@@ -24,7 +24,7 @@ NOTA_GUARDADA = "[% 'La nota se actualizo correctamente' | i18n %]";
 //================================================Catalogacion===================================================
 CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'El campo no puede estar en blanco' | i18n %]";
 ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'Este campo es requerido, no lo deje en blanco' | i18n %]";
-ESTA_SEGURO_QUE_DESEA_BORRARLO= "&iquery;[% 'Est\u00e1 seguro que desea borrarlo' | i18n %]?";
+ESTA_SEGURO_QUE_DESEA_BORRARLO= "&iquest;[% 'Est\u00e1 seguro que desea borrarlo' | i18n %]?";
 HAY_BARCODES_REPETIDOS= "[% 'Hay barcodes repetidos' | i18n %]";
 ELIJA_AL_MENOS_UN_EJEMPLAR= "[% 'Elija al menos un ejemplar para realizar la acción' | i18n %]";
 FALTA_PARAMETRO_PARA_REFERENCIA= "[% 'Falta par\u00e1metro para referencia' | i18n %]";
@@ -94,8 +94,8 @@ ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA= "&iquest;[% 'Esta seguro que desea ca
 //=============================================Fin===Circulacion=================================================
 //================================================Control Autoridades==============================================
 YA_EXISTE_EL_ELEMENTO= "[% 'Ya existe el elemento' | i18n %]";
-CONFIRMA_LA_BAJA_DEL_SEUDONIMO= "&iquery;[% 'Confirma la baja del seudonimo' | i18n %]?";
-CONFIRMA_LA_BAJA_DEL_SINONIMO= "&iquery;[% 'Confirma la baja del sinonimo' | i18n %]?";
+CONFIRMA_LA_BAJA_DEL_SEUDONIMO= "&iquest;[% 'Confirma la baja del seudonimo' | i18n %]?";
+CONFIRMA_LA_BAJA_DEL_SINONIMO= "&iquest;[% 'Confirma la baja del sinonimo' | i18n %]?";
 CONTROL_AUTORIDADES_TITLE= "[% 'Advertencia de Control de Autoridades' | i18n %]";
 //=============================================Fin===Control Autoridades===========================================
 
@@ -122,7 +122,7 @@ POR_FAVOR_SELECCIONE_CATEGORIA_SOCIO= "[% 'Por favor, seleccione una categor\u00
 //=============================================Fin===Reglas Sanciones===========================================
 
 //================================================Sanciones==============================================
-ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION= "&iquery;[% 'Est\u00e1 seguro que desea cancelar la sanci\u00f3n' | i18n %]?";
+ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION= "&iquest;[% 'Est\u00e1 seguro que desea cancelar la sanci\u00f3n' | i18n %]?";
 SANCIONES_TITLE= "[% 'Advertencia de Sanciones' | i18n %]";
 //===============================================Fin=Sanciones===========================================
 

@@ -455,12 +455,13 @@ Recupero un nivel 2 a partir de un id2
 retorna un objeto o 0 si no existe
 =cut
 sub getNivel2FromId2{
-	my ($id2) = @_;
+	my ($id2, $db) = @_;
 
 	my $nivel2_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(   
-																							query => [ 
-																										id2 => { eq => $id2 },
-																								], 
+                                                                        db => $db,             
+																		query => [ 
+																					id2 => { eq => $id2 },
+																			], 
 																);
 
 	if( scalar(@$nivel2_array_ref) > 0){
@@ -522,7 +523,9 @@ sub t_modificarNivel2 {
     my $msg_object= C4::AR::Mensajes::create();
     my $id2;
 
-    my ($catNivel2) = getNivel2FromId2($params->{'id2'});
+    my  $catNivel2 = C4::Modelo::CatNivel2->new();
+    my  $db = $catNivel2->db;
+    my ($catNivel2) = getNivel2FromId2($params->{'id2'}, $db);
 
     if(!$catNivel2){
         #Se setea error para el usuario
@@ -567,19 +570,27 @@ sub t_modificarNivel2 {
 
 
 sub t_eliminarNivel2{
-   
-   my($id2)=@_;
+   my($id2) = @_;
    
    my $msg_object= C4::AR::Mensajes::create();
 
 # FIXME falta verificar si es posible eliminar el nivel 2
+    my  $catNivel2= C4::Modelo::CatNivel2->new();
+    my $db = $catNivel2->db;
+    my ($catNivel2) = getNivel2FromId2($id2, $db);
+
+    if(!$catNivel2){
+        #Se setea error para el usuario
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U404', 'params' => []} ) ;
+    }
 
     if(!$msg_object->{'error'}){
     #No hay error
-        my  $catNivel2= C4::Modelo::CatNivel2->new(id2 => $id2);
-            $catNivel2->load;
-		my $id2= $catNivel2->getId2;
-        my $db= $catNivel2->dbh;
+#         my  $catNivel2= C4::Modelo::CatNivel2->new(id2 => $id2);
+#             $catNivel2->load;
+# 		my $id2 = $catNivel2->getId2;
+        
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
@@ -595,7 +606,7 @@ sub t_eliminarNivel2{
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
-            eval {$db->rollback};
+            $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U378', 'params' => [$id2]} ) ;

@@ -927,7 +927,7 @@ sub t_modificarNivel3 {
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
-            eval {$db->rollback};
+            $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U385', 'params' => [$catNivel3->getBarcode]} ) ;
@@ -950,36 +950,38 @@ sub t_eliminarNivel3{
     if(!$msg_object->{'error'}){
     #No hay error
 
-		my	$catNivel2= C4::Modelo::CatNivel2->new();
-		my	$db= $catNivel2->db;
+		my	$catNivel2 = C4::Modelo::CatNivel2->new();
+		my	$db = $catNivel2->db;
 			# enable transactions, if possible
 			$db->{connect_options}->{AutoCommit} = 0;
+            $db->begin_work;
 		my $id3_array= $params->{'id3_array'};
 
         eval {
 			for(my $i=0;$i<scalar(@$id3_array);$i++){
 				my $catNivel3;
 				
-				$catNivel3= C4::Modelo::CatNivel3->new(
+				$catNivel3 = C4::Modelo::CatNivel3->new(
 														db => $db,
 														id3 => $id3_array->[$i]
 													);
 
 				$catNivel3->load();
 				my $barcode= $catNivel3->getBarcode;	
-				$catNivel3->eliminar;  
+				$catNivel3->eliminar();  
 				
 				#se cambio el permiso con exito
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U376', 'params' => [$barcode]} ) ;
 			}
+
 			$db->commit;
         };
 
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B435',"INTRA");
-            eval {$db->rollback};
+            $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U379', 'params' => [$barcode]} ) ;

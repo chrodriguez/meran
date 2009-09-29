@@ -1132,7 +1132,7 @@ sub inicializarAuth{
 
     my ($session) = CGI::Session->load();
 
-
+    C4::AR::Debug::debug("inicializarAuth => ".$session->param('codMsg'));
     my $msjCode = getMsgCode();
     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
     #se destruye la session anterior
@@ -1186,7 +1186,7 @@ sub _generarToken {
 
     my $digest;
     #se le hace SHA al sessionID para generar el TOKEN 
-    $digest = sha1_hex($session);
+    $digest = sha1_hex($session->id);
 
 	my $token= $digest;
 
@@ -1326,6 +1326,8 @@ sub redirectTo {
    		my $session = CGI::Session->load();
 		# send proper HTTP header with cookies:
         $session->param('redirectTo', $url);
+        $session->save_param();
+#         C4::AR::Debug::debug("redirectTo=> session->dump(): ".$session->dump());;
         C4::AR::Debug::debug("redirectTo=> url: ".$url);
 #      	print $session->header();
         print_header($session);
@@ -1350,25 +1352,25 @@ sub redirectToNoHTTPS {
     my ($url) = @_;
 
     C4::AR::Debug::debug("\n");
-    C4::AR::Debug::debug("redirectToNoHTTPS=> \n");
+    C4::AR::Debug::debug("redirectToNoHTTPS=>");
 
     #para saber si fue un llamado con AJAX
     if(C4::AR::Utilidades::isAjaxRequest()){
     #redirijo en el cliente
-        C4::AR::Debug::debug("redirectToNoHTTPS=> CLIENT_REDIRECT\n");         
+        C4::AR::Debug::debug("redirectToNoHTTPS=> CLIENT_REDIRECT");         
         my $session = CGI::Session->load();
         # send proper HTTP header with cookies:
         $session->param('redirectTo', $url);
         C4::AR::Debug::debug("SESSION url: ".$session->param('redirectTo'));
 
-        C4::AR::Debug::debug("redirectToNoHTTPS=> url: ".$url."\n");
+        C4::AR::Debug::debug("redirectToNoHTTPS=> url: ".$url);
 #         print $session->header();
         print_header($session);
         print 'CLIENT_REDIRECT';
         exit;
     }else{
     #redirijo en el servidor
-        C4::AR::Debug::debug("redirectToNoHTTPS=> SERVER_REDIRECT\n");    
+        C4::AR::Debug::debug("redirectToNoHTTPS=> SERVER_REDIRECT");    
 
         my $input = CGI->new(); 
         print $input->redirect( 
@@ -1378,7 +1380,7 @@ sub redirectToNoHTTPS {
                     -status => 301,
         ); 
 
-        C4::AR::Debug::debug("redirectTo=> url: ".$url."\n");
+        C4::AR::Debug::debug("redirectTo=> url: ".$url);
         exit;
     }
 

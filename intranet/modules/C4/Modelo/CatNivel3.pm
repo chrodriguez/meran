@@ -142,23 +142,24 @@ sub agregar{
 }
 
 sub eliminar{
-
     my ($self)=shift;
+
+    my ($db) = @_;
+
+    $db = $db || $self->db;
 
     use C4::Modelo::CatNivel3Repetible;
     use C4::Modelo::CatNivel3Repetible::Manager;
 
     my ($repetiblesNivel3) = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible( 
-																
+					                                                                db => $db,											
 																					query => [ id3 => { eq => $self->getId3 } ] 
 																				);
     foreach my $n3Rep (@$repetiblesNivel3){
-	  	$n3Rep->load( db => $self->db );
 		$n3Rep->eliminar();
     }
 
     $self->delete();
-
 }
 
 sub setDato{

@@ -72,9 +72,9 @@ sub agregar{
 }
 
 sub eliminar{
+    my ($self) = shift;   
 
-   my ($self)=shift;   
-   $self->delete();
+    $self->delete();
 }
 
 sub getId_rep{

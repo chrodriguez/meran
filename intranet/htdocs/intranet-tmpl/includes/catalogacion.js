@@ -973,8 +973,8 @@ function borrarN1(id1){
 		    objAH.debug= true;
 		    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 		    objAH.id1=id1;
-		    objAH.nivel=1;
-		    objAH.itemtype=$("#id_tipo_doc").val();
+		    objAH.nivel=1; 
+		    objAH.itemtype=$("#id_tipo_doc").val(); //creo q no es necesario
 		    objAH.tipoAccion="ELIMINAR_NIVEL";
 		    objAH.sendToServer();
         }

@@ -1,6 +1,7 @@
 [% INCLUDE  "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/includes/circulacion.js"></script>
+<script src="/intranet-tmpl/includes/catalogacion.js"></script>
 
 <!-- Se incluyen las librerias necesarias para manejar autocomplete -->
 [% INCLUDE "AutocompleteHelper.inc" %]
@@ -15,7 +16,34 @@ function inicializar(){
 	ID_N3=0; //para saber el id del nivel 3
 }
 
+// function borrarNivel1(id1) implementado en catalogacion.js
+
+function updateBorrarN1(responseText){
+    var info=JSONstring.toObject(responseText);  
+    //se borrar el nivel 1 y en cascada nivel 2 y 3 si esta permitido
+    //se refresca la info   
+    var Messages = info.Message_arrayref;
+    setMessages(Messages);
+    //oculto todo el registro con los grupos y sus items
+    $('#detalleComun').slideUp('slow');
+    //borro el contenido
+    $('#detalleComun').html('');
+}
+
+// function borrarN2(id2) //esta implementado en catalogacion.js
+
+function updateBorrarN2(responseText){
+    var info=JSONstring.toObject(responseText);  
+    var Messages= info.Message_arrayref;
+    setMessages(Messages);
+    //oculto todo el grupo con los items
+    $('#grupo'+objAH.id2).slideUp('slow');
+    //borro el contenido
+    $('#fieldset_grupo'+objAH.id2).html('');
+}
+
 function borrarN3(id2, id3){
+//id2 es necesario para luego de eliminar un ejemplar, se debe refrescar los ejemplares del nivel3
 
     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_TITLE, function(confirmStatus){if (confirmStatus) {
 		ID_N2= id2;
@@ -237,55 +265,6 @@ function updateInfoPrestarReserva(responseText){
 
 /************************************************FIN CIRCULACUION************************************************/
 
-function borrarGrupo(id1,id2){
-
-    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_TITLE, function(confirmStatus){if (confirmStatus) {
-	    objAH=new AjaxHelper(updateBorrarGrupo);
-	    objAH.debug= true;
-	    objAH.url= "/cgi-bin/koha/busquedas/detalleDB.pl";
-	    objAH.id1= id1;
-	    objAH.id2= id2;
-	    objAH.accion="BORRAR_GRUPO";
-	    //se envia la consulta
-	    objAH.sendToServer();
-        }
-    });
-}
-
-function updateBorrarGrupo(responseText){
-	var Messages= JSONstring.toObject(responseText);
-	setMessages(Messages);
-	//oculto todo el grupo con los items
-	$('#grupo'+objAH.id2).slideUp('slow');
-	//borro el contenido
-	$('#grupo'+objAH.id2).html('');
-}
-
-
-
-function borrarNivel1(id1){
-
-    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_TITLE, function(confirmStatus){if (confirmStatus) {
-	    objAH=new AjaxHelper(updateBorrarNivel1);
-	    objAH.debug= true;
-	    objAH.url= "/cgi-bin/koha/busquedas/detalleDB.pl";
-	    objAH.id1= id1;
-	    objAH.accion="BORRAR_NIVEL1";
-	    //se envia la consulta
-	    objAH.sendToServer();
-    }
-    });
-}
-
-function updateBorrarNivel1(responseText){
-	var Messages= JSONstring.toObject(responseText);
-	setMessages(Messages);
-	//oculto todo el registro con los grupos y sus items
-	$('#detalleComun').slideUp('slow');
-	//borro el contenido
-	$('#detalleComun').html('');
-}
-
 $(document).ready(function(){
 	inicializar();
 	zebra("tablaResult");	
@@ -332,7 +311,7 @@ $(document).ready(function(){
     [% PERL %]
         print C4::AR::Filtros::to_Icon(    
                                             boton   => "icon_borrar",
-                                            onClick => "borrarNivel1([% id1 %]);",
+                                            onClick => "borrarN1([% id1 %]);",
                                             title   => "[% 'Borrar Nivel 1' | i18n %]",
                 ) ;
     [% END %]
@@ -351,6 +330,7 @@ $(document).ready(function(){
 </div>
 </fieldset>
 [% FOREACH nivel2 %]
+<div id="fieldset_grupo[% id2 %]">
 <fieldset>
 <strong><legend>[% "Detalles de Nivel 2 para registro" | i18n %] [% id2 %] GRUPO - [% tipo_documento %]</legend></strong>
 
@@ -371,7 +351,7 @@ $(document).ready(function(){
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(  
                                                                     boton   => "icon_borrar",
-                                                                    onClick => "borrarGrupo([% id1 %],[% id2 %]);",
+                                                                    onClick => "borrarN2([% id2 %]);",
                                                                     title   => "[% 'Borrar Grupo' | i18n %]",
                                         ) ;
             [% END %]
@@ -402,6 +382,7 @@ $(document).ready(function(){
             </div>
        </div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->
 </fieldset>
+</div>
 [% END %]<!-- END FOREACH Nivel 2-->
 
 </div> <!-- Fin DIV detalleComun -->

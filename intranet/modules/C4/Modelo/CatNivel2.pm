@@ -141,6 +141,9 @@ sub agregar{
 sub eliminar{
 
     my ($self)=shift;
+    my ($db) = @_;
+
+    $db = $db || $self->db;
 
     use C4::Modelo::CatNivel2Repetible;
     use C4::Modelo::CatNivel2Repetible::Manager;
@@ -148,13 +151,20 @@ sub eliminar{
     use C4::Modelo::CatNivel3::Manager;
 
 
-    my ($nivel3) = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(query => [ id2 => { eq => $self->getId2 } ] );
+    my ($nivel3) = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(  db => $db, 
+                                                                    query => [ id2 => { eq => $self->getId2 } ] 
+                                                            );
     foreach my $n3 (@$nivel3){
       $n3->eliminar();
     }
 
 
-    my ($repetiblesNivel2) = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(query => [ id2 => { eq => $self->getId2() } ] );
+    my ($repetiblesNivel2) = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(
+                                                                                db => $db,    
+                                                                                query => [
+                                                                                            id2 => { eq => $self->getId2() } 
+                                                                                    ] 
+                                                                                );
     foreach my $n2Rep (@$repetiblesNivel2){
       $n2Rep->eliminar();
     }
