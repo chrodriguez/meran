@@ -35,7 +35,7 @@ $VERSION = 3.0;
     &eliminarReservasVencidas
     &reasignarTodasLasReservasEnEspera
     &reasignarReservaEnEspera
-
+    &getReserva
     &t_realizarPrestamo
     &eliminarReservas
 );
@@ -824,6 +824,5 @@ sub cantReservasPorNivel1{
     my ($count) = C4::Modelo::CircReserva::Manager->get_circ_reserva_count(query => \@filtros, require_objects => ['nivel2']);
     return $count;
 }
-
 
 1;

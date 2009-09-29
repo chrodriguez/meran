@@ -337,10 +337,12 @@ sub insertarPrestamo {
 	my ($self)=shift;
 	my($params)=@_;
 
-	use C4::Modelo::CircReserva;
-    my ($reserva) = C4::Modelo::CircReserva->new(db=> $self->db, id_reserva => $params->{'id_reserva'});
-    $reserva->load();
-	$self->debug("Se actualiza el estado de la reserva a P = Prestado");
+# 	use C4::Modelo::CircReserva;
+#     my ($reserva) = C4::Modelo::CircReserva->new(db=> $self->db, id_reserva => $params->{'id_reserva'});
+#     $reserva->load();
+
+    my ($reserva) = C4::AR::Reservas::getReserva($params->{'id_reserva'},$self->db);
+	$self->debug("Se actualiza el estado de la reserva a P = Prestado a la reserva ".$reserva->getId2);
 #Se actualiza el estado de la reserva a P = Prestado
 	$reserva->setEstado('P');
 	$reserva->save();
