@@ -67,9 +67,10 @@ sub t_cancelar_y_reservar {
 	my $paramsReserva;
 	my ($msg_object);	
 
+    my $db = undef;
 	my ($reserva) = getReserva($params->{'id_reserva'});
     if ($reserva){
-        my $db = $reserva->db;
+       $db = $reserva->db;
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
     
