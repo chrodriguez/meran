@@ -501,6 +501,7 @@ sub t_devolver {
 
     for(my $i=0;$i<$loop;$i++){
 		$id_prestamo= $prestamos_array_validos->[$i];
+        $prestamo = C4::AR::Prestamos::getInfoPrestamo($id_prestamo, $db);
 		$params->{'id_prestamo'}= $id_prestamo;
 		C4::AR::Debug::debug("PRESTAMOS => t_devolver => id_prestamo: ".$id_prestamo);
         if ($prestamo){

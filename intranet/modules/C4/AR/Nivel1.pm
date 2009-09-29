@@ -9,8 +9,6 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 
 @EXPORT=qw(
-	&buscarNivel1PorId3
-
 	&getAutoresAdicionales
 	&getColaboradores
 	&getUnititle
@@ -37,30 +35,6 @@ C4::AR::Nivel1 - Funciones que manipulan datos del catálogo de nivel 1
 
 =cut
 
-=item buscarNivel1PorId3
-
-	$id_Nivel1=buscarNivel1PorId3($id3);
-
-Devuelve los datos del nivel 1 a partir de un id de nivel 3
-=cut
-# FIXME DEPRECATED
-sub buscarNivel1PorId3{
-        my ($id3) = @_;
-
-        my $dbh = C4::Context->dbh;
-        my $query = "	SELECT n1.*,a.* 
-			FROM cat_nivel1 n1 INNER JOIN cat_nivel3 n3 ON n1.id1 = n3.id1 
-		     	LEFT JOIN cat_autor a ON n1.autor = a.id WHERE id3=? ";
-
-        my $sth = $dbh->prepare($query);
-        $sth->execute($id3);
-        my $res=$sth->fetchrow_hashref;
-        $sth->finish();
-
-        return $res;
-}
-
-
 
 sub getAutoresAdicionales(){
 	my ($id)=@_;
@@ -75,18 +49,19 @@ sub getColaboradores(){
 # 	falta implementar, seria un campo de nivel 1 repetibles
 }
 
-=item getUnititle
+=item sub getUnititle
 
 	$titulo_unico=getUnititle($id_nivel1);
 	Esta funcion retorna el untitle segun un id1
 =cut
+# TODO DEPRECATED
 sub getUnititle {
 	my($id1)= @_;
 	return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id1,"245","b","1");
 }
 
 
-=item getNivel1FromId1
+=item sub getNivel1FromId1
 Recupero un nivel 1 a partir de un id1
 retorna un objeto o 0 si no existe
 =cut
@@ -110,10 +85,9 @@ sub getNivel1FromId1{
 
 
 #=======================================================================ABM Nivel 1=======================================================
-=item t_guardarNivel1
+=item sub t_guardarNivel1
 	guardar datos de nivel1
 =cut
-
 sub t_guardarNivel1 {
     my($params)=@_;
 
@@ -155,6 +129,9 @@ sub t_guardarNivel1 {
     return ($msg_object, $id1);
 }
 
+=item sub t_modificarNivel1
+    Modifica el nivel 1 pasado por parametro
+=cut
 sub t_modificarNivel1 {
     my($params)=@_;
 
@@ -204,7 +181,9 @@ sub t_modificarNivel1 {
     return ($msg_object, $id1);
 }
 
-
+=item sub t_eliminarNivel1
+    Elimina el nivel 1 pasado por parametro
+=cut
 sub t_eliminarNivel1{
    my ($id1) = @_;
    

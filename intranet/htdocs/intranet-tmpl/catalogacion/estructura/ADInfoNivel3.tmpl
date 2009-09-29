@@ -4,7 +4,7 @@
             <tr align="center" cellpadding="0"  valign="middle" class="titulo_tabla_resultado">
 		        
 		        <td>
-			        <input type="image" id="checkAllEjemplares" src="[% themelang %]/images/check.png" title="[% 'Seleccionar todos' | i18n %]">
+			        <input type="image" id="checkAllEjemplares" class="icon_seleccionar" title="[% 'Seleccionar todos' | i18n %]">
 		        </td>
                 <td><b>[% 'Sig. Top.' | i18n %]</b></td>
                 <td><b>[% 'C&oacute;digo' | i18n %]</b></td>
@@ -18,11 +18,10 @@
         [% FOREACH nivel3 IN nivel3_array %]
 	        <tr align="center">
 			        <td>
-				        <input type="checkbox" id="checkEjemplares" name="checkEjemplares" value="[% nivel3.getId3 %]">
+				        <input type="checkbox" id="checkEjemplares" name="checkEjemplares" class="icon_seleccionar" value="[% nivel3.getId3 %]">
 			        </td>
                     <td>[% nivel3.getSignatura_topografica %]</td>
                     <td>
-                        <!--<a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% id3 %]&barcode=[% nivel3.getBarcode %]&signatura_topografica=[% nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'>[% nivel3.getBarcode %]</a>-->
 	        
 			        [% PERL %]
 				        print C4::AR::Filtros::link_to(	text => 	"[% nivel3.getBarcode %]",
@@ -71,7 +70,6 @@
         [% END %] <!-- END FOREACH nivel3 -->
         </table>
         
-        <img class="selectallarrow" height="22" width="38" alt="[% 'Para los elementos que están marcados:' | i18n %]" src="[% themelang %]/images/arrow_ltr.png"/>
         <div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
         
             [% PERL %]

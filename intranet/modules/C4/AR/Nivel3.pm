@@ -11,16 +11,12 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 
 @EXPORT=qw(
-	&detalleDisponibilidad
 
-	&detalleNivel3MARC
-	&detalleNivel3OPAC
 	&detalleNivel3
 
 	&getBarcode
 	&getDataNivel3
 
-	&disponibilidadItem
 	&modificarEstadoItem
 );
 
@@ -95,7 +91,7 @@ sub getNivel3FromBarcode {
 }
 
 =item
-
+DEPRECATED, PERO DEJAR PARA REEIMPLEMENTAR
 =cut
 sub modificarEstadoItem{
 	my($params)=@_;
@@ -142,6 +138,7 @@ sub _modItemNoDisponibleAPrestamo{
 	#FALTARIA CAMBIAR EL ESTADOs
 }
 
+# FIXME DEPRECATED
 sub _estaDisponible {
 	my($id3)=@_;
 
@@ -162,134 +159,22 @@ sub _estaDisponible {
 detalleDisponibilidad
 Devuelve la disponibilidad del item que viene por paramentro.
 =cut
-sub detalleDisponibilidad{
-        my ($id3) = @_;
-        my $dbh = C4::Context->dbh;
-        my $query = "SELECT * FROM cat_detalle_disponibilidad WHERE id3 = ? ORDER BY date DESC";
-        my $sth = $dbh->prepare($query);
-        $sth->execute($id3);
-	my @results;
-	my $i=0;
-
-	while (my $data=$sth->fetchrow_hashref){
-		$results[$i]=$data; $i++; 
-	}
-	$sth->finish;
-
-	return(scalar(@results),\@results);
-}
-
-=item
-detalleNivel3MARC
-trae el nivel3 completo (nivel3 y nivel3_repetibles), para mostrar en MARC,
-segun id3 pasado por parametro
-=cut
-sub detalleNivel3MARC{
-	my ($id3,$itemtype,$tipo)=@_;
-
-	my $dbh = C4::Context->dbh;
-	my (@nivel3)=&C4::AR::Catalogacion::buscarNivel3($id3);
-	my $disponibles;
-	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel3');
-	my $i=0;
-	my $dato;
-	my $campo;
-	my $subcampo;
-	my $librarian;
-	my @marcResult;
- 	foreach my $row(@nivel3){
-
-		foreach my $llave (keys %$mapeo){
-			$campo=$mapeo->{$llave}->{'campo'};
-			$subcampo=$mapeo->{$llave}->{'subcampo'};
-			my $dato=$row->{$mapeo->{$llave}->{'campoTabla'}};
-			$librarian=&C4::AR::Busquedas::getLibrarian($campo, $subcampo, $dato,$itemtype,$tipo,1);
-
-			$marcResult[$i]->{'campo'}= $campo;
-			$marcResult[$i]->{'subcampo'}= $subcampo;
-			$marcResult[$i]->{'dato'}= $librarian->{'dato'};
-			$marcResult[$i]->{'librarian'}= $librarian->{'liblibrarian'};
-	
-			$i++;
-		}
-		my $query="SELECT * FROM cat_nivel3_repetible WHERE id3=?";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($id3);
-		while (my $data=$sth->fetchrow_hashref){
-
- 			$librarian=&C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'},$itemtype,$tipo,1);
-
-			$marcResult[$i]->{'campo'}= $data->{'campo'};
-			$marcResult[$i]->{'subcampo'}= $data->{'subcampo'};
-			$marcResult[$i]->{'dato'}= $librarian->{'dato'};
-			$marcResult[$i]->{'librarian'}= $librarian->{'liblibrarian'};
-
-			$i++;
-		}
-		$sth->finish;
-	}
-
-	return(\@marcResult);
-}
-
-
-=item
-detalleNivel3OPAC
-Trae todos los datos del nivel 3, para poder verlos en el template.
-=cut
-sub detalleNivel3OPAC{
-	my ($id2,$itemtype,$tipo)=@_;
-	my $dbh = C4::Context->dbh;
-
-	my ($infoNivel3,@nivel3)= buscarNivel3PorId2YDisponibilidad($id2);
-	my $mapeo=&C4::AR::Busquedas::buscarMapeo('cat_nivel3');
-	my @nivel3Comp;
-	my @results;
-	my $i=0;
-	my $id3;
-	my $campo;
-	my $subcampo;
-	my $dato;
-	my $librarian;
-	my $getLib;
-
-	$results[0]->{'nivel3'}=\@nivel3;
-
-	$results[0]->{'id2'}= $id2;
-	$results[0]->{'cantParaPrestamo'}= $infoNivel3->{'cantParaPrestamo'};
-	$results[0]->{'cantParaSala'}= $infoNivel3->{'cantParaSala'};
-	$results[0]->{'cantResevasActual'}= $infoNivel3->{'cantReservas'};
-	foreach my $row(@nivel3){
-
-		foreach my $llave (keys %$mapeo){
-			$campo=$mapeo->{$llave}->{'campo'};
-			$subcampo=$mapeo->{$llave}->{'subcampo'};
-			$nivel3Comp[$i]->{'campo'}=$campo;
-			$nivel3Comp[$i]->{'subcampo'}=$subcampo;
-			$dato= $row->{$mapeo->{$llave}->{'campoTabla'}};
-			$getLib= &C4::AR::Busquedas::getLibrarian($campo, $subcampo, "", $itemtype,$tipo,0);
-			$nivel3Comp[$i]->{'librarian'}= $getLib->{'textPred'};
-			$nivel3Comp[$i]->{'dato'}= $dato;
-			$i++;
-		}
-		$id3=$row->{'id3'};
-		my $query="SELECT * FROM cat_nivel3_repetible WHERE id3=?";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($id3);
-		while (my $data=$sth->fetchrow_hashref){
-			$nivel3Comp[$i]->{'campo'}=$data->{'campo'};
-			$nivel3Comp[$i]->{'subcampo'}=$data->{'subcampo'};
-			$getLib= &C4::AR::Busquedas::getLibrarian($data->{'campo'}, $data->{'subcampo'}, $data->{'dato'}, $itemtype,$tipo,0);
-			$nivel3Comp[$i]->{'librarian'}= $getLib->{'textPred'};
-			$nivel3Comp[$i]->{'dato'}= $getLib->{'dato'};
-
-			$i++;
-		}
-		$sth->finish;
-	}
-	return(\@results,\@nivel3Comp);
-}
-
+# sub detalleDisponibilidad{
+#         my ($id3) = @_;
+#         my $dbh = C4::Context->dbh;
+#         my $query = "SELECT * FROM cat_detalle_disponibilidad WHERE id3 = ? ORDER BY date DESC";
+#         my $sth = $dbh->prepare($query);
+#         $sth->execute($id3);
+# 	my @results;
+# 	my $i=0;
+# 
+# 	while (my $data=$sth->fetchrow_hashref){
+# 		$results[$i]=$data; $i++; 
+# 	}
+# 	$sth->finish;
+# 
+# 	return(scalar(@results),\@results);
+# }
 
 =item
 detalleNivel3
@@ -487,70 +372,6 @@ sub detalleCompletoOPAC{
 	$t_params->{'nivel2'}= \@nivel2,
 }
 
-=item
-disponibilidadItem
-Esta funcion busca el estado en el que se encuentra el item con id3 que viene por parametro, si esta prestado o reservado trae la info del usuario al cual fue asignado.
-=cut
-sub disponibilidadItem{
-	my ($datosItem)=@_;
-
-	my $dbh=C4::Context->dbh;
-	my $borrowernumber="";
-	my $clase;
-	my $disponibilidad;
-	my $dateformat = C4::Date::get_date_format();
-	$datosItem->{'sePuedeBorrar'}=1;
-	$datosItem->{'sePuedeEditar'}=1;
-
-	my $data= &C4::AR::Prestamos::getDatosPrestamoDeId3($datosItem->{'id3'});
-
-	if ($data){
-    	#el item esta prestado, obtengo la informacion
-		$datosItem->{'prestado'}=1;
-		$datosItem->{'clase'}="";
-		$datosItem->{'sePuedeBorrar'}=0; #no se permite borrar un item prestado
-		$datosItem->{'sePuedeEditar'}=0; #no se permite editar un item prestado
-		$datosItem->{'borrowernumber'}=$data->{'borrowernumber'};
-		$datosItem->{'usuarioNombre'}=$data->{'surname'}.", ".$data->{'firstname'};
-		$datosItem->{'disponibilidad'}="Prestado a ";
-		$datosItem->{'usuario'}="<a href='../usuarios/reales/datosUsuario.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a><br>".$data->{'description'};
-     	#DEPRECATED REHACER
-# 		my ($vencido,$df)= &C4::AR::Prestamos::estaVencido($data->{'id3'},$data->{'issuecode'});
-# 		my $returndate=format_date($df,$dateformat);
-# 		$datosItem->{'vencimiento'}=$returndate;
-# 		if($vencido){
-# 			$datosItem->{'claseFecha'}="fechaVencida";
-# 		}
-#       		$datosItem->{'renew'} = C4::AR::Prestamos::sepuederenovar($data->{'borrowernumber'}, $data->{'id3'});
-	}
-
-	my $data= &C4::AR::Reservas::getDatosReservaDeId3($datosItem->{'id3'});
-
-	if($data){
-	#Se encuentra reservado, obtengo la informacion de la reserva	
-		$datosItem->{'clase'}="";
-		$datosItem->{'borrowernumber'}=$data->{'borrowernumber'};
-		$datosItem->{'usuarioNombre'}=$data->{'surname'}.", ".$data->{'firstname'};
-		my $reminderdate=format_date($data->{'reminderdate'},$dateformat);
-		$datosItem->{'vencimiento'}=$reminderdate;
-		$datosItem->{'disponibilidad'}="Reservado a ";
-      		$datosItem->{'usuario'}="<a href='../usuarios/reales/datosUsuario.pl?bornum=".$data->{'borrowernumber'}."'>".$data->{'firstname'}." ".$data->{'surname'}."</a>";
-	}
-}
-
-
-sub getBarcode{
-	my($id3)=@_;
-
-	my $dbh = C4::Context->dbh;
-	my $query=" 	SELECT barcode
-			FROM cat_nivel3
-			WHERE id3 = ? ";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id3);
-
-	return $sth->fetchrow;
-}
 
 sub getDataNivel3{
 	my ($id3)= @_;
@@ -601,8 +422,7 @@ sub generaCodigoBarra{
 }
 
 
-=item
-buscarNiveles3PorDisponibilidad
+=item sub buscarNiveles3PorDisponibilidad
 Busca los datos del nivel 3 a partir de un id3, respetando su disponibilidad
 =cut
 sub buscarNivel3PorDisponibilidad{
@@ -647,7 +467,7 @@ sub _verificarDeleteItem {
 
 
 
-=item
+=item sub getNivel3FromId2
 Recupero todos los nivel 3 a partir de un id2
 =cut
 sub getNivel3FromId2{
@@ -663,7 +483,7 @@ sub getNivel3FromId2{
 }
 
 
-=item
+=item sub getNivel3FromId3
 Recupero un nivel 3 a partir de un id3
 retorna un objeto o 0 si no existe
 =cut
@@ -734,7 +554,7 @@ sub t_guardarNivel3 {
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
-            eval {$db->rollback};
+            eval $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U373', 'params' => []} ) ;
@@ -853,30 +673,6 @@ sub _generarArregloDeBarcodesPorCantidad{
 
 }
 
-=item sub _existeBarcodeEnArray
-Esta funcion verifica si en el arreglo de barcodes no existe 1 o mas barcodes iguales
-=cut
-=item
-sub _existeBarcodeEnArray{
-	my ($barcode, $barcodes_array)= @_;
-
-	my $cant=0;
-
-	for(my $i=0;$i<scalar(@$barcodes_array);$i++){
-#         C4::AR::Debug::debug("_existeBarcodeEnArray=> cmp ".$barcodes_array->[$i]." con ".$barcode."\n");
-		if(C4::AR::Utilidades::trim($barcodes_array->[$i]) eq C4::AR::Utilidades::trim($barcode) ){
-			$cant++;
-			if($cant gt 1){
-#                 C4::AR::Debug::debug("_existeBarcodeEnArray=> EXISTE: ".$barcodes_array->[$i]."\n");
-				#el barcode ya existe en el arreglo de barcodes que se esta intentando agregar
- 				return 1;
-			}
-		}
-	}
-	#no existe el barcode en el arreglo de barcodes
-	return 0;
-}
-=cut
 
 sub _existeBarcodeEnArray {
     my ($barcode, $barcodes_array)= @_;
@@ -884,6 +680,11 @@ sub _existeBarcodeEnArray {
     return C4::AR::Utilidades::existeInArray($barcode, $barcodes_array);
 }
 
+=item sub t_modificarNivel3
+    Modifica los ejemplares del nivel 3 pasados por parametro
+    @parametros:
+        $params->{'ID3_ARRAY'}: arreglo de ID3
+=cut
 sub t_modificarNivel3 {
     my ($params)= @_;
 
@@ -940,6 +741,11 @@ sub t_modificarNivel3 {
 	return ($msg_object);
 }
 
+=item sub t_eliminarNivel3
+    Elimina los ejemplares de nivel 3 pasados por parametro
+    @parametros:
+        $params->{'id3_array'}: arreglo de ID3
+=cut
 sub t_eliminarNivel3{
    
    	my($params)=@_;

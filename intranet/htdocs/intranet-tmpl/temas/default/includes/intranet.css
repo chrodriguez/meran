@@ -825,6 +825,13 @@ label.error_adv{
     cursor: pointer;
 }
 
+.icon_seleccionar {
+    background: transparent url(../imagenes/iconos/seleccionar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+}
+
 #icon_anadir {
     background: transparent url(../imagenes/iconos/anadir.png) no-repeat;
     height: 25px;
