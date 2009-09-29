@@ -472,7 +472,7 @@ sub getReservasDeSocio {
     push(@filtros, ( nro_socio  => { eq => $nro_socio} ));
     push(@filtros, ( estado     => { ne => 'P'} ));
 
-    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, require_objects => ['nivel3','nivel2']);
 
     return ($reservas_array_ref,scalar(@$reservas_array_ref));
 }
@@ -486,7 +486,7 @@ sub getReservasDeId2 {
         push(@filtros, ( id2    => { eq => $id2}));
         push(@filtros, ( estado     => { ne => 'P'} ));
 
-        my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros); 
+        my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, require_objects => ['nivel3','nivel2']); 
         return ($reservas_array_ref,scalar(@$reservas_array_ref));
 }
 
@@ -499,7 +499,7 @@ sub getReservaDeId3{
         push(@filtros, ( id3    => { eq => $id3}));
         push(@filtros, ( estado     => { ne => 'P'} ));
 
-        my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros); 
+        my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, require_objects => ['nivel3','nivel2']); 
         return ($reservas_array_ref->[0]);
 }
 
@@ -537,7 +537,8 @@ sub _getReservasAsignadas {
     use C4::Modelo::CircReserva::Manager;
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(db => $db,
-                query => [ nro_socio => { eq => $socio }, id3 => {ne => undef} ] );
+                query => [ nro_socio => { eq => $socio }, id3 => {ne => undef} ],
+                require_objects => ['nivel3','nivel2'] );
     return($reservas_array_ref);
 }
 
@@ -553,7 +554,7 @@ sub getReserva{
 
     push (@filtros, (id_reserva => {eq => $id}) );
 
-    my ($reserva) = C4::Modelo::CircReserva::Manager->get_circ_reserva(db => $db, query => \@filtros,);
+    my ($reserva) = C4::Modelo::CircReserva::Manager->get_circ_reserva(db => $db, query => \@filtros, require_objects => ['nivel3','nivel2']);
     if (scalar(@$reserva)){
         return ($reserva->[0]);
     }else{
@@ -576,7 +577,8 @@ sub reservasVencidas{
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
                             query => [ fecha_recordatorio => { lt => $hoy }, 
                                    estado => {ne => 'P'}, 
-                                   id3 => {ne => undef}]
+                                   id3 => {ne => undef}],
+                            require_objects => ['nivel3','nivel2']
                                 ); 
     return ($reservas_array_ref);
 
@@ -600,7 +602,8 @@ sub reservasEnEspera {
     push(@filtros, ( id2 => { eq => $id2}));
     push(@filtros, ( id3 => undef ));
 
-    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, sort_by => 'timestamp');
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, sort_by => 'timestamp',
+                                                                                  require_objects => ['nivel3','nivel2']);
 
   if (scalar(@$reservas_array_ref) == 0){
         return 0;

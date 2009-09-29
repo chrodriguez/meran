@@ -65,7 +65,7 @@ function _createContentMessages(){
 
 //luego de x segundos se ejecuta la funcion pasada por parametro
 function _delay(funcion, segundos){
-	setTimeout(funcion, segundos*600);
+	setTimeout(funcion, segundos*1000);
 }
 
 function hayError(msg){
