@@ -21,7 +21,7 @@ function _clearMessages(){
 
 function verificarRespuesta(responseText){
     if (responseText == 0){
-        alert(DATOS_ENVIADOS_INCORRECTOS);
+        jAlert(DATOS_ENVIADOS_INCORRECTOS,'Info', 'errboxid');
         return(0);
     }else{
         return (1);

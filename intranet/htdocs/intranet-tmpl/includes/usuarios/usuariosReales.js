@@ -6,7 +6,7 @@
  *
  */
 var nro_socio_temp; //SOLO USADO PARA MODIFICAR_USUARIO
-
+var vDatosUsuario = 0;
 //*********************************************Modificar Datos Usuario*********************************************
 function modificarDatosDeUsuario(){
 	objAH=new AjaxHelper(updateModificarDatosDeUsuario);

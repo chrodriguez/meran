@@ -39,18 +39,16 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 	$infoDevRen[0]->{'accion'}=$tipoAccion;
 	for(my $i=0;$i<$loop;$i++){
  		my $id_prestamo=$array_ids->[$i];
-        	my $prestamo = C4::Modelo::CircPrestamo->new(id_prestamo => $id_prestamo);
-        	$prestamo->load();
-		$infoDevRen[$i]->{'id_prestamo'}=$id_prestamo;
-        	$infoDevRen[$i]->{'id3'}=$prestamo->getId3;
- 		$infoDevRen[$i]->{'barcode'}=$prestamo->nivel3->getBarcode;
-		if($prestamo->nivel3->nivel1->getAutor){
-			#si tengo el ID del autor lo busco, sino se rompe
-  			$infoDevRen[$i]->{'autor'}=$prestamo->nivel3->nivel1->cat_autor->getCompleto;
-		}
- 		$infoDevRen[$i]->{'titulo'}=$prestamo->nivel3->nivel1->getTitulo;
-  		$infoDevRen[$i]->{'unititle'}="";
- 		$infoDevRen[$i]->{'edicion'}=$prestamo->nivel3->nivel2->getEdicion;
+        my $prestamo = C4::AR::Prestamos::getInfoPrestamo($id_prestamo);;
+        if ($prestamo){
+            $infoDevRen[$i]->{'id_prestamo'}=$id_prestamo;
+            $infoDevRen[$i]->{'id3'}=$prestamo->getId3;
+            $infoDevRen[$i]->{'barcode'}=$prestamo->nivel3->getBarcode;
+            $infoDevRen[$i]->{'autor'}=$prestamo->nivel3->nivel1->cat_autor->getCompleto;
+            $infoDevRen[$i]->{'titulo'}=$prestamo->nivel3->nivel1->getTitulo;
+            $infoDevRen[$i]->{'unititle'}="";
+            $infoDevRen[$i]->{'edicion'}=$prestamo->nivel3->nivel2->getEdicion;
+        }
 	}
 	my $infoDevRenJSON = to_json \@infoDevRen;
     C4::Auth::print_header($session);

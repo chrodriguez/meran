@@ -43,6 +43,11 @@ function delay(funcion, segundos){
  * @param params: string con los paramatros a pasar por el formulario, concatenado con "&" entre parametros y con
  *                "=" entre nombre y valor del parametro.
  */
+
+function fancybox(id){
+  $('#'+id).fancybox();
+}
+
 function crearForm(url,params){
 	var arrayParam=params.split("&");
 	var formu=$("#formulario");

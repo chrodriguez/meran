@@ -32,7 +32,7 @@ __PACKAGE__->meta->setup(
         },
 
 		nivel1 => {
-            class      => 'C4::Modelo::CatNivel3',
+            class      => 'C4::Modelo::CatNivel1',
             column_map => { id1 => 'id1' },
             type       => 'one to one',
         },

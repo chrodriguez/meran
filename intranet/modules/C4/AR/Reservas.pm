@@ -67,42 +67,42 @@ sub t_cancelar_y_reservar {
 	my $paramsReserva;
 	my ($msg_object);	
 
-	my ($reserva) = C4::Modelo::CircReserva->new(id_reserva => $params->{'id_reserva'});
-	$reserva->load();
-	my $db = $reserva->db;
-	$db->{connect_options}->{AutoCommit} = 0;
-    $db->begin_work;
-
-	eval {
-		$reserva->cancelar_reserva($params);
-
-		my ($msg_object)= &_verificaciones($params);
-		
-		if(!$msg_object->{'error'}){
-
-			($paramsReserva)= $reserva->reservar($params);
-
-			#Se setean los parametros para el mensaje de la reserva SIN ERRORES
-			if($paramsReserva->{'estado'} eq 'E'){
-			#SE RESERVO CON EXITO UN EJEMPLAR
-				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [	$paramsReserva->{'desde'}, 
-													$paramsReserva->{'desdeh'},
-													$paramsReserva->{'hasta'},
-													$paramsReserva->{'hastah'}
-						]} ) ;
-
-			}else{
-			#SE REALIZO UN RESERVA DE GRUPO
-				my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'borrowernumber'});
-				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$borrowerInfo->{'emailaddress'}]} ) ;
-			}
-		}
-
-		$db->commit;	
-	};
-
+	my ($reserva) = getReserva($params->{'id_reserva'});
+    if ($reserva){
+        my $db = $reserva->db;
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+    
+        eval {
+            $reserva->cancelar_reserva($params);
+    
+            my ($msg_object)= &_verificaciones($params);
+            
+            if(!$msg_object->{'error'}){
+    
+                ($paramsReserva)= $reserva->reservar($params);
+    
+                #Se setean los parametros para el mensaje de la reserva SIN ERRORES
+                if($paramsReserva->{'estado'} eq 'E'){
+                #SE RESERVO CON EXITO UN EJEMPLAR
+                    $msg_object->{'error'}= 0;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [	$paramsReserva->{'desde'}, 
+                                                        $paramsReserva->{'desdeh'},
+                                                        $paramsReserva->{'hasta'},
+                                                        $paramsReserva->{'hastah'}
+                            ]} ) ;
+    
+                }else{
+                #SE REALIZO UN RESERVA DE GRUPO
+                    my $borrowerInfo= C4::AR::Usuarios::getBorrowerInfo($params->{'borrowernumber'});
+                    $msg_object->{'error'}= 0;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$borrowerInfo->{'emailaddress'}]} ) ;
+                }
+            }
+    
+            $db->commit;	
+        };
+    }
 	if ($@){
 		#Se loguea error de Base de Datos
 		&C4::AR::Mensajes::printErrorDB($@, 'B407',"OPAC");
@@ -516,9 +516,11 @@ sub obtenerReservasDeSocio {
     use C4::Modelo::CircReserva;
     use C4::Modelo::CircReserva::Manager;
 
-    my ($socio)=@_;
+    my ($socio,$db)=@_;
+    $db = $db || C4::Modelo::CircReserva->new()->db;
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
+                                                    db => $db,
 													query => [ nro_socio => { eq => $socio }, estado => {ne => 'P'}],
 													require_objects => [ 'nivel3.nivel2' ], # INNER JOIN
 													with_objects => [ 'nivel3' ] #LEFT JOIN
@@ -536,13 +538,14 @@ Dado un socio, devuelve las reservas asignadas a el
 =cut
 sub _getReservasAsignadas {
 
-	my ($socio)=@_;
+    my ($socio,$db)=@_;
+    $db = $db || C4::Modelo::CircReserva->new()->db;
 	
-    	use C4::Modelo::CircReserva;
-    	use C4::Modelo::CircReserva::Manager;
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
 
-    	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
-					query => [ nro_socio => { eq => $socio }, id3 => {ne => undef} ] );
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(db => $db,
+                query => [ nro_socio => { eq => $socio }, id3 => {ne => undef} ] );
 	return($reservas_array_ref);
 }
 
@@ -551,10 +554,19 @@ getReserva
 Funcion que retorna la informacion de la reserva con el numero que se le pasa por parametro.
 =cut
 sub getReserva{
-    my ($id)=@_;
-    my ($reserva) = C4::Modelo::CircReserva->new(id_reserva => $id);
-    $reserva->load();
-    return ($reserva);
+    my ($id,$db)=@_;
+    my @filtros;
+
+    $db = $db || C4::Modelo::CircReserva->new()->db;
+
+    push (@filtros, (id_reserva => {eq => $id}) );
+
+    my ($reserva) = C4::Modelo::CircReserva::Manager->get_circ_reserva(db => $db, query => \@filtros,);
+    if (scalar(@$reserva)){
+        return ($reserva);
+    }else{
+        return(0);
+    }
 }
 
 =item

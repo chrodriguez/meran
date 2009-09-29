@@ -28,7 +28,7 @@ __PACKAGE__->meta->setup(
         msg_texto        => { type => 'varchar', length => 255 },
         alt_calle        => { type => 'varchar', length => 255 },
         alt_barrio       => { type => 'varchar', length => 255 },
-        alt_ciudad       => { type => 'varchar', length => 11 },
+        alt_ciudad       => { type => 'varchar', length => 11, not_null => 0 },
         alt_telefono     => { type => 'varchar', length => 255 },
 #         nacimiento       => { type => 'date' },
         nacimiento       => { type => 'varchar', length => 255},

@@ -104,6 +104,7 @@ C4::Auth - Authenticates Koha users
 		&getSessionBrowser
         &getSessionNroSocio
 		&_generarNroRandom
+        &redirectAndAdvice
 		
 );
 
@@ -1646,6 +1647,18 @@ sub new_password_is_needed {
 
 }
 
+
+
+sub redirectAndAdvice{
+
+    my ($cod_msg)= @_;
+    my ($session) = CGI::Session->load();
+
+    $codMSG = $cod_msg;
+    $cod_msg = getMsgCode();
+    $session->param('codMsg',$cod_msg);
+    redirectTo('/cgi-bin/koha/informacion.pl');
+}
 
 
 END { }       # module clean-up code here (global destructor)

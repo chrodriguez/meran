@@ -284,16 +284,17 @@ function cancelarDiv(){
  */
 function cancelarReserva(reserveNumber){
 
-	var is_confirmed = confirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA);
-	if (is_confirmed) {
-		objAH=new AjaxHelper(updateInfoCancelacion);
-		objAH.debug= true;
-		objAH.url='/cgi-bin/koha/circ/circulacionDB.pl';
-		objAH.tipoAccion= 'CANCELAR_RESERVA';
-		objAH.nro_socio= USUARIO.ID;
-		objAH.id_reserva= reserveNumber;
-		objAH.sendToServer();
-	}
+	jConfirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA,'Info',function(is_confirmed){
+        if (is_confirmed) {
+            objAH=new AjaxHelper(updateInfoCancelacion);
+            objAH.debug= true;
+            objAH.url='/cgi-bin/koha/circ/circulacionDB.pl';
+            objAH.tipoAccion= 'CANCELAR_RESERVA';
+            objAH.nro_socio= USUARIO.ID;
+            objAH.id_reserva= reserveNumber;
+            objAH.sendToServer();
+        }
+    });
 }
 
 

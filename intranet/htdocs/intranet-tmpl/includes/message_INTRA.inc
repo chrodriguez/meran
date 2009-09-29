@@ -90,7 +90,7 @@ INGRESE_EL_USUARIO= "[% 'Ingrese el Usuario' | i18n %]";
 ERROR_ITSELF= "[% 'Error' | i18n %]";
 //================================================Fin==Catalogo==================================================
 //================================================Circulacion===================================================
-ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA= "&iquery;[% 'Esta seguro que desea cancelar la reserva' | i18n %]?";
+ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA= "&iquest;[% 'Esta seguro que desea cancelar la reserva' | i18n %]?";
 //=============================================Fin===Circulacion=================================================
 //================================================Control Autoridades==============================================
 YA_EXISTE_EL_ELEMENTO= "[% 'Ya existe el elemento' | i18n %]";

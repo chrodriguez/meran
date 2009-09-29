@@ -2492,17 +2492,6 @@ sub barcodePrestadoAutocomplete{
 ############################## Fin funciones para AUTOCOMPLETABLES #############################################################
 
 
-sub redirectAndAdvice{
-
-    my ($cod_msg)= @_;
-    my ($session) = CGI::Session->load();
-
-    $session->param('codMsg',$cod_msg);
-#     $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
-    C4::Auth::redirectTo('/cgi-bin/koha/informacion.pl');
-#     exit;
-}
-
 #######################################FUNCIONES PARA TRABAJAR CON BINARIOS##########################################
 sub bin2dec {
     return unpack("N", pack("B32", substr("0" x 32 . shift, -32)));

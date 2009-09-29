@@ -327,7 +327,7 @@ sub validateParams {
     }
 
     if (!$flag){
-        C4::AR::Utilidades::redirectAndAdvice($cod_msg);
+        C4::Auth::redirectAndAdvice($cod_msg);
     }
 
 }

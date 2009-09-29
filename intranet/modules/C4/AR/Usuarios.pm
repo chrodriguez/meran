@@ -163,9 +163,8 @@ sub habilitarPersona {
 
     eval {
         foreach my $socio (@$id_socios_array_ref){
-            my ($partner) = C4::Modelo::UsrSocio->new(id_socio => $socio);
+            my ($partner) = getSocioInfo($socio);
             if ($partner){
-                $partner->load();
                 $partner->activar;
             }
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U347', 'params' => [$partner->getNro_socio]});
@@ -196,9 +195,8 @@ sub deshabilitarPersona {
 
     eval {
         foreach my $socio (@$id_socios_array_ref){
-            my ($partner) = C4::Modelo::UsrSocio->new(id_socio => $socio);
+            my ($partner) = getSocioInfo($socio);
             if ($partner){
-                $partner->load();
                 $partner->desactivar;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U363', 'params' => [$partner->getNro_socio]});
             }
@@ -357,7 +355,6 @@ sub t_cambiarPermisos {
     if(!$msg_object->{'error'}){
     #No hay error
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
-            $socio->load();
 
         my $db= $socio->db;
         # enable transactions, if possible
@@ -491,9 +488,8 @@ sub _verificarDatosBorrower {
     }
 
     if (!($msg_object->{'error'}) && ($credential_type eq "superlibrarian") ){
-        my $socio = C4::Modelo::UsrSocio->new(nro_socio => C4::Auth::getSessionNroSocio());
-           $socio->load();
-        if (!($socio->isSuperUser())){
+        my $socio = getSocioInfoPorNroSocio(C4::Auth::getSessionNroSocio());
+        if ( (!$socio) || (!($socio->isSuperUser())) ){
           $msg_object->{'error'}= 1;
           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U399', 'params' => []} ) ;
         }
@@ -589,13 +585,19 @@ sub actualizarSocio {
 sub getSocioInfo {
 
     my ($id_socio) = @_;
-    my  $socio = C4::Modelo::UsrSocio->new(id_socio => $id_socio);
-    use C4::Modelo::UsrSocio;
-    use C4::Modelo::UsrSocio::Manager;
+    my @filtros;
 
-    if ($socio){
-        $socio->load();
-        return ($socio);
+    use C4::Modelo::UsrSocio::Manager;
+    push (@filtros, (id_socio => {eq =>$id_socio}) );
+
+    my  $socio = C4::Modelo::UsrSocio::Manager->get_usr_socio(query => \@filtros,
+                                                              require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                                                  'persona.documento'],
+                                                              with_objects => ['persona.alt_ciudad_ref'],
+                                                             );
+
+    if (scalar(@$socio)){
+        return ($socio->[0]);
     }else{
         return (0);
     }
@@ -608,9 +610,11 @@ sub getSocioInfoPorNroSocio {
     my ($nro_socio)= @_;
 
     my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
-                                                        query => [ nro_socio => { eq => $nro_socio } ],
-                                                        require_objects => [ 'persona' ]
-                                                    );
+                                                              query => [ nro_socio => { eq => $nro_socio } ],
+                                                              require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                                                  'persona.documento'],
+                                                              with_objects => ['persona.alt_ciudad_ref'],
+                                                                        );
 #     use C4::Modelo::UsrSocio;
 
     if($socio_array_ref){
@@ -676,12 +680,14 @@ sub getSocioLike {
                                                                             sort_by => $ordenAux,
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
-                                                                            require_objects => [ 'persona' ]
+                                                              require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                                                  'persona.documento'],
      ); 
 
     #Obtengo la cant total de socios para el paginador
     my $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => \@filtros,
-                                                                               require_objects => [ 'persona' ]
+                                                              require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                                                  'persona.documento'],
                                                                      );
 
     if(scalar(@$socios_array_ref) > 0){
@@ -769,13 +775,15 @@ sub BornameSearchForCard {
     eval{
         $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count(   query => \@filtros,
                                                                             sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
-                                                                            require_objects => [ 'persona','persona.documento' ]
+                                                              require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                                                  'persona.documento'],
         );
         $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                             sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
 #                                                                             limit => $params->{'cantR'},
 #                                                                             offset => $params->{'ini'},
-                                                                            require_objects => [ 'persona','persona.documento' ]
+                                                              require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                                                  'persona.documento'],
         );
     };
 
@@ -799,7 +807,8 @@ sub isUniqueDocument {
     }
 
     my $cant = C4::Modelo::UsrSocio::Manager::get_usr_socio_count( query => \@filtros,
-                                                                       require_objects => ['persona'], );
+                                                                   require_objects => ['persona']
+                                                                );
 
     return ($cant == 0); # SE USA 0 PARA SABER QUE NADIE TIENE ESE DOCUMENTO, Y 1 PARA SABER QUE LO TIENE UNO SOLO, SIRVE PARA MODIFICAR
 }
