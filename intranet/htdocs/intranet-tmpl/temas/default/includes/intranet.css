@@ -1168,7 +1168,7 @@ fieldset.accionesUsuarios{
 }
 
 #mensajes{
-  color: #666600;
+  color: InfoBackground;
 }
 .columna_izq{
   float:left;

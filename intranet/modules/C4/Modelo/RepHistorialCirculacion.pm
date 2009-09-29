@@ -230,8 +230,6 @@ sub agregar {
 
     $self->setId1($data_hash->{'id1'});
     $self->setId2($data_hash->{'id2'}); 
-C4::AR::Debug::debug("ID2 de HISOTRICO RESERVA ===========================================: ".$data_hash->{'id2'});
-
     $self->setId3($data_hash->{'id3'});
     $self->setNro_socio($data_hash->{'nro_socio'});
 C4::AR::Debug::debug("responsable desde rep_historial_circulacion***************************: ".$data_hash->{'responsable'});
