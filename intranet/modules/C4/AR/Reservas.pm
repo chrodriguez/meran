@@ -423,6 +423,46 @@ sub estaLibre{
     }
 }
 
+=item sub estaReservado
+    Devuelve 1 si esta reservado el ejemplar pasado por parametro, 0 caso contrario
+=cut
+sub estaReservado{
+    my ($id3)=@_;   
+
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
+    my @filtros;
+    push(@filtros, ( id3    => { eq => $id3}));
+#     push(@filtros, ( estado => { ne => undef}));
+    my ($reservas_array_ref) = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
+
+    if (scalar(@$reservas_array_ref) > 0){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+=item sub tieneReservas
+    Devuelve 1 si tiene ejemplares reservados en el grupo, 0 caso contrario
+=cut
+sub tieneReservas{
+    my ($id2) = @_;   
+
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
+    my @filtros;
+    push(@filtros, ( id2    => { eq => $id2}));
+
+    my ($reservas_array_ref) = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
+
+    if (scalar(@$reservas_array_ref) > 0){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
 sub _verificarHorario{
     my $end = ParseDate(C4::AR::Preferencias->getValorPreferencia("close"));
     my $begin =C4::Date::calc_beginES();
@@ -487,6 +527,7 @@ sub getReservasDeId2 {
         push(@filtros, ( estado     => { ne => 'P'} ));
 
         my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, require_objects => ['nivel3','nivel2']); 
+
         return ($reservas_array_ref,scalar(@$reservas_array_ref));
 }
 
@@ -500,6 +541,7 @@ sub getReservaDeId3{
         push(@filtros, ( estado     => { ne => 'P'} ));
 
         my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, require_objects => ['nivel3','nivel2']); 
+
         return ($reservas_array_ref->[0]);
 }
 

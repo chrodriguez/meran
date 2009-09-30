@@ -478,20 +478,20 @@ sub checkauth {
 
 	my $token;
 	if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
-		my $obj=$query->param('obj');
+		my $obj = $query->param('obj');
 
 		if ( defined($obj) ){
 			$obj=C4::AR::Utilidades::from_json_ISO($obj);
             #ESTO ES PARA LAS LLAMADAS AJAX QUE PASSAN UN OBJETO JSON (HELPER DE AJAX)
-		    $token= $obj->{'token'};
+		    $token = $obj->{'token'};
             C4::AR::Debug::debug("checkauth=> Token desde AjaxHelper: ".$token);
         }else{
             #ESTO ES PARA LAS LLAMADAS AJAX TRADICIONALES (PARAMETROS POR URL)
-            $token= $query->param('token');
+            $token = $query->param('token');
             C4::AR::Debug::debug("checkauth=> Token desde Ajax comun: ".$token);
         }
 	}else{
-		$token= $query->param('token');
+		$token = $query->param('token');
         C4::AR::Debug::debug("checkauth=> Token desde GET: ".$token);
 	}
 

@@ -176,6 +176,26 @@ sub t_modificarNivel2 {
 }
 
 
+sub _verificarDeleteNivel2 {
+    my($msg_object, $params)=@_;
+
+    $msg_object->{'error'} = 0;#no hay error
+
+    if( !($msg_object->{'error'}) && C4::AR::Prestamos::tienePrestamos($params->{'id2'}) ){
+        C4::AR::Debug::debug("_verificarDeleteNivel2 => tiene al menos 1 ejemplar prestado ");
+        #verifico que el nivel2 que quiero eliminar no tenga ningun ejemplar prestado
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P124', 'params' => [$params->{'id2'}]} ) ;
+
+    }elsif( !($msg_object->{'error'}) && C4::AR::Reservas::tieneReservas($params->{'id2'}) ){
+        #verifico que el nivel2 que quiero eliminar no tenga ningun ejemplar reservado
+        $msg_object->{'error'} = 1;
+        C4::AR::Debug::debug("_verificarDeleteNivel2 => Se está intentando eliminar un ejemplar que tiene al menos un ejemplar reservado ");
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P123', 'params' => [$params->{'id2'}]} ) ;
+    }
+
+}
+
 =item sub t_eliminarNivel2
     Elimina el nivel 2 pasado por parametro
 =cut
@@ -184,16 +204,19 @@ sub t_eliminarNivel2{
    
    my $msg_object= C4::AR::Mensajes::create();
 
-# FIXME falta verificar si es posible eliminar el nivel 2
+    my $params;    
     my  $catNivel2= C4::Modelo::CatNivel2->new();
     my $db = $catNivel2->db;
     my ($catNivel2) = getNivel2FromId2($id2, $db);
-
+   
     if(!$catNivel2){
         #Se setea error para el usuario
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U404', 'params' => []} ) ;
     }
+
+    $params->{'id2'} = $id2;
+    _verificarDeleteNivel2($msg_object, $params);
 
     if(!$msg_object->{'error'}){
     #No hay error        

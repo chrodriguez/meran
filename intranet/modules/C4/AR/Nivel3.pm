@@ -446,23 +446,23 @@ sub buscarNivel3PorDisponibilidad{
 }
 
 sub _verificarDeleteItem {
-	my($params)=@_;
-# FIXME falta implementar
-	
-	my $msg_object= C4::AR::Mensajes::create();
+	my($msg_object, $params)=@_;
 
-	my $tipo= $params->{'tipo'}; #INTRA
-	my $id2= $params->{'id2'};
-	my $id3= $params->{'id3'};
-	my $barcode= $params->{'barcode'};
-	my $loggedinuser= $params->{'loggedinuser'};
-	my $codMsg= '000';
-	my @paraMens;
-	my $dateformat=C4::Date::get_date_format();
-	$msg_object->{'error'}= 0;
+    $msg_object->{'error'} = 0;#no hay error
 
+    if( !($msg_object->{'error'}) && C4::AR::Reservas::estaReservado($params->{'id3'}) ){
+        #verifico que el ejemplar que quiero eliminar no esté prestado
+        $msg_object->{'error'} = 1;
+        C4::AR::Debug::debug("_verificarDeleteItem => Se está intentando eliminar un ejemplar que tiene una reserva");
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P122', 'params' => [$params->{'id3'}]} ) ;
 
-	return ($msg_object);
+    }elsif( !($msg_object->{'error'}) && C4::AR::Prestamos::estaPrestado($params->{'id3'}) ){
+        #verifico que el ejemplar no se encuentre reservado
+        $msg_object->{'error'} = 1;
+        C4::AR::Debug::debug("_verificarDeleteItem => Se está intentando eliminar un ejemplar que tiene un prestamo");
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P121', 'params' => [$params->{'id3'}]} ) ;
+    }
+
 }
 
 
@@ -748,54 +748,52 @@ sub t_modificarNivel3 {
 =cut
 sub t_eliminarNivel3{
    
-   	my($params)=@_;
+   	my ($params) = @_;
 	my $barcode;
 
-	my ($msg_object)= _verificarDeleteItem($params);
+    my $msg_object = C4::AR::Mensajes::create();
 	
-    if(!$msg_object->{'error'}){
-    #No hay error
+	my	$catNivel2 = C4::Modelo::CatNivel2->new();
+	my	$db = $catNivel2->db;
+	# enable transactions, if possible
+	$db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+	my $id3_array= $params->{'id3_array'};
 
-		my	$catNivel2 = C4::Modelo::CatNivel2->new();
-		my	$db = $catNivel2->db;
-			# enable transactions, if possible
-			$db->{connect_options}->{AutoCommit} = 0;
-            $db->begin_work;
-		my $id3_array= $params->{'id3_array'};
-
-        eval {
-			for(my $i=0;$i<scalar(@$id3_array);$i++){
-				my $catNivel3;
-				
+    eval {
+        for(my $i=0;$i<scalar(@$id3_array);$i++){
+		    my $catNivel3;
+            $params->{'id3'} = $id3_array->[$i];
+            _verificarDeleteItem($msg_object, $params);
+			
+            if(!$msg_object->{'error'}){
 				$catNivel3 = C4::Modelo::CatNivel3->new(
 														db => $db,
 														id3 => $id3_array->[$i]
 													);
 
 				$catNivel3->load();
-				my $barcode= $catNivel3->getBarcode;	
-				$catNivel3->eliminar();  
-				
-				#se cambio el permiso con exito
-				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U376', 'params' => [$barcode]} ) ;
-			}
-
-			$db->commit;
-        };
-
-        if ($@){
-            #Se loguea error de Base de Datos
-            &C4::AR::Mensajes::printErrorDB($@, 'B435',"INTRA");
-            $db->rollback;
-            #Se setea error para el usuario
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U379', 'params' => [$barcode]} ) ;
+				my $barcode = $catNivel3->getBarcode;	
+				$catNivel3->eliminar();
+                #se eliminó con exito
+                $msg_object->{'error'} = 0;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U376', 'params' => [$barcode]} ) ;
+            }
         }
 
-        $db->{connect_options}->{AutoCommit} = 1;
+			$db->commit;
+    };
 
+    if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'B435',"INTRA");
+        $db->rollback;
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U379', 'params' => [$barcode]} ) ;
     }
+
+    $db->{connect_options}->{AutoCommit} = 1;
 
     return ($msg_object);
 }

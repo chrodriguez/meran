@@ -30,9 +30,6 @@ use vars qw(@EXPORT @ISA);
 	&buscarCampo
 	&guardarCamposModificados
 	&guardarCampoTemporal
-    &t_eliminarNivel1
-	&t_eliminarNivel2
-	&t_eliminarNivel3
 );
 
 

@@ -220,7 +220,7 @@ sub getCountPrestamosDeGrupoPorUsuario {
 Esta funcion devuelve la cantidad de prestamos por grupo
 =cut
 sub getCountPrestamosDelRegistro{
-	my ($id1)= @_;
+	my ($id1) = @_;
 
 	use C4::Modelo::CircPrestamo;
 	use C4::Modelo::CircPrestamo::Manager;
@@ -287,16 +287,6 @@ sub getPrestamosDeSocio {
 
     	return ($prestamos__array_ref);
 }
-# 
-# sub getTipoPrestamo {
-# #retorna los datos del tipo de prestamo
-# use C4::Modelo::CircRefTipoPrestamo;
-#    my ($tipo_prestamo)=@_;
-#    my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo->new( id_tipo_prestamo => $tipo_prestamo );
-#    $circ_ref_tipo_prestamo->load();
-#    return($circ_ref_tipo_prestamo);
-# }
-
 
 sub getTipoPrestamo {
 #retorna los datos del tipo de prestamo
@@ -418,11 +408,10 @@ sub obtenerPrestamosDeSocio {
 Esta funcion retorna si el ejemplar segun el id3 pasado por parametro esta prestado o no
 =cut
 sub estaPrestado {
+    my ($id3) = @_;
     
     use C4::Modelo::CircPrestamo;
     use C4::Modelo::CircPrestamo::Manager;
-
-    my ($id3)=@_;
 
     my $nivel3_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
 																query => [ fecha_devolucion  => { eq => undef }, 
@@ -804,80 +793,6 @@ sub getPrestamoActivo {
     }
 }
 
-# FIXME esta en ROSE, pero tarda, asi que si no hay algo milagroso que acelere esto, volarlo sin culpa
-# sub getHistorialPrestamos {
-#     my ($nro_socio,$ini,$cantR,$orden)=@_;
-# 
-#     use C4::Modelo::CircPrestamo;
-#     use C4::Modelo::CircPrestamo::Manager;
-# 
-#     my @filtros;
-#     push(@filtros, ( nro_socio => { eq => $nro_socio } ));
-# 
-#     if($orden eq 'autor'){
-#         $orden= 'cat_autor.apellido';
-#     }elsif($orden eq 'titulo'){
-#         $orden= 'cat_nivel1.titulo';
-#     }elsif($orden eq 'barcode'){
-#         $orden= 'cat_nivel3.barcode';
-#     }elsif($orden eq 'fecha_devolucion'){
-#         $orden= 'circ_prestamo.fecha_devolucion';
-#     }else{$orden= 'cat_nivel1.titulo';} #ordena por titulo por defecto
-# 
-#     my $prestamos_count_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros );
-# 
-#     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
-#                                                                                     query => \@filtros,
-#                                                                                     limit   => $cantR,
-#                                                                                     offset  => $ini,
-#                                                                                     sort_by => ( $orden ),
-#                                                                 require_objects => [    'nivel3', 'nivel3.nivel1', 
-#                                                                                         'nivel3.nivel2.nivel1.cat_autor','nivel3.nivel2' ]
-#                                                                 );
-# 
-#     return ($prestamos_count_array_ref, $prestamos_array_ref);
-# }
-
-# sub getHistorialPrestamosParaTemplate {
-# 
-#     my ($nro_socio,$ini,$cantR,$orden)=@_;
-# 
-#     my ($cant,$presmamos_array_ref) = getHistorialPrestamos($nro_socio,$ini,$cantR,$orden);
-# 
-#     my @loop_reading;
-# 
-# # FIXME tarda mucho!!!!
-#     foreach my $prestamo (@$presmamos_array_ref){
-#         my %line;
-#         $line{'titulo'}=$prestamo->nivel3->nivel2->nivel1->getTitulo;
-#     #   $line{unititle}=C4::AR::Nivel1::getUnititle($issues->[$i]->{'id1'});;
-#         $line{'autor'}=$prestamo->nivel3->nivel2->nivel1->cat_autor->getApellido.", ".$prestamo->nivel3->nivel2->nivel1->cat_autor->getNombre;
-#         $line{'idautor'}=$prestamo->nivel3->nivel2->nivel1->cat_autor->getId;
-#         $line{'id1'}=$prestamo->nivel3->getId1;
-#         $line{'id2'}=$prestamo->nivel3->getId2;
-#         $line{'id3'}=$prestamo->nivel3->getId3;
-#         $line{'signatura_topografica'}=$prestamo->nivel3->getSignatura_topografica;
-#         $line{'barcode'}=$prestamo->nivel3->getBarcode;
-#         $line{'date_due'}=$prestamo->getFecha_prestamo_formateada;
-#         $line{'date_fin'} = $prestamo->getFecha_vencimiento_formateada; 
-#         $line{'estaVencido'}= $prestamo->estaVencido;
-#         $line{'date_renew'}=$prestamo->getFecha_devolucion_formateada;
-#         if ($prestamo->getRenovaciones > 0){
-#             $line{'date_renew'}=$prestamo->getFecha_ultima_renovacion_formateada;
-#         }
-#         $line{'returndate'}=$prestamo->getFecha_devolucion_formateada;
-#         $line{'edicion'}= $prestamo->nivel3->nivel2->getEdicion;
-#         $line{'volume'}= $prestamo->nivel3->nivel2->getVolumenDesc;
-#     #   $line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
-#           $line{'grupos'}= C4::AR::Busquedas::obtenerGrupos($prestamo->nivel3->getId1,'','intra');
-#     
-#         push(@loop_reading,\%line);
-#     }
-# 
-#     return ($cant,$presmamos_array_ref,\@loop_reading);
-# 
-# }
-
 
 sub getHistorialPrestamos {
     my ($nro_socio,$ini,$cantR,$orden)=@_;
@@ -1019,7 +934,7 @@ C4::AR::Debug::debug("MODIFICAR TIPO DE PRESTAMO ".$params->{'id_tipo_prestamo'}
     if ($@){
         #Se loguea error de Base de Datos
         &C4::AR::Mensajes::printErrorDB($@, 'SP008','INTRA');
-        eval{$db->rollback};
+        $db->rollback;
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP008', 'params' => []} ) ;
@@ -1054,7 +969,7 @@ sub t_eliminarTipoPrestamo {
     if ($@){
         #Se loguea error de Base de Datos
         &C4::AR::Mensajes::printErrorDB($@, 'SP007','INTRA');
-        eval{$db->rollback};
+        $db->rollback;
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP007', 'params' => []} ) ;
@@ -1071,10 +986,45 @@ sub t_eliminarTipoPrestamo {
 
 
 sub cantidadDeUsoTipoPrestamo {
-    my ($id_tipo_prestamo)=@_;
+    my ($id_tipo_prestamo) = @_;
+
     my @filtros;
     push(@filtros, (tipo_prestamo => { eq => $id_tipo_prestamo}));
     my $cantidad_prestamos= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros);
+
     return $cantidad_prestamos;
-    }
+}
+
+=item sub getCountPrestamosDeGrupo
+    Devuelve la cantidad de prestamos de grupo
+=cut
+sub getCountPrestamosDeGrupo {
+    my ($id2) = @_;
+
+    use C4::Modelo::CircPrestamo;
+    use C4::Modelo::CircPrestamo::Manager;
+
+    my @filtros;
+    push(@filtros, ( id2    => { eq => $id2 } ));
+    push(@filtros, ( fecha_devolucion => { eq => undef } ));
+
+    my $prestamos_grupo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
+                                                                                    query => \@filtros,
+                                                                                    require_objects => [ 'nivel3' ]
+                                                        );
+
+    return ($prestamos_grupo_count);
+}
+
+=item sub tienePrestamos
+    Verifica si el nivel 2 pasado por parametro tiene ejemplares con prestamos o no
+=cut
+sub tienePrestamos{
+    my ($id2) = @_;
+
+    my $cant = getCountPrestamosDeGrupo($id2);
+
+    return ($cant > 0)?1:0;
+}
+
 1;
