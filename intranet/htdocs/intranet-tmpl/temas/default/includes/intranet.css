@@ -1274,7 +1274,6 @@ input.file {
 
 #mensajes {
   position: relative;
-  z-index: 10;
   background:#ffc;
   padding:5px;
   border:1px solid #CCCCCC;
