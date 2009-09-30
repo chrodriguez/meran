@@ -25,8 +25,8 @@ function _AddDiv(){
 
 	var contenedor = $('#state')[0];
 	if(contenedor == null){
-// 		$('body').append("<div id='state' class='loading' style='position:absolute'>&nbsp;</div>");
-        $('body').append("<div id='state' class='cargando' style='position:absolute'>&nbsp;</div>");
+		$('body').append("<div id='state' class='loading' style='position:absolute'>&nbsp;</div>");
+//         $('body').append("<div id='state' class='cargando' style='position:absolute'>&nbsp;</div>");
 		$('#state').css('top', '0px');
 		$('#state').css('left', '0px');
 
