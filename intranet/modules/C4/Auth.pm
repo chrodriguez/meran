@@ -645,7 +645,7 @@ sub checkauth {
                 $sist_sesion->setLasttime(time());
                 $sist_sesion->save();
 
-                my ($socio)= C4::AR::Usuarios::getInfoSocioPorNroSocio($userid);
+                my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
                 $flags = $socio->tienePermisos($flagsrequired);
 
                 if ($flags) {
@@ -725,7 +725,7 @@ C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID
             $sessionID= $session->param('sessionID');
             $sessionID.="_".$branch;
             $session->param('sessionID', $sessionID);
-            my ($socio) = C4::AR::Usuarios::getInfoSocioPorNroSocio($userid);
+            my ($socio) = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
             #el usuario se logueo bien, ya no es necessario el nroRandom
             $random_number= 0;
             #guardo la session en la base

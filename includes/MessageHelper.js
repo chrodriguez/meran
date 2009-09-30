@@ -45,10 +45,24 @@ function setMessages(Messages_hashref){
 		$('#mensajes').append(Messages_hashref.messages[i].message + '<br>');
 	}
 
-	scrollTo('mensajes');
-	_delay(_clearMessages, 10);
+// 	scrollTo('mensajes');
+    $(window).scroll(function()
+    {
+      $('#mensajes').animate({queue: false, duration: 350});
+    });
+// 	_delay(_clearMessages, 10);
 }
 
+
+function assignCloseButton(){
+    $('#close_message').click(function()
+    {
+      //the messagebox gets scrool down with top property and gets hidden with zero opacity
+      $('#mensajes').animate({opacity:0 }, "slow");
+      _clearMessages();
+    });
+
+}
 //crea el contenedor para los mensajes, si ya esta creado, borra el contenido
 function _createContentMessages(){
 
@@ -56,10 +70,13 @@ function _createContentMessages(){
 
 	if(contenedor == null){
 		//console.log("MessageHelper: Se crea el div cotenedor");
-		$('#end_top').append("<div class='mensajes_informacion'><div id='mensajes'></div></div>");
+		$('#end_top').append("<div class='mensajes_informacion'><div id='mensajes'><img id='close_message' style='float:right;cursor:pointer' src="+imagesForJS+'/iconos/12-em-cross.png'+" /></div></div>");
+        assignCloseButton();
 	}
 	else{
-		_clearMessages();
+        $('#mensajes').append("<img id='close_message' style='float:right;cursor:pointer' src='"+imagesForJS+'/iconos/12-em-cross.png'+ " />");
+        $('#mensajes').animate({opacity:90}, "slow");
+        assignCloseButton();
 	}
 }
 
