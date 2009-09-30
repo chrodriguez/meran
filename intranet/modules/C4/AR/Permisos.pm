@@ -31,6 +31,96 @@ use vars qw(@EXPORT @ISA @EXPORT_OK);
 our @EXPORT_OK= ('TODOS', 'ALTA', 'BAJA', 'MODIFICACION', 'CONSULTA');
 
 
+sub getPermCatalogoOne{
+
+    my ($filtros,$db)= @_;
+
+    $db = $db || C4::Modelo::PermCatalogo->new()->db;
+
+    my $permiso = getPermCatalogo($filtros,$db);
+
+    if ($permiso){
+        return($permiso->[0]);
+    }else{
+      return(0);
+    }
+}
+
+sub getPermGeneralOne{
+
+    my ($filtros,$db)= @_;
+
+    $db = $db || C4::Modelo::PermGeneral->new()->db;
+
+    my $permiso = getPermGeneral($filtros,$db);
+
+    if ($permiso){
+        return($permiso->[0]);
+    }else{
+      return(0);
+    }
+}
+
+sub getPermCirculacionOne{
+
+    my ($filtros,$db)= @_;
+
+
+    my $permiso = getPermCirculacion($filtros,$db);
+
+    if ($permiso){
+        return($permiso->[0]);
+    }else{
+      return(0);
+    }
+}
+
+
+
+sub getPermCatalogo{
+
+    my ($filtros,$db)= @_;
+
+    $db = $db || C4::Modelo::PermCatalogo->new()->db;
+    my $permiso = C4::Modelo::PermCatalogo::Manager->get_perm_catalogo(query => $filtros,);
+
+    if (scalar(@$permiso)){
+        return($permiso);
+    }else{
+      return(0);
+    }
+}
+
+sub getPermGeneral{
+
+    my ($filtros,$db)= @_;
+
+    $db = $db || C4::Modelo::PermGeneral->new()->db;
+
+    my $permiso = C4::Modelo::PermGeneral::Manager->get_perm_general(query => $filtros,);
+
+    if (scalar(@$permiso)){
+        return($permiso);
+    }else{
+      return(0);
+    }
+}
+
+sub getPermCirculacion{
+
+    my ($filtros,$db)= @_;
+
+    $db = $db || C4::Modelo::PermCirculacion->new()->db;
+
+    my $permiso = C4::Modelo::PermCirculacion::Manager->get_perm_circulacion(query => $filtros,);
+
+    if (scalar(@$permiso)){
+        return($permiso);
+    }else{
+      return(0);
+    }
+}
+
 sub getAltaByte{
   return ALTA;
 }
@@ -155,20 +245,27 @@ sub actualizarPermisosCatalogo{
 
     my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
 
-    my $permisos = C4::Modelo::PermCatalogo->new(nro_socio => $nro_socio, ui => $id_ui, tipo_documento => $tipo_documento);
-    eval{
-        $permisos->load();
-        $hash_permisos->{'tipo_documento'} = $tipo_documento;
-        $hash_permisos->{'nro_socio'} = $nro_socio;
-        $id_ui = $id_ui || 'ALL';
-        $hash_permisos->{'id_ui'} = $id_ui;
-
-        $permisos->agregar($hash_permisos);
-
-        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
-
-        return ($permisos);
-    };
+    my @filtros;
+    
+    push (@filtros, (nro_socio => {eq => $nro_socio}));
+    push (@filtros, (ui => {eq => $id_ui}));
+    push (@filtros, (tipo_documento => {eq => $tipo_documento}));
+  
+    my $permiso = getPermCatalogoOne(\@filtros);
+    if ($permiso){
+        eval{
+            $hash_permisos->{'tipo_documento'} = $tipo_documento;
+            $hash_permisos->{'nro_socio'} = $nro_socio;
+            $id_ui = $id_ui || 'ALL';
+            $hash_permisos->{'id_ui'} = $id_ui;
+    
+            $permiso->agregar($hash_permisos);
+    
+            $permiso = C4::AR::Permisos::parsearPermisos($permiso);
+    
+            return ($permiso);
+        };
+    }
     return (0);
 
 }
@@ -179,19 +276,21 @@ sub obtenerPermisosCatalogo{
     my $permisos;
     my @filtros;
     my $newUpdate;
+
     push (@filtros, (nro_socio => {eq => $nro_socio}));
     $id_ui = $id_ui || 'ANY';
     push (@filtros, (ui => {eq => $id_ui}));
     push (@filtros, (tipo_documento => {eq => $tipo_documento}));
 
-    $permisos = C4::Modelo::PermCatalogo::Manager::get_perm_catalogo( query => \@filtros,
-                                                                        );
-    if ($permisos->[0]){
-        $permisos = C4::AR::Permisos::parsearPermisos($permisos->[0]);
+    $permisos = C4::AR::Permisos::getPermCatalogoOne(\@filtros);
+
+    if ($permisos){
+        $permisos = C4::AR::Permisos::armarPerfilCatalogo($perfil,$permisos);
+        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
         $newUpdate = 0;
     }else{
         if ($perfil){
-            $permisos = C4::AR::Permisos::armarPerfilCatalogo($perfil);
+            $permisos = C4::AR::Permisos::armarPerfilCatalogo($perfil,$permisos);
             $permisos = C4::AR::Permisos::parsearPermisos($permisos);
         }else{
             $permisos = 0;
@@ -223,8 +322,8 @@ sub nuevoPermisoCatalogo{
 
 
 sub get_permisos_catalogo {
-    my ($params) = @_;
 
+    my ($params) = @_;
     my @filtros;
 
     if($params->{'ui'} ne 'ANY'){
@@ -240,22 +339,17 @@ sub get_permisos_catalogo {
     push (@filtros, ( 'nro_socio' => { eq => $params->{'nro_socio'} }) );
 
 
-    my $permisos_catalogo_array_ref = C4::Modelo::PermCatalogo::Manager::get_perm_catalogo( 
-                                                                                            query => \@filtros,
-                                                                                          );
-    if(scalar(@$permisos_catalogo_array_ref) > 0){
-        return $permisos_catalogo_array_ref;
-    }else{
-        return 0;
-    }
+    my $permisos_catalogo_array_ref = getPermCatalogo(\@filtros);
+
+    return $permisos_catalogo_array_ref;
 }
 
 sub armarPerfilCatalogo{
 
-    my ($perfil) = @_;
+    my ($perfil,$permisos) = @_;
 
     use C4::Modelo::PermCatalogo;
-    my $permisoTemp = C4::Modelo::PermCatalogo->new();
+    my $permisoTemp = $permisos || C4::Modelo::PermCatalogo->new();
 
     if ($perfil eq 'SL'){
         $permisoTemp->setAll(TODOS);
@@ -265,7 +359,6 @@ sub armarPerfilCatalogo{
 
     }
     return $permisoTemp;
-
 }
 
 
@@ -279,20 +372,26 @@ sub actualizarPermisosGeneral{
 
     my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
 
-    my $permisos = C4::Modelo::PermGeneral->new(nro_socio => $nro_socio, ui => $id_ui, tipo_documento => $tipo_documento);
-    eval{
-        $permisos->load();
-        $hash_permisos->{'tipo_documento'} = $tipo_documento;
-        $hash_permisos->{'nro_socio'} = $nro_socio;
-        $id_ui = $id_ui || 'ALL';
-        $hash_permisos->{'id_ui'} = $id_ui;
+    push (@filtros, (nro_socio => {eq => $nro_socio}));
+    push (@filtros, (ui => {eq => $id_ui}));
+    push (@filtros, (tipo_documento => {eq => $tipo_documento}));
+  
 
-        $permisos->agregar($hash_permisos);
-
-        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
-
-        return ($permisos);
-    };
+    my $permiso = getPermGeneralOne(\@filtros);
+    if ($permiso){
+        eval{
+            $hash_permisos->{'tipo_documento'} = $tipo_documento;
+            $hash_permisos->{'nro_socio'} = $nro_socio;
+            $id_ui = $id_ui || 'ALL';
+            $hash_permisos->{'id_ui'} = $id_ui;
+    
+            $permiso->agregar($hash_permisos);
+    
+            $permiso = C4::AR::Permisos::parsearPermisos($permiso);
+    
+            return ($permiso);
+        };
+    }
     return (0);
 
 }
@@ -308,14 +407,15 @@ sub obtenerPermisosGenerales{
     push (@filtros, (ui => {eq => $id_ui}));
     push (@filtros, (tipo_documento => {eq => $tipo_documento}));
 
-    $permisos = C4::Modelo::PermGeneral::Manager::get_perm_general( query => \@filtros,
-                                                                        );
-    if ($permisos->[0]){
-        $permisos = C4::AR::Permisos::parsearPermisos($permisos->[0]);
+    $permisos = C4::AR::Permisos::getPermGeneralOne(\@filtros);
+
+    if ($permisos){
+        $permisos = C4::AR::Permisos::armarPerfilGeneral($perfil,$permisos);
+        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
         $newUpdate = 0;
     }else{
         if ($perfil){
-            $permisos = C4::AR::Permisos::armarPerfilGeneral($perfil);
+            $permisos = C4::AR::Permisos::armarPerfilGeneral($perfil,$permisos);
             $permisos = C4::AR::Permisos::parsearPermisos($permisos);
         }else{
             $permisos = 0;
@@ -364,22 +464,18 @@ sub get_permisos_general {
     push (@filtros, ( 'nro_socio' => { eq => $params->{'nro_socio'} }) );
 
 
-    my $permisos_general_array_ref = C4::Modelo::PermGeneral::Manager::get_perm_general( 
-                                                                                            query => \@filtros,
-                                                                                          );
-    if(scalar(@$permisos_general_array_ref) > 0){
-        return $permisos_general_array_ref;
-    }else{
-        return 0;
-    }
+    my $permisos_general_array_ref = getPermGeneral(\@filtros);
+
+    return $permisos_general_array_ref;
 }
 
 sub armarPerfilGeneral{
 
-    my ($perfil) = @_;
+    my ($perfil,$permisos) = @_;
 
     use C4::Modelo::PermGeneral;
-    my $permisoTemp = C4::Modelo::PermGeneral->new();
+
+    my $permisoTemp = $permisos || C4::Modelo::PermGeneral->new();
 
     if ($perfil eq 'SL'){
         $permisoTemp->setAll(TODOS);
@@ -405,20 +501,26 @@ sub actualizarPermisosCirculacion{
 
     my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
 
-    my $permisos = C4::Modelo::PermCirculacion->new(nro_socio => $nro_socio, ui => $id_ui, tipo_documento => $tipo_documento);
-    eval{
-        $permisos->load();
-        $hash_permisos->{'tipo_documento'} = $tipo_documento;
-        $hash_permisos->{'nro_socio'} = $nro_socio;
-        $id_ui = $id_ui || 'ALL';
-        $hash_permisos->{'id_ui'} = $id_ui;
+    push (@filtros, (nro_socio => {eq => $nro_socio}));
+    push (@filtros, (ui => {eq => $id_ui}));
+    push (@filtros, (tipo_documento => {eq => $tipo_documento}));
+  
 
-        $permisos->agregar($hash_permisos);
-
-        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
-
-        return ($permisos);
-    };
+    my $permiso = getPermCirculacionOne(\@filtros);
+    if ($permiso){
+        eval{
+            $hash_permisos->{'tipo_documento'} = $tipo_documento;
+            $hash_permisos->{'nro_socio'} = $nro_socio;
+            $id_ui = $id_ui || 'ALL';
+            $hash_permisos->{'id_ui'} = $id_ui;
+    
+            $permiso->agregar($hash_permisos);
+    
+            $permiso = C4::AR::Permisos::parsearPermisos($permiso);
+    
+            return ($permiso);
+        };
+    }
     return (0);
 
 }
@@ -434,14 +536,15 @@ sub obtenerPermisosCirculacion{
     push (@filtros, (ui => {eq => $id_ui}));
     push (@filtros, (tipo_documento => {eq => $tipo_documento}));
 
-    $permisos = C4::Modelo::PermCirculacion::Manager::get_perm_circulacion( query => \@filtros,
-                                                                        );
-    if ($permisos->[0]){
-        $permisos = C4::AR::Permisos::parsearPermisos($permisos->[0]);
+    $permisos = C4::AR::Permisos::getPermCirculacionOne(\@filtros);
+
+    if ($permisos){
+        $permisos = C4::AR::Permisos::armarPerfilCatalogo($perfil,$permisos);
+        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
         $newUpdate = 0;
     }else{
         if ($perfil){
-            $permisos = C4::AR::Permisos::armarPerfilCirculacion($perfil);
+            $permisos = C4::AR::Permisos::armarPerfilCirculacion($perfil,$permisos);
             $permisos = C4::AR::Permisos::parsearPermisos($permisos);
         }else{
             $permisos = 0;
@@ -490,22 +593,18 @@ sub get_permisos_circulacion {
     push (@filtros, ( 'nro_socio' => { eq => $params->{'nro_socio'} }) );
 
 
-    my $permisos_circulacion_array_ref = C4::Modelo::PermCirculacion::Manager::get_perm_circulacion( 
-                                                                                            query => \@filtros,
-                                                                                          );
-    if(scalar(@$permisos_circulacion_array_ref) > 0){
-        return $permisos_circulacion_array_ref;
-    }else{
-        return 0;
-    }
+    my $permisos_circulacion_array_ref = C4::AR::Permisos::getPermCirculacion(\@filtros);
+
+    return $permisos_circulacion_array_ref;
 }
 
 sub armarPerfilCirculacion{
 
-    my ($perfil) = @_;
+    my ($perfil,$permisos) = @_;
 
     use C4::Modelo::PermCirculacion;
-    my $permisoTemp = C4::Modelo::PermCirculacion->new();
+
+    my $permisoTemp = $permisos || C4::Modelo::PermCirculacion->new();
 
     if ($perfil eq 'SL'){
         $permisoTemp->setAll(TODOS);

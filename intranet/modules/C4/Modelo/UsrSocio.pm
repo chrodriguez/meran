@@ -552,81 +552,157 @@ sub convertirEnEstudiante{
 
     my ($self) = shift;
     my ($perm_catalogo, $perm_general, $perm_circulacion);
+    my $msg_object= C4::AR::Mensajes::create();
+
+    my @filtros;
+
+    push (@filtros, (nro_socio => {eq => $self->getNro_socio}));
+    push (@filtros, (ui => {eq => $self->getId_ui}));
+    push (@filtros, (tipo_documento => {eq => 'ALL'}));
+
+    my $db = $self->db;
     
-    $perm_catalogo = C4::Modelo::PermCatalogo->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
-    unless($perm_catalogo->load(speculative => 1))
+    $perm_catalogo = C4::AR::Permisos::getPermCatalogo(\@filtros,$db);
+
+    unless($perm_catalogo)
     {
       $perm_catalogo = C4::Modelo::PermCatalogo->new(db => $self->db);
     }
-    $perm_catalogo->convertirEnEstudiante($self);
 
-    $perm_general = C4::Modelo::PermGeneral->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
-    unless($perm_general->load(speculative => 1))
+    $perm_general = C4::AR::Permisos::getPermGeneral(\@filtros,$db);
+    unless($perm_general)
     {
       $perm_general = C4::Modelo::PermGeneral->new(db => $self->db);
     }
-    $perm_general->convertirEnEstudiante($self);
 
-    $perm_circulacion = C4::Modelo::PermCirculacion->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
-    unless($perm_circulacion->load(speculative => 1))
+    $perm_circulacion = C4::AR::Permisos::getPermCirculacion(\@filtros,$db);
+    unless($perm_circulacion)
     {
       $perm_circulacion = C4::Modelo::PermCirculacion->new(db => $self->db);
     }
-    $perm_circulacion->convertirEnEstudiante($self);
+
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+        $perm_general->convertirEnEstudiante($self);
+        $perm_circulacion->convertirEnEstudiante($self);
+        $perm_catalogo->convertirEnEstudiante($self);
+        eval{
+            $db->commit;
+        };
+        if ($@){
+            C4::AR::Debug::debug("ERROR EN CONVERTIR PERMISOS");
+            #Se loguea error de Base de Datos
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P106', 'params' => []} ) ;
+        }
+    $db->{connect_options}->{AutoCommit} = 1;
 }
 
 sub convertirEnLibrarian{
 
     my ($self) = shift;
     my ($perm_catalogo, $perm_general, $perm_circulacion);
+    my $msg_object= C4::AR::Mensajes::create();
+
+    my @filtros;
+
+    push (@filtros, (nro_socio => {eq => $self->getNro_socio}));
+    push (@filtros, (ui => {eq => $self->getId_ui}));
+    push (@filtros, (tipo_documento => {eq => 'ALL'}));
+
+    my $db = $self->db;
     
-    $perm_catalogo = C4::Modelo::PermCatalogo->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
-    unless($perm_catalogo->load(speculative => 1))
+    $perm_catalogo = C4::AR::Permisos::getPermCatalogo(\@filtros,$db);
+
+    unless($perm_catalogo)
     {
       $perm_catalogo = C4::Modelo::PermCatalogo->new(db => $self->db);
     }
-    $perm_catalogo->convertirEnLibrarian($self);
 
-    $perm_general = C4::Modelo::PermGeneral->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
-    unless($perm_general->load(speculative => 1))
+    $perm_general = C4::AR::Permisos::getPermGeneral(\@filtros,$db);
+    unless($perm_general)
     {
       $perm_general = C4::Modelo::PermGeneral->new(db => $self->db);
     }
-    $perm_general->convertirEnLibrarian($self);
 
-    $perm_circulacion = C4::Modelo::PermCirculacion->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
-    unless($perm_circulacion->load(speculative => 1))
+    $perm_circulacion = C4::AR::Permisos::getPermCirculacion(\@filtros,$db);
+    unless($perm_circulacion)
     {
       $perm_circulacion = C4::Modelo::PermCirculacion->new(db => $self->db);
     }
-    $perm_circulacion->convertirEnLibrarian($self);
+
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+        $perm_general->convertirEnLibrarian($self);
+        $perm_circulacion->convertirEnLibrarian($self);
+        $perm_catalogo->convertirEnLibrarian($self);
+        eval{
+            $db->commit;
+        };
+        if ($@){
+            C4::AR::Debug::debug("ERROR EN CONVERTIR PERMISOS");
+            #Se loguea error de Base de Datos
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P106', 'params' => []} ) ;
+        }
+    $db->{connect_options}->{AutoCommit} = 1;
 }
 
 sub convertirEnSuperLibrarian{
 
     my ($self) = shift;
     my ($perm_catalogo, $perm_general, $perm_circulacion);
+    my $msg_object= C4::AR::Mensajes::create();
+
+    my @filtros;
+
+    push (@filtros, (nro_socio => {eq => $self->getNro_socio}));
+    push (@filtros, (ui => {eq => $self->getId_ui}));
+    push (@filtros, (tipo_documento => {eq => 'ALL'}));
+
+    my $db = $self->db;
     
-    $perm_catalogo = C4::Modelo::PermCatalogo->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
-    unless($perm_catalogo->load(speculative => 1))
+    $perm_catalogo = C4::AR::Permisos::getPermCatalogo(\@filtros,$db);
+
+    unless($perm_catalogo)
     {
       $perm_catalogo = C4::Modelo::PermCatalogo->new(db => $self->db);
     }
-    $perm_catalogo->convertirEnSuperLibrarian($self);
 
-    $perm_general = C4::Modelo::PermGeneral->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
-    unless($perm_general->load(speculative => 1))
+    $perm_general = C4::AR::Permisos::getPermGeneral(\@filtros,$db);
+    unless($perm_general)
     {
       $perm_general = C4::Modelo::PermGeneral->new(db => $self->db);
     }
-    $perm_general->convertirEnSuperLibrarian($self);
 
-    $perm_circulacion = C4::Modelo::PermCirculacion->new(nro_socio => ($self->getNro_socio), ui => ($self->getId_ui), tipo_documento => 'ALL');
-    unless($perm_circulacion->load(speculative => 1))
+    $perm_circulacion = C4::AR::Permisos::getPermCirculacion(\@filtros,$db);
+    unless($perm_circulacion)
     {
       $perm_circulacion = C4::Modelo::PermCirculacion->new(db => $self->db);
     }
-    $perm_circulacion->convertirEnSuperLibrarian($self);
+
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+        $perm_general->convertirEnSuperLibrarian($self);
+        $perm_circulacion->convertirEnSuperLibrarian($self);
+        $perm_catalogo->convertirEnSuperLibrarian($self);
+        eval{
+            $db->commit;
+        };
+        if ($@){
+            C4::AR::Debug::debug("ERROR EN CONVERTIR PERMISOS");
+            #Se loguea error de Base de Datos
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P106', 'params' => []} ) ;
+        }
+    $db->{connect_options}->{AutoCommit} = 1;
+    
 }
 
 
