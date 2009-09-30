@@ -158,7 +158,7 @@ sub getSessionIdSocio {
 sub getSessionNroSocio {
 #     my ($session) = @_;
 #     if (!$session){
-#       $session = CGI::Session->load();
+#       $session = CGI::Session ();
 #     }
     my $session= CGI::Session->load();
 #     C4::AR::Debug::debug("getSessionNroSocio=> ".$session->param('nro_socio'));
@@ -192,6 +192,21 @@ sub getSessionFlagsRequired {
 	return $session->param('flagsrequired');
 }
 
+sub getSistSession{
+
+    my ($sessionID) = @_;
+    my @filtros;
+
+    push(@filtros,(sessionID => {eq => $sessionID}) );
+
+    my $session = C4::Modelo::SistSesion::Manager->get_sist_sesion(query => \@filtros,);
+
+    if (scalar(@$session)){
+        return($session->[0]);
+    }else{
+        return(0);
+    }
+}
 =item sub getSessionBrowser
 
     obtiene el browser de la session que el usuario esta usando
@@ -630,8 +645,7 @@ sub checkauth {
                 $sist_sesion->setLasttime(time());
                 $sist_sesion->save();
 
-                my ($socio)= C4::Modelo::UsrSocio->new(nro_socio => $userid);
-                $socio->load();
+                my ($socio)= C4::AR::Usuarios::getInfoSocioPorNroSocio($userid);
                 $flags = $socio->tienePermisos($flagsrequired);
 
                 if ($flags) {
@@ -676,9 +690,7 @@ C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID
         C4::AR::Debug::debug("checkauth=> Usuario no logueado, intento de autenticacion \n");     
         #No genero un nuevo sessionID
         #con este sessionID puedo recuperar el nroRandom (si existe) guardado en la base, para verificar la password
-        my ($sist_sesion) = C4::Modelo::SistSesion->new(sessionID => $sessionID);
-        $sist_sesion->load();
-
+        my ($sist_sesion) = getSistSession($sessionID);
         my $sessionID= $session->param('sessionID');
         #recupero el userid y la password desde el cliente
         $userid= $query->param('userid');
@@ -713,8 +725,7 @@ C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID
             $sessionID= $session->param('sessionID');
             $sessionID.="_".$branch;
             $session->param('sessionID', $sessionID);
-            my ($socio) = C4::Modelo::UsrSocio->new(nro_socio => $userid);
-            $socio->load();
+            my ($socio) = C4::AR::Usuarios::getInfoSocioPorNroSocio($userid);
             #el usuario se logueo bien, ya no es necessario el nroRandom
             $random_number= 0;
             #guardo la session en la base
