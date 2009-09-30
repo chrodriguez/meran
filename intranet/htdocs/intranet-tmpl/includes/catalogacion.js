@@ -212,22 +212,22 @@ function _showAndHiddeEstructuraDelNivel(nivel){
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
 function syncComponentesArray(){
     for(var i=0; i < COMPONENTES_ARRAY.length; i++){
-        window.console.log("COMPONENTES_ARRAY[" + i +"].dato: " + COMPONENTES_ARRAY[i].dato);
-        window.console.log("COMPONENTES_ARRAY[" + i +"].datoReferencia: " + COMPONENTES_ARRAY[i].datoReferencia);
+//         window.console.log("COMPONENTES_ARRAY[" + i +"].dato: " + COMPONENTES_ARRAY[i].dato);
+//         window.console.log("COMPONENTES_ARRAY[" + i +"].datoReferencia: " + COMPONENTES_ARRAY[i].datoReferencia);
         if(COMPONENTES_ARRAY[i].referencia == 1){
-            window.console.log("TIENE REFERENCIA");
+//             window.console.log("TIENE REFERENCIA");
             if($('#'+COMPONENTES_ARRAY[i].idCompCliente).val() != '' && COMPONENTES_ARRAY[i].tipo == 'combo'){
                 COMPONENTES_ARRAY[i].datoReferencia = $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
-                window.console.log("COMBO");
+//                 window.console.log("COMBO");
             }else if($('#'+COMPONENTES_ARRAY[i].idCompCliente).val() != '' && COMPONENTES_ARRAY[i].tipo == 'auto'){
                 COMPONENTES_ARRAY[i].datoReferencia = $('#'+COMPONENTES_ARRAY[i].idCompCliente + '_hidden').val();
-                window.console.log("AUTO");
+//                 window.console.log("AUTO");
             }else{
                 COMPONENTES_ARRAY[i].datoReferencia = 0;
                 COMPONENTES_ARRAY[i].dato = '';
             }
         }else{  
-            window.console.log("NO TIENE REFERENCIA");
+//             window.console.log("NO TIENE REFERENCIA");
             COMPONENTES_ARRAY[i].dato = $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
         }
     }
