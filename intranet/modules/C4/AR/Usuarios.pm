@@ -615,7 +615,6 @@ sub getSocioInfoPorNroSocio {
                                                                                   'persona.documento'],
                                                               with_objects => ['persona.alt_ciudad_ref'],
                                                                         );
-#     use C4::Modelo::UsrSocio;
 
     if($socio_array_ref){
         return ($socio_array_ref->[0]);
