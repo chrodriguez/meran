@@ -16,6 +16,7 @@
 
 
 function _clearMessages(){
+    $('#mensajes').css({opacity:0,filter:alpha(opacity=0)});
 	$('#mensajes').html('');
 }
 
@@ -58,7 +59,7 @@ function assignCloseButton(){
     $('#close_message').click(function()
     {
       //the messagebox gets scrool down with top property and gets hidden with zero opacity
-      $('#mensajes').animate({opacity:0 }, "slow");
+      $('#mensajes').animate({opacity:0,filter:alpha(opacity=0) }, "slow");
       _clearMessages();
     });
 
@@ -75,7 +76,7 @@ function _createContentMessages(){
 	}
 	else{
         $('#mensajes').append("<img id='close_message' style='float:right;cursor:pointer' src='"+imagesForJS+'/iconos/12-em-cross.png'+ " />");
-        $('#mensajes').animate({opacity:90}, "slow");
+        $('#mensajes').animate({opacity:90,filter:alpha(opacity=90)}, "slow");
         assignCloseButton();
 	}
 }
