@@ -45,12 +45,12 @@ function setMessages(Messages_hashref){
 		$('#mensajes').append(Messages_hashref.messages[i].message + '<br>');
 	}
 
-// 	scrollTo('mensajes');
+	scrollTo('mensajes');
     $(window).scroll(function()
     {
       $('#mensajes').animate({queue: false, duration: 350});
     });
-// 	_delay(_clearMessages, 10);
+	_delay(_clearMessages, 180);
 }
 
 
