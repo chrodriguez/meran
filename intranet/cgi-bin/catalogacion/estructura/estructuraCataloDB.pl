@@ -609,6 +609,7 @@ elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
 							flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
 });
 
+
 	#Cuando viene desde otra pagina que llama al detalle.
 	my $id2= $obj->{'id2'};
 	my($nivel2_hashref)=&C4::AR::Nivel3::detalleNivel3($id2);

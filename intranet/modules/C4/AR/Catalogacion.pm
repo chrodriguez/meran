@@ -1,23 +1,5 @@
 package C4::AR::Catalogacion;
 
-
-#Copyright (C) 2003-2008  Linti, Facultad de Inform�tica, UNLP
-#This file is part of Koha-UNLP
-#
-#This program is free software; you can redistribute it and/or
-#modify it under the terms of the GNU General Public License
-#as published by the Free Software Foundation; either version 2
-#of the License, or (at your option) any later version.
-#
-#This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#GNU General Public License for more details.
-#
-#You should have received a copy of the GNU General Public License
-#along with this program; if not, write to the Free Software
-#Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
 =item
 Este modulo sera el encargado del manejo de la carga de datos en las tablas MARC
 Tambien en la carga de los items en los distintos niveles y de la creacion del catalogo.
@@ -44,207 +26,20 @@ use vars qw(@EXPORT @ISA);
 
 @EXPORT=qw(
 	&crearCatalogo
-	&cantidadItem	
 	&buscarCamposObligatorios
-	&buscarSubCampo
 	&buscarCampo
-	&buscarMaximoHabilitado
-	&buscarNombreCampoMarc
-	&actualizarCamposModificados
-	&actualizarInfoReferencia
 	&guardarCamposModificados
 	&guardarCampoTemporal
-	&obtenerCamposTablaRef
     &t_eliminarNivel1
 	&t_eliminarNivel2
 	&t_eliminarNivel3
 );
 
 
-=item
-buscarNombreCampoMarc
-Busca el nombre del campo marc en la tabla marc_tag_structure.
-=cut
-sub buscarNombreCampoMarc{
-	my ($tagField)=@_;
-	my $dbh = C4::Context->dbh;
-	my $nombre="";
-	my $rep="";
-	my $query = "SELECT liblibrarian, repeatable";
-	$query .=" FROM pref_estructura_campo_marc ";
-	$query .=" WHERE tagfield=?";
 
-	my $sth=$dbh->prepare($query);
-        $sth->execute($tagField);
-	if (my $data=$sth->fetchrow_hashref){
-		$nombre=$data->{'liblibrarian'};
-		if($data->{'repeatable'}){
-			$rep="(R)";
-		}
-		else{
-			$rep="(NR)";
-		}
-	}
-	$sth->finish;
-	$nombre.=" ".$rep;
-	return ($nombre);
-}
-
-
-=item
-buscarSubCampo
-Esta funcion busca los subcampos de los campos MARC, recibe como parametro el campo seleccionado.
-Realiza la busqueda sobre 2 tablas estructura_catalogacion (estan los subcampos seleccionados por el usuario) y marc_subfield_structure (estan los subcampos propios de marc con su nombre original).
-Filtra a los subcampos del usuario para que no se repitan
-=cut
-sub buscarSubCampo{
-	#Ver posibilidad de SP!!!
-	my ($tagField,$nivel,$itemType)=@_;
-	my $dbh = C4::Context->dbh;
-	#Busco en la tabla estructura_catalogacion por si ya esta ingresado
-	my $query="SELECT subcampo as tagsubfield,liblibrarian, intranet_habilitado,obligatorio ";
-	$query .= "FROM cat_estructura_catalogacion ";
-	$query .= "WHERE campo = ? AND nivel=? AND itemtype=? ";
-	$query .= "AND intranet_habilitado <> 0 "; 
-	$query .= "ORDER BY subcampo ";
-
-	my $sth=$dbh->prepare($query);
-        $sth->execute($tagField,$nivel,$itemType);
-	
-	my %results;
-	while(my $data=$sth->fetchrow_hashref){
-		$results{$data->{'tagsubfield'}}=$data;
-	}
-
-	#Busco en la tabla marc_subfield_structure todos los subcampos
-	$query="SELECT tagsubfield,liblibrarian,repeatable,obligatorio ";
-	$query.=" FROM pref_estructura_subcampo_marc ";
-	$query.=" WHERE tagfield = ? AND nivel=? ORDER BY tagsubfield";
-	
-	my $sth=$dbh->prepare($query);
-        $sth->execute($tagField,$nivel);
-	my %results2;
-	while(my $data=$sth->fetchrow_hashref){
-		#Si no existe el subcampo en la tabla estructura_catalogacion se ingresa en la hash
-		if (not exists($results{$data->{'tagsubfield'}})){
-			($results2{$data->{'tagsubfield'}}=$data);
-		}
-		#Si esta deshabilitado se agrega para que se pueda modificar
-		elsif($results{$data->{'intranet_habilitado '}}!= 0 || $data->{'repeatable'} ){
-			($results2{$data->{'tagsubfield'}}=$data);
-		}
-	}
-	$sth->finish;	
-	return (\%results2);
-}
-
-=item
-actualizarCamposModificados
-Actualiza los cambios hecho en un campo modificado; recibe como parametro el id del campo que se modifico junto con el texto nuevo para el campo y el tipo de input deseado para mostrar los datos.
-Y si el campo estaba deshabilitado el parametro intra toma el ultimo lugar en el orden, si esta habilitado intra tiene el valor 0.
-=cut
-sub actualizarCamposModificados{
-	my ($id,$textoMod,$tipoInput,$intra,$ref)=@_;
-	
-	my $dbh = C4::Context->dbh;
-	my $query="UPDATE cat_estructura_catalogacion ";
-	$query .= "SET liblibrarian = ?,tipo=?, referencia=?";
-	if($intra){
-		$query.=", intranet_habilitado='".$intra."'";
-	}
-	$query .=" WHERE id=?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($textoMod,$tipoInput,$ref,$id);
-	$sth->finish;
-}
-
-=item
-actualizarInfoReferencia
-Actualiza los cambios hechos en la informacion de referencia de un campo, esto se hace si es que ya tenia la info de referencia.
-Si no hay info de referencia del campo se inserta en la tabla.
-=cut
-sub actualizarInfoReferencia{
-	my ($idinforef,$tabla,$orden,$campoRef,$separador)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query="UPDATE pref_informacion_referencia ";
-	$query .= "SET referencia = ?, orden= ?, campos=?, separador=? WHERE idinforef=? ";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($tabla,$orden,$campoRef,$separador,$idinforef);
-	$sth->finish;
-	
-}
-
-=item
-buscarMaximoHabilitado
-Busca el maximo campo para generar un nuevo maximo para generar el orden del campo.
-=cut
-sub buscarMaximoHabilitado{
-	my($tmpl,$itemType,$nivel)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query="SELECT max(".$tmpl."_habilitado) FROM cat_estructura_catalogacion WHERE itemtype=? AND nivel=?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($itemType,$nivel);
-	my $nuevoMax=$sth->fetchrow + 1;
-	return($nuevoMax);
-}
-
-=item
-obtenerCamposTablaRef
-Obtiene los campos de la tabla que se pasa como parametro y tambien devuelve un tupla como ejemplo para el usuario de la misma tabla
-=cut
-sub obtenerCamposTablaRef{
-	my ($tabla)=@_;
-	my $dbh = C4::Context->dbh;
-
-	my $query="SHOW FIELDS FROM $tabla";
-	my $sth=$dbh->prepare("SHOW FIELDS FROM $tabla");
-	$sth->execute();
-	
-	my %results;
-	while(my $data=$sth->fetchrow_hashref){
-		$results{$data->{'Field'}}=$data->{'Field'};
-	}
-	$sth->finish;
-	
-	#Para mostrar un ejemplo de la tabla a la cual se hizo referencia
-	$sth=$dbh->prepare("SELECT * FROM $tabla LIMIT 1");
-	$sth->execute();
-	my $data2=$sth->fetchrow_hashref();
-	my $ejemplo="( - ";
-	foreach my $campo (keys %results){
-		$ejemplo .= $campo.": ".$data2->{$campo}." - ";
-	}
-	$ejemplo.=")";
-	$sth->finish;
-	return ($ejemplo, %results);
-}
-
-
-=item
-cantidadItem
-Cuenta la cantidad de item que exiten en el nivel 3 dependiendo el nivel y el id que le llegan como parametros, si el nivel es 1 cuenta los item para que exiten para ese nivel y si es 2 cuenta los item que exiten para ese grupo.
-=cut
-sub cantidadItem{
-	my($nivel,$id)=@_;
-	my $dbh = C4::Context->dbh;
-	my $cant=0;
-	my $query="SELECT COUNT(*) as cant FROM cat_nivel3 WHERE ";
-	if($nivel==1){
-		$query.="id1=?";
-	}
-	else{
-		$query.="id2=?";
-	}
-	my $sth=$dbh->prepare($query);
-         $sth->execute($id);
-	if(my $data=$sth->fetchrow_hashref){
-		$cant=$data->{'cant'};
-	}
-	return($cant);
-}
 
 ################################################### NUEVAS NUEVAS FRESQUITAS ##############################################################
-=item
+=item sub subirOrden
 Esta funcion sube el orden como se va a mostrar del campo, subcampo catalogado
 =cut
 sub subirOrden{
@@ -259,7 +54,7 @@ sub subirOrden{
     }
 }
 
-=item
+=item sub bajarOrden
 Esta funcion baja el orden como se va a mostrar del campo, subcampo catalogado
 =cut
 sub bajarOrden{
@@ -274,7 +69,7 @@ sub bajarOrden{
     }
 }
 
-=item
+=item sub cambiarVisibilidad
 Esta funcion cambia la visibilidad de la estructura de catalogacion que se indica segun parametro ID
 =cut
 sub cambiarVisibilidad{
@@ -289,7 +84,7 @@ sub cambiarVisibilidad{
     }
 }
 
-=item
+=item sub eliminarCampo
 Esta funcion elimina un "campo", estructura de catalogacion, segun parametro ID
 =cut
 sub eliminarCampo{
@@ -304,6 +99,9 @@ sub eliminarCampo{
     }
 }
 
+=item sub getCamposXLike
+    Busca un campo like..., segun nivel indicado
+=cut
 sub getCamposXLike{
 
     use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
@@ -324,6 +122,10 @@ sub getCamposXLike{
     return($db_campos_MARC);
 }
 
+
+=item sub getSubCamposLike
+    Obtiene los subcampos haciendo busqueda like, para el nivel indicado
+=cut
 sub getSubCamposLike{
 
     use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
@@ -344,7 +146,7 @@ sub getSubCamposLike{
     return($db_campos_MARC);
 }
 
-=item
+=item t_guardarEnEstructuraCatalogacion
 Esta transaccion guarda una estructura de catalogacion configurada por el bibliotecario 
 =cut
 sub t_guardarEnEstructuraCatalogacion {
@@ -371,7 +173,7 @@ sub t_guardarEnEstructuraCatalogacion {
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B426',"INTRA");
-            eval {$db->rollback};
+            $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U365', 'params' => []} ) ;
@@ -384,7 +186,7 @@ sub t_guardarEnEstructuraCatalogacion {
     return ($msg_object);
 }
 
-=item
+=item sub t_modificarEnEstructuraCatalogacion
 Esta transaccion guarda una estructura de catalogacion configurada por el bibliotecario 
 =cut
 sub t_modificarEnEstructuraCatalogacion {
@@ -532,9 +334,14 @@ sub cantNivel2 {
     return $count;
 }
 
-=item
+=item sub getEstructuraConDatos
     Esta funcion genera la estructura de catalogacion con los datos para los REPETIBLES, al final se agregan los datos 
     y la estructura de los niveles 1, 2 y 3
+
+    @Parametros
+
+    $params->{'nivel'}: nivel 1, 2 o 3
+    $params->{'id_tipo_doc'}: tipo de ejemplar
 =cut
 sub getEstructuraConDatos{
     my ($params) = @_;
@@ -752,7 +559,7 @@ sub getCatalogacionesConDatos{
                                                 query => [ 
  															'cat_nivel1.id1' => { eq => $params->{'id'} },
                                                     ], 
-#   	 										with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor','CEC' ]
+
                                              with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor'], #LEFT JOIN
                                              require_objects => [ 'CEC' ] #INNER JOIN
 
@@ -818,7 +625,6 @@ sub getRepetible{
                                                             'campo' => { eq => $params->{'campo'} },
                                                             'subcampo' => { eq => $params->{'subcampo'} },        
                                                     ], 
-#                                               with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor','CEC' ]
                                                 with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor'], #LEFT JOIN
                                                 require_objects => [ 'CEC' ] #INNER JOIN
 
@@ -833,7 +639,6 @@ sub getRepetible{
                                                                 'campo' => { eq => $params->{'campo'} },
                                                                 'subcampo' => { eq => $params->{'subcampo'} },   
                                                             ],
-#                                                    require_objects => [ 'cat_nivel2', 'CEC' ]
                                                     require_objects => [ 'CEC' ],#INNER JOIN
                                                     with_objects => [ 'cat_nivel2' ], #LEFT JOIN
                                 );
@@ -846,7 +651,6 @@ sub getRepetible{
                                                                 'campo' => { eq => $params->{'campo'} },
                                                                 'subcampo' => { eq => $params->{'subcampo'} },   
                                                         ],
-#                                                     require_objects => [ 'cat_nivel3', 'CEC' ]
                                                         require_objects => [ 'CEC' ], #INNER JOIN  
                                                         with_objects => [ 'cat_nivel3' ], #LEFT JOIN
                                 );
@@ -856,7 +660,7 @@ sub getRepetible{
     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref->[0]);
 }
 
-=item
+=item sub _getEstructuraFromCampoSubCampo
 Este funcion devuelve la informacion de la estructura de catalogacion de un campo, subcampo
 =cut
 sub _getEstructuraFromCampoSubCampo{

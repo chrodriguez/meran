@@ -462,9 +462,9 @@ sub obtenerGrupos {
 		if ( $cant > 0){
         		$result[$res]->{'id2'}=$data->{'id2'};
 			$result[$res]->{'cant'}=$cant;
-        		$result[$res]->{'edicion'}= &C4::AR::Nivel2::getEdicion($data->{'id2'});
+#         		$result[$res]->{'edicion'}= &C4::AR::Nivel2::getEdicion($data->{'id2'});
         		$result[$res]->{'anio_publicacion'}=$data->{'anio_publicacion'};
-        		$result[$res]->{'volume'}= C4::AR::Nivel2::getVolume($data->{'id2'});
+#         		$result[$res]->{'volume'}= C4::AR::Nivel2::getVolume($data->{'id2'});
         		$res++;
 		}
 	}
