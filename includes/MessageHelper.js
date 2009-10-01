@@ -16,7 +16,7 @@
 
 
 function _clearMessages(){
-    $('#mensajes').css({opacity:0,filter:alpha(opacity=0)});
+    $('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});
 	$('#mensajes').html('');
 }
 
@@ -39,11 +39,11 @@ function setMessages(Messages_hashref){
 //Message.messages: [message_1, message_2, ... , message_n]
 //message1: 	codMsg: 'U324'
 //		message: 'Texto para informar'
-
-	_createContentMessages();
+    if (!($('#mensajes').html()))
+        _createContentMessages();
 	var i;
 	for(i=0;i<Messages_hashref.messages.length;i++){
-		$('#mensajes').append(Messages_hashref.messages[i].message + '<br>');
+		$('#mensajes').append('<div class="message_text" >'+Messages_hashref.messages[i].message + '</div>');
 	}
 
 	scrollTo('mensajes');
@@ -59,7 +59,7 @@ function assignCloseButton(){
     $('#close_message').click(function()
     {
       //the messagebox gets scrool down with top property and gets hidden with zero opacity
-      $('#mensajes').animate({opacity:0,filter:alpha(opacity=0) }, "slow");
+      $('#mensajes').animate({opacity:0}, "slow");
       _clearMessages();
     });
 
@@ -76,7 +76,7 @@ function _createContentMessages(){
 	}
 	else{
         $('#mensajes').append("<img id='close_message' style='float:right;cursor:pointer' src='"+imagesForJS+'/iconos/12-em-cross.png'+ " />");
-        $('#mensajes').animate({opacity:90,filter:alpha(opacity=90)}, "slow");
+        $('#mensajes').animate({opacity:90,"filter":"alpha(opacity=90)"}, "slow");
         assignCloseButton();
 	}
 }

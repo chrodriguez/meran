@@ -39,8 +39,9 @@
         </font>
     </div>
 </noscript>
-
-<div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes' class="mensajes_informacion auth_info">[% mensaje %]</div></b></font></div>
+[% IF mensaje %]
+  <div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes' class="mensajes_informacion auth_info">[% mensaje %]</div></b></font></div>
+[% END %]
 
 <center>
 
