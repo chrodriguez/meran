@@ -1,0 +1,54 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+<script>
+function busquedaZ3950(){
+    if(($('#titulo').val() !='')&&($('#autor').val() !='')){}
+    else {
+	objAH=new AjaxHelper(updateBusquedaZ3950);
+	objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
+    objAH.tipo="BUSCAR";
+	objAH.titulo= $('#titulo').val();
+	objAH.autor= $('#autor').val();
+	objAH.sendToServer();
+    }
+}
+
+function updateBusquedaZ3950(responseText){
+	$('#resultadoZ3950').html(responseText);
+   zebra('datos_tabla');
+	$('#resultadoZ3950').show();
+}
+
+</script>
+
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend">[% "B&uacute;squeda Z3950" | i18n %]:</legend>
+<div class="datos_tabla_div_z3950">
+    <ul>
+    <li class="item" >
+        <label for="titulo">
+            [% "T&iacute;tulo" | i18n %]
+        </label>
+        <input type="text" id="titulo" size="20" tabindex=1>
+    </li>
+    <li class="item" >
+        <label for="autor">
+            [% "Autor" | i18n %]
+        </label>
+        <input type="text" id="autor" size="20" tabindex=1>
+    </li>
+    <li class="item" >
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_buscar",
+                                                                    onClick => "busquedaZ3950();",
+                                                                    title   => "[% 'Buscar' | i18n %]",
+                                        ) ;
+            [% END %]
+    </li>
+    </ul>
+</div>
+</fieldset>
+
+<div id="resultadoZ3950"></div>
+[% INCLUDE 'intranet-bottom.inc' %]

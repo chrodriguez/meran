@@ -1075,5 +1075,16 @@ INSERT INTO `pref_tabla_referencia_rel_catalogo` (`id`, `alias_tabla`, `tabla_re
 -- ESTANTES AUTOINCREMENTABLES!!!
  ALTER TABLE `cat_estante` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
 
+-- Z3950
+ ALTER TABLE `pref_servidor_z3950`
+CHANGE `name` `nombre` TEXT  NULL DEFAULT NULL ,
+CHANGE `checked` `habilitado` TINYINT( 1 ) NOT NULL DEFAULT '1';
 
+ ALTER TABLE `pref_servidor_z3950` DROP `rank`;
+
+ ALTER TABLE `pref_servidor_z3950` CHANGE `host` `servidor` VARCHAR( 255 ) NULL DEFAULT NULL ,
+CHANGE `port` `puerto` INT( 11 ) NULL DEFAULT NULL ,
+CHANGE `db` `base` VARCHAR( 255 ) NULL DEFAULT NULL ,
+CHANGE `userid` `usuario` VARCHAR( 255 ) NULL DEFAULT NULL ,
+CHANGE `syntax` `sintaxis` VARCHAR( 80 ) NULL DEFAULT NULL ;
 

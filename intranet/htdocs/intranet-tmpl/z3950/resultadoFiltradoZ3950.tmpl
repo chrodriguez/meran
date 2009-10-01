@@ -1,0 +1,37 @@
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend">[% "Resultado de b&uacute;squeda" | i18n %] :</legend>
+[% IF cant_resultados %]
+        <div>
+           <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                <thead>
+                <tr class="titulo_tabla_resultado">
+                    <th>[% "T&iacute;tulo" | i18n %]</th>
+                    <th>[% "Autor" | i18n %]</th>
+                    <th>[% "Edici&oacute;n" | i18n %]</th>
+                    <th>[% "A&ntilde;o" | i18n %]</th>
+                </tr>
+                </thead>
+                <tbody>
+                [% FOREACH marc IN RESULTADO %]
+                <tr>
+                    <td>
+                    [% marc.title %]
+                    </td>
+                    <td>
+                    [% marc.author %] 
+                    </td>
+                    <td>
+                    [% marc.edition %] 
+                    </td>
+                    <td >
+                    [% marc.publication_date %] 
+                    </td>
+                </tr>
+                [% END %]
+                </tbody>
+            </table>
+        </div>
+[% ELSE %]
+<legend>[% "No hay resultados" | i18n %]</legend>
+[% END %]
+</fieldset>

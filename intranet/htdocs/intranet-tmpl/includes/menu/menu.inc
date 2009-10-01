@@ -80,6 +80,14 @@
                                                             ) ;
                             [% END %]
                         </li>
+                        <li>
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'B&uacute;squeda Z3950' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/z3950/filtradoZ3950.pl", 
+                                                                title =>    "[% 'B&uacute;squeda Z3950' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </li>
                      </ul>
                   </li>
                   <li><h3 class="menu_intermedio">[% 'Cat&aacute;logo' | i18n %]</h3>
