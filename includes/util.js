@@ -254,17 +254,21 @@ function makeToggle(container_class,trigger,afterToggleFunction,hide){
 }
 
 function makeDataTable(id){
-    $(id).dataTable({
-                                  "bFilter": true,
-                                  "bPaginate": false,
-                                  "oLanguage": {
-                                    "sLengthMenu": S_LENGTH_MENU,
-                                    "sZeroRecords": S_ZERO_RECORDS,
-                                    "sInfo": S_INFO,
-                                    "sInfoEmtpy": S_INFO_EMPTY,
-                                    "sInfoFiltered": S_INFO_FILTERED,
-                                    "sSearch":S_SEARCH,
-                                  }
-                                });
+    try{
+        $(id).dataTable({
+                          "bFilter": true,
+                          "bPaginate": false,
+                          "oLanguage": {
+                            "sLengthMenu": S_LENGTH_MENU,
+                            "sZeroRecords": S_ZERO_RECORDS,
+                            "sInfo": S_INFO,
+                            "sInfoEmpty": S_INFO_EMPTY,
+                            "sInfoFiltered": S_INFO_FILTERED,
+                            "sSearch":S_SEARCH,
+                          }
+        });
+    }
+    catch (e){
+    }
 }
 

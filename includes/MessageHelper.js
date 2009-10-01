@@ -39,19 +39,24 @@ function setMessages(Messages_hashref){
 //Message.messages: [message_1, message_2, ... , message_n]
 //message1: 	codMsg: 'U324'
 //		message: 'Texto para informar'
-    if (!($('#mensajes').html()))
-        _createContentMessages();
-	var i;
-	for(i=0;i<Messages_hashref.messages.length;i++){
-		$('#mensajes').append('<div class="message_text" >'+Messages_hashref.messages[i].message + '</div>');
-	}
-
-	scrollTo('mensajes');
-    $(window).scroll(function()
-    {
-      $('#mensajes').animate({queue: false, duration: 350});
-    });
-	_delay(_clearMessages, 180);
+    try{
+        if (!($('#mensajes').html()))
+            _createContentMessages();
+        var i;
+        for(i=0;i<Messages_hashref.messages.length;i++){
+            $('#mensajes').append('<div class="message_text" >'+Messages_hashref.messages[i].message + '</div>');
+        }
+    
+        scrollTo('mensajes');
+        $(window).scroll(function()
+        {
+          $('#mensajes').animate({queue: false, duration: 350});
+        });
+        _delay(_clearMessages, 180);
+    }
+    catch (e){
+      // We do nothing ;)
+    }
 }
 
 
