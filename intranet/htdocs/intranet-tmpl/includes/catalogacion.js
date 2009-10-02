@@ -606,6 +606,8 @@ function updateGuardarDocumentoN3(responseText){
 		BARCODES_ARRAY= [];
         //deja la misma estructura, solo borra el campo dato
         _clearDataFromComponentesArray();
+        //acutalizo los datos de nivel 2
+        mostrarInfoAltaNivel2(ID_N2);
         //muestra la tabla con los ejemplares agregados
         mostrarInfoAltaNivel3(ID_N2);
     }
@@ -993,7 +995,6 @@ function updateBorrarN1(responseText){
         inicializar();
 	    mostrarEstructuraDelNivel1();
 	    mostrarInfoAltaNivel2(ID_N2);
-    // 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
     }
 }
@@ -1023,7 +1024,6 @@ function updateBorrarN2(responseText){
 	    inicializar();
 	    mostrarEstructuraDelNivel2();
 	    mostrarInfoAltaNivel2(ID_N2);
-    // 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
     }
 }
@@ -1052,7 +1052,8 @@ function updateBorrarN3(responseText){
     if (! (hayError(Messages) ) ){
         inicializar();
         mostrarEstructuraDelNivel3();
-    //  mostrarInfoAltaNivel3(ID_N1,ID_N2);
+        //acutalizo los datos de nivel 2
+        mostrarInfoAltaNivel2(ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
     }
 }
@@ -1082,7 +1083,7 @@ function updateBorrarEjemplaresN3(responseText){
     if (! (hayError(Messages) ) ){
 	    inicializar();
 	    mostrarEstructuraDelNivel3();
-    // 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+        mostrarInfoAltaNivel2(ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
     }
 }
