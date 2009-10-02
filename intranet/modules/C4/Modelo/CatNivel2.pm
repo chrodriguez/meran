@@ -634,5 +634,36 @@ sub getCantEjemplares{
     return $cantEjemplares_count;
 }
 
+=item sub tienePrestamos
+    Verifica si el nivel 2 pasado por parametro tiene ejemplares con prestamos o no
+=cut
+sub tienePrestamos {
+    my ($self) = shift;
+
+    my $cant = C4::AR::Prestamos::getCountPrestamosDeGrupo($self->getId2);
+
+    return ($cant > 0)?1:0;
+}
+
+=item sub tieneReservas
+    Devuelve 1 si tiene ejemplares reservados en el grupo, 0 caso contrario
+=cut
+sub tieneReservas {
+    my ($self) = shift;
+
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
+    my @filtros;
+    push(@filtros, ( id2    => { eq => $self->getId2}));
+
+    my ($reservas_array_ref) = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
+
+    if (scalar(@$reservas_array_ref) > 0){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
 1;
 

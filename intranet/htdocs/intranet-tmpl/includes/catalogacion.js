@@ -91,7 +91,7 @@ function verificarAgregarDocumentoN3(){
 		//verifico que los barcodes no esten repetidos
 		for(var i=0;i<BARCODES_ARRAY.length;i++){
 			if( _existeEnArray(BARCODES_ARRAY, BARCODES_ARRAY[i]) ){
-				existe= 1;
+				existe = 1;
 				repetidos_array.push(BARCODES_ARRAY[i]);
 			}
 		}
@@ -525,6 +525,7 @@ function updateGuardarDocumentoN1(responseText){
     var Messages= info.Message_arrayref;
     ID_N1= info.id1; //recupero el id desde el servidor
     setMessages(Messages);
+
     if (! (hayError(Messages) ) ){
         inicializar();
         //carga la barra lateral con info de nivel 1
@@ -552,6 +553,7 @@ function updateGuardarDocumentoN2(responseText){
     var Messages= info.Message_arrayref;//obtengo los mensajes para el usuario
     ID_N2= info.id2; //recupero el id desde el servidor
     setMessages(Messages);
+
     if (! (hayError(Messages) ) ){
         inicializar();
         //carga la barra lateral con info de nivel 2
@@ -572,10 +574,12 @@ function guardarDocumentoN3(){
 		objAH.tipoAccion= "GUARDAR_NIVEL_3";
 		objAH.tipo_documento= $("#tipo_nivel3_id").val();
         objAH.esPorBarcode = porBarcode;
+
         if (porBarcode)
             objAH.BARCODES_ARRAY= BARCODES_ARRAY;
         else
             objAH.cantEjemplares= $("#cantEjemplares").val();
+
 		_sacarOpciones();
 		objAH.infoArrayNivel3= COMPONENTES_ARRAY;
 		objAH.id1 = ID_N1;
@@ -603,7 +607,6 @@ function updateGuardarDocumentoN3(responseText){
         //deja la misma estructura, solo borra el campo dato
         _clearDataFromComponentesArray();
         //muestra la tabla con los ejemplares agregados
-//         mostrarInfoAltaNivel3(ID_N1, ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
     }
 }
@@ -629,6 +632,7 @@ function updateGuardarModificacionDocumentoN1(responseText){
     var Messages= info.Message_arrayref;
     ID_N1= info.id1; //recupero el id desde el servidor
     setMessages(Messages);
+
     if (! (hayError(Messages) ) ){
         inicializar();
         //carga la barra lateral con info de nivel 1
@@ -654,11 +658,12 @@ function updateGuardarModificacionDocumentoN2(responseText){
     
     if (!verificarRespuesta(responseText)) return(0);
 
-	MODIFICAR=0;
+	MODIFICAR = 0;
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref;//obtengo los mensajes para el usuario
     ID_N2= info.id2; //recupero el id desde el servidor
     setMessages(Messages);
+
     if (! (hayError(Messages) ) ){
         inicializar();
         //carga la barra lateral con info de nivel 2
@@ -685,10 +690,6 @@ function guardarModificacionDocumentoN3(){
 
 function updateGuardarModificacionDocumentoN3(responseText){
 
-// 	//inicializo el arreglo
-// 	_freeMemory(ID3_ARRAY);
-// 	ID3_ARRAY= [];
-// 	MODIFICAR=0;
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
     setMessages(Messages);
@@ -987,11 +988,14 @@ function updateBorrarN1(responseText){
 	//se refresca la info	
     var Messages= info.Message_arrayref;
     setMessages(Messages);
-	inicializar();
-	mostrarEstructuraDelNivel1();
-	mostrarInfoAltaNivel2(ID_N2);
-// 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
-    mostrarInfoAltaNivel3(ID_N2);
+
+    if (! (hayError(Messages) ) ){
+        inicializar();
+	    mostrarEstructuraDelNivel1();
+	    mostrarInfoAltaNivel2(ID_N2);
+    // 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+        mostrarInfoAltaNivel3(ID_N2);
+    }
 }
 
 function borrarN2(id2){
@@ -1014,11 +1018,14 @@ function updateBorrarN2(responseText){
     var info=JSONstring.toObject(responseText);  
     var Messages= info.Message_arrayref;
     setMessages(Messages);
-	inicializar();
-	mostrarEstructuraDelNivel2();
-	mostrarInfoAltaNivel2(ID_N2);
-// 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
-    mostrarInfoAltaNivel3(ID_N2);
+
+    if (! (hayError(Messages) ) ){
+	    inicializar();
+	    mostrarEstructuraDelNivel2();
+	    mostrarInfoAltaNivel2(ID_N2);
+    // 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+        mostrarInfoAltaNivel3(ID_N2);
+    }
 }
 
 function borrarN3(id3){
@@ -1038,13 +1045,16 @@ function borrarN3(id3){
 }
 
 function updateBorrarN3(responseText){
-	inicializar();
-	mostrarEstructuraDelNivel3();
-// 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
-    mostrarInfoAltaNivel3(ID_N2);
 	var info=JSONstring.toObject(responseText);  
     var Messages= info.Message_arrayref;
     setMessages(Messages);
+
+    if (! (hayError(Messages) ) ){
+        inicializar();
+        mostrarEstructuraDelNivel3();
+    //  mostrarInfoAltaNivel3(ID_N1,ID_N2);
+        mostrarInfoAltaNivel3(ID_N2);
+    }
 }
 
 function borrarEjemplaresN3(id3){
@@ -1068,10 +1078,13 @@ function updateBorrarEjemplaresN3(responseText){
     var info=JSONstring.toObject(responseText);  
     var Messages= info.Message_arrayref;
     setMessages(Messages);
-	inicializar();
-	mostrarEstructuraDelNivel3();
-// 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
-    mostrarInfoAltaNivel3(ID_N2);
+    
+    if (! (hayError(Messages) ) ){
+	    inicializar();
+	    mostrarEstructuraDelNivel3();
+    // 	mostrarInfoAltaNivel3(ID_N1,ID_N2);
+        mostrarInfoAltaNivel3(ID_N2);
+    }
 }
 /*
  * modificarN1

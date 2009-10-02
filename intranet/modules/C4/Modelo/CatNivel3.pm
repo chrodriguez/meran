@@ -538,6 +538,23 @@ sub replaceBy{
                                                                         set   => { $campo => $new_value });
 }
 
+=item sub estaReservado
+    Verifica si el ejemplar se encuentra reservado o no
+=cut
+sub estaReservado {
+    my ($self) = shift;
+
+    return C4::AR::Reservas::estaReservado($self->getId3);
+}
+
+=item sub estaPrestado
+    Verifica si el ejemplar se encuentra prestado o no
+=cut
+sub estaPrestado {
+    my ($self) = shift;
+    
+    return C4::AR::Prestamos::estaPrestado($self->getId3);
+}
 
 1;
 

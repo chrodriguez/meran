@@ -20,7 +20,7 @@ use vars qw(@EXPORT @ISA);
     retorna la canitdad de items prestados para el grupo pasado por parametro
 =cut
 sub getCantPrestados{
-	my ($id2)=@_;
+	my ($id2) = @_;
 
 	my $cantPrestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
                                                                	query => [ 	't2.id2' => { eq => $id2 },
@@ -177,17 +177,17 @@ sub t_modificarNivel2 {
 
 
 sub _verificarDeleteNivel2 {
-    my($msg_object, $params)=@_;
+    my($msg_object, $params, $catNivel2)=@_;
 
     $msg_object->{'error'} = 0;#no hay error
 
-    if( !($msg_object->{'error'}) && C4::AR::Prestamos::tienePrestamos($params->{'id2'}) ){
+    if( !($msg_object->{'error'}) && $catNivel2->tienePrestamos() ){
         C4::AR::Debug::debug("_verificarDeleteNivel2 => tiene al menos 1 ejemplar prestado ");
         #verifico que el nivel2 que quiero eliminar no tenga ningun ejemplar prestado
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P124', 'params' => [$params->{'id2'}]} ) ;
 
-    }elsif( !($msg_object->{'error'}) && C4::AR::Reservas::tieneReservas($params->{'id2'}) ){
+    }elsif( !($msg_object->{'error'}) && $catNivel2->tieneReservas() ){
         #verifico que el nivel2 que quiero eliminar no tenga ningun ejemplar reservado
         $msg_object->{'error'} = 1;
         C4::AR::Debug::debug("_verificarDeleteNivel2 => Se está intentando eliminar un ejemplar que tiene al menos un ejemplar reservado ");
@@ -200,26 +200,29 @@ sub _verificarDeleteNivel2 {
     Elimina el nivel 2 pasado por parametro
 =cut
 sub t_eliminarNivel2{
-   my($id2) = @_;
+    my($id2) = @_;
    
-   my $msg_object= C4::AR::Mensajes::create();
+    my $msg_object= C4::AR::Mensajes::create();
 
     my $params;    
-    my  $catNivel2= C4::Modelo::CatNivel2->new();
+    my $catNivel2= C4::Modelo::CatNivel2->new();
     my $db = $catNivel2->db;
     my ($catNivel2) = getNivel2FromId2($id2, $db);
    
     if(!$catNivel2){
+        #NO EXISTE EL OBJETO
         #Se setea error para el usuario
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U404', 'params' => []} ) ;
+    }else{
+        #EXISTE EL OBJETO
+         $params->{'id2'} = $id2;
+        #verifico condiciones necesarias antes de eliminar     
+        _verificarDeleteNivel2($msg_object, $params, $catNivel2);
     }
 
-    $params->{'id2'} = $id2;
-    _verificarDeleteNivel2($msg_object, $params);
-
     if(!$msg_object->{'error'}){
-    #No hay error        
+        #No hay error        
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
@@ -228,7 +231,7 @@ sub t_eliminarNivel2{
             $catNivel2->eliminar;  
             $db->commit;
             #se cambio el permiso con exito
-            $msg_object->{'error'}= 0;
+            $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U375', 'params' => [$id2]} ) ;
         };
     
@@ -237,7 +240,7 @@ sub t_eliminarNivel2{
             &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
             $db->rollback;
             #Se setea error para el usuario
-            $msg_object->{'error'}= 1;
+            $msg_object->{'error'} = 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U378', 'params' => [$id2]} ) ;
         }
 
@@ -246,7 +249,6 @@ sub t_eliminarNivel2{
     }
 
     return ($msg_object);
-
 }
 
 #===================================================================Fin====ABM Nivel 1====================================================

@@ -516,16 +516,15 @@ sub existeBarcode{
 #=======================================================================ABM Nivel 3======================================================
 
 sub t_guardarNivel3 {
-    my($params)=@_;
+    my($params) = @_;
 
-## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object= C4::AR::Mensajes::create();
     my $catNivel3;
 	my $db;
 
-#     if(!$msg_object->{'error'}){
+    if(!$msg_object->{'error'}){
     #No hay error
-		my	$catNivel2= C4::Modelo::CatNivel2->new();
+		my	$catNivel2 = C4::Modelo::CatNivel2->new();
 		my	$db= $catNivel2->db;
 			# enable transactions, if possible
 			$db->{connect_options}->{AutoCommit} = 0;
@@ -538,13 +537,13 @@ sub t_guardarNivel3 {
             foreach my $barcode (@$barcodes_para_agregar){
                 #se procesa un barcode por vez junto con la info del nivel 3 y nivel3 repetible
 				my $catNivel3;
-                $params->{'barcode'}= $barcode; 
+                $params->{'barcode'} = $barcode; 
     
-				$catNivel3= C4::Modelo::CatNivel3->new(db => $db);
+				$catNivel3 = C4::Modelo::CatNivel3->new(db => $db);
 				$catNivel3->agregar($params);  
 				
 				#se agregaron los barcodes con exito
-				$msg_object->{'error'}= 0;
+				$msg_object->{'error'} = 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$catNivel3->getBarcode]} );
 			}
 
@@ -562,7 +561,7 @@ sub t_guardarNivel3 {
 
         $db->{connect_options}->{AutoCommit} = 1;
 
-#     }
+    }
 
 	return ($msg_object);
 }
@@ -599,19 +598,19 @@ sub _generateBarcode{
 sub _generarArreglo{	
 	my ($params, $msg_object) = @_;
  
-	my $cant= $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
+	my $cant = $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
 	my $barcodes_array = $params->{'BARCODES_ARRAY'}; #se esta agregando por barcodes 
 	my @barcodes_para_agregar;
-	$params->{'agregarPorBarcodes'}= 0;
+	$params->{'agregarPorBarcodes'} = 0;
     my $esPorBarcode = 0;
     $esPorBarcode = defined $barcodes_array;
 
     #se setea la cantidad de ejemplares a agregar
 	if($esPorBarcode){
-		$params->{'agregarPorBarcodes'}= 1;
+		$params->{'agregarPorBarcodes'} = 1;
         _generarArregloDeBarcodesPorBarcodes($msg_object, $barcodes_array, \@barcodes_para_agregar);
 	}else{
-		_generarArregloDeBarcodesPorCantidad($cant, \@barcodes_para_agregar)
+		_generarArregloDeBarcodesPorCantidad($cant, \@barcodes_para_agregar, $msg_object);
 	}
 
 	return (\@barcodes_para_agregar);
@@ -657,20 +656,31 @@ sub _generarArregloDeBarcodesPorBarcodes{
 =item sub _generarArregloDeBarcodesPorCantidad
 Esta funcion genera un arreglo de barcodes VALIDOS para agregar en la base de datos
 =cut
-sub _generarArregloDeBarcodesPorCantidad{   
-    my($cant, $barcodes_para_agregar)=@_;
+sub _generarArregloDeBarcodesPorCantidad {   
+    my($cant, $barcodes_para_agregar, $msg_object) = @_;
 
     my $barcode;
+    my $tope = 1000; #puede ser preferencia
+
+    $msg_object->{'error'} = 0;#no hay error
+
+    if( !($msg_object->{'error'}) && $cant > $tope ){
+        #se esta intentando agregar mas de $tope ejemplares
+        $msg_object->{'error'} = 1;
+        C4::AR::Debug::debug("_verificarGuardarNivel3 => Se está intentando agregar mas de ".$tope." ejemplares");
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U405', 'params' => [$tope]} ) ;
+
+    }
  
-    for(my $i=0;$i<$cant;$i++){
-# FIXME poner la funcion que generar el barcode realmente, esto es una prueba
-        $barcode = _generateBarcode($barcodes_para_agregar).$i;
-#         C4::AR::Debug::debug("barcode : ".$barcode);
+    if( !$msg_object->{'error'} ){
 
-        push (@{$barcodes_para_agregar}, $barcode);
-        
-    }# END for(my $i;$i<$cant;$i++) 
+        for(my $i=0;$i<$cant;$i++){
+        # FIXME poner la funcion que generar el barcode realmente, esto es una prueba
+            $barcode = _generateBarcode($barcodes_para_agregar).$i;
+            push (@{$barcodes_para_agregar}, $barcode);
+        }# END for(my $i;$i<$cant;$i++)
 
+    } 
 }
 
 
@@ -767,6 +777,7 @@ sub t_eliminarNivel3{
             _verificarDeleteItem($msg_object, $params);
 			
             if(!$msg_object->{'error'}){
+# FIXME falta verificar existencia de los ejemplares q se estan levantando
 				$catNivel3 = C4::Modelo::CatNivel3->new(
 														db => $db,
 														id3 => $id3_array->[$i]

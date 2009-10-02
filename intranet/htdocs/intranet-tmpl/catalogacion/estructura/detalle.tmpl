@@ -24,10 +24,12 @@ function updateBorrarN1(responseText){
     //se refresca la info   
     var Messages = info.Message_arrayref;
     setMessages(Messages);
-    //oculto todo el registro con los grupos y sus items
-    $('#detalleComun').slideUp('slow');
-    //borro el contenido
-    $('#detalleComun').html('');
+    if (! (hayError(Messages) ) ){
+        //oculto todo el registro con los grupos y sus items
+        $('#detalleComun').slideUp('slow');
+        //borro el contenido
+        $('#detalleComun').html('');
+    }
 }
 
 // function borrarN2(id2) //esta implementado en catalogacion.js
@@ -36,10 +38,12 @@ function updateBorrarN2(responseText){
     var info=JSONstring.toObject(responseText);  
     var Messages= info.Message_arrayref;
     setMessages(Messages);
-    //oculto todo el grupo con los items
-    $('#grupo'+objAH.id2).slideUp('slow');
-    //borro el contenido
-    $('#fieldset_grupo'+objAH.id2).html('');
+    if (! (hayError(Messages) ) ){
+        //oculto todo el grupo con los items
+        $('#grupo'+objAH.id2).slideUp('slow');
+        //borro el contenido
+        $('#fieldset_grupo'+objAH.id2).html('');
+    }
 }
 
 function borrarN3(id2, id3){
@@ -63,7 +67,9 @@ function updateBorrarN3(responseText){
     var info=JSONstring.toObject(responseText);  
     var Messages= info.Message_arrayref;
     setMessages(Messages);
-	ejemplaresDelGrupo(ID_N2);
+    if (! (hayError(Messages) ) ){
+	    ejemplaresDelGrupo(ID_N2);
+    }
 }
 
 //muestra los ejemplares del grupo

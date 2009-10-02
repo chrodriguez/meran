@@ -40,18 +40,23 @@ function setMessages(Messages_hashref){
 //message1: 	codMsg: 'U324'
 //		message: 'Texto para informar'
     try{
-        if (!($('#mensajes').html()))
+
+//         if (!($('#mensajes').html()))
             _createContentMessages();
         var i;
+        //se agregan todos los mensajes
         for(i=0;i<Messages_hashref.messages.length;i++){
             $('#mensajes').append('<div class="message_text" >'+Messages_hashref.messages[i].message + '</div>');
         }
     
         scrollTo('mensajes');
-        $(window).scroll(function()
-        {
-          $('#mensajes').animate({queue: false, duration: 350});
-        });
+//         $(window).scroll(function()
+//         {
+//           $('#mensajes').animate({queue: false, duration: 350});
+//              $('#mensajes').animate({queue: false, duration: 0});   
+//         });
+
+        _show();
         _delay(_clearMessages, 180);
     }
     catch (e){
@@ -75,15 +80,22 @@ function _createContentMessages(){
 	var contenedor = $('#mensajes')[0];
 
 	if(contenedor == null){
+     //no existe el contenedor, se crea
 		//console.log("MessageHelper: Se crea el div cotenedor");
 		$('#end_top').append("<div class='mensajes_informacion'><div id='mensajes'><img id='close_message' style='float:right;cursor:pointer' src="+imagesForJS+'/iconos/12-em-cross.png'+" /></div></div>");
-        assignCloseButton();
 	}
 	else{
+    //existe el contenedor, lo limpio
+        _clearMessages();
         $('#mensajes').append("<img id='close_message' style='float:right;cursor:pointer' src='"+imagesForJS+'/iconos/12-em-cross.png'+ " />");
-        $('#mensajes').animate({opacity:90,"filter":"alpha(opacity=90)"}, "slow");
-        assignCloseButton();
 	}
+
+    _show();
+    assignCloseButton();
+}
+
+function _show(){
+    $('#mensajes').animate({opacity:90,"filter":"alpha(opacity=90)"}, "fast");
 }
 
 //luego de x segundos se ejecuta la funcion pasada por parametro

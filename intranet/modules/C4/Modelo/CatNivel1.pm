@@ -287,7 +287,6 @@ sub getInvolvedCount{
 }
 
 sub replaceBy{
- 
     my ($self) = shift;
 
     my ($campo,$value,$new_value)= @_;
@@ -299,6 +298,43 @@ sub replaceBy{
 
     my $replaced = C4::Modelo::CatNivel1::Manager->update_cat_nivel1(   where => \@filtros,
                                                                         set   => { $campo => $new_value });
+}
+
+
+=item sub getGrupos
+    Recupero todos los grupos del nivel 1.
+    Retorna la referencia a un arreglo de objetos
+=cut
+sub getGrupos {
+    my ($self) = shift;
+
+    #recupero todos los grupos de nivel 1 
+    my ($nivel2_object_array) = C4::Modelo::CatNivel2::Manager->get_cat_nivel2( 
+                                                                        query => [ id1 => { eq => $self->getId1 } ]
+                                                                   );
+    return $nivel2_object_array;
+}
+
+=item sub tienePrestamos
+    Verifica si el nivel 1 pasado por parametro tiene ejemplares con prestamos o no
+=cut
+sub tienePrestamos{
+    my ($self) = shift;
+
+    my $cant = 0;
+    #recupero todos los grupos del nivel 1
+    my ($nivel2_object_array) = $self->getGrupos();
+    
+    #recorro los id2 del nivel 1 para verificar si tienen prestamos o no 
+    foreach my $nivel2 (@$nivel2_object_array){
+        $cant = C4::AR::Prestamos::getCountPrestamosDeGrupo($nivel2->getId2);        
+        if($cant > 0){
+            last;
+        } 
+
+    }
+
+    return ($cant > 0)?1:0;
 }
 
 # sub getNombreCompletoAutor{

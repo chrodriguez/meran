@@ -1,24 +1,5 @@
 package C4::AR::Prestamos;
 
-#Este modulo provee funcionalidades para el prestamo de documentos
-#
-#Copyright (C) 2003-2008  Linti, Facultad de Informatica, UNLP
-#This file is part of Koha-UNLP
-#
-#This program is free software; you can redistribute it and/or
-#modify it under the terms of the GNU General Public License
-#as published by the Free Software Foundation; either version 2
-#of the License, or (at your option) any later version.
-#
-#This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#GNU General Public License for more details.
-#
-#You should have received a copy of the GNU General Public License
-#along with this program; if not, write to the Free Software
-#Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
 use strict;
 require Exporter;
 use DBI;
@@ -414,7 +395,7 @@ sub estaPrestado {
     use C4::Modelo::CircPrestamo::Manager;
 
     my $nivel3_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
-																query => [ fecha_devolucion  => { eq => undef }, 
+																query => [  fecha_devolucion  => { eq => undef }, 
 																			id3  => { eq => $id3 }
 																]
      							); 
@@ -964,22 +945,23 @@ sub t_eliminarTipoPrestamo {
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP006', 'params' => []} ) ;
                 $db->commit;
             };
+        }
+
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'SP007','INTRA');
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP007', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }else{
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP012', 'params' => [$cantidad_prestamos]} ) ;
     }
 
-    if ($@){
-        #Se loguea error de Base de Datos
-        &C4::AR::Mensajes::printErrorDB($@, 'SP007','INTRA');
-        $db->rollback;
-        #Se setea error para el usuario
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP007', 'params' => []} ) ;
-    }
-
-    $db->{connect_options}->{AutoCommit} = 1;
-    }
-    else{
-    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP012', 'params' => [$cantidad_prestamos]} ) ;
-    }
     return ($msg_object);
 }
 
@@ -1014,17 +996,6 @@ sub getCountPrestamosDeGrupo {
                                                         );
 
     return ($prestamos_grupo_count);
-}
-
-=item sub tienePrestamos
-    Verifica si el nivel 2 pasado por parametro tiene ejemplares con prestamos o no
-=cut
-sub tienePrestamos{
-    my ($id2) = @_;
-
-    my $cant = getCountPrestamosDeGrupo($id2);
-
-    return ($cant > 0)?1:0;
 }
 
 1;

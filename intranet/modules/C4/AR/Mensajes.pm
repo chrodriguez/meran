@@ -237,6 +237,7 @@ my %mensajesINTRA = (
     'U405' => 'La sesi&oacute;n ha sido eliminada, por favor, inicie sesi&oacute;n nuevamente. Disculpe las molestias.',
     'U403' => 'No existe el Grupo que se intenta modificar.',
     'U404' => 'No existe el Nivel 1 que se intenta modificar.',
+    'U405' => 'No está permitido agregar mas de *?* ejempales.',
 #     'U405' => 'No existe la estructura de catalogaci&oacute;n que se intentando recuperar.',
 	'B400' => '',
 	'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
