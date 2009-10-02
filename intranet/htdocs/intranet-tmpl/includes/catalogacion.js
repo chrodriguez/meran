@@ -865,7 +865,7 @@ function _cambiarIdDeAutocomplete(){
 		if(COMPONENTES_ARRAY[i].tipo == 'auto'){	
 			//si es un autocomplete, el dato es un ID y se encuentra en el hidden
 			COMPONENTES_ARRAY[i].idCompCliente= COMPONENTES_ARRAY[i].idCompCliente + '_hidden';
-// FIXME esto no esta funcionando, se pierde el id de la referencia
+    // FIXME esto no esta funcionando, se pierde el id de la referencia
 			$('#'+COMPONENTES_ARRAY[i].idCompCliente).val(COMPONENTES_ARRAY[i].datoReferencia);
 		}
     }
