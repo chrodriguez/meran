@@ -50,10 +50,19 @@ foreach my $servidor (@$servidores_array_ref){
 
 C4::AR::Debug::debug("SERVIDOR".$servidor->getConexion);
 
-    $z[$i] = new ZOOM::Connection($servidor->getConexion, 0,
-				  async => 1, # asynchronous mode
-				  count => 1, # piggyback retrieval count
-				  preferredRecordSyntax => "usmarc");
+	$z[$i] = new ZOOM::Connection(
+ 		 	$servidor->getServidor,
+  			$servidor->getPuerto,
+  			databaseName => $servidor->getBase,
+  			user => $servidor->getUsuario,
+  			password => $servidor->getPassword,
+  			elementSetName => "f",
+  			preferredRecordSyntax => "1.2.840.10003.5.1", # UNIMARC
+			async => 1, # asynchronous mode
+			count => 1, # piggyback retrieval count
+		);
+
+
     $r[$i] = $z[$i]->search($query);
 }
 
