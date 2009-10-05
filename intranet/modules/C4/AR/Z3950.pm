@@ -13,6 +13,7 @@ use vars qw($VERSION @ISA @EXPORT);
 @EXPORT = qw(
 	&getServidoresZ3950
 	&buscarEnZ3950
+    &encolarBusquedaZ3950
 );
 
 sub getServidoresZ3950 {
@@ -88,7 +89,6 @@ while ((($i = ZOOM::event(\@z)) != 0)and($cant <= 10)) {
 return @resultado;
 }
 
-
 sub buscarEnZ3950Async {
 my ($search) = @_;
 
@@ -135,7 +135,7 @@ if ($i != 0) {
    my($error, $errmsg, $addinfo, $diagset) = $connection[$i]->error_x();
    
  if ($error) {
-#print STDERR "$tname error: $errmsg ($error) $addinfo\n";
+#print STDERR "$tname error: $errmsg ($error) $addinfo\n";  push(@results,$marc);
 	goto MAYBE_AGAIN;
     }
 
@@ -145,7 +145,7 @@ if ($i != 0) {
 C4::AR::Debug::debug( "$tname: $size resultados");
 
     # Go through all records at target
-    $size = 20 if $size > 20;
+   # $size = 20 if $size > 20;
     for (my $pos = 0; $pos < $size; $pos++) {
 C4::AR::Debug::debug( "$tname: buscando ", $pos+1, " de $size");
 	my $tmp = $resultset[$i]->record($pos);
@@ -158,7 +158,6 @@ C4::AR::Debug::debug( "$tname: no se puede obtener registro ", $pos+1, "\n");
 
 	my $raw = $tmp->raw();
  	my $marc = new_from_usmarc MARC::Record($raw);
-    $marc->encoding( 'UTF-8' );
  C4::AR::Debug::debug("Titulo ".$marc->title);
 	push(@results,$marc);
 
@@ -180,6 +179,12 @@ $connection[$i]->destroy();
 $options->destroy();
 
 return @results;
+}
+
+sub encolarBusquedaZ3950 {
+my ($search) = @_;
+
+
 }
 
 1;
