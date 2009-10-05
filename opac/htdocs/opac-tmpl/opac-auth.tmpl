@@ -1,67 +1,65 @@
 [% INCLUDE 'opac-top-login.inc' %]
-
-<div class='tableMsgUser'>
-    <font class='fontMsgUser'>
-        <b>
-            <div id='mensajes'>
-                [% mensaje %]
-            </div>
-        </b>
-    </font>
-</div>
-
-<script language="javascript"> 
-
+<script language="javascript">
     function enviar(){
-        var nro_socio = $.trim($("#nro_socio").val());
-        var password = $("#password_user").val();
-
-        if ( (nro_socio != "") && (password != "") ){
-            var nroRandom= [% RANDOM_NUMBER %];
-            hash= b64_sha256(b64_sha256(b64_md5(password))+nroRandom);
-            $("#password").val(hash);
-            $("#userid").val(nro_socio);
-            $("#datosAEnviar").submit();
-        }
+        var nroRandom= [% RANDOM_NUMBER %];
+        var username = $.trim($("#username").val());
+        hash= b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
+        $("#password").val(hash);
+        $("#userid").val(username);
+        $("#datosAEnviar").submit();
     }
+</script>
+
+<script language="javascript" type="text/javascript">
 
     $(document).ready(function() {
-        onEnter("nro_socio",enviar);
-        onEnter("password_user",enviar);
+        //onEnter con foco en input, ejecuta la busqueda
+          onEnter("username",enviar);
+          onEnter("password_plain",enviar);
+          $('#username').focus();
     });
 
 </script>
-<table align="center" border="0" class="top" width="90%">
-    <tr>
-        <td align="center">
-            <form method="post" name="datos">
-                <div id="login">
-                    <div id="contenido_login">
-                        <span>
-                                <label>Identificaci&oacute;n:</label>
-                                <input size=15  name="nro_socio" id="nro_socio" >
-                        </span>
-                        <span>
-                                <label>Contrase&ntilde;a:</label>
-                                <input size=15 type="password" name="password_user" id="password_user">
-                        </span>
-                        <div id="boton_login">
-                            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Ingresar' | i18n %]",
-                                                                    boton   => "boton_entrar", 
-                                                                    onClick => "enviar()",
-                                                                    title   => "[% 'Ingresar' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </td>
-    </tr>
-</table>
 
-<form method="post" name="datosAEnviar" id="datosAEnviar" action='/cgi-bin/koha/opac-user.pl'>
-    <input type="hidden" name="userid" id="userid">
-    <input type="hidden" name="password" id="password">
+</head>
+<body>
+<noscript>
+    <div class='tableMsgUser'>
+        <font class='fontMsgUser'>
+                <b>[% 'Su navegador no soporta o no tiene habilidato Javascript' | i18n %]</b>
+        </font>
+    </div>
+</noscript>
+[% IF mensaje %]
+  <div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes' class="mensajes_informacion auth_info">[% mensaje %]</div></b></font></div>
+[% END %]
+
+<center>
+
+<form action='/cgi-bin/koha/opac-main.pl' method="post" name="datosAEnviar" id="datosAEnviar">
+        <input type="hidden" name="userid" id="userid" >
+        <input type="hidden" name="password" id="password">
 </form>
+
+<div id="login">
+    <div id="contenido_login">
+        <div class="entry">     
+                <label for="username" class="login">[% 'Identificaci&oacute;n:' | i18n %]</label>
+                <input size=15  name="username" id="username" >
+        </div>
+        <div class="entry">
+                <label for="password_plain" class=login">[% 'Contrase&ntilde;a:' | i18n %]</label>
+                <input  size=15 type="password" name="password_plain" id="password_plain">
+        </div>
+        <div id="boton_login">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Entrar' | i18n %]",
+                                                                    boton   => "boton_entrar",
+                                                                    onClick => "enviar(); return(false);",
+                                                                    title   => "[% 'Entrar' | i18n %]",
+                                                                    width   => "auto",
+                                        ) ;
+            [% END %]
+      </div>
+    </div>
+</div>
