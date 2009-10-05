@@ -474,9 +474,10 @@ sub getNivel3FromId2{
 	my ($id2) = @_;
 
 	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
-																		query => [ 
-																					id2 => { eq => $id2 },
-																			], 
+															query => [ 
+																		id2 => { eq => $id2 },
+																], 
+                                                            require_objects => ['ref_disponibilidad', 'ref_estado']
 										);
 
     return $nivel3_array_ref;
@@ -491,9 +492,10 @@ sub getNivel3FromId3{
 	my ($id3) = @_;
 
 	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
-																			query => [ 
-																					id3 => { eq => $id3},
-																				], 
+																	query => [ 
+																			id3 => { eq => $id3},
+																		], 
+                                                                    require_objects => ['ref_disponibilidad', 'ref_estado']
 																);
 
 	if( scalar(@$nivel3_array_ref) > 0){
@@ -720,12 +722,14 @@ sub t_modificarNivel3 {
 				my $catNivel3;
                 C4::AR::Debug::debug("t_modificarNivel3 => ID3 a modificar: ".$params->{'ID3_ARRAY'}->[$i]);
 
-				$catNivel3= C4::Modelo::CatNivel3->new(
-																db => $db,
-																id3 => $params->{'ID3_ARRAY'}->[$i]
-												);
+# 				$catNivel3= C4::Modelo::CatNivel3->new(
+# 																db => $db,
+# 																id3 => $params->{'ID3_ARRAY'}->[$i]
+# 												);
+                ($catNivel3) = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i]);
 
-				$catNivel3->load();
+# 				$catNivel3->load();
+                $catNivel3->db($db);
 				$catNivel3->agregar($params);  #si es mas de un ejemplar, a todos les setea la misma info
 				
 				#se cambio el permiso con exito

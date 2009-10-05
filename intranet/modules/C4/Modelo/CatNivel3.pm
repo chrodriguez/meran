@@ -190,7 +190,8 @@ sub setDato{
 # 	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 't') ){
     if( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 't') ){
 	#signatura_topografica
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+        if ($data_hash->{'referencia'}) {
 				$self->setSignatura_topografica($data_hash->{'datoReferencia'});
 			}else{
 				$self->setSignatura_topografica($data_hash->{'dato'});
@@ -199,7 +200,8 @@ sub setDato{
 
 	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'c') ){
 	#UI poseedora
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+        if ($data_hash->{'referencia'}) {
 				$self->setId_ui_poseedora($data_hash->{'datoReferencia'});
 			}else{
 				$self->setId_ui_poseedora($data_hash->{'dato'});
@@ -208,7 +210,8 @@ sub setDato{
 
 	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'd') ){
 	#UI origen
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+        if ($data_hash->{'referencia'}){            
 				$self->setId_ui_origen($data_hash->{'datoReferencia'});
 			}else{
 				$self->setId_ui_origen($data_hash->{'dato'});
@@ -217,7 +220,10 @@ sub setDato{
 
 	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'o') ){
 	#disponibilidad
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+        C4::AR::Debug::debug("995, o => ".$data_hash->{'dato'});
+        C4::AR::Debug::debug("995, o => ".$data_hash->{'datoReferencia'});
+        if ($data_hash->{'referencia'}) {
 				$self->setId_disponibilidad($data_hash->{'datoReferencia'});
 			}else{
 				$self->setId_disponibilidad($data_hash->{'dato'});
@@ -226,7 +232,10 @@ sub setDato{
 
 	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'e') ){
 	#estado del ejemplar
-		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+        C4::AR::Debug::debug("995, e => ".$data_hash->{'dato'});
+        C4::AR::Debug::debug("995, e => ".$data_hash->{'datoReferencia'});
+        if ($data_hash->{'referencia'}) {
 				$self->setId_estado($data_hash->{'datoReferencia'});
 			}else{
 				$self->setId_estado($data_hash->{'dato'});

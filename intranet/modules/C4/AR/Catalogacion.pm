@@ -242,21 +242,21 @@ sub t_modificarEnEstructuraCatalogacion {
 sub _setDatos_de_estructura {
     my ($cat, $hash_ref, $datos_hash_ref) = @_;
 
-    $hash_ref->{'campo'} = $cat->getCampo;
-    $hash_ref->{'subcampo'} = $cat->getSubcampo;
-    $hash_ref->{'dato'} = $datos_hash_ref->{'dato'};
-    $hash_ref->{'datoReferencia'}= $datos_hash_ref->{'datoReferencia'};
-    $hash_ref->{'Id_rep'}= $datos_hash_ref->{'Id_rep'};
-    $hash_ref->{'nivel'} = $cat->getNivel;
-    $hash_ref->{'visible'} = $cat->getVisible;
-    $hash_ref->{'liblibrarian'} = $cat->getLiblibrarian;
-    $hash_ref->{'itemtype'} = $cat->getItemType;
-    $hash_ref->{'repetible'} = $cat->getRepetible;
-    $hash_ref->{'tipo'} = $cat->getTipo;
-    $hash_ref->{'referencia'} = $cat->getReferencia;
-    $hash_ref->{'obligatorio'} = $cat->getObligatorio;
-    $hash_ref->{'idCompCliente'} = $cat->getIdCompCliente;
-    $hash_ref->{'intranet_habilitado'} = $cat->getIntranet_habilitado;
+    $hash_ref->{'campo'} =                  $cat->getCampo;
+    $hash_ref->{'subcampo'} =               $cat->getSubcampo;
+    $hash_ref->{'dato'} =                   $datos_hash_ref->{'dato'};
+    $hash_ref->{'datoReferencia'}=          $datos_hash_ref->{'datoReferencia'};
+    $hash_ref->{'Id_rep'} =                 $datos_hash_ref->{'Id_rep'};
+    $hash_ref->{'nivel'} =                  $cat->getNivel;
+    $hash_ref->{'visible'} =                $cat->getVisible;
+    $hash_ref->{'liblibrarian'} =           $cat->getLiblibrarian;
+    $hash_ref->{'itemtype'} =               $cat->getItemType;
+    $hash_ref->{'repetible'} =              $cat->getRepetible;
+    $hash_ref->{'tipo'} =                   $cat->getTipo;
+    $hash_ref->{'referencia'} =             $cat->getReferencia;
+    $hash_ref->{'obligatorio'} =            $cat->getObligatorio;
+    $hash_ref->{'idCompCliente'} =          $cat->getIdCompCliente;
+    $hash_ref->{'intranet_habilitado'} =    $cat->getIntranet_habilitado;
 
     C4::AR::Debug::debug("");
     if($cat->getRepetible){    

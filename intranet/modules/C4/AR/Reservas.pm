@@ -121,11 +121,13 @@ Esta funcion se utiliza por ej. cuando se elimina un usuario
 =cut
 sub reasignarTodasLasReservasEnEspera{
     my ($params)=@_;
+# FIXME borrowernumber????
     my $reservas= _getReservasAsignadas($params->{'borrowernumber'});
 
     foreach my $reserva (@$reservas){
 
-        reasignarReservaEnEspera($reserva,$reserva->{'loggedinuser'});
+#         reasignarReservaEnEspera($reserva,$reserva->{'loggedinuser'});
+        $reserva->reasignarReservaEnEspera($reserva->{'loggedinuser'});
     }
 }
 
