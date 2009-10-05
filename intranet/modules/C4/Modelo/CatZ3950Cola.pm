@@ -11,10 +11,8 @@ __PACKAGE__->meta->setup(
         id       => { type => 'serial', not_null => 1 },
         busqueda => { type => 'varchar', length => 255 },
         tipo   => { type => 'varchar', length => 255 },
-        comienzo     => { type => 'varchar' },
+        comienzo => { type => 'varchar' },
         fin  => { type => 'varchar' },
-        resultado => { type => 'longblob'},
-        registros   => { type => 'integer' },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -73,17 +71,6 @@ sub setFin{
     my ($self) = shift;
     my ($fin) = @_;
     $self->fin($fin);
-}
-
-sub getResultado{
-    my ($self) = shift;
-    return ($self->resultado);
-}
-
-sub setResultado{
-    my ($self) = shift;
-    my ($resultado) = @_;
-    $self->resultado($resultado);
 }
 
 sub getRegistros{

@@ -3,6 +3,7 @@ use strict;
 
 use DBI;
 use ZOOM;
+use C4::Date;
 use MARC::Record;
 use Net::Z3950::ZOOM;
 require Exporter;
@@ -14,6 +15,8 @@ use vars qw($VERSION @ISA @EXPORT);
 	&getServidoresZ3950
 	&buscarEnZ3950
     &encolarBusquedaZ3950
+    &busquedasEncoladas
+    &limpiarBusquedas
 );
 
 sub getServidoresZ3950 {
@@ -92,7 +95,7 @@ return @resultado;
 sub buscarEnZ3950Async {
 my ($search) = @_;
 
-my @results;
+my @resultado;
 
 my $servidores_array_ref = C4::AR::Z3950::getServidoresZ3950;
 my $query = new ZOOM::Query::CQL($search);
@@ -159,7 +162,7 @@ C4::AR::Debug::debug( "$tname: no se puede obtener registro ", $pos+1, "\n");
 	my $raw = $tmp->raw();
  	my $marc = new_from_usmarc MARC::Record($raw);
  C4::AR::Debug::debug("Titulo ".$marc->title);
-	push(@results,$marc);
+	push($resultado[$i],$marc);
 
     }
 }
@@ -178,14 +181,37 @@ $connection[$i]->destroy();
 
 $options->destroy();
 
-return @results;
+return  ($servidores_array_ref ,\@resultado);
 }
 
 sub encolarBusquedaZ3950 {
-my ($search) = @_;
+my ($busqueda,$tipo) = @_;
 
+my $dateformat = C4::Date::get_date_format();
+my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+
+my $cola = new C4::Modelo::CatZ3950Cola();
+$cola->setBusqueda($busqueda);
+$cola->setTipo($tipo);
+$cola->setComienzo($hoy);
+$cola->save;
 
 }
 
+sub efectuarBusquedaZ3950 {
+my ($cola) = @_;
+
+#HOY
+my $dateformat = C4::Date::get_date_format();
+my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+
+my ($sevidores,$resultados)=C4::AR::Z3950::buscarEnZ3950Async($cola->getTipo."=".$cola->getBusqueda);
+$cola->setFin($hoy);
+$cola->save;
+
+for (my $i = 0; $i < @$sevidores; $i++) {
+
+}
+}
 1;
 __END__

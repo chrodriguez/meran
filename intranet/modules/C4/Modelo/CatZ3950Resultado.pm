@@ -9,15 +9,26 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id       => { type => 'serial', not_null => 1 },
-        busqueda => { type => 'varchar', length => 255 },
-        tipo   => { type => 'varchar', length => 255 },
-        comienzo     => { type => 'varchar' },
-        fin  => { type => 'varchar' },
+        servidor_id  => { type => 'serial', not_null => 1 },
         resultado => { type => 'longblob'},
         registros   => { type => 'integer' },
+        cola_id       => { type => 'serial', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
+
+    relationships => [
+        cola => {
+            class       => 'C4::Modelo::CatZ3950Cola',
+            key_columns => { cola_id => 'id' },
+        type        => 'one to one',
+        },
+        servidor => {
+            class       => 'C4::Modelo::PrefServidorZ3950',
+            key_columns => { servidor_id => 'id' },
+        type        => 'one to one',
+        },
+    ],
 );
 
 sub getId{
