@@ -1,0 +1,81 @@
+
+
+ 
+<script language="javascript"> 
+function toggle( id) {
+    var ele = document.getElementById("resultado_"+id);
+    var text = document.getElementById("href_"+id);
+    if(ele.style.display == "block") {
+            ele.style.display = "none";
+        text.innerHTML = "+";
+    }
+    else {
+        ele.style.display = "block";
+        text.innerHTML = "-";
+    }
+} 
+</script>
+
+
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend">[% "B&uacute;squedas Z3950" | i18n %] :</legend>
+
+[% IF cant_busquedas %]
+
+        <div>
+           <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                <thead>
+                <tr class="titulo_tabla_resultado">
+                    <th>[% "B&uacute;squeda" | i18n %]</th>
+                    <th>[% "Tipo" | i18n %]</th>
+                    <th>[% "Estado" | i18n %]</th>
+                    <th>[% "Servidor" | i18n %]</th>
+                </tr>
+                </thead>
+                <tbody>
+                [% FOREACH busqueda IN BUSQUEDAS %]
+                <tr>
+                    <td class="titulo_result">
+                     [% busqueda.getBusqueda %]
+                    </td>
+                    <td class="titulo_result">
+                    [% busqueda.getTipo %]
+                    </td>
+                    <td class="titulo_result">
+                    [% IF busqueda.getFin %]
+                        [% "Finalizada" | i18n %]
+                    [% ELSE %]
+                            [% IF busqueda.getComienzo %]
+                                [% "Buscando" | i18n %]
+                            [% ELSE %]
+                                [% "Encolada" | i18n %]
+                            [% END %]
+                    [% END %]
+                    </td>
+                    <td class="titulo_result">
+                        <ul>
+                        [% FOREACH resultado IN busqueda.resultados %]
+                           <li> 
+                                [% resultado.servidor.getNombre %] ([% resultado.getCantRegistros %])
+                                [% IF resultado.getCantRegistros %]
+                                    <a id="href_[% resultado.getId %]" href="javascript:toggle([% resultado.getId %]);">+</a>
+                                [% END %]
+                           </li>
+                        [% END %]
+                        </ul>
+                    </td>
+                </tr>
+
+                [% FOREACH resultado IN busqueda.resultados %]
+                        [% IF resultado.getCantRegistros %]
+                              <div id="resultado_[% resultado.getId %]" style="display: none"  >
+                                [% resultado.getRegistros %]
+                              </div>
+                        [% END %]
+                [% END %]
+                [% END %]
+                </tbody>
+            </table>
+        [% END %]
+        </div>
+</fieldset>

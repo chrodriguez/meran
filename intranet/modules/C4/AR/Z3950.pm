@@ -17,6 +17,7 @@ use vars qw($VERSION @ISA @EXPORT);
     &encolarBusquedaZ3950
     &busquedasEncoladas
     &limpiarBusquedas
+    &efectuarBusquedaZ3950
 );
 
 sub getServidoresZ3950 {
@@ -93,18 +94,16 @@ return @resultado;
 }
 
 sub buscarEnZ3950Async {
-my ($search) = @_;
+my ($cola) = @_;
 
-my @resultado;
+my @resultados;
 
 my $servidores_array_ref = C4::AR::Z3950::getServidoresZ3950;
-my $query = new ZOOM::Query::CQL($search);
-my(@connection, @resultset);			# connections, result sets
+my $query = new ZOOM::Query::CQL($cola->getBusquedaFinal);
+my(@connection, @resultset); # connections, result sets
 
 my $options = new ZOOM::Options();
 $options->option(async => 1);
-$options->option(count => 20);
-$options->option(preferredRecordSyntax => "usmarc");
 
 my $c=0;
 foreach my $servidor (@$servidores_array_ref){
@@ -116,6 +115,11 @@ foreach my $servidor (@$servidores_array_ref){
 
 my $r=0;
 foreach my $servidor (@$servidores_array_ref){
+   $resultados[$r]=  C4::Modelo::CatZ3950Resultado->new();
+   $resultados[$r]->setServidorId($servidor->getId);
+   $resultados[$r]->setColaId($cola->getId);
+   $resultados[$r]->setRegistros("");
+
    $resultset[$r]=$connection[$r]->search($query);
    $r++;
 }
@@ -132,8 +136,8 @@ while (($i = ZOOM::event(\@connection)) != 0) {
 
 if ($i != 0) {
     # Not the end of the whole loop; one server is ready to display
-    $i--;
-    my $tname = $servidores_array_ref->[$i]->getNombre;
+    $i--;    my $tname = $servidores_array_ref->[$i]->getNombre;
+
     # Display errors if any
    my($error, $errmsg, $addinfo, $diagset) = $connection[$i]->error_x();
    
@@ -144,26 +148,23 @@ if ($i != 0) {
 
     # OK, no major errors.  Look at the result count
     my $size = $resultset[$i]->size();
+    $resultados[$i]->setCantRegistros($resultset[$i]->size());
+
      print "$tname: $size hits\n";
-C4::AR::Debug::debug( "$tname: $size resultados");
+     C4::AR::Debug::debug( "$tname: $size resultados");
 
-    # Go through all records at target
-   # $size = 20 if $size > 20;
     for (my $pos = 0; $pos < $size; $pos++) {
-C4::AR::Debug::debug( "$tname: buscando ", $pos+1, " de $size");
-	my $tmp = $resultset[$i]->record($pos);
+        C4::AR::Debug::debug( "$tname: buscando ".($pos+1)." de $size");
+	    my $tmp = $resultset[$i]->record($pos);
 	
-	if (!defined $tmp) {
-C4::AR::Debug::debug( "$tname: no se puede obtener registro ", $pos+1, "\n");
-	  #  print "$tname: can't get record ", $pos+1, "\n";
-	    next;
-	}
+	    if (!defined $tmp) {
+            C4::AR::Debug::debug( "$tname: no se puede obtener registro ".($pos+1)."\n");
+	        next;
+	    }
 
-	my $raw = $tmp->raw();
- 	my $marc = new_from_usmarc MARC::Record($raw);
- C4::AR::Debug::debug("Titulo ".$marc->title);
-	push($resultado[$i],$marc);
-
+	    my $raw = $tmp->raw();
+        if ($resultados[$i]->getRegistros){    $resultados[$i]->setRegistros($resultados[$i]->getRegistros."\n".$tmp->render());}
+            else{ $resultados[$i]->setRegistros($raw);}
     }
 }
 
@@ -181,37 +182,87 @@ $connection[$i]->destroy();
 
 $options->destroy();
 
-return  ($servidores_array_ref ,\@resultado);
+return  (@resultados);
 }
 
 sub encolarBusquedaZ3950 {
 my ($busqueda,$tipo) = @_;
-
-my $dateformat = C4::Date::get_date_format();
-my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
-
-my $cola = new C4::Modelo::CatZ3950Cola();
-$cola->setBusqueda($busqueda);
-$cola->setTipo($tipo);
-$cola->setComienzo($hoy);
-$cola->save;
-
+    my $msg_object= C4::AR::Mensajes::create();
+    $msg_object->{'tipo'}="INTRA";
+    my $cola = C4::Modelo::CatZ3950Cola->new();
+    $cola->setBusqueda($busqueda);
+    $cola->setTipo($tipo);
+    $cola->setCola(C4::Date::getCurrentTimestamp());
+    $cola->save();
+    return $msg_object;
 }
 
 sub efectuarBusquedaZ3950 {
 my ($cola) = @_;
 
-#HOY
-my $dateformat = C4::Date::get_date_format();
-my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+$cola->setComienzo(C4::Date::getCurrentTimestamp());
+$cola->save();
 
-my ($sevidores,$resultados)=C4::AR::Z3950::buscarEnZ3950Async($cola->getTipo."=".$cola->getBusqueda);
-$cola->setFin($hoy);
-$cola->save;
+my (@resultados)=C4::AR::Z3950::buscarEnZ3950Async($cola);
 
-for (my $i = 0; $i < @$sevidores; $i++) {
+foreach my $zres (@resultados) {
+$zres->save;
+}
+
+$cola->setFin(C4::Date::getCurrentTimestamp());
+$cola->save();
+}
+
+
+sub getBusquedas{
+
+    use C4::Modelo::CatZ3950Cola;
+    use C4::Modelo::CatZ3950Cola::Manager;
+    my $busquedas_array_ref = C4::Modelo::CatZ3950Cola::Manager->get_cat_z3950_cola(sort_by => 'cola');
+
+    if (scalar(@$busquedas_array_ref) == 0){
+        return 0;
+    }else{
+        return $busquedas_array_ref;
+    }
+}
+
+
+sub busquedasEncoladas {
+
+    use C4::Modelo::CatZ3950Cola;
+    use C4::Modelo::CatZ3950Cola::Manager;
+
+    my @filtros;
+    push(@filtros, ( comienzo => undef ));
+
+    my $busquedas_array_ref = C4::Modelo::CatZ3950Cola::Manager->get_cat_z3950_cola( query => \@filtros, sort_by => 'cola');
+
+  if (scalar(@$busquedas_array_ref) == 0){
+        return 0;
+  }else{
+    return $busquedas_array_ref;
+  }
 
 }
+
+sub limpiarBusquedas {
+    my $err;
+
+    my $session = CGI::Session->load();
+    print $session->param("type")."\n";
+
+    my $hasta = Date::Manip::DateCalc("today","- 1 days",\$err);
+    my $dateformat= C4::Date::get_date_format();
+    $hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
+
+    use C4::Modelo::CatZ3950Cola;
+    use C4::Modelo::CatZ3950Cola::Manager;
+    my @filtros;
+    push(@filtros, ( cola => { lt => $hasta} ));
+
+    C4::Modelo::CatZ3950Cola::Manager->delete_cat_z3950_cola( query => \@filtros, all=>1);
+
 }
 1;
 __END__

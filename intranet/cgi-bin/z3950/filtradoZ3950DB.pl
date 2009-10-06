@@ -17,32 +17,38 @@ my $tipo= $obj->{'tipo'};
 
 if($tipo eq "BUSCAR"){
 
-my $titulo = $obj->{'titulo'};
-my $autor = $obj->{'autor'};
-my $search='';
+    my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'ALTA', 
+                                                    entorno => 'undefined' },
+                                                'intranet'
+                               );
 
-if ($titulo ne ''){ 
-    $search='title='.$titulo;
-    if ($autor ne ''){
-        $search.=' and author='.$autor;
-    }
-        }
-elsif ($autor ne '') {
-   $search='author='.$autor;
+    my $busqueda = $obj->{'busqueda'};
+    my $tipobusqueda = $obj->{'tipobusqueda'};
+
+    my ($Message_arrayref)=C4::AR::Z3950::encolarBusquedaZ3950($busqueda,$tipobusqueda);
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    C4::Auth::print_header($session);
+    print $infoOperacionJSON;
+
 }
+elsif($tipo eq "VER_BUSQUEDAS"){
 
-my @resultado = C4::AR::Z3950::buscarEnZ3950Async($search);
-
-my ($template, $session, $t_params) = get_template_and_user(
-            {template_name => "z3950/resultadoFiltradoZ3950.tmpl",
+    my ($template, $session, $t_params) = get_template_and_user(
+            {template_name => "z3950/verBusquedasZ3950.tmpl",
                     query => $input,
                     type => "intranet",
                     authnotrequired => 0,
                     flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                     });
 
-    $t_params->{'RESULTADO'}= \@resultado;
-    $t_params->{'cant_resultados'}= scalar(@resultado);
-
+    my $busquedas = C4::AR::Z3950::getBusquedas();
+    if($busquedas){
+        $t_params->{'cant_busquedas'}= @$busquedas;
+        $t_params->{'BUSQUEDAS'}= $busquedas;
+    }
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

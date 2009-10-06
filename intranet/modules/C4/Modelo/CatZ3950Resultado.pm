@@ -8,11 +8,11 @@ __PACKAGE__->meta->setup(
     table   => 'cat_z3950_resultado',
 
     columns => [
-        id       => { type => 'serial', not_null => 1 },
-        servidor_id  => { type => 'serial', not_null => 1 },
-        resultado => { type => 'longblob'},
-        registros   => { type => 'integer' },
-        cola_id       => { type => 'serial', not_null => 1 },
+        id              => { type => 'serial', not_null => 1 },
+        servidor_id     => { type => 'serial', not_null => 1 },
+        registros       => { type => 'text', default => 0},
+        cant_registros  => { type => 'integer' },
+        cola_id         => { type => 'serial', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -21,7 +21,7 @@ __PACKAGE__->meta->setup(
         cola => {
             class       => 'C4::Modelo::CatZ3950Cola',
             key_columns => { cola_id => 'id' },
-        type        => 'one to one',
+            type        => 'one to one',
         },
         servidor => {
             class       => 'C4::Modelo::PrefServidorZ3950',
@@ -42,59 +42,37 @@ sub setId{
     $self->id($id);
 }
 
-sub getBusqueda{
+sub getServidorId {
     my ($self) = shift;
-    return ($self->busqueda);
+    return ($self->servidor_id);
 }
 
-sub setBusqueda{
+sub setServidorId {
     my ($self) = shift;
-    my ($busqueda) = @_;
-    $self->busqueda($busqueda);
+    my ($servidor_id) = @_;
+    $self->servidor_id($servidor_id);
 }
 
-sub getTipo{
+sub getColaId{
     my ($self) = shift;
-    return ($self->tipo);
+    return ($self->cola_id);
 }
 
-sub setTipo{
+sub setColaId{
     my ($self) = shift;
-    my ($tipo) = @_;
-    $self->tipo($tipo);
+    my ($cola_id) = @_;
+    $self->cola_id($cola_id);
 }
 
-sub getComienzo{
+sub getCantRegistros{
     my ($self) = shift;
-    return ($self->comienzo);
+    return ($self->cant_registros);
 }
 
-sub setComienzo{
+sub setCantRegistros{
     my ($self) = shift;
-    my ($comienzo) = @_;
-    $self->comienzo($comienzo);
-}
-
-sub getFin{
-    my ($self) = shift;
-    return ($self->fin);
-}
-
-sub setFin{
-    my ($self) = shift;
-    my ($fin) = @_;
-    $self->fin($fin);
-}
-
-sub getResultado{
-    my ($self) = shift;
-    return ($self->resultado);
-}
-
-sub setResultado{
-    my ($self) = shift;
-    my ($resultado) = @_;
-    $self->resultado($resultado);
+    my ($cant_registros) = @_;
+    $self->cant_registros($cant_registros);
 }
 
 sub getRegistros{
@@ -105,7 +83,7 @@ sub getRegistros{
 sub setRegistros{
     my ($self) = shift;
     my ($registros) = @_;
-    $self->nombre($registros);
+    $self->registros($registros);
 }
 
 1;

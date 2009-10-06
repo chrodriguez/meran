@@ -11,11 +11,19 @@ __PACKAGE__->meta->setup(
         id       => { type => 'serial', not_null => 1 },
         busqueda => { type => 'varchar', length => 255 },
         tipo   => { type => 'varchar', length => 255 },
-        comienzo => { type => 'varchar' },
-        fin  => { type => 'varchar' },
+        cola => { type => 'datetime' },
+        comienzo => { type => 'datetime' },
+        fin  => { type => 'datetime' },
     ],
 
     primary_key_columns => [ 'id' ],
+    relationships => [
+        resultados => {
+            class       => 'C4::Modelo::CatZ3950Resultado',
+            key_columns => {  id => 'cola_id' },
+            type        => 'one to many',
+        },
+    ],
 );
 
 sub getId{
@@ -38,6 +46,11 @@ sub setBusqueda{
     my ($self) = shift;
     my ($busqueda) = @_;
     $self->busqueda($busqueda);
+}
+
+sub getBusquedaFinal{
+    my ($self) = shift;
+    return ($self->getTipo."=".$self->busqueda);
 }
 
 sub getTipo{
@@ -73,16 +86,15 @@ sub setFin{
     $self->fin($fin);
 }
 
-sub getRegistros{
+sub getCola{
     my ($self) = shift;
-    return ($self->registros);
+    return ($self->cola);
 }
 
-sub setRegistros{
+sub setCola{
     my ($self) = shift;
-    my ($registros) = @_;
-    $self->nombre($registros);
+    my ($cola) = @_;
+    $self->cola($cola);
 }
-
 1;
 

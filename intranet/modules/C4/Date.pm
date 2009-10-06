@@ -3,6 +3,7 @@ package C4::Date;
 use strict;
 use C4::Context;
 use Date::Manip;
+use C4::AR::Preferencias;
 
 require Exporter;
 
@@ -27,6 +28,7 @@ $VERSION = 0.01;
 	     &Date_Init
 	     &ParseDate
 	     &UnixDate
+         &getCurrentTimestamp
 );
 
 sub get_date_format
@@ -322,5 +324,16 @@ sub mesString(){
 	elsif ($mes eq "11") {$mes='Noviembre'}
 	elsif ($mes eq "12") {$mes='Diciembre'};
 	return ($mes);
+}
+
+sub getCurrentTimestamp(){
+
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)=localtime(time);
+
+ my $timestamp = sprintf ("%4d-%02d-%02d %02d:%02d:%02d",$year+1900,$mon+1,$mday,$hour,$min,$sec);
+
+return $timestamp;
+
+
 }
 1;

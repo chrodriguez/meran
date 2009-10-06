@@ -1,24 +1,45 @@
 [% INCLUDE 'intranet-top.inc' %]
 
 <script>
-function busquedaZ3950(){
+
+function verBusquedas (){
+    objAH=new AjaxHelper(updateVerBusquedas);
+    objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
+    objAH.tipo="VER_BUSQUEDAS";
+    objAH.sendToServer();
+}
+
+function updateVerBusquedas(responseText){
+    $('#busquedasZ3950').html(responseText);
+   zebra('datos_tabla');
+    $('#busquedasZ3950').show();
+}
+
+function agregarBusquedaZ3950(){
     if(($('#titulo').val() !='')&&($('#autor').val() !='')){}
     else {
-	objAH=new AjaxHelper(updateBusquedaZ3950);
+	objAH=new AjaxHelper(updateAgregarBusquedaZ3950);
 	objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
     objAH.tipo="BUSCAR";
-	objAH.titulo= $('#titulo').val();
-	objAH.autor= $('#autor').val();
-	objAH.sendToServer();
+    if($('#titulo').val() !=''){
+        objAH.tipobusqueda= 'title';
+        objAH.busqueda= $('#titulo').val();
+    } else {
+        objAH.tipobusqueda= 'author';
+        objAH.busqueda= $('#autor').val();
+    }
+	    objAH.sendToServer();
     }
 }
 
-function updateBusquedaZ3950(responseText){
-	$('#resultadoZ3950').html(responseText);
-   zebra('datos_tabla');
-	$('#resultadoZ3950').show();
+function updateAgregarBusquedaZ3950(responseText){
+    verBusquedas();
 }
 
+
+$(document).ready(function() {
+                verBusquedas();
+});
 </script>
 
 <fieldset class="resultados_busqueda">
@@ -41,7 +62,7 @@ function updateBusquedaZ3950(responseText){
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_buscar",
-                                                                    onClick => "busquedaZ3950();",
+                                                                    onClick => "agregarBusquedaZ3950();",
                                                                     title   => "[% 'Buscar' | i18n %]",
                                         ) ;
             [% END %]
@@ -50,5 +71,5 @@ function updateBusquedaZ3950(responseText){
 </div>
 </fieldset>
 
-<div id="resultadoZ3950"></div>
+<div id="busquedasZ3950"></div>
 [% INCLUDE 'intranet-bottom.inc' %]
