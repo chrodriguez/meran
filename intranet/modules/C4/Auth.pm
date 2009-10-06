@@ -502,9 +502,6 @@ sub checkauth {
     C4::AR::Debug::debug("NI BIEN CARGA LA SESSION: ".$session->dump());
 
     my ($userid, $cookie, $sessionID, $flags);
-# FIXME esto esta re feo, te pueden sacar desde cualquier .pl
-    my $logout = $query->param('logout.x')||0;
-
 
     #verifica que no haya sesiones "colgadas", las borra de la base
     _clear_sessions_from_DB();
@@ -540,25 +537,6 @@ sub checkauth {
         $nroRandom= $sist_sesion->getNroRandom;
 		$tokenDB= $sist_sesion->getToken;
         $flag= $sist_sesion->getFlag;
-
-        if ($logout) {
-            #se maneja el logout del usuario
-            _logout_Controller($userid, $ip, $sessionID, $sist_sesion);
-            $sessionID = undef;
-            $userid = undef;
-
-            C4::AR::Debug::debug("checkauth=> sessionID de CGI-Session: ".$session->id."\n");
-            C4::AR::Debug::debug("checkauth=> sessionID en logout: ". $session->param('sessionID')."\n");
-            $session->param('codMsg', 'U358');
-            $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-            # FIXME parche feo parametrizar o dejar logica dentro del redirectTo
-            if ($type eq 'opac') {
-                _opac_logout();
-            }else{
-                redirectTo('/cgi-bin/koha/auth.pl');
-            }
-            #EXIT
-        }
 
         if ($userid) {
 
@@ -1147,6 +1125,53 @@ sub inicializarAuth{
     #genero una nueva session
 
     my ($session) = CGI::Session->load();
+    if (!$session->param('userid') || _session_expired($session)){
+        C4::AR::Debug::debug("inicializarAuth => ".$session->param('codMsg'));
+        my $msjCode = getMsgCode();
+        $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
+        #se destruye la session anterior
+        $session->clear();
+        $session->delete();
+        
+        #se genera una nueva session
+        my %params;
+        $params{'userid'}= '';
+        $params{'loggedinusername'}= '';
+        $params{'password'}= '';
+        $params{'token'}= '';
+        $params{'nroRandom'}= '';
+        $params{'borrowernumber'}= '';
+        $params{'type'}= $t_params->{'type'}; #OPAC o INTRA
+        $params{'flagsrequired'}= '';
+        $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
+        $params{'SERVER_GENERATED_SID'}= 1;
+        
+        #esto realmente destruye la session
+        undef($session);
+        $session= C4::Auth::_generarSession(\%params);
+        my $sessionID= $session->param('sessionID');
+        my $userid= undef;
+        #guardo la session en la base
+        C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number, $params{'token'});
+        #se pasa el RANDOM_NUMBER al cliente, $t_params es una REFERENCIA
+        $t_params->{'RANDOM_NUMBER'}= $random_number;
+        $session->flush();
+        C4::AR::Debug::debug("USER ID :".$session->param('userid'));
+        return ($session);
+    }else{
+        redirectTo('/cgi-bin/koha/mainpage.pl');
+    }
+}
+
+sub cerrarSesion{
+    my ($t_params) = @_;
+
+    #se genera un nuevo nroRandom para que se autentique el usuario
+    my $random_number= C4::Auth::_generarNroRandom();
+    
+    #genero una nueva session
+
+    my ($session) = CGI::Session->load();
 
     C4::AR::Debug::debug("inicializarAuth => ".$session->param('codMsg'));
     my $msjCode = getMsgCode();
@@ -1160,25 +1185,22 @@ sub inicializarAuth{
     $params{'userid'}= '';
     $params{'loggedinusername'}= '';
     $params{'password'}= '';
-	$params{'token'}= '';
+    $params{'token'}= '';
     $params{'nroRandom'}= '';
     $params{'borrowernumber'}= '';
-	$params{'type'}= $t_params->{'type'}; #OPAC o INTRA
+    $params{'type'}= $t_params->{'type'}; #OPAC o INTRA
     $params{'flagsrequired'}= '';
     $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
     $params{'SERVER_GENERATED_SID'}= 1;
     
     #esto realmente destruye la session
     undef($session);
-    $session= C4::Auth::_generarSession(\%params);
-    my $sessionID= $session->param('sessionID');
-    my $userid= undef;
-    #guardo la session en la base
-    C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number, $params{'token'});
-    #se pasa el RANDOM_NUMBER al cliente, $t_params es una REFERENCIA
-    $t_params->{'RANDOM_NUMBER'}= $random_number;
+    $session = CGI::Session->new();
 
-    return ($session);
+    $session->param('codMsg', 'U358');
+    $session->param('redirectTo', '/cgi-bin/koha/auth.pl?sessionClose=1');
+    redirectTo('/cgi-bin/koha/auth.pl?sessionClose=1');
+
 }
 
 sub _generarNroRandom {
