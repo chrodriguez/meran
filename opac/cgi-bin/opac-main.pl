@@ -31,7 +31,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 #se inicializa la session y demas parametros para autenticar
 $t_params->{'opac'};
-my ($session)= C4::Auth::inicializarAuth($t_params);
+# my ($session)= C4::Auth::inicializarAuth($t_params);
 
 $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 

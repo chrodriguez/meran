@@ -499,6 +499,8 @@ sub checkauth {
     my $loggedin = 0;
     my %info;
     my ($session) = CGI::Session->load();
+    C4::AR::Debug::debug("NI BIEN CARGA LA SESSION: ".$session->dump());
+
     my ($userid, $cookie, $sessionID, $flags);
 # FIXME esto esta re feo, te pueden sacar desde cualquier .pl
     my $logout = $query->param('logout.x')||0;
@@ -820,9 +822,12 @@ sub _session_expired {
 #     C4::AR::Debug::debug("_session_expired=>  (session->atime + session->etime): ".($session->atime + $session->etime));
 #     C4::AR::Debug::debug("_session_expired=>  time(): ".time());
 #     C4::AR::Debug::debug("_session_expired=>  session->id(): ".$session->id);
-  
+  C4::AR::Debug::debug($session->dump());
+
     if( (($session->atime + $session->etime) <= time()) && (_getExpireStatus()) ){
-        C4::AR::Debug::debug("_session_expired=> EXPIRO LA SESSION DE LA COOKIE ");
+        C4::AR::Debug::debug("_session_expired=> EXPIRO LA SESSION DE LA COOKIE CON: ".(($session->atime + $session->etime) <= time())." Y _getExpireStatus: "._getExpireStatus());
+
+        C4::AR::Debug::debug("atime: ".$session->atime."etime: ".$session->etime);
         return 1;
     }
 
