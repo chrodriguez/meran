@@ -1,36 +1,74 @@
 <fieldset class="resultados_busqueda">
 <legend class="titulo_legend">[% "Resultado de b&uacute;squeda" | i18n %] :</legend>
-[% IF cant_resultados %]
+[% IF cant_resultados %] 
+  <center> [% "Cantidad de resultados" | i18n %]: [% cant_resultados %]<center>
+
+                      [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_subir",
+                                                                    onClick => "esconderResultadosZ3950();",
+                                                                    title   => "[% 'Volver' | i18n %]",
+                                        ) ;
+                        [% END %]
+
         <div>
-           <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+
+                [% FOREACH resultado IN RESULTADO.resultados %]
+                <fieldset class="resultados_busqueda">
+                <legend class="titulo_legend">[% resultado.servidor.getNombre %]</legend>
+                <div>
+                <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <thead>
                 <tr class="titulo_tabla_resultado">
                     <th>[% "T&iacute;tulo" | i18n %]</th>
                     <th>[% "Autor" | i18n %]</th>
                     <th>[% "Edici&oacute;n" | i18n %]</th>
                     <th>[% "A&ntilde;o" | i18n %]</th>
+                    <th>[&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
-                [% FOREACH marc IN RESULTADO %]
-                <tr>
-                    <td>
-                    [% marc.title %]
-                    </td>
-                    <td>
-                    [% marc.author %] 
-                    </td>
-                    <td>
-                    [% marc.edition %] 
-                    </td>
-                    <td >
-                    [% marc.publication_date %] 
-                    </td>
-                </tr>
-                [% END %]
+
+                    [% FOREACH marc IN resultado.getRegistrosMARC %]
+                    <tr>
+                        <td class="titulo_result">
+                        [% marc.title %]
+                        </td>
+                        <td>
+                        [% marc.author %] 
+                        </td>
+                        <td>
+                        [% marc.edition %] 
+                        </td>
+                        <td >
+                        [% marc.publication_date %] 
+                        </td>
+                        <td >
+                         [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_ayuda_marc",
+                                                                    onClick => "",
+                                                                    title   => "[% 'MARC' | i18n %]",
+                                        ) ;
+                        [% END %]
+                        </td>
+                    </tr>
+                    [% END %]
                 </tbody>
             </table>
+            </div>
+            </fieldset>
+                [% END %]
+
         </div>
+
+                      [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_subir",
+                                                                    onClick => "esconderResultadosZ3950();",
+                                                                    title   => "[% 'Volver' | i18n %]",
+                                        ) ;
+                        [% END %]
 [% ELSE %]
 <legend>[% "No hay resultados" | i18n %]</legend>
 [% END %]

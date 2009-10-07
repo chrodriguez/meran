@@ -52,3 +52,21 @@ elsif($tipo eq "VER_BUSQUEDAS"){
     }
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
+elsif($tipo eq "VER_RESULTADO"){
+
+    my ($template, $session, $t_params) = get_template_and_user(
+            {template_name => "z3950/resultadoFiltradoZ3950.tmpl",
+                    query => $input,
+                    type => "intranet",
+                    authnotrequired => 0,
+                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    });
+
+    my $id_busqueda = $obj->{'id_busqueda'};
+    my $busqueda = C4::AR::Z3950::getBusqueda($id_busqueda);
+    if($busqueda){
+        $t_params->{'cant_resultados'}= $busqueda->getCantResultados;
+        $t_params->{'RESULTADO'}= $busqueda;
+    }
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+}

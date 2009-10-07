@@ -33,153 +33,94 @@ sub getServidoresZ3950 {
 }
 
 sub buscarEnZ3950 {
-
-my ($search) = @_;
-
-C4::AR::Debug::debug("SE VA A BUSCAR ".$search);
-
-my $servidores_array_ref = C4::AR::Z3950::getServidoresZ3950;
-
-my $cant=0;
-my @r;
-my @z;
-my $ev;
-my $size;
-my $i;
-my @resultado;
-
-
-my $query = new ZOOM::Query::CQL($search);
-
-foreach my $servidor (@$servidores_array_ref){
-
-C4::AR::Debug::debug("SERVIDOR".$servidor->getConexion);
-
-	$z[$i] = new ZOOM::Connection(
- 		 	$servidor->getServidor,
-  			$servidor->getPuerto,
-  			databaseName => $servidor->getBase,
-  			user => $servidor->getUsuario,
-  			password => $servidor->getPassword,
-  			elementSetName => "f",
-  			preferredRecordSyntax => "1.2.840.10003.5.1", # UNIMARC
-			async => 1, # asynchronous mode
-			count => 1, # piggyback retrieval count
-		);
-
-
-    $r[$i] = $z[$i]->search($query);
-}
-
-while ((($i = ZOOM::event(\@z)) != 0)and($cant <= 10)) {
-    $ev = $z[$i-1]->last_event();
-    if ($ev == ZOOM::Event::ZEND) {
-
-	$size = $r[$i-1]->size();
-	#printf L "Se encontraron ".$size." registros\n";
-	
-	if ($size > 0) {
-        for (my $j = 0; $j < $size; $j++) {
-	        my $rec=$r[$i-1]->record($j);
-        	my $raw = $rec->raw();
- 	        my $marc = new_from_usmarc MARC::Record($raw);
-            C4::AR::Debug::debug("Titulo ".$marc->title);
-            push(@resultado,$marc);
-	    }
-	}
-	}
-}
-
-return @resultado;
-}
-
-sub buscarEnZ3950Async {
 my ($cola) = @_;
 
 my @resultados;
 
-my $servidores_array_ref = C4::AR::Z3950::getServidoresZ3950;
+my $servidores = C4::AR::Z3950::getServidoresZ3950;
 my $query = new ZOOM::Query::CQL($cola->getBusquedaFinal);
-my(@connection, @resultset); # connections, result sets
+my(@connection, @resultset);
 
 my $options = new ZOOM::Options();
-$options->option(async => 1);
+   $options->option(preferredRecordSyntax => "USMARC");
+   $options->option(charset => "UTF-8");
+   $options->option(elementSetName => "F");
+   $options->option(async => 1);
 
-my $c=0;
-foreach my $servidor (@$servidores_array_ref){
+#Genero la conexion a todos los servidores
+foreach my $servidor (@$servidores){
+    #creo la conexion
     my $conn = create ZOOM::Connection($options);
     $conn->connect($servidor->getConexion);
-    $connection[$c]=$conn;
-    $c++;
-}
-
-my $r=0;
-foreach my $servidor (@$servidores_array_ref){
-   $resultados[$r]=  C4::Modelo::CatZ3950Resultado->new();
-   $resultados[$r]->setServidorId($servidor->getId);
-   $resultados[$r]->setColaId($cola->getId);
-   $resultados[$r]->setRegistros("");
-
-   $resultset[$r]=$connection[$r]->search($query);
-   $r++;
+    push(@connection,$conn);
+    #Realizo la consula
+    push(@resultset,$conn->search_pqf($cola->getBusqueda));
 }
 
 # Network I/O.  Pass number of connections and array of connections
-my $nremaining = @$servidores_array_ref;
+my $conexiones = scalar(@connection);
 AGAIN:
 my $i;
 while (($i = ZOOM::event(\@connection)) != 0) {
     my $ev = $connection[$i-1]->last_event();
-    C4::AR::Debug::debug("Conexion ", $i-1, ": evento $ev (",Net::Z3950::ZOOM::event_str($ev), ")");
     last if $ev == ZOOM::Event::ZEND;
 }
 
+
 if ($i != 0) {
-    # Not the end of the whole loop; one server is ready to display
-    $i--;    my $tname = $servidores_array_ref->[$i]->getNombre;
+ # No es el fin, un servidor esta listo para mostrar resultados
+    my($error, $errmsg, $addinfo, $diagset) = $connection[$i-1]->error_x();
 
-    # Display errors if any
-   my($error, $errmsg, $addinfo, $diagset) = $connection[$i]->error_x();
-   
- if ($error) {
-#print STDERR "$tname error: $errmsg ($error) $addinfo\n";  push(@results,$marc);
-	goto MAYBE_AGAIN;
+    if ($error) {
+         C4::AR::Debug::debug( "Error: $errmsg ($error) $addinfo\n");
+        goto MAYBE_AGAIN; #sale del lazo por un error
     }
 
-    # OK, no major errors.  Look at the result count
-    my $size = $resultset[$i]->size();
-    $resultados[$i]->setCantRegistros($resultset[$i]->size());
+        my $registros = $resultset[$i-1]->size();
+C4::AR::Debug::debug( "Encontrados $registros registros en ".$servidores->[$i-1]->getNombre." \n");
+         # Aca se puede poner una cota al resultado de cada servidor
+         my $max_results=C4::AR::Preferencias->getValorPreferencia('z3950_ cant_resultados');
+         my $cant_registros=0;
+         if ($registros > 0){
+            #si obtengo algun resultado creo el resultado
+            my $resultado = C4::Modelo::CatZ3950Resultado->new();
+            $resultado->setServidorId($servidores->[$i-1]->getId);
+            $resultado->setColaId($cola->getId);
+            $resultado->setRegistros("");
 
-     print "$tname: $size hits\n";
-     C4::AR::Debug::debug( "$tname: $size resultados");
-
-    for (my $pos = 0; $pos < $size; $pos++) {
-        C4::AR::Debug::debug( "$tname: buscando ".($pos+1)." de $size");
-	    my $tmp = $resultset[$i]->record($pos);
-	
-	    if (!defined $tmp) {
-            C4::AR::Debug::debug( "$tname: no se puede obtener registro ".($pos+1)."\n");
-	        next;
-	    }
-
-	    my $raw = $tmp->raw();
-        if ($resultados[$i]->getRegistros){    $resultados[$i]->setRegistros($resultados[$i]->getRegistros."\n".$tmp->render());}
-            else{ $resultados[$i]->setRegistros($raw);}
-    }
+           for (my $pos = 0; (($pos < $registros) && ($cant_registros < $max_results)); $pos++) {
+            my $registro = $resultset[$i-1]->record($pos);
+            if (!defined $registro) {
+                C4::AR::Debug::debug( "No se puede obtener registro ".($pos+1)."\n");
+            } else {
+                $cant_registros++;
+                my $raw = $registro->raw();
+                if ($resultado->getRegistros){
+                    $resultado->setRegistros($resultado->getRegistros."\n".$raw);
+                }else{ 
+                    $resultado->setRegistros($raw);
+                }
+            }
+            }
+            #Guardo el resultado
+            if($cant_registros > 0){ #Si hay registros sin error
+            $resultado->setCantRegistros($cant_registros);
+            push(@resultados,$resultado);
+            }
+        }
 }
 
 MAYBE_AGAIN:
-if (--$nremaining > 0) {
+if (--$conexiones > 0) { # Si $conexiones se hace 0 se termino la busqueda
     goto AGAIN;
 }
 
-# Housekeeping
-for (my $i = 0; $i < @$servidores_array_ref; $i++) {
-C4::AR::Debug::debug( "Limpiando");
-$resultset[$i]->destroy();
-$connection[$i]->destroy();
-}
 
+# Limpieza
+for (my $i = 0; $i <  scalar(@connection) ; $i++) {
+    $resultset[$i]->destroy();
+    $connection[$i]->destroy();
+}
 $options->destroy();
 
 return  (@resultados);
@@ -203,7 +144,7 @@ my ($cola) = @_;
 $cola->setComienzo(C4::Date::getCurrentTimestamp());
 $cola->save();
 
-my (@resultados)=C4::AR::Z3950::buscarEnZ3950Async($cola);
+my (@resultados)=C4::AR::Z3950::buscarEnZ3950($cola);
 
 foreach my $zres (@resultados) {
 $zres->save;
@@ -224,6 +165,24 @@ sub getBusquedas{
         return 0;
     }else{
         return $busquedas_array_ref;
+    }
+}
+
+sub getBusqueda{
+my ($id) = @_;
+
+    use C4::Modelo::CatZ3950Cola;
+    use C4::Modelo::CatZ3950Cola::Manager;
+
+    my @filtros;
+    push(@filtros, ( id    => { eq => $id}));
+
+    my $busqueda_array_ref = C4::Modelo::CatZ3950Cola::Manager->get_cat_z3950_cola( query => \@filtros);
+
+    if (scalar(@$busqueda_array_ref) == 0){
+        return 0;
+    }else{
+        return $busqueda_array_ref->[0];
     }
 }
 

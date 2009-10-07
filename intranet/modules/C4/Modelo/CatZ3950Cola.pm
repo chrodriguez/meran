@@ -96,5 +96,15 @@ sub setCola{
     my ($cola) = @_;
     $self->cola($cola);
 }
+
+sub getCantResultados {
+    my ($self) = shift;
+    my $cant=0;
+    foreach my $res ($self->resultados){ 
+        $cant+=$res->getCantRegistros;
+     }
+    return ($cant);
+}
+
 1;
 

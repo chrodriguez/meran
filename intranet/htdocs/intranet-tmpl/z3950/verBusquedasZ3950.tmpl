@@ -23,13 +23,14 @@ function toggle( id) {
 [% IF cant_busquedas %]
 
         <div>
-           <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+           <table id="tablaBusquedas" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <thead>
                 <tr class="titulo_tabla_resultado">
                     <th>[% "B&uacute;squeda" | i18n %]</th>
                     <th>[% "Tipo" | i18n %]</th>
                     <th>[% "Estado" | i18n %]</th>
-                    <th>[% "Servidor" | i18n %]</th>
+                    <th>[% "Resultados" | i18n %]</th>
+                     <th>&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -43,36 +44,31 @@ function toggle( id) {
                     </td>
                     <td class="titulo_result">
                     [% IF busqueda.getFin %]
-                        [% "Finalizada" | i18n %]
+                       <font color="green"> [% "Finalizada" | i18n %]</font>
                     [% ELSE %]
                             [% IF busqueda.getComienzo %]
-                                [% "Buscando" | i18n %]
+                         <font color="red">  [% "Buscando" | i18n %]</font>
                             [% ELSE %]
-                                [% "Encolada" | i18n %]
+                            <font color="orange"> [% "Encolada" | i18n %]</font>
                             [% END %]
                     [% END %]
                     </td>
                     <td class="titulo_result">
-                        <ul>
-                        [% FOREACH resultado IN busqueda.resultados %]
-                           <li> 
-                                [% resultado.servidor.getNombre %] ([% resultado.getCantRegistros %])
-                                [% IF resultado.getCantRegistros %]
-                                    <a id="href_[% resultado.getId %]" href="javascript:toggle([% resultado.getId %]);">+</a>
-                                [% END %]
-                           </li>
+                       [% IF busqueda.getFin %] [% busqueda.getCantResultados %] [% ELSE %]-[% END %]
+                    </td>
+
+                    <td class="titulo_result">
+                        [% IF busqueda.getFin %] 
+                        [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_bajar",
+                                                                    onClick => "verResultadosZ3950([% busqueda.getId %]);",
+                                                                    title   => "[% 'Ver Resultados' | i18n %]",
+                                        ) ;
                         [% END %]
-                        </ul>
+                        [% ELSE %]-[% END %]
                     </td>
                 </tr>
-
-                [% FOREACH resultado IN busqueda.resultados %]
-                        [% IF resultado.getCantRegistros %]
-                              <div id="resultado_[% resultado.getId %]" style="display: none"  >
-                                [% resultado.getRegistros %]
-                              </div>
-                        [% END %]
-                [% END %]
                 [% END %]
                 </tbody>
             </table>

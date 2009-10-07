@@ -86,5 +86,16 @@ sub setRegistros{
     $self->registros($registros);
 }
 
+sub getRegistrosMARC {
+    my ($self) = shift;
+    my @regs = split(/\n/,$self->registros);
+    my @marcs;
+
+    foreach my $raw (@regs){
+       my $marc  = new_from_usmarc MARC::Record($raw);
+       push (@marcs,$marc);
+    }
+    return \@marcs;
+}
 1;
 

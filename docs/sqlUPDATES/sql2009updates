@@ -1089,3 +1089,6 @@ CHANGE `userid` `usuario` VARCHAR( 255 ) NULL DEFAULT NULL ,
 CHANGE `syntax` `sintaxis` VARCHAR( 80 ) NULL DEFAULT NULL ;
 
  ALTER TABLE `pref_servidor_z3950` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
+
+INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`) VALUES ('z3950_ cant_resultados', '25', 'Cantidad de resultados por servidor en una busqueda z3950', NULL, 'text');
