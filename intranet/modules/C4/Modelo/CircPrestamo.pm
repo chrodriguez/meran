@@ -273,7 +273,7 @@ sub prestar {
 		$self->debug("NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!");
 		my $seReserva=1;
 		#Se verifica disponibilidad del item;
-		my $reserva=C4::AR::Reservas::getReservaDeId3($id3);
+		my $reserva = C4::AR::Reservas::getReservaDeId3($id3);
 		if ($reserva){
 		$self->debug("El item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario");
 		#el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
@@ -475,12 +475,12 @@ sub devolver {
     my $reserva=$reservas_array_ref->[0];
 
     if($reserva){
-    #Si la reserva que voy a borrar existia realmente sino hubo un error
-    $self->debug("Si la reserva que voy a borrar existia realmente sino hubo un error");
+        #Si la reserva que voy a borrar existia realmente sino hubo un error
+        $self->debug("Si la reserva que voy a borrar existia realmente sino hubo un error");
         if($disponibilidad eq 'Domiciliario'){#si no es para sala
                $self->debug("reasignar Reserva En Espera");
-            $reserva->reasignarReservaEnEspera($loggedinuser);
-            }
+            $reserva->reasignarEjemplarASiguienteReservaEnEspera($loggedinuser);
+        }
 
     $self->debug("Se borra la reserva");
     #Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
@@ -559,8 +559,9 @@ C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
                 $sanction = 1;
 
                 #Se borran las reservas del usuario sancionado
-                my $reserva=C4::Modelo::CircReserva->new(db=>$self->db);
-                $reserva->cancelar_reservas_socio($loggedinuser,$nro_socio);
+                my $reserva = C4::Modelo::CircReserva->new( db => $self->db );
+
+                $reserva->cancelar_reservas_socio(\%paramsSancion);
             }
         }
 ### FIN SANCIONES

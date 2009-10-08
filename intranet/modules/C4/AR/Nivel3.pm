@@ -121,6 +121,7 @@ sub modificarEstadoItem{
 =item
 Esta funcion modifica el estado de un ejemplar PASA DE DISPONIBLE PARA SALA A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
 =cut
+# FIXME DEPRECATED
 sub modItemSalaAPrestamo{
 	my($params)=@_;
 
@@ -131,6 +132,7 @@ sub modItemSalaAPrestamo{
 =item
 Esta funcion modifica el estado de un ejemplar PASA DE NO DISPONIBLE A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
 =cut
+# FIXME DEPRECATED
 sub _modItemNoDisponibleAPrestamo{
 	my($params)=@_;
 

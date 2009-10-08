@@ -76,8 +76,9 @@ __PACKAGE__->meta->setup(
 
 
 sub agregar{
-    my ($self)=shift;
-    my ($data_hash)=@_;
+    my ($self) = shift;
+
+    my ($data_hash) = @_;
 
     use C4::Modelo::CatNivel2Repetible;
 
@@ -96,12 +97,46 @@ sub agregar{
     $self->setId1($data_hash->{'id1'});
     $self->setId2($data_hash->{'id2'});
 
+    my $params;
+    #recupero la disponibilidad anterior
+    $params->{'disponibilidad_anterior'} = $self->getId_disponibilidad; 
+    #recupero el estado anterior
+    $params->{'estado_anterior'} = $self->getId_estado;
+    $params->{'id2'} = $self->getId2;
+    $params->{'id3'} = $self->getId3;
+
     #se guardan los datos de Nivel3
     foreach my $infoNivel3 (@arrayNivel3){  
         $self->setDato($infoNivel3);
+
+        if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'o') ){
+            #disponibilidad
+# TODO esta feo ver si se puede modularizar
+                if ($infoNivel3->{'referencia'}) {
+                        $params->{'disponibilidad_nueva'} = $infoNivel3->{'datoReferencia'};
+                        $params->{'estado_nuevo'} = $infoNivel3->{'datoReferencia'};
+                    }else{
+                        $params->{'disponibilidad_nueva'} = $infoNivel3->{'dato'};
+                        $params->{'estado_nuevo'} = $infoNivel3->{'dato'};
+                }
+            }elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'e') ){
+            #estado del ejemplar
+                if ($infoNivel3->{'referencia'}) {
+                    $params->{'estado_nuevo'} = $infoNivel3->{'datoReferencia'};
+                    $params->{'disponibilidad_nueva'} = $infoNivel3->{'datoReferencia'};
+                }else{
+                    $params->{'estado_nuevo'} = $infoNivel3->{'dato'};
+                    $params->{'disponibilidad_nueva'} = $infoNivel3->{'dato'};
+                }
+            }
+
+
     } #END foreach my $infoNivel3 (@arrayNivel3)
 
+    #se verifica si luego del cambio realizado en el ejemplar es necesario reasignar las colas de reservas
+    $self->verificar_cambio($params);
 
+# TODO ver esto para q es????
     if(!$data_hash->{'modificado'}){
         $self->setBarcode($data_hash->{'barcode'});
     }
@@ -163,34 +198,21 @@ sub eliminar{
 
 sub setDato{
 	my ($self) = shift;
-	my ($data_hash)=@_;
-	my $barcode;
 
-# 	if( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'f') ){
-	#tipo de documento
-=item
-		if($data_hash->{'agregarPorBarcodes'}){
-		#se esta haciendo un alta de 1 o mas barcodes
-			$barcode= $data_hash->{'barcode'};
-		}else {		
-			$barcode= $data_hash->{'dato'}
-		}
-=cut
+	my ($data_hash) = @_;
 
-#         $barcode= $data_hash->{'barcode'};
-# 		$self->setBarcode($barcode);
-# 		$self->debug ("Se agrega el BARCODE: ".$barcode);
-# 	}
+    $data_hash->{'id2'} = $self->getId2;
+    $data_hash->{'id3'} = $self->getId3;
+
+
     if( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'f') ){
         if($data_hash->{'modificado'}){
             $self->setBarcode($data_hash->{'dato'});
         }
     }
 
-# 	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 't') ){
     if( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 't') ){
 	#signatura_topografica
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
         if ($data_hash->{'referencia'}) {
 				$self->setSignatura_topografica($data_hash->{'datoReferencia'});
 			}else{
@@ -200,7 +222,6 @@ sub setDato{
 
 	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'c') ){
 	#UI poseedora
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
         if ($data_hash->{'referencia'}) {
 				$self->setId_ui_poseedora($data_hash->{'datoReferencia'});
 			}else{
@@ -210,7 +231,6 @@ sub setDato{
 
 	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'd') ){
 	#UI origen
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
         if ($data_hash->{'referencia'}){            
 				$self->setId_ui_origen($data_hash->{'datoReferencia'});
 			}else{
@@ -220,37 +240,152 @@ sub setDato{
 
 	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'o') ){
 	#disponibilidad
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
-        C4::AR::Debug::debug("995, o => ".$data_hash->{'dato'});
-        C4::AR::Debug::debug("995, o => ".$data_hash->{'datoReferencia'});
+        C4::AR::Debug::debug("DISPONIBILIDAD");
+        C4::AR::Debug::debug("995, o => dato: ".$data_hash->{'dato'});
+        C4::AR::Debug::debug("995, o => datoReferencia: ".$data_hash->{'datoReferencia'});
+
+        #recupero la disponibilidad anterior
+#         $data_hash->{'disponibilidad_anterior'} = $self->getId_disponibilidad;
+#         $data_hash->{'estado_anterior'} = $self->getId_estado;  
+
         if ($data_hash->{'referencia'}) {
 				$self->setId_disponibilidad($data_hash->{'datoReferencia'});
+#                 $data_hash->{'disponibilidad_nueva'} = $data_hash->{'datoReferencia'};
+#                 $data_hash->{'estado_nuevo'} = $data_hash->{'datoReferencia'};
 			}else{
 				$self->setId_disponibilidad($data_hash->{'dato'});
+#                 $data_hash->{'disponibilidad_nueva'} = $data_hash->{'dato'};
+#                 $data_hash->{'estado_nuevo'} = $data_hash->{'dato'};
 		}
+        
 	}
 
 	elsif( ($data_hash->{'campo'} eq '995')&&($data_hash->{'subcampo'} eq 'e') ){
 	#estado del ejemplar
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
-        C4::AR::Debug::debug("995, e => ".$data_hash->{'dato'});
-        C4::AR::Debug::debug("995, e => ".$data_hash->{'datoReferencia'});
+        C4::AR::Debug::debug("ESTADO");
+        C4::AR::Debug::debug("995, e => dato: ".$data_hash->{'dato'});
+        C4::AR::Debug::debug("995, e => datoReferencia: ".$data_hash->{'datoReferencia'});
+        
+        #recupero el estado anterior
+#         $data_hash->{'estado_anterior'} = $self->getId_estado;
+#         $data_hash->{'disponibilidad_anterior'} = $self->getId_disponibilidad;
+    
         if ($data_hash->{'referencia'}) {
-				$self->setId_estado($data_hash->{'datoReferencia'});
-			}else{
-				$self->setId_estado($data_hash->{'dato'});
+            $self->setId_estado($data_hash->{'datoReferencia'});
+#             $data_hash->{'estado_nuevo'} = $data_hash->{'datoReferencia'};
+#             $data_hash->{'disponibilidad_nueva'} = $data_hash->{'datoReferencia'};
+        }else{
+            $self->setId_estado($data_hash->{'dato'});
+#             $data_hash->{'estado_nuevo'} = $data_hash->{'dato'};
+#             $data_hash->{'disponibilidad_nueva'} = $data_hash->{'dato'};
 		}
+
 	}
+}
+
+sub ESTADO_DISPONIBLE{
+=item    
+ESTADO
+
+    0   Disponible
+    1   Perdido
+    2   Compartido
+    4   Baja
+    5   Ejemplar deteriorado
+    6   En Encuadernación
+=cut
+    
+    my ($estado) = @_;
+
+    return ($estado eq 0);
+}   
+
+=item
+DISPONIBILIDAD
+
+    1   Prestamo
+    2   Sala de Lectura
+=cut
+
+sub DISPONIBILIDAD_PRESTAMO{
+    my ($estado) = @_;
+
+    return ($estado eq 1);
+}
+
+sub DISPONIBILIDAD_PARA_SALA{
+    my ($estado) = @_;
+
+    return ($estado eq 2);
+}
+
+sub verificar_cambio {
+    my ($self) = shift;
+
+    my ($params) = @_;
+
+    my $estado_anterior             = $params->{'estado_anterior'};          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
+    my $estado_nuevo                = $params->{'estado_nuevo'};
+    my $disponibilidad_anterior     = $params->{'disponibilidad_anterior'};  #(DISPONIBLE, PRESTAMO, SALA LECTURA)
+    my $disponibilidad_nueva        = $params->{'disponibilidad_nueva'};
+    C4::AR::Debug::debug("verificar_cambio => estado_anterior: ".$params->{'estado_anterior'});
+    C4::AR::Debug::debug("verificar_cambio => estado_nuevo: ".$params->{'estado_nuevo'});
+    C4::AR::Debug::debug("verificar_cambio => disponibilidad_anterior: ".$params->{'disponibilidad_anterior'});
+    C4::AR::Debug::debug("verificar_cambio => disponibilidad_nueva: ".$params->{'disponibilidad_nueva'});
+
+    #  ESTADOS
+    #   wthdrawn = 0 => DISPONIBLE
+    #   wthdrawn > => NO DISPONIBLE
+
+    #  DISPONIBILIDADES
+    #   notforloan = 1 => PARA SALA
+    #   notforload = 0 => PARA PRESTAMO
+        
+    my $msg_object;
+    
+    if( ESTADO_DISPONIBLE($estado_anterior) && (!ESTADO_DISPONIBLE($estado_nuevo)) && DISPONIBILIDAD_PRESTAMO($disponibilidad_anterior) ){
+    #pasa de NO DISPONIBLE a DISPONIBLE con disponibilidad_anterior PRESTAMO
+    #Si estado_anterior es DISPONIBLE y estado_nuevo es NO DISPONIBLE y disponibilidad_anterior es PARA PRESTAMO
+    #hay que reasignar las reservas que existen para el ejemplar, si no se puede reasignar se eliminan las reservas y sanciones
+        C4::AR::Debug::debug("verificar_cambio => DISPONIBLE a NO DISPONIBLE con disponibilidad anterior PRESTAMO");
+        
+        C4::AR::Reservas::reasignarNuevoEjemplarAReserva($params, $msg_object);
+
+    }elsif ( (!ESTADO_DISPONIBLE($estado_anterior)) && ESTADO_DISPONIBLE($estado_nuevo) && DISPONIBILIDAD_PRESTAMO($disponibilidad_nueva) ){
+    #pasa de DISPONIBLE a NO DISPONIBLE con disponibilidad_nueva PRESTAMO
+    #Si estado_anterior es NO DISPONIBLE  y  estado_nuevo es DISPONIBLE  y  disponibilidad_nueva es PRESTAMO
+    #hay que verificar si hay reservas en espera, si hay se reasignan al nuevo ejemplar
+        C4::AR::Debug::debug("verificar_cambio => NO DISPONIBLE a DISPONIBLE con disponibilidad nueva PRESTAMO");
+        C4::AR::Reservas::asignarEjemplarASiguienteReservaEnEspera($params);
+
+    }elsif ( ESTADO_DISPONIBLE($estado_anterior) && DISPONIBILIDAD_PRESTAMO($disponibilidad_anterior) && 
+             DISPONIBILIDAD_PARA_SALA($disponibilidad_nueva) ){
+    #Si estaba DISPONIBLE y pasa de disponibilidad_anterior PRESTAMO a disponibilidad_nueva SALA
+    #hay que verificar si tiene reservas, si tiene se reasignan si no se puden reasignar se cancelan
+        C4::AR::Debug::debug("verificar_cambio => DISPONIBLE de disponibilidad anterior PRESTAMO a disponibilidad nueva PARA SALA");
+        C4::AR::Reservas::reasignarNuevoEjemplarAReserva($params, $msg_object);            
+
+    }elsif ( ESTADO_DISPONIBLE($estado_anterior) && DISPONIBILIDAD_PARA_SALA($disponibilidad_anterior) &&
+             DISPONIBILIDAD_PRESTAMO($disponibilidad_nueva) ){
+    #Si estaba DISPONIBLE y pasa de disponibilidad_anterior PARA SALA a disponibilidad_nueva PRESTAMO
+    #Se verifica si hay reservas en espera, si hay se reasignan al nuevo ejemplar
+        C4::AR::Debug::debug("verificar_cambio => DISPONIBLE de disponibilidad anterior PARA SALA a disponibilidad nueva PRESTAMO");
+        C4::AR::Reservas::asignarEjemplarASiguienteReservaEnEspera($params);
+    }
+    
 }
 
 sub getId_ui_poseedora{
     my ($self) = shift;
+
     return ($self->id_ui_poseedora);
 }
 
 sub setId_ui_poseedora{
     my ($self) = shift;
+
     my ($id_ui_poseedora) = @_;
+
     $self->id_ui_poseedora($id_ui_poseedora);
 }
 
@@ -353,9 +488,10 @@ sub setTimestamp{
     $self->timestamp($timestamp);
 }
 
-sub estaPrestado{
-	my ($self) = shift;
-	return 0;
+sub estaPrestado {
+    my ($self) = shift;
+
+    return (C4::AR::Prestamos::estaPrestado($self->getId3));
 }
 
 sub estadoDisponible{
@@ -373,13 +509,6 @@ sub getEstado{
 
 	return (C4::AR::Referencias::getNombreEstado($self->getId_estado));
 }
-
-sub estaPrestado {
-  	my ($self) = shift;
-
-    return (C4::AR::Prestamos::estaPrestado($self->getId3));
-}
-
 
 # ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
 

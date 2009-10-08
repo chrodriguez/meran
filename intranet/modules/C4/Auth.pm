@@ -261,7 +261,7 @@ sub get_template_and_user {
 
 	my $nro_socio;
 	if ( $session->param('userid') ) {
-    $params->{'loggedinuser'}= $session->param('userid');
+        $params->{'loggedinuser'}= $session->param('userid');
 		$nro_socio = $session->param('userid');
         $params->{'nro_socio'}= $nro_socio;
 
@@ -1543,7 +1543,7 @@ sub t_operacionesDeINTRA{
 		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
 		$reserva->cancelar_reservas_no_regulares($userid);
 		#Ademas, se borran las reservas vencidas
-		$reserva->cancelar_reservas_vencidas($userid);	
+		$reserva->cancelar_reservas_vencidas($userid, $db);	
 		#Si se logueo correctamente en intranet entonces guardo la fecha
         my $today = Date::Manip::ParseDate("today");
         $socio->setLast_login($today);
