@@ -31,8 +31,8 @@
 
                     [% FOREACH marc IN resultado.getRegistrosMARC %]
                     <tr>
-                        <td class="titulo_result">
-                        [% marc.title %]
+                        <td>
+                        <p class="titulo_result">[% marc.title %]</p>
                         </td>
                         <td>
                         [% marc.author %] 
@@ -47,12 +47,13 @@
                          [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_ayuda_marc",
-                                                                    onClick => "",
+                                                                    onClick => ,
                                                                     title   => "[% 'MARC' | i18n %]",
                                         ) ;
                         [% END %]
                         </td>
                     </tr>
+                    <tr id="marcRecord"><td colspan="5"> [% marc.as_formatted %]</td></tr>
                     [% END %]
                 </tbody>
             </table>

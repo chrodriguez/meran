@@ -91,9 +91,13 @@ sub getRegistrosMARC {
     my @regs = split(/\n/,$self->registros);
     my @marcs;
 
+    my $i=0;
     foreach my $raw (@regs){
        my $marc  = new_from_usmarc MARC::Record($raw);
+       $marc->encoding( 'UTF-8' );
+        
        push (@marcs,$marc);
+       $i++;
     }
     return \@marcs;
 }

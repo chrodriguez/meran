@@ -43,7 +43,7 @@ my(@connection, @resultset);
 
 my $options = new ZOOM::Options();
    $options->option(preferredRecordSyntax => "USMARC");
-   $options->option(charset => "UTF-8");
+#    $options->option(charset => "UTF-8");
    $options->option(elementSetName => "F");
    $options->option(async => 1);
 
@@ -94,7 +94,9 @@ C4::AR::Debug::debug( "Encontrados $registros registros en ".$servidores->[$i-1]
                 C4::AR::Debug::debug( "No se puede obtener registro ".($pos+1)."\n");
             } else {
                 $cant_registros++;
-                my $raw = $registro->raw();
+
+                my $raw=$registro->get("raw; charset=marc-8");
+
                 if ($resultado->getRegistros){
                     $resultado->setRegistros($resultado->getRegistros."\n".$raw);
                 }else{ 
