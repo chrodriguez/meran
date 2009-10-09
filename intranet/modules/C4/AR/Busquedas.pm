@@ -1927,7 +1927,7 @@ sub MARCDetail{
 		my $campo= @result[$i]->{'campo'};
 		my @info_campo_array;
 		C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
-		if(!_exsiteEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
+		if(!_existeEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
 			#proceso todos los subcampos del campo
 			for(my $j=$i;$j < scalar(@result);$j++){
 				my %hash_temp;
@@ -1957,7 +1957,7 @@ sub MARCDetail{
 =item
 Verifica si existe en el arreglo de campos el campo pasado por parametro
 =cut
-sub _exsiteEnArregloDeCampoMARC{
+sub _existeEnArregloDeCampoMARC{
 	my ($array, $campo)= @_;
 
 	for(my $j=0;$j < scalar(@$array);$j++){

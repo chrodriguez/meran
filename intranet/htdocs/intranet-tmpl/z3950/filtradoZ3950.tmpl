@@ -37,24 +37,35 @@ function updateVerBusquedas(responseText){
 }
 
 function agregarBusquedaZ3950(){
-    if(($('#titulo').val() !='')&&($('#autor').val() !='')){}
-    else {
+    if($('#termino').val() !='')
+    {
 	objAH=new AjaxHelper(updateAgregarBusquedaZ3950);
 	objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
     objAH.tipo="BUSCAR";
-    if($('#titulo').val() !=''){
-        objAH.tipobusqueda= 'title';
-        objAH.busqueda= $('#titulo').val();
-    } else {
-        objAH.tipobusqueda= 'author';
-        objAH.busqueda= $('#autor').val();
-    }
-	    objAH.sendToServer();
+    objAH.busqueda= $('#termino').val();
+	objAH.sendToServer();
     }
 }
 
 function updateAgregarBusquedaZ3950(responseText){
     verBusquedas();
+}
+
+
+function mostrarDetalleMARC (id_red,pos_res){
+    objAH=new AjaxHelper(updateMostrarDetalleMARC);
+    objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
+
+    objAH.id_resultado = id_red;
+    objAH.pos_resultado = pos_res;
+
+    objAH.tipo="VER_DETALLE_MARC";
+    objAH.sendToServer();
+}
+
+function updateMostrarDetalleMARC(responseText){
+    $('#detalleMARC').html(responseText);
+    $('#detalleMARC').show();
 }
 
 
@@ -69,19 +80,13 @@ $(document).ready(function() {
 <div class="datos_tabla_div_z3950">
     <ul>
     <li class="item" >
-        <label for="titulo">
-            [% "T&iacute;tulo" | i18n %]
+        <label for="termino">
+            [% "B&uacute;squeda" | i18n %]
         </label>
-        <input type="text" id="titulo" size="20" tabindex=1>
+        <input type="text" id="termino" size="20" tabindex=1>
     </li>
     <li class="item" >
-        <label for="autor">
-            [% "Autor" | i18n %]
-        </label>
-        <input type="text" id="autor" size="20" tabindex=1>
-    </li>
-    <li class="item" >
-            [% PERL %]
+         [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_buscar",
                                                                     onClick => "agregarBusquedaZ3950();",

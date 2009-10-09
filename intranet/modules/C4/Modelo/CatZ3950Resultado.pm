@@ -95,11 +95,30 @@ sub getRegistrosMARC {
     foreach my $raw (@regs){
        my $marc  = new_from_usmarc MARC::Record($raw);
        $marc->encoding( 'UTF-8' );
-        
-       push (@marcs,$marc);
+       
+       my $rec;
+       $rec->{"pos"}=$i;
+       $rec->{"record"}=$marc;
+
+       push (@marcs,$rec);
        $i++;
     }
     return \@marcs;
+}
+
+sub getRegistroMARC {
+    my ($self) = shift;
+    my ($pos) = @_;
+
+    my @regs = split(/\n/,$self->registros);
+
+    if (scalar(@regs) > $pos) {
+       my $marc  = new_from_usmarc MARC::Record($regs[$pos]);
+       $marc->encoding( 'UTF-8' );
+       return $marc;
+    }
+
+    return 0;
 }
 1;
 

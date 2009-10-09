@@ -10,7 +10,6 @@ __PACKAGE__->meta->setup(
     columns => [
         id       => { type => 'serial', not_null => 1 },
         busqueda => { type => 'varchar', length => 255 },
-        tipo   => { type => 'varchar', length => 255 },
         cola => { type => 'datetime' },
         comienzo => { type => 'datetime' },
         fin  => { type => 'datetime' },
@@ -46,22 +45,6 @@ sub setBusqueda{
     my ($self) = shift;
     my ($busqueda) = @_;
     $self->busqueda($busqueda);
-}
-
-sub getBusquedaFinal{
-    my ($self) = shift;
-    return ($self->getTipo."=".$self->busqueda);
-}
-
-sub getTipo{
-    my ($self) = shift;
-    return ($self->tipo);
-}
-
-sub setTipo{
-    my ($self) = shift;
-    my ($tipo) = @_;
-    $self->tipo($tipo);
 }
 
 sub getComienzo{

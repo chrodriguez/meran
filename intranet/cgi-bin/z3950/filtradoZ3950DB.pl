@@ -27,9 +27,8 @@ if($tipo eq "BUSCAR"){
                                );
 
     my $busqueda = $obj->{'busqueda'};
-    my $tipobusqueda = $obj->{'tipobusqueda'};
 
-    my ($Message_arrayref)=C4::AR::Z3950::encolarBusquedaZ3950($busqueda,$tipobusqueda);
+    my ($Message_arrayref)=C4::AR::Z3950::encolarBusquedaZ3950($busqueda);
     my $infoOperacionJSON=to_json $Message_arrayref;
     C4::Auth::print_header($session);
     print $infoOperacionJSON;
@@ -67,6 +66,31 @@ elsif($tipo eq "VER_RESULTADO"){
     if($busqueda){
         $t_params->{'cant_resultados'}= $busqueda->getCantResultados;
         $t_params->{'RESULTADO'}= $busqueda;
+    }
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
+elsif($tipo eq "VER_DETALLE_MARC"){
+
+    my ($template, $session, $t_params) = get_template_and_user(
+            {template_name => "z3950/MARCDetalle.tmpl",
+                    query => $input,
+                    type => "intranet",
+                    authnotrequired => 0,
+                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    });
+
+    my $id_resultado = $obj->{'id_resultado'};
+    my $pos_resultado = $obj->{'pos_resultado'};
+
+    my $resultado = C4::AR::Z3950::getResultado($id_resultado);
+    if($resultado){
+        my $marc=$resultado->getRegistroMARC($pos_resultado);
+        my $MARCDetail_array = C4::AR::Z3950::detalleMARC($marc);
+        $t_params->{'MARCDetail_array'}= $MARCDetail_array;
+        my $isbn=$marc->field('020')->subfield('a');
+        if($isbn){
+        $t_params->{'url'}= C4::AR::Amazon::getImageByIsbn($isbn,'small'); 
+        }
     }
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

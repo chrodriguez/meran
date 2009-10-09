@@ -32,28 +32,27 @@
                     [% FOREACH marc IN resultado.getRegistrosMARC %]
                     <tr>
                         <td>
-                        <p class="titulo_result">[% marc.title %]</p>
+                        <p class="titulo_result">[% marc.record.title %]</p>
                         </td>
                         <td>
-                        [% marc.author %] 
+                        [% marc.record.author %] 
                         </td>
                         <td>
-                        [% marc.edition %] 
+                        [% marc.record.edition %] 
                         </td>
                         <td >
-                        [% marc.publication_date %] 
+                        [% marc.record.publication_date %] 
                         </td>
                         <td >
                          [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_ayuda_marc",
-                                                                    onClick => ,
+                                                                    onClick => "mostrarDetalleMARC('[% resultado.getId %]','[% marc.pos %]')",
                                                                     title   => "[% 'MARC' | i18n %]",
                                         ) ;
                         [% END %]
                         </td>
                     </tr>
-                    <tr id="marcRecord"><td colspan="5"> [% marc.as_formatted %]</td></tr>
                     [% END %]
                 </tbody>
             </table>
@@ -74,3 +73,5 @@
 <legend>[% "No hay resultados" | i18n %]</legend>
 [% END %]
 </fieldset>
+
+<div id="detalleMARC"></div>

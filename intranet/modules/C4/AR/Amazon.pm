@@ -71,7 +71,11 @@ if ($url eq ''){
 
 my $isbnaux=$isbn;
 #Se Conecta
-my $ua = Net::Amazon->new(token => C4::AR::Preferencias->getValorPreferencia("amazon-token"));
+my $ua = Net::Amazon->new(
+        token => C4::AR::Preferencias->getValorPreferencia("amazon-token"),
+        secret_key => C4::AR::Preferencias->getValorPreferencia("amazon-secret-key")
+        );
+
 #Realiza la Busqueda
 $isbnaux =~ s/-//g; # Quito los - para buscar
 
