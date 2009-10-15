@@ -19,11 +19,12 @@
             <input type="text" id="searchField" size="25" name="searchField">
         </li>
         <li>
+            <script type="text/javascript"> var criteria = "all"; </script>
             [% PERL %]
                             print C4::AR::Filtros::to_Button(
                                                                 text    =>  "[% 'Buscar' | i18n %]",
                                                                 boton   =>  "boton_buscar",
-                                                                onClick =>  'searchinc("all")',
+                                                                onClick =>  'searchinc(criteria)',
                                                             );
             [% END %]
         </li>

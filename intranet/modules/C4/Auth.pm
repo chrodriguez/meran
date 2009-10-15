@@ -777,8 +777,10 @@ C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID
             C4::AR::Debug::debug("checkauth=> eliminino la sesssion ".$sessionID."\n");
             $userid= undef;
             #genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
-            $session->param('codMsg', 'U357');
-            $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
+            if ($query->param('userid')){
+                $session->param('codMsg', 'U357');
+                $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
+            }
             redirectTo('/cgi-bin/koha/auth.pl');
             #EXIT
         }#end if ($passwordValida)

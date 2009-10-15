@@ -77,30 +77,29 @@
 </script>
 
 <body>
-
-<noscript>
-    <div class='tableMsgUser'>
-        <font class='fontMsgUser'>
-                <b>[% 'Su navegador no soporta o no tiene habilidato Javascript' | i18n %]</b>
-        </font>
-    </div>
-</noscript>
-
-
-<div id="menu-container" class="main-header">
-
-[% INCLUDE   'menu.inc'  %]
-
-</div>
-
-<div id="marco_principal">
-    <div id="marco_superior"> <div>
-</div></div>
-
-<div id="marco_contenido" class="contenido">
-
-
-<div id="marco_contenido_datos" class="contenido">
-    
- <!--  usado como referencia por el MessageHelper -->
-<div id="end_top"></div>
+  <noscript>
+      <div class='tableMsgUser'>
+          <font class='fontMsgUser'>
+                  <b>[% 'Su navegador no soporta o no tiene habilidato Javascript' | i18n %]</b>
+          </font>
+      </div>
+  </noscript>
+  
+  
+  <div id="menu-container" class="main-header">
+  
+  [% INCLUDE   'menu.inc'  %]
+  
+  </div>
+  
+  <div id="marco_principal">
+      <div id="marco_superior"> <div>
+  </div></div>
+  
+  <div id="marco_contenido" class="contenido">
+  
+  
+  <div id="marco_contenido_datos" class="contenido">
+      
+  <!--  usado como referencia por el MessageHelper -->
+  <div id="end_top"></div>
