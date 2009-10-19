@@ -1,53 +1,58 @@
+
 <fieldset class="resultados_busqueda">
-<legend class="titulo_legend">[% "Resultado de b&uacute;squeda" | i18n %] :</legend>
+<legend class="titulo_legend trigger click">[% "Resultado de b&uacute;squeda" | i18n %] : [% RESULTADO.getBusqueda %] ([% cant_resultados %])</legend>
 [% IF cant_resultados %] 
-  <center> [% "Cantidad de resultados" | i18n %]: [% cant_resultados %]<center>
+    <script type="text/javascript">
+                $(document).ready(function() {
+                makeToggle('datos_tabla_div','trigger',null,false);
 
-                      [% PERL %]
-                                print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_subir",
-                                                                    onClick => "esconderResultadosZ3950();",
-                                                                    title   => "[% 'Volver' | i18n %]",
-                                        ) ;
-                        [% END %]
+               });
+    </script>
 
-        <div>
-
-                [% FOREACH resultado IN RESULTADO.resultados %]
-                <fieldset class="resultados_busqueda">
-                <legend class="titulo_legend">[% resultado.servidor.getNombre %]</legend>
-                <div>
+                <div class="datos_tabla_div" id="datos_tabla_div">
                 <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <thead>
                 <tr class="titulo_tabla_resultado">
+                    <th>[% "Servidor" | i18n %]</th>
                     <th>[% "T&iacute;tulo" | i18n %]</th>
+                    <th>&nbsp;</th>
                     <th>[% "Autor" | i18n %]</th>
                     <th>[% "Edici&oacute;n" | i18n %]</th>
                     <th>[% "A&ntilde;o" | i18n %]</th>
-                    <th>[&nbsp;</th>
+                    <th>&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
-
-                    [% FOREACH marc IN resultado.getRegistrosMARC %]
+                    [% FOREACH resultado IN RESULTADO.resultados %]
                     <tr>
+                        <td width="15%" > 
+                        [% resultado.servidor.nombre %]
+                        </td>
+
                         <td>
-                        <p class="titulo_result">[% marc.record.title %]</p>
+                        <p class="titulo_result" width="45%">[% resultado.getRegistroMARC.title %]</p>
                         </td>
                         <td>
-                        [% marc.record.author %] 
+                            [% IF resultado.getPortada %]
+                                <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/covers/[% resultado.getPortada.getSmall %]" title="Portada">
+                            [% ELSE %]
+                                <img src="[% themelang %]/covers/no_image.jpg" alt="[% 'Sin Portada' | i18n %]" title="[% 'Sin Portada' | i18n %]" />
+                            [% END %]
                         </td>
-                        <td>
-                        [% marc.record.edition %] 
+                        <td width="15%">
+                        [% resultado.getRegistroMARC.author %] 
                         </td>
-                        <td >
-                        [% marc.record.publication_date %] 
+                        <td width="5%">
+                        [% resultado.getRegistroMARC.edition %] 
                         </td>
-                        <td >
+                        <td width="5%">
+                        [% resultado.getRegistroMARC.publication_date %] 
+                        </td>
+                        <td width="5%">
                          [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_ayuda_marc",
-                                                                    onClick => "mostrarDetalleMARC('[% resultado.getId %]','[% marc.pos %]')",
+                                                                    onClick => "mostrarDetalleMARC('[% resultado.getId %]')",
                                                                     title   => "[% 'MARC' | i18n %]",
                                         ) ;
                         [% END %]
@@ -57,18 +62,6 @@
                 </tbody>
             </table>
             </div>
-            </fieldset>
-                [% END %]
-
-        </div>
-
-                      [% PERL %]
-                                print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_subir",
-                                                                    onClick => "esconderResultadosZ3950();",
-                                                                    title   => "[% 'Volver' | i18n %]",
-                                        ) ;
-                        [% END %]
 [% ELSE %]
 <legend>[% "No hay resultados" | i18n %]</legend>
 [% END %]

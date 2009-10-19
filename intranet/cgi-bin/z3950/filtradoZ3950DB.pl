@@ -6,6 +6,7 @@ use C4::AR::Z3950;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use MARC::Record;
+use C4::AR::PortadasRegistros;
 use JSON;
 
 my $input=new CGI;
@@ -80,17 +81,12 @@ elsif($tipo eq "VER_DETALLE_MARC"){
                     });
 
     my $id_resultado = $obj->{'id_resultado'};
-    my $pos_resultado = $obj->{'pos_resultado'};
 
     my $resultado = C4::AR::Z3950::getResultado($id_resultado);
     if($resultado){
-        my $marc=$resultado->getRegistroMARC($pos_resultado);
+        my $marc=$resultado->getRegistroMARC();
         my $MARCDetail_array = C4::AR::Z3950::detalleMARC($marc);
         $t_params->{'MARCDetail_array'}= $MARCDetail_array;
-        my $isbn=$marc->field('020')->subfield('a');
-        if($isbn){
-        $t_params->{'url'}= C4::AR::Amazon::getImageByIsbn($isbn,'small'); 
-        }
     }
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

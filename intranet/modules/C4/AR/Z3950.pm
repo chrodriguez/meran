@@ -54,9 +54,9 @@ foreach my $servidor (@$servidores){
     $conn->connect($servidor->getConexion);
     push(@connection,$conn);
     #Realizo la consula
-    push(@resultset,$conn->search_pqf($cola->getBusqueda));
+    push(@resultset,$conn->search_pqf('"'.$cola->getBusqueda.'"'));
 }
-C4::AR::Debug::debug( "Esperemos resultados a :  ".$cola->getBusqueda);
+C4::AR::Debug::debug( 'Esperemos resultados a :  "'.$cola->getBusqueda.'"');
 # Network I/O.  Pass number of connections and array of connections
 my $conexiones = scalar(@connection);
 AGAIN:
@@ -83,11 +83,6 @@ C4::AR::Debug::debug( "Encontrados $registros registros en ".$servidores->[$i-1]
         if ($max_results eq "MAX") {$max_results = $registros;} #Se recuperan TODOS los registros
          my $cant_registros=0;
          if ($registros > 0){
-            #si obtengo algun resultado creo el resultado
-            my $resultado = C4::Modelo::CatZ3950Resultado->new();
-            $resultado->setServidorId($servidores->[$i-1]->getId);
-            $resultado->setColaId($cola->getId);
-            $resultado->setRegistros("");
 
            for (my $pos = 0; (($pos < $registros) && ($cant_registros < $max_results)); $pos++) {
             my $registro = $resultset[$i-1]->record($pos);
@@ -96,19 +91,26 @@ C4::AR::Debug::debug( "Encontrados $registros registros en ".$servidores->[$i-1]
             } else {
                 $cant_registros++;
 
-                my $raw=$registro->get("raw; charset=marc-8");
+                 my $raw=$registro->get("raw; charset=marc-8");
 
-                if ($resultado->getRegistros){
-                    $resultado->setRegistros($resultado->getRegistros."\n".$raw);
-                }else{ 
-                    $resultado->setRegistros($raw);
-                }
+#                   my $marc  = new_from_usmarc MARC::Record($raw);
+#                      $marc->encoding( 'UTF-8' );
+#                   my $isbn = $marc->subfield("020","a");
+#                   
+#                   if ($isbn){
+#                   my @isbns=split(/\s+/,$isbn);
+#                      $isbn=$isbns[0];
+#                      C4::AR::PortadasRegistros::getAllImagesByIsbn($isbn);
+#                     }
+
+                 #si obtengo algun resultado creo el resultado
+                my $resultado = C4::Modelo::CatZ3950Resultado->new();
+                $resultado->setServidorId($servidores->[$i-1]->getId);
+                $resultado->setColaId($cola->getId);
+                $resultado->setRegistro($raw);
+                $resultado->save;
+                push(@resultados,$resultado);
             }
-            }
-            #Guardo el resultado
-            if($cant_registros > 0){ #Si hay registros sin error
-            $resultado->setCantRegistros($cant_registros);
-            push(@resultados,$resultado);
             }
         }
 }
@@ -147,10 +149,6 @@ $cola->setComienzo(C4::Date::getCurrentTimestamp());
 $cola->save();
 
 my (@resultados)=C4::AR::Z3950::buscarEnZ3950($cola);
-
-foreach my $zres (@resultados) {
-$zres->save;
-}
 
 $cola->setFin(C4::Date::getCurrentTimestamp());
 $cola->save();
@@ -233,12 +231,11 @@ sub detalleMARC {
     my @MARC_result_array;
 
     foreach my $field ($marc->fields) {
-     if($field->is_control_field){ C4::AR::Debug::debug("CAMPO= ".$field->tag.": ".$field->data." - Campos menores a 010 son de control - no tienen subcampos");}
-      else{
+     if(! $field->is_control_field){
         my %hash;
         my $campo= $field->tag;
         my @info_campo_array;
-        C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
+#         C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
             #proceso todos los subcampos del campo
                foreach my $subfield ($field->subfields()) {
                 my %hash_temp;
@@ -248,14 +245,14 @@ sub detalleMARC {
                 $hash_temp{'liblibrarian'}= C4::AR::Busquedas::getLiblibrarian($campo, $subcampo);
                 $hash_temp{'dato'}= $dato;
                 push(@info_campo_array, \%hash_temp);
-                C4::AR::Debug::debug("agrego el subcampo: ". $subcampo);
+#                 C4::AR::Debug::debug("agrego el subcampo: ". $subcampo);
             }
             $hash{'campo'}= $campo;
             $hash{'header'}= C4::AR::Busquedas::getHeader($campo);
             $hash{'info_campo_array'}= \@info_campo_array;
 
             push(@MARC_result_array, \%hash);
-            C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
+#             C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
         }
     }
 

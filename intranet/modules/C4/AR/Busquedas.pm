@@ -28,6 +28,7 @@ use C4::AR::Reservas;
 use C4::AR::Nivel1;
 use C4::AR::Nivel2;
 use C4::AR::Nivel3;
+use C4::AR::PortadasRegistros;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -729,6 +730,53 @@ sub buscarAutorPorCond{
 	}
 	return @autores;
 }
+
+
+sub buscarTodosLosDatosDeCampoRepetibleN1 {
+    my ($campo,$subcampo)=@_;
+
+    use C4::Modelo::CatNivel1Repetible;
+    use C4::Modelo::CatNivel1Repetible::Manager;
+
+    my @filtros;
+    push(@filtros, ( campo    => { eq => $campo}));
+    push(@filtros, ( subcampo    => { eq => $subcampo}));
+
+    my $repetibles_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible( query => \@filtros);
+    return $repetibles_array_ref;
+}
+
+sub buscarTodosLosDatosDeCampoRepetibleN2 {
+    my ($campo,$subcampo)=@_;
+
+    use C4::Modelo::CatNivel2Repetible;
+    use C4::Modelo::CatNivel2Repetible::Manager;
+
+    my @filtros;
+    push(@filtros, ( campo    => { eq => $campo}));
+    push(@filtros, ( subcampo    => { eq => $subcampo}));
+
+    my $repetibles_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible( query => \@filtros);
+    return $repetibles_array_ref;
+}
+
+sub buscarTodosLosDatosDeCampoRepetibleN3 {
+    my ($campo,$subcampo)=@_;
+
+    use C4::Modelo::CatNivel3Repetible;
+    use C4::Modelo::CatNivel3Repetible::Manager;
+
+    my @filtros;
+    push(@filtros, ( campo    => { eq => $campo}));
+    push(@filtros, ( subcampo    => { eq => $subcampo}));
+
+    my $repetibles_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible( query => \@filtros);
+    return $repetibles_array_ref;
+}
+
+
+
+
 
 sub buscarDatoDeCampoRepetible {
 	my ($id,$campo,$subcampo,$nivel)=@_;
@@ -1841,6 +1889,7 @@ sub armarInfoNivel1{
 		$result{$i}->{'titulo'}= @resultId1[$i]->{'titulo'};
 		$result{$i}->{'idAutor'}= @resultId1[$i]->{'autor'};
 		$result{$i}->{'nomCompleto'}= @resultId1[$i]->{'completo'};
+        $result{$i}->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1($result{$i}->{'id1'},'S');
 		$cant=  C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'titulo'},$searchstring_array);
 		$cant += C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'nomCompleto'},$searchstring_array);
 		$result{$i}->{'hits'}= $cant;

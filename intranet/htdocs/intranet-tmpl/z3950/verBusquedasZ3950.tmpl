@@ -1,9 +1,16 @@
 <fieldset class="resultados_busqueda">
-<legend class="titulo_legend">[% "B&uacute;squedas Z3950" | i18n %] :</legend>
+<legend class="titulo_legend trigger click">[% "B&uacute;squedas Z3950" | i18n %] :</legend>
 
 [% IF cant_busquedas %]
 
-        <div>
+<script type="text/javascript">
+            $(document).ready(function() {
+                makeToggle('datos_busquedas_div','trigger',null,false);
+
+            });
+</script>
+
+         <div class="datos_busquedas_div" id="datos_busquedas_div">
            <table id="tablaBusquedas" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <thead>
                 <tr class="titulo_tabla_resultado">

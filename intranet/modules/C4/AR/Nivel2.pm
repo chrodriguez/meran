@@ -4,7 +4,6 @@ package C4::AR::Nivel2;
 use strict;
 require Exporter;
 use C4::Context;
-use C4::AR::Amazon;
 
 use vars qw(@EXPORT @ISA);
 
@@ -252,3 +251,39 @@ sub t_eliminarNivel2{
 }
 
 #===================================================================Fin====ABM Nivel 1====================================================
+
+
+=item
+retorna el primer isbn del grupo con correpondiente al parametro $id2
+=cut
+# FIXME DEPRECATED
+sub getISBN{
+    my ($id2)=@_;
+    return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id2,"020","a","2");
+}
+
+=item
+retorna el primer isbn del grupo con correpondiente al parametro $id1
+=cut
+# FIXME DEPRECATED
+sub getISBNById1{
+    my ($id1)=@_;
+
+
+    use C4::Modelo::CatNivel2Repetible;
+    use C4::Modelo::CatNivel2Repetible::Manager;
+
+    my @filtros;
+    push(@filtros, ( campo    => { eq => "020"}));
+    push(@filtros, ( subcampo    => { eq => "a"}));
+    push(@filtros, ( id1    => { eq => $id1}));
+
+    my $repetibles_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible( query => \@filtros, with_objects => "cat_nivel2");
+
+        if(scalar(@$repetibles_array_ref) > 0){
+            return $repetibles_array_ref->[0]->getDato;
+        }else{
+            return 0;
+        }
+
+}

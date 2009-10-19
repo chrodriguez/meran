@@ -1,0 +1,24 @@
+
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend">[% "Detalle MARC" | i18n %] :</legend>
+
+<!--*****************************************MARC DETAIL*****************************************************  -->
+
+<ul class="MARCResult">
+[% FOREACH MARCDetail_array %]
+
+	[% IF header %]
+	<li class="MARCHeader">
+		[% campo %]&nbsp;[% header %]
+	</li>
+		[% FOREACH info_campo_array %]
+			<li class="MARCDetalle">
+				[% subcampo %]&nbsp;[% liblibrarian %]: &nbsp;<b>[% dato %]</b>
+			</li>
+		[% END %]
+	[% END %]  
+
+[% END %]
+</ul>
+
+</fieldset>

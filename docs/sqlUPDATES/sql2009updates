@@ -1092,3 +1092,42 @@ CHANGE `syntax` `sintaxis` VARCHAR( 80 ) NULL DEFAULT NULL ;
 
 
 INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`) VALUES ('z3950_ cant_resultados', '25', 'Cantidad de resultados por servidor en una busqueda z3950', NULL, 'text');
+
+
+
+DROP TABLE IF EXISTS `cat_z3950_cola`;
+CREATE TABLE IF NOT EXISTS `cat_z3950_cola` (
+  `id` int(11) NOT NULL auto_increment,
+  `busqueda` text,
+  `cola` datetime NOT NULL,
+  `comienzo` datetime default NULL,
+  `fin` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
+
+
+DROP TABLE IF EXISTS `cat_z3950_resultado`;
+CREATE TABLE IF NOT EXISTS `cat_z3950_resultado` (
+  `id` int(11) NOT NULL auto_increment,
+  `servidor_id` tinyint(4) NOT NULL,
+  `registro` longtext character set utf8,
+  `cola_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
+
+
+
+-- Portadas de Libros
+
+DROP TABLE IF EXISTS `cat_tapa_amazon`;
+DROP TABLE IF EXISTS `cat_portada_registro`;
+CREATE TABLE IF NOT EXISTS `cat_portada_registro` (
+  `id` tinyint(4) NOT NULL,
+  `isbn` varchar(50) NOT NULL,
+  `small` varchar(500) default NULL,
+  `medium` varchar(500) default NULL,
+  `large` varchar(500) default NULL,
+  UNIQUE KEY `isbn` (`isbn`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+

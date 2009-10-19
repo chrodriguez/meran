@@ -10,8 +10,7 @@ __PACKAGE__->meta->setup(
     columns => [
         id              => { type => 'serial', not_null => 1 },
         servidor_id     => { type => 'serial', not_null => 1 },
-        registros       => { type => 'text', default => 0},
-        cant_registros  => { type => 'integer' },
+        registro       => { type => 'text', default => 0},
         cola_id         => { type => 'serial', not_null => 1 },
     ],
 
@@ -64,61 +63,38 @@ sub setColaId{
     $self->cola_id($cola_id);
 }
 
-sub getCantRegistros{
+
+sub getRegistro{
     my ($self) = shift;
-    return ($self->cant_registros);
+    return ($self->registro);
 }
 
-sub setCantRegistros{
+sub setRegistro{
     my ($self) = shift;
-    my ($cant_registros) = @_;
-    $self->cant_registros($cant_registros);
-}
-
-sub getRegistros{
-    my ($self) = shift;
-    return ($self->registros);
-}
-
-sub setRegistros{
-    my ($self) = shift;
-    my ($registros) = @_;
-    $self->registros($registros);
-}
-
-sub getRegistrosMARC {
-    my ($self) = shift;
-    my @regs = split(/\n/,$self->registros);
-    my @marcs;
-
-    my $i=0;
-    foreach my $raw (@regs){
-       my $marc  = new_from_usmarc MARC::Record($raw);
-       $marc->encoding( 'UTF-8' );
-       
-       my $rec;
-       $rec->{"pos"}=$i;
-       $rec->{"record"}=$marc;
-
-       push (@marcs,$rec);
-       $i++;
-    }
-    return \@marcs;
+    my ($registro) = @_;
+    $self->registro($registro);
 }
 
 sub getRegistroMARC {
     my ($self) = shift;
-    my ($pos) = @_;
 
-    my @regs = split(/\n/,$self->registros);
+    my $raw=$self->registro;
+    my $marc  = new_from_usmarc MARC::Record($raw);
+    $marc->encoding( 'UTF-8' );
+    return $marc;
+}
 
-    if (scalar(@regs) > $pos) {
-       my $marc  = new_from_usmarc MARC::Record($regs[$pos]);
-       $marc->encoding( 'UTF-8' );
-       return $marc;
-    }
+sub getPortada {
+    my ($self) = shift;
+        my $portada="";
+        my $marc = $self->getRegistroMARC;
+        my $isbn = $marc->subfield('020','a');
+        if($isbn){
+            my @isbns=split(/\s+/,$isbn);
+         $portada= C4::AR::PortadasRegistros::getPortadaByIsbn($isbns[0]);
+        }
 
-    return 0;
+    return $portada;
 }
 1;
 

@@ -82,11 +82,8 @@ sub setCola{
 
 sub getCantResultados {
     my ($self) = shift;
-    my $cant=0;
-    foreach my $res ($self->resultados){ 
-        $cant+=$res->getCantRegistros;
-     }
-    return ($cant);
+    my $res=$self->resultados;
+    return (scalar(@$res));
 }
 
 1;

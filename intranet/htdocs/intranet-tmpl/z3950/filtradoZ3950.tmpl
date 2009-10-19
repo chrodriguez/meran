@@ -5,6 +5,7 @@
 function esconderResultadosZ3950(){
     $('#busquedasZ3950').show();
     $('#resultadoZ3950').hide();
+    $('#detalleMARC').hide();
 }
 
 function verResultadosZ3950 (id){
@@ -18,7 +19,7 @@ function verResultadosZ3950 (id){
 function updateVerResultadosZ3950(responseText){
     $('#resultadoZ3950').html(responseText);
     zebra('datos_tabla');
-    $('#busquedasZ3950').hide();
+  $('#datos_busquedas_div').hide();
     $('#resultadoZ3950').show();
 }
 
@@ -39,6 +40,8 @@ function updateVerBusquedas(responseText){
 function agregarBusquedaZ3950(){
     if($('#termino').val() !='')
     {
+    $('#resultadoZ3950').hide();
+    $('#detalleMARC').hide();
 	objAH=new AjaxHelper(updateAgregarBusquedaZ3950);
 	objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
     objAH.tipo="BUSCAR";
@@ -52,12 +55,11 @@ function updateAgregarBusquedaZ3950(responseText){
 }
 
 
-function mostrarDetalleMARC (id_red,pos_res){
+function mostrarDetalleMARC (id_red){
     objAH=new AjaxHelper(updateMostrarDetalleMARC);
     objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
 
     objAH.id_resultado = id_red;
-    objAH.pos_resultado = pos_res;
 
     objAH.tipo="VER_DETALLE_MARC";
     objAH.sendToServer();
@@ -65,6 +67,8 @@ function mostrarDetalleMARC (id_red,pos_res){
 
 function updateMostrarDetalleMARC(responseText){
     $('#detalleMARC').html(responseText);
+    $('#datos_busquedas_div').hide();
+    $('#datos_tabla_div').hide();
     $('#detalleMARC').show();
 }
 
