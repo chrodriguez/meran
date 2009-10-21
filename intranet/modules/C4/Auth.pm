@@ -499,8 +499,6 @@ sub checkauth {
     my $loggedin = 0;
     my %info;
     my ($session) = CGI::Session->load();
-    C4::AR::Debug::debug("NI BIEN CARGA LA SESSION: ".$session->dump());
-
     my ($userid, $cookie, $sessionID, $flags);
 
     #verifica que no haya sesiones "colgadas", las borra de la base
@@ -802,8 +800,6 @@ sub _session_expired {
 #     C4::AR::Debug::debug("_session_expired=>  (session->atime + session->etime): ".($session->atime + $session->etime));
 #     C4::AR::Debug::debug("_session_expired=>  time(): ".time());
 #     C4::AR::Debug::debug("_session_expired=>  session->id(): ".$session->id);
-  C4::AR::Debug::debug($session->dump());
-
     if( (($session->atime + $session->etime) <= time()) && (_getExpireStatus()) ){
         C4::AR::Debug::debug("_session_expired=> EXPIRO LA SESSION DE LA COOKIE CON: ".(($session->atime + $session->etime) <= time())." Y _getExpireStatus: "._getExpireStatus());
 

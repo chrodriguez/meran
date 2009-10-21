@@ -15,6 +15,41 @@ function updateObtenerTabla(responseText){
 
 }
 
+function obtenerTablaFiltrada(){
+    objAH=new AjaxHelper(updateObtenerTablaFiltrada);
+    objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
+    objAH.cache = false;
+
+    objAH.accion="OBTENER_TABLAS";
+    objAH.alias_tabla = $('#tablas_ref').val();
+    objAH.filtro = $.trim($('#search_tabla').val());
+    objAH.sendToServer();
+}
+
+
+function updateObtenerTablaFiltrada(responseText){
+
+    $('#detalle_tabla').html(responseText);
+
+}
+
+function agregarRegistro(tabla){
+    objAH=new AjaxHelper(updateAgregarRegistro);
+    objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
+    objAH.cache = false;
+
+    objAH.accion="AGREGAR_REGISTRO";
+    objAH.alias_tabla = tabla;
+    objAH.sendToServer();
+}
+
+
+function updateAgregarRegistro(responseText){
+
+    $('#detalle_tabla').html(responseText);
+
+}
+
 
 function mostrarReferencias(tabla,value_id){
     objAH=new AjaxHelper(updateObtenerTabla);

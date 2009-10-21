@@ -8,12 +8,14 @@ __PACKAGE__->meta->setup(
     table   => 'ref_disponibilidad',
 
     columns => [
+        id                    => { type => 'serial', not_null => 1 },
         codigo => { type => 'integer', not_null => 1 },
         nombre => { type => 'varchar', default => '', length => 255, not_null => 1 },
     ],
 
-    primary_key_columns => [ 'codigo' ],
+    primary_key_columns => [ 'id' ],
     unique_key => [ 'nombre' ],
+
 );
 
 sub toString{
@@ -108,14 +110,19 @@ sub nextMember{
 sub getAll{
 
     my ($self) = shift;
-    my ($limit,$offset,$matchig_or_not)=@_;
+    my ($limit,$offset,$matchig_or_not,$filtro)=@_;
     use C4::Modelo::RefDisponibilidad::Manager;
     use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
-    push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
+    if ($filtro){
+        my @filtros_or;
+        push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
+        push(@filtros, (or => \@filtros_or) );
+    }
     my $ref_valores;
     if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
+        push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
         $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad(query => \@filtros,);
     }else{
         $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad(query => \@filtros,

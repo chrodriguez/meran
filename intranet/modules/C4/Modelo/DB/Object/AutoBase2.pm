@@ -182,16 +182,26 @@ sub printAsTableElement{
     my $campos = $self->getCamposAsArray;
 
     my $td;
-  
+    my $editId = 1;
     foreach my $campo (@$campos){
         
-        $td.="<td>".$self->{$campo}."</td>";
+        $td.="<td class='editable' id='".$self->getAlias."___".$campo."___".$self->getPkValue."___".$editId."'>".$self->{$campo}."</td>";
+        $editId++;
     }
     return ($td);
 }
 
 
+sub modifyFieldValue{
 
+    my ($self)=shift;
+    my ($field,$value) = @_;
+
+    $self->{$field} = $value;
+
+    $self->save;
+}
+    
 =item
 Esta funcion devuelve los campos de la tabla del objeto llamador
 =cut
@@ -234,6 +244,19 @@ sub getCampos{
     return($fieldsString);
 }
 
+
+sub addNewRecord{
+    my ($self)=shift;
+
+    my $fields = $self->getCamposAsArray();
+
+    foreach my $field (@$fields){
+      $self->{$field} = '11## EDITAR ##11';
+    }
+
+    $self->save;
+
+}
 
 sub getAlias{
     use C4::Modelo::PrefTablaReferencia;

@@ -8,6 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'circ_ref_tipo_prestamo',
 
     columns => [
+        id     => { type => 'serial', not_null => 1 },
         id_tipo_prestamo    => { type => 'character', length => 2, not_null => 1 },
         descripcion  => { type => 'text', length => 65535 },
         id_disponibilidad   => { type => 'integer', default => '0', not_null => 1 },
@@ -19,8 +20,9 @@ __PACKAGE__->meta->setup(
         habilitado      => { type => 'integer', default => 1 },
     ],
 
-    primary_key_columns => [ 'id_tipo_prestamo' ],
-    
+    primary_key_columns => [ 'id' ],
+    unique_key => [ 'id_tipo_prestamo' ],
+
 	relationships => [
 	    disponibilidad => {
             class      => 'C4::Modelo::RefDisponibilidad',
@@ -215,14 +217,20 @@ sub modificar {
 sub getAll{
 
     my ($self) = shift;
-    my ($limit,$offset,$matchig_or_not)=@_;
+    my ($limit,$offset,$matchig_or_not,$filtro)=@_;
     use C4::Modelo::CircRefTipoPrestamo::Manager;
     use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
-    push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
+    if ($filtro){
+        my @filtros_or;
+        push(@filtros_or, (id_tipo_prestamo => {like => '%'.$filtro.'%'}) );
+        push(@filtros_or, (descripcion => {like => '%'.$filtro.'%'}) );
+        push(@filtros, (or => \@filtros_or) );
+    }
     my $ref_valores;
     if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
+        push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
         $ref_valores = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(query => \@filtros,);
     }else{
         $ref_valores = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(query => \@filtros,

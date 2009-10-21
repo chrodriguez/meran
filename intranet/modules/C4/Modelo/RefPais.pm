@@ -8,6 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'ref_pais',
 
     columns => [
+        id                    => { type => 'serial', not_null => 1 },
         iso          => { type => 'character', length => 2, not_null => 1 },
         iso3         => { type => 'character', default => '', length => 3, not_null => 1 },
         nombre       => { type => 'varchar', length => 80, not_null => 1 },
@@ -16,6 +17,8 @@ __PACKAGE__->meta->setup(
     ],
 
     primary_key_columns => [ 'iso' ],
+    unique_key => [ 'iso' ],
+
 );
 
 sub toString{
@@ -140,14 +143,20 @@ sub nextMember{
 sub getAll{
 
     my ($self) = shift;
-    my ($limit,$offset,$matchig_or_not)=@_;
+    my ($limit,$offset,$matchig_or_not,$filtro)=@_;
     use C4::Modelo::RefPais::Manager;
     use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
-    push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
+    if ($filtro){
+        my @filtros_or;
+        push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
+        push(@filtros_or, (nombre_largo => {like => '%'.$filtro.'%'}) );
+        push(@filtros, (or => \@filtros_or) );
+    }
     my $ref_valores;
     if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
+        push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
         $ref_valores = C4::Modelo::RefPais::Manager->get_ref_pais(query => \@filtros,);
     }else{
         $ref_valores = C4::Modelo::RefPais::Manager->get_ref_pais(query => \@filtros,

@@ -8,11 +8,14 @@ __PACKAGE__->meta->setup(
     table   => 'usr_ref_tipo_documento',
 
     columns => [
+        id                    => { type => 'serial', not_null => 1 },
         nombre            => { type => 'varchar', length => 50, not_null => 1 },
         descripcion       => { type => 'varchar', length => 250, not_null => 1 },
     ],
 
-    primary_key_columns => [ 'nombre' ],
+    primary_key_columns => [ 'id' ],
+    unique_key => [ 'nombre' ],
+
 );
 
 
@@ -88,14 +91,20 @@ sub nextMember{
 sub getAll{
 
     my ($self) = shift;
-    my ($limit,$offset,$matchig_or_not)=@_;
+    my ($limit,$offset,$matchig_or_not,$filtro)=@_;
     use C4::Modelo::UsrRefTipoDocumento::Manager;
     use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
-    push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
+    if ($filtro){
+        my @filtros_or;
+        push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
+        push(@filtros_or, (descripcion => {like => '%'.$filtro.'%'}) );
+        push(@filtros, (or => \@filtros_or) );
+    }
     my $ref_valores;
     if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
+        push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
         $ref_valores = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento(query => \@filtros,);
     }else{
         $ref_valores = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento(query => \@filtros,

@@ -494,12 +494,12 @@ sub getAutor {
 
 sub getTabla{
     
-    my ($alias) = @_;
+    my ($alias,$filtro) = @_;
     
     my $tabla = C4::Modelo::PrefTablaReferencia->new();
        $tabla = $tabla->createFromAlias($alias);
 
-    my $datos = $tabla->getAll(100,0);
+    my $datos = $tabla->getAll(100,0,0,$filtro);
     my $campos = $tabla->getCamposAsArray();
     my $clave = $tabla->meta->primary_key;
 
@@ -651,6 +651,41 @@ sub asignarYEliminarReferencia{
     $status = eliminarReferencia($alias_tabla,$referer_involved);
 
     return ($status);
+}
+
+sub editarReferencia{
+
+    my ($string_ref,$value) = @_;
+
+    my @values = split('___',$string_ref);
+
+    eval{
+        my $tabla = getTablaInstanceByAlias($values[0]);
+        my $campo = $values[1];
+        my $id_tabla = $values[2];
+        my $object = $tabla->getByPk($id_tabla);
+        $object->modifyFieldValue($campo,$value);
+        return ($object->{$campo});
+    };
+
+}
+
+sub agregarRegistro{
+
+    my ($alias,$filtro) = @_;
+    my $tabla = C4::Modelo::PrefTablaReferencia->new();
+       $tabla = $tabla->createFromAlias($alias);
+
+    eval{
+        $tabla->addNewRecord();
+    };
+    $tabla = $tabla->createFromAlias($alias);
+    my $datos = $tabla->getAll(100,0,0,$filtro);
+    my $campos = $tabla->getCamposAsArray();
+    my $clave = $tabla->meta->primary_key;
+
+    $tabla = $tabla->getAlias;
+    return ($clave,$tabla,$datos,$campos);
 }
 
 1;

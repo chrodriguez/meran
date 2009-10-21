@@ -36,4 +36,12 @@ S_INFO_EMPTY= '[% "Mostrando 0 a 0 de 0 registros" | i18n %]';
 S_INFO_FILTERED= '[% "(filtrados de _MAX_ registros totales)" | i18n %]';
 S_SEARCH= '[% "Buscar" | i18n %]';
 
+
+//FIN PARA CALENDAR
+CANCELAR= '[% "Cancelar" | i18n %]';
+OK= '[% "Ok" | i18n %]';
+EDITABLE_MSG= '[% "Editar..." | i18n %]';
+
+
+
 </script>

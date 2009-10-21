@@ -1131,3 +1131,24 @@ CREATE TABLE IF NOT EXISTS `cat_portada_registro` (
   KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
+ALTER TABLE `usr_ref_tipo_documento` DROP PRIMARY KEY;
+ALTER TABLE `usr_ref_tipo_documento` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE `ref_estado` DROP PRIMARY KEY;
+ALTER TABLE `ref_estado` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+`ALTER TABLE usr_ref_categoria_socio DROP INDEX categorycode`;
+`ALTER TABLE usr_ref_categoria_socio DROP PRIMARY KEY`;
+ALTER TABLE `ref_pais` DROP PRIMARY KEY;
+ALTER TABLE `ref_pais` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE `ref_idioma` DROP PRIMARY KEY;
+ALTER TABLE `ref_idioma` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE `ref_localidad` DROP PRIMARY KEY;
+ALTER TABLE `ref_localidad` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE `circ_ref_tipo_prestamo` DROP PRIMARY KEY;
+ALTER TABLE `circ_ref_tipo_prestamo` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE `ref_nivel_bibliografico` DROP PRIMARY KEY;
+ALTER TABLE `ref_nivel_bibliografico` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE `ref_disponibilidad` DROP INDEX `nombre`;
+ALTER TABLE `ref_disponibilidad` DROP PRIMARY KEY;
+ALTER TABLE `ref_disponibilidad` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+

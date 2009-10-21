@@ -1291,3 +1291,12 @@ input.file {
 .message_text{
   clear:both;
 }
+
+.center_fieldset{
+    width: 45%;
+    margin: 0 auto;
+}
+
+.editable:hover{
+  background: InfoBackground;
+}

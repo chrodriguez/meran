@@ -7,12 +7,14 @@ __PACKAGE__->meta->setup
     table   => 'usr_ref_categoria_socio',
     columns =>
         [
+#             id                    => { type => 'serial', not_null => 1 }, MAS ADELANTE DESCOMENTAAR; CUANDO LA DB SE HAGA NUEVA
             categorycode    => { type => 'char', not_null => 1 , length => 2},
             description  => { type => 'varchar', length => 255, not_null => 1 },
         ],
-    primary_key_columns => 'categorycode',
-    unique_key => 'categorycode',
-    relationships => [],
+#     primary_key_columns => ['id'],MAS ADELANTE DESCOMENTAAR; CUANDO LA DB SE HAGA NUEVA
+    primary_key_columns => ['categorycode'],
+    unique_key => ['categorycode'],
+
 );
 
 
@@ -200,14 +202,20 @@ sub nextMember{
 sub getAll{
 
     my ($self) = shift;
-    my ($limit,$offset,$matchig_or_not)=@_;
+    my ($limit,$offset,$matchig_or_not,$filtro)=@_;
     use C4::Modelo::UsrRefCategoriasSocio::Manager;
     use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
-    push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
+    if ($filtro){
+        my @filtros_or;
+        push(@filtros_or, (categorycode => {like => '%'.$filtro.'%'}) );
+        push(@filtros_or, (description => {like => '%'.$filtro.'%'}) );
+        push(@filtros, (or => \@filtros_or) );
+    }
     my $ref_valores;
     if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
+        push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
         $ref_valores = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categoria_socio(query => \@filtros,);
     }else{
         $ref_valores = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categoria_socio(query => \@filtros,

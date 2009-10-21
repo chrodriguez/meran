@@ -8,6 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'pref_unidad_informacion',
 
     columns => [
+        id         => { type => 'serial'},
         id_ui         => { type => 'varchar', not_null => 1 , length => 4},
         nombre           => { type => 'varchar', not_null => 1 , length => 255},
         direccion           => { type => 'varchar', not_null => 1 , length => 255},
@@ -17,7 +18,7 @@ __PACKAGE__->meta->setup(
         email           => { type => 'varchar', not_null => 1 , length => 255},
     ],
 
-    primary_key_columns => [ 'id_ui' ],
+    primary_key_columns => [ 'id' ],
 
     unique_key => [ 'id_ui' ],
 ); 
@@ -28,6 +29,13 @@ sub getId_ui{
     return ($self->id_ui);
 }  
  
+sub setId_ui{
+    my ($self) = shift;
+    my ($id_ui) = @_;
+    
+    return ($self->id_ui($id_ui));
+}  
+
 sub getNombre{
     my ($self) = shift;
 
@@ -118,7 +126,7 @@ sub agregar{
     $self->setTelefono($data_hash->{'telefono'});
     $self->setFax($data_hash->{'fax'});
     $self->setEmail($data_hash->{'email'});
-    
+
     $self->save();
 }
 
@@ -179,14 +187,20 @@ sub getCampo{
 sub getAll{
 
     my ($self) = shift;
-    my ($limit,$offset,$matchig_or_not)=@_;
+    my ($limit,$offset,$matchig_or_not,$filtro)=@_;
     use C4::Modelo::PrefUnidadInformacion::Manager;
     use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
-    push(@filtros, (id_ui => {ne => $self->getId_ui}) );
+
+    if ($filtro){
+        my @filtros_or;
+        push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
+        push(@filtros, (or => \@filtros_or) );
+    }
     my $ref_valores;
     if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
+        push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
         $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(query => \@filtros,);
     }else{
         $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(query => \@filtros,

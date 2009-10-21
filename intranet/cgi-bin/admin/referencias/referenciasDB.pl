@@ -11,6 +11,11 @@ use JSON;
 
 my $input = new CGI;
 my $obj=$input->param('obj');
+
+
+
+my $editing = $input->param('value') && $input->param('id');
+
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $accion;
@@ -20,8 +25,48 @@ if ($obj != 0){
     $accion = $input->param('action') || undef;
 }
 
+if ($editing){
+    my $string_ref = $input->param('id');
+    my $value = $input->param('value');
+    my $valor = C4::AR::Referencias::editarReferencia($string_ref,$value);
 
-if ($accion eq "OBTENER_TABLAS"){
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                        template_name => "includes/partials/modificar_value.tmpl",
+                        query => $input,
+                        type => "intranet",
+                        authnotrequired => 0,
+                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                        debug => 1,
+                    });
+
+    $t_params->{'value'} = $value;
+
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
+elsif ($accion eq "OBTENER_TABLAS"){
+
+    my $alias_tabla= $obj->{'alias_tabla'};
+    my $filtro= $obj->{'filtro'} || 0;
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                        template_name => "admin/referencias/detalle_tabla.tmpl",
+                        query => $input,
+                        type => "intranet",
+                        authnotrequired => 0,
+                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                        debug => 1,
+                    });
+
+    my ($clave,$tabla,$datos,$campos) = C4::AR::Referencias::getTabla($alias_tabla,$filtro);
+
+    $t_params->{'campos'} = $campos;
+    $t_params->{'datos'} = $datos;
+    $t_params->{'tabla'} = $tabla;
+
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+}
+elsif ($accion eq "AGREGAR_REGISTRO"){
 
     my $alias_tabla= $obj->{'alias_tabla'};
 
@@ -34,7 +79,7 @@ if ($accion eq "OBTENER_TABLAS"){
                         debug => 1,
                     });
 
-    my ($clave,$tabla,$datos,$campos) = C4::AR::Referencias::getTabla($alias_tabla);
+    my ($clave,$tabla,$datos,$campos) = C4::AR::Referencias::agregarRegistro($alias_tabla);
 
     $t_params->{'campos'} = $campos;
     $t_params->{'datos'} = $datos;

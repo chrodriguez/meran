@@ -1,15 +1,47 @@
-[% INCLUDE 'partials/admin/_nuevoPermiso.inc' %]
-
 [% USE HTML %]
 
 <script type="text/javascript">
       $(document).ready(function() {
         makeToggle('datos_tabla_div','trigger',null,false);
         makeDataTable('#tablaResult');
+        onEnter('search_tabla',obtenerTablaFiltrada);
+        $('.editable').editable('/cgi-bin/koha/admin/referencias/referenciasDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: '1'},
+        });
       });
 </script>
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Tabla " | i18n %]: [% tabla %]</legend>
+        <div class="search_tabla">
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Registro' | i18n %]",
+                                                            boton   => "boton_agregar",
+                                                            onClick => "agregarRegistro('[% tabla %]');",
+                                                            title   => "[% 'Agregar Registro' | i18n %]",
+                                ) ;
+                    [% END %]
+
+            <fieldset class="center_fieldset">
+                <legend class="titulo_legend">[% "Filtrar por:" | i18n %]</legend>
+                <ul>
+                    <li class="item">
+                        <label for="search_tabla"> Tabla.: </label>
+                        <input type="text" id="search_tabla" name="search_tabla"/>
+                    </li>
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                            boton   => "boton_agregar",
+                                                            onClick => "obtenerTablaFiltrada();",
+                                                            title   => "[% 'Buscar' | i18n %]",
+                                ) ;
+                    [% END %]
+            </fieldset>
         <div class="datos_tabla_div" id="datos_tabla_div">
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
                 <thead>
