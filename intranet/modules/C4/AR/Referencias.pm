@@ -680,12 +680,14 @@ sub agregarRegistro{
         $tabla->addNewRecord();
     };
     $tabla = $tabla->createFromAlias($alias);
-    my $datos = $tabla->getAll(100,0,0,$filtro);
+#     my $datos = $tabla->getAll(100,0,0,$filtro);
+    my @array;
+    push (@array,$tabla);
     my $campos = $tabla->getCamposAsArray();
     my $clave = $tabla->meta->primary_key;
 
     $tabla = $tabla->getAlias;
-    return ($clave,$tabla,$datos,$campos);
+    return ($clave,$tabla,\@array,$campos);
 }
 
 1;
