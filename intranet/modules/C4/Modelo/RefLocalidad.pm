@@ -46,6 +46,11 @@ sub getNombre{
     return ($self->NOMBRE);
 }
 
+sub getNombre_abreviado{
+    my ($self) = shift;
+    return ($self->NOMBRE_ABREVIADO);
+}
+
 sub setId_persona{
     my ($self) = shift;
     my ($nombre) = @_;
@@ -134,7 +139,7 @@ sub getAll{
     if ($matchig_or_not){
         my @matched_array;
         foreach my $each (@$ref_valores){
-          $match = ((distance($self_nombre,$each->getNombre)<=1));
+          $match = ((distance($self_nombre,$each->getNombre)<=1) || (distance($self_nombre,$each->getNombre_abreviado)<=1));
           if ($match){
             push (@matched_array,$each);
           }

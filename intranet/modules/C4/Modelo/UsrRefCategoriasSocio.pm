@@ -12,7 +12,7 @@ __PACKAGE__->meta->setup
             description  => { type => 'varchar', length => 255, not_null => 1 },
         ],
 #     primary_key_columns => ['id'],MAS ADELANTE DESCOMENTAAR; CUANDO LA DB SE HAGA NUEVA
-    primary_key_columns => ['categorycode'],
+    primary_key_columns => ['categorycode'], #MAS ADELANTE ELIMINAR; CUANDO LA DB SE HAGA NUEVA
     unique_key => ['categorycode'],
 
 );

@@ -1151,4 +1151,4 @@ ALTER TABLE `ref_nivel_bibliografico` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST
 ALTER TABLE `ref_disponibilidad` DROP INDEX `nombre`;
 ALTER TABLE `ref_disponibilidad` DROP PRIMARY KEY;
 ALTER TABLE `ref_disponibilidad` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
-
+ALTER TABLE `ref_soporte` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
