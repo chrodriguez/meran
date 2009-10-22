@@ -113,6 +113,7 @@ sub getAll{
                                                                     sort_by => ['descripcion'] 
                                                                    );
     }
+    my $ref_cant = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento_count(query => \@filtros,);
     my $self_descripcion = $self->getDescripcion;
 
     my $match = 0;
@@ -124,10 +125,10 @@ sub getAll{
             push (@matched_array,$each);
           }
         }
-        return (\@matched_array);
+        return (scalar(@matched_array),\@matched_array);
     }
     else{
-      return($ref_valores);
+      return($ref_cant,$ref_valores);
     }
 }
 

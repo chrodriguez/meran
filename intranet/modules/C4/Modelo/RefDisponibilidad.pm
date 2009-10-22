@@ -131,6 +131,7 @@ sub getAll{
                                                                     sort_by => ['nombre'] 
                                                                    );
     }
+    my $ref_cant = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad_count(query => \@filtros,);
     my $self_nombre = $self->getNombre;
 
     my $match = 0;
@@ -142,10 +143,10 @@ sub getAll{
             push (@matched_array,$each);
           }
         }
-        return (\@matched_array);
+        return (scalar(@matched_array),\@matched_array);
     }
     else{
-      return($ref_valores);
+      return($ref_cant,$ref_valores);
     }
 }
 

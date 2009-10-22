@@ -112,6 +112,8 @@ sub getAll{
                                                                     sort_by => ['nombre'] 
                                                                    );
     }
+    my $ref_cant = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3_count(query => \@filtros,);
+
     my $self_nombre = $self->getNombre;
 
     my $match = 0;
@@ -123,10 +125,10 @@ sub getAll{
             push (@matched_array,$autor);
           }
         }
-        return (\@matched_array);
+        return (scalar(@matched_array),\@matched_array);
     }
     else{
-      return($ref_valores);
+      return($ref_cant,$ref_valores);
     }
 }
 

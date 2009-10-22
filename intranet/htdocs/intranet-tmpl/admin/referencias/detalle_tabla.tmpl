@@ -4,6 +4,7 @@
       $(document).ready(function() {
         makeToggle('datos_tabla_div','trigger',null,false);
         makeDataTable('#tablaResult');
+        zebraId('tablaResult');
         onEnter('search_tabla',obtenerTablaFiltrada);
         $('.editable').editable('/cgi-bin/koha/admin/referencias/referenciasDB.pl', { 
               type      : 'text',
@@ -43,6 +44,7 @@
                     [% END %]
             </fieldset>
         <div class="datos_tabla_div" id="datos_tabla_div">
+            <div class="contenedor_paginador">[% paginador %]</div>
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
                 <thead>
                     <tr class="titulo_tabla_resultado">

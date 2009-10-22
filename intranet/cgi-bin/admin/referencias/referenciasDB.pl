@@ -47,7 +47,9 @@ elsif ($accion eq "OBTENER_TABLAS"){
 
     my $alias_tabla= $obj->{'alias_tabla'};
     my $filtro= $obj->{'filtro'} || 0;
-
+    my $ini=$obj->{'ini'};
+    my $funcion=$obj->{'funcion'};
+    my $inicial=$obj->{'inicial'};
     my ($template, $session, $t_params)  = get_template_and_user({  
                         template_name => "admin/referencias/detalle_tabla.tmpl",
                         query => $input,
@@ -57,8 +59,9 @@ elsif ($accion eq "OBTENER_TABLAS"){
                         debug => 1,
                     });
 
-    my ($clave,$tabla,$datos,$campos) = C4::AR::Referencias::getTabla($alias_tabla,$filtro);
-
+    my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+    my ($cantidad,$clave,$tabla,$datos,$campos) = C4::AR::Referencias::getTabla($alias_tabla,$filtro,$cantR,$ini);
+    $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
     $t_params->{'campos'} = $campos;
     $t_params->{'datos'} = $datos;
     $t_params->{'tabla'} = $tabla;

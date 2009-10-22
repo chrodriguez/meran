@@ -132,6 +132,7 @@ sub getAll{
                                                                     sort_by => ['description'] 
                                                                    );
     }
+    my $ref_cant = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico_count(query => \@filtros,);
     my $self_descripcion = $self->getDescription;
 
     my $match = 0;
@@ -143,10 +144,10 @@ sub getAll{
             push (@matched_array,$each);
           }
         }
-        return (\@matched_array);
+        return (scalar(@matched_array),\@matched_array);
     }
     else{
-      return($ref_valores);
+      return($ref_cant,$ref_valores);
     }
 }
 

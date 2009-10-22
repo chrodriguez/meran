@@ -209,6 +209,7 @@ sub getAll{
                                                                     sort_by => ['nombre'] 
                                                                    );
     }
+    my $ref_cant = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion_count(query => \@filtros,);
     my $self_nombre = $self->getNombre;
     my $self_id_ui = $self->getId_ui;
 
@@ -221,14 +222,12 @@ sub getAll{
             push (@matched_array,$autor);
           }
         }
-        return (\@matched_array);
+        return (scalar(@matched_array),\@matched_array);
     }
     else{
-      return($ref_valores);
+      return($ref_cant,$ref_valores);
     }
 }
-
-
 
 1;
 

@@ -5,6 +5,7 @@ function obtenerTabla(){
 
     objAH.accion="OBTENER_TABLAS";
     objAH.alias_tabla = $('#tablas_ref').val();
+    objAH.funcion= 'changePage';
     objAH.sendToServer();
 }
 

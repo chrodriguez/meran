@@ -165,6 +165,7 @@ sub getAll{
                                                                     sort_by => ['nombre','nombre_largo'] 
                                                                    );
     }
+    my $ref_cant = C4::Modelo::RefPais::Manager->get_ref_pais_count(query => \@filtros,);
     my $self_nombre = $self->getNombre;
     my $self_nombre_largo = $self->getNombre_largo;
 
@@ -177,10 +178,10 @@ sub getAll{
             push (@matched_array,$each);
           }
         }
-        return (\@matched_array);
+        return (scalar(@matched_array),\@matched_array);
     }
     else{
-      return($ref_valores);
+      return($ref_cant,$ref_valores);
     }
 }
 

@@ -224,6 +224,7 @@ sub getAll{
                                                                     sort_by => ['description'] 
                                                                    );
     }
+    my $ref_cant = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categoria_socio_count(query => \@filtros,);
     my $self_descripcion = $self->getDescription;
 
     my $match = 0;
@@ -235,10 +236,10 @@ sub getAll{
             push (@matched_array,$each);
           }
         }
-        return (\@matched_array);
+        return (scalar(@matched_array),\@matched_array);
     }
     else{
-      return($ref_valores);
+      return($ref_cant,$ref_valores);
     }
 }
 

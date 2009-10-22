@@ -205,6 +205,8 @@ sub getAll{
                                                                     sort_by => ['nombre'] 
                                                                    );
     }
+
+    my $ref_cant = C4::Modelo::CatAutor::Manager->get_cat_autor_count(query => \@filtros,);
     my $self_nombre = $self->getNombre;
     my $self_apellido = $self->getApellido;
 
@@ -217,10 +219,10 @@ sub getAll{
             push (@matched_array,$autor);
           }
         }
-        return (\@matched_array);
+        return (scalar(@matched_array),\@matched_array);
     }
     else{
-      return($ref_valores);
+      return($ref_cant,$ref_valores);
     }
 }
 

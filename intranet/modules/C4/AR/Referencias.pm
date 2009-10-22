@@ -494,17 +494,19 @@ sub getAutor {
 
 sub getTabla{
     
-    my ($alias,$filtro) = @_;
+    my ($alias,$filtro,$limit,$offset) = @_;
     
     my $tabla = C4::Modelo::PrefTablaReferencia->new();
        $tabla = $tabla->createFromAlias($alias);
 
-    my $datos = $tabla->getAll(100,0,0,$filtro);
+    $limit = $limit || 20;
+    $offset = $offset || 0;
+    my ($cantidad,$datos) = $tabla->getAll($limit,$offset,0,$filtro);
     my $campos = $tabla->getCamposAsArray();
     my $clave = $tabla->meta->primary_key;
 
     $tabla = $tabla->getAlias;
-    return ($clave,$tabla,$datos,$campos);
+    return ($cantidad,$clave,$tabla,$datos,$campos);
 }
 
 sub getTablaInstanceByAlias{

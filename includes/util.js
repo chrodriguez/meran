@@ -272,3 +272,6 @@ function makeDataTable(id){
     }
 }
 
+function changePage(ini){
+    objAH.changePage(ini);
+}
