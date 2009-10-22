@@ -257,6 +257,7 @@ sub _setDatos_de_estructura {
     $hash_ref->{'obligatorio'} =            $cat->getObligatorio;
     $hash_ref->{'idCompCliente'} =          $cat->getIdCompCliente;
     $hash_ref->{'intranet_habilitado'} =    $cat->getIntranet_habilitado;
+    $hash_ref->{'rules'} =                  $cat->getRules;    
 
     C4::AR::Debug::debug("");
     if($cat->getRepetible){    

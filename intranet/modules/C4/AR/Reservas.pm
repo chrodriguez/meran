@@ -860,11 +860,11 @@ sub cantReservasPorNivel1{
         $params->{'db'}:
 =cut
 sub reasignarNuevoEjemplarAReserva{
-    my ($params, $msg_object) = @_;
+    my ($db, $params, $msg_object) = @_;
 
     C4::AR::Debug::debug("reasignarNuevoEjemplarAReserva => id3: ".$params->{'id3'});
     #se verifca si el ejemplar que se esta modificado tiene o no un reserva asignada
-    my ($reserva_asignada) = C4::AR::Reservas::getReservaDeId3($params->{'id3'});
+    my ($reserva_asignada) = C4::AR::Reservas::getReservaDeId3($db, $params->{'id3'});
 
     if($reserva_asignada){
         C4::AR::Debug::debug("reasignarNuevoEjemplarAReserva => tiene reserva asignada ");
@@ -874,7 +874,7 @@ sub reasignarNuevoEjemplarAReserva{
         if($nuevoId3){
             C4::AR::Debug::debug("reasignarNuevoEjemplarAReserva => EXISTE ejemplar disponible");
             #EXISTE un ejemplar disponible
-            $reserva_asignada->intercambiarId3 ($nuevoId3, $msg_object, $params->{'db'});
+            $reserva_asignada->intercambiarId3 ($db, $nuevoId3, $msg_object);
         }else{
             C4::AR::Debug::debug("reasignarNuevoEjemplarAReserva => NO EXISTE");
             #si NO EXISTE un ejemplar disponible del grupo
@@ -887,7 +887,7 @@ sub reasignarNuevoEjemplarAReserva{
     }
 
     #verifico la disponibilidad del grupo
-    manejoDeDisponibilidadDomiciliaria($params);
+    manejoDeDisponibilidadDomiciliaria($db, $params);
 }
 
 
@@ -899,16 +899,16 @@ sub reasignarNuevoEjemplarAReserva{
         $params->{'id2'}: grupo con el que se esta trabajando
 =cut
 sub manejoDeDisponibilidadDomiciliaria{
-    my ($params) = @_;
+    my ($db, $params) = @_;
 
     #verifico la disponibilidad del grupo
-    my ($cant) = getDisponibilidadDeGrupoParaPrestamoDomiciliario($params->{'id2'});
+    my ($cant) = getDisponibilidadDeGrupoParaPrestamoDomiciliario($db, $params->{'id2'});
     if($cant == 0){
         C4::AR::Debug::debug("manejoDeDisponibilidadDomiciliaria => NO hay disponibilidad para el grupo id2: ".$params->{'id2'});
         #si no hay disponibilidad, (el grupo ahora NO TIENE mas ejemplares para prestamo), 
         #elimino TODAS las reservas en espera y la asignada del GRUPO, tambien elimino las sanciones y las reservas
         #retorna las reserva en espera (SI EXISTEN) del grupo
-        my ($reservas_en_espera_array_ref) = getReservasEnEsperaById2($params->{'id2'}); 
+        my ($reservas_en_espera_array_ref) = getReservasEnEsperaById2($db, $params->{'id2'}); 
 
         foreach my $r (@$reservas_en_espera_array_ref) {
             C4::AR::Debug::debug("manejoDeDisponibilidadDomiciliaria => elimino la reserva con id_reserva: ".$r->getId_reserva);
@@ -965,14 +965,14 @@ sub asignarEjemplarASiguienteReservaEnEspera{
     Indica si tiene o no (el grupo) disponibilidad para prestamo DOMICILIARIO
 =cut
 sub getDisponibilidadDeGrupoParaPrestamoDomiciliario{
-    my ($id2) = @_;
+    my ($db, $id2) = @_;
 
     my @filtros;
     push(@filtros, ( id2                => { eq => $id2 }) );
     push(@filtros, ( id_disponibilidad  => { eq => 1 }) );    # Es Prestamo Domiciliario
-    push(@filtros, ( id_estado          => { eq => 0 }) );            # Esta Disponible
+    push(@filtros, ( id_estado          => { eq => 0 }) );    # Esta Disponible
 
-    my $cant = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count( query => \@filtros);
+    my $cant = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count( db => $db, query => \@filtros);
 
     if($cant > 0){
         return $cant;
@@ -1013,6 +1013,7 @@ sub getEjemplaresDeGrupoParaReserva{
     #n3.id_disponibilidad   = 1   DISPONIBILIDAD => PRESTAMO
     #n3.id_estado           = 1   ESTADO => DISPONIBLE
 
+    #esta consulta devuelve todos los ejemplares del grupo q no estan la tabla reservas
     my $query= "    SELECT id3 
                     FROM cat_nivel3 n3 WHERE n3.id2 = ? AND n3.id_disponibilidad = 1 AND n3.id_estado = 0 
                     AND n3.id3 NOT IN ( SELECT cr.id3 
@@ -1057,7 +1058,7 @@ sub getEjemplarDeGrupoParaReserva {
     $id3 = id3 del ejemplar del cual se intenta recuperar la reserva
 =cut
 sub getReservaDeId3{
-    my ($id3) = @_;
+    my ($db, $id3) = @_;
 
     use C4::Modelo::CircReserva;
     use C4::Modelo::CircReserva::Manager;
@@ -1065,7 +1066,7 @@ sub getReservaDeId3{
     push(@filtros, ( id3        => { eq => $id3}));
     push(@filtros, ( estado     => { ne => 'P'} ));
 
-    my ($reservas_array_ref) = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, require_objects => ['nivel3','nivel2']); 
+    my ($reservas_array_ref) = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $db, query => \@filtros, require_objects => ['nivel3','nivel2']); 
 
     if(scalar(@$reservas_array_ref) > 0){
         return ($reservas_array_ref->[0]);
@@ -1080,9 +1081,9 @@ sub getReservaDeId3{
 Funcion que trae los datos de la primer reserva de la cola que estaba esperando que se desocupe un ejemplar del grupo de esta misma reserva.
 =cut
 sub getReservaEnEsperaById2{
-    my ($id2) = @_;
+    my ($db, $id2) = @_;
 
-    my $reservas_array_ref = getReservasEnEsperaById2($id2);
+    my $reservas_array_ref = getReservasEnEsperaById2($db, $id2);
 
     if(scalar(@$reservas_array_ref) > 0){
         return ($reservas_array_ref->[0]);
@@ -1097,14 +1098,14 @@ sub getReservaEnEsperaById2{
 Funcion que trae las reservas en espera sobre un grupo.
 =cut
 sub getReservasEnEsperaById2{
-    my ($id2) = @_;
+    my ($db, $id2) = @_;
 
     use C4::Modelo::CircReserva::Manager;
     my @filtros;
     push(@filtros, ( id2 => { eq => $id2 }));
     push(@filtros, ( id3 => undef ));
 
-    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(   
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(    db      => $db,
                                                                                     query   => \@filtros,
                                                                                     sort_by => 'timestamp',
                                                                 ); 

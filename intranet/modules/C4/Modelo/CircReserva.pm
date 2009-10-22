@@ -661,7 +661,7 @@ sub pasar_a_espera{
 sub intercambiarId3{
     my ($self) = shift;
 
-    my ($nuevo_Id3, $msg_object, $db) = @_;
+    my ($db, $nuevo_Id3, $msg_object) = @_;
     
     C4::AR::Debug::debug("intercambiarId3 => se va a intercambiar el id3, nuevo_Id3: ".$nuevo_Id3);
     use C4::Modelo::CircReserva::Manager;

@@ -78,7 +78,7 @@ __PACKAGE__->meta->setup(
 sub agregar{
     my ($self) = shift;
 
-    my ($data_hash) = @_;
+    my ($db, $data_hash) = @_;
 
     use C4::Modelo::CatNivel2Repetible;
 
@@ -133,15 +133,17 @@ sub agregar{
 
     } #END foreach my $infoNivel3 (@arrayNivel3)
 
-    #se verifica si luego del cambio realizado en el ejemplar es necesario reasignar las colas de reservas
-    $self->verificar_cambio($params);
-
 # TODO ver esto para q es????
     if(!$data_hash->{'modificado'}){
         $self->setBarcode($data_hash->{'barcode'});
     }
     
     $self->save(); #guardo un nivel 3
+
+#     $params->{'db'} = $self->db;
+    #se verifica si luego del cambio realizado en el ejemplar es necesario reasignar las colas de reservas
+    $self->verificar_cambio($db, $params);
+
 
     my $id3= $self->getId3;
 
@@ -322,7 +324,7 @@ sub DISPONIBILIDAD_PARA_SALA{
 sub verificar_cambio {
     my ($self) = shift;
 
-    my ($params) = @_;
+    my ($db, $params) = @_;
 
     my $estado_anterior             = $params->{'estado_anterior'};          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
     my $estado_nuevo                = $params->{'estado_nuevo'};
@@ -349,7 +351,7 @@ sub verificar_cambio {
     #hay que reasignar las reservas que existen para el ejemplar, si no se puede reasignar se eliminan las reservas y sanciones
         C4::AR::Debug::debug("verificar_cambio => DISPONIBLE a NO DISPONIBLE con disponibilidad anterior PRESTAMO");
         
-        C4::AR::Reservas::reasignarNuevoEjemplarAReserva($params, $msg_object);
+        C4::AR::Reservas::reasignarNuevoEjemplarAReserva($db, $params, $msg_object);
 
     }elsif ( (!ESTADO_DISPONIBLE($estado_anterior)) && ESTADO_DISPONIBLE($estado_nuevo) && DISPONIBILIDAD_PRESTAMO($disponibilidad_nueva) ){
     #pasa de DISPONIBLE a NO DISPONIBLE con disponibilidad_nueva PRESTAMO
@@ -363,7 +365,7 @@ sub verificar_cambio {
     #Si estaba DISPONIBLE y pasa de disponibilidad_anterior PRESTAMO a disponibilidad_nueva SALA
     #hay que verificar si tiene reservas, si tiene se reasignan si no se puden reasignar se cancelan
         C4::AR::Debug::debug("verificar_cambio => DISPONIBLE de disponibilidad anterior PRESTAMO a disponibilidad nueva PARA SALA");
-        C4::AR::Reservas::reasignarNuevoEjemplarAReserva($params, $msg_object);            
+        C4::AR::Reservas::reasignarNuevoEjemplarAReserva($db, $params, $msg_object);            
 
     }elsif ( ESTADO_DISPONIBLE($estado_anterior) && DISPONIBILIDAD_PARA_SALA($disponibilidad_anterior) &&
              DISPONIBILIDAD_PRESTAMO($disponibilidad_nueva) ){

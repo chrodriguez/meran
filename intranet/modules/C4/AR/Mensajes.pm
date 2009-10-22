@@ -127,6 +127,7 @@ my %mensajesINTRA = (
     'P122' => 'Disculpe, no se pudo eliminar el ejemplar *?*, se encuentra reservado.',
     'P123' => 'Disculpe, no se pudo eliminar el nivel 2 (*?*), tiene al menos 1 ejemplar con reserva.',
     'P124' => 'Disculpe, no se pudo eliminar el nivel 2 (*?*), tiene al menos 1 ejemplar con prestamo.',
+    'P125' => 'Disculpe, no se pudo modificar el ejemplar *?*, se encuentra prestado.',
 	'S200' => 'El usuario no puede reservar porque esta sancionado hasta el *?*',
 	'S201' => 'El usuario no puede reservar porque tiene una posible sanci&oacute;n pendiente.',
 	'S202' => 'Se elimin&oacute; la sanci&oacute;n a *?* con &eacute;xito.',

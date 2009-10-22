@@ -1,4 +1,8 @@
 /*---------------------------------------------------------------- LOGIN-------------------------------------------------*/                        
+body, html {
+    height: 100%;
+}
+
 body input[type="text"]:focus{
   background: InfoBackground;
 }
@@ -130,6 +134,7 @@ body{
 #marco_contenido{
 	clear:both;
 	margin-bottom:3%;
+    height: 80%;
 }
 
 #marco_contenido_datos{

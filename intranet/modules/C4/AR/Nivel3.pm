@@ -467,6 +467,20 @@ sub _verificarDeleteItem {
 
 }
 
+sub _verificarUpdateItem {
+# FIXME no se verificar si se repiten los barcodes
+    my($msg_object, $params)=@_;
+
+    $msg_object->{'error'} = 0;#no hay error
+
+    if( !($msg_object->{'error'}) && C4::AR::Prestamos::estaPrestado($params->{'id3'}) ){
+        #verifico que el ejemplar no se encuentre reservado
+        $msg_object->{'error'} = 1;
+        C4::AR::Debug::debug("_verificarDeleteItem => Se está intentando modificar un ejemplar que tiene un prestamo");
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P125', 'params' => [$params->{'id3'}]} ) ;
+    }
+
+}
 
 
 =item sub getNivel3FromId2
@@ -494,8 +508,9 @@ sub getNivel3FromId3{
 	my ($id3) = @_;
 
 	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
-																	query => [ 
-																			id3 => { eq => $id3},
+#                                                                     db      => $db,
+																	query   => [ 
+                                                                                id3 => { eq => $id3},
 																		], 
                                                                     require_objects => ['ref_disponibilidad', 'ref_estado']
 																);
@@ -700,59 +715,54 @@ sub _existeBarcodeEnArray {
         $params->{'ID3_ARRAY'}: arreglo de ID3
 =cut
 sub t_modificarNivel3 {
-    my ($params)= @_;
+    my ($params) = @_;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object= C4::AR::Mensajes::create();
     my $catNivel3;
-	my $db;
 
-    if(!$msg_object->{'error'}){
-    #No hay error
-		my	$catNivel2= C4::Modelo::CatNivel2->new();
-		my	$db= $catNivel2->db;
-		$params->{'modificado'}=1;
-		# enable transactions, if possible
-		$db->{connect_options}->{AutoCommit} = 0;
+	my	$catNivel2 = C4::Modelo::CatNivel2->new();
+	my	$db = $catNivel2->db;
+	$params->{'modificado'} = 1;
+	# enable transactions, if possible
+	$db->{connect_options}->{AutoCommit} = 0;
 	
-        eval {
-# FIXME no se verificar si se repiten los barcodes
-			my $id3_array= $params->{'ID3_ARRAY'}; 
-			my $cant= scalar(@$id3_array);
-            C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: ".$cant);
-			for(my $i=0;$i<$cant;$i++){
-				my $catNivel3;
-                C4::AR::Debug::debug("t_modificarNivel3 => ID3 a modificar: ".$params->{'ID3_ARRAY'}->[$i]);
+    eval {
 
-# 				$catNivel3= C4::Modelo::CatNivel3->new(
-# 																db => $db,
-# 																id3 => $params->{'ID3_ARRAY'}->[$i]
-# 												);
+		my $id3_array = $params->{'ID3_ARRAY'}; 
+		my $cant = scalar(@$id3_array);
+        C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: ".$cant);
+		for(my $i=0;$i<$cant;$i++){
+			my $catNivel3;
+            C4::AR::Debug::debug("t_modificarNivel3 => ID3 a modificar: ".$params->{'ID3_ARRAY'}->[$i]);
+
+            $params->{'id3'} = $params->{'ID3_ARRAY'}->[$i];
+            #verifico las condiciones para actualizar los datos
+            _verificarUpdateItem($msg_object, $params);
+
+            if(!$msg_object->{'error'}){
                 ($catNivel3) = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i]);
 
-# 				$catNivel3->load();
-                $catNivel3->db($db);
-				$catNivel3->agregar($params);  #si es mas de un ejemplar, a todos les setea la misma info
-				
-				#se cambio el permiso con exito
-				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$catNivel3->getBarcode]} ) ;
-			}
-			$db->commit;
-        };
+                $catNivel3->agregar($db, $params);  #si es mas de un ejemplar, a todos les setea la misma info
+                #se cambio el permiso con exito
+                $msg_object->{'error'} = 0;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$catNivel3->getBarcode]} ) ;
+            }
+		}#END for(my $i=0;$i<$cant;$i++)
 
-        if ($@){
-            #Se loguea error de Base de Datos
-            &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
-            $db->rollback;
-            #Se setea error para el usuario
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U385', 'params' => [$catNivel3->getBarcode]} ) ;
-        }
+		$db->commit;
+    };
 
-        $db->{connect_options}->{AutoCommit} = 1;
-
+    if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
+        $db->rollback;
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U385', 'params' => [$catNivel3->getBarcode]} ) ;
     }
+
+    $db->{connect_options}->{AutoCommit} = 1;
 
 	return ($msg_object);
 }

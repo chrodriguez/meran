@@ -317,6 +317,7 @@ function updateMostrarEstructuraDelNivel2(responseText){
     
 	//asigno el handler para el validador
 	validateForm('formNivel2',guardarModificarDocumentoN2);
+    addRules();
 }
 
 
@@ -410,10 +411,15 @@ function agregarN2(){
         jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
         $('#tipo_nivel3_id').focus();
     }else{
-        MODIFICAR = 0;
-        AGREGAR_COMPLETO = 0;
-        mostrarEstructuraDelNivel2();
-        inicializarSideLayers();
+        if( $('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') {
+            jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
+            $('#tipo_nivel3_id').focus();
+        }else{
+            MODIFICAR = 0;
+            AGREGAR_COMPLETO = 0;
+            mostrarEstructuraDelNivel2();
+            inicializarSideLayers();
+        }
     }
 }
 
@@ -768,6 +774,8 @@ function procesarInfoJson(json){
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
         COMPONENTES_ARRAY[i]= objetos[i];
         procesarObjeto(objetos[i]);
+//         create_rules_object(COMPONENTES_ARRAY[i].rules);
+//             $('#'+COMPONENTES_ARRAY[i].idCompCliente).rules("add", RULES_OPTIONS);
     }
 	//hago foco en la primer componente
 	_setFoco();
@@ -783,11 +791,6 @@ function procesarInfoJson(json){
  * @params
  * objeto, elemento que contiene toda la info necesaria.
  */
-
-function crearRegla(comp,idComp){
-   $('#'+idComp).rules("add", { required:true } );
-}
-
 function procesarObjeto(objeto){
     var libtext = $.trim(objeto.liblibrarian);
     var tipo = $.trim(objeto.tipo);
@@ -849,7 +852,14 @@ function procesarObjeto(objeto){
             $("#"+idComp).val(objeto.valText);
 			$("#"+idComp).datepicker({ dateFormat: 'dd/mm/yy' });
 		break;
+        case "anio":
+            //tipo,id,opciones,valor
+            comp= crearComponente(tipo,idComp,"","");
+            $(comp).appendTo("#"+idDiv);
+            $("#"+idComp).val(objeto.valText);
+        break;
     }
+
 //     crearRegla(comp,idComp);
    //Se agregan clases para cuando tenga que recuperar los datos.
     if(objeto.obligatorio == "1"){
@@ -858,6 +868,54 @@ function procesarObjeto(objeto){
 
 }
 
+var RULES_OPTIONS = [];
+
+function create_rules_object(rule){
+
+    var rules_array = rule.split("|");    
+    var rule_array;
+    var clave;
+    var valor;
+    RULES_OPTIONS = [];
+
+    for(i=0;i<rules_array.length;i++){
+        rule_array = rules_array[i].split(":");
+
+        clave = $.trim(rule_array[0]);
+        valor = $.trim(rule_array[1]);
+
+        switch (clave) { 
+            case 'minlength': 
+                RULES_OPTIONS.minlength     = valor;
+                break;
+            case 'maxlength': 
+                RULES_OPTIONS.maxlength     = valor;
+                break;
+            case 'digits': 
+                RULES_OPTIONS.digits        = valor;
+                break;
+            case 'lettersonly': 
+                RULES_OPTIONS.lettersonly   = valor;
+                break;
+            case 'date': 
+                RULES_OPTIONS.date          = valor;
+                break;
+            case 'dateITA': 
+                RULES_OPTIONS.dateITA       = valor;
+                break;
+        }
+    }
+}
+
+//prueba
+function addRules(){
+     for(var i=0; i< COMPONENTES_ARRAY.length; i++){
+        if(COMPONENTES_ARRAY[i].rules != ""){
+            create_rules_object(COMPONENTES_ARRAY[i].rules);
+            $('#'+COMPONENTES_ARRAY[i].idCompCliente).rules("add", RULES_OPTIONS);
+        }
+    }
+}
 
 function _cambiarIdDeAutocomplete(){
 	 for(var i=0; i< COMPONENTES_ARRAY.length; i++){
@@ -937,6 +995,8 @@ function crearComponente(tipo,id,objeto,valor){
         break;
 		case "calendar": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
         break;
+        case "anio": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
+        break;
     }
 
     return comp;
@@ -947,7 +1007,7 @@ function crearComponente(tipo,id,objeto,valor){
 function hacerComponenteObligatoria(idObj){
     $("#"+idObj).addClass("obligatorio");
     $("#"+idObj).addClass("required");
-    agrearAHash(HASH_RULES, idObj, "required");
+//     agrearAHash(HASH_RULES, idObj, "required");
     agrearAHash(HASH_MESSAGES, idObj, ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO);    
 }
 

@@ -3,6 +3,8 @@ package C4::Modelo::CatEstructuraCatalogacion;
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
+use Switch;
+
 
 __PACKAGE__->meta->setup(
     table   => 'cat_estructura_catalogacion',
@@ -13,6 +15,7 @@ __PACKAGE__->meta->setup(
         subcampo            => { type => 'character', length => 1, not_null => 1 },
         itemtype            => { type => 'varchar', length => 4, not_null => 1 },
         liblibrarian        => { type => 'varchar', length => 255, not_null => 1 },
+        rules               => { type => 'varchar', length => 255, not_null => 0 },
         tipo                => { type => 'varchar', length => 255, not_null => 1 },
         referencia          => { type => 'integer', default => '0', not_null => 1 },
         nivel               => { type => 'integer', not_null => 1 },
@@ -68,6 +71,7 @@ sub agregar{
     $self->setSubcampo($data_hash->{'subcampo'});
     $self->setItemType($data_hash->{'itemtype'}||'ALL');
     $self->setLiblibrarian($data_hash->{'liblibrarian'});
+    $self->setRule($data_hash->{'tipoInput'});
     $self->setTipo($data_hash->{'tipoInput'});
     $self->setReferencia($data_hash->{'referencia'});
     $self->setNivel($data_hash->{'nivel'});
@@ -435,6 +439,49 @@ sub setLiblibrarian{
     my ($liblibrarian) = @_;
 	utf8::encode($liblibrarian);
     $self->liblibrarian($liblibrarian);
+}
+
+sub getRules{
+    my ($self) = shift;
+#     return ("'".C4::AR::Utilidades::trim($self->rules)."'");
+    return (C4::AR::Utilidades::trim($self->rules));
+}
+
+sub setRules{
+    my ($self) = shift;
+
+    my ($rules) = @_;
+    utf8::encode($rules);
+    $self->rules($rules);
+}
+
+sub setRule{
+    my ($self) = shift;
+
+    my ($tipo) = @_;
+    my $lettersonly    = " lettersonly: ";
+    my $dateITA        = " dateITA: "; 
+    my $digits         = " digits: ";
+    my $maxlength      = " maxlength: ";
+    my $minlength      = " minlength: ";
+    my $rule;
+
+C4::AR::Debug::debug("tipo: ".$tipo);
+
+    switch ($tipo) {
+
+        case "combo"        { $rule = $lettersonly." true " }
+        case "calendar"     { $rule = $dateITA." true " }
+        case "anio"         { $rule = $digits." true | ".$maxlength." 4 | ".$minlength." 4" }
+        case "auto"         { $rule = $lettersonly." true " }
+        case "texto"        { $rule = $lettersonly." true " }
+        case "texto2"       { $rule = $lettersonly." true " }
+        case "textoa"       { $rule = $lettersonly." true " }
+
+    }  
+
+C4::AR::Debug::debug("rule: ".$rule);
+    $self->rules($rule);
 }
         
 sub getReferencia{
