@@ -73,6 +73,23 @@ function updateMostrarDetalleMARC(responseText){
 }
 
 
+function importarMARC(id_resultado){
+    objAH=new AjaxHelper(updateImportarMARC);
+    objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
+    objAH.id_resultado = id_resultado;
+    objAH.tipo="IMPORTAR_MARC";
+    objAH.sendToServer();
+}
+
+function updateImportarMARC(responseText){
+         var Messages= JSONstring.toObject(responseText);
+         setMessages(Messages);
+        $('#datos_busquedas_div').show();
+        $('#datos_tabla_div').show();
+        $('#detalleMARC').hide();
+}
+
+
 $(document).ready(function() {
     verBusquedas();
        //     setInterval( "verBusquedas()", 30000 );
@@ -89,7 +106,7 @@ $(document).ready(function() {
         </label>
         <input type="text" id="termino" size="20" tabindex=1>
     </li>
-    <li class="item" >
+    <li class="click" >
          [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_buscar",

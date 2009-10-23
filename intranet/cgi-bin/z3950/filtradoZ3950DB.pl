@@ -87,6 +87,33 @@ elsif($tipo eq "VER_DETALLE_MARC"){
         my $marc=$resultado->getRegistroMARC();
         my $MARCDetail_array = C4::AR::Z3950::detalleMARC($marc);
         $t_params->{'MARCDetail_array'}= $MARCDetail_array;
+        $t_params->{'id_resultado'}= $id_resultado;
     }
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
+elsif($tipo eq "IMPORTAR_MARC"){
+
+    my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'ALTA', 
+                                                    entorno => 'undefined' },
+                                                'intranet'
+                               );
+
+    my $infoOperacionJSON;
+
+    my $id_resultado = $obj->{'id_resultado'};
+    my $resultado = C4::AR::Z3950::getResultado($id_resultado);
+    if($resultado){
+        my $marc=$resultado->getRegistroMARC();
+        my ($Messages_arrayref, $id1) = C4::AR::Nivel1::guardarRegistroMARC($marc);
+        $infoOperacionJSON=to_json $Messages_arrayref;
+
+    C4::Auth::print_header($session);
+    print $infoOperacionJSON;
+    
+    }
+
 }

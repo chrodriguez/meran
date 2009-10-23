@@ -255,7 +255,53 @@ sub t_eliminarNivel1{
 
     return ($msg_object);
 }
-#===================================================================Fin====ABM Nivel 1====================================================
+#===================================================================Fin====ABM Nivel 1=============================================================
+#========================================================IMPORTACION MARC==========================================================================
+=item sub guardarRegistroMARC
+Este funcion recibe un objeto MARC::Record  y lo guarda en el Catálogo (Solo Nivel1, Nivel2 y sus repetibles)
+=cut
+sub guardarRegistroMARC {
+    my ($marc)=@_;
+
+    my $msg_object= C4::AR::Mensajes::create();
+       $msg_object->{'tipo'}="INTRA";
+
+    my $id1;
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $catNivel1;
+        $catNivel1= C4::Modelo::CatNivel1->new();
+        my $db= $catNivel1->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+         $db->begin_work;
+    
+        eval {
+            $catNivel1->agregarDesdeMARC($marc);
+            $id1 = $catNivel1->getId1;
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$catNivel1->getId1]} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B427',"INTRA");
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U371', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object, $id1);
+}
+#========================================================FIN IMPORTACION MARC======================================================================
 #
 =back
 

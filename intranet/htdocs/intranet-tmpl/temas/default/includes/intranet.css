@@ -882,6 +882,15 @@ label.error_adv{
       width: 90%; 
 }
 
+.guardarMARC {
+      display:block;
+      float:right;
+      padding:5px;
+      text-align: center;
+      margin-left:auto;
+      margin-right:auto;
+}
+
 li.MARCHeader{
     margin:0;
     padding:5px;

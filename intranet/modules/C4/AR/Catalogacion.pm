@@ -119,6 +119,24 @@ sub getCamposXLike{
     return($db_campos_MARC);
 }
 
+=item sub getSubCampos
+    Obtiene los subcampos MARC para el nivel indicado
+=cut
+sub getSubCampos{
+
+    use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
+    use C4::Modelo::PrefEstructuraSubcampoMarc;
+    my ($nivel) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( nivel => { eq => $nivel } ) );
+
+    my $db_campos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                query => \@filtros,
+                                                            );
+    return($db_campos_MARC);
+}
 
 =item sub getSubCamposLike
     Obtiene los subcampos haciendo busqueda like, para el nivel indicado

@@ -14,11 +14,10 @@
            <table id="tablaBusquedas" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <thead>
                 <tr class="titulo_tabla_resultado">
-                    <th>[% "B&uacute;squeda" | i18n %]</th>
-                    <th>[% "Tipo" | i18n %]</th>
-                    <th>[% "Estado" | i18n %]</th>
-                    <th>[% "Resultados" | i18n %]</th>
-                    <th></th>
+                    <th width="55%">[% "B&uacute;squeda" | i18n %]</th>
+                    <th width="15%">[% "Estado" | i18n %]</th>
+                    <th width="15%">[% "Resultados" | i18n %]</th>
+                    <th width="5%">&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -42,7 +41,7 @@
                        [% IF busqueda.getFin %] [% busqueda.getCantResultados %] [% ELSE %]-[% END %]
                     </td>
 
-                    <td class="titulo_result">
+                    <td width="5%">
                         [% IF busqueda.getFin %] 
                         [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
@@ -57,7 +56,7 @@
                 [% END %]
                 </tbody>
             </table>
-
+        <div class="guardarMARC">
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_anadir",
@@ -65,7 +64,7 @@
                                                                     title   => "[% 'Actualizar' | i18n %]",
                                         ) ;
             [% END %]
-
+        </div>
         [% END %]
         </div>
 </fieldset>
