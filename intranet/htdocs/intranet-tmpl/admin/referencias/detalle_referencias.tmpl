@@ -7,6 +7,7 @@
           makeToggle('datos_tabla_div_related','trigger',null,false);
           makeDataTable('#tablaResult_similares');
           zebra('datos_tabla');
+          scrollTo('fieldset_tablaResult_involved');
       });
 </script>
 <fieldset class="resultados_busqueda" id="fieldset_tablaResult_involved">
@@ -19,12 +20,30 @@
                           [% FOREACH campo IN referer_involved.getCamposAsArray %]
                               <th> [% campo %]</th>
                           [% END %]
+                          [% IF used == 0 %]
+                              <th> [% "Eliminar" | i18n %] </th>
+                          [% END %]
                       </tr>
                   </thead>
                   <tbody>
                       <tr>
                           [% referer_involved.printAsTableElement %]
+                          [% IF used == 0 %]
+                              <td>
+                                  [% PERL %]
+                                      print C4::AR::Filtros::to_Icon(  
+                                                                          boton   => "icon_cancelar",
+                                                                          onClick => "eliminarReferencia('[% tabla_related %]','[% referer_involved.getPkValue %]');",
+                                                                          title   => "[% 'Eliminar' | i18n %]",
+                                                                          alternClass => "botonCentradoTabla",
+                                                                          elem => 'span',
+                                                                          style => 'float: left;',
+                                              ) ;
+                                  [% END %]
+                              </td>
+                          [% END %]
                       </tr>
+
                     [% ELSE %]
                       <tr class="titulo_tabla_resultado">
                           <td>[% "Campos" | i18n %]</td>
@@ -51,13 +70,12 @@
                         [% IF involved %]
                             [% FOREACH data IN involved %]
                                 <tr>
-                                    <td> [% "El registro tiene " | i18n %][% data.cantidad %][% " tuplas relacionadas en la tabla " | i18n %] [% data.tabla %]</td>
+                                    <td> [% "El registro tiene " | i18n %][% data.cantidad %][% " tupla(s) relacionada(s) en la tabla " | i18n %] [% data.tabla %]</td>
                                 </tr>
                             [% END %]
                         [% ELSE %]
                               <tr><td>[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</td></tr>
                         [% END %]
-                    </tr>
                 </tbody>
             </table>
         </div>

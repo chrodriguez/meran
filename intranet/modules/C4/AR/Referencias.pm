@@ -557,6 +557,7 @@ sub mostrarReferencias{
     my @filtros;
 
     my @data_array;
+    my $global_references_count = 0;
 
     use C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager;
     push (  @filtros, ( alias_tabla => { eq => $alias },) );
@@ -582,11 +583,12 @@ sub mostrarReferencias{
                 $table_data{"tabla"} = $tabla->getTabla_referente;
                 $table_data{"tabla_object"} = $tabla;
                 $table_data{"cantidad"} = $involved_count;
+                $global_references_count += $involved_count;
                 push (@data_array, \%table_data);
             }
         }
         
-        return ($referer_involved,\@data_array);
+        return ($global_references_count,$referer_involved,\@data_array);
     }else{
         return (0,0);
     }
@@ -634,13 +636,27 @@ sub eliminarReferencia{
     my ($alias_tabla,$referer_involved) = @_;
     my $tabla = getTablaInstanceByAlias($alias_tabla);
     my $status = 0;
-
     if ($tabla){
-        my $old_pk = $tabla->getByPk($referer_involved);
-    
-        $status = $old_pk->delete();
+
+        my ($used_or_not) = mostrarReferencias($alias_tabla,$referer_involved);
+        if (!$used_or_not){
+            my $old_pk = $tabla->getByPk($referer_involved);
+            $status = $old_pk->delete();
+        }else{
+            $status = 0;
+        }
     }
-    return ($status);
+    my $msg_object= C4::AR::Mensajes::create();
+    if (!$status){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REF0', 'params' => []} );
+    }else{
+        $msg_object->{'error'}= 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REF1', 'params' => []} );
+    }
+
+
+    return ($msg_object);
 }
 
 sub asignarYEliminarReferencia{

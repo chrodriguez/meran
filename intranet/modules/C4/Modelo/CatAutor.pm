@@ -214,7 +214,7 @@ sub getAll{
     if ($matchig_or_not){
         my @matched_array;
         foreach my $autor (@$ref_valores){
-          $match = ((distance($self_nombre,$autor->getNombre)<=1) or (distance($self_apellido,$autor->getApellido)<=1));
+          $match = ((distance($self_nombre,$autor->getNombre)<=1) || (distance($self_apellido,$autor->getApellido)<=1));
           if ($match){
             push (@matched_array,$autor);
           }

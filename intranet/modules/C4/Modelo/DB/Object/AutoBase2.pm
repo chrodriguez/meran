@@ -86,7 +86,7 @@ sub replaceByThis{
 
     my @filtros;
 
-    my ($referer_involved,$data_array) = C4::AR::Referencias::mostrarReferencias($self->getAlias(),$self->getPkValue);
+    my ($used_or_not,$referer_involved,$data_array) = C4::AR::Referencias::mostrarReferencias($self->getAlias(),$self->getPkValue);
 
 
     foreach my $tabla (@$data_array){

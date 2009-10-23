@@ -437,7 +437,7 @@ sub _destruirSession{
     
     my ($codMsg,$url) = @_;
 
-    $codMsg = $codMsg || 'U405';
+    $codMsg = $codMsg || 'U406';
     $url = $url || '/cgi-bin/koha/auth.pl';
 
     my ($session) = CGI::Session->load();
@@ -525,7 +525,7 @@ sub checkauth {
         #de la base
             $sessionID = undef;
             $userid = undef;    
-            _destruirSession('U405');
+            _destruirSession('U406');
         }
 
         my ($ip , $lasttime, $nroRandom, $flag, $tokenDB);
@@ -1125,6 +1125,7 @@ sub inicializarAuth{
     #genero una nueva session
 
     my ($session) = CGI::Session->load();
+    $session->flush();
     if (!$session->param('userid') || _session_expired($session)){
         C4::AR::Debug::debug("inicializarAuth => ".$session->param('codMsg'));
         my $msjCode = getMsgCode();

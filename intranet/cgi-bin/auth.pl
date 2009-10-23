@@ -16,7 +16,7 @@ my ($template, $t_params)= C4::Output::gettemplate("auth.tmpl", 'intranet');
 #se inicializa la session y demas parametros para autenticar
 $t_params->{'intranet'};
 my ($session)= C4::Auth::inicializarAuth($t_params);
-
+$session->flush();
 $t_params->{'sessionClose'} = $cgi->param('sessionClose') || 0;
 
 if ($t_params->{'sessionClose'}){

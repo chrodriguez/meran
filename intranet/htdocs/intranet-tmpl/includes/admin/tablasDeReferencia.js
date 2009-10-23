@@ -24,6 +24,7 @@ function obtenerTablaFiltrada(){
     objAH.accion="OBTENER_TABLAS";
     objAH.alias_tabla = $('#tablas_ref').val();
     objAH.filtro = $.trim($('#search_tabla').val());
+    objAH.funcion= 'changePage';
     objAH.sendToServer();
 }
 
@@ -32,6 +33,31 @@ function updateObtenerTablaFiltrada(responseText){
 
     $('#detalle_tabla').html(responseText);
 
+}
+
+
+function eliminarReferencia(tabla,id){
+
+    $('#fieldset_tablaResult_involved').addClass("warning");
+    jConfirm(TITLE_DELETE_REFERENCE+id+"?","Titulo",function(confirmed){
+        if (confirmed){
+            objAH=new AjaxHelper(updateEliminarReferencia);
+            objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
+            objAH.cache = false;
+            objAH.accion="ELIMINAR_REFERENCIA";
+            objAH.alias_tabla = tabla;
+            objAH.item_id= id;
+            objAH.sendToServer();
+        }
+        $('#fieldset_tablaResult_involved').removeClass("warning");
+    });
+}
+
+
+function updateEliminarReferencia(responseText){
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+    obtenerTabla();
 }
 
 function agregarRegistro(tabla){

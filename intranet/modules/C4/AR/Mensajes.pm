@@ -235,10 +235,10 @@ my %mensajesINTRA = (
     'U400' => 'UD. acaba de cambiar la password, debe ingresar nuevamente.',
     'U401' => 'Disculpe, intent&oacute; loguearse de forma inadecuada.',
     'U402' => 'El barcode no cumple con el formato requerido.',
-    'U405' => 'La sesi&oacute;n ha sido eliminada, por favor, inicie sesi&oacute;n nuevamente. Disculpe las molestias.',
     'U403' => 'No existe el Grupo que se intenta modificar.',
     'U404' => 'No existe el Nivel 1 que se intenta modificar.',
     'U405' => 'No está permitido agregar mas de *?* ejempales.',
+    'U406' => 'La sesi&oacute;n ha sido eliminada, por favor, inicie sesi&oacute;n nuevamente. Disculpe las molestias.',
 #     'U405' => 'No existe la estructura de catalogaci&oacute;n que se intentando recuperar.',
 	'B400' => '',
 	'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
@@ -346,6 +346,8 @@ my %mensajesINTRA = (
     'E010' => 'No se pudo agregar el estante  ya que existe otro con el nombre "*?*".',
     'E011' => 'El estante fue agregado con &eacute;xito a "*?*".',
     'E012' => 'Se produjo un error al tratar de agregar el estante "*?*" .',
+    'REF0' => 'La referencia no se ha podido eliminar, verifique que no se est&eacute; usando.',
+    'REF1' => 'La referencia ha sido eliminada correctamente.',
 );
 
 sub getMensaje {

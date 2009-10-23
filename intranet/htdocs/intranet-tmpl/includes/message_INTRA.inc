@@ -139,6 +139,8 @@ TITLE_FIRST_ASSIGN_DELETE_REFERENCIES = "[% 'Desea asignar y eliminar el element
 
 TITLE_TO_ASSIGN_REFERENCIES = "[% ' a este otro? ' | i18n %]";
 
+TITLE_DELETE_REFERENCE = "[% ' Desea eliminar la referencia con id  ' | i18n %]";
+
 //=================================================Fin===Admin=======================================================
 
 //====================================================Estante==========================================================
