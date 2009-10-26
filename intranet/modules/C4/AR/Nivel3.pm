@@ -539,7 +539,7 @@ sub t_guardarNivel3 {
 
     my $msg_object= C4::AR::Mensajes::create();
     my $catNivel3;
-	my $db;
+	  my $db;
 
     if(!$msg_object->{'error'}){
     #No hay error
@@ -547,8 +547,8 @@ sub t_guardarNivel3 {
 		my	$db= $catNivel2->db;
 			# enable transactions, if possible
 			$db->{connect_options}->{AutoCommit} = 0;
-	
-        eval {
+
+    eval {
 
             #se genera el arreglo de barcodes validos para agregar a la base y se setean los mensajes para el usuario (mensajes de ERROR)
 			my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
@@ -559,7 +559,7 @@ sub t_guardarNivel3 {
                 $params->{'barcode'} = $barcode; 
     
 				$catNivel3 = C4::Modelo::CatNivel3->new(db => $db);
-				$catNivel3->agregar($params);  
+				$catNivel3->agregar($db, $params);  
 				
 				#se agregaron los barcodes con exito
 				$msg_object->{'error'} = 0;
@@ -567,18 +567,18 @@ sub t_guardarNivel3 {
 			}
 
 			$db->commit;
-        };
+    };
 
-        if ($@){
-            #Se loguea error de Base de Datos
-            &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
-            eval $db->rollback;
-            #Se setea error para el usuario
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U373', 'params' => []} ) ;
-        }
+      if ($@){
+          #Se loguea error de Base de Datos
+          &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
+          eval $db->rollback;
+          #Se setea error para el usuario
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U373', 'params' => []} ) ;
+      }
 
-        $db->{connect_options}->{AutoCommit} = 1;
+      $db->{connect_options}->{AutoCommit} = 1;
 
     }
 

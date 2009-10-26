@@ -481,7 +481,8 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
                                                 { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'datos_nivel3'}, 
 												'intranet'
 											);
-                
+               
+
 	#Se muestran la estructura de catalogacion para que el usuario agregue un documento
     my ($Message_arrayref, $nivel3) = &C4::AR::Nivel3::t_guardarNivel3($obj);
     

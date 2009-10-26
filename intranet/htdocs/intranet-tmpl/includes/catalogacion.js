@@ -298,7 +298,7 @@ function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL= 2;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug= true;
-	objAH.cache= true;
+	  objAH.cache= true;
     objAH.showStatusIn = 'estructuraDelNivel2';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -314,9 +314,9 @@ function updateMostrarEstructuraDelNivel2(responseText){
     procesarInfoJson(responseText);
     mostrarDataNivel();
     scrollTo('nivel2Tabla');
-    
-	//asigno el handler para el validador
-	validateForm('formNivel2',guardarModificarDocumentoN2);
+      
+	  //asigno el handler para el validador
+	  validateForm('formNivel2',guardarModificarDocumentoN2);
     addRules();
 }
 
@@ -337,7 +337,7 @@ function mostrarEstructuraDelNivel3(){
 
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel3);
     objAH.debug= true;
-	objAH.cache= true;
+	  objAH.cache= true;
     objAH.showStatusIn = 'estructuraDelNivel3';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -425,9 +425,9 @@ function agregarN2(){
 
 function agregarN3( id2){
     ID_N2 = id2; 
-	MODIFICAR = 0;
-	$('#divCantEjemplares').show();
-	mostrarEstructuraDelNivel3();
+	  MODIFICAR = 0;
+	  $('#divCantEjemplares').show();
+	  mostrarEstructuraDelNivel3();
 }
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 1 luego de ser guardado
@@ -779,7 +779,8 @@ function procesarInfoJson(json){
     }
 	//hago foco en la primer componente
 	_setFoco();
-    if( MODIFICAR == 0 && _NIVEL_ACTUAL == 2 && AGREGAR_COMPLETO == 1){  
+//     if( MODIFICAR == 0 && _NIVEL_ACTUAL == 2 && AGREGAR_COMPLETO == 1){  
+    if( MODIFICAR == 0 && _NIVEL_ACTUAL == 2 ){  
     //si se esta agregando un NIVEL 2  
         _seleccionarTipoDocumentoYDeshabilitarCombo();
     }    

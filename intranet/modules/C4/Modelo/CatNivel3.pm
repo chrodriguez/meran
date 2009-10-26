@@ -112,23 +112,24 @@ sub agregar{
         if( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'o') ){
             #disponibilidad
 # TODO esta feo ver si se puede modularizar
-                if ($infoNivel3->{'referencia'}) {
-                        $params->{'disponibilidad_nueva'} = $infoNivel3->{'datoReferencia'};
-                        $params->{'estado_nuevo'} = $infoNivel3->{'datoReferencia'};
-                    }else{
-                        $params->{'disponibilidad_nueva'} = $infoNivel3->{'dato'};
-                        $params->{'estado_nuevo'} = $infoNivel3->{'dato'};
-                }
-            }elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'e') ){
-            #estado del ejemplar
-                if ($infoNivel3->{'referencia'}) {
-                    $params->{'estado_nuevo'} = $infoNivel3->{'datoReferencia'};
+            if ($infoNivel3->{'referencia'}) {
                     $params->{'disponibilidad_nueva'} = $infoNivel3->{'datoReferencia'};
+                    $params->{'estado_nuevo'} = $infoNivel3->{'datoReferencia'};
                 }else{
-                    $params->{'estado_nuevo'} = $infoNivel3->{'dato'};
                     $params->{'disponibilidad_nueva'} = $infoNivel3->{'dato'};
-                }
+                    $params->{'estado_nuevo'} = $infoNivel3->{'dato'};
             }
+
+        }elsif( ($infoNivel3->{'campo'} eq '995')&&($infoNivel3->{'subcampo'} eq 'e') ){
+        #estado del ejemplar
+            if ($infoNivel3->{'referencia'}) {
+                $params->{'estado_nuevo'} = $infoNivel3->{'datoReferencia'};
+                $params->{'disponibilidad_nueva'} = $infoNivel3->{'datoReferencia'};
+            }else{
+                $params->{'estado_nuevo'} = $infoNivel3->{'dato'};
+                $params->{'disponibilidad_nueva'} = $infoNivel3->{'dato'};
+            }
+        }
 
 
     } #END foreach my $infoNivel3 (@arrayNivel3)
