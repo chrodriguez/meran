@@ -505,13 +505,14 @@ Recupero un nivel 3 a partir de un id3
 retorna un objeto o 0 si no existe
 =cut
 sub getNivel3FromId3{
-	my ($id3) = @_;
+	my ($id3, $db) = @_;
 
+  $db = $db || C4::Modelo::PermCatalogo->new()->db;
 	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
-#                                                                     db      => $db,
-																	query   => [ 
+                                                                    db => $db,
+                                                                    query   => [  
                                                                                 id3 => { eq => $id3},
-																		], 
+												                                                        ], 
                                                                     require_objects => ['ref_disponibilidad', 'ref_estado']
 																);
 
@@ -550,21 +551,21 @@ sub t_guardarNivel3 {
 
     eval {
 
-            #se genera el arreglo de barcodes validos para agregar a la base y se setean los mensajes para el usuario (mensajes de ERROR)
-			my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
+        #se genera el arreglo de barcodes validos para agregar a la base y se setean los mensajes para el usuario (mensajes de ERROR)
+			  my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
 
-            foreach my $barcode (@$barcodes_para_agregar){
-                #se procesa un barcode por vez junto con la info del nivel 3 y nivel3 repetible
-				my $catNivel3;
-                $params->{'barcode'} = $barcode; 
-    
-				$catNivel3 = C4::Modelo::CatNivel3->new(db => $db);
-				$catNivel3->agregar($db, $params);  
-				
-				#se agregaron los barcodes con exito
-				$msg_object->{'error'} = 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$catNivel3->getBarcode]} );
-			}
+        foreach my $barcode (@$barcodes_para_agregar){
+        #se procesa un barcode por vez junto con la info del nivel 3 y nivel3 repetible
+				  my $catNivel3;
+          $params->{'barcode'} = $barcode; 
+      
+				  $catNivel3 = C4::Modelo::CatNivel3->new(db => $db);
+				  $catNivel3->agregar($db, $params);  
+				  
+				  #se agregaron los barcodes con exito
+				  $msg_object->{'error'} = 0;
+				  C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$catNivel3->getBarcode]} );
+			  }
 
 			$db->commit;
     };
@@ -572,7 +573,7 @@ sub t_guardarNivel3 {
       if ($@){
           #Se loguea error de Base de Datos
           &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
-          eval $db->rollback;
+          $db->rollback;
           #Se setea error para el usuario
           $msg_object->{'error'}= 1;
           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U373', 'params' => []} ) ;
@@ -721,19 +722,20 @@ sub t_modificarNivel3 {
     my $msg_object= C4::AR::Mensajes::create();
     my $catNivel3;
 
-	my	$catNivel2 = C4::Modelo::CatNivel2->new();
-	my	$db = $catNivel2->db;
-	$params->{'modificado'} = 1;
-	# enable transactions, if possible
-	$db->{connect_options}->{AutoCommit} = 0;
+	  my	$catNivel2 = C4::Modelo::CatNivel2->new();
+	  my	$db = $catNivel2->db;
+	  $params->{'modificado'} = 1;
+	  # enable transactions, if possible
+	  $db->{connect_options}->{AutoCommit} = 0;
 	
     eval {
 
-		my $id3_array = $params->{'ID3_ARRAY'}; 
-		my $cant = scalar(@$id3_array);
+		    my $id3_array = $params->{'ID3_ARRAY'}; 
+		    my $cant = scalar(@$id3_array);
         C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: ".$cant);
-		for(my $i=0;$i<$cant;$i++){
-			my $catNivel3;
+
+		    for(my $i=0;$i<$cant;$i++){
+			      my $catNivel3;
             C4::AR::Debug::debug("t_modificarNivel3 => ID3 a modificar: ".$params->{'ID3_ARRAY'}->[$i]);
 
             $params->{'id3'} = $params->{'ID3_ARRAY'}->[$i];
@@ -741,16 +743,16 @@ sub t_modificarNivel3 {
             _verificarUpdateItem($msg_object, $params);
 
             if(!$msg_object->{'error'}){
-                ($catNivel3) = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i]);
-
+                ($catNivel3) = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i], $db);
+#                 $db = $catNivel3->db;
                 $catNivel3->agregar($db, $params);  #si es mas de un ejemplar, a todos les setea la misma info
                 #se cambio el permiso con exito
                 $msg_object->{'error'} = 0;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$catNivel3->getBarcode]} ) ;
             }
-		}#END for(my $i=0;$i<$cant;$i++)
+		    }#END for(my $i=0;$i<$cant;$i++)
 
-		$db->commit;
+		    $db->commit;
     };
 
     if ($@){

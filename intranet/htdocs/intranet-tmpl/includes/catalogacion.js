@@ -572,19 +572,19 @@ function updateGuardarDocumentoN2(responseText){
 function guardarDocumentoN3(){
 	if( verificarAgregarDocumentoN3() ){
 		syncComponentesArray();
-        var porBarcode = $("#cantEjemplares").attr("readonly");
+    var porBarcode = $("#cantEjemplares").attr("readonly");
 		objAH=new AjaxHelper(updateGuardarDocumentoN3);
 		objAH.debug= true;
-        objAH.modificado = 0;
+    objAH.modificado = 0;
 		objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 		objAH.tipoAccion= "GUARDAR_NIVEL_3";
 		objAH.tipo_documento= $("#tipo_nivel3_id").val();
-        objAH.esPorBarcode = porBarcode;
+    objAH.esPorBarcode = porBarcode;
 
-        if (porBarcode)
-            objAH.BARCODES_ARRAY= BARCODES_ARRAY;
-        else
-            objAH.cantEjemplares= $("#cantEjemplares").val();
+    if (porBarcode)
+        objAH.BARCODES_ARRAY= BARCODES_ARRAY;
+    else
+        objAH.cantEjemplares= $("#cantEjemplares").val();
 
 		_sacarOpciones();
 		objAH.infoArrayNivel3= COMPONENTES_ARRAY;
@@ -595,7 +595,7 @@ function guardarDocumentoN3(){
 }
 
 function updateGuardarDocumentoN3(responseText){
-
+/*
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
     setMessages(Messages);
@@ -617,6 +617,7 @@ function updateGuardarDocumentoN3(responseText){
         //muestra la tabla con los ejemplares agregados
         mostrarInfoAltaNivel3(ID_N2);
     }
+*/
 }
 
 function guardarModificacionDocumentoN1(){

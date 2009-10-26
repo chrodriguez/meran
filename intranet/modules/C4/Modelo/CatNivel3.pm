@@ -156,11 +156,13 @@ sub agregar{
 
         if ( $infoNivel3->{'Id_rep'} != 0 ){
             C4::AR::Debug::debug("CatNivel3 => agregar => Se va a modificar CatNivel3, Id_rep: ". $infoNivel3->{'Id_rep'});
-            $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $self->db, rep_n3_id => $infoNivel3->{'Id_rep'});
-            $nivel3Repetible->load();
+#             $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $self->db, rep_n3_id => $infoNivel3->{'Id_rep'});
+            $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $db, rep_n3_id => $infoNivel3->{'Id_rep'});
+#             $nivel3Repetible->load();
         }else{
             C4::AR::Debug::debug("CatNivel3 => agregar => No existe el REPETIBLE se crea uno");
-            $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $self->db);
+#             $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $self->db);
+            $nivel3Repetible = C4::Modelo::CatNivel3Repetible->new(db => $db);
         }
 
         $nivel3Repetible->setId3($infoNivel3->{'id3'});
