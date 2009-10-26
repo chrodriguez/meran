@@ -142,7 +142,7 @@ sub obtenerValoresCampo {
     my ($campo,$orden)=@_;
 	use C4::Modelo::CircRefTipoPrestamo::Manager;
  	my $ref_valores = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo
-						( select  => [$self->meta->primary_key ,$campo],
+						( select  => ['id_tipo_prestamo' ,$campo],
 						  sort_by => ($orden) );
     my @array_valores;
 

@@ -47,7 +47,7 @@ sub obtenerValoresCampo {
     my ($campo,$orden)=@_;
 	use C4::Modelo::RefEstado::Manager;
  	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
-						( select   => [ $self->meta->primary_key , $campo],
+						( select   => [ 'codigo' , $campo],
 						  sort_by => ($orden) );
     my @array_valores;
 

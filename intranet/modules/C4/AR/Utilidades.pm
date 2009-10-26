@@ -986,36 +986,33 @@ sub armarPaginas{
 
     my $themelang= $t_params->{'themelang'};
 
-    my $paginador= "<div id=paginador>";
+    my $paginador= "<div class='pagination'>";
     my $class="paginador";
 
     if($actual > 1){
         #a la primer pagina
-        $paginador .= "<span class='click' onClick='".$funcion."(1)' title='Inicio'>
-        <img src='".$themelang."/images/numbers/pag_primera.png' border=0></span>";
-
-        $paginador .= "<span> </span>";
-
         my $ant= $actual-1;
-        $paginador .= "<span class='click' onClick='".$funcion."(".$ant.")' title='Anterior'>
-        <img src='".$themelang."/images/numbers/pag_anterior.png' border=0></span>";
+        $paginador .= "<a class='click previous' onClick='".$funcion."(".$ant.")' title='Previous'>« Previous</a>";
+
+    }else{
+        $paginador .= "<span class='disabled' title='Previous'>« Previous</span>";
     }
 
     for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
-        if($actual == $i){$class="paginador_seleccionado"}
-            else{$class="paginador"}
-        $paginador .= "<span class='".$class."' onClick='".$funcion."(".$i.")'> ".$i." </span>";
+        my $onClick = "";
+        if($actual == $i){
+            $class="'current'";
+        }else{
+            $class="'pagination click'";
+            $onClick = "onClick='".$funcion."(".$i.")'";
+        }
+        $paginador .= "<a class=".$class." ".$onClick."> ".$i." </a>";
     }
 
     if($actual >= 1 && $actual < $totalPaginas){
         my $sig= $actual+1;
-        $paginador .= "<span class='click' onClick='".$funcion."(".$sig.")' title='Siguiente'>
-        <img src='".$themelang."/images/numbers/pag_siguiente.png' border=0></span>";
+        $paginador .= "<a class='click next' onClick='".$funcion."(".$sig.")' title='Siguiente'>"."Next »"."</a>";
 
-        $paginador .= "<span> </span>";
-        #a la primer pagina
-        $paginador .= "<span class='click' onClick='".$funcion."(".$totalPaginas.")' title='Fin'>
-        <img src='".$themelang."/images/numbers/pag_ultima.png' border=0></span>";
     }
     $paginador .= "</div>"; 
 

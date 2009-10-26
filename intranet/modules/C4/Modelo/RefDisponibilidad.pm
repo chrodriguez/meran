@@ -65,7 +65,7 @@ sub obtenerValoresCampo {
 
 	use C4::Modelo::RefDisponibilidad::Manager;
  	my $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad
-						( select   => [ $self->meta->primary_key ,$campo],
+						( select   => [ 'codigo',$campo],
 						  sort_by => ($orden) );
     my @array_valores;
 

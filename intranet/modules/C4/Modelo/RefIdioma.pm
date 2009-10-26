@@ -66,7 +66,7 @@ sub obtenerValoresCampo {
     my ($campo,$orden)=@_;
 	use C4::Modelo::RefIdioma::Manager;
  	my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_idioma
-						( select   => [$self->meta->primary_key , $campo],
+						( select   => ['idLanguage', $campo],
 						  sort_by => ($orden) );
     my @array_valores;
 

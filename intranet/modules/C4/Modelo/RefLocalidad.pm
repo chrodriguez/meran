@@ -63,7 +63,7 @@ sub obtenerValoresCampo {
     my ($campo,$orden)=@_;
 	use C4::Modelo::RefLocalidad::Manager;
  	my $ref_valores = C4::Modelo::RefLocalidad::Manager->get_ref_localidad
-						( select   => [$self->meta->primary_key , $campo],
+						( select   => ['LOCALIDAD' , $campo],
 						  sort_by => ($orden) );
     my @array_valores;
 

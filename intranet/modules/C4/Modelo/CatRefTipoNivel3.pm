@@ -51,7 +51,7 @@ sub obtenerValoresCampo {
     my ($campo,$orden)=@_;
 	
  	my $ref_valores = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3
-						( select   => [$self->meta->primary_key , $campo],
+						( select   => ['id_tipo_doc' , $campo],
 						  sort_by => ($orden) );
     my @array_valores;
 

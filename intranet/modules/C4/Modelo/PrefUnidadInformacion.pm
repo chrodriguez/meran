@@ -141,7 +141,7 @@ sub obtenerValoresCampo {
     my ($campo,$orden)=@_;
 	use C4::Modelo::PrefUnidadInformacion::Manager;
  	my $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion
-						( select   => [$self->meta->primary_key , $campo],
+						( select   => ['id_ui' , $campo],
 						  sort_by => ($orden) );
     my @array_valores;
 

@@ -1314,3 +1314,46 @@ input.file {
 .editable:hover{
   background: InfoBackground;
 }
+
+
+
+
+.contenedor_paginador{
+
+    width: 45%;
+    margin: 0 auto;
+    padding: 4px;
+}
+
+div.pagination {
+    font-size: 11px;
+    font-family: Tahoma, Arial, Helvetica, Sans-serif;
+    padding:2px;
+    background-color:#c1c1c1;
+    width: 90%;
+}
+
+div.pagination a {
+    padding: 2px 5px 2px 5px;
+    margin: 2px;
+    background-color:#c1c1c1;
+    text-decoration: none; /* no underline */
+    color: #000;
+}
+div.pagination a:hover, div.pagination a:active {
+    background-color:InfoBackground;
+    color: #000;
+}
+div.pagination a.current {
+    padding: 2px 5px 2px 5px;
+    margin: 2px;
+    font-weight: bold;
+    background-color: #D9D300;
+    color: #FFFFFF;
+    }
+div.pagination span.disabled {
+        padding: 2px 5px 2px 5px;
+        margin: 2px;
+        background-color:#c1c1c1;
+        color: #797979;
+    }

@@ -66,7 +66,7 @@ sub obtenerValoresCampo {
     my ($campo,$orden)=@_;
 	use C4::Modelo::RefNivelBibliografico::Manager;
  	my $ref_valores = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico
-						( select   => [$self->meta->primary_key , $campo],
+						( select   => ['code' , $campo],
 						  sort_by => ($orden) );
     my @array_valores;
 
