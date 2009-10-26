@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'ref_pais',
 
     columns => [
-        id                    => { type => 'serial', not_null => 1 },
+        id           => { type => 'serial', not_null => 1 },
         iso          => { type => 'character', length => 2, not_null => 1 },
         iso3         => { type => 'character', default => '', length => 3, not_null => 1 },
         nombre       => { type => 'varchar', length => 80, not_null => 1 },
@@ -16,7 +16,7 @@ __PACKAGE__->meta->setup(
         codigo       => { type => 'varchar', length => 11, not_null => 1 },
     ],
 
-    primary_key_columns => [ 'iso' ],
+    primary_key_columns => [ 'id' ],
     unique_key => [ 'iso' ],
 
 );
@@ -96,17 +96,17 @@ sub setCodigo{
 sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
-	use C4::Modelo::RefPais::Manager;
- 	my $ref_valores = C4::Modelo::RefPais::Manager->get_ref_pais
-						( select   => [$self->meta->primary_key , $campo],
-						  sort_by => ($orden) );
+	  use C4::Modelo::RefPais::Manager;
+    my $ref_valores = C4::Modelo::RefPais::Manager->get_ref_pais
+						  ( select   => ['iso' , $campo],
+						    sort_by => ($orden) );
     my @array_valores;
 
     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
-		my $valor;
-		$valor->{"clave"}=$ref_valores->[$i]->getIso;
-		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
-        push (@array_valores, $valor);
+		  my $valor;
+		  $valor->{"clave"}=$ref_valores->[$i]->getIso;
+		  $valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+      push (@array_valores, $valor);
     }
 	
     return (scalar(@array_valores), \@array_valores);

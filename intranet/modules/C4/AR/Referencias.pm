@@ -263,7 +263,7 @@ sub obtenerValoresTablaRef{
 
     use C4::Modelo::PrefTablaReferencia;
     my $ref = C4::Modelo::PrefTablaReferencia->new();
-	my ($cantidad,$valores)= $ref->obtenerValoresTablaRef($tableAlias,$campo, $orden);
+	  my ($cantidad,$valores)= $ref->obtenerValoresTablaRef($tableAlias,$campo, $orden);
 
     return($cantidad,$valores);
 

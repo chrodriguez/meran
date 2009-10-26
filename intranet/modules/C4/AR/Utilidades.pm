@@ -131,7 +131,7 @@ sub generarComboDeCredentials{
     $select_credentials{'librarian'} = 'Librarian';
     $select_credentials{'superLibrarian'} = 'SuperLibrarian';
 
-    my $CGIregular=CGI::scrolling_list(  -name      => 'credential',
+    my $CGIregular=CGI::scrolling_list(     -name      => 'credential',
                                             -id        => 'credential',
                                             -values    => \@select_credentials,
                                             -defaults  => 'Estudiante',

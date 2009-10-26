@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'usr_ref_tipo_documento',
 
     columns => [
-        id                    => { type => 'serial', not_null => 1 },
+        id                => { type => 'serial', not_null => 1 },
         nombre            => { type => 'varchar', length => 50, not_null => 1 },
         descripcion       => { type => 'varchar', length => 250, not_null => 1 },
     ],
@@ -18,6 +18,12 @@ __PACKAGE__->meta->setup(
 
 );
 
+
+sub getId{
+  my ($self) = shift;
+
+  return ($self->id);
+}
 
 sub getDescripcion{
     my ($self) = shift;
@@ -53,9 +59,10 @@ sub obtenerValoresCampo {
     my @array_valores;
 
     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
-		my $valor;
-		$valor->{"clave"}=$ref_valores->[$i]->getNombre;
-		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+  
+		    my $valor;
+		    $valor->{"clave"}=$ref_valores->[$i]->getNombre;
+		    $valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
         push (@array_valores, $valor);
     }
 	

@@ -27,14 +27,17 @@ $t_params->{'id3'} = $id3;
 $t_params->{'tipoAccion'} = $tipoAccion;
 $t_params->{'tiene_nivel_2'} = 0;
 
-if($tipoAccion eq "MODIFICAR_NIVEL_1"){
-# se verifica si tiene nivel 2, sino hay q mostrar el comboTiposNivel3 para q selecione el tipo de documento (esquema)
-    $t_params->{'tiene_nivel_2'} = C4::AR::Catalogacion::cantNivel2($t_params->{'id1'});
-}
-
 my $nivel=1;
 my %params_combo;
-# $params_combo{'onChange'}= 'mostrarEstructuraDelNivel1()';
+
+
+if($tipoAccion eq "MODIFICAR_NIVEL_1"){
+# se verifica si tiene nivel 2, sino hay q mostrar el comboTiposNivel3 para q selecione el tipo de documento (esquema)
+  $t_params->{'tiene_nivel_2'} = C4::AR::Catalogacion::cantNivel2($t_params->{'id1'});
+}else{
+  $params_combo{'onChange'}= 'mostrarEstructuraDelNivel1()';
+}
+
 $params_combo{'default'}= 'SIN SELECCIONAR';
 my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'comboTipoDocumento'}= $comboTiposNivel3;
