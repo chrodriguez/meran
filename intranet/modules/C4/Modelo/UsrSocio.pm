@@ -120,13 +120,13 @@ sub agregarAutorizado{
 }
 
 sub desautorizarTercero{
+    my ($self) = shift;
 
-    my ($self)=shift;
     my ($params) = @_;
 
-    $self->setNombre_apellido_autorizado('');
-    $self->setDni_autorizado('');
-    $self->setTelefono_autorizado('');
+    $self->nombre_apellido_autorizado('');
+    $self->dni_autorizado('');
+    $self->telefono_autorizado('');
 
     $self->save();
 }

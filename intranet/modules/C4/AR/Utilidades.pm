@@ -2081,10 +2081,10 @@ sub obtenerBusquedas{
     my $pal;
 
     foreach my  $b (@busqueda){
-        C4::AR::Debug::debug('buscar por: '.$b);
+#         C4::AR::Debug::debug('buscar por: '.$b);
         $pal= trim($b);
         if( length($pal) > 0 ){
-            C4::AR::Debug::debug('agrego: '.$pal);
+#             C4::AR::Debug::debug('agrego: '.$pal);
             push(@search_array, $pal);
         }
     }

@@ -38,17 +38,17 @@ Aca se maneja el cambio de la password para el usuario
 if (C4::AR::Utilidades::validateString($tipoAccion)){
     if($tipoAccion eq "POR_AUTOR"){
     
-        my $session = CGI::Session->load();
+      my $session = CGI::Session->load();
     
 	    $t_params->{'idAutor'}= $obj->{'idAutor'};
-        $t_params->{'session'}= $session;
-        my ($cantidad, $resultId1)= C4::AR::Busquedas::filtrarPorAutor($t_params);
-        $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
-    
-        $t_params->{'SEARCH_RESULTS'}= $resultId1;
+      $t_params->{'session'}= $session;
+      my ($cantidad, $resultId1)= C4::AR::Busquedas::filtrarPorAutor($t_params);
+      $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
+  
+      $t_params->{'SEARCH_RESULTS'}= $resultId1;
 	    #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
-        $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
-        $t_params->{'cantidad'}= $cantidad;
+      $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
+      $t_params->{'cantidad'}= $cantidad;
     
 }elsif($tipoAccion eq "BUSQUEDA_COMBINADA"){
     

@@ -43,7 +43,6 @@ use vars qw(@EXPORT @ISA);
 		&buscarMapeo
 		&buscarMapeoTotal
 		&buscarMapeoCampoSubcampo
-		&buscarGrupos
 		&buscarCamposMARC
 		&buscarSubCamposMARC
 		&buscarAutorPorCond
@@ -1087,61 +1086,6 @@ sub busquedaCombinada {
 }
 
 
-
-sub buscarGrupos{
-	my ($isbn,$titulo,$ini,$cantR)=@_;
-	my $dbh = C4::Context->dbh;
-	my $limit=" limit ?,?";
-	my @bind;
-	my $query="SELECT COUNT(*) ";
-	my $query2;
-	my $resto;
-	if($isbn ne ""){
-		#issn 022a
-		#isbn 020a
-		$query2="SELECT * ";
-		$resto="FROM cat_nivel2_repetible n2r INNER JOIN cat_nivel2 n2 ON (n2r.id2=n2.id2)";
-		$resto.=" INNER JOIN cat_nivel1 n1 ON (n2.id1=n1.id1)";
-		$resto.=" WHERE (campo=020 and subcampo='a' and dato=?) or (campo=022 and subcampo='a' and dato=?) ";
-# 		$sth=$dbh->prepare($query);
-#         	$sth->execute($isbn,$isbn);
-		push(@bind,$isbn);
-		push(@bind,$isbn);
-	}
-	else{
-		$query2="SELECT DISTINCT n1.* ";
-		$resto="FROM cat_nivel1 n1 WHERE titulo like ? ";
-		$titulo.="%";
-		push(@bind,$titulo);
-# 		$sth=$dbh->prepare($query);
-#         	$sth->execute($titulo."%");
-	}
-	$query.=$resto;
-	my $sth=$dbh->prepare($query);
-	$sth->execute(@bind);
-	my $cantidad=$sth->fetchrow;
-
-	$query2.=$resto.$limit;
-	push(@bind,$ini);
-	push(@bind,$cantR);
-	$sth=$dbh->prepare($query2);
-	$sth->execute(@bind);
-	
-	my @result;
-	my $i=0;
-	while(my $data=$sth->fetchrow_hashref){
-		$result[$i]{'titulo'}=$data->{'titulo'};
-		my $autor=C4::AR::Busquedas::getautor($data->{'autor'});
-		$result[$i]{'autor'}=$autor->{'completo'};
-		$result[$i]{'id1'}=$data->{'id1'};
-		$result[$i]{'id2'}=$data->{'id2'};
-		$result[$i]{'itemtype'}=$data->{'tipo_documento'};
-		$i++;
-	}
-	$sth->finish;
-	return($cantidad,\@result);
-}
-
 =item
 getNombreLocalidad
 Devuelve el nombre de la localidad que se pasa por parametro.
@@ -1415,90 +1359,93 @@ Realiza una busqueda combinada sobre nivel 1, 2 y 3
 NO BUSCA EN REPETIBLES
 =cut
 sub busquedaCombinada_newTemp{
-	my ($string,$session,$obj_for_log) = @_;
+	  my ($string,$session,$obj_for_log) = @_;
+  
+	  my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string);
+	  
+	  my $sql_string_c3 = "		    FROM ( cat_nivel3 c3 ) \n";
+	  my $sql_string_c3_where = " WHERE ";
+	  
+	  my $sql_string_c2 = "		    FROM ( cat_nivel2 c2 ) \n ";
+	  my $sql_string_c2_where = " WHERE ";
+	  
+	  my $sql_string_c1 = "		    FROM cat_nivel1 c1 \n ";
+	  $sql_string_c1 .=	" 		    LEFT  JOIN cat_autor a ON (c1.autor = a.id) \n ";
+	  my $sql_string_c1_where = " WHERE ";
+	  my @bind;
+    
+C4::AR::Debug::debug("cant foreach busquedas=========================== ".scalar(@searchstring_array));
 
-	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($string);
+	  foreach $string (@searchstring_array){
+		  $sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) ) AND \n ";
+		  $sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
+									              OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) ) AND \n ";
+# 		$sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (c1.autor LIKE ?) ) AND \n";
+      $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) ) AND \n";
+	  }
 	
-	my $sql_string_c3 = "		FROM ( cat_nivel3 c3 ) \n";
-	my $sql_string_c3_where = " WHERE ";
-	
-	my $sql_string_c2 = "		FROM ( cat_nivel2 c2 ) \n ";
-	my $sql_string_c2_where = " WHERE ";
-	
-	my $sql_string_c1 = "		FROM cat_nivel1 c1 \n ";
-	$sql_string_c1 .=	" 		LEFT  JOIN cat_autor a ON (c1.autor = a.id) \n ";
-	my $sql_string_c1_where = " WHERE ";
-	my @bind;
- 	
-	foreach $string (@searchstring_array){
-		$sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) ) AND \n ";
-		$sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
-									OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) ) AND \n ";
-		$sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (c1.autor LIKE ?) ) AND \n";
-	}
-	
-	$sql_string_c3_where .= " TRUE ";
-	$sql_string_c2_where .= " TRUE ";
-	$sql_string_c1_where .= " TRUE ";
+	  $sql_string_c3_where .= " TRUE ";
+	  $sql_string_c2_where .= " TRUE ";
+	  $sql_string_c1_where .= " TRUE ";
 
    	my $sql_options_string = "";
-	my @id1_array;
+	  my @id1_array;
+  
+	  my $dbh = C4::Context->dbh;
+	  
+	  my $sth = $dbh->prepare("SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  \n ".$sql_string_c1.$sql_string_c1_where);
+    
+	  foreach $string (@searchstring_array){
+		  push(@bind, "%".$string."%");
+		  push(@bind, "%".$string."%");
+	  }
 
-	my $dbh = C4::Context->dbh;
+	  $sth->execute(@bind);
+			  
+	  while(my $data = $sth->fetchrow_hashref){
+		  if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+        push (@id1_array,$data);
+		  }
+	  }
+  
+	  $sth = $dbh->prepare("SELECT DISTINCT(c2.id1)  \n ".$sql_string_c2.$sql_string_c2_where);
+  
+	  my @bind;
+	  foreach $string (@searchstring_array){
+		  push(@bind, "%".$string."%");
+		  push(@bind, "%".$string."%");
+		  push(@bind, "%".$string."%");
+		  push(@bind, "%".$string."%");
+	  }
 	
-	my $sth = $dbh->prepare("SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  \n ".$sql_string_c1.$sql_string_c1_where);
-   
-	foreach $string (@searchstring_array){
-		push(@bind, "%".$string."%");
-		push(@bind, "%".$string."%");
-	}
+	  $sth->execute(@bind);
+  
+	  while(my $data = $sth->fetchrow_hashref){
+		  if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+        push (@id1_array,$data);
+		  }
+	  }
 
-	$sth->execute(@bind);
-			
-	while(my $data = $sth->fetchrow_hashref){
-		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
- 			push (@id1_array,$data);
-		}
-	}
-
-	$sth = $dbh->prepare("SELECT DISTINCT(c2.id1)  \n ".$sql_string_c2.$sql_string_c2_where);
-
-	my @bind;
-	foreach $string (@searchstring_array){
-		push(@bind, "%".$string."%");
-		push(@bind, "%".$string."%");
-		push(@bind, "%".$string."%");
-		push(@bind, "%".$string."%");
-	}
-	
-	$sth->execute(@bind);
-
-	while(my $data = $sth->fetchrow_hashref){
-		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
- 			push (@id1_array,$data);
-		}
-	}
-
-	$sth = $dbh->prepare("SELECT DISTINCT(c3.id1)  \n ".$sql_string_c3.$sql_string_c3_where);
-		
-	my @bind;
-	foreach $string (@searchstring_array){
-		push(@bind, "%".$string."%");
-		push(@bind, "%".$string."%");
-	}
-
-	$sth->execute(@bind);
-
-	while(my $data = $sth->fetchrow_hashref){
-		if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
- 			push (@id1_array,$data);
-		}
-	}
-
-	#arma y ordena el arreglo para enviar al cliente
-   	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
-	#se loquea la busqueda
-   	C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
+	  $sth = $dbh->prepare("SELECT DISTINCT(c3.id1)  \n ".$sql_string_c3.$sql_string_c3_where);
+		  
+	  my @bind;
+	  foreach $string (@searchstring_array){
+		  push(@bind, "%".$string."%");
+		  push(@bind, "%".$string."%");
+	  }
+  
+	  $sth->execute(@bind);
+  
+	  while(my $data = $sth->fetchrow_hashref){
+		  if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+        push (@id1_array,$data);
+		  }
+	  }
+  
+	  #arma y ordena el arreglo para enviar al cliente
+    my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
+	  #se loquea la busqueda
+    C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 
    	return ($cant_total, $resultsarray);
 }
@@ -1884,12 +1831,12 @@ sub armarInfoNivel1{
 	#todos los resultados
 	my $i=0;
 	for($i=0;$i<scalar(@resultId1);$i++ ) {
+  #aca se procesan TODOS los ids de nivel 1 OJO
 		$cant= 0;
 		$result{$i}->{'id1'}= @resultId1[$i]->{'id1'};
 		$result{$i}->{'titulo'}= @resultId1[$i]->{'titulo'};
 		$result{$i}->{'idAutor'}= @resultId1[$i]->{'autor'};
 		$result{$i}->{'nomCompleto'}= @resultId1[$i]->{'completo'};
-        $result{$i}->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1($result{$i}->{'id1'},'S');
 		$cant=  C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'titulo'},$searchstring_array);
 		$cant += C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'nomCompleto'},$searchstring_array);
 		$result{$i}->{'hits'}= $cant;
@@ -1911,6 +1858,7 @@ sub armarInfoNivel1{
 	my ($cant_total,@result_array_paginado) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultsarray);
 ;
 	for($i=0;$i<scalar(@result_array_paginado);$i++ ) {
+    #aca se procesan solo los ids de nivel 1 que se van a mostrar
 		#se generan los grupos para mostrar en el resultado de la consulta
 		my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
 		@result_array_paginado[$i]->{'grupos'}= 0;
@@ -1918,6 +1866,7 @@ sub armarInfoNivel1{
  			@result_array_paginado[$i]->{'grupos'}=$ediciones;
 		}
 
+    @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1($result{$i}->{'id1'},'S');
 		#se obtine la disponibilidad total 
  		my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);	
 		@result_array_paginado[$i]->{'disponibilidad'}= 0;

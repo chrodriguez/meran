@@ -213,7 +213,7 @@ function desautorizarTercero(claveUsuario, confirmeClave){
 
     if (is_confirmed) {
         objAH=new AjaxHelper(updateDesautorizarTercero);
-        //objAH.debug= true;
+        objAH.debug= true;
         objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
         objAH.nro_socio= USUARIO.ID;
         objAH.tipoAccion= 'ELIMINAR_AUTORIZADO';

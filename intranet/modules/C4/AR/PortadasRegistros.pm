@@ -112,19 +112,20 @@ return $url;
 }
 
 sub getImageForId1 {
-my ($id1,$size)=@_;
-my $url='';
+  my ($id1,$size) = @_;
+  my $url='';
+  
+  my $isbn = C4::AR::Nivel2::getISBNById1($id1);
+  
+  if ($isbn) {
+    my $portada = getPortadaByIsbn($isbn);
+    
+        if (($portada)&&($size eq 'S')) {$url=$portada->getSmall;}
+        elsif (($portada)&&($size eq 'M')) {$url=$portada->getMedium;}
+            elsif (($portada)&&($size eq 'L')) {$url=$portada->getLarge;}
+  }
 
-my $isbn = C4::AR::Nivel2::getISBNById1($id1);
-
-if ($isbn) {
-my $portada = getPortadaByIsbn($isbn);
-
-    if (($portada)&&($size eq 'S')) {$url=$portada->getSmall;}
-    elsif (($portada)&&($size eq 'M')) {$url=$portada->getMedium;}
-        elsif (($portada)&&($size eq 'L')) {$url=$portada->getLarge;}
-}
-return $url;
+  return $url;
 }
 
 
