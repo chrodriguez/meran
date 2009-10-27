@@ -153,7 +153,7 @@ sub convertirEnSocio{
     use C4::Modelo::UsrPersona;
     use C4::Modelo::UsrEstado;
     my $db = $self->db;
-    my $socio = C4::Modelo::UsrPersona->new(db => $db);
+    my $socio = C4::Modelo::UsrSocio->new(db => $db);
         $data_hash->{'id_persona'} = $self->getId_persona;
 
     my $estado = C4::Modelo::UsrEstado->new(db => $db);

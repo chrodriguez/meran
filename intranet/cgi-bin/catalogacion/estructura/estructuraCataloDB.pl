@@ -231,6 +231,7 @@ elsif($tipoAccion eq "SUBIR_ORDEN"){
 
     C4::AR::Catalogacion::subirOrden($id,$itemtype);
     C4::Auth::print_header($session);
+    print 1;
 }
 
 #Baja el orden en la vista del campo seleccionado

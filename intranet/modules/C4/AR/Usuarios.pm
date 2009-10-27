@@ -125,8 +125,8 @@ sub agregarPersona {
     my $db = $person->db;
 
     _verificarDatosBorrower($params,$msg_object);
-
     if (!($msg_object->{'error'})){
+
         $params->{'iniciales'} = "DGR";
         #genero un estado de ALTA para la persona para una fuente de informacion
         $db->{connect_options}->{AutoCommit} = 0;
@@ -483,8 +483,9 @@ sub _verificarDatosBorrower {
     my $credential_type = lc $data->{'credential_type'};
     my $nro_socio = $data->{'nro_socio'};
 
-    if (!($msg_object->{'error'}) ){
-          $msg_object->{'error'} = (!existeSocio($nro_socio));
+    if ( (!($msg_object->{'error'})) && ($data->{'auto_nro_socio'} != 1) ){
+          $msg_object->{'error'} = (existeSocio($nro_socio) > 0);
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U500', 'params' => []} ) ;
     }
 
     if (!($msg_object->{'error'}) && ($credential_type eq "superlibrarian") ){

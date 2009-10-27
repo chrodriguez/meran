@@ -1,7 +1,7 @@
 package C4::Modelo::DB::Object::AutoBase2;
 
-# use base 'Rose::DB::Object';
-use base 'Rose::DB::Object::Cached';
+use base 'Rose::DB::Object';
+# use base 'Rose::DB::Object::Cached';
 # our @ISA = qw(Rose::DB::Cache);
 
 
@@ -72,7 +72,7 @@ sub getByPk{
     my $self_like = $self->meta->class->new($pk => $value_id);
   
 #     SI NO SE TRABAJA CON CACHE, COMENTAR LA SIGUIENTE LINEA
-    $self_like->forget;
+#     $self_like->forget;
     
     $self_like->load();
 

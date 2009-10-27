@@ -101,8 +101,8 @@ sub agregar{
         C4::AR::Debug::debug("Desde UsrSocio->agregar(), se tiene autoActivarPersona en 1, ojimetro");
         $self->activar();
     }
+
     $self->save();
-    C4::AR::Debug::debug("CREDENTIAL_TYPE: ".$data_hash->{'credential_type'});
     $self->setCredentials($data_hash->{'credential_type'});
 
 }
