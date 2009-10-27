@@ -1357,3 +1357,8 @@ div.pagination span.disabled {
         background-color:#c1c1c1;
         color: #797979;
     }
+
+#content_paginator {
+    width: auto;
+    margin: 0 auto;
+}

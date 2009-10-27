@@ -1152,8 +1152,12 @@ ALTER TABLE `ref_disponibilidad` DROP INDEX `nombre`;
 ALTER TABLE `ref_disponibilidad` DROP PRIMARY KEY;
 ALTER TABLE `ref_disponibilidad` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
 ALTER TABLE `ref_soporte` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
-ALTER TABLE  `cat_estructura_catalogacion` ADD  `rules` VARCHAR( 255 ) NULL;=======
+ALTER TABLE  `cat_estructura_catalogacion` ADD  `rules` VARCHAR( 255 ) NULL;
 ALTER TABLE `ref_soporte` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+
+ALTER TABLE `pref_unidad_informacion` DROP PRIMARY KEY;
+ALTER TABLE `pref_unidad_informacion` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+ALTER TABLE `cat_ref_tipo_nivel3` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
 
 
 ---CatEstructuraCatalogagion

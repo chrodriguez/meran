@@ -986,7 +986,7 @@ sub armarPaginas{
 
     my $themelang= $t_params->{'themelang'};
 
-    my $paginador= "<div class='pagination'>";
+    my $paginador= "<div class='pagination'><div id='content_paginator'>";
     my $class="paginador";
 
     if($actual > 1){
@@ -1014,8 +1014,11 @@ sub armarPaginas{
         $paginador .= "<a class='click next' onClick='".$funcion."(".$sig.")' title='Siguiente'>"."Next »"."</a>";
 
     }
-    $paginador .= "</div>"; 
+    $paginador .= "</div></div>"; 
 
+    if ($totalPaginas <= 1){
+      $paginador="";
+    }
     return($paginador, $totalPaginas);
 }
 
