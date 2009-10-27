@@ -41,7 +41,7 @@ function busquedaCombinable(){
     objAH.autor= $('#autor').val();
     objAH.signatura= $('#signatura').val()
     objAH.tipo_nivel3_name= $('#tipo_nivel3_id').val();
-    objAH.tipoAccion= 'BUSQUEDA_AVANZADA';
+    objAH.tipoAccion = 'BUSQUEDA_AVANZADA';    
     
     var radio= $(":checked");
     var tipo=radio[0].value;
@@ -148,6 +148,7 @@ function busquedaPorKeyword(){
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
     objAH.keyword= $('#keyword').val();
+    objAH.REPETIBLES = ($('#check_repetibles')[0].checked)?1:0;
     objAH.tipoAccion= 'BUSQUEDA_COMBINADA';
     //se setea la funcion para cambiar de pagina
     objAH.funcion= 'changePage';
