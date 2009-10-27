@@ -1359,6 +1359,7 @@ Realiza una busqueda combinada sobre nivel 1, 2 y 3
 NO BUSCA EN REPETIBLES
 =cut
 sub busquedaCombinada_newTemp{
+# TODO buscar en repetibles tb, que el usuario pueda indicar si va a incluir los repetibles tb
 	  my ($string,$session,$obj_for_log) = @_;
   
 	  my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string);
@@ -1373,14 +1374,11 @@ sub busquedaCombinada_newTemp{
 	  $sql_string_c1 .=	" 		    LEFT  JOIN cat_autor a ON (c1.autor = a.id) \n ";
 	  my $sql_string_c1_where = " WHERE ";
 	  my @bind;
-    
-C4::AR::Debug::debug("cant foreach busquedas=========================== ".scalar(@searchstring_array));
 
 	  foreach $string (@searchstring_array){
 		  $sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) ) AND \n ";
 		  $sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
 									              OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) ) AND \n ";
-# 		$sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (c1.autor LIKE ?) ) AND \n";
       $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) ) AND \n";
 	  }
 	

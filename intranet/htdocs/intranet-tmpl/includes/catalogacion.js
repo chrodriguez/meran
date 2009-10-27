@@ -970,9 +970,9 @@ function _cearAutocompleteParaCamponente(o){
 function crearComponente(tipo,id,objeto,valor){
     var comp;
 	TAB_INDEX++;
-
+// TODO queda pendiente q los inputs se adapten a la resolucion de la pantalla
     switch(tipo){
-        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='60' tabindex="+TAB_INDEX+" name='"+id+"'>";
+        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='55' tabindex="+TAB_INDEX+" name='"+id+"'>";     
         break;
         case "combo": comp="<select id='"+id+"' name='"+id+"' tabindex="+TAB_INDEX+">\n<option value=''>Elegir opci&oacute;n</option>\n";
             var op="";
@@ -991,11 +991,11 @@ function crearComponente(tipo,id,objeto,valor){
         break;
         case "texta": comp="<textarea id='"+id+"' name='"+id+"'" + opciones +" rows='4' tabindex="+TAB_INDEX+">"+valor+"</textarea>";
         break;
-		case "auto": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='60' tabindex="+TAB_INDEX+">";
+		    case "auto": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='55' tabindex="+TAB_INDEX+">";
         break;
-		case "hidden": comp="<input type='hidden' id='"+id+"' name='"+id+"' value='"+valor+"'>";
+		    case "hidden": comp="<input type='hidden' id='"+id+"' name='"+id+"' value='"+valor+"'>";
         break;
-		case "calendar": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
+		    case "calendar": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
         break;
         case "anio": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
         break;

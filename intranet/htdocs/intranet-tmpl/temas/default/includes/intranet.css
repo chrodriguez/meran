@@ -205,6 +205,7 @@ body{
     font-weight: bold;
 	text-decoration:none;
 }
+
 .sub_item label{
     display:block;
     float:left;
@@ -212,7 +213,9 @@ body{
     padding-right:10px;
     position:relative;
     text-align:right;
-    width:266px;
+/*    width:266px;*/
+/* estoy probando % para que no se rompa */
+    width:26%; 
 }
 
 
@@ -261,6 +264,18 @@ tr.impar {
     background-color:#666666;
 }
 
+
+.CEC_componente_largo {
+   width: 100%;
+}
+
+.CEC_componente_medio {
+   width: 50%;
+}
+
+.CEC_componente_corto {
+   width: 25%;
+}
 /* ------------------------------------------------ estilos para Circulacion ------------------------------------------------ 
 ----------------ESTO NO LO TOQUE PORQUE NO SE LA FUNCION POR FAVOR REVISEN!!!!----------------------------------------------------------*/
 /*em.error_adv{

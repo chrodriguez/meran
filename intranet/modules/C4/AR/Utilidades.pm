@@ -91,6 +91,54 @@ use vars qw(@EXPORT @ISA);
 
 );
 
+# para los combos que no usan tablas de referencia
+my @VALUES_COMPONENTS = (   "-1", "text", "texta", "texta2", "combo", "auto", "calendar", "anio" );
+my %LABELS_COMPONENTS = (   "-1" => "SIN SELECCIONAR" => "text" => "Texto" , "texta" => "Texto Area", "texta2" => "Texto 1 por linea", 
+                            "combo" => "ComoBox", "auto" => "Autocompletable", "calendar" => "Calendario", "anio" => "Año" );
+
+=item sub getStringFor
+    Devuelve el texto de la clave pasada por parametro
+=cut
+sub getStringFor{
+    my ($key) = @_;
+
+    if(defined %LABELS_COMPONENTS->{$key}){
+        return C4::AR::Filtros::i18n(%LABELS_COMPONENTS->{$key});
+    }else{ 
+        return "INDEFINIDO";
+    }
+}
+
+sub generarComboComponentes{
+    my ($params) = @_;
+
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}= $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}= $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){
+        $options_hash{'onBlur'}= $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}= $params->{'name'}||'disponibilidad_name';
+    $options_hash{'id'}= $params->{'id'}||'disponibilidad_id';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultComboComponentes");
+
+    $options_hash{'values'}= \@VALUES_COMPONENTS;
+    $options_hash{'labels'}= \%LABELS_COMPONENTS;
+
+    my $comboDeComponentes= CGI::scrolling_list(\%options_hash);
+
+    return $comboDeComponentes;
+}
+
 =item
 crearComponentes
 Crea los componentes que van a ir al tmpl.
@@ -162,6 +210,7 @@ sub generarComboRegular{
                                       );
     return ($CGIregular);
 }
+
 
 sub crearComponentes{
 

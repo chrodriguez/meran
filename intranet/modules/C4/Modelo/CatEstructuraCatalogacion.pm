@@ -409,6 +409,12 @@ sub getTipo{
 
     return (C4::AR::Utilidades::trim($self->tipo));
 }
+
+sub getTipoString{
+    my ($self) = shift;
+
+    return (C4::AR::Utilidades::getStringFor(C4::AR::Utilidades::trim($self->tipo)));
+}
       
 
 sub setTipo{
@@ -474,9 +480,9 @@ C4::AR::Debug::debug("tipo: ".$tipo);
         case "calendar"     { $rule = $dateITA." true " }
         case "anio"         { $rule = $digits." true | ".$maxlength." 4 | ".$minlength." 4" }
         case "auto"         { $rule = $lettersonly." true " }
-        case "texto"        { $rule = $lettersonly." true " }
-        case "texto2"       { $rule = $lettersonly." true " }
-        case "textoa"       { $rule = $lettersonly." true " }
+        case "text"        { $rule = $lettersonly." true " }
+        case "texta2"       { $rule = $lettersonly." true " }
+        case "texta"       { $rule = $lettersonly." true " }
 
     }  
 
