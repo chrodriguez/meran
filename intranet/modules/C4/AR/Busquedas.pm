@@ -1353,6 +1353,65 @@ sub busquedaAvanzada_newTemp{
 	return ($cant_total,$resultsarray);
 }
 
+sub getConjDeIds{
+  my ($table_repetible, $tabla_ref, $campo, $filtro, $id) = @_;
+=item  
+SELECT *
+FROM cat_nivel1_repetible
+WHERE dato IN
+
+(SELECT id
+FROM cat_autor
+WHERE (completo LIKE '%ferguso%' ))
+=cut
+  my $sql_string = "  SELECT ".$id." \n";
+#   my $sql_string = "  SELECT id1 \n";
+  $sql_string .= "    FROM  ".$table_repetible."\n";
+  $sql_string .= "    WHERE dato IN \n";
+  $sql_string .= "                  ( SELECT id \n";
+  $sql_string .= "                    FROM ".$tabla_ref." \n";
+  $sql_string .= "                    WHERE ".$campo." LIKE '".$filtro."' ) \n";
+  
+  C4::AR::Debug::debug("subconsulta============: ".$sql_string);
+
+  return $sql_string;
+}
+
+sub generarConjuntoDeIDsFromTablasDeReferencia{
+# By TUTO
+    my ($table_repetible, $filtro, $id) = @_;
+
+    my $conj_string = '';
+    my $sql_string = '';
+    my $tablas_referencia_objects_array_ref = C4::AR::Referencias::obtenerTablasDeReferencia();
+
+    foreach my $tabla (@$tablas_referencia_objects_array_ref){
+
+#         $sql_string= '';
+        $sql_string = getConjDeIds($table_repetible, $tabla->getNombre_tabla, $tabla->getCampo_busqueda, $filtro, $id);
+
+
+#         C4::AR::Debug::debug("TABLA ==================== ".$tabla->getNombre_tabla);
+#         C4::AR::Debug::debug("CAMPO ==================== ".$tabla->getCampo_busqueda);
+#         C4::AR::Debug::debug("ID ==================== ".$id);
+#         C4::AR::Debug::debug("sql_string=============>>>>>>>>> ".$sql_string);          
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare($sql_string);
+        $sth->execute();
+        
+        while(my $data = $sth->fetchrow_hashref){
+            $conj_string .= $data->{$id}.","
+        }
+
+    }
+
+  $conj_string = substr $conj_string,0,((length $conj_string) - 1);
+
+#   C4::AR::Debug::debug("CONJ_STRING ==================== ".$conj_string);
+  if($conj_string eq ""){$conj_string = "0"}
+
+  return $conj_string;
+}
 
 =item
 Realiza una busqueda combinada sobre nivel 1, 2 y 3
@@ -1362,6 +1421,13 @@ sub busquedaCombinada_newTemp{
 # TODO Miguel hay q sacar los repetibles que tienen una referencia o buscar en la referencia
 	  my ($string,$session,$obj_for_log) = @_;
   
+#     my $tabla_ref = 'cat_autor';
+    my $table_repetible = 'cat_nivel1_repetible';
+#     my $campo = 'completo';
+
+#     my $sql_ids_tabla_referencia = getConjDeIds($table_repetible, $tabla_ref, $campo);
+#     C4::AR::Debug::debug("CONSULTA ids TABLA ".$sql_ids_tabla_referencia);
+
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string);
 	  
 	  my $sql_string_c3 = "		    FROM ( cat_nivel3 c3 ) \n";
@@ -1387,10 +1453,25 @@ sub busquedaCombinada_newTemp{
 		 
       if($obj_for_log->{'REPETIBLES'}){
         #se incluyen los repetibles
-        $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) ) AND \n";
-        $sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
-                                  OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) OR (c2r.dato LIKE ?) ) AND \n ";
-        $sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) OR (c3r.dato LIKE ?) ) AND \n ";
+# ESTO ANDA
+#         $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) ) AND \n";
+# ESTO TB
+#   $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) OR c1.id1 IN ( ".getConjDeIds($table_repetible, $tabla_ref, $campo, "%".$string."%")." )) AND \n";
+$table_repetible = 'cat_nivel1_repetible';
+$sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) OR c1.id1 IN ( ".generarConjuntoDeIDsFromTablasDeReferencia($table_repetible, "%".$string."%", "id1")." )) AND \n";
+
+#         $sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
+#                                   OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) OR (c2r.dato LIKE ?) ) AND \n ";
+$table_repetible = 'cat_nivel2_repetible';
+ $sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
+                            OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) OR (c2r.dato LIKE ?) OR c2.id2 IN ( ".generarConjuntoDeIDsFromTablasDeReferencia($table_repetible, "%".$string."%","id2")." )) AND \n ";
+
+$table_repetible = 'cat_nivel3_repetible';
+#         $sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) OR (c3r.dato LIKE ?) ) AND \n ";
+        $sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) OR (c3r.dato LIKE ?) OR c3.id3 IN ( ".generarConjuntoDeIDsFromTablasDeReferencia($table_repetible, "%".$string."%","id3")." )) AND \n ";
+
+# C4::AR::Debug::debug("sql_string_c1_where ============== ".$sql_string_c1_where);
+
       }else{
         $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) ) AND \n";
         $sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
@@ -1407,8 +1488,8 @@ sub busquedaCombinada_newTemp{
 	  my @id1_array;
   
 	  my $dbh = C4::Context->dbh;
-	  
-	  my $sth = $dbh->prepare("SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  \n ".$sql_string_c1.$sql_string_c1_where);
+# 	  C4::AR::Debug::debug("NIVEL 1 =>>>>>> SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  \n ".$sql_string_c1.$sql_string_c1_where);
+    my $sth = $dbh->prepare("SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  \n ".$sql_string_c1.$sql_string_c1_where);
     
 	  foreach $string (@searchstring_array){
 		  push(@bind, "%".$string."%");
@@ -1426,6 +1507,7 @@ sub busquedaCombinada_newTemp{
 		  }
 	  }
   
+#     C4::AR::Debug::debug("NIVEL 2 =>>>>>> SELECT DISTINCT(c2.id1)  \n ".$sql_string_c2.$sql_string_c2_where);
 	  $sth = $dbh->prepare("SELECT DISTINCT(c2.id1)  \n ".$sql_string_c2.$sql_string_c2_where);
   
 	  my @bind;
@@ -1446,6 +1528,7 @@ sub busquedaCombinada_newTemp{
 		  }
 	  }
 
+#     C4::AR::Debug::debug("NIVEL 3 =>>>>>> SELECT DISTINCT(c3.id1)  \n ".$sql_string_c3.$sql_string_c3_where);
 	  $sth = $dbh->prepare("SELECT DISTINCT(c3.id1)  \n ".$sql_string_c3.$sql_string_c3_where);
 		  
 	  my @bind;

@@ -24,6 +24,9 @@ $(document).ready(function() {
         </label>
         <input type="text" id="keyword" size="20" tabindex=1>
 
+        <strong>[% "Incluir repetibles" | i18n %]</strong>
+        <input type="checkbox" id="check_repetibles">
+
          [% PERL %]
                      print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
                              boton   => "boton_buscar",
@@ -32,6 +35,7 @@ $(document).ready(function() {
                              title   => "[% 'Buscar en el cat&aacute;logo' | i18n %]",
                              ) ;
           [% END %]
+
   	</li>
     <li class="item">
         [% PERL %]

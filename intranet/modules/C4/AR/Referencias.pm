@@ -216,7 +216,7 @@ sub obtenerTablasDeReferencia {
     my @results;
 
     foreach my $objeto_ref (@$referencias_array_ref) {
-		push (@results, $objeto_ref);
+		  push (@results, $objeto_ref);
     }
 
     return(\@results);
