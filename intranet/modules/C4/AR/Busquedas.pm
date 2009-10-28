@@ -1359,6 +1359,7 @@ Realiza una busqueda combinada sobre nivel 1, 2 y 3
 NO BUSCA EN REPETIBLES
 =cut
 sub busquedaCombinada_newTemp{
+# TODO Miguel hay q sacar los repetibles que tienen una referencia o buscar en la referencia
 	  my ($string,$session,$obj_for_log) = @_;
   
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string);
