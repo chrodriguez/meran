@@ -1026,7 +1026,8 @@ sub armarPaginas{
     my $numBloq=floor($actual / $pagAMostrar);
     my $limInf=($numBloq * $pagAMostrar);
     my $limSup=$limInf + $pagAMostrar;
-
+    my $previous_text = "« ".C4::AR::Filtros::i18n('Anterior');
+    my $next_text = C4::AR::Filtros::i18n('Siguiente')." »";
     if($limInf == 0){
         $limInf= 1;
         $limSup=$limInf + $pagAMostrar -1;
@@ -1035,16 +1036,16 @@ sub armarPaginas{
 
     my $themelang= $t_params->{'themelang'};
 
-    my $paginador= "<div class='pagination'><div id='content_paginator'>";
+    my $paginador= "<div class='pagination'><div id='content_paginator'  align='center' >";
     my $class="paginador";
 
     if($actual > 1){
         #a la primer pagina
         my $ant= $actual-1;
-        $paginador .= "<a class='click previous' onClick='".$funcion."(".$ant.")' title='Previous'>« Previous</a>";
+        $paginador .= "<a class='click previous' onClick='".$funcion."(".$ant.")' title='".$previous_text."'> ".$previous_text."</a>";
 
     }else{
-        $paginador .= "<span class='disabled' title='Previous'>« Previous</span>";
+        $paginador .= "<span class='disabled' title='".$previous_text."'>".$previous_text."</span>";
     }
 
     for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
@@ -1060,7 +1061,7 @@ sub armarPaginas{
 
     if($actual >= 1 && $actual < $totalPaginas){
         my $sig= $actual+1;
-        $paginador .= "<a class='click next' onClick='".$funcion."(".$sig.")' title='Siguiente'>"."Next »"."</a>";
+        $paginador .= "<a class='click next' onClick='".$funcion."(".$sig.")' title='".$next_text."'>".$next_text."</a>";
 
     }
     $paginador .= "</div></div>"; 

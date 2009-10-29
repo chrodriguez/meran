@@ -37,10 +37,6 @@ if(C4::AR::Mensajes::hayError($Message_arrayref)){
     $session->param('codMsg', C4::AR::Mensajes::getFirstCodeError($Message_arrayref));
     #hay error vulve al mismo
     C4::Auth::redirectTo('/cgi-bin/koha/usuarios/change_password.pl?token='.$input->param('token'));
-}else{
-    #se cambio la password exitosamente, se destruye la sesion y se obliga al socio a ingresar nuevamente
-    C4::Auth::session_destroy();
-    $session->param('codMsg', 'U400');
-    #redirecciono a auth.pl
-    C4::Auth::redirectTo('/cgi-bin/koha/auth.pl');
 }
+
+C4::Auth::redirectTo('/cgi-bin/koha/sessionDestroy.pl');

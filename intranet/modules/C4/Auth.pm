@@ -441,13 +441,15 @@ sub _destruirSession{
     $url = $url || '/cgi-bin/koha/auth.pl';
 
     my ($session) = CGI::Session->load();
+    $codMSG = $codMsg;
+    $session->expire('-1');
+    $session->delete();
+    $session = C4::Auth::_generarSession();
     $session->param('sessionID', undef);
     #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
     $session->param('codMsg', $codMsg);
     $session->param('redirectTo', $url);
 
-    $codMSG = $codMsg;
-    $session->expire('-1');
     C4::AR::Debug::debug("WARNING: ¡¡¡¡Se destruye la session y la cookie!!!!!");
 
     redirectTo($url);        
@@ -1128,7 +1130,7 @@ sub inicializarAuth{
 
     my ($session) = CGI::Session->load();
     $session->flush();
-    if (!$session->param('userid') || _session_expired($session)){
+#     if ((!C4::AR::Utilidades::validateString($session->param('userid'))) || _session_expired($session)){
         C4::AR::Debug::debug("inicializarAuth => ".$session->param('codMsg'));
         my $msjCode = getMsgCode();
         $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
@@ -1138,12 +1140,12 @@ sub inicializarAuth{
         
         #se genera una nueva session
         my %params;
-        $params{'userid'}= '';
-        $params{'loggedinusername'}= '';
-        $params{'password'}= '';
+        $params{'userid'}= undef;
+        $params{'loggedinusername'}= undef;
+        $params{'password'}= undef;
         $params{'token'}= '';
-        $params{'nroRandom'}= '';
-        $params{'borrowernumber'}= '';
+        $params{'nroRandom'}= undef;
+        $params{'borrowernumber'}= undef;
         $params{'type'}= $t_params->{'type'}; #OPAC o INTRA
         $params{'flagsrequired'}= '';
         $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
@@ -1161,9 +1163,9 @@ sub inicializarAuth{
         $session->flush();
         C4::AR::Debug::debug("USER ID :".$session->param('userid'));
         return ($session);
-    }else{
-        redirectTo('/cgi-bin/koha/mainpage.pl');
-    }
+#     }else{
+#         redirectTo('/cgi-bin/koha/mainpage.pl');
+#     }
 }
 
 sub cerrarSesion{
@@ -1251,7 +1253,7 @@ sub _generarSession {
     my $session = new CGI::Session(undef, undef, undef);
 #     $session->httponly; #seteo flag HTTPONLY para evitar robo de cookie con javascript
     #se setea toda la info necesaria en la sesion
-	$session->param('userid', $params->{'userid'});
+	$session->param('userid', $params->{'userid'} || undef);
     $session->param('nro_socio', $params->{'userid'});
 	$session->param('sessionID', $session->id());
 	$session->param('loggedinusername', $params->{'userid'});

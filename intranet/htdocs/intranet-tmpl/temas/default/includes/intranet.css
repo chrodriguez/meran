@@ -1376,4 +1376,5 @@ div.pagination span.disabled {
 #content_paginator {
     width: auto;
     margin: 0 auto;
+    text-align:center;
 }
