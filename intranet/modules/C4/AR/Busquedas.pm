@@ -1367,10 +1367,10 @@ WHERE (completo LIKE '%ferguso%' ))
   my $sql_string = "  SELECT ".$id." \n";
 #   my $sql_string = "  SELECT id1 \n";
   $sql_string .= "    FROM  ".$table_repetible."\n";
-  $sql_string .= "    WHERE dato IN \n";
-  $sql_string .= "                  ( SELECT id \n";
-  $sql_string .= "                    FROM ".$tabla_ref." \n";
-  $sql_string .= "                    WHERE ".$campo." LIKE '".$filtro."' ) \n";
+  $sql_string .= "    WHERE dato <> 0 AND dato <> '' AND dato IN \n"; #ojo con esto ver el tema de las referencias q usan id 0
+  $sql_string .= "                                  ( SELECT id \n";
+  $sql_string .= "                                    FROM ".$tabla_ref." \n";
+  $sql_string .= "                                    WHERE ".$campo." LIKE '".$filtro."' ) \n";
   
   C4::AR::Debug::debug("subconsulta============: ".$sql_string);
 
@@ -1387,9 +1387,7 @@ sub generarConjuntoDeIDsFromTablasDeReferencia{
 
     foreach my $tabla (@$tablas_referencia_objects_array_ref){
 
-#         $sql_string= '';
-        $sql_string = getConjDeIds($table_repetible, $tabla->getNombre_tabla, $tabla->getCampo_busqueda, $filtro, $id);
-
+        $sql_string = getConjDeIds($table_repetible, $tabla->getNombre_tabla, $tabla->getCampo_busqueda, $filtro, $id);        
 
 #         C4::AR::Debug::debug("TABLA ==================== ".$tabla->getNombre_tabla);
 #         C4::AR::Debug::debug("CAMPO ==================== ".$tabla->getCampo_busqueda);
@@ -1402,12 +1400,14 @@ sub generarConjuntoDeIDsFromTablasDeReferencia{
         while(my $data = $sth->fetchrow_hashref){
             $conj_string .= $data->{$id}.","
         }
+  
+        C4::AR::Debug::debug("CONJ_STRING PARCIAL ==================== ".$conj_string);
 
     }
 
   $conj_string = substr $conj_string,0,((length $conj_string) - 1);
 
-#   C4::AR::Debug::debug("CONJ_STRING ==================== ".$conj_string);
+  C4::AR::Debug::debug("CONJ_STRING ==================== ".$conj_string);
   if($conj_string eq ""){$conj_string = "0"}
 
   return $conj_string;
@@ -1416,13 +1416,6 @@ sub generarConjuntoDeIDsFromTablasDeReferencia{
 
 sub getConjDeIdsFromTablaNiveles{
   my ($tabla_nivel, $id_referencia, $tabla_ref, $campo, $filtro, $id) = @_;
-
-#    SELECT id3
-#     FROM  cat_nivel3
-#     WHERE id_estado IN
-#                   ( SELECT id
-#                     FROM ref_estado
-#                     WHERE nombre LIKE '%compartido%' )
 
   my $sql_string = "  SELECT ".$id." \n";
   $sql_string .= "    FROM  ".$tabla_nivel."\n";
@@ -1458,7 +1451,6 @@ sub generarConjuntoDeIDsFromTablasDeReferencia2{
                                           $filtro, 
                                           $id 
                                     );
-
 
 #         C4::AR::Debug::debug("TABLA ==================== ".$tabla->getNombre_tabla);
 #         C4::AR::Debug::debug("CAMPO ==================== ".$tabla->getCampo_busqueda);
