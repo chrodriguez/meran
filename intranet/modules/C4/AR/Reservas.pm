@@ -910,13 +910,14 @@ sub manejoDeDisponibilidadDomiciliaria{
         #retorna las reserva en espera (SI EXISTEN) del grupo
         my ($reservas_en_espera_array_ref) = getReservasEnEsperaById2($db, $params->{'id2'}); 
 
-        foreach my $r (@$reservas_en_espera_array_ref) {
-            C4::AR::Debug::debug("manejoDeDisponibilidadDomiciliaria => elimino la reserva con id_reserva: ".$r->getId_reserva);
-        #elimino todas las sanciones y las reservas
-            $r->borrar_sancion_de_reserva($params->{'db'});
-            $r->delete();
+        if($reservas_en_espera_array_ref){
+          foreach my $r (@$reservas_en_espera_array_ref) {
+              C4::AR::Debug::debug("manejoDeDisponibilidadDomiciliaria => elimino la reserva con id_reserva: ".$r->getId_reserva);
+          #elimino todas las sanciones y las reservas
+              $r->borrar_sancion_de_reserva($params->{'db'});
+              $r->delete();
+          }
         }
-
     }
 }
 

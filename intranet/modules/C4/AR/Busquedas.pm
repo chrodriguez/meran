@@ -1413,6 +1413,75 @@ sub generarConjuntoDeIDsFromTablasDeReferencia{
   return $conj_string;
 }
 
+
+sub getConjDeIdsFromTablaNiveles{
+  my ($tabla_nivel, $id_referencia, $tabla_ref, $campo, $filtro, $id) = @_;
+
+#    SELECT id3
+#     FROM  cat_nivel3
+#     WHERE id_estado IN
+#                   ( SELECT id
+#                     FROM ref_estado
+#                     WHERE nombre LIKE '%compartido%' )
+
+  my $sql_string = "  SELECT ".$id." \n";
+  $sql_string .= "    FROM  ".$tabla_nivel."\n";
+  $sql_string .= "    WHERE ".$id_referencia." IN \n";
+  $sql_string .= "                  ( SELECT id \n";
+  $sql_string .= "                    FROM ".$tabla_ref." \n";
+  $sql_string .= "                    WHERE ".$campo." LIKE '".$filtro."' ) \n";
+  
+  C4::AR::Debug::debug("subconsulta============: ".$sql_string);
+
+  return $sql_string;
+}
+
+sub generarConjuntoDeIDsFromTablasDeReferencia2{
+    my ($table_nivel, $filtro, $id) = @_;
+
+    my $conj_string = '';
+    my $sql_string = '';
+
+    my %tablas_referencia_names;
+    $tablas_referencia_names{'ref_estado'}              = 'id_estado';
+    $tablas_referencia_names{'ref_disponibilidad'}      = 'id_ui_poseedora';
+    $tablas_referencia_names{'pref_unidad_informacion'} = 'id_ui_poseedora';
+
+    while ( my ($tabla_name, $id_referencia) = each(%tablas_referencia_names) ) {
+        my $tabla_ref_object = C4::AR::Referencias::getTablaDeReferenciaLike($tabla_name);
+
+        $sql_string = getConjDeIdsFromTablaNiveles( 
+                                          $table_nivel, 
+                                          $id_referencia,  
+                                          $tabla_ref_object->getNombre_tabla, 
+                                          $tabla_ref_object->getCampo_busqueda, 
+                                          $filtro, 
+                                          $id 
+                                    );
+
+
+#         C4::AR::Debug::debug("TABLA ==================== ".$tabla->getNombre_tabla);
+#         C4::AR::Debug::debug("CAMPO ==================== ".$tabla->getCampo_busqueda);
+#         C4::AR::Debug::debug("ID ==================== ".$id);
+#         C4::AR::Debug::debug("sql_string=============>>>>>>>>> ".$sql_string);          
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare($sql_string);
+        $sth->execute();
+        
+        while(my $data = $sth->fetchrow_hashref){
+            $conj_string .= $data->{$id}.","
+        }
+
+    }
+
+  $conj_string = substr $conj_string,0,((length $conj_string) - 1);
+
+  C4::AR::Debug::debug("CONJ_STRING 2222222222222222222==================== ".$conj_string);
+  if($conj_string eq ""){$conj_string = "0"}
+
+  return $conj_string;
+}
+
 =item
 Realiza una busqueda combinada sobre nivel 1, 2 y 3
 NO BUSCA EN REPETIBLES
@@ -1457,6 +1526,8 @@ sub busquedaCombinada_newTemp{
 #         $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) ) AND \n";
 # ESTO TB
 #   $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) OR c1.id1 IN ( ".getConjDeIds($table_repetible, $tabla_ref, $campo, "%".$string."%")." )) AND \n";
+
+
 $table_repetible = 'cat_nivel1_repetible';
 $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) OR c1.id1 IN ( ".generarConjuntoDeIDsFromTablasDeReferencia($table_repetible, "%".$string."%", "id1")." )) AND \n";
 
@@ -1468,7 +1539,7 @@ $table_repetible = 'cat_nivel2_repetible';
 
 $table_repetible = 'cat_nivel3_repetible';
 #         $sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) OR (c3r.dato LIKE ?) ) AND \n ";
-        $sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) OR (c3r.dato LIKE ?) OR c3.id3 IN ( ".generarConjuntoDeIDsFromTablasDeReferencia($table_repetible, "%".$string."%","id3")." )) AND \n ";
+        $sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) OR (c3r.dato LIKE ?) OR c3.id3 IN ( ".generarConjuntoDeIDsFromTablasDeReferencia($table_repetible, "%".$string."%","id3")." ) OR c3.id3 IN ( ".generarConjuntoDeIDsFromTablasDeReferencia2('cat_nivel3', "%".$string."%", "id3")." )) AND \n ";
 
 # C4::AR::Debug::debug("sql_string_c1_where ============== ".$sql_string_c1_where);
 

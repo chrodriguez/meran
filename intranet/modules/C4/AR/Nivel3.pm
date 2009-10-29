@@ -761,7 +761,7 @@ sub t_modificarNivel3 {
         $db->rollback;
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U385', 'params' => [$catNivel3->getBarcode]} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U385', 'params' => []} ) ;
     }
 
     $db->{connect_options}->{AutoCommit} = 1;

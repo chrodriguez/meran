@@ -321,6 +321,27 @@ sub obtenerCamposLike {
     return(\@results);
 }
 
+
+=item sub getTablasDeReferenciaLike
+Devuelve un objeto PrefTablaReferencia (SI EXISTE) segun las tablas pasadas por parametro
+=cut
+sub getTablaDeReferenciaLike {
+    my ($tabla) = @_;
+
+    my $referencias_array_ref = C4::Modelo::PrefTablaReferencia::Manager->get_pref_tabla_referencia(
+                                                      query => [  
+                                                                  or => [ nombre_tabla => { like => '%'.$tabla.'%' } ]
+                                                                ]
+                      );
+    my @results;
+
+    if(scalar(@$referencias_array_ref) > 0){
+      return $referencias_array_ref->[0];
+    }else{
+      return 0;
+    }
+}
+
 =item
 Devuelve un arreglo de objetos PrefEstructuraCampoMarc
 =cut
