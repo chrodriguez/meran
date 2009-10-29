@@ -1355,24 +1355,15 @@ sub busquedaAvanzada_newTemp{
 
 sub getConjDeIds{
   my ($table_repetible, $tabla_ref, $campo, $filtro, $id) = @_;
-=item  
-SELECT *
-FROM cat_nivel1_repetible
-WHERE dato IN
 
-(SELECT id
-FROM cat_autor
-WHERE (completo LIKE '%ferguso%' ))
-=cut
   my $sql_string = "  SELECT ".$id." \n";
-#   my $sql_string = "  SELECT id1 \n";
   $sql_string .= "    FROM  ".$table_repetible."\n";
   $sql_string .= "    WHERE dato <> 0 AND dato <> '' AND dato IN \n"; #ojo con esto ver el tema de las referencias q usan id 0
   $sql_string .= "                                  ( SELECT id \n";
   $sql_string .= "                                    FROM ".$tabla_ref." \n";
   $sql_string .= "                                    WHERE ".$campo." LIKE '".$filtro."' ) \n";
   
-  C4::AR::Debug::debug("subconsulta============: ".$sql_string);
+#   C4::AR::Debug::debug("subconsulta============: ".$sql_string);
 
   return $sql_string;
 }
@@ -1384,6 +1375,7 @@ sub generarConjuntoDeIDsFromTablasDeReferencia{
     my $conj_string = '';
     my $sql_string = '';
     my $tablas_referencia_objects_array_ref = C4::AR::Referencias::obtenerTablasDeReferencia();
+    my $dbh = C4::Context->dbh;
 
     foreach my $tabla (@$tablas_referencia_objects_array_ref){
 
@@ -1393,7 +1385,7 @@ sub generarConjuntoDeIDsFromTablasDeReferencia{
 #         C4::AR::Debug::debug("CAMPO ==================== ".$tabla->getCampo_busqueda);
 #         C4::AR::Debug::debug("ID ==================== ".$id);
 #         C4::AR::Debug::debug("sql_string=============>>>>>>>>> ".$sql_string);          
-        my $dbh = C4::Context->dbh;
+        
         my $sth = $dbh->prepare($sql_string);
         $sth->execute();
         
@@ -1401,13 +1393,14 @@ sub generarConjuntoDeIDsFromTablasDeReferencia{
             $conj_string .= $data->{$id}.","
         }
   
-        C4::AR::Debug::debug("CONJ_STRING PARCIAL ==================== ".$conj_string);
+#         C4::AR::Debug::debug("SQL_STRING ==================== ".$sql_string);
+#         C4::AR::Debug::debug("CONJ_STRING PARCIAL ==================== ".$conj_string);
 
     }
 
   $conj_string = substr $conj_string,0,((length $conj_string) - 1);
 
-  C4::AR::Debug::debug("CONJ_STRING ==================== ".$conj_string);
+  #   C4::AR::Debug::debug("CONJ_STRING_TOTAL ==================== ".$conj_string);
   if($conj_string eq ""){$conj_string = "0"}
 
   return $conj_string;
@@ -1434,6 +1427,7 @@ sub generarConjuntoDeIDsFromTablasDeReferencia2{
 
     my $conj_string = '';
     my $sql_string = '';
+    my $dbh = C4::Context->dbh;
 
     my %tablas_referencia_names;
     $tablas_referencia_names{'ref_estado'}              = 'id_estado';
@@ -1456,7 +1450,7 @@ sub generarConjuntoDeIDsFromTablasDeReferencia2{
 #         C4::AR::Debug::debug("CAMPO ==================== ".$tabla->getCampo_busqueda);
 #         C4::AR::Debug::debug("ID ==================== ".$id);
 #         C4::AR::Debug::debug("sql_string=============>>>>>>>>> ".$sql_string);          
-        my $dbh = C4::Context->dbh;
+        
         my $sth = $dbh->prepare($sql_string);
         $sth->execute();
         
@@ -1464,6 +1458,7 @@ sub generarConjuntoDeIDsFromTablasDeReferencia2{
             $conj_string .= $data->{$id}.","
         }
 
+        C4::AR::Debug::debug("CONJ_STRING PARCIAL 2222222222222222222==================== ".$conj_string);
     }
 
   $conj_string = substr $conj_string,0,((length $conj_string) - 1);
