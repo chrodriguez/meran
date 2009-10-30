@@ -1,9 +1,8 @@
 <script src="/includes/jquery/jquery.jeditable.js"></script>
 <script type="text/javascript">
-
     $(document).ready(function(){
         makeToggle('toggle_container','trigger',null,true);
-        $('.editable').editable('/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl', { 
+        $('.editable').editable('/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl', {
               type      : 'text',
               cancel    : CANCELAR,
               submit    : OK,
@@ -11,9 +10,9 @@
               placeholder: EDITABLE_MSG,
               style   : 'display: inline',
               submitdata : {token: "[% token %]", edit: '1', tipoAccion: "EDITAR_AUTORIZADO", nro_socio: "[% socio.getNro_socio %]"},
+              indicator : '<img src="'+imagesForJS+'/loaders/loader_default.gif"'+'>',
         });
     });
-
 </script>
 
 <div class="vcard">

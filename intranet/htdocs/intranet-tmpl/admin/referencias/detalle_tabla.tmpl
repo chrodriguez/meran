@@ -1,7 +1,9 @@
 [% USE HTML %]
 
 <script type="text/javascript">
+var loaderPath= "";
       $(document).ready(function() {
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_default.gif"'+'>'
         makeToggle('datos_tabla_div','trigger',null,false);
         makeDataTable('#tablaResult');
         zebraId('tablaResult');
@@ -14,6 +16,8 @@
               placeholder: EDITABLE_MSG,
               style   : 'display: inline',
               submitdata : {token: "[% token %]", edit: '1'},
+              indicator : loaderPath,
+
         });
       });
 </script>
