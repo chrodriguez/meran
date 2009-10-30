@@ -1,8 +1,17 @@
+<script src="/includes/jquery/jquery.jeditable.js"></script>
 <script type="text/javascript">
 
     $(document).ready(function(){
         makeToggle('toggle_container','trigger',null,true);
-//         makeNudge('trigger');
+        $('.editable').editable('/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: '1', tipoAccion: "EDITAR_AUTORIZADO", nro_socio: "[% socio.getNro_socio %]"},
+        });
     });
 
 </script>
@@ -34,12 +43,18 @@
         <fieldset>
             <legend class="titulo_legend">[% 'Usuarios autorizados' | i18n %]</legend>
               <div class="authorizedBack">
-                            <ul class="listado_sin_margen">
-                                      <li>[% "Nombre y Apellido del autorizado" | i18n %]:<strong> [% socio.getNombre_apellido_autorizado%]</strong></li>
-                                      <li>[% "DNI del autorizado" | i18n %]:<strong> [% socio.getDni_autorizado %]</strong></li>
-                                      <li>[% "Tel&eacute;fono del autorizado" | i18n %]:<strong> [% socio.getTelefono_autorizado %]</strong></li>
-                            </ul>
-                          </div>
+                  <ul class="listado_sin_margen">
+                      <li>
+                          [% "Nombre y Apellido del autorizado" | i18n %]:<span id="nombre_autorizado" class="editable strong" > [% socio.getNombre_apellido_autorizado%]</span>
+                      </li>
+                      <li>
+                            [% "DNI del autorizado" | i18n %]:<span id="dni_autorizado" class="editable strong" >  [% socio.getDni_autorizado %]</span>
+                      </li>
+                      <li>
+                          [% "Tel&eacute;fono del autorizado" | i18n %]:<span id="telefono_autorizado" class="editable strong" >[% socio.getTelefono_autorizado %]</span>
+                      </li>
+                  </ul>
+              </div>
         </fieldset>
      [% END %]
         <div id="datos_Secundarios">

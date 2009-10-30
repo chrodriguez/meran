@@ -1179,3 +1179,46 @@ CREATE TABLE IF NOT EXISTS `pref_tabla_referencia` (
   KEY `campo_busqueda` (`campo_busqueda`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
+ALTER TABLE  `cat_nivel1_repetible` ADD INDEX  `dato` (  `dato` );
+ALTER TABLE  `cat_nivel2_repetible` ADD INDEX  `dato` (  `dato` );
+ALTER TABLE  `cat_nivel3_repetible` ADD INDEX  `dato` (  `dato` );
+
+ALTER TABLE  `cat_autor` CHANGE  `nombre`  `nombre` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+CHANGE  `apellido`  `apellido` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+CHANGE  `completo`  `completo` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+ALTER TABLE  `cat_autor` ADD INDEX (  `nombre` );
+ALTER TABLE  `cat_autor` ADD INDEX (  `apellido` );
+ALTER TABLE  `cat_autor` ADD INDEX (  `completo` );
+ALTER TABLE  `cat_tema` CHANGE  `nombre`  `nombre` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE  `cat_tema` ADD INDEX (  `nombre` );
+ALTER TABLE  `ref_localidad` ADD INDEX (  `NOMBRE` );
+ALTER TABLE  `ref_localidad` ADD INDEX (  `NOMBRE_ABREVIADO` );
+ALTER TABLE  `usr_ref_tipo_documento` ADD INDEX (  `nombre` );
+ALTER TABLE  `ref_soporte` ADD INDEX (  `description` );
+ALTER TABLE  `circ_ref_tipo_prestamo` CHANGE  `descripcion`  `descripcion` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE  `circ_ref_tipo_prestamo` ADD INDEX (  `descripcion` );
+ALTER TABLE  `pref_unidad_informacion` ADD INDEX (  `nombre` );
+ALTER TABLE  `ref_idioma` ADD INDEX (  `description` );
+ALTER TABLE  `ref_localidad` ADD INDEX ( `NOMBRE_ABREVIADO` ) ;
+ALTER TABLE  `ref_localidad` ADD INDEX ( `NOMBRE` ) ;
+ALTER TABLE  `ref_nivel_bibliografico` ADD INDEX (  `description` );
+ALTER TABLE  `usr_ref_categoria_socio` CHANGE  `description`  `description` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE  `usr_ref_categoria_socio` ADD INDEX (  `description` );
+ALTER TABLE  `usr_ref_tipo_documento` ADD INDEX (  `nombre` );
+ALTER TABLE  `usr_ref_tipo_documento` CHANGE  `nombre`  `nombre` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+CHANGE  `descripcion`  `descripcion` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE  `ref_pais` ADD INDEX (  `nombre` );
+ALTER TABLE  `ref_pais` ADD INDEX (  `nombre_largo` );
+ALTER TABLE  `ref_pais` ADD INDEX (  `iso` );
+ALTER TABLE  `ref_pais` ADD INDEX (  `iso3` );
+ALTER TABLE  `ref_disponibilidad` ADD INDEX (  `nombre` );
+ALTER TABLE  `cat_ref_tipo_nivel3` ADD INDEX (  `nombre` );
+ALTER TABLE  `ref_estado` ADD INDEX (  `nombre` );
+
+
+
+
+
+
+

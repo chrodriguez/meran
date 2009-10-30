@@ -724,6 +724,24 @@ sub estaSancionado {
     return $sancionado;
 }
 
+sub editarAutorizado{
+    my ($params)=@_;
+    use Switch;
+    my $nro_socio = $params->{'nro_socio'};
+    my $campo = $params->{'id'};
+    my $value = $params->{'value'};
+    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+
+    if ($socio){
+        switch ($campo) {
+            case "nombre_autorizado" { $socio->setNombre_apellido_autorizado($value); $socio->save();  }
+            case "dni_autorizado" { $socio->setDni_autorizado($value); $socio->save();  }
+            case "telefono_autorizado" { $socio->setTelefono_autorizado($value); $socio->save();  }
+            else { }
+        }
+    }
+    return ($value);
+}
 =item
     Busca todos los usuarios, con sus datos, entre un par de nombres o legajo para poder crear los carnet.
 =cut

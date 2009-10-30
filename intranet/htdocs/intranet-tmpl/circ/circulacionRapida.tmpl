@@ -6,10 +6,10 @@
 <script language="javascript" type="text/javascript">
 // para la ventana de Agregar Autorizado
 NRO_SOCIO_AUTH=0;
-
+var objAH;
 function verificarBarcode(){
 
-	var objAH=new AjaxHelper(updateVerificarBarcode);
+	objAH=new AjaxHelper(updateVerificarBarcode);
 	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/cir/circulacionDB.pl";
 	objAH.id1= id1;
@@ -27,7 +27,7 @@ function updateVerificarBarcode(responseText){
 
 function obtenerTiposDePrestamos(){
 
-	var objAH=new AjaxHelper(updateObtenerTiposDePrestamos);
+	objAH=new AjaxHelper(updateObtenerTiposDePrestamos);
 	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio= NRO_SOCIO_AUTH;
@@ -48,7 +48,7 @@ function updateObtenerTiposDePrestamos(responseText){
 
 function realizarAccionCircRapida(){
 
-	var objAH=new AjaxHelper(updateRealizarAccion);
+	objAH=new AjaxHelper(updateRealizarAccion);
 	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio= $('#nro_socio_hidden').val();
@@ -191,7 +191,7 @@ function onCompleteUsuarios(){
 }
 
 function esRegular(NRO_SOCIO_AUTH){
-	var objAH=new AjaxHelper(updateEsRegular);
+	objAH=new AjaxHelper(updateEsRegular);
 	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio= NRO_SOCIO_AUTH;

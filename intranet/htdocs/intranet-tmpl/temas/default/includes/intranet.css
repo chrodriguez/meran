@@ -1378,3 +1378,7 @@ div.pagination span.disabled {
     margin: 0 auto;
     text-align:center;
 }
+
+.strong{
+  font-weight: bold;
+}
