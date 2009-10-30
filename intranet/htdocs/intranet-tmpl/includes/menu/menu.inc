@@ -98,9 +98,8 @@
                                                                 url =>      "/cgi-bin/koha/catalogacion/estructura/datosDocumento.pl", 
                                                                 title =>    "[% 'Agregar documento' | i18n %]"
                                                             ) ;
-                            [% END %]                        
+                            [% END %]
                         </li>
-                        
                         <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Estante virtual' | i18n %]",
@@ -238,9 +237,8 @@
 
                 </ul>
             </li>
-
           <!-- Navigation item -->
-            <li>                
+            <li>
                 <div class="menu_superior_der">
                     <div class="menu_superior_izq">
                         <h3 class="menu_superior">[% 'Consultas' | i18n %]</h3>
@@ -658,7 +656,6 @@
 
                   </ul>
                 </li>
-               
               </ul>
            </li>
           <!-- Navigation item -->
@@ -682,4 +679,4 @@
       </ul>
     </div>
 </div>
-      <!-- A.4 HEADER BREADCRUMBS -->
+<!-- A.4 HEADER BREADCRUMBS -->
