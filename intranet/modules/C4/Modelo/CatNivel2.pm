@@ -378,6 +378,7 @@ sub toMARC{
 	    $hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
 		$hash{'datoReferencia'}= $self->getTipo_documento
 	}
+  $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
 
@@ -393,6 +394,7 @@ sub toMARC{
 	if($estructura->[0]){
 		$hash{'datoReferencia'}= $self->getPais_publicacion;
 	}
+  $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
 
@@ -407,6 +409,7 @@ sub toMARC{
     if($estructura->[0]){
 	    $hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
     }
+  $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
 
@@ -423,6 +426,7 @@ sub toMARC{
 	#tiene referencia
 		$hash{'datoReferencia'}= $self->getCiudad_publicacion;
 	}
+  $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
 
@@ -439,6 +443,7 @@ sub toMARC{
 	#tiene referencia
 		$hash{'datoReferencia'}= $self->getLenguaje;
 	}
+  $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
 
@@ -455,6 +460,7 @@ sub toMARC{
 	#tiene referencia
 		$hash{'datoReferencia'}= $self->getSoporte;
 	}
+  $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
 
@@ -471,6 +477,7 @@ sub toMARC{
 	#tiene referencia
 		$hash{'datoReferencia'}= $self->getNivel_bibliografico;
 	}
+  $hash{'id1'} = $self->getId1;
 	
 	push (@marc_array, \%hash);
 	

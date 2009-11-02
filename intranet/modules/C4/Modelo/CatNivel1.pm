@@ -210,6 +210,7 @@ sub toMARC{
 	$hash{'ident'}= 'TITULO'; #parece q no es necesario
  	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+  $hash{'id1'} = $self->getId1;
 	
 
 	push (@marc_array, \%hash);
@@ -227,6 +228,7 @@ sub toMARC{
 	#tiene referencia
 		$hash{'datoReferencia'}= $self->getAutor;
 	}
+  $hash{'id1'} = $self->getId1;
 
 
 	push (@marc_array, \%hash);

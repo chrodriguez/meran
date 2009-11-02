@@ -537,6 +537,7 @@ sub toMARC{
 	#tiene referencia
 		$hash{'datoReferencia'}= $self->getId_ui_origen;
 	}
+  $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
 
@@ -547,6 +548,7 @@ sub toMARC{
 	$hash{'subcampo'}= $subcampo;
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= $self->getBarcode;
+  $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
 
@@ -563,6 +565,7 @@ sub toMARC{
 	#tiene referencia
 		$hash{'datoReferencia'}= $self->getId_ui_poseedora;
 	}
+  $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
 
@@ -573,6 +576,7 @@ sub toMARC{
 	$hash{'subcampo'}= $subcampo;
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= $self->getSignatura_topografica;
+  $hash{'id1'} = $self->getId1;  
 
 	push (@marc_array, \%hash);
 
@@ -589,6 +593,7 @@ sub toMARC{
 	#tiene referencia
 		$hash{'datoReferencia'}= $self->getId_estado;
 	}
+  $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
 
@@ -605,6 +610,7 @@ sub toMARC{
 	#tiene referencia
 		$hash{'datoReferencia'}= $self->getId_disponibilidad;
 	}
+  $hash{'id1'} = $self->getId1;
 
 
 	push (@marc_array, \%hash);
