@@ -326,7 +326,7 @@ sub setId2{
 
 sub getId1{
     my ($self) = shift;
-    return ($self->id1);
+    return ($self->nivel1->id1);
 }
 
 sub setId1{
@@ -505,7 +505,7 @@ sub nivel2CompletoToMARC{
 		$hash{'dato'}= $dato;
     $hash{'id1'}= $id1;
 
-		C4::AR::Debug::debug("nivel2CompletoToMARC => ".$campo.", ".$subcampo."  ".$dato);	
+		C4::AR::Debug::debug("nivel2CompletoToMARC => ".$campo.", ".$subcampo."  ".$dato." id1 ".$id1);	
 
  		push(@$marc_array, \%hash);
 	}

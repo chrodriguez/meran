@@ -2428,12 +2428,16 @@ sub getNivelesMARC{
   my $marc_array_nivel2;
   my $marc_array_nivel3;
   my @MARC_result_array;
-
   my $dbh = C4::Context->dbh;
+
   my $query=" SELECT id3 FROM cat_nivel3";
   my $sth=$dbh->prepare($query);
   $sth->execute();
+
   while (my $data=$sth->fetchrow_hashref){
+        my $marc_array_nivel1;
+        my $marc_array_nivel2;
+        my $marc_array_nivel3;
 
         my ($nivel3_object)= C4::AR::Nivel3::getNivel3FromId3($data->{'id3'});
         if($nivel3_object ne 0){
@@ -2453,53 +2457,58 @@ sub getNivelesMARC{
           C4::AR::Debug::debug('recupero el nivel1');
           ($marc_array_nivel1)= $nivel1_object->nivel1CompletoToMARC;
         }
-      
+        
         my @result;
         push(@result, @$marc_array_nivel1);
         push(@result, @$marc_array_nivel2);
         push(@result, @$marc_array_nivel3);
         
-        my @MARC_result_array;
+        
       # FIXME no es muy eficiente pero funciona, ver si se puede mejorar, orden cuadrado
-        my $dbh = C4::Context->dbh;
+        
         
         for(my $i=0; $i< scalar(@result); $i++){
-          my %hash; 
-          my $campo= @result[$i]->{'campo'};
-          my @info_campo_array;
-          C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
-          if(!_existeEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
+#           my %hash; 
+#           my $campo= @result[$i]->{'campo'};
+#           my @info_campo_array;
+#           C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
+#           if(!_existeEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
               #proceso todos los subcampos del campo
-              for(my $j=$i;$j < scalar(@result);$j++){
-                my %hash_temp;
-                $hash_temp{'subcampo'}= @result[$j]->{'subcampo'};
-                $hash_temp{'liblibrarian'}= @result[$j]->{'liblibrarian'};
-                $hash_temp{'dato'}= @result[$j]->{'dato'};
-                $hash_temp{'id1'}= @result[$j]->{'id1'};
+#               for(my $j=$i;$j < scalar(@result);$j++){
+#                 my %hash_temp;
+#                 $hash_temp{'subcampo'}= @result[$j]->{'subcampo'};
+#                 $hash_temp{'liblibrarian'}= @result[$j]->{'liblibrarian'};
+#                 $hash_temp{'dato'}= @result[$j]->{'dato'};
+#                 $hash_temp{'id1'}= @result[$j]->{'id1'};
       
-      
-                my $sth = $dbh->prepare("INSERT INTO indice (id1, dato) VALUES (?,?)");  
-                $sth->execute($hash_temp{'id1'}, $hash_temp{'dato'});
-          
-                if(@result[$j]->{'campo'} eq $campo){
-                  push(@info_campo_array, \%hash_temp);
-                  C4::AR::Debug::debug("agrego el subcampo: ".@result[$j]->{'subcampo'});
+                if((@result[$i]->{'id1'} ne '')&&(@result[$i]->{'dato'} ne '')){
+                    my $sth = $dbh->prepare("INSERT INTO indice (id1, dato) VALUES (?,?)");  
+                    $sth->execute(@result[$i]->{'id1'}, @result[$i]->{'dato'});
                 }
-              }
+#                 C4::AR::Debug::debug("agrego el id1: ".@result[$j]->{'id1'});
+#                 C4::AR::Debug::debug("agrego el campo: ".@result[$j]->{'campo'});
+#                 C4::AR::Debug::debug("agrego el subcampo: ".@result[$j]->{'subcampo'});
+#                 C4::AR::Debug::debug("agrego el dato: ".@result[$j]->{'dato'});
+          
+#                 if(@result[$j]->{'campo'} eq $campo){
+#                   push(@info_campo_array, \%hash_temp);
+#                   C4::AR::Debug::debug("agrego el subcampo: ".@result[$j]->{'subcampo'});
+#                 }
+#               }
             
 #               $hash{'campo'}= $campo;
 #               $hash{'header'}= @result[$i]->{'header'};
-              $hash{'info_campo_array'}= \@info_campo_array;
+#               $hash{'info_campo_array'}= \@info_campo_array;
             
-              push(@MARC_result_array, \%hash);
+#               push(@MARC_result_array, \%hash);
 #               C4::AR::Debug::debug("campo: ".$campo);
 #               C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
       
-          }
+#           }
         }
   }
 
-  return (\@MARC_result_array);
+#   return (\@MARC_result_array);
 }
 
 =item

@@ -30,7 +30,7 @@ __PACKAGE__->meta->setup(
             type       => 'one to one',
         },
 
-		nivel1 => {
+		  nivel1 => {
             class      => 'C4::Modelo::CatNivel1',
             column_map => { id1 => 'id1' },
             type       => 'one to one',
@@ -407,7 +407,7 @@ sub setId_ui_origen{
 
 sub getId1{
     my ($self) = shift;
-    return ($self->id1);
+    return ($self->nivel1->id1);
 }
 
 sub setId1{
@@ -642,7 +642,7 @@ sub nivel3CompletoToMARC{
     $hash{'id1'}= $id1;
 
  		push(@$marc_array, \%hash);
-    C4::AR::Debug::debug("nivel3CompletoToMARC => ".$campo.", ".$subcampo."  ".$dato);		
+    C4::AR::Debug::debug("nivel3CompletoToMARC => ".$campo.", ".$subcampo."  ".$dato." id1 ".$id1);		
 	}
 
   C4::AR::Debug::debug("nivel3CompletoToMARC => cant: ".scalar(@$marc_array));
