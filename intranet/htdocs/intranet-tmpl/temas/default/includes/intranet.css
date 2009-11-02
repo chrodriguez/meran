@@ -1287,6 +1287,11 @@ input.file {
   text-align:center;
 }
 
+.datos_tabla{
+  text-align:center;
+  width: 90%;
+}
+
 
 .warning{
     background-color: #990000;

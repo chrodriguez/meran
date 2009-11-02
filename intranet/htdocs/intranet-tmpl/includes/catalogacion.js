@@ -595,29 +595,29 @@ function guardarDocumentoN3(){
 }
 
 function updateGuardarDocumentoN3(responseText){
-/*
+
     var info=JSONstring.toObject(responseText);
     var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
     setMessages(Messages);
 
-   //PARA LIMPIAR EL VALUE DE TODOS (ASI INGRESA UNO NUEVO)
-   var allInputs = $('#estructuraDelNivel3 :input');
-       for (x=0; x< allInputs.length; x++)
-            allInputs[x].value="";
-    if (! (hayError(Messages) ) ){
-		//inicializo el arreglo
-		_freeMemory(ID3_ARRAY);
-		ID3_ARRAY= [];
-		_freeMemory(BARCODES_ARRAY);
-		BARCODES_ARRAY= [];
-        //deja la misma estructura, solo borra el campo dato
-        _clearDataFromComponentesArray();
-        //acutalizo los datos de nivel 2
-        mostrarInfoAltaNivel2(ID_N2);
-        //muestra la tabla con los ejemplares agregados
-        mostrarInfoAltaNivel3(ID_N2);
-    }
-*/
+//    //PARA LIMPIAR EL VALUE DE TODOS (ASI INGRESA UNO NUEVO)
+//    var allInputs = $('#estructuraDelNivel3 :input');
+//        for (x=0; x< allInputs.length; x++)
+//             allInputs[x].value="";
+//     if (! (hayError(Messages) ) ){
+// 		//inicializo el arreglo
+// 		_freeMemory(ID3_ARRAY);
+// 		ID3_ARRAY= [];
+// 		_freeMemory(BARCODES_ARRAY);
+// 		BARCODES_ARRAY= [];
+//         //deja la misma estructura, solo borra el campo dato
+//         _clearDataFromComponentesArray();
+//         //acutalizo los datos de nivel 2
+//         mostrarInfoAltaNivel2(ID_N2);
+//         //muestra la tabla con los ejemplares agregados
+//         mostrarInfoAltaNivel3(ID_N2);
+//     }
+
 }
 
 function guardarModificacionDocumentoN1(){
