@@ -627,6 +627,7 @@ sub nivel3CompletoToMARC{
 	my $campo;
 	my $subcampo;
 	my $dato;	
+  my $id1 = $self->getId1;
 
 	foreach my $marc_object (@$nivel3Repetible_object_array){
 		$campo= $marc_object->getCampo;
@@ -638,12 +639,13 @@ sub nivel3CompletoToMARC{
 		$hash{'subcampo'}= $subcampo;
 		$hash{'liblibrarian'}= C4::AR::Busquedas::getLiblibrarian($campo, $subcampo);
 		$hash{'dato'}= $dato;
+    $hash{'id1'}= $id1;
 
  		push(@$marc_array, \%hash);
-C4::AR::Debug::debug("nivel3CompletoToMARC => ".$campo.", ".$subcampo."  ".$dato);		
+    C4::AR::Debug::debug("nivel3CompletoToMARC => ".$campo.", ".$subcampo."  ".$dato);		
 	}
 
-C4::AR::Debug::debug("nivel3CompletoToMARC => cant: ".scalar(@$marc_array));
+  C4::AR::Debug::debug("nivel3CompletoToMARC => cant: ".scalar(@$marc_array));
 	
 	return ($marc_array);
 }

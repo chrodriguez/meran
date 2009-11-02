@@ -21,6 +21,7 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $idNivel3=$obj->{'id3'};
 
 my $MARCDetail_array= C4::AR::Busquedas::MARCDetail($idNivel3,'intra');
+my $MARCDetail_array2= C4::AR::Busquedas::getNivelesMARC($idNivel3,'intra');
 
 $t_params->{'MARCDetail_array'}= $MARCDetail_array;
 

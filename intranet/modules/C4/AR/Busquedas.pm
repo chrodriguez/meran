@@ -1356,6 +1356,37 @@ sub busquedaAvanzada_newTemp{
 sub getConjDeIds{
   my ($table_repetible, $tabla_ref, $campo, $filtro, $id) = @_;
 
+=item
+ SELECT id2 
+    FROM  cat_nivel2_repetible INNER JOIN cat_estructura_catalogacion cec 
+    ON (cec.campo = cat_nivel2_repetible.campo ) AND (cec.subcampo = cat_nivel2_repetible.subcampo ) 
+    INNER JOIN pref_informacion_referencia pir ON (cec.idinforef = pir.idinforef)
+    WHERE ( cec.referencia = 1 ) AND (pir.referencia = 'ref_estado') AND
+
+dato <> 0 AND dato <> '' AND dato IN 
+                                  ( SELECT id 
+                                    FROM ref_estado 
+                                    WHERE nombre LIKE '%testmigueChascomusEstado%' )
+=cut
+
+  my $sql_string = "  SELECT ".$id." \n";
+  $sql_string .= "    FROM  ".$table_repetible." INNER JOIN cat_estructura_catalogacion cec \n";
+  $sql_string .= "    ON (cec.campo = ".$table_repetible.".campo ) AND (cec.subcampo = ".$table_repetible.".subcampo ) \n";
+  #ojo con esto ver el tema de las referencias q usan id 0
+  $sql_string .= "    WHERE ( cec.referencia = 1 ) AND dato <> 0 AND dato <> '' AND dato IN \n"; 
+  $sql_string .= "                                  ( SELECT id \n";
+  $sql_string .= "                                    FROM ".$tabla_ref." \n";
+  $sql_string .= "                                    WHERE ".$campo." LIKE '".$filtro."' ) \n";
+  
+#   C4::AR::Debug::debug("subconsulta============: ".$sql_string);
+
+  return $sql_string;
+}
+
+=item
+sub getConjDeIds{
+  my ($table_repetible, $tabla_ref, $campo, $filtro, $id) = @_;
+
   my $sql_string = "  SELECT ".$id." \n";
   $sql_string .= "    FROM  ".$table_repetible."\n";
   $sql_string .= "    WHERE dato <> 0 AND dato <> '' AND dato IN \n"; #ojo con esto ver el tema de las referencias q usan id 0
@@ -1367,12 +1398,13 @@ sub getConjDeIds{
 
   return $sql_string;
 }
+=cut
 
 sub generarConjuntoDeIDsFromTablasDeReferencia{
-# By TUTO
     my ($table_repetible, $filtro, $id) = @_;
 
     my $conj_string = '';
+    my $conj_string_total = ''; 
     my $sql_string = '';
     my $tablas_referencia_objects_array_ref = C4::AR::Referencias::obtenerTablasDeReferencia();
     my $dbh = C4::Context->dbh;
@@ -1388,22 +1420,25 @@ sub generarConjuntoDeIDsFromTablasDeReferencia{
         
         my $sth = $dbh->prepare($sql_string);
         $sth->execute();
-        
+        $conj_string = '';
         while(my $data = $sth->fetchrow_hashref){
             $conj_string .= $data->{$id}.","
         }
   
-#         C4::AR::Debug::debug("SQL_STRING ==================== ".$sql_string);
-#         C4::AR::Debug::debug("CONJ_STRING PARCIAL ==================== ".$conj_string);
+        $conj_string_total = $conj_string_total.$conj_string;
+
+        C4::AR::Debug::debug("SQL_STRING ==================== ".$sql_string);
+        C4::AR::Debug::debug("CONJ_STRING PARCIAL ==================== ".$conj_string);
+        C4::AR::Debug::debug("CONJ_STRING TOTAL ==================== ".$conj_string_total);
 
     }
 
-  $conj_string = substr $conj_string,0,((length $conj_string) - 1);
+  $conj_string_total = substr $conj_string_total,0,((length $conj_string_total) - 1);
 
-  #   C4::AR::Debug::debug("CONJ_STRING_TOTAL ==================== ".$conj_string);
-  if($conj_string eq ""){$conj_string = "0"}
+#   C4::AR::Debug::debug("CONJ_STRING TOTAL ==================== ".$conj_string_total);
+  if($conj_string_total eq ""){$conj_string_total = "0"}
 
-  return $conj_string;
+  return $conj_string_total;
 }
 
 
@@ -1422,10 +1457,25 @@ sub getConjDeIdsFromTablaNiveles{
   return $sql_string;
 }
 
+sub traerDatoReferencia{
+    my $dbh = C4::Context->dbh;
+    
+    my $sql = " SELECT * FROM cat_nivel1_repetible c1r INNER JOIN cat_estructura_catalogacion cec \n";
+      $sql .= " ON (cec.campo = c1r.campo) AND (cec.subcampo = c1r.subcampo) \n";
+      $sql .= " WHERE  (cec.referencia = 1) \n";
+    my $sth = $dbh->prepare($sql);
+    $sth->execute();
+  
+    while(my $data = $sth->fetchrow_hashref){
+        C4::AR::Debug::debug("campo, subcampo: dato: ".$data->{'campo'}.", ".$data->{'subcampo'}." : ".$data->{'dato'});
+    }
+}
+
 sub generarConjuntoDeIDsFromTablasDeReferencia2{
     my ($table_nivel, $filtro, $id) = @_;
 
     my $conj_string = '';
+    my $conj_string_total = '';
     my $sql_string = '';
     my $dbh = C4::Context->dbh;
 
@@ -1453,20 +1503,38 @@ sub generarConjuntoDeIDsFromTablasDeReferencia2{
         
         my $sth = $dbh->prepare($sql_string);
         $sth->execute();
+
+        $conj_string = '';
         
         while(my $data = $sth->fetchrow_hashref){
             $conj_string .= $data->{$id}.","
         }
 
+        $conj_string_total = $conj_string_total.$conj_string;
         C4::AR::Debug::debug("CONJ_STRING PARCIAL 2222222222222222222==================== ".$conj_string);
+        C4::AR::Debug::debug("CONJ_STRING TOTAOL  2222222222222222222==================== ".$conj_string_total);
     }
 
-  $conj_string = substr $conj_string,0,((length $conj_string) - 1);
+  $conj_string_total = substr $conj_string_total,0,((length $conj_string) - 1);
 
-  C4::AR::Debug::debug("CONJ_STRING 2222222222222222222==================== ".$conj_string);
-  if($conj_string eq ""){$conj_string = "0"}
+#   C4::AR::Debug::debug("CONJ_STRING TOTAOL  2222222222222222222==================== ".$conj_string_total);
+  if($conj_string_total eq ""){$conj_string_total = "0"}
 
-  return $conj_string;
+  return $conj_string_total;
+}
+
+
+sub callStoredProcedure{
+  my $dbh = C4::Context->dbh;
+
+  my $SQL_Text = "call r3() " ;
+  my $sth= $dbh->prepare($SQL_Text);
+  $sth->execute();
+
+  my $tt;
+  while ( ($tt) = $sth->fetchrow_array( ) ) { 
+      C4::AR::Debug::debug("tt: ".$tt); 
+  }
 }
 
 =item
@@ -1476,61 +1544,88 @@ NO BUSCA EN REPETIBLES
 sub busquedaCombinada_newTemp{
 # TODO Miguel hay q sacar los repetibles que tienen una referencia o buscar en la referencia
 	  my ($string,$session,$obj_for_log) = @_;
-  
-#     my $tabla_ref = 'cat_autor';
-    my $table_repetible = 'cat_nivel1_repetible';
-#     my $campo = 'completo';
 
-#     my $sql_ids_tabla_referencia = getConjDeIds($table_repetible, $tabla_ref, $campo);
-#     C4::AR::Debug::debug("CONSULTA ids TABLA ".$sql_ids_tabla_referencia);
+    traerDatoReferencia();
 
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string);
 	  
-	  my $sql_string_c3 = "		    FROM ( cat_nivel3 c3 ) \n";
-	  my $sql_string_c3_where = " WHERE ";
-	  
-	  my $sql_string_c2 = "		    FROM ( cat_nivel2 c2 ) \n ";
-	  my $sql_string_c2_where = " WHERE ";
-	  
-	  my $sql_string_c1 = "		    FROM cat_nivel1 c1 \n ";
-	  $sql_string_c1 .=	" 		    LEFT  JOIN cat_autor a ON (c1.autor = a.id) \n ";
+
+    my $sql_string_c1 = "       FROM cat_nivel1 c1 \n ";
+    my $sql_string_c2 = "       FROM ( cat_nivel2 c2 ) \n ";
+    my $sql_string_c3 = "       FROM ( cat_nivel3 c3 ) \n"; 
+    my $sql_string_c1_where = " WHERE ";
+    my $sql_string_c2_where = " WHERE ";
+    my $sql_string_c3_where = " WHERE ";
     
+    my $sql_string_c1_where_con_ref  = " WHERE ";
+    my $sql_string_c2_where_con_ref  = " WHERE ";
+    my $sql_string_c3_where_con_ref  = " WHERE ";
+	   
+	  
+	  
+	  $sql_string_c1 .=	" 		    LEFT  JOIN cat_autor a ON (c1.autor = a.id) \n ";
+# INNER JOIN cat_estructura_catalogacion cec ON (cec.campo = c3r.campo) AND (cec.subcampo = c3r.subcampo)
+
+# ( cec.referencia = 1 )
+# ( cec.referencia = 0 )    
+
     if($obj_for_log->{'REPETIBLES'}){
     #se incluyen los repetibles
-      $sql_string_c1 .= "LEFT JOIN cat_nivel1_repetible c1r ON (c1.id1 = c1r.id1)";
-      $sql_string_c2 .= "LEFT JOIN cat_nivel2_repetible c2r ON (c2.id2 = c2r.id2)";
-      $sql_string_c3 .= "LEFT JOIN cat_nivel3_repetible c3r ON (c3.id3 = c3r.id3)";
+      $sql_string_c1 .= " LEFT JOIN cat_nivel1_repetible c1r ON (c1.id1 = c1r.id1) ";
+     
+      $sql_string_c2 .= " LEFT JOIN cat_nivel2_repetible c2r ON (c2.id2 = c2r.id2) ";
+      
+      $sql_string_c3 .= " LEFT JOIN cat_nivel3_repetible c3r ON (c3.id3 = c3r.id3) ";
+      
     }
 
-	  my $sql_string_c1_where = " WHERE ";
 	  my @bind;
-
 	  foreach $string (@searchstring_array){
-		 
+
       if($obj_for_log->{'REPETIBLES'}){
+  
+       $sql_string_c1_where .= " ( ( cec.referencia = 0 ) AND (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) ) AND \n";     
+       $sql_string_c2_where .= " ( ( cec.referencia = 0 ) AND (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
+                                    OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) OR (c2r.dato LIKE ?) ) AND \n ";
+       $sql_string_c3_where .= " ( ( cec.referencia = 0 ) AND (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) 
+                                    OR (c3r.dato LIKE ?) ) AND \n ";
+
+
+        $sql_string_c1 .= " INNER JOIN cat_estructura_catalogacion cec ON (cec.campo = c1r.campo) AND (cec.subcampo = c1r.subcampo) ";  
+        $sql_string_c2 .= " INNER JOIN cat_estructura_catalogacion cec ON (cec.campo = c2r.campo) AND (cec.subcampo = c2r.subcampo) ";
+        $sql_string_c3 .= " INNER JOIN cat_estructura_catalogacion cec ON (cec.campo = c3r.campo) AND (cec.subcampo = c3r.subcampo) ";
+
         #se incluyen los repetibles
-# ESTO ANDA
-#         $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) ) AND \n";
-# ESTO TB
-#   $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) OR c1.id1 IN ( ".getConjDeIds($table_repetible, $tabla_ref, $campo, "%".$string."%")." )) AND \n";
+          my $conj_ids_nivel1_repetible = generarConjuntoDeIDsFromTablasDeReferencia("cat_nivel1_repetible", "%".$string."%", "id1");
+
+         #  $sql_string_c1_where .= " ( ( cec.referencia = 0 ) AND (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) ) AND \n";         
+
+          $sql_string_c1_where_con_ref .= " (( cec.referencia = 1 ) AND (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) 
+                                            OR c1.id1 IN ( ".$conj_ids_nivel1_repetible." )) AND \n";
 
 
-$table_repetible = 'cat_nivel1_repetible';
-$sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) OR c1.id1 IN ( ".generarConjuntoDeIDsFromTablasDeReferencia($table_repetible, "%".$string."%", "id1")." )) AND \n";
 
-#         $sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
-#                                   OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) OR (c2r.dato LIKE ?) ) AND \n ";
-$table_repetible = 'cat_nivel2_repetible';
- $sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
-                            OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) OR (c2r.dato LIKE ?) OR c2.id2 IN ( ".generarConjuntoDeIDsFromTablasDeReferencia($table_repetible, "%".$string."%","id2")." )) AND \n ";
+          my $conj_ids_nivel2_repetible = generarConjuntoDeIDsFromTablasDeReferencia("cat_nivel2_repetible", "%".$string."%", "id2");
+#           $sql_string_c2_where .= " ( ( cec.referencia = 0 ) AND (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
+#                                     OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) OR (c2r.dato LIKE ?) ) AND \n ";
 
-$table_repetible = 'cat_nivel3_repetible';
-#         $sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) OR (c3r.dato LIKE ?) ) AND \n ";
-        $sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) OR (c3r.dato LIKE ?) OR c3.id3 IN ( ".generarConjuntoDeIDsFromTablasDeReferencia($table_repetible, "%".$string."%","id3")." ) OR c3.id3 IN ( ".generarConjuntoDeIDsFromTablasDeReferencia2('cat_nivel3', "%".$string."%", "id3")." )) AND \n ";
+          $sql_string_c2_where_con_ref .= "  ( ( cec.referencia = 1 ) AND (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
+                                                OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) OR (c2r.dato LIKE ?) 
+                                                OR c2.id2 IN ( ".$conj_ids_nivel2_repetible." )) AND \n ";
+
+          my $conj_ids_nivel2_repetible = generarConjuntoDeIDsFromTablasDeReferencia("cat_nivel3_repetible", "%".$string."%", "id3");
+
+#           $sql_string_c3_where .= " ( ( cec.referencia = 0 ) AND (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) 
+#                                     OR (c3r.dato LIKE ?) ) AND \n ";
+
+          $sql_string_c3_where_con_ref .= "  ( ( cec.referencia = 1 ) AND (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) 
+                                              OR (c3r.dato LIKE ?) OR c3.id3 IN ( ".$conj_ids_nivel2_repetible." ) 
+                                              OR c3.id3 IN ( ".generarConjuntoDeIDsFromTablasDeReferencia2('cat_nivel3', "%".$string."%", "id3")." )) AND \n ";
 
 # C4::AR::Debug::debug("sql_string_c1_where ============== ".$sql_string_c1_where);
 
-      }else{
+      }
+      else{
         $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) ) AND \n";
         $sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
                                   OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) ) AND \n ";
@@ -1541,6 +1636,9 @@ $table_repetible = 'cat_nivel3_repetible';
 	  $sql_string_c3_where .= " TRUE ";
 	  $sql_string_c2_where .= " TRUE ";
 	  $sql_string_c1_where .= " TRUE ";
+    $sql_string_c3_where_con_ref .= " TRUE ";
+    $sql_string_c2_where_con_ref .= " TRUE ";
+    $sql_string_c1_where_con_ref .= " TRUE ";
 
    	my $sql_options_string = "";
 	  my @id1_array;
@@ -1549,6 +1647,7 @@ $table_repetible = 'cat_nivel3_repetible';
 # 	  C4::AR::Debug::debug("NIVEL 1 =>>>>>> SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  \n ".$sql_string_c1.$sql_string_c1_where);
     my $sth = $dbh->prepare("SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  \n ".$sql_string_c1.$sql_string_c1_where);
     
+    my @bind;
 	  foreach $string (@searchstring_array){
 		  push(@bind, "%".$string."%");
 		  push(@bind, "%".$string."%");
@@ -1559,11 +1658,28 @@ $table_repetible = 'cat_nivel3_repetible';
 
 	  $sth->execute(@bind);
 			  
-	  while(my $data = $sth->fetchrow_hashref){
-		  if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
-        push (@id1_array,$data);
-		  }
-	  }
+
+
+    if($obj_for_log->{'REPETIBLES'}){
+        my $sth = $dbh->prepare("SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  \n ".$sql_string_c1.$sql_string_c1_where_con_ref);
+        
+        my @bind;
+        foreach $string (@searchstring_array){
+          push(@bind, "%".$string."%");
+          push(@bind, "%".$string."%");
+          if($obj_for_log->{'REPETIBLES'}){
+            push(@bind, "%".$string."%");        
+          }
+        }
+    
+        $sth->execute(@bind);
+    
+        while(my $data = $sth->fetchrow_hashref){
+          if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+            push (@id1_array,$data);
+          }
+        }
+    }
   
 #     C4::AR::Debug::debug("NIVEL 2 =>>>>>> SELECT DISTINCT(c2.id1)  \n ".$sql_string_c2.$sql_string_c2_where);
 	  $sth = $dbh->prepare("SELECT DISTINCT(c2.id1)  \n ".$sql_string_c2.$sql_string_c2_where);
@@ -1586,6 +1702,29 @@ $table_repetible = 'cat_nivel3_repetible';
 		  }
 	  }
 
+    if($obj_for_log->{'REPETIBLES'}){
+       $sth = $dbh->prepare("SELECT DISTINCT(c2.id1)  \n ".$sql_string_c2.$sql_string_c2_where_con_ref);
+      
+        my @bind;
+        foreach $string (@searchstring_array){
+          push(@bind, "%".$string."%");
+          push(@bind, "%".$string."%");
+          push(@bind, "%".$string."%");
+          push(@bind, "%".$string."%");
+          if($obj_for_log->{'REPETIBLES'}){
+            push(@bind, "%".$string."%");        
+          }
+        }
+        $sth->execute(@bind);
+      
+        while(my $data = $sth->fetchrow_hashref){
+          if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+            push (@id1_array,$data);
+          }
+        }
+
+    }
+
 #     C4::AR::Debug::debug("NIVEL 3 =>>>>>> SELECT DISTINCT(c3.id1)  \n ".$sql_string_c3.$sql_string_c3_where);
 	  $sth = $dbh->prepare("SELECT DISTINCT(c3.id1)  \n ".$sql_string_c3.$sql_string_c3_where);
 		  
@@ -1605,6 +1744,29 @@ $table_repetible = 'cat_nivel3_repetible';
         push (@id1_array,$data);
 		  }
 	  }
+
+
+    if($obj_for_log->{'REPETIBLES'}){
+        $sth = $dbh->prepare("SELECT DISTINCT(c3.id1)  \n ".$sql_string_c3.$sql_string_c3_where_con_ref);
+          
+        my @bind;
+        foreach $string (@searchstring_array){
+          push(@bind, "%".$string."%");
+          push(@bind, "%".$string."%");
+          if($obj_for_log->{'REPETIBLES'}){
+            push(@bind, "%".$string."%");        
+          }
+        }
+      
+        $sth->execute(@bind);
+    
+        while(my $data = $sth->fetchrow_hashref){
+          if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+            push (@id1_array,$data);
+          }
+        }
+
+    }
   
 	  #arma y ordena el arreglo para enviar al cliente
     my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
@@ -1613,6 +1775,147 @@ $table_repetible = 'cat_nivel3_repetible';
 
    	return ($cant_total, $resultsarray);
 }
+
+
+# ESTO ANDABA
+=item
+sub busquedaCombinada_newTemp{
+# TODO Miguel hay q sacar los repetibles que tienen una referencia o buscar en la referencia
+    my ($string,$session,$obj_for_log) = @_;
+  
+    my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string);
+    
+    my $sql_string_c3 = "       FROM ( cat_nivel3 c3 ) \n";
+    my $sql_string_c3_where = " WHERE ";
+    
+    my $sql_string_c2 = "       FROM ( cat_nivel2 c2 ) \n ";
+    my $sql_string_c2_where = " WHERE ";
+    
+    my $sql_string_c1 = "       FROM cat_nivel1 c1 \n ";
+    $sql_string_c1 .= "         LEFT  JOIN cat_autor a ON (c1.autor = a.id) \n ";
+    
+    if($obj_for_log->{'REPETIBLES'}){
+    #se incluyen los repetibles
+      $sql_string_c1 .= "LEFT JOIN cat_nivel1_repetible c1r ON (c1.id1 = c1r.id1)";
+      $sql_string_c2 .= "LEFT JOIN cat_nivel2_repetible c2r ON (c2.id2 = c2r.id2)";
+      $sql_string_c3 .= "LEFT JOIN cat_nivel3_repetible c3r ON (c3.id3 = c3r.id3)";
+    }
+
+    my $sql_string_c1_where = " WHERE ";
+    my @bind;
+
+    foreach $string (@searchstring_array){
+     
+      if($obj_for_log->{'REPETIBLES'}){
+        #se incluyen los repetibles
+# ESTO ANDA
+#         $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) ) AND \n";
+# ESTO TB
+#   $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) OR c1.id1 IN ( ".getConjDeIds($table_repetible, $tabla_ref, $campo, "%".$string."%")." )) AND \n";
+
+
+          my $conj_ids_nivel1_repetible = generarConjuntoDeIDsFromTablasDeReferencia("cat_nivel1_repetible", "%".$string."%", "id1");
+#           $table_repetible = 'cat_nivel1_repetible';
+          $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) OR (c1r.dato LIKE ?) OR c1.id1 IN ( ".$conj_ids_nivel1_repetible." )) AND \n";
+
+#         $sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
+#                                   OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) OR (c2r.dato LIKE ?) ) AND \n ";
+
+
+          my $conj_ids_nivel2_repetible = generarConjuntoDeIDsFromTablasDeReferencia("cat_nivel2_repetible", "%".$string."%", "id2");
+          $sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
+                            OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) OR (c2r.dato LIKE ?) OR c2.id2 IN ( ".$conj_ids_nivel2_repetible." )) AND \n ";
+
+          my $conj_ids_nivel2_repetible = generarConjuntoDeIDsFromTablasDeReferencia("cat_nivel3_repetible", "%".$string."%", "id3");
+#         $sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) OR (c3r.dato LIKE ?) ) AND \n ";
+          $sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) OR (c3r.dato LIKE ?) OR c3.id3 IN ( ".$conj_ids_nivel2_repetible." ) OR c3.id3 IN ( ".generarConjuntoDeIDsFromTablasDeReferencia2('cat_nivel3', "%".$string."%", "id3")." )) AND \n ";
+
+# C4::AR::Debug::debug("sql_string_c1_where ============== ".$sql_string_c1_where);
+
+      }else{
+        $sql_string_c1_where .= " ( (c1.titulo LIKE ?) OR (a.completo LIKE ?) ) AND \n";
+        $sql_string_c2_where .= " ( (c2.nivel_bibliografico LIKE ?) OR (c2.tipo_documento LIKE ?) \n
+                                  OR (c2.soporte LIKE ?) OR (c2.anio_publicacion LIKE ?) ) AND \n ";
+        $sql_string_c3_where .= " ( (c3.barcode LIKE ?) OR (c3.signatura_topografica LIKE ?) ) AND \n ";
+      }
+    }
+  
+    $sql_string_c3_where .= " TRUE ";
+    $sql_string_c2_where .= " TRUE ";
+    $sql_string_c1_where .= " TRUE ";
+
+    my $sql_options_string = "";
+    my @id1_array;
+  
+    my $dbh = C4::Context->dbh;
+#     C4::AR::Debug::debug("NIVEL 1 =>>>>>> SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  \n ".$sql_string_c1.$sql_string_c1_where);
+    my $sth = $dbh->prepare("SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo  \n ".$sql_string_c1.$sql_string_c1_where);
+    
+    foreach $string (@searchstring_array){
+      push(@bind, "%".$string."%");
+      push(@bind, "%".$string."%");
+      if($obj_for_log->{'REPETIBLES'}){
+        push(@bind, "%".$string."%");        
+      }
+    }
+
+    $sth->execute(@bind);
+        
+    while(my $data = $sth->fetchrow_hashref){
+      if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+        push (@id1_array,$data);
+      }
+    }
+  
+#     C4::AR::Debug::debug("NIVEL 2 =>>>>>> SELECT DISTINCT(c2.id1)  \n ".$sql_string_c2.$sql_string_c2_where);
+    $sth = $dbh->prepare("SELECT DISTINCT(c2.id1)  \n ".$sql_string_c2.$sql_string_c2_where);
+  
+    my @bind;
+    foreach $string (@searchstring_array){
+      push(@bind, "%".$string."%");
+      push(@bind, "%".$string."%");
+      push(@bind, "%".$string."%");
+      push(@bind, "%".$string."%");
+      if($obj_for_log->{'REPETIBLES'}){
+        push(@bind, "%".$string."%");        
+      }
+    }
+    $sth->execute(@bind);
+  
+    while(my $data = $sth->fetchrow_hashref){
+      if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+        push (@id1_array,$data);
+      }
+    }
+
+#     C4::AR::Debug::debug("NIVEL 3 =>>>>>> SELECT DISTINCT(c3.id1)  \n ".$sql_string_c3.$sql_string_c3_where);
+    $sth = $dbh->prepare("SELECT DISTINCT(c3.id1)  \n ".$sql_string_c3.$sql_string_c3_where);
+      
+    my @bind;
+    foreach $string (@searchstring_array){
+      push(@bind, "%".$string."%");
+      push(@bind, "%".$string."%");
+      if($obj_for_log->{'REPETIBLES'}){
+        push(@bind, "%".$string."%");        
+      }
+    }
+  
+    $sth->execute(@bind);
+  
+    while(my $data = $sth->fetchrow_hashref){
+      if (!C4::AR::Utilidades::existeInArray($data,@id1_array)){
+        push (@id1_array,$data);
+      }
+    }
+  
+    #arma y ordena el arreglo para enviar al cliente
+    my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
+    #se loquea la busqueda
+    C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
+
+    return ($cant_total, $resultsarray);
+}
+=cut
 
 =item
 Realiza una busqueda simpel por autor sobre nivel 1
@@ -2114,6 +2417,89 @@ sub MARCDetail{
 	}
 
 	return (\@MARC_result_array);
+}
+
+
+sub getNivelesMARC{
+  my ($id3,$tipo)= @_;
+
+  my @MARC_result;
+  my $marc_array_nivel1;
+  my $marc_array_nivel2;
+  my $marc_array_nivel3;
+  my @MARC_result_array;
+
+  my $dbh = C4::Context->dbh;
+  my $query=" SELECT id3 FROM cat_nivel3";
+  my $sth=$dbh->prepare($query);
+  $sth->execute();
+  while (my $data=$sth->fetchrow_hashref){
+
+        my ($nivel3_object)= C4::AR::Nivel3::getNivel3FromId3($data->{'id3'});
+        if($nivel3_object ne 0){
+          C4::AR::Debug::debug('recupero el nivel3');
+          ($marc_array_nivel3)= $nivel3_object->nivel3CompletoToMARC;
+        }
+      
+        my ($nivel2_object)= C4::AR::Nivel2::getNivel2FromId2($nivel3_object->getId2);
+        
+        if($nivel2_object ne 0){
+          C4::AR::Debug::debug('recupero el nivel2');
+          ($marc_array_nivel2)= $nivel2_object->nivel2CompletoToMARC;
+          C4::AR::Debug::debug('MARCDetail => cant '.scalar(@$marc_array_nivel2));
+        }
+        my ($nivel1_object)= C4::AR::Nivel1::getNivel1FromId1($nivel2_object->getId1);
+        if($nivel1_object ne 0){
+          C4::AR::Debug::debug('recupero el nivel1');
+          ($marc_array_nivel1)= $nivel1_object->nivel1CompletoToMARC;
+        }
+      
+        my @result;
+        push(@result, @$marc_array_nivel1);
+        push(@result, @$marc_array_nivel2);
+        push(@result, @$marc_array_nivel3);
+        
+        my @MARC_result_array;
+      # FIXME no es muy eficiente pero funciona, ver si se puede mejorar, orden cuadrado
+        my $dbh = C4::Context->dbh;
+        
+        for(my $i=0; $i< scalar(@result); $i++){
+          my %hash; 
+          my $campo= @result[$i]->{'campo'};
+          my @info_campo_array;
+          C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
+          if(!_existeEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
+              #proceso todos los subcampos del campo
+              for(my $j=$i;$j < scalar(@result);$j++){
+                my %hash_temp;
+                $hash_temp{'subcampo'}= @result[$j]->{'subcampo'};
+                $hash_temp{'liblibrarian'}= @result[$j]->{'liblibrarian'};
+                $hash_temp{'dato'}= @result[$j]->{'dato'};
+                $hash_temp{'id1'}= @result[$j]->{'id1'};
+      
+      
+                my $sth = $dbh->prepare("INSERT INTO indice (id1, dato) VALUES (?,?)");  
+                $sth->execute($hash_temp{'id1'}, $hash_temp{'dato'});
+          
+                if(@result[$j]->{'campo'} eq $campo){
+                  push(@info_campo_array, \%hash_temp);
+                  C4::AR::Debug::debug("agrego el subcampo: ".@result[$j]->{'subcampo'});
+                }
+              }
+            
+#               $hash{'campo'}= $campo;
+#               $hash{'header'}= @result[$i]->{'header'};
+              $hash{'info_campo_array'}= \@info_campo_array;
+            
+              push(@MARC_result_array, \%hash);
+#               C4::AR::Debug::debug("campo: ".$campo);
+#               C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
+      
+          }
+        }
+  }
+
+  return (\@MARC_result_array);
 }
 
 =item

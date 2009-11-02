@@ -495,7 +495,7 @@ sub _setearInfoParaAutocomplete{
     Retorna la estructura de catalogacion del Nivel 1, 2 o 3 que se encuentra configurada en la BD
 =cut
 sub getEstructuraCatalogacionFromDBCompleta{
-    my ($nivel,$itemType) = @_;
+    my ($nivel, $itemType) = @_;
 
     use C4::Modelo::CatEstructuraCatalogacion::Manager;
 
@@ -504,7 +504,7 @@ sub getEstructuraCatalogacionFromDBCompleta{
                                                                                 nivel => { eq => $nivel },
 
                                                                     or   => [ 	
-																				itemtype => { eq => $itemType },
+																				                                      itemtype => { eq => $itemType },
                                                                             	itemtype => { eq => 'ALL' },    
                                                                             ],
 
