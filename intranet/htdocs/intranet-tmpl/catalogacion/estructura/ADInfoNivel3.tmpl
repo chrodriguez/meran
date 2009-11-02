@@ -1,89 +1,83 @@
-
-
-        <table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
-            <tr align="center" cellpadding="0"  valign="middle" class="titulo_tabla_resultado">
-		        
-		        <td>
-			        <input type="image" id="checkAllEjemplares" class="icon_seleccionar" title="[% 'Seleccionar todos' | i18n %]">
-		        </td>
-                <td><b>[% 'Sig. Top.' | i18n %]</b></td>
-                <td><b>[% 'C&oacute;digo' | i18n %]</b></td>
-                <td><b>[% 'Disponibilidad' | i18n %]</b></td>
-                <td><b>[% 'Origen UI' | i18n %]</b></td>
-                <td><b>[% 'Due&ntilde;o UI' | i18n %]</b></td>
-                <td><b>[% 'Estado' | i18n %]</b></td>
-                <td><b>[% 'Acci&oacute;n' | i18n %]</b></td>
-        
-            </tr>
-        [% FOREACH nivel3 IN nivel3_array %]
-	        <tr align="center">
-			        <td>
-				        <input type="checkbox" id="checkEjemplares" name="checkEjemplares" class="icon_seleccionar" value="[% nivel3.getId3 %]">
-			        </td>
-                    <td>[% nivel3.getSignatura_topografica %]</td>
-                    <td>
-	        
-			        [% PERL %]
-				        print C4::AR::Filtros::link_to(	text => 	"[% nivel3.getBarcode %]",
-												        url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
-												        params =>	[	"id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]",
-																        "barcode=[% nivel3.getBarcode %]",
-																        "signatura_topografica=[% nivel3.getSignatura_topografica %]"
-															        ],
-												        title =>	"[% 'Detalle de disponibilidad' | i18n %]"
-											        ) ;
-			        [% END %]
-                    </td>
-                    <td>
-                        [% nivel3.ref_disponibilidad.getNombre %]
-                    </td>
-                    <td>
-                        [% nivel3.getId_ui_origen %] 
-                    </td>
-                    <td>
-                        [% nivel3.getId_ui_poseedora %]
-                    </td>
-                    <td>
-                        [% nivel3.ref_estado.getNombre %]
-                    </td>
-                
-                    [% PERL %]
-                        print C4::AR::Filtros::to_Icon(   
-                                                                boton   => "icon_edicion",
-                                                                onClick => "modificarN3('[% nivel3.getId3 %]');",
-                                                                title   => "[% 'Modificar nivel 3' | i18n %]",
-                                                                alternClass => "botonCentrado"
-                                    ) ;
-                    [% END %]
-        
-                    [% PERL %]
-                            print C4::AR::Filtros::to_Icon( 
-                                                                boton   => "icon_borrar",
-                                                                onClick => "borrarN3('[% nivel3.getId3 %]');",
-                                                                title   => "[% 'Borrar nivel 3' | i18n %]",
-                                                                alternClass => "botonCentrado"
-                                    ) ;
-                    [% END %]
-                
-        
-            </tr>
-        [% END %] <!-- END FOREACH nivel3 -->
-        </table>
-        
-        <div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
-        
+<table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult" width="100%">
+    <tr align="center" cellpadding="0"  valign="middle" class="titulo_tabla_resultado">
+        <td>
+            <input type="image" id="checkAllEjemplares" class="icon_seleccionar" title="[% 'Seleccionar todos' | i18n %]">
+        </td>
+        <td><b>[% 'Sig. Top.' | i18n %]</b></td>
+        <td><b>[% 'C&oacute;digo' | i18n %]</b></td>
+        <td><b>[% 'Disponibilidad' | i18n %]</b></td>
+        <td><b>[% 'Origen UI' | i18n %]</b></td>
+        <td><b>[% 'Due&ntilde;o UI' | i18n %]</b></td>
+        <td><b>[% 'Estado' | i18n %]</b></td>
+        <td><b>[% 'Acci&oacute;n' | i18n %]</b></td>
+    </tr>
+[% FOREACH nivel3 IN nivel3_array %]
+    <tr align="center">
+            <td>
+                <input type="checkbox" id="checkEjemplares" name="checkEjemplares" class="icon_seleccionar" value="[% nivel3.getId3 %]">
+            </td>
+            <td>[% nivel3.getSignatura_topografica %]</td>
+            <td>
             [% PERL %]
-                    print C4::AR::Filtros::to_Icon(  
-                                                        boton   => "icon_edicion",
-                                                        onClick => "modificarEjemplaresN3('[% nivel3.getId3 %]');",
-                                                        title   => "[% 'Modificar Ejemplares' | i18n %]",
-                            ) ;
+                print C4::AR::Filtros::link_to(	text => 	"[% nivel3.getBarcode %]",
+                                                url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
+                                                params =>	[	"id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]",
+                                                                "barcode=[% nivel3.getBarcode %]",
+                                                                "signatura_topografica=[% nivel3.getSignatura_topografica %]"
+                                                            ],
+                                                title =>	"[% 'Detalle de disponibilidad' | i18n %]"
+                                            ) ;
             [% END %]
-        
-            [% PERL %]
+            </td>
+            <td>
+                [% nivel3.ref_disponibilidad.getNombre %]
+            </td>
+            <td>
+                [% nivel3.getId_ui_origen %] 
+            </td>
+            <td>
+                [% nivel3.getId_ui_poseedora %]
+            </td>
+            <td>
+                [% nivel3.ref_estado.getNombre %]
+            </td>
+            <td>
+                [% PERL %]
                     print C4::AR::Filtros::to_Icon(   
-                                                        boton   => "icon_borrar",
-                                                        onClick => "borrarEjemplaresN3('[% nivel3.getId3 %]');",
-                                                        title   => "[% 'Borrar Ejemplares' | i18n %]",
-                            ) ;
-            [% END %]
+                                                            boton   => "icon_edicion",
+                                                            onClick => "modificarN3('[% nivel3.getId3 %]');",
+                                                            title   => "[% 'Modificar nivel 3' | i18n %]",
+                                                            alternClass => "botonCentrado"
+                                ) ;
+                [% END %]
+
+                [% PERL %]
+                        print C4::AR::Filtros::to_Icon( 
+                                                            boton   => "icon_borrar",
+                                                            onClick => "borrarN3('[% nivel3.getId3 %]');",
+                                                            title   => "[% 'Borrar nivel 3' | i18n %]",
+                                                            alternClass => "botonCentrado"
+                                ) ;
+                [% END %]
+            </td>
+    </tr>
+[% END %] <!-- END FOREACH nivel3 -->
+</table>
+
+<div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
+
+    [% PERL %]
+            print C4::AR::Filtros::to_Icon(  
+                                                boton   => "icon_edicion",
+                                                onClick => "modificarEjemplaresN3('[% nivel3.getId3 %]');",
+                                                title   => "[% 'Modificar Ejemplares' | i18n %]",
+                    ) ;
+    [% END %]
+
+    [% PERL %]
+            print C4::AR::Filtros::to_Icon(   
+                                                boton   => "icon_borrar",
+                                                onClick => "borrarEjemplaresN3('[% nivel3.getId3 %]');",
+                                                title   => "[% 'Borrar Ejemplares' | i18n %]",
+                    ) ;
+    [% END %]
