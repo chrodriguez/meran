@@ -1136,8 +1136,8 @@ ALTER TABLE `usr_ref_tipo_documento` DROP PRIMARY KEY;
 ALTER TABLE `usr_ref_tipo_documento` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
 ALTER TABLE `ref_estado` DROP PRIMARY KEY;
 ALTER TABLE `ref_estado` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
-`ALTER TABLE usr_ref_categoria_socio DROP INDEX categorycode`;
-`ALTER TABLE usr_ref_categoria_socio DROP PRIMARY KEY`;
+ALTER TABLE usr_ref_categoria_socio DROP INDEX categorycode`;
+ALTER TABLE usr_ref_categoria_socio DROP PRIMARY KEY`;
 ALTER TABLE `ref_pais` DROP PRIMARY KEY;
 ALTER TABLE `ref_pais` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
 ALTER TABLE `ref_idioma` DROP PRIMARY KEY;
@@ -1217,8 +1217,21 @@ ALTER TABLE  `cat_ref_tipo_nivel3` ADD INDEX (  `nombre` );
 ALTER TABLE  `ref_estado` ADD INDEX (  `nombre` );
 
 
+---INDICES
+
+CREATE TABLE IF NOT EXISTS `indice_busqueda` (
+  `id` int(11) NOT NULL auto_increment,
+  `titulo` text,
+  `autor` text,
+  `string` text NOT NULL,
+  PRIMARY KEY  (`id`),
+  FULLTEXT KEY `string` (`string`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 
+ALTER TABLE `cat_nivel1_repetible` CHANGE `dato` `dato` VARCHAR( 500 );
+ALTER TABLE `cat_nivel2_repetible` CHANGE `dato` `dato` VARCHAR( 500 );
+ALTER TABLE `cat_nivel3_repetible` CHANGE `dato` `dato` VARCHAR( 500 );
 
 
 

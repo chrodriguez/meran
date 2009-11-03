@@ -13,7 +13,7 @@ __PACKAGE__->meta->setup(
         id2       => { type => 'integer', not_null => 1 },
         campo     => { type => 'varchar', length => 3 },
         subcampo  => { type => 'varchar', length => 3, not_null => 1 },
-        dato      => { type => 'varchar', length => 250 },
+        dato      => { type => 'varchar', length => 500 },
         timestamp => { type => 'timestamp' },
          agregacion_temp      => { type => 'varchar', length => 255},
     ],
