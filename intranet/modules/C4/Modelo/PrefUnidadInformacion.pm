@@ -157,8 +157,9 @@ sub obtenerValoresCampo {
 
 
 sub obtenerValorCampo {
-	my ($self)=shift;
-    	my ($campo,$id)=@_;
+	my ($self) = shift;
+  my ($campo,$id) = @_;
+
 	use C4::Modelo::PrefUnidadInformacion::Manager;
  	my $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion
 						( select   => [$campo],

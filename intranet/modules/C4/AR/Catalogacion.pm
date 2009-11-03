@@ -251,6 +251,34 @@ sub t_modificarEnEstructuraCatalogacion {
 
 #======================================================SOPORTE PARA ESTRUCTURA CATALOGACION====================================================
 
+
+sub getDatoFromReferencia{
+  my ($campo, $subcampo, $id_tabla) = @_;
+  
+  my $valor_referencia = '';
+
+  if(($id_tabla ne '')&&($campo ne '')&&($subcampo ne '')){
+
+      my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+      
+      if($estructura){
+        if($estructura->getReferencia){
+          #tiene referencia
+          my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
+          my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+                                                                            #campo_tabla,                   id_tabla
+          $valor_referencia = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $id_tabla);
+          C4::AR::Debug::debug("getDatoFromReferencia => getReferencia: ".$estructura->infoReferencia->getReferencia);
+          C4::AR::Debug::debug("getDatoFromReferencia => Tabla: ".$obj_generico->getTableName);
+          C4::AR::Debug::debug("getDatoFromReferencia => Modulo: ".$obj_generico->toString);
+          C4::AR::Debug::debug("getDatoFromReferencia => Valor referencia: ".$valor_referencia);
+        }
+      }
+  }
+
+  return $valor_referencia;
+}
+
 =item  sub _setDatos_de_estructura
     Esta funcion setea 
 
@@ -299,6 +327,11 @@ sub _setDatos_de_estructura {
         C4::AR::Debug::debug("_setDatos_de_estructura => ======== AUTOCOMPLETE ======== ");
         C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref->{'datoReferencia'});
         C4::AR::Debug::debug("_setDatos_de_estructura => referenciaTabla: ".$hash_ref->{'referenciaTabla'});
+        if($cat->getRepetible){
+        #obtengo el dato de la referencia solo si es un repetible, los campos fijos recuperan de otra forma el dato de la referencia 
+          my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'dato'});
+          $hash_ref->{'dato'} = $valor_referencia;
+        }
     }else{
         #cualquier otra componete
         C4::AR::Debug::debug("_setDatos_de_estructura => ======== ".$cat->getTipo." ======== ");
@@ -451,10 +484,10 @@ sub _getEstructuraYDatosDeNivelNoRepetible{
       
         my %hash;
   
-        if(scalar(@$cat_estruct_array) > 0){	
+        if($cat_estruct_array){	
 
             my %hash_temp;
-            _setDatos_de_estructura($cat_estruct_array->[0], \%hash_temp, $nivel_info_marc_array->[$i]);
+            _setDatos_de_estructura($cat_estruct_array, \%hash_temp, $nivel_info_marc_array->[$i]);
                 
             push(@result, \%hash_temp);
         }
