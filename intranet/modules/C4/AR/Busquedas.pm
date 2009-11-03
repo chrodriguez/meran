@@ -1565,7 +1565,8 @@ sub busquedaCombinada_newTemp{
     my $matches = $results->{'matches'};
     my $total_found = $results->{'total_found'};
     C4::AR::Utilidades::printHASH($results);
-
+    C4::AR::Debug::debug("total_found: ".$total_found);
+  
     foreach my $hash (@$matches){
       my %hash_temp = {};
       $hash_temp{'id1'} = $hash->{'doc'};
@@ -1576,7 +1577,7 @@ sub busquedaCombinada_newTemp{
     }
   
     #arma y ordena el arreglo para enviar al cliente
-    my ($total_found, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
+    my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
 #     #se loquea la busqueda
     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 # 
