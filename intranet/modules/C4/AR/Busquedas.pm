@@ -1550,30 +1550,33 @@ sub busquedaCombinada_newTemp{
     use Sphinx::Search;
 
     my $sphinx = Sphinx::Search->new();
-  
-    my $results = $sphinx->SetMatchMode(SPH_MATCH_ALL)
-                                    ->SetSortMode(SPH_SORT_RELEVANCE)
-                                    ->Query("Ahorro");
-  
-#     C4::AR::Utilidades::printHASH($results);
-    my $matches = $results->{'matches'};
-    foreach my $hash (@$matches){
-    C4::AR::Debug::debug("================================entro");
-      C4::AR::Utilidades::printHASH($hash);
+    my $query = '';
+
+    foreach $string (@searchstring_array){
+      $query .=  $string;
     }
 
-#    
-#     foreach $string (@searchstring_array){
-# 
-#     
-#     }
+    my $results = $sphinx->SetMatchMode(SPH_MATCH_ALL)
+                                    ->SetSortMode(SPH_SORT_RELEVANCE)
+                                    ->Query($query);
+
+
+    my @id1_array;
+    my $matches = $results->{'matches'};
+    foreach my $hash (@$matches){
+      my %hash_temp = {};
+      $hash_temp{'id1'} = $hash->{'doc'};
+#     C4::AR::Debug::debug("================================entro");
+#       C4::AR::Utilidades::printHASH($hash);
+      push (@id1_array, \%hash_temp);
+    }
   
     #arma y ordena el arreglo para enviar al cliente
-#     my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
+    my ($matches, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
 #     #se loquea la busqueda
-#     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
+    C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 # 
-#     return ($cant_total, $resultsarray);
+    return ($matches, $resultsarray);
 }
 
 =item
@@ -2327,6 +2330,7 @@ sub armarBuscoPor{
 	return $buscoPor;
 }
 
+=item
 sub armarInfoNivel1{
 	my ($params,$searchstring_array, @resultId1) = @_;
 
@@ -2382,13 +2386,73 @@ sub armarInfoNivel1{
 		if(scalar(@disponibilidad) > 0){
 			@result_array_paginado[$i]->{'disponibilidad'}=\@disponibilidad;
 		}
-#       #Busco si existe alguna imagen de Amazon de alguno de los niveles 2
-#       my $url=&C4::AR::Amazon::getImageForId1($id1,"small");
-#       if ($url) {$result{$i}->{'amazon_cover'}="amazon_covers/".$url;}
 	}
 
 
 	return ($cant_total, \@result_array_paginado);
+}
+=cut
+
+
+sub armarInfoNivel1{
+  my ($params,$searchstring_array, @resultId1) = @_;
+
+  my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
+  my $orden= $params->{'orden'}||'hits'; #si no se especifico ningun orden, se ordena por cant de hits en la consulta
+  my @resultsarray;
+  my %result;
+  my $cant;
+  #si busquedaCombianda devuelve algo se busca la info siguiente, solo se recupera la info necesaria para luego poder ordenar
+  #todos los resultados
+#   my $i=0;
+#   for($i=0;$i<scalar(@resultId1);$i++ ) {
+#   #aca se procesan TODOS los ids de nivel 1 OJO
+#     $cant= 0;
+#     $result{$i}->{'id1'}= @resultId1[$i]->{'id1'};
+#     $result{$i}->{'titulo'}= @resultId1[$i]->{'titulo'};
+#     $result{$i}->{'idAutor'}= @resultId1[$i]->{'autor'};
+#     $result{$i}->{'nomCompleto'}= @resultId1[$i]->{'completo'};
+#     $cant=  C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'titulo'},$searchstring_array);
+#     $cant += C4::AR::Utilidades::obtenerCoincidenciasDeBusqueda($result{$i}->{'nomCompleto'},$searchstring_array);
+#     $result{$i}->{'hits'}= $cant;
+#   }
+
+#   my @keys;
+#   my $params_sort;
+#   $params_sort->{'orden'}= $orden;
+#   $params_sort->{'info'}= \%result;
+#   $params_sort->{'DESC'}= 1;
+#   #se ordenan los resultados
+#   if($orden ne 'hits'){
+#     @resultsarray= C4::AR::Utilidades::sortHASHString($params_sort);
+#   }else{
+#     @resultsarray= C4::AR::Utilidades::sortHASHNumber($params_sort);
+#   }
+
+  #se corta el arreglo segun lo que indica el paginador
+  my ($cant_total,@result_array_paginado) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultId1);
+  
+  for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {
+    #aca se procesan solo los ids de nivel 1 que se van a mostrar
+    #se generan los grupos para mostrar en el resultado de la consulta
+    my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
+    @result_array_paginado[$i]->{'grupos'}= 0;
+    if(scalar(@$ediciones) > 0){
+      @result_array_paginado[$i]->{'grupos'}=$ediciones;
+    }
+
+    @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
+    #se obtine la disponibilidad total 
+    my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);  
+    @result_array_paginado[$i]->{'disponibilidad'}= 0;
+
+    if(scalar(@disponibilidad) > 0){
+      @result_array_paginado[$i]->{'disponibilidad'}=\@disponibilidad;
+    }
+  }
+
+
+  return ($cant_total, \@result_array_paginado);
 }
 
 #*****************************************Soporte MARC************************************************************************
