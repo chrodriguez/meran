@@ -1553,11 +1553,11 @@ sub busquedaCombinada_newTemp{
   
     my $results = $sphinx->SetMatchMode(SPH_MATCH_ALL)
                                     ->SetSortMode(SPH_SORT_RELEVANCE)
-                                    ->Query(" Ahorro ");
+                                    ->Query("Ahorro");
   
-
-    C4::AR::Debug::debug("================================results".$results);
-    foreach my $hash (@$results){
+#     C4::AR::Utilidades::printHASH($results);
+    my $matches = $results->{'matches'};
+    foreach my $hash (@$matches){
     C4::AR::Debug::debug("================================entro");
       C4::AR::Utilidades::printHASH($hash);
     }
