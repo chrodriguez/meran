@@ -11,5 +11,7 @@ my $loader = Rose::DB::Object::Loader->new(
 $loader->make_modules(  module_dir => "/usr/local/koha/intranet/modules/",
                                         );
 
-
+use CGI;
+use C4::Auth;
+use C4::Interface::CGI::Output;
 my $MARCDetail_array2= C4::AR::Busquedas::getNivelesMARC($idNivel3,'intra');

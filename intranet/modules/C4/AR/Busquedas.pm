@@ -2422,7 +2422,6 @@ sub MARCDetail{
 
 
 sub getNivelesMARC{
-  my ($id3,$tipo)= @_;
 
   my @MARC_result;
   my $marc_array_nivel1;
@@ -2469,18 +2468,6 @@ sub getNivelesMARC{
         
         
         for(my $i=0; $i< scalar(@result); $i++){
-#           my %hash; 
-#           my $campo= @result[$i]->{'campo'};
-#           my @info_campo_array;
-#           C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
-#           if(!_existeEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
-              #proceso todos los subcampos del campo
-#               for(my $j=$i;$j < scalar(@result);$j++){
-#                 my %hash_temp;
-#                 $hash_temp{'subcampo'}= @result[$j]->{'subcampo'};
-#                 $hash_temp{'liblibrarian'}= @result[$j]->{'liblibrarian'};
-#                 $hash_temp{'dato'}= @result[$j]->{'dato'};
-#                 $hash_temp{'id1'}= @result[$j]->{'id1'};
       
                 if((@result[$i]->{'id1'} ne '')&&(@result[$i]->{'dato'} ne '')){
                     my $sth = $dbh->prepare("INSERT INTO indice (id1, dato) VALUES (?,?)");  
@@ -2490,26 +2477,9 @@ sub getNivelesMARC{
 #                 C4::AR::Debug::debug("agrego el campo: ".@result[$j]->{'campo'});
 #                 C4::AR::Debug::debug("agrego el subcampo: ".@result[$j]->{'subcampo'});
 #                 C4::AR::Debug::debug("agrego el dato: ".@result[$j]->{'dato'});
-          
-#                 if(@result[$j]->{'campo'} eq $campo){
-#                   push(@info_campo_array, \%hash_temp);
-#                   C4::AR::Debug::debug("agrego el subcampo: ".@result[$j]->{'subcampo'});
-#                 }
-#               }
-            
-#               $hash{'campo'}= $campo;
-#               $hash{'header'}= @result[$i]->{'header'};
-#               $hash{'info_campo_array'}= \@info_campo_array;
-            
-#               push(@MARC_result_array, \%hash);
-#               C4::AR::Debug::debug("campo: ".$campo);
-#               C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
-      
-#           }
+         
         }
   }
-
-#   return (\@MARC_result_array);
 }
 
 =item
