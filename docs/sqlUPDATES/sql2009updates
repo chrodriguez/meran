@@ -1224,10 +1224,10 @@ CREATE TABLE IF NOT EXISTS `indice_busqueda` (
   `titulo` text,
   `autor` text,
   `string` text NOT NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
   FULLTEXT KEY `string` (`string`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
-
 
 ALTER TABLE `cat_nivel1_repetible` CHANGE `dato` `dato` VARCHAR( 500 );
 ALTER TABLE `cat_nivel2_repetible` CHANGE `dato` `dato` VARCHAR( 500 );
