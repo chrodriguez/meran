@@ -1571,13 +1571,11 @@ sub busquedaCombinada_newTemp{
       $hash_temp{'id1'} = $hash->{'doc'};
       C4::AR::Debug::debug("IMPRIMO LA HAS DENTRO DEL FOR DE LOS MATCHES ");
       C4::AR::Utilidades::printHASH($hash);
-#     C4::AR::Debug::debug("================================entro");
 
       push (@id1_array, \%hash_temp);
     }
   
     #arma y ordena el arreglo para enviar al cliente
-    C4::AR::Debug::debug("matches: ".$matches);
     my ($total_found, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
 #     #se loquea la busqueda
     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
