@@ -1923,25 +1923,27 @@ sub armarInfoNivel1{
   my ($cant_total,@result_array_paginado) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultId1);
   
   for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {
-    my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
-# TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
-    @result_array_paginado[$i]->{'titulo'} = $nivel1->getTitulo();
-    @result_array_paginado[$i]->{'nomCompleto'} = $nivel1->cat_autor->getCompleto();
-    #aca se procesan solo los ids de nivel 1 que se van a mostrar
-    #se generan los grupos para mostrar en el resultado de la consulta
-    my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
-    @result_array_paginado[$i]->{'grupos'}= 0;
-    if(scalar(@$ediciones) > 0){
-      @result_array_paginado[$i]->{'grupos'}=$ediciones;
-    }
-
-    @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
-    #se obtine la disponibilidad total 
-    my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);  
-    @result_array_paginado[$i]->{'disponibilidad'}= 0;
-
-    if(scalar(@disponibilidad) > 0){
-      @result_array_paginado[$i]->{'disponibilidad'}=\@disponibilidad;
+      my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
+    if($nivel1){
+  # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
+      @result_array_paginado[$i]->{'titulo'} = $nivel1->getTitulo();
+      @result_array_paginado[$i]->{'nomCompleto'} = $nivel1->cat_autor->getCompleto();
+      #aca se procesan solo los ids de nivel 1 que se van a mostrar
+      #se generan los grupos para mostrar en el resultado de la consulta
+      my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
+      @result_array_paginado[$i]->{'grupos'}= 0;
+      if(scalar(@$ediciones) > 0){
+        @result_array_paginado[$i]->{'grupos'}=$ediciones;
+      }
+  
+      @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
+      #se obtine la disponibilidad total 
+      my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);  
+      @result_array_paginado[$i]->{'disponibilidad'}= 0;
+  
+      if(scalar(@disponibilidad) > 0){
+        @result_array_paginado[$i]->{'disponibilidad'}=\@disponibilidad;
+      }
     }
   }
 
@@ -2001,8 +2003,10 @@ sub MARCDetail{
 	
 				if(@result[$j]->{'campo'} eq $campo){
 					push(@info_campo_array, \%hash_temp);
-					C4::AR::Debug::debug("agrego el subcampo: ".@result[$j]->{'subcampo'});
+# 					C4::AR::Debug::debug("agrego el subcampo: ".@result[$j]->{'subcampo'});
 				}
+
+        C4::AR::Debug::debug("campo, subcampo, dato: ".@result[$j]->{'campo'}.", ".@result[$j]->{'subcampo'}." : ".@result[$j]->{'dato'});
 			}
 		
 			$hash{'campo'}= $campo;
@@ -2010,7 +2014,7 @@ sub MARCDetail{
 			$hash{'info_campo_array'}= \@info_campo_array;
 		
 			push(@MARC_result_array, \%hash);
-			C4::AR::Debug::debug("campo: ".$campo);
+# 			C4::AR::Debug::debug("campo: ".$campo);
 			C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
 		}
 	}
@@ -2018,67 +2022,6 @@ sub MARCDetail{
 	return (\@MARC_result_array);
 }
 
-
-sub getNivelesMARC{
-
-  my @MARC_result;
-  my $marc_array_nivel1;
-  my $marc_array_nivel2;
-  my $marc_array_nivel3;
-  my @MARC_result_array;
-  my $dbh = C4::Context->dbh;
-
-  my $query=" SELECT id3 FROM cat_nivel3";
-  my $sth=$dbh->prepare($query);
-  $sth->execute();
-
-  while (my $data=$sth->fetchrow_hashref){
-        my $marc_array_nivel1;
-        my $marc_array_nivel2;
-        my $marc_array_nivel3;
-
-        my ($nivel3_object)= C4::AR::Nivel3::getNivel3FromId3($data->{'id3'});
-        if($nivel3_object ne 0){
-          C4::AR::Debug::debug('recupero el nivel3');
-          ($marc_array_nivel3)= $nivel3_object->nivel3CompletoToMARC;
-        }
-      
-        my ($nivel2_object)= C4::AR::Nivel2::getNivel2FromId2($nivel3_object->getId2);
-        
-        if($nivel2_object ne 0){
-          C4::AR::Debug::debug('recupero el nivel2');
-          ($marc_array_nivel2)= $nivel2_object->nivel2CompletoToMARC;
-          C4::AR::Debug::debug('MARCDetail => cant '.scalar(@$marc_array_nivel2));
-        }
-        my ($nivel1_object)= C4::AR::Nivel1::getNivel1FromId1($nivel2_object->getId1);
-        if($nivel1_object ne 0){
-          C4::AR::Debug::debug('recupero el nivel1');
-          ($marc_array_nivel1)= $nivel1_object->nivel1CompletoToMARC;
-        }
-        
-        my @result;
-        push(@result, @$marc_array_nivel1);
-        push(@result, @$marc_array_nivel2);
-        push(@result, @$marc_array_nivel3);
-        
-        
-      # FIXME no es muy eficiente pero funciona, ver si se puede mejorar, orden cuadrado
-        
-        
-        for(my $i=0; $i< scalar(@result); $i++){
-      
-                if((@result[$i]->{'id1'} ne '')&&(@result[$i]->{'dato'} ne '')){
-                    my $sth = $dbh->prepare("INSERT INTO indice (id1, dato) VALUES (?,?)");  
-                    $sth->execute(@result[$i]->{'id1'}, @result[$i]->{'dato'});
-                }
-#                 C4::AR::Debug::debug("agrego el id1: ".@result[$j]->{'id1'});
-#                 C4::AR::Debug::debug("agrego el campo: ".@result[$j]->{'campo'});
-#                 C4::AR::Debug::debug("agrego el subcampo: ".@result[$j]->{'subcampo'});
-#                 C4::AR::Debug::debug("agrego el dato: ".@result[$j]->{'dato'});
-         
-        }
-  }
-}
 
 =item
 Verifica si existe en el arreglo de campos el campo pasado por parametro
@@ -2119,12 +2062,14 @@ sub getLiblibrarian{
 	use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
 	#primero busca en estructura_catalogacion
 	my $estructura_array= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	if(scalar(@$estructura_array) > 0){
-		return $estructura_array->[0]->getLiblibrarian;
+
+
+	if($estructura_array){
+		return $estructura_array->getLiblibrarian;
 	}else{
 		my ($pref_estructura_sub_campo_marc_array) = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc( 
-																					query => [ tagfield => { eq => $campo },
-																								tagsubfield => { eq => $subcampo }
+																					query => [  tagfield => { eq => $campo },
+																								      tagsubfield => { eq => $subcampo }
 																							 ]
 																	);
 		#si no lo encuentra en estructura_catalogacion, lo busca en estructura_sub_campo_marc

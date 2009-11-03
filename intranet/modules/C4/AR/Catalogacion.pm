@@ -679,6 +679,7 @@ sub getRepetible{
 =item sub _getEstructuraFromCampoSubCampo
 Este funcion devuelve la informacion de la estructura de catalogacion de un campo, subcampo
 =cut
+# FIXME una estructura para un campo, subcampo varia segun el tipo de documento
 sub _getEstructuraFromCampoSubCampo{
     my ($campo, $subcampo) = @_;
 
@@ -690,7 +691,11 @@ sub _getEstructuraFromCampoSubCampo{
                                                                                 with_objects => ['infoReferencia']
 										);	
 
-	return $cat_estruct_info_array;
+  if(scalar(@$cat_estruct_info_array) > 0){
+    return $cat_estruct_info_array->[0];
+  }else{
+    return 0;
+  }
 }
 
 =item sub getEstructuraCatalogacionById

@@ -532,10 +532,14 @@ sub toMARC{
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreUI($self->getId_ui_origen);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-	if($estructura->[0]->getReferencia){
-	#tiene referencia
-		$hash{'datoReferencia'}= $self->getId_ui_origen;
+	
+	if($estructura){
+    if($estructura->getReferencia){
+	    #tiene referencia
+		  $hash{'datoReferencia'}= $self->getId_ui_origen;
+    }
+  
+    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
 	}
   $hash{'id1'} = $self->getId1;
 
@@ -560,10 +564,14 @@ sub toMARC{
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreUI($self->getId_ui_poseedora);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-	if($estructura->[0]->getReferencia){
-	#tiene referencia
-		$hash{'datoReferencia'}= $self->getId_ui_poseedora;
+
+  if($estructura){
+    if($estructura->getReferencia){
+	    #tiene referencia
+		  $hash{'datoReferencia'}= $self->getId_ui_poseedora;
+    }
+  
+    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
 	}
   $hash{'id1'} = $self->getId1;
 
@@ -588,10 +596,14 @@ sub toMARC{
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreEstado($self->getId_estado);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-	if($estructura->[0]->getReferencia){
-	#tiene referencia
-		$hash{'datoReferencia'}= $self->getId_estado;
+
+  if($estructura){
+    if($estructura->getReferencia){
+	    #tiene referencia
+		  $hash{'datoReferencia'}= $self->getId_estado;
+    }
+
+    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
 	}
   $hash{'id1'} = $self->getId1;
 
@@ -605,11 +617,16 @@ sub toMARC{
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreDisponibilidad($self->getId_disponibilidad);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-	if($estructura->[0]->getReferencia){
-	#tiene referencia
-		$hash{'datoReferencia'}= $self->getId_disponibilidad;
+
+  if($estructura){
+    if($estructura->getReferencia){
+	    #tiene referencia
+		  $hash{'datoReferencia'}= $self->getId_disponibilidad;
+    }
+
+    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
 	}
+
   $hash{'id1'} = $self->getId1;
 
 

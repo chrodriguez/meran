@@ -209,7 +209,11 @@ sub toMARC{
 	$hash{'dato'}= $self->getTitulo;
 	$hash{'ident'}= 'TITULO'; #parece q no es necesario
  	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
+
+  if($estructura){
+	  $hash{'liblibrarian'}= $estructura->getLiblibrarian;
+  }
+
   $hash{'id1'} = $self->getId1;
 	
 
@@ -223,11 +227,16 @@ sub toMARC{
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreAutor($self->getAutor);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-	if($estructura->[0]->getReferencia){
-	#tiene referencia
-		$hash{'datoReferencia'}= $self->getAutor;
+
+  if($estructura){
+    if($estructura->getReferencia){
+	    #tiene referencia
+		  $hash{'datoReferencia'}= $self->getAutor;
+    }
+
+    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
 	}
+
   $hash{'id1'} = $self->getId1;
 
 
@@ -264,6 +273,20 @@ sub nivel1CompletoToMARC{
 		$hash{'liblibrarian'}= C4::AR::Busquedas::getLiblibrarian($campo, $subcampo);
 		$hash{'dato'}= $dato;
     $hash{'id1'}= $id1;
+    my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+
+    if($estructura){
+      if($estructura->getReferencia){
+        #tiene referencia
+        my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
+        my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia, $estructura->{'dato'});
+        $obj_generico = $obj_generico->getObjeto($estructura->{'dato'});
+        $hash{'dato'} = $obj_generico->toString;
+        C4::AR::Debug::debug("dato de la referencia ".$hash{'dato'});
+  #       $hash_ref->{'datoReferencia'} = $estructura->[0]->{'dato'};#sobreescribo el dato
+        $hash{'datoReferencia'}= $estructura->infoReferencia->getReferencia;
+      }
+    }
 
  		push(@$marc_array, \%hash);
         C4::AR::Debug::debug("CatNivel1 => nivel1CompletoToMARC => nivel1CompletoToMARC => ".$campo.", ".$subcampo."  ".$dato." id1 ".$id1);	

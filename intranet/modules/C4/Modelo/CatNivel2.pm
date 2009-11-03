@@ -374,10 +374,13 @@ sub toMARC{
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreTipoDocumento($self->getTipo_documento);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-    if ($estructura->[0]){
-	    $hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-		$hash{'datoReferencia'}= $self->getTipo_documento
+  if($estructura){
+    if($estructura->getReferencia){
+	    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
+		  $hash{'datoReferencia'}= $self->getTipo_documento
+    }
 	}
+
   $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
@@ -390,10 +393,14 @@ sub toMARC{
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombrePais($self->getPais_publicacion);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-	if($estructura->[0]){
-		$hash{'datoReferencia'}= $self->getPais_publicacion;
+	
+	if($estructura){
+    if($estructura->getReferencia){
+		  $hash{'datoReferencia'}= $self->getPais_publicacion;
+    }
+    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
 	}
+
   $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
@@ -405,10 +412,11 @@ sub toMARC{
 	$hash{'subcampo'}= $subcampo;
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= $self->getAnio_publicacion;
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-    if($estructura->[0]){
-	    $hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-    }
+	my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+  if($estructura){
+    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
+  }
+
   $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
@@ -421,11 +429,16 @@ sub toMARC{
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
  	$hash{'dato'}= C4::AR::Referencias::getNombreCiudad($self->getCiudad_publicacion);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-	if($estructura->[0]){
-	#tiene referencia
-		$hash{'datoReferencia'}= $self->getCiudad_publicacion;
+	
+	if($estructura){
+    if($estructura->getReferencia){
+	    #tiene referencia
+		  $hash{'datoReferencia'}= $self->getCiudad_publicacion;
+    }
+
+    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
 	}
+
   $hash{'id1'} = $self->getId1;
 
 	push (@marc_array, \%hash);
@@ -438,10 +451,14 @@ sub toMARC{
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreLenguaje($self->getLenguaje);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-	if($estructura->[0]->getReferencia){
-	#tiene referencia
-		$hash{'datoReferencia'}= $self->getLenguaje;
+	
+	if($estructura){
+    if($estructura->getReferencia){
+	    #tiene referencia
+		  $hash{'datoReferencia'}= $self->getLenguaje;
+    }
+
+    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
 	}
   $hash{'id1'} = $self->getId1;
 
@@ -455,10 +472,13 @@ sub toMARC{
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreSoporte($self->getSoporte);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-	if($estructura->[0]->getReferencia){
-	#tiene referencia
-		$hash{'datoReferencia'}= $self->getSoporte;
+	
+	if($estructura){
+    if($estructura->getReferencia){
+	    #tiene referencia
+		  $hash{'datoReferencia'}= $self->getSoporte;
+    }
+    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
 	}
   $hash{'id1'} = $self->getId1;
 
@@ -472,10 +492,13 @@ sub toMARC{
 	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreNivelBibliografico($self->getNivel_bibliografico);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	$hash{'liblibrarian'}= $estructura->[0]->getLiblibrarian;
-	if($estructura->[0]->getReferencia){
-	#tiene referencia
-		$hash{'datoReferencia'}= $self->getNivel_bibliografico;
+	if($estructura){
+    if($estructura->getReferencia){
+	    #tiene referencia
+		  $hash{'datoReferencia'}= $self->getNivel_bibliografico;
+    }
+  
+    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
 	}
   $hash{'id1'} = $self->getId1;
 	
