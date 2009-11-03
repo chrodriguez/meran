@@ -1538,10 +1538,49 @@ sub callStoredProcedure{
   }
 }
 
+sub busquedaCombinada_newTemp{
+# TODO Miguel hay q sacar los repetibles que tienen una referencia o buscar en la referencia
+    my ($string,$session,$obj_for_log) = @_;
+
+#     traerDatoReferencia();
+
+    my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string);
+  
+
+    use Sphinx::Search;
+
+    my $sphinx = Sphinx::Search->new();
+  
+    my $results = $sphinx->SetMatchMode(SPH_MATCH_ALL)
+                                    ->SetSortMode(SPH_SORT_RELEVANCE)
+                                    ->Query(" Ahorro ");
+  
+
+    C4::AR::Debug::debug("================================results".$results);
+    foreach my $hash (@$results){
+    C4::AR::Debug::debug("================================entro");
+      C4::AR::Utilidades::printHASH($hash);
+    }
+
+#    
+#     foreach $string (@searchstring_array){
+# 
+#     
+#     }
+  
+    #arma y ordena el arreglo para enviar al cliente
+#     my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
+#     #se loquea la busqueda
+#     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
+# 
+#     return ($cant_total, $resultsarray);
+}
+
 =item
 Realiza una busqueda combinada sobre nivel 1, 2 y 3
 NO BUSCA EN REPETIBLES
 =cut
+=item
 sub busquedaCombinada_newTemp{
 # TODO Miguel hay q sacar los repetibles que tienen una referencia o buscar en la referencia
 	  my ($string,$session,$obj_for_log) = @_;
@@ -1776,6 +1815,7 @@ sub busquedaCombinada_newTemp{
 
    	return ($cant_total, $resultsarray);
 }
+=cut
 
 
 # ESTO ANDABA
