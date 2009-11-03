@@ -18,14 +18,17 @@ $(document).ready(function() {
 <legend><strong>[% "Cat&aacute;logo:" | i18n %]</strong></legend>
 	<ul>
     <li class="item" >
+
+        [% PERL %]
+            print C4::AR::Filtros::getComboBusqueda() ;
+        [% END %]
+    </li>
+    <li class="item" >
 			
         <label for="keyword">
             [% "B&uacute;squeda combinada" | i18n %]
         </label>
         <input type="text" id="keyword" size="20" tabindex=1>
-
-        <strong>[% "Incluir repetibles" | i18n %]</strong>
-        <input type="checkbox" id="check_repetibles">
 
          [% PERL %]
                      print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",

@@ -1018,75 +1018,6 @@ sub buscarTema{
 }
 
 
-sub busquedaCombinada {
-
-	my ($search, $ini, $cantR)=@_;
-
-  	my $dbh = C4::Context->dbh;
-  	$search->{'keyword'}=~ s/ +$//;
-	my @key=split(' ',$search->{'keyword'});
-  
-  	my $count=0;
-  	my @returnvalues= ();
-  
-  	my @bind = ();
-  	my @condiciones=(); 
-  	my $index=0;
-
-	#Se arma el bind
-	foreach my $keyword (@key) {push(@bind,"\Q$keyword\E%","% \Q$keyword\E%");}
-
-	#Campos para las condiciones, se tienen que corresponder con las queries
-	foreach my $field (qw(titulo cat_autor.completo cat_tema.nombre cat_nivel1_repetible.dato cat_nivel2_repetible.dato cat_nivel3_repetible.dato)){ 
-		my @subclauses = ();
-		foreach my $keyword (@key) { push @subclauses, "$field LIKE ? OR $field LIKE ?";}
-		$condiciones[$index]= "(" . join(")\n\tOR (", @subclauses) . ")";
-		$index++;
-	}
-	
-	#CONSULTAS
-	my @queries=(
-		"SELECT id1 FROM cat_nivel1 WHERE ".$condiciones[0], #TITULO
-		"SELECT id1 FROM cat_nivel1 left join cat_autor on cat_nivel1.autor = cat_autor.id WHERE ".$condiciones[1], #AUTOR
-		"SELECT id1 FROM cat_nivel1_repetible left join cat_autor on cat_nivel1_repetible.dato = cat_autor.id WHERE campo='700' and subcampo='a' and ".$condiciones[1], #Autores adicionales 700 a
-		"SELECT id1 FROM cat_nivel1_repetible left join cat_tema on cat_nivel1_repetible.dato = cat_tema.id WHERE campo='650' and subcampo='a' and ".$condiciones[2], #Tema 650 a
-		"SELECT id1 FROM cat_nivel1_repetible WHERE ".$condiciones[3], #nivel1_repetible
-		"SELECT cat_nivel2.id1 FROM cat_nivel2 right join cat_nivel2_repetible on cat_nivel2.id2 = cat_nivel2_repetible.id2 WHERE ".$condiciones[4], #nivel2_repetible
-		"SELECT cat_nivel3.id1 FROM cat_nivel3 right join cat_nivel3_repetible on cat_nivel3.id3 = cat_nivel3_repetible.id3 WHERE ".$condiciones[5], #nivel3_repetible
-	) ;
-
-	#Realizamos las consultas
-	foreach my $query (@queries){
-		my $sth=$dbh->prepare($query);
-		$sth->execute(@bind);
-		while (my ($id1) = $sth->fetchrow) {
-			#Se agrega solo si no es repetido
-			my $found=0;
-			foreach my $ret ( @returnvalues ) {
-			if( $ret == $id1 ) { $found = 1; last }
-			} 
-	
-			if ($found == 0){
-				push(@returnvalues,$id1);
-				$count++;
-			}
-		}
-	}
-
-	my $i;
-	my $cantidad= scalar(@returnvalues);
-	my $fin= $ini + $cantR;
-	my @returnvalues2;
-
-# 	Se pagina el resultado
-	for($i=$ini;$i<$fin;$i++){
-		push(@returnvalues2, $returnvalues[$i]);
-	}
-
-	return($cantidad, @returnvalues2);
-}
-
-
 =item
 getNombreLocalidad
 Devuelve el nombre de la localidad que se pasa por parametro.
@@ -1558,7 +1489,7 @@ sub busquedaCombinada_newTemp{
     $query = $string;
 
     C4::AR::Debug::debug("query string ".$query);
-    my $tipo = $obj_for_log->{'match_mode'};
+    my $tipo = $obj_for_log->{'match_mode'}||'SPH_MATCH_ANY';
     my $tipo_match;
 
     if($tipo eq 'SPH_MATCH_ANY'){
@@ -1583,7 +1514,7 @@ sub busquedaCombinada_newTemp{
     my $results = $sphinx->SetMatchMode($tipo_match)
                                     ->SetSortMode(SPH_SORT_RELEVANCE)
 #                                     ->SetSelect("*")
-                                    ->Query($query);
+                                    ->Query('ahorro');
 
 
     my @id1_array;
@@ -1993,6 +1924,7 @@ sub armarInfoNivel1{
   
   for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {
     my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
+# TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
     @result_array_paginado[$i]->{'titulo'} = $nivel1->getTitulo();
     @result_array_paginado[$i]->{'nomCompleto'} = $nivel1->cat_autor->getCompleto();
     #aca se procesan solo los ids de nivel 1 que se van a mostrar
