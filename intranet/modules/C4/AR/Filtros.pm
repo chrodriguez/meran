@@ -298,3 +298,24 @@ sub setComboLang {
 
     return $html;
 }
+
+
+sub getComboBusqueda {
+    my ($type) = @_;
+    my $session = CGI::Session->load();
+    my $html= '';
+    my $lang_Selected= $session->param('locale');
+## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
+    my @array_lang= ('es_ES', 'en_EN', 'nz_NZ', 'jp_JP');
+    my $i;
+
+    $html .="<select id='match_mode' tabindex='-1'>";
+    $html .="<option value='SPH_MATCH_ANY'>Conincidir con cualquier palabra</option>";
+    $html .="<option value='SPH_MATCH_PHRASE'>Conincidir con la frase exacta</option>";
+    $html .="<option value='SPH_MATCH_BOOLEAN'>Conincidir con valores booleanos (&), OR (|), NOT (!,-)</option>";
+    $html .="<option value='SPH_MATCH_EXTENDED'>Coincidencia Extendida</option>";
+    $html .="<option value='SPH_MATCH_ALL'>Conincidir con todas las palabras</option>";
+    $html .="</select>";
+
+    return $html;
+}
