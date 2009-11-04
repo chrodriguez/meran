@@ -88,7 +88,13 @@ sub obtenerValorCampo {
 						( select   => [$campo],
 						  query =>[ id => { eq => $id} ]);
     	
-	return ($ref_valores->[0]->getCampo($campo));
+# 	return ($ref_valores->[0]->getCampo($campo));
+  if(scalar(@$ref_valores) > 0){
+    return ($ref_valores->[0]->getCampo($campo));
+  }else{
+    C4::AR::Debug::debug("CatTema => obtenerValorCampo => no se pudo recuperar el objeto");
+    return 'NO TIENE';
+  }
 }
 
 

@@ -165,7 +165,13 @@ sub obtenerValorCampo {
 						( select   => [$campo],
 						  query =>[ id_tipo_prestamo => { eq => $id} ]);
     	
-	return ($ref_valores->[0]->getCampo($campo));
+# 	return ($ref_valores->[0]->getCampo($campo));
+  if(scalar(@$ref_valores) > 0){
+    return ($ref_valores->[0]->getCampo($campo));
+  }else{
+    C4::AR::Debug::debug("CircRefTipoPrestamo => obtenerValorCampo => no se pudo recuperar el objeto");
+    return 'NO TIENE';
+  }
 }
 
 sub getCampo{

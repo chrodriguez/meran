@@ -119,7 +119,13 @@ sub obtenerValorCampo {
  	my $ref_valores = C4::Modelo::RefPais::Manager->get_ref_pais
 						( select   => [$campo],
 						  query =>[ iso => { eq => $id} ]);
-	return ($ref_valores->[0]->getCampo($campo));
+# 	return ($ref_valores->[0]->getCampo($campo));
+  if(scalar(@$ref_valores) > 0){
+    return ($ref_valores->[0]->getCampo($campo));
+  }else{
+    C4::AR::Debug::debug("RefPais => obtenerValorCampo => no se pudo recuperar el objeto");
+    return 'NO TIENE';
+  }
 }
 
 sub getCampo{

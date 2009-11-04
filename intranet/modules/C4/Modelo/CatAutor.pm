@@ -163,20 +163,25 @@ sub obtenerValoresCampo {
 }
 
 sub obtenerValorCampo {
-	my ($self)=shift;
-    my ($campo,$id)=@_;
+  my ($self)=shift;
+  my ($campo,$id)=@_;
 
 	use C4::Modelo::CatAutor::Manager;
  	my $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor
 						( select   => [$campo],
 						  query =>[ id => { eq => $id} ]);
-    	
-	return ($ref_valores->[0]->getCampo($campo));
+
+  if(scalar(@$ref_valores) > 0){
+    return ($ref_valores->[0]->getCampo($campo));
+  }else{
+    C4::AR::Debug::debug("CatAutor => obtenerValorCampo => no se pudo recuperar el objeto");
+    return 'NO TIENE';
+  }
 }
 
 
 sub getCampo{
-    my ($self) = shift;
+  my ($self) = shift;
 	my ($campo)=@_;
     
 	if ($campo eq "id") {return $self->getId;}

@@ -76,7 +76,13 @@ sub obtenerValorCampo {
  	my $ref_valores = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento
 						( select   => [$campo],
 						  query =>[ descripcion => { eq => $id} ]);
-	return ($ref_valores->[0]->getCampo($campo));
+# 	return ($ref_valores->[0]->getCampo($campo));
+  if(scalar(@$ref_valores) > 0){
+    return ($ref_valores->[0]->getCampo($campo));
+  }else{
+    C4::AR::Debug::debug("UsrRefTipoDocumento => obtenerValorCampo => no se pudo recuperar el objeto");
+    return 'NO TIENE';
+  }
 }
 
 sub getCampo{

@@ -399,8 +399,9 @@ sub getEstructuraConDatos{
     my $nivel = $params->{'nivel'};
     my $itemType = $params->{'id_tipo_doc'};
     #obtengo la estructura_catalogacion configurada solo de los campos REPETIBLES
-     my ($cant, $catalogaciones_array_ref_objects)= getEstructuraCatalogacionFromDBRepetibles($nivel,$itemType);
-
+# FIXME no le esta llegano el itemtype
+    my ($cant, $catalogaciones_array_ref_objects)= getEstructuraCatalogacionFromDBRepetibles($nivel,$itemType);
+    C4::AR::Debug::debug("son REPETIBLES cant;: ".$cant);
     my @result;
 
     foreach my $cat_estructura  (@$catalogaciones_array_ref_objects){
