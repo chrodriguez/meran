@@ -112,8 +112,9 @@ sub agregar{
 
         if ( $infoNivel2->{'Id_rep'} != 0 ){
             C4::AR::Debug::debug("CatNivel2 => agregar => Se va a modificar CatNivel2, Id_rep: ". $infoNivel2->{'Id_rep'});
-            $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'Id_rep'});
-            $nivel2Repetible->load();
+#             $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'Id_rep'});
+#             getNivel2RepetibleFromId2Repetible
+            $nivel2Repetible = C4::AR::Nivel2::getNivel2RepetibleFromId2Repetible($infoNivel2->{'Id_rep'},$self->db);
         }else{
             C4::AR::Debug::debug("CatNivel2 => agregar => No existe el REPETIBLE se crea uno");
             $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);

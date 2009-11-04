@@ -72,6 +72,28 @@ sub getNivel2FromId2{
 	}
 }
 
+=item sub getNivel2RepetibleFromId2Repetible
+Recupero un nivel 2 repetible a partir de un $id2_rep (id2 repetible)
+retorna un objeto o 0 si no existe
+=cut
+sub getNivel2RepetibleFromId2Repetible{
+  my ($id2_rep, $db) = @_;
+
+  $db = $db || C4::Modelo::PermCatalogo->new()->db;
+  my $nivel2_repetible_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(   
+                                                                                    db => $db,
+                                                                                    query   => [  
+                                                                                                rep_n2_id => { eq => $id2_rep},
+                                                                                                ], 
+                #                                                                     require_objects => ['CEC']
+                                );
+
+  if( scalar(@$nivel2_repetible_array_ref) > 0){
+    return ($nivel2_repetible_array_ref->[0]);
+  }else{
+    return 0;
+  }
+}
 
 #=======================================================================ABM Nivel 1=======================================================
 

@@ -400,10 +400,11 @@ sub getEstructuraConDatos{
     my $itemType = $params->{'id_tipo_doc'};
     #obtengo la estructura_catalogacion configurada solo de los campos REPETIBLES
 # FIXME no le esta llegano el itemtype
+    C4::AR::Debug::debug("getEstructuraConDatos => tipo de documento: ".$itemType);
     my ($cant, $catalogaciones_array_ref_objects)= getEstructuraCatalogacionFromDBRepetibles($nivel,$itemType);
-    C4::AR::Debug::debug("son REPETIBLES cant;: ".$cant);
-    my @result;
+    C4::AR::Debug::debug("getEstructuraConDatos => son REPETIBLES cant: ".$cant);
 
+    my @result;
     foreach my $cat_estructura  (@$catalogaciones_array_ref_objects){
 
         if($cat_estructura->getRepetible){        
@@ -437,7 +438,7 @@ sub getEstructuraConDatos{
         }# END IF
 
     }# END foreach my $cat_estructura  (@$catalogaciones_array_ref_objects)
-   
+
 
     #obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
     my @resultEstYDatos= _getEstructuraYDatosDeNivelNoRepetible($params);
@@ -503,6 +504,7 @@ sub _obtenerOpciones{
     my ($cat_estruct_object, $hash_ref) = @_;
 
     C4::AR::Debug::debug('_obtenerOpciones => es un combo, se setean las opciones para => '.$cat_estruct_object->infoReferencia->getReferencia);
+    C4::AR::Debug::debug('_obtenerOpciones => getCampos => '.$cat_estruct_object->infoReferencia->getCampos);
     my $orden = $cat_estruct_object->infoReferencia->getCampos;
     my ($cantidad, $valores) = &C4::AR::Referencias::obtenerValoresTablaRef(   
                                                                 $cat_estruct_object->infoReferencia->getReferencia,  #tabla  
@@ -510,6 +512,8 @@ sub _obtenerOpciones{
                                                                 $orden
                                                 );
     $hash_ref->{'opciones'} = $valores;
+
+C4::AR::Debug::debug("_obtenerOpciones => opciones => ".$valores);
 }
 
 sub _setearInfoParaAutocomplete{

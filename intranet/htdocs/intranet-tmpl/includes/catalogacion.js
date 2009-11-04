@@ -1156,10 +1156,10 @@ function updateBorrarEjemplaresN3(responseText){
  */
 function modificarN1(id1){
 	inicializar();
-    ID_N1 = id1;
+  ID_N1 = id1;
 	objAH = new AjaxHelper(updateModificarN1);
 	objAH.url = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.showStatusIn = "centro";
+  objAH.showStatusIn = "centro";
 	objAH.debug = true;
 //     objAH.cache = true;
 	objAH.tipoAccion = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
@@ -1214,7 +1214,7 @@ function modificarN3(id3){
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug= true;
 //     objAH.cache = true;
-    objAH.showStatusIn = "centro";
+  objAH.showStatusIn = "centro";
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype=$("#id_tipo_doc").val();
  	objAH.id3 = ID_N3;
@@ -1313,7 +1313,7 @@ function cargarNivel1(params){
 	mostrarInfoAltaNivel1(params.id1);
 	mostrarInfoAltaNivel2(params.id2);	
 // 	mostrarInfoAltaNivel3(params.id1, params.id2);	
-    mostrarInfoAltaNivel3(params.id2);  
+  mostrarInfoAltaNivel3(params.id2);  
 }
 
 function validateForm(formID, func){

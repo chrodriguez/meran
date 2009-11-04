@@ -523,6 +523,30 @@ sub getNivel3FromId3{
 	}
 }
 
+
+=item sub getNivel3RepetibleFromId3Repetible
+Recupero un nivel 3 a partir de un $id3_rep (id3 repetible)
+retorna un objeto o 0 si no existe
+=cut
+sub getNivel3RepetibleFromId3Repetible{
+  my ($id3_rep, $db) = @_;
+
+  $db = $db || C4::Modelo::PermCatalogo->new()->db;
+  my $nivel3_repetible_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
+                                                                                    db => $db,
+                                                                                    query   => [  
+                                                                                                rep_n3_id => { eq => $id3_rep},
+                                                                                                ], 
+                #                                                                     require_objects => ['CEC']
+                                );
+
+  if( scalar(@$nivel3_repetible_array_ref) > 0){
+    return ($nivel3_repetible_array_ref->[0]);
+  }else{
+    return 0;
+  }
+}
+
 =item sub existeBarcode
 Verifica si existe el barcode en la base
 =cut
