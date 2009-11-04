@@ -60,16 +60,16 @@ use MARC::Record;
 
     my $superstring="";
         
-        my $marc=MARC::Record->new();
-        
-        for(my $i=0; $i< scalar(@result); $i++){
-          if ($superstring eq "") {$superstring =@result[$i]->{'dato'}; }
-            else {$superstring .=" ".@result[$i]->{'dato'}; }
-          }
+    my $marc=MARC::Record->new();
+    
+    for(my $i=0; $i< scalar(@result); $i++){
+      if ($superstring eq "") {$superstring =@result[$i]->{'dato'}; }
+        else {$superstring .=" ".@result[$i]->{'dato'}; }
+    }
       
-  my $query4="INSERT INTO indice_busqueda (id,titulo,autor,string) VALUES (?,?,?,?) ";
-  my $sth4=$dbh->prepare($query4);
-  my $autor = C4::AR::Referencias::getAutor($nivel1_object->getId1);
+    my $query4="INSERT INTO indice_busqueda (id,titulo,autor,string) VALUES (?,?,?,?) ";
+    my $sth4=$dbh->prepare($query4);
+    my $autor = C4::AR::Referencias::getAutor($nivel1_object->getAutor);
     $sth4->execute($id1,$nivel1_object->getTitulo,$autor,$superstring);
       
   }
