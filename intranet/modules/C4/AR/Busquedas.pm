@@ -1298,31 +1298,32 @@ sub callStoredProcedure{
   }
 }
 
-# sub _getMatchMode{
-#   my ($tipo) = @_;
-# 
-#   #por defecto se setea este match_mode
-#   my $tipo_match = SPH_MATCH_ANY;
-# 
-#   if($tipo eq 'SPH_MATCH_ANY'){
-#     #Match any words
-#     $tipo_match = SPH_MATCH_ANY;
-#   }elsif($tipo eq 'SPH_MATCH_PHRASE'){
-#     #Exact phrase match
-#     $tipo_match = SPH_MATCH_PHRASE;
-#   }elsif($tipo eq 'SPH_MATCH_BOOLEAN'){
-#     #Boolean match, using AND (&), OR (|), NOT (!,-) and parenthetic grouping
-#     $tipo_match = SPH_MATCH_BOOLEAN;
-#   }elsif($tipo eq 'SPH_MATCH_EXTENDED'){
-#     #Extended match, which includes the Boolean syntax plus field, phrase and proximity operators
-#     $tipo_match = SPH_MATCH_EXTENDED;
-#   }elsif($tipo eq 'SPH_MATCH_ALL'){
-#     #Match all words
-#     $tipo_match = SPH_MATCH_ALL;
-#   }
-# 
-#   return ($tipo_match);
-# }
+sub _getMatchMode{
+  my ($tipo) = @_;
+  use Sphinx::Search;
+
+  #por defecto se setea este match_mode
+  my $tipo_match = SPH_MATCH_ANY;
+
+  if($tipo eq 'SPH_MATCH_ANY'){
+    #Match any words
+    $tipo_match = SPH_MATCH_ANY;
+  }elsif($tipo eq 'SPH_MATCH_PHRASE'){
+    #Exact phrase match
+    $tipo_match = SPH_MATCH_PHRASE;
+  }elsif($tipo eq 'SPH_MATCH_BOOLEAN'){
+    #Boolean match, using AND (&), OR (|), NOT (!,-) and parenthetic grouping
+    $tipo_match = SPH_MATCH_BOOLEAN;
+  }elsif($tipo eq 'SPH_MATCH_EXTENDED'){
+    #Extended match, which includes the Boolean syntax plus field, phrase and proximity operators
+    $tipo_match = SPH_MATCH_EXTENDED;
+  }elsif($tipo eq 'SPH_MATCH_ALL'){
+    #Match all words
+    $tipo_match = SPH_MATCH_ALL;
+  }
+
+  return ($tipo_match);
+}
 
 sub busquedaCombinada_newTemp{
     my ($string,$session,$obj_for_log) = @_;
@@ -1345,24 +1346,7 @@ sub busquedaCombinada_newTemp{
 
     C4::AR::Debug::debug("query string ".$query);
     my $tipo = $obj_for_log->{'match_mode'}||'SPH_MATCH_ANY';
-    my $tipo_match;
-
-    if($tipo eq 'SPH_MATCH_ANY'){
-      #Match any words
-      $tipo_match = SPH_MATCH_ANY;
-    }elsif($tipo eq 'SPH_MATCH_PHRASE'){
-      #Exact phrase match
-      $tipo_match = SPH_MATCH_PHRASE;
-    }elsif($tipo eq 'SPH_MATCH_BOOLEAN'){
-      #Boolean match, using AND (&), OR (|), NOT (!,-) and parenthetic grouping
-      $tipo_match = SPH_MATCH_BOOLEAN;
-    }elsif($tipo eq 'SPH_MATCH_EXTENDED'){
-      #Extended match, which includes the Boolean syntax plus field, phrase and proximity operators
-      $tipo_match = 'SPH_MATCH_EXTENDED';
-    }elsif($tipo eq 'SPH_MATCH_ALL'){
-      #Match all words
-      $tipo_match = SPH_MATCH_ALL;
-    }
+    my $tipo_match = _getMatchMode($tipo);
 
     C4::AR::Debug::debug("MATCH MODE ".$tipo);
 

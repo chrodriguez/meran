@@ -58,6 +58,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 	    my $search;
 	    $search->{'keyword'}= $keyword;
 	    $search->{'class'}= $tipo_documento;
+        C4::AR::Debug::debug("KEYWORD: ".$keyword);
 	    
 	    my ($cantidad, $resultId1)= C4::AR::Busquedas::busquedaCombinada_newTemp($search->{'keyword'},$session,$obj);
 	    

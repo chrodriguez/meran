@@ -1233,8 +1233,9 @@ sub quitarduplicados{
 sub UTF8toISO {
 
     my ($data)=@_;
-
-    return $data= Encode::decode('utf8', $data);
+#POR QUE ROMPE LOS ACENTOS???? VERRRRRRRRRRRRRRRRRRRRRRR
+#     return $data= Encode::decode('utf8', $data);
+    return ($data);
 }
 
 
