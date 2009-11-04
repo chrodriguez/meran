@@ -27,9 +27,8 @@ my $ini= $obj->{'ini'};
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-$t_params->{'ini'} = $obj->{'ini'}= $ini;
-
-$t_params->{'cantR'} = $obj->{'cantR'}= $cantR;
+$t_params->{'ini'} = $obj->{'ini'} = $ini;
+$t_params->{'cantR'} = $obj->{'cantR'} = $cantR;
 $obj->{'type'} = 'INTRA';
 
 =item

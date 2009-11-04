@@ -1285,177 +1285,6 @@ sub busquedaAvanzada_newTemp{
 	return ($cant_total,$resultsarray);
 }
 
-sub getConjDeIds{
-  my ($table_repetible, $tabla_ref, $campo, $filtro, $id) = @_;
-
-=item
- SELECT id2 
-    FROM  cat_nivel2_repetible INNER JOIN cat_estructura_catalogacion cec 
-    ON (cec.campo = cat_nivel2_repetible.campo ) AND (cec.subcampo = cat_nivel2_repetible.subcampo ) 
-    INNER JOIN pref_informacion_referencia pir ON (cec.idinforef = pir.idinforef)
-    WHERE ( cec.referencia = 1 ) AND (pir.referencia = 'ref_estado') AND
-
-dato <> 0 AND dato <> '' AND dato IN 
-                                  ( SELECT id 
-                                    FROM ref_estado 
-                                    WHERE nombre LIKE '%testmigueChascomusEstado%' )
-=cut
-
-  my $sql_string = "  SELECT ".$id." \n";
-  $sql_string .= "    FROM  ".$table_repetible." INNER JOIN cat_estructura_catalogacion cec \n";
-  $sql_string .= "    ON (cec.campo = ".$table_repetible.".campo ) AND (cec.subcampo = ".$table_repetible.".subcampo ) \n";
-  #ojo con esto ver el tema de las referencias q usan id 0
-  $sql_string .= "    WHERE ( cec.referencia = 1 ) AND dato <> 0 AND dato <> '' AND dato IN \n"; 
-  $sql_string .= "                                  ( SELECT id \n";
-  $sql_string .= "                                    FROM ".$tabla_ref." \n";
-  $sql_string .= "                                    WHERE ".$campo." LIKE '".$filtro."' ) \n";
-  
-#   C4::AR::Debug::debug("subconsulta============: ".$sql_string);
-
-  return $sql_string;
-}
-
-=item
-sub getConjDeIds{
-  my ($table_repetible, $tabla_ref, $campo, $filtro, $id) = @_;
-
-  my $sql_string = "  SELECT ".$id." \n";
-  $sql_string .= "    FROM  ".$table_repetible."\n";
-  $sql_string .= "    WHERE dato <> 0 AND dato <> '' AND dato IN \n"; #ojo con esto ver el tema de las referencias q usan id 0
-  $sql_string .= "                                  ( SELECT id \n";
-  $sql_string .= "                                    FROM ".$tabla_ref." \n";
-  $sql_string .= "                                    WHERE ".$campo." LIKE '".$filtro."' ) \n";
-  
-#   C4::AR::Debug::debug("subconsulta============: ".$sql_string);
-
-  return $sql_string;
-}
-=cut
-
-sub generarConjuntoDeIDsFromTablasDeReferencia{
-    my ($table_repetible, $filtro, $id) = @_;
-
-    my $conj_string = '';
-    my $conj_string_total = ''; 
-    my $sql_string = '';
-    my $tablas_referencia_objects_array_ref = C4::AR::Referencias::obtenerTablasDeReferencia();
-    my $dbh = C4::Context->dbh;
-
-    foreach my $tabla (@$tablas_referencia_objects_array_ref){
-
-        $sql_string = getConjDeIds($table_repetible, $tabla->getNombre_tabla, $tabla->getCampo_busqueda, $filtro, $id);        
-
-#         C4::AR::Debug::debug("TABLA ==================== ".$tabla->getNombre_tabla);
-#         C4::AR::Debug::debug("CAMPO ==================== ".$tabla->getCampo_busqueda);
-#         C4::AR::Debug::debug("ID ==================== ".$id);
-#         C4::AR::Debug::debug("sql_string=============>>>>>>>>> ".$sql_string);          
-        
-        my $sth = $dbh->prepare($sql_string);
-        $sth->execute();
-        $conj_string = '';
-        while(my $data = $sth->fetchrow_hashref){
-            $conj_string .= $data->{$id}.","
-        }
-  
-        $conj_string_total = $conj_string_total.$conj_string;
-
-        C4::AR::Debug::debug("SQL_STRING ==================== ".$sql_string);
-        C4::AR::Debug::debug("CONJ_STRING PARCIAL ==================== ".$conj_string);
-        C4::AR::Debug::debug("CONJ_STRING TOTAL ==================== ".$conj_string_total);
-
-    }
-
-  $conj_string_total = substr $conj_string_total,0,((length $conj_string_total) - 1);
-
-#   C4::AR::Debug::debug("CONJ_STRING TOTAL ==================== ".$conj_string_total);
-  if($conj_string_total eq ""){$conj_string_total = "0"}
-
-  return $conj_string_total;
-}
-
-
-sub getConjDeIdsFromTablaNiveles{
-  my ($tabla_nivel, $id_referencia, $tabla_ref, $campo, $filtro, $id) = @_;
-
-  my $sql_string = "  SELECT ".$id." \n";
-  $sql_string .= "    FROM  ".$tabla_nivel."\n";
-  $sql_string .= "    WHERE ".$id_referencia." IN \n";
-  $sql_string .= "                  ( SELECT id \n";
-  $sql_string .= "                    FROM ".$tabla_ref." \n";
-  $sql_string .= "                    WHERE ".$campo." LIKE '".$filtro."' ) \n";
-  
-  C4::AR::Debug::debug("subconsulta============: ".$sql_string);
-
-  return $sql_string;
-}
-
-# sub traerDatoReferencia{
-#     my $dbh = C4::Context->dbh;
-#     
-#     my $sql = " SELECT * FROM cat_nivel1_repetible c1r INNER JOIN cat_estructura_catalogacion cec \n";
-#       $sql .= " ON (cec.campo = c1r.campo) AND (cec.subcampo = c1r.subcampo) \n";
-#       $sql .= " WHERE  (cec.referencia = 1) \n";
-#     my $sth = $dbh->prepare($sql);
-#     $sth->execute();
-#   
-#     while(my $data = $sth->fetchrow_hashref){
-#         C4::AR::Debug::debug("campo, subcampo: dato: ".$data->{'campo'}.", ".$data->{'subcampo'}." : ".$data->{'dato'});
-#     }
-# }
-
-sub generarConjuntoDeIDsFromTablasDeReferencia2{
-    my ($table_nivel, $filtro, $id) = @_;
-
-    my $conj_string = '';
-    my $conj_string_total = '';
-    my $sql_string = '';
-    my $dbh = C4::Context->dbh;
-
-    my %tablas_referencia_names;
-    $tablas_referencia_names{'ref_estado'}              = 'id_estado';
-    $tablas_referencia_names{'ref_disponibilidad'}      = 'id_ui_poseedora';
-    $tablas_referencia_names{'pref_unidad_informacion'} = 'id_ui_poseedora';
-
-    while ( my ($tabla_name, $id_referencia) = each(%tablas_referencia_names) ) {
-        my $tabla_ref_object = C4::AR::Referencias::getTablaDeReferenciaLike($tabla_name);
-
-        $sql_string = getConjDeIdsFromTablaNiveles( 
-                                          $table_nivel, 
-                                          $id_referencia,  
-                                          $tabla_ref_object->getNombre_tabla, 
-                                          $tabla_ref_object->getCampo_busqueda, 
-                                          $filtro, 
-                                          $id 
-                                    );
-
-#         C4::AR::Debug::debug("TABLA ==================== ".$tabla->getNombre_tabla);
-#         C4::AR::Debug::debug("CAMPO ==================== ".$tabla->getCampo_busqueda);
-#         C4::AR::Debug::debug("ID ==================== ".$id);
-#         C4::AR::Debug::debug("sql_string=============>>>>>>>>> ".$sql_string);          
-        
-        my $sth = $dbh->prepare($sql_string);
-        $sth->execute();
-
-        $conj_string = '';
-        
-        while(my $data = $sth->fetchrow_hashref){
-            $conj_string .= $data->{$id}.","
-        }
-
-        $conj_string_total = $conj_string_total.$conj_string;
-        C4::AR::Debug::debug("CONJ_STRING PARCIAL 2222222222222222222==================== ".$conj_string);
-        C4::AR::Debug::debug("CONJ_STRING TOTAOL  2222222222222222222==================== ".$conj_string_total);
-    }
-
-  $conj_string_total = substr $conj_string_total,0,((length $conj_string) - 1);
-
-#   C4::AR::Debug::debug("CONJ_STRING TOTAOL  2222222222222222222==================== ".$conj_string_total);
-  if($conj_string_total eq ""){$conj_string_total = "0"}
-
-  return $conj_string_total;
-}
-
-
 sub callStoredProcedure{
   my $dbh = C4::Context->dbh;
 
@@ -1514,31 +1343,30 @@ sub busquedaCombinada_newTemp{
     my $results = $sphinx->SetMatchMode($tipo_match)
                                     ->SetSortMode(SPH_SORT_RELEVANCE)
 #                                     ->SetSelect("*")
-                                    ->Query('ahorro');
+                                    ->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'})
+                                    ->Query($query);
 
 
     my @id1_array;
     my $matches = $results->{'matches'};
     my $total_found = $results->{'total_found'};
-    C4::AR::Utilidades::printHASH($results);
+    $obj_for_log->{'total_found'} = $total_found;
+#     C4::AR::Utilidades::printHASH($results);
     C4::AR::Debug::debug("total_found: ".$total_found);
   
     foreach my $hash (@$matches){
       my %hash_temp = {};
-#       C4::AR::Debug::debug("IMPRIMO LA HAS DENTRO DEL FOR DE LOS MATCHES titulo".$hash->{'titulo'});
       $hash_temp{'id1'} = $hash->{'doc'};
-#       C4::AR::Debug::debug("IMPRIMO LA HAS DENTRO DEL FOR DE LOS MATCHES ");
-      C4::AR::Utilidades::printHASH($hash);
+#       C4::AR::Utilidades::printHASH($hash);
 
       push (@id1_array, \%hash_temp);
     }
   
     #arma y ordena el arreglo para enviar al cliente
-#     my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,\@searchstring_array, @id1_array);
      my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
-#     #se loquea la busqueda
+    #se loquea la busqueda
     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
-# 
+ 
     return ($total_found, $resultsarray);
 }
 
@@ -1641,138 +1469,6 @@ sub filtrarPorAutor{
 
     return ($cant_total,$resultsarray);
 }
-
-# sub busquedaCombinada_newTemp{
-# 
-#    my ($ini,$cantR,$string,$session,$obj_for_log) = @_;
-#    
-#    my @filtros;
-# 
-#    my $nivel3_repetible = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel3_repetible(
-#                                                             query => [
-#                                                                         or =>[
-#                                                                               dato => {like => '%'.$string.'%'},
-#                                                                               'cat_nivel3.barcode' => {like => '%'.$string.'%'},
-#                                                                               'cat_nivel3.signatura_topografica' => {like => '%'.$string.'%'},
-#                                                                         ],
-#                                                                      ],
-#                                                                      limit => $cantR,
-#                                                                      offset => $ini,
-#                                                                      select => ['cat_nivel3.id1'],
-#                                                                      distinct => 1,
-#                                                                      require_objects => ['cat_nivel3'],
-#                                                             );
-# 
-#    my $nivel3_repetible_count = C4::Modelo::CatNivel3Repetible::Manager::get_cat_nivel3_repetible(
-#                                                                query => [
-#                                                                            or =>[
-#                                                                                  dato => {like => '%'.$string.'%'},
-#                                                                                  'cat_nivel3.barcode' => {like => '%'.$string.'%'},
-#                                                                                  'cat_nivel3.signatura_topografica' => {like => '%'.$string.'%'},
-#                                                                            ],
-#                                                                         ],
-#                                                                         select => ['COUNT(DISTINCT(id1)) AS agregacion_temp'],
-#                                                                         require_objects => ['cat_nivel3'],
-#                                                                );
-# 
-#    my $nivel2_repetible = C4::Modelo::CatNivel2Repetible::Manager::get_cat_nivel2_repetible(
-#                                                                   query => [
-#                                                                               or => [
-#                                                                                  dato => {like => '%'.$string.'%'},
-#                                                                                  'cat_nivel2.nivel_bibliografico' => {like => '%'.$string.'%'},
-#                                                                                  'cat_nivel2.tipo_documento' => {like => '%'.$string.'%'},
-#                                                                                  'cat_nivel2.soporte' => {like => '%'.$string.'%'},
-#                                                                                  'cat_nivel2.anio_publicacion' => {like => '%'.$string.'%'},
-#                                                                               ],
-#                                                                            ],
-#                                                                            limit => $cantR,
-#                                                                            offset => $ini,
-#                                                                            select => ['cat_nivel2.id1'],
-#                                                                            distinct => 1,
-#                                                                            require_objects => ['cat_nivel2'],
-#                                                                   );
-# 
-#    my $nivel2_repetible_count = C4::Modelo::CatNivel2Repetible::Manager::get_cat_nivel2_repetible(
-#                                                                      query => [
-#                                                                                  or => [
-#                                                                                     dato => {like => '%'.$string.'%'},
-#                                                                                     'cat_nivel2.nivel_bibliografico' => {like => '%'.$string.'%'},
-#                                                                                     'cat_nivel2.tipo_documento' => {like => '%'.$string.'%'},
-#                                                                                     'cat_nivel2.soporte' => {like => '%'.$string.'%'},
-#                                                                                     'cat_nivel2.anio_publicacion' => {like => '%'.$string.'%'},
-#                                                                                  ],
-#                                                                               ],
-#                                                                               select => ['COUNT(DISTINCT(t2.id1)) AS agregacion_temp'],
-#                                                                               require_objects => ['cat_nivel2'],
-#                                                                      );
-# 
-#    my $nivel1_repetible = C4::Modelo::CatNivel1Repetible::Manager::get_cat_nivel1_repetible(
-#                                                                               query => [
-#                                                                                           or => [
-#                                                                                              dato => {like => '%'.$string.'%'},
-#                                                                                              'cat_nivel1.titulo' => {like => '%'.$string.'%'},
-#                                                                                              'cat_nivel1.autor' => {like => '%'.$string.'%'},
-#                                                                                           ],
-#                                                                                        ],
-# 
-# # FIXME Y SI DIVIDIMOS POR 3???????????????????????
-#                                                                                        limit => $cantR,
-#                                                                                        offset => $ini,
-#                                                                                        select => ['cat_nivel1.id1'],
-#                                                                                        distinct => 1,
-#                                                                                        require_objects => ['cat_nivel1'],
-#                                                                               );
-# 
-#    my $nivel1_repetible_count = C4::Modelo::CatNivel1Repetible::Manager::get_cat_nivel1_repetible(
-#                                                                               query => [
-#                                                                                           or => [
-#                                                                                              dato => {like => '%'.$string.'%'},
-#                                                                                              'cat_nivel1.titulo' => {like => '%'.$string.'%'},
-#                                                                                              'cat_nivel1.autor' => {like => '%'.$string.'%'},
-#                                                                                           ],
-#                                                                                        ],
-#                                                                                        select => ['COUNT(DISTINCT(t2.id1)) AS agregacion_temp'],
-#                                                                                        require_objects => ['cat_nivel1'],
-#                                                                               );
-# 
-#    my @id1_array;
-# # 	#se sacan los repetidos
-#    foreach my $nivel1 (@$nivel1_repetible){
-#       if (!C4::AR::Utilidades::existeInArray($nivel1->cat_nivel1->id1,@id1_array)){
-#           push(@id1_array,$nivel1->cat_nivel1->id1);
-#       }
-#    }
-# 
-# 	#se sacan los repetidos
-#    foreach my $nivel2 (@$nivel2_repetible){
-#       if (!C4::AR::Utilidades::existeInArray($nivel2->cat_nivel2->id1,@id1_array)){
-#         push(@id1_array,$nivel2->cat_nivel2->id1);
-#       }
-#    }
-# 
-# 	#se sacan los repetidos
-#    foreach my $nivel3 (@$nivel3_repetible){
-#       if (!C4::AR::Utilidades::existeInArray($nivel3->cat_nivel3->id1,@id1_array)){
-#          push(@id1_array,$nivel3->cat_nivel3->id1);
-#       }
-#    }
-# 
-# 
-#    my $cant_total = 	scalar(@id1_array);
-# 
-#    my $cant_temp = $nivel1_repetible_count->[0]->agregacion_temp + $nivel2_repetible_count->[0]->agregacion_temp + $nivel3_repetible_count->[0]->agregacion_temp;
-# 
-#    $obj_for_log->{'cantidad'}= $cant_total;
-# 
-#    my $resultsarray = C4::AR::Busquedas::armarInfoNivel1($obj_for_log,@id1_array);
-# 
-#    C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
-# 
-# 
-# 
-#    return ($cant_temp,$resultsarray);
-# }
-
 
 
 sub t_loguearBusqueda {
@@ -1918,12 +1614,29 @@ sub armarInfoNivel1{
 
   my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
   my $orden= $params->{'orden'}||'hits'; #si no se especifico ningun orden, se ordena por cant de hits en la consulta
- 
+
+#   my $fin = $params->{'ini'} + $params->{'cantR'};
+#   $params->{'cantR'} = $fin;  
+#   if($fin > $params->{'total_found'}){
+#     $params->{'cantR'} = $params->{'total_found'};
+#   } 
+# 
+#   
+#   C4::AR::Debug::debug("INI??? ".$params->{'ini'}); 
+#   C4::AR::Debug::debug("FIN??? ".$params->{'cantR'});
+  
+  
   #se corta el arreglo segun lo que indica el paginador
-  my ($cant_total,@result_array_paginado) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultId1);
+# TODO si se usa el setLimit en el objeto indexador no es necesario hacer esto
+#   my ($cant_total,@result_array_paginado) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultId1);
+
+my @result_array_paginado = @resultId1;
+my $cant_total = scalar(@resultId1);
+
+# C4::AR::Debug::debug("cant??? ".scalar(@result_array_paginado));
   
   for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {
-      my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
+    my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
     if($nivel1){
   # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
       @result_array_paginado[$i]->{'titulo'} = $nivel1->getTitulo();

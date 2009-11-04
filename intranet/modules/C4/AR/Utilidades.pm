@@ -2106,7 +2106,8 @@ sub paginarArreglo{
 
     #La variable $ini, no es el numero de pagina, sino es la posicion ya calculada (la que devuelve InitPaginador)
     my ($ini,$fin,@array) = @_;
-        C4::AR::Debug::debug(" INI: ".$ini." FIN: ".$fin);
+    C4::AR::Debug::debug(" Utilidades::paginarArreglo => INI: ".$ini." FIN: ".$fin);
+    C4::AR::Debug::debug(" Utilidades::paginarArreglo => CANT ARRAY antes de paginar: ".scalar(@array));
 
     my $cant_total = scalar(@array);
     my $division_temp  = floor ($cant_total / $fin);
@@ -2115,9 +2116,13 @@ sub paginarArreglo{
 
     if ( ($numPagina > $division_temp) ){
         @array = @array[$ini..($ini + $resto-1)];
+        C4::AR::Debug::debug(" Utilidades::paginarArreglo => CANT ARRAY if: ".scalar(@array));
     }else{
         @array = @array[$ini..($ini + $fin-1)];
+        C4::AR::Debug::debug(" Utilidades::paginarArreglo => CANT ARRAY else: ".scalar(@array));
     }
+
+    C4::AR::Debug::debug(" Utilidades::paginarArreglo => CANT ARRAY despues de paginar: ".scalar(@array));
 
     return ($cant_total,@array);
 }
