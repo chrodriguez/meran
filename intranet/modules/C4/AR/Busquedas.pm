@@ -1298,6 +1298,32 @@ sub callStoredProcedure{
   }
 }
 
+# sub _getMatchMode{
+#   my ($tipo) = @_;
+# 
+#   #por defecto se setea este match_mode
+#   my $tipo_match = SPH_MATCH_ANY;
+# 
+#   if($tipo eq 'SPH_MATCH_ANY'){
+#     #Match any words
+#     $tipo_match = SPH_MATCH_ANY;
+#   }elsif($tipo eq 'SPH_MATCH_PHRASE'){
+#     #Exact phrase match
+#     $tipo_match = SPH_MATCH_PHRASE;
+#   }elsif($tipo eq 'SPH_MATCH_BOOLEAN'){
+#     #Boolean match, using AND (&), OR (|), NOT (!,-) and parenthetic grouping
+#     $tipo_match = SPH_MATCH_BOOLEAN;
+#   }elsif($tipo eq 'SPH_MATCH_EXTENDED'){
+#     #Extended match, which includes the Boolean syntax plus field, phrase and proximity operators
+#     $tipo_match = SPH_MATCH_EXTENDED;
+#   }elsif($tipo eq 'SPH_MATCH_ALL'){
+#     #Match all words
+#     $tipo_match = SPH_MATCH_ALL;
+#   }
+# 
+#   return ($tipo_match);
+# }
+
 sub busquedaCombinada_newTemp{
     my ($string,$session,$obj_for_log) = @_;
 
@@ -1613,7 +1639,6 @@ sub armarInfoNivel1{
    my ($params, @resultId1) = @_;
 
   my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
-  my $orden= $params->{'orden'}||'hits'; #si no se especifico ningun orden, se ordena por cant de hits en la consulta
 
 #   my $fin = $params->{'ini'} + $params->{'cantR'};
 #   $params->{'cantR'} = $fin;  
@@ -1633,7 +1658,10 @@ sub armarInfoNivel1{
 my @result_array_paginado = @resultId1;
 my $cant_total = scalar(@resultId1);
 
-# C4::AR::Debug::debug("cant??? ".scalar(@result_array_paginado));
+
+# FIXME Miguel uso un arreglo temporal para guardar solo los id1 que me recuperan un objeto de nivel1_object
+# puede pasar q el indice este desactualizado y no recupere un id1 que ya no existe en la base
+my @result_array_paginado_temp;
   
   for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {
     my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
@@ -1657,9 +1685,13 @@ my $cant_total = scalar(@resultId1);
       if(scalar(@disponibilidad) > 0){
         @result_array_paginado[$i]->{'disponibilidad'}=\@disponibilidad;
       }
+
+      push (@result_array_paginado_temp, @result_array_paginado[$i]);
     }
   }
 
+$cant_total = scalar(@result_array_paginado_temp);
+@result_array_paginado = @result_array_paginado_temp;
 
   return ($cant_total, \@result_array_paginado);
 }

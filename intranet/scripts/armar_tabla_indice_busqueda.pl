@@ -69,7 +69,8 @@ use MARC::Record;
       
   my $query4="INSERT INTO indice_busqueda (id,titulo,autor,string) VALUES (?,?,?,?) ";
   my $sth4=$dbh->prepare($query4);
-  $sth4->execute($id1,$nivel1_object->getTitulo,$nivel1_object->cat_autor->getCompleto,$superstring);
+  my $autor = C4::AR::Referencias::getAutor($nivel1_object->getId1);
+    $sth4->execute($id1,$nivel1_object->getTitulo,$autor,$superstring);
       
   }
 
