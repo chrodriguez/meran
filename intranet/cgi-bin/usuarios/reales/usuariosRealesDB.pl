@@ -237,7 +237,9 @@ Se genra la ventana para modificar los datos del usuario
         my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc(\%params);
         #se genera el combo de las bibliotecas
         my $comboDeUI= &C4::AR::Utilidades::generarComboUI(\%params);
-        my $comboDeCredentials= &C4::AR::Utilidades::generarComboDeCredentials(\%params);        
+
+        $t_params->{'socio'}= $socio;
+        my $comboDeCredentials= &C4::AR::Utilidades::generarComboDeCredentials($t_params);
 
         $t_params->{'comboDeCredentials'}= $comboDeCredentials;
         $t_params->{'combo_tipo_documento'}= $comboDeTipoDeDoc;
@@ -246,7 +248,6 @@ Se genra la ventana para modificar los datos del usuario
         $t_params->{'addBorrower'}= 0;
 
         #paso el objeto socio al cliente
-        $t_params->{'socio'}= $socio;
         C4::Auth::output_html_with_http_headers($template, $t_params, $session);
     } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 

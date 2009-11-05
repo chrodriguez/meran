@@ -176,14 +176,19 @@ sub generarComboDeCredentials{
     push @select_credentials, 'estudiante';
     push @select_credentials, 'librarian';
     push @select_credentials, 'superLibrarian';
-    $select_credentials{'estudiante'} = 'Estudiante';
-    $select_credentials{'librarian'} = 'Librarian';
-    $select_credentials{'superLibrarian'} = 'SuperLibrarian';
+    $select_credentials{'estudiante'} = 'estudiante';
+    $select_credentials{'librarian'} = 'librarian';
+    $select_credentials{'superLibrarian'} = 'superLibrarian';
+    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
+    my $default_credential = 'estudiante';
+    if ($socio){
+        $default_credential = $socio->getCredentialType;
+    }
 
     my $CGIregular=CGI::scrolling_list(     -name      => 'credential',
                                             -id        => 'credential',
                                             -values    => \@select_credentials,
-                                            -defaults  => 'Estudiante',
+                                            -defaults  => $default_credential,
                                             -labels    => \%select_credentials,
                                             -size      => 1,
                                       );

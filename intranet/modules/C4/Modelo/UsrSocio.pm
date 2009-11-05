@@ -29,7 +29,7 @@ __PACKAGE__->meta->setup(
         dni_autorizado                   => { type => 'varchar', length => 255, not_null => 0 },
         telefono_autorizado              => { type => 'varchar', length => 255, not_null => 0 },
         is_super_user                    => { type => 'integer', default => 0, not_null => 1 },
-
+        credential_type                  => { type => 'varchar', length => 255, not_null => 1, default => 'estudiante' },
     ],
 
      relationships =>
@@ -69,12 +69,25 @@ __PACKAGE__->meta->setup(
     unique_key => [ 'nro_socio' ],
 );
 
+sub setCredentialType{
+    my ($self)=shift;
+    my ($credential_type)=@_;
+    $credential_type = $credential_type || 'estudiante';
+    $self->credential_type = $credential_type;
+    $self->save();
+}
+
+sub getCredentialType{
+    my ($self)=shift;
+
+    return($self->credential_type);
+}
 
 sub agregar{
 
     my ($self)=shift;
     my ($data_hash)=@_;
-    
+
     $self->setId_persona($data_hash->{'id_persona'});
     if ($data_hash->{'auto_nro_socio'}){
         if (C4::AR::Preferencias->getValorPreferencia("auto-nro_socio_from_dni")){
@@ -548,6 +561,7 @@ sub setCredentials{
       else                   {$self->convertirEnEstudiante} # estudiante debería ser default?
     }
 
+    $self->setCredentialType($credential_type);
     $self->save();
 }
 sub convertirEnEstudiante{
