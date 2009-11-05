@@ -165,6 +165,7 @@ sub modificar{
 
     $self->setId_ui($data_hash->{'id_ui'});
     $self->setCod_categoria($data_hash->{'cod_categoria'});
+    $self->setCredentials($data_hash->{'credential_type'});
     $self->persona->modificar($data_hash);
     $self->agregarAutorizado($data_hash);
     $self->save();
@@ -547,6 +548,7 @@ sub setCredentials{
       else                   {$self->convertirEnEstudiante} # estudiante debería ser default?
     }
 
+    $self->save();
 }
 sub convertirEnEstudiante{
 

@@ -45,6 +45,17 @@ sub getAutor{
     return ($self->autor);
 }
 
+sub getAutorObject{
+    my ($self) = shift;
+    my $autor = C4::AR::Referencias::getAutor($self->getAutor());
+    if(!$autor){
+        C4::AR::Debug::debug("CatNivel1=>getAutorObject()=> EL OBJECTO (ID) AUTOR NO EXISTE");
+        $autor = C4::Modelo::CatAutor->new();
+    }
+    return ($autor);
+}
+
+
 sub setAutor{
     my ($self) = shift;
     my ($autor) = @_;

@@ -1363,7 +1363,7 @@ sub busquedaCombinada_newTemp{
     $obj_for_log->{'total_found'} = $total_found;
 #     C4::AR::Utilidades::printHASH($results);
     C4::AR::Debug::debug("total_found: ".$total_found);
-  
+    C4::AR::Debug::debug("LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
       my %hash_temp = {};
       $hash_temp{'id1'} = $hash->{'doc'};
@@ -1371,12 +1371,12 @@ sub busquedaCombinada_newTemp{
 
       push (@id1_array, \%hash_temp);
     }
-  
+    my ($total_found_paginado, $resultsarray);
     #arma y ordena el arreglo para enviar al cliente
-     my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
+    ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
     #se loquea la busqueda
     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
- 
+
     return ($total_found, $resultsarray);
 }
 
@@ -1652,7 +1652,7 @@ my @result_array_paginado_temp;
     if($nivel1){
   # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
       @result_array_paginado[$i]->{'titulo'} = $nivel1->getTitulo();
-      @result_array_paginado[$i]->{'nomCompleto'} = $nivel1->cat_autor->getCompleto();
+      @result_array_paginado[$i]->{'nomCompleto'} = $nivel1->getAutorObject->getCompleto();
       #aca se procesan solo los ids de nivel 1 que se van a mostrar
       #se generan los grupos para mostrar en el resultado de la consulta
       my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");

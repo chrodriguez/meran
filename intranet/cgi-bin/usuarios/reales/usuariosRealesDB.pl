@@ -239,7 +239,7 @@ Se genra la ventana para modificar los datos del usuario
         my $comboDeUI= &C4::AR::Utilidades::generarComboUI(\%params);
         my $comboDeCredentials= &C4::AR::Utilidades::generarComboDeCredentials(\%params);        
 
-        $t_params->{'comboDeCredentials'}= $comboDeCredentials;  
+        $t_params->{'comboDeCredentials'}= $comboDeCredentials;
         $t_params->{'combo_tipo_documento'}= $comboDeTipoDeDoc;
         $t_params->{'comboDeCategorias'}= $comboDeCategorias;
         $t_params->{'comboDeUI'}= $comboDeUI;

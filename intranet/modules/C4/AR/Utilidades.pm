@@ -169,6 +169,7 @@ sub generarComboDeAnios{
 
 sub generarComboDeCredentials{
 
+    my ($params) = @_;
     my @select_credentials;
     my %select_credentials;
 

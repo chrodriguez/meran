@@ -483,7 +483,7 @@ sub _verificarDatosBorrower {
     my $credential_type = lc $data->{'credential_type'};
     my $nro_socio = $data->{'nro_socio'};
 
-    if ( (!($msg_object->{'error'})) && ($data->{'auto_nro_socio'} != 1) ){
+    if ( (!($msg_object->{'error'})) && ($data->{'auto_nro_socio'} != 1) && (!$data->{'modifica'})){
           $msg_object->{'error'} = (existeSocio($nro_socio) > 0);
           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U500', 'params' => []} ) ;
     }
