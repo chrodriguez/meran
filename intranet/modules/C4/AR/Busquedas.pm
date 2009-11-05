@@ -1278,7 +1278,7 @@ sub busquedaAvanzada_newTemp{
 		push (@id1_array,$data);
 	}
 	#arma y ordena el arreglo para enviar al cliente
-   	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array, @id1_array);
+   	 my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,@id1_array);
 	#se loquea la busqueda
    	C4::AR::Busquedas::logBusqueda($params_obj, $session);
 	
@@ -1354,14 +1354,14 @@ sub busquedaCombinada_newTemp{
                                     ->SetSortMode(SPH_SORT_RELEVANCE)
 #                                     ->SetSelect("*")
                                     ->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'})
-                                    ->Query($query);
+                                    ->Query($query.'*');
 
 
     my @id1_array;
     my $matches = $results->{'matches'};
     my $total_found = $results->{'total_found'};
     $obj_for_log->{'total_found'} = $total_found;
-#     C4::AR::Utilidades::printHASH($results);
+    C4::AR::Utilidades::printHASH($results);
     C4::AR::Debug::debug("total_found: ".$total_found);
     C4::AR::Debug::debug("LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
@@ -1405,7 +1405,7 @@ sub busquedaSimplePorAutor{
 	}
 
 	#arma y ordena el arreglo para enviar al cliente
-   	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params,\@searchstring_array, @id1_array);
+   	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @id1_array);
 	#se loquea la busqueda
    	C4::AR::Busquedas::logBusqueda($params, $session);
 
@@ -1436,7 +1436,7 @@ sub busquedaSimplePorTitulo{
 	}
 
 	#arma y ordena el arreglo para enviar al cliente
-   	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params,\@searchstring_array, @id1_array);
+   	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @id1_array);
 	#se loquea la busqueda
    	C4::AR::Busquedas::logBusqueda($params, $session);
 
@@ -1473,7 +1473,7 @@ sub filtrarPorAutor{
     push (@searchstring_array, "AUTOR: ".$autor->{'completo'});
 
 
-    my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,\@searchstring_array, @id1_array);
+    my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,@id1_array);
     #se loquea la busqueda
     C4::AR::Busquedas::logBusqueda($params_obj, $params_obj->{'session'});
 
@@ -1653,6 +1653,7 @@ my @result_array_paginado_temp;
   # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
       @result_array_paginado[$i]->{'titulo'} = $nivel1->getTitulo();
       @result_array_paginado[$i]->{'nomCompleto'} = $nivel1->getAutorObject->getCompleto();
+      @result_array_paginado[$i]->{'idAutor'} = $nivel1->getAutorObject->getId();
       #aca se procesan solo los ids de nivel 1 que se van a mostrar
       #se generan los grupos para mostrar en el resultado de la consulta
       my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");

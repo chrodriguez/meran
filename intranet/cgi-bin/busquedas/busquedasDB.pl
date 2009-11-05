@@ -39,7 +39,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
     
       my $session = CGI::Session->load();
     
-	    $t_params->{'idAutor'}= $obj->{'idAutor'};
+      $t_params->{'idAutor'}= $obj->{'idAutor'};
       $t_params->{'session'}= $session;
       my ($cantidad, $resultId1)= C4::AR::Busquedas::filtrarPorAutor($t_params);
       $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
