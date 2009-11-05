@@ -29,16 +29,12 @@
     <li class="sub_item">
         <label for="tipoInput">[% 'Tipo de input' | i18n %]:</label>
         [% comboComponentes %]    
-       <!-- <select name="tipoInput" id="tipoInput">
-            <option value="-1">[% 'Seleccione tipo' | i18n %]</option>
-            <option value="text">[% 'Texto' | i18n %]</option>
-            <option value="texta">[% 'Texto Area' | i18n %]</option>
-            <option value="texa2">[% 'Texto 1 por linea' | i18n %]</option>
-            <option value="combo">[% 'Combo Box' | i18n %]</option>
-		        <option value="auto">[% 'Autocompletable' | i18n %]</option>
-		        <option value="calendar">[% 'Calendario' | i18n %]</option>
-            <option value="anio">[% 'A&ntilde;o' | i18n %]</option>
-        </select>-->
+    </li>
+    <li class="sub_item">
+        <label for="combo_validate">[% 'Validador' | i18n %]:</label>
+        [% PERL %]
+                        print C4::AR::Filtros::getComboValidadores();
+        [% END %]
     </li>
 
     <li class="sub_item">

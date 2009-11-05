@@ -58,7 +58,7 @@ function limpiarCampos(side){
                     </label>
                     <input type="text" id="keyword" size="25" onkeypress="limpiarCampos('derecha')">
                     [% PERL %]
-                        print C4::AR::Filtros::getComboBusqueda() ;
+                        print C4::AR::Filtros::getComboMatchMode() ;
                     [% END %]
                     </li>
                 </ul>

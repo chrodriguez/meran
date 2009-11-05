@@ -373,6 +373,11 @@ function checkEstructuraCatalogacion(){
       else
         ok = false;
 
+      if (comboSeleccionado($('#combo_validate')) && ok)
+        objAH.combo_validate= $('#combo_validate').val();
+      else
+        ok = false;
+
       if (comboSeleccionado($('#tablaRef')) && ok)
         objAH.tabla= $('#tablaRef').val();
           
@@ -387,7 +392,7 @@ function checkEstructuraCatalogacion(){
             }else{
                 ok = false;
                 objAH.referencia=0;
-                jAlert("Debe seleccionar una tabla de referencia.",CATALOGO_ALERT_TITLE);
+                jAlert(DEBE_SELECCIONAR_UNA_TABLA_DE_REFERENCIA,CATALOGO_ALERT_TITLE);
             }
           }
       }
@@ -414,10 +419,9 @@ function agregarEstructuraCatalogacion(){
 	if(ok){
     	objAH.tipoAccion= "GUARDAR_ESTRUCTURA_CATALOGACION";
     	objAH.sendToServer();
-	}
-    else{
-      jAlert("Debe seleccionar todos los campos requeridos",CATALOGO_ALERT_TITLE);
-    }
+	}else{
+      jAlert(DEBE_SELECCIONAR_TODOS_LOS_CAMPOS_REQUERIDOS,CATALOGO_ALERT_TITLE);
+  }
 }
 
 function updateAgregarEstructuraCatalogacion(responseText){
@@ -444,6 +448,7 @@ function modificarEstructuraCatalogacion(id){
     objAH.subcampo= $('#subcampo').val();
     objAH.liblibrarian= $('#liblibrarian').val();
     objAH.tipoInput= $('#tipoInput').val();
+    objAH.combo_validate = $('#combo_validate').val();
     objAH.tabla= $('#tablaRef').val();
     if( ( $('#tablaRef').val() != -1)&&($('#tablaRef').val()) ){
         objAH.referencia=1;

@@ -34,6 +34,8 @@ CATALOGO_ALERT_TITLE= "[% 'Advertencia de cat\u00e1logo' | i18n %]";
 BORRAR_CANTIDAD_DE_EJEMPLARES = "[% 'Borrar Cantidad de ejemplares?' %]";
 BORRAR_LISTA_DE_CODIGOS = "[% 'Borrar lista de codigos de barras?' %]";
 SELECCIONE_EL_ESQUEMA = "[% 'Seleccione el esquema' %]";
+DEBE_SELECCIONAR_TODOS_LOS_CAMPOS_REQUERIDOS = "[% 'Debe seleccionar todos los campos requeridos.' %]";
+DEBE_SELECCIONAR_UNA_TABLA_DE_REFERENCIA = "[% 'Debe seleccionar una tabla de referencia.' %]";
 //=============================================Fin===Catalogacion=================================================
 
 //================================================Usuarios========================================================

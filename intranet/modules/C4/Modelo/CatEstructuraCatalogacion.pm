@@ -71,7 +71,7 @@ sub agregar{
     $self->setSubcampo($data_hash->{'subcampo'});
     $self->setItemType($data_hash->{'itemtype'}||'ALL');
     $self->setLiblibrarian($data_hash->{'liblibrarian'});
-    $self->setRule($data_hash->{'tipoInput'});
+    $self->setRule($data_hash->{'combo_validate'});
     $self->setTipo($data_hash->{'tipoInput'});
     $self->setReferencia($data_hash->{'referencia'});
     $self->setNivel($data_hash->{'nivel'});
@@ -107,6 +107,8 @@ sub modificar{
 #         $self->setSubcampo($data_hash->{'subcampo'});
 #         $self->setItemType($data_hash->{'itemtype'});
         $self->setLiblibrarian($data_hash->{'liblibrarian'});
+        $self->setRule($data_hash->{'combo_validate'});
+
 #         $self->setTipo($data_hash->{'tipoInput'});
 # 		if( $self->getNivel == 1){
 # 			$self->setItemType('ALL');
@@ -463,30 +465,37 @@ sub setRules{
 
 sub setRule{
     my ($self) = shift;
-
     my ($tipo) = @_;
-    my $lettersonly    = " lettersonly: ";
-    my $dateITA        = " dateITA: "; 
-    my $digits         = " digits: ";
-    my $maxlength      = " maxlength: ";
-    my $minlength      = " minlength: ";
+
+#     my $lettersonly    = " lettersonly: ";
+#     my $dateITA        = " dateITA: "; 
+#     my $digits         = " digits: ";
+#     my $maxlength      = " maxlength: ";
+#     my $minlength      = " minlength: ";
+#     my $alphanumeric   = " alphanumeric: ";
     my $rule;
 
-C4::AR::Debug::debug("tipo: ".$tipo);
+
+    C4::AR::Debug::debug("tipo: ".$tipo);
 
     switch ($tipo) {
 
-        case "combo"        { $rule = $lettersonly." true " }
-        case "calendar"     { $rule = $dateITA." true " }
-        case "anio"         { $rule = $digits." true | ".$maxlength." 4 | ".$minlength." 4" }
-        case "auto"         { $rule = $lettersonly." true " }
-        case "text"        { $rule = $lettersonly." true " }
-        case "texta2"       { $rule = $lettersonly." true " }
-        case "texta"       { $rule = $lettersonly." true " }
+        case "combo"                { $rule = " digits:true " } # Combo
+        case "calendar"             { $rule = " dateITA:true " } # Calendario
+        case "anio"                 { $rule = " digits:true | maxlength: 4 | minlength: 4 " } # Año
+        case "solo_texto"           { $rule = " alphanumeric_total:true " } # Solo Texto
+        case "digits"               { $rule = " digits:true " } # Solo Dígitos
+#         case "alphanumeric"         { $rule = " alphanumeric:true " } # Alfanumérico
+        case "alphanumeric"         { $rule = "  " } # Alfanumérico
+        case "alphanumeric_total"   { $rule = " alphanumeric_total:true " } # Alfanumérico
+        case "auto"                 { $rule = " digits:true " } # Autocompletable
+        case "texto_area"           { $rule = " alphanumeric:true " } #Text Area
+#         case "texta2"       { $rule = $lettersonly." true " }
+
 
     }  
 
-C4::AR::Debug::debug("rule: ".$rule);
+    C4::AR::Debug::debug("rule: ".$rule);
     $self->rules($rule);
 }
         

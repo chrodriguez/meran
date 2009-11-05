@@ -290,8 +290,9 @@ function updateMostrarEstructuraDelNivel1(responseText){
     mostrarDataNivel();
     scrollTo('nivel1Tabla');
     
-	//asigno el handler para el validador
-	validateForm('formNivel1',guardarModificarDocumentoN1);
+	  //asigno el handler para el validador
+	  validateForm('formNivel1',guardarModificarDocumentoN1);
+    addRules();
 }
 
 function mostrarEstructuraDelNivel2(){
@@ -349,14 +350,14 @@ function mostrarEstructuraDelNivel3(){
 function updateMostrarEstructuraDelNivel3(responseText){
     _clearContentsEstructuraDelNivel();
     _showAndHiddeEstructuraDelNivel(3);
-	TAB_INDEX= 0;
+	  TAB_INDEX= 0;
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
     mostrarDataNivel();
     scrollTo('nivel3Tabla');
 	
-	//asigno el handler para el validador
-	validateForm('formNivel3',guardarModificarDocumentoN3);
+	  //asigno el handler para el validador
+	  validateForm('formNivel3',guardarModificarDocumentoN3);
     if(MODIFICAR == 0){
     //si se esta agregando se muestra el input para la cantidad    
         var id = _getIdComponente('995','f');
@@ -364,6 +365,8 @@ function updateMostrarEstructuraDelNivel3(responseText){
             registrarToggleOnChangeForBarcode(id);
         });
     }
+
+    addRules();
 }
 
 function switchTipoBarcode(chosen, readOnly){
@@ -871,7 +874,7 @@ function procesarObjeto(objeto){
 }
 
 var RULES_OPTIONS = [];
-
+// FXIME DEPRECATED?????????
 function create_rules_object(rule){
 
     var rules_array = rule.split("|");    
@@ -899,11 +902,20 @@ function create_rules_object(rule){
             case 'lettersonly': 
                 RULES_OPTIONS.lettersonly   = valor;
                 break;
+            case 'alphanumeric': 
+                RULES_OPTIONS.alphanumeric   = valor;
+                break;
+            case 'alphanumeric_total': 
+                RULES_OPTIONS.alphanumeric_total   = valor;
+                break;
             case 'date': 
                 RULES_OPTIONS.date          = valor;
                 break;
             case 'dateITA': 
                 RULES_OPTIONS.dateITA       = valor;
+                break;
+            case 'solo_texto': 
+                RULES_OPTIONS.solo_texto    = valor;
                 break;
         }
     }
@@ -914,7 +926,9 @@ function addRules(){
      for(var i=0; i< COMPONENTES_ARRAY.length; i++){
         if(COMPONENTES_ARRAY[i].rules != ""){
             create_rules_object(COMPONENTES_ARRAY[i].rules);
+//             $('#'+COMPONENTES_ARRAY[i].idCompCliente).rules("add", RULES_OPTIONS);
             $('#'+COMPONENTES_ARRAY[i].idCompCliente).rules("add", RULES_OPTIONS);
+            window.console.log("rules: " + COMPONENTES_ARRAY[i].rules);
         }
     }
 }

@@ -300,14 +300,8 @@ sub setComboLang {
 }
 
 
-sub getComboBusqueda {
-    my ($type) = @_;
-    my $session = CGI::Session->load();
+sub getComboMatchMode {
     my $html= '';
-    my $lang_Selected= $session->param('locale');
-## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
-    my @array_lang= ('es_ES', 'en_EN', 'nz_NZ', 'jp_JP');
-    my $i;
 
     $html .="<select id='match_mode' tabindex='-1'>";
     $html .="<option value='SPH_MATCH_ANY'>Conincidir con cualquier palabra</option>";
@@ -315,6 +309,23 @@ sub getComboBusqueda {
     $html .="<option value='SPH_MATCH_BOOLEAN'>Conincidir con valores booleanos (&), OR (|), NOT (!,-)</option>";
     $html .="<option value='SPH_MATCH_EXTENDED'>Coincidencia Extendida</option>";
     $html .="<option value='SPH_MATCH_ALL'>Conincidir con todas las palabras</option>";
+    $html .="</select>";
+
+    return $html;
+}
+
+sub getComboValidadores {
+    my $html= '';
+
+    $html .="<select id='combo_validate' tabindex='-1'>";
+    $html .="<option value='solo_texto'>Solo Texto</option>";
+    $html .="<option value='digits'>Solo Dígitos</option>";
+    $html .="<option value='alphanumeric_total'>Alfanumérico</option>";
+    $html .="<option value='combo'>Combo</option>";
+    $html .="<option value='anio'>A&ntilde;o</option>";
+    $html .="<option value='calendar'>Calendario</option>";
+    $html .="<option value='auto'>Autocompletable</option>";
+    $html .="<option value='texto_area'>Texto Area</option>";
     $html .="</select>";
 
     return $html;

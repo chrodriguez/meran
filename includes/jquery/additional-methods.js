@@ -19,6 +19,11 @@ jQuery.validator.addMethod("alphanumeric", function(value, element) {
 	return this.optional(element) || /^\w+$/i.test(value);
 }, "Letters, numbers, spaces or underscores only please");  
 
+jQuery.validator.addMethod("alphanumeric_total", function(value, element) {
+  return this.optional(element) || /\b\w+\b/i.test(value);
+}, "Letters, numbers, spaces or underscores only please????????");  
+
+
 jQuery.validator.addMethod("lettersonly", function(value, element) {
 	return this.optional(element) || /^[a-z]+$/i.test(value);
 }, "Letters only please"); 

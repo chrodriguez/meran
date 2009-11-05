@@ -1240,7 +1240,7 @@ sub UTF8toISO {
 
     my ($data)=@_;
 #POR QUE ROMPE LOS ACENTOS???? VERRRRRRRRRRRRRRRRRRRRRRR
-#     return $data= Encode::decode('utf8', $data);
+    return $data= Encode::decode('utf8', $data);
     return ($data);
 }
 

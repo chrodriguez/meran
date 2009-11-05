@@ -35,6 +35,12 @@ $(document).ready(function() {
         </label>
         <input id="liblibrarian" type="text" value="[% catalogacion.getLiblibrarian %]" size="90"> 
    </li>
+    <li class="sub_item">
+        <label for="combo_validate">[% 'Validador' | i18n %]:</label>
+        [% PERL %]
+                        print C4::AR::Filtros::getComboValidadores();
+        [% END %]
+    </li>
 </ul>
 
 
