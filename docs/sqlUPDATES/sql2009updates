@@ -1232,7 +1232,7 @@ CREATE TABLE IF NOT EXISTS `indice_busqueda` (
 ALTER TABLE `cat_nivel1_repetible` CHANGE `dato` `dato` VARCHAR( 500 );
 ALTER TABLE `cat_nivel2_repetible` CHANGE `dato` `dato` VARCHAR( 500 );
 ALTER TABLE `cat_nivel3_repetible` CHANGE `dato` `dato` VARCHAR( 500 );
-ALTER TABLE `usr_socio` ADD `credential_type` VARCHAR( 255 ) NOT NULL,
+ALTER TABLE `usr_socio` ADD `credential_type` VARCHAR( 255 ) NOT NULL;
 ALTER TABLE `usr_socio` CHANGE `credential_type` `credential_type` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'estudiante';
 
 
