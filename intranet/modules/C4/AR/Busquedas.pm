@@ -1367,7 +1367,8 @@ sub busquedaCombinada_newTemp{
     foreach my $hash (@$matches){
       my %hash_temp = {};
       $hash_temp{'id1'} = $hash->{'doc'};
-#       C4::AR::Utilidades::printHASH($hash);
+      $hash_temp{'hits'} = $hash->{'weight'};
+#        C4::AR::Utilidades::printHASH($hash);
 
       push (@id1_array, \%hash_temp);
     }
