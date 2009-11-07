@@ -510,6 +510,15 @@
                                                                             ) ;
                                             [% END %]
                                 </li>
+                                <li>
+                                            [% PERL %]
+                                                print C4::AR::Filtros::link_to( text =>     "[% 'Chequeo Importaci&oacute;n' | i18n %]",
+                                                                                url =>      "/cgi-bin/koha/herramientas/chequeo_importacion.pl", 
+                                                                                title =>    "[% 'Chequeo Importaci&oacute;n' | i18n %]"
+                                                                            ) ;
+                                            [% END %]
+                                </li>
+
                             </ul>
                         </li>
 

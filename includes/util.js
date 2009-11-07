@@ -116,6 +116,19 @@ function checkedAll(id,nombreCheckbox){
 	);
 }
 
+
+function recuperarSeleccionados(chckbox){
+  var chck=$("input[name="+chckbox+"]:checked");
+  var array= new Array;
+  var long=chck.length;
+
+  for(var i=0; i< long; i++){
+    array[i]=chck[i].value;
+  }
+  
+  return array;
+}
+
 /*
  * checkedAllById
  * Selecciona y deselecciona a todos los checkbox por id, cuando se toca el boton.

@@ -79,7 +79,7 @@ sub getNivel3FromBarcode {
     my  $barcodes_array_ref;
     my @filtros;
  
-	push(@filtros, ( barcode=> { eq => $barcode }) );
+	  push(@filtros, ( barcode=> { eq => $barcode }) );
     
     $barcodes_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( query => \@filtros ); 
 
@@ -88,6 +88,26 @@ sub getNivel3FromBarcode {
 	}else{
 		return (0);
 	}
+}
+
+=item sub getNivel3RepetibleFromId3Repetible
+Recupero el objeto nivel3_repetible a partir de un rep_n3_id
+retorna un objeto o 0 si no existe ninguno
+=cut
+sub getNivel3RepetibleFromId3Repetible{
+  my ($rep_n3_id, $db) = @_;
+
+  $db = $db || C4::Modelo::PermCatalogo->new()->db;  
+  my $nivel3_repetible_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(
+                                                                        db => $db,         
+                                                                        query => [ rep_n3_id => { eq => $rep_n3_id } ] 
+                                                        );
+
+  if( scalar(@$nivel3_repetible_array_ref) > 0){
+    return ($nivel3_repetible_array_ref->[0]);
+  }else{
+    return 0;
+  }
 }
 
 =item
@@ -822,7 +842,7 @@ sub t_eliminarNivel3{
 # FIXME falta verificar existencia de los ejemplares q se estan levantando
 				$catNivel3 = C4::Modelo::CatNivel3->new(
 														db => $db,
-														id3 => $id3_array->[$i]
+														id3 => $id3_array->[$i]#esto esta mal, hay q hacer getTTTTTTTTTT
 													);
 
 				$catNivel3->load();
@@ -847,6 +867,64 @@ sub t_eliminarNivel3{
     }
 
     $db->{connect_options}->{AutoCommit} = 1;
+
+    return ($msg_object);
+}
+
+=item sub t_eliminarNivel3Repetible
+    Elimina el nivel 3 repetido pasado por parametro
+=cut
+sub t_eliminarNivel3Repetible{
+    my ($params) = @_;
+   
+    my $msg_object = C4::AR::Mensajes::create();
+    my $campo;
+    my $subcampo;
+    my $parametro;
+    my $catNivel3Repetible;
+   
+    my $db = C4::Modelo::PermCatalogo->new()->db;
+    my $array_nivel_repetible = $params->{'id_rep_array'};
+    # enable transactions, if possible
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+
+    eval {
+        for(my $i=0;$i<scalar(@$array_nivel_repetible);$i++){  
+
+            ($catNivel3Repetible) = getNivel3RepetibleFromId3Repetible($array_nivel_repetible->[$i], $db);
+
+            if(!$catNivel3Repetible){
+                #NO EXISTE EL OBJETO
+                #Se setea error para el usuario
+                $msg_object->{'error'} = 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U409', 'params' => []} ) ;
+            }else{
+                #EXISTE EL OBJETO
+                #verifico condiciones necesarias antes de eliminar     
+                $campo = $catNivel3Repetible->getCampo();
+                $subcampo = $catNivel3Repetible->getSubcampo();
+                $parametro = $array_nivel_repetible->[$i]." - ".$campo.", ".$subcampo;
+                $catNivel3Repetible->eliminar;  
+                $db->commit;
+                #se cambio el permiso con exito
+                $msg_object->{'error'} = 0;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U407', 'params' => [$parametro]} ) ;
+            }
+        }# for
+    };
+
+    if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'B447',"INTRA");
+        $db->rollback;
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U408', 'params' => [$parametro]} ) ;
+    }
+
+    $db->{connect_options}->{AutoCommit} = 1;
+
 
     return ($msg_object);
 }

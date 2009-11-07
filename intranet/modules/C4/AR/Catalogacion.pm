@@ -33,6 +33,198 @@ use vars qw(@EXPORT @ISA);
 );
 
 
+################################################################ 06/11/10 ##############################################################
+
+=item sub getNivel1RepetibleSinEstrucutra
+  Esta funcion retorn un arreglo de objetos, donde los mismos no tiene configurada la estructura de catalogacion, o sea
+  no se van a poder mostrar en el sistema
+=cut
+sub getNivel1RepetibleSinEstrucutra{
+    my ($nivel, $ini, $cantR) = @_;
+
+    my $dbh   = C4::Context->dbh;
+
+    my $sth = $dbh->prepare(" SELECT count(*) as cant
+                              FROM cat_nivel1_repetible n1r
+                              WHERE (n1r.campo, n1r.subcampo) NOT IN 
+
+                              (SELECT cec.campo, cec.subcampo
+                              FROM cat_estructura_catalogacion cec
+                              WHERE cec.nivel = ?) ");
+    $sth->execute($nivel);
+    my $data = $sth->fetchrow_hashref;
+    my $cant = $data->{'cant'};
+
+    my $sth = $dbh->prepare(" SELECT *
+                              FROM cat_nivel1_repetible n1r
+                              WHERE (n1r.campo, n1r.subcampo) NOT IN 
+
+                              (SELECT cec.campo, cec.subcampo
+                              FROM cat_estructura_catalogacion cec
+                              WHERE cec.nivel = ?) LIMIT ?, ?");
+
+    $sth->execute($nivel, $ini, $cantR);
+    my @array_objects;
+
+    while (my $data = $sth->fetchrow_hashref) {
+        my $nivel_repetible = C4::AR::Nivel1::getNivel1RepetibleFromId1Repetible($data->{'rep_n1_id'});
+
+        if($nivel_repetible){
+            push (@array_objects, $nivel_repetible);
+        }
+    } # while
+
+    return ($cant, @array_objects);
+}
+
+=item sub getNivel1RepetibleSinEstrucutra
+  Esta funcion retorn un arreglo de objetos, donde los mismos no tiene configurada la estructura de catalogacion, o sea
+  no se van a poder mostrar en el sistema
+=cut
+sub getNivel2RepetibleSinEstrucutra{
+    my ($nivel, $ini, $cantR) = @_;
+
+    my $dbh   = C4::Context->dbh;
+
+    my $sth = $dbh->prepare(" SELECT count(*) as cant
+                              FROM cat_nivel2_repetible n2r
+                              WHERE (n2r.campo, n2r.subcampo) NOT IN 
+
+                              (SELECT cec.campo, cec.subcampo
+                              FROM cat_estructura_catalogacion cec
+                              WHERE cec.nivel = ?) ");
+    $sth->execute($nivel);
+    my $data = $sth->fetchrow_hashref;
+    my $cant = $data->{'cant'};
+
+    my $sth = $dbh->prepare(" SELECT *
+                              FROM cat_nivel2_repetible n2r
+                              WHERE (n2r.campo, n2r.subcampo) NOT IN 
+
+                              (SELECT cec.campo, cec.subcampo
+                              FROM cat_estructura_catalogacion cec
+                              WHERE cec.nivel = ?) LIMIT ?, ?");
+
+    $sth->execute($nivel, $ini, $cantR);
+    my @array_objects;
+
+    while (my $data = $sth->fetchrow_hashref) {
+        my $nivel_repetible = C4::AR::Nivel2::getNivel2RepetibleFromId2Repetible($data->{'rep_n2_id'});
+
+        if($nivel_repetible){
+            push (@array_objects, $nivel_repetible);
+        }
+    } # while
+
+    return ($cant, @array_objects);
+}
+
+=item sub getNivel1RepetibleSinEstrucutra
+  Esta funcion retorn un arreglo de objetos, donde los mismos no tiene configurada la estructura de catalogacion, o sea
+  no se van a poder mostrar en el sistema
+=cut
+sub getNivel3RepetibleSinEstrucutra{
+    my ($nivel, $ini, $cantR) = @_;
+
+    my $dbh   = C4::Context->dbh;
+
+    my $sth = $dbh->prepare(" SELECT count(*) as cant
+                              FROM cat_nivel3_repetible n3r
+                              WHERE (n3r.campo, n3r.subcampo) NOT IN 
+
+                              (SELECT cec.campo, cec.subcampo
+                              FROM cat_estructura_catalogacion cec
+                              WHERE cec.nivel = ?) ");
+    $sth->execute($nivel);
+    my $data = $sth->fetchrow_hashref;
+    my $cant = $data->{'cant'};
+
+    my $sth = $dbh->prepare(" SELECT *
+                              FROM cat_nivel3_repetible n3r
+                              WHERE (n3r.campo, n3r.subcampo) NOT IN 
+
+                              (SELECT cec.campo, cec.subcampo
+                              FROM cat_estructura_catalogacion cec
+                              WHERE cec.nivel = ?) LIMIT ?, ?");
+
+    $sth->execute($nivel, $ini, $cantR);
+    my @array_objects;
+
+    while (my $data = $sth->fetchrow_hashref) {
+        my $nivel_repetible = C4::AR::Nivel3::getNivel3RepetibleFromId3Repetible($data->{'rep_n3_id'});
+
+        if($nivel_repetible){
+            push (@array_objects, $nivel_repetible);
+        }
+    } # while
+
+    return ($cant, @array_objects);
+}
+
+=item sub getImportacionSinEstructura
+  Retorna un arreglo de objetos, campo, subcampo y dato, los cuales no se encuentran en la cat_estructura_catalogacion
+=cut
+sub getImportacionSinEstructura{
+    my ($params) = @_;
+
+    my $nivel = $params->{'nivel'};
+    my $ini = $params->{'ini'};
+    my $cantR = $params->{'cantR'};
+
+    my @nivel_repetible_array_ref;
+    my $cant;
+
+    if($nivel eq '1'){
+      ($cant, @nivel_repetible_array_ref) = getNivel1RepetibleSinEstrucutra($nivel, $ini, $cantR);
+    }elsif($nivel eq '2'){
+      ($cant, @nivel_repetible_array_ref) = getNivel2RepetibleSinEstrucutra($nivel, $ini, $cantR);
+    }elsif($nivel eq '3'){
+      ($cant, @nivel_repetible_array_ref) = getNivel3RepetibleSinEstrucutra($nivel, $ini, $cantR);
+    }
+
+
+
+    if(scalar(@nivel_repetible_array_ref) > 0){
+        C4::AR::Debug::debug("Catalogacion => getImportacionSinEstructura => cant: ".scalar(@nivel_repetible_array_ref));
+        return ($cant, @nivel_repetible_array_ref);
+    }else{
+        return 0;
+    }
+}
+
+=item sub t_eliminarNivelRepetible
+Esta funcion elimina un "campo", de uno de los niveles repetibles segun el nivel indicado por parametro y segun el id del nivel repetible
+=cut
+sub t_eliminarNivelRepetible{
+    my ($params) = @_;
+    
+    if($params->{'nivel'} eq '1'){
+        C4::AR::Nivel1::t_eliminarNivel1Repetible($params);
+    }elsif($params->{'nivel'} eq '2'){
+        C4::AR::Nivel2::t_eliminarNivel2Repetible($params);
+    }elsif($params->{'nivel'} eq '3'){
+        C4::AR::Nivel3::t_eliminarNivel3Repetible($params);
+    }else{
+#         ERROR
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ################################################### NUEVAS NUEVAS FRESQUITAS ##############################################################
@@ -323,7 +515,10 @@ sub _setDatos_de_estructura {
         #es un autocomplete
         $hash_ref->{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
         #si es un autocomplete y no tengo el dato de la referencia, muestro un blanco
-        if ( ($hash_ref->{'datoReferencia'} eq 0) || not defined($hash_ref->{'datoReferencia'}) ) {$hash_ref->{'dato'} = '';}
+        if ( ($hash_ref->{'datoReferencia'} eq 0) || ($hash_ref->{'dato'} eq 0) || not defined($hash_ref->{'datoReferencia'}) ) {
+          $hash_ref->{'dato'} = 'NO TIENE';
+        }
+  
         C4::AR::Debug::debug("_setDatos_de_estructura => ======== AUTOCOMPLETE ======== ");
         C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref->{'datoReferencia'});
         C4::AR::Debug::debug("_setDatos_de_estructura => referenciaTabla: ".$hash_ref->{'referenciaTabla'});
@@ -336,6 +531,7 @@ sub _setDatos_de_estructura {
         #cualquier otra componete
         C4::AR::Debug::debug("_setDatos_de_estructura => ======== ".$cat->getTipo." ======== ");
     }
+
 }
 
 =item sub getEstructuraSinDatos

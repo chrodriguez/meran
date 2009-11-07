@@ -82,6 +82,50 @@ sub getNivel1FromId1{
 	}
 }
 
+=item sub getNivel1RepetiblesFromId1
+Recupero todos los nivel1_repetible a partir de un id1
+retorna un arreglo de objetos o 0 si no existe ninguno
+=cut
+sub getNivel1RepetiblesFromId1{
+  my ($id1) = @_;
+
+  my $nivel1_repetible_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
+                                    query => [ 
+                                          id1 => { eq => $id1 },
+                                      ], 
+#                                                                         with_objects => [ 'cat_autor' ]    
+                                );
+
+  if( scalar(@$nivel1_repetible_array_ref) > 0){
+    return ($nivel1_repetible_array_ref->[0]);
+  }else{
+    return 0;
+  }
+}
+
+=item sub getNivel1RepetibleFromId1Repetible
+Recupero el objeto nivel1_repetible a partir de un rep_n1_id
+retorna un objeto o 0 si no existe ninguno
+=cut
+sub getNivel1RepetibleFromId1Repetible{
+    my ($rep_n1_id, $db) = @_;
+        
+    $db = $db || C4::Modelo::PermCatalogo->new()->db;    
+    
+    my $nivel1_repetible_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible( 
+                                                                            db => $db,
+                                                                            query => [
+                                                                                        rep_n1_id => { eq => $rep_n1_id } 
+                                                                                ] 
+                                                            );
+    
+    if( scalar(@$nivel1_repetible_array_ref) > 0){
+        return ($nivel1_repetible_array_ref->[0]);
+    }else{
+        return 0;
+    }
+}
+
 
 
 #=======================================================================ABM Nivel 1=======================================================
@@ -252,6 +296,65 @@ sub t_eliminarNivel1{
         $db->{connect_options}->{AutoCommit} = 1;
 
     }
+
+    return ($msg_object);
+}
+
+=item sub t_eliminarNivel1Repetible
+    Elimina el nivel 1 repetido pasado por parametro
+=cut
+sub t_eliminarNivel1Repetible{
+    my ($params) = @_;
+   
+    my $msg_object = C4::AR::Mensajes::create();
+    my $campo;
+    my $subcampo;
+    my $parametro;
+    my $catNivel1Repetible;
+  
+
+    #No hay error
+        my $db = C4::Modelo::PermCatalogo->new()->db;
+        my $array_nivel_repetible = $params->{'id_rep_array'};
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+    
+        eval {
+            for(my $i=0;$i<scalar(@$array_nivel_repetible);$i++){  
+
+                ($catNivel1Repetible) = getNivel1RepetibleFromId1Repetible($array_nivel_repetible->[$i], $db);
+
+                if(!$catNivel1Repetible){
+                    #NO EXISTE EL OBJETO
+                    #Se setea error para el usuario
+                    $msg_object->{'error'} = 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U409', 'params' => []} ) ;
+                }else{
+                    #EXISTE EL OBJETO
+                    #verifico condiciones necesarias antes de eliminar     
+                    $campo = $catNivel1Repetible->getCampo();
+                    $subcampo = $catNivel1Repetible->getSubcampo();
+                    $parametro = $array_nivel_repetible->[$i]." - ".$campo.", ".$subcampo;
+                    $catNivel1Repetible->eliminar;  
+                    $db->commit;
+                    #se cambio el permiso con exito
+                    $msg_object->{'error'} = 0;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U407', 'params' => [$parametro]} ) ;
+                }
+            }# for
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B447',"INTRA");
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U408', 'params' => [$parametro]} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
 
     return ($msg_object);
 }

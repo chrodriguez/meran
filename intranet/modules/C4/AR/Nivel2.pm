@@ -51,6 +51,24 @@ sub getNivel2FromId1{
     return $nivel2_array_ref;
 }
 
+=item sub getNivel2RepetibleFromId2Repetible
+Recupero el objeto nivel2_repetible a partir de un rep_n2_id
+retorna un objeto o 0 si no existe ninguno
+=cut
+sub getNivel2RepetibleFromId2Repetible{
+  my ($rep_n2_id) = @_;
+
+  my $nivel2_repetible_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible( 
+                                                                        query => [ rep_n2_id => { eq => $rep_n2_id } ] 
+                                                        );
+
+  if( scalar(@$nivel2_repetible_array_ref) > 0){
+    return ($nivel2_repetible_array_ref->[0]);
+  }else{
+    return 0;
+  }
+}
+
 =item sub getNivel2FromId2
     Recupero un nivel 2 a partir de un id2
     retorna un objeto o 0 si no existe
@@ -268,6 +286,63 @@ sub t_eliminarNivel2{
         $db->{connect_options}->{AutoCommit} = 1;
 
     }
+
+    return ($msg_object);
+}
+
+=item sub t_eliminarNivel2Repetible
+    Elimina el nivel 2 repetido pasado por parametro
+=cut
+sub t_eliminarNivel2Repetible{
+    my ($params) = @_;
+   
+    my $msg_object = C4::AR::Mensajes::create();
+    my $campo;
+    my $subcampo;
+    my $parametro;
+    my $catNivel2Repetible;
+   
+    my $db = C4::Modelo::PermCatalogo->new()->db;
+    my $array_nivel_repetible = $params->{'id_rep_array'};
+    # enable transactions, if possible
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+
+    eval {
+        for(my $i=0;$i<scalar(@$array_nivel_repetible);$i++){  
+
+            ($catNivel2Repetible) = getNivel2RepetibleFromId2Repetible($array_nivel_repetible->[$i], $db);
+
+            if(!$catNivel2Repetible){
+                #NO EXISTE EL OBJETO
+                #Se setea error para el usuario
+                $msg_object->{'error'} = 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U409', 'params' => []} ) ;
+            }else{
+                #EXISTE EL OBJETO
+                #verifico condiciones necesarias antes de eliminar     
+                $campo = $catNivel2Repetible->getCampo();
+                $subcampo = $catNivel2Repetible->getSubcampo();
+                $parametro = $array_nivel_repetible->[$i]." - ".$campo.", ".$subcampo;
+                $catNivel2Repetible->eliminar;  
+                $db->commit;
+                #se cambio el permiso con exito
+                $msg_object->{'error'} = 0;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U407', 'params' => [$parametro]} ) ;
+            }
+        }# for
+    };
+
+    if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'B447',"INTRA");
+        $db->rollback;
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U408', 'params' => [$parametro]} ) ;
+    }
+
+    $db->{connect_options}->{AutoCommit} = 1;
 
     return ($msg_object);
 }
