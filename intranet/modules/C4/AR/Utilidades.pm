@@ -974,9 +974,9 @@ verificarValor
 Verifica que el valor que ingresado no tenga sentencias peligrosas, se filtran.
 =cut
 sub verificarValor{
+    my ($valor) = @_;
 
-    my ($valor)=@_;
-    my @array=split(/;/,$valor);
+    my @array = split(/;/,$valor);
 
     if(scalar(@array) > 1){
         #por si viene un ; saco las palabras peligrosas, que son las de sql.
@@ -985,6 +985,8 @@ sub verificarValor{
     $valor=~ s/%|"|'|=|;|\*|-(<,>)//g;    
     $valor=~ s/%3b|%3d|%27|%25//g;#Por aca no entra llegan los caracteres ya traducidos
     $valor=~ s/\<SCRIPT>|\<\/SCRIPT>//gi;
+    $valor= Encode::encode('utf8', $valor);
+
     return $valor;
 }
 
