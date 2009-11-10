@@ -8,7 +8,15 @@ use C4::Auth;
 use C4::Context;
 use CGI::Session;
 
-my ($template, $t_params)= C4::Output::gettemplate("auth.tmpl", 'intranet');
+my $input=new CGI;
+
+my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
+            template_name   => 'auth.tmpl',
+            query       => $input,
+            type        => "intranet",
+            authnotrequired => 0,
+            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+    });
 
 my ($session)= C4::Auth::cerrarSesion();
 

@@ -24,7 +24,7 @@
                     <span id="me_name">[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]</span>
                 </a>
             <div class="culture_Select">
-                  [<a target="_parent" href=/cgi-bin/koha/logout.pl tabindex="-1">[% "Salir" | i18n %]</a>]
+                  [<a target="_parent" href=/cgi-bin/koha/logout.pl?token=[% token %] tabindex="-1">[% "Salir" | i18n %]</a>]
                   [%  "INTRA" | setComboLang %] 
             </div>
         </div>
