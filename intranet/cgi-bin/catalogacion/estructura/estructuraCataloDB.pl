@@ -173,7 +173,7 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
 
     my $catalogacion = C4::AR::Catalogacion::getEstructuraCatalogacionById($id);
 
-    $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
+#     $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
     $t_params->{'catalogacion'} = $catalogacion;
     $t_params->{'OK'} = ($catalogacion?1:0); 
 
@@ -600,6 +600,26 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
     C4::Auth::print_header($session);
     print to_json \%info;
 }
+
+elsif($tipoAccion eq "AGRUPAR_CAMPOS"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'MODIFICACION', 
+                                                    entorno => 'datos_nivel3'}, 
+                                                'intranet'
+                                    );
+
+    my ($Message_arrayref) = &C4::AR::Catalogacion::t_agruparCampos($obj);
+    
+    my %info;
+    $info{'Message_arrayref'} = $Message_arrayref;
+
+    C4::Auth::print_header($session);
+    print to_json \%info;
+}
+
 elsif($tipoAccion eq "ELIMINAR_NIVEL"){
     my $entorno= 'datos_nivel1';
     if($obj->{'nivel'} eq '2'){$entorno= 'datos_nivel2'};

@@ -318,14 +318,11 @@ sub getComboValidadores {
     my $html= '';
 
     $html .="<select id='combo_validate' tabindex='-1'>";
-    $html .="<option value='solo_texto'>Solo Texto</option>";
-    $html .="<option value='digits'>Solo Dígitos</option>";
-    $html .="<option value='alphanumeric_total'>Alfanumérico</option>";
-    $html .="<option value='combo'>Combo</option>";
-    $html .="<option value='anio'>A&ntilde;o</option>";
-    $html .="<option value='calendar'>Calendario</option>";
-    $html .="<option value='auto'>Autocompletable</option>";
-    $html .="<option value='texto_area'>Texto Area</option>";
+    my $validadores_hash_ref = C4::AR::Referencias::getValidadores();
+    while ( my ($key, $value) = each(%$validadores_hash_ref) ) {
+        $html .="<option value=".$key.">".$value."</option>";
+    }
+
     $html .="</select>";
 
     return $html;

@@ -2289,13 +2289,13 @@ sub obtenerDescripcionDeSubCampos{
 }
 
 sub ayudaCampoMARCAutocomplete{
+    my ($campo) = @_;
 
-    my ($campo)= @_;
     my $campos_marc_array_ref= &C4::AR::Referencias::obtenerCamposLike($campo); 
     my $textout;
 
     foreach my $campo_marc (@$campos_marc_array_ref){
-        $textout.= $campo_marc->getTagfield."|".$campo_marc->getLiblibrarian."\n";
+        $textout.= $campo_marc->getCampo."|".$campo_marc->getLiblibrarian."\n";
     }
     return $textout;
 }
@@ -2392,7 +2392,7 @@ sub autocompleteAyudaMarc{
     my $data;
 
     for ($i; $i<$cant; $i++){
-        $field=$results[$i]->{'tagfield'};
+        $field=$results[$i]->{'campo'};
         $data=$results[$i]->{'liblibrarian'};
         $resultado .= $field."|".$data. "\n";
     }

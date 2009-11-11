@@ -25,6 +25,8 @@
 <script src="/includes/jquery/jquery.alerts.js"></script>
 <script src="/includes/jquery/jquery.dataTables.js"></script>
 <script src="/includes/jquery/jquery.tooltip.js"></script>
+<!-- <script src="/includes/jquery/jquery.tablednd.js"></script> -->
+
 [% INCLUDE 'datePicker.inc' %]
 
 [% INCLUDE  'AutocompleteHelper.inc'  %]

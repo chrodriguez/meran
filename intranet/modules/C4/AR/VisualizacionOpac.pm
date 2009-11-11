@@ -105,7 +105,7 @@ sub traerKohaToMARC{
 
 	my $query = "	SELECT ktm.idmap, ktm.tabla, ktm.campoTabla, ktm.campo, ktm.subcampo, mse.liblibrarian
 			FROM cat_pref_mapeo_koha_marc ktm LEFT JOIN pref_estructura_subcampo_marc mse
-			ON (mse.tagfield = ktm.campo) AND (mse.tagsubfield = ktm.subcampo)
+			ON (mse.campo = ktm.campo) AND (mse.subcampo = ktm.subcampo)
 			WHERE tabla = ? ";
 
 	my $sth=$dbh->prepare($query);
@@ -128,9 +128,9 @@ sub buscarInfoCampo{
 	my ($campo)=@_;
   
 	my $dbh = C4::Context->dbh;
-	my $query = "	SELECT tagfield, liblibrarian
+	my $query = "	SELECT campo, liblibrarian
 			FROM pref_estructura_campo_marc
-			WHERE tagfield like ? OR  liblibrarian like ?
+			WHERE campo like ? OR  liblibrarian like ?
 			ORDER BY liblibrarian ";
 
 	my $sth=$dbh->prepare($query);
@@ -152,10 +152,10 @@ sub buscarInfoSubCampo{
   
 	my $dbh = C4::Context->dbh;
 
-	my $query = "	SELECT tagsubfield, CONCAT_WS(' - ',tagsubfield,liblibrarian) AS subcampo
+	my $query = "	SELECT subcampo, CONCAT_WS(' - ',subcampo,liblibrarian) AS subcampo
 			FROM pref_estructura_subcampo_marc 
-			WHERE tagfield = ?
-			ORDER BY tagsubfield, liblibrarian ";
+			WHERE campo = ?
+			ORDER BY subcampo, liblibrarian ";
 
 	my $sth=$dbh->prepare($query);
 	$sth->execute($campo);
@@ -827,8 +827,8 @@ sub traerSubCampos{
 	my ($idencabezado, $campo, $itemtype) =@_;
 	my $dbh = C4::Context->dbh;
 
- 	my $query=" 	SELECT tagsubfield as subcampo FROM pref_estructura_subcampo_marc
-			WHERE obligatorio = '1' and tagfield = ? UNION
+ 	my $query=" 	SELECT subcampo as subcampo FROM pref_estructura_subcampo_marc
+			WHERE obligatorio = '1' and campo = ? UNION
 			(SELECT DISTINCT subcampo FROM cat_estructura_catalogacion
 			WHERE campo = ? ) UNION
 			(SELECT DISTINCT subcampo FROM cat_estructura_catalogacion_opac

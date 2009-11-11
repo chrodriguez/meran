@@ -5,6 +5,7 @@
 <script type="text/javascript">
       $(document).ready(function() {
         makeToggle('datos_tabla_div','trigger',null,false);
+        checkedAll('checkAllCampos','checkCampos');
       });
 </script>
 
@@ -14,21 +15,30 @@
         <table id="tablaCamposMod" class="tabla_datos" width="100%" cellspacing="0" cellpadding="0" border="0">
 
 	        <tr class="titulo_tabla_resultado">
-		        <td width="21%">[% 'MARC' | i18n %]</td>
+                <td width="1%">
+                    <input type="image" id="checkAllCampos" class="icon_seleccionar" title="[% 'Seleccionar todos' | i18n %]">
+                </td>
+		        <td width="10%">[% 'MARC' | i18n %]</td>
 		        <td width="20%">[% 'Vista en Intranet' | i18n %]</td>
 		        <td width="10%">[% 'Orden' | i18n %]</td>
-		        <td >[% 'Visible' | i18n %]</td>
-		        <td width="10%">[% 'Editar' | i18n %]</td>
+		        <td>[% 'Visible' | i18n %]</td>
+		        <td width="5%">[% 'Editar' | i18n %]</td>
                 <td width="10%">[% 'Deshabilitar' | i18n %]</td>
                 <td width="10%">[% 'Tipo' | i18n %]</td>
+                <td width="10%">[% 'Validador' | i18n %]</td>
                 <td width="10%">[% 'Referencia' | i18n %]</td>
-                <td width="10%">[% 'Fijo' | i18n %]</td>
-                <td width="10%">[% 'Obligatorio' | i18n %]</td>
+                <td width="4%">[% 'Fijo' | i18n %]</td>
+                <td width="5%">[% 'Obligatorio' | i18n %]</td>
+                <td width="5%">[% 'Grupo' | i18n %]</td>
 	        </tr>
         [% FOREACH catalogacion IN catalogaciones %]
-	        <tr align="center">
+	        <tr align="center" >
+                <td>
+                        <input  type="checkbox" id="checkCampos" name="checkCampos" class="icon_seleccionar" 
+                                value="[% catalogacion.getId %]">
+                </td>
 		        <td>
-			        [% 'Campo:' | i18n %] <b>[% catalogacion.getCampo %]</b>, [% 'Subcampo:' | i18n %] <b>[% catalogacion.getSubcampo %]</b>
+			        <b>[% catalogacion.getCampo %]</b>, <b>[% catalogacion.getSubcampo %]</b>
 		        </td>
 		        <td>
                     [% catalogacion.getIntranet_habilitado %]
@@ -102,6 +112,9 @@
                         &nbsp;  [% catalogacion.getTipoString %]
                 </td>
                 <td>    
+                        &nbsp;  [% catalogacion.getRulesToString %]
+                </td>
+                <td>    
                                     [% IF catalogacion.tieneReferencia == 1 %]
                                             [% catalogacion.infoReferencia.getReferencia %]
                                     [% ELSE %]
@@ -125,6 +138,9 @@
                                             <span class="rojo">[% "No" | i18n %]</span>
                                     [% END %]
                 </td>
+                <td>
+                    [% catalogacion.getGrupo %]
+                </td>
 	        </tr>
         [% END %]
             
@@ -144,6 +160,18 @@
                                                         alternClass => "botonCentrado"
                         ) ;
     [% END %]
+
+    [% PERL %]
+                print C4::AR::Filtros::to_Button(       text    => "[% 'Agrupar Campos' | i18n %]",
+                                                        boton   => "boton_agregar",
+                                                        onClick => "agruparCampos();",
+                                                        title   => "[% 'Agrupar Campos' | i18n %]",
+                                                        width   => "auto",
+                                                        alternClass => "botonCentrado"
+                        ) ;
+    [% END %]
     
        
 [% END %] <!-- END IF niveles -->
+
+<div id="groups_content"></div>

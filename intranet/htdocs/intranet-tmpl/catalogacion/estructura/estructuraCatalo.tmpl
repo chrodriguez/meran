@@ -192,8 +192,8 @@ function updateEleccionCampoX(responseText){
     var options = "<option value='-1'>Seleccionar CampoX</option>";
     
     for (x=0;x < campos_array.length;x++){
-         CAMPOS_ARRAY[campos_array[x].tagfield]= $.trim(campos_array[x].liblibrarian);   
-         options+= "<option value=" + campos_array[x].tagfield +" >" + campos_array[x].tagfield + "</option>";
+         CAMPOS_ARRAY[campos_array[x].campo]= $.trim(campos_array[x].liblibrarian);   
+         options+= "<option value=" + campos_array[x].campo +" >" + campos_array[x].campo + "</option>";
     }
     $("#campo").append(options);
     //se agrega la info al combo
@@ -225,10 +225,21 @@ function updateEleccionCampo(responseText){
     //se inicializa el combo
     $("#subcampo").html('');
     var options = "<option value='-1'>Seleccionar SubCampo</option>";
+//     var subcampo = new Object;    
+//     subcampo.liblibrarian = '';
+//     subcampo.obligatorio = '';
     
     for (x=0;x < subcampos_array.length;x++){
-         SUBCAMPOS_ARRAY[ subcampos_array[x].tagsubfield ]= $.trim(subcampos_array[x].liblibrarian);
-         options+= "<option value=" + subcampos_array[x].tagsubfield +" >" + subcampos_array[x].tagsubfield + "</option>";
+//             SUBCAMPOS_ARRAY[ subcampos_array[x].tagsubfield ]= $.trim(subcampos_array[x].liblibrarian);
+        var subcampo = new Object;    
+        subcampo.liblibrarian = '';
+        subcampo.obligatorio = '';
+        subcampo.liblibrarian =  $.trim(subcampos_array[x].liblibrarian);
+        subcampo.obligatorio = $.trim(subcampos_array[x].obligatorio); 
+        SUBCAMPOS_ARRAY[ subcampos_array[x].subcampo ]= subcampo;
+//             SUBCAMPOS_ARRAY[ subcampos_array[x].tagsubfield ]= $.trim(subcampos_array[x].obligatorio); 
+
+        options+= "<option value=" + subcampos_array[x].subcampo +" >" + subcampos_array[x].subcampo + "</option>";
     }
     //se agrega la info al combo
     $("#subcampo").append(options);
@@ -321,7 +332,18 @@ function eleccionTablaRef(){
 function eleccionSubCampo(){
 
     if ($('#subcampo').val() != -1){
-        $('#liblibrarian').val(SUBCAMPOS_ARRAY[$('#subcampo').val()]);
+//         $('#liblibrarian').val(SUBCAMPOS_ARRAY[$('#subcampo').val()]);
+        $('#liblibrarian').val(SUBCAMPOS_ARRAY[$('#subcampo').val()].liblibrarian);
+        if(SUBCAMPOS_ARRAY[$('#subcampo').val()].obligatorio == '1'){
+        //si es obligatorio, no se pude cambiar
+            $('#obligatorio_si')[0].checked = true;
+            $('#obligatorio_si').attr('disabled', true);
+            $('#obligatorio_no').attr('disabled', true);
+        } else {
+            $('#obligatorio_no')[0].checked = true;
+            $('#obligatorio_si').attr('disabled', false);
+            $('#obligatorio_no').attr('disabled', false);
+        }
         mostrarTablaRef();
     }
     else 
@@ -346,6 +368,7 @@ function comboSeleccionado(jQueryElem){
 function checkEstructuraCatalogacion(){
 
     ok = true;
+    objAH.obligatorio = ($('#obligatorio_si')[0].checked)?1:0;
 
     if (!isNaN(objAH.nivel)) {
       if (objAH.nivel == 1)
@@ -443,6 +466,7 @@ function modificarEstructuraCatalogacion(id){
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.nivel= $('#niveles_id').val();
     objAH.id= id;
+    objAH.obligatorio = ($('#obligatorio_si')[0].checked)?1:0;
     objAH.itemtype= $('#tipo_nivel3_id').val();
     objAH.campo= $('#campo').val();
     objAH.subcampo= $('#subcampo').val();
@@ -463,11 +487,36 @@ function modificarEstructuraCatalogacion(id){
 }
 
 function updateModificarEstructuraCatalogacion(responseText){
-    var Messages=JSONstring.toObject(responseText);
+    var Messages = JSONstring.toObject(responseText);
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
         eleccionDeNivel();
         inicializar();
+    }
+}
+
+function agruparCampos(){
+    var campos_array = recuperarSeleccionados("checkCampos");
+
+    if(campos_array.length > 0){   
+        objAH=new AjaxHelper(updateAgruparCampos);
+        objAH.debug= true;
+        objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.array_grupos = campos_array;
+        objAH.tipoAccion = "AGRUPAR_CAMPOS";
+        objAH.sendToServer();
+    }else{
+        jAlert(DEBE_SELECCIONAR_AL_MENOS_UN_CAMPO,CATALOGO_ALERT_TITLE);
+    }
+
+}
+
+function updateAgruparCampos(responseText){
+    var info = JSONstring.toObject(responseText);  
+    var Messages= info.Message_arrayref;
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        eleccionDeNivel();
     }
 }
 

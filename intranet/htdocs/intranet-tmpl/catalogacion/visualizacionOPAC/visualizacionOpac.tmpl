@@ -41,8 +41,8 @@ function updateEleccionCampoX(responseText){
     var options = "<option value='-1'>Seleccionar Campo</option>";
     
     for (x=0;x < campos_array.length;x++){
-         CAMPOS_ARRAY[campos_array[x].tagfield]= $.trim(campos_array[x].liblibrarian);   
-         options+= "<option value=" + campos_array[x].tagfield +" >" + campos_array[x].tagfield + "</option>";
+         CAMPOS_ARRAY[campos_array[x].campo]= $.trim(campos_array[x].liblibrarian);   
+         options+= "<option value=" + campos_array[x].campo +" >" + campos_array[x].campo + "</option>";
     }
     $("#campo").append(options);
     //se agrega la info al combo

@@ -225,8 +225,6 @@ sub t_eliminarNivelRepetible{
 
 
 
-
-
 ################################################### NUEVAS NUEVAS FRESQUITAS ##############################################################
 =item sub subirOrden
 Esta funcion sube el orden como se va a mostrar del campo, subcampo catalogado
@@ -299,14 +297,14 @@ sub getCamposXLike{
 
     my @filtros;
 
-    push(@filtros, ( tagfield => { like => $campoX.'%'} ) );
+    push(@filtros, ( campo => { like => $campoX.'%'} ) );
     push(@filtros, ( nivel => { eq => $nivel } ) );
 
     my $db_campos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
                                                                                         query => \@filtros,
-                                                                                        sort_by => ('tagfield'),
-                                                                                        select   => [ 'tagfield', 'liblibrarian'],
-                                                                                        group_by => [ 'tagfield'],
+                                                                                        sort_by => ('campo'),
+                                                                                        select   => [ 'campo', 'liblibrarian'],
+                                                                                        group_by => [ 'campo'],
                                                                        );
     return($db_campos_MARC);
 }
@@ -341,14 +339,14 @@ sub getSubCamposLike{
 
     my @filtros;
 
-    push(@filtros, ( tagfield => { eq => $campo} ) );
+    push(@filtros, ( campo => { eq => $campo} ) );
     push(@filtros, ( nivel => { eq => $nivel } ) );
 
     my $db_campos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
                                                                 query => \@filtros,
-                                                                sort_by => ('tagsubfield'),
-                                                                select   => [ 'tagsubfield', 'liblibrarian' ],
-                                                                group_by => [ 'tagsubfield'],
+                                                                sort_by => ('subcampo'),
+                                                                select   => [ 'subcampo', 'liblibrarian', 'obligatorio' ],
+                                                                group_by => [ 'subcampo'],
                                                             );
     return($db_campos_MARC);
 }
@@ -357,7 +355,7 @@ sub getSubCamposLike{
 Esta transaccion guarda una estructura de catalogacion configurada por el bibliotecario 
 =cut
 sub t_guardarEnEstructuraCatalogacion {
-    my($params)=@_;
+    my($params) = @_;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object= C4::AR::Mensajes::create();
@@ -391,6 +389,70 @@ sub t_guardarEnEstructuraCatalogacion {
     }
 
     return ($msg_object);
+}
+
+
+=item t_agruparCampos
+Esta transaccion agrupa las configuraciones de campo, subcampo pasados por parametro 
+=cut
+sub t_agruparCampos {
+    my($params)=@_;
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object= C4::AR::Mensajes::create();
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $estrCatalogacion = C4::Modelo::CatEstructuraCatalogacion->new();
+        my $db = $estrCatalogacion->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+        my $grupo = $estrCatalogacion->getNextGroup;
+    
+        eval {
+#             $estrCatalogacion->agrupar($params, $db);  
+            my $array_grupos = $params->{'array_grupos'};
+        
+            foreach my $id (@$array_grupos){
+                my ($cat_estructura_catalogacion) = C4::AR::Catalogacion::getEstructuraCatalogacionById($id, $db);
+                if($cat_estructura_catalogacion){
+                    $cat_estructura_catalogacion->setGrupo($grupo);
+                    $cat_estructura_catalogacion->save();
+                }
+            }
+
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U410', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B448',"INTRA");
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U411', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+}
+
+
+sub verificarModificarEnEstructuraCatalogacion {
+    my($params, $msg_object) = @_;
+
+#     if( !($msg_object->{'error'}) && ( $params->{'newpassword'} ne $params->{'newpassword1'} ) ){
+    #verifico si se cambia el validador, que no tenga referencia
+#         $msg_object->{'error'}= 1;
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => [$params->{'cardnumber'}]} ) ;
+#     }
+
 }
 
 =item sub t_modificarEnEstructuraCatalogacion
@@ -593,6 +655,8 @@ sub getEstructuraConDatos{
 
     C4::AR::Debug::debug("getEstructuraConDatos => ======================================================================");
     my $nivel = $params->{'nivel'};
+
+getDatosFromNivel($params);
     my $itemType = $params->{'id_tipo_doc'};
     #obtengo la estructura_catalogacion configurada solo de los campos REPETIBLES
 # FIXME no le esta llegano el itemtype
@@ -642,6 +706,107 @@ sub getEstructuraConDatos{
 
     return (scalar(@resultEstYDatos), \@resultEstYDatos);
 }
+
+#########################################################PROBANDO######################################################################
+=item sub getDatosRepetibleFromNivel 
+    esta funcion trae toda la info del nivel pasado por parametro segun el id
+=cut
+sub getDatosRepetibleFromNivel{
+    my ($params) = @_;
+
+    my $nivel = $params->{'nivel'};
+
+    use C4::Modelo::CatNivel1;
+    use C4::Modelo::CatNivel1::Manager;
+
+    use C4::Modelo::CatNivel1Repetible;
+    use C4::Modelo::CatNivel1Repetible::Manager;
+      
+    use C4::Modelo::CatNivel2Repetible;
+    use C4::Modelo::CatNivel2Repetible::Manager;
+
+    use C4::Modelo::CatNivel3Repetible;
+    use C4::Modelo::CatNivel3Repetible::Manager;
+    my $catalogaciones_array_ref;
+    my $nivel1_array_ref;
+
+   if ($nivel == 1){
+    C4::AR::Debug::debug("getRepetible => NIVEL 1");
+         $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
+                                                query => [ 
+                                                            'cat_nivel1.id1' => { eq => $params->{'id'} },
+#                                                             'campo' => { eq => $params->{'campo'} },
+#                                                             'subcampo' => { eq => $params->{'subcampo'} },        
+                                                    ], 
+                                                with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor'], #LEFT JOIN
+#                                                 require_objects => [ 'CEC' ] #INNER JOIN
+
+                            );
+    
+   }
+   elsif ($nivel == 2){
+    C4::AR::Debug::debug("getRepetible => NIVEL 2");
+         $catalogaciones_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(   
+                                                    query => [ 
+                                                                id2 => { eq => $params->{'id'} },
+#                                                                 'campo' => { eq => $params->{'campo'} },
+#                                                                 'subcampo' => { eq => $params->{'subcampo'} },   
+                                                            ],
+#                                                     require_objects => [ 'CEC' ],#INNER JOIN
+                                                    with_objects => [ 'cat_nivel2' ], #LEFT JOIN
+                                );
+   }
+   else{
+    C4::AR::Debug::debug("getRepetible => NIVEL 3");
+         $catalogaciones_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
+                                                    query => [ 
+                                                                id3 => { eq => $params->{'id3'} },
+#                                                                 'campo' => { eq => $params->{'campo'} },
+#                                                                 'subcampo' => { eq => $params->{'subcampo'} },   
+                                                        ],
+#                                                         require_objects => [ 'CEC' ], #INNER JOIN  
+                                                        with_objects => [ 'cat_nivel3' ], #LEFT JOIN
+                                );
+   }
+
+
+    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
+}
+
+
+sub getDatosFromNivel{
+    my ($params) = @_;
+
+    C4::AR::Debug::debug("getEstructuraConDatos => ======================================================================");
+    my $nivel = $params->{'nivel'};
+    my $itemType = $params->{'id_tipo_doc'};
+    #obtengo la estructura_catalogacion configurada solo de los campos REPETIBLES
+# FIXME no le esta llegano el itemtype
+    C4::AR::Debug::debug("getEstructuraConDatos => tipo de documento: ".$itemType);
+    my ($cant, $catalogaciones_array_ref_objects) = getDatosRepetibleFromNivel($params);
+    C4::AR::Debug::debug("getEstructuraConDatos => son REPETIBLES cant: ".$cant);
+
+    my @result;
+    foreach my $c  (@$catalogaciones_array_ref_objects){
+
+        C4::AR::Debug::debug("getDatosFromNivel => campo, subcampo, dato => ".$c->getCampo.", ".$c->getSubcampo.": ".$c->getDato);
+#             my %hash_temp;
+#             _setDatos_de_estructura($cat_estructura, \%hash_temp, $cat);
+        
+#             push (@result, \%hash_temp);
+      
+
+    }# END foreach my $cat_estructura  (@$catalogaciones_array_ref_objects)
+
+
+    #obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
+#     my @resultEstYDatos= _getEstructuraYDatosDeNivelNoRepetible($params);
+#     push(@resultEstYDatos,@result);
+
+#     return (scalar(@resultEstYDatos), \@resultEstYDatos);
+}
+
+###################################################FIN PROBANDO######################################################################
 
 =item
 Esta funcion retorna la estructura de catalogacion con los datos de un Nivel (REPETIBLES NO).
@@ -738,7 +903,7 @@ sub getEstructuraCatalogacionFromDBCompleta{
                                                                                 nivel => { eq => $nivel },
 
                                                                     or   => [ 	
-																				                                      itemtype => { eq => $itemType },
+                                                                                itemtype => { eq => $itemType },
                                                                             	itemtype => { eq => 'ALL' },    
                                                                             ],
 
@@ -936,10 +1101,13 @@ sub _getEstructuraFromCampoSubCampo{
 Este funcion devuelve la configuracion de la estructura de catalogacion segun id pasado por parametro
 =cut
 sub getEstructuraCatalogacionById{
-    my ($id)=@_;
+    my ($id, $db) = @_;
+    
+    $db = $db || C4::Modelo::PermCatalogo->new()->db;   
 
     my $cat_estructura_catalogacion_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
-                                                                                query => [ 
+                                                                                db      => $db,
+                                                                                query   => [ 
                                                                                             id => { eq => $id },
                                                                                     ], 
 

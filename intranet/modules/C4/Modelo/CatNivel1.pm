@@ -410,8 +410,8 @@ sub agregarDesdeMARC {
     #Se guardan los datos en Nivel 1 repetibles
     foreach my $infoNivel1  (@$arrayNivel1Repetibles){
 
-        my $campo = $infoNivel1->getTagfield;
-        my $subcampo = $infoNivel1->getTagSubField;
+        my $campo = $infoNivel1->getCampo;
+        my $subcampo = $infoNivel1->getSubcampo;
         if (!((($campo eq "100") || ($campo eq "245"))&&($subcampo eq "a"))){ # si es ni titulo ni autor
             my $datoRepetible=$marc->subfield($campo,$subcampo);
 

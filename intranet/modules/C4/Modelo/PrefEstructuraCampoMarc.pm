@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'pref_estructura_campo_marc',
 
     columns => [
-        tagfield         => { type => 'character', length => 3, not_null => 1 },
+        campo            => { type => 'character', length => 3, not_null => 1 },
         liblibrarian     => { type => 'character', length => 255, not_null => 1 },
         libopac          => { type => 'character', length => 255, not_null => 1 },
         repeatable       => { type => 'integer', default => '0', not_null => 1 },
@@ -16,19 +16,19 @@ __PACKAGE__->meta->setup(
         authorised_value => { type => 'character', length => 10 },
     ],
 
-    primary_key_columns => [ 'tagfield' ],
+    primary_key_columns => [ 'campo' ],
 );
 
 
-sub getTagfield{
+sub getCampo{
     my ($self) = shift;
-    return ($self->tagfield);
+    return ($self->campo);
 }
 
-sub setTagfield{
+sub setCampo{
     my ($self) = shift;
-    my ($tagfield) = @_;
-    $self->tagfield($tagfield);
+    my ($campo) = @_;
+    $self->campo($campo);
 }
 
 sub getLiblibrarian{

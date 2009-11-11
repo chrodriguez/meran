@@ -62,10 +62,9 @@ function eliminarCampos(){
 
 function updateEliminarCampo(responseText){
     var Message_arrayref = JSONstring.toObject(responseText);
-    var Messages = Message_arrayref;
-    setMessages(Messages);
+    setMessages(Message_arrayref);
 
-    if (! (hayError(Messages) ) ){
+    if (! (hayError(Message_arrayref) ) ){
       eleccionDeNivel();
     }
 }

@@ -250,7 +250,7 @@ sub getLibrarianMARCSubField{
 
 	my $query = " SELECT * ";
 	$query .= " FROM pref_estructura_subcampo_marc ";
-	$query .= " WHERE (tagfield = ? )and(tagsubfield = ?)";
+	$query .= " WHERE (campo = ? )and(subcampo = ?)";
 
 	my $sth=$dbh->prepare($query);
    	$sth->execute($campo, $subcampo);
@@ -525,8 +525,8 @@ Busca los campos correspondiente a el parametro campoX, para ver en el tmpl de f
 sub buscarCamposMARC{
 	my ($campoX) =@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT DISTINCT nivel,tagfield FROM pref_estructura_subcampo_marc ";
-	$query .=" WHERE nivel > 0 AND tagfield LIKE ? ORDER BY nivel";
+	my $query="SELECT DISTINCT nivel,campo FROM pref_estructura_subcampo_marc ";
+	$query .=" WHERE nivel > 0 AND campo LIKE ? ORDER BY nivel";
 	
 	my $sth=$dbh->prepare($query);
         $sth->execute($campoX."%");
@@ -534,7 +534,7 @@ sub buscarCamposMARC{
 	my $nivel;
 	while(my $data=$sth->fetchrow_hashref){
 		$nivel="n".$data->{'nivel'}."r";
-		push (@results,$nivel."/".$data->{'tagfield'});
+		push (@results,$nivel."/".$data->{'campo'});
 	}
 	$sth->finish;
 	return (@results);
@@ -547,17 +547,17 @@ Busca los subcampos correspondiente al parametro de campo y que no sean propios 
 sub buscarSubCamposMARC{
 	my ($campo) =@_;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT tagsubfield FROM pref_estructura_subcampo_marc ";
-	$query .=" WHERE nivel > 0 AND tagfield = ? ";
+	my $query="SELECT subcampo FROM pref_estructura_subcampo_marc ";
+	$query .=" WHERE nivel > 0 AND campo = ? ";
 	my $mapeo=&buscarSubCamposMapeo($campo);
 	foreach my $llave (keys %$mapeo){
-		$query.=" AND (tagsubfield <> '".$mapeo->{$llave}->{'subcampo'}."' ) ";
+		$query.=" AND (subcampo <> '".$mapeo->{$llave}->{'subcampo'}."' ) ";
 	}
 	my $sth=$dbh->prepare($query);
         $sth->execute($campo);
 	my @results;
 	while(my $data=$sth->fetchrow_hashref){
-		push (@results, $data->{'tagsubfield'});
+		push (@results, $data->{'subcampo'});
 	}
 
 	$sth->finish;
@@ -1779,7 +1779,7 @@ sub getHeader{
 	use C4::Modelo::PrefEstructuraCampoMarc::Manager;
 
 	my ($pref_estructura_campo_marc_array) = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc( 
-																					query => [ tagfield => { eq => $campo } ]
+																					query => [ campo => { eq => $campo } ]
 																	);
 
 	if(scalar(@$pref_estructura_campo_marc_array) > 0){
@@ -1802,8 +1802,8 @@ sub getLiblibrarian{
 		return $estructura_array->getLiblibrarian;
 	}else{
 		my ($pref_estructura_sub_campo_marc_array) = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc( 
-																					query => [  tagfield => { eq => $campo },
-																								      tagsubfield => { eq => $subcampo }
+																					query => [  campo => { eq => $campo },
+																								      subcampo => { eq => $subcampo }
 																							 ]
 																	);
 		#si no lo encuentra en estructura_catalogacion, lo busca en estructura_sub_campo_marc

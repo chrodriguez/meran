@@ -36,6 +36,7 @@ BORRAR_LISTA_DE_CODIGOS = "[% 'Borrar lista de codigos de barras?' %]";
 SELECCIONE_EL_ESQUEMA = "[% 'Seleccione el esquema' %]";
 DEBE_SELECCIONAR_TODOS_LOS_CAMPOS_REQUERIDOS = "[% 'Debe seleccionar todos los campos requeridos.' %]";
 DEBE_SELECCIONAR_UNA_TABLA_DE_REFERENCIA = "[% 'Debe seleccionar una tabla de referencia.' %]";
+DEBE_SELECCIONAR_AL_MENOS_UN_CAMPO = "[% 'Debe seleccionar al menos un campo.' %]";
 //=============================================Fin===Catalogacion=================================================
 
 //================================================Usuarios========================================================

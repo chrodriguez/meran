@@ -11,8 +11,8 @@ __PACKAGE__->meta->setup(
     columns => [
         nivel              => { type => 'integer', default => '0', not_null => 1 },
         obligatorio        => { type => 'integer', default => '0', not_null => 1 },
-        tagfield           => { type => 'character', length => 3, not_null => 1 },
-        tagsubfield        => { type => 'character', length => 1, not_null => 1 },
+        campo              => { type => 'character', length => 3, not_null => 1 },
+        subcampo           => { type => 'character', length => 1, not_null => 1 },
         liblibrarian       => { type => 'character', length => 255, not_null => 1 },
         libopac            => { type => 'character', length => 255, not_null => 1 },
         repeatable         => { type => 'integer', default => '0', not_null => 1 },
@@ -24,40 +24,54 @@ __PACKAGE__->meta->setup(
         value_builder      => { type => 'character', length => 80 },
     ],
 
-    primary_key_columns => [ 'tagfield', 'tagsubfield' ],
+    primary_key_columns => [ 'campo', 'subcampo' ],
 
     relationships =>
     [
       campoRef => 
       {
         class       => 'C4::Modelo::PrefEstructuraCampoMarc',
-        key_columns => { tagfield => 'tagfield' },
+        key_columns => { campo => 'campo' },
         type        => 'one to one',
       },
     ]
 );
 
 
-sub getTagfield{
+sub getCampo{
     my ($self) = shift;
-    return ($self->tagfield);
+
+    return ($self->campo);
 }
 
-sub setTagfield{
+sub setCampo{
     my ($self) = shift;
-    my ($tagfield) = @_;
-    $self->tagfield($tagfield);
+
+    my ($campo) = @_;
+    $self->campo($campo);
 }
 
-sub getTagSubField{
+sub getSubcampo{
     my ($self) = shift;
-    return ($self->tagsubfield);
+
+    return ($self->subcampo);
 }
 
-sub setTagSubField{
+sub setSubcampo{
     my ($self) = shift;
-    my ($tagsubfield) = @_;
-    $self->tagsubfield($tagsubfield);
+    my ($subcampo) = @_;
+    $self->subcampo($subcampo);
+}
+
+sub getObligatorio{
+    my ($self) = shift;
+    return ($self->obligatorio);
+}
+
+sub setObligatorio{
+    my ($self) = shift;
+    my ($obligatorio) = @_;
+    $self->obligatorio($obligatorio);
 }
 
 sub getLiblibrarian{

@@ -24,6 +24,7 @@ __PACKAGE__->meta->setup(
         visible             => { type => 'integer', default => 1, not_null => 1 },
         repetible           => { type => 'integer', default => 1},
         idinforef           => { type => 'integer', length => 11, not_null => 0 },
+        grupo               => { type => 'integer', length => 11, not_null => 0 },
         idCompCliente       => { type => 'varchar', length => 255, not_null => 1 },
         fijo                => { type => 'integer', length => 1, not_null => 1 },  #modificable = 0 / no modificable = 1
     ],
@@ -43,8 +44,8 @@ __PACKAGE__->meta->setup(
         refCampo => 
         {
             class       => 'C4::Modelo::PrefEstructuraSubcampoMarc',
-            key_columns => { campo => 'tagfield',
-                            subcampo => 'tagsubfield' },
+            key_columns => { campo => 'campo',
+                             subcampo => 'subcampo' },
             type        => 'one to one',
         },
 
@@ -76,7 +77,7 @@ sub agregar{
     $self->setReferencia($data_hash->{'referencia'});
     $self->setNivel($data_hash->{'nivel'});
     $self->setObligatorio($data_hash->{'obligatorio'});
-#     $self->setIntranet_habilitado($data_hash->{'intranet_habilitado'});
+    $self->setGrupo($self->getNextGroup);
     $self->setIntranet_habilitado($self->getUltimoIntranetHabilitado($self->getItemType)+1 );
     $self->setVisible($data_hash->{'visible'});
     $self->setIdCompCliente(md5_hex(time()));
@@ -96,6 +97,18 @@ sub agregar{
     }
 } 
 
+sub getNextGroup{
+    my $dbh = C4::Context->dbh;
+
+    my $sth = $dbh->prepare(" SELECT MAX(grupo) AS grupo
+                              FROM cat_estructura_catalogacion ");
+
+    $sth->execute();
+    my $data = $sth->fetchrow_hashref;
+
+    return $data->{'grupo'} + 1;
+}
+
 sub modificar{
 
     my ($self)=shift;
@@ -106,6 +119,7 @@ sub modificar{
 #         $self->setCampo($data_hash->{'campo'});
 #         $self->setSubcampo($data_hash->{'subcampo'});
 #         $self->setItemType($data_hash->{'itemtype'});
+        $self->setObligatorio($data_hash->{'obligatorio'});
         $self->setLiblibrarian($data_hash->{'liblibrarian'});
         $self->setRule($data_hash->{'combo_validate'});
 
@@ -115,7 +129,7 @@ sub modificar{
 # 		}
 #         $self->setReferencia($data_hash->{'referencia'});
 #         $self->setNivel($data_hash->{'nivel'});
-#         $self->setObligatorio($data_hash->{'obligatorio'});
+
     
 #         if($self->tieneReferencia){
 #             my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(idinforef => $self->getIdInfoRef);
@@ -331,6 +345,18 @@ sub setFijo{
     $self->fijo($fijo);
 }
 
+sub getGrupo{
+    my ($self)=shift;
+
+    return $self->grupo;
+}
+
+sub setGrupo{
+    my ($self) = shift;
+    my ($grupo) = @_;
+    $self->grupo($grupo);
+}
+
 sub cambiarVisibilidad{
 
     my ($self)=shift;
@@ -453,6 +479,21 @@ sub getRules{
     my ($self) = shift;
 #     return ("'".C4::AR::Utilidades::trim($self->rules)."'");
     return (C4::AR::Utilidades::trim($self->rules));
+}
+
+sub getRulesToString{
+    my ($self) = shift;
+
+    my $rules = C4::AR::Utilidades::trim($self->rules);
+    my @rules_array = split("|", $rules);
+    my $validadores_hash_ref = C4::AR::Referencias::getValidadores();
+    C4::AR::Debug::debug("cant: ".scalar(@rules_array));
+    foreach my $r (@rules_array){
+#         if($r =~ m/^(Clinton|Bush|Reagan)/i)
+        C4::AR::Debug::debug("rule??? ".$r);
+    }
+
+    return ($rules);
 }
 
 sub setRules{

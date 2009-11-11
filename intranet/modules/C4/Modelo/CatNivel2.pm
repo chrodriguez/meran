@@ -754,8 +754,8 @@ sub agregarDesdeMARC {
     #Se guardan los datos en Nivel 1 repetibles
     foreach my $infoNivel2  (@$arrayNivel2Repetibles){
 
-        my $campo = $infoNivel2->getTagfield;
-        my $subcampo = $infoNivel2->getTagSubField;
+        my $campo = $infoNivel2->getCampo;
+        my $subcampo = $infoNivel2->getSubcampo;
 
         if (!( (($campo eq "245") && ($subcampo eq "h")) ||
                (($campo eq "043") && ($subcampo eq "c")) || 

@@ -29,6 +29,37 @@ $(document).ready(function() {
 <legend><strong>[% 'Modificar campo Marc para el nivel' | i18n %] [% nivel %]:</strong></legend>
 
 <ul>
+<!--   <li class="sub_item">
+        <label for="campoX">[% 'Seleccion' | i18n %]:</label> 
+        [% selectCampoX %]
+    </li>
+    <li class="sub_item">
+        <label for="campo">[% 'Campo' | i18n %]:</label>
+            <select name="campo" id="campo" onChange="eleccionCampo()">
+                <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
+            </select>
+        [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span></strong>
+    </li>
+    <li class="sub_item">
+        <label for="subcampo">[% 'Subcampo' | i18n %]:</label>
+        <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
+                <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
+            </select>
+    </li>-->
+
+
+<!--     Si catalogacion.refCampo.getObligatorio (LA BIBLIA) dice que es obligatorio, no se puede modificar -->
+    <li class="sub_item">
+        <label for="obligatorio">[% 'Obligatorio?' | i18n %]</label>
+        <input  type=radio id="obligatorio_si" name="obligatorio" value="1" 
+                [% IF catalogacion.obligatorio == '1' %] checked [% END %]
+                [% IF catalogacion.refCampo.getObligatorio %] disabled [% END %]>
+            [% 'S&iacute;' | i18n %]<BR>
+        <input  type=radio id="obligatorio_no" name="obligatorio" value="0" 
+                [% IF catalogacion.obligatorio == '0' %] checked [% END %]
+                [% IF catalogacion.refCampo.getObligatorio %] disabled [% END %]>  
+            [% 'No' | i18n %]<BR>
+    </li> 
     <li class="sub_item">
         <label for="liblibrarian">
             [% 'Vista en Intranet:' | i18n %] 
@@ -46,20 +77,20 @@ $(document).ready(function() {
 
 
     [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo temporal' | i18n %]",
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo' | i18n %]",
                                                             boton   => "boton_buscar",
                                                             onClick => "modificarEstructuraCatalogacion([% catalogacion.getId %]);",
-                                                            title   => "[% 'Guardar Campo temporal' | i18n %]",
+                                                            title   => "[% 'Guardar Campo' | i18n %]",
                                                             alternClass => "botonCentrado",
                                                             width   => "auto"
                                 ) ;
     [% END %]
 
     [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo temporal' | i18n %]",
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo' | i18n %]",
                                                             boton   => "boton_buscar",
                                                             onClick => "cancelarEstructuraCatalogacion();",
-                                                            title   => "[% 'Cancelar Campo temporal' | i18n %]",
+                                                            title   => "[% 'Cancelar Campo' | i18n %]",
                                                             alternClass => "botonCentrado",       
                                                             width   => "auto"
                                 ) ;

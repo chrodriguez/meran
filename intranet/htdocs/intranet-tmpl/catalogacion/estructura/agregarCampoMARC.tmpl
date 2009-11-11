@@ -20,8 +20,13 @@
         <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
                 <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
             </select>
-        <input id="obligatorio" type="hidden" value="">
+<!--        <input id="obligatorio" type="hidden" value="">-->
     </li>
+    <li class="sub_item">
+        <label for="obligatorio">[% 'Obligatorio?' | i18n %]</label>
+        <input type=radio id="obligatorio_si" name="obligatorio" value="1">[% 'S&iacute;' | i18n %]<BR>
+        <input type=radio id="obligatorio_no" name="obligatorio" value="0" checked>[% 'No' | i18n %]<BR>
+    </li> 
     <li class="sub_item">
         <label for="liblibrarian">[% 'Vista en Intranet' | i18n %]:</label> 
         <input id="liblibrarian" type="text" value="" size="90">
@@ -60,20 +65,20 @@
 </ul>
 
     [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo temporal' | i18n %]",
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo' | i18n %]",
                                                             boton   => "boton_buscar",
                                                             onClick => "agregarEstructuraCatalogacion([% nivel %]);",
-                                                            title   => "[% 'Guardar Campo temporal' | i18n %]",
+                                                            title   => "[% 'Guardar Campo' | i18n %]",
                                                             width => "auto",
                                                             alternClass => "botonCentrado",
                                 ) ;
     [% END %]
 
     [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo temporal' | i18n %]",
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo' | i18n %]",
                                                             boton   => "boton_buscar",
                                                             onClick => "cancelarEstructuraCatalogacion();",
-                                                            title   => "[% 'Cancelar Campo temporal' | i18n %]",
+                                                            title   => "[% 'Cancelar Campo' | i18n %]",
                                                             width => "auto",    
                                                             alternClass => "botonCentrado",
                                 ) ;

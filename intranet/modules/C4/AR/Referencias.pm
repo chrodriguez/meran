@@ -734,4 +734,19 @@ sub agregarRegistro{
     return ($clave,$tabla,\@array,$campos);
 }
 
+sub getValidadores{
+    
+    my %validadores;    
+    $validadores{'solo_texto'}          = C4::AR::Filtros::i18n('Solo Texto');
+    $validadores{'digits'}              = C4::AR::Filtros::i18n('Solo D&iacute;gitos');
+    $validadores{'alphanumeric_total'}  = C4::AR::Filtros::i18n('Alfanum&eacute;rico');
+    $validadores{'combo'}               = C4::AR::Filtros::i18n('Combo');
+    $validadores{'anio'}                = C4::AR::Filtros::i18n('A&ntilde;o');
+    $validadores{'calendar'}            = C4::AR::Filtros::i18n('Calendario');
+    $validadores{'auto'}                = C4::AR::Filtros::i18n('Autocompletable');
+    $validadores{'texto_area'}          = C4::AR::Filtros::i18n('Texto Area');
+
+    return \%validadores;
+}
+
 1;
