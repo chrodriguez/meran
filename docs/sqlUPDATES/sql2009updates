@@ -1240,5 +1240,7 @@ ALTER TABLE `cat_estructura_catalogacion` ADD `grupo` INT( 11 ) NOT NULL AFTER `
 -- 11/11/09
 ALTER TABLE `pref_estructura_subcampo_marc` DROP `value_builder`;
 ALTER TABLE `pref_estructura_subcampo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+ ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL  
+ ALTER TABLE `pref_estructura_subcampo_marc` DROP `tab`, DROP `authorised_value`, DROP `thesaurus_category`
   CHANGE `tagsubfield` `subcampo` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;

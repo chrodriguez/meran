@@ -221,11 +221,11 @@ sub toMARC{
 	$hash{'ident'}= 'TITULO'; #parece q no es necesario
  	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 
-  if($estructura){
-	  $hash{'liblibrarian'}= $estructura->getLiblibrarian;
-  }
+    if($estructura){
+	    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
+    }
 
-  $hash{'id1'} = $self->getId1;
+    $hash{'id1'} = $self->getId1;
 	
 
 	push (@marc_array, \%hash);
@@ -239,16 +239,16 @@ sub toMARC{
 	$hash{'dato'}= C4::AR::Referencias::getNombreAutor($self->getAutor);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 
-  if($estructura){
-    if($estructura->getReferencia){
-	    #tiene referencia
-		  $hash{'datoReferencia'}= $self->getAutor;
+    if($estructura){
+        if($estructura->getReferencia){
+	        #tiene referencia
+		    $hash{'datoReferencia'}= $self->getAutor;
+        }
+    
+        $hash{'liblibrarian'}= $estructura->getLiblibrarian;
     }
 
-    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
-	}
-
-  $hash{'id1'} = $self->getId1;
+    $hash{'id1'} = $self->getId1;
 
 
 	push (@marc_array, \%hash);
@@ -271,7 +271,7 @@ sub nivel1CompletoToMARC{
 	my $campo;
 	my $subcampo;
 	my $dato;	
-  my $id1 = $self->getId1;
+    my $id1 = $self->getId1;
 
 	foreach my $marc_object (@$nivel1Repetible_object_array){
 		$campo                  = $marc_object->getCampo;
@@ -283,17 +283,17 @@ sub nivel1CompletoToMARC{
 		$hash{'subcampo'}       = $subcampo;
 		$hash{'liblibrarian'}   = C4::AR::Busquedas::getLiblibrarian($campo, $subcampo);
 		$hash{'dato'}           = $dato;
-    $hash{'id1'}            = $id1;
-    #obtengo el dato de la referencia solo si es un repetible, los campos fijos recuperan de otra forma el dato de la referencia 
-    my $valor_referencia    = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato);
-    $hash{'dato'}           = $valor_referencia;
-
- 		push(@$marc_array, \%hash);
-    C4::AR::Debug::debug("CatNivel1 => nivel1CompletoToMARC => nivel1CompletoToMARC => campo, subcampo: ".$campo.", ".$subcampo);
-    C4::AR::Debug::debug("CatNivel1 => nivel1CompletoToMARC => nivel1CompletoToMARC => id1: ".$id1);	
+        $hash{'id1'}            = $id1;
+        #obtengo el dato de la referencia solo si es un repetible, los campos fijos recuperan de otra forma el dato de la referencia 
+        my $valor_referencia    = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato);
+        $hash{'dato'}           = $valor_referencia;
+    
+        push(@$marc_array, \%hash);
+        C4::AR::Debug::debug("CatNivel1 => nivel1CompletoToMARC => nivel1CompletoToMARC => campo, subcampo: ".$campo.", ".$subcampo);
+        C4::AR::Debug::debug("CatNivel1 => nivel1CompletoToMARC => nivel1CompletoToMARC => id1: ".$id1);	
 	}
     
-   C4::AR::Debug::debug("CatNivel1 => nivel1CompletoToMARC => cant: ".scalar(@$marc_array));
+    C4::AR::Debug::debug("CatNivel1 => nivel1CompletoToMARC => cant: ".scalar(@$marc_array));
 
 	return ($marc_array);
 }
