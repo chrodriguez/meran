@@ -13,7 +13,6 @@ __PACKAGE__->meta->setup(
         libopac          => { type => 'character', length => 255, not_null => 1 },
         repeatable       => { type => 'integer', default => '0', not_null => 1 },
         mandatory        => { type => 'integer', default => '0', not_null => 1 },
-        authorised_value => { type => 'character', length => 10 },
     ],
 
     primary_key_columns => [ 'campo' ],
@@ -76,15 +75,5 @@ sub setMandatory{
 }
 
 
-sub getAuthorised_value{
-    my ($self) = shift;
-    return ($self->authorised_value);
-}
-
-sub setAuthorised_value{
-    my ($self) = shift;
-    my ($authorised_value) = @_;
-    $self->authorised_value($authorised_value);
-}
 1;
 

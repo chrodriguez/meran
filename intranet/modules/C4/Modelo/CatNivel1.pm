@@ -405,7 +405,7 @@ sub agregarDesdeMARC {
     my $arrayNivel1Repetibles;
 
     my $id1 = $self->getId1;
-     my ($arrayNivel1Repetibles)= C4::AR::Catalogacion::getSubCampos(1); #Todos los campos MARC del nivel 1
+     my ($arrayNivel1Repetibles)= C4::AR::EstructuraCatalogacionBase::getSubCampos(1); #Todos los campos MARC del nivel 1
 
     #Se guardan los datos en Nivel 1 repetibles
     foreach my $infoNivel1  (@$arrayNivel1Repetibles){

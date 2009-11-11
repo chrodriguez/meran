@@ -22,7 +22,7 @@ __PACKAGE__->meta->setup(
         obligatorio         => { type => 'integer', default => '0', not_null => 1 },
         intranet_habilitado => { type => 'integer', default => '1' },
         visible             => { type => 'integer', default => 1, not_null => 1 },
-        repetible           => { type => 'integer', default => 1},
+#         repetible           => { type => 'integer', default => 1},
         idinforef           => { type => 'integer', length => 11, not_null => 0 },
         grupo               => { type => 'integer', length => 11, not_null => 0 },
         idCompCliente       => { type => 'varchar', length => 255, not_null => 1 },
@@ -55,6 +55,14 @@ __PACKAGE__->meta->setup(
             key_columns => { idinforef=> 'idinforef' },
             type        => 'one to one',
         },
+
+        estructuraBase => 
+        {
+            class       => 'C4::Modelo::PrefEstructuraSubcampoMarc',
+            key_columns => { campo => 'campo',
+                             subcampo => 'subcampo' },
+            type        => 'one to one',
+        },
     ]
 
 );
@@ -82,7 +90,7 @@ sub agregar{
     $self->setVisible($data_hash->{'visible'});
     $self->setIdCompCliente(md5_hex(time()));
     $self->setFijo(0); #por defecto, todo lo que se ingresa como estructura del catalogo NO ES FIJO
-    $self->setRepetible(1); 
+#     $self->setRepetible(1); 
     $self->save();
 
 #     if($data_hash->{'referencia'}){
@@ -385,16 +393,16 @@ sub setCampo{
     $self->campo($campo);
 }
 
-sub getRepetible{
-    my ($self) = shift;
-    return ($self->repetible);
-}
+# sub getRepetible{
+#     my ($self) = shift;
+#     return ($self->repetible);
+# }
 
-sub setRepetible{
-    my ($self) = shift;
-    my ($repetible) = @_;
-    $self->repetible($repetible);
-}
+# sub setRepetible{
+#     my ($self) = shift;
+#     my ($repetible) = @_;
+#     $self->repetible($repetible);
+# }
 
 
 sub getIdCompCliente{

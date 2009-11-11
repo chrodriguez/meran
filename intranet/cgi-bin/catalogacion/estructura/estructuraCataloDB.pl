@@ -79,7 +79,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
     my $nivel = $obj->{'nivel'};
     my $campoX = $obj->{'campoX'};
 
-    my ($campos_array) = C4::AR::Catalogacion::getCamposXLike($nivel,$campoX);
+    my ($campos_array) = C4::AR::EstructuraCatalogacionBase::getCamposXLike($nivel,$campoX);
 
     my $info = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
 
@@ -101,7 +101,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
     my $nivel = $obj->{'nivel'};
     my $campo = $obj->{'campo'};
 
-    my ($campos_array) = C4::AR::Catalogacion::getSubCamposLike($nivel,$campo);
+    my ($campos_array) = C4::AR::EstructuraCatalogacionBase::getSubCamposLike($nivel,$campo);
 
     my $info = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
 
@@ -372,7 +372,8 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
 #         if($nivel2){
 #           $obj->{'id_tipo_doc'} = $nivel2->getTipo_documento();
             #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
-	        my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getEstructuraConDatos($obj);
+# 	        my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getEstructuraConDatos($obj);
+            my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getDatosFromNivel($obj);
             
 	        $infoOperacionJSON= to_json($catalogaciones_array_ref);
 #         }

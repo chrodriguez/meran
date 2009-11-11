@@ -15,7 +15,7 @@ __PACKAGE__->meta->setup(
         subcampo           => { type => 'character', length => 1, not_null => 1 },
         liblibrarian       => { type => 'character', length => 255, not_null => 1 },
         libopac            => { type => 'character', length => 255, not_null => 1 },
-        repeatable         => { type => 'integer', default => '0', not_null => 1 },
+        repetible          => { type => 'integer', default => '0', not_null => 1 },
         mandatory          => { type => 'integer', default => '0', not_null => 1 },
         kohafield          => { type => 'character', length => 40 },
     ],
@@ -80,6 +80,12 @@ sub setLiblibrarian{
     my ($liblibrarian) = @_;
     $self->liblibrarian($liblibrarian);
 }
+
+sub getRepetible{
+    my ($self) = shift;
+    return ($self->repetible);
+}
+
 
 1;
 

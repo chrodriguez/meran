@@ -809,68 +809,81 @@ function procesarObjeto(objeto){
     var unoLinea = 0;
     var idDiv = "div"+idComp;
     var divComp = crearDivComponente(idDiv);
+//     var tiene_estructura = objeto.tiene_estructura; #falta q los niveles 1, 2, 3 mantengan esta estructura
+    var tiene_estructura = 1; 
+
+    if(objeto.repetible == "1"){  
+        libtext = libtext + "<b> (R) </b>";
+    }
 
     if(objeto.obligatorio == "1"){  
         libtext = libtext + "<b> * </b>";
+    }
+
+    if(objeto.tiene_estructura == '0'){ 
+        libtext = libtext + "<div class='divComponente'><input type='text' value='NO TIENE ESTRUCTURA' disabled></div>";
+        tiene_estructura = 0;
     }
 
     var divLabel= crearDivLabel(libtext, idComp);
 
     strComp="<li class='sub_item'> "+divLabel+divComp+"</li>";
     $(strComp).appendTo("#"+getDivDelNivel());
-    switch(tipo){
-        case "text":
-            //tipo,id,opciones,valor
-            comp = crearComponente(tipo,idComp,"","");
-            $(comp).appendTo("#"+idDiv);
-            $("#"+idComp).val(objeto.valText);
-        break;
-        case "combo":
-            comp= crearComponente(tipo,idComp,objeto,valor);
-            $(comp).appendTo("#"+idDiv);
-        break;
-        case "texta2":
-            compText=crearComponente("text",idComp,"","");
-            comp=crearComponente("texta","texta"+idComp,"readonly='readonly'","");
-            var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+idComp+")' src='[% themelang %]/images/sacar.png'>";
-            comp="<div style='float: left;padding-right:1%; padding-bottom: 1%;'>"+comp+"</div>";
-            compText=compText+" "+boton;
-            $(compText).appendTo("#"+idDiv);
-            $(comp).appendTo("#strComp"+idComp);
-            $("#texta"+idComp).val(objeto.valTextArea);
-        break;
-		 case "auto":
-            //tipo,id,opciones,valor
-            comp= crearComponente(tipo,idComp,"","");
-            $(comp).appendTo("#"+idDiv);
-//             $("#"+idComp).val(objeto.valText);?????
-			_cearAutocompleteParaCamponente(objeto);
-			//se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
-			comp= crearComponente('hidden',objeto.idCompCliente + '_hidden','','');
-			 $(comp).appendTo("#"+idDiv);
-// 			_cambiarIdDeAutocomplete();
-        break;
-		case "calendar":
-            //tipo,id,opciones,valor
-            comp= crearComponente(tipo,idComp,"","");
-            $(comp).appendTo("#"+idDiv);
-            $("#"+idComp).val(objeto.valText);
-			$("#"+idComp).datepicker({ dateFormat: 'dd/mm/yy' });
-		break;
-        case "anio":
-            //tipo,id,opciones,valor
-            comp= crearComponente(tipo,idComp,"","");
-            $(comp).appendTo("#"+idDiv);
-            $("#"+idComp).val(objeto.valText);
-        break;
-    }
 
-//     crearRegla(comp,idComp);
-   //Se agregan clases para cuando tenga que recuperar los datos.
-    if(objeto.obligatorio == "1"){
-        hacerComponenteObligatoria(idComp);
-    }
+    if(tiene_estructura == 1){
 
+        switch(tipo){
+            case "text":
+                //tipo,id,opciones,valor
+                comp = crearComponente(tipo,idComp,"","");
+                $(comp).appendTo("#"+idDiv);
+                $("#"+idComp).val(objeto.valText);
+            break;
+            case "combo":
+                comp= crearComponente(tipo,idComp,objeto,valor);
+                $(comp).appendTo("#"+idDiv);
+            break;
+            case "texta2":
+                compText=crearComponente("text",idComp,"","");
+                comp=crearComponente("texta","texta"+idComp,"readonly='readonly'","");
+                var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+idComp+")' src='[% themelang %]/images/sacar.png'>";
+                comp="<div style='float: left;padding-right:1%; padding-bottom: 1%;'>"+comp+"</div>";
+                compText=compText+" "+boton;
+                $(compText).appendTo("#"+idDiv);
+                $(comp).appendTo("#strComp"+idComp);
+                $("#texta"+idComp).val(objeto.valTextArea);
+            break;
+		    case "auto":
+                //tipo,id,opciones,valor
+                comp= crearComponente(tipo,idComp,"","");
+                $(comp).appendTo("#"+idDiv);
+			    _cearAutocompleteParaCamponente(objeto);
+			    //se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
+			    comp= crearComponente('hidden',objeto.idCompCliente + '_hidden','','');
+			    $(comp).appendTo("#"+idDiv);   
+            break;
+		    case "calendar":
+                //tipo,id,opciones,valor
+                comp= crearComponente(tipo,idComp,"","");
+                $(comp).appendTo("#"+idDiv);
+                $("#"+idComp).val(objeto.valText);
+			    $("#"+idComp).datepicker({ dateFormat: 'dd/mm/yy' });
+		    break;
+            case "anio":
+                //tipo,id,opciones,valor
+                comp= crearComponente(tipo,idComp,"","");
+                $(comp).appendTo("#"+idDiv);
+                $("#"+idComp).val(objeto.valText);
+            break;
+        }
+    
+    //     crearRegla(comp,idComp);
+    //Se agregan clases para cuando tenga que recuperar los datos.
+        if(objeto.obligatorio == "1"){
+            hacerComponenteObligatoria(idComp);
+        }
+
+    }
 }
 
 var RULES_OPTIONS = [];
@@ -1011,7 +1024,7 @@ function crearComponente(tipo,id,objeto,valor){
         break;
 		    case "calendar": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
         break;
-        case "anio": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
+            case "anio": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
         break;
     }
 
