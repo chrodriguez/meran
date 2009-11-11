@@ -18,10 +18,6 @@ __PACKAGE__->meta->setup(
         repeatable         => { type => 'integer', default => '0', not_null => 1 },
         mandatory          => { type => 'integer', default => '0', not_null => 1 },
         kohafield          => { type => 'character', length => 40 },
-        tab                => { type => 'integer' },
-        authorised_value   => { type => 'character', length => 13 },
-        thesaurus_category => { type => 'character', length => 10 },
-        value_builder      => { type => 'character', length => 80 },
     ],
 
     primary_key_columns => [ 'campo', 'subcampo' ],

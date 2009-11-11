@@ -72,20 +72,7 @@
 	
 	$(document).ready(function(){
 		mainmenu();
-        $('input[type=text]').tooltip({track: true,});
-        $('a').tooltip({showURL: false, track: true,});
-        $('li').tooltip({showURL: false, track: true,});
-        $('select option').tooltip({
-            track: true,
-            delay: 0,
-            showURL: false,
-            opacity: 1, 
-            fixPNG: true, 
-            showBody: " - ", 
-            extraClass: "pretty fancy", 
-            top: -15, 
-            left: 5 
-        }); 
+//         registrarTooltips();
 	});
 
 

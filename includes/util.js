@@ -288,3 +288,21 @@ function makeDataTable(id){
 function changePage(ini){
     objAH.changePage(ini);
 }
+
+function registrarTooltips(){
+        $('input[type=text]').tooltip({track: true,});
+        $('a').tooltip({showURL: false, track: true,});
+        $('li').tooltip({showURL: false, track: true,});
+        $('tr td').tooltip({showURL: false, track: true,});
+        $('select option').tooltip({
+            track: true,
+            delay: 0,
+            showURL: false,
+            opacity: 1, 
+            fixPNG: true, 
+            showBody: " - ", 
+            extraClass: "pretty fancy", 
+            top: -15, 
+            left: 5 
+        }); 
+}

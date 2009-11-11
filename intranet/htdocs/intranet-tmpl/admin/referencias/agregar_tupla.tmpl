@@ -1,12 +1,9 @@
 [% USE HTML %]
 
 <script type="text/javascript">
-var loaderPath= "";
       $(document).ready(function() {
-        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_default.gif"'+'>'
         makeToggle('datos_tabla_div','trigger',null,false);
         makeDataTable('#tablaResult');
-        zebraId('tablaResult');
         onEnter('search_tabla',obtenerTablaFiltrada);
         $('.editable').editable('/cgi-bin/koha/admin/referencias/referenciasDB.pl', { 
               type      : 'text',
@@ -16,21 +13,12 @@ var loaderPath= "";
               placeholder: EDITABLE_MSG,
               style   : 'display: inline',
               submitdata : {token: "[% token %]", edit: '1'},
-              indicator : loaderPath,
-
         });
       });
 </script>
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Tabla " | i18n %]: [% tabla %]</legend>
         <div class="search_tabla">
-                    [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Registro' | i18n %]",
-                                                            boton   => "boton_agregar",
-                                                            onClick => "agregarRegistro('[% tabla %]');",
-                                                            title   => "[% 'Agregar Registro' | i18n %]",
-                                ) ;
-                    [% END %]
 
             <fieldset class="center_fieldset">
                 <legend class="titulo_legend">[% "Filtrar por:" | i18n %]</legend>
@@ -46,11 +34,9 @@ var loaderPath= "";
                                                             title   => "[% 'Buscar' | i18n %]",
                                 ) ;
                     [% END %]
-                </ul>
             </fieldset>
         <div class="datos_tabla_div" id="datos_tabla_div">
-            <div class="contenedor_paginador">[% paginador %]</div>
-            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0>
+            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
                 <thead>
                     <tr class="titulo_tabla_resultado">
                         [% FOREACH campo IN campos %]

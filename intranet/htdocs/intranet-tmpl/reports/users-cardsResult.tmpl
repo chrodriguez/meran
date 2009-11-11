@@ -1,6 +1,7 @@
 <script type="text/javascript">
       $(document).ready(function() {
         makeToggle('datos_tabla_div','trigger',null,false);
+//         registrarTooltips();
       });
 </script>
 <fieldset class="resultados_busqueda">
@@ -31,7 +32,7 @@
                                 print C4::AR::Filtros::link_to( text =>     "[% socio.persona.getApeYNom %]",
                                                                 url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
                                                                 params =>   ["nro_socio=[% socio.getNro_socio %]"],
-                                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                                title =>    "[% 'Ver datos de ' | i18n %] [% socio.persona.getApeYNom %]"
                                                             ) ;
                             [% END %]
                         </td>

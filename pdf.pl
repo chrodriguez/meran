@@ -2,24 +2,24 @@
 use strict;
 use warnings;
 use PDF::API2;
-
+use Encode;
 use constant mm => 25.4 / 72;
 use constant in => 1 / 72;
 use constant pt => 1;
 
-my $pdf = PDF::API2->new;
+my $pdf = PDF::API2->new(-encode => 'latin1');
 
 
 my %font = (
   Helvetica => {
-      Bold   => $pdf->corefont( 'Helvetica-Bold',    -encode => 'utf8' ),
-      Roman  => $pdf->corefont( 'Helvetica',         -encode => 'utf8' ),
-      Italic => $pdf->corefont( 'Helvetica-Oblique', -encode => 'utf8' ),
+      Bold   => $pdf->corefont( 'Helvetica-Bold',    -encode => 'latin1' ),
+      Roman  => $pdf->corefont( 'Helvetica',         -encode => 'latin1' ),
+      Italic => $pdf->corefont( 'Helvetica-Oblique', -encode => 'latin1' ),
   },
   Times => {
-      Bold   => $pdf->corefont( 'Times-Bold',   -encode => 'utf8' ),
-      Roman  => $pdf->corefont( 'Times',        -encode => 'utf8' ),
-      Italic => $pdf->corefont( 'Times-Italic', -encode => 'utf8' ),
+      Bold   => $pdf->corefont( 'Times-Bold',   -encode => 'latin1' ),
+      Roman  => $pdf->corefont( 'Times',        -encode => 'latin1' ),
+      Italic => $pdf->corefont( 'Times-Italic', -encode => 'latin1' ),
   },
 );
 
@@ -48,6 +48,8 @@ $headline_text->fillcolor('black');
 
 $headline_text->translate( 95/mm, 131/mm );
 
-$headline_text->text_right('USING PDF::API2 maría');
+my $data = 'USING PDF::API2 maría';
+
+$headline_text->text_right(Encode::encode('latin1', $data));
 
 $pdf->saveas("new.pdf");

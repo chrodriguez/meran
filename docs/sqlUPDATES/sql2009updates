@@ -1238,7 +1238,7 @@ ALTER TABLE `usr_socio` CHANGE `credential_type` `credential_type` VARCHAR( 255 
 -- 10/11/09 se agrego el siguiente campo para poder agrupar las configuraciones del catalogo
 ALTER TABLE `cat_estructura_catalogacion` ADD `grupo` INT( 11 ) NOT NULL AFTER `rules` ;
 -- 11/11/09
-ALTER TABLE `pref_estructura_subcampo_marc` DROP `value_builder`  
+ALTER TABLE `pref_estructura_subcampo_marc` DROP `value_builder`;
 ALTER TABLE `pref_estructura_subcampo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
-CHANGE `tagsubfield` `subcampo` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL 
- ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL  
+  CHANGE `tagsubfield` `subcampo` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;

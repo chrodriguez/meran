@@ -142,7 +142,7 @@ sub availPdfGenerator{
 }
 
 #Genera el PDF de las estadisticas que se generan en la pagina estadisticas.pl - Damian
-sub estadisticasPdfGenerator(){
+sub estadisticasPdfGenerator{
     my ($msg,@results)=@_;
     my $pdf=newPdf();
     my $pos;
@@ -170,7 +170,7 @@ sub estadisticasPdfGenerator(){
 }
 
 #Miguel 31-05/07 - Genero el PDF de Historico de Prestamos
-sub hitoricoPrestamosPdfGenerator(){
+sub hitoricoPrestamosPdfGenerator{
     my ($msg,@results)=@_;
     my $pdf=newPdf();
     my $pos;
@@ -194,7 +194,7 @@ sub hitoricoPrestamosPdfGenerator(){
 
 #Damian - 22/05/2007
 #Funcion generica que sirve para imprimir las lineas se usa en todos los generadores de pdf
-sub imprimirLinea(){
+sub imprimirLinea{
     my ($pdf,$pos,$msg,$msg2,$line,$page)=@_;
     my $pagewidth;
     my $pageheight; 
@@ -223,7 +223,7 @@ sub imprimirLinea(){
 
 #Damian - 22/05/2007
 #Funcion generica que sirve para imprimir las lineas se usa en todos los generadores de pdf
-sub imprimirLinea2(){
+sub imprimirLinea2{
     my ($pdf, $text,$line,$pos)=@_;
 
     if (length($text) < 100){
@@ -263,7 +263,7 @@ sub imprimirLinea2(){
 
 #Para imprimir el archivo con el nombre. Funcion generica que se puede usar en todos las funciones 
 #que generan pdf - Damian - 23/05/2007
-sub imprimirFinal(){
+sub imprimirFinal{
     my($pdf,$tmpFileName)=@_;
     print "Content-type: application/pdf\n";
         print "Content-Disposition: attachment; filename=\"$tmpFileName\"\n\n";
@@ -454,7 +454,7 @@ sub libreDeuda{
 prestInterBiblio
 Genera y muestra la ventana para imprimir el documento de prestamos interbibliotecarios.
 =cut
-sub prestInterBiblio(){
+sub prestInterBiblio{
 	my ($nro_socio, $socio, $biblioDestino, $director, $datos)=@_;
 
     my $tmpFileName= "prestInterBiblio".$nro_socio.".pdf";
@@ -507,7 +507,7 @@ sub prestInterBiblio(){
 inicializarPDF
 Crea un objeto pdf, lo devuelve, junto con la longitud de ancho ($pagewidth) y largo ($pageheight) que va a tener el documento.
 =cut
-sub inicializarPDF(){
+sub inicializarPDF{
     my $pdf=newPdf();
     $pdf->newpage(1);
     $pdf->openpage(1);
@@ -564,7 +564,7 @@ Imprime el contenido de del documento.
     $tamRenglon, tama�o que va a tener el renglon. Espacio entre texto por fila;
     $parrafo, referencia al arreglo que contiene los string a imprimir en el pdf;
 =cut
-sub imprimirContenido(){
+sub imprimirContenido{
     my ($pdf,$x,$y,$pageheight,$tamRenglon,$parrafo)=@_;
     for(my $i=0; $i < scalar(@$parrafo); $i++){
         $pdf->addRawText($parrafo->[$i], $x,$pageheight - $y);
@@ -582,7 +582,7 @@ Imprime la parte donde se pide la firma y aclaracion.
         imprimir;
     $pageheight, largo del documento;
 =cut
-sub imprimirFirma(){
+sub imprimirFirma{
     my ($pdf,$y,$pageheight)=@_;
     my $linea="................................";
     $y=$y+30;
@@ -604,7 +604,7 @@ Imprime una tabla de tres columnas y n filas, dependiendo del parametro que lleg
     $pageheight, largo del documento;
     $cantFila: cantidad de filas a generar en la tabla;
 =cut
-sub imprimirTabla(){
+sub imprimirTabla{
     my ($pdf,$y,$pageheight,$cantFila,$datos)=@_;
     $pdf->setFont("Verdana-Bold");
     $pdf->setSize(12);
@@ -641,7 +641,7 @@ Imprime el pie de pagina del documento con la info de la biblioteca.
     $pageheight, largo del documento;
     $biblio, referencia a una hash con los datos de la biblioteca.
 =cut
-sub imprimirPiePag(){
+sub imprimirPiePag{
     my ($pdf,$y,$pageheight,$biblio)=@_;
     my @texto;
     $texto[0]="Biblioteca: ".$biblio->{'branchname'};
