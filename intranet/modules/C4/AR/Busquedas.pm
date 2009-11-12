@@ -1332,7 +1332,7 @@ sub index_update{
 sub busquedaCombinada_newTemp{
     my ($string,$session,$obj_for_log) = @_;
 
-#     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string);
+    my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string);
   
 
     use Sphinx::Search;
@@ -1341,11 +1341,9 @@ sub busquedaCombinada_newTemp{
     my $query = '';
 
     #se arma el query string
-#     foreach $string (@searchstring_array){
-#       $query .=  " ".$string;
-#     }
-
-    $query = $string;
+    foreach $string (@searchstring_array){
+      $query .=  " ".$string."*";
+    }
 
     C4::AR::Debug::debug("query string ".$query);
     my $tipo = $obj_for_log->{'match_mode'}||'SPH_MATCH_ANY';
@@ -1357,7 +1355,7 @@ sub busquedaCombinada_newTemp{
                                     ->SetSortMode(SPH_SORT_RELEVANCE)
 #                                     ->SetSelect("*")
                                     ->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'})
-                                    ->Query($query.'*');
+                                    ->Query($query);
 
 
     my @id1_array;

@@ -15,16 +15,14 @@ $(document).ready(function() {
 
 </script>
 <fieldset class="main">
-<legend><strong>[% "Cat&aacute;logo:" | i18n %]</strong></legend>
+    <legend class="titulo_legend"><strong>[% "Cat&aacute;logo:" | i18n %]</strong></legend>
 	<ul>
     <li class="item" >
-
         [% PERL %]
-            print C4::AR::Filtros::getComboMatchMode() ;
+            print C4::AR::Filtros::getComboMatchMode();
         [% END %]
     </li>
     <li class="item" >
-			
         <label for="keyword">
             [% "B&uacute;squeda combinada" | i18n %]
         </label>
@@ -39,7 +37,6 @@ $(document).ready(function() {
                              title   => "[% 'Buscar en el cat&aacute;logo' | i18n %]",
                              ) ;
           [% END %]
-
   	</li>
     <li class="item">
         [% PERL %]
@@ -52,7 +49,7 @@ $(document).ready(function() {
     </ul>
 </fieldset>
 <fieldset class="main">
-<legend><strong>[% "Usuarios:" | i18n %]</strong></legend>
+<legend class="titulo_legend"><strong>[% "Usuarios:" | i18n %]</strong></legend>
 	<ul>
         <li class="item" >
             <label for="socio">
@@ -74,39 +71,39 @@ $(document).ready(function() {
     </ul>
 </fieldset>
 <fieldset class="main">
-<legend><strong>[% "Circulaci&oacute;n:" | i18n %]</strong></legend>
-<ul>
-<li class="item">
-            [% PERL %]
-            print C4::AR::Filtros::link_to( 
-                   text =>     "[% 'Pr&eacute;stamos' | i18n %]",
-                   url =>      "/cgi-bin/koha/circ/prestamos.pl", 
-                   title =>    "[% 'Pr&eacute;stamos' | i18n %]"
-                   );
-            [% END %]
-</li>
-<li class="item">
-            [% PERL %]
-            print C4::AR::Filtros::link_to( text =>     "[% 'Devoluciones y Renovaciones' | i18n %]",
-                    url =>      "/cgi-bin/koha/circ/devoluciones.pl", 
-                    title =>    "[% 'Devoluciones y Renovaciones' | i18n %]"
-                    ) ;
-            [% END %]
-</li>
-</ul>
+    <legend class="titulo_legend"><strong>[% "Circulaci&oacute;n:" | i18n %]</strong></legend>
+    <ul>
+        <li class="item">
+                    [% PERL %]
+                    print C4::AR::Filtros::link_to( 
+                          text =>     "[% 'Pr&eacute;stamos' | i18n %]",
+                          url =>      "/cgi-bin/koha/circ/prestamos.pl", 
+                          title =>    "[% 'Pr&eacute;stamos' | i18n %]"
+                          );
+                    [% END %]
+        </li>
+        <li class="item">
+                    [% PERL %]
+                    print C4::AR::Filtros::link_to( text =>     "[% 'Devoluciones y Renovaciones' | i18n %]",
+                            url =>      "/cgi-bin/koha/circ/devoluciones.pl", 
+                            title =>    "[% 'Devoluciones y Renovaciones' | i18n %]"
+                            ) ;
+                    [% END %]
+        </li>
+    </ul>
 </fieldset>
 <fieldset class="main">
     <legend class="titulo_legend">[% "Personal:" | i18n %]</legend>
     <ul>
-    <li class="item">
-                [% PERL %]
-                print C4::AR::Filtros::link_to( text =>     "[% 'Mis datos' | i18n %]",
-                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
-                                                title =>    "[% 'Reportes' | i18n %]",
-                                                params =>   ["nro_socio=[% nro_socio %]"],    
-                        ) ;
-                [% END %]
-    </li>
+        <li class="item">
+                    [% PERL %]
+                    print C4::AR::Filtros::link_to( text =>     "[% 'Mis datos' | i18n %]",
+                                                    url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                    title =>    "[% 'Reportes' | i18n %]",
+                                                    params =>   ["nro_socio=[% nro_socio %]"],
+                            );
+                    [% END %]
+        </li>
     </ul>
 </fieldset>
 <div id="resultBusqueda"></div>

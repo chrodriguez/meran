@@ -603,9 +603,9 @@
                 <ul>
                     <li>
                                 [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "[% 'Reportes Gene&eacute;ricos' | i18n %]",
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Reportes Gen&eacute;ricos' | i18n %]",
                                                                     url =>      "#", 
-                                                                    title =>    "[% 'Reportes Gene&eacute;ricos' | i18n %]"
+                                                                    title =>    "[% 'Reportes Gen&eacute;ricos' | i18n %]"
                                                                 ) ;
                                 [% END %]
                     </li>

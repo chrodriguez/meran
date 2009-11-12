@@ -99,8 +99,10 @@
                 <tbody>
                     [% IF related_referers %]
                         [% FOREACH related IN related_referers %]
-                            <tr  onClick="mostrarReferencias('[% related.getAlias %]','[% related.getPkValue %]')">
-                                [% related.printAsTableElement %]
+                            <tr>
+                                <span onClick="mostrarReferencias('[% related.getAlias %]','[% related.getPkValue %]')">
+                                    [% related.printAsTableElement %]
+                                </span>
                                 <td>
                                     [% PERL %]
                                         print C4::AR::Filtros::to_Icon(  
