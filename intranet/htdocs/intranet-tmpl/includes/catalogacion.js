@@ -149,6 +149,19 @@ function _getIdComponente(campo, subcampo){
 	return 0;
 }
 
+/*
+    Esta funcion busca un objeto en el arreglo de objetos de configuracion MARC, sgeun el idCompCliente
+*/
+function _getMARC_conf_ById(id){
+    for(var i=0;i<COMPONENTES_ARRAY.length;i++){
+        if(COMPONENTES_ARRAY[i].idCompCliente == id){
+            return COMPONENTES_ARRAY[i];
+        }
+    }
+
+    return 0;
+}
+
 function _getBarcodes(){
 	var barcodes_string = $('#'+_getIdComponente('995','f')).val();
 	//inicializo el arreglo
@@ -290,8 +303,8 @@ function updateMostrarEstructuraDelNivel1(responseText){
     mostrarDataNivel();
     scrollTo('nivel1Tabla');
     
-	  //asigno el handler para el validador
-	  validateForm('formNivel1',guardarModificarDocumentoN1);
+	//asigno el handler para el validador
+	validateForm('formNivel1',guardarModificarDocumentoN1);
     addRules();
 }
 
@@ -778,8 +791,6 @@ function procesarInfoJson(json){
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
         COMPONENTES_ARRAY[i]= objetos[i];
         procesarObjeto(objetos[i]);
-//         create_rules_object(COMPONENTES_ARRAY[i].rules);
-//             $('#'+COMPONENTES_ARRAY[i].idCompCliente).rules("add", RULES_OPTIONS);
     }
 	//hago foco en la primer componente
 	_setFoco();
@@ -821,13 +832,13 @@ function procesarObjeto(objeto){
     }
 
     if(objeto.tiene_estructura == '0'){ 
-        libtext = libtext + "<div class='divComponente'><input type='text' value='NO TIENE ESTRUCTURA' disabled></div>";
+        libtext = libtext + "<div class='divComponente'><input type='text' value='" + objeto.dato + " (NO TIENE ESTRUCTURA)' size='55' disabled></div>";
         tiene_estructura = 0;
     }
 
     var divLabel= crearDivLabel(libtext, idComp);
 
-    strComp="<li class='sub_item'> "+divLabel+divComp+"</li>";
+    strComp="<li id='LI" + objeto.idCompCliente + "' class='sub_item'> "+divLabel+divComp+"</li>";
     $(strComp).appendTo("#"+getDivDelNivel());
 
     if(tiene_estructura == 1){
@@ -835,7 +846,7 @@ function procesarObjeto(objeto){
         switch(tipo){
             case "text":
                 //tipo,id,opciones,valor
-                comp = crearComponente(tipo,idComp,"","");
+                comp = crearComponente(tipo,idComp,objeto,"");
                 $(comp).appendTo("#"+idDiv);
                 $("#"+idComp).val(objeto.valText);
             break;
@@ -844,7 +855,7 @@ function procesarObjeto(objeto){
                 $(comp).appendTo("#"+idDiv);
             break;
             case "texta2":
-                compText=crearComponente("text",idComp,"","");
+                compText=crearComponente("text",idComp,objeto,"");
                 comp=crearComponente("texta","texta"+idComp,"readonly='readonly'","");
                 var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+idComp+")' src='[% themelang %]/images/sacar.png'>";
                 comp="<div style='float: left;padding-right:1%; padding-bottom: 1%;'>"+comp+"</div>";
@@ -855,28 +866,31 @@ function procesarObjeto(objeto){
             break;
 		    case "auto":
                 //tipo,id,opciones,valor
-                comp= crearComponente(tipo,idComp,"","");
+                comp= crearComponente(tipo,idComp,objeto,"");
                 $(comp).appendTo("#"+idDiv);
 			    _cearAutocompleteParaCamponente(objeto);
 			    //se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
-			    comp= crearComponente('hidden',objeto.idCompCliente + '_hidden','','');
+			    comp= crearComponente('hidden',objeto.idCompCliente + '_hidden',objeto,'');
 			    $(comp).appendTo("#"+idDiv);   
             break;
 		    case "calendar":
                 //tipo,id,opciones,valor
-                comp= crearComponente(tipo,idComp,"","");
+                comp= crearComponente(tipo,idComp,objeto,"");
                 $(comp).appendTo("#"+idDiv);
                 $("#"+idComp).val(objeto.valText);
 			    $("#"+idComp).datepicker({ dateFormat: 'dd/mm/yy' });
 		    break;
             case "anio":
                 //tipo,id,opciones,valor
-                comp= crearComponente(tipo,idComp,"","");
+                comp= crearComponente(tipo,idComp,objeto,"");
                 $(comp).appendTo("#"+idDiv);
                 $("#"+idComp).val(objeto.valText);
             break;
         }
     
+
+// crearBotonAgregarRepetible(objeto, idComp);
+
     //     crearRegla(comp,idComp);
     //Se agregan clases para cuando tenga que recuperar los datos.
         if(objeto.obligatorio == "1"){
@@ -986,6 +1000,58 @@ function _cearAutocompleteParaCamponente(o){
 	}
 }
 
+
+function marc_conf(){
+    this.liblibrarian = '';
+    this.itemtype = '';
+    this.campo =  '';
+    this.subcampo = '';
+    this.dato =  '';
+    this.nivel = '';
+    this.rules =  '';
+    this.tipo = '';
+    this.intranet_habilitado =  '';
+    this.tiene_estructura = '';
+    this.visible = '';
+    this.Id_rep = '';
+    this.repetible = '';
+    this.referencia = '';
+    this.obligatorio = '';
+    this.datoReferencia = '';
+    this.idCompCliente =  '';
+}
+
+
+function generarIdComponente(){
+    return '789';
+}
+
+// function clone(id){
+function clone(id){
+
+    var t = $('#LI'+id).clone();
+// TODO falta generar un ID de componente unico
+    t.attr('id', 'miguel');
+//luego agregar esta estructura en el arreglo de componentes para q se pueda enviar al servidor
+    t.insertAfter($('#LI'+id)); 
+//     var objeto = crearObjeto(objeto)
+//     COMPONENTES_ARRAY.push(objeto);
+    var obj_temp = _getMARC_conf_ById(id);
+    obj_temp.idCompCliente = generarIdComponente();
+    COMPONENTES_ARRAY.push(obj_temp);
+}
+
+function crearBotonAgregarRepetible(obj){
+    if(obj.repetible == '1'){
+//         return "<input type='button' value='+' size='10' onclick=clone('"+ obj.idCompCliente +"')>";
+//         $('#'+id).before("<input id='BOTON_ADD_" + id +"' type='button' value='+' size='10'>");
+//         $('#BOTON_ADD_'+id).click(function (obj, id){clone(obj, id);})
+        return "<input type='button' value='+' size='10' onclick=clone('"+ obj.idCompCliente +"')>";
+    }else{  
+        return "";
+    }
+}
+
 /*
  * crearComponente
  * crea el string HTML del componente correspondiente al parametro tipo.
@@ -999,32 +1065,44 @@ function crearComponente(tipo,id,objeto,valor){
 	TAB_INDEX++;
 // TODO queda pendiente q los inputs se adapten a la resolucion de la pantalla
     switch(tipo){
-        case "text": comp="<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='55' tabindex="+TAB_INDEX+" name='"+id+"'>";     
+        case    "text": comp = "<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='55' tabindex="+TAB_INDEX+" name='"+id+"'>";     
+//                 crearBotonAgregarRepetible(objeto, id);
+                comp = comp + crearBotonAgregarRepetible(objeto);
         break;
-        case "combo": comp="<select id='"+id+"' name='"+id+"' tabindex="+TAB_INDEX+">\n<option value=''>Elegir opci&oacute;n</option>\n";
+        case "combo": comp = "<select id='"+id+"' name='"+id+"' tabindex="+TAB_INDEX+">\n<option value=''>Elegir opci&oacute;n</option>\n";
             var op="";
             var def="";
-            var opciones= objeto.opciones;
+            var opciones = objeto.opciones;
 
             for(var i=0; i< opciones.length; i++){
                 if(valor == opciones[i].clave){
                     def=" selected='selected' ";
                 }
-                op=op+"<option value='"+opciones[i].clave+ "'" + def +"'>"+opciones[i].valor+"</option>\n";
-                def="";
+                op = op+"<option value='"+opciones[i].clave+ "'" + def +"'>"+opciones[i].valor+"</option>\n";
+                def = "";
             }
 
-            comp=comp+op+"</select>";
+            comp = comp + op + "</select>";
+            comp = comp + crearBotonAgregarRepetible(objeto);
+// crearBotonAgregarRepetible(objeto);
         break;
-        case "texta": comp="<textarea id='"+id+"' name='"+id+"'" + opciones +" rows='4' tabindex="+TAB_INDEX+">"+valor+"</textarea>";
+        case    "texta": comp = "<textarea id='"+id+"' name='"+id+"'" + opciones +" rows='4' tabindex="+TAB_INDEX+">"+valor+"</textarea>";
+                comp = comp + crearBotonAgregarRepetible(objeto);
+// crearBotonAgregarRepetible(objeto);
         break;
-		    case "auto": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='55' tabindex="+TAB_INDEX+">";
+		case    "auto": comp = "<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='55' tabindex="+TAB_INDEX+">";
+                comp = comp + crearBotonAgregarRepetible(objeto);
+// crearBotonAgregarRepetible(objeto);
         break;
-		    case "hidden": comp="<input type='hidden' id='"+id+"' name='"+id+"' value='"+valor+"'>";
+		case    "hidden": comp = "<input type='hidden' id='"+id+"' name='"+id+"' value='"+valor+"'>";
         break;
-		    case "calendar": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
+		case    "calendar": comp = "<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
+                comp = comp + crearBotonAgregarRepetible(objeto);
+// crearBotonAgregarRepetible(objeto);
         break;
-            case "anio": comp="<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
+        case    "anio": comp = "<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
+                comp = comp + crearBotonAgregarRepetible(objeto);
+// crearBotonAgregarRepetible(objeto);
         break;
     }
 

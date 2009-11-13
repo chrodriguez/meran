@@ -1244,10 +1244,9 @@ ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHA
 ALTER TABLE `pref_estructura_subcampo_marc` DROP `tab`, DROP `authorised_value`, DROP `thesaurus_category`
 CHANGE `tagsubfield` `subcampo` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
-ALTER TABLE `cat_estructura_catalogacion`DROP `repetible`;
  ALTER TABLE `pref_estructura_subcampo_marc` CHANGE `repeatable` `repetible` TINYINT( 4 ) NOT NULL DEFAULT '0';
 ALTER TABLE `pref_estructura_campo_marc` DROP `authorised_value`;
  ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
- ALTER TABLE `pref_estructura_subcampo_marc` DROP `tab`, DROP `authorised_value`, DROP `thesaurus_category`,
-  CHANGE `tagsubfield` `subcampo` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ ALTER TABLE `pref_estructura_subcampo_marc` CHANGE `tagsubfield` `subcampo` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+

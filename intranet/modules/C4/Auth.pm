@@ -801,6 +801,7 @@ C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID
 =cut
 sub _session_expired {
     my ($session) = @_;
+    C4::AR::Debug::debug("dump desde _session_expired ".$session->dump());
 
 #     C4::AR::Debug::debug("_session_expired=>  (session->atime + session->etime): ".($session->atime + $session->etime));
 #     C4::AR::Debug::debug("_session_expired=>  time(): ".time());
@@ -1130,6 +1131,7 @@ sub inicializarAuth{
 
     my ($session) = CGI::Session->load();
     $session->flush();
+C4::AR::Debug::debug("dump desde inicializarAuth ".$session->dump());
 #     if ((!C4::AR::Utilidades::validateString($session->param('userid'))) || _session_expired($session)){
         C4::AR::Debug::debug("inicializarAuth => ".$session->param('codMsg'));
         my $msjCode = getMsgCode();
@@ -1160,7 +1162,7 @@ sub inicializarAuth{
         C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number, $params{'token'});
         #se pasa el RANDOM_NUMBER al cliente, $t_params es una REFERENCIA
         $t_params->{'RANDOM_NUMBER'}= $random_number;
-        $session->flush();
+#         $session->flush();
         C4::AR::Debug::debug("USER ID :".$session->param('userid'));
         return ($session);
 #     }else{
@@ -1274,6 +1276,9 @@ sub _generarSession {
     }else{
       $session->expire(0);
     }
+
+    C4::AR::Debug::debug("dump desde _generarSession ".$session->dump());
+
 	return $session;
 }
 

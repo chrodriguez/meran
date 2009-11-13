@@ -495,6 +495,7 @@ sub _setDatos_de_estructura {
     $hash_ref->{'idCompCliente'} =          $cat->getIdCompCliente;
     $hash_ref->{'intranet_habilitado'} =    $cat->getIntranet_habilitado;
     $hash_ref->{'rules'} =                  $cat->getRules;    
+    $hash_ref->{'fijo'} =                   $cat->getFijo;  
 
     C4::AR::Debug::debug("");
     if($cat->estructuraBase->getRepetible){    
@@ -539,8 +540,8 @@ sub _setDatos_de_estructura2 {
 
     $hash_ref->{'campo'} =                  $cat->getCampo;
     $hash_ref->{'subcampo'} =               $cat->getSubcampo;
-    $hash_ref->{'dato'} =                   $datos_hash_ref->{'dato'};
-    $hash_ref->{'datoReferencia'}=          $datos_hash_ref->{'datoReferencia'};
+#     $hash_ref->{'dato'} =                   $datos_hash_ref->{'dato'};
+#     $hash_ref->{'datoReferencia'}=          $datos_hash_ref->{'datoReferencia'};
     $hash_ref->{'Id_rep'} =                 $datos_hash_ref->{'Id_rep'};
     $hash_ref->{'nivel'} =                  '';#$cat->getNivel;
     $hash_ref->{'visible'} =                '';#$cat->getVisible;
@@ -625,7 +626,6 @@ sub getEstructuraConDatos{
     C4::AR::Debug::debug("getEstructuraConDatos => ======================================================================");
     my $nivel = $params->{'nivel'};
 
-getDatosFromNivel($params);
     my $itemType = $params->{'id_tipo_doc'};
     #obtengo la estructura_catalogacion configurada solo de los campos REPETIBLES
 # FIXME no le esta llegano el itemtype
@@ -700,41 +700,32 @@ sub getDatosRepetibleFromNivel{
     my $nivel1_array_ref;
 
    if ($nivel == 1){
-    C4::AR::Debug::debug("getRepetible => NIVEL 1");
+    C4::AR::Debug::debug("getDatosRepetibleFromNivel => NIVEL 1");
          $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
-                                                query => [ 
-                                                            'cat_nivel1.id1' => { eq => $params->{'id'} },
-#                                                             'campo' => { eq => $params->{'campo'} },
-#                                                             'subcampo' => { eq => $params->{'subcampo'} },        
-                                                    ], 
-                                                with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor'], #LEFT JOIN
-#                                                 require_objects => [ 'CEC' ] #INNER JOIN
+                                                    query => [ 
+                                                                'cat_nivel1.id1' => { eq => $params->{'id'} },
+                                                        ], 
+                                                    with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor'], #LEFT JOIN
 
                             );
     
    }
    elsif ($nivel == 2){
-    C4::AR::Debug::debug("getRepetible => NIVEL 2");
+    C4::AR::Debug::debug("getDatosRepetibleFromNivel => NIVEL 2");
          $catalogaciones_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(   
                                                     query => [ 
                                                                 id2 => { eq => $params->{'id'} },
-#                                                                 'campo' => { eq => $params->{'campo'} },
-#                                                                 'subcampo' => { eq => $params->{'subcampo'} },   
                                                             ],
-#                                                     require_objects => [ 'CEC' ],#INNER JOIN
                                                     with_objects => [ 'cat_nivel2' ], #LEFT JOIN
                                 );
    }
    else{
-    C4::AR::Debug::debug("getRepetible => NIVEL 3");
+    C4::AR::Debug::debug("getDatosRepetibleFromNivel => NIVEL 3");
          $catalogaciones_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
                                                     query => [ 
                                                                 id3 => { eq => $params->{'id3'} },
-#                                                                 'campo' => { eq => $params->{'campo'} },
-#                                                                 'subcampo' => { eq => $params->{'subcampo'} },   
                                                         ],
-#                                                         require_objects => [ 'CEC' ], #INNER JOIN  
-                                                        with_objects => [ 'cat_nivel3' ], #LEFT JOIN
+                                                     with_objects => [ 'cat_nivel3' ], #LEFT JOIN
                                 );
    }
 
@@ -746,39 +737,43 @@ sub getDatosRepetibleFromNivel{
 sub getDatosFromNivel{
     my ($params) = @_;
 
-    C4::AR::Debug::debug("getEstructuraConDatos => ======================================================================");
-    my $nivel = $params->{'nivel'};
-    my $itemType = $params->{'id_tipo_doc'};
-    #obtengo la estructura_catalogacion configurada solo de los campos REPETIBLES
-# FIXME no le esta llegano el itemtype
-    C4::AR::Debug::debug("getEstructuraConDatos => tipo de documento: ".$itemType);
+    C4::AR::Debug::debug("getDatosFromNivel => ======================================================================");
+    my $nivel       = $params->{'nivel'};
+    my $itemType    = $params->{'id_tipo_doc'};
+
+    C4::AR::Debug::debug("getDatosFromNivel => tipo de documento: ".$itemType);
+    #obtengo los datos de alguno de los niveles SOLO REPETIBLES, cat_nivel1_repetible, cat_nivel2_repetible o cat_nivel3_repetible
     my ($cant, $catalogaciones_array_ref_objects) = getDatosRepetibleFromNivel($params);
-    C4::AR::Debug::debug("getEstructuraConDatos => son REPETIBLES cant: ".$cant);
 
     my @result;
     foreach my $c  (@$catalogaciones_array_ref_objects){
 
         C4::AR::Debug::debug("getDatosFromNivel => campo, subcampo, dato => ".$c->getCampo.", ".$c->getSubcampo.": ".$c->getDato);
         my %hash_temp;
-        #verifico si existe la estructura para el campo subcampo que se va a intentar mostrar, sino existe se lo imprime
+        #verifico si existe la estructura para el campo subcampo que se va a intentar mostrar, si no existe se lo imprime
         my $estructura = _getEstructuraFromCampoSubCampo( $c->getCampo, $c->getSubcampo );
         if($estructura){
 
-            $hash_temp{'tiene_estructura'} = '1';
-            $hash_temp{'dato'} = $c->getDato;
-            $hash_temp{'datoReferencia'} = $c->getDato;
+            $hash_temp{'tiene_estructura'}  = '1';
+            $hash_temp{'dato'}              = $c->getDato;
+            $hash_temp{'datoReferencia'}    = $c->getDato;
     
             _setDatos_de_estructura($estructura, \%hash_temp, $c);
         }else{      
         #no tiene estructura, se imprime
             my $estructura = &C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo( $c->getCampo, $c->getSubcampo );
-        C4::AR::Debug::debug("getDatosFromNivel => NO EXISTE ESTRUCTURA PARA ");
-        C4::AR::Debug::debug("getDatosFromNivel => campo, subcampo, dato => ".$c->getCampo.", ".$c->getSubcampo.": ".$c->getDato);
-        C4::AR::Debug::debug("getDatosFromNivel => NO EXISTE ESTRUCTURA PARA Liblibrarian: ".$estructura->getLiblibrarian);    
+            C4::AR::Debug::debug("getDatosFromNivel => NO EXISTE ESTRUCTURA PARA ");
+            C4::AR::Debug::debug("getDatosFromNivel => campo, subcampo, dato => ".$c->getCampo.", ".$c->getSubcampo.": ".$c->getDato);
+            C4::AR::Debug::debug("getDatosFromNivel => NO EXISTE ESTRUCTURA PARA Liblibrarian: ".$estructura->getLiblibrarian);    
 
-            $hash_temp{'tiene_estructura'} = '0';
-            $hash_temp{'dato'} = $c->getCampo.", ".$c->getSubcampo.": ".$c->getDato;
-            $hash_temp{'datoReferencia'} = '';
+            $hash_temp{'tiene_estructura'}  = '0';
+            my $dato = $c->getDato;
+            if($c->getDato eq ''){
+                $dato = " SIN DATO ";
+            }
+            $hash_temp{'dato'}              = $c->getCampo.", ".$c->getSubcampo.": ".$dato;
+            $hash_temp{'datoReferencia'}    = '';
+
             _setDatos_de_estructura2($estructura, \%hash_temp, $c);
         }
     
@@ -789,7 +784,7 @@ sub getDatosFromNivel{
 
 
     #obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
-    my @resultEstYDatos= _getEstructuraYDatosDeNivelNoRepetible($params);
+    my @resultEstYDatos = _getEstructuraYDatosDeNivelNoRepetible($params);
     push(@resultEstYDatos,@result);
 
     return (scalar(@resultEstYDatos), \@resultEstYDatos);
@@ -802,20 +797,20 @@ Esta funcion retorna la estructura de catalogacion con los datos de un Nivel (RE
 Ademas mapea las campos fijos de nivel 1, 2 y 3 a MARC
 =cut
 sub _getEstructuraYDatosDeNivelNoRepetible{
-	my ($params)=@_;
+	my ($params) = @_;
 
 	my @result;
 	my $nivel;
 	if( $params->{'nivel'} eq '1'){
-		$nivel= C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
+		$nivel = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
         C4::AR::Debug::debug("_getEstructuraYDatosDeNivelNoRepetible=>  getNivel1FromId1\n");
 	}
 	elsif( $params->{'nivel'} eq '2'){
-		$nivel= C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
+		$nivel = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
         C4::AR::Debug::debug("_getEstructuraYDatosDeNivelNoRepetible=>  getNivel2FromId2\n");
 	}
 	elsif( $params->{'nivel'} eq '3'){
-		$nivel= C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
+		$nivel = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
         C4::AR::Debug::debug("_getEstructuraYDatosDeNivelNoRepetible=>  getNivel3FromId3");
 	}
 

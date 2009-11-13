@@ -71,7 +71,7 @@ __PACKAGE__->meta->setup(
     ],
 );
 
-
+=item
 sub agregar{
 
     my ($self)=shift;
@@ -137,6 +137,72 @@ sub agregar{
 
     return $self;
 }
+=cut
+
+sub agregar{
+
+    my ($self)=shift;
+    use C4::Modelo::CatNivel2Repetible;
+
+    my ($data_hash)=@_;
+
+    my @arrayNivel2;
+    my @arrayNivel2Repetibles;
+
+    my $infoArrayNivel2 = $data_hash->{'infoArrayNivel2'};
+    #se guardan los datos de Nivel2
+    foreach my $infoNivel2 (@$infoArrayNivel2){
+
+#         if($infoNivel2->{'repetible'}){
+        if(($infoNivel2->{'fijo'} ne '1')|| !defined $infoNivel2->{'fijo'}){
+            push(@arrayNivel2Repetibles, $infoNivel2);
+        }else{
+            push(@arrayNivel2, $infoNivel2);
+        }
+    }
+    
+    #se guardan los datos de Nivel2
+    foreach my $infoNivel2 (@arrayNivel2){  
+        $self->setDato($infoNivel2);
+    } #END foreach my $infoNivel2 (@arrayNivel2)
+
+    $self->setId1($data_hash->{'id1'});
+    $self->save();
+
+    my $id2 = $self->getId2;
+
+    #Se guradan los datos en Nivel 2 repetibles
+    foreach my $infoNivel2 (@arrayNivel2Repetibles){
+        $infoNivel2->{'id2'} = $id2;
+            
+        my $nivel2Repetible;
+        C4::AR::Debug::debug("CatNivel2 => campo, subcampo: ".$infoNivel2->{'campo'}.", ".$infoNivel2->{'subcampo'});
+
+        if ( $infoNivel2->{'Id_rep'} != 0 ){
+            C4::AR::Debug::debug("CatNivel2 => agregar => Se va a modificar CatNivel2, Id_rep: ". $infoNivel2->{'Id_rep'});
+            $nivel2Repetible = C4::AR::Nivel2::getNivel2RepetibleFromId2Repetible($infoNivel2->{'Id_rep'},$self->db);
+        }else{
+            C4::AR::Debug::debug("CatNivel2 => agregar => No existe el REPETIBLE se crea uno");
+            $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
+        }
+
+        $nivel2Repetible->setId2($infoNivel2->{'id2'});
+        $nivel2Repetible->setCampo($infoNivel2->{'campo'});
+        $nivel2Repetible->setSubcampo($infoNivel2->{'subcampo'});
+
+        if($infoNivel2->{'referencia'}){
+            C4::AR::Debug::debug("CatNivel2 => REPETIBLE con REFERENCIA: ".$infoNivel2->{'datoReferencia'});
+            $nivel2Repetible->dato($infoNivel2->{'datoReferencia'});
+        }else{
+            C4::AR::Debug::debug("CatNivel2 => REPETIBLE sin REFERENCIA: ".$infoNivel2->{'dato'});
+            $nivel2Repetible->dato($infoNivel2->{'dato'});
+        }
+
+        $nivel2Repetible->save(); 
+    }
+
+    return $self;
+}
 
 sub eliminar{
 
@@ -175,7 +241,7 @@ sub eliminar{
 
 sub setDato{
 	my ($self) = shift;
-	my ($data_hash)=@_;
+	my ($data_hash) = @_;
 
 	 if( ($data_hash->{'campo'} eq '910')&&($data_hash->{'subcampo'} eq 'a') ){
 	#tipo de documento
