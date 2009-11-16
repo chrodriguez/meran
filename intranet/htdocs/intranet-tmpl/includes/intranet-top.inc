@@ -7,6 +7,21 @@
     imagesForJS = '[% temas %]/[% tema %]/imagenes';
 </script>
 
+<head>
+[% IF page_sub_title %]
+    <title>Meran::UNLP::[% page_sub_title %]</title>
+[% ELSE %]
+    <title>Meran::UNLP</title>
+[% END %]
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="Public" content="max-age=3153600">
+
+<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranetOLD.css">
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/intranet.css">
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/menu.css">
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/jquery.alerts.css">
+
 <script src="/includes/jquery/jquery.js"></script>
 <script src="/includes/jquery/jquery.scrollTo.js"></script>
 <script src="/includes/jquery/jquery.menu.js"></script>
@@ -25,6 +40,11 @@
 <script src="/includes/jquery/jquery.alerts.js"></script>
 <script src="/includes/jquery/jquery.dataTables.js"></script>
 <script src="/includes/jquery/jquery.tooltip.js"></script>
+
+</head>
+
+
+
 <!-- <script src="/includes/jquery/jquery.tablednd.js"></script> -->
 
 [% INCLUDE 'datePicker.inc' %]
@@ -35,21 +55,6 @@
 
 [% INCLUDE  'SmallPlugins.inc'  %]
 <!-- Se incluyen los mensajes para la catalogacion -->
-
-<head>
-[% IF page_sub_title %]
-    <title>Meran::UNLP::[% page_sub_title %]</title>
-[% ELSE %]
-    <title>Meran::UNLP</title>
-[% END %]
-
-<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranetOLD.css">
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/intranet.css">
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/menu.css">
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/jquery.alerts.css">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="Public">
-</head>
 
 <script language="javascript" type="text/javascript">
 
