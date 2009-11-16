@@ -83,7 +83,7 @@
                             print C4::AR::Filtros::link_to( text    => "[% 'Salir' | i18n %]",
                                                             boton   => "boton_salir", 
                                                             width   => "95",
-                                                            url     => "/cgi-bin/koha/opac-main.pl?logout.x=1", 
+                                                            url     => "/cgi-bin/koha/logout.pl", 
                                                             title   => "[% 'Salir' | i18n %]"
                                                     ) ;
                     [% END %]

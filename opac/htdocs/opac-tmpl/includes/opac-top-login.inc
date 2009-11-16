@@ -1,33 +1,30 @@
-
 <html>
 <head>
+    <title> [% IF titulo_nombre_ui %]
+                [% titulo_nombre_ui %]
+            [% ELSE %]
+                [% "Bienvenido a Meran - Cat&aacute;logo P&uacute;blico" | i18n %]
+            [% END %]
+    </title>
 
-<title> [% IF titulo_nombre_ui %]
-            [% titulo_nombre_ui %]
-        [% ELSE %]
-            [% "Bienvenido a Meran - Cat&aacute;logo P&uacute;blico" | i18n %]
-        [% END %]
-</title>
+    <script language="javascript" type="text/javascript">
+        token= '[% token %]';
+    </script>
 
-<script language="javascript" type="text/javascript">
-    token= '[% token %]';
-</script>
-
-<script src="/includes/jquery/jquery.js"></script>
-<script src="/includes/AjaxHelper.js"></script>
-<script src="/includes/MessageHelper.js"></script>
-<script src="/includes/json/jsonStringify.js"></script>
-<script src="/includes/jquery/jquery-highlight.js"></script>
-<script src="/includes/util.js"></script>
-<script src="/includes/md5.js"></script>
-<script src="/includes/sha1.js"></script>
-<script src="/opac-tmpl/includes/opac-searchFunciones.js"></script>
-<script src="/opac-tmpl/includes/favoritos.js"></script>
-<script src="/opac-tmpl/includes/message_OPAC.inc"></script>
-<script src="/includes/AutocompleteHelper.js"></script>
-
-<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/opac.css">
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/opac.css">
+    <script src="/includes/jquery/jquery.js"></script>
+    <script src="/includes/AjaxHelper.js"></script>
+    <script src="/includes/MessageHelper.js"></script>
+    <script src="/includes/json/jsonStringify.js"></script>
+    <script src="/includes/jquery/jquery-highlight.js"></script>
+    <script src="/includes/util.js"></script>
+    <script src="/includes/md5.js"></script>
+    <script src="/includes/sha1.js"></script>
+    <script src="/opac-tmpl/includes/opac-searchFunciones.js"></script>
+    <script src="/opac-tmpl/includes/favoritos.js"></script>
+    <script src="/includes/AutocompleteHelper.js"></script>
+    [% INCLUDE 'message_OPAC.inc' %]
+    <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/opac.css">
+    <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/opac.css">
 </head>
 <script language="javascript" type="text/javascript">
     // FIXME esto esta repetido en el opac-top.inc, ver si se puede unificar
@@ -62,7 +59,7 @@
 
     [% PERL %]
         print C4::AR::Filtros::link_to( text    => "[% 'Salir' | i18n %]",
-                                        url     => "/cgi-bin/koha/opac-main.pl?logout.x=1", 
+                                        url     => "/cgi-bin/koha/logout.pl", 
                                         title   => "[% 'Salir' | i18n %]",
                                         boton   => "boton_salir",
                                         width   => "95",
