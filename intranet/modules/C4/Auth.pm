@@ -290,44 +290,6 @@ sub get_template_and_user {
 sub output_html_with_http_headers {
     my($template, $params, $session) = @_;
 
-#     my $secure;
-
-=item
-    if(is_OPAC($params)){
-        C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE OPAC");
-        #si la conexion no es segura no se envía la cookie, en el OPAC la conexion no es segura
-        $secure = 0;
-    }else{
-        C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE INTRANET");
-        $secure = 1;
-    }
-=cut
-
-    #si se usa CGI::Session 4.42 FIXED descomentar esto
-#     $session->secure($secure); #seteo cookie con flag secure
-#     $session->httponly(1);
-
-    #si se usa CGI::Session 4.42 FIXED descomentar esto
-#     print $session->header(	charset => C4::Context->config("charset")||'utf-8', "Cache-control: public" );
-
-#si se usa CGI::Session 4.42 descomentar esto
-
-#     use CGI::Cookie;
-#     my $query = new CGI;
-#     my $cookie= undef;
-# 
-#     $cookie = new CGI::Cookie(  
-#                                 -httponly   => 1, 
-#                                 -name       =>$session->name, 
-#                                 -value      =>$session->id, 
-#                                 -expires    => '+' .$session->expire. 's', 
-#                             );
-# 
-# 
-# 
-#     
-#     print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'utf-8', "Cache-control: public");
-
     print_header($session, $params);
 
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
@@ -344,11 +306,11 @@ sub print_header {
     my $secure;
 
     if(is_OPAC($template_params)){
-        C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE OPAC");
+#         C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE OPAC");
         #si la conexion no es segura no se envía la cookie, en el OPAC la conexion no es segura
         $secure = 0;
     }else{
-        C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE INTRANET");
+#         C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE INTRANET");
         $secure = 1;
     }
 
