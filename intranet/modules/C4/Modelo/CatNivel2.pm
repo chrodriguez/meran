@@ -153,11 +153,13 @@ sub agregar{
     #se guardan los datos de Nivel2
     foreach my $infoNivel2 (@$infoArrayNivel2){
 
-#         if($infoNivel2->{'repetible'}){
-        if(($infoNivel2->{'fijo'} ne '1')|| !defined $infoNivel2->{'fijo'}){
-            push(@arrayNivel2Repetibles, $infoNivel2);
-        }else{
-            push(@arrayNivel2, $infoNivel2);
+        if($infoNivel2->{'tiene_estructura'} eq '1'){
+    #         if($infoNivel2->{'repetible'}){
+            if(($infoNivel2->{'fijo'} ne '1')|| !defined $infoNivel2->{'fijo'}){
+                push(@arrayNivel2Repetibles, $infoNivel2);
+            }else{
+                push(@arrayNivel2, $infoNivel2);
+            }
         }
     }
     

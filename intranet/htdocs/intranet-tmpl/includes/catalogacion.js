@@ -227,21 +227,23 @@ function syncComponentesArray(){
     for(var i=0; i < COMPONENTES_ARRAY.length; i++){
 //         window.console.log("COMPONENTES_ARRAY[" + i +"].dato: " + COMPONENTES_ARRAY[i].dato);
 //         window.console.log("COMPONENTES_ARRAY[" + i +"].datoReferencia: " + COMPONENTES_ARRAY[i].datoReferencia);
-        if(COMPONENTES_ARRAY[i].referencia == 1){
-//             window.console.log("TIENE REFERENCIA");
-            if($('#'+COMPONENTES_ARRAY[i].idCompCliente).val() != '' && COMPONENTES_ARRAY[i].tipo == 'combo'){
-                COMPONENTES_ARRAY[i].datoReferencia = $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
-//                 window.console.log("COMBO");
-            }else if($('#'+COMPONENTES_ARRAY[i].idCompCliente).val() != '' && COMPONENTES_ARRAY[i].tipo == 'auto'){
-                COMPONENTES_ARRAY[i].datoReferencia = $('#'+COMPONENTES_ARRAY[i].idCompCliente + '_hidden').val();
-//                 window.console.log("AUTO");
-            }else{
-                COMPONENTES_ARRAY[i].datoReferencia = 0;
-                COMPONENTES_ARRAY[i].dato = '';
+        if(COMPONENTES_ARRAY[i].tiene_estructura == '1'){
+            if(COMPONENTES_ARRAY[i].referencia == 1){
+    //             window.console.log("TIENE REFERENCIA");
+                if($('#'+COMPONENTES_ARRAY[i].idCompCliente).val() != '' && COMPONENTES_ARRAY[i].tipo == 'combo'){
+                    COMPONENTES_ARRAY[i].datoReferencia = $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
+    //                 window.console.log("COMBO");
+                }else if($('#'+COMPONENTES_ARRAY[i].idCompCliente).val() != '' && COMPONENTES_ARRAY[i].tipo == 'auto'){
+                    COMPONENTES_ARRAY[i].datoReferencia = $('#'+COMPONENTES_ARRAY[i].idCompCliente + '_hidden').val();
+    //                 window.console.log("AUTO");
+                }else{
+                    COMPONENTES_ARRAY[i].datoReferencia = 0;
+                    COMPONENTES_ARRAY[i].dato = '';
+                }
+            }else{  
+    //             window.console.log("NO TIENE REFERENCIA");
+                COMPONENTES_ARRAY[i].dato = $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
             }
-        }else{  
-//             window.console.log("NO TIENE REFERENCIA");
-            COMPONENTES_ARRAY[i].dato = $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
         }
     }
 }
@@ -281,7 +283,7 @@ function mostrarDataNivel(){
 
     if (MODIFICAR){
         for (x=0; x<COMPONENTES_ARRAY.length; x++){
-            if(x < DATA_ARRAY.length){
+            if(x < DATA_ARRAY.length && DATA_ARRAY[x].tiene_estructura == '1'){
                 //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
                 $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
                 if(DATA_ARRAY[x].referencia == 1){
@@ -329,8 +331,8 @@ function updateMostrarEstructuraDelNivel2(responseText){
     mostrarDataNivel();
     scrollTo('nivel2Tabla');
       
-	  //asigno el handler para el validador
-	  validateForm('formNivel2',guardarModificarDocumentoN2);
+	//asigno el handler para el validador
+	validateForm('formNivel2',guardarModificarDocumentoN2);
     addRules();
 }
 
@@ -785,7 +787,7 @@ function updateMostrarInfoAltaNivel3(responseText){
  */
 function procesarInfoJson(json){
 
-    var objetos=JSONstring.toObject(json);
+    var objetos = JSONstring.toObject(json);
 
     for(var i=0; i < objetos.length; i++){
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
@@ -836,7 +838,7 @@ function procesarObjeto(objeto){
         tiene_estructura = 0;
     }
 
-    var divLabel= crearDivLabel(libtext, idComp);
+    var divLabel = crearDivLabel(libtext, idComp);
 
     strComp="<li id='LI" + objeto.idCompCliente + "' class='sub_item'> "+divLabel+divComp+"</li>";
     $(strComp).appendTo("#"+getDivDelNivel());
@@ -1126,7 +1128,7 @@ function crearDivComponente(idObj){
 // Esta funcion crea un divLabel con un Label segun parametro
 function crearDivLabel(label, idComp){
 //     return "<label for='div"+ idComp +"'><div class='divLabelComponente'>  "+label+": </div></label>";
-    return "<label for='"+ idComp +"'> " +label + " </label>";
+    return "<label for='"+ idComp +"'> " + label + " </label>";
 }
 
 
@@ -1261,10 +1263,10 @@ function updateBorrarEjemplaresN3(responseText){
  */
 function modificarN1(id1){
 	inicializar();
-  ID_N1 = id1;
+    ID_N1 = id1;
 	objAH = new AjaxHelper(updateModificarN1);
 	objAH.url = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-  objAH.showStatusIn = "centro";
+    objAH.showStatusIn = "centro";
 	objAH.debug = true;
 //     objAH.cache = true;
 	objAH.tipoAccion = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";

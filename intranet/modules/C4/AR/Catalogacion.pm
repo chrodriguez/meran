@@ -754,11 +754,15 @@ sub getDatosFromNivel{
         my $estructura = _getEstructuraFromCampoSubCampo( $c->getCampo, $c->getSubcampo );
         if($estructura){
 
-            $hash_temp{'tiene_estructura'}  = '1';
-            $hash_temp{'dato'}              = $c->getDato;
-            $hash_temp{'datoReferencia'}    = $c->getDato;
+            my %hash;
+            $hash{'tiene_estructura'}  = '1';
+            $hash{'dato'}              = $c->getDato;
+            $hash{'datoReferencia'}    = $c->getDato;
+            $hash{'Id_rep'}            = $c->getId_rep;
+C4::AR::Debug::debug("getDatosFromNivel => Id_rep => ".$c->getId_rep);
     
-            _setDatos_de_estructura($estructura, \%hash_temp, $c);
+#             _setDatos_de_estructura($estructura, \%hash_temp, $c);
+            _setDatos_de_estructura($estructura, \%hash_temp, \%hash);
         }else{      
         #no tiene estructura, se imprime
             my $estructura = &C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo( $c->getCampo, $c->getSubcampo );
@@ -773,8 +777,11 @@ sub getDatosFromNivel{
             }
             $hash_temp{'dato'}              = $c->getCampo.", ".$c->getSubcampo.": ".$dato;
             $hash_temp{'datoReferencia'}    = '';
+        
+            my %hash;
 
-            _setDatos_de_estructura2($estructura, \%hash_temp, $c);
+#             _setDatos_de_estructura2($estructura, \%hash_temp, $c);
+            _setDatos_de_estructura2($estructura, \%hash_temp, \%hash);
         }
     
         push (@result, \%hash_temp);
@@ -793,7 +800,7 @@ sub getDatosFromNivel{
 ###################################################FIN PROBANDO######################################################################
 
 =item
-Esta funcion retorna la estructura de catalogacion con los datos de un Nivel (REPETIBLES NO).
+Esta funcion retorna la estructura de catalogacion con los datos de un Nivel (NO REPETIBLES).
 Ademas mapea las campos fijos de nivel 1, 2 y 3 a MARC
 =cut
 sub _getEstructuraYDatosDeNivelNoRepetible{
@@ -829,11 +836,20 @@ sub _getEstructuraYDatosDeNivelNoRepetible{
                                                                     $nivel_info_marc_array->[$i]->{'subcampo'}
                                             );
       
-        my %hash;
   
         if($cat_estruct_array){	
 
             my %hash_temp;
+            my $estructura = _getEstructuraFromCampoSubCampo( 
+                                                                $nivel_info_marc_array->[$i]->{'campo'},
+                                                                $nivel_info_marc_array->[$i]->{'subcampo'}     
+                                                    );
+            if($estructura){
+                $hash_temp{'tiene_estructura'}  = '1';
+            }else{
+                $hash_temp{'tiene_estructura'}  = '0';
+            }
+
             _setDatos_de_estructura($cat_estruct_array, \%hash_temp, $nivel_info_marc_array->[$i]);
                 
             push(@result, \%hash_temp);
