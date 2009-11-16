@@ -22,6 +22,7 @@ C4::Auth
 
 
 use strict;
+use warnings;
 
 require Exporter;
 use C4::AR::Authldap;
@@ -310,22 +311,24 @@ sub output_html_with_http_headers {
 #     print $session->header(	charset => C4::Context->config("charset")||'utf-8', "Cache-control: public" );
 
 #si se usa CGI::Session 4.42 descomentar esto
-=item
-    use CGI::Cookie;
-    my $query = new CGI;
-    my $cookie= undef;
 
-    $cookie = new CGI::Cookie(  -secure     => $secure, 
-                                -httponly   => 1, 
-                                -name       =>$session->name, 
-                                -value      =>$session->id, 
-                                -expires    => '+' .$session->expire. 's', 
-                            );
+#     use CGI::Cookie;
+#     my $query = new CGI;
+#     my $cookie= undef;
+# 
+#     $cookie = new CGI::Cookie(  
+#                                 -httponly   => 1, 
+#                                 -name       =>$session->name, 
+#                                 -value      =>$session->id, 
+#                                 -expires    => '+' .$session->expire. 's', 
+#                             );
+# 
+# 
+# 
+#     
+#     print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'utf-8', "Cache-control: public");
 
-
-    print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'utf-8', "Cache-control: public");
-=cut
-    print_header($session);
+    print_header($session, $params);
 
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
 	exit;
@@ -333,25 +336,25 @@ sub output_html_with_http_headers {
 
 
 sub print_header {
-    my($session) = @_;
-        
-    my $secure;
-
-    if(is_OPAC($session->{'type'})){
-#         C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE OPAC");
-        #si la conexion no es segura no se envía la cookie, en el OPAC la conexion no es segura
-        $secure = 0;
-    }else{
-#         C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE INTRANET");
-        $secure = 1;
-    }
-
+    my($session, $template_params) = @_;
     use CGI::Cookie;
 
     my $query = new CGI;
-    my $cookie= undef;
+    my $cookie = undef;
+    my $secure;
 
-    $cookie = new CGI::Cookie(  -secure     => $secure, 
+    if(is_OPAC($template_params)){
+        C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE OPAC");
+        #si la conexion no es segura no se envía la cookie, en el OPAC la conexion no es segura
+        $secure = 0;
+    }else{
+        C4::AR::Debug::debug("is_OPAC => REQUERIMIENTO DESDE INTRANET");
+        $secure = 1;
+    }
+
+
+    $cookie = new CGI::Cookie(  
+                                -secure     => $secure, 
                                 -httponly   => 1, 
                                 -name       =>$session->name, 
                                 -value      =>$session->id, 
@@ -372,7 +375,7 @@ sub print_header {
 sub is_OPAC {
     my($template_params) = @_;
 
-    return ($template_params->{'sitio'} eq 'opac'? 1: 0);
+    return (($template_params->{'sitio'} eq 'opac')?1:0);
 }
 
 =item checkauth
@@ -480,24 +483,24 @@ sub checkauth {
 
 #     C4::AR::Utilidades::printHASH(\%ENV);
 
-	  my $token;
-	  if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
-		  my $obj = $query->param('obj');
-  
-		  if ( defined($obj) ){
-			  $obj=C4::AR::Utilidades::from_json_ISO($obj);
-              #ESTO ES PARA LAS LLAMADAS AJAX QUE PASSAN UN OBJETO JSON (HELPER DE AJAX)
-		      $token = $obj->{'token'};
-              C4::AR::Debug::debug("checkauth=> Token desde AjaxHelper: ".$token);
-          }else{
-              #ESTO ES PARA LAS LLAMADAS AJAX TRADICIONALES (PARAMETROS POR URL)
-              $token = $query->param('token');
-              C4::AR::Debug::debug("checkauth=> Token desde Ajax comun: ".$token);
-          }
-	  }else{
-		    $token = $query->param('token');
-        C4::AR::Debug::debug("checkauth=> Token desde GET: ".$token);
-	  }
+	my $token;
+	if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
+		my $obj = $query->param('obj');
+
+		if ( defined($obj) ){
+			$obj=C4::AR::Utilidades::from_json_ISO($obj);
+            #ESTO ES PARA LAS LLAMADAS AJAX QUE PASSAN UN OBJETO JSON (HELPER DE AJAX)
+		    $token = $obj->{'token'};
+            C4::AR::Debug::debug("checkauth=> Token desde AjaxHelper: ".$token);
+        }else{
+            #ESTO ES PARA LAS LLAMADAS AJAX TRADICIONALES (PARAMETROS POR URL)
+            $token = $query->param('token');
+            C4::AR::Debug::debug("checkauth=> Token desde Ajax comun: ".$token);
+        }
+	}else{
+		$token = $query->param('token');
+    C4::AR::Debug::debug("checkauth=> Token desde GET: ".$token);
+	}
 
     # state variables
     my $loggedin = 0;
@@ -801,7 +804,7 @@ C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID
 =cut
 sub _session_expired {
     my ($session) = @_;
-    C4::AR::Debug::debug("dump desde _session_expired ".$session->dump());
+#     C4::AR::Debug::debug("dump desde _session_expired ".$session->dump());
 
 #     C4::AR::Debug::debug("_session_expired=>  (session->atime + session->etime): ".($session->atime + $session->etime));
 #     C4::AR::Debug::debug("_session_expired=>  time(): ".time());
@@ -1131,7 +1134,7 @@ sub inicializarAuth{
 
     my ($session) = CGI::Session->load();
     $session->flush();
-C4::AR::Debug::debug("dump desde inicializarAuth ".$session->dump());
+#         C4::AR::Debug::debug("dump desde inicializarAuth ".$session->dump());
 #     if ((!C4::AR::Utilidades::validateString($session->param('userid'))) || _session_expired($session)){
         C4::AR::Debug::debug("inicializarAuth => ".$session->param('codMsg'));
         my $msjCode = getMsgCode();
@@ -1277,7 +1280,7 @@ sub _generarSession {
       $session->expire(0);
     }
 
-    C4::AR::Debug::debug("dump desde _generarSession ".$session->dump());
+#     C4::AR::Debug::debug("dump desde _generarSession ".$session->dump());
 
 	return $session;
 }

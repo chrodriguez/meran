@@ -56,7 +56,7 @@ related to the (guessed) charset.
 @EXPORT = qw(
 		&guesscharset
 		&guesstype
-		&output_html_with_http_headers
+
 	     );
 
 =item guesscharset
@@ -104,13 +104,13 @@ corresponds to the HTML page $html.
 
 =cut
 
-sub output_html_with_http_headers {
-    my($query, $cookie, $html) = @_;
-    print $query->header(
-	-type   => guesstype($html),
-	-cookie => $cookie,
-    ), $html;
-}
+# sub output_html_with_http_headers {
+#     my($query, $cookie, $html) = @_;
+#     print $query->header(
+# 	-type   => guesstype($html),
+# 	-cookie => $cookie,
+#     ), $html;
+# }
 
 #---------------------------------
 
