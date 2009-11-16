@@ -499,12 +499,12 @@ C4::AR::Debug::debug("checkauth=> DUMP DESPUES DE LOAD SESSION: ".$session->dump
 
         my ($ip , $lasttime, $nroRandom, $flag, $tokenDB);
 
-        $userid= $sist_sesion->getUserid;
-        $ip= $sist_sesion->getIp;
-        $lasttime= $sist_sesion->getLasttime;
-        $nroRandom= $sist_sesion->getNroRandom;
-		    $tokenDB= $sist_sesion->getToken;
-        $flag= $sist_sesion->getFlag;
+        $userid     = $sist_sesion->getUserid;
+        $ip         = $sist_sesion->getIp;
+        $lasttime   = $sist_sesion->getLasttime;
+        $nroRandom  = $sist_sesion->getNroRandom;
+		$tokenDB    = $sist_sesion->getToken;
+        $flag       = $sist_sesion->getFlag;
 
         if ($userid) {
 

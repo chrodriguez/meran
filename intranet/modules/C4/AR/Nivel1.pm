@@ -177,8 +177,8 @@ sub t_guardarNivel1 {
     Modifica el nivel 1 pasado por parametro
 =cut
 sub t_modificarNivel1 {
-    my($params)=@_;
-
+    my($params) = @_;
+ 
 # FIXME falta verificar que no se agregue con barcode repetido
     my $msg_object= C4::AR::Mensajes::create();
     my $id1 = 0;

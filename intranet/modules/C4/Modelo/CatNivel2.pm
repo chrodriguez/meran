@@ -155,9 +155,11 @@ sub agregar{
 
         if($infoNivel2->{'tiene_estructura'} eq '1'){
     #         if($infoNivel2->{'repetible'}){
+            #si es fijo es un campo de la tabla cat_nivel2
             if(($infoNivel2->{'fijo'} ne '1')|| !defined $infoNivel2->{'fijo'}){
                 push(@arrayNivel2Repetibles, $infoNivel2);
             }else{
+            #es es un campo de la tabla cat_nivel2_repetible
                 push(@arrayNivel2, $infoNivel2);
             }
         }

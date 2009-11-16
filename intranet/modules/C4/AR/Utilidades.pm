@@ -1386,8 +1386,7 @@ sub trim($){
 
 #FUNCION QUE VALIDA QUE UN STRING NO SEA SOLAMENTE UNA SECUENCIA DE BLANCOS (USA Trim())
 sub validateString{
-
-    my ($string)=@_;
+    my ($string) = @_;
 
     $string = trim($string);
     if (length($string) == 0){

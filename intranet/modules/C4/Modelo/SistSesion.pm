@@ -86,7 +86,12 @@ sub setUserid{
 
 sub getFlag{
     my ($self) = shift;
-    return ($self->flag);
+
+    if(!defined $self->flag){
+        return "NO TIENE";
+    }else{
+        return ($self->flag);
+    }
 }
 
 sub setFlag{
