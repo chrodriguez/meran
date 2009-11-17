@@ -14,7 +14,8 @@
 
       [% INCLUDE 'opac-navlink.inc' %]
       [% INCLUDE 'opac-login.inc' %]
-      [% INCLUDE 'opac-search_form.inc' %]
+      <h1>Search</h1>
+        [% INCLUDE 'opac-search_form.inc' %]
         <h1>Heading h1</h1>
         <h2>Heading h2</h2>
         <h3>Heading h3</h3>

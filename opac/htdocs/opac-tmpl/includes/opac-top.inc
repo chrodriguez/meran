@@ -61,7 +61,7 @@
 
       [% INCLUDE 'opac-top-header.inc' %]
       <div class="main-content">
-        
+
         <!-- Pagetitle -->
         <h1 class="pagetitle">Multiflex-3 / Layout-4</h1>
 
@@ -78,7 +78,6 @@
           <p class="details">Posting details ...  </p>
         </div>          
         <hr class="clear-contentunit" />
-          
         <!-- Content unit - Two columns -->
         <div class="column2-unit-left">
           <h1>Heading h1</h1>                            
@@ -230,8 +229,7 @@
           <p class="center">Text center.</p>
           <p class="right">Text right.</p>
         </div>
-        <hr class="clear-contentunit" />        
-                              
+        <hr class="clear-contentunit" />
         <!-- Content unit - One column -->
         <h1 class="block">5 - Links</h1>
         <div class="column1-unit">
@@ -243,8 +241,7 @@
           <p class="center"><a href="#"><img class="center" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" /></a></p>
           <p><a href="#"><img class="right" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" /></a></p>
         </div>
-        <hr class="clear-contentunit" />                
-                    
+        <hr class="clear-contentunit" />
         <!-- Content unit - One column -->
         <h1 class="block">6 - Contact form</h1>
         <div class="column1-unit">
@@ -296,10 +293,9 @@
                 <p><input type="submit" name="submit" id="submit" class="button" value="Send message" tabindex="6" /></p>
               </fieldset>
             </form>
-          </div>              
+          </div>
         </div>
       </div>
-                
       <!-- B.3 SUBCONTENT -->
       <div class="main-subcontent">
 

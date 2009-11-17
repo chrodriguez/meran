@@ -78,22 +78,9 @@
 
       <!-- Breadcrumbs -->
       <div class="header-breadcrumbs">
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Webdesign</a></li>
-          <li><a href="#">Templates</a></li>
-          <li>Multiflex-3</li>
-        </ul>
+      [% INCLUDE 'opac-status_links.inc' %]
 
-        <!-- Search form -->                  
-        <div class="searchform">
-          <form action="index.html" method="get">
-            <fieldset>
-              <input name="field" class="field"  value=" Search..." />
-              <input type="submit" name="button" class="button" value="GO!" />
-            </fieldset>
-          </form>
-        </div>
+      [% INCLUDE 'opac-search_form.inc' %]
       </div>
     </div>
 
