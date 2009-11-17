@@ -10,13 +10,15 @@ use C4::Context;
 use CGI::Session;
 use CGI;
 
-my $cgi = new CGI;
+# my $cgi = new CGI;
+# 
+# my ($template, $t_params)= C4::Output::gettemplate("opac-auth.tmpl", 'opac');
+# 
+# #se inicializa la session y demas parametros para autenticar
+# $t_params->{'opac'};
+# $t_params->{'type'} = 'opac';
+# my ($session) = C4::Auth::inicializarAuth($t_params);
+# $session->flush();
+# C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 
-my ($template, $t_params)= C4::Output::gettemplate("opac-auth.tmpl", 'opac');
-
-#se inicializa la session y demas parametros para autenticar
-$t_params->{'opac'};
-$t_params->{'type'} = 'opac';
-my ($session) = C4::Auth::inicializarAuth($t_params);
-$session->flush();
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::Auth::redirectTo('/cgi-bin/koha/opac-main.pl');
