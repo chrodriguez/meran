@@ -13,11 +13,9 @@
   <meta name="distribution" content="global" />
   <meta name="description" content="Your page description here ..." />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
-  <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/opac.css">
-  <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/opac.css">
-  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="./css/layout4_setup.css" />
-  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="./css/layout4_text.css" />
-  <link rel="icon" type="image/x-icon" href="./img/favicon.ico" />
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/default/includes/setup.css" />
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/default/includes/text.css" />
+  <link rel="icon" type="image/x-icon" href="[% temas %]/default/imagenes/favicon.ico" />
   
   <script language="javascript" type="text/javascript">
     token= '[% token %]';
@@ -59,299 +57,313 @@
   <!-- Main Page Container -->
   <div class="page-container">
 
-   <!-- For alternative headers START PASTE here -->
+    <!-- For alternative headers START PASTE here -->
 
     <!-- A. HEADER -->      
     <div class="header">
-      
       <!-- A.1 HEADER TOP -->
       <div class="header-top">
-        
         <!-- Sitelogo and sitename -->
         <a class="sitelogo" href="#" title="Go to Start page"></a>
         <div class="sitename">
           <h1><a href="index.html" title="Go to Start page">MULTIFLEX&bull;3<span style="font-weight:normal;font-size:50%;">&nbsp;update-2</span></a></h1>
           <h2>Open Source Template</h2>
         </div>
-    
-        <!-- Navigation Level 0 -->
-        <div class="nav0">
-          <ul>
-            <li><a href="#" title="Pagina home in Italiano"><img src="./img/flag_italy.gif" alt="Image description" /></a></li>
-            <li><a href="#" title="Homepage auf Deutsch"><img src="./img/flag_germany.gif" alt="Image description" /></a></li>
-            <li><a href="#" title="Hemsidan p&aring; svenska"><img src="./img/flag_sweden.gif" alt="Image description" /></a></li>
-          </ul>
-        </div>          
-
-        <!-- Navigation Level 1 -->
-        <div class="nav1">
-          <ul>
-            <li><a href="#" title="Go to Start page">Home</a></li>
-            <li><a href="#" title="Get to know who we are">About</a></li>
-            <li><a href="#" title="Get in touch with us">Contact</a></li>                                                                       
-            <li><a href="#" title="Get an overview of website">Sitemap</a></li>
-          </ul>
-        </div>              
-      </div>
-      
-      <!-- A.2 HEADER MIDDLE -->
-      <div class="header-middle">    
-   
-        <!-- Site message -->
-        <div class="sitemessage">
-          <h1>EASY &bull; FRESH &bull; ROBUST</h1>
-          <h2>The third generation Multiflex is here, now with cooler design features and easier code.</h2>
-          <h3><a href="#">&rsaquo;&rsaquo;&nbsp;More details</a></h3>
-        </div>        
-      </div>
-      
-      <!-- A.3 HEADER BOTTOM -->
-      <div class="header-bottom">
-      
-        <!-- Navigation Level 2 (Drop-down menus) -->
-        <div class="nav2">
-    
-          <!-- Navigation item -->
-          <ul>
-            <li><a href="index.html">Overview</a></li>
-          </ul>
-          
-          <!-- Navigation item -->
-          <ul>
-            <li><a href="#">Page Layouts<!--[if IE 7]><!--></a><!--<![endif]-->
-              <!--[if lte IE 6]><table><tr><td><![endif]-->
-                <ul>
-                  <li><a href="layout1.html">Layout-1 (1-col)</a></li>
-                  <li><a href="layout2.html">Layout-2 (2-col)</a></li>
-                  <li><a href="layout3.html">Layout-3 (2-col)</a></li>
-                  <li><a href="layout4.html">Layout-4 (3-col)</a></li>
-                  <li><a href="layout5.html">Layout-5 (3-col)</a></li>                                    
-                </ul>
-              <!--[if lte IE 6]></td></tr></table></a><![endif]-->
-            </li>
-          </ul>          
-
-          <!-- Navigation item -->
-          <ul>
-            <li><a href="#">Header Layouts<!--[if IE 7]><!--></a><!--<![endif]-->
-              <!--[if lte IE 6]><table><tr><td><![endif]-->
-                <ul>
-                  <li><a href="header1.html">Header-1 (T+M+B)</a></li>
-                  <li><a href="header2.html">Header-2 (T+M)</a></li>
-                  <li><a href="header3.html">Header-3 (T+B)</a></li>
-                  <li><a href="header4.html">Header-4 (M+B)</a></li>
-                  <li><a href="header5.html">Header-5 (T)</a></li>
-                  <li><a href="header6.html">Header-6 (M)</a></li>
-                  <li><a href="header7.html">Header-7 (B)</a></li>
-                </ul>
-              <!--[if lte IE 6]></td></tr></table></a><![endif]-->
-            </li>
-          </ul>          
-        </div>
-      </div>
-
-      <!-- A.4 HEADER BREADCRUMBS -->
-
-      <!-- Breadcrumbs -->
-      <div class="header-breadcrumbs">
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Webdesign</a></li>
-          <li><a href="#">Templates</a></li>
-          <li>Multiflex-3</li>
-        </ul>
-
-        <!-- Search form -->                  
-        <div class="searchform">
-          <form action="#" method="get" class="form">
-            <fieldset>
-              <input value=" Search..." name="field" class="field" />
-              <input type="submit" value="GO!" name="button" class="button" />
-            </fieldset>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- For alternative headers END PASTE here -->
-
+    [% INCLUDE 'opac-header-nav.inc' %]
     <!-- B. MAIN -->
     <div class="main">
- 
-      <!-- B.1 MAIN NAVIGATION -->
-      <div class="main-navigation">
 
-        <!-- Navigation Level 3 -->
-        <div class="round-border-topright"></div>
-        <h1 class="first">Navigation Title</h1>
+      [% INCLUDE 'opac-navlink.inc' %]
+      [% INCLUDE 'opac-login.inc' %]
+      [% INCLUDE 'opac-search_form.inc' %]
+        <h1>Heading h1</h1>
+        <h2>Heading h2</h2>
+        <h3>Heading h3</h3>
 
-        <!-- Navigation with grid style -->
-        <dl class="nav3-grid">
-          <dt><a href="#">Navlink 11</a></dt>
-          <dt><a href="#">Navlink 12</a></dt>
-            <dd><a href="#">Navlink 121</a></dd>
-            <dd><a href="#">Navlink 122</a></dd>
-            <dd><a href="#">Navlink 123</a></dd>        
-          <dt><a href="#">Navlink 13</a></dt>
-          <dt><a href="#">Navlink 14</a></dt>
-          <dt><a href="#">Navlink 15</a></dt>
-        </dl>                        
+        <h3>Paragraph text</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
-        <!-- Template infos -->                
-        <h1>Multiflex History</h1>
-        <h3>MultiFlex-1</h3>
-        <p>Released: 01.05.2006<br />OK for operational use, but very heavy code.<br /><a href="http://www.1-2-3-4.info/webtemplates/">Download latest update</a></p>
-        <h3>MultiFlex-1.1</h3>
-        <p>Released: 15.05.2006<br />OK for operational use, but very heavy code.<br /><a href="http://www.1-2-3-4.info/webtemplates/">Download latest update</a></p>          
-        <h3>MultiFlex-2</h3>
-        <p>Released: 08.06.2006<br />OK for operational use, but heavy code and printer bug.<br /><a href="http://www.1-2-3-4.info/webtemplates/">Download latest update</a></p>
-        <h3>MultiFlex-3</h3>
-        <p>Released: 25.11.2006<br />BEST for operational use, with very good code.<br /><a href="http://www.1-2-3-4.info/webtemplates/">Download latest update</a></p>  
+        <h3>Bulleted list</h3>
+        <ul>
+          <li><a href="#">Link 1</a></li>
+          <li><a href="#">Link 2</a></li>
+          <li>Fact 1</li>
+          <li>Fact 2</li>                            
+        </ul>
+
+        <h3>Ordered list</h3>
+        <ol>
+          <li><a href="#">Link 1</a></li>
+          <li><a href="#">Link 2</a></li>
+          <li>Fact 1</li>
+          <li>Fact 2</li>                           
+        </ol>
+
+        <h3>Text orientation</h3>
+        <p>Text left.</p>
+        <p class="center">Text center.</p>
+        <p class="right">Text right.</p>
+
+        <h3>Image<br />(text align left)</h3>
+        <p><img src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" />Here is place for text.</p>
+        <p class="center"><img class="center" src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" /></p>
+        <p><img class="right" src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" />Here is place for text.</p>
+
+        <h3>Image<br />(text align right)</h3>
+        <p class="right"><img src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" />Here is place for text.</p>
+        <p class="center"><img class="center" src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" /></p>
+        <p class="right"><img class="right" src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" />Here is place for text.</p>
+
+        <!-- Image Links -->
+        <h3>Text link</h3>
+        <p><a href="#">Here is a link.</a></p>
+
+        <!-- Image Links -->
+        <h3>Image link</h3>
+        <p><a href="#"><img src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" /></a>Text as in image sections above.</p>
+        <p class="center"><a href="#"><img class="center" src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" /></a></p>
+        <p><a href="#"><img class="right" src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" /></a>Text as in image sections above.</p>     
       </div>
  
-      <!-- B.2 MAIN CONTENT -->
+      <!-- B.1 MAIN CONTENT -->
       <div class="main-content">
         
         <!-- Pagetitle -->
-        <h1 class="pagetitle">Multiflex-3 Overview</h1>
+        <h1 class="pagetitle">Multiflex-3 / Layout-4</h1>
 
         <!-- Content unit - One column -->
+        <h1 class="block">1 - Column types</h1>
         <div class="column1-unit">
-          <h1>Flexible and robust template</h1>                            
-          <h3>Now substantially improved and simplified</h3>
-          <p>Multiflex-3 is the third generation Multiflex template. Numerous improvements have been made since Multiflex-2.1: More modern appearance, more page layouts, new drop down menus with sticky hover zones, solid printer support, expanded browser support, fully scalable upwards and downwards when user resizes the default browser font size, and last but not least, a much better and easier code. But there is more than that. Check the navigation menu to discover all about the new Multiflex-3!</p>
-        </div>
-        <hr class="clear-contentunit" />          
-
-
-        <!-- Content unit - One column -->
-        <div class="column1-unit">        
-          <h1>Content Management Systems</h1>                            
-          <h3>Portings for MODx and others</h3>
-          <p>If you want to use Multiflex-3 in combination with a Content Management System (CMS), then you don't need to look any further! Operational portings are being produced for <a href="http://www.modxcms.com">MODx</a> and <a href="http://www.contrexx-user.de">Contrexx</a>.</p>
+          <h1>Here comes the title</h1>                            
+          <h3>Monday, 20 November 2006 at 20:30 GMT, by <a href="#">SiteAdmin </a></h3>
+          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod tincidunt ut laoreet dolore <a href="#">magna aliquam</a> erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis. <a href="#">Read more &raquo;</a></p>
+          <p class="details">| Posted by <a href="#">SiteAdmin </a> | Categories: <a href="#">General</a> | Comments: <a href="#">73</a> |</p>
+          <h1><a href="">Heading h1 with link</a></h1>                            
+          <h3>Heading h3</h3>
+          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod tincidunt ut laoreet dolore <a href="#">magna aliquam</a> erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis. <a href="#">Read more &raquo;</a></p>
+          <p class="details">Posting details ...  </p>
         </div>          
-        <hr class="clear-contentunit" />          
+        <hr class="clear-contentunit" />
+          
+        <!-- Content unit - Two columns -->
+        <div class="column2-unit-left">
+          <h1>Heading h1</h1>                            
+          <h3>Heading h3</h3>
+          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod tincidunt ut laoreet dolore <a href="#">magna aliquam</a> erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip.</p>
+          <h1>Heading h1</h1>                            
+          <h3>Heading h3</h3>
+          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod tincidunt ut laoreet dolore <a href="#">magna aliquam</a> erat volutpat. Ut wisi enim ad minim veniam.</p>
+        </div>
+        <div class="column2-unit-right">
+          <h1>Heading h1</h1>                            
+          <h3>Heading h3</h3>
+          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod.</p>
+          <h1>Heading h1</h1>                            
+          <h3>Heading h3</h3>
+          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod.</p>
+          <h1>Heading h1</h1>                            
+          <h3>Heading h3</h3>
+          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod.</p>
+        </div>
+        <hr class="clear-contentunit" />
 
-        <!-- Content unit - One column -->
-        <div class="column1-unit">
-          <h1>Extensive browser support</h1>                            
-          <h3>Tested for all major browsers</h3>
-          <p>Multiflex-3 has been tested for all major browsers and <strong>functions properly for about 95%</strong> of currently used browsers.</p>
-          <p>The only problematic browsers are Mozilla 1.7+, Netscape 8.1+, Konqueror 3.4+ and IE5.x, together making up for about 5% of browser users. For Mozilla 1.x, Netscape 8.x and Konqueror 3.4 the drop-down menu opens horizontally instead of vertically. For IE5.x the template breaks down. If you are not planning to use drop-down menus, but only want to use the main links in the navigation bar, then you have around 97% browser compatibility, only leaving IE5.x left over as incompatible with Multiflex-3 (but this is a browser on its deathbed anyway, so I will not care to make fixes for this one).</p>
-          <p>If you know a fix for the Mozilla 1.7+, Netscape 8.1+ or Konqueror 3.4+ browsers to make the drop-down menu open vertically, get in touch with me and let me know, so that I can make an update of the template and post it on Open Webdesign!</p>
-          <p>To see what the template looks like in various browsers, check the view-links below to see screenshots, or you can download all screenshots in a single ZIP-file. Screenshot files are stored at my personal website.</p>
-
-          <p>All screenshots in ZIP-file (6.4 Mb): <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/multiflex3-screenshots.zip">Download</a></p>
-
-          <h5>Windows 2000</h5>
+        <!-- Content unit - Three columns -->
+        <div class="column3-unit-left">
+          <h2>Heading h2</h2>   
+          <h3>Heading h3</h3>
+          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>.</p>
+          <h2>Heading h2</h2>                            
+          <h3>Heading h3</h3>
+          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod. Lorem ipsum dolor sit amet.</p>
+        </div>
+        <div class="column3-unit-middle">
+          <h2>Heading h2</h2>                            
+          <h3>Heading h3</h3>
           <ul>
-            <li>Explorer - IE6 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/win2000-explorer6.png">(View)</a></li>
-            <li>Firefox - 2.0 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/win2000-firefox20.png">(View)</a></li>
-            <li>Mozilla - 1.7 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/win2000-mozilla17.png">(View)</a> (Drop-down menu opens horizontally)</li>
-            <li>Netscape - 7.2 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/win2000-netscape72.png">(View)</a> (Drop-down menu opens horizontally)</li>
-            <li>Opera - 9.0 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/win2000-opera90.png">(View)</a></li>
+            <li><a href="#">Resource</a></li>
+            <li><a href="#">Resource</a></li>
+            <li><a href="#">Resource</a></li>
           </ul>
-
-          <h5>Windows XP</h5>
+          <h2>Heading h2</h2>                            
+          <h3>Heading h3</h3>
           <ul>
-            <li>Explorer - IE6 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/winxp-explorer6.png">(View)</a>, IE7 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/winxp-explorer7.png">(View)</a></li>
-            <li>Firefox - 2.0 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/winxp-firefox20.png">(View)</a></li>
-            <li>Mozilla - 1.7 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/winxp-mozilla17.png">(View)</a> (Drop-down menu opens horizontally)</li>
-            <li>Netscape - 8.1 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/winxp-netscape81.png">(View)</a> (Drop-down menu opens horizontally)</li>
-            <li>Opera - 9.0 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/winxp-opera90.png">(View)</a></li>
+            <li>Fact 1</li>
+            <li>Fact 2</li>
           </ul>
-
-          <h5>Windows Vista RC2</h5>
+          <h2>Heading h2</h2>                            
+          <h3>Heading h3</h3>
           <ul>
-            <li>Explorer - IE7 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/winvista-explorer7.png">(View)</a></li>
-            <li>Firefox - 2.0 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/winvista-firefox20.png">(View)</a></li>
-            <li>Opera - 9.0 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/winvista-opera90.png">(View)</a></li>
-          </ul>
-
-          <h5>Mac OSX 10.3</h5>
-          <ul>
-            <li>Firefox - 2.0 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/mac103-firefox20.png">(View)</a></li>
-            <li>Mozilla - 1.7 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/mac103-mozilla17.png">(View)</a> (Drop-down menu opens horizontally)</li>
-            <li>Netscape - 7.2 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/mac103-netscape72.png">(View)</a> (Drop-down menu opens horizontally)</li>
-            <li>Opera - 9.0 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/mac103-opera90.png">(View)</a></li>
-            <li>Safari - 1.3 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/mac103-safari13.png">(View)</a></li>
-          </ul>
-
-          <h5>Mac OSX 10.4</h5>
-          <ul>            
-            <li>Firefox - 2.0 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/mac104-firefox20.png">(View)</a></li>
-            <li>Mozilla - 1.7 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/mac104-mozilla17.png">(View)</a> (Drop-down menu opens horizontally)</li>
-            <li>Netscape - 7.2 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/mac104-netscape72.png">(View)</a> (Drop-down menu opens horizontally)</li>
-            <li>Opera - 9.0 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/mac104-opera90.png">(View)</a></li>
-            <li>Camino - 1.0 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/mac104-camino10.png">(View)</a></li>
-            <li>Safari - 2.0 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/mac104-safari20.png">(View)</a></li>
-          </ul>
-
-          <h5>Linux Fedora Core 4</h5>
-          <ul>
-            <li>Firefox - 2.0 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/linuxfed4-firefox20.png">(View)</a></li>
-            <li>Mozilla - 1.7 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/linuxfed4-mozilla17.png">(View)</a> (Drop-down menu opens horizontally)</li>
-            <li>Opera - 9.0 (<a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/linuxfed4-opera90.png">(View)</a></li>
-            <li>Konqueror - 3.4 <a href="http://www.1-2-3-4.info/webtemplates/multiflex3/browsercam/linuxfed4-konqueror34.png">(View)</a> (Drop-down menu opens horizontally)</li>
+            <li>Fact 1</li>
+            <li>Fact 2</li>
           </ul>
         </div>
-        <hr class="clear-contentunit" />                    
+        <div class="column3-unit-right">
+          <h2>Heading h2</h2>                            
+          <h3>Heading h3</h3>
+          <ul>
+            <li><a href="#">Resource</a></li>
+            <li><a href="#">Resource</a></li>
+            <li><a href="#">Resource</a></li>
+            <li><a href="#">Resource</a></li>
+            <li><a href="#">Resource</a></li>
+            <li><a href="#">Resource</a></li>                  
+            <li><a href="#">Resource</a></li>
+            <li><a href="#">Resource</a></li>                  
+          </ul>
+          <h2>Heading h2</h2>                            
+          <h3>Heading h3</h3>
+          <ul>
+            <li>Fact 1</li>
+            <li>Fact 2</li>
+            <li>Fact 3</li>
+            <li>Fact 4</li>
+          </ul>
+        </div>                        
+        <hr class="clear-contentunit" />
 
         <!-- Content unit - One column -->
+        <h1 class="block">2 - Text and images</h1>
         <div class="column1-unit">
-          <h1>Coding tools</h1>                            
-          <p>Many people ask me what tools I use. Here is the list:</p>
-          <ul>
-            <li><a href="http://www.chami.com/html-kit/">HTML-Kit 292</a> freeware for coding the HTML documents.</li>
-            <li><a href="http://www.newsgator.com/NGOLProduct.aspx?ProdId=TopStyle&amp;ProdView=lite">TopStyle Lite 3.10</a> freeware for coding the CSS documents.</li>
-            <li><a href="http://www.browsercam.com">Browsercam</a> provided the fantastic browsertest screenshots. They even offer services where you can test your templates at a live server. For those who are serious about webdesign, this is the ultimate place to check for compatibility. It is well worth its money (for 24-hrs you can even get a free test account)!</li>
-          </ul>
-        </div>
-        <hr class="clear-contentunit" />                            
+          <h1>Main heading above image</h1>
+          <h1>Heading h1</h1>
+          <h3>Heading h3</h3>                    
+          <p><img src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" />Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostruderci tation ullamcorper suscipit lobortis nisl ut aliquip. orem ipsum dolor sit amet.</p>              
+          <p class="center"><img class="center" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" /></p>
+          <h1>Heading h1</h1>
+          <h3>Heading h3</h3>          
+          <p><img class="right" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" />Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostruderci tation ullamcorper suscipit lobortis nisl ut aliquip. orem ipsum dolor sit amet.</p>              
 
-        <!-- Content unit - One column -->
-        <div class="column1-unit">
-          <h1>Credits for reviews and ideas</h1>                            
-          <p>Persons who contributed with reviews, ideas or CMS ports:</p>
-          <ul>
-            <li><a href="http://www.vertexworks.com">Ryan Thrash</a>, <a href="http://www.blueskyvineyard.com">Jesse Rochman</a> (USA), <a href="http://sottwell.com">Susan Ottwell</a> (UK) -- Sticky hover zones, IE margin hack, and fantastic port to <a href="http://www.modxcms.com">MODx.</a></li>
-            <li><a href="http://martin.thumann.eu">Martin Thumann</a> (UK) -- Great port to <a href="http://www.contrexx-user.de">Contrexx</a>.</li>
-            <li><a href="http://www.cssplay.co.uk/menus/drop_examples.html">Stu Nicholls</a> (UK) -- Fabulous drop-down menus.</li>
-            <li><a href="http://www.mister-pixel.com/">Dan Popa</a> (Romania) -- CSS-hack to eliminate IE6 flicker bug.</li>
-            <li><a href="http://www.positioniseverything.net/easyclearing.html">Big John</a> (USA) -- CSS-hack for clearing floats.</li>
-            <li><a href="http://www.bartelme.at/showroom/archive/blue_crystal_desktops/">Wolfgang Bartelme</a> (Austria) -- Attractive green header.</li>
-            <li><a href="http://www.famfamfam.com/lab/icons/flags/">Mark James</a> (UK) -- Cool flag icons.</li>
-          </ul>
+          <h1>Main heading beside image</h1>
+          <h1 class="side"><img src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" />Heading h1</h1>
+          <h3 class="side">Heading h3</h3>
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostruderci tation ullamcorper suscipit lobortis nisl ut aliquip. orem ipsum dolor sit amet.</p>              
+          <p class="center"><img class="center" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" /></p>
+          <h1 class="side"><img class="right" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" />Heading h1</h1>
+          <h3 class="side">Heading h3</h3>
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostruderci tation ullamcorper suscipit lobortis nisl ut aliquip. orem ipsum dolor sit amet.</p>              
         </div>          
-        <hr class="clear-contentunit" />                                    
-        
+        <hr class="clear-contentunit" />
+          
         <!-- Content unit - One column -->
+        <h1 class="block">3 - Tables</h1>
         <div class="column1-unit">
-          <h1>Release Notes</h1>                            
-          <h2>Multiflex-3 / Update-2</h2>
-          <h3>November 29, 2006</h3>
+          <table>
+            <tr><th class="top" scope="col">Heading 1</th><th class="top" scope="col">Heading 2</th><th class="top" scope="col">Heading 3</th><th class="top" scope="col">Heading 4</th></tr>
+            <tr><th scope="row">Category 1</th><td>Data</td><td>Data</td><td>Data</td></tr>
+            <tr><th scope="row">Category 2</th><td>Data</td><td>Data</td><td>Data</td></tr>
+            <tr><th scope="row">Category 3</th><td>Data</td><td>Data</td><td>Data</td></tr>
+          </table>
+          <p class="caption"><strong>Table x.x.</strong> Caption</p>
+        </div>          
+        <hr class="clear-contentunit" />        
+                                             
+        <!-- Content unit - One column -->
+        <h1 class="block">4 - Paragraph text</h1>
+        <div class="column1-unit">
+          <h1>Heading h1</h1>
+          <h3>Heading h3</h3>
+          <h2>Heading h2</h2>
+          <h3>Heading h3</h3>
+          <h4>Heading h4</h4>
+          <h5>Heading h5</h5>                                
+          <h6>Heading h6</h6>
+                
+          <h5>Paragraph text</h5>
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam at libero. Lorem ipsum dolor sit amet, consectetuer adipiscing. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam at libero. Lorem ipsum dolor sit amet, consectetuer adipiscing. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam at libero. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+
+          <h5>Detail text line</h5>
+          <p class="details">Read more  ... </p>
+                            
+          <h5>Quote</h5>
+          <blockquote>
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam at libero. Lorem ipsum dolor sit amet, consectetuer adipiscing. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam at libero. Lorem ipsum dolor sit amet, consectetuer adipiscing. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam at libero. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+          </blockquote>
+
+          <h5>Bullet list</h5>
           <ul>
-            <li><strong>Printer layout and background color</strong><br />Browser: All / Description: When printing, a gap was created between the header and the content section. Further, no background color was printed for the left navigation sidebar. / Correction: Removed erroneous vertical padding in CSS-class ".header-breadcrumbs in all CSS-files "layoutNN_setup.css". Further, included a printer CSS statement for the class ".main-navigation" in CSS-files "layoutNN_setup.css".</li>
-            <li><strong>Template links</strong><br />Browser: All / Modification: All template links now point to my homepage, instead of to Open Webdesign. This change was done in "index.html".</li>      
+            <li>Bullet 1</li>
+            <li>Bullet 2</li>
           </ul>
 
-          <h2>Multiflex-3 / Update-1</h2>
-          <h3>November 27, 2006</h3>
-          <ul>
-            <li><strong>Drop-down menu items</strong><br />Browser: IE7 / Description: Misbehavior when hovering main link by showing multiple columns / Correction: Reformulated conditional "if" statements in "layoutNN.html", "headerNN.html" and "index.html".</li>
-            <li><strong>Bottom header background</strong><br />Browser: All / Description: Background gap between bottom header and breadcrumbs when browser font-size reduced / Correction: Added background to the CSS-class ".bottom-header" in "layoutNN_setup.css".</li>
-            <li><strong>Rounded corners line</strong><br />Browser: All / Description: When decreasing or increasing browser font size, a horizontal line appears above the rounded corners for subcontent boxes with boundary. Effect happens when font-size resizes, but page is not reloaded. / Solution: Simply reload the page, and the horizonal line disappears. This is a Safari bug which we have no control over.</li>
-            <li><strong>Top search form</strong><br />Browser: Konqueror 3.4 / Description: Field width available for search form widened, so that "Go" button appears to the right, and not below, the search area. / Modification: CSS-class ".header-breadrumbs" changed in "headerNN_setup.css" and "layoutNN_setup.css".</li>
-            <li><strong>Search form layout</strong><br />Browser: All / Description: Search forms now have their "Go" buttons below the search entry field (only exception is search form below the page header). Reason for this is that design remains consistent when browser font-sizes are resized / Modification: CSS-class ".button" changed in "headerNN_setup.css" and "layoutNN.css".</li>
-            <li><strong>Button styles</strong><br />Browser: All / Description: Default buttons are styled very differently for different browsers. / Correction: To harmonize button appearance we have now styled the buttons explicitly. However, Camino and Safari overrule this style with Mac-specific buttons. / Modification: CSS-class ".button" changed in "headerNN_setup.css", "layoutNN_setup.css" and "layoutNN_text.css".</li>
-            <li><strong>Credits for flags</strong><br />Credits were included for the flags.</li>
-          </ul>
-          <h2>Multiflex-3</h2>
-          <h3>November 23, 2006</h3>
-          <ul>
-            <li>First public release at <a href="http://www.openwebdesign.org">Open Webdesign</a>.</li>
-          </ul>          
-        </div>                  
+          <h5>Ordered list</h5>
+          <ol>
+            <li>Fact 1</li>
+            <li>Fact 2</li>
+          </ol>
+
+          <h5>Text orientation</h5>
+          <p>Text left.</p>
+          <p class="center">Text center.</p>
+          <p class="right">Text right.</p>
+        </div>
+        <hr class="clear-contentunit" />        
+                              
+        <!-- Content unit - One column -->
+        <h1 class="block">5 - Links</h1>
+        <div class="column1-unit">
+          <h5>Text link</h5>
+          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">Aliquam at Libero</a>.</p>
+
+          <h5>Image link</h5>
+          <p><a href="#"><img src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" /></a></p>
+          <p class="center"><a href="#"><img class="center" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" /></a></p>
+          <p><a href="#"><img class="right" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" /></a></p>
+        </div>
+        <hr class="clear-contentunit" />                
+                    
+        <!-- Content unit - One column -->
+        <h1 class="block">6 - Contact form</h1>
+        <div class="column1-unit">
+          <div class="contactform">
+            <form method="post" action="index.html">
+              <fieldset><legend>&nbsp;CONTACT DETAILS&nbsp;</legend>
+                <p><label for="contact_title" class="left">Title:</label>
+                   <select name="contact_title" id="contact_title" class="combo">
+                     <option value="choose"> Select... </option>
+                     <option value="mrs"> Mrs. </option>
+                     <option value="mr"> Mr. </option>
+                     <option value="dr"> Dr. </option></select></p>
+                <p><label for="contact_firstname" class="left">First name:</label>
+                   <input type="text" name="contact_firstname" id="contact_firstname" class="field" value="" tabindex="1" /></p>
+                <p><label for="contact_familyname" class="left">Family name:</label>
+                   <input type="text" name="contact_familyname" id="contact_familyname" class="field" value="" tabindex="1" /></p>
+                <p><label for="contact_street" class="left">Street:</label>
+                   <input type="text" name="contact_street" id="contact_street" class="field" value="" tabindex="1" /></p>
+                <p><label for="contact_postalcode" class="left">Postal code:</label>
+                   <input type="text" name="contact_postalcode" id="contact_postalcode" class="field" value="" tabindex="1" /></p>
+                <p><label for="contact_city" class="left">City:</label>
+                   <input type="text" name="contact_city" id="contact_city" class="field" value="" tabindex="1" /></p>
+                <p><label for="contact_country" class="left">Country:</label>
+                   <select name="contact_country" id="contact_country" class="combo">
+                     <option value="choose"> Select... </option>
+                     <option value="Sweden"> Sweden </option>
+                     <option value="United States"> United States </option>
+                     <option value="China"> China </option></select></p>
+                <p><label for="contact_phone" class="left">Phone:</label>
+                   <input type="text" name="contact_phone" id="contact_phone" class="field" value="" tabindex="2" /></p>
+                <p><label for="contact_email" class="left">Email:</label>
+                   <input type="text" name="contact_email" id="contact_email" class="field" value="" tabindex="2" /></p>
+                <p><label for="contact_url" class="left">Website:</label>
+                   <input type="text" name="contact_url" id="contact_url" class="field" value="" tabindex="3" /></p>
+              </fieldset>
+              <fieldset><legend>&nbsp;MESSAGE DETAILS&nbsp;</legend>
+                <p><label for="contact_subject" class="left">Subject:</label>
+                   <input type="text" name="contact_subject" id="contact_subject" class="field" value="" tabindex="4" /></p>
+                <p><label for="contact_urgency" class="left">Please reply:</label>
+                   <select name="contact_urgency" id="contact_urgency" class="combo">
+                     <option value="choose"> Select... </option>
+                     <option value="today"> Latest today </option>
+                     <option value="tomorrow"> Latest tomorrow </option>
+                     <option value="threedays"> Latest in 3 days </option>
+                     <option value="week"> Latest in a week </option>
+                     <option value="month"> Latest in a month </option></select></p>
+                <p><label for="contact_message" class="left">Message:</label>
+                   <textarea name="contact_message" id="contact_message" cols="45" rows="10"tabindex="5"></textarea></p>
+                <p><input type="submit" name="submit" id="submit" class="button" value="Send message" tabindex="6" /></p>
+              </fieldset>
+            </form>
+          </div>              
+        </div>
       </div>
                 
       <!-- B.3 SUBCONTENT -->
@@ -360,251 +372,108 @@
         <!-- Subcontent unit -->
         <div class="subcontent-unit-border">
           <div class="round-border-topleft"></div><div class="round-border-topright"></div>
-          <h1>Layout Options</h1>
-          <p>Multiflex-3 has five layout styles, for 1-column, 2-column and 3-column pages.</p>
-          <p>Multiflex-3 also has seven header layout styles.</p>
-          <p>See links in navigation bar for more details.</p>
+          <h1>Grey - Border</h1>
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
         </div>
 
         <!-- Subcontent unit -->
-        <div class="subcontent-unit-border">
+        <div class="subcontent-unit-border-blue">
           <div class="round-border-topleft"></div><div class="round-border-topright"></div>
-          <h1>Code Structure</h1>
-          <p>The CSS code has been modularized into two files for easier maintenance:</p>   
-          <p>1) <strong>setup.css</strong> defines the basic layout structure of the page.</p>
-          <p>2) <strong>text.css</strong> defines the text formats available for the page main section.</p>
-        </div>
-
-        <!-- Subcontent unit -->
-        <div class="subcontent-unit-border-orange">
-          <div class="round-border-topleft"></div><div class="round-border-topright"></div>
-          <h1 class="orange">About me</h1>
-          <p>My name is Gerhard, and you may be surprised to hear that for my real job I work as a full-time pastor for a Christian church. Feel free to visit our global <a href="http://www.sda.org">church website</a>.</p>
-          <p>In 2006 I decided to start my own website. When surfing around I didn't find the template I needed. So I began to develop my own, with trials, errors and many long nights. About half a dozen experiments and six months later, I feel that I am coming closer to the design I need. Multiflex-3 will be the one for me!</p>
-          <p>I have profited much from others who have shared their CSS-knowledge on the internet. The best way to show my appreciation is by sharing my results with others. So if this template is what you were looking for, then feel free to use and enjoy it!</p>
-          <p>If you want to get in touch with me, you can check my <a href="http://www.1-2-3-4.info"> website</a> or email me via <a href="http://www.openwebdesign.org/userinfo.phtml?user=gwolfgang">Open Webdesign</a>.</p>
-          <p class="center"><img class="center" src="./img/myphoto.jpg" alt="Image description" /></p>
+          <h1 class="blue">Blue - Border</h1>
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
         </div>
 
         <!-- Subcontent unit -->
         <div class="subcontent-unit-border-green">
           <div class="round-border-topleft"></div><div class="round-border-topright"></div>
-          <h1 class="green">It's free!</h1>
-          <p>Enjoy the template for free. There are no restrictions in the license. As a sign of appreciation, please keep the author credits "<a href="http://www.1-2-3-4.info">Design by G. Wolfgang</a>" in the template footer. Thanks!</p>
+          <h1 class="green">Green - Border</h1>
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+        </div>
+
+        <!-- Subcontent unit -->
+        <div class="subcontent-unit-border-orange">
+          <div class="round-border-topleft"></div><div class="round-border-topright"></div>
+          <h1 class="orange">Orange - Border</h1>
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+        </div>
+
+        <!-- Subcontent unit -->
+        <div class="subcontent-unit-noborder">
+          <div class="round-noborder-topleft"></div><div class="round-noborder-topright"></div>
+          <h1>Grey - No border</h1>
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+        </div>
+
+        <!-- Subcontent unit -->
+        <div class="subcontent-unit-noborder-blue">
+          <div class="round-noborder-topleft"></div><div class="round-noborder-topright"></div>
+          <h1 class="blue">Blue - No border</h1>
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+        </div>
+
+        <!-- Subcontent unit -->
+        <div class="subcontent-unit-noborder-green">
+          <div class="round-noborder-topleft"></div><div class="round-noborder-topright"></div>
+          <h1 class="green">Green - No border</h1>
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+        </div>
+
+        <!-- Subcontent unit -->
+        <div class="subcontent-unit-noborder-orange">
+          <div class="round-noborder-topleft"></div><div class="round-noborder-topright"></div>
+          <h1 class="orange">Orange - No border</h1>
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+        </div>
+
+        <!-- Subcontent unit -->
+        <div class="subcontent-unit-border">
+          <div class="round-border-topleft"></div><div class="round-border-topright"></div>
+          <h1>Heading h1</h1>
+          <h3>Heading h3</h3>
+
+          <h3>Paragraph text</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+
+          <h3>Bulleted list</h3>
+          <ul>
+            <li><a href="#">Link 1</a></li>
+            <li><a href="#">Link 2</a></li>
+            <li>Fact 1</li>
+            <li>Fact 2</li>                            
+          </ul>
+
+          <h3>Ordered list</h3>
+          <ol>
+            <li><a href="#">Link 1</a></li>
+            <li><a href="#">Link 2</a></li>
+            <li>Fact 1</li>
+            <li>Fact 2</li>                           
+          </ol>
+
+          <h3>Text orientation</h3>
+          <p>Text left.</p>
+          <p class="center">Text center.</p>
+          <p class="right">Text right.</p>
+
+          <h3>Image<br />(text align left)</h3>
+          <p><img src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" />Here is place for text.</p>
+          <p class="center"><img class="center" src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" /></p>
+          <p><img class="right" src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" />Here is place for text.</p>
+
+          <h3>Image<br />(text align right)</h3>
+          <p class="right"><img src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" />Here is place for text.</p>
+          <p class="center"><img class="center" src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" /></p>
+          <p class="right"><img class="right" src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" />Here is place for text.</p>
+
+          <!-- Image Links -->
+          <h3>Text link</h3>
+          <p><a href="#">Here is a link.</a></p>
+
+          <!-- Image Links -->
+          <h3>Image link</h3>
+          <p><a href="#"><img src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" /></a>Text as in image sections above.</p>
+          <p class="center"><a href="#"><img class="center" src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" /></a></p>
+          <p><a href="#"><img class="right" src="[% temas %]/default/imagenes/image.jpg" width="50" alt="Image description" title="Image title" /></a>Text as in image sections above.</p>     
         </div>
       </div>
     </div>
-      
-    <!-- C. FOOTER AREA -->      
-
-    <div class="footer">
-      <p>Copyright &copy; 2006 Your Company | All Rights Reserved</p>
-      <p class="credits">Original design by <a href="http://www.1-2-3-4.info" title="Designer Homepage">G. Wolfgang</a> | Adapted by <a href="#" title="Adaptor Homepage">Your Name</a> | Powered by <a href="#" title="Content Management System">Your CMS</a> | <a href="http://validator.w3.org/check?uri=referer" title="Validate XHTML code">W3C XHTML 1.0</a> | <a href="http://jigsaw.w3.org/css-validator/" title="Validate CSS code">W3C CSS 2.0</a></p>
-    </div>      
-  </div> 
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</head>
-<script language="javascript" type="text/javascript">
-
-    function cambiarIdioma() {
-        $('#lang_server').val($('#language').val());
-        $('#url').val(location.pathname);
-        $('#formLang').submit();
-    }
-
-</script>
-<body>
-
-<noscript>
-    <div class='tableMsgUser'>
-        <font class='fontMsgUser'>
-                <b>[% "Su navegador no soporta o no tiene habilidato Javascript" | i18n %]</b>
-        </font>
-    </div>
-</noscript>
-
-<div id="login-container">
-    <div class="buttonContainerHorizontal" style="width:100%">
-        [% IF nro_socio %]
-            <ul class="horizontal-list-default" style="float:right" >
-                        <li>
-                            [%  "OPAC" | setComboLang %]
-                        </li>
-                        &nbsp;
-                        <li>
-                            [% "Ingres&oacute; como:" | i18n %]<b> [% nro_socio %]</b>
-                        </li>
-                        &nbsp;
-            </ul>
-            <ul class="horizontal-list-default" style="float:left" >
-                    [% PERL %]
-                        print C4::AR::Filtros::link_to( text    => "[% 'Miembros' | i18n %]",
-                                                        boton   => "boton_miembros",
-                                                        width   => "95",
-                                                        url     => "/cgi-bin/koha/opac-user.pl", 
-                                                        title   => "[% 'Miembros' | i18n %]"
-                                                    ) ;
-                    [% END %]
-
-                    [% PERL %]
-                            print C4::AR::Filtros::link_to( text    => "[% 'Salir' | i18n %]",
-                                                            boton   => "boton_salir", 
-                                                            width   => "95",
-                                                            url     => "/cgi-bin/koha/logout.pl", 
-                                                            title   => "[% 'Salir' | i18n %]"
-                                                    ) ;
-                    [% END %]
-
-            [% ELSE %]
-                <li>
-                    [%  "OPAC" | setComboLang %]
-                </li>
-            </ul>
-        [% END %]
-    </div>
-</div>
-
-<div id="marco_principal">
-    <div id="marco_superior"></div>
-    <div id="end_top"></div>
-
-<div id="marco_contenido" class="contenido">
-    <div id="marco_busqueda">[% INCLUDE "opac-search.inc" %]</div>
-
-<!--     <div id="menu-container" class="main-header"> -->
-
-        <div class="buttonContainerHorizontal">
-            <ul class="horizontal-list" >
-
-                [% IF nro_socio %]
-
-                        [% PERL %]
-                            print C4::AR::Filtros::to_Button(   text    => "[% 'Ver mis favoritos' | i18n %]",
-                                                                boton   => "boton_favoritos", 
-                                                                onClick => "consultarFavoritos();",
-                                                                title   => "[% 'Ver mis favoritos' | i18n %]"
-                                                        ) ;
-                        [% END %]
-
-                        [% PERL %]
-                            print C4::AR::Filtros::to_Button( text    => "[% 'Historial de Prestamos' | i18n %]",
-                                                            boton   => "boton_miembros",
-                                                            onClick => "mostrarHistorialPrestamos([% socio.getNro_socio %]);",
-                                                            title   => "[% 'Mostrar Historial de Prestamos' | i18n %]"
-                                                        ) ;
-                        [% END %]
-
-                        [% PERL %]
-                            print C4::AR::Filtros::to_Button(   text    => "[% 'Historial de Reservas' | i18n %]",
-                                                                boton   => "boton_favoritos", 
-                                                                onClick => "mostrarHistorialReservas([% socio.getNro_socio %]);",
-                                                                title   => "[% 'Mostrar Historial de Reservas' | i18n %]"
-                                                        ) ;
-                        [% END %]
-
-                [% END %]
-
-                [% PERL %]
-                    print C4::AR::Filtros::link_to( text    => "[% 'Registrarse' | i18n %]",
-                                                    boton   => "boton_registrarse", 
-                                                    width   => "95",
-                                                    class   => "horizontal",
-                                                    url     => "/join.html", 
-                                                    title   => "[% 'Registrarse' | i18n %]"
-                                                ) ;
-                [% END %]  
-
-                [% IF hiddesearch %]
-                    <!-- Y ACA?????? DO NOTHING????? -->
-                [% ELSE %]
-                    [% PERL %]
-                                print C4::AR::Filtros::link_to( text    => "[% 'Buscar' | i18n %]",
-                                                                boton   => "boton_buscar", 
-                                                                width   => "95",
-                                                                url     => "/cgi-bin/koha/opac-search.pl", 
-                                                                class   => "horizontal",
-                                                                title   => "[% 'Buscar' | i18n %]"
-                                                            ) ;
-                    [% END %]  
-                [% END %]
-
-                [% PERL %]
-                            print C4::AR::Filtros::link_to( text    => "[% 'Inicio' | i18n %]",
-                                                            boton   => "boton_inicio", 
-                                                            width   => "95",
-                                                            class   => "horizontal",
-                                                            url     => "/cgi-bin/koha/opac-user.pl", 
-                                                            title   => "[% 'Inicio' | i18n %]"
-                                                        ) ;
-                [% END %]
-
-            </ul>
-    </div>
-</div>
-<div id="resultHistoriales"> </div>
-<div id="result"> </div>
-<!-- usado como referencia por el MessageHelper     -->
-
