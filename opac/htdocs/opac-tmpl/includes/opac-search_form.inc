@@ -1,8 +1,9 @@
         <div class="searchform">
-          <form action="index.html" method="get">
+          <form action="/cgi-bin/koha/opac-busquedasDB.pl" method="get">
             <fieldset>
-              <input name="field" class="field"  value=" Search..." />
-              <input type="submit" name="button" class="button" value="GO!" />
+              <input name="string" class="field"  value=" [% 'Buscar' | i18n %]..." />
+              <input type="submit" name="button" class="button" value="[% 'OK' | i18n %]!" />
+              <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
             </fieldset>
           </form>
         </div>

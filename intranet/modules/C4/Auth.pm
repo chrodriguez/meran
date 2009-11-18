@@ -446,7 +446,7 @@ sub checkauth {
 #     C4::AR::Utilidades::printHASH(\%ENV);
 
 	my $token;
-	if($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest'){
+	if(defined($ENV{'HTTP_X_REQUESTED_WITH'}) && ($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest')){
 		my $obj = $query->param('obj');
 
 		if ( defined($obj) ){

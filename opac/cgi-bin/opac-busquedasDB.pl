@@ -11,7 +11,7 @@ use Time::HiRes;
 my $input = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-                        template_name => "opac-busquedaResult.tmpl",
+                        template_name => "opac-main.tmpl",
                         query => $input,
                         type => "opac",
                         authnotrequired => 1,
@@ -23,6 +23,12 @@ my $obj=$input->param('obj');
 
 if($obj){
     $obj= C4::AR::Utilidades::from_json_ISO($obj);
+}else{
+  my %hash_temp = {};
+  $obj = \%hash_temp;
+  $obj->{'tipoAccion'} = $input->param('tipoAccion');
+  $obj->{'string'} = $input->param('string');
+  $obj->{'tipoBusqueda'} = 'all';
 }
 
 my $ini= $obj->{'ini'};
@@ -60,11 +66,14 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 # FIXME falta implementar
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
+    C4::AR::Debug::debug("ENTRA A COMBINABLE");
     if ($obj->{'tipoBusqueda'} eq 'all'){
         ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj);
     }else{
         ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
     }
+    $t_params->{'partial_template'}= "opac-busquedaResult.inc";
+
 }
 
 
