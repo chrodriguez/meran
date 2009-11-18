@@ -23,54 +23,34 @@
    
         <!-- Site message -->
         <div class="sitemessage">
-          <h1>EASY &bull; FRESH &bull; ROBUST</h1>
-          <h2>The third generation Multiflex is here, now with cooler design features and easier code.</h2>
+          <h1>[% 'Cat&aacute;logo P&uacute;blico' | i18n %] &bull; [% 'Facultad de Inform&aacute;tica' | i18n %] &bull; UNLP</h1>
+          <h2>[% 'Informacion de la UI?????' | i18n %]</h2>
           <h3><a href="#">&rsaquo;&rsaquo;&nbsp;More details</a></h3>
-        </div>        
+        </div>
       </div>
-      
       <!-- A.3 HEADER BOTTOM -->
       <div class="header-bottom">
-      
         <!-- Navigation Level 2 (Drop-down menus) -->
         <div class="nav2">
-    
           <!-- Navigation item -->
           <ul>
-            <li><a href="index.html">Overview</a></li>
+            <li><a href="/cgi-bin/koha/opac-main.pl">[% 'Inicio' | i18n %]</a></li>
           </ul>
-          
           <!-- Navigation item -->
           <ul>
-            <li><a href="#">Page Layouts<!--[if IE 7]><!--></a><!--<![endif]-->
+            <li><a href="#">[% 'Accesos' | i18n %]<!--[if IE 7]><!--></a><!--<![endif]-->
               <!--[if lte IE 6]><table><tr><td><![endif]-->
                 <ul>
-                  <li><a href="layout1.html">Layout-1 (1-col)</a></li>
-                  <li><a href="layout2.html">Layout-2 (2-col)</a></li>
-                  <li><a href="layout3.html">Layout-3 (2-col)</a></li>
-                  <li><a href="layout4.html">Layout-4 (3-col)</a></li>
-                  <li><a href="layout5.html">Layout-5 (3-col)</a></li>                                    
+                  <li><a href="#">[% 'B&uacute;squeda Avanzada' | i18n %]</a></li>
+                  <li><a href="#">[% 'Accesos' | i18n %]</a></li>
+                  <li><a href="#">[% 'Accesos' | i18n %]</a></li>
+                  <li><a href="#">[% 'Accesos' | i18n %]</a></li>
+                  <li><a href="#">[% 'Accesos' | i18n %]</a></li>                                    
                 </ul>
               <!--[if lte IE 6]></td></tr></table></a><![endif]-->
             </li>
           </ul>          
 
-          <!-- Navigation item -->
-          <ul>
-            <li><a href="#">Header Layouts<!--[if IE 7]><!--></a><!--<![endif]-->
-              <!--[if lte IE 6]><table><tr><td><![endif]-->
-                <ul>
-                  <li><a href="header1.html">Header-1 (T+M+B)</a></li>
-                  <li><a href="header2.html">Header-2 (T+M)</a></li>
-                  <li><a href="header3.html">Header-3 (T+B)</a></li>
-                  <li><a href="header4.html">Header-4 (M+B)</a></li>
-                  <li><a href="header5.html">Header-5 (T)</a></li>
-                  <li><a href="header6.html">Header-6 (M)</a></li>
-                  <li><a href="header7.html">Header-7 (B)</a></li>
-                </ul>
-              <!--[if lte IE 6]></td></tr></table></a><![endif]-->
-            </li>
-          </ul>          
         </div>
       </div>
 
