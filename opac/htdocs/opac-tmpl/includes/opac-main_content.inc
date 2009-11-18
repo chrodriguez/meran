@@ -1,6 +1,12 @@
 <div class="main-content">
    <!-- Pagetitle -->
-        <h1 class="pagetitle">Multiflex-3 / Layout-4</h1>
+        <h1 class="pagetitle">
+            [% IF content_title %]
+                [% content_title %]
+            [% ELSE %]
+                [% 'Si no hay titulo, que pongo?????' | i18n %]
+            [% END %]
+        </h1>
 
         <!-- Content unit - One column -->
         <h1 class="block">1 - Column types</h1>
@@ -16,104 +22,7 @@
         </div>
         <hr class="clear-contentunit" />
         <!-- Content unit - Two columns -->
-        <div class="column2-unit-left">
-          <h1>Heading h1</h1>                            
-          <h3>Heading h3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod tincidunt ut laoreet dolore <a href="#">magna aliquam</a> erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip.</p>
-          <h1>Heading h1</h1>                            
-          <h3>Heading h3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod tincidunt ut laoreet dolore <a href="#">magna aliquam</a> erat volutpat. Ut wisi enim ad minim veniam.</p>
-        </div>
-        <div class="column2-unit-right">
-          <h1>Heading h1</h1>                            
-          <h3>Heading h3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod.</p>
-          <h1>Heading h1</h1>                            
-          <h3>Heading h3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod.</p>
-          <h1>Heading h1</h1>                            
-          <h3>Heading h3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod.</p>
-        </div>
-        <hr class="clear-contentunit" />
 
-        <!-- Content unit - Three columns -->
-        <div class="column3-unit-left">
-          <h2>Heading h2</h2>   
-          <h3>Heading h3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>.</p>
-          <h2>Heading h2</h2>                            
-          <h3>Heading h3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod. Lorem ipsum dolor sit amet.</p>
-        </div>
-        <div class="column3-unit-middle">
-          <h2>Heading h2</h2>                            
-          <h3>Heading h3</h3>
-          <ul>
-            <li><a href="#">Resource</a></li>
-            <li><a href="#">Resource</a></li>
-            <li><a href="#">Resource</a></li>
-          </ul>
-          <h2>Heading h2</h2>                            
-          <h3>Heading h3</h3>
-          <ul>
-            <li>Fact 1</li>
-            <li>Fact 2</li>
-          </ul>
-          <h2>Heading h2</h2>                            
-          <h3>Heading h3</h3>
-          <ul>
-            <li>Fact 1</li>
-            <li>Fact 2</li>
-          </ul>
-        </div>
-        <div class="column3-unit-right">
-          <h2>Heading h2</h2>                            
-          <h3>Heading h3</h3>
-          <ul>
-            <li><a href="#">Resource</a></li>
-            <li><a href="#">Resource</a></li>
-            <li><a href="#">Resource</a></li>
-            <li><a href="#">Resource</a></li>
-            <li><a href="#">Resource</a></li>
-            <li><a href="#">Resource</a></li>                  
-            <li><a href="#">Resource</a></li>
-            <li><a href="#">Resource</a></li>                  
-          </ul>
-          <h2>Heading h2</h2>                            
-          <h3>Heading h3</h3>
-          <ul>
-            <li>Fact 1</li>
-            <li>Fact 2</li>
-            <li>Fact 3</li>
-            <li>Fact 4</li>
-          </ul>
-        </div>                        
-        <hr class="clear-contentunit" />
-
-        <!-- Content unit - One column -->
-        <h1 class="block">2 - Text and images</h1>
-        <div class="column1-unit">
-          <h1>Main heading above image</h1>
-          <h1>Heading h1</h1>
-          <h3>Heading h3</h3>                    
-          <p><img src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" />Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostruderci tation ullamcorper suscipit lobortis nisl ut aliquip. orem ipsum dolor sit amet.</p>              
-          <p class="center"><img class="center" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" /></p>
-          <h1>Heading h1</h1>
-          <h3>Heading h3</h3>          
-          <p><img class="right" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" />Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostruderci tation ullamcorper suscipit lobortis nisl ut aliquip. orem ipsum dolor sit amet.</p>              
-
-          <h1>Main heading beside image</h1>
-          <h1 class="side"><img src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" />Heading h1</h1>
-          <h3 class="side">Heading h3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostruderci tation ullamcorper suscipit lobortis nisl ut aliquip. orem ipsum dolor sit amet.</p>              
-          <p class="center"><img class="center" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" /></p>
-          <h1 class="side"><img class="right" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" />Heading h1</h1>
-          <h3 class="side">Heading h3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostruderci tation ullamcorper suscipit lobortis nisl ut aliquip. orem ipsum dolor sit amet.</p>              
-        </div>          
-        <hr class="clear-contentunit" />
-          
         <!-- Content unit - One column -->
         <h1 class="block">3 - Tables</h1>
         <div class="column1-unit">
@@ -125,61 +34,8 @@
           </table>
           <p class="caption"><strong>Table x.x.</strong> Caption</p>
         </div>          
-        <hr class="clear-contentunit" />        
-                                             
-        <!-- Content unit - One column -->
-        <h1 class="block">4 - Paragraph text</h1>
-        <div class="column1-unit">
-          <h1>Heading h1</h1>
-          <h3>Heading h3</h3>
-          <h2>Heading h2</h2>
-          <h3>Heading h3</h3>
-          <h4>Heading h4</h4>
-          <h5>Heading h5</h5>                                
-          <h6>Heading h6</h6>
-                
-          <h5>Paragraph text</h5>
-          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam at libero. Lorem ipsum dolor sit amet, consectetuer adipiscing. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam at libero. Lorem ipsum dolor sit amet, consectetuer adipiscing. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam at libero. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
-
-          <h5>Detail text line</h5>
-          <p class="details">Read more  ... </p>
-                            
-          <h5>Quote</h5>
-          <blockquote>
-            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam at libero. Lorem ipsum dolor sit amet, consectetuer adipiscing. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam at libero. Lorem ipsum dolor sit amet, consectetuer adipiscing. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam at libero. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
-          </blockquote>
-
-          <h5>Bullet list</h5>
-          <ul>
-            <li>Bullet 1</li>
-            <li>Bullet 2</li>
-          </ul>
-
-          <h5>Ordered list</h5>
-          <ol>
-            <li>Fact 1</li>
-            <li>Fact 2</li>
-          </ol>
-
-          <h5>Text orientation</h5>
-          <p>Text left.</p>
-          <p class="center">Text center.</p>
-          <p class="right">Text right.</p>
-        </div>
         <hr class="clear-contentunit" />
-        <!-- Content unit - One column -->
-        <h1 class="block">5 - Links</h1>
-        <div class="column1-unit">
-          <h5>Text link</h5>
-          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">Aliquam at Libero</a>.</p>
 
-          <h5>Image link</h5>
-          <p><a href="#"><img src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" /></a></p>
-          <p class="center"><a href="#"><img class="center" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" /></a></p>
-          <p><a href="#"><img class="right" src="[% temas %]/default/imagenes/image.jpg" alt="Image description" title="Image title" /></a></p>
-        </div>
-        <hr class="clear-contentunit" />
-        <!-- Content unit - One column -->
         <h1 class="block">6 - Contact form</h1>
         <div class="column1-unit">
           <div class="contactform">

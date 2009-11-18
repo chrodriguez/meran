@@ -5,8 +5,9 @@
         <!-- Sitelogo and sitename -->
         <a class="sitelogo" href="#" title="Go to Start page"></a>
         <div class="sitename">
-          <h1><a href="index.html" title="Go to Start page">MULTIFLEX&bull;3<span style="font-weight:normal;font-size:50%;">&nbsp;update-2</span></a></h1>
-          <h2>Open Source Template</h2>
+          <h1><a href="index.html" title="Go to Start page">[% 'MERAN' | i18n %] &bull; 
+          <span style="font-weight:normal;font-size:50%;">&nbsp;[% 'Facultad de Inform&aacute;tica' | i18n %]</span></a></h1>
+          <h2>[% 'Cat&aacute;logo P&uacute;blico' | i18n %]</h2>
         </div>
     [% INCLUDE 'opac-header-nav.inc' %]
     <!-- B. MAIN -->

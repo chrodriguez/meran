@@ -5,27 +5,23 @@
             <li><a href="#" title="Homepage auf Deutsch"><img src="[% temas %]/default/imagenes/flag_germany.gif" alt="Image description" /></a></li>
             <li><a href="#" title="Hemsidan p&aring; svenska"><img src="[% temas %]/default/imagenes/flag_sweden.gif" alt="Image description" /></a></li>
           </ul>
-        </div>          
-
+        </div>
         <!-- Navigation Level 1 -->
         <div class="nav1">
           <ul>
-            <li><a href="#" title="Go to Start page">Home</a></li>
-            <li><a href="#" title="Get to know who we are">About</a></li>
-            <li><a href="#" title="Get in touch with us">Contact</a></li>                                                                       
-            <li><a href="#" title="Get an overview of website">Sitemap</a></li>
+            <li><a href="#" title="[% 'Ir a la p&aacute;gina de inicio' | i18n %]">[% 'Inicio' | i18n %]</a></li>
+            <li><a href="#" title="[% 'Sepa qui&eacute;nes somos' | i18n %]">[% 'Acerca de' | i18n %]</a></li>
+            <li><a href="#" title="[% 'P&oacute;ngase en contacto con nosotros' | i18n %]">[% 'Contacto' | i18n %]</a></li>
           </ul>
-        </div>              
+        </div>
       </div>
-      
       <!-- A.2 HEADER MIDDLE -->
       <div class="header-middle">    
-   
         <!-- Site message -->
         <div class="sitemessage">
-          <h1>[% 'Cat&aacute;logo P&uacute;blico' | i18n %] &bull; [% 'Facultad de Inform&aacute;tica' | i18n %] &bull; UNLP</h1>
+          <h1>&bull; [% 'Facultad de Inform&aacute;tica' | i18n %]</h1>
           <h2>[% 'Informacion de la UI?????' | i18n %]</h2>
-          <h3><a href="#">&rsaquo;&rsaquo;&nbsp;More details</a></h3>
+          <h3><a href="#">&rsaquo;&rsaquo;&nbsp;[% 'Este link servira para algo???' %]</a></h3>
         </div>
       </div>
       <!-- A.3 HEADER BOTTOM -->

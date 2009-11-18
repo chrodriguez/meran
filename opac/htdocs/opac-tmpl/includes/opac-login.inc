@@ -1,16 +1,27 @@
 <!-- Login -->
-<h1>Login</h1>
+<h1>[% 'Ingresar' | i18n %]</h1>
 <div class="loginform">
   <form method="post" action="index.html"> 
     <p><input type="hidden" name="rememberme" value="0" /></p>
     <fieldset>
-      <p><label for="username_1" class="top">User:</label><br />
-        <input type="text" name="username_1" id="username_1" tabindex="1" class="field" onkeypress="return webLoginEnter(document.loginfrm.password);" value="" /></p>
-      <p><label for="password_1" class="top">Password:</label><br />
-        <input type="password" name="password_1" id="password_1" tabindex="2" class="field" onkeypress="return webLoginEnter(document.loginfrm.cmdweblogin);" value="" /></p>
-      <p><input type="checkbox" name="checkbox_1" id="checkbox_1" class="checkbox" tabindex="3" size="1" value="" onclick="webLoginCheckRemember()" /><label for="checkbox_1" class="right">Remember me</label></p>
-      <p><input type="submit" name="cmdweblogin" class="button" value="LOGIN"  /></p>
-      <p><a href="#" onclick="webLoginShowForm(2);return false;" id="forgotpsswd_1">Password forgotten?</a></p>
+      <p>
+        <label for="username_1" class="top">[% 'Usuario' | i18n %]:</label><br />
+        <input type="text" name="username_1" id="username_1" tabindex="1" class="field" value="" />
+      </p>
+      <p>
+        <label for="password_1" class="top">[% 'Contrase&ntilde;a' | i18n %]:</label><br />
+        <input type="password" name="password_1" id="password_1" tabindex="2" class="field" value="" />
+      </p>
+      <p>
+        <input type="checkbox" name="checkbox_1" id="checkbox_1" class="checkbox" tabindex="3" size="1" value="" />
+        <label for="checkbox_1" class="right">[% 'Recordarme' | i18n %]</label>
+      </p>
+      <p>
+        <input type="submit" name="cmdweblogin" class="button" value="[% 'Enviar' | i18n %]"  />
+      </p>
+      <p>
+        <a href="#" id="forgotpsswd_1">[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]</a>
+      </p>
     </fieldset>
   </form>
 </div>
