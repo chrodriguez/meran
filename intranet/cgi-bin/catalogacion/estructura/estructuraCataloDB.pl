@@ -365,20 +365,9 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
       }
     }
 
-#     my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($obj->{'id3'});
-  
-#     if($nivel3){
-#         my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($nivel3->getId2);
-#         if($nivel2){
-#           $obj->{'id_tipo_doc'} = $nivel2->getTipo_documento();
-            #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
-# 	        my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getEstructuraConDatos($obj);
-            my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getDatosFromNivel($obj);
-            
-	        $infoOperacionJSON= to_json($catalogaciones_array_ref);
-#         }
-#     }
-# die;
+    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getDatosFromNivel($obj);
+    
+	$infoOperacionJSON= to_json($catalogaciones_array_ref);
     
     C4::Auth::print_header($session);
     print $infoOperacionJSON;

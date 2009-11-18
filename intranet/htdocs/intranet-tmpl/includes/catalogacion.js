@@ -269,7 +269,7 @@ function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL= 1;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug= true;
-	objAH.cache= true;
+// 	objAH.cache= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel= _NIVEL_ACTUAL;
@@ -314,7 +314,7 @@ function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL= 2;
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug= true;
-	  objAH.cache= true;
+// 	  objAH.cache= true;
     objAH.showStatusIn = 'estructuraDelNivel2';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -353,7 +353,7 @@ function mostrarEstructuraDelNivel3(){
 
     objAH=new AjaxHelper(updateMostrarEstructuraDelNivel3);
     objAH.debug= true;
-	  objAH.cache= true;
+// 	  objAH.cache= true;
     objAH.showStatusIn = 'estructuraDelNivel3';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -791,12 +791,11 @@ function procesarInfoJson(json){
 
     for(var i=0; i < objetos.length; i++){
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
-        COMPONENTES_ARRAY[i]= objetos[i];
+        COMPONENTES_ARRAY[i] = objetos[i];
         procesarObjeto(objetos[i]);
     }
 	//hago foco en la primer componente
 	_setFoco();
-//     if( MODIFICAR == 0 && _NIVEL_ACTUAL == 2 && AGREGAR_COMPLETO == 1){  
     if( MODIFICAR == 0 && _NIVEL_ACTUAL == 2 ){  
     //si se esta agregando un NIVEL 2  
         _seleccionarTipoDocumentoYDeshabilitarCombo();
@@ -810,100 +809,69 @@ function procesarInfoJson(json){
  * objeto, elemento que contiene toda la info necesaria.
  */
 function procesarObjeto(objeto){
-    var libtext = $.trim(objeto.liblibrarian);
-    var tipo = $.trim(objeto.tipo);
-    var ref = objeto.referencia;
-    var valor = objeto.valor;         
-    var varios = objeto.varios;
-    var idComp = objeto.idCompCliente;
+
+    TAB_INDEX++;
+
+    var marc_conf_obj       = new marc_conf(objeto);
+    var vista_intra         = marc_conf_obj.getVistaIntra();
+    var tipo                = marc_conf_obj.getTipo();
     var comp;
     var strComp;
-    var auto = 0;
-    var unoLinea = 0;
-    var idDiv = "div"+idComp;
-    var divComp = crearDivComponente(idDiv);
-//     var tiene_estructura = objeto.tiene_estructura; #falta q los niveles 1, 2, 3 mantengan esta estructura
-    var tiene_estructura = 1; 
+    var divComp             = crearDivComponente("div"+marc_conf_obj.getIdCompCliente());
+    var tiene_estructura    = marc_conf_obj.getTieneEstructura(); //falta q los niveles 1, 2, 3 mantengan esta estructura
 
-    if(objeto.repetible == "1"){  
-        libtext = libtext + "<b> (R) </b>";
+    if(marc_conf_obj.getRepetible() == "1"){  
+        vista_intra = vista_intra + "<b> (R) </b>";
     }
 
-    if(objeto.obligatorio == "1"){  
-        libtext = libtext + "<b> * </b>";
+    if(marc_conf_obj.getObligatorio() == "1"){  
+        vista_intra = vista_intra + "<b> * </b>";
     }
 
-    if(objeto.tiene_estructura == '0'){ 
-        libtext = libtext + "<div class='divComponente'><input type='text' value='" + objeto.dato + " (NO TIENE ESTRUCTURA)' size='55' disabled></div>";
+    if(marc_conf_obj.getTieneEstructura() == '0'){ 
+        vista_intra = vista_intra + "<div class='divComponente'><input type='text' value='" + marc_conf_obj.getDato() + " (NO TIENE ESTRUCTURA)' size='55' disabled></div>";
         tiene_estructura = 0;
     }
 
-    var divLabel = crearDivLabel(libtext, idComp);
+    var divLabel = crearDivLabel(vista_intra, marc_conf_obj.getIdCompCliente());
 
-    strComp="<li id='LI" + objeto.idCompCliente + "' class='sub_item'> "+divLabel+divComp+"</li>";
-    $(strComp).appendTo("#"+getDivDelNivel());
+    strComp = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + divComp + "</li>";
+
+    $("#" + getDivDelNivel()).append(strComp);
 
     if(tiene_estructura == 1){
 
         switch(tipo){
             case "text":
-                //tipo,id,opciones,valor
-                comp = crearComponente(tipo,idComp,objeto,"");
-                $(comp).appendTo("#"+idDiv);
-                $("#"+idComp).val(objeto.valText);
+                crearText(marc_conf_obj);
             break;
             case "combo":
-                comp= crearComponente(tipo,idComp,objeto,valor);
-                $(comp).appendTo("#"+idDiv);
+                crearCombo(marc_conf_obj);
             break;
             case "texta2":
-                compText=crearComponente("text",idComp,objeto,"");
-                comp=crearComponente("texta","texta"+idComp,"readonly='readonly'","");
-                var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+idComp+")' src='[% themelang %]/images/sacar.png'>";
-                comp="<div style='float: left;padding-right:1%; padding-bottom: 1%;'>"+comp+"</div>";
-                compText=compText+" "+boton;
-                $(compText).appendTo("#"+idDiv);
-                $(comp).appendTo("#strComp"+idComp);
-                $("#texta"+idComp).val(objeto.valTextArea);
+                crearTextArea(marc_conf_obj);
             break;
-		    case "auto":
-                //tipo,id,opciones,valor
-                comp= crearComponente(tipo,idComp,objeto,"");
-                $(comp).appendTo("#"+idDiv);
-			    _cearAutocompleteParaCamponente(objeto);
-			    //se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
-			    comp= crearComponente('hidden',objeto.idCompCliente + '_hidden',objeto,'');
-			    $(comp).appendTo("#"+idDiv);   
+		    case "auto": 
+                crearAuto(marc_conf_obj);
             break;
-		    case "calendar":
-                //tipo,id,opciones,valor
-                comp= crearComponente(tipo,idComp,objeto,"");
-                $(comp).appendTo("#"+idDiv);
-                $("#"+idComp).val(objeto.valText);
-			    $("#"+idComp).datepicker({ dateFormat: 'dd/mm/yy' });
+            case "calendar":
+                crearCalendar(marc_conf_obj);
 		    break;
             case "anio":
-                //tipo,id,opciones,valor
-                comp= crearComponente(tipo,idComp,objeto,"");
-                $(comp).appendTo("#"+idDiv);
-                $("#"+idComp).val(objeto.valText);
+                crearTextAnio(marc_conf_obj);
             break;
         }
     
-
-// crearBotonAgregarRepetible(objeto, idComp);
-
-    //     crearRegla(comp,idComp);
-    //Se agregan clases para cuando tenga que recuperar los datos.
+        //Se agregan clases para cuando tenga que recuperar los datos.
         if(objeto.obligatorio == "1"){
-            hacerComponenteObligatoria(idComp);
+            hacerComponenteObligatoria(marc_conf_obj.getIdCompCliente());
         }
 
     }
 }
 
 var RULES_OPTIONS = [];
-// FXIME DEPRECATED?????????
+// FIXME DEPRECATED?????????
 function create_rules_object(rule){
 
     var rules_array = rule.split("|");    
@@ -977,25 +945,25 @@ function _cambiarIdDeAutocomplete(){
 //crea el Autocomplete segun lo indicado en el parametro "referenciaTabla"
 function _cearAutocompleteParaCamponente(o){
 
-	switch(o.referenciaTabla){
-		case "autor": CrearAutocompleteAutores(		{IdInput: o.idCompCliente, 
-													IdInputHidden: o.idCompCliente + '_hidden'}
+	switch(o.getReferenciaTabla()){
+		case "autor": CrearAutocompleteAutores(		{IdInput: o.getIdCompCliente(), 
+													IdInputHidden: o.getIdCompCliente() + '_hidden'}
 									);
         break;
-		case "pais": CrearAutocompletePaises(	{IdInput: o.idCompCliente, 
-												IdInputHidden: o.idCompCliente + '_hidden' }
+		case "pais": CrearAutocompletePaises(	{IdInput: o.getIdCompCliente(), 
+												IdInputHidden: o.getIdCompCliente() + '_hidden' }
 									);
         break;
-		case "lenguaje": CrearAutocompleteLenguajes(	{IdInput: o.idCompCliente, 
-														IdInputHidden: o.idCompCliente + '_hidden' }
+		case "lenguaje": CrearAutocompleteLenguajes(	{IdInput: o.getIdCompCliente(), 
+														IdInputHidden: o.getIdCompCliente() + '_hidden' }
 									);
         break;
-		case "ciudad": CrearAutocompleteCiudades(	{IdInput: o.idCompCliente, 
-													IdInputHidden: o.idCompCliente + '_hidden' }
+		case "ciudad": CrearAutocompleteCiudades(	{IdInput: o.getIdCompCliente(), 
+													IdInputHidden: o.getIdCompCliente() + '_hidden' }
 									);
         break;
-        case "ui": CrearAutocompleteUI(   {IdInput: o.idCompCliente, 
-                                                    IdInputHidden: o.idCompCliente + '_hidden' }
+        case "ui": CrearAutocompleteUI(   {IdInput: o.getIdCompCliente(), 
+                                                    IdInputHidden: o.getIdCompCliente() + '_hidden' }
                                     );
 
         break;
@@ -1003,114 +971,172 @@ function _cearAutocompleteParaCamponente(o){
 }
 
 
-function marc_conf(){
-    this.liblibrarian = '';
-    this.itemtype = '';
-    this.campo =  '';
-    this.subcampo = '';
-    this.dato =  '';
-    this.nivel = '';
-    this.rules =  '';
-    this.tipo = '';
-    this.intranet_habilitado =  '';
-    this.tiene_estructura = '';
-    this.visible = '';
-    this.Id_rep = '';
-    this.repetible = '';
-    this.referencia = '';
-    this.obligatorio = '';
-    this.datoReferencia = '';
-    this.idCompCliente =  '';
-}
-
-
 function generarIdComponente(){
-    return '789';
+// TODO falta gerneralo
+    return '789'+TAB_INDEX;
 }
 
-// function clone(id){
 function clone(id){
-
-    var t = $('#LI'+id).clone();
-// TODO falta generar un ID de componente unico
-    t.attr('id', 'miguel');
+    var id_componente = generarIdComponente();
+//     var t = $('#LI'+id).clone();
+//     t.attr('LI'+id_componente, id_componente);
 //luego agregar esta estructura en el arreglo de componentes para q se pueda enviar al servidor
-    t.insertAfter($('#LI'+id)); 
-//     var objeto = crearObjeto(objeto)
-//     COMPONENTES_ARRAY.push(objeto);
+//     t.insertAfter($('#LI'+id)); 
     var obj_temp = _getMARC_conf_ById(id);
-    obj_temp.idCompCliente = generarIdComponente();
-    COMPONENTES_ARRAY.push(obj_temp);
+    var obj;
+    obj = copy(obj_temp);
+    obj.idCompCliente = id_componente;
+    procesarObjeto(obj);
+    
+    COMPONENTES_ARRAY.push(obj);
+}
+
+function cloneObj(o) {
+    if(typeof(o) != 'object') return o;
+    if(o == null) return o;
+    
+    var newO = new Object();
+    
+    for(var i in o) newO[i] = cloneObj(o[i]);
+
+    return newO;
 }
 
 function crearBotonAgregarRepetible(obj){
-    if(obj.repetible == '1'){
-//         return "<input type='button' value='+' size='10' onclick=clone('"+ obj.idCompCliente +"')>";
-//         $('#'+id).before("<input id='BOTON_ADD_" + id +"' type='button' value='+' size='10'>");
-//         $('#BOTON_ADD_'+id).click(function (obj, id){clone(obj, id);})
-        return "<input type='button' value='+' size='10' onclick=clone('"+ obj.idCompCliente +"')>";
+
+    if(obj.getRepetible() == '1'){
+        return "<input type='button' value='+' size='10' onclick=clone('"+ obj.getIdCompCliente() +"')>";
     }else{  
         return "";
     }
 }
 
-/*
- * crearComponente
- * crea el string HTML del componente correspondiente al parametro tipo.
- * @params
- * tipo, corresponde a la clase de componente html que se quiere crear.
- * id, identificador para el componente que se va a crear.
- * opciones, son las opciones que se generan si el componente es un combobox, para los demas esta en blanco.
- */
-function crearComponente(tipo,id,objeto,valor){
-    var comp;
-	TAB_INDEX++;
-// TODO queda pendiente q los inputs se adapten a la resolucion de la pantalla
-    switch(tipo){
-        case    "text": comp = "<input type='"+tipo+"' id='"+id+"' value='"+valor+"' size='55' tabindex="+TAB_INDEX+" name='"+id+"'>";     
-//                 crearBotonAgregarRepetible(objeto, id);
-                comp = comp + crearBotonAgregarRepetible(objeto);
-        break;
-        case "combo": comp = "<select id='"+id+"' name='"+id+"' tabindex="+TAB_INDEX+">\n<option value=''>Elegir opci&oacute;n</option>\n";
-            var op="";
-            var def="";
-            var opciones = objeto.opciones;
+function marc_conf(obj){
 
-            for(var i=0; i< opciones.length; i++){
-                if(valor == opciones[i].clave){
-                    def=" selected='selected' ";
-                }
-                op = op+"<option value='"+opciones[i].clave+ "'" + def +"'>"+opciones[i].valor+"</option>\n";
-                def = "";
-            }
+    this.liblibrarian = obj.liblibrarian;
+    this.itemtype = obj.itemtype;
+    this.campo =  obj.campo;
+    this.subcampo = obj.subcampo;
+    this.dato =  obj.dato;
+    this.nivel = obj.nivel;
+    this.rules =  obj.rules;
+    this.tipo = obj.tipo;
+    this.intranet_habilitado =  obj.intranet_habilitado;
+    this.tiene_estructura = obj.tiene_estructura;
+    this.visible = obj.visible;
+    this.Id_rep = obj.Id_rep;
+    this.repetible = obj.repetible;
+    this.referencia = obj.referencia;
+    this.obligatorio = obj.obligatorio;
+    this.datoReferencia = obj.datoReferencia;
+    this.idCompCliente =  obj.idCompCliente;
+    this.referenciaTabla =  obj.referenciaTabla;
+    this.opciones = obj.opciones;
+    this.defaultValue = obj.defaultValue;
+    this.tiene_estructura = obj.tiene_estructura;
 
-            comp = comp + op + "</select>";
-            comp = comp + crearBotonAgregarRepetible(objeto);
-// crearBotonAgregarRepetible(objeto);
-        break;
-        case    "texta": comp = "<textarea id='"+id+"' name='"+id+"'" + opciones +" rows='4' tabindex="+TAB_INDEX+">"+valor+"</textarea>";
-                comp = comp + crearBotonAgregarRepetible(objeto);
-// crearBotonAgregarRepetible(objeto);
-        break;
-		case    "auto": comp = "<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='55' tabindex="+TAB_INDEX+">";
-                comp = comp + crearBotonAgregarRepetible(objeto);
-// crearBotonAgregarRepetible(objeto);
-        break;
-		case    "hidden": comp = "<input type='hidden' id='"+id+"' name='"+id+"' value='"+valor+"'>";
-        break;
-		case    "calendar": comp = "<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
-                comp = comp + crearBotonAgregarRepetible(objeto);
-// crearBotonAgregarRepetible(objeto);
-        break;
-        case    "anio": comp = "<input type='"+tipo+"' id='"+id+"' name='"+id+"' value='"+valor+"' size='10' tabindex="+TAB_INDEX+">";
-                comp = comp + crearBotonAgregarRepetible(objeto);
-// crearBotonAgregarRepetible(objeto);
-        break;
-    }
+    function fGetIdCompCliente(){ return this.idCompCliente };
+    function fGetCampo(){ return this.campo };
+    function fGetSubCampo(){ return this.subcampo };
+    function fGetDato(){ return this.dato };
+    function fGetTipo(){ return $.trim(this.tipo) };
+    function fGetRepetible(){ return this.repetible };
+    function fGetReferenciaTabla(){ return this.referenciaTabla };    
+    function fGetOpciones(){ return this.opciones };
+    function fGetDefaultValue(){ return this.defaultValue };
+    function fGetTieneEstructura(){ return this.tiene_estructura };
+    function fGetObligatorio(){ return this.obligatorio };
+    function fGetVistaIntra(){ return $.trim(this.liblibrarian) };
 
-    return comp;
+    //metodos
+    this.getIdCompCliente   = fGetIdCompCliente;
+    this.getCampo           = fGetCampo;
+    this.getSubCampo        = fGetSubCampo;
+    this.getDato            = fGetDato;
+    this.getTipo            = fGetTipo;
+    this.getRepetible       = fGetRepetible;
+    this.getReferenciaTabla = fGetReferenciaTabla;
+    this.getOpciones        = fGetOpciones;
+    this.getDefaultValue    = fGetDefaultValue;
+    this.getTieneEstructura = fGetTieneEstructura;
+    this.getObligatorio     = fGetObligatorio;
+    this.getVistaIntra      = fGetVistaIntra;
 }
 
+function crearText(obj){
+    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "'>";     
+    comp = comp + crearBotonAgregarRepetible(obj);
+    $("#div" + obj.getIdCompCliente()).append(comp);
+}
+
+function crearCombo(obj){
+    var comp = "<select id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' tabindex="+TAB_INDEX+">\n<option value=''>Elegir opci&oacute;n</option>\n";
+
+    var op="";
+    var def="";
+    var opciones = obj.getOpciones();
+
+    for(var i=0; i< opciones.length; i++){
+        if(obj.getDefaultValue() == opciones[i].clave){
+            def=" selected='selected' ";
+        }
+        op = op + "<option value='" + opciones[i].clave + "'" + def + "'>" + opciones[i].valor + "</option>\n";
+        def = "";
+    }
+
+    comp = comp + op + "</select>";
+    comp = comp + crearBotonAgregarRepetible(obj);
+    $("#div" + obj.getIdCompCliente()).append(comp);
+}
+
+function crearTextArea(obj){
+// TODO falta terminar
+    crearText(obj);
+
+    var comp = "<textarea id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' rows='4' tabindex="+TAB_INDEX+">" + obj.getOpciones() + "</textarea>";
+    comp = comp + crearBotonAgregarRepetible(obj);
+
+    comp = crearComponente("texta","texta"+idComp,"readonly='readonly'","");
+    var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+idComp+")' src='[% themelang %]/images/sacar.png'>";
+    comp = "<div style='float: left;padding-right:1%; padding-bottom: 1%;'>"+comp+"</div>";
+    compText = compText+" "+boton;
+    $(compText).appendTo("#"+idDiv);
+
+    $("#div" + obj.getIdCompCliente()).append(comp);
+    $("#texta"+idComp).val(objeto.valTextArea);
+}
+
+function crearHidden(obj){
+    return "<input type='hidden' id='" + obj.getIdCompCliente() + "_hidden' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "'>";
+}
+
+function crearAuto(obj){
+    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='"+ obj.getIdCompCliente() +"' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+">";
+
+    comp = comp + crearBotonAgregarRepetible(obj);
+    $("#div" + obj.getIdCompCliente()).append(comp);
+
+    _cearAutocompleteParaCamponente(obj);
+    //se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
+    comp = crearHidden(obj);
+    $("#div" + obj.getIdCompCliente()).append(comp);
+}
+
+function crearCalendar(obj){
+    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+">";
+
+    comp = comp + crearBotonAgregarRepetible(obj);
+    $("#div" + obj.getIdCompCliente()).append(comp);
+
+    $("#"+obj.getIdCompCliente()).datepicker({ dateFormat: 'dd/mm/yy' });
+}
+
+function crearTextAnio(obj){
+    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+">";
+
+    comp = comp + crearBotonAgregarRepetible(obj);
+    $("#div" + obj.getIdCompCliente()).append(comp);
+}
 
 // Esta funcion convierte una componete segun idObj en obligatoria, agrega * a la derecha de la misma
 function hacerComponenteObligatoria(idObj){
@@ -1127,7 +1153,6 @@ function crearDivComponente(idObj){
 
 // Esta funcion crea un divLabel con un Label segun parametro
 function crearDivLabel(label, idComp){
-//     return "<label for='div"+ idComp +"'><div class='divLabelComponente'>  "+label+": </div></label>";
     return "<label for='"+ idComp +"'> " + label + " </label>";
 }
 
@@ -1321,7 +1346,7 @@ function modificarN3(id3){
 	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug= true;
 //     objAH.cache = true;
-  objAH.showStatusIn = "centro";
+    objAH.showStatusIn = "centro";
 	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype=$("#id_tipo_doc").val();
  	objAH.id3 = ID_N3;

@@ -526,7 +526,8 @@ sub _setDatos_de_estructura {
         C4::AR::Debug::debug("_setDatos_de_estructura => referenciaTabla: ".$hash_ref_result{'referenciaTabla'});
         if($cat->estructuraBase->getRepetible){
             #obtengo el dato de la referencia solo si es un repetible, los campos fijos recuperan de otra forma el dato de la referencia 
-            my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'dato'});
+#             my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'dato'});
+            my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'datoReferencia'});
             $hash_ref_result{'dato'} = $valor_referencia;
         }
     }else{
@@ -578,23 +579,23 @@ sub getEstructuraSinDatos{
 	my $itemType =  $params->{'id_tipo_doc'};
 	my $orden =     $params->{'orden'};
 	
-    #inicializo la hash de datos
-    my $datos_hash_ref;
-    $datos_hash_ref->{'dato'} = '';
-    $datos_hash_ref->{'datoReferencia'} = 0;
-    $datos_hash_ref->{'Id_rep'} = 0;
-
 	#obtengo toda la informacion de la estructura de catalogacion del Nivel 1, 2 o 3
     my ($cant, $catalogaciones_array_ref) = getEstructuraCatalogacionFromDBCompleta($nivel, $itemType);
     C4::AR::Debug::debug("getEstructuraSinDatos => cant: ".$cant);    
 
     my @result;
-    foreach my $cat  (@$catalogaciones_array_ref){
-#         my %hash_temp;
-#         _setDatos_de_estructura($cat, \%hash_temp, $datos_hash_ref);
-        my $hash_temp = _setDatos_de_estructura($cat, $datos_hash_ref);
-#         push (@result, \%hash_temp);
-        push (@result, $hash_temp);
+    foreach my $c  (@$catalogaciones_array_ref){
+
+            my %hash;
+            $hash{'tiene_estructura'}  = '1';
+            $hash{'dato'}              = '';
+            $hash{'datoReferencia'}    = 0;
+            $hash{'Id_rep'}            = 0;
+    
+            my ($hash_temp) = _setDatos_de_estructura($c, \%hash);
+        
+            push (@result, $hash_temp);
+
     }
 
     C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================FIN");
@@ -611,73 +612,6 @@ sub cantNivel2 {
     my $count = C4::Modelo::CatNivel2::Manager->get_cat_nivel2_count( query => [ id1 => { eq => $id1 } ]);
 
     return $count;
-}
-
-=item sub getEstructuraConDatos
-    Esta funcion genera la estructura de catalogacion con los datos para los REPETIBLES, al final se agregan los datos 
-    y la estructura de los niveles 1, 2 y 3
-
-    @Parametros
-
-    $params->{'nivel'}: nivel 1, 2 o 3
-    $params->{'id_tipo_doc'}: tipo de ejemplar
-=cut
-sub getEstructuraConDatos{
-    my ($params) = @_;
-
-    C4::AR::Debug::debug("getEstructuraConDatos => ======================================================================");
-    my $nivel = $params->{'nivel'};
-
-    my $itemType = $params->{'id_tipo_doc'};
-    #obtengo la estructura_catalogacion configurada solo de los campos REPETIBLES
-# FIXME no le esta llegano el itemtype
-    C4::AR::Debug::debug("getEstructuraConDatos => tipo de documento: ".$itemType);
-    my ($cant, $catalogaciones_array_ref_objects)= getEstructuraCatalogacionFromDBRepetibles($nivel,$itemType);
-    C4::AR::Debug::debug("getEstructuraConDatos => son REPETIBLES cant: ".$cant);
-
-    my @result;
-    foreach my $cat_estructura  (@$catalogaciones_array_ref_objects){
-
-        if($cat_estructura->estructuraBase->getRepetible){        
-            C4::AR::Debug::debug("getEstructuraConDatos => PROCESO UN REPETIBLE");
-            #seteo el campo, subcampo a buscar segun el nivel $params->{'nivel'} y el ID de nivel $params->{'id'}
-            $params->{'campo'} = $cat_estructura->getCampo;
-            $params->{'subcampo'} = $cat_estructura->getSubcampo;
-            #obtengo la estructura de catalogacion de los NIVELES REPETIBLES
-            my ($cant, $catalogaciones_array_ref) = getRepetible($params);
-            C4::AR::Debug::debug("getEstructuraConDatos REPETIBLES=> cant: ".$cant." NIVEL: ".$params->{'nivel'});
-            C4::AR::Debug::debug("getEstructuraConDatos REPETIBLES=> campo: ".$cat_estructura->getCampo);
-            C4::AR::Debug::debug("getEstructuraConDatos REPETIBLES=> subcampo: ".$cat_estructura->getSubcampo);
-            my $cat;
-    
-            if($cant){
-                $cat->{'dato'} = $catalogaciones_array_ref->getDato;
-                $cat->{'Id_rep'} = $catalogaciones_array_ref->getId_rep;
-                $cat->{'datoReferencia'} = $catalogaciones_array_ref->getDato;
-            }else{  
-                #NO EXISTE la tupla del repetible, sí la estructura, puede que se haya modificado la estructura (SE AGREGO)
-                #y no se tenga la tupla repetible
-                $cat->{'dato'} = '';
-                $cat->{'Id_rep'} = 0;
-                $cat->{'datoReferencia'} = 0;
-            }
-    
-#             my %hash_temp;
-#             _setDatos_de_estructura($cat_estructura, \%hash_temp, $cat);
-            my $hash_temp = _setDatos_de_estructura($cat_estructura, $cat);
-        
-#             push (@result, \%hash_temp);
-            push (@result, $hash_temp);
-        }# END IF
-
-    }# END foreach my $cat_estructura  (@$catalogaciones_array_ref_objects)
-
-
-    #obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
-    my @resultEstYDatos= _getEstructuraYDatosDeNivelNoRepetible($params);
-    push(@resultEstYDatos,@result);
-
-    return (scalar(@resultEstYDatos), \@resultEstYDatos);
 }
 
 #########################################################PROBANDO######################################################################
@@ -784,7 +718,7 @@ sub getDatosFromNivel{
             }
 
             $hash{'dato'}              = $c->getCampo.", ".$c->getSubcampo.": ".$dato;
-            $hash{'datoReferencia'}    = '';
+            $hash{'datoReferencia'}    = 0;
 
             ($hash_temp) = _setDatos_de_estructura2($estructura, \%hash);
 

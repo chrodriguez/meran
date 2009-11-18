@@ -306,3 +306,22 @@ function registrarTooltips(){
             left: 5 
         }); 
 }
+
+function print_objetc(o){
+    for (property in o) {
+        alert(property);
+    }
+}
+
+/*
+* copia el objeto pasado por parametro
+*/
+function copy(o) {
+    var newO = new Object();
+
+    for (property in o) {
+        newO[property] = o[property]; 
+    }
+
+    return newO;
+}
