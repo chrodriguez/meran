@@ -66,7 +66,6 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 # FIXME falta implementar
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
-    C4::AR::Debug::debug("ENTRA A COMBINABLE");
     if ($obj->{'tipoBusqueda'} eq 'all'){
         ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj);
     }else{

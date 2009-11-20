@@ -10,7 +10,7 @@
         <div class="nav1">
           <ul>
             <li><a href="#" title="[% 'Ir a la p&aacute;gina de inicio' | i18n %]">[% 'Inicio' | i18n %]</a></li>
-            <li><a href="#" title="[% 'Sepa qui&eacute;nes somos' | i18n %]">[% 'Acerca de' | i18n %]</a></li>
+            <li><a href="/cgi-bin/koha/opac-about.pl" title="[% 'Sepa qui&eacute;nes somos' | i18n %]">[% 'Acerca de' | i18n %]</a></li>
             <li><a href="#" title="[% 'P&oacute;ngase en contacto con nosotros' | i18n %]">[% 'Contacto' | i18n %]</a></li>
           </ul>
         </div>
@@ -37,7 +37,7 @@
             <li><a href="#">[% 'Accesos' | i18n %]<!--[if IE 7]><!--></a><!--<![endif]-->
               <!--[if lte IE 6]><table><tr><td><![endif]-->
                 <ul>
-                  <li><a href="#">[% 'B&uacute;squeda Avanzada' | i18n %]</a></li>
+                  <li><a href="/cgi-bin/koha/opac-advanced_search.pl">[% 'B&uacute;squeda Avanzada' | i18n %]</a></li>
                   <li><a href="#">[% 'Accesos' | i18n %]</a></li>
                   <li><a href="#">[% 'Accesos' | i18n %]</a></li>
                   <li><a href="#">[% 'Accesos' | i18n %]</a></li>
