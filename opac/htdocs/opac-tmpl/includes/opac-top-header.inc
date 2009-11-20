@@ -6,7 +6,7 @@
         <a class="sitelogo" href="#" title="Go to Start page"></a>
         <div class="sitename">
           <h1><a href="index.html" title="Go to Start page">[% 'MERAN' | i18n %] &bull; 
-          <span style="font-weight:normal;font-size:50%;">&nbsp;[% 'Facultad de Inform&aacute;tica' | i18n %]</span></a></h1>
+          <span style="font-weight:normal;font-size:50%;">&nbsp;[% ui.getNombre %]</span></a></h1>
           <h2>[% 'Cat&aacute;logo P&uacute;blico' | i18n %]</h2>
         </div>
     [% INCLUDE 'opac-header-nav.inc' %]

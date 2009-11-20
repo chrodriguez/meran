@@ -265,15 +265,21 @@ sub get_template_and_user {
         $params->{'loggedinuser'}= $session->param('userid');
 		$nro_socio = $session->param('userid');
         $params->{'nro_socio'}= $nro_socio;
-
         my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
         $session->param('nro_socio',$nro_socio);
         $params->{'socio_data'}= $socio;
+        # ES UN ALIAS PARA LOS TEMPLATES QUE PIDEN POR SOCIO, NO POR SOCIO_DATA
+        $params->{'socio'} = $socio;
 		$params->{'token'}= $session->param('token');
 		#para mostrar o no algun submenu del menu principal
  		$params->{'menu_preferences'}= C4::AR::Preferencias::getMenuPreferences();
+    C4::AR::Debug::debug("SOCIO: ".$socio->persona->getNombre());
 	}
-
+    my $ui;
+    $ui = C4::AR::Preferencias->getValorPreferencia('defaultUI');
+    $ui = C4::AR::Referencias::getUI_info($ui);
+    $params->{'ui'} = $ui;
+    my $socio = $params->{'socio'};
 	return ($template, $session, $params);
 }
 

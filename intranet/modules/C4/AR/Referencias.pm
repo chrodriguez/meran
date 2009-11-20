@@ -457,6 +457,20 @@ sub getNombreUI {
 	}
 }
 
+sub getUI_info {
+    my ($id_ui)= @_;
+
+    my $ui_array_ref = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(
+                                                                    query => [ id_ui => $id_ui ]
+                                                        );
+
+    if(scalar(@$ui_array_ref) > 0){
+        return $ui_array_ref->[0];
+    }else{
+        return 0;
+    }
+}
+
 sub getNombreEstado {
 	my ($codigo)= @_;
 

@@ -19,9 +19,9 @@
       <div class="header-middle">    
         <!-- Site message -->
         <div class="sitemessage">
-          <h1>&bull; [% 'Facultad de Inform&aacute;tica' | i18n %]</h1>
-          <h2>[% 'Informacion de la UI?????' | i18n %]</h2>
-          <h3><a href="#">&rsaquo;&rsaquo;&nbsp;[% 'Este link servira para algo???' %]</a></h3>
+          <h1>&bull; [% ui.getNombre %]</h1>
+          <h2>[% ui.getDireccion %]</h2>
+          <h3><a href="#">&rsaquo;&rsaquo;&nbsp;[% 'M&aacute;s Informaci&oacute;n De La Unidad' | i18n %]</a></h3>
         </div>
       </div>
       <!-- A.3 HEADER BOTTOM -->
