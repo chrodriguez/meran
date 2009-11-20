@@ -17,15 +17,15 @@
     [% END %]
     <div class="loginform">
       <form method="post" action="/cgi-bin/koha/login.pl"> 
-        <p><input type="hidden" name="rememberme" value="0" /></p>
+        <p><input type="hidden" name="remember_me" value="0" /></p>
         <fieldset>
           <p>
             <label for="username_1" class="top">[% 'Usuario' | i18n %]:</label><br />
-            <input type="text" name="username_1" id="username_1" tabindex="1" class="field" value="" />
+            <input type="text" name="username" id="username" tabindex="1" class="field" value="" />
           </p>
           <p>
             <label for="password_1" class="top">[% 'Contrase&ntilde;a' | i18n %]:</label><br />
-            <input type="password" name="password_1" id="password_1" tabindex="2" class="field" value="" />
+            <input type="password" name="password" id="password" tabindex="2" class="field" value="" />
           </p>
           <p>
             <input type="checkbox" name="checkbox_1" id="checkbox_1" class="checkbox" tabindex="3" size="1" value="" />
