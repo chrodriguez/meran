@@ -73,6 +73,8 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
         ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
     }
     $t_params->{'partial_template'}= "opac-busquedaResult.inc";
+    $t_params->{'content_title'}= C4::AR::Filtros::i18n("Resultados de b&uacute;squeda para: ").$obj->{'string'};
+    $t_params->{'search_string'}= $obj->{'string'};
 
 }
 

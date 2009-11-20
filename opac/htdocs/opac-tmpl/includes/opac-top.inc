@@ -23,23 +23,6 @@
 
   <script src="/includes/jquery/jquery.js"></script>
 
-  <script src="/includes/AjaxHelper.js"></script>
-  <script src="/includes/MessageHelper.js"></script>
-  <script src="/includes/json/jsonStringify.js"></script>
-  <script src="/includes/jquery/jquery-highlight.js"></script>
-  <script src="/includes/util.js"></script>
-  <script src="/opac-tmpl/includes/opac-searchFunciones.js"></script>
-  <script src="/opac-tmpl/includes/circulacionOPAC.js"></script>
-  <script src="/opac-tmpl/includes/favoritos.js"></script>
-  <script src="/includes/AutocompleteHelper.js"></script>
-  <script src="/includes/WindowHelper.js"></script>
-  <script src="/includes/jquery/jquery.alerts.js"></script>
-
-  [% INCLUDE "message_OPAC.inc" %]
-
-  [% INCLUDE  'WindowHelper.inc'  %]
-
-  [% INCLUDE  'AutocompleteHelper.inc'  %]
 
   <title>
     [% IF titulo_nombre_ui %]

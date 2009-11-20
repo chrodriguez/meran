@@ -1,13 +1,10 @@
 <div class="main-content">
    <!-- Pagetitle -->
-        <h1 class="pagetitle">
             [% IF content_title %]
-                [% content_title %]
-            [% ELSE %]
-                [% 'Si no hay titulo, que pongo?????' | i18n %]
+                <h1 class="pagetitle">
+                    [% content_title %]
+                    <hr class="clear-contentunit" />
+                </h1>
             [% END %]
-        </h1>
-
         [% INCLUDE $partial_template %]
-        <hr class="clear-contentunit" />
-      </div>
+</div>
