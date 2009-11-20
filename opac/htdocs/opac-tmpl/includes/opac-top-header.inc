@@ -12,11 +12,11 @@
     [% INCLUDE 'opac-header-nav.inc' %]
     <!-- B. MAIN -->
     <div class="main">
-
-      [% INCLUDE 'opac-navlink.inc' %]
-      [% INCLUDE 'opac-login.inc' %]
-      <h1>Search</h1>
-        [% INCLUDE 'opac-search_form.inc' %]
-<!--         <h1>&nbsp;</h1> -->
-      </div>
-      <!-- B.1 MAIN CONTENT -->
+      <div class="main-navigation">
+          [% INCLUDE 'opac-navlink.inc' %]
+          [% INCLUDE 'opac-login.inc' %]
+          <h1>[% 'Buscar' | i18n %]:</h1>
+            [% INCLUDE 'opac-search_form.inc' %]
+    <!--         <h1>&nbsp;</h1> -->
+          </div>
+          <!-- B.1 MAIN CONTENT -->

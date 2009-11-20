@@ -8,9 +8,15 @@
       <a href="#" id="forgotpsswd_1">[% 'Cerrar Sesi&oacute;n' | i18n %]</a>
     </p>
 [% ELSE %]
-    <h1>[% 'Ingresar' | i18n %]</h1>
+    <div class="round-border-topright"></div>
+    [% IF show_navlink %]
+        <h1>[% 'Ingresar' | i18n %]</h1>
+    [% ELSE %]
+            <h1 class="first">[% 'Ingresar' | i18n %]</h1>
+            <br>
+    [% END %]
     <div class="loginform">
-      <form method="post" action="index.html"> 
+      <form method="post" action="/cgi-bin/koha/login.pl"> 
         <p><input type="hidden" name="rememberme" value="0" /></p>
         <fieldset>
           <p>

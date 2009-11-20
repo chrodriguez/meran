@@ -17,5 +17,6 @@ my ($template, $session, $t_params)= get_template_and_user({
             });
 
 $t_params->{'opac'};
-$t_params->{'partial_template'}= "opac-content_data.inc";
+
+$t_params->{'partial_template'}= "opac-contact.inc";
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
