@@ -10,7 +10,14 @@
               <h1>[% 'Datos Personales' | i18n %]</h1>
 
               <p>
-                <img src="[% temas %]/default/imagenes/image.jpg" width="50" alt="[% 'Socio' %]" title="[% 'Imagen del socio' %]" />
+                [% IF socio_data.tieneFoto %]
+                    <img width="50" height="50" src="[% themelang %]/pictures/[% socio_data.tieneFoto %]"
+                        alt="[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]"/>
+                [% ELSE %]
+                      <img  width="50" height="50" src="[% temas %]/default/imagenes/no_foto.jpg" 
+                            alt="[% 'Usuario sin foto' | i18n %]"
+                            title="[% 'Usuario sin foto' | i18n %]" />
+                [% END %]
                     Alguna idea para este texto?
               </p>
 
