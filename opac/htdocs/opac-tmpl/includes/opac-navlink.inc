@@ -1,4 +1,4 @@
-[% IF show_navlink %]
+<!-- [% IF show_navlink %] -->
     <!-- B.1 MAIN NAVIGATION -->
 
         <!-- Navigation Level 3 -->
@@ -16,4 +16,4 @@
           <dt><a href="#">Navlink 14</a></dt>
           <dt><a href="#">Navlink 15</a></dt>
         </dl>
-[% END %]
+<!-- [% END %] -->

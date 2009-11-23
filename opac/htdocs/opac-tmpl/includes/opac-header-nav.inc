@@ -38,7 +38,9 @@
               <!--[if lte IE 6]><table><tr><td><![endif]-->
                 <ul>
                   <li><a href="/cgi-bin/koha/opac-advanced_search.pl">[% 'B&uacute;squeda Avanzada' | i18n %]</a></li>
-                  <li><a href="#">[% 'Accesos' | i18n %]</a></li>
+                  [% IF !socio %]
+                      <li><a href="/cgi-bin/koha/login.pl">[% 'Iniciar Sesi&oacute;n' | i18n %]</a></li>
+                  [% END %]
                   <li><a href="#">[% 'Accesos' | i18n %]</a></li>
                   <li><a href="#">[% 'Accesos' | i18n %]</a></li>
                   <li><a href="#">[% 'Accesos' | i18n %]</a></li>                                    

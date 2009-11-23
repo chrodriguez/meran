@@ -4,8 +4,6 @@
 
 <script type="text/javascript">
     function enviar(){
-        var nroRandom= [% RANDOM_NUMBER %];
-        
         var username = $.trim($("#userid").val());
         var hash= b64_sha256(b64_sha256(b64_md5($("#password").val()))+nroRandom);
         $("#password").val(hash);
@@ -43,7 +41,7 @@
             <br>
     [% END %]
     <div class="loginform">
-      <form name="datosAEnviar" method="post" action="/cgi-bin/koha/login.pl" onSubmit = "enviar()"> 
+      <form name="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl" onSubmit = "enviar()"> 
         <p><input type="hidden" name="remember_me" value="0" /></p>
         <fieldset>
           <p>

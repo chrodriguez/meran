@@ -275,8 +275,8 @@ sub get_template_and_user {
 		$params->{'token'}= $session->param('token');
 		#para mostrar o no algun submenu del menu principal
  		$params->{'menu_preferences'}= C4::AR::Preferencias::getMenuPreferences();
-    C4::AR::Debug::debug("SOCIO: ".$socio->persona->getNombre());
 	}
+
     my $ui;
     $ui = C4::AR::Preferencias->getValorPreferencia('defaultUI');
     $ui = C4::AR::Referencias::getUI_info($ui);
@@ -661,7 +661,6 @@ C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID
         C4::AR::Debug::debug("checkauth=> random_number desde la base: ".$random_number."\n");
         #se verifica la password ingresada
         my ($passwordValida, $cardnumber, $branch)= _verificarPassword($dbh,$userid,$password,$random_number);
-
         if ($passwordValida) {
            #se valido la password y es valida
            # setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
