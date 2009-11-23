@@ -33,7 +33,14 @@
               <h3>[% 'Problemas con sus datos' |  i18n %]</h3>
               <p class="right">[% 'Si alguno de sus datos es incorrecto, s&iacute;rvase a corregirlos. Gracias' | i18n %]</p>
               <ul>
-                <li><a href="/cgi-bin/koha/modificarDatos.pl">[% 'Modificar mis datos' | i18n %]</a></li>
+                <li>
+                    [% PERL %]
+                            print C4::AR::Filtros::link_to( text    =>  "[% 'Modificar mis datos' | i18n %]",
+                                                            url     =>  "/cgi-bin/koha/modificarDatos.pl",
+                                                            title   =>  "[% 'Modificar mis datos' | i18n %]",
+                                    ) ;
+                    [% END %]
+                </li>
               </ul>
             </div>
     [% END %]

@@ -30,14 +30,28 @@
         <div class="nav2">
           <!-- Navigation item -->
           <ul>
-            <li><a href="/cgi-bin/koha/opac-main.pl">[% 'Inicio' | i18n %]</a></li>
+              <li>
+                  [% PERL %]
+                      print C4::AR::Filtros::link_to( text    =>  "[% 'Inicio' | i18n %]",
+                                                      url     =>  "/cgi-bin/koha/opac-main.pl",
+                                                      title   =>  "[% 'Inicio' | i18n %]",
+                              ) ;
+                  [% END %]
+              </li>
           </ul>
           <!-- Navigation item -->
           <ul>
             <li><a href="#">[% 'Accesos' | i18n %]<!--[if IE 7]><!--></a><!--<![endif]-->
               <!--[if lte IE 6]><table><tr><td><![endif]-->
                 <ul>
-                  <li><a href="/cgi-bin/koha/opac-advanced_search.pl">[% 'B&uacute;squeda Avanzada' | i18n %]</a></li>
+                  <li>
+                      [% PERL %]
+                          print C4::AR::Filtros::link_to( text    =>  "[% 'B&uacute;squeda Avanzada' | i18n %]",
+                                                          url     =>  "/cgi-bin/koha/opac-advanced_search.pl",
+                                                          title   =>  "[% 'B&uacute;squeda Avanzada' | i18n %]",
+                                  ) ;
+                      [% END %]
+                  </li>
                   [% IF !socio %]
                       <li><a href="/cgi-bin/koha/login.pl">[% 'Iniciar Sesi&oacute;n' | i18n %]</a></li>
                   [% END %]

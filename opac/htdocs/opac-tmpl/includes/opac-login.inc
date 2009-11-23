@@ -2,30 +2,29 @@
 <script src="/includes/md5.js"></script>
 <script src="/includes/sha1.js"></script>
 
-<script type="text/javascript">
-    function enviar(){
-        var nroRandom= [% RANDOM_NUMBER %];
-        var username = $.trim($("#userid").val());
-        var hash= b64_sha256(b64_sha256(b64_md5($("#password").val()))+nroRandom);
-        $("#password").val(hash);
-        $("#userid").val(username);
-        alert("userid: " + username + " password hasheada " + hash + " nroRandom " + nroRandom);
-        $("#datosAEnviar").submit();
-        return true;
-    }
-</script>
+[% IF RANDOM_NUMBER %]
+    <script type="text/javascript">
+        function enviar(){
+            var nroRandom= [% RANDOM_NUMBER %];
+            var username = $.trim($("#userid").val());
+            var hash= b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
+            $("#password").val(hash);
+            $("#userid").val(username);
+            $("#datosAEnviar").submit();
+            return true;
+        }
+    </script>
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-    $(document).ready(function() {
-        //onEnter con foco en input, ejecuta la busqueda
-          onEnter("userid",enviar);
-          onEnter("password",enviar);
-          $("#userid").focus();
-    });
+        $(document).ready(function() {
+            //onEnter con foco en input, ejecuta la busqueda
+              onEnter("password",enviar);
+              $("#userid").focus();
+        });
 
-</script>
-
+    </script>
+[% END %]
 <!-- Login -->
 [% IF socio %]
     <h1>[% 'Mi Sesi&oacute;n' | i18n %]</h1>
@@ -33,7 +32,12 @@
       [% socio.persona.getNombre %] ([% socio.getNro_socio %])
     </p>
     <p>
-      <a href="/cgi-bin/koha/logout.pl" id="forgotpsswd_1">[% 'Cerrar Sesi&oacute;n' | i18n %]</a>
+      [% PERL %]
+              print C4::AR::Filtros::link_to( text    =>  "[% 'Cerrar Sesi&oacute;n' | i18n %]",
+                                              url     =>  "/cgi-bin/koha/logout.pl",
+                                              title   =>  "[% 'Cerrar Sesi&oacute;n' | i18n %]"
+                      ) ;
+      [% END %]
     </p>
 [% ELSE %]
     <div class="round-border-topright"></div>
@@ -53,8 +57,9 @@
             <input type="text" name="userid" id="userid" tabindex="1" class="field" value="" />
           </p>
           <p>
-            <label for="password" class="top">[% 'Contrase&ntilde;a' | i18n %]:</label><br />
-            <input type="password" name="password" id="password" tabindex="2" class="field" value="" />
+            <label for="password_plain" class="top">[% 'Contrase&ntilde;a' | i18n %]:</label><br />
+            <input type="password" name="password_plain" id="password_plain" tabindex="2" class="field" value="" />
+            <input type="hidden" name="password" id="password" tabindex="2" class="field" value="" />
           </p>
           <p>
             <input type="checkbox" name="checkbox_1" id="checkbox_1" class="checkbox" tabindex="3" size="1" value="" />

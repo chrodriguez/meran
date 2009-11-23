@@ -14,6 +14,9 @@
     <div class="main">
       <div class="main-navigation">
           [% INCLUDE 'opac-navlink.inc' %]
+          [% IF socio %]
+              [% INCLUDE 'opac-login.inc' %]
+          [% END %]
           <h1>[% 'Buscar' | i18n %]:</h1>
             [% INCLUDE 'opac-search_form.inc' %]
     <!--         <h1>&nbsp;</h1> -->
