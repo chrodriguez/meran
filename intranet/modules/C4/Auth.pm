@@ -1380,7 +1380,7 @@ sub redirectToAuth {
 
     my $url;
     if(is_OPAC($template_params)){
-        $url = '/cgi-bin/koha/opac-main.pl?sessionClose=1'
+        $url = '/cgi-bin/koha/auth.pl?sessionClose=1'
 #         $session->param('redirectTo', $url);
     }else{
         $url = '/cgi-bin/koha/auth.pl?sessionClose=1';
