@@ -1,11 +1,38 @@
+<script src="/includes/util.js"></script>
+<script src="/includes/md5.js"></script>
+<script src="/includes/sha1.js"></script>
+
+<script type="text/javascript">
+    function enviar(){
+        var nroRandom= [% RANDOM_NUMBER %] + " ";
+        alert(nroRandom);
+        var username = $.trim($("#userid").val());
+        var hash= b64_sha256(b64_sha256(b64_md5($("#password").val()))+nroRandom);
+        $("#password").val(hash);
+        $("#userid").val(username);
+        $("#datosAEnviar").submit();
+    }
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        //onEnter con foco en input, ejecuta la busqueda
+          onEnter("username",enviar);
+          onEnter("password",enviar);
+          $('#username').focus();
+    });
+
+</script>
+
 <!-- Login -->
 [% IF socio %]
     <h1>[% 'Mi Sesi&oacute;n' | i18n %]</h1>
     <p>
-      <h1>[% socio.persona.getNombre %] ([% socio.getNro_socio %])</h1>
+      [% socio.persona.getNombre %] ([% socio.getNro_socio %])
     </p>
     <p>
-      <a href="#" id="forgotpsswd_1">[% 'Cerrar Sesi&oacute;n' | i18n %]</a>
+      <a href="/cgi-bin/koha/logout.pl" id="forgotpsswd_1">[% 'Cerrar Sesi&oacute;n' | i18n %]</a>
     </p>
 [% ELSE %]
     <div class="round-border-topright"></div>
@@ -16,15 +43,15 @@
             <br>
     [% END %]
     <div class="loginform">
-      <form method="post" action="/cgi-bin/koha/login.pl"> 
+      <form method="post" action="/cgi-bin/koha/login.pl" onSubmit = "enviar()"> 
         <p><input type="hidden" name="remember_me" value="0" /></p>
         <fieldset>
           <p>
-            <label for="username_1" class="top">[% 'Usuario' | i18n %]:</label><br />
-            <input type="text" name="username" id="username" tabindex="1" class="field" value="" />
+            <label for="userid" class="top">[% 'Usuario' | i18n %]:</label><br />
+            <input type="text" name="userid" id="userid" tabindex="1" class="field" value="" />
           </p>
           <p>
-            <label for="password_1" class="top">[% 'Contrase&ntilde;a' | i18n %]:</label><br />
+            <label for="password" class="top">[% 'Contrase&ntilde;a' | i18n %]:</label><br />
             <input type="password" name="password" id="password" tabindex="2" class="field" value="" />
           </p>
           <p>

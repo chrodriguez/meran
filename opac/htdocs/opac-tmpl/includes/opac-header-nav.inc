@@ -9,7 +9,7 @@
         <!-- Navigation Level 1 -->
         <div class="nav1">
           <ul>
-            <li><a href="#" title="[% 'Ir a la p&aacute;gina de inicio' | i18n %]">[% 'Inicio' | i18n %]</a></li>
+            <li><a href="/cgi-bin/koha/opac-main.pl" title="[% 'Ir a la p&aacute;gina de inicio' | i18n %]">[% 'Inicio' | i18n %]</a></li>
             <li><a href="/cgi-bin/koha/opac-about.pl" title="[% 'Sepa qui&eacute;nes somos' | i18n %]">[% 'Acerca de' | i18n %]</a></li>
             <li><a href="/cgi-bin/koha/opac-contact.pl" title="[% 'P&oacute;ngase en contacto con nosotros' | i18n %]">[% 'Contacto' | i18n %]</a></li>
           </ul>

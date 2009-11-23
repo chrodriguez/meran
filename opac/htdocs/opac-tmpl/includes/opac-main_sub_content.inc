@@ -15,19 +15,19 @@
               </p>
 
               <h3>[% 'Apellido y Nombre' | i18n %]</h3>
-              <p>[% socio.persona.getCompleto %]</p>
+              <p>[% socio.persona.getApellido %], [% socio.persona.getNombre %]</p>
 
               <h3>[% 'Tipo y Nro. de Documento' | i18n %]</h3>
-              <p>[% socio.persona.getNroDocumento %]</p>
+              <p>[% socio.persona.documento.getNombre %]: [% socio.persona.getNro_documento %]</p>
 
               <h3>[% 'Nro. de Socio' | i18n %]</h3>
               <p>[% socio.getNro_socio %]</p>
 
               <h3>[% 'Direcci&oacute;n' | i18n %]</h3>
-              <p>[% socio.persona.getDireccion %]</p>
+              <p>[% socio.persona.getCalle %], [% socio.persona.ciudad_ref.NOMBRE %]</p>
 
               <h3>[% 'Categor&iacute;a' | i18n %]</h3>
-              <p>[% socio.persona.categoria.getNombre %]</p>
+              <p>[% socio.categoria.getDescription %]</p>
 
 
               <h3>[% 'Problemas con sus datos' |  i18n %]</h3>

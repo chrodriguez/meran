@@ -11,7 +11,7 @@ use CGI::Session;
 my $input=new CGI;
 
 my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
-            template_name   => 'auth.tmpl',
+            template_name   => 'opac-main.tmpl',
             query       => $input,
             type        => "intranet",
             authnotrequired => 0,
@@ -19,5 +19,6 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
     });
 
 my ($session)= C4::Auth::cerrarSesion();
-
+$t_params->{'opac'};
+$t_params->{'partial_template'}= "opac-content_data.inc";
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

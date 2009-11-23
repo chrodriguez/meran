@@ -11,12 +11,12 @@ use CGI::Session;
 
 my $query = new CGI;
 
-my ($template, $t_params)= C4::Output::gettemplate("informacion.tmpl", 'opac');
+my ($template, $t_params)= C4::Output::gettemplate("opac-main.tmpl", 'opac');
 
 my $session = CGI::Session->new();
 $t_params->{'loggedinuser'}= $session->param('userid');
 ##En este pl, se muestran todos los mensajes al usuario con respecto a la falta de permisos,
 #sin destruir la sesion del usuario, permitiendo asi que navegue por donde tiene permisos
 $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param('codMsg'),'INTRA',[]);
-
+$t_params->{'partial_template'}= "informacion.inc";
 &C4::Auth::output_html_with_http_headers($template, $t_params, $session);

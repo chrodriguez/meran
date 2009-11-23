@@ -6,5 +6,7 @@
                     <hr class="clear-contentunit" />
                 </h1>
             [% END %]
-        [% INCLUDE $partial_template %]
+        [% IF partial_template %]
+          [% INCLUDE $partial_template %]
+        [% END %]
 </div>
