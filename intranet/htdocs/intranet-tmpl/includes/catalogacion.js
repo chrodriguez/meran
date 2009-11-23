@@ -833,6 +833,7 @@ function procesarObjeto(objeto){
         tiene_estructura = 0;
     }
 
+    vista_intra =  marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + ' - ' + vista_intra
     var divLabel = crearDivLabel(vista_intra, marc_conf_obj.getIdCompCliente());
 
     strComp = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + divComp + "</li>";

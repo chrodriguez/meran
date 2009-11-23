@@ -2271,7 +2271,8 @@ sub autorAutocomplete{
     foreach my $autor (@$autores_array_ref){
         $textout.= $autor->getId."|".$autor->getCompleto."\n";
     }
-    return $textout;
+    
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub obtenerDescripcionDeSubCampos{
@@ -2296,7 +2297,8 @@ sub ayudaCampoMARCAutocomplete{
     foreach my $campo_marc (@$campos_marc_array_ref){
         $textout.= $campo_marc->getCampo."|".$campo_marc->getLiblibrarian."\n";
     }
-    return $textout;
+    
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub uiAutocomplete{
@@ -2309,7 +2311,7 @@ sub uiAutocomplete{
         $textout.= $ui->getId_ui."|".$ui->getNombre."\n";
     }
 
-    return $textout;
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 
@@ -2323,7 +2325,7 @@ sub bibliosAutocomplete{
         $textout.=$biblio->{'branchname'}."|".$biblio->{'id'}."\n";
     }
 
-    return $textout;
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub autocompleteTemas{
@@ -2341,7 +2343,7 @@ sub autocompleteTemas{
         $resultado .= $field."|".$data. "\n";
     }
 
-    return $resultado;
+    return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
 }
 
 sub autoresAutocomplete{
@@ -2359,7 +2361,7 @@ sub autoresAutocomplete{
         $resultado .= $field."|".$data. "\n";
     }
 
-    return $resultado;
+    return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
 }
 
 sub autocompleteEditoriales{
@@ -2377,7 +2379,7 @@ sub autocompleteEditoriales{
         $resultado .= $field."|".$data. "\n";
     }
 
-    return $resultado;
+    return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
 
 }
 
@@ -2396,7 +2398,7 @@ sub autocompleteAyudaMarc{
         $resultado .= $field."|".$data. "\n";
     }
 
-    return $resultado;
+    return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
 
 }
 
@@ -2414,7 +2416,7 @@ sub lenguajesAutocomplete{
         }
     }
 
-    return $textout;
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub nivelBibliograficoAutocomplete{
@@ -2431,7 +2433,7 @@ sub nivelBibliograficoAutocomplete{
         }
     }
 
-    return $textout;
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub paisesAutocomplete{
@@ -2444,7 +2446,7 @@ sub paisesAutocomplete{
         $textout.=$pais->{'iso'}."|".$pais->{'nombre_largo'}."\n";
     }
 
-    return $textout;
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub ciudadesAutocomplete{
@@ -2460,7 +2462,9 @@ sub ciudadesAutocomplete{
             $textout.= $result->[$i]->{'localidad'}."|".$result->[$i]->{'nombre'}."\n";
         }
     }
-    return $textout;
+
+
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub soportesAutocomplete{
@@ -2476,7 +2480,8 @@ sub soportesAutocomplete{
             $textout.= $result->[$i]->{'idSupport'}."|".$result->[$i]->{'description'}."\n";
         }
     }
-    return $textout;
+    
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub temasAutocomplete{
@@ -2499,7 +2504,8 @@ sub temasAutocomplete{
         $textout.=$texto."|".$tema->{'id'}."\n";
         $texto="";
     }
-    return $textout;
+    
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub usuarioAutocomplete{
@@ -2514,7 +2520,7 @@ sub usuarioAutocomplete{
         }
     }
 
-    return $textout;
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 =item
@@ -2532,7 +2538,7 @@ sub barcodeAutocomplete{
         }
     }
 
-    return $textout;
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub barcodePrestadoAutocomplete{
@@ -2550,7 +2556,7 @@ sub barcodePrestadoAutocomplete{
         }
     }
 
-    return $textout;
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 ############################## Fin funciones para AUTOCOMPLETABLES #############################################################
 

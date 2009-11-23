@@ -253,11 +253,13 @@ sub get_template_and_user {
 	my $in = shift;
 
 	my ($template, $params) = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'});
+    $in->{'template_params'} = $params;
 	my ($user, $session, $flags)= checkauth(    $in->{'query'}, 
                                                 $in->{'authnotrequired'}, 
                                                 $in->{'flagsrequired'}, 
                                                 $in->{'type'}, 
-                                                $in->{'changepassword'}
+                                                $in->{'changepassword'},
+                                                $in->{'template_params'}
                                             );
 
 	my $nro_socio;
@@ -406,10 +408,10 @@ has authenticated.
 
 sub _destruirSession{
     
-    my ($codMsg,$url) = @_;
+    my ($codMsg,$template_params) = @_;
 
     $codMsg = $codMsg || 'U406';
-    $url = $url || '/cgi-bin/koha/auth.pl';
+#     $url = $url || '/cgi-bin/koha/auth.pl';
 
     my ($session) = CGI::Session->load();
     $codMSG = $codMsg;
@@ -419,11 +421,12 @@ sub _destruirSession{
     $session->param('sessionID', undef);
     #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
     $session->param('codMsg', $codMsg);
-    $session->param('redirectTo', $url);
+#     $session->param('redirectTo', $url);
 
     C4::AR::Debug::debug("WARNING: ¡¡¡¡Se destruye la session y la cookie!!!!!");
 
-    redirectTo($url);        
+#     redirectTo($url);        
+    redirectToAuth($template_params)
 
 }
 
@@ -437,6 +440,7 @@ sub checkauth {
     my $flagsrequired = shift;
     my $type = shift;
     my $change_password = shift || 0;
+    my $template_params = shift;
 
     $type = 'opac' unless $type;
     C4::AR::Debug::debug("desde checkauth==================================================================================================");
@@ -474,7 +478,7 @@ sub checkauth {
     my $loggedin = 0;
     my %info;
     my ($session) = CGI::Session->load();
-#     C4::AR::Debug::debug("checkauth=> DUMP DESPUES DE LOAD SESSION: ".$session->dump());
+    C4::AR::Debug::debug("checkauth=> DUMP DESPUES DE LOAD SESSION: ".$session->dump());
     my ($userid, $cookie, $sessionID, $flags);
 
     #verifica que no haya sesiones "colgadas", las borra de la base
@@ -485,8 +489,11 @@ sub checkauth {
         $session->param('codMsg', 'U355');
         $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
         redirectTo('/cgi-bin/koha/auth.pl');
+#         _destruirSession('U355', $template_params);
     }else{
     #NO EXPIRO LA SESION
+
+C4::AR::Debug::debug($session->dump);
 
         $sessionID=$session->param('sessionID');
 
@@ -500,7 +507,7 @@ sub checkauth {
         #de la base
             $sessionID = undef;
             $userid = undef;
-            _destruirSession('U406');
+            _destruirSession('U406', $template_params);
         }
 
         my ($ip , $lasttime, $nroRandom, $flag, $tokenDB);
@@ -730,9 +737,9 @@ C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID
     
             }# end if ($flags = haspermission($dbh, $userid, $flagsrequired))
              if ($type eq 'opac') {
-                $session->param('redirectTo', '/cgi-bin/koha/opac-user.pl?token='.$params{'token'});
+                $session->param('redirectTo', '/cgi-bin/koha/opac-main.pl?token='.$params{'token'});
 #                 redirectTo('/cgi-bin/koha/opac-user.pl?token='.$params{'token'});
-                redirectToNoHTTPS('/cgi-bin/koha/opac-user.pl?token='.$params{'token'});
+                redirectToNoHTTPS('/cgi-bin/koha/opac-main.pl?token='.$params{'token'});
                 $session->secure(0);
              }else{
                 C4::AR::Debug::debug("DESDE Auth, redirect al MAIN");
@@ -751,11 +758,12 @@ C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID
             C4::AR::Debug::debug("checkauth=> eliminino la sesssion ".$sessionID."\n");
             $userid= undef;
             #genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
-            if ($query->param('userid')){
-                $session->param('codMsg', 'U357');
-                $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-            }
-            redirectTo('/cgi-bin/koha/auth.pl');
+#             if ($query->param('userid')){
+#                 $session->param('codMsg', 'U357');
+#                 $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
+#             }
+#             redirectTo('/cgi-bin/koha/auth.pl');
+            redirectToAuth($template_params);
             #EXIT
         }#end if ($passwordValida)
  
@@ -1151,7 +1159,7 @@ sub cerrarSesion{
 
     my ($session) = CGI::Session->load();
 
-    C4::AR::Debug::debug("inicializarAuth => ".$session->param('codMsg'));
+    C4::AR::Debug::debug("cerrarSesion => ".$session->param('codMsg'));
     my $msjCode = getMsgCode();
     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
     #se destruye la session anterior
@@ -1176,10 +1184,11 @@ sub cerrarSesion{
     $session = CGI::Session->new();
 
     $session->param('codMsg', 'U358');
-    $session->param('redirectTo', '/cgi-bin/koha/auth.pl?sessionClose=1');
-    redirectTo('/cgi-bin/koha/auth.pl?sessionClose=1');
-
+    
+    redirectToAuth($t_params);
 }
+
+
 
 sub _generarNroRandom {
 	#PARA QUE EL USUARIO REALICE UN HASH CON EL NUMERO RANDOM
@@ -1365,6 +1374,21 @@ sub redirectTo {
 	}
 
     C4::AR::Debug::debug(" ");
+}
+
+sub redirectToAuth {
+    my ($template_params) = @_;
+
+    my $url;
+    if(is_OPAC($template_params)){
+        $url = '/cgi-bin/koha/opac-main.pl?sessionClose=1'
+#         $session->param('redirectTo', $url);
+    }else{
+        $url = '/cgi-bin/koha/auth.pl?sessionClose=1';
+#         $session->param('redirectTo', $url);
+    }
+
+    redirectTo($url);    
 }
 
 sub redirectToNoHTTPS {

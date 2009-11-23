@@ -524,12 +524,12 @@ sub _setDatos_de_estructura {
         C4::AR::Debug::debug("_setDatos_de_estructura => ======== AUTOCOMPLETE ======== ");
         C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref_result{'datoReferencia'});
         C4::AR::Debug::debug("_setDatos_de_estructura => referenciaTabla: ".$hash_ref_result{'referenciaTabla'});
-        if($cat->estructuraBase->getRepetible){
+#         if($cat->estructuraBase->getRepetible){
             #obtengo el dato de la referencia solo si es un repetible, los campos fijos recuperan de otra forma el dato de la referencia 
 #             my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'dato'});
             my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'datoReferencia'});
             $hash_ref_result{'dato'} = $valor_referencia;
-        }
+#         }
     }else{
         #cualquier otra componete
         C4::AR::Debug::debug("_setDatos_de_estructura => ======== ".$cat->getTipo." ======== ");
@@ -820,18 +820,6 @@ sub _obtenerOpciones{
     C4::AR::Debug::debug("_obtenerOpciones => opciones => ".$valores);
 }
 
-sub _setearInfoParaAutocomplete{
-# FIXME no se para q se usa
-    my ($cat_estruct_object, $hash_ref) = @_;
-
-    C4::AR::Debug::debug('setearInfoParaAutocomplete => tiene referencia y es un autocomplete');
-    $hash_ref->{'referenciaTabla'} =  $cat_estruct_object->infoReferencia->getReferencia;
-    my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
-    my $obj_generico = $pref_tabla_referencia->getObjeto($cat_estruct_object->infoReferencia->getReferencia, $cat_estruct_object->{'dato'});
-    $obj_generico = $obj_generico->getObjeto($cat_estruct_object->{'dato'});
-    $hash_ref->{'dato'} = $obj_generico->toString;
-    $hash_ref->{'datoReferencia'} = $cat_estruct_object->{'dato'};#sobreescribo el dato
-}
 
 =item sub getEstructuraCatalogacionFromDBCompleta
     Retorna la estructura de catalogacion del Nivel 1, 2 o 3 que se encuentra configurada en la BD

@@ -4,8 +4,8 @@
 
 <script type="text/javascript">
     function enviar(){
-        var nroRandom= [% RANDOM_NUMBER %] + " ";
-        alert(nroRandom);
+        var nroRandom= [% RANDOM_NUMBER %];
+        
         var username = $.trim($("#userid").val());
         var hash= b64_sha256(b64_sha256(b64_md5($("#password").val()))+nroRandom);
         $("#password").val(hash);
@@ -18,9 +18,9 @@
 
     $(document).ready(function() {
         //onEnter con foco en input, ejecuta la busqueda
-          onEnter("username",enviar);
+          onEnter("userid",enviar);
           onEnter("password",enviar);
-          $('#username').focus();
+          $("#userid").focus();
     });
 
 </script>
@@ -43,7 +43,7 @@
             <br>
     [% END %]
     <div class="loginform">
-      <form method="post" action="/cgi-bin/koha/login.pl" onSubmit = "enviar()"> 
+      <form name="datosAEnviar" method="post" action="/cgi-bin/koha/login.pl" onSubmit = "enviar()"> 
         <p><input type="hidden" name="remember_me" value="0" /></p>
         <fieldset>
           <p>

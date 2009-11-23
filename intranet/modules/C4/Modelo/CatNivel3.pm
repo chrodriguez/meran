@@ -86,11 +86,25 @@ sub agregar{
     my @arrayNivel3Repetibles;
     my $infoArrayNivel3 = $data_hash->{'infoArrayNivel3'}; #seteo el arreglo de campos repetibles y no repetibles
 	#se separa la info en arreglo de repetibles y no repetibles
+#     foreach my $infoNivel3 (@$infoArrayNivel3){
+#         if($infoNivel3->{'repetible'}){
+#             push(@arrayNivel3Repetibles, $infoNivel3);
+#         }else{
+#             push(@arrayNivel3, $infoNivel3);
+#         }
+#     }
+
     foreach my $infoNivel3 (@$infoArrayNivel3){
-        if($infoNivel3->{'repetible'}){
-            push(@arrayNivel3Repetibles, $infoNivel3);
-        }else{
-            push(@arrayNivel3, $infoNivel3);
+
+        if($infoNivel3->{'tiene_estructura'} eq '1'){
+    #         if($infoNivel2->{'repetible'}){
+            #si es fijo es un campo de la tabla cat_nivel3
+            if(($infoNivel3->{'fijo'} ne '1')|| !defined $infoNivel3->{'fijo'}){
+                push(@arrayNivel3Repetibles, $infoNivel3);
+            }else{
+            #es es un campo de la tabla cat_nivel3_repetible
+                push(@arrayNivel3, $infoNivel3);
+            }
         }
     }
 
