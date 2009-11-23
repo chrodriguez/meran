@@ -4,11 +4,14 @@
 
 <script type="text/javascript">
     function enviar(){
+        var nroRandom= [% RANDOM_NUMBER %];
         var username = $.trim($("#userid").val());
         var hash= b64_sha256(b64_sha256(b64_md5($("#password").val()))+nroRandom);
         $("#password").val(hash);
         $("#userid").val(username);
+        alert("userid: " + username + " password hasheada " + hash + " nroRandom " + nroRandom);
         $("#datosAEnviar").submit();
+        return true;
     }
 </script>
 
@@ -41,7 +44,8 @@
             <br>
     [% END %]
     <div class="loginform">
-      <form name="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl" onSubmit = "enviar()"> 
+      <form name="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl" onSubmit = "enviar()">
+<!-- <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl">  -->
         <p><input type="hidden" name="remember_me" value="0" /></p>
         <fieldset>
           <p>
@@ -58,6 +62,7 @@
           </p>
           <p>
             <input type="submit" name="cmdweblogin" class="button" value="[% 'Enviar' | i18n %]"  />
+<!--         <input type="button"  onclick="enviar()" name="cmdweblogin" class="button" value="[% 'Enviar' | i18n %]"  /> -->
           </p>
           <p>
             <a href="#" id="forgotpsswd_1">[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]</a>
