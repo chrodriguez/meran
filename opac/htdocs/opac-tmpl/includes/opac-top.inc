@@ -36,9 +36,11 @@
   </title>
   
   <script type="text/javascript">
-      $(document).ready(function() {
-          infoReservas();
-      });
+      [% IF socio %]
+          $(document).ready(function() {
+              infoReservas();
+          });
+      [% END %]
   </script>
 </head>
 
