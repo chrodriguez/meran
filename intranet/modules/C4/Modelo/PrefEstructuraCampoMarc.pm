@@ -9,9 +9,10 @@ __PACKAGE__->meta->setup(
 
     columns => [
         campo            => { type => 'character', length => 3, not_null => 1 },
-        liblibrarian     => { type => 'character', length => 255, not_null => 1 },
-        libopac          => { type => 'character', length => 255, not_null => 1 },
+        nombre           => { type => 'character', length => 255, not_null => 1 },
+#         libopac          => { type => 'character', length => 255, not_null => 1 },
         repeatable       => { type => 'integer', default => '0', not_null => 1 },
+        descripcion      => { type => 'character', length => 255, not_null => 1 },
         mandatory        => { type => 'integer', default => '0', not_null => 1 },
     ],
 
@@ -30,27 +31,27 @@ sub setCampo{
     $self->campo($campo);
 }
 
-sub getLiblibrarian{
+sub getNombre{
     my ($self) = shift;
-    return ($self->liblibrarian);
+    return ($self->nombre);
 }
 
-sub setLiblibrarian{
+sub setNombre{
     my ($self) = shift;
-    my ($liblibrarian) = @_;
-    $self->liblibrarian($liblibrarian);
+    my ($nombre) = @_;
+    $self->nombre($nombre);
 }
 
-sub getLibopac{
-    my ($self) = shift;
-    return ($self->libopac);
-}
-
-sub setLibopac{
-    my ($self) = shift;
-    my ($opac) = @_;
-    $self->opac($opac);
-}
+# sub getLibopac{
+#     my ($self) = shift;
+#     return ($self->libopac);
+# }
+# 
+# sub setLibopac{
+#     my ($self) = shift;
+#     my ($opac) = @_;
+#     $self->opac($opac);
+# }
 
 sub getRepeatable{
     my ($self) = shift;
@@ -61,6 +62,17 @@ sub setRepeatable{
     my ($self) = shift;
     my ($repeatable) = @_;
     $self->repeatable($repeatable);
+}
+
+sub getDescripcion{
+    my ($self) = shift;
+    return ($self->descripcion);
+}
+
+sub setDescripcion{
+    my ($self) = shift;
+    my ($descripcion) = @_;
+    $self->descripcion($descripcion);
 }
 
 sub getMandatory{

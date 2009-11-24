@@ -41,14 +41,6 @@ __PACKAGE__->meta->setup(
             type        => 'one to one',
         },
     
-        refCampo => 
-        {
-            class       => 'C4::Modelo::PrefEstructuraSubcampoMarc',
-            key_columns => { campo => 'campo',
-                             subcampo => 'subcampo' },
-            type        => 'one to one',
-        },
-
         infoReferencia => 
         {
             class       => 'C4::Modelo::PrefInformacionReferencia',
@@ -56,7 +48,14 @@ __PACKAGE__->meta->setup(
             type        => 'one to one',
         },
 
-        estructuraBase => 
+        camposBase      => 
+        {
+            class       => 'C4::Modelo::PrefEstructuraCampoMarc',
+            key_columns => { campo => 'campo' },
+            type        => 'one to one',
+        },
+
+        subCamposBase => 
         {
             class       => 'C4::Modelo::PrefEstructuraSubcampoMarc',
             key_columns => { campo => 'campo',

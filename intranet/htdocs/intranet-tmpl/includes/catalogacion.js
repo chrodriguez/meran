@@ -788,18 +788,47 @@ function updateMostrarInfoAltaNivel3(responseText){
 function procesarInfoJson(json){
 
     var objetos = JSONstring.toObject(json);
+    var campo_ant = '';
+    var campo;
+    var strComp;
 
+    
     for(var i=0; i < objetos.length; i++){
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
+        var marc_conf_obj = new marc_conf(objetos[i]);
+        campo = marc_conf_obj.getCampo();
+        //genero el header para el campo q contiene todos los subcampos
+        if(campo != campo_ant){
+            if(i > 0){
+//                 $("#" + getDivDelNivel()).append("</div>");
+            }
+// <div id='marc_group falta agregarlo
+            strComp = "<div id='marc_group" + marc_conf_obj.getIdCompCliente() + "' ><li class='MARCHeader'><div style='width: 100%; height: 35px;'><div style='width: 90%; float:left'>";
+            strComp = strComp + "<label>" + crearBotonAyudaCampo(marc_conf_obj.getCampo())  + " " + marc_conf_obj.getCampo() + " - " + marc_conf_obj.getVistaIntra() + " </label></div><div style='width: 5%;float:right'> + - </div></div></li>";
+            $("#" + getDivDelNivel()).append(strComp);
+        }
+
+        
+        campo_ant = campo;
         COMPONENTES_ARRAY[i] = objetos[i];
         procesarObjeto(objetos[i]);
     }
+
+//     $("#" + getDivDelNivel()).append("</div>");
 	//hago foco en la primer componente
 	_setFoco();
     if( MODIFICAR == 0 && _NIVEL_ACTUAL == 2 ){  
     //si se esta agregando un NIVEL 2  
         _seleccionarTipoDocumentoYDeshabilitarCombo();
     }    
+}
+
+function crearBotonAyudaCampo(campo){
+    return "<input type='button' value='?' onclick='ayudaParaCampo(" + campo + ")'>"; 
+}
+
+function ayudaParaCampo(campo){
+    alert("crear ventana con ayuda para campo " + campo);
 }
 
 /*
@@ -926,7 +955,7 @@ function addRules(){
             create_rules_object(COMPONENTES_ARRAY[i].rules);
 //             $('#'+COMPONENTES_ARRAY[i].idCompCliente).rules("add", RULES_OPTIONS);
             $('#'+COMPONENTES_ARRAY[i].idCompCliente).rules("add", RULES_OPTIONS);
-            window.console.log("rules: " + COMPONENTES_ARRAY[i].rules);
+//             window.console.log("rules: " + COMPONENTES_ARRAY[i].rules);
         }
     }
 }
@@ -1035,6 +1064,8 @@ function marc_conf(obj){
     this.opciones = obj.opciones;
     this.defaultValue = obj.defaultValue;
     this.tiene_estructura = obj.tiene_estructura;
+    this.ayuda_campo = obj.ayuda_campo;
+    this.descripcion_campo = obj.descripcion_campo;
 
     function fGetIdCompCliente(){ return this.idCompCliente };
     function fGetCampo(){ return this.campo };
@@ -1048,21 +1079,108 @@ function marc_conf(obj){
     function fGetTieneEstructura(){ return this.tiene_estructura };
     function fGetObligatorio(){ return this.obligatorio };
     function fGetVistaIntra(){ return $.trim(this.liblibrarian) };
+    function fGetAyudaCampo(){ return $.trim(this.ayuda_campo) };
+    function fGetDescripcionCampo(){ return $.trim(this.descripcion_campo) };
 
     //metodos
-    this.getIdCompCliente   = fGetIdCompCliente;
-    this.getCampo           = fGetCampo;
-    this.getSubCampo        = fGetSubCampo;
-    this.getDato            = fGetDato;
-    this.getTipo            = fGetTipo;
-    this.getRepetible       = fGetRepetible;
-    this.getReferenciaTabla = fGetReferenciaTabla;
-    this.getOpciones        = fGetOpciones;
-    this.getDefaultValue    = fGetDefaultValue;
-    this.getTieneEstructura = fGetTieneEstructura;
-    this.getObligatorio     = fGetObligatorio;
-    this.getVistaIntra      = fGetVistaIntra;
+    this.getIdCompCliente       = fGetIdCompCliente;
+    this.getCampo               = fGetCampo;
+    this.getSubCampo            = fGetSubCampo;
+    this.getDato                = fGetDato;
+    this.getTipo                = fGetTipo;
+    this.getRepetible           = fGetRepetible;
+    this.getReferenciaTabla     = fGetReferenciaTabla;
+    this.getOpciones            = fGetOpciones;
+    this.getDefaultValue        = fGetDefaultValue;
+    this.getTieneEstructura     = fGetTieneEstructura;
+    this.getObligatorio         = fGetObligatorio;
+    this.getVistaIntra          = fGetVistaIntra;
+    this.getAyudaCampo          = fGetAyudaCampo;
+    this.getDescripcionCampo    = fGetDescripcionCampo;
 }
+
+function campo_marc_conf(obj){
+
+    this.nombre = obj.nombre;
+    this.campo =  obj.campo;
+    this.ayuda_campo = obj.ayuda_campo;
+    this.descripcion_campo = obj.descripcion_campo;
+    this.subcampos_array = obj.subcampos_array;
+    this.repetible = obj.repetible;
+
+    function fGetCampo(){ return this.campo };
+    function fGetNombre(){ return this.nombre };
+    function fGetAyudaCampo(){ return this.ayuda_campo };
+    function fGetDescripcionCampo(){ return $.trim(this.descripcion_campo) };
+    function fGetSubCamposArray(){ return $.trim(this.subcampos_array) };
+    function fGetRepetible(){ return (this.repetible) };
+
+    //metodos
+    this.getCampo               = fGetCampo;
+    this.getAyudaCampo          = fGetAyudaCampo;
+    this.getDescripcionCampo    = fGetDescripcionCampo;
+    this.getSubCamposArray      = fGetSubCamposArray;
+    this.getRepetible           = fGetRepetible;
+}
+
+function subcampo_marc_conf(obj){
+
+    this.liblibrarian = obj.liblibrarian;
+    this.itemtype = obj.itemtype;
+    this.campo =  obj.campo;
+    this.subcampo = obj.subcampo;
+    this.dato =  obj.dato;
+    this.nivel = obj.nivel;
+    this.rules =  obj.rules;
+    this.tipo = obj.tipo;
+    this.intranet_habilitado =  obj.intranet_habilitado;
+    this.tiene_estructura = obj.tiene_estructura;
+    this.visible = obj.visible;
+    this.Id_rep = obj.Id_rep;
+    this.repetible = obj.repetible;
+    this.referencia = obj.referencia;
+    this.obligatorio = obj.obligatorio;
+    this.datoReferencia = obj.datoReferencia;
+    this.idCompCliente =  obj.idCompCliente;
+    this.referenciaTabla =  obj.referenciaTabla;
+    this.opciones = obj.opciones;
+    this.defaultValue = obj.defaultValue;
+    this.tiene_estructura = obj.tiene_estructura;
+    this.ayuda_campo = obj.ayuda_campo;
+    this.descripcion_subcampo = obj.descripcion_subcampo;
+
+    function fGetIdCompCliente(){ return this.idCompCliente };
+    function fGetCampo(){ return this.campo };
+    function fGetSubCampo(){ return this.subcampo };
+    function fGetDato(){ return this.dato };
+    function fGetTipo(){ return $.trim(this.tipo) };
+    function fGetRepetible(){ return this.repetible };
+    function fGetReferenciaTabla(){ return this.referenciaTabla };    
+    function fGetOpciones(){ return this.opciones };
+    function fGetDefaultValue(){ return this.defaultValue };
+    function fGetTieneEstructura(){ return this.tiene_estructura };
+    function fGetObligatorio(){ return this.obligatorio };
+    function fGetVistaIntra(){ return $.trim(this.liblibrarian) };
+    function fGetAyudaCampo(){ return $.trim(this.ayuda_campo) };
+    function fGetDescripcionSubCampo(){ return $.trim(this.descripcion_subcampo) };
+
+    //metodos
+    this.getIdCompCliente           = fGetIdCompCliente;
+    this.getCampo                   = fGetCampo;
+    this.getSubCampo                = fGetSubCampo;
+    this.getDato                    = fGetDato;
+    this.getTipo                    = fGetTipo;
+    this.getRepetible               = fGetRepetible;
+    this.getReferenciaTabla         = fGetReferenciaTabla;
+    this.getOpciones                = fGetOpciones;
+    this.getDefaultValue            = fGetDefaultValue;
+    this.getTieneEstructura         = fGetTieneEstructura;
+    this.getObligatorio             = fGetObligatorio;
+    this.getVistaIntra              = fGetVistaIntra;
+    this.getAyudaCampo              = fGetAyudaCampo;
+    this.getDescripcionSubCampo     = fGetDescripcionSubCampo;
+}
+
 
 function crearText(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "'>";     

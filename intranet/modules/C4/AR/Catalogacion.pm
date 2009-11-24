@@ -486,11 +486,13 @@ sub _setDatos_de_estructura {
     $hash_ref_result{'datoReferencia'}=          $datos_hash_ref->{'datoReferencia'};
     $hash_ref_result{'Id_rep'} =                 $datos_hash_ref->{'Id_rep'};
     $hash_ref_result{'tiene_estructura'}=        $datos_hash_ref->{'tiene_estructura'};
+    $hash_ref_result{'ayuda_subcampo'} =         $datos_hash_ref->{'ayuda_subcampo'};
+    $hash_ref_result{'descripcion_subcampo'} =   $datos_hash_ref->{'descripcion_subcampo'};
     $hash_ref_result{'nivel'} =                  $cat->getNivel;
     $hash_ref_result{'visible'} =                $cat->getVisible;
     $hash_ref_result{'liblibrarian'} =           $cat->getLiblibrarian;
     $hash_ref_result{'itemtype'} =               $cat->getItemType;
-    $hash_ref_result{'repetible'} =              $cat->estructuraBase->getRepetible;
+    $hash_ref_result{'repetible'} =              $cat->subCamposBase->getRepetible;
     $hash_ref_result{'tipo'} =                   $cat->getTipo;
     $hash_ref_result{'referencia'} =             $cat->getReferencia;
     $hash_ref_result{'obligatorio'} =            $cat->getObligatorio;
@@ -500,7 +502,7 @@ sub _setDatos_de_estructura {
     $hash_ref_result{'fijo'} =                   $cat->getFijo;  
 
     C4::AR::Debug::debug("");
-    if($cat->estructuraBase->getRepetible){    
+    if($cat->subCamposBase->getRepetible){    
         #solo para debug
         C4::AR::Debug::debug("_setDatos_de_estructura => ======== ES UN REPETIBLE ======== ");
         C4::AR::Debug::debug("_setDatos_de_estructura => Id_rep: ".$datos_hash_ref->{'Id_rep'});
@@ -524,7 +526,7 @@ sub _setDatos_de_estructura {
         C4::AR::Debug::debug("_setDatos_de_estructura => ======== AUTOCOMPLETE ======== ");
         C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref_result{'datoReferencia'});
         C4::AR::Debug::debug("_setDatos_de_estructura => referenciaTabla: ".$hash_ref_result{'referenciaTabla'});
-#         if($cat->estructuraBase->getRepetible){
+#         if($cat->subCamposBase->getRepetible){
             #obtengo el dato de la referencia solo si es un repetible, los campos fijos recuperan de otra forma el dato de la referencia 
 #             my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'dato'});
             my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'datoReferencia'});
@@ -553,7 +555,7 @@ sub _setDatos_de_estructura2 {
     $hash_ref_result{'visible'} =                '';#$cat->getVisible;
     $hash_ref_result{'liblibrarian'} =           $cat->getLiblibrarian;
     $hash_ref_result{'itemtype'} =               '';#$cat->getItemType;
-    $hash_ref_result{'repetible'} =              '';#$cat->estructuraBase->getRepetible;
+    $hash_ref_result{'repetible'} =              '';#$cat->subCamposBase->getRepetible;
     $hash_ref_result{'tipo'} =                   '';#$cat->getTipo;
     $hash_ref_result{'referencia'} =             '';#$cat->getReferencia;
     $hash_ref_result{'obligatorio'} =            $cat->getObligatorio;
@@ -581,26 +583,44 @@ sub getEstructuraSinDatos{
 	
 	#obtengo toda la informacion de la estructura de catalogacion del Nivel 1, 2 o 3
     my ($cant, $catalogaciones_array_ref) = getEstructuraCatalogacionFromDBCompleta($nivel, $itemType);
+
     C4::AR::Debug::debug("getEstructuraSinDatos => cant: ".$cant);    
 
     my @result;
+    my @result_total;
+    my $campo = '';
+    my $campo_ant = '';
     foreach my $c  (@$catalogaciones_array_ref){
+        my %hash;
 
-            my %hash;
-            $hash{'tiene_estructura'}  = '1';
-            $hash{'dato'}              = '';
-            $hash{'datoReferencia'}    = 0;
-            $hash{'Id_rep'}            = 0;
-    
-            my ($hash_temp) = _setDatos_de_estructura($c, \%hash);
+        $campo = $c->getCampo;
+        if($campo ne $campo_ant){
+        #agrego la informacion del campo segun la estructura base pref_estructura_campo_marc    
+            my %hash_campos;
+
+            $hash_campos{'descripcion_campo'}  = $c->camposBase->getDescripcion.' - '.$c->getCampo;
+            $hash_campos{'ayuda_campo'}        = 'esta es la ayuda del campo '.$c->getCampo;
+#             $hash_campos{'subcampos_array'}    = \@result;
+#             undef @result;
+#             push (@result_total, \%hash_campos);
+        }
         
-            push (@result, $hash_temp);
+        $hash{'tiene_estructura'}  = '1';
+        $hash{'dato'}              = '';
+        $hash{'datoReferencia'}    = 0;
+        $hash{'Id_rep'}            = 0;
+        
+        my ($hash_temp) = _setDatos_de_estructura($c, \%hash);
+        $campo_ant = $campo;
+        
+        push (@result, $hash_temp);
 
     }
 
     C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================FIN");
 
     return (scalar(@$catalogaciones_array_ref), \@result);
+#     return (scalar(@$catalogaciones_array_ref), \@result_total);
 }
 
 =item sub cantNivel2
@@ -684,6 +704,9 @@ sub getDatosFromNivel{
     my ($cant, $catalogaciones_array_ref_objects) = getDatosRepetibleFromNivel($params);
 
     my @result;
+    my $campo;
+    my $campo_ant;
+
     foreach my $c  (@$catalogaciones_array_ref_objects){
 
         C4::AR::Debug::debug("getDatosFromNivel => campo, subcampo, dato => ".$c->getCampo.", ".$c->getSubcampo.": ".$c->getDato);
@@ -697,6 +720,14 @@ sub getDatosFromNivel{
             $hash{'dato'}              = $c->getDato;
             $hash{'datoReferencia'}    = $c->getDato;
             $hash{'Id_rep'}            = $c->getId_rep;
+
+            $campo = $c->getCampo;
+
+            if($campo ne $campo_ant){
+            #agrego la informacion del campo segun la estructura base pref_estructura_campo_marc    
+                $hash{'descripcion_campo'} = 'esta es la descripcion del campo '.$c->getCampo;
+                $hash{'ayuda_campo'} = 'esta es la ayuda del campo '.$c->getCampo;
+            }
 
             C4::AR::Debug::debug("getDatosFromNivel => Id_rep => ".$c->getId_rep);
     
@@ -732,8 +763,10 @@ sub getDatosFromNivel{
     #obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
     my @resultEstYDatos = _getEstructuraYDatosDeNivelNoRepetible($params);
     push(@resultEstYDatos,@result);
+    my @sorted = sort { $a->{campo} cmp $b->{campo} } @resultEstYDatos; # alphabetical sort 
 
-    return (scalar(@resultEstYDatos), \@resultEstYDatos);
+#     return (scalar(@resultEstYDatos), \@resultEstYDatos);
+    return (scalar(@resultEstYDatos), \@sorted);
 }
 
 ###################################################FIN PROBANDO######################################################################
@@ -841,8 +874,10 @@ sub getEstructuraCatalogacionFromDBCompleta{
                                                                         		intranet_habilitado => { gt => 0 }, 
                                                                         ],
 
-                                                                with_objects => [ 'infoReferencia' ],  #LEFT OUTER JOIN
-                                                                sort_by => ( 'intranet_habilitado' ),
+                                                                with_objects    => [ 'infoReferencia' ],  #LEFT OUTER JOIN
+                                                                require_objects => [ 'camposBase', 'subCamposBase' ],
+#                                                                 sort_by => ( 'intranet_habilitado' ),
+                                                                sort_by => ( 'campo' ),
                                                              );
 
     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
@@ -870,7 +905,7 @@ sub getEstructuraCatalogacionFromDBRepetibles{
                                                                         ],
 
                                                                 with_objects    => [ 'infoReferencia' ],  #LEFT OUTER JOIN
-                                                                require_objects => [ 'estructuraBase' ], #INNER JOIN
+                                                                require_objects => [ 'subCamposBase' ], #INNER JOIN
                                                                 sort_by         => ( 'intranet_habilitado' ),
                                                              );
 
@@ -1022,7 +1057,7 @@ sub _getEstructuraFromCampoSubCampo{
 																							subcampo    => { eq => $subcampo },
 																					], 
                                                                                 with_objects    => ['infoReferencia'],#LEFT JOIN
-                                                                                require_objects => [ 'estructuraBase' ] #INNER JOIN
+                                                                                require_objects => [ 'subCamposBase' ] #INNER JOIN
 
 										);	
 

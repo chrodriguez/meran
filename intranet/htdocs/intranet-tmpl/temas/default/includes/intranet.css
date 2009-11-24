@@ -907,11 +907,28 @@ label.error_adv{
 }
 
 li.MARCHeader{
-    margin:0;
-    padding:5px;
-    background-color:#FFFFFF;
-    width: 90%;
-    list-style-type:none;
+    background-color:#A1C162;
+    margin: 0;
+    padding: 4px;
+    width: 100%;
+    list-style-type: none;
+    clear: both;
+}
+
+li.MARCHeader label{
+/*     margin: 0; */
+/*     padding: 4px; */
+    /*background-color:#A1C162;*/
+    width: 100%;
+    list-style-type: none;
+/*     clear: both; */
+    text-align: left;
+    font-weight: bold;
+    margin: 1% 0 1%;
+}
+
+li.MARCHeader input{
+    text-align: right;
 }
 
 .horizontal{

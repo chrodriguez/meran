@@ -16,6 +16,7 @@ __PACKAGE__->meta->setup(
         liblibrarian       => { type => 'character', length => 255, not_null => 1 },
         libopac            => { type => 'character', length => 255, not_null => 1 },
         repetible          => { type => 'integer', default => '0', not_null => 1 },
+        descripcion        => { type => 'character', length => 255, not_null => 1 },
         mandatory          => { type => 'integer', default => '0', not_null => 1 },
         kohafield          => { type => 'character', length => 40 },
     ],
@@ -86,6 +87,16 @@ sub getRepetible{
     return ($self->repetible);
 }
 
+sub getDescripcion{
+    my ($self) = shift;
+    return ($self->descripcion);
+}
+
+sub setDescripcion{
+    my ($self) = shift;
+    my ($descripcion) = @_;
+    $self->descripcion($descripcion);
+}
 
 1;
 

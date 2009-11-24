@@ -48,16 +48,16 @@ $(document).ready(function() {
     </li>-->
 
 
-<!--     Si catalogacion.refCampo.getObligatorio (LA BIBLIA) dice que es obligatorio, no se puede modificar -->
+<!--     Si catalogacion.subCamposBase.getObligatorio (LA BIBLIA) dice que es obligatorio, no se puede modificar -->
     <li class="sub_item">
         <label for="obligatorio">[% 'Obligatorio?' | i18n %]</label>
         <input  type=radio id="obligatorio_si" name="obligatorio" value="1" 
                 [% IF catalogacion.obligatorio == '1' %] checked [% END %]
-                [% IF catalogacion.refCampo.getObligatorio %] disabled [% END %]>
+                [% IF catalogacion.subCamposBase.getObligatorio %] disabled [% END %]>
             [% 'S&iacute;' | i18n %]<BR>
         <input  type=radio id="obligatorio_no" name="obligatorio" value="0" 
                 [% IF catalogacion.obligatorio == '0' %] checked [% END %]
-                [% IF catalogacion.refCampo.getObligatorio %] disabled [% END %]>  
+                [% IF catalogacion.subCamposBase.getObligatorio %] disabled [% END %]>  
             [% 'No' | i18n %]<BR>
     </li> 
     <li class="sub_item">
