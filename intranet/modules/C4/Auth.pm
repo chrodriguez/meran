@@ -908,7 +908,7 @@ sub desencriptar{
 
     use Crypt::CBC;
     use MIME::Base64;
-
+ C4::AR::Debug::debug("desencriptar=> ".$texto_a_desencriptar);
     my  $cipher = Crypt::CBC->new( 
                                     -key    => $key,
                                     -cipher => 'Rijndael',

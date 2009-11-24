@@ -1,7 +1,8 @@
     [% IF socio %]
       <div class="main-subcontent">
         <!-- Subcontent unit -->
-        [% INCLUDE 'opac-reservas_info.inc' %]
+        <div id="info_reservas">
+        </div>
         <!-- Subcontent unit -->
         [% INCLUDE 'opac-sanciones_info.inc' %]
             <!-- Subcontent unit -->

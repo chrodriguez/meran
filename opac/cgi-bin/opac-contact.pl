@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 use strict;
 require Exporter;
-
 use C4::Output;  # contains gettemplate
 use C4::Auth;
 use CGI;
@@ -9,11 +8,11 @@ use CGI;
 my $query = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-									template_name => "opac-main.tmpl",
-									query => $query,
-                                    type => "opac",
-									authnotrequired => 1,
-									flagsrequired => {  ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                template_name => "opac-main.tmpl",
+                                query => $query,
+                                type => "opac",
+                                authnotrequired => 1,
+                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
             });
 
 $t_params->{'opac'};

@@ -47,6 +47,10 @@
             <h1 class="first">[% 'Ingresar' | i18n %]</h1>
             <br>
     [% END %]
+    [% IF mensaje %]
+        <h1>[% mensaje %]</h1>
+    [% END %]
+
       <div class="column1-unit">
           <div class="contactform">
               <form name="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl" onSubmit = "enviar()">

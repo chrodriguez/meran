@@ -13,7 +13,7 @@ my $query = new CGI;
 my $input = $query;
 
 my ($template, $session, $t_params)= get_template_and_user({
-                                    template_name => "opac-userupdate.tmpl",
+                                    template_name => "opac-main.tmpl",
                                     query => $query,
                                     type => "opac",
                                     authnotrequired => 1,
@@ -21,98 +21,54 @@ my ($template, $session, $t_params)= get_template_and_user({
              });
 
 
-my $nro_socio = $session->param('nro_socio');
+my $nro_socio = C4::Auth::getSessionNroSocio();
 
-# get borrower information ....
 my ($socio, $flags) = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
 C4::AR::Validator::validateObjectInstance($socio);
 
 my %data_hash;
-
+my $msg_object = C4::AR::Mensajes::create();
 $data_hash{'nombre'} = $input->param('nombre');
 $data_hash{'apellido'} = $input->param('apellido');
 $data_hash{'direccion'} = $input->param('direccion');
-$data_hash{'numero_telefono'} = $input->param('numero_telefono');
-$data_hash{'numero_fax'} = $input->param('numero_fax');
+$data_hash{'numero_telefono'} = $input->param('telefono');
 $data_hash{'id_ciudad'} = $input->param('id_ciudad');
 $data_hash{'email'} = $input->param('email');
+$data_hash{'actualPassword'} = $input->param('actual_password');
+$data_hash{'newpassword'} = $input->param('new_password1');
+$data_hash{'newpassword1'} = $input->param('new_password2');
+my $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email'];
+my $update_password = 0;
+if ($update_password = C4::AR::Utilidades::validateString($data_hash{'actualPassword'})){
+  $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email', 'actualPassword','newpassword','newpassword1']
+}
+if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
+    if ($update_password){
+        $data_hash{'nro_socio'} = $socio->getNro_socio;
+        $msg_object = C4::AR::Usuarios::cambiarPassword(\%data_hash);
+    }
 
-if (C4::AR::Validator::checkParams('VT001',\%data_hash,['nombre','apellido','direccion','numero_telefono','numero_fax','id_ciudad','email'])){
+    $t_params->{'mensaje'} = C4::AR::Filtros::i18n("Se modificaron sus datos correctamente");
 
-    $socio->persona->modificarVisibilidadOPAC(\%data_hash);
+    if (!$msg_object->{'error'}){
+        $socio->persona->modificarVisibilidadOPAC(\%data_hash);
+    }else{
+        my $cod_msg = C4::AR::Mensajes::getFirstCodeError($msg_object);
+        $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($cod_msg,'opac');
+    }
 
     my $dateformat = C4::Date::get_date_format();
-    # handle the new information....
-    # collect the form values and send an email.
-    my @fields = ('surname', 'firstname', 'phone', 'faxnumber', 'streetaddress','city', 'emailaddress');
-    my $update;
-    $update->{'nro_socio'}=$nro_socio;
-    my $updateemailaddress= C4::AR::Preferencias->getValorPreferencia('KohaAdminEmailAddress');
-    if ($updateemailaddress eq '') {
-        warn "La preferencia KohaAdminEmailAddress no esta seteada. No se puede enviar la informacion de actualizacion de $socio->persona->getApellido, $socio->persona->getNombre (#$nro_socio)\n";
-        my ($template, $session, $t_params)= get_template_and_user({
-                                                template_name => "kohaerror.tmpl",
-                                                query => $query,
-                                                type => "opac",
-                                                authnotrequired => 1,
-                                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-                    });
-    
-        $t_params->{'errormessage'} = 'La preferencia KohaAdminEmailAddress no esta seteada. Por favor visite la biblioteca para actualizar sus datos';
-    
-        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
-    }
+
+
+    $t_params->{'partial_template'}= "informacion.inc";
+}else{
+    $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('VA002','intranet');
 }
-
-if ( C4::AR::Preferencias->getValorPreferencia('CheckUpdateDataEnabled')) {
-
-
-#     if ($query->{'surname'}) {
-#         # get all the fields:
-#         my $message =  "El usuario  $socio->{'cardnumber'}
-#                             ha requerido cambiar sus datos personales.
-#                             Por favor chequee los cambios realizados:
-#                             \nEOF";
-#         foreach my $field (@fields){
-#             my $newfield = $query->param($field);
-#             $message .= "$field : $socio->$field  -->  $newfield\n";
-#             $update->{$field}=$newfield;
-#             
-#         }
-#         $message .= "\n\nGracias,\nKoha\n\n";
-#         my %mail = ( To      => $updateemailaddress ,
-#             From    => $updateemailaddress ,
-#             Subject => "Cambio de caracteristicas de usuario.",
-#             Message => $message );
-#         if (sendmail %mail) {
-#     # do something if it works....
-#     
-#             C4::AR::Usuarios::updateOpacBorrower($update);  #Se actualiza el registro del usuario
-#         
-#             warn "Mail sent ok\n";
-#             print $query->redirect('/cgi-bin/koha/opac-user.pl');
-#             exit;
-#             } else {
-#         # do something if it doesnt work....
-#                 warn "Error sending mail: $Mail::Sendmail::error \n";
-#         }
-#     }
-}
-
-# $socio->{'dateenrolled'} = format_date($socio->{'dateenrolled'},$dateformat);
-# $socio->{'expiry'}       = format_date($socio->{'expiry'},$dateformat);
-# $socio->{'dateofbirth'}  = format_date($socio->{'dateofbirth'},$dateformat);
-
 
 $t_params->{'socio'}= $socio,
-$t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 
-#otra vez einar con Guarani
-
-$t_params->{'updatedata'} =(!C4::AR::Preferencias->getValorPreferencia('CheckUpdateDataEnabled'));
-
-
-$t_params->{'pagetitle'}= "Actualizaci&oacute;n de datos personales";
+$t_params->{'opac'};
+$t_params->{'partial_template'}= "informacion.inc";
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

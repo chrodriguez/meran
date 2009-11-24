@@ -11,7 +11,7 @@ use C4::AR::Busquedas;
 my $input = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-									template_name => "opac-DetalleReservas.tmpl",
+									template_name => "includes/opac-reservas_info.inc",
 									query => $input,
 									type => "opac",
 									authnotrequired => 0,
@@ -21,18 +21,15 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 
 
-my $obj=$input->param('obj');
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
-
-my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($session->param('nro_socio'));
+my $nro_socio = C4::Auth::getSessionNroSocio();
+my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($nro_socio);
 
 if ($reservas){
     my @reservas_asignadas;
     my $racount = 0;
     my @reservas_espera;
     my $recount = 0;
-    
-    
+
     foreach my $reserva (@$reservas) {
 	    if ($reserva->getId3) {
 		    #Reservas para retirar
@@ -44,7 +41,6 @@ if ($reservas){
 		    $recount++;
         }
     }
-    
     $t_params->{'RESERVAS_ASIGNADAS'}= \@reservas_asignadas;
     $t_params->{'reservas_asignadas_count'}= $racount;
     $t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;

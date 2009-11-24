@@ -22,7 +22,10 @@
   </script>
 
   <script src="/includes/jquery/jquery.js"></script>
-
+  <script src="/includes/AjaxHelper.js"></script>
+  <script src="/includes/json/jsonStringify.js"></script>
+  [% INCLUDE 'AutocompleteHelper.inc'  %]
+  <script src="/includes/circulacionOPAC.js"></script>
 
   <title>
     [% IF titulo_nombre_ui %]
@@ -31,6 +34,12 @@
         Meran - OPAC
     [% END %]
   </title>
+  
+  <script type="text/javascript">
+      $(document).ready(function() {
+          infoReservas();
+      });
+  </script>
 </head>
 
 <!-- Global IE fix to avoid layout crash when single word size wider than column width -->

@@ -417,7 +417,7 @@ sub _verificarPassword {
 sub cambiarPassword {
     my ($params)=@_;
 
-    my $msg_object;    
+    my $msg_object;
     my  $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
 
     if ($socio){
