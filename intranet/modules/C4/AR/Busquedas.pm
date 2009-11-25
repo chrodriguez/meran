@@ -1771,47 +1771,6 @@ sub _existeEnArregloDeCampoMARC{
 	return 0;
 }
 
-sub getHeader{
-	my ($campo) = @_;
-	use C4::Modelo::PrefEstructuraCampoMarc;
-	use C4::Modelo::PrefEstructuraCampoMarc::Manager;
-
-	my ($pref_estructura_campo_marc_array) = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc( 
-																					query => [ campo => { eq => $campo } ]
-																	);
-
-	if(scalar(@$pref_estructura_campo_marc_array) > 0){
-		return $pref_estructura_campo_marc_array->[0]->getLiblibrarian;
-	}else{
-		return 0;
-	}
-}
-
-sub getLiblibrarian{
-	my ($campo, $subcampo)= @_;
-
-	use C4::Modelo::PrefEstructuraSubcampoMarc;
-	use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
-	#primero busca en estructura_catalogacion
-	my $estructura_array= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-
-
-	if($estructura_array){
-		return $estructura_array->getLiblibrarian;
-	}else{
-		my ($pref_estructura_sub_campo_marc_array) = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc( 
-																					query => [  campo => { eq => $campo },
-																								      subcampo => { eq => $subcampo }
-																							 ]
-																	);
-		#si no lo encuentra en estructura_catalogacion, lo busca en estructura_sub_campo_marc
-		if(scalar(@$pref_estructura_sub_campo_marc_array) > 0){
-			return  $pref_estructura_sub_campo_marc_array->[0]->getLiblibrarian
-		}else{
-			return 0;
-		}
-	}
-}
 #***************************************Fin**Soporte MARC*********************************************************************
 
 1;

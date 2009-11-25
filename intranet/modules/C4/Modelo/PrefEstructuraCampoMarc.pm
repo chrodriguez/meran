@@ -9,7 +9,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         campo            => { type => 'character', length => 3, not_null => 1 },
-        nombre           => { type => 'character', length => 255, not_null => 1 },
+        liblibrarian     => { type => 'character', length => 255, not_null => 1 },
 #         libopac          => { type => 'character', length => 255, not_null => 1 },
         repeatable       => { type => 'integer', default => '0', not_null => 1 },
         descripcion      => { type => 'character', length => 255, not_null => 1 },
@@ -31,15 +31,15 @@ sub setCampo{
     $self->campo($campo);
 }
 
-sub getNombre{
+sub getLiblibrarian{
     my ($self) = shift;
-    return ($self->nombre);
+    return ($self->liblibrarian);
 }
 
-sub setNombre{
+sub setLiblibrarian{
     my ($self) = shift;
-    my ($nombre) = @_;
-    $self->nombre($nombre);
+    my ($liblibrarian) = @_;
+    $self->liblibrarian($liblibrarian);
 }
 
 # sub getLibopac{

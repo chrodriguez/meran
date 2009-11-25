@@ -442,7 +442,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreTipoDocumento($self->getTipo_documento);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
   if($estructura){
@@ -461,7 +461,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombrePais($self->getPais_publicacion);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	
@@ -481,7 +481,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
 	$hash{'dato'}= $self->getAnio_publicacion;
 	my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
   if($estructura){
@@ -497,7 +497,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
  	$hash{'dato'}= C4::AR::Referencias::getNombreCiudad($self->getCiudad_publicacion);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	
@@ -519,7 +519,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreLenguaje($self->getLenguaje);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	
@@ -540,7 +540,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreSoporte($self->getSoporte);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	
@@ -560,7 +560,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreNivelBibliografico($self->getNivel_bibliografico);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	if($estructura){
@@ -599,10 +599,10 @@ sub nivel2CompletoToMARC{
 		$subcampo               = $marc_object->getSubcampo;
 		$dato                   = $marc_object->getDato;
 		my %hash;
-		$hash{'header'}         = C4::AR::Busquedas::getHeader($campo);
+		$hash{'header'}         = C4::AR::Catalogacion::getHeader($campo);
 		$hash{'campo'}          = $campo;
 		$hash{'subcampo'}       = $subcampo;
-		$hash{'liblibrarian'}   = C4::AR::Busquedas::getLiblibrarian($campo, $subcampo);
+		$hash{'liblibrarian'}   = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
 		$hash{'dato'}           = $dato;
     $hash{'id1'}            = $id1;
     #obtengo el dato de la referencia solo si es un repetible, los campos fijos recuperan de otra forma el dato de la referencia 

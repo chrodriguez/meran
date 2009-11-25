@@ -540,7 +540,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreUI($self->getId_ui_origen);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	
@@ -562,7 +562,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
 	$hash{'dato'}= $self->getBarcode;
     $hash{'id1'} = $self->getId1;
 
@@ -573,7 +573,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreUI($self->getId_ui_poseedora);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 
@@ -594,7 +594,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
 	$hash{'dato'}= $self->getSignatura_topografica;
     $hash{'id1'} = $self->getId1;  
 
@@ -605,7 +605,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreEstado($self->getId_estado);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 
@@ -627,7 +627,7 @@ sub toMARC{
 	my %hash;
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
 	$hash{'dato'}= C4::AR::Referencias::getNombreDisponibilidad($self->getId_disponibilidad);
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 
@@ -670,10 +670,10 @@ sub nivel3CompletoToMARC{
 		$subcampo               = $marc_object->getSubcampo;
 		$dato                   = $marc_object->getDato;
 		my %hash;
-		$hash{'header'}         = C4::AR::Busquedas::getHeader($campo);
+		$hash{'header'}         = C4::AR::Catalogacion::getHeader($campo);
 		$hash{'campo'}          = $campo;
 		$hash{'subcampo'}       = $subcampo;
-		$hash{'liblibrarian'}   = C4::AR::Busquedas::getLiblibrarian($campo, $subcampo);
+		$hash{'liblibrarian'}   = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
 		$hash{'dato'}           = $dato;
         $hash{'id1'}            = $id1;
     

@@ -573,6 +573,119 @@ sub _setDatos_de_estructura2 {
 Este funcion devuelve la estructura de catalogacion para armar los componentes en el cliente
 Nivel 1, 2 y 3 y REPETIBLES, estructura SIN DATOS
 =cut
+
+sub getSubCamposFromEstructuraByCampo{
+    my ($campo, $nivel, $itemType) = @_;
+
+    use C4::Modelo::CatEstructuraCatalogacion::Manager;
+
+    my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
+                                                                query => [ 
+                                                                                nivel => { eq => $nivel },
+                                                                                campo => { eq => $campo },    
+
+                                                                    or   => [   
+                                                                                itemtype => { eq => $itemType },
+                                                                                itemtype => { eq => 'ALL' },    
+                                                                            ],
+
+                                                                                intranet_habilitado => { gt => 0 }, 
+                                                                        ],
+
+                                                                with_objects    => [ 'infoReferencia' ],  #LEFT OUTER JOIN
+                                                                require_objects => [ 'camposBase', 'subCamposBase' ],
+#                                                                 sort_by => ( 'intranet_habilitado' ),
+                                                                sort_by => ( 'subcampo' ),
+                                                             );
+
+    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
+}
+
+sub getCampoFromEstructura{
+    my ($nivel, $itemType) = @_;
+
+    use C4::Modelo::CatEstructuraCatalogacion::Manager;
+
+    my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
+                                                                distinct => 1,
+                                                                select   => [ 'campo' ],
+
+                                                                query => [ 
+                                                                                nivel => { eq => $nivel },
+
+                                                                    or   => [   
+                                                                                itemtype => { eq => $itemType },
+                                                                                itemtype => { eq => 'ALL' },    
+                                                                            ],
+
+                                                                                intranet_habilitado => { gt => 0 }, 
+                                                                        ],
+
+                                                                with_objects    => [ 'infoReferencia' ],  #LEFT OUTER JOIN
+                                                                require_objects => [ 'camposBase', 'subCamposBase' ],
+#                                                                 sort_by => ( 'intranet_habilitado' ),
+                                                                sort_by => ( 'campo' ),
+                                                             );
+
+    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
+}
+
+sub getEstructuraSinDatos{
+    my ($params) = @_;
+    C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================INI");
+
+    my $nivel =     $params->{'nivel'};
+    my $itemType =  $params->{'id_tipo_doc'};
+    my $orden =     $params->{'orden'};
+    
+    #obtengo todos los campos <> de la estructura de catalogacion del Nivel 1, 2 o 3
+    my ($cant, $campos_array_ref) = getCampoFromEstructura($nivel, $itemType);
+
+    C4::AR::Debug::debug("getEstructuraSinDatos => cant: ".$cant);    
+
+    my @result_total;
+    my $campo = '';
+    my $campo_ant = '';
+    foreach my $c  (@$campos_array_ref
+){
+
+        my %hash_campos;
+        my @result;
+        #obtengo todos los subcampos de la estructura de catalogacion segun el campo
+        my ($cant, $subcampos_array_ref) = getSubCamposFromEstructuraByCampo($c->getCampo, $nivel, $itemType);
+
+        foreach my $sc  (@$subcampos_array_ref){
+            my %hash;
+        
+            $hash{'tiene_estructura'}  = '1';
+            $hash{'dato'}              = '';
+            $hash{'datoReferencia'}    = 0;
+            $hash{'Id_rep'}            = 0;
+            
+            my ($hash_temp) = _setDatos_de_estructura($sc, \%hash);
+            
+            push (@result, $hash_temp);
+        }
+
+        my %hash_campos;
+
+        $hash_campos{'campo'}               = $c->getCampo;
+        $hash_campos{'nombre'}              = $c->camposBase->getLiblibrarian;
+        $hash_campos{'descripcion_campo'}   = $c->camposBase->getDescripcion.' - '.$c->getCampo;
+        $hash_campos{'ayuda_campo'}         = 'esta es la ayuda del campo '.$c->getCampo;
+        $hash_campos{'subcampos_array'}     = \@result;
+
+        push (@result_total, \%hash_campos);
+
+    }
+
+    C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================FIN");
+
+#     return (scalar(@$catalogaciones_array_ref), \@result);
+    return (scalar(@result_total), \@result_total);
+}
+
+=item
 sub getEstructuraSinDatos{
     my ($params) = @_;
     C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================INI");
@@ -598,11 +711,13 @@ sub getEstructuraSinDatos{
         #agrego la informacion del campo segun la estructura base pref_estructura_campo_marc    
             my %hash_campos;
 
-            $hash_campos{'descripcion_campo'}  = $c->camposBase->getDescripcion.' - '.$c->getCampo;
-            $hash_campos{'ayuda_campo'}        = 'esta es la ayuda del campo '.$c->getCampo;
-#             $hash_campos{'subcampos_array'}    = \@result;
-#             undef @result;
-#             push (@result_total, \%hash_campos);
+            $hash_campos{'campo'}               = $c->getCampo;
+            $hash_campos{'nombre'}              = $c->camposBase->getNombre;
+            $hash_campos{'descripcion_campo'}   = $c->camposBase->getDescripcion.' - '.$c->getCampo;
+            $hash_campos{'ayuda_campo'}         = 'esta es la ayuda del campo '.$c->getCampo;
+            $hash_campos{'subcampos_array'}     = \@result;
+
+            push (@result_total, \%hash_campos);
         }
         
         $hash{'tiene_estructura'}  = '1';
@@ -619,9 +734,10 @@ sub getEstructuraSinDatos{
 
     C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================FIN");
 
-    return (scalar(@$catalogaciones_array_ref), \@result);
-#     return (scalar(@$catalogaciones_array_ref), \@result_total);
+#     return (scalar(@$catalogaciones_array_ref), \@result);
+    return (scalar(@$catalogaciones_array_ref), \@result_total);
 }
+=cut
 
 =item sub cantNivel2
      devuelve la cantidad de Niveles 2 que tiene  relacionados el Nivel 1 con id1 pasado por parameto
@@ -1092,4 +1208,46 @@ sub getEstructuraCatalogacionById{
     }
 }
 
+
+sub getLiblibrarian{
+    my ($campo, $subcampo)= @_;
+
+    use C4::Modelo::PrefEstructuraSubcampoMarc;
+    use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
+    #primero busca en estructura_catalogacion
+    my $estructura_array= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+
+
+    if($estructura_array){
+        return $estructura_array->getLiblibrarian;
+    }else{
+        my ($pref_estructura_sub_campo_marc_array) = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc( 
+                                                                                    query => [  campo => { eq => $campo },
+                                                                                                      subcampo => { eq => $subcampo }
+                                                                                             ]
+                                                                    );
+        #si no lo encuentra en estructura_catalogacion, lo busca en estructura_sub_campo_marc
+        if(scalar(@$pref_estructura_sub_campo_marc_array) > 0){
+            return  $pref_estructura_sub_campo_marc_array->[0]->getLiblibrarian
+        }else{
+            return 0;
+        }
+    }
+}
+
+sub getHeader{
+    my ($campo) = @_;
+    use C4::Modelo::PrefEstructuraCampoMarc;
+    use C4::Modelo::PrefEstructuraCampoMarc::Manager;
+
+    my ($pref_estructura_campo_marc_array) = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc( 
+                                                                                    query => [ campo => { eq => $campo } ]
+                                                                    );
+
+    if(scalar(@$pref_estructura_campo_marc_array) > 0){
+        return $pref_estructura_campo_marc_array->[0]->getLiblibrarian;
+    }else{
+        return 0;
+    }
+}
 #====================================================FIN==SOPORTE PARA ESTRUCTURA CATALOGACION==================================================

@@ -242,13 +242,13 @@ sub detalleMARC {
                 my $subcampo= $subfield->[0];
                 my $dato= $subfield->[1];
                 $hash_temp{'subcampo'}= $subcampo;
-                $hash_temp{'liblibrarian'}= C4::AR::Busquedas::getLiblibrarian($campo, $subcampo);
+                $hash_temp{'liblibrarian'}= C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
                 $hash_temp{'dato'}= $dato;
                 push(@info_campo_array, \%hash_temp);
 #                 C4::AR::Debug::debug("agrego el subcampo: ". $subcampo);
             }
             $hash{'campo'}= $campo;
-            $hash{'header'}= C4::AR::Busquedas::getHeader($campo);
+            $hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
             $hash{'info_campo_array'}= \@info_campo_array;
 
             push(@MARC_result_array, \%hash);

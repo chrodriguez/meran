@@ -795,26 +795,26 @@ function procesarInfoJson(json){
     
     for(var i=0; i < objetos.length; i++){
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
-        var marc_conf_obj = new marc_conf(objetos[i]);
-        campo = marc_conf_obj.getCampo();
+        var campo_marc_conf_obj = new campo_marc_conf(objetos[i]);
         //genero el header para el campo q contiene todos los subcampos
-        if(campo != campo_ant){
-            if(i > 0){
-//                 $("#" + getDivDelNivel()).append("</div>");
-            }
-// <div id='marc_group falta agregarlo
-            strComp = "<div id='marc_group" + marc_conf_obj.getIdCompCliente() + "' ><li class='MARCHeader'><div style='width: 100%; height: 35px;'><div style='width: 90%; float:left'>";
-            strComp = strComp + "<label>" + crearBotonAyudaCampo(marc_conf_obj.getCampo())  + " " + marc_conf_obj.getCampo() + " - " + marc_conf_obj.getVistaIntra() + " </label></div><div style='width: 5%;float:right'> + - </div></div></li>";
-            $("#" + getDivDelNivel()).append(strComp);
+        strComp = "<div id='marc_group" + i + "' ><li class='MARCHeader'><div style='width: 100%; height: 35px;'>";
+        strComp = strComp + "<div style='width: 90%; float:left'>";
+        strComp = strComp + "<label>" + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo())  + " " + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre() + " </label></div><div style='width: 5%;float:right'> + - </div></div></li></div>";
+        $("#" + getDivDelNivel()).append(strComp);
+
+//         COMPONENTES_ARRAY[i] = objetos[i];
+//         procesarObjeto(objetos[i]);
+        //proceso los subcampos
+        var subcampo_marc_conf_obj = new subcampo_marc_conf(objetos[i]);
+        var subcampos_array = campo_marc_conf_obj.getSubCamposArray();
+        for(var j=0; j < subcampos_array.length; j++){
+            subcampos_array[j].marc_group = 'marc_group' + i;
+            COMPONENTES_ARRAY[j+i] = subcampos_array[j];
+            procesarObjeto(subcampos_array[j], 'marc_group' + i);
         }
 
-        
-        campo_ant = campo;
-        COMPONENTES_ARRAY[i] = objetos[i];
-        procesarObjeto(objetos[i]);
     }
 
-//     $("#" + getDivDelNivel()).append("</div>");
 	//hago foco en la primer componente
 	_setFoco();
     if( MODIFICAR == 0 && _NIVEL_ACTUAL == 2 ){  
@@ -837,11 +837,79 @@ function ayudaParaCampo(campo){
  * @params
  * objeto, elemento que contiene toda la info necesaria.
  */
-function procesarObjeto(objeto){
+
+// ANDABA!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+// function procesarObjeto(objeto){
+// 
+//     TAB_INDEX++;
+// 
+//     var marc_conf_obj       = new marc_conf(objeto);
+//     var vista_intra         = marc_conf_obj.getVistaIntra();
+//     var tipo                = marc_conf_obj.getTipo();
+//     var comp;
+//     var strComp;
+//     var divComp             = crearDivComponente("div"+marc_conf_obj.getIdCompCliente());
+//     var tiene_estructura    = marc_conf_obj.getTieneEstructura(); //falta q los niveles 1, 2, 3 mantengan esta estructura
+// 
+//     if(marc_conf_obj.getRepetible() == "1"){  
+//         vista_intra = vista_intra + "<b> (R) </b>";
+//     }
+// 
+//     if(marc_conf_obj.getObligatorio() == "1"){  
+//         vista_intra = vista_intra + "<b> * </b>";
+//     }
+// 
+//     if(marc_conf_obj.getTieneEstructura() == '0'){ 
+//         vista_intra = vista_intra + "<div class='divComponente'><input type='text' value='" + marc_conf_obj.getDato() + " (NO TIENE ESTRUCTURA)' size='55' disabled></div>";
+//         tiene_estructura = 0;
+//     }
+// 
+//     vista_intra =  marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + ' - ' + vista_intra
+//     var divLabel = crearDivLabel(vista_intra, marc_conf_obj.getIdCompCliente());
+// 
+//     strComp = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + divComp + "</li>";
+// 
+//     $("#" + getDivDelNivel()).append(strComp);
+// 
+//     if(tiene_estructura == 1){
+// 
+//         switch(tipo){
+//             case "text":
+//                 crearText(marc_conf_obj);
+//             break;
+//             case "combo":
+//                 crearCombo(marc_conf_obj);
+//             break;
+//             case "texta2":
+//                 crearTextArea(marc_conf_obj);
+//             break;
+// 		    case "auto": 
+//                 crearAuto(marc_conf_obj);
+//             break;
+//             case "calendar":
+//                 crearCalendar(marc_conf_obj);
+// 		    break;
+//             case "anio":
+//                 crearTextAnio(marc_conf_obj);
+//             break;
+//         }
+//     
+//         //Se agregan clases para cuando tenga que recuperar los datos.
+//         if(objeto.obligatorio == "1"){
+//             hacerComponenteObligatoria(marc_conf_obj.getIdCompCliente());
+//         }
+// 
+//     }
+// }
+
+
+function procesarObjeto(objeto, marc_group){
 
     TAB_INDEX++;
 
-    var marc_conf_obj       = new marc_conf(objeto);
+//     var marc_conf_obj       = new marc_conf(objeto);
+    var marc_conf_obj       = new subcampo_marc_conf(objeto);
     var vista_intra         = marc_conf_obj.getVistaIntra();
     var tipo                = marc_conf_obj.getTipo();
     var comp;
@@ -867,7 +935,8 @@ function procesarObjeto(objeto){
 
     strComp = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + divComp + "</li>";
 
-    $("#" + getDivDelNivel()).append(strComp);
+//     $("#" + getDivDelNivel()).append(strComp);
+    $("#" + marc_group).append(strComp);
 
     if(tiene_estructura == 1){
 
@@ -881,12 +950,12 @@ function procesarObjeto(objeto){
             case "texta2":
                 crearTextArea(marc_conf_obj);
             break;
-		    case "auto": 
+            case "auto": 
                 crearAuto(marc_conf_obj);
             break;
             case "calendar":
                 crearCalendar(marc_conf_obj);
-		    break;
+            break;
             case "anio":
                 crearTextAnio(marc_conf_obj);
             break;
@@ -1013,10 +1082,11 @@ function clone(id){
 //luego agregar esta estructura en el arreglo de componentes para q se pueda enviar al servidor
 //     t.insertAfter($('#LI'+id)); 
     var obj_temp = _getMARC_conf_ById(id);
+alert(obj_temp);
     var obj;
     obj = copy(obj_temp);
     obj.idCompCliente = id_componente;
-    procesarObjeto(obj);
+    procesarObjeto(obj, obj_temp.marc_group);
     
     COMPONENTES_ARRAY.push(obj);
 }
@@ -1112,11 +1182,12 @@ function campo_marc_conf(obj){
     function fGetNombre(){ return this.nombre };
     function fGetAyudaCampo(){ return this.ayuda_campo };
     function fGetDescripcionCampo(){ return $.trim(this.descripcion_campo) };
-    function fGetSubCamposArray(){ return $.trim(this.subcampos_array) };
+    function fGetSubCamposArray(){ return this.subcampos_array };
     function fGetRepetible(){ return (this.repetible) };
 
     //metodos
     this.getCampo               = fGetCampo;
+    this.getNombre              = fGetNombre;
     this.getAyudaCampo          = fGetAyudaCampo;
     this.getDescripcionCampo    = fGetDescripcionCampo;
     this.getSubCamposArray      = fGetSubCamposArray;
