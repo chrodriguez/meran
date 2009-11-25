@@ -9,9 +9,12 @@ use Date::Manip;
 use C4::AR::Busquedas;
 
 my $input = new CGI;
+my $action = $input->param('action') || 0;
+
+my $template = $action?"opac-main.tmpl":"includes/opac-reservas_info.inc";
 
 my ($template, $session, $t_params)= get_template_and_user({
-									template_name => "includes/opac-reservas_info.inc",
+									template_name => $template,
 									query => $input,
 									type => "opac",
 									authnotrequired => 0,
@@ -19,16 +22,22 @@ my ($template, $session, $t_params)= get_template_and_user({
 									debug => 1,
 			     });
 
+if ($action eq "detalle_espera"){
+    $t_params->{'partial_template'}= "opac-detalle_reservas_espera.inc";
+}
+elsif ($action eq "detalle_asignadas"){
+    $t_params->{'partial_template'}= "opac-detalle_reservas_asignadas.inc";
+}
 
 
 my $nro_socio = C4::Auth::getSessionNroSocio();
 my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($nro_socio);
+my $racount = 0;
+my $recount = 0;
 
 if ($reservas){
     my @reservas_asignadas;
-    my $racount = 0;
     my @reservas_espera;
-    my $recount = 0;
 
     foreach my $reserva (@$reservas) {
 	    if ($reserva->getId3) {
@@ -42,10 +51,10 @@ if ($reservas){
         }
     }
     $t_params->{'RESERVAS_ASIGNADAS'}= \@reservas_asignadas;
-    $t_params->{'reservas_asignadas_count'}= $racount;
     $t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;
-    $t_params->{'reservas_espera_count'}=$recount;
 }
+$t_params->{'reservas_asignadas_count'}= $racount;
+$t_params->{'reservas_espera_count'}=$recount;
 $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 $t_params->{'pagetitle'}= "Usuarios";
 $t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");

@@ -39,6 +39,7 @@
       [% IF socio %]
           $(document).ready(function() {
               infoReservas();
+              infoSanciones();
           });
       [% END %]
   </script>

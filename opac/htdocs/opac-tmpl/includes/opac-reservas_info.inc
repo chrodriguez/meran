@@ -1,6 +1,21 @@
         <div class="subcontent-unit-border-green">
           <div class="round-border-topleft"></div><div class="round-border-topright"></div>
           <h1 class="green">[% 'Reservas Actuales' | i18n %]</h1>
-          <a>&nbsp;[% 'Reservas asignadas' | i18n %]: </a>&nbsp;[% reservas_asignadas_count %]<br />
-          <a>&nbsp;[% 'Reservas en espera' | i18n %]: </a>&nbsp;[% reservas_espera_count %]<br />
-        </div>
+          [% PERL %]
+              print C4::AR::Filtros::link_to( text    =>  "&nbsp;[% 'Reservas asignadas' | i18n %]:",
+                                              url     =>  "/cgi-bin/koha/opac-info_reservas.pl",
+                                              params => ["action=detalle_asignadas"],
+                                              title   =>  "[% 'Reservas asignadas' | i18n %]",
+                      ) ;
+          [% END %]
+          &nbsp;[% reservas_asignadas_count %]<br />
+          [% PERL %]
+              print C4::AR::Filtros::link_to( text    =>  "&nbsp;[% 'Reservas en espera' | i18n %]:",
+                                              url     =>  "/cgi-bin/koha/opac-info_reservas.pl",
+                                              params => ["action=detalle_espera"],
+                                              title   =>  "[% 'Reservas en espera' | i18n %]",
+                      ) ;
+          [% END %]
+          &nbsp;[% reservas_espera_count %]<br />
+
+      </div>
