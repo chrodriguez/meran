@@ -8,12 +8,14 @@ __PACKAGE__->meta->setup(
     table   => 'pref_estructura_campo_marc',
 
     columns => [
-        campo            => { type => 'character', length => 3, not_null => 1 },
-        liblibrarian     => { type => 'character', length => 255, not_null => 1 },
+        campo                   => { type => 'character', length => 3, not_null => 1 },
+        liblibrarian            => { type => 'character', length => 255, not_null => 1 },
 #         libopac          => { type => 'character', length => 255, not_null => 1 },
-        repeatable       => { type => 'integer', default => '0', not_null => 1 },
-        descripcion      => { type => 'character', length => 255, not_null => 1 },
-        mandatory        => { type => 'integer', default => '0', not_null => 1 },
+        repeatable              => { type => 'integer', default => '0', not_null => 1 },
+        descripcion             => { type => 'character', length => 255, not_null => 1 },
+        mandatory               => { type => 'integer', default => '0', not_null => 1 },
+        indicador_primario      => { type => 'character', length => 255, default => '0', not_null => 1 },
+        indicador_secundario    => { type => 'character', length => 255, default => '0', not_null => 1 },
     ],
 
     primary_key_columns => [ 'campo' ],
@@ -42,6 +44,15 @@ sub setLiblibrarian{
     $self->liblibrarian($liblibrarian);
 }
 
+sub getIndicadorPrimario{
+    my ($self) = shift;
+    return ($self->indicador_primario);
+}
+
+sub getIndicadorSecundario{
+    my ($self) = shift;
+    return ($self->indicador_secundario);
+}
 # sub getLibopac{
 #     my ($self) = shift;
 #     return ($self->libopac);
