@@ -161,10 +161,21 @@ function updateDetallePrestamo(responseText){
 function infoReservas(){
     objAH=new AjaxHelper(updateInfoReservas);
     objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/opac-DetalleReservas.pl';
+    objAH.url= '/cgi-bin/koha/opac-info_reservas.pl';
     objAH.sendToServer();
 }
 
 function updateInfoReservas(responseText){
     $('#info_reservas').html(responseText);
+}
+
+function infoSanciones(){
+    objAH=new AjaxHelper(updateInfoSanciones);
+    objAH.debug= true;
+    objAH.url= '/cgi-bin/koha/opac-info_sanciones.pl';
+    objAH.sendToServer();
+}
+
+function updateInfoSanciones(responseText){
+    $('#info_sanciones').html(responseText);
 }
