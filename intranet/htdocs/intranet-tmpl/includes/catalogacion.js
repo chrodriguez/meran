@@ -826,19 +826,13 @@ function procesarInfoJson(json){
 }
 
 function crearBotonAyudaCampo(campo){
-    return "<input type='button' value='?' onclick='ayudaParaCampo(" + campo + ")'>"; 
+    var funcion = "ayudaParaCampo('" + campo + "')";
+    return "<input type='button' value='?' onclick=" + funcion + ">"; 
 }
 
 function ayudaParaCampo(campo){
     alert("crear ventana con ayuda para campo " + campo);
 }
-
-/*
- * procesarObjeto
- * procesa el objeto json, para poder crear el componente adecuado al tipo de datos que vienen en el objeto.
- * @params
- * objeto, elemento que contiene toda la info necesaria.
- */
 
 // ANDABA!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -906,6 +900,12 @@ function ayudaParaCampo(campo){
 // }
 
 
+/*
+ * procesarObjeto
+ * procesa el objeto json, para poder crear el componente adecuado al tipo de datos que vienen en el objeto.
+ * @params
+ * objeto, elemento que contiene toda la info necesaria.
+ */
 function procesarObjeto(objeto, marc_group){
 
     TAB_INDEX++;
@@ -1270,22 +1270,44 @@ function crearText(obj){
     $("#div" + obj.getIdCompCliente()).append(comp);
 }
 
-function crearCombo(obj){
-    var comp = "<select id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' tabindex="+TAB_INDEX+">\n<option value=''>Elegir opci&oacute;n</option>\n";
+function newCombo(obj){
+    var comp = "<select id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' tabindex="+TAB_INDEX+">\n";
+    comp = comp + "<option value=''>Elegir opci&oacute;n</option>\n";
 
-    var op="";
-    var def="";
+    var op = "";
+    var defaultValue = "";
     var opciones = obj.getOpciones();
 
     for(var i=0; i< opciones.length; i++){
         if(obj.getDefaultValue() == opciones[i].clave){
-            def=" selected='selected' ";
+            defaultValue =" selected='selected' ";
         }
-        op = op + "<option value='" + opciones[i].clave + "'" + def + "'>" + opciones[i].valor + "</option>\n";
-        def = "";
+
+        op = op + "<option value='" + opciones[i].clave + "'" + defaultValue + "'>" + opciones[i].valor + "</option>\n";
+        defaultValue = "";
     }
 
     comp = comp + op + "</select>";
+    
+    return comp;
+}
+
+function crearCombo(obj){
+//     var comp = "<select id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' tabindex="+TAB_INDEX+">\n<option value=''>Elegir opci&oacute;n</option>\n";
+// 
+//     var op="";
+//     var def="";
+//     var opciones = obj.getOpciones();
+// 
+//     for(var i=0; i< opciones.length; i++){
+//         if(obj.getDefaultValue() == opciones[i].clave){
+//             def=" selected='selected' ";
+//         }
+//         op = op + "<option value='" + opciones[i].clave + "'" + def + "'>" + opciones[i].valor + "</option>\n";
+//         def = "";
+//     }
+    var comp = newCombo(obj);
+
     comp = comp + crearBotonAgregarRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 }
