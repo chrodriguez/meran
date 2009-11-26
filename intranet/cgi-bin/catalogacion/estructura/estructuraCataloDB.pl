@@ -328,6 +328,27 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
     
     #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getEstructuraSinDatos($obj);
+
+    
+
+    my $dbh   = C4::Context->dbh;
+    use MARC::Record;
+
+    my $sth = $dbh->prepare(" SELECT registro_marc
+                              FROM indice_busqueda n1r
+                              WHERE (id = ?) ");
+    $sth->execute(1);
+    my $marcblob = $sth->fetchrow;
+    
+    my $marc_record = MARC::Record->new_from_usmarc( $marcblob );
+#     my $marc_record  = new_from_usmarc MARC::Record($marcblob);
+
+    $marc_record->fields();
+
+    $marc_record->encoding( 'UTF-8' );
+    C4::AR::Debug::debug("marcblob ===================================================> titulo".$marc_record->subfield("245","a"));
+    C4::AR::Debug::debug("marcblob ===================================================> barcode ".$marc_record->subfield("995","f"));
+    C4::AR::Debug::debug("marcblob ===================================================> autor ".$marc_record->subfield("110","a"));
     
     my $infoOperacionJSON= to_json($catalogaciones_array_ref);
     

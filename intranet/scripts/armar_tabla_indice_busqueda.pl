@@ -63,15 +63,18 @@ use MARC::Record;
     my $marc=MARC::Record->new();
     
     for(my $i=0; $i< scalar(@result); $i++){
+          my $field = MARC::Field->new(@result[$i]->{'campo'},'','',@result[$i]->{'subcampo'} => @result[$i]->{'dato'});
+        $marc->append_fields($field);
+
       if ($superstring eq "") {$superstring =@result[$i]->{'dato'}; }
         else {$superstring .=" ".@result[$i]->{'dato'}; }
     }
       
-    my $query4="INSERT INTO indice_busqueda (id,titulo,autor,string) VALUES (?,?,?,?) ";
+    my $query4="INSERT INTO indice_busqueda (id,titulo,autor,string,registro_marc) VALUES (?,?,?,?,?) ";
     my $sth4=$dbh->prepare($query4);
     my $autor = C4::AR::Referencias::getAutor($nivel1_object->getAutor);
     if($autor){$autor = $autor->getCompleto;}
-    $sth4->execute($id1,$nivel1_object->getTitulo,$autor,$superstring);
+    $sth4->execute($id1,$nivel1_object->getTitulo,$autor,$superstring,$marc->as_usmarc);
       
   }
 
