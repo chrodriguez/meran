@@ -906,31 +906,6 @@ label.error_adv{
       margin-right:auto;
 }
 
-li.MARCHeader{
-    background-color:#A1C162;
-    margin: 0;
-    padding: 4px;
-    width: 100%;
-    list-style-type: none;
-    clear: both;
-}
-
-li.MARCHeader label{
-/*     margin: 0; */
-/*     padding: 4px; */
-    /*background-color:#A1C162;*/
-    width: 100%;
-    list-style-type: none;
-/*     clear: both; */
-    text-align: left;
-    font-weight: bold;
-    margin: 1% 0 1%;
-}
-
-li.MARCHeader input{
-    text-align: right;
-}
-
 .horizontal{
     float:left;
     margin-right: 10px;
@@ -1478,3 +1453,45 @@ em { font-style: italic; }
 #tooltip.fancy.viewport-right {
     background: url(../imagenes/shadow2-reverse.png);
 }
+
+/*================================================================catalogo==========================================================*/
+
+li.MARCHeader{
+    background-color:#A1C162;
+    margin: 0;
+    padding: 4px;
+    width: 100%;
+    list-style-type: none;
+    clear: both;
+}
+
+li.MARCHeader label{
+    width: 100%;
+    list-style-type: none;
+    text-align: left;
+    font-weight: bold;
+    margin: 1% 0 1%;
+}
+
+li.MARCHeader input{
+    text-align: right;
+}
+
+
+.MARCHeader_content{
+    width: 100%; 
+    height: 35px;
+}
+
+.MARCHeader_info{
+    width: 90%; 
+    float: left;
+}
+
+.MARCHeader_controls{
+    width: 5%;
+    float: right;
+}
+
+
+/* ==============================================================fin==catalogo======================================================*/

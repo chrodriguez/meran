@@ -569,9 +569,8 @@ sub _setDatos_de_estructura2 {
     return (\%hash_ref_result);
 }
 
-=item sub getEstructuraSinDatos
-Este funcion devuelve la estructura de catalogacion para armar los componentes en el cliente
-Nivel 1, 2 y 3 y REPETIBLES, estructura SIN DATOS
+=item sub getSubCamposFromEstructuraByCampo
+
 =cut
 
 sub getSubCamposFromEstructuraByCampo{
@@ -593,15 +592,21 @@ sub getSubCamposFromEstructuraByCampo{
                                                                         ],
 
                                                                 with_objects    => [ 'infoReferencia' ],  #LEFT OUTER JOIN
-                                                                require_objects => [ 'camposBase', 'subCamposBase' ],
-#                                                                 sort_by => ( 'intranet_habilitado' ),
+                                                                require_objects => [ 'camposBase', 'subCamposBase' ], #INNER JOIN
                                                                 sort_by => ( 'subcampo' ),
                                                              );
 
     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
 }
 
-sub getCampoFromEstructura{
+
+=item sub getCamposFromEstructura
+
+Esta funcion trae todos los campos segun nivel e itemtype
+ademas trae los indicadores Primero y Segundo (SI ES QUE EXISTE)
+
+=cut
+sub getCamposFromEstructura{
     my ($nivel, $itemType) = @_;
 
     use C4::Modelo::CatEstructuraCatalogacion::Manager;
@@ -639,7 +644,7 @@ sub getEstructuraSinDatos{
     my $orden =     $params->{'orden'};
     
     #obtengo todos los campos <> de la estructura de catalogacion del Nivel 1, 2 o 3
-    my ($cant, $campos_array_ref) = getCampoFromEstructura($nivel, $itemType);
+    my ($cant, $campos_array_ref) = getCamposFromEstructura($nivel, $itemType);
 
     C4::AR::Debug::debug("getEstructuraSinDatos => cant: ".$cant);    
 
@@ -669,11 +674,13 @@ sub getEstructuraSinDatos{
 
         my %hash_campos;
 
-        $hash_campos{'campo'}               = $c->getCampo;
-        $hash_campos{'nombre'}              = $c->camposBase->getLiblibrarian;
-        $hash_campos{'descripcion_campo'}   = $c->camposBase->getDescripcion.' - '.$c->getCampo;
-        $hash_campos{'ayuda_campo'}         = 'esta es la ayuda del campo '.$c->getCampo;
-        $hash_campos{'subcampos_array'}     = \@result;
+        $hash_campos{'campo'}                   = $c->getCampo;
+        $hash_campos{'nombre'}                  = $c->camposBase->getLiblibrarian;
+        $hash_campos{'indicador_primario'}      = $c->camposBase->getIndicadorPrimario;
+        $hash_campos{'indicador_secundario'}    = $c->camposBase->getIndicadorSecundario;
+        $hash_campos{'descripcion_campo'}       = $c->camposBase->getDescripcion.' - '.$c->getCampo;
+        $hash_campos{'ayuda_campo'}             = 'esta es la ayuda del campo '.$c->getCampo;
+        $hash_campos{'subcampos_array'}         = \@result;
 
         push (@result_total, \%hash_campos);
 

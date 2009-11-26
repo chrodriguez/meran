@@ -345,6 +345,8 @@ sub print_header {
 sub is_OPAC {
     my($template_params) = @_;
 
+    $template_params->{'sitio'} = $template_params->{'sitio'} || 'opac';
+
     return (($template_params->{'sitio'} eq 'opac')?1:0);
 }
 
@@ -471,7 +473,7 @@ sub checkauth {
         }
 	}else{
 		$token = $query->param('token');
-    C4::AR::Debug::debug("checkauth=> Token desde GET: ".$token);
+        C4::AR::Debug::debug("checkauth=> Token desde GET: ".$token);
 	}
 
     # state variables
@@ -640,7 +642,7 @@ C4::AR::Debug::debug($session->dump);
             #EXIT
         }#end if (($userid) && (new_password_is_needed($userid)))
 
-C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." cookie=> sessionID: ".$query->cookie('sessionID')." sessionID: ".$sessionID."\n");
+        C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." sessionID: ".$sessionID."\n");
         return ($userid, $session, $flags);
     }#end if ($loggedin || $authnotrequired || (defined($insecure) && $insecure))
 

@@ -797,9 +797,11 @@ function procesarInfoJson(json){
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
         var campo_marc_conf_obj = new campo_marc_conf(objetos[i]);
         //genero el header para el campo q contiene todos los subcampos
-        strComp = "<div id='marc_group" + i + "' ><li class='MARCHeader'><div style='width: 100%; height: 35px;'>";
-        strComp = strComp + "<div style='width: 90%; float:left'>";
-        strComp = strComp + "<label>" + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo())  + " " + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre() + " </label></div><div style='width: 5%;float:right'> + - </div></div></li></div>";
+        strComp = "<div id='marc_group" + i + "' ><li class='MARCHeader'>";
+        strComp = strComp + "<div class='MARCHeader_content'>";
+        strComp = strComp + "<div class='MARCHeader_info'>";
+        strComp = strComp + "<label>" + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo())  + " " + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre() + " </label></div>";
+        strComp = strComp + "<div class='MARCHeader_controls'> + - </div></div></li></div>";
         $("#" + getDivDelNivel()).append(strComp);
 
 //         COMPONENTES_ARRAY[i] = objetos[i];
@@ -1111,6 +1113,8 @@ function crearBotonAgregarRepetible(obj){
     }
 }
 
+
+// FIXME DEPRECATED????????
 function marc_conf(obj){
 
     this.liblibrarian = obj.liblibrarian;
@@ -1171,12 +1175,14 @@ function marc_conf(obj){
 
 function campo_marc_conf(obj){
 
-    this.nombre = obj.nombre;
-    this.campo =  obj.campo;
-    this.ayuda_campo = obj.ayuda_campo;
-    this.descripcion_campo = obj.descripcion_campo;
-    this.subcampos_array = obj.subcampos_array;
-    this.repetible = obj.repetible;
+    this.nombre                 = obj.nombre;
+    this.campo                  = obj.campo;
+    this.ayuda_campo            = obj.ayuda_campo;
+    this.descripcion_campo      = obj.descripcion_campo;
+    this.subcampos_array        = obj.subcampos_array;
+    this.repetible              = obj.repetible;
+    this.indicador_primario     = obj.indicador_primario;
+    this.indicador_secundario   = obj.indicador_secundario;
 
     function fGetCampo(){ return this.campo };
     function fGetNombre(){ return this.nombre };
@@ -1184,6 +1190,9 @@ function campo_marc_conf(obj){
     function fGetDescripcionCampo(){ return $.trim(this.descripcion_campo) };
     function fGetSubCamposArray(){ return this.subcampos_array };
     function fGetRepetible(){ return (this.repetible) };
+    function fGetIndicadorPrimario(){ return (this.indicador_primario) };
+    function fGetIndicadorSecundario(){ return (this.indicador_secundario) };
+    
 
     //metodos
     this.getCampo               = fGetCampo;
@@ -1192,6 +1201,8 @@ function campo_marc_conf(obj){
     this.getDescripcionCampo    = fGetDescripcionCampo;
     this.getSubCamposArray      = fGetSubCamposArray;
     this.getRepetible           = fGetRepetible;
+    this.getIndicadorPrimario   = fGetIndicadorPrimario;
+    this.getIndicadorSecundario = fGetIndicadorSecundario;
 }
 
 function subcampo_marc_conf(obj){

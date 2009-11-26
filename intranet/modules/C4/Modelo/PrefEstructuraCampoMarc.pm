@@ -46,12 +46,22 @@ sub setLiblibrarian{
 
 sub getIndicadorPrimario{
     my ($self) = shift;
-    return ($self->indicador_primario);
+
+    if(!$self->indicador_primario =~ /\s+/){
+        return C4::AR::Filtros::i18n('NO TIENE');
+    }else{
+        return (C4::AR::Utilidades::trim($self->indicador_primario));
+    }
 }
 
 sub getIndicadorSecundario{
     my ($self) = shift;
-    return ($self->indicador_secundario);
+    
+    if(!$self->indicador_secundario =~ /\s+/){
+        return C4::AR::Filtros::i18n('NO TIENE');
+    }else{
+        return (C4::AR::Utilidades::trim($self->indicador_secundario));
+    }
 }
 # sub getLibopac{
 #     my ($self) = shift;
