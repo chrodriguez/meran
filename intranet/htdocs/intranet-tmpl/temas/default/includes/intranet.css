@@ -159,7 +159,7 @@ body{
 	font-weight: bold;
 	font-Family : arial, helvetica, sans-serif;
 	font-size : 15px;
-	color: #4B6D22;
+	color: #46848F;
 	text-align: left;
 	text-transform: uppercase;
 }
@@ -167,7 +167,7 @@ body{
 .item{
     font-family: "Verdana", "Trebuchet MS", "Arial";
     font-size: 8pt;
-    color: #a9b41a;
+    color: #46848f; /*#a9b41a;*/
     list-style: none;
     font-weight: bold;
     padding: 0px;
@@ -178,7 +178,7 @@ body{
 .item a{
       font-family: "Verdana", "Trebuchet MS", "Arial";
     font-size: 8pt;
-    color: #a9b41a;
+    color: #46848F /*a9b41a*/;
     list-style: none;
     font-weight: bold;
     padding: 0px;
@@ -189,7 +189,7 @@ body{
 .item a:hover{
       font-family: "Verdana", "Trebuchet MS", "Arial";
     font-size: 8pt;
-    color: #4b6d22;
+    color: #73aeaf /*4b6d22*/;
     list-style: none;
     font-weight: bold;
     padding: 0px;
@@ -200,7 +200,7 @@ body{
 .sub_item{
     font-family: "Verdana", "Trebuchet MS", "Arial";
     font-size: 9pt;
-    color: #a1c162;
+    color: #46848F/*#a1c162*/;
     list-style: none;
     font-weight: bold;
 	text-decoration:none;
@@ -845,13 +845,6 @@ label.error_adv{
     cursor: pointer;
 }
 
-.icon_seleccionar {
-    background: transparent url(../imagenes/iconos/seleccionar.png) no-repeat;
-    height: 25px;
-    width: 25px;
-    cursor: pointer;
-}
-
 #icon_anadir {
     background: transparent url(../imagenes/iconos/anadir.png) no-repeat;
     height: 25px;
@@ -939,7 +932,7 @@ ul#horizontal-list li {
 	padding: 5px;
 	font-family: Arial, Helvetica, sans-serif;
 	color:#fff;/*  #4B6D22;*/
-	background-color:#4B6D22;
+	background-color:#3a9e9c;
 }
 
 .resultados_consulta a:hover {
@@ -1164,6 +1157,17 @@ fieldset.accionesUsuarios{
 }
 /* -------------------------------------------------------Informacion para el Usuario---------------------------------------------- */
 
+.mensajes_informacion{
+
+    background-color: #000000;
+    border:0;
+    text-decoration: none;
+    font-size:12pt;
+    font-family:verdana;
+    color:#f2f2f2;
+    font-weight:bold;
+    text-align:center;
+}
 .showhelp{
     background: transparent url(../imagenes/iconos/ayuda.png) no-repeat;
     height: 25px;
@@ -1173,9 +1177,8 @@ fieldset.accionesUsuarios{
 }
 .titulo_legend{
 	font-weight:bold;
-	font-size: 13px;
-	color: #666666;
-	text-transform: uppercase;
+	font-size: 12px;
+	color: #555555;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -1184,7 +1187,9 @@ fieldset.accionesUsuarios{
   color: #CC0033;
 }
 
-
+#mensajes{
+  color: #666600;
+}
 .columna_izq{
   float:left;
   width:50%;
@@ -1294,6 +1299,8 @@ input.file {
     text-align: center;
 }
 
+<<<<<<< .mine
+=======
 .detalle_sanciones_sancionado{
     background-color: #CC3333;
 }
@@ -1313,6 +1320,7 @@ input.file {
   width:99%;
 }
 
+>>>>>>> .r2234
 .message_text{
   clear:both;
 }

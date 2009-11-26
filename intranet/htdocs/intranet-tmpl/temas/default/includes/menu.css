@@ -158,8 +158,8 @@ height:20px;
 }
 .menu-item a:hover{
     font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
-    background:#9bc931 /*c4d872*/;
-    color: #5FA3A4;
+    background:#333333/*b1e0e1/*9dcacb /*9bc931 /*c4d872*/;
+    color: #fff/*5FA3A4*/;
     cursor: pointer;
     display:block;
 }

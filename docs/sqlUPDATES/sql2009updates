@@ -1250,11 +1250,24 @@ ALTER TABLE `pref_estructura_campo_marc` DROP `authorised_value`;
  ALTER TABLE `pref_estructura_subcampo_marc` CHANGE `tagsubfield` `subcampo` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 
-
+--25/11/09
+ALTER TABLE `pref_estructura_campo_marc` ADD `IndicadorPrimario` VARCHAR( 50 ) NOT NULL
+ADD `IndicadorSecundario` VARCHAR( 50 ) NOT NULL ;
+CREATE TABLE `V3`.`pref_indicadores_primarios` (
+         `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+         `indicador` VARCHAR( 50 ) NOT NULL,
+         `dato` VARCHAR( 50 ) NOT NULL,
+         `campo_marc` INT NOT NULL
+         );
+CREATE TABLE `V3`.`pref_indicadores_secundarios` (
+         `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+         `indicador` VARCHAR( 50 ) NOT NULL,
+         `dato` VARCHAR( 50 ) NOT NULL,
+         `campo_marc` INT NOT NULL
+         ); 
 
 --26/11/09 actualizacion de campos y tablas para el catalogo
 ver archivo update_catalogo.sql
-
 
 
 
