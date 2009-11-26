@@ -73,7 +73,7 @@ if ($i != 0) {
 
     if ($error) {
          C4::AR::Debug::debug( "Error: $errmsg ($error) $addinfo\n");
-        goto MAYBE_AGAIN; #sale del lazo por un error
+        goto MAYBE_AGAIN; #sale del lazo por un error CHANCHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!!!!!!!!!!!!!!
     }
 
         my $registros = $resultset[$i-1]->size();
