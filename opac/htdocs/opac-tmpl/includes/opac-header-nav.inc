@@ -60,8 +60,13 @@
                   </li>
                   [% IF !socio %]
                       <li><a href="/cgi-bin/koha/login.pl">[% 'Iniciar Sesi&oacute;n' | i18n %]</a></li>
+                  [% ELSE %]
+                      <li>
+                          <a href="/cgi-bin/koha/opac-historial_prestamos.pl?token=[% token %]">
+                              [% 'Historial de pr&eacute;stamos' | i18n %]
+                          </a>
+                      </li>
                   [% END %]
-                  <li><a href="#">[% 'Accesos' | i18n %]</a></li>
                   <li><a href="#">[% 'Accesos' | i18n %]</a></li>
                   <li><a href="#">[% 'Accesos' | i18n %]</a></li>                                    
                 </ul>

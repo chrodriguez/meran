@@ -4,17 +4,9 @@
 
 <div class="contenedor_paginador">[% paginador %]</div>
 
-<table id="tablaResult" class="tabla_datos tablaResult" border=1 align="center" cellspacing=0 cellpadding=0 width=100%>
+<table id="tablaResult" class="tabla_datos" border=1 align="center" cellspacing=0 cellpadding=0 width=100%>
     <thead>
         <tr class="tablaresultadoTitle" >
-            [% IF nro_socio %]
-                <th>
-                    <a id="todos" class="click">
-                        <img    src="[% temas %]/[% tema %]/imagenes/iconos/icon_check.png" 
-                                title="Invertir la selecci&oacute;n" border=0>
-                    </a>
-                </th>
-            [% END %]
             <th align="center" width="30%">
                 <a class="click" onClick="ordenarPor('titulo')">[% "T&iacute;tulo" | i18n %]</a>
             </th>
@@ -33,12 +25,6 @@
 <!-- Resultados de la busqueda -->
         [% FOREACH SEARCH_RESULTS %]
             <tr>
-                [% IF nro_socio %]
-                    <td valign="middle" align="center">
-                        <input type=checkbox name=checkbox value="[% id1 %]" 
-                                id="[% id1 %]">
-                    </td>
-                [% END %]
                 <td class="titulo_result">	
                     [% IF titulo %]
                         [% PERL %]

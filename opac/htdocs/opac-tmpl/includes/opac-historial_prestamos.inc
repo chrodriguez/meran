@@ -15,7 +15,7 @@
         <th>[% "Dev" | i18n %]</th>
     </tr>
     <!-- ESTE LOOP MUESTRA LOS PRESTAMOS -->
-    [% FOREACH loop_reading %]
+    [% FOREACH prestamos %]
         <tr>
         <td> 
                 [% IF id1 %]
@@ -29,27 +29,36 @@
                     &nbsp;
                 [% END %]
             </td>
-            <td>
-                [% IF autor %]
-                    <a class="click" onClick="buscarPorAutor([% id %])" title="[% 'Mostrar Detalle por autor' | i18n %]">
-                        [% autor %]
-                    </a> 
+            <td class="autor_result click" onClick="filtrarPorAutor([% idAutor %])" title="[% 'Filtrar por Autor' | i18n %]">
+                [% IF nomCompleto %]
+                    [% nomCompleto %]
                 [% ELSE %]
                     &nbsp;
                 [% END %]
             </td>
-            <td align="center">
-                [% IF edicion %]
-                    [% edicion %]
+            <td>
+                [% IF grupos %]
+                    [% FOREACH grupos %]
+                        [% IF edicion %]
+                            [% edicion %] &nbsp;
+                        [% END %]
+                        [% IF anio_publicacion %]
+                            ([% anio_publicacion %])
+                        [% END %]
+                        [% IF volume %] 
+                            t [% volume %]
+                        [% END %]
+                        <br>
+                [% END %]
                 [% ELSE %]
-                    -
+                    &nbsp;
                 [% END %]
             </td>
             <td align=center>
-                [% date_due %]&nbsp;
+                [% fecha_prestamo %]&nbsp;
             </td>
             <td align=center>
-                [% returndate %]&nbsp;
+                [% fecha_devolucion %]&nbsp;
             </td>
         </tr>
     [% END %]
@@ -59,12 +68,3 @@
 <a class="click" onClick="volverDesdeHistorial()">
     [% "Volver" | i18n %]
 </a>
-
-<p align="center">
-<!-- FIXME falta -->
-<!--    <a  onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" 
-        onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
-        <input  onClick="print();return false;"  name="print" id="print" type="image" value="[% 'Imprimir' | i18n %]" 
-                src="[% themelang %]/images/menu-imprimir.png" border="0">
-    </a>-->
-</p>

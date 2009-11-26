@@ -16,9 +16,6 @@ my ($template, $session, $t_params)= get_template_and_user({
                                     flagsrequired => {  ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
             });
 
-# my ($template, $t_params)= C4::Output::gettemplate("opac-main.tmpl", 'opac');
-# my ($session) = CGI::Session->load();
-
 $t_params->{'opac'};
 
 my $nro_socio = C4::Auth::getSessionNroSocio();

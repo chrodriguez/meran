@@ -1622,33 +1622,14 @@ sub armarBuscoPor{
 
 sub armarInfoNivel1{
 #   my ($params,$searchstring_array, @resultId1) = @_;
-   my ($params, @resultId1) = @_;
-
-  my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
-
-#   my $fin = $params->{'ini'} + $params->{'cantR'};
-#   $params->{'cantR'} = $fin;  
-#   if($fin > $params->{'total_found'}){
-#     $params->{'cantR'} = $params->{'total_found'};
-#   } 
-# 
-#   
-#   C4::AR::Debug::debug("INI??? ".$params->{'ini'}); 
-#   C4::AR::Debug::debug("FIN??? ".$params->{'cantR'});
-  
-  
-  #se corta el arreglo segun lo que indica el paginador
-# TODO si se usa el setLimit en el objeto indexador no es necesario hacer esto
-#   my ($cant_total,@result_array_paginado) = C4::AR::Utilidades::paginarArreglo($params->{'ini'},$params->{'cantR'},@resultId1);
-
-my @result_array_paginado = @resultId1;
-my $cant_total = scalar(@resultId1);
+    my ($params, @resultId1) = @_;
+    my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
+    my @result_array_paginado = @resultId1;
+    my $cant_total = scalar(@resultId1);
 
 
-# FIXME Miguel uso un arreglo temporal para guardar solo los id1 que me recuperan un objeto de nivel1_object
-# puede pasar q el indice este desactualizado y no recupere un id1 que ya no existe en la base
-my @result_array_paginado_temp;
-  
+    my @result_array_paginado_temp;
+
   for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {
     my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
     if($nivel1){
@@ -1659,16 +1640,16 @@ my @result_array_paginado_temp;
       #aca se procesan solo los ids de nivel 1 que se van a mostrar
       #se generan los grupos para mostrar en el resultado de la consulta
       my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
+
       @result_array_paginado[$i]->{'grupos'}= 0;
       if(scalar(@$ediciones) > 0){
         @result_array_paginado[$i]->{'grupos'}=$ediciones;
       }
-  
       @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
       #se obtine la disponibilidad total 
       my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);  
+
       @result_array_paginado[$i]->{'disponibilidad'}= 0;
-  
       if(scalar(@disponibilidad) > 0){
         @result_array_paginado[$i]->{'disponibilidad'}=\@disponibilidad;
       }
@@ -1677,8 +1658,8 @@ my @result_array_paginado_temp;
     }
   }
 
-$cant_total = scalar(@result_array_paginado_temp);
-@result_array_paginado = @result_array_paginado_temp;
+  $cant_total = scalar(@result_array_paginado_temp);
+  @result_array_paginado = @result_array_paginado_temp;
 
   return ($cant_total, \@result_array_paginado);
 }

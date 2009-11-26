@@ -8,7 +8,7 @@ use CGI;
 my $input=new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-								template_name => "opac-HistorialPrestamos.tmpl",
+								template_name => "opac-main.tmpl",
 								query => $input,
 								type => "opac",
 								authnotrequired => 0,
@@ -16,19 +16,19 @@ my ($template, $session, $t_params)= get_template_and_user({
 								debug => 1,
 			});
 
+my $ini = 0;
+my $orden = 'titulo';
+my $funcion = "return true;";
 
-my $obj=$input->param('obj');
-$obj= &C4::AR::Utilidades::from_json_ISO($obj);
-
-my $funcion= $obj->{'funcion'};
-my $orden=$obj->{'orden'}||'date_due';
-my $ini= $obj->{'ini'}||'';
-
+my $nro_socio = C4::Auth::getSessionNroSocio($session);
 my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
-my ($cantidad,$issues,$loop_reading)=C4::AR::Prestamos::getHistorialPrestamosParaTemplate(C4::Auth::getSessionNroSocio($session),$ini,$cantR,$orden);
 
-$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber,$funcion,$t_params);
-$t_params->{'loop_reading'}= $loop_reading;
+my ($cantidad,$prestamos)=C4::AR::Prestamos::getHistorialPrestamosParaTemplate($nro_socio,$ini,$cantR,$orden);
+
+$t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber,$funcion,$t_params);
+$t_params->{'prestamos'}= $prestamos;
 $t_params->{'cantidad'}= $cantidad;
+$t_params->{'content_title'}= C4::AR::Filtros::i18n("Historial de pr&eacute;stamos");
+$t_params->{'partial_template'}= "opac-historial_prestamos.inc";
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -23,20 +23,20 @@ $VERSION = 3;
 
 @EXPORT = qw(
 
-	&t_devolver
-	&t_renovar
+    &t_devolver
+    &t_renovar
     &t_renovarOPAC
-	&t_realizarPrestamo
+    &t_realizarPrestamo
     &_verificarMaxTipoPrestamo
-	&chequeoDeFechas
-	&prestamosHabilitadosPorTipo	
-	&getTipoPrestamo
-	&getPrestamoDeId3
-	&getPrestamosDeSocio
-	&getTipoPrestamo
+    &chequeoDeFechas
+    &prestamosHabilitadosPorTipo    
+    &getTipoPrestamo
+    &getPrestamoDeId3
+    &getPrestamosDeSocio
+    &getTipoPrestamo
     &obtenerPrestamosDeSocio
-	&cantidadDePrestamosPorUsuario
-	&crearTicket
+    &cantidadDePrestamosPorUsuario
+    &crearTicket
     &t_eliminarTipoPrestamo
     &t_agregarTipoPrestamo
     &t_modificarTipoPrestamo
@@ -66,28 +66,28 @@ sub getInfoPrestamo{
     
 
 sub chequeoDeFechas{
-	my ($cantDiasRenovacion,$fechaRenovacion,$intervalo_vale_renovacion)=@_;
-	# La $fechaRenovacion es la ultima fecha de renovacion o la fecha del prestamo si nunca se renovo
-	my $plazo_actual=$cantDiasRenovacion;# Cuantos dias m�s se puede renovar el prestamo
-	my $vencimiento=proximoHabil($plazo_actual,0,$fechaRenovacion);
-	my $err= "Error con la fecha";
-	my $dateformat = C4::Date::get_date_format();
-	my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);#se saco el 2 para que ande bien.
-	my $desde=C4::Date::format_date_in_iso(DateCalc($vencimiento,"- ".$intervalo_vale_renovacion." days",\$err,2),$dateformat);#SE AGREGO EL 2 PARA QUE SALTEE LOS SABADOS Y DOMINGOS. 01/10/2007
-	my $flag = Date_Cmp($desde,$hoy);
-	#comparo la fecha de hoy con el inicio del plazo de renovacion	
-	if (!($flag gt 0)){ 
-		#quiere decir que la fecha de hoy es mayor o igual al inicio del plazo de renovacion
-		#ahora tengo que ver que la fecha de hoy sea anterior al vencimiento
-		my $flag2=Date_Cmp($vencimiento,$hoy);
-		if (!($flag2 lt 0)){
-			#la fecha esta ok
-			return 1;
-			
-		}
+    my ($cantDiasRenovacion,$fechaRenovacion,$intervalo_vale_renovacion)=@_;
+    # La $fechaRenovacion es la ultima fecha de renovacion o la fecha del prestamo si nunca se renovo
+    my $plazo_actual=$cantDiasRenovacion;# Cuantos dias m�s se puede renovar el prestamo
+    my $vencimiento=proximoHabil($plazo_actual,0,$fechaRenovacion);
+    my $err= "Error con la fecha";
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);#se saco el 2 para que ande bien.
+    my $desde=C4::Date::format_date_in_iso(DateCalc($vencimiento,"- ".$intervalo_vale_renovacion." days",\$err,2),$dateformat);#SE AGREGO EL 2 PARA QUE SALTEE LOS SABADOS Y DOMINGOS. 01/10/2007
+    my $flag = Date_Cmp($desde,$hoy);
+    #comparo la fecha de hoy con el inicio del plazo de renovacion  
+    if (!($flag gt 0)){ 
+        #quiere decir que la fecha de hoy es mayor o igual al inicio del plazo de renovacion
+        #ahora tengo que ver que la fecha de hoy sea anterior al vencimiento
+        my $flag2=Date_Cmp($vencimiento,$hoy);
+        if (!($flag2 lt 0)){
+            #la fecha esta ok
+            return 1;
+            
+        }
 
-	}
-	return 0;
+    }
+    return 0;
 }
 
 =item
@@ -95,53 +95,53 @@ prestamosHabilitadosPorTipo
 Esta funcion devuelve los tipos de prestamos permitidos para un usuario, en un arreglo de hash.
 =cut
 sub prestamosHabilitadosPorTipo {
- 	my ($id_disponibilidad, $nro_socio)=@_;
+    my ($id_disponibilidad, $nro_socio)=@_;
 
-	#Se buscan todas las sanciones de un usuario
-	my $sanciones= C4::AR::Sanciones::tieneSanciones($nro_socio);
+    #Se buscan todas las sanciones de un usuario
+    my $sanciones= C4::AR::Sanciones::tieneSanciones($nro_socio);
 
-	#Trae todos los tipos de prestamos que estan habilitados
-	my $tipos_habilitados_array_ref = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(   
-																		query => [ 
-																				id_disponibilidad => { eq => $id_disponibilidad },
-																				habilitado    => { eq => 1}
-																			], 
-										);
+    #Trae todos los tipos de prestamos que estan habilitados
+    my $tipos_habilitados_array_ref = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(   
+                                                                        query => [ 
+                                                                                id_disponibilidad => { eq => $id_disponibilidad },
+                                                                                habilitado    => { eq => 1}
+                                                                            ], 
+                                        );
 
 
 
-	my @tipos;
-	foreach my $tipo_prestamo (@$tipos_habilitados_array_ref){
-		my $estaSancionado= 0;
-		
+    my @tipos;
+    foreach my $tipo_prestamo (@$tipos_habilitados_array_ref){
+        my $estaSancionado= 0;
+        
 
         if($sanciones){
         #tiene sanciones
-		    foreach my $sancion (@$sanciones){
-			    if($sancion->getTipo_sancion){#Si no es una sancion por una reserva
-			    #tipos de prestamo que afecta
-			    my @tipos_prestamo_sancion=$sancion->ref_tipo_sancion->ref_tipo_prestamo_sancion;
-				    foreach my $tipo_prestamo_sancion (@tipos_prestamo_sancion){
-					    if ($tipo_prestamo_sancion->getId_tipo_prestamo eq $tipo_prestamo->getId_tipo_prestamo){
-						    $estaSancionado= 1;
-					    }
-				    }
-			    }
-			    else{#Si es una sancion por reserva???
-			    }
-		    }# END foreach my $sancion (@$sanciones)
+            foreach my $sancion (@$sanciones){
+                if($sancion->getTipo_sancion){#Si no es una sancion por una reserva
+                #tipos de prestamo que afecta
+                my @tipos_prestamo_sancion=$sancion->ref_tipo_sancion->ref_tipo_prestamo_sancion;
+                    foreach my $tipo_prestamo_sancion (@tipos_prestamo_sancion){
+                        if ($tipo_prestamo_sancion->getId_tipo_prestamo eq $tipo_prestamo->getId_tipo_prestamo){
+                            $estaSancionado= 1;
+                        }
+                    }
+                }
+                else{#Si es una sancion por reserva???
+                }
+            }# END foreach my $sancion (@$sanciones)
         }
 
-		if(!$estaSancionado){
-			#solo se agrega si no esta sancionado para ese tipo de prestamo
-			my $tipo;
-			$tipo->{'value'}=$tipo_prestamo->getId_tipo_prestamo;
-			$tipo->{'label'}=$tipo_prestamo->getDescripcion;
-			push(@tipos,$tipo)
-		}
-	}
+        if(!$estaSancionado){
+            #solo se agrega si no esta sancionado para ese tipo de prestamo
+            my $tipo;
+            $tipo->{'value'}=$tipo_prestamo->getId_tipo_prestamo;
+            $tipo->{'label'}=$tipo_prestamo->getDescripcion;
+            push(@tipos,$tipo)
+        }
+    }
 
-	return(\@tipos);
+    return(\@tipos);
 }
 
 #
@@ -152,12 +152,12 @@ sub prestamosHabilitadosPorTipo {
 
 
 sub _verificarMaxTipoPrestamo{
-	my ($nro_socio,$tipo_prestamo)=@_;
+    my ($nro_socio,$tipo_prestamo)=@_;
 
-	my $error=0;
+    my $error=0;
 
-	#Obtengo la cant maxima de prestamos de ese tipo que se puede tener
-	my $tipo=C4::AR::Prestamos::getTipoPrestamo($tipo_prestamo);
+    #Obtengo la cant maxima de prestamos de ese tipo que se puede tener
+    my $tipo=C4::AR::Prestamos::getTipoPrestamo($tipo_prestamo);
     if ($tipo){
         my $prestamos_maximos= $tipo->getPrestamos;
         #
@@ -172,28 +172,28 @@ sub _verificarMaxTipoPrestamo{
         
         if ($cantidad_prestamos >= $prestamos_maximos) {$error=1}
     }
-	return $error;
+    return $error;
 }
 
 sub getCountPrestamosDeGrupoPorUsuario {
 #devuelve la cantidad de prestamos de grupo del usuario
-	my ($nro_socio, $id2, $tipo_prestamo)=@_;
+    my ($nro_socio, $id2, $tipo_prestamo)=@_;
 
-    	use C4::Modelo::CircPrestamo;
-    	use C4::Modelo::CircPrestamo::Manager;
+        use C4::Modelo::CircPrestamo;
+        use C4::Modelo::CircPrestamo::Manager;
 
-    	my @filtros;
-    	push(@filtros, ( id2 	=> { eq => $id2 } ));
-    	push(@filtros, ( nro_socio => { eq => $nro_socio } ));
-		push(@filtros, ( tipo_prestamo => { eq => $tipo_prestamo } ));
-		push(@filtros, ( fecha_devolucion => { eq => undef } ));
+        my @filtros;
+        push(@filtros, ( id2    => { eq => $id2 } ));
+        push(@filtros, ( nro_socio => { eq => $nro_socio } ));
+        push(@filtros, ( tipo_prestamo => { eq => $tipo_prestamo } ));
+        push(@filtros, ( fecha_devolucion => { eq => undef } ));
 
-    	my $prestamos_grupo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
-																						query => \@filtros,
-																						with_objects => [ 'nivel3' ]
-															);
+        my $prestamos_grupo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
+                                                                                        query => \@filtros,
+                                                                                        with_objects => [ 'nivel3' ]
+                                                            );
 
-    	return ($prestamos_grupo_count);
+        return ($prestamos_grupo_count);
 }
 
 
@@ -201,21 +201,21 @@ sub getCountPrestamosDeGrupoPorUsuario {
 Esta funcion devuelve la cantidad de prestamos por grupo
 =cut
 sub getCountPrestamosDelRegistro{
-	my ($id1) = @_;
+    my ($id1) = @_;
 
-	use C4::Modelo::CircPrestamo;
-	use C4::Modelo::CircPrestamo::Manager;
+    use C4::Modelo::CircPrestamo;
+    use C4::Modelo::CircPrestamo::Manager;
 
-	my @filtros;
-	push(@filtros, ( id1 	=> { eq => $id1 } ));
-	push(@filtros, ( fecha_devolucion => { eq => undef } ));
+    my @filtros;
+    push(@filtros, ( id1    => { eq => $id1 } ));
+    push(@filtros, ( fecha_devolucion => { eq => undef } ));
 
-	my $prestamos_grupo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
-																				query => \@filtros,
-																				with_objects => [ 'nivel3' ]
-															);
+    my $prestamos_grupo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
+                                                                                query => \@filtros,
+                                                                                with_objects => [ 'nivel3' ]
+                                                            );
 
-	return ($prestamos_grupo_count);
+    return ($prestamos_grupo_count);
 }
 
 =item
@@ -246,18 +246,18 @@ getPrestamosDeSocio
 Esta funcion retorna los prestamos actuales de un socio
 =cut
 sub getPrestamosDeSocio {
-	my ($nro_socio,$db)=@_;
+    my ($nro_socio,$db)=@_;
 
-    	use C4::Modelo::CircPrestamo;
-    	use C4::Modelo::CircPrestamo::Manager;
+        use C4::Modelo::CircPrestamo;
+        use C4::Modelo::CircPrestamo::Manager;
 
-    	my @filtros;
-    	push(@filtros, ( fecha_devolucion => { eq => undef } ));
-    	push(@filtros, ( nro_socio => { eq => $nro_socio } ));
+        my @filtros;
+        push(@filtros, ( fecha_devolucion => { eq => undef } ));
+        push(@filtros, ( nro_socio => { eq => $nro_socio } ));
         
         my $prestamos__array_ref;
         if($db){ #Si viene $db es porque forma parte de una transaccion
-    	    $prestamos__array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(db => $db,query => \@filtros,
+            $prestamos__array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(db => $db,query => \@filtros,
                                                                         require_objects => ['nivel3','socio','ui'],
                                                                         );
         }else{
@@ -266,7 +266,7 @@ sub getPrestamosDeSocio {
                                                                       );
         }
 
-    	return ($prestamos__array_ref);
+        return ($prestamos__array_ref);
 }
 
 sub getTipoPrestamo {
@@ -294,80 +294,80 @@ use C4::Modelo::CircRefTipoPrestamo::Manager;
 }
 
 sub prestarYGenerarTicket{
-	my ($params)=@_;
+    my ($params)=@_;
 
 # FIXME falta verificar
 
-	my ($nivel3aPrestar)= C4::AR::Nivel3::getNivel3FromBarcode($params->{'barcode'});
+    my ($nivel3aPrestar)= C4::AR::Nivel3::getNivel3FromBarcode($params->{'barcode'});
 C4::AR::Debug::debug("barcode a prestar: ".$params->{'barcode'});
 
-	my @infoTickets;
-	my @infoMessages;
-	my $id3= $nivel3aPrestar->getId3;
-	my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3);
-	$params->{'id1'}= $nivel3aPrestar->nivel2->nivel1->getId1;
-	$params->{'id2'}= $nivel3aPrestar->nivel2->getId2;
-	C4::AR::Debug::debug("id1: ".$nivel3aPrestar->nivel1->getId1);
-	C4::AR::Debug::debug("id2: ".$nivel3aPrestar->nivel2->getId2);
-	C4::AR::Debug::debug("id3: ".$id3);
-	$params->{'id3'}= $id3;
-	$params->{'id_ui'}=C4::AR::Preferencias->getValorPreferencia('defaultUI');
-	$params->{'id_ui_prestamo'}=C4::AR::Preferencias->getValorPreferencia('defaultUI');
-	$params->{'tipo'}="INTRA";
+    my @infoTickets;
+    my @infoMessages;
+    my $id3= $nivel3aPrestar->getId3;
+    my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3);
+    $params->{'id1'}= $nivel3aPrestar->nivel2->nivel1->getId1;
+    $params->{'id2'}= $nivel3aPrestar->nivel2->getId2;
+    C4::AR::Debug::debug("id1: ".$nivel3aPrestar->nivel1->getId1);
+    C4::AR::Debug::debug("id2: ".$nivel3aPrestar->nivel2->getId2);
+    C4::AR::Debug::debug("id3: ".$id3);
+    $params->{'id3'}= $id3;
+    $params->{'id_ui'}=C4::AR::Preferencias->getValorPreferencia('defaultUI');
+    $params->{'id_ui_prestamo'}=C4::AR::Preferencias->getValorPreferencia('defaultUI');
+    $params->{'tipo'}="INTRA";
 
-	my ($msg_object)= &C4::AR::Prestamos::t_realizarPrestamo($params);
-	my $ticketObj=0;
+    my ($msg_object)= &C4::AR::Prestamos::t_realizarPrestamo($params);
+    my $ticketObj=0;
 
-	if(!$msg_object->{'error'}){
-	#Se crean los ticket para imprimir.
-		C4::AR::Debug::debug("SE PRESTO SIN ERROR --> SE CREA EL TICKET");
-		$ticketObj=C4::AR::Prestamos::crearTicket($id3,$params->{'nro_socio'},$params->{'loggedinuser'});
-	}
+    if(!$msg_object->{'error'}){
+    #Se crean los ticket para imprimir.
+        C4::AR::Debug::debug("SE PRESTO SIN ERROR --> SE CREA EL TICKET");
+        $ticketObj=C4::AR::Prestamos::crearTicket($id3,$params->{'nro_socio'},$params->{'loggedinuser'});
+    }
 
- 	push (@infoMessages, $msg_object);
+    push (@infoMessages, $msg_object);
 
-	my %infoOperacion = (
-				ticket  => $ticketObj,
-	);
-	
-	push (@infoTickets, \%infoOperacion);
+    my %infoOperacion = (
+                ticket  => $ticketObj,
+    );
+    
+    push (@infoTickets, \%infoOperacion);
 
-	my %infoOperaciones;
-	$infoOperaciones{'tickets'}= \@infoTickets;
-	$infoOperaciones{'messages'}= \@infoMessages;
+    my %infoOperaciones;
+    $infoOperaciones{'tickets'}= \@infoTickets;
+    $infoOperaciones{'messages'}= \@infoMessages;
 
 
-	return (\%infoOperaciones);
+    return (\%infoOperaciones);
 }
 
 #funcion que realiza la transaccion del Prestamo
 sub t_realizarPrestamo{
-	my ($params)=@_;
-		C4::AR::Debug::debug("Antes de verificar");	
-	my ($msg_object)= C4::AR::Reservas::_verificaciones($params);
-	if(!$msg_object->{'error'}){
-		C4::AR::Debug::debug("No hay error en las verificaciones");
-		my  $prestamo = C4::Modelo::CircPrestamo->new();
+    my ($params)=@_;
+        C4::AR::Debug::debug("Antes de verificar"); 
+    my ($msg_object)= C4::AR::Reservas::_verificaciones($params);
+    if(!$msg_object->{'error'}){
+        C4::AR::Debug::debug("No hay error en las verificaciones");
+        my  $prestamo = C4::Modelo::CircPrestamo->new();
         my $db = $prestamo->db;
-		   $db->{connect_options}->{AutoCommit} = 0;
+           $db->{connect_options}->{AutoCommit} = 0;
            $db->begin_work;
-		eval{
-			$prestamo->prestar($params,$msg_object);
-			$db->commit;
-		};
-		if ($@){
-			C4::AR::Debug::debug("ERROR");
-			#Se loguea error de Base de Datos
-			C4::AR::Mensajes::printErrorDB($@, 'B401',"INTRA");
-			$db->rollback;
-			#Se setea error para el usuario
-			$msg_object->{'error'}= 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P106', 'params' => []} ) ;
-		}
-		$db->{connect_options}->{AutoCommit} = 1;
-	}
+        eval{
+            $prestamo->prestar($params,$msg_object);
+            $db->commit;
+        };
+        if ($@){
+            C4::AR::Debug::debug("ERROR");
+            #Se loguea error de Base de Datos
+            C4::AR::Mensajes::printErrorDB($@, 'B401',"INTRA");
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P106', 'params' => []} ) ;
+        }
+        $db->{connect_options}->{AutoCommit} = 1;
+    }
 
-	return ($msg_object);
+    return ($msg_object);
 }
 
 sub obtenerPrestamosDeSocio {
@@ -381,7 +381,7 @@ sub obtenerPrestamosDeSocio {
                                           query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $nro_socio }],
                                           require_objects => ['nivel3','socio','ui'],
 
-     							); 
+                                ); 
     return ($prestamos_array_ref);
 }
 
@@ -395,10 +395,10 @@ sub estaPrestado {
     use C4::Modelo::CircPrestamo::Manager;
 
     my $nivel3_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
-																query => [  fecha_devolucion  => { eq => undef }, 
-																			id3  => { eq => $id3 }
-																]
-     							); 
+                                                                query => [  fecha_devolucion  => { eq => undef }, 
+                                                                            id3  => { eq => $id3 }
+                                                                ]
+                                ); 
 
     return (scalar(@$nivel3_array_ref) > 0);
 }
@@ -409,18 +409,18 @@ cantidadDePrestamosPorUsuario
 Devuelve la cantidad de prestamos que tiene el usuario que se pasa por parametro y la cantidad de vencidos.
 =cut
 sub cantidadDePrestamosPorUsuario {
-	my ($nro_socio)=@_;
+    my ($nro_socio)=@_;
 
-	my $prestamos= obtenerPrestamosDeSocio($nro_socio);
+    my $prestamos= obtenerPrestamosDeSocio($nro_socio);
 
-  	my $prestados=0;
-  	my $vencidos=0;
-	foreach my $prestamo (@$prestamos){
-		$prestados++;
-		if($prestamo->estaVencido){$vencidos++;}
-	}
-	
-	return($vencidos,$prestados);
+    my $prestados=0;
+    my $vencidos=0;
+    foreach my $prestamo (@$prestamos){
+        $prestados++;
+        if($prestamo->estaVencido){$vencidos++;}
+    }
+    
+    return($vencidos,$prestados);
 }
 
 sub existePrestamo{
@@ -459,21 +459,21 @@ Transaccion que maneja los erroes de base de datos y llama a la funcion devolver
 sub t_devolver {
     my($params)=@_;
 
- 	my $msg_object= C4::AR::Mensajes::create();
+    my $msg_object= C4::AR::Mensajes::create();
     my $array_id_prestamos= $params->{'datosArray'};
     my $prestamos_array_validos = C4::AR::Prestamos::validarExistenciaPrestamos($msg_object,$array_id_prestamos);
     my $loop=scalar(@$array_id_prestamos);
     my $id_prestamo;
-	my $prestamo = C4::Modelo::CircPrestamo->new();
-	my $db = $prestamo->db;
-	$db->{connect_options}->{AutoCommit} = 0;
-	$db->begin_work;
+    my $prestamo = C4::Modelo::CircPrestamo->new();
+    my $db = $prestamo->db;
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
 
     for(my $i=0;$i<$loop;$i++){
-		$id_prestamo= $prestamos_array_validos->[$i];
+        $id_prestamo= $prestamos_array_validos->[$i];
         $prestamo = C4::AR::Prestamos::getInfoPrestamo($id_prestamo, $db);
-		$params->{'id_prestamo'}= $id_prestamo;
-		C4::AR::Debug::debug("PRESTAMOS => t_devolver => id_prestamo: ".$id_prestamo);
+        $params->{'id_prestamo'}= $id_prestamo;
+        C4::AR::Debug::debug("PRESTAMOS => t_devolver => id_prestamo: ".$id_prestamo);
         if ($prestamo){
             $params->{'id3'}= $prestamo->getId3;
             $params->{'barcode'}= $prestamo->nivel3->getBarcode;
@@ -501,7 +501,7 @@ sub t_devolver {
             }# END if(!$msg_object->{'error'})
         }
 
-	}# END for(my $i=0;$i<$loop;$i++)
+    }# END for(my $i=0;$i<$loop;$i++)
 
     $db->{connect_options}->{AutoCommit} = 1;
 
@@ -523,9 +523,9 @@ sub t_renovar {
      $db->begin_work;
 
     foreach my $data (@$array_id_prestamos){
-		my ($msg_object)= C4::AR::Mensajes::create();
-   		$msg_object->{'error'}= 0;
-		C4::AR::Debug::debug("T_Renovar ".$data->{'barcode'});
+        my ($msg_object)= C4::AR::Mensajes::create();
+        $msg_object->{'error'}= 0;
+        C4::AR::Debug::debug("T_Renovar ".$data->{'barcode'});
         my $prestamo = C4::AR::Prestamos::getInfoPrestamo($data->{'id_prestamo'},$db);
         if ($prestamo){
             $prestamo->_verificarParaRenovar($msg_object);
@@ -556,11 +556,11 @@ sub t_renovar {
   }
   $db->{connect_options}->{AutoCommit} = 1;
 
-	my %infoOperaciones;
-	$infoOperaciones{'tickets'}= \@infoTickets;
-	$infoOperaciones{'messages'}= \@infoMessages;
+    my %infoOperaciones;
+    $infoOperaciones{'tickets'}= \@infoTickets;
+    $infoOperaciones{'messages'}= \@infoMessages;
 
-	return (\%infoOperaciones);
+    return (\%infoOperaciones);
 }
 
 sub t_renovarOPAC {
@@ -609,25 +609,25 @@ sub t_renovarOPAC {
 
 sub getPrestamoPorBarcode {
 
-	my ($barcode)=@_;
+    my ($barcode)=@_;
     
     use C4::Modelo::CircPrestamo;
     use C4::Modelo::CircPrestamo::Manager;
 
-	my @filtros;
- 	push(@filtros, ( barcode => { eq => $barcode } ));
-	push(@filtros, ( fecha_devolucion => { eq => undef } ) );
+    my @filtros;
+    push(@filtros, ( barcode => { eq => $barcode } ));
+    push(@filtros, ( fecha_devolucion => { eq => undef } ) );
 
     my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
-																query => \@filtros,
-																require_objects => [ 'nivel3' ] #INNER JOIN
-     							); 
+                                                                query => \@filtros,
+                                                                require_objects => [ 'nivel3' ] #INNER JOIN
+                                ); 
 
-	if(scalar(@$prestamo_array_ref) > 0){
-		return $prestamo_array_ref->[0]->getId_prestamo;
-	}else {	
-    	return 0;
-	}
+    if(scalar(@$prestamo_array_ref) > 0){
+        return $prestamo_array_ref->[0]->getId_prestamo;
+    }else { 
+        return 0;
+    }
 }
 
 
@@ -636,83 +636,83 @@ Esta funcion verifica que el id_prestamo que se pasa por parametro exista y que 
 =cut
 sub esUnPrestamo {
 
-	my ($id_prestamo)=@_;
+    my ($id_prestamo)=@_;
     
     use C4::Modelo::CircPrestamo;
     use C4::Modelo::CircPrestamo::Manager;
 
-	my @filtros;
- 	push(@filtros, ( id_prestamo => { eq => $id_prestamo } ));
-	push(@filtros, ( fecha_devolucion => { eq => undef } ) );
+    my @filtros;
+    push(@filtros, ( id_prestamo => { eq => $id_prestamo } ));
+    push(@filtros, ( fecha_devolucion => { eq => undef } ) );
 
     my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
-																query => \@filtros,
-# 																require_objects => [ 'nivel3' ] #INNER JOIN
-     							); 
+                                                                query => \@filtros,
+#                                                               require_objects => [ 'nivel3' ] #INNER JOIN
+                                ); 
 
-	if(scalar(@$prestamo_array_ref) > 0){
-# 		return $prestamo_array_ref->[0]->getId_prestamo;
-		return 1;
-	}else {	
-    	return 0;
-	}
+    if(scalar(@$prestamo_array_ref) > 0){
+#       return $prestamo_array_ref->[0]->getId_prestamo;
+        return 1;
+    }else { 
+        return 0;
+    }
 }
 
 sub getSocioFromID_Prestamo {
-	my ($prestamo)=@_;
+    my ($prestamo)=@_;
     
     use C4::Modelo::CircPrestamo;
     use C4::Modelo::CircPrestamo::Manager;
 
-	my @filtros;
- 	push(@filtros, ( id_prestamo => { eq => $prestamo } ));
-	push(@filtros, ( fecha_devolucion => { eq => undef } ) );
+    my @filtros;
+    push(@filtros, ( id_prestamo => { eq => $prestamo } ));
+    push(@filtros, ( fecha_devolucion => { eq => undef } ) );
 
     my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
-																query => \@filtros,
-																require_objects => [ 'socio' ] #INNER JOIN
-     							); 
+                                                                query => \@filtros,
+                                                                require_objects => [ 'socio' ] #INNER JOIN
+                                ); 
 
-	if(scalar(@$prestamo_array_ref) > 0){
-		return $prestamo_array_ref->[0]->socio;
-	}else {	
-    	return 0;
-	}
+    if(scalar(@$prestamo_array_ref) > 0){
+        return $prestamo_array_ref->[0]->socio;
+    }else { 
+        return 0;
+    }
 }
 
 sub verificarCirculacionRapida {
-	my ($params, $msg_object)=@_;
+    my ($params, $msg_object)=@_;
 
 
 # FIXME ahora no se mandan los barcodes, se mandan los id_prestamo, faltaria verificar esto!!!!!!!!!!
 # verificar q el id_prestmo exista y que no se haya devuelto
 
 =item
-	if( !($msg_object->{'error'}) &&  $params->{'operacion'} eq 'devolver'){
-	#se verifica si la operacion es una devolucion, que EXISTA el BARCODE
-		$params->{'id_prestamo'}= getPrestamoPorBarcode($params->{'barcode'});
-		if($params->{'id_prestamo'} == 0){
-		#no existe el barcode
-			$msg_object->{'error'}= 1;
-			C4::AR::Debug::debug("verificarCirculacionRapida => no existe el barcode");
-        	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P115', 'params' => [$params->{'barcode'}]} ) ;
-		}
-	}
+    if( !($msg_object->{'error'}) &&  $params->{'operacion'} eq 'devolver'){
+    #se verifica si la operacion es una devolucion, que EXISTA el BARCODE
+        $params->{'id_prestamo'}= getPrestamoPorBarcode($params->{'barcode'});
+        if($params->{'id_prestamo'} == 0){
+        #no existe el barcode
+            $msg_object->{'error'}= 1;
+            C4::AR::Debug::debug("verificarCirculacionRapida => no existe el barcode");
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P115', 'params' => [$params->{'barcode'}]} ) ;
+        }
+    }
 =cut
-	if( !($msg_object->{'error'}) && $params->{'operacion'} ne 'devolver' && !esUnPrestamo($params->{'id_prestamo'})){
-	#si la operacion es una devolucion, se verifica que exista el id_prestamo y que ademas ya no se haya devuelto
-		$msg_object->{'error'}= 1;
-		C4::AR::Debug::debug("verificarCirculacionRapida => no existe el prestamo o ya se devolvió anteriormente");
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P117', 'params' => []} ) ;
-	}
-	
-	if( !($msg_object->{'error'}) && $params->{'operacion'} ne 'devolver' && !C4::AR::Usuarios::existeSocio($params->{'nro_socio'})){
-	#se verifica si la operacion es un prestamo, que EXISTA el USUARIO
-	#si es una devolucion  no importa el usuario ya que lo tengo en el prestamo
-		$msg_object->{'error'}= 1;
-		C4::AR::Debug::debug("verificarCirculacionRapida => no existe el usuario");
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P116', 'params' => []} ) ;
-	}
+    if( !($msg_object->{'error'}) && $params->{'operacion'} ne 'devolver' && !esUnPrestamo($params->{'id_prestamo'})){
+    #si la operacion es una devolucion, se verifica que exista el id_prestamo y que ademas ya no se haya devuelto
+        $msg_object->{'error'}= 1;
+        C4::AR::Debug::debug("verificarCirculacionRapida => no existe el prestamo o ya se devolvió anteriormente");
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P117', 'params' => []} ) ;
+    }
+    
+    if( !($msg_object->{'error'}) && $params->{'operacion'} ne 'devolver' && !C4::AR::Usuarios::existeSocio($params->{'nro_socio'})){
+    #se verifica si la operacion es un prestamo, que EXISTA el USUARIO
+    #si es una devolucion  no importa el usuario ya que lo tengo en el prestamo
+        $msg_object->{'error'}= 1;
+        C4::AR::Debug::debug("verificarCirculacionRapida => no existe el usuario");
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P116', 'params' => []} ) ;
+    }
 
 }
 
@@ -734,22 +734,22 @@ Esta funcion obtiene el socio del ejemplar prestado
 =cut
 # FIXME ver si la condicion de filtro es valida (id3, nro_socio, fecha_prestamo)
 sub getSocioFromPrestamo {
-	my ($id3)= @_;
+    my ($id3)= @_;
 
-	my @filtros;
- 	push(@filtros, ( id3 => { eq => $id3 } ));
-	push(@filtros, ( fecha_devolucion => { eq => undef } ) );
+    my @filtros;
+    push(@filtros, ( id3 => { eq => $id3 } ));
+    push(@filtros, ( fecha_devolucion => { eq => undef } ) );
 
-	my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
-																					query => \@filtros,
-																					require_objects => ['socio']
-																				);
+    my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                                    query => \@filtros,
+                                                                                    require_objects => ['socio']
+                                                                                );
 
-	if(scalar(@$prestamos_array_ref) > 0){
-		return ($prestamos_array_ref->[0]->socio);
-	}else{
-		return 0;
-	}
+    if(scalar(@$prestamos_array_ref) > 0){
+        return ($prestamos_array_ref->[0]->socio);
+    }else{
+        return 0;
+    }
 }
 
 =item
@@ -791,34 +791,36 @@ sub getHistorialPrestamos {
         $orden= 'circ_prestamo.fecha_devolucion';
     }else{$orden= 'cat_nivel1.titulo';} #ordena por titulo por defecto
 
-    my $select = "SELECT *\n";
+    my $select = "SELECT CN1.id1, RHP.fecha_prestamo, RHP.fecha_devolucion\n";
 
-    my $from = "FROM circ_prestamo CP INNER JOIN cat_nivel3 CN3 ON CP.id3 = CN3.id3\n
+    my $from = "FROM rep_historial_prestamo RHP INNER JOIN cat_nivel3 CN3 ON RHP.id3 = CN3.id3\n
                                  INNER JOIN cat_nivel1 CN1 ON CN3.id1 = CN1.id1\n
                                  INNER JOIN cat_autor CA ON CN1.autor = CA.id\n" ;
 
-    my $where = "WHERE (CP.nro_socio = ? )\n";
+    my $where = "WHERE (RHP.nro_socio = ? )\n";
     my $limit = "LIMIT ".$ini.", ".$cantR."\n";
     my $query = $select.$from.$where.$limit;
-C4::AR::Debug::debug("SQL HISTORIAL: ".$query);
- 
+
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute($nro_socio);
     my @prestamos_array;
+    my $dateformat = C4::Date::get_date_format();
+
     while(my $data=$sth->fetchrow_hashref){
+        $data->{'fecha_prestamo'} = C4::Date::format_date_in_iso($data->{'fecha_prestamo'},$dateformat);
+        $data->{'fecha_devolucion'} = C4::Date::format_date_in_iso($data->{'fecha_devolucion'},$dateformat);
         push(@prestamos_array,$data);
     }
+    my ($obj_for_log) = {};
+    my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @prestamos_array);
 
-    my $query_count = "SELECT COUNT(*) AS cantidad\n".$from.$where;
-    $sth = $dbh->prepare($query_count);
+    my $count = "SELECT COUNT(*) AS cantidad\n".$from.$where;
+    $sth = $dbh->prepare($count);
     $sth->execute($nro_socio);
-    my $cantidad= $sth->fetchrow_hashref;
-    #CONTANDO EL TOTAL
-
-    
-    
-    return ($cantidad->{'cantidad'}, \@prestamos_array);
+    my $total_found = $sth->fetchrow_hashref;
+    $total_found = $total_found->{'cantidad'};
+    return ($total_found, $resultsarray);
 }
 
 
@@ -826,40 +828,9 @@ sub getHistorialPrestamosParaTemplate {
 
     my ($nro_socio,$ini,$cantR,$orden)=@_;
 
-    my ($cant,$presmamos_array_ref) = getHistorialPrestamos($nro_socio,$ini,$cantR,$orden);
+    my ($cant,$prestamos_array_ref) = getHistorialPrestamos($nro_socio,$ini,$cantR,$orden);
 
-    my @loop_reading;
-    my $dateformat = C4::Date::get_date_format();
-
-# FIXME tarda mucho!!!!
-    foreach my $prestamo (@$presmamos_array_ref){
-        my %line;
-        $line{'titulo'}=$prestamo->{'titulo'};
-    #   $line{unititle}=C4::AR::Nivel1::getUnititle($issues->[$i]->{'id1'});;
-        $line{'autor'}=$prestamo->{'apellido'}.", ".$prestamo->{'nombre'};
-        $line{'idAutor'}=$prestamo->{'autor'};
-        $line{'id1'}=$prestamo->{'id1'};
-        $line{'id2'}=$prestamo->{'id2'};
-        $line{'id3'}=$prestamo->{'id3'};
-        $line{'signatura_topografica'}=$prestamo->{'signatura_topografica'};
-        $line{'barcode'}=$prestamo->{'barcode'};
-        $line{'date_due'}=C4::Date::format_date($prestamo->{'fecha_prestamo'},$dateformat);
-        $line{'date_fin'} = C4::Date::format_date($prestamo->{'fecha_devolucion'},$dateformat);
-#         $line{'estaVencido'}= $prestamo->estaVencido;
-#         $line{'date_renew'}=$prestamo->{'fecha_ultima_renovacion'};
-        if ($prestamo->{'renovaciones'} > 0){
-            $line{'date_renew'}=C4::Date::format_date($prestamo->{'fecha_ultima_renovacion'},$dateformat);
-        }
-#         $line{'returndate'}=$prestamo->getFecha_devolucion_formateada;
-#         $line{'edicion'}= $prestamo->nivel3->nivel2->getEdicion;
-#         $line{'volume'}= $prestamo->nivel3->nivel2->getVolumenDesc;
-    #   $line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
-#           $line{'grupos'}= C4::AR::Busquedas::obtenerGrupos($prestamo->nivel3->getId1,'','intra');
-
-        push(@loop_reading,\%line);
-    }
-
-    return ($cant,$presmamos_array_ref,\@loop_reading);
+    return ($cant,$prestamos_array_ref);
 }
 
 
