@@ -1253,13 +1253,13 @@ ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHA
 --25/11/09
 ALTER TABLE `pref_estructura_campo_marc` ADD `IndicadorPrimario` VARCHAR( 50 ) NOT NULL
 ADD `IndicadorSecundario` VARCHAR( 50 ) NOT NULL ;
-CREATE TABLE `V3`.`pref_indicadores_primarios` (
+CREATE TABLE `pref_indicadores_primarios` (
          `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
          `indicador` VARCHAR( 50 ) NOT NULL,
          `dato` VARCHAR( 50 ) NOT NULL,
          `campo_marc` INT NOT NULL
          );
-CREATE TABLE `V3`.`pref_indicadores_secundarios` (
+CREATE TABLE `pref_indicadores_secundarios` (
          `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
          `indicador` VARCHAR( 50 ) NOT NULL,
          `dato` VARCHAR( 50 ) NOT NULL,
@@ -1267,7 +1267,7 @@ CREATE TABLE `V3`.`pref_indicadores_secundarios` (
          ); 
 
 --26/11/09 actualizacion de campos y tablas para el catalogo
-ver archivo update_catalogo.sql
+--ver archivo update_catalogo.sql
 
 
  CREATE TABLE `cat_registro_marc_n1` (

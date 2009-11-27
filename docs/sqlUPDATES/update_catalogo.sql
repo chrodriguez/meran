@@ -1,6 +1,7 @@
 --
 -- Table structure for table `pref_indicador_secundario`
 --
+DROP TABLE `pref_indicador_secundario`;
 
 CREATE TABLE IF NOT EXISTS `pref_indicador_secundario` (
   `id` int(11) NOT NULL auto_increment,
@@ -254,6 +255,7 @@ INSERT INTO `pref_indicador_secundario` (`id`, `indicador`, `dato`, `campo_marc`
 --
 -- Table structure for table `pref_indicador_primario`
 --
+DROP TABLE `pref_indicador_primario`;
 
 CREATE TABLE IF NOT EXISTS `pref_indicador_primario` (
   `id` int(11) NOT NULL auto_increment,
@@ -437,7 +439,7 @@ INSERT INTO `pref_indicador_primario` (`id`, `indicador`, `dato`, `campo_marc`) 
 --
 -- Table structure for table `pref_estructura_subcampo_marc`
 --
-
+DROP TABLE `pref_estructura_subcampo_marc`;
 CREATE TABLE IF NOT EXISTS `pref_estructura_subcampo_marc` (
   `nivel` tinyint(1) NOT NULL default '0',
   `obligatorio` tinyint(1) NOT NULL default '0',
@@ -2403,6 +2405,7 @@ INSERT INTO `pref_estructura_subcampo_marc` (`nivel`, `obligatorio`, `campo`, `s
 --
 -- Table structure for table `pref_estructura_campo_marc`
 --
+DROP TABLE `pref_estructura_campo_marc`;
 
 CREATE TABLE IF NOT EXISTS `pref_estructura_campo_marc` (
   `campo` char(3) NOT NULL,
