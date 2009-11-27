@@ -2,7 +2,7 @@
 if [ ! -z $1 ] && [ -f $1 ]; then
 		echo "Procesando $1";
 	      else 
-		echo "Error, debe pasar el nombre del archivo csv a procesar como parámetro, el csv debe ser separado por ;";
+		echo "Error, debe pasar el nombre del archivo .CSV a procesar como parámetro, el csv debe ser separado por ;";
 		echo "Invoque sh permisos.sh permisos.csv";
 		exit;
 	      fi 
