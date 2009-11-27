@@ -17,7 +17,7 @@ var ID_N2=0; //para saber el id del nivel 2
 var ID_N3=0; //para saber el id del nivel 3
 var TAB_INDEX= 0;//tabindex para las componentes
 //arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
-var COMPONENTES_ARRAY= new Array();
+var MARC_OBJECT_ARRAY= new Array();
 //arreglo con datos del servidor para modificar las componentes
 var DATA_ARRAY = new Array();
 var MODIFICAR = 0;
@@ -53,8 +53,8 @@ function toggleClass(layer){
 
 function inicializar(){
 
-	_freeMemory(COMPONENTES_ARRAY);
-	COMPONENTES_ARRAY= [];
+	_freeMemory(MARC_OBJECT_ARRAY);
+	MARC_OBJECT_ARRAY= [];
 	_freeMemory(DATA_ARRAY);
 	DATA_ARRAY= [];
 	_freeMemory(BARCODES_ARRAY);
@@ -140,10 +140,18 @@ function seleccionoAlgo(chckbox){
 Esta funcion retorna el ID de la componente en COMPONENTE_ARRAY segun campo, subcampo
 */
 function _getIdComponente(campo, subcampo){
-	for(var i=0;i<COMPONENTES_ARRAY.length;i++){
-		if( (COMPONENTES_ARRAY[i].campo == campo) && (COMPONENTES_ARRAY[i].subcampo == subcampo) ){
-			return COMPONENTES_ARRAY[i].idCompCliente;
-		}
+	for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){
+        var marc_object = MARC_OBJECT_ARRAY[i];
+
+        if (marc_object.getCampo() == campo) {
+
+            var subcampos_array = marc_object.getSubCamposArray();
+            for(var j=0;j< subcampos_array.length;j++){
+                if (subcampos_array[j].getSubCampo() == subcampo) {
+                    return subcampos_array[j].getIdCompCliente();
+                }
+            }
+        }
 	}
 
 	return 0;
@@ -153,9 +161,9 @@ function _getIdComponente(campo, subcampo){
     Esta funcion busca un objeto en el arreglo de objetos de configuracion MARC, sgeun el idCompCliente
 */
 function _getMARC_conf_ById(id){
-    for(var i=0;i<COMPONENTES_ARRAY.length;i++){
-        if(COMPONENTES_ARRAY[i].idCompCliente == id){
-            return COMPONENTES_ARRAY[i];
+    for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){
+        if(MARC_OBJECT_ARRAY[i].idCompCliente == id){
+            return MARC_OBJECT_ARRAY[i];
         }
     }
 
@@ -178,20 +186,20 @@ function _getBarcodes(){
 
 //esta funcion elimina el arreglo de opciones, para enviar menos info al servidor
 function _sacarOpciones(){
-	for(var i=0;i<COMPONENTES_ARRAY.length;i++){
-		if(COMPONENTES_ARRAY[i].opciones){//si esta definido...
-			if(COMPONENTES_ARRAY[i].opciones.length > 0){
+	for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){
+		if(MARC_OBJECT_ARRAY[i].opciones){//si esta definido...
+			if(MARC_OBJECT_ARRAY[i].opciones.length > 0){
 				//elimino la propiedad opciones, para enviar menos info al servidor
-				COMPONENTES_ARRAY[i].opciones= [];
+				MARC_OBJECT_ARRAY[i].opciones= [];
 			}
 		}
 	}
 }
 
 function _clearDataFromComponentesArray(){
-    for(var i=0;i< COMPONENTES_ARRAY.length;i++){
-        COMPONENTES_ARRAY[i].dato= '';
-		$('#'+COMPONENTES_ARRAY[i].idCompCliente).val('');
+    for(var i=0;i< MARC_OBJECT_ARRAY.length;i++){
+        MARC_OBJECT_ARRAY[i].dato= '';
+		$('#'+MARC_OBJECT_ARRAY[i].idCompCliente).val('');
     }
 }
 
@@ -224,25 +232,25 @@ function _showAndHiddeEstructuraDelNivel(nivel){
 
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
 function syncComponentesArray(){
-    for(var i=0; i < COMPONENTES_ARRAY.length; i++){
-//         window.console.log("COMPONENTES_ARRAY[" + i +"].dato: " + COMPONENTES_ARRAY[i].dato);
-//         window.console.log("COMPONENTES_ARRAY[" + i +"].datoReferencia: " + COMPONENTES_ARRAY[i].datoReferencia);
-        if(COMPONENTES_ARRAY[i].tiene_estructura == '1'){
-            if(COMPONENTES_ARRAY[i].referencia == 1){
+    for(var i=0; i < MARC_OBJECT_ARRAY.length; i++){
+//         window.console.log("MARC_OBJECT_ARRAY[" + i +"].dato: " + MARC_OBJECT_ARRAY[i].dato);
+//         window.console.log("MARC_OBJECT_ARRAY[" + i +"].datoReferencia: " + MARC_OBJECT_ARRAY[i].datoReferencia);
+        if(MARC_OBJECT_ARRAY[i].tiene_estructura == '1'){
+            if(MARC_OBJECT_ARRAY[i].referencia == 1){
     //             window.console.log("TIENE REFERENCIA");
-                if($('#'+COMPONENTES_ARRAY[i].idCompCliente).val() != '' && COMPONENTES_ARRAY[i].tipo == 'combo'){
-                    COMPONENTES_ARRAY[i].datoReferencia = $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
+                if($('#'+MARC_OBJECT_ARRAY[i].idCompCliente).val() != '' && MARC_OBJECT_ARRAY[i].tipo == 'combo'){
+                    MARC_OBJECT_ARRAY[i].datoReferencia = $('#'+MARC_OBJECT_ARRAY[i].idCompCliente).val();
     //                 window.console.log("COMBO");
-                }else if($('#'+COMPONENTES_ARRAY[i].idCompCliente).val() != '' && COMPONENTES_ARRAY[i].tipo == 'auto'){
-                    COMPONENTES_ARRAY[i].datoReferencia = $('#'+COMPONENTES_ARRAY[i].idCompCliente + '_hidden').val();
+                }else if($('#'+MARC_OBJECT_ARRAY[i].idCompCliente).val() != '' && MARC_OBJECT_ARRAY[i].tipo == 'auto'){
+                    MARC_OBJECT_ARRAY[i].datoReferencia = $('#'+MARC_OBJECT_ARRAY[i].idCompCliente + '_hidden').val();
     //                 window.console.log("AUTO");
                 }else{
-                    COMPONENTES_ARRAY[i].datoReferencia = 0;
-                    COMPONENTES_ARRAY[i].dato = '';
+                    MARC_OBJECT_ARRAY[i].datoReferencia = 0;
+                    MARC_OBJECT_ARRAY[i].dato = '';
                 }
             }else{  
     //             window.console.log("NO TIENE REFERENCIA");
-                COMPONENTES_ARRAY[i].dato = $('#'+COMPONENTES_ARRAY[i].idCompCliente).val();
+                MARC_OBJECT_ARRAY[i].dato = $('#'+MARC_OBJECT_ARRAY[i].idCompCliente).val();
             }
         }
     }
@@ -282,12 +290,12 @@ function mostrarEstructuraDelNivel1(){
 function mostrarDataNivel(){
 
     if (MODIFICAR){
-        for (x=0; x<COMPONENTES_ARRAY.length; x++){
+        for (x=0; x<MARC_OBJECT_ARRAY.length; x++){
             if(x < DATA_ARRAY.length && DATA_ARRAY[x].tiene_estructura == '1'){
                 //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
                 $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
                 if(DATA_ARRAY[x].referencia == 1){
-                    COMPONENTES_ARRAY[x].datoReferencia = DATA_ARRAY[x].datoReferencia;
+                    MARC_OBJECT_ARRAY[x].datoReferencia = DATA_ARRAY[x].datoReferencia;
                     $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
                 }
             }
@@ -299,7 +307,7 @@ function updateMostrarEstructuraDelNivel1(responseText){
     _clearContentsEstructuraDelNivel();
     _showAndHiddeEstructuraDelNivel(1);
     //proceso la info del servidor y se crean las componentes en el cliente
-    //ademas se carga el arreglo COMPONENTES_ARRAY donde se hace el mapeo de componente del cliente y dato
+    //ademas se carga el arreglo MARC_OBJECT_ARRAY donde se hace el mapeo de componente del cliente y dato
     procesarInfoJson(responseText); 
     //carga los datos en los campos solo si se esta modificando
     mostrarDataNivel();
@@ -538,7 +546,7 @@ function guardarDocumentoN1(){
     objAH.tipoAccion= "GUARDAR_NIVEL_1";
     objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
 	_sacarOpciones();
-    objAH.infoArrayNivel1= COMPONENTES_ARRAY;
+    objAH.infoArrayNivel1= MARC_OBJECT_ARRAY;
     objAH.id1 = ID_N1;
     objAH.sendToServer();
 }
@@ -565,7 +573,7 @@ function guardarDocumentoN2(){
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_2";
 	_sacarOpciones();
-    objAH.infoArrayNivel2= COMPONENTES_ARRAY;
+    objAH.infoArrayNivel2= MARC_OBJECT_ARRAY;
     objAH.id1 = ID_N1;
     objAH.id2 = ID_N2; //por si se modificó
     objAH.sendToServer();
@@ -605,7 +613,7 @@ function guardarDocumentoN3(){
         objAH.cantEjemplares= $("#cantEjemplares").val();
 
 		_sacarOpciones();
-		objAH.infoArrayNivel3= COMPONENTES_ARRAY;
+		objAH.infoArrayNivel3= MARC_OBJECT_ARRAY;
 		objAH.id1 = ID_N1;
 		objAH.id2 = ID_N2;
 		objAH.sendToServer();
@@ -647,7 +655,7 @@ function guardarModificacionDocumentoN1(){
     objAH.tipoAccion= "MODIFICAR_NIVEL_1";
     objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
 	_sacarOpciones();
-    objAH.infoArrayNivel1= COMPONENTES_ARRAY;
+    objAH.infoArrayNivel1= MARC_OBJECT_ARRAY;
     objAH.id1 = ID_N1;
     objAH.sendToServer();
 }
@@ -675,7 +683,7 @@ function guardarModificacionDocumentoN2(){
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MODIFICAR_NIVEL_2";
 	_sacarOpciones();
-    objAH.infoArrayNivel2= COMPONENTES_ARRAY;
+    objAH.infoArrayNivel2= MARC_OBJECT_ARRAY;
     objAH.id1 = ID_N1;
     objAH.id2 = ID_N2; //por si se modificó
     objAH.sendToServer();
@@ -708,7 +716,7 @@ function guardarModificacionDocumentoN3(){
     objAH.tipo_documento= $("#tipo_nivel3_id").val();
 	objAH.cantEjemplares= $("#cantEjemplares").val();
 	_sacarOpciones();
-    objAH.infoArrayNivel3= COMPONENTES_ARRAY;
+    objAH.infoArrayNivel3= MARC_OBJECT_ARRAY;
     objAH.id1 = ID_N1;
     objAH.id2 = ID_N2;
 	objAH.ID3_ARRAY= ID3_ARRAY;
@@ -792,10 +800,17 @@ function procesarInfoJson(json){
     var campo;
     var strComp;
 
+
+//     var campo_test = new campo_marc_conf(objetos[1]);
+//     var subcampos_array = campo_test.getSubCamposArray();
+//     alert(subcampos_array[0].getSubCampo());
+
     
     for(var i=0; i < objetos.length; i++){
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
         var campo_marc_conf_obj = new campo_marc_conf(objetos[i]);
+//         var campo_test = new campo_marc_conf(objetos[1]);
+        var subcampos_array = campo_marc_conf_obj.getSubCamposArray();
         //genero el header para el campo q contiene todos los subcampos
         strComp = "<div id='marc_group" + i + "' ><li class='MARCHeader'>";
         strComp = strComp + "<div class='MARCHeader_content'>";
@@ -804,17 +819,19 @@ function procesarInfoJson(json){
         strComp = strComp + "<div class='MARCHeader_controls'> + - </div></div></li></div>";
         $("#" + getDivDelNivel()).append(strComp);
 
-//         COMPONENTES_ARRAY[i] = objetos[i];
-//         procesarObjeto(objetos[i]);
         //proceso los subcampos
         var subcampo_marc_conf_obj = new subcampo_marc_conf(objetos[i]);
         var subcampos_array = campo_marc_conf_obj.getSubCamposArray();
+
+        
         for(var j=0; j < subcampos_array.length; j++){
-            subcampos_array[j].marc_group = 'marc_group' + i;
-            COMPONENTES_ARRAY[j+i] = subcampos_array[j];
+//             subcampos_array[j].marc_group = 'marc_group' + i;
+//             MARC_OBJECT_ARRAY[j+i] = subcampos_array[j];
+//             subcampo_marc_conf_obj.setMarcGroup('marc_group' + i);
             procesarObjeto(subcampos_array[j], 'marc_group' + i);
         }
 
+        MARC_OBJECT_ARRAY[i] = campo_marc_conf_obj;
     }
 
 	//hago foco en la primer componente
@@ -1021,24 +1038,24 @@ function create_rules_object(rule){
 
 //prueba
 function addRules(){
-     for(var i=0; i< COMPONENTES_ARRAY.length; i++){
-        if(COMPONENTES_ARRAY[i].rules != ""){
-            create_rules_object(COMPONENTES_ARRAY[i].rules);
-//             $('#'+COMPONENTES_ARRAY[i].idCompCliente).rules("add", RULES_OPTIONS);
-            $('#'+COMPONENTES_ARRAY[i].idCompCliente).rules("add", RULES_OPTIONS);
-//             window.console.log("rules: " + COMPONENTES_ARRAY[i].rules);
+     for(var i=0; i< MARC_OBJECT_ARRAY.length; i++){
+        if(MARC_OBJECT_ARRAY[i].rules != ""){
+            create_rules_object(MARC_OBJECT_ARRAY[i].rules);
+//             $('#'+MARC_OBJECT_ARRAY[i].idCompCliente).rules("add", RULES_OPTIONS);
+            $('#'+MARC_OBJECT_ARRAY[i].idCompCliente).rules("add", RULES_OPTIONS);
+//             window.console.log("rules: " + MARC_OBJECT_ARRAY[i].rules);
         }
     }
 }
 
 function _cambiarIdDeAutocomplete(){
-	 for(var i=0; i< COMPONENTES_ARRAY.length; i++){
+	 for(var i=0; i< MARC_OBJECT_ARRAY.length; i++){
        	//si es un autocomplete, guardo el ID del input hidden
-		if(COMPONENTES_ARRAY[i].tipo == 'auto'){	
+		if(MARC_OBJECT_ARRAY[i].tipo == 'auto'){	
 			//si es un autocomplete, el dato es un ID y se encuentra en el hidden
-			COMPONENTES_ARRAY[i].idCompCliente= COMPONENTES_ARRAY[i].idCompCliente + '_hidden';
+			MARC_OBJECT_ARRAY[i].idCompCliente= MARC_OBJECT_ARRAY[i].idCompCliente + '_hidden';
     // FIXME esto no esta funcionando, se pierde el id de la referencia
-			$('#'+COMPONENTES_ARRAY[i].idCompCliente).val(COMPONENTES_ARRAY[i].datoReferencia);
+			$('#'+MARC_OBJECT_ARRAY[i].idCompCliente).val(MARC_OBJECT_ARRAY[i].datoReferencia);
 		}
     }
 }
@@ -1090,7 +1107,7 @@ alert(obj_temp);
     obj.idCompCliente = id_componente;
     procesarObjeto(obj, obj_temp.marc_group);
     
-    COMPONENTES_ARRAY.push(obj);
+    MARC_OBJECT_ARRAY.push(obj);
 }
 
 function cloneObj(o) {
@@ -1115,63 +1132,63 @@ function crearBotonAgregarRepetible(obj){
 
 
 // FIXME DEPRECATED????????
-function marc_conf(obj){
-
-    this.liblibrarian = obj.liblibrarian;
-    this.itemtype = obj.itemtype;
-    this.campo =  obj.campo;
-    this.subcampo = obj.subcampo;
-    this.dato =  obj.dato;
-    this.nivel = obj.nivel;
-    this.rules =  obj.rules;
-    this.tipo = obj.tipo;
-    this.intranet_habilitado =  obj.intranet_habilitado;
-    this.tiene_estructura = obj.tiene_estructura;
-    this.visible = obj.visible;
-    this.Id_rep = obj.Id_rep;
-    this.repetible = obj.repetible;
-    this.referencia = obj.referencia;
-    this.obligatorio = obj.obligatorio;
-    this.datoReferencia = obj.datoReferencia;
-    this.idCompCliente =  obj.idCompCliente;
-    this.referenciaTabla =  obj.referenciaTabla;
-    this.opciones = obj.opciones;
-    this.defaultValue = obj.defaultValue;
-    this.tiene_estructura = obj.tiene_estructura;
-    this.ayuda_campo = obj.ayuda_campo;
-    this.descripcion_campo = obj.descripcion_campo;
-
-    function fGetIdCompCliente(){ return this.idCompCliente };
-    function fGetCampo(){ return this.campo };
-    function fGetSubCampo(){ return this.subcampo };
-    function fGetDato(){ return this.dato };
-    function fGetTipo(){ return $.trim(this.tipo) };
-    function fGetRepetible(){ return this.repetible };
-    function fGetReferenciaTabla(){ return this.referenciaTabla };    
-    function fGetOpciones(){ return this.opciones };
-    function fGetDefaultValue(){ return this.defaultValue };
-    function fGetTieneEstructura(){ return this.tiene_estructura };
-    function fGetObligatorio(){ return this.obligatorio };
-    function fGetVistaIntra(){ return $.trim(this.liblibrarian) };
-    function fGetAyudaCampo(){ return $.trim(this.ayuda_campo) };
-    function fGetDescripcionCampo(){ return $.trim(this.descripcion_campo) };
-
-    //metodos
-    this.getIdCompCliente       = fGetIdCompCliente;
-    this.getCampo               = fGetCampo;
-    this.getSubCampo            = fGetSubCampo;
-    this.getDato                = fGetDato;
-    this.getTipo                = fGetTipo;
-    this.getRepetible           = fGetRepetible;
-    this.getReferenciaTabla     = fGetReferenciaTabla;
-    this.getOpciones            = fGetOpciones;
-    this.getDefaultValue        = fGetDefaultValue;
-    this.getTieneEstructura     = fGetTieneEstructura;
-    this.getObligatorio         = fGetObligatorio;
-    this.getVistaIntra          = fGetVistaIntra;
-    this.getAyudaCampo          = fGetAyudaCampo;
-    this.getDescripcionCampo    = fGetDescripcionCampo;
-}
+// function marc_conf(obj){
+// 
+//     this.liblibrarian = obj.liblibrarian;
+//     this.itemtype = obj.itemtype;
+//     this.campo =  obj.campo;
+//     this.subcampo = obj.subcampo;
+//     this.dato =  obj.dato;
+//     this.nivel = obj.nivel;
+//     this.rules =  obj.rules;
+//     this.tipo = obj.tipo;
+//     this.intranet_habilitado =  obj.intranet_habilitado;
+//     this.tiene_estructura = obj.tiene_estructura;
+//     this.visible = obj.visible;
+//     this.Id_rep = obj.Id_rep;
+//     this.repetible = obj.repetible;
+//     this.referencia = obj.referencia;
+//     this.obligatorio = obj.obligatorio;
+//     this.datoReferencia = obj.datoReferencia;
+//     this.idCompCliente =  obj.idCompCliente;
+//     this.referenciaTabla =  obj.referenciaTabla;
+//     this.opciones = obj.opciones;
+//     this.defaultValue = obj.defaultValue;
+//     this.tiene_estructura = obj.tiene_estructura;
+//     this.ayuda_campo = obj.ayuda_campo;
+//     this.descripcion_campo = obj.descripcion_campo;
+// 
+//     function fGetIdCompCliente(){ return this.idCompCliente };
+//     function fGetCampo(){ return this.campo };
+//     function fGetSubCampo(){ return this.subcampo };
+//     function fGetDato(){ return this.dato };
+//     function fGetTipo(){ return $.trim(this.tipo) };
+//     function fGetRepetible(){ return this.repetible };
+//     function fGetReferenciaTabla(){ return this.referenciaTabla };    
+//     function fGetOpciones(){ return this.opciones };
+//     function fGetDefaultValue(){ return this.defaultValue };
+//     function fGetTieneEstructura(){ return this.tiene_estructura };
+//     function fGetObligatorio(){ return this.obligatorio };
+//     function fGetVistaIntra(){ return $.trim(this.liblibrarian) };
+//     function fGetAyudaCampo(){ return $.trim(this.ayuda_campo) };
+//     function fGetDescripcionCampo(){ return $.trim(this.descripcion_campo) };
+// 
+//     //metodos
+//     this.getIdCompCliente       = fGetIdCompCliente;
+//     this.getCampo               = fGetCampo;
+//     this.getSubCampo            = fGetSubCampo;
+//     this.getDato                = fGetDato;
+//     this.getTipo                = fGetTipo;
+//     this.getRepetible           = fGetRepetible;
+//     this.getReferenciaTabla     = fGetReferenciaTabla;
+//     this.getOpciones            = fGetOpciones;
+//     this.getDefaultValue        = fGetDefaultValue;
+//     this.getTieneEstructura     = fGetTieneEstructura;
+//     this.getObligatorio         = fGetObligatorio;
+//     this.getVistaIntra          = fGetVistaIntra;
+//     this.getAyudaCampo          = fGetAyudaCampo;
+//     this.getDescripcionCampo    = fGetDescripcionCampo;
+// }
 
 function campo_marc_conf(obj){
 
@@ -1183,6 +1200,12 @@ function campo_marc_conf(obj){
     this.repetible              = obj.repetible;
     this.indicador_primario     = obj.indicador_primario;
     this.indicador_secundario   = obj.indicador_secundario;
+    this.subcampos_array        = [];
+
+    for(var i = 0; i < obj.subcampos_array.length; i++){
+        var subcampo_marc_conf_obj = new subcampo_marc_conf(obj.subcampos_array[i]);
+        this.subcampos_array[i] = subcampo_marc_conf_obj;
+    }
 
     function fGetCampo(){ return this.campo };
     function fGetNombre(){ return this.nombre };
@@ -1192,6 +1215,7 @@ function campo_marc_conf(obj){
     function fGetRepetible(){ return (this.repetible) };
     function fGetIndicadorPrimario(){ return (this.indicador_primario) };
     function fGetIndicadorSecundario(){ return (this.indicador_secundario) };
+    function fGetSubCamposArray(){ return (this.subcampos_array) };
     
 
     //metodos
@@ -1203,6 +1227,7 @@ function campo_marc_conf(obj){
     this.getRepetible           = fGetRepetible;
     this.getIndicadorPrimario   = fGetIndicadorPrimario;
     this.getIndicadorSecundario = fGetIndicadorSecundario;
+    this.getSubCamposArray      = fGetSubCamposArray;
 }
 
 function subcampo_marc_conf(obj){
@@ -1293,19 +1318,6 @@ function newCombo(obj){
 }
 
 function crearCombo(obj){
-//     var comp = "<select id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' tabindex="+TAB_INDEX+">\n<option value=''>Elegir opci&oacute;n</option>\n";
-// 
-//     var op="";
-//     var def="";
-//     var opciones = obj.getOpciones();
-// 
-//     for(var i=0; i< opciones.length; i++){
-//         if(obj.getDefaultValue() == opciones[i].clave){
-//             def=" selected='selected' ";
-//         }
-//         op = op + "<option value='" + opciones[i].clave + "'" + def + "'>" + opciones[i].valor + "</option>\n";
-//         def = "";
-//     }
     var comp = newCombo(obj);
 
     comp = comp + crearBotonAgregarRepetible(obj);

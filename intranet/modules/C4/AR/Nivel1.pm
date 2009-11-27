@@ -3,6 +3,7 @@ package C4::AR::Nivel1;
 use strict;
 require Exporter;
 use C4::Context;
+use C4::Modelo::CatRegistroMarcN1;
 
 use vars qw(@EXPORT @ISA);
 
@@ -127,27 +128,6 @@ sub getNivel1FromId1{
 	}
 }
 
-=item sub getNivel1RepetiblesFromId1
-Recupero todos los nivel1_repetible a partir de un id1
-retorna un arreglo de objetos o 0 si no existe ninguno
-=cut
-sub getNivel1RepetiblesFromId1{
-  my ($id1) = @_;
-
-  my $nivel1_repetible_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
-                                    query => [ 
-                                          id1 => { eq => $id1 },
-                                      ], 
-#                                                                         with_objects => [ 'cat_autor' ]    
-                                );
-
-  if( scalar(@$nivel1_repetible_array_ref) > 0){
-    return ($nivel1_repetible_array_ref->[0]);
-  }else{
-    return 0;
-  }
-}
-
 =item sub getNivel1RepetibleFromId1Repetible
 Recupero el objeto nivel1_repetible a partir de un rep_n1_id
 retorna un objeto o 0 si no existe ninguno
@@ -170,8 +150,6 @@ sub getNivel1RepetibleFromId1Repetible{
         return 0;
     }
 }
-
-
 
 
 =item sub t_modificarNivel1
@@ -301,9 +279,92 @@ sub t_eliminarNivel1{
     return ($msg_object);
 }
 
+#===================================================================Fin====ABM Nivel 1=============================================================
+#========================================================IMPORTACION MARC==========================================================================
+=item sub guardarRegistroMARC
+Este funcion recibe un objeto MARC::Record  y lo guarda en el Catálogo (Solo Nivel1, Nivel2 y sus repetibles)
+=cut
+sub guardarRegistroMARC {
+    my ($marc)=@_;
+
+    my $msg_object= C4::AR::Mensajes::create();
+       $msg_object->{'tipo'}="INTRA";
+
+    my $id1;
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $catNivel1;
+        $catNivel1= C4::Modelo::CatNivel1->new();
+        my $db= $catNivel1->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+         $db->begin_work;
+    
+        eval {
+            $catNivel1->agregarDesdeMARC($marc);
+            $id1 = $catNivel1->getId1;
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$catNivel1->getId1]} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B427',"INTRA");
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U371', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object, $id1);
+}
+
+
+
+
+
+
+
+
+
+#======================================================DEPRECATED?????????????==================================================================
+=item sub getNivel1RepetiblesFromId1
+Recupero todos los nivel1_repetible a partir de un id1
+retorna un arreglo de objetos o 0 si no existe ninguno
+=cut
+# FIXME DEPRECATED
+=item
+sub getNivel1RepetiblesFromId1{
+  my ($id1) = @_;
+
+  my $nivel1_repetible_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
+                                    query => [ 
+                                          id1 => { eq => $id1 },
+                                      ], 
+#                                                                         with_objects => [ 'cat_autor' ]    
+                                );
+
+  if( scalar(@$nivel1_repetible_array_ref) > 0){
+    return ($nivel1_repetible_array_ref->[0]);
+  }else{
+    return 0;
+  }
+}
+=cut
+
+
 =item sub t_eliminarNivel1Repetible
     Elimina el nivel 1 repetido pasado por parametro
 =cut
+# FIXME DEPRECATED
+=item
 sub t_eliminarNivel1Repetible{
     my ($params) = @_;
    
@@ -359,52 +420,10 @@ sub t_eliminarNivel1Repetible{
 
     return ($msg_object);
 }
-#===================================================================Fin====ABM Nivel 1=============================================================
-#========================================================IMPORTACION MARC==========================================================================
-=item sub guardarRegistroMARC
-Este funcion recibe un objeto MARC::Record  y lo guarda en el Catálogo (Solo Nivel1, Nivel2 y sus repetibles)
 =cut
-sub guardarRegistroMARC {
-    my ($marc)=@_;
 
-    my $msg_object= C4::AR::Mensajes::create();
-       $msg_object->{'tipo'}="INTRA";
 
-    my $id1;
 
-    if(!$msg_object->{'error'}){
-    #No hay error
-        my  $catNivel1;
-        $catNivel1= C4::Modelo::CatNivel1->new();
-        my $db= $catNivel1->db;
-        # enable transactions, if possible
-        $db->{connect_options}->{AutoCommit} = 0;
-         $db->begin_work;
-    
-        eval {
-            $catNivel1->agregarDesdeMARC($marc);
-            $id1 = $catNivel1->getId1;
-            $db->commit;
-            #se cambio el permiso con exito
-            $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$catNivel1->getId1]} ) ;
-        };
-    
-        if ($@){
-            #Se loguea error de Base de Datos
-            &C4::AR::Mensajes::printErrorDB($@, 'B427',"INTRA");
-            $db->rollback;
-            #Se setea error para el usuario
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U371', 'params' => []} ) ;
-        }
-
-        $db->{connect_options}->{AutoCommit} = 1;
-
-    }
-
-    return ($msg_object, $id1);
-}
 #========================================================FIN IMPORTACION MARC======================================================================
 #
 =back
