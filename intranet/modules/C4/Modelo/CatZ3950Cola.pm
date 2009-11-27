@@ -43,8 +43,17 @@ sub getBusqueda{
 
 sub setBusqueda{
     my ($self) = shift;
-    my ($busqueda) = @_;
-    $self->busqueda($busqueda);
+    my ($termino,$busqueda) = @_;
+    
+    my $busqueda_final='';
+    if ($termino eq 'titulo') 		{$busqueda_final = '@attr 1=4 '.$busqueda;} 
+    elsif ($termino eq 'autor') 	{$busqueda_final = '@attr 1=1003 '.$busqueda;} 
+    elsif ($termino eq 'isbn') 		{$busqueda_final = '@attr 1=7 '.$busqueda;} 
+    elsif ($termino eq 'issn') 		{$busqueda_final = '@attr 1=8 '.$busqueda;} 
+    elsif ($termino eq 'termino')	{$busqueda_final = '@attr 1=1016 '.$busqueda;} 
+    elsif ($termino eq 'pqf') 		{$busqueda_final = $busqueda;} 
+    
+    $self->busqueda($busqueda_final);
 }
 
 sub getComienzo{

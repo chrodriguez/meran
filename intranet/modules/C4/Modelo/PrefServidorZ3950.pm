@@ -123,10 +123,17 @@ sub setSintaxis{
 
 sub getConexion{
     my ($self) = shift;
-    my $conexion= $self->getServidor."\:".$self->getPuerto."/".$self->getBase;
+
+	my $conexion= $self->getServidor.":".$self->getPuerto;
+	
+	if($self->getBase ne '') {
+		$conexion .= "/".$self->getBase;
+	}
+	
     if ($self->getUsuario ne ''){
-    $conexion.="/".$self->getUsuario."/".$self->getPassword;
-    }
+		$conexion.="/".$self->getUsuario."/".$self->getPassword;
+     }
+
     return $conexion;
 }
 1;

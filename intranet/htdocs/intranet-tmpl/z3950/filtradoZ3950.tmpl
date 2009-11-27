@@ -38,14 +38,37 @@ function updateVerBusquedas(responseText){
 }
 
 function agregarBusquedaZ3950(){
-    if($('#termino').val() !='')
+    if(($('#titulo').val() !='')||($('#autor').val() !='')||($('#isbn').val() !='')||($('#issn').val() !='')||($('#termino').val() !='')||($('#pqf').val() !=''))
     {
     $('#resultadoZ3950').hide();
     $('#detalleMARC').hide();
 	objAH=new AjaxHelper(updateAgregarBusquedaZ3950);
 	objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
     objAH.tipo="BUSCAR";
-    objAH.busqueda= $('#termino').val();
+    
+    var termino;
+    var busqueda;
+    
+    if ($('#titulo').val()) { termino="titulo"; busqueda=$('#titulo').val(); }
+    else {
+		if ($('#autor').val()) { termino="autor"; busqueda=$('#autor').val(); }
+		    else {
+				if ($('#isbn').val()) { termino="isbn"; busqueda=$('#isbn').val(); }
+				 else {
+					if ($('#issn').val()) { termino="issn"; busqueda=$('#issn').val(); }
+					else {
+						if ($('#termino').val()) { termino="termino"; busqueda=$('#termino').val(); }
+						else {
+							if ($('#pqf').val()) { termino="pqf"; busqueda=$('#pqf').val(); }
+						}
+					}
+				}
+			}
+    }
+    
+    objAH.termino= termino;
+    objAH.busqueda= busqueda;
+	
 	objAH.sendToServer();
     }
 }
@@ -100,12 +123,59 @@ $(document).ready(function() {
 <legend class="titulo_legend">[% "B&uacute;squeda Z3950" | i18n %]:</legend>
 <div class="datos_tabla_div_z3950">
     <ul>
+        <li class="item" >
+        <label for="titutlo">
+            [% "T&iacute;tulo" | i18n %]
+        </label>
+        <input type="text" id="titulo" size="20" tabindex=1>
+    </li>
+        <li class="item" >
+        <label for="autor">
+            [% "Autor" | i18n %]
+        </label>
+        <input type="text" id="autor" size="20" tabindex=2>
+    </li>
+ </ul>
+ </div>
+  <div class="datos_tabla_div_z3950">
+ <ul>
+    <li class="item" >
+        <label for="isbn">
+            [% "ISBN" | i18n %]
+        </label>
+        <input type="text" id="isbn" size="20" tabindex=3>
+    </li>
+    
+    <li class="item" >
+        <label for="issn">
+            [% "ISSN" | i18n %]
+        </label>
+        <input type="text" id="issn" size="20" tabindex=4>
+    </li>
+    
+</ul>
+</div>
+ <div class="datos_tabla_div_z3950">
+ <ul>
     <li class="item" >
         <label for="termino">
-            [% "B&uacute;squeda" | i18n %]
+            [% "B&uacute;squeda General" | i18n %]
         </label>
-        <input type="text" id="termino" size="20" tabindex=1>
+        <input type="text" id="termino" size="20" tabindex=3>
     </li>
+    
+    <li class="item" >
+        <label for="termino-pqf">
+            [% "B&uacute;squeda PQF" | i18n %]
+        </label>
+        <input type="text" id="pqf" size="20" tabindex=4>
+    </li>
+    
+</ul>
+</div>
+
+<div class="datos_tabla_div_z3950">
+<ul>
     <li class="click" >
          [% PERL %]
                                 print C4::AR::Filtros::to_Icon(

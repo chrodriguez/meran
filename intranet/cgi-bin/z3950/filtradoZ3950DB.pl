@@ -27,9 +27,11 @@ if($tipo eq "BUSCAR"){
                                                 'intranet'
                                );
 
-    my $busqueda = $obj->{'busqueda'};
 
-    my ($Message_arrayref)=C4::AR::Z3950::encolarBusquedaZ3950($busqueda);
+	my $termino = $obj->{'termino'};
+	my $busqueda = $obj->{'busqueda'};
+    
+    my ($Message_arrayref)=C4::AR::Z3950::encolarBusquedaZ3950($termino,$busqueda);
     my $infoOperacionJSON=to_json $Message_arrayref;
     C4::Auth::print_header($session);
     print $infoOperacionJSON;

@@ -38,13 +38,12 @@ my ($cola) = @_;
 my @resultados;
 
 my $servidores = C4::AR::Z3950::getServidoresZ3950;
-# my $query = new ZOOM::Query::PQF('@attr 1='.$cola->getBusqueda);
 my(@connection, @resultset);
 
 my $options = new ZOOM::Options();
    $options->option(preferredRecordSyntax => "USMARC");
 #    $options->option(charset => "UTF-8");
-   $options->option(elementSetName => "F");
+   $options->option(elementSetName => "f");
    $options->option(async => 1);
 
 #Genero la conexion a todos los servidores
@@ -54,7 +53,10 @@ foreach my $servidor (@$servidores){
     $conn->connect($servidor->getConexion);
     push(@connection,$conn);
     #Realizo la consula
-    push(@resultset,$conn->search_pqf('"'.$cola->getBusqueda.'"'));
+#    push(@resultset,$conn->search_pqf('"'.$cola->getBusqueda.'"'));
+C4::AR::Debug::debug( 'Buscamos por a : '.$cola->getBusqueda);
+push(@resultset, $conn->search(new ZOOM::Query::PQF($cola->getBusqueda)));
+
 }
 C4::AR::Debug::debug( 'Esperemos resultados a :  "'.$cola->getBusqueda.'"');
 # Network I/O.  Pass number of connections and array of connections
@@ -93,16 +95,6 @@ C4::AR::Debug::debug( "Encontrados $registros registros en ".$servidores->[$i-1]
 
                  my $raw=$registro->get("raw; charset=marc-8");
 
-#                   my $marc  = new_from_usmarc MARC::Record($raw);
-#                      $marc->encoding( 'UTF-8' );
-#                   my $isbn = $marc->subfield("020","a");
-#                   
-#                   if ($isbn){
-#                   my @isbns=split(/\s+/,$isbn);
-#                      $isbn=$isbns[0];
-#                      C4::AR::PortadasRegistros::getAllImagesByIsbn($isbn);
-#                     }
-
                  #si obtengo algun resultado creo el resultado
                 my $resultado = C4::Modelo::CatZ3950Resultado->new();
                 $resultado->setServidorId($servidores->[$i-1]->getId);
@@ -132,11 +124,12 @@ return  (@resultados);
 }
 
 sub encolarBusquedaZ3950 {
-my ($busqueda,$tipo) = @_;
+my ($termino,$busqueda) = @_;
     my $msg_object= C4::AR::Mensajes::create();
     $msg_object->{'tipo'}="INTRA";
     my $cola = C4::Modelo::CatZ3950Cola->new();
-    $cola->setBusqueda($busqueda);
+    
+    $cola->setBusqueda($termino,$busqueda);
     $cola->setCola(C4::Date::getCurrentTimestamp());
     $cola->save();
     return $msg_object;
@@ -152,6 +145,22 @@ my (@resultados)=C4::AR::Z3950::buscarEnZ3950($cola);
 
 $cola->setFin(C4::Date::getCurrentTimestamp());
 $cola->save();
+
+
+
+foreach my $resultado (@resultados) {
+	#Buscamos las imágenes
+	my $marc  = new_from_usmarc MARC::Record($resultado->getRegistro);
+       $marc->encoding( 'UTF-8' );
+    my $isbn = $marc->subfield("020","a");
+                
+   if ($isbn){
+       my @isbns=split(/\s+/,$isbn);
+       $isbn=$isbns[0];
+       C4::AR::PortadasRegistros::getAllImagesByIsbn($isbn);
+     }
+	}
+	
 }
 
 
