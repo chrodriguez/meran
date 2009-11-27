@@ -1970,6 +1970,20 @@ sub getToday{
     return (format_date($today,$dateformat));
 }
 
+sub printARRAY{
+
+    my ($array_ref) = @_;
+
+    C4::AR::Debug::debug("PRINT HASH: \n");
+
+    if($hash_ref){
+        foreach my  $value (@$array_ref) {
+                C4::AR::Debug::debug("value: $value\n");
+            }
+    }
+}
+
+
 sub printHASH{
 
     my ($hash_ref) = @_;
