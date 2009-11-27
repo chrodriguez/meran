@@ -78,10 +78,10 @@ echo "Procesando el archivo ..... Aguarde";
 for i in $(cat $1);
     do
     if [ $j -gt 1 ]; then 
-    		  	echo $i |sed 's/"//g' | sed 's/|//g'| awk -F";" '{print "GRANT " $2 " on " $1 " to '$userOPAC@localhost'; " }' >> permisos$userOPAC.sql
-    		  	echo $i |sed 's/"//g' | sed 's/|//g'| awk -F";" '{print "GRANT " $3 " on " $1 " to '$userINTRA@localhost'; " }' >> permisos$userINTRA.sql
-    		  	echo $i |sed 's/"//g' | sed 's/|//g'| awk -F";" '{print "GRANT " $4 " on " $1 " to '$userDevelop@localhost'; " }' >> permisos$userDevelop.sql
-    		  	echo $i |sed 's/"//g' | sed 's/|//g'| awk -F";" '{print "GRANT " $5 " on " $1 " to '$userAdmin@localhost'; " }' >> permisos$userAdmin.sql
+    		  	echo $i |sed 's/"//g' | sed 's/|//g'| awk -F";" '{print "GRANT on " $1 $2" to '$userOPAC@localhost'; " }' >> permisos$userOPAC.sql
+    		  	echo $i |sed 's/"//g' | sed 's/|//g'| awk -F";" '{print "GRANT on " $1 $3" to '$userINTRA@localhost'; " }' >> permisos$userINTRA.sql
+    		  	echo $i |sed 's/"//g' | sed 's/|//g'| awk -F";" '{print "GRANT on " $1 $4" to '$userDevelop@localhost'; " }' >> permisos$userDevelop.sql
+    		  	echo $i |sed 's/"//g' | sed 's/|//g'| awk -F";" '{print "GRANT on " $1 $5" to '$userAdmin@localhost'; " }' >> permisos$userAdmin.sql
 		   else
 			  let j+=1;
 		   fi
