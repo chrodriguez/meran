@@ -13,6 +13,7 @@ __PACKAGE__->meta->setup(
 #         libopac          => { type => 'character', length => 255, not_null => 1 },
         repeatable              => { type => 'integer', default => '0', not_null => 1 },
         descripcion             => { type => 'character', length => 255, not_null => 1 },
+        nivel                   => { type => 'character', length => 255, not_null => 1 },
         mandatory               => { type => 'integer', default => '0', not_null => 1 },
         indicador_primario      => { type => 'character', length => 255, default => '0', not_null => 1 },
         indicador_secundario    => { type => 'character', length => 255, default => '0', not_null => 1 },
@@ -24,7 +25,7 @@ __PACKAGE__->meta->setup(
 
 sub getCampo{
     my ($self) = shift;
-    return ($self->campo);
+    return (C4::AR::Utilidades::trim($self->campo));
 }
 
 sub setCampo{
@@ -35,7 +36,7 @@ sub setCampo{
 
 sub getLiblibrarian{
     my ($self) = shift;
-    return ($self->liblibrarian);
+    return (C4::AR::Utilidades::trim($self->liblibrarian));
 }
 
 sub setLiblibrarian{
@@ -74,6 +75,11 @@ sub getIndicadorSecundario{
 #     $self->opac($opac);
 # }
 
+sub getNivel{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->nivel));
+}
+
 sub getRepeatable{
     my ($self) = shift;
     return ($self->repeatable);
@@ -87,7 +93,7 @@ sub setRepeatable{
 
 sub getDescripcion{
     my ($self) = shift;
-    return ($self->descripcion);
+    return (C4::AR::Utilidades::trim($self->descripcion));
 }
 
 sub setDescripcion{

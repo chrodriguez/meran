@@ -38,7 +38,7 @@ __PACKAGE__->meta->setup(
 sub getCampo{
     my ($self) = shift;
 
-    return ($self->campo);
+    return (C4::AR::Utilidades::trim($self->campo));
 }
 
 sub setCampo{
@@ -51,7 +51,7 @@ sub setCampo{
 sub getSubcampo{
     my ($self) = shift;
 
-    return ($self->subcampo);
+    return (C4::AR::Utilidades::trim($self->subcampo));
 }
 
 sub setSubcampo{
@@ -73,7 +73,7 @@ sub setObligatorio{
 
 sub getLiblibrarian{
     my ($self) = shift;
-    return ($self->liblibrarian);
+    return (C4::AR::Utilidades::trim($self->liblibrarian));
 }
 
 sub setLiblibrarian{
@@ -89,7 +89,7 @@ sub getRepetible{
 
 sub getDescripcion{
     my ($self) = shift;
-    return ($self->descripcion);
+    return (C4::AR::Utilidades::trim($self->descripcion));
 }
 
 sub setDescripcion{

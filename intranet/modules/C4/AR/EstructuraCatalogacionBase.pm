@@ -23,7 +23,7 @@ use vars qw(@EXPORT @ISA);
 );
 
 
-=item sub getCamposXLike
+=head2 sub getCamposXLike
     Busca un campo like..., segun nivel indicado
 =cut
 sub getCamposXLike{
@@ -43,7 +43,7 @@ sub getCamposXLike{
     return($db_campos_MARC);
 }
 
-=item sub getSubCampos
+=head2 sub getSubCampos
     Obtiene los subcampos MARC para el nivel indicado
 =cut
 sub getSubCampos{
@@ -59,7 +59,7 @@ sub getSubCampos{
     return($db_campos_MARC);
 }
 
-=item sub getSubCamposLike
+=head2 sub getSubCamposLike
     Obtiene los subcampos haciendo busqueda like, para el nivel indicado
 =cut
 sub getSubCamposLike{
@@ -80,8 +80,29 @@ sub getSubCamposLike{
 }
 
 
-=item sub getEstructuraBaseFromCampoSubCampo
-    Esta funcion retorna la estructura base de MARC segun un campo y subcampo
+=head2 sub getEstructuraBaseFromCampo
+    Esta funcion retorna la estructura BASE de MARC segun un campo
+=cut
+sub getEstructuraBaseFromCampo{
+    my ($campo) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( campo      => { eq => $campo } ) );
+
+    my $estructura_base = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc(
+                                                                                        query    => \@filtros,
+                                                                       );
+
+    if(scalar(@$estructura_base) > 0){  
+        return $estructura_base->[0];
+    }else{
+        return 0;
+    }
+}
+
+=head2 sub getEstructuraBaseFromCampoSubCampo
+    Esta funcion retorna la estructura BASE de MARC segun un campo y subcampo
 =cut
 sub getEstructuraBaseFromCampoSubCampo{
     my ($campo, $subcampo) = @_;
@@ -97,6 +118,29 @@ sub getEstructuraBaseFromCampoSubCampo{
 
     if(scalar(@$estructura_base) > 0){  
         return $estructura_base->[0];
+    }else{
+        return 0;
+    }
+}
+
+
+=head2 sub getNivelFromEstructuraBaseByCampo
+    Esta funcion retorna el nivel de la estructura BASE de MARC segun un campo
+=cut
+sub getNivelFromEstructuraBaseByCampo{
+    my ($campo) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( campo  => { eq => $campo } ) );
+
+    my $estructura_base = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc(
+                                                                                        select  => ['nivel']
+                                                                                        query   => \@filtros,
+                                                                       );
+
+    if(scalar(@$estructura_base) > 0){  
+        return $estructura_base->[0]->getNivel;
     }else{
         return 0;
     }
