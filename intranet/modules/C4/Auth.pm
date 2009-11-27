@@ -480,7 +480,6 @@ sub checkauth {
     my $loggedin = 0;
     my %info;
     my ($session) = CGI::Session->load();
-    C4::AR::Debug::debug("checkauth=> DUMP DESPUES DE LOAD SESSION: ".$session->dump());
     my ($userid, $cookie, $sessionID, $flags);
 
     #verifica que no haya sesiones "colgadas", las borra de la base
@@ -495,7 +494,6 @@ sub checkauth {
     }else{
     #NO EXPIRO LA SESION
 
-C4::AR::Debug::debug($session->dump);
 
         $sessionID=$session->param('sessionID');
 

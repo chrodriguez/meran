@@ -20,7 +20,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 
 my $obj=$input->param('obj');
-
+my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token');
 if($obj){
     $obj= C4::AR::Utilidades::from_json_ISO($obj);
 }else{
@@ -78,7 +78,7 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 }
 
 
-$t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
+$t_params->{'paginador'} = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
 #se arma el arreglo con la info para mostrar en el template
 $obj->{'cantidad'}= $cantidad;
 $obj->{'nro_socio'}= $session->param('nro_socio');

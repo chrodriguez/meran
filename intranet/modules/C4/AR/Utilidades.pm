@@ -2601,4 +2601,73 @@ sub md5ToSHA_B64_256 {
     }
 }
 
+
+sub crearPaginadorOPAC{
+
+    my ($cantResult, $cantRenglones, $pagActual, $url, $t_params)=@_;
+
+    my ($paginador, $cantPaginas)=C4::AR::Utilidades::armarPaginasOPAC($pagActual, $cantResult, $cantRenglones,$url,$t_params);
+    return $paginador;
+
+}
+sub armarPaginasOPAC{
+#@actual, es la pagina seleccionada por el usuario
+#@cantRegistros, cant de registros que se van a paginar
+#@$cantRenglones, cantidad de renglones maximo a mostrar
+#@$t_params, para obtener el path para las imagenes
+
+# FIXME falta pasar las imagenes al estilo
+    my ($actual, $cantRegistros, $cantRenglones, $url, $t_params)=@_;
+    my $page_position_string = index $url,"&page=";
+    my $url_length = length $url;
+    $url = substr($url,0,$page_position_string);
+    my $pagAMostrar=C4::AR::Preferencias->getValorPreferencia("paginas") || 10;
+    my $numBloq=floor($actual / $pagAMostrar);
+    my $limInf=($numBloq * $pagAMostrar);
+    my $limSup=$limInf + $pagAMostrar;
+    my $previous_text = "« ".C4::AR::Filtros::i18n('Anterior');
+    my $next_text = C4::AR::Filtros::i18n('Siguiente')." »";
+    if($limInf == 0){
+        $limInf= 1;
+        $limSup=$limInf + $pagAMostrar -1;
+    }
+    my $totalPaginas = ceil($cantRegistros/$cantRenglones);
+
+    my $themelang= $t_params->{'themelang'};
+
+    my $paginador= "<div class='pagination'><div id='content_paginator' align='center' >";
+    my $class="paginador";
+
+    if($actual > 1){
+        #a la primer pagina
+        my $ant= $actual-1;
+        $paginador .= "<a href='".$url."&page=".$ant."' class='previous' title='".$previous_text."'> ".$previous_text."</a>";
+
+    }else{
+        $paginador .= "<span class='disabled' title='".$previous_text."'>".$previous_text."</span>";
+    }
+
+    for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
+        if($actual == $i){
+            $class="'current'";
+        }else{
+            $class="'pagination'";
+        }
+
+        $paginador .= "<a href='".$url."&page=".$i."' class=".$class."> ".$i." </a>";
+    }
+
+    if($actual >= 1 && ($actual < $totalPaginas)){
+        my $sig= $actual+1;
+        $paginador .= "<a href='".$url."&page=".$sig."' class='next' title='".$next_text."'>".$next_text."</a>";
+
+    }
+    $paginador .= "</div></div>"; 
+
+    if ($totalPaginas <= 1){
+      $paginador="";
+    }
+    return($paginador, $totalPaginas);
+}
+
 1;
