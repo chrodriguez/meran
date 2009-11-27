@@ -94,8 +94,10 @@ sub generar_marc_record {
     my $marc = MARC::Record->new();
     
     for(my $i=0; $i< scalar(@result); $i++){
-        my $field = MARC::Field->new(@result[$i]->{'campo'},'','',@result[$i]->{'subcampo'} => @result[$i]->{'dato'});
-        $marc->append_fields($field);
+		if (@result[$i]->{'dato'}){
+			my $field = MARC::Field->new(@result[$i]->{'campo'},'','',@result[$i]->{'subcampo'} => @result[$i]->{'dato'});
+			$marc->add_fields($field);
+		}
     }
 
     return $marc;
