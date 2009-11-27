@@ -1273,29 +1273,29 @@ ver archivo update_catalogo.sql
  CREATE TABLE `cat_registro_marc_n1` (
 `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `marc_record` TEXT NOT NULL
-) ENGINE = InnoDB 
+) ENGINE = InnoDB; 
 
 
  CREATE TABLE `cat_registro_marc_n2` (
 `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `marc_record` TEXT NOT NULL ,
 `id1` INT( 11 ) NOT NULL
-) ENGINE = InnoDB 
+) ENGINE = InnoDB; 
 
  CREATE TABLE `cat_registro_marc_n3` (
 `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `marc_record` TEXT NOT NULL ,
 `id1` INT( 11 ) NOT NULL ,
 `id2` INT( 11 ) NOT NULL
-) ENGINE = Innodb 
+) ENGINE = Innodb; 
 
 
 ALTER TABLE `cat_registro_marc_n3`
   ADD CONSTRAINT `cat_registro_marc_n3_n1` FOREIGN KEY (`id1`) REFERENCES `cat_registro_marc_n1` (`id`),
-  ADD CONSTRAINT `cat_registro_marc_n3_n2` FOREIGN KEY (`id2`) REFERENCES `cat_registro_marc_n2` (`id`)
+  ADD CONSTRAINT `cat_registro_marc_n3_n2` FOREIGN KEY (`id2`) REFERENCES `cat_registro_marc_n2` (`id`);
 
 
-ALTER TABLE `cat_registro_marc_n2`  ADD CONSTRAINT `cat_registro_marc_n2_n1` FOREIGN KEY ( `id1` ) REFERENCES `cat_registro_marc_n1` ( `id` )
+ALTER TABLE `cat_registro_marc_n2`  ADD CONSTRAINT `cat_registro_marc_n2_n1` FOREIGN KEY ( `id1` ) REFERENCES `cat_registro_marc_n1` ( `id` );
 
 --27/11/09
 DELETE FROM `cat_nivel2_repetible` WHERE dato = '';
