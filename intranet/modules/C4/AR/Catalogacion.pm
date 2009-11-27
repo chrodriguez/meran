@@ -69,7 +69,7 @@ sub meran_nivel1_to_meran{
         if (C4::AR::Utilidades::existeInArray($infoNivel1->{'campo'},@autorizados)){
         my $field = MARC::Field->new($infoNivel1->{'campo'}, $infoNivel1->{'indetificador_1'}, $infoNivel1->{'indetificador_2'});
         foreach my $subcampo (@$infoNivel1->{'subcampos'}){
-                $field->add_subfield($subcampo->{'subcampo'}=>$subcampo->{'dato'});
+                $field->add_subfield($subcampo->{'subcampo'}->$subcampo->{'dato'});
             }
         }
     }
