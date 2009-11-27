@@ -145,3 +145,19 @@ sub getNivelFromEstructuraBaseByCampo{
         return 0;
     }
 }
+
+=head2 sub getCampos
+    Obtiene los campos MARC para el nivel indicado desde la estructura de campos marc
+=cut
+sub getCampos{
+    my ($nivel) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( nivel => { eq => $nivel } ) );
+
+    my $db_campos_MARC = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                query => \@filtros,
+                                                            );
+    return($db_campos_MARC);
+}
