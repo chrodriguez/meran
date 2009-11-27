@@ -53,7 +53,7 @@ C4::AR::Catalogacion - Funciones que manipulan datos del catálogo
 sub meran_nivel1_to_meran 
 
 Toma una estructura que proviene de la interface de catalogación de meran con un formato establecido y genera un Marc:Record que se va a enviar para guardar.
-El formato es el siguiente [dato], cada dato es un hash con los siguientes campos (campo->'950',identificador_1->'1', indentificador2->'2',[subcampo]) y cada subcampo es un hash con (subcampo->'a',dato->'Mikaela es del rojo')
+El formato es el siguiente [dato], cada dato es un hash con los siguientes campos (campo->'950',identificador_1->'1', indentificador2->'2',[subcampo]) y cada subcampo es un hash con ('subcampo'->'contenido, ej 'a'->'Mikaela es del rojo')
 =cut
 sub meran_nivel1_to_meran{
     my ($data_hash)=@_;
@@ -69,7 +69,7 @@ sub meran_nivel1_to_meran{
         if (C4::AR::Utilidades::existeInArray($infoNivel1->{'campo'},@autorizados)){
         my $field = MARC::Field->new($infoNivel1->{'campo'}, $infoNivel1->{'indetificador_1'}, $infoNivel1->{'indetificador_2'});
         foreach my $subcampo (@$infoNivel1->{'subcampos'}){
-                $field->add_subfield($subcampo->{'subcampo'},$subcampo->{'dato'});
+                $field->add_subfield($subcampo->{'subcampo'}=>$subcampo->{'dato'});
             }
         }
     }
