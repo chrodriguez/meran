@@ -47,14 +47,14 @@ sub t_guardarNivel1 {
     if(!$msg_object->{'error'}){
     #No hay error
         my  $catNivel1;
-        $catNivel1= C4::Modelo::CatRegistroMarcN1->new();
+        
         my $db= $catNivel1->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
         my $marc_record=C4::AR::Catalogacion::meran_nivel1_to_meran($params);
         eval {
-            $catNivel1->setMarcRecord($params);  
+            $catNivel1= C4::Modelo::CatRegistroMarcN1->new(marc_record => $params);  
             $id1 = $catNivel1->getId;
             $db->commit;
             #se cambio el permiso con exito
