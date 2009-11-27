@@ -135,7 +135,7 @@ sub getNivelFromEstructuraBaseByCampo{
     push(@filtros, ( campo  => { eq => $campo } ) );
 
     my $estructura_base = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc(
-                                                                                        select  => ['nivel']
+                                                                                        select  => ['nivel'],
                                                                                         query   => \@filtros,
                                                                        );
 
