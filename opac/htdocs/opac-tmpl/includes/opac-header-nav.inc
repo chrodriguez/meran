@@ -67,8 +67,6 @@
                           </a>
                       </li>
                   [% END %]
-                  <li><a href="#">[% 'Accesos' | i18n %]</a></li>
-                  <li><a href="#">[% 'Accesos' | i18n %]</a></li>                                    
                 </ul>
               <!--[if lte IE 6]></td></tr></table></a><![endif]-->
             </li>
