@@ -13,7 +13,7 @@
                 <a href="/cgi-bin/koha/opac-main.pl?token=[% token %]" title="[% 'Ir a la p&aacute;gina de inicio' | i18n %]">[% 'Inicio' | i18n %]</a>
             </li>
             <li>
-                <a href="/cgi-bin/koha/opac-about.pl?token=[% token %]l" title="[% 'Sepa qui&eacute;nes somos' | i18n %]">[% 'Acerca de' | i18n %]</a>
+                <a href="/cgi-bin/koha/opac-about.pl?token=[% token %]" title="[% 'Sepa qui&eacute;nes somos' | i18n %]">[% 'Acerca de' | i18n %]</a>
             </li>
             <li>
                 <a href="/cgi-bin/koha/opac-contact.pl?token=[% token %]" title="[% 'P&oacute;ngase en contacto con nosotros' | i18n %]">[% 'Contacto' | i18n %]</a>
@@ -27,7 +27,7 @@
         <div class="sitemessage">
           <h1>&bull; [% ui.getNombre %]</h1>
           <h2>[% ui.getDireccion %]</h2>
-          <h3><a href="#">&rsaquo;&rsaquo;&nbsp;[% 'M&aacute;s Informaci&oacute;n De La Unidad' | i18n %]</a></h3>
+          <h3><a href="/cgi-bin/koha/opac-ui_info.pl?token=[% token %]">&rsaquo;&rsaquo;&nbsp;[% 'M&aacute;s Informaci&oacute;n De La Unidad' | i18n %]</a></h3>
         </div>
       </div>
       <!-- A.3 HEADER BOTTOM -->
