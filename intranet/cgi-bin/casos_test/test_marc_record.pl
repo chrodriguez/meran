@@ -16,9 +16,9 @@ my $session = CGI::Session->new();
 my $dbh   = C4::Context->dbh;
 use MARC::Record;
 
-my $sth = $dbh->prepare(" SELECT registro_marc
-                        FROM indice_busqueda n1r
-                        WHERE (id = ?) ");
+my $sth = $dbh->prepare("   SELECT registro_marc
+                            FROM indice_busqueda n1r
+                            WHERE (id = ?) ");
 $sth->execute(1);
 my $marcblob = $sth->fetchrow;
     

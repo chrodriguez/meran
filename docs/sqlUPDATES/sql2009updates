@@ -1297,3 +1297,7 @@ ALTER TABLE `cat_registro_marc_n3`
 
 ALTER TABLE `cat_registro_marc_n2`  ADD CONSTRAINT `cat_registro_marc_n2_n1` FOREIGN KEY ( `id1` ) REFERENCES `cat_registro_marc_n1` ( `id` )
 
+--27/11/09
+DELETE FROM `cat_nivel2_repetible` WHERE dato = '';
+DELETE FROM `cat_nivel1_repetible` WHERE dato = '';
+DELETE FROM `cat_nivel3_repetible` WHERE dato = '';
