@@ -61,14 +61,21 @@ sub meran_nivel1_to_meran{
     my $infoArrayNivel1 = $data_hash->{'infoArrayNivel1'};
     my $marc_record=MARC::Record->new();
     my $campos_autorizados=C4::AR::EstructuraCatalogacionBase::getCampos(1);
+    my @autorizados;
+    foreach my $autorizado (@$campos_autorizados){
+        push (@autorizados, $autorizado->getCampo());
+    }
+    
     foreach my $infoNivel1 (@$infoArrayNivel1){
+        if (C4::AR::Utilidades::existeInArray($infoNivel1->{'campo'},@autorizados)){
         my $field = MARC::Field->new($infoNivel1->{'campo'}, $infoNivel1->{'indetificador_1'}, $infoNivel1->{'indetificador_2'});
         foreach my $subcampo (@$infoNivel1->{'subcampos'}){
                 $field->add_subfield($subcampo->{'subcampo'},$subcampo->{'dato'});
             }
+        }
     }
     return($marc_record);
-    }
+}
 
 =head2
 sub meran_nivel2_to_meran

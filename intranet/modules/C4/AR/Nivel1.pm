@@ -33,7 +33,49 @@ C4::AR::Nivel1 - Funciones que manipulan datos del catálogo de nivel 1
 =cut
 
 =head2
+sub t_guardarNivel1
+
+    Esta funcion se invoca desde el template para guardar los datos de nivel1, se apoya en una funcion de Catalogacion.pm que lo que hace es transformar los datos que llegan en un objeto MARC::Record que luego va a insertarse en la base de datos a traves de un objeto CatRegistroMarcN1.
+  guardar datos de nivel1
 =cut
+sub t_guardarNivel1 {
+    my($params)=@_;
+    my $msg_object= C4::AR::Mensajes::create();
+    my $id1;
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $catNivel1;
+        $catNivel1= C4::Modelo::CatRegistroMarcN1->new();
+        my $db= $catNivel1->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+        my $marc_record=meran_nivel1_to_meran($params);
+        eval {
+            $catNivel1->agregar($params);  
+            $id1 = $catNivel1->getId1;
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$catNivel1->getId1]} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B427',"INTRA");
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U371', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object, $id1);
+}
 
 
 #==ACA FINALIZA LA NUEVA ESTRUCTURA***************************************************************
@@ -131,48 +173,6 @@ sub getNivel1RepetibleFromId1Repetible{
 
 
 
-#=======================================================================ABM Nivel 1=======================================================
-=item sub t_guardarNivel1
-	guardar datos de nivel1
-=cut
-sub t_guardarNivel1 {
-    my($params)=@_;
-    my $msg_object= C4::AR::Mensajes::create();
-    my $id1;
-
-    if(!$msg_object->{'error'}){
-    #No hay error
-        my  $catNivel1;
-        $catNivel1= C4::Modelo::CatRegistroMarcN1->new();
-        my $db= $catNivel1->db;
-        # enable transactions, if possible
-        $db->{connect_options}->{AutoCommit} = 0;
-        $db->begin_work;
-        my $marc_record=meran_nivel1_to_meran($params);
-        eval {
-            $catNivel1->agregar($params);  
-            $id1 = $catNivel1->getId1;
-            $db->commit;
-            #se cambio el permiso con exito
-            $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$catNivel1->getId1]} ) ;
-        };
-    
-        if ($@){
-            #Se loguea error de Base de Datos
-            &C4::AR::Mensajes::printErrorDB($@, 'B427',"INTRA");
-            $db->rollback;
-            #Se setea error para el usuario
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U371', 'params' => []} ) ;
-        }
-
-        $db->{connect_options}->{AutoCommit} = 1;
-
-    }
-
-    return ($msg_object, $id1);
-}
 
 =item sub t_modificarNivel1
     Modifica el nivel 1 pasado por parametro

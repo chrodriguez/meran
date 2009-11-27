@@ -306,6 +306,7 @@ sub in_array{
     return 0;
 }
 
+
 =item
 Esta funcion reemplaza en string lo indicado por cadena_a_reemplazar por cadena_reemplazo, con expresiones regulares
 tener en cuenta escapar algunos caracteres como <\label> => <\/label>
@@ -2063,8 +2064,10 @@ sub arrayClaveValorToJSONString{
 }
 
 
-=item sub existeInArray
-    Esta funcion busca en el arreglo el string pasado por parametro
+=head2
+sub existeInArray
+ 
+   Esta funcion busca en el arreglo el string, ambos pasados por parametro y devuelve 1 o 0
 =cut
 sub existeInArray{
 

@@ -146,10 +146,12 @@ sub getNivelFromEstructuraBaseByCampo{
     }
 }
 
-=head2 sub getCampos
-    Obtiene los campos MARC para el nivel indicado desde la estructura de campos marc
+=head2 
+sub getCamposByNivel
+
+    Obtiene los campos MARC para el nivel indicado desde la estructura de campos marc, reibe un numero que identifica el nivel y devuelve la referencia a un arrego de objetos C4::Modelo::PrefEstructuraCampoMarc.
 =cut
-sub getCampos{
+sub getCamposByNivel{
     my ($nivel) = @_;
 
     my @filtros;
