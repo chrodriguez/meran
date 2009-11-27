@@ -14,9 +14,6 @@ use vars qw(@EXPORT @ISA);
 	&getUnititle
 );
 
-
-
-
 =head1 NAME
 
 C4::AR::Nivel1 - Funciones que manipulan datos del catálogo de nivel 1
@@ -34,6 +31,12 @@ C4::AR::Nivel1 - Funciones que manipulan datos del catálogo de nivel 1
 =over 2
 
 =cut
+
+=head2
+=cut
+
+
+#==ACA FINALIZA LA NUEVA ESTRUCTURA***************************************************************
 
 
 sub getAutoresAdicionales(){
@@ -134,20 +137,18 @@ sub getNivel1RepetibleFromId1Repetible{
 =cut
 sub t_guardarNivel1 {
     my($params)=@_;
-
-## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object= C4::AR::Mensajes::create();
     my $id1;
 
     if(!$msg_object->{'error'}){
     #No hay error
         my  $catNivel1;
-        $catNivel1= C4::Modelo::CatNivel1->new();
+        $catNivel1= C4::Modelo::CatRegistroMarcN1->new();
         my $db= $catNivel1->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
-         $db->begin_work;
-    
+        $db->begin_work;
+        my $marc_record=meran_nivel1_to_meran($params);
         eval {
             $catNivel1->agregar($params);  
             $id1 = $catNivel1->getId1;
