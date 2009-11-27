@@ -65,7 +65,6 @@ sub meran_nivel1_to_meran{
     foreach my $autorizado (@$campos_autorizados){
         push (@autorizados, $autorizado->getCampo());
     }
-    
     foreach my $infoNivel1 (@$infoArrayNivel1){
         if (C4::AR::Utilidades::existeInArray($infoNivel1->{'campo'},@autorizados)){
         my $field = MARC::Field->new($infoNivel1->{'campo'}, $infoNivel1->{'indetificador_1'}, $infoNivel1->{'indetificador_2'});

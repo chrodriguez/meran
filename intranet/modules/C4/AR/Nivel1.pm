@@ -52,10 +52,10 @@ sub t_guardarNivel1 {
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
-        my $marc_record=meran_nivel1_to_meran($params);
+        my $marc_record=C4::AR::Catalogacion::meran_nivel1_to_meran($params);
         eval {
-            $catNivel1->agregar($params);  
-            $id1 = $catNivel1->getId1;
+            $catNivel1->setMarcRecord($params);  
+            $id1 = $catNivel1->getId;
             $db->commit;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
