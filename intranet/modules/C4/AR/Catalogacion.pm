@@ -62,15 +62,28 @@ sub meran_nivel1_to_meran{
     my $marc_record=MARC::Record->new();
     my $campos_autorizados=C4::AR::EstructuraCatalogacionBase::getCamposByNivel(1);
     my @autorizados;
+    my @subcampos;
     foreach my $autorizado (@$campos_autorizados){
         push (@autorizados, $autorizado->getCampo());
     }
     foreach my $infoNivel1 (@$infoArrayNivel1){
         if (C4::AR::Utilidades::existeInArray($infoNivel1->{'campo'},@autorizados)){
-        my $field = MARC::Field->new($infoNivel1->{'campo'}, $infoNivel1->{'indetificador_1'}, $infoNivel1->{'indetificador_2'});
-        foreach my $subcampo (@$infoNivel1->{'subcampos'}){
-                $field->add_subfield($subcampo->{'subcampo'}->$subcampo->{'dato'});
+        
+
+#         C4::AR::Debug::debug("laputa".@aux);
+#           foreach my $subcampo (@$infoNivel1->{'subcampos_array'}){
+        for(my $i=0;$i<scalar($infoNivel1->{'subcampos_array'});$i++){
+
+                my %pepe=($infoNivel1->{'subcampos_array'})[$i];
+                C4::AR::Debug::debug("subcampo".$pepe->{'subcampo'});
+                C4::AR::Debug::debug("subcampo".$pepe->{'dato'});
+#                 C4::AR::Debug::debug("subcampo".@$subcampo[0]);
+#                 my $subcampo_auxiliar="'".$subcampo->{'subcampo'}."'".'=>'."'".$subcampo->{'dato'}."'";
+#                 push (@subcampos,$subcampo_auxiliar);
+#                 $field->add_subfield($subcampo->{'subcampo'}->$subcampo->{'dato'});
             }
+        my $field = MARC::Field->new($infoNivel1->{'campo'}, $infoNivel1->{'indetificador_1'}, $infoNivel1->{'indetificador_2'},@subcampos);
+        
         }
     }
     return($marc_record);

@@ -1976,7 +1976,7 @@ sub printARRAY{
 
     C4::AR::Debug::debug("PRINT HASH: \n");
 
-    if($hash_ref){
+    if($array_ref){
         foreach my  $value (@$array_ref) {
                 C4::AR::Debug::debug("value: $value\n");
             }
