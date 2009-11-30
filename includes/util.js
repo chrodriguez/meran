@@ -325,3 +325,9 @@ function copy(o) {
 
     return newO;
 }
+
+function log(string){
+    if(window.console){
+        window.console.log(string);
+    }
+}

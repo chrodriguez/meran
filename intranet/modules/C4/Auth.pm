@@ -542,14 +542,15 @@ sub checkauth {
                 $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
                 redirectTo('/cgi-bin/koha/auth.pl');
                 #EXIT
-            }elsif ($tokenDB ne $token){
-                C4::AR::Debug::debug("Token <> o no existe, posible CSRF");
-                C4::AR::Debug::debug("tokenDB: ".$tokenDB);
-                C4::AR::Debug::debug("query->param('token'): ".$query->param('token'));
-			    $session->param('codMsg', 'U354');
-			    $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
-			    redirectTo('/cgi-bin/koha/informacion.pl');
-			    #EXIT
+# TODO ver esta mierda del TOKEN
+# #             }elsif ($tokenDB ne $token){
+#                 C4::AR::Debug::debug("Token <> o no existe, posible CSRF");
+#                 C4::AR::Debug::debug("tokenDB: ".$tokenDB);
+#                 C4::AR::Debug::debug("query->param('token'): ".$query->param('token'));
+# 			    $session->param('codMsg', 'U354');
+# 			    $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
+# 			    redirectTo('/cgi-bin/koha/informacion.pl');
+# 			    #EXIT
             } elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
 #                 $session->_ip_matches probar
     #              } elsif ($ip ne '127.0.0.2') {

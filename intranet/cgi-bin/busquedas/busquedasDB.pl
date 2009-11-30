@@ -19,7 +19,10 @@ my ($template, $session, $t_params) = get_template_and_user ({
 
 my $authnotrequired= 0;
 my $obj=$input->param('obj');
+
+
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
+
 my $start = [ Time::HiRes::gettimeofday( ) ]; #se toma el tiempo de inicio de la búsqueda
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 my $dateformat = C4::Date::get_date_format();

@@ -59,32 +59,69 @@ sub meran_nivel1_to_meran{
     my ($data_hash)=@_;
     my @arrayNivel1;
     my $infoArrayNivel1 = $data_hash->{'infoArrayNivel1'};
-    my $marc_record=MARC::Record->new();
+    my $marc_record = MARC::Record->new();
+
+
+    my $cant_campos = scalar(@$infoArrayNivel1);
+    C4::AR::Debug::debug("infoArrayNivel1 => ".scalar(@$infoArrayNivel1));
+
     my $campos_autorizados=C4::AR::EstructuraCatalogacionBase::getCamposByNivel(1);
     my @autorizados;
     my @subcampos;
     foreach my $autorizado (@$campos_autorizados){
         push (@autorizados, $autorizado->getCampo());
     }
-    foreach my $infoNivel1 (@$infoArrayNivel1){
-        if (C4::AR::Utilidades::existeInArray($infoNivel1->{'campo'},@autorizados)){
+
+#     foreach my $s (@$infoArrayNivel1->{'subcampos_array'}){
+    for (my $i=0;$i<$cant_campos;$i++){
+#         my $infoNivel1 = $s;
+        my %hash_campos = $infoArrayNivel1->[$i];
+        my $campo = $infoArrayNivel1->[$i]->{'campo'};
+        my @subcampos_array = $infoArrayNivel1->[$i]->{'subcampos_array'};
+        my $subcampos_hash = $infoArrayNivel1->[$i]->{'subcampos_hash'};
+#         my $subcampos_hash2 = $infoArrayNivel1->[$i]->{'subcampos_hash2'};
+
+# C4::AR::Utilidades::printHASH($subcampos_hash);
+C4::AR::Utilidades::printHASH($subcampos_hash);
+C4::AR::Debug::debug("cant subcampos ???????????????????????????????? ".scalar(@$infoArrayNivel1->[$i]->{'subcampos_array'}));
+
+
+# C4::AR::Debug::debug("que es?: ".$infoArrayNivel1->[$i]);
+# C4::AR::Utilidades::printHASH(\%hash_campos);
+
+        my $cant_subcampos = scalar(@subcampos_array);
+        
+        C4::AR::Debug::debug("campo ".$campo);
+        C4::AR::Debug::debug("cant. subcampos ".$cant_subcampos);
+
+#         if (C4::AR::Utilidades::existeInArray($campo,@autorizados)){
         
 
 #         C4::AR::Debug::debug("laputa".@aux);
 #           foreach my $subcampo (@$infoNivel1->{'subcampos_array'}){
-        for(my $i=0;$i<scalar($infoNivel1->{'subcampos_array'});$i++){
+            for(my $j=0;$j<$cant_subcampos;$j++){
 
-                my %pepe=($infoNivel1->{'subcampos_array'})[$i];
-#                 C4::AR::Debug::debug("subcampo".@$subcampo[0]);
-#                 my $subcampo_auxiliar="'".$subcampo->{'subcampo'}."'".'=>'."'".$subcampo->{'dato'}."'";
-#                 push (@subcampos,$subcampo_auxiliar);
-#                 $field->add_subfield($subcampo->{'subcampo'}->$subcampo->{'dato'});
+                my %hash = @subcampos_array[$j];
+                C4::AR::Debug::debug("subcampos_array ".@subcampos_array[$j]);
+                my $subcampo = $hash{'subcampo'};
+                my $dato = $hash{'dato'};
+                C4::AR::Debug::debug("subcampo ".$subcampo);
+                C4::AR::Debug::debug("dato ".$dato);
+# 
+#                 my %pepe=($infoNivel1->{'subcampos_array'})[$i];
+#                 C4::AR::Debug::debug("subcampo".$pepe->{'subcampo'});
+#                 C4::AR::Debug::debug("subcampo".$pepe->{'dato'});
+# #                 C4::AR::Debug::debug("subcampo".@$subcampo[0]);
+# #                 my $subcampo_auxiliar="'".$subcampo->{'subcampo'}."'".'=>'."'".$subcampo->{'dato'}."'";
+# #                 push (@subcampos,$subcampo_auxiliar);
+# #                 $field->add_subfield($subcampo->{'subcampo'}->$subcampo->{'dato'});
             }
-        my $field = MARC::Field->new($infoNivel1->{'campo'}, $infoNivel1->{'indetificador_1'}, $infoNivel1->{'indetificador_2'},@subcampos);
+#         my $field = MARC::Field->new($infoNivel1->{'campo'}, $infoNivel1->{'indetificador_1'}, $infoNivel1->{'indetificador_2'},@subcampos);
         
-        }
+#         }
     }
-    return($marc_record);
+
+#     return($marc_record);
 }
 
 =head2
