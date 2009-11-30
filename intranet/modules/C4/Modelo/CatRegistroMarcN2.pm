@@ -25,6 +25,58 @@ __PACKAGE__->meta->setup(
 );
 
 
+sub getId2{
+    my ($self)  = shift;
+
+    return $self->id;
+}
+
+sub getId1{
+    my ($self)  = shift;
+
+    return $self->id1;
+}
+
+sub setId1{
+    my ($self)  = shift;
+    my ($id1)   = @_;
+
+    $self->id1($id1);
+}
+
+sub getMarcRecord{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->marc_record));
+}
+
+sub setMarcRecord{
+    my ($self)          = shift;
+    my ($marc_record)   = @_;
+
+    $self->marc_record($marc_record);
+}
+
+sub agregar{
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    $self->setId1($params->{'id1'});    
+    $self->setMarcRecord($params->{'marc_record'});
+
+    $self->save();
+}
+
+# sub getTitulo{
+#     my ($self)      = shift;
+#     
+#     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+#     
+# #     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a")); 
+# 
+#     return $marc_record->subfield("245","a");
+# }
+
+
 
 1;
 

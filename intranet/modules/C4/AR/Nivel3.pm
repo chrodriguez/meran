@@ -234,7 +234,7 @@ sub detalleCompletoINTRA{
 	my ($id1, $t_params)=@_;
 	
 	#recupero el nivel1 segun el id1 pasado por parametro
-	my $nivel1= &C4::AR::Nivel1::getNivel1FromId1($id1);
+	my $nivel1 = &C4::AR::Nivel1::getNivel1FromId1($id1);
 	#recupero todos los nivel2 segun el id1 pasado por parametro
 	my $nivel2_array_ref= &C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
 
@@ -247,9 +247,9 @@ sub detalleCompletoINTRA{
 		push(@nivel2, $hash_nivel2);
 	}
 
-	$t_params->{'nivel1'}= $nivel1->toMARC,
-	$t_params->{'id1'}	  = $id1;
-	$t_params->{'nivel2'}= \@nivel2,
+	$t_params->{'nivel1'}   = $nivel1->toMARC,
+	$t_params->{'id1'}	    = $id1;
+	$t_params->{'nivel2'}   = \@nivel2,
 	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
 	$t_params->{'circularDesdeDetalleDelRegistro'}= C4::AR::Preferencias->getValorPreferencia('circularDesdeDetalleDelRegistro');
 }

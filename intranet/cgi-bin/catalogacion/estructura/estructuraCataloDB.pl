@@ -406,8 +406,8 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
 
     my ($nivel1) = C4::AR::Nivel1::getNivel1FromId1($obj->{'id1'});
 
-    $t_params->{'nivel1'} = $nivel1;
-    $t_params->{'OK'} = ($nivel1?1:0);
+    $t_params->{'nivel1'}   = $nivel1;
+    $t_params->{'OK'}       = ($nivel1?1:0);
 
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
@@ -492,8 +492,13 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
     
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
-    $info{'id1'}= $nivel2->getId1;
-    $info{'id2'}= $nivel2->getId2;
+
+    $info{'id1'} = 0;
+    $info{'id2'} = 0;
+    if($nivel2){
+        $info{'id1'}= $nivel2->getId1;
+        $info{'id2'}= $nivel2->getId2;
+    }
 
     C4::Auth::print_header($session);
     print to_json \%info;

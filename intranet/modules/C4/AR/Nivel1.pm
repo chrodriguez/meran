@@ -4,6 +4,8 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Modelo::CatRegistroMarcN1;
+use C4::Modelo::CatRegistroMarcN1::Manager;
+
 
 use vars qw(@EXPORT @ISA);
 
@@ -40,28 +42,30 @@ sub t_guardarNivel1
   guardar datos de nivel1
 =cut
 sub t_guardarNivel1 {
-    my($params)=@_;
-    my $msg_object= C4::AR::Mensajes::create();
+    my($params) = @_;
+    my $msg_object = C4::AR::Mensajes::create();
     my $id1;
 
     if(!$msg_object->{'error'}){
     #No hay error
-        my  $catNivel1;
-        my $marc_record=C4::AR::Catalogacion::meran_nivel1_to_meran($params);
-        $catNivel1= C4::Modelo::CatRegistroMarcN1->new(marc_record => $marc_record);  
-        my $db= $catNivel1->db;
+        my $catRegistroMarcN1;
+        my $marc_record = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
+        $catRegistroMarcN1 = C4::Modelo::CatRegistroMarcN1->new();  
+        my $db = $catRegistroMarcN1->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
         
         eval {
-            #$catNivel1->agregar();
-            $id1 = $catNivel1->getId;
+            $params->{'marc_record'} = $marc_record->as_usmarc;
+            $catRegistroMarcN1->agregar($params);
             $db->commit;
+
+            #recupero el id1 recien agregado
+            $id1 = $catRegistroMarcN1->getId1;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$catNivel1->getId1]} ) ;
-            C4::AR::Debug::debug("t_guardarNivel1 COMPLETO => as_formatted ".$marc_record->as_formatted());
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$id1]} ) ;
         };
     
         if ($@){
@@ -81,7 +85,28 @@ sub t_guardarNivel1 {
 }
 
 
-#==ACA FINALIZA LA NUEVA ESTRUCTURA***************************************************************
+=item sub 
+Recupero un nivel 1 a partir de un id1
+retorna un objeto o 0 si no existe
+=cut
+sub getNivel1FromId1{
+    my ($id1) = @_;
+
+    my $nivel1_array_ref = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1(   
+                                                                        query => [ 
+                                                                                    id => { eq => $id1 },
+                                                                            ]
+                                                                );
+
+    if( scalar(@$nivel1_array_ref) > 0){
+        return ($nivel1_array_ref->[0]);
+    }else{
+        return 0;
+    }
+}
+
+
+#***********************************************ACA FINALIZA LA NUEVA ESTRUCTURA***************************************************************
 
 
 sub getAutoresAdicionales(){
@@ -108,27 +133,6 @@ sub getUnititle {
 	return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id1,"245","b","1");
 }
 
-
-=item sub getNivel1FromId1
-Recupero un nivel 1 a partir de un id1
-retorna un objeto o 0 si no existe
-=cut
-sub getNivel1FromId1{
-	my ($id1) = @_;
-
-	my $nivel1_array_ref = C4::Modelo::CatNivel1::Manager->get_cat_nivel1(   
-																		query => [ 
-																					id1 => { eq => $id1 },
-																			], 
-                                                                        with_objects => [ 'cat_autor' ]    
-																);
-
-	if( scalar(@$nivel1_array_ref) > 0){
-		return ($nivel1_array_ref->[0]);
-	}else{
-		return 0;
-	}
-}
 
 =item sub getNivel1RepetibleFromId1Repetible
 Recupero el objeto nivel1_repetible a partir de un rep_n1_id

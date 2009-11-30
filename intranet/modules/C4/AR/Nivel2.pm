@@ -4,6 +4,8 @@ package C4::AR::Nivel2;
 use strict;
 require Exporter;
 use C4::Context;
+use C4::Modelo::CatRegistroMarcN2;
+use C4::Modelo::CatRegistroMarcN2::Manager;
 
 use vars qw(@EXPORT @ISA);
 
@@ -38,29 +40,31 @@ C4::AR::Nivel1 - Funciones que manipulan datos del catálogo de nivel 1
     Esta funcion se invoca desde el template para guardar los datos de nivel2, se apoya en una funcion de Catalogacion.pm que lo que hace es transformar los datos que llegan en un objeto MARC::Record que luego va a insertarse en la base de datos a traves de un objeto CatRegistroMarcN2
 =cut
 sub t_guardarNivel2 {
-    my($params)=@_;
-    my $msg_object= C4::AR::Mensajes::create();
+    my ($params) = @_;
+
+    my $msg_object = C4::AR::Mensajes::create();
     my $id2;
-    my $catNivel2;
+    my $catRegistroMarcN2;
 
     if(!$msg_object->{'error'}){
     #No hay error
-        my $marc_record=C4::AR::Catalogacion::meran_nivel2_to_meran($params);
-        $catNivel2= C4::Modelo::CatRegistroMarcN2->new(marc_record => $marc_record); 
-        my $db= $catNivel2->db;
+        my $marc_record = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
+        $catRegistroMarcN2 = C4::Modelo::CatRegistroMarcN2->new();  
+        my $db = $catRegistroMarcN2->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
     
         eval {
-#             $catNivel2->agregar($params);  
+            $params->{'marc_record'} = $marc_record->as_usmarc;
+            $catRegistroMarcN2->agregar($params);
             $db->commit;
-            $id2 = $catNivel2->getId2;
+
+            #recupero el id1 recien agregado
+            $id2 = $catRegistroMarcN2->getId2;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => [$catNivel2->getId2]} ) ;
-            C4::AR::Debug::debug("t_guardarNivel2 COMPLETO => as_formatted ".$marc_record->as_formatted());
-       
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => [$id2]} ) ;
         };
     
         if ($@){
@@ -76,13 +80,13 @@ sub t_guardarNivel2 {
 
     }
 
-    return ($msg_object, $catNivel2);
+    return ($msg_object, $catRegistroMarcN2);
 }
 
 
 
 
-#==ACA FINALIZA LA NUEVA ESTRUCTURA***************************************************************
+#***********************************************ACA FINALIZA LA NUEVA ESTRUCTURA***************************************************************
 
 
 =item sub getCantPrestados

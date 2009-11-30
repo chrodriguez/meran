@@ -1369,7 +1369,6 @@ sub busquedaCombinada_newTemp{
       my %hash_temp = {};
       $hash_temp{'id1'} = $hash->{'doc'};
       $hash_temp{'hits'} = $hash->{'weight'};
-#        C4::AR::Utilidades::printHASH($hash);
 
       push (@id1_array, \%hash_temp);
     }
@@ -1634,9 +1633,9 @@ sub armarInfoNivel1{
     my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
     if($nivel1){
   # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
-      @result_array_paginado[$i]->{'titulo'} = $nivel1->getTitulo();
+      @result_array_paginado[$i]->{'titulo'} =      $nivel1->getTitulo();
       @result_array_paginado[$i]->{'nomCompleto'} = $nivel1->getAutorObject->getCompleto();
-      @result_array_paginado[$i]->{'idAutor'} = $nivel1->getAutorObject->getId();
+      @result_array_paginado[$i]->{'idAutor'} =     $nivel1->getAutorObject->getId();
       #aca se procesan solo los ids de nivel 1 que se van a mostrar
       #se generan los grupos para mostrar en el resultado de la consulta
       my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
