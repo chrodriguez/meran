@@ -2,6 +2,23 @@ package C4::Modelo::CatRegistroMarcN3;
 
 use strict;
 
+=head1 NAME
+
+ C4::Modelo::CatRegistroMarcN3- Funciones que manipulan datos del catálogo a nivel 3
+
+=head1 SYNOPSIS
+
+  use C4::Modelo::CatRegistroMarcN3;
+
+=head1 DESCRIPTION
+
+Modulo para manejar objetos del ORM de los datos del nivel3 del catalogo
+
+=head1 FUNCTIONS
+
+=over 2
+=cut
+
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -31,7 +48,92 @@ __PACKAGE__->meta->setup(
     ],
 );
 
+=head2
+sub getId3
 
+Obteniendo el id del elemento
+=cut
+
+sub getId3{
+    my ($self)  = shift;
+
+    return $self->id;
+}
+
+=head2
+sub getId2
+
+Obteniendo el id2 al que pertenece el elemento de nivel3
+=cut
+
+
+sub getId2{
+    my ($self)  = shift;
+
+    return $self->id;
+}
+
+=head2
+sub getId1
+
+Obteniendo el id1 al que pertenece el elemento de nivel3
+=cut
+
+
+sub getId1{
+    my ($self)  = shift;
+
+    return $self->id;
+}
+
+=head2
+sub getId1
+
+Setea el id1 al que pertenece el elemento de nivel3
+=cut
+
+sub setId1{
+    my ($self)  = shift;
+    my ($id1)   = @_;
+
+    $self->id1($id1);
+}
+
+=head2
+sub setId2
+
+Setea el id2 al que pertenece el elemento de nivel3
+=cut
+
+sub setId2{
+    my ($self)  = shift;
+    my ($id2)   = @_;
+
+    $self->id2($id2);
+}
+
+
+sub getMarcRecord{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->marc_record));
+}
+
+sub setMarcRecord{
+    my ($self)          = shift;
+    my ($marc_record)   = @_;
+
+    $self->marc_record($marc_record);
+}
+
+sub agregar{
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    $self->setId2($params->{'id2'});
+    $self->setId1($params->{'id1'});
+    $self->setMarcRecord($params->{'marc_record'});
+    $self->save();
+}
 
 1;
 

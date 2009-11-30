@@ -66,15 +66,69 @@ sub agregar{
     $self->save();
 }
 
-# sub getTitulo{
-#     my ($self)      = shift;
-#     
-#     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-#     
-# #     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a")); 
-# 
-#     return $marc_record->subfield("245","a");
-# }
+=head2
+sub getISBN
+
+Funcion que devuelve el isbn
+=cut
+
+sub getISBN
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+     
+ #     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a")); 
+ 
+     return $marc_record->subfield("20","a");
+}
+
+=head2
+sub getISSN
+
+Funcion que devuelve el issn
+=cut
+
+sub getISSN
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+     
+ #     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a")); 
+ 
+     return $marc_record->subfield("22","a");
+}
+
+=head2
+sub getSeriesTitulo
+
+Funcion que devuelve el series_titulo
+=cut
+
+sub getSeriesTitulo
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+     
+ #     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a")); 
+ 
+     return $marc_record->subfield("440","a");
+}
+
+=head2
+sub getTipoDocumento
+
+Funcion que devuelve el isbn
+=cut
+
+sub getTipoDocumento
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+     
+ #     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a")); 
+ 
+     return $marc_record->subfield("910","a");
+}
 
 
 
