@@ -150,5 +150,36 @@ sub getTipoDocumentoObject{
 }
 
 
+sub getSoporte{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+ 
+    return $marc_record->subfield("245","h");
+}
+
+=head2
+sub getTipoDocumentoObject
+
+Funcion que devuelve un objeto tipo de documento de acuerdo al id de referencia a TipoDocumento que tiene
+=cut
+
+sub getSoporteObject{
+    my ($self)      = shift;
+     
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+     
+    my $tipo_doc    = C4::AR::Referencias::getNombreSoporte($self->getSoporte());
+        
+    if(!$tipo_doc){
+            C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) CatRefTipoNivel3 NO EXISTE");
+            $tipo_doc = C4::Modelo::RefSoporte->new();
+    }
+
+    return $tipo_doc;
+}
+
+
+
 1;
 

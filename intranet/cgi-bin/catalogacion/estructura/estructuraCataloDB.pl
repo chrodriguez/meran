@@ -425,7 +425,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
                     });
 
     C4::AR::Validator::validateParams('U389', $obj,['id1']);
-    C4::AR::Debug::debug("DEBUGGGGGGGGG".$obj->{'id1'});
+    
     my $nivel2_array_ref = C4::AR::Nivel2::getNivel2FromId1($obj->{'id1'});
 
     #se envia al cliente todos los objetos nivel2 segun id1
