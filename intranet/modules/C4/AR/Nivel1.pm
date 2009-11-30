@@ -55,7 +55,7 @@ sub t_guardarNivel1 {
         $db->begin_work;
         
         eval {
-            $catNivel2->agregar();
+            $catNivel1->agregar();
             $id1 = $catNivel1->getId;
             $db->commit;
             #se cambio el permiso con exito

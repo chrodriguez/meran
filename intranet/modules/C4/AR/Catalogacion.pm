@@ -82,10 +82,9 @@ sub _meran_to_marc{
                         push(@subcampos_array, ($key => $value));
                     }
                 }
-                C4::AR::Debug::debug("meran_nivel_to_meran => subcampos string ".$subcampos);
             }
             if(scalar(@subcampos_array) > 0){
-                $field = MARC::Field->new($campo, $indetificador_1, $indetificador_2, @subcampos_array);
+                $field = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);
                 $marc_record->add_fields($field);
                 C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$field->as_formatted());
             }            
