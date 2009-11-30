@@ -138,7 +138,7 @@ sub meran_nivel1_to_meran{
 #             }
 # 
 #             if(scalar(@subcampos_array) > 0){
-#                 $field = MARC::Field->new($campo, $indetificador_1, $indetificador_2, @subcampos_array);
+#                 $field = MARC::Field->new($campso, $indetificador_1, $indetificador_2, @subcampos_array);
 #                 $marc_record->add_fields($field);
 #                 C4::AR::Debug::debug("meran_nivel1_to_meran => COMPLETO => as_formatted ".$field->as_formatted());
 #             }            
