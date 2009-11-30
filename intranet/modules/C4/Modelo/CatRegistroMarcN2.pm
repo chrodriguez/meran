@@ -72,7 +72,7 @@ sub getISBN
 Funcion que devuelve el isbn
 =cut
 
-sub getISBN
+sub getISBN{
      my ($self)      = shift;
      
      my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
@@ -88,7 +88,7 @@ sub getISSN
 Funcion que devuelve el issn
 =cut
 
-sub getISSN
+sub getISSN{
      my ($self)      = shift;
      
      my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
@@ -104,7 +104,7 @@ sub getSeriesTitulo
 Funcion que devuelve el series_titulo
 =cut
 
-sub getSeriesTitulo
+sub getSeriesTitulo{
      my ($self)      = shift;
      
      my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
@@ -120,12 +120,19 @@ sub getTipoDocumento
 Funcion que devuelve el isbn
 =cut
 
-sub getTipoDocumento
+sub getTipoDocumento{
      my ($self)      = shift;
      
      my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
      
  #     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a")); 
+    my $autor = C4::AR::Referencias::getNombreTipoDocumento($ref_autor);
+        
+    if(!$autor){
+            C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> EL OBJECTO (ID) AUTOR NO EXISTE");
+            $autor = C4::Modelo::CatAutor->new();
+    }
+
  
      return $marc_record->subfield("910","a");
 }

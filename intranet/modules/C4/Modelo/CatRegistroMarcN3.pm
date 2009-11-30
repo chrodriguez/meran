@@ -127,11 +127,12 @@ sub setMarcRecord{
 
 sub agregar{
     my ($self)      = shift;
-    my ($params)    = @_;
+    my ($db, $params)    = @_;
 
     $self->setId2($params->{'id2'});
     $self->setId1($params->{'id1'});
     $self->setMarcRecord($params->{'marc_record'});
+
     $self->save();
 }
 
