@@ -53,7 +53,7 @@ sub t_guardarNivel1 {
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
-C4::AR::Debug::debug("marc_record_n2 COMPLETO => as_formatted ".$marc_record->as_formatted());
+        C4::AR::Debug::debug("t_guardarNivel1 COMPLETO => as_formatted ".$marc_record->as_formatted());
 die;
         eval {
             $id1 = $catNivel1->getId;

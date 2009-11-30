@@ -63,65 +63,61 @@ sub meran_nivel1_to_meran{
 
 
     my $cant_campos = scalar(@$infoArrayNivel1);
-    C4::AR::Debug::debug("infoArrayNivel1 => ".scalar(@$infoArrayNivel1));
+    C4::AR::Debug::debug("meran_nivel1_to_meran => ".scalar(@$infoArrayNivel1));
 
     my $campos_autorizados=C4::AR::EstructuraCatalogacionBase::getCamposByNivel(1);
     my @autorizados;
-    my @subcampos;
+    my $subcampos;
     foreach my $autorizado (@$campos_autorizados){
         push (@autorizados, $autorizado->getCampo());
     }
 
-#     foreach my $s (@$infoArrayNivel1->{'subcampos_array'}){
+
+
+    my $field;
+
     for (my $i=0;$i<$cant_campos;$i++){
-#         my $infoNivel1 = $s;
         my %hash_campos = $infoArrayNivel1->[$i];
+        my $indetificador_1= $infoArrayNivel1->[$i]->{'indetificador_1'};
+        my $indetificador_2 = $infoArrayNivel1->[$i]->{'indetificador_2'};
         my $campo = $infoArrayNivel1->[$i]->{'campo'};
-        my @subcampos_array = $infoArrayNivel1->[$i]->{'subcampos_array'};
+        my @subcampos_array;
         my $subcampos_hash = $infoArrayNivel1->[$i]->{'subcampos_hash'};
-#         my $subcampos_hash2 = $infoArrayNivel1->[$i]->{'subcampos_hash2'};
-
-# C4::AR::Utilidades::printHASH($subcampos_hash);
-C4::AR::Utilidades::printHASH($subcampos_hash);
-C4::AR::Debug::debug("cant subcampos ???????????????????????????????? ".scalar(@$infoArrayNivel1->[$i]->{'subcampos_array'}));
-
-
-# C4::AR::Debug::debug("que es?: ".$infoArrayNivel1->[$i]);
-# C4::AR::Utilidades::printHASH(\%hash_campos);
-
-        my $cant_subcampos = scalar(@subcampos_array);
+        my $cant_subcampos = $infoArrayNivel1->[$i]->{'cant_subcampos'};
         
-        C4::AR::Debug::debug("campo ".$campo);
-        C4::AR::Debug::debug("cant. subcampos ".$cant_subcampos);
-
-#         if (C4::AR::Utilidades::existeInArray($campo,@autorizados)){
+#         C4::AR::Debug::debug("campo: ".$campo);
+#         C4::AR::Debug::debug("cant. subcampos: ".$cant_subcampos);
+#         C4::AR::Debug::debug("subcampos hash => ");
+#         C4::AR::Utilidades::printHASH($subcampos_hash);
         
-
-#         C4::AR::Debug::debug("laputa".@aux);
-#           foreach my $subcampo (@$infoNivel1->{'subcampos_array'}){
+        #se verifica si el campo esta autorizado para el nivel que se estra procesando
+        if (C4::AR::Utilidades::existeInArray($campo,@autorizados)){
+        
             for(my $j=0;$j<$cant_subcampos;$j++){
+                 my $subcampo= $subcampos_hash->{$j};
 
-                my %hash = @subcampos_array[$j];
-                C4::AR::Debug::debug("subcampos_array ".@subcampos_array[$j]);
-                my $subcampo = $hash{'subcampo'};
-                my $dato = $hash{'dato'};
-                C4::AR::Debug::debug("subcampo ".$subcampo);
-                C4::AR::Debug::debug("dato ".$dato);
-# 
-#                 my %pepe=($infoNivel1->{'subcampos_array'})[$i];
-#                 C4::AR::Debug::debug("subcampo".$pepe->{'subcampo'});
-#                 C4::AR::Debug::debug("subcampo".$pepe->{'dato'});
-# #                 C4::AR::Debug::debug("subcampo".@$subcampo[0]);
-# #                 my $subcampo_auxiliar="'".$subcampo->{'subcampo'}."'".'=>'."'".$subcampo->{'dato'}."'";
-# #                 push (@subcampos,$subcampo_auxiliar);
-# #                 $field->add_subfield($subcampo->{'subcampo'}->$subcampo->{'dato'});
+                while ( my ($key, $value) = each(%$subcampo) ){
+
+                    if($value ne ''){
+                        push(@subcampos_array, ($key => $value));
+                    }
+                }
+                C4::AR::Debug::debug("meran_nivel1_to_meran => subcampos string ".$subcampos);
+                
             }
-#         my $field = MARC::Field->new($infoNivel1->{'campo'}, $infoNivel1->{'indetificador_1'}, $infoNivel1->{'indetificador_2'},@subcampos);
+
+            if(scalar(@subcampos_array) > 0){
+                $field = MARC::Field->new($campo, $indetificador_1, $indetificador_2, @subcampos_array);
+                $marc_record->add_fields($field);
+                C4::AR::Debug::debug("meran_nivel1_to_meran => COMPLETO => as_formatted ".$field->as_formatted());
+            }            
         
-#         }
+        }
     }
 
-#     return($marc_record);
+    C4::AR::Debug::debug("meran_nivel1_to_meran => SALIDA => as_formatted ".$marc_record->as_formatted());
+
+    return($marc_record);
 }
 
 =head2

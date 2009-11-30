@@ -236,7 +236,8 @@ function syncComponentesArray(){
         var subcampos_array = MARC_OBJECT_ARRAY[i].getSubCamposArray();
         var subcampos_hash = MARC_OBJECT_ARRAY[i].subcampos_hash;
         var subcampo_valor = '';
-        subcampos_hash[MARC_OBJECT_ARRAY[i].getCampo()] = '';
+//         subcampos_hash[MARC_OBJECT_ARRAY[i].getCampo()] = '';
+        MARC_OBJECT_ARRAY[i].cant_subcampos = 0;
 //         var subcampos_hash2 = MARC_OBJECT_ARRAY[i].subcampos_hash2;
     
         for(var s=0; s < subcampos_array.length; s++){
@@ -258,21 +259,21 @@ function syncComponentesArray(){
                 }else{  
                     log("NO TIENE REFERENCIA");
                     log("DATO: "+$('#'+subcampos_array[s].getIdCompCliente()).val());
-                    subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
+                       subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
 //                     subcampos_hash[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val() + '|';
-                    subcampo_valor = subcampo_valor + subcampos_array[s].getSubCampo() + "|" + $('#'+subcampos_array[s].getIdCompCliente()).val() + "#";
-
-//                     subcampos_hash[MARC_OBJECT_ARRAY[i].getCampo()] = subcampos_hash[MARC_OBJECT_ARRAY[i].getCampo()] + subcampo_valor;
-//                     subcampos_hash2[s] = $('#'+subcampos_array[s].getIdCompCliente()).val() + '|';
-//                     subcampos_hash2[s] = JSONstring.make(subcampos_array[s]);
-//                     subcampos_hash2[s].subcampo = subcampos_array[s].getSubCampo();
-//                     subcampos_hash2[s].dato = $('#'+subcampos_array[s].getIdCompCliente()).val();
+//                     subcampo_valor = subcampo_valor + "@" + subcampos_array[s].getSubCampo();
+//                     subcampo_valor = subcampo_valor + "|" + $('#'+subcampos_array[s].getIdCompCliente()).val();
+                       subcampo_valor=new Object();
+                       subcampo_valor[subcampos_array[s].getSubCampo()]=$('#'+subcampos_array[s].getIdCompCliente()).val();
+                       subcampos_hash[s] = subcampo_valor;
                 }
             }
-            
+             
         }//END for(var s=0; s < subcampos_array.length; s++)
-        alert("camop " + MARC_OBJECT_ARRAY[i].getCampo() + " subcampos " + subcampo_valor);
-            subcampos_hash[MARC_OBJECT_ARRAY[i].getCampo()] = subcampo_valor;
+//         alert("camop " + MARC_OBJECT_ARRAY[i].getCampo() + " subcampos " + subcampo_valor);
+            MARC_OBJECT_ARRAY[i].cant_subcampos = subcampos_array.length;
+//             subcampos_hash[MARC_OBJECT_ARRAY[i].getCampo()] = subcampo_valor;
+            
     }//END for(var i=0; i < MARC_OBJECT_ARRAY.length; i++)
 }
 
