@@ -1,7 +1,7 @@
         <h1 class="block">[% 'Formulario de contacto' | i18n %]</h1>
         <div class="column1-unit">
           <div class="contactform">
-            <form method="post" action="index.html">
+            <form method="post" action="/cgi-bin/koha/opac-contact.pl">
               <fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
                 <p><label for="contact_title" class="left">[% 'Trato' | i18n %]:</label>
                    <select name="contact_title" id="contact_title" class="combo" tabindex="5">
@@ -21,27 +21,18 @@
                    <input type="text" name="contact_city" id="contact_city" class="field" value="" tabindex="10" /></p>
                 <p><label for="contact_country" class="left">[% 'Pa&iacute;s' | i18n %]:</label>
                    <input type="text" name="contact_country" id="contact_country" class="field" value="" tabindex="10" /></p>
-                <p><label for="contact_phone" class="left">Phone:</label>
+                <p><label for="contact_phone" class="left">[% 'Tel&eacute;fono' | i18n %]:</label>
                    <input type="text" name="contact_phone" id="contact_phone" class="field" value="" tabindex="12" /></p>
-                <p><label for="contact_email" class="left">Email:</label>
+                <p><label for="contact_email" class="left">[% 'E-mail' | i18n %]:</label>
                    <input type="text" name="contact_email" id="contact_email" class="field" value="" tabindex="13" /></p>
-                <p><label for="contact_url" class="left">Website:</label>
-                   <input type="text" name="contact_url" id="contact_url" class="field" value="" tabindex="14" /></p>
               </fieldset>
-              <fieldset><legend>&nbsp;MESSAGE DETAILS&nbsp;</legend>
-                <p><label for="contact_subject" class="left">Subject:</label>
+              <fieldset><legend>&nbsp;[% 'Inquietud de contacto' | i18n %]&nbsp;</legend>
+                <p><label for="contact_subject" class="left">[% 'Asunto' | i18n %]:</label>
                    <input type="text" name="contact_subject" id="contact_subject" class="field" value="" tabindex="15" /></p>
-                <p><label for="contact_urgency" class="left">Please reply:</label>
-                   <select name="contact_urgency" id="contact_urgency" class="combo" tabindex="16">
-                     <option value="choose"> Select... </option>
-                     <option value="today"> Latest today </option>
-                     <option value="tomorrow"> Latest tomorrow </option>
-                     <option value="threedays"> Latest in 3 days </option>
-                     <option value="week"> Latest in a week </option>
-                     <option value="month"> Latest in a month </option></select></p>
-                <p><label for="contact_message" class="left">Message:</label>
+                <p><label for="contact_message" class="left">[% 'Mensaje' | i18n %]:</label>
                    <textarea name="contact_message" id="contact_message" cols="45" rows="10" tabindex="17"></textarea></p>
                 <p><input type="submit" name="submit" id="submit" class="button" value="Send message" tabindex="18" /></p>
+                   <input type="hidden" name="post_message" id="post_message" value="1"/>
               </fieldset>
             </form>
           </div>

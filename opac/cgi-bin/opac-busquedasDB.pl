@@ -20,7 +20,6 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 
 my $obj=$input->param('obj');
-my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token');
 if($obj){
     $obj= C4::AR::Utilidades::from_json_ISO($obj);
 }else{
@@ -30,6 +29,8 @@ if($obj){
   $obj->{'string'} = $input->param('string');
   $obj->{'tipoBusqueda'} = 'all';
 }
+
+my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
 
 my $ini= $obj->{'ini'};
 my $start = [ Time::HiRes::gettimeofday() ]; #se toma el tiempo de inicio de la búsqueda

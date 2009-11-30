@@ -27,7 +27,7 @@ use CGI;
 my $input=new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-									template_name => "opac-HistorialReservas.tmpl",
+									template_name => "opac-main.tmpl",
 									query => $input,
 									type => "opac",
 									authnotrequired => 0,
@@ -35,20 +35,18 @@ my ($template, $session, $t_params)= get_template_and_user({
 									debug => 1,
 			});
 
-my $bornum= C4::Auth::getSessionLoggedUser($session);
+my $nro_socio= C4::Auth::getSessionNroSocio($session);
 
-my $obj=$input->param('obj');
-$obj= &C4::AR::Utilidades::from_json_ISO($obj);
-
-my $funcion= $obj->{'funcion'};
-my $ini= ( $obj->{'ini'} || '');
-
+my $ini = $input->param('page') || 0;
+my $url = "/cgi-bin/koha/opac-historial_reservas.pl?token=".$input->param('token');
+my $orden = 'titulo';
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-my ($cantidad,$reservas_hashref)=&C4::AR::Estadisticas::historialReservas($bornum,$ini,$cantR);
+my ($cantidad,$reservas_hashref)=&C4::AR::Estadisticas::historialReservas($nro_socio,$ini,$cantR);
 
-$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+$t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
 $t_params->{'cantidad'}= $cantidad;
 $t_params->{'loop_reservas'}= $reservas_hashref;
-
+$t_params->{'content_title'}= C4::AR::Filtros::i18n("Historial de reservas");
+$t_params->{'partial_template'}= "opac-historial_reservas.inc";
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

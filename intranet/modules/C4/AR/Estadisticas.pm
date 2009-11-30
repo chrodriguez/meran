@@ -1172,24 +1172,8 @@ return ($cant);
 sub historialReservas {
   my ($bornum,$ini,$cantR)=@_;
  
-  my $dbh = C4::Context->dbh;
-  my $dateformat = C4::Date::get_date_format();
-
-  my $querySelectCount="SELECT count(*) as cant ";
-
-  my $querySelect =" SELECT h.id, a.completo,a.id as idAutor,h.id1, n1.titulo, ";
-  $querySelect .= "  h.id2,h.id3,h.branchcode as branchcode, ";
-  $querySelect .= "  it.description,h.date as fechaReserva,h.end_date as fechaVto,h.type ";
-
-  my $queryFrom .= " 	FROM rep_historial_circulacion h LEFT JOIN circ_ref_tipo_prestamo it ";
-  $queryFrom .= " 	ON(it.id_tipo_prestamo = h.issuetype) ";
-  $queryFrom .= " 	LEFT JOIN cat_nivel1 n1 ";
-  $queryFrom .= " 	ON (n1.id1 = h.id1) ";
-  $queryFrom .= " 	LEFT JOIN cat_autor a ";
-  $queryFrom .= " 	ON (a.id = n1.autor) ";
-  $queryFrom .= " 	LEFT ";
-
-# FIXME que paso aca???????????
+  # RE HACER, ESTA DEPRECATED
+  return (0,0);
 }
 
 sub historicoCirculacion{

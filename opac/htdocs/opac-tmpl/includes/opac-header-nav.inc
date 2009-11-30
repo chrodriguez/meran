@@ -66,6 +66,11 @@
                               [% 'Historial de pr&eacute;stamos' | i18n %]
                           </a>
                       </li>
+                      <li>
+                          <a href="/cgi-bin/koha/opac-historial_reservas.pl?token=[% token %]">
+                              [% 'Historial de reservas' | i18n %]
+                          </a>
+                      </li>
                   [% END %]
                 </ul>
               <!--[if lte IE 6]></td></tr></table></a><![endif]-->

@@ -16,6 +16,10 @@ my ($template, $session, $t_params)= get_template_and_user({
             });
 
 $t_params->{'opac'};
-
-$t_params->{'partial_template'}= "opac-contact.inc";
+my $post = $query->param('post_message') || 0;
+if ($post){
+    $t_params->{'partial_template'}= "opac-contact_posted.inc";
+}else{
+    $t_params->{'partial_template'}= "opac-contact.inc";
+}
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
