@@ -75,8 +75,6 @@ sub meran_nivel1_to_meran{
         for(my $i=0;$i<scalar($infoNivel1->{'subcampos_array'});$i++){
 
                 my %pepe=($infoNivel1->{'subcampos_array'})[$i];
-                C4::AR::Debug::debug("subcampo".$pepe->{'subcampo'});
-                C4::AR::Debug::debug("subcampo".$pepe->{'dato'});
 #                 C4::AR::Debug::debug("subcampo".@$subcampo[0]);
 #                 my $subcampo_auxiliar="'".$subcampo->{'subcampo'}."'".'=>'."'".$subcampo->{'dato'}."'";
 #                 push (@subcampos,$subcampo_auxiliar);
