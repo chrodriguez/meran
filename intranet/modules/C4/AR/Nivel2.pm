@@ -14,6 +14,76 @@ use vars qw(@EXPORT @ISA);
 		&getCantPrestados
 );
 
+=head1 NAME
+
+C4::AR::Nivel1 - Funciones que manipulan datos del catálogo de nivel 1
+
+=head1 SYNOPSIS
+
+  use C4::AR::Nivel1;
+
+=head1 DESCRIPTION
+
+  Descripción del modulo COMPLETAR
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
+=head2
+ sub t_guardarNivel2
+
+    Esta funcion se invoca desde el template para guardar los datos de nivel2, se apoya en una funcion de Catalogacion.pm que lo que hace es transformar los datos que llegan en un objeto MARC::Record que luego va a insertarse en la base de datos a traves de un objeto CatRegistroMarcN2
+=cut
+sub t_guardarNivel2 {
+    my($params)=@_;
+    my $msg_object= C4::AR::Mensajes::create();
+    my $id2;
+    my $catNivel2;
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my $marc_record=C4::AR::Catalogacion::meran_nivel2_to_meran($params);
+        $catNivel2= C4::Modelo::CatRegistroMarcN2->new(marc_record => $marc_record); 
+        my $db= $catNivel2->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+    
+        eval {
+            $catNivel2->agregar($params);  
+            $db->commit;
+            $id2 = $catNivel2->getId2;
+            #se cambio el permiso con exito
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => [$catNivel2->getId2]} ) ;
+            C4::AR::Debug::debug("t_guardarNivel2 COMPLETO => as_formatted ".$marc_record->as_formatted());
+       
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B428',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U372', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object, $catNivel2);
+}
+
+
+
+
+#==ACA FINALIZA LA NUEVA ESTRUCTURA***************************************************************
+
 
 =item sub getCantPrestados
     retorna la canitdad de items prestados para el grupo pasado por parametro
@@ -115,49 +185,6 @@ sub getNivel2RepetibleFromId2Repetible{
 
 #=======================================================================ABM Nivel 1=======================================================
 
-=item sub t_guardarNivel2
-    transaccion guarda un nivel 2
-=cut
-sub t_guardarNivel2 {
-    my($params)=@_;
-
-## FIXME ver si falta verificar algo!!!!!!!!!!
-    my $msg_object= C4::AR::Mensajes::create();
-    my $id2;
-    my $catNivel2;
-
-    if(!$msg_object->{'error'}){
-    #No hay error
-		$catNivel2= C4::Modelo::CatNivel2->new();
-        my $db= $catNivel2->db;
-        # enable transactions, if possible
-        $db->{connect_options}->{AutoCommit} = 0;
-         $db->begin_work;
-    
-        eval {
-            $catNivel2->agregar($params);  
-            $db->commit;
-            $id2 = $catNivel2->getId2;
-            #se cambio el permiso con exito
-            $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => [$catNivel2->getId2]} ) ;
-        };
-    
-        if ($@){
-            #Se loguea error de Base de Datos
-            &C4::AR::Mensajes::printErrorDB($@, 'B428',"INTRA");
-            eval {$db->rollback};
-            #Se setea error para el usuario
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U372', 'params' => []} ) ;
-        }
-
-        $db->{connect_options}->{AutoCommit} = 1;
-
-    }
-
-    return ($msg_object, $catNivel2);
-}
 
 
 =item sub t_modificarNivel2

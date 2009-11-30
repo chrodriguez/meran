@@ -48,19 +48,20 @@ sub t_guardarNivel1 {
     #No hay error
         my  $catNivel1;
         my $marc_record=C4::AR::Catalogacion::meran_nivel1_to_meran($params);
-        $catNivel1= C4::Modelo::CatRegistroMarcN1->new(marc_record => $params);  
+        $catNivel1= C4::Modelo::CatRegistroMarcN1->new(marc_record => $marc_record);  
         my $db= $catNivel1->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
-        C4::AR::Debug::debug("t_guardarNivel1 COMPLETO => as_formatted ".$marc_record->as_formatted());
-die;
+        
         eval {
+            $catNivel2->agregar();
             $id1 = $catNivel1->getId;
             $db->commit;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$catNivel1->getId1]} ) ;
+            C4::AR::Debug::debug("t_guardarNivel1 COMPLETO => as_formatted ".$marc_record->as_formatted());
         };
     
         if ($@){
