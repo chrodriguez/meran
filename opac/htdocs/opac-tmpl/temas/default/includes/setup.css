@@ -18,6 +18,14 @@
 /* NON-HEADER */
 *{padding:0; margin:0;}
  body {font-size:62.5%; background-color:rgb(255,255,255); font-family:verdana,arial,sans-serif;} /*Font-size: 1.0em = 10px when browser default size is 16px*/
+ 
+body input[type="text"]:focus{
+  background: InfoBackground;
+}
+
+body textarea:focus{
+  background: Wheat;
+}
 .page-container {width:98%; margin:0px auto; margin-top:10px; margin-bottom:10px; border:solid 1px rgb(150,150,150); font-size:1.0em;}
 .main {clear:both; width:100%; padding-bottom:30px; background:transparent url(../imagenes/bg_main_withnav.jpg) top left repeat-y;}
 .main-navigation {display:inline /*Fix IE floating margin bug*/; float:left; width:200px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
