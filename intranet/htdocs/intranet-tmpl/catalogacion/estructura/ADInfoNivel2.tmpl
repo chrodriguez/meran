@@ -2,7 +2,7 @@
 
             [% PERL %]
                 print C4::AR::Filtros::get_error_message( 
-                                            debug   => "Error de parámetros en ADInfoNivel2.tmpl",
+                                            debug   => "Error de parametros en ADInfoNivel2.tmpl",
                                             msg     => "[% 'ERROR EN LOS PARAMETROS DE NIVEL 2'| i18n %]",
                                 );
             [% END %]
@@ -11,7 +11,7 @@
 
         [% FOREACH nivel2 IN nivel2_array %]    
         <fieldset><legend class="nivel2Selected" onClick="mostrarInfoAltaNivel3('[% nivel2.getId2 %]'); toggleClass(this);">
-            <strong>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.getTipoDocumento %]</strong>
+            <strong>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.getTipoDocumentoObject.getNombre %]</strong>
             </legend>
         <ul class="listado_sin_margen">
         <li class="botonera_horizontal">

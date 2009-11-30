@@ -121,22 +121,28 @@ Funcion que devuelve el isbn
 =cut
 
 sub getTipoDocumento{
-     my ($self)      = shift;
-     
-     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-     
- #     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a")); 
-    my $autor = C4::AR::Referencias::getNombreTipoDocumento($ref_autor);
-        
-    if(!$autor){
-            C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> EL OBJECTO (ID) AUTOR NO EXISTE");
-            $autor = C4::Modelo::CatAutor->new();
-    }
-
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
  
-     return $marc_record->subfield("910","a");
+    return $marc_record->subfield("910","a");
 }
 
+
+sub getTipoDocumentoObject{
+    my ($self)      = shift;
+     
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+     
+    my $tipo_doc    = C4::AR::Referencias::getNombreTipoDocumento($self->getTipoDocumento());
+        
+    if(!$tipo_doc){
+            C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject()=> EL OBJECTO (ID) CatRefTipoNivel3 NO EXISTE");
+            $tipo_doc = C4::Modelo::CatRefTipoNivel3->new();
+    }
+
+    return $tipo_doc;
+}
 
 
 1;
