@@ -117,7 +117,7 @@ sub getSeriesTitulo{
 =head2
 sub getTipoDocumento
 
-Funcion que devuelve el isbn
+Funcion que devuelve la referencia al tipo de Documento
 =cut
 
 sub getTipoDocumento{
@@ -128,6 +128,11 @@ sub getTipoDocumento{
     return $marc_record->subfield("910","a");
 }
 
+=head2
+sub getTipoDocumentoObject
+
+Funcion que devuelve un objeto tipo de documento de acuerdo al id de referencia a TipoDocumento que tiene
+=cut
 
 sub getTipoDocumentoObject{
     my ($self)      = shift;
