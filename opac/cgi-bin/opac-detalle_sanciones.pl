@@ -28,7 +28,9 @@ foreach my $san (@$sanc) {
         $san->{'fecha_final'}=format_date($san->{'fecha_final'},$dateformat);
         $san->{'fecha_comienzo'}=format_date($san->{'fecha_comienzo'},$dateformat);
     }
-if (scalar(@$sanc) > 0){$t_params->{'sanciones_loop'}= $sanc;}
+if (scalar(@$sanc) > 0){
+    $t_params->{'sanciones_loop'}= $sanc;
+}
 
 $t_params->{'partial_template'}= "opac-detalle_sanciones.inc";
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

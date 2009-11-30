@@ -2635,9 +2635,9 @@ sub armarPaginasOPAC{
 
 # FIXME falta pasar las imagenes al estilo
     my ($actual, $cantRegistros, $cantRenglones, $url, $t_params)=@_;
-    my $page_position_string = index $url,"&page=";
-    my $url_length = length $url;
-    $url = substr($url,0,$page_position_string);
+#     my $page_position_string = index $url,"&page=";
+#     my $url_length = length $url;
+#     $url = substr($url,0,$page_position_string+2);
     my $pagAMostrar=C4::AR::Preferencias->getValorPreferencia("paginas") || 10;
     my $numBloq=floor($actual / $pagAMostrar);
     my $limInf=($numBloq * $pagAMostrar);
