@@ -85,6 +85,21 @@ sub t_guardarNivel3 {
 
 
 
+=item sub getNivel3FromId2
+Recupero todos los nivel 3 a partir de un id2
+=cut
+sub getNivel3FromId2{
+    my ($id2) = @_;
+
+    my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
+                                                            query => [ 
+                                                                        id2 => { eq => $id2 },
+                                                                ], 
+#                                                             require_objects => ['ref_disponibilidad', 'ref_estado']
+                                        );
+
+    return $nivel3_array_ref;
+}
 
 
 
@@ -570,23 +585,6 @@ sub _verificarUpdateItem {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P125', 'params' => [$params->{'id3'}]} ) ;
     }
 
-}
-
-
-=item sub getNivel3FromId2
-Recupero todos los nivel 3 a partir de un id2
-=cut
-sub getNivel3FromId2{
-	my ($id2) = @_;
-
-	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
-															query => [ 
-																		id2 => { eq => $id2 },
-																], 
-                                                            require_objects => ['ref_disponibilidad', 'ref_estado']
-										);
-
-    return $nivel3_array_ref;
 }
 
 

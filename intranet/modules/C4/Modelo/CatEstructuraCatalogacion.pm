@@ -497,7 +497,7 @@ sub getRulesToString{
     C4::AR::Debug::debug("cant: ".scalar(@rules_array));
     foreach my $r (@rules_array){
 #         if($r =~ m/^(Clinton|Bush|Reagan)/i)
-        C4::AR::Debug::debug("rule??? ".$r);
+#         C4::AR::Debug::debug("rule??? ".$r);
     }
 
     return ($rules);

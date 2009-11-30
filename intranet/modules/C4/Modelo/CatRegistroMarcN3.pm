@@ -136,5 +136,85 @@ sub agregar{
     $self->save();
 }
 
+sub getBarcode{
+    my ($self)      = shift;
+
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return C4::AR::Utilidades::trim($marc_record->subfield("995","f"));
+}
+
+sub getSignatura_topografica{
+    my ($self)      = shift;
+
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return C4::AR::Utilidades::trim($marc_record->subfield("995","t"));
+}
+
+
+sub getId_ui_origen{
+    my ($self)      = shift;
+
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return C4::AR::Utilidades::trim($marc_record->subfield("995","d"));
+}
+
+sub getId_ui_poseedora{
+    my ($self)      = shift;
+
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return C4::AR::Utilidades::trim($marc_record->subfield("995","c"));
+}
+
+sub getIdEstado{
+    my ($self)      = shift;
+
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return C4::AR::Utilidades::trim($marc_record->subfield("995","e"));
+}
+
+sub getEstadoObject{
+    my ($self)      = shift;
+
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+     
+    my $estado      = C4::AR::Referencias::getNombreEstado($self->getIdEstado());
+        
+    if(!$estado){
+            C4::AR::Debug::debug("CatRegistroMarcN3 => getEstadoObject()=> EL OBJECTO (ID) RefEstado NO EXISTE");
+            $estado = C4::Modelo::RefEstado->new();
+    }
+
+    return C4::AR::Utilidades::trim($estado);
+}
+
+sub getIdDisponibilidad{
+    my ($self)      = shift;
+
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return C4::AR::Utilidades::trim($marc_record->subfield("995","o"));
+}
+
+sub getDisponibilidadObject{
+    my ($self)              = shift;
+
+    my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
+     
+    my $disponibilidad      = C4::AR::Referencias::getNombreDisponibilidad($self->getIdDisponibilidad());
+        
+    if(!$disponibilidad){
+            C4::AR::Debug::debug("CatRegistroMarcN3 => getDisponibilidadObject()=> EL OBJECTO (ID) RefDisponibilidad NO EXISTE");
+            $disponibilidad = C4::Modelo::RefDisponibilidad->new();
+    }
+
+    return C4::AR::Utilidades::trim($disponibilidad);
+}
+
+
 1;
 
