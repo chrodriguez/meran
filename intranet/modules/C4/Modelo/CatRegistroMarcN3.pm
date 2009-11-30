@@ -215,6 +215,30 @@ sub getDisponibilidadObject{
     return C4::AR::Utilidades::trim($disponibilidad);
 }
 
+sub estaPrestado {
+    my ($self) = shift;
+
+    return (C4::AR::Prestamos::estaPrestado($self->getId3));
+}
+
+sub getEstado{
+    my ($self) = shift;
+
+    return (C4::AR::Referencias::getNombreEstado($self->getIdEstado));
+}
+
+sub estadoDisponible{
+    my ($self) = shift;
+
+    return (C4::AR::Referencias::getNombreEstado($self->getIdEstado) eq "Disponible");
+}
+
+sub esParaSala{
+    my ($self) = shift;
+
+    return (C4::AR::Referencias::getNombreDisponibilidad($self->getIdEstado) eq "Sala de Lectura");
+}
+
 
 1;
 

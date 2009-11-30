@@ -504,27 +504,32 @@ sub setTimestamp{
     $self->timestamp($timestamp);
 }
 
-sub estaPrestado {
-    my ($self) = shift;
 
-    return (C4::AR::Prestamos::estaPrestado($self->getId3));
-}
+# DEPRECADDD
+# sub estaPrestado {
+#     my ($self) = shift;
+# 
+#     return (C4::AR::Prestamos::estaPrestado($self->getId3));
+# }
 
-sub estadoDisponible{
-	my ($self) = shift;
-	return (C4::AR::Referencias::getNombreEstado($self->getId_estado) eq "Disponible");
-}
+# DEPRECADDD
+# sub estadoDisponible{
+# 	my ($self) = shift;
+# 	return (C4::AR::Referencias::getNombreEstado($self->getId_estado) eq "Disponible");
+# }
+# 
+# DEPRECADDD
+# sub esParaSala{
+# 	my ($self) = shift;
+# 	return (C4::AR::Referencias::getNombreDisponibilidad($self->getId_estado) eq "Sala de Lectura");
+# }
 
-sub esParaSala{
-	my ($self) = shift;
-	return (C4::AR::Referencias::getNombreDisponibilidad($self->getId_estado) eq "Sala de Lectura");
-}
-
-sub getEstado{
-	my ($self) = shift;
-
-	return (C4::AR::Referencias::getNombreEstado($self->getId_estado));
-}
+# DEPRECADDD
+# sub getEstado{
+# 	my ($self) = shift;
+# 
+# 	return (C4::AR::Referencias::getNombreEstado($self->getId_estado));
+# }
 
 # ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
 
