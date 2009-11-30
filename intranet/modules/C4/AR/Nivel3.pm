@@ -5,6 +5,8 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Date;
+use C4::Modelo::CatRegistroMarcN3;
+use C4::Modelo::CatRegistroMarcN3::Manager;
 
 use vars qw(@EXPORT @ISA);
 
@@ -20,6 +22,75 @@ use vars qw(@EXPORT @ISA);
 	&modificarEstadoItem
 );
 
+
+sub t_guardarNivel3 {
+    my($params) = @_;
+
+    my $msg_object = C4::AR::Mensajes::create();
+    my $catRegistroMarcN3;
+    my $db;
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my $marc_record             = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
+        my $catRegistroMarcN3_tmp   = C4::Modelo::CatRegistroMarcN3->new();  
+        my $db = $catRegistroMarcN3_tmp->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+    
+        eval {
+    
+            #se genera el arreglo de barcodes validos para agregar a la base y se setean los mensajes para el usuario (mensajes de ERROR)
+            my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
+    
+            foreach my $barcode (@$barcodes_para_agregar){
+                #se procesa un barcode por vez junto con la info del nivel 3 y nivel3 repetible
+                my $catNivel3;
+                $params->{'barcode'} = $barcode; 
+        
+                $catRegistroMarcN3  = C4::Modelo::CatRegistroMarcN3->new(db => $db);  
+    
+                $params->{'marc_record'} = $marc_record->as_usmarc;
+                $catRegistroMarcN3->agregar($db, $params);
+                $db->commit;
+    
+                #recupero el id3 recien agregado
+                my $id3 = $catRegistroMarcN3->getId3;
+                
+                #se agregaron los barcodes con exito
+                $msg_object->{'error'} = 0;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$id3]} );
+        }
+    
+                $db->commit;
+        };
+
+      if ($@){
+          #Se loguea error de Base de Datos
+          &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
+          $db->rollback;
+          #Se setea error para el usuario
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U373', 'params' => []} ) ;
+      }
+
+      $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+}
+
+
+
+
+
+
+
+
+
+#***********************************************ACA FINALIZA LA NUEVA ESTRUCTURA***************************************************************
 
 
 sub getBarcodesLike {
@@ -578,56 +649,6 @@ sub existeBarcode{
 }
 #=======================================================================ABM Nivel 3======================================================
 
-sub t_guardarNivel3 {
-    my($params) = @_;
-
-    my $msg_object= C4::AR::Mensajes::create();
-    my $catNivel3;
-	  my $db;
-
-    if(!$msg_object->{'error'}){
-    #No hay error
-		my	$catNivel2 = C4::Modelo::CatNivel2->new();
-		my	$db= $catNivel2->db;
-			# enable transactions, if possible
-			$db->{connect_options}->{AutoCommit} = 0;
-
-    eval {
-
-        #se genera el arreglo de barcodes validos para agregar a la base y se setean los mensajes para el usuario (mensajes de ERROR)
-			  my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
-
-        foreach my $barcode (@$barcodes_para_agregar){
-        #se procesa un barcode por vez junto con la info del nivel 3 y nivel3 repetible
-				  my $catNivel3;
-          $params->{'barcode'} = $barcode; 
-      
-				  $catNivel3 = C4::Modelo::CatNivel3->new(db => $db);
-				  $catNivel3->agregar($db, $params);  
-				  
-				  #se agregaron los barcodes con exito
-				  $msg_object->{'error'} = 0;
-				  C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$catNivel3->getBarcode]} );
-			  }
-
-			$db->commit;
-    };
-
-      if ($@){
-          #Se loguea error de Base de Datos
-          &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
-          $db->rollback;
-          #Se setea error para el usuario
-          $msg_object->{'error'}= 1;
-          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U373', 'params' => []} ) ;
-      }
-
-      $db->{connect_options}->{AutoCommit} = 1;
-
-    }
-
-	return ($msg_object);
-}
 
 =item
 Lo que hace la funcion es verificar cada barcode y devolver un arreglo de barcodes permitidos para agregar junto con sus

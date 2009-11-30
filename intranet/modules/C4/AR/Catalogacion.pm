@@ -141,9 +141,11 @@ Funciona de manera similar a meran_nivel1_to_meran pero para el nivel 3
 
 =cut
 sub meran_nivel3_to_meran{
-    my ($data_hash)=@_;
-    my $campos_autorizados=C4::AR::EstructuraCatalogacionBase::getCamposByNivel(3);
-    my $marc_record=_meran_to_marc($data_hash->{'infoArrayNivel1'},$campos_autorizados);
+    my ($data_hash) = @_;
+
+    my $campos_autorizados = C4::AR::EstructuraCatalogacionBase::getCamposByNivel(3);
+    my $marc_record = _meran_to_marc($data_hash->{'infoArrayNivel3'},$campos_autorizados);
+
     return($marc_record);
 
 }

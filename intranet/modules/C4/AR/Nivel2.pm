@@ -83,6 +83,20 @@ sub t_guardarNivel2 {
     return ($msg_object, $catRegistroMarcN2);
 }
 
+=head2 sub getNivel2FromId1
+    Recupero TODOS los nivel 2 a partir de un id1
+=cut
+sub getNivel2FromId1{
+    my ($id1) = @_;
+
+    my $nivel2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(   
+                                                            query => [ 
+                                                                        id1 => { eq => $id1 },
+                                                                ], 
+                                        );
+
+    return $nivel2_array_ref;
+}
 
 
 
@@ -109,21 +123,6 @@ sub getCantPrestados{
 	return $cantPrestamos_count;
 }
 
-
-=item sub getNivel2FromId1
-    Recupero TODOS los nivel 2 a partir de un id1
-=cut
-sub getNivel2FromId1{
-	my ($id1) = @_;
-
-	my $nivel2_array_ref = C4::Modelo::CatNivel2::Manager->get_cat_nivel2(   
-															query => [ 
-																		id1 => { eq => $id1 },
-																], 
-										);
-
-    return $nivel2_array_ref;
-}
 
 =item sub getNivel2RepetibleFromId2Repetible
 Recupero el objeto nivel2_repetible a partir de un rep_n2_id
