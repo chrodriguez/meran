@@ -236,43 +236,45 @@ function syncComponentesArray(){
         var subcampos_array = MARC_OBJECT_ARRAY[i].getSubCamposArray();
         var subcampos_hash = MARC_OBJECT_ARRAY[i].subcampos_hash;
         var subcampo_valor = '';
-//         subcampos_hash[MARC_OBJECT_ARRAY[i].getCampo()] = '';
-        MARC_OBJECT_ARRAY[i].cant_subcampos = 0;
-//         var subcampos_hash2 = MARC_OBJECT_ARRAY[i].subcampos_hash2;
+        MARC_OBJECT_ARRAY[i].cant_subcampos = 0; //para llevar la cantidad de subcampos del campo q se esta procesando
     
         for(var s=0; s < subcampos_array.length; s++){
+            subcampo_valor = new Object();
 
             if(subcampos_array[s].getTieneEstructura() == '1'){
 
                 if(subcampos_array[s].getReferencia() == '1'){
                     log("TIENE REFERENCIA");
                     if($('#'+subcampos_array[s].getIdCompCliente()).val() != '' && subcampos_array[s].getTipo() == 'combo'){
-                        subcampos_array[s].datoReferencia = $('#'+subcampos_array[s].getIdCompCliente()).val();
+//                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val();
+                        subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
+                        subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val();
                         log("COMBO");
                     }else if($('#'+subcampos_array[s].getIdCompCliente()).val() != '' && subcampos_array[s].getTipo() == 'auto'){
-                        subcampos_array[s].datoReferencia = $('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val();
+//                         subcampos_array[s].setDatoReferencia($('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val());
+                        subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val());
+                        subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val();
                         log("AUTO");
                     }else{
                         subcampos_array[s].datoReferencia = 0;
-                        subcampos_array[s].setDato('');
+//                         subcampos_array[s].setDato('');
+                        subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
+                        subcampo_valor[subcampos_array[s].getSubCampo()] = 0;
                     }
                 }else{  
                     log("NO TIENE REFERENCIA");
                     log("DATO: "+$('#'+subcampos_array[s].getIdCompCliente()).val());
                        subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
-//                     subcampos_hash[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val() + '|';
-//                     subcampo_valor = subcampo_valor + "@" + subcampos_array[s].getSubCampo();
-//                     subcampo_valor = subcampo_valor + "|" + $('#'+subcampos_array[s].getIdCompCliente()).val();
-                       subcampo_valor=new Object();
-                       subcampo_valor[subcampos_array[s].getSubCampo()]=$('#'+subcampos_array[s].getIdCompCliente()).val();
-                       subcampos_hash[s] = subcampo_valor;
+//                        subcampo_valor = new Object();
+                       subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val();
+                      
                 }
+                
+                subcampos_hash[s] = subcampo_valor;
             }
              
         }//END for(var s=0; s < subcampos_array.length; s++)
-//         alert("camop " + MARC_OBJECT_ARRAY[i].getCampo() + " subcampos " + subcampo_valor);
             MARC_OBJECT_ARRAY[i].cant_subcampos = subcampos_array.length;
-//             subcampos_hash[MARC_OBJECT_ARRAY[i].getCampo()] = subcampo_valor;
             
     }//END for(var i=0; i < MARC_OBJECT_ARRAY.length; i++)
 }
@@ -1163,13 +1165,11 @@ function campo_marc_conf(obj){
     this.indicador_secundario   = obj.indicador_secundario;
     this.subcampos_array        = new Array();
     this.subcampos_hash         = new Object();
-//     this.subcampos_hash2        = new Object();    
+
 
     for(var i = 0; i < obj.subcampos_array.length; i++){
         var subcampo_marc_conf_obj = new subcampo_marc_conf(obj.subcampos_array[i]);
         this.subcampos_array[i] = subcampo_marc_conf_obj;
-//         this.subcampos_hash[obj.subcampos_array[i].subcampo] = obj.subcampos_array[i].dato;
-//         this.subcampos_hash[i] = obj.subcampos_array[i].subcampo + "|" + obj.subcampos_array[i].dato + "#";
     }
 
     function fGetCampo(){ return this.campo };
@@ -1226,6 +1226,8 @@ function subcampo_marc_conf(obj){
     function fGetSubCampo(){ return this.subcampo };
     function fGetDato(){ return this.dato };
     function fSetDato(dato){ this.dato = dato };    
+    function fGetDatoReferencia(){ return $.trim(this.datoReferencia) };
+    function fSetDatoReferencia(datoReferencia){ this.datoReferencia = datoReferencia };    
     function fGetTipo(){ return $.trim(this.tipo) };
     function fGetReferencia(){ return $.trim(this.referencia) };
     function fGetRepetible(){ return this.repetible };
@@ -1244,6 +1246,8 @@ function subcampo_marc_conf(obj){
     this.getSubCampo                = fGetSubCampo;
     this.getDato                    = fGetDato;
     this.setDato                    = fSetDato;
+    this.getDatoReferencia          = fGetDatoReferencia;
+    this.setDatoReferencia          = fSetDatoReferencia;            
     this.getTipo                    = fGetTipo;
     this.getRepetible               = fGetRepetible;
     this.getReferenciaTabla         = fGetReferenciaTabla;

@@ -70,14 +70,15 @@ sub _meran_to_marc{
         my $indentificador_1 = $infoArrayNivel->[$i]->{'indetificador_1'};
         my $indentificador_2 = $infoArrayNivel->[$i]->{'indetificador_2'};
         my $campo = $infoArrayNivel->[$i]->{'campo'};
-        my @subcampos_array=[];
+        my @subcampos_array;
         my $subcampos_hash = $infoArrayNivel->[$i]->{'subcampos_hash'};
         my $cant_subcampos = $infoArrayNivel->[$i]->{'cant_subcampos'};
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
-        if (C4::AR::Utilidades::existeInArray($campo,@autorizados)){
+#         if (C4::AR::Utilidades::existeInArray($campo,@autorizados)){
             for(my $j=0;$j<$cant_subcampos;$j++){
                  my $subcampo= $subcampos_hash->{$j};
                  while ( my ($key, $value) = each(%$subcampo) ){
+#                     C4::AR::Debug::debug("clave = ".$key." valor: ".$value);
                    if($value ne ''){
                         push(@subcampos_array, ($key => $value));
                     }
@@ -89,12 +90,12 @@ sub _meran_to_marc{
                 C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$field->as_formatted());
             }            
         
-        }
+#         }
     }
 
     C4::AR::Debug::debug("meran_nivel_to_meran => SALIDA => as_formatted ".$marc_record->as_formatted());
     
-return($marc_record);
+    return($marc_record);
 
 }
 =head2
