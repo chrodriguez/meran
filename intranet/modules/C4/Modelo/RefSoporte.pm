@@ -49,7 +49,7 @@ sub setIdSupport{
     
 sub getDescription{
     my ($self) = shift;
-
+    C4::AR::Debug::debug("A VER AHORA".$self->description);
     return ($self->description);
 }
     

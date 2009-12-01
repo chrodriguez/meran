@@ -154,7 +154,7 @@ sub getSoporte{
     my ($self)      = shift;
     
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
- 
+ C4::AR::Debug::debug("ACA TAMOS".$marc_record->subfield("245","h"));
     return $marc_record->subfield("245","h");
 }
 
@@ -172,10 +172,11 @@ sub getSoporteObject{
     my $tipo_doc    = C4::AR::Referencias::getNombreSoporte($self->getSoporte());
         
     if(!$tipo_doc){
-            C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) CatRefTipoNivel3 NO EXISTE");
+            C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) RefSoporte NO EXISTE");
             $tipo_doc = C4::Modelo::RefSoporte->new();
     }
-
+    C4::AR::Debug::debug("EXISTE ".$tipo_doc);
+    C4::AR::Debug::debug("EXISTE ".$tipo_doc->getDescription());
     return $tipo_doc;
 }
 
