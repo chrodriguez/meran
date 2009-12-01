@@ -139,450 +139,10 @@ sub agregar{
 }
 =cut
 
-sub agregar{
 
-    my ($self)=shift;
-    use C4::Modelo::CatNivel2Repetible;
-
-    my ($data_hash)=@_;
-
-    my @arrayNivel2;
-    my @arrayNivel2Repetibles;
-
-    my $infoArrayNivel2 = $data_hash->{'infoArrayNivel2'};
-    #se guardan los datos de Nivel2
-    foreach my $infoNivel2 (@$infoArrayNivel2){
-
-        if($infoNivel2->{'tiene_estructura'} eq '1'){
-    #         if($infoNivel2->{'repetible'}){
-            #si es fijo es un campo de la tabla cat_nivel2
-            if(($infoNivel2->{'fijo'} ne '1')|| !defined $infoNivel2->{'fijo'}){
-                push(@arrayNivel2Repetibles, $infoNivel2);
-            }else{
-            #es es un campo de la tabla cat_nivel2_repetible
-                push(@arrayNivel2, $infoNivel2);
-            }
-        }
-    }
-    
-    #se guardan los datos de Nivel2
-    foreach my $infoNivel2 (@arrayNivel2){  
-        $self->setDato($infoNivel2);
-    } #END foreach my $infoNivel2 (@arrayNivel2)
-
-    $self->setId1($data_hash->{'id1'});
-    $self->save();
-
-    my $id2 = $self->getId2;
-
-    #Se guradan los datos en Nivel 2 repetibles
-    foreach my $infoNivel2 (@arrayNivel2Repetibles){
-        $infoNivel2->{'id2'} = $id2;
-            
-        my $nivel2Repetible;
-        C4::AR::Debug::debug("CatNivel2 => campo, subcampo: ".$infoNivel2->{'campo'}.", ".$infoNivel2->{'subcampo'});
-
-        if ( $infoNivel2->{'Id_rep'} != 0 ){
-            C4::AR::Debug::debug("CatNivel2 => agregar => Se va a modificar CatNivel2, Id_rep: ". $infoNivel2->{'Id_rep'});
-            $nivel2Repetible = C4::AR::Nivel2::getNivel2RepetibleFromId2Repetible($infoNivel2->{'Id_rep'},$self->db);
-        }else{
-            C4::AR::Debug::debug("CatNivel2 => agregar => No existe el REPETIBLE se crea uno");
-            $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
-        }
-
-        $nivel2Repetible->setId2($infoNivel2->{'id2'});
-        $nivel2Repetible->setCampo($infoNivel2->{'campo'});
-        $nivel2Repetible->setSubcampo($infoNivel2->{'subcampo'});
-
-        if($infoNivel2->{'referencia'}){
-            C4::AR::Debug::debug("CatNivel2 => REPETIBLE con REFERENCIA: ".$infoNivel2->{'datoReferencia'});
-            $nivel2Repetible->dato($infoNivel2->{'datoReferencia'});
-        }else{
-            C4::AR::Debug::debug("CatNivel2 => REPETIBLE sin REFERENCIA: ".$infoNivel2->{'dato'});
-            $nivel2Repetible->dato($infoNivel2->{'dato'});
-        }
-
-        $nivel2Repetible->save(); 
-    }
-
-    return $self;
-}
-
-sub eliminar{
-
-    my ($self)=shift;
-    my ($db) = @_;
-
-    $db = $db || $self->db;
-
-    use C4::Modelo::CatNivel2Repetible;
-    use C4::Modelo::CatNivel2Repetible::Manager;
-    use C4::Modelo::CatNivel3;
-    use C4::Modelo::CatNivel3::Manager;
-
-
-    my ($nivel3) = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(  db => $db, 
-                                                                    query => [ id2 => { eq => $self->getId2 } ] 
-                                                            );
-    foreach my $n3 (@$nivel3){
-      $n3->eliminar();
-    }
-
-
-    my ($repetiblesNivel2) = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(
-                                                                                db => $db,    
-                                                                                query => [
-                                                                                            id2 => { eq => $self->getId2() } 
-                                                                                    ] 
-                                                                                );
-    foreach my $n2Rep (@$repetiblesNivel2){
-      $n2Rep->eliminar();
-    }
-
-    $self->delete();
-
-}
-
-sub setDato{
-	my ($self) = shift;
-	my ($data_hash) = @_;
-
-	 if( ($data_hash->{'campo'} eq '910')&&($data_hash->{'subcampo'} eq 'a') ){
-	#tipo de documento
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
-        if ($data_hash->{'referencia'}){
-				$self->setTipo_documento($data_hash->{'datoReferencia'});
-			}else{
-				$self->setTipo_documento($data_hash->{'dato'});
-		}
-	}
-
-	elsif( ($data_hash->{'campo'} eq '245')&&($data_hash->{'subcampo'} eq 'h') ){
-	#soporte
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
-        if ($data_hash->{'referencia'}) {
-				$self->setSoporte($data_hash->{'datoReferencia'});
-			}else{
-				$self->setSoporte($data_hash->{'dato'});
-		}
-	}
-
-	elsif( ($data_hash->{'campo'} eq '900')&&($data_hash->{'subcampo'} eq 'b') ){
-	#nivel bibliografico
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
-        if ($data_hash->{'referencia'}) {
-				$self->setNivel_bibliografico($data_hash->{'datoReferencia'});
-			}else{
-				$self->setNivel_bibliografico($data_hash->{'dato'});
-		}
-	}
-
-	elsif( ($data_hash->{'campo'} eq '043')&&($data_hash->{'subcampo'} eq 'c') ){
-	#pais publicacion
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
-        if ($data_hash->{'referencia'}) {
-				$self->setPais_publicacion($data_hash->{'datoReferencia'});
-			}else{
-				$self->setPais_publicacion($data_hash->{'dato'});
-		}
-	}
-
-	elsif( ($data_hash->{'campo'} eq '041')&&($data_hash->{'subcampo'} eq 'h') ){
-	#lenguaje
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
-    if ($data_hash->{'referencia'}) {
-				$self->setLenguaje($data_hash->{'datoReferencia'});
-			}else{
-				$self->setLenguaje($data_hash->{'dato'});
-		}
-	}
-
-	elsif( ($data_hash->{'campo'} eq '260')&&($data_hash->{'subcampo'} eq 'a') ){
-	#ciudad de publicacion
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
-        if($data_hash->{'referencia'}){
-				$self->setCiudad_publicacion($data_hash->{'datoReferencia'});
-			}else{
-				$self->setCiudad_publicacion($data_hash->{'dato'});
-		}
-	}
-
-	elsif( ($data_hash->{'campo'} eq '260')&&($data_hash->{'subcampo'} eq 'c') ){
-	#anio de publicacion
-# 		if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
-        if ($data_hash->{'referencia'}){
-				$self->setAnio_publicacion($data_hash->{'datoReferencia'});
-			}else{
-				$self->setAnio_publicacion($data_hash->{'dato'});
-		}
-	}
-}
-
-sub getAnio_publicacion{
-    my ($self) = shift;
-    return ($self->anio_publicacion);
-}
-
-sub setAnio_publicacion{
-    my ($self) = shift;
-    my ($anio_publicacion) = @_;
-    $self->anio_publicacion($anio_publicacion);
-}
-
-sub getCiudad_publicacion{
-    my ($self) = shift;
-    return ($self->ciudad_publicacion);
-}
-
-sub setCiudad_publicacion{
-    my ($self) = shift;
-    my ($ciudad_publicacion) = @_;
-    $self->ciudad_publicacion($ciudad_publicacion);
-}
-
-sub getLenguaje{
-    my ($self) = shift;
-    return ($self->lenguaje);
-}
-
-sub setLenguaje{
-    my ($self) = shift;
-    my ($lenguaje) = @_;
-    $self->lenguaje($lenguaje);
-}
-
-sub getPais_publicacion{
-    my ($self) = shift;
-    return ($self->pais_publicacion);
-}
-
-sub setPais_publicacion{
-    my ($self) = shift;
-    my ($pais_publicacion) = @_;
-    $self->pais_publicacion($pais_publicacion);
-}
-
-sub getSoporte{
-    my ($self) = shift;
-    return ($self->soporte);
-}
-
-sub setSoporte{
-    my ($self) = shift;
-    my ($soporte) = @_;
-    $self->soporte($soporte);
-}
-
-sub getNivel_bibliografico{
-    my ($self) = shift;
-    return ($self->nivel_bibliografico);
-}
-
-sub setNivel_bibliografico{
-    my ($self) = shift;
-    my ($nivel_bibliografico) = @_;
-    $self->nivel_bibliografico($nivel_bibliografico);
-}
-
-sub getId2{
-    my ($self) = shift;
-    return ($self->id2);
-}
-
-sub setId2{
-    my ($self) = shift;
-    my ($id2) = @_;
-    $self->id2($id2);
-}
-
-sub getId1{
-    my ($self) = shift;
-    return ($self->nivel1->id1);
-}
-
-sub setId1{
-    my ($self) = shift;
-    my ($id1) = @_;
-    $self->id1($id1);
-}
-
-sub setTipo_documento{
-    my ($self) = shift;
-    my ($tipo_documento) = @_;
-    $self->tipo_documento($tipo_documento);
-}
-
-sub getTipo_documento{
-    my ($self) = shift;
-    return ($self->tipo_documento);
-}
-
-sub getTimestamp{
-    my ($self) = shift;
-    return ($self->timestamp);
-}
-
-sub setTimestamp{
-    my ($self) = shift;
-    my ($timestamp) = @_;
-    $self->timestamp($timestamp);
-}
 
 # ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
 
-=item
-Esta funcion devuelve los campos de nivel 3 mapeados en un arreglo de {campo, subcampo, dato}
-=cut
-sub toMARC{
-    my ($self) = shift;
-	my @marc_array;
-
-	my $campo= '910';
-	my $subcampo= 'a';
-	my %hash;
-	$hash{'campo'}= $campo;
-	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
-	$hash{'dato'}= C4::AR::Referencias::getNombreTipoDocumento($self->getTipo_documento);
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-  if($estructura){
-    if($estructura->getReferencia){
-	    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
-		  $hash{'datoReferencia'}= $self->getTipo_documento
-    }
-	}
-
-  $hash{'id1'} = $self->getId1;
-
-	push (@marc_array, \%hash);
-
-	$campo= '043';
-	$subcampo= 'c';
-	my %hash;
-	$hash{'campo'}= $campo;
-	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
-	$hash{'dato'}= C4::AR::Referencias::getNombrePais($self->getPais_publicacion);
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	
-	if($estructura){
-    if($estructura->getReferencia){
-		  $hash{'datoReferencia'}= $self->getPais_publicacion;
-    }
-    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
-	}
-
-  $hash{'id1'} = $self->getId1;
-
-	push (@marc_array, \%hash);
-
-	$campo= '260';
-	$subcampo= 'c';
-	my %hash;
-	$hash{'campo'}= $campo;
-	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
-	$hash{'dato'}= $self->getAnio_publicacion;
-	my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-  if($estructura){
-    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
-  }
-
-  $hash{'id1'} = $self->getId1;
-
-	push (@marc_array, \%hash);
-
-	$campo= '260';
-	$subcampo= 'a';
-	my %hash;
-	$hash{'campo'}= $campo;
-	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
-    my $ciudad  = C4::AR::Referencias::getCiudadObject($self->getCiudad_publicacion);
- 	$hash{'dato'} = '';
-
-    if($ciudad){
-        $hash{'dato'} = $ciudad->getNombre();
-    }
-
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	
-	if($estructura){
-    if($estructura->getReferencia){
-	    #tiene referencia
-		  $hash{'datoReferencia'}= $self->getCiudad_publicacion;
-    }
-
-    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
-	}
-
-  $hash{'id1'} = $self->getId1;
-
-	push (@marc_array, \%hash);
-
-	$campo= '041';
-	$subcampo= 'h';
-	my %hash;
-	$hash{'campo'}= $campo;
-	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
-	$hash{'dato'}= C4::AR::Referencias::getNombreLenguaje($self->getLenguaje);
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	
-	if($estructura){
-    if($estructura->getReferencia){
-	    #tiene referencia
-		  $hash{'datoReferencia'}= $self->getLenguaje;
-    }
-
-    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
-	}
-  $hash{'id1'} = $self->getId1;
-
-	push (@marc_array, \%hash);
-
-	$campo= '245';
-	$subcampo= 'h';
-	my %hash;
-	$hash{'campo'}= $campo;
-	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
-	$hash{'dato'}= C4::AR::Referencias::getNombreSoporte($self->getSoporte);
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	
-	if($estructura){
-    if($estructura->getReferencia){
-	    #tiene referencia
-		  $hash{'datoReferencia'}= $self->getSoporte;
-    }
-    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
-	}
-  $hash{'id1'} = $self->getId1;
-
-	push (@marc_array, \%hash);
-
-	$campo= '900';
-	$subcampo= 'b';
-	my %hash;
-	$hash{'campo'}= $campo;
-	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
-	$hash{'dato'}= C4::AR::Referencias::getNombreNivelBibliografico($self->getNivel_bibliografico);
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-	if($estructura){
-    if($estructura->getReferencia){
-	    #tiene referencia
-		  $hash{'datoReferencia'}= $self->getNivel_bibliografico;
-    }
-  
-    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
-	}
-  $hash{'id1'} = $self->getId1;
-	
-	push (@marc_array, \%hash);
-	
-	return (\@marc_array);
-}
 
 =item
 Esta funcion devuelve los campos de nivel 2 y nivel2Repetible mapeados en un arreglo de {campo, subcampo, dato}
@@ -629,77 +189,6 @@ sub nivel2CompletoToMARC{
 # ==============================================FIN===SOPORTE=====ESTRUCTURA CATALOGACION================================================
 
 
-=item
-Esta funcion retorna la edicion
-=cut
-sub getEdicion{
-    my ($self) = shift;
-	my $aux="";
-	foreach my $repetible ($self->cat_nivel2_repetible){
-		if(($repetible->getCampo eq "250")and($repetible->getSubcampo eq "a")){
-			if ($aux eq "")
-				{$aux= $repetible->getDato;}else{$aux.=" ".$repetible->getDato;}
-		}
-	}
-	return $aux;
-}
-
-=item
-Esta funcion retorna el volumen segun un id2
-=cut
-
-sub getVolumen{
-    my ($self) = shift;
-	my $aux="";
-	foreach my $repetible ($self->cat_nivel2_repetible){
-		if(($repetible->getCampo eq "740")and($repetible->getSubcampo eq "n")){
-			if ($aux eq "")
-				{$aux= $repetible->getDato;}else{$aux.=" ".$repetible->getDato;}
-		}
-	}
-	return $aux;
-}
-
-=item
-Esta funcion retorna la descripcion del volumen segun un id2
-=cut
-sub getVolumenDesc{
-    my ($self) = shift;
-	my $aux="";
-	foreach my $repetible ($self->cat_nivel2_repetible){
-		if(($repetible->getCampo eq "740")and($repetible->getSubcampo eq "a")){
-			if ($aux eq "")
-				{$aux= $repetible->getDato;}else{$aux.=" ".$repetible->getDato;}
-		}
-	}
-	return $aux;
-}
-
-=item
-retorna la canitdad de items prestados para el grupo pasado por parametro
-=cut
-sub getCantPrestados{
-	my ($self) = shift;
-	my ($id2)=@_;
-
-=item
-	my $cantPrestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
-                                                               	query => [ 	id2 => { eq => $self->getId2 },
-# FIXME #ojo no se si funciona el NULL
- 																			fecha_devolucion => { eq => 'NULL' }  
-																		 ],
-																require_objects => ['nivel3.nivel2'],
-																with_objects => ['nivel3'],
-										);
-=cut
-	my ($cantPrestamos_count)= C4::AR::Nivel2::getCantPrestados($id2);
-
-# 	C4::AR::Debug::debug("C4::AR::Nivel2::getCantPrestados ".$cantPrestamos_count);
-
-	return $cantPrestamos_count;
-}
-
-
 sub getInvolvedCount{
  
     my ($self) = shift;
@@ -728,55 +217,6 @@ sub replaceBy{
 
     my $replaced = C4::Modelo::CatNivel2::Manager->update_cat_nivel2(   where => \@filtros,
                                                                         set   => { $campo => $new_value });
-}
-
-=item sub getCantEjemplares
-retorna la canitdad de ejemplares del grupo
-=cut
-sub getCantEjemplares{
-    my ($self) = shift;
-
-    my $cantEjemplares_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count(
-
-                                                                query => [  'id1' => { eq => $self->getId1 },
-                                                                            'id2' => { eq => $self->getId2 }
-                                                                         ],
-
-                                        );
-
-
-    return $cantEjemplares_count;
-}
-
-=item sub tienePrestamos
-    Verifica si el nivel 2 pasado por parametro tiene ejemplares con prestamos o no
-=cut
-sub tienePrestamos {
-    my ($self) = shift;
-
-    my $cant = C4::AR::Prestamos::getCountPrestamosDeGrupo($self->getId2);
-
-    return ($cant > 0)?1:0;
-}
-
-=item sub tieneReservas
-    Devuelve 1 si tiene ejemplares reservados en el grupo, 0 caso contrario
-=cut
-sub tieneReservas {
-    my ($self) = shift;
-
-    use C4::Modelo::CircReserva;
-    use C4::Modelo::CircReserva::Manager;
-    my @filtros;
-    push(@filtros, ( id2    => { eq => $self->getId2}));
-
-    my ($reservas_array_ref) = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
-
-    if (scalar(@$reservas_array_ref) > 0){
-        return 1;
-    }else{
-        return 0;
-    }
 }
 
 
@@ -854,6 +294,579 @@ sub agregarDesdeMARC {
         }
 
 }
+
+#=======================================================DEPRECATEDD======================================================================
+
+
+# sub agregar{
+# 
+#     my ($self)=shift;
+#     use C4::Modelo::CatNivel2Repetible;
+# 
+#     my ($data_hash)=@_;
+# 
+#     my @arrayNivel2;
+#     my @arrayNivel2Repetibles;
+# 
+#     my $infoArrayNivel2 = $data_hash->{'infoArrayNivel2'};
+#     #se guardan los datos de Nivel2
+#     foreach my $infoNivel2 (@$infoArrayNivel2){
+# 
+#         if($infoNivel2->{'tiene_estructura'} eq '1'){
+#     #         if($infoNivel2->{'repetible'}){
+#             #si es fijo es un campo de la tabla cat_nivel2
+#             if(($infoNivel2->{'fijo'} ne '1')|| !defined $infoNivel2->{'fijo'}){
+#                 push(@arrayNivel2Repetibles, $infoNivel2);
+#             }else{
+#             #es es un campo de la tabla cat_nivel2_repetible
+#                 push(@arrayNivel2, $infoNivel2);
+#             }
+#         }
+#     }
+#     
+#     #se guardan los datos de Nivel2
+#     foreach my $infoNivel2 (@arrayNivel2){  
+#         $self->setDato($infoNivel2);
+#     } #END foreach my $infoNivel2 (@arrayNivel2)
+# 
+#     $self->setId1($data_hash->{'id1'});
+#     $self->save();
+# 
+#     my $id2 = $self->getId2;
+# 
+#     #Se guradan los datos en Nivel 2 repetibles
+#     foreach my $infoNivel2 (@arrayNivel2Repetibles){
+#         $infoNivel2->{'id2'} = $id2;
+#             
+#         my $nivel2Repetible;
+#         C4::AR::Debug::debug("CatNivel2 => campo, subcampo: ".$infoNivel2->{'campo'}.", ".$infoNivel2->{'subcampo'});
+# 
+#         if ( $infoNivel2->{'Id_rep'} != 0 ){
+#             C4::AR::Debug::debug("CatNivel2 => agregar => Se va a modificar CatNivel2, Id_rep: ". $infoNivel2->{'Id_rep'});
+#             $nivel2Repetible = C4::AR::Nivel2::getNivel2RepetibleFromId2Repetible($infoNivel2->{'Id_rep'},$self->db);
+#         }else{
+#             C4::AR::Debug::debug("CatNivel2 => agregar => No existe el REPETIBLE se crea uno");
+#             $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
+#         }
+# 
+#         $nivel2Repetible->setId2($infoNivel2->{'id2'});
+#         $nivel2Repetible->setCampo($infoNivel2->{'campo'});
+#         $nivel2Repetible->setSubcampo($infoNivel2->{'subcampo'});
+# 
+#         if($infoNivel2->{'referencia'}){
+#             C4::AR::Debug::debug("CatNivel2 => REPETIBLE con REFERENCIA: ".$infoNivel2->{'datoReferencia'});
+#             $nivel2Repetible->dato($infoNivel2->{'datoReferencia'});
+#         }else{
+#             C4::AR::Debug::debug("CatNivel2 => REPETIBLE sin REFERENCIA: ".$infoNivel2->{'dato'});
+#             $nivel2Repetible->dato($infoNivel2->{'dato'});
+#         }
+# 
+#         $nivel2Repetible->save(); 
+#     }
+# 
+#     return $self;
+# }
+# 
+# sub eliminar{
+# 
+#     my ($self)=shift;
+#     my ($db) = @_;
+# 
+#     $db = $db || $self->db;
+# 
+#     use C4::Modelo::CatNivel2Repetible;
+#     use C4::Modelo::CatNivel2Repetible::Manager;
+#     use C4::Modelo::CatNivel3;
+#     use C4::Modelo::CatNivel3::Manager;
+# 
+# 
+#     my ($nivel3) = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(  db => $db, 
+#                                                                     query => [ id2 => { eq => $self->getId2 } ] 
+#                                                             );
+#     foreach my $n3 (@$nivel3){
+#       $n3->eliminar();
+#     }
+# 
+# 
+#     my ($repetiblesNivel2) = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(
+#                                                                                 db => $db,    
+#                                                                                 query => [
+#                                                                                             id2 => { eq => $self->getId2() } 
+#                                                                                     ] 
+#                                                                                 );
+#     foreach my $n2Rep (@$repetiblesNivel2){
+#       $n2Rep->eliminar();
+#     }
+# 
+#     $self->delete();
+# 
+# }
+# 
+# sub setDato{
+#     my ($self) = shift;
+#     my ($data_hash) = @_;
+# 
+#      if( ($data_hash->{'campo'} eq '910')&&($data_hash->{'subcampo'} eq 'a') ){
+#     #tipo de documento
+# #       if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+#         if ($data_hash->{'referencia'}){
+#                 $self->setTipo_documento($data_hash->{'datoReferencia'});
+#             }else{
+#                 $self->setTipo_documento($data_hash->{'dato'});
+#         }
+#     }
+# 
+#     elsif( ($data_hash->{'campo'} eq '245')&&($data_hash->{'subcampo'} eq 'h') ){
+#     #soporte
+# #       if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+#         if ($data_hash->{'referencia'}) {
+#                 $self->setSoporte($data_hash->{'datoReferencia'});
+#             }else{
+#                 $self->setSoporte($data_hash->{'dato'});
+#         }
+#     }
+# 
+#     elsif( ($data_hash->{'campo'} eq '900')&&($data_hash->{'subcampo'} eq 'b') ){
+#     #nivel bibliografico
+# #       if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+#         if ($data_hash->{'referencia'}) {
+#                 $self->setNivel_bibliografico($data_hash->{'datoReferencia'});
+#             }else{
+#                 $self->setNivel_bibliografico($data_hash->{'dato'});
+#         }
+#     }
+# 
+#     elsif( ($data_hash->{'campo'} eq '043')&&($data_hash->{'subcampo'} eq 'c') ){
+#     #pais publicacion
+# #       if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+#         if ($data_hash->{'referencia'}) {
+#                 $self->setPais_publicacion($data_hash->{'datoReferencia'});
+#             }else{
+#                 $self->setPais_publicacion($data_hash->{'dato'});
+#         }
+#     }
+# 
+#     elsif( ($data_hash->{'campo'} eq '041')&&($data_hash->{'subcampo'} eq 'h') ){
+#     #lenguaje
+# #       if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+#     if ($data_hash->{'referencia'}) {
+#                 $self->setLenguaje($data_hash->{'datoReferencia'});
+#             }else{
+#                 $self->setLenguaje($data_hash->{'dato'});
+#         }
+#     }
+# 
+#     elsif( ($data_hash->{'campo'} eq '260')&&($data_hash->{'subcampo'} eq 'a') ){
+#     #ciudad de publicacion
+# #       if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+#         if($data_hash->{'referencia'}){
+#                 $self->setCiudad_publicacion($data_hash->{'datoReferencia'});
+#             }else{
+#                 $self->setCiudad_publicacion($data_hash->{'dato'});
+#         }
+#     }
+# 
+#     elsif( ($data_hash->{'campo'} eq '260')&&($data_hash->{'subcampo'} eq 'c') ){
+#     #anio de publicacion
+# #       if( ($data_hash->{'modificado'})&&($data_hash->{'referencia'}) ){
+#         if ($data_hash->{'referencia'}){
+#                 $self->setAnio_publicacion($data_hash->{'datoReferencia'});
+#             }else{
+#                 $self->setAnio_publicacion($data_hash->{'dato'});
+#         }
+#     }
+# }
+# 
+# sub getAnio_publicacion{
+#     my ($self) = shift;
+#     return ($self->anio_publicacion);
+# }
+# 
+# sub setAnio_publicacion{
+#     my ($self) = shift;
+#     my ($anio_publicacion) = @_;
+#     $self->anio_publicacion($anio_publicacion);
+# }
+# 
+# sub getCiudad_publicacion{
+#     my ($self) = shift;
+#     return ($self->ciudad_publicacion);
+# }
+# 
+# sub setCiudad_publicacion{
+#     my ($self) = shift;
+#     my ($ciudad_publicacion) = @_;
+#     $self->ciudad_publicacion($ciudad_publicacion);
+# }
+# 
+# sub getLenguaje{
+#     my ($self) = shift;
+#     return ($self->lenguaje);
+# }
+# 
+# sub setLenguaje{
+#     my ($self) = shift;
+#     my ($lenguaje) = @_;
+#     $self->lenguaje($lenguaje);
+# }
+# 
+# sub getPais_publicacion{
+#     my ($self) = shift;
+#     return ($self->pais_publicacion);
+# }
+# 
+# sub setPais_publicacion{
+#     my ($self) = shift;
+#     my ($pais_publicacion) = @_;
+#     $self->pais_publicacion($pais_publicacion);
+# }
+# 
+# sub getSoporte{
+#     my ($self) = shift;
+#     return ($self->soporte);
+# }
+# 
+# sub setSoporte{
+#     my ($self) = shift;
+#     my ($soporte) = @_;
+#     $self->soporte($soporte);
+# }
+# 
+# sub getNivel_bibliografico{
+#     my ($self) = shift;
+#     return ($self->nivel_bibliografico);
+# }
+# 
+# sub setNivel_bibliografico{
+#     my ($self) = shift;
+#     my ($nivel_bibliografico) = @_;
+#     $self->nivel_bibliografico($nivel_bibliografico);
+# }
+# 
+# sub getId2{
+#     my ($self) = shift;
+#     return ($self->id2);
+# }
+# 
+# sub setId2{
+#     my ($self) = shift;
+#     my ($id2) = @_;
+#     $self->id2($id2);
+# }
+# 
+# sub getId1{
+#     my ($self) = shift;
+#     return ($self->nivel1->id1);
+# }
+# 
+# sub setId1{
+#     my ($self) = shift;
+#     my ($id1) = @_;
+#     $self->id1($id1);
+# }
+# 
+# sub setTipo_documento{
+#     my ($self) = shift;
+#     my ($tipo_documento) = @_;
+#     $self->tipo_documento($tipo_documento);
+# }
+# 
+# sub getTipo_documento{
+#     my ($self) = shift;
+#     return ($self->tipo_documento);
+# }
+# 
+# sub getTimestamp{
+#     my ($self) = shift;
+#     return ($self->timestamp);
+# }
+# 
+# sub setTimestamp{
+#     my ($self) = shift;
+#     my ($timestamp) = @_;
+#     $self->timestamp($timestamp);
+# }
+
+
+=item
+Esta funcion retorna la edicion
+=cut
+# sub getEdicion{
+#     my ($self) = shift;
+#     my $aux="";
+#     foreach my $repetible ($self->cat_nivel2_repetible){
+#         if(($repetible->getCampo eq "250")and($repetible->getSubcampo eq "a")){
+#             if ($aux eq "")
+#                 {$aux= $repetible->getDato;}else{$aux.=" ".$repetible->getDato;}
+#         }
+#     }
+#     return $aux;
+# }
+# 
+# =item
+# Esta funcion retorna el volumen segun un id2
+# =cut
+# 
+# sub getVolumen{
+#     my ($self) = shift;
+#     my $aux="";
+#     foreach my $repetible ($self->cat_nivel2_repetible){
+#         if(($repetible->getCampo eq "740")and($repetible->getSubcampo eq "n")){
+#             if ($aux eq "")
+#                 {$aux= $repetible->getDato;}else{$aux.=" ".$repetible->getDato;}
+#         }
+#     }
+#     return $aux;
+# }
+# 
+# =item
+# Esta funcion retorna la descripcion del volumen segun un id2
+# =cut
+# sub getVolumenDesc{
+#     my ($self) = shift;
+#     my $aux="";
+#     foreach my $repetible ($self->cat_nivel2_repetible){
+#         if(($repetible->getCampo eq "740")and($repetible->getSubcampo eq "a")){
+#             if ($aux eq "")
+#                 {$aux= $repetible->getDato;}else{$aux.=" ".$repetible->getDato;}
+#         }
+#     }
+#     return $aux;
+# }
+
+
+=item
+retorna la canitdad de items prestados para el grupo pasado por parametro
+=cut
+# sub getCantPrestados{
+#     my ($self) = shift;
+#     my ($id2)=@_;
+# 
+# =item
+#     my $cantPrestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
+#                                                                 query => [  id2 => { eq => $self->getId2 },
+# # FIXME #ojo no se si funciona el NULL
+#                                                                             fecha_devolucion => { eq => 'NULL' }  
+#                                                                          ],
+#                                                                 require_objects => ['nivel3.nivel2'],
+#                                                                 with_objects => ['nivel3'],
+#                                         );
+# =cut
+#     my ($cantPrestamos_count)= C4::AR::Nivel2::getCantPrestados($id2);
+# 
+# #   C4::AR::Debug::debug("C4::AR::Nivel2::getCantPrestados ".$cantPrestamos_count);
+# 
+#     return $cantPrestamos_count;
+# }
+
+
+# DEPRECATEDD
+=item sub getCantEjemplares
+retorna la canitdad de ejemplares del grupo
+=cut
+# sub getCantEjemplares{
+#     my ($self) = shift;
+# 
+#     my $cantEjemplares_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count(
+# 
+#                                                                 query => [  'id1' => { eq => $self->getId1 },
+#                                                                             'id2' => { eq => $self->getId2 }
+#                                                                          ],
+# 
+#                                         );
+# 
+# 
+#     return $cantEjemplares_count;
+# }
+
+
+# DEPRECATEDD
+=item sub tieneReservas
+    Devuelve 1 si tiene ejemplares reservados en el grupo, 0 caso contrario
+# =cut
+# sub tieneReservas {
+#     my ($self) = shift;
+# 
+#     use C4::Modelo::CircReserva;
+#     use C4::Modelo::CircReserva::Manager;
+#     my @filtros;
+#     push(@filtros, ( id2    => { eq => $self->getId2}));
+# 
+#     my ($reservas_array_ref) = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
+# 
+#     if (scalar(@$reservas_array_ref) > 0){
+#         return 1;
+#     }else{
+#         return 0;
+#     }
+# }
+
+# DEPRECATEDDD
+# =item sub tienePrestamos
+#     Verifica si el nivel 2 pasado por parametro tiene ejemplares con prestamos o no
+# =cut
+# sub tienePrestamos {
+#     my ($self) = shift;
+# 
+#     my $cant = C4::AR::Prestamos::getCountPrestamosDeGrupo($self->getId2);
+# 
+#     return ($cant > 0)?1:0;
+# }
+
+
+# =item
+# Esta funcion devuelve los campos de nivel 3 mapeados en un arreglo de {campo, subcampo, dato}
+# =cut
+# sub toMARC{
+#     my ($self) = shift;
+#     my @marc_array;
+# 
+#     my $campo= '910';
+#     my $subcampo= 'a';
+#     my %hash;
+#     $hash{'campo'}= $campo;
+#     $hash{'subcampo'}= $subcampo;
+#     $hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
+#     $hash{'dato'}= C4::AR::Referencias::getNombreTipoDocumento($self->getTipo_documento);
+#     my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+#   if($estructura){
+#     if($estructura->getReferencia){
+#         $hash{'liblibrarian'}= $estructura->getLiblibrarian;
+#           $hash{'datoReferencia'}= $self->getTipo_documento
+#     }
+#     }
+# 
+#   $hash{'id1'} = $self->getId1;
+# 
+#     push (@marc_array, \%hash);
+# 
+#     $campo= '043';
+#     $subcampo= 'c';
+#     my %hash;
+#     $hash{'campo'}= $campo;
+#     $hash{'subcampo'}= $subcampo;
+#     $hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
+#     $hash{'dato'}= C4::AR::Referencias::getNombrePais($self->getPais_publicacion);
+#     my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+#     
+#     if($estructura){
+#     if($estructura->getReferencia){
+#           $hash{'datoReferencia'}= $self->getPais_publicacion;
+#     }
+#     $hash{'liblibrarian'}= $estructura->getLiblibrarian;
+#     }
+# 
+#   $hash{'id1'} = $self->getId1;
+# 
+#     push (@marc_array, \%hash);
+# 
+#     $campo= '260';
+#     $subcampo= 'c';
+#     my %hash;
+#     $hash{'campo'}= $campo;
+#     $hash{'subcampo'}= $subcampo;
+#     $hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
+#     $hash{'dato'}= $self->getAnio_publicacion;
+#     my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+#   if($estructura){
+#     $hash{'liblibrarian'}= $estructura->getLiblibrarian;
+#   }
+# 
+#   $hash{'id1'} = $self->getId1;
+# 
+#     push (@marc_array, \%hash);
+# 
+#     $campo= '260';
+#     $subcampo= 'a';
+#     my %hash;
+#     $hash{'campo'}= $campo;
+#     $hash{'subcampo'}= $subcampo;
+#     $hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
+#     my $ciudad  = C4::AR::Referencias::getCiudadObject($self->getCiudad_publicacion);
+#     $hash{'dato'} = '';
+# 
+#     if($ciudad){
+#         $hash{'dato'} = $ciudad->getNombre();
+#     }
+# 
+#     my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+#     
+#     if($estructura){
+#     if($estructura->getReferencia){
+#         #tiene referencia
+#           $hash{'datoReferencia'}= $self->getCiudad_publicacion;
+#     }
+# 
+#     $hash{'liblibrarian'}= $estructura->getLiblibrarian;
+#     }
+# 
+#   $hash{'id1'} = $self->getId1;
+# 
+#     push (@marc_array, \%hash);
+# 
+#     $campo= '041';
+#     $subcampo= 'h';
+#     my %hash;
+#     $hash{'campo'}= $campo;
+#     $hash{'subcampo'}= $subcampo;
+#     $hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
+#     $hash{'dato'}= C4::AR::Referencias::getNombreLenguaje($self->getLenguaje);
+#     my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+#     
+#     if($estructura){
+#     if($estructura->getReferencia){
+#         #tiene referencia
+#           $hash{'datoReferencia'}= $self->getLenguaje;
+#     }
+# 
+#     $hash{'liblibrarian'}= $estructura->getLiblibrarian;
+#     }
+#   $hash{'id1'} = $self->getId1;
+# 
+#     push (@marc_array, \%hash);
+# 
+#     $campo= '245';
+#     $subcampo= 'h';
+#     my %hash;
+#     $hash{'campo'}= $campo;
+#     $hash{'subcampo'}= $subcampo;
+#     $hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
+#     $hash{'dato'}= C4::AR::Referencias::getNombreSoporte($self->getSoporte);
+#     my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+#     
+#     if($estructura){
+#     if($estructura->getReferencia){
+#         #tiene referencia
+#           $hash{'datoReferencia'}= $self->getSoporte;
+#     }
+#     $hash{'liblibrarian'}= $estructura->getLiblibrarian;
+#     }
+#   $hash{'id1'} = $self->getId1;
+# 
+#     push (@marc_array, \%hash);
+# 
+#     $campo= '900';
+#     $subcampo= 'b';
+#     my %hash;
+#     $hash{'campo'}= $campo;
+#     $hash{'subcampo'}= $subcampo;
+#     $hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
+#     $hash{'dato'}= C4::AR::Referencias::getNombreNivelBibliografico($self->getNivel_bibliografico);
+#     my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+#     if($estructura){
+#     if($estructura->getReferencia){
+#         #tiene referencia
+#           $hash{'datoReferencia'}= $self->getNivel_bibliografico;
+#     }
+#   
+#     $hash{'liblibrarian'}= $estructura->getLiblibrarian;
+#     }
+#   $hash{'id1'} = $self->getId1;
+#     
+#     push (@marc_array, \%hash);
+#     
+#     return (\@marc_array);
+# }
 
 1;
 

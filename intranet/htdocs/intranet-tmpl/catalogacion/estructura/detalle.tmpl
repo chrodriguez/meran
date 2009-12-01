@@ -332,13 +332,14 @@ $(document).ready(function(){
 
 	[% END %]
 	</ul>
-	N&uacute;mero Total de Ejemplares:<b> [% cantItemN1 %]</b> 
+
+	[% "N&uacute;mero Total de Ejemplares" | i18n %]:<b> [% cantItemN1 %]</b> 
 </div>
 </fieldset>
 [% FOREACH nivel2 %]
 <div id="fieldset_grupo[% id2 %]">
 <fieldset>
-<strong><legend>[% "Detalles de Nivel 2 para registro" | i18n %] [% id2 %] GRUPO - [% tipo_documento %]</legend></strong>
+<strong><legend>[% "Detalles de Nivel 2 para registro" | i18n %] [% id2 %] [% "GRUPO" | i18n %] - [% tipo_documento %]</legend></strong>
 
         <div id="grupo[% id2 %]">
         

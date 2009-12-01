@@ -49,6 +49,32 @@ __PACKAGE__->meta->setup(
 );
 
 =head2
+    sub agregar
+=cut
+sub agregar{
+    my ($self)      = shift;
+    my ($db, $params)    = @_;
+
+    $self->setId2($params->{'id2'});
+    $self->setId1($params->{'id1'});
+    $self->setMarcRecord($params->{'marc_record'});
+
+    $self->save();
+}
+
+=head2
+    sub eliminar
+=cut
+sub eliminar{
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    #HACER ALGO SI ES NECESARIO
+
+    $self->delete();    
+}
+
+=head2
 sub getId3
 
 Obteniendo el id del elemento
@@ -123,17 +149,6 @@ sub setMarcRecord{
     my ($marc_record)   = @_;
 
     $self->marc_record($marc_record);
-}
-
-sub agregar{
-    my ($self)      = shift;
-    my ($db, $params)    = @_;
-
-    $self->setId2($params->{'id2'});
-    $self->setId1($params->{'id1'});
-    $self->setMarcRecord($params->{'marc_record'});
-
-    $self->save();
 }
 
 sub getBarcode{
@@ -239,6 +254,28 @@ sub esParaSala{
     return (C4::AR::Referencias::getNombreDisponibilidad($self->getIdEstado) eq "Sala de Lectura");
 }
 
+=head2 sub toMARC
+
+=cut
+sub toMARC{
+    my ($self) = shift;
+
+    #obtengo el marc_record del NIVEL 2
+    my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+
+    my $MARC_result_array   = &C4::AR::Catalogacion::detalleMARC($marc_record);
+
+#     foreach my $m (@$MARC_result_array){
+#         C4::AR::Debug::debug("campo => ".$m->{'campo'});
+#         foreach my $s (@{$m->{'subcampos_array'}}){
+#             C4::AR::Debug::debug("liblibrarian => ".$s->{'subcampo'});        
+#             C4::AR::Debug::debug("liblibrarian => ".$s->{'liblibrarian'});        
+#         }
+#     }
+
+    return ($MARC_result_array);
+}
 
 1;
 

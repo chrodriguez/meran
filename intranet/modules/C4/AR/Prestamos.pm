@@ -299,7 +299,7 @@ sub prestarYGenerarTicket{
 # FIXME falta verificar
 
     my ($nivel3aPrestar)= C4::AR::Nivel3::getNivel3FromBarcode($params->{'barcode'});
-C4::AR::Debug::debug("barcode a prestar: ".$params->{'barcode'});
+    C4::AR::Debug::debug("barcode a prestar: ".$params->{'barcode'});   
 
     my @infoTickets;
     my @infoMessages;

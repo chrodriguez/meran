@@ -15,14 +15,13 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw(
 
 	&detalleNivel3
-
 	&getBarcode
-	&getDataNivel3
-
 	&modificarEstadoItem
 );
 
-
+=head2
+    sub t_guardarNivel3
+=cut
 sub t_guardarNivel3 {
     my($params) = @_;
 
@@ -83,16 +82,16 @@ sub t_guardarNivel3 {
 }
 
 
-
-
-=item sub getNivel3FromId2
+=head2 sub getNivel3FromId2
 Recupero todos los nivel 3 a partir de un id2
 =cut
 sub getNivel3FromId2{
-    my ($id2) = @_;
+    my ($db, $id2) = @_;
+    $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db;
 
     my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
-                                                            query => [ 
+                                                                        db  => $db,
+                                                            query => [  
                                                                         id2 => { eq => $id2 },
                                                                 ], 
 #                                                             require_objects => ['ref_disponibilidad', 'ref_estado']
@@ -103,6 +102,113 @@ sub getNivel3FromId2{
 
 
 
+=head2 sub t_eliminarNivel3
+    Elimina los ejemplares de nivel 3 pasados por parametro
+    @parametros:
+        $params->{'id3_array'}: arreglo de ID3
+=cut
+sub t_eliminarNivel3{
+    my ($params) = @_;
+
+    my $barcode;
+
+    my $msg_object = C4::AR::Mensajes::create();
+    
+    my  $cat_registro_marc_n3 = C4::Modelo::CatNivel2->new();
+    my  $db = $cat_registro_marc_n3->db;
+    # enable transactions, if possible
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+    my $id3_array = $params->{'id3_array'};
+
+    eval {
+        for(my $i=0;$i<scalar(@$id3_array);$i++){
+            my $cat_registro_marc_n3;
+            $params->{'id3'} = $id3_array->[$i];
+            _verificarDeleteItem($msg_object, $params);
+            
+            if(!$msg_object->{'error'}){
+# FIXME falta verificar existencia de los ejemplares q se estan levantando
+                $cat_registro_marc_n3 = getNivel3FromId3($id3_array->[$i], $db);
+                my $barcode = $cat_registro_marc_n3->getBarcode;   
+                $cat_registro_marc_n3->eliminar();
+                #se eliminó con exito
+                $msg_object->{'error'} = 0;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U376', 'params' => [$barcode]} ) ;
+            }
+        }
+
+            $db->commit;
+    };
+
+    if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'B435',"INTRA");
+        $db->rollback;
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U379', 'params' => [$barcode]} ) ;
+    }
+
+    $db->{connect_options}->{AutoCommit} = 1;
+
+    return ($msg_object);
+}
+
+
+=head2 sub getNivel3FromId3
+Recupero un nivel 3 a partir de un id3
+retorna un objeto o 0 si no existe
+=cut
+sub getNivel3FromId3{
+    my ($id3, $db) = @_;
+
+    $db = $db || C4::Modelo::PermCatalogo->new()->db;
+    my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
+                                                                    db => $db,
+                                                                    query   => [ id => { eq => $id3} ], 
+#                                                                     require_objects => ['ref_disponibilidad', 'ref_estado']
+                                                                );
+
+    if( scalar(@$nivel3_array_ref) > 0){
+        return ($nivel3_array_ref->[0]);
+    }else{
+        return 0;
+    }
+}
+
+sub getNivel3FromBarcode {
+    my ($barcode) = @_;
+    
+#     use C4::Modelo::CatNivel3;
+#     use C4::Modelo::CatNivel3::Manager;
+
+# TODO Miguel ver si esto es eficiente, de todos modos no se si se puede hacer de otra manera!!!!!!!!!!
+# 1) parece q no queda otra, hay q "abrir" el marc_record y sacar el barcode para todos los ejemplares e ir comparando cada uno GARRONNNN!!!!
+# 2) se podria usar el indice??????????????
+
+    my @filtros;
+    my @barcode_result;
+
+#   push(@filtros, ( barcode=> { eq => $barcode }) );
+    
+    my $barcodes_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
+
+    my $cant = scalar(@$barcodes_array_ref);
+
+    for(my $i=0; $i < $cant; $i++){
+
+        if($barcodes_array_ref->[$i]->getBarcode() eq $barcode){
+            push(@barcode_result, $barcodes_array_ref->[$i]);
+        }
+    }
+
+    if(scalar(@barcode_result) > 0){
+        return (\@barcode_result);
+    }else{
+        return (0);
+    }
+}
 
 
 #***********************************************ACA FINALIZA LA NUEVA ESTRUCTURA***************************************************************
@@ -156,179 +262,58 @@ sub getBarcodesPrestadoLike {
 	}
 }
 
-sub getNivel3FromBarcode {
-    
-    use C4::Modelo::CatNivel3;
-    use C4::Modelo::CatNivel3::Manager;
-
-    my ($barcode) = @_;
-    my  $barcodes_array_ref;
-    my @filtros;
- 
-	  push(@filtros, ( barcode=> { eq => $barcode }) );
-    
-    $barcodes_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( query => \@filtros ); 
-
-	if(scalar(@$barcodes_array_ref) > 0){
-		return ($barcodes_array_ref->[0]);
-	}else{
-		return (0);
-	}
-}
-
-=item sub getNivel3RepetibleFromId3Repetible
-Recupero el objeto nivel3_repetible a partir de un rep_n3_id
-retorna un objeto o 0 si no existe ninguno
-=cut
-sub getNivel3RepetibleFromId3Repetible{
-  my ($rep_n3_id, $db) = @_;
-
-  $db = $db || C4::Modelo::PermCatalogo->new()->db;  
-  my $nivel3_repetible_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(
-                                                                        db => $db,         
-                                                                        query => [ rep_n3_id => { eq => $rep_n3_id } ] 
-                                                        );
-
-  if( scalar(@$nivel3_repetible_array_ref) > 0){
-    return ($nivel3_repetible_array_ref->[0]);
-  }else{
-    return 0;
-  }
-}
-
-=item
-DEPRECATED, PERO DEJAR PARA REEIMPLEMENTAR
-=cut
-sub modificarEstadoItem{
-	my($params)=@_;
-	open(A, ">>/tmp/debbug.txt");
-	print  A "entro ";
-	close (A);
-	#avail y loan preguntar por estos campos
-	my $disponible= _estaDisponible($params->{'id3'});
-	my $itemActual = C4::AR::Nivel3::getDataNivel3($params->{'id3'});
-	#Si {'wthdrawn'} eq 0 significa DISPONIBLE
-	#Si {'wthdrawn'} mayor q 0 significa NO DISPONIBLE
-	#Si {'notforloan'} eq DO significa PARA PRESTAMO
-	#Si {'notforloan'} eq SA significa PARA SALA
-	#Si el items esta disponible => $disponible=1
-	
-	# ESTE CASO ES MODIFICAR UN ITEMS NO DISPONIBLE A DISPONIBLE PARA PRESTAMO DOMICILIARIO
-	if( ($disponible == 0) && ($params->{'wthdrawn'} eq 0) && ($params->{'notforloan'} eq 'DO') ){
-		_modItemNoDisponibleAPrestamo($params);
-	}
-# 	else{
-		
-# 	}
-	
-}
-
-
-=item
-Esta funcion modifica el estado de un ejemplar PASA DE DISPONIBLE PARA SALA A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
-=cut
-# FIXME DEPRECATED
-sub modItemSalaAPrestamo{
-	my($params)=@_;
-
-	C4::AR::Reservas::reasignarReservaEnEspera($params);
-	#FALTARIA CAMBIAR EL ESTADO
-}
-
-=item
-Esta funcion modifica el estado de un ejemplar PASA DE NO DISPONIBLE A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
-=cut
-# FIXME DEPRECATED
-sub _modItemNoDisponibleAPrestamo{
-	my($params)=@_;
-
-	C4::AR::Reservas::reasignarReservaEnEspera($params);
-	#FALTARIA CAMBIAR EL ESTADOs
-}
-
-# FIXME DEPRECATED
-sub _estaDisponible {
-	my($id3)=@_;
-
-	my $dbh = C4::Context->dbh;
-	my $query=" SELECT FROM cat_nivel3 WHERE id3 = ? ";
-
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id3);
-
-	my $data=$sth->fetchrow;
-	
-	if($data == 0) {return 1;} #DISPONIBLE
-	else {return 0;} #NO DISPONIBLE
-}
-
-
-=item
-detalleDisponibilidad
-Devuelve la disponibilidad del item que viene por paramentro.
-=cut
-# sub detalleDisponibilidad{
-#         my ($id3) = @_;
-#         my $dbh = C4::Context->dbh;
-#         my $query = "SELECT * FROM cat_detalle_disponibilidad WHERE id3 = ? ORDER BY date DESC";
-#         my $sth = $dbh->prepare($query);
-#         $sth->execute($id3);
-# 	my @results;
-# 	my $i=0;
-# 
-# 	while (my $data=$sth->fetchrow_hashref){
-# 		$results[$i]=$data; $i++; 
-# 	}
-# 	$sth->finish;
-# 
-# 	return(scalar(@results),\@results);
-# }
-
-=item
-detalleNivel3
-Trae todos los datos del nivel 3, para poder verlos en el template.
-@params 
-$id2, id de nivel2
+=head2
+    detalleNivel3
+    Trae todos los datos del nivel 3, para poder verlos en el template.
+    @params 
+    $id2, id de nivel2
 =cut
 sub detalleNivel3{
-	my ($id2)=@_;
+	my ($id2) = @_;
 
 	my %hash_nivel2;	
 	#recupero el nivel1 segun el id1 pasado por parametro
-	my $nivel2_object= C4::Modelo::CatNivel2->new(id2 => $id2);
-	$nivel2_object->load;
+# 	my $nivel2_object= C4::Modelo::CatNivel2->new(id2 => $id2);
+# 	$nivel2_object->load;
+    my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2);
 
-	$hash_nivel2{'id2'}= $id2;
-	$hash_nivel2{'tipo_documento'}= C4::AR::Referencias::getNombreTipoDocumento($nivel2_object->getTipo_documento);
-	$hash_nivel2{'nivel2_array'}= $nivel2_object->toMARC; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
-	my ($totales_nivel3,@result)= detalleDisponibilidadNivel3($id2);
-	$hash_nivel2{'nivel3'}= \@result;
-	$hash_nivel2{'cantPrestados'}= $totales_nivel3->{'cantPrestados'};
-	$hash_nivel2{'cantReservas'}= $totales_nivel3->{'cantReservas'};
-	$hash_nivel2{'cantReservasEnEspera'}= $totales_nivel3->{'cantReservasEnEspera'};
-	$hash_nivel2{'disponibles'}= $totales_nivel3->{'disponibles'};
-	$hash_nivel2{'cantParaSala'}= $totales_nivel3->{'cantParaSala'};
-	$hash_nivel2{'cantParaPrestamo'}= $totales_nivel3->{'cantParaPrestamo'};
+    if($nivel2_object){
+
+	    $hash_nivel2{'id2'}                     = $id2;
+	    $hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
+	    $hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
+    
+	    my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2);
+    
+#         my ($totales_nivel3,@result); 
+	    $hash_nivel2{'nivel3'}                  = \@result;
+	    $hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
+	    $hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
+	    $hash_nivel2{'cantReservasEnEspera'}    = $totales_nivel3->{'cantReservasEnEspera'};
+	    $hash_nivel2{'disponibles'}             = $totales_nivel3->{'disponibles'};
+	    $hash_nivel2{'cantParaSala'}            = $totales_nivel3->{'cantParaSala'};
+	    $hash_nivel2{'cantParaPrestamo'}        = $totales_nivel3->{'cantParaPrestamo'};
+    }
 
 	return (\%hash_nivel2);
 }
 
-=item
-Genera el detalle 
+=head2 sub detalleCompletoINTRA
+    Genera el detalle 
 =cut
 sub detalleCompletoINTRA{
-	my ($id1, $t_params)=@_;
+	my ($id1, $t_params) = @_;
 	
 	#recupero el nivel1 segun el id1 pasado por parametro
-	my $nivel1 = &C4::AR::Nivel1::getNivel1FromId1($id1);
+	my $nivel1              = &C4::AR::Nivel1::getNivel1FromId1($id1);
 	#recupero todos los nivel2 segun el id1 pasado por parametro
-	my $nivel2_array_ref= &C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
+	my $nivel2_array_ref    = &C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
 
 	my @nivel2;
 	
 	for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
 
-		my ($hash_nivel2)= detalleNivel3($nivel2_array_ref->[$i]->getId2);
+		my ($hash_nivel2) = detalleNivel3($nivel2_array_ref->[$i]->getId2);
 	
 		push(@nivel2, $hash_nivel2);
 	}
@@ -340,91 +325,98 @@ sub detalleCompletoINTRA{
 	$t_params->{'circularDesdeDetalleDelRegistro'}= C4::AR::Preferencias->getValorPreferencia('circularDesdeDetalleDelRegistro');
 }
 
-=item
-detalleDisponibilidadNivel3
-Busca los datos del nivel 3 a partir de un id2 correspondiente a nivel 2.
+=head2 sub detalleDisponibilidadNivel3
+    detalleDisponibilidadNivel3
+    Busca los datos del nivel 3 a partir de un id2 correspondiente a nivel 2.
 =cut
 sub detalleDisponibilidadNivel3{
-    my ($id2)=@_;
+    my ($id2) = @_;
     
     #recupero todos los nivel3 segun el id2 pasado por parametro
-    my $nivel3_array_ref= &C4::AR::Nivel3::getNivel3FromId2($id2);
+    my $nivel3_array_ref = &C4::AR::Nivel3::getNivel3FromId2($id2);
     my @result;
     my %hash_nivel2;
 
     my $i=0;
-    my $cantDisponibles=0;
+    my $cantDisponibles                 = 0;
     my %infoNivel3;
-    $infoNivel3{'cantParaSala'}= 0;
-    $infoNivel3{'cantParaPrestamo'}= 0;
-    $infoNivel3{'disponibles'}= 0;
-    $infoNivel3{'cantPrestados'}= C4::AR::Nivel2::getCantPrestados($id2);
-    $infoNivel3{'cantReservas'}= C4::AR::Reservas::cantReservasPorGrupo($id2);
-    $infoNivel3{'cantReservasEnEspera'}= C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2);
+    $infoNivel3{'cantParaSala'}         = 0;
+    $infoNivel3{'cantParaPrestamo'}     = 0;
+    $infoNivel3{'disponibles'}          = 0;
+    $infoNivel3{'cantPrestados'}        = C4::AR::Nivel2::getCantPrestados($id2);
+    $infoNivel3{'cantReservas'}         = C4::AR::Reservas::cantReservasPorGrupo($id2);
+    $infoNivel3{'cantReservasEnEspera'} = C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2);
+
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
-        my %hash_nivel3= ();
+        my %hash_nivel3 = ();
 #    		C4::AR::Utilidades::initHASH(\%hash_nivel3);
 		my $socio;
 # FIXME si no se setea undef, muestra al usuario de un grupo tantas veces como ejemplares tenga, si este tiene un prestamo sobre 
 # un ejemplar del grupo.
 # con el debug no veo el nro_socio luego de my $socio, o sea lo que se esta mamando es el template, va haber q inicializar los flags
 # que van hacia el template.
-   		$hash_nivel3{'nro_socio'}= undef;
+   		$hash_nivel3{'nro_socio'} = undef;
 # FIXME no alcanza con undef
 
 # C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
 
-        $hash_nivel3{'nivel3_obj'}= $nivel3_array_ref->[$i]; 
-        $hash_nivel3{'id3'}= $nivel3_array_ref->[$i]->getId3;
-        $hash_nivel3{'paraPrestamo'}= $nivel3_array_ref->[$i]->estaPrestado;
+        $hash_nivel3{'nivel3_obj'}      = $nivel3_array_ref->[$i]; 
+        $hash_nivel3{'id3'}             = $nivel3_array_ref->[$i]->getId3;
+        $hash_nivel3{'paraPrestamo'}    = $nivel3_array_ref->[$i]->estaPrestado;
 
-        my $UI_poseedora= C4::AR::Referencias::getNombreUI($hash_nivel3{'id_ui_poseedora'});
-        $hash_nivel3{'UI_poseedora'}= $UI_poseedora;
+        my $UI_poseedora_object = C4::AR::Referencias::getUI_infoObject($hash_nivel3{'id_ui_poseedora'});
 
-        my $UI_origen= C4::AR::Referencias::getNombreUI($hash_nivel3{'id_ui_origen'});
-        $hash_nivel3{'UI_origen'}= $UI_origen;
+        if($UI_poseedora_object){
+            $hash_nivel3{'UI_poseedora'} = $UI_poseedora_object->getNombre();
+        }
+
+        my $UI_origen_object = C4::AR::Referencias::getUI_infoObject($hash_nivel3{'id_ui_origen'});
+
+        if($UI_origen_object){
+            $hash_nivel3{'UI_origen'}   = $UI_origen_object->getNombre();
+        }
 	
-	#ESTADO
-	$hash_nivel3{'estado'}= $nivel3_array_ref->[$i]->getEstado;
+	    #ESTADO
+	    $hash_nivel3{'estado'}= $nivel3_array_ref->[$i]->getEstado;
         if($nivel3_array_ref->[$i]->estadoDisponible){
-        #ESTADO DISPONIBLE
+            #ESTADO DISPONIBLE
             $hash_nivel3{'claseEstado'}= "disponible";
             $cantDisponibles++;
- 	    $hash_nivel3{'disponible'}= 1; # lo marco como disponible
+            $hash_nivel3{'disponible'}= 1; # lo marco como disponible
+    
+		        if(!$nivel3_array_ref->[$i]->esParaSala){
+                    #esta DISPONIBLE y es PARA PRESTAMO
+                    $infoNivel3{'cantParaPrestamo'}++;
+                }elsif($nivel3_array_ref->[$i]->esParaSala){
+                    #es PARA SALA
+                    $infoNivel3{'cantParaSala'}++;
+                }
 
-		if(!$nivel3_array_ref->[$i]->esParaSala){
-        	#esta DISPONIBLE y es PARA PRESTAMO
-            		$infoNivel3{'cantParaPrestamo'}++;
-        	}elsif($nivel3_array_ref->[$i]->esParaSala){
-        	#es PARA SALA
-            		$infoNivel3{'cantParaSala'}++;
-        	}
         } else {
-	#ESTADO NO DISPONIBLE
-	     $hash_nivel3{'claseEstado'}= "nodisponible";
-	     $hash_nivel3{'disponible'}= 0; # lo marco como no disponible
-	}
+	        #ESTADO NO DISPONIBLE
+	        $hash_nivel3{'claseEstado'}= "nodisponible";
+	        $hash_nivel3{'disponible'}= 0; # lo marco como no disponible
+	    }
 	
-	#DISPONIBILIDAD
-	if(!$nivel3_array_ref->[$i]->esParaSala){
-        #PARA PRESTAMO
+	    #DISPONIBILIDAD
+        if(!$nivel3_array_ref->[$i]->esParaSala){
+            #PARA PRESTAMO
             $hash_nivel3{'disponibilidad'}= "Prestamo";
             $hash_nivel3{'claseDisponibilidad'}= "prestamo";
         }elsif($nivel3_array_ref->[$i]->esParaSala){
-        #es PARA SALA
+            #es PARA SALA
             $hash_nivel3{'disponibilidad'}= "Sala de Lectura";
             $hash_nivel3{'claseDisponibilidad'}= "salaLectura";
         }
-   
 		
-C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
+        C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
         $socio= C4::AR::Prestamos::getSocioFromPrestamo($hash_nivel3{'id3'});
         $hash_nivel3{'vencimiento'} = undef;
         if($socio){ 
             C4::AR::Debug::debug("ENTRO POR HAY SOCIO...");
-            my $prestamo=C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'});
-            $hash_nivel3{'prestamo'}= $prestamo;
-            $hash_nivel3{'socio'}= $socio;
+            my $prestamo =                      C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'});
+            $hash_nivel3{'prestamo'} =          $prestamo;
+            $hash_nivel3{'socio'} =             $socio;
             if ($prestamo->estaVencido) {
                 $hash_nivel3{'claseFecha'}= "fecha_vencida";
             }else {
@@ -436,6 +428,7 @@ C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
     }
 
     $infoNivel3{'disponibles'}= $infoNivel3{'cantParaPrestamo'} + $infoNivel3{'cantParaSala'};
+
     return(\%infoNivel3,@result);
 }
 
@@ -478,21 +471,6 @@ sub detalleCompletoOPAC{
 	$t_params->{'id1'}	  = $id1;
 	$t_params->{'nivel2'}= \@nivel2,
 }
-
-
-sub getDataNivel3{
-	my ($id3)= @_;
-
-	my $dbh = C4::Context->dbh;
-# 	my $sth=$dbh->prepare("	SELECT id1, homebranch, id2, barcode
-	my $sth=$dbh->prepare("	SELECT *
-				FROM cat_nivel3
-				WHERE(id3 = ?)");
-	$sth->execute($id3);
-	my $dataNivel3= $sth->fetchrow_hashref;
-	return $dataNivel3;
-}
-
 
 
 =item
@@ -588,52 +566,7 @@ sub _verificarUpdateItem {
 }
 
 
-=item sub getNivel3FromId3
-Recupero un nivel 3 a partir de un id3
-retorna un objeto o 0 si no existe
-=cut
-sub getNivel3FromId3{
-	my ($id3, $db) = @_;
 
-  $db = $db || C4::Modelo::PermCatalogo->new()->db;
-	my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(   
-                                                                    db => $db,
-                                                                    query   => [  
-                                                                                id3 => { eq => $id3},
-												                                                        ], 
-                                                                    require_objects => ['ref_disponibilidad', 'ref_estado']
-																);
-
-	if( scalar(@$nivel3_array_ref) > 0){
-		return ($nivel3_array_ref->[0]);
-	}else{
-		return 0;
-	}
-}
-
-
-=item sub getNivel3RepetibleFromId3Repetible
-Recupero un nivel 3 a partir de un $id3_rep (id3 repetible)
-retorna un objeto o 0 si no existe
-=cut
-sub getNivel3RepetibleFromId3Repetible{
-  my ($id3_rep, $db) = @_;
-
-  $db = $db || C4::Modelo::PermCatalogo->new()->db;
-  my $nivel3_repetible_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
-                                                                                    db => $db,
-                                                                                    query   => [  
-                                                                                                rep_n3_id => { eq => $id3_rep},
-                                                                                                ], 
-                #                                                                     require_objects => ['CEC']
-                                );
-
-  if( scalar(@$nivel3_repetible_array_ref) > 0){
-    return ($nivel3_repetible_array_ref->[0]);
-  }else{
-    return 0;
-  }
-}
 
 =item sub existeBarcode
 Verifica si existe el barcode en la base
@@ -831,120 +764,196 @@ sub t_modificarNivel3 {
 	return ($msg_object);
 }
 
-=item sub t_eliminarNivel3
-    Elimina los ejemplares de nivel 3 pasados por parametro
-    @parametros:
-        $params->{'id3_array'}: arreglo de ID3
+
+
+#=================================================================DEPRECATED====================================================
+
+=item sub getNivel3RepetibleFromId3Repetible
+Recupero el objeto nivel3_repetible a partir de un rep_n3_id
+retorna un objeto o 0 si no existe ninguno
 =cut
-sub t_eliminarNivel3{
-   
-   	my ($params) = @_;
-	my $barcode;
+# sub getNivel3RepetibleFromId3Repetible{
+#   my ($rep_n3_id, $db) = @_;
+# 
+#   $db = $db || C4::Modelo::PermCatalogo->new()->db;  
+#   my $nivel3_repetible_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(
+#                                                                         db => $db,         
+#                                                                         query => [ rep_n3_id => { eq => $rep_n3_id } ] 
+#                                                         );
+# 
+#   if( scalar(@$nivel3_repetible_array_ref) > 0){
+#     return ($nivel3_repetible_array_ref->[0]);
+#   }else{
+#     return 0;
+#   }
+# }
 
-    my $msg_object = C4::AR::Mensajes::create();
-	
-	my	$catNivel2 = C4::Modelo::CatNivel2->new();
-	my	$db = $catNivel2->db;
-	# enable transactions, if possible
-	$db->{connect_options}->{AutoCommit} = 0;
-    $db->begin_work;
-	my $id3_array= $params->{'id3_array'};
+=item
+DEPRECATED, PERO DEJAR PARA REEIMPLEMENTAR
+=cut
+# sub modificarEstadoItem{
+#     my($params)=@_;
+#     open(A, ">>/tmp/debbug.txt");
+#     print  A "entro ";
+#     close (A);
+#     #avail y loan preguntar por estos campos
+#     my $disponible= _estaDisponible($params->{'id3'});
+#     my $itemActual = C4::AR::Nivel3::getDataNivel3($params->{'id3'});
+#     #Si {'wthdrawn'} eq 0 significa DISPONIBLE
+#     #Si {'wthdrawn'} mayor q 0 significa NO DISPONIBLE
+#     #Si {'notforloan'} eq DO significa PARA PRESTAMO
+#     #Si {'notforloan'} eq SA significa PARA SALA
+#     #Si el items esta disponible => $disponible=1
+#     
+#     # ESTE CASO ES MODIFICAR UN ITEMS NO DISPONIBLE A DISPONIBLE PARA PRESTAMO DOMICILIARIO
+#     if( ($disponible == 0) && ($params->{'wthdrawn'} eq 0) && ($params->{'notforloan'} eq 'DO') ){
+#         _modItemNoDisponibleAPrestamo($params);
+#     }
+# #   else{
+#         
+# #   }
+#     
+# }
 
-    eval {
-        for(my $i=0;$i<scalar(@$id3_array);$i++){
-		    my $catNivel3;
-            $params->{'id3'} = $id3_array->[$i];
-            _verificarDeleteItem($msg_object, $params);
-			
-            if(!$msg_object->{'error'}){
-# FIXME falta verificar existencia de los ejemplares q se estan levantando
-				$catNivel3 = C4::Modelo::CatNivel3->new(
-														db => $db,
-														id3 => $id3_array->[$i]#esto esta mal, hay q hacer getTTTTTTTTTT
-													);
+=item sub getNivel3RepetibleFromId3Repetible
+Recupero un nivel 3 a partir de un $id3_rep (id3 repetible)
+retorna un objeto o 0 si no existe
+=cut
+# sub getNivel3RepetibleFromId3Repetible{
+#   my ($id3_rep, $db) = @_;
+# 
+#   $db = $db || C4::Modelo::PermCatalogo->new()->db;
+#   my $nivel3_repetible_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
+#                                                                                     db => $db,
+#                                                                                     query   => [  
+#                                                                                                 rep_n3_id => { eq => $id3_rep},
+#                                                                                                 ], 
+#                 #                                                                     require_objects => ['CEC']
+#                                 );
+# 
+#   if( scalar(@$nivel3_repetible_array_ref) > 0){
+#     return ($nivel3_repetible_array_ref->[0]);
+#   }else{
+#     return 0;
+#   }
+# }
 
-				$catNivel3->load();
-				my $barcode = $catNivel3->getBarcode;	
-				$catNivel3->eliminar();
-                #se eliminó con exito
-                $msg_object->{'error'} = 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U376', 'params' => [$barcode]} ) ;
-            }
-        }
-
-			$db->commit;
-    };
-
-    if ($@){
-        #Se loguea error de Base de Datos
-        &C4::AR::Mensajes::printErrorDB($@, 'B435',"INTRA");
-        $db->rollback;
-        #Se setea error para el usuario
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U379', 'params' => [$barcode]} ) ;
-    }
-
-    $db->{connect_options}->{AutoCommit} = 1;
-
-    return ($msg_object);
-}
 
 =item sub t_eliminarNivel3Repetible
     Elimina el nivel 3 repetido pasado por parametro
 =cut
-sub t_eliminarNivel3Repetible{
-    my ($params) = @_;
-   
-    my $msg_object = C4::AR::Mensajes::create();
-    my $campo;
-    my $subcampo;
-    my $parametro;
-    my $catNivel3Repetible;
-   
-    my $db = C4::Modelo::PermCatalogo->new()->db;
-    my $array_nivel_repetible = $params->{'id_rep_array'};
-    # enable transactions, if possible
-    $db->{connect_options}->{AutoCommit} = 0;
-    $db->begin_work;
+# sub t_eliminarNivel3Repetible{
+#     my ($params) = @_;
+#    
+#     my $msg_object = C4::AR::Mensajes::create();
+#     my $campo;
+#     my $subcampo;
+#     my $parametro;
+#     my $catNivel3Repetible;
+#    
+#     my $db = C4::Modelo::PermCatalogo->new()->db;
+#     my $array_nivel_repetible = $params->{'id_rep_array'};
+#     # enable transactions, if possible
+#     $db->{connect_options}->{AutoCommit} = 0;
+#     $db->begin_work;
+# 
+#     eval {
+#         for(my $i=0;$i<scalar(@$array_nivel_repetible);$i++){  
+# 
+#             ($catNivel3Repetible) = getNivel3RepetibleFromId3Repetible($array_nivel_repetible->[$i], $db);
+# 
+#             if(!$catNivel3Repetible){
+#                 #NO EXISTE EL OBJETO
+#                 #Se setea error para el usuario
+#                 $msg_object->{'error'} = 1;
+#                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U409', 'params' => []} ) ;
+#             }else{
+#                 #EXISTE EL OBJETO
+#                 #verifico condiciones necesarias antes de eliminar     
+#                 $campo = $catNivel3Repetible->getCampo();
+#                 $subcampo = $catNivel3Repetible->getSubcampo();
+#                 $parametro = $array_nivel_repetible->[$i]." - ".$campo.", ".$subcampo;
+#                 $catNivel3Repetible->eliminar;  
+#                 $db->commit;
+#                 #se cambio el permiso con exito
+#                 $msg_object->{'error'} = 0;
+#                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U407', 'params' => [$parametro]} ) ;
+#             }
+#         }# for
+#     };
+# 
+#     if ($@){
+#         #Se loguea error de Base de Datos
+#         &C4::AR::Mensajes::printErrorDB($@, 'B447',"INTRA");
+#         $db->rollback;
+#         #Se setea error para el usuario
+#         $msg_object->{'error'}= 1;
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U408', 'params' => [$parametro]} ) ;
+#     }
+# 
+#     $db->{connect_options}->{AutoCommit} = 1;
+# 
+# 
+#     return ($msg_object);
+# }
 
-    eval {
-        for(my $i=0;$i<scalar(@$array_nivel_repetible);$i++){  
 
-            ($catNivel3Repetible) = getNivel3RepetibleFromId3Repetible($array_nivel_repetible->[$i], $db);
+=item
+Esta funcion modifica el estado de un ejemplar PASA DE DISPONIBLE PARA SALA A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
+=cut
+# FIXME DEPRECATED
+# sub modItemSalaAPrestamo{
+#     my($params)=@_;
+# 
+#     C4::AR::Reservas::reasignarReservaEnEspera($params);
+#     #FALTARIA CAMBIAR EL ESTADO
+# }
 
-            if(!$catNivel3Repetible){
-                #NO EXISTE EL OBJETO
-                #Se setea error para el usuario
-                $msg_object->{'error'} = 1;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U409', 'params' => []} ) ;
-            }else{
-                #EXISTE EL OBJETO
-                #verifico condiciones necesarias antes de eliminar     
-                $campo = $catNivel3Repetible->getCampo();
-                $subcampo = $catNivel3Repetible->getSubcampo();
-                $parametro = $array_nivel_repetible->[$i]." - ".$campo.", ".$subcampo;
-                $catNivel3Repetible->eliminar;  
-                $db->commit;
-                #se cambio el permiso con exito
-                $msg_object->{'error'} = 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U407', 'params' => [$parametro]} ) ;
-            }
-        }# for
-    };
+=item
+Esta funcion modifica el estado de un ejemplar PASA DE NO DISPONIBLE A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
+=cut
+# FIXME DEPRECATED
+# sub _modItemNoDisponibleAPrestamo{
+#     my($params)=@_;
+# 
+#     C4::AR::Reservas::reasignarReservaEnEspera($params);
+#     #FALTARIA CAMBIAR EL ESTADOs
+# }
 
-    if ($@){
-        #Se loguea error de Base de Datos
-        &C4::AR::Mensajes::printErrorDB($@, 'B447',"INTRA");
-        $db->rollback;
-        #Se setea error para el usuario
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U408', 'params' => [$parametro]} ) ;
-    }
-
-    $db->{connect_options}->{AutoCommit} = 1;
+# FIXME DEPRECATED
+# sub _estaDisponible {
+#     my($id3)=@_;
+# 
+#     my $dbh = C4::Context->dbh;
+#     my $query=" SELECT FROM cat_nivel3 WHERE id3 = ? ";
+# 
+#     my $sth=$dbh->prepare($query);
+#         $sth->execute($id3);
+# 
+#     my $data=$sth->fetchrow;
+#     
+#     if($data == 0) {return 1;} #DISPONIBLE
+#     else {return 0;} #NO DISPONIBLE
+# }
 
 
-    return ($msg_object);
-}
-
-#===================================================================Fin====ABM Nivel 3====================================================
+=item
+detalleDisponibilidad
+Devuelve la disponibilidad del item que viene por paramentro.
+=cut
+# sub detalleDisponibilidad{
+#         my ($id3) = @_;
+#         my $dbh = C4::Context->dbh;
+#         my $query = "SELECT * FROM cat_detalle_disponibilidad WHERE id3 = ? ORDER BY date DESC";
+#         my $sth = $dbh->prepare($query);
+#         $sth->execute($id3);
+#   my @results;
+#   my $i=0;
+# 
+#   while (my $data=$sth->fetchrow_hashref){
+#       $results[$i]=$data; $i++; 
+#   }
+#   $sth->finish;
+# 
+#   return(scalar(@results),\@results);
+# }

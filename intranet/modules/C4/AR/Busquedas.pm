@@ -1620,13 +1620,11 @@ sub armarBuscoPor{
 
 
 sub armarInfoNivel1{
-#   my ($params,$searchstring_array, @resultId1) = @_;
     my ($params, @resultId1) = @_;
-    my $tipo_nivel3_name= $params->{'tipo_nivel3_name'};
-    my @result_array_paginado = @resultId1;
-    my $cant_total = scalar(@resultId1);
 
-
+    my $tipo_nivel3_name        = $params->{'tipo_nivel3_name'};
+    my @result_array_paginado   = @resultId1;
+    my $cant_total              = scalar(@resultId1);
     my @result_array_paginado_temp;
 
   for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {
@@ -1638,7 +1636,7 @@ sub armarInfoNivel1{
       @result_array_paginado[$i]->{'idAutor'} =     $nivel1->getAutorObject->getId();
       #aca se procesan solo los ids de nivel 1 que se van a mostrar
       #se generan los grupos para mostrar en el resultado de la consulta
-      my $ediciones=&C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
+      my $ediciones = &C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
 
       @result_array_paginado[$i]->{'grupos'}= 0;
       if(scalar(@$ediciones) > 0){
@@ -1646,7 +1644,7 @@ sub armarInfoNivel1{
       }
       @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
       #se obtine la disponibilidad total 
-      my @disponibilidad=&C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);  
+      my @disponibilidad = &C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);  
 
       @result_array_paginado[$i]->{'disponibilidad'}= 0;
       if(scalar(@disponibilidad) > 0){

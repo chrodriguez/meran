@@ -235,7 +235,7 @@ sub limpiarBusquedas {
 
 
 sub detalleMARC {
-    my ($marc)= @_;
+    my ($marc) = @_;
 
     my @MARC_result_array;
 
@@ -248,17 +248,17 @@ sub detalleMARC {
             #proceso todos los subcampos del campo
                foreach my $subfield ($field->subfields()) {
                 my %hash_temp;
-                my $subcampo= $subfield->[0];
-                my $dato= $subfield->[1];
-                $hash_temp{'subcampo'}= $subcampo;
-                $hash_temp{'liblibrarian'}= C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
-                $hash_temp{'dato'}= $dato;
+                my $subcampo                = $subfield->[0];
+                my $dato                    = $subfield->[1];
+                $hash_temp{'subcampo'}      = $subcampo;
+                $hash_temp{'liblibrarian'}  = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
+                $hash_temp{'dato'}          = $dato;
                 push(@info_campo_array, \%hash_temp);
 #                 C4::AR::Debug::debug("agrego el subcampo: ". $subcampo);
             }
-            $hash{'campo'}= $campo;
-            $hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
-            $hash{'info_campo_array'}= \@info_campo_array;
+            $hash{'campo'}                  = $campo;
+            $hash{'header'}                 = C4::AR::Catalogacion::getHeader($campo);
+            $hash{'info_campo_array'}       = \@info_campo_array;
 
             push(@MARC_result_array, \%hash);
 #             C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));

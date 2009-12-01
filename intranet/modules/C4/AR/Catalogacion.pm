@@ -175,7 +175,44 @@ sub koha2_to_meran{
 
 }
 
-#####A PARTIR DE ESTE PUNTO ES LO VIEJO#######
+sub detalleMARC {
+    my ($marc_record) = @_;
+
+    my @MARC_result_array;
+
+    foreach my $field ($marc_record->fields) {
+     if(! $field->is_control_field){
+        my %hash;
+        my $campo = $field->tag;
+        my @subcampos_array;
+        C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
+        #proceso todos los subcampos del campo
+        foreach my $subfield ($field->subfields()) {
+            my %hash_temp;
+
+            my $subcampo                = $subfield->[0];
+            my $dato                    = $subfield->[1];
+            $hash_temp{'subcampo'}      = $subcampo;
+            $hash_temp{'liblibrarian'}  = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
+            $hash_temp{'dato'}          = $dato;
+
+            push(@subcampos_array, \%hash_temp);
+
+            C4::AR::Debug::debug("agrego el subcampo: ". $subcampo);
+        }
+            $hash{'campo'}                  = $campo;
+            $hash{'header'}                 = C4::AR::Catalogacion::getHeader($campo);
+            $hash{'subcampos_array'}        = \@subcampos_array;
+
+            push(@MARC_result_array, \%hash);
+#             C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
+        }
+    }
+
+    return (\@MARC_result_array);
+}
+
+###############################################################A PARTIR DE ESTE PUNTO ES LO VIEJO########################################
 
 ################################################################ 06/11/10 ##############################################################
 

@@ -66,6 +66,23 @@ sub agregar{
     $self->save();
 }
 
+
+sub eliminar{
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    #HACER ALGO SI ES NECESARIO
+
+    my ($nivel3) = C4::AR::Nivel3::getNivel3FromId2($self->db, $self->getId2());
+
+    foreach my $n3 (@$nivel3){
+      $n3->eliminar();
+    }
+
+    $self->delete();    
+}
+
+
 =head2
 sub getISBN
 
@@ -76,8 +93,6 @@ sub getISBN{
      my ($self)      = shift;
      
      my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-     
- #     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a")); 
  
      return $marc_record->subfield("20","a");
 }
@@ -233,14 +248,14 @@ sub getIdiomaObject{
 }
 
 =head2 sub getNivelBibliografico
-Recupera el Nivel Bibliografico segun el MARC ?,?
+Recupera el Nivel Bibliografico segun el MARC 900,b
 =cut
 sub getNivelBibliografico{
     my ($self)      = shift;
     
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
-    return $marc_record->subfield("041","a");
+    return $marc_record->subfield("900","b");
 }
 
 =head2 sub getNivelBibliograficoObject
@@ -272,6 +287,96 @@ sub getAnio_publicacion{
     return $marc_record->subfield("260","c");
 }
 
+=head2 sub tienePrestamos
+    Verifica si el nivel 2 pasado por parametro tiene ejemplares con prestamos o no
+=cut
+sub tienePrestamos {
+    my ($self) = shift;
+
+    my $cant = C4::AR::Prestamos::getCountPrestamosDeGrupo($self->getId2);
+
+    return ($cant > 0)?1:0;
+}
+
+
+=head2 sub toMARC
+
+=cut
+sub toMARC{
+    my ($self) = shift;
+
+    #obtengo el marc_record del NIVEL 2
+    my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+
+    my $MARC_result_array   = &C4::AR::Catalogacion::detalleMARC($marc_record);
+
+#     foreach my $m (@$MARC_result_array){
+#         C4::AR::Debug::debug("campo => ".$m->{'campo'});
+#         foreach my $s (@{$m->{'subcampos_array'}}){
+#             C4::AR::Debug::debug("liblibrarian => ".$s->{'subcampo'});        
+#             C4::AR::Debug::debug("liblibrarian => ".$s->{'liblibrarian'});        
+#         }
+#     }
+
+    return ($MARC_result_array);
+}
+
+
+
+#==================================================VERRRRRRRRRRRRRRRRRR==========================================================
+
+
+=item
+retorna la canitdad de items prestados para el grupo pasado por parametro
+=cut
+sub getCantPrestados{
+    my ($self)  = shift;
+    my ($id2)   = @_;
+
+    my ($cantPrestamos_count) = C4::AR::Nivel2::getCantPrestados($id2);
+
+    return $cantPrestamos_count;
+}
+
+
+=head2 sub tieneReservas
+    Devuelve 1 si tiene ejemplares reservados en el grupo, 0 caso contrario
+=cut
+sub tieneReservas {
+    my ($self) = shift;
+
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
+    my @filtros;
+    push(@filtros, ( id2    => { eq => $self->getId2}));
+
+    my ($reservas_array_ref) = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
+
+    if (scalar(@$reservas_array_ref) > 0){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+=head2 sub getCantEjemplares
+retorna la canitdad de ejemplares del grupo
+=cut
+sub getCantEjemplares{
+    my ($self) = shift;
+
+    my $cantEjemplares_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(
+
+                                                                query => [  'id1' => { eq => $self->getId1 },
+                                                                            'id2' => { eq => $self->getId2 }
+                                                                         ],
+
+                                        );
+
+
+    return $cantEjemplares_count;
+}
 
 
 1;
