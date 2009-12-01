@@ -279,7 +279,7 @@ sub get_template_and_user {
 
     my $ui;
     $ui = C4::AR::Preferencias->getValorPreferencia('defaultUI');
-    $ui = C4::AR::Referencias::getUI_info($ui);
+    $ui = C4::AR::Referencias::getUI_infoObject($ui)->getNombre();
     $params->{'ui'} = $ui;
     my $socio = $params->{'socio'};
 	return ($template, $session, $params);

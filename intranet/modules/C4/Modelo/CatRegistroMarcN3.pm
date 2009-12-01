@@ -182,14 +182,14 @@ sub getEstadoObject{
 
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
      
-    my $estado      = C4::AR::Referencias::getNombreEstado($self->getIdEstado());
+    my $estado      = C4::AR::Referencias::getEstadoObject($self->getIdEstado());
         
     if(!$estado){
             C4::AR::Debug::debug("CatRegistroMarcN3 => getEstadoObject()=> EL OBJECTO (ID) RefEstado NO EXISTE");
             $estado = C4::Modelo::RefEstado->new();
     }
 
-    return C4::AR::Utilidades::trim($estado);
+    return $estado;
 }
 
 sub getIdDisponibilidad{
@@ -205,14 +205,14 @@ sub getDisponibilidadObject{
 
     my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
      
-    my $disponibilidad      = C4::AR::Referencias::getNombreDisponibilidad($self->getIdDisponibilidad());
+    my $disponibilidad      = C4::AR::Referencias::getDisponibilidadObject($self->getIdDisponibilidad());
         
     if(!$disponibilidad){
             C4::AR::Debug::debug("CatRegistroMarcN3 => getDisponibilidadObject()=> EL OBJECTO (ID) RefDisponibilidad NO EXISTE");
             $disponibilidad = C4::Modelo::RefDisponibilidad->new();
     }
 
-    return C4::AR::Utilidades::trim($disponibilidad);
+    return $disponibilidad;
 }
 
 sub estaPrestado {

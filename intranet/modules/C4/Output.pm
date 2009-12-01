@@ -123,9 +123,15 @@ sub gettemplate {
 
 	#se asignan los parametros que son necesarios para todos los templates
     my $ui;
+    my $nombre_ui = '';
 
-    $ui = C4::AR::Preferencias->getValorPreferencia('defaultUI');
-    $ui = C4::AR::Referencias::getUI_info($ui);
+    my $default_ui = C4::AR::Preferencias->getValorPreferencia('defaultUI');
+    $ui = C4::AR::Referencias::getUI_infoObject($default_ui);
+
+    if($ui){
+        $nombre_ui = $ui->getNombre();
+    }
+
 	%params= (
 # FIXME DEPRECATED
 			themelang           => ($opac ne 'intranet'? '/opac-tmpl/': '/intranet-tmpl/') ,
@@ -136,7 +142,7 @@ sub gettemplate {
 			temas               => $temas,
             titulo_nombre_ui    => C4::AR::Preferencias->getValorPreferencia('titulo_nombre_ui'),
 			template_name       => "$htdocs/$tmplbase", #se setea el nombre del tmpl
-            ui                  => $ui,
+            ui                  => $nombre_ui,
 		);
 
 

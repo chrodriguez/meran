@@ -2088,9 +2088,11 @@ sub existeInArray{
    my ($string,@array) = @_;
 
    if (grep {$_ eq $string} @array) {
+      C4::AR::Debug::debug("Utilidades => existeInArray => EXISTE => ".$string." en el arreglo");
       return 1;
    }
 
+    C4::AR::Debug::debug("Utilidades => existeInArray => NO EXISTE => ".$string." en el arreglo");
    return 0;
 }
 

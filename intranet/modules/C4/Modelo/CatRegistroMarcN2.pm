@@ -91,9 +91,7 @@ Funcion que devuelve el issn
 sub getISSN{
      my ($self)      = shift;
      
-     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-     
- #     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a")); 
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());    
  
      return $marc_record->subfield("22","a");
 }
@@ -107,9 +105,7 @@ Funcion que devuelve el series_titulo
 sub getSeriesTitulo{
      my ($self)      = shift;
      
-     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-     
- #     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a")); 
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());    
  
      return $marc_record->subfield("440","a");
 }
@@ -119,7 +115,6 @@ sub getTipoDocumento
 
 Funcion que devuelve la referencia al tipo de Documento
 =cut
-
 sub getTipoDocumento{
     my ($self)      = shift;
     
@@ -139,7 +134,7 @@ sub getTipoDocumentoObject{
      
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
      
-    my $tipo_doc    = C4::AR::Referencias::getNombreTipoDocumento($self->getTipoDocumento());
+    my $tipo_doc    = C4::AR::Referencias::getTipoDocumentoObject($self->getTipoDocumento());
         
     if(!$tipo_doc){
             C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject()=> EL OBJECTO (ID) CatRefTipoNivel3 NO EXISTE");
@@ -150,34 +145,131 @@ sub getTipoDocumentoObject{
 }
 
 
+=head2 sub getSoporte
+
+=cut
 sub getSoporte{
     my ($self)      = shift;
     
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
- C4::AR::Debug::debug("ACA TAMOS".$marc_record->subfield("245","h"));
+
     return $marc_record->subfield("245","h");
 }
 
-=head2
-sub getTipoDocumentoObject
+=head2 getSoporteObject
 
-Funcion que devuelve un objeto tipo de documento de acuerdo al id de referencia a TipoDocumento que tiene
 =cut
-
 sub getSoporteObject{
+    my ($self)          = shift;
+     
+    my $marc_record     = MARC::Record->new_from_usmarc($self->getMarcRecord());
+     
+    my $soporte_object  = C4::AR::Referencias::getSoporteObject($self->getSoporte());
+        
+    if(!$soporte_object){
+            C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) RefSoporte NO EXISTE");
+            $soporte_object = C4::Modelo::RefSoporte->new();
+    }
+
+    return $soporte_object;
+}
+
+=head2 sub getCiudadPublicacion
+Recupera la Ciudad de Publicacion segun el MARC 260,a
+=cut
+sub getCiudadPublicacion{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return $marc_record->subfield("260","a");
+}
+
+=head2 getCiudadObject
+
+=cut
+sub getCiudadObject{
+    my ($self)          = shift;
+     
+    my $marc_record     = MARC::Record->new_from_usmarc($self->getMarcRecord());
+     
+    my $ciudad_object   = C4::AR::Referencias::getCiudadObject($self->getSoporte());
+        
+    if(!$ciudad_object){
+            C4::AR::Debug::debug("CatRegistroMarcN2 => getCiudadObject()=> EL OBJECTO (ID) RefLocalidad NO EXISTE");
+            $ciudad_object = C4::Modelo::RefLocalidad->new();
+    }
+
+    return $ciudad_object;
+}
+
+=head2 sub getIdioma
+Recupera el Idioma segun el MARC 041,a
+=cut
+sub getIdioma{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return $marc_record->subfield("041","a");
+}
+
+=head2 sub getIdiomaObject
+    Recupera el objeto 
+=cut
+sub getIdiomaObject{
     my ($self)      = shift;
      
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
      
-    my $tipo_doc    = C4::AR::Referencias::getNombreSoporte($self->getSoporte());
+    my $tipo_doc    = C4::AR::Referencias::getSoporteObject($self->getSoporte());
         
     if(!$tipo_doc){
             C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) RefSoporte NO EXISTE");
-            $tipo_doc = C4::Modelo::RefSoporte->new();
+            $tipo_doc = C4::Modelo::RefIdioma->new();
     }
-    C4::AR::Debug::debug("EXISTE ".$tipo_doc);
-    C4::AR::Debug::debug("EXISTE ".$tipo_doc->getDescription());
+
     return $tipo_doc;
+}
+
+=head2 sub getNivelBibliografico
+Recupera el Nivel Bibliografico segun el MARC ?,?
+=cut
+sub getNivelBibliografico{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return $marc_record->subfield("041","a");
+}
+
+=head2 sub getNivelBibliograficoObject
+    Recupera el objeto 
+=cut
+sub getNivelBibliograficoObject{
+    my ($self)      = shift;
+     
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+     
+    my $nivel_bibliografico_objecto = C4::AR::Referencias::getNivelBibliograficoObject($self->getNivelBibliografico());
+        
+    if(!$nivel_bibliografico_objecto){
+            C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) RefSoporte NO EXISTE");
+            $nivel_bibliografico_objecto = C4::Modelo::RefNivelBibliografico->new();
+    }
+
+    return $nivel_bibliografico_objecto;
+}
+
+=head2 sub getAnio_publicacion
+ Recupera la ciudad de la publicacion segun el MARC 260,c
+=cut
+sub getAnio_publicacion{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return $marc_record->subfield("260","c");
 }
 
 

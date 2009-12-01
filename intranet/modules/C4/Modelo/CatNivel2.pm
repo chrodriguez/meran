@@ -498,7 +498,13 @@ sub toMARC{
 	$hash{'campo'}= $campo;
 	$hash{'subcampo'}= $subcampo;
 	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
- 	$hash{'dato'}= C4::AR::Referencias::getNombreCiudad($self->getCiudad_publicacion);
+    my $ciudad  = C4::AR::Referencias::getCiudadObject($self->getCiudad_publicacion);
+ 	$hash{'dato'} = '';
+
+    if($ciudad){
+        $hash{'dato'} = $ciudad->getNombre();
+    }
+
 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 	
 	if($estructura){

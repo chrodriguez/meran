@@ -62,7 +62,7 @@ sub getAutorObject{
 
     C4::AR::Debug::debug("ref_autor ================================".$ref_autor);
 
-    my $autor = C4::AR::Referencias::getAutor($ref_autor);
+    my $autor = C4::AR::Referencias::getAutorObject($ref_autor);
 
     if(!$autor){
         C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> EL OBJECTO (ID) AUTOR NO EXISTE");
