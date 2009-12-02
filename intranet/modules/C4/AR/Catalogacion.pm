@@ -86,6 +86,7 @@ sub _meran_to_marc{
                 }
             }
         }
+
         if(scalar(@subcampos_array) > 0){
             $field = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);
             $marc_record->add_fields($field);
