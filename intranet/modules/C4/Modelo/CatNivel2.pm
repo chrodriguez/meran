@@ -71,122 +71,7 @@ __PACKAGE__->meta->setup(
     ],
 );
 
-=item
-sub agregar{
 
-    my ($self)=shift;
-    use C4::Modelo::CatNivel2Repetible;
-
-    my ($data_hash)=@_;
-
-    my @arrayNivel2;
-    my @arrayNivel2Repetibles;
-
-    my $infoArrayNivel2= $data_hash->{'infoArrayNivel2'};
-	#se guardan los datos de Nivel2
-    foreach my $infoNivel2 (@$infoArrayNivel2){
-
-        if($infoNivel2->{'repetible'}){
-            push(@arrayNivel2Repetibles, $infoNivel2);
-        }else{
-            push(@arrayNivel2, $infoNivel2);
-        }
-    }
-    
-    #se guardan los datos de Nivel2
-    foreach my $infoNivel2 (@arrayNivel2){  
-		$self->setDato($infoNivel2);
-    } #END foreach my $infoNivel2 (@arrayNivel2)
-
-    $self->setId1($data_hash->{'id1'});
-    $self->save();
-
-    my $id2= $self->getId2;
-
-    #Se guradan los datos en Nivel 2 repetibles
-    foreach my $infoNivel2 (@arrayNivel2Repetibles){
-        $infoNivel2->{'id2'}= $id2;
-            
-        my $nivel2Repetible;
-        C4::AR::Debug::debug("CatNivel2 => campo, subcampo: ".$infoNivel2->{'campo'}.", ".$infoNivel2->{'subcampo'});
-
-        if ( $infoNivel2->{'Id_rep'} != 0 ){
-            C4::AR::Debug::debug("CatNivel2 => agregar => Se va a modificar CatNivel2, Id_rep: ". $infoNivel2->{'Id_rep'});
-#             $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'Id_rep'});
-#             getNivel2RepetibleFromId2Repetible
-            $nivel2Repetible = C4::AR::Nivel2::getNivel2RepetibleFromId2Repetible($infoNivel2->{'Id_rep'},$self->db);
-        }else{
-            C4::AR::Debug::debug("CatNivel2 => agregar => No existe el REPETIBLE se crea uno");
-            $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
-        }
-
-        $nivel2Repetible->setId2($infoNivel2->{'id2'});
-        $nivel2Repetible->setCampo($infoNivel2->{'campo'});
-        $nivel2Repetible->setSubcampo($infoNivel2->{'subcampo'});
-
-        if($infoNivel2->{'referencia'}){
-            C4::AR::Debug::debug("CatNivel2 => REPETIBLE con REFERENCIA: ".$infoNivel2->{'datoReferencia'});
-			$nivel2Repetible->dato($infoNivel2->{'datoReferencia'});
-		}else{
-            C4::AR::Debug::debug("CatNivel2 => REPETIBLE sin REFERENCIA: ".$infoNivel2->{'dato'});
-			$nivel2Repetible->dato($infoNivel2->{'dato'});
-		}
-
-        $nivel2Repetible->save(); 
-    }
-
-    return $self;
-}
-=cut
-
-
-
-# ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
-
-
-=item
-Esta funcion devuelve los campos de nivel 2 y nivel2Repetible mapeados en un arreglo de {campo, subcampo, dato}
-=cut
-sub nivel2CompletoToMARC{
-  my ($self) = shift;
-
-	my ($marc_array) = $self->toMARC;
-	my ($nivel2Repetible_object_array) = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible( 
-																						query => [ id2 => { eq => $self->getId2 } ]
-																		);
-
-	my $campo;
-	my $subcampo;
-	my $dato;
-  my $id1 = $self->getId1;
-
-	foreach my $marc_object (@$nivel2Repetible_object_array){
-		$campo                  = $marc_object->getCampo;
-		$subcampo               = $marc_object->getSubcampo;
-		$dato                   = $marc_object->getDato;
-		my %hash;
-		$hash{'header'}         = C4::AR::Catalogacion::getHeader($campo);
-		$hash{'campo'}          = $campo;
-		$hash{'subcampo'}       = $subcampo;
-		$hash{'liblibrarian'}   = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
-		$hash{'dato'}           = $dato;
-    $hash{'id1'}            = $id1;
-    #obtengo el dato de la referencia solo si es un repetible, los campos fijos recuperan de otra forma el dato de la referencia 
-    my $valor_referencia    = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato);
-    $hash{'dato'}           = $valor_referencia;
-
-    push(@$marc_array, \%hash);
-    C4::AR::Debug::debug("CatNivel3 => nivel1CompletoToMARC => nivel1CompletoToMARC => campo, subcampo: ".$campo.", ".$subcampo);
-    C4::AR::Debug::debug("CatNivel3 => nivel1CompletoToMARC => nivel1CompletoToMARC => id1: ".$id1);  
-
- 		push(@$marc_array, \%hash);
-	}
-
-	C4::AR::Debug::debug("nivel2CompletoToMARC => ******************************* cant: ".scalar(@$marc_array));
-	return ($marc_array);
-}
-
-# ==============================================FIN===SOPORTE=====ESTRUCTURA CATALOGACION================================================
 
 
 sub getInvolvedCount{
@@ -220,82 +105,119 @@ sub replaceBy{
 }
 
 
-sub agregarDesdeMARC {
 
-   my ($self)=shift;
-   my ($id1,$marc)=@_;
-   
-    $self->setId1($id1);
-
-    my $leader= $marc->leader();
-    my @leaderarray = split(//, $leader);
-    #Tipo de Documento LEADER 06
-    my $tipo_documento=$leaderarray[6];
-    if($tipo_documento){$self->setTipo_documento("LIB");} # FIXME lo deje fijo por ahora
-
-    #Nivel bibliográfico LEADER 07
-    my $nivel_bibliografico=$leaderarray[7];
-    if($nivel_bibliografico){$self->setNivel_bibliografico($nivel_bibliografico);} # FIXME lo deje fijo por ahora
-
-    #Soporte 245 h
-#     my $soporte = $marc->subfield("245","h");
-#     if($soporte){$self->setSoporte($soporte);}
-
-    #Pais 043 c
-    my $pais_publicacion = $marc->subfield("043","c");
-    if($pais_publicacion){$self->setPais_publicacion($pais_publicacion);}
-
-    #Lenguaje 043 c
-    my $lenguaje = $marc->subfield("041","h");
-    if($lenguaje){$self->setLenguaje($lenguaje);}
-    
-    #Ciudad 260 a
-    my $ciudad_publicacion = $marc->subfield("260","a");
-    if($ciudad_publicacion){$self->setCiudad_publicacion($ciudad_publicacion);}
-
-    #Año publicacion 260 c
-    my $anio_publicacion = $marc->subfield("260","c");
-    if($anio_publicacion){$self->setAnio_publicacion($anio_publicacion);}
- 
-    $self->save();
-    
-          C4::AR::Debug::debug("agregarDesdeMARC => Se guardo el nivel 2");
-
-    use C4::Modelo::CatNivel2Repetible;
-    my $arrayNivel2Repetibles;
-
-    my $id2 = $self->getId2;
-     my ($arrayNivel2Repetibles)= C4::AR::EstructuraCatalogacionBase::getSubCampos(2); #Todos los campos MARC del nivel 2
-
-    #Se guardan los datos en Nivel 1 repetibles
-    foreach my $infoNivel2  (@$arrayNivel2Repetibles){
-
-        my $campo = $infoNivel2->getCampo;
-        my $subcampo = $infoNivel2->getSubcampo;
-
-        if (!( (($campo eq "245") && ($subcampo eq "h")) ||
-               (($campo eq "043") && ($subcampo eq "c")) || 
-               (($campo eq "041") && ($subcampo eq "h")) ||
-               (($campo eq "260") && ($subcampo eq "a")) || 
-               (($campo eq "260") && ($subcampo eq "c")) )) { # si no es ninguno de los fijos
-        
-            my $datoRepetible=$marc->subfield($campo,$subcampo);
-
-            if($datoRepetible){
-                my $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
-                $nivel2Repetible->setId2($id2);
-                $nivel2Repetible->setCampo($campo);
-                $nivel2Repetible->setSubcampo($subcampo);
-                $nivel2Repetible->dato($datoRepetible);
-                $nivel2Repetible->save();
-   C4::AR::Debug::debug("agregarDesdeMARC => Se guarda el nivel 2 repetible => ".$campo." - ".$subcampo);
-            }
-        }
-        }
-
-}
 
 #=======================================================DEPRECATEDD======================================================================
+
+=item
+sub agregar{
+
+    my ($self)=shift;
+    use C4::Modelo::CatNivel2Repetible;
+
+    my ($data_hash)=@_;
+
+    my @arrayNivel2;
+    my @arrayNivel2Repetibles;
+
+    my $infoArrayNivel2= $data_hash->{'infoArrayNivel2'};
+    #se guardan los datos de Nivel2
+    foreach my $infoNivel2 (@$infoArrayNivel2){
+
+        if($infoNivel2->{'repetible'}){
+            push(@arrayNivel2Repetibles, $infoNivel2);
+        }else{
+            push(@arrayNivel2, $infoNivel2);
+        }
+    }
+    
+    #se guardan los datos de Nivel2
+    foreach my $infoNivel2 (@arrayNivel2){  
+        $self->setDato($infoNivel2);
+    } #END foreach my $infoNivel2 (@arrayNivel2)
+
+    $self->setId1($data_hash->{'id1'});
+    $self->save();
+
+    my $id2= $self->getId2;
+
+    #Se guradan los datos en Nivel 2 repetibles
+    foreach my $infoNivel2 (@arrayNivel2Repetibles){
+        $infoNivel2->{'id2'}= $id2;
+            
+        my $nivel2Repetible;
+        C4::AR::Debug::debug("CatNivel2 => campo, subcampo: ".$infoNivel2->{'campo'}.", ".$infoNivel2->{'subcampo'});
+
+        if ( $infoNivel2->{'Id_rep'} != 0 ){
+            C4::AR::Debug::debug("CatNivel2 => agregar => Se va a modificar CatNivel2, Id_rep: ". $infoNivel2->{'Id_rep'});
+#             $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db, rep_n2_id => $infoNivel2->{'Id_rep'});
+#             getNivel2RepetibleFromId2Repetible
+            $nivel2Repetible = C4::AR::Nivel2::getNivel2RepetibleFromId2Repetible($infoNivel2->{'Id_rep'},$self->db);
+        }else{
+            C4::AR::Debug::debug("CatNivel2 => agregar => No existe el REPETIBLE se crea uno");
+            $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
+        }
+
+        $nivel2Repetible->setId2($infoNivel2->{'id2'});
+        $nivel2Repetible->setCampo($infoNivel2->{'campo'});
+        $nivel2Repetible->setSubcampo($infoNivel2->{'subcampo'});
+
+        if($infoNivel2->{'referencia'}){
+            C4::AR::Debug::debug("CatNivel2 => REPETIBLE con REFERENCIA: ".$infoNivel2->{'datoReferencia'});
+            $nivel2Repetible->dato($infoNivel2->{'datoReferencia'});
+        }else{
+            C4::AR::Debug::debug("CatNivel2 => REPETIBLE sin REFERENCIA: ".$infoNivel2->{'dato'});
+            $nivel2Repetible->dato($infoNivel2->{'dato'});
+        }
+
+        $nivel2Repetible->save(); 
+    }
+
+    return $self;
+}
+=cut
+
+=item
+Esta funcion devuelve los campos de nivel 2 y nivel2Repetible mapeados en un arreglo de {campo, subcampo, dato}
+=cut
+# sub nivel2CompletoToMARC{
+#   my ($self) = shift;
+# 
+#     my ($marc_array) = $self->toMARC;
+#     my ($nivel2Repetible_object_array) = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible( 
+#                                                                                         query => [ id2 => { eq => $self->getId2 } ]
+#                                                                         );
+# 
+#     my $campo;
+#     my $subcampo;
+#     my $dato;
+#   my $id1 = $self->getId1;
+# 
+#     foreach my $marc_object (@$nivel2Repetible_object_array){
+#         $campo                  = $marc_object->getCampo;
+#         $subcampo               = $marc_object->getSubcampo;
+#         $dato                   = $marc_object->getDato;
+#         my %hash;
+#         $hash{'header'}         = C4::AR::Catalogacion::getHeader($campo);
+#         $hash{'campo'}          = $campo;
+#         $hash{'subcampo'}       = $subcampo;
+#         $hash{'liblibrarian'}   = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
+#         $hash{'dato'}           = $dato;
+#     $hash{'id1'}            = $id1;
+#     #obtengo el dato de la referencia solo si es un repetible, los campos fijos recuperan de otra forma el dato de la referencia 
+#     my $valor_referencia    = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato);
+#     $hash{'dato'}           = $valor_referencia;
+# 
+#     push(@$marc_array, \%hash);
+#     C4::AR::Debug::debug("CatNivel3 => nivel1CompletoToMARC => nivel1CompletoToMARC => campo, subcampo: ".$campo.", ".$subcampo);
+#     C4::AR::Debug::debug("CatNivel3 => nivel1CompletoToMARC => nivel1CompletoToMARC => id1: ".$id1);  
+# 
+#         push(@$marc_array, \%hash);
+#     }
+# 
+#     C4::AR::Debug::debug("nivel2CompletoToMARC => ******************************* cant: ".scalar(@$marc_array));
+#     return ($marc_array);
+# }
 
 
 # sub agregar{

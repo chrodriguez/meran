@@ -96,6 +96,114 @@ sub toMARC{
     return ($MARC_result_array);
 }
 
+
+=head2 sub getGrupos
+    Recupero todos los grupos del nivel 1.
+    Retorna la referencia a un arreglo de objetos
+=cut
+sub getGrupos {
+    my ($self) = shift;
+
+    #recupero todos los grupos de nivel 1 
+    my ($nivel2_object_array) = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1( 
+                                                                        query => [ id => { eq => $self->getId1 } ]
+                                                                   );
+    return $nivel2_object_array;
+}
+
+=head2 sub tienePrestamos
+    Verifica si el nivel 1 pasado por parametro tiene ejemplares con prestamos o no
+=cut
+sub tienePrestamos{
+    my ($self) = shift;
+
+    my $cant = 0;
+    #recupero todos los grupos del nivel 1
+    my ($nivel2_object_array) = $self->getGrupos();
+    
+    #recorro los id2 del nivel 1 para verificar si tienen prestamos o no 
+    foreach my $nivel2 (@$nivel2_object_array){
+        $cant = C4::AR::Prestamos::getCountPrestamosDeGrupo($nivel2->getId2);        
+        if($cant > 0){
+            last;
+        } 
+
+    }
+
+    return ($cant > 0)?1:0;
+}
+
+# DEPRECATEDD
+# actualizar segun tablas nuevas
+=item
+sub agregarDesdeMARC {
+
+   my ($self)=shift;
+    my ($marc)=@_;
+    
+    #Autor
+    my $autor = $marc->subfield("100","a");
+    if ($autor){
+        $autor =~ s/\.//; #Saco los puntos
+        my $refAutores = C4::AR::Referencias::obtenerAutoresLike($autor);
+        if($refAutores) { #Se encontro una referencia al autor
+            $self->setAutor($refAutores->[0]->getId);
+        }
+        else{ #Hay que crear el autor
+                my $autoTemp = C4::Modelo::CatAutor->new();
+                $autoTemp->setCompleto($autor);
+                my @personal = split(/,\s/, $autor); #Divido por ,+espacio
+                if ($personal[0]){$autoTemp->setApellido($personal[0]);}
+                if ($personal[1]){$autoTemp->setNombre($personal[1]);}
+                $autoTemp->save;
+                $self->setAutor($autoTemp->getId);
+        }
+    }
+
+    C4::AR::Debug::debug("agregarDesdeMARC => Autor => ".$autor);
+
+    #Titulo
+    my $titulo = $marc->subfield("245","a");
+    $self->setTitulo($titulo);
+    C4::AR::Debug::debug("agregarDesdeMARC => Autor => ".$titulo);
+    $self->save();
+
+    C4::AR::Debug::debug("agregarDesdeMARC => Se guarda el nivel 1 ");
+
+    use C4::Modelo::CatNivel1Repetible;
+    my $arrayNivel1Repetibles;
+
+    my $id1 = $self->getId1;
+     my ($arrayNivel1Repetibles)= C4::AR::EstructuraCatalogacionBase::getSubCampos(1); #Todos los campos MARC del nivel 1
+
+    #Se guardan los datos en Nivel 1 repetibles
+    foreach my $infoNivel1  (@$arrayNivel1Repetibles){
+
+        my $campo = $infoNivel1->getCampo;
+        my $subcampo = $infoNivel1->getSubcampo;
+        if (!((($campo eq "100") || ($campo eq "245"))&&($subcampo eq "a"))){ # si es ni titulo ni autor
+            my $datoRepetible=$marc->subfield($campo,$subcampo);
+
+            if($datoRepetible){
+                my $nivel1Repetible = C4::Modelo::CatNivel1Repetible->new(db => $self->db);
+                $nivel1Repetible->setId1($id1);
+                $nivel1Repetible->setCampo($campo);
+                $nivel1Repetible->setSubcampo($subcampo);
+                $nivel1Repetible->dato($datoRepetible);
+                $nivel1Repetible->save();
+               C4::AR::Debug::debug("agregarDesdeMARC => Se guarda el nivel 1 repetible => ".$campo." - ".$subcampo);
+            }
+        }
+        }
+
+          C4::AR::Debug::debug("agregarDesdeMARC => Se va a guardar el nivel 2");
+
+        my $nivel2 = C4::Modelo::CatNivel2->new(db => $self->db);
+        $nivel2->agregarDesdeMARC($id1,$marc);
+}
+=cut
+
+
 # sub toMARC{
 #     my ($self)      = shift;
 # 

@@ -184,6 +184,8 @@ sub getId_ui_poseedora{
     return C4::AR::Utilidades::trim($marc_record->subfield("995","c"));
 }
 
+=head2 sub getIdEstado
+=cut
 sub getIdEstado{
     my ($self)      = shift;
 
@@ -192,6 +194,8 @@ sub getIdEstado{
     return C4::AR::Utilidades::trim($marc_record->subfield("995","e"));
 }
 
+=head2 sub getEstadoObject
+=cut
 sub getEstadoObject{
     my ($self)      = shift;
 
@@ -207,6 +211,8 @@ sub getEstadoObject{
     return $estado;
 }
 
+=head2 sub getIdDisponibilidad
+=cut
 sub getIdDisponibilidad{
     my ($self)      = shift;
 
@@ -215,6 +221,9 @@ sub getIdDisponibilidad{
     return C4::AR::Utilidades::trim($marc_record->subfield("995","o"));
 }
 
+
+=head2 sub getDisponibilidadObject
+=cut
 sub getDisponibilidadObject{
     my ($self)              = shift;
 
@@ -230,24 +239,51 @@ sub getDisponibilidadObject{
     return $disponibilidad;
 }
 
+
+=head2 sub estaReservado
+    Verifica si el ejemplar se encuentra reservado o no
+=cut
+sub estaReservado {
+    my ($self) = shift;
+
+    return C4::AR::Reservas::estaReservado($self->getId3);
+}
+
+
+=head2  sub estaPrestado
+=cut
 sub estaPrestado {
     my ($self) = shift;
 
     return (C4::AR::Prestamos::estaPrestado($self->getId3));
 }
 
+=head2  sub getEstado
+=cut
 sub getEstado{
     my ($self) = shift;
 
-    return (C4::AR::Referencias::getNombreEstado($self->getIdEstado));
+    my $estado_object = C4::AR::Referencias::getEstadoObject($self->getIdEstado);
+
+    if($estado_object){
+        return C4::AR::Utilidades::trim($estado_object->getNombre());
+    }
+
+    C4::AR::Debug::debug("CatRegistroMarcN3 => getEstado => NO EXISTE EL ID ESTADO QUE SE INTENTA RECUPERAR");
+    return ('');
 }
 
+=head2 sub estadoDisponible
+
+=cut
 sub estadoDisponible{
     my ($self) = shift;
 
     return (C4::AR::Referencias::getNombreEstado($self->getIdEstado) eq "Disponible");
 }
 
+=head2 sub esParaSala
+=cut
 sub esParaSala{
     my ($self) = shift;
 

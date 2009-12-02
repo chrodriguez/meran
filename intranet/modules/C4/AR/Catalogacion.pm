@@ -941,58 +941,60 @@ sub cantNivel2 {
 =item sub getDatosRepetibleFromNivel 
     esta funcion trae toda la info del nivel pasado por parametro segun el id
 =cut
-sub getDatosRepetibleFromNivel{
-    my ($params) = @_;
 
-    my $nivel = $params->{'nivel'};
-
-    use C4::Modelo::CatNivel1;
-    use C4::Modelo::CatNivel1::Manager;
-
-    use C4::Modelo::CatNivel1Repetible;
-    use C4::Modelo::CatNivel1Repetible::Manager;
-      
-    use C4::Modelo::CatNivel2Repetible;
-    use C4::Modelo::CatNivel2Repetible::Manager;
-
-    use C4::Modelo::CatNivel3Repetible;
-    use C4::Modelo::CatNivel3Repetible::Manager;
-    my $catalogaciones_array_ref;
-    my $nivel1_array_ref;
-
-   if ($nivel == 1){
-    C4::AR::Debug::debug("getDatosRepetibleFromNivel => NIVEL 1");
-         $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
-                                                    query => [ 
-                                                                'cat_nivel1.id1' => { eq => $params->{'id'} },
-                                                        ], 
-                                                    with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor'], #LEFT JOIN
-
-                            );
-    
-   }
-   elsif ($nivel == 2){
-    C4::AR::Debug::debug("getDatosRepetibleFromNivel => NIVEL 2");
-         $catalogaciones_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(   
-                                                    query => [ 
-                                                                id2 => { eq => $params->{'id'} },
-                                                            ],
-                                                    with_objects => [ 'cat_nivel2' ], #LEFT JOIN
-                                );
-   }
-   else{
-    C4::AR::Debug::debug("getDatosRepetibleFromNivel => NIVEL 3");
-         $catalogaciones_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
-                                                    query => [ 
-                                                                id3 => { eq => $params->{'id3'} },
-                                                        ],
-                                                     with_objects => [ 'cat_nivel3' ], #LEFT JOIN
-                                );
-   }
-
-
-    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
-}
+# TODO actualizar segun tablas nuevas
+# sub getDatosRepetibleFromNivel{
+#     my ($params) = @_;
+# 
+#     my $nivel = $params->{'nivel'};
+# 
+#     use C4::Modelo::CatNivel1;
+#     use C4::Modelo::CatNivel1::Manager;
+# 
+#     use C4::Modelo::CatNivel1Repetible;
+#     use C4::Modelo::CatNivel1Repetible::Manager;
+#       
+#     use C4::Modelo::CatNivel2Repetible;
+#     use C4::Modelo::CatNivel2Repetible::Manager;
+# 
+#     use C4::Modelo::CatNivel3Repetible;
+#     use C4::Modelo::CatNivel3Repetible::Manager;
+#     my $catalogaciones_array_ref;
+#     my $nivel1_array_ref;
+# 
+#    if ($nivel == 1){
+#     C4::AR::Debug::debug("getDatosRepetibleFromNivel => NIVEL 1");
+#          $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
+#                                                     query => [ 
+#                                                                 'cat_nivel1.id1' => { eq => $params->{'id'} },
+#                                                         ], 
+#                                                     with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor'], #LEFT JOIN
+# 
+#                             );
+#     
+#    }
+#    elsif ($nivel == 2){
+#     C4::AR::Debug::debug("getDatosRepetibleFromNivel => NIVEL 2");
+#          $catalogaciones_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(   
+#                                                     query => [ 
+#                                                                 id2 => { eq => $params->{'id'} },
+#                                                             ],
+#                                                     with_objects => [ 'cat_nivel2' ], #LEFT JOIN
+#                                 );
+#    }
+#    else{
+#     C4::AR::Debug::debug("getDatosRepetibleFromNivel => NIVEL 3");
+#          $catalogaciones_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
+#                                                     query => [ 
+#                                                                 id3 => { eq => $params->{'id3'} },
+#                                                         ],
+#                                                      with_objects => [ 'cat_nivel3' ], #LEFT JOIN
+#                                 );
+#    }
+# 
+# 
+#     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
+# }
 
 
 sub getDatosFromNivel{
@@ -1004,6 +1006,7 @@ sub getDatosFromNivel{
 
     C4::AR::Debug::debug("getDatosFromNivel => tipo de documento: ".$itemType);
     #obtengo los datos de alguno de los niveles SOLO REPETIBLES, cat_nivel1_repetible, cat_nivel2_repetible o cat_nivel3_repetible
+# TODO esta funcion no se usa mas actualizar a las nuevas tablas
     my ($cant, $catalogaciones_array_ref_objects) = getDatosRepetibleFromNivel($params);
 
     my @result;
@@ -1219,131 +1222,63 @@ sub getEstructuraCatalogacionFromDBRepetibles{
  Esta funcion retorna la estructura_catalogacion y los datos para los campos REPETIBLES
  TENER EN CUENTA QUE SI NO HAY UNA ESTRUCTURA DE CATALOGACION QUE SOPORTE (QUE GUARDE) LOS DATOS, ESTOS NO SE VERAN
 =cut
-sub getCatalogacionesConDatos{
-    my ($params)=@_;
-
-	my $nivel= $params->{'nivel'};
-
-	use C4::Modelo::CatNivel1;
-    use C4::Modelo::CatNivel1::Manager;
-
-    use C4::Modelo::CatNivel1Repetible;
-    use C4::Modelo::CatNivel1Repetible::Manager;
-      
-    use C4::Modelo::CatNivel2Repetible;
-    use C4::Modelo::CatNivel2Repetible::Manager;
-
-    use C4::Modelo::CatNivel3Repetible;
-    use C4::Modelo::CatNivel3Repetible::Manager;
-    my $catalogaciones_array_ref;
-	my $nivel1_array_ref;
-
-   if ($nivel == 1){
-    C4::AR::Debug::debug("getCatalogacionesConDatos => NIVEL 1");
-         $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
-                                                query => [ 
- 															'cat_nivel1.id1' => { eq => $params->{'id'} },
-                                                    ], 
-
-                                             with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor'], #LEFT JOIN
-                                             require_objects => [ 'CEC' ] #INNER JOIN
-
-							);
-	
-   }
-   elsif ($nivel == 2){
-    C4::AR::Debug::debug("getCatalogacionesConDatos => NIVEL 2");
-         $catalogaciones_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(   
-                                                                              query => [ 
-                                                                                          id2 => { eq => $params->{'id'} },
-                                                                                    ],
-                                                                require_objects => [ 'cat_nivel2', 'CEC' ]
-
-                                                                     );
-   }
-   else{
-    C4::AR::Debug::debug("getCatalogacionesConDatos => NIVEL 3");
-         $catalogaciones_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
-                                                                              query => [ 
-                                                                                           id3 => { eq => $params->{'id3'} },
-                                                                                    ],
-                                                                              require_objects => [ 'cat_nivel3', 'CEC' ]
-                                                                     );
-   }
-
-    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
-}
-
-=item sub getRepetible
-    Esta funcion recupera (SI EXISTE) el objeto de un nivel repetible
-    @Parametros:
-    
-    $params->{'nivel'} = nivel por el que se va a filtrar
-    $params->{'id'} = ID correspondiente al nivel 1, 2 o 3
-    $params->{'campo'} = campo MARC
-    $params->{'subcampo'} = subcampo MARC
-=cut
-sub getRepetible{
-    my ($params) = @_;
-
-    my $nivel= $params->{'nivel'};
-
-    use C4::Modelo::CatNivel1;
-    use C4::Modelo::CatNivel1::Manager;
-
-    use C4::Modelo::CatNivel1Repetible;
-    use C4::Modelo::CatNivel1Repetible::Manager;
-      
-    use C4::Modelo::CatNivel2Repetible;
-    use C4::Modelo::CatNivel2Repetible::Manager;
-
-    use C4::Modelo::CatNivel3Repetible;
-    use C4::Modelo::CatNivel3Repetible::Manager;
-    my $catalogaciones_array_ref;
-    my $nivel1_array_ref;
-
-   if ($nivel == 1){
-    C4::AR::Debug::debug("getRepetible => NIVEL 1");
-         $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
-                                                query => [ 
-                                                            'cat_nivel1.id1'    => { eq => $params->{'id'} },
-                                                            'campo'             => { eq => $params->{'campo'} },
-                                                            'subcampo'          => { eq => $params->{'subcampo'} },        
-                                                    ], 
-                                                with_objects        => [ 'cat_nivel1','cat_nivel1.cat_autor'], #LEFT JOIN
-                                                require_objects     => [ 'CEC' ] #INNER JOIN
-
-                            );
-    
-   }
-   elsif ($nivel == 2){
-    C4::AR::Debug::debug("getRepetible => NIVEL 2");
-         $catalogaciones_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(   
-                                                    query => [ 
-                                                                id2         => { eq => $params->{'id'} },
-                                                                'campo'     => { eq => $params->{'campo'} },
-                                                                'subcampo'  => { eq => $params->{'subcampo'} },   
-                                                            ],
-                                                    require_objects     => [ 'CEC' ],#INNER JOIN
-                                                    with_objects        => [ 'cat_nivel2' ], #LEFT JOIN
-                                );
-   }
-   else{
-    C4::AR::Debug::debug("getRepetible => NIVEL 3");
-         $catalogaciones_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
-                                                    query => [ 
-                                                                id3         => { eq => $params->{'id3'} },
-                                                                'campo'     => { eq => $params->{'campo'} },
-                                                                'subcampo'  => { eq => $params->{'subcampo'} },   
-                                                        ],
-                                                        require_objects     => [ 'CEC' ], #INNER JOIN  
-                                                        with_objects        => [ 'cat_nivel3' ], #LEFT JOIN
-                                );
-   }
+# TODO actualizar segun tablas nuevas
+# sub getCatalogacionesConDatos{
+#     my ($params)=@_;
+# 
+# 	my $nivel= $params->{'nivel'};
+# 
+# 	use C4::Modelo::CatNivel1;
+#     use C4::Modelo::CatNivel1::Manager;
+# 
+#     use C4::Modelo::CatNivel1Repetible;
+#     use C4::Modelo::CatNivel1Repetible::Manager;
+#       
+#     use C4::Modelo::CatNivel2Repetible;
+#     use C4::Modelo::CatNivel2Repetible::Manager;
+# 
+#     use C4::Modelo::CatNivel3Repetible;
+#     use C4::Modelo::CatNivel3Repetible::Manager;
+#     my $catalogaciones_array_ref;
+# 	my $nivel1_array_ref;
+# 
+#    if ($nivel == 1){
+#     C4::AR::Debug::debug("getCatalogacionesConDatos => NIVEL 1");
+#          $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
+#                                                 query => [ 
+#  															'cat_nivel1.id1' => { eq => $params->{'id'} },
+#                                                     ], 
+# 
+#                                              with_objects => [ 'cat_nivel1','cat_nivel1.cat_autor'], #LEFT JOIN
+#                                              require_objects => [ 'CEC' ] #INNER JOIN
+# 
+# 							);
+# 	
+#    }
+#    elsif ($nivel == 2){
+#     C4::AR::Debug::debug("getCatalogacionesConDatos => NIVEL 2");
+#          $catalogaciones_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(   
+#                                                                               query => [ 
+#                                                                                           id2 => { eq => $params->{'id'} },
+#                                                                                     ],
+#                                                                 require_objects => [ 'cat_nivel2', 'CEC' ]
+# 
+#                                                                      );
+#    }
+#    else{
+#     C4::AR::Debug::debug("getCatalogacionesConDatos => NIVEL 3");
+#          $catalogaciones_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
+#                                                                               query => [ 
+#                                                                                            id3 => { eq => $params->{'id3'} },
+#                                                                                     ],
+#                                                                               require_objects => [ 'cat_nivel3', 'CEC' ]
+#                                                                      );
+#    }
+# 
+#     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
+# }
 
 
-    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref->[0]);
-}
 
 =item sub _getEstructuraFromCampoSubCampo
 Este funcion devuelve la configuracion de la estructura de catalogacion de un campo, subcampo, realizada por el usuario
@@ -1437,4 +1372,78 @@ sub getHeader{
         return 0;
     }
 }
-#====================================================FIN==SOPORTE PARA ESTRUCTURA CATALOGACION==================================================
+#====================================================DEPRECATEDDDDDDDDDDD==================================================
+
+
+=item sub getRepetible
+    Esta funcion recupera (SI EXISTE) el objeto de un nivel repetible
+    @Parametros:
+    
+    $params->{'nivel'} = nivel por el que se va a filtrar
+    $params->{'id'} = ID correspondiente al nivel 1, 2 o 3
+    $params->{'campo'} = campo MARC
+    $params->{'subcampo'} = subcampo MARC
+=cut
+
+# TODO no se si es necesario
+# sub getRepetible{
+#     my ($params) = @_;
+# 
+#     my $nivel= $params->{'nivel'};
+# 
+#     use C4::Modelo::CatNivel1;
+#     use C4::Modelo::CatNivel1::Manager;
+# 
+#     use C4::Modelo::CatNivel1Repetible;
+#     use C4::Modelo::CatNivel1Repetible::Manager;
+#       
+#     use C4::Modelo::CatNivel2Repetible;
+#     use C4::Modelo::CatNivel2Repetible::Manager;
+# 
+#     use C4::Modelo::CatNivel3Repetible;
+#     use C4::Modelo::CatNivel3Repetible::Manager;
+#     my $catalogaciones_array_ref;
+#     my $nivel1_array_ref;
+# 
+#    if ($nivel == 1){
+#     C4::AR::Debug::debug("getRepetible => NIVEL 1");
+#          $catalogaciones_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible(   
+#                                                 query => [ 
+#                                                             'cat_nivel1.id1'    => { eq => $params->{'id'} },
+#                                                             'campo'             => { eq => $params->{'campo'} },
+#                                                             'subcampo'          => { eq => $params->{'subcampo'} },        
+#                                                     ], 
+#                                                 with_objects        => [ 'cat_nivel1','cat_nivel1.cat_autor'], #LEFT JOIN
+#                                                 require_objects     => [ 'CEC' ] #INNER JOIN
+# 
+#                             );
+#     
+#    }
+#    elsif ($nivel == 2){
+#     C4::AR::Debug::debug("getRepetible => NIVEL 2");
+#          $catalogaciones_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible(   
+#                                                     query => [ 
+#                                                                 id2         => { eq => $params->{'id'} },
+#                                                                 'campo'     => { eq => $params->{'campo'} },
+#                                                                 'subcampo'  => { eq => $params->{'subcampo'} },   
+#                                                             ],
+#                                                     require_objects     => [ 'CEC' ],#INNER JOIN
+#                                                     with_objects        => [ 'cat_nivel2' ], #LEFT JOIN
+#                                 );
+#    }
+#    else{
+#     C4::AR::Debug::debug("getRepetible => NIVEL 3");
+#          $catalogaciones_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible(   
+#                                                     query => [ 
+#                                                                 id3         => { eq => $params->{'id3'} },
+#                                                                 'campo'     => { eq => $params->{'campo'} },
+#                                                                 'subcampo'  => { eq => $params->{'subcampo'} },   
+#                                                         ],
+#                                                         require_objects     => [ 'CEC' ], #INNER JOIN  
+#                                                         with_objects        => [ 'cat_nivel3' ], #LEFT JOIN
+#                                 );
+#    }
+# 
+# 
+#     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref->[0]);
+# }

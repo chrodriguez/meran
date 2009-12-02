@@ -379,5 +379,84 @@ sub getCantEjemplares{
 }
 
 
+# DEPRECATEDD
+# actualizar segun tablas nuevas
+=item
+sub agregarDesdeMARC {
+
+   my ($self)=shift;
+   my ($id1,$marc)=@_;
+   
+    $self->setId1($id1);
+
+    my $leader= $marc->leader();
+    my @leaderarray = split(//, $leader);
+    #Tipo de Documento LEADER 06
+    my $tipo_documento=$leaderarray[6];
+    if($tipo_documento){$self->setTipo_documento("LIB");} # FIXME lo deje fijo por ahora
+
+    #Nivel bibliográfico LEADER 07
+    my $nivel_bibliografico=$leaderarray[7];
+    if($nivel_bibliografico){$self->setNivel_bibliografico($nivel_bibliografico);} # FIXME lo deje fijo por ahora
+
+    #Soporte 245 h
+#     my $soporte = $marc->subfield("245","h");
+#     if($soporte){$self->setSoporte($soporte);}
+
+    #Pais 043 c
+    my $pais_publicacion = $marc->subfield("043","c");
+    if($pais_publicacion){$self->setPais_publicacion($pais_publicacion);}
+
+    #Lenguaje 043 c
+    my $lenguaje = $marc->subfield("041","h");
+    if($lenguaje){$self->setLenguaje($lenguaje);}
+    
+    #Ciudad 260 a
+    my $ciudad_publicacion = $marc->subfield("260","a");
+    if($ciudad_publicacion){$self->setCiudad_publicacion($ciudad_publicacion);}
+
+    #Año publicacion 260 c
+    my $anio_publicacion = $marc->subfield("260","c");
+    if($anio_publicacion){$self->setAnio_publicacion($anio_publicacion);}
+ 
+    $self->save();
+    
+          C4::AR::Debug::debug("agregarDesdeMARC => Se guardo el nivel 2");
+
+    use C4::Modelo::CatNivel2Repetible;
+    my $arrayNivel2Repetibles;
+
+    my $id2 = $self->getId2;
+     my ($arrayNivel2Repetibles)= C4::AR::EstructuraCatalogacionBase::getSubCampos(2); #Todos los campos MARC del nivel 2
+
+    #Se guardan los datos en Nivel 1 repetibles
+    foreach my $infoNivel2  (@$arrayNivel2Repetibles){
+
+        my $campo = $infoNivel2->getCampo;
+        my $subcampo = $infoNivel2->getSubcampo;
+
+        if (!( (($campo eq "245") && ($subcampo eq "h")) ||
+               (($campo eq "043") && ($subcampo eq "c")) || 
+               (($campo eq "041") && ($subcampo eq "h")) ||
+               (($campo eq "260") && ($subcampo eq "a")) || 
+               (($campo eq "260") && ($subcampo eq "c")) )) { # si no es ninguno de los fijos
+        
+            my $datoRepetible=$marc->subfield($campo,$subcampo);
+
+            if($datoRepetible){
+                my $nivel2Repetible = C4::Modelo::CatNivel2Repetible->new(db => $self->db);
+                $nivel2Repetible->setId2($id2);
+                $nivel2Repetible->setCampo($campo);
+                $nivel2Repetible->setSubcampo($subcampo);
+                $nivel2Repetible->dato($datoRepetible);
+                $nivel2Repetible->save();
+   C4::AR::Debug::debug("agregarDesdeMARC => Se guarda el nivel 2 repetible => ".$campo." - ".$subcampo);
+            }
+        }
+        }
+
+}
+=cut
+
 1;
 

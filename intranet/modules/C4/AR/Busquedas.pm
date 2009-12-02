@@ -732,52 +732,6 @@ sub buscarAutorPorCond{
 }
 
 
-sub buscarTodosLosDatosDeCampoRepetibleN1 {
-    my ($campo,$subcampo)=@_;
-
-    use C4::Modelo::CatNivel1Repetible;
-    use C4::Modelo::CatNivel1Repetible::Manager;
-
-    my @filtros;
-    push(@filtros, ( campo    => { eq => $campo}));
-    push(@filtros, ( subcampo    => { eq => $subcampo}));
-
-    my $repetibles_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible( query => \@filtros);
-    return $repetibles_array_ref;
-}
-
-sub buscarTodosLosDatosDeCampoRepetibleN2 {
-    my ($campo,$subcampo)=@_;
-
-    use C4::Modelo::CatNivel2Repetible;
-    use C4::Modelo::CatNivel2Repetible::Manager;
-
-    my @filtros;
-    push(@filtros, ( campo    => { eq => $campo}));
-    push(@filtros, ( subcampo    => { eq => $subcampo}));
-
-    my $repetibles_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible( query => \@filtros);
-    return $repetibles_array_ref;
-}
-
-sub buscarTodosLosDatosDeCampoRepetibleN3 {
-    my ($campo,$subcampo)=@_;
-
-    use C4::Modelo::CatNivel3Repetible;
-    use C4::Modelo::CatNivel3Repetible::Manager;
-
-    my @filtros;
-    push(@filtros, ( campo    => { eq => $campo}));
-    push(@filtros, ( subcampo    => { eq => $subcampo}));
-
-    my $repetibles_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible( query => \@filtros);
-    return $repetibles_array_ref;
-}
-
-
-
-
-
 sub buscarDatoDeCampoRepetible {
 	my ($id,$campo,$subcampo,$nivel)=@_;
 	
@@ -1750,6 +1704,54 @@ sub _existeEnArregloDeCampoMARC{
 }
 
 #***************************************Fin**Soporte MARC*********************************************************************
+
+
+#====================================================DEPRECATED=====================================================================
+
+# DEPRECATED
+# sub buscarTodosLosDatosDeCampoRepetibleN1 {
+#     my ($campo,$subcampo) = @_;
+# 
+#     use C4::Modelo::CatNivel1Repetible;
+#     use C4::Modelo::CatNivel1Repetible::Manager;
+# 
+#     my @filtros;
+#     push(@filtros, ( campo    => { eq => $campo}));
+#     push(@filtros, ( subcampo    => { eq => $subcampo}));
+# 
+#     my $repetibles_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible( query => \@filtros);
+#     return $repetibles_array_ref;
+# }
+
+# DEPRECATED
+# sub buscarTodosLosDatosDeCampoRepetibleN2 {
+#     my ($campo,$subcampo)=@_;
+# 
+#     use C4::Modelo::CatNivel2Repetible;
+#     use C4::Modelo::CatNivel2Repetible::Manager;
+# 
+#     my @filtros;
+#     push(@filtros, ( campo    => { eq => $campo}));
+#     push(@filtros, ( subcampo    => { eq => $subcampo}));
+# 
+#     my $repetibles_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible( query => \@filtros);
+#     return $repetibles_array_ref;
+# }
+
+# DEPRECATED
+# sub buscarTodosLosDatosDeCampoRepetibleN3 {
+#     my ($campo,$subcampo)=@_;
+# 
+#     use C4::Modelo::CatNivel3Repetible;
+#     use C4::Modelo::CatNivel3Repetible::Manager;
+# 
+#     my @filtros;
+#     push(@filtros, ( campo    => { eq => $campo}));
+#     push(@filtros, ( subcampo    => { eq => $subcampo}));
+# 
+#     my $repetibles_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible( query => \@filtros);
+#     return $repetibles_array_ref;
+# }
 
 1;
 __END__
