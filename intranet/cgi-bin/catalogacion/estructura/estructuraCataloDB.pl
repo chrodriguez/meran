@@ -348,6 +348,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
 
     my $infoOperacionJSON;
 
+# TODO esta feo, ver si se puede meter mas adentro en un modulo
     if($obj->{'nivel'} eq '1'){
         $obj->{'id_tipo_doc'} = 'ALL';
     }elsif($obj->{'nivel'} eq '2'){

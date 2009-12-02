@@ -868,7 +868,6 @@ sub getEstructuraSinDatos{
 
     C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================FIN");
 
-#     return (scalar(@$catalogaciones_array_ref), \@result);
     return (scalar(@result_total), \@result_total);
 }
 
@@ -1007,68 +1006,68 @@ sub getDatosFromNivel{
     C4::AR::Debug::debug("getDatosFromNivel => tipo de documento: ".$itemType);
     #obtengo los datos de alguno de los niveles SOLO REPETIBLES, cat_nivel1_repetible, cat_nivel2_repetible o cat_nivel3_repetible
 # TODO esta funcion no se usa mas actualizar a las nuevas tablas
-    my ($cant, $catalogaciones_array_ref_objects) = getDatosRepetibleFromNivel($params);
-
-    my @result;
-    my $campo;
-    my $campo_ant;
-
-    foreach my $c  (@$catalogaciones_array_ref_objects){
-
-        C4::AR::Debug::debug("getDatosFromNivel => campo, subcampo, dato => ".$c->getCampo.", ".$c->getSubcampo.": ".$c->getDato);
-        my $hash_temp;
-        #verifico si existe la estructura para el campo subcampo que se va a intentar mostrar, si no existe se lo imprime
-        my $estructura = _getEstructuraFromCampoSubCampo( $c->getCampo, $c->getSubcampo );
-        if($estructura){
-
-            my %hash;
-            $hash{'tiene_estructura'}  = '1';
-            $hash{'dato'}              = $c->getDato;
-            $hash{'datoReferencia'}    = $c->getDato;
-            $hash{'Id_rep'}            = $c->getId_rep;
-
-            $campo = $c->getCampo;
-
-            if($campo ne $campo_ant){
-            #agrego la informacion del campo segun la estructura base pref_estructura_campo_marc    
-                $hash{'descripcion_campo'} = 'esta es la descripcion del campo '.$c->getCampo;
-                $hash{'ayuda_campo'} = 'esta es la ayuda del campo '.$c->getCampo;
-            }
-
-            C4::AR::Debug::debug("getDatosFromNivel => Id_rep => ".$c->getId_rep);
-    
-            ($hash_temp) = _setDatos_de_estructura($estructura, \%hash);
-
-        }else{      
-        #no tiene estructura, se imprime
-            my $estructura = &C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo( $c->getCampo, $c->getSubcampo );
-            C4::AR::Debug::debug("getDatosFromNivel => NO EXISTE ESTRUCTURA PARA ");
-            C4::AR::Debug::debug("getDatosFromNivel => campo, subcampo, dato => ".$c->getCampo.", ".$c->getSubcampo.": ".$c->getDato);
-            C4::AR::Debug::debug("getDatosFromNivel => NO EXISTE ESTRUCTURA PARA Liblibrarian: ".$estructura->getLiblibrarian);    
-
-            my %hash;
-
-            $hash{'tiene_estructura'}  = '0';
-            my $dato = $c->getDato;
-            if($c->getDato eq ''){
-                $dato = " SIN DATO ";
-            }
-
-            $hash{'dato'}              = $c->getCampo.", ".$c->getSubcampo.": ".$dato;
-            $hash{'datoReferencia'}    = 0;
-
-            ($hash_temp) = _setDatos_de_estructura2($estructura, \%hash);
-
-        }
-    
-        push (@result, $hash_temp);
-      
-
-    }# END foreach my $cat_estructura  (@$catalogaciones_array_ref_objects)
+#     my ($cant, $catalogaciones_array_ref_objects) = getDatosRepetibleFromNivel($params);
+# 
+#     my @result;
+#     my $campo;
+#     my $campo_ant;
+# 
+#     foreach my $c  (@$catalogaciones_array_ref_objects){
+# 
+#         C4::AR::Debug::debug("getDatosFromNivel => campo, subcampo, dato => ".$c->getCampo.", ".$c->getSubcampo.": ".$c->getDato);
+#         my $hash_temp;
+#         #verifico si existe la estructura para el campo subcampo que se va a intentar mostrar, si no existe se lo imprime
+#         my $estructura = _getEstructuraFromCampoSubCampo( $c->getCampo, $c->getSubcampo );
+#         if($estructura){
+# 
+#             my %hash;
+#             $hash{'tiene_estructura'}  = '1';
+#             $hash{'dato'}              = $c->getDato;
+#             $hash{'datoReferencia'}    = $c->getDato;
+#             $hash{'Id_rep'}            = $c->getId_rep;
+# 
+#             $campo = $c->getCampo;
+# 
+#             if($campo ne $campo_ant){
+#             #agrego la informacion del campo segun la estructura base pref_estructura_campo_marc    
+#                 $hash{'descripcion_campo'} = 'esta es la descripcion del campo '.$c->getCampo;
+#                 $hash{'ayuda_campo'} = 'esta es la ayuda del campo '.$c->getCampo;
+#             }
+# 
+#             C4::AR::Debug::debug("getDatosFromNivel => Id_rep => ".$c->getId_rep);
+#     
+#             ($hash_temp) = _setDatos_de_estructura($estructura, \%hash);
+# 
+#         }else{      
+#         #no tiene estructura, se imprime
+#             my $estructura = &C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo( $c->getCampo, $c->getSubcampo );
+#             C4::AR::Debug::debug("getDatosFromNivel => NO EXISTE ESTRUCTURA PARA ");
+#             C4::AR::Debug::debug("getDatosFromNivel => campo, subcampo, dato => ".$c->getCampo.", ".$c->getSubcampo.": ".$c->getDato);
+#             C4::AR::Debug::debug("getDatosFromNivel => NO EXISTE ESTRUCTURA PARA Liblibrarian: ".$estructura->getLiblibrarian);    
+# 
+#             my %hash;
+# 
+#             $hash{'tiene_estructura'}  = '0';
+#             my $dato = $c->getDato;
+#             if($c->getDato eq ''){
+#                 $dato = " SIN DATO ";
+#             }
+# 
+#             $hash{'dato'}              = $c->getCampo.", ".$c->getSubcampo.": ".$dato;
+#             $hash{'datoReferencia'}    = 0;
+# 
+#             ($hash_temp) = _setDatos_de_estructura2($estructura, \%hash);
+# 
+#         }
+#     
+#         push (@result, $hash_temp);
+#       
+# 
+#     }# END foreach my $cat_estructura  (@$catalogaciones_array_ref_objects)
 
     #obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
     my @resultEstYDatos = _getEstructuraYDatosDeNivelNoRepetible($params);
-    push(@resultEstYDatos,@result);
+#     push(@resultEstYDatos,@result);
     my @sorted = sort { $a->{campo} cmp $b->{campo} } @resultEstYDatos; # alphabetical sort 
 
 #     return (scalar(@resultEstYDatos), \@resultEstYDatos);
