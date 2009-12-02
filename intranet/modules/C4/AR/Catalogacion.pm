@@ -997,73 +997,12 @@ sub getDatosFromNivel{
     my $itemType    = $params->{'id_tipo_doc'};
 
     C4::AR::Debug::debug("getDatosFromNivel => tipo de documento: ".$itemType);
-    #obtengo los datos de alguno de los niveles SOLO REPETIBLES, cat_nivel1_repetible, cat_nivel2_repetible o cat_nivel3_repetible
-# TODO esta funcion no se usa mas actualizar a las nuevas tablas
-#     my ($cant, $catalogaciones_array_ref_objects) = getDatosRepetibleFromNivel($params);
-# 
-#     my @result;
-#     my $campo;
-#     my $campo_ant;
-# 
-#     foreach my $c  (@$catalogaciones_array_ref_objects){
-# 
-#         C4::AR::Debug::debug("getDatosFromNivel => campo, subcampo, dato => ".$c->getCampo.", ".$c->getSubcampo.": ".$c->getDato);
-#         my $hash_temp;
-#         #verifico si existe la estructura para el campo subcampo que se va a intentar mostrar, si no existe se lo imprime
-#         my $estructura = _getEstructuraFromCampoSubCampo( $c->getCampo, $c->getSubcampo );
-#         if($estructura){
-# 
-#             my %hash;
-#             $hash{'tiene_estructura'}  = '1';
-#             $hash{'dato'}              = $c->getDato;
-#             $hash{'datoReferencia'}    = $c->getDato;
-#             $hash{'Id_rep'}            = $c->getId_rep;
-# 
-#             $campo = $c->getCampo;
-# 
-#             if($campo ne $campo_ant){
-#             #agrego la informacion del campo segun la estructura base pref_estructura_campo_marc    
-#                 $hash{'descripcion_campo'} = 'esta es la descripcion del campo '.$c->getCampo;
-#                 $hash{'ayuda_campo'} = 'esta es la ayuda del campo '.$c->getCampo;
-#             }
-# 
-#             C4::AR::Debug::debug("getDatosFromNivel => Id_rep => ".$c->getId_rep);
-#     
-#             ($hash_temp) = _setDatos_de_estructura($estructura, \%hash);
-# 
-#         }else{      
-#         #no tiene estructura, se imprime
-#             my $estructura = &C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo( $c->getCampo, $c->getSubcampo );
-#             C4::AR::Debug::debug("getDatosFromNivel => NO EXISTE ESTRUCTURA PARA ");
-#             C4::AR::Debug::debug("getDatosFromNivel => campo, subcampo, dato => ".$c->getCampo.", ".$c->getSubcampo.": ".$c->getDato);
-#             C4::AR::Debug::debug("getDatosFromNivel => NO EXISTE ESTRUCTURA PARA Liblibrarian: ".$estructura->getLiblibrarian);    
-# 
-#             my %hash;
-# 
-#             $hash{'tiene_estructura'}  = '0';
-#             my $dato = $c->getDato;
-#             if($c->getDato eq ''){
-#                 $dato = " SIN DATO ";
-#             }
-# 
-#             $hash{'dato'}              = $c->getCampo.", ".$c->getSubcampo.": ".$dato;
-#             $hash{'datoReferencia'}    = 0;
-# 
-#             ($hash_temp) = _setDatos_de_estructura2($estructura, \%hash);
-# 
-#         }
-#     
-#         push (@result, $hash_temp);
-#       
-# 
-#     }# END foreach my $cat_estructura  (@$catalogaciones_array_ref_objects)
 
     #obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
-    my @resultEstYDatos = _getEstructuraYDatosDeNivelNoRepetible($params);
-#     push(@resultEstYDatos,@result);
+    my @resultEstYDatos = getEstructuraYDatosDeNivel($params);
+
     my @sorted = sort { $a->{campo} cmp $b->{campo} } @resultEstYDatos; # alphabetical sort 
 
-#     return (scalar(@resultEstYDatos), \@resultEstYDatos);
     return (scalar(@resultEstYDatos), \@sorted);
 }
 
@@ -1073,22 +1012,22 @@ sub getDatosFromNivel{
 Esta funcion retorna la estructura de catalogacion con los datos de un Nivel (NO REPETIBLES).
 Ademas mapea las campos fijos de nivel 1, 2 y 3 a MARC
 =cut
-sub _getEstructuraYDatosDeNivelNoRepetible{
+sub getEstructuraYDatosDeNivel{
 	my ($params) = @_;
 
 	my @result;
 	my $nivel;
 	if( $params->{'nivel'} eq '1'){
 		$nivel = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
-        C4::AR::Debug::debug("_getEstructuraYDatosDeNivelNoRepetible=>  getNivel1FromId1\n");
+        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel1FromId1\n");
 	}
 	elsif( $params->{'nivel'} eq '2'){
 		$nivel = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
-        C4::AR::Debug::debug("_getEstructuraYDatosDeNivelNoRepetible=>  getNivel2FromId2\n");
+        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel2FromId2\n");
 	}
 	elsif( $params->{'nivel'} eq '3'){
 		$nivel = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
-        C4::AR::Debug::debug("_getEstructuraYDatosDeNivelNoRepetible=>  getNivel3FromId3");
+        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel3FromId3");
 	}
 
 	#paso todo a MARC
@@ -1101,35 +1040,46 @@ sub _getEstructuraYDatosDeNivelNoRepetible{
     if ($nivel_info_marc_array ){
       for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++){
 
-        my $cat_estruct_array = _getEstructuraFromCampoSubCampo(	
-                                                                    $nivel_info_marc_array->[$i]->{'campo'}, 
-                                                                    $nivel_info_marc_array->[$i]->{'subcampo'}
-                                            );
-      
-  
-        if($cat_estruct_array){	
+        foreach my $subcampo (@{$nivel_info_marc_array->[$i]->{'subcampos_array'}}){
 
-            my %hash_temp;
-            my $estructura = _getEstructuraFromCampoSubCampo( 
-                                                                $nivel_info_marc_array->[$i]->{'campo'},
-                                                                $nivel_info_marc_array->[$i]->{'subcampo'}     
-                                                    );
+            my $cat_estruct_array = _getEstructuraFromCampoSubCampo(	
+                                                                        $nivel_info_marc_array->[$i]->{'campo'}, 
+                                                                        $subcampo->{'subcampo'}
+                                                );
+        
+    
+            if($cat_estruct_array){	
+    
+                my %hash_temp;
+                my $estructura = _getEstructuraFromCampoSubCampo( 
+                                                                    $nivel_info_marc_array->[$i]->{'campo'},
+                                                                    $subcampo->{'subcampo'}     
+                                                        );
+    
+                if($estructura){
+                    $hash_temp{'tiene_estructura'}  = '1';
+                }else{
+                    $hash_temp{'tiene_estructura'}  = '0';
+                }
+    
+                $hash_temp{'dato'} = $subcampo->{'dato'};
+                $hash_temp{'datoReferencia'} = $subcampo->{'datoReferencia'};
 
-            if($estructura){
-                $hash_temp{'tiene_estructura'}  = '1';
-            }else{
-                $hash_temp{'tiene_estructura'}  = '0';
-            }
-
-            $hash_temp{'dato'} = $nivel_info_marc_array->[$i]->{'dato'};
-            $hash_temp{'datoReferencia'} = $nivel_info_marc_array->[$i]->{'datoReferencia'};
-
-            my $hash_result = _setDatos_de_estructura($cat_estruct_array, \%hash_temp);
+                C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
+                C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
+                C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => liblibrarian => ".$subcampo->{'liblibrarian'});
+                C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
+                C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => datoReferencia => ".$subcampo->{'datoReferencia'});
                 
-            push(@result, $hash_result);
-        }
+    
+                my $hash_result = _setDatos_de_estructura($cat_estruct_array, \%hash_temp);
+                    
+                push(@result, $hash_result);
+            }
+        }# END foreach my $s (@{$m->{'subcampos_array'}})
       }
     }# END for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++)
+
 
 	return @result;
 }
