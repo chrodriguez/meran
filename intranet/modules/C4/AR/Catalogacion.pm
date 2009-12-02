@@ -61,9 +61,9 @@ sub _meran_to_marc{
 
     my $marc_record = MARC::Record->new();
     my $cant_campos = scalar(@$infoArrayNivel);
-    my @autorizados;
+    my %autorizados;
     foreach my $autorizado (@$campos_autorizados){
-        push (@autorizados, $autorizado->getCampo());
+        $autorizados{$autorizado->getCampo()}=$autorizado->getSubcampo();
     }
 
     my $field;
@@ -76,25 +76,18 @@ sub _meran_to_marc{
         my $subcampos_hash = $infoArrayNivel->[$i]->{'subcampos_hash'};
         my $cant_subcampos = $infoArrayNivel->[$i]->{'cant_subcampos'};
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
-#         C4::AR::Utilidades::printARRAY(\@autorizados);
-        if (C4::AR::Utilidades::existeInArray($campo,@autorizados)){
-            C4::AR::Debug::debug("AUTORIZADO ".$campo);
-            for(my $j=0;$j<$cant_subcampos;$j++){
-                 my $subcampo= $subcampos_hash->{$j};
-                 while ( my ($key, $value) = each(%$subcampo) ){
-#                     C4::AR::Debug::debug("clave = ".$key." valor: ".$value);
-                   if($value ne ''){
-                        push(@subcampos_array, ($key => $value));
-                    }
+        my $subcampo= $subcampos_hash->{$i};
+            while ( my ($key, $value) = each(%$subcampo) ){
+#                 C4::AR::Debug::debug("clave = ".$key." valor: ".$value);
+                if (($value ne '')&&(C4::AR::Utilidades::existeInArray($key,$autorizados{$campo}))) {
+                    push(@subcampos_array, ($key => $value));
                 }
             }
-            if(scalar(@subcampos_array) > 0){
-                $field = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);
-                $marc_record->add_fields($field);
-                C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$field->as_formatted());
-            }            
-        
-         }
+        if(scalar(@subcampos_array) > 0){
+            $field = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);
+            $marc_record->add_fields($field);
+        C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$field->as_formatted());
+        }            
     }
 
     C4::AR::Debug::debug("meran_nivel_to_meran => SALIDA => as_formatted ".$marc_record->as_formatted());
