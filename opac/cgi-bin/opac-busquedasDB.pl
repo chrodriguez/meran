@@ -28,6 +28,7 @@ if($obj){
   $obj->{'tipoAccion'} = $input->param('tipoAccion');
   $obj->{'string'} = $input->param('string');
   $obj->{'tipoBusqueda'} = 'all';
+  $obj->{'ini'} = $input->param('page') || 0;;
 }
 
 my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
@@ -42,7 +43,6 @@ $obj->{'session'}= $session;
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-$obj->{'ini'}= $ini;
 $obj->{'cantR'}= $obj->{'cantR'} || $cantR;
 
 C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
