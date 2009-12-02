@@ -189,7 +189,7 @@ html {filter: expression(document.execCommand("BackgroundImageCache", false, tru
 
 
 .contenedor_paginador{
-    width: 56%;
+    width: 60%;
     margin: 0 auto;
     padding: 4px;
 }
