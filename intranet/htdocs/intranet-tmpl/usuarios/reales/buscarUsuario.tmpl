@@ -17,7 +17,7 @@ $(document).ready(function() {
 <ul>
     <li class="horizontal">
 			<input id="socio" type=text name="socio" onFocus="checkFilter('focus')" 
-                onBlur="checkFilter('blur')" value="[% socio %]">
+                onBlur="checkFilter('blur')">
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
                                                                     boton   => "boton_buscar",

@@ -18,6 +18,11 @@ my ($template, $session, $t_params)= get_template_and_user({
 $t_params->{'opac'};
 my $post = $query->param('post_message') || 0;
 if ($post){
+    use C4::Modelo::Contacto;
+    my ($contacto) = C4::Modelo::Contacto->new();
+    my $params_hash = $query->Vars;
+    C4::AR::Debug::debug("TRATO: ".$params_hash->{'trato'});
+    $contacto->agregar($params_hash);
     $t_params->{'partial_template'}= "opac-contact_posted.inc";
 }else{
     $t_params->{'partial_template'}= "opac-contact.inc";

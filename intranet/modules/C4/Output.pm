@@ -142,7 +142,7 @@ sub gettemplate {
 			temas               => $temas,
             titulo_nombre_ui    => C4::AR::Preferencias->getValorPreferencia('titulo_nombre_ui'),
 			template_name       => "$htdocs/$tmplbase", #se setea el nombre del tmpl
-            ui                  => $nombre_ui,
+            ui                  => $ui,
 		);
 
 
