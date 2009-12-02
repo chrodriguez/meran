@@ -171,7 +171,8 @@ sub koha2_to_meran
  Esta funcion la idea es que sea llamada desde las distintas fuentes de ingreso de datos que existen, ej: aguapey, bibun, biblo, etc
 =cut
 sub koha2_to_meran{
-
+        my ($params) = @_;
+        
 }
 
 sub detalleMARC {
