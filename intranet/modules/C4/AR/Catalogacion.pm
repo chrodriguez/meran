@@ -90,7 +90,7 @@ sub _meran_to_marc{
             $field = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);
             $marc_record->add_fields($field);
         C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$field->as_formatted());
-        }            
+        }
     }
 
     C4::AR::Debug::debug("meran_nivel_to_meran => SALIDA => as_formatted ".$marc_record->as_formatted());
