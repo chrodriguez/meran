@@ -391,7 +391,104 @@ sub t_eliminarNivelRepetible{
 
 
 
+sub getDatoFromReferencia{
+  my ($campo, $subcampo, $id_tabla) = @_;
+  
+  my $valor_referencia = '';
 
+  if(($id_tabla ne '')&&($campo ne '')&&($subcampo ne '')){
+
+      my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+      
+      if($estructura){
+        if($estructura->getReferencia){
+          #tiene referencia
+          my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
+          my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+                                                                            #campo_tabla,                   id_tabla
+          $valor_referencia = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $id_tabla);
+          C4::AR::Debug::debug("getDatoFromReferencia => getReferencia: ".$estructura->infoReferencia->getReferencia);
+          C4::AR::Debug::debug("getDatoFromReferencia => Tabla: ".$obj_generico->getTableName);
+          C4::AR::Debug::debug("getDatoFromReferencia => Modulo: ".$obj_generico->toString);
+          C4::AR::Debug::debug("getDatoFromReferencia => Valor referencia: ".$valor_referencia);
+        }
+      }
+  }
+
+  return $valor_referencia;
+}
+
+=head2  
+sub _setDatos_de_estructura
+    
+
+Esta funcion setea 
+
+    @Parametros
+    $cat: es un objeto de cat_estructura_catalogacion que contiene toda la estructura que se va a setear a la HASH
+=cut
+sub _setDatos_de_estructura {
+    my ($cat, $datos_hash_ref) = @_;
+    my %hash_ref_result;
+
+    $hash_ref_result{'campo'} =                  $cat->getCampo;
+    $hash_ref_result{'subcampo'} =               $cat->getSubcampo;
+    $hash_ref_result{'dato'} =                   $datos_hash_ref->{'dato'};
+    $hash_ref_result{'datoReferencia'}=          $datos_hash_ref->{'datoReferencia'};
+    $hash_ref_result{'Id_rep'} =                 $datos_hash_ref->{'Id_rep'};
+    $hash_ref_result{'tiene_estructura'}=        $datos_hash_ref->{'tiene_estructura'};
+    $hash_ref_result{'ayuda_subcampo'} =         $datos_hash_ref->{'ayuda_subcampo'};
+    $hash_ref_result{'descripcion_subcampo'} =   $datos_hash_ref->{'descripcion_subcampo'};
+    $hash_ref_result{'nivel'} =                  $cat->getNivel;
+    $hash_ref_result{'visible'} =                $cat->getVisible;
+    $hash_ref_result{'liblibrarian'} =           $cat->getLiblibrarian;
+    $hash_ref_result{'itemtype'} =               $cat->getItemType;
+    $hash_ref_result{'repetible'} =              $cat->subCamposBase->getRepetible;
+    $hash_ref_result{'tipo'} =                   $cat->getTipo;
+    $hash_ref_result{'referencia'} =             $cat->getReferencia;
+    $hash_ref_result{'obligatorio'} =            $cat->getObligatorio;
+    $hash_ref_result{'idCompCliente'} =          $cat->getIdCompCliente;
+    $hash_ref_result{'intranet_habilitado'} =    $cat->getIntranet_habilitado;
+    $hash_ref_result{'rules'} =                  $cat->getRules;    
+    $hash_ref_result{'fijo'} =                   $cat->getFijo;  
+
+    C4::AR::Debug::debug("");
+    if($cat->subCamposBase->getRepetible){    
+        #solo para debug
+        C4::AR::Debug::debug("_setDatos_de_estructura => ======== ES UN REPETIBLE ======== ");
+        C4::AR::Debug::debug("_setDatos_de_estructura => Id_rep: ".$datos_hash_ref->{'Id_rep'});
+    }
+    C4::AR::Debug::debug("_setDatos_de_estructura => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
+    C4::AR::Debug::debug("_setDatos_de_estructura => dato: ".$datos_hash_ref->{'dato'});
+    C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$datos_hash_ref->{'datoReferencia'});
+    if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
+        #tiene una referencia, y es un COMBO
+        C4::AR::Debug::debug("_setDatos_de_estructura => ======== COMBO ======== ");
+        _obtenerOpciones ($cat, \%hash_ref_result);
+
+    }elsif( ($cat->getReferencia) && ($cat->getTipo eq 'auto') ){
+        #es un autocomplete
+        $hash_ref_result{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
+        $hash_ref_result{'datoReferencia'} = $hash_ref_result{'dato'};
+        #si es un autocomplete y no tengo el dato de la referencia, muestro un blanco
+        if ( ($hash_ref_result{'datoReferencia'} eq 0) || ($hash_ref_result{'dato'} eq 0) || not defined($hash_ref_result{'datoReferencia'}) ) {
+          $hash_ref_result{'dato'} = 'NO TIENE';
+        }
+  
+        
+        my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'dato'});
+        $hash_ref_result{'dato'} = $valor_referencia;
+
+        C4::AR::Debug::debug("_setDatos_de_estructura => ======== AUTOCOMPLETE ======== ");
+        C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref_result{'datoReferencia'});
+        C4::AR::Debug::debug("_setDatos_de_estructura => referenciaTabla: ".$hash_ref_result{'referenciaTabla'});
+    }else{
+        #cualquier otra componete
+        C4::AR::Debug::debug("_setDatos_de_estructura => ======== ".$cat->getTipo." ======== ");
+    }
+
+    return (\%hash_ref_result);
+}
 
 
 
@@ -622,105 +719,6 @@ sub t_modificarEnEstructuraCatalogacion {
 #======================================================SOPORTE PARA ESTRUCTURA CATALOGACION====================================================
 
 
-sub getDatoFromReferencia{
-  my ($campo, $subcampo, $id_tabla) = @_;
-  
-  my $valor_referencia = '';
-
-  if(($id_tabla ne '')&&($campo ne '')&&($subcampo ne '')){
-
-      my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-      
-      if($estructura){
-        if($estructura->getReferencia){
-          #tiene referencia
-          my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
-          my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
-                                                                            #campo_tabla,                   id_tabla
-          $valor_referencia = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $id_tabla);
-          C4::AR::Debug::debug("getDatoFromReferencia => getReferencia: ".$estructura->infoReferencia->getReferencia);
-          C4::AR::Debug::debug("getDatoFromReferencia => Tabla: ".$obj_generico->getTableName);
-          C4::AR::Debug::debug("getDatoFromReferencia => Modulo: ".$obj_generico->toString);
-          C4::AR::Debug::debug("getDatoFromReferencia => Valor referencia: ".$valor_referencia);
-        }
-      }
-  }
-
-  return $valor_referencia;
-}
-
-=head2  
-sub _setDatos_de_estructura
-    
-
-Esta funcion setea 
-
-    @Parametros
-    $cat: es un objeto de cat_estructura_catalogacion que contiene toda la estructura que se va a setear a la HASH
-=cut
-sub _setDatos_de_estructura {
-    my ($cat, $datos_hash_ref) = @_;
-    my %hash_ref_result;
-
-    $hash_ref_result{'campo'} =                  $cat->getCampo;
-    $hash_ref_result{'subcampo'} =               $cat->getSubcampo;
-    $hash_ref_result{'dato'} =                   $datos_hash_ref->{'dato'};
-    $hash_ref_result{'datoReferencia'}=          $datos_hash_ref->{'datoReferencia'};
-    $hash_ref_result{'Id_rep'} =                 $datos_hash_ref->{'Id_rep'};
-    $hash_ref_result{'tiene_estructura'}=        $datos_hash_ref->{'tiene_estructura'};
-    $hash_ref_result{'ayuda_subcampo'} =         $datos_hash_ref->{'ayuda_subcampo'};
-    $hash_ref_result{'descripcion_subcampo'} =   $datos_hash_ref->{'descripcion_subcampo'};
-    $hash_ref_result{'nivel'} =                  $cat->getNivel;
-    $hash_ref_result{'visible'} =                $cat->getVisible;
-    $hash_ref_result{'liblibrarian'} =           $cat->getLiblibrarian;
-    $hash_ref_result{'itemtype'} =               $cat->getItemType;
-    $hash_ref_result{'repetible'} =              $cat->subCamposBase->getRepetible;
-    $hash_ref_result{'tipo'} =                   $cat->getTipo;
-    $hash_ref_result{'referencia'} =             $cat->getReferencia;
-    $hash_ref_result{'obligatorio'} =            $cat->getObligatorio;
-    $hash_ref_result{'idCompCliente'} =          $cat->getIdCompCliente;
-    $hash_ref_result{'intranet_habilitado'} =    $cat->getIntranet_habilitado;
-    $hash_ref_result{'rules'} =                  $cat->getRules;    
-    $hash_ref_result{'fijo'} =                   $cat->getFijo;  
-
-    C4::AR::Debug::debug("");
-    if($cat->subCamposBase->getRepetible){    
-        #solo para debug
-        C4::AR::Debug::debug("_setDatos_de_estructura => ======== ES UN REPETIBLE ======== ");
-        C4::AR::Debug::debug("_setDatos_de_estructura => Id_rep: ".$datos_hash_ref->{'Id_rep'});
-    }
-    C4::AR::Debug::debug("_setDatos_de_estructura => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
-    C4::AR::Debug::debug("_setDatos_de_estructura => dato: ".$datos_hash_ref->{'dato'});
-    C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$datos_hash_ref->{'datoReferencia'});
-    if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
-        #tiene una referencia, y es un COMBO
-        C4::AR::Debug::debug("_setDatos_de_estructura => ======== COMBO ======== ");
-        _obtenerOpciones ($cat, \%hash_ref_result);
-
-    }elsif( ($cat->getReferencia) && ($cat->getTipo eq 'auto') ){
-        #es un autocomplete
-        $hash_ref_result{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
-        #si es un autocomplete y no tengo el dato de la referencia, muestro un blanco
-        if ( ($hash_ref_result{'datoReferencia'} eq 0) || ($hash_ref_result{'dato'} eq 0) || not defined($hash_ref_result{'datoReferencia'}) ) {
-          $hash_ref_result{'dato'} = 'NO TIENE';
-        }
-  
-        C4::AR::Debug::debug("_setDatos_de_estructura => ======== AUTOCOMPLETE ======== ");
-        C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref_result{'datoReferencia'});
-        C4::AR::Debug::debug("_setDatos_de_estructura => referenciaTabla: ".$hash_ref_result{'referenciaTabla'});
-#         if($cat->subCamposBase->getRepetible){
-            #obtengo el dato de la referencia solo si es un repetible, los campos fijos recuperan de otra forma el dato de la referencia 
-#             my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'dato'});
-            my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'datoReferencia'});
-            $hash_ref_result{'dato'} = $valor_referencia;
-#         }
-    }else{
-        #cualquier otra componete
-        C4::AR::Debug::debug("_setDatos_de_estructura => ======== ".$cat->getTipo." ======== ");
-    }
-
-    return (\%hash_ref_result);
-}
 
 #para los datos q no tienen estructura
 sub _setDatos_de_estructura2 {

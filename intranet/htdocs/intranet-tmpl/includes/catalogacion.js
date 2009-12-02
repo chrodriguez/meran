@@ -311,21 +311,21 @@ function mostrarEstructuraDelNivel1(){
 
 
 // FIXME deprecatedd
-function mostrarDataNivel(){
-
-    if (MODIFICAR){
-        for (x=0; x<MARC_OBJECT_ARRAY.length; x++){
-            if(x < DATA_ARRAY.length && DATA_ARRAY[x].tiene_estructura == '1'){
-                //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
-                $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-                if(DATA_ARRAY[x].referencia == 1){
-                    MARC_OBJECT_ARRAY[x].datoReferencia = DATA_ARRAY[x].datoReferencia;
-                    $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
-                }
-            }
-        }
-   }
-}
+// function mostrarDataNivel(){
+// 
+//     if (MODIFICAR){
+//         for (x=0; x<MARC_OBJECT_ARRAY.length; x++){
+//             if(x < DATA_ARRAY.length && DATA_ARRAY[x].tiene_estructura == '1'){
+//                 //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
+//                 $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
+//                 if(DATA_ARRAY[x].referencia == 1){
+//                     MARC_OBJECT_ARRAY[x].datoReferencia = DATA_ARRAY[x].datoReferencia;
+//                     $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
+//                 }
+//             }
+//         }
+//    }
+// }
 
 function updateMostrarEstructuraDelNivel1(responseText){
     _clearContentsEstructuraDelNivel();
@@ -334,7 +334,6 @@ function updateMostrarEstructuraDelNivel1(responseText){
     //ademas se carga el arreglo MARC_OBJECT_ARRAY donde se hace el mapeo de componente del cliente y dato
     procesarInfoJson(responseText); 
     //carga los datos en los campos solo si se esta modificando
-//     mostrarDataNivel();
     scrollTo('nivel1Tabla');
     
 	//asigno el handler para el validador
@@ -360,7 +359,6 @@ function updateMostrarEstructuraDelNivel2(responseText){
     _showAndHiddeEstructuraDelNivel(2);
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
-//     mostrarDataNivel();
     scrollTo('nivel2Tabla');
       
 	//asigno el handler para el validador
@@ -400,7 +398,6 @@ function updateMostrarEstructuraDelNivel3(responseText){
 	  TAB_INDEX= 0;
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
-//     mostrarDataNivel();
     scrollTo('nivel3Tabla');
 	
 	  //asigno el handler para el validador
@@ -843,9 +840,6 @@ function procesarInfoJson(json){
 
         
         for(var j=0; j < subcampos_array.length; j++){
-//             subcampos_array[j].marc_group = 'marc_group' + i;
-//             MARC_OBJECT_ARRAY[j+i] = subcampos_array[j];
-//             subcampo_marc_conf_obj.setMarcGroup('marc_group' + i);
             procesarObjeto(subcampos_array[j], 'marc_group' + i);
         }
 
@@ -1206,7 +1200,8 @@ function newCombo(obj){
     var opciones = obj.getOpciones();
 
     for(var i=0; i< opciones.length; i++){
-        if(obj.getDefaultValue() == opciones[i].clave){
+//         if(obj.getDefaultValue() == opciones[i].clave){
+        if(obj.getDato() == opciones[i].clave){
             defaultValue =" selected='selected' ";
         }
 
@@ -1244,7 +1239,7 @@ function crearTextArea(obj){
 }
 
 function crearHidden(obj){
-    return "<input type='hidden' id='" + obj.getIdCompCliente() + "_hidden' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "'>";
+    return "<input type='hidden' id='" + obj.getIdCompCliente() + "_hidden' name='" + obj.getIdCompCliente() + "' value='" + obj.getDatoReferencia() + "'>";
 }
 
 function crearAuto(obj){
@@ -1441,14 +1436,9 @@ function modificarN1(id1){
 function updateModificarN1(responseText){
     MODIFICAR = 1;
     //se genera un arreglo de objetos con la informacion guardada, campo, subcampo  
-// FIXME esto parece q esta al pedo  
     DATA_ARRAY = JSONstring.toObject(responseText);
-//FIXME estoy probado esto
     _NIVEL_ACTUAL = 1;
     updateMostrarEstructuraDelNivel1(responseText);
-// fin prueba
-// parece q no es necesario llamar y hacer otro ajax para traer la estructura, se reusa la estructura q viene con los datos
-//     mostrarEstructuraDelNivel1();
 }
 
 function modificarN2(id2){
