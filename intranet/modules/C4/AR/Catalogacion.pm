@@ -78,9 +78,9 @@ sub _meran_to_marc{
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
         my $subcampo= $subcampos_hash->{$i};
             while ( my ($key, $value) = each(%$subcampo) ){
-#                 C4::AR::Debug::debug("clave = ".$key." valor: ".$value);
                 if (($value ne '')&&(C4::AR::Utilidades::existeInArray($key,$autorizados{$campo}))) {
                     push(@subcampos_array, ($key => $value));
+                    C4::AR::Debug::debug("ACEPTADO clave = ".$key." valor: ".$value);
                 }
             }
         if(scalar(@subcampos_array) > 0){
