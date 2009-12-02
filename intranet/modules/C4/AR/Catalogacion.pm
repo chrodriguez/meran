@@ -76,13 +76,16 @@ sub _meran_to_marc{
         my $subcampos_hash = $infoArrayNivel->[$i]->{'subcampos_hash'};
         my $cant_subcampos = $infoArrayNivel->[$i]->{'cant_subcampos'};
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
-        my $subcampo= $subcampos_hash->{$i};
+        for(my $j=0;$j<$cant_subcampos;$j++){
+            my $subcampo= $subcampos_hash->{$j};
+            C4::AR::Utilidades::printHASH($subcampo);
             while ( my ($key, $value) = each(%$subcampo) ){
                 if (($value ne '')&&(C4::AR::Utilidades::existeInArray($key,$autorizados{$campo}))) {
                     push(@subcampos_array, ($key => $value));
                     C4::AR::Debug::debug("ACEPTADO clave = ".$key." valor: ".$value);
                 }
             }
+        }
         if(scalar(@subcampos_array) > 0){
             $field = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);
             $marc_record->add_fields($field);
@@ -643,8 +646,11 @@ sub getDatoFromReferencia{
   return $valor_referencia;
 }
 
-=item  sub _setDatos_de_estructura
-    Esta funcion setea 
+=head2  
+sub _setDatos_de_estructura
+    
+
+Esta funcion setea 
 
     @Parametros
     $cat: es un objeto de cat_estructura_catalogacion que contiene toda la estructura que se va a setear a la HASH
@@ -682,7 +688,7 @@ sub _setDatos_de_estructura {
     }
     C4::AR::Debug::debug("_setDatos_de_estructura => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
     C4::AR::Debug::debug("_setDatos_de_estructura => dato: ".$datos_hash_ref->{'dato'});
-    
+    C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$datos_hash_ref->{'datoReferencia'});
     if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
         #tiene una referencia, y es un COMBO
         C4::AR::Debug::debug("_setDatos_de_estructura => ======== COMBO ======== ");
@@ -742,7 +748,8 @@ sub _setDatos_de_estructura2 {
     return (\%hash_ref_result);
 }
 
-=item sub getSubCamposFromEstructuraByCampo
+=head2
+sub getSubCamposFromEstructuraByCampo
 
 =cut
 
