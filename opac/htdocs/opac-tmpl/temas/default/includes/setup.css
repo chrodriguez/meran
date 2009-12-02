@@ -185,3 +185,47 @@ html {filter: expression(document.execCommand("BackgroundImageCache", false, tru
     width: 25px;
     cursor: pointer;
 }
+
+
+
+.contenedor_paginador{
+    width: 56%;
+    margin: 0 auto;
+    padding: 4px;
+}
+
+div.pagination {
+    font-size: 11px;
+    font-family: Tahoma, Arial, Helvetica, Sans-serif;
+    padding:2px;
+    width: 100%;
+}
+
+div.pagination a {
+    padding: 2px 2px 2px 2px;
+    margin: 2px;
+    text-decoration: none; /* no underline */
+    color: #2A5A8A;
+}
+div.pagination a:hover, div.pagination a:active, div.pagination a:visited {
+    color: #2A5A8A;
+}
+div.pagination span.current {
+    padding: 2px 3px 2px 3px;
+    margin: 2px;
+    font-weight: bold;
+    background-color:#A0B355;
+    color: InfoBackground;
+    }
+div.pagination span.disabled {
+        padding: 2px 5px 2px 5px;
+        margin: 2px;
+        background-color:#c1c1c1;
+        color: #797979;
+    }
+
+#content_paginator {
+    width: auto;
+    margin: 0 auto;
+    text-align:center;
+}

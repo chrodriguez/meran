@@ -2666,11 +2666,11 @@ sub armarPaginasOPAC{
     for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
         if($actual == $i){
             $class="'current'";
+            $paginador .= "<span class=".$class."> ".$i." </span>";
         }else{
             $class="'pagination'";
+            $paginador .= "<a href='".$url."&page=".$i."' class=".$class."> ".$i." </a>";
         }
-
-        $paginador .= "<a href='".$url."&page=".$i."' class=".$class."> ".$i." </a>";
     }
 
     if($actual >= 1 && ($actual < $totalPaginas)){
