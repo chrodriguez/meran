@@ -6,9 +6,9 @@
                 <p><label for="trato" class="left">[% 'Trato' | i18n %]:</label>
                    <select name="trato" id="trato" class="combo" tabindex="5">
                      <option value="choose"> [% 'Elija una opci&oacute;n' | i18n %]... </option>
-                     <option value="mrs"> [% 'Sr.' | i18n %] </option>
-                     <option value="mr"> [% 'Sra.' | i18n %] </option>
-                     <option value="dr"> [% 'Dr.' | i18n %] </option></select></p>
+                     <option value="Sr"> [% 'Sr.' | i18n %] </option>
+                     <option value="Sra"> [% 'Sra.' | i18n %] </option>
+                     <option value="Dr"> [% 'Dr.' | i18n %] </option></select></p>
                 <p><label for="nombre" class="left">[% 'Nombre/s' | i18n %]:</label>
                    <input type="text" name="nombre" id="nombre" class="field" value="[% socio.persona.getNombre %]" tabindex="6" /></p>
                 <p><label for="apellido" class="left">[% 'Apellido/s' | i18n %]:</label>
