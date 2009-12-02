@@ -310,6 +310,7 @@ function mostrarEstructuraDelNivel1(){
 }
 
 
+// FIXME deprecatedd
 function mostrarDataNivel(){
 
     if (MODIFICAR){
@@ -333,7 +334,7 @@ function updateMostrarEstructuraDelNivel1(responseText){
     //ademas se carga el arreglo MARC_OBJECT_ARRAY donde se hace el mapeo de componente del cliente y dato
     procesarInfoJson(responseText); 
     //carga los datos en los campos solo si se esta modificando
-    mostrarDataNivel();
+//     mostrarDataNivel();
     scrollTo('nivel1Tabla');
     
 	//asigno el handler para el validador
@@ -359,7 +360,7 @@ function updateMostrarEstructuraDelNivel2(responseText){
     _showAndHiddeEstructuraDelNivel(2);
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
-    mostrarDataNivel();
+//     mostrarDataNivel();
     scrollTo('nivel2Tabla');
       
 	//asigno el handler para el validador
@@ -399,7 +400,7 @@ function updateMostrarEstructuraDelNivel3(responseText){
 	  TAB_INDEX= 0;
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
-    mostrarDataNivel();
+//     mostrarDataNivel();
     scrollTo('nivel3Tabla');
 	
 	  //asigno el handler para el validador
@@ -823,12 +824,6 @@ function procesarInfoJson(json){
     var campo;
     var strComp;
 
-
-//     var campo_test = new campo_marc_conf(objetos[1]);
-//     var subcampos_array = campo_test.getSubCamposArray();
-//     alert(subcampos_array[0].getSubCampo());
-
-    
     for(var i=0; i < objetos.length; i++){
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
         var campo_marc_conf_obj = new campo_marc_conf(objetos[i]);
@@ -873,72 +868,6 @@ function crearBotonAyudaCampo(campo){
 function ayudaParaCampo(campo){
     alert("crear ventana con ayuda para campo " + campo);
 }
-
-// ANDABA!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-// function procesarObjeto(objeto){
-// 
-//     TAB_INDEX++;
-// 
-//     var marc_conf_obj       = new marc_conf(objeto);
-//     var vista_intra         = marc_conf_obj.getVistaIntra();
-//     var tipo                = marc_conf_obj.getTipo();
-//     var comp;
-//     var strComp;
-//     var divComp             = crearDivComponente("div"+marc_conf_obj.getIdCompCliente());
-//     var tiene_estructura    = marc_conf_obj.getTieneEstructura(); //falta q los niveles 1, 2, 3 mantengan esta estructura
-// 
-//     if(marc_conf_obj.getRepetible() == "1"){  
-//         vista_intra = vista_intra + "<b> (R) </b>";
-//     }
-// 
-//     if(marc_conf_obj.getObligatorio() == "1"){  
-//         vista_intra = vista_intra + "<b> * </b>";
-//     }
-// 
-//     if(marc_conf_obj.getTieneEstructura() == '0'){ 
-//         vista_intra = vista_intra + "<div class='divComponente'><input type='text' value='" + marc_conf_obj.getDato() + " (NO TIENE ESTRUCTURA)' size='55' disabled></div>";
-//         tiene_estructura = 0;
-//     }
-// 
-//     vista_intra =  marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + ' - ' + vista_intra
-//     var divLabel = crearDivLabel(vista_intra, marc_conf_obj.getIdCompCliente());
-// 
-//     strComp = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + divComp + "</li>";
-// 
-//     $("#" + getDivDelNivel()).append(strComp);
-// 
-//     if(tiene_estructura == 1){
-// 
-//         switch(tipo){
-//             case "text":
-//                 crearText(marc_conf_obj);
-//             break;
-//             case "combo":
-//                 crearCombo(marc_conf_obj);
-//             break;
-//             case "texta2":
-//                 crearTextArea(marc_conf_obj);
-//             break;
-// 		    case "auto": 
-//                 crearAuto(marc_conf_obj);
-//             break;
-//             case "calendar":
-//                 crearCalendar(marc_conf_obj);
-// 		    break;
-//             case "anio":
-//                 crearTextAnio(marc_conf_obj);
-//             break;
-//         }
-//     
-//         //Se agregan clases para cuando tenga que recuperar los datos.
-//         if(objeto.obligatorio == "1"){
-//             hacerComponenteObligatoria(marc_conf_obj.getIdCompCliente());
-//         }
-// 
-//     }
-// }
-
 
 /*
  * procesarObjeto
@@ -1511,7 +1440,8 @@ function modificarN1(id1){
 
 function updateModificarN1(responseText){
     MODIFICAR = 1;
-    //se genera un arreglo de objetos con la informacion guardada, campo, subcampo    
+    //se genera un arreglo de objetos con la informacion guardada, campo, subcampo  
+// FIXME esto parece q esta al pedo  
     DATA_ARRAY = JSONstring.toObject(responseText);
 //FIXME estoy probado esto
     _NIVEL_ACTUAL = 1;

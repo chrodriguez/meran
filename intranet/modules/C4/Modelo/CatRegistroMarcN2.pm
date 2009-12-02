@@ -237,7 +237,7 @@ sub getIdiomaObject{
      
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
      
-    my $tipo_doc    = C4::AR::Referencias::getSoporteObject($self->getSoporte());
+    my $tipo_doc    = C4::AR::Referencias::getIdiomaObject($self->getIdioma());
         
     if(!$tipo_doc){
             C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) RefSoporte NO EXISTE");
