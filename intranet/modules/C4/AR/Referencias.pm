@@ -768,6 +768,19 @@ sub getUIObject {
     }
 }
 
+sub getIdiomaObject {
+    my ($id)= @_;
+
+    my $idioma_array_ref = C4::Modelo::RefIdioma::Manager->get_ref_idioma(
+                                                                    query => [ id => $id ]
+                                                        );
+
+    if(scalar(@$idioma_array_ref) > 0){
+        return $idioma_array_ref->[0];
+    }else{
+        return 0;
+    }
+}
 
 
 #=====================================================ESTO ESTA DE MAS USAR LOS getObject DE CADA OBJETO===================================

@@ -2084,16 +2084,15 @@ sub existeInArray
    Esta funcion busca en el arreglo el string, ambos pasados por parametro y devuelve 1 o 0
 =cut
 sub existeInArray{
+    my ($string,@array) = @_;
 
-   my ($string,@array) = @_;
-
-   if (grep {$_ eq $string} @array) {
-      C4::AR::Debug::debug("Utilidades => existeInArray => EXISTE => ".$string." en el arreglo");
-      return 1;
-   }
-
-    C4::AR::Debug::debug("Utilidades => existeInArray => NO EXISTE => ".$string." en el arreglo");
-   return 0;
+    if (grep {$_ eq $string} @array) {
+#         C4::AR::Debug::debug("Utilidades => existeInArray => EXISTE => ".$string." en el arreglo");
+        return 1;
+    }
+    
+#         C4::AR::Debug::debug("Utilidades => existeInArray => NO EXISTE => ".$string." en el arreglo");
+    return 0;
 }
 
 =item

@@ -354,7 +354,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
     }elsif($obj->{'nivel'} eq '2'){
         my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($obj->{'id'});
         if($nivel2){
-          $obj->{'id_tipo_doc'} = $nivel2->getTipo_documento();
+          $obj->{'id_tipo_doc'} = $nivel2->getTipoDocumentoObject()->getIdTipoDoc();
         }
     }elsif($obj->{'nivel'} eq '3'){
       my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($obj->{'id3'});

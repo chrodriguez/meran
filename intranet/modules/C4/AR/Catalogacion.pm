@@ -63,7 +63,7 @@ sub _meran_to_marc{
     my $cant_campos = scalar(@$infoArrayNivel);
     my %autorizados;
     foreach my $autorizado (@$campos_autorizados){
-        $autorizados{$autorizado->getCampo()}=$autorizado->getSubcampo();
+       push(@{$autorizados{$autorizado->getCampo()}},$autorizado->getSubcampo());
     }
 
     my $field;
@@ -78,9 +78,11 @@ sub _meran_to_marc{
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
         for(my $j=0;$j<$cant_subcampos;$j++){
             my $subcampo= $subcampos_hash->{$j};
+#             C4::AR::Debug::debug("CAMPO => ".$campo);
             C4::AR::Utilidades::printHASH($subcampo);
             while ( my ($key, $value) = each(%$subcampo) ){
-                if (($value ne '')&&(C4::AR::Utilidades::existeInArray($key,$autorizados{$campo}))) {
+                    C4::AR::Utilidades::printARRAY($autorizados{$campo});
+                if ( ($value ne '')&&(C4::AR::Utilidades::existeInArray($key, @{$autorizados{$campo}} ) )) {
                     push(@subcampos_array, ($key => $value));
                     C4::AR::Debug::debug("ACEPTADO clave = ".$key." valor: ".$value);
                 }
@@ -90,7 +92,7 @@ sub _meran_to_marc{
         if(scalar(@subcampos_array) > 0){
             $field = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);
             $marc_record->add_fields($field);
-        C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$field->as_formatted());
+#         C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$field->as_formatted());
         }
     }
 
@@ -108,7 +110,7 @@ Se apoya en la funcion _meran_to_marc que entiende el formato.
 sub meran_nivel1_to_meran{
     my ($data_hash) = @_;
 
-    my $campos_autorizados = C4::AR::EstructuraCatalogacionBase::getCamposByNivel(1);
+    my $campos_autorizados = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(1);
     my $marc_record = _meran_to_marc($data_hash->{'infoArrayNivel1'},$campos_autorizados);
 
     return($marc_record);
@@ -123,7 +125,7 @@ Funciona de manera similar a meran_nivel1_to_meran pero para el nivel 2
 sub meran_nivel2_to_meran{
     my ($data_hash) = @_;
 
-    my $campos_autorizados = C4::AR::EstructuraCatalogacionBase::getCamposByNivel(2);
+    my $campos_autorizados = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(2);
     my $marc_record = _meran_to_marc($data_hash->{'infoArrayNivel2'},$campos_autorizados);
 
     return($marc_record);
@@ -140,7 +142,7 @@ Funciona de manera similar a meran_nivel1_to_meran pero para el nivel 3
 sub meran_nivel3_to_meran{
     my ($data_hash) = @_;
 
-    my $campos_autorizados = C4::AR::EstructuraCatalogacionBase::getCamposByNivel(3);
+    my $campos_autorizados = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(3);
     my $marc_record = _meran_to_marc($data_hash->{'infoArrayNivel3'},$campos_autorizados);
 
     return($marc_record);
@@ -182,7 +184,7 @@ sub detalleMARC {
         my %hash;
         my $campo = $field->tag;
         my @subcampos_array;
-        C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
+#         C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
         #proceso todos los subcampos del campo
         foreach my $subfield ($field->subfields()) {
             my %hash_temp;
@@ -195,7 +197,7 @@ sub detalleMARC {
 
             push(@subcampos_array, \%hash_temp);
 
-            C4::AR::Debug::debug("agrego el subcampo: ". $subcampo);
+#             C4::AR::Debug::debug("agrego el subcampo: ". $subcampo);
         }
             $hash{'campo'}                  = $campo;
             $hash{'header'}                 = C4::AR::Catalogacion::getHeader($campo);
@@ -890,6 +892,7 @@ sub getEstructuraYDatosDeNivel{
 	#se genera la estructura de catalogacion para enviar al cliente
     if ($nivel_info_marc_array ){
       for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++){
+            my @result;
 
             foreach my $subcampo (@{$nivel_info_marc_array->[$i]->{'subcampos_array'}}){
     

@@ -235,16 +235,16 @@ sub getIdioma{
 sub getIdiomaObject{
     my ($self)      = shift;
      
-    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    my $marc_record      = MARC::Record->new_from_usmarc($self->getMarcRecord());
      
-    my $tipo_doc    = C4::AR::Referencias::getIdiomaObject($self->getIdioma());
+    my $idioma_object    = C4::AR::Referencias::getIdiomaObject($self->getIdioma());
         
-    if(!$tipo_doc){
+    if(!$idioma_object){
             C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) RefSoporte NO EXISTE");
-            $tipo_doc = C4::Modelo::RefIdioma->new();
+            $idioma_object = C4::Modelo::RefIdioma->new();
     }
 
-    return $tipo_doc;
+    return $idioma_object;
 }
 
 =head2 sub getNivelBibliografico
