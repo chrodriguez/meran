@@ -20,6 +20,7 @@ __PACKAGE__->meta->setup(
         email          => { type => 'varchar', length => 255, not_null => 1 },
         asunto         => { type => 'varchar', length => 255, not_null => 1 },
         mensaje        => { type => 'text', not_null => 1 },
+        leido          => { type => 'integer', not_null => 1, default => 0 },
     ],
     primary_key_columns => [ 'id' ],
 );
@@ -194,6 +195,40 @@ sub setMensaje{
     my ($string) = @_;
 
     $self->mensaje($string);
+}
+
+sub getLeido{
+    my ($self) = shift;
+
+    return ($self->leido);
+}
+
+sub setLeido{
+    my ($self) = shift;
+
+    $self->leido(1);
+
+    $self->save();
+}
+
+sub setNoLeido{
+    my ($self) = shift;
+
+    $self->leido(0);
+
+    $self->save();
+}
+
+sub switchState{
+    my ($self) = shift;
+
+    if ($self->getLeido){
+        $self->setNoLeido();
+    }else{
+        $self->setLeido();
+    }
+
+    $self->save();
 }
 
 1;

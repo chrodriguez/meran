@@ -1,20 +1,73 @@
 [% INCLUDE 'intranet-top.inc' %]
-
 [% USE HTML %]
 
+<script src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
+<script src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/css/fancybox/jquery.fancybox.css">
 <script type="text/javascript">
       $(document).ready(function() {
+        $('.fancy_link').fancybox({
+            'frameWidth':   600,
+            'frameHeight':  500,
+        });
       });
 </script>
 
 
-<div class="contenedor_paginador">[% paginador %]</div>
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Mensajes de Contacto" | i18n %]:</legend>
+        <div class="contenedor_paginador">[% paginador %]</div>
         <div class="datos_tabla_div_user">
-            <div class="resultados_consulta">[% "La cantidad de mensajes es" | i18n %]: [% cantidad %]</div>
+            <div class="resultados_consulta">[% "La cantidad de mensajes es" | i18n %]: [% cant_mensajes %]</div>
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                <thead>
+                <tr class="titulo_tabla_resultado">
+                    <th>[% "Fecha" | i18n %]</th>
+                    <th>[% "Asunto" | i18n %]</th>
+                    <th>[% "Remitente" | i18n %]</th>
+                    <th>[% "Marcar Como Leido/No Leido" | i18n %]</th>
+                    <th>[% "Eliminar" | i18n %]</th>
+                </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH mensaje IN mensajes_contacto %]
+                        <tr class="leido[% mensaje.getLeido %]">
+                            <td>
+                                <a class="fancy_link" href="/cgi-bin/koha/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
+                                    10/10/1999
+                                </a>
+                            </td>
+                            <td>
+                                <a class="fancy_link" href="/cgi-bin/koha/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
+                                    [% mensaje.getAsunto %] 
+                                </a>
+                            </td>
+                            <td>
+                                <a class="fancy_link" href="/cgi-bin/koha/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
+                                    [% mensaje.getApellido %], [% mensaje.getNombre %] 
+                                </a>
+                            </td>
+                            <td>
+                                <a class="" 
+                                    href="/cgi-bin/koha/admin/mensajes_contacto.pl?token=[% token %]&id=[% mensaje.id %]&tipoAccion=marcar">
+                                    [% IF mensaje.getLeido == 1%]
+                                        [% 'No Leido' | i18n %]
+                                    [% ELSE %]
+                                        [% 'Leido' | i18n %]
+                                    [% END %]
+                                </a>
+                            </td>
+                            <td>
+                                <a class="" 
+                                    href="/cgi-bin/koha/admin/mensajes_contacto.pl?token=[% token %]&id=[% mensaje.id %]&tipoAccion=eliminar">
+                                    [% 'Eliminar' | i18n %]
+                                </a>
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
             </table>
         </div>
 </fieldset>
+
 [% INCLUDE 'intranet-bottom.inc' %]

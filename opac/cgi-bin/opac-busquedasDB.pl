@@ -28,7 +28,7 @@ if($obj){
   $obj->{'tipoAccion'} = $input->param('tipoAccion');
   $obj->{'string'} = $input->param('string');
   $obj->{'tipoBusqueda'} = 'all';
-  $obj->{'ini'} = $input->param('page') || 0;;
+  $obj->{'ini'} = $input->param('page') || 0;
 }
 
 my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
