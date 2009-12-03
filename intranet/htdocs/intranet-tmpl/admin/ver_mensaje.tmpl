@@ -1,6 +1,7 @@
 <div class="mensaje_contacto">
     <h2>[% 'Asunto' | i18n %]: [% mensaje.getAsunto %]</h2>
     <fieldset>
+        <legend>[% 'Cuerpo del mensaje' | i18n %]:</legend>
         <h3>[% mensaje.getMensaje %]</h3>
     </fieldset>
     <a href="mailto:[% mensaje.getEmail %]">[% 'De' | i18n %]: [% mensaje.getApellido %], [% mensaje.getNombre %]

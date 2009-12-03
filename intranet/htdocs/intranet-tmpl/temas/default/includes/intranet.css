@@ -1526,3 +1526,7 @@ li.MARCHeader input{
 .leido1{
   background:green;
 }
+
+.mensaje_contacto{
+    background: InfoBackground;
+}
