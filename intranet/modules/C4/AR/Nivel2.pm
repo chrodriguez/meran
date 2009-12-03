@@ -288,14 +288,14 @@ sub t_modificarNivel2 {
     my($params)=@_;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
-    my $msg_object= C4::AR::Mensajes::create();
-    my $id2;
+    #my $msg_object= C4::AR::Mensajes::create();
+    #my $id2;
 
-    my  $catNivel2 = C4::Modelo::CatNivel2->new();
+    my  $cat_registro_marc_n2 = C4::Modelo::CatNivel2->new();
     my  $db = $catNivel2->db;
-    my ($catNivel2) = getNivel2FromId2($params->{'id2'}, $db);
+    my ($cat_registro_marc_n2) = getNivel2FromId2($params->{'id2'}, $db);
 
-    if(!$catNivel2){
+    if(!$cat_registro_marc_n2){
         #Se setea error para el usuario
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U403', 'params' => []} ) ;
@@ -305,18 +305,20 @@ sub t_modificarNivel2 {
     #No hay error
 		
 		$params->{'modificado'} = 1;
-        my $db= $catNivel2->db;
+        my $db= $cat_registro_marc_n2->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
          $db->begin_work;
     
         eval {
-            $catNivel2->agregar($params);  
+            my $marc_record = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
+            $params->{'marc_record'} = $marc_record->as_usmarc;
+            $cat_registro_marc_n2->agregar($params);  
             $db->commit;
-            $id2 = $catNivel2->getId2;
+            #$id2 = $catNivel2->getId2;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U381', 'params' => [$catNivel2->getId2]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U381', 'params' => [$cat_registro_marc_n2->getId2]} ) ;
         };
     
         if ($@){
@@ -325,14 +327,14 @@ sub t_modificarNivel2 {
             $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U384', 'params' => [$catNivel2->getId2]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U384', 'params' => [$cat_registro_marc_n2->getId2]} ) ;
         }
 
         $db->{connect_options}->{AutoCommit} = 1;
 
     }
 
-    return ($msg_object, $catNivel2);
+    return ($msg_object, $cat_registro_marc_n2);
 }
 
 
