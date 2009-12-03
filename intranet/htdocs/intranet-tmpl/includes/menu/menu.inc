@@ -410,6 +410,14 @@
                         </li>
                   </ul>
             </li>
+                            <li>
+                                      [% PERL %]
+                                          print C4::AR::Filtros::link_to( text =>     "[% 'Mensajes de Contacto' | i18n %]",
+                                                                          url =>      "/cgi-bin/koha/admin/mensajes_contacto.pl",
+                                                                          title =>    "[% 'Mensajes de Contacto' | i18n %]"
+                                                                      ) ;
+                                      [% END %]
+                            </li>
           </ul>
         </li>
           <!-- Navigation item -->
