@@ -47,19 +47,30 @@ sub t_guardarNivel1 {
 
     if(!$msg_object->{'error'}){
     #No hay error
-        my $catRegistroMarcN1;
         my $marc_record = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
-        $catRegistroMarcN1 = C4::Modelo::CatRegistroMarcN1->new();  
+        ($msg_object,$id1)=guardarRealmente($msg_object,$marc_record);
+        
+    }
+    return ($msg_object, $id1);
+}
+=head2
+sub guardarRealmente
+
+Esta funcion realmente guarda el elemento en la base
+=cut
+sub guardarRealmente{
+    my ($msg_object,$marcrecord)=@_;
+    my $id1;
+    if(!$msg_object->{'error'}){
+        my $catRegistroMarcN1 = C4::Modelo::CatRegistroMarcN1->new();  
         my $db = $catRegistroMarcN1->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
         
         eval {
-            $params->{'marc_record'} = $marc_record->as_usmarc;
-            $catRegistroMarcN1->agregar($params);
+            $catRegistroMarcN1->agregar($marc_record->as_usmarc);
             $db->commit;
-
             #recupero el id1 recien agregado
             $id1 = $catRegistroMarcN1->getId1;
             #se cambio el permiso con exito

@@ -35,10 +35,10 @@ sub setMarcRecord{
 
 sub agregar{
     my ($self)      = shift;
-    my ($params)    = @_;
+    my ($marc_record)    = @_;
 
 
-    $self->setMarcRecord($params->{'marc_record'});
+    $self->setMarcRecord($marc_record);
     $self->save();
 }
 

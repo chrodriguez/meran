@@ -157,7 +157,14 @@ sub Z3950_to_meran{
     my $msg_object= C4::AR::Mensajes::create();
     $msg_object->{'tipo'}="INTRA";
     my($marc_record)=@_;
-    my $marc_record_limpio=_procesar_referencias($marc_record);
+    my ($marc_record_limpio1,$marc_record_limpio2,$marc_record_limpio3,$marc_record_campos_sin_definir)=_procesar_referencias($marc_record);
+    C4::AR::Debug::debug("Z3950 marc_nivel1 => SALIDA => as_formatted ".$marc_record_limpio1->as_formatted());
+    C4::AR::Nivel1::guardarRealmente($msg_object,$marc_record_limpio1); 
+    C4::AR::Debug::debug("Z3950 marc_nivel2 => SALIDA => as_formatted ".$marc_record_limpio2->as_formatted());
+    C4::AR::Nivel2::guardarRealmente($msg_object,$marc_record_limpio2); 
+    C4::AR::Debug::debug("Z3950 marc_nivel3 => SALIDA => as_formatted ".$marc_record_limpio3->as_formatted());
+    C4::AR::Nivel3::guardarRealmente($msg_object,$marc_record_limpio3); 
+    C4::AR::Debug::debug("Z3950 campos no definidos en la biblioa!!  => SALIDA => as_formatted ".$marc_record_campos_sin_definir->as_formatted());
     return($msg_object);
     
 }
@@ -183,7 +190,7 @@ sub _procesar_referencia{
             return('10'); #FIXME, este valor es el que devuelve cuando lo encuentra en la tabla de referencia
         } 
     }
-    return("feo");
+    return("FIXME");
 }
 
 
@@ -203,6 +210,7 @@ sub _procesar_referencias{
     my $marc_record_limpio1=MARC::Record->new();
     my $marc_record_limpio2=MARC::Record->new();
     my $marc_record_limpio3=MARC::Record->new();
+    my $marc_record_campos_sin_definir=MARC::Record->new();
     my $ref_campos_nivel1 = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(1);
     my %campos_nivel1;
     foreach my $campo_nivel1 (@$ref_campos_nivel1){
@@ -219,7 +227,6 @@ sub _procesar_referencias{
        push(@{$campos_nivel3{$campo_nivel3->getCampo()}},$campo_nivel3->getSubcampo());
     }
     foreach my $referenciado (@$campos_referenciados){
-       C4::AR::Debug::debug("REFERENCIADO".$referenciado->getCampo()."subcampo".$referenciado->getSubcampo());
        push(@{$referenciados{$referenciado->getCampo()}},$referenciado->getSubcampo());
     }
     foreach my $field ($marc_record->fields) {
@@ -228,6 +235,7 @@ sub _procesar_referencias{
             my @subcampos1_array;
             my @subcampos2_array;
             my @subcampos3_array;
+            my @subcampos_sin_definir_array;
             foreach my $subfield ($field->subfields()) {
                 my $subcampo                = $subfield->[0];
                 my $dato                    = $subfield->[1];
@@ -243,6 +251,8 @@ sub _procesar_referencias{
                         push(@subcampos2_array, ($subcampo => $dato));
                         } elsif ( ($dato ne '')&&(C4::AR::Utilidades::existeInArray($subcampo, @{$campos_nivel3{$campo}} ) )) { 
                             push(@subcampos3_array, ($subcampo => $dato));
+                            } elsif ($dato ne '') { 
+                                push(@subcampos_sin_definir_array, ($subcampo => $dato));
                             }
             }
         if (scalar(@subcampos1_array)>0){
@@ -254,10 +264,13 @@ sub _procesar_referencias{
         if (scalar(@subcampos3_array)>0){
         my $field_limpio3 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos3_array);
         $marc_record_limpio3->add_fields($field_limpio3);}
+        if (scalar(@subcampos_sin_definir_array)>0){
+        my $field_sin_definir = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos_sin_definir_array);
+        $marc_record_campos_sin_definir->add_fields($field_sin_definir);}
         }
     }
     C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$marc_record_limpio1->as_formatted());
-    return($marc_record_limpio1,$marc_record_limpio2,$marc_record_limpio3);
+    return($marc_record_limpio1,$marc_record_limpio2,$marc_record_limpio3,$marc_record_campos_sin_definir);
 }
 
 
