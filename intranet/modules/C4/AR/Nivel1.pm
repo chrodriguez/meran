@@ -201,12 +201,14 @@ sub _verificarDeleteNivel1 {
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P124', 'params' => [$params->{'id2'}]} ) ;
 
-    }elsif( !($msg_object->{'error'}) && $cat_registro_marc_n1->tieneReservas() ){
-        #verifico que el nivel2 que quiero eliminar no tenga ningun ejemplar reservado
-        $msg_object->{'error'} = 1;
-        C4::AR::Debug::debug("_verificarDeleteNivel1 => Se está intentando eliminar un ejemplar que tiene al menos un ejemplar reservado ");
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P123', 'params' => [$params->{'id2'}]} ) ;
     }
+# TODO falta el tieneReservas
+#     elsif( !($msg_object->{'error'}) && $cat_registro_marc_n1->tieneReservas() ){
+#         #verifico que el nivel2 que quiero eliminar no tenga ningun ejemplar reservado
+#         $msg_object->{'error'} = 1;
+#         C4::AR::Debug::debug("_verificarDeleteNivel1 => Se está intentando eliminar un ejemplar que tiene al menos un ejemplar reservado ");
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P123', 'params' => [$params->{'id2'}]} ) ;
+#     }
 
 }
 
@@ -220,7 +222,6 @@ sub t_eliminarNivel1{
 
 # FIXME falta verificar si es posible eliminar el nivel 1
     my $params;
-#     my ($catNivel1) = getNivel1FromId1($id1);
 
     my $cat_registro_marc_n1 = C4::Modelo::CatRegistroMarcN1->new();
     my $db = $cat_registro_marc_n1->db;
