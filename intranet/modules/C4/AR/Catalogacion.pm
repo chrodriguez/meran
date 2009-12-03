@@ -147,14 +147,19 @@ sub meran_nivel3_to_meran{
 
 }
 
+
 =head2
 sub Z3950_to_meran
+
+Recibe los datos de la importacion z3950 y los guarda en la base de meran, teniendo en cuenta tablas de referencia  
 =cut
 sub Z3950_to_meran{
+    my $msg_object= C4::AR::Mensajes::create();
+    $msg_object->{'tipo'}="INTRA";
     my($marc_record)=@_;
     my $marc_record_limpio=_procesar_referencias($marc_record);
-        
-
+    return($msg_object);
+    
 }
 
 
@@ -167,18 +172,18 @@ sub _procesar_referencia{
     my ($campo,$subcampo,$dato)=@_;
     my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
     if($estructura){
-        if($estructura->getReferencia){
+       if($estructura->getReferencia){
             #tiene referencia
             my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
             my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
             if (!$obj_generico){ 
-                return(8);
+                return('8');
                 #FIXME, este valor es el que devuelve cuando NO lo encuentra en la tabla de referencia, en este caso deberia arreglarlo
                 }
-            return(10); #FIXME, este valor es el que devuelve cuando lo encuentra en la tabla de referencia
+            return('10'); #FIXME, este valor es el que devuelve cuando lo encuentra en la tabla de referencia
         } 
     }
-    
+    return("feo");
 }
 
 
@@ -190,30 +195,69 @@ lo que hace esta funcion es recibir un objeto marc y procesarlo para procesar aq
 =cut
 sub _procesar_referencias{
     my($marc_record)=@_;
-    my $campos_referenciados = C4::AR::CatEstructuraCatalogacion::getCamposConReferencia();
+    my $campos_referenciados = C4::Modelo::CatEstructuraCatalogacion::getCamposConReferencia();
     my %referenciados;
-    my @subcampos_array;
-    my $marc_record_limpio=MARC::Record->new();
+    my @subcampos1_array;
+    my @subcampos2_array;
+    my @subcampos3_array;
+    my $marc_record_limpio1=MARC::Record->new();
+    my $marc_record_limpio2=MARC::Record->new();
+    my $marc_record_limpio3=MARC::Record->new();
+    my $ref_campos_nivel1 = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(1);
+    my %campos_nivel1;
+    foreach my $campo_nivel1 (@$ref_campos_nivel1){
+       push(@{$campos_nivel1{$campo_nivel1->getCampo()}},$campo_nivel1->getSubcampo());
+    }
+    my $ref_campos_nivel2 = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(2);
+    my %campos_nivel2;
+    foreach my $campo_nivel2 (@$ref_campos_nivel2){
+       push(@{$campos_nivel2{$campo_nivel2->getCampo()}},$campo_nivel2->getSubcampo());
+    }
+    my $ref_campos_nivel3 = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(3);
+    my %campos_nivel3;
+    foreach my $campo_nivel3 (@$ref_campos_nivel3){
+       push(@{$campos_nivel3{$campo_nivel3->getCampo()}},$campo_nivel3->getSubcampo());
+    }
     foreach my $referenciado (@$campos_referenciados){
+       C4::AR::Debug::debug("REFERENCIADO".$referenciado->getCampo()."subcampo".$referenciado->getSubcampo());
        push(@{$referenciados{$referenciado->getCampo()}},$referenciado->getSubcampo());
     }
     foreach my $field ($marc_record->fields) {
         if(! $field->is_control_field){
             my $campo = $field->tag;
+            my @subcampos1_array;
+            my @subcampos2_array;
+            my @subcampos3_array;
             foreach my $subfield ($field->subfields()) {
                 my $subcampo                = $subfield->[0];
                 my $dato                    = $subfield->[1];
-                if ((@{$referenciados{$campo}})&&(C4::AR::Utilidades::existeInArray($subcampo, @{$referenciados{$campo}}))){
+                if (($referenciados{$campo})&&(C4::AR::Utilidades::existeInArray($subcampo, @{$referenciados{$campo}}))){
                     #si entre aca quiere decir q el campo esta referenciado;
+                   C4::AR::Debug::debug("ACA ESTAMOS".$campo.$subcampo.$dato);
                    $dato=_procesar_referencia($campo,$subcampo,$dato);
+                   C4::AR::Debug::debug("ACA ESTAMOS".$campo.$subcampo."NUEVO DATO".$dato);
                 }
-                push(@subcampos_array, ($subcampo => $dato));
+                if ( ($dato ne '')&&(C4::AR::Utilidades::existeInArray($subcampo, @{$campos_nivel1{$campo}} ) )) { 
+                    push(@subcampos1_array, ($subcampo => $dato));
+                } elsif ( ($dato ne '')&&(C4::AR::Utilidades::existeInArray($subcampo, @{$campos_nivel2{$campo}} ) )) { 
+                        push(@subcampos2_array, ($subcampo => $dato));
+                        } elsif ( ($dato ne '')&&(C4::AR::Utilidades::existeInArray($subcampo, @{$campos_nivel3{$campo}} ) )) { 
+                            push(@subcampos3_array, ($subcampo => $dato));
+                            }
             }
-        my $field_limpio = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos_array);
-        $marc_record_limpio->add_fields($field_limpio);
+        if (scalar(@subcampos1_array)>0){
+        my $field_limpio1 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos1_array);
+        $marc_record_limpio1->add_fields($field_limpio1);}
+        if (scalar(@subcampos2_array)>0){
+        my $field_limpio2 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos2_array);
+        $marc_record_limpio2->add_fields($field_limpio2);}
+        if (scalar(@subcampos3_array)>0){
+        my $field_limpio3 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos3_array);
+        $marc_record_limpio3->add_fields($field_limpio3);}
         }
     }
-    return($marc_record_limpio);
+    C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$marc_record_limpio1->as_formatted());
+    return($marc_record_limpio1,$marc_record_limpio2,$marc_record_limpio3);
 }
 
 

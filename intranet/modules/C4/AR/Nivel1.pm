@@ -38,8 +38,7 @@ C4::AR::Nivel1 - Funciones que manipulan datos del catálogo de nivel 1
 =head2
 sub t_guardarNivel1
 
-    Esta funcion se invoca desde el template para guardar los datos de nivel1, se apoya en una funcion de Catalogacion.pm que lo que hace es transformar los datos que llegan en un objeto MARC::Record que luego va a insertarse en la base de datos a traves de un objeto CatRegistroMarcN1.
-  guardar datos de nivel1
+    Esta funcion se invoca desde el template para guardar los datos de nivel1, se apoya en una funcion de Catalogacion.pm que lo que hace es transformar los datos que llegan a un objeto MARC::Record que luego va a insertarse en la base de datos a traves de un objeto CatRegistroMarcN1, ese dato estara filtrado de acuerdo a los datos que corresponden al nivel, solo conteniendo datos que 
 =cut
 sub t_guardarNivel1 {
     my($params) = @_;
@@ -85,7 +84,9 @@ sub t_guardarNivel1 {
 }
 
 
-=item sub 
+=head2 
+sub getNivel1FromId1
+
 Recupero un nivel 1 a partir de un id1
 retorna un objeto o 0 si no existe
 =cut
