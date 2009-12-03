@@ -109,10 +109,8 @@ Se apoya en la funcion _meran_to_marc que entiende el formato.
 =cut
 sub meran_nivel1_to_meran{
     my ($data_hash) = @_;
-
     my $campos_autorizados = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(1);
     my $marc_record = _meran_to_marc($data_hash->{'infoArrayNivel1'},$campos_autorizados);
-
     return($marc_record);
 }
 
@@ -153,7 +151,71 @@ sub meran_nivel3_to_meran{
 sub Z3950_to_meran
 =cut
 sub Z3950_to_meran{
+    my($marc_record)=@_;
+    my $marc_record_limpio=_procesar_referencias($marc_record);
+        
+
 }
+
+
+=head2
+sub _procesar_referencia
+
+Esta funcion recibe un campo, un subcampo y un dato y busca en la tabla de referencia correspondinte en valor que se corresponde con el dato, en el caso de no encontrarlo lo agrega en la tabla de referencia correspondiente y devuelve el id del nuevo elemento
+=cut
+sub _procesar_referencia{
+    my ($campo,$subcampo,$dato)=@_;
+    my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+    if($estructura){
+        if($estructura->getReferencia){
+            #tiene referencia
+#             my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
+#             my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+            if (!$obj_generico){ 
+                return(8);
+                #FIXME, este valor es el que devuelve cuando NO lo encuentra en la tabla de referencia, en este caso deberia arreglarlo
+                }
+            return(10); #FIXME, este valor es el que devuelve cuando lo encuentra en la tabla de referencia
+        } 
+    }
+    
+}
+
+
+
+=head2
+sub _procesar_referencias
+
+lo que hace esta funcion es recibir un objeto marc y procesarlo para procesar aquellos campos que son referencia, lo que hace es recorrer todos los campos del objeto y aquellos que estan configurados como referencia en la tabla CatEstructuraCatalogacion los modifica, cambiando el dato por su referencia en el marc_record y agregando la referencia a la tabla correspondiente en caso de no estar en ella
+=cut
+sub _procesar_referencias{
+    my($marc_record)=@_;
+    my $campos_referenciados = C4::AR::CatEstructuraCatalogacion::getCamposConReferencia();
+    my %referenciados;
+    my $marc_record_limpio=MARC::Record->new();
+    foreach my $referenciado (@$campos_referenciados){
+       push(@{$referenciados{$referenciado->getCampo()}},$referenciado->getSubcampo());
+    }
+    foreach my $field ($marc_record->fields) {
+        if(! $field->is_control_field){
+            my $campo = $field->tag;
+            foreach my $subfield ($field->subfields()) {
+                my $subcampo                = $subfield->[0];
+                my $dato                    = $subfield->[1];
+                if ((@{$referenciados{$campo}})&&(C4::AR::Utilidades::existeInArray($subcampo, @{$referenciados{$campo}}))){
+                    #si entre aca quiere decir q el campo esta referenciado;
+                   $dato=_procesar_referencia($campo,$subcampo,$dato);
+                }
+                push(@subcampos_array, ($subcampo => $dato));
+            }
+        my $field_limpio = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);
+        $marc_record_limpio->add_fields($field_limpio);
+        }
+    }
+    return($marc_record_limpio);
+}
+
+
 
 =head2
 sub importacion_to_meran

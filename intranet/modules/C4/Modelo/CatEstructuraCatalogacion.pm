@@ -603,6 +603,22 @@ sub setVisible{
     $self->visible($visible);
 }
 
+=head2
+sub getCamposConReferencia
+
+Funcion que devuelve un arreglo asociativo con el campo como clave y con un arreglo de subcampos como valor de cada clave
+=cut
+sub getCamposConReferencia{
+    my @filtros;
+
+    push(@filtros, ( nivel => { eq => 1 } ) );
+
+    my $db_estructura_catalogacion = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(
+                                                                query => \@filtros,
+                                                            );
+    return($db_estructura_catalogacion);
+}
+
 
 
 

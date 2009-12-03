@@ -110,7 +110,7 @@ elsif($tipo eq "IMPORTAR_MARC"){
     my $resultado = C4::AR::Z3950::getResultado($id_resultado);
     if($resultado){
         my $marc=$resultado->getRegistroMARC();
-        my ($Messages_arrayref, $id1) = C4::AR::Nivel1::guardarRegistroMARC($marc);
+        my ($Messages_arrayref, $id1) = C4::AR::Catalogacion::Z3950_to_meran($marc);
         $infoOperacionJSON=to_json $Messages_arrayref;
 
     C4::Auth::print_header($session);
