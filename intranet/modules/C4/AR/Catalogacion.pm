@@ -169,8 +169,8 @@ sub _procesar_referencia{
     if($estructura){
         if($estructura->getReferencia){
             #tiene referencia
-#             my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
-#             my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+            my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
+            my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
             if (!$obj_generico){ 
                 return(8);
                 #FIXME, este valor es el que devuelve cuando NO lo encuentra en la tabla de referencia, en este caso deberia arreglarlo
@@ -192,6 +192,7 @@ sub _procesar_referencias{
     my($marc_record)=@_;
     my $campos_referenciados = C4::AR::CatEstructuraCatalogacion::getCamposConReferencia();
     my %referenciados;
+    my @subcampos_array;
     my $marc_record_limpio=MARC::Record->new();
     foreach my $referenciado (@$campos_referenciados){
        push(@{$referenciados{$referenciado->getCampo()}},$referenciado->getSubcampo());
@@ -208,7 +209,7 @@ sub _procesar_referencias{
                 }
                 push(@subcampos_array, ($subcampo => $dato));
             }
-        my $field_limpio = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);
+        my $field_limpio = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos_array);
         $marc_record_limpio->add_fields($field_limpio);
         }
     }
