@@ -42,6 +42,22 @@ sub agregar{
     $self->save();
 }
 
+sub eliminar{
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    #HACER ALGO SI ES NECESARIO
+
+    my ($nivel2) = C4::AR::Nivel2::getNivel2FromId1($self->getId1(), $self->db);
+
+    foreach my $n2 (@$nivel2){
+      $n2->eliminar();
+    }
+
+    $self->delete();    
+}
+
+
 sub getTitulo{
     my ($self)      = shift;
     
@@ -105,7 +121,7 @@ sub getGrupos {
     my ($self) = shift;
 
     #recupero todos los grupos de nivel 1 
-    my ($nivel2_object_array) = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1( 
+    my ($nivel2_object_array) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2( 
                                                                         query => [ id => { eq => $self->getId1 } ]
                                                                    );
     return $nivel2_object_array;

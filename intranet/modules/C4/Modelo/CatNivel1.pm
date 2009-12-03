@@ -80,6 +80,44 @@ sub setTimestamp{
 # ===================================================SOPORTE=====ESTRUCTURA CATALOGACION=================================================
 
 
+
+
+
+# ==============================================FIN===SOPORTE=====ESTRUCTURA CATALOGACION================================================
+
+sub getInvolvedCount{
+ 
+    my ($self) = shift;
+
+    my ($campo, $value)= @_;
+    
+    my @filtros;
+
+    push (@filtros, ( $campo => $value ) );
+
+    my $cat_nivel1_count = C4::Modelo::CatNivel1::Manager->get_cat_nivel1_count( query => \@filtros );
+
+    return ($cat_nivel1_count);
+}
+
+sub replaceBy{
+    my ($self) = shift;
+
+    my ($campo,$value,$new_value)= @_;
+    
+    my @filtros;
+
+    push (  @filtros, ( $campo => { eq => $value},) );
+
+
+    my $replaced = C4::Modelo::CatNivel1::Manager->update_cat_nivel1(   where => \@filtros,
+                                                                        set   => { $campo => $new_value });
+}
+
+
+#===============================================================DEPRECATEDDDDDDDDa=========================================================
+
+
 # FIXME DEPRECATEDDDDDDDDa
 # 
 # sub getAutorObject{
@@ -167,40 +205,40 @@ ademas si es una referencia, setea el dato referente
 sub toMARC{
     my ($self) = shift;
 
-	my @marc_array;
+    my @marc_array;
 
-	my $campo= '245';
-	my $subcampo= 'a';
-	my %hash;
-	$hash{'campo'}= $campo;
-	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
-	$hash{'dato'}= $self->getTitulo;
-	$hash{'ident'}= 'TITULO'; #parece q no es necesario
- 	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+    my $campo= '245';
+    my $subcampo= 'a';
+    my %hash;
+    $hash{'campo'}= $campo;
+    $hash{'subcampo'}= $subcampo;
+    $hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
+    $hash{'dato'}= $self->getTitulo;
+    $hash{'ident'}= 'TITULO'; #parece q no es necesario
+    my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 
     if($estructura){
-	    $hash{'liblibrarian'}= $estructura->getLiblibrarian;
+        $hash{'liblibrarian'}= $estructura->getLiblibrarian;
     }
 
     $hash{'id1'} = $self->getId1;
-	
+    
 
-	push (@marc_array, \%hash);
+    push (@marc_array, \%hash);
 
-	$campo= '110';
-	$subcampo= 'a';
-	my %hash;
-	$hash{'campo'}= $campo;
-	$hash{'subcampo'}= $subcampo;
-	$hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
-	$hash{'dato'}= C4::AR::Referencias::getNombreAutor($self->getAutor);
-	my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+    $campo= '110';
+    $subcampo= 'a';
+    my %hash;
+    $hash{'campo'}= $campo;
+    $hash{'subcampo'}= $subcampo;
+    $hash{'header'}= C4::AR::Catalogacion::getHeader($campo);
+    $hash{'dato'}= C4::AR::Referencias::getNombreAutor($self->getAutor);
+    my $estructura= C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
 
     if($estructura){
         if($estructura->getReferencia){
-	        #tiene referencia
-		    $hash{'datoReferencia'}= $self->getAutor;
+            #tiene referencia
+            $hash{'datoReferencia'}= $self->getAutor;
         }
     
         $hash{'liblibrarian'}= $estructura->getLiblibrarian;
@@ -209,47 +247,12 @@ sub toMARC{
     $hash{'id1'} = $self->getId1;
 
 
-	push (@marc_array, \%hash);
-	
-	return (\@marc_array);
+    push (@marc_array, \%hash);
+    
+    return (\@marc_array);
 }
 =cut
 
-
-
-# ==============================================FIN===SOPORTE=====ESTRUCTURA CATALOGACION================================================
-
-sub getInvolvedCount{
- 
-    my ($self) = shift;
-
-    my ($campo, $value)= @_;
-    
-    my @filtros;
-
-    push (@filtros, ( $campo => $value ) );
-
-    my $cat_nivel1_count = C4::Modelo::CatNivel1::Manager->get_cat_nivel1_count( query => \@filtros );
-
-    return ($cat_nivel1_count);
-}
-
-sub replaceBy{
-    my ($self) = shift;
-
-    my ($campo,$value,$new_value)= @_;
-    
-    my @filtros;
-
-    push (  @filtros, ( $campo => { eq => $value},) );
-
-
-    my $replaced = C4::Modelo::CatNivel1::Manager->update_cat_nivel1(   where => \@filtros,
-                                                                        set   => { $campo => $new_value });
-}
-
-
-#===============================================================DEPRECATEDDDDDDDDa=========================================================
 
 =item
 Esta funcion devuelve los campos de nivel 1 y nivel1Repetible mapeados en un arreglo de {campo, subcampo, dato}

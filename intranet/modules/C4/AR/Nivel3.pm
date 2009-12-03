@@ -164,6 +164,7 @@ sub getNivel3FromId3{
     my ($id3, $db) = @_;
 
     $db = $db || C4::Modelo::PermCatalogo->new()->db;
+
     my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
                                                                     db => $db,
                                                                     query   => [ id => { eq => $id3} ], 

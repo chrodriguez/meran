@@ -73,7 +73,7 @@ sub eliminar{
 
     #HACER ALGO SI ES NECESARIO
 
-    my ($nivel3) = C4::AR::Nivel3::getNivel3FromId2($self->db, $self->getId2());
+    my ($nivel3) = C4::AR::Nivel3::getNivel3FromId2($self->getId2(), $self->db);
 
     foreach my $n3 (@$nivel3){
       $n3->eliminar();

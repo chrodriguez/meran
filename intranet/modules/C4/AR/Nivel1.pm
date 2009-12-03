@@ -90,9 +90,12 @@ Recupero un nivel 1 a partir de un id1
 retorna un objeto o 0 si no existe
 =cut
 sub getNivel1FromId1{
-    my ($id1) = @_;
+    my ($id1, $db) = @_;
 
-    my $nivel1_array_ref = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1(   
+    $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db();
+    
+    my $nivel1_array_ref = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1(
+                                                                        db => $db,    
                                                                         query => [ 
                                                                                     id => { eq => $id1 },
                                                                             ]
@@ -133,29 +136,6 @@ sub getUnititle {
 	return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id1,"245","b","1");
 }
 
-
-=item sub getNivel1RepetibleFromId1Repetible
-Recupero el objeto nivel1_repetible a partir de un rep_n1_id
-retorna un objeto o 0 si no existe ninguno
-=cut
-sub getNivel1RepetibleFromId1Repetible{
-    my ($rep_n1_id, $db) = @_;
-        
-    $db = $db || C4::Modelo::PermCatalogo->new()->db;    
-    
-    my $nivel1_repetible_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible( 
-                                                                            db => $db,
-                                                                            query => [
-                                                                                        rep_n1_id => { eq => $rep_n1_id } 
-                                                                                ] 
-                                                            );
-    
-    if( scalar(@$nivel1_repetible_array_ref) > 0){
-        return ($nivel1_repetible_array_ref->[0]);
-    }else{
-        return 0;
-    }
-}
 
 
 =item sub t_modificarNivel1
@@ -211,17 +191,17 @@ sub t_modificarNivel1 {
 }
 
 sub _verificarDeleteNivel1 {
-    my($msg_object, $params, $catNivel1)=@_;
+    my($msg_object, $params, $cat_registro_marc_n1)=@_;
 
     $msg_object->{'error'} = 0;#no hay error
 
-    if( !($msg_object->{'error'}) && $catNivel1->tienePrestamos() ){
+    if( !($msg_object->{'error'}) && $cat_registro_marc_n1->tienePrestamos() ){
         C4::AR::Debug::debug("_verificarDeleteNivel1 => tiene al menos 1 ejemplar prestado ");
         #verifico que el nivel2 que quiero eliminar no tenga ningun ejemplar prestado
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P124', 'params' => [$params->{'id2'}]} ) ;
 
-    }elsif( !($msg_object->{'error'}) && $catNivel1->tieneReservas() ){
+    }elsif( !($msg_object->{'error'}) && $cat_registro_marc_n1->tieneReservas() ){
         #verifico que el nivel2 que quiero eliminar no tenga ningun ejemplar reservado
         $msg_object->{'error'} = 1;
         C4::AR::Debug::debug("_verificarDeleteNivel1 => Se está intentando eliminar un ejemplar que tiene al menos un ejemplar reservado ");
@@ -236,13 +216,17 @@ sub _verificarDeleteNivel1 {
 sub t_eliminarNivel1{
    my ($id1) = @_;
    
-   my $msg_object= C4::AR::Mensajes::create();
+   my $msg_object = C4::AR::Mensajes::create();
 
 # FIXME falta verificar si es posible eliminar el nivel 1
     my $params;
-    my ($catNivel1) = getNivel1FromId1($id1);
+#     my ($catNivel1) = getNivel1FromId1($id1);
 
-    if(!$catNivel1){
+    my $cat_registro_marc_n1 = C4::Modelo::CatRegistroMarcN1->new();
+    my $db = $cat_registro_marc_n1->db;
+    my ($cat_registro_marc_n1) = getNivel1FromId1($id1, $db);
+
+    if(!$cat_registro_marc_n1){
         #NO EXISTE EL OBJETO
         #Se setea error para el usuario
         $msg_object->{'error'} = 1;
@@ -251,18 +235,18 @@ sub t_eliminarNivel1{
         #EXISTE EL OBJETO
         $params->{'id1'} = $id1;
         #verifico condiciones necesarias antes de eliminar     
-        _verificarDeleteNivel1($msg_object, $params, $catNivel1);
+        _verificarDeleteNivel1($msg_object, $params, $cat_registro_marc_n1);
     }
 
     if(!$msg_object->{'error'}){
     #No hay error
-        my $db = $catNivel1->db;
+#         my $db = $cat_registro_marc_n1->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
     
         eval {
-            $catNivel1->eliminar;  
+            $cat_registro_marc_n1->eliminar;  
             $db->commit;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
@@ -341,6 +325,31 @@ sub guardarRegistroMARC {
 
 
 #======================================================DEPRECATED?????????????==================================================================
+
+=item sub getNivel1RepetibleFromId1Repetible
+Recupero el objeto nivel1_repetible a partir de un rep_n1_id
+retorna un objeto o 0 si no existe ninguno
+=cut
+# sub getNivel1RepetibleFromId1Repetible{
+#     my ($rep_n1_id, $db) = @_;
+#         
+#     $db = $db || C4::Modelo::PermCatalogo->new()->db;    
+#     
+#     my $nivel1_repetible_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible( 
+#                                                                             db => $db,
+#                                                                             query => [
+#                                                                                         rep_n1_id => { eq => $rep_n1_id } 
+#                                                                                 ] 
+#                                                             );
+#     
+#     if( scalar(@$nivel1_repetible_array_ref) > 0){
+#         return ($nivel1_repetible_array_ref->[0]);
+#     }else{
+#         return 0;
+#     }
+# }
+
+
 =item sub getNivel1RepetiblesFromId1
 Recupero todos los nivel1_repetible a partir de un id1
 retorna un arreglo de objetos o 0 si no existe ninguno

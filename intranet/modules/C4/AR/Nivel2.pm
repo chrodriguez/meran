@@ -144,12 +144,15 @@ sub getNivel2FromId1
     Recupero TODOS los catRegistroMarcN2 que existen relacionados a un CatRegistroMarcN1 a traves del id1
 =cut
 sub getNivel2FromId1{
-    my ($id1) = @_;
+    my ($id1, $db) = @_;
+    
+    $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db();
 
     my $nivel2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(   
-                                                                      query => [ 
-                                                                                    id1 => { eq => $id1 },
-                                                                            ]
+                                                                        db => $db,
+                                                                        query => [ 
+                                                                                        id1 => { eq => $id1 },
+                                                                                ]
                                                                 );
     return $nivel2_array_ref;
 }
