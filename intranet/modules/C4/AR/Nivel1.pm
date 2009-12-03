@@ -59,7 +59,7 @@ sub guardarRealmente
 Esta funcion realmente guarda el elemento en la base
 =cut
 sub guardarRealmente{
-    my ($msg_object,$marcrecord)=@_;
+    my ($msg_object,$marc_record)=@_;
     my $id1;
     if(!$msg_object->{'error'}){
         my $catRegistroMarcN1 = C4::Modelo::CatRegistroMarcN1->new();  
