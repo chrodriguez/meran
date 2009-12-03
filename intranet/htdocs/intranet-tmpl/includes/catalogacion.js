@@ -527,7 +527,7 @@ Esta funcion es la asignada al handler del validate, ejecuta guardarModificacion
 dependiendo de si se esta modificando o agregando
 */
 function guardarModificarDocumentoN1(){
-	if(MODIFICAR){
+	if(MODIFICAR == 1){
 		guardarModificacionDocumentoN1();
 	}else{
 		guardarDocumentoN1();
@@ -539,7 +539,7 @@ Esta funcion es la asignada al handler del validate, ejecuta guardarModificacion
 dependiendo de si se esta modificando o agregando
 */
 function guardarModificarDocumentoN2(){
-	if(MODIFICAR){
+	if(MODIFICAR == 1){
 		guardarModificacionDocumentoN2();
 	}else{
 		guardarDocumentoN2();
@@ -551,7 +551,7 @@ Esta funcion es la asignada al handler del validate, ejecuta guardarModificacion
 dependiendo de si se esta modificando o agregando
 */
 function guardarModificarDocumentoN3(){
-	if(MODIFICAR){
+	if(MODIFICAR == 1){
 		guardarModificacionDocumentoN3();
 	}else{
 		guardarDocumentoN3();

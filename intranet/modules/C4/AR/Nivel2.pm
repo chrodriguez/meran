@@ -288,11 +288,11 @@ sub t_modificarNivel2 {
     my($params)=@_;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
-    #my $msg_object= C4::AR::Mensajes::create();
-    #my $id2;
+    my $msg_object= C4::AR::Mensajes::create();
+#     my $id2;
 
     my  $cat_registro_marc_n2 = C4::Modelo::CatNivel2->new();
-    my  $db = $catNivel2->db;
+    my  $db = $cat_registro_marc_n2->db;
     my ($cat_registro_marc_n2) = getNivel2FromId2($params->{'id2'}, $db);
 
     if(!$cat_registro_marc_n2){
