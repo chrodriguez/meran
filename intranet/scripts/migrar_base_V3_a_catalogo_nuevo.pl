@@ -25,7 +25,8 @@ while (my $id1 = $sth->fetchrow){
     my ($nivel1_object) = C4::AR::Nivel1::getNivel1FromId1($id1);
     if($nivel1_object ne 0){
         C4::AR::Debug::debug('recupero el nivel1');
-        my $marc_array_nivel1 = $nivel1_object->nivel1CompletoToMARC;
+#         my $marc_array_nivel1 = $nivel1_object->nivel1CompletoToMARC;
+        my $marc_array_nivel1 = $nivel1_object->toMARC;
 
         my $marc_record = generar_marc_record(@$marc_array_nivel1);
       
@@ -49,7 +50,8 @@ while (my $id1 = $sth->fetchrow){
         
         if($nivel2_object ne 0){
             C4::AR::Debug::debug('recupero el nivel2 '.$id2);
-            my $marc_array_nivel2 = $nivel2_object->nivel2CompletoToMARC;
+#             my $marc_array_nivel2 = $nivel2_object->nivel2CompletoToMARC;
+            my $marc_array_nivel2 = $nivel2_object->toMARC;
             C4::AR::Debug::debug('MARCDetail => cant '.scalar(@$marc_array_nivel2));
             my $marc_record = generar_marc_record(@$marc_array_nivel2);
         
@@ -73,7 +75,8 @@ while (my $id1 = $sth->fetchrow){
             
             if($nivel3_object ne 0){
                 C4::AR::Debug::debug('recupero el nivel3');
-                my $marc_array_nivel3 = $nivel3_object->nivel3CompletoToMARC;
+#                 my $marc_array_nivel3 = $nivel3_object->nivel3CompletoToMARC;
+                my $marc_array_nivel3 = $nivel3_object->toMARC;
                 my $marc_record = generar_marc_record(@$marc_array_nivel3);
         
                 my $query3 = "INSERT INTO cat_registro_marc_n3 (marc_record, id2, id1) VALUES (?,?,?) ";
@@ -94,10 +97,18 @@ sub generar_marc_record {
     my $marc = MARC::Record->new();
     
     for(my $i=0; $i< scalar(@result); $i++){
-		if (@result[$i]->{'dato'}){
-			my $field = MARC::Field->new(@result[$i]->{'campo'},'','',@result[$i]->{'subcampo'} => @result[$i]->{'dato'});
-			$marc->add_fields($field);
-		}
+
+        C4::AR::Debug::debug("campo ".@result[$i]->{'campo'});
+
+        for(my $i=0; $i< scalar(@result); $i++){
+            C4::AR::Debug::debug("subcampo ".@result[$i]->{'subcampo'});
+            C4::AR::Debug::debug("dato ".@result[$i]->{'dato'});
+
+		    if (@result[$i]->{'dato'}){
+			    my $field = MARC::Field->new(@result[$i]->{'campo'},'','',@result[$i]->{'subcampo'} => @result[$i]->{'dato'});
+			    $marc->add_fields($field);
+		    }
+        }
     }
 
     return $marc;
