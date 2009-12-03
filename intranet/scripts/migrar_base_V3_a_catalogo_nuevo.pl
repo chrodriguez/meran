@@ -98,14 +98,20 @@ sub generar_marc_record {
     
     for(my $i=0; $i< scalar(@result); $i++){
 
-        C4::AR::Debug::debug("campo ".@result[$i]->{'campo'});
+        my $campo = @result[$i]->{'campo'};
+        C4::AR::Debug::debug("campo ".$campo);
 
-        for(my $i=0; $i< scalar(@result); $i++){
-            C4::AR::Debug::debug("subcampo ".@result[$i]->{'subcampo'});
-            C4::AR::Debug::debug("dato ".@result[$i]->{'dato'});
+        my $cant_subcampos = scalar(@result[$i]->{'subcampos_array'});
+        my $subcampos_array = @result[$i]->{'subcampos_array'};
 
-		    if (@result[$i]->{'dato'}){
-			    my $field = MARC::Field->new(@result[$i]->{'campo'},'','',@result[$i]->{'subcampo'} => @result[$i]->{'dato'});
+        foreach my $s (@{@result[$i]->{'subcampos_array'}}){
+            my $subcampo =  $s->{'subcampo'};
+            my $dato =      $s->{'dato'};
+            C4::AR::Debug::debug("subcampo ".$subcampo);
+            C4::AR::Debug::debug("dato ".$dato);
+
+		    if ($dato ne ''){
+			    my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
 			    $marc->add_fields($field);
 		    }
         }
