@@ -171,8 +171,7 @@ sub koha2_to_meran
  Esta funcion la idea es que sea llamada desde las distintas fuentes de ingreso de datos que existen, ej: aguapey, bibun, biblo, etc
 =cut
 sub koha2_to_meran{
-        my ($params) = @_;
-        
+
 }
 
 sub detalleMARC {
@@ -194,7 +193,8 @@ sub detalleMARC {
             my $dato                    = $subfield->[1];
             $hash_temp{'subcampo'}      = $subcampo;
             $hash_temp{'liblibrarian'}  = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
-            $hash_temp{'dato'}          = $dato;
+             my $valor_referencia       = getDatoFromReferencia($campo, $subcampo, $dato);
+            $hash_temp{'dato'}          = $valor_referencia;
 
             push(@subcampos_array, \%hash_temp);
 
@@ -393,30 +393,34 @@ sub t_eliminarNivelRepetible{
 
 
 sub getDatoFromReferencia{
-  my ($campo, $subcampo, $id_tabla) = @_;
-  
-  my $valor_referencia = '';
-
-  if(($id_tabla ne '')&&($campo ne '')&&($subcampo ne '')){
-
-      my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-      
-      if($estructura){
-        if($estructura->getReferencia){
-          #tiene referencia
-          my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
-          my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
-                                                                            #campo_tabla,                   id_tabla
-          $valor_referencia = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $id_tabla);
-          C4::AR::Debug::debug("getDatoFromReferencia => getReferencia: ".$estructura->infoReferencia->getReferencia);
-          C4::AR::Debug::debug("getDatoFromReferencia => Tabla: ".$obj_generico->getTableName);
-          C4::AR::Debug::debug("getDatoFromReferencia => Modulo: ".$obj_generico->toString);
-          C4::AR::Debug::debug("getDatoFromReferencia => Valor referencia: ".$valor_referencia);
+    my ($campo, $subcampo, $id_tabla) = @_;
+    
+    my $valor_referencia = '';
+    
+    if(($id_tabla ne '')&&($campo ne '')&&($subcampo ne '')){
+    
+        my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+        
+        if($estructura){
+            if($estructura->getReferencia){
+                #tiene referencia
+                my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
+                my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+                                                                                #campo_tabla,                   id_tabla
+                $valor_referencia = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $id_tabla);
+                C4::AR::Debug::debug("getDatoFromReferencia => getReferencia: ".$estructura->infoReferencia->getReferencia);
+                C4::AR::Debug::debug("getDatoFromReferencia => Tabla: ".$obj_generico->getTableName);
+                C4::AR::Debug::debug("getDatoFromReferencia => Modulo: ".$obj_generico->toString);
+                C4::AR::Debug::debug("getDatoFromReferencia => Valor referencia: ".$valor_referencia);
+            }
         }
-      }
-  }
 
-  return $valor_referencia;
+        return $valor_referencia;   
+
+    }else{
+
+        return $id_tabla;
+    }
 }
 
 =head2  
@@ -903,11 +907,11 @@ sub getEstructuraYDatosDeNivel{
         
                 if($cat_estruct_array){
 
-                    $campo = $cat_estruct_array->getCampo;
-                    $liblibrarian = $cat_estruct_array->camposBase->getLiblibrarian;
-                    $indicador_primario = $cat_estruct_array->camposBase->getIndicadorPrimario;
-                    $indicador_secundario = $cat_estruct_array->camposBase->getIndicadorSecundario;
-                    $descripcion_campo = $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;	
+                    $campo =                    $cat_estruct_array->getCampo;
+                    $liblibrarian =             $cat_estruct_array->camposBase->getLiblibrarian;
+                    $indicador_primario =       $cat_estruct_array->camposBase->getIndicadorPrimario;
+                    $indicador_secundario =     $cat_estruct_array->camposBase->getIndicadorSecundario;
+                    $descripcion_campo =        $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;	
         
                     my %hash_temp;
 #                     my $estructura = _getEstructuraFromCampoSubCampo( 

@@ -32,6 +32,7 @@
 
 [% FOREACH nivel3 %]
 
+    [% FOREACH subcampos_array %]
 		<tr align="center">
                 <td>
                     [% PERL %]
@@ -128,7 +129,7 @@
                             onClick="detalleMARC('[% id3 %]')">
                 </td>
     </tr>
-
+    [% END %]
 [% END %]<!-- END FOREACH NIVEL 3 -->
 	
 	</table>
