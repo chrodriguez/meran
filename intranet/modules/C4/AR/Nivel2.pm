@@ -305,7 +305,7 @@ sub t_modificarNivel2 {
     #No hay error
 		
 		$params->{'modificado'} = 1;
-        my $db= $cat_registro_marc_n2->db;
+#         my $db = $cat_registro_marc_n2->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
          $db->begin_work;
