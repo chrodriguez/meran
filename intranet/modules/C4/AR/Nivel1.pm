@@ -148,9 +148,9 @@ sub t_modificarNivel1 {
     my $msg_object= C4::AR::Mensajes::create();
     my $id1 = 0;
 
-    my ($catNivel1) = getNivel1FromId1($params->{'id1'});
+    my ($cat_registro_marc_n1) = getNivel1FromId1($params->{'id1'});
 
-    if(!$catNivel1){
+    if(!$cat_registro_marc_n1){
         #Se setea error para el usuario
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U404', 'params' => []} ) ;
@@ -160,18 +160,21 @@ sub t_modificarNivel1 {
     #No hay error
 		$params->{'modificado'}=1;
 
-        my $db = $catNivel1->db;
+        my $db = $cat_registro_marc_n1->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
          $db->begin_work;
     
         eval {
-            $catNivel1->agregar($params);  
-            $id1 = $catNivel1->getId1;
+
+            my $marc_record = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
+            $params->{'marc_record'} = $marc_record->as_usmarc;
+            $cat_registro_marc_n1->agregar($params);  
+            #$id1 = $cat_registro_marc_n1->getId1;
             $db->commit;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U380', 'params' => [$catNivel1->getId1]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U380', 'params' => [$cat_registro_marc_n1->getId1]} ) ;
         };
     
         if ($@){
@@ -180,14 +183,14 @@ sub t_modificarNivel1 {
             $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U383', 'params' => [$catNivel1->getId1]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U383', 'params' => [$cat_registro_marc_n1->getId1]} ) ;
         }
 
         $db->{connect_options}->{AutoCommit} = 1;
 
     }
 
-    return ($msg_object, $id1);
+    return ($msg_object, $cat_registro_marc_n1->getId1);
 }
 
 sub _verificarDeleteNivel1 {
