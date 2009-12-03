@@ -1305,6 +1305,6 @@ DELETE FROM `cat_nivel3_repetible` WHERE dato = '';
 ALTER TABLE `pref_estructura_campo_marc` ADD `nivel` INT NOT NULL ;
 
 --tabla para contacto
-CREATE TABLE `contacto` (`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, `trato` VARCHAR(255) NOT NULL, `nombre` VARCHAR(255) NOT NULL, `apellido` VARCHAR(255) NOT NULL, `direccion` VARCHAR(255) NULL, `codigo_postal` VARCHAR(255) NULL, `ciudad` VARCHAR(255) NULL, `pais` VARCHAR(255) NULL, `telefono` VARCHAR(255) NULL, `email` VARCHAR(255) NOT NULL, `asunto` VARCHAR(255) NOT NULL, `mensaje` TEXT NOT NULL) ENGINE = MyISAM;
 
+CREATE TABLE `contacto` (`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, `trato` VARCHAR(255) NOT NULL, `nombre` VARCHAR(255) NOT NULL, `apellido` VARCHAR(255) NOT NULL, `direccion` VARCHAR(255) NULL, `codigo_postal` VARCHAR(255) NULL, `ciudad` VARCHAR(255) NULL, `pais` VARCHAR(255) NULL, `telefono` VARCHAR(255) NULL, `email` VARCHAR(255) NOT NULL, `asunto` VARCHAR(255) NOT NULL, `mensaje` TEXT NOT NULL) ENGINE = MyISAM;
 ALTER TABLE `contacto` ADD `leido` INT NOT NULL DEFAULT '0';
