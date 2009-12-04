@@ -492,17 +492,13 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
                                                 'intranet'
                                     );
     #Se guarda informacion del NIVEL 2 relacionada con un ID de NIVEL 1
-    my ($Message_arrayref, $nivel2) = &C4::AR::Nivel2::t_guardarNivel2($obj);
+    my ($Message_arrayref, $id1, $id2) = &C4::AR::Nivel2::t_guardarNivel2($obj);
     
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
 
-    $info{'id1'} = 0;
-    $info{'id2'} = 0;
-    if($nivel2){
-        $info{'id1'}= $nivel2->getId1;
-        $info{'id2'}= $nivel2->getId2;
-    }
+    $info{'id1'}= $id1;
+    $info{'id2'}= $id2;
 
     C4::Auth::print_header($session);
     print to_json \%info;

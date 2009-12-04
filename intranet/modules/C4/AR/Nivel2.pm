@@ -47,10 +47,10 @@ sub t_guardarNivel2 {
     if(!$msg_object->{'error'}){
     #No hay error
         my $marc_record = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
-        ($msg_object,$id2)=guardarRealmente($msg_object,$params->{'id1'},$params->{'marc_record'});
+        ($msg_object,$id2)=guardarRealmente($msg_object,$params->{'id1'},$marc_record);
         
     }
-    return ($msg_object, $$params->{'id1'}, $id2);
+    return ($msg_object, $params->{'id1'}, $id2);
 }
 
 
