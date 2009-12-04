@@ -44,11 +44,27 @@ sub t_guardarNivel2 {
 
     my $msg_object = C4::AR::Mensajes::create();
     my $id2;
-    my $catRegistroMarcN2;
-
     if(!$msg_object->{'error'}){
     #No hay error
         my $marc_record = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
+        ($msg_object,$id2)=guardarRealmente($msg_object,$params->{'id1'},$params->{'marc_record'});
+        
+    }
+    return ($msg_object, $$params->{'id1'}, $id2);
+}
+
+
+
+=head2
+sub guardarRealmente
+
+Esta funcion realmente guarda el elemento en la base
+=cut
+sub guardarRealmente{
+    my ($msg_object,$id1,$marc_record)=@_;
+    my $id2;
+    my $catRegistroMarcN3;
+    if(!$msg_object->{'error'}){
         $catRegistroMarcN2 = C4::Modelo::CatRegistroMarcN2->new();  
         my $db = $catRegistroMarcN2->db;
         # enable transactions, if possible
@@ -57,9 +73,8 @@ sub t_guardarNivel2 {
     
         eval {
             $params->{'marc_record'} = $marc_record->as_usmarc;
-            $catRegistroMarcN2->agregar($params);
+            $catRegistroMarcN2->agregar($id1,$marc_record->as_usmarc);
             $db->commit;
-
             #recupero el id1 recien agregado
             $id2 = $catRegistroMarcN2->getId2;
             #se cambio el permiso con exito
@@ -80,7 +95,7 @@ sub t_guardarNivel2 {
 
     }
 
-    return ($msg_object, $catRegistroMarcN2);
+    return ($msg_object, $id2);
 }
 
 =head2 sub t_eliminarNivel2
