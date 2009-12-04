@@ -543,8 +543,6 @@ sub getDatoFromReferencia{
         return $dato;
     }
 }
-###############################################################A PARTIR DE ESTE PUNTO ES LO VIEJO########################################
-
 
 =head2  
 sub _setDatos_de_estructura
@@ -615,10 +613,181 @@ sub _setDatos_de_estructura {
     return (\%hash_ref_result);
 }
 
+=head2
+Esta funcion retorna la estructura de catalogacion con los datos de un Nivel (NO REPETIBLES).
+Ademas mapea las campos fijos de nivel 1, 2 y 3 a MARC
+=cut
+sub getEstructuraYDatosDeNivel{
+    my ($params) = @_;
+
+    my @result;
+    my $nivel;
+    if( $params->{'nivel'} eq '1'){
+        $nivel = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
+        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel1FromId1\n");
+    }
+    elsif( $params->{'nivel'} eq '2'){
+        $nivel = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
+        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel2FromId2\n");
+    }
+    elsif( $params->{'nivel'} eq '3'){
+        $nivel = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
+        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel3FromId3");
+    }
+
+    #paso todo a MARC
+    my $nivel_info_marc_array = undef;
+    eval{
+      $nivel_info_marc_array = $nivel->toMARC; #mapea los campos de la tabla nivel 1, 2, o 3 a MARC
+    };
 
 
+    my $campo;
+    my $liblibrarian;
+    my $indicador_primario;
+    my $indicador_secundario;
+    my $descripcion_campo;  
+    my @result_total;
+
+# TODO falta mostrar los campos de la estructura que estan vacios
+
+    #se genera la estructura de catalogacion para enviar al cliente
+    if ($nivel_info_marc_array ){
+      for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++){
+            my @result;
+
+            foreach my $subcampo (@{$nivel_info_marc_array->[$i]->{'subcampos_array'}}){
+    
+                my $cat_estruct_array = _getEstructuraFromCampoSubCampo(    
+                                                                            $nivel_info_marc_array->[$i]->{'campo'}, 
+                                                                            $subcampo->{'subcampo'}
+                                                    );
+            
+        
+                if($cat_estruct_array){
+
+                    $campo =                    $cat_estruct_array->getCampo;
+                    $liblibrarian =             $cat_estruct_array->camposBase->getLiblibrarian;
+                    $indicador_primario =       $cat_estruct_array->camposBase->getIndicadorPrimario;
+                    $indicador_secundario =     $cat_estruct_array->camposBase->getIndicadorSecundario;
+                    $descripcion_campo =        $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
+        
+                    my %hash_temp;
+        
+                    if($cat_estruct_array){
+                        $hash_temp{'tiene_estructura'}  = '1';
+                    }else{
+                        $hash_temp{'tiene_estructura'}  = '0';
+                    }
+        
+                    $hash_temp{'dato'}              = $subcampo->{'dato'};
+                    $hash_temp{'datoReferencia'}    = $subcampo->{'datoReferencia'};
+    
+                    C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
+                    C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
+                    C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => liblibrarian => ".$subcampo->{'liblibrarian'});
+                    C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
+                    C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => datoReferencia => ".$subcampo->{'datoReferencia'});
+                    
+        
+                    my $hash_result = _setDatos_de_estructura($cat_estruct_array, \%hash_temp);
+                        
+                    push(@result, $hash_result);
+                }
+            }# END foreach my $s (@{$m->{'subcampos_array'}})
+    
+            my %hash_campos;
+    
+            $hash_campos{'campo'}                   = $campo;
+            $hash_campos{'nombre'}                  = $liblibrarian;
+            $hash_campos{'indicador_primario'}      = $indicador_primario;
+            $hash_campos{'indicador_secundario'}    = $indicador_secundario;
+            $hash_campos{'descripcion_campo'}       = $descripcion_campo.' - '.$campo;
+            $hash_campos{'ayuda_campo'}             = 'esta es la ayuda del campo '.$campo;
+            $hash_campos{'subcampos_array'}         = \@result;
+
+            push (@result_total, \%hash_campos);
+    
+      }# END for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++)
+
+    }# END if ($nivel_info_marc_array )
 
 
+    return @result_total;
+}
+
+sub getEstructuraSinDatos{
+    my ($params) = @_;
+    C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================INI");
+
+    my $nivel =     $params->{'nivel'};
+    my $itemType =  $params->{'id_tipo_doc'};
+    my $orden =     $params->{'orden'};
+    
+    #obtengo todos los campos <> de la estructura de catalogacion del Nivel 1, 2 o 3
+    my ($cant, $campos_array_ref) = getCamposFromEstructura($nivel, $itemType);
+
+    C4::AR::Debug::debug("getEstructuraSinDatos => cant: ".$cant);    
+
+    my @result_total;
+    my $campo = '';
+    my $campo_ant = '';
+    foreach my $c  (@$campos_array_ref){
+
+        my %hash_campos;
+        my @result;
+        #obtengo todos los subcampos de la estructura de catalogacion segun el campo
+        my ($cant, $subcampos_array_ref) = getSubCamposFromEstructuraByCampo($c->getCampo, $nivel, $itemType);
+
+        foreach my $sc  (@$subcampos_array_ref){
+            my %hash;
+        
+            $hash{'tiene_estructura'}  = '1';
+            $hash{'dato'}              = '';
+            $hash{'datoReferencia'}    = 0;
+            
+            my ($hash_temp) = _setDatos_de_estructura($sc, \%hash);
+            
+            push (@result, $hash_temp);
+        }
+
+        my %hash_campos;
+
+        $hash_campos{'campo'}                   = $c->getCampo;
+        $hash_campos{'nombre'}                  = $c->camposBase->getLiblibrarian;
+        $hash_campos{'indicador_primario'}      = $c->camposBase->getIndicadorPrimario;
+        $hash_campos{'indicador_secundario'}    = $c->camposBase->getIndicadorSecundario;
+        $hash_campos{'descripcion_campo'}       = $c->camposBase->getDescripcion.' - '.$c->getCampo;
+        $hash_campos{'ayuda_campo'}             = 'esta es la ayuda del campo '.$c->getCampo;
+        $hash_campos{'subcampos_array'}         = \@result;
+
+        push (@result_total, \%hash_campos);
+
+    }
+
+    C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================FIN");
+
+    return (scalar(@result_total), \@result_total);
+}
+
+
+sub _obtenerOpciones{
+    my ($cat_estruct_object, $hash_ref) = @_;
+
+    C4::AR::Debug::debug('_obtenerOpciones => es un combo, se setean las opciones para => '.$cat_estruct_object->infoReferencia->getReferencia);
+    C4::AR::Debug::debug('_obtenerOpciones => getCampos => '.$cat_estruct_object->infoReferencia->getCampos);
+    my $orden = $cat_estruct_object->infoReferencia->getCampos;
+    my ($cantidad, $valores) = &C4::AR::Referencias::obtenerValoresTablaRef(   
+                                                                $cat_estruct_object->infoReferencia->getReferencia,  #tabla  
+                                                                $cat_estruct_object->infoReferencia->getCampos,  #campo
+                                                                $orden
+                                                );
+    $hash_ref->{'opciones'} = $valores;
+
+    C4::AR::Debug::debug("_obtenerOpciones => opciones => ".$valores);
+}
+
+###############################################################A PARTIR DE ESTE PUNTO ES LO VIEJO########################################
 
 
 
@@ -935,178 +1104,6 @@ sub getDatosFromNivel{
     my @sorted = sort { $a->{campo} cmp $b->{campo} } @resultEstYDatos; # alphabetical sort 
 
     return (scalar(@resultEstYDatos), \@sorted);
-}
-
-=head2
-Esta funcion retorna la estructura de catalogacion con los datos de un Nivel (NO REPETIBLES).
-Ademas mapea las campos fijos de nivel 1, 2 y 3 a MARC
-=cut
-sub getEstructuraYDatosDeNivel{
-	my ($params) = @_;
-
-	my @result;
-	my $nivel;
-	if( $params->{'nivel'} eq '1'){
-		$nivel = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
-        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel1FromId1\n");
-	}
-	elsif( $params->{'nivel'} eq '2'){
-		$nivel = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
-        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel2FromId2\n");
-	}
-	elsif( $params->{'nivel'} eq '3'){
-		$nivel = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
-        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel3FromId3");
-	}
-
-	#paso todo a MARC
-	my $nivel_info_marc_array = undef;
-    eval{
-      $nivel_info_marc_array = $nivel->toMARC; #mapea los campos de la tabla nivel 1, 2, o 3 a MARC
-    };
-
-
-    my $campo;
-    my $liblibrarian;
-    my $indicador_primario;
-    my $indicador_secundario;
-    my $descripcion_campo;  
-    my @result_total;
-
-	#se genera la estructura de catalogacion para enviar al cliente
-    if ($nivel_info_marc_array ){
-      for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++){
-            my @result;
-
-            foreach my $subcampo (@{$nivel_info_marc_array->[$i]->{'subcampos_array'}}){
-    
-                my $cat_estruct_array = _getEstructuraFromCampoSubCampo(	
-                                                                            $nivel_info_marc_array->[$i]->{'campo'}, 
-                                                                            $subcampo->{'subcampo'}
-                                                    );
-            
-        
-                if($cat_estruct_array){
-
-                    $campo =                    $cat_estruct_array->getCampo;
-                    $liblibrarian =             $cat_estruct_array->camposBase->getLiblibrarian;
-                    $indicador_primario =       $cat_estruct_array->camposBase->getIndicadorPrimario;
-                    $indicador_secundario =     $cat_estruct_array->camposBase->getIndicadorSecundario;
-                    $descripcion_campo =        $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;	
-        
-                    my %hash_temp;
-        
-                    if($cat_estruct_array){
-                        $hash_temp{'tiene_estructura'}  = '1';
-                    }else{
-                        $hash_temp{'tiene_estructura'}  = '0';
-                    }
-        
-                    $hash_temp{'dato'}              = $subcampo->{'dato'};
-                    $hash_temp{'datoReferencia'}    = $subcampo->{'datoReferencia'};
-    
-                    C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
-                    C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
-                    C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => liblibrarian => ".$subcampo->{'liblibrarian'});
-                    C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
-                    C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => datoReferencia => ".$subcampo->{'datoReferencia'});
-                    
-        
-                    my $hash_result = _setDatos_de_estructura($cat_estruct_array, \%hash_temp);
-                        
-                    push(@result, $hash_result);
-                }
-            }# END foreach my $s (@{$m->{'subcampos_array'}})
-    
-            my %hash_campos;
-    
-            $hash_campos{'campo'}                   = $campo;
-            $hash_campos{'nombre'}                  = $liblibrarian;
-            $hash_campos{'indicador_primario'}      = $indicador_primario;
-            $hash_campos{'indicador_secundario'}    = $indicador_secundario;
-            $hash_campos{'descripcion_campo'}       = $descripcion_campo.' - '.$campo;
-            $hash_campos{'ayuda_campo'}             = 'esta es la ayuda del campo '.$campo;
-            $hash_campos{'subcampos_array'}         = \@result;
-
-            push (@result_total, \%hash_campos);
-    
-      }# END for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++)
-
-    }# END if ($nivel_info_marc_array )
-
-
-	return @result_total;
-}
-
-sub getEstructuraSinDatos{
-    my ($params) = @_;
-    C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================INI");
-
-    my $nivel =     $params->{'nivel'};
-    my $itemType =  $params->{'id_tipo_doc'};
-    my $orden =     $params->{'orden'};
-    
-    #obtengo todos los campos <> de la estructura de catalogacion del Nivel 1, 2 o 3
-    my ($cant, $campos_array_ref) = getCamposFromEstructura($nivel, $itemType);
-
-    C4::AR::Debug::debug("getEstructuraSinDatos => cant: ".$cant);    
-
-    my @result_total;
-    my $campo = '';
-    my $campo_ant = '';
-    foreach my $c  (@$campos_array_ref){
-
-        my %hash_campos;
-        my @result;
-        #obtengo todos los subcampos de la estructura de catalogacion segun el campo
-        my ($cant, $subcampos_array_ref) = getSubCamposFromEstructuraByCampo($c->getCampo, $nivel, $itemType);
-
-        foreach my $sc  (@$subcampos_array_ref){
-            my %hash;
-        
-            $hash{'tiene_estructura'}  = '1';
-            $hash{'dato'}              = '';
-            $hash{'datoReferencia'}    = 0;
-            
-            my ($hash_temp) = _setDatos_de_estructura($sc, \%hash);
-            
-            push (@result, $hash_temp);
-        }
-
-        my %hash_campos;
-
-        $hash_campos{'campo'}                   = $c->getCampo;
-        $hash_campos{'nombre'}                  = $c->camposBase->getLiblibrarian;
-        $hash_campos{'indicador_primario'}      = $c->camposBase->getIndicadorPrimario;
-        $hash_campos{'indicador_secundario'}    = $c->camposBase->getIndicadorSecundario;
-        $hash_campos{'descripcion_campo'}       = $c->camposBase->getDescripcion.' - '.$c->getCampo;
-        $hash_campos{'ayuda_campo'}             = 'esta es la ayuda del campo '.$c->getCampo;
-        $hash_campos{'subcampos_array'}         = \@result;
-
-        push (@result_total, \%hash_campos);
-
-    }
-
-    C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================FIN");
-
-    return (scalar(@result_total), \@result_total);
-}
-
-
-sub _obtenerOpciones{
-    my ($cat_estruct_object, $hash_ref) = @_;
-
-    C4::AR::Debug::debug('_obtenerOpciones => es un combo, se setean las opciones para => '.$cat_estruct_object->infoReferencia->getReferencia);
-    C4::AR::Debug::debug('_obtenerOpciones => getCampos => '.$cat_estruct_object->infoReferencia->getCampos);
-    my $orden = $cat_estruct_object->infoReferencia->getCampos;
-    my ($cantidad, $valores) = &C4::AR::Referencias::obtenerValoresTablaRef(   
-                                                                $cat_estruct_object->infoReferencia->getReferencia,  #tabla  
-                                                                $cat_estruct_object->infoReferencia->getCampos,  #campo
-                                                                $orden
-                                                );
-    $hash_ref->{'opciones'} = $valores;
-
-    C4::AR::Debug::debug("_obtenerOpciones => opciones => ".$valores);
 }
 
 

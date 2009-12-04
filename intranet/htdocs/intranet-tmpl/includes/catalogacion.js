@@ -188,12 +188,15 @@ function _getBarcodes(){
 //esta funcion elimina el arreglo de opciones, para enviar menos info al servidor
 function _sacarOpciones(){
 	for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){
-		if(MARC_OBJECT_ARRAY[i].opciones){//si esta definido...
-			if(MARC_OBJECT_ARRAY[i].opciones.length > 0){
-				//elimino la propiedad opciones, para enviar menos info al servidor
-				MARC_OBJECT_ARRAY[i].opciones= [];
-			}
-		}
+        var subcampos_array = MARC_OBJECT_ARRAY[i].getSubCamposArray();
+        for(var s=0;s<subcampos_array.length;s++){
+	        if(subcampos_array[s].opciones){//si esta definido...
+		        if(subcampos_array[s].opciones.length > 0){
+			        //elimino la propiedad opciones, para enviar menos info al servidor
+			        subcampos_array[s].opciones= [];
+		        }
+	        }
+        }
 	}
 }
 

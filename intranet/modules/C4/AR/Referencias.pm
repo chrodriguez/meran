@@ -772,7 +772,7 @@ sub getIdiomaObject {
     my ($id)= @_;
 
     my $idioma_array_ref = C4::Modelo::RefIdioma::Manager->get_ref_idioma(
-                                                                    query => [ id => $id ]
+                                                                    query => [  idLanguage => $id ]
                                                         );
 
     if(scalar(@$idioma_array_ref) > 0){
