@@ -19,7 +19,6 @@ var TAB_INDEX= 0;//tabindex para las componentes
 //arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
 var MARC_OBJECT_ARRAY= new Array();
 //arreglo con datos del servidor para modificar las componentes
-var DATA_ARRAY = new Array();
 var MODIFICAR = 0;
 var ID3_ARRAY = new Array(); //para enviar 1 o mas ID_N3 para agregar/modificar/eliminar
 var BARCODES_ARRAY = new Array(); //para enviar 1 o mas barcodes
@@ -55,8 +54,6 @@ function inicializar(){
 
 	_freeMemory(MARC_OBJECT_ARRAY);
 	MARC_OBJECT_ARRAY= [];
-	_freeMemory(DATA_ARRAY);
-	DATA_ARRAY= [];
 	_freeMemory(BARCODES_ARRAY);
 	BARCODES_ARRAY= [];
 	TAB_INDEX= 0;
@@ -309,23 +306,6 @@ function mostrarEstructuraDelNivel1(){
     objAH.sendToServer();
 }
 
-
-// FIXME deprecatedd
-// function mostrarDataNivel(){
-// 
-//     if (MODIFICAR){
-//         for (x=0; x<MARC_OBJECT_ARRAY.length; x++){
-//             if(x < DATA_ARRAY.length && DATA_ARRAY[x].tiene_estructura == '1'){
-//                 //seteo el dato "DATA_ARRAY[x].dato" en la componete con ID  "DATA_ARRAY[x].idCompCliente"
-//                 $('#'+DATA_ARRAY[x].idCompCliente).val(DATA_ARRAY[x].dato);
-//                 if(DATA_ARRAY[x].referencia == 1){
-//                     MARC_OBJECT_ARRAY[x].datoReferencia = DATA_ARRAY[x].datoReferencia;
-//                     $('#'+DATA_ARRAY[x].idCompCliente + '_hidden').val(DATA_ARRAY[x].datoReferencia);
-//                 }
-//             }
-//         }
-//    }
-// }
 
 function updateMostrarEstructuraDelNivel1(responseText){
     _clearContentsEstructuraDelNivel();
@@ -1435,8 +1415,6 @@ function modificarN1(id1){
 
 function updateModificarN1(responseText){
     MODIFICAR = 1;
-    //se genera un arreglo de objetos con la informacion guardada, campo, subcampo  
-    DATA_ARRAY = JSONstring.toObject(responseText);
     _NIVEL_ACTUAL = 1;
     updateMostrarEstructuraDelNivel1(responseText);
 }
@@ -1458,10 +1436,6 @@ function modificarN2(id2){
 
 function updateModificarN2(responseText){
    MODIFICAR = 1;
-   DATA_ARRAY = JSONstring.toObject(responseText);
-// parece q no es necesario llamar y hacer otro ajax para traer la estructura, se reusa la estructura q viene con los datos
-//    mostrarEstructuraDelNivel2();
-//FIXME estoy probado esto
     _NIVEL_ACTUAL = 2;
     updateMostrarEstructuraDelNivel2(responseText);
 // fin prueba
@@ -1486,10 +1460,6 @@ function modificarN3(id3){
 function updateModificarN3(responseText){
 	MODIFICAR = 1;
 	$('#divCantEjemplares').hide();	
-	DATA_ARRAY = JSONstring.toObject(responseText);
-// parece q no es necesario llamar y hacer otro ajax para traer la estructura, se reusa la estructura q viene con los datos
-// 	mostrarEstructuraDelNivel3();
-//FIXME estoy probado esto
     _NIVEL_ACTUAL = 3;
     updateMostrarEstructuraDelNivel3(responseText);
 // fin prueba
@@ -1523,7 +1493,6 @@ function modificarEjemplaresN3(id3){
 function updateModificarEjemplaresN3(responseText){
 	MODIFICAR = 1;
 	$('#divCantEjemplares').hide();	
-	DATA_ARRAY = JSONstring.toObject(responseText);
 	mostrarEstructuraDelNivel3();
 }
 

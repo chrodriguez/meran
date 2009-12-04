@@ -66,6 +66,14 @@ sub agregar{
     $self->save();
 }
 
+sub modificar{
+    my ($self)           = shift;
+    my ($marc_record)    = @_;
+
+    $self->setMarcRecord($marc_record);
+
+    $self->save();
+}
 
 sub eliminar{
     my ($self)      = shift;
@@ -134,8 +142,10 @@ sub getTipoDocumento{
     my ($self)      = shift;
     
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
- 
-    return $marc_record->subfield("910","a");
+    my $tipo_doc    = $marc_record->subfield("910","a");
+
+    C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumento => getTipoDocumento => ".$tipo_doc);
+    return $tipo_doc;
 }
 
 =head2
@@ -168,7 +178,9 @@ sub getSoporte{
     
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
-    return $marc_record->subfield("245","h");
+    my $soporte     = $marc_record->subfield("245","h");
+    C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporte => soporte => ".$soporte);
+    return $soporte;
 }
 
 =head2 getSoporteObject

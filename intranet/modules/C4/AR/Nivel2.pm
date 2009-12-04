@@ -326,10 +326,8 @@ sub t_modificarNivel2 {
     
         eval {
             my $marc_record = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
-            $params->{'marc_record'} = $marc_record->as_usmarc;
-            $cat_registro_marc_n2->agregar($params);  
+            $cat_registro_marc_n2->modificar($marc_record->as_usmarc);  
             $db->commit;
-            #$id2 = $catNivel2->getId2;
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U381', 'params' => [$cat_registro_marc_n2->getId2]} ) ;
