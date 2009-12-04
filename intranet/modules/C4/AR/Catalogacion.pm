@@ -109,8 +109,10 @@ Se apoya en la funcion _meran_to_marc que entiende el formato.
 =cut
 sub meran_nivel1_to_meran{
     my ($data_hash) = @_;
+
     my $campos_autorizados = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(1);
     my $marc_record = _meran_to_marc($data_hash->{'infoArrayNivel1'},$campos_autorizados);
+
     return($marc_record);
 }
 
@@ -154,12 +156,15 @@ sub Z3950_to_meran
 Recibe los datos de la importacion z3950 y los guarda en la base de meran, teniendo en cuenta tablas de referencia  
 =cut
 sub Z3950_to_meran{
-    my $msg_object= C4::AR::Mensajes::create();
+    my($marc_record) = @_;
+
+    my ($msg_object) = C4::AR::Mensajes::create();
     my $id1;
     my $id2;
     my $id3;
+
     $msg_object->{'tipo'}="INTRA";
-    my($marc_record)=@_;
+    
     my ($marc_record_limpio1,$marc_record_limpio2,$marc_record_limpio3,$marc_record_campos_sin_definir)=_procesar_referencias($marc_record);
     C4::AR::Debug::debug("Z3950 marc_nivel1 => SALIDA => as_formatted ".$marc_record_limpio1->as_formatted());
     ($msg_object,$id1)=C4::AR::Nivel1::guardarRealmente($msg_object,$marc_record_limpio1); 
@@ -167,10 +172,10 @@ sub Z3950_to_meran{
     ($msg_object,$id1,$id2)=C4::AR::Nivel2::guardarRealmente($msg_object,$id1,$marc_record_limpio2); 
     C4::AR::Debug::debug("Z3950 marc_nivel3 => ERROR en la estrcutura => as_formatted ".$marc_record_limpio3->as_formatted());
     C4::AR::Debug::debug("Z3950 WARNING campos no definidos en la biblioa!!  => SALIDA => as_formatted ".$marc_record_campos_sin_definir->as_formatted());
+
     return($msg_object);
     
 }
-
 
 =head2
 sub _procesar_referencia
@@ -278,6 +283,7 @@ sub _procesar_referencias{
 
 
 =head2
+>>>>>>> .r2463
 sub importacion_to_meran
  
 Esta funcion la idea es que sea llamada desde las distintas fuentes de ingreso de datos que existen, ej: aguapey, bibun, biblo, etc
@@ -531,6 +537,7 @@ sub getDatoFromReferencia{
                                                                                 #campo_tabla,                   id_tabla
                 $valor_referencia = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $id_tabla);
                 C4::AR::Debug::debug("getDatoFromReferencia => getReferencia: ".$estructura->infoReferencia->getReferencia);
+                C4::AR::Debug::debug("getDatoFromReferencia => dato: ".$id_tabla);
                 C4::AR::Debug::debug("getDatoFromReferencia => Tabla: ".$obj_generico->getTableName);
                 C4::AR::Debug::debug("getDatoFromReferencia => Modulo: ".$obj_generico->toString);
                 C4::AR::Debug::debug("getDatoFromReferencia => Valor referencia: ".$valor_referencia);

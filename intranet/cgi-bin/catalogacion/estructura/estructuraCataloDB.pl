@@ -369,6 +369,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
       }
     }
 
+
     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getDatosFromNivel($obj);
     
 	$infoOperacionJSON= to_json($catalogaciones_array_ref);
