@@ -319,6 +319,9 @@ sub detalleMARC {
 
             my $subcampo                = $subfield->[0];
             my $dato                    = $subfield->[1];
+            C4::AR::Debug::debug("Catalogacion => detalleMARC => campo: ".$campo);
+            C4::AR::Debug::debug("Catalogacion => detalleMARC => subcampo: ".$subcampo);
+            C4::AR::Debug::debug("Catalogacion => detalleMARC => dato: ".$dato);
             $hash_temp{'subcampo'}      = $subcampo;
             $hash_temp{'liblibrarian'}  = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
              my $valor_referencia       = getDatoFromReferencia($campo, $subcampo, $dato);
@@ -501,31 +504,20 @@ sub getImportacionSinEstructura{
     }
 }
 
-=item sub t_eliminarNivelRepetible
-Esta funcion elimina un "campo", de uno de los niveles repetibles segun el nivel indicado por parametro y segun el id del nivel repetible
+
+=head2
+    sub getDatoFromReferencia
+
+    Esta funcion recibe campo, subcampo y dato, donde dato puede ser el dato en si mismo, un string o la referencia a un dato.
+    Si es la referencia a un dato, se obtiene el dato de la referencia, y dato era un "dato" (string) se retorna y no se hace nada.
+    Siempre devuelve el dato.
 =cut
-sub t_eliminarNivelRepetible{
-    my ($params) = @_;
-    
-    if($params->{'nivel'} eq '1'){
-        C4::AR::Nivel1::t_eliminarNivel1Repetible($params);
-    }elsif($params->{'nivel'} eq '2'){
-        C4::AR::Nivel2::t_eliminarNivel2Repetible($params);
-    }elsif($params->{'nivel'} eq '3'){
-        C4::AR::Nivel3::t_eliminarNivel3Repetible($params);
-    }else{
-#         ERROR
-    }
-}
-
-
-
 sub getDatoFromReferencia{
-    my ($campo, $subcampo, $id_tabla) = @_;
+    my ($campo, $subcampo, $dato) = @_;
     
     my $valor_referencia = '';
     
-    if(($id_tabla ne '')&&($campo ne '')&&($subcampo ne '')){
+    if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato != 0)&&($dato ne '')){
     
         my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
         
@@ -535,9 +527,9 @@ sub getDatoFromReferencia{
                 my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
                 my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
                                                                                 #campo_tabla,                   id_tabla
-                $valor_referencia = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $id_tabla);
+                $valor_referencia = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
                 C4::AR::Debug::debug("getDatoFromReferencia => getReferencia: ".$estructura->infoReferencia->getReferencia);
-                C4::AR::Debug::debug("getDatoFromReferencia => dato: ".$id_tabla);
+                C4::AR::Debug::debug("getDatoFromReferencia => dato entrada: ".$dato);
                 C4::AR::Debug::debug("getDatoFromReferencia => Tabla: ".$obj_generico->getTableName);
                 C4::AR::Debug::debug("getDatoFromReferencia => Modulo: ".$obj_generico->toString);
                 C4::AR::Debug::debug("getDatoFromReferencia => Valor referencia: ".$valor_referencia);
@@ -548,7 +540,7 @@ sub getDatoFromReferencia{
 
     }else{
 
-        return $id_tabla;
+        return $dato;
     }
 }
 
@@ -963,9 +955,8 @@ sub cantNivel2 {
     return $count;
 }
 
-#########################################################PROBANDO######################################################################
-
-
+=head2
+=cut
 sub getDatosFromNivel{
     my ($params) = @_;
 
@@ -983,9 +974,7 @@ sub getDatosFromNivel{
     return (scalar(@resultEstYDatos), \@sorted);
 }
 
-###################################################FIN PROBANDO######################################################################
-
-=item
+=head2
 Esta funcion retorna la estructura de catalogacion con los datos de un Nivel (NO REPETIBLES).
 Ademas mapea las campos fijos de nivel 1, 2 y 3 a MARC
 =cut
@@ -1043,10 +1032,6 @@ sub getEstructuraYDatosDeNivel{
                     $descripcion_campo =        $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;	
         
                     my %hash_temp;
-#                     my $estructura = _getEstructuraFromCampoSubCampo( 
-#                                                                         $nivel_info_marc_array->[$i]->{'campo'},
-#                                                                         $subcampo->{'subcampo'}     
-#                                                             );
         
                     if($cat_estruct_array){
                         $hash_temp{'tiene_estructura'}  = '1';
@@ -1192,35 +1177,6 @@ sub getEstructuraCatalogacionFromDBCompleta{
     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
 }
 
-=item sub getEstructuraCatalogacionFromDBRepetibles
-    Retorna la estructura de catalogacion del Nivel 1, 2 o 3 que se encuentra configurada en la BD pero SOLO de los campos REPETIBLES
-=cut
-sub getEstructuraCatalogacionFromDBRepetibles{
-    my ($nivel,$itemType)=@_;
-
-    use C4::Modelo::CatEstructuraCatalogacion::Manager;
-
-    my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
-                                                                query   => [ 
-                                                                                nivel => { eq => $nivel },
-
-                                                                    or  => [   
-                                                                                itemtype => { eq => $itemType },
-                                                                                itemtype => { eq => 'ALL' },    
-                                                                            ],
-
-                                                                                intranet_habilitado => { gt => 0 }, 
-                                                                                repetible => { eq => 1 },
-                                                                        ],
-
-                                                                with_objects    => [ 'infoReferencia' ],  #LEFT OUTER JOIN
-                                                                require_objects => [ 'subCamposBase' ], #INNER JOIN
-                                                                sort_by         => ( 'intranet_habilitado' ),
-                                                             );
-
-    return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
-}
-
 
 =item sub _getEstructuraFromCampoSubCampo
 Este funcion devuelve la configuracion de la estructura de catalogacion de un campo, subcampo, realizada por el usuario
@@ -1315,6 +1271,52 @@ sub getHeader{
     }
 }
 #====================================================DEPRECATEDDDDDDDDDDD==================================================
+
+=item sub getEstructuraCatalogacionFromDBRepetibles
+    Retorna la estructura de catalogacion del Nivel 1, 2 o 3 que se encuentra configurada en la BD pero SOLO de los campos REPETIBLES
+# =cut
+# sub getEstructuraCatalogacionFromDBRepetibles{
+#     my ($nivel,$itemType)=@_;
+# 
+#     use C4::Modelo::CatEstructuraCatalogacion::Manager;
+# 
+#     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
+#                                                                 query   => [ 
+#                                                                                 nivel => { eq => $nivel },
+# 
+#                                                                     or  => [   
+#                                                                                 itemtype => { eq => $itemType },
+#                                                                                 itemtype => { eq => 'ALL' },    
+#                                                                             ],
+# 
+#                                                                                 intranet_habilitado => { gt => 0 }, 
+#                                                                                 repetible => { eq => 1 },
+#                                                                         ],
+# 
+#                                                                 with_objects    => [ 'infoReferencia' ],  #LEFT OUTER JOIN
+#                                                                 require_objects => [ 'subCamposBase' ], #INNER JOIN
+#                                                                 sort_by         => ( 'intranet_habilitado' ),
+#                                                              );
+# 
+#     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
+# }
+
+=item sub t_eliminarNivelRepetible
+Esta funcion elimina un "campo", de uno de los niveles repetibles segun el nivel indicado por parametro y segun el id del nivel repetible
+=cut
+# sub t_eliminarNivelRepetible{
+#     my ($params) = @_;
+#     
+#     if($params->{'nivel'} eq '1'){
+#         C4::AR::Nivel1::t_eliminarNivel1Repetible($params);
+#     }elsif($params->{'nivel'} eq '2'){
+#         C4::AR::Nivel2::t_eliminarNivel2Repetible($params);
+#     }elsif($params->{'nivel'} eq '3'){
+#         C4::AR::Nivel3::t_eliminarNivel3Repetible($params);
+#     }else{
+# #         ERROR
+#     }
+# }
 
 =item
 sub getEstructuraSinDatos{
