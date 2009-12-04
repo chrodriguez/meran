@@ -42,6 +42,16 @@ sub agregar{
     $self->save();
 }
 
+sub modificar{
+    my ($self)           = shift;
+    my ($marc_record)    = @_;
+
+    $self->setMarcRecord($marc_record);
+
+    $self->save();
+}
+
+
 sub eliminar{
     my ($self)      = shift;
     my ($params)    = @_;

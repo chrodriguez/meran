@@ -317,15 +317,16 @@ sub detalleMARC {
         foreach my $subfield ($field->subfields()) {
             my %hash_temp;
 
-            my $subcampo                = $subfield->[0];
-            my $dato                    = $subfield->[1];
+            my $subcampo                    = $subfield->[0];
+            my $dato                        = $subfield->[1];
             C4::AR::Debug::debug("Catalogacion => detalleMARC => campo: ".$campo);
             C4::AR::Debug::debug("Catalogacion => detalleMARC => subcampo: ".$subcampo);
             C4::AR::Debug::debug("Catalogacion => detalleMARC => dato: ".$dato);
-            $hash_temp{'subcampo'}      = $subcampo;
-            $hash_temp{'liblibrarian'}  = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
-             my $valor_referencia       = getDatoFromReferencia($campo, $subcampo, $dato);
-            $hash_temp{'dato'}          = $valor_referencia;
+            $hash_temp{'subcampo'}          = $subcampo;
+            $hash_temp{'liblibrarian'}      = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
+            $hash_temp{'datoReferencia'}    = $dato;
+             my $valor_referencia           = getDatoFromReferencia($campo, $subcampo, $dato);
+            $hash_temp{'dato'}              = $valor_referencia;
 
             push(@subcampos_array, \%hash_temp);
 
@@ -589,11 +590,14 @@ sub _setDatos_de_estructura {
 
     }elsif( ($cat->getReferencia) && ($cat->getTipo eq 'auto') ){
         #es un autocomplete
-        $hash_ref_result{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
-        $hash_ref_result{'datoReferencia'} = $hash_ref_result{'dato'};
+# FIXME esto ya no es necesario en el metodo toMARC, si el dato es una referencia, automaticamente se obtiene el dato y queda la referencia en 
+#datoReferencia
+
+#         $hash_ref_result{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
+#         $hash_ref_result{'datoReferencia'} = $hash_ref_result{'dato'};
         
-        my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'dato'});
-        $hash_ref_result{'dato'} = $valor_referencia;
+#         my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'dato'});
+#         $hash_ref_result{'dato'} = $valor_referencia;
 
         #si es un autocomplete y no tengo el dato de la referencia, muestro un blanco
         if ( ($hash_ref_result{'datoReferencia'} eq 0) || ($hash_ref_result{'dato'} eq 0) || not defined($hash_ref_result{'datoReferencia'}) ) {
@@ -1063,7 +1067,6 @@ sub getEstructuraSinDatos{
             $hash{'tiene_estructura'}  = '1';
             $hash{'dato'}              = '';
             $hash{'datoReferencia'}    = 0;
-            $hash{'Id_rep'}            = 0;
             
             my ($hash_temp) = _setDatos_de_estructura($sc, \%hash);
             

@@ -159,8 +159,12 @@ function _getIdComponente(campo, subcampo){
 */
 function _getMARC_conf_ById(id){
     for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){
-        if(MARC_OBJECT_ARRAY[i].idCompCliente == id){
-            return MARC_OBJECT_ARRAY[i];
+        var subcampos_array = MARC_OBJECT_ARRAY[i].getSubCamposArray();
+        for(var s=0;s<subcampos_array.length;s++){
+            if(subcampos_array[s].getIdCompCliente() == id){
+//                 return MARC_OBJECT_ARRAY[i];
+                return subcampos_array[s];
+            }
         }
     }
 
@@ -800,6 +804,7 @@ function procesarInfoJson(json){
     var campo_ant = '';
     var campo;
     var strComp;
+    var marc_group;
 
     for(var i=0; i < objetos.length; i++){
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
@@ -817,10 +822,13 @@ function procesarInfoJson(json){
         //proceso los subcampos
         var subcampo_marc_conf_obj = new subcampo_marc_conf(objetos[i]);
         var subcampos_array = campo_marc_conf_obj.getSubCamposArray();
-
+        marc_group = 'marc_group' + i;
         
         for(var j=0; j < subcampos_array.length; j++){
-            procesarObjeto(subcampos_array[j], 'marc_group' + i);
+            
+            subcampos_array[j].marc_group   = marc_group;
+            subcampos_array[j].posCampo     = i; //posicion del campo contenedor en MARC_OBJECT_ARRAY
+            procesarObjeto(subcampos_array[j], marc_group);
         }
 
         MARC_OBJECT_ARRAY[i] = campo_marc_conf_obj;
@@ -877,10 +885,7 @@ function procesarObjeto(objeto, marc_group){
 
     vista_intra =  marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + ' - ' + vista_intra
     var divLabel = crearDivLabel(vista_intra, marc_conf_obj.getIdCompCliente());
-
     strComp = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + divComp + "</li>";
-
-//     $("#" + getDivDelNivel()).append(strComp);
     $("#" + marc_group).append(strComp);
 
     if(tiene_estructura == 1){
@@ -1022,18 +1027,14 @@ function generarIdComponente(){
 
 function clone(id){
     var id_componente = generarIdComponente();
-//     var t = $('#LI'+id).clone();
-//     t.attr('LI'+id_componente, id_componente);
-//luego agregar esta estructura en el arreglo de componentes para q se pueda enviar al servidor
-//     t.insertAfter($('#LI'+id)); 
-    var obj_temp = _getMARC_conf_ById(id);
-alert(obj_temp);
+    var subcampo_temp = _getMARC_conf_ById(id);
     var obj;
-    obj = copy(obj_temp);
+    obj = copy(subcampo_temp);
     obj.idCompCliente = id_componente;
-    procesarObjeto(obj, obj_temp.marc_group);
+    procesarObjeto(obj, subcampo_temp.marc_group);
     
-    MARC_OBJECT_ARRAY.push(obj);
+    //agredo el subcampo en la poscion "posCampo" del arreglo MARC_OBJECT_ARRAY, donde se encuentra el campo contenedor
+    MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray().push(obj);
 }
 
 function cloneObj(o) {
@@ -1111,7 +1112,6 @@ function subcampo_marc_conf(obj){
     this.intranet_habilitado =  obj.intranet_habilitado;
     this.tiene_estructura = obj.tiene_estructura;
     this.visible = obj.visible;
-    this.Id_rep = obj.Id_rep;
     this.repetible = obj.repetible;
     this.referencia = obj.referencia;
     this.obligatorio = obj.obligatorio;

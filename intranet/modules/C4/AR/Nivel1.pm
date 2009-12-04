@@ -170,7 +170,6 @@ sub t_modificarNivel1 {
 
     if(!$msg_object->{'error'}){
     #No hay error
-		$params->{'modificado'}=1;
 
         my $db = $cat_registro_marc_n1->db;
         # enable transactions, if possible
@@ -178,10 +177,9 @@ sub t_modificarNivel1 {
          $db->begin_work;
     
         eval {
-
             my $marc_record = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
-            $params->{'marc_record'} = $marc_record->as_usmarc;
-            $cat_registro_marc_n1->agregar($params);  
+
+            $cat_registro_marc_n1->modificar($marc_record->as_usmarc);  
             #$id1 = $cat_registro_marc_n1->getId1;
             $db->commit;
             #se cambio el permiso con exito
