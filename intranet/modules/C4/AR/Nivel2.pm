@@ -63,7 +63,7 @@ Esta funcion realmente guarda el elemento en la base
 sub guardarRealmente{
     my ($msg_object,$id1,$marc_record)=@_;
     my $id2;
-    my $catRegistroMarcN3;
+    my $catRegistroMarcN2;
     if(!$msg_object->{'error'}){
         $catRegistroMarcN2 = C4::Modelo::CatRegistroMarcN2->new();  
         my $db = $catRegistroMarcN2->db;
