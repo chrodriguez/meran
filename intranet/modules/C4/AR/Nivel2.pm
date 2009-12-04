@@ -72,7 +72,6 @@ sub guardarRealmente{
         $db->begin_work;
     
         eval {
-            $params->{'marc_record'} = $marc_record->as_usmarc;
             $catRegistroMarcN2->agregar($id1,$marc_record->as_usmarc);
             $db->commit;
             #recupero el id1 recien agregado
