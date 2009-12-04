@@ -343,22 +343,19 @@ sub detalleMARC {
     return (\@MARC_result_array);
 }
 
-###############################################################A PARTIR DE ESTE PUNTO ES LO VIEJO########################################
 
-################################################################ 06/11/10 ##############################################################
-
-=item sub getNivel1RepetibleSinEstrucutra
+=item sub getCatRegistroMarcN1SinEstructura
   Esta funcion retorn un arreglo de objetos, donde los mismos no tiene configurada la estructura de catalogacion, o sea
   no se van a poder mostrar en el sistema
 =cut
-sub getNivel1RepetibleSinEstrucutra{
+sub getCatRegistroMarcN1SinEstructura{
     my ($nivel, $ini, $cantR) = @_;
 
     my $dbh   = C4::Context->dbh;
 
     my $sth = $dbh->prepare(" SELECT count(*) as cant
-                              FROM cat_nivel1_repetible n1r
-                              WHERE (n1r.campo, n1r.subcampo) NOT IN 
+                              FROM cat_registro_marc_n1 crmn1
+                              WHERE (crmn1.campo, crmn1.subcampo) NOT IN 
 
                               (SELECT cec.campo, cec.subcampo
                               FROM cat_estructura_catalogacion cec
@@ -368,8 +365,8 @@ sub getNivel1RepetibleSinEstrucutra{
     my $cant = $data->{'cant'};
 
     my $sth = $dbh->prepare(" SELECT *
-                              FROM cat_nivel1_repetible n1r
-                              WHERE (n1r.campo, n1r.subcampo) NOT IN 
+                              FROM cat_registro_marc_n1 crmn1
+                              WHERE (crmn1.campo, crmn1.subcampo) NOT IN 
 
                               (SELECT cec.campo, cec.subcampo
                               FROM cat_estructura_catalogacion cec
@@ -379,28 +376,28 @@ sub getNivel1RepetibleSinEstrucutra{
     my @array_objects;
 
     while (my $data = $sth->fetchrow_hashref) {
-        my $nivel_repetible = C4::AR::Nivel1::getNivel1RepetibleFromId1Repetible($data->{'rep_n1_id'});
+        my $nivel_array_ref = C4::AR::Nivel1::getNivel1FromId1($data->{'id'});
 
-        if($nivel_repetible){
-            push (@array_objects, $nivel_repetible);
+        if($nivel_array_ref){
+            push (@array_objects, $nivel_array_ref);
         }
     } # while
 
     return ($cant, @array_objects);
 }
 
-=item sub getNivel1RepetibleSinEstrucutra
+=item sub getCatRegistroMarcN2SinEstructura
   Esta funcion retorn un arreglo de objetos, donde los mismos no tiene configurada la estructura de catalogacion, o sea
   no se van a poder mostrar en el sistema
 =cut
-sub getNivel2RepetibleSinEstrucutra{
+sub getCatRegistroMarcN2SinEstructura{
     my ($nivel, $ini, $cantR) = @_;
 
     my $dbh   = C4::Context->dbh;
 
     my $sth = $dbh->prepare(" SELECT count(*) as cant
-                              FROM cat_nivel2_repetible n2r
-                              WHERE (n2r.campo, n2r.subcampo) NOT IN 
+                              FROM cat_registro_marc_n2 crmn2
+                              WHERE (crmn2.campo, crmn2.subcampo) NOT IN 
 
                               (SELECT cec.campo, cec.subcampo
                               FROM cat_estructura_catalogacion cec
@@ -410,8 +407,8 @@ sub getNivel2RepetibleSinEstrucutra{
     my $cant = $data->{'cant'};
 
     my $sth = $dbh->prepare(" SELECT *
-                              FROM cat_nivel2_repetible n2r
-                              WHERE (n2r.campo, n2r.subcampo) NOT IN 
+                              FROM cat_registro_marc_n2 crmn2
+                              WHERE (crmn2.campo, crmn2.subcampo) NOT IN 
 
                               (SELECT cec.campo, cec.subcampo
                               FROM cat_estructura_catalogacion cec
@@ -421,28 +418,29 @@ sub getNivel2RepetibleSinEstrucutra{
     my @array_objects;
 
     while (my $data = $sth->fetchrow_hashref) {
-        my $nivel_repetible = C4::AR::Nivel2::getNivel2RepetibleFromId2Repetible($data->{'rep_n2_id'});
+        my $nivel_array_ref = C4::AR::Nivel2::getNivel2FromId2($data->{'id'});
 
-        if($nivel_repetible){
-            push (@array_objects, $nivel_repetible);
+        if($nivel_array_ref){
+            push (@array_objects, $nivel_array_ref);
         }
     } # while
 
     return ($cant, @array_objects);
 }
 
-=item sub getNivel1RepetibleSinEstrucutra
+
+=item sub getCatRegistroMarcN3SinEstructura
   Esta funcion retorn un arreglo de objetos, donde los mismos no tiene configurada la estructura de catalogacion, o sea
   no se van a poder mostrar en el sistema
 =cut
-sub getNivel3RepetibleSinEstrucutra{
+sub getCatRegistroMarcN3SinEstructura{
     my ($nivel, $ini, $cantR) = @_;
 
     my $dbh   = C4::Context->dbh;
 
     my $sth = $dbh->prepare(" SELECT count(*) as cant
-                              FROM cat_nivel3_repetible n3r
-                              WHERE (n3r.campo, n3r.subcampo) NOT IN 
+                              FROM cat_registro_marc_n3 crmn3
+                              WHERE (crmn3.campo, crmn3.subcampo) NOT IN 
 
                               (SELECT cec.campo, cec.subcampo
                               FROM cat_estructura_catalogacion cec
@@ -452,8 +450,8 @@ sub getNivel3RepetibleSinEstrucutra{
     my $cant = $data->{'cant'};
 
     my $sth = $dbh->prepare(" SELECT *
-                              FROM cat_nivel3_repetible n3r
-                              WHERE (n3r.campo, n3r.subcampo) NOT IN 
+                              FROM cat_registro_marc_n3 crmn3
+                              WHERE (crmn3.campo, crmn3.subcampo) NOT IN 
 
                               (SELECT cec.campo, cec.subcampo
                               FROM cat_estructura_catalogacion cec
@@ -463,15 +461,16 @@ sub getNivel3RepetibleSinEstrucutra{
     my @array_objects;
 
     while (my $data = $sth->fetchrow_hashref) {
-        my $nivel_repetible = C4::AR::Nivel3::getNivel3RepetibleFromId3Repetible($data->{'rep_n3_id'});
+        my $nivel_array_ref = C4::AR::Nivel3::getNivel3FromId3($data->{'id'});
 
-        if($nivel_repetible){
-            push (@array_objects, $nivel_repetible);
+        if($nivel_array_ref){
+            push (@array_objects, $nivel_array_ref);
         }
     } # while
 
     return ($cant, @array_objects);
 }
+
 
 =item sub getImportacionSinEstructura
   Retorna un arreglo de objetos, campo, subcampo y dato, los cuales no se encuentran en la cat_estructura_catalogacion
@@ -483,22 +482,22 @@ sub getImportacionSinEstructura{
     my $ini = $params->{'ini'};
     my $cantR = $params->{'cantR'};
 
-    my @nivel_repetible_array_ref;
+    my @nivel_array_ref;
     my $cant;
 
     if($nivel eq '1'){
-      ($cant, @nivel_repetible_array_ref) = getNivel1RepetibleSinEstrucutra($nivel, $ini, $cantR);
+      ($cant, @nivel_array_ref) = getCatRegistroMarcN1SinEstructura($nivel, $ini, $cantR);
     }elsif($nivel eq '2'){
-      ($cant, @nivel_repetible_array_ref) = getNivel2RepetibleSinEstrucutra($nivel, $ini, $cantR);
+      ($cant, @nivel_array_ref) = getCatRegistroMarcN2SinEstructura($nivel, $ini, $cantR);
     }elsif($nivel eq '3'){
-      ($cant, @nivel_repetible_array_ref) = getNivel3RepetibleSinEstrucutra($nivel, $ini, $cantR);
+      ($cant, @nivel_array_ref) = getCatRegistroMarcN3SinEstructura($nivel, $ini, $cantR);
     }
 
 
 
-    if(scalar(@nivel_repetible_array_ref) > 0){
-        C4::AR::Debug::debug("Catalogacion => getImportacionSinEstructura => cant: ".scalar(@nivel_repetible_array_ref));
-        return ($cant, @nivel_repetible_array_ref);
+    if(scalar(@nivel_array_ref) > 0){
+        C4::AR::Debug::debug("Catalogacion => getImportacionSinEstructura => cant: ".scalar(@nivel_array_ref));
+        return ($cant, @nivel_array_ref);
     }else{
         return 0;
     }
@@ -543,6 +542,8 @@ sub getDatoFromReferencia{
         return $dato;
     }
 }
+###############################################################A PARTIR DE ESTE PUNTO ES LO VIEJO########################################
+
 
 =head2  
 sub _setDatos_de_estructura
@@ -555,13 +556,13 @@ Esta funcion setea
 =cut
 sub _setDatos_de_estructura {
     my ($cat, $datos_hash_ref) = @_;
+
     my %hash_ref_result;
 
     $hash_ref_result{'campo'} =                  $cat->getCampo;
     $hash_ref_result{'subcampo'} =               $cat->getSubcampo;
     $hash_ref_result{'dato'} =                   $datos_hash_ref->{'dato'};
     $hash_ref_result{'datoReferencia'}=          $datos_hash_ref->{'datoReferencia'};
-    $hash_ref_result{'Id_rep'} =                 $datos_hash_ref->{'Id_rep'};
     $hash_ref_result{'tiene_estructura'}=        $datos_hash_ref->{'tiene_estructura'};
     $hash_ref_result{'ayuda_subcampo'} =         $datos_hash_ref->{'ayuda_subcampo'};
     $hash_ref_result{'descripcion_subcampo'} =   $datos_hash_ref->{'descripcion_subcampo'};
@@ -578,12 +579,6 @@ sub _setDatos_de_estructura {
     $hash_ref_result{'rules'} =                  $cat->getRules;    
     $hash_ref_result{'fijo'} =                   $cat->getFijo;  
 
-    C4::AR::Debug::debug("");
-    if($cat->subCamposBase->getRepetible){    
-        #solo para debug
-        C4::AR::Debug::debug("_setDatos_de_estructura => ======== ES UN REPETIBLE ======== ");
-        C4::AR::Debug::debug("_setDatos_de_estructura => Id_rep: ".$datos_hash_ref->{'Id_rep'});
-    }
     C4::AR::Debug::debug("_setDatos_de_estructura => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
     C4::AR::Debug::debug("_setDatos_de_estructura => dato: ".$datos_hash_ref->{'dato'});
     C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$datos_hash_ref->{'datoReferencia'});
@@ -596,14 +591,14 @@ sub _setDatos_de_estructura {
         #es un autocomplete
         $hash_ref_result{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
         $hash_ref_result{'datoReferencia'} = $hash_ref_result{'dato'};
+        
+        my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'dato'});
+        $hash_ref_result{'dato'} = $valor_referencia;
+
         #si es un autocomplete y no tengo el dato de la referencia, muestro un blanco
         if ( ($hash_ref_result{'datoReferencia'} eq 0) || ($hash_ref_result{'dato'} eq 0) || not defined($hash_ref_result{'datoReferencia'}) ) {
           $hash_ref_result{'dato'} = 'NO TIENE';
         }
-  
-        
-        my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'dato'});
-        $hash_ref_result{'dato'} = $valor_referencia;
 
         C4::AR::Debug::debug("_setDatos_de_estructura => ======== AUTOCOMPLETE ======== ");
         C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref_result{'datoReferencia'});
@@ -623,12 +618,6 @@ sub _setDatos_de_estructura {
 
 
 
-
-
-
-
-
-################################################### NUEVAS NUEVAS FRESQUITAS ##############################################################
 =item sub subirOrden
 Esta funcion sube el orden como se va a mostrar del campo, subcampo catalogado
 =cut
@@ -844,36 +833,6 @@ sub t_modificarEnEstructuraCatalogacion {
 
 #======================================================SOPORTE PARA ESTRUCTURA CATALOGACION====================================================
 
-
-
-#para los datos q no tienen estructura
-sub _setDatos_de_estructura2 {
-    my ($cat, $datos_hash_ref) = @_;
-
-    my %hash_ref_result;
-
-    $hash_ref_result{'campo'} =                  $cat->getCampo;
-    $hash_ref_result{'subcampo'} =               $cat->getSubcampo;
-    $hash_ref_result{'Id_rep'} =                 $datos_hash_ref->{'Id_rep'};
-    $hash_ref_result{'tiene_estructura'}=        $datos_hash_ref->{'tiene_estructura'};
-    $hash_ref_result{'dato'}=                    $datos_hash_ref->{'dato'};
-    $hash_ref_result{'nivel'} =                  '';#$cat->getNivel;
-    $hash_ref_result{'visible'} =                '';#$cat->getVisible;
-    $hash_ref_result{'liblibrarian'} =           $cat->getLiblibrarian;
-    $hash_ref_result{'itemtype'} =               '';#$cat->getItemType;
-    $hash_ref_result{'repetible'} =              '';#$cat->subCamposBase->getRepetible;
-    $hash_ref_result{'tipo'} =                   '';#$cat->getTipo;
-    $hash_ref_result{'referencia'} =             '';#$cat->getReferencia;
-    $hash_ref_result{'obligatorio'} =            $cat->getObligatorio;
-    $hash_ref_result{'idCompCliente'} =          '';#$cat->getIdCompCliente;
-    $hash_ref_result{'intranet_habilitado'} =    '';#$cat->getIntranet_habilitado;
-    $hash_ref_result{'rules'} =                  '';#$cat->getRules;    
-
-    C4::AR::Debug::debug("_setDatos_de_estructura2 => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
-    C4::AR::Debug::debug("_setDatos_de_estructura2 => dato: ".$datos_hash_ref->{'dato'});
-
-    return (\%hash_ref_result);
-}
 
 =head2
 sub getSubCamposFromEstructuraByCampo
@@ -1271,6 +1230,36 @@ sub getHeader{
     }
 }
 #====================================================DEPRECATEDDDDDDDDDDD==================================================
+
+#para los datos q no tienen estructura
+# sub _setDatos_de_estructura2 {
+#     my ($cat, $datos_hash_ref) = @_;
+# 
+#     my %hash_ref_result;
+# 
+#     $hash_ref_result{'campo'} =                  $cat->getCampo;
+#     $hash_ref_result{'subcampo'} =               $cat->getSubcampo;
+#     $hash_ref_result{'Id_rep'} =                 $datos_hash_ref->{'Id_rep'};
+#     $hash_ref_result{'tiene_estructura'}=        $datos_hash_ref->{'tiene_estructura'};
+#     $hash_ref_result{'dato'}=                    $datos_hash_ref->{'dato'};
+#     $hash_ref_result{'nivel'} =                  '';#$cat->getNivel;
+#     $hash_ref_result{'visible'} =                '';#$cat->getVisible;
+#     $hash_ref_result{'liblibrarian'} =           $cat->getLiblibrarian;
+#     $hash_ref_result{'itemtype'} =               '';#$cat->getItemType;
+#     $hash_ref_result{'repetible'} =              '';#$cat->subCamposBase->getRepetible;
+#     $hash_ref_result{'tipo'} =                   '';#$cat->getTipo;
+#     $hash_ref_result{'referencia'} =             '';#$cat->getReferencia;
+#     $hash_ref_result{'obligatorio'} =            $cat->getObligatorio;
+#     $hash_ref_result{'idCompCliente'} =          '';#$cat->getIdCompCliente;
+#     $hash_ref_result{'intranet_habilitado'} =    '';#$cat->getIntranet_habilitado;
+#     $hash_ref_result{'rules'} =                  '';#$cat->getRules;    
+# 
+#     C4::AR::Debug::debug("_setDatos_de_estructura2 => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
+#     C4::AR::Debug::debug("_setDatos_de_estructura2 => dato: ".$datos_hash_ref->{'dato'});
+# 
+#     return (\%hash_ref_result);
+# }
+
 
 =item sub getEstructuraCatalogacionFromDBRepetibles
     Retorna la estructura de catalogacion del Nivel 1, 2 o 3 que se encuentra configurada en la BD pero SOLO de los campos REPETIBLES
