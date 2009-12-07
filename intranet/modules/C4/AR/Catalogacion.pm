@@ -166,13 +166,18 @@ sub Z3950_to_meran{
     $msg_object->{'tipo'}="INTRA";
     
     my ($marc_record_limpio1,$marc_record_limpio2,$marc_record_limpio3,$marc_record_campos_sin_definir)=_procesar_referencias($marc_record);
-    C4::AR::Debug::debug("Z3950 marc_nivel1 => SALIDA => as_formatted ".$marc_record_limpio1->as_formatted());
-    ($msg_object,$id1)=C4::AR::Nivel1::guardarRealmente($msg_object,$marc_record_limpio1); 
-    C4::AR::Debug::debug("Z3950 marc_nivel2 => SALIDA => as_formatted ".$marc_record_limpio2->as_formatted());
-    ($msg_object,$id1,$id2)=C4::AR::Nivel2::guardarRealmente($msg_object,$id1,$marc_record_limpio2); 
-    C4::AR::Debug::debug("Z3950 marc_nivel3 => ERROR en la estrcutura => as_formatted ".$marc_record_limpio3->as_formatted());
-    C4::AR::Debug::debug("Z3950 WARNING campos no definidos en la biblioa!!  => SALIDA => as_formatted ".$marc_record_campos_sin_definir->as_formatted());
-
+    if (scalar($marc_record_limpio1->fields())>0){
+    	C4::AR::Debug::debug("Z3950 marc_nivel1 => SALIDA => as_formatted ".$marc_record_limpio1->as_formatted());
+        ($msg_object,$id1)=C4::AR::Nivel1::guardarRealmente($msg_object,$marc_record_limpio1); }
+    if (scalar($marc_record_limpio2->fields())>0){
+    	C4::AR::Debug::debug("Z3950 marc_nivel2 => SALIDA => as_formatted ".$marc_record_limpio2->as_formatted());
+    	($msg_object,$id1,$id2)=C4::AR::Nivel2::guardarRealmente($msg_object,$id1,$marc_record_limpio2); }
+    if (scalar($marc_record_limpio3->fields())>0){
+    	C4::AR::Debug::debug("Z3950 marc_nivel3 => ERROR en la estrcutura => as_formatted ".$marc_record_limpio3->as_formatted());
+    }
+    if (scalar($marc_record_campos_sin_definir->fields())>0){
+    	C4::AR::Debug::debug("Z3950 WARNING campos no definidos en la biblia!!  => SALIDA => as_formatted ".$marc_record_campos_sin_definir->as_formatted());
+    }
     return($msg_object);
     
 }
@@ -248,9 +253,9 @@ sub _procesar_referencias{
                 my $dato                    = $subfield->[1];
                 if (($referenciados{$campo})&&(C4::AR::Utilidades::existeInArray($subcampo, @{$referenciados{$campo}}))){
                     #si entre aca quiere decir q el campo esta referenciado;
-                   C4::AR::Debug::debug("ACA ESTAMOS".$campo.$subcampo.$dato);
+#                    C4::AR::Debug::debug("ACA ESTAMOS".$campo.$subcampo.$dato);
                    $dato=_procesar_referencia($campo,$subcampo,$dato);
-                   C4::AR::Debug::debug("ACA ESTAMOS".$campo.$subcampo."NUEVO DATO".$dato);
+#                    C4::AR::Debug::debug("ACA ESTAMOS".$campo.$subcampo."NUEVO DATO".$dato);
                 }
                 if ( ($dato ne '')&&(C4::AR::Utilidades::existeInArray($subcampo, @{$campos_nivel1{$campo}} ) )) { 
                     push(@subcampos1_array, ($subcampo => $dato));
@@ -263,20 +268,20 @@ sub _procesar_referencias{
                             }
             }
         if (scalar(@subcampos1_array)>0){
-        my $field_limpio1 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos1_array);
-        $marc_record_limpio1->add_fields($field_limpio1);}
+        	my $field_limpio1 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos1_array);
+        	$marc_record_limpio1->add_fields($field_limpio1);}
         if (scalar(@subcampos2_array)>0){
-        my $field_limpio2 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos2_array);
-        $marc_record_limpio2->add_fields($field_limpio2);}
+        	my $field_limpio2 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos2_array);
+        	$marc_record_limpio2->add_fields($field_limpio2);}
         if (scalar(@subcampos3_array)>0){
-        my $field_limpio3 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos3_array);
-        $marc_record_limpio3->add_fields($field_limpio3);}
+        	my $field_limpio3 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos3_array);
+        	$marc_record_limpio3->add_fields($field_limpio3);}
         if (scalar(@subcampos_sin_definir_array)>0){
-        my $field_sin_definir = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos_sin_definir_array);
-        $marc_record_campos_sin_definir->add_fields($field_sin_definir);}
+        	my $field_sin_definir = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos_sin_definir_array);
+        	$marc_record_campos_sin_definir->add_fields($field_sin_definir);}
         }
     }
-    C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$marc_record_limpio1->as_formatted());
+#     C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$marc_record_limpio1->as_formatted());
     return($marc_record_limpio1,$marc_record_limpio2,$marc_record_limpio3,$marc_record_campos_sin_definir);
 }
 
