@@ -62,6 +62,18 @@ sub agregar{
     $self->save();
 }
 
+
+sub modificar{
+    my ($self)           = shift;
+    my ($params, $db)    = @_;
+
+    $self->setId2($params->{'id2'});
+    $self->setId1($params->{'id1'});
+    $self->setMarcRecord($params->{'marc_record'});
+
+    $self->save();
+}
+
 =head2
     sub eliminar
 =cut

@@ -82,6 +82,68 @@ sub t_guardarNivel3 {
 }
 
 
+=item sub t_modificarNivel3
+    Modifica los ejemplares del nivel 3 pasados por parametro
+    @parametros:
+        $params->{'ID3_ARRAY'}: arreglo de ID3
+=cut
+sub t_modificarNivel3 {
+    my ($params) = @_;
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object = C4::AR::Mensajes::create();
+
+    my $cat_registro_marc_n3 = C4::Modelo::CatRegistroMarcN3->new();
+    my $marc_record = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
+    my $db = $cat_registro_marc_n3->db;
+    $params->{'modificado'} = 1;
+    # enable transactions, if possible
+    $db->{connect_options}->{AutoCommit} = 0;
+    
+    eval {
+
+            my $id3_array = $params->{'ID3_ARRAY'}; 
+            my $cant = scalar(@$id3_array);
+            C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: ".$cant);
+
+            for(my $i=0;$i<$cant;$i++){
+                  my $catNivel3;
+            C4::AR::Debug::debug("t_modificarNivel3 => ID3 a modificar: ".$params->{'ID3_ARRAY'}->[$i]);
+
+            $params->{'id3'} = $params->{'ID3_ARRAY'}->[$i];
+            #verifico las condiciones para actualizar los datos
+            _verificarUpdateItem($msg_object, $params);
+
+            if(!$msg_object->{'error'}){
+                ($cat_registro_marc_n3) = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i], $db);
+#                 $db = $catNivel3->db;
+                $params->{'marc_record'} = $marc_record->as_usmarc;
+                $cat_registro_marc_n3->modificar($params, $db);  #si es mas de un ejemplar, a todos les setea la misma info
+                #se cambio el permiso con exito
+                $msg_object->{'error'} = 0;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$cat_registro_marc_n3->getBarcode]} ) ;
+            }
+            }#END for(my $i=0;$i<$cant;$i++)
+
+            $db->commit;
+    };
+
+    if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
+        $db->rollback;
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U385', 'params' => []} ) ;
+    }
+
+    $db->{connect_options}->{AutoCommit} = 1;
+
+    return ($msg_object);
+}
+
+
+
 =head2 sub getNivel3FromId2
 Recupero todos los nivel 3 a partir de un id2
 =cut
@@ -703,65 +765,6 @@ sub _existeBarcodeEnArray {
     my ($barcode, $barcodes_array)= @_;
 
     return C4::AR::Utilidades::existeInArray($barcode, $barcodes_array);
-}
-
-=item sub t_modificarNivel3
-    Modifica los ejemplares del nivel 3 pasados por parametro
-    @parametros:
-        $params->{'ID3_ARRAY'}: arreglo de ID3
-=cut
-sub t_modificarNivel3 {
-    my ($params) = @_;
-
-## FIXME ver si falta verificar algo!!!!!!!!!!
-    my $msg_object= C4::AR::Mensajes::create();
-    my $catNivel3;
-
-	  my	$catNivel2 = C4::Modelo::CatNivel2->new();
-	  my	$db = $catNivel2->db;
-	  $params->{'modificado'} = 1;
-	  # enable transactions, if possible
-	  $db->{connect_options}->{AutoCommit} = 0;
-	
-    eval {
-
-		    my $id3_array = $params->{'ID3_ARRAY'}; 
-		    my $cant = scalar(@$id3_array);
-        C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: ".$cant);
-
-		    for(my $i=0;$i<$cant;$i++){
-			      my $catNivel3;
-            C4::AR::Debug::debug("t_modificarNivel3 => ID3 a modificar: ".$params->{'ID3_ARRAY'}->[$i]);
-
-            $params->{'id3'} = $params->{'ID3_ARRAY'}->[$i];
-            #verifico las condiciones para actualizar los datos
-            _verificarUpdateItem($msg_object, $params);
-
-            if(!$msg_object->{'error'}){
-                ($catNivel3) = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i], $db);
-#                 $db = $catNivel3->db;
-                $catNivel3->agregar($db, $params);  #si es mas de un ejemplar, a todos les setea la misma info
-                #se cambio el permiso con exito
-                $msg_object->{'error'} = 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$catNivel3->getBarcode]} ) ;
-            }
-		    }#END for(my $i=0;$i<$cant;$i++)
-
-		    $db->commit;
-    };
-
-    if ($@){
-        #Se loguea error de Base de Datos
-        &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
-        $db->rollback;
-        #Se setea error para el usuario
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U385', 'params' => []} ) ;
-    }
-
-    $db->{connect_options}->{AutoCommit} = 1;
-
-	return ($msg_object);
 }
 
 
