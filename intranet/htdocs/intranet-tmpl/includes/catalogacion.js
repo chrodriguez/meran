@@ -807,6 +807,7 @@ function procesarInfoJson(json){
     var campo_ant = '';
     var campo;
     var strComp;
+    var strIndicadores;
     var marc_group;
 
     for(var i=0; i < objetos.length; i++){
@@ -818,7 +819,17 @@ function procesarInfoJson(json){
         strComp = "<div id='marc_group" + i + "' ><li class='MARCHeader'>";
         strComp = strComp + "<div class='MARCHeader_content'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
-        strComp = strComp + "<label>" + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo())  + " " + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre() + " </label></div>";
+    
+//         if(campo_marc_conf_obj.getIndicadorPrimario() != ''){
+            strIndicadores = "<label>Indicador Primero: " + campo_marc_conf_obj.getIndicadorPrimario() + "</label>";
+//         }
+
+//         if(campo_marc_conf_obj.getIndicadorSecundario() != ''){
+            strIndicadores = strIndicadores + "<label>Indicador Segundo: " + campo_marc_conf_obj.getIndicadorSecundario() + "</label>";
+//         }
+
+        strComp = strComp + "<label>" + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo())  + " " + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre() + strIndicadores + "</label></div>";
+
         strComp = strComp + "<div class='MARCHeader_controls'> + - </div></div></li></div>";
         $("#" + getDivDelNivel()).append(strComp);
 

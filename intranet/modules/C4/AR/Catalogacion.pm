@@ -721,6 +721,85 @@ sub getEstructuraYDatosDeNivel{
     return @result_total;
 }
 
+
+=head2
+    sub getIndicadorPrimarioByCampo
+    Trae todos los inficadores primarios segun el campo pasado por parametro
+=cut
+sub getIndicadorPrimarioByCampo{
+    my ($campo) = @_;
+
+    use C4::Modelo::PrefIndicadorPrimario::Manager;
+
+    my $indicadores_array_ref = C4::Modelo::PrefIndicadorPrimario::Manager->get_pref_indicador_primario(   
+                                                                query => [ 
+                                                                                campo_marc => { eq => $campo },
+
+                                                                        ],
+
+                                                                sort_by => ( 'dato' ),
+                                                             );
+
+    return ($indicadores_array_ref);
+}
+
+=head2
+    sub getIndicadorSecundarioByCampo
+    Trae todos los inficadores primarios segun el campo pasado por parametro
+=cut
+sub getIndicadorSecundarioByCampo{
+    my ($campo) = @_;
+
+    use C4::Modelo::PrefIndicadorSecundario::Manager;
+
+    my $indicadores_array_ref = C4::Modelo::PrefIndicadorSecundario::Manager->get_pref_indicador_secundario(   
+                                                                query => [ 
+                                                                                campo_marc => { eq => $campo },
+
+                                                                        ],
+
+                                                                sort_by => ( 'dato' ),
+                                                             );
+
+    return ($indicadores_array_ref);
+}
+
+sub getOpcionesFromIdicadorPrimarioByCampo{
+    my ($campo, $subcampo) = @_;
+
+    my ($indicadores_array_ref) = getIndicadorPrimarioByCampo($campo);
+    my @array_valores;
+
+    for(my $i=0; $i<scalar(@$indicadores_array_ref); $i++ ){
+        my $valor;
+        $valor->{"clave"}= $indicadores_array_ref->[$i]->getId;
+        $valor->{"valor"}= $indicadores_array_ref->[$i]->getDato;
+
+        push (@array_valores, $valor);
+    }
+
+    return (\@array_valores);
+}
+
+sub getOpcionesFromIdicadorSecundarioByCampo{
+    my ($campo, $subcampo) = @_;
+
+    my ($indicadores_array_ref) = getIndicadorSecundarioByCampo($campo);
+    my @array_valores;
+
+    for(my $i=0; $i<scalar(@$indicadores_array_ref); $i++ ){
+        my $valor;
+        $valor->{"clave"}= $indicadores_array_ref->[$i]->getId;
+        $valor->{"valor"}= $indicadores_array_ref->[$i]->getDato;
+
+        push (@array_valores, $valor);
+    }
+
+    return (\@array_valores);
+}
+
+
+
 sub getEstructuraSinDatos{
     my ($params) = @_;
     C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================INI");
