@@ -172,16 +172,18 @@ sub getId_ui_origen{
     my ($self)      = shift;
 
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("995","d"));
 
-    return C4::AR::Utilidades::trim($marc_record->subfield("995","d"));
+    return C4::AR::Utilidades::trim($ref);
 }
 
 sub getId_ui_poseedora{
     my ($self)      = shift;
 
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("995","c"));
 
-    return C4::AR::Utilidades::trim($marc_record->subfield("995","c"));
+    return C4::AR::Utilidades::trim($ref);
 }
 
 =head2 sub getIdEstado
@@ -200,8 +202,9 @@ sub getEstadoObject{
     my ($self)      = shift;
 
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdEstado());
      
-    my $estado      = C4::AR::Referencias::getEstadoObject($self->getIdEstado());
+    my $estado      = C4::AR::Referencias::getEstadoObject($ref);
         
     if(!$estado){
             C4::AR::Debug::debug("CatRegistroMarcN3 => getEstadoObject()=> EL OBJECTO (ID) RefEstado NO EXISTE");
@@ -228,8 +231,10 @@ sub getDisponibilidadObject{
     my ($self)              = shift;
 
     my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    my $ref                 = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdDisponibilidad());
+
      
-    my $disponibilidad      = C4::AR::Referencias::getDisponibilidadObject($self->getIdDisponibilidad());
+    my $disponibilidad      = C4::AR::Referencias::getDisponibilidadObject($ref);
         
     if(!$disponibilidad){
             C4::AR::Debug::debug("CatRegistroMarcN3 => getDisponibilidadObject()=> EL OBJECTO (ID) RefDisponibilidad NO EXISTE");

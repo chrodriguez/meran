@@ -81,7 +81,8 @@ sub _meran_to_marc{
 #             C4::AR::Debug::debug("CAMPO => ".$campo);
             C4::AR::Utilidades::printHASH($subcampo);
             while ( my ($key, $value) = each(%$subcampo) ){
-                    C4::AR::Utilidades::printARRAY($autorizados{$campo});
+#                 C4::AR::Utilidades::printARRAY($autorizados{$campo});
+                $value = _procesar_referencia($campo, $key, $value);
                 if ( ($value ne '')&&(C4::AR::Utilidades::existeInArray($key, @{$autorizados{$campo}} ) )) {
                     push(@subcampos_array, ($key => $value));
                     C4::AR::Debug::debug("ACEPTADO clave = ".$key." valor: ".$value);
@@ -181,30 +182,6 @@ sub Z3950_to_meran{
     return($msg_object);
     
 }
-
-=head2
-sub _procesar_referencia
-
-Esta funcion recibe un campo, un subcampo y un dato y busca en la tabla de referencia correspondinte en valor que se corresponde con el dato, en el caso de no encontrarlo lo agrega en la tabla de referencia correspondiente y devuelve el id del nuevo elemento
-=cut
-sub _procesar_referencia{
-    my ($campo,$subcampo,$dato)=@_;
-    my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
-    if($estructura){
-       if($estructura->getReferencia){
-            #tiene referencia
-            my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
-            my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
-            if (!$obj_generico){ 
-                return('8');
-                #FIXME, este valor es el que devuelve cuando NO lo encuentra en la tabla de referencia, en este caso deberia arreglarlo
-                }
-            return('10'); #FIXME, este valor es el que devuelve cuando lo encuentra en la tabla de referencia
-        } 
-    }
-    return("FIXME");
-}
-
 
 
 =head2
@@ -324,13 +301,15 @@ sub detalleMARC {
 
             my $subcampo                    = $subfield->[0];
             my $dato                        = $subfield->[1];
-            C4::AR::Debug::debug("Catalogacion => detalleMARC => campo: ".$campo);
-            C4::AR::Debug::debug("Catalogacion => detalleMARC => subcampo: ".$subcampo);
-            C4::AR::Debug::debug("Catalogacion => detalleMARC => dato: ".$dato);
+#             C4::AR::Debug::debug("Catalogacion => detalleMARC => campo: ".$campo);
+#             C4::AR::Debug::debug("Catalogacion => detalleMARC => subcampo: ".$subcampo);
+#             C4::AR::Debug::debug("Catalogacion => detalleMARC => dato: ".$dato);
             $hash_temp{'subcampo'}          = $subcampo;
             $hash_temp{'liblibrarian'}      = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
+            $dato                           = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
             $hash_temp{'datoReferencia'}    = $dato;
-             my $valor_referencia           = getDatoFromReferencia($campo, $subcampo, $dato);
+#             C4::AR::Debug::debug("Catalogacion => detalleMARC => dato: ".$dato);
+            my $valor_referencia            = getDatoFromReferencia($campo, $subcampo, $dato);
             $hash_temp{'dato'}              = $valor_referencia;
 
             push(@subcampos_array, \%hash_temp);
@@ -529,6 +508,7 @@ sub getDatoFromReferencia{
         if($estructura){
             if($estructura->getReferencia){
                 #tiene referencia
+
                 my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
                 my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
                                                                                 #campo_tabla,                   id_tabla
@@ -548,6 +528,91 @@ sub getDatoFromReferencia{
         return $dato;
     }
 }
+
+
+=head2
+    sub getRefFromStringConArrobas
+    esta funcion devuelve el dato (referencia) a partir de un string
+    @tabla@campo@subcampo@dato
+=cut
+sub getRefFromStringConArrobas{
+    my ($dato) = @_;
+
+    my @datos_array = split(/@/,$dato);
+=item
+    @datos_array[0]; #nada
+    @datos_array[1]; #tabla
+    @datos_array[2]; #campo
+    @datos_array[3]; #subcampo
+    @datos_array[4]; #dato
+=cut
+#     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 1: ".@datos_array[1]);
+#     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 2: ".@datos_array[2]);
+#     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 3: ".@datos_array[3]);
+    C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 4: ".@datos_array[4]);
+
+    return @datos_array[4];
+}
+
+=head2
+    sub getRefFromStringConArrobasByCampoSubcampo
+    Esta funcion llama getRefFromStringConArrobas, solo q antes verifica si el dato es una referencia
+    Si es una referencia, devuelve el dato (referencia) sin las @
+    Si no es una referencia, se devuelve el dato pasado por parametro
+=cut
+sub getRefFromStringConArrobasByCampoSubcampo{
+    my ($campo, $subcampo, $dato) = @_;
+
+    my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+
+    if($estructura){
+        if($estructura->getReferencia){
+        #tiene referencia
+            return getRefFromStringConArrobas($dato);
+        }
+    }
+
+    return $dato;
+}
+=head2
+sub _procesar_referencia
+
+Esta funcion recibe un campo, un subcampo y un dato y busca en la tabla de referencia correspondinte en valor que se corresponde con el dato, en el caso de no encontrarlo lo agrega en la tabla de referencia correspondiente y devuelve el id del nuevo elemento
+=cut
+sub _procesar_referencia{
+    my ($campo, $subcampo, $dato) = @_;
+
+    C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
+
+    my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+    if($estructura){
+       if($estructura->getReferencia){
+            #tiene referencia
+            my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
+            my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+#             if (!$obj_generico){ 
+
+                my $string_result = '@'.$obj_generico->getTableName.'@'.$campo.'@'.$subcampo.'@'.$dato;
+
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia: ".$estructura->infoReferencia->getReferencia);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada: ".$dato);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Tabla: ".$obj_generico->getTableName);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Modulo: ".$obj_generico->toString);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result: ".$string_result);
+
+                return($string_result);
+                #FIXME, este valor es el que devuelve cuando NO lo encuentra en la tabla de referencia, en este caso deberia arreglarlo
+#             }
+
+#             return('10'); #FIXME, este valor es el que devuelve cuando lo encuentra en la tabla de referencia
+        }else{  
+            return $dato;
+        }
+    }
+
+#     return("FIXME");
+}
+
 
 =head2  
 sub _setDatos_de_estructura
@@ -667,7 +732,6 @@ sub getEstructuraYDatosDeNivel{
                                                                             $nivel_info_marc_array->[$i]->{'campo'}, 
                                                                             $subcampo->{'subcampo'}
                                                     );
-            
         
                 if($cat_estruct_array){
 
