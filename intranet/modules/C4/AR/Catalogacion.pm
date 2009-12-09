@@ -91,12 +91,14 @@ sub _meran_to_marc{
         }
 
         if(scalar(@subcampos_array) > 0){
-            C4::AR::Debug::debug("indicador_primario    ".$indentificador_1." del campo ".$campo);
-            C4::AR::Debug::debug("indicador_secundario  ".$indentificador_2." del campo ".$campo);
+# TODO, el indicador undefined # (numeral) debe ser reemplazado por blanco el asci correspondiente
+
+            #C4::AR::Debug::debug("indicador_primario    ".$indentificador_1." del campo ".$campo);
+            #C4::AR::Debug::debug("indicador_secundario  ".$indentificador_2." del campo ".$campo);
 
             $field = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);
-            C4::AR::Utilidades::printHASH($field);
-            C4::AR::Debug::debug("field  warnings: ".$field->warnings());
+            #C4::AR::Utilidades::printHASH($field);
+            #C4::AR::Debug::debug("field  warnings: ".$field->warnings());
             
             $marc_record->add_fields($field);
             #C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$field->as_formatted());
@@ -725,6 +727,7 @@ sub getEstructuraYDatosDeNivel{
     my @result_total;
 
 # TODO falta mostrar los campos de la estructura que estan vacios
+# SOLO TRAE LOS CAMPOS QUE TIENEN ESTRUCTURA Y TIENEN DATOS
 
     #se genera la estructura de catalogacion para enviar al cliente
     if ($nivel_info_marc_array ){
