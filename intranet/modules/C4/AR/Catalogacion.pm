@@ -78,30 +78,36 @@ sub _meran_to_marc{
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
         for(my $j=0;$j<$cant_subcampos;$j++){
             my $subcampo= $subcampos_hash->{$j};
-#             C4::AR::Debug::debug("CAMPO => ".$campo);
-            C4::AR::Utilidades::printHASH($subcampo);
+            #C4::AR::Debug::debug("CAMPO => ".$campo);
+            #C4::AR::Utilidades::printHASH($subcampo);
             while ( my ($key, $value) = each(%$subcampo) ){
-#                 C4::AR::Utilidades::printARRAY($autorizados{$campo});
+                #C4::AR::Utilidades::printARRAY($autorizados{$campo});
                 $value = _procesar_referencia($campo, $key, $value);
                 if ( ($value ne '')&&(C4::AR::Utilidades::existeInArray($key, @{$autorizados{$campo}} ) )) {
                     push(@subcampos_array, ($key => $value));
-                    C4::AR::Debug::debug("ACEPTADO clave = ".$key." valor: ".$value);
+                    #C4::AR::Debug::debug("ACEPTADO clave = ".$key." valor: ".$value);
                 }
             }
         }
 
         if(scalar(@subcampos_array) > 0){
+            C4::AR::Debug::debug("indicador_primario    ".$indentificador_1." del campo ".$campo);
+            C4::AR::Debug::debug("indicador_secundario  ".$indentificador_2." del campo ".$campo);
+
             $field = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);
+            C4::AR::Utilidades::printHASH($field);
+            C4::AR::Debug::debug("field  warnings: ".$field->warnings());
+            
             $marc_record->add_fields($field);
-#         C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$field->as_formatted());
+            #C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$field->as_formatted());
         }
     }
 
     C4::AR::Debug::debug("meran_nivel_to_meran => SALIDA => as_formatted ".$marc_record->as_formatted());
     
     return($marc_record);
-
 }
+
 =head2
 sub meran_nivel1_to_meran 
 
@@ -111,8 +117,8 @@ Se apoya en la funcion _meran_to_marc que entiende el formato.
 sub meran_nivel1_to_meran{
     my ($data_hash) = @_;
 
-    my $campos_autorizados = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(1);
-    my $marc_record = _meran_to_marc($data_hash->{'infoArrayNivel1'},$campos_autorizados);
+    my $campos_autorizados  = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(1);
+    my $marc_record         = _meran_to_marc($data_hash->{'infoArrayNivel1'},$campos_autorizados);
 
     return($marc_record);
 }
@@ -658,10 +664,9 @@ sub _setDatos_de_estructura {
 
     }elsif( ($cat->getReferencia) && ($cat->getTipo eq 'auto') ){
         #es un autocomplete
+        $hash_ref_result{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
 # FIXME esto ya no es necesario en el metodo toMARC, si el dato es una referencia, automaticamente se obtiene el dato y queda la referencia en 
 #datoReferencia
-
-#         $hash_ref_result{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
 #         $hash_ref_result{'datoReferencia'} = $hash_ref_result{'dato'};
         
 #         my $valor_referencia = getDatoFromReferencia($cat->getCampo, $cat->getSubcampo, $datos_hash_ref->{'dato'});
@@ -770,7 +775,9 @@ sub getEstructuraYDatosDeNivel{
             $hash_campos{'campo'}                   = $campo;
             $hash_campos{'nombre'}                  = $liblibrarian;
             $hash_campos{'indicador_primario'}      = $indicador_primario;
+            $hash_campos{'indicadores_primarios'}   = C4::AR::EstructuraCatalogacionBase::getIndicadorPrimarioFromEstructuraBaseByCampo($campo);
             $hash_campos{'indicador_secundario'}    = $indicador_secundario;
+            $hash_campos{'indicadores_secundarios'} = C4::AR::EstructuraCatalogacionBase::getIndicadorSecundarioFromEstructuraBaseByCampo($campo);
             $hash_campos{'descripcion_campo'}       = $descripcion_campo.' - '.$campo;
             $hash_campos{'ayuda_campo'}             = 'esta es la ayuda del campo '.$campo;
             $hash_campos{'subcampos_array'}         = \@result;

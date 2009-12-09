@@ -47,12 +47,14 @@ sub getId{
 
 sub getIndicador{
     my ($self) = shift;
-    return ($self->indicador);
+
+    return (C4::AR::Utilidades::trim($self->indicador));
 }
 
 sub setIndicador{
     my ($self) = shift;
     my ($indicador) = @_;
+
     $self->indicador($indicador);
 }
 
@@ -117,7 +119,7 @@ sub getIndicadoresByCampoToARRAY {
 
     for(my $i=0; $i<scalar(@$indicadores_array_ref); $i++ ){
         my $valor;
-        $valor->{"clave"} = $indicadores_array_ref->[$i]->getId;
+        $valor->{"clave"} = $indicadores_array_ref->[$i]->getIndicador;
         $valor->{"valor"} = $indicadores_array_ref->[$i]->getDato;
 
         push (@array_valores, $valor);
