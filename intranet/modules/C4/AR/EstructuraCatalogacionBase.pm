@@ -124,6 +124,38 @@ sub getEstructuraBaseFromCampoSubCampo{
 }
 
 
+=head2 sub getIndicadorPrimarioFromEstructuraBaseByCampo
+    Esta funcion retorna la estructura BASE de MARC segun un campo y subcampo
+=cut
+sub getIndicadorPrimarioFromEstructuraBaseByCampo{
+    my ($campo) = @_;
+    
+    my $indicador = C4::Modelo::PrefIndicadorPrimario->new();
+    my $indicadores_array_ref = $indicador->getIndicadoresByCampoToARRAY($campo);
+
+    if(scalar(@$indicadores_array_ref) > 0){  
+        return $indicadores_array_ref;
+    }else{
+        return 0;
+    }
+}
+
+=head2 sub getIndicadorSecundarioFromEstructuraBaseByCampo
+    Esta funcion retorna la estructura BASE de MARC segun un campo y subcampo
+=cut
+sub getIndicadorSecundarioFromEstructuraBaseByCampo{
+    my ($campo) = @_;
+
+    my $indicador = C4::Modelo::PrefIndicadorSecundario->new();
+    my $indicadores_array_ref = $indicador->getIndicadoresByCampoToARRAY($campo);
+
+    if(scalar(@$indicadores_array_ref) > 0){  
+        return $indicadores_array_ref;
+    }else{
+        return 0;
+    }
+}
+
 =head2 sub getNivelFromEstructuraBaseByCampo
     Esta funcion retorna el nivel de la estructura BASE de MARC segun un campo
 =cut

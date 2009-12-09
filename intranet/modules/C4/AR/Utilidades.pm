@@ -1374,16 +1374,17 @@ sub buscarNivelesBibliograficos{
       return (scalar(@$nivelesBibliograficos), $nivelesBibliograficos);
 }
 
+=head2
 # Esta funcioin remueve los blancos del principio y el final del string
-sub trim($){
+=cut;
+sub trim{
+    my ($string) = @_;
 
-    my $string = shift;
     $string =~ s/^\s+//;
     $string =~ s/\s+$//;
 
     return $string;
 }
-
 
 #FUNCION QUE VALIDA QUE UN STRING NO SEA SOLAMENTE UNA SECUENCIA DE BLANCOS (USA Trim())
 sub validateString{

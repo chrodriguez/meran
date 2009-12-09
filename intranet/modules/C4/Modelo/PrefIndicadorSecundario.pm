@@ -58,7 +58,7 @@ sub setIndicador{
 
 sub getDato{
     my ($self) = shift;
-    return ($self->dato);
+    return (C4::AR::Utilidades::trim($self->dato));
 }
 
 sub setDato{
@@ -67,7 +67,44 @@ sub setDato{
     $self->dato($dato);
 }
 
+=head2 sub getIndicadoresByCampo
+=cut
+sub getIndicadoresByCampo{
+    my ($self) = shift;
 
+    my ($campo) = @_;
+    my @filtros;
+
+    push(@filtros, ( campo_marc      => { eq => $campo } ) );
+
+    my $indicadores_array_ref = C4::Modelo::PrefIndicadorSecundario::Manager->get_pref_indicador_secundario(
+                                                                                        query    => \@filtros,
+                                                                       );
+
+    return $indicadores_array_ref;
+}
+
+=head2
+    sub getIndicadoresByCampoToARRAY
+=cut
+sub getIndicadoresByCampoToARRAY {
+    my ($self) = shift;
+
+    my ($campo) = @_;
+    my $indicadores_array_ref = $self->getIndicadoresByCampo($campo);
+
+    my @array_valores;
+
+    for(my $i=0; $i<scalar(@$indicadores_array_ref); $i++ ){
+        my $valor;
+        $valor->{"clave"} = $indicadores_array_ref->[$i]->getId;
+        $valor->{"valor"} = $indicadores_array_ref->[$i]->getDato;
+
+        push (@array_valores, $valor);
+    }
+    
+    return (scalar(@array_valores), \@array_valores);
+}
 
 
 1;

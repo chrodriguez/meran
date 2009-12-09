@@ -811,22 +811,26 @@ function procesarInfoJson(json){
     var marc_group;
 
     for(var i=0; i < objetos.length; i++){
+        strComp = "";
+        strIndicadores = "";
+    
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
         var campo_marc_conf_obj = new campo_marc_conf(objetos[i]);
-//         var campo_test = new campo_marc_conf(objetos[1]);
-        var subcampos_array = campo_marc_conf_obj.getSubCamposArray();
+        var subcampos_array     = campo_marc_conf_obj.getSubCamposArray();
         //genero el header para el campo q contiene todos los subcampos
         strComp = "<div id='marc_group" + i + "' ><li class='MARCHeader'>";
         strComp = strComp + "<div class='MARCHeader_content'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
     
-//         if(campo_marc_conf_obj.getIndicadorPrimario() != ''){
+        if(campo_marc_conf_obj.getIndicadorPrimario() != ''){
             strIndicadores = "<label>Indicador Primero: " + campo_marc_conf_obj.getIndicadorPrimario() + "</label>";
-//         }
+            strIndicadores = strIndicadores + crearSelectIndicadores(campo_marc_conf_obj.getIndicadoresPrimarios());
+        }
 
-//         if(campo_marc_conf_obj.getIndicadorSecundario() != ''){
+        if(campo_marc_conf_obj.getIndicadorSecundario() != ''){
             strIndicadores = strIndicadores + "<label>Indicador Segundo: " + campo_marc_conf_obj.getIndicadorSecundario() + "</label>";
-//         }
+            strIndicadores = strIndicadores + crearSelectIndicadores(campo_marc_conf_obj.getIndicadoresSecundarios());
+        }
 
         strComp = strComp + "<label>" + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo())  + " " + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre() + strIndicadores + "</label></div>";
 
@@ -863,6 +867,25 @@ function crearBotonAyudaCampo(campo){
 
 function ayudaParaCampo(campo){
     alert("crear ventana con ayuda para campo " + campo);
+}
+
+function generarOpcionesParaSelect(array_options){
+    var op;
+
+    for(var i=0; i< array_options.length; i++){
+        op = op + "<option value='" + array_options[i].clave + "'>" + array_options[i].valor + "</option>\n";
+    }
+
+    return op;
+}
+
+function crearSelectIndicadores(opciones_array){
+    var indicadores = "";
+    if(opciones_array.length > 0){
+        indicadores = "<label><select>" + generarOpcionesParaSelect(opciones_array) + "</select></label>";
+    }
+
+    return indicadores;
 }
 
 /*
@@ -1073,16 +1096,18 @@ function crearBotonAgregarRepetible(obj){
 
 function campo_marc_conf(obj){
 
-    this.nombre                 = obj.nombre;
-    this.campo                  = obj.campo;
-    this.ayuda_campo            = obj.ayuda_campo;
-    this.descripcion_campo      = obj.descripcion_campo;
-    this.subcampos_array        = obj.subcampos_array;
-    this.repetible              = obj.repetible;
-    this.indicador_primario     = obj.indicador_primario;
-    this.indicador_secundario   = obj.indicador_secundario;
-    this.subcampos_array        = new Array();
-    this.subcampos_hash         = new Object();
+    this.nombre                     = obj.nombre;
+    this.campo                      = obj.campo;
+    this.ayuda_campo                = obj.ayuda_campo;
+    this.descripcion_campo          = obj.descripcion_campo;
+    this.subcampos_array            = obj.subcampos_array;
+    this.repetible                  = obj.repetible;
+    this.indicador_primario         = obj.indicador_primario;
+    this.indicador_secundario       = obj.indicador_secundario;
+    this.subcampos_array            = new Array();
+    this.subcampos_hash             = new Object();
+    this.indicadores_primarios      = obj.indicadores_primarios;
+    this.indicadores_secundarios    = obj.indicadores_secundarios;
 
 
     for(var i = 0; i < obj.subcampos_array.length; i++){
@@ -1099,18 +1124,22 @@ function campo_marc_conf(obj){
     function fGetIndicadorPrimario(){ return (this.indicador_primario) };
     function fGetIndicadorSecundario(){ return (this.indicador_secundario) };
     function fGetSubCamposArray(){ return (this.subcampos_array) };
+    function fGetIndicadoresPrimarios(){return (this.indicadores_primarios)};
+    function fGetIndicadoresSecundarios(){return (this.indicadores_secundarios)};
     
 
     //metodos
-    this.getCampo               = fGetCampo;
-    this.getNombre              = fGetNombre;
-    this.getAyudaCampo          = fGetAyudaCampo;
-    this.getDescripcionCampo    = fGetDescripcionCampo;
-    this.getSubCamposArray      = fGetSubCamposArray;
-    this.getRepetible           = fGetRepetible;
-    this.getIndicadorPrimario   = fGetIndicadorPrimario;
-    this.getIndicadorSecundario = fGetIndicadorSecundario;
-    this.getSubCamposArray      = fGetSubCamposArray;
+    this.getCampo                   = fGetCampo;
+    this.getNombre                  = fGetNombre;
+    this.getAyudaCampo              = fGetAyudaCampo;
+    this.getDescripcionCampo        = fGetDescripcionCampo;
+    this.getSubCamposArray          = fGetSubCamposArray;
+    this.getRepetible               = fGetRepetible;
+    this.getIndicadorPrimario       = fGetIndicadorPrimario;
+    this.getIndicadorSecundario     = fGetIndicadorSecundario;
+    this.getSubCamposArray          = fGetSubCamposArray;
+    this.getIndicadoresPrimarios    = fGetIndicadoresPrimarios;
+    this.getIndicadoresSecundarios  = fGetIndicadoresSecundarios;    
 }
 
 function subcampo_marc_conf(obj){
@@ -1207,6 +1236,7 @@ function newCombo(obj){
     
     return comp;
 }
+
 
 function crearCombo(obj){
     var comp = newCombo(obj);

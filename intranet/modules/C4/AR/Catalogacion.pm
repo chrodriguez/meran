@@ -904,7 +904,11 @@ sub getEstructuraSinDatos{
         $hash_campos{'campo'}                   = $c->getCampo;
         $hash_campos{'nombre'}                  = $c->camposBase->getLiblibrarian;
         $hash_campos{'indicador_primario'}      = $c->camposBase->getIndicadorPrimario;
+        $hash_campos{'indicadores_primarios'}   = C4::AR::EstructuraCatalogacionBase::getIndicadorPrimarioFromEstructuraBaseByCampo($c->getCampo);
         $hash_campos{'indicador_secundario'}    = $c->camposBase->getIndicadorSecundario;
+        $hash_campos{'indicadores_secundarios'} = C4::AR::EstructuraCatalogacionBase::getIndicadorSecundarioFromEstructuraBaseByCampo(
+                                                                                                                                      $c->getCampo
+                                                                                                                                    );
         $hash_campos{'descripcion_campo'}       = $c->camposBase->getDescripcion.' - '.$c->getCampo;
         $hash_campos{'ayuda_campo'}             = 'esta es la ayuda del campo '.$c->getCampo;
         $hash_campos{'subcampos_array'}         = \@result;
