@@ -29,7 +29,6 @@
                 <td width="10%">[% 'Referencia' | i18n %]</td>
                 <td width="4%">[% 'Fijo' | i18n %]</td>
                 <td width="5%">[% 'Obligatorio' | i18n %]</td>
-                <td width="5%">[% 'Grupo' | i18n %]</td>
 	        </tr>
         [% FOREACH catalogacion IN catalogaciones %]
 	        <tr align="center" >
@@ -138,9 +137,6 @@
                                             <span class="rojo">[% "No" | i18n %]</span>
                                     [% END %]
                 </td>
-                <td>
-                    [% catalogacion.getGrupo %]
-                </td>
 	        </tr>
         [% END %]
             
@@ -159,18 +155,7 @@
                                                         width   => "auto",
                                                         alternClass => "botonCentrado"
                         ) ;
-    [% END %]
-
-    [% PERL %]
-                print C4::AR::Filtros::to_Button(       text    => "[% 'Agrupar Campos' | i18n %]",
-                                                        boton   => "boton_agregar",
-                                                        onClick => "agruparCampos();",
-                                                        title   => "[% 'Agrupar Campos' | i18n %]",
-                                                        width   => "auto",
-                                                        alternClass => "botonCentrado"
-                        ) ;
-    [% END %]
-    
+    [% END %]    
        
 [% END %] <!-- END IF niveles -->
 

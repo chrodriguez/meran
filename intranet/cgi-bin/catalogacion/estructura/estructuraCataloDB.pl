@@ -355,7 +355,6 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
         my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($obj->{'id'});
         if($nivel2){
           $obj->{'id_tipo_doc'} = $nivel2->getTipoDocumentoObject()->getId_tipo_doc();
-#           $obj->{'id_tipo_doc'} = $nivel2->getTipoDocumento();
         }
     }elsif($obj->{'nivel'} eq '3'){
       my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($obj->{'id3'});
@@ -364,18 +363,9 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
           my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($nivel3->getId2);
           if($nivel2){
           $obj->{'id_tipo_doc'} = $nivel2->getTipoDocumentoObject()->getId_tipo_doc();
-#             $obj->{'id_tipo_doc'} = $nivel2->getTipoDocumento();
           }
       }
     }
-
-# my $string = '00223     2200085   4500072002200000082002300022084003700045110002600082245002900108 a@cat_autor@4590  2fuente del codigo  2@cat_autor@0  a@pref_unidad_informacion@084@a@010a@cat_autor@4591  atitulobresto del titulo  a@cat_autor@4591';
-# 
-# my $ref = '4591';
-# 
-# $string =~ s/cat_autor\@$ref/cat_autor\@123456/g;
-# 
-# C4::AR::Debug::debug("remplazado=> ".$string);
 
     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getDatosFromNivel($obj);
     
@@ -621,25 +611,6 @@ elsif($tipoAccion eq "IMPORTAR_DESDE_KOHA"){
     C4::Auth::print_header($session);
     print to_json \%info;
 }
-elsif($tipoAccion eq "AGRUPAR_CAMPOS"){
-     my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'MODIFICACION', 
-                                                    entorno => 'datos_nivel3'}, 
-                                                'intranet'
-                                    );
-
-    my ($Message_arrayref) = &C4::AR::Catalogacion::t_agruparCampos($obj);
-    
-    my %info;
-    $info{'Message_arrayref'} = $Message_arrayref;
-
-    C4::Auth::print_header($session);
-    print to_json \%info;
-}
-
 elsif($tipoAccion eq "ELIMINAR_NIVEL"){
     my $entorno= 'datos_nivel1';
     if($obj->{'nivel'} eq '2'){$entorno= 'datos_nivel2'};

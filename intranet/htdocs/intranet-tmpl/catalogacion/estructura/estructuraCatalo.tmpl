@@ -495,32 +495,6 @@ function updateModificarEstructuraCatalogacion(responseText){
     }
 }
 
-function agruparCampos(){
-    var campos_array = recuperarSeleccionados("checkCampos");
-
-    if(campos_array.length > 0){   
-        objAH=new AjaxHelper(updateAgruparCampos);
-        objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-        objAH.array_grupos = campos_array;
-        objAH.tipoAccion = "AGRUPAR_CAMPOS";
-        objAH.sendToServer();
-    }else{
-        jAlert(DEBE_SELECCIONAR_AL_MENOS_UN_CAMPO,CATALOGO_ALERT_TITLE);
-    }
-
-}
-
-function updateAgruparCampos(responseText){
-    var info = JSONstring.toObject(responseText);  
-    var Messages= info.Message_arrayref;
-    setMessages(Messages);
-    if (! (hayError(Messages) ) ){
-        eleccionDeNivel();
-    }
-}
-
-
 </script>
 
 [% PERL %]

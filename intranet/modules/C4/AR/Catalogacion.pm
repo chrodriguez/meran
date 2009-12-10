@@ -1048,58 +1048,6 @@ sub t_guardarEnEstructuraCatalogacion {
 }
 
 
-=item t_agruparCampos
-Esta transaccion agrupa las configuraciones de campo, subcampo pasados por parametro 
-=cut
-sub t_agruparCampos {
-    my($params)=@_;
-
-## FIXME ver si falta verificar algo!!!!!!!!!!
-    my $msg_object= C4::AR::Mensajes::create();
-
-    if(!$msg_object->{'error'}){
-    #No hay error
-        my  $estrCatalogacion = C4::Modelo::CatEstructuraCatalogacion->new();
-        my $db = $estrCatalogacion->db;
-        # enable transactions, if possible
-        $db->{connect_options}->{AutoCommit} = 0;
-        my $grupo = $estrCatalogacion->getNextGroup;
-    
-        eval {
-#             $estrCatalogacion->agrupar($params, $db);  
-            my $array_grupos = $params->{'array_grupos'};
-        
-            foreach my $id (@$array_grupos){
-                my ($cat_estructura_catalogacion) = C4::AR::Catalogacion::getEstructuraCatalogacionById($id, $db);
-                if($cat_estructura_catalogacion){
-                    $cat_estructura_catalogacion->setGrupo($grupo);
-                    $cat_estructura_catalogacion->save();
-                }
-            }
-
-            $db->commit;
-            #se cambio el permiso con exito
-            $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U410', 'params' => []} ) ;
-        };
-    
-        if ($@){
-            #Se loguea error de Base de Datos
-            &C4::AR::Mensajes::printErrorDB($@, 'B448',"INTRA");
-            $db->rollback;
-            #Se setea error para el usuario
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U411', 'params' => []} ) ;
-        }
-
-        $db->{connect_options}->{AutoCommit} = 1;
-
-    }
-
-    return ($msg_object);
-}
-
-
 sub verificarModificarEnEstructuraCatalogacion {
     my($params, $msg_object) = @_;
 
@@ -1384,7 +1332,62 @@ sub getHeader{
         return 0;
     }
 }
+
+
 #====================================================DEPRECATEDDDDDDDDDDD==================================================
+
+=item t_agruparCampos
+Esta transaccion agrupa las configuraciones de campo, subcampo pasados por parametro 
+=cut
+# sub t_agruparCampos {
+#     my($params)=@_;
+# 
+# ## FIXME ver si falta verificar algo!!!!!!!!!!
+#     my $msg_object= C4::AR::Mensajes::create();
+# 
+#     if(!$msg_object->{'error'}){
+#     #No hay error
+#         my  $estrCatalogacion = C4::Modelo::CatEstructuraCatalogacion->new();
+#         my $db = $estrCatalogacion->db;
+#         # enable transactions, if possible
+#         $db->{connect_options}->{AutoCommit} = 0;
+#         my $grupo = $estrCatalogacion->getNextGroup;
+#     
+#         eval {
+# #             $estrCatalogacion->agrupar($params, $db);  
+#             my $array_grupos = $params->{'array_grupos'};
+#         
+#             foreach my $id (@$array_grupos){
+#                 my ($cat_estructura_catalogacion) = C4::AR::Catalogacion::getEstructuraCatalogacionById($id, $db);
+#                 if($cat_estructura_catalogacion){
+#                     $cat_estructura_catalogacion->setGrupo($grupo);
+#                     $cat_estructura_catalogacion->save();
+#                 }
+#             }
+# 
+#             $db->commit;
+#             #se cambio el permiso con exito
+#             $msg_object->{'error'}= 0;
+#             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U410', 'params' => []} ) ;
+#         };
+#     
+#         if ($@){
+#             #Se loguea error de Base de Datos
+#             &C4::AR::Mensajes::printErrorDB($@, 'B448',"INTRA");
+#             $db->rollback;
+#             #Se setea error para el usuario
+#             $msg_object->{'error'}= 1;
+#             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U411', 'params' => []} ) ;
+#         }
+# 
+#         $db->{connect_options}->{AutoCommit} = 1;
+# 
+#     }
+# 
+#     return ($msg_object);
+# }
+
+
 
 #para los datos q no tienen estructura
 # sub _setDatos_de_estructura2 {
