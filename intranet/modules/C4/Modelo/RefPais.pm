@@ -40,7 +40,7 @@ sub getObjeto{
 sub getIso{
     my ($self) = shift;
 
-    return ($self->iso);
+    return (C4::AR::Utilidades::trim($self->iso));
 }
     
 sub setIso{
@@ -51,7 +51,7 @@ sub setIso{
 
 sub getIso3{
     my ($self) = shift;
-    return ($self->iso3);
+    return (C4::AR::Utilidades::trim($self->iso3));
 }
     
 sub setIso3{
@@ -62,7 +62,7 @@ sub setIso3{
 
 sub getNombre{
     my ($self) = shift;
-    return ($self->nombre);
+    return (C4::AR::Utilidades::trim($self->nombre));
 }
     
 sub setNombre{
@@ -73,7 +73,7 @@ sub setNombre{
 
 sub getNombre_largo{
     my ($self) = shift;
-    return ($self->nombre_largo);
+    return (C4::AR::Utilidades::trim($self->nombre_largo));
 }
     
 sub setNombre_largo{
@@ -84,7 +84,7 @@ sub setNombre_largo{
 
 sub getCodigo{
     my ($self) = shift;
-    return ($self->codigo);
+    return C4::AR::Utilidades::trim(($self->codigo));
 }
     
 sub setCodigo{

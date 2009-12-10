@@ -37,7 +37,7 @@ sub getObjeto{
 sub getIdLanguage{
     my ($self) = shift;
 
-    return ($self->idLanguage);
+    return (C4::AR::Utilidades::trim($self->idLanguage));
 }
     
 sub setIdLanguage{
@@ -51,7 +51,7 @@ sub setIdLanguage{
 sub getDescription{
     my ($self) = shift;
 
-    return ($self->description);
+    return (C4::AR::Utilidades::trim($self->description));
 }
     
 sub setDescription{

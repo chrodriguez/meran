@@ -24,7 +24,7 @@ sub defaultSort {
 
 sub getVariable{
     my ($self) = shift;
-    return ($self->variable);
+    return (C4::AR::Utilidades::trim($self->variable));
 }
 
 sub setVariable{
@@ -77,7 +77,7 @@ sub getShowValue{
 
 sub getExplanation{
     my ($self) = shift;
-    return ($self->explanation);
+    return (C4::AR::Utilidades::trim($self->explanation));
 }
 
 sub setExplanation{
@@ -99,7 +99,7 @@ sub setOptions{
 
 sub getType{
     my ($self) = shift;
-    return ($self->type);
+    return (C4::AR::Utilidades::trim($self->type));
 }
 
 sub setType{

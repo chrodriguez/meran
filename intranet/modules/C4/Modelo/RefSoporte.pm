@@ -36,7 +36,7 @@ sub getObjeto{
 sub getIdSupport{
     my ($self) = shift;
 
-    return ($self->idSupport);
+    return (C4::AR::Utilidades::trim($self->idSupport));
 }
     
 sub setIdSupport{
@@ -50,7 +50,7 @@ sub setIdSupport{
 sub getDescription{
     my ($self) = shift;
     
-    return ($self->description);
+    return (C4::AR::Utilidades::trim($self->description));
 }
     
 sub setDescription{

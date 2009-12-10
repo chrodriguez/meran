@@ -8,10 +8,10 @@ __PACKAGE__->meta->setup(
     table   => 'pref_tabla_referencia',
 
     columns => [
-        id      => { type => 'serial'},
-        nombre_tabla => { type => 'varchar', length => 40, not_null => 1 },
-        alias_tabla  => { type => 'varchar', length => 20, not_null => 1 },
-        campo_busqueda  => { type => 'varchar', length => 255, not_null => 1 },
+        id                  => { type => 'serial'},
+        nombre_tabla        => { type => 'varchar', length => 40, not_null => 1 },
+        alias_tabla         => { type => 'varchar', length => 20, not_null => 1 },
+        campo_busqueda      => { type => 'varchar', length => 255, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -64,7 +64,7 @@ sub getId{
 
 sub getNombre_tabla{
     my ($self) = shift;
-    return ($self->nombre_tabla);
+    return (C4::AR::Utilidades::trim($self->nombre_tabla));
 }
 
 sub setNombre_tabla{
@@ -86,7 +86,7 @@ sub setAlias_tabla{
 
 sub getCampo_busqueda{
     my ($self) = shift;
-    return ($self->campo_busqueda);
+    return (C4::AR::Utilidades::trim($self->campo_busqueda));
 }
 
 sub obtenerValoresTablaRef{

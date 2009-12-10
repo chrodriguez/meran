@@ -37,7 +37,7 @@ sub getObjeto{
 sub getCode{
     my ($self) = shift;
 
-    return ($self->code);
+    return (C4::AR::Utilidades::trim($self->code));
 }
     
 sub setCode{
@@ -51,7 +51,7 @@ sub setCode{
 sub getDescription{
     my ($self) = shift;
 
-    return ($self->description);
+    return (C4::AR::Utilidades::trim($self->description));
 }
     
 sub setDescription{

@@ -88,7 +88,7 @@ sub setId{
 sub getNombre{
     my ($self) = shift;
 
-    return ($self->nombre);
+    return (C4::AR::Utilidades::trim($self->nombre));
 }
 
 sub setNombre{
@@ -101,7 +101,7 @@ sub setNombre{
 sub getApellido{
     my ($self) = shift;
 
-    return ($self->apellido);
+    return (C4::AR::Utilidades::trim($self->apellido));
 }
 
 sub setApellido{
@@ -114,7 +114,7 @@ sub setApellido{
 sub getNacionalidad{
     my ($self) = shift;
 
-    return ($self->nacionalidad);
+    return (C4::AR::Utilidades::trim($self->nacionalidad));
 }
     
 sub setNacionalidad{
@@ -127,7 +127,7 @@ sub setNacionalidad{
 sub getCompleto{
     my ($self) = shift;
 
-    return ($self->completo);
+    return (C4::AR::Utilidades::trim($self->completo));
 }
     
 sub setCompleto{

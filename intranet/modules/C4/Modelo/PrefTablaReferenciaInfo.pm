@@ -18,7 +18,7 @@ __PACKAGE__->meta->setup(
 
 sub getOrden{
     my ($self) = shift;
-    return ($self->orden);
+    return (C4::AR::Utilidades::trim($self->orden));
 }
 
 sub setOrden{
@@ -29,7 +29,7 @@ sub setOrden{
 
 sub getReferencia{
     my ($self) = shift;
-    return ($self->referencia);
+    return (C4::AR::Utilidades::trim($self->referencia));
 }
 
 sub setReferencia{
@@ -40,7 +40,7 @@ sub setReferencia{
 
 sub getSimilares{
     my ($self) = shift;
-    return ($self->similares);
+    return (C4::AR::Utilidades::trim($self->similares));
 }
 
 sub setSimilares{

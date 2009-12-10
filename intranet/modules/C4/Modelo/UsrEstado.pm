@@ -49,7 +49,7 @@ sub setRegular{
 
 sub getCategoria{
     my ($self) = shift;
-    return ($self->categoria);
+    return (C4::AR::Utilidades::trim($self->categoria));
 }
 
 sub setCategoria{
@@ -60,7 +60,7 @@ sub setCategoria{
 
 sub getFuente{
     my ($self) = shift;
-    return ($self->fuente);
+    return (C4::AR::Utilidades::trim($self->fuente));
 }
 
 sub setFuente{

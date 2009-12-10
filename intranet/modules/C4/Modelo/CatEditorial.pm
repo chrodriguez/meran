@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'cat_editorial',
 
     columns => [
-        id     => { type => 'serial', not_null => 1 },
-        editorial => { type => 'text', length => 255, not_null => 1 },
+        id          => { type => 'serial', not_null => 1 },
+        editorial   => { type => 'text', length => 255, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -49,7 +49,7 @@ sub setId{
 sub getEditorial{
     my ($self) = shift;
 
-    return ($self->editorial);
+    return (C4::AR::Utilidades::trim($self->editorial));
 }
     
 sub setEditorial{

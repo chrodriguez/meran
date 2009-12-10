@@ -322,15 +322,12 @@ sub detalleMARC {
 #             C4::AR::Debug::debug("Catalogacion => detalleMARC => dato despues de getDatoFromReferencia: ".$hash_temp{'dato'});
 
             push(@subcampos_array, \%hash_temp);
-
-#             C4::AR::Debug::debug("agrego el subcampo: ". $subcampo);
         }
             $hash{'campo'}                  = $campo;
             $hash{'header'}                 = C4::AR::Catalogacion::getHeader($campo);
             $hash{'subcampos_array'}        = \@subcampos_array;
 
             push(@MARC_result_array, \%hash);
-#             C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
         }
     }
 

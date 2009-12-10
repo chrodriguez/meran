@@ -8,14 +8,14 @@ __PACKAGE__->meta->setup(
     table   => 'pref_unidad_informacion',
 
     columns => [
-        id         => { type => 'serial'},
-        id_ui         => { type => 'varchar', not_null => 1 , length => 4},
-        nombre           => { type => 'varchar', not_null => 1 , length => 255},
+        id                  => { type => 'serial'},
+        id_ui               => { type => 'varchar', not_null => 1 , length => 4},
+        nombre              => { type => 'varchar', not_null => 1 , length => 255},
         direccion           => { type => 'varchar', not_null => 1 , length => 255},
-        alt_direccion           => { type => 'varchar', not_null => 1 , length => 255},
-        telefono           => { type => 'varchar', not_null => 1 , length => 255},
-        fax           => { type => 'varchar', not_null => 1 , length => 255},
-        email           => { type => 'varchar', not_null => 1 , length => 255},
+        alt_direccion       => { type => 'varchar', not_null => 1 , length => 255},
+        telefono            => { type => 'varchar', not_null => 1 , length => 255},
+        fax                 => { type => 'varchar', not_null => 1 , length => 255},
+        email               => { type => 'varchar', not_null => 1 , length => 255},
     ],
 
     primary_key_columns => [ 'id' ],
@@ -39,7 +39,7 @@ sub setId_ui{
 sub getNombre{
     my ($self) = shift;
 
-    return ($self->nombre);
+    return (C4::AR::Utilidades::trim($self->nombre));
 }
     
 sub setNombre{
@@ -52,7 +52,7 @@ sub setNombre{
 sub getDireccion{
     my ($self) = shift;
 
-    return ($self->direccion);
+    return (C4::AR::Utilidades::trim($self->direccion));
 } 
     
 sub setDireccion{
@@ -65,7 +65,7 @@ sub setDireccion{
 sub getAlt_direccion{
     my ($self) = shift;
 
-    return ($self->direccion);
+    return (C4::AR::Utilidades::trim($self->direccion));
 }
     
 sub setAlt_direccion{
@@ -78,7 +78,7 @@ sub setAlt_direccion{
 sub getTelefono{
     my ($self) = shift;
 
-    return ($self->telefono);
+    return (C4::AR::Utilidades::trim($self->telefono));
 }
     
 sub setTelefono{
@@ -91,7 +91,7 @@ sub setTelefono{
 sub getFax{
     my ($self) = shift;
 
-    return ($self->fax);
+    return (C4::AR::Utilidades::trim($self->fax));
 }
     
 sub setFax{
@@ -104,7 +104,7 @@ sub setFax{
 sub getEmail{
     my ($self) = shift;
 
-    return ($self->email);
+    return (C4::AR::Utilidades::trim($self->email));
 }
     
 sub setEmail{

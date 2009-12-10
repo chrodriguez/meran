@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'circ_tipo_prestamo_sancion',
 
     columns => [
-        tipo_sancion  		=> { type => 'integer', not_null => 1 },
+        tipo_sancion  		 => { type => 'integer', not_null => 1 },
         tipo_prestamo        => { type => 'character', length => 2, not_null => 1 },
     ],
 
@@ -33,7 +33,7 @@ __PACKAGE__->meta->setup(
 
 sub getTipo_prestamo{
     my ($self) = shift;
-    return ($self->tipo_prestamo);
+    return (C4::AR::Utilidades::trim($self->tipo_prestamo));
 }
 
 sub setTipo_prestamo{

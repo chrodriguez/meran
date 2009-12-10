@@ -32,7 +32,7 @@ sub setCategory_code{
 
 sub getDescription{
     my ($self) = shift;
-    return ($self->description);
+    return (C4::AR::Utilidades::trim($self->description));
 }
 
 sub setDescription{

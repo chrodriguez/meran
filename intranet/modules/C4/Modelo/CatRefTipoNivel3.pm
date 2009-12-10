@@ -20,7 +20,7 @@ __PACKAGE__->meta->setup(
 
 sub getId_tipo_doc{
     my ($self) = shift;
-    return ($self->id_tipo_doc);
+    return (C4::AR::Utilidades::trim($self->id_tipo_doc));
 }
 
 sub setId_tipo_doc{
@@ -31,7 +31,7 @@ sub setId_tipo_doc{
 
 sub getNombre{
     my ($self) = shift;
-    return ($self->nombre);
+    return (C4::AR::Utilidades::trim($self->nombre));
 }
 
 sub setNombre{

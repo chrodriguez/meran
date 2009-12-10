@@ -369,6 +369,13 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
       }
     }
 
+# my $string = '00223     2200085   4500072002200000082002300022084003700045110002600082245002900108 a@cat_autor@4590  2fuente del codigo  2@cat_autor@0  a@pref_unidad_informacion@084@a@010a@cat_autor@4591  atitulobresto del titulo  a@cat_autor@4591';
+# 
+# my $ref = '4591';
+# 
+# $string =~ s/cat_autor\@$ref/cat_autor\@123456/g;
+# 
+# C4::AR::Debug::debug("remplazado=> ".$string);
 
     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getDatosFromNivel($obj);
     

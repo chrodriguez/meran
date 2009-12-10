@@ -27,7 +27,7 @@ sub getId{
 
 sub getDescripcion{
     my ($self) = shift;
-    return ($self->descripcion);
+    return (C4::AR::Utilidades::trim($self->descripcion));
 }
     
 sub setDescripcion{
@@ -39,7 +39,7 @@ sub setDescripcion{
     
 sub getNombre{
     my ($self) = shift;
-    return ($self->nombre);
+    return (C4::AR::Utilidades::trim($self->nombre));
 }
     
 sub setNombre{

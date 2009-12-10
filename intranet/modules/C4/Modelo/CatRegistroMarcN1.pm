@@ -34,8 +34,8 @@ sub setMarcRecord{
 }
 
 sub agregar{
-    my ($self)      = shift;
-    my ($marc_record)    = @_;
+    my ($self)          = shift;
+    my ($marc_record)   = @_;
 
 
     $self->setMarcRecord($marc_record);

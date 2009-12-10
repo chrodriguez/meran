@@ -8,9 +8,9 @@ __PACKAGE__->meta->setup(
     table   => 'circ_tipo_sancion',
 
     columns => [
-        tipo_sancion => { type => 'serial', not_null => 1 },
+        tipo_sancion        => { type => 'serial', not_null => 1 },
         categoria_socio     => { type => 'character', default => '', length => 2, not_null => 1 },
-        tipo_prestamo        => { type => 'character', default => '', length => 2, not_null => 1 },
+        tipo_prestamo       => { type => 'character', default => '', length => 2, not_null => 1 },
     ],
 
     primary_key_columns => [ 'tipo_sancion' ],
@@ -51,7 +51,7 @@ __PACKAGE__->meta->setup(
 
 sub getTipo_prestamo{
     my ($self) = shift;
-    return ($self->tipo_prestamo);
+    return (C4::AR::Utilidades::trim($self->tipo_prestamo));
 }
 
 sub setTipo_prestamo{
@@ -62,7 +62,7 @@ sub setTipo_prestamo{
 
 sub getTipo_sancion{
     my ($self) = shift;
-    return ($self->tipo_sancion);
+    return (C4::AR::Utilidades::trim($self->tipo_sancion));
 }
 
 sub setTipo_sancion{
@@ -73,7 +73,7 @@ sub setTipo_sancion{
 
 sub getCategoria_socio{
     my ($self) = shift;
-    return ($self->categoria_socio);
+    return (C4::AR::Utilidades::trim($self->categoria_socio));
 }
 
 sub setCategoria_socio{

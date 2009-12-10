@@ -38,17 +38,27 @@ sub getObjeto{
 
 sub getIdLocalidad{
     my ($self) = shift;
-    return ($self->LOCALIDAD);
+    return (C4::AR::Utilidades::trim($self->LOCALIDAD));
 }
 
 sub getNombre{
     my ($self) = shift;
-    return ($self->NOMBRE);
+    return (C4::AR::Utilidades::trim($self->NOMBRE));
+}
+
+sub getDptoPartido{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->DPTO_PARTIDO));
+}
+
+sub getDDN{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->DDN));
 }
 
 sub getNombre_abreviado{
     my ($self) = shift;
-    return ($self->NOMBRE_ABREVIADO);
+    return (C4::AR::Utilidades::trim($self->NOMBRE_ABREVIADO));
 }
 
 sub setId_persona{
@@ -98,11 +108,11 @@ sub getCampo{
     my ($self) = shift;
 	my ($campo)=@_;
     
-	if ($campo eq "LOCALIDAD") {return $self->LOCALIDAD;}
-	if ($campo eq "NOMBRE") {return $self->NOMBRE;}
-	if ($campo eq "NOMBRE_ABREVIADO") {return $self->NOMBRE_ABREVIADO;}
-	if ($campo eq "DPTO_PARTIDO") {return $self->DPTO_PARTIDO;}
-	if ($campo eq "DDN") {return $self->DDN;}
+	if ($campo eq "LOCALIDAD") {return $self->getIdLocalidad;}
+	if ($campo eq "NOMBRE") {return $self->getNombre;}
+	if ($campo eq "NOMBRE_ABREVIADO") {return $self->getNombre_abreviado;}
+	if ($campo eq "DPTO_PARTIDO") {return $self->getDptoPartido;}
+	if ($campo eq "DDN") {return $self->getDDN;}
 	return (0);
 }
 

@@ -31,7 +31,7 @@ __PACKAGE__->meta->setup(
 
 sub getCampo{
     my ($self) = shift;
-    return ($self->campo_marc);
+    return (C4::AR::Utilidades::trim($self->campo_marc));
 }
 
 sub setCampo{
