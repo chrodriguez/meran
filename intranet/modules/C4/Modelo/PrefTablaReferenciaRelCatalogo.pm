@@ -12,6 +12,7 @@ __PACKAGE__->meta->setup(
         alias_tabla     => { type => 'varchar', length => 32, not_null => 1 },
         tabla_referente => { type => 'varchar', length => 32, not_null => 1 },
         campo_referente => { type => 'varchar', length => 32, not_null => 1 },
+        sub_campo_referente => { type => 'varchar', length => 32, not_null => 0, default => 'NULL' },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -48,10 +49,24 @@ sub getTabla_referente{
 sub getCampo_referente{
 
     my ($self) = shift;
-        
     return ($self->campo_referente);
 }
 
+sub getSub_campo_referente{
+
+    my ($self) = shift;
+    return ($self->sub_campo_referente);
+}
+
+sub getReferente{
+
+    my ($self) = shift;
+    my $campo = $self->getCampo_referente;
+#     my $sub_campo = $self->getSub_campo_referente;
+
+#     return ($campo,$sub_campo);
+    return ($campo);
+}
 
 1;
 

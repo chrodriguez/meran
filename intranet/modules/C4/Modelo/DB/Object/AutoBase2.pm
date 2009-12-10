@@ -90,14 +90,13 @@ sub replaceByThis{
 
 
     foreach my $tabla (@$data_array){
-        
-        my $tabla_referente = C4::AR::Referencias::getTablaInstanceByTableName($tabla->{'tabla_object'}->getTabla_referente);
-
-        $tabla_referente->replaceBy($tabla->{'tabla_object'}->getCampo_referente,$self->getPkValue,$new_id);        
+        if (!$tabla->{'tabla_catalogo'}){
+            my $tabla_referente = C4::AR::Referencias::getTablaInstanceByTableName($tabla->{'tabla_object'}->getTabla_referente);
+            $tabla_referente->replaceBy($tabla->{'tabla_object'}->getCampo_referente,$self->getPkValue,$new_id);
+        }
     }
 
 }
-
 
 sub getRelated{
 

@@ -927,10 +927,10 @@ sub getInvolvedCount{
     my ($self) = shift;
 
     my ($campo, $value)= @_;
-    
+    C4::AR::Debug::debug("usr_socio ///////// CAMPO: ".$campo." VALUE: ".$value);
     my @filtros;
 
-    push (@filtros, ( $campo => $value ) );
+    push (@filtros, ( $campo->getCampo_referente => $value ) );
 
     my $count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => \@filtros );
 

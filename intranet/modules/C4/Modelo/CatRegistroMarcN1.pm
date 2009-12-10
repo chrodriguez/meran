@@ -145,18 +145,51 @@ sub tienePrestamos{
     my $cant = 0;
     #recupero todos los grupos del nivel 1
     my ($nivel2_object_array) = $self->getGrupos();
-    
+
     #recorro los id2 del nivel 1 para verificar si tienen prestamos o no 
     foreach my $nivel2 (@$nivel2_object_array){
-        $cant = C4::AR::Prestamos::getCountPrestamosDeGrupo($nivel2->getId2);        
+        $cant = C4::AR::Prestamos::getCountPrestamosDeGrupo($nivel2->getId2);
         if($cant > 0){
             last;
-        } 
+        }
 
     }
 
     return ($cant > 0)?1:0;
 }
+
+sub getInvolvedCount{
+
+    my ($self) = shift;
+
+    my ($tabla, $value)= @_;
+    my @filtros;
+    my $table_name = $tabla->meta->table;
+
+    my $filter_string = $table_name."@".$value;
+
+    push (@filtros, ( marc_record => {like => '%'.$filter_string.'%'} ) );
+
+    my $cat_registro_marc_n1_count = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1_count( query => \@filtros );
+# die;
+    return ($cat_registro_marc_n1_count);
+}
+
+
+sub getReferenced{
+
+    my ($tabla, $value)= @_;
+    my @filtros;
+    my $table_name = $tabla->meta->table;
+
+    my $filter_string = $table_name.'@'.$value;
+
+    push (@filtros, ( marc_record => {like => '%'.$filter_string.'%'} ) );
+
+    my $cat_registro_marc_n1 = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1( query => \@filtros );
+    return ($cat_registro_marc_n1);
+}
+
 
 # DEPRECATEDD
 # actualizar segun tablas nuevas

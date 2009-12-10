@@ -460,9 +460,9 @@ sub getTablaInstanceByTableName{
     my $tabla;
 
    switch ($name) {
-      case "cat_nivel1" { $tabla = C4::Modelo::CatNivel1->new()  }
-      case "cat_nivel2" { $tabla = C4::Modelo::CatNivel2->new()  }
-      case "cat_nivel3" { $tabla = C4::Modelo::CatNivel3->new()  }
+      case "cat_registro_marc_n1" { $tabla = C4::Modelo::CatRegistroMarcN1->new()  }
+      case "cat_registro_marc_n2" { $tabla = C4::Modelo::CatRegistroMarcN2->new()  }
+      case "cat_registro_marc_n3" { $tabla = C4::Modelo::CatRegistroMarcN3->new()  }
       case "usr_socio" { $tabla = C4::Modelo::UsrSocio->new()  }
       case "usr_persona" { $tabla = C4::Modelo::UsrPersona->new()  }
       case "circ_prestamo" { $tabla = C4::Modelo::CircPrestamo->new()  }
@@ -475,13 +475,35 @@ sub getTablaInstanceByTableName{
     return ($clave,$tabla);
 }
 
+sub mostrarReferenciasParaCatalogo{
+
+    my ($alias,$value_id,$data_array) = @_;
+
+    my $global_references_count = 0;
+
+    my @tablas_matching = ('cat_registro_marc_n1','cat_registro_marc_n2','cat_registro_marc_n3');
+    my $tabla_rerefencia = getTablaInstanceByAlias($alias);
+    foreach my $tabla (@tablas_matching){
+        my %table_data = {};
+        my $tabla_referente = getTablaInstanceByTableName($tabla);
+        my $involved_count = $tabla_referente->getInvolvedCount($tabla_rerefencia,$value_id);
+        $table_data{"tabla"} = $tabla_referente->meta->table;
+        $table_data{"tabla_object"} = $tabla_referente;
+        $table_data{"cantidad"} = $involved_count;
+        $table_data{"tabla_catalogo"} = 1;
+        $global_references_count += $involved_count;
+        push (@$data_array, \%table_data);
+    }
+    return ($global_references_count);
+}
+
+
 sub mostrarReferencias{
 
     my ($alias,$value_id) = @_;
     my @filtros;
 
     my @data_array;
-    my $global_references_count = 0;
 
     use C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager;
     push (  @filtros, ( alias_tabla => { eq => $alias },) );
@@ -489,21 +511,21 @@ sub mostrarReferencias{
     my $tablas_matching = C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager->get_pref_tabla_referencia_rel_catalogo(
                                                                                    query => \@filtros,
                                                                                 );
-
-
+    my $global_references_count = mostrarReferenciasParaCatalogo($alias,$value_id,\@data_array);
+    my $referer_involved = $value_id;
     if (scalar(@$tablas_matching)){
         my ($clave_original,$tabla_original) = getTablaInstanceByAlias($tablas_matching->[0]->getAlias_tabla);
         #ESTE ES EL REFERIDO ORIGINAL, PARA MOSTRARLO EN EL CLIENTE
-        my $referer_involved = $tabla_original->getByPk($value_id);
-      
+        $referer_involved = $tabla_original->getByPk($value_id);
+
         foreach my $tabla (@$tablas_matching){
             my %table_data = {};
             my $alias_tabla = $tabla->getAlias_tabla;
             #NO TIENE ALIAS PORQUE NO ES UNA TABLA DE REFERENCIA, IGUAL ESTA POR VERSE SI LE PONEMOS ALIAS A TODAS O NO
             my ($clave_referente,$tabla_referente) = getTablaInstanceByTableName($tabla->getTabla_referente);
-    
             if ($tabla_referente){
-                my $involved_count = $tabla_referente->getInvolvedCount($tabla->getCampo_referente,$value_id);
+                my $involved_count;
+                $involved_count = $tabla_referente->getInvolvedCount($tabla,$value_id);
                 $table_data{"tabla"} = $tabla->getTabla_referente;
                 $table_data{"tabla_object"} = $tabla;
                 $table_data{"cantidad"} = $involved_count;
@@ -511,12 +533,8 @@ sub mostrarReferencias{
                 push (@data_array, \%table_data);
             }
         }
-        
-        return ($global_references_count,$referer_involved,\@data_array);
-    }else{
-        return (0,0);
     }
-    
+    return ($global_references_count,$referer_involved,\@data_array);
 }
 
 sub mostrarSimilares{
@@ -548,12 +566,32 @@ sub asignarReferencia{
 
     if ($tabla){
         my $old_pk = $tabla->getByPk($referer_involved);
-    
         $status = $old_pk->replaceByThis($related_id);
     }
+    
+    asignarReferenciaParaCatalogo($alias_tabla,$referer_involved,$related_id);
 
     return ($status);
 }
+
+
+sub asignarReferenciaParaCatalogo{
+
+  my ($alias_tabla,$related_id,$referer_involved) = @_;
+  my $tabla = getTablaInstanceByAlias($alias_tabla);
+  my $nombre_tabla = $tabla->meta->table;
+
+  my $id_viejo = $referer_involved;
+  my $id_nuevo = $related_id;
+  my $registros = C4::Modelo::CatRegistroMarcN1::getReferenced($tabla,$referer_involved);
+  foreach my $registro (@$registros){
+      my $marc = $registro->getMarcRecord;
+      $marc =~ s/$nombre_tabla\@$id_viejo/$nombre_tabla\@$id_nuevo/g;
+      $registro->setMarcRecord($marc);
+      $registro->save();
+  }
+}
+
 
 sub eliminarReferencia{
 
