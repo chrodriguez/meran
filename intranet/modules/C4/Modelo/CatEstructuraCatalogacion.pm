@@ -69,11 +69,10 @@ __PACKAGE__->meta->setup(
 use utf8;
 
 sub agregar{
-
     use Digest::MD5 qw(md5_hex);
     use C4::Modelo::PrefInformacionReferencia;
-    my ($self)=shift;
-    my ($data_hash)=@_;
+    my ($self)      = shift;
+    my ($data_hash) = @_;
 
     $self->setCampo($data_hash->{'campo'});
     $self->setSubcampo($data_hash->{'subcampo'});
@@ -95,7 +94,7 @@ sub agregar{
 #     if($data_hash->{'referencia'}){
     if($self->tieneReferencia){
     #si tiene referencia....
-        $data_hash->{'id_est_cat'}= $self->id;
+        $data_hash->{'id_est_cat'}  = $self->id;
         my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(db => $self->db);
         $pref_temp->agregar($data_hash);
 
@@ -611,7 +610,7 @@ Funcion que devuelve un arreglo asociativo con el campo como clave y con un arre
 sub getCamposConReferencia{
     my @filtros;
 
-    push(@filtros, ( nivel => { eq => 1 } ) );
+    push(@filtros, ( referencia => { eq => 1 } ) );
 
     my $db_estructura_catalogacion = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(
                                                                 query => \@filtros,

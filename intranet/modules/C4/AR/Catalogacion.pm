@@ -54,19 +54,21 @@ sub _meran_to_marc{
     my $marc_record = MARC::Record->new();
     my $cant_campos = scalar(@$infoArrayNivel);
     my %autorizados;
+
+    #armo el arreglo de campo => [subcampos] autorizados
     foreach my $autorizado (@$campos_autorizados){
        push(@{$autorizados{$autorizado->getCampo()}},$autorizado->getSubcampo());
     }
 
     my $field;
     for (my $i=0;$i<$cant_campos;$i++){
-        my %hash_campos = $infoArrayNivel->[$i];
-        my $indentificador_1 = $infoArrayNivel->[$i]->{'indicador_primario'};
-        my $indentificador_2 = $infoArrayNivel->[$i]->{'indicador_secundario'};
-        my $campo = $infoArrayNivel->[$i]->{'campo'};
+        my %hash_campos         = $infoArrayNivel->[$i];
+        my $indentificador_1    = $infoArrayNivel->[$i]->{'indicador_primario'};
+        my $indentificador_2    = $infoArrayNivel->[$i]->{'indicador_secundario'};
+        my $campo               = $infoArrayNivel->[$i]->{'campo'};
         my @subcampos_array;
-        my $subcampos_hash = $infoArrayNivel->[$i]->{'subcampos_hash'};
-        my $cant_subcampos = $infoArrayNivel->[$i]->{'cant_subcampos'};
+        my $subcampos_hash      = $infoArrayNivel->[$i]->{'subcampos_hash'};
+        my $cant_subcampos      = $infoArrayNivel->[$i]->{'cant_subcampos'};
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
         for(my $j=0;$j<$cant_subcampos;$j++){
             my $subcampo= $subcampos_hash->{$j};
@@ -76,8 +78,12 @@ sub _meran_to_marc{
                 #C4::AR::Utilidades::printARRAY($autorizados{$campo});
                 $value = _procesar_referencia($campo, $key, $value);
                 if ( ($value ne '')&&(C4::AR::Utilidades::existeInArray($key, @{$autorizados{$campo}} ) )) {
+                #el subcampo $key, esta autorizado para el campo $campo
                     push(@subcampos_array, ($key => $value));
                     #C4::AR::Debug::debug("ACEPTADO clave = ".$key." valor: ".$value);
+                }else{
+#                     $msg_object->{'error'} = 1;
+#                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [$campo.", ".$key." valor: ".$value]} ) ;
                 }
             }
         }
@@ -164,7 +170,8 @@ sub Z3950_to_meran{
     my $id2;
     my $id3;
 
-    $msg_object->{'tipo'}="INTRA";
+# FIXME QUE ES ESTO???
+#     $msg_object->{'tipo'}="INTRA";
     
     my ($marc_record_limpio1,$marc_record_limpio2,$marc_record_limpio3,$marc_record_campos_sin_definir)=_procesar_referencias($marc_record);
     if (scalar($marc_record_limpio1->fields())>0){
@@ -934,6 +941,89 @@ sub _obtenerOpciones{
     C4::AR::Debug::debug("_obtenerOpciones => opciones => ".$valores);
 }
 
+
+=head2 t_guardarEnEstructuraCatalogacion
+Esta transaccion guarda una estructura de catalogacion configurada por el bibliotecario 
+=cut
+sub t_guardarEnEstructuraCatalogacion {
+    my($params) = @_;
+
+## FIXME ver si falta verificar algo!!!!!!!!!!
+    my $msg_object          = C4::AR::Mensajes::create();
+
+    _verificar_campo_subcampo_to_estructura($msg_object, $params->{'campo'}, $params->{'subcampo'}, $params->{'nivel'}); 
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my  $estrCatalogacion = C4::Modelo::CatEstructuraCatalogacion->new();
+        my $db = $estrCatalogacion->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+    
+        eval {
+            $estrCatalogacion->agregar($params);  
+            $db->commit;
+            #se cambio el permiso con exito
+            $msg_object->{'error'} = 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U364', 'params' => []} ) ;
+        };
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B426',"INTRA");
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U365', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+}
+
+
+=head2 sub _verificar_campo_subcampo_to_estructura
+=cut
+sub _verificar_campo_subcampo_to_estructura{
+    my ($msg_object, $campo, $subcampo, $nivel) = @_;
+
+    my $campos_autorizados  = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel($nivel);
+    my %autorizados;
+    my $campo_subcampo_array; #campo y subcampo que se va agregar
+    $msg_object->{'error'}  = 0;
+
+    #armo el arreglo de campo => [subcampos] autorizados
+    foreach my $autorizado (@$campos_autorizados){
+       push(@{$autorizados{$autorizado->getCampo()}},$autorizado->getSubcampo());
+    }
+
+    #recupero el campo y subcampo de la BIBLIA para verificar la existencia
+    my ($cat_estructura_base) = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo($campo, $subcampo);
+
+    #recupero la configuracion del campo y subcampo
+#     my ($cat_estructura_catalogacion) = _getEstructuraFromCampoSubCampo($campo, $subcampo);
+
+    if(!$cat_estructura_base){
+        #NO EXISTE el campo, subcampo
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [" el campo ".$campo.", ".$subcampo." NO EXISTE"]} ) ;
+        C4::AR::Debug::debug("_verificar_campo_subcampo_to_estructura => NO EXISTE el campo, subcampo".$campo.", ".$subcampo);
+    }elsif (!C4::AR::Utilidades::existeInArray($subcampo, @{$autorizados{$campo}})) {
+        #el campo, subcampo NO ESTA AUTORIZADO
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [" NO ESTA AUTORIZADO ".$campo.", ".$subcampo]} ) ;
+        C4::AR::Debug::debug("_verificar_campo_subcampo_to_estructura => NO ESTA AUTORIZADO el campo, subcampo".$campo.", ".$subcampo);
+    }elsif(!$cat_estructura_base->getRepetible() && (_getEstructuraFromCampoSubCampo($campo, $subcampo))) {
+        #el subcampo NO ES REPETIBLE y ya EXISTE en la ESTRUCTURA
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [" el campo ".$campo.", ".$subcampo." no es repetible"]} ) ;
+        C4::AR::Debug::debug("_verificar_campo_subcampo_to_estructura => NO SE PUEDE REPETIR el campo, subcampo".$campo.", ".$subcampo);
+    }
+
+}
 ###############################################################A PARTIR DE ESTE PUNTO ES LO VIEJO########################################
 
 
@@ -996,47 +1086,6 @@ sub eliminarCampo{
      }else{
         C4::AR::Debug::debug("Catalogacion => eliminarCampo => NO EXISTE EL ID DE LA ESTRUCTURA QUE SE INTENTA MODIFICAR");
     }
-}
-
-
-=item t_guardarEnEstructuraCatalogacion
-Esta transaccion guarda una estructura de catalogacion configurada por el bibliotecario 
-=cut
-sub t_guardarEnEstructuraCatalogacion {
-    my($params) = @_;
-
-## FIXME ver si falta verificar algo!!!!!!!!!!
-    my $msg_object= C4::AR::Mensajes::create();
-
-    if(!$msg_object->{'error'}){
-    #No hay error
-        my  $estrCatalogacion = C4::Modelo::CatEstructuraCatalogacion->new();
-        my $db = $estrCatalogacion->db;
-        # enable transactions, if possible
-        $db->{connect_options}->{AutoCommit} = 0;
-    
-        eval {
-            $estrCatalogacion->agregar($params);  
-            $db->commit;
-            #se cambio el permiso con exito
-            $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U364', 'params' => []} ) ;
-        };
-    
-        if ($@){
-            #Se loguea error de Base de Datos
-            &C4::AR::Mensajes::printErrorDB($@, 'B426',"INTRA");
-            $db->rollback;
-            #Se setea error para el usuario
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U365', 'params' => []} ) ;
-        }
-
-        $db->{connect_options}->{AutoCommit} = 1;
-
-    }
-
-    return ($msg_object);
 }
 
 
