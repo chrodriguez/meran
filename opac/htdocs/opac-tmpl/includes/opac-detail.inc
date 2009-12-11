@@ -44,16 +44,6 @@
         <table  width="100%">
             <tr>
                 <td class="impar" >
-                    <a href="/cgi-bin/koha/opac-shelves.pl?viewShelfItems=[% biblioitemnumber %]&biblio=[% biblionumber %]">
-                        <img src="[% themelang %]/images/vertodos.png" border="0" alt="[% 'Estantes Virtuales' | i18n %]">
-                    </a>
-                    <a  href="/cgi-bin/koha/opac-analysis.pl?bibnum=[% biblionumber %]&bibnumitems=[% biblioitemnumber %]">
-                        <img src="[% themelang %]/images/analiticas.png" border="0" alt="[% 'Anal&iacute;ticas' | i18n %] ">
-                    </a>
-
-                    <a  href="/cgi-bin/koha/opac-indiceLibro.pl?biblionumber=[% biblionumber %]&biblioitemnumber=[% biblioitemnumber %]">
-                        <img src="[% themelang %]/images/indice.png" border="0" alt="[% 'Indice' | i18n %]">
-                    </a>
                     <br>
                     [% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %] <b>[% cantParaPrestamo %]</b><br>    
                     [% "Disponibilidad Actual Para Sala de Lectura:" | i18n %] <b>[% cantParaSala %]</b><br>
