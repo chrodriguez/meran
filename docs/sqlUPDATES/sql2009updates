@@ -1310,3 +1310,7 @@ CREATE TABLE `contacto` (`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, `trato` V
 ALTER TABLE `contacto` ADD `leido` INT NOT NULL DEFAULT '0';
 
 ALTER TABLE `pref_tabla_referencia_rel_catalogo` ADD `sub_campo_referente` VARCHAR( 255 ) NULL DEFAULT NULL;
+
+--11/12/09
+ ALTER TABLE `ref_estado` DROP `codigo`;
+ ALTER TABLE `ref_disponibilidad` DROP `codigo`;

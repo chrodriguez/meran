@@ -370,10 +370,10 @@ sub getUI_infoObject {
 
 
 sub getEstadoObject {
-    my ($codigo)= @_;
+    my ($id)= @_;
 
     my $estado_array_ref = C4::Modelo::RefEstado::Manager->get_ref_estado(
-                                                                    query => [ codigo => $codigo ]
+                                                                    query => [ id => $id ]
                                                         );
 
     if(scalar(@$estado_array_ref) > 0){
@@ -399,10 +399,10 @@ sub getIdEstadoDisponibleFromName {
 
 
 sub getDisponibilidadObject {
-    my ($codigo)= @_;
+    my ($id)= @_;
 
     my $disponibilidad_array_ref = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad(
-                                                                    query => [ codigo => $codigo ]
+                                                                    query => [ id => $id ]
                                                         );
 
     if(scalar(@$disponibilidad_array_ref) > 0){
@@ -911,10 +911,10 @@ sub getNombreUI {
 }
 
 sub getNombreEstado {
-    my ($codigo)= @_;
+    my ($id)= @_;
 
     my $estado_array_ref = C4::Modelo::RefEstado::Manager->get_ref_estado(
-                                                                    query => [ codigo => $codigo ]
+                                                                    query => [ id => $id ]
                                                         );
 
     if(scalar(@$estado_array_ref) > 0){
@@ -925,10 +925,10 @@ sub getNombreEstado {
 }
 
 sub getNombreDisponibilidad {
-    my ($codigo)= @_;
+    my ($id)= @_;
 
     my $disponibilidad_array_ref = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad(
-                                                                    query => [ codigo => $codigo ]
+                                                                    query => [ id => $id ]
                                                         );
 
     if(scalar(@$disponibilidad_array_ref) > 0){

@@ -60,6 +60,12 @@ sub getNivel3ParaReserva{
     my $diponibilidad_filtro       = 'ref_disponibilidad@'.C4::AR::Referencias::getIdDisponibilidadFromName($disponibilidad);
     my $estado_disponible_filtro   = 'ref_estado@'.C4::AR::Referencias::getIdEstadoDisponibleFromName('Disponible');
 
+# DEBUG=> disponibilidad_filtro => ref_disponibilidad@0
+# DEBUG=> estado_disponible_filtro => ref_estado@3
+
+# @ref_estado@0
+# @ref_disponibilidad@1
+
     C4::AR::Debug::debug("disponibilidad => ".$disponibilidad);
     C4::AR::Debug::debug("disponibilidad_filtro => ".$diponibilidad_filtro);
     C4::AR::Debug::debug("estado_disponible_filtro => ".$estado_disponible_filtro);
