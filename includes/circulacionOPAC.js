@@ -27,7 +27,9 @@ function updateInfoReserva(responseText){
     
     //si estoy logueado, oculta la informacion del usuario
     $('#resultadoReserva').html(responseText);
-    $('#resultadoReserva').slideDown('slow');   
+    $('#resultadoReserva').slideDown('slow');
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
 
 }
 
