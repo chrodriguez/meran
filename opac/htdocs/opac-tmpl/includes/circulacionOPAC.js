@@ -46,7 +46,16 @@ function cancelarReserva(id_reserva){
     objAH.sendToServer();
 }
 
-
+/*
+* Funcion que muestra el mensaje al usuario, luego de cancelar una reserva
+*/
+function updateInfoCancelarReserva(responseText){
+//  objJSON= JSONstring.toObject(responseText);
+//  showMessage(objJSON.message);
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);  
+    DetalleReservas();
+}
 /*
 * Funcion que llama a cancelar una reserva
 */
@@ -62,17 +71,6 @@ function cancelarYReservar(reserveNumber,id1Nuevo,id2Nuevo){
     objAH.accion= 'CANCELAR_Y_RESERVAR';
 
     objAH.sendToServer();
-}
-
-/*
-* Funcion que muestra el mensaje al usuario, luego de cancelar una reserva
-*/
-function updateInfoCancelarReserva(responseText){
-// 	objJSON= JSONstring.toObject(responseText);
-// 	showMessage(objJSON.message);
-	var Messages=JSONstring.toObject(responseText);
-	setMessages(Messages);	
-	DetalleReservas();
 }
 
 /*
@@ -112,7 +110,8 @@ function DetalleReservas(){
 	objAH=new AjaxHelper(updateDetalleReserva);
   	objAH.debug= true;
 	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/opac-DetalleReservas.pl';
+	objAH.url= '/cgi-bin/koha/opac-info_reservas.pl';
+    objAH.action = 'detalle_espera';
 // 	objAH.borrowernumber= borrowernumber;
 	//se envia la consulta
 	objAH.sendToServer();
@@ -161,7 +160,8 @@ function updateDetallePrestamo(responseText){
 function infoReservas(){
     objAH=new AjaxHelper(updateInfoReservas);
     objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/opac-DetalleReservas.pl';
+    objAH.url= '/cgi-bin/koha/opac-info_reservas.pl';
+    objAH.action = 'detalle_espera';
     objAH.sendToServer();
 }
 

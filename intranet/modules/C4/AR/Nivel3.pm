@@ -506,12 +506,12 @@ sub detalleCompletoOPAC{
 	my $nivel2_array_ref= &C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
 
 	my @nivel2;
-	
+
 	for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
  		my $hash_nivel2;
 		$nivel2_array_ref->[$i]->load();
 		$hash_nivel2->{'id2'}= $nivel2_array_ref->[$i]->getId2;
-		$hash_nivel2->{'tipo_documento'}= C4::AR::Referencias::getNombreTipoDocumento($nivel2_array_ref->[$i]->getTipo_documento);
+		$hash_nivel2->{'tipo_documento'}= C4::AR::Referencias::getNombreTipoDocumento($nivel2_array_ref->[$i]->getTipoDocumentoObject);
 		$hash_nivel2->{'nivel2_array'}= ($nivel2_array_ref->[$i])->toMARC; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
 		my ($totales_nivel3,@result)= detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2);
 		$hash_nivel2->{'nivel3'}= \@result;

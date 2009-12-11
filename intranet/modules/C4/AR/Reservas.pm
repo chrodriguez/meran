@@ -702,11 +702,12 @@ C4::AR::Debug::debug("sancionado: $sancionado ------ fechaFin: $fechaFin\n");
 C4::AR::Debug::debug("Entro al if de sanciones");
     }
 #Se verifica que el usuario no intente reservar desde el OPAC un item para SALA
-    if(!$msg_object->{'error'} && $tipo eq "OPAC" && getDisponibilidadGrupo($id2) eq 'SA'){
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R007', 'params' => []} ) ;
-C4::AR::Debug::debug("Entro al if de prestamos de sala");
-    }
+# FIXME que es esto??????????????????????????????????????????????????????????????????????????????????????????
+#     if(!$msg_object->{'error'} && $tipo eq "OPAC" && getDisponibilidadGrupo($id2) eq 'SA'){
+#         $msg_object->{'error'}= 1;
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R007', 'params' => []} ) ;
+# C4::AR::Debug::debug("Entro al if de prestamos de sala");
+#     }
 
 #Se verifica que el usuario no tenga dos reservas sobre el mismo grupo
     if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (&_verificarTipoReserva($nro_socio, $id2)) ){

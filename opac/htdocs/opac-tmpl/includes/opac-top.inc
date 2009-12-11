@@ -25,6 +25,7 @@
   <script src="/includes/AjaxHelper.js"></script>
   <script src="/includes/json/jsonStringify.js"></script>
   [% INCLUDE 'AutocompleteHelper.inc'  %]
+  <script src="/includes/MessageHelper.js"></script>
   <script src="/includes/circulacionOPAC.js"></script>
 
   <title>
