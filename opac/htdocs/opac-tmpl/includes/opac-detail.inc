@@ -64,3 +64,4 @@
         </table>
     </div>
 [% END %]
+<div id="resultadoReserva"></div>
