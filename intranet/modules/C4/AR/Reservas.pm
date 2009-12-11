@@ -10,6 +10,7 @@ use Date::Manip;
 use C4::Date;#formatdate
 use C4::Modelo::CircReserva;
 use C4::Modelo::CircReserva::Manager;
+use C4::Modelo::CatRegistroMarcN3::Manager;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -38,6 +39,71 @@ $VERSION = 3.0;
     &t_realizarPrestamo
     &eliminarReservas
 );
+
+=head2  sub getNivel3ParaReserva
+    Busca un nivel3 sin reservas para los prestamos y nuevas reservas.
+=cut
+sub getNivel3ParaReserva{
+    my ($id2,$disponibilidad) = @_;
+
+#     my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+#                                                                         query => [ 
+#                                                                                 id2 => { eq => $id2},
+#                                                                             'ref_disponibilidad.nombre' => { eq => $disponibilidad},
+#                                                                             'ref_estado.nombre' => { eq => "Disponible"},
+#                                                                                 ],
+#                                                                         with_objects => ['ref_disponibilidad','ref_estado']
+#                                                                 );
+
+#     getIdDisponibilidadFromName($disponibilidad);
+
+    my $diponibilidad_filtro       = 'ref_disponibilidad@'.C4::AR::Referencias::getIdDisponibilidadFromName($disponibilidad);
+    my $estado_disponible_filtro   = 'ref_estado@'.C4::AR::Referencias::getIdEstadoDisponibleFromName('Disponible');
+
+    C4::AR::Debug::debug("disponibilidad => ".$disponibilidad);
+    C4::AR::Debug::debug("disponibilidad_filtro => ".$diponibilidad_filtro);
+    C4::AR::Debug::debug("estado_disponible_filtro => ".$estado_disponible_filtro);
+
+    my @filtros;
+
+    push (  @filtros, ( id2         => { eq => $id2} ) );                                   #ejemplares del grupo
+    push (  @filtros, ( marc_record => { like => '%'.$diponibilidad_filtro.'%' } ) );       #con esta disponibilidad
+    push (  @filtros, ( marc_record => { like => '%'.$estado_disponible_filtro.'%' } ) );   #con estado disponible
+
+    my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => [ @filtros ] );
+
+    foreach my $nivel3 (@$nivel3_array_ref){
+        if(estaLibre($nivel3->getId3)){
+            return($nivel3);
+        }
+    }
+
+    
+    return 0;
+}
+
+=head2  sub estaLibre 
+    Devuelve si esta libre: sin prestamos ni reservas
+=cut
+sub estaLibre{
+
+    my ($id3)=@_;   
+
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
+    my @filtros;
+    push(@filtros, ( id3    => { eq => $id3}));
+    push(@filtros, ( estado => { ne => undef}));
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
+
+    if ($reservas_array_ref){
+        return 1;
+    }else{
+      return 0;
+    }
+}
+#===================================================hasta aca revisado=======================================================================
+
 
 sub t_cancelar_y_reservar {
     
@@ -374,43 +440,6 @@ sub Enviar_Email{
     }#end if (C4::Context->preference("EnabledMailSystem"))
 }
 
-#Busca un nivel3 sin reservas para los prestamos y nuevas reservas.
-sub getNivel3ParaReserva{
-    my ($id2,$disponibilidad)=@_;
-    use C4::Modelo::CatNivel3::Manager;
-    my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-                                                                        query => [ 
-                                                                                id2 => { eq => $id2},
-                                                                            'ref_disponibilidad.nombre' => { eq => $disponibilidad},
-                                                                            'ref_estado.nombre' => { eq => "Disponible"},
-                                                                                ],
-                                                                        with_objects => ['ref_disponibilidad','ref_estado']
-                                                                );
-
-    foreach my $nivel3 (@$nivel3_array_ref)
-    {
-        if(estaLibre($nivel3->getId3)){return($nivel3);}
-    }
-return 0;
-}
-
-sub estaLibre{
-#Devuelve si esta libre: sin prestamos ni reservas
-    my ($id3)=@_;   
-
-    use C4::Modelo::CircReserva;
-    use C4::Modelo::CircReserva::Manager;
-    my @filtros;
-    push(@filtros, ( id3    => { eq => $id3}));
-    push(@filtros, ( estado => { ne => undef}));
-    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
-
-    if ($reservas_array_ref){
-        return 1;
-    }else{
-      return 0;
-    }
-}
 
 =item sub estaReservado
     Devuelve 1 si esta reservado el ejemplar pasado por parametro, 0 caso contrario

@@ -17,6 +17,12 @@ __PACKAGE__->meta->setup(
     unique_key => [ 'codigo','nombre' ],
 );
 
+sub getId{
+    my ($self) = shift;
+
+    return ($self->id);
+}
+
 sub getCodigo{
     my ($self) = shift;
 
