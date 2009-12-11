@@ -512,7 +512,7 @@ sub mostrarReferencias{
                                                                                    query => \@filtros,
                                                                                 );
     my $global_references_count = mostrarReferenciasParaCatalogo($alias,$value_id,\@data_array);
-    my $referer_involved = $value_id;
+    my $referer_involved = getTablaInstanceByAlias($alias)->getByPk($value_id);;
     if (scalar(@$tablas_matching)){
         my ($clave_original,$tabla_original) = getTablaInstanceByAlias($tablas_matching->[0]->getAlias_tabla);
         #ESTE ES EL REFERIDO ORIGINAL, PARA MOSTRARLO EN EL CLIENTE
@@ -534,6 +534,7 @@ sub mostrarReferencias{
             }
         }
     }
+#     C4::AR::Debug::debug("REFERER INVOLVED: ".$referer_involved);
     return ($global_references_count,$referer_involved,\@data_array);
 }
 
