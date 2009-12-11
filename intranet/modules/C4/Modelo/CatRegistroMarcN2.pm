@@ -16,7 +16,7 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 
     relationships => [
-        cat_registro_marc_n1  => {
+        nivel1  => {
             class       => 'C4::Modelo::CatRegistroMarcN1',
             key_columns => { id1 => 'id' },
             type        => 'one to one',

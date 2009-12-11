@@ -28,25 +28,25 @@ __PACKAGE__->meta->setup(
 
     relationships => [
         nivel3 => {
-            class       => 'C4::Modelo::CatNivel3',
-            key_columns => { id3 => 'id3' },
-	    type        => 'one to one',
+            class       => 'C4::Modelo::CatRegistroMarcN3',
+            key_columns => { id3 => 'id' },
+	        type        => 'one to one',
         },
         nivel2 => {
-            class       => 'C4::Modelo::CatNivel2',
-            key_columns => { id2 => 'id2' },
-	    type        => 'one to one',
+            class       => 'C4::Modelo::CatRegistroMarcN2',
+            key_columns => { id2 => 'id' },
+	        type        => 'one to one',
         },
-   	socio => {
+        socio => {
             class       => 'C4::Modelo::UsrSocio',
             key_columns => { nro_socio => 'nro_socio' },
-	    type        => 'one to one',
+	        type        => 'one to one',
+            },
+        ui =>  {
+            class       => 'C4::Modelo::PrefUnidadInformacion',
+            key_columns => { id_ui => 'id_ui' },
+            type        => 'one to one',
         },
-      ui =>  {
-        class       => 'C4::Modelo::PrefUnidadInformacion',
-        key_columns => { id_ui => 'id_ui' },
-        type        => 'one to one',
-      },
     ],
 );
 

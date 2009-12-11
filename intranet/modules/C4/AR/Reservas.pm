@@ -46,7 +46,7 @@ $VERSION = 3.0;
 sub getNivel3ParaReserva{
     my ($id2, $disponibilidad) = @_;
 
-    my $diponibilidad_filtro       = 'ref_disponibilidad@1'; # 1 =  Domiciliario
+    my $diponibilidad_filtro       = 'ref_disponibilidad@1';                # 1 =  Domiciliario
     my $estado_disponible_filtro   = 'ref_estado@3';                        # 3   Disponible
 
     my @filtros;
@@ -546,8 +546,8 @@ sub obtenerReservasDeSocio {
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
                                                     db => $db,
                                                     query => [ nro_socio => { eq => $socio }, estado => {ne => 'P'}],
-                                                    require_objects => [ 'nivel3.nivel2' ], # INNER JOIN
-                                                    with_objects => [ 'nivel3' ] #LEFT JOIN
+                                                    require_objects     => [ 'nivel3.nivel2' ], # INNER JOIN
+                                                    with_objects        => [ 'nivel3' ] #LEFT JOIN
                                 ); 
 
     if(scalar(@$reservas_array_ref) > 0){
@@ -589,7 +589,9 @@ sub getReserva{
 
     push (@filtros, (id_reserva => {eq => $id}) );
 
-    my ($reserva) = C4::Modelo::CircReserva::Manager->get_circ_reserva(db => $db, query => \@filtros, require_objects => ['nivel3','nivel2']);
+    my ($reserva) = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $db, query => \@filtros, 
+                                                                        require_objects => ['nivel3','nivel2']);
+
     if (scalar(@$reserva)){
         return ($reserva->[0]);
     }else{
