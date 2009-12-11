@@ -50,6 +50,7 @@ function setMessages(Messages_hashref){
         }
     
         scrollTo('mensajes');
+        $('#mensajes').css("display","block");
 //         $(window).scroll(function()
 //         {
 //           $('#mensajes').animate({queue: false, duration: 350});

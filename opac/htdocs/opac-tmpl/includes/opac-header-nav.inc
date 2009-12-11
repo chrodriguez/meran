@@ -84,9 +84,9 @@
 
       <!-- Breadcrumbs -->
       <div class="header-breadcrumbs">
-      [% INCLUDE 'opac-status_links.inc' %]
-
-      [% INCLUDE 'opac-search_form.inc' %]
+          [% INCLUDE 'opac-status_links.inc' %]
+          <div id="mensajes"></div>
+          [% INCLUDE 'opac-search_form.inc' %]
       </div>
     </div>
 

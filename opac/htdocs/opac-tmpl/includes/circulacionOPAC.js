@@ -114,6 +114,7 @@ function DetalleReservas(){
     objAH.action = 'detalle_espera';
 // 	objAH.borrowernumber= borrowernumber;
 	//se envia la consulta
+    alert("HOLA");
 	objAH.sendToServer();
 }
 

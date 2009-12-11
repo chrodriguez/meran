@@ -40,9 +40,9 @@ elsif ($obj->{'accion'} eq 'CANCELAR_Y_RESERVAR'){
     ($msg_object)=C4::AR::Reservas::t_cancelar_y_reservar(\%params);
 }
 
-my $infoOperacionJSON = to_json $msg_object;	
+my $infoOperacionJSON=to_json $msg_object;
 
-print $input->header;
+C4::Auth::print_header($session);
 print $infoOperacionJSON;
 
 
