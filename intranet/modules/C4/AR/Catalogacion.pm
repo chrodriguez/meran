@@ -7,14 +7,6 @@ use C4::AR::Busquedas;
 use C4::Date;
 use C4::AR::Utilidades;
 use MARC::Record;
-
-
-use C4::Modelo::CatNivel1::Manager;
-use C4::Modelo::CatNivel1;
-use C4::Modelo::CatNivel2::Manager;
-use C4::Modelo::CatNivel2;
-use C4::Modelo::CatNivel3::Manager;
-use C4::Modelo::CatNivel3;
 use C4::Modelo::CatPrefMapeoKohaMarc;
 use C4::Modelo::CatPrefMapeoKohaMarc::Manager;
 use C4::AR::EstructuraCatalogacionBase;
