@@ -8,34 +8,27 @@ __PACKAGE__->meta->setup(
     table   => 'ref_estado',
 
     columns => [
-        id                    => { type => 'serial', not_null => 1 },
-        codigo => { type => 'integer', not_null => 1 },
+        id     => { type => 'serial', not_null => 1 },
         nombre => { type => 'varchar', default => '', length => 255, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
-    unique_key => [ 'codigo','nombre' ],
+    unique_key => [ 'nombre' ],
 );
+
+
+# 1   Baja
+# 2   Compartido
+# 3   Disponible
+# 4   Ejemplar deteriorado
+# 5   En Encuadernación
+# 6   Perdido
 
 sub getId{
     my ($self) = shift;
 
     return ($self->id);
-}
-
-sub getCodigo{
-    my ($self) = shift;
-
-    return ($self->codigo);
-}
-    
-sub setCodigo{
-    my ($self) = shift;
-    my ($codigo) = @_;
-
-    $self->codigo($codigo);
-}
-    
+}    
 
 sub getNombre{
     my ($self) = shift;
@@ -53,13 +46,13 @@ sub obtenerValoresCampo {
     my ($campo,$orden)=@_;
 	use C4::Modelo::RefEstado::Manager;
  	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
-						( select   => [ 'codigo' , $campo],
+						( select   => [ 'id' , $campo],
 						  sort_by => ($orden) );
     my @array_valores;
 
     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
 		my $valor;
-		$valor->{"clave"}=$ref_valores->[$i]->getCodigo;
+		$valor->{"clave"}=$ref_valores->[$i]->getId;
 		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
         push (@array_valores, $valor);
     }
@@ -73,7 +66,7 @@ sub obtenerValorCampo {
 	use C4::Modelo::RefEstado::Manager;
  	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
 						( select   => [$campo],
-						  query =>[ codigo => { eq => $id} ]);
+						  query =>[ id => { eq => $id} ]);
     	
 # 	return ($ref_valores->[0]->getCampo($campo));
   if(scalar(@$ref_valores) > 0){
@@ -89,7 +82,7 @@ sub getCampo{
     my ($self) = shift;
 	my ($campo)=@_;
     
-	if ($campo eq "codigo") {return $self->getCodigo;}
+	if ($campo eq "id") {return $self->getId;}
 	if ($campo eq "nombre") {return $self->getNombre;}
 
 	return (0);
@@ -112,7 +105,7 @@ sub getAll{
     if ($filtro){
         my @filtros_or;
         push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
-        push(@filtros_or, (codigo => {like => '%'.$filtro.'%'}) );
+        push(@filtros_or, (id => {like => '%'.$filtro.'%'}) );
         push(@filtros, (or => \@filtros_or) );
     }
     my $ref_valores;

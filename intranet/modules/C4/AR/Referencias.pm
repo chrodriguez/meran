@@ -383,19 +383,19 @@ sub getEstadoObject {
     }
 }
 
-sub getIdEstadoDisponibleFromName {
-    my ($name) = @_;
-
-    my $estado_array_ref = C4::Modelo::RefEstado::Manager->get_ref_estado(
-                                                                    query => [ nombre => $name ]
-                                                        );
-
-    if(scalar(@$estado_array_ref) > 0){
-        return $estado_array_ref->[0]->getId();
-    }else{
-        return 0;
-    }
-}
+# sub getIdEstadoDisponibleFromName {
+#     my ($name) = @_;
+# 
+#     my $estado_array_ref = C4::Modelo::RefEstado::Manager->get_ref_estado(
+#                                                                     query => [ nombre => $name ]
+#                                                         );
+# 
+#     if(scalar(@$estado_array_ref) > 0){
+#         return $estado_array_ref->[0]->getId();
+#     }else{
+#         return 0;
+#     }
+# }
 
 
 sub getDisponibilidadObject {
@@ -412,19 +412,19 @@ sub getDisponibilidadObject {
     }
 }
 
-sub getIdDisponibilidadFromName {
-    my ($name)= @_;
-
-    my $estado_array_ref = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad(
-                                                                    query => [ nombre => $name ]
-                                                        );
-
-    if(scalar(@$estado_array_ref) > 0){
-        return $estado_array_ref->[0]->getId();
-    }else{
-        return 0;
-    }
-}
+# sub getIdDisponibilidadFromName {
+#     my ($name)= @_;
+# 
+#     my $estado_array_ref = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad(
+#                                                                     query => [ nombre => $name ]
+#                                                         );
+# 
+#     if(scalar(@$estado_array_ref) > 0){
+#         return $estado_array_ref->[0]->getId();
+#     }else{
+#         return 0;
+#     }
+# }
 
 =item
 Retorna el objeto autor segun el id pasado por parametro, si no existe el autor retorna 0

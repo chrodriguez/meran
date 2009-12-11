@@ -8,8 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'ref_disponibilidad',
 
     columns => [
-        id                    => { type => 'serial', not_null => 1 },
-        codigo => { type => 'integer', not_null => 1 },
+        id     => { type => 'serial', not_null => 1 },
         nombre => { type => 'varchar', default => '', length => 255, not_null => 1 },
     ],
 
@@ -17,6 +16,10 @@ __PACKAGE__->meta->setup(
     unique_key => [ 'nombre' ],
 
 );
+
+
+# 1 =  Domiciliario
+# 2 =  Sala de Lectura
 
 sub toString{
 	my ($self) = shift;
@@ -28,23 +31,23 @@ sub getObjeto{
 	my ($self) = shift;
 	my ($id) = @_;
 
-	my $objecto= C4::Modelo::RefDisponibilidad->new(codigo => $id);
+	my $objecto= C4::Modelo::RefDisponibilidad->new(id => $id);
 	$objecto->load();
 	return $objecto;
 }
 
 
-sub getCodigo{
+sub getId{
     my ($self) = shift;
 
-    return ($self->codigo);
+    return ($self->id);
 }
     
-sub setCodigo{
+sub setId{
     my ($self) = shift;
-    my ($codigo) = @_;
+    my ($id) = @_;
 
-    $self->codigo($codigo);
+    $self->id($id);
 }
     
 
@@ -65,13 +68,13 @@ sub obtenerValoresCampo {
 
 	use C4::Modelo::RefDisponibilidad::Manager;
  	my $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad
-						( select   => [ 'codigo',$campo],
+						( select   => [ 'id',$campo],
 						  sort_by => ($orden) );
     my @array_valores;
 
     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
 		my $valor;
-		$valor->{"clave"}=$ref_valores->[$i]->getCodigo;
+		$valor->{"clave"}=$ref_valores->[$i]->getId;
 		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
         push (@array_valores, $valor);
     }
@@ -85,7 +88,7 @@ sub obtenerValorCampo {
 	use C4::Modelo::RefDisponibilidad::Manager;
  	my $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad
 						( select   => [$campo],
-						  query =>[ codigo => { eq => $id} ]);
+						  query =>[ id => { eq => $id} ]);
     	
 # 	return ($ref_valores->[0]->getCampo($campo));
   if(scalar(@$ref_valores) > 0){
@@ -101,7 +104,7 @@ sub getCampo{
     my ($self) = shift;
 	my ($campo)=@_;
     
-	if ($campo eq "codigo") {return $self->getCodigo;}
+	if ($campo eq "id") {return $self->getId;}
 	if ($campo eq "nombre") {return $self->getNombre;}
 
 	return (0);

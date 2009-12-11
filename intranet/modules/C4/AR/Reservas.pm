@@ -44,31 +44,10 @@ $VERSION = 3.0;
     Busca un nivel3 sin reservas para los prestamos y nuevas reservas.
 =cut
 sub getNivel3ParaReserva{
-    my ($id2,$disponibilidad) = @_;
+    my ($id2, $disponibilidad) = @_;
 
-#     my $nivel3_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-#                                                                         query => [ 
-#                                                                                 id2 => { eq => $id2},
-#                                                                             'ref_disponibilidad.nombre' => { eq => $disponibilidad},
-#                                                                             'ref_estado.nombre' => { eq => "Disponible"},
-#                                                                                 ],
-#                                                                         with_objects => ['ref_disponibilidad','ref_estado']
-#                                                                 );
-
-#     getIdDisponibilidadFromName($disponibilidad);
-
-    my $diponibilidad_filtro       = 'ref_disponibilidad@'.C4::AR::Referencias::getIdDisponibilidadFromName($disponibilidad);
-    my $estado_disponible_filtro   = 'ref_estado@'.C4::AR::Referencias::getIdEstadoDisponibleFromName('Disponible');
-
-# DEBUG=> disponibilidad_filtro => ref_disponibilidad@0
-# DEBUG=> estado_disponible_filtro => ref_estado@3
-
-# @ref_estado@0
-# @ref_disponibilidad@1
-
-    C4::AR::Debug::debug("disponibilidad => ".$disponibilidad);
-    C4::AR::Debug::debug("disponibilidad_filtro => ".$diponibilidad_filtro);
-    C4::AR::Debug::debug("estado_disponible_filtro => ".$estado_disponible_filtro);
+    my $diponibilidad_filtro       = 'ref_disponibilidad@1'; # 1 =  Domiciliario
+    my $estado_disponible_filtro   = 'ref_estado@3';                        # 3   Disponible
 
     my @filtros;
 
