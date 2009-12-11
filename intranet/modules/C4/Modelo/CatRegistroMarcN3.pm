@@ -330,5 +330,100 @@ sub toMARC{
     return ($MARC_result_array);
 }
 
+
+
+sub ESTADO_DISPONIBLE{
+=item    
+ESTADO
+
+    0   Disponible
+    1   Perdido
+    2   Compartido
+    4   Baja
+    5   Ejemplar deteriorado
+    6   En Encuadernación
+=cut
+    
+    my ($estado) = @_;
+
+    return ($estado eq 0);
+}   
+
+=item
+DISPONIBILIDAD
+
+    1   Prestamo
+    2   Sala de Lectura
+=cut
+
+sub DISPONIBILIDAD_PRESTAMO{
+    my ($estado) = @_;
+
+    return ($estado eq 1);
+}
+
+sub DISPONIBILIDAD_PARA_SALA{
+    my ($estado) = @_;
+
+    return ($estado eq 2);
+}
+
+sub verificar_cambio {
+    my ($self) = shift;
+
+    my ($db, $params) = @_;
+
+    my $estado_anterior             = $params->{'estado_anterior'};          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
+    my $estado_nuevo                = $params->{'estado_nuevo'};
+    my $disponibilidad_anterior     = $params->{'disponibilidad_anterior'};  #(DISPONIBLE, PRESTAMO, SALA LECTURA)
+    my $disponibilidad_nueva        = $params->{'disponibilidad_nueva'};
+    C4::AR::Debug::debug("verificar_cambio => estado_anterior: ".$params->{'estado_anterior'});
+    C4::AR::Debug::debug("verificar_cambio => estado_nuevo: ".$params->{'estado_nuevo'});
+    C4::AR::Debug::debug("verificar_cambio => disponibilidad_anterior: ".$params->{'disponibilidad_anterior'});
+    C4::AR::Debug::debug("verificar_cambio => disponibilidad_nueva: ".$params->{'disponibilidad_nueva'});
+
+    #  ESTADOS
+    #   wthdrawn = 0 => DISPONIBLE
+    #   wthdrawn > => NO DISPONIBLE
+
+    #  DISPONIBILIDADES
+    #   notforloan = 1 => PARA SALA
+    #   notforload = 0 => PARA PRESTAMO
+        
+    my $msg_object;
+    
+    if( ESTADO_DISPONIBLE($estado_anterior) && (!ESTADO_DISPONIBLE($estado_nuevo)) && DISPONIBILIDAD_PRESTAMO($disponibilidad_anterior) ){
+    #pasa de NO DISPONIBLE a DISPONIBLE con disponibilidad_anterior PRESTAMO
+    #Si estado_anterior es DISPONIBLE y estado_nuevo es NO DISPONIBLE y disponibilidad_anterior es PARA PRESTAMO
+    #hay que reasignar las reservas que existen para el ejemplar, si no se puede reasignar se eliminan las reservas y sanciones
+        C4::AR::Debug::debug("verificar_cambio => DISPONIBLE a NO DISPONIBLE con disponibilidad anterior PRESTAMO");
+        
+        C4::AR::Reservas::reasignarNuevoEjemplarAReserva($db, $params, $msg_object);
+
+    }elsif ( (!ESTADO_DISPONIBLE($estado_anterior)) && ESTADO_DISPONIBLE($estado_nuevo) && DISPONIBILIDAD_PRESTAMO($disponibilidad_nueva) ){
+    #pasa de DISPONIBLE a NO DISPONIBLE con disponibilidad_nueva PRESTAMO
+    #Si estado_anterior es NO DISPONIBLE  y  estado_nuevo es DISPONIBLE  y  disponibilidad_nueva es PRESTAMO
+    #hay que verificar si hay reservas en espera, si hay se reasignan al nuevo ejemplar
+        C4::AR::Debug::debug("verificar_cambio => NO DISPONIBLE a DISPONIBLE con disponibilidad nueva PRESTAMO");
+        C4::AR::Reservas::asignarEjemplarASiguienteReservaEnEspera($params);
+
+    }elsif ( ESTADO_DISPONIBLE($estado_anterior) && DISPONIBILIDAD_PRESTAMO($disponibilidad_anterior) && 
+             DISPONIBILIDAD_PARA_SALA($disponibilidad_nueva) ){
+    #Si estaba DISPONIBLE y pasa de disponibilidad_anterior PRESTAMO a disponibilidad_nueva SALA
+    #hay que verificar si tiene reservas, si tiene se reasignan si no se puden reasignar se cancelan
+        C4::AR::Debug::debug("verificar_cambio => DISPONIBLE de disponibilidad anterior PRESTAMO a disponibilidad nueva PARA SALA");
+        C4::AR::Reservas::reasignarNuevoEjemplarAReserva($db, $params, $msg_object);            
+
+    }elsif ( ESTADO_DISPONIBLE($estado_anterior) && DISPONIBILIDAD_PARA_SALA($disponibilidad_anterior) &&
+             DISPONIBILIDAD_PRESTAMO($disponibilidad_nueva) ){
+    #Si estaba DISPONIBLE y pasa de disponibilidad_anterior PARA SALA a disponibilidad_nueva PRESTAMO
+    #Se verifica si hay reservas en espera, si hay se reasignan al nuevo ejemplar
+        C4::AR::Debug::debug("verificar_cambio => DISPONIBLE de disponibilidad anterior PARA SALA a disponibilidad nueva PRESTAMO");
+        C4::AR::Reservas::asignarEjemplarASiguienteReservaEnEspera($params);
+    }
+    
+}
+
+
 1;
 
