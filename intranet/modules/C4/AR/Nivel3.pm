@@ -489,7 +489,7 @@ sub detalleDisponibilidadNivel3{
 
     $infoNivel3{'disponibles'} = $infoNivel3{'cantParaPrestamo'} + $infoNivel3{'cantParaSala'};
 
-     my (%infoNivel3,@result);   
+#     my (%infoNivel3,@result);   
 
     return(\%infoNivel3,@result);
 }
