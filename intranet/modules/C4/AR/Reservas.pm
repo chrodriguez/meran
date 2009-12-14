@@ -46,8 +46,8 @@ $VERSION = 3.0;
 sub getNivel3ParaReserva{
     my ($id2, $disponibilidad) = @_;
 
-    my $diponibilidad_filtro       = 'ref_disponibilidad@1';                # 1 =  Domiciliario
-    my $estado_disponible_filtro   = 'ref_estado@3';                        # 3   Disponible
+    my $diponibilidad_filtro       = C4::AR::Referencias::getIdRefDisponibilidadDomiciliaria(); # 1 =  Domiciliario
+    my $estado_disponible_filtro   = C4::AR::Referencias::getIdRefEstadoDisponible();           # 3 =  Disponible
 
     my @filtros;
 
@@ -63,7 +63,6 @@ sub getNivel3ParaReserva{
         }
     }
 
-    
     return 0;
 }
 
@@ -85,6 +84,53 @@ sub estaLibre{
         return 1;
     }else{
       return 0;
+    }
+}
+
+
+=head2 sub getDisponibilidadDeGrupoParaPrestamoDomiciliario
+    Indica si tiene o no (el grupo) disponibilidad para prestamo DOMICILIARIO
+=cut
+sub getDisponibilidadDeGrupoParaPrestamoDomiciliario{
+    my ($db, $id2) = @_;
+
+    my @filtros;
+    my $diponibilidad_filtro      = C4::AR::Referencias::getIdRefDisponibilidadDomiciliaria();      #Domiciliario
+    my $estado_disponible_filtro  = C4::AR::Referencias::getIdRefEstadoDisponible();                #Disponible
+    push(@filtros, ( id2                => { eq => $id2 }) );
+    push(@filtros, ( marc_record        => { like => '%'.$diponibilidad_filtro.'%' } ) );       
+    push(@filtros, ( marc_record        => { like => '%'.$estado_disponible_filtro.'%' } ) );   
+
+    my $cant = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( db => $db, query => \@filtros);
+
+    if($cant > 0){
+        return $cant;
+    }else{
+        return 0;
+    }
+}
+
+=head2
+    sub getDisponibilidadDeGrupoParaPrestamoSala
+    Indica si tiene o no (el grupo) disponibilidad para prestamo PARA SALA
+=cut
+sub getDisponibilidadDeGrupoParaPrestamoSala{
+    my ($id2) = @_;
+
+    my @filtros;
+  
+    my $diponibilidad_filtro      = C4::AR::Referencias::getIdRefDisponibilidadSalaLectura();      #Para Sala
+    my $estado_disponible_filtro  = C4::AR::Referencias::getIdRefEstadoDisponible();               #Disponible
+    push(@filtros, ( id2                => { eq => $id2}) );
+    push(@filtros, ( marc_record        => { like => '%'.$diponibilidad_filtro.'%' } ) );       
+    push(@filtros, ( marc_record        => { like => '%'.$estado_disponible_filtro.'%' } ) );   
+
+    my $cant = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( query => \@filtros);
+
+    if($cant > 0){
+        return $cant;
+    }else{
+        return 0;
     }
 }
 #===================================================hasta aca revisado=======================================================================
@@ -485,7 +531,7 @@ sub getDisponibilidad{
     my  $catNivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
 
     if ($catNivel3){
-        return C4::AR::Referencias::getNombreDisponibilidad($catNivel3->getId_disponibilidad);
+        return C4::AR::Referencias::getNombreDisponibilidad($catNivel3->getIdDisponibilidad);
     }else{
       return (0);
     }
@@ -504,14 +550,17 @@ sub _verificarTipoReserva {
     return ($error);
 }
 
+=head2
+    sub getReservasDeSocio
+    devuelve las reservas de grupo del usuario
+=cut
 sub getReservasDeSocio {
-#devuelve las reservas de grupo del usuario
     my ($nro_socio,$id2)=@_;
 
     use C4::Modelo::CircReserva;
     use C4::Modelo::CircReserva::Manager;
     my @filtros;
-    push(@filtros, ( id2    => { eq => $id2}));
+    push(@filtros, ( id2        => { eq => $id2}));
     push(@filtros, ( nro_socio  => { eq => $nro_socio} ));
     push(@filtros, ( estado     => { ne => 'P'} ));
 
@@ -520,13 +569,16 @@ sub getReservasDeSocio {
     return ($reservas_array_ref,scalar(@$reservas_array_ref));
 }
 
+=head2
+    sub getReservasDeId2
+    devuelve las reservas de grupo
+=cut
 sub getReservasDeId2 {
-#devuelve las reservas de grupo
     my ($id2) = @_;
     use C4::Modelo::CircReserva;
     use C4::Modelo::CircReserva::Manager;
     my @filtros;
-    push(@filtros, ( id2    => { eq => $id2}));
+    push(@filtros, ( id2        => { eq => $id2}));
     push(@filtros, ( estado     => { ne => 'P'} ));
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, require_objects => ['nivel3','nivel2']); 
@@ -535,6 +587,9 @@ sub getReservasDeId2 {
 }
 
 
+=head2
+    sub obtenerReservasDeSocio
+=cut
 sub obtenerReservasDeSocio {
     
     use C4::Modelo::CircReserva;
@@ -557,8 +612,9 @@ sub obtenerReservasDeSocio {
     }
 }
 
-=item
-Dado un socio, devuelve las reservas asignadas a el
+=head2  
+    sub _getReservasAsignadas
+    Dado un socio, devuelve las reservas asignadas a el
 =cut
 sub _getReservasAsignadas {
 
@@ -577,9 +633,9 @@ sub _getReservasAsignadas {
     return($reservas_array_ref);
 }
 
-=item
-getReserva
-Funcion que retorna la informacion de la reserva con el numero que se le pasa por parametro.
+=head2
+    sub getReserva
+    Funcion que retorna la informacion de la reserva con el numero que se le pasa por parametro.
 =cut
 sub getReserva{
     my ($id,$db)=@_;
@@ -599,9 +655,9 @@ sub getReserva{
     }
 }
 
-=item
-reservasVencidas
-Devuele una referencia a un arreglo con todas las reservas que esta vencidas al dia de la fecha.
+=head2
+    sub reservasVencidas
+    Devuele una referencia a un arreglo con todas las reservas que esta vencidas al dia de la fecha.
 =cut
 sub reservasVencidas{
 
@@ -624,9 +680,9 @@ sub reservasVencidas{
 
 
 
-=item
-reservasEnEspera
-Funcion que trae las reservas en espera de un grupo
+=head2
+    sub reservasEnEspera
+    Funcion que trae las reservas en espera de un grupo
 =cut
 sub reservasEnEspera {
     my($id2)=@_;
@@ -979,45 +1035,7 @@ sub asignarEjemplarASiguienteReservaEnEspera{
     }
 }
 
-=item sub getDisponibilidadDeGrupoParaPrestamoDomiciliario
-    Indica si tiene o no (el grupo) disponibilidad para prestamo DOMICILIARIO
-=cut
-sub getDisponibilidadDeGrupoParaPrestamoDomiciliario{
-    my ($db, $id2) = @_;
 
-    my @filtros;
-    push(@filtros, ( id2                => { eq => $id2 }) );
-    push(@filtros, ( id_disponibilidad  => { eq => 1 }) );    # Es Prestamo Domiciliario
-    push(@filtros, ( id_estado          => { eq => 0 }) );    # Esta Disponible
-
-    my $cant = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count( db => $db, query => \@filtros);
-
-    if($cant > 0){
-        return $cant;
-    }else{
-        return 0;
-    }
-}
-
-=item sub getDisponibilidadDeGrupoParaPrestamoSala
-    Indica si tiene o no (el grupo) disponibilidad para prestamo PARA SALA
-=cut
-sub getDisponibilidadDeGrupoParaPrestamoSala{
-    my ($id2) = @_;
-
-    my @filtros;
-    push(@filtros, ( id2 => { eq => $id2}) );
-    push(@filtros, ( id_disponibilidad => { eq => 2}) );    # Es Prestamo PARA SALA
-    push(@filtros, ( id_estado => { eq => 0}) );            # Esta Disponible
-
-    my $cant = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count( query => \@filtros);
-
-    if($cant > 0){
-        return $cant;
-    }else{
-        return 0;
-    }
-}
 
 
 =item sub getEjemplarDeGrupoParaReserva
@@ -1025,15 +1043,16 @@ sub getDisponibilidadDeGrupoParaPrestamoSala{
 =cut
 # TODO no se como hacer el NOT IN con Rose::DB
 sub getEjemplaresDeGrupoParaReserva{
-    my ($id2) = @_;
-    my $dbh = C4::Context->dbh;
+    my ($id2)   = @_;
+    my $dbh     = C4::Context->dbh;
 
-    #n3.id_disponibilidad   = 1   DISPONIBILIDAD => PRESTAMO
-    #n3.id_estado           = 1   ESTADO => DISPONIBLE
+    my $disponibilidad_prestamo = C4::AR::Referencias::getIdRefDisponibilidadDomiciliaria();
+    my $estado_disponible       = C4::AR::Referencias::getIdRefEstadoDisponible();
 
     #esta consulta devuelve todos los ejemplares del grupo q no estan la tabla reservas
     my $query= "    SELECT id3 
-                    FROM cat_nivel3 n3 WHERE n3.id2 = ? AND n3.id_disponibilidad = 1 AND n3.id_estado = 0 
+                    FROM cat_registro_marc_n3 n3 WHERE n3.id2 = ? AND n3.marc_record LIKE '% ? %' 
+                    AND n3.marc_record LIKE '% ? %' 
                     AND n3.id3 NOT IN ( SELECT cr.id3 
                                         FROM circ_reserva cr 
                                         WHERE cr.id2 = ? AND cr.id3 IS NOT NULL)";
@@ -1041,7 +1060,8 @@ sub getEjemplaresDeGrupoParaReserva{
     #el 2do SELECT devuelve todas las reservas asigandas del grupo
 
     my $sth=$dbh->prepare($query);
-    $sth->execute($id2, $id2);
+    
+    $sth->execute($id2, $disponibilidad_prestamo, $estado_disponible, $id2);
     
     my @array_id3;
 
@@ -1050,9 +1070,7 @@ sub getEjemplaresDeGrupoParaReserva{
     }
 
     return @array_id3;
-
 }
-
 
 =item sub getEjemplarDeGrupoParaReserva
     Devuelve el primer el ejemplar (si existe) del grupo disponible para reserva.

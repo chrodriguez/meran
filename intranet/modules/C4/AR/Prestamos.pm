@@ -45,6 +45,9 @@ $VERSION = 3;
 );
 
 
+=head2
+    sub getInfoPrestamo
+=cut
 sub getInfoPrestamo{
 
     my ($id_prestamo,$db) = @_;
@@ -63,36 +66,38 @@ sub getInfoPrestamo{
     }
     return (0);
 }
+
+
+=head2
+    sub _verificarMaxTipoPrestamo
+=cut
+sub _verificarMaxTipoPrestamo{
+    my ($nro_socio,$tipo_prestamo)=@_;
+
+    my $error=0;
+
+    #Obtengo la cant maxima de prestamos de ese tipo que se puede tener
+    my $tipo=C4::AR::Prestamos::getTipoPrestamo($tipo_prestamo);
+    if ($tipo){
+        my $prestamos_maximos= $tipo->getPrestamos;
+        #
     
-
-sub chequeoDeFechas{
-    my ($cantDiasRenovacion,$fechaRenovacion,$intervalo_vale_renovacion)=@_;
-    # La $fechaRenovacion es la ultima fecha de renovacion o la fecha del prestamo si nunca se renovo
-    my $plazo_actual=$cantDiasRenovacion;# Cuantos dias m�s se puede renovar el prestamo
-    my $vencimiento=proximoHabil($plazo_actual,0,$fechaRenovacion);
-    my $err= "Error con la fecha";
-    my $dateformat = C4::Date::get_date_format();
-    my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);#se saco el 2 para que ande bien.
-    my $desde=C4::Date::format_date_in_iso(DateCalc($vencimiento,"- ".$intervalo_vale_renovacion." days",\$err,2),$dateformat);#SE AGREGO EL 2 PARA QUE SALTEE LOS SABADOS Y DOMINGOS. 01/10/2007
-    my $flag = Date_Cmp($desde,$hoy);
-    #comparo la fecha de hoy con el inicio del plazo de renovacion  
-    if (!($flag gt 0)){ 
-        #quiere decir que la fecha de hoy es mayor o igual al inicio del plazo de renovacion
-        #ahora tengo que ver que la fecha de hoy sea anterior al vencimiento
-        my $flag2=Date_Cmp($vencimiento,$hoy);
-        if (!($flag2 lt 0)){
-            #la fecha esta ok
-            return 1;
-            
-        }
-
+        #Obtengo la cant total de prestamos actuales de ese tipo que tiene el usuario
+        my @filtros;
+        push(@filtros, ( fecha_devolucion => { eq => undef } ));
+        push(@filtros, ( nro_socio => { eq => $nro_socio}) );
+        push(@filtros, ( tipo_prestamo => { eq => $tipo_prestamo}) );
+        my $cantidad_prestamos= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros);
+        #
+        
+        if ($cantidad_prestamos >= $prestamos_maximos) {$error=1}
     }
-    return 0;
+    return $error;
 }
 
-=item
-prestamosHabilitadosPorTipo
-Esta funcion devuelve los tipos de prestamos permitidos para un usuario, en un arreglo de hash.
+=head2
+    sub prestamosHabilitadosPorTipo
+    Esta funcion devuelve los tipos de prestamos permitidos para un usuario, en un arreglo de hash.
 =cut
 sub prestamosHabilitadosPorTipo {
     my ($id_disponibilidad, $nro_socio)=@_;
@@ -144,37 +149,9 @@ sub prestamosHabilitadosPorTipo {
     return(\@tipos);
 }
 
-#
-# NUEVAS FUNCIONES
-#
-
-
-
-
-sub _verificarMaxTipoPrestamo{
-    my ($nro_socio,$tipo_prestamo)=@_;
-
-    my $error=0;
-
-    #Obtengo la cant maxima de prestamos de ese tipo que se puede tener
-    my $tipo=C4::AR::Prestamos::getTipoPrestamo($tipo_prestamo);
-    if ($tipo){
-        my $prestamos_maximos= $tipo->getPrestamos;
-        #
-    
-        #Obtengo la cant total de prestamos actuales de ese tipo que tiene el usuario
-        my @filtros;
-        push(@filtros, ( fecha_devolucion => { eq => undef } ));
-        push(@filtros, ( nro_socio => { eq => $nro_socio}) );
-        push(@filtros, ( tipo_prestamo => { eq => $tipo_prestamo}) );
-        my $cantidad_prestamos= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros);
-        #
-        
-        if ($cantidad_prestamos >= $prestamos_maximos) {$error=1}
-    }
-    return $error;
-}
-
+=head2
+    sub getCountPrestamosDeGrupoPorUsuario
+=cut
 sub getCountPrestamosDeGrupoPorUsuario {
 #devuelve la cantidad de prestamos de grupo del usuario
     my ($nro_socio, $id2, $tipo_prestamo)=@_;
@@ -183,10 +160,10 @@ sub getCountPrestamosDeGrupoPorUsuario {
         use C4::Modelo::CircPrestamo::Manager;
 
         my @filtros;
-        push(@filtros, ( id2    => { eq => $id2 } ));
-        push(@filtros, ( nro_socio => { eq => $nro_socio } ));
-        push(@filtros, ( tipo_prestamo => { eq => $tipo_prestamo } ));
-        push(@filtros, ( fecha_devolucion => { eq => undef } ));
+        push(@filtros, ( id2                => { eq => $id2 } ));
+        push(@filtros, ( nro_socio          => { eq => $nro_socio } ));
+        push(@filtros, ( tipo_prestamo      => { eq => $tipo_prestamo } ));
+        push(@filtros, ( fecha_devolucion   => { eq => undef } ));
 
         my $prestamos_grupo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
                                                                                         query => \@filtros,
@@ -196,9 +173,9 @@ sub getCountPrestamosDeGrupoPorUsuario {
         return ($prestamos_grupo_count);
 }
 
-
-=item
-Esta funcion devuelve la cantidad de prestamos por grupo
+=head2
+    sub getCountPrestamosDelRegistro
+    Esta funcion devuelve la cantidad de prestamos por grupo
 =cut
 sub getCountPrestamosDelRegistro{
     my ($id1) = @_;
@@ -217,6 +194,59 @@ sub getCountPrestamosDelRegistro{
 
     return ($prestamos_grupo_count);
 }
+
+
+=head2
+    sub getTipoPrestamo
+    retorna los datos del tipo de prestamo
+=cut
+sub getTipoPrestamo {
+    
+    use C4::Modelo::CircRefTipoPrestamo;
+    my ($tipo_prestamo)=@_;
+    my @filtros;
+
+    push (@filtros,(id_tipo_prestamo => {eq => $tipo_prestamo}) );
+    my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo( query => \@filtros,);
+    if (scalar(@$circ_ref_tipo_prestamo)){
+        return($circ_ref_tipo_prestamo->[0]);
+    }else{
+        return(0);
+    }
+}
+#==========================================================hasta aca revisado========================================================    
+
+sub chequeoDeFechas{
+    my ($cantDiasRenovacion,$fechaRenovacion,$intervalo_vale_renovacion)=@_;
+    # La $fechaRenovacion es la ultima fecha de renovacion o la fecha del prestamo si nunca se renovo
+    my $plazo_actual=$cantDiasRenovacion;# Cuantos dias m�s se puede renovar el prestamo
+    my $vencimiento=proximoHabil($plazo_actual,0,$fechaRenovacion);
+    my $err= "Error con la fecha";
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);#se saco el 2 para que ande bien.
+    my $desde=C4::Date::format_date_in_iso(DateCalc($vencimiento,"- ".$intervalo_vale_renovacion." days",\$err,2),$dateformat);#SE AGREGO EL 2 PARA QUE SALTEE LOS SABADOS Y DOMINGOS. 01/10/2007
+    my $flag = Date_Cmp($desde,$hoy);
+    #comparo la fecha de hoy con el inicio del plazo de renovacion  
+    if (!($flag gt 0)){ 
+        #quiere decir que la fecha de hoy es mayor o igual al inicio del plazo de renovacion
+        #ahora tengo que ver que la fecha de hoy sea anterior al vencimiento
+        my $flag2=Date_Cmp($vencimiento,$hoy);
+        if (!($flag2 lt 0)){
+            #la fecha esta ok
+            return 1;
+            
+        }
+
+    }
+    return 0;
+}
+
+
+#
+# NUEVAS FUNCIONES
+#
+
+
 
 =item
 getPrestamoDeId3
@@ -269,20 +299,7 @@ sub getPrestamosDeSocio {
         return ($prestamos__array_ref);
 }
 
-sub getTipoPrestamo {
-#retorna los datos del tipo de prestamo
-use C4::Modelo::CircRefTipoPrestamo;
-    my ($tipo_prestamo)=@_;
-    my @filtros;
 
-    push (@filtros,(id_tipo_prestamo => {eq => $tipo_prestamo}) );
-    my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo( query => \@filtros,);
-    if (scalar(@$circ_ref_tipo_prestamo)){
-        return($circ_ref_tipo_prestamo->[0]);
-    }else{
-        return(0);
-    }
-}
 
 
 sub getTiposDePrestamos {
@@ -608,15 +625,14 @@ sub t_renovarOPAC {
 }
 
 sub getPrestamoPorBarcode {
-
-    my ($barcode)=@_;
+    my ($barcode) = @_;
     
     use C4::Modelo::CircPrestamo;
     use C4::Modelo::CircPrestamo::Manager;
 
     my @filtros;
-    push(@filtros, ( barcode => { eq => $barcode } ));
-    push(@filtros, ( fecha_devolucion => { eq => undef } ) );
+    push(@filtros, ( barcode            => { eq => $barcode } ));
+    push(@filtros, ( fecha_devolucion   => { eq => undef } ) );
 
     my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
                                                                 query => \@filtros,

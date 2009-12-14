@@ -86,6 +86,41 @@ use vars qw(@EXPORT @ISA);
             &obtenerTiposNivel3
           );
 
+
+
+sub getIdRefDisponibilidadDomiciliaria{
+    return 'ref_disponibilidad@1';
+}
+
+sub getIdRefDisponibilidadSalaLectura{
+    return 'ref_disponibilidad@2';
+}
+
+sub getIdRefEstadoBaja{
+    return 'ref_estado@1';
+}
+
+sub getIdRefEstadoCompartido{
+    return 'ref_estado@2';
+}
+
+sub getIdRefEstadoDisponible{
+    return 'ref_estado@3';
+}
+
+sub getIdRefEstadoDeteriorado{
+    return 'ref_estado@4';
+}
+
+sub getIdRefEstadoEncuadernacion{
+    return 'ref_estado@5';
+}
+
+sub getIdRefEstadoPerdido{
+    return 'ref_estado@6';
+}
+
+
 =item
 Esta funcion devuelve un arreglo de objetos tipo de documento
 =cut

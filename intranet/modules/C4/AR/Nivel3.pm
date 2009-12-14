@@ -278,16 +278,16 @@ sub getNivel3FromBarcode {
 
 sub getBarcodesLike {
     
-    use C4::Modelo::CatNivel3;
-    use C4::Modelo::CatNivel3::Manager;
+    use C4::Modelo::CatRegistroMarcN3;
+    use C4::Modelo::CatRegistroMarcN3::Manager;
 
     my ($barcode) = @_;
     my  $barcodes_array_ref;
     my @filtros;
  
-	push(@filtros, ( barcode=> { like => $barcode.'%' }) );
+	push(@filtros, ( marc_record => { like => '%'.$barcode.'%' }) );
     
-    $barcodes_array_ref = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( query => \@filtros ); 
+    $barcodes_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
 	my $cant= scalar(@$barcodes_array_ref);
 
 	if($cant > 0){
