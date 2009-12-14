@@ -1,4 +1,42 @@
+
+
+
+
+
+[% "Detalle del Registro" | i18n %]
+<div class="detalle">
+    
+    <ul class="listado_sin_margen">
+    [% FOREACH nivel1 %]
+        [% FOREACH subcampos_array %]
+            [% IF liblibrarian %]
+                [% IF dato %]
+                <li>    [% liblibrarian %]: <strong>[% dato %]</strong></li>
+                [% END %]
+            [% END %]
+        [% END %]
+    [% END %]
+    </ul>
+
+</div>
+
+[% "Detalle del Grupo" | i18n %]
+
 [% FOREACH nivel2 %]
+
+    <ul class="listado_sin_margen">
+        [% FOREACH nivel2_array %]
+            [% FOREACH subcampos_array %]
+
+                    [% IF liblibrarian %]
+                        [% IF dato %]
+                        <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
+                        [% END %]
+                    [% END %]
+        
+            [% END %] <!-- END FOREACH nivel2_array -->
+        [% END %] <!-- END FOREACH subcampos_array-->
+    </ul>
     <div id="[% DivDetalle %]">
 
         <table id="tablaDetalleNivel" class="tablaDetalleNivel3" cellspacing=0 border="0" cellpadding=0 width="100%" class="tope">
@@ -16,6 +54,9 @@
             </tr>
             </thead>
             <tbody>
+
+            [% "Detalle del Ejemplar" | i18n %]
+    
             [% FOREACH nivel3 %]
                 <tr align="center">
 

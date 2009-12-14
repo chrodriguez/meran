@@ -506,7 +506,6 @@ sub detalleCompletoOPAC{
 	my $nivel2_array_ref= &C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
 
 	my @nivel2;
-
 	for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
  		my $hash_nivel2;
 		$nivel2_array_ref->[$i]->load();
@@ -526,12 +525,9 @@ sub detalleCompletoOPAC{
 		push(@nivel2, $hash_nivel2);
 	}
 
-	my $hash_nivel2;
-	$hash_nivel2->{'nivel1'}= $nivel1->toMARC;
-	push(@nivel2, $hash_nivel2);
-# 	$t_params->{'nivel1'}= $nivel1->toMARC,
-	$t_params->{'id1'}	  = $id1;
-	$t_params->{'nivel2'}= \@nivel2,
+	$t_params->{'nivel1'}   = $nivel1->toMARC,
+	$t_params->{'id1'}	    = $id1;
+	$t_params->{'nivel2'}   = \@nivel2,
 }
 
 
