@@ -643,11 +643,10 @@ sub getReserva{
 
     $db = $db || C4::Modelo::CircReserva->new()->db;
 
-    push (@filtros, (id_reserva => {eq => $id}) );
+    push (@filtros, (id_reserva => $id) );
 
-    my ($reserva) = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $db, query => \@filtros, 
-                                                                        require_objects => ['nivel3','nivel2']);
-
+    my ($reserva) = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, 
+                                                                        with_objects => ['nivel3','nivel2']);
     if (scalar(@$reserva)){
         return ($reserva->[0]);
     }else{
@@ -880,7 +879,6 @@ sub t_cancelar_reserva{
         $db = $reserva->db;
         $db->{connect_options}->{AutoCommit} = 0;
             $db->begin_work;
-    
         eval{
             C4::AR::Debug::debug("VAMOS A CANCELAR LA RESERVA");
             $reserva->cancelar_reserva($params);
