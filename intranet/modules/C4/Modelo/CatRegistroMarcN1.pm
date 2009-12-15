@@ -97,6 +97,16 @@ sub getAutorObject{
     return ($autor);
 }
 
+=head2 sub getAutor
+  Devuelve solo el completo del autor
+=cut
+sub getAutor{
+    my ($self)      = shift;
+    
+    my $autor = $self->getAutorObject();
+
+    return ($autor->getCompleto());
+}
 
 =head2 sub toMARC
 

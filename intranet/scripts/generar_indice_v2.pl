@@ -11,7 +11,7 @@ use C4::AR::PortadasRegistros;
 use C4::AR::Busquedas;
 use MARC::Record;
 use CGI;
-use Sphinx::Manager;
+#use Sphinx::Manager;
 
 
 my $input = new CGI;
