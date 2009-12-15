@@ -273,9 +273,6 @@ sub getNivel3FromBarcode {
 }
 
 
-#***********************************************ACA FINALIZA LA NUEVA ESTRUCTURA***************************************************************
-
-
 sub getBarcodesLike {
     
     use C4::Modelo::CatRegistroMarcN3;

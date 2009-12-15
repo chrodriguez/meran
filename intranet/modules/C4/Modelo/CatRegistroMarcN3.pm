@@ -60,6 +60,8 @@ sub agregar{
     $self->setMarcRecord($params->{'marc_record'});
 
     $self->save();
+
+#     system('perl /usr/local/koha/intranet/scripts/generar_indice_v2.pl');
 }
 
 
@@ -72,6 +74,8 @@ sub modificar{
     $self->setMarcRecord($params->{'marc_record'});
 
     $self->save();
+
+#     system('perl /usr/local/koha/intranet/scripts/generar_indice_v2.pl');
 }
 
 =head2

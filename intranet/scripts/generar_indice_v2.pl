@@ -10,12 +10,28 @@ use C4::AR::Nivel3;
 use C4::AR::PortadasRegistros;
 use C4::AR::Busquedas;
 use MARC::Record;
+use CGI;
+use Sphinx::Manager;
 
+
+my $input = new CGI;
+
+my $id1 = $ARGV[0] || '0'; #id1 del registro
 my $dbh = C4::Context->dbh;
-my $query1=" SELECT * FROM cat_registro_marc_n1";
-my $sth1=$dbh->prepare($query1);
-$sth1->execute();
+my $sth1;
 
+if($id1 eq '0'){
+
+    my $query1  =   " SELECT * FROM cat_registro_marc_n1";
+    $sth1       =   $dbh->prepare($query1);
+    $sth1->execute();
+
+} else {
+
+    my $query1  =   " SELECT * FROM cat_registro_marc_n1 WHERE id = ?";
+    $sth1       =   $dbh->prepare($query1);
+    $sth1->execute($id1);
+}
 
 while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
     C4::AR::Debug::debug('ID1 '.$registro_marc_n1->{'id'});
@@ -45,8 +61,8 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #Ahora en $marc_record tenemos todo el registro completo
     #Autor
     my $autor = $marc_record->subfield("100","a");
-        if(! $autor) { $autor = $marc_record->subfield("110","a");}
-        if(! $autor) { $autor = $marc_record->subfield("111","a");}
+        if(! $autor) { $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("110","a"));}
+        if(! $autor) { $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("111","a"));}
 
     #Titulo
     my $titulo = $marc_record->subfield("245","a");
@@ -54,15 +70,39 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
     #Armo el superstring
     my $superstring="";
 
-   foreach my $field ($marc_record->fields){
+    #recorro los campos
+    foreach my $field ($marc_record->fields){
+        my $campo = $field->tag;
 
-            if ($superstring eq "") {$superstring =$field->as_string; }
-                else {$superstring .=" ".$field->as_string; }
+        #recorro los subcampos
+        foreach my $subfield ($field->subfields()) {
+    
+            my $subcampo                    = $subfield->[0];
+            my $dato                        = $subfield->[1];
+            $dato                           = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
+            $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato);
+            
+    
+            if ($superstring eq "") {
+                $superstring = $dato;
+            } else {
+                $superstring .= " ".$dato;
+            }
+        }
     }
 
-    my $query4="INSERT INTO indice_busqueda (id,titulo,autor,string) VALUES (?,?,?,?) ";
-    my $sth4=$dbh->prepare($query4);
-    $sth4->execute($registro_marc_n1->{'id'},$titulo,$autor,$superstring);
 
 
+    if($id1 eq '0'){
+        my $query4="INSERT INTO indice_busqueda (id,titulo,autor,string) VALUES (?,?,?,?) ";
+        my $sth4=$dbh->prepare($query4);
+        $sth4->execute($registro_marc_n1->{'id'},$titulo,$autor,$superstring);
+    } else {    
+        my $query4="UPDATE indice_busqueda SET titulo = ?, autor = ?, string = ? WHERE id = ? ";
+        my $sth4=$dbh->prepare($query4);
+        $sth4->execute($titulo, $autor, $superstring, $registro_marc_n1->{'id'});
+    }
 }
+
+    
+# C4::AR::Utilidades::reindexar();

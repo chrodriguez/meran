@@ -40,6 +40,8 @@ sub agregar{
 
     $self->setMarcRecord($marc_record);
     $self->save();
+
+#     system('perl /usr/local/koha/intranet/scripts/generar_indice_v2.pl?id1'.$self->getId1());
 }
 
 sub modificar{
@@ -49,6 +51,20 @@ sub modificar{
     $self->setMarcRecord($marc_record);
 
     $self->save();
+
+    my $err = system("perl /usr/local/koha/intranet/scripts/generar_indice_v2.pl ".$self->getId1);
+
+    C4::AR::Debug::debug("ERRORRRRRRRRRRRRR11111111111111111 => ".$err);
+    use Sphinx::Manager;
+
+#     my $mgr = Sphinx::Manager->new({ config_file => '/usr/local/etc/sphinx.conf' });
+    
+#     $mgr->stop_searchd;
+#     $mgr->run_indexer;
+#     $mgr->run_indexer('--all --rotate --quiet');
+#     $mgr->start_searchd;
+#     $mgr->start_searchd;
+
 }
 
 

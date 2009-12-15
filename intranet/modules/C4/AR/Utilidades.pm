@@ -2686,4 +2686,11 @@ sub armarPaginasOPAC{
     return($paginador, $totalPaginas);
 }
 
+sub reindexar{
+    my @args = ("indexer", "--all", "--rotate", "--quiet");
+    
+    my $err = system(@args);
+    #C4::AR::Debug::debug("Utilidades => reindexar => ERROR ".$err);
+}
+
 1;

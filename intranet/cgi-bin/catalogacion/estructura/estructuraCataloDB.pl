@@ -537,7 +537,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_1"){
         my %info;
         $info{'Message_arrayref'}= $Message_arrayref;
         $info{'id1'} = $id1;
-    
+
         C4::Auth::print_header($session);
         print to_json \%info;
 

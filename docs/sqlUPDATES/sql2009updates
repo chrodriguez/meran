@@ -1314,3 +1314,17 @@ ALTER TABLE `pref_tabla_referencia_rel_catalogo` ADD `sub_campo_referente` VARCH
 --11/12/09
  ALTER TABLE `ref_estado` DROP `codigo`;
  ALTER TABLE `ref_disponibilidad` DROP `codigo`;
+
+--14/12/09 estas referencias deben ser iguales para todos
+
+INSERT INTO `ref_disponibilidad` (`id`, `nombre`) VALUES
+(1, 'Domiciliario'),
+(2, 'Sala de Lectura');
+
+INSERT INTO `ref_estado` (`id`, `nombre`) VALUES
+(1, 'Baja'),
+(2, 'Compartido'),
+(3, 'Disponible'),
+(4, 'Ejemplar deteriorado'),
+(5, 'En Encuadernación'),
+(6, 'Perdido');
