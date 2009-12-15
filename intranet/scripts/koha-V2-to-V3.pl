@@ -31,15 +31,15 @@ my $dbh = C4::Context->dbh;
 print "INICIO \n";
 
 print "Creando tablas necesarias \n";
-crearTablasNecesarias();
+ crearTablasNecesarias();
 
 print "Creando nuevas referencias \n";
-crearNuevasReferencias();
+ crearNuevasReferencias();
 
 #################
 print "Procesando los 3 niveles (va a tardar!!! ...MUCHO!!!) \n";
 my $st1 = time();
-procesarV2_V3();
+ procesarV2_V3();
 my $end1 = time();
 my $tardo1=($end1 - $st1);
 print "AL FIN TERMINO!!! Tardo $tardo1 segundos !!!\n";
@@ -48,16 +48,18 @@ print "AL FIN TERMINO!!! Tardo $tardo1 segundos !!!\n";
 #Referencias
 print "Reparando referencias. OTRO QUE VA A TARDAR!!! \n";
 my $st2 = time();
-repararReferencias();
+ repararReferencias();
 my $end2 = time();
 my $tardo2=($end2 - $st2);
 print "FFFAAAAAAAAA  NO TERMINABA MAS!! Fuiste a comer???  Tardo $tardo2 segundos !!!\n";
 print "Quitando referencias  viejas \n";
-quitarReferenciasViejas();
+ quitarReferenciasViejas();
 # ##
 
 print "Quitando tablas de mas \n";
-# quitarTablasDeMas();
+quitarTablasDeMas();
+print "Renombrando tablas \n";
+renombrarTablas();
 print "Pasamos TODO a INNODB \n";
 # pasarTodoAInnodb();
 print "Creando nuevas claves foraneas \n";
@@ -145,7 +147,7 @@ print "\n GRACIAS DICO!!! \n";
 	while (my $biblio=$biblios->fetchrow_hashref ) {
 	
 	my $porcentaje= int (($registro * 100) / $cantidad );
-	print "Procesando registro: $registro de $cantidad ($porcentaje%) \n";
+# 	print "Procesando registro: $registro de $cantidad ($porcentaje%) \n";
 
 
 
@@ -156,7 +158,10 @@ print "\n GRACIAS DICO!!! \n";
 		my $dn1;
 		$dn1->{'campo'}=$_->{'campo'};
 		$dn1->{'subcampo'}=$_->{'subcampo'};
-		$dn1->{'valor'}=$biblio->{$_->{'campoTabla'}};
+        
+        if($_->{'campoTabla'} eq 'author'){ $dn1->{'valor'}='cat_autor@'.$biblio->{$_->{'campoTabla'}}; }
+          else { $dn1->{'valor'}=$biblio->{$_->{'campoTabla'}};}
+
 		$dn1->{'simple'}=1;
 		if (($dn1->{'valor'} ne '') && ($dn1->{'valor'} ne null)){push(@ids1,$dn1);}
 	}
@@ -171,7 +176,7 @@ print "\n GRACIAS DICO!!! \n";
 	$dn1->{'subcampo'}=$subject->{'subcampo'};
 
 	while (my $biblosubject=$temas->fetchrow_hashref ) {
-		push (@ar1,$biblosubject->{$subject->{'campoTabla'}});
+		push (@ar1,$biblosubject->{'cat_tema@'.$subject->{'campoTabla'}});
 		}
 	$dn1->{'simple'}=0;
 	$dn1->{'valor'}=\@ar1;
@@ -203,7 +208,7 @@ print "\n GRACIAS DICO!!! \n";
 	$dn1->{'campo'}=$additionalauthor->{'campo'};
 	$dn1->{'subcampo'}=$additionalauthor->{'subcampo'};
 	while (my $aauthors=$additionalauthors->fetchrow_hashref ) {
-	push(@ar1,$aauthors->{$additionalauthor->{'campoTabla'}});
+	push(@ar1,'cat_autor@'.$aauthors->{$additionalauthor->{'campoTabla'}});
 	}
 	$dn1->{'simple'}=0;
 	$dn1->{'valor'}=\@ar1;
@@ -224,7 +229,13 @@ print "\n GRACIAS DICO!!! \n";
 		my $dn2;
 		$dn2->{'campo'}=$_->{'campo'};
 		$dn2->{'subcampo'}=$_->{'subcampo'};
-		$dn2->{'valor'}=$biblioitem->{$_->{'campoTabla'}};
+
+        if($_->{'campoTabla'} eq 'itemtype'){ $dn2->{'valor'}='cat_ref_tipo_nivel3@'.$biblioitem->{$_->{'campoTabla'}}; }
+        elsif($_->{'campoTabla'} eq 'idLanguage'){ $dn2->{'valor'}='ref_idioma@'.$biblioitem->{$_->{'campoTabla'}}; }
+        elsif($_->{'campoTabla'} eq 'idCountry'){ $dn2->{'valor'}='ref_pais@'.$biblioitem->{$_->{'campoTabla'}}; }
+        elsif($_->{'campoTabla'} eq 'idSupport'){ $dn2->{'valor'}='ref_soporte@'.$biblioitem->{$_->{'campoTabla'}}; }
+          else { $dn2->{'valor'}=$biblioitem->{$_->{'campoTabla'}}; }
+
 		$dn2->{'simple'}=1;
 		if (($dn2->{'valor'} ne '') && ($dn2->{'valor'} ne null)){push(@ids2,$dn2);}
 	}
@@ -279,11 +290,14 @@ print "\n GRACIAS DICO!!! \n";
 		$dn3->{'subcampo'}=$_->{'subcampo'};
 
 		my $val='';
-		if ($_->{'campoTabla'} eq 'notforloan'){
-			if ($item->{$_->{'campoTabla'}}  == 1){$val='SA';}
-			elsif ($item->{$_->{'campoTabla'}}  == 0){$val='DO';}
-			}
-		else {$val=$item->{$_->{'campoTabla'}};}
+
+        if($_->{'campoTabla'} eq 'notforloan'){   $val='ref_disponibilidad@'.$item->{$_->{'campoTabla'}}; }
+        elsif($_->{'campoTabla'} eq 'homebranch'){$val='pref_unidad_informacion@'.$item->{$_->{'campoTabla'}}; }
+        elsif($_->{'campoTabla'} eq 'wthdrawn'){ $val='ref_estado@'.$item->{$_->{'campoTabla'}}; }
+        elsif($_->{'campoTabla'} eq 'holdingbranch'){ $val='pref_unidad_informacion@'.$item->{$_->{'campoTabla'}}; }
+          else { $val=$item->{$_->{'campoTabla'}}; }
+
+
 		$dn3->{'valor'}=$val;
 		$dn3->{'simple'}=1;
 		if (($dn3->{'valor'} ne '') && ($dn3->{'valor'} ne null)){push(@ids3,$dn3);}
@@ -329,18 +343,24 @@ $biblios->finish();
 
 	while (my $nivel1=$niveles1->fetchrow_hashref ) {
 	my $porcentaje= int (($registro * 100) / $cantidad );
-	print "Procesando registro: $registro de $cantidad ($porcentaje%) \n";
+# 	print "Procesando registro: $registro de $cantidad ($porcentaje%) \n";
 
 	#########################################################################
 	#			REFERENCIAS A NIVEL 1 (biblio)			#
 	#				colaboradores				#
+    #               additionalauthors               #
 	#########################################################################
 	my $col2=$dbh->prepare("UPDATE colaboradores SET id1 = ? where biblionumber= ?;");
-	$col2->execute($nivel1->{'id1'},$nivel1->{'biblionumber'});
+	$col2->execute($nivel1->{'id'},$nivel1->{'biblionumber'});
 	$col2->finish();
 
+    my $adaut2=$dbh->prepare("UPDATE additionalauthors SET id1 = ? where biblionumber= ?;");
+    $adaut2->execute($nivel1->{'id'},$nivel1->{'biblionumber'});
+    $adaut2->finish();
+
+
 	my $mod1=$dbh->prepare("UPDATE modificaciones SET id = ? where tipo = 'Libro' and numero = ?;");
-	$mod1->execute($nivel1->{'id1'},$nivel1->{'biblionumber'});
+	$mod1->execute($nivel1->{'id'},$nivel1->{'biblionumber'});
 	$mod1->finish();
 	
 	#########################################################################
@@ -349,7 +369,7 @@ $biblios->finish();
 
 	#############2222222222222222222222222222222222222222222222##############
 	my $niveles2=$dbh->prepare("SELECT * FROM cat_registro_marc_n2 where id1 = ? ;");
-	$niveles2->execute($nivel1->{'id1'});
+	$niveles2->execute($nivel1->{'id'});
 
 	while (my $nivel2=$niveles2->fetchrow_hashref ) {
 
@@ -360,19 +380,19 @@ $biblios->finish();
 	#			shelfcontents					#
 	#########################################################################
 	my $banalysis2=$dbh->prepare("UPDATE biblioanalysis SET id1 = ? , id2 = ? where biblionumber= ? and biblioitemnumber= ?;");
-	$banalysis2->execute($nivel1->{'id1'},$nivel2->{'id2'},$nivel1->{'biblionumber'},$nivel2->{'biblioitemnumber'});
+	$banalysis2->execute($nivel1->{'id'},$nivel2->{'id'},$nivel1->{'biblionumber'},$nivel2->{'biblioitemnumber'});
 	$banalysis2->finish();
 
 	my $reserves2=$dbh->prepare("UPDATE reserves SET id2 = ? where biblioitemnumber= ? and itemnumber is NULL;");
-	$reserves2->execute($nivel2->{'id2'},$nivel2->{'biblioitemnumber'});
+	$reserves2->execute($nivel2->{'id'},$nivel2->{'biblioitemnumber'});
 	$reserves2->finish();
 
 	my $estantes2=$dbh->prepare(" UPDATE shelfcontents SET id2 = ? where biblioitemnumber= ?;");
-	$estantes2->execute($nivel2->{'id2'},$nivel2->{'biblioitemnumber'}); 
+	$estantes2->execute($nivel2->{'id'},$nivel2->{'biblioitemnumber'}); 
 	$estantes2->finish();
 
 	my $mod2=$dbh->prepare("UPDATE modificaciones SET id = ? where tipo = 'Grupo' and numero = ?;");
-	$mod2->execute($nivel2->{'id2'},$nivel2->{'biblioitemnumber'});
+	$mod2->execute($nivel2->{'id'},$nivel2->{'biblioitemnumber'});
 	$mod2->finish();
 
 	#########################################################################
@@ -381,7 +401,7 @@ $biblios->finish();
 
 	#############3333333333333333333333333333333333333333333333##############
 	my $niveles3=$dbh->prepare("SELECT * FROM cat_registro_marc_n3 where id1 = ? and id2 = ? ;");
-	$niveles3->execute($nivel1->{'id1'},$nivel2->{'id2'});
+	$niveles3->execute($nivel1->{'id'},$nivel2->{'id'});
 
 	while (my $nivel3=$niveles3->fetchrow_hashref ) {
 
@@ -395,27 +415,27 @@ $biblios->finish();
 	#			reserves						#
 	#########################################################################
 	my $av2=$dbh->prepare(" UPDATE availability SET id3 = ? where item = ?;");
-	$av2->execute($nivel3->{'id3'},$nivel3->{'itemnumber'}); 
+	$av2->execute($nivel3->{'id'},$nivel3->{'itemnumber'}); 
 	$av2->finish();
 
 	my $hi2=$dbh->prepare(" UPDATE historicIssues SET id3 = ? where itemnumber = ?;");
-	$hi2->execute($nivel3->{'id3'},$nivel3->{'itemnumber'}); 
+	$hi2->execute($nivel3->{'id'},$nivel3->{'itemnumber'}); 
 	$hi2->finish();
 
 	my $hc2=$dbh->prepare(" UPDATE historicCirculation SET id1 = ? , id2 = ? , id3 = ? where biblionumber= ? and biblioitemnumber= ? and itemnumber = ?;");
-	$hc2->execute($nivel3->{'id1'},$nivel3->{'id2'},$nivel3->{'id3'},$nivel3->{'biblionumber'},$nivel3->{'biblioitemnumber'},$nivel3->{'itemnumber'}); 
+	$hc2->execute($nivel3->{'id1'},$nivel3->{'id2'},$nivel3->{'id'},$nivel3->{'biblionumber'},$nivel3->{'biblioitemnumber'},$nivel3->{'itemnumber'}); 
 	$hc2->finish();
 
 	my $is2=$dbh->prepare(" UPDATE issues SET id3 = ? where itemnumber = ?;");
-	$is2->execute($nivel3->{'id3'},$nivel3->{'itemnumber'}); 
+	$is2->execute($nivel3->{'id'},$nivel3->{'itemnumber'}); 
 	$is2->finish();
 
 	my $reserves3=$dbh->prepare("UPDATE reserves SET id2 = ? , id3 = ?  where biblioitemnumber = ? and itemnumber = ?;");
-	$reserves3->execute($nivel3->{'id2'},$nivel3->{'id3'},$nivel3->{'biblioitemnumber'},$nivel3->{'itemnumber'});
+	$reserves3->execute($nivel3->{'id2'},$nivel3->{'id'},$nivel3->{'biblioitemnumber'},$nivel3->{'itemnumber'});
 	$reserves3->finish();
 
 	my $mod3=$dbh->prepare("UPDATE modificaciones SET id = ? where tipo = 'Ejemplar' and numero = ?;");
-	$mod3->execute($nivel3->{'id3'},$nivel3->{'itemnumber'});
+	$mod3->execute($nivel3->{'id'},$nivel3->{'itemnumber'});
 	$mod3->finish();
 
 	#########################################################################
@@ -451,6 +471,10 @@ $biblios->finish();
 	#Nivel 1#
 	my $col=$dbh->prepare("ALTER TABLE `colaboradores` ADD `id1` INT( 11 ) NOT NULL FIRST ;");
    	$col->execute();
+
+    my $adaut=$dbh->prepare("ALTER TABLE additionalauthors ADD `id1` INT( 11 ) NOT NULL FIRST ;");
+    $adaut->execute();
+
 	#Nivel 2#
 	my $banalysis=$dbh->prepare("ALTER TABLE `biblioanalysis` ADD `id1` INT( 11 ) NOT NULL FIRST , 
 					ADD `id2` INT( 11 ) NOT NULL AFTER `id1` ;");
@@ -524,9 +548,6 @@ $biblios->finish();
 	my $mod4=$dbh->prepare("ALTER TABLE modificaciones DROP numero;");
    	$mod4->execute();
 
-
-	my $res1=$dbh->prepare("ALTER TABLE `reserves` CHANGE `constrainttype` `estado` CHAR( 1 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;");
-	$res1->execute();
 	my $res2=$dbh->prepare("ALTER TABLE `reserves` DROP `priority` , DROP `found` , DROP `itemnumber` ;");
 	$res2->execute();
 
@@ -717,35 +738,35 @@ $biblios->finish();
 ( 'biblio', 'abstract', 'Nota de resumen, etc.', '520', 'a'),
 ( 'biblio', 'author', 'Nombre Personal', '100', 'a'),
 ( 'biblio', 'notes', 'Entrada principal del original', '534', 'a'),
-( 'biblio', 'seriestitle', 'NÃºmero de ClasificaciÃ³n Decimal Universal', '080', 'a'),
-( 'biblio', 'title', 'TÃ­tulo', '245', 'a'),
-( 'biblio', 'unititle', 'Resto del tÃ­tulo', '245', 'b'),
+( 'biblio', 'seriestitle', 'Numero de Clasificacion Decimal Universal', '080', 'a'),
+( 'biblio', 'title', 'Titulo', '245', 'a'),
+( 'biblio', 'unititle', 'Resto del ti­tulo', '245', 'b'),
 ( 'biblioitems', 'dewey', 'Call number prefix (NR)', '852', 'k'),
-( 'biblioitems', 'idCountry', 'CÃ³digo ISO (R)', '043', 'c'),
-( 'biblioitems', 'illus', 'Otros detalles fÃ­sicos', '300', 'b'),
+( 'biblioitems', 'idCountry', 'Codigo ISO (R)', '043', 'c'),
+( 'biblioitems', 'illus', 'Otros detalles fi­sicos', '300', 'b'),
 ( 'biblioitems', 'issn', 'ISSN', '022', 'a'),
 ( 'biblioitems', 'itemtype', 'Tipo de documento', '910', 'a'),
 ( 'biblioitems', 'lccn', 'LC control number', '010', 'a'),
 ( 'biblioitems', 'notes', 'Nota General', '500', 'a'),
-( 'biblioitems', 'number', 'MenciÃ³n de ediciÃ³n', '250', 'a'),
-( 'biblioitems', 'pages', 'ExtensiÃ³n', '300', 'a'),
-( 'biblioitems', 'place', 'Lugar de publicaciÃ³n, distribuciÃ³n, etc.', '260', 'a'),
-( 'biblioitems', 'publicationyear', 'Fecha de publicaciÃ³n, distribuciÃ³n, etc.', '260', 'c'),
-( 'biblioitems', 'seriestitle', 'TÃ­tulo', '440', 'a'),
+( 'biblioitems', 'number', 'Mencion de edicion', '250', 'a'),
+( 'biblioitems', 'pages', 'Extension', '300', 'a'),
+( 'biblioitems', 'place', 'Lugar de publicacion, distribucion, etc.', '260', 'a'),
+( 'biblioitems', 'publicationyear', 'Fecha de publicacion, distribucion, etc.', '260', 'c'),
+( 'biblioitems', 'seriestitle', 'Ti­tulo', '440', 'a'),
 ( 'biblioitems', 'size', 'Dimensiones', '300', 'c'),
 ( 'biblioitems', 'subclass', 'Call number suffix (NR)', '852', 'm'),
 ( 'biblioitems', 'url', 'Identificador Uniforme de Recurso (URI)', '856', 'u'),
-( 'biblioitems', 'volume', 'Number of part/section of a work', '740', 'n'),
-( 'biblioitems', 'volumeddesc', 'TÃ­tulo', '740', 'a'),
-( 'bibliosubject', 'subject', 'TÃ³pico o nombre geogrÃ¡fico', '650', 'a'),
-( 'bibliosubtitle', 'subtitle', 'TÃ­tulo propiamente dicho/TÃ­tulo corto', '246', 'a'),
+( 'biblioitems', 'volume', 'Number of part/section of a work', '440', 'v'),
+( 'biblioitems', 'volumeddesc', 'Ti­tulo', '440', 'p'),
+( 'bibliosubject', 'subject', 'Topico o nombre geografico', '650', 'a'),
+( 'bibliosubtitle', 'subtitle', 'Ti­tulo propiamente dicho/Ti­tulo corto', '246', 'a'),
 ( 'isbns', 'isbn', 'ISBN', '020', 'a'),
-( 'items', 'barcode', 'C&oacute;digo de Barras', '995', 'f'),
+( 'items', 'barcode', 'Codigo de Barras', '995', 'f'),
 ( 'items', 'booksellerid', 'Nombre del vendedor', '995', 'a'),
-( 'items', 'bulk', 'Signatura Topogr&aacute;fica', '995', 't'),
+( 'items', 'bulk', 'Signatura Topografica', '995', 't'),
 ( 'items', 'dateaccessioned', 'Fecha de acceso', '995', 'm'),
-( 'items', 'holdingbranch', 'Unidad de Informaci&oacute;n', '995', 'c'),
-( 'items', 'homebranch', 'Unidad de Informaci&oacute;n de Origen', '995', 'd'),
+( 'items', 'holdingbranch', 'Unidad de Informacion', '995', 'c'),
+( 'items', 'homebranch', 'Unidad de Informacion de Origen', '995', 'd'),
 ( 'items', 'itemnotes', 'Notas del item', '995', 'u'),
 ( 'items', 'notforloan', 'Disponibilidad', '995', 'o'),
 ( 'items', 'price', 'Precio de compra', '995', 'p'),
@@ -3363,7 +3384,7 @@ $biblios->finish();
 (107, 'sanb', 'South African National Bibliography Project', '42'),
 (108, '#', 'Undefined', '42'),
 (109, 'Subfield Code', '', '42'),
-(110, '$a', 'Authentication code (R)', '42'),
+(110, '\$a', 'Authentication code (R)', '42'),
 (111, '0', '9  Number of nonfiling characters', '530'),
 (112, '#', 'Undefined', '666'),
 (113, '#', 'Undefined', '642'),
@@ -3589,10 +3610,60 @@ $biblios->finish();
   `descripcion` varchar(20) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;",
-"ALTER TABLE `cat_registro_marc_n3`
-  ADD CONSTRAINT `cat_registro_marc_n3_n1` FOREIGN KEY (`id1`) REFERENCES `cat_registro_marc_n1` (`id`),
-  ADD CONSTRAINT `cat_registro_marc_n3_n2` FOREIGN KEY (`id2`) REFERENCES `cat_registro_marc_n2` (`id`);
-");
+"DROP TABLE IF EXISTS `pref_servidor_z3950`;",
+"CREATE TABLE IF NOT EXISTS `pref_servidor_z3950` (
+  `servidor` varchar(255) default NULL,
+  `puerto` int(11) default NULL,
+  `base` varchar(255) default NULL,
+  `usuario` varchar(255) default NULL,
+  `password` varchar(255) default NULL,
+  `nombre` text,
+  `id` int(11) NOT NULL auto_increment,
+  `habilitado` tinyint(1) NOT NULL default '1',
+  `sintaxis` varchar(80) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;",
+"INSERT INTO `pref_servidor_z3950` (`servidor`, `puerto`, `base`, `usuario`, `password`, `nombre`, `id`, `habilitado`, `sintaxis`) VALUES ('z3950.loc.gov', 7090, 'voyager', NULL, NULL, 'Library of Congress', 1, 1, 'UNIMARC');",
+"DROP TABLE IF EXISTS `ref_disponibilidad`;",
+"CREATE TABLE IF NOT EXISTS `ref_disponibilidad` (
+  `id` int(11) NOT NULL auto_increment,
+  `codigo` tinyint(5) NOT NULL default '0',
+  `nombre` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;",
+"INSERT INTO `ref_disponibilidad` (`id`, `codigo`, `nombre`) VALUES
+(1, 0, 'Domiciliario'),
+(2, 1, 'Para Sala'),
+(3, 2, 'Descarga');",
+"DROP TABLE IF EXISTS `rep_busqueda`;",
+"CREATE TABLE IF NOT EXISTS `rep_busqueda` (
+  `idBusqueda` int(11) NOT NULL auto_increment,
+  `id_socio` int(11) default NULL,
+  `fecha` varchar(12) NOT NULL,
+  PRIMARY KEY  (`idBusqueda`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;",
+"DROP TABLE IF EXISTS `rep_historial_busqueda`;",
+"CREATE TABLE IF NOT EXISTS `rep_historial_busqueda` (
+  `idHistorial` int(11) NOT NULL auto_increment,
+  `idBusqueda` int(11) NOT NULL,
+  `campo` varchar(100) NOT NULL,
+  `valor` varchar(100) NOT NULL,
+  `tipo` varchar(10) default NULL,
+  `agent` varchar(255) NOT NULL,
+  PRIMARY KEY  (`idHistorial`),
+  KEY `FK_idBusqueda` (`idBusqueda`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;",
+"CREATE TABLE IF NOT EXISTS `usr_ref_tipo_documento` (
+  `id` int(11) NOT NULL auto_increment,
+  `nombre` varchar(50) NOT NULL,
+  `descripcion` varchar(250) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;",
+"INSERT INTO `usr_ref_tipo_documento` (`id`, `nombre`, `descripcion`) VALUES
+(1, 'DNI', 'DNI'),
+(2, 'LC', 'LC'),
+(3, 'LE', 'LE'),
+(4, 'PAS', 'PAS');");
 
 foreach my $sql (@sqls){
     my $qsql=$dbh->prepare($sql);
@@ -3601,16 +3672,130 @@ foreach my $sql (@sqls){
 
 }
 
+
+    sub renombrarTablas
+    {
+    #########################################################################
+    #           Renombramos tablas!!!             #
+    #########################################################################
+    my @antes=( 'biblioanalysis','autores','analyticalauthors','colaboradores','shelfcontents',
+                'publisher','bookshelf','availability'.'referenciaColaboradores','itemtypes',
+                'bibliosubject','analyticalsubject','issues','issuetypes','sanctionrules',
+                'sanctiontypesrules','reserves','sanctions','sanctionissuetypes','sanctiontypes',
+                'branchcategories','feriados','iso2709','stopwords','systempreferences',
+                'branchrelations','branches','authorised_values','dptos_partidos','unavailable',
+                'languages','localidades','bibliolevel','countries','provincias',
+                'supports','historicCirculation','historicIssues','historicSanctions','modificaciones',
+                'persons','categories','borrowers','deletedborrowers');
+
+    my @despues=( 'cat_analitica','cat_autor','cat_autor_analitica','cat_colaborador','cat_contenido_estante',
+                'cat_editorial','cat_estante','cat_historico_disponibilidad'.'cat_ref_colaborador','cat_ref_tipo_nivel3',
+                'cat_tema','cat_tema_analitica','circ_prestamo','circ_ref_tipo_prestamo','circ_regla_sancion',
+                'circ_regla_tipo_sancion','circ_reserva','circ_sancion','circ_tipo_prestamo_sancion','circ_tipo_sancion',
+                'pref_categoria_unidad_informacion','pref_feriado','pref_iso2709','pref_palabra_frecuente','pref_preferencia_sistema',
+                'pref_relacion_unidad_informacion','pref_unidad_informacion','pref_valor_autorizado','ref_dpto_partido','ref_estado',
+                'ref_idioma','ref_localidad','ref_nivel_bibliografico','ref_pais','ref_provincia',
+                'ref_soporte','rep_historial_circulacion','rep_historial_prestamo','rep_historial_sancion',
+                'rep_registro_modificacion','usr_persona','usr_ref_categoria_socio','usr_socio','usr_socio_borrado');
+
+  for(my $i=0; $i< scalar(@antes); $i++){
+    my $rename=$dbh->prepare("RENAME TABLE ".$antes[$i]." TO ".$despues[$i]."; ");
+    $rename->execute();
+  }
+### Despues de renombrar hay que alterarlas 
+
+    my @alternos=(
+    "ALTER TABLE circ_reserva CHANGE `reservenumber` `id_reserva` INT(11) NOT NULL AUTO_INCREMENT,
+      CHANGE `borrowernumber` `nro_socio` VARCHAR(16) NOT NULL DEFAULT '0', 
+      CHANGE `reservedate` `fecha_reserva` VARCHAR(20) NOT NULL,
+      CHANGE `constrainttype` `estado` CHAR(1) NULL DEFAULT NULL, 
+      CHANGE `branchcode` `id_ui` VARCHAR(4) NULL DEFAULT NULL, 
+      CHANGE `notificationdate` `fecha_notificacion` VARCHAR(20) NULL DEFAULT NULL, 
+      CHANGE `reminderdate` `fecha_recordatorio` VARCHAR(20) NULL DEFAULT NULL;",
+    " ALTER TABLE circ_reserva  DROP `cancellationdate`,  DROP `reservenotes`,  DROP `priority`,  DROP `found`;",
+    " ALTER TABLE circ_prestamo CHANGE `borrowernumber` `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0',
+      CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) NOT NULL DEFAULT 'DO',
+      CHANGE `date_due` `fecha_prestamo` VARCHAR( 20 ) NULL DEFAULT NULL ,
+      CHANGE `branchcode` `id_ui_origen` CHAR( 4 ) NULL DEFAULT NULL ,
+      CHANGE `issuingbranch` `id_ui_prestamo` CHAR( 18 ) NULL DEFAULT NULL ,
+      CHANGE `returndate` `fecha_devolucion` VARCHAR( 20 ) NULL DEFAULT NULL ,
+      CHANGE `lastreneweddate` `fecha_ultima_renovacion` VARCHAR( 20 ) NULL DEFAULT NULL ,
+      CHANGE `renewals` `renovaciones` TINYINT( 4 ) NULL DEFAULT NULL",
+      "ALTER TABLE circ_prestamo DROP `return`",
+      "ALTER TABLE `usr_persona` CHANGE `personnumber` `id_persona` INT(11) NOT NULL AUTO_INCREMENT, 
+       CHANGE `borrowernumber` id_socio INT(11) NULL DEFAULT NULL, 
+       CHANGE `cardnumber` nro_socio VARCHAR(16) NOT NULL, 
+       CHANGE `documentnumber` `nro_documento` VARCHAR(16) NOT NULL, 
+       CHANGE `documenttype` ` tipo_documento` CHAR(3) NOT NULL, 
+       CHANGE `surname` `apellido` TEXT NOT NULL, 
+       CHANGE `firstname` `nombre` TEXT  NOT NULL, 
+       CHANGE `title` `titulo` TEXT NULL DEFAULT NULL, 
+       CHANGE `othernames` `otros_nombres` TEXT NULL DEFAULT NULL, 
+       CHANGE `initials` `iniciales` TEXT NULL DEFAULT NULL,
+       CHANGE `streetaddress` `calle` TEXT NULL DEFAULT NULL,
+       CHANGE `suburb` `barrio` TEXT NULL DEFAULT NULL,
+       CHANGE `city` `ciudad` TEXT NULL DEFAULT NULL,
+       CHANGE `phone` `telefono` TEXT NULL DEFAULT NULL,
+       CHANGE `emailaddress` `email` TEXT NULL DEFAULT NULL,
+       CHANGE `faxnumber` `fax` TEXT NULL DEFAULT NULL,
+       CHANGE `textmessaging` `msg_texto` TEXT NULL DEFAULT NULL,
+       CHANGE `altstreetaddress` `alt_calle` TEXT NULL DEFAULT NULL,
+       CHANGE `altsuburb` `alt_barrio` TEXT NULL DEFAULT NULL,
+       CHANGE `altcity` `alt_ciudad` TEXT NULL DEFAULT NULL,
+       CHANGE `altphone` `alt_telefono` TEXT NULL DEFAULT NULL,
+       CHANGE `dateofbirth` `nacimiento` DATE NULL DEFAULT NULL,
+       CHANGE `dateenrolled` `fecha_alta` DATE NULL DEFAULT NULL,
+       CHANGE `studentnumber` legajo VARCHAR( 8 ) NOT NULL, 
+       CHANGE `sex` `sexo` CHAR(1) NULL DEFAULT NULL, 
+       CHANGE `phoneday` `telefono_laboral` VARCHAR(50)  NULL DEFAULT NULL,
+       CHANGE `regular` `cumple_condicion` TINYINT(1) NOT NULL DEFAULT '0';",
+       "ALTER TABLE `usr_persona` DROP `gonenoaddress`,  DROP `lost`,  DROP `debarred`,  DROP `school`,  DROP `contactname`,  DROP `borrowernotes`,  DROP `guarantor`,  DROP `area`,  DROP `ethnicity`,  DROP `ethnotes`,  DROP `expiry`,  DROP `altnotes`,  DROP `altrelationship`,  DROP `streetcity`,  DROP `preferredcont`,  DROP `physstreet`,  DROP `homezipcode`,  DROP `zipcode`,  DROP `userid`,  DROP `flags`;",
+       "ALTER TABLE `usr_socio` CHANGE `cardnumber` `nro_socio` VARCHAR( 16 ) NOT NULL ,
+        CHANGE `borrowernumber` `id_socio` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+        CHANGE `branchcode` `id_ui` VARCHAR( 4 ) NOT NULL ,
+        CHANGE `categorycode` `cod_categoria` CHAR( 2 ) NOT NULL ,
+        CHANGE `dateenrolled` `fecha_alta` DATE NULL DEFAULT NULL ,
+        CHANGE `expiry` `expira` DATE NULL DEFAULT NULL ,
+        CHANGE `lastlogin` `last_login` DATETIME NULL DEFAULT NULL ,
+        CHANGE `lastchangepassword` `last_change_password` DATE NULL DEFAULT NULL ,
+        CHANGE `changepassword` `change_password` TINYINT( 1 ) NULL DEFAULT '0',
+        CHANGE `usercourse` `cumple_requisito` DATE NULL DEFAULT NULL;",
+        "ALTER TABLE `usr_socio`  DROP `documenttype`,  DROP `surname`,  DROP `firstname`,  DROP `title`,  DROP `othernames`,
+        DROP `initials`,  DROP `streetaddress`,  DROP `suburb`,  DROP `city`,  DROP `phone`,  DROP `emailaddress`,  DROP `faxnumber`,
+        DROP `textmessaging`,  DROP `altstreetaddress`,  DROP `altsuburb`,  DROP `altcity`,  DROP `altphone`,  DROP `dateofbirth`,  
+        DROP `gonenoaddress`,  DROP `lost`,  DROP `debarred`,  DROP `studentnumber`,  DROP `school`,  DROP `contactname`,
+        DROP `borrowernotes`,  DROP `guarantor`,  DROP `area`,  DROP `ethnicity`,  DROP `ethnotes`,  DROP `sex`,  DROP `altnotes`,
+        DROP `altrelationship`,  DROP `streetcity`,  DROP `phoneday`,  DROP `preferredcont`,  DROP `physstreet`,  DROP `homezipcode`,
+        DROP `zipcode`,  DROP `userid`;",
+      "ALTER TABLE `usr_socio` ADD `nombre_apellido_autorizado` VARCHAR( 255 ) NOT NULL ;",
+      "ALTER TABLE `usr_socio` ADD dni_autorizado VARCHAR( 16 ) NOT NULL ;",
+      "ALTER TABLE `usr_socio` ADD telefono_autorizado VARCHAR( 255 ) NOT NULL ;",
+      "ALTER TABLE `usr_socio` ADD is_super_user INT( 11 )NOT NULL ;",
+      "ALTER TABLE `usr_socio` ADD credential_type VARCHAR( 255 ) NOT NULL ;",
+      "ALTER TABLE `usr_socio` ADD id_estado INT( 11 )NOT NULL ;",
+      "ALTER TABLE `usr_socio` ADD activo VARCHAR( 255 ) NOT NULL ;",
+      "ALTER TABLE `usr_socio` ADD agregacion_temp VARCHAR( 255 ) NOT NULL ;"
+    );
+
+  foreach my $alt (@alternos){
+      my $qalt=$dbh->prepare($alt);
+#       $qalt->execute();
+  }
+
+    }
+
 	sub quitarTablasDeMas 
 	{
 	#########################################################################
 	#			QUITAR TABLAS DE MAS!!!				#
 	#########################################################################
 
-	my $drop=$dbh->prepare(" DROP TABLE `accountlines`, `accountoffsets`, `amazon_covers`, `aqbookfund`, `aqbooksellers`, `aqbudget`, `aqorderbreakdown`, `aqorderdelivery`, `aqorders`, `biblio`, `biblioitems`, `bibliothesaurus`, `borexp`, `branchtransfers`, `catalogueentry`, `categoryitem`, `currency`, `defaultbiblioitem`, `deletedbiblio`, `deletedbiblioitems`, `deleteditems`, `ethnicity`, `isbns`, `isomarc`, `items`, `itemsprices`, `languages`, `marcrecorddone`, `marc_biblio`, `marc_blob_subfield`, `marc_breeding`, `marc_subfield_structure`, `marc_subfield_table`, `marc_tag_structure`, `marc_word`, `printers`, `publisher`, `relationISO`, `reserveconstraints`, `statistics`, `virtual_itemtypes`, `virtual_request`, `websites`;");
+	my $drop=$dbh->prepare(" DROP TABLE `accountlines`, `accountoffsets`, `amazon_covers`, `aqbookfund`, `aqbooksellers`, `aqbudget`, `aqorderbreakdown`, `aqorderdelivery`, `aqorders`, `biblio`, `biblioitems`, `bibliothesaurus`, `borexp`, `branchtransfers`, `catalogueentry`, `categoryitem`, `currency`, `defaultbiblioitem`, `deletedbiblio`, `deletedbiblioitems`, `deleteditems`, `ethnicity`, `isbns`, `isomarc`, `items`, `itemsprices`, `languages`, `marcrecorddone`, `marc_biblio`, `marc_blob_subfield`, `marc_breeding`, `marc_subfield_structure`, `marc_subfield_table`, `marc_tag_structure`, `marc_word`, `printers`, `publisher`, `relationISO`, `reserveconstraints`, `statistics`, `virtual_itemtypes`, `virtual_request`, `websites`, `z3950queue`, `z3950results`, `z3950servers`;");
 	$drop->execute();
 	
 	}
+
+
 	sub pasarTodoAInnodb 
 	{
 	#########################################################################
@@ -3635,17 +3820,16 @@ foreach my $sql (@sqls){
 	#########################################################################
 
 	my @claves = (
-'ALTER TABLE `nivel1_repetibles` ADD CONSTRAINT `FK_nivel1_repetibles` FOREIGN KEY (`id1`) REFERENCES `nivel1` (`id1`);',
-'ALTER TABLE `nivel2_repetibles` ADD CONSTRAINT `FK_nivel2_repetibles` FOREIGN KEY (`id2`) REFERENCES `nivel2` (`id2`);',
-'ALTER TABLE `nivel3_repetibles` ADD CONSTRAINT `FK_nivel3_repetibles` FOREIGN KEY (`id3`) REFERENCES `nivel3` (`id3`);',
-'ALTER TABLE `nivel1` ADD CONSTRAINT `FK_nivel1_autores` FOREIGN KEY (`autor`) REFERENCES `autores` (`id`);',
-'ALTER TABLE `reserves` ADD CONSTRAINT `FK_reserves_id2` FOREIGN KEY (`id2`) REFERENCES `nivel2` (`id2`);',
-'ALTER TABLE `reserves` ADD CONSTRAINT `FK_reserves_id3` FOREIGN KEY (`id3`) REFERENCES `nivel3` (`id3`);',
-'ALTER TABLE `issues` ADD CONSTRAINT `FK_issues_id3` FOREIGN KEY (`id3`) REFERENCES `nivel3` (`id3`);',
-'ALTER TABLE `historicCirculation` ADD CONSTRAINT `FK_historicCirculation_id1` FOREIGN KEY (`id1`) REFERENCES `nivel1` (`id1`);',
-'ALTER TABLE `historicCirculation` ADD CONSTRAINT `FK_historicCirculation_id2` FOREIGN KEY (`id2`) REFERENCES `nivel2` (`id2`);',
-'ALTER TABLE `historicCirculation` ADD CONSTRAINT `FK_historicCirculation_id3` FOREIGN KEY (`id3`) REFERENCES `nivel3` (`id3`);'
-	);
+"ALTER TABLE `cat_registro_marc_n3`
+  ADD CONSTRAINT `cat_registro_marc_n3_n1` FOREIGN KEY (`id1`) REFERENCES `cat_registro_marc_n1` (`id`),
+  ADD CONSTRAINT `cat_registro_marc_n3_n2` FOREIGN KEY (`id2`) REFERENCES `cat_registro_marc_n2` (`id`);",
+"ALTER TABLE `circ_reserva`
+  ADD CONSTRAINT `FK_reserves_id3` FOREIGN KEY (`id3`) REFERENCES `cat_nivel3` (`id3`);",
+"ALTER TABLE `usr_socio`
+  ADD CONSTRAINT `usr_socio_ibfk_1` FOREIGN KEY (`id_persona`) REFERENCES `usr_persona` (`id_persona`),
+  ADD CONSTRAINT `usr_socio_ibfk_2` FOREIGN KEY (`cod_categoria`) REFERENCES `usr_ref_categoria_socio` (`categorycode`),
+  ADD CONSTRAINT `usr_socio_ibfk_3` FOREIGN KEY (`id_estado`) REFERENCES `usr_estado` (`id_estado`);"
+);
 	
 	foreach $clave (@claves){my $cv=$dbh->prepare($clave);	$cv->execute();}
 
