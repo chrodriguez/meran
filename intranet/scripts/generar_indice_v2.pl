@@ -101,8 +101,9 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         my $query4="UPDATE indice_busqueda SET titulo = ?, autor = ?, string = ? WHERE id = ? ";
         my $sth4=$dbh->prepare($query4);
         $sth4->execute($titulo, $autor, $superstring, $registro_marc_n1->{'id'});
+        C4::AR::Debug::debug("generar_indice_v2 => UPDATE => id1 => ".$registro_marc_n1->{'id'});
     }
 }
 
     
-# C4::AR::Utilidades::reindexar();
+C4::AR::Utilidades::reindexar();

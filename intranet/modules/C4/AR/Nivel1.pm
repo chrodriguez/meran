@@ -182,6 +182,7 @@ sub t_modificarNivel1 {
             $cat_registro_marc_n1->modificar($marc_record->as_usmarc);  
             #$id1 = $cat_registro_marc_n1->getId1;
             $db->commit;
+            C4::AR::Utilidades::generar_indice($cat_registro_marc_n1->getId1);
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U380', 'params' => [$cat_registro_marc_n1->getId1]} ) ;
