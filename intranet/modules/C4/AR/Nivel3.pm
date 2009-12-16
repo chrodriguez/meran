@@ -31,6 +31,9 @@ sub t_guardarNivel3 {
 
     if(!$msg_object->{'error'}){
     #No hay error
+
+#  my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
+# TODO no esta funcionando el generar barcodes pq se tiene que hacer aca, antes de llamar a meran_nivel3_to_meran
         my $marc_record             = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
         my $catRegistroMarcN3_tmp   = C4::Modelo::CatRegistroMarcN3->new();  
         my $db = $catRegistroMarcN3_tmp->db;
@@ -181,7 +184,7 @@ sub t_eliminarNivel3{
 
     my $msg_object = C4::AR::Mensajes::create();
     
-    my  $cat_registro_marc_n3 = C4::Modelo::CatNivel2->new();
+    my  $cat_registro_marc_n3 = C4::Modelo::CatRegistroMarcN3->new();
     my  $db = $cat_registro_marc_n3->db;
     # enable transactions, if possible
     $db->{connect_options}->{AutoCommit} = 0;
@@ -698,6 +701,7 @@ Esta funcion genera un arreglo de barcodes VALIDOS para agregar en la base de da
 =cut
 sub _generarArregloDeBarcodesPorBarcodes{   
     my ($msg_object, $barcodes_array, $barcodes_para_agregar) = @_;
+    C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorBarcodes !!!!!!!!!!");
  
     foreach my $barcode (@$barcodes_array){
         $msg_object->{'error'} = 0;
@@ -735,7 +739,7 @@ Esta funcion genera un arreglo de barcodes VALIDOS para agregar en la base de da
 =cut
 sub _generarArregloDeBarcodesPorCantidad {   
     my($cant, $barcodes_para_agregar, $msg_object) = @_;
-
+    C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorCantidad !!!!!!!!!!");
     my $barcode;
     my $tope = 1000; #puede ser preferencia
 
@@ -754,6 +758,7 @@ sub _generarArregloDeBarcodesPorCantidad {
         for(my $i=0;$i<$cant;$i++){
         # FIXME poner la funcion que generar el barcode realmente, esto es una prueba
             $barcode = _generateBarcode($barcodes_para_agregar).$i;
+            C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorCantidad => barcode => ".$barcode);
             push (@{$barcodes_para_agregar}, $barcode);
         }# END for(my $i;$i<$cant;$i++)
 

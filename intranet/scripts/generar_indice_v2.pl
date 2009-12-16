@@ -103,14 +103,17 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         $sth4->execute($registro_marc_n1->{'id'});
         my $data = $sth4->fetchrow_hashref;
 
-        if($data->{'cant'} eq '0'){
-            my $query4="INSERT INTO indice_busqueda (id,titulo,autor,string) VALUES (?,?,?,?) ";
-            my $sth4=$dbh->prepare($query4);
-            $sth4->execute($registro_marc_n1->{'id'},$titulo,$autor,$superstring);
-        }else{
+        if($data->{'cant'}){
             my $query4="UPDATE indice_busqueda SET titulo = ?, autor = ?, string = ? WHERE id = ? ";
             my $sth4=$dbh->prepare($query4);
             $sth4->execute($titulo, $autor, $superstring, $registro_marc_n1->{'id'});
+
+        }else{
+
+            my $query4="INSERT INTO indice_busqueda (id,titulo,autor,string) VALUES (?,?,?,?) ";
+            my $sth4=$dbh->prepare($query4);
+            $sth4->execute($registro_marc_n1->{'id'},$titulo,$autor,$superstring);
+
         }
 
         C4::AR::Debug::debug("generar_indice_v2 => UPDATE => id1 => ".$registro_marc_n1->{'id'});

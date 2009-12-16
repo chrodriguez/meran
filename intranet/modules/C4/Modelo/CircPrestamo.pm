@@ -255,25 +255,27 @@ sub prestar {
 	$params->{'id_reserva'}= $reservas->[0]->getId_reserva;
 	
 		if($id3 != $reservas->[0]->getId3){
-		$self->debug("Los ids son distintos, se intercambian");
-		#se le esta entregando un item que es <> al que se le asigno al relizar la reserva
-		#Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
-		#Los ids son distintos, se intercambian.
-			$reservas->[0]->db=$self->db;
-			$reservas->[0]->intercambiarId3($id3,$msg_object);
+		    $self->debug("Los ids son distintos, se intercambian");
+		    #se le esta entregando un item que es <> al que se le asigno al relizar la reserva
+		    #Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
+		    #Los ids son distintos, se intercambian.
+			    $reservas->[0]->db=$self->db;
+			    $reservas->[0]->intercambiarId3($id3,$msg_object);
 		}
-	}
-	elsif($cant ==1 && $disponibilidad eq "Para Sala"){
+
+	} elsif($cant ==1 && $disponibilidad eq "Para Sala"){
 		#FALTA!!! SE PUEDE PONER EN EL ELSE???	
 		#llamar a la funcion verificaciones!!
 		#verificar disponibilidad del item??? ya esta prestado- hay libre para prestamo de SALA.
 		#es un prestamo ES ?????? ****VER****
-	}
-	else{#NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!
+	} else {   
+        #NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!
 		$self->debug("NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!");
 		my $seReserva=1;
+
 		#Se verifica disponibilidad del item;
 		my $reserva = C4::AR::Reservas::getReservaDeId3($id3);
+
 		if ($reserva){
             $self->debug("El item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario");
           #el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
@@ -286,8 +288,7 @@ sub prestar {
 				$reserva->save();
 				# el id3 de params quedo libre para ser reservado
 				
-			}
-			else{
+			} else {
 				$self->debug("NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO");
 # NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE
 # REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
@@ -299,7 +300,7 @@ sub prestar {
 					$self->debug("Hay error no se permite realizar una reserva de grupo en intra");
 					$msg_object->{'error'}= 1;
 					C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R004', 'params' => []} ) ;
-				}else{
+				} else {
 				#SE PERMITE LA RESERVA DE GRUPO
 					$self->debug("No hay error, se realiza una reserva de grupo");
 					#No hay error, se realiza una reserva de grupo.
@@ -308,6 +309,7 @@ sub prestar {
 				}
 			}
 		}
+
 		#Se realiza una reserva
 		if($seReserva){
 			$self->debug("Se realiza una reserva!! ");
@@ -322,9 +324,8 @@ sub prestar {
 	if(!$msg_object->{'error'}){
 	#No hay error, se realiza el pretamo
 		$self->debug("Se va a insertar el prestamo");
-C4::AR::Debug::debug("responsable desde CircPrestamo antes de insertarPrestamo: ".$params->{'responsable'});
+        C4::AR::Debug::debug("responsable desde CircPrestamo antes de insertarPrestamo: ".$params->{'responsable'});
 		$self->insertarPrestamo($params);
-
 		$self->debug("se realizan las verificacioines luego de realizar el prestamo");
 		#se realizan lgetFecha_vencimiento_formateadaas verificacioines luego de realizar el prestamo
 		$self->_verificacionesPostPrestamo($params,$msg_object);
