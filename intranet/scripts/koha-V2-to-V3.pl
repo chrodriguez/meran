@@ -31,15 +31,15 @@ my $dbh = C4::Context->dbh;
 print "INICIO \n";
 
 print "Creando tablas necesarias \n";
- crearTablasNecesarias();
+#  crearTablasNecesarias();
 
 print "Creando nuevas referencias \n";
- crearNuevasReferencias();
+#  crearNuevasReferencias();
 
 #################
 print "Procesando los 3 niveles (va a tardar!!! ...MUCHO!!!) \n";
 my $st1 = time();
- procesarV2_V3();
+#  procesarV2_V3();
 my $end1 = time();
 my $tardo1=($end1 - $st1);
 print "AL FIN TERMINO!!! Tardo $tardo1 segundos !!!\n";
@@ -48,16 +48,16 @@ print "AL FIN TERMINO!!! Tardo $tardo1 segundos !!!\n";
 #Referencias
 print "Reparando referencias. OTRO QUE VA A TARDAR!!! \n";
 my $st2 = time();
- repararReferencias();
+#  repararReferencias();
 my $end2 = time();
 my $tardo2=($end2 - $st2);
 print "FFFAAAAAAAAA  NO TERMINABA MAS!! Fuiste a comer???  Tardo $tardo2 segundos !!!\n";
 print "Quitando referencias  viejas \n";
- quitarReferenciasViejas();
+#  quitarReferenciasViejas();
 # ##
 
 print "Quitando tablas de mas \n";
-quitarTablasDeMas();
+#quitarTablasDeMas();
 print "Renombrando tablas \n";
 renombrarTablas();
 print "Pasamos TODO a INNODB \n";
@@ -348,16 +348,10 @@ $biblios->finish();
 	#########################################################################
 	#			REFERENCIAS A NIVEL 1 (biblio)			#
 	#				colaboradores				#
-    #               additionalauthors               #
 	#########################################################################
 	my $col2=$dbh->prepare("UPDATE colaboradores SET id1 = ? where biblionumber= ?;");
 	$col2->execute($nivel1->{'id'},$nivel1->{'biblionumber'});
 	$col2->finish();
-
-    my $adaut2=$dbh->prepare("UPDATE additionalauthors SET id1 = ? where biblionumber= ?;");
-    $adaut2->execute($nivel1->{'id'},$nivel1->{'biblionumber'});
-    $adaut2->finish();
-
 
 	my $mod1=$dbh->prepare("UPDATE modificaciones SET id = ? where tipo = 'Libro' and numero = ?;");
 	$mod1->execute($nivel1->{'id'},$nivel1->{'biblionumber'});
@@ -3679,7 +3673,7 @@ foreach my $sql (@sqls){
     #           Renombramos tablas!!!             #
     #########################################################################
     my @antes=( 'biblioanalysis','autores','analyticalauthors','colaboradores','shelfcontents',
-                'publisher','bookshelf','availability'.'referenciaColaboradores','itemtypes',
+                'publisher','bookshelf','availability','referenciaColaboradores','itemtypes',
                 'bibliosubject','analyticalsubject','issues','issuetypes','sanctionrules',
                 'sanctiontypesrules','reserves','sanctions','sanctionissuetypes','sanctiontypes',
                 'branchcategories','feriados','iso2709','stopwords','systempreferences',
@@ -3689,7 +3683,7 @@ foreach my $sql (@sqls){
                 'persons','categories','borrowers','deletedborrowers');
 
     my @despues=( 'cat_analitica','cat_autor','cat_autor_analitica','cat_colaborador','cat_contenido_estante',
-                'cat_editorial','cat_estante','cat_historico_disponibilidad'.'cat_ref_colaborador','cat_ref_tipo_nivel3',
+                'cat_editorial','cat_estante','cat_historico_disponibilidad','cat_ref_colaborador','cat_ref_tipo_nivel3',
                 'cat_tema','cat_tema_analitica','circ_prestamo','circ_ref_tipo_prestamo','circ_regla_sancion',
                 'circ_regla_tipo_sancion','circ_reserva','circ_sancion','circ_tipo_prestamo_sancion','circ_tipo_sancion',
                 'pref_categoria_unidad_informacion','pref_feriado','pref_iso2709','pref_palabra_frecuente','pref_preferencia_sistema',
@@ -3720,8 +3714,8 @@ foreach my $sql (@sqls){
       CHANGE `issuingbranch` `id_ui_prestamo` CHAR( 18 ) NULL DEFAULT NULL ,
       CHANGE `returndate` `fecha_devolucion` VARCHAR( 20 ) NULL DEFAULT NULL ,
       CHANGE `lastreneweddate` `fecha_ultima_renovacion` VARCHAR( 20 ) NULL DEFAULT NULL ,
-      CHANGE `renewals` `renovaciones` TINYINT( 4 ) NULL DEFAULT NULL",
-      "ALTER TABLE circ_prestamo DROP `return`",
+      CHANGE `renewals` `renovaciones` TINYINT( 4 ) NULL DEFAULT NULL;",
+      "ALTER TABLE circ_prestamo DROP `return`;",
       "ALTER TABLE `usr_persona` CHANGE `personnumber` `id_persona` INT(11) NOT NULL AUTO_INCREMENT, 
        CHANGE `borrowernumber` id_socio INT(11) NULL DEFAULT NULL, 
        CHANGE `cardnumber` nro_socio VARCHAR(16) NOT NULL, 
@@ -3779,7 +3773,7 @@ foreach my $sql (@sqls){
 
   foreach my $alt (@alternos){
       my $qalt=$dbh->prepare($alt);
-#       $qalt->execute();
+       $qalt->execute();
   }
 
     }
@@ -3789,12 +3783,19 @@ foreach my $sql (@sqls){
 	#########################################################################
 	#			QUITAR TABLAS DE MAS!!!				#
 	#########################################################################
+    my @drops = ('accountlines', 'accountoffsets', 'amazon_covers', 'aqbookfund', 'aqbooksellers', 'aqbudget', 'aqorderbreakdown', 'aqorderdelivery', 'aqorders', 
+                  'biblio', 'biblioitems', 'bibliothesaurus', 'borexp', 'branchtransfers', 'catalogueentry', 'categoryitem', 'currency', 'defaultbiblioitem', 
+                  'deletedbiblio', 'deletedbiblioitems', 'deleteditems', 'ethnicity', 'isbns', 'isomarc', 'items', 'itemsprices', 'languages', 'marcrecorddone', 
+                  'marc_biblio', 'marc_blob_subfield', 'marc_breeding', 'marc_subfield_structure', 'marc_subfield_table', 'marc_tag_structure', 'marc_word', 
+                  'printers', 'publisher', 'relationISO', 'reserveconstraints', 'statistics', 'virtual_itemtypes', 'virtual_request', 'websites', 'z3950queue', 
+                  'z3950results', 'z3950servers', 'uploadedmarc','generic_report_joins','generic_report_tables','tablasDeReferencias','tablasDeReferenciasInfo',
+                  'additionalauthors','bibliosubtitle');
 
-	my $drop=$dbh->prepare(" DROP TABLE `accountlines`, `accountoffsets`, `amazon_covers`, `aqbookfund`, `aqbooksellers`, `aqbudget`, `aqorderbreakdown`, `aqorderdelivery`, `aqorders`, `biblio`, `biblioitems`, `bibliothesaurus`, `borexp`, `branchtransfers`, `catalogueentry`, `categoryitem`, `currency`, `defaultbiblioitem`, `deletedbiblio`, `deletedbiblioitems`, `deleteditems`, `ethnicity`, `isbns`, `isomarc`, `items`, `itemsprices`, `languages`, `marcrecorddone`, `marc_biblio`, `marc_blob_subfield`, `marc_breeding`, `marc_subfield_structure`, `marc_subfield_table`, `marc_tag_structure`, `marc_word`, `printers`, `publisher`, `relationISO`, `reserveconstraints`, `statistics`, `virtual_itemtypes`, `virtual_request`, `websites`, `z3950queue`, `z3950results`, `z3950servers`;");
-	$drop->execute();
-	
-	}
-
+      foreach $tabla (@innodbs) {
+        my $drop=$dbh->prepare(" DROP TABLE ".$tabla." ;");
+        $drop->execute();
+      }
+  }
 
 	sub pasarTodoAInnodb 
 	{
