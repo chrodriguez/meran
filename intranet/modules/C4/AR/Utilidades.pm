@@ -2699,16 +2699,19 @@ sub generar_indice{
 
     use Sphinx::Manager;
 
-    my $mgr = Sphinx::Manager->new({ config_file => '/usr/local/etc/sphinx.conf' });
+    my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
     
-#     $mgr->stop_searchd;
-#     $mgr->run_indexer;
-#     $mgr->start_searchd;
+    my $pids = $mgr->get_searchd_pid;
+
+    if(scalar(@$pids) == 0){
+        C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!!");
+        $mgr->start_searchd;
+    }
 
     my $err = system("perl /usr/local/koha/intranet/scripts/generar_indice_v2.pl ".$id1);
     C4::AR::Debug::debug("Utilidades => generar_indice => ERROR ".$err);
 
-    $mgr->run_indexer('--all --rotate');
+    $mgr->run_indexer('--all --rotate --quiet');
 }
 
 1;

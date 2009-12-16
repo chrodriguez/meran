@@ -14,7 +14,6 @@ use CGI;
 #use Sphinx::Manager;
 
 
-my $session = CGI::Session->new();
 my $input = new CGI;
 
 my $id1 = $ARGV[0] || '0'; #id1 del registro
@@ -118,7 +117,3 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         C4::AR::Debug::debug("generar_indice_v2 => UPDATE => id1 => ".$registro_marc_n1->{'id'});
     }
 }
-
-    
-C4::Auth::print_header($session);
-# C4::AR::Utilidades::reindexar();
