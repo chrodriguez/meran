@@ -52,7 +52,11 @@ sub t_guardarNivel3 {
                 $params->{'barcode'} = $barcode; 
         
                 $catRegistroMarcN3  = C4::Modelo::CatRegistroMarcN3->new(db => $db);  
-    
+
+#                 $marc_record->field('995', 'f', $barcode)    
+                my $field = MARC::Field->new('995','','','f' => $barcode);
+                $marc_record->add_fields($field);
+
                 $params->{'marc_record'} = $marc_record->as_usmarc;
                 $catRegistroMarcN3->agregar($db, $params);
 # FIXME transaccion por ejemplar???

@@ -90,7 +90,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         }
     }
 
-    C4::AR::Debug::debug("generar_indice_v2 => superstring!!!!!!!!!!!!!!!!!!! => ".$superstring);
+#     C4::AR::Debug::debug("generar_indice_v2 => superstring!!!!!!!!!!!!!!!!!!! => ".$superstring);
 
     if($id1 eq '0'){
         my $query4="INSERT INTO indice_busqueda (id,titulo,autor,string) VALUES (?,?,?,?) ";
