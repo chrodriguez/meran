@@ -70,9 +70,10 @@ sub guardarRealmente{
         
         eval {
             $catRegistroMarcN1->agregar($marc_record->as_usmarc);
-            $db->commit;
+            $db->commit;            
             #recupero el id1 recien agregado
             $id1 = $catRegistroMarcN1->getId1;
+            C4::AR::Utilidades::generar_indice($id1);
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$id1]} ) ;
@@ -179,8 +180,7 @@ sub t_modificarNivel1 {
         eval {
             my $marc_record = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
 
-            $cat_registro_marc_n1->modificar($marc_record->as_usmarc);  
-            #$id1 = $cat_registro_marc_n1->getId1;
+            $cat_registro_marc_n1->modificar($marc_record->as_usmarc);
             $db->commit;
             C4::AR::Utilidades::generar_indice($cat_registro_marc_n1->getId1);
             #se cambio el permiso con exito

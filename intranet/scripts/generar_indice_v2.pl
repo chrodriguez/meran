@@ -14,6 +14,7 @@ use CGI;
 #use Sphinx::Manager;
 
 
+my $session = CGI::Session->new();
 my $input = new CGI;
 
 my $id1 = $ARGV[0] || '0'; #id1 del registro
@@ -98,12 +99,26 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         my $sth4=$dbh->prepare($query4);
         $sth4->execute($registro_marc_n1->{'id'},$titulo,$autor,$superstring);
     } else {    
-        my $query4="UPDATE indice_busqueda SET titulo = ?, autor = ?, string = ? WHERE id = ? ";
+
+        my $query4="SELECT COUNT(*) as cant FROM indice_busqueda WHERE id = ?";
         my $sth4=$dbh->prepare($query4);
-        $sth4->execute($titulo, $autor, $superstring, $registro_marc_n1->{'id'});
+        $sth4->execute($registro_marc_n1->{'id'});
+        my $data = $sth4->fetchrow_hashref;
+
+        if($data->{'cant'} eq '0'){
+            my $query4="INSERT INTO indice_busqueda (id,titulo,autor,string) VALUES (?,?,?,?) ";
+            my $sth4=$dbh->prepare($query4);
+            $sth4->execute($registro_marc_n1->{'id'},$titulo,$autor,$superstring);
+        }else{
+            my $query4="UPDATE indice_busqueda SET titulo = ?, autor = ?, string = ? WHERE id = ? ";
+            my $sth4=$dbh->prepare($query4);
+            $sth4->execute($titulo, $autor, $superstring, $registro_marc_n1->{'id'});
+        }
+
         C4::AR::Debug::debug("generar_indice_v2 => UPDATE => id1 => ".$registro_marc_n1->{'id'});
     }
 }
 
     
-C4::AR::Utilidades::reindexar();
+C4::Auth::print_header($session);
+# C4::AR::Utilidades::reindexar();
