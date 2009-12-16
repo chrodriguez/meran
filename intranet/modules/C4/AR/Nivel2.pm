@@ -133,6 +133,8 @@ sub t_eliminarNivel2{
         eval {
             $cat_registro_marc_n2->eliminar($params);  
             $db->commit;
+            C4::AR::Busquedas::generar_indice($cat_registro_marc_n2->getId1());
+            C4::AR::Busquedas::reindexar();
             #se cambio el permiso con exito
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U375', 'params' => [$id2]} ) ;

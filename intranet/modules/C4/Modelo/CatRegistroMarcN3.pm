@@ -234,7 +234,7 @@ sub getIdDisponibilidad{
 
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
-    return C4::AR::Utilidades::trim($marc_record->subfield("995","o"));
+    return C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record->subfield("995","o")));
 }
 
 
@@ -244,10 +244,10 @@ sub getDisponibilidadObject{
     my ($self)              = shift;
 
     my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    my $ref                 = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdDisponibilidad());
+#     my $ref                 = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdDisponibilidad());
 
      
-    my $disponibilidad      = C4::AR::Referencias::getDisponibilidadObject($ref);
+    my $disponibilidad      = C4::AR::Referencias::getDisponibilidadObject($self->getIdDisponibilidad());
         
     if(!$disponibilidad){
             C4::AR::Debug::debug("CatRegistroMarcN3 => getDisponibilidadObject()=> EL OBJECTO (ID) RefDisponibilidad NO EXISTE");

@@ -206,6 +206,8 @@ sub t_eliminarNivel3{
         }
 
             $db->commit;
+            C4::AR::Busquedas::generar_indice($cat_registro_marc_n3->getId1());
+            C4::AR::Busquedas::reindexar();
     };
 
     if ($@){
@@ -579,7 +581,7 @@ sub buscarNivel3PorDisponibilidad{
 	foreach my $n3 (@$nivel3_array_ref){
 		my $item;
 
-		if((!$n3->estaPrestado)&&($n3->estadoDisponible)&&($nivel3aPrestar->getId_disponibilidad eq $n3->getId_disponibilidad)){
+		if((!$n3->estaPrestado)&&($n3->estadoDisponible)&&($nivel3aPrestar->getIdDisponibilidad eq $n3->getIdDisponibilidad)){
 		#Si no esta prestado, esta en estado disponmible y tiene la misma disponibilidad que el novel 3 que intento prestar se agrega al combo
 				$item->{'label'}=$n3->getBarcode;
 				$item->{'value'}=$n3->getId3;
