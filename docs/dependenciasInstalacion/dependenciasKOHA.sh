@@ -15,4 +15,5 @@ apt-get install libcrypt-cbc-perl   #cpan -i Crypt::CBC
 cpan -i Image::Resize
 cpan -i Text::LevenshteinXS
 cpan -i Sphinx::Search
+cpan -i Sphinx::Manager
 

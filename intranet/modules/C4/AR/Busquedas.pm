@@ -113,7 +113,7 @@ sub sphinx_start{
 
     my $pids = $mgr->get_searchd_pid;
     if(scalar(@$pids) == 0){
-        C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ".getToday());
+        C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ".C4::AR::Utilidades::getToday());
         $mgr->start_searchd;
     }
 }

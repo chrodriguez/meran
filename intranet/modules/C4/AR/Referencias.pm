@@ -89,11 +89,11 @@ use vars qw(@EXPORT @ISA);
 
 
 sub getIdRefDisponibilidadDomiciliaria{
-    return 'ref_disponibilidad@1';
+    return 'ref_disponibilidad@0';
 }
 
 sub getIdRefDisponibilidadSalaLectura{
-    return 'ref_disponibilidad@2';
+    return 'ref_disponibilidad@1';
 }
 
 sub getIdRefEstadoBaja{

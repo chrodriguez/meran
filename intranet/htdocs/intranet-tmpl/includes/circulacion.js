@@ -183,8 +183,8 @@ function generaDivPrestamo(responseText){
 		infoPrestamoObj.id3Old= infoArray[i].id3Old;
 		INFO_PRESTAMOS_ARRAY[i]= infoPrestamoObj;
  
-		var comboItems =crearCombo(infoArray[i].items, 'comboItems' + i);
-		var comboTipoPrestamo =crearCombo(infoArray[i].tipoPrestamo, 'tiposPrestamos' + i);
+		var comboItems = crearComboDeItems(infoArray[i].items, 'comboItems' + i);
+		var comboTipoPrestamo =crearComboDeItems(infoArray[i].tipoPrestamo, 'tiposPrestamos' + i);
 		if(infoArray[i].autor != ""){ html= html + infoArray[i].autor + ", "};
 		html= html + infoArray[i].titulo + ", ";
 		if(infoArray[i].unititle != ""){html= html + infoArray[i].unititle + ", "};
@@ -203,13 +203,13 @@ function generaDivPrestamo(responseText){
 }
 
 /*
- * crearCombo
+ * crearComboDeItems
  * Crea los combos necesarios para poder seleccionar el item y el tipo de prestamo, para cada item que se va a
  * prestar.
  * prestamos.tmpl--->se usa en la funcion generarDivPrestamos.
  * PUEDE IR EN OTRA LIBRERIA, COMO UTIL.js !!!!!!???????
  */
-function crearCombo(items_array, idSelect){
+function crearComboDeItems(items_array, idSelect){
 	var opciones= '';	
 	var html= "<select id='" + idSelect + "'>";
 	var i;
