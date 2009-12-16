@@ -76,6 +76,51 @@ use vars qw(@EXPORT @ISA);
 		&t_loguearBusqueda
 );
 
+
+
+#==================================================================SPHINX====================================================================
+=head2
+    sub generar_indice
+=cut
+sub generar_indice {
+    my ($id1) = @_;
+
+    my $err = system("perl /usr/local/koha/intranet/scripts/generar_indice_v2.pl ".$id1);
+    C4::AR::Debug::debug("Busquedas => generar_indice => ERROR ".$err);
+}
+
+=head2
+    sub reindexar
+=cut
+sub reindexar{
+    use Sphinx::Manager;
+
+    my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
+    #verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada    
+    sphinx_start();
+
+    $mgr->run_indexer('--all --rotate --quiet');
+}
+
+=head2
+    sub sphinx_start
+    verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada
+=cut
+sub sphinx_start{
+    use Sphinx::Manager;
+
+    my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
+
+    my $pids = $mgr->get_searchd_pid;
+    if(scalar(@$pids) == 0){
+        C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ".getToday());
+        $mgr->start_searchd;
+    }
+}
+#================================================================FIN SPHINX=================================================================
+
+
+
 =item
 buscarDatoReferencia
 Busca el valor del dato que viene de referencia. Es un id que apunta a una tupla de una tabla y se buscan los campos que el usuario introdujo para que se vean. Se concatenan con el separador que el mismo introdujo.
@@ -1752,6 +1797,7 @@ sub _existeEnArregloDeCampoMARC{
 #     my $repetibles_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible( query => \@filtros);
 #     return $repetibles_array_ref;
 # }
+
 
 1;
 __END__

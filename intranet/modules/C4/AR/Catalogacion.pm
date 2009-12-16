@@ -549,8 +549,9 @@ sub getRefFromStringConArrobas{
     @datos_array[1]; #tabla
     @datos_array[2]; #dato
 =cut
-#     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 1: ".@datos_array[1]);
-    C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 2: ".@datos_array[2]);
+
+#     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato: ".$dato);
+#     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 2: ".@datos_array[2]);
 
     return @datos_array[2];
 }
@@ -583,7 +584,7 @@ Esta funcion recibe un campo, un subcampo y un dato y busca en la tabla de refer
 sub _procesar_referencia{
     my ($campo, $subcampo, $dato) = @_;
 
-    C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
+#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
 
     my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
     if($estructura){
@@ -591,28 +592,24 @@ sub _procesar_referencia{
             #tiene referencia
             my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
             my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
-#             if (!$obj_generico){ 
 
 #                 my $string_result = '@'.$obj_generico->getTableName.'@'.$campo.'@'.$subcampo.'@'.$dato;
                 my $string_result = '@'.$obj_generico->getTableName.'@'.$dato;
 
-                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
-                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
-                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Tabla:            ".$obj_generico->getTableName);
-                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Modulo:           ".$obj_generico->toString);
-                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result:    ".$string_result);
+#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
+#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
+#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Tabla:            ".$obj_generico->getTableName);
+#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Modulo:           ".$obj_generico->toString);
+#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result:    ".$string_result);
 
                 return($string_result);
                 #FIXME, este valor es el que devuelve cuando NO lo encuentra en la tabla de referencia, en este caso deberia arreglarlo
-#             }
 
 #             return('10'); #FIXME, este valor es el que devuelve cuando lo encuentra en la tabla de referencia
         }else{  
             return $dato;
         }
     }
-
-#     return("FIXME");
 }
 
 

@@ -73,7 +73,8 @@ sub guardarRealmente{
             $db->commit;            
             #recupero el id1 recien agregado
             $id1 = $catRegistroMarcN1->getId1;
-            C4::AR::Utilidades::generar_indice($id1);
+            C4::AR::Busquedas::generar_indice($id1);
+            C4::AR::Busquedas::reindexar();
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$id1]} ) ;
@@ -182,7 +183,8 @@ sub t_modificarNivel1 {
 
             $cat_registro_marc_n1->modificar($marc_record->as_usmarc);
             $db->commit;
-            C4::AR::Utilidades::generar_indice($cat_registro_marc_n1->getId1);
+            C4::AR::Busquedas::generar_indice($cat_registro_marc_n1->getId1());
+            C4::AR::Busquedas::reindexar();
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U380', 'params' => [$cat_registro_marc_n1->getId1]} ) ;

@@ -28,6 +28,9 @@ my $tipoAccion= $obj->{'tipoAccion'}||"";
 my $dateformat = C4::Date::get_date_format();
 my $ini= $obj->{'ini'};
 
+#verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada    
+C4::AR::Busquedas::sphinx_start();
+
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 $t_params->{'ini'} = $obj->{'ini'} = $ini;

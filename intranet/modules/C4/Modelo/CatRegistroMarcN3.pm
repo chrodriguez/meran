@@ -108,7 +108,7 @@ Obteniendo el id2 al que pertenece el elemento de nivel3
 sub getId2{
     my ($self)  = shift;
 
-    return $self->id;
+    return $self->id2;
 }
 
 =head2
@@ -121,7 +121,7 @@ Obteniendo el id1 al que pertenece el elemento de nivel3
 sub getId1{
     my ($self)  = shift;
 
-    return $self->id;
+    return $self->id1;
 }
 
 =head2
@@ -215,7 +215,7 @@ sub getEstadoObject{
     my ($self)      = shift;
 
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdEstado()));
+    my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdEstado());
      
     my $estado      = C4::AR::Referencias::getEstadoObject($ref);
         
@@ -244,7 +244,7 @@ sub getDisponibilidadObject{
     my ($self)              = shift;
 
     my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    my $ref                 = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdDisponibilidad()));
+    my $ref                 = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdDisponibilidad());
 
      
     my $disponibilidad      = C4::AR::Referencias::getDisponibilidadObject($ref);

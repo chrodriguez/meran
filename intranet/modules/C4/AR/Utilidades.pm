@@ -2686,32 +2686,5 @@ sub armarPaginasOPAC{
     return($paginador, $totalPaginas);
 }
 
-sub reindexar{
-#     my @args = ("indexer", "--all", "--rotate", "--quiet");
-    my @args = ("indexer", "--all", "--quiet", "--rotate");
-    
-    my $err = system(@args);
-    C4::AR::Debug::debug("Utilidades => reindexar => ERROR ".$err);
-}
-
-sub generar_indice{
-    my ($id1) = @_;
-
-    use Sphinx::Manager;
-
-    my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
-    
-    my $pids = $mgr->get_searchd_pid;
-
-    if(scalar(@$pids) == 0){
-        C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!!");
-        $mgr->start_searchd;
-    }
-
-    my $err = system("perl /usr/local/koha/intranet/scripts/generar_indice_v2.pl ".$id1);
-    C4::AR::Debug::debug("Utilidades => generar_indice => ERROR ".$err);
-
-    $mgr->run_indexer('--all --rotate --quiet');
-}
 
 1;

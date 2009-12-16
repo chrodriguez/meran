@@ -52,17 +52,18 @@ sub t_guardarNivel3 {
     
                 $params->{'marc_record'} = $marc_record->as_usmarc;
                 $catRegistroMarcN3->agregar($db, $params);
+# FIXME transaccion por ejemplar???
                 $db->commit;
-    
                 #recupero el id3 recien agregado
                 my $id3 = $catRegistroMarcN3->getId3;
-                
+                C4::AR::Busquedas::generar_indice($catRegistroMarcN3->getId1);
                 #se agregaron los barcodes con exito
                 $msg_object->{'error'} = 0;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$id3]} );
         }
     
-                $db->commit;
+#                 $db->commit;
+                C4::AR::Busquedas::reindexar();
         };
 
       if ($@){
@@ -114,18 +115,22 @@ sub t_modificarNivel3 {
             #verifico las condiciones para actualizar los datos
             _verificarUpdateItem($msg_object, $params);
 
-            if(!$msg_object->{'error'}){
-                ($cat_registro_marc_n3) = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i], $db);
-#                 $db = $catNivel3->db;
-                $params->{'marc_record'} = $marc_record->as_usmarc;
-                $cat_registro_marc_n3->modificar($params, $db);  #si es mas de un ejemplar, a todos les setea la misma info
-                #se cambio el permiso con exito
-                $msg_object->{'error'} = 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$cat_registro_marc_n3->getBarcode]} ) ;
-            }
+                if(!$msg_object->{'error'}){
+                    ($cat_registro_marc_n3) = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i], $db);
+    #                 $db = $catNivel3->db;
+                    $params->{'marc_record'} = $marc_record->as_usmarc;
+                    $cat_registro_marc_n3->modificar($params, $db);  #si es mas de un ejemplar, a todos les setea la misma info
+                    $db->commit;
+                    C4::AR::Busquedas::generar_indice($cat_registro_marc_n3->getId1);
+                    #se cambio el permiso con exito
+                    $msg_object->{'error'} = 0;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$cat_registro_marc_n3->getBarcode]} ) ;
+                }
             }#END for(my $i=0;$i<$cant;$i++)
 
-            $db->commit;
+#             $db->commit;
+            
+            C4::AR::Busquedas::reindexar();
     };
 
     if ($@){
