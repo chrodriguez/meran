@@ -67,7 +67,7 @@
                     <td>[% nivel3_obj.getId_ui_poseedora %]</td>   
                     <td>[% nivel3_obj.getId_ui_origen %]</td>  
                     <td>[% nivel3_obj.getEstado %]</td>
-                    <td>[% nivel3_obj.ref_disponibilidad.getNombre %]</td>
+                    <td>[% nivel3_obj.getDisponibilidadObject.getNombre %]</td>
                     <td>
                         <a class="click" onClick="MARCDetail('[% id3 %]', '[% DivDetalle %]', '[% DivMARC %]');">
                         <img src="[% themelang %]/images/MARC.png" border="0" alt="[% 'Detalle MARC' | i18n %]" title="[% 'Detalle MARC' | i18n %]">
