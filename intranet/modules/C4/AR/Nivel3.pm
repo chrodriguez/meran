@@ -53,10 +53,10 @@ sub t_guardarNivel3 {
         
                 $catRegistroMarcN3  = C4::Modelo::CatRegistroMarcN3->new(db => $db);  
 
-#                 $marc_record->field('995', 'f', $barcode)    
-                my $field = MARC::Field->new('995','','','f' => $barcode);
+                my $field = $marc_record->field('995');  
+                $field->add_subfields( 'f' => $barcode );
                 $marc_record->add_fields($field);
-
+# FIXME agrega el barcode repetido
                 $params->{'marc_record'} = $marc_record->as_usmarc;
                 $catRegistroMarcN3->agregar($db, $params);
 # FIXME transaccion por ejemplar???
