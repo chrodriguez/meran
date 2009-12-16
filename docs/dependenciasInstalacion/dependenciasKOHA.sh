@@ -1,6 +1,6 @@
 #/bin/bash
 apt-get update -y
-apt-get install libpdf-report-perl libhtml-template-expr-perl  libhtml-template-perl libnet-ldap-perl libdbd-mysql-perl libmail-sendmail-perl libmarc-record-perl libgd-gd2-perl libarchive-zip-perl libapache2-mod-perl2 libapache-db-perl libdate-manip-perl libooolib-perl libpdf-report-perl  libchart-perl libtemplate-perl libcgi-session-perl libnet-amazon-perl libnet-z3950-zoom-perl -y
+apt-get install libpdf-report-perl libhtml-template-expr-perl  libhtml-template-perl libnet-ldap-perl libdbd-mysql-perl libmail-sendmail-perl libmarc-record-perl libgd-gd2-perl libarchive-zip-perl libapache2-mod-perl2 libapache-db-perl libdate-manip-perl libooolib-perl libpdf-report-perl  libchart-perl libtemplate-perl libnet-amazon-perl libnet-z3950-zoom-perl -y
 
 cpan -i JSON
 cpan -i JSON::XS
@@ -16,4 +16,5 @@ cpan -i Image::Resize
 cpan -i Text::LevenshteinXS
 cpan -i Sphinx::Search
 cpan -i Sphinx::Manager
+cpan -i CGI::Session #libcgi-session-perl
 

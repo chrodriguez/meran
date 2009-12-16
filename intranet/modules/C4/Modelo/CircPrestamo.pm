@@ -271,8 +271,8 @@ sub prestar {
 	} else {   
         #NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!
 		$self->debug("NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!");
-		my $seReserva=1;
 
+		my $seReserva=1;
 		#Se verifica disponibilidad del item;
 		my $reserva = C4::AR::Reservas::getReservaDeId3($id3);
 
@@ -335,14 +335,15 @@ sub prestar {
 
 
 sub insertarPrestamo {
-	my ($self)=shift;
-	my($params)=@_;
+	my ($self)  = shift;
+	my($params) = @_;
 
 # 	use C4::Modelo::CircReserva;
 #     my ($reserva) = C4::Modelo::CircReserva->new(db=> $self->db, id_reserva => $params->{'id_reserva'});
 #     $reserva->load();
 
-    my ($reserva) = C4::AR::Reservas::getReserva($params->{'id_reserva'},$self->db);
+    $self->debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    my ($reserva) = C4::AR::Reservas::getReserva($params->{'id_reserva'}, $self->db);
 	$self->debug("Se actualiza el estado de la reserva a P = Prestado a la reserva ".$reserva->getId2);
 #Se actualiza el estado de la reserva a P = Prestado
 	$reserva->setEstado('P');
@@ -352,8 +353,8 @@ sub insertarPrestamo {
 # Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo
 	use C4::Modelo::CircSancion::Manager;
 	my $sancion= C4::Modelo::CircSancion::Manager->get_circ_sancion(
-                                                                    db=>$self->db,
-                                                                    query =>[id_reserva =>{eq => $reserva->getId_reserva }]
+                                                                        db      =>  $self->db,
+                                                                        query   =>  [ id_reserva  =>  {eq => $reserva->getId_reserva }]
                                                                    );
 	if ($sancion->[0]){$sancion->[0]->delete();}
 

@@ -60,6 +60,7 @@ sub getInfoPrestamo{
                                                                           db => $db,
                                                                           require_objects => ['nivel3','socio','ui'],
                                                                         );
+
     
     if (scalar(@$prestamos)){
         return ($prestamos->[0]);

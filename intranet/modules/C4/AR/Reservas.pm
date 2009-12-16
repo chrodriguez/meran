@@ -638,16 +638,21 @@ sub _getReservasAsignadas {
     Funcion que retorna la informacion de la reserva con el numero que se le pasa por parametro.
 =cut
 sub getReserva{
-    my ($id,$db)=@_;
+    my ($id, $db) = @_;
     my @filtros;
 
     $db = $db || C4::Modelo::CircReserva->new()->db;
 
     push (@filtros, (id_reserva => $id) );
 
-    my ($reserva) = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, 
-                                                                        with_objects => ['nivel3','nivel2']);
-    if (scalar(@$reserva)){
+    my ($reserva) = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
+                                                                        db              => $db,
+                                                                        query           => \@filtros, 
+                                                                        with_objects    => ['nivel3','nivel2']);
+
+
+
+    if (scalar(@$reserva) > 0){
         return ($reserva->[0]);
     }else{
         return(0);
@@ -1092,15 +1097,22 @@ sub getEjemplarDeGrupoParaReserva {
     $id3 = id3 del ejemplar del cual se intenta recuperar la reserva
 =cut
 sub getReservaDeId3{
-    my ($db, $id3) = @_;
-
+    my ($id3, $db) = @_;
+    
     use C4::Modelo::CircReserva;
     use C4::Modelo::CircReserva::Manager;
+
+    $db = $db || C4::Modelo::PermCatalogo->new()->db;  
+
     my @filtros;
     push(@filtros, ( id3        => { eq => $id3}));
     push(@filtros, ( estado     => { ne => 'P'} ));
 
-    my ($reservas_array_ref) = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $db, query => \@filtros, require_objects => ['nivel3','nivel2']); 
+    my ($reservas_array_ref) = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
+                                                                                    db => $db, 
+                                                                                    query => \@filtros, 
+                                                                                    require_objects => ['nivel3','nivel2']
+                                                                            ); 
 
     if(scalar(@$reservas_array_ref) > 0){
         return ($reservas_array_ref->[0]);
