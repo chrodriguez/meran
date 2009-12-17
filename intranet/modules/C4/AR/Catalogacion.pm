@@ -318,7 +318,7 @@ sub detalleMARC {
 #             C4::AR::Debug::debug("Catalogacion => detalleMARC => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
             my $valor_referencia            = getDatoFromReferencia($campo, $subcampo, $dato);
             $hash_temp{'dato'}              = $valor_referencia;
-#             C4::AR::Debug::debug("Catalogacion => detalleMARC => dato despues de getDatoFromReferencia: ".$hash_temp{'dato'});
+            C4::AR::Debug::debug("Catalogacion => detalleMARC => dato despues de getDatoFromReferencia: ".$hash_temp{'dato'});
 
             push(@subcampos_array, \%hash_temp);
         }

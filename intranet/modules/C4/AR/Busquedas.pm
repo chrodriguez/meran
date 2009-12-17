@@ -548,29 +548,16 @@ sub obtenerDisponibilidadTotal{
 	my $cant_para_domicilio = 0;
     my $cant_para_sala = 0;
     my $i = 0;
-# 	while(my $data = $sth->fetchrow_hashref){
+
     foreach my $n3 (@$cat_ref_tipo_nivel3_array_ref){
-	    #DOMICILIO
-# 		if ($data->{'id_disponibilidad'} == 0) {
-# 			$disponibilidad[$i]->{'tipoPrestamo'}   = "Para Domicilio:";
-# 			$disponibilidad[$i]->{'prestados'}      = "Prestados: ";
-# 			$disponibilidad[$i]->{'prestados'}     .= C4::AR::Prestamos::getCountPrestamosDelRegistro($id1);
-# 			$disponibilidad[$i]->{'reservados'}     = "Reservados: ".C4::AR::Reservas::cantReservasPorNivel1($id1);
-# 		} else {
-# 	    #PARA SALA
-# 			$disponibilidad[$i]->{'tipoPrestamo'}   = "Para Sala:";
-# 		}
-# 
-# 		$disponibilidad[$i]->{'cantTotal'}          = $data->{'cant'};
-# 		$i++;
-    
+
         if ($n3->getIdDisponibilidad == 0) {
         #DOMICILIO    
-        C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
+#         C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
             $cant_para_domicilio++;
         } else {
         #PARA SALA
-        C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => PARA SALA");
+#         C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => PARA SALA");
             
             $cant_para_sala++;
         }
@@ -1395,8 +1382,8 @@ sub busquedaCombinada_newTemp{
     my $matches = $results->{'matches'};
     my $total_found = $results->{'total_found'};
     $obj_for_log->{'total_found'} = $total_found;
-    C4::AR::Utilidades::printHASH($results);
-#     C4::AR::Debug::debug("total_found: ".$total_found);
+#     C4::AR::Utilidades::printHASH($results);
+    C4::AR::Debug::debug("total_found: ".$total_found);
 #     C4::AR::Debug::debug("LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
       my %hash_temp = {};
@@ -1653,45 +1640,48 @@ sub armarBuscoPor{
 
 
 sub armarInfoNivel1{
-    my ($params, @resultId1) = @_;
+    my ($params, @resultId1)    = @_;
 
     my $tipo_nivel3_name        = $params->{'tipo_nivel3_name'};
     my @result_array_paginado   = @resultId1;
     my $cant_total              = scalar(@resultId1);
     my @result_array_paginado_temp;
 
-  for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {
-    my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
-    if($nivel1){
-  # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
-      @result_array_paginado[$i]->{'titulo'} =      $nivel1->getTitulo();
-      @result_array_paginado[$i]->{'nomCompleto'} = $nivel1->getAutorObject->getCompleto();
-      @result_array_paginado[$i]->{'idAutor'} =     $nivel1->getAutorObject->getId();
-      #aca se procesan solo los ids de nivel 1 que se van a mostrar
-      #se generan los grupos para mostrar en el resultado de la consulta
-      my $ediciones = &C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
 
-      @result_array_paginado[$i]->{'grupos'}= 0;
-      if(scalar(@$ediciones) > 0){
-        @result_array_paginado[$i]->{'grupos'}=$ediciones;
-      }
-      @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
-      #se obtine la disponibilidad total 
-      my @disponibilidad = &C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);  
+    for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {
+        my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
 
-      @result_array_paginado[$i]->{'disponibilidad'}= 0;
-      if(scalar(@disponibilidad) > 0){
-        @result_array_paginado[$i]->{'disponibilidad'}=\@disponibilidad;
-      }
+        if($nivel1){
+        # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
+            @result_array_paginado[$i]->{'titulo'}      = $nivel1->getTitulo();
+            @result_array_paginado[$i]->{'nomCompleto'} = $nivel1->getAutorObject->getCompleto();
+            @result_array_paginado[$i]->{'idAutor'}     = $nivel1->getAutorObject->getId();
+            #aca se procesan solo los ids de nivel 1 que se van a mostrar
+            #se generan los grupos para mostrar en el resultado de la consulta
+            my $ediciones = &C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
+        
+            @result_array_paginado[$i]->{'grupos'}      = 0;
+            if(scalar(@$ediciones) > 0){
+                @result_array_paginado[$i]->{'grupos'}  = $ediciones;
+            }
 
-      push (@result_array_paginado_temp, @result_array_paginado[$i]);
+            @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
+            #se obtine la disponibilidad total 
+            my @disponibilidad = &C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);  
+        
+            @result_array_paginado[$i]->{'disponibilidad'}= 0;
+            if(scalar(@disponibilidad) > 0){
+                @result_array_paginado[$i]->{'disponibilidad'}=\@disponibilidad;
+            }
+        
+            push (@result_array_paginado_temp, @result_array_paginado[$i]);
+        }
     }
-  }
 
-  $cant_total = scalar(@result_array_paginado_temp);
-  @result_array_paginado = @result_array_paginado_temp;
-
-  return ($cant_total, \@result_array_paginado);
+    $cant_total = scalar(@result_array_paginado_temp);
+    @result_array_paginado = @result_array_paginado_temp;
+    
+    return ($cant_total, \@result_array_paginado);
 }
 
 #*****************************************Soporte MARC************************************************************************

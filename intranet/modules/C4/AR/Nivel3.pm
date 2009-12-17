@@ -49,11 +49,11 @@ sub t_guardarNivel3 {
             foreach my $barcode (@$barcodes_para_agregar){
                 #se procesa un barcode por vez junto con la info del nivel 3 y nivel3 repetible
                 my $catNivel3;
-                $params->{'barcode'} = $barcode; 
+                $params->{'barcode'}    = $barcode; 
         
-                $catRegistroMarcN3  = C4::Modelo::CatRegistroMarcN3->new(db => $db);  
+                $catRegistroMarcN3      = C4::Modelo::CatRegistroMarcN3->new(db => $db);  
 
-                 my $marc_record             = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
+                my $marc_record         = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
                 my $field = $marc_record->field('995');  
                 $field->add_subfields( 'f' => $barcode );
                 $marc_record->add_fields($field);
