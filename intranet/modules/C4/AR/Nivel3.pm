@@ -404,11 +404,11 @@ sub detalleDisponibilidadNivel3{
     my ($id2) = @_;
     
     #recupero todos los nivel3 segun el id2 pasado por parametro
-    my $nivel3_array_ref = &C4::AR::Nivel3::getNivel3FromId2($id2);
+    my $nivel3_array_ref                = &C4::AR::Nivel3::getNivel3FromId2($id2);
     my @result;
     my %hash_nivel2;
 
-    my $i=0;
+    my $i = 0;
     my $cantDisponibles                 = 0;
     my %infoNivel3;
     $infoNivel3{'cantParaSala'}         = 0;
@@ -419,41 +419,37 @@ sub detalleDisponibilidadNivel3{
     $infoNivel3{'cantReservasEnEspera'} = C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2);
 
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
-        my %hash_nivel3 = ();
-#    		C4::AR::Utilidades::initHASH(\%hash_nivel3);
-		my $socio;
+        my %hash_nivel3;
+
 # FIXME si no se setea undef, muestra al usuario de un grupo tantas veces como ejemplares tenga, si este tiene un prestamo sobre 
 # un ejemplar del grupo.
 # con el debug no veo el nro_socio luego de my $socio, o sea lo que se esta mamando es el template, va haber q inicializar los flags
 # que van hacia el template.
-   		$hash_nivel3{'nro_socio'} = undef;
-# FIXME no alcanza con undef
+   		
+        $hash_nivel3{'nro_socio'}           = undef;
+        $hash_nivel3{'nivel3_obj'}          = $nivel3_array_ref->[$i]; 
+        $hash_nivel3{'id3'}                 = $nivel3_array_ref->[$i]->getId3;
+        $hash_nivel3{'paraPrestamo'}        = $nivel3_array_ref->[$i]->estaPrestado;
 
-# C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
-
-        $hash_nivel3{'nivel3_obj'}      = $nivel3_array_ref->[$i]; 
-        $hash_nivel3{'id3'}             = $nivel3_array_ref->[$i]->getId3;
-        $hash_nivel3{'paraPrestamo'}    = $nivel3_array_ref->[$i]->estaPrestado;
-
-        my $UI_poseedora_object = C4::AR::Referencias::getUI_infoObject($hash_nivel3{'id_ui_poseedora'});
+        my $UI_poseedora_object             = C4::AR::Referencias::getUI_infoObject($hash_nivel3{'id_ui_poseedora'});
 
         if($UI_poseedora_object){
-            $hash_nivel3{'UI_poseedora'} = $UI_poseedora_object->getNombre();
+            $hash_nivel3{'UI_poseedora'}    = $UI_poseedora_object->getNombre();
         }
 
-        my $UI_origen_object = C4::AR::Referencias::getUI_infoObject($hash_nivel3{'id_ui_origen'});
+        my $UI_origen_object                = C4::AR::Referencias::getUI_infoObject($hash_nivel3{'id_ui_origen'});
 
         if($UI_origen_object){
-            $hash_nivel3{'UI_origen'}   = $UI_origen_object->getNombre();
+            $hash_nivel3{'UI_origen'}       = $UI_origen_object->getNombre();
         }
 	
 	    #ESTADO
 	    $hash_nivel3{'estado'} = $nivel3_array_ref->[$i]->getEstado;
         if($nivel3_array_ref->[$i]->estadoDisponible){
             #ESTADO DISPONIBLE
-            $hash_nivel3{'claseEstado'}= "disponible";
+            $hash_nivel3{'claseEstado'} = "disponible";
             $cantDisponibles++;
-            $hash_nivel3{'disponible'}= 1; # lo marco como disponible
+            $hash_nivel3{'disponible'} = 1; # lo marco como disponible
     
 		        if(!$nivel3_array_ref->[$i]->esParaSala){
                     #esta DISPONIBLE y es PARA PRESTAMO
@@ -465,33 +461,39 @@ sub detalleDisponibilidadNivel3{
 
         } else {
 	        #ESTADO NO DISPONIBLE
-	        $hash_nivel3{'claseEstado'}= "nodisponible";
-	        $hash_nivel3{'disponible'}= 0; # lo marco como no disponible
+	        $hash_nivel3{'claseEstado'}         = "nodisponible";
+	        $hash_nivel3{'disponible'} = 0; # lo marco como no disponible
 	    }
 	
 	    #DISPONIBILIDAD
         if(!$nivel3_array_ref->[$i]->esParaSala){
             #PARA PRESTAMO
-            $hash_nivel3{'disponibilidad'}= "Prestamo";
-            $hash_nivel3{'claseDisponibilidad'}= "prestamo";
+            $hash_nivel3{'disponibilidad'}      = "Prestamo";
+            $hash_nivel3{'claseDisponibilidad'} = "prestamo";
         }elsif($nivel3_array_ref->[$i]->esParaSala){
             #es PARA SALA
-            $hash_nivel3{'disponibilidad'}= "Sala de Lectura";
-            $hash_nivel3{'claseDisponibilidad'}= "salaLectura";
+            $hash_nivel3{'disponibilidad'}      = "Sala de Lectura";
+            $hash_nivel3{'claseDisponibilidad'} = "salaLectura";
         }
 		
-        C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
-        $socio= C4::AR::Prestamos::getSocioFromPrestamo($hash_nivel3{'id3'});
-        $hash_nivel3{'vencimiento'} = undef;
-        if($socio){ 
-            C4::AR::Debug::debug("ENTRO POR HAY SOCIO...");
-            my $prestamo =                      C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'});
-            $hash_nivel3{'prestamo'} =          $prestamo;
-            $hash_nivel3{'socio'} =             $socio;
+#         C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
+        my $socio = C4::AR::Prestamos::getSocioFromPrestamo($hash_nivel3{'id3'});
+
+        #se inicializa la hash
+        $hash_nivel3{'vencimiento'}         = undef;
+        $hash_nivel3{'socio'}               = undef;
+        $hash_nivel3{'prestamo'}            = undef;
+
+        if ($socio) { 
+
+            my $prestamo                    = C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'});
+            $hash_nivel3{'prestamo'}        = $prestamo;
+            $hash_nivel3{'socio'}           = $socio;
+
             if ($prestamo->estaVencido) {
-                $hash_nivel3{'claseFecha'}= "fecha_vencida";
+                $hash_nivel3{'claseFecha'}  = "fecha_vencida";
             }else {
-                $hash_nivel3{'claseFecha'}= "fecha_cumple";
+                $hash_nivel3{'claseFecha'}  = "fecha_cumple";
             }
         }
     
@@ -500,8 +502,6 @@ sub detalleDisponibilidadNivel3{
 
     $infoNivel3{'disponibles'} = $infoNivel3{'cantParaPrestamo'} + $infoNivel3{'cantParaSala'};
 
-#     my (%infoNivel3,@result);   
-
     return(\%infoNivel3,@result);
 }
 
@@ -509,7 +509,7 @@ sub detalleDisponibilidadNivel3{
 Genera el detalle 
 =cut
 sub detalleCompletoOPAC{
-	my ($id1, $t_params)=@_;
+	my ($id1, $t_params) = @_;
 	
 	#recupero el nivel1 segun el id1 pasado por parametro
 	my $nivel1= &C4::AR::Nivel1::getNivel1FromId1($id1);
@@ -575,6 +575,49 @@ sub generaCodigoBarra{
 	return($barcode);
 }
 
+
+=head2 sub getNivel3FromId1
+    Recupero un nivel 3 a partir de un id1
+    retorna un objeto o 0 si no existe
+=cut
+sub getNivel3FromId1{
+    my ($id1, $db) = @_;
+
+    $db = $db || C4::Modelo::PermCatalogo->new()->db;
+    my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
+                                                                    db => $db,
+                                                                    query   => [ id1 => { eq => $id1} ], 
+                                                                );
+
+
+    return $nivel3_array_ref;
+}
+
+=head2 sub getDisponibilidadFromId1
+    Retorna la disponibilidad del registro
+=cut
+# sub getDisponibilidadFromId1{
+#     my ($id1) = @_;
+#     
+#     my ($nivel3_array_ref) = getNivel3FromId1($id1);
+#     my @items;
+#     my $j=0;
+#     foreach my $n3 (@$nivel3_array_ref){
+#         my $item;
+# 
+#         my $marc_record = MARC::Record->new_from_usmarc($n3->getMarcRecord());
+#         $n3->getIdDisponibilidad;
+# 
+# #         if((!$n3->estaPrestado)&&($n3->estadoDisponible)&&($nivel3aPrestar->getIdDisponibilidad eq $n3->getIdDisponibilidad)){
+# #         #Si no esta prestado, esta en estado disponmible y tiene la misma disponibilidad que el novel 3 que intento prestar se agrega al combo
+# #                 $item->{'label'} = $n3->getBarcode;
+# #                 $item->{'value'} = $n3->getId3;
+# #                 push (@items,$item);
+# #             }
+#     }
+# 
+#     return(\@items);
+# }
 
 =item sub buscarNiveles3PorDisponibilidad
 Busca los datos del nivel 3 a partir de un id3, respetando su disponibilidad

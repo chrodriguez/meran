@@ -520,42 +520,76 @@ sub obtenerGrupos {
 
 
 sub obtenerDisponibilidadTotal{
-	my ($id1,$itemtype)=@_;
+	my ($id1, $itemtype) = @_;
 
 	my @disponibilidad;
 	my $dbh = C4::Context->dbh;
-	my $query="SELECT count(*) as cant, id_disponibilidad FROM cat_nivel3 WHERE id1=? ";
+=item
+	my $query = " SELECT count(*) as cant, id_disponibilidad FROM cat_nivel3 WHERE id1=? ";
 	my $sth;
 
-	if($itemtype == -1 || $itemtype eq "" || $itemtype eq "ALL"){
-	  $query .=" GROUP BY id_disponibilidad";
-	
-	  $sth=$dbh->prepare($query);
-	  $sth->execute($id1);
-	}else{#Filtro tb por tipo de item
-	  $query .= " AND id2 IN ( SELECT id2 FROM cat_nivel2 WHERE tipo_documento = ? )  GROUP BY id_disponibilidad";
-
-	  $sth=$dbh->prepare($query);
-	  $sth->execute($id1, $itemtype);
+	if ($itemtype == -1 || $itemtype eq "" || $itemtype eq "ALL") {
+	    $query .=" GROUP BY id_disponibilidad";
+    
+	    $sth = $dbh->prepare($query);
+	    $sth->execute($id1);
+	} else {
+        #Filtro tb por tipo de item
+	    $query .= " AND id2 IN ( SELECT id2 FROM cat_nivel2 WHERE tipo_documento = ? )  GROUP BY id_disponibilidad";
+    
+	    $sth = $dbh->prepare($query);
+	    $sth->execute($id1, $itemtype);
 	}
-	
-	my $i=0;
-	while(my $data=$sth->fetchrow_hashref){
-	#DOMICILIO
-		if($data->{'id_disponibilidad'} == 0){
-			$disponibilidad[$i]->{'tipoPrestamo'}="Para Domicilio:";
-			$disponibilidad[$i]->{'prestados'}="Prestados: ";
-			$disponibilidad[$i]->{'prestados'}.= C4::AR::Prestamos::getCountPrestamosDelRegistro($id1);
-			$disponibilidad[$i]->{'reservados'}="Reservados: ".C4::AR::Reservas::cantReservasPorNivel1($id1);
-		}
-		else{
-	#PARA SALA
-			$disponibilidad[$i]->{'tipoPrestamo'}="Para Sala:";
-		}
+=cut
 
-		$disponibilidad[$i]->{'cantTotal'}=$data->{'cant'};
-		$i++;
+    my ($cat_ref_tipo_nivel3_array_ref) = C4::AR::Nivel3::getNivel3FromId1($id1);
+
+	
+	my $cant_para_domicilio = 0;
+    my $cant_para_sala = 0;
+    my $i = 0;
+# 	while(my $data = $sth->fetchrow_hashref){
+    foreach my $n3 (@$cat_ref_tipo_nivel3_array_ref){
+	    #DOMICILIO
+# 		if ($data->{'id_disponibilidad'} == 0) {
+# 			$disponibilidad[$i]->{'tipoPrestamo'}   = "Para Domicilio:";
+# 			$disponibilidad[$i]->{'prestados'}      = "Prestados: ";
+# 			$disponibilidad[$i]->{'prestados'}     .= C4::AR::Prestamos::getCountPrestamosDelRegistro($id1);
+# 			$disponibilidad[$i]->{'reservados'}     = "Reservados: ".C4::AR::Reservas::cantReservasPorNivel1($id1);
+# 		} else {
+# 	    #PARA SALA
+# 			$disponibilidad[$i]->{'tipoPrestamo'}   = "Para Sala:";
+# 		}
+# 
+# 		$disponibilidad[$i]->{'cantTotal'}          = $data->{'cant'};
+# 		$i++;
+    
+        if ($n3->getIdDisponibilidad == 0) {
+        #DOMICILIO    
+        C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
+            $cant_para_domicilio++;
+        } else {
+        #PARA SALA
+        C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => PARA SALA");
+            
+            $cant_para_sala++;
+        }
 	}
+
+    $disponibilidad[$i]->{'tipoPrestamo'}   = "Para Domicilio:";
+    $disponibilidad[$i]->{'cantTotal'}      = $cant_para_domicilio;
+
+    $i++;
+    $disponibilidad[$i]->{'tipoPrestamo'}   = "Para Sala:";
+    $disponibilidad[$i]->{'cantTotal'}      = $cant_para_sala;
+
+    $i++;
+    $disponibilidad[$i]->{'tipoPrestamo'}   = "Circulaci&oacute;n";
+    $disponibilidad[$i]->{'cantTotal'}      = $cant_para_domicilio + $cant_para_sala;
+    $disponibilidad[$i]->{'prestados'}      = "Prestados: ";
+    $disponibilidad[$i]->{'prestados'}     .= C4::AR::Prestamos::getCountPrestamosDelRegistro($id1);
+    $disponibilidad[$i]->{'reservados'}     = "Reservados: ".C4::AR::Reservas::cantReservasPorNivel1($id1);
+
 	return(@disponibilidad);
 }
 
@@ -1348,7 +1382,7 @@ sub busquedaCombinada_newTemp{
     my $tipo = $obj_for_log->{'match_mode'}||'SPH_MATCH_ANY';
     my $tipo_match = _getMatchMode($tipo);
 
-    C4::AR::Debug::debug("MATCH MODE ".$tipo);
+#     C4::AR::Debug::debug("MATCH MODE ".$tipo);
 
     my $results = $sphinx->SetMatchMode($tipo_match)
                                     ->SetSortMode(SPH_SORT_RELEVANCE)
@@ -1362,8 +1396,8 @@ sub busquedaCombinada_newTemp{
     my $total_found = $results->{'total_found'};
     $obj_for_log->{'total_found'} = $total_found;
     C4::AR::Utilidades::printHASH($results);
-    C4::AR::Debug::debug("total_found: ".$total_found);
-    C4::AR::Debug::debug("LAST ERROR: ".$sphinx->GetLastError());
+#     C4::AR::Debug::debug("total_found: ".$total_found);
+#     C4::AR::Debug::debug("LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
       my %hash_temp = {};
       $hash_temp{'id1'} = $hash->{'doc'};

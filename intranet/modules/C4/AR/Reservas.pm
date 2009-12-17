@@ -911,14 +911,22 @@ sub t_cancelar_reserva{
 }
 
 # ## FIXME reservas por Nivel 1 ?????????????, SE ESTA USANDO ARREGLAR O PASAR
+=head2
+    sub cantReservasPorNivel1
+    Devuelve la cantidad de reservas realizadas (SIN PRESTAR) sobre el nivel1
+=cut
 sub cantReservasPorNivel1{
-#Devuelve la cantidad de reservas realizadas (SIN PRESTAR) sobre el nivel1
-    my ($id1)=@_;
+    my ($id1) = @_;
     
     my @filtros;
     
     push (@filtros, ('nivel2.id1' => {eq => $id1}));    
-    my ($count) = C4::Modelo::CircReserva::Manager->get_circ_reserva_count(query => \@filtros, require_objects => ['nivel2']);
+
+    my ($count) = C4::Modelo::CircReserva::Manager->get_circ_reserva_count(
+                                                                    query => \@filtros, 
+                                                                    require_objects => ['nivel2']
+                                                                );
+
     return $count;
 }
 

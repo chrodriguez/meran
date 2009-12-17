@@ -37,7 +37,7 @@ __PACKAGE__->meta->setup(
 	         type        => 'one to one',
         },
 
-	    socio => {
+	  socio => {
             class       => 'C4::Modelo::UsrSocio',
             key_columns => { nro_socio => 'nro_socio' },
 	            type        => 'one to one',
@@ -733,7 +733,7 @@ sub replaceBy{
  
     my ($self) = shift;
 
-    my ($campo,$value,$new_value)= @_;
+    my ($campo,$value,$new_value) = @_;
     
     my @filtros;
 

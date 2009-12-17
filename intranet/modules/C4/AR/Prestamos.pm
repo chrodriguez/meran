@@ -73,26 +73,28 @@ sub getInfoPrestamo{
     sub _verificarMaxTipoPrestamo
 =cut
 sub _verificarMaxTipoPrestamo{
-    my ($nro_socio,$tipo_prestamo)=@_;
+    my ($nro_socio, $tipo_prestamo) = @_;
 
-    my $error=0;
+    my $error = 0;
 
     #Obtengo la cant maxima de prestamos de ese tipo que se puede tener
-    my $tipo=C4::AR::Prestamos::getTipoPrestamo($tipo_prestamo);
+    my $tipo = C4::AR::Prestamos::getTipoPrestamo($tipo_prestamo);
     if ($tipo){
         my $prestamos_maximos= $tipo->getPrestamos;
         #
     
         #Obtengo la cant total de prestamos actuales de ese tipo que tiene el usuario
         my @filtros;
-        push(@filtros, ( fecha_devolucion => { eq => undef } ));
-        push(@filtros, ( nro_socio => { eq => $nro_socio}) );
-        push(@filtros, ( tipo_prestamo => { eq => $tipo_prestamo}) );
+        push(@filtros, ( fecha_devolucion   => { eq => undef } ));
+        push(@filtros, ( nro_socio          => { eq => $nro_socio}) );
+        push(@filtros, ( tipo_prestamo      => { eq => $tipo_prestamo}) );
+
         my $cantidad_prestamos= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros);
-        #
+
         
         if ($cantidad_prestamos >= $prestamos_maximos) {$error=1}
     }
+
     return $error;
 }
 
@@ -101,7 +103,7 @@ sub _verificarMaxTipoPrestamo{
     Esta funcion devuelve los tipos de prestamos permitidos para un usuario, en un arreglo de hash.
 =cut
 sub prestamosHabilitadosPorTipo {
-    my ($id_disponibilidad, $nro_socio)=@_;
+    my ($id_disponibilidad, $nro_socio) = @_;
 
     #Se buscan todas las sanciones de un usuario
     my $sanciones= C4::AR::Sanciones::tieneSanciones($nro_socio);
@@ -109,8 +111,8 @@ sub prestamosHabilitadosPorTipo {
     #Trae todos los tipos de prestamos que estan habilitados
     my $tipos_habilitados_array_ref = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(   
                                                                         query => [ 
-                                                                                id_disponibilidad => { eq => $id_disponibilidad },
-                                                                                habilitado    => { eq => 1}
+                                                                                id_disponibilidad   => { eq => $id_disponibilidad },
+                                                                                habilitado          => { eq => 1}
                                                                             ], 
                                         );
 
@@ -141,8 +143,8 @@ sub prestamosHabilitadosPorTipo {
         if(!$estaSancionado){
             #solo se agrega si no esta sancionado para ese tipo de prestamo
             my $tipo;
-            $tipo->{'value'}=$tipo_prestamo->getId_tipo_prestamo;
-            $tipo->{'label'}=$tipo_prestamo->getDescripcion;
+            $tipo->{'value'}= $tipo_prestamo->getId_tipo_prestamo;
+            $tipo->{'label'}= $tipo_prestamo->getDescripcion;
             push(@tipos,$tipo)
         }
     }
@@ -185,8 +187,8 @@ sub getCountPrestamosDelRegistro{
     use C4::Modelo::CircPrestamo::Manager;
 
     my @filtros;
-    push(@filtros, ( id1    => { eq => $id1 } ));
-    push(@filtros, ( fecha_devolucion => { eq => undef } ));
+    push(@filtros, ( id1                => { eq => $id1 } ));
+    push(@filtros, ( fecha_devolucion   => { eq => undef } ));
 
     my $prestamos_grupo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
                                                                                 query => \@filtros,

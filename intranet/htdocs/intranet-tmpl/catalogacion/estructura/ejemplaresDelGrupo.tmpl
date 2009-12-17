@@ -11,8 +11,8 @@
 <hr>
 <table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult datos_tabla">
 		<tr align="center" cellpadding="0"  valign="middle" class="titulo_tabla_resultado">
-            <td >
-				<strong>[% "Edici&oacute;n" |i18n %]</strong>
+            <td>
+				<strong>[% "Acciones" |i18n %]</strong>
 				[% PERL %]
 					print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
 													url =>      "datosDocumento.pl", 
@@ -26,7 +26,7 @@
 			<td><strong>[% "Disponibilidad"|i18n %]</strong></td>
 			<td><strong>[% "Estado"|i18n %]</strong></td>
 			<td><strong>[% "Vencimiento"|i18n %]</strong></td>
-			<td width="7%"  colspan="2"><strong>[% "Circulaci&oacute;n"|i18n %]</strong></td>
+			<td width="7%"><strong>[% "Circulaci&oacute;n"|i18n %]</strong></td>
 			<td><strong>[% "MARC" |i18n %]</strong></td>
 		</tr>
 
@@ -62,17 +62,17 @@
                 </td>
                 <td>
                     <span class="[% claseDisponibilidad %]">
-                        [% disponibilidad %]
+                        [% nivel3_obj.getDisponibilidadObject.getNombre %]
                     </span>
                     <p class="usuario_del_prestamo">
-                    [% IF socio %]
-                            [% socio.persona.getApeYNom %]
+                    [% IF prestamo.getNro_socio %]
+                            [% prestamo.socio.persona.getApeYNom %]
                     [% END %]
                     </p>
                 </td>
                 <td>
                     <span class="[% claseEstado %]">
-                        [% estado %]
+                        [% nivel3_obj.getEstadoObject.getNombre %]
                     </span>
                 </td>
                 <td>
