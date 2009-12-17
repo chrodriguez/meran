@@ -34,7 +34,7 @@ sub t_guardarNivel3 {
 
 #  my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
 # TODO no esta funcionando el generar barcodes pq se tiene que hacer aca, antes de llamar a meran_nivel3_to_meran
-        my $marc_record             = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
+#         my $marc_record             = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
         my $catRegistroMarcN3_tmp   = C4::Modelo::CatRegistroMarcN3->new();  
         my $db = $catRegistroMarcN3_tmp->db;
         # enable transactions, if possible
@@ -53,6 +53,7 @@ sub t_guardarNivel3 {
         
                 $catRegistroMarcN3  = C4::Modelo::CatRegistroMarcN3->new(db => $db);  
 
+                 my $marc_record             = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
                 my $field = $marc_record->field('995');  
                 $field->add_subfields( 'f' => $barcode );
                 $marc_record->add_fields($field);
