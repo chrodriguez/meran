@@ -51,21 +51,17 @@ sub t_guardarNivel3 {
     
             foreach my $barcode (@$barcodes_para_agregar){
                 #se procesa un barcode por vez junto con la info del nivel 3 y nivel3 repetible
-#                 my $catNivel3;
-#                 $params->{'barcode'}    = $barcode; 
                 my $marc_record         = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
-                C4::AR::Debug::debug("barcodes===============================".$barcode);
+#                 C4::AR::Debug::debug("barcodes===============================".$barcode);
         
                 $catRegistroMarcN3      = C4::Modelo::CatRegistroMarcN3->new(db => $db);  
 
                 
                 my $field = $marc_record->field('995');  
                 $field->add_subfields( 'f' => $barcode );
-                $marc_record->add_fields($field);
-                # FIXME agrega el barcode repetido
+
                 $params->{'marc_record'} = $marc_record->as_usmarc;
-                C4::AR::Debug::debug("marc_record!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=> ".$params->{'marc_record'});
-                C4::AR::Debug::debug("marc_record!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=> ".$marc_record->as_usmarc);
+#                 C4::AR::Debug::debug("marc_record!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=> ".$marc_record->as_usmarc);
                 $catRegistroMarcN3->agregar($db, $params);
                 # FIXME transaccion por ejemplar???
                 $db->commit;
@@ -596,11 +592,12 @@ sub generaCodigoBarra{
     $sth2->execute('f'.$like, 'f'.$like, 'f'.$like);
 	my $data2= $sth2->fetchrow_hashref;
 # 	$barcode = "'".$like.($data2->{'maximo'}+1)."'";
-    $barcode = $like.($data2->{'maximo'}+1);
+    my $numero = ($data2->{'maximo'}+1);
+    $barcode = $like.$numero;
 
 #     C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode ".$barcode);
 
-	return($barcode);
+	return($barcode, $numero);
 }
 
 
@@ -816,6 +813,7 @@ sub _generarArregloDeBarcodesPorCantidad {
     my($cant, $barcodes_para_agregar, $params, $msg_object) = @_;
     C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorCantidad !!!!!!!!!!");
     my $barcode;
+    my $numero;
     my $tope = 1000; #puede ser preferencia
 
     $msg_object->{'error'} = 0;#no hay error
@@ -838,7 +836,8 @@ sub _generarArregloDeBarcodesPorCantidad {
         # FIXME poner la funcion que generar el barcode realmente, esto es una prueba
 #             $barcode = _generateBarcode($barcodes_para_agregar).$i;
             
-            $barcode = generaCodigoBarra(\%parametros);
+            ($barcode, $numero) = generaCodigoBarra(\%parametros);
+            C4::AR::Debug::debug("barcode numero + 1 ".$numero + 1);
             C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorCantidad => barcode => ".$barcode);
             push (@{$barcodes_para_agregar}, $barcode);
         }# END for(my $i;$i<$cant;$i++)
