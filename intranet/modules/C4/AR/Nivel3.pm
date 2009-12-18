@@ -94,7 +94,7 @@ sub t_guardarNivel3 {
 }
 
 
-=item sub t_modificarNivel3
+=head2 sub t_modificarNivel3
     Modifica los ejemplares del nivel 3 pasados por parametro
     @parametros:
         $params->{'ID3_ARRAY'}: arreglo de ID3
@@ -312,7 +312,7 @@ sub getBarcodesLike {
 	}
 }
 
-=item
+=head2
 busca un barcode segun barcode, sobre el conjunto de barcodes prestados
 =cut
 sub getBarcodesPrestadoLike {
@@ -509,7 +509,7 @@ sub detalleDisponibilidadNivel3{
     return(\%infoNivel3,@result);
 }
 
-=item
+=head2
 Genera el detalle 
 =cut
 sub detalleCompletoOPAC{
@@ -546,14 +546,14 @@ sub detalleCompletoOPAC{
 }
 
 
-=item
+=head2
 generaCodigoBarra
 Funcion interna al pm
 Genera el codigo de barras del item automanticamente por medio de una consulta a la base de datos, esta funcion es llamada desde una transaccion.
 Los parametros son el manejador de la base de datos y los parametros que necesita para generar el codigo de barra.
 =cut
 sub generaCodigoBarra{
-    my($parametros) = @_;
+    my($parametros, $cant) = @_;
 
     my $dbh   = C4::Context->dbh;
 
@@ -569,35 +569,24 @@ sub generaCodigoBarra{
 		}
 	}
 
-=item
-	my $sth2=$dbh->prepare("SELECT MAX(CAST(substring(barcode,INSTR(barcode,?)+?,100) AS SIGNED)) AS maximo 
-				FROM cat_nivel3 
-				WHERE barcode LIKE (?) ");
-=cut
-
-#      my $sth2=$dbh->prepare("   SELECT MAX(substring(marc_record,INSTR(marc_record,'fDEO-LIB-')+9, 
-#                                 INSTR(   substring(marc_record,INSTR(marc_record,'fDEO-LIB-')+9),' ')-1 )) as maximo 
-#                                 FROM `cat_registro_marc_n3` 
-#                                 WHERE INSTR(marc_record,'fDEO-LIB-') <> 0 ");
-
      my $sth2 = $dbh->prepare("     SELECT MAX(substring(marc_record,INSTR(marc_record, ?)+9, 
                                     INSTR(   substring(marc_record,INSTR(marc_record, ?)+9), CHAR(30))-1 )) as maximo 
                                     FROM cat_registro_marc_n3 
                                     WHERE INSTR(marc_record, ?) <> 0 ");
 
 
-#     C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => like ".$like);
-# 	$sth2->execute($like.'%',length($like)+1,$like.'%');
-
     $sth2->execute('f'.$like, 'f'.$like, 'f'.$like);
 	my $data2= $sth2->fetchrow_hashref;
-#     my $numero = ($data2->{'maximo'}+1);
     my $numero = ($data2->{'maximo'});
-    $barcode = $like.$numero;
 
-#     C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode ".$barcode);
+    my @barcodes_array_ref;
+    for(my $i=0;$i<$cant;$i++){
+        $barcode  = $parametros->{'UI'}."-".$parametros->{'tipo_ejemplar'}."-".($numero + $i + 1);
+        C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode => ".$barcode);
+        push(@barcodes_array_ref, $barcode);
+    }
 
-	return($barcode, $numero);
+    return (@barcodes_array_ref);
 }
 
 
@@ -644,7 +633,7 @@ sub getNivel3FromId1{
 #     return(\@items);
 # }
 
-=item sub buscarNiveles3PorDisponibilidad
+=head2 sub buscarNiveles3PorDisponibilidad
 Busca los datos del nivel 3 a partir de un id3, respetando su disponibilidad
 =cut
 sub buscarNivel3PorDisponibilidad{
@@ -705,7 +694,7 @@ sub _verificarUpdateItem {
 
 
 
-=item sub existeBarcode
+=head2 sub existeBarcode
 Verifica si existe el barcode en la base
 =cut
 sub existeBarcode{
@@ -718,7 +707,7 @@ sub existeBarcode{
 #=======================================================================ABM Nivel 3======================================================
 
 
-=item
+=head2
 Lo que hace la funcion es verificar cada barcode y devolver un arreglo de barcodes permitidos para agregar junto con sus
 respectivos mensajes, ya sea que se AGREGO con EXITO o NO se pudo AGREGAR (por algun motivo)
 
@@ -740,7 +729,7 @@ sub _generateBarcode{
   return (time());
 }
 
-=item sub _generarArreglo
+=head2 sub _generarArreglo
 
     Esta funcion hace de "distribuidor", chequea q tipo de alta de ejemplares se va hacer, 
     por cant de ejemplares (llama a _generarArregloDeBarcodesPorCantidad) o 
@@ -762,13 +751,13 @@ sub _generarArreglo{
 		$params->{'agregarPorBarcodes'} = 1;
         _generarArregloDeBarcodesPorBarcodes($msg_object, $barcodes_array, \@barcodes_para_agregar);
 	}else{
-		_generarArregloDeBarcodesPorCantidad($cant, \@barcodes_para_agregar, $params, $msg_object);
+		@barcodes_para_agregar = _generarArregloDeBarcodesPorCantidad($cant, $params, $msg_object);
 	}
 
 	return (\@barcodes_para_agregar);
 }
 
-=item sub _generarArregloDeBarcodesPorBarcodes
+=head2 sub _generarArregloDeBarcodesPorBarcodes
 Esta funcion genera un arreglo de barcodes VALIDOS para agregar en la base de datos, ademas setea los mensajes de ERROR para los usuarios
 =cut
 sub _generarArregloDeBarcodesPorBarcodes{   
@@ -806,11 +795,12 @@ sub _generarArregloDeBarcodesPorBarcodes{
 
 }
 
-=item sub _generarArregloDeBarcodesPorCantidad
+=head2 sub _generarArregloDeBarcodesPorCantidad
 Esta funcion genera un arreglo de barcodes VALIDOS para agregar en la base de datos
 =cut
 sub _generarArregloDeBarcodesPorCantidad {   
-    my($cant, $barcodes_para_agregar, $params, $msg_object) = @_;
+    my($cant, $params, $msg_object) = @_;
+
     C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorCantidad !!!!!!!!!!");
     my $barcode;
     my $numero;
@@ -826,22 +816,20 @@ sub _generarArregloDeBarcodesPorCantidad {
 
     }
  
+
+    my @barcodes_para_agregar;
     if( !$msg_object->{'error'} ){
 
         my %parametros;
         $parametros{'UI'}               = C4::AR::Preferencias->getValorPreferencia("defaultUI");
         $parametros{'tipo_ejemplar'}    = $params->{'tipo_ejemplar'};
 
-        for(my $i=0;$i<$cant;$i++){
+        (@barcodes_para_agregar) = generaCodigoBarra(\%parametros, $cant);
+        
 
-            ($barcode, $numero) = generaCodigoBarra(\%parametros);
-            $barcode  = $parametros{'UI'}."-".$parametros{'tipo_ejemplar'}."-".($numero + $i + 1);
-            C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorCantidad => barcode => ".$barcode);
+    }
     
-            push (@{$barcodes_para_agregar}, $barcode);
-        }# END for(my $i;$i<$cant;$i++)
-
-    } 
+    return (@barcodes_para_agregar); 
 }
 
 
@@ -855,7 +843,7 @@ sub _existeBarcodeEnArray {
 
 #=================================================================DEPRECATED====================================================
 
-=item sub getNivel3RepetibleFromId3Repetible
+=head2 sub getNivel3RepetibleFromId3Repetible
 Recupero el objeto nivel3_repetible a partir de un rep_n3_id
 retorna un objeto o 0 si no existe ninguno
 =cut
@@ -875,7 +863,7 @@ retorna un objeto o 0 si no existe ninguno
 #   }
 # }
 
-=item
+=head2
 DEPRECATED, PERO DEJAR PARA REEIMPLEMENTAR
 =cut
 # sub modificarEstadoItem{
@@ -902,7 +890,7 @@ DEPRECATED, PERO DEJAR PARA REEIMPLEMENTAR
 #     
 # }
 
-=item sub getNivel3RepetibleFromId3Repetible
+=head2 sub getNivel3RepetibleFromId3Repetible
 Recupero un nivel 3 a partir de un $id3_rep (id3 repetible)
 retorna un objeto o 0 si no existe
 =cut
@@ -926,7 +914,7 @@ retorna un objeto o 0 si no existe
 # }
 
 
-=item sub t_eliminarNivel3Repetible
+=head2 sub t_eliminarNivel3Repetible
     Elimina el nivel 3 repetido pasado por parametro
 =cut
 # sub t_eliminarNivel3Repetible{
@@ -985,7 +973,7 @@ retorna un objeto o 0 si no existe
 # }
 
 
-=item
+=head2
 Esta funcion modifica el estado de un ejemplar PASA DE DISPONIBLE PARA SALA A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
 =cut
 # FIXME DEPRECATED
@@ -996,7 +984,7 @@ Esta funcion modifica el estado de un ejemplar PASA DE DISPONIBLE PARA SALA A DI
 #     #FALTARIA CAMBIAR EL ESTADO
 # }
 
-=item
+=head2
 Esta funcion modifica el estado de un ejemplar PASA DE NO DISPONIBLE A DISPONIBLE PARA PRESTAMO, debemos ver si existen reservas para ese grupo, y reasignar la reserva para ese ejemplar
 =cut
 # FIXME DEPRECATED
@@ -1024,7 +1012,7 @@ Esta funcion modifica el estado de un ejemplar PASA DE NO DISPONIBLE A DISPONIBL
 # }
 
 
-=item
+=head2
 detalleDisponibilidad
 Devuelve la disponibilidad del item que viene por paramentro.
 =cut
