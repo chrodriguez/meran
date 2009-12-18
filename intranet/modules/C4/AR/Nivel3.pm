@@ -591,8 +591,8 @@ sub generaCodigoBarra{
 
     $sth2->execute('f'.$like, 'f'.$like, 'f'.$like);
 	my $data2= $sth2->fetchrow_hashref;
-# 	$barcode = "'".$like.($data2->{'maximo'}+1)."'";
-    my $numero = ($data2->{'maximo'}+1);
+#     my $numero = ($data2->{'maximo'}+1);
+    my $numero = ($data2->{'maximo'});
     $barcode = $like.$numero;
 
 #     C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode ".$barcode);
@@ -833,12 +833,11 @@ sub _generarArregloDeBarcodesPorCantidad {
         $parametros{'tipo_ejemplar'}    = $params->{'tipo_ejemplar'};
 
         for(my $i=0;$i<$cant;$i++){
-        # FIXME poner la funcion que generar el barcode realmente, esto es una prueba
-#             $barcode = _generateBarcode($barcodes_para_agregar).$i;
-            
+
             ($barcode, $numero) = generaCodigoBarra(\%parametros);
-            C4::AR::Debug::debug("barcode numero + 1 ".$numero + 1);
+            $barcode  = $parametros{'UI'}."-".$parametros{'tipo_ejemplar'}."-".($numero + $i + 1);
             C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorCantidad => barcode => ".$barcode);
+    
             push (@{$barcodes_para_agregar}, $barcode);
         }# END for(my $i;$i<$cant;$i++)
 
