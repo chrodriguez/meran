@@ -793,7 +793,7 @@ sub getPrestamoActivo {
     }
 }
 
-
+# TODO DEPRECATEDDDDDDDDDDDDd
 sub getHistorialPrestamos {
     my ($nro_socio,$ini,$cantR,$orden)=@_;
 

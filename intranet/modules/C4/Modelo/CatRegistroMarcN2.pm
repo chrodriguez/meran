@@ -145,7 +145,7 @@ sub getTipoDocumento{
     my $tipo_doc    = $marc_record->subfield("910","a");
 
     C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumento => getTipoDocumento => ".$tipo_doc);
-    return $tipo_doc;
+    return C4::AR::Catalogacion::getRefFromStringConArrobas($tipo_doc);
 }
 
 =head2

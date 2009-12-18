@@ -198,6 +198,15 @@ sub getNivel2FromId2{
     }
 }
 
+sub getTipoEjemplarFromId2{
+    my ($id2) = @_;
+
+    my ($cat_registro_marc_n2) = getNivel2FromId2($id2);
+
+    if($cat_registro_marc_n2){
+        return $cat_registro_marc_n2->getTipoDocumento;
+    }
+}
 
 sub _verificarDeleteNivel2 {
     my($msg_object, $params, $cat_registro_marc_n2)=@_;

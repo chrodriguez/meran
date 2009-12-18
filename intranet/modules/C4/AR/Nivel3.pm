@@ -43,24 +43,31 @@ sub t_guardarNivel3 {
     
         eval {
     
+            #obtengo el tipo de ejemplar a partir del id2 del nivel 2
+            $params->{'tipo_ejemplar'} = C4::AR::Nivel2::getTipoEjemplarFromId2($params->{'id2'});
             #se genera el arreglo de barcodes validos para agregar a la base y se setean los mensajes para el usuario (mensajes de ERROR)
             my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
+            
     
             foreach my $barcode (@$barcodes_para_agregar){
                 #se procesa un barcode por vez junto con la info del nivel 3 y nivel3 repetible
-                my $catNivel3;
-                $params->{'barcode'}    = $barcode; 
+#                 my $catNivel3;
+#                 $params->{'barcode'}    = $barcode; 
+                my $marc_record         = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
+                C4::AR::Debug::debug("barcodes===============================".$barcode);
         
                 $catRegistroMarcN3      = C4::Modelo::CatRegistroMarcN3->new(db => $db);  
 
-                my $marc_record         = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
+                
                 my $field = $marc_record->field('995');  
                 $field->add_subfields( 'f' => $barcode );
                 $marc_record->add_fields($field);
-# FIXME agrega el barcode repetido
+                # FIXME agrega el barcode repetido
                 $params->{'marc_record'} = $marc_record->as_usmarc;
+                C4::AR::Debug::debug("marc_record!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=> ".$params->{'marc_record'});
+                C4::AR::Debug::debug("marc_record!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=> ".$marc_record->as_usmarc);
                 $catRegistroMarcN3->agregar($db, $params);
-# FIXME transaccion por ejemplar???
+                # FIXME transaccion por ejemplar???
                 $db->commit;
                 #recupero el id3 recien agregado
                 my $id3 = $catRegistroMarcN3->getId3;
@@ -550,29 +557,49 @@ Genera el codigo de barras del item automanticamente por medio de una consulta a
 Los parametros son el manejador de la base de datos y los parametros que necesita para generar el codigo de barra.
 =cut
 sub generaCodigoBarra{
-	#VER COMO SE GENERA EL BARCODE!!! VER SI ESTA BIEN!!!!!!!!
-# FIXME si cambia el itemtype de nivel 2 esto se deberia ver reflejado en todos los barcode del grupo, lo mismo si cambia el homebranch
-	my($dbh,$parametros)=@_;
-	my $barcode;
-	my @estructurabarcode=split(',',C4::AR::Preferencias->getValorPreferencia("barcodeFormat"));
-        my $like='';
+    my($parametros) = @_;
 
-	for (my $i=0; $i<@estructurabarcode; $i++){
-		if (($i % 2) ==0){
-			$like.=%$parametros->{$estructurabarcode[$i]};
-		}
-		else{
-			$like.=$estructurabarcode[$i];
+    my $dbh   = C4::Context->dbh;
+
+	my $barcode;
+	my @estructurabarcode = split(',',C4::AR::Preferencias->getValorPreferencia("barcodeFormat"));
+    my $like = '';
+
+	for (my $i=0; $i<@estructurabarcode; $i++) {
+		if (($i % 2) == 0) {
+			$like.= %$parametros->{$estructurabarcode[$i]};
+		} else {
+			$like.= $estructurabarcode[$i];
 		}
 	}
 
+=item
 	my $sth2=$dbh->prepare("SELECT MAX(CAST(substring(barcode,INSTR(barcode,?)+?,100) AS SIGNED)) AS maximo 
 				FROM cat_nivel3 
 				WHERE barcode LIKE (?) ");
+=cut
 
-	$sth2->execute($like.'%',length($like)+1,$like.'%');
+#      my $sth2=$dbh->prepare("   SELECT MAX(substring(marc_record,INSTR(marc_record,'fDEO-LIB-')+9, 
+#                                 INSTR(   substring(marc_record,INSTR(marc_record,'fDEO-LIB-')+9),' ')-1 )) as maximo 
+#                                 FROM `cat_registro_marc_n3` 
+#                                 WHERE INSTR(marc_record,'fDEO-LIB-') <> 0 ");
+
+     my $sth2 = $dbh->prepare("     SELECT MAX(substring(marc_record,INSTR(marc_record, ?)+9, 
+                                    INSTR(   substring(marc_record,INSTR(marc_record, ?)+9), CHAR(30))-1 )) as maximo 
+                                    FROM cat_registro_marc_n3 
+                                    WHERE INSTR(marc_record, ?) <> 0 ");
+
+
+#     C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => like ".$like);
+# 	$sth2->execute($like.'%',length($like)+1,$like.'%');
+
+    $sth2->execute('f'.$like, 'f'.$like, 'f'.$like);
 	my $data2= $sth2->fetchrow_hashref;
-	$barcode="'".$like.($data2->{'maximo'}+1)."'";
+# 	$barcode = "'".$like.($data2->{'maximo'}+1)."'";
+    $barcode = $like.($data2->{'maximo'}+1);
+
+#     C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode ".$barcode);
+
 	return($barcode);
 }
 
@@ -738,7 +765,7 @@ sub _generarArreglo{
 		$params->{'agregarPorBarcodes'} = 1;
         _generarArregloDeBarcodesPorBarcodes($msg_object, $barcodes_array, \@barcodes_para_agregar);
 	}else{
-		_generarArregloDeBarcodesPorCantidad($cant, \@barcodes_para_agregar, $msg_object);
+		_generarArregloDeBarcodesPorCantidad($cant, \@barcodes_para_agregar, $params, $msg_object);
 	}
 
 	return (\@barcodes_para_agregar);
@@ -786,7 +813,7 @@ sub _generarArregloDeBarcodesPorBarcodes{
 Esta funcion genera un arreglo de barcodes VALIDOS para agregar en la base de datos
 =cut
 sub _generarArregloDeBarcodesPorCantidad {   
-    my($cant, $barcodes_para_agregar, $msg_object) = @_;
+    my($cant, $barcodes_para_agregar, $params, $msg_object) = @_;
     C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorCantidad !!!!!!!!!!");
     my $barcode;
     my $tope = 1000; #puede ser preferencia
@@ -803,9 +830,15 @@ sub _generarArregloDeBarcodesPorCantidad {
  
     if( !$msg_object->{'error'} ){
 
+        my %parametros;
+        $parametros{'UI'}               = C4::AR::Preferencias->getValorPreferencia("defaultUI");
+        $parametros{'tipo_ejemplar'}    = $params->{'tipo_ejemplar'};
+
         for(my $i=0;$i<$cant;$i++){
         # FIXME poner la funcion que generar el barcode realmente, esto es una prueba
-            $barcode = _generateBarcode($barcodes_para_agregar).$i;
+#             $barcode = _generateBarcode($barcodes_para_agregar).$i;
+            
+            $barcode = generaCodigoBarra(\%parametros);
             C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorCantidad => barcode => ".$barcode);
             push (@{$barcodes_para_agregar}, $barcode);
         }# END for(my $i;$i<$cant;$i++)

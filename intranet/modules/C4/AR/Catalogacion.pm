@@ -149,8 +149,8 @@ Funciona de manera similar a meran_nivel1_to_meran pero para el nivel 3
 sub meran_nivel3_to_meran{
     my ($data_hash) = @_;
 
-    my $campos_autorizados = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(3);
-    my $marc_record = _meran_to_marc($data_hash->{'infoArrayNivel3'},$campos_autorizados);
+    my $campos_autorizados  = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(3);
+    my $marc_record         = _meran_to_marc($data_hash->{'infoArrayNivel3'},$campos_autorizados);
 
     return($marc_record);
 
@@ -518,11 +518,11 @@ sub getDatoFromReferencia{
                 my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
                                                                                 #campo_tabla,                   id_tabla
                 $valor_referencia = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
-                C4::AR::Debug::debug("getDatoFromReferencia => getReferencia:       ".$estructura->infoReferencia->getReferencia);
-                C4::AR::Debug::debug("getDatoFromReferencia => dato entrada:        ".$dato);
-                C4::AR::Debug::debug("getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
-                C4::AR::Debug::debug("getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
-                C4::AR::Debug::debug("getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
+                #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => getReferencia:       ".$estructura->infoReferencia->getReferencia);
+                #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato entrada:        ".$dato);
+                #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
+                #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
+                #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
 
 
                 return $valor_referencia;

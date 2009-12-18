@@ -1328,3 +1328,7 @@ INSERT INTO `ref_estado` (`id`, `nombre`) VALUES
 (4, 'Ejemplar deteriorado'),
 (5, 'En Encuadernación'),
 (6, 'Perdido');
+
+
+
+UPDATE pref_preferencia_sistema SET `value` = 'UI,-,tipo_ejemplar,-' WHERE CONVERT( `pref_preferencia_sistema`.`variable` USING utf8 ) = 'barcodeFormat' LIMIT 1 ;
