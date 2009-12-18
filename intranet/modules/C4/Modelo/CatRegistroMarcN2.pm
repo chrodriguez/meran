@@ -158,7 +158,7 @@ sub getTipoDocumentoObject{
     my ($self)      = shift;
         
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getTipoDocumento());
+    my $ref         = $self->getTipoDocumento();
         
     my $tipo_doc    = C4::AR::Referencias::getTipoDocumentoObject($ref);
         

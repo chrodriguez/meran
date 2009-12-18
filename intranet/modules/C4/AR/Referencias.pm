@@ -785,7 +785,7 @@ sub getCiudadObject {
 
 
 sub getTipoDocumentoObject {
-    my ($id_tipo_doc)= @_;
+    my ($id_tipo_doc) = @_;
 
     my $tipo_doc_array_ref = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(
                                                                     query => [ id_tipo_doc => $id_tipo_doc]
