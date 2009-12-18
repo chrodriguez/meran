@@ -116,6 +116,8 @@ sub sphinx_start{
         C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ".C4::AR::Utilidades::getToday());
         $mgr->start_searchd;
     }
+
+# TODO faltaria hacer un delay para darle tiempo a q levante el servicio, sino en la  busqueda no devuelve nada
 }
 #================================================================FIN SPHINX=================================================================
 
