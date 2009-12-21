@@ -629,20 +629,20 @@ sub convertirEnLibrarian{
 
     my $db = $self->db;
     
-    $perm_catalogo = C4::AR::Permisos::getPermCatalogo(\@filtros,$db);
+    $perm_catalogo = C4::AR::Permisos::getPermCatalogoOne(\@filtros,$db);
 
     unless($perm_catalogo)
     {
       $perm_catalogo = C4::Modelo::PermCatalogo->new(db => $self->db);
     }
 
-    $perm_general = C4::AR::Permisos::getPermGeneral(\@filtros,$db);
+    $perm_general = C4::AR::Permisos::getPermGeneralOne(\@filtros,$db);
     unless($perm_general)
     {
       $perm_general = C4::Modelo::PermGeneral->new(db => $self->db);
     }
 
-    $perm_circulacion = C4::AR::Permisos::getPermCirculacion(\@filtros,$db);
+    $perm_circulacion = C4::AR::Permisos::getPermCirculacionOne(\@filtros,$db);
     unless($perm_circulacion)
     {
       $perm_circulacion = C4::Modelo::PermCirculacion->new(db => $self->db);
@@ -681,20 +681,20 @@ sub convertirEnSuperLibrarian{
 
     my $db = $self->db;
     
-    $perm_catalogo = C4::AR::Permisos::getPermCatalogo(\@filtros,$db);
+    $perm_catalogo = C4::AR::Permisos::getPermCatalogoOne(\@filtros,$db);
 
     unless($perm_catalogo)
     {
       $perm_catalogo = C4::Modelo::PermCatalogo->new(db => $self->db);
     }
 
-    $perm_general = C4::AR::Permisos::getPermGeneral(\@filtros,$db);
+    $perm_general = C4::AR::Permisos::getPermGeneralOne(\@filtros,$db);
     unless($perm_general)
     {
       $perm_general = C4::Modelo::PermGeneral->new(db => $self->db);
     }
 
-    $perm_circulacion = C4::AR::Permisos::getPermCirculacion(\@filtros,$db);
+    $perm_circulacion = C4::AR::Permisos::getPermCirculacionOne(\@filtros,$db);
     unless($perm_circulacion)
     {
       $perm_circulacion = C4::Modelo::PermCirculacion->new(db => $self->db);
