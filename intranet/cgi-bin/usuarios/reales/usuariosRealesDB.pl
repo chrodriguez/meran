@@ -238,7 +238,7 @@ Se genra la ventana para modificar los datos del usuario
         #se genera el combo de las bibliotecas
         my $comboDeUI= &C4::AR::Utilidades::generarComboUI(\%params);
 
-        $t_params->{'socio'}= $socio;
+        $t_params->{'socio_modificar'}= $socio;
         my $comboDeCredentials= &C4::AR::Utilidades::generarComboDeCredentials($t_params);
 
         $t_params->{'comboDeCredentials'}= $comboDeCredentials;
