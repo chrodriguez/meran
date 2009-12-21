@@ -29,7 +29,7 @@ $VERSION = 3;
     &t_realizarPrestamo
     &_verificarMaxTipoPrestamo
     &chequeoDeFechas
-    &prestamosHabilitadosPorTipo    
+    &prestamosHabilitadosPorTipo
     &getTipoPrestamo
     &getPrestamoDeId3
     &getPrestamosDeSocio
@@ -52,7 +52,7 @@ sub getInfoPrestamo{
 
     my ($id_prestamo,$db) = @_;
     my @filtros;
-    
+
     my $db_temp = C4::Modelo::CircPrestamo->new()->db;
     push (@filtros, (id_prestamo => {eq => $id_prestamo} ) );
     $db = $db || $db_temp;
@@ -61,7 +61,6 @@ sub getInfoPrestamo{
                                                                           require_objects => ['nivel3','socio','ui'],
                                                                         );
 
-    
     if (scalar(@$prestamos)){
         return ($prestamos->[0]);
     }
