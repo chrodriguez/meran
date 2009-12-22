@@ -375,6 +375,21 @@ sub marc_record_to_meran_por_nivel {
 }
 
 =head2
+    sub marc_record_to_opac_view
+=cut
+sub marc_record_to_opac_view {
+    my ($marc_record) = @_;
+
+    #obtengo los campo, subcampo que se pueden mostrar
+#     ($meran_to_marc) = filtrar();
+
+    #se procesa el marc_record filtrado
+    my ($MARC_result_array) = marc_record_to_meran($marc_record);
+
+    return $MARC_result_array;
+}
+
+=head2
     sub marc_record_to_meran
 =cut
 sub marc_record_to_meran {

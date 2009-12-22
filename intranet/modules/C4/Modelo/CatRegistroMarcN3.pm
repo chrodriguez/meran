@@ -339,6 +339,24 @@ sub toMARC{
 
 
 
+=head2 sub toMARC_Opac
+
+=cut
+sub toMARC_Opac{
+    my ($self) = shift;
+
+    #obtengo el marc_record del NIVEL 3
+    my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+
+    my $params;
+    $params->{'nivel'} = '3';
+    $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
+    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record);
+
+    return ($MARC_result_array);
+}
+
 sub ESTADO_DISPONIBLE{
 =item    
 ESTADO

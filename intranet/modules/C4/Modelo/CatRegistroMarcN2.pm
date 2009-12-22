@@ -323,12 +323,12 @@ sub toMARC{
     my ($self) = shift;
 
     #obtengo el marc_record del NIVEL 2
-    my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
     my $params;
     $params->{'nivel'} = '2';
-    $params->{'id_tipo_doc'} = $self->getTipoDocumento;
-    my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
+    $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
+    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
     #     my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran($marc_record);
 #     foreach my $m (@$MARC_result_array){
@@ -342,6 +342,24 @@ sub toMARC{
     return ($MARC_result_array);
 }
 
+
+=head2 sub toMARC_Opac
+
+=cut
+sub toMARC_Opac{
+    my ($self) = shift;
+
+    #obtengo el marc_record del NIVEL 2
+    my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+
+    my $params;
+    $params->{'nivel'} = '2';
+    $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
+    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record);
+
+    return ($MARC_result_array);
+}
 
 
 #==================================================VERRRRRRRRRRRRRRRRRR==========================================================
