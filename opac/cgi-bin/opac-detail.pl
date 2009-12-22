@@ -21,5 +21,10 @@ my $idNivel1= $input->param('id1');
 C4::AR::Nivel3::detalleCompletoOPAC($idNivel1, $t_params);
 
 $t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");
-$t_params->{'partial_template'}= "opac-detail.inc";
+my $split_by_levels = C4::AR::Preferencias->getValorPreferencia("split_by_levels");
+if ($split_by_levels){
+    $t_params->{'partial_template'}= "opac-detail-levels.inc";
+}else{
+    $t_params->{'partial_template'}= "opac-detail.inc";
+}
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

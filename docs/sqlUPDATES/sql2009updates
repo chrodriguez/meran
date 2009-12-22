@@ -1332,3 +1332,15 @@ INSERT INTO `ref_estado` (`id`, `nombre`) VALUES
 
 
 UPDATE pref_preferencia_sistema SET `value` = 'UI,-,tipo_ejemplar,-' WHERE CONVERT( `pref_preferencia_sistema`.`variable` USING utf8 ) = 'barcodeFormat' LIMIT 1 ;
+
+
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'split_by_levels', '1', 'Para mostrar en el OPAC el detalle dividido por niveles o no', NULL , NULL
+);
