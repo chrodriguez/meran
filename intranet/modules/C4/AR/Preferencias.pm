@@ -221,6 +221,7 @@ sub getConfigVisualizacionOPAC{
     my %hash_config = {};
     $hash_config{'resumido'} = C4::AR::Preferencias->getValorPreferencia("detalle_resumido") || 0;
     $hash_config{'nivel1_repetible'} = C4::AR::Preferencias->getValorPreferencia("nivel1_repetible") || 0;
+    $hash_config{'perfil_visual'} = C4::AR::Preferencias->getValorPreferencia("perfil_visual") || 0;
 
     return (\%hash_config);
 }

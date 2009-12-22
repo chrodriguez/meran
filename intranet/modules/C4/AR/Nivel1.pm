@@ -122,6 +122,17 @@ sub getNivel1FromId1{
     }
 }
 
+sub getNivel1FromId1OPAC{
+    my ($id1, $db) = @_;
+
+    $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db();
+
+    my $nivel1 = getNivel1FromId1($id1, $db);
+    
+    
+    
+}
+
 
 #***********************************************ACA FINALIZA LA NUEVA ESTRUCTURA***************************************************************
 
