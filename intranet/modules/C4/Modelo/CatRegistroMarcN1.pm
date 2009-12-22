@@ -118,7 +118,13 @@ sub toMARC{
     my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
 
-    my $MARC_result_array   = &C4::AR::Catalogacion::detalleMARC($marc_record);
+    my $params;
+    $params->{'nivel'} = '1';
+    $params->{'id_tipo_doc'} = 'ALL';
+    my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
+
+
+#     my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran($marc_record);
 
 #     foreach my $m (@$MARC_result_array){
 #         C4::AR::Debug::debug("campo => ".$m->{'campo'});

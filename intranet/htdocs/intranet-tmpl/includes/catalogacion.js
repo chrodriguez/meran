@@ -854,8 +854,9 @@ function procesarInfoJson(json){
         for(var j=0; j < subcampos_array.length; j++){
         //recorro los subcampos
             
-            subcampos_array[j].marc_group   = marc_group;
-            subcampos_array[j].posCampo     = i; //posicion del campo contenedor en MARC_OBJECT_ARRAY
+            subcampos_array[j].idCompCliente    = "id_componente_" + i + j;
+            subcampos_array[j].marc_group       = marc_group;
+            subcampos_array[j].posCampo         = i; //posicion del campo contenedor en MARC_OBJECT_ARRAY
             procesarObjeto(subcampos_array[j], marc_group);
         }
 

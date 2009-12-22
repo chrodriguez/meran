@@ -325,9 +325,12 @@ sub toMARC{
     #obtengo el marc_record del NIVEL 2
     my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
+    my $params;
+    $params->{'nivel'} = '2';
+    $params->{'id_tipo_doc'} = $self->getTipoDocumento;
+    my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
-    my $MARC_result_array   = &C4::AR::Catalogacion::detalleMARC($marc_record);
-
+    #     my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran($marc_record);
 #     foreach my $m (@$MARC_result_array){
 #         C4::AR::Debug::debug("campo => ".$m->{'campo'});
 #         foreach my $s (@{$m->{'subcampos_array'}}){
