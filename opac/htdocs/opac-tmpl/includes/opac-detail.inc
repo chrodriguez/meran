@@ -46,7 +46,7 @@
                 <thead>
                 <tr class="bordetabla" align="center">
                     <td>[% "C&oacute;digo" | i18n %]</td>
-                    <td>[% "Signatura Topogr&aacute;fica" | i18n %]</td> 
+                    <td>[% "Signatura Topogr&aacute;fica" | i18n %]</td>s
                     <td>[% "Biblioteca que lo posee" | i18n %]</td>
                     <td>[% "Biblioteca de origen" | i18n %]</td>
                     <td>[% "Estado" | i18n %]</td>

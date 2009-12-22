@@ -1344,3 +1344,16 @@ INSERT INTO `pref_preferencia_sistema` (
 VALUES (
 'split_by_levels', '1', 'Para mostrar en el OPAC el detalle dividido por niveles o no', NULL , NULL
 );
+
+DROP TABLE `cat_encabezado_campo_opac`;
+DROP TABLE `cat_encabezado_item_opac`;
+ALTER TABLE `cat_estructura_catalogacion_opac`
+  DROP `textsucc`,
+  DROP `separador`,
+  DROP `idencabezado`,
+  DROP `visible`;
+
+ALTER TABLE `cat_estructura_catalogacion_opac` CHANGE `idestcatopac` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `cat_estructura_catalogacion_opac` CHANGE `textpred` `vista_opac` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE `cat_estructura_catalogacion_opac` ADD `id_perfil` INT( 11 ) NOT NULL;
+
