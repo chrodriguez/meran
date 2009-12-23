@@ -50,7 +50,7 @@
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Sanciones' | i18n %]",
                                                                     boton   => "boton_borrar",
-                                                                    onClick => 'borrarSanciones("chkboxSanciones");',
+                                                                    onClick => "borrarSanciones('chkboxSanciones');",
                                                                     title   => "[% 'Borrar Sanciones' | i18n %]",
                                                                     alternClass=> "botonCentradoTabla",
                                         ) ;
