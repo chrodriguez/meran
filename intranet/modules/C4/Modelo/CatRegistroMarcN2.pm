@@ -144,7 +144,7 @@ sub getTipoDocumento{
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
     my $tipo_doc    = $marc_record->subfield("910","a");
 
-    C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumento => getTipoDocumento => ".$tipo_doc);
+#     C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumento => getTipoDocumento => ".$tipo_doc);
     return C4::AR::Catalogacion::getRefFromStringConArrobas($tipo_doc);
 }
 
@@ -180,7 +180,7 @@ sub getSoporte{
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
     my $soporte     = $marc_record->subfield("245","h");
-    C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporte => soporte => ".$soporte);
+#     C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporte => soporte => ".$soporte);
     return $soporte;
 }
 

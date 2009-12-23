@@ -739,26 +739,26 @@ sub verificar_permisos_por_nivel{
 #     my @entornos_circulacion = ('');
 
 # FIXME falta verificar los parametros de entrada, que sean numeros y ademas q sean validos
-    C4::AR::Debug::debug("");
-    C4::AR::Debug::debug("verificar_permisos_por_nivel => permisos requeridos");
-    C4::AR::Debug::debug("verificar_permisos_por_nivel => ui=================: ".$flagsrequired->{'ui'});
-    C4::AR::Debug::debug("verificar_permisos_por_nivel => tipo_documento=================: ".$flagsrequired->{'tipo_documento'});
-    C4::AR::Debug::debug("verificar_permisos_por_nivel => nro_socio=================: ".$flagsrequired->{'nro_socio'});
-    C4::AR::Debug::debug("verificar_permisos_por_nivel => entorno=================: ".$flagsrequired->{'entorno'});
-    C4::AR::Debug::debug("verificar_permisos_por_nivel => accion=================: ".$flagsrequired->{'accion'});
+#     C4::AR::Debug::debug("");
+#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => permisos requeridos");
+#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => ui=================: ".$flagsrequired->{'ui'});
+#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => tipo_documento=================: ".$flagsrequired->{'tipo_documento'});
+#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => nro_socio=================: ".$flagsrequired->{'nro_socio'});
+#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => entorno=================: ".$flagsrequired->{'entorno'});
+#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => accion=================: ".$flagsrequired->{'accion'});
 
 
     $permisos_array_hash_ref = C4::Modelo::UsrSocio::checkEntorno($flagsrequired,\@entornos_perm_catalogo,\@entornos_perm_general,\@entornos_perm_circulacion);
     
     if (!$permisos_array_hash_ref){
         #el entorno pasado por parametro no existe, NO TIENE PERMISOS
-        C4::AR::Debug::debug("verificar_permisos_por_nivel => NO EXISTE EL ENTORNO: ".$flagsrequired->{'entorno'});
+#         C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => NO EXISTE EL ENTORNO: ".$flagsrequired->{'entorno'});
         return (0);
     }
 
     foreach my $permisos_hash_ref (@$permisos_array_hash_ref){
 #         if($permisos_hash_ref ne 0){
-            C4::AR::Debug::debug("verificar_permisos_por_nivel");
+#             C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel");
             #se encontraron permisos level1
         
             my $permiso_bin_del_usuario= $permisos_hash_ref->{$flagsrequired->{'entorno'}};
@@ -768,14 +768,14 @@ sub verificar_permisos_por_nivel{
     
             if( ($permiso_bin_del_usuario & '00010000') > 0){
                 #tiene TODOS los permisos
-                C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: ".$permiso_bin_del_usuario);
-                C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================TODOS");
+#                 C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: ".$permiso_bin_del_usuario);
+#                 C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================TODOS");
                 return 1;
             }
             
-            C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: ".$permiso_bin_del_usuario);
-            C4::AR::Debug::debug("verificar_permisos_por_nivel => PERMISOS REQUERIDOS=================bin: ".$permiso_bin_requerido);
-            C4::AR::Debug::debug("verificar_permisos_por_nivel => ENTORNO=================: ".$flagsrequired->{'entorno'});
+#             C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => PERMISOS DEL USUARIO=================bin: ".$permiso_bin_del_usuario);
+#             C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => PERMISOS REQUERIDOS=================bin: ".$permiso_bin_requerido);
+#             C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => ENTORNO=================: ".$flagsrequired->{'entorno'});
             my $resultado= $permiso_bin_del_usuario & $permiso_bin_requerido;
             if( C4::AR::Utilidades::bin2dec($resultado) > 0 ){
                 return 1;
@@ -801,30 +801,30 @@ sub tienePermisos {
     # Se setean los flags requeridos
     $flagsrequired->{'nro_socio'}= $self->getNro_socio;
     $flagsrequired->{'tipo_permiso'} = $flagsrequired->{'tipo_permiso'} || "catalogo";
-    C4::AR::Debug::debug("TIPO_PERMISO => ".$flagsrequired->{'tipo_permiso'});
+#     C4::AR::Debug::debug("UsrSocio => TIPO_PERMISO => ".$flagsrequired->{'tipo_permiso'});
     #se verifican permisos level1
-    C4::AR::Debug::debug("tienePermisos??? => intento level1");
+#     C4::AR::Debug::debug("UsrSocio => tienePermisos??? => intento level1");
     if(verificar_permisos_por_nivel($flagsrequired)){return 1}
 
     $flagsrequired->{'tipo_documento'}= 'ALL';
     #se verifican permisos level2
-    C4::AR::Debug::debug("tienePermisos??? => intento level2");
+    C4::AR::Debug::debug("UsrSocio => tienePermisos??? => intento level2");
     if(verificar_permisos_por_nivel($flagsrequired)){return 1}
 
     $flagsrequired->{'ui'}= 'ALL';
     #se verifican permisos level3
-    C4::AR::Debug::debug("tienePermisos??? => intento level3");
+    C4::AR::Debug::debug("UsrSocio => tienePermisos??? => intento level3");
     if(verificar_permisos_por_nivel($flagsrequired)){return 1}
 
     $flagsrequired->{'tipo_documento'}= 'ALL';
     $flagsrequired->{'ui'}= 'ALL';
     #se verifican permisos level4
-    C4::AR::Debug::debug("tienePermisos??? => intento level4");
+    C4::AR::Debug::debug("UsrSocio => tienePermisos??? => intento level4");
     if(verificar_permisos_por_nivel($flagsrequired)){
         return 1;
     }else{
         #el usuario no tiene permisos
-        C4::AR::Debug::debug("NO TIENE EL PERMISO");
+        C4::AR::Debug::debug("UsrSocio => NO TIENE EL PERMISO");
         return 0;
     }
 }

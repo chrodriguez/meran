@@ -296,15 +296,15 @@ Obtiene las tuplas con los campos requeridos de la tabla a la cual se esta hacie
 sub obtenerValoresTablaRef{
     my ($tableAlias,$campo, $orden)=@_;
 
-    C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => tableAlias: ".$tableAlias);
-    C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => campo: ".$campo);
-    C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => orden: ".$orden);
+#     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => tableAlias: ".$tableAlias);
+#     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => campo: ".$campo);
+#     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => orden: ".$orden);
     use C4::Modelo::PrefTablaReferencia;
     my $ref = C4::Modelo::PrefTablaReferencia->new();
 	  my ($cantidad,$valores) = $ref->obtenerValoresTablaRef($tableAlias,$campo, $orden);
 
-    C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => cantidad: ".$cantidad);
-    C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => valores: ".$valores);
+#     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => cantidad: ".$cantidad);
+#     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => valores: ".$valores);
     return($cantidad,$valores);
 
 }

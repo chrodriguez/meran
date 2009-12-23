@@ -1249,7 +1249,7 @@ function newCombo(obj){
 
     for(var i=0; i< opciones.length; i++){
 //         if(obj.getDefaultValue() == opciones[i].clave){
-        if(obj.getDato() == opciones[i].clave){
+        if(obj.getDatoReferencia() == opciones[i].clave){
             defaultValue =" selected='selected' ";
         }
 
