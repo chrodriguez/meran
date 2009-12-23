@@ -606,12 +606,16 @@ sub getDatoFromReferencia{
     my ($campo, $subcampo, $dato) = @_;
     
     my $valor_referencia = '';
+    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo:                    ".$campo);
+    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => subcampo:                 ".$subcampo);
+    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato:                     ".$dato);
     
-    if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato != 0)&&($dato ne '')){
-    
-        my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
+    if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato ne '')&&($dato ne '0')){
+
+        my ($estructura) = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo);
         
         if($estructura){
+
             if($estructura->getReferencia){
                 #tiene referencia
 
@@ -619,11 +623,11 @@ sub getDatoFromReferencia{
                 my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
                                                                                 #campo_tabla,                   id_tabla
                 $valor_referencia = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
-                #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => getReferencia:       ".$estructura->infoReferencia->getReferencia);
-                #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato entrada:        ".$dato);
-                #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
-                #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
-                #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
+                C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => getReferencia:       ".$estructura->infoReferencia->getReferencia);
+                C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato entrada:        ".$dato);
+                C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
+                C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
+                C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
 
 
                 return $valor_referencia;
@@ -889,6 +893,8 @@ sub getEstructuraYDatosDeNivel{
 
 =head2
     sub agregarCamposVacios
+
+    recupera el marc_record y le agrega los campos vacios configurados en la estructura de catalogacion
 =cut
 sub agregarCamposVacios {
     my ($marc_record, $estructura_array_ref) = @_;
@@ -898,14 +904,14 @@ sub agregarCamposVacios {
         my %hash_campos;
         my @subcampos_array;
         my $campo = $estructura_array_ref->[$j]->{'campo'};
-        C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => campo => ".$campo);
+        #C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => campo => ".$campo);
         
         foreach my $subcampo (@{$estructura_array_ref->[$j]->{'subcampos_array'}}){
-            C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => subcampo ".$subcampo->{'subcampo'});
+            #C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => subcampo ".$subcampo->{'subcampo'});
             #setedo el dato para cada (campo, subcampo) en estructura_array_ref                            
 
             if ($marc_record->field($campo)) {
-                C4::AR::Debug::debug("EXISTE el campo ".$campo);
+                #C4::AR::Debug::debug("EXISTE el campo ".$campo);
                 $marc_record->field($campo)->subfield( $subcampo->{'subcampo'} );
             } else {
             #si no existe el campo, se agrega
@@ -914,7 +920,7 @@ sub agregarCamposVacios {
                             );
 
                 $marc_record->add_fields( $campo_subcampo );    
-                C4::AR::Debug::debug("NO EXISTE el campo ".$campo);
+                #C4::AR::Debug::debug("NO EXISTE el campo ".$campo);
             }
 
         }

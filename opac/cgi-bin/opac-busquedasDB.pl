@@ -19,7 +19,11 @@ my ($template, $session, $t_params)= get_template_and_user({
                     });
 
 
-my $obj=$input->param('obj');
+#verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada    
+C4::AR::Busquedas::sphinx_start();
+
+my $obj = $input->param('obj');
+
 if($obj){
     $obj= C4::AR::Utilidades::from_json_ISO($obj);
 }else{
