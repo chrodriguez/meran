@@ -100,6 +100,7 @@ sub reindexar{
     sphinx_start($mgr);
 
     $mgr->run_indexer('--all --rotate --quiet');
+    C4::AR::Debug::debug("Utilidades => reindexar => run_indexer => ");
 }
 
 =head2

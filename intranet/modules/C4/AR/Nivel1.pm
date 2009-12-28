@@ -82,6 +82,7 @@ sub guardarRealmente{
 
         C4::AR::Busquedas::generar_indice($id1);
         C4::AR::Busquedas::reindexar();
+        C4::AR::Debug::debug("Nivel1 => guardarRealmente => despues de reindexar => ");
     
         if ($@){
             #Se loguea error de Base de Datos
@@ -95,6 +96,8 @@ sub guardarRealmente{
         $db->{connect_options}->{AutoCommit} = 1;
 
     }
+
+    C4::AR::Debug::debug("Nivel1 => guardarRealmente => return msg_object => ".$msg_object);
 
     return ($msg_object, $id1);
 }
