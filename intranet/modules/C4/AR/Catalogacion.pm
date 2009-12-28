@@ -346,28 +346,34 @@ sub filtrarVisualizacion{
     my $marc_record_salida = MARC::Record->new();
     #se genera el arreglo de campo, subcampos autorizados para mostrar
     foreach my $autorizado (@$visulizacion_array_ref){
-       push(@{$autorizados{$autorizado->getCampo()}},$autorizado->getSubcampo());
+       push(@{$autorizados{$autorizado->getCampo()}},$autorizado->getSubCampo());
     }
 
     foreach my $field ($marc_record->fields) {
-        #se verifica si el campo esta autorizado para el nivel que se estra procesando
-#         foreach my $subfield ($field->subfields()){
-            my @subcampos_array;
-#             while ( my ($key, $value) = each($field->subfields()) ){
-            foreach my $subfield (@$field->subfields()){
-                if ( ($subfield ne '')&&(C4::AR::Utilidades::existeInArray($subfield, @{$autorizados{$field->tag}} ) )) {
-C4::AR::Debug::debug("subfield => ".$subfield);
-                #el subcampo $key, esta autorizado para el campo $campo
-#                     push(@subcampos_array, ($subfield => $value));
-                    #C4::AR::Debug::debug("ACEPTADO clave = ".$key." valor: ".$value);
-                }else{
-#                     $msg_object->{'error'} = 1;
-#                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [$campo.", ".$key." valor: ".$value]} ) ;
+        if(! $field->is_control_field){
+            C4::AR::Debug::debug("-------------------------------------------------------------field => ".$field->tag);
+            #se verifica si el campo esta autorizado para el nivel que se estra procesando
+    #         foreach my $subfield ($field->subfields()){
+                my @subcampos_array = ();
+    #             while ( my ($key, $value) = each($field->subfields()) ){
+                foreach my $subfield ($field->subfields()){
+                    my $dato = $subfield->[1];
+                    my $sub_campo = $subfield->[0];
+                    if ( ($sub_campo ne '')&&(C4::AR::Utilidades::existeInArray($sub_campo, @{$autorizados{$field->tag}} ) )) {
+        C4::AR::Debug::debug("subfield => ".$sub_campo);
+                    #el subcampo $key, esta autorizado para el campo $campo
+                        push(@subcampos_array, ($sub_campo => $dato));
+                        #C4::AR::Debug::debug("ACEPTADO clave = ".$key." valor: ".$value);
+                    }else{
+    #                     $msg_object->{'error'} = 1;
+    #                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [$campo.", ".$key." valor: ".$value]} ) ;
+                    }
                 }
-            }
-
-            my $marc_record_salida_temp = MARC::Field->new($field->tag, $field->indicator(1), $field->indicator(2), @subcampos_array);
-            $marc_record_salida->add_fields($marc_record_salida_temp);
+                if (scalar(@subcampos_array)){
+                    my $marc_record_salida_temp = MARC::Field->new($field->tag, $field->indicator(1), $field->indicator(2), @subcampos_array);
+                    $marc_record_salida->add_fields($marc_record_salida_temp);
+                }
+        }
     }
 
     return $marc_record_salida;

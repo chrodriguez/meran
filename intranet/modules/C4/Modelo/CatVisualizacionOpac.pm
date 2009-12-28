@@ -32,7 +32,7 @@ sub setVistaOpac{
     $self->vista_opac($vista_opac);
 }
 
-sub getSuCampo{
+sub getSubCampo{
     my ($self)=shift;
 
     return $self->subcampo;

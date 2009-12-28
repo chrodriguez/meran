@@ -21,8 +21,13 @@
     token= '[% token %]';
     imagesForJS = '[% temas %]/[% tema %]/imagenes';
   </script>
-  <link href="/includes/jquery/jquery.autocomplete.css" type="text/css" rel="stylesheet">
-  <script src="/includes/opac-top-packed.js"></script>
+
+  <script src="/includes/jquery/jquery.js"></script>
+  <script src="/includes/AjaxHelper.js"></script>
+  <script src="/includes/json/jsonStringify.js"></script>
+  [% INCLUDE 'AutocompleteHelper.inc'  %]
+  <script src="/includes/MessageHelper.js"></script>
+  <script src="/includes/circulacionOPAC.js"></script>
 
   <title>
     [% IF titulo_nombre_ui %]
