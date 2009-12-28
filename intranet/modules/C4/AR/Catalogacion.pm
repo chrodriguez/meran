@@ -299,60 +299,6 @@ sub detalleMARC {
     return ($MARC_result_array);
 }
 
-=item
-sub detalleMARC {
-    my ($marc_record) = @_;
-
-    C4::AR::Debug::debug("Catalogacion => detalleMARC ");
-    my @MARC_result_array;
-
-    my $params;
-        $params->{'nivel'} = 1;
-        $params->{'id_tipo_doc'} = 'LIB';
-    
-    #obtengo la estructura y se verifica si falta agregar un campo, subcampo a la estructura de los datos    
-    my ($cant, $catalogaciones_array_ref) = getEstructuraSinDatos($params);
-    # #prueba
-    agregarCamposVacios($marc_record, $catalogaciones_array_ref);
-
-    foreach my $field ($marc_record->fields) {
-     if(! $field->is_control_field){
-        my %hash;
-        my $campo = $field->tag;
-        my @subcampos_array;
-#         C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
-        #proceso todos los subcampos del campo
-        foreach my $subfield ($field->subfields()) {
-            my %hash_temp;
-
-            my $subcampo                    = $subfield->[0];
-            my $dato                        = $subfield->[1];
-#             C4::AR::Debug::debug("Catalogacion => detalleMARC => campo: ".$campo);
-#             C4::AR::Debug::debug("Catalogacion => detalleMARC => subcampo: ".$subcampo);
-#             C4::AR::Debug::debug("Catalogacion => detalleMARC => dato: ".$dato);
-            $hash_temp{'subcampo'}          = $subcampo;
-            $hash_temp{'liblibrarian'}      = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
-            $dato                           = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
-            $hash_temp{'datoReferencia'}    = $dato;
-#             C4::AR::Debug::debug("Catalogacion => detalleMARC => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
-            my $valor_referencia            = getDatoFromReferencia($campo, $subcampo, $dato);
-            $hash_temp{'dato'}              = $valor_referencia;
-            C4::AR::Debug::debug("Catalogacion => detalleMARC => dato despues de getDatoFromReferencia: ".$hash_temp{'dato'});
-
-            push(@subcampos_array, \%hash_temp);
-        }
-            $hash{'campo'}                  = $campo;
-            $hash{'header'}                 = C4::AR::Catalogacion::getHeader($campo);
-            $hash{'subcampos_array'}        = \@subcampos_array;
-
-            push(@MARC_result_array, \%hash);
-        }
-    }
-
-    return (\@MARC_result_array);
-}
-=cut
-
 
 =head2
     sub marc_record_to_meran_por_nivel
@@ -391,6 +337,13 @@ sub marc_record_to_opac_view {
 
 =head2
     sub marc_record_to_meran
+    
+    pasa la informacion de un marc_record a una estructura para utilizar en el cliente
+
+    campo => "campo"
+    indicador_primario =>
+    indicador_secundario => 
+    subcampos_array => [ {subcampo => 'a', dato => 'dato'}, {subcampo => 'b', dato => 'dato'}, ...]
 =cut
 sub marc_record_to_meran {
     my ($marc_record) = @_;
@@ -439,6 +392,7 @@ sub marc_record_to_meran {
   Esta funcion retorn un arreglo de objetos, donde los mismos no tiene configurada la estructura de catalogacion, o sea
   no se van a poder mostrar en el sistema
 =cut
+# FIXME DEPRECATEDDDDDDDDDDD
 sub getCatRegistroMarcN1SinEstructura{
     my ($nivel, $ini, $cantR) = @_;
 
@@ -481,6 +435,7 @@ sub getCatRegistroMarcN1SinEstructura{
   Esta funcion retorn un arreglo de objetos, donde los mismos no tiene configurada la estructura de catalogacion, o sea
   no se van a poder mostrar en el sistema
 =cut
+# FIXME DEPRECATEDDDDDDDDDDD
 sub getCatRegistroMarcN2SinEstructura{
     my ($nivel, $ini, $cantR) = @_;
 
@@ -524,6 +479,7 @@ sub getCatRegistroMarcN2SinEstructura{
   Esta funcion retorn un arreglo de objetos, donde los mismos no tiene configurada la estructura de catalogacion, o sea
   no se van a poder mostrar en el sistema
 =cut
+# FIXME DEPRECATEDDDDDDDDDDD
 sub getCatRegistroMarcN3SinEstructura{
     my ($nivel, $ini, $cantR) = @_;
 

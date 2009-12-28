@@ -233,7 +233,7 @@ sub limpiarBusquedas {
 
 }
 
-
+# FIXME esto es igual a detalleMARC de C4::AR::Catalogacion
 sub detalleMARC {
     my ($marc) = @_;
 

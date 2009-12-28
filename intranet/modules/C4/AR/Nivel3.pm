@@ -555,6 +555,7 @@ Funcion interna al pm
 Genera el codigo de barras del item automanticamente por medio de una consulta a la base de datos, esta funcion es llamada desde una transaccion.
 Los parametros son el manejador de la base de datos y los parametros que necesita para generar el codigo de barra.
 =cut
+# FIXME no esta funcionando bien
 sub generaCodigoBarra{
     my($parametros, $cant) = @_;
 
