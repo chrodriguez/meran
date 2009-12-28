@@ -1365,7 +1365,7 @@ ALTER TABLE `pref_preferencia_sistema` ADD UNIQUE (
 
 ALTER TABLE `pref_preferencia_sistema` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
 
-INSERT INTO `EconoV3`.`pref_preferencia_sistema` (
+INSERT INTO `pref_preferencia_sistema` (
 `variable` ,
 `value` ,
 `explanation` ,
