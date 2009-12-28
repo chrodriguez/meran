@@ -22,9 +22,6 @@ C4::AR::Nivel3::detalleCompletoOPAC($idNivel1, $t_params);
 
 $t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");
 my $split_by_levels = C4::AR::Preferencias->getValorPreferencia("split_by_levels");
-if ($split_by_levels){
-    $t_params->{'partial_template'}= "opac-detail-levels.inc";
-}else{
-    $t_params->{'partial_template'}= "opac-detail.inc";
-}
+$t_params->{'partial_template'}= "opac-detail.inc";
+# $t_params->{'reducido'}= 1;
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

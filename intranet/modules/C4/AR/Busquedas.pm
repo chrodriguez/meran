@@ -111,14 +111,22 @@ sub sphinx_start{
     use Sphinx::Manager;
     my ($mgr)= @_;
 
-    $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
+    defined (my $kid = fork) or die "Cannot fork: $!\n";
+    if ($kid) {
+    # Parent runs this block
+  } else {
+      # Child runs this block
+      # some code comes here
+      $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
 
-    my $pids = $mgr->get_searchd_pid;
-    if(scalar(@$pids) == 0){
-        C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
-        $mgr->start_searchd;
-        C4::AR::Debug::debug("Utilidades => generar_indice => levantó sphinx!!!!!!! => ");
-    }
+      my $pids = $mgr->get_searchd_pid;
+      if(scalar(@$pids) == 0){
+          C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
+          $mgr->start_searchd;
+          C4::AR::Debug::debug("Utilidades => generar_indice => levantó sphinx!!!!!!! => ");
+      }
+      CORE::exit(0);
+  }
 
 # TODO faltaria hacer un delay para darle tiempo a q levante el servicio, sino en la  busqueda no devuelve nada
 }

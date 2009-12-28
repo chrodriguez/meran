@@ -8,6 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'pref_preferencia_sistema',
 
     columns => [
+        id          => { type => 'serial' },
         variable    => { type => 'varchar', length => 50, not_null => 1 },
         value       => { type => 'text', length => 65535 },
         explanation => { type => 'varchar', default => '', length => 200, not_null => 1 },
@@ -15,7 +16,8 @@ __PACKAGE__->meta->setup(
         type        => { type => 'varchar', length => 20 },
     ],
 
-    primary_key_columns => [ 'variable' ],
+    primary_key_columns => [ 'id' ],
+    unique_key => [ 'variable' ],
 );
 
 sub defaultSort {

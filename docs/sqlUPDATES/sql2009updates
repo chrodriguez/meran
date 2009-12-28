@@ -1357,6 +1357,14 @@ ALTER TABLE `cat_estructura_catalogacion_opac` CHANGE `idestcatopac` `id` INT( 1
 ALTER TABLE `cat_estructura_catalogacion_opac` CHANGE `textpred` `vista_opac` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 ALTER TABLE `cat_estructura_catalogacion_opac` ADD `id_perfil` INT( 11 ) NOT NULL;
 
+ALTER TABLE `pref_preferencia_sistema` DROP PRIMARY KEY;
+
+ALTER TABLE `pref_preferencia_sistema` ADD UNIQUE (
+`variable`
+);
+
+ALTER TABLE `pref_preferencia_sistema` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+
 INSERT INTO `EconoV3`.`pref_preferencia_sistema` (
 `variable` ,
 `value` ,
