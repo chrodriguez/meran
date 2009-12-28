@@ -115,9 +115,12 @@ sub sphinx_start{
     if(scalar(@$pids) == 0){
         C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
         $mgr->start_searchd;
-        while(scalar(@{$mgr->get_searchd_pid}) == 0){   
-            C4::AR::Debug::debug("Utilidades => Haciendo tiempo ");
-        }
+#         while(scalar(@{$mgr->get_searchd_pid}) == 0){   
+#             C4::AR::Debug::debug("Utilidades => Haciendo tiempo ");
+#         }
+        C4::AR::Debug::debug("Utilidades => Haciendo tiempo ");
+        sleep 5;
+        C4::AR::Debug::debug("Utilidades => termino el tiempo ");
     }
 
 # TODO faltaria hacer un delay para darle tiempo a q levante el servicio, sino en la  busqueda no devuelve nada
