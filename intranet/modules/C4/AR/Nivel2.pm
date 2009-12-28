@@ -76,12 +76,14 @@ sub guardarRealmente{
             $db->commit;
             #recupero el id1 recien agregado
             $id2 = $catRegistroMarcN2->getId2;
-            C4::AR::Busquedas::generar_indice($catRegistroMarcN2->getId1);
-            C4::AR::Busquedas::reindexar();
             #se cambio el permiso con exito
-            $msg_object->{'error'}= 0;
+            $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => [$id2]} ) ;
         };
+
+        C4::AR::Busquedas::generar_indice($catRegistroMarcN2->getId1);
+        C4::AR::Busquedas::reindexar();
+
     
         if ($@){
             #Se loguea error de Base de Datos

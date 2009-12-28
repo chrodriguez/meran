@@ -48,9 +48,10 @@ sub t_guardarNivel1 {
     if(!$msg_object->{'error'}){
     #No hay error
         my $marc_record = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
-        ($msg_object,$id1) = guardarRealmente($msg_object,$marc_record);
+        ($msg_object, $id1) = guardarRealmente($msg_object,$marc_record);
         
     }
+
     return ($msg_object, $id1);
 }
 =head2
@@ -59,7 +60,8 @@ sub guardarRealmente
 Esta funcion realmente guarda el elemento en la base
 =cut
 sub guardarRealmente{
-    my ($msg_object,$marc_record)=@_;
+    my ($msg_object,$marc_record) = @_;
+
     my $id1;
     if(!$msg_object->{'error'}){
         my $catRegistroMarcN1 = C4::Modelo::CatRegistroMarcN1->new();  
@@ -74,14 +76,12 @@ sub guardarRealmente{
             #recupero el id1 recien agregado
             $id1 = $catRegistroMarcN1->getId1;
             #se cambio el permiso con exito
-            $msg_object->{'error'}= 0;
+            $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$id1]} ) ;
         };
 
-        if(!$msg_object->{'error'}){
-            C4::AR::Busquedas::generar_indice($id1);
-            C4::AR::Busquedas::reindexar();
-        }
+        C4::AR::Busquedas::generar_indice($id1);
+        C4::AR::Busquedas::reindexar();
     
         if ($@){
             #Se loguea error de Base de Datos
