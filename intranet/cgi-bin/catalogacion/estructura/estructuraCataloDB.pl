@@ -534,6 +534,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_1"){
                                                 'intranet'
                                     );
 
+
     my ($Message_arrayref, $id1) = &C4::AR::Nivel1::t_modificarNivel1($obj);
     
     if($id1){    

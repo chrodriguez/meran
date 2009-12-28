@@ -137,7 +137,6 @@ sub sphinx_start{
           C4::AR::Debug::debug("Utilidades => generar_indice => levantó sphinx!!!!!!! => ");
       }
   }
-# TODO faltaria hacer un delay para darle tiempo a q levante el servicio, sino en la  busqueda no devuelve nada
 }
 #================================================================FIN SPHINX=================================================================
 

@@ -328,11 +328,67 @@ sub marc_record_to_opac_view {
 
     #obtengo los campo, subcampo que se pueden mostrar
 #     ($meran_to_marc) = filtrar();
+    my ($marc_record_salida) = filtrarVisualizacion($marc_record);
 
     #se procesa el marc_record filtrado
-    my ($MARC_result_array) = marc_record_to_meran($marc_record);
+    my ($MARC_result_array) = marc_record_to_meran($marc_record_salida);
 
     return $MARC_result_array;
+}
+
+
+sub filtrarVisualizacion{
+    my ($marc_record) = @_;
+
+    my ($visulizacion_array_ref) = getVisualizacionOpac();
+
+    my %autorizados;
+    my $marc_record_salida = MARC::Record->new();
+    #se genera el arreglo de campo, subcampos autorizados para mostrar
+    foreach my $autorizado (@$visulizacion_array_ref){
+       push(@{$autorizados{$autorizado->getCampo()}},$autorizado->getSubcampo());
+    }
+
+    foreach my $field ($marc_record->fields) {
+        #se verifica si el campo esta autorizado para el nivel que se estra procesando
+#         foreach my $subfield ($field->subfields()){
+            my @subcampos_array;
+#             while ( my ($key, $value) = each($field->subfields()) ){
+            foreach my $subfield (@$field->subfields()){
+                if ( ($subfield ne '')&&(C4::AR::Utilidades::existeInArray($subfield, @{$autorizados{$field->tag}} ) )) {
+C4::AR::Debug::debug("subfield => ".$subfield);
+                #el subcampo $key, esta autorizado para el campo $campo
+#                     push(@subcampos_array, ($subfield => $value));
+                    #C4::AR::Debug::debug("ACEPTADO clave = ".$key." valor: ".$value);
+                }else{
+#                     $msg_object->{'error'} = 1;
+#                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [$campo.", ".$key." valor: ".$value]} ) ;
+                }
+            }
+
+            my $marc_record_salida_temp = MARC::Field->new($field->tag, $field->indicator(1), $field->indicator(2), @subcampos_array);
+            $marc_record_salida->add_fields($marc_record_salida_temp);
+    }
+
+    return $marc_record_salida;
+}
+
+=head2
+    sub getVisualizacionOpac
+    
+=cut
+sub getVisualizacionOpac {
+    my ($idPerfil) = @_;
+
+    my @filtros;
+
+    use C4::Modelo::CatVisualizacionOpac::Manager;
+
+    my $visulizacion_array_ref = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(   
+                                                                query => \@filtros,
+                                                             );
+
+    return ($visulizacion_array_ref);
 }
 
 =head2
