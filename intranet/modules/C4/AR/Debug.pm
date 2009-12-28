@@ -54,11 +54,21 @@ sub debugObject{
 
 
 sub debug_date_time{
+    debug(_str_debug_date_time());
+}
+
+=head2
+    sub _str_debug_date_time
+    
+    genera el string con la fecha y hora
+=cut
+sub _str_debug_date_time{
 
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
     #     dia-mes-año    
-    debug("debug_date_time => ".$mday."-".($mon+1)."-".($year+1900)." ".$hour.":".$min.":".$sec);
+    return $mday."-".($mon+1)."-".($year+1900)." ".$hour.":".$min.":".$sec;
 }
+
 
 =item
 debug por linea
@@ -71,21 +81,23 @@ sub debug{
     if($context->config('debug')){
         my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
         open(Z, ">>".$debug_file);
-		print Z "DEBUG=> ".$data."\n";
+		print Z "DEBUG ("._str_debug_date_time().") => ".$data."\n";
 		close(Z);        
     }
 }
 
 sub _printHASH {
     my ($hash_ref) = @_;
-C4::AR::Debug::debug("\n");
-C4::AR::Debug::debug("PRINT HASH: \n");
+
+    C4::AR::Debug::debug("\n");
+    C4::AR::Debug::debug("PRINT HASH: \n");
     if($hash_ref){
         while ( my ($key, $value) = each(%$hash_ref) ) {
 				C4::AR::Debug::debug("		key: $key => value: $value\n");
 		}
     }
-C4::AR::Debug::debug("\n");
+
+    C4::AR::Debug::debug("\n");
 }
 
 

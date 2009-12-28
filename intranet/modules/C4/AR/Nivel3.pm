@@ -192,8 +192,9 @@ sub t_eliminarNivel3{
 
     my $msg_object = C4::AR::Mensajes::create();
     
-    my  $cat_registro_marc_n3 = C4::Modelo::CatRegistroMarcN3->new();
-    my  $db = $cat_registro_marc_n3->db;
+    my $cat_registro_marc_n3 = C4::Modelo::CatRegistroMarcN3->new();
+    my $db = $cat_registro_marc_n3->db;
+    my $id1 = 0;
     # enable transactions, if possible
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
@@ -201,24 +202,32 @@ sub t_eliminarNivel3{
 
     eval {
         for(my $i=0;$i<scalar(@$id3_array);$i++){
-            my $cat_registro_marc_n3;
             $params->{'id3'} = $id3_array->[$i];
             _verificarDeleteItem($msg_object, $params);
             
             if(!$msg_object->{'error'}){
-# FIXME falta verificar existencia de los ejemplares q se estan levantando
+
                 $cat_registro_marc_n3 = getNivel3FromId3($id3_array->[$i], $db);
-                my $barcode = $cat_registro_marc_n3->getBarcode;   
-                $cat_registro_marc_n3->eliminar();
-                #se eliminó con exito
-                $msg_object->{'error'} = 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U376', 'params' => [$barcode]} ) ;
+                if ($cat_registro_marc_n3){
+                    $id1 = $cat_registro_marc_n3->getId1();
+                    my $barcode = $cat_registro_marc_n3->getBarcode;   
+                    $cat_registro_marc_n3->eliminar();
+                    #se eliminó con exito
+                    $msg_object->{'error'} = 0;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U376', 'params' => [$barcode]} ) ;
+                }else{
+                    #se esta intentando recuperar un ejemplar con un id3 inexistente
+                    C4::AR::Debug::debug("Nivel3 => t_eliminarNivel3 => se esta intentando recuperar un ejemplar con ID3 inexistente ".$id3_array->[$i]);
+                }
             }
         }
 
-            $db->commit;
-            C4::AR::Busquedas::generar_indice($cat_registro_marc_n3->getId1());
+        $db->commit;
+
+        if ($id1) {
+            C4::AR::Busquedas::generar_indice($id1);
             C4::AR::Busquedas::reindexar();
+        }
     };
 
     if ($@){
@@ -579,13 +588,15 @@ sub generaCodigoBarra{
                                     WHERE INSTR(marc_record, ?) <> 0 ");
 
 
+
     $sth2->execute('f'.$like, 'f'.$like, 'f'.$like);
 	my $data2= $sth2->fetchrow_hashref;
     my $numero = ($data2->{'maximo'});
 
+
     my @barcodes_array_ref;
     for(my $i=0;$i<$cant;$i++){
-        $barcode  = $parametros->{'UI'}."-".$parametros->{'tipo_ejemplar'}."-".($numero + $i + 1);
+        $barcode  = $parametros->{'UI'}."-".$parametros->{'tipo_ejemplar'}."-".completarConCeros($numero + $i + 1);
         C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode => ".$barcode);
         push(@barcodes_array_ref, $barcode);
     }
@@ -593,6 +604,16 @@ sub generaCodigoBarra{
     return (@barcodes_array_ref);
 }
 
+sub completarConCeros {
+    my ($numero) = @_;
+
+    my $ceros = '';
+    for(my $j=0;(($j + length($numero)) < C4::Context->preference("longitud_barcode")) ;$j++){
+        $ceros.= "0";
+    }
+
+    return $ceros.$numero;
+}
 
 =head2 sub getNivel3FromId1
     Recupero un nivel 3 a partir de un id1

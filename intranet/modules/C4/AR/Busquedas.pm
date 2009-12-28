@@ -123,43 +123,7 @@ sub sphinx_start{
 
 
 
-=item
-buscarDatoReferencia
-Busca el valor del dato que viene de referencia. Es un id que apunta a una tupla de una tabla y se buscan los campos que el usuario introdujo para que se vean. Se concatenan con el separador que el mismo introdujo.
-=cut
-sub buscarDatoReferencia{
-	my ($dato,$tabla,$campos,$separador)=@_;
-	
-	my $ident=C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
 
-	my $dbh = C4::Context->dbh;
-	my @camposArr=split(/,/,$campos);
-	my $i=0;
-	my $strCampos="";
-	foreach my $camp(@camposArr){
-		$strCampos.=", ".$camp . " AS dato".$i." ";
-		$i++;
-	}
-	$strCampos=substr($strCampos,1,length($strCampos));
-	my $query=" SELECT ".$strCampos;
-	$query .= " FROM ".$tabla;
-	$query .= " WHERE ".$ident." = ?";
-
-	my $sth=$dbh->prepare($query);
-   	$sth->execute($dato);
-	my $data=$sth->fetchrow_hashref;
-	$strCampos="";
-	my $llave;
-	for(my $j=0;$j<$i;$j++){
-		$llave="dato".$j;
-		$strCampos.=$separador.$data->{$llave};
-	}
-	
-	if ($separador ne ''){ #Si existe un separador quito el 1ro que esta de mas
-		$strCampos=substr($strCampos,1,length($strCampos));
-	}
-	return($strCampos);
-}
 
 =item
 getLibrarianEstCat
@@ -1778,6 +1742,44 @@ sub _existeEnArregloDeCampoMARC{
 
 
 #====================================================DEPRECATED=====================================================================
+
+=item
+buscarDatoReferencia
+Busca el valor del dato que viene de referencia. Es un id que apunta a una tupla de una tabla y se buscan los campos que el usuario introdujo para que se vean. Se concatenan con el separador que el mismo introdujo.
+=cut
+# sub buscarDatoReferencia{
+#     my ($dato,$tabla,$campos,$separador)=@_;
+#     
+#     my $ident=C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
+# 
+#     my $dbh = C4::Context->dbh;
+#     my @camposArr=split(/,/,$campos);
+#     my $i=0;
+#     my $strCampos="";
+#     foreach my $camp(@camposArr){
+#         $strCampos.=", ".$camp . " AS dato".$i." ";
+#         $i++;
+#     }
+#     $strCampos=substr($strCampos,1,length($strCampos));
+#     my $query=" SELECT ".$strCampos;
+#     $query .= " FROM ".$tabla;
+#     $query .= " WHERE ".$ident." = ?";
+# 
+#     my $sth=$dbh->prepare($query);
+#     $sth->execute($dato);
+#     my $data=$sth->fetchrow_hashref;
+#     $strCampos="";
+#     my $llave;
+#     for(my $j=0;$j<$i;$j++){
+#         $llave="dato".$j;
+#         $strCampos.=$separador.$data->{$llave};
+#     }
+#     
+#     if ($separador ne ''){ #Si existe un separador quito el 1ro que esta de mas
+#         $strCampos=substr($strCampos,1,length($strCampos));
+#     }
+#     return($strCampos);
+# }
 
 # DEPRECATED
 # sub buscarTodosLosDatosDeCampoRepetibleN1 {
