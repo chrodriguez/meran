@@ -476,9 +476,10 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
 
     my %info;
     $info{'Message_arrayref'} = $Message_arrayref;
-    $info{'id1'}= $id1;
+    $info{'id1'} = $id1;
 
     C4::Auth::print_header($session);
+C4::AR::Debug::_printHASH(\%info);
     print to_json \%info;
 }
 
