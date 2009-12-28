@@ -721,7 +721,7 @@ sub _setDatos_de_estructura {
         $hash_ref_result{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
         #si es un autocomplete y no tengo el dato de la referencia, muestro un blanco
         if ( ($hash_ref_result{'datoReferencia'} eq 0) || ($hash_ref_result{'dato'} eq 0) || not defined($hash_ref_result{'datoReferencia'}) ) {
-          $hash_ref_result{'dato'} = 'NO TIENE';
+          $hash_ref_result{'dato'} = '';#'NO TIENE';
         }
 
 #         C4::AR::Debug::debug("_setDatos_de_estructura => ======== AUTOCOMPLETE ======== ");
