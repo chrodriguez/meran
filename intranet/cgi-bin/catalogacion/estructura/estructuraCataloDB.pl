@@ -480,7 +480,8 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
 
     C4::Auth::print_header($session);
 C4::AR::Debug::_printHASH(\%info);
-    print to_json \%info;
+print "HOLA";
+#     print to_json \%info;
 }
 
 elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
