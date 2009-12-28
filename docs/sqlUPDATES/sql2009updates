@@ -1375,3 +1375,5 @@ INSERT INTO `pref_preferencia_sistema` (
 VALUES (
 'longitud_barcode', '3', 'cantidad de caracteres que conforman el barcode', NULL , NULL
 );
+
+RENAME TABLE  `cat_estructura_catalogacion_opac` TO  `cat_visualizacion_opac` ;
