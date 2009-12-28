@@ -1,11 +1,11 @@
-package C4::Modelo::CatEstructuraCatalogacionOpac;
+package C4::Modelo::CatVisualizacionOpac;
 
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
-    table   => 'cat_estructura_catalogacion_opac',
+    table   => 'cat_visualizacion_opac',
 
     columns => [
         id           => { type => 'serial', not_null => 1 },
