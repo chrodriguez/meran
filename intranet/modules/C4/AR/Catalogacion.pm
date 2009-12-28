@@ -327,7 +327,6 @@ sub marc_record_to_opac_view {
     my ($marc_record) = @_;
 
     #obtengo los campo, subcampo que se pueden mostrar
-#     ($meran_to_marc) = filtrar();
     my ($marc_record_salida) = filtrarVisualizacion($marc_record);
 
     #se procesa el marc_record filtrado
@@ -337,6 +336,10 @@ sub marc_record_to_opac_view {
 }
 
 
+=head2
+    sub filtrarVisualizacion
+    filtra la visualizacion del opac, se muestra lo indicado en cat_visualizacion_opac
+=cut
 sub filtrarVisualizacion{
     my ($marc_record) = @_;
 
@@ -351,17 +354,13 @@ sub filtrarVisualizacion{
 
     foreach my $field ($marc_record->fields) {
         if(! $field->is_control_field){
-            C4::AR::Debug::debug("-------------------------------------------------------------field => ".$field->tag);
             #se verifica si el campo esta autorizado para el nivel que se estra procesando
-    #         foreach my $subfield ($field->subfields()){
                 my @subcampos_array = ();
-    #             while ( my ($key, $value) = each($field->subfields()) ){
                 foreach my $subfield ($field->subfields()){
                     my $dato = $subfield->[1];
                     my $sub_campo = $subfield->[0];
                     if ( ($sub_campo ne '')&&(C4::AR::Utilidades::existeInArray($sub_campo, @{$autorizados{$field->tag}} ) )) {
-        C4::AR::Debug::debug("subfield => ".$sub_campo);
-                    #el subcampo $key, esta autorizado para el campo $campo
+                        #el subcampo $sub_campo, esta autorizado para el campo $field
                         push(@subcampos_array, ($sub_campo => $dato));
                         #C4::AR::Debug::debug("ACEPTADO clave = ".$key." valor: ".$value);
                     }else{
