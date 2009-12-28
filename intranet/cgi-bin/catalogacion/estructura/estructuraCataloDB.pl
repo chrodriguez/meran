@@ -479,7 +479,6 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
     $info{'id1'} = $id1;
 
     C4::Auth::print_header($session);
-C4::AR::Debug::_printHASH(\%info);
     print to_json \%info;
 }
 
