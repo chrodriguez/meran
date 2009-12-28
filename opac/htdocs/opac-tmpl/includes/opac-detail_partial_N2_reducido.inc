@@ -15,7 +15,7 @@
                     [% END %] <!-- END FOREACH nivel2_array -->
                 [% END %] <!-- END FOREACH subcampos_array-->
             </ul>
-          [% INCLUDE 'opac-detail_partial_disponibilidad.inc'%]
+            [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
         [% END %] <!-- FOREACH de nivel2 -->
       </div>
   </div>

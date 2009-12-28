@@ -5,7 +5,7 @@
                         <tr>
                             <td class="impar" >
                                 <br>
-                                [% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %] <b>[% cantParaPrestamo %]</b><br>    
+                                [% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %] <b>[% cantParaPrestamo %]</b><br>
                                 [% "Disponibilidad Actual Para Sala de Lectura:" | i18n %] <b>[% cantParaSala %]</b><br>
                                 [% "Cantidad Actual de Reservas:" | i18n %] <b>[% cantReservas %]</b><br>
 
