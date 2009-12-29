@@ -540,7 +540,6 @@ sub detalleCompletoOPAC{
 		$hash_nivel2->{'cantReservas'}= $totales_nivel3->{'cantReservas'};
         $hash_nivel2->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1($nivel2_array_ref->[$i]->getId1,'S');
         $hash_nivel2->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId1($nivel2_array_ref->[$i]->getId1,'M');
-        C4::AR::Debug::debug("ISBN EN DETALLE------------------------: ".$nivel2_array_ref->[$i]->getTipoDocumento());
         $hash_nivel2->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId1($nivel2_array_ref->[$i]->getId1,'L');
 		$hash_nivel2->{'cantReservasEnEspera'}= $totales_nivel3->{'cantReservasEnEspera'};
 		$hash_nivel2->{'disponibles'}= $totales_nivel3->{'disponibles'};
