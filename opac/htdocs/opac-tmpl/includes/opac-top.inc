@@ -16,7 +16,7 @@
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/default/includes/setup.css" />
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/default/includes/text.css" />
   <link rel="icon" type="image/x-icon" href="[% temas %]/default/imagenes/favicon.ico" />
-  
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/fancybox.css" />
   <script language="javascript" type="text/javascript">
     token= '[% token %]';
     imagesForJS = '[% temas %]/[% tema %]/imagenes';
@@ -28,6 +28,8 @@
   [% INCLUDE 'AutocompleteHelper.inc'  %]
   <script src="/includes/MessageHelper.js"></script>
   <script src="/includes/circulacionOPAC.js"></script>
+  <script src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
+  <script src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
 
   <title>
     [% IF titulo_nombre_ui %]
