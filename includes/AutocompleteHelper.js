@@ -33,7 +33,7 @@ function= funcion a ejecutar luego de traer la respuesta del servidor
 		return 0;
 	}
 
-    url = "/cgi-bin/koha/autocompletablesDB.pl?accion="+options.accion+"&token="+token;
+    url = "/cgi-bin/koha/autocompletablesDB.pl?accion="+options.accion+"&token="+token+"&limit="+M_LIMITE_RESULTADOS;
 
     $("#"+options.IdInput).search();
     // q= valor de campoHelp
@@ -46,7 +46,6 @@ function= funcion a ejecutar luego de traer la respuesta del servidor
 		matchContains:1,
         limit:M_LIMITE_RESULTADOS,
         maxItemsToShow:M_LIMITE_RESULTADOS,
-        autoFill: true,
 		cacheLength:M_LIMITE_RESULTADOS,
 		selectOnly:1,
     });//end autocomplete

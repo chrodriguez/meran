@@ -348,6 +348,8 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
 
     my $infoOperacionJSON;
 
+C4::AR::Busquedas::buscarTodosLosDatosFromNivel2ByCampoSubcampo('020', 'a');
+
 # TODO esta feo, ver si se puede meter mas adentro en un modulo
     if($obj->{'nivel'} eq '1'){
         $obj->{'id_tipo_doc'} = 'ALL';

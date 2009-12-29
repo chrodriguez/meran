@@ -142,7 +142,38 @@ sub sphinx_start{
 
 
 
+=head2
+    sub buscarTodosLosDatosFromNivel2ByCampoSubcampo
 
+    speedy gonzalezzzz
+=cut
+sub buscarTodosLosDatosFromNivel2ByCampoSubcampo {
+    my ($campo, $subcampo) = @_;
+
+    my @filtros;
+    my @datos_array;
+
+    my $cat_registro_marc_n2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2( query => \@filtros);
+
+    foreach my $n2 (@$cat_registro_marc_n2_array_ref){
+        my $marc_record = MARC::Record->new_from_usmarc($n2->getMarcRecord);
+
+        foreach my $field ($marc_record->field($campo)) {
+#             C4::AR::Debug::debug("field => ".$field->tag);
+        
+            foreach my $subfield ($field->subfields()) {
+                if ($subfield->[0] eq $subcampo){
+#                     C4::AR::Debug::debug("subfield => ".$subfield->[0]);
+#                     C4::AR::Debug::debug("dato => ".$subfield->[1]);
+                    push (@datos_array, $subfield->[1]);
+                }
+            }# END foreach my $subfield ($field->subfields())
+
+        }# END foreach my $field ($marc_record->field($campo))
+    }
+
+    return (\@datos_array);
+}
 
 =item
 getLibrarianEstCat
