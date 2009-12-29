@@ -102,7 +102,7 @@ sub getISBN{
      
      my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
  
-     return $marc_record->subfield("20","a");
+     return $marc_record->subfield("020","a");
 }
 
 =head2

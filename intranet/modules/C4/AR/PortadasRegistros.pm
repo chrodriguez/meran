@@ -87,13 +87,13 @@ sub getImageByIsbn {
         $file= $isbnaux."-".$size.".jpg";
         $url= "http://covers.openlibrary.org/b/isbn/".$file."?default=false";
 
-C4::AR::Debug::debug( "Obteniendo : ".$url);
+        C4::AR::Debug::debug( "Obteniendo : ".$url);
 		my $request = HTTP::Request->new(GET => $url);
 		my $ua = LWP::UserAgent->new;
  		my $response = $ua->request($request);
         if ($response->is_success) {
 		    my $buffer = $response->content;
-		    if (!open(WFD,">$path$file")) {
+		    if (!open(WFD,">$path/$file")) {
                 C4::AR::Debug::debug( "Hay un error y el archivo no puede escribirse en el servidor.");
             }
 		    else {
@@ -150,19 +150,19 @@ sub getAllImages {
 
     open (L,">>/tmp/covers");
 
-    my $repetibles_array_ref = C4::AR::Busquedas::buscarTodosLosDatosDeCampoRepetibleN2("020","a");
+    my $repetibles_array_ref = C4::AR::Busquedas::buscarTodosLosDatosFromNivel2ByCampoSubcampo("020","a");
 
-    foreach my $n2r (@$repetibles_array_ref)
+    foreach my $dato (@$repetibles_array_ref)
 	{
-	printf L "Bajando  ISBN: ".$n2r->getDato."  \n";
+	printf L "Bajando  ISBN: ".$dato."  \n";
 
-	my $urlsmall= getImageByIsbn($n2r->getDato,'S');
+	my $urlsmall= getImageByIsbn($dato,'S');
 	printf L "Url Small: ".$urlsmall."  \n";
 
-	my $urlmedium= getImageByIsbn($n2r->getDato,'M');
+	my $urlmedium= getImageByIsbn($dato,'M');
 	printf L "Url Medium: ".$urlmedium."  \n";
 
-	my $urllarge= getImageByIsbn($n2r->getDato,'L');
+	my $urllarge= getImageByIsbn($dato,'L');
 	printf L "Url Large: ".$urllarge."  \n";
 	}
 

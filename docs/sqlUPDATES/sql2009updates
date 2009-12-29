@@ -1390,3 +1390,8 @@ INSERT INTO `pref_preferencia_sistema` (
 VALUES (
 'limite_resultados_autocompletables', NULL , '20', 'limite de resultados a mostrar en los campos autocompletables', NULL , NULL
 );
+
+ALTER TABLE  `cat_portada_registro` DROP INDEX  `id`;
+ALTER TABLE  `cat_portada_registro` DROP INDEX  `isbn`;
+ALTER TABLE  `cat_portada_registro` DROP  `id`;
+ALTER TABLE  `cat_portada_registro` ADD  `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;

@@ -1,6 +1,22 @@
-            <div class="main-subcontent" style="width:95%;">
-                <div class="subcontent-unit-border-green" style="width:100%;">
-                    <h1 class="green">[% "Informaci&oacute;n de disponibilidad" | i18n %]</h1>
+<script>
+    $(document).ready(function() {
+        $('.fancylink').fancybox();
+    });
+</script>
+          <div class="main-subcontent" style="width:25%; float:left; margin: 5px">
+              [% IF portada_registro %]
+                  <a class="fancylink" href="/covers/[% portada_registro_big %]">
+                      <img name="cover"  VALUE="" BORDER=0 src="/covers/[% portada_registro_medium %]" title="Portada">
+                  </a>
+              [% ELSE %]
+                    <img src="/covers/no_image.jpg" 
+                          alt="[% 'Sin Portada' | i18n %]"
+                          title="[% 'Sin Portada' | i18n %]" />
+              [% END %]
+          </div>
+          <div class="main-subcontent" style="width:70%; float:left">
+                <div class="subcontent-unit-border-orange" style="width:100%;">
+                    <h1 class="orange">[% "Informaci&oacute;n de disponibilidad" | i18n %]</h1>
                     <table  style="width:95%;">
                         <tr>
                             <td class="impar" >
