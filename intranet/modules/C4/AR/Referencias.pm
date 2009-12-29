@@ -332,7 +332,8 @@ sub obtenerCamposLike {
 
     my $campos_marc_array_ref = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc(
 																query => [  
-																			or => [ tagfield => { like => '%'.$campo.'%' }, 
+																			or => [ 
+                                                                                    campo => { like => '%'.$campo.'%' }, 
 																					liblibrarian => { like => '%'.$campo.'%' }
 																				]
 																		]

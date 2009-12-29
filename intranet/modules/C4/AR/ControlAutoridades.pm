@@ -49,23 +49,35 @@ use vars qw(@EXPORT @ISA);
 
 sub search_temas{
 	my ($tema)=@_; 
+    my @filtros;
 
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT id, nombre
-			       	FROM cat_tema
-				WHERE nombre like ?
-			       	ORDER BY nombre");
+    push(@filtros, ( nombre => { like => '%'.$tema.'%'}) );
 
-	$sth->execute('%'.$tema.'%');
+    my $temas_array_ref = C4::Modelo::CatTema::Manager->get_cat_tema(
 
-	my @results;
-	my $cant= 0;
-	while (my $data=$sth->fetchrow_hashref){
-		push (@results, $data);
-		$cant++;
-	}
-	$sth->finish;
-	return ($cant, @results);
+        query => \@filtros,
+        sort_by => 'nombre ASC',
+        limit   => C4::AR::Preferencias->getValorPreferencia("limite_resultados_autocompletables"),
+    );
+
+    return (scalar(@$temas_array_ref), $temas_array_ref);
+
+    #my $dbh = C4::Context->dbh;
+    #my $sth=$dbh->prepare("	SELECT id, nombre
+#			       	FROM cat_tema
+#				WHERE nombre like ?
+#			       	ORDER BY nombre");
+
+#	$sth->execute('%'.$tema.'%');
+
+#	my @results;
+#	my $cant= 0;
+#	while (my $data=$sth->fetchrow_hashref){
+#		push (@results, $data);
+#		$cant++;
+#	}
+#	$sth->finish;
+#	return ($cant, @results);
 
 }
 
@@ -91,23 +103,35 @@ sub search_autores{
 
 sub search_editoriales{
 	my ($editorial)=@_; 
+    my @filtros;
 
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT id, editorial
-			       	FROM cat_editorial
-				WHERE editorial like ?
-			       	ORDER BY editorial");
+    push(@filtros, ( editorial => { like => '%'.$editorial.'%'}) );
 
-	$sth->execute('%'.$editorial.'%');
+    my $editoriales_array_ref = C4::Modelo::CatEditorial::Manager->get_cat_editorial(
 
-	my @results;
-	my $cant= 0;
-	while (my $data=$sth->fetchrow_hashref){
-		push (@results, $data);
-		$cant++;
-	}
-	$sth->finish;
-	return ($cant, @results);
+        query => \@filtros,
+        sort_by => 'editorial ASC',
+        limit   => C4::AR::Preferencias->getValorPreferencia("limite_resultados_autocompletables"),
+    );
+
+    return (scalar(@$editoriales_array_ref), $editoriales_array_ref);
+
+#	my $dbh = C4::Context->dbh;
+#	my $sth=$dbh->prepare("	SELECT id, editorial
+#			       	FROM cat_editorial
+#				WHERE editorial like ?
+#			       	ORDER BY editorial");
+
+#	$sth->execute('%'.$editorial.'%');
+
+#	my @results;
+#	my $cant= 0;
+#	while (my $data=$sth->fetchrow_hashref){
+#		push (@results, $data);
+#		$cant++;
+#	}
+#	$sth->finish;
+#	return ($cant, @results);
 }
 
 #*************************************************************************************************

@@ -489,24 +489,44 @@ sub obtenerAutores{
     return(@results);
 }
 
+=head2
+    sub obtenerPaises
+=cut
 sub obtenerPaises{
 
-    my ($dato)=@_;
-    my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" SELECT nombre_largo, iso 
-                            FROM ref_pais 
-                            WHERE nombre_largo LIKE ? 
-                            ORDER BY (nombre_largo)");
+#    my ($dato)=@_;
+    #   my $dbh = C4::Context->dbh;
+    #my $sth=$dbh->prepare(" SELECT nombre_largo, iso 
+    #                        FROM ref_pais 
+    #                        WHERE nombre_largo LIKE ? 
+    #                        ORDER BY (nombre_largo)");
 
-    $sth->execute($dato.'%');
+    #$sth->execute($dato.'%');
 
-    my @results;
+    #my @results;
 
-    while (my $data = $sth->fetchrow_hashref) {
-        push(@results, $data);
-    } # while
-    $sth->finish;
-    return(@results);
+    #while (my $data = $sth->fetchrow_hashref) {
+    #    push(@results, $data);
+    #} # while
+    #$sth->finish;
+    #return(@results);
+
+    my ($pais) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( nombre_largo => { like => $pais.'%'}) );
+
+    my $paises_array_ref = C4::Modelo::RefPais::Manager->get_ref_pais(
+
+        query => \@filtros,
+        sort_by => 'nombre_largo ASC',
+        limit   => C4::AR::Preferencias->getValorPreferencia("limite_resultados_autocompletables"),
+    );
+
+    return (scalar(@$paises_array_ref), $paises_array_ref);
+
+    
 }
 
 #obtenerTemas devuelve los temas que sean like el parametro
@@ -2350,19 +2370,15 @@ sub bibliosAutocomplete{
 sub autocompleteTemas{
 
     my ($tema) = @_;
-    my ($cant, @results)= &C4::AR::ControlAutoridades::search_temas($tema);
     my $i=0;
+    my ($cant, $temas_array_ref)= &C4::AR::ControlAutoridades::search_temas($tema);
     my $resultado="";
-    my $field;
-    my $data;
 
-    for ($i; $i<$cant; $i++){
-        $field=$results[$i]->{'id'};
-        $data=$results[$i]->{'nombre'};
-        $resultado .= $field."|".$data. "\n";
+    foreach my $tema (@$temas_array_ref){
+        $resultado .=  $tema->getId."|". $tema->getNombre. "\n";
     }
 
-    return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
+        return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
 }
 
 
@@ -2386,16 +2402,13 @@ sub autoresAutocomplete{
 sub autocompleteEditoriales{
 
     my ($editorial) = @_;
-    my ($cant, @results)= &C4::AR::ControlAutoridades::search_editoriales($editorial);
-    my $i=0;
     my $resultado="";
-    my $field;
-    my $data;
+    my ($cant, $editoriales_array_ref)= &C4::AR::ControlAutoridades::search_editoriales($editorial);
+    my $resultado="";
 
-    for ($i; $i<$cant; $i++){
-        $field=$results[$i]->{'id'};
-        $data=$results[$i]->{'editorial'};
-        $resultado .= $field."|".$data. "\n";
+    foreach my $editorial (@$editoriales_array_ref){
+                      $resultado .=  $editorial->getId."|". $editorial->getEditorial. "\n";
+
     }
 
     return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
@@ -2436,6 +2449,16 @@ sub lenguajesAutocomplete{
     }
 
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+
+#    my ($cant, $lenguajes_array_ref)= C4::AR::Utilidades::buscarLenguaje($lenguaje);
+#    my $resultado="";
+
+#    foreach my $lenguaje (@$lenguajes_array_ref){
+#        $resultado .=  $lenguaje->getId."|". $lenguaje->getDescription. "\n";
+#    }
+
+#    return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
+
 }
 
 sub nivelBibliograficoAutocomplete{
@@ -2457,12 +2480,12 @@ sub nivelBibliograficoAutocomplete{
 
 sub paisesAutocomplete{
 
-    my ($autorStr)= @_;;
+    my ($paisesStr)= @_;;
     my $textout="";
-    my @result=C4::AR::Utilidades::obtenerPaises($autorStr);
+    my ($cant, $paises_array_ref)=C4::AR::Utilidades::obtenerPaises($paisesStr);
 
-    foreach my $pais (@result){
-        $textout.=$pais->{'iso'}."|".$pais->{'nombre_largo'}."\n";
+    foreach my $pais (@$paises_array_ref){
+        $textout.=$pais->getIso."|".$pais->getNombre_largo."\n";
     }
 
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
