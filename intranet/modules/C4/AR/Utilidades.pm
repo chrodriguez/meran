@@ -1772,6 +1772,58 @@ sub generarComboTablasDeReferencia{
 }
 
 
+sub generarComboDePerfilesOPAC{
+
+    my ($params) = @_;
+
+    my @select_perfil_ref_array;
+    my %select_perfil_ref_array;
+
+    use C4::Modelo::CatPerfilOpac::Manager;
+    my ($perfiles)= C4::Modelo::CatPerfilOpac::Manager->get_cat_perfil_opac();
+    
+
+    foreach my $perfil (@$perfiles) {
+        push(@select_perfil_ref_array, $perfil->getNombre);
+        $select_perfil_ref_array{$perfil->getNombre}= $perfil->getNombre;
+    }
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+         $options_hash{'onChange'}= $params->{'onChange'};
+    }
+
+    if ( $params->{'onFocus'} ){
+      $options_hash{'onFocus'}= $params->{'onFocus'};
+    }
+
+    if ( $params->{'class'} ){
+         $options_hash{'class'}= $params->{'class'};
+    }
+
+    if ( $params->{'onBlur'} ){
+      $options_hash{'onBlur'}= $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}= $params->{'name'}||'perfiles_ref';
+    $options_hash{'id'}= $params->{'id'}||'perfiles_ref';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+
+#FIXME falta un default no?
+#     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
+
+
+    push (@select_perfil_ref_array, 'SIN SELECCIONAR');
+    $options_hash{'values'}= \@select_perfil_ref_array;
+    $options_hash{'labels'}= \%select_perfil_ref_array;
+
+    my $combo_perfiles= CGI::scrolling_list(\%options_hash);
+
+    return $combo_perfiles;
+}
+
 #GENERA EL COMBO CON LOS BRANCHES, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboUI{
 

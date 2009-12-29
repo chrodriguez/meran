@@ -1395,3 +1395,21 @@ ALTER TABLE  `cat_portada_registro` DROP INDEX  `id`;
 ALTER TABLE  `cat_portada_registro` DROP INDEX  `isbn`;
 ALTER TABLE  `cat_portada_registro` DROP  `id`;
 ALTER TABLE  `cat_portada_registro` ADD  `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+
+CREATE TABLE  `cat_perfil_opac` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`nombre` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+) ENGINE = MYISAM;
+
+
+INSERT INTO  `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+NULL ,  'perfil_opac',  '1',  'Id del perfil de visualización para OPAC', NULL , NULL
+);

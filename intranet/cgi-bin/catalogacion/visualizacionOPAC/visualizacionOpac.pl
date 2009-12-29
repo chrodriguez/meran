@@ -19,17 +19,6 @@ my ($template, $session, $t_params)= get_template_and_user({
 			     });
 
 
-
-my %params_combo;
-$params_combo{'onChange'}= 'changeTipoItem()';
-$params_combo{'default'}= 'SIN SELECCIONAR';
-$params_combo{'id'}= 'comboTiposItems';
-my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
-$t_params->{'selectItemType'}= $comboTiposNivel3;
-
-$params_combo{'default'}= 'LIB';
-$params_combo{'id'}= 'comboTiposItemsAltaEncabezado';
-my $comboTiposNivel3= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
-$t_params->{'selectItemTypeAltaEncabezado'}= $comboTiposNivel3;
-
+$t_params->{'combo_perfiles'} = C4::AR::Utilidades::generarComboDePerfilesOPAC($t_params);
+$t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion();
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
