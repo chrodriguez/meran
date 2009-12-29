@@ -11,7 +11,7 @@
 
               <p>
                 [% IF socio_data.tieneFoto %]
-                    <img width="50" height="50" src="[% themelang %]/pictures/[% socio_data.tieneFoto %]"
+                    <img width="50" height="50" src="/pictures/[% socio_data.tieneFoto %]"
                         alt="[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]"/>
                 [% ELSE %]
                       <img  width="50" height="50" src="[% temas %]/default/imagenes/no_foto.jpg" 

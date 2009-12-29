@@ -8,6 +8,9 @@
     <thead>
         <tr class="tablaresultadoTitle" >
             <th align="center" width="30%">
+                <a class="click" >[% "Im&aacute;gen" | i18n %]</a>
+            </th>
+            <th align="center" width="30%">
                 <a class="click" onClick="ordenarPor('titulo')">[% "T&iacute;tulo" | i18n %]</a>
             </th>
             <th align="center" width="30%">
@@ -25,6 +28,15 @@
 <!-- Resultados de la busqueda -->
         [% FOREACH SEARCH_RESULTS %]
             <tr>
+                <td class="titulo_result">
+                    [% IF portada_registro %]
+                        <img name="cover"  VALUE="" BORDER=0 src="/covers/[% portada_registro %]" title="Portada">
+                    [% ELSE %]
+                          <img src="/covers/no_image.jpg" 
+                                alt="[% 'Sin Portada' | i18n %]"
+                                title="[% 'Sin Portada' | i18n %]" />
+                    [% END %]
+                </td>
                 <td class="titulo_result">	
                     [% IF titulo %]
                         [% PERL %]
