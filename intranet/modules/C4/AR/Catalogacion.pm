@@ -40,6 +40,7 @@ C4::AR::Catalogacion - Funciones que manipulan datos del catálogo
 =head1 FUNCTIONS
 
 =over 2
+=cut
 
 
 =head2
@@ -62,13 +63,14 @@ sub _meran_to_marc{
 
     my $field;
     for (my $i=0;$i<$cant_campos;$i++){
-        my %hash_campos         = $infoArrayNivel->[$i];
-        my $indentificador_1    = $infoArrayNivel->[$i]->{'indicador_primario'};
-        my $indentificador_2    = $infoArrayNivel->[$i]->{'indicador_secundario'};
-        my $campo               = $infoArrayNivel->[$i]->{'campo'};
+        my %hash_campos             = $infoArrayNivel->[$i];
+        my $indentificador_1        = C4::AR::Utilidades::ASCIItoHEX($infoArrayNivel->[$i]->{'indicador_primario'});
+        my $indentificador_2        = C4::AR::Utilidades::ASCIItoHEX($infoArrayNivel->[$i]->{'indicador_secundario'});
+        my $campo                   = $infoArrayNivel->[$i]->{'campo'};
+        my $subcampos_hash          = $infoArrayNivel->[$i]->{'subcampos_hash'};
+        my $cant_subcampos          = $infoArrayNivel->[$i]->{'cant_subcampos'};
+
         my @subcampos_array;
-        my $subcampos_hash      = $infoArrayNivel->[$i]->{'subcampos_hash'};
-        my $cant_subcampos      = $infoArrayNivel->[$i]->{'cant_subcampos'};
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
         for(my $j=0;$j<$cant_subcampos;$j++){
             my $subcampo= $subcampos_hash->{$j};
@@ -90,9 +92,11 @@ sub _meran_to_marc{
 
         if(scalar(@subcampos_array) > 0){
 # TODO, el indicador undefined # (numeral) debe ser reemplazado por blanco el asci correspondiente
+C4::AR::Debug::debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaa");
+            C4::AR::Debug::debug("indicador_primario    ".C4::AR::Utilidades::HEXtoASCII($indentificador_1)." del campo ".$campo);
+            C4::AR::Debug::debug("indicador_secundario  ".C4::AR::Utilidades::HEXtoASCII($indentificador_2)." del campo ".$campo);
 
-            #C4::AR::Debug::debug("indicador_primario    ".$indentificador_1." del campo ".$campo);
-            #C4::AR::Debug::debug("indicador_secundario  ".$indentificador_2." del campo ".$campo);
+            C4::AR::Debug::debug("blanco 2 ". C4::AR::Utilidades::dec2hex(32));
 
             $field = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);
             #C4::AR::Utilidades::printHASH($field);
@@ -415,32 +419,36 @@ sub marc_record_to_meran {
     foreach my $field ($marc_record->fields) {
      if(! $field->is_control_field){
         my %hash;
-        my $campo = $field->tag;
+        my $campo                       = $field->tag;
+        my $indicador_primario_dato     = $field->indicator(1);
+        my $indicador_secundario_dato   = $field->indicator(2);
         my @subcampos_array;
 #         C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
         #proceso todos los subcampos del campo
         foreach my $subfield ($field->subfields()) {
             my %hash_temp;
 
-            my $subcampo                    = $subfield->[0];
-            my $dato                        = $subfield->[1];
+            my $subcampo                        = $subfield->[0];
+            my $dato                            = $subfield->[1];
 #             C4::AR::Debug::debug("Catalogacion => detalleMARC => campo: ".$campo);
 #             C4::AR::Debug::debug("Catalogacion => detalleMARC => subcampo: ".$subcampo);
 #             C4::AR::Debug::debug("Catalogacion => detalleMARC => dato: ".$dato);
-            $hash_temp{'subcampo'}          = $subcampo;
-            $hash_temp{'liblibrarian'}      = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
-            $dato                           = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
-            $hash_temp{'datoReferencia'}    = $dato;
+            $hash_temp{'subcampo'}              = $subcampo;
+            $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
+            $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
+            $hash_temp{'datoReferencia'}        = $dato;
 #             C4::AR::Debug::debug("Catalogacion => detalleMARC => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
-            my $valor_referencia            = getDatoFromReferencia($campo, $subcampo, $dato);
-            $hash_temp{'dato'}              = $valor_referencia;
+            my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato);
+            $hash_temp{'dato'}                  = $valor_referencia;
 #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato despues de getDatoFromReferencia: ".$hash_temp{'dato'});
 
             push(@subcampos_array, \%hash_temp);
         }
-            $hash{'campo'}                  = $campo;
-            $hash{'header'}                 = C4::AR::Catalogacion::getHeader($campo);
-            $hash{'subcampos_array'}        = \@subcampos_array;
+            $hash{'campo'}                      = $campo;
+            $hash{'indicador_primario_dato'}    = $indicador_primario_dato;
+            $hash{'indicador_secundario_dato'}  = $indicador_secundario_dato;
+            $hash{'header'}                     = C4::AR::Catalogacion::getHeader($campo);
+            $hash{'subcampos_array'}            = \@subcampos_array;
 
             push(@MARC_result_array, \%hash);
         }
@@ -843,6 +851,9 @@ sub getEstructuraYDatosDeNivel{
    
         for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++){
                 my @result;
+                my $campo                       = $nivel_info_marc_array->[$i]->{'campo'};
+                my $indicador_primario_dato     = C4::AR::Utilidades::HEXtoASCII($nivel_info_marc_array->[$i]->{'indicador_primario_dato'});
+                my $indicador_secundario_dato   = C4::AR::Utilidades::HEXtoASCII($nivel_info_marc_array->[$i]->{'indicador_secundario_dato'});
     
                 foreach my $subcampo (@{$nivel_info_marc_array->[$i]->{'subcampos_array'}}){
         
@@ -853,7 +864,6 @@ sub getEstructuraYDatosDeNivel{
             
                     if($cat_estruct_array){
     
-                        $campo =                    $cat_estruct_array->getCampo;
                         $liblibrarian =             $cat_estruct_array->camposBase->getLiblibrarian;
                         $indicador_primario =       $cat_estruct_array->camposBase->getIndicadorPrimario;
                         $indicador_secundario =     $cat_estruct_array->camposBase->getIndicadorSecundario;
@@ -885,15 +895,17 @@ sub getEstructuraYDatosDeNivel{
         
                 my %hash_campos;
         
-                $hash_campos{'campo'}                   = $campo;
-                $hash_campos{'nombre'}                  = $liblibrarian;
-                $hash_campos{'indicador_primario'}      = $indicador_primario;
-                $hash_campos{'indicadores_primarios'}   = C4::AR::EstructuraCatalogacionBase::getIndicadorPrimarioFromEstructuraBaseByCampo($campo);
-                $hash_campos{'indicador_secundario'}    = $indicador_secundario;
-                $hash_campos{'indicadores_secundarios'} = C4::AR::EstructuraCatalogacionBase::getIndicadorSecundarioFromEstructuraBaseByCampo($campo);
-                $hash_campos{'descripcion_campo'}       = $descripcion_campo.' - '.$campo;
-                $hash_campos{'ayuda_campo'}             = 'esta es la ayuda del campo '.$campo;
-                $hash_campos{'subcampos_array'}         = \@result;
+                $hash_campos{'campo'}                       = $campo;
+                $hash_campos{'nombre'}                      = $liblibrarian;
+                $hash_campos{'indicador_primario'}          = $indicador_primario;
+                $hash_campos{'indicador_primario_dato'}     = $indicador_primario_dato;
+                $hash_campos{'indicadores_primarios'}       = C4::AR::EstructuraCatalogacionBase::getIndicadorPrimarioFromEstructuraBaseByCampo($campo);
+                $hash_campos{'indicador_secundario'}        = $indicador_secundario;
+                $hash_campos{'indicador_secundario_dato'}   = $indicador_secundario_dato;
+                $hash_campos{'indicadores_secundarios'}     = C4::AR::EstructuraCatalogacionBase::getIndicadorSecundarioFromEstructuraBaseByCampo($campo);
+                $hash_campos{'descripcion_campo'}           = $descripcion_campo.' - '.$campo;
+                $hash_campos{'ayuda_campo'}                 = 'esta es la ayuda del campo '.$campo;
+                $hash_campos{'subcampos_array'}             = \@result;
     
                 push (@result_total, \%hash_campos);
         

@@ -844,6 +844,10 @@ function procesarInfoJson(json){
 
         strComp = strComp + "<div class='MARCHeader_controls'> + - </div></div></li></div>";
         $("#" + getDivDelNivel()).append(strComp);
+        
+        //seteo los datos de los indicadores
+        $("#select_indicador_primario"+i).val(campo_marc_conf_obj.getIndicadorPrimarioDato());
+        $("#select_indicador_secundario"+i).val(campo_marc_conf_obj.getIndicadorSecundarioDato());
 
         //proceso los subcampos
         var subcampo_marc_conf_obj = new subcampo_marc_conf(objetos[i]);
@@ -1018,9 +1022,10 @@ function create_rules_object(rule){
             case 'digits': 
                 RULES_OPTIONS.digits        = valor;
                 break;
-            case 'lettersonly': 
-                RULES_OPTIONS.lettersonly   = valor;
-                break;
+// FIXME no se porque pero cada vez que se intenta modificar agrega esta regla y no deja modificar
+//             case 'lettersonly': 
+//                 RULES_OPTIONS.lettersonly   = valor;
+//                 break;
             case 'alphanumeric': 
                 RULES_OPTIONS.alphanumeric   = valor;
                 break;
@@ -1132,6 +1137,8 @@ function campo_marc_conf(obj){
     this.subcampos_hash             = new Object();
     this.indicadores_primarios      = obj.indicadores_primarios;
     this.indicadores_secundarios    = obj.indicadores_secundarios;
+    this.indicador_primario_dato    = obj.indicador_primario_dato;
+    this.indicador_secundario_dato  = obj.indicador_secundario_dato;
 
 
     for(var i = 0; i < obj.subcampos_array.length; i++){
@@ -1150,6 +1157,8 @@ function campo_marc_conf(obj){
     function fGetSubCamposArray(){ return (this.subcampos_array) };
     function fGetIndicadoresPrimarios(){return (this.indicadores_primarios)};
     function fGetIndicadoresSecundarios(){return (this.indicadores_secundarios)};
+    function fGetIndicadorPrimarioDato(){return (this.indicador_primario_dato)};
+    function fGetIndicadorSecundarioDato(){return (this.indicador_secundario_dato)};
     
 
     //metodos
@@ -1164,6 +1173,9 @@ function campo_marc_conf(obj){
     this.getSubCamposArray          = fGetSubCamposArray;
     this.getIndicadoresPrimarios    = fGetIndicadoresPrimarios;
     this.getIndicadoresSecundarios  = fGetIndicadoresSecundarios;    
+    this.getIndicadorPrimarioDato   = fGetIndicadorPrimarioDato;
+    this.getIndicadorSecundarioDato = fGetIndicadorSecundarioDato;
+
 }
 
 function subcampo_marc_conf(obj){

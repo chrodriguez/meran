@@ -1267,7 +1267,9 @@ sub UTF8toISO {
     return ($data);
 }
 
-
+=head2
+    sub from_json_ISO
+=cut
 sub from_json_ISO {
 
     eval {
@@ -1281,6 +1283,83 @@ sub from_json_ISO {
         return "0";
     }
 }
+
+=head2
+    sub ASCIItoHEX
+=cut
+sub ASCIItoHEX {
+    my ($char) = @_;
+
+    use Switch;
+   
+    switch ($char) {
+        case "#"    { $char =  "\x".C4::AR::Utilidades::dec2hex(32)   }
+        else        { $char =  $char }
+    }
+
+    return $char;
+}
+
+=head2
+    sub HEXtoASCII
+=cut
+sub HEXtoASCII {
+    my ($char) = @_;
+
+    use Switch;
+   
+    switch ($char) {
+        case "\x20"    { $char =  "#"   }
+        else        { $char =  $char }
+    }
+
+    return $char;
+}
+
+
+sub dec2hex {
+    # parameter passed to
+    # the subfunction
+    my $decnum = $_[0];
+    # the final hex number
+    my $hexnum;
+    my $tempval;
+    while ($decnum != 0) {
+        # get the remainder (modulus function)
+        # by dividing by 16
+        $tempval = $decnum % 16;
+        # convert to the appropriate letter
+        # if the value is greater than 9
+        if ($tempval > 9) {
+            $tempval = chr($tempval + 55);
+        }
+        # 'concatenate' the number to
+        # what we have so far in what will
+        # be the final variable
+        $hexnum = $tempval . $hexnum ;
+        # new actually divide by 16, and
+        # keep the integer value of the
+        # answer
+        $decnum = int($decnum / 16);
+        # if we cant divide by 16, this is the
+        # last step
+        if ($decnum < 16) {
+        # convert to letters again..
+            if ($decnum > 9) {
+                $decnum = chr($decnum + 55);
+            }
+    
+            # add this onto the final answer..
+            # reset decnum variable to zero so loop
+            # will exit
+            $hexnum = $decnum . $hexnum;
+            $decnum = 0
+        }
+    }
+
+    return $hexnum;
+} # end sub
+
 =item
 obtenerValoresAutorizados
 Obtiene todas las categorias, sin repetición de la tabla authorised_values.

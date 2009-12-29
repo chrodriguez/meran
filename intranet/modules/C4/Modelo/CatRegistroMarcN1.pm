@@ -84,7 +84,7 @@ sub getAutorObject{
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
     
     #obtengo la referencia al autor
-    my $ref_autor   = $marc_record->subfield("110","a");
+    my $ref_autor   = $marc_record->subfield("100","a");
     my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
 
     my $autor = C4::AR::Referencias::getAutorObject($ref);
