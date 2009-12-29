@@ -44,7 +44,9 @@ function= funcion a ejecutar luego de traer la respuesta del servidor
         minChars:3,
 		matchSubset:1,
 		matchContains:1,
+        limit:M_LIMITE_RESULTADOS,
         maxItemsToShow:M_LIMITE_RESULTADOS,
+        autoFill: true,
 		cacheLength:M_LIMITE_RESULTADOS,
 		selectOnly:1,
     });//end autocomplete

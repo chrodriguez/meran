@@ -1377,3 +1377,16 @@ VALUES (
 );
 
 RENAME TABLE  `cat_estructura_catalogacion_opac` TO  `cat_visualizacion_opac` ;
+
+
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`id` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'limite_resultados_autocompletables', NULL , '20', 'limite de resultados a mostrar en los campos autocompletables', NULL , NULL
+);
