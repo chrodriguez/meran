@@ -1784,12 +1784,13 @@ sub generarComboDePerfilesOPAC{
     
 
     foreach my $perfil (@$perfiles) {
-        push(@select_perfil_ref_array, $perfil->getNombre);
-        $select_perfil_ref_array{$perfil->getNombre}= $perfil->getNombre;
+        push(@select_perfil_ref_array, $perfil->id);
+        $select_perfil_ref_array{$perfil->id}= $perfil->getNombre;
     }
 
     my %options_hash; 
 
+    $params->{'onChange'} = $params->{'onChange'} || 'eleccionDePerfil()';
     if ( $params->{'onChange'} ){
          $options_hash{'onChange'}= $params->{'onChange'};
     }

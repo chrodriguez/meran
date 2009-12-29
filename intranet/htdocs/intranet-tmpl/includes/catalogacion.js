@@ -353,7 +353,6 @@ function updateMostrarEstructuraDelNivel2(responseText){
     //proceso la info del servidor y se crean las componentes en el cliente
     procesarInfoJson(responseText);
     scrollTo('nivel2Tabla');
-      
 	//asigno el handler para el validador
 	validateForm('formNivel2',guardarModificarDocumentoN2);
     addRules();

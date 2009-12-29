@@ -77,7 +77,8 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
                                     );
-    my $nivel = $obj->{'nivel'};
+# SE AGREGA '|| 0' porque se usa en VISUALIZACION DEL OPAC, NO SACAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    my $nivel = $obj->{'nivel'} || 0;
     my $campoX = $obj->{'campoX'};
 
     my ($campos_array) = C4::AR::EstructuraCatalogacionBase::getCamposXLike($nivel,$campoX);
@@ -99,7 +100,8 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
                                     );
-    my $nivel = $obj->{'nivel'};
+# SE AGREGA '|| 0' porque se usa en VISUALIZACION DEL OPAC, NO SACAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    my $nivel = $obj->{'nivel'} || 0;;
     my $campo = $obj->{'campo'};
 
     my ($campos_array) = C4::AR::EstructuraCatalogacionBase::getSubCamposLike($nivel,$campo);

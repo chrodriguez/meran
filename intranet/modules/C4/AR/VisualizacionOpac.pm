@@ -26,12 +26,24 @@ $VERSION = 0.01;
 
 
 sub getConfiguracion{
-
+    my ($perfil) = @_;
     my @filtros;
-    my $perfil = C4::AR::Preferencias->getValorPreferencia('perfil_opac');
+
+    $perfil = $perfil || C4::AR::Preferencias->getValorPreferencia('perfil_opac');
     push (@filtros, (id_perfil => { eq => $perfil }) );
     my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
 
+    return ($configuracion);
+}
+
+sub addConfiguracion{
+    my ($params) = @_;
+    my @filtros;
+
+    my $configuracion = C4::Modelo::CatVisualizacionOpac->new();
+
+    $configuracion->agregar($params);
+    
     return ($configuracion);
 }
 

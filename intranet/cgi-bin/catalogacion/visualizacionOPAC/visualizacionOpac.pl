@@ -20,5 +20,4 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 
 $t_params->{'combo_perfiles'} = C4::AR::Utilidades::generarComboDePerfilesOPAC($t_params);
-$t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion();
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

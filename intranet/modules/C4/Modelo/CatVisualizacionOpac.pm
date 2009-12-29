@@ -18,6 +18,20 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
+
+sub agregar{
+
+    my ($self)=shift;
+    my ($params) = @_;
+
+    $self->setCampo($params->{'campo'});
+    $self->setSubCampo($params->{'subcampo'});
+    $self->setVistaOpac($params->{'liblibrarian'});
+    $self->setIdPerfil($params->{'perfil'});
+
+    $self->save();
+}
+
 sub getVistaOpac{
     my ($self)=shift;
 
