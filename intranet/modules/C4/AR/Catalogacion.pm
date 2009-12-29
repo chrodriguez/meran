@@ -770,7 +770,7 @@ sub _setDatos_de_estructura {
     $hash_ref_result{'fijo'} =                   $cat->getFijo;  
 
 #     C4::AR::Debug::debug("_setDatos_de_estructura => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
-#     C4::AR::Debug::debug("_setDatos_de_estructura => dato: ".$datos_hash_ref->{'dato'});
+    C4::AR::Debug::debug("_setDatos_de_estructura => dato: ".$datos_hash_ref->{'dato'});
 #     C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$datos_hash_ref->{'datoReferencia'});
     if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
         #tiene una referencia, y es un COMBO
@@ -785,8 +785,12 @@ sub _setDatos_de_estructura {
           $hash_ref_result{'dato'} = '';#'NO TIENE';
         }
 
+        if ($hash_ref_result{'datoReferencia'} eq -1){
+            C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia = -1 => el autor no existe se agrega ".$hash_ref_result{'dato'});
+        }
+
 #         C4::AR::Debug::debug("_setDatos_de_estructura => ======== AUTOCOMPLETE ======== ");
-#         C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref_result{'datoReferencia'});
+        C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref_result{'datoReferencia'});
 #         C4::AR::Debug::debug("_setDatos_de_estructura => referenciaTabla: ".$hash_ref_result{'referenciaTabla'});
     }else{
         #cualquier otra componete

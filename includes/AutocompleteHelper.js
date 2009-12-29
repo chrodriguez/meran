@@ -44,8 +44,8 @@ function= funcion a ejecutar luego de traer la respuesta del servidor
         minChars:3,
 		matchSubset:1,
 		matchContains:1,
-        maxItemsToShow:10,
-		cacheLength:10,
+        maxItemsToShow:M_LIMITE_RESULTADOS,
+		cacheLength:M_LIMITE_RESULTADOS,
 		selectOnly:1,
     });//end autocomplete
     $("#"+options.IdInput).result(function(event, data, formatted) {

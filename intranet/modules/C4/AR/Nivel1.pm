@@ -84,7 +84,6 @@ sub guardarRealmente{
 
         C4::AR::Busquedas::generar_indice($id1);
         C4::AR::Busquedas::reindexar();
-        C4::AR::Debug::debug("Nivel1 => guardarRealmente => despues de reindexar => ");
     
         if ($@){
             #Se loguea error de Base de Datos
@@ -98,9 +97,6 @@ sub guardarRealmente{
         $db->{connect_options}->{AutoCommit} = 1;
 
     }
-
-    C4::AR::Debug::debug("Nivel1 => guardarRealmente => return msg_object => ".$msg_object);
-    C4::AR::Debug::debug("Nivel1 => guardarRealmente => return id1 => ".$id1);
 
     return ($msg_object, $id1);
 }
@@ -137,8 +133,6 @@ sub getNivel1FromId1OPAC{
     $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db();
 
     my $nivel1 = getNivel1FromId1($id1, $db);
-    
-    
     
     
     

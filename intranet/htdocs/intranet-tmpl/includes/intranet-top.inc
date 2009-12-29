@@ -41,6 +41,8 @@
 <script src="/includes/jquery/jquery.dataTables.js"></script>
 <script src="/includes/jquery/jquery.tooltip.js"></script>
 
+<script> M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %];  </script>
+
 </head>
 
 

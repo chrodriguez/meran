@@ -69,25 +69,24 @@ sub search_temas{
 
 }
 
+=head2
+    sub search_autores
+=cut
 sub search_autores{
-	my ($autor)=@_; 
+    my ($autor) = @_;
 
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT id, nombre
-			       	FROM cat_autor
-				WHERE nombre like ?
-			       	ORDER BY nombre");
+    my @filtros;
 
-	$sth->execute('%'.$autor.'%');
+    push(@filtros, ( completo => { like => '%'.$autor.'%'}) );
+    
+    my $autores_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor(
 
-	my @results;
-	my $cant= 0;
-	while (my $data=$sth->fetchrow_hashref){
-		push (@results, $data);
-		$cant++;
-	}
-	$sth->finish;
-	return ($cant, @results);
+                                        query => \@filtros,
+                                        sort_by => 'completo ASC',
+                                        limit   => C4::AR::Preferencias->getValorPreferencia("limite_resultados_autocompletables"),
+                                     );
+
+    return (scalar(@$autores_array_ref), $autores_array_ref);
 }
 
 sub search_editoriales{

@@ -277,7 +277,11 @@ sub get_template_and_user {
  		$params->{'menu_preferences'}= C4::AR::Preferencias::getMenuPreferences();
 	}
 
-    my $socio = $params->{'socio'};
+    #se cargan todas las variables de entorno de las preferencias del sistema
+    $params->{'limite_resultados_autocompletables'} = C4::AR::Preferencias->getValorPreferencia("limite_resultados_autocompletables");
+
+#     my $socio = $params->{'socio'};
+
 	return ($template, $session, $params);
 }
 

@@ -2365,19 +2365,19 @@ sub autocompleteTemas{
     return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
 }
 
+
+=head2
+    sub autoresAutocomplete
+
+=cut
 sub autoresAutocomplete{
-
     my ($autor) = @_;
-    my ($cant, @results)= &C4::AR::ControlAutoridades::search_autores($autor);
-    my $i=0;
-    my $resultado="";
-    my $field;
-    my $data;
 
-    for ($i; $i<$cant; $i++){
-        $field=$results[$i]->{'id'};
-        $data=$results[$i]->{'nombre'};
-        $resultado .= $field."|".$data. "\n";
+    my ($cant, $autores_array_ref)= &C4::AR::ControlAutoridades::search_autores($autor);
+    my $resultado="";
+   
+    foreach my $autor (@$autores_array_ref){
+        $resultado .=  $autor->getId."|". $autor->getCompleto. "\n";
     }
 
     return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;

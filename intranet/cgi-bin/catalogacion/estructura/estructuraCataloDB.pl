@@ -471,9 +471,6 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
 	#Se guarda informacion del NIVEL 1
     my ($Message_arrayref, $id1) = &C4::AR::Nivel1::t_guardarNivel1($obj);
     
-    C4::AR::Debug::debug("estructura_catalogacion_db => msg_object => ".$Message_arrayref);
-    C4::AR::Debug::debug("estructura_catalogacion_db => id1 => ".$id1);
-
     my %info;
     $info{'Message_arrayref'} = $Message_arrayref;
     $info{'id1'} = $id1;
