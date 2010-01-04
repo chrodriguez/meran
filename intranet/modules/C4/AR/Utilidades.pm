@@ -1890,6 +1890,7 @@ sub generarComboDePerfilesOPAC{
     $options_hash{'id'}= $params->{'id'}||'perfiles_ref';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'defaults'}= 'SIN SELECCIONAR';
 
 #FIXME falta un default no?
 #     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
