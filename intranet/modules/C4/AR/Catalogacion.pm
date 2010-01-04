@@ -857,6 +857,7 @@ sub getEstructuraYDatosDeNivel{
     
                 foreach my $subcampo (@{$nivel_info_marc_array->[$i]->{'subcampos_array'}}){
         
+                    my %hash_temp;
                     my $cat_estruct_array = _getEstructuraFromCampoSubCampo(    
                                                                                 $nivel_info_marc_array->[$i]->{'campo'}, 
                                                                                 $subcampo->{'subcampo'}
@@ -869,7 +870,7 @@ sub getEstructuraYDatosDeNivel{
                         $indicador_secundario =     $cat_estruct_array->camposBase->getIndicadorSecundario;
                         $descripcion_campo =        $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
             
-                        my %hash_temp;
+                        
             
 #                         if($cat_estruct_array){
                             $hash_temp{'tiene_estructura'}  = '1';
@@ -891,7 +892,12 @@ sub getEstructuraYDatosDeNivel{
                             
                         push(@result, $hash_result);
                     }else{
-                        $hash_temp{'tiene_estructura'}  = '0';
+                        my $hash_result;
+                        $hash_result->{'tiene_estructura'}  = '0';
+                        $hash_result->{'campo'}             = $campo;
+                        $hash_result->{'subcampo'}          = $subcampo->{'subcampo'};
+                        $hash_result->{'dato'}              = $subcampo->{'dato'};  
+  
                         push(@result, $hash_result);
                     }
                 }# END foreach my $s (@{$m->{'subcampos_array'}})
