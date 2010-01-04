@@ -757,13 +757,15 @@ sub _setDatos_de_estructura {
 
     my %hash_ref_result;
 
-    $hash_ref_result{'campo'} =                  $cat->getCampo;
-    $hash_ref_result{'subcampo'} =               $cat->getSubcampo;
+    
     $hash_ref_result{'dato'} =                   $datos_hash_ref->{'dato'};
     $hash_ref_result{'datoReferencia'}=          $datos_hash_ref->{'datoReferencia'};
     $hash_ref_result{'tiene_estructura'}=        $datos_hash_ref->{'tiene_estructura'};
     $hash_ref_result{'ayuda_subcampo'} =         $datos_hash_ref->{'ayuda_subcampo'};
     $hash_ref_result{'descripcion_subcampo'} =   $datos_hash_ref->{'descripcion_subcampo'};
+
+    $hash_ref_result{'subcampo'} =               $cat->getSubcampo;
+    $hash_ref_result{'campo'} =                  $cat->getCampo;
     $hash_ref_result{'nivel'} =                  $cat->getNivel;
     $hash_ref_result{'visible'} =                $cat->getVisible;
     $hash_ref_result{'liblibrarian'} =           $cat->getLiblibrarian;
@@ -804,6 +806,35 @@ sub _setDatos_de_estructura {
         #cualquier otra componete
 #         C4::AR::Debug::debug("_setDatos_de_estructura => ======== ".$cat->getTipo." ======== ");
     }
+
+    return (\%hash_ref_result);
+}
+
+#para los datos q no tienen estructura
+sub _setDatos_de_estructura_base {
+    my ($cat, $datos_hash_ref) = @_;
+
+    my %hash_ref_result;
+
+    $hash_ref_result{'campo'} =                  $cat->getCampo;
+    $hash_ref_result{'subcampo'} =               $cat->getSubcampo;
+    $hash_ref_result{'Id_rep'} =                 $datos_hash_ref->{'Id_rep'};
+    $hash_ref_result{'tiene_estructura'}=        $datos_hash_ref->{'tiene_estructura'};
+    $hash_ref_result{'dato'}=                    $datos_hash_ref->{'dato'};
+    $hash_ref_result{'nivel'} =                  '';#$cat->getNivel;
+    $hash_ref_result{'visible'} =                '';#$cat->getVisible;
+    $hash_ref_result{'liblibrarian'} =           $cat->getLiblibrarian;
+    $hash_ref_result{'itemtype'} =               '';#$cat->getItemType;
+    $hash_ref_result{'repetible'} =              '';#$cat->subCamposBase->getRepetible;
+    $hash_ref_result{'tipo'} =                   '';#$cat->getTipo;
+    $hash_ref_result{'referencia'} =             '';#$cat->getReferencia;
+    $hash_ref_result{'obligatorio'} =            $cat->getObligatorio;
+    $hash_ref_result{'idCompCliente'} =          '';#$cat->getIdCompCliente;
+    $hash_ref_result{'intranet_habilitado'} =    '';#$cat->getIntranet_habilitado;
+    $hash_ref_result{'rules'} =                  '';#$cat->getRules;    
+
+    C4::AR::Debug::debug("_setDatos_de_estructura_base => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
+    C4::AR::Debug::debug("_setDatos_de_estructura_base => dato: ".$datos_hash_ref->{'dato'});
 
     return (\%hash_ref_result);
 }
@@ -858,6 +889,7 @@ sub getEstructuraYDatosDeNivel{
                 foreach my $subcampo (@{$nivel_info_marc_array->[$i]->{'subcampos_array'}}){
         
                     my %hash_temp;
+                    #RECUPERO LA INFO DE LA ESTRUCTURA DE CATALOGACION CONFIGURADA
                     my $cat_estruct_array = _getEstructuraFromCampoSubCampo(    
                                                                                 $nivel_info_marc_array->[$i]->{'campo'}, 
                                                                                 $subcampo->{'subcampo'}
@@ -865,19 +897,12 @@ sub getEstructuraYDatosDeNivel{
             
                     if($cat_estruct_array){
     
-                        $liblibrarian =             $cat_estruct_array->camposBase->getLiblibrarian;
-                        $indicador_primario =       $cat_estruct_array->camposBase->getIndicadorPrimario;
-                        $indicador_secundario =     $cat_estruct_array->camposBase->getIndicadorSecundario;
-                        $descripcion_campo =        $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
+                        $liblibrarian           = $cat_estruct_array->camposBase->getLiblibrarian;
+                        $indicador_primario     = $cat_estruct_array->camposBase->getIndicadorPrimario;
+                        $indicador_secundario   = $cat_estruct_array->camposBase->getIndicadorSecundario;
+                        $descripcion_campo      = $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
             
-                        
-            
-#                         if($cat_estruct_array){
-                            $hash_temp{'tiene_estructura'}  = '1';
-#                         }else{
-#                             $hash_temp{'tiene_estructura'}  = '0';
-#                         }
-            
+                        $hash_temp{'tiene_estructura'}  = '1';
                         $hash_temp{'dato'}              = $subcampo->{'dato'};
                         $hash_temp{'datoReferencia'}    = $subcampo->{'datoReferencia'};
         
@@ -886,17 +911,34 @@ sub getEstructuraYDatosDeNivel{
                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => liblibrarian => ".$subcampo->{'liblibrarian'});
                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => datoReferencia => ".$subcampo->{'datoReferencia'});
-                        
             
                         my $hash_result = _setDatos_de_estructura($cat_estruct_array, \%hash_temp);
                             
                         push(@result, $hash_result);
                     }else{
+                        #EL CAMPO, SUBCAMPO NO TIENE UNA ESTRUCTURA CONFIGURADA
                         my $hash_result;
+
+                        #RECUPERO LA INFO DE LA ESTRUCTURA BASE
+                        my $cat_estruct_base_array = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo(    
+                                                                                                    $nivel_info_marc_array->[$i]->{'campo'}, 
+                                                                                                    $subcampo->{'subcampo'}
+                                                                                );
+
+                        $liblibrarian           = $cat_estruct_base_array->camposBase->getLiblibrarian;
+                        $indicador_primario     = $cat_estruct_base_array->camposBase->getIndicadorPrimario;
+                        $indicador_secundario   = $cat_estruct_base_array->camposBase->getIndicadorSecundario;
+                        $descripcion_campo      = $cat_estruct_base_array->camposBase->getDescripcion.' - '.$cat_estruct_base_array->getCampo;  
+
+
+
+
                         $hash_result->{'tiene_estructura'}  = '0';
                         $hash_result->{'campo'}             = $campo;
                         $hash_result->{'subcampo'}          = $subcampo->{'subcampo'};
                         $hash_result->{'dato'}              = $subcampo->{'dato'};  
+                        my $hash_result                     = _setDatos_de_estructura_base($cat_estruct_base_array, $hash_result);
+
   
                         push(@result, $hash_result);
                     }
@@ -1472,6 +1514,7 @@ sub _getEstructuraFromCampoSubCampo{
 																							campo       => { eq => $campo },
 																							subcampo    => { eq => $subcampo },
 																					], 
+#                                                                 FIXME es necesario????????????
                                                                                 with_objects    => ['infoReferencia'],#LEFT JOIN
                                                                                 require_objects => [ 'subCamposBase' ] #INNER JOIN
 

@@ -25,12 +25,13 @@ __PACKAGE__->meta->setup(
 
     relationships =>
     [
-      campoRef => 
-      {
-        class       => 'C4::Modelo::PrefEstructuraCampoMarc',
-        key_columns => { campo => 'campo' },
-        type        => 'one to one',
-      },
+#       campoRef => 
+        camposBase => 
+        {
+            class       => 'C4::Modelo::PrefEstructuraCampoMarc',
+            key_columns => { campo => 'campo' },
+            type        => 'one to one',
+        },
     ]
 );
 
