@@ -29,5 +29,55 @@ sub setNombre{
     $self->nombre($string);
 }
 
+sub lastTable{
+    
+    return(1);
+}
+
+
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset,$matchig_or_not,$filtro)=@_;
+    use C4::Modelo::CatPerfilOpac::Manager;
+    use Text::LevenshteinXS;
+    $matchig_or_not = $matchig_or_not || 0;
+    my @filtros;
+
+    if ($filtro){
+        my @filtros_or;
+        push(@filtros_or, (NOMBRE => {like => '%'.$filtro.'%'}) );
+        push(@filtros, (or => \@filtros_or) );
+    }
+    my $ref_valores;
+    if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
+        push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
+        $ref_valores = C4::Modelo::CatPerfilOpac::Manager->get_cat_perfil_opac(query => \@filtros,);
+    }else{
+        $ref_valores = C4::Modelo::CatPerfilOpac::Manager->get_cat_perfil_opac(query => \@filtros,
+                                                                    limit => $limit, 
+                                                                    offset => $offset, 
+                                                                    sort_by => ['nombre'] 
+                                                                   );
+    }
+    my $ref_cant = C4::Modelo::CatPerfilOpac::Manager->get_cat_perfil_opac_count(query => \@filtros,);
+    my $self_nombre = $self->getNombre;
+
+    my $match = 0;
+    if ($matchig_or_not){
+        my @matched_array;
+        foreach my $each (@$ref_valores){
+          $match = ( (distance($self_nombre,$each->getNombre)<=1) );
+          if ($match){
+            push (@matched_array,$each);
+          }
+        }
+        return (scalar(@matched_array),\@matched_array);
+    }
+    else{
+      return($ref_cant,$ref_valores);
+    }
+}
+
 1;
 

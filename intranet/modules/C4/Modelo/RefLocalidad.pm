@@ -117,9 +117,10 @@ sub getCampo{
 }
 
 
-sub lastTable{
-    
-    return(1);
+sub nextMember{
+    use C4::Modelo::CatPerfilOpac;
+
+    return(C4::Modelo::CatPerfilOpac->new());
 }
 
 sub getAll{

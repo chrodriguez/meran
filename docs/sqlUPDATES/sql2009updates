@@ -1413,3 +1413,30 @@ INSERT INTO  `pref_preferencia_sistema` (
 VALUES (
 NULL ,  'perfil_opac',  '1',  'Id del perfil de visualización para OPAC', NULL , NULL
 );
+
+INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`) VALUES (NULL, 'cat_perfil_opac', 'perfiles_opac', 'nombre');
+
+
+INSERT INTO `pref_tabla_referencia_rel_catalogo` (`id`, `alias_tabla`, `tabla_referente`, `campo_referente`, `sub_campo_referente`) VALUES (NULL, 'perfiles_opac', 'cat_visualizacion_opac', 'id_perfil', NULL);
+
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =3 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =5 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =6 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =7 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =8 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =9 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =11 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =12 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =15 LIMIT 1 ;
+
+
+

@@ -530,6 +530,7 @@ sub getTablaInstanceByTableName{
       case "usr_socio" { $tabla = C4::Modelo::UsrSocio->new()  }
       case "usr_persona" { $tabla = C4::Modelo::UsrPersona->new()  }
       case "circ_prestamo" { $tabla = C4::Modelo::CircPrestamo->new()  }
+      case "cat_visualizacion_opac" { $tabla = C4::Modelo::CatVisualizacionOpac->new()  }
 
       else { print "previous case not true" }
   }
