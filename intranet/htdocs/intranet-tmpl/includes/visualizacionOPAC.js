@@ -4,6 +4,24 @@ CAMPOS_ARRAY= new Array();
 //arreglo de objetos subcampo
 SUBCAMPOS_ARRAY= new Array();
 
+
+function eliminarVista(vista_id){
+
+    objAH=new AjaxHelper(updateAgregarVisualizacion);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+    objAH.tipoAccion= 'ELIMINAR_VISUALIZACION';
+    if ( vista_id ){
+        jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
+            if (confirmStatus){
+                objAH.vista_id= vista_id;
+                objAH.sendToServer();
+            }
+        });
+    }
+
+}
+
 function agregarVisualizacion(){
 
     objAH=new AjaxHelper(updateAgregarVisualizacion);
@@ -11,14 +29,18 @@ function agregarVisualizacion(){
     objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
     objAH.tipoAccion= 'AGREGAR_VISUALIZACION';
     var perfil=$("#perfiles_ref").val();
-    var campo=$("#campo").val();
-    var subcampo=$("#subcampo").val();
-    var liblibrarian=$("#liblibrarian").val();
-    objAH.perfil = perfil;
-    objAH.campo= campo;
-    objAH.subcampo = subcampo;
-    objAH.liblibrarian= liblibrarian;
-    objAH.sendToServer();
+    var campo=$.trim($("#campo").val());
+    var subcampo=$.trim($("#subcampo").val());
+    var liblibrarian=$.trim($("#liblibrarian").val());
+    if ( (perfil) && (campo) && (subcampo) && (liblibrarian) ){
+        objAH.perfil = perfil;
+        objAH.campo= campo;
+        objAH.subcampo = subcampo;
+        objAH.liblibrarian= liblibrarian;
+        objAH.sendToServer();
+    }else{
+        jAlert(SELECCIONE_VISTA_OPAC,CATALOGO_ALERT_TITLE);
+    }
     
 }
 

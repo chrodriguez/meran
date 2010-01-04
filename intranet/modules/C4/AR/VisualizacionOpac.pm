@@ -21,6 +21,7 @@ $VERSION = 0.01;
 @EXPORT=qw(
 
 	&getConfiguracion
+    &deleteConfiguracion
 
 );
 
@@ -45,6 +46,36 @@ sub addConfiguracion{
     $configuracion->agregar($params);
     
     return ($configuracion);
+}
+
+sub deleteConfiguracion{
+    my ($params) = @_;
+    my @filtros;
+    my $vista_id = $params->{'vista_id'};
+
+    push (@filtros, (id => { eq => $vista_id }) );
+    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
+
+    if ($configuracion->[0]){
+        return ( $configuracion->[0]->delete() );
+    }else{
+        return(0);
+    }
+}
+
+sub editConfiguracion{
+    my ($vista_id,$value) = @_;
+    my @filtros;
+
+    push (@filtros, (id => { eq => $vista_id }) );
+    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
+
+    if ($configuracion->[0]){
+        $configuracion->[0]->modificar($value);
+        return ( $configuracion->[0]->getVistaOpac() );
+    }else{
+        return(0);
+    }
 }
 
 1;

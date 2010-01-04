@@ -114,6 +114,7 @@ SELECCIONE_EL_SUBCAMPO= "[% 'Seleccione el subcampo' | i18n %]";
 INGRESE_EL_TEXTO_PREDECESOR= "[% 'Ingrese el texto predecesor' | i18n %]";
 INGRESE_EL_TEXTO_SUCESOR= "[% 'Ingrese el texto sucesor' | i18n %]";
 INGRESE_EL_SEPERADOR= "[% 'Ingrese el separador' | i18n %]";
+SELECCIONE_VISTA_OPAC= "[% 'Seleccione una opcion en todos los campos' | i18n %]";
 //=============================================Fin===Visualizacion Opac===========================================
 //================================================Busquedas==============================================
 SELECCIONE_AL_MENOS_UN_CAMPO_PARA_BUSCAR= "[% 'Seleccione al menos un campo para buscar' | i18n %]";

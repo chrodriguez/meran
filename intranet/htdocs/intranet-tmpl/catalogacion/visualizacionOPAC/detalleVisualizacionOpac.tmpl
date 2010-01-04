@@ -1,0 +1,94 @@
+<script src="/includes/jquery/jquery.jeditable.js"></script>
+<script>
+    $(document).ready(function() {
+        makeToggle('divTablaAgregarVisualizacion','trigger',null,false);
+        makeToggle('divTablaVisualizacion','trigger',null,false);
+        onEnter('lib_librarian',agregarVisualizacion);
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>'
+        $('.editable').editable('/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1},
+              indicator : loaderPath,
+
+        });
+    });
+</script>
+
+<fieldset>
+    <legend class="titulo_legend trigger click"><strong>[% "Agregar Visualizaci&oacute;n:" | i18n %]</strong></legend>
+    <div class="divTablaAgregarVisualizacion" id="divTablaAgregarVisualizacion">
+        <ul>
+            <li class="sub_item">
+                <label for="campoX">[% 'Seleccion' | i18n %]:</label> 
+                [% selectCampoX %]
+            </li>
+            <li class="sub_item">
+                <label for="campo">[% 'Campo' | i18n %]:</label>
+                    <select name="campo" id="campo" onChange="eleccionCampo()">
+                        <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
+                    </select>
+                [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span></strong>
+            </li>
+            <li class="sub_item">
+                <label for="subcampo">[% 'Subcampo' | i18n %]:</label>
+                <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
+                        <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
+                    </select>
+            </li>
+            <li class="sub_item" id="lib_librarian">
+                <label for="liblibrarian">[% 'Vista en Intranet' | i18n %]:</label> 
+                <input id="liblibrarian" type="text" value="" size="90">
+            </li> 
+            [% PERL %]
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Vista' | i18n %]",
+                                                        boton   => "boton_buscar",
+                                                        onClick => "agregarVisualizacion()",
+                                                        title   => "[% 'Agregar Vista' | i18n %]",
+                                                        width => "auto",
+                                                        alternClass => "botonCentrado",
+                            ) ;
+            [% END %]
+
+      </ul>
+    </div>
+</fieldset>
+
+<div id="divAgregarModificarVisualizacion"></div>
+
+<fieldset>
+    <legend class="titulo_legend trigger click"><strong>[% "Configuraci&oacute;n de la Visualizaci&oacute;n:" | i18n %]</strong></legend>
+    <div id="divTablaVisualizacion" class="divTablaVisualizacion"></div>
+      <table class="tabla_datos" cellspacing=0 border="0" cellpadding=0 style="width:95%;">
+            <thead>
+                <tr class="titulo_tabla_resultado">
+                    <td>[% "Campo" | i18n %]</td>
+                    <td>[% "Subcampo" | i18n %]</td>
+                    <td>[% "Vista en OPAC " | i18n %]</td>
+                    <td>[% "Eliminar" | i18n %]</td>
+                </tr>
+            </thead>
+            <tbody>
+                [% FOREACH campo IN visualizacion %]
+                    <tr align="center">
+                        <td>[% campo.getCampo %]</td>
+                        <td>[% campo.getSubCampo %]</td>
+                        <td class="editable" id="[% campo.id %]">[% campo.getVistaOpac %]</td>
+                        <td align="center">
+                            [% PERL %]
+                                print C4::AR::Filtros::to_Icon( text =>     "[% 'Eliminar Vista' | i18n %]",
+                                                                onClick => "eliminarVista('[% campo.id %]')",
+                                                                boton   => "icon_cancelar",
+                                                                title =>    "[% 'Eliminar Vista' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+</fieldset>

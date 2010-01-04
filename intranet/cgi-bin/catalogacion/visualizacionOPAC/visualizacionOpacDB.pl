@@ -9,51 +9,91 @@ use C4::AR::Utilidades;
 use JSON;
 
 my $input = new CGI;
-my $obj=$input->param('obj');
 
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
+my $editing = $input->param('value') && $input->param('id');
 
-#tipoAccion = Insert, Update, Select
-my $tipoAccion= $obj->{'tipoAccion'} || "";
-my $componente= $obj->{'componente'} || "";
-my $perfil= $obj->{'perfil'} || "";
-my $result;
-my %infoRespuesta;
-my $authnotrequired = 0;
+if($editing){
 
-#************************* para cargar la tabla de encabezados*************************************
-if($tipoAccion eq "MOSTRAR_VISUALIZACION"){
-
-	my ($template, $session, $t_params) = get_template_and_user({
-		                template_name => "catalogacion/visualizacionOPAC/detalleVisualizacionOpac.tmpl",
-		                query => $input,
-		                type => "intranet",
-		                authnotrequired => 0,
-		                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-		                debug => 1,
-	});
-
-    $t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion($perfil);
-    $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
-
-	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
-}
-elsif($tipoAccion eq "AGREGAR_VISUALIZACION"){
-
-    my ($template, $session, $t_params) = get_template_and_user({
-                        template_name => "catalogacion/visualizacionOPAC/detalleVisualizacionOpac.tmpl",
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                        template_name => "includes/partials/modificar_value.tmpl",
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
                         debug => 1,
-    });
+                    });
 
-    my ($messages) = C4::AR::VisualizacionOpac::addConfiguracion($obj);
-    $t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion($perfil);
+    my $value = $input->param('value');
+    my $vista_id = $input->param('id');
+    my ($configuracion) = C4::AR::VisualizacionOpac::editConfiguracion($vista_id,$value);
+
+    $t_params->{'value'} = $configuracion;
 
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
-#**************************************************************************************************
+else{
 
+    my $obj=$input->param('obj');
+
+    $obj=C4::AR::Utilidades::from_json_ISO($obj);
+
+    #tipoAccion = Insert, Update, Select
+    my $tipoAccion= $obj->{'tipoAccion'} || "";
+    my $componente= $obj->{'componente'} || "";
+    my $perfil= $obj->{'perfil'} || "";
+    my $result;
+    my %infoRespuesta;
+    my $authnotrequired = 0;
+
+    #************************* para cargar la tabla de encabezados*************************************
+    if($tipoAccion eq "MOSTRAR_VISUALIZACION"){
+
+        my ($template, $session, $t_params) = get_template_and_user({
+                            template_name => "catalogacion/visualizacionOPAC/detalleVisualizacionOpac.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                            debug => 1,
+        });
+
+        $t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion($perfil);
+        $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
+
+        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    }
+    elsif($tipoAccion eq "AGREGAR_VISUALIZACION"){
+
+        my ($template, $session, $t_params) = get_template_and_user({
+                            template_name => "catalogacion/visualizacionOPAC/detalleVisualizacionOpac.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                            debug => 1,
+        });
+
+        my ($messages) = C4::AR::VisualizacionOpac::addConfiguracion($obj);
+        $t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion($perfil);
+
+        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    }
+    elsif($tipoAccion eq "ELIMINAR_VISUALIZACION"){
+
+        my ($template, $session, $t_params) = get_template_and_user({
+                            template_name => "catalogacion/visualizacionOPAC/detalleVisualizacionOpac.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                            debug => 1,
+        });
+
+        my ($status) = C4::AR::VisualizacionOpac::deleteConfiguracion($obj);
+        $t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion($perfil);
+
+        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    }
+    #**************************************************************************************************
+}
 

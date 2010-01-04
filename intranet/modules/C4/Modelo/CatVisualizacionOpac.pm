@@ -32,6 +32,16 @@ sub agregar{
     $self->save();
 }
 
+sub modificar{
+
+    my ($self)=shift;
+    my ($string) = @_;
+
+    $self->setVistaOpac($string);
+
+    $self->save();
+}
+
 sub getVistaOpac{
     my ($self)=shift;
 
