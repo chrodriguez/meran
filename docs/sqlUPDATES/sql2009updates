@@ -1378,6 +1378,25 @@ VALUES (
 
 RENAME TABLE  `cat_estructura_catalogacion_opac` TO  `cat_visualizacion_opac` ;
 
+DROP TABLE IF EXISTS `cat_visualizacion_opac`;
+CREATE TABLE IF NOT EXISTS `cat_visualizacion_opac` (
+  `id` int(11) NOT NULL auto_increment,
+  `campo` char(3) NOT NULL,
+  `subcampo` char(1) NOT NULL,
+  `vista_opac` varchar(255) default NULL,
+  `id_perfil` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `campo` (`campo`,`subcampo`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+
+INSERT INTO `cat_visualizacion_opac` (`id`, `campo`, `subcampo`, `vista_opac`, `id_perfil`) VALUES
+(2, '013', 'b', 'rock', 1),
+(3, '110', 'f', 'No se, ni idea', 1),
+(4, '653', 'a', 'Lenguaje natural ananaan', 1);
+
+
+
 
 INSERT INTO `pref_preferencia_sistema` (
 `variable` ,
