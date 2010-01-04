@@ -84,7 +84,7 @@ function eleccionCampoX(){
     if ( $("#campoX").val() != -1){
         objAH=new AjaxHelper(updateEleccionCampoX);
         objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
         objAH.campoX=$('#campoX').val();
         objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS";
         objAH.sendToServer();
@@ -116,7 +116,7 @@ function eleccionCampo(){
     if ($("#campo").val() != -1){
         objAH=new AjaxHelper(updateEleccionCampo);
         objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
         objAH.campo=$('#campo').val();
         objAH.tipoAccion="GENERAR_ARREGLO_SUBCAMPOS";
         objAH.sendToServer();

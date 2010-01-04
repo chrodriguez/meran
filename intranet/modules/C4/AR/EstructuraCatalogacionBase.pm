@@ -32,10 +32,7 @@ sub getCamposXLike{
     my @filtros;
 
     push(@filtros, ( campo => { like => $campoX.'%'} ) );
-
-    if ($nivel){
-        push(@filtros, ( nivel => { eq => $nivel } ) );
-    }
+    push(@filtros, ( nivel => { eq => $nivel } ) );
 
     my $db_campos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
                                                                                         query => \@filtros,
@@ -54,9 +51,7 @@ sub getSubCampos{
 
     my @filtros;
 
-    if ($nivel){
-        push(@filtros, ( nivel => { eq => $nivel } ) );
-    }
+    push(@filtros, ( nivel => { eq => $nivel } ) );
 
     my $db_campos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
                                                                 query => \@filtros,

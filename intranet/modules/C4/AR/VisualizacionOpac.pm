@@ -10,7 +10,8 @@ require Exporter;
 use C4::Context;
 use C4::Modelo::CatVisualizacionOpac;
 use C4::Modelo::CatVisualizacionOpac::Manager;
-
+use C4::Modelo::CatEstructuraCatalogacion;
+use C4::Modelo::CatEstructuraCatalogacion::Manager;
 use vars qw($VERSION @EXPORT @ISA);
 
 # set the version for version checking
@@ -77,5 +78,44 @@ sub editConfiguracion{
         return(0);
     }
 }
+
+=head2 sub getSubCamposLike
+    Obtiene los subcampos haciendo busqueda like, para el nivel indicado
+=cut
+sub getSubCamposLike{
+    my ($campo) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( campo => { eq => $campo} ) );
+
+    my $db_campos_MARC = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(
+                                                                query => \@filtros,
+                                                                sort_by => ('subcampo'),
+                                                                select   => [ 'subcampo', 'liblibrarian', 'obligatorio' ],
+                                                                group_by => [ 'subcampo'],
+                                                            );
+    return($db_campos_MARC);
+}
+
+=head2 sub getCamposXLike
+    Busca un campo like..., segun nivel indicado
+=cut
+sub getCamposXLike{
+    my ($campoX) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( campo => { like => $campoX.'%'} ) );
+
+    my $db_campos_MARC = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(
+                                                                                        query => \@filtros,
+                                                                                        sort_by => ('campo'),
+                                                                                        select   => [ 'campo', 'liblibrarian'],
+                                                                                        group_by => [ 'campo'],
+                                                                       );
+    return($db_campos_MARC);
+}
+
 
 1;

@@ -94,6 +94,47 @@ else{
 
         C4::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
+    elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
+        my ($user, $session, $flags)= checkauth(    $input, 
+                                                  $authnotrequired, 
+                                                  {   ui => 'ANY', 
+                                                      tipo_documento => 'ANY', 
+                                                      accion => 'CONSULTA', 
+                                                      entorno => 'datos_nivel1'}, 
+                                                  'intranet'
+                                      );
+      my $campoX = $obj->{'campoX'};
+
+      my ($campos_array) = C4::AR::VisualizacionOpac::getCamposXLike($campoX);
+
+      my $info = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
+
+      my $infoOperacionJSON = $info;
+
+      C4::Auth::print_header($session);
+      print $infoOperacionJSON;
+    }
+
+    elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
+        my ($user, $session, $flags)= checkauth(    $input, 
+                                                  $authnotrequired, 
+                                                  {   ui => 'ANY', 
+                                                      tipo_documento => 'ANY', 
+                                                      accion => 'CONSULTA', 
+                                                      entorno => 'datos_nivel1'}, 
+                                                  'intranet'
+                                      );
+      my $campo = $obj->{'campo'};
+
+      my ($campos_array) = C4::AR::VisualizacionOpac::getSubCamposLike($campo);
+
+      my $info = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
+
+      my $infoOperacionJSON = $info;
+
+      C4::Auth::print_header($session);
+      print $infoOperacionJSON;
+    }
     #**************************************************************************************************
 }
 
