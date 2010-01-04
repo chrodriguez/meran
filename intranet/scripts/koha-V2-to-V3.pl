@@ -3629,24 +3629,6 @@ $biblios->finish();
 (1, 0, 'Domiciliario'),
 (2, 1, 'Para Sala'),
 (3, 2, 'Descarga');",
-"DROP TABLE IF EXISTS `rep_busqueda`;",
-"CREATE TABLE IF NOT EXISTS `rep_busqueda` (
-  `idBusqueda` int(11) NOT NULL auto_increment,
-  `id_socio` int(11) default NULL,
-  `fecha` varchar(12) NOT NULL,
-  PRIMARY KEY  (`idBusqueda`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;",
-"DROP TABLE IF EXISTS `rep_historial_busqueda`;",
-"CREATE TABLE IF NOT EXISTS `rep_historial_busqueda` (
-  `idHistorial` int(11) NOT NULL auto_increment,
-  `idBusqueda` int(11) NOT NULL,
-  `campo` varchar(100) NOT NULL,
-  `valor` varchar(100) NOT NULL,
-  `tipo` varchar(10) default NULL,
-  `agent` varchar(255) NOT NULL,
-  PRIMARY KEY  (`idHistorial`),
-  KEY `FK_idBusqueda` (`idBusqueda`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;",
 "CREATE TABLE IF NOT EXISTS `usr_ref_tipo_documento` (
   `id` int(11) NOT NULL auto_increment,
   `nombre` varchar(50) NOT NULL,
@@ -3657,7 +3639,19 @@ $biblios->finish();
 (1, 'DNI', 'DNI'),
 (2, 'LC', 'LC'),
 (3, 'LE', 'LE'),
-(4, 'PAS', 'PAS');");
+(4, 'PAS', 'PAS');",
+"CREATE TABLE IF NOT EXISTS `usr_estado` (
+  `id_estado` int(11) NOT NULL auto_increment,
+  `regular` tinyint(1) NOT NULL default '0',
+  `categoria` char(2) NOT NULL,
+  `fuente` varchar(255) NOT NULL default 'koha',
+  PRIMARY KEY  (`id_estado`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;",
+"INSERT INTO `usr_estado` (`id_estado`, `regular`, `categoria`, `fuente`) VALUES
+(20, 1, 'NN', 'ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....'),
+(46, 1, 'NN', 'MONO TU FUCKING KOHAADMIN SUPERLIBRARIAN'),
+(47, 1, 'NN', 'ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....');"
+);
 
 foreach my $sql (@sqls){
     my $qsql=$dbh->prepare($sql);
@@ -3673,14 +3667,14 @@ foreach my $sql (@sqls){
     #           Renombramos tablas!!!             #
     #########################################################################
     my @antes=( 'biblioanalysis','autores','analyticalauthors','colaboradores','shelfcontents',
-                'publisher','bookshelf','availability','referenciaColaboradores','itemtypes',
-                'bibliosubject','analyticalsubject','issues','issuetypes','sanctionrules',
+                'publisher','bookshelf','availability','rusr_permisoeferenciaColaboradores','itemtypes',
+                'temas','analyticalsubject','issues','issuetypes','sanctionrules',
                 'sanctiontypesrules','reserves','sanctions','sanctionissuetypes','sanctiontypes',
                 'branchcategories','feriados','iso2709','stopwords','systempreferences',
                 'branchrelations','branches','authorised_values','dptos_partidos','unavailable',
                 'languages','localidades','bibliolevel','countries','provincias',
                 'supports','historicCirculation','historicIssues','historicSanctions','modificaciones',
-                'persons','categories','borrowers','deletedborrowers');
+                'persons','categories','borrowers','deletedborrowers','historialBusqueda','busquedas','sessions','userflags');
 
     my @despues=( 'cat_analitica','cat_autor','cat_autor_analitica','cat_colaborador','cat_contenido_estante',
                 'cat_editorial','cat_estante','cat_historico_disponibilidad','cat_ref_colaborador','cat_ref_tipo_nivel3',
@@ -3690,7 +3684,8 @@ foreach my $sql (@sqls){
                 'pref_relacion_unidad_informacion','pref_unidad_informacion','pref_valor_autorizado','ref_dpto_partido','ref_estado',
                 'ref_idioma','ref_localidad','ref_nivel_bibliografico','ref_pais','ref_provincia',
                 'ref_soporte','rep_historial_circulacion','rep_historial_prestamo','rep_historial_sancion',
-                'rep_registro_modificacion','usr_persona','usr_ref_categoria_socio','usr_socio','usr_socio_borrado');
+                'rep_registro_modificacion','usr_persona','usr_ref_categoria_socio','usr_socio','usr_socio_borrado',
+                'rep_historial_busqueda','rep_busqueda','sist_sesion','usr_permiso');
 
   for(my $i=0; $i< scalar(@antes); $i++){
     my $rename=$dbh->prepare("RENAME TABLE ".$antes[$i]." TO ".$despues[$i]."; ");
@@ -3699,6 +3694,8 @@ foreach my $sql (@sqls){
 ### Despues de renombrar hay que alterarlas 
 
     my @alternos=(
+    "ALTER TABLE rep_historial_busqueda CHANGE `HTTP_USER_AGENT` `agent` VARCHAR( 255 ) NOT NULL;",
+    "ALTER TABLE rep_busqueda CHANGE `borrower` `id_socio` INT( 11 ) NULL DEFAULT NULL;",
     "ALTER TABLE circ_reserva CHANGE `reservenumber` `id_reserva` INT(11) NOT NULL AUTO_INCREMENT,
       CHANGE `borrowernumber` `nro_socio` VARCHAR(16) NOT NULL DEFAULT '0', 
       CHANGE `reservedate` `fecha_reserva` VARCHAR(20) NOT NULL,
@@ -3768,8 +3765,21 @@ foreach my $sql (@sqls){
       "ALTER TABLE `usr_socio` ADD credential_type VARCHAR( 255 ) NOT NULL ;",
       "ALTER TABLE `usr_socio` ADD id_estado INT( 11 )NOT NULL ;",
       "ALTER TABLE `usr_socio` ADD activo VARCHAR( 255 ) NOT NULL ;",
-      "ALTER TABLE `usr_socio` ADD agregacion_temp VARCHAR( 255 ) NOT NULL ;"
-    );
+      "ALTER TABLE `usr_socio` ADD agregacion_temp VARCHAR( 255 ) NOT NULL ;",
+      "ALTER TABLE `pref_unidad_informacion` CHANGE `branchcode` `id_ui` VARCHAR( 4 )  NOT NULL ,
+      CHANGE `branchname` `nombre` TEXT  NOT NULL ,
+      CHANGE `branchaddress1` `direccion` TEXT  NULL DEFAULT NULL ,
+      CHANGE `branchaddress2` `alt_direccion` TEXT  NULL DEFAULT NULL ,
+      CHANGE `branchphone` `telefono` TEXT  NULL DEFAULT NULL ,
+      CHANGE `branchfax` `fax` TEXT  NULL DEFAULT NULL ,
+      CHANGE `branchemail` `email` TEXT  NULL DEFAULT NULL ;",
+      "ALTER TABLE `pref_unidad_informacion`
+      DROP `branchaddress3`,
+      DROP `issuing`;",
+      "ALTER TABLE `pref_unidad_informacion` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;" ,
+      "ALTER TABLE `pref_unidad_informacion` DROP INDEX `branchcode`",
+      "ALTER TABLE `sist_sesion` ADD `token` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `nroRandom` ;"
+          );
 
   foreach my $alt (@alternos){
       my $qalt=$dbh->prepare($alt);
@@ -3789,7 +3799,7 @@ foreach my $sql (@sqls){
                   'marc_biblio', 'marc_blob_subfield', 'marc_breeding', 'marc_subfield_structure', 'marc_subfield_table', 'marc_tag_structure', 'marc_word', 
                   'printers', 'publisher', 'relationISO', 'reserveconstraints', 'statistics', 'virtual_itemtypes', 'virtual_request', 'websites', 'z3950queue', 
                   'z3950results', 'z3950servers', 'uploadedmarc','generic_report_joins','generic_report_tables','tablasDeReferencias','tablasDeReferenciasInfo',
-                  'additionalauthors','bibliosubtitle');
+                  'additionalauthors','bibliosubtitle','bibliosubject','sessionqueries');
 
       foreach $tabla (@innodbs) {
         my $drop=$dbh->prepare(" DROP TABLE ".$tabla." ;");
@@ -3841,10 +3851,115 @@ foreach my $sql (@sqls){
 	#########################################################################
 	#			PREFERENCIAS DEL SISTEMA			#
 	#########################################################################
-	my $pref1=$dbh->prepare("INSERT INTO systempreferences (variable,value,explanation,type,options) VALUES ('paginas','10','Cantidad de paginas que va a  mostrar el paginador.','text','');");
-	   $pref1->execute();
+    my $pref0=$dbh->prepare("DROP TABLE `pref_preferencia_sistema`;");
+     $pref0->execute();
 
-	my $pref2=$dbh->prepare("INSERT INTO `unavailable` ( `code` , `description` ) VALUES ( '0', 'Disponible');");
+	my $pref1=$dbh->prepare("CREATE TABLE IF NOT EXISTS `pref_preferencia_sistema` (
+                            `variable` varchar(50) NOT NULL default '',
+                            `value` text,
+                            `explanation` varchar(200) NOT NULL default '',
+                            `options` text,
+                            `type` varchar(20) default NULL,
+                            PRIMARY KEY  (`variable`) )
+                            ENGINE=InnoDB DEFAULT CHARSET=latin1 PACK_KEYS=1;");
+     $pref1->execute();
+
+	my $pref2=$dbh->prepare("INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`) VALUES
+('acquisitions', 'simple', 'Normal, budget-based acquisitions, or Simple bibliographic-data acquisitions', 'acquisitions', 'valAuto'),
+('amazon-secret-key', 'h8gqbZreGcoV2F1YbTB+RH6sGeOxhwwNOyITOGMo', 'amazon-secret-key', NULL, 'text'),
+('amazon-token', 'AKIAJGKW6XWXPOPDODVQ', 'Token para conectarse a Amazon', NULL, 'text'),
+('authoritysep', '--', 'the separator used in authority/thesaurus. Usually --', '10', 'text'),
+('auto-nro_socio_from_dni', '1', 'Preferencia que configura el auto-generar de nro de socio. Si es 0, es el autogenerar "serial", sino sera el documento.', NULL, NULL),
+('autoActivarPersona', '1', 'Activa por defecto un alta de una persona', NULL, 'bool'),
+('autoMemberNum', '0', 'Member number is auto-calculated', NULL, 'bool'),
+('barcodeFormat', 'homebranch,-,itemtype,-', 'Formato del Barcode para la generación automática es un campo de item seguido de un separador', NULL, 'text'),
+('beginESissue', '60', 'Cantidad de minutos antes del cierre de la biblioteca que se puede realizar un prestamo ESPECIAL.', NULL, 'text'),
+('checkdigit', 'none', 'Validity checks on membership number: none or "Katipo" style checks', 'none|katipo', 'text'),
+('CheckUpdateDataEnabled', '1', 'evita que Koha modifique los datos del usuario', NULL, 'bool'),
+('circularDesdeDetalleDelRegistro', '1', 'se permite (=1) circular desde el detalle del registro', NULL, 'bool'),
+('circularDesdeDetalleUsuario', '1', 'se permite (=1) circular desde el detalle del usuario', NULL, 'bool'),
+('circulation', '1', 'Habilita o dehabilita la circulación en la biblioteca desde la parte del opac', '', 'bool'),
+('close', '19:00', 'Horario de Cierre de la Biblioteca', NULL, 'text'),
+('dateformat', 'metric', 'date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)', 'dateformat', 'valAuto'),
+('dayrenewals', '1', 'N&uacute;mero de d&iacute;as que se renueva un prestamo como m&aacute;ximo.', NULL, 'text'),
+('daysissue', '4', 'No se qu e era', NULL, 'text'),
+('daysOfSanctionReserves', '15', 'Indica la cantidad de dias se sancion que le corresponde a un usuario que hace una reserva y no va a buscarla', NULL, 'text'),
+('daysvirtualcomplete', '10', 'Cantidad de d&iacute;as que un pedido puede estar completado', NULL, 'text'),
+('daysvirtualrequest', '4', 'Cantidad de diÂ­as que un pedido puede estar pendiente.', NULL, 'text'),
+('days_to_renew', '1', 'N&uacute;mero de d&iacute;as antes del vencimiento de un prestamo en el que se puede renovar.', NULL, 'text'),
+('defaultbranch', 'DEO', 'Unidad de informacion por defecto', 'ui|nombre', 'referencia'),
+('defaultCategoriaSocio', 'ES', 'Categoria de Socio por defecto', 'tipo_socio|description', 'referencia'),
+('defaultDisponibilidad', '0', 'Disponibilidad por defecto', 'disponibilidad|nombre', 'referencia'),
+('defaultissuetype', 'DO', 'Es el tipo de préstamo por defecto de la biblioteca', 'tipo_prestamo|descripcion', 'referencia'),
+('defaultlevel', 'm', 'Nivel bibliográfico por defecto', 'nivel_bibliografico|description', 'referencia'),
+('defaultsuport', '1', ' Soporte por defecto', 'soporte|description', 'referencia'),
+('defaultTipoDoc', 'DNI', 'Tipo de Documento de Usuario por defecto', 'tipo_documento_usr|descripcion', 'referencia'),
+('defaultTipoNivel3', 'LIB', 'Tipo de Documento por defecto', 'tipo_ejemplar|nombre', 'referencia'),
+('EnabledMailSystem', '1', 'Indica si el sistema debe o no enviar mails', NULL, 'bool'),
+('endESissue', '35', 'Cantidad de minutos luego de la apertura de la biblioteca  en que se puede devolver un prestamo ESPECIAL.', NULL, 'text'),
+('gist', '0.125', 'the gist rate. NOT in %, but in numeric form (0.12 for 12%)', NULL, 'text'),
+('habilitar_https', '1', 'habilita https (=1) o no (=0)', NULL, 'bool'),
+('habilitar_irregulares', '0', 'Habilita o no alumnos irregulares', NULL, 'bool'),
+('insecure', '0', 'Si es SI, no se necesita autorizacion para nada. CUIDADO!!', NULL, 'bool'),
+('keeppasswordalive', '0', 'Indica la cantidad de dias de vida que tiene una contraseña para aquellas cuentas cuya contraseña vence. Si el valor es 0 (cero) entonces la contraseña solo debe ser cambiada la primera vez', NULL, 'bool'),
+('KohaAdminEmailAddress', 'biblio\@econo.unlp.edu.ar', 'the email address where borrowers modifs are sent', NULL, 'text'),
+('ldapenabled', '0', 'Indica si se usa ldap para hacer autenticacion de usuarios', NULL, 'bool'),
+('ldapinfos', 'dc=biblio,dc=econo,dc=unlp,dc=edu,dc=ar', 'Sufijo de la Base de Datos Ldap', NULL, 'text'),
+('ldappass', 'mariaesteresaxel', 'Es la clave del del root del servidor Ldap', NULL, 'text'),
+('ldaproot', 'admin', 'Es el nombre de usuario del administrador del Ldap', NULL, 'text'),
+('ldapserver', 'localhost', 'Dirección del Servidor Ldap', NULL, 'text'),
+('LibraryName', '<i><b>Koha<br/>Software Libre ILS<br/><br/></b>', 'Nombre de la biblioteca como se muestra en la página de Opac', NULL, 'text'),
+('libreDeuda', '00100', 'variable que limita la impresion del documento de libre deuda', NULL, 'text'),
+('logSearchINTRA', '0', 'Hbilita (1) o no (0) loguea busquedas en la INTRA', NULL, 'bool'),
+('logSearchOPAC', '0', 'Hbilita (1) o no (0) loguea busquedas en el OPAC', NULL, 'bool'),
+('mailFrom', 'Biblioteca de Ciencias Económicas <biblio\@econo.unlp.edu.ar>', 'From del Mail', NULL, 'text'),
+('mailMensajeVencido', ' Debe un ejemplar de\r\n        TITLE:UNITITLE\r\n desde la fecha DATE.', 'Como se envia el vencimiento de un ejemplar por mail', NULL, 'texta'),
+('mailMessage', 'Sr./Sra.  FIRSTNAME SURNAME :\r\n\r\nMENSAJEVENCIDO\r\n\r\nBRANCH\r\n', 'Mensaje del mail', NULL, 'texta'),
+('mailSubject', 'Aviso de prestamo vencido !!!', 'Subject del mail', NULL, 'text'),
+('marc', '0', 'Habilitar el soporte en MARC', NULL, 'bool'),
+('marcflavour', 'MARC21', 'your MARC flavor (MARC21 or UNIMARC) used for character encoding', 'MARC21|UNIMARC', 'text'),
+('maxissues', '3', 'N&uacute;mero m&aacute;ximo de prestamos', NULL, 'text'),
+('maxoutstanding', '5', 'maximum amount withstanding to be able make reserves', NULL, 'text'),
+('maxrenewals', '4', 'M&aacute;ximo n&uacute;mero de renovaciones posibles mientras no sea reservado por otra persona', NULL, 'text'),
+('maxreserves', '5', 'Numero maximo de reservas', NULL, 'text'),
+('maxvirtualcopy', '7', 'Cantidad m&aacute;xima de copias de un ejemplar de la biblioteca virtual dentro del per&iacute;odo fijado por <i>virtualcopyrenew</i>.', NULL, 'text'),
+('maxvirtualprint', '10', 'Cantidad m&aacute;xima de impresiones sobre un ejemplar de la biblioteca virtual dentro del per&iacute;odo fijado por <i>virtualprintrenew</i>', NULL, 'text'),
+('maxwaiting', '3', 'Maximo de reservas en espera.', NULL, 'text'),
+('noissuescharge', '3', 'maximum amount withstanding to be able to check out an item', NULL, 'text'),
+('opaclanguages', 'es2', 'Set the preferred order for translations.  The top language will be tried first.', NULL, 'text'),
+('opacSearchAnonymous', '1', 'Esta preferencia permite (=1) realizar bùsquedas desde el OPAC sin haber iniciado sesiòn', NULL, 'bool'),
+('opacthemes', 'default', 'Set the preferred order for themes.  The top theme will be tried first.', NULL, 'text'),
+('opacUnavail', '1', 'Muestra en Opac ', '', 'bool'),
+('open', '08:00', 'Horario de Apertura de la Biblioteca', NULL, 'text'),
+('paginas', '10', 'Cantidad de paginas que va a  mostrar el paginador.', '', 'text'),
+('permite_cambio_password_desde_opac', '1', 'permite (=1) o no (=0) el cambio de password desde el OPAC', NULL, 'bool'),
+('print_renew', '1', 'indica si se imprime la renovacion o no, (1 para si, 0 para no), desde la intranet', NULL, 'bool'),
+('puerto_para_https', '444', 'puerto para https', NULL, 'text'),
+('reminderMail', '0', 'Habilita o deshabilita el mail de recodatorio de devolucion de ejemplares', NULL, 'bool'),
+('reminderMessage', 'Sr./Sra. FIRSTNAME SURNAME : \r\n\r\nSe le recuerda que el día VENCIMIENTO debe reintegrar el ejemplar que posee del libro  \r\nTITLE:UNITITLE - AUTHOR (EDICION) \r\na la BRANCH.\r\n\r\nMuchas gracias\r\n', 'Mensaje del mail de recordatorio de prestamo a vencer', NULL, 'texta'),
+('reminderSubject', 'Recordatorio de vencimiento de préstamos', 'Subject del mail de recodatorio de prestamo a vencer', NULL, 'text'),
+('renglones', '10', 'Cantidad de renglones que se muestran en las b&uacute;squedas', NULL, 'text'),
+('reserveFrom', 'biblio\@econo.unlp.edu.ar', 'DirecciÃ³n desde la que llegan los mails que se refieren a las reservas', NULL, 'text'),
+('reserveGroup', '3', 'NÃºmero de dÃ­as que tiene el usuario para retirar el libro si la reserva se efectua sobre un grupo. Dicho lapso comienza a contarse a partir de que la reserva se asocia a un item.', NULL, 'text'),
+('reserveItem', '1', 'NÃºmero de dÃ­as que tiene el usuario para retirar el libro si la reserva se efectua sobre un item', NULL, 'text'),
+('reserveMessage', 'Estimado/a SURNAME FIRSTNAME, \r\nTiene un ejemplar disponible para retirar.\r\nTítulo: TITLE\r\nAutor: AUTHOR\r\nLo puede retirar desde el a1 a las a2 hasta el a4 a las a3.', 'El mensaje que nos llegapor una reserva que esta disponible. Las variables que se reemplazan por ahora son: BRANCH,FIRSTNAME,SURNAME,UNITITLE,TITLE,AUTHOR,a1,a2,a3,a4 fechas y horas, EDICION', NULL, 'texta'),
+('reserveSubject', 'Importante: Reservas en BRANCH', 'Subject del mail que llega BRANCHNAME se colocarÃ¡ el nombre de la biblioteca', NULL, 'text'),
+('sanctions', '1', 'Indica si se hace uso de las sanciones por retraso en la devolucón de los elementos prestados por la biblioteca.', NULL, 'bool'),
+('selectHomeBranch', '1', '1 para poder seleccionar otra biblioteca, 0 para que la biblioteca sea la de defecto', NULL, 'bool'),
+('showHistoricReserves', '0', 'Muestra (valor = 1) o no el historico de reservas en el OPAC', NULL, 'bool'),
+('showMenuItem_circ_devolucion_renovacion', '1', 'Preferencia que configura si el menu item dado se muestra o no en el menu (1 sí ; 0 no).', NULL, 'bool'),
+('showMenuItem_circ_prestamos', '1', 'Preferencia que configura si el menu item dado se muestra o no en el menu (1 sí ; 0 no).', NULL, 'bool'),
+('susp', '1', 'Habilita o no el uso de suspensiones', NULL, 'bool'),
+('template', 'blue', 'Preference order for intranet interface templates', NULL, 'text'),
+('timeout', '3600', 'Inactivity timeout for cookies authentication (in seconds)', NULL, 'text'),
+('titulo_nombre_ui', 'Biblioteca - Facultad de Ciencias Econ&oacute;micas - U.N.L.P.', '', NULL, 'text'),
+('UploadPictureFromOPAC', '1', 'Permito o no que se pueda subir la foto de un usuario desde el OPAC', NULL, 'bool'),
+('usercourse', '0', 'habilita o no que el curso de usuario sea necesario para utilizar el opac. ', NULL, 'bool'),
+('viewDetail', '1', 'Habilita o Deshabilita la muestra de campos.', NULL, 'bool'),
+('virtualcopyrenew', '120', 'Cantidad de d&iacute;as que son tomados en cuenta para la cantidad m&aacute;xima de pedidos virtuales de copia.', NULL, 'text'),
+('virtuallibrary', '0', 'Habilita o no la Biblioteca Virtual.', NULL, 'bool'),
+('virtualprintrenew', '16', 'Cantidad de días que son tomados en cuenta para la cantidad máxima de pedidos virtuales de impresión.', NULL, 'text'),
+('z3950_ cant_resultados', '25', 'Cantidad de resultados por servidor en una busqueda z3950 MAX para devoler todos', NULL, 'text');");
 	   $pref2->execute();
 	}
 
