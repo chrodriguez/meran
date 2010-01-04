@@ -871,11 +871,11 @@ sub getEstructuraYDatosDeNivel{
             
                         my %hash_temp;
             
-                        if($cat_estruct_array){
+#                         if($cat_estruct_array){
                             $hash_temp{'tiene_estructura'}  = '1';
-                        }else{
-                            $hash_temp{'tiene_estructura'}  = '0';
-                        }
+#                         }else{
+#                             $hash_temp{'tiene_estructura'}  = '0';
+#                         }
             
                         $hash_temp{'dato'}              = $subcampo->{'dato'};
                         $hash_temp{'datoReferencia'}    = $subcampo->{'datoReferencia'};
@@ -889,6 +889,9 @@ sub getEstructuraYDatosDeNivel{
             
                         my $hash_result = _setDatos_de_estructura($cat_estruct_array, \%hash_temp);
                             
+                        push(@result, $hash_result);
+                    }else{
+                        $hash_temp{'tiene_estructura'}  = '0';
                         push(@result, $hash_result);
                     }
                 }# END foreach my $s (@{$m->{'subcampos_array'}})

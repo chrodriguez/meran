@@ -1019,9 +1019,6 @@ function create_rules_object(rule){
         clave = $.trim(rule_array[0]);
         valor = $.trim(rule_array[1]);
 
-    log("clave: " + clave);
-    log("valor: " + valor);
-
         switch (clave) { 
             case 'minlength': 
                 RULES_OPTIONS.minlength     = valor;
