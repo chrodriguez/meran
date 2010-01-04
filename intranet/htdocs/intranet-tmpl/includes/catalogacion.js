@@ -987,7 +987,7 @@ function procesarObjeto(objeto, marc_group){
 var RULES_OPTIONS = [];
 
 function addRules(){
-    log("add rules ????????????????: ");
+//     log("add rules ????????????????: ");
      for(var i=0; i< MARC_OBJECT_ARRAY.length; i++){
     //recorro los campos
         var subcampos_array = MARC_OBJECT_ARRAY[i].getSubCamposArray();
@@ -995,9 +995,9 @@ function addRules(){
         //recorro los subcampos
             if(subcampos_array[s].rules != ""){
                 create_rules_object(subcampos_array[s].rules);
-                log("remove rules val??: " + $('#'+subcampos_array[s].getIdCompCliente()).val() + " para el id " + subcampos_array[s].getIdCompCliente());
+//                 log("remove rules val??: " + $('#'+subcampos_array[s].getIdCompCliente()).val() + " para el id " + subcampos_array[s].getIdCompCliente());
                 $('#'+subcampos_array[s].getIdCompCliente()).rules("remove");
-                log("rules: " + subcampos_array[s].rules + " para el id " + subcampos_array[s].getIdCompCliente());
+//                 log("rules: " + subcampos_array[s].rules + " para el id " + subcampos_array[s].getIdCompCliente());
                 $('#'+subcampos_array[s].getIdCompCliente()).rules("add", RULES_OPTIONS);
             }
         }
