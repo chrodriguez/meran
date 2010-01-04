@@ -519,6 +519,7 @@ Esta funcion es la asignada al handler del validate, ejecuta guardarModificacion
 dependiendo de si se esta modificando o agregando
 */
 function guardarModificarDocumentoN1(){
+
 	if(MODIFICAR == 1){
 		guardarModificacionDocumentoN1();
 	}else{
@@ -531,6 +532,7 @@ Esta funcion es la asignada al handler del validate, ejecuta guardarModificacion
 dependiendo de si se esta modificando o agregando
 */
 function guardarModificarDocumentoN2(){
+
 	if(MODIFICAR == 1){
 		guardarModificacionDocumentoN2();
 	}else{
@@ -543,6 +545,7 @@ Esta funcion es la asignada al handler del validate, ejecuta guardarModificacion
 dependiendo de si se esta modificando o agregando
 */
 function guardarModificarDocumentoN3(){
+
 	if(MODIFICAR == 1){
 		guardarModificacionDocumentoN3();
 	}else{
@@ -984,6 +987,7 @@ function procesarObjeto(objeto, marc_group){
 var RULES_OPTIONS = [];
 
 function addRules(){
+    log("add rules ????????????????: ");
      for(var i=0; i< MARC_OBJECT_ARRAY.length; i++){
     //recorro los campos
         var subcampos_array = MARC_OBJECT_ARRAY[i].getSubCamposArray();
@@ -991,12 +995,15 @@ function addRules(){
         //recorro los subcampos
             if(subcampos_array[s].rules != ""){
                 create_rules_object(subcampos_array[s].rules);
+                log("remove rules val??: " + $('#'+subcampos_array[s].getIdCompCliente()).val() + " para el id " + subcampos_array[s].getIdCompCliente());
+                $('#'+subcampos_array[s].getIdCompCliente()).rules("remove");
+                log("rules: " + subcampos_array[s].rules + " para el id " + subcampos_array[s].getIdCompCliente());
                 $('#'+subcampos_array[s].getIdCompCliente()).rules("add", RULES_OPTIONS);
-//                 log("rules: " + subcampos_array[s].rules);
             }
         }
     }
 }
+
 
 function create_rules_object(rule){
 
@@ -1011,6 +1018,9 @@ function create_rules_object(rule){
 
         clave = $.trim(rule_array[0]);
         valor = $.trim(rule_array[1]);
+
+    log("clave: " + clave);
+    log("valor: " + valor);
 
         switch (clave) { 
             case 'minlength': 
@@ -1638,7 +1648,7 @@ function validateForm(formID, func){
     $("#"+formID).validate({
             errorElement: "div",
             errorClass: "error_adv",
-            rules: HASH_RULES,
+//             rules: HASH_RULES,
             messages: HASH_MESSAGES,
     })});
 
