@@ -3621,14 +3621,26 @@ $biblios->finish();
 "DROP TABLE IF EXISTS `ref_disponibilidad`;",
 "CREATE TABLE IF NOT EXISTS `ref_disponibilidad` (
   `id` int(11) NOT NULL auto_increment,
-  `codigo` tinyint(5) NOT NULL default '0',
   `nombre` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;",
-"INSERT INTO `ref_disponibilidad` (`id`, `codigo`, `nombre`) VALUES
-(1, 0, 'Domiciliario'),
-(2, 1, 'Para Sala'),
-(3, 2, 'Descarga');",
+"INSERT INTO `ref_disponibilidad` (`id`, `nombre`) VALUES
+(1, 'Domiciliario'),
+(2, 'Sala de Lectura');",
+"DROP TABLE IF EXISTS `ref_estado`;",
+"CREATE TABLE IF NOT EXISTS `ref_estado` (
+  `id` int(11) NOT NULL auto_increment,
+  `nombre` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;",
+"INSERT INTO `ref_estado` (`id`, `nombre`) VALUES
+(1, 'Baja'),
+(2, 'Compartido'),
+(3, 'Disponible'),
+(4, 'Ejemplar deteriorado'),
+(5, 'En Encuadernación'),
+(6, 'Perdido');",
 "CREATE TABLE IF NOT EXISTS `usr_ref_tipo_documento` (
   `id` int(11) NOT NULL auto_increment,
   `nombre` varchar(50) NOT NULL,
@@ -3671,7 +3683,7 @@ foreach my $sql (@sqls){
                 'temas','analyticalsubject','issues','issuetypes','sanctionrules',
                 'sanctiontypesrules','reserves','sanctions','sanctionissuetypes','sanctiontypes',
                 'branchcategories','feriados','iso2709','stopwords','systempreferences',
-                'branchrelations','branches','authorised_values','dptos_partidos','unavailable',
+                'branchrelations','branches','authorised_values','dptos_partidos',
                 'languages','localidades','bibliolevel','countries','provincias',
                 'supports','historicCirculation','historicIssues','historicSanctions','modificaciones',
                 'persons','categories','borrowers','deletedborrowers','historialBusqueda','busquedas','sessions','userflags');
@@ -3681,7 +3693,7 @@ foreach my $sql (@sqls){
                 'cat_tema','cat_tema_analitica','circ_prestamo','circ_ref_tipo_prestamo','circ_regla_sancion',
                 'circ_regla_tipo_sancion','circ_reserva','circ_sancion','circ_tipo_prestamo_sancion','circ_tipo_sancion',
                 'pref_categoria_unidad_informacion','pref_feriado','pref_iso2709','pref_palabra_frecuente','pref_preferencia_sistema',
-                'pref_relacion_unidad_informacion','pref_unidad_informacion','pref_valor_autorizado','ref_dpto_partido','ref_estado',
+                'pref_relacion_unidad_informacion','pref_unidad_informacion','pref_valor_autorizado','ref_dpto_partido',
                 'ref_idioma','ref_localidad','ref_nivel_bibliografico','ref_pais','ref_provincia',
                 'ref_soporte','rep_historial_circulacion','rep_historial_prestamo','rep_historial_sancion',
                 'rep_registro_modificacion','usr_persona','usr_ref_categoria_socio','usr_socio','usr_socio_borrado',
@@ -3778,7 +3790,13 @@ foreach my $sql (@sqls){
       DROP `issuing`;",
       "ALTER TABLE `pref_unidad_informacion` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;" ,
       "ALTER TABLE `pref_unidad_informacion` DROP INDEX `branchcode`",
-      "ALTER TABLE `sist_sesion` ADD `token` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `nroRandom` ;"
+      "ALTER TABLE `sist_sesion` ADD `token` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `nroRandom` ;",
+      "ALTER TABLE `usr_persona` ADD `version_documento` CHAR( 1 ) NOT NULL DEFAULT 'P' AFTER `id_persona` ;",
+      "ALTER TABLE `usr_persona`    DROP `id_socio`, DROP `nro_socio`;",
+      "ALTER TABLE `usr_persona` DROP `branchcode` , DROP `categorycode` ;",
+      "ALTER TABLE `usr_persona` ADD `es_socio` INT( 1 ) UNSIGNED NOT NULL DEFAULT '0' COMMENT '1= si; 0=no';",
+      "ALTER TABLE `ref_localidad` DROP PRIMARY KEY;",
+      "ALTER TABLE `ref_localidad` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );"
           );
 
   foreach my $alt (@alternos){
@@ -3805,6 +3823,18 @@ foreach my $sql (@sqls){
         my $drop=$dbh->prepare(" DROP TABLE ".$tabla." ;");
         $drop->execute();
       }
+
+#Re Hasear Pass con sha256
+    my $usuarios=$dbh->prepare("SELECT * FROM usr_socio;");
+    $usuarios->execute();
+    while (my $usuario=$usuarios->fetchrow_hashref) {
+      if($usuario->{'password'}){
+          my $upus=$dbh->prepare(" UPDATE usr_socio SET password='".C4::Auth::_hashear_password($usuario->{'password'},'SHA_256_B64')."' WHERE nro_socio='". $usuario->{'nro_socio'} ."' ;");
+          $upus->execute();
+      }
+    }
+
+
   }
 
 	sub pasarTodoAInnodb 
