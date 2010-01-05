@@ -367,10 +367,11 @@ sub filtrarVisualizacion{
 
     my $visulizacion_array_ref;
 
+    use C4::AR::VisualizacionIntra;
     if($params->{'tipo'} eq 'OPAC'){
-        ($visulizacion_array_ref) = C4::AR::ViusalizacionOpac::getConfiguracion();#getVisualizacionOpac();
+        ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion();
     } else {
-        ($visulizacion_array_ref) = &C4::AR::ViusalizacionIntra::getConfiguracion($params->{'tipo_ejemplar'});
+        ($visulizacion_array_ref) = &C4::AR::VisualizacionIntra::getConfiguracion($params->{'tipo_ejemplar'});
     }
 
     my %autorizados;
@@ -406,27 +407,6 @@ sub filtrarVisualizacion{
     return $marc_record_salida;
 }
 
-
-=head2
-    sub getVisualizacionIntra
-    
-=cut
-# sub getVisualizacionIntra {
-#     my ($params) = @_;
-# 
-#     use C4::Modelo::CatVisualizacionIntra::Manager;
-#     my @filtros;
-# 
-#     push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $params->{'id_tipo_doc'} }, 
-#                                     tipo_ejemplar   => { eq => 'ALL'     } ])
-#                      );
-# 
-#     my $visulizacion_array_ref = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(   
-#                                                                 query => \@filtros,
-#                                                              );
-# 
-#     return ($visulizacion_array_ref);
-# }
 
 =head2
     sub marc_record_to_meran
