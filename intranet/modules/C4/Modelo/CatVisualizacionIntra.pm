@@ -8,11 +8,11 @@ __PACKAGE__->meta->setup(
     table   => 'cat_visualizacion_intra',
 
     columns => [
-        id           => { type => 'serial', not_null => 1 },
-        campo        => { type => 'character', length => 3, not_null => 1 },
-        subcampo     => { type => 'character', length => 1, not_null => 1 },
-        vista_intra   => { type => 'varchar', length => 255 },
-        id_perfil    => { type => 'integer', default => 1, not_null => 1 },
+        id              => { type => 'serial', not_null => 1 },
+        campo           => { type => 'character', length => 3, not_null => 1 },
+        subcampo        => { type => 'character', length => 1, not_null => 1 },
+        vista_intra     => { type => 'varchar', length => 255 },
+        tipo_ejemplar   => { type => 'char', length => 3 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -80,16 +80,17 @@ sub setCampo{
     $self->campo($campo);
 }
 
-sub getIdPerfil{
-    my ($self)=shift;
+sub getTipoEjemplar{
+    my ($self) = shift;
 
-    return $self->id_perfil;
+    return $self->tipo_ejemplar;
 }
 
-sub setIdPerfil{
+sub setTipoEjemplar{
     my ($self) = shift;
-    my ($id_perfil) = @_;
-    $self->id_perfil($id_perfil);
+    my ($tipo_ejemplar) = @_;
+
+    $self->tipo_ejamplar($tipo_ejemplar);
 }
 
 1;

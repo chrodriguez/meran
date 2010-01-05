@@ -350,9 +350,28 @@ sub toMARC_Opac{
 
 
     my $params;
-    $params->{'nivel'} = '3';
+    $params->{'nivel'}          = '3';
     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record);
+
+    return ($MARC_result_array);
+}
+
+
+=head2 sub toMARC_Intra
+
+=cut
+sub toMARC_Intra{
+    my ($self) = shift;
+
+    #obtengo el marc_record del NIVEL 3
+    my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+
+    my $params;
+    $params->{'nivel'} = '3';
+    $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
+    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params);
 
     return ($MARC_result_array);
 }

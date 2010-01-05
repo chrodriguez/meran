@@ -331,10 +331,10 @@ sub marc_record_to_opac_view {
     my ($marc_record) = @_;
 
     #obtengo los campo, subcampo que se pueden mostrar
-    my ($marc_record_salida) = filtrarVisualizacion($marc_record);
+    my ($marc_record_salida) = filtrarVisualizacion($marc_record, 'INTRA');
 
     #se procesa el marc_record filtrado
-    my ($MARC_result_array) = marc_record_to_meran($marc_record_salida, 'INTRA');
+    my ($MARC_result_array) = marc_record_to_meran($marc_record_salida);
 
     return $MARC_result_array;
 }
@@ -346,7 +346,7 @@ sub marc_record_to_intra_view {
     my ($marc_record) = @_;
 
     #obtengo los campo, subcampo que se pueden mostrar
-    my ($marc_record_salida) = filtrarVisualizacion($marc_record, 'OPAC');
+    my ($marc_record_salida) = filtrarVisualizacion($marc_record, 'INTRA');
 
     #se procesa el marc_record filtrado
     my ($MARC_result_array) = marc_record_to_meran($marc_record_salida);
@@ -431,7 +431,7 @@ sub getVisualizacionIntra {
     use C4::Modelo::CatVisualizacionIntra::Manager;
     my @filtros;
 
-    push(@filtros, ( tipo_ejemplar    => { eq => $tipo_ejemplar}));
+    push(@filtros, ( tipo_ejemplar    => { eq => $tipo_ejemplar }));
 
     my $visulizacion_array_ref = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(   
                                                                 query => \@filtros,

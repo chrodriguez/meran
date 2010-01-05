@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `cat_visualizacion_intra` (
   `campo` char(3) NOT NULL,
   `subcampo` char(1) NOT NULL,
   `vista_intra` varchar(255) default NULL,
-  `id_perfil` int(11) NOT NULL,
+  tipo_ejemplar` CHAR( 3 ) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `campo` (`campo`,`subcampo`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

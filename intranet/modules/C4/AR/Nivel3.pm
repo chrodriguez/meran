@@ -365,7 +365,7 @@ sub detalleNivel3{
 
 	    $hash_nivel2{'id2'}                     = $id2;
 	    $hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
-	    $hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
+	    $hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
     
 	    my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2);
     
@@ -401,7 +401,7 @@ sub detalleCompletoINTRA{
 		push(@nivel2, $hash_nivel2);
 	}
 
-	$t_params->{'nivel1'}   = $nivel1->toMARC,
+	$t_params->{'nivel1'}   = $nivel1->toMARC_Intra,
 	$t_params->{'id1'}	    = $id1;
 	$t_params->{'nivel2'}   = \@nivel2,
 	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada

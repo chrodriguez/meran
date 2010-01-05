@@ -156,6 +156,24 @@ sub toMARC_Opac{
     return ($MARC_result_array);
 }
 
+=head2 sub toMARC_Intra
+
+=cut
+sub toMARC_Intra{
+    my ($self) = shift;
+
+    #obtengo el marc_record del NIVEL 1
+    my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+
+    my $params;
+    $params->{'nivel'}          = '1';
+    $params->{'id_tipo_doc'}    = 'ALL';
+    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params);
+
+    return ($MARC_result_array);
+}
+
 =head2 sub getGrupos
     Recupero todos los grupos del nivel 1.
     Retorna la referencia a un arreglo de objetos
