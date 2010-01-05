@@ -8,3 +8,33 @@ CREATE TABLE IF NOT EXISTS `cat_visualizacion_intra` (
   PRIMARY KEY  (`id`),
   KEY `campo` (`campo`,`subcampo`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+-- ejemplo de configuracion de la vista de la intra
+
+INSERT INTO cat_visualizacion_intra (campo, subcampo, tipo_ejemplar, vista_intra) VALUES
+('245', 'a', 'ALL', 'Título'),
+('995', 'd', 'ALL', 'Unidad de Información de Origen'),
+('995', 'c', 'ALL', 'Unidad de Información'),
+('995', 'o', 'ALL', 'Disponibilidad'),
+('995', 'e', 'ALL', 'Estado'),
+('910', 'a', 'ALL', 'Tipo de Documento'),
+('260', 'c', 'ALL', 'Fecha de publicación'),
+('043', 'c', 'LIB', 'Código ISO (R)'),
+('041', 'h', 'LIB', 'Código de idioma de la versión original y/o traducciones intermedias del texto'),
+('900', 'b', 'ALL', 'Nivel Bibliográfico'),
+('995', 't', 'ALL', 'Signatura Topográfica'),
+('995', 'f', 'ALL', 'Código de Barras'),
+('100', 'a', 'ALL', 'Autor'),
+('260', 'a', 'ALL', 'Ciudad de publicación'),
+('245', 'h', 'ALL', 'Medio'),
+('041', 'a', 'MAP', 'Código de Idioma para texto o pista de sonido o título separado'),
+('995', 'a', 'LIB', 'Nombre del vendedor'),
+('084', 'a', 'ALL', 'Otro Número de Clasificación R'),
+('995', 'u', 'LIB', 'Notas del item'),
+('022', 'a', 'LIB', 'Año'),
+('082', '2', 'ALL', 'No. de la edición'),
+('440', 'a', 'LIB', 'Serie - título de la serie'),
+('020', 'a', 'LIB', 'ISBN'),
+('245', 'b', 'ALL', 'Resto del título'),
+('072', '2', 'LIB', 'Fuente del código');
