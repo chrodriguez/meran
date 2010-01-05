@@ -331,7 +331,7 @@ sub marc_record_to_opac_view {
     my ($marc_record) = @_;
 
     #obtengo los campo, subcampo que se pueden mostrar
-    my ($marc_record_salida) = filtrarVisualizacion($marc_record, 'INTRA');
+    my ($marc_record_salida) = filtrarVisualizacion($marc_record, 'OPAC');
 
     #se procesa el marc_record filtrado
     my ($MARC_result_array) = marc_record_to_meran($marc_record_salida);
