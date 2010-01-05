@@ -20,10 +20,8 @@
                 </td>
 		        <td width="10%">[% 'MARC' | i18n %]</td>
 		        <td width="20%">[% 'Vista en Intranet' | i18n %]</td>
-		        <td width="10%">[% 'Orden' | i18n %]</td>
 		        <td>[% 'Visible' | i18n %]</td>
 		        <td width="5%">[% 'Editar' | i18n %]</td>
-                <td width="10%">[% 'Deshabilitar' | i18n %]</td>
                 <td width="10%">[% 'Tipo' | i18n %]</td>
                 <td width="10%">[% 'Validador' | i18n %]</td>
                 <td width="10%">[% 'Referencia' | i18n %]</td>
@@ -40,13 +38,13 @@
 			        <b>[% catalogacion.getCampo %]</b>, <b>[% catalogacion.getSubcampo %]</b>
 		        </td>
 		        <td>
-                    [% catalogacion.getIntranet_habilitado %]
 			        [% catalogacion.getLiblibrarian %]
 		        </td>
-		        <td>
+<!-- 		        <td> -->
+<!-- FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA -->
 
 <!--                 Si no soy el prmiero muestro el boton para subir el orden -->
-                [% IF ! catalogacion.primeroDelTipo(itemType) %]  
+<!--                [% IF ! catalogacion.primeroDelTipo(itemType) %]  
                         [% PERL %]
                             print C4::AR::Filtros::to_Icon(    
                                                                 boton   => "icon_subir",
@@ -55,9 +53,9 @@
                                                                 alternClass => "botonCentradoTabla"
                                     ) ;
                         [% END %]
-                [% END %]
+                [% END %]-->
 <!--                 Si no soy el ultimo muestro el boton para bajar el orden -->
-                [% IF ! catalogacion.ultimoDelTipo(itemType) %]  
+    <!--            [% IF ! catalogacion.ultimoDelTipo(itemType) %]  
                         [% PERL %]
                             print C4::AR::Filtros::to_Icon(    
                                                                 boton   => "icon_bajar",
@@ -67,8 +65,8 @@
                                     ) ;
                         [% END %]
                 [% END %]
-                
-		        </td>
+    -->            
+<!-- 		        </td> -->
 		        <td>
 				[% IF catalogacion.getObligatorio != 1 %]
 			        <input type="checkbox" id="[% id %]" value="[% catalogacion.getVisible %]" onChange="visibilidad('[% catalogacion.getId %]')" 
@@ -92,9 +90,9 @@
                 [% END %]
                 
 		        </td>
-		        <td>
-                
-                [% IF catalogacion.soyFijo != 1 %]
+<!-- 		        <td> -->
+<!-- # FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA                 -->
+<!--                [% IF catalogacion.soyFijo != 1 %]
                         [% PERL %]
                             print C4::AR::Filtros::to_Icon(    
                                                                 boton   => "icon_borrar",
@@ -103,9 +101,9 @@
                                                                 alternClass => "botonCentradoTabla"
                                     ) ;
                         [% END %]
-                [% END %]
+                [% END %]-->
                 
-		        </td>
+<!-- 		        </td> -->
 
                 <td>    
                         &nbsp;  [% catalogacion.getTipoString %]

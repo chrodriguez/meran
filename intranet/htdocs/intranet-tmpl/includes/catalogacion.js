@@ -15,6 +15,7 @@
 var ID_N1=0; //para saber el id del nivel 1
 var ID_N2=0; //para saber el id del nivel 2
 var ID_N3=0; //para saber el id del nivel 3
+var ID_TIPO_EJEMPLAR=0; //para saber con tipo de ejemplar se esta trabajando
 var TAB_INDEX= 0;//tabindex para las componentes
 //arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
 var MARC_OBJECT_ARRAY= new Array();
@@ -588,6 +589,7 @@ function guardarDocumentoN2(){
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "GUARDAR_NIVEL_2";
+    objAH.tipo_ejemplar = $('#tipo_nivel3_id').val();
 	_sacarOpciones();
     objAH.infoArrayNivel2= MARC_OBJECT_ARRAY;
     objAH.id1 = ID_N1;
@@ -614,14 +616,14 @@ function updateGuardarDocumentoN2(responseText){
 function guardarDocumentoN3(){
 	if( verificarAgregarDocumentoN3() ){
 		syncComponentesArray();
-    var porBarcode = $("#cantEjemplares").attr("readonly");
+        var porBarcode = $("#cantEjemplares").attr("readonly");
 		objAH=new AjaxHelper(updateGuardarDocumentoN3);
 		objAH.debug= true;
-    objAH.modificado = 0;
+        objAH.modificado = 0;
 		objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 		objAH.tipoAccion= "GUARDAR_NIVEL_3";
 		objAH.tipo_documento= $("#tipo_nivel3_id").val();
-    objAH.esPorBarcode = porBarcode;
+        objAH.esPorBarcode = porBarcode;
 
     if (porBarcode)
         objAH.BARCODES_ARRAY= BARCODES_ARRAY;
@@ -700,6 +702,7 @@ function guardarModificacionDocumentoN2(){
     objAH.tipoAccion= "MODIFICAR_NIVEL_2";
 	_sacarOpciones();
     objAH.infoArrayNivel2= MARC_OBJECT_ARRAY;
+    objAH.tipo_ejemplar = ID_TIPO_EJEMPLAR;
     objAH.id1 = ID_N1;
     objAH.id2 = ID_N2; //por si se modificó
     objAH.sendToServer();
@@ -733,6 +736,7 @@ function guardarModificacionDocumentoN3(){
 	objAH.cantEjemplares= $("#cantEjemplares").val();
 	_sacarOpciones();
     objAH.infoArrayNivel3= MARC_OBJECT_ARRAY;
+    objAH.tipo_ejemplar = ID_TIPO_EJEMPLAR;
     objAH.id1 = ID_N1;
     objAH.id2 = ID_N2;
 	objAH.ID3_ARRAY= ID3_ARRAY;
@@ -1506,16 +1510,16 @@ function updateModificarN1(responseText){
     updateMostrarEstructuraDelNivel1(responseText);
 }
 
-function modificarN2(id2){
+function modificarN2(id2, tipo_ejemplar){
     inicializar();
-    ID_N2 = id2;
+    ID_N2               = id2;
+    ID_TIPO_EJEMPLAR    = tipo_ejemplar;
     objAH=new AjaxHelper(updateModificarN2);
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showStatusIn = "centro";
     objAH.debug= true;
 //     objAH.cache = true;
     objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
-    objAH.itemtype=$("#id_tipo_doc").val();
     objAH.id = ID_N2;
     objAH.nivel = 2;
     objAH.sendToServer();
@@ -1528,19 +1532,19 @@ function updateModificarN2(responseText){
 // fin prueba
 }
 
-function modificarN3(id3){
+function modificarN3(id3, tipo_ejemplar){
 	inicializar();
-	ID_N3= id3;	
-	objAH=new AjaxHelper(updateModificarN3);
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-	objAH.debug= true;
+	ID_N3               = id3;	
+    ID_TIPO_EJEMPLAR    = tipo_ejemplar;
+	objAH               = new AjaxHelper(updateModificarN3);
+	objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+	objAH.debug         = true;
 //     objAH.cache = true;
-    objAH.showStatusIn = "centro";
-	objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
-	objAH.itemtype=$("#id_tipo_doc").val();
- 	objAH.id3 = ID_N3;
- 	ID3_ARRAY[0]= ID_N3;
-	objAH.nivel = 3;
+    objAH.showStatusIn  = "centro";
+	objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+ 	objAH.id3           = ID_N3;
+ 	ID3_ARRAY[0]        = ID_N3;
+	objAH.nivel         = 3;
 	objAH.sendToServer();
 }
 

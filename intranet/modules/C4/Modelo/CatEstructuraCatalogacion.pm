@@ -74,33 +74,51 @@ sub agregar{
     my ($self)      = shift;
     my ($data_hash) = @_;
 
-    $self->setCampo($data_hash->{'campo'});
-    $self->setSubcampo($data_hash->{'subcampo'});
-    $self->setItemType($data_hash->{'itemtype'}||'ALL');
-    $self->setLiblibrarian($data_hash->{'liblibrarian'});
-    $self->setRule($data_hash->{'combo_validate'});
-    $self->setTipo($data_hash->{'tipoInput'});
-    $self->setReferencia($data_hash->{'referencia'});
-    $self->setNivel($data_hash->{'nivel'});
-    $self->setObligatorio($data_hash->{'obligatorio'});
-    $self->setGrupo($self->getNextGroup);
-    $self->setIntranet_habilitado($self->getUltimoIntranetHabilitado($self->getItemType)+1 );
-    $self->setVisible($data_hash->{'visible'});
-    $self->setIdCompCliente(md5_hex(time()));
-    $self->setFijo(0); #por defecto, todo lo que se ingresa como estructura del catalogo NO ES FIJO
-#     $self->setRepetible(1); 
-    $self->save();
+    #recupero la configuracion de la estructura de catalogacion para verificar si ya existe un configuracion anterior 
+    #que se encuentre NO VISIBLE
+    my $estructura_array = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo(
+                                                                                    $data_hash->{'campo'},
+                                                                                    $data_hash->{'subcampo'},
+                                                                                    $data_hash->{'itemtype'}||'ALL',
+                                                                                    $self->db,
+                                                                            );
 
-#     if($data_hash->{'referencia'}){
-    if($self->tieneReferencia){
-    #si tiene referencia....
-        $data_hash->{'id_est_cat'}  = $self->id;
-        my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(db => $self->db);
-        $pref_temp->agregar($data_hash);
-
-        $self->setIdInfoRef($pref_temp->getIdInfoRef);
+    if($estructura_array) {
+    #EXISTE configuracion para campo, subcampo, itemtype
+        $estructura_array->setVisible(1); #se setea como VISIBLE
+        $estructura_array->save();
+        C4::AR::Debug::debug("El campo, subcampo, itemtype ".$data_hash->{'campo'}.", ".$data_hash->{'subcampo'}.", ".$data_hash->{'itemtype'}." EXISTE");
+    } else {
+    #NO EXISTE configuracion para campo, subcampo, itemtype
+        $self->setCampo($data_hash->{'campo'});
+        $self->setSubcampo($data_hash->{'subcampo'});
+        $self->setItemType($data_hash->{'itemtype'}||'ALL');
+        $self->setLiblibrarian($data_hash->{'liblibrarian'});
+        $self->setRule($data_hash->{'combo_validate'});
+        $self->setTipo($data_hash->{'tipoInput'});
+        $self->setReferencia($data_hash->{'referencia'});
+        $self->setNivel($data_hash->{'nivel'});
+        $self->setObligatorio($data_hash->{'obligatorio'});
+        # FIXME el grupo ya no seria necesario al usar marc_record
+        $self->setGrupo($self->getNextGroup);
+        $self->setIntranet_habilitado($self->getUltimoIntranetHabilitado($self->getItemType)+1 );
+        $self->setVisible($data_hash->{'visible'});
+        # FIXME ya no sería necesario, el id se genera en el cliente
+        $self->setIdCompCliente(md5_hex(time()));
+        $self->setFijo(0); #por defecto, todo lo que se ingresa como estructura del catalogo NO ES FIJO
         $self->save();
+    
+        if($self->tieneReferencia){
+        #si tiene referencia....
+            $data_hash->{'id_est_cat'}  = $self->id;
+            my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(db => $self->db);
+            $pref_temp->agregar($data_hash);
+            $self->setIdInfoRef($pref_temp->getIdInfoRef);
+            $self->save();
+        }
+
     }
+
 } 
 
 sub getNextGroup{
@@ -233,6 +251,7 @@ subirOrden
 Sube el orden en la vista, del campo seleccionado.
 =cut
 
+# FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA
 sub subirOrden{
     my ($self)=shift;
     my ($itemtype) = @_;
@@ -247,6 +266,7 @@ sub subirOrden{
 bajarOrden
 Baja el orden en la vista, del campo seleccionado.
 =cut
+# FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA
 sub bajarOrden{
 
     my ($self)=shift;
@@ -391,18 +411,6 @@ sub setCampo{
     $self->campo($campo);
 }
 
-# sub getRepetible{
-#     my ($self) = shift;
-#     return ($self->repetible);
-# }
-
-# sub setRepetible{
-#     my ($self) = shift;
-#     my ($repetible) = @_;
-#     $self->repetible($repetible);
-# }
-
-
 sub getIdCompCliente{
     my ($self) = shift;
     return (C4::AR::Utilidades::trim($self->idCompCliente));
@@ -493,11 +501,6 @@ sub getRulesToString{
     my $rules = C4::AR::Utilidades::trim($self->rules);
     my @rules_array = split("|", $rules);
     my $validadores_hash_ref = C4::AR::Referencias::getValidadores();
-    C4::AR::Debug::debug("cant: ".scalar(@rules_array));
-    foreach my $r (@rules_array){
-#         if($r =~ m/^(Clinton|Bush|Reagan)/i)
-#         C4::AR::Debug::debug("rule??? ".$r);
-    }
 
     return ($rules);
 }

@@ -59,21 +59,22 @@ function updateEleccionDeNivel(responseText){
     zebra("tabla_datos");
 }
 
-function modificarOrden(id, accion){    
-    
-    objAH=new AjaxHelper(updateModificarOrden);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.idMod=id;
-    objAH.itemtype_cliente = $('#tipo_nivel3_id').val();
-    objAH.tipoAccion= accion; //SUBIR_ORDEN, BAJAR_ORDEN
-    objAH.sendToServer();
-}
-
-function updateModificarOrden(responseText){
-
-    eleccionDeNivel();
-}
+// FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA
+// function modificarOrden(id, accion){    
+//     
+//     objAH=new AjaxHelper(updateModificarOrden);
+//     objAH.debug= true;
+//     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+//     objAH.idMod=id;
+//     objAH.itemtype_cliente = $('#tipo_nivel3_id').val();
+//     objAH.tipoAccion= accion; //SUBIR_ORDEN, BAJAR_ORDEN
+//     objAH.sendToServer();
+// }
+// 
+// function updateModificarOrden(responseText){
+// 
+//     eleccionDeNivel();
+// }
 
 function visibilidad(id){
     objAH=new AjaxHelper(eleccionDeNivel);
@@ -84,19 +85,20 @@ function visibilidad(id){
     objAH.sendToServer();
 }
 
+//  # FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA                
 //Elimina el campo en la estructura inicial del catalogo
-function eliminarCampo(id){
-    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_TITLE, function(confirmStatus){
-        if (confirmStatus){
-            objAH=new AjaxHelper(eleccionDeNivel);
-            objAH.debug= true;
-            objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-            objAH.idMod=id;
-            objAH.tipoAccion= 'ELIMINAR_CAMPO';
-            objAH.sendToServer();
-        }
-    });
-}
+// function eliminarCampo(id){
+//     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_TITLE, function(confirmStatus){
+//         if (confirmStatus){
+//             objAH=new AjaxHelper(eleccionDeNivel);
+//             objAH.debug= true;
+//             objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+//             objAH.idMod=id;
+//             objAH.tipoAccion= 'ELIMINAR_CAMPO';
+//             objAH.sendToServer();
+//         }
+//     });
+// }
 
 function mostrarAgregarCampo(id){
     objAH=new AjaxHelper(updateMostrarAgregarCampo);

@@ -46,7 +46,7 @@
                 [% PERL %]
                     print C4::AR::Filtros::to_Icon(   
                                                             boton   => "icon_edicion",
-                                                            onClick => "modificarN3('[% nivel3.getId3 %]');",
+                                                            onClick => "modificarN3('[% nivel3.getId3 %]', '[% nivel3.nivel2.getTipoDocumentoObject.getId_tipo_doc %]');",
                                                             title   => "[% 'Modificar nivel 3' | i18n %]",
                                                             alternClass => "botonCentrado"
                                 ) ;

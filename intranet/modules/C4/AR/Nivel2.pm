@@ -46,9 +46,8 @@ sub t_guardarNivel2 {
     my $id2;
     if(!$msg_object->{'error'}){
     #No hay error
-        my $marc_record = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
-        ($msg_object,$id2)=guardarRealmente($msg_object,$params->{'id1'},$marc_record);
-        
+        my $marc_record     = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
+        ($msg_object,$id2)  = guardarRealmente($msg_object,$params->{'id1'},$marc_record);
     }
     return ($msg_object, $params->{'id1'}, $id2);
 }
@@ -314,7 +313,7 @@ sub getISBNById1{
     transaccion mofica el nivel 2 pasado por parametro
 =cut
 sub t_modificarNivel2 {
-    my($params)=@_;
+    my($params) = @_;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object= C4::AR::Mensajes::create();

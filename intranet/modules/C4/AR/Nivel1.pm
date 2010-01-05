@@ -52,8 +52,8 @@ sub t_guardarNivel1 {
         
     }
 
-    C4::AR::Debug::debug("Nivel1 => t_guardarNivel1 => return msg_object => ".$msg_object);
-    C4::AR::Debug::debug("Nivel1 => t_guardarNivel1 => return id1 => ".$id1);
+#     C4::AR::Debug::debug("Nivel1 => t_guardarNivel1 => return msg_object => ".$msg_object);
+#     C4::AR::Debug::debug("Nivel1 => t_guardarNivel1 => return id1 => ".$id1);
     return ($msg_object, $id1);
 }
 =head2
