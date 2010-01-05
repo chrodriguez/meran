@@ -10,7 +10,7 @@ use C4::AR::VisualizacionOpac;
 my $input = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-							template_name => "catalogacion/visualizacionOPAC/visualizacionOpac.tmpl",
+							template_name => "catalogacion/visualizacionINTRA/visualizacionIntra.tmpl",
 							query => $input,
 							type => "intranet",
 							authnotrequired => 0,
@@ -19,5 +19,6 @@ my ($template, $session, $t_params)= get_template_and_user({
 			     });
 
 
-$t_params->{'combo_perfiles'} = C4::AR::Utilidades::generarComboDePerfilesOPAC($t_params);
+$t_params->{'onChange'} = "eleccionDeEjemplar()";
+$t_params->{'combo_ejemplares'} = C4::AR::Utilidades::generarComboTipoNivel3($t_params);
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

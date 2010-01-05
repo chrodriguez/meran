@@ -1,4 +1,4 @@
-package C4::AR::VisualizacionOpac;
+package C4::AR::VisualizacionIntra;
 
 #
 #Este modulo sera el encargado del manejo de la carga de datos en las tablas MARC
@@ -33,7 +33,7 @@ sub getConfiguracion{
 
     $perfil = $perfil || C4::AR::Preferencias->getValorPreferencia('perfil_opac');
 
-    push ( @filtros, ( or   => [    id_perfil   => { eq => $id_perfil }, 
+    push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
                                     id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
                 );
 

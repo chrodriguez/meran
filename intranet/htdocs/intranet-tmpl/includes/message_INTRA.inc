@@ -116,6 +116,21 @@ INGRESE_EL_TEXTO_SUCESOR= "[% 'Ingrese el texto sucesor' | i18n %]";
 INGRESE_EL_SEPERADOR= "[% 'Ingrese el separador' | i18n %]";
 SELECCIONE_VISTA_OPAC= "[% 'Seleccione una opcion en todos los campos' | i18n %]";
 //=============================================Fin===Visualizacion Opac===========================================
+
+//================================================Visualizacion INTRA==============================================
+AGREGAR_ENCABEZADO= "[% 'Agregar Encabezado' | i18n %]";
+CONFIRMA_LA_BAJA_DEL_ENCABEZADO = "[% 'Confirma la baja del Encabezado?' | i18n %]";
+INGRESE_EL_ENCABEZADO = "[% 'Ingrese el encabezado' | i18n %]";
+VISUALIZACION_OPAC_TITLE= "[% 'Advertencia de Visualizaci\u00f3n del Opac' | i18n %]";
+NO_SE_PUEDE_SUBIR_MAS= "[% 'No se puede subir m\u00e1s' | i18n %]";
+SELECCIONE_EL_FILTRO_PARA_CAMPOS= "[% 'Seleccione el filtro para campos' | i18n %]";
+SELECCIONE_EL_CAMPO= "[% 'Seleccione el campo' | i18n %]";
+SELECCIONE_EL_SUBCAMPO= "[% 'Seleccione el subcampo' | i18n %]";
+INGRESE_EL_TEXTO_PREDECESOR= "[% 'Ingrese el texto predecesor' | i18n %]";
+INGRESE_EL_TEXTO_SUCESOR= "[% 'Ingrese el texto sucesor' | i18n %]";
+INGRESE_EL_SEPERADOR= "[% 'Ingrese el separador' | i18n %]";
+SELECCIONE_VISTA_INTRA= "[% 'Seleccione una opcion en todos los campos' | i18n %]";
+//=============================================Fin===Visualizacion Opac===========================================
 //================================================Busquedas==============================================
 SELECCIONE_AL_MENOS_UN_CAMPO_PARA_BUSCAR= "[% 'Seleccione al menos un campo para buscar' | i18n %]";
 //=============================================Fin===Busquedas===========================================

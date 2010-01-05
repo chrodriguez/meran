@@ -9,7 +9,7 @@ function eliminarVista(vista_id){
 
     objAH=new AjaxHelper(updateAgregarVisualizacion);
     objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+    objAH.url="/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
     objAH.tipoAccion= 'ELIMINAR_VISUALIZACION';
     if ( vista_id ){
         jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
@@ -26,7 +26,7 @@ function agregarVisualizacion(){
 
     objAH=new AjaxHelper(updateAgregarVisualizacion);
     objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+    objAH.url="/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
     objAH.tipoAccion= 'AGREGAR_VISUALIZACION';
     var perfil=$("#perfiles_ref").val();
     var campo=$.trim($("#campo").val());
@@ -39,7 +39,7 @@ function agregarVisualizacion(){
         objAH.liblibrarian= liblibrarian;
         objAH.sendToServer();
     }else{
-        jAlert(SELECCIONE_VISTA_OPAC,CATALOGO_ALERT_TITLE);
+        jAlert(SELECCIONE_VISTA_INTRA,CATALOGO_ALERT_TITLE);
     }
     
 }
@@ -51,16 +51,16 @@ function updateAgregarVisualizacion(responseText){
 
 }
 
-function eleccionDePerfil(){
-    var perfil=$("#perfiles_ref").val();
+function eleccionDeEjemplar(){
+    var perfil=$("tipo_nivel3_id").val();
     var ObjDiv = $("#result");
-    if (isNaN(perfil)){
+    if (!isNaN(perfil)){
         ObjDiv.hide();
     }else{
         ObjDiv.show();
         objAH=new AjaxHelper(updateEleccionDeNivel);
         objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+        objAH.url="/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
         objAH.tipoAccion= 'MOSTRAR_VISUALIZACION';
         objAH.perfil = perfil;
 
@@ -84,7 +84,7 @@ function eleccionCampoX(){
     if ( $("#campoX").val() != -1){
         objAH=new AjaxHelper(updateEleccionCampoX);
         objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+        objAH.url="/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
         objAH.campoX=$('#campoX').val();
         objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS";
         objAH.sendToServer();
@@ -116,7 +116,7 @@ function eleccionCampo(){
     if ($("#campo").val() != -1){
         objAH=new AjaxHelper(updateEleccionCampo);
         objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+        objAH.url="/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
         objAH.campo=$('#campo').val();
         objAH.tipoAccion="GENERAR_ARREGLO_SUBCAMPOS";
         objAH.sendToServer();

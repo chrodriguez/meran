@@ -4,7 +4,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use C4::AR::VisualizacionOpac;
+use C4::AR::VisualizacionIntra;
 use C4::AR::Utilidades;
 use JSON;
 
@@ -25,7 +25,7 @@ if($editing){
 
     my $value = $input->param('value');
     my $vista_id = $input->param('id');
-    my ($configuracion) = C4::AR::VisualizacionOpac::editConfiguracion($vista_id,$value);
+    my ($configuracion) = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value);
 
     $t_params->{'value'} = $configuracion;
 
@@ -49,7 +49,7 @@ else{
     if($tipoAccion eq "MOSTRAR_VISUALIZACION"){
 
         my ($template, $session, $t_params) = get_template_and_user({
-                            template_name => "catalogacion/visualizacionOPAC/detalleVisualizacionOpac.tmpl",
+                            template_name => "catalogacion/visualizacionINTRA/detalleVisualizacionIntra.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
@@ -57,7 +57,7 @@ else{
                             debug => 1,
         });
 
-        $t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion($perfil);
+        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracion($perfil);
         $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
 
         C4::Auth::output_html_with_http_headers($template, $t_params, $session);
@@ -65,7 +65,7 @@ else{
     elsif($tipoAccion eq "AGREGAR_VISUALIZACION"){
 
         my ($template, $session, $t_params) = get_template_and_user({
-                            template_name => "catalogacion/visualizacionOPAC/detalleVisualizacionOpac.tmpl",
+                            template_name => "catalogacion/visualizacionINTRA/detalleVisualizacionIntra.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
@@ -73,15 +73,15 @@ else{
                             debug => 1,
         });
 
-        my ($messages) = C4::AR::VisualizacionOpac::addConfiguracion($obj);
-        $t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion($perfil);
+        my ($messages) = C4::AR::VisualizacionIntra::addConfiguracion($obj);
+        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracion($perfil);
 
         C4::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
     elsif($tipoAccion eq "ELIMINAR_VISUALIZACION"){
 
         my ($template, $session, $t_params) = get_template_and_user({
-                            template_name => "catalogacion/visualizacionOPAC/detalleVisualizacionOpac.tmpl",
+                            template_name => "catalogacion/visualizacionINTRA/detalleVisualizacionIntra.tmpl",
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
@@ -89,8 +89,8 @@ else{
                             debug => 1,
         });
 
-        my ($status) = C4::AR::VisualizacionOpac::deleteConfiguracion($obj);
-        $t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion($perfil);
+        my ($status) = C4::AR::VisualizacionIntra::deleteConfiguracion($obj);
+        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracion($perfil);
 
         C4::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
@@ -105,7 +105,7 @@ else{
                                       );
       my $campoX = $obj->{'campoX'};
 
-      my ($campos_array) = C4::AR::VisualizacionOpac::getCamposXLike($campoX);
+      my ($campos_array) = C4::AR::VisualizacionIntra::getCamposXLike($campoX);
 
       my $info = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
 
@@ -126,7 +126,7 @@ else{
                                       );
       my $campo = $obj->{'campo'};
 
-      my ($campos_array) = C4::AR::VisualizacionOpac::getSubCamposLike($campo);
+      my ($campos_array) = C4::AR::VisualizacionIntra::getSubCamposLike($campo);
 
       my $info = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
 
