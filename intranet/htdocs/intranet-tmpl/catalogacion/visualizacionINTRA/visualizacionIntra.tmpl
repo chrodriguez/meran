@@ -1,0 +1,38 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<!-- para manejar la ventana de campos MARC -->
+<script src="/intranet-tmpl/includes/popups/helpCamposMARC.js"></script>
+<script src="/intranet-tmpl/includes/visualizacionOPAC.js"></script>
+
+<script>
+//Init Form
+$(document).ready(function() {
+	// Help
+    toggle_ayuda_in_line();
+    makeToggle('divTablaAgregarVisualizacion','trigger',null,true);
+    makeToggle('divTablaVisualizacion','trigger',null,true);
+
+});
+
+</script>
+
+[% PERL %]
+    print C4::AR::Filtros::ayuda_marc() ;
+[% END %]
+
+[% PERL %]
+    print C4::AR::Filtros::ayuda_in_line("[% 'ayudaaaaa' | i18n %]") ;
+[% END %]
+
+<input type="hidden" id="idEncabezado">
+
+<div class="titulos" >[% 'Visualizaci&oacute;n de campos MARC en OPAC' | i18n %]</div>
+
+<fieldset>
+    <legend><strong>[% "Seleccione un perfil:" | i18n %]</strong></legend>
+    [% combo_perfiles %]
+</fieldset>
+
+<div id="result"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]
