@@ -24,8 +24,8 @@ my $san= C4::AR::Sanciones::estaSancionado($nro_socio);
 my $dateformat = C4::Date::get_date_format();
 if ($san){
     if ($san->{'id3'}) {
-        my $aux=C4::AR::Nivel1::buscarNivel1PorId3($san->{'id3'}); 
-        $san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'completo'}.") "; 
+        my $aux=C4::AR::Nivel1::getNivel1FromId3($san->{'id3'}); 
+        $san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'completo'}.") ";
     }
     $san->{'fecha_final'}=format_date($san->{'fecha_final'},$dateformat);
     $san->{'fecha_comienzo'}=format_date($san->{'fecha_comienzo'},$dateformat);

@@ -42,6 +42,4 @@ CANCELAR= '[% "Cancelar" | i18n %]';
 OK= '[% "Ok" | i18n %]';
 EDITABLE_MSG= '[% "Editar..." | i18n %]';
 
-
-
 </script>

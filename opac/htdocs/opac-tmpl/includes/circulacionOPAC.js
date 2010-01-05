@@ -10,24 +10,30 @@
 */
 function reservar(id1, id2){
 
-	objAH=new AjaxHelper(updateInfoReserva);
-   	objAH.debug= true;
-	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/opac-reservar.pl';
-	objAH.id1= id1;
-	objAH.id2= id2;
-	//se envia la consulta
-	objAH.sendToServer();
+    jConfirm(ESTA_SEGURO_QUE_DESEA_RESERVAR,OPAC_ALERT_TITLE, function(confirmStatus){
+        if (confirmStatus){
+            objAH=new AjaxHelper(updateInfoReserva);
+            objAH.debug= true;
+            //para busquedas combinables
+            objAH.url= '/cgi-bin/koha/opac-reservar.pl';
+            objAH.id1= id1;
+            objAH.id2= id2;
+            //se envia la consulta
+            objAH.sendToServer();
+        }
+    });
 }
 
 /*
 * Funcion que muestra la informacion de las reservas
 */
 function updateInfoReserva(responseText){
-	
+
 	//si estoy logueado, oculta la informacion del usuario
 	$('#resultadoReserva').html(responseText);
-	$('#resultadoReserva').slideDown('slow');	
+	$('#resultadoReserva').slideDown('slow');
+    infoReservas();
+    infoSanciones();
 
 }
 
@@ -114,7 +120,6 @@ function DetalleReservas(){
     objAH.action = 'detalle_espera';
 // 	objAH.borrowernumber= borrowernumber;
 	//se envia la consulta
-    alert("HOLA");
 	objAH.sendToServer();
 }
 

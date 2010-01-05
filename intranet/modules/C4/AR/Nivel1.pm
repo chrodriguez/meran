@@ -127,6 +127,17 @@ sub getNivel1FromId1{
     }
 }
 
+sub getNivel1FromId3{
+    my ($id3) = @_;
+    my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
+
+    if ($nivel3){
+      return ($nivel3->nivel2->nivel1);
+    }else{
+        return(0);
+    }
+}
+
 sub getNivel1FromId1OPAC{
     my ($id1, $db) = @_;
 

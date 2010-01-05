@@ -14,6 +14,7 @@
   <meta name="description" content="Your page description here ..." />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/default/includes/setup.css" />
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/default/includes/jquery.alerts.css" />
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/default/includes/text.css" />
   <link rel="icon" type="image/x-icon" href="[% temas %]/default/imagenes/favicon.ico" />
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/fancybox.css" />
@@ -21,9 +22,10 @@
     token= '[% token %]';
     imagesForJS = '[% temas %]/[% tema %]/imagenes';
   </script>
-
+  [% INCLUDE 'message_OPAC.inc' %]
   <script src="/includes/jquery/jquery.js"></script>
   <script src="/includes/AjaxHelper.js"></script>
+  <script src="/includes/jquery/jquery.alerts.js"></script>
   <script src="/includes/json/jsonStringify.js"></script>
   [% INCLUDE 'AutocompleteHelper.inc'  %]
   <script src="/includes/MessageHelper.js"></script>

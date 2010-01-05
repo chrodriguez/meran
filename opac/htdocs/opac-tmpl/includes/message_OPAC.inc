@@ -11,4 +11,9 @@
 
     CAMBIO_DE_CONTRASENIA= "[% 'Cambio de Contraseña' | i18n %]";
 
+    ESTA_SEGURO_QUE_DESEA_RESERVAR= '[% "Realmente desea reservar el ejemplar?" | i18n %]';
+
+    OPAC_ALERT_TITLE= '[% "Alerta de La Biblioteca" | i18n %]';
+
+
 </script>
