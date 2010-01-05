@@ -28,12 +28,12 @@ function agregarVisualizacion(){
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
     objAH.tipoAccion= 'AGREGAR_VISUALIZACION';
-    var perfil=$("#perfiles_ref").val();
+    var ejemplar=$("#tipo_nivel3_id").val();
     var campo=$.trim($("#campo").val());
     var subcampo=$.trim($("#subcampo").val());
     var liblibrarian=$.trim($("#liblibrarian").val());
-    if ( (perfil) && (campo) && (subcampo) && (liblibrarian) ){
-        objAH.perfil = perfil;
+    if ( (ejemplar) && (campo) && (subcampo) && (liblibrarian) ){
+        objAH.ejemplar = ejemplar;
         objAH.campo= campo;
         objAH.subcampo = subcampo;
         objAH.liblibrarian= liblibrarian;
@@ -47,14 +47,14 @@ function agregarVisualizacion(){
 function updateAgregarVisualizacion(responseText){
 
     //Informar mensajes
-    eleccionDePerfil();
+    eleccionDeEjemplar();
 
 }
 
 function eleccionDeEjemplar(){
-    var perfil=$("tipo_nivel3_id").val();
+    var ejemplar=$("#tipo_nivel3_id").val();
     var ObjDiv = $("#result");
-    if (!isNaN(perfil)){
+    if (!isNaN(ejemplar)){
         ObjDiv.hide();
     }else{
         ObjDiv.show();
@@ -62,7 +62,7 @@ function eleccionDeEjemplar(){
         objAH.debug= true;
         objAH.url="/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
         objAH.tipoAccion= 'MOSTRAR_VISUALIZACION';
-        objAH.perfil = perfil;
+        objAH.ejemplar = ejemplar;
 
         objAH.sendToServer();
     }

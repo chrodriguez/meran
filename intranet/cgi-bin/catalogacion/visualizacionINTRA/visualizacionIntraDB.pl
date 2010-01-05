@@ -40,7 +40,7 @@ else{
     #tipoAccion = Insert, Update, Select
     my $tipoAccion= $obj->{'tipoAccion'} || "";
     my $componente= $obj->{'componente'} || "";
-    my $perfil= $obj->{'perfil'} || "";
+    my $ejemplar= $obj->{'ejemplar'} || "";
     my $result;
     my %infoRespuesta;
     my $authnotrequired = 0;
@@ -57,7 +57,7 @@ else{
                             debug => 1,
         });
 
-        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracion($perfil);
+        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracion($ejemplar);
         $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
 
         C4::Auth::output_html_with_http_headers($template, $t_params, $session);
@@ -74,7 +74,7 @@ else{
         });
 
         my ($messages) = C4::AR::VisualizacionIntra::addConfiguracion($obj);
-        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracion($perfil);
+        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracion($ejemplar);
 
         C4::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
@@ -90,7 +90,7 @@ else{
         });
 
         my ($status) = C4::AR::VisualizacionIntra::deleteConfiguracion($obj);
-        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracion($perfil);
+        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracion($ejemplar);
 
         C4::Auth::output_html_with_http_headers($template, $t_params, $session);
     }

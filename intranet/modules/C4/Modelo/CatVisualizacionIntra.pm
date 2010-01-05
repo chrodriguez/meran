@@ -27,7 +27,7 @@ sub agregar{
     $self->setCampo($params->{'campo'});
     $self->setSubCampo($params->{'subcampo'});
     $self->setVistaIntra($params->{'liblibrarian'});
-    $self->setIdPerfil($params->{'perfil'});
+    $self->setTipoEjemplar($params->{'ejemplar'});
 
     $self->save();
 }
@@ -90,7 +90,7 @@ sub setTipoEjemplar{
     my ($self) = shift;
     my ($tipo_ejemplar) = @_;
 
-    $self->tipo_ejamplar($tipo_ejemplar);
+    $self->tipo_ejemplar($tipo_ejemplar);
 }
 
 1;

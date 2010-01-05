@@ -8,8 +8,8 @@ package C4::AR::VisualizacionIntra;
 use strict;
 require Exporter;
 use C4::Context;
-use C4::Modelo::CatVisualizacionOpac;
-use C4::Modelo::CatVisualizacionOpac::Manager;
+use C4::Modelo::CatVisualizacionIntra;
+use C4::Modelo::CatVisualizacionIntra::Manager;
 use C4::Modelo::CatEstructuraCatalogacion;
 use C4::Modelo::CatEstructuraCatalogacion::Manager;
 use vars qw($VERSION @EXPORT @ISA);
@@ -28,16 +28,14 @@ $VERSION = 0.01;
 
 
 sub getConfiguracion{
-    my ($perfil) = @_;
+    my ($ejemplar) = @_;
     my @filtros;
 
-    $perfil = $perfil || C4::AR::Preferencias->getValorPreferencia('perfil_opac');
-
-    push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
-                                    id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
                 );
 
-    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros,);
 
     return ($configuracion);
 }
@@ -46,7 +44,7 @@ sub addConfiguracion{
     my ($params) = @_;
     my @filtros;
 
-    my $configuracion = C4::Modelo::CatVisualizacionOpac->new();
+    my $configuracion = C4::Modelo::CatVisualizacionIntra->new();
 
     $configuracion->agregar($params);
     
@@ -59,7 +57,7 @@ sub deleteConfiguracion{
     my $vista_id = $params->{'vista_id'};
 
     push (@filtros, (id => { eq => $vista_id }) );
-    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros,);
 
     if ($configuracion->[0]){
         return ( $configuracion->[0]->delete() );
@@ -73,11 +71,11 @@ sub editConfiguracion{
     my @filtros;
 
     push (@filtros, (id => { eq => $vista_id }) );
-    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros,);
 
     if ($configuracion->[0]){
         $configuracion->[0]->modificar($value);
-        return ( $configuracion->[0]->getVistaOpac() );
+        return ( $configuracion->[0]->getVistaIntra() );
     }else{
         return(0);
     }
