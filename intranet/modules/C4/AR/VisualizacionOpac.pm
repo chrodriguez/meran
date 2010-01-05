@@ -32,7 +32,11 @@ sub getConfiguracion{
     my @filtros;
 
     $perfil = $perfil || C4::AR::Preferencias->getValorPreferencia('perfil_opac');
-    push (@filtros, (id_perfil => { eq => $perfil }) );
+
+    push ( @filtros, ( or   => [    id_perfil   => { eq => $id_perfil }, 
+                                    id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
+                );
+
     my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
 
     return ($configuracion);

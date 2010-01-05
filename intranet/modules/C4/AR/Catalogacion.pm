@@ -328,10 +328,11 @@ sub marc_record_to_meran_por_nivel {
     sub marc_record_to_opac_view
 =cut
 sub marc_record_to_opac_view {
-    my ($marc_record) = @_;
+    my ($marc_record, $params) = @_;
 
+    $params->{'tipo'} = 'OPAC';
     #obtengo los campo, subcampo que se pueden mostrar
-    my ($marc_record_salida) = filtrarVisualizacion($marc_record, 'OPAC');
+    my ($marc_record_salida) = filtrarVisualizacion($marc_record, $params);
 
     #se procesa el marc_record filtrado
     my ($MARC_result_array) = marc_record_to_meran($marc_record_salida);
@@ -343,10 +344,12 @@ sub marc_record_to_opac_view {
     sub marc_record_to_intra_view
 =cut
 sub marc_record_to_intra_view {
-    my ($marc_record) = @_;
+    my ($marc_record, $params) = @_;
 
+    
+    $params->{'tipo'} = 'INTRA';
     #obtengo los campo, subcampo que se pueden mostrar
-    my ($marc_record_salida) = filtrarVisualizacion($marc_record, 'INTRA');
+    my ($marc_record_salida) = filtrarVisualizacion($marc_record, $params);
 
     #se procesa el marc_record filtrado
     my ($MARC_result_array) = marc_record_to_meran($marc_record_salida);
@@ -360,14 +363,14 @@ sub marc_record_to_intra_view {
     filtra la visualizacion del opac, se muestra lo indicado en cat_visualizacion_opac
 =cut
 sub filtrarVisualizacion{
-    my ($marc_record, $tipo) = @_;
+    my ($marc_record, $params) = @_;
 
     my $visulizacion_array_ref;
 
-    if($tipo eq 'OPAC'){
-        ($visulizacion_array_ref) = getVisualizacionOpac();
+    if($params->{'tipo'} eq 'OPAC'){
+        ($visulizacion_array_ref) = C4::AR::ViusalizacionOpac::getConfiguracion();#getVisualizacionOpac();
     } else {
-        ($visulizacion_array_ref) = getVisualizacionIntra();
+        ($visulizacion_array_ref) = getVisualizacionIntra($params);
     }
 
     my %autorizados;
@@ -403,35 +406,20 @@ sub filtrarVisualizacion{
     return $marc_record_salida;
 }
 
-=head2
-    sub getVisualizacionOpac
-    
-=cut
-sub getVisualizacionOpac {
-    my ($idPerfil) = @_;
-
-    my @filtros;
-
-    use C4::Modelo::CatVisualizacionOpac::Manager;
-
-    my $visulizacion_array_ref = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(   
-                                                                query => \@filtros,
-                                                             );
-
-    return ($visulizacion_array_ref);
-}
 
 =head2
     sub getVisualizacionIntra
     
 =cut
 sub getVisualizacionIntra {
-    my ($tipo_ejemplar) = @_;
+    my ($params) = @_;
 
     use C4::Modelo::CatVisualizacionIntra::Manager;
     my @filtros;
 
-    push(@filtros, ( tipo_ejemplar    => { eq => $tipo_ejemplar }));
+    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $params->{'id_tipo_doc'} }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ])
+                     );
 
     my $visulizacion_array_ref = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(   
                                                                 query => \@filtros,
