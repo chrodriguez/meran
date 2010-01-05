@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS `cat_visualizacion_intra`;
+CREATE TABLE IF NOT EXISTS `cat_visualizacion_intra` (
+  `id` int(11) NOT NULL auto_increment,
+  `campo` char(3) NOT NULL,
+  `subcampo` char(1) NOT NULL,
+  `vista_intra` varchar(255) default NULL,
+  `id_perfil` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `campo` (`campo`,`subcampo`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
