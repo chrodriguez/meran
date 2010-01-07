@@ -40,3 +40,5 @@
                     </table>
                 </div>
            </div>
+          [% INCLUDE 'rating.inc' %]
+
