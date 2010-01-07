@@ -381,7 +381,11 @@ sub getRating{
         $count+= $rate->getRate();
     }
 
-    return (ceil($count/$rating_count));
+    if($rating_count > 0){
+        $rating_count = ceil($count/$rating_count);
+    } 
+    
+    return $rating_count;
 }
 
 sub rate{
