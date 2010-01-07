@@ -894,7 +894,11 @@ function procesarInfoJson(json){
     if( MODIFICAR == 0 && _NIVEL_ACTUAL == 2 ){  
     //si se esta agregando un NIVEL 2  
         _seleccionarTipoDocumentoYDeshabilitarCombo();
-    }    
+    } 
+
+    if(MODIFICAR == 1){
+        $('#tipo_nivel3_id').val($('#'+_getIdComponente('910','a')).val());
+    }   
 }
 
 function crearBotonAyudaCampo(campo){
@@ -1542,7 +1546,7 @@ function modificarN2(id2, tipo_ejemplar){
 }
 
 function updateModificarN2(responseText){
-   MODIFICAR = 1;
+    MODIFICAR = 1;
     _NIVEL_ACTUAL = 2;
     updateMostrarEstructuraDelNivel2(responseText);
 // fin prueba
