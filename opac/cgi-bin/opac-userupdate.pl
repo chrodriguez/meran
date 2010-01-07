@@ -66,7 +66,7 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('VA002','intranet');
 }
 
-$t_params->{'socio'}= $socio,
+$t_params->{'socio'}= $socio;
 
 $t_params->{'opac'};
 $t_params->{'partial_template'}= "informacion.inc";

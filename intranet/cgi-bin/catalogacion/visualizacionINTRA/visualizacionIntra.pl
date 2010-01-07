@@ -20,5 +20,6 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 
 $t_params->{'onChange'} = "eleccionDeEjemplar()";
+$t_params->{'default'} = 'SIN SELECCIONAR';
 $t_params->{'combo_ejemplares'} = C4::AR::Utilidades::generarComboTipoNivel3($t_params);
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -369,6 +369,7 @@ sub filtrarVisualizacion{
 
     use C4::AR::VisualizacionOpac;
     use C4::AR::VisualizacionIntra;
+    use C4::AR::VisualizacionOpac;
     if($params->{'tipo'} eq 'OPAC'){
         ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion();
     } else {

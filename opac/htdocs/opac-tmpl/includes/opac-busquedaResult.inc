@@ -1,3 +1,19 @@
+<script type="text/javascript">
+    $(function(){
+        $(".ratings").children().not(":radio").hide();
+        $(".ratings").stars({
+            callback: function(ui, type, value)
+            {
+                $.post("demo1.php", {rate: value}, function(data)
+                {
+                    $("#ajax_response").html(data);
+                });
+            },
+            cancelShow: false,
+        });
+    });
+</script>
+
 
 <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
 <div class="resultados_consulta">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
@@ -21,6 +37,9 @@
             </th>
             <th align="center" width="20%">
                 [% "Disponibilidad" | i18n %]
+            </th>
+            <th align="center" width="20%">
+                [% "Valoraci&oacute;n" | i18n %]
             </th>
         </tr>
     </thead>
@@ -93,7 +112,10 @@
                     [% ELSE %]
                         &nbsp;
                     [% END %]
-                </td>	
+                </td>
+                <td>
+                    [% INCLUDE 'rating.inc' %]
+                </td>
             </tr>
         [% END %]
     </tbody>

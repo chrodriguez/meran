@@ -10,7 +10,7 @@ my $query = new CGI;
 
 my ($template, $t_params)= C4::Output::gettemplate("opac-main.tmpl", 'opac');
 
-$t_params->{'opac'};
+$t_params->{'type'}='opac';
 my ($session)= C4::Auth::inicializarAuth($t_params);
 
 $t_params->{'partial_template'}= "opac-login.inc";

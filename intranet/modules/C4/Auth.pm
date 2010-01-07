@@ -443,7 +443,6 @@ sub checkauth {
     my $type = shift;
     my $change_password = shift || 0;
     my $template_params = shift;
-
     $type = 'opac' unless $type;
     C4::AR::Debug::debug("desde checkauth==================================================================================================");
     my $dbh = C4::Context->dbh;
@@ -483,7 +482,7 @@ sub checkauth {
     my ($userid, $cookie, $sessionID, $flags);
 
     #verifica que no haya sesiones "colgadas", las borra de la base
-    _clear_sessions_from_DB();
+     _clear_sessions_from_DB();
 
     if(defined $session and _session_expired($session)){
     #EXPIRO LA SESION
@@ -497,7 +496,7 @@ sub checkauth {
 
         $sessionID=$session->param('sessionID');
 
-        C4::AR::Debug::debug("checkauth=> sessionID seteado \n");
+        C4::AR::Debug::debug("checkauth=> sessionID seteado \n".$sessionID);
 
         #Se recupera la info de la session guardada en la base segun el sessionID
         my ($sist_sesion)= C4::Modelo::SistSesion->getActiveSession($sessionID);
@@ -1110,40 +1109,35 @@ sub inicializarAuth{
 
     my ($session) = CGI::Session->load();
     $session->flush();
-#         C4::AR::Debug::debug("dump desde inicializarAuth ".$session->dump());
-#     if ((!C4::AR::Utilidades::validateString($session->param('userid'))) || _session_expired($session)){
-        C4::AR::Debug::debug("inicializarAuth => ".$session->param('codMsg'));
-        my $msjCode = getMsgCode();
-        $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
-        #se destruye la session anterior
-        $session->clear();
-        $session->delete();
-        
-        #se genera una nueva session
-        my %params;
-        $params{'userid'}= undef;
-        $params{'loggedinusername'}= undef;
-        $params{'password'}= undef;
-        $params{'token'}= '';
-        $params{'nroRandom'}= undef;
-        $params{'borrowernumber'}= undef;
-        $params{'type'}= $t_params->{'type'}; #OPAC o INTRA
-        $params{'flagsrequired'}= '';
-        $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
-        $params{'SERVER_GENERATED_SID'}= 1;
-        
-        #esto realmente destruye la session
-        undef($session);
-        $session= C4::Auth::_generarSession(\%params);
-        my $sessionID= $session->param('sessionID');
-        my $userid= undef;
-        #guardo la session en la base
-        C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number, $params{'token'});
-        #se pasa el RANDOM_NUMBER al cliente, $t_params es una REFERENCIA
-        $t_params->{'RANDOM_NUMBER'}= $random_number;
-#         $session->flush();
-        C4::AR::Debug::debug("USER ID :".$session->param('userid'));
-        return ($session);
+    C4::AR::Debug::debug("inicializarAuth => ".$session->param('codMsg'));
+    my $msjCode = getMsgCode();
+    $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
+    #se destruye la session anterior
+    $session->clear();
+    $session->delete();
+     #se genera una nueva session
+    my %params;
+    $params{'userid'}= undef;
+    $params{'loggedinusername'}= undef;
+    $params{'password'}= undef;
+    $params{'token'}= '';
+    $params{'nroRandom'}= undef;
+    $params{'borrowernumber'}= undef;
+    $params{'type'}= $t_params->{'type'}; #OPAC o INTRA
+    $params{'flagsrequired'}= '';
+    $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
+    $params{'SERVER_GENERATED_SID'}= 1;
+    #esto realmente destruye la session
+    undef($session);
+    $session= C4::Auth::_generarSession(\%params);
+    my $sessionID= $session->param('sessionID');
+    my $userid= undef;
+    #guardo la session en la base
+    C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number, $params{'token'});
+    #se pasa el RANDOM_NUMBER al cliente, $t_params es una REFERENCIA
+    $t_params->{'RANDOM_NUMBER'}= $random_number;
+    C4::AR::Debug::debug("USER ID :".$session->param('userid'));
+    return ($session);
 #     }else{
 #         redirectTo('/cgi-bin/koha/mainpage.pl');
 #     }

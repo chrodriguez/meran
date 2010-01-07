@@ -365,7 +365,38 @@ sub t_modificarNivel2 {
     return ($msg_object, $cat_registro_marc_n2);
 }
 
+sub getRating{
+    my($id2) = @_;
+    use C4::Modelo::Rating::Manager;
+    use POSIX;
 
+    my @filtros;
+
+    push (@filtros, (id2 => {eq => $id2}));
+    my $rating = C4::Modelo::Rating::Manager->get_rating(query => \@filtros,);
+    my $rating_count = C4::Modelo::Rating::Manager->get_rating_count(query => \@filtros,);
+    my $count = 0;
+
+    foreach my $rate (@$rating){
+        $count+= $rate->getRate();
+    }
+
+    return (ceil($count/$rating_count));
+}
+
+sub rate{
+
+    my($rate,$id2,$nro_socio) = @_;
+    my $rating_obj = C4::Modelo::Rating->new();
+    use C4::Modelo::Rating;
+
+    $rating_obj = $rating_obj->getObjeto($nro_socio, $id2);
+    $rating_obj->setRate($rate);
+#     $rating_obj->setNroSocio($nro_socio);
+#     $rating_obj->setId2($id2);
+    $rating_obj->save();
+
+}
 
 #=======================================================DEPRECATED========================================================================
 

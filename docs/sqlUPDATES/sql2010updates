@@ -38,3 +38,12 @@ INSERT INTO cat_visualizacion_intra (campo, subcampo, tipo_ejemplar, vista_intra
 ('020', 'a', 'LIB', 'ISBN'),
 ('245', 'b', 'ALL', 'Resto del título'),
 ('072', '2', 'LIB', 'Fuente del código');
+
+
+DROP TABLE IF EXISTS `rating`;
+CREATE TABLE IF NOT EXISTS `rating` (
+  `nro_socio` varchar(11) NOT NULL,
+  `id2` int(11) NOT NULL,
+  `rate` float NOT NULL,
+  PRIMARY KEY  (`nro_socio`,`id2`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;

@@ -18,6 +18,7 @@
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/default/includes/text.css" />
   <link rel="icon" type="image/x-icon" href="[% temas %]/default/imagenes/favicon.ico" />
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/fancybox.css" />
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/ui.stars.css" />
   <script language="javascript" type="text/javascript">
     token= '[% token %]';
     imagesForJS = '[% temas %]/[% tema %]/imagenes';
@@ -26,6 +27,10 @@
   <script src="/includes/jquery/jquery.js"></script>
   <script src="/includes/AjaxHelper.js"></script>
   <script src="/includes/jquery/jquery.alerts.js"></script>
+  <script src="/includes/jquery/ui.core.js"></script>
+  <script src="/includes/jquery/ui.mouse.js"></script>
+  <script src="/includes/jquery/ui.draggable.js"></script>
+  <script src="/includes/jquery/ui.stars.js"></script>
   <script src="/includes/json/jsonStringify.js"></script>
   [% INCLUDE 'AutocompleteHelper.inc'  %]
   <script src="/includes/MessageHelper.js"></script>

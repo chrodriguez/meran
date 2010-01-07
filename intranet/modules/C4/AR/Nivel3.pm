@@ -547,6 +547,7 @@ sub detalleCompletoOPAC{
 		$hash_nivel2->{'cantParaPrestamo'}= $totales_nivel3->{'cantParaPrestamo'};
 		$hash_nivel2->{'DivMARC'}="MARCDetail".$i;
 		$hash_nivel2->{'DivDetalle'}="Detalle".$i;
+        $hash_nivel2->{'rating'}= C4::AR::Nivel2::getRating($hash_nivel2->{'id2'});;
 		push(@nivel2, $hash_nivel2);
 	}
 
