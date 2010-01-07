@@ -365,10 +365,12 @@ function updateMostrarEstructuraDelNivel2(responseText){
     esquema de ingreso de datos.
 */
 function _seleccionarTipoDocumentoYDeshabilitarCombo(){
-    //obtengo el ID de la componente del combo de tipo de nivel3
-    id = _getIdComponente('910','a');
-    $('#'+ id).val($('#tipo_nivel3_id').val());    
-    $('#'+ id).attr('disabled', 'true');
+    if(MODIFICAR == 1){
+        //obtengo el ID de la componente del combo de tipo de nivel3
+        id = _getIdComponente('910','a');
+        $('#'+ id).val($('#tipo_nivel3_id').val());    
+        $('#'+ id).attr('disabled', 'true');
+    }
 }
 
 function mostrarEstructuraDelNivel3(){
@@ -583,18 +585,32 @@ function updateGuardarDocumentoN1(responseText){
     }
 }
 
+function verificar_guardar_nivel2(){
+    var ok = true;
+    if( (MODIFICAR == 0)&&($('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') ){
+        jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
+        $('#tipo_nivel3_id').focus();
+        ok = false;
+    }
+
+    return ok;
+}
+
 function guardarDocumentoN2(){
-    syncComponentesArray();
-    objAH=new AjaxHelper(updateGuardarDocumentoN2);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tipoAccion= "GUARDAR_NIVEL_2";
-    objAH.tipo_ejemplar = $('#tipo_nivel3_id').val();
-	_sacarOpciones();
-    objAH.infoArrayNivel2= MARC_OBJECT_ARRAY;
-    objAH.id1 = ID_N1;
-    objAH.id2 = ID_N2; //por si se modificó
-    objAH.sendToServer();
+
+    if(verificar_guardar_nivel2()){
+        syncComponentesArray();
+        objAH=new AjaxHelper(updateGuardarDocumentoN2);
+        objAH.debug= true;
+        objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.tipoAccion= "GUARDAR_NIVEL_2";
+        objAH.tipo_ejemplar = $('#tipo_nivel3_id').val();
+	    _sacarOpciones();
+        objAH.infoArrayNivel2= MARC_OBJECT_ARRAY;
+        objAH.id1 = ID_N1;
+        objAH.id2 = ID_N2; //por si se modificó
+        objAH.sendToServer();
+    }
 }
 
 function updateGuardarDocumentoN2(responseText){
