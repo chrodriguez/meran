@@ -693,7 +693,7 @@ sub getRefFromStringConArrobas{
 #     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato: ".$dato);
 #     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 2: ".@datos_array[2]);
 
-    return @datos_array[2];
+    return @datos_array[1];
 }
 
 =head2

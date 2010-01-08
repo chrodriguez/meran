@@ -20,13 +20,14 @@
                 </td>
 		        <td width="10%">[% 'MARC' | i18n %]</td>
 		        <td width="20%">[% 'Vista en Intranet' | i18n %]</td>
-		        <td>[% 'Visible' | i18n %]</td>
-		        <td width="5%">[% 'Editar' | i18n %]</td>
                 <td width="10%">[% 'Tipo' | i18n %]</td>
                 <td width="10%">[% 'Validador' | i18n %]</td>
                 <td width="10%">[% 'Referencia' | i18n %]</td>
                 <td width="4%">[% 'Fijo' | i18n %]</td>
                 <td width="5%">[% 'Obligatorio' | i18n %]</td>
+                <td width="5%">[% 'Visible' | i18n %]</td>
+                <td width="5%">[% 'Editar' | i18n %]</td>
+                <td width="5%">[% 'Eliminar' | i18n %]</td>
 	        </tr>
         [% FOREACH catalogacion IN catalogaciones %]
 	        <tr align="center" >
@@ -67,44 +68,6 @@
                 [% END %]
     -->            
 <!-- 		        </td> -->
-		        <td>
-				[% IF catalogacion.getObligatorio != 1 %]
-			        <input type="checkbox" id="[% id %]" value="[% catalogacion.getVisible %]" onChange="visibilidad('[% catalogacion.getId %]')" 
-			        value="[% catalogacion.getVisible %]"   [% IF catalogacion.getVisible %] 
-                                                                checked
-			                                                [% END %] 
-                    >
-				[% END %]
-		        </td>
-		        <td>
-                
-                [% IF catalogacion.soyFijo != 1 %]
-                        [% PERL %]
-                            print C4::AR::Filtros::to_Icon(    
-                                                                boton   => "icon_edicion",
-                                                                onClick => "mostrarModificarCampo('[% catalogacion.getId %]');",
-                                                                title   => "[% 'Modificar Campo' | i18n %]",
-                                                                alternClass => "botonCentradoTabla"
-                                    ) ;
-                        [% END %]
-                [% END %]
-                
-		        </td>
-<!-- 		        <td> -->
-<!-- # FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA                 -->
-<!--                [% IF catalogacion.soyFijo != 1 %]
-                        [% PERL %]
-                            print C4::AR::Filtros::to_Icon(    
-                                                                boton   => "icon_borrar",
-                                                                onClick => "eliminarCampo('[% catalogacion.getId %]');",
-                                                                title   => "[% 'Eliminar Campo' | i18n %]",
-                                                                alternClass => "botonCentradoTabla"
-                                    ) ;
-                        [% END %]
-                [% END %]-->
-                
-<!-- 		        </td> -->
-
                 <td>    
                         &nbsp;  [% catalogacion.getTipoString %]
                 </td>
@@ -135,6 +98,43 @@
                                             <span class="rojo">[% "No" | i18n %]</span>
                                     [% END %]
                 </td>
+                <td>
+                [% IF catalogacion.getObligatorio != 1 %]
+                    <input type="checkbox" id="[% id %]" value="[% catalogacion.getVisible %]" onChange="visibilidad('[% catalogacion.getId %]')" 
+                    value="[% catalogacion.getVisible %]"   [% IF catalogacion.getVisible %] 
+                                                                checked
+                                                            [% END %] 
+                    >
+                [% END %]
+                </td>
+                <td>
+                
+                [% IF catalogacion.soyFijo != 1 %]
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                                                boton   => "icon_edicion",
+                                                                onClick => "mostrarModificarCampo('[% catalogacion.getId %]');",
+                                                                title   => "[% 'Modificar Campo' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
+                                    ) ;
+                        [% END %]
+                [% END %]
+                
+                </td>
+                <td>
+<!-- # FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA                 -->
+                [% IF catalogacion.soyFijo != 1 %]
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                                                boton   => "icon_borrar",
+                                                                onClick => "eliminarCampo('[% catalogacion.getId %]');",
+                                                                title   => "[% 'Eliminar Campo' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
+                                    ) ;
+                        [% END %]
+                [% END %]
+                
+                </td> 
 	        </tr>
         [% END %]
             
