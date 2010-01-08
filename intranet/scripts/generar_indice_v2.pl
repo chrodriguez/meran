@@ -59,15 +59,17 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
     }
 #Ahora en $marc_record tenemos todo el registro completo
     #Autor
-    my $autor = $marc_record->subfield("100","a");
+    my $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("100","a"));
+       $autor = C4::AR::Catalogacion::getDatoFromReferencia("100","a",$autor,"ALL");
+
     if(! $autor) { 
-        $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("110","a"));
-        $autor = C4::AR::Catalogacion::getDatoFromReferencia($autor);
+       $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("110","a"));
+       $autor = C4::AR::Catalogacion::getDatoFromReferencia("110","a",$autor,"ALL");
     }
 
     if(! $autor) { 
-        $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("111","a"));
-        $autor = C4::AR::Catalogacion::getDatoFromReferencia($autor);
+       $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("111","a"));
+       $autor = C4::AR::Catalogacion::getDatoFromReferencia("111","a",$autor,"ALL");
     }
 
     C4::AR::Debug::debug("autor ".$autor);

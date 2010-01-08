@@ -56,19 +56,22 @@ print "Quitando referencias  viejas \n";
 #  quitarReferenciasViejas();
 # ##
 
+
+print "Renombrando tablas \n";
+#renombrarTablas();
 print "Quitando tablas de mas \n";
 #quitarTablasDeMas();
-print "Renombrando tablas \n";
-renombrarTablas();
+print "Hasheando passwords \n";
+#hashearPasswords();
 print "Pasamos TODO a INNODB \n";
-# pasarTodoAInnodb();
+#pasarTodoAInnodb();
 print "Creando nuevas claves foraneas \n";
-# crearClaves();
+#crearClaves();
 print "Creando la estructura MARC \n";
-# crearEstructuraMarc();
+#crearEstructuraMarc();
 
 print "Agregando preferencias del sistema \n";
-# agregarPreferenciasDelSistema();
+#agregarPreferenciasDelSistema();
 print "FIN!!! \n";
 print "\n GRACIAS DICO!!! \n";
 
@@ -147,7 +150,7 @@ print "\n GRACIAS DICO!!! \n";
 	while (my $biblio=$biblios->fetchrow_hashref ) {
 	
 	my $porcentaje= int (($registro * 100) / $cantidad );
-# 	print "Procesando registro: $registro de $cantidad ($porcentaje%) \n";
+ 	print "Procesando registro: $registro de $cantidad ($porcentaje%) \r";
 
 
 
@@ -3542,28 +3545,6 @@ $biblios->finish();
 ('EL'),
 ('LOS'),
 ('LA');",
-"DROP TABLE IF EXISTS `pref_tabla_referencia`;",
-"CREATE TABLE IF NOT EXISTS `pref_tabla_referencia` (
-  `id` int(11) unsigned NOT NULL auto_increment,
-  `nombre_tabla` varchar(40) NOT NULL,
-  `alias_tabla` varchar(20) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;",
-"INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`) VALUES
-(3, 'cat_autor', 'autor'),
-(4, 'cat_ref_tipo_nivel3', 'tipo_ejemplar'),
-(5, 'pref_unidad_informacion', 'ui'),
-(6, 'ref_idioma', 'idioma'),
-(7, 'ref_pais', 'pais'),
-(8, 'ref_disponibilidad', 'disponibilidad'),
-(9, 'circ_ref_tipo_prestamo', 'tipo_prestamo'),
-(10, 'ref_soporte', 'soporte'),
-(11, 'ref_nivel_bibliografico', 'nivel_bibliografico'),
-(12, 'cat_tema', 'tema'),
-(13, 'usr_ref_tipo_documento', 'tipo_documento_usr'),
-(14, 'usr_ref_categoria_socio', 'tipo_socio'),
-(16, 'ref_estado', 'estado'),
-(17, 'ref_localidad', 'ciudad');",
 "DROP TABLE IF EXISTS `pref_tabla_referencia_info`;",
 "CREATE TABLE IF NOT EXISTS `pref_tabla_referencia_info` (
   `orden` varchar(20) NOT NULL,
@@ -3662,7 +3643,32 @@ $biblios->finish();
 "INSERT INTO `usr_estado` (`id_estado`, `regular`, `categoria`, `fuente`) VALUES
 (20, 1, 'NN', 'ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....'),
 (46, 1, 'NN', 'MONO TU FUCKING KOHAADMIN SUPERLIBRARIAN'),
-(47, 1, 'NN', 'ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....');"
+(47, 1, 'NN', 'ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....');",
+"DROP TABLE IF EXISTS `pref_tabla_referencia`;",
+"CREATE TABLE IF NOT EXISTS `pref_tabla_referencia` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `nombre_tabla` varchar(40) NOT NULL,
+  `alias_tabla` varchar(20) NOT NULL default '0',
+  `campo_busqueda` varchar(255) NOT NULL default 'jmmj',
+  PRIMARY KEY  (`id`),
+  KEY `campo_busqueda` (`campo_busqueda`)
+) ENGINE=MyISAM ;",
+"INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`) VALUES
+(3, 'cat_autor', 'autor', 'completo'),
+(4, 'cat_ref_tipo_nivel3', 'tipo_ejemplar', 'nombre'),
+(5, 'pref_unidad_informacion', 'ui', 'nombre'),
+(6, 'ref_idioma', 'idioma', 'description'),
+(7, 'ref_pais', 'pais', 'nombre_largo'),
+(8, 'ref_disponibilidad', 'disponibilidad', 'nombre'),
+(9, 'circ_ref_tipo_prestamo', 'tipo_prestamo', 'descripcion'),
+(10, 'ref_soporte', 'soporte', 'description'),
+(11, 'ref_nivel_bibliografico', 'nivel_bibliografico', 'description'),
+(12, 'cat_tema', 'tema', 'nombre'),
+(13, 'usr_ref_categoria_socio', 'tipo_socio', 'description'),
+(14, 'usr_ref_tipo_documento', 'tipo_documento_usr', 'nombre'),
+(15, 'ref_estado', 'estado', 'nombre'),
+(16, 'ref_localidad', 'ciudad', 'NOMBRE'),
+(17, 'cat_perfil_opac', 'perfiles_opac', 'nombre');"
 );
 
 foreach my $sql (@sqls){
@@ -3796,7 +3802,27 @@ foreach my $sql (@sqls){
       "ALTER TABLE `usr_persona` DROP `branchcode` , DROP `categorycode` ;",
       "ALTER TABLE `usr_persona` ADD `es_socio` INT( 1 ) UNSIGNED NOT NULL DEFAULT '0' COMMENT '1= si; 0=no';",
       "ALTER TABLE `ref_localidad` DROP PRIMARY KEY;",
-      "ALTER TABLE `ref_localidad` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );"
+      "ALTER TABLE `ref_localidad` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );",
+      "ALTER TABLE `usr_socio` CHANGE `password` `password` VARCHAR( 255 ) NULL DEFAULT NULL",
+      "ALTER TABLE `ref_pais` DROP PRIMARY KEY;",
+      "ALTER TABLE `ref_pais` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;",
+      " ALTER TABLE `ref_pais` CHANGE `name` `nombre` VARCHAR( 80 )  NOT NULL ,
+      CHANGE `printable_name` `nombre_largo` VARCHAR( 80 ) NOT NULL ,
+      CHANGE `code` `codigo` VARCHAR( 11 ) NOT NULL;",
+      "ALTER TABLE `cat_ref_tipo_nivel3` DROP INDEX `itemtype`;",
+      "ALTER TABLE `cat_ref_tipo_nivel3` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;",
+      "ALTER TABLE `cat_ref_tipo_nivel3`
+      DROP `loanlength`,
+      DROP `renewalsallowed`,
+      DROP `rentalcharge`,
+      DROP `search`,
+      DROP `detail`;",
+      " ALTER TABLE `cat_ref_tipo_nivel3` CHANGE `itemtype` `id_tipo_doc` VARCHAR( 4 ) NOT NULL ,
+      CHANGE `description` `nombre` TEXT NULL DEFAULT NULL;",
+      "ALTER TABLE ref_idioma ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;",
+      " ALTER TABLE `ref_estado` CHANGE `code` `id` TINYINT( 5 ) NOT NULL AUTO_INCREMENT ,
+      CHANGE `description` `nombre` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;",
+      " ALTER TABLE `ref_estado` ADD UNIQUE ( `nombre` );"
           );
 
   foreach my $alt (@alternos){
@@ -3824,7 +3850,11 @@ foreach my $sql (@sqls){
         $drop->execute();
       }
 
-#Re Hasear Pass con sha256
+  }
+
+  sub hashearPasswords    
+  {
+  #Re Hasear Pass con sha256
     my $usuarios=$dbh->prepare("SELECT * FROM usr_socio;");
     $usuarios->execute();
     while (my $usuario=$usuarios->fetchrow_hashref) {
@@ -3833,8 +3863,6 @@ foreach my $sql (@sqls){
           $upus->execute();
       }
     }
-
-
   }
 
 	sub pasarTodoAInnodb 
