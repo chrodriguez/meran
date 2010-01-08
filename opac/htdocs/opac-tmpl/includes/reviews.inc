@@ -1,3 +1,12 @@
+<script>
+    $(document).ready(function() {
+        $(function()
+        {
+            $('#review').wysiwyg({width: "300px",});
+        });
+    });
+</script>
+
 [% USE HTML %]
 [% IF reviews %]
     [% FOREACH review IN reviews %]
