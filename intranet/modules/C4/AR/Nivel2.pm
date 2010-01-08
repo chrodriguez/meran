@@ -453,6 +453,31 @@ sub getCantReviews{
     return $reviews;
 }
 
+sub getReviews{
+    my($id2) = @_;
+    use C4::Modelo::CatRating::Manager;
+    use POSIX;
+
+    my @filtros;
+
+    push (@filtros, (id2 => {eq => $id2}));
+    push (@filtros, (review => {ne => NULL}));
+    my $reviews = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros,
+                                                                 include_objects => ['socio'],
+                                                                 );
+
+    return $reviews;
+}
+
+sub reviewNivel2{
+    my ($id2,$review,$nro_socio) = @_;
+    my $rating_obj = C4::Modelo::CatRating->new();
+    use C4::Modelo::CatRating;
+
+    $rating_obj = $rating_obj->getObjeto($nro_socio, $id2);
+    $rating_obj->setReview($review);
+    $rating_obj->save();
+}
 #=======================================================DEPRECATED========================================================================
 
 # DEPRECATED

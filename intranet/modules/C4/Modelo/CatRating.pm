@@ -16,6 +16,15 @@ __PACKAGE__->meta->setup(
 
     primary_key_columns => [ 'nro_socio','id2' ],
 
+     relationships =>
+    [
+      socio => 
+      {
+        class       => 'C4::Modelo::UsrSocio',
+        key_columns => { nro_socio => 'nro_socio' },
+        type        => 'one to one',
+      },
+    ]
 );
 
 
@@ -29,7 +38,7 @@ sub getObjeto{
 	my ($self) = shift;
 	my ($socio,$id2) = @_;
 
-	my $objecto= C4::Modelo::Rating->new(nro_socio => $socio, id2 => $id2);
+	my $objecto= C4::Modelo::CatRating->new(nro_socio => $socio, id2 => $id2);
 	$objecto->load();
 	return $objecto;
 }
