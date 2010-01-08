@@ -9,7 +9,7 @@
                       <img name="cover"  VALUE="" BORDER=0 src="/covers/[% portada_registro_medium %]" title="Portada">
                   </a>
               [% ELSE %]
-                    <img src="/covers/no_image.jpg" 
+                    <img src="/covers/no_image_medium.jpg" 
                           alt="[% 'Sin Portada' | i18n %]"
                           title="[% 'Sin Portada' | i18n %]" />
               [% END %]

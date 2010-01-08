@@ -538,9 +538,9 @@ sub detalleCompletoOPAC{
 		$hash_nivel2->{'nivel3'}= \@result;
 		$hash_nivel2->{'cantPrestados'}= $totales_nivel3->{'cantPrestados'};
 		$hash_nivel2->{'cantReservas'}= $totales_nivel3->{'cantReservas'};
-        $hash_nivel2->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1($nivel2_array_ref->[$i]->getId1,'S');
-        $hash_nivel2->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId1($nivel2_array_ref->[$i]->getId1,'M');
-        $hash_nivel2->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId1($nivel2_array_ref->[$i]->getId1,'L');
+        $hash_nivel2->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
+        $hash_nivel2->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
+        $hash_nivel2->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');
 		$hash_nivel2->{'cantReservasEnEspera'}= $totales_nivel3->{'cantReservasEnEspera'};
 		$hash_nivel2->{'disponibles'}= $totales_nivel3->{'disponibles'};
 		$hash_nivel2->{'cantParaSala'}= $totales_nivel3->{'cantParaSala'};

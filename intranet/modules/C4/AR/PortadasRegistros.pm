@@ -132,12 +132,12 @@ sub getImageForId1 {
 sub getImageForId2 {
     my ($id2,$size)=@_;
     my $url='';
-
-    my $n2r = C4::AR::Nivel2::getISBN($id2);
-    my $isbn=$n2r->getDato;
-
-    if ($isbn ne ''){
-    $url= getImageByIsbn($isbn,$size);
+    my $n2r = C4::AR::Nivel2::getISBNById2($id2);
+    if ($n2r){
+        my $isbn=$n2r;
+        if ($isbn ne ''){
+            $url= getImageByIsbn($isbn,$size);
+        }
     }
     return($url);
 }

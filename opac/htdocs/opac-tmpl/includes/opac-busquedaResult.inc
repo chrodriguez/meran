@@ -1,19 +1,8 @@
-<script type="text/javascript">
-    $(function(){
-        $(".ratings").children().not(":radio").hide();
-        $(".ratings").stars({
-            callback: function(ui, type, value)
-            {
-                $.post("demo1.php", {rate: value}, function(data)
-                {
-                    $("#ajax_response").html(data);
-                });
-            },
-            cancelShow: false,
-        });
+<script>
+    $(document).ready(function() {
+        $('.fancylink').fancybox();
     });
 </script>
-
 
 <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
 <div class="resultados_consulta">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
@@ -46,14 +35,45 @@
     <tbody>
 <!-- Resultados de la busqueda -->
         [% FOREACH SEARCH_RESULTS %]
+            <script type="text/javascript">
+                $(function(){
+                    $("#rating[% id1 %]").children().not(":radio").hide();
+                    $("#rating[% id1 %]").stars({
+                        cancelShow: false,
+                        split: 2,
+                        disabled: true,
+                    });
+                    $("#rating[% id1 %]").stars("select",[% rating %]);
+                });
+            </script>
             <tr>
                 <td class="titulo_result">
-                    [% IF portada_registro %]
-                        <img name="cover"  VALUE="" BORDER=0 src="/covers/[% portada_registro %]" title="Portada">
+                    [% IF portadas_grupo %]
+                            [% FOREACH portadas_grupo %]
+                                [% IF portada_registro %]
+                                    <a class="fancylink" rel="group" href="/covers/[% portada_registro_big %]">
+                                        <img name="cover"  
+                                             VALUE="" BORDER=0 
+                                             src="/covers/[% portada_registro %]" title="Portada" style="float:left"
+                                        />
+                                    </a>
+                                [% ELSE %]
+                                      <a class="fancylink" href="/covers/no_image.jpg">
+                                          <img src="/covers/no_image.jpg" 
+                                                alt="[% 'Sin Portada' | i18n %]"
+                                                title="[% 'Sin Portada' | i18n %]" style="float:left" 
+                                          />
+                                      </a>
+                                [% END %]
+                            [% END %]
                     [% ELSE %]
-                          <img src="/covers/no_image.jpg" 
-                                alt="[% 'Sin Portada' | i18n %]"
-                                title="[% 'Sin Portada' | i18n %]" />
+                        [% IF portada_registro %]
+                            <img name="cover"  VALUE="" BORDER=0 src="/covers/[% portada_registro %]" title="Portada">
+                        [% ELSE %]
+                              <img src="/covers/no_image.jpg" 
+                                    alt="[% 'Sin Portada' | i18n %]"
+                                    title="[% 'Sin Portada' | i18n %]" />
+                        [% END %]
                     [% END %]
                 </td>
                 <td class="titulo_result">	
@@ -114,7 +134,25 @@
                     [% END %]
                 </td>
                 <td>
-                    [% INCLUDE 'rating.inc' %]
+                    <div class="rating">
+                        <label>[% "Valoraci&oacute;n" | i18n %]</label>
+                        <form id="rating[% id1 %]" class="ratings" action="/cgi-bin/koha/rating.pl" method="post">
+                            <input type="radio" name="rate" value="1" id="rate1" />
+                            <input type="radio" name="rate" value="2" id="rate2" />
+                            <input type="radio" name="rate" value="3" id="rate3" />
+                            <input type="radio" name="rate" value="4" id="rate4" />
+                            <input type="radio" name="rate" value="5" id="rate5" />
+                            <input type="radio" name="rate" value="6" id="rate6" />
+                            <input type="radio" name="rate" value="7" id="rate7" />
+                            <input type="radio" name="rate" value="8" id="rate8" />
+                            <input type="radio" name="rate" value="9" id="rate9" />
+                            <input type="radio" name="rate" value="10" id="rate10" />
+                            <input type="submit" value="Enviar" />
+                        </form>
+
+                        <br style="clear:both" />
+                        <p id="ajax_response[% id2 %]"></p>
+                    </div>
                 </td>
             </tr>
         [% END %]

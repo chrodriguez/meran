@@ -304,6 +304,26 @@ sub getISBNById1{
         return (0);
     }
 }
+
+=head2
+    sub getISBNById1
+    Retorna (SI EXISTE) el ISBN segun el Id1 pasado por parametro
+=cut
+sub getISBNById2{
+    my ($id2) = @_;
+
+    my @filtros;
+    my @cat_registro_marc_n2_array_result;
+    push(@filtros, ( id    => { eq => $id2}));
+
+    my $cat_registro_marc_n2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2( query => \@filtros );
+
+    if(scalar(@$cat_registro_marc_n2_array_ref) > 0){
+        return ($cat_registro_marc_n2_array_ref->[0]->getISBN());
+    }else{
+        return (0);
+    }
+}
 #***********************************************ACA FINALIZA LA NUEVA ESTRUCTURA***************************************************************
 
 
@@ -385,6 +405,18 @@ sub getRating{
         $rating_count = ceil($count/$rating_count);
     } 
     
+    return $rating_count;
+}
+
+sub getRatingPromedio{
+    my($nivel2_array_ref) = @_;
+
+    my $cant = scalar(@$nivel2_array_ref);
+    my $ratings = 0;
+    foreach my $nivel2 (@$nivel2_array_ref){
+        $ratings+= getRating($nivel2->getId2);
+    }
+    my $rating_count = ceil($ratings/$cant);
     return $rating_count;
 }
 

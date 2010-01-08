@@ -1675,7 +1675,8 @@ sub armarInfoNivel1{
             #aca se procesan solo los ids de nivel 1 que se van a mostrar
             #se generan los grupos para mostrar en el resultado de la consulta
             my $ediciones = &C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,"INTRA");
-        
+            my $nivel2_array_ref= &C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
+
             @result_array_paginado[$i]->{'grupos'}      = 0;
             if(scalar(@$ediciones) > 0){
                 @result_array_paginado[$i]->{'grupos'}  = $ediciones;
@@ -1684,8 +1685,21 @@ sub armarInfoNivel1{
             @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
             @result_array_paginado[$i]->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'M');
             @result_array_paginado[$i]->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'L');
+            
+            my @nivel2_portadas;
+            if (scalar(@$nivel2_array_ref)>1){
+                for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
+                    my $hash_nivel2;
+                    $hash_nivel2->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
+                    $hash_nivel2->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
+                    $hash_nivel2->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');
+                    push(@nivel2_portadas, $hash_nivel2);
+                }
+                @result_array_paginado[$i]->{'portadas_grupo'}= \@nivel2_portadas;
+            }
             #se obtine la disponibilidad total 
-            my @disponibilidad = &C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);  
+            @result_array_paginado[$i]->{'rating'} =  C4::AR::Nivel2::getRatingPromedio($nivel2_array_ref);
+            my @disponibilidad = &C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);
         
             @result_array_paginado[$i]->{'disponibilidad'}= 0;
             if(scalar(@disponibilidad) > 0){
