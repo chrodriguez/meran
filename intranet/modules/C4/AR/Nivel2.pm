@@ -387,14 +387,14 @@ sub t_modificarNivel2 {
 
 sub getRating{
     my($id2) = @_;
-    use C4::Modelo::Rating::Manager;
+    use C4::Modelo::CatRating::Manager;
     use POSIX;
 
     my @filtros;
 
     push (@filtros, (id2 => {eq => $id2}));
-    my $rating = C4::Modelo::Rating::Manager->get_rating(query => \@filtros,);
-    my $rating_count = C4::Modelo::Rating::Manager->get_rating_count(query => \@filtros,);
+    my $rating = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros,);
+    my $rating_count = C4::Modelo::CatRating::Manager->get_cat_rating_count(query => \@filtros,);
     my $count = 0;
 
     foreach my $rate (@$rating){
@@ -412,19 +412,23 @@ sub getRatingPromedio{
     my($nivel2_array_ref) = @_;
 
     my $cant = scalar(@$nivel2_array_ref);
-    my $ratings = 0;
-    foreach my $nivel2 (@$nivel2_array_ref){
-        $ratings+= getRating($nivel2->getId2);
+    if ($cant > 0){
+        my $ratings = 0;
+        foreach my $nivel2 (@$nivel2_array_ref){
+            $ratings+= getRating($nivel2->getId2);
+        }
+        my $rating_count = ceil($ratings/$cant);
+        return $rating_count;
+    }else{
+        return (0);
     }
-    my $rating_count = ceil($ratings/$cant);
-    return $rating_count;
 }
 
 sub rate{
 
     my($rate,$id2,$nro_socio) = @_;
-    my $rating_obj = C4::Modelo::Rating->new();
-    use C4::Modelo::Rating;
+    my $rating_obj = C4::Modelo::CatRating->new();
+    use C4::Modelo::CatRating;
 
     $rating_obj = $rating_obj->getObjeto($nro_socio, $id2);
     $rating_obj->setRate($rate);
@@ -432,6 +436,21 @@ sub rate{
 #     $rating_obj->setId2($id2);
     $rating_obj->save();
 
+}
+
+
+sub getCantReviews{
+    my($id2) = @_;
+    use C4::Modelo::CatRating::Manager;
+    use POSIX;
+
+    my @filtros;
+
+    push (@filtros, (id2 => {eq => $id2}));
+    push (@filtros, (review => {ne => NULL}));
+    my $reviews = C4::Modelo::CatRating::Manager->get_cat_rating_count(query => \@filtros,);
+
+    return $reviews;
 }
 
 #=======================================================DEPRECATED========================================================================

@@ -1,16 +1,17 @@
-package C4::Modelo::Rating;
+package C4::Modelo::CatRating;
 
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
-    table   => 'rating',
+    table   => 'cat_rating',
 
     columns => [
         nro_socio     => { type => 'varchar', not_null => 1, length => 11 },
         id2           => { type => 'integer', not_null => 1, length => 11 },
         rate          => { type => 'float', not_null => 1 },
+        review        => { type => 'text' },
     ],
 
     primary_key_columns => [ 'nro_socio','id2' ],
@@ -74,7 +75,18 @@ sub setRate{
     $self->rate($rate);
 }
 
+sub getReview{
+    my ($self) = shift;
 
+    return ($self->review);
+}
+
+sub setReview{
+    my ($self) = shift;
+    my ($review) = @_;
+
+    $self->review($review);
+}
 
 1;
 

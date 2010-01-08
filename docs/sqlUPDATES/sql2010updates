@@ -61,4 +61,6 @@ VALUES (
 'detalle_resumido', NULL , '1', 'Muestra el detalle desde el OPAC en forma resumida', NULL , NULL
 );
 
-RENAME TABLE `rating`  TO `EconoV3`.`cat_rating` ;
+RENAME TABLE `rating`  TO `cat_rating` ;
+
+ALTER TABLE  `cat_rating` ADD  `review` TEXT NOT NULL ;
