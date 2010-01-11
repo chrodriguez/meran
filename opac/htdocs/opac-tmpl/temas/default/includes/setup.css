@@ -260,3 +260,11 @@ div.pagination span.disabled {
 .rating{
     float:right;
 }
+
+.review{
+    background: InfoBackground;
+}
+
+.review pre{
+    margin-left: 10px;
+}

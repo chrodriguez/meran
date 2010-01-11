@@ -465,15 +465,25 @@ sub getReviews{
     my $reviews = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros,
                                                                  include_objects => ['socio'],
                                                                  );
+    if (scalar(@$reviews) > 0){
+        return $reviews
+    }else{
+        return 0;
+    }
 
-    return $reviews;
 }
 
 sub reviewNivel2{
     my ($id2,$review,$nro_socio) = @_;
     my $rating_obj = C4::Modelo::CatRating->new();
     use C4::Modelo::CatRating;
-
+    use HTML::Entities;
+    $review = encode_entities($review);
+    $review=~ s/&lt;/</gi;
+    $review=~ s/&gt;/>/gi;
+    $review=~ s/<script>/_/gi;
+    $review=~ s/<\/script>/_/gi;
+    C4::AR::Debug::debug("Review escapado: ".$review);
     $rating_obj = $rating_obj->getObjeto($nro_socio, $id2);
     $rating_obj->setReview($review);
     $rating_obj->save();

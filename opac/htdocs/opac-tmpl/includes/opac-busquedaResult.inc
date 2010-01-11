@@ -135,8 +135,7 @@
                 </td>
                 <td>
                     <div class="rating">
-                        <label>[% "Valoraci&oacute;n" | i18n %]</label>
-                        <form id="rating[% id1 %]" class="ratings" action="/cgi-bin/koha/rating.pl" method="post">
+                        <form id="rating[% id1 %]" class="ratings">
                             <input type="radio" name="rate" value="1" id="rate1" />
                             <input type="radio" name="rate" value="2" id="rate2" />
                             <input type="radio" name="rate" value="3" id="rate3" />
@@ -149,9 +148,7 @@
                             <input type="radio" name="rate" value="10" id="rate10" />
                             <input type="submit" value="Enviar" />
                         </form>
-
                         <br style="clear:both" />
-                        <p id="ajax_response[% id2 %]"></p>
                     </div>
                 </td>
             </tr>
