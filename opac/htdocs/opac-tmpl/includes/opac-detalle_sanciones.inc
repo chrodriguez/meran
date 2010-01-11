@@ -10,9 +10,9 @@
                   </font></b>
                   <ul>
                   [% IF sancion %]
-                        [% IF sancion.getDescription %]
+                        [% IF sancion.description %]
                           <li class="sancionesOPAC">
-                              [% sancion.getDescription %] - [% "Desde el" | i18n %] [% sancion.getFecha_comienzo %] [% "hasta el" | i18n %] [% sancion.getFecha_final %]
+                              [% sancion.description %] - [% "Desde el" | i18n %] [% sancion.getFecha_comienzo %] [% "hasta el" | i18n %] [% sancion.getFecha_final %]
                           </li>
                         [% END %]
                   [% END %]
@@ -24,6 +24,6 @@
       </tr>
     </table>
 [% ELSE %]
-  <h1> [% 'Ud. no ha sido sancionado.' | i18n %]
+    <h1> [% 'Ud. no ha sido sancionado.' | i18n %]
 [% END %]
 

@@ -585,6 +585,7 @@ sub cancelar_reservas_vencidas {
         $data_hash->{'id3'} = $reserva->getId3;
         $data_hash->{'nro_socio'} = $reserva->getNro_socio;
         $data_hash->{'loggedinuser'} = $loggedinuser;
+        $data_hash->{'responsable'} = $loggedinuser;
         $data_hash->{'hasta'} = undef;
         $data_hash->{'tipo_prestamo'} = '-';
         $data_hash->{'id_ui'} = $reserva->getId_ui;
