@@ -18,6 +18,13 @@ my $input = new CGI;
 
 my $id1 = $ARGV[0] || '0'; #id1 del registro
 my $dbh = C4::Context->dbh;
+
+#Vaciamos el indice
+    my $truncate  =   " TRUNCATE TABLE `indice_busqueda`;";
+    my $sth0      = $dbh->prepare($truncate);
+    $sth0->execute();
+
+
 my $sth1;
 
 if($id1 eq '0'){
@@ -60,8 +67,9 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #Ahora en $marc_record tenemos todo el registro completo
     #Autor
     my $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("100","a"));
+    C4::AR::Debug::debug("autor ANTES  ".$autor);
        $autor = C4::AR::Catalogacion::getDatoFromReferencia("100","a",$autor,"ALL");
-
+    C4::AR::Debug::debug("autor DESPUES  ".$autor);
     if(! $autor) { 
        $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("110","a"));
        $autor = C4::AR::Catalogacion::getDatoFromReferencia("110","a",$autor,"ALL");
@@ -72,7 +80,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
        $autor = C4::AR::Catalogacion::getDatoFromReferencia("111","a",$autor,"ALL");
     }
 
-    C4::AR::Debug::debug("autor ".$autor);
+
 
     #Titulo
     my $titulo = $marc_record->subfield("245","a");
