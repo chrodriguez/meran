@@ -27,8 +27,9 @@ if ($san){
         my $aux=C4::AR::Nivel1::getNivel1FromId3($san->{'id3'}); 
         $san->{'description'}.=": ".$aux->{'titulo'}." (".$aux->{'completo'}.") ";
     }
-    $san->{'fecha_final'}=format_date($san->{'fecha_final'},$dateformat);
-    $san->{'fecha_comienzo'}=format_date($san->{'fecha_comienzo'},$dateformat);
+    $san->{'fecha_final'}=format_date($san->getFecha_final,$dateformat);
+    $san->{'fecha_comienzo'}=format_date($san->getFecha_comienzo,$dateformat);
+    $t_params->{'sancion'} = $san;
 }
 $t_params->{'partial_template'}= "opac-detalle_sanciones.inc";
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

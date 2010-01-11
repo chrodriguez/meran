@@ -101,7 +101,11 @@ sub estaSancionado {
 																			fecha_final    	=> { ge => $hoy},
 																		],
 									);
-  return($sanciones_array_ref->[0] || 0);
+  if (scalar($sanciones_array_ref->[0])){
+      return($sanciones_array_ref->[0] || 0);
+  }else{
+      return (0);
+  }
 
 }
 
