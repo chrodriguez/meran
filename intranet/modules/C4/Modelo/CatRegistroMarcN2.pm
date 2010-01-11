@@ -196,7 +196,7 @@ sub getSoporteObject{
     my $soporte_object  = C4::AR::Referencias::getSoporteObject($ref);
         
     if(!$soporte_object){
-            C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) RefSoporte NO EXISTE");
+            C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) RefSoporte NO EXISTE => ".$ref);
             $soporte_object = C4::Modelo::RefSoporte->new();
     }
 

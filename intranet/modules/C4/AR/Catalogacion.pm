@@ -82,7 +82,7 @@ sub _meran_to_marc{
                 if ( ($value ne '')&&(C4::AR::Utilidades::existeInArray($key, @{$autorizados{$campo}} ) )) {
                 #el subcampo $key, esta autorizado para el campo $campo
                     push(@subcampos_array, ($key => $value));
-                    C4::AR::Debug::debug("ACEPTADO clave = ".$key." valor: ".$value);
+#                     C4::AR::Debug::debug("ACEPTADO clave = ".$key." valor: ".$value);
                 }else{
 #                     $msg_object->{'error'} = 1;
 #                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [$campo.", ".$key." valor: ".$value]} ) ;
@@ -734,7 +734,8 @@ sub _procesar_referencia{
             my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
 
 #                 my $string_result = '@'.$obj_generico->getTableName.'@'.$campo.'@'.$subcampo.'@'.$dato;
-                my $string_result = '@'.$obj_generico->getTableName.'@'.$dato;
+#                 my $string_result = '@'.$obj_generico->getTableName.'@'.$dato;
+                my $string_result = $obj_generico->getTableName.'@'.$dato;
 
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
