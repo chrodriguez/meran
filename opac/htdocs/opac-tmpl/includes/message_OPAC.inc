@@ -13,6 +13,16 @@
 
     ESTA_SEGURO_QUE_DESEA_RESERVAR= '[% "Realmente desea reservar el ejemplar?" | i18n %]';
 
+    FAVORITE_ADDED= '[% "Se agrego el favorito correctamente." | i18n %]';
+
+    FAVORITE_ADDED_ERROR= '[% "No se pudo agregar el favorito" | i18n %]';
+
+    FAVORITE_DELETED= '[% "Se elimino el favorito correctamente." | i18n %]';
+
+    FAVORITE_DELETED_ERROR= '[% "No se pudo eliminar el favorito" | i18n %]';
+
+    CATALOGO_TITLE= '[% "Alerta de Catalogo" | i18n %]';
+
     OPAC_ALERT_TITLE= '[% "Alerta de La Biblioteca" | i18n %]';
 
 

@@ -432,8 +432,6 @@ sub rate{
 
     $rating_obj = $rating_obj->getObjeto($nro_socio, $id2);
     $rating_obj->setRate($rate);
-#     $rating_obj->setNroSocio($nro_socio);
-#     $rating_obj->setId2($id2);
     $rating_obj->save();
 
 }

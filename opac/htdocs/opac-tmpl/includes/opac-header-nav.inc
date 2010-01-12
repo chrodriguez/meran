@@ -71,6 +71,11 @@
                               [% 'Historial de reservas' | i18n %]
                           </a>
                       </li>
+                      <li>
+                          <a href="/cgi-bin/koha/opac-favoritos.pl?token=[% token %]">
+                              [% 'Mis favoritos' | i18n %]
+                          </a>
+                      </li>
                   [% END %]
                 </ul>
               <!--[if lte IE 6]></td></tr></table></a><![endif]-->

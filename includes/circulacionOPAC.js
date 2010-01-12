@@ -186,3 +186,37 @@ function infoSanciones(){
 function updateInfoSanciones(responseText){
     $('#info_sanciones').html(responseText);
 }
+
+
+function addFavorite(id1){
+    objAH=new AjaxHelper(updateAddFavorite);
+    objAH.debug= true;
+    objAH.url= '/cgi-bin/koha/opac-favoritosDB.pl';
+    objAH.action = 'add_favorite';
+    objAH.id1= id1;
+    objAH.sendToServer();
+}
+
+function updateAddFavorite(responseText){
+    if (responseText == 1)
+        jAlert(FAVORITE_ADDED,CATALOGO_TITLE);
+    else
+        jAlert(FAVORITE_ADDED_ERROR,CATALOGO_TITLE);
+}
+
+
+function deleteFavorite(id1){
+    objAH=new AjaxHelper(updateDeleteFavorite);
+    objAH.debug= true;
+    objAH.url= '/cgi-bin/koha/opac-favoritosDB.pl';
+    objAH.action = 'delete_favorite';
+    objAH.id1= id1;
+    objAH.sendToServer();
+}
+
+function updateDeleteFavorite(responseText){
+    if (responseText == 1)
+        jAlert(FAVORITE_DELETED,CATALOGO_TITLE);
+    else
+        jAlert(FAVORITE_DELETED_ERROR,CATALOGO_TITLE);
+}

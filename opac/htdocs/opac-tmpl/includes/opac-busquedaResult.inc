@@ -12,13 +12,13 @@
 <table id="tablaResult" class="tabla_datos" border=1 align="center" cellspacing=0 cellpadding=0 width=100%>
     <thead>
         <tr class="tablaresultadoTitle" >
-            <th align="center" width="30%">
+            <th align="center" width="15%">
                 <a class="click" >[% "Im&aacute;gen" | i18n %]</a>
             </th>
             <th align="center" width="30%">
                 <a class="click" onClick="ordenarPor('titulo')">[% "T&iacute;tulo" | i18n %]</a>
             </th>
-            <th align="center" width="30%">
+            <th align="center" width="20%">
                 <a class="click" onClick="ordenarPor('nomCompleto')">[% "Autor" | i18n %] </a>
             </th>
             <th align="center" width="20%">
@@ -29,6 +29,9 @@
             </th>
             <th align="center" width="20%">
                 [% "Valoraci&oacute;n" | i18n %]
+            </th>
+            <th align="center" width="20%">
+                [% "Favoritos" | i18n %]
             </th>
         </tr>
     </thead>
@@ -150,6 +153,27 @@
                         </form>
                         <br style="clear:both" />
                     </div>
+                </td>
+                <td class="titulo_result">
+                    [% IF esta_en_favoritos %]
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                                                boton   => "icon_borrar",
+                                                                onClick => "deleteFavorite('[% id1 %]');",
+                                                                title   => "[% 'Eliminar favorito' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
+                                    ) ;
+                        [% END %]
+                    [% ELSE %]
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                                                boton   => "icon_agregar",
+                                                                onClick => "addFavorite('[% id1 %]');",
+                                                                title   => "[% 'Agregar a Favoritos' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
+                                    ) ;
+                        [% END %]
+                    [% END %]
                 </td>
             </tr>
         [% END %]

@@ -363,12 +363,69 @@ sub guardarRegistroMARC {
 }
 
 
+sub addToFavoritos{
 
+    my($id1,$nro_socio) = @_;
+    use C4::Modelo::CatFavoritosOpac;
+    my $favorito_obj = C4::Modelo::CatFavoritosOpac->new();
+    my $status = 0;
+    $favorito_obj = $favorito_obj->getObjeto($nro_socio, $id1);
+    eval{
+        $favorito_obj->save();
+        $status = 1;
+    };
 
+    return($status);
 
+}
 
+sub removeFromFavoritos{
 
+    my($id1,$nro_socio) = @_;
+    use C4::Modelo::CatFavoritosOpac;
+    my $favorito_obj = C4::Modelo::CatFavoritosOpac->new();
 
+    $favorito_obj = $favorito_obj->getObjeto($nro_socio, $id1);
+    return($favorito_obj->delete());
+
+}
+
+sub estaEnFavoritos{
+    my($id1) = @_;
+    use C4::Modelo::CatFavoritosOpac::Manager;
+    my @filtros;
+    my $nro_socio = C4::Auth::getSessionNroSocio();
+    
+    push (@filtros, (nro_socio => {eq => $nro_socio}) );
+    push (@filtros, (id1 => {eq => $id1}) );
+
+    my $favoritos_count = C4::Modelo::CatFavoritosOpac::Manager->get_cat_favoritos_opac_count(query => \@filtros,);
+    
+    return ($favoritos_count);
+
+}
+
+sub getFavoritos{
+    my($nro_socio) = @_;
+    use C4::Modelo::CatFavoritosOpac::Manager;
+    my @filtros;
+    my %obj_for_log;
+
+    push (@filtros, (nro_socio => {eq => $nro_socio}) );
+
+    my $favoritos = C4::Modelo::CatFavoritosOpac::Manager->get_cat_favoritos_opac(  query => \@filtros,
+                                                                                    select    => ['id1'],
+                                                                                  );
+    my @arreglo_temp;
+    
+    foreach my $favorito (@$favoritos){
+        push (@arreglo_temp,$favorito);
+    }
+    my ($cantidad,$results) = C4::AR::Busquedas::armarInfoNivel1(\%obj_for_log,@arreglo_temp);
+
+    return ($cantidad,$results);
+
+}
 
 #======================================================DEPRECATED?????????????==================================================================
 
