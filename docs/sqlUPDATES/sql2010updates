@@ -72,3 +72,6 @@ CREATE TABLE IF NOT EXISTS `cat_favoritos_opac` (
   PRIMARY KEY  (`nro_socio`,`id1`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--12/01/10
+--esto solo es para mostrar el formato que tiene q tener el barcode autogenerado, la 20.30 no generaba bien porque el "barcodeFormat" estaba mal
+--UPDATE `V3`.`pref_preferencia_sistema` SET `value` = 'UI,-,tipo_ejemplar,-' WHERE `pref_preferencia_sistema`.`id` =62 LIMIT 1 ;
