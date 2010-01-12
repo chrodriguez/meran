@@ -791,7 +791,7 @@ sub _setDatos_de_estructura {
     $hash_ref_result{'fijo'} =                   $cat->getFijo;  
 
 #     C4::AR::Debug::debug("_setDatos_de_estructura => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
-    C4::AR::Debug::debug("_setDatos_de_estructura => dato: ".$datos_hash_ref->{'dato'});
+#     C4::AR::Debug::debug("_setDatos_de_estructura => dato: ".$datos_hash_ref->{'dato'});
 #     C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$datos_hash_ref->{'datoReferencia'});
     if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
         #tiene una referencia, y es un COMBO
@@ -811,7 +811,7 @@ sub _setDatos_de_estructura {
         }
 
 #         C4::AR::Debug::debug("_setDatos_de_estructura => ======== AUTOCOMPLETE ======== ");
-        C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref_result{'datoReferencia'});
+#         C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref_result{'datoReferencia'});
 #         C4::AR::Debug::debug("_setDatos_de_estructura => referenciaTabla: ".$hash_ref_result{'referenciaTabla'});
     }else{
         #cualquier otra componete
@@ -988,46 +988,51 @@ sub getEstructuraYDatosDeNivel{
 =head2
     sub agregarCamposVacios
 
-    recupera el marc_record y le agrega los campos vacios configurados en la estructura de catalogacion
+    modifica el marc_record, le agrega los campos vacios configurados en la estructura de catalogacion
 =cut
 sub agregarCamposVacios {
     my ($marc_record, $estructura_array_ref) = @_;
-
+    
+    #recorro la estructura de catalogacion en busca de campos vacios que debe tener el marc_record
     for(my $j=0;$j<scalar(@$estructura_array_ref);$j++){ 
 
         my %hash_campos;
         my @subcampos_array;
         my $campo = $estructura_array_ref->[$j]->{'campo'};
-        #C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => campo => ".$campo);
         
+        #recorro los subcampos del campo que se esta procesando
         foreach my $subcampo (@{$estructura_array_ref->[$j]->{'subcampos_array'}}){
-            #C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => subcampo ".$subcampo->{'subcampo'});
+            #C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => campo, subcampo => ".$campo.", ".$subcampo->{'subcampo'});
             #setedo el dato para cada (campo, subcampo) en estructura_array_ref                            
 
             if ($marc_record->field($campo)) {
                 #C4::AR::Debug::debug("EXISTE el campo ".$campo);
-                $marc_record->field($campo)->subfield( $subcampo->{'subcampo'} );
+                my $field = $marc_record->field( $campo );
+                if ( !$field->subfield( $subcampo->{'subcampo'} ) ) {
+                    #C4::AR::Debug::debug("NO EXISTE el subcampo ".$subcampo->{'subcampo'}." => dato => ".$marc_record->field($campo)->subfield( $subcampo->{'subcampo'}));
+                    $field->add_subfields( $subcampo->{'subcampo'} => " " );
+
+                }else{
+                    #C4::AR::Debug::debug("EXISTE el subcampo => ".$subcampo->{'subcampo'}." => dato => ".$marc_record->field($campo)->subfield( $subcampo->{'subcampo'}));
+                }
             } else {
-            #si no existe el campo, se agrega
-                my $campo_subcampo = MARC::Field->new(
-                                        $campo, " ", " ", $subcampo->{'subcampo'} => " "
-                            );
-
-                $marc_record->add_fields( $campo_subcampo );    
                 #C4::AR::Debug::debug("NO EXISTE el campo ".$campo);
+                #no existe el campo, se genera un nuevo campo y subcampo vacio
+                my $campo_subcampo = MARC::Field->new(
+                                    $campo, " ", " ", $subcampo->{'subcampo'} => " "
+                        );
+                
+                $marc_record->append_fields( $campo_subcampo );    
             }
-
-        }
-
-#         C4::AR::Debug::debug($marc_record->as_usmarc);
-
+        }# END foreach my $subcampo (@{$estructura_array_ref->[$j]->{'subcampos_array'}})
     }# END for(my $j=0;$j<scalar(@$catalogaciones_array_ref);$j++)
-    
+
+    C4::AR::Debug::debug("agregarCamposVacios => as_usmarc => ".$marc_record->as_usmarc);
 }
 
 sub getEstructuraSinDatos {
     my ($params) = @_;
-    C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================INI");
+#     C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================INI");
 
     my $nivel =     $params->{'nivel'};
     my $itemType =  $params->{'id_tipo_doc'};
@@ -1037,7 +1042,7 @@ sub getEstructuraSinDatos {
     my ($cant, $campos_array_ref) = getCamposFromEstructura($nivel, $itemType);
 
 
-    C4::AR::Debug::debug("getEstructuraSinDatos => cant: ".$cant);    
+#     C4::AR::Debug::debug("getEstructuraSinDatos => cant campos distintos: ".$cant);    
 
     my @result_total;
     my $campo = '';
@@ -1057,6 +1062,7 @@ sub getEstructuraSinDatos {
             $hash{'datoReferencia'}    = 0;
             
             my ($hash_temp) = _setDatos_de_estructura($sc, \%hash);
+            C4::AR::Debug::debug("getEstructuraSinDatos => campo, subcampo: ".$c->getCampo.", ".$sc->getSubcampo);
             
             push (@result, $hash_temp);
         }
@@ -1079,8 +1085,9 @@ sub getEstructuraSinDatos {
 
     }
 
-    C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================FIN");
+#     C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================FIN");
 
+    # devuelve scalar(@result_total) que es la cantidad de campos distintos con sus respectivos subcampos
     return (scalar(@result_total), \@result_total);
 }
 

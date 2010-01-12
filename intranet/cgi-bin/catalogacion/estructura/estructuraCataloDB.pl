@@ -40,9 +40,9 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
     my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getEstructuraCatalogacionFromDBCompleta($nivel,$itemType,$orden);
     
     #Se pasa al cliente el arreglo de objetos estructura_catalogacion   
-    $t_params->{'catalogaciones'} = $catalogaciones_array_ref;
-    $t_params->{'nivel'} = $nivel;
-    $t_params->{'itemType'} = $itemType;
+    $t_params->{'catalogaciones'}   = $catalogaciones_array_ref;
+    $t_params->{'nivel'}            = $nivel;
+    $t_params->{'itemType'}         = $itemType;
     
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

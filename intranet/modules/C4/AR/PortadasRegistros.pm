@@ -66,10 +66,10 @@ sub getAllImagesByIsbn {
 
 sub getImageByIsbn {
     my ($isbn,$size)=@_;
-    my $url="";
-    my $path=C4::Context->config("covers"); #Donde se guardan las imagenes
-    my $file="";
-    my $msg='';
+    my $url = "";
+    my $path = C4::Context->config("covers"); #Donde se guardan las imagenes
+    my $file = "";
+    my $msg = '';
 
     my $portada = C4::AR::PortadasRegistros::getPortadaByIsbn($isbn);
 
@@ -77,6 +77,7 @@ sub getImageByIsbn {
     elsif (($portada)&&($size eq 'M')) {$url=$portada->getMedium;}
         elsif (($portada)&&($size eq 'L')) {$url=$portada->getLarge;}
 
+# TODO falta verificar $path, sino existe covers en el koha.conf
     if ($url eq ''){
 
         my $isbnaux=$isbn;
