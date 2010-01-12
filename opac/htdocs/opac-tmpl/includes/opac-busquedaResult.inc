@@ -37,22 +37,22 @@
     </thead>
     <tbody>
 <!-- Resultados de la busqueda -->
-        [% FOREACH SEARCH_RESULTS %]
+        [% FOREACH NIVEL IN SEARCH_RESULTS %]
             <script type="text/javascript">
                 $(function(){
-                    $("#rating[% id1 %]").children().not(":radio").hide();
-                    $("#rating[% id1 %]").stars({
+                    $("#rating[% NIVEL.id1 %]").children().not(":radio").hide();
+                    $("#rating[% NIVEL.id1 %]").stars({
                         cancelShow: false,
                         split: 2,
                         disabled: true,
                     });
-                    $("#rating[% id1 %]").stars("select",[% rating %]);
+                    $("#rating[% NIVEL.id1 %]").stars("select",[% NIVEL.rating %]);
                 });
             </script>
             <tr>
                 <td class="titulo_result">
-                    [% IF portadas_grupo %]
-                            [% FOREACH portadas_grupo %]
+                    [% IF NIVEL.portadas_grupo %]
+                            [% FOREACH NIVEL.portadas_grupo %]
                                 [% IF portada_registro %]
                                     <a class="fancylink" rel="group" href="/covers/[% portada_registro_big %]">
                                         <img name="cover"  
@@ -70,8 +70,8 @@
                                 [% END %]
                             [% END %]
                     [% ELSE %]
-                        [% IF portada_registro %]
-                            <img name="cover"  VALUE="" BORDER=0 src="/covers/[% portada_registro %]" title="Portada">
+                        [% IF NIVEL.portada_registro %]
+                            <img name="cover"  VALUE="" BORDER=0 src="/covers/[% NIVEL.portada_registro %]" title="Portada">
                         [% ELSE %]
                               <img src="/covers/no_image.jpg" 
                                     alt="[% 'Sin Portada' | i18n %]"
@@ -80,9 +80,9 @@
                     [% END %]
                 </td>
                 <td class="titulo_result">	
-                    [% IF titulo %]
+                    [% IF NIVEL.titulo %]
                         [% PERL %]
-                            print C4::AR::Filtros::link_to( text =>     "( [% hits %] ) - [% titulo %]",
+                            print C4::AR::Filtros::link_to( text =>     "( [% NIVEL.hits %] ) - [% NIVEL.titulo %]",
                                                             url =>      "/cgi-bin/koha/opac-detail.pl", 
                                                             params =>   ["id1=[% id1 %]"],
                                                             title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
@@ -93,17 +93,17 @@
                     [% END %]
                 </td>
 
-                <td class="autor_result click" onClick="filtrarPorAutor([% idAutor %])" title="[% 'Filtrar por Autor' | i18n %]">
-                    [% IF nomCompleto %]
-                        [% nomCompleto %]
+                <td class="autor_result click" onClick="filtrarPorAutor([% NIVEL.idAutor %])" title="[% 'Filtrar por Autor' | i18n %]">
+                    [% IF NIVEL.nomCompleto %]
+                        [% NIVEL.nomCompleto %]
                     [% ELSE %]
                         &nbsp;
                     [% END %]
                 </td>
 
                 <td>
-                    [% IF grupos %]
-                        [% FOREACH grupos %]
+                    [% IF NIVEL.grupos %]
+                        [% FOREACH NIVEL.grupos %]
                             [% IF edicion %]
                                 [% edicion %] &nbsp;
                             [% END %]
@@ -121,8 +121,8 @@
                 </td>
 
                 <td>
-                    [% IF disponibilidad %]
-                        [% FOREACH disponibilidad %]
+                    [% IF NIVEL.disponibilidad %]
+                        [% FOREACH NIVEL.disponibilidad %]
                             <b>[% tipoPrestamo %]</b> [% cantTotal %]
                             <br>
                             <div style="margin-right:4px">
@@ -138,7 +138,7 @@
                 </td>
                 <td>
                     <div class="rating">
-                        <form id="rating[% id1 %]" class="ratings">
+                        <form id="rating[% NIVEL.id1 %]" class="ratings">
                             <input type="radio" name="rate" value="1" id="rate1" />
                             <input type="radio" name="rate" value="2" id="rate2" />
                             <input type="radio" name="rate" value="3" id="rate3" />
@@ -155,11 +155,11 @@
                     </div>
                 </td>
                 <td class="titulo_result">
-                    [% IF esta_en_favoritos %]
+                    [% IF NIVEL.esta_en_favoritos %]
                         [% PERL %]
                             print C4::AR::Filtros::to_Icon(    
                                                                 boton   => "icon_borrar",
-                                                                onClick => "deleteFavorite('[% id1 %]');",
+                                                                onClick => "deleteFavorite('[% NIVEL.id1 %]');",
                                                                 title   => "[% 'Eliminar favorito' | i18n %]",
                                                                 alternClass => "botonCentradoTabla"
                                     ) ;
@@ -168,7 +168,7 @@
                         [% PERL %]
                             print C4::AR::Filtros::to_Icon(    
                                                                 boton   => "icon_agregar",
-                                                                onClick => "addFavorite('[% id1 %]');",
+                                                                onClick => "addFavorite('[% NIVEL.id1 %]');",
                                                                 title   => "[% 'Agregar a Favoritos' | i18n %]",
                                                                 alternClass => "botonCentradoTabla"
                                     ) ;
