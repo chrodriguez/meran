@@ -180,13 +180,3 @@
     </tbody>
 </table>
 <br>
-
-[% IF nro_socio %]
-<!-- FIXME creo q no se usa mas -->
-<!--    <input type="hidden" value="" name="bookmarks" id="bookmarks">
-    <a  onMouseOut="swap('ps','[% themelang %]/images/favoritos.png')" 		
-        onMouseOver="swap('ps','[% themelang %]/images/favoritosbis.png')">
-        <input onClick="agregarAFavoritos();" name="ps" id="ps" type="image" value="publicshelf"  
-               src="[% themelang %]/images/favoritos.png" border="0" title="Agregar a favoritos">
-    </a>-->
-[% END %]

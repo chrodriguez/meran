@@ -409,7 +409,7 @@ sub getFavoritos{
     my($nro_socio) = @_;
     use C4::Modelo::CatFavoritosOpac::Manager;
     my @filtros;
-    my %obj_for_log;
+    my %obj_for_log = {};
 
     push (@filtros, (nro_socio => {eq => $nro_socio}) );
 

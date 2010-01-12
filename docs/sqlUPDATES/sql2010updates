@@ -69,6 +69,6 @@ DROP TABLE IF EXISTS `cat_favoritos_opac`;
 CREATE TABLE IF NOT EXISTS `cat_favoritos_opac` (
   `nro_socio` varchar(16) character set utf8 NOT NULL,
   `id1` int(11) NOT NULL,
-  PRIMARY KEY  (`nro_socio`,`id2`)
+  PRIMARY KEY  (`nro_socio`,`id1`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
