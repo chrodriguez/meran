@@ -67,7 +67,7 @@ if($socios){
 	
 	$t_params->{'resultsloop'}= \@resultsdata;
 	$t_params->{'cantidad'}= $cantidad;
-	$t_params->{'socio'}= $socioBuscado;
+	$t_params->{'socio_busqueda'}= $socioBuscado;
 
 }#END if($socios)
 

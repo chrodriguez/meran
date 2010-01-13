@@ -62,7 +62,9 @@ print "Renombrando tablas \n";
 print "Quitando tablas de mas \n";
 #quitarTablasDeMas();
 print "Hasheando passwords \n";
-#hashearPasswords();
+# hashearPasswords();
+print "Relacion usuario-persona \n";
+crearRelacionUsuarioPersona();
 print "Pasamos TODO a INNODB \n";
 #pasarTodoAInnodb();
 print "Creando nuevas claves foraneas \n";
@@ -3764,7 +3766,7 @@ foreach my $sql (@sqls){
        CHANGE `borrowernumber` id_socio INT(11) NULL DEFAULT NULL, 
        CHANGE `cardnumber` nro_socio VARCHAR(16) NOT NULL, 
        CHANGE `documentnumber` `nro_documento` VARCHAR(16) NOT NULL, 
-       CHANGE `documenttype` ` tipo_documento` CHAR(3) NOT NULL, 
+       CHANGE `documenttype` `tipo_documento` CHAR(3) NOT NULL, 
        CHANGE `surname` `apellido` TEXT NOT NULL, 
        CHANGE `firstname` `nombre` TEXT  NOT NULL, 
        CHANGE `title` `titulo` TEXT NULL DEFAULT NULL, 
@@ -3798,21 +3800,15 @@ foreach my $sql (@sqls){
         CHANGE `lastchangepassword` `last_change_password` DATE NULL DEFAULT NULL ,
         CHANGE `changepassword` `change_password` TINYINT( 1 ) NULL DEFAULT '0',
         CHANGE `usercourse` `cumple_requisito` DATE NULL DEFAULT NULL;",
-        "ALTER TABLE `usr_socio`  DROP `documenttype`,  DROP `surname`,  DROP `firstname`,  DROP `title`,  DROP `othernames`,
-        DROP `initials`,  DROP `streetaddress`,  DROP `suburb`,  DROP `city`,  DROP `phone`,  DROP `emailaddress`,  DROP `faxnumber`,
-        DROP `textmessaging`,  DROP `altstreetaddress`,  DROP `altsuburb`,  DROP `altcity`,  DROP `altphone`,  DROP `dateofbirth`,  
-        DROP `gonenoaddress`,  DROP `lost`,  DROP `debarred`,  DROP `studentnumber`,  DROP `school`,  DROP `contactname`,
-        DROP `borrowernotes`,  DROP `guarantor`,  DROP `area`,  DROP `ethnicity`,  DROP `ethnotes`,  DROP `sex`,  DROP `altnotes`,
-        DROP `altrelationship`,  DROP `streetcity`,  DROP `phoneday`,  DROP `preferredcont`,  DROP `physstreet`,  DROP `homezipcode`,
-        DROP `zipcode`,  DROP `userid`;",
-      "ALTER TABLE `usr_socio` ADD `nombre_apellido_autorizado` VARCHAR( 255 ) NOT NULL ;",
-      "ALTER TABLE `usr_socio` ADD dni_autorizado VARCHAR( 16 ) NOT NULL ;",
-      "ALTER TABLE `usr_socio` ADD telefono_autorizado VARCHAR( 255 ) NOT NULL ;",
+      "ALTER TABLE `usr_socio` ADD `nombre_apellido_autorizado` VARCHAR( 255 )  NULL ;",
+      "ALTER TABLE `usr_socio` ADD dni_autorizado VARCHAR( 16 )  NULL ;",
+      "ALTER TABLE `usr_socio` ADD telefono_autorizado VARCHAR( 255 )  NULL ;",
       "ALTER TABLE `usr_socio` ADD is_super_user INT( 11 )NOT NULL ;",
       "ALTER TABLE `usr_socio` ADD credential_type VARCHAR( 255 ) NOT NULL ;",
+      "ALTER TABLE `usr_socio` CHANGE `credential_type` `credential_type` VARCHAR( 255 ) NOT NULL DEFAULT 'estudiante'",
       "ALTER TABLE `usr_socio` ADD id_estado INT( 11 )NOT NULL ;",
       "ALTER TABLE `usr_socio` ADD activo VARCHAR( 255 ) NOT NULL ;",
-      "ALTER TABLE `usr_socio` ADD agregacion_temp VARCHAR( 255 ) NOT NULL ;",
+      "ALTER TABLE `usr_socio` ADD agregacion_temp VARCHAR( 255 ) NULL ;",
       "ALTER TABLE `pref_unidad_informacion` CHANGE `branchcode` `id_ui` VARCHAR( 4 )  NOT NULL ,
       CHANGE `branchname` `nombre` TEXT  NOT NULL ,
       CHANGE `branchaddress1` `direccion` TEXT  NULL DEFAULT NULL ,
@@ -3832,7 +3828,8 @@ foreach my $sql (@sqls){
       "ALTER TABLE `usr_persona` ADD `es_socio` INT( 1 ) UNSIGNED NOT NULL DEFAULT '0' COMMENT '1= si; 0=no';",
       "ALTER TABLE `ref_localidad` DROP PRIMARY KEY;",
       "ALTER TABLE `ref_localidad` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );",
-      "ALTER TABLE `usr_socio` CHANGE `password` `password` VARCHAR( 255 ) NULL DEFAULT NULL",
+      "ALTER TABLE `usr_socio` CHANGE `password` `password` VARCHAR( 255 ) NULL DEFAULT NULL;",
+      "ALTER TABLE `usr_socio` ADD `id_persona` INT( 11 ) NOT NULL FIRST ;",
       "ALTER TABLE `ref_pais` DROP PRIMARY KEY;",
       "ALTER TABLE `ref_pais` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;",
       " ALTER TABLE `ref_pais` CHANGE `name` `nombre` VARCHAR( 80 )  NOT NULL ,
@@ -3918,6 +3915,93 @@ foreach my $sql (@sqls){
 
   }
 
+  sub crearRelacionUsuarioPersona    
+  {
+# Le agrega el id_persona a usr_socio 
+    my $usuarios=$dbh->prepare("SELECT * FROM usr_socio;");
+    $usuarios->execute();
+
+    while (my $usuario=$usuarios->fetchrow_hashref) {
+        my $persona=$dbh->prepare("SELECT id_persona FROM usr_persona WHERE  nro_documento= ? ;");
+        $persona->execute($usuario->{'documentnumber'});
+        my $id_persona=$persona->fetchrow;
+        
+
+        if (!$id_persona) {
+             #No existe la persona HAY QUE CREARLA!!!
+        my $nueva_persona=$dbh->prepare("INSERT into usr_persona (nro_documento,tipo_documento,apellido,nombre,titulo,
+                                        otros_nombres,iniciales,calle,barrio,ciudad,telefono,email,fax,msg_texto,
+                                        alt_calle,alt_barrio,alt_ciudad,alt_telefono,nacimiento,sexo,
+                                        telefono_laboral,es_socio,cumple_condicion,legajo) 
+                                        values (?,?,?,?,?,
+                                                ?,?,?,?,?,?,?,?,?,
+                                                ?,?,?,?,?,?,
+                                                ?,'1','1','');");
+        $nueva_persona->execute($usuario->{'documentnumber'},$usuario->{'documenttype'},$usuario->{'surname'},$usuario->{'firstname'},$usuario->{'title'},
+                                $usuario->{'othernames'},$usuario->{'initials'},$usuario->{'streetaddress'},$usuario->{'suburb'},$usuario->{'city'},$usuario->{'phone'},$usuario->{'emailaddress'},$usuario->{'faxnumber'},$usuario->{'textmessaging'},
+                                $usuario->{'altstreetaddress'},$usuario->{'altsuburb'},$usuario->{'altcity'},$usuario->{'altphone'},$usuario->{'dateofbirth'},$usuario->{'sex'}, 
+                                $usuario->{'phoneday'});
+        
+        $persona->execute($usuario->{'documentnumber'});
+        $id_persona=$persona->fetchrow;
+
+          }
+            my $upuspr=$dbh->prepare(" UPDATE usr_socio SET id_persona = ? WHERE nro_socio= ? ;");
+            $upuspr->execute($id_persona,$usuario->{'nro_socio'});
+     
+
+    }
+
+#Limpiamos usr_socio
+       my $limpiando_usr= "ALTER TABLE `usr_socio`  DROP documentnumber  , DROP `documenttype`,  DROP `surname`,  DROP `firstname`,  DROP `title`,  DROP `othernames`,
+        DROP `initials`,  DROP `streetaddress`,  DROP `suburb`,  DROP `city`,  DROP `phone`,  DROP `emailaddress`,  DROP `faxnumber`,
+        DROP `textmessaging`,  DROP `altstreetaddress`,  DROP `altsuburb`,  DROP `altcity`,  DROP `altphone`,  DROP `dateofbirth`,  
+        DROP `gonenoaddress`,  DROP `lost`,  DROP `debarred`,  DROP `studentnumber`,  DROP `school`,  DROP `contactname`,
+        DROP `borrowernotes`,  DROP `guarantor`,  DROP `area`,  DROP `ethnicity`,  DROP `ethnotes`,  DROP `sex`,  DROP `altnotes`,
+        DROP `altrelationship`,  DROP `streetcity`,  DROP `phoneday`,  DROP `preferredcont`,  DROP `physstreet`,  DROP `homezipcode`,
+        DROP `zipcode`,  DROP `userid`;";
+
+        my $droppr=$dbh->prepare($limpiando_usr);
+         $droppr->execute();
+
+
+#Agregamos KOHAADMIN!!!
+
+ my $kohaadmin_persona="INSERT INTO `usr_persona` (`version_documento`, `nro_documento`, `tipo_documento`, `apellido`, `nombre`, `titulo`, `otros_nombres`, `iniciales`, `calle`, `barrio`, `ciudad`, `telefono`, `email`, `fax`, `msg_texto`, `alt_calle`, `alt_barrio`, `alt_ciudad`, `alt_telefono`, `nacimiento`, `fecha_alta`, `legajo`, `sexo`, `telefono_laboral`, `cumple_condicion`, `es_socio`) VALUES
+('P', '1000000', 'DNI', 'kohaadmin', 'kohaadmin', NULL, NULL, 'DGR', '007', NULL, '16648', '', '', NULL, NULL, NULL, NULL, '', NULL, '2009-12-23', NULL, '007', NULL, NULL, 0, 1);"
+ my $kp=$dbh->prepare($kohaadmin_persona);
+    $kp->execute();
+ my $personaka=$dbh->prepare("SELECT id_persona FROM usr_persona WHERE  nro_documento= ? ;");
+    $personaka->execute('1000000');
+ my $id_persona_kohaadmin=$personaka->fetchrow;
+
+my $kohaadmin_socio="INSERT INTO `usr_socio` (`id_persona`, `nro_socio`, `id_ui`, `cod_categoria`, `fecha_alta`, `expira`, `flags`, `password`, `last_login`, `last_change_password`, `change_password`, `cumple_requisito`, `nombre_apellido_autorizado`, `dni_autorizado`, `telefono_autorizado`, `is_super_user`, `credential_type`, `id_estado`, `activo`, `agregacion_temp`) VALUES
+(?, 'kohaadmin', 'DEO', 'DO', NULL, NULL, 1, 'a1q8oyiSjO02w1vpPlwscK+kQdDDbolevtC2ZsZX1Uc', '2010-01-13 00:00:00', '2009-12-13', 0, '0000-00-00', '', '', '', 1, '', 46, '1', 'id_persona');";
+ my $ks=$dbh->prepare($kohaadmin_socio);
+    $ks->execute($id_persona_kohaadmin);
+
+
+#habilitamos los socios
+
+ my $act=$dbh->prepare("UPDATE `usr_socio` SET id_estado =20, activo =1 WHERE id_estado =0;");
+    $act->execute();
+
+#Agregamos los socios de las personas no habilitadas!!! 
+
+    my $persona=$dbh->prepare("SELECT * FROM usr_persona;");
+    $persona->execute();
+
+    while (my $p=$persona->fetchrow_hashref) {
+      if(!$p->{'es_socio'}){
+           my $usu_0=$dbh->prepare("INSERT INTO usr_socio (id_persona,nro_socio,id_ui,cod_categoria,flags,change_password,is_super_user,id_estado,activo) VALUES
+                ( ? , ? ,'DEO','ES', 0, 1, 0, 20, 0);");
+             $usu_0->execute($p->{'id_persona'},$p->{'nro_documento'});
+      }
+
+    }
+
+  }
+
   sub hashearPasswords    
   {
   #Re Hasear Pass con sha256
@@ -3993,12 +4077,12 @@ foreach my $sql (@sqls){
 ('amazon-secret-key', 'h8gqbZreGcoV2F1YbTB+RH6sGeOxhwwNOyITOGMo', 'amazon-secret-key', NULL, 'text'),
 ('amazon-token', 'AKIAJGKW6XWXPOPDODVQ', 'Token para conectarse a Amazon', NULL, 'text'),
 ('authoritysep', '--', 'the separator used in authority/thesaurus. Usually --', '10', 'text'),
-('auto-nro_socio_from_dni', '1', 'Preferencia que configura el auto-generar de nro de socio. Si es 0, es el autogenerar "serial", sino sera el documento.', NULL, NULL),
+('auto-nro_socio_from_dni', '1', 'Preferencia que configura el auto-generar de nro de socio. Si es 0, es el autogenerar 'serial', sino sera el documento.', NULL, NULL),
 ('autoActivarPersona', '1', 'Activa por defecto un alta de una persona', NULL, 'bool'),
 ('autoMemberNum', '0', 'Member number is auto-calculated', NULL, 'bool'),
 ('barcodeFormat', 'homebranch,-,itemtype,-', 'Formato del Barcode para la generación automática es un campo de item seguido de un separador', NULL, 'text'),
 ('beginESissue', '60', 'Cantidad de minutos antes del cierre de la biblioteca que se puede realizar un prestamo ESPECIAL.', NULL, 'text'),
-('checkdigit', 'none', 'Validity checks on membership number: none or "Katipo" style checks', 'none|katipo', 'text'),
+('checkdigit', 'none', 'Validity checks on membership number: none or 'Katipo' style checks', 'none|katipo', 'text'),
 ('CheckUpdateDataEnabled', '1', 'evita que Koha modifique los datos del usuario', NULL, 'bool'),
 ('circularDesdeDetalleDelRegistro', '1', 'se permite (=1) circular desde el detalle del registro', NULL, 'bool'),
 ('circularDesdeDetalleUsuario', '1', 'se permite (=1) circular desde el detalle del usuario', NULL, 'bool'),
