@@ -18,7 +18,7 @@
     [% PERL %]
         print C4::AR::Filtros::link_to( text =>     "[% 'Volver al detalle' | i18n %]",
                                         url =>      "/cgi-bin/koha/opac-detail.pl", 
-                                        params =>   ["id1=[% nivel2.getId1 %]"],
+                                        params =>   ["id1=[% id1 %]"],
                                         title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
                                     ) ;
     [% END %]
