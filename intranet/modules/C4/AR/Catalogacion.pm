@@ -912,10 +912,28 @@ sub getEstructuraYDatosDeNivel{
             
                     if($cat_estruct_array){
 
-                        $liblibrarian           = $cat_estruct_array->camposBase->getLiblibrarian;
-                        $indicador_primario     = $cat_estruct_array->camposBase->getIndicadorPrimario;
-                        $indicador_secundario   = $cat_estruct_array->camposBase->getIndicadorSecundario;
-                        $descripcion_campo      = $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
+                        my ($campos_base_array_ref) = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampo($campo);
+
+                        if($campos_base_array_ref){
+
+                            $liblibrarian           = $cat_estruct_array->camposBase->getLiblibrarian;
+                            $indicador_primario     = $cat_estruct_array->camposBase->getIndicadorPrimario;
+                            $indicador_secundario   = $cat_estruct_array->camposBase->getIndicadorSecundario;
+                            $descripcion_campo      = $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
+    
+                        } else {
+
+                            $liblibrarian           = "NO EXISTE EL CAMPO (".$campo.")";
+                            $indicador_primario     = "NO EXISTE EL CAMPO (".$campo.")";
+                            $indicador_secundario   = "NO EXISTE EL CAMPO (".$campo.")";
+                            $descripcion_campo      = "NO EXISTE EL CAMPO (".$campo.")";  
+
+                        }
+
+#                         $liblibrarian           = $cat_estruct_array->camposBase->getLiblibrarian;
+#                         $indicador_primario     = $cat_estruct_array->camposBase->getIndicadorPrimario;
+#                         $indicador_secundario   = $cat_estruct_array->camposBase->getIndicadorSecundario;
+#                         $descripcion_campo      = $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
             
                         $hash_temp{'tiene_estructura'}  = '1';
                         $hash_temp{'dato'}              = $subcampo->{'dato'};
