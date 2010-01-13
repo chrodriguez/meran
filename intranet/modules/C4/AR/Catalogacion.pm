@@ -1364,6 +1364,7 @@ sub campoEnUsoFromNivel {
     my ($params)    = @_;
 
     my $existe      = 0;
+# TODO falta modularizar
 
     if( $params->{'nivel'} eq '1'){
         my $nivel_array_ref = C4::AR::Nivel1::getNivel1Completo();
@@ -1389,8 +1390,26 @@ sub campoEnUsoFromNivel {
         C4::AR::Debug::debug("Catalogacion => campoEnUsoFromNivel=> verifico existencia de campo en nivel 2");
     }
     elsif( $params->{'nivel'} eq '3'){
-        $existe = C4::AR::Nivel3::seUsaCampo($params->{'campo'});
+#         $existe = C4::AR::Nivel3::seUsaCampo($params->{'campo'});
         C4::AR::Debug::debug("Catalogacion => campoEnUsoFromNivel=> verifico existencia de campo en nivel 3");
+
+        my $nivel_array_ref = C4::AR::Nivel3::getNivel3Completo();
+
+        foreach my $nivel (@$nivel_array_ref){
+           my  $nivel_info_marc_array = $nivel->toMARC;
+
+            for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++){
+                if($nivel_info_marc_array->[$i]->{'campo'}){
+                    C4::AR::Debug::debug("EL CAMPO se esta  USANDOOOOOOOOOOOOOOOO ");
+                    $existe = 1;
+                }
+
+                last if ($existe);
+            }
+
+            last if ($existe);
+        }
+
     }
 
     return $existe;

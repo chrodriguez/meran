@@ -178,6 +178,24 @@ sub getNivel3FromId2{
     return $nivel3_array_ref;
 }
 
+=head2 sub getNivel3Completo
+Recupero todos los nivel 3 
+=cut
+sub getNivel3Completo{
+    my ($db) = @_;
+
+    $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db();
+
+    my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
+                                                                        db  => $db,
+#                                                                         query => [  
+#                                                                                     id2 => { eq => $id2 },
+#                                                                             ], 
+                                        );
+
+    return $nivel3_array_ref;
+}
+
 
 
 =head2 sub t_eliminarNivel3
