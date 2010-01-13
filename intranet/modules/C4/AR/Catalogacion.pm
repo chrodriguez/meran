@@ -276,10 +276,8 @@ sub _procesar_referencias{
 
 
 =head2
->>>>>>> .r2463
 sub importacion_to_meran
- 
-Esta funcion la idea es que sea llamada desde las distintas fuentes de ingreso de datos que existen, ej: aguapey, bibun, biblo, etc
+    Esta funcion la idea es que sea llamada desde las distintas fuentes de ingreso de datos que existen, ej: aguapey, bibun, biblo, etc
 =cut
 sub importacion_to_meran{
 

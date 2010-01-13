@@ -894,11 +894,15 @@ function procesarInfoJson(json){
     if( MODIFICAR == 0 && _NIVEL_ACTUAL == 2 ){  
     //si se esta agregando un NIVEL 2  
         _seleccionarTipoDocumentoYDeshabilitarCombo();
+        $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
     } 
 
     if(MODIFICAR == 1){
-        $('#tipo_nivel3_id').val($('#'+_getIdComponente('910','a')).val());
+        $('#tipo_nivel3_id').change( function() {
+            $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
+        });
     }   
+ 
 }
 
 function crearBotonAyudaCampo(campo){
