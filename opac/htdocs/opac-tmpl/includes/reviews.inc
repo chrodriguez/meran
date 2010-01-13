@@ -14,6 +14,14 @@
     <a class="fancylink" rel="group" href="/covers/[% portada_registro_big %]" >
       <img  name="cover" src="/covers/[% portada_registro_medium %]" title="Portada" style="float:left" />
     </a>
+
+    [% PERL %]
+        print C4::AR::Filtros::link_to( text =>     "[% 'Volver al detalle' | i18n %]",
+                                        url =>      "/cgi-bin/koha/opac-detail.pl", 
+                                        params =>   ["id1=[% nivel2.getId1 %]"],
+                                        title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                                    ) ;
+    [% END %]
 </fieldset>
 [% IF reviews %]
     [% FOREACH review IN reviews %]
