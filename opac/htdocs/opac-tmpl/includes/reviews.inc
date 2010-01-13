@@ -3,11 +3,18 @@
         $(function()
         {
             $('#review').wysiwyg();
+            $('.fancylink').fancybox();
         });
     });
 </script>
 
 [% USE HTML %]
+<fieldset style="float:left; width:90%; margin: 0 auto;">
+    <legend> <b>[% 'Revisiones de ' | i18n %] [% titulo %]</b></legend>
+    <a class="fancylink" rel="group" href="/covers/[% portada_registro_big %]" >
+      <img  name="cover" src="/covers/[% portada_registro_medium %]" title="Portada" style="float:left" />
+    </a>
+</fieldset>
 [% IF reviews %]
     [% FOREACH review IN reviews %]
         <div style="float:left; width:90%" class="review" >

@@ -84,7 +84,7 @@
                         [% PERL %]
                             print C4::AR::Filtros::link_to( text =>     "( [% NIVEL.hits %] ) - [% NIVEL.titulo %]",
                                                             url =>      "/cgi-bin/koha/opac-detail.pl", 
-                                                            params =>   ["id1=[% id1 %]"],
+                                                            params =>   ["id1=[% NIVEL.id1 %]"],
                                                             title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
                                                         ) ;
                         [% END %]
@@ -114,7 +114,7 @@
                                 t [% volume %]
                             [% END %]
                             <br>
-                    [% END %]
+                        [% END %]
                     [% ELSE %]
                         &nbsp;
                     [% END %]

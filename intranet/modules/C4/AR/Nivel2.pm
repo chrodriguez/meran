@@ -167,9 +167,9 @@ sub getNivel2FromId1{
     
     $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db();
 
-    my $nivel2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(   
+    my $nivel2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(
                                                                         db => $db,
-                                                                        query => [ 
+                                                                        query => [
                                                                                         id1 => { eq => $id1 },
                                                                                 ]
                                                                 );
@@ -185,14 +185,14 @@ sub getNivel2FromId1{
 sub getNivel2FromId2{
     my ($id2, $db) = @_;
 
-    my $nivel2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(   
-                                                                        db => $db,             
+    my $nivel2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(
+                                                                        db => $db, 
                                                                         query => [ 
                                                                                     id => { eq => $id2 },
-                                                                            ], 
+                                                                            ],
                                                                 );
 
-    if( scalar(@$nivel2_array_ref) > 0){
+    if (scalar(@$nivel2_array_ref) > 0){
         return ($nivel2_array_ref->[0]);
     }else{
         return (0);
