@@ -290,8 +290,8 @@ elsif($tipoAccion eq "ELIMINAR_CAMPO"){
                                                 'intranet'
                                     );
 
-    C4::AR::Validator::validateParams('U389', $obj,['idMod']);
-    C4::AR::Catalogacion::eliminarCampo($obj->{'idMod'});
+#     C4::AR::Validator::validateParams('U389', $obj,['id']);
+    C4::AR::Catalogacion::eliminarCampo($obj);
 
     C4::Auth::print_header($session);
 }

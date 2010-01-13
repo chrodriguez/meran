@@ -914,6 +914,7 @@ sub getEstructuraYDatosDeNivel{
 
                         my ($campos_base_array_ref) = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampo($campo);
 
+                        #se verifica que exista el campo en la BIBLIA
                         if($campos_base_array_ref){
 
                             $liblibrarian           = $cat_estruct_array->camposBase->getLiblibrarian;
@@ -929,11 +930,6 @@ sub getEstructuraYDatosDeNivel{
                             $descripcion_campo      = "NO EXISTE EL CAMPO (".$campo.")";  
 
                         }
-
-#                         $liblibrarian           = $cat_estruct_array->camposBase->getLiblibrarian;
-#                         $indicador_primario     = $cat_estruct_array->camposBase->getIndicadorPrimario;
-#                         $indicador_secundario   = $cat_estruct_array->camposBase->getIndicadorSecundario;
-#                         $descripcion_campo      = $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
             
                         $hash_temp{'tiene_estructura'}  = '1';
                         $hash_temp{'dato'}              = $subcampo->{'dato'};
@@ -1334,15 +1330,71 @@ sub cambiarVisibilidad{
 Esta funcion elimina un "campo", estructura de catalogacion, segun parametro ID
 =cut
 sub eliminarCampo{
-    my ($id) = @_;
+    my ($params) = @_;
+    
+    my $id      = $params->{'id'};
+    my $nivel   = $params->{'nivel'};
 
+    #verifica que el campo q se esta intentando eliminar no se este utilizando en el nivel correspondiente
     my $catalogacion = getEstructuraCatalogacionById($id);
-
+# TODO falta modularizar
     if($catalogacion){
-        $catalogacion->delete();
-     }else{
+        #obtengo el nivel al que pertence el campo que se intenta eliminar de la estructura de catalogacion
+#         $nivel = C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampo($nivel);
+        $params->{'campo'} = $catalogacion->getCampo;
+
+        if(campoEnUsoFromNivel($params)){
+            C4::AR::Debug::debug("EL CAMPO se esta  USANDOOOOOOOOOOOOOOOO ");
+        } else {
+            $catalogacion->delete();
+        }
+
+    }else{
         C4::AR::Debug::debug("Catalogacion => eliminarCampo => NO EXISTE EL ID DE LA ESTRUCTURA QUE SE INTENTA MODIFICAR");
     }
+
+#     if($catalogacion){
+#         $catalogacion->delete();
+#      }else{
+#         C4::AR::Debug::debug("Catalogacion => eliminarCampo => NO EXISTE EL ID DE LA ESTRUCTURA QUE SE INTENTA MODIFICAR");
+#     }
+}
+
+sub campoEnUsoFromNivel {
+    my ($params)    = @_;
+
+    my $existe      = 0;
+
+    if( $params->{'nivel'} eq '1'){
+        my $nivel_array_ref = C4::AR::Nivel1::getNivel1Completo();
+
+        foreach my $nivel (@$nivel_array_ref){
+           my  $nivel_info_marc_array = $nivel->toMARC;
+
+            for(my $i=0;$i<scalar(@$nivel_info_marc_array);$i++){
+                if($nivel_info_marc_array->[$i]->{'campo'}){
+                    C4::AR::Debug::debug("EL CAMPO se esta  USANDOOOOOOOOOOOOOOOO ");
+                    $existe = 1;
+                }
+
+                last if ($existe);
+            }
+
+            last if ($existe);
+        }
+
+        C4::AR::Debug::debug("Catalogacion => campoEnUsoFromNivel=> verifico existencia de campo en nivel 1");
+    }
+    elsif( $params->{'nivel'} eq '2'){
+        C4::AR::Debug::debug("Catalogacion => campoEnUsoFromNivel=> verifico existencia de campo en nivel 2");
+    }
+    elsif( $params->{'nivel'} eq '3'){
+        $existe = C4::AR::Nivel3::seUsaCampo($params->{'campo'});
+        C4::AR::Debug::debug("Catalogacion => campoEnUsoFromNivel=> verifico existencia de campo en nivel 3");
+    }
+
+    return $existe;
+
 }
 
 

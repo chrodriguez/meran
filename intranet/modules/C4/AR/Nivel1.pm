@@ -127,6 +127,26 @@ sub getNivel1FromId1{
     }
 }
 
+=head2 
+sub getNivel1Completo
+
+Se recupera el nivel 1 completo
+=cut
+sub getNivel1Completo {
+    my ($db) = @_;
+
+    $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db();
+    
+    my $nivel1_array_ref = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1(
+                                                                        db => $db,    
+#                                                                         query => [ 
+#                                                                                     id => { eq => $id1 },
+#                                                                             ]
+                                                                );
+
+    return ($nivel1_array_ref);
+}
+
 sub getNivel1FromId3{
     my ($id3) = @_;
     my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
