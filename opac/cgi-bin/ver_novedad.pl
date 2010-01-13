@@ -2,11 +2,9 @@
 use strict;
 require Exporter;
 use CGI;
-use Mail::Sendmail;
 use C4::Auth;         # checkauth, getnro_socio.
-use C4::Circulation::Circ2;
 use C4::Interface::CGI::Output;
-use C4::Date;
+use C4::AR::Novedades;
 
 my $query = new CGI;
 
@@ -21,19 +19,12 @@ my ($template, $session, $t_params)= get_template_and_user({
              });
 
 
-my $nro_socio = C4::Auth::getSessionNroSocio();
-my ($socio, $flags) = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
-C4::AR::Validator::validateObjectInstance($socio);
+my $id_novedad = $input->param('id');
 
+my $novedad = C4::AR::Novedades::getNovedad($id_novedad);
 
-my ($cantidad,$resultsarray)= C4::AR::Nivel1::getFavoritos($nro_socio);
-
-$t_params->{'cantidad'}= $cantidad;
-$t_params->{'nro_socio'}= $session->param('nro_socio');
-$t_params->{'SEARCH_RESULTS'}= $resultsarray;
-$t_params->{'content_title'}= C4::AR::Filtros::i18n("Sus favoritos: ".$cantidad);
-$t_params->{'partial_template'}= "opac-busquedaResult.inc";
+$t_params->{'novedad'} = $novedad;
+$t_params->{'partial_template'}= "ver_novedad.inc";
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 
-1;

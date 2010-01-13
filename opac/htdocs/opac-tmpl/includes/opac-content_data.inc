@@ -1,14 +1,28 @@
         <!-- Content unit - One column -->
-        <h1 class="block">1 - Column types</h1>
+        <h1 class="block">[% 'Novedades de la biblioteca' | i18n %]</h1>
         <div class="column1-unit">
-          <h1>Here comes the title</h1>
-          <h3>Monday, 20 November 2006 at 20:30 GMT, by <a href="#">SiteAdmin </a></h3>
-          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod tincidunt ut laoreet dolore <a href="#">magna aliquam</a> erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis. <a href="#">Read more &raquo;</a></p>
-          <p class="details">| Posted by <a href="#">SiteAdmin </a> | Categories: <a href="#">General</a> | Comments: <a href="#">73</a> |</p>
-          <h1><a href="">Heading h1 with link</a></h1>
-          <h3>Heading h3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetuer <a href="#">adipiscing elit</a>, sed diam nonummy nibh euismod tincidunt ut laoreet dolore <a href="#">magna aliquam</a> erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis. <a href="#">Read more &raquo;</a></p>
-          <p class="details">Posting details ...  </p>
+
+          [% IF !novedades %]
+                  <a href="#">[% 'Sin novedades' | i18n %].</a>
+          [% END %]
+          [% FOREACH novedad IN novedades %]
+              <h1><a href="/cgi-bin/koha/ver_novedad.pl?token=[% token %]&id=[% novedad.getId %]">[% novedad.getTitulo %]</a></h1>
+              <h3>[% novedad.getFechaLegible %], [% 'por ' | i18n %] <a href="#">[% novedad.getUsuario %]</a></h3>
+              <p>
+                  [% novedad.getResumen %]
+                  <a href="/cgi-bin/koha/ver_novedad.pl?token=[% token %]&id=[% novedad.getId %]">[% 'Leer m&aacute;s' | i18n %] &raquo;</a>
+              </p>
+              <p class="details">| 
+                  [% 'Acutalizado por' | i18n %] <a href="#"> [% novedad.getUsuario %] </a> | [% 'Categor&iacute;a' | i18n %]: 
+                  <a href="#">[% novedad.getCategoria %]</a> |
+              </p>
+          [% END %]
+          
         </div>
         <hr class="clear-contentunit" />
         <!-- Content unit - Two columns -->
+
+        <h1 class="pagetitle"> [% 'Ultimos ejemplares adquiridos por la biblioteca' | i18n %] 
+            <hr class="clear-contentunit" />
+        </h1>
+        [% INCLUDE 'opac-busquedaResult.inc' %]

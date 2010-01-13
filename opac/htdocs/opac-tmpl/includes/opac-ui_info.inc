@@ -1,4 +1,5 @@
-        <!-- Content unit - One column -->
+
+      <!-- Content unit - One column -->
         <h1 class="block">[% ui.getNombre %]</h1>
         <div class="column1-unit">
           <h1>[% 'Informaci&oacute;n de Contacto' | i18n %]</h1>
@@ -12,3 +13,4 @@
         </div>
         <hr class="clear-contentunit" />
         <!-- Content unit - Two columns -->
+        [% google_map %]

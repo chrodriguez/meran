@@ -4,10 +4,12 @@
     });
 </script>
 [% IF SEARCH_RESULTS %]
-    <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
-    <div class="resultados_consulta">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
+    [% IF !not_show_search_details %]
+        <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
+        <div class="resultados_consulta">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
 
-    <div class="contenedor_paginador">[% paginador %]</div>
+        <div class="contenedor_paginador">[% paginador %]</div>
+    [% END %]
 
     <table id="tablaResult" class="tabla_datos" border=1 align="center" cellspacing=0 cellpadding=0 width=100%>
         <thead>

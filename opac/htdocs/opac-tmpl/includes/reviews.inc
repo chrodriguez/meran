@@ -10,7 +10,7 @@
 
 [% USE HTML %]
 <fieldset style="float:left; width:90%; margin: 0 auto;">
-    <legend> <b>[% 'Revisiones de ' | i18n %] [% titulo %]</b></legend>
+    <legend> <b>[% 'Revisiones de ' | i18n %] [% titulo %]</b> </legend>
     <a class="fancylink" rel="group" href="/covers/[% portada_registro_big %]" >
       <img  name="cover" src="/covers/[% portada_registro_medium %]" title="Portada" style="float:left" />
     </a>
@@ -20,7 +20,7 @@
                                         url =>      "/cgi-bin/koha/opac-detail.pl", 
                                         params =>   ["id1=[% id1 %]"],
                                         title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
-                                    ) ;
+                                    );
     [% END %]
 </fieldset>
 [% IF reviews %]

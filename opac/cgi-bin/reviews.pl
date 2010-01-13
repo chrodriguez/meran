@@ -33,7 +33,9 @@ if ($review){
 }
 $t_params->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId2($id2,'M');
 $t_params->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId2($id2,'L');
+
 my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($id2);
+
 $t_params->{'nivel2'}= $nivel2->toMARC_Opac;
 $t_params->{'titulo'}=  $nivel2->nivel1->getTitulo;
 $t_params->{'id1'}=  $nivel2->nivel1->getId1;

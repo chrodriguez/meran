@@ -18,4 +18,5 @@ my ($template, $session, $t_params)= get_template_and_user({
 $t_params->{'opac'};
 
 $t_params->{'partial_template'}= "opac-ui_info.inc";
+$t_params->{'google_map'} = C4::AR::Preferencias->getValorPreferencia('google_map');
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

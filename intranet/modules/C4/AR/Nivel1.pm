@@ -363,6 +363,31 @@ sub guardarRegistroMARC {
 }
 
 
+
+sub getUltimosGrupos{
+    use C4::Modelo::CatRegistroMarcN1::Manager;
+    use POSIX;
+
+    my @filtros;
+
+    my $grupos = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1(query => \@filtros,
+                                                                                  limit => 5,
+                                                                                  offset => 0,
+                                                                                  sorty_by => ['id DESC'],
+                                                                                  );
+    my @arreglo_temp;
+
+    foreach my $grupo (@$grupos){
+        $grupo->{'id1'} = $grupo->getId1;
+        push (@arreglo_temp,$grupo);
+    }
+
+    my %obj_for_log = {};
+    my ($cantidad,$results) = C4::AR::Busquedas::armarInfoNivel1(\%obj_for_log,@arreglo_temp);
+
+    return ($cantidad,$results);
+}
+
 sub addToFavoritos{
 
     my($id1,$nro_socio) = @_;
