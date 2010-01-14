@@ -25,10 +25,10 @@ my $id_mensaje = $input->param('id') || 0;
 my $url = "/cgi-bin/koha/admin/novedades_opac.pl?token=".$input->param('token')."&tipoAccion=".$obj->{'tipoAccion'};
 
 if ($accion eq 'marcar'){
-    C4::AR::MensajesContacto::marcar($id_mensaje);
+    C4::AR::Novedades::marcar($id_mensaje);
 }
 elsif ($accion eq 'eliminar'){
-    C4::AR::MensajesContacto::eliminar($id_mensaje);
+    C4::AR::Novedades::eliminar($id_mensaje);
 }
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
