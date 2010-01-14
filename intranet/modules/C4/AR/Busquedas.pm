@@ -604,23 +604,23 @@ sub obtenerDisponibilidadTotal{
 buscarCamposMARC
 Busca los campos correspondiente a el parametro campoX, para ver en el tmpl de filtradoAvanzado.
 =cut
-sub buscarCamposMARC{
-	my ($campoX) =@_;
-	my $dbh = C4::Context->dbh;
-	my $query="SELECT DISTINCT nivel,campo FROM pref_estructura_subcampo_marc ";
-	$query .=" WHERE nivel > 0 AND campo LIKE ? ORDER BY nivel";
-	
-	my $sth=$dbh->prepare($query);
-        $sth->execute($campoX."%");
-	my @results;
-	my $nivel;
-	while(my $data=$sth->fetchrow_hashref){
-		$nivel="n".$data->{'nivel'}."r";
-		push (@results,$nivel."/".$data->{'campo'});
-	}
-	$sth->finish;
-	return (@results);
-}
+# sub buscarCamposMARC{
+# 	my ($campoX) =@_;
+# 	my $dbh = C4::Context->dbh;
+# 	my $query="SELECT DISTINCT nivel,campo FROM pref_estructura_subcampo_marc ";
+# 	$query .=" WHERE nivel > 0 AND campo LIKE ? ORDER BY nivel";
+# 	
+# 	my $sth=$dbh->prepare($query);
+#         $sth->execute($campoX."%");
+# 	my @results;
+# 	my $nivel;
+# 	while(my $data=$sth->fetchrow_hashref){
+# 		$nivel="n".$data->{'nivel'}."r";
+# 		push (@results,$nivel."/".$data->{'campo'});
+# 	}
+# 	$sth->finish;
+# 	return (@results);
+# }
 
 =item
 buscarSubCamposMARC
@@ -647,98 +647,6 @@ sub buscarSubCamposMARC{
 }
 
 
-=item
-buscarItemtypes
-Busca los distintos tipos de documentos que tiene una tupla del nivel1, se pasa como parametro el id1 de la misma.
-=cut
-sub buscarItemtypes{
-	my ($id1)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query="SELECT DISTINCT tipo_documento FROM cat_nivel2 WHERE id1=?";
-	
-	my $sth=$dbh->prepare($query);
-        $sth->execute($id1);
-	my @results;
-	my $i=0;
-	while(my $data=$sth->fetchrow_hashref){
-		$results[$i]=$data->{'tipo_documento'};
-		$i++;
-	}
-	$sth->finish;
-	return (\@results);
-}
-
-=item
-buscarEncabezados
-Busca los encabezados correspondientes a los tipos de documentos que llegan por parametro y para un determinado nivel.
-=cut
-sub buscarEncabezados{
-	my ($itemtypes,$nivel)= @_;
-	my %encabezados;
-	my $linea;
-	my $nombre;
-	my $orden;
-	my $llave;
-open(A,">>/tmp/debug.txt");
-print A "************************************************************************************************* \n";
-print A "desde buscar encabezado \n";
-
-#NO LOS TRAE EN ORDEN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-#PQ DEBERIAMOS TRAER TODOS LOS ENCABEZADOS SEGUN UN TIPO DE ITEM!!!!!!!!!!!!!!!!!!!!!1
-#ordeno el resultado del arreglo por tipo de item
-	my $query2="	SELECT *
-			FROM cat_estructura_catalogacion_opac estco INNER JOIN cat_encabezado_campo_opac eco
-			ON (estco.idencabezado = eco.idencabezado)
-			WHERE estco.visible = 1 AND estco.idencabezado = ? AND nivel=? ";
-# 			ORDER BY eco.orden ";
-
-  	foreach my $itemtype (@$itemtypes){
-		my @infoEncabezado;
-	#busca los idencabezado para un tipo de item
-		my $dbh = C4::Context->dbh;
-		my $query="SELECT * FROM cat_encabezado_item_opac WHERE itemtype=?";
-		my $sth=$dbh->prepare($query);
-		$sth->execute($itemtype);
-
-print A "---------------------------Encabezado para itemtype: ".$itemtype."----------------------------- \n";
-	#se procesa cada idencabezado
-		while(my $data=$sth->fetchrow_hashref){#while de query
-			my $sth2=$dbh->prepare($query2);
-			$sth2->execute($data->{'idencabezado'},$nivel);
-			my %result;
-			my %infoEnca;
-			while(my $data2=$sth2->fetchrow_hashref){#while de query2
- 				$linea= $data2->{'linea'};
- 				$nombre= $data2->{'nombre'};
-				$orden= $data2->{'orden'};
-# print A "encabezado dentro de while: ".$nombre."\n";
-# print A "linea : $linea \n";
-				$llave=$data2->{'campo'}.",".$data2->{'subcampo'};
-print A "llave: $llave\n";
-				$result{$llave}->{'textpred'}=$data2->{'textpred'};
-				$result{$llave}->{'textsucc'}=$data2->{'textsucc'};
-				$result{$llave}->{'separador'}=$data2->{'separador'};
-			}
-			$sth2->finish;
-			#Llenados de datos del encabezado.
-			$infoEnca{'linea'}= $linea;
-			$infoEnca{'orden'}= $orden;
-# print A "encabezado q se asigna: ".$nombre."\n";
-			$infoEnca{'nombre'}= $nombre;
-			$infoEnca{'result'}= \%result;
-
-			push(@infoEncabezado, \%infoEnca);
-		}
-		#ordeno el arreglo encabezados de tipos de items segun orden
-		@infoEncabezado = sort { $a->{'orden'} cmp $b->{'orden'} } (@infoEncabezado);
-# print A "guardo info para itemtype: ".$itemtype."\n";
-		#se guarda el arreglo con todos los encabezados para un tipo de documento
-		$encabezados{$itemtype}= \@infoEncabezado;
-print A "**************************************************************************************** \n";
-	}
-	return \%encabezados;
-close(A);
-}
 
 =item
 buscarNivel2EnMARC
@@ -1069,98 +977,6 @@ sub getNombreLocalidad{
 	if ($description) {return $description;}
 	else{return "";}
 }
-
-# sub loguearBusqueda{
-# 	my ($borrowernumber,$type,$search_array)=@_;
-# 
-# 	my $dbh = C4::Context->dbh;
-# 
-# 	my $query = "	INSERT INTO rep_busqueda ( `id_socio` , `fecha` )
-# 			VALUES ( ?, NOW( ));";
-# 	my $sth=$dbh->prepare($query);
-# 	$sth->execute($borrowernumber);
-# 
-# 	my $query2= "SELECT MAX(idBusqueda) as idBusqueda FROM rep_busqueda";
-# 	$sth=$dbh->prepare($query2);
-# 	$sth->execute();
-# 
-# 	my $id=$sth->fetchrow;
-# 
-# 	my $query3;
-# 	my $campo;
-# 	my $valor;
-# 
-# 	my $desde= "INTRA";
-# 	if($type eq "opac"){
-# 		$desde= "OPAC";
-# 	}
-# 
-# 	$query3= "	INSERT INTO rep_historial_busqueda (`idBusqueda` , `campo` , `valor`, `tipo`)
-# 			VALUES (?, ?, ?, ?);";
-# 
-# 	$sth=$dbh->prepare($query3);
-# 
-# 	foreach my $search (@$search_array){
-# 
-# 
-# 		if($search->{'keyword'} ne ""){
-# 			$sth->execute($id, 'keyword', $search->{'keyword'}, $desde);
-# 		}
-# 	
-# 		if($search->{'dictionary'} ne ""){
-# 			$sth->execute($id, 'dictionary', $search->{'dictionary'}, $desde);
-# 		}
-# 	
-# 		if($search->{'virtual'} ne ""){
-# 			$sth->execute($id, 'virtual', $search->{'virtual'}, $desde);
-# 		}
-# 	
-# 		if($search->{'signature'} ne ""){
-# 			$sth->execute($id, 'signature', $search->{'signature'}, $desde);
-# 		}	
-# 	
-# 		if($search->{'analytical'} ne ""){
-# 			$sth->execute($id, 'analytical', $search->{'analytical'}, $desde);
-# 		}
-# 	
-# 		if($search->{'id3'} ne ""){
-# 			$sth->execute($id, 'id3', $search->{'id3'}, $desde);
-# 		}
-# 	
-# 		if($search->{'class'} ne ""){
-# 			$sth->execute($id, 'class', $search->{'class'}, $desde);
-# 		}
-# 	
-# 		if($search->{'subjectitems'} ne ""){
-# 			$sth->execute($id, 'subjectitems', $search->{'subjectitems'}, $desde);
-# 		}
-# 	
-# 		if($search->{'isbn'} ne ""){
-# 			$sth->execute($id, 'isbn', $search->{'isbn'}, $desde);
-# 		}
-# 	
-# 		if($search->{'subjectid'} ne ""){
-# 			$sth->execute($id, 'subjectid', $search->{'subjectid'}, $desde);
-# 		}
-# 	
-# 		if($search->{'autor'} ne ""){
-# 			$sth->execute($id, 'autor', $search->{'autor'}, $desde);
-# 		}
-# 	
-# 		if($search->{'titulo'} ne ""){
-# 			$sth->execute($id,'titulo', $search->{'titulo'}, $desde);
-# 		}
-# 	
-# 		if($search->{'tipo_documento'} ne ""){
-# 			$sth->execute($id,'tipo_documento', $search->{'tipo_documento'}, $desde);
-# 		}
-# 
-# 		if($search->{'barcode'} ne ""){
-# 			$sth->execute($id,'barcode', $search->{'barcode'}, $desde);
-# 		}
-# 	}
-# 
-# }
 
 =item
 getBranches
@@ -1807,91 +1623,7 @@ sub _existeEnArregloDeCampoMARC{
 #***************************************Fin**Soporte MARC*********************************************************************
 
 
-#====================================================DEPRECATED=====================================================================
-
-=item
-buscarDatoReferencia
-Busca el valor del dato que viene de referencia. Es un id que apunta a una tupla de una tabla y se buscan los campos que el usuario introdujo para que se vean. Se concatenan con el separador que el mismo introdujo.
-=cut
-# sub buscarDatoReferencia{
-#     my ($dato,$tabla,$campos,$separador)=@_;
-#     
-#     my $ident=C4::AR::Utilidades::obtenerIdentTablaRef($tabla);
-# 
-#     my $dbh = C4::Context->dbh;
-#     my @camposArr=split(/,/,$campos);
-#     my $i=0;
-#     my $strCampos="";
-#     foreach my $camp(@camposArr){
-#         $strCampos.=", ".$camp . " AS dato".$i." ";
-#         $i++;
-#     }
-#     $strCampos=substr($strCampos,1,length($strCampos));
-#     my $query=" SELECT ".$strCampos;
-#     $query .= " FROM ".$tabla;
-#     $query .= " WHERE ".$ident." = ?";
-# 
-#     my $sth=$dbh->prepare($query);
-#     $sth->execute($dato);
-#     my $data=$sth->fetchrow_hashref;
-#     $strCampos="";
-#     my $llave;
-#     for(my $j=0;$j<$i;$j++){
-#         $llave="dato".$j;
-#         $strCampos.=$separador.$data->{$llave};
-#     }
-#     
-#     if ($separador ne ''){ #Si existe un separador quito el 1ro que esta de mas
-#         $strCampos=substr($strCampos,1,length($strCampos));
-#     }
-#     return($strCampos);
-# }
-
-# DEPRECATED
-# sub buscarTodosLosDatosDeCampoRepetibleN1 {
-#     my ($campo,$subcampo) = @_;
-# 
-#     use C4::Modelo::CatNivel1Repetible;
-#     use C4::Modelo::CatNivel1Repetible::Manager;
-# 
-#     my @filtros;
-#     push(@filtros, ( campo    => { eq => $campo}));
-#     push(@filtros, ( subcampo    => { eq => $subcampo}));
-# 
-#     my $repetibles_array_ref = C4::Modelo::CatNivel1Repetible::Manager->get_cat_nivel1_repetible( query => \@filtros);
-#     return $repetibles_array_ref;
-# }
-
-# DEPRECATED
-# sub buscarTodosLosDatosDeCampoRepetibleN2 {
-#     my ($campo,$subcampo)=@_;
-# 
-#     use C4::Modelo::CatNivel2Repetible;
-#     use C4::Modelo::CatNivel2Repetible::Manager;
-# 
-#     my @filtros;
-#     push(@filtros, ( campo    => { eq => $campo}));
-#     push(@filtros, ( subcampo    => { eq => $subcampo}));
-# 
-#     my $repetibles_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_nivel2_repetible( query => \@filtros);
-#     return $repetibles_array_ref;
-# }
-
-# DEPRECATED
-# sub buscarTodosLosDatosDeCampoRepetibleN3 {
-#     my ($campo,$subcampo)=@_;
-# 
-#     use C4::Modelo::CatNivel3Repetible;
-#     use C4::Modelo::CatNivel3Repetible::Manager;
-# 
-#     my @filtros;
-#     push(@filtros, ( campo    => { eq => $campo}));
-#     push(@filtros, ( subcampo    => { eq => $subcampo}));
-# 
-#     my $repetibles_array_ref = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible( query => \@filtros);
-#     return $repetibles_array_ref;
-# }
-
+END { }       # module clean-up code here (global destructor)
 
 1;
 __END__

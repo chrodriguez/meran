@@ -213,3 +213,8 @@ sub getSubCamposByNivel{
                                                             );
     return($db_subcampos_MARC);
 }
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__

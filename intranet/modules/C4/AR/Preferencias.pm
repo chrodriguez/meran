@@ -22,47 +22,6 @@ use vars qw(@EXPORT @ISA);
     &getMenuPreferences
 );
 
-=item
-buscarPreferencias
-Busca todas las variables del sistema o las que correspondan con el parametro que viene si es distinto de ("").
-=cut
-=item
-sub buscarPreferencias(){
-	my ($str)=@_;
-
-	my $dbh = C4::Context->dbh;
-	my @bind;
-	my $query="SELECT variable,value,explanation,type,options FROM pref_preferencia_sistema ";
-	if($str ne ""){
-		$query.=" WHERE variable like ?";
-		$str="%$str%";
-		push(@bind,$str);
-	}
-	$query.=" ORDER BY variable";
-	my $sth=$dbh->prepare($query);
-        $sth->execute(@bind);
-	my @results;
-	while (my $data=$sth->fetchrow_hashref){
-        	push(@results,$data);
-        }
-        $sth->finish;
-
-	return (\@results);
-}
-
-sub buscarPreferencia{
-	my ($var)=@_;
-
-	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM pref_preferencia_sistema WHERE variable=?";
-	my $sth=$dbh->prepare($query);
-        $sth->execute($var);
-	my $data=$sth->fetchrow_hashref;
-	$sth->finish;
-
-	return($data);
-}
-=cut
 
 sub getMenuPreferences{
 
@@ -226,13 +185,7 @@ sub getConfigVisualizacionOPAC{
     return (\%hash_config);
 }
 
-=item
-sub _modificarVariable(){
-	my ($var,$valor,$expl)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query=" UPDATE pref_preferencia_sistema SET value=?,explanation=? WHERE variable=?";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($valor,$expl,$var);
-	$sth->finish;
-}
-=cut
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__

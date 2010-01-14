@@ -848,7 +848,10 @@ sub esRegular {
 
 
 
+END { }       # module clean-up code here (global destructor)
+
 1;
+__END__
 =back
 
 =head1 AUTHOR

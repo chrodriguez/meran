@@ -239,9 +239,10 @@ function _showAndHiddeEstructuraDelNivel(nivel){
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
 function syncComponentesArray(){
     for(var i=0; i < MARC_OBJECT_ARRAY.length; i++){
-        var subcampos_array = MARC_OBJECT_ARRAY[i].getSubCamposArray();
-        var subcampos_hash = MARC_OBJECT_ARRAY[i].subcampos_hash;
-        var subcampo_valor = '';
+
+        var subcampos_array                 = MARC_OBJECT_ARRAY[i].getSubCamposArray();
+        var subcampos_hash                  = MARC_OBJECT_ARRAY[i].subcampos_hash;
+        var subcampo_valor                  = '';
         MARC_OBJECT_ARRAY[i].cant_subcampos = 0; //para llevar la cantidad de subcampos del campo q se esta procesando
 
 
@@ -252,7 +253,7 @@ function syncComponentesArray(){
         for(var s=0; s < subcampos_array.length; s++){
             subcampo_valor = new Object();
 
-            if(subcampos_array[s].getTieneEstructura() == '1'){
+//             if(subcampos_array[s].getTieneEstructura() == '1'){
 
                 if(subcampos_array[s].getReferencia() == '1'){
                     log("TIENE REFERENCIA");
@@ -282,7 +283,7 @@ function syncComponentesArray(){
                 }
                 
                 subcampos_hash[s] = subcampo_valor;
-            }
+//             }
              
         }//END for(var s=0; s < subcampos_array.length; s++)
             MARC_OBJECT_ARRAY[i].cant_subcampos = subcampos_array.length;
@@ -681,7 +682,6 @@ function updateGuardarDocumentoN3(responseText){
 }
 
 function guardarModificacionDocumentoN1(){
-
     syncComponentesArray();
     objAH=new AjaxHelper(updateGuardarModificacionDocumentoN1);
     objAH.debug= true;
@@ -972,7 +972,8 @@ function procesarObjeto(objeto, marc_group){
     }
 
     if(marc_conf_obj.getTieneEstructura() == '0'){ 
-        vista_intra = vista_intra + "<div class='divComponente'><input type='text' value='" + marc_conf_obj.getDato() + " (NO TIENE ESTRUCTURA)' size='55' disabled></div>";
+// TODO armar una funcion q genere esto
+        vista_intra = vista_intra + "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled> (NO TIENE ESTRUCTURA) </div>";
         tiene_estructura = 0;
     }
 

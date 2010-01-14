@@ -493,4 +493,7 @@ C4::AR::Debug::debug("Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."
  	push (@{$Message_hashref->{'messages'}}, $msg_hashref);
 }
 
+END { }       # module clean-up code here (global destructor)
+
 1;
+__END__

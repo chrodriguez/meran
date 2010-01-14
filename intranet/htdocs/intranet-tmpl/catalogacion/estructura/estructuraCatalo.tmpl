@@ -86,7 +86,7 @@ function visibilidad(id){
 }
 
 
-//Elimina el campo en la estructura inicial del catalogo (SI NO SE ESTA USANDO)
+//Elimina el campo en la estructura inicial del catalogo
 function eliminarCampo(id){
     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_TITLE, function(confirmStatus){
         if (confirmStatus){
@@ -94,7 +94,7 @@ function eliminarCampo(id){
             objAH.debug         = true;
             objAH.url           ="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
             objAH.id            = id;
-            objAH.nivel         = $('#niveles_id').val();
+//             objAH.nivel         = $('#niveles_id').val();
             objAH.tipoAccion    = 'ELIMINAR_CAMPO';
             objAH.sendToServer();
         }
