@@ -681,6 +681,15 @@
 
                   </ul>
                 </li>
+                <li>
+                          [% PERL %]
+                              print C4::AR::Filtros::link_to( text =>     "[% 'Novedades de OPAC' | i18n %]",
+                                                              url =>      "/cgi-bin/koha/admin/novedades_opac.pl",
+                                                              title =>    "[% 'Novedades de OPAC' | i18n %]"
+                                                          ) ;
+                          [% END %]
+                </li>
+
               </ul>
            </li>
           <!-- Navigation item -->

@@ -11,9 +11,25 @@ use vars qw(@EXPORT @ISA);
 
     &getUltimasNovedades
     &getNovedad
+    &listar
 );
 
 
+
+sub listar{
+
+    my $novedades_array_ref = C4::Modelo::SysNovedad::Manager->get_sys_novedad( 
+                                                                                sort_by => ['id DESC'],
+                                                                              );
+
+    #Obtengo la cant total de sys_novedads para el paginador
+    my $novedades_array_ref_count = C4::Modelo::SysNovedad::Manager->get_sys_novedad_count();
+    if(scalar(@$novedades_array_ref) > 0){
+        return ($novedades_array_ref_count, $novedades_array_ref);
+    }else{
+        return (0,0);
+    }
+}
 
 sub getUltimasNovedades{
 

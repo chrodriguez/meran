@@ -73,7 +73,19 @@
                                 [% END %]
                         [% ELSE %]
                             [% IF NIVEL.portada_registro %]
-                                <img name="cover"  VALUE="" BORDER=0 src="/covers/[% NIVEL.portada_registro %]" title="Portada">
+                                [% IF NIVEL.portada_registro_big %]
+                                    <a class="fancylink" rel="group" href="/covers/[% NIVEL.portada_registro_big %]">
+                                        <img name="cover"  VALUE="" BORDER=0 src="/covers/[% NIVEL.portada_registro %]" title="Portada">
+                                    </a>
+                                [% ELSE %]
+                                    [% IF NIVEL.portada_registro_medium %]
+                                        <a class="fancylink" rel="group" href="/covers/[% NIVEL.portada_registro_medium %]">
+                                            <img name="cover"  VALUE="" BORDER=0 src="/covers/[% NIVEL.portada_registro %]" title="Portada">
+                                        </a>
+                                    [% ELSE %]
+                                            <img name="cover"  VALUE="" BORDER=0 src="/covers/[% NIVEL.portada_registro %]" title="Portada">
+                                    [% END %]
+                                [% END %]
                             [% ELSE %]
                                   <img src="/covers/no_image.jpg" 
                                         alt="[% 'Sin Portada' | i18n %]"
