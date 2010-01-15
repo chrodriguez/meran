@@ -38,9 +38,11 @@ sub agregar{
 
 
 sub listar{
-
+    my ($ini,$cantR) = @_;
     my $novedades_array_ref = C4::Modelo::SysNovedad::Manager->get_sys_novedad( 
                                                                                 sort_by => ['id DESC'],
+                                                                                limit   => $cantR,
+                                                                                offset  => $ini,
                                                                               );
 
     #Obtengo la cant total de sys_novedads para el paginador

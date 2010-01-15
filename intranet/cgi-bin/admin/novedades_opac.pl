@@ -24,16 +24,13 @@ my $ini = $obj->{'ini'} = $input->param('page') || 0;
 my $id_mensaje = $input->param('id') || 0;
 my $url = "/cgi-bin/koha/admin/novedades_opac.pl?token=".$input->param('token')."&tipoAccion=".$obj->{'tipoAccion'};
 
-if ($accion eq 'marcar'){
-    C4::AR::Novedades::marcar($id_mensaje);
-}
-elsif ($accion eq 'eliminar'){
+if ($accion eq 'eliminar'){
     C4::AR::Novedades::eliminar($id_mensaje);
 }
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-my ($cant_novedades,$novedades) = C4::AR::Novedades::listar(0,$ini,$cantR);
+my ($cant_novedades,$novedades) = C4::AR::Novedades::listar($ini,$cantR);
 
 $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginadorOPAC($cant_novedades,$cantR, $pageNumber,$url,$t_params);
 
