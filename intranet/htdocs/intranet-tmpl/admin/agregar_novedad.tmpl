@@ -1,0 +1,31 @@
+[% INCLUDE 'intranet-top.inc' %]
+[% USE HTML %]
+
+
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Agregar novedad de OPAC" | i18n %]:</legend>
+        <div class="form">
+            <form id="form_novedad" action="/cgi-bin/koha/admin/agregar_novedad.pl" method="POST">
+                        <label for="titulo">[% "Titulo" | i18n %]</label>
+                          <input type="text" id="titulo" name="titulo" value="[% novedad.getTitulo %]">
+                          <br />
+
+                        <label for="categoria">[% "Categor&iacute;a" | i18n %]</label>
+                          <input type="text" id="categoria" name="categoria" value="[% novedad.getCategoria %]">
+                          <br />
+
+                        <label for="contenido">[% "Contenido" | i18n %]</label>
+                          <textarea id="contenido" name="contenido" >[% novedad.getContenido %]</textarea>
+                          <br />
+
+                        <input type="hidden" id="token" name="token" value="[% token %]">
+                        <input type="hidden" id="action" name="action" value="agregar">
+
+                        <input type="submit" value="[% 'Agregar' | i18n %]">
+
+            </form>
+        </div>
+</fieldset>
+
+
+[% INCLUDE 'intranet-bottom.inc' %]

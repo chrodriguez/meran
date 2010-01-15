@@ -33,7 +33,14 @@ __PACKAGE__->meta->setup(
 sub agregar{
 
     my ($self) = shift;
+    my (%params) = @_;
+    my $usuario = C4::Auth::getSessionNroSocio();
+    $self->setTitulo($params{'titulo'});
+    $self->setContenido($params{'contenido'});
+    $self->setCategoria($params{'categoria'});
+    $self->setUsuario($usuario);
 
+    return($self->save());
 
 }
 

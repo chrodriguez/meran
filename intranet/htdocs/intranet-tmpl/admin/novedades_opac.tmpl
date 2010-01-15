@@ -10,6 +10,7 @@
             'frameWidth':   600,
             'frameHeight':  500,
         });
+        zebra('datos_tabla');
       });
 </script>
 
@@ -24,6 +25,7 @@
                     <tr class="titulo_tabla_resultado">
                         <th>[% "Fecha" | i18n %]</th>
                         <th>[% "Usuario" | i18n %]</th>
+                        <th>[% "Titulo" | i18n %]</th>
                         <th>[% "Resumen" | i18n %]</th>
                         <th>[% "Categor&iacute;a" | i18n %]</th>
                         <th>[% "Eliminar" | i18n %]</th>
@@ -44,12 +46,17 @@
                             </td>
                             <td>
                                 <a class="fancy_link" href="/cgi-bin/koha/admin/ver_novedad.pl?token=[% token %]&id=[% novedad.id %]">
+                                    [% novedad.getTitulo %] 
+                                </a>
+                            </td>
+                            <td>
+                                <a class="fancy_link" href="/cgi-bin/koha/admin/ver_novedad.pl?token=[% token %]&id=[% novedad.id %]">
                                     [% novedad.getResumen %] 
                                 </a>
                             </td>
                             <td>
                                 <a class="" 
-                                    href="/cgi-bin/koha/admin/novedades_opac.pl?token=[% token %]&id=[% novedad.id %]&tipoAccion=marcar">
+                                    href="/cgi-bin/koha/admin/novedades_opac.pl?token=[% token %]&id=[% novedad.id %]">
                                     [% novedad.getCategoria %]
                                 </a>
                             </td>
@@ -65,5 +72,13 @@
             </table>
         </div>
 </fieldset>
+[% PERL %]
+            print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar novedad' | i18n %]",
+                    boton   => "boton_buscar",
+                    url => "/cgi-bin/koha/admin/agregar_novedad.pl?token=[% token %]",
+                    width => "auto",
+                    title   => "[% 'Agregar novedad' | i18n %]",
+                    ) ;
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

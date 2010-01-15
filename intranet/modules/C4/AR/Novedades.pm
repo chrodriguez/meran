@@ -12,8 +12,18 @@ use vars qw(@EXPORT @ISA);
     &getUltimasNovedades
     &getNovedad
     &listar
+    &agregar
 );
 
+
+sub agregar{
+
+    my ($input) = @_;
+
+    my $novedad = C4::Modelo::SysNovedad->new();
+    
+    return ($novedad->agregar($input->Vars));
+}
 
 
 sub listar{
@@ -83,7 +93,5 @@ sub eliminar{
     }
 }
 
-END { }       # module clean-up code here (global destructor)
 
 1;
-__END__
