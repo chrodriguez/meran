@@ -1,4 +1,15 @@
 [% INCLUDE 'intranet-top.inc' %]
+<link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/wysiwyg.css" />
+<script src="/includes/jquery/jquery.wysiwyg.js"></script>
+<script>
+    $(document).ready(function() {
+        $(function()
+        {
+            $('#contenido').wysiwyg();
+        });
+    });
+</script>
+
 [% USE HTML %]
 
 
@@ -15,7 +26,7 @@
                           <br />
 
                         <label for="contenido">[% "Contenido" | i18n %]</label>
-                          <textarea id="contenido" name="contenido" >[% novedad.getContenido %]</textarea>
+                          <textarea id="contenido" name="contenido" style="width: 88.3%">[% novedad.getContenido %]</textarea>
                           <br />
 
                         <input type="hidden" id="token" name="token" value="[% token %]">

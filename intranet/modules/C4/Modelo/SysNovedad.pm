@@ -121,7 +121,7 @@ sub setContenido{
 sub getResumen{
     my ($self) = shift;
 
-    my $string_sub = substr ($self->contenido,0,100);
+    my $string_sub = substr ($self->contenido,0,75);
     return ($string_sub."...");
 }
 
