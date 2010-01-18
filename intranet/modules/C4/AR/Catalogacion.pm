@@ -791,9 +791,9 @@ sub _setDatos_de_estructura {
     $hash_ref_result{'rules'}                   = $cat->getRules;    
     $hash_ref_result{'fijo'}                    = $cat->getFijo;  
 
-#     C4::AR::Debug::debug("_setDatos_de_estructura => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
-#     C4::AR::Debug::debug("_setDatos_de_estructura => dato: ".$datos_hash_ref->{'dato'});
-#     C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$datos_hash_ref->{'datoReferencia'});
+    C4::AR::Debug::debug("_setDatos_de_estructura => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
+    C4::AR::Debug::debug("_setDatos_de_estructura => dato: ".$datos_hash_ref->{'dato'});
+    C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$datos_hash_ref->{'datoReferencia'});
     if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
         #tiene una referencia, y es un COMBO
 #         C4::AR::Debug::debug("_setDatos_de_estructura => ======== COMBO ======== ");
