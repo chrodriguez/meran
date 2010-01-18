@@ -75,7 +75,7 @@ sub _meran_to_marc{
         for(my $j=0;$j<$cant_subcampos;$j++){
             my $subcampo = $subcampos_hash->{$j};
             #C4::AR::Debug::debug("CAMPO => ".$campo);
-            C4::AR::Utilidades::printHASH($subcampo);
+            #C4::AR::Utilidades::printHASH($subcampo);
             while ( my ($key, $value) = each(%$subcampo) ){
                 #C4::AR::Utilidades::printARRAY($autorizados{$campo});
                 $value = _procesar_referencia($campo, $key, $value, $itemtype);
@@ -92,23 +92,17 @@ sub _meran_to_marc{
         }# END for(my $j=0;$j<$cant_subcampos;$j++)
 
         if(scalar(@subcampos_array) > 0){
-# TODO, el indicador undefined # (numeral) debe ser reemplazado por blanco el asci correspondiente
-#             C4::AR::Debug::debug("indicador_primario    ".C4::AR::Utilidades::HEXtoASCII($indentificador_1)." del campo ".$campo);
-#             C4::AR::Debug::debug("indicador_secundario  ".C4::AR::Utilidades::HEXtoASCII($indentificador_2)." del campo ".$campo);
-
-#             C4::AR::Debug::debug("blanco 2 ". C4::AR::Utilidades::dec2hex(32));
-
-            $field = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);
-            #C4::AR::Utilidades::printHASH($field);
-            #C4::AR::Debug::debug("field  warnings: ".$field->warnings());
-            
-            $marc_record->add_fields($field);
+            #el indicador undefined # (numeral) debe ser reemplazado por blanco el asci correspondiente
+            $field = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);            
+#             FIXME DEPRECATEDDDDDDDDDDD, estoy testeando append_fields
+#             $marc_record->add_fields($field);
+            $marc_record->append_fields($field);
             #C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$field->as_formatted());
         }
     }
 
     C4::AR::Debug::debug("_meran_to_marc => SALIDA => as_formatted ".$marc_record->as_formatted());
-    
+
     return($marc_record);
 }
 
@@ -256,18 +250,26 @@ sub _procesar_referencias{
                                 push(@subcampos_sin_definir_array, ($subcampo => $dato));
                             }
             }
-        if (scalar(@subcampos1_array)>0){
-        	my $field_limpio1 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos1_array);
-        	$marc_record_limpio1->add_fields($field_limpio1);}
-        if (scalar(@subcampos2_array)>0){
-        	my $field_limpio2 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos2_array);
-        	$marc_record_limpio2->add_fields($field_limpio2);}
-        if (scalar(@subcampos3_array)>0){
-        	my $field_limpio3 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos3_array);
-        	$marc_record_limpio3->add_fields($field_limpio3);}
-        if (scalar(@subcampos_sin_definir_array)>0){
-        	my $field_sin_definir = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos_sin_definir_array);
-        	$marc_record_campos_sin_definir->add_fields($field_sin_definir);}
+
+            if (scalar(@subcampos1_array)>0){
+                my $field_limpio1 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos1_array);
+                $marc_record_limpio1->add_fields($field_limpio1);
+            }
+    
+            if (scalar(@subcampos2_array)>0){
+                my $field_limpio2 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos2_array);
+                $marc_record_limpio2->add_fields($field_limpio2);
+            }
+    
+            if (scalar(@subcampos3_array)>0){
+                my $field_limpio3 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos3_array);
+                $marc_record_limpio3->add_fields($field_limpio3);
+            }
+    
+            if (scalar(@subcampos_sin_definir_array)>0){
+                my $field_sin_definir = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos_sin_definir_array);
+                $marc_record_campos_sin_definir->add_fields($field_sin_definir);
+            }
         }
     }
 #     C4::AR::Debug::debug("meran_nivel_to_meran => COMPLETO => as_formatted ".$marc_record_limpio1->as_formatted());
@@ -400,7 +402,9 @@ sub filtrarVisualizacion{
                 }
                 if (scalar(@subcampos_array)){
                     my $marc_record_salida_temp = MARC::Field->new($field->tag, $field->indicator(1), $field->indicator(2), @subcampos_array);
-                    $marc_record_salida->add_fields($marc_record_salida_temp);
+                    # FIXME DEPRECATEDDDDDDDDDDD, estoy testeando append_fields
+        #             $marc_record->add_fields($field);
+                    $marc_record_salida->append_fields($marc_record_salida_temp);
                 }
         }
     }
@@ -732,8 +736,7 @@ sub _procesar_referencia{
             my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
             my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
 
-#                 my $string_result = '@'.$obj_generico->getTableName.'@'.$campo.'@'.$subcampo.'@'.$dato;
-#                 my $string_result = '@'.$obj_generico->getTableName.'@'.$dato;
+                #se genera el nuevo dato => tabla@dato para poder obtener el dato de la referencia luego
                 my $string_result = $obj_generico->getTableName.'@'.$dato;
 
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
@@ -743,13 +746,12 @@ sub _procesar_referencia{
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result:    ".$string_result);
 
                 return($string_result);
-                #FIXME, este valor es el que devuelve cuando NO lo encuentra en la tabla de referencia, en este caso deberia arreglarlo
+        }#END if($estructura->getReferencia){
 
-#             return('10'); #FIXME, este valor es el que devuelve cuando lo encuentra en la tabla de referencia
-        }else{  
-            return $dato;
-        }
-    }
+    }#END if($estructura){
+       
+    #si no tiene la estructura o no tiene referencia, se devuelve el dato como viene 
+    return $dato;
 }
 
 

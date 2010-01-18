@@ -326,8 +326,10 @@ function copy(o) {
     return newO;
 }
 
+//loguea el string pasado por parametro en la consola
 function log(string){
     if(window.console){
         window.console.log(string);
     }
 }
+

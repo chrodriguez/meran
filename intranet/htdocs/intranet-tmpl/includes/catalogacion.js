@@ -60,14 +60,16 @@ function inicializar(){
 	TAB_INDEX= 0;
 }
 
+//libera espacio de memoria utilizada por los arreglos
 function _freeMemory(array){
 	for(var i=0;i<array.length;i++){
 		delete array[i];
 	}
 }
 
+//busca en array el string pasado por parametro
 function _existeEnArray(array, elemento){
-	var cant=0;
+	var cant = 0;
 
 	for(var i=0;i<array.length;i++){
 		if( jQuery.trim(array[i]) == jQuery.trim(elemento) ){
@@ -78,6 +80,7 @@ function _existeEnArray(array, elemento){
 			}			
 		}
 	}
+
 	return 0;
 }
 
@@ -171,6 +174,13 @@ function _getMARC_conf_ById(id){
 
     return 0;
 }
+
+// Array Remove - By John Resig (MIT Licensed)
+function removeFromArray (array, from, to) {
+  var rest = array.slice((to || from) + 1 || array.length);
+  array.length = from < 0 ? array.length + from : from;
+  return array.push.apply(array, rest);
+};
 
 function _getBarcodes(){
 	var barcodes_string = $('#'+_getIdComponente('995','f')).val();
@@ -883,6 +893,7 @@ function procesarInfoJson(json){
             subcampos_array[j].idCompCliente    = "id_componente_" + i + j;
             subcampos_array[j].marc_group       = marc_group;
             subcampos_array[j].posCampo         = i; //posicion del campo contenedor en MARC_OBJECT_ARRAY
+            subcampos_array[j].posSubCampo      = j; //posicion del subcampo en el arreglo de subcampos
             procesarObjeto(subcampos_array[j], marc_group);
         }
 
@@ -1058,10 +1069,9 @@ function create_rules_object(rule){
             case 'digits': 
                 RULES_OPTIONS.digits        = valor;
                 break;
-// FIXME no se porque pero cada vez que se intenta modificar agrega esta regla y no deja modificar
-//             case 'lettersonly': 
-//                 RULES_OPTIONS.lettersonly   = valor;
-//                 break;
+            case 'lettersonly': 
+                RULES_OPTIONS.lettersonly   = valor;
+                break;
             case 'alphanumeric': 
                 RULES_OPTIONS.alphanumeric   = valor;
                 break;
@@ -1081,6 +1091,7 @@ function create_rules_object(rule){
     }
 }
 
+// FIXME parece q no se usa mas!!!!!!!!!!!!!!!
 function _cambiarIdDeAutocomplete(){
 	 for(var i=0; i< MARC_OBJECT_ARRAY.length; i++){
        	//si es un autocomplete, guardo el ID del input hidden
@@ -1128,15 +1139,25 @@ function generarIdComponente(){
 }
 
 function clone(id){
-    var id_componente = generarIdComponente();
-    var subcampo_temp = _getMARC_conf_ById(id);
+    var id_componente   = generarIdComponente();
+    var subcampo_temp   = _getMARC_conf_ById(id);
     var obj;
-    obj = copy(subcampo_temp);
-    obj.idCompCliente = id_componente;
-    procesarObjeto(obj, subcampo_temp.marc_group);
+    obj                 = copy(subcampo_temp);      //se genera una copia del subcampo
+    obj.setIdCompCliente( id_componente );          //seteo el nuevo id de la componente
+    procesarObjeto(obj, subcampo_temp.marc_group);  //se genera la componente en el cliente
     
     //agredo el subcampo en la poscion "posCampo" del arreglo MARC_OBJECT_ARRAY, donde se encuentra el campo contenedor
     MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray().push(obj);
+}
+
+function remove(id){
+    var subcampo_temp   = _getMARC_conf_ById(id);       //recupero el subcampo segun el id pasado por parametro
+    var _from           = subcampo_temp.posSubCampo;    //posicion del subcampo en el arreglo de subcampos
+    var _to             = subcampo_temp.posSubCampo;
+
+    $('#LI'+id).remove();                               //elimino la componete del cliente
+                                                        //elimino la informacion del subcampo
+    removeFromArray(MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray(), _from, _to);
 }
 
 function cloneObj(o) {
@@ -1154,6 +1175,15 @@ function crearBotonAgregarRepetible(obj){
 
     if(obj.getRepetible() == '1'){
         return "<input type='button' value='+' size='10' onclick=clone('"+ obj.getIdCompCliente() +"')>";
+    }else{  
+        return "";
+    }
+}
+
+function crearBotonEliminarRepetible(obj){
+
+    if(obj.getRepetible() == '1'){
+        return "<input type='button' value='-' size='10' onclick=remove('"+ obj.getIdCompCliente() +"')>";
     }else{  
         return "";
     }
@@ -1182,19 +1212,19 @@ function campo_marc_conf(obj){
         this.subcampos_array[i] = subcampo_marc_conf_obj;
     }
 
-    function fGetCampo(){ return this.campo };
-    function fGetNombre(){ return this.nombre };
-    function fGetAyudaCampo(){ return this.ayuda_campo };
-    function fGetDescripcionCampo(){ return $.trim(this.descripcion_campo) };
-    function fGetSubCamposArray(){ return this.subcampos_array };
-    function fGetRepetible(){ return (this.repetible) };
-    function fGetIndicadorPrimario(){ return (this.indicador_primario) };
-    function fGetIndicadorSecundario(){ return (this.indicador_secundario) };
-    function fGetSubCamposArray(){ return (this.subcampos_array) };
-    function fGetIndicadoresPrimarios(){return (this.indicadores_primarios)};
-    function fGetIndicadoresSecundarios(){return (this.indicadores_secundarios)};
-    function fGetIndicadorPrimarioDato(){return (this.indicador_primario_dato)};
-    function fGetIndicadorSecundarioDato(){return (this.indicador_secundario_dato)};
+    function fGetCampo(){                   return this.campo };
+    function fGetNombre(){                  return this.nombre };
+    function fGetAyudaCampo(){              return this.ayuda_campo };
+    function fGetDescripcionCampo(){        return $.trim(this.descripcion_campo) };
+    function fGetSubCamposArray(){          return this.subcampos_array };
+    function fGetRepetible(){               return (this.repetible) };
+    function fGetIndicadorPrimario(){       return (this.indicador_primario) };
+    function fGetIndicadorSecundario(){     return (this.indicador_secundario) };
+    function fGetSubCamposArray(){          return (this.subcampos_array) };
+    function fGetIndicadoresPrimarios(){    return (this.indicadores_primarios)};
+    function fGetIndicadoresSecundarios(){  return (this.indicadores_secundarios)};
+    function fGetIndicadorPrimarioDato(){   return (this.indicador_primario_dato)};
+    function fGetIndicadorSecundarioDato(){ return (this.indicador_secundario_dato)};
     
 
     //metodos
@@ -1215,31 +1245,31 @@ function campo_marc_conf(obj){
 }
 
 function subcampo_marc_conf(obj){
-
-    this.liblibrarian = obj.liblibrarian;
-    this.itemtype = obj.itemtype;
-    this.campo =  obj.campo;
-    this.subcampo = obj.subcampo;
-    this.dato =  obj.dato;
-    this.nivel = obj.nivel;
-    this.rules =  obj.rules;
-    this.tipo = obj.tipo;
-    this.intranet_habilitado =  obj.intranet_habilitado;
-    this.tiene_estructura = obj.tiene_estructura;
-    this.visible = obj.visible;
-    this.repetible = obj.repetible;
-    this.referencia = obj.referencia;
-    this.obligatorio = obj.obligatorio;
-    this.datoReferencia = obj.datoReferencia;
-    this.idCompCliente =  obj.idCompCliente;
-    this.referenciaTabla =  obj.referenciaTabla;
-    this.opciones = obj.opciones;
-    this.defaultValue = obj.defaultValue;
-    this.tiene_estructura = obj.tiene_estructura;
-    this.ayuda_campo = obj.ayuda_campo;
-    this.descripcion_subcampo = obj.descripcion_subcampo;
+    this.liblibrarian           = obj.liblibrarian;
+    this.itemtype               = obj.itemtype;
+    this.campo                  = obj.campo;
+    this.subcampo               = obj.subcampo;
+    this.dato                   = obj.dato;
+    this.nivel                  = obj.nivel;
+    this.rules                  = obj.rules;
+    this.tipo                   = obj.tipo;
+    this.intranet_habilitado    = obj.intranet_habilitado;
+    this.tiene_estructura       = obj.tiene_estructura;
+    this.visible                = obj.visible;
+    this.repetible              = obj.repetible;
+    this.referencia             = obj.referencia;
+    this.obligatorio            = obj.obligatorio;
+    this.datoReferencia         = obj.datoReferencia;
+    this.idCompCliente          = obj.idCompCliente;
+    this.referenciaTabla        = obj.referenciaTabla;
+    this.opciones               = obj.opciones;
+    this.defaultValue           = obj.defaultValue;
+    this.tiene_estructura       = obj.tiene_estructura;
+    this.ayuda_campo            = obj.ayuda_campo;
+    this.descripcion_subcampo   = obj.descripcion_subcampo;
 
     function fGetIdCompCliente(){ return this.idCompCliente };
+    function fSetIdCompCliente( id ){ this.idCompCliente = id };
     function fGetCampo(){ return this.campo };
     function fGetSubCampo(){ return this.subcampo };
     function fGetDato(){ return this.dato };
@@ -1260,6 +1290,7 @@ function subcampo_marc_conf(obj){
 
     //metodos
     this.getIdCompCliente           = fGetIdCompCliente;
+    this.setIdCompCliente           = fSetIdCompCliente;
     this.getCampo                   = fGetCampo;
     this.getSubCampo                = fGetSubCampo;
     this.getDato                    = fGetDato;
@@ -1283,6 +1314,7 @@ function subcampo_marc_conf(obj){
 function crearText(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "'>";     
     comp = comp + crearBotonAgregarRepetible(obj);
+    comp = comp + crearBotonEliminarRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 }
 
@@ -1314,6 +1346,7 @@ function crearCombo(obj){
     var comp = newCombo(obj);
 
     comp = comp + crearBotonAgregarRepetible(obj);
+    comp = comp + crearBotonEliminarRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 }
 
@@ -1323,6 +1356,7 @@ function crearTextArea(obj){
 
     var comp = "<textarea id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' rows='4' tabindex="+TAB_INDEX+">" + obj.getOpciones() + "</textarea>";
     comp = comp + crearBotonAgregarRepetible(obj);
+    comp = comp + crearBotonEliminarRepetible(obj);
 
     comp = crearComponente("texta","texta"+idComp,"readonly='readonly'","");
     var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+idComp+")' src='[% themelang %]/images/sacar.png'>";
@@ -1342,6 +1376,7 @@ function crearAuto(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='"+ obj.getIdCompCliente() +"' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+">";
 
     comp = comp + crearBotonAgregarRepetible(obj);
+    comp = comp + crearBotonEliminarRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 
     _cearAutocompleteParaCamponente(obj);
@@ -1354,6 +1389,7 @@ function crearCalendar(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+">";
 
     comp = comp + crearBotonAgregarRepetible(obj);
+    comp = comp + crearBotonEliminarRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 
     $("#"+obj.getIdCompCliente()).datepicker({ dateFormat: 'dd/mm/yy' });
@@ -1363,6 +1399,7 @@ function crearTextAnio(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+">";
 
     comp = comp + crearBotonAgregarRepetible(obj);
+    comp = comp + crearBotonEliminarRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 }
 
