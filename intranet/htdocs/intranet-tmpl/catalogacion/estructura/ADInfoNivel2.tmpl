@@ -16,7 +16,7 @@
         <ul class="listado_sin_margen">
         <li class="botonera_horizontal">
             <ul class="listado_sin_margen">
-            [% PERL %]
+                [% PERL %]
                         print C4::AR::Filtros::to_Icon(   
                                                             boton   => "icon_edicion",
                                                             onClick => "modificarN2('[% nivel2.getId2 %]', '[% nivel2.getTipoDocumentoObject.getId_tipo_doc %]');",
@@ -27,7 +27,7 @@
                 [% PERL %]
                         print C4::AR::Filtros::to_Icon(   
                                                             boton   => "icon_agregar",
-                                                            onClick => "agregarN3('[% nivel2.getId2 %]');",
+                                                            onClick => "agregarN3('[% nivel2.getId2 %]','[% nivel2.getTipoDocumentoObject.getId_tipo_doc %]');",
                                                             title   => "[% 'Agregar nivel 3' | i18n %]",
                                                             li => 1,
                                 ) ;

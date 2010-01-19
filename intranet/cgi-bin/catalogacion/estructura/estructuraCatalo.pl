@@ -19,15 +19,16 @@ my ($template, $session, $t_params) = get_template_and_user({
 	    });
 
 my %params_combo;
-$params_combo{'onChange'} = 'eleccionDeNivel()';
-my $comboTiposNivel3 = &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
-$t_params->{'selectItemType'} = $comboTiposNivel3;
+$params_combo{'onChange'}       = 'eleccionDeNivel()';
+my $comboTiposNivel3            = &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
+$t_params->{'selectItemType'}   = $comboTiposNivel3;
 
 my %params_combo;
-$params_combo{'onChange'} = 'eleccionDeNivel()';
-my $selectNivel = &C4::AR::Utilidades::generarComboNiveles(\%params_combo);
+$params_combo{'onChange'}       = 'eleccionDeNivel()';
+$params_combo{'class'}          = 'horizontal';
+my $selectNivel                 = &C4::AR::Utilidades::generarComboNiveles(\%params_combo);
 
-$t_params->{'selectNivel'} = $selectNivel;
+$t_params->{'selectNivel'}      = $selectNivel;
 
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

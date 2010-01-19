@@ -82,9 +82,9 @@ sub _meran_to_marc{
                 if ( ($value ne '')&&(C4::AR::Utilidades::existeInArray($key, @{$autorizados{$campo}} ) )) {
                 #el subcampo $key, esta autorizado para el campo $campo
                     push(@subcampos_array, ($key => $value));
-#                     C4::AR::Debug::debug("campo ".$campo." ACEPTADO clave = ".$key." valor: ".$value);
+                    C4::AR::Debug::debug("campo ".$campo." ACEPTADO clave = ".$key." valor: ".$value);
                 }else{
-#                     C4::AR::Debug::debug("campo ".$campo." NO ACEPTADO clave = ".$key." valor: ".$value);
+                    C4::AR::Debug::debug("campo ".$campo." NO ACEPTADO clave = ".$key." valor: ".$value);
 #                     $msg_object->{'error'} = 1;
 #                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [$campo.", ".$key." valor: ".$value]} ) ;
                 }
@@ -1056,12 +1056,11 @@ sub getEstructuraSinDatos {
     #obtengo todos los campos <> de la estructura de catalogacion del Nivel 1, 2 o 3
     my ($cant, $campos_array_ref) = getCamposFromEstructura($nivel, $itemType);
 
-
-#     C4::AR::Debug::debug("getEstructuraSinDatos => cant campos distintos: ".$cant);    
+    C4::AR::Debug::debug("getEstructuraSinDatos => cant campos distintos: ".$cant);    
 
     my @result_total;
-    my $campo = '';
-    my $campo_ant = '';
+    my $campo       = '';
+    my $campo_ant   = '';
     foreach my $c  (@$campos_array_ref){
 
         my %hash_campos;

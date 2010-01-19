@@ -215,7 +215,8 @@ body{
     text-align:right;
 /*    width:266px;*/
 /* estoy probando % para que no se rompa */
-    width:26%; 
+    /*width:26%; */
+    width:21%; 
 }
 
 
@@ -1489,12 +1490,14 @@ li.MARCHeader input{
 
 .MARCHeader_content{
     width: 100%; 
-    height: 35px;
+    /*height: 35px;*/
+    height: 40px;
 }
 
 .MARCHeader_info{
     width: 90%; 
     float: left;
+    font-weight: bold;
 }
 
 .MARCHeader_controls{

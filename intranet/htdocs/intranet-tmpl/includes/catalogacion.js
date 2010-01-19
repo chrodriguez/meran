@@ -266,17 +266,17 @@ function syncComponentesArray(){
 //             if(subcampos_array[s].getTieneEstructura() == '1'){
 
                 if(subcampos_array[s].getReferencia() == '1'){
-                    log("TIENE REFERENCIA");
+                    //log("TIENE REFERENCIA");
                     if($('#'+subcampos_array[s].getIdCompCliente()).val() != '' && subcampos_array[s].getTipo() == 'combo'){
 //                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val();
                         subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val();
-                        log("COMBO");
+                        //log("COMBO");
                     }else if($('#'+subcampos_array[s].getIdCompCliente()).val() != '' && subcampos_array[s].getTipo() == 'auto'){
 //                         subcampos_array[s].setDatoReferencia($('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val());
                         subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val());
                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val();
-                        log("AUTO");
+                        //log("AUTO");
                     }else{
                         subcampos_array[s].datoReferencia = 0;
 //                         subcampos_array[s].setDato('');
@@ -284,8 +284,8 @@ function syncComponentesArray(){
                         subcampo_valor[subcampos_array[s].getSubCampo()] = 0;
                     }
                 }else{  
-                    log("NO TIENE REFERENCIA");
-                    log("DATO: "+$('#'+subcampos_array[s].getIdCompCliente()).val());
+                    //log("NO TIENE REFERENCIA");
+                    //log("DATO: "+$('#'+subcampos_array[s].getIdCompCliente()).val());
                        subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
 //                        subcampo_valor = new Object();
                        subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val();
@@ -301,6 +301,7 @@ function syncComponentesArray(){
     }//END for(var i=0; i < MARC_OBJECT_ARRAY.length; i++)
 }
 
+//dado el nivel pasado por parametro devuelve el nombre del div contenedor
 function getDivDelNivel(){
     
     switch(_NIVEL_ACTUAL){
@@ -319,15 +320,14 @@ function getDivDelNivel(){
 
 // FIXME esto podria ser generico para los 3 niveles
 function mostrarEstructuraDelNivel1(){
-    _NIVEL_ACTUAL= 1;
-    objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);
-    objAH.debug= true;
+    _NIVEL_ACTUAL       = 1;
+    objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
+    objAH.debug         = true;
 // 	objAH.cache= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
-    objAH.nivel= _NIVEL_ACTUAL;
-    
-    objAH.id_tipo_doc= 'ALL';
+    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
+    objAH.nivel         = _NIVEL_ACTUAL;
+    objAH.id_tipo_doc   = 'ALL';
     objAH.sendToServer();
 }
 
@@ -347,15 +347,15 @@ function updateMostrarEstructuraDelNivel1(responseText){
 }
 
 function mostrarEstructuraDelNivel2(){
-    _NIVEL_ACTUAL= 2;
-    objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);
-    objAH.debug= true;
+    _NIVEL_ACTUAL       = 2;
+    objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
+    objAH.debug         = true;
 // 	  objAH.cache= true;
-    objAH.showStatusIn = 'estructuraDelNivel2';
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
-    objAH.nivel= 2;
-    objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
+    objAH.showStatusIn  = 'estructuraDelNivel2';
+    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
+    objAH.nivel         = 2;
+    objAH.id_tipo_doc   = $("#tipo_nivel3_id").val();
     objAH.sendToServer();
 }
 
@@ -384,17 +384,16 @@ function _seleccionarTipoDocumentoYDeshabilitarCombo(){
     }
 }
 
-function mostrarEstructuraDelNivel3(){
-    _NIVEL_ACTUAL= 3;
-
-    objAH=new AjaxHelper(updateMostrarEstructuraDelNivel3);
-    objAH.debug= true;
+function mostrarEstructuraDelNivel3(tipo_documento){
+    _NIVEL_ACTUAL       = 3;
+    objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel3);
+    objAH.debug         = true;
 // 	  objAH.cache= true;
-    objAH.showStatusIn = 'estructuraDelNivel3';
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tipoAccion= "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
-    objAH.nivel= _NIVEL_ACTUAL;
-    objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
+    objAH.showStatusIn  = 'estructuraDelNivel3';
+    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
+    objAH.nivel         = _NIVEL_ACTUAL;
+    objAH.id_tipo_doc   = (tipo_documento)?tipo_documento:$("#tipo_nivel3_id").val();
     objAH.sendToServer();
 }
 
@@ -406,8 +405,8 @@ function updateMostrarEstructuraDelNivel3(responseText){
     procesarInfoJson(responseText);
     scrollTo('nivel3Tabla');
 	
-	  //asigno el handler para el validador
-	  validateForm('formNivel3',guardarModificarDocumentoN3);
+	//asigno el handler para el validador
+	validateForm('formNivel3',guardarModificarDocumentoN3);
     if(MODIFICAR == 0){
     //si se esta agregando se muestra el input para la cantidad    
         var id = _getIdComponente('995','f');
@@ -429,34 +428,34 @@ function switchTipoBarcode(chosen, readOnly){
 }
 
 function registrarToggleOnChangeForBarcode(callFromBarcode){
-        var cantidad_comp = $('#cantEjemplares');
-        var cantidad_val = $.trim(cantidad_comp.val());
-        var id = _getIdComponente('995','f');
-        var barcode_comp = $('#'+id);
-        var barcode_val = $.trim(barcode_comp.val());
+    var cantidad_comp = $('#cantEjemplares');
+    var cantidad_val = $.trim(cantidad_comp.val());
+    var id = _getIdComponente('995','f');
+    var barcode_comp = $('#'+id);
+    var barcode_val = $.trim(barcode_comp.val());
 
-        if (callFromBarcode){       
-            if ((cantidad_val.length)>0)
-                jConfirm(BORRAR_CANTIDAD_DE_EJEMPLARES, CATALOGO_ALERT_TITLE, function(confirmStatus){
-                    if (confirmStatus){
-                        switchTipoBarcode(barcode_comp,cantidad_comp);
-                        $('#cantEjemplares').removeClass('required');
-                    }
-                })  
-            else
-                switchTipoBarcode(barcode_comp,cantidad_comp);
-        }
-        else{
-            if ((barcode_val.length)>0)
-                jConfirm(BORRAR_LISTA_DE_CODIGOS, CATALOGO_ALERT_TITLE, function(confirmStatus){
-                    if (confirmStatus){
-                        switchTipoBarcode(cantidad_comp,barcode_comp);
-                        $('#cantEjemplares').addClass('required');
-                    }
-                })  
-            else
-                switchTipoBarcode(cantidad_comp,barcode_comp);
-        }
+    if (callFromBarcode){       
+        if ((cantidad_val.length)>0)
+            jConfirm(BORRAR_CANTIDAD_DE_EJEMPLARES, CATALOGO_ALERT_TITLE, function(confirmStatus){
+                if (confirmStatus){
+                    switchTipoBarcode(barcode_comp,cantidad_comp);
+                    $('#cantEjemplares').removeClass('required');
+                }
+            })  
+        else
+            switchTipoBarcode(barcode_comp,cantidad_comp);
+    }
+    else{
+        if ((barcode_val.length)>0)
+            jConfirm(BORRAR_LISTA_DE_CODIGOS, CATALOGO_ALERT_TITLE, function(confirmStatus){
+                if (confirmStatus){
+                    switchTipoBarcode(cantidad_comp,barcode_comp);
+                    $('#cantEjemplares').addClass('required');
+                }
+            })  
+        else
+            switchTipoBarcode(cantidad_comp,barcode_comp);
+    }
 }
 
 function agregarN2(){
@@ -476,11 +475,12 @@ function agregarN2(){
     }
 }
 
-function agregarN3( id2){
-    ID_N2 = id2; 
-	  MODIFICAR = 0;
-	  $('#divCantEjemplares').show();
-	  mostrarEstructuraDelNivel3();
+function agregarN3(id2, tipo_documento){
+    ID_N2               = id2; 
+    ID_TIPO_EJEMPLAR    = tipo_documento;
+	MODIFICAR           = 0;
+	$('#divCantEjemplares').show();
+	mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
 }
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 1 luego de ser guardado
@@ -611,31 +611,31 @@ function guardarDocumentoN2(){
 
     if(verificar_guardar_nivel2()){
         syncComponentesArray();
-        objAH=new AjaxHelper(updateGuardarDocumentoN2);
-        objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-        objAH.tipoAccion= "GUARDAR_NIVEL_2";
-        objAH.tipo_ejemplar = $('#tipo_nivel3_id').val();
+        objAH                   = new AjaxHelper(updateGuardarDocumentoN2);
+        objAH.debug             = true;
+        objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.tipoAccion        = "GUARDAR_NIVEL_2";
+        objAH.tipo_ejemplar     = $('#tipo_nivel3_id').val();
 	    _sacarOpciones();
-        objAH.infoArrayNivel2= MARC_OBJECT_ARRAY;
-        objAH.id1 = ID_N1;
-        objAH.id2 = ID_N2; //por si se modificó
+        objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;
+        objAH.id1               = ID_N1;
+        objAH.id2               = ID_N2; //por si se modificó
         objAH.sendToServer();
     }
 }
 
 function updateGuardarDocumentoN2(responseText){
-
-    var info=JSONstring.toObject(responseText);
-    var Messages= info.Message_arrayref;//obtengo los mensajes para el usuario
-    ID_N2= info.id2; //recupero el id desde el servidor
+    var info        = JSONstring.toObject(responseText);
+    var Messages    = info.Message_arrayref;//obtengo los mensajes para el usuario
+// FIXME para ????
+    ID_N2           = info.id2; //recupero el id desde el servidor
     setMessages(Messages);
 
     if (! (hayError(Messages) ) ){
         inicializar();
         //carga la barra lateral con info de nivel 2
         mostrarInfoAltaNivel2(ID_N2);
-        mostrarEstructuraDelNivel3();
+        mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
     }
 }
 
@@ -693,23 +693,24 @@ function updateGuardarDocumentoN3(responseText){
 
 function guardarModificacionDocumentoN1(){
     syncComponentesArray();
-    objAH=new AjaxHelper(updateGuardarModificacionDocumentoN1);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tipoAccion= "MODIFICAR_NIVEL_1";
-    objAH.id_tipo_doc= $("#tipo_nivel3_id").val();
+    objAH                   = new AjaxHelper(updateGuardarModificacionDocumentoN1);
+    objAH.debug             = true;
+    objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tipoAccion        = "MODIFICAR_NIVEL_1";
+    objAH.id_tipo_doc       = $("#tipo_nivel3_id").val();
 	_sacarOpciones();
-    objAH.infoArrayNivel1= MARC_OBJECT_ARRAY;
-    objAH.id1 = ID_N1;
+    objAH.infoArrayNivel1   = MARC_OBJECT_ARRAY;
+    objAH.id1               = ID_N1;
     objAH.sendToServer();
 }
 
 function updateGuardarModificacionDocumentoN1(responseText){
 
-	MODIFICAR=0;
-    var info=JSONstring.toObject(responseText);
-    var Messages= info.Message_arrayref;
-    ID_N1= info.id1; //recupero el id desde el servidor
+	MODIFICAR       = 0;
+    var info        = JSONstring.toObject(responseText);
+    var Messages    = info.Message_arrayref;
+// FIXME para que???
+//     ID_N1 = info.id1; //recupero el id desde el servidor
     setMessages(Messages);
 
     if (! (hayError(Messages) ) ){
@@ -722,15 +723,15 @@ function updateGuardarModificacionDocumentoN1(responseText){
 
 function guardarModificacionDocumentoN2(){
     syncComponentesArray();
-    objAH=new AjaxHelper(updateGuardarModificacionDocumentoN2);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tipoAccion= "MODIFICAR_NIVEL_2";
+    objAH                   = new AjaxHelper(updateGuardarModificacionDocumentoN2);
+    objAH.debug             = true;
+    objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tipoAccion        = "MODIFICAR_NIVEL_2";
 	_sacarOpciones();
-    objAH.infoArrayNivel2= MARC_OBJECT_ARRAY;
-    objAH.tipo_ejemplar = ID_TIPO_EJEMPLAR;
-    objAH.id1 = ID_N1;
-    objAH.id2 = ID_N2; //por si se modificó
+    objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;
+    objAH.tipo_ejemplar     = ID_TIPO_EJEMPLAR;
+    objAH.id1               = ID_N1;
+    objAH.id2               = ID_N2; //por si se modificó
     objAH.sendToServer();
 }
 
@@ -738,9 +739,10 @@ function updateGuardarModificacionDocumentoN2(responseText){
     
     if (!verificarRespuesta(responseText)) return(0);
 
-	MODIFICAR = 0;
-    var info=JSONstring.toObject(responseText);
-    var Messages= info.Message_arrayref;//obtengo los mensajes para el usuario
+	MODIFICAR       = 0;
+    var info        = JSONstring.toObject(responseText);
+    var Messages    = info.Message_arrayref;//obtengo los mensajes para el usuario
+// FIXME para que ???
     ID_N2= info.id2; //recupero el id desde el servidor
     setMessages(Messages);
 
@@ -748,7 +750,7 @@ function updateGuardarModificacionDocumentoN2(responseText){
         inicializar();
         //carga la barra lateral con info de nivel 2
         mostrarInfoAltaNivel2(ID_N2);
-        mostrarEstructuraDelNivel3();
+        mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
     }
 }
 
@@ -771,12 +773,12 @@ function guardarModificacionDocumentoN3(){
 
 function updateGuardarModificacionDocumentoN3(responseText){
 
-    var info=JSONstring.toObject(responseText);
-    var Messages= info.Message_arrayref; //obtengo los mensajes para el usuario
+    var info        = JSONstring.toObject(responseText);
+    var Messages    = info.Message_arrayref; //obtengo los mensajes para el usuario
     setMessages(Messages);
 
    	//PARA LIMPIAR EL VALUE DE TODOS (ASI INGRESA UNO NUEVO)
-  	var allInputs = $('#estructuraDelNivel3 :input');
+  	var allInputs   = $('#estructuraDelNivel3 :input');
 	for (x=0; x< allInputs.length; x++){
 		allInputs[x].value="";
 	}
@@ -860,22 +862,23 @@ function procesarInfoJson(json){
         strComp = "<div id='marc_group" + i + "' ><li class='MARCHeader'>";
         strComp = strComp + "<div class='MARCHeader_content'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
+        strComp = strComp + "<ul>";
     
         //genero el indicador primario
         if(campo_marc_conf_obj.getIndicadorPrimario() != ''){
-            strIndicadores = "<label>Indicador Primero: " + campo_marc_conf_obj.getIndicadorPrimario() + "</label>";
-            strIndicadores = strIndicadores + crearSelectIndicadoresPrimarios(campo_marc_conf_obj, i);
+            strIndicadores = "<li class='sub_item'><label>Indicador Primero: " + campo_marc_conf_obj.getIndicadorPrimario();
+            strIndicadores = strIndicadores + crearSelectIndicadoresPrimarios(campo_marc_conf_obj, i) + "</label></li>";
         }
 
         //genero el indicador secundario
         if(campo_marc_conf_obj.getIndicadorSecundario() != ''){
-            strIndicadores = strIndicadores + "<label>Indicador Segundo: " + campo_marc_conf_obj.getIndicadorSecundario() + "</label>";
-            strIndicadores = strIndicadores + crearSelectIndicadoresSecundarios(campo_marc_conf_obj, i);
+            strIndicadores = strIndicadores + "<li class='sub_item'><label>Indicador Segundo: " + campo_marc_conf_obj.getIndicadorSecundario();
+            strIndicadores = strIndicadores + crearSelectIndicadoresSecundarios(campo_marc_conf_obj, i) + "</label></li>";
         }
 
-        strComp = strComp + "<label>" + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo())  + " " + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre() + strIndicadores + "</label></div>";
+        strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo())  + " " + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre() + strIndicadores + "</ul></div>";
 
-        strComp = strComp + "<div class='MARCHeader_controls'> + - </div></div></li></div>";
+        strComp = strComp + "</div></li></div>";
         $("#" + getDivDelNivel()).append(strComp);
         
         //seteo los datos de los indicadores
@@ -918,7 +921,8 @@ function procesarInfoJson(json){
 
 function crearBotonAyudaCampo(campo){
     var funcion = "ayudaParaCampo('" + campo + "')";
-    return "<input type='button' value='?' onclick=" + funcion + ">"; 
+//     return "<input type='button' value='?' onclick=" + funcion + ">"; 
+    return "<div id='icon_ayuda' onclick=" + funcion + "> </div>"; 
 }
 
 function ayudaParaCampo(campo){
@@ -939,7 +943,7 @@ function crearSelectIndicadoresPrimarios(campo_marc_conf_obj, campo){
     var opciones_array = campo_marc_conf_obj.getIndicadoresPrimarios();
     var indicadores = "";
     if(opciones_array.length > 0){
-        indicadores = "<label><select id='select_indicador_primario" + campo + "'>" + generarOpcionesParaSelect(opciones_array) + "</select></label>";
+        indicadores = "<select id='select_indicador_primario" + campo + "'>" + generarOpcionesParaSelect(opciones_array) + "</select>";
     }
 
     return indicadores;
@@ -949,7 +953,7 @@ function crearSelectIndicadoresSecundarios(campo_marc_conf_obj, campo){
     var opciones_array = campo_marc_conf_obj.getIndicadoresSecundarios();
     var indicadores = "";
     if(opciones_array.length > 0){
-        indicadores = "<label><select id='select_indicador_secundario" + campo + "'>" + generarOpcionesParaSelect(opciones_array) + "</select></label>";
+        indicadores = "<select id='select_indicador_secundario" + campo + "'>" + generarOpcionesParaSelect(opciones_array) + "</select>";
     }
 
     return indicadores;
@@ -1174,7 +1178,8 @@ function cloneObj(o) {
 function crearBotonAgregarRepetible(obj){
 
     if(obj.getRepetible() == '1'){
-        return "<input type='button' value='+' size='10' onclick=clone('"+ obj.getIdCompCliente() +"')>";
+//         return "<input type='button' value='+' size='10' onclick=clone('"+ obj.getIdCompCliente() +"')>";
+        return "<div id='icon_agregar' onclick=clone('"+ obj.getIdCompCliente() +"') class='horizontal' title='Agregar'/>";
     }else{  
         return "";
     }
@@ -1183,7 +1188,8 @@ function crearBotonAgregarRepetible(obj){
 function crearBotonEliminarRepetible(obj){
 
     if(obj.getRepetible() == '1'){
-        return "<input type='button' value='-' size='10' onclick=remove('"+ obj.getIdCompCliente() +"')>";
+        return "<div id='icon_sacar' onclick=clone('"+ obj.getIdCompCliente() +"') class='horizontal' title='Eliminar'/>";
+//         return "<input type='button' value='-' size='10' onclick=remove('"+ obj.getIdCompCliente() +"')>";
     }else{  
         return "";
     }
@@ -1312,14 +1318,14 @@ function subcampo_marc_conf(obj){
 
 
 function crearText(obj){
-    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "'>";     
+    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "' class='horizontal' >";     
     comp = comp + crearBotonAgregarRepetible(obj);
     comp = comp + crearBotonEliminarRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 }
 
 function newCombo(obj){
-    var comp = "<select id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' tabindex="+TAB_INDEX+">\n";
+    var comp = "<select id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' tabindex="+TAB_INDEX+" class='horizontal'>";
     comp = comp + "<option value=''>Elegir opci&oacute;n</option>\n";
 
     var op = "";
@@ -1373,7 +1379,7 @@ function crearHidden(obj){
 }
 
 function crearAuto(obj){
-    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='"+ obj.getIdCompCliente() +"' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+">";
+    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='"+ obj.getIdCompCliente() +"' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" class='horizontal' >";
 
     comp = comp + crearBotonAgregarRepetible(obj);
     comp = comp + crearBotonEliminarRepetible(obj);
@@ -1386,7 +1392,7 @@ function crearAuto(obj){
 }
 
 function crearCalendar(obj){
-    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+">";
+    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
     comp = comp + crearBotonAgregarRepetible(obj);
     comp = comp + crearBotonEliminarRepetible(obj);
@@ -1396,7 +1402,7 @@ function crearCalendar(obj){
 }
 
 function crearTextAnio(obj){
-    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+">";
+    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
     comp = comp + crearBotonAgregarRepetible(obj);
     comp = comp + crearBotonEliminarRepetible(obj);
@@ -1504,13 +1510,13 @@ function borrarN3(id3){
 }
 
 function updateBorrarN3(responseText){
-	var info=JSONstring.toObject(responseText);  
-    var Messages= info.Message_arrayref;
+	var info        = JSONstring.toObject(responseText);  
+    var Messages    = info.Message_arrayref;
     setMessages(Messages);
 
     if (! (hayError(Messages) ) ){
         inicializar();
-        mostrarEstructuraDelNivel3();
+        mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
         //acutalizo los datos de nivel 2
         mostrarInfoAltaNivel2(ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
@@ -1535,13 +1541,13 @@ function borrarEjemplaresN3(id3){
 }
 
 function updateBorrarEjemplaresN3(responseText){
-    var info=JSONstring.toObject(responseText);  
-    var Messages= info.Message_arrayref;
+    var info        = JSONstring.toObject(responseText);  
+    var Messages    = info.Message_arrayref;
     setMessages(Messages);
     
     if (! (hayError(Messages) ) ){
 	    inicializar();
-	    mostrarEstructuraDelNivel3();
+	    mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
         mostrarInfoAltaNivel2(ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
     }
@@ -1553,22 +1559,23 @@ function updateBorrarEjemplaresN3(responseText){
  */
 function modificarN1(id1){
 	inicializar();
-    ID_N1 = id1;
-	objAH = new AjaxHelper(updateModificarN1);
-	objAH.url = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.showStatusIn = "centro";
-	objAH.debug = true;
+    ID_TIPO_EJEMPLAR    = "ALL";
+    ID_N1               = id1;
+	objAH               = new AjaxHelper(updateModificarN1);
+	objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.showStatusIn  = "centro";
+	objAH.debug         = true;
 //     objAH.cache = true;
-	objAH.tipoAccion = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
-	objAH.itemtype = "ALL";
-	objAH.id = ID_N1;
-	objAH.nivel = 1;
+	objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+	objAH.itemtype      = ID_TIPO_EJEMPLAR;
+	objAH.id            = ID_N1;
+	objAH.nivel         = 1;
 	objAH.sendToServer();
 }
 
 function updateModificarN1(responseText){
-    MODIFICAR = 1;
-    _NIVEL_ACTUAL = 1;
+    MODIFICAR       = 1;
+    _NIVEL_ACTUAL   = 1;
     updateMostrarEstructuraDelNivel1(responseText);
 }
 
@@ -1576,20 +1583,20 @@ function modificarN2(id2, tipo_ejemplar){
     inicializar();
     ID_N2               = id2;
     ID_TIPO_EJEMPLAR    = tipo_ejemplar;
-    objAH=new AjaxHelper(updateModificarN2);
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.showStatusIn = "centro";
-    objAH.debug= true;
+    objAH               = new AjaxHelper(updateModificarN2);
+    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.showStatusIn  = "centro";
+    objAH.debug         = true;
 //     objAH.cache = true;
-    objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
-    objAH.id = ID_N2;
-    objAH.nivel = 2;
+    objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+    objAH.id            = ID_N2;
+    objAH.nivel         = 2;
     objAH.sendToServer();
 }
 
 function updateModificarN2(responseText){
-    MODIFICAR = 1;
-    _NIVEL_ACTUAL = 2;
+    MODIFICAR       = 1;
+    _NIVEL_ACTUAL   = 2;
     updateMostrarEstructuraDelNivel2(responseText);
 // fin prueba
 }
@@ -1611,11 +1618,10 @@ function modificarN3(id3, tipo_ejemplar){
 }
 
 function updateModificarN3(responseText){
-	MODIFICAR = 1;
+	MODIFICAR       = 1;
+    _NIVEL_ACTUAL   = 3;
 	$('#divCantEjemplares').hide();	
-    _NIVEL_ACTUAL = 3;
     updateMostrarEstructuraDelNivel3(responseText);
-// fin prueba
 }
 
 /*
@@ -1646,7 +1652,7 @@ function modificarEjemplaresN3(id3){
 function updateModificarEjemplaresN3(responseText){
 	MODIFICAR = 1;
 	$('#divCantEjemplares').hide();	
-	mostrarEstructuraDelNivel3();
+	mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
 }
 
 /*
@@ -1655,13 +1661,13 @@ function updateModificarEjemplaresN3(responseText){
  * ese grupo.
  */
 function borrarGrupo(id1,id2){	
-	objAH=new AjaxHelper(updateBorrarGrupo);
-    objAH.debug= true;
-	objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-	objAH.id2=id2;
-	objAH.nivel=2;
-	objAH.itemtype=$("#id_tipo_doc").val();
-	objAH.tipoAccion="ELIMINAR_NIVEL";
+	objAH               = new AjaxHelper(updateBorrarGrupo);
+    objAH.debug         = true;
+	objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+	objAH.id2           = id2;
+	objAH.nivel         = 2;
+	objAH.itemtype      = $("#id_tipo_doc").val();
+	objAH.tipoAccion    = "ELIMINAR_NIVEL";
 	objAH.sendToServer();
 }
 
@@ -1694,8 +1700,7 @@ function cargarNivel1(params){
 
 	mostrarInfoAltaNivel1(params.id1);
 	mostrarInfoAltaNivel2(params.id2);	
-// 	mostrarInfoAltaNivel3(params.id1, params.id2);	
-  mostrarInfoAltaNivel3(params.id2);  
+    mostrarInfoAltaNivel3(params.id2);  
 }
 
 function validateForm(formID, func){

@@ -14,9 +14,9 @@ my $type = $session->param('type') || "opac";
 
 my ($user, $session, $flags)= C4::Auth::checkauth($input, $authnotrequired, $flagsrequired, $type);
 
-my $operacion= C4::AR::Utilidades::trim( $input->param('operacion') ) || '';
-my $accion= C4::AR::Utilidades::trim( $input->param('accion') );
-my $string= C4::AR::Utilidades::trim( $input->param('q') );
+my $operacion   = C4::AR::Utilidades::trim( $input->param('operacion') ) || '';
+my $accion      = C4::AR::Utilidades::trim( $input->param('accion') );
+my $string      = C4::AR::Utilidades::trim( $input->param('q') );
 # C4::AR::Debug::debug("BUSCASTE: ".$string);
 #Variable para luego hacerle el print
 my $result;

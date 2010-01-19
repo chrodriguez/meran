@@ -512,9 +512,17 @@ function updateModificarEstructuraCatalogacion(responseText){
     <ul>
         <li class="sub_item">
             <label for="niveles_id" >
-                [% 'Nivel:' | i18n %]
+                [% 'Nivel:' | i18n %] 
             </label>
             [% selectNivel %]
+
+            [% PERL %]
+                    print C4::AR::Filtros::to_Icon(   
+                                                        boton   => "icon_buscar",
+                                                        onClick => "eleccionDeNivel();",
+                                                        title   => "[% 'Buscar' | i18n %]",
+                            ) ;
+            [% END %]
         </li>
     
         <li id="content_combo_tipo_nivel3_id" class="sub_item" style="display:none;">

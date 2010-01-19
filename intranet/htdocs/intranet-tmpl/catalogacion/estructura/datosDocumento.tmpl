@@ -93,6 +93,15 @@ $(document).ready( function() {
 
 <div id="div_combo_tipo_documento">
 [% "Esquema de ingreso de datos tipo:" | i18n %] [% comboTipoDocumento %]
+
+                [% PERL %]
+                        print C4::AR::Filtros::to_Icon(   
+                                                            boton   => "icon_buscar",
+                                                            onClick => "mostrarEstructuraDelNivel1();",
+                                                            title   => "[% 'Buscar' | i18n %]",
+                                ) ;
+                [% END %]
+
 </div>
 
 <div class="todo">
