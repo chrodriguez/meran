@@ -17,6 +17,7 @@
 
 function _clearMessages(){
     $('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});
+    $('#mensajes').hide();
 	$('#mensajes').html('');
 }
 
@@ -51,11 +52,6 @@ function setMessages(Messages_hashref){
     
         scrollTo('mensajes');
         $('#mensajes').css("display","block");
-//         $(window).scroll(function()
-//         {
-//           $('#mensajes').animate({queue: false, duration: 350});
-//              $('#mensajes').animate({queue: false, duration: 0});   
-//         });
 
         _show();
         _delay(_clearMessages, 180);

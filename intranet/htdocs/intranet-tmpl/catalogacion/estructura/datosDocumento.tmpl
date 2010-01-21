@@ -69,12 +69,12 @@ $(document).ready( function() {
 		[% END %]
 	[% END %]
 
-    if(_modificar){
-        $('#titulo_modificar').show();
-        showTipoDocumento();
-    }else{
-        $('#titulo_agregar').show();
-    }
+//     if(_modificar){
+//         $('#titulo_modificar').show();
+//         showTipoDocumento();
+//     }else{
+//         $('#titulo_agregar').show();
+//     }
 
 } );
 
@@ -84,12 +84,12 @@ $(document).ready( function() {
     print C4::AR::Filtros::ayuda_marc() ;
 [% END %]
 
-<div id="titulo_agregar" style="display:none">
+<!--<div id="titulo_agregar" style="display:none">
     <p class="titulos" >[% "Agregar Documento" | i18n %]</p>
 </div>
 <div id="titulo_modificar" style="display:none">
     <p class="titulos" >[% "Modificar Documento" | i18n %]</p>
-</div>
+</div>-->
 
 <div id="div_combo_tipo_documento">
 [% "Esquema de ingreso de datos tipo:" | i18n %] [% comboTipoDocumento %]
@@ -114,11 +114,12 @@ $(document).ready( function() {
 </div>   <!--END <div class="lateral">-->
 
 <div id="centro" class="centro">
-
+<!-- aca se va mostrando la accion que se va realizando -->
+<div id="estado_accion" class="titulos" style="display:none"></div>
 <!--            Manejo del Nivel 1 -->
 <div id="nivel1Tabla" style="display:none">
 <fieldset>
-<legend class="titulo_legend">[% "Agregar Documento:" | i18n %] [% descripcion %]  [% "(paso: 1 de 3)" | i18n %]</legend>
+<legend class="titulo_legend"></legend>
 
 <!--<form id="formNivel1" name="formNivel1" class="validateDataForm">-->
 <form id="formNivel1" name="formNivel1">
@@ -145,7 +146,7 @@ $(document).ready( function() {
 <!--            Manejo del Nivel 2 -->
 <div id="nivel2Tabla" style="display:none">
 <fieldset>
-<legend class="titulo_legend">[% "Agregar Grupo:" | i18n %] [% descripcion %]  [% "(paso: 2 de 3)" | i18n %]</legend>
+<legend class="titulo_legend"></legend>
     
 <!--<form id="formNivel2" name="formNivel2" class="validateDataForm">-->
 <form id="formNivel2" name="formNivel2">
@@ -172,7 +173,7 @@ $(document).ready( function() {
 <!--            Manejo del Nivel 3 -->
 <div id="nivel3Tabla" style="display:none">   
 <fieldset>
-<legend class="titulo_legend">[% "Agregar Ejemplar:" | i18n %] [% descripcion %]  [% "(paso: 3 de 3)" | i18n %]</legend>
+<legend class="titulo_legend"></legend>
 
 <!--<form id="formNivel3" name="formNivel3" class="validateDataForm">-->
 <form id="formNivel3" name="formNivel3">

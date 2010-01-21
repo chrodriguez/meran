@@ -320,6 +320,13 @@ function getDivDelNivel(){
 
 // FIXME esto podria ser generico para los 3 niveles
 function mostrarEstructuraDelNivel1(){
+    
+    if(MODIFICAR == 0){
+        _mostrarAccion("Agregando metadatos");
+    } 
+// else {
+//         
+//     }
     _NIVEL_ACTUAL       = 1;
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug         = true;
@@ -348,6 +355,9 @@ function updateMostrarEstructuraDelNivel1(responseText){
 
 function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
+    if(MODIFICAR == 0){
+        _mostrarAccion("Agregando grupo");
+    }
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug         = true;
 // 	  objAH.cache= true;
@@ -386,6 +396,10 @@ function _seleccionarTipoDocumentoYDeshabilitarCombo(){
 
 function mostrarEstructuraDelNivel3(tipo_documento){
     _NIVEL_ACTUAL       = 3;
+    if(MODIFICAR == 0){
+        _mostrarAccion("Agregando ejemplares");
+    }
+
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel3);
     objAH.debug         = true;
 // 	  objAH.cache= true;
@@ -467,8 +481,9 @@ function agregarN2(){
             jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
             $('#tipo_nivel3_id').focus();
         }else{
-            MODIFICAR = 0;
-            AGREGAR_COMPLETO = 0;
+            MODIFICAR           = 0;
+            AGREGAR_COMPLETO    = 0;
+            
             mostrarEstructuraDelNivel2();
             inicializarSideLayers();
         }
@@ -479,6 +494,7 @@ function agregarN3(id2, tipo_documento){
     ID_N2               = id2; 
     ID_TIPO_EJEMPLAR    = tipo_documento;
 	MODIFICAR           = 0;
+    _mostrarAccion("Agregando ejemplares");
 	$('#divCantEjemplares').show();
 	mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
 }
@@ -1561,6 +1577,7 @@ function modificarN1(id1){
 	inicializar();
     ID_TIPO_EJEMPLAR    = "ALL";
     ID_N1               = id1;
+    _mostrarAccion("Modificando el metadato (" + ID_N1 + ")");
 	objAH               = new AjaxHelper(updateModificarN1);
 	objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showStatusIn  = "centro";
@@ -1573,6 +1590,11 @@ function modificarN1(id1){
 	objAH.sendToServer();
 }
 
+function _mostrarAccion(mensaje){
+    $('#estado_accion').html( mensaje );
+    $('#estado_accion').show();
+}
+
 function updateModificarN1(responseText){
     MODIFICAR       = 1;
     _NIVEL_ACTUAL   = 1;
@@ -1582,6 +1604,7 @@ function updateModificarN1(responseText){
 function modificarN2(id2, tipo_ejemplar){
     inicializar();
     ID_N2               = id2;
+    _mostrarAccion("Modificando el grupo (" + ID_N2 + ")");
     ID_TIPO_EJEMPLAR    = tipo_ejemplar;
     objAH               = new AjaxHelper(updateModificarN2);
     objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
@@ -1604,6 +1627,7 @@ function updateModificarN2(responseText){
 function modificarN3(id3, tipo_ejemplar){
 	inicializar();
 	ID_N3               = id3;	
+    _mostrarAccion("Modificando el ejemplar (" + ID_N3 + ")");
     ID_TIPO_EJEMPLAR    = tipo_ejemplar;
 	objAH               = new AjaxHelper(updateModificarN3);
 	objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
