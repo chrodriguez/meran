@@ -37,6 +37,29 @@ sub agregar{
 }
 
 
+sub editar{
+
+    my ($input) = @_;
+    my %params;
+    my $novedad = getNovedad($input->param('id'));
+
+    use HTML::Entities;
+    my $contenido = $input->param('contenido');
+
+    $contenido = encode_entities($contenido);
+    $contenido=~ s/&lt;/</gi;
+    $contenido=~ s/&gt;/>/gi;
+    $contenido=~ s/<script>/_/gi;
+    $contenido=~ s/<\/script>/_/gi;
+    %params = $input->Vars;
+    $params{'contenido'} = $contenido;
+    $novedad->delete();
+    $novedad = C4::Modelo::SysNovedad->new();
+    
+    return ($novedad->agregar(%params));
+}
+
+
 sub listar{
     my ($ini,$cantR) = @_;
     my $novedades_array_ref = C4::Modelo::SysNovedad::Manager->get_sys_novedad( 

@@ -21,11 +21,11 @@ my %hash_temp = {};
 my $obj = \%hash_temp;
 my $accion = $obj->{'tipoAccion'} = $input->param('tipoAccion');
 my $ini = $obj->{'ini'} = $input->param('page') || 0;
-my $id_mensaje = $input->param('id') || 0;
+my $id_novedad = $input->param('id') || 0;
 my $url = "/cgi-bin/koha/admin/novedades_opac.pl?token=".$input->param('token')."&tipoAccion=".$obj->{'tipoAccion'};
 
 if ($accion eq 'eliminar'){
-    C4::AR::Novedades::eliminar($id_mensaje);
+    C4::AR::Novedades::eliminar($id_novedad);
 }
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);

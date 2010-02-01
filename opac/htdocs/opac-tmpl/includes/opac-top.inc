@@ -39,7 +39,7 @@
   <script src="/includes/circulacionOPAC.js"></script>
   <script src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
   <script src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
-
+  
   <title>
     [% IF titulo_nombre_ui %]
         [% titulo_nombre_ui %]
@@ -63,6 +63,7 @@
 
 <body>
   <!-- Main Page Container -->
+  <noscript> [% 'DEBE HABILITAR SOPORTE PARA JAVASCRIPT EN SU NAVEGADOR, DE LO CONTRARIO NO PODRA NAVEGAR EL SITIO.' | i18n %] </noscript>
   <div class="page-container">
     <!-- For alternative headers START PASTE here -->
       [% INCLUDE 'opac-top-header.inc' %]
