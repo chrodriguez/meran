@@ -7,11 +7,7 @@
 ####################
 
 # Copyright 2000-2002 Katipo Communications
-<<<<<<< .merge_file_nXwqXv
-#tst adssdfdsfdsfdsMONONONONONOONONONONONONOONONONONONONONON
-=======
-#tst adssdfdsfdsfdsGASARPAPARPLEPRKESOIERWJTONGFNEROGJEORGNRSJGNO
->>>>>>> .merge_file_l7PQ0w
+# NANANA
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
