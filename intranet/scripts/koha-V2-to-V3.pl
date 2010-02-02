@@ -37,7 +37,7 @@ print "Creando nuevas referencias \n";
 #  crearNuevasReferencias();
 
 #################
-print "Procesando los 3 niveles (va a tardar!!! ...MUCHO!!!) \n";
+print "Procesando los 3 niveles (va a tardar!!! ...MUCHO!!! mas de lo que te imaginas) \n";
 my $st1 = time();
 #  procesarV2_V3();
 my $end1 = time();
