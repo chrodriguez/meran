@@ -29,6 +29,7 @@
                         <th>[% "Resumen" | i18n %]</th>
                         <th>[% "Categor&iacute;a" | i18n %]</th>
                         <th>[% "Eliminar" | i18n %]</th>
+                        <th>[% "Editar" | i18n %]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,6 +65,12 @@
                                 <a class="" 
                                     href="/cgi-bin/koha/admin/novedades_opac.pl?token=[% token %]&id=[% novedad.id %]&tipoAccion=eliminar">
                                     [% 'Eliminar' | i18n %]
+                                </a>
+                            </td>
+                            <td>
+                                <a class="" 
+                                    href="/cgi-bin/koha/admin/editar_novedad.pl?token=[% token %]&id=[% novedad.id %]">
+                                    [% 'Editar' | i18n %]
                                 </a>
                             </td>
                         </tr>
