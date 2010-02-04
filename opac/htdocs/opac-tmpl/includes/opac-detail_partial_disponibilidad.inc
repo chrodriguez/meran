@@ -6,8 +6,7 @@
           <div class="main-subcontent" style="width:25%; float:left; margin: 5px">
               [% IF portada_registro %]
                   <a class="fancylink" href="/covers/[% portada_registro_big %]">
-                      <img name="cover" VALUE="" BORDER=0 src="/covers/[% portada_registro_medium %]" title="Portada" 
-                            alt="[% 'Portada del ejemplar' | i18n %]">
+                      <img name="cover"  VALUE="" BORDER=0 src="/covers/[% portada_registro_medium %]" title="Portada">
                   </a>
               [% ELSE %]
                     <img src="/covers/no_image_medium.jpg" 
