@@ -20,25 +20,25 @@
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/fancybox.css" />
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/ui.stars.css" />
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/wysiwyg.css" />
-  <script language="javascript" type="text/javascript">
+  <script type="text/javascript">
     token= '[% token %]';
     imagesForJS = '[% temas %]/[% tema %]/imagenes';
   </script>
   [% INCLUDE 'message_OPAC.inc' %]
-  <script src="/includes/jquery/jquery.js"></script>
-  <script src="/includes/AjaxHelper.js"></script>
-  <script src="/includes/jquery/jquery.alerts.js"></script>
-  <script src="/includes/jquery/ui.core.js"></script>
-  <script src="/includes/jquery/ui.mouse.js"></script>
-  <script src="/includes/jquery/ui.draggable.js"></script>
-  <script src="/includes/jquery/ui.stars.js"></script>
-  <script src="/includes/jquery/jquery.wysiwyg.js"></script>
-  <script src="/includes/json/jsonStringify.js"></script>
+  <script src="/includes/jquery/jquery.js" type="text/javascript"></script>
+  <script src="/includes/AjaxHelper.js" type="text/javascript"></script>
+  <script src="/includes/jquery/jquery.alerts.js" type="text/javascript"></script>
+  <script src="/includes/jquery/ui.core.js" type="text/javascript"></script>
+  <script src="/includes/jquery/ui.mouse.js" type="text/javascript"></script>
+  <script src="/includes/jquery/ui.draggable.js" type="text/javascript"></script>
+  <script src="/includes/jquery/ui.stars.js" type="text/javascript"></script>
+  <script src="/includes/jquery/jquery.wysiwyg.js" type="text/javascript"></script>
+  <script src="/includes/json/jsonStringify.js" type="text/javascript"></script>
   [% INCLUDE 'AutocompleteHelper.inc'  %]
-  <script src="/includes/MessageHelper.js"></script>
-  <script src="/includes/circulacionOPAC.js"></script>
-  <script src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
-  <script src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
+  <script src="/includes/MessageHelper.js" type="text/javascript"></script>
+  <script src="/includes/circulacionOPAC.js" type="text/javascript"></script>
+  <script src="/includes/jquery/fancybox/jquery.easing.1.3.js" type="text/javascript"></script>
+  <script src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js" type="text/javascript"></script>
   
   <title>
     [% IF titulo_nombre_ui %]
@@ -63,7 +63,10 @@
 
 <body>
   <!-- Main Page Container -->
-  <noscript> [% 'DEBE HABILITAR SOPORTE PARA JAVASCRIPT EN SU NAVEGADOR, DE LO CONTRARIO NO PODRA NAVEGAR EL SITIO.' | i18n %] </noscript>
+  <noscript> 
+      <p>[% 'DEBE HABILITAR SOPORTE PARA JAVASCRIPT EN SU NAVEGADOR, DE LO CONTRARIO NO PODRA NAVEGAR EL SITIO.' | i18n %]</p> 
+  </noscript>
+  
   <div class="page-container">
     <!-- For alternative headers START PASTE here -->
       [% INCLUDE 'opac-top-header.inc' %]
