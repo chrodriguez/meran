@@ -23,6 +23,7 @@ En modifcar docuemtno (datosDocumento.pl), algunos campos hidden no se completan
 
 En el OPAC se puede reservar mas de una vez sobre el mismo grupo (cuando queda en espera) - 08/02/2010
 
+Ver porqué en algunos servidores no se puede loggear con otro browser que no sea Firefox - 08/02/2010
 
 
 
