@@ -18,10 +18,10 @@
                     <a class="click" >[% "Im&aacute;gen" | i18n %]</a>
                 </th>
                 <th align="center" width="30%">
-                    <a class="click" onClick="ordenarPor('titulo')">[% "T&iacute;tulo" | i18n %]</a>
+                    <a class="click" onclick="ordenarPor('titulo')">[% "T&iacute;tulo" | i18n %]</a>
                 </th>
                 <th align="center" width="20%">
-                    <a class="click" onClick="ordenarPor('nomCompleto')">[% "Autor" | i18n %] </a>
+                    <a class="click" onclick="ordenarPor('nomCompleto')">[% "Autor" | i18n %] </a>
                 </th>
                 <th align="center" width="20%">
                     [% "Edici&oacute;n/A&ntilde;o" | i18n %]
@@ -107,7 +107,7 @@
                         [% END %]
                     </td>
 
-                    <td class="autor_result click" onClick="filtrarPorAutor([% NIVEL.idAutor %])" title="[% 'Filtrar por Autor' | i18n %]">
+                    <td class="autor_result click" onclick="filtrarPorAutor([% NIVEL.idAutor %])" title="[% 'Filtrar por Autor' | i18n %]">
                         [% IF NIVEL.nomCompleto %]
                             [% NIVEL.nomCompleto %]
                         [% ELSE %]
@@ -173,7 +173,7 @@
                             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_borrar",
-                                                                    onClick => "deleteFavorite('[% NIVEL.id1 %]');",
+                                                                    onclick => "deleteFavorite('[% NIVEL.id1 %]');",
                                                                     title   => "[% 'Eliminar favorito' | i18n %]",
                                                                     alternClass => "botonCentradoTabla"
                                         ) ;
@@ -182,7 +182,7 @@
                             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_agregar",
-                                                                    onClick => "addFavorite('[% NIVEL.id1 %]');",
+                                                                    onclick => "addFavorite('[% NIVEL.id1 %]');",
                                                                     title   => "[% 'Agregar a Favoritos' | i18n %]",
                                                                     alternClass => "botonCentradoTabla"
                                         ) ;

@@ -1,6 +1,6 @@
-<script src="/includes/util.js"></script>
-<script src="/includes/md5.js"></script>
-<script src="/includes/sha1.js"></script>
+<script src="/includes/util.js" type="text/javascript"></script>
+<script src="/includes/md5.js" type="text/javascript"></script>
+<script src="/includes/sha1.js" type="text/javascript"></script>
 
 [% IF RANDOM_NUMBER %]
     <script type="text/javascript">

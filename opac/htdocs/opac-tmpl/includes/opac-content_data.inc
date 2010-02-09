@@ -6,11 +6,11 @@
                   <a href="#">[% 'Sin novedades' | i18n %].</a>
           [% END %]
           [% FOREACH novedad IN novedades %]
-              <h1><a href="/cgi-bin/koha/ver_novedad.pl?token=[% token %]&id=[% novedad.getId %]">[% novedad.getTitulo %]</a></h1>
+              <h1><a href='/cgi-bin/koha/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% novedad.getTitulo %]</a></h1>
               <h3>[% novedad.getFechaLegible %], [% 'por ' | i18n %] <a href="#">[% novedad.getUsuario %]</a></h3>
               <p>
                   [% novedad.getResumen %]
-                  <a href="/cgi-bin/koha/ver_novedad.pl?token=[% token %]&id=[% novedad.getId %]">[% 'Leer m&aacute;s' | i18n %] &raquo;</a>
+                  <a href='/cgi-bin/koha/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% 'Leer m&aacute;s' | i18n %] &raquo;</a>
               </p>
               <p class="details">| 
                   [% 'Acutalizado por' | i18n %] <a href="#"> [% novedad.getUsuario %] </a> | [% 'Categor&iacute;a' | i18n %]: 

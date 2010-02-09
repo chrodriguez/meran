@@ -69,7 +69,7 @@ sub link_to {
         }
 	}
 
-	$link= "<a href=".$url;
+	$link= "<a href='".$url."'";
 	if ($class ne ''){
         if (!$boton){ #Porque si es con boton, la clase la lleva el li
 		    $link .= " class=".$class;
@@ -77,7 +77,7 @@ sub link_to {
 	}
 
 	if($title ne ''){
-		$link .= " Title='".$title."'";
+		$link .= " title='".$title."'";
 	}
 
 	$link .= " tabindex='-1'>";
