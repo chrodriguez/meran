@@ -3,8 +3,12 @@ body, html {
     height: 100%;
 }
 
+
+/* TODO esto hace que no se vea el gif animado del autocomplete, habria que hacer una clase */
+/* y agregar la clase a cada input text que sea necesario */
+/* registrar la clase en el evento onclick */
 body input[type="text"]:focus{
-  background: InfoBackground;
+/*   background: InfoBackground; */
 }
 
 fieldset{
