@@ -39,6 +39,11 @@
   <script src="/includes/circulacionOPAC.js" type="text/javascript"></script>
   <script src="/includes/jquery/fancybox/jquery.easing.1.3.js" type="text/javascript"></script>
   <script src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js" type="text/javascript"></script>
+
+<!-- variables de entorno sacadas de las preferencias del sistema -->
+<script> M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %];  </script>
+
+</head>
   
   <title>
     [% IF titulo_nombre_ui %]

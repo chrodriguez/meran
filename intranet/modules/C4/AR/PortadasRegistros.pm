@@ -70,6 +70,7 @@ sub getImageByIsbn {
     my $path = C4::Context->config("covers"); #Donde se guardan las imagenes
     my $file = "";
     my $msg = '';
+# FIXME MONOOOOOOOOO esto esta matando la maquina!!!!!!!!!!
 
     my $portada = C4::AR::PortadasRegistros::getPortadaByIsbn($isbn);
 
