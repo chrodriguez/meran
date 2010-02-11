@@ -45,7 +45,7 @@
         <h1>[% 'Ingresar' | i18n %]</h1>
     [% ELSE %]
             <h1 class="first">[% 'Ingresar' | i18n %]</h1>
-            <br>
+            <br />
     [% END %]
     [% IF mensaje %]
         <h1>[% mensaje %]</h1>
@@ -53,7 +53,7 @@
 
       <div class="column1-unit">
           <div class="contactform">
-              <form name="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl" onSubmit = "enviar()">
+              <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl" onsubmit = "enviar()">
         <!-- <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl">  -->
                 <p><input type="hidden" name="remember_me" value="0" /></p>
                 <fieldset>
