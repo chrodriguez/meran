@@ -12,7 +12,6 @@
     [% END %]
 
     <table id="tablaResult" class="tabla_datos" cellspacing='0' cellpadding='0' style="text-align:center; width:100%; border:1;">
-        <thead>
             <tr class="tablaresultadoTitle" >
                 <th align="center">
                     <a class="click" >[% "Im&aacute;gen" | i18n %]</a>
@@ -36,21 +35,8 @@
                     [% "Favoritos" | i18n %]
                 </th>
             </tr>
-        </thead>
-        <tbody>
     <!-- Resultados de la busqueda -->
             [% FOREACH NIVEL IN SEARCH_RESULTS %]
-                <script type="text/javascript">
-                    $(function(){
-                        $("#rating[% NIVEL.id1 %]").children().not(":radio").hide();
-                        $("#rating[% NIVEL.id1 %]").stars({
-                            cancelShow: false,
-                            split: 2,
-                            disabled: true,
-                        });
-                        $("#rating[% NIVEL.id1 %]").stars("select",[% NIVEL.rating %]);
-                    });
-                </script>
                 <tr>
                     <td class="titulo_result">
                         [% IF NIVEL.portadas_grupo %]
@@ -192,7 +178,21 @@
                     </td>
                 </tr>
             [% END %]
-        </tbody>
     </table>
     <br />
 [% END %]
+<!-- FIX PARA W3C PORQUE NO SE PERMITEN SCRIPT DENTRO DE TABLAS -->
+[% FOREACH NIVEL IN SEARCH_RESULTS %]
+    <script type="text/javascript">
+        $(function(){
+            $("#rating[% NIVEL.id1 %]").children().not(":radio").hide();
+            $("#rating[% NIVEL.id1 %]").stars({
+                cancelShow: false,
+                split: 2,
+                disabled: true,
+            });
+            $("#rating[% NIVEL.id1 %]").stars("select",[% NIVEL.rating %]);
+        });
+    </script>
+[% END %]
+

@@ -80,7 +80,7 @@ sub link_to {
 		$link .= " title='".$title."'";
 	}
 
-	$link .= " tabindex='-1'>";
+	$link .= " >";
 
     my $button;
 

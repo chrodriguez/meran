@@ -72,4 +72,5 @@
       [% INCLUDE 'opac-top-header.inc' %]
       [% INCLUDE 'opac-main_content.inc' %]
       [% INCLUDE 'opac-main_sub_content.inc' %]
+    </div>
   </div>
