@@ -3,8 +3,10 @@
 <html>
 [% INCLUDE "message_INTRA.inc" %]
 <script language="javascript" type="text/javascript">
-    token= '[% token %]';
+//     <!-- variables de entorno sacadas de las preferencias del sistema -->
+    token       = '[% token %]';
     imagesForJS = '[% temas %]/[% tema %]/imagenes';
+    M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %];
 </script>
 
 <head>
@@ -22,29 +24,26 @@
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/menu.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/jquery.alerts.css">
 
-<script src="/includes/jquery/jquery.js"></script>
-<script src="/includes/jquery/jquery.scrollTo.js"></script>
-<script src="/includes/jquery/jquery.menu.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.scrollTo.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.menu.js"></script>
 <!-- FIXME esto no deberia estar aca, solo se usa cuando se cambia la pass o cuando se loguea -->
-<script src="/includes/md5.js"></script>
-<script src="/includes/md5_cbc.js"></script>
-<script src="/includes/sha1.js"></script>  
+<script type="text/javascript" src="/includes/md5.js"></script>
+<script type="text/javascript" src="/includes/md5_cbc.js"></script>
+<script type="text/javascript" src="/includes/sha1.js"></script>  
 <!-- para generar la hash de la cache -->
-<script src="/includes/jquery/jquery.jCache.js"></script>
-<script src="/includes/json/jsonStringify.js"></script>
-<script src="/includes/AjaxHelper.js"></script>
-<script src="/includes/util.js"></script>
-<script src="/includes/MessageHelper.js"></script>
-<script src="/includes/WindowHelper.js"></script>
-<script src="/includes/AutocompleteHelper.js"></script>
-<script src="/includes/jquery/jquery.alerts.js"></script>
-<script src="/includes/jquery/jquery.dataTables.js"></script>
-<script src="/includes/jquery/jquery.tooltip.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.jCache.js"></script>
+<script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
+<script type="text/javascript" src="/includes/AjaxHelper.js"></script>
+<script type="text/javascript" src="/includes/util.js"></script>
+<script type="text/javascript" src="/includes/MessageHelper.js"></script>
+<script type="text/javascript" src="/includes/WindowHelper.js"></script>
+<script type="text/javascript" src="/includes/AutocompleteHelper.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.alerts.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.tooltip.js"></script>
 
-<!-- variables de entorno sacadas de las preferencias del sistema -->
-<script> M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %];  </script>
-
-</head>
+<!--</head>-->
 
 
 
@@ -85,6 +84,9 @@
 
 
 </script>
+
+</head>
+
 
 <body>
   <noscript>

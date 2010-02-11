@@ -15,7 +15,7 @@
 \u00d1 -> Ñ -->
 <!-- FIXME falta acomodar los acentos -->
 
-<script>
+<script type="text/javascript">
 
 //================================================Circulacion=================================================
 FALLO_NOTA = "[% 'La nota no se ha podido guardar' | i18n %]";

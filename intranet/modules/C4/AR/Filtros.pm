@@ -49,7 +49,8 @@ sub link_to {
 		for(my $i=0; $i < $cant; $i++ ){
 			if($i > 0){
 			#se procesan el resto de los parametros
-				$url .= '&'.@$params->[$i]; 
+# 				$url .= '&'.@$params->[$i];
+                $url .= '&amp;'.@$params->[$i];  
 			}else{
 			#se procesa el primer parametro
 				$url .= @$params->[$i];
@@ -295,7 +296,7 @@ sub setComboLang {
         }
     }
 
-    $html .="</select></p>";
+    $html .="</select></p></label>";
     if($type eq 'OPAC'){
         $html .="</fieldset>";
     }

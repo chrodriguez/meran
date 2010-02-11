@@ -7,7 +7,7 @@
         <div class="user_icon">
             <div style="float:left; height:25px">
                 <a title="[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]" rel="contact" class="url" 
-                    href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?token=[% token %]&nro_socio=[% socio_data.getNro_socio %]">
+                    href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?token=[% token %]&amp;nro_socio=[% socio_data.getNro_socio %]">
                     [% IF socio_data.tieneFoto %]
                         <img width="48" height="48" src="[% themelang %]/pictures/[% socio_data.tieneFoto %]" class="side_thumb photo fn" 
                             alt="[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]"/>
@@ -20,7 +20,7 @@
                 </a>
             </div>
                 <a title="[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]" rel="contact"
-                    href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?token=[% token %]&nro_socio=[% socio_data.getNro_socio %]">
+                    href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?token=[% token %]&amp;nro_socio=[% socio_data.getNro_socio %]">
                     <span id="me_name">[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]</span>
                 </a>
             <div class="culture_Select">
