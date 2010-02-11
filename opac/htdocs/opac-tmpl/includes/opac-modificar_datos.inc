@@ -30,8 +30,8 @@
                 <p><label for="apellido" class="left">[% 'Apellido/s' |  i18n %]:</label>
                    <input type="text" name="apellido" id="apellido" class="field" value="[% socio.persona.getApellido %]" tabindex="7" /></p>
                 <p><label for="ciudad" class="left">[% 'Ciudad' |  i18n %]:</label>
-                   <input type="text" name="ciudad" id="ciudad" class="field" value="[% socio.persona.ciudad_ref.NOMBRE %]" tabindex="8" /></p>
-                   <input type="hidden" name="id_ciudad" id="id_ciudad" class="field" value="[% socio.persona.ciudad_ref.id %]"/></p>
+                   <input type="text" name="ciudad" id="ciudad" class="field" value="[% socio.persona.ciudad_ref.NOMBRE %]" tabindex="8" />
+                   <input type="hidden" name="id_ciudad" id="id_ciudad" class="field" value="[% socio.persona.ciudad_ref.id %]"/> </p>
                 <p><label for="direccion" class="left">[% 'Direcci&oacute;n' |  i18n %]:</label>
                    <input type="text" name="direccion" id="direccion" class="field" value="[% socio.persona.getCalle %]" tabindex="9" /></p>
                 <p><label for="telefono" class="left">[% 'Tel&eacute;fono' |  i18n %]:</label>
@@ -40,24 +40,24 @@
                    <input type="text" name="email" id="email" class="field" value="[% socio.persona.getEmail %]" tabindex="11" /></p>
                    <input type="hidden" name="token" id="token" value="[% token %]" />
                    <!-- CAMPOS PARA CAMBIO DE PASSWORD -->
-                   <input type="hidden" name="new_password1" id="new_password1" autocomplete="off">
-                   <input type="hidden" name="new_password2" id="new_password2" autocomplete="off">
-                   <input type="hidden" name="changePassword" id="changePassword" autocomplete="off">
-                   <input type="hidden" name="actual_password" id="actual_password" autocomplete="off">
+                   <input type="hidden" name="new_password1" id="new_password1" />
+                   <input type="hidden" name="new_password2" id="new_password2" />
+                   <input type="hidden" name="changePassword" id="changePassword" />
+                   <input type="hidden" name="actual_password" id="actual_password" />
               </fieldset>
               <fieldset>
                   <legend>&nbsp;[% 'Cambio de contrase&ntilde;a' | i18n %] ([% 'Dejar en blanco para descartar' | i18n %])&nbsp;</legend>
                   <p>
                       <label for="actualpassword" class="left">[% 'Contrase&ntilde;a Actual' | i18n %]:</label>
-                      <input type="password" name="actualpassword" id="actualpassword" class="field" autocomplete="off">
+                      <input type="password" name="actualpassword" id="actualpassword" class="field" />
                   </p>
                   <p>
                       <label for="newpassword1" class="left">[% 'Nueva Contrase&ntilde;a' | i18n %]:</label>
-                      <input type="password" name="newpassword1" id="newpassword1" class="field" autocomplete="off">
+                      <input type="password" name="newpassword1" id="newpassword1" class="field" />
                   </p>
                   <p>
                       <label for="newpassword2" class="left">[% 'Repetir contrase&ntilde;a' | i18n %]:</label>
-                      <input type="password" name="newpassword2" id="newpassword2" class="field" autocomplete="off">
+                      <input type="password" name="newpassword2" id="newpassword2" class="field" />
                   </p>
               </fieldset>
               <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Modificar datos' |  i18n %]" tabindex="12" /></p>

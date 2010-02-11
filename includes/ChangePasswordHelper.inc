@@ -1,11 +1,11 @@
 
-<script src="/includes/sha1.js"></script>  
-<script src="/includes/pidcrypt.js"></script>  
-<script src="/includes/pidcrypt_util.js"></script> 
-<script src="/includes/md5.js"></script>
-<script src="/includes/md5_cbc.js"></script>
-<script src="/includes/aes_core.js"></script>
-<script src="/includes/aes_cbc.js"></script>  
+<script src="/includes/sha1.js" type="text/javascript"></script>  
+<script src="/includes/pidcrypt.js" type="text/javascript"></script>  
+<script src="/includes/pidcrypt_util.js" type="text/javascript"></script> 
+<script src="/includes/md5.js" type="text/javascript"></script>
+<script src="/includes/md5_cbc.js" type="text/javascript"></script>
+<script src="/includes/aes_core.js" type="text/javascript"></script>
+<script src="/includes/aes_cbc.js" type="text/javascript"></script>  
 
 
 <script type="text/javascript">

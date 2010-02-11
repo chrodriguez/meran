@@ -1,12 +1,12 @@
 
 [% IF reservas_espera_count %]
-    <table class="tabla_datos" width="100%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center">
-      <tr  class="tablaResultadoTitulo">    
-        <td colspan="4" align="center" borde=1>
+    <table class="tabla_datos tope" style="width:100%; text-align:center">
+      <tr class="tablaResultadoTitulo">
+        <td >
             <b>[% "Material en espera" | i18n %]</b>
         </td>
-      </tr>     
-      <tr class="tablaResultadoTitulo"  >
+      </tr>
+      <tr class="tablaResultadoTitulo" >
         <th>[% "T&iacute;tulo" | i18n %]</th>
         <th>[% "Autor" | i18n %]</th>
         <th>[% "Edici&oacute;n" | i18n %]</th>
@@ -14,9 +14,9 @@
       </tr>
     <!-- ESTE LOOP MUESTRA LAS RESERVAS -->
     [% FOREACH reserva IN RESERVAS_ESPERA %]
-      <tr border="1">
+      <tr>
         <td>
-        <a class="click" onClick="detalleMaterialEnEspera([% reserva.nivel2.nivel1.getId1  %])" title="[% 'Mostrar Detalle' | i18n %]">
+        <a class="click" onclick="detalleMaterialEnEspera([% reserva.nivel2.nivel1.getId1  %])" title="[% 'Mostrar Detalle' | i18n %]">
             [% reserva.nivel2.nivel1.getTitulo %]
         </a>
         </td>
@@ -29,10 +29,10 @@
             &nbsp;
         [% END %]
         </td>
-        <td align=center > 
+        <td> 
     [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
         </td>
-        <td  align="center">
+        <td>
             [% IF CirculationEnabled %]
 
                     [% PERL %]

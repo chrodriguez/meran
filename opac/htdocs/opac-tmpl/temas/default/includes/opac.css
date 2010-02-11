@@ -81,42 +81,42 @@ input[type=text]:focus{
     height:30px;
 }
 
-#boton_buscar {
+.boton_buscar {
     background: transparent  url(../imagenes/botones/boton_buscar.png) no-repeat;
     height: 22px;
     width: 20px;
     float: left;
 }
 
-#boton_salir {
+.boton_salir {
     background: transparent  url(../imagenes/botones/boton_salir.png) no-repeat;
     height: 22px;
     width: 20px;
     float: left;
 }
 
-#boton_favoritos {
+.boton_favoritos {
     background: transparent  url(../imagenes/botones/boton_favoritos.png) no-repeat;
     height: 22px;
     width: 20px;
     float: left;
 }
 
-#boton_inicio {
+.boton_inicio {
     background: transparent  url(../imagenes/botones/boton_inicio.png) no-repeat;
     height: 22px;
     width: 20px;
     float: left;
 }
 
-#boton_registrarse {
+.boton_registrarse {
     background: transparent  url(../imagenes/botones/boton_registrarse.png) no-repeat;
     height: 22px;
     width: 20px;
     float: left;
 }
 
-#boton_miembros {
+.boton_miembros {
     background: transparent  url(../imagenes/botones/boton_miembros.png) no-repeat;
     height: 22px;
     width: 20px;
@@ -124,7 +124,7 @@ input[type=text]:focus{
 }
 
 /*              parte del boton generica                  */
-#boton_texto {
+.boton_texto {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 11px;
     font-weight: bold;
@@ -137,7 +137,7 @@ input[type=text]:focus{
 /*     margin-top: 3px; */
 }
 
-#boton_medio {
+.boton_medio {
     background:url(../imagenes/botones/boton_medio.png) repeat-x scroll center ;
     height: 22px;
     /*width: 7%;*//*se debe modificar dinamicamente*/
@@ -150,7 +150,7 @@ input[type=text]:focus{
 /*     margin-left: 25px;*/
 }
 
-#boton_der {
+.boton_der {
     float:right;
     background: transparent url(../imagenes/botones/boton_der.png) no-repeat;
     height: 22px;
@@ -158,7 +158,7 @@ input[type=text]:focus{
     cursor: pointer;
 }
 
-#boton_entrar {
+.boton_entrar {
     float:right;
     background: transparent url(../imagenes/botones/boton_entrar.png) no-repeat;
     height: 22px;
@@ -340,7 +340,7 @@ ul.horizontal-list li {
     padding: 21% 12%;
     margin-top: 22%;
 }
-#boton_login  {
+.boton_login  {
     display:block;
     padding: 11% 32%; 
 }

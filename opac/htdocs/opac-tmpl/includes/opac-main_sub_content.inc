@@ -6,7 +6,8 @@
         <div id="info_sanciones"></div>
             <!-- Subcontent unit -->
             <div class="subcontent-unit-border">
-              <div class="round-border-topleft"></div><div class="round-border-topright"></div>
+              <div class="round-border-topleft"></div>
+              <div class="round-border-topright"></div>
               <h1>[% 'Datos Personales' | i18n %]</h1>
 
               <p>
@@ -49,6 +50,8 @@
                     [% END %]
                 </li>
               </ul>
-            </div>
+          </div>
+      </div>
     [% END %]
-        
+</div> <!--  <div class="main"> en opac-top-header.inc    -->
+

@@ -53,26 +53,26 @@
                   <li>
                       [% PERL %]
                           print C4::AR::Filtros::link_to( text    =>  "[% 'B&uacute;squeda Avanzada' | i18n %]",
-                                                          url     =>  "/cgi-bin/koha/opac-advanced_search.pl",
+                                                          url     =>  '/cgi-bin/koha/opac-advanced_search.pl',
                                                           title   =>  "[% 'B&uacute;squeda Avanzada' | i18n %]",
                                   ) ;
                       [% END %]
                   </li>
                   [% IF !socio %]
-                      <li><a href="/cgi-bin/koha/login.pl">[% 'Iniciar Sesi&oacute;n' | i18n %]</a></li>
+                      <li><a href='/cgi-bin/koha/login.pl'>[% 'Iniciar Sesi&oacute;n' | i18n %]</a></li>
                   [% ELSE %]
                       <li>
-                          <a href="/cgi-bin/koha/opac-historial_prestamos.pl?token=[% token %]">
+                          <a href='/cgi-bin/koha/opac-historial_prestamos.pl?token=[% token %]'>
                               [% 'Historial de pr&eacute;stamos' | i18n %]
                           </a>
                       </li>
                       <li>
-                          <a href="/cgi-bin/koha/opac-historial_reservas.pl?token=[% token %]">
+                          <a href='/cgi-bin/koha/opac-historial_reservas.pl?token=[% token %]'>
                               [% 'Historial de reservas' | i18n %]
                           </a>
                       </li>
                       <li>
-                          <a href="/cgi-bin/koha/opac-favoritos.pl?token=[% token %]">
+                          <a href='/cgi-bin/koha/opac-favoritos.pl?token=[% token %]'>
                               [% 'Mis favoritos' | i18n %]
                           </a>
                       </li>

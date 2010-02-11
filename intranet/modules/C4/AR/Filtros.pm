@@ -63,13 +63,13 @@ sub link_to {
 	#si hay sesion se usa el token, sino no tiene sentido
          #SI NO HUBO PARAMETROS, EL TOKEN ES EL UNICO EN LA URL, O SEA QUE SE PONE ? EN VEZ DE &
         if ($cant > 0){
-		    $url .= '&token='.$session->param('token'); #se agrega el token
+		    $url .= '&amp;token='.$session->param('token'); #se agrega el token
         }else{
             $url .= '?token='.$session->param('token'); 
         }
 	}
 
-	$link= "<a href=".$url;
+	$link= "<a href='".$url."'";
 	if ($class ne ''){
         if (!$boton){ #Porque si es con boton, la clase la lleva el li
 		    $link .= " class=".$class;
@@ -77,10 +77,10 @@ sub link_to {
 	}
 
 	if($title ne ''){
-		$link .= " Title='".$title."'";
+		$link .= " title='".$title."'";
 	}
 
-	$link .= " tabindex='-1'>";
+	$link .= " >";
 
     my $button;
 
@@ -137,7 +137,7 @@ sub to_Button{
 
     my $text= $params_hash_ref{'text'}; #obtengo el texto a mostrar
     my $boton= $params_hash_ref{'boton'}; #obtengo el boton
-    my $onClick= $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onClick
+    my $onclick= $params_hash_ref{'onclick'}; #obtengo el llamado a la funcion en el evento onclick
     my $title= $params_hash_ref{'title'}; #obtengo el title de la componete
     my $width= length($text);
     if($params_hash_ref{'width'}){
@@ -150,18 +150,18 @@ sub to_Button{
     }
     
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
-    $button .=  '<li  id="boton_medio" class="click '.$alternClass.'" onClick="'.$onClick.'" style="width:'.$width.'"';
+    $button .=  '<li  class="click '.$alternClass.' '.$boton.' " onclick="'.$onclick.'" style="width:'.$width.'"';
 
     if($title){
         $button .= ' title="'.$title.'"';
     }
     
     $button .=  '> ';
-    $button .=  '    <div id="'.$boton.'"> ';
+    $button .=  '    <div class="'.$boton.'"> ';
     $button .=  '   </div> ';
-    $button .=  '   <div id="boton_der"> ';
+    $button .=  '   <div class="boton_der"> ';
     $button .=  '   </div> ';
-    $button .=  '   <div id="boton_texto">'.$text.'</div> ';
+    $button .=  '   <div class="boton_texto">'.$text.'</div> ';
     $button .=  '</li> ';
 
     if ($params_hash_ref{'url'}){
@@ -179,7 +179,7 @@ sub to_Icon{
 
     my $button= '';
     my $boton= $params_hash_ref{'boton'}; #obtengo el boton
-    my $onClick= $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onClick
+    my $onclick= $params_hash_ref{'onclick'}; #obtengo el llamado a la funcion en el evento onclick
     my $title= $params_hash_ref{'title'}; #obtengo el title de la componete
     
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
@@ -194,9 +194,9 @@ sub to_Icon{
     }
 
     if($params_hash_ref{'li'}){
-        $button .=  '<li id="'.$boton.'" class="click '.$alternClass.'" onClick="'.$onClick.'"';
+        $button .=  '<li class="click '.$alternClass.' '.$boton.' " onclick="'.$onclick.'"';
     }else{
-        $button .=  $open_elem.' id="'.$boton.'" class="click '.$alternClass.'" onClick="'.$onClick.'"'.' style="'.$style.'"';
+        $button .=  $open_elem.' class="click '.$alternClass.' '.$boton.'" onclick="'.$onclick.'"'.' style="'.$style.'"';
     }
 
     if($title){
@@ -205,7 +205,7 @@ sub to_Icon{
     
     $button .= '> ';
     if($params_hash_ref{'li'}){
-        $button .=  '</li> ';
+        $button .=  '&nbsp;</li> ';
     }else{
         $button .=  $close_elem;
     }
@@ -217,7 +217,7 @@ sub ayuda_marc{
 
     my $icon= to_Icon(  
                 boton   => "icon_ayuda_marc",
-                onClick => "abrirVentanaHelperMARC();",
+                onclick => "abrirVentanaHelperMARC();",
                 title   => i18n("Ayuda MARC"),
             ) ;
 

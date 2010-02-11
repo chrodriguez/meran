@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
     $(document).ready(function() {
         $('.fancylink').fancybox();
     });
@@ -11,54 +11,39 @@
         <div class="contenedor_paginador">[% paginador %]</div>
     [% END %]
 
-    <table id="tablaResult" class="tabla_datos" border=1 align="center" cellspacing=0 cellpadding=0 width=100%>
-        <thead>
+    <table id="tablaResult" class="tabla_datos" cellspacing='0' cellpadding='0' style="text-align:center; width:100%; border:1;">
             <tr class="tablaresultadoTitle" >
-                <th align="center" width="15%">
+                <th align="center">
                     <a class="click" >[% "Im&aacute;gen" | i18n %]</a>
                 </th>
-                <th align="center" width="30%">
-                    <a class="click" onClick="ordenarPor('titulo')">[% "T&iacute;tulo" | i18n %]</a>
+                <th align="center">
+                    <a class="click" onclick="ordenarPor('titulo')">[% "T&iacute;tulo" | i18n %]</a>
                 </th>
-                <th align="center" width="20%">
-                    <a class="click" onClick="ordenarPor('nomCompleto')">[% "Autor" | i18n %] </a>
+                <th align="center">
+                    <a class="click" onclick="ordenarPor('nomCompleto')">[% "Autor" | i18n %] </a>
                 </th>
-                <th align="center" width="20%">
+                <th align="center">
                     [% "Edici&oacute;n/A&ntilde;o" | i18n %]
                 </th>
-                <th align="center" width="20%">
+                <th align="center">
                     [% "Disponibilidad" | i18n %]
                 </th>
-                <th align="center" width="20%">
+                <th align="center">
                     [% "Valoraci&oacute;n" | i18n %]
                 </th>
-                <th align="center" width="20%">
+                <th align="center">
                     [% "Favoritos" | i18n %]
                 </th>
             </tr>
-        </thead>
-        <tbody>
     <!-- Resultados de la busqueda -->
             [% FOREACH NIVEL IN SEARCH_RESULTS %]
-                <script type="text/javascript">
-                    $(function(){
-                        $("#rating[% NIVEL.id1 %]").children().not(":radio").hide();
-                        $("#rating[% NIVEL.id1 %]").stars({
-                            cancelShow: false,
-                            split: 2,
-                            disabled: true,
-                        });
-                        $("#rating[% NIVEL.id1 %]").stars("select",[% NIVEL.rating %]);
-                    });
-                </script>
                 <tr>
                     <td class="titulo_result">
                         [% IF NIVEL.portadas_grupo %]
                                 [% FOREACH NIVEL.portadas_grupo %]
                                     [% IF portada_registro %]
                                         <a class="fancylink" rel="group" href="/covers/[% portada_registro_big %]">
-                                            <img name="cover"  
-                                                VALUE="" BORDER=0 
+                                            <img alt="cover"
                                                 src="/covers/[% portada_registro %]" title="Portada" style="float:left"
                                             />
                                         </a>
@@ -75,15 +60,15 @@
                             [% IF NIVEL.portada_registro %]
                                 [% IF NIVEL.portada_registro_big %]
                                     <a class="fancylink" rel="group" href="/covers/[% NIVEL.portada_registro_big %]">
-                                        <img name="cover"  VALUE="" BORDER=0 src="/covers/[% NIVEL.portada_registro %]" title="Portada">
+                                        <img alt="cover" src="/covers/[% NIVEL.portada_registro %]" title="Portada" />
                                     </a>
                                 [% ELSE %]
                                     [% IF NIVEL.portada_registro_medium %]
                                         <a class="fancylink" rel="group" href="/covers/[% NIVEL.portada_registro_medium %]">
-                                            <img name="cover"  VALUE="" BORDER=0 src="/covers/[% NIVEL.portada_registro %]" title="Portada">
+                                            <img alt="cover" src="/covers/[% NIVEL.portada_registro %]" title="Portada" />
                                         </a>
                                     [% ELSE %]
-                                            <img name="cover"  VALUE="" BORDER=0 src="/covers/[% NIVEL.portada_registro %]" title="Portada">
+                                            <img alt="cover" src="/covers/[% NIVEL.portada_registro %]" title="Portada" />
                                     [% END %]
                                 [% END %]
                             [% ELSE %]
@@ -107,7 +92,7 @@
                         [% END %]
                     </td>
 
-                    <td class="autor_result click" onClick="filtrarPorAutor([% NIVEL.idAutor %])" title="[% 'Filtrar por Autor' | i18n %]">
+                    <td class="autor_result click" onclick="filtrarPorAutor([% NIVEL.idAutor %])" title="[% 'Filtrar por Autor' | i18n %]">
                         [% IF NIVEL.nomCompleto %]
                             [% NIVEL.nomCompleto %]
                         [% ELSE %]
@@ -127,7 +112,7 @@
                                 [% IF volume %] 
                                     t [% volume %]
                                 [% END %]
-                                <br>
+                                <br />
                             [% END %]
                         [% ELSE %]
                             &nbsp;
@@ -138,12 +123,12 @@
                         [% IF NIVEL.disponibilidad %]
                             [% FOREACH NIVEL.disponibilidad %]
                                 <b>[% tipoPrestamo %]</b> [% cantTotal %]
-                                <br>
+                                <br />
                                 <div style="margin-right:4px">
                                     [% reservados %]
-                                    <br> 
+                                    <br /> 
                                     [% prestados %]
-                                    <br>
+                                    <br />
                                 </div>
                             [% END %]
                         [% ELSE %]
@@ -152,18 +137,20 @@
                     </td>
                     <td>
                         <div class="rating">
-                            <form id="rating[% NIVEL.id1 %]" class="ratings">
-                                <input type="radio" name="rate" value="1" id="rate1" />
-                                <input type="radio" name="rate" value="2" id="rate2" />
-                                <input type="radio" name="rate" value="3" id="rate3" />
-                                <input type="radio" name="rate" value="4" id="rate4" />
-                                <input type="radio" name="rate" value="5" id="rate5" />
-                                <input type="radio" name="rate" value="6" id="rate6" />
-                                <input type="radio" name="rate" value="7" id="rate7" />
-                                <input type="radio" name="rate" value="8" id="rate8" />
-                                <input type="radio" name="rate" value="9" id="rate9" />
-                                <input type="radio" name="rate" value="10" id="rate10" />
-                                <input type="submit" value="Enviar" />
+                            <form id="rating[% NIVEL.id1 %]" class="ratings" action="">
+                                <div>
+                                  <input type="radio" name="rate" value="1" />
+                                  <input type="radio" name="rate" value="2" />
+                                  <input type="radio" name="rate" value="3" />
+                                  <input type="radio" name="rate" value="4" />
+                                  <input type="radio" name="rate" value="5" />
+                                  <input type="radio" name="rate" value="6" />
+                                  <input type="radio" name="rate" value="7" />
+                                  <input type="radio" name="rate" value="8" />
+                                  <input type="radio" name="rate" value="9" />
+                                  <input type="radio" name="rate" value="10" />
+                                  <input type="submit" value="Enviar" />
+                                </div>
                             </form>
                             <br style="clear:both" />
                         </div>
@@ -173,7 +160,7 @@
                             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_borrar",
-                                                                    onClick => "deleteFavorite('[% NIVEL.id1 %]');",
+                                                                    onclick => "deleteFavorite('[% NIVEL.id1 %]');",
                                                                     title   => "[% 'Eliminar favorito' | i18n %]",
                                                                     alternClass => "botonCentradoTabla"
                                         ) ;
@@ -182,7 +169,7 @@
                             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_agregar",
-                                                                    onClick => "addFavorite('[% NIVEL.id1 %]');",
+                                                                    onclick => "addFavorite('[% NIVEL.id1 %]');",
                                                                     title   => "[% 'Agregar a Favoritos' | i18n %]",
                                                                     alternClass => "botonCentradoTabla"
                                         ) ;
@@ -191,7 +178,21 @@
                     </td>
                 </tr>
             [% END %]
-        </tbody>
     </table>
-    <br>
+    <br />
 [% END %]
+<!-- FIX PARA W3C PORQUE NO SE PERMITEN SCRIPT DENTRO DE TABLAS -->
+[% FOREACH NIVEL IN SEARCH_RESULTS %]
+    <script type="text/javascript">
+        $(function(){
+            $("#rating[% NIVEL.id1 %]").children().not(":radio").hide();
+            $("#rating[% NIVEL.id1 %]").stars({
+                cancelShow: false,
+                split: 2,
+                disabled: true,
+            });
+            $("#rating[% NIVEL.id1 %]").stars("select",[% NIVEL.rating %]);
+        });
+    </script>
+[% END %]
+
