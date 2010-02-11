@@ -272,16 +272,109 @@ div.pagination span.disabled {
 
 
 
-#icon_borrar {
+.icon_borrar {
     background: transparent url(../imagenes/iconos/borrar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_agregar {
+.icon_agregar {
     background: transparent url(../imagenes/iconos/agregar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
+
+
+.boton_buscar {
+    background: transparent  url(../imagenes/botones/boton_buscar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+.boton_salir {
+    background: transparent  url(../imagenes/botones/boton_salir.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+.boton_favoritos {
+    background: transparent  url(../imagenes/botones/boton_favoritos.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+.boton_inicio {
+    background: transparent  url(../imagenes/botones/boton_inicio.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+.boton_registrarse {
+    background: transparent  url(../imagenes/botones/boton_registrarse.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+.boton_miembros {
+    background: transparent  url(../imagenes/botones/boton_miembros.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+/*              parte del boton generica                  */
+.boton_texto {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: #000000;
+    background-position: center;
+    margin-left: 27px;
+    margin-top: 5px;
+    text-align:center;
+    cursor: pointer;
+/*     margin-top: 3px; */
+}
+
+.boton_medio {
+    background:url(../imagenes/botones/boton_medio.png) repeat-x scroll center ;
+    height: 22px;
+    /*width: 7%;*//*se debe modificar dinamicamente*/
+    position: relative;
+    padding-bottom:0;
+    padding-left:0;
+    padding-right:0;
+    cursor: pointer;
+/*     padding-top:6px; */
+/*     margin-left: 25px;*/
+}
+
+.boton_der {
+    float:right;
+    background: transparent url(../imagenes/botones/boton_der.png) no-repeat;
+    height: 22px;
+    width: 3px;
+    cursor: pointer;
+}
+
+.boton_entrar {
+    float:right;
+    background: transparent url(../imagenes/botones/boton_entrar.png) no-repeat;
+    height: 22px;
+    width: 3px;
+    cursor: pointer;
+}
+/*            fin  parte del boton generica                */
+
+
+
+
+
+
