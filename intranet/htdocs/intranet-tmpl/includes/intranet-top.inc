@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
+<head>
 [% INCLUDE "message_INTRA.inc" %]
 <script language="javascript" type="text/javascript">
 //     <!-- variables de entorno sacadas de las preferencias del sistema -->
@@ -9,7 +10,6 @@
     M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %];
 </script>
 
-<head>
 [% IF page_sub_title %]
     <title>Meran::UNLP::[% page_sub_title %]</title>
 [% ELSE %]
@@ -17,7 +17,7 @@
 [% END %]
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="Public" content="max-age=3153600">
+<META HTTP-EQUIV="cache-control" content="public">
 
 <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranetOLD.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/intranet.css">
@@ -42,9 +42,6 @@
 <script type="text/javascript" src="/includes/jquery/jquery.alerts.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.dataTables.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.tooltip.js"></script>
-
-<!--</head>-->
-
 
 
 <!-- <script src="/includes/jquery/jquery.tablednd.js"></script> -->
