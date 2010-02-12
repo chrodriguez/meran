@@ -70,11 +70,15 @@ height:70%;
     float: left;
 }
 
-.boton_login  {
+#boton_login  {
     display:block;
     list-style-type:none;
     margin: 0 auto;
     width: 75px;
+}
+
+#boton_login  ul {
+    list-style-type:none;
 }
 /*---------------------------------------------------------------- HEADER--------------------------------------------------*/
 .header{
@@ -918,13 +922,13 @@ label.error_adv{
     margin: 0 auto;
 }
 
-ul#horizontal-list {
+ul.horizontal-list {
     min-width: 696px;
     list-style: none;
     padding-top: 20px;
 }
 
-ul#horizontal-list li {
+ul.horizontal-list li {
     display: inline;
 }
 
