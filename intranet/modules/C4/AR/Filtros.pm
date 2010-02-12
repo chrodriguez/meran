@@ -146,7 +146,7 @@ sub to_Button{
             $width =$width+4;
             $width= $width."ex";
         }
-        else{ $width= $params_hash_ref{'width'}; 
+        else{ $width= $params_hash_ref{'width'};
         }
     }
     
