@@ -138,7 +138,7 @@ sub to_Button{
 
     my $text= $params_hash_ref{'text'}; #obtengo el texto a mostrar
     my $boton= $params_hash_ref{'boton'}; #obtengo el boton
-    my $onclick= $params_hash_ref{'onclick'}; #obtengo el llamado a la funcion en el evento onclick
+    my $onclick= $params_hash_ref{'onclick'} || $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onclick
     my $title= $params_hash_ref{'title'}; #obtengo el title de la componete
     my $width= length($text);
     if($params_hash_ref{'width'}){
@@ -180,7 +180,7 @@ sub to_Icon{
 
     my $button= '';
     my $boton= $params_hash_ref{'boton'}; #obtengo el boton
-    my $onclick= $params_hash_ref{'onclick'}; #obtengo el llamado a la funcion en el evento onclick
+    my $onclick= $params_hash_ref{'onclick'} || $params_hash_ref{'onclick'}; #obtengo el llamado a la funcion en el evento onclick
     my $title= $params_hash_ref{'title'}; #obtengo el title de la componete
     
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';

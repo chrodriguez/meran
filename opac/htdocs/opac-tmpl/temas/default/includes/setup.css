@@ -24,7 +24,7 @@ body input[type="text"]:focus{
 }
 
 body textarea:focus{
-  background: Wheat;
+  background: #F5DEB3;
 }
 .page-container {width:98%; margin:0px auto; margin-top:10px; margin-bottom:10px; border:solid 1px rgb(150,150,150); font-size:1.0em;}
 .main {clear:both; width:100%; padding-bottom:30px; background:transparent url(../imagenes/bg_main_withnav.jpg) top left repeat-y;}
@@ -286,6 +286,13 @@ div.pagination span.disabled {
     cursor: pointer;
 }
 
+.icon_cancelar {
+    background: transparent url(../imagenes/iconos/cancelar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+}
+
 
 .boton_buscar {
     background: transparent  url(../imagenes/botones/boton_buscar.png) no-repeat;
@@ -370,6 +377,13 @@ div.pagination span.disabled {
     height: 22px;
     width: 3px;
     cursor: pointer;
+}
+
+.boton_borrar {
+    background: transparent  url(../imagenes/botones/boton_borrar.png) no-repeat;
+    height: 21px;
+    width: 20px;
+    float: left;
 }
 /*            fin  parte del boton generica                */
 
