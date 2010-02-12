@@ -6,7 +6,7 @@
 
 <div class="tablaResultadoTitulo">[% "Historial de Pr&eacute;stamos" | i18n %]</div>
 
-<table id="tablaHistorial" class="tablaHistorial" width="98%" border="1" class="tabla_datos" cellspacing="0" cellpadding="4" align="center">
+<table id="tablaHistorial" class="tablaHistorial tabla_datos" cellspacing="0" cellpadding="4" style="width:98%; text-align:center; border: 1;">
     <tr class="tablaResultadoTitulo" >
         <th>[% "T&iacute;tulo" | i18n %]</th>
         <th>[% "Autor" | i18n %]</th>

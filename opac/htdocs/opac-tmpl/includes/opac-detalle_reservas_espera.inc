@@ -40,6 +40,7 @@
                                                             boton   => "boton_borrar",
                                                             onClick => "cancelarReserva([% reserva.getId_reserva %])",
                                                             title   => "[% 'Cancelar Reserva' | i18n %]",
+                                                            width => "auto",
                                                             alternClass => "botonCentradoTabla"
                                                     );
                     [% END %]
