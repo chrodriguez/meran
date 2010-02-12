@@ -1,14 +1,16 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <html>
+
 <head>
 <title>Meran::UNLP</title>
-<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/intranet.css">
-<script src="/includes/jquery/jquery.js"></script>
-<script src="/includes/util.js"></script>
-<script src="/includes/md5.js"></script>
-<script src="/includes/sha1.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.js"></script>
+<script type="text/javascript" src="/includes/util.js"></script>
+<script type="text/javascript" src="/includes/md5.js"></script>
+<script type="text/javascript" src="/includes/sha1.js"></script>
 
-<script language="javascript">
+<script type="text/javascript">
     function enviar(){
         var nroRandom= [% RANDOM_NUMBER %];
         var username = $.trim($("#username").val());
@@ -40,10 +42,12 @@
     </div>
 </noscript>
 [% IF mensaje %]
-  <div class='tableMsgUser'><font class='fontMsgUser'><b><div id='mensajes' class="mensajes_informacion auth_info">[% mensaje %]</div></b></font></div>
+  <div class='tableMsgUser'>
+    <div id='mensajes' class="mensajes_informacion auth_info">
+      <font class='fontMsgUser'><b>[% mensaje %]</b></font>
+    </div>
+  </div>
 [% END %]
-
-<center>
 
 <form action='/cgi-bin/koha/mainpage.pl' method="post" name="datosAEnviar" id="datosAEnviar">
         <input type="hidden" name="userid" id="userid" >
@@ -57,10 +61,11 @@
                 <input size=15  name="username" id="username" >
         </div>
         <div class="entry">
-                <label for="password_plain" class=login">[% 'Contrase&ntilde;a:' | i18n %]</label>
+                <label for="password_plain" class="login">[% 'Contrase&ntilde;a:' | i18n %]</label>
                 <input  size=15 type="password" name="password_plain" id="password_plain">
         </div>
         <div id="boton_login">
+            <ul class="listaMenuBotones">
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Entrar' | i18n %]",
                                                                     boton   => "boton_entrar",
@@ -69,6 +74,7 @@
                                                                     width   => "auto",
                                         ) ;
             [% END %]
+           </ul>
       </div>
     </div>
 </div>

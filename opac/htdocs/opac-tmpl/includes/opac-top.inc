@@ -7,11 +7,11 @@
   <meta http-equiv="expires" content="3600" />
   <meta name="revisit-after" content="2 days" />
   <meta name="robots" content="index,follow" />
-  <meta name="publisher" content="Your publisher infos here ..." />
-  <meta name="copyright" content="Your copyright infos here ..." />
-  <meta name="author" content="Design: G. Wolfgang www.1-2-3-4.info / Author: Your author infos here ..." />
+  <meta name="publisher" content="Grupo Meran" />
+  <meta name="copyright" content="" />
+  <meta name="author" content="Grupo Meran" />
   <meta name="distribution" content="global" />
-  <meta name="description" content="Your page description here ..." />
+  <meta name="description" content="OPAC" />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/default/includes/setup.css" />
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/default/includes/jquery.alerts.css" />
