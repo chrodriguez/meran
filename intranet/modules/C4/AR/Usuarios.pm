@@ -442,7 +442,7 @@ sub cambiarPassword {
     #No hay error
 # FIXME si cambia la pass que pasa con LDAP??
         my $password_actual_desde_DB = $socio->getPassword;
-        my $cambioDePasswordForzado;      
+        my $cambioDePasswordForzado;
         my $password_actual_desde_cliente_hasheada = C4::Auth::prepare_password($params->{'actualPassword'});
 
         if( ($params->{'changePassword'} eq 1) && ($socio->getChange_password) ){
