@@ -1613,11 +1613,11 @@ sub _getMetodoEncriptacion {
 sub _verificar_password_con_metodo {
     my ($hashed_password, $password, $dni, $random_number, $metodo) = @_;
 
-    if ($hashed_password eq undef){
-    # La 1ra vez esta vacio se usa el dni o password reseteada
-        $hashed_password= _hashear_password(md5_base64($dni), $metodo);
-        C4::AR::Debug::debug("_verificar_password_con_metodo=> es la 1era vez que se loguea, se usa el DNI\n");
-    }
+#     if ($hashed_password eq undef){
+#     # La 1ra vez esta vacio se usa el dni o password reseteada
+#         $hashed_password= _hashear_password(md5_base64($dni), $metodo);
+#         C4::AR::Debug::debug("_verificar_password_con_metodo=> es la 1era vez que se loguea, se usa el DNI\n");
+#     }
 
 C4::AR::Debug::debug("_verificar_password_con_metodo=> password del cliente: ".$password."\n");
 C4::AR::Debug::debug("_verificar_password_con_metodo=> password de la base: ".$hashed_password."\n");
