@@ -151,7 +151,7 @@ sub to_Button{
     }
     
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
-    $button .=  '<li  class="click '.$alternClass.' '.$boton.' " onclick="'.$onclick.'" style="width:'.$width.'"';
+    $button .=  '<li  class="click boton_medio '.$alternClass.' " onclick="'.$onclick.'" style="width:'.$width.'"';
 
     if($title){
         $button .= ' title="'.$title.'"';
