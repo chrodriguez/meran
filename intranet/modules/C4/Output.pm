@@ -128,9 +128,7 @@ sub gettemplate {
     my $default_ui = C4::AR::Preferencias->getValorPreferencia('defaultUI');
     $ui = C4::AR::Referencias::getUI_infoObject($default_ui);
 
-    my $year;
-    my ($second, $minute, $hour, $dayOfMonth, $month, $yearOffset, $dayOfWeek, $dayOfYear, $daylightSavings) = localtime();
-    $year = 1900 + $yearOffset;
+    my $date = C4::AR::Utilidades::getDate();
     if($ui){
         $nombre_ui = $ui->getNombre();
     }
@@ -146,7 +144,7 @@ sub gettemplate {
             titulo_nombre_ui    => C4::AR::Preferencias->getValorPreferencia('titulo_nombre_ui'),
 			template_name       => "$htdocs/$tmplbase", #se setea el nombre del tmpl
             ui                  => $ui,
-            actual_year         => $year,
+            actual_year         => $date->{'year'},
 		);
 
 
