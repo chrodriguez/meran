@@ -2842,6 +2842,17 @@ sub armarPaginasOPAC{
     return($paginador, $totalPaginas);
 }
 
+sub getDate{
+
+    my ($second, $minute, $hour, $dayOfMonth, $month, $yearOffset, $dayOfWeek, $dayOfYear, $daylightSavings) = localtime();
+    my %date_hash = {};
+
+    $date_hash{'year'} = 1900 + $yearOffset;
+    $date_hash{'month'} = $month;
+
+    return (\%date_hash);
+}
+
 
 END { }       # module clean-up code here (global destructor)
 
