@@ -106,7 +106,7 @@ sub agregar{
     $self->setFlags($data_hash->{'flags'});
 #     $self->setPassword($data_hash->{'password'});
     
-    $self->setPassword(_hashear_password(_hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
+    $self->setPassword(C4::Auth::_hashear_password(C4::Auth::_hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
 #     $self->setLast_login($data_hash->{'last_login'});
     $self->setChange_password($data_hash->{'changepassword'});
     $self->setCumple_requisito($data_hash->{'cumple_requisito'});
@@ -213,7 +213,7 @@ sub cambiarPassword{
 sub resetPassword{
     my ($self)=shift;
 
-    $self->setPassword(_hashear_password(_hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
+    $self->setPassword(C4::Auth::_hashear_password(C4::Auth::_hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
     $self->forzarCambioDePassword();
     $self->save();
 }

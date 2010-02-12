@@ -106,6 +106,7 @@ C4::Auth - Authenticates Koha users
         &getSessionNroSocio
 		&_generarNroRandom
         &redirectAndAdvice
+        &_hashear_password
 		
 );
 
