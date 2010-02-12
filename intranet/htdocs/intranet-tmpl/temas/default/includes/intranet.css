@@ -70,7 +70,7 @@ height:70%;
     float: left;
 }
 
-#boton_login  {
+.boton_login  {
     display:block;
     list-style-type:none;
     margin: 0 auto;
@@ -462,7 +462,7 @@ label.error_adv{
 
 /*---------------------------------------------------BOTONES------------------------------------------------------------------------*/
 
-#boton_texto {
+.boton_texto {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 11px;
     font-weight: bold;
@@ -473,7 +473,7 @@ label.error_adv{
 
 }
 
-#boton_medio {
+.boton_medio {
     background:url(../imagenes/botones/boton_medio.png) repeat-x scroll center ;
     height: 21px;
     /*width: 7%;*//*se debe modificar dinamicamente*/
@@ -488,7 +488,7 @@ label.error_adv{
     width:150px;
 }
 
-#boton_der {
+.boton_der {
     float:right;
     background: transparent url(../imagenes/botones/boton_der.png) no-repeat;
     height: 21px;
@@ -496,147 +496,147 @@ label.error_adv{
 }
 /*IZQUIERDA*/
 
-#boton_buscar {
+.boton_buscar {
     background: transparent  url(../imagenes/botones/boton_buscar.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_agregar {
+.boton_agregar {
     background: transparent  url(../imagenes/botones/boton_agregar.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_ayuda {
+.boton_ayuda {
     background: transparent  url(../imagenes/botones/boton_ayuda.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_borrar {
+.boton_borrar {
     background: transparent  url(../imagenes/botones/boton_borrar.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_campo_temporal {
+.boton_campo_temporal {
     background: transparent  url(../imagenes/botones/boton_campo_temporal.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_edicion {
+.boton_edicion {
     background: transparent  url(../imagenes/botones/boton_edicion.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_entrar {
+.boton_entrar {
     background: transparent  url(../imagenes/botones/boton_entrar.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_enviar {
+.boton_enviar {
     background: transparent  url(../imagenes/botones/boton_enviar.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_estantes {
+.boton_estantes {
     background: transparent  url(../imagenes/botones/boton_estantes.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_favoritos {
+.boton_favoritos {
     background: transparent  url(../imagenes/botones/boton_favoritos.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_guardar {
+.boton_guardar {
     background: transparent  url(../imagenes/botones/boton_guardar.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_imprimir {
+.boton_imprimir {
     background: transparent  url(../imagenes/botones/boton_imprimir.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_indice {
+.boton_indice {
     background: transparent  url(../imagenes/botones/boton_indice.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_inicio {
+.boton_inicio {
     background: transparent  url(../imagenes/botones/boton_inicio.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_ir {
+.boton_ir {
     background: transparent  url(../imagenes/botones/boton_ir.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_micuenta {
+.boton_micuenta {
     background: transparent  url(../imagenes/botones/boton_micuenta.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_miembros {
+.boton_miembros {
     background: transparent  url(../imagenes/botones/boton_miembros.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_PDF {
+.boton_PDF {
     background: transparent  url(../imagenes/botones/boton_PDF.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_salir {
+.boton_salir {
     background: transparent  url(../imagenes/botones/boton_salir.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_seleccionar {
+.boton_seleccionar {
     background: transparent  url(../imagenes/botones/boton_seleccionar.png) no-repeat;
     height: 21px;
     width: 20px;
     float: left;
 }
 
-#boton_subir {
+.boton_subir {
     background: transparent  url(../imagenes/botones/boton_subir.png) no-repeat;
     height: 21px;
     width: 20px;
@@ -645,7 +645,7 @@ label.error_adv{
 
 
 /*---- estilos para los iconos-----*/
-#icon_bajar {
+.icon_bajar {
     background: transparent url(../imagenes/iconos/bajar.png) no-repeat;
     height: 25px;
     width: 25px;
@@ -654,7 +654,7 @@ label.error_adv{
     float:left;
 }
 
-#icon_subir {
+.icon_subir {
     background: transparent url(../imagenes/iconos/subir.png) no-repeat;
     height: 25px;
     width: 25px;
@@ -663,14 +663,14 @@ label.error_adv{
     float:none;
 }
 
-#icon_borrar {
+.icon_borrar {
     background: transparent url(../imagenes/iconos/borrar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_ayuda {
+.icon_ayuda {
     background: transparent url(../imagenes/iconos/ayuda.png) no-repeat;
     height: 25px;
     width: 25px;
@@ -678,7 +678,7 @@ label.error_adv{
     float:left;
 }
 
-#icon_ayuda_marc {
+.icon_ayuda_marc {
     background: transparent url(../imagenes/iconos/ayuda_marc.png) no-repeat;
     height: 25px;
     width: 25px;
@@ -686,171 +686,171 @@ label.error_adv{
     float:right;
 }
 
-#icon_agregar {
+.icon_agregar {
     background: transparent url(../imagenes/iconos/agregar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_renovar {
+.icon_renovar {
     background: transparent url(../imagenes/iconos/renovar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_der {
+.icon_der {
     background: transparent url(../imagenes/iconos/der.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_devolver {
+.icon_devolver {
     background: transparent url(../imagenes/iconos/devolver.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_buscar {
+.icon_buscar {
     background: transparent url(../imagenes/iconos/buscar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_edicion {
+.icon_edicion {
     background: transparent url(../imagenes/iconos/edicion.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
-#icon_entrar {
+.icon_entrar {
     background: transparent url(../imagenes/iconos/entrar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
-#icon_enviar {
+.icon_enviar {
     background: transparent url(../imagenes/iconos/enviar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
-#icon_estvirtuales {
+.icon_estvirtuales {
     background: transparent url(../imagenes/iconos/estvirtuales.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_favoritos {
+.icon_favoritos {
     background: transparent url(../imagenes/iconos/favoritos.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_guardar {
+.icon_guardar {
     background: transparent url(../imagenes/iconos/guardar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_imprimir {
+.icon_imprimir {
     background: transparent url(../imagenes/iconos/imprimir.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_indice {
+.icon_indice {
     background: transparent url(../imagenes/iconos/indice.png) no-repeat;
     height: 25px;
     width: 25px;
 }
 
-#icon_inicio {
+.icon_inicio {
     background: transparent url(../imagenes/iconos/inicio.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_ir {
+.icon_ir {
     background: transparent url(../imagenes/iconos/ir.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_izq {
+.icon_izq {
     background: transparent url(../imagenes/iconos/izq.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_micuenta {
+.icon_micuenta {
     background: transparent url(../imagenes/iconos/micuenta.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_miembros {
+.icon_miembros {
     background: transparent url(../imagenes/iconos/miembros.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_pdf {
+.icon_pdf {
     background: transparent url(../imagenes/iconos/pdf.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_prestar {
+.icon_prestar {
     background: transparent url(../imagenes/iconos/prestar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_cancelar {
+.icon_cancelar {
     background: transparent url(../imagenes/iconos/cancelar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_sacar {
+.icon_sacar {
     background: transparent url(../imagenes/iconos/sacar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_salir {
+.icon_salir {
     background: transparent url(../imagenes/iconos/salir.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_seleccionar {
+.icon_seleccionar {
     background: transparent url(../imagenes/iconos/seleccionar.png) no-repeat;
     height: 25px;
     width: 25px;
     cursor: pointer;
 }
 
-#icon_anadir {
+.icon_anadir {
     background: transparent url(../imagenes/iconos/anadir.png) no-repeat;
     height: 25px;
     width: 25px;
