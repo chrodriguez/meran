@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
     $(document).ready(function() {
         $('.fancylink').fancybox();
     });
@@ -6,8 +6,8 @@
           <div class="main-subcontent" style="width:25%; float:left; margin: 5px">
               [% IF portada_registro %]
                   <a class="fancylink" href="/covers/[% portada_registro_big %]">
-                      <img name="cover" VALUE="" BORDER=0 src="/covers/[% portada_registro_medium %]" title="Portada" 
-                            alt="[% 'Portada del ejemplar' | i18n %]">
+                      <img src="/covers/[% portada_registro_medium %]" title="Portada" 
+                            alt="[% 'Portada del ejemplar' | i18n %]" />
                   </a>
               [% ELSE %]
                     <img src="/covers/no_image_medium.jpg" 
@@ -21,10 +21,10 @@
                     <table  style="width:95%;">
                         <tr>
                             <td class="impar" >
-                                <br>
-                                [% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %] <b>[% cantParaPrestamo %]</b><br>
-                                [% "Disponibilidad Actual Para Sala de Lectura:" | i18n %] <b>[% cantParaSala %]</b><br>
-                                [% "Cantidad Actual de Reservas:" | i18n %] <b>[% cantReservas %]</b><br>
+                                <br />
+                                [% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %] <b>[% cantParaPrestamo %]</b><br />
+                                [% "Disponibilidad Actual Para Sala de Lectura:" | i18n %] <b>[% cantParaSala %]</b><br />
+                                [% "Cantidad Actual de Reservas:" | i18n %] <b>[% cantReservas %]</b><br />
 
                                 [% IF socio_data %]
                                     [% PERL %]
@@ -42,7 +42,9 @@
                 </div>
            </div>
           [% INCLUDE 'rating.inc' %]
-          <a href="/cgi-bin/koha/reviews.pl?token=[% token %]&id2=[% id2 %]">
-              <h3> [% 'Revisiones' | i18n %] ([% cant_reviews %]) </h3>
-          </a>
+          <h3>
+              <a href="/cgi-bin/koha/reviews.pl?token=[% token %]&amp;id2=[% id2 %]">
+                  [% 'Revisiones' | i18n %] ([% cant_reviews %])
+              </a>
+          </h3>
 

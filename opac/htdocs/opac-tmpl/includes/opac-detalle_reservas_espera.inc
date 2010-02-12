@@ -2,7 +2,7 @@
 [% IF reservas_espera_count %]
     <table class="tabla_datos tope" style="width:100%; text-align:center">
       <tr class="tablaResultadoTitulo">
-        <td >
+        <td>
             <b>[% "Material en espera" | i18n %]</b>
         </td>
       </tr>
@@ -22,7 +22,7 @@
         </td>
         <td >
         [% IF reserva.nivel2.nivel1.getAutor %]
-            <a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor %]" >
+            <a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutorObject.getId %]" >
             [% reserva.nivel2.nivel1.cat_autor.getCompleto %]
             </a>
         [% ELSE %]
@@ -34,15 +34,16 @@
         </td>
         <td>
             [% IF CirculationEnabled %]
-
+                 <ul>
                     [% PERL %]
                         print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar' | i18n %]",
-                                                            boton   => "boton_cancelar",
+                                                            boton   => "boton_borrar",
                                                             onClick => "cancelarReserva([% reserva.getId_reserva %])",
                                                             title   => "[% 'Cancelar Reserva' | i18n %]",
                                                             alternClass => "botonCentradoTabla"
                                                     );
                     [% END %]
+                </ul>
 
             [% ELSE %]
                 [% "No disponible" | i18n %]
@@ -51,7 +52,7 @@
       </tr>
     [% END %]
     </table>
-    <br>
+    <br />
 [% ELSE %]
 
     <h1> [% 'Ud. no tiene reservas en espera.' | i18n %] </h1>
