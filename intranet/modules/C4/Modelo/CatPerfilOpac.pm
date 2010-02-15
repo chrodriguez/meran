@@ -29,9 +29,10 @@ sub setNombre{
     $self->nombre($string);
 }
 
-sub lastTable{
-    
-    return(1);
+sub nextMember{
+    use C4::Modelo::PrefServidorZ3950;
+
+    return(C4::Modelo::PrefServidorZ3950->new());
 }
 
 
