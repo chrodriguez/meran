@@ -19,15 +19,15 @@ my $input = new CGI;
 my $id1 = $ARGV[0] || '0'; #id1 del registro
 my $dbh = C4::Context->dbh;
 
-#Vaciamos el indice
-    my $truncate  =   " TRUNCATE TABLE `indice_busqueda`;";
-    my $sth0      = $dbh->prepare($truncate);
-    $sth0->execute();
-
 
 my $sth1;
 
 if($id1 eq '0'){
+
+    #Vaciamos el indice
+    my $truncate  =   " TRUNCATE TABLE `indice_busqueda`;";
+    my $sth0      = $dbh->prepare($truncate);
+    $sth0->execute();
 
     my $query1  =   " SELECT * FROM cat_registro_marc_n1";
     $sth1       =   $dbh->prepare($query1);
@@ -35,6 +35,7 @@ if($id1 eq '0'){
 
 } else {
 
+    #se va a modificar un registro en particular
     my $query1  =   " SELECT * FROM cat_registro_marc_n1 WHERE id = ?";
     $sth1       =   $dbh->prepare($query1);
     $sth1->execute($id1);
