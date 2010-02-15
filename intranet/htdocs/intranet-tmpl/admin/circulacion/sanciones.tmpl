@@ -30,7 +30,7 @@ function guardarTiposQueAplica(){
 
 
     objAH=new AjaxHelper(updateGuardarTiposQueAplica);
-    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+    objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
 
     objAH.tipo_prestamo=$("#tipo_prestamo_id").val();
     objAH.categoria_socio=$("#categoria_socio_id").val();
@@ -72,7 +72,7 @@ function buscarTiposPrestamosSancionados(){
 
 			objAH=new AjaxHelper(updateTiposPrestamosSancionados);
 			objAH.debug= true;
-			objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+			objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
 			objAH.tipo_prestamo=$("#tipo_prestamo_id").val();
 			objAH.categoria_socio=$("#categoria_socio_id").val();
 			objAH.tipoAccion= "TIPOS_PRESTAMOS_SANCIONADOS";
@@ -94,7 +94,7 @@ function buscarSancionesReglas(){
 
             objAH=new AjaxHelper(updateSancionesReglas);
             objAH.debug= true;
-            objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+            objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
             objAH.tipo_prestamo=$("#tipo_prestamo_id").val();
             objAH.categoria_socio=$("#categoria_socio_id").val();
             objAH.tipoAccion= "REGLAS_SANCIONES";
@@ -112,7 +112,7 @@ function updateSancionesReglas(responseText){
  */
 function agregarReglaTipoSancion(tipo_sancion){
     objAH=new AjaxHelper(updateAgregarReglaTipoSancion);
-    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+    objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
 
     objAH.regla_sancion=$("#regla_sancion").val();
     objAH.orden=$("#orden").val();
@@ -137,7 +137,7 @@ function eliminarReglaTipoSancion(tipo_sancion, regla_sancion){
         if (confirmStatus) {
             objAH=new AjaxHelper(updateEliminarReglaTipoSancion);
             objAH.debug= true;
-            objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+            objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
             objAH.tipo_sancion=tipo_sancion;
             objAH.regla_sancion=regla_sancion;
             objAH.tipoAccion= "ELIMINAR_REGLA_TIPO_SANCION";
@@ -157,7 +157,7 @@ function updateEliminarReglaTipoSancion(responseText){
 function editarReglas(){
     objAH=new AjaxHelper(updateEditarReglas);
     objAH.debug= true;
-    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+    objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
     objAH.tipoAccion= "MODIFICAR_REGLAS";
     objAH.sendToServer();
 }
@@ -186,7 +186,7 @@ function eliminarReglaSancion(regla_sancion){
         if (confirmStatus) {
             objAH=new AjaxHelper(updateEliminarReglaSancion);
             objAH.debug= true;
-            objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+            objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
             objAH.regla_sancion=regla_sancion;
             objAH.tipoAccion= "ELIMINAR_REGLA_SANCION";
             objAH.sendToServer();
@@ -207,7 +207,7 @@ function updateEliminarReglaSancion(responseText){
  */
 function agregarReglaSancion(){
     objAH=new AjaxHelper(updateAgregarReglaSancion);
-    objAH.url= "/cgi-bin/koha/admin/sancionesDB.pl";
+    objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
 
     objAH.dias_sancion=$("#dias_sancion").val();
     objAH.dias_demora=$("#dias_demora").val();

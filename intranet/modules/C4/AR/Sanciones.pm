@@ -399,6 +399,8 @@ sub getReglasSancionNoAplicadas{
                                                               sort_by => 'dias_demora , dias_sancion'
                                                                         );
    my $reglas_tipo_sancion=&C4::AR::Sanciones::getReglasTipoSancion($tipo_sancion);
+  
+  if(($reglas_sancion_array_ref)&&($reglas_tipo_sancion)) {
 
    my @reglas_resultado;
 
@@ -411,6 +413,7 @@ sub getReglasSancionNoAplicadas{
    }
 
    if ($reglas_resultado[0]) {return \@reglas_resultado;}
+  }
 
   return 0;
 

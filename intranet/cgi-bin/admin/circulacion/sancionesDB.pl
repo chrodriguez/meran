@@ -105,10 +105,12 @@ if($accion eq "REGLAS_SANCIONES"){
                 $orden{$i} = $i;
         }
         my $sugestedOrder= 0; #Maximo +1
+        if($reglas_tipo_sancion){
         foreach my $mi_regla (@$reglas_tipo_sancion) { 
             if($mi_regla->getOrden > $sugestedOrder){
                 $sugestedOrder=$mi_regla->getOrden;
             } 
+        }
         }
         $sugestedOrder++;
 
