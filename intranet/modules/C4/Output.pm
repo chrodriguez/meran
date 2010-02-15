@@ -145,6 +145,7 @@ sub gettemplate {
 			template_name       => "$htdocs/$tmplbase", #se setea el nombre del tmpl
             ui                  => $ui,
             actual_year         => $date->{'year'},
+            localization_FLAGS  => C4::AR::Filtros::setFlagsLang('OPAC'),
 		);
 
 

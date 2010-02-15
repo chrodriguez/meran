@@ -12,7 +12,8 @@ $session->param('locale', $input->param('lang_server') );
 #regreso a la pagina en la que estaba
 if($session->param('token')){
 #si hay sesion se le agrega el token
-	C4::Auth::redirectTo($input->param('url')."?token=".$session->param('token'));
+# 	C4::Auth::redirectTo($input->param('url')."?token=".$session->param('token'));
+    C4::Auth::redirectTo($input->param('url'));
 }else{
 	C4::Auth::redirectTo($input->param('url'));
 }

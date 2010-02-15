@@ -260,7 +260,47 @@ sub ayuda_in_line{
 
     return $ayuda;
 }
+=item
+Este filtro sirve para generar dinamicamente le combo para seleccionar el idioma.
+Este es llamado desde el opac-top.inc o intranet-top.inc (solo una vez).
+Se le parametriza si el combo es para la INTRA u OPAC
+=cut
+sub setFlagsLang {
 
+    my ($type) = @_;
+    my $session = CGI::Session->load();
+    my $html= '<ul>';
+    my $lang_Selected= $session->param('locale');
+## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
+    my @array_lang;
+
+
+    my %hash_flags = {};
+    $hash_flags{'lang'} = 'es_ES';
+    $hash_flags{'flag'} = 'es.png';
+    push (@array_lang, \%hash_flags);
+    my %hash_flags = {};
+    $hash_flags{'lang'} = 'en_EN';
+    $hash_flags{'flag'} = 'en.png';
+    push (@array_lang, \%hash_flags);
+    my $href;
+
+
+    my $url = $ENV{'REQUEST_URI'};
+    if($type eq 'OPAC'){
+        $href = '/cgi-bin/koha/opac-language.pl?url='.$url.'&amp;';
+    }else{
+        $href = '/cgi-bin/koha/intra-language.pl?';
+    }
+
+    my $flags_dir = C4::Context->config('temasOPAC').'/default/imagenes/flags';
+    foreach my $hash_temp (@array_lang){
+            $html .='<li><a href='."$href"."lang_server=".$hash_temp->{'lang'}.' title="Pagina home in Italiano"><img src='.$flags_dir.'/'.$hash_temp->{'flag'}.' alt="[% "Cambio de lenguaje" | i18n %]" /></a></li>';
+    }
+    $html .="</ul>";
+
+    return $html;
+}
 =item
 Este filtro sirve para generar dinamicamente le combo para seleccionar el idioma.
 Este es llamado desde el opac-top.inc o intranet-top.inc (solo una vez).

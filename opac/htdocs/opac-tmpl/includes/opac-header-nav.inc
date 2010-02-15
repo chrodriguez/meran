@@ -1,10 +1,6 @@
         <!-- Navigation Level 0 -->
         <div class="nav0">
-          <ul>
-            <li><a href="#" title="Pagina home in Italiano"><img src="[% temas %]/default/imagenes/flag_italy.gif" alt="[% 'Cambio de lenguaje' | i18n %]" /></a></li>
-            <li><a href="#" title="Homepage auf Deutsch"><img src="[% temas %]/default/imagenes/flag_germany.gif" alt="[% 'Cambio de lenguaje' | i18n %]" /></a></li>
-            <li><a href="#" title="Hemsidan p&aring; svenska"><img src="[% temas %]/default/imagenes/flag_sweden.gif" alt="[% 'Cambio de lenguaje' | i18n %]" /></a></li>
-          </ul>
+          [% localization_FLAGS %]
         </div>
         <!-- Navigation Level 1 -->
         <div class="nav1">
