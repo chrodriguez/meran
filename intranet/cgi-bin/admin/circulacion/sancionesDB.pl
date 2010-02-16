@@ -73,10 +73,12 @@ if($accion eq "REGLAS_SANCIONES"){
         my $categoria_socio=$obj->{'categoria_socio'};
 
         my $tipo_sancion=&C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio);
-        $t_params->{'tipo_sancion'}= $tipo_sancion;
-
-        my $reglas_tipo_sancion=&C4::AR::Sanciones::getReglasTipoSancion($tipo_sancion);
-        $t_params->{'REGLAS_TIPOS_SANCIONES'}= $reglas_tipo_sancion;
+        my $reglas_tipo_sancion;
+        if($tipo_sancion){
+          $t_params->{'tipo_sancion'}= $tipo_sancion;
+          $reglas_tipo_sancion=&C4::AR::Sanciones::getReglasTipoSancion($tipo_sancion);
+          $t_params->{'REGLAS_TIPOS_SANCIONES'}= $reglas_tipo_sancion;
+        }
 
         ######################Combos de las reglas de sancion##################################
         my $reglas_sancion=&C4::AR::Sanciones::getReglasSancionNoAplicadas($tipo_sancion);

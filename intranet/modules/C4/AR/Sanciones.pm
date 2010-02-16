@@ -400,14 +400,16 @@ sub getReglasSancionNoAplicadas{
                                                                         );
    my $reglas_tipo_sancion=&C4::AR::Sanciones::getReglasTipoSancion($tipo_sancion);
   
-  if(($reglas_sancion_array_ref)&&($reglas_tipo_sancion)) {
+  if ($reglas_sancion_array_ref) {
 
    my @reglas_resultado;
 
    foreach  my $regla1 (@$reglas_sancion_array_ref) {
             my $existe=0;
+           if($reglas_tipo_sancion){
            foreach  my $regla2 (@$reglas_tipo_sancion) {
                 if($regla1->getRegla_sancion eq $regla2->getRegla_sancion){$existe=1;}
+           }
            }
             if(!$existe){push (@reglas_resultado,$regla1);}
    }
@@ -423,6 +425,7 @@ sub getReglasTipoSancion{
   #Esta funcion recupera las reglas de un tipo de sancion
    my ($tipo_sancion)=@_;
 
+  if($tipo_sancion){
    use C4::Modelo::CircReglaTipoSancion::Manager;
    my $reglas_sanciones_array_ref = C4::Modelo::CircReglaTipoSancion::Manager->get_circ_regla_tipo_sancion(
                                                                     query => [ 
@@ -432,7 +435,7 @@ sub getReglasTipoSancion{
                                     );
 
     if ($reglas_sanciones_array_ref->[0]) {return $reglas_sanciones_array_ref;}
-
+  }
   return 0;
 
 }
