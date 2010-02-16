@@ -525,11 +525,6 @@ file and this method */
 
 
 
-ul li {
-      list-style-type:none;
-}
-
-
 .partnerNumberHighlight{
     color: red;
     font-weight:bold;

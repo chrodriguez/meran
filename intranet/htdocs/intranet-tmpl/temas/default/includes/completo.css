@@ -1609,6 +1609,9 @@ top:0;
 ul li a:visited{
   text-decoration:none;
 }
+ul li {
+      list-style-type:none;
+}
 
 .menu_superior_der{
 background: url(../imagenes/menu_der.png) 100% 0 no-repeat;
