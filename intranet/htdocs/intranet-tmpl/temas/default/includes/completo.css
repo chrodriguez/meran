@@ -1591,7 +1591,7 @@ top:0;
 
 #menu ul li {
       list-style-type:none;
-      display:block;
+      display:none;
       margin:0;
    float:left;
    width:100px;  

@@ -24,13 +24,13 @@
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/menu.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/jquery.alerts.css">-->
 
-<script type="text/javascript" src="/includes/jquery/jquery.js"></script>
-<script type="text/javascript" src="/includes/jquery/jquery.scrollTo.js"></script>
-<script type="text/javascript" src="/includes/jquery/jquery.menu.js"></script>
-<!-- FIXME esto no deberia estar aca, solo se usa cuando se cambia la pass o cuando se loguea -->
+<script type="text/javascript" src="/includes/jquery/completo.js"></script>
+<!--<script type="text/javascript" src="/includes/jquery/jquery.scrollTo.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.menu.js"></script>-->
+ <!--FIXME esto no deberia estar aca, solo se usa cuando se cambia la pass o cuando se loguea 
 <script type="text/javascript" src="/includes/md5.js"></script>
 <script type="text/javascript" src="/includes/md5_cbc.js"></script>
-<script type="text/javascript" src="/includes/sha1.js"></script>  
+<script type="text/javascript" src="/includes/sha1.js"></script>  -->
 <!-- para generar la hash de la cache -->
 <script type="text/javascript" src="/includes/jquery/jquery.jCache.js"></script>
 <script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
@@ -48,7 +48,7 @@
 
 [% INCLUDE  'WindowHelper.inc'  %]
 
-[% INCLUDE  'SmallPlugins.inc'  %]
+<!-- FIXME, esto parece que no sirve para nada, preguntar GASPO [% INCLUDE  'SmallPlugins.inc'  %] -->
 <!-- Se incluyen los mensajes para la catalogacion -->
 
 <script language="javascript" type="text/javascript">

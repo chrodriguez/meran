@@ -1,4 +1,3 @@
-<!-- A.3 HEADER BOTTOM -->
       <div class="header-bottom">
       <div class="logo_Superior">
   </div>
