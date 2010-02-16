@@ -109,10 +109,10 @@ sub getCampo{
 
 
 
-sub nextMember{
-    use C4::Modelo::RefPais;
-    return(C4::Modelo::RefPais->new());
+sub lastTable{
+    return(1);
 }
+
 
 sub getAll{
 
