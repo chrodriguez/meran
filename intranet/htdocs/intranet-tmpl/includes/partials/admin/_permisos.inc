@@ -1,3 +1,5 @@
+[% INCLUDE  'AutocompleteHelper.inc'  %]
+
 <script type="text/javascript">
     $(document).ready(function() {
         $('#usuario').focus();
