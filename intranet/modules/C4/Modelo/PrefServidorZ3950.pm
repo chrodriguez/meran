@@ -145,11 +145,6 @@ sub getAll{
     use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
-sub nextMember{
-    use C4::Modelo::CatPerfilOpac;
-
-    return(C4::Modelo::CatPerfilOpac->new());
-}
     if ($filtro){
         my @filtros_or;
         push(@filtros_or, (NOMBRE => {like => '%'.$filtro.'%'}) );
@@ -185,10 +180,13 @@ sub nextMember{
     }
 }
 
-sub lastTable{
-    
-    return(1);
+
+sub nextMember{
+    use C4::Modelo::RefColaborador;
+
+    return(C4::Modelo::RefColaborador->new());
 }
+
 
 1;
 
