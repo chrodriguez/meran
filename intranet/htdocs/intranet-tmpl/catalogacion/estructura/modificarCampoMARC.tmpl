@@ -44,6 +44,16 @@ $(document).ready(function() {
     </li>-->
 
 
+    <li class="sub_item">
+        <label for="campoX">Campo:</label> 
+        <input type="text" value="[% catalogacion.campo %]" disabled/>
+    </li>
+
+    <li class="sub_item">
+        <label for="campoX">Subcampo:</label> 
+        <input type="text" value="[% catalogacion.subcampo %]" disabled/>
+    </li>
+
 <!--     Si catalogacion.subCamposBase.getObligatorio (LA BIBLIA) dice que es obligatorio, no se puede modificar -->
     <li class="sub_item">
         <label for="obligatorio">[% 'Obligatorio?' | i18n %]</label>
@@ -63,11 +73,39 @@ $(document).ready(function() {
         <input id="liblibrarian" type="text" value="[% catalogacion.getLiblibrarian %]" size="90"> 
    </li>
     <li class="sub_item">
+        <label for="tipoInput">[% 'Tipo de input' | i18n %]:</label>
+        [% comboComponentes %]
+    </li>
+    <li class="sub_item">
         <label for="combo_validate">[% 'Validador' | i18n %]:</label>
         [% PERL %]
                         print C4::AR::Filtros::getComboValidadores();
         [% END %]
     </li>
+
+    <li class="sub_item">
+        <label for="tablaRef">[% 'Tabla de referencia' | i18n %]: </label>
+<!--         <select name="tablaRef" id="tablaRef" onChange="eleccionTablaRef()"> -->
+<!--             <option value="-1">[% 'Seleccionar TablaRef' | i18n %]</option> -->
+<!--         </select> -->
+        [% tabla_referencias %]
+    </li>
+
+    <div id="divCamposRef" valign="top" style="display:none">
+        <li class="sub_item">
+            <label for="orden">[% 'Orden' | i18n %]:</label>
+            <select name="camposSelect" id="camposSelect"></select>
+        </li>
+        <li class="sub_item">
+            <label for="camposRef">[% 'Campos' | i18n %]:</label> 
+            <select name="camposRef" id="camposRef"></select>
+        </li>
+    
+        <p>[% 'Ejemplo' | i18n %]: [% ejemplo %]</p>
+        <p>[% 'NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero' | i18n %]</p>
+
+    </div>
+
 </ul>
 
 

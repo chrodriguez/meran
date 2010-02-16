@@ -1817,35 +1817,36 @@ sub generarComboTablasDeReferencia{
     my %options_hash; 
 
     if ( $params->{'onChange'} ){
-         $options_hash{'onChange'}= $params->{'onChange'};
+         $options_hash{'onChange'}  = $params->{'onChange'};
     }
 
     if ( $params->{'onFocus'} ){
-      $options_hash{'onFocus'}= $params->{'onFocus'};
+      $options_hash{'onFocus'}      = $params->{'onFocus'};
     }
 
     if ( $params->{'class'} ){
-         $options_hash{'class'}= $params->{'class'};
+         $options_hash{'class'}     = $params->{'class'};
     }
 
     if ( $params->{'onBlur'} ){
-      $options_hash{'onBlur'}= $params->{'onBlur'};
+      $options_hash{'onBlur'}       = $params->{'onBlur'};
     }
 
-    $options_hash{'name'}= $params->{'name'}||'tablas_ref';
-    $options_hash{'id'}= $params->{'id'}||'tablas_ref';
-    $options_hash{'size'}=  $params->{'size'}||1;
-    $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'name'}           = $params->{'name'}||'tablas_ref';
+    $options_hash{'id'}             = $params->{'id'}||'tablas_ref';
+    $options_hash{'size'}           = $params->{'size'}||1;
+    $options_hash{'multiple'}       = $params->{'multiple'}||0;
+    $options_hash{'defaults'}       = $params->{'default'} || 'SIN SELECCIONAR';
 
 #FIXME falta un default no?
 #     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
 
 
     push (@select_tabla_ref_array, 'SIN SELECCIONAR');
-    $options_hash{'values'}= \@select_tabla_ref_array;
-    $options_hash{'labels'}= \%select_tabla_ref_array;
+    $options_hash{'values'}         = \@select_tabla_ref_array;
+    $options_hash{'labels'}         = \%select_tabla_ref_array;
 
-    my $comboTipoNivel3= CGI::scrolling_list(\%options_hash);
+    my $comboTipoNivel3             = CGI::scrolling_list(\%options_hash);
 
     return $comboTipoNivel3;
 }
@@ -1871,36 +1872,36 @@ sub generarComboDePerfilesOPAC{
 
     $params->{'onChange'} = $params->{'onChange'} || 'eleccionDePerfil()';
     if ( $params->{'onChange'} ){
-         $options_hash{'onChange'}= $params->{'onChange'};
+         $options_hash{'onChange'}  = $params->{'onChange'};
     }
 
     if ( $params->{'onFocus'} ){
-      $options_hash{'onFocus'}= $params->{'onFocus'};
+      $options_hash{'onFocus'}      = $params->{'onFocus'};
     }
 
     if ( $params->{'class'} ){
-         $options_hash{'class'}= $params->{'class'};
+         $options_hash{'class'}     = $params->{'class'};
     }
 
     if ( $params->{'onBlur'} ){
-      $options_hash{'onBlur'}= $params->{'onBlur'};
+      $options_hash{'onBlur'}       = $params->{'onBlur'};
     }
 
-    $options_hash{'name'}= $params->{'name'}||'perfiles_ref';
-    $options_hash{'id'}= $params->{'id'}||'perfiles_ref';
-    $options_hash{'size'}=  $params->{'size'}||1;
-    $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= 'SIN SELECCIONAR';
+    $options_hash{'name'}           = $params->{'name'}||'perfiles_ref';
+    $options_hash{'id'}             = $params->{'id'}||'perfiles_ref';
+    $options_hash{'size'}           =  $params->{'size'}||1;
+    $options_hash{'multiple'}       = $params->{'multiple'}||0;
+    $options_hash{'defaults'}       = 'SIN SELECCIONAR';
 
 #FIXME falta un default no?
 #     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
 
 
     push (@select_perfil_ref_array, 'SIN SELECCIONAR');
-    $options_hash{'values'}= \@select_perfil_ref_array;
-    $options_hash{'labels'}= \%select_perfil_ref_array;
+    $options_hash{'values'}         = \@select_perfil_ref_array;
+    $options_hash{'labels'}         = \%select_perfil_ref_array;
 
-    my $combo_perfiles= CGI::scrolling_list(\%options_hash);
+    my $combo_perfiles              = CGI::scrolling_list(\%options_hash);
 
     return $combo_perfiles;
 }

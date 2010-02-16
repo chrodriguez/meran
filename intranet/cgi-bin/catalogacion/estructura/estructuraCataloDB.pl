@@ -172,13 +172,18 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
                         debug => 1,
                     });
 
-    my $id = $obj->{'id'};
+    my $id                              = $obj->{'id'};
+    my $catalogacion                    = C4::AR::Catalogacion::getEstructuraCatalogacionById($id);
 
-    my $catalogacion = C4::AR::Catalogacion::getEstructuraCatalogacionById($id);
-
-#     $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
-    $t_params->{'catalogacion'} = $catalogacion;
-    $t_params->{'OK'} = ($catalogacion?1:0); 
+    my %params_combo;
+    $params_combo{'default'}            = 'SIN SELECCIONAR';
+    $t_params->{'tabla_referencias'}    = C4::AR::Utilidades::generarComboTablasDeReferencia(\%params_combo);
+    $t_params->{'catalogacion'}         = $catalogacion;
+    $t_params->{'OK'}                   = ($catalogacion?1:0); 
+    
+    $params_combo{'default'}            = 'SIN SELECCIONAR';
+    $params_combo{'id'}                 = 'tipoInput';
+    $t_params->{'comboComponentes'}     = &C4::AR::Utilidades::generarComboComponentes(\%params_combo);
 
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
