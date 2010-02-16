@@ -15,9 +15,7 @@
         <table id="tablaCamposMod" class="tabla_datos" width="100%" cellspacing="0" cellpadding="0" border="0">
 
 	        <tr class="titulo_tabla_resultado">
-                <td width="1%">
-                    <input type="image" id="checkAllCampos" class="icon_seleccionar" title="[% 'Seleccionar todos' | i18n %]">
-                </td>
+
 		        <td width="10%">[% 'MARC' | i18n %]</td>
 		        <td width="20%">[% 'Vista en Intranet' | i18n %]</td>
                 <td width="10%">[% 'Tipo' | i18n %]</td>
@@ -31,10 +29,7 @@
 	        </tr>
         [% FOREACH catalogacion IN catalogaciones %]
 	        <tr align="center" >
-                <td>
-                        <input  type="checkbox" id="checkCampos" name="checkCampos" class="icon_seleccionar" 
-                                value="[% catalogacion.getId %]">
-                </td>
+    
 		        <td>
 			        <b>[% catalogacion.getCampo %]</b>, <b>[% catalogacion.getSubcampo %]</b>
 		        </td>

@@ -377,7 +377,7 @@ sub obtenerSubCamposDeCampo {
 	use C4::Modelo::PrefEstructuraSubcampoMarc;
 
     my $campos_marc_array_ref = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
-																query => [ tagfield => { eq => $campo } ]
+																query => [ campo => { eq => $campo } ]
 											);
     my @results;
 

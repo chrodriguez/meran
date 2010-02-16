@@ -2454,7 +2454,7 @@ sub obtenerDescripcionDeSubCampos{
     my $textout;
 
     foreach my $sub_campo_marc (@$sub_campos_marc_array_ref) {
-        $textout .= $sub_campo_marc->getTagSubField."/".$sub_campo_marc->getTagSubField." - ".$sub_campo_marc->getLiblibrarian."#";
+        $textout .= $sub_campo_marc->getSubcampo."/".$sub_campo_marc->getSubcampo." - ".$sub_campo_marc->getLiblibrarian."#";
     }
 
     return $textout;
