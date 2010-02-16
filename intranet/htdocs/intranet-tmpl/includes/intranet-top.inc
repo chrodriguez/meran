@@ -18,11 +18,11 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <META HTTP-EQUIV="cache-control" content="public">
-
-<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranetOLD.css">
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/completo.css"> 
+<!-- <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranetOLD.css"> 
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/intranet.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/menu.css">
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/jquery.alerts.css">
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/jquery.alerts.css">-->
 
 <script type="text/javascript" src="/includes/jquery/jquery.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.scrollTo.js"></script>
@@ -45,10 +45,6 @@
 
 
 <!-- <script src="/includes/jquery/jquery.tablednd.js"></script> -->
-
-[% INCLUDE 'datePicker.inc' %]
-
-[% INCLUDE  'AutocompleteHelper.inc'  %]
 
 [% INCLUDE  'WindowHelper.inc'  %]
 
