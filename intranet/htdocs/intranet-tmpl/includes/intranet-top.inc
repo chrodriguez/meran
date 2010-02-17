@@ -19,16 +19,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <META HTTP-EQUIV="cache-control" content="public">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/completo.css"> 
-<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranetOLD.css"> 
+<!-- <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranetOLD.css">  -->
 <!-- Estos 3 css fueron a parar a completo.css 
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/intranet.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/menu.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/jquery.alerts.css">-->
-<!--
-Estos 2 script fueron concatenados a jquery/completo.js 
+
+<!--Estos 6 scripts fueron concatenados a jquery/completo.js 
 <script type="text/javascript" src="/includes/jquery/jquery.scrollTo.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.menu.js"></script>
-Este tambien pero comprimido <script type="text/javascript" src="/includes/jquery/jquery.jCache.js"></script> -->
+Este tambien pero comprimido <script type="text/javascript" src="/includes/jquery/jquery.jCache.js"></script> 
+Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery/jquery.alerts.js"></script> -->
+<!-- <script type="text/javascript" src="/includes/jquery/jquery.dataTables.js"></script> -->
+<!-- Este tambien pero comprimido <script type="text/javascript" src="/includes/jquery/jquery.tooltip.js"></script> -->
 
 <script type="text/javascript" src="/includes/jquery/completo.js"></script>
 
@@ -44,14 +47,12 @@ Este tambien pero comprimido <script type="text/javascript" src="/includes/jquer
 <script type="text/javascript" src="/includes/MessageHelper.js"></script>
 <script type="text/javascript" src="/includes/WindowHelper.js"></script>
 <script type="text/javascript" src="/includes/AutocompleteHelper.js"></script>
-<script type="text/javascript" src="/includes/jquery/jquery.alerts.js"></script>
-<script type="text/javascript" src="/includes/jquery/jquery.dataTables.js"></script>
-<script type="text/javascript" src="/includes/jquery/jquery.tooltip.js"></script>
+
 
 
 <!-- <script src="/includes/jquery/jquery.tablednd.js"></script> -->
 
-<!--[% INCLUDE  'WindowHelper.inc'  %]-->
+
 
 <!-- FIXME, esto parece que no sirve para nada, preguntar GASPO [% INCLUDE  'SmallPlugins.inc'  %] -->
 <!-- Se incluyen los mensajes para la catalogacion -->
