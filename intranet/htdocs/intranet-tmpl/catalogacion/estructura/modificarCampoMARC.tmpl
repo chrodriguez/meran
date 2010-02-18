@@ -7,7 +7,7 @@ $(document).ready(function() {
  
     [% IF catalogacion.getReferencia == '1' %] 
 //         armarComboCampos();
-        mostrarTablaRef();
+        mostrartablas_ref();
         $("#tipoInput").removeAttr('disabled');
     [% END %]
     
@@ -84,9 +84,9 @@ $(document).ready(function() {
     </li>
 
     <li class="sub_item">
-        <label for="tablaRef">[% 'Tabla de referencia' | i18n %]: </label>
-<!--         <select name="tablaRef" id="tablaRef" onChange="eleccionTablaRef()"> -->
-<!--             <option value="-1">[% 'Seleccionar TablaRef' | i18n %]</option> -->
+        <label for="tablas_ref">[% 'Tabla de referencia' | i18n %]: </label>
+<!--         <select name="tablas_ref" id="tablas_ref" onChange="elecciontablas_ref()"> -->
+<!--             <option value="-1">[% 'Seleccionar tablas_ref' | i18n %]</option> -->
 <!--         </select> -->
         [% tabla_referencias %]
     </li>

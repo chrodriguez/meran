@@ -122,6 +122,25 @@ sub getIdRefEstadoPerdido{
 
 
 =item
+    sub getInformacionReferenciaFromId
+    
+    retorna un objeto PrefInformacionReferencia si existe la informacion de referencia segun el id pasado por parametro
+=cut
+sub getInformacionReferenciaFromId {
+    my ($id) = @_;
+
+    my $informacion_referencia_array_ref = C4::Modelo::PrefInformacionReferencia::Manager->get_pref_informacion_referencia(
+                                                                query => [ idinforef => { eq => $id } ]
+                                            );
+    
+    if(scalar(@$informacion_referencia_array_ref) > 0){
+      return $informacion_referencia_array_ref->[0];
+    }else{
+      return 0;
+    }
+}
+
+=item
 Esta funcion devuelve un arreglo de objetos tipo de documento
 =cut
 sub obtenerTiposDeDocumentos {
@@ -359,7 +378,6 @@ sub getTablaDeReferenciaLike {
                                                                   or => [ nombre_tabla => { like => '%'.$tabla.'%' } ]
                                                                 ]
                       );
-    my @results;
 
     if(scalar(@$referencias_array_ref) > 0){
       return $referencias_array_ref->[0];

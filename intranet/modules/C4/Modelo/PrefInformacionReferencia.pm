@@ -45,10 +45,10 @@ sub agregar{
 }
 
 sub modificar{
+    my ($self)      = shift;
+    my ($data_hash) = @_;
 
-    my ($self)=shift;
-    my ($data_hash)=@_;
-
+# FIXME id_est_cat se usa?
     $self->setIdEstCat($data_hash->{'id_est_cat'});
     $self->setReferencia($data_hash->{'tabla'});
     $self->setOrden($data_hash->{'orden'}||'ALL');
@@ -62,10 +62,10 @@ sub createFromAlias{
 
     use C4::Modelo::CatAutor;
 
-    my ($self)=shift;
-    my $classAlias = shift;
+    my ($self)      = shift;
+    my $classAlias  = shift;
 
-    my $autorTemp = C4::Modelo::CatAutor->new();
+    my $autorTemp   = C4::Modelo::CatAutor->new();
 
     return ($autorTemp->createFromAlias($classAlias));
 }
@@ -73,6 +73,7 @@ sub createFromAlias{
 
 sub getIdInfoRef{
     my ($self) = shift;
+
     return ($self->idinforef);
 }
 

@@ -177,10 +177,12 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
 
     my %params_combo;
     $params_combo{'default'}            = 'SIN SELECCIONAR';
+    $params_combo{'onChange'}           = 'eleccionTablaRef()';
     $t_params->{'tabla_referencias'}    = C4::AR::Utilidades::generarComboTablasDeReferencia(\%params_combo);
     $t_params->{'catalogacion'}         = $catalogacion;
     $t_params->{'OK'}                   = ($catalogacion?1:0); 
     
+    my %params_combo;
     $params_combo{'default'}            = 'SIN SELECCIONAR';
     $params_combo{'id'}                 = 'tipoInput';
     $t_params->{'comboComponentes'}     = &C4::AR::Utilidades::generarComboComponentes(\%params_combo);
@@ -208,7 +210,7 @@ elsif($tipoAccion eq "GUARDAR_ESTRUCTURA_CATALOGACION"){
 }
 
 elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
-     my ($user, $session, $flags)= checkauth(    $input, 
+     my ($user, $session, $flags) = checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 

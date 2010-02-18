@@ -160,13 +160,13 @@ function mostrarTablaRef(){
 function updateMostrarTablaRef(responseText){
     var tablaRef_array=JSONstring.toObject(responseText);
     //se inicializa el combo
-    $("#tablaRef").html('');
+    $("#tablas_ref").html('');
     var options = "<option value='-1'>Seleccionar Tabla Ref</option>";
     
     for (x=0;x < tablaRef_array.length;x++){
             options+= "<option value=" + tablaRef_array[x] +" >" + tablaRef_array[x] + "</option>";
     }
-    $("#tablaRef").append(options);
+    $("#tablas_ref").append(options);
     enable_disableSelects();
 }
 
@@ -257,31 +257,31 @@ function updateEleccionCampo(responseText){
 function enable_disableSelects(){
     $("#campo").removeAttr('disabled');
     $("#subcampo").removeAttr('disabled');
-    $("#tablaRef").removeAttr('disabled');
+    $("#tablas_ref").removeAttr('disabled');
     $("#tipoInput").removeAttr('disabled');
     $("#divCamposRef").show();
     if ( $('#campoX').val() == -1){
          $("#campo").attr('disabled',true);
          $("#subcampo").attr('disabled',true);
-         $("#tablaRef").attr('disabled',true);
+         $("#tablas_ref").attr('disabled',true);
          $("#tipoInput").attr('disabled',true);
          $("#divCamposRef").hide();
     }
     else
       if ( $('#campo').val() == -1){
          $("#subcampo").attr('disabled',true);
-         $("#tablaRef").attr('disabled',true);
+         $("#tablas_ref").attr('disabled',true);
          $("#tipoInput").attr('disabled',true);
          $("#divCamposRef").hide();
       }
     else
        if ( $('#subcampo').val() == -1){
-         $("#tablaRef").attr('disabled',true);
+         $("#tablas_ref").attr('disabled',true);
          $("#tipoInput").attr('disabled',true);
          $("#divCamposRef").hide();
         }
     else
-      if ( $('#tablaRef').val() == -1){
+      if ( $('#tablas_ref').val() == -1){
 //          $("#tipoInput").attr('disabled',true);
          $("#divCamposRef").hide();
        }
@@ -289,11 +289,11 @@ function enable_disableSelects(){
 
 //esta funcion genera el combo de los campos segun la tabla de referencia seleccionada
 function armarComboCampos(){
-    objAH=new AjaxHelper(updateArmarComboCampos);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tableAlias=$('#tablaRef').val();
-    objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS_REFERENCIA";
+    objAH               = new AjaxHelper(updateArmarComboCampos);
+    objAH.debug         = true;
+    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tableAlias    = $('#tablas_ref').val();
+    objAH.tipoAccion    = "GENERAR_ARREGLO_CAMPOS_REFERENCIA";
     objAH.sendToServer();
 }
 
@@ -328,7 +328,7 @@ function updateArmarComboCampos(responseText){
 
 function eleccionTablaRef(){
 
-	if($('#tablaRef').val() != '-1'){
+	if($('#tablas_ref').val() != '-1'){
 
     	armarComboCampos();
 	}
@@ -408,12 +408,12 @@ function checkEstructuraCatalogacion(){
       else
         ok = false;
 
-      if (comboSeleccionado($('#tablaRef')) && ok)
-        objAH.tabla= $('#tablaRef').val();
+      if (comboSeleccionado($('#tablas_ref')) && ok)
+        objAH.tabla= $('#tablas_ref').val();
           
       if (comboSeleccionado($('#tipoInput'))){
           if ( ($('#tipoInput').val() == "auto") || ($('#tipoInput').val() == "combo") ){
-            if (comboSeleccionado($('#tablaRef'))){
+            if (comboSeleccionado($('#tablas_ref'))){
                 objAH.referencia=1;
                 objAH.orden= $('#camposSelect').val();
                 objAH.campos= $('#camposRef').val();
@@ -468,28 +468,31 @@ function updateAgregarEstructuraCatalogacion(responseText){
  * modificarEstructuraCatalogacion
  */
 function modificarEstructuraCatalogacion(id){ 
-    objAH=new AjaxHelper(updateModificarEstructuraCatalogacion);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.nivel= $('#niveles_id').val();
-    objAH.id= id;
-    objAH.obligatorio = ($('#obligatorio_si')[0].checked)?1:0;
-    objAH.itemtype= $('#tipo_nivel3_id').val();
-    objAH.campo= $('#campo').val();
-    objAH.subcampo= $('#subcampo').val();
-    objAH.liblibrarian= $('#liblibrarian').val();
-    objAH.tipoInput= $('#tipoInput').val();
-    objAH.combo_validate = $('#combo_validate').val();
-    objAH.tabla= $('#tablaRef').val();
-    if( ( $('#tablaRef').val() != -1)&&($('#tablaRef').val()) ){
-        objAH.referencia=1;
-        objAH.orden= $('#camposSelect').val();
-        objAH.campos= $('#camposRef').val();
-        objAH.separador= $('#separador').val();
+    objAH                   = new AjaxHelper(updateModificarEstructuraCatalogacion);
+    objAH.debug             = true;
+    objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.nivel             = $('#niveles_id').val();
+    objAH.id                = id;
+    objAH.obligatorio       = ($('#obligatorio_si')[0].checked)?1:0;
+    objAH.itemtype          = $('#tipo_nivel3_id').val();
+//     objAH.campo             = $('#campo').val();
+//     objAH.subcampo          = $('#subcampo').val();
+    objAH.liblibrarian      = $('#liblibrarian').val();
+    objAH.tipoInput         = $('#tipoInput').val();
+    objAH.combo_validate    = $('#combo_validate').val();
+//     objAH.tabla             = $('#tablas_ref').val();
+
+    if( ( $('#tablas_ref').val() != -1)&&($('#tablas_ref').val()) ){
+        objAH.referencia    = 1;
+        objAH.orden         = $('#camposSelect').val();
+        objAH.campos        = $('#camposRef').val();
+        objAH.separador     = $('#separador').val();
+        objAH.tabla         = $('#tablas_ref').val();
     }else{
-         objAH.referencia=0;
+         objAH.referencia   = 0;
     }
-    objAH.tipoAccion= "MODIFICAR_ESTRUCTURA_CATALOGACION";
+
+    objAH.tipoAccion        = "MODIFICAR_ESTRUCTURA_CATALOGACION";
     objAH.sendToServer();
 }
 

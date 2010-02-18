@@ -74,7 +74,7 @@ sub agregar{
     my ($self)      = shift;
     my ($data_hash) = @_;
 
-    #recupero la configuracion de la estructura de catalogacion para verificar si ya existe un configuracion anterior 
+    #recupero la configuracion de la estructura de catalogacion para verificar si ya existe una configuracion anterior 
     #que se encuentre NO VISIBLE
     my $estructura_array = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo(
                                                                                     $data_hash->{'campo'},
@@ -84,12 +84,12 @@ sub agregar{
                                                                             );
 
     if($estructura_array) {
-    #EXISTE configuracion para campo, subcampo, itemtype
+        #EXISTE configuracion para campo, subcampo, itemtype
         $estructura_array->setVisible(1); #se setea como VISIBLE
         $estructura_array->save();
         C4::AR::Debug::debug("El campo, subcampo, itemtype ".$data_hash->{'campo'}.", ".$data_hash->{'subcampo'}.", ".$data_hash->{'itemtype'}." EXISTE");
     } else {
-    #NO EXISTE configuracion para campo, subcampo, itemtype
+        #NO EXISTE configuracion para campo, subcampo, itemtype
         $self->setCampo($data_hash->{'campo'});
         $self->setSubcampo($data_hash->{'subcampo'});
         $self->setItemType($data_hash->{'itemtype'}||'ALL');
@@ -100,7 +100,7 @@ sub agregar{
         $self->setNivel($data_hash->{'nivel'});
         $self->setObligatorio($data_hash->{'obligatorio'});
         # FIXME el grupo ya no seria necesario al usar marc_record
-        $self->setGrupo($self->getNextGroup);
+#         $self->setGrupo($self->getNextGroup);
         $self->setIntranet_habilitado($self->getUltimoIntranetHabilitado($self->getItemType)+1 );
         $self->setVisible($data_hash->{'visible'});
         # FIXME ya no sería necesario, el id se genera en el cliente
@@ -142,23 +142,43 @@ sub modificar{
 # TODO por ahora solo se permite modificar liblibrarian, visible y el orde
 #         $self->setCampo($data_hash->{'campo'});
 #         $self->setSubcampo($data_hash->{'subcampo'});
-#         $self->setItemType($data_hash->{'itemtype'});
+        $self->setItemType($data_hash->{'itemtype'});
         $self->setObligatorio($data_hash->{'obligatorio'});
         $self->setLiblibrarian($data_hash->{'liblibrarian'});
         $self->setRule($data_hash->{'combo_validate'});
+        $self->setTipo($data_hash->{'tipoInput'});
+        $self->setReferencia($data_hash->{'referencia'});
+        $self->setNivel($data_hash->{'nivel'});
 
-#         $self->setTipo($data_hash->{'tipoInput'});
-# 		if( $self->getNivel == 1){
-# 			$self->setItemType('ALL');
-# 		}
-#         $self->setReferencia($data_hash->{'referencia'});
-#         $self->setNivel($data_hash->{'nivel'});
-
+		if( $self->getNivel == 1){
+			$self->setItemType('ALL');
+		}
     
+        my $pref_info_ref = C4::AR::Referencias::getInformacionReferenciaFromId($self->getIdInfoRef);
+
+        if ($pref_info_ref) {
+            #tiene informacion de referencia, se modifican los datos
+            $pref_info_ref->modificar($data_hash);
+            $pref_info_ref->save();
+        }else{
+            #no tenia referencia, se crea ahora
+
+            if($self->tieneReferencia){
+                $data_hash->{'id_est_cat'}  = $self->getId;
+                my $pref_temp = C4::Modelo::PrefInformacionReferencia->new();
+                $pref_temp->agregar($data_hash);
+                $pref_temp->save();
+                $self->setIdInfoRef($pref_temp->getIdInfoRef);
+            }
+        }
+
 #         if($self->tieneReferencia){
-#             my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(idinforef => $self->getIdInfoRef);
-#             $pref_temp->load(); 
-#             $pref_temp->modificar($data_hash);
+#         #si tiene referencia....
+#             $data_hash->{'id_est_cat'}  = $self->id;
+#             my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(db => $self->db);
+#             $pref_temp->agregar($data_hash);
+#             $self->setIdInfoRef($pref_temp->getIdInfoRef);
+#             $self->save();
 #         }
     
         $self->save();
@@ -209,7 +229,7 @@ sub realDelete{
 indica si la estructura de catalogacion tiene (=1) o no (=0) informacion de referencia
 =cut
 sub tieneReferencia{
-    my ($self)=shift;
+    my ($self) = shift;
 
     return $self->getReferencia;
 }

@@ -1195,7 +1195,8 @@ function crearBotonAgregarRepetible(obj){
 
     if(obj.getRepetible() == '1'){
 //         return "<input type='button' value='+' size='10' onclick=clone('"+ obj.getIdCompCliente() +"')>";
-        return "<div id='icon_agregar' onclick=clone('"+ obj.getIdCompCliente() +"') class='horizontal' title='Agregar'/>";
+//         return "<div id='icon_agregar' onclick=clone('"+ obj.getIdCompCliente() +"') class='horizontal' title='Agregar'/>";
+        return "<div onclick=clone('"+ obj.getIdCompCliente() +"') class='icon_agregar horizontal' title='Agregar'/>";
     }else{  
         return "";
     }
@@ -1204,7 +1205,9 @@ function crearBotonAgregarRepetible(obj){
 function crearBotonEliminarRepetible(obj){
 
     if(obj.getRepetible() == '1'){
-        return "<div id='icon_sacar' onclick=clone('"+ obj.getIdCompCliente() +"') class='horizontal' title='Eliminar'/>";
+//         return "<div id='icon_sacar' onclick=clone('"+ obj.getIdCompCliente() +"') class='horizontal' title='Eliminar'/>";v
+        return "<div onclick=remove('"+ obj.getIdCompCliente() +"') class='horizontal icon_sacar' title='Eliminar'/>";v
+
 //         return "<input type='button' value='-' size='10' onclick=remove('"+ obj.getIdCompCliente() +"')>";
     }else{  
         return "";
