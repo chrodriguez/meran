@@ -1,0 +1,3 @@
+/usr/local/koha/intranet/htdocs/intranet-tmpl/includes/busquedasUsuarios
+/usr/local/koha/includes/jquery/jquery-highlight
+/usr/local/koha/intranet/htdocs/intranet-tmpl/includes/busquedasCatalogo

@@ -26,7 +26,8 @@
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/menu.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/jquery.alerts.css">-->
 
-<!--Estos 6 scripts fueron concatenados a jquery/completo.js 
+<!--Estos 7 scripts fueron concatenados a jquery/completo.js 
+<script type="text/javascript" src="/includes/jquery/jquery.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.scrollTo.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.menu.js"></script>
 Este tambien pero comprimido <script type="text/javascript" src="/includes/jquery/jquery.jCache.js"></script> 
@@ -34,7 +35,7 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
 <!-- <script type="text/javascript" src="/includes/jquery/jquery.dataTables.js"></script> -->
 <!-- Este tambien pero comprimido <script type="text/javascript" src="/includes/jquery/jquery.tooltip.js"></script> -->
 
-<script type="text/javascript" src="/includes/jquery/completo.js"></script>
+<!--<script type="text/javascript" src="/includes/jquery/completo.js"></script> -->
 
  <!--FIXME esto no deberia estar aca, lo mandamos a donde se loguea el usuario o cambia la password 
 <script type="text/javascript" src="/includes/md5.js"></script>
@@ -43,11 +44,12 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
 <!-- para generar la hash de la cache -->
 <script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
 
-<script type="text/javascript" src="/includes/AjaxHelper.js"></script>
+<script type="text/javascript" src="/includes/completo-intranet-top.js"></script>
+<!--<script type="text/javascript" src="/includes/AjaxHelper.js"></script>
 <script type="text/javascript" src="/includes/util.js"></script>
 <script type="text/javascript" src="/includes/MessageHelper.js"></script>
 <script type="text/javascript" src="/includes/WindowHelper.js"></script>
-<script type="text/javascript" src="/includes/AutocompleteHelper.js"></script>
+<script type="text/javascript" src="/includes/AutocompleteHelper.js"></script>-->
 
 
 
