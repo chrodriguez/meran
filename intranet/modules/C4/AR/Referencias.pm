@@ -129,6 +129,8 @@ sub getIdRefEstadoPerdido{
 sub getInformacionReferenciaFromId {
     my ($id) = @_;
 
+    use C4::Modelo::PrefInformacionReferencia::Manager;
+
     my $informacion_referencia_array_ref = C4::Modelo::PrefInformacionReferencia::Manager->get_pref_informacion_referencia(
                                                                 query => [ idinforef => { eq => $id } ]
                                             );
