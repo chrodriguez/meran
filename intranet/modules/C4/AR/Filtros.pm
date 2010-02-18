@@ -278,10 +278,12 @@ sub setFlagsLang {
     my %hash_flags = {};
     $hash_flags{'lang'} = 'es_ES';
     $hash_flags{'flag'} = 'es.png';
+    $hash_flags{'title'} = 'Espa&ntilde;ol';
     push (@array_lang, \%hash_flags);
     my %hash_flags = {};
     $hash_flags{'lang'} = 'en_EN';
     $hash_flags{'flag'} = 'en.png';
+    $hash_flags{'title'} = 'English';
     push (@array_lang, \%hash_flags);
     my $href;
 
@@ -295,7 +297,7 @@ sub setFlagsLang {
 
     my $flags_dir = C4::Context->config('temasOPAC').'/default/imagenes/flags';
     foreach my $hash_temp (@array_lang){
-            $html .='<li><a href='."$href"."lang_server=".$hash_temp->{'lang'}.' title="Pagina home in Italiano"><img src='.$flags_dir.'/'.$hash_temp->{'flag'}.' alt="[% "Cambio de lenguaje" | i18n %]" /></a></li>';
+            $html .='<li><a href='."$href"."lang_server=".$hash_temp->{'lang'}.' title="'.$hash_flags{'title'}.'"><img src='.$flags_dir.'/'.$hash_temp->{'flag'}.' alt="[% "Cambio de lenguaje" | i18n %]" /></a></li>';
     }
     $html .="</ul>";
 
