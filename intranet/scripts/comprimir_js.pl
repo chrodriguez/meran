@@ -35,3 +35,11 @@ while ( <FILE> ) {
 #open(OUTFILE, '>myScript-min.js') or die;
 
 close(FILE);
+#procesa el archivo archivos_no_comprimir_individuales.txt y los copia en archivos -min.js
+open (FILE, $path."/intranet/scripts/archivos_no_comprimir_individuales.txt" ) or die "No se pudo abrir el archivo: $!";
+while ( <FILE> ) {
+    my($line) = $_;
+    chomp($line);
+    system ("cp $path$line.js $path$line-min.js") ;
+}
+close(FILE);
