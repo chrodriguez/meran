@@ -1,0 +1,15 @@
+function _getId(IdObj,id){$('#'+IdObj).val(id);}
+function _CrearAutocomplete(options){if(!(options.IdInput)||!(options.IdInputHidden)){alert("AutocompleteHelper=> _CrearAutocomplete=> Error en parametros");return 0;}
+url="/cgi-bin/koha/autocompletablesDB.pl?accion="+options.accion+"&token="+token;$("#"+options.IdInput).search();$("#"+options.IdInput).autocomplete(url,{formatItem:function(row){return row[1];},minChars:3,matchSubset:1,matchContains:1,maxItemsToShow:M_LIMITE_RESULTADOS,cacheLength:M_LIMITE_RESULTADOS,selectOnly:1,});$("#"+options.IdInput).result(function(event,data,formatted){$("#"+options.IdInput).val(data[1]);_getId(options.IdInputHidden,data[0]);if(options.callBackFunction){options.callBackFunction();}});}
+function CrearAutocompleteCiudades(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_ciudades',callBackFunction:options.callBackFunction,});}
+function CrearAutocompletePaises(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_paises',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteLenguajes(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_lenguajes',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteAutores(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_autores',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteSoportes(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_soportes',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteUsuarios(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_usuarios',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteBarcodes(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_barcodes',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteBarcodesPrestados(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_barcodes_prestados',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteTemas(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_temas',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteEditoriales(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_editoriales',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteAyudaMARC(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_ayuda_marc',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteUI(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_UI',callBackFunction:options.callBackFunction,});}
