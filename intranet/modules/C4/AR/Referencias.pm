@@ -127,12 +127,13 @@ sub getIdRefEstadoPerdido{
     retorna un objeto PrefInformacionReferencia si existe la informacion de referencia segun el id pasado por parametro
 =cut
 sub getInformacionReferenciaFromId {
-    my ($id) = @_;
+    my ($db, $id) = @_;
 
     use C4::Modelo::PrefInformacionReferencia::Manager;
 
     my $informacion_referencia_array_ref = C4::Modelo::PrefInformacionReferencia::Manager->get_pref_informacion_referencia(
-                                                                query => [ idinforef => { eq => $id } ]
+                                                                db      => $db,
+                                                                query   => [ idinforef => { eq => $id } ]
                                             );
     
     if(scalar(@$informacion_referencia_array_ref) > 0){

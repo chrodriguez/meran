@@ -116,25 +116,24 @@ sub generarComboComponentes{
     my %options_hash; 
 
     if ( $params->{'onChange'} ){
-        $options_hash{'onChange'}= $params->{'onChange'};
+        $options_hash{'onChange'}   = $params->{'onChange'};
     }
     if ( $params->{'onFocus'} ){
-        $options_hash{'onFocus'}= $params->{'onFocus'};
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
     if ( $params->{'onBlur'} ){
-        $options_hash{'onBlur'}= $params->{'onBlur'};
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
-    $options_hash{'name'}= $params->{'name'}||'disponibilidad_name';
-    $options_hash{'id'}= $params->{'id'}||'disponibilidad_id';
-    $options_hash{'size'}=  $params->{'size'}||1;
-    $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultComboComponentes");
+    $options_hash{'name'}           = $params->{'name'}||'disponibilidad_name';
+    $options_hash{'id'}             = $params->{'id'}||'disponibilidad_id';
+    $options_hash{'size'}           = $params->{'size'}||1;
+    $options_hash{'multiple'}       = $params->{'multiple'}||0;
+    $options_hash{'defaults'}       = $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultComboComponentes");
+    $options_hash{'values'}         = \@VALUES_COMPONENTS;
+    $options_hash{'labels'}         = \%LABELS_COMPONENTS;
 
-    $options_hash{'values'}= \@VALUES_COMPONENTS;
-    $options_hash{'labels'}= \%LABELS_COMPONENTS;
-
-    my $comboDeComponentes= CGI::scrolling_list(\%options_hash);
+    my $comboDeComponentes          = CGI::scrolling_list(\%options_hash);
 
     return $comboDeComponentes;
 }
@@ -1842,7 +1841,8 @@ sub generarComboTablasDeReferencia{
 #     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
 
 
-    push (@select_tabla_ref_array, 'SIN SELECCIONAR');
+    push (@select_tabla_ref_array, '-1');
+    $select_tabla_ref_array{'-1'}   = 'SIN SELECCIONAR';
     $options_hash{'values'}         = \@select_tabla_ref_array;
     $options_hash{'labels'}         = \%select_tabla_ref_array;
 
@@ -1963,7 +1963,7 @@ sub generarComboDeSocios{
     my ($params) = @_;
     my @select_socios;
     my %select_socios;
-    my $socios= C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ 
+    my $socios  = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ 
                                                                           activo => {eq => 1},
                                                                        ],);
 
@@ -1975,32 +1975,33 @@ sub generarComboDeSocios{
     my %options_hash; 
 
     if ( $params->{'onChange'} ){
-        $options_hash{'onChange'}= $params->{'onChange'};
+        $options_hash{'onChange'}   = $params->{'onChange'};
     }
     if ( $params->{'onFocus'} ){
-        $options_hash{'onFocus'}= $params->{'onFocus'};
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
 
     if ( $params->{'class'} ){
-         $options_hash{'class'}= $params->{'class'};
+         $options_hash{'class'}     = $params->{'class'};
     }
 
     if ( $params->{'onBlur'} ){
-        $options_hash{'onBlur'}= $params->{'onBlur'};
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
-    $options_hash{'name'}= $params->{'name'}||'ui_name';
-    $options_hash{'id'}= $params->{'id'}||'socios';
-    $options_hash{'size'}=  $params->{'size'}||1;
-    $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || '-1';
+    $options_hash{'name'}           = $params->{'name'}||'ui_name';
+    $options_hash{'id'}             = $params->{'id'}||'socios';
+    $options_hash{'size'}           =  $params->{'size'}||1;
+    $options_hash{'multiple'}       = $params->{'multiple'}||0;
+    $options_hash{'defaults'}       = $params->{'default'} || '-1';
 
-    push (@select_socios, 'SIN SELECCIONAR');
-    $select_socios{'-1'}='SIN SELECCIONAR';
-    $options_hash{'values'}= \@select_socios;
-    $options_hash{'labels'}= \%select_socios;
+#     push (@select_socios, 'SIN SELECCIONAR');
+    push (@select_socios, '-1');
+    $select_socios{'-1'}            ='SIN SELECCIONAR';
+    $options_hash{'values'}         = \@select_socios;
+    $options_hash{'labels'}         = \%select_socios;
 
-    my $CGIsocios= CGI::scrolling_list(\%options_hash);
+    my $CGIsocios                   = CGI::scrolling_list(\%options_hash);
 
     return $CGIsocios; 
 }

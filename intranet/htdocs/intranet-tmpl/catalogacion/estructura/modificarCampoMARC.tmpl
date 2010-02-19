@@ -1,20 +1,6 @@
 
 [% IF OK == 1 %] 
 
-<script>
-
-$(document).ready(function() {
- 
-    [% IF catalogacion.getReferencia == '1' %] 
-//         armarComboCampos();
-        mostrartablas_ref();
-        $("#tipoInput").removeAttr('disabled');
-    [% END %]
-    
-}); 
-
-</script>
-
 [% USE HTML %]
 
 <!-- TEMPLATE DE CAMPOS TEMPORALES -->
@@ -25,24 +11,6 @@ $(document).ready(function() {
 <legend><strong>[% 'Modificar campo Marc para el nivel' | i18n %] [% nivel %]:</strong></legend>
 
 <ul>
-<!--   <li class="sub_item">
-        <label for="campoX">[% 'Seleccion' | i18n %]:</label> 
-        [% selectCampoX %]
-    </li>
-    <li class="sub_item">
-        <label for="campo">[% 'Campo' | i18n %]:</label>
-            <select name="campo" id="campo" onChange="eleccionCampo()">
-                <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
-            </select>
-        [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span></strong>
-    </li>
-    <li class="sub_item">
-        <label for="subcampo">[% 'Subcampo' | i18n %]:</label>
-        <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
-                <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
-            </select>
-    </li>-->
-
 
     <li class="sub_item">
         <label for="campoX">Campo:</label> 
@@ -85,9 +53,6 @@ $(document).ready(function() {
 
     <li class="sub_item">
         <label for="tablas_ref">[% 'Tabla de referencia' | i18n %]: </label>
-<!--         <select name="tablas_ref" id="tablas_ref" onChange="elecciontablas_ref()"> -->
-<!--             <option value="-1">[% 'Seleccionar tablas_ref' | i18n %]</option> -->
-<!--         </select> -->
         [% tabla_referencias %]
     </li>
 

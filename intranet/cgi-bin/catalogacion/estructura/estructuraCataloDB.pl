@@ -176,15 +176,15 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
     my $catalogacion                    = C4::AR::Catalogacion::getEstructuraCatalogacionById($id);
 
     my %params_combo;
-    $params_combo{'default'}            = 'SIN SELECCIONAR';
+    $params_combo{'default'}            = $catalogacion->getTablaFromReferencia()||'-1';
     $params_combo{'onChange'}           = 'eleccionTablaRef()';
     $t_params->{'tabla_referencias'}    = C4::AR::Utilidades::generarComboTablasDeReferencia(\%params_combo);
     $t_params->{'catalogacion'}         = $catalogacion;
     $t_params->{'OK'}                   = ($catalogacion?1:0); 
     
     my %params_combo;
-    $params_combo{'default'}            = 'SIN SELECCIONAR';
     $params_combo{'id'}                 = 'tipoInput';
+    $params_combo{'default'}            = $catalogacion->getTipo();
     $t_params->{'comboComponentes'}     = &C4::AR::Utilidades::generarComboComponentes(\%params_combo);
 
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -110,11 +110,7 @@ sub agregar{
     
         if($self->tieneReferencia){
         #si tiene referencia....
-            $data_hash->{'id_est_cat'}  = $self->id;
-            my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(db => $self->db);
-            $pref_temp->agregar($data_hash);
-            $self->setIdInfoRef($pref_temp->getIdInfoRef);
-            $self->save();
+
         }
 
     }
@@ -139,9 +135,6 @@ sub modificar{
     my ($data_hash)=@_;
 
     if (!$self->soyFijo){
-# TODO por ahora solo se permite modificar liblibrarian, visible y el orde
-#         $self->setCampo($data_hash->{'campo'});
-#         $self->setSubcampo($data_hash->{'subcampo'});
         $self->setItemType($data_hash->{'itemtype'});
         $self->setObligatorio($data_hash->{'obligatorio'});
         $self->setLiblibrarian($data_hash->{'liblibrarian'});
@@ -153,37 +146,28 @@ sub modificar{
 		if( $self->getNivel == 1){
 			$self->setItemType('ALL');
 		}
-    
-        my $pref_info_ref = C4::AR::Referencias::getInformacionReferenciaFromId($self->getIdInfoRef);
+
+        #verifico si tiene informacion de referencia, si la tiene la elimino
+        my $pref_info_ref = C4::AR::Referencias::getInformacionReferenciaFromId($self->db, $self->getIdInfoRef);
 
         if ($pref_info_ref) {
             #tiene informacion de referencia, se modifican los datos
-            $pref_info_ref->modificar($data_hash);
-            $pref_info_ref->save();
-        }else{
-            #no tenia referencia, se crea ahora
-
-            if($self->tieneReferencia){
-                $data_hash->{'id_est_cat'}  = $self->getId;
-                my $pref_temp = C4::Modelo::PrefInformacionReferencia->new();
-                $pref_temp->agregar($data_hash);
-                $pref_temp->save();
-                $self->setIdInfoRef($pref_temp->getIdInfoRef);
-            }
+            $pref_info_ref->delete();
+            $self->setIdInfoRef(0);                
         }
 
-#         if($self->tieneReferencia){
-#         #si tiene referencia....
-#             $data_hash->{'id_est_cat'}  = $self->id;
-#             my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(db => $self->db);
-#             $pref_temp->agregar($data_hash);
-#             $self->setIdInfoRef($pref_temp->getIdInfoRef);
-#             $self->save();
-#         }
+        if ($data_hash->{'referencia'}) {
+            #es necesario informacion de referencia se crea una nueva
+            $data_hash->{'id_est_cat'}  = $self->id;
+            my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(db => $self->db);
+            $pref_temp->agregar($data_hash);
+            $pref_temp->save();
+
+            $self->setIdInfoRef($pref_temp->getIdInfoRef);
+        }
     
         $self->save();
     }
-
 }
 
 sub delete{
@@ -641,7 +625,20 @@ sub getCamposConReferencia{
     return($db_estructura_catalogacion);
 }
 
+=head2
+sub getTablaFromReferencia
 
+Devuelve el nombre de la tabla de referencia si es que la configuracion tiene referencia
+=cut
+sub getTablaFromReferencia{
+    my ($self) = shift;
+
+    if($self->tieneReferencia()){
+        return $self->infoReferencia->getReferencia();
+    }else{
+        return undef;
+    }
+}
 
 
 
