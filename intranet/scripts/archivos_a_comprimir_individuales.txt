@@ -1,6 +1,7 @@
 /intranet/htdocs/intranet-tmpl/includes/busquedasUsuarios
 /includes/AutocompleteHelper
 /intranet/htdocs/intranet-tmpl/includes/circulacion
+/intranet/htdocs/intranet-tmpl/includes/catalogacion
 /intranet/htdocs/intranet-tmpl/includes/usuarios/usuariosReales
 /intranet/htdocs/intranet-tmpl/includes/busquedasCatalogo
 /includes/jquery/jquery
