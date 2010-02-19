@@ -314,7 +314,7 @@ sub esParaSala{
 sub toMARC{
     my ($self) = shift;
 
-    #obtengo el marc_record del NIVEL 2
+    #obtengo el marc_record del NIVEL 3
     my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
 
@@ -326,13 +326,13 @@ sub toMARC{
 
 #     my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran($marc_record);
 
-#     foreach my $m (@$MARC_result_array){
-#         C4::AR::Debug::debug("campo => ".$m->{'campo'});
-#         foreach my $s (@{$m->{'subcampos_array'}}){
-#             C4::AR::Debug::debug("liblibrarian => ".$s->{'subcampo'});        
-#             C4::AR::Debug::debug("liblibrarian => ".$s->{'liblibrarian'});        
-#         }
-#     }
+    foreach my $m (@$MARC_result_array){
+        C4::AR::Debug::debug("campo => ".$m->{'campo'});
+        foreach my $s (@{$m->{'subcampos_array'}}){
+            C4::AR::Debug::debug("liblibrarian => ".$s->{'subcampo'});        
+            C4::AR::Debug::debug("liblibrarian => ".$s->{'liblibrarian'});        
+        }
+    }
 
     return ($MARC_result_array);
 }
