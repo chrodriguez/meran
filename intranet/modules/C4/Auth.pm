@@ -747,22 +747,21 @@ sub checkauth {
                 redirectTo('/cgi-bin/koha/mainpage.pl?token='.$params{'token'});
             }
         } else {
-        #usuario o password invalida
+            #usuario o password invalida
             if ($userid) {
-                C4::AR::Debug::debug("checkauth=> usuario o password incorrecta dentro del if\n");
-                $info{'invalid_username_or_password'} = 1;
+                #intento de loguin
+#                 C4::AR::Debug::debug("checkauth=> usuario o password incorrecta dentro del if");
+                $template_params->{'loginAttempt'} = 1;      
+                
+#                 C4::AR::Debug::debug("checkauth=> eliminino la sesssion ".$sessionID);
                 #elimino la session vieja
                 $sist_sesion->delete;
             }
-            C4::AR::Debug::debug("checkauth=> usuario o password incorrecta \n");
-            C4::AR::Debug::debug("checkauth=> eliminino la sesssion ".$sessionID."\n");
-            $userid= undef;
+#             C4::AR::Debug::debug("checkauth=> usuario o password incorrecta \n");
+            
+            $userid = undef;
+
             #genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
-#             if ($query->param('userid')){
-#                 $session->param('codMsg', 'U357');
-#                 $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-#             }
-#             redirectTo('/cgi-bin/koha/auth.pl');
             redirectToAuth($template_params);
             #EXIT
         }#end if ($passwordValida)
@@ -1148,38 +1147,39 @@ sub cerrarSesion{
     my ($t_params) = @_;
 
     #se genera un nuevo nroRandom para que se autentique el usuario
-    my $random_number= C4::Auth::_generarNroRandom();
-    
+    my $random_number       = C4::Auth::_generarNroRandom();
     #genero una nueva session
-
-    my ($session) = CGI::Session->load();
+    my ($session)           = CGI::Session->load();
 
     C4::AR::Debug::debug("cerrarSesion => ".$session->param('codMsg'));
-    my $msjCode = getMsgCode();
-    $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
+    my $msjCode              = getMsgCode();
+    $t_params->{'mensaje'}  = C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
     #se destruye la session anterior
     $session->clear();
     $session->delete();
     
     #se genera una nueva session
+# TODO para que esta esto? no se usa!!!!!!!
     my %params;
-    $params{'userid'}= '';
-    $params{'loggedinusername'}= '';
-    $params{'password'}= '';
-    $params{'token'}= '';
-    $params{'nroRandom'}= '';
-    $params{'borrowernumber'}= '';
-    $params{'type'}= $t_params->{'type'}; #OPAC o INTRA
-    $params{'flagsrequired'}= '';
-    $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
-    $params{'SERVER_GENERATED_SID'}= 1;
+    $params{'userid'}               = '';
+    $params{'loggedinusername'}     = '';
+    $params{'password'}             = '';
+    $params{'token'}                = '';
+    $params{'nroRandom'}            = '';
+    $params{'borrowernumber'}       = '';
+    $params{'type'}                 = $t_params->{'type'}; #OPAC o INTRA
+    $params{'flagsrequired'}        = '';
+    $params{'browser'}              = $ENV{'HTTP_USER_AGENT'};
+    $params{'SERVER_GENERATED_SID'} = 1;
+
+    $t_params->{'sessionClose'}     = 1;
+    $session->param('codMsg', 'U358');
+    
     
     #esto realmente destruye la session
     undef($session);
     $session = CGI::Session->new();
 
-    $session->param('codMsg', 'U358');
-    
     redirectToAuth($t_params);
 }
 
@@ -1373,15 +1373,21 @@ sub redirectTo {
 
 sub redirectToAuth {
     my ($template_params) = @_;
-
     my $url;
+    $url = '/cgi-bin/koha/auth.pl';
+
+# TODO deprecated ???
+=item
     if(is_OPAC($template_params)){
-        $url = '/cgi-bin/koha/auth.pl?sessionClose=1'
+#         $url = '/cgi-bin/koha/auth.pl';
 #         $session->param('redirectTo', $url);
     }else{
-        $url = '/cgi-bin/koha/auth.pl?sessionClose=1';
+#         $url = '/cgi-bin/koha/auth.pl?sessionClose=1';
 #         $session->param('redirectTo', $url);
     }
+=cut
+    ($template_params->{'loginAttempt'})?$url = $url.'?loginAttempt=1':$url;
+    ($template_params->{'sessionClose'})?$url = $url.'?sessionClose=1':$url;
 
     redirectTo($url);    
 }

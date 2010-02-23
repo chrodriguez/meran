@@ -53,7 +53,7 @@
 
       <div class="column1-unit">
           <div class="contactform">
-              <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl" onsubmit = "enviar()">
+              <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl" onsubmit = "enviar()" autocomplete="off">
         <!-- <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl">  -->
                 <p><input type="hidden" name="remember_me" value="0" /></p>
                 <fieldset>

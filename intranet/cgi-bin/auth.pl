@@ -23,6 +23,13 @@ if ($t_params->{'sessionClose'}){
   $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('U358','intranet');
 }
 
+$t_params->{'loginAttempt'} = $cgi->param('loginAttempt') || 0;
+
+if ($t_params->{'loginAttempt'}){
+  $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('U357','intranet');
+}
+
+
 if ($session->param('codMsg')){
   $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($session->param('codMsg'),'intranet');
 }
