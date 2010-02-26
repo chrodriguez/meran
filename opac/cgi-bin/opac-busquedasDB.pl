@@ -72,27 +72,29 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
     if ($obj->{'tipoBusqueda'} eq 'all'){
-        ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj);
+        ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj);
     }else{
-        ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
+        ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
     }
-    $t_params->{'partial_template'}= "opac-busquedaResult.inc";
-    $t_params->{'content_title'}= C4::AR::Filtros::i18n("Resultados de b&uacute;squeda para: ").$obj->{'string'};
-    $t_params->{'search_string'}= $obj->{'string'};
 
+    $t_params->{'partial_template'}         = "opac-busquedaResult.inc";
+    $t_params->{'content_title'}            = C4::AR::Filtros::i18n("Resultados de la b&uacute;squeda");
+    $t_params->{'search_string'}            = $obj->{'string'};
+#     $t_params->{'buscoPor'}                 = $obj->{'string'};
 }
 
 
-$t_params->{'paginador'} = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
+$t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
 #se arma el arreglo con la info para mostrar en el template
-$obj->{'cantidad'}= $cantidad;
-$obj->{'nro_socio'}= $session->param('nro_socio');
-$t_params->{'SEARCH_RESULTS'}= $resultsarray;
+my $elapsed                     = Time::HiRes::tv_interval( $start );
+$t_params->{'timeSeg'}          = $elapsed;
+$obj->{'nro_socio'}             = $session->param('nro_socio');
+$t_params->{'SEARCH_RESULTS'}   = $resultsarray;
 #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
-$t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
-$t_params->{'cantidad'}= $cantidad || 0;
+$t_params->{'buscoPor'}         = C4::AR::Utilidades::verificarValor($obj->{'string'});#C4::AR::Busquedas::armarBuscoPor($obj);
+$t_params->{'cantidad'}         = $cantidad || 0;
 
-my $elapsed = Time::HiRes::tv_interval( $start );
-$t_params->{'timeSeg'}= $elapsed;
+# my $elapsed = Time::HiRes::tv_interval( $start );
+# $t_params->{'timeSeg'}= $elapsed;
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

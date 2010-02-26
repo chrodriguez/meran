@@ -730,14 +730,14 @@ sub verificar_permisos_por_nivel{
     my $permisos_array_hash_ref;
 #     my @entornos_datos_nivel = ('datos_nivel1','datos_nivel2','datos_nivel3'); 
 #     my @entornos_estructura_catalogacion= ('estructura_catalogacion_n1','estructura_catalogacion_n2','estructura_catalogacion_n3');
-    my @entornos_perm_catalogo= ( 'datos_nivel1','datos_nivel2','datos_nivel3', 'estructura_catalogacion_n1',
-                                    'estructura_catalogacion_n2','estructura_catalogacion_n3', 'sistema', 'undefined', 'usuarios');
+    my @entornos_perm_catalogo      = ( 'datos_nivel1','datos_nivel2','datos_nivel3', 'estructura_catalogacion_n1',
+                                        'estructura_catalogacion_n2','estructura_catalogacion_n3', 'sistema', 'undefined', 'usuarios');
     
-    my @entornos_perm_general= ( 'reportes','preferencias','permisos' );
+    my @entornos_perm_general       = ( 'reportes','preferencias','permisos' );
     
-    my @entornos_perm_circulacion= ( 'prestamos' );
+    my @entornos_perm_circulacion   = ( 'prestamos' );
 
-    my @entornos_manejo_usuario = ( 'usuarios' );
+    my @entornos_manejo_usuario     = ( 'usuarios' );
 #     my @entornos_circulacion = ('');
 
 # FIXME falta verificar los parametros de entrada, que sean numeros y ademas q sean validos
@@ -801,25 +801,25 @@ sub tienePermisos {
     my ($flagsrequired) = @_;
 
     # Se setean los flags requeridos
-    $flagsrequired->{'nro_socio'}= $self->getNro_socio;
-    $flagsrequired->{'tipo_permiso'} = $flagsrequired->{'tipo_permiso'} || "catalogo";
-#     C4::AR::Debug::debug("UsrSocio => TIPO_PERMISO => ".$flagsrequired->{'tipo_permiso'});
+    $flagsrequired->{'nro_socio'}       = $self->getNro_socio;
+    $flagsrequired->{'tipo_permiso'}    = $flagsrequired->{'tipo_permiso'} || "catalogo";
+    C4::AR::Debug::debug("UsrSocio => TIPO_PERMISO => ".$flagsrequired->{'tipo_permiso'});
     #se verifican permisos level1
-#     C4::AR::Debug::debug("UsrSocio => tienePermisos??? => intento level1");
+    C4::AR::Debug::debug("UsrSocio => tienePermisos??? => intento level1");
     if(verificar_permisos_por_nivel($flagsrequired)){return 1}
 
-    $flagsrequired->{'tipo_documento'}= 'ALL';
+    $flagsrequired->{'tipo_documento'}  = 'ALL';
     #se verifican permisos level2
     C4::AR::Debug::debug("UsrSocio => tienePermisos??? => intento level2");
     if(verificar_permisos_por_nivel($flagsrequired)){return 1}
 
-    $flagsrequired->{'ui'}= 'ALL';
+    $flagsrequired->{'ui'}              = 'ALL';
     #se verifican permisos level3
     C4::AR::Debug::debug("UsrSocio => tienePermisos??? => intento level3");
     if(verificar_permisos_por_nivel($flagsrequired)){return 1}
 
-    $flagsrequired->{'tipo_documento'}= 'ALL';
-    $flagsrequired->{'ui'}= 'ALL';
+    $flagsrequired->{'tipo_documento'}  = 'ALL';
+    $flagsrequired->{'ui'}              = 'ALL';
     #se verifican permisos level4
     C4::AR::Debug::debug("UsrSocio => tienePermisos??? => intento level4");
     if(verificar_permisos_por_nivel($flagsrequired)){

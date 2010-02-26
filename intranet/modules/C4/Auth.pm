@@ -420,6 +420,7 @@ sub _destruirSession{
     $codMSG = $codMsg;
     $session->expire('-1');
     $session->delete();
+    $session->flush();
     $session = C4::Auth::_generarSession();
     $session->param('sessionID', undef);
     #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
@@ -448,12 +449,15 @@ sub checkauth {
     C4::AR::Debug::debug("desde checkauth==================================================================================================");
     my $dbh = C4::Context->dbh;
 
+# FIXME no se usa mas
+=item
     my $template_name;
     if ($type eq 'opac') {
         $template_name = "opac-auth.tmpl";
     } else {
         $template_name = "auth.tmpl";
     }
+=cut
 
 #     C4::AR::Utilidades::printHASH(\%ENV);
 
@@ -673,17 +677,17 @@ sub checkauth {
             $sist_sesion->delete;
 
             my %params;
-            $params{'userid'}= $userid;
-            $params{'loggedinusername'}= $userid;
-            $params{'password'}= $password;
-            $params{'nroRandom'}= $random_number;
-            $params{'type'}= $type; #OPAC o INTRA
-            $params{'flagsrequired'}= $flagsrequired;
-            $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
-			$params{'token'}= _generarToken();
+            $params{'userid'}           = $userid;
+            $params{'loggedinusername'} = $userid;
+            $params{'password'}         = $password;
+            $params{'nroRandom'}        = $random_number;
+            $params{'type'}             = $type; #OPAC o INTRA
+            $params{'flagsrequired'}    = $flagsrequired;
+            $params{'browser'}          = $ENV{'HTTP_USER_AGENT'};
+			$params{'token'}            = _generarToken();
             #genero una nueva session
-            $session= _generarSession(\%params);
-            $sessionID= $session->param('sessionID');
+            $session    = _generarSession(\%params);
+            $sessionID  = $session->param('sessionID');
             $sessionID.="_".$branch;
             $session->param('sessionID', $sessionID);
             my ($socio) = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
@@ -699,6 +703,7 @@ sub checkauth {
             #por defecto no tiene permisos
             $info{'nopermission'} = 1;
             if( $flags = $socio->tienePermisos($flagsrequired) ){
+C4::AR::Debug::debug("checkauth=> tiene permisos!!!!!!!!LAST LOGUIN");
                 $info{'nopermission'} = 0;
                 $loggedin = 1;
                 #WARNING: Cuando pasan dias habiles sin actividad se consideran automaticamente feriados
@@ -1108,39 +1113,38 @@ sub inicializarAuth{
     #genero una nueva session
 
     my ($session) = CGI::Session->load();
-    $session->flush();
+#     $session->flush();
     C4::AR::Debug::debug("inicializarAuth => ".$session->param('codMsg'));
     my $msjCode = getMsgCode();
     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
     #se destruye la session anterior
     $session->clear();
     $session->delete();
+    $session->flush();
      #se genera una nueva session
     my %params;
-    $params{'userid'}= undef;
-    $params{'loggedinusername'}= undef;
-    $params{'password'}= undef;
-    $params{'token'}= '';
-    $params{'nroRandom'}= undef;
-    $params{'borrowernumber'}= undef;
-    $params{'type'}= $t_params->{'type'}; #OPAC o INTRA
-    $params{'flagsrequired'}= '';
-    $params{'browser'}= $ENV{'HTTP_USER_AGENT'};
-    $params{'SERVER_GENERATED_SID'}= 1;
+    $params{'userid'}               = undef;
+    $params{'loggedinusername'}     = undef;
+    $params{'password'}             = undef;
+    $params{'token'}                = '';
+    $params{'nroRandom'}            = undef;
+    $params{'borrowernumber'}       = undef;
+    $params{'type'}                 = $t_params->{'type'}; #OPAC o INTRA
+    $params{'flagsrequired'}        = '';
+    $params{'browser'}              = $ENV{'HTTP_USER_AGENT'};
+    $params{'SERVER_GENERATED_SID'} = 1;
     #esto realmente destruye la session
     undef($session);
-    $session= C4::Auth::_generarSession(\%params);
-    my $sessionID= $session->param('sessionID');
-    my $userid= undef;
+    $session            = C4::Auth::_generarSession(\%params);
+    my $sessionID       = $session->param('sessionID');
+    my $userid          = undef;
     #guardo la session en la base
     C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number, $params{'token'});
     #se pasa el RANDOM_NUMBER al cliente, $t_params es una REFERENCIA
-    $t_params->{'RANDOM_NUMBER'}= $random_number;
+    $t_params->{'RANDOM_NUMBER'}    = $random_number;
     C4::AR::Debug::debug("USER ID :".$session->param('userid'));
+
     return ($session);
-#     }else{
-#         redirectTo('/cgi-bin/koha/mainpage.pl');
-#     }
 }
 
 sub cerrarSesion{
@@ -1157,6 +1161,7 @@ sub cerrarSesion{
     #se destruye la session anterior
     $session->clear();
     $session->delete();
+    $session->flush();
     
     #se genera una nueva session
 # TODO para que esta esto? no se usa!!!!!!!
@@ -1178,7 +1183,8 @@ sub cerrarSesion{
     
     #esto realmente destruye la session
     undef($session);
-    $session = CGI::Session->new();
+#     $session = CGI::Session->new();
+    $session = C4::Auth::_generarSession(\%params);
 
     redirectToAuth($t_params);
 }

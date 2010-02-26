@@ -1482,8 +1482,8 @@ sub armarInfoNivel1{
     for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {
         my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
         if($nivel1){
-                C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".@result_array_paginado[$i]->{'id1'});
-                C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".$nivel1->getTitulo());
+#                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".@result_array_paginado[$i]->{'id1'});
+#                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".$nivel1->getTitulo());
 #                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".($nivel1->toMARC)->as_formatted);
         # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
             @result_array_paginado[$i]->{'titulo'}      = $nivel1->getTitulo();
