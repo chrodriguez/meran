@@ -26,9 +26,6 @@ __PACKAGE__->meta->setup(
 
 );
 
-
-
-
 sub getCampo{
     my ($self) = shift;
     return (C4::AR::Utilidades::trim($self->campo_marc));
@@ -37,7 +34,7 @@ sub getCampo{
 sub setCampo{
     my ($self) = shift;
     my ($campo_marc) = @_;
-    $self->campo_marc($campo_marc);
+    $self->campo_marc(C4::AR::Utilidades::trim($campo_marc));
 }
 
 sub getId{
@@ -53,7 +50,7 @@ sub getIndicador{
 sub setIndicador{
     my ($self) = shift;
     my ($indicador) = @_;
-    $self->indicador($indicador);
+    $self->indicador(C4::AR::Utilidades::trim($indicador));
 }
 
 sub getDato{
@@ -64,7 +61,7 @@ sub getDato{
 sub setDato{
     my ($self) = shift;
     my ($dato) = @_;
-    $self->dato($dato);
+    $self->dato(C4::AR::Utilidades::trim($dato));
 }
 
 =head2 sub getIndicadoresByCampo
@@ -106,6 +103,4 @@ sub getIndicadoresByCampoToARRAY {
     return (scalar(@array_valores), \@array_valores);
 }
 
-
 1;
-

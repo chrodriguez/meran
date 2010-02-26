@@ -1,8 +1,8 @@
 package C4::Modelo::PrefEstructuraCampoMarc;
 
 use strict;
-
 use base qw(C4::Modelo::DB::Object::AutoBase2);
+use C4::AR::Utilidades;
 
 __PACKAGE__->meta->setup(
     table   => 'pref_estructura_campo_marc',
@@ -12,8 +12,8 @@ __PACKAGE__->meta->setup(
         liblibrarian            => { type => 'character', length => 255, not_null => 1 },
 #         libopac          => { type => 'character', length => 255, not_null => 1 },
         repeatable              => { type => 'integer', default => '0', not_null => 1 },
-        descripcion             => { type => 'character', length => 255, not_null => 1 },
-        nivel                   => { type => 'character', length => 255, not_null => 1 },
+        descripcion             => { type => 'character', length => 255 , default => ''},
+        nivel                   => { type => 'character', length => 255,default => '0',  not_null => 1 },
         mandatory               => { type => 'integer', default => '0', not_null => 1 },
         indicador_primario      => { type => 'character', length => 255, default => '0', not_null => 1 },
         indicador_secundario    => { type => 'character', length => 255, default => '0', not_null => 1 },
@@ -31,7 +31,7 @@ sub getCampo{
 sub setCampo{
     my ($self) = shift;
     my ($campo) = @_;
-    $self->campo($campo);
+    $self->campo(C4::AR::Utilidades::trim($campo));
 }
 
 sub getLiblibrarian{
@@ -42,7 +42,7 @@ sub getLiblibrarian{
 sub setLiblibrarian{
     my ($self) = shift;
     my ($liblibrarian) = @_;
-    $self->liblibrarian($liblibrarian);
+    $self->liblibrarian(C4::AR::Utilidades::trim($liblibrarian));
 }
 
 sub getIndicadorPrimario{
@@ -64,6 +64,19 @@ sub getIndicadorSecundario{
         return (C4::AR::Utilidades::trim($self->indicador_secundario));
     }
 }
+
+sub setIndicadorPrimario{
+    my ($self) = shift;
+    my ($ip) = @_;
+    $self->indicador_primario(C4::AR::Utilidades::trim($ip));
+}
+
+sub setIndicadorSecundario{
+    my ($self) = shift;
+    my ($is) = @_;
+    $self->indicador_secundario(C4::AR::Utilidades::trim($is));
+}
+
 # sub getLibopac{
 #     my ($self) = shift;
 #     return ($self->libopac);
@@ -88,7 +101,7 @@ sub getRepeatable{
 sub setRepeatable{
     my ($self) = shift;
     my ($repeatable) = @_;
-    $self->repeatable($repeatable);
+    $self->repeatable(C4::AR::Utilidades::trim($repeatable));
 }
 
 sub getDescripcion{
@@ -99,7 +112,7 @@ sub getDescripcion{
 sub setDescripcion{
     my ($self) = shift;
     my ($descripcion) = @_;
-    $self->descripcion($descripcion);
+    $self->descripcion(C4::AR::Utilidades::trim($descripcion));
 }
 
 sub getMandatory{
@@ -110,9 +123,8 @@ sub getMandatory{
 sub setMandatory{
     my ($self) = shift;
     my ($mandatory) = @_;
-    $self->mandatory($mandatory);
+    $self->mandatory(C4::AR::Utilidades::trim($mandatory));
 }
 
 
 1;
-

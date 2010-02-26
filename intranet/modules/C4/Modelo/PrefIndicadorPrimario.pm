@@ -37,7 +37,7 @@ sub getCampo{
 sub setCampo{
     my ($self) = shift;
     my ($campo_marc) = @_;
-    $self->campo_marc($campo_marc);
+    $self->campo_marc(C4::AR::Utilidades::trim($campo_marc));
 }
 
 sub getId{
@@ -55,7 +55,7 @@ sub setIndicador{
     my ($self) = shift;
     my ($indicador) = @_;
 
-    $self->indicador($indicador);
+    $self->indicador(C4::AR::Utilidades::trim($indicador));
 }
 
 sub getDato{
@@ -66,7 +66,7 @@ sub getDato{
 sub setDato{
     my ($self) = shift;
     my ($dato) = @_;
-    $self->dato($dato);
+    $self->dato(C4::AR::Utilidades::trim($dato));
 }
 
 sub obtenerValoresCampo {

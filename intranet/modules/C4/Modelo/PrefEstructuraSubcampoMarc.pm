@@ -12,11 +12,11 @@ __PACKAGE__->meta->setup(
         nivel              => { type => 'integer', default => '0', not_null => 1 },
         obligatorio        => { type => 'integer', default => '0', not_null => 1 },
         campo              => { type => 'character', length => 3, not_null => 1 },
-        subcampo           => { type => 'character', length => 1, not_null => 1 },
+        subcampo           => { type => 'character', length => 3, not_null => 1 },
         liblibrarian       => { type => 'character', length => 255, not_null => 1 },
         libopac            => { type => 'character', length => 255, not_null => 1 },
         repetible          => { type => 'integer', default => '0', not_null => 1 },
-        descripcion        => { type => 'character', length => 255, not_null => 1 },
+        descripcion        => { type => 'character', length => 255, default => ''},
         mandatory          => { type => 'integer', default => '0', not_null => 1 },
         kohafield          => { type => 'character', length => 40 },
     ],
@@ -46,7 +46,7 @@ sub setCampo{
     my ($self) = shift;
 
     my ($campo) = @_;
-    $self->campo($campo);
+    $self->campo(C4::AR::Utilidades::trim($campo));
 }
 
 sub getSubcampo{
@@ -58,7 +58,7 @@ sub getSubcampo{
 sub setSubcampo{
     my ($self) = shift;
     my ($subcampo) = @_;
-    $self->subcampo($subcampo);
+    $self->subcampo(C4::AR::Utilidades::trim($subcampo));
 }
 
 sub getObligatorio{
@@ -69,7 +69,7 @@ sub getObligatorio{
 sub setObligatorio{
     my ($self) = shift;
     my ($obligatorio) = @_;
-    $self->obligatorio($obligatorio);
+    $self->obligatorio(C4::AR::Utilidades::trim($obligatorio));
 }
 
 sub getLiblibrarian{
@@ -80,13 +80,20 @@ sub getLiblibrarian{
 sub setLiblibrarian{
     my ($self) = shift;
     my ($liblibrarian) = @_;
-    $self->liblibrarian($liblibrarian);
+    $self->liblibrarian(C4::AR::Utilidades::trim($liblibrarian));
 }
 
 sub getRepetible{
     my ($self) = shift;
     return ($self->repetible);
 }
+
+sub setRepetible{
+    my ($self) = shift;
+    my ($repetible) = @_;
+    $self->repetible(C4::AR::Utilidades::trim($repetible));
+}
+
 
 sub getDescripcion{
     my ($self) = shift;
@@ -96,8 +103,18 @@ sub getDescripcion{
 sub setDescripcion{
     my ($self) = shift;
     my ($descripcion) = @_;
-    $self->descripcion($descripcion);
+    $self->descripcion(C4::AR::Utilidades::trim($descripcion));
+}
+
+sub getLibopac{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->libopac));
+}
+
+sub setLibopac{
+    my ($self) = shift;
+    my ($opac) = @_;
+    $self->libopac(C4::AR::Utilidades::trim($opac));
 }
 
 1;
-

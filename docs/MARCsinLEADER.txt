@@ -65,14 +65,8 @@
 
 017 - COPYRIGHT OR LEGAL DEPOSIT NUMBER (R)
    Indicators
-      First - Government jurisdiction (BK MP MU VM)[OBSOLETE]
-         0 - United States [OBSOLETE]
-         1 - Canada [OBSOLETE] [CAN/MARC only]
-         2 - France [OBSOLETE] [CAN/MARC only]
       First - Undefined
          # - Undefined
-      Second - Undefined [OBSOLETE]
-         # - Undefined [OBSOLETE]
       Second - Display constant controller
          # - Copyright or legal deposit number
          8 - No display constant controller generated
@@ -261,7 +255,7 @@
       $b - Source (agency assigning number) (NR)
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
-	  
+
 033 - DATE/TIME AND PLACE OF AN EVENT (R)
    Indicators
       First - Type of date in subfield $a
@@ -294,9 +288,6 @@
          1 - Exclusion ring
    Subfield Codes
       $a - Category of scale (NR)
-         a - Linear scale 
-         b - Angular scale
-         z - Other type of scale
       $b - Constant ratio linear horizontal scale (R)
       $c - Constant ratio linear vertical scale (R)
       $d - Coordinates--westernmost longitude (NR)
@@ -417,35 +408,6 @@
          # - Undefined
    Subfield Code
       $a - Authentication code (R)
-         dc - Dublin Core 
-         dhca - Dance Heritage Coalition Access Project
-         gamma - Georgia Archives & Manuscripts Automated Access Project
-         gils - Government Information Location Service
-         isds/c - ISSN Canada
-         lc - Library of Congress
-         lcac - LC Annotated Children's Cataloging Program
-         lccopycat - LC copy cataloging
-         lccopycat-nm - LC copy cataloging-Near Match
-         lcd - CONSER full authority application
-         lcderive - LC derived cataloging
-         lchlas - Handbook of Latin American Studies
-         lcllh - LC Law Library Hispanic
-         lcnccp - LC National Coordinated Cataloging Program
-         lcnitrate - LC nitrate film
-         lcnuc - National Union Catalog
-         lcode - LC overseas data entry
-         msc - CONSER minimal authority application
-         nlc - National Library of Canada 
-         nlmcopyc - National Library of Medicine copy cataloging
-         nsdp - National Serial Data Program
-         ntccf - LC National Translations Center citation file
-         pcc - Program for Cooperative Cataloging
-         premarc - LC PreMARC Retrospective Conversion Project
-         sanb - South African National Bibliography Project
-         xisds/c - ISSN Canada does not consider item a serial
-         xlc - LC does not consider item a serial
-         xnlc - NLC does not consider item a serial
-         xnsdp - NSDP does not consider item a serial
 
 043 - GEOGRAPHIC AREA CODE (NR)
    Indicators
@@ -499,16 +461,6 @@
          # - Undefined
    Subfield Codes
       $a - Type of date code (NR)
-          i - Inclusive dates of collection
-          k - Bulk of collection
-          m - Multiple dates
-          n - Unknown dates
-          p - Distribution/release/issue and production/recording session dates
-          q - Questionable date
-          r - Reissue and originaldates
-          s - Single known/probable date
-          t - Publication date and copyright dates
-          x - Incorrect dates
       $b - Date 1 (B.C. date) (NR)
       $c - Date 1 (C.E. date) (NR)
       $d - Date 2 (B.C. date) (NR)
@@ -546,107 +498,6 @@
       $b - Soloist (R)
       $2 - Source of code (NR)
       $8 - Field link and sequence number (R)
-   Instrument or Voices Codes 
-      ba - Brass - Horn
-      bb - Brass--Trumpet
-      bc - Brass--Cornet
-      bd - Brass--Trombone
-      be - Brass--Tuba
-      bf - Brass--Baritone
-      bn - Brass--Unspecified
-      bu - Brass--Unknown
-      by - Brass--Ethnic
-      bz - Brass--Other
-      ca - Choruses--Mixed
-      cb - Choruses--Women's
-      cc - Choruses--Men's
-      cd - Choruses--Children's
-      cn - Choruses--Unspecified
-      cu - Choruses--Unknown
-      cy - Choruses--Ethnic
-      ea - Electronic--Synthesizer
-      eb - Electronic--Tape
-      ec - Electronic--Computer
-      ed - Electronic--Ondes Martinot
-      en - Electronic--Unspecified
-      eu - Electronic--Unknown
-      ez - Electronic--Other
-      ka - Keyboard--Piano
-      kb - Keyboard--Organ  
-      kc - Keyboard--Harpsichord
-      kd - Keyboard--Clavichord
-      ke - Keyboard--Continuo
-      kf - Keyboard--Celeste
-      kn - Keyboard--Unspecified
-      ku - Keyboard--Unknown
-      ky - Keyboard--Ethnic
-      kz - Keyboard--Other
-      oa - Larger ensemble--Full orchestra
-      ob - Larger ensemble--Chamber orch.
-      oc - Larger ensemble--String orchestra
-      od - Larger ensemble--Band
-      oe - Larger ensemble--Dance orchestra
-      of - Larger ensemble--Brass band
-      on - Larger ensemble--Unspecified
-      ou - Larger ensemble--Unknown
-      oy - Larger ensemble--Ethnic
-      oz - Larger ensemble--Other
-      pa - Percussion--Timpani
-      pb - Percussion--Xylophone
-      pc - Percussion--Marimba
-      pd - Percussion--Drum
-      pn - Percussion--Unspecified
-      pu - Percussion--Unknown
-      py - Percussion--Ethnic
-      pz - Percussion--Other
-      sa - Strings, bowed--Violin
-      sb - Strings, bowed--Viola
-      sc - Strings, bowed--Violoncello
-      sd - Strings, bowed--Double bass
-      se - Strings, bowed--Viol
-      sf - Strings, bowed--Viola d'amore
-      sg - Strings, bowed--Viola da gamba
-      sn - Strings, bowed--Unspecified
-      su - Strings, bowed--Unknown
-      sy - Strings, bowed--Ethnic
-      sz - Strings, bowed--Other
-      ta - Strings, plucked--Harp
-      tb - Strings, plucked--Guitar
-      tc - Strings, plucked--Lute
-      td - Strings, plucked--Mandolin
-      tn - Strings, plucked--Unspecified
-      tu - Strings, plucked--Unknown
-      ty - Strings, plucked--Ethnic
-      tz - Strings, plucked--Other
-      va - Voices--Soprano
-      vb - Voices--Mezzo Soprano
-      vc - Voices--Alto
-      vd - Voices--Tenor
-      ve - Voices--Baritone
-      vf - Voices--Bass
-      vg - Voices--Counter tenor
-      vh - Voices--High voice
-      vi - Voices--Medium voice
-      vj - Voices--Low voice
-      vn - Voices--Unspecified
-      vu - Voices--Unknown
-      vy - Voices--Ethnic
-      wa - Woodwinds--Flute
-      wb - Woodwinds--Oboe
-      wc - Woodwinds--Clarinet
-      wd - Woodwinds--Bassoon
-      we - Woodwinds--Piccolo
-      wf - Woodwinds--English horn
-      wg - Woodwinds--Bass clarinet
-      wh - Woodwinds--Recorder
-      wi - Woodwinds--Saxophone
-      wn - Woodwinds--Unspecified
-      wu - Woodwinds--Unknown
-      wy - Woodwinds--Ethnic
-      wz - Woodwinds--Other
-      zn - Unspecified instruments
-      zu - Unknown
-
 
 --Classification and Call Number Fields (05X-08X)--
 050 - LIBRARY OF CONGRESS CALL NUMBER (R)
@@ -659,11 +510,6 @@
          # - No information provided [OBSOLETE]
          0 - Assigned by LC
          4 - Assigned by agency other than LC
-      Second - Series call number (SE) [OBSOLETE]
-         0 - No series involved
-         1 - Main series
-         2 - Subseries
-         3 - Sub-subseries
    Subfield Codes
       $a - Classification number (R)
       $b - Item number (NR)
@@ -671,7 +517,6 @@
       $3 - Materials specified (NR)
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
-
 
 051 - LIBRARY OF CONGRESS COPY, ISSUE, OFFPRINT STATEMENT (R)
    Indicators
@@ -741,11 +586,6 @@
          # - No information provided [OBSOLETE]
          0 - Assigned by NLM
          4 - Assigned by agency other than NLM
-      Second - Series call number (SE) [OBSOLETE]
-         0 - No series involved
-         1 - Main series
-         2 - Subseries
-         3 - Sub-subseries
    Subfield Codes
       $a - Classification number (R)
       $b - Item number (NR)
@@ -757,11 +597,6 @@
          # - Undefined
       Second - Undefined
          # - Undefined
-      Second - Series call number (SE) [OBSOLETE]
-         0 - No series involved
-         1 - Main series
-         2 - Subseries
-         3 - Sub-subseries
    Subfield Codes
       $a - Classification number (R)
       $b - Item number (NR)
@@ -786,11 +621,6 @@
          1 - Item is not in NAL
       Second - Undefined
          # - Undefined
-      Second - Series call number (SE) [OBSOLETE]
-         0 - No series involved
-         1 - Main series
-         2 - Subseries
-         3 - Sub-subseries
    Subfield Codes
       $a - Classification number (R)
       $b - Item number (NR)
@@ -802,11 +632,6 @@
          # - Undefined
       Second - Undefined
          # - Undefined
-      Second - Series call number (SE) [OBSOLETE]
-         0 - No series involved
-         1 - Main series
-         2 - Subseries
-         3 - Sub-subseries
    Subfield Codes
       $a - Classification number (R)
       $b - Item number (NR)
@@ -905,7 +730,7 @@
       $2 - Source of number (NR)
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
-	  
+
 085  SYNTHESIZED CLASSIFICATION NUMBER COMPONENTS (R)
    Indicators
       First - Undefined
@@ -985,7 +810,6 @@
    Subfield Code
       $a - Microfilm shelf location (NR)
 
-
 --Main Entry Fields (1XX)--
 100 - MAIN ENTRY--PERSONAL NAME (NR)
    Indicators
@@ -996,7 +820,6 @@
          3 - Family name
       Second - Undefined
          # - Undefined
-      Second - Main entry/subject relationship (BK MU SE) [OBSOLETE]
    Subfield Codes
       $a - Personal name (NR)
       $b - Numeration (NR)
@@ -1026,7 +849,6 @@
          2 - Name in direct order
       Second - Undefined
          # - Undefined
-      Second - Main entry/subject relationship (BK MU SE) [OBSOLETE]
    Subfield Codes
       $a - Corporate name or jurisdiction name as entry element (NR)
       $b - Subordinate unit (R)
@@ -1054,7 +876,6 @@
          2 - Name in direct order
       Second - Undefined
          # - Undefined
-      Second - Main entry/subject relationship (BK MU SE) [OBSOLETE]
    Subfield Codes
       $a - Meeting name or jurisdiction name as entry element (NR)
       $b - Number (BK CF MP MU SE VM MX) [OBSOLETE]
@@ -1083,7 +904,6 @@
          # - Nonfiling characters not specified [OBSOLETE]
       Second - Undefined
          # - Undefined
-      Second - Main entry/subject relationship (BK MU SE) [OBSOLETE]
    Subfield Codes
       $a - Uniform title (NR)
       $d - Date of treaty signing (R)
@@ -1102,7 +922,6 @@
       $0 - Authority record control number (R)
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
-
 
 --Title and Title-Related Fields (20X-24X)--
 210 - ABBREVIATED TITLE (R)
@@ -1157,11 +976,6 @@
    Indicators
       First - Undefined
          # - Undefined
-      First - Specifies whether variant title and/or added entry is required (CF SE) [OBSOLETE]
-         0 - No key title added entry; title proper same
-         1 - Key title added entry; title proper different
-         2 - Key title added entry; title proper same
-         3 - No key title added entry; title proper different
       Second - Nonfiling characters
          0-9 - Number of nonfiling characters
    Subfield Codes
@@ -1332,7 +1146,6 @@
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
 
-
 --Edition, Imprint, etc. Fields 250-270--
 250 - EDITION STATEMENT (NR)
    Indicators
@@ -1417,12 +1230,6 @@
          3 - Current/latest publisher
       Second - Undefined
          # - Undefined
-      First - Presence of publisher in imprint (BK MP MU SE) [OBSOLETE]
-         0 - Publisher, distributor, etc. is present
-         1 - Publisher, distributor, etc. is not present
-      Second - Added entry/publisher relationship (SE) [OBSOLETE]
-         0 - Publisher, distributor, etc. not same as issuing body in added entry
-         1 - Publisher, distributor, etc. same as issuing body in added entry
    Subfield Codes
       $a - Place of publication, distribution, etc. (R)
       $b - Name of publisher, distributor, etc. (R)
@@ -1518,7 +1325,6 @@
       $4 - Relator code (R)
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
-
 
 --Physical Description, etc. Fields (3XX)--
 300 - PHYSICAL DESCRIPTION (R)
@@ -1669,7 +1475,7 @@
       $b - Dates of former publication frequency (NR)
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
-	  
+
 336 - CONTENT TYPE (R)
    Indicators
       First - Undefined
@@ -1683,7 +1489,7 @@
       $3 - Materials specified (NR)
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
-	  
+
 337 - MEDIA TYPE (R)
    Indicators
       First - Undefined
@@ -1697,7 +1503,7 @@
       $3 - Materials specified (NR)
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
-	  
+
 338 - CARRIER TYPE (R)
    Indicators
       First - Undefined
@@ -1710,8 +1516,8 @@
       $2 - Source (NR)
       $3 - Materials specified (NR)
       $6 - Linkage (NR)
-      $8 - Field link and sequence number (R)	
-	          	  
+      $8 - Field link and sequence number (R)
+
 340 - PHYSICAL MEDIUM (R)
    Indicators 
       First - Undefined
@@ -1973,7 +1779,6 @@
       $6 - Linkage (NR) 
       $8 - Field link and sequence number (R)
 
-
 --Series Statement Fields (4XX)--
 400 - SERIES STATEMENT/ADDED ENTRY--PERSONAL NAME  (R) [US-LOCAL]
    Indicators
@@ -2098,7 +1903,6 @@
       $3 - Materials specified
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
-
 
 --Note Fields (Part 1: 50X-53X)--
 500 - GENERAL NOTE (R)
@@ -2404,7 +2208,7 @@
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
 
-  522 - GEOGRAPHIC COVERAGE NOTE (R)
+522 - GEOGRAPHIC COVERAGE NOTE (R)
    Indicators
       First - Display constant controller
          # - Geographic coverage
@@ -2518,15 +2322,6 @@
       $5 - Institution to which field applies (NR)
       $6 - Linkage (NR)
       $7 - Fixed-length data elements of reproduction (NR)
-         0 - Type of date/Publication status
-         1-4 - Date 1
-         5-8 - Date 2
-         9-11 - Place of publication, production, or execution
-         12 - Frequency
-            n - Not applicable
-         13 - Regularity
-            # - Not applicable
-         14 - Form of item
       $8 - Field link and sequence number (R)
 
 534 - ORIGINAL VERSION NOTE (R)
@@ -2535,9 +2330,6 @@
          # - Undefined
       Second - Undefined
          # - Undefined
-      First - Specifies presence of series statement on original (BK MP MU VM SE) [OBSOLETE]
-         0 - Note excludes series of original
-         1 - Note includes series of original
    Subfield Codes
       $a - Main entry of original (NR)
       $b - Edition statement of original (NR)
@@ -2575,7 +2367,6 @@
       $3 - Materials specified (NR)
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
-
 
 --Note Fields (Part 2: 53X-58X)--
 536 - FUNDING INFORMATION NOTE (R)
@@ -2769,9 +2560,6 @@
          # - Undefined
       Second - Undefined
          # - Undefined
-      First - Existence of additional information (SE) [OBSOLETE]
-         0 - Repetitious
-         1 - Not repetitious
    Subfield Codes
       $a - Issuing body note (NR)
       $z - Source of note information (NR) (SE) [OBSOLETE]
@@ -3019,7 +2807,7 @@
       $5 - Institution to which field applies (NR)
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
-	  
+
 586 - AWARDS NOTE (R)
    Indicators
       First - Display constant controller
@@ -3032,7 +2820,7 @@
       $3 - Materials specified (NR)
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
-	  
+
 588 - SOURCE OF DESCRIPTION NOTE (R)
    Indicators
       First - Undefined
@@ -3044,7 +2832,7 @@
       $5 - Institution to which field applies (NR)
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
-	  
+
 --59X - LOCAL NOTES--
 590 - LOCAL NOTE (BK CF MP MU SE VM MX) [OBSOLETE]
    Indicators
@@ -3066,7 +2854,6 @@
       $b - Provenance (NR)
       $d - Condition of individual reels (NR)
       $d - Origin of safety copy (NR)
-
 
 --Subject Access Fields (6XX)--
 600 - SUBJECT ADDED ENTRY--PERSONAL NAME (R)
@@ -3492,7 +3279,6 @@
       $6 - Linkage (NR)
       $8 - Field link and sequence number (R)
 
-
 --Added Entry Fields (70X-75X)--
 700 - ADDED ENTRY--PERSONAL NAME (R)
    Indicators
@@ -3827,8 +3613,7 @@
       $2 - Source of term (NR) 
       $3 - Materials specified (NR)
       $6 - Linkage (NR)
-          $8 - Field link and sequence number (R)
-
+      $8 - Field link and sequence number (R)
 
 --Linking Entry Fields (76X-78X)--
 760 - MAIN SERIES ENTRY (R)
@@ -4104,10 +3889,6 @@
       Second - Display constant controller
          # - Other edition available
          8 - No display constant generated
-      Second - Edition entry same as main entry or title (SE) [OBSOLETE]
-         0 - Entry not the same
-         1 - Entry is the same as title
-         2 - Entry is the same as main entry and title
    Subfield Codes
       $a - Main entry heading (NR)
       $b - Edition (NR)
@@ -4351,7 +4132,6 @@
       $7 - Control subfield (NR)
       $8 - Field link and sequence number (R)
 
-
 --Series Added Entry Fields (80X-830)--
 800 - SERIES ADDED ENTRY--PERSONAL NAME (R)
    Indicators
@@ -4500,7 +4280,6 @@
       $a - Title (NR)
       $h - Medium (NR)
       $v - Volume/sequential designation (NR)
-
 
 --Holdings, Location, Alternate Graphics, etc. Fields (841-88X)--
 841 - HOLDINGS CODED DATA VALUES (NR)
@@ -4713,4 +4492,4 @@
          # - Undefined
    Subfield Codes
       $a - Content of non-MARC field (NR)
-      $2 - Source of data (NR) 
+      $2 - Source of data (NR)
