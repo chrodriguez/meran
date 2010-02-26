@@ -18,6 +18,6 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
             flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
     });
 
-my ($session)= C4::Auth::cerrarSesion();
+my ($session) = C4::Auth::cerrarSesion();
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
