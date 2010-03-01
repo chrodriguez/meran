@@ -20,21 +20,6 @@ sub trim
     return $string;
 }
 
-# sub getSubCampoFromEstructura {
-#     my ($campo,$subcampo) = @_;
-#     my @filtros;
-#     push(@filtros, ( campo => { like => $campo} ) );
-#     push(@filtros, ( subcampo => { like => $subcampo} ) );
-# 
-#     my $db_campo_MARC = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( query => \@filtros );
-# 
-#     if (scalar(@$db_campo_MARC) > 0){
-#         return $db_campo_MARC->[0];
-#     }else{
-#         return 0;
-#     }
-# }
-
 sub getCampo {
     my ($campo) = @_;
     my @filtros;
@@ -195,14 +180,14 @@ while ( my ($key, $value) = each(%datos) ) {
 
         my $subcampo=getSubCampo($key,$keySub);
         if($subcampo){ #El subcampo existe
-              $sql='UPDATE pref_estructura_subcampo_marc SET liblibrarian="'.$value->{'descripcion'}.'",libopac="'.$value->{'descripcion'}.'",repetible="'.$value->{'repetible'}.'"';
-              if($value->{'obsoleto'}){$sql.=' ,descripcion="OBSOLETO" ';}
+              $sql='UPDATE pref_estructura_subcampo_marc SET liblibrarian="'.$valueSub->{'descripcion'}.'",libopac="'.$valueSub->{'descripcion'}.'",repetible="'.$valueSub->{'repetible'}.'"';
+              if($valueSub->{'obsoleto'}){$sql.=' ,descripcion="OBSOLETO" ';}
               $sql.=' WHERE campo="'.$key.'" AND subcampo="'.$keySub.'";';
             } 
         else { #subcampo nuevo
               my $obsoleto='';
-              if($value->{'obsoleto'}){$obsoleto="OBSOLETO";}
-              $sql='INSERT INTO pref_estructura_subcampo_marc (campo,subcampo,liblibrarian,libopac,repetible,descripcion) VALUES ("'.$key.'","'.$keySub.'","'.$value->{'descripcion'}.'","'.$value->{'descripcion'}.'","'.$value->{'repetible'}.'","'.$obsoleto.'"); ';
+              if($valueSub->{'obsoleto'}){$obsoleto="OBSOLETO";}
+              $sql='INSERT INTO pref_estructura_subcampo_marc (campo,subcampo,liblibrarian,libopac,repetible,descripcion) VALUES ("'.$key.'","'.$keySub.'","'.$valueSub->{'descripcion'}.'","'.$valueSub->{'descripcion'}.'","'.$valueSub->{'repetible'}.'","'.$obsoleto.'"); ';
             }
          print $sql;
          print "\n";
