@@ -20,20 +20,20 @@ sub trim
     return $string;
 }
 
-sub getSubCampoFromEstructura {
-    my ($campo,$subcampo) = @_;
-    my @filtros;
-    push(@filtros, ( campo => { like => $campo} ) );
-    push(@filtros, ( subcampo => { like => $subcampo} ) );
-
-    my $db_campo_MARC = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( query => \@filtros );
-
-    if (scalar(@$db_campo_MARC) > 0){
-        return $db_campo_MARC->[0];
-    }else{
-        return 0;
-    }
-}
+# sub getSubCampoFromEstructura {
+#     my ($campo,$subcampo) = @_;
+#     my @filtros;
+#     push(@filtros, ( campo => { like => $campo} ) );
+#     push(@filtros, ( subcampo => { like => $subcampo} ) );
+# 
+#     my $db_campo_MARC = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( query => \@filtros );
+# 
+#     if (scalar(@$db_campo_MARC) > 0){
+#         return $db_campo_MARC->[0];
+#     }else{
+#         return 0;
+#     }
+# }
 
 sub getCampo {
     my ($campo) = @_;
@@ -151,61 +151,70 @@ while ($line= <DATOS>) {
 }
 
 
-print "TRUNCATE `pref_indicador_primario`;\n";
-print "TRUNCATE `pref_indicador_secundario`;\n";
+# print 'TRUNCATE pref_indicador_primario;';
+# print "\n";
+# print 'TRUNCATE pref_indicador_secundario;';
+# print "\n";
 
 ####A RECORRER!!!!!!!!!!!!!!
 my $sql='';
 while ( my ($key, $value) = each(%datos) ) {
     #Prosesamos el campo
     my $campo=getCampo($key);
-
     if($campo){ #El campo existe
-      $sql="UPDATE pref_estructura_campo_marc SET indicador_primario='".$value->{'primario'}->{'descripcion'}."',indicador_secundario='".$value->{'secundario'}->{'descripcion'}."',liblibrarian='".$value->{'descripcion'}."',libopac='".$value->{'descripcion'}."',repeatable='".$value->{'repetible'}."'";
-      if($value->{'obsoleto'}){$sql.=" ,descripcion='OBSOLETO' ";}
-      $sql.=" WHERE campo=".$key.";\n";
+      $sql='UPDATE pref_estructura_campo_marc SET indicador_primario="'.$value->{'primario'}->{'descripcion'}.'",indicador_secundario="'.$value->{'secundario'}->{'descripcion'}.'",liblibrarian="'.$value->{'descripcion'}.'",libopac="'.$value->{'descripcion'}.'",repeatable="'.$value->{'repetible'}.'"';
+      if($value->{'obsoleto'}){$sql.=' ,descripcion="OBSOLETO" ';}
+      $sql.=' WHERE campo="'.$key.'";';
     } 
     else { #campo nuevo
       my $obsoleto='';
       if($value->{'obsoleto'}){$obsoleto="OBSOLETO";}
-      $sql="INSERT INTO pref_estructura_campo_marc (campo,liblibrarian,libopac,repeatable,descripcion,indicador_primario,indicador_secundario) VALUES ('".$key."','".$value->{'descripcion'}."','".$value->{'descripcion'}."','".$value->{'repetible'}."','".$obsoleto."','".$value->{'primario'}->{'descripcion'}."','".$value->{'secundario'}->{'descripcion'}."'); \n";
+      $sql='INSERT INTO pref_estructura_campo_marc (campo,liblibrarian,libopac,repeatable,descripcion,indicador_primario,indicador_secundario) VALUES ("'.$key.'","'.$value->{'descripcion'}.'","'.$value->{'descripcion'}.'","'.$value->{'repetible'}.'","'.$obsoleto.'","'.$value->{'primario'}->{'descripcion'}.'","'.$value->{'secundario'}->{'descripcion'}.'"); ';
     }
-    print $sql;
+     print $sql;
+     print "\n";
+     $sql='';
 
     #Prosesamos los indicadores primarios
     my $first=$value->{'primario'}->{'elementos'};
     while ( my ($keyF, $valueF) = each(%$first) ){
-        print "INSERT into pref_indicadores_primarios (indicador,dato, campo_marc) values (".'"'.$keyF.'"'.",".'"'.$valueF.'"'.",".$key.");\n";
+       print 'INSERT into pref_indicador_primario (indicador,dato, campo_marc) values ("'.$keyF.'","'.$valueF.'","'.$key.'");';
+       print "\n";
     }
 
     #Prosesamos los indicadores secundarios
     my $second=$value->{'secundario'}->{'elementos'};
     while ( my ($keyS, $valueS) = each(%$second) ) {
-        print "INSERT into pref_indicadores_secundarios (indicador,dato, campo_marc) values  (".'"'.$keyS.'"'.",".'"'.$valueS.'"'.",".$key.");\n";
+       print 'INSERT into pref_indicador_secundario (indicador,dato, campo_marc) values  ("'.$keyS.'","'.$valueS.'","'.$key.'");';
+       print "\n";
      }
     
     #Subcampos!!!!!!
     my $subcampos = $value->{'subcampos'};
     while ( my ($keySub, $valueSub) = each(%$subcampos) ) {
+
         my $subcampo=getSubCampo($key,$keySub);
         if($subcampo){ #El subcampo existe
-              $sql="UPDATE pref_estructura_subcampo_marc SET liblibrarian='".$value->{'descripcion'}."',libopac='".$value->{'descripcion'}."',repetible='".$value->{'repetible'}."'";
-              if($value->{'obsoleto'}){$sql.=" ,descripcion='OBSOLETO' ";}
-              $sql.=" WHERE campo=".$key." AND subcampo='".$keySub."';\n";
+              $sql='UPDATE pref_estructura_subcampo_marc SET liblibrarian="'.$value->{'descripcion'}.'",libopac="'.$value->{'descripcion'}.'",repetible="'.$value->{'repetible'}.'"';
+              if($value->{'obsoleto'}){$sql.=' ,descripcion="OBSOLETO" ';}
+              $sql.=' WHERE campo="'.$key.'" AND subcampo="'.$keySub.'";';
             } 
         else { #subcampo nuevo
               my $obsoleto='';
               if($value->{'obsoleto'}){$obsoleto="OBSOLETO";}
-              $sql="INSERT INTO pref_estructura_subcampo_marc (campo,subcampo,liblibrarian,libopac,repetible,descripcion) VALUES ('".$key."','".$keySub."','".$value->{'descripcion'}."','".$value->{'descripcion'}."','".$value->{'repetible'}."','".$obsoleto."'); \n";
+              $sql='INSERT INTO pref_estructura_subcampo_marc (campo,subcampo,liblibrarian,libopac,repetible,descripcion) VALUES ("'.$key.'","'.$keySub.'","'.$value->{'descripcion'}.'","'.$value->{'descripcion'}.'","'.$value->{'repetible'}.'","'.$obsoleto.'"); ';
             }
-        print $sql;
+         print $sql;
+         print "\n";
+         $sql ='';
 
+#         my $subcampoEstructura=getSubCampoFromEstructura($key,$keySub);
+#         if($subcampoEstructura){ #El subcampo existe en la tabla estructura, actualizo la descripcion
+#               $sql='UPDATE cat_estructura_catalogacion SET liblibrarian="'.$value->{'descripcion'}.'",repetible="'.$value->{'repetible'}.'" WHERE campo="'.$key.'" AND subcampo="'.$keySub.'";';
+#               print $sql;
+#               print "\n";
+#               $sql ='';
+#             }
 
-        my $subcampoEstructura=getSubCampoFromEstructura($key,$keySub);
-        if($subcampoEstructura){ #El subcampo existe en la tabla estructura, actualizo la descripcion
-              $sql="UPDATE cat_estructura_catalogacion SET liblibrarian='".$value->{'descripcion'}."',repetible='".$value->{'repetible'}."' WHERE campo=".$key." AND subcampo='".$keySub."';\n";
-            }
-        print $sql;
      }
 }
-
