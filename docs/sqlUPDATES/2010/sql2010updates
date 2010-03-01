@@ -108,3 +108,6 @@ INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo
 INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`) VALUES (NULL, 'pref_servidor_z3950', 'z3950', 'nombre');
 
 INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`) VALUES (NULL, 'ref_colaborador', 'colaborador', 'descripcion');
+
+-- Para la nueva biblia --
+ ALTER TABLE `pref_estructura_subcampo_marc` CHANGE `subcampo` `subcampo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ;
