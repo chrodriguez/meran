@@ -20,6 +20,20 @@ sub trim
     return $string;
 }
 
+sub getSubCampoFromEstructura {
+    my ($campo,$subcampo) = @_;
+    my @filtros;
+    push(@filtros, ( campo => { like => $campo} ) );
+    push(@filtros, ( subcampo => { like => $subcampo} ) );
+
+    my $db_campo_MARC = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion( query => \@filtros );
+
+    if (scalar(@$db_campo_MARC) > 0){
+        return $db_campo_MARC->[0];
+    }else{
+        return 0;
+    }
+}
 
 sub getCampo {
     my ($campo) = @_;
@@ -137,73 +151,61 @@ while ($line= <DATOS>) {
 }
 
 
+print "TRUNCATE `pref_indicador_primario`;\n";
+print "TRUNCATE `pref_indicador_secundario`;\n";
 
 ####A RECORRER!!!!!!!!!!!!!!
-
+my $sql='';
 while ( my ($key, $value) = each(%datos) ) {
     #Prosesamos el campo
     my $campo=getCampo($key);
 
     if($campo){ #El campo existe
-      $campo->setLiblibrarian($value->{'descripcion'});
-      $campo->setIndicadorPrimario($value->{'primario'}->{'descripcion'});
-      $campo->setIndicadorSecundario($value->{'secundario'}->{'descripcion'});
-      $campo->setRepeatable($value->{'repetible'});
-      if($value->{'obsoleto'}){$campo->setDescripcion("OBSOLETO");}
-      $campo->save;
+      $sql="UPDATE pref_estructura_campo_marc SET indicador_primario='".$value->{'primario'}->{'descripcion'}."',indicador_secundario='".$value->{'secundario'}->{'descripcion'}."',liblibrarian='".$value->{'descripcion'}."',libopac='".$value->{'descripcion'}."',repeatable='".$value->{'repetible'}."'";
+      if($value->{'obsoleto'}){$sql.=" ,descripcion='OBSOLETO' ";}
+      $sql.=" WHERE campo=".$key.";\n";
     } 
     else { #campo nuevo
-       my  $newcampo = C4::Modelo::PrefEstructuraCampoMarc->new();
-      $newcampo->setCampo($key);
-      $newcampo->setLiblibrarian($value->{'descripcion'});
-      $newcampo->setIndicadorPrimario($value->{'primario'}->{'descripcion'});
-      $newcampo->setIndicadorSecundario($value->{'secundario'}->{'descripcion'});
-      $newcampo->setRepeatable($value->{'repetible'});
-      if($value->{'obsoleto'}){$newcampo->setDescripcion("OBSOLETO");}
-      $newcampo->save;
+      my $obsoleto='';
+      if($value->{'obsoleto'}){$obsoleto="OBSOLETO";}
+      $sql="INSERT INTO pref_estructura_campo_marc (campo,liblibrarian,libopac,repeatable,descripcion,indicador_primario,indicador_secundario) VALUES ('".$key."','".$value->{'descripcion'}."','".$value->{'descripcion'}."','".$value->{'repetible'}."','".$obsoleto."','".$value->{'primario'}->{'descripcion'}."','".$value->{'secundario'}->{'descripcion'}."'); \n";
     }
-  
+    print $sql;
+
     #Prosesamos los indicadores primarios
     my $first=$value->{'primario'}->{'elementos'};
     while ( my ($keyF, $valueF) = each(%$first) ){
-       my $newindicadorp = C4::Modelo::PrefIndicadorPrimario->new();
-          $newindicadorp->setCampo($key);
-          $newindicadorp->setIndicador($keyF);
-          $newindicadorp->setDato($valueF);
-          $newindicadorp->save;
+        print "INSERT into pref_indicadores_primarios (indicador,dato, campo_marc) values (".'"'.$keyF.'"'.",".'"'.$valueF.'"'.",".$key.");\n";
     }
 
     #Prosesamos los indicadores secundarios
     my $second=$value->{'secundario'}->{'elementos'};
     while ( my ($keyS, $valueS) = each(%$second) ) {
-      my  $newindicadors = C4::Modelo::PrefIndicadorSecundario->new();
-          $newindicadors->setCampo($key);
-          $newindicadors->setIndicador($keyS);
-          $newindicadors->setDato($valueS);
-          $newindicadors->save;
+        print "INSERT into pref_indicadores_secundarios (indicador,dato, campo_marc) values  (".'"'.$keyS.'"'.",".'"'.$valueS.'"'.",".$key.");\n";
      }
     
     #Subcampos!!!!!!
     my $subcampos = $value->{'subcampos'};
     while ( my ($keySub, $valueSub) = each(%$subcampos) ) {
         my $subcampo=getSubCampo($key,$keySub);
-
-            if($subcampo){ #El subcampo existe
-              $subcampo->setLiblibrarian($valueSub->{'descripcion'});
-              $subcampo->setRepetible($valueSub->{'repetible'});
-              if($valueSub->{'obsoleto'}){$subcampo->setDescripcion("OBSOLETO");}
-              $subcampo->save;
+        if($subcampo){ #El subcampo existe
+              $sql="UPDATE pref_estructura_subcampo_marc SET liblibrarian='".$value->{'descripcion'}."',libopac='".$value->{'descripcion'}."',repetible='".$value->{'repetible'}."'";
+              if($value->{'obsoleto'}){$sql.=" ,descripcion='OBSOLETO' ";}
+              $sql.=" WHERE campo=".$key." AND subcampo='".$keySub."';\n";
             } 
-            else { #subcampo nuevo
-              my  $newsubcampo = C4::Modelo::PrefEstructuraSubcampoMarc->new();
-              $newsubcampo->setCampo($key);
-              $newsubcampo->setSubcampo($keySub);
-              $newsubcampo->setLiblibrarian($valueSub->{'descripcion'});
-              $newsubcampo->setLibopac($valueSub->{'descripcion'});
-              $newsubcampo->setRepetible($valueSub->{'repetible'});
-              if($value->{'obsoleto'}){$newsubcampo->setDescripcion("OBSOLETO");}
-              $newsubcampo->save;
+        else { #subcampo nuevo
+              my $obsoleto='';
+              if($value->{'obsoleto'}){$obsoleto="OBSOLETO";}
+              $sql="INSERT INTO pref_estructura_subcampo_marc (campo,subcampo,liblibrarian,libopac,repetible,descripcion) VALUES ('".$key."','".$keySub."','".$value->{'descripcion'}."','".$value->{'descripcion'}."','".$value->{'repetible'}."','".$obsoleto."'); \n";
             }
+        print $sql;
+
+
+        my $subcampoEstructura=getSubCampoFromEstructura($key,$keySub);
+        if($subcampoEstructura){ #El subcampo existe en la tabla estructura, actualizo la descripcion
+              $sql="UPDATE cat_estructura_catalogacion SET liblibrarian='".$value->{'descripcion'}."',repetible='".$value->{'repetible'}."' WHERE campo=".$key." AND subcampo='".$keySub."';\n";
+            }
+        print $sql;
      }
 }
 
