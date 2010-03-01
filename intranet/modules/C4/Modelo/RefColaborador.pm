@@ -109,8 +109,9 @@ sub getCampo{
 
 
 
-sub lastTable{
-    return(1);
+sub nextMember{
+    use C4::Modelo::PrefValorAutorizado;
+    return(C4::Modelo::PrefValorAutorizado->new());
 }
 
 

@@ -101,3 +101,10 @@ VALUES (
 
 
 INSERT INTO `pref_tabla_referencia` (`nombre_tabla`, `alias_tabla`, `campo_busqueda`) VALUES ('pref_servidor_z3950', 'servidores_z3950', 'nombre'),('ref_colaborador', 'tipo_colaborador', 'descripcion');
+
+
+INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`) VALUES (NULL, 'pref_valor_autorizado', 'valor_autorizado', 'category');
+
+INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`) VALUES (NULL, 'pref_servidor_z3950', 'z3950', 'nombre');
+
+INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`) VALUES (NULL, 'ref_colaborador', 'colaborador', 'descripcion');

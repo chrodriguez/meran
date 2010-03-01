@@ -504,10 +504,11 @@ sub getAutorObject {
 sub getTabla{
     
     my ($alias,$filtro,$limit,$offset) = @_;
-    
+       
+
     my $tabla = C4::Modelo::PrefTablaReferencia->new();
        $tabla = $tabla->createFromAlias($alias);
-
+ C4::AR::Debug::debug("TABLAAAAAAAAAAAAAA: ".$tabla->meta->table);
     $limit = $limit || 20;
     $offset = $offset || 0;
     my ($cantidad,$datos) = $tabla->getAll($limit,$offset,0,$filtro);

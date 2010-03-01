@@ -22,6 +22,11 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
+sub nextMember{
+    use C4::Modelo::RefColaborador;
+    return(C4::Modelo::RefColaborador->new());
+}
+
 sub getId{
     my ($self) = shift;
     return ($self->id);
@@ -178,13 +183,6 @@ sub getAll{
     else{
       return($ref_cant,$ref_valores);
     }
-}
-
-
-sub nextMember{
-    use C4::Modelo::RefColaborador;
-
-    return(C4::Modelo::RefColaborador->new());
 }
 
 
