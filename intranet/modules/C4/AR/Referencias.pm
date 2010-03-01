@@ -67,8 +67,8 @@ use C4::Modelo::PrefTablaReferencia;
 use C4::Modelo::PrefTablaReferencia::Manager;
 use C4::Modelo::UsrRefTipoDocumento;
 use C4::Modelo::UsrRefTipoDocumento::Manager;
-use C4::Modelo::UsrRefCategoriasSocio;
-use C4::Modelo::UsrRefCategoriasSocio::Manager;
+use C4::Modelo::UsrRefCategoriaSocio;
+use C4::Modelo::UsrRefCategoriaSocio::Manager;
 use C4::Modelo::PrefUnidadInformacion;
 use C4::Modelo::PrefUnidadInformacion::Manager;
 use C4::Modelo::RefDisponibilidad;
@@ -77,6 +77,8 @@ use C4::Modelo::CatRefTipoNivel3;
 use C4::Modelo::CatRefTipoNivel3::Manager;
 use C4::Modelo::RefLocalidad;
 use C4::Modelo::RefLocalidad::Manager;
+use C4::Modelo::RefColaborador;
+use C4::Modelo::RefColaborador::Manager;
 # use JSON;
 
 use vars qw(@EXPORT @ISA);
@@ -175,7 +177,7 @@ sub obtenerTiposNivel3 {
 Esta funcion devuelve un arreglo de objetos de categorias de socios
 =cut
 sub obtenerCategoriaDeSocio {
-    my $categorias_array_ref = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categoria_socio;
+    my $categorias_array_ref = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio;
     my @results;
 
     foreach my $objeto_categoria (@$categorias_array_ref) {
@@ -508,7 +510,6 @@ sub getTabla{
 
     my $tabla = C4::Modelo::PrefTablaReferencia->new();
        $tabla = $tabla->createFromAlias($alias);
- C4::AR::Debug::debug("TABLAAAAAAAAAAAAAA: ".$tabla->meta->table);
     $limit = $limit || 20;
     $offset = $offset || 0;
     my ($cantidad,$datos) = $tabla->getAll($limit,$offset,0,$filtro);

@@ -22,7 +22,6 @@ sub getAliasForTable {
     use C4::Modelo::PrefTablaReferencia::Manager;
     my ($self) = shift;
     my ($nombre_tabla) = @_;
-    C4::AR::Debug::debug("TABLAAAAAAAAAAAAAA: ".$nombre_tabla);
     my $db = C4::Modelo::PrefTablaReferencia::Manager->get_pref_tabla_referencia(
                                                                                 query => [
                                                                                            nombre_tabla => { eq  => $nombre_tabla } ,

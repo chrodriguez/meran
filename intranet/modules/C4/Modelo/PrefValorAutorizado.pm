@@ -17,6 +17,11 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
+sub lastTable{
+    return(1);
+}
+
+
 sub getId{
     my ($self) = shift;
     return ($self->id);
@@ -65,11 +70,6 @@ sub agregar{
     $self->save();
 }
 
-
-
-sub lastTable{
-    return(1);
-}
 
 
 sub getAll{

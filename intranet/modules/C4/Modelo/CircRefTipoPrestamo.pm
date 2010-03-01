@@ -26,7 +26,7 @@ __PACKAGE__->meta->setup(
 	relationships => [
 	    disponibilidad => {
             class      => 'C4::Modelo::RefDisponibilidad',
-            column_map => { id_disponibilidad => 'codigo' },
+            column_map => { id_disponibilidad => 'id' },
             type       => 'one to one',
         },
     ],
