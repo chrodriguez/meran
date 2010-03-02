@@ -1,7 +1,7 @@
 <script src="/includes/util.js" type="text/javascript"></script>
 <script src="/includes/md5.js" type="text/javascript"></script>
 <script src="/includes/sha1.js" type="text/javascript"></script>
-
+[% USE HTML %]
 [% IF RANDOM_NUMBER %]
     <script type="text/javascript">
         function enviar(){
@@ -29,7 +29,7 @@
 [% IF socio %]
     <h1>[% 'Mi Sesi&oacute;n' | i18n %]</h1>
     <p>
-      [% socio.persona.getNombre %] ([% socio.getNro_socio %])
+      [% HTML.escape(socio.persona.getNombre) %] ([% HTML.escape(socio.getNro_socio) %])
     </p>
     <p>
       [% PERL %]
