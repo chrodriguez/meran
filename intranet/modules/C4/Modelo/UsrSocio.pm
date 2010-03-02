@@ -50,7 +50,7 @@ __PACKAGE__->meta->setup(
 
      categoria => 
       {
-        class       => 'C4::Modelo::UsrRefCategoriaSocio',
+        class       => 'C4::Modelo::UsrRefCategoriasSocio',
         key_columns => { cod_categoria => 'categorycode' },
         type        => 'one to one',
       },

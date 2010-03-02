@@ -1,10 +1,10 @@
-package C4::Modelo::UsrRefCategoriaSocio;
+package C4::Modelo::UsrRefCategoriasSocio;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup
   (
-    table   => 'usr_ref_categoria_socio',
+    table   => 'usr_ref_categorias_socio',
     columns =>
         [
 #             id                    => { type => 'serial', not_null => 1 }, MAS ADELANTE DESCOMENTAAR; CUANDO LA DB SE HAGA NUEVA
@@ -160,8 +160,8 @@ sub obtenerValoresCampo {
 	my ($self)=shift;
     my ($campo, $orden)=@_;
 
-	use C4::Modelo::UsrRefCategoriaSocio::Manager;
- 	my $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio
+	use C4::Modelo::UsrRefCategoriasSocio::Manager;
+ 	my $ref_valores = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categorias_socio
 						( select   => [$self->meta->primary_key ,$campo],
 						  sort_by => ($orden) );
     my @array_valores;
@@ -179,8 +179,8 @@ sub obtenerValoresCampo {
 sub obtenerValorCampo {
 	my ($self)=shift;
     	my ($campo,$id)=@_;
-	use C4::Modelo::UsrRefCategoriaSocio::Manager;
- 	my $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio
+	use C4::Modelo::UsrRefCategoriasSocio::Manager;
+ 	my $ref_valores = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categorias_socio
 						( select   => [$campo],
 						  query =>[ categorycode => { eq => $id} ]);
     	
@@ -188,7 +188,7 @@ sub obtenerValorCampo {
   if(scalar(@$ref_valores) > 0){
     return ($ref_valores->[0]->getCampo($campo));
   }else{
-    C4::AR::Debug::debug("UsrRefCategoriaSocio => obtenerValorCampo => no se pudo recuperar el objeto");
+    C4::AR::Debug::debug("UsrRefCategoriasSocio => obtenerValorCampo => no se pudo recuperar el objeto");
     return 'NO TIENE';
   }
 }
@@ -208,7 +208,7 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::UsrRefCategoriaSocio::Manager;
+    use C4::Modelo::UsrRefCategoriasSocio::Manager;
     use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
@@ -221,15 +221,15 @@ sub getAll{
     my $ref_valores;
     if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
         push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
-        $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio(query => \@filtros,);
+        $ref_valores = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categorias_socio(query => \@filtros,);
     }else{
-        $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio(query => \@filtros,
+        $ref_valores = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categorias_socio(query => \@filtros,
                                                                     limit => $limit, 
                                                                     offset => $offset, 
                                                                     sort_by => ['description'] 
                                                                    );
     }
-    my $ref_cant = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio_count(query => \@filtros,);
+    my $ref_cant = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categorias_socio_count(query => \@filtros,);
     my $self_descripcion = $self->getDescription;
 
     my $match = 0;

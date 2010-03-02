@@ -67,8 +67,8 @@ use C4::Modelo::PrefTablaReferencia;
 use C4::Modelo::PrefTablaReferencia::Manager;
 use C4::Modelo::UsrRefTipoDocumento;
 use C4::Modelo::UsrRefTipoDocumento::Manager;
-use C4::Modelo::UsrRefCategoriaSocio;
-use C4::Modelo::UsrRefCategoriaSocio::Manager;
+use C4::Modelo::UsrRefCategoriasSocio;
+use C4::Modelo::UsrRefCategoriasSocio::Manager;
 use C4::Modelo::PrefUnidadInformacion;
 use C4::Modelo::PrefUnidadInformacion::Manager;
 use C4::Modelo::RefDisponibilidad;
@@ -177,7 +177,7 @@ sub obtenerTiposNivel3 {
 Esta funcion devuelve un arreglo de objetos de categorias de socios
 =cut
 sub obtenerCategoriaDeSocio {
-    my $categorias_array_ref = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio;
+    my $categorias_array_ref = C4::Modelo::UsrRefCategoriasSocio::Manager->get_usr_ref_categoria_socio;
     my @results;
 
     foreach my $objeto_categoria (@$categorias_array_ref) {
