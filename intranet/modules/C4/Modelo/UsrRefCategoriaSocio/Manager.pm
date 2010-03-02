@@ -8,7 +8,6 @@ use C4::Modelo::UsrRefCategoriaSocio;
 
 sub object_class { 'C4::Modelo::UsrRefCategoriaSocio' }
 
-__PACKAGE__->make_manager_methods('usr_ref_categorias_socio');
+__PACKAGE__->make_manager_methods('usr_ref_categoria_socio');
 
 1;
-

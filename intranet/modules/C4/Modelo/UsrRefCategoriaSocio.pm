@@ -4,7 +4,7 @@ use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup
   (
-    table   => 'usr_ref_categorias_socio',
+    table   => 'usr_ref_categoria_socio',
     columns =>
         [
 #             id                    => { type => 'serial', not_null => 1 }, MAS ADELANTE DESCOMENTAAR; CUANDO LA DB SE HAGA NUEVA
@@ -17,10 +17,10 @@ __PACKAGE__->meta->setup
 
 );
 
-sub lastTable{
-    return(1);
+sub nextMember{
+    use C4::Modelo::UsrRefTipoDocumento;
+    return(C4::Modelo::UsrRefTipoDocumento->new());
 }
-
 
 sub getCategory_code{
     my ($self) = shift;
@@ -157,34 +157,34 @@ sub setBorrowing_days{
 
 
 sub obtenerValoresCampo {
-	my ($self)=shift;
+    my ($self)=shift;
     my ($campo, $orden)=@_;
 
-	use C4::Modelo::UsrRefCategoriaSocio::Manager;
- 	my $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categorias_socio
-						( select   => [$self->meta->primary_key ,$campo],
-						  sort_by => ($orden) );
+    use C4::Modelo::UsrRefCategoriaSocio::Manager;
+    my $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio
+                        ( select   => [$self->meta->primary_key ,$campo],
+                          sort_by => ($orden) );
     my @array_valores;
 
     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
-		my $valor;
-		$valor->{"clave"}=$ref_valores->[$i]->getCategory_code;
-		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+        my $valor;
+        $valor->{"clave"}=$ref_valores->[$i]->getCategory_code;
+        $valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
         push (@array_valores, $valor);
     }
-	
+    
     return (scalar(@array_valores), \@array_valores);
 }
 
 sub obtenerValorCampo {
-	my ($self)=shift;
-    	my ($campo,$id)=@_;
-	use C4::Modelo::UsrRefCategoriaSocio::Manager;
- 	my $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categorias_socio
-						( select   => [$campo],
-						  query =>[ categorycode => { eq => $id} ]);
-    	
-# 	return ($ref_valores->[0]->getCampo($campo));
+    my ($self)=shift;
+        my ($campo,$id)=@_;
+    use C4::Modelo::UsrRefCategoriaSocio::Manager;
+    my $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio
+                        ( select   => [$campo],
+                          query =>[ categorycode => { eq => $id} ]);
+        
+#   return ($ref_valores->[0]->getCampo($campo));
   if(scalar(@$ref_valores) > 0){
     return ($ref_valores->[0]->getCampo($campo));
   }else{
@@ -195,12 +195,12 @@ sub obtenerValorCampo {
 
 sub getCampo{
     my ($self) = shift;
-	my ($campo)=@_;
+    my ($campo)=@_;
     
-	if ($campo eq "categorycode") {return $self->getCategory_code;}
-	if ($campo eq "description") {return $self->getDescription;}
+    if ($campo eq "categorycode") {return $self->getCategory_code;}
+    if ($campo eq "description") {return $self->getDescription;}
 
-	return (0);
+    return (0);
 }
 
 
@@ -221,15 +221,15 @@ sub getAll{
     my $ref_valores;
     if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
         push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
-        $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categorias_socio(query => \@filtros,);
+        $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio(query => \@filtros,);
     }else{
-        $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categorias_socio(query => \@filtros,
+        $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio(query => \@filtros,
                                                                     limit => $limit, 
                                                                     offset => $offset, 
                                                                     sort_by => ['description'] 
                                                                    );
     }
-    my $ref_cant = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categorias_socio_count(query => \@filtros,);
+    my $ref_cant = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio_count(query => \@filtros,);
     my $self_descripcion = $self->getDescription;
 
     my $match = 0;

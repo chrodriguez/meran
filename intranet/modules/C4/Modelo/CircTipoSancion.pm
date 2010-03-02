@@ -38,7 +38,7 @@ __PACKAGE__->meta->setup(
         },
 
 	    ref_categoria_socio => {
-            class      => 'C4::Modelo::UsrRefCategoriasSocio',
+            class      => 'C4::Modelo::UsrRefCategoriaSocio',
             column_map => { categoria_socio => 'categorycode' },
             type       => 'one to one',
         },
