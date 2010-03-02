@@ -27,6 +27,7 @@ if ($action eq 'editar'){
 }
 else{
     $t_params->{'novedad'} = C4::AR::Novedades::getNovedad($id);
+    $t_params->{'editing'} = 1;
 }
 
 

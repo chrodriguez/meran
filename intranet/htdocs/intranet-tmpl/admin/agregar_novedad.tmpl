@@ -12,11 +12,17 @@
 
 [% USE HTML %]
 
-
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Agregar novedad de OPAC" | i18n %]:</legend>
         <div class="form">
-            <form id="form_novedad" action="/cgi-bin/koha/admin/agregar_novedad.pl" method="POST">
+            [% IF editing %]
+                <form id="form_novedad" action="/cgi-bin/koha/admin/editar_novedad.pl" method="POST">
+                    <input type="hidden" id="action" name="action" value="editar">
+                    <input type="hidden" id="novedad_id" name="novedad_id" value="[% novedad.id %]">
+            [% ELSE %]
+                <form id="form_novedad" action="/cgi-bin/koha/admin/agregar_novedad.pl" method="POST">
+                    <input type="hidden" id="action" name="action" value="agregar">
+            [% END %]
                         <label for="titulo">[% "Titulo" | i18n %]</label>
                           <input type="text" id="titulo" name="titulo" value="[% novedad.getTitulo %]">
                           <br />
@@ -30,7 +36,6 @@
                           <br />
 
                         <input type="hidden" id="token" name="token" value="[% token %]">
-                        <input type="hidden" id="action" name="action" value="agregar">
 
                         <input type="submit" value="[% 'Agregar' | i18n %]">
 

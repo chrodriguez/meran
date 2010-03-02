@@ -25,11 +25,11 @@ sub agregar{
     use HTML::Entities;
     my $contenido = $input->param('contenido');
 
-    $contenido = encode_entities($contenido);
-    $contenido=~ s/&lt;/</gi;
-    $contenido=~ s/&gt;/>/gi;
-    $contenido=~ s/<script>/_/gi;
-    $contenido=~ s/<\/script>/_/gi;
+#     $contenido = encode_entities($contenido);
+#     $contenido=~ s/&lt;/</gi;
+#     $contenido=~ s/&gt;/>/gi;
+#     $contenido=~ s/<script>/_/gi;
+#     $contenido=~ s/<\/script>/_/gi;
     %params = $input->Vars;
     $params{'contenido'} = $contenido;
 
@@ -41,7 +41,7 @@ sub editar{
 
     my ($input) = @_;
     my %params;
-    my $novedad = getNovedad($input->param('id'));
+    my $novedad = getNovedad($input->param('novedad_id'));
 
     use HTML::Entities;
     my $contenido = $input->param('contenido');
