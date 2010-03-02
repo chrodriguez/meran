@@ -47,7 +47,7 @@
     <br />
 </div>
 <form action="/cgi-bin/koha/reviews.pl" method="post">
-    <textarea id="review" name="review" class="self_review" style="width: 100%"></textarea>
+    <textarea id="review" name="review" class="self_review" style="width: 88.3%"></textarea>
     <input type="hidden" name="token" value="[% token %]" />
     <input type="hidden" name="id2" value="[% HTML.escape(id2) %]" />
     <input type="submit" value="[% 'Enviar' | i18n %]" />

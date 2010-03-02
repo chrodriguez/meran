@@ -1,3 +1,4 @@
+
 DROP TABLE IF EXISTS `cat_visualizacion_intra`;
 CREATE TABLE IF NOT EXISTS `cat_visualizacion_intra` (
   `id` int(11) NOT NULL auto_increment,
@@ -114,5 +115,4 @@ INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo
 -- Para la nueva biblia --
  ALTER TABLE `pref_estructura_subcampo_marc` CHANGE `subcampo` `subcampo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ;
 
--- GASPO ROMPISTE TODO!!!
-RENAME TABLE `usr_ref_categoria_socio`  TO `usr_ref_categorias_socio` ;
+-- GASPO ROMPISTE TODO!!! ( NO ROMPI NADA!!!!!!!!!!!!!!!!! :P)
