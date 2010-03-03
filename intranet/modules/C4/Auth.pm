@@ -583,8 +583,8 @@ C4::AR::Debug::debug("desde checkauth===========================================
 
                 $session->param('lasttime', time());
 
-                my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-                $flags = $socio->tienePermisos($flagsrequired);
+                my ($socio) = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+                $flags      = $socio->tienePermisos($flagsrequired);
 
                 if ($flags) {
                     $loggedin = 1;
@@ -663,6 +663,10 @@ C4::AR::Debug::debug("desde checkauth===========================================
             $session->param('SERVER_GENERATED_SID', 1);
 
             my ($socio) = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+            #Si se logueo correctamente en intranet entonces guardo la fecha
+            my $today = Date::Manip::ParseDate("today");
+            $socio->setLast_login($today);
+            $socio->save();
             #el usuario se logueo bien, ya no es necessario el nroRandom
             $random_number= 0;
             #guardo la session en la base
@@ -696,10 +700,20 @@ C4::AR::Debug::debug("desde checkauth===========================================
                     
                     #Genera una comprovacion una vez al dia, cuando se loguea el primer usuario
                     my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"));
+C4::AR::Debug::debug("lastlogin, today ".Date::Manip::Date_Cmp($lastlogin,$today));
+C4::AR::Debug::debug("lastlogin".$lastlogin);
+C4::AR::Debug::debug("today ".$today);
+
                     if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
                         # lastlogin es anterior a hoy
                         # Hoy no se enviaron nunca los mails de recordacion
                         _enviarCorreosDeRecordacion($today);
+#                         _realizarOperaciones({ type => $type , socio => $socio });
+                        if ($type eq 'intranet') {
+                        ##Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
+                            C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeINTRA\n");
+                            t_operacionesDeINTRA($socio);
+                        }# end if ($type eq 'intra')
                     }
                 }#end if ($lastlogin)
 
@@ -709,20 +723,26 @@ C4::AR::Debug::debug("desde checkauth===========================================
                     my ($count,@holidays)= C4::AR::Utilidades::getholidays();
                     C4::AR::Utilidades::savedatemanip(@holidays);
                 }
-                
-                _realizarOperaciones({ type => $type , socio => $socio });
+
+                if ($type eq 'opac') {
+                    #Si es un usuario de opac que esta sancionado entonces se borran sus reservas
+                    C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeOPAC\n");
+                    t_operacionesDeOPAC($socio);
+                } 
     
             }# end if ($flags = haspermission($dbh, $userid, $flagsrequired))
-             if ($type eq 'opac') {
+
+            if ($type eq 'opac') {
                 $session->param('redirectTo', '/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
 #                 redirectTo('/cgi-bin/koha/opac-user.pl?token='.$params{'token'});
                 redirectToNoHTTPS('/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
                 $session->secure(0);
-             }else{
+            }else{
                 C4::AR::Debug::debug("DESDE Auth, redirect al MAIN");
                 $session->param('redirectTo', '/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
                 redirectTo('/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
             }
+
         } else {
             #usuario o password invalida
             if ($userid) {
@@ -812,19 +832,15 @@ sub _clear_sessions_from_DB {
 
 =item sub _realizarOperaciones
 
-    Esta funcion realiza las operaciones necesarias para la INTRA u OPAC
-    este es el tratamiento actual que se le esta dando a la password antes de guardar en la base de datos,
-    si cambia, solo deberia cambiarse este metodo
-
     Parametros: 
     $type: INTRA | OPAC
     $socio
 
 =cut
+# FIXME DEPRECATED??????
 sub _realizarOperaciones {
     my ($params) = @_;
     
-    #Se borran las reservas de los usuarios sancionados         
     if ($params->{'type'} eq 'opac') {
     #Si es un usuario de opac que esta sancionado entonces se borran sus reservas
         C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeOPAC\n");
@@ -906,6 +922,7 @@ sub desencriptar{
     $sessionID, $userid, $remote_addr, $random_number, $token
 
 =cut
+# FIXME DEPRECATED????????????
 sub _save_session_db{
 	my ($sessionID, $userid, $remote_addr, $random_number, $token) = @_;
 
@@ -1116,10 +1133,10 @@ sub inicializarAuth{
     my $userid                      = undef;
 
     #guardo la session en la base
-    C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number, $params{'token'});
+#     C4::Auth::_save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number, $params{'token'});
     #se pasa el RANDOM_NUMBER al cliente, $t_params es una REFERENCIA
     $t_params->{'RANDOM_NUMBER'}    = $random_number;
-    C4::AR::Debug::debug("DUMP inicializarAuth => ".$session->dump());
+#     C4::AR::Debug::debug("DUMP inicializarAuth => ".$session->dump());
 
     return ($session);
 }
@@ -1487,9 +1504,10 @@ sub _session_log {
 sub t_operacionesDeOPAC{
 	my ($socio) = @_;
 
-    my $msg_object= C4::AR::Mensajes::create();
-	my $db= $socio->db;
-    $db->{connect_options}->{AutoCommit} = 0;
+    C4::AR::Debug::debug("t_operacionesDeOPAC !!!!!!!!!!!!!!!!!");
+    my $msg_object                          = C4::AR::Mensajes::create();
+	my $db                                  = $socio->db;
+    $db->{connect_options}->{AutoCommit}    = 0;
     $db->begin_work;
 
 	eval{
@@ -1520,6 +1538,7 @@ sub t_operacionesDeOPAC{
 sub t_operacionesDeINTRA{
 	my ($socio) = @_;
 
+    C4::AR::Debug::debug("t_operacionesDeINTRA !!!!!!!!!!!!!!!!!");
     my $msg_object= C4::AR::Mensajes::create();
     my $db= $socio->db;
     $db->{connect_options}->{AutoCommit} = 0;
@@ -1535,10 +1554,10 @@ sub t_operacionesDeINTRA{
 		$reserva->cancelar_reservas_no_regulares($userid);
 		#Ademas, se borran las reservas vencidas
 		$reserva->cancelar_reservas_vencidas($userid, $db);	
-		#Si se logueo correctamente en intranet entonces guardo la fecha
-        my $today = Date::Manip::ParseDate("today");
-        $socio->setLast_login($today);
-        $socio->save();
+# 		#Si se logueo correctamente en intranet entonces guardo la fecha
+#         my $today = Date::Manip::ParseDate("today");
+#         $socio->setLast_login($today);
+#         $socio->save();
 
 		$db->commit;
 	};

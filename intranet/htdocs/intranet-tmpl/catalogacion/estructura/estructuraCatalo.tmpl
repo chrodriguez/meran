@@ -12,15 +12,15 @@
 var objAH;
 //Arreglos globales de objetos
 //arreglo de objetos campo
-CAMPOS_ARRAY= new Array();
+CAMPOS_ARRAY        = new Array();
 //arreglo de objetos subcampo
-SUBCAMPOS_ARRAY= new Array();
+SUBCAMPOS_ARRAY     = new Array();
 
 function inicializar(){
     //arreglo de objetos campo
-    CAMPOS_ARRAY= new Array();
+    CAMPOS_ARRAY        = new Array();
     //arreglo de objetos subcampo
-    SUBCAMPOS_ARRAY= new Array();
+    SUBCAMPOS_ARRAY     = new Array();
     $("#resultAgregarCampo").html('');
     $("#resultModificarCampo").html('');
 }
@@ -228,24 +228,18 @@ function eleccionCampo(){
 //se genera el combo en el cliente
 function updateEleccionCampo(responseText){
     $('#nombre_campo').html(CAMPOS_ARRAY[$("#campo").val()]);
-    //Arreglo de Objetos Global
-    var subcampos_array=JSONstring.toObject(responseText);
+    var subcampos_array = JSONstring.toObject(responseText);
     //se inicializa el combo
     $("#subcampo").html('');
     var options = "<option value='-1'>Seleccionar SubCampo</option>";
-//     var subcampo = new Object;    
-//     subcampo.liblibrarian = '';
-//     subcampo.obligatorio = '';
     
     for (x=0;x < subcampos_array.length;x++){
-//             SUBCAMPOS_ARRAY[ subcampos_array[x].tagsubfield ]= $.trim(subcampos_array[x].liblibrarian);
-        var subcampo = new Object;    
-        subcampo.liblibrarian = '';
-        subcampo.obligatorio = '';
-        subcampo.liblibrarian =  $.trim(subcampos_array[x].liblibrarian);
-        subcampo.obligatorio = $.trim(subcampos_array[x].obligatorio); 
-        SUBCAMPOS_ARRAY[ subcampos_array[x].subcampo ]= subcampo;
-//             SUBCAMPOS_ARRAY[ subcampos_array[x].tagsubfield ]= $.trim(subcampos_array[x].obligatorio); 
+        var subcampo                                    = new Object;    
+        subcampo.liblibrarian                           = '';
+        subcampo.obligatorio                            = '';
+        subcampo.liblibrarian                           = $.trim(subcampos_array[x].liblibrarian);
+        subcampo.obligatorio                            = $.trim(subcampos_array[x].obligatorio); 
+        SUBCAMPOS_ARRAY[ subcampos_array[x].subcampo ]  = subcampo;
 
         options+= "<option value=" + subcampos_array[x].subcampo +" >" + subcampos_array[x].subcampo + "</option>";
     }
@@ -340,7 +334,6 @@ function eleccionTablaRef(){
 function eleccionSubCampo(){
 
     if ($('#subcampo').val() != -1){
-//         $('#liblibrarian').val(SUBCAMPOS_ARRAY[$('#subcampo').val()]);
         $('#liblibrarian').val(SUBCAMPOS_ARRAY[$('#subcampo').val()].liblibrarian);
         if(SUBCAMPOS_ARRAY[$('#subcampo').val()].obligatorio == '1'){
         //si es obligatorio, no se pude cambiar
