@@ -100,11 +100,15 @@ function validateForm(func){
                   sexo: "required",
                   calle: "required",
                   ciudad: "required",
-                  nacimiento: "required",
-                  email: "required",
-                  
+
+                  nacimiento: {
+                        required: true,
+                        dateITA: true
+                  },
+                 
                   email: {
-                     email: true
+                        required: true,
+                        email: true
                   },
                },
                messages: {
@@ -170,24 +174,25 @@ function agregarUsuario(){
       }else{
         objAH.nro_socio= $('#nro_socio').val();
       }
-      objAH.sexo= $("input[@name=sexo]:checked").val();
-      objAH.calle= $('#calle').val();
-      objAH.nombre= $('#nombre').val();
-      objAH.nacimiento= $('#nacimiento').val();
-      objAH.email= $('#email').val();
-      objAH.telefono= $('#telefono').val();
-      objAH.cod_categoria= $('#categoria_socio_id').val();
-      objAH.ciudad= $('#id_ciudad').val();
-      objAH.alt_ciudad= $('#id_alt_ciudad').val();
-      objAH.alt_telefono= $('#alt_telefono').val();
-      objAH.apellido= $('#apellido').val();
-      objAH.id_ui= $('#id_ui').val();
-      objAH.tipo_documento= $('#tipo_documento_id').val();
-      objAH.credential_type= $('#credential').val();
-      objAH.nro_documento= $('#nro_documento').val();
-      objAH.legajo= $('#legajo').val();
-      objAH.changepassword= ( $('#changepassword').attr('checked') )?1:0;
-      objAH.tipoAccion= 'AGREGAR_USUARIO';
+
+      objAH.sexo            = $("input[@name=sexo]:checked").val();
+      objAH.calle           = $('#calle').val();
+      objAH.nombre          = $('#nombre').val();
+      objAH.nacimiento      = $('#nacimiento').val();
+      objAH.email           = $('#email').val();
+      objAH.telefono        = $('#telefono').val();
+      objAH.cod_categoria   = $('#categoria_socio_id').val();
+      objAH.ciudad          = $('#id_ciudad').val();
+      objAH.alt_ciudad      = $('#id_alt_ciudad').val();
+      objAH.alt_telefono    = $('#alt_telefono').val();
+      objAH.apellido        = $('#apellido').val();
+      objAH.id_ui           = $('#id_ui').val();
+      objAH.tipo_documento  = $('#tipo_documento_id').val();
+      objAH.credential_type = $('#credential').val();
+      objAH.nro_documento   = $('#nro_documento').val();
+      objAH.legajo          = $('#legajo').val();
+      objAH.changepassword  = ( $('#changepassword').attr('checked') )?1:0;
+      objAH.tipoAccion      = 'AGREGAR_USUARIO';
       objAH.sendToServer();
 }
 

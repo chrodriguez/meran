@@ -507,9 +507,12 @@ sub getNacimiento{
 
 sub setNacimiento{
     my ($self) = shift;
-    my ($nacimiento) = @_;
-    my $dateformat = C4::Date::get_date_format();
-    $nacimiento= C4::Date::format_date_in_iso($nacimiento, $dateformat);
+    my ($nacimiento)    = @_;
+
+    $nacimiento         = C4::AR::Validator::toValidDate($nacimiento);
+    my $dateformat      = C4::Date::get_date_format();
+    $nacimiento         = C4::Date::format_date_in_iso($nacimiento, $dateformat);
+
     $self->nacimiento($nacimiento);
 }
 

@@ -265,8 +265,24 @@ sub checkPassword{
 
 ################################# FIN FUNCIONES PARA PASSSWORD ########################
 
-################################# FUNCIONES PARA MAIL ##################################
+=item sub toValidDate
+    toma una fecha (valida o invalida) y la pasa a fecha valida
+=cut
+sub toValidDate {
+    my $date = shift;
 
+
+    use DateTime::Format::DateManip; 
+    my $dt = DateTime::Format::DateManip->parse_datetime( Date::Manip::ParseDate($date));
+#     C4::AR::Debug::debug("isValidDate 1ero!!!!!!!!!!!!! ".$dt);
+    $date = C4::Date::format_date($date, 'metric');
+#     C4::AR::Debug::debug("dateeeeeee formated ".$date);
+
+    return $date;
+}
+
+
+################################# FUNCIONES PARA MAIL ##################################
 
 =item
     Funcion que checkea que una direccion de mail cumpla con un patron estandar

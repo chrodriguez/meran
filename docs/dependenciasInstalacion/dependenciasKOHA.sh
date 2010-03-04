@@ -17,4 +17,5 @@ cpan -i Text::LevenshteinXS
 cpan -i Sphinx::Search
 cpan -i Sphinx::Manager
 cpan -i CGI::Session #libcgi-session-perl
+cpan -i DateTime::Format::DateManip
 
