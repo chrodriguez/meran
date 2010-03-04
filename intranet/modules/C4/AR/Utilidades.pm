@@ -1308,8 +1308,8 @@ sub HEXtoASCII {
     use Switch;
    
     switch ($char) {
-        case "\x20"    { $char =  "#"   }
-        else        { $char =  $char }
+        case "\x20"     { $char =  "#"   }
+        else            { $char =  $char }
     }
 
     return $char;

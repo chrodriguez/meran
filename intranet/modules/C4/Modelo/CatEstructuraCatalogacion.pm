@@ -24,7 +24,8 @@ __PACKAGE__->meta->setup(
         visible             => { type => 'integer', default => 1, not_null => 1 },
 #         repetible           => { type => 'integer', default => 1},
         idinforef           => { type => 'integer', length => 11, not_null => 0 },
-        grupo               => { type => 'integer', length => 11, not_null => 0 },
+# NO SE USA MAS, AL USAR MARC_RECORD
+#         grupo               => { type => 'integer', length => 11, not_null => 0 },
         idCompCliente       => { type => 'varchar', length => 255, not_null => 1 },
         fijo                => { type => 'integer', length => 1, not_null => 1 },  #modificable = 0 / no modificable = 1
     ],
@@ -108,10 +109,22 @@ sub agregar{
         $self->setFijo(0); #por defecto, todo lo que se ingresa como estructura del catalogo NO ES FIJO
         $self->save();
     
-        if($self->tieneReferencia){
-        #si tiene referencia....
+#         if($self->tieneReferencia){
+#         #si tiene referencia....
+# 
+#         }
 
+        if ($data_hash->{'referencia'}) {
+            #es necesario informacion de referencia se crea una nueva
+            $data_hash->{'id_est_cat'}  = $self->id;
+            my $pref_temp = C4::Modelo::PrefInformacionReferencia->new(db => $self->db);
+            $pref_temp->agregar($data_hash);
+            $pref_temp->save();
+
+            $self->setIdInfoRef($pref_temp->getIdInfoRef);
         }
+
+        $self->save();
 
     }
 
