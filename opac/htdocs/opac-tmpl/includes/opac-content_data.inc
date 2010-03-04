@@ -1,20 +1,21 @@
-        <!-- Content unit - One column -->
+[% USE HTML %]
+      <!-- Content unit - One column -->
         <h1 class="block">[% 'Novedades de la biblioteca' | i18n %]</h1>
         <div class="column1-unit">
 
           [% IF !novedades %]
-                  <a href="#">[% 'Sin novedades' | i18n %].</a>
+                  <span class="highlighted">[% 'Sin novedades' | i18n %].</span>
           [% END %]
           [% FOREACH novedad IN novedades %]
               <h1><a href='/cgi-bin/koha/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% novedad.getTitulo %]</a></h1>
-              <h3>[% novedad.getFechaLegible %], [% 'por ' | i18n %] <a href="#">[% novedad.getUsuario %]</a></h3>
+              <h3>[% novedad.getFechaLegible %], [% 'por ' | i18n %] <span class="highlighted">[% novedad.getUsuario %]</span></h3>
               <p>
-                  [% novedad.getResumen %]
+                  [% HTML.escape(novedad.getResumen) %]
                   <a href='/cgi-bin/koha/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% 'Leer m&aacute;s' | i18n %] &raquo;</a>
               </p>
               <p class="details">| 
-                  [% 'Acutalizado por' | i18n %] <a href="#"> [% novedad.getUsuario %] </a> | [% 'Categor&iacute;a' | i18n %]: 
-                  <a href="#">[% novedad.getCategoria %]</a> |
+                  [% 'Acutalizado por' | i18n %] <span class="highlighted"> [% novedad.getUsuario %] </span> | [% 'Categor&iacute;a' | i18n %]: 
+                  <span class="highlighted">[% novedad.getCategoria %]</span> |
               </p>
           [% END %]
           

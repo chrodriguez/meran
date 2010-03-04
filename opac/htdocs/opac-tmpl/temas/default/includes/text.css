@@ -152,3 +152,8 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .message_text{
   font-size: 17px;
 }
+
+.highlighted{
+  color:#a52612;
+  font-weight: bold;
+}

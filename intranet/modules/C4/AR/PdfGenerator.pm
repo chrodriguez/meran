@@ -338,7 +338,6 @@ sub batchCardsGenerator {
 #genera a partir de una coordenada
 sub generateCard {
      my ($nro_socio,$x,$y,$pdf) = @_;
-
     my $phone;
     #Datos del usuario
     my $socio = &C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
@@ -351,7 +350,6 @@ sub generateCard {
     my ($pagewidth, $pageheight) = $pdf->getPageDimensions();
     $pdf->setSize(7);
     my $picturesDir= C4::Context->config("picturesdir");
-    C4::AR::Debug::debug("PICTURES DIR: ".$picturesDir);
     my $foto= undef;
     if (opendir(DIR, $picturesDir)) {
         my $pattern= $nro_socio.".*";
@@ -377,26 +375,31 @@ sub generateCard {
      #Write the borrower data into the pdf file
      $pdf->setSize(7);
      $pdf->setFont("Arial-Bold");
-     $pdf->addRawText(uc($socio->categoria->getDescription),$x,$pageheight - ($y+4));
-     $pdf->addRawText(uc($socio->ui->getNombre),$x,$pageheight - ($y+11));
+     $pdf->addRawText(_format(uc($socio->categoria->getDescription)),$x,$pageheight - ($y+4));
+     $pdf->addRawText(_format(uc($socio->ui->getNombre)),$x,$pageheight - ($y+11));
      $pdf->addRawText("BIBLIOTECA",$x,$pageheight - ($y+18));
      $pdf->setFont("Arial");
      $pdf->setSize(6);
 
-     my $address=$socio->ui->getDireccion;
+     my $address=_format($socio->ui->getDireccion);
      $pdf->addRawText($address,$x,$pageheight - ($y+25));
-
+use locale;
 #     FIXME falta FAX, blabla
      $phone = $socio->ui->getTelefono; 
      $pdf->addRawText($phone,$x,$pageheight - ($y+31));
      $pdf->setSize(8);
-     $pdf->addRawText("Apellido: ".$socio->persona->getApellido,$x+4,$pageheight - ($y+57) );
-     $pdf->addRawText("Nombre: ".$socio->persona->getNombre,$x+4,$pageheight - ($y+65));
-     $pdf->addRawText("Tipo de Lector: ".$socio->categoria->getDescription,$x+4,$pageheight - ($y+73));
-     $pdf->addRawText("".$socio->persona->documento->nombre.":". $socio->persona->getNro_documento,$x+4,$pageheight - ($y+81));
+     $pdf->addRawText("Apellido: "._format($socio->persona->getApellido),$x+4,$pageheight - ($y+57) );
+     $pdf->addRawText("Nombre: "._format($socio->persona->getNombre),$x+4,$pageheight - ($y+65));
+     $pdf->addRawText("Tipo de Lector: "._format($socio->categoria->getDescription),$x+4,$pageheight - ($y+73));
+     $pdf->addRawText(""._format($socio->persona->documento->getNombre).":". _format($socio->persona->getNro_documento),$x+4,$pageheight - ($y+81));
 }
 #############FIN CARNET########################
+sub _format{
+    my ($string) = @_;
 
+    $string = Encode::decode_utf8($string);
+    return($string);
+}
 =item
 datosBiblio
 Busca todos los datos de la biblioteca en que se encuentra asociado el usuario.
@@ -747,4 +750,3 @@ sub generateBookLabel {
     $pdf->setFont("Arial");
 }
 #############FIN Etiquetas########################
-
