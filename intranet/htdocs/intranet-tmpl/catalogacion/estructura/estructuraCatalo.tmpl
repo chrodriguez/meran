@@ -234,14 +234,17 @@ function updateEleccionCampo(responseText){
     var options = "<option value='-1'>Seleccionar SubCampo</option>";
     
     for (x=0;x < subcampos_array.length;x++){
+        var subcampo_string                             = $.trim(subcampos_array[x].subcampo)
         var subcampo                                    = new Object;    
+        
         subcampo.liblibrarian                           = '';
         subcampo.obligatorio                            = '';
         subcampo.liblibrarian                           = $.trim(subcampos_array[x].liblibrarian);
         subcampo.obligatorio                            = $.trim(subcampos_array[x].obligatorio); 
-        SUBCAMPOS_ARRAY[ subcampos_array[x].subcampo ]  = subcampo;
+        
+        SUBCAMPOS_ARRAY[ subcampo_string ]  = subcampo;
 
-        options+= "<option value=" + subcampos_array[x].subcampo +" >" + subcampos_array[x].subcampo + "</option>";
+        options+= "<option value=" + subcampo_string +" >" + subcampo_string + "</option>";
     }
     //se agrega la info al combo
     $("#subcampo").append(options);
