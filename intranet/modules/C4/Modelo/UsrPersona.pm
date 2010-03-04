@@ -51,7 +51,7 @@ __PACKAGE__->meta->setup(
       alt_ciudad_ref => 
       {
         class       => 'C4::Modelo::RefLocalidad',
-        key_columns => { alt_ciudad => 'LOCALIDAD' },
+        key_columns => { alt_ciudad => 'id' },
         type        => 'one to one',
       },
      documento => 
