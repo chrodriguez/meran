@@ -201,8 +201,7 @@ sub modificarVisibilidadOPAC{
     my ($self)=shift;
     my ($data_hash)=@_;
     #Asignando data...
-    use HTML::Entities;
-    $self->setNombre(encode_entities$data_hash->{'nombre'});
+    $self->setNombre($data_hash->{'nombre'});
     $self->setApellido($data_hash->{'apellido'});
     $self->setCalle($data_hash->{'direccion'});
     $self->setCiudad($data_hash->{'id_ciudad'});
