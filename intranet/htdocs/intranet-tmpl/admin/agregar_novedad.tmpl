@@ -32,13 +32,15 @@
                           <br />
 
                         <label for="contenido">[% "Contenido" | i18n %]</label>
-                          <textarea id="contenido" name="contenido" style="width: 88.3%">[% novedad.getContenido %]</textarea>
+                          <textarea id="contenido" name="contenido" style="width: 88.3%">[% HTML.escape(novedad.getContenido) %]</textarea>
                           <br />
 
                         <input type="hidden" id="token" name="token" value="[% token %]">
-
-                        <input type="submit" value="[% 'Agregar' | i18n %]">
-
+                        [% IF editing %]
+                            <input type="submit" value="[% 'Agregar' | i18n %]">
+                        [% ELSE %]
+                            <input type="submit" value="[% 'Modificar' | i18n %]">
+                        [% END %]
             </form>
         </div>
 </fieldset>

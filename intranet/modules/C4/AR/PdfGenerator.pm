@@ -375,26 +375,26 @@ sub generateCard {
      #Write the borrower data into the pdf file
      $pdf->setSize(7);
      $pdf->setFont("Arial-Bold");
-     $pdf->addRawText(to_hex(uc($socio->categoria->getDescription)),$x,$pageheight - ($y+4));
-     $pdf->addRawText(to_hex(uc($socio->ui->getNombre)),$x,$pageheight - ($y+11));
+     $pdf->addRawText(_format(uc($socio->categoria->getDescription)),$x,$pageheight - ($y+4));
+     $pdf->addRawText(_format(uc($socio->ui->getNombre)),$x,$pageheight - ($y+11));
      $pdf->addRawText("BIBLIOTECA",$x,$pageheight - ($y+18));
      $pdf->setFont("Arial");
      $pdf->setSize(6);
 
-     my $address=to_hex($socio->ui->getDireccion);
+     my $address=_format($socio->ui->getDireccion);
      $pdf->addRawText($address,$x,$pageheight - ($y+25));
 use locale;
 #     FIXME falta FAX, blabla
      $phone = $socio->ui->getTelefono; 
      $pdf->addRawText($phone,$x,$pageheight - ($y+31));
      $pdf->setSize(8);
-     $pdf->addRawText("Apellido: ".to_hex($socio->persona->getApellido),$x+4,$pageheight - ($y+57) );
-     $pdf->addRawText("Nombre: ".to_hex($socio->persona->getNombre),$x+4,$pageheight - ($y+65));
-     $pdf->addRawText("Tipo de Lector: ".to_hex($socio->categoria->getDescription),$x+4,$pageheight - ($y+73));
-     $pdf->addRawText("".to_hex($socio->persona->documento->getNombre).":". to_hex($socio->persona->getNro_documento),$x+4,$pageheight - ($y+81));
+     $pdf->addRawText("Apellido: "._format($socio->persona->getApellido),$x+4,$pageheight - ($y+57) );
+     $pdf->addRawText("Nombre: "._format($socio->persona->getNombre),$x+4,$pageheight - ($y+65));
+     $pdf->addRawText("Tipo de Lector: "._format($socio->categoria->getDescription),$x+4,$pageheight - ($y+73));
+     $pdf->addRawText(""._format($socio->persona->documento->getNombre).":". _format($socio->persona->getNro_documento),$x+4,$pageheight - ($y+81));
 }
 #############FIN CARNET########################
-sub to_hex{
+sub _format{
     my ($string) = @_;
 
     $string = Encode::decode_utf8($string);
