@@ -42,11 +42,16 @@
         [% END %]
     </li>
 
+<!--     <li class="sub_item"> -->
+<!--         <label for="tablaRef">[% 'Tabla de refencia' | i18n %]: </label> -->
+<!--         <select name="tablaRef" id="tablaRef" onChange="eleccionTablaRef()"> -->
+<!--             <option value="-1">[% 'Seleccionar TablaRef' | i18n %]</option> -->
+<!--         </select> -->
+<!--     </li> -->
+
     <li class="sub_item">
-        <label for="tablaRef">[% 'Tabla de refencia' | i18n %]: </label>
-        <select name="tablaRef" id="tablaRef" onChange="eleccionTablaRef()">
-            <option value="-1">[% 'Seleccionar TablaRef' | i18n %]</option>
-        </select>
+        <label for="tablas_ref">[% 'Tabla de referencia' | i18n %]: </label>
+        [% tabla_referencias %]
     </li>
 
     <div id="divCamposRef" valign="top" style="display:none">

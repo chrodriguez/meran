@@ -1308,8 +1308,8 @@ sub HEXtoASCII {
     use Switch;
    
     switch ($char) {
-        case "\x20"    { $char =  "#"   }
-        else        { $char =  $char }
+        case "\x20"     { $char =  "#"   }
+        else            { $char =  $char }
     }
 
     return $char;
@@ -1407,7 +1407,7 @@ sub buscarCiudades{
 
     my ($ciudad) = @_;
     my $dbh = C4::Context->dbh;
-    my $query = "   SELECT  ref_pais.nombre AS pais, ref_provincia.nombre AS provincia, 
+    my $query = "   SELECT  ref_localidad.id, ref_pais.nombre AS pais, ref_provincia.nombre AS provincia, 
                             ref_dpto_partido.nombre AS partido, ref_localidad.localidad AS localidad,
                             ref_localidad.nombre AS nombre 
 
@@ -2636,7 +2636,7 @@ sub ciudadesAutocomplete{
         my($cant, $result) = C4::AR::Utilidades::buscarCiudades($ciudad);# agregado sacar
         $textout= "";
         for (my $i; $i<$cant; $i++){
-            $textout.= $result->[$i]->{'localidad'}."|".$result->[$i]->{'nombre'}."\n";
+            $textout.= $result->[$i]->{'id'}."|".$result->[$i]->{'nombre'}."\n";
         }
     }
 
