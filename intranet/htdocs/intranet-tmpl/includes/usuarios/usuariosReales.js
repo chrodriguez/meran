@@ -93,6 +93,7 @@ function validateForm(func){
                 errorElement: "em",
                 errorClass: "error_adv",
                rules: {
+                  nro_documento: "required",  
 				  categoria_socio_id: "required",	
                   apellido: "required",
                   nombre: "required",

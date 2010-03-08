@@ -310,7 +310,7 @@ sub isValidDocument {
     $docType = C4::AR::Utilidades::trim($docType);
 
     if ($docType eq "DNI"){
-        if ( countAlphaNumericChars($docNumber) ){
+        if ( countNumericChars($docNumber) ){
             if (length(C4::AR::Utilidades::trim($docNumber)) > 0){
                 $checkResult = 1;
             }

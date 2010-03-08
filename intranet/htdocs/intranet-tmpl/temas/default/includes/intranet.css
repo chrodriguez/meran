@@ -285,12 +285,11 @@ tr.impar {
 .CEC_componente_corto {
    width: 25%;
 }
-/* ------------------------------------------------ estilos para Circulacion ------------------------------------------------ 
-----------------ESTO NO LO TOQUE PORQUE NO SE LA FUNCION POR FAVOR REVISEN!!!!----------------------------------------------------------*/
-/*em.error_adv{
+/* ------------------------------------------------ estilos para Circulacion ----------------------------------------------------------*/
+em.error_adv{
   background: transparent url(../imagenes/error.gif) no-repeat scroll 0 0;
   padding-left: 16px;
-}*/
+}
 
 div.error_adv{
   background: transparent url(../imagenes/error.gif) no-repeat scroll 0 0;
