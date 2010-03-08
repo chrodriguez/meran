@@ -263,14 +263,9 @@ div.pagination span.disabled {
 
 .review{
     background: InfoBackground;
+    float: left;
+    width: 90%;
 }
-
-.review pre{
-    margin-left: 10px;
-}
-
-
-
 
 .icon_borrar {
     background: transparent url(../imagenes/iconos/borrar.png) no-repeat;

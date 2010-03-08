@@ -157,3 +157,21 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
   color:#a52612;
   font-weight: bold;
 }
+
+.review p{
+    margin-left: 10px;
+    font-family:"Arial";
+    font-size: 20px;
+    text-align: justify;
+    width: 98%;
+}
+
+.review h2{
+    font-size: 20px;
+}
+
+.user_cite{
+    font-size: 20px;
+    font-style: italic;
+    color:blue;
+}

@@ -23,17 +23,17 @@
                                     );
     [% END %]
 </fieldset>
-<div id="reviews_all" style="width: 100%; " >
+<div id="reviews_all" style="width: 100%;">
     [% IF reviews %]
         [% FOREACH review IN reviews %]
-            <div style="float:left; width:90%" class="review" >
+            <div class="review">
                 <br />
-                <p style="width:100%; ">
+                <p>
                     [% review.getReview %]
                     [% IF socio.getNro_socio != review.socio.getNro_socio %]
                         <h2>[% 'Escrito por' | i18n %]:</h2> [% review.socio.persona.getApellido %], [% review.socio.persona.getNombre %] ([% review.socio.getNro_socio %])
                     [% ELSE %]
-                        <h2>[% 'Escrito por' | i18n %]:</h2> [% 'usted' | i18n %]
+                        <h2>[% 'Escrito por' | i18n %]: <span class="user_cite">[% 'usted' | i18n %]</span> </h2>
                     [% END %]
                 </p>
                 <br />
