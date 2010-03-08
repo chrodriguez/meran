@@ -135,7 +135,7 @@ sub gettemplate {
         $nombre_ui = $ui->getNombre();
     }
 
-	%params= (
+    %params= (
 # FIXME DEPRECATED
 			themelang           => ($opac ne 'intranet'? '/opac-tmpl/': '/intranet-tmpl/') ,
 # FIXME DEPRECATED
@@ -148,6 +148,7 @@ sub gettemplate {
             ui                  => $ui,
             actual_year         => $date->{'year'},
             localization_FLAGS  => C4::AR::Filtros::setFlagsLang('OPAC'),
+            HOST                => $ENV{HTTP_HOST},
 		);
 
 

@@ -60,12 +60,20 @@
           });
       [% END %]
   </script>
+  
+  <script type="text/javascript">
+    window.history.forward();
+    function noBack() { window.history.forward(); }
+</script>
+
 </head>
 
 <!-- Global IE fix to avoid layout crash when single word size wider than column width -->
 <!--[if IE]><style type="text/css"> body {word-wrap: break-word;}</style><![endif]-->
 
-<body>
+
+    
+<body onload="noBack();" onpageshow="if (event.persisted) noBack();" onunload="">
   <!-- Main Page Container -->
   <noscript> 
       <p>[% 'DEBE HABILITAR SOPORTE PARA JAVASCRIPT EN SU NAVEGADOR, DE LO CONTRARIO NO PODRA NAVEGAR EL SITIO.' | i18n %]</p> 
