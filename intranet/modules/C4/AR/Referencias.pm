@@ -88,7 +88,18 @@ use vars qw(@EXPORT @ISA);
             &obtenerTiposNivel3
           );
 
-
+# 
+# INSERT INTO `ref_estado` (`id`, `nombre`) VALUES
+# (4, 'Baja'),
+# (2, 'Compartido'),
+# (0, 'Disponible'),
+# (5, 'Ejemplar deteriorado'),
+# (6, 'En Encuadernación'),
+# (7, 'En Etiquetado'),
+# (8, 'En Impresiones'),
+# (9, 'En procesos técnicos'),
+# (1, 'Perdido');
+# 
 
 sub getIdRefDisponibilidadDomiciliaria{
     return 'ref_disponibilidad@0';
@@ -99,7 +110,7 @@ sub getIdRefDisponibilidadSalaLectura{
 }
 
 sub getIdRefEstadoBaja{
-    return 'ref_estado@1';
+    return 'ref_estado4';
 }
 
 sub getIdRefEstadoCompartido{
@@ -107,22 +118,32 @@ sub getIdRefEstadoCompartido{
 }
 
 sub getIdRefEstadoDisponible{
-    return 'ref_estado@3';
+    return 'ref_estado@0';
 }
 
 sub getIdRefEstadoDeteriorado{
-    return 'ref_estado@4';
-}
-
-sub getIdRefEstadoEncuadernacion{
     return 'ref_estado@5';
 }
 
-sub getIdRefEstadoPerdido{
+sub getIdRefEstadoEncuadernacion{
     return 'ref_estado@6';
 }
 
+sub getIdRefEstadoPerdido{
+    return 'ref_estado@1';
+}
 
+sub getIdRefEstadoImpresiones{
+    return 'ref_estado@8';
+}
+
+sub getIdRefEstadoProcesosTecnicos{
+    return 'ref_estado@9';
+}
+
+sub getIdRefEstadoEtiquetado{
+    return 'ref_estado@7';
+}
 =item
     sub getInformacionReferenciaFromId
     
