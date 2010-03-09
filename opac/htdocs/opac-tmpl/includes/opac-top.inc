@@ -26,7 +26,7 @@
     token= '[% token %]';
     imagesForJS = '[% temas %]/[% tema %]/imagenes';
 // TODO no esta recuperando este valor
-    M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %];
+    M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %] + "";
   </script>
   [% INCLUDE 'message_OPAC.inc' %]
   <script src="/includes/jquery/jquery.js" type="text/javascript"></script>
