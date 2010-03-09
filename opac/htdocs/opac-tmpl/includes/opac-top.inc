@@ -2,9 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
-<script type='text/javascript' 
-        src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>
-        
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta http-equiv="cache-control" content="no-cache" />
   <meta http-equiv="expires" content="3600" />

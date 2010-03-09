@@ -450,10 +450,10 @@ sub detalleDisponibilidadNivel3{
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
         my %hash_nivel3;
 
-# FIXME si no se setea undef, muestra al usuario de un grupo tantas veces como ejemplares tenga, si este tiene un prestamo sobre 
-# un ejemplar del grupo.
-# con el debug no veo el nro_socio luego de my $socio, o sea lo que se esta mamando es el template, va haber q inicializar los flags
-# que van hacia el template.
+        # FIXME si no se setea undef, muestra al usuario de un grupo tantas veces como ejemplares tenga, si este tiene un prestamo sobre 
+        # un ejemplar del grupo.
+        # con el debug no veo el nro_socio luego de my $socio, o sea lo que se esta mamando es el template, va haber q inicializar los flags
+        # que van hacia el template.
         
         $hash_nivel3{'nro_socio'}           = undef;
         $hash_nivel3{'nivel3_obj'}          = $nivel3_array_ref->[$i]; 
