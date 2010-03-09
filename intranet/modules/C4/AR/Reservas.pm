@@ -47,7 +47,7 @@ sub getNivel3ParaReserva{
     my ($id2, $disponibilidad) = @_;
 
     my $diponibilidad_filtro       = C4::AR::Referencias::getIdRefDisponibilidadDomiciliaria(); # 1 =  Domiciliario
-    my $estado_disponible_filtro   = C4::AR::Referencias::getIdRefEstadoDisponible();           # 3 =  Disponible
+    my $estado_disponible_filtro   = C4::AR::Referencias::getIdRefEstadoDisponible();           # 0 =  Disponible
 
     my @filtros;
 
