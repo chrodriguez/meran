@@ -10,7 +10,7 @@
             $("#rating[% NIVEL.id1 %]").stars({
                 cancelShow: false,
                 split: 2,
-                disabled: true,
+                disabled: true
             });
             $("#rating[% NIVEL.id1 %]").stars("select",[% NIVEL.rating %]);
         });
