@@ -31,7 +31,6 @@
         <input type="radio" name="rate" value="10" id="rate10" />
         <input type="submit" value="Enviar" />
     </form>
-
     <br style="clear:both" />
     <p id="ajax_response[% id2 %]"></p>
 </div>
