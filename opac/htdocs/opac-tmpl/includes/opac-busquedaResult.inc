@@ -3,6 +3,19 @@
         $('.fancylink').fancybox();
     });
 </script>
+[% FOREACH NIVEL IN SEARCH_RESULTS %]
+    <script type="text/javascript">
+        $(function(){
+            $("#rating[% NIVEL.id1 %]").children().not(":radio").hide();
+            $("#rating[% NIVEL.id1 %]").stars({
+                cancelShow: false,
+                split: 2,
+                disabled: true,
+            });
+            $("#rating[% NIVEL.id1 %]").stars("select",[% NIVEL.rating %]);
+        });
+    </script>
+[% END %]
 [% IF SEARCH_RESULTS %]
     [% IF !not_show_search_details %]
         <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
@@ -182,17 +195,5 @@
     <br />
 [% END %]
 <!-- FIX PARA W3C PORQUE NO SE PERMITEN SCRIPT DENTRO DE TABLAS -->
-[% FOREACH NIVEL IN SEARCH_RESULTS %]
-    <script type="text/javascript">
-        $(function(){
-            $("#rating[% NIVEL.id1 %]").children().not(":radio").hide();
-            $("#rating[% NIVEL.id1 %]").stars({
-                cancelShow: false,
-                split: 2,
-                disabled: true,
-            });
-            $("#rating[% NIVEL.id1 %]").stars("select",[% NIVEL.rating %]);
-        });
-    </script>
-[% END %]
+
 
