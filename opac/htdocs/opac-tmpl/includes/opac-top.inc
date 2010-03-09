@@ -2,6 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
+<script type='text/javascript' 
+        src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>
+        
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta http-equiv="cache-control" content="no-cache" />
   <meta http-equiv="expires" content="3600" />
@@ -60,11 +63,6 @@
           });
       [% END %]
   </script>
-  
-  <script type="text/javascript">
-    window.history.forward();
-    function noBack() { window.history.forward(); }
-</script>
 
 </head>
 
@@ -73,7 +71,7 @@
 
 
     
-<body onload="noBack();" onpageshow="if (event.persisted) noBack();" onunload="">
+<body>
   <!-- Main Page Container -->
   <noscript> 
       <p>[% 'DEBE HABILITAR SOPORTE PARA JAVASCRIPT EN SU NAVEGADOR, DE LO CONTRARIO NO PODRA NAVEGAR EL SITIO.' | i18n %]</p> 
