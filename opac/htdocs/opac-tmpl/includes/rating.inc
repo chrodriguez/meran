@@ -10,7 +10,7 @@
                 });
             },
             cancelShow: false,
-            split: 2,
+            split: 2
         });
         $("#rating[% id2 %]").stars("select",[% rating %]);
     });
