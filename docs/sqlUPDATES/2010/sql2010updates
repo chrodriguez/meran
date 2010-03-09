@@ -116,3 +116,6 @@ INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo
  ALTER TABLE `pref_estructura_subcampo_marc` CHANGE `subcampo` `subcampo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ;
 
 -- GASPO ROMPISTE TODO!!! ( NO ROMPI NADA!!!!!!!!!!!!!!!!! :P)
+
+ALTER TABLE  `cat_rating` CHANGE  `rate`  `rate` FLOAT NULL;
+
