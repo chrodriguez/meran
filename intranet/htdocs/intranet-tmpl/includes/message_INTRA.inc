@@ -16,12 +16,11 @@
 <!-- FIXME falta acomodar los acentos -->
 
 <script type="text/javascript">
-
-//================================================Circulacion=================================================
+/*================================================Circulacion=================================================*/
 FALLO_NOTA = "[% 'La nota no se ha podido guardar' | i18n %]";
 NOTA_GUARDADA = "[% 'La nota se actualizo correctamente' | i18n %]";
 
-//================================================Catalogacion===================================================
+/*================================================Catalogacion===================================================*/
 CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'El campo no puede estar en blanco' | i18n %]";
 ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'Este campo es requerido, no lo deje en blanco' | i18n %]";
 ESTA_SEGURO_QUE_DESEA_BORRARLO= "&iquest;[% 'Est\u00e1 seguro que desea borrarlo' | i18n %]?";
@@ -37,9 +36,9 @@ SELECCIONE_EL_ESQUEMA = "[% 'Seleccione el esquema' %]";
 DEBE_SELECCIONAR_TODOS_LOS_CAMPOS_REQUERIDOS = "[% 'Debe seleccionar todos los campos requeridos.' %]";
 DEBE_SELECCIONAR_UNA_TABLA_DE_REFERENCIA = "[% 'Debe seleccionar una tabla de referencia.' %]";
 DEBE_SELECCIONAR_AL_MENOS_UN_CAMPO = "[% 'Debe seleccionar al menos un campo.' %]";
-//=============================================Fin===Catalogacion=================================================
+/*=============================================Fin===Catalogacion=================================================*/
 
-//================================================Usuarios========================================================
+/*================================================Usuarios========================================================*/
 INGRESE_UN_DATO= "[% 'Ingrese un dato' | i18n %]";
 NO_SE_SELECCIONO_NINGUN_USUARIO= "[% 'No seleccion\u00f3 ning\u00fan usuario' | i18n %]";
 // mensaje compuesto
@@ -86,23 +85,23 @@ USUARIOS_ALERT_TITLE= "[% 'Advertencia de Usuarios' | i18n %]";
 FALTA_INGRESAR_EL_NOMBRE_DEL_AUTORIZADO= "[% 'Falta ingresar el nombre del autorizado' | i18n %]";
 FALTA_INGRESAR_EL_DNI_DEL_AUTORIZADO= "[% 'Falta ingresar el DNI del autorizado' | i18n %]";
 FALTA_INGRESAR_EL_TELEFONO_DEL_AUTORIZADO= "[% 'Falta ingresar el Tel\u00e9fono del autorizado' | i18n %]";
-//================================================Fin==Usuarios==================================================
+/*================================================Fin==Usuarios==================================================*/
 
-//================================================Catalogo=======================================================
+/*================================================Catalogo=======================================================*/
 INGRESE_EL_USUARIO= "[% 'Ingrese el Usuario' | i18n %]";
 ERROR_ITSELF= "[% 'Error' | i18n %]";
-//================================================Fin==Catalogo==================================================
-//================================================Circulacion===================================================
+/*================================================Fin==Catalogo==================================================*/
+/*================================================Circulacion===================================================*/
 ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA= "&iquest;[% 'Esta seguro que desea cancelar la reserva' | i18n %]?";
-//=============================================Fin===Circulacion=================================================
-//================================================Control Autoridades==============================================
+/*=============================================Fin===Circulacion=================================================*/
+/*================================================Control Autoridades==============================================*/
 YA_EXISTE_EL_ELEMENTO= "[% 'Ya existe el elemento' | i18n %]";
 CONFIRMA_LA_BAJA_DEL_SEUDONIMO= "&iquest;[% 'Confirma la baja del seudonimo' | i18n %]?";
 CONFIRMA_LA_BAJA_DEL_SINONIMO= "&iquest;[% 'Confirma la baja del sinonimo' | i18n %]?";
 CONTROL_AUTORIDADES_TITLE= "[% 'Advertencia de Control de Autoridades' | i18n %]";
-//=============================================Fin===Control Autoridades===========================================
+/*=============================================Fin===Control Autoridades===========================================*/
 
-//================================================Visualizacion Opac==============================================
+/*================================================Visualizacion Opac==============================================*/
 AGREGAR_ENCABEZADO= "[% 'Agregar Encabezado' | i18n %]";
 CONFIRMA_LA_BAJA_DEL_ENCABEZADO = "[% 'Confirma la baja del Encabezado?' | i18n %]";
 INGRESE_EL_ENCABEZADO = "[% 'Ingrese el encabezado' | i18n %]";
@@ -115,9 +114,9 @@ INGRESE_EL_TEXTO_PREDECESOR= "[% 'Ingrese el texto predecesor' | i18n %]";
 INGRESE_EL_TEXTO_SUCESOR= "[% 'Ingrese el texto sucesor' | i18n %]";
 INGRESE_EL_SEPERADOR= "[% 'Ingrese el separador' | i18n %]";
 SELECCIONE_VISTA_OPAC= "[% 'Seleccione una opcion en todos los campos' | i18n %]";
-//=============================================Fin===Visualizacion Opac===========================================
+/*=============================================Fin===Visualizacion Opac===========================================*/
 
-//================================================Visualizacion INTRA==============================================
+/*================================================Visualizacion INTRA==============================================*/
 AGREGAR_ENCABEZADO= "[% 'Agregar Encabezado' | i18n %]";
 CONFIRMA_LA_BAJA_DEL_ENCABEZADO = "[% 'Confirma la baja del Encabezado?' | i18n %]";
 INGRESE_EL_ENCABEZADO = "[% 'Ingrese el encabezado' | i18n %]";
@@ -130,22 +129,22 @@ INGRESE_EL_TEXTO_PREDECESOR= "[% 'Ingrese el texto predecesor' | i18n %]";
 INGRESE_EL_TEXTO_SUCESOR= "[% 'Ingrese el texto sucesor' | i18n %]";
 INGRESE_EL_SEPERADOR= "[% 'Ingrese el separador' | i18n %]";
 SELECCIONE_VISTA_INTRA= "[% 'Seleccione una opcion en todos los campos' | i18n %]";
-//=============================================Fin===Visualizacion Opac===========================================
-//================================================Busquedas==============================================
+/*=============================================Fin===Visualizacion Opac===========================================*/
+/*================================================Busquedas==============================================*/
 SELECCIONE_AL_MENOS_UN_CAMPO_PARA_BUSCAR= "[% 'Seleccione al menos un campo para buscar' | i18n %]";
-//=============================================Fin===Busquedas===========================================
+/*=============================================Fin===Busquedas===========================================*/
 
-//================================================Reglas Sanciones==============================================
+/*================================================Reglas Sanciones==============================================*/
 POR_FAVOR_SELECCIONE_TIPO_PRESTAMO= "[% 'Por favor, seleccione un tipo de pr\u00e9stamo' | i18n %]";
 POR_FAVOR_SELECCIONE_CATEGORIA_SOCIO= "[% 'Por favor, seleccione una categor\u00eda de socio' | i18n %]"
-//=============================================Fin===Reglas Sanciones===========================================
+/*=============================================Fin===Reglas Sanciones===========================================*/
 
-//================================================Sanciones==============================================
+/*================================================Sanciones==============================================*/
 ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION= "&iquest;[% 'Est\u00e1 seguro que desea cancelar la sanci\u00f3n' | i18n %]?";
 SANCIONES_TITLE= "[% 'Advertencia de Sanciones' | i18n %]";
-//===============================================Fin=Sanciones===========================================
+/*===============================================Fin=Sanciones===========================================*/
 
-//====================================================Admin==========================================================
+/*====================================================Admin==========================================================*/
 DEBE_SELECCIONAR_UNA_OPCION= "[% 'Debe seleccionar al menos una opci\u00f3n' | i18n %]";
 DEBE_SELECCIONAR_UNA_TABLA_DE_REFERENCIA= "[% 'Debe seleccionar una tabla de referencia' | i18n %]";
 DEBE_SELECCIONAR_UN_VALOR_AUTORIZADO= "[% 'Debe seleccionar un valor autorizado' | i18n %]";
@@ -160,9 +159,9 @@ TITLE_TO_ASSIGN_REFERENCIES = "[% ' a este otro? ' | i18n %]";
 
 TITLE_DELETE_REFERENCE = "[% ' Desea eliminar la referencia con id  ' | i18n %]";
 
-//=================================================Fin===Admin=======================================================
+/*=================================================Fin===Admin=======================================================*/
 
-//====================================================Estante==========================================================
+/*====================================================Estante==========================================================*/
 ELIMINAR_ESTANTE_TITLE =  "[% 'Advertencia' | i18n %]";
 ELIMINAR_LOS_ESTANTES = "[% 'Usted est\u00e1 a punto de eliminar los estantes' | i18n %]";
 NO_SE_SELECCIONO_NINGUN_ESTANTE= "[% 'No seleccion\u00f3 ning\u00fan estante' | i18n %]";
@@ -170,6 +169,6 @@ NO_SE_SELECCIONO_NINGUN_ESTANTE= "[% 'No seleccion\u00f3 ning\u00fan estante' | 
 ELIMINAR_CONTENIDO_TITLE =  "[% 'Advertencia' | i18n %]";
 ELIMINAR_EL_CONTENIDO = "[% 'Usted est\u00e1 a punto de eliminar el contenido' | i18n %]";
 NO_SE_SELECCIONO_NINGUN_CONTENIDO= "[% 'No seleccion\u00f3 ning\u00fan contenido' | i18n %]";
-//=================================================Fin===Estante=======================================================
+/*=================================================Fin===Estante=======================================================*/
 
 </script>
