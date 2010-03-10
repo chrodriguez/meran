@@ -80,7 +80,7 @@ sub setCredentialType{
 sub getCredentialType{
     my ($self)=shift;
 
-    return($self->credential_type);
+    return($self->credential_type || C4::AR::Filtros::i18n("Indefinido"));
 }
 
 sub agregar{

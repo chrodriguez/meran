@@ -22,4 +22,5 @@ my ($template, $session, $t_params)= get_template_and_user({
 $t_params->{'onChange'} = "eleccionDeEjemplar()";
 $t_params->{'default'} = 'SIN SELECCIONAR';
 $t_params->{'combo_ejemplares'} = C4::AR::Utilidades::generarComboTipoNivel3($t_params);
+$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Catalogaci&oacute;n - Visualizaci&oacute;n de Intranet");
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

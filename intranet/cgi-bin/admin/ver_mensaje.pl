@@ -17,5 +17,5 @@ my ($template, $session, $t_params) = get_template_and_user({
 my ($id_mensaje) = $input->param('id');
 my ($mensaje) = C4::AR::MensajesContacto::ver($id_mensaje);
 $t_params->{'mensaje'} = $mensaje;
-
+$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Mensajes - Ver mensaje");
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

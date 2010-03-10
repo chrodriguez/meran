@@ -15,4 +15,6 @@ my ($template, $session, $t_params) = get_template_and_user({
 									debug => 1,
 			    });
 
+$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("B&uacute;squeda de Usuarios");
+
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

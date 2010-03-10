@@ -30,6 +30,6 @@ $params_combo{'class'}          = 'horizontal';
 my $selectNivel                 = &C4::AR::Utilidades::generarComboNiveles(\%params_combo);
 
 $t_params->{'selectNivel'}      = $selectNivel;
-
+$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Catalogaci&oacute;n - Estructura");
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -43,5 +43,6 @@ my $mapeo=CGI::scrolling_list(
 
 $t_params->{'type'}= 'intranet';
 $t_params->{'mapeo'}= $mapeo;
+$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Cat&aacute;logo - B&uacute;squeda Avanzada");
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

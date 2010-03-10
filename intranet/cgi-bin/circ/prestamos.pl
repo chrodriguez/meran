@@ -52,5 +52,5 @@ if($obj ne ""){
 }
 
 $t_params->{'usuarioID'}= $usuarioID;
-
+$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Circulaci&oacute;n - Pr&eacute;stamos");
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

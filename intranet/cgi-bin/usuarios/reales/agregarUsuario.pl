@@ -29,4 +29,5 @@ $t_params->{'comboDeCredentials'}   = $comboDeCredentials;
 $t_params->{'comboDeUI'}            = $comboDeUI;
 $t_params->{'addBorrower'}          = 1;
 
+$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Agregar Usuario");
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

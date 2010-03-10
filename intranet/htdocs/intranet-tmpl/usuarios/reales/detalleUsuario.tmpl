@@ -36,6 +36,7 @@
                  [% IF !(socio.getNro_socio == socio.getNro_documento) %]
                      <li> [% "Tarjeta de identificaci&oacute;n :" | i18n %] <strong> [% socio.getNro_socio %]</strong></li>
                   [% END %]
+                <li> [% "Tipo de Usuario (Permisos):" | i18n %]<strong> [% socio.getCredentialType %]</strong> </li>
                 </ul>
           </fieldset>
     [% IF socio.tieneAutorizado %]

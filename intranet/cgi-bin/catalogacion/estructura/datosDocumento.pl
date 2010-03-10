@@ -44,5 +44,5 @@ $params_combo{'default'}                = 'SIN SELECCIONAR';
 my $comboTiposNivel3                    = &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'comboTipoDocumento'}       = $comboTiposNivel3;
 $t_params->{'nivel'}                    = $nivel;
-
+$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Catalogaci&oacute;n - Datos del documento");
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

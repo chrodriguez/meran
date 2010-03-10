@@ -17,5 +17,5 @@ my ($template, $session, $t_params) = get_template_and_user({
 my ($id_novedad) = $input->param('id');
 my ($novedad) = C4::AR::Novedades::getNovedad($id_novedad);
 $t_params->{'novedad'} = $novedad;
-
+$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Novedades - Ver novedad");
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
