@@ -106,7 +106,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 
 	this.sendToServer= function(){
 
-			//se ejecuta el ajax
+			//se ejecuta el ajaxz
 			this.ajaxCallback(this);
 
 	}//end sendToServer

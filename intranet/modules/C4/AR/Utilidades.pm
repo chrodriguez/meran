@@ -2633,7 +2633,6 @@ sub ciudadesAutocomplete{
     my ($ciudad)= @_;
     my $textout;
     my @result;
-
     if ($ciudad){
         my($cant, $result) = C4::AR::Utilidades::buscarCiudades($ciudad);# agregado sacar
         $textout= "";

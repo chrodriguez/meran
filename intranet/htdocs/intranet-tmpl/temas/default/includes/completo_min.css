@@ -186,12 +186,14 @@ input.file{position:relative;text-align:right;-moz-opacity:0;filter:alpha(opacit
 .titulo_result{text-decoration:none;text-align:left;}
 .datos_tabla td{text-align:center;}
 .datos_tabla{width:100%;}
+.datos_tabla a{color: #5757FF;}
+.datos_tabla a:visited{color: #FF4848;}
 .warning{background-color:#990000;color:InfoBackground;}
 .error_en_parametros{color:red;text-align:center;}
-<<<<<<< .mine ======= .detalle_sanciones_sancionado{background-color:#CC3333;}
+.detalle_sanciones_sancionado{background-color:#CC3333;}
 .auth_info{background-color:#003366;}
 #mensajes{position:relative;background:#ffc;padding:5px;border:1px solid #CCCCCC;text-align:center;font-weight:bold;width:99%;}
->>>>>>> .r2234 .message_text{clear:both;}
+.message_text{clear:both;}
 .center_fieldset{margin:0 auto;}
 .editable:hover{background:InfoBackground;}
 .contenedor_paginador{width:45%;margin:0 auto;padding:4px;}
