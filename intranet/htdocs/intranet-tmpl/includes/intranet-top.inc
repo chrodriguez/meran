@@ -20,6 +20,8 @@
 <META HTTP-EQUIV="cache-control" content="public">
 <!-- <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/completo.css"> -->
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/completo_min.css"> 
+<link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/fancybox.css" />
+
 <!-- <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranetOLD.css">  -->
 <!-- Estos 3 css fueron a parar a completo.css 
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/intranet.css">
