@@ -112,7 +112,7 @@ sub gettemplate {
 								"/usr/local/koha/includes/",
 							],
  					ABSOLUTE => 1,
-                    CACHE_SIZE => 64,
+                    CACHE_SIZE => 200,
                     COMPILE_DIR => '/tmp/ttc',
                     RELATIVE => 1,
 					EVAL_PERL => 1,
