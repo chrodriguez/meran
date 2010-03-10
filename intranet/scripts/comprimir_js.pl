@@ -1,3 +1,4 @@
+#!/usr/bin/perl  
 use JavaScript::Minifier qw(minify);
 
 #procesa el archivo archivos_a_comprimir.txt y comprime los js
