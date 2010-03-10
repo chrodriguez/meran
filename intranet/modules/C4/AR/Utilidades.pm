@@ -1555,9 +1555,11 @@ sub generarComboPerfiles{
     my %options_hash; 
     @values[0]='SL';
     @values[1]='L';
-    @values[2]='custom';
+    @values[2]='E';
+    @values[3]='custom';
     $labels{"SL"}= 'SuperLibrarian';
     $labels{"L"}= 'Librarian';
+    $labels{"E"}= C4::AR::Filtros::i18n('Estudiante');
     $labels{"custom"}= 'Custom';
 
     $options_hash{'onChange'}= $params->{'onChange'} || 'profileSelection(this)';

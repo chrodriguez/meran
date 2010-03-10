@@ -356,6 +356,9 @@ sub armarPerfilCatalogo{
     }
     elsif ($perfil eq 'L'){
         $permisoTemp->setAll(ALTA | MODIFICACION | CONSULTA);
+    }
+    elsif ($perfil eq 'E'){
+        $permisoTemp->setAll(CONSULTA);
 
     }
     return $permisoTemp;
