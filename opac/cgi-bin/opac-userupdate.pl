@@ -38,6 +38,7 @@ $data_hash{'email'} = $input->param('email');
 $data_hash{'actualPassword'} = $input->param('actual_password');
 $data_hash{'newpassword'} = $input->param('new_password1');
 $data_hash{'newpassword1'} = $input->param('new_password2');
+$data_hash{'tema'} = $input->param('temas_opac') || 0;
 my $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email'];
 my $update_password = 0;
 if ($update_password = C4::AR::Utilidades::validateString($data_hash{'actualPassword'})){
@@ -56,6 +57,10 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     }else{
         my $cod_msg = C4::AR::Mensajes::getFirstCodeError($msg_object);
         $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($cod_msg,'opac');
+    }
+    
+    if ($data_hash{'tema'}){
+        $socio->setThemeSave($data_hash{'tema'});
     }
 
     my $dateformat = C4::Date::get_date_format();

@@ -135,6 +135,9 @@ sub gettemplate {
         $nombre_ui = $ui->getNombre();
     }
 
+    my $socio = C4::Auth::getSessionNroSocio();
+    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+    
     %params= (
 # FIXME DEPRECATED
 			themelang           => ($opac ne 'intranet'? '/opac-tmpl/': '/intranet-tmpl/') ,
@@ -149,6 +152,8 @@ sub gettemplate {
             actual_year         => $date->{'year'},
             localization_FLAGS  => C4::AR::Filtros::setFlagsLang('OPAC'),
             HOST                => $ENV{HTTP_HOST},
+            user_theme          => $socio->getTheme() || $tema,
+            user_theme_intra    => $socio->getThemeINTRA() || $tema,
 		);
 
 

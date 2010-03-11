@@ -17,6 +17,10 @@
 
     $(document).ready(function() {
         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
+        $("#temas_opac").change(function() {
+            $("link").attr("href","[% temas %]/"+$("#temas_opac").val()+"/includes/opac.css");
+            return false;
+        });
     });
 </script>
         <h1 class="block">[% 'Modificar sus datos personales' | i18n%]</h1>
@@ -58,6 +62,13 @@
                   <p>
                       <label for="newpassword2" class="left">[% 'Repetir contrase&ntilde;a' | i18n %]:</label>
                       <input type="password" name="newpassword2" id="newpassword2" class="field" autocomplete="off" />
+                  </p>
+              </fieldset>
+              <fieldset>
+                  <legend>&nbsp;[% 'Personalizacion de visualizaicion' | i18n %]&nbsp;</legend>
+                  <p>
+                      <label for="temas_opac" class="left">[% 'Tema' | i18n %]:</label>
+                      [% combo_temas %]
                   </p>
               </fieldset>
               <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Modificar datos' |  i18n %]" tabindex="12" /></p>

@@ -14,6 +14,7 @@ __PACKAGE__->meta->setup(
         explanation => { type => 'varchar', default => '', length => 200, not_null => 1 },
         options     => { type => 'text', length => 65535 },
         type        => { type => 'varchar', length => 20 },
+        categoria   => { type => 'varchar', length => 20 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -44,6 +45,17 @@ sub setValue{
     my ($self) = shift;
     my ($value) = @_;
     $self->value($value);
+}
+
+sub getCategoria{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->categoria));
+}
+
+sub setCategoria{
+    my ($self) = shift;
+    my ($value) = @_;
+    $self->categoria($value);
 }
 
 sub getShowValue{

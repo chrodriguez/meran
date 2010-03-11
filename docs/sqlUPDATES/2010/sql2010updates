@@ -119,3 +119,64 @@ INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo
 
 ALTER TABLE  `cat_rating` CHANGE  `rate`  `rate` FLOAT NULL;
 
+
+ALTER TABLE  `usr_socio` ADD  `theme` VARCHAR( 255 ) NULL DEFAULT  'default';
+ALTER TABLE  `usr_socio` ADD  `theme_intra` VARCHAR( 255 ) NULL DEFAULT  'default';
+
+ALTER TABLE  `pref_preferencia_sistema` ADD  `categoria` VARCHAR( 255 ) NOT NULL DEFAULT  'sistema';
+
+
+INSERT INTO  `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL ,  'tema_opac_test',  'test',  'Un tema para el OPAC', NULL , NULL ,  'temas_opac'
+);
+
+
+INSERT INTO  `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL ,  'tema_opac_default',  'default',  'Un tema para el OPAC', NULL , NULL ,  'temas_opac'
+);
+
+
+INSERT INTO  `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL ,  'tema_intra_test',  'test',  'Un tema para el INTRA', NULL , NULL ,  'temas_intra'
+);
+
+
+INSERT INTO  `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL ,  'tema_intra_default',  'default',  'Un tema para el INTRA', NULL , NULL ,  'temas_intra'
+);

@@ -88,6 +88,8 @@ use vars qw(@EXPORT @ISA);
     &redirectAndAdvice
     &generarComboDeAnios
     &generarComboDeCredentials
+    &generarComboTemasOPAC
+    &generarComboTemasINTRA
 
 );
 
@@ -164,6 +166,63 @@ sub generarComboDeAnios{
                                     -onChange  =>'consultar()'
                                 );
     return ($year_select);
+}
+
+
+sub generarComboTemasOPAC{
+    my ($params) = @_;
+    my (@label,@values);
+    my $temas = C4::AR::Preferencias::getPreferenciasByCategoria("temas_opac");
+    my %labels;
+    my %options_hash; 
+
+    foreach my $pref (@$temas){
+        push (@values,$pref->getValue());
+        $labels{$pref->getValue()} = $pref->getValue();
+    }
+    
+    my $socio = C4::Auth::getSessionNroSocio();
+    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+
+    $options_hash{'values'}= \@values;
+    $options_hash{'labels'}=\%labels;
+    $options_hash{'defaults'}= $socio->getTheme() || 'default';
+    $options_hash{'size'}= 1;
+    $options_hash{'name'}= 'temas_opac';
+    $options_hash{'id'}= 'temas_opac';
+
+    my $select = CGI::scrolling_list(\%options_hash);
+
+    return($select);
+
+}
+
+
+sub generarComboTemasINTRA{
+    my ($nro_socio) = @_;
+    my (@label,@values);
+    my $temas = C4::AR::Preferencias::getPreferenciasByCategoria("temas_intra");
+    my %labels;
+    my %options_hash; 
+
+    foreach my $pref (@$temas){
+        push (@values,$pref->getValue());
+        $labels{$pref->getValue()} = $pref->getValue();
+    }
+    
+    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::Modelo::UsrSocio->new();
+
+    $options_hash{'values'}= \@values;
+    $options_hash{'labels'}=\%labels;
+    $options_hash{'defaults'}= $socio->getThemeINTRA() || 'default';
+    $options_hash{'size'}= 1;
+    $options_hash{'name'}= 'temas_intra';
+    $options_hash{'id'}= 'temas_intra';
+
+    my $select = CGI::scrolling_list(\%options_hash);
+
+    return($select);
+
 }
 
 sub generarComboDeCredentials{
@@ -1648,7 +1707,8 @@ sub generarComboCategoriasDeSocio{
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultCategoriaSocio");
 
-    push (@select_categorias_array, 'SIN SELECCIONAR');
+    push (@select_categorias_array, '');
+    $select_categorias_hash{''} = "SIN SELECCIONAR";
     $options_hash{'values'}= \@select_categorias_array;
     $options_hash{'labels'}= \%select_categorias_hash;
 
@@ -1949,7 +2009,8 @@ sub generarComboUI{
         push (@select_ui, 'ALL');
         $select_ui{'ALL'}='TODOS';
     }else{
-        push (@select_ui, 'SIN SELECCIONAR');
+        push (@select_ui, '');
+        $select_ui{''}='SIN SELECCIONAR';
     }
     $options_hash{'values'}= \@select_ui;
     $options_hash{'labels'}= \%select_ui;

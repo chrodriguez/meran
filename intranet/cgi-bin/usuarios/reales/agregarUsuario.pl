@@ -23,6 +23,7 @@ my $comboDeTipoDeDoc        = &C4::AR::Utilidades::generarComboTipoDeDoc();
 my $comboDeUI               = &C4::AR::Utilidades::generarComboUI();
 my $comboDeCredentials      = &C4::AR::Utilidades::generarComboDeCredentials();
 
+$t_params->{'combo_temas'} = C4::AR::Utilidades::generarComboTemasINTRA();
 $t_params->{'combo_tipo_documento'} = $comboDeTipoDeDoc;
 $t_params->{'comboDeCategorias'}    = $comboDeCategorias;
 $t_params->{'comboDeCredentials'}   = $comboDeCredentials;
