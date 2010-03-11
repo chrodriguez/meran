@@ -153,6 +153,7 @@ sub gettemplate {
             localization_FLAGS  => C4::AR::Filtros::setFlagsLang('OPAC'),
             HOST                => $ENV{HTTP_HOST},
             user_theme          => $socio->getTheme() || $tema,
+            user_theme_intra    => $socio->getThemeINTRA() || $tema,
 		);
 
 

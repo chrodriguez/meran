@@ -56,6 +56,7 @@ function guardarModificacionUsuario(){
     objAH.changepassword= ( $('#changepassword').attr('checked') )?1:0;
 	objAH.tipoAccion= 'GUARDAR_MODIFICACION_USUARIO';
     objAH.credential_type= $('#credential').val();
+    objAH.tema= $('#temas_intra').val();
  	objAH.sendToServer();
 
 }
@@ -164,7 +165,7 @@ function updateEliminarUsuario(responseText){
 //*********************************************Fin***Eliminar Usuario*********************************************
 
 
-//************************************************Agregar Usuario**********************************************
+//************************************************gu Usuario**********************************************
 function agregarUsuario(){
 
       objAH=new AjaxHelper(updateAgregarUsuario);
@@ -194,6 +195,8 @@ function agregarUsuario(){
       objAH.legajo          = $('#legajo').val();
       objAH.changepassword  = ( $('#changepassword').attr('checked') )?1:0;
       objAH.tipoAccion      = 'AGREGAR_USUARIO';
+      objAH.tema= $('#temas_intra').val();
+
       objAH.sendToServer();
 }
 

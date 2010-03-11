@@ -163,6 +163,7 @@ sub convertirEnSocio{
         $estado->agregar($data_hash);
         $data_hash->{'id_estado'}= $estado->getId_estado;
         $socio->agregar($data_hash);
+        $socio->setThemeINTRA($data_hash->{'tema'} || 'default');
 }
 
 

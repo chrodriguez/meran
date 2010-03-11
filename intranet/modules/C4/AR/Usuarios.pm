@@ -565,6 +565,7 @@ sub actualizarSocio {
         eval {
             my $socio = getSocioInfoPorNroSocio($params->{'nro_socio'});
             $socio->modificar($params);
+            $socio->setThemeINTRA($params->{'tema'} || 'default');
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
         };
 

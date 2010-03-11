@@ -31,6 +31,7 @@ __PACKAGE__->meta->setup(
         is_super_user                    => { type => 'integer', default => 0, not_null => 1 },
         credential_type                  => { type => 'varchar', length => 255, not_null => 1, default => 'estudiante' },
         theme                            => { type => 'varchar', length => 255 },
+        theme_intra                      => { type => 'varchar', length => 255 },
     ],
 
      relationships =>
@@ -470,6 +471,18 @@ sub setTheme{
     my ($self) = shift;
     my ($theme) = @_;
     $self->theme($theme);
+}
+
+sub getThemeINTRA{
+    my ($self) = shift;
+    return ($self->theme_intra);
+}
+
+sub setThemeINTRA{
+    my ($self) = shift;
+    my ($theme) = @_;
+    $self->theme_intra($theme);
+    $self->save();
 }
 
 

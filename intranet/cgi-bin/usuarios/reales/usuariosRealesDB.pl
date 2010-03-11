@@ -240,7 +240,7 @@ Se genra la ventana para modificar los datos del usuario
 
         $t_params->{'socio_modificar'}= $socio;
         my $comboDeCredentials= &C4::AR::Utilidades::generarComboDeCredentials($t_params);
-
+        $t_params->{'combo_temas'} = C4::AR::Utilidades::generarComboTemasINTRA($nro_socio);
         $t_params->{'comboDeCredentials'}= $comboDeCredentials;
         $t_params->{'combo_tipo_documento'}= $comboDeTipoDeDoc;
         $t_params->{'comboDeCategorias'}= $comboDeCategorias;
