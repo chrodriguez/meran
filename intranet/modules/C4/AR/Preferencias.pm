@@ -39,6 +39,20 @@ sub getMenuPreferences{
     return (\%hash);
 }
 
+sub getPreferenciasByCategoria {
+
+    use C4::Modelo::PrefPreferenciaSistema;
+    use C4::Modelo::PrefPreferenciaSistema::Manager;
+    my ($str)=@_;
+    my $preferencias_array_ref;
+    my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
+  
+    $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
+                                        query => [ categoria => { eq => $str }],
+                                ); 
+
+    return (scalar($preferencias_array_ref), $preferencias_array_ref);
+}
 
 sub getPreferenciaLike {
 

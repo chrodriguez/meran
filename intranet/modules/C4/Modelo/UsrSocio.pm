@@ -30,6 +30,7 @@ __PACKAGE__->meta->setup(
         telefono_autorizado              => { type => 'varchar', length => 255, not_null => 0 },
         is_super_user                    => { type => 'integer', default => 0, not_null => 1 },
         credential_type                  => { type => 'varchar', length => 255, not_null => 1, default => 'estudiante' },
+        theme                            => { type => 'varchar', length => 255 },
     ],
 
      relationships =>
@@ -458,6 +459,25 @@ sub setId_estado{
     my ($self) = shift;
     my ($id_estado) = @_;
     $self->id_estado($id_estado);
+}
+
+sub getTheme{
+    my ($self) = shift;
+    return ($self->theme);
+}
+
+sub setTheme{
+    my ($self) = shift;
+    my ($theme) = @_;
+    $self->theme($theme);
+}
+
+
+sub setThemeSave{
+    my ($self) = shift;
+    my ($theme) = @_;
+    $self->theme($theme);
+    $self->save();
 }
 
 sub esRegular{

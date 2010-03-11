@@ -88,6 +88,7 @@ use vars qw(@EXPORT @ISA);
     &redirectAndAdvice
     &generarComboDeAnios
     &generarComboDeCredentials
+    &generarComboTemasOPAC
 
 );
 
@@ -165,6 +166,36 @@ sub generarComboDeAnios{
                                 );
     return ($year_select);
 }
+
+
+sub generarComboTemasOPAC{
+    my ($params) = @_;
+    my (@label,@values);
+    my $temas = C4::AR::Preferencias::getPreferenciasByCategoria("temas_opac");
+    my %labels;
+    my %options_hash; 
+
+    foreach my $pref (@$temas){
+        push (@values,$pref->getValue());
+        $labels{$pref->getValue()} = $pref->getValue();
+    }
+    
+    my $socio = C4::Auth::getSessionNroSocio();
+    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+
+    $options_hash{'values'}= \@values;
+    $options_hash{'labels'}=\%labels;
+    $options_hash{'defaults'}= $socio->getTheme() || 'default';
+    $options_hash{'size'}= 1;
+    $options_hash{'name'}= 'temas_opac';
+    $options_hash{'id'}= 'temas_opac';
+
+    my $select = CGI::scrolling_list(\%options_hash);
+
+    return($select);
+
+}
+
 
 sub generarComboDeCredentials{
 

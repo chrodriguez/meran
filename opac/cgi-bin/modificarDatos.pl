@@ -18,6 +18,6 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
             flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
     });
 
-$t_params->{'opac'};
+$t_params->{'combo_temas'} = C4::AR::Utilidades::generarComboTemasOPAC();
 $t_params->{'partial_template'}= "opac-modificar_datos.inc";
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

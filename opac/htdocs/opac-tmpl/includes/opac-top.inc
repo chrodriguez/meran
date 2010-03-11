@@ -13,9 +13,8 @@
   <meta name="distribution" content="global" />
   <meta name="description" content="OPAC" />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
-  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/default/includes/setup.css" />
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/default/includes/jquery.alerts.css" />
-  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/default/includes/text.css" />
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/[% user_theme %]/includes/opac.css" />
   <link rel="icon" type="image/x-icon" href="[% temas %]/default/imagenes/favicon.ico" />
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/fancybox.css" />
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/ui.stars.css" />
