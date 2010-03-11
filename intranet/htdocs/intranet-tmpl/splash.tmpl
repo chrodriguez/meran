@@ -12,7 +12,6 @@
 
 <script type="text/javascript">
     function loginSuccess(response){
-        window.close();
         var wOpen = window.open("https://[% HOST %]/cgi-bin/koha/mainpage.pl" , 'mainpage', 'status=no,menubar=no,scrollbars=yes,fullscreen=yes');
         wOpen.resizeTo( screen.availWidth, screen.availHeight );
     }
