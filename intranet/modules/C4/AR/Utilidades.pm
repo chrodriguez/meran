@@ -1707,7 +1707,8 @@ sub generarComboCategoriasDeSocio{
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultCategoriaSocio");
 
-    push (@select_categorias_array, 'SIN SELECCIONAR');
+    push (@select_categorias_array, '');
+    $select_categorias_hash{''} = "SIN SELECCIONAR";
     $options_hash{'values'}= \@select_categorias_array;
     $options_hash{'labels'}= \%select_categorias_hash;
 
@@ -2008,7 +2009,8 @@ sub generarComboUI{
         push (@select_ui, 'ALL');
         $select_ui{'ALL'}='TODOS';
     }else{
-        push (@select_ui, 'SIN SELECCIONAR');
+        push (@select_ui, '');
+        $select_ui{''}='SIN SELECCIONAR';
     }
     $options_hash{'values'}= \@select_ui;
     $options_hash{'labels'}= \%select_ui;

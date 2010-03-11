@@ -102,6 +102,7 @@ function validateForm(func){
                   sexo: "required",
                   calle: "required",
                   ciudad: "required",
+                  id_ui: "required",
 
                   nacimiento: {
                         required: true,
