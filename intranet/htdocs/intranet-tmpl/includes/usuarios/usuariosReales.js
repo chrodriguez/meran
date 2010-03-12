@@ -128,6 +128,7 @@ function validateForm(func){
                      required: POR_FAVOR_INGRESE_SU_NRO_DE_DNI,
                   },
                   email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
+                  id_ui: POR_FAVOR_INGRESE_UNA_UI
                }
             });
          });

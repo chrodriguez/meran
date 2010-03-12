@@ -1,6 +1,12 @@
 
 <link href="/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet">
+<link href="/includes/css/datePicker.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="/includes/jquery/datetimepicker/ui.datepicker-min.js"></script>
+<script type="text/javascript" src="/includes/jquery/dateMethods.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.datePicker.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.datePickerMultiMonth.js"></script>
+<script type="text/javascript" src="/includes/jquery/datePicker_locale_es.js"></script>
+
 
 
 <script type="text/javascript">
