@@ -1388,8 +1388,11 @@ sub redirectToAuth {
 #         $session->param('redirectTo', $url);
     }
 =cut
-    ($template_params->{'loginAttempt'})?$url = $url.'?loginAttempt=1':$url;
-    ($template_params->{'sessionClose'})?$url = $url.'?sessionClose=1':$url;
+    if($template_params->{'loginAttempt'}){
+        $url = $url.'?loginAttempt=1'
+    }elsif($template_params->{'sessionClose'}){
+        $url = $url.'?sessionClose=1';
+    }
 
     redirectTo($url);    
 }
