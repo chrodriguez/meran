@@ -90,6 +90,7 @@ use vars qw(@EXPORT @ISA);
     &generarComboDeCredentials
     &generarComboTemasOPAC
     &generarComboTemasINTRA
+    &getFeriados
 
 );
 
@@ -2915,6 +2916,43 @@ sub getDate{
     $date_hash{'month'} = $month;
 
     return (\%date_hash);
+}
+
+
+sub getFeriados{
+    use C4::Modelo::PrefFeriado;
+    use C4::Modelo::PrefFeriado::Manager;
+
+    my $feriados = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(sort_by => ['fecha DESC']);
+    my @dates;
+
+    foreach my $date (@$feriados){
+        push (@dates, $date->getFecha());
+    }
+
+    return (\@dates);
+}
+
+sub setFeriado{
+
+    my ($fecha,$status) = @_;
+
+    use C4::Modelo::PrefFeriado;
+    use C4::Modelo::PrefFeriado::Manager;
+    my $dateformat      = C4::Date::get_date_format();
+    $fecha              = C4::Date::format_date_in_iso($fecha, $dateformat);
+
+    my $feriado = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { eq => $fecha } ] );
+    
+    if (scalar(@$feriado)){
+        $feriado->[0]->setFecha($fecha,$status);
+    }else{
+        $feriado = C4::Modelo::PrefFeriado->new();
+        eval{
+            $feriado->agregar($fecha,$status);
+        };
+    }
+    return (1);
 }
 
 

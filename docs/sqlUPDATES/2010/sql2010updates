@@ -180,3 +180,7 @@ INSERT INTO  `pref_preferencia_sistema` (
 VALUES (
 NULL ,  'tema_intra_default',  'default',  'Un tema para el INTRA', NULL , NULL ,  'temas_intra'
 );
+
+
+ALTER TABLE  `pref_feriado` CHANGE  `fecha`  `fecha` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '0000-00-00';
+ALTER TABLE  `pref_feriado` ADD  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;

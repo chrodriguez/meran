@@ -5,6 +5,8 @@
 <script type="text/javascript" src="/includes/jquery/dateMethods.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.datePicker.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.datePickerMultiMonth.js"></script>
+<script type="text/javascript" src="/includes/jquery/datePicker_locale_es.js"></script>
+
 
 
 <script type="text/javascript">
