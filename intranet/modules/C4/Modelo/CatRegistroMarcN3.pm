@@ -193,7 +193,7 @@ sub getId_ui_poseedora{
     my ($self)      = shift;
 
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("995","c"));
+    my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record->subfield("995","c")));
 
     return C4::AR::Utilidades::trim($ref);
 }
@@ -205,7 +205,7 @@ sub getIdEstado{
 
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
-    return C4::AR::Utilidades::trim($marc_record->subfield("995","e"));
+    return C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record->subfield("995","e")));
 }
 
 
@@ -215,7 +215,7 @@ sub getEstadoObject{
     my ($self)      = shift;
 
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdEstado());
+    my $ref         = $self->getIdEstado();
      
     my $estado      = C4::AR::Referencias::getEstadoObject($ref);
         
@@ -281,7 +281,7 @@ sub estaPrestado {
 sub getEstado{
     my ($self) = shift;
 
-    my $estado_object = C4::AR::Referencias::getEstadoObject(C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdEstado));
+    my $estado_object = C4::AR::Referencias::getEstadoObject($self->getIdEstado);
 
     if($estado_object){
         return C4::AR::Utilidades::trim($estado_object->getNombre());
@@ -297,7 +297,7 @@ sub getEstado{
 sub estadoDisponible{
     my ($self) = shift;
 
-    return (C4::AR::Referencias::getNombreEstado(C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdEstado)) eq "Disponible");
+    return (C4::AR::Referencias::getNombreEstado($self->getIdEstado) eq "Disponible");
 }
 
 =head2 sub esParaSala
@@ -305,7 +305,11 @@ sub estadoDisponible{
 sub esParaSala{
     my ($self) = shift;
 
-    return (C4::AR::Referencias::getNombreDisponibilidad(C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdEstado)) eq "Sala de Lectura");
+    C4::AR::Debug::debug("CatRegistroMarcN3 => getIdDisponibilidad ".$self->getIdDisponibilidad);
+    C4::AR::Debug::debug("CatRegistroMarcN3 => getRefFromStringConArrobas ".C4::AR::Catalogacion::getRefFromStringConArrobas('ref_disponibilidad@1'));
+    C4::AR::Debug::debug("CatRegistroMarcN3 => getNombreDisponibilidad ".C4::AR::Referencias::getNombreDisponibilidad(C4::AR::Catalogacion::getRefFromStringConArrobas('ref_disponibilidad@1')));
+
+    return (C4::AR::Referencias::getNombreDisponibilidad($self->getIdDisponibilidad) eq "Sala de Lectura");
 }
 
 =head2 sub toMARC
