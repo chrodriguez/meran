@@ -47,7 +47,7 @@ sub getNivel3ParaReserva{
     my ($id2, $disponibilidad) = @_;
 
     my $diponibilidad_filtro       = C4::AR::Referencias::getIdRefDisponibilidadDomiciliaria(); # 1 =  Domiciliario
-    my $estado_disponible_filtro   = C4::AR::Referencias::getIdRefEstadoDisponible();           # 0 =  Disponible
+    my $estado_disponible_filtro   = C4::AR::Referencias::getIdRefEstadoDisponible();           # 3 =  Disponible
 
     my @filtros;
 
@@ -543,11 +543,10 @@ Verifica que el usuario no reserve un item y que ya tenga una reserva para el mi
 =cut
 sub _verificarTipoReserva {
     my ($nro_socio, $id2)=@_;
-    my $error= 0;
+
     my ($reservas, $cant)= getReservasDeSocio($nro_socio, $id2);
     #Se intento reservar desde el OPAC sobre el mismo GRUPO
-    if ($cant == 1){$error= 1;}
-    return ($error);
+    return ($cant ne 0);
 }
 
 =head2
@@ -562,9 +561,11 @@ sub getReservasDeSocio {
     my @filtros;
     push(@filtros, ( id2        => { eq => $id2}));
     push(@filtros, ( nro_socio  => { eq => $nro_socio} ));
-    push(@filtros, ( estado     => { ne => 'P'} ));
+#     push(@filtros, ( estado     => { ne => 'P'} ));
 
-    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, require_objects => ['nivel3','nivel2']);
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
+
+   C4::AR::Debug::debug("getReservasDeSocio -->>  reservas de $id2 de grupo de $nro_socio = ".scalar(@$reservas_array_ref) );
 
     return ($reservas_array_ref,scalar(@$reservas_array_ref));
 }
@@ -584,6 +585,24 @@ sub getReservasDeId2 {
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, require_objects => ['nivel3','nivel2']); 
 
     return ($reservas_array_ref,scalar(@$reservas_array_ref));
+}
+
+=head2
+    sub getDisponibilidadGrupo
+    devuelve si el grupo tiene ejemplares disponibles para reservar
+=cut
+sub disponibilidadGrupoParaReserva {
+    my ($id2) = @_;
+
+    my $nivel3_array_ref  = C4::AR::Nivel3::getNivel3FromId2($id2);
+
+    for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
+            C4::AR::Debug::debug("disponibilidadGrupoParaReserva>> estadoDisponible: ".$nivel3_array_ref->[$i]->estadoDisponible);
+            C4::AR::Debug::debug("disponibilidadGrupoParaReserva>> esParaSala: ".$nivel3_array_ref->[$i]->esParaSala);
+              
+             if (($nivel3_array_ref->[$i]->estadoDisponible) && (!$nivel3_array_ref->[$i]->esParaSala)) {return 1;}
+    }
+    return 0;
 }
 
 
@@ -729,17 +748,17 @@ sub _verificaciones {
 
     if ($socio){
     
-C4::AR::Debug::debug("tipo: $tipo\n");
-C4::AR::Debug::debug("id2: $id2\n");
-C4::AR::Debug::debug("id3: $id3\n");
-C4::AR::Debug::debug("socio: $nro_socio\n");
-C4::AR::Debug::debug("tipo_prestamo: $tipo_prestamo\n");
+      C4::AR::Debug::debug("tipo: $tipo\n");
+      C4::AR::Debug::debug("id2: $id2\n");
+      C4::AR::Debug::debug("id3: $id3\n");
+      C4::AR::Debug::debug("socio: $nro_socio\n");
+      C4::AR::Debug::debug("tipo_prestamo: $tipo_prestamo\n");
         
     #Se verifica que el usuario sea Regular
         if( !$socio->esRegular ){
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U300', 'params' => []} ) ;
-C4::AR::Debug::debug("Entro al if de regularidad\n");
+            C4::AR::Debug::debug("Entro al if de regularidad\n");
         }
     }else{
             $msg_object->{'error'}= 1;
@@ -751,7 +770,7 @@ C4::AR::Debug::debug("Entro al if de regularidad\n");
         (!$socio->getCumple_requisito) ){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U304', 'params' => []} ) ;
-C4::AR::Debug::debug("Entro al if de si cumple o no requisito\n");
+        C4::AR::Debug::debug("Entro al if de si cumple o no requisito\n");
     }
 
 #Se verifica que el usuario no tenga el maximo de prestamos permitidos para el tipo de prestamo.
@@ -769,6 +788,7 @@ C4::AR::Debug::debug("Entro al if que verifica la cantidad de prestamos");
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P102', 'params' => []} ) ;
 C4::AR::Debug::debug("Entro al if de prestamos especiales");
     }
+
 #Se verfica si el usuario esta sancionado
     my ($sancionado,$fechaFin)= C4::AR::Sanciones::permisoParaPrestamo($nro_socio, $tipo_prestamo);
 C4::AR::Debug::debug("sancionado: $sancionado ------ fechaFin: $fechaFin\n");
@@ -777,13 +797,15 @@ C4::AR::Debug::debug("sancionado: $sancionado ------ fechaFin: $fechaFin\n");
         C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'S200', 'params' => [C4::Date::format_date($fechaFin,$dateformat)]} ) ;
 C4::AR::Debug::debug("Entro al if de sanciones");
     }
-#Se verifica que el usuario no intente reservar desde el OPAC un item para SALA
-# FIXME que es esto??????????????????????????????????????????????????????????????????????????????????????????
-#     if(!$msg_object->{'error'} && $tipo eq "OPAC" && getDisponibilidadGrupo($id2) eq 'SA'){
-#         $msg_object->{'error'}= 1;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R007', 'params' => []} ) ;
-# C4::AR::Debug::debug("Entro al if de prestamos de sala");
-#     }
+
+#Se verifica que el usuario no intente reservar desde el OPAC un registro que no tiene items para prestamo domiciliario
+
+    C4::AR::Debug::debug("Disponibilidad???? ".disponibilidadGrupoParaReserva($id2));
+     if(!$msg_object->{'error'} && $tipo eq "OPAC" && !disponibilidadGrupoParaReserva($id2)){
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R007', 'params' => []} ) ;
+ C4::AR::Debug::debug("Entro al if de prestamos de sala");
+     }
 
 #Se verifica que el usuario no tenga dos reservas sobre el mismo grupo
     if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (&_verificarTipoReserva($nro_socio, $id2)) ){
@@ -800,7 +822,7 @@ C4::AR::Debug::debug("Entro al if de maximo de reservas desde OPAC");
     }
 
 
-#Se verifica que el usuario no tenga dos prestamos sobre el mismo grupo para el mismo tipo prestamo
+#Se verifica que el usuario no tenga un prestamo sobre el mismo grupo para el mismo tipo prestamo
     if( !($msg_object->{'error'}) && (&C4::AR::Prestamos::getCountPrestamosDeGrupoPorUsuario($nro_socio, $id2, $tipo_prestamo)) ){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;

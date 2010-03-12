@@ -180,3 +180,7 @@ INSERT INTO  `pref_preferencia_sistema` (
 VALUES (
 NULL ,  'tema_intra_default',  'default',  'Un tema para el INTRA', NULL , NULL ,  'temas_intra'
 );
+
+
+
+ ALTER TABLE `rep_historial_circulacion` CHANGE `id3` `id3` INT( 11 ) NULL ;
