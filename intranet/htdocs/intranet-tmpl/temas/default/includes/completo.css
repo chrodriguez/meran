@@ -34,7 +34,7 @@ body{color:#000000;font-family:"Verdana","Trebuchet MS","Arial";font-size:13px;f
 .click{cursor:pointer;}
 .tabla_datos{font-size:9pt;color:#000000;font-family:" Arial ","Verdana"," sans-serif ";;font-style:normal;}
 tr.par{background-color:#ccc;}
-tr.impar{background-color:#666666;}
+tr.impar{background-color:#C0C0C0;}
 .CEC_componente_largo{width:100%;}
 .CEC_componente_medio{width:50%;}
 .CEC_componente_corto{width:25%;}
