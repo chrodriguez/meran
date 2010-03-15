@@ -901,8 +901,37 @@ function procesarInfoJson(marc_object_array, id_padre){
         var id_temp = generarIdComponente();
         //genero el header para el campo q contiene todos los subcampos
         strComp = "<div id='marc_group" + id_temp + "' ><li class='MARCHeader'>";
-        strComp = strComp + "<div class='MARCHeader_content'>";
+//         strComp = strComp + "<div class='MARCHeader_content'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
+
+        //header LEFT
+        strComp = strComp + "<div style='width:10%;float:left'>";
+        strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo());
+        strComp = strComp + "</div>";
+
+
+        //header CENTER
+        strComp = strComp + "<div style='width:80%;float:left'>";
+        strComp = strComp + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre();
+
+        if(campo_marc_conf_obj.getRepetible() == "1"){  
+            strComp = strComp + "<b> (R) </b>";
+            //cierro div CENTER
+            strComp = strComp + "</div>";
+            //header RIGHT
+            strComp = strComp + "<div style='width:3%;float:right'>";
+            campo_marc_conf_obj.setIdCompCliente('marc_group' + id_temp);
+            strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
+            strComp = strComp + "</div>";
+        } else {
+            //cierro div CENTER si no es repetible
+            strComp = strComp + "</div>";
+        }
+
+        //cierro MARCHeader_info
+        strComp = strComp + "</div>";
+
+        strComp = strComp + "</li><div class='MARCHeader_content'>";
         strComp = strComp + "<ul>";
     
         //genero el indicador primario
@@ -917,18 +946,20 @@ function procesarInfoJson(marc_object_array, id_padre){
             strIndicadores = strIndicadores + crearSelectIndicadoresSecundarios(campo_marc_conf_obj, i) + "</label></li>";
         }
 
-        strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo())  + " " + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre();
+//         strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo())  + " " + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre();
 
-        if(campo_marc_conf_obj.getRepetible() == "1"){  
-            strComp = strComp + "<b> (R) </b>";
-//             campo_marc_conf_obj.setIdCompCliente('marc_group' + i);
-            campo_marc_conf_obj.setIdCompCliente('marc_group' + id_temp);
-            strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
-        }
+//         if(campo_marc_conf_obj.getRepetible() == "1"){  
+//             strComp = strComp + "<b> (R) </b>";
+//             campo_marc_conf_obj.setIdCompCliente('marc_group' + id_temp);
+//             strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
+//         }
 
-        strComp = strComp + strIndicadores + "</ul></div>";
 
-        strComp = strComp + "</div></li></div>";
+
+        strComp = strComp + strIndicadores + "</ul>";
+
+//         strComp = strComp + "</div></li></div>";
+         strComp = strComp + "</div></div>";
 
         if(objetos.length == 1) {
             //estoy clonando un campo
