@@ -351,7 +351,8 @@ sub getBarcodesPrestadoLike {
     my  $barcodes_array_ref;
     my @filtros;
  
-	push(@filtros, ( barcode=> { like => $barcode.'%' }) );
+    push(@filtros, ( marc_record => { like => '%'.$barcode.'%' } ) ); #Con este barcode, FIXME: si agregan el barcode en otro lugar?? 
+# 	push(@filtros, ( barcode=> { like => $barcode.'%' }) );
 	push(@filtros, ( fecha_devolucion => { eq => undef }) );
     
     $barcodes_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 	query => \@filtros, 

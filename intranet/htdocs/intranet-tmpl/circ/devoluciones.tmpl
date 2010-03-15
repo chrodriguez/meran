@@ -147,13 +147,19 @@ $(document).ready(function() {
     </ul>
 </fieldset>
 
-<div id="botonDevolver">
- <p align="center">
-        <input type="image" BORDER=0 
-        src="[% themelang %]/images/item-return.png" 
-        title="Devolver" 
-        onClick="devolverPrestamo();">
-    </p>
+<div id="botonDevolver" align ="center">
+                <ul class="listaMenuBotones">
+                    <li>
+                            [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Devolver' | i18n %]",
+                                                                        boton   => "boton_enviar",
+                                                                        onClick => "devolverPrestamo();",
+                                                                        title   => "[% 'Devolver' | i18n %]",
+                                                                        alternClass => "botonCentrado"
+                                            ) ;
+                            [% END %]
+                  </li>
+              </ul>
 </div>
 <!-- DELTALLE DEL USUARIO -->
 <div id="detalleUsuario"></div>
