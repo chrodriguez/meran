@@ -234,11 +234,11 @@ em{font-style:italic;}
 #tooltip.pretty div{width:220px;text-align:left;}
 #tooltip.fancy{background:url(../imagenes/shadow2.png);padding-top:5em;height:100px;}
 #tooltip.fancy.viewport-right{background:url(../imagenes/shadow2-reverse.png);}
-li.MARCHeader{background-color:#A1C162;margin:0;padding:4px;width:100%;list-style-type:none;clear:both;}
+li.MARCHeader{background-color:#A1C162;margin:0 0 4px;padding:4px;width:100%;list-style-type:none;clear:both;height:40px;}
 li.MARCHeader label{width:100%;list-style-type:none;text-align:left;font-weight:bold;margin:1% 0 1%;}
 li.MARCHeader input{text-align:right;}
-.MARCHeader_content{width:100%;height:40px;}
-.MARCHeader_info{width:90%;float:left;font-weight:bold;}
+.MARCHeader_content{width:100%;}
+.MARCHeader_info{width:100%;font-weight:bold;padding-top:9px;}
 .MARCHeader_controls{width:5%;float:right;}
 .datos_tabla_div_z3950{float:left;text-align:rigth;padding-right:1%;padding-bottom:1%;font-size:14pt;}
 .leido0{background:red;}
