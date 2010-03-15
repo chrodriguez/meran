@@ -61,6 +61,10 @@ sub _meran_to_marc{
        push(@{$autorizados{$autorizado->getCampo()}},$autorizado->getSubcampo());
     }
 
+C4::AR::Debug::debug("CAnt ".$cant_campos." ?????????????????????????");
+# TODO mono, autorizados es una HASH asi q para poder mostrar mas de un campo, tengo q sacar la hash pq no me permite agregar por ej dos veces
+# el campo 072
+
     my $field;
     for (my $i=0;$i<$cant_campos;$i++){
         my %hash_campos             = $infoArrayNivel->[$i];
@@ -70,12 +74,15 @@ sub _meran_to_marc{
         my $subcampos_hash          = $infoArrayNivel->[$i]->{'subcampos_hash'};
         my $cant_subcampos          = $infoArrayNivel->[$i]->{'cant_subcampos'};
 
+
+        C4::AR::Debug::debug("_meran_to_marc => campo => ".$infoArrayNivel->[$i]->{'campo'});
+        C4::AR::Debug::debug("_meran_to_marc => cant_subcampos => ".$infoArrayNivel->[$i]->{'cant_subcampos'});
         my @subcampos_array;
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
         for(my $j=0;$j<$cant_subcampos;$j++){
             my $subcampo = $subcampos_hash->{$j};
-            #C4::AR::Debug::debug("CAMPO => ".$campo);
-            #C4::AR::Utilidades::printHASH($subcampo);
+            C4::AR::Debug::debug("CAMPO => ".$campo);
+#             C4::AR::Utilidades::printHASH($subcampo);
             while ( my ($key, $value) = each(%$subcampo) ){
                 #C4::AR::Utilidades::printARRAY($autorizados{$campo});
                 $value = _procesar_referencia($campo, $key, $value, $itemtype);
@@ -796,7 +803,7 @@ sub _setDatos_de_estructura {
 
     C4::AR::Debug::debug("_setDatos_de_estructura => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
     C4::AR::Debug::debug("_setDatos_de_estructura => dato: ".$datos_hash_ref->{'dato'});
-    C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$datos_hash_ref->{'datoReferencia'});
+    C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$datos_hash_ref->{'datoReferencia'});  
     if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
         #tiene una referencia, y es un COMBO
 #         C4::AR::Debug::debug("_setDatos_de_estructura => ======== COMBO ======== ");
@@ -888,6 +895,7 @@ sub getEstructuraYDatosDeNivel{
     };
 
     my $campo;
+    my $repetible;
     my $liblibrarian;
     my $indicador_primario;
     my $indicador_secundario;
@@ -924,6 +932,7 @@ sub getEstructuraYDatosDeNivel{
                         if($campos_base_array_ref){
 
                             $liblibrarian           = $cat_estruct_array->camposBase->getLiblibrarian;
+                            $repetible              = $cat_estruct_array->camposBase->getRepeatable;
                             $indicador_primario     = $cat_estruct_array->camposBase->getIndicadorPrimario;
                             $indicador_secundario   = $cat_estruct_array->camposBase->getIndicadorSecundario;
                             $descripcion_campo      = $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
@@ -961,6 +970,7 @@ sub getEstructuraYDatosDeNivel{
                                                                                 );
 
                         $liblibrarian           = $cat_estruct_base_array->camposBase->getLiblibrarian;
+                        $repetible              = $cat_estruct_base_array->camposBase->getRepeatable;
                         $indicador_primario     = $cat_estruct_base_array->camposBase->getIndicadorPrimario;
                         $indicador_secundario   = $cat_estruct_base_array->camposBase->getIndicadorSecundario;
                         $descripcion_campo      = $cat_estruct_base_array->camposBase->getDescripcion.' - '.$cat_estruct_base_array->getCampo;  
@@ -982,6 +992,7 @@ sub getEstructuraYDatosDeNivel{
                 my %hash_campos;
         
                 $hash_campos{'campo'}                       = $campo;
+                $hash_campos{'repetible'}                   = $repetible;
                 $hash_campos{'nombre'}                      = $liblibrarian;
                 $hash_campos{'indicador_primario'}          = $indicador_primario;
                 $hash_campos{'indicador_primario_dato'}     = $indicador_primario_dato;
@@ -1087,6 +1098,7 @@ sub getEstructuraSinDatos {
         my %hash_campos;
 
         $hash_campos{'campo'}                   = $c->getCampo;
+        $hash_campos{'repetible'}               = $c->camposBase->getRepeatable;
         $hash_campos{'nombre'}                  = $c->camposBase->getLiblibrarian;
         $hash_campos{'indicador_primario'}      = $c->camposBase->getIndicadorPrimario;
         $hash_campos{'indicadores_primarios'}   = C4::AR::EstructuraCatalogacionBase::getIndicadorPrimarioFromEstructuraBaseByCampo($c->getCampo);

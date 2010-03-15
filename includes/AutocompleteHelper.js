@@ -57,6 +57,55 @@ function= funcion a ejecutar luego de traer la respuesta del servidor
     });
 }
 
+
+function _CrearAutocompleteTextArea(options){
+/*
+@params
+IdInput= parametro para la busqueda
+IdInputHidden= donde se guarda el ID de la busqueda
+accion= filtro para autocompletablesDB.pl
+function= funcion a ejecutar luego de traer la respuesta del servidor
+*/
+//  if(!(options.IdInput)||!(options.IdInputHidden)){ 
+    if(!(options.IdInput)){ 
+        alert("AutocompleteHelper=> _CrearAutocomplete=> Error en parametros");
+        return 0;
+    }
+
+    url = "/cgi-bin/koha/autocompletablesDB.pl?accion="+options.accion+"&token="+token;
+
+    $("#"+options.IdInput).search();
+    // q= valor de campoHelp
+    $("#"+options.IdInput).autocomplete(url,{
+        formatItem: function(row){
+            return row[1];
+        },
+        minChars:3,
+        matchSubset:1,
+        matchContains:1,
+        maxItemsToShow:10,
+        cacheLength:50,
+        selectOnly:1,
+        multiple: true,
+        matchContains: true,
+        formatItem: formatItem,
+        formatResult: formatResult,
+        multipleSeparator: "\n",
+    });//end autocomplete
+
+    $("#"+options.IdInput).result(function(event, data, formatted) {
+//         $("#"+options.IdInput).val(data[1]);
+
+        if(options.IdInputHidden){
+            _getId(options.IdInputHidden, data[0]);
+        }
+
+        if(options.callBackFunction){
+            options.callBackFunction();
+        }
+    });
+}
+
 //Funciones publicas
 
 function CrearAutocompleteCiudades(options){

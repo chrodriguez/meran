@@ -38,6 +38,10 @@
     DEBE_SELECCIONAR_AL_MENOS_UN_CAMPO = "[% 'Debe seleccionar al menos un campo.' %]";
     /*=============================================Fin===Catalogacion=================================================*/
 
+    ELIMINAR_NOVEDAD = "[% 'Elminar la novedad?' %]";
+    NOVEDAD_TITLE = "[% 'Administración de Novedades' %]";
+
+
     /*================================================Usuarios========================================================*/
     INGRESE_UN_DATO= "[% 'Ingrese un dato' | i18n %]";
     NO_SE_SELECCIONO_NINGUN_USUARIO= "[% 'No seleccion\u00f3 ning\u00fan usuario' | i18n %]";
