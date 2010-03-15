@@ -176,6 +176,17 @@ function _getSubCampoMARC_conf_ById(id){
     return 0;
 }
 
+function _getCampoMARC_conf_ById(id){
+    for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){
+        if(MARC_OBJECT_ARRAY[i].getIdCompCliente() == id){
+
+            return MARC_OBJECT_ARRAY[i];
+        }
+    }
+
+    return 0;
+}
+
 // Array Remove - By John Resig (MIT Licensed)
 function removeFromArray (array, from, to) {
   var rest = array.slice((to || from) + 1 || array.length);
@@ -250,7 +261,7 @@ function _showAndHiddeEstructuraDelNivel(nivel){
 //esta funcion sincroniza la informacion del cliente con el arreglo de componentes para enviarlos al servidor
 function syncComponentesArray(){
     for(var i=0; i < MARC_OBJECT_ARRAY.length; i++){
-        log("syncComponentesArray => proceso " + MARC_OBJECT_ARRAY.length + " campos ");
+//         log("syncComponentesArray => proceso " + MARC_OBJECT_ARRAY.length + " campos ");
 
         var subcampos_array                 = MARC_OBJECT_ARRAY[i].getSubCamposArray();
         var subcampos_hash                  = MARC_OBJECT_ARRAY[i].subcampos_hash;
@@ -273,23 +284,23 @@ function syncComponentesArray(){
 //                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val();
                         subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val();
-                        log("syncComponentesArray => COMBO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
+//                         log("syncComponentesArray => COMBO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
                     }else if($('#'+subcampos_array[s].getIdCompCliente()).val() != '' && subcampos_array[s].getTipo() == 'auto'){
 //                         subcampos_array[s].setDatoReferencia($('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val());
                         subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val());
                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val();
-                        log("syncComponentesArray => AUTO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
+//                         log("syncComponentesArray => AUTO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
                     }else{
                         subcampos_array[s].datoReferencia = 0;
 //                         subcampos_array[s].setDato('');
                         subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
                         subcampo_valor[subcampos_array[s].getSubCampo()] = 0;
-                        log("syncComponentesArray => OTRO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
+//                         log("syncComponentesArray => OTRO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
                     }
                 }else{  
                     //log("NO TIENE REFERENCIA");
                     //log("DATO: "+$('#'+subcampos_array[s].getIdCompCliente()).val());
-                    log("syncComponentesArray => NO TIENE REFERENCIA => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
+//                     log("syncComponentesArray => NO TIENE REFERENCIA => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
                     subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
 //                        subcampo_valor = new Object();
                     subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val();
@@ -349,7 +360,7 @@ function updateMostrarEstructuraDelNivel1(responseText){
     //proceso la info del servidor y se crean las componentes en el cliente
     //ademas se carga el arreglo MARC_OBJECT_ARRAY donde se hace el mapeo de componente del cliente y dato
     var objetos_array = JSONstring.toObject(responseText);
-    procesarInfoJson(objetos_array); 
+    procesarInfoJson(objetos_array, 'nada'); 
 //     procesarInfoJson(responseText); 
     //carga los datos en los campos solo si se esta modificando
     scrollTo('nivel1Tabla');
@@ -380,7 +391,7 @@ function updateMostrarEstructuraDelNivel2(responseText){
     _showAndHiddeEstructuraDelNivel(2);
     //proceso la info del servidor y se crean las componentes en el cliente
     var objetos_array = JSONstring.toObject(responseText);
-    procesarInfoJson(objetos_array); 
+    procesarInfoJson(objetos_array, 'nada'); 
 //     procesarInfoJson(responseText);
     scrollTo('nivel2Tabla');
 	//asigno el handler para el validador
@@ -425,7 +436,7 @@ function updateMostrarEstructuraDelNivel3(responseText){
 	  TAB_INDEX= 0;
     //proceso la info del servidor y se crean las componentes en el cliente
     var objetos_array = JSONstring.toObject(responseText);
-    procesarInfoJson(objetos_array); 
+    procesarInfoJson(objetos_array, 'nada'); 
 //     procesarInfoJson(responseText);
     scrollTo('nivel3Tabla');
 	
@@ -869,10 +880,10 @@ function updateMostrarInfoAltaNivel3(responseText){
  * json, string con formato json.
  */
 // function procesarInfoJson(json){
-function procesarInfoJson(objetos_array){
+function procesarInfoJson(marc_object_array, id_padre){
 
 //     var objetos = JSONstring.toObject(json);
-    var objetos = objetos_array;
+    var objetos = marc_object_array;
     var campo_ant = '';
     var campo;
     var strComp;
@@ -880,15 +891,16 @@ function procesarInfoJson(objetos_array){
     var marc_group;
 
     for(var i=0; i < objetos.length; i++){
-    //recorro los campos
+        //recorro los campos
         strComp = "";
         strIndicadores = "";
     
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
         var campo_marc_conf_obj = new campo_marc_conf(objetos[i]);
         var subcampos_array     = campo_marc_conf_obj.getSubCamposArray();
+        var id_temp = generarIdComponente();
         //genero el header para el campo q contiene todos los subcampos
-        strComp = "<div id='marc_group" + i + "' ><li class='MARCHeader'>";
+        strComp = "<div id='marc_group" + id_temp + "' ><li class='MARCHeader'>";
         strComp = strComp + "<div class='MARCHeader_content'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
         strComp = strComp + "<ul>";
@@ -909,15 +921,21 @@ function procesarInfoJson(objetos_array){
 
         if(campo_marc_conf_obj.getRepetible() == "1"){  
             strComp = strComp + "<b> (R) </b>";
-            campo_marc_conf_obj.setIdCompCliente('marc_group' + i);
-            strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj);
+//             campo_marc_conf_obj.setIdCompCliente('marc_group' + i);
+            campo_marc_conf_obj.setIdCompCliente('marc_group' + id_temp);
+            strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
         }
 
         strComp = strComp + strIndicadores + "</ul></div>";
 
         strComp = strComp + "</div></li></div>";
 
-        $("#" + getDivDelNivel()).append(strComp);
+        if(objetos.length == 1) {
+            //estoy clonando un campo
+            $("#" + id_padre).append(strComp);
+        } else {
+            $("#" + getDivDelNivel()).append(strComp);
+        }
         
         //seteo los datos de los indicadores
         $("#select_indicador_primario"+i).val(campo_marc_conf_obj.getIndicadorPrimarioDato());
@@ -926,7 +944,7 @@ function procesarInfoJson(objetos_array){
         //proceso los subcampos
         var subcampo_marc_conf_obj = new subcampo_marc_conf(objetos[i]);
         var subcampos_array = campo_marc_conf_obj.getSubCamposArray();
-        marc_group = 'marc_group' + i;
+        marc_group = 'marc_group' + id_temp;
         
         for(var j=0; j < subcampos_array.length; j++){
         //recorro los subcampos
@@ -936,14 +954,17 @@ function procesarInfoJson(objetos_array){
             subcampos_array[j].marc_group       = marc_group;
             subcampos_array[j].posCampo         = i; //posicion del campo contenedor en MARC_OBJECT_ARRAY
             subcampos_array[j].posSubCampo      = j; //posicion del subcampo en el arreglo de subcampos
-            procesarObjeto(subcampos_array[j], marc_group);
+            procesarSubCampo(subcampos_array[j], marc_group);
         }
 
-        MARC_OBJECT_ARRAY[i] = campo_marc_conf_obj;
+        MARC_OBJECT_ARRAY.push(campo_marc_conf_obj);
     }
 
-	//hago foco en la primer componente
-	_setFoco();
+    if(objetos.length != 1) {
+	    //hago foco en la primer componente
+	    _setFoco();
+    }
+
     if( MODIFICAR == 0 && _NIVEL_ACTUAL == 2 ){  
     //si se esta agregando un NIVEL 2  
         _seleccionarTipoDocumentoYDeshabilitarCombo();
@@ -999,16 +1020,16 @@ function crearSelectIndicadoresSecundarios(campo_marc_conf_obj, campo){
 }
 
 /*
- * procesarObjeto
+ * procesarSubCampo
  * procesa el objeto json, para poder crear el componente adecuado al tipo de datos que vienen en el objeto.
  * @params
  * objeto, elemento que contiene toda la info necesaria.
+ * marc_group, id del marc_group, div que contiene el campo con sus subcampos
  */
-function procesarObjeto(objeto, marc_group){
+function procesarSubCampo(objeto, marc_group){
 
     TAB_INDEX++;
 
-//     var marc_conf_obj       = new marc_conf(objeto);
     var marc_conf_obj       = new subcampo_marc_conf(objeto);
     var vista_intra         = marc_conf_obj.getVistaIntra();
     var tipo                = marc_conf_obj.getTipo();
@@ -1185,26 +1206,20 @@ function generarIdComponente(){
 function cloneSubCampo(id){
     var id_componente   = generarIdComponente();
     var subcampo_temp   = _getSubCampoMARC_conf_ById(id);
-    var obj;
-    obj                 = copy(subcampo_temp);      //se genera una copia del subcampo
-    obj.setIdCompCliente( id_componente );          //seteo el nuevo id de la componente
-    procesarObjeto(obj, subcampo_temp.marc_group);  //se genera la componente en el cliente
+    var obj             = copy(subcampo_temp);        //se genera una copia del subcampo
+    obj.setIdCompCliente( id_componente );            //seteo el nuevo id de la componente
+    procesarSubCampo(obj, subcampo_temp.marc_group);  //se genera la componente en el cliente
     
-    //agredo el subcampo en la poscion "posCampo" del arreglo MARC_OBJECT_ARRAY, donde se encuentra el campo contenedor
+    //agrego el subcampo en la poscion "posCampo" del arreglo MARC_OBJECT_ARRAY, donde se encuentra el campo contenedor
     MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray().push(obj);
 }
 
+//clona un campo 
+//@params: id es el marc_group del padre
 function cloneCampo(id){
     var id_componente   = generarIdComponente();
-
-// TODO para testear
-
-    $('#'+id).append(  $('#'+id).clone());
-
-// TODO apunta a MARC_OBJECT_ARRAY[0] q esta fijo
-    var campo_temp   = MARC_OBJECT_ARRAY[0];//_getSubCampoMARC_conf_ById(id);
-    var campo_obj;
-    campo_obj        = copy(campo_temp);      //se genera una copia del subcampo
+    var campo_temp      = _getCampoMARC_conf_ById(id);
+    var campo_obj       = copy(campo_temp);      //se genera una copia del campo
 
     //ahora cambio el id del campo
     campo_obj.setIdCompCliente(generarIdComponente());
@@ -1213,31 +1228,29 @@ function cloneCampo(id){
     var subcampos_array_destino = new Array();
     for(var i=0;i<subcampos_array.length;i++){
 // TODO falta acomodar el posCampo que indica a los subcampos en q posicion esta el campo padre, esta FEOOOOO!!
-//         subcampos_array[i].setIdCompCliente(generarIdComponente());
         var subcampo_obj;
-        subcampo_obj = copy(subcampos_array[i]); 
-        subcampo_obj.setIdCompCliente(generarIdComponente());
+        subcampo_obj = copy(subcampos_array[i]);                //se genera una copia del subcampo
+        subcampo_obj.setIdCompCliente(generarIdComponente());   //ahora cambio los id's de los subcampos
         subcampo_obj.posCampo = campo_temp.posCampo;
         subcampos_array_destino.push(subcampo_obj);
-//         alert("cambio el idCompCliente de un subcampo length " + subcampos_array_destino.length);
     }
 
-//     campo_obj.subcampos_hash = campo_temp.getSubCamposHash();
-// TODO hay q armarlo bien
     campo_obj.subcampos_hash = copy(campo_obj.getSubCamposHash());
     campo_obj.setSubCamposArray(subcampos_array_destino);
-//     alert(campo_obj.getSubCamposHash());
-    MARC_OBJECT_ARRAY.push(campo_obj);
+
+    temp = new Array();
+    temp.push(campo_obj)
+    procesarInfoJson(temp, id);
 }
 
 function remove(id){
     var subcampo_temp   = _getSubCampoMARC_conf_ById(id);       //recupero el subcampo segun el id pasado por parametro
-    var _from           = subcampo_temp.posSubCampo;    //posicion del subcampo en el arreglo de subcampos
+    var _from           = subcampo_temp.posSubCampo;            //posicion del subcampo en el arreglo de subcampos
     var _to             = subcampo_temp.posSubCampo;
 
-    $('#LI'+id).remove();                               //elimino la componete del cliente
-                                                        //elimino la informacion del subcampo
-    removeFromArray(MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray(), _from, _to);
+    $('#LI'+id).remove();                                       //elimino la componete del cliente
+
+    removeFromArray(MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray(), _from, _to); //elimino la informacion del subcampo
 }
 
 // FIXME DEPRECATEDDDDDDDDd
@@ -1262,15 +1275,16 @@ function crearBotonAgregarSubcampoRepetible(obj){
     }
 }
 
-function crearBotonAgregarCampoRepetible(obj){
+function crearBotonAgregarCampoRepetible(obj, id_padre){
 
     if(obj.getRepetible() == '1'){
-        return "<div onclick=cloneCampo('"+ obj.getIdCompCliente() +"') class='icon_agregar horizontal' title='Agregar'/>";
+        return "<div onclick=cloneCampo('marc_group"+ id_padre +"') class='icon_agregar horizontal' title='Agregar'/>";
     }else{  
         return "";
     }
 }
 
+// TODO parece q no se va a usar mas
 function crearBotonEliminarRepetible(obj){
 
     if(obj.getRepetible() == '1'){
@@ -1414,7 +1428,7 @@ function subcampo_marc_conf(obj){
 function crearText(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "' class='horizontal' >";     
     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
-    comp = comp + crearBotonEliminarRepetible(obj);
+//     comp = comp + crearBotonEliminarRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 }
 
@@ -1446,7 +1460,7 @@ function crearCombo(obj){
     var comp = newCombo(obj);
 
     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
-    comp = comp + crearBotonEliminarRepetible(obj);
+//     comp = comp + crearBotonEliminarRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 }
 
@@ -1456,7 +1470,7 @@ function crearTextArea(obj){
 
     var comp = "<textarea id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' rows='4' tabindex="+TAB_INDEX+">" + obj.getOpciones() + "</textarea>";
     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
-    comp = comp + crearBotonEliminarRepetible(obj);
+//     comp = comp + crearBotonEliminarRepetible(obj);
 
     comp = crearComponente("texta","texta"+idComp,"readonly='readonly'","");
     var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+idComp+")' src='[% themelang %]/images/sacar.png'>";
@@ -1476,7 +1490,7 @@ function crearAuto(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='"+ obj.getIdCompCliente() +"' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" class='horizontal' >";
 
     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
-    comp = comp + crearBotonEliminarRepetible(obj);
+//     comp = comp + crearBotonEliminarRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 
     _cearAutocompleteParaCamponente(obj);
@@ -1489,7 +1503,7 @@ function crearCalendar(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
-    comp = comp + crearBotonEliminarRepetible(obj);
+//     comp = comp + crearBotonEliminarRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 
     $("#"+obj.getIdCompCliente()).datepicker({ dateFormat: 'dd/mm/yy' });
@@ -1499,7 +1513,7 @@ function crearTextAnio(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
-    comp = comp + crearBotonEliminarRepetible(obj);
+//     comp = comp + crearBotonEliminarRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 }
 
