@@ -284,18 +284,18 @@ function syncComponentesArray(){
 //                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val();
                         subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val();
-//                         log("syncComponentesArray => COMBO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
+                        log("syncComponentesArray => COMBO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
                     }else if($('#'+subcampos_array[s].getIdCompCliente()).val() != '' && subcampos_array[s].getTipo() == 'auto'){
 //                         subcampos_array[s].setDatoReferencia($('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val());
                         subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val());
                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val();
-//                         log("syncComponentesArray => AUTO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
+                        log("syncComponentesArray => AUTO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
                     }else{
                         subcampos_array[s].datoReferencia = 0;
 //                         subcampos_array[s].setDato('');
                         subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
                         subcampo_valor[subcampos_array[s].getSubCampo()] = 0;
-//                         log("syncComponentesArray => OTRO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
+                        log("syncComponentesArray => OTRO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
                     }
                 }else{  
                     //log("NO TIENE REFERENCIA");
@@ -879,10 +879,8 @@ function updateMostrarInfoAltaNivel3(responseText){
  * @params
  * json, string con formato json.
  */
-// function procesarInfoJson(json){
 function procesarInfoJson(marc_object_array, id_padre){
 
-//     var objetos = JSONstring.toObject(json);
     var objetos = marc_object_array;
     var campo_ant = '';
     var campo;
@@ -901,7 +899,6 @@ function procesarInfoJson(marc_object_array, id_padre){
         var id_temp = generarIdComponente();
         //genero el header para el campo q contiene todos los subcampos
         strComp = "<div id='marc_group" + id_temp + "' ><li class='MARCHeader'>";
-//         strComp = strComp + "<div class='MARCHeader_content'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
 
         //header LEFT
@@ -920,7 +917,7 @@ function procesarInfoJson(marc_object_array, id_padre){
             strComp = strComp + "</div>";
             //header RIGHT
             strComp = strComp + "<div style='width:3%;float:right'>";
-            campo_marc_conf_obj.setIdCompCliente('marc_group' + id_temp);
+            campo_marc_conf_obj.setIdCompCliente("marc_group" + id_temp);
             strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
             strComp = strComp + "</div>";
         } else {
@@ -936,30 +933,22 @@ function procesarInfoJson(marc_object_array, id_padre){
     
         //genero el indicador primario
         if(campo_marc_conf_obj.getIndicadorPrimario() != ''){
-            strIndicadores = "<li class='sub_item'><label>Indicador Primero: " + campo_marc_conf_obj.getIndicadorPrimario();
-            strIndicadores = strIndicadores + crearSelectIndicadoresPrimarios(campo_marc_conf_obj, i) + "</label></li>";
+            strIndicadores = "<li class='sub_item'>Indicador Primero: " + campo_marc_conf_obj.getIndicadorPrimario() + "</li>";
+            strIndicadores = strIndicadores + "<li>" + crearSelectIndicadoresPrimarios(campo_marc_conf_obj, MARC_OBJECT_ARRAY.length) + "</li>";
         }
 
         //genero el indicador secundario
         if(campo_marc_conf_obj.getIndicadorSecundario() != ''){
-            strIndicadores = strIndicadores + "<li class='sub_item'><label>Indicador Segundo: " + campo_marc_conf_obj.getIndicadorSecundario();
-            strIndicadores = strIndicadores + crearSelectIndicadoresSecundarios(campo_marc_conf_obj, i) + "</label></li>";
+            strIndicadores = strIndicadores + "<li class='sub_item'>Indicador Segundo: " + campo_marc_conf_obj.getIndicadorSecundario() + "</li>";
+            strIndicadores = strIndicadores + "<li>" + crearSelectIndicadoresSecundarios(campo_marc_conf_obj, MARC_OBJECT_ARRAY.length) + "</li>";
         }
 
-//         strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo())  + " " + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre();
-
-//         if(campo_marc_conf_obj.getRepetible() == "1"){  
-//             strComp = strComp + "<b> (R) </b>";
-//             campo_marc_conf_obj.setIdCompCliente('marc_group' + id_temp);
-//             strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
-//         }
-
-
-
+        //cierro UL de indicadores
         strComp = strComp + strIndicadores + "</ul>";
-
-//         strComp = strComp + "</div></li></div>";
-         strComp = strComp + "</div></div>";
+        //cierrdo DIV MARCHeader_content
+        strComp = strComp + "</div>";
+        //cierro DIV marc_group
+        strComp = strComp + "</div>";
 
         if(objetos.length == 1) {
             //estoy clonando un campo
@@ -969,13 +958,13 @@ function procesarInfoJson(marc_object_array, id_padre){
         }
         
         //seteo los datos de los indicadores
-        $("#select_indicador_primario"+i).val(campo_marc_conf_obj.getIndicadorPrimarioDato());
-        $("#select_indicador_secundario"+i).val(campo_marc_conf_obj.getIndicadorSecundarioDato());
+        $("#select_indicador_primario" + MARC_OBJECT_ARRAY.length).val(campo_marc_conf_obj.getIndicadorPrimarioDato());
+        $("#select_indicador_secundario" + MARC_OBJECT_ARRAY.length).val(campo_marc_conf_obj.getIndicadorSecundarioDato());
 
         //proceso los subcampos
         var subcampo_marc_conf_obj = new subcampo_marc_conf(objetos[i]);
         var subcampos_array = campo_marc_conf_obj.getSubCamposArray();
-        marc_group = 'marc_group' + id_temp;
+        marc_group = "marc_group" + id_temp;
         
         for(var j=0; j < subcampos_array.length; j++){
         //recorro los subcampos
@@ -983,7 +972,7 @@ function procesarInfoJson(marc_object_array, id_padre){
 //             subcampos_array[j].idCompCliente    = "id_componente_" + i + j;
             subcampos_array[j].idCompCliente    = "id_componente_" + generarIdComponente();
             subcampos_array[j].marc_group       = marc_group;
-            subcampos_array[j].posCampo         = i; //posicion del campo contenedor en MARC_OBJECT_ARRAY
+            subcampos_array[j].posCampo         = MARC_OBJECT_ARRAY.length;//i; //posicion del campo contenedor en MARC_OBJECT_ARRAY
             subcampos_array[j].posSubCampo      = j; //posicion del subcampo en el arreglo de subcampos
             procesarSubCampo(subcampos_array[j], marc_group);
         }
@@ -1006,8 +995,7 @@ function procesarInfoJson(marc_object_array, id_padre){
         $('#tipo_nivel3_id').change( function() {
             $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
         });
-    }   
- 
+    }
 }
 
 function crearBotonAyudaCampo(campo){
@@ -1031,20 +1019,22 @@ function generarOpcionesParaSelect(array_options){
 }
 
 function crearSelectIndicadoresPrimarios(campo_marc_conf_obj, campo){
-    var opciones_array = campo_marc_conf_obj.getIndicadoresPrimarios();
-    var indicadores = "";
+    var opciones_array  = campo_marc_conf_obj.getIndicadoresPrimarios();
+    var indicadores     = "";
+
     if(opciones_array.length > 0){
-        indicadores = "<select id='select_indicador_primario'" + campo + "'>" + generarOpcionesParaSelect(opciones_array) + "</select>";
+        indicadores = "<select id='select_indicador_primario" + campo + "'>" + generarOpcionesParaSelect(opciones_array) + "</select>";
     }
 
     return indicadores;
 }
 
 function crearSelectIndicadoresSecundarios(campo_marc_conf_obj, campo){
-    var opciones_array = campo_marc_conf_obj.getIndicadoresSecundarios();
-    var indicadores = "";
+    var opciones_array  = campo_marc_conf_obj.getIndicadoresSecundarios();
+    var indicadores     = "";
+
     if(opciones_array.length > 0){
-        indicadores = "<select id='select_indicador_secundario'" + campo + "'>" + generarOpcionesParaSelect(opciones_array) + "</select>";
+        indicadores = "<select id='select_indicador_secundario" + campo + "'>" + generarOpcionesParaSelect(opciones_array) + "</select>";
     }
 
     return indicadores;
