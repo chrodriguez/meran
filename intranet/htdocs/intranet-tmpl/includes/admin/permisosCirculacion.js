@@ -48,7 +48,7 @@ function checkChecks(){
 
     arreglo = new Array();
     arreglo[0] = 'prestamos';
-//     arreglo[1] = 'preferencias';
+    arreglo[1] = 'circ_opac';
 //     arreglo[2] = 'datos_nivel3';
 //     arreglo[3] = 'estantes_virtuales';
 //     arreglo[4] = 'estructura_catalogacion_n1';
@@ -150,7 +150,7 @@ function armarArregloDePermisos(){
     superUserGranted = 0;
     arreglo = new Array();
     arreglo[0] = new permiso('prestamos');
-//     arreglo[1] = new permiso('reportes');
+    arreglo[1] = new permiso('circ_opac');
 //     arreglo[2] = new permiso('datos_nivel3');
 //     arreglo[3] = new permiso('estantes_virtuales');
 //     arreglo[4] = new permiso('estructura_catalogacion_n1');

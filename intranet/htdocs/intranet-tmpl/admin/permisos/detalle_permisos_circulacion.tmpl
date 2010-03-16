@@ -47,4 +47,37 @@
     </fieldset>
 </div>
 
+
+<div>
+    <fieldset id="circ_opac">
+        <legend class="titulo_legend"> [% "Reservar desde OPAC" | i18n %] </legend>
+        <ul class="permission_grant" >
+            <li class="inline_input">
+                <label for="permission_5"> TODOS </label>
+                <input type="checkbox" id="circ_opac_todos" name="circ_opac_todos" onChange="adviceGrant(this,'prestamos','high');"
+                    [% IF permisos.circ_opac.TODOS %] "checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_2"> Baja </label>
+                <input type="checkbox" id="circ_opac_baja" name="circ_opac_baja" onChange="adviceGrant(this,'prestamos','high');"
+                    [% IF permisos.circ_opac.BAJA %] "checked" [% END %]/>
+            </li>
+            <li class="inline_input">
+                <label for="permission_3"> Modificaci&oacute;n </label>
+                <input type="checkbox" id="circ_opac_modif" name="circ_opac_modif" onChange="adviceGrant(this,'prestamos','high');"
+                    [% IF permisos.circ_opac.MODIFICACION %] "checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_1"> Alta </label>
+                <input type="checkbox" id="circ_opac_alta" name="circ_opac_alta" onChange="adviceGrant(this,'prestamos','medium');"
+                    [% IF permisos.circ_opac.ALTA %] "checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_4"> Consulta </label>
+                <input type="checkbox" id="circ_opac_consulta" name="circ_opac_consulta" onChange="adviceGrant(this,'prestamos','low');"
+                    [% IF permisos.circ_opac.CONSULTA %] "checked" [% END %]/>
+            </li>
+        </ul>
+    </fieldset>
+</div>
 [% INCLUDE 'partials/admin/_guardarPermisos.inc' %]

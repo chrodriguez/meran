@@ -203,3 +203,6 @@ NULL ,  'tema_opac',  'default',  'El tema por defecto para OPAc',  '',  '',  's
 ), (
 NULL ,  'tema_intra', 'default',  'El tema por defecto para INTRANET', NULL , NULL ,  'sistema'
 );
+
+ALTER TABLE  `perm_circulacion` ADD  `circ_opac` VARBINARY( 8 ) NOT NULL DEFAULT  '00000000';
+

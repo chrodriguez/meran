@@ -12,6 +12,8 @@ __PACKAGE__->meta->setup(
         ui  => { type => 'varchar', length => 4, not_null => 1 },
         tipo_documento => { type => 'varchar', length => 4, not_null => 1 }, 
         prestamos => { type => 'varchar', length => 8, not_null => 1 },
+        circ_opac => { type => 'varchar', length => 8, not_null => 1 },
+
     ],
 
     primary_key_columns => [ 'nro_socio','ui','tipo_documento' ],
@@ -60,6 +62,17 @@ sub setNro_socio{
     my ($nro_socio) = @_;
     
     $self->nro_socio($nro_socio);
+}
+
+sub getCirc_opac{
+    my ($self) = shift;
+    return ($self->circ_opac);
+}
+
+sub setCirc_opac{
+    my ($self) = shift;
+    my ($permisos) = @_;
+    $self->circ_opac($permisos);
 }
 
 sub getUI{
