@@ -37,13 +37,18 @@
 
                         <input type="hidden" id="token" name="token" value="[% token %]">
                         [% IF editing %]
-                            <input type="submit" value="[% 'Agregar' | i18n %]">
-                        [% ELSE %]
                             <input type="submit" value="[% 'Modificar' | i18n %]">
+                        [% ELSE %]
+                            <input type="submit" value="[% 'Agregar' | i18n %]">
                         [% END %]
             </form>
         </div>
 </fieldset>
-
+[% PERL %]
+        print C4::AR::Filtros::link_to( text    =>  "[% 'Volver al listado' | i18n %]",
+                                        url     =>  "/cgi-bin/koha/admin/novedades_opac.pl",
+                                        title   =>  "[% 'Volver al listado' | i18n %]"
+                ) ;
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
