@@ -485,7 +485,9 @@ sub _verificarDatosBorrower {
 
     if ( (!($msg_object->{'error'})) && ($data->{'auto_nro_socio'} != 1) && (!$data->{'modifica'})){
           $msg_object->{'error'} = (existeSocio($nro_socio) > 0);
-          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U500', 'params' => []} ) ;
+          if ($msg_object->{'error'}){
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U500', 'params' => []} ) ;
+          }
     }
 
     if (!($msg_object->{'error'}) && ($credential_type eq "superlibrarian") ){
