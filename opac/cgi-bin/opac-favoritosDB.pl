@@ -11,26 +11,54 @@ use C4::AR::Busquedas;
 my $input = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-									template_name => "opac-main.tmpl",
-									query => $input,
-									type => "opac",
-									authnotrequired => 0,
-									flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-									debug => 1,
-			     });
+                                    template_name => "includes/opac-busquedaResult.inc",
+                                    query => $input,
+                                    type => "opac",
+                                    authnotrequired => 1,
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+});
+
+
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $action = $obj->{'action'};
 my $id1 = $obj->{'id1'};
 my $nro_socio = C4::Auth::getSessionNroSocio();
 
-print $session->header;
-
 if ($action eq "add_favorite"){
+    print $session->header;
     print C4::AR::Nivel1::addToFavoritos($id1,$nro_socio);
 }
 elsif ($action eq "delete_favorite"){
-    print C4::AR::Nivel1::removeFromFavoritos($id1,$nro_socio);
+    C4::AR::Debug::debug("NRO_SOCIO_FAVORITOS: ".$nro_socio." ID1: ".$id1);
+    C4::AR::Nivel1::removeFromFavoritos($id1,$nro_socio);
+    
+    my ($cantidad,$resultsarray)= C4::AR::Nivel1::getFavoritos($nro_socio);
+
+    $t_params->{'cantidad'}= $cantidad;
+    $t_params->{'nro_socio'}= $session->param('nro_socio');
+    $t_params->{'SEARCH_RESULTS'}= $resultsarray;
+    $t_params->{'content_title'}= C4::AR::Filtros::i18n("Sus favoritos: ".$cantidad);
+    # $t_params->{'partial_template'}= "opac-busquedaResult.inc";
+
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
+elsif ($action eq "get_favoritos"){
+
+    my $nro_socio = C4::Auth::getSessionNroSocio();
+    my ($socio, $flags) = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+    C4::AR::Validator::validateObjectInstance($socio);
+
+
+    my ($cantidad,$resultsarray)= C4::AR::Nivel1::getFavoritos($nro_socio);
+
+    $t_params->{'cantidad'}= $cantidad;
+    $t_params->{'nro_socio'}= $session->param('nro_socio');
+    $t_params->{'SEARCH_RESULTS'}= $resultsarray;
+    $t_params->{'content_title'}= C4::AR::Filtros::i18n("Sus favoritos: ".$cantidad);
+    # $t_params->{'partial_template'}= "opac-busquedaResult.inc";
+
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 

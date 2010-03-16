@@ -173,7 +173,7 @@
                             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_borrar",
-                                                                    onclick => "deleteFavorite('[% NIVEL.id1 %]');",
+                                                                    onclick => "eliminarFavorito('[% NIVEL.id1 %]');",
                                                                     title   => "[% 'Eliminar favorito' | i18n %]",
                                                                     alternClass => "botonCentradoTabla"
                                         ) ;

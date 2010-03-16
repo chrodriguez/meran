@@ -113,6 +113,7 @@ sub eliminar{
 
     #Obtengo la cant total de sys_novedads para el paginador
     if(scalar(@$novedades_array_ref) > 0){
+    C4::AR::Debug::debug("que meirda pasa???????????????????");
         return ($novedades_array_ref->[0]->delete());
     }else{
         return (0);

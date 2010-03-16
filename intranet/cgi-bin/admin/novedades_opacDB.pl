@@ -24,7 +24,7 @@ if ($accion eq 'ELIMINAR'){
                                         debug => 1,
     });
     
-    my $id_novedad = $input->param('id') || 0;
+    my $id_novedad = $obj->{'id'} || 0;
     C4::AR::Novedades::eliminar($id_novedad);
     my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 

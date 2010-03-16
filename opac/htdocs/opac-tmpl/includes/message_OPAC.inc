@@ -19,6 +19,8 @@
 
     FAVORITE_DELETED= '[% "Se elimino el favorito correctamente." | i18n %]';
 
+    FAVORITE_CONFIRM_DELETE= '[% "Desea borrar el favorito?" | i18n %]';
+
     FAVORITE_DELETED_ERROR= '[% "No se pudo eliminar el favorito" | i18n %]';
 
     CATALOGO_TITLE= '[% "Alerta de Catalogo" | i18n %]';
