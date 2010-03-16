@@ -90,6 +90,7 @@
     FALTA_INGRESAR_EL_NOMBRE_DEL_AUTORIZADO= "[% 'Falta ingresar el nombre del autorizado' | i18n %]";
     FALTA_INGRESAR_EL_DNI_DEL_AUTORIZADO= "[% 'Falta ingresar el DNI del autorizado' | i18n %]";
     FALTA_INGRESAR_EL_TELEFONO_DEL_AUTORIZADO= "[% 'Falta ingresar el Tel\u00e9fono del autorizado' | i18n %]";
+    RESET_PASSWORD= "[% 'Desea reestablecer el password del usuario?' | i18n %]";
     /*================================================Fin==Usuarios==================================================*/
 
     /*================================================Catalogo=======================================================*/

@@ -16,7 +16,7 @@ return(0);var Messages=JSONstring.toObject(responseText);setMessages(Messages);}
 function desautorizarTercero(claveUsuario,confirmeClave){var is_confirmed=confirm(CONFIRMAR_ELIMINAR_AFILIADO);if(is_confirmed){objAH=new AjaxHelper(updateDesautorizarTercero);objAH.debug=true;objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='ELIMINAR_AUTORIZADO';objAH.sendToServer();}}
 function updateDesautorizarTercero(responseText){if(!verificarRespuesta(responseText))
 return(0);var Messages=JSONstring.toObject(responseText);setMessages(Messages);detalleUsuario();}
-function resetPassword(claveUsuario,confirmeClave){objAH=new AjaxHelper(updateResetPassword);objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='RESET_PASSWORD';objAH.sendToServer();}
+function resetPassword(claveUsuario,confirmeClave){jConfirm(RESET_PASSWORD,USUARIOS_ALERT_TITLE,function(confirmStatus){if(confirmStatus){objAH=new AjaxHelper(updateResetPassword);objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='RESET_PASSWORD';objAH.sendToServer();}});}
 function updateResetPassword(responseText){if(!verificarRespuesta(responseText))
 return(0);var Messages=JSONstring.toObject(responseText);setMessages(Messages);}
 function clearInput(){$('#newpassword').val('');$('#newpassword1').val('');}

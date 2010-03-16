@@ -245,16 +245,16 @@ function updateDesautorizarTercero(responseText){
 
 
 function resetPassword(claveUsuario, confirmeClave){
-
-    objAH=new AjaxHelper(updateResetPassword);
-    //objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-//     objAH.newpassword= claveUsuario;
-//     objAH.newpassword1= confirmeClave;
-    objAH.nro_socio= USUARIO.ID;
-    objAH.tipoAccion= 'RESET_PASSWORD';
-    //se envia la consulta
-    objAH.sendToServer();
+    jConfirm(RESET_PASSWORD, USUARIOS_ALERT_TITLE, function(confirmStatus){
+        if (confirmStatus){
+            objAH=new AjaxHelper(updateResetPassword);
+            objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+            objAH.nro_socio= USUARIO.ID;
+            objAH.tipoAccion= 'RESET_PASSWORD';
+            //se envia la consulta
+            objAH.sendToServer();
+        }
+    });
 }
 
 function updateResetPassword(responseText){

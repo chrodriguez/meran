@@ -85,8 +85,8 @@
 
         <li class="sub_item">
             <label for="sexo">[% "Sexo" | i18n %] *</label>
-            <input type="radio" name="sexo" value="F" [% IF socio.persona.getSexo == "F" %] class="required" checked="checked" F [% END %]> F
-            <input type="radio" name="sexo" value="M" [% IF socio.persona.getSexo == "M" %] class="required" checked="checked" M [% END %]> M 
+            <input type="radio" name="sexo" value="F" class="required" [% IF socio_modificar.persona.getSexo == 'F' %] checked="checked" [% END %] /> F
+            <input type="radio" name="sexo" value="M" class="required" [% IF socio_modificar.persona.getSexo == 'M' %] checked="checked" [% END %] /> M 
         </li>
 
         <li class="sub_item">
@@ -173,7 +173,7 @@
 </ul>
 </fieldset>
 
-[% IF socio.tieneAutorizado %]
+[% IF socio_modificar.tieneAutorizado %]
     <fieldset>
         <legend class="titulo_legend">[% "Informaci&oacute;n de autorizado" | i18n %] </legend>
         <ul>
