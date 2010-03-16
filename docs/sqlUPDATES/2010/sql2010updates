@@ -187,3 +187,19 @@ ALTER TABLE  `pref_feriado` ADD  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FI
 
 -- Para permitir cancelar reservas de grupo y guardar el histórico
  ALTER TABLE `rep_historial_circulacion` CHANGE `id3` `id3` INT( 11 ) NULL ;
+
+
+INSERT INTO  `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL ,  'tema_opac',  'default',  'El tema por defecto para OPAc',  '',  '',  'sistema'
+), (
+NULL ,  'tema_intra', 'default',  'El tema por defecto para INTRANET', NULL , NULL ,  'sistema'
+);

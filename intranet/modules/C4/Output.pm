@@ -85,14 +85,18 @@ sub gettemplate {
 	my ($tmplbase, $opac) = @_;
 
 	my $htdocs;
-    my $tema = C4::Context->config('tema');
+    my $tema_opac = C4::AR::Preferencias->getValorPreferencia('tema_opac') || 'default';
+    my $tema_intra = C4::AR::Preferencias->getValorPreferencia('tema_intra') || 'default';
     my $temas = C4::Context->config('temas');
+    my $tema;
 
 	if ($opac ne "intranet") {
 		$htdocs = C4::Context->config('opachtdocs');
         $temas = C4::Context->config('temasOPAC');
+        $tema = $tema_opac;
 	} else {
 		$htdocs = C4::Context->config('intrahtdocs');
+        $tema = $tema_intra;
 	}
 
 	my $filter= Template::Filters->new({
@@ -152,8 +156,8 @@ sub gettemplate {
             actual_year         => $date->{'year'},
             localization_FLAGS  => C4::AR::Filtros::setFlagsLang('OPAC'),
             HOST                => $ENV{HTTP_HOST},
-            user_theme          => $socio->getTheme() || $tema,
-            user_theme_intra    => $socio->getThemeINTRA() || $tema,
+            user_theme          => $socio->getTheme() || $tema_opac,
+            user_theme_intra    => $socio->getThemeINTRA() || $tema_intra,
 		);
 
 
