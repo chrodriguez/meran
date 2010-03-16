@@ -632,8 +632,9 @@ sub getSocioInfoPorNroSocio {
 sub existeSocio {
 
     my ($nro_socio)= @_;
-    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => [ nro_socio => { eq => $nro_socio } ]);
     use C4::Modelo::UsrSocio;
+
+    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => [ nro_socio => { eq => $nro_socio } ]);
 
 	return $socio_array_ref;
 }
