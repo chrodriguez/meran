@@ -276,26 +276,24 @@ function syncComponentesArray(){
         for(var s=0; s < subcampos_array.length; s++){
             subcampo_valor = new Object();
 
-//             if(subcampos_array[s].getTieneEstructura() == '1'){
-
                 if(subcampos_array[s].getReferencia() == '1'){
                     //log("TIENE REFERENCIA");
                     if($('#'+subcampos_array[s].getIdCompCliente()).val() != '' && subcampos_array[s].getTipo() == 'combo'){
 //                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val();
                         subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente()).val();
-                        log("syncComponentesArray => COMBO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
+//                         log("syncComponentesArray => COMBO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
                     }else if($('#'+subcampos_array[s].getIdCompCliente()).val() != '' && subcampos_array[s].getTipo() == 'auto'){
 //                         subcampos_array[s].setDatoReferencia($('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val());
                         subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val());
                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val();
-                        log("syncComponentesArray => AUTO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
+//                         log("syncComponentesArray => AUTO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
                     }else{
                         subcampos_array[s].datoReferencia = 0;
 //                         subcampos_array[s].setDato('');
                         subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
                         subcampo_valor[subcampos_array[s].getSubCampo()] = 0;
-                        log("syncComponentesArray => OTRO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
+//                         log("syncComponentesArray => OTRO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
                     }
                 }else{  
                     //log("NO TIENE REFERENCIA");
