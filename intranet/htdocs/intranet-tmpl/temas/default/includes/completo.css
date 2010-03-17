@@ -63,6 +63,7 @@ label.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scro
 #paginador{color:#000000;cursor:pointer;font-family:Arial, Helvetica, sans-serif;font-size:10pt;font-weight:normal;text-align:center;margin:0 auto;width:50%;}
 .paginador_seleccionado{color:#4B6D22;cursor:pointer;font-family:Arial, Verdana, Helvetica, sans-serif;font-size:10pt;font-weight:bold;text-align:center;margin:2px;}
 .letras{color:#CCCCCC;cursor:pointer;font-family:" Arial ","Verdana"," sans-serif ";font-size:10pt;font-weight:normal;text-align:center;}
+li {list-style-type: none;}
 .boton_texto{font-family:Arial, Helvetica, sans-serif;font-size:11px;font-weight:bold;color:#000000;background-position:center;margin-top:5px;text-align:center;}
 .boton_medio{background:url(../imagenes/botones/boton_medio.png) repeat-x scroll center;height:21px;position:relative;margin:5px auto;padding-left:0;padding-right:0;cursor:pointer;height:21px;white-space:nowrap;width:150px;}
 .boton_der{float:right;background:transparent url(../imagenes/botones/boton_der.png) no-repeat;height:21px;width:3px;}

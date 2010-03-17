@@ -70,6 +70,10 @@ height:70%;
     float: left;
 }
 
+li {
+    list-style-type: none;
+}
+
 #boton_login  {
     display:block;
     list-style-type:none;
