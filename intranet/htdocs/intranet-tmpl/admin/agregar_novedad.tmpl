@@ -2,6 +2,14 @@
 <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/wysiwyg.css" />
 <script src="/includes/jquery/jquery.wysiwyg.js"></script>
 <script>
+    function modificar(){
+        $('#form_novedad').submit();
+    }
+        
+    function agregar(){
+        $('#form_novedad').submit();
+    }
+
     $(document).ready(function() {
         $(function()
         {
@@ -23,24 +31,43 @@
                 <form id="form_novedad" action="/cgi-bin/koha/admin/agregar_novedad.pl" method="POST">
                     <input type="hidden" id="action" name="action" value="agregar">
             [% END %]
+                <ul>
+                    <li class="sub_item">
                         <label for="titulo">[% "Titulo" | i18n %]</label>
                           <input type="text" id="titulo" name="titulo" value="[% novedad.getTitulo %]">
-                          <br />
-
+                    </li>
+                    <li class="sub_item">
                         <label for="categoria">[% "Categor&iacute;a" | i18n %]</label>
                           <input type="text" id="categoria" name="categoria" value="[% novedad.getCategoria %]">
-                          <br />
-
+                    </li>
+                    <li class="sub_item">
                         <label for="contenido">[% "Contenido" | i18n %]</label>
+                    </li>
+                    <br/><br/>
                           <textarea id="contenido" name="contenido" style="width: 88.3%">[% HTML.escape(novedad.getContenido) %]</textarea>
-                          <br />
+
 
                         <input type="hidden" id="token" name="token" value="[% token %]">
                         [% IF editing %]
-                            <input type="submit" value="[% 'Modificar' | i18n %]">
+                            [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar' | i18n %]",
+                                                boton   => "boton_edicion",
+                                                onClick => "modificar();",
+                                                width => "auto",
+                                                title   => "[% 'Modificar novedad' | i18n %]",
+                                                ) ;
+                            [% END %]
                         [% ELSE %]
-                            <input type="submit" value="[% 'Agregar' | i18n %]">
+                            [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
+                                                boton   => "boton_agregar",
+                                                onClick => "agregar();",
+                                                width => "auto",
+                                                title   => "[% 'Agreagr novedad' | i18n %]",
+                                                ) ;
+                            [% END %]
                         [% END %]
+                </ul>
             </form>
         </div>
 </fieldset>

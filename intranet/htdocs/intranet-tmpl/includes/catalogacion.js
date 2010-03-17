@@ -910,7 +910,7 @@ function procesarInfoJson(marc_object_array, id_padre){
         strComp = strComp + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre();
 
         if(campo_marc_conf_obj.getRepetible() == "1"){  
-            strComp = strComp + "<b> (R) </b>";
+//             strComp = strComp + "<b> (R) </b>";
             //cierro div CENTER
             strComp = strComp + "</div>";
             //header RIGHT
@@ -1057,9 +1057,9 @@ function procesarSubCampo(objeto, marc_group){
     var divComp             = crearDivComponente("div"+marc_conf_obj.getIdCompCliente());
     var tiene_estructura    = marc_conf_obj.getTieneEstructura(); //falta q los niveles 1, 2, 3 mantengan esta estructura
 
-    if(marc_conf_obj.getRepetible() == "1"){  
-        vista_intra = vista_intra + "<b> (R) </b>";
-    }
+//     if(marc_conf_obj.getRepetible() == "1"){  
+//         vista_intra = vista_intra + "<b> (R) </b>";
+//     }
 
     if(marc_conf_obj.getObligatorio() == "1"){  
         vista_intra = vista_intra + "<b> * </b>";

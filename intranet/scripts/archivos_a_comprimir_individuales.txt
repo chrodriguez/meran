@@ -13,9 +13,13 @@
 /includes/jquery/jquery.autocomplete
 /includes/jquery/datetimepicker/ui.datepicker
 /includes/jquery/jquery.dimensions
-/includes/jquery/ui.core
-/includes/jquery/ui.draggable
-/includes/jquery/ui.mouse
+/includes/jquery/ui/core
+/includes/jquery/ui/draggable
+/includes/jquery/ui/mouse
+/includes/jquery/ui/position
+/includes/jquery/ui/widget
+/includes/jquery/ui/dialog
+/includes/jquery/ui/custom
 /includes/util
 /includes/md5
 /includes/sha1
