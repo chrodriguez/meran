@@ -135,11 +135,12 @@ while ($line= <DATOS>) {
     }
 }
 
-
-# print 'TRUNCATE pref_indicador_primario;';
-# print "\n";
-# print 'TRUNCATE pref_indicador_secundario;';
-# print "\n";
+ print 'SET NAMES UTF8;';
+ print "\n";
+ print 'TRUNCATE pref_indicador_primario;';
+ print "\n";
+ print 'TRUNCATE pref_indicador_secundario;';
+ print "\n";
 
 ####A RECORRER!!!!!!!!!!!!!!
 my $sql='';
