@@ -2,16 +2,6 @@
 <script type="text/javascript">
     $(document).ready(function(){
         makeToggle('toggle_container','trigger',null,true);
-        $('.editable').editable('/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl', {
-              type      : 'text',
-              cancel    : CANCELAR,
-              submit    : OK,
-              tooltip   : EDITABLE_MSG,
-              placeholder: EDITABLE_MSG,
-              style   : 'display: inline',
-              submitdata : {token: "[% token %]", edit: '1', tipoAccion: "EDITAR_AUTORIZADO", nro_socio: "[% socio.getNro_socio %]"},
-              indicator : '<img src="'+imagesForJS+'/loaders/loader_default.gif"'+'>',
-        });
     });
 </script>
 
@@ -45,13 +35,13 @@
               <div class="authorizedBack">
                   <ul class="listado_sin_margen">
                       <li>
-                          [% "Nombre y Apellido del autorizado" | i18n %]:<span id="nombre_autorizado" class="editable strong" > [% socio.getNombre_apellido_autorizado%]</span>
+                          [% "Nombre y Apellido del autorizado" | i18n %]:<span id="nombre_autorizado" class="strong" > [% socio.getNombre_apellido_autorizado%]</span>
                       </li>
                       <li>
-                            [% "DNI del autorizado" | i18n %]:<span id="dni_autorizado" class="editable strong" >  [% socio.getDni_autorizado %]</span>
+                            [% "DNI del autorizado" | i18n %]:<span id="dni_autorizado" class="strong" >  [% socio.getDni_autorizado %]</span>
                       </li>
                       <li>
-                          [% "Tel&eacute;fono del autorizado" | i18n %]:<span id="telefono_autorizado" class="editable strong" >[% socio.getTelefono_autorizado %]</span>
+                          [% "Tel&eacute;fono del autorizado" | i18n %]:<span id="telefono_autorizado" class="strong" >[% socio.getTelefono_autorizado %]</span>
                       </li>
                   </ul>
               </div>
