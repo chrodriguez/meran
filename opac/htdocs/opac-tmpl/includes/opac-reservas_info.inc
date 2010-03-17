@@ -17,5 +17,12 @@
                       ) ;
           [% END %]
           &nbsp;[% reservas_espera_count %]<br />
+          [% PERL %]
+              print C4::AR::Filtros::link_to( text    =>  "&nbsp;[% 'Pr&eacute;stamos vigentes' | i18n %]:",
+                                              url     =>  "/cgi-bin/koha/opac-prestamos_vigentes.pl",
+                                              title   =>  "[% 'Pr&eacute;stamos vigentes' | i18n %]",
+                      ) ;
+          [% END %]
+          &nbsp;[% prestamos_count %]<br />
 
       </div>

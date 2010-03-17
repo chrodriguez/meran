@@ -22,6 +22,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 									debug => 1,
 			     });
 
+
 if ($action eq "detalle_espera"){
     $t_params->{'partial_template'}= "opac-detalle_reservas_espera.inc";
 }
@@ -30,8 +31,10 @@ elsif ($action eq "detalle_asignadas"){
 }
 
 
+
 my $nro_socio = C4::Auth::getSessionNroSocio();
 my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($nro_socio);
+my ($cant_prestamos, $prestamos) = C4::AR::Prestamos::getHistorialPrestamosVigentesParaTemplate($nro_socio);
 my $racount = 0;
 my $recount = 0;
 
@@ -54,6 +57,7 @@ if ($reservas){
     $t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;
 }
 $t_params->{'reservas_asignadas_count'}= $racount;
+$t_params->{'prestamos_count'}= $cant_prestamos;
 $t_params->{'reservas_espera_count'}=$recount;
 $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 $t_params->{'pagetitle'}= "Usuarios";

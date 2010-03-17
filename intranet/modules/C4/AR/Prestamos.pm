@@ -42,6 +42,7 @@ $VERSION = 3;
     &t_modificarTipoPrestamo
     &cantidadDeUsoTipoPrestamo
     &getInfoPrestamo
+    &getHistorialPrestamosVigentesParaTemplate
 );
 
 
@@ -398,10 +399,15 @@ sub obtenerPrestamosDeSocio {
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
                                           query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $nro_socio }],
-                                          require_objects => ['nivel3','socio','ui'],
+                                          require_objects => ['nivel3','socio','ui', 'nivel3.nivel2.nivel1'],
 
                                 ); 
-    return ($prestamos_array_ref);
+    my $prestamos_array_ref_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( 
+                                          query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $nro_socio }],
+                                          require_objects => ['nivel3','socio','ui'],
+
+                                );     
+    return ($prestamos_array_ref_count, $prestamos_array_ref);
 }
 
 =item
@@ -851,6 +857,16 @@ sub getHistorialPrestamosParaTemplate {
     return ($cant,$prestamos_array_ref);
 }
 
+
+sub getHistorialPrestamosVigentesParaTemplate {
+
+    my ($nro_socio,$ini,$cantR,$orden)=@_;
+
+    my ($cant,$prestamos_array_ref) = obtenerPrestamosDeSocio($nro_socio,$ini,$cantR,$orden);
+
+    
+    return ($cant,$prestamos_array_ref);
+}
 
 sub t_agregarTipoPrestamo {
     my ($params)=@_;
