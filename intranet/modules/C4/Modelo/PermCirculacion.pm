@@ -29,7 +29,7 @@ sub agregar{
     $self->setUI($permisos_hash->{'id_ui'});
     $self->setTipo_documento($permisos_hash->{'tipo_documento'});
     $self->setPrestamos($permisos_hash->{'prestamos'});
-    
+    $self->setCirc_opac($permisos_hash->{'circ_opac'});
     $self->save();
 }
 
@@ -39,6 +39,7 @@ sub setAll{
     my ($permisosByte) = @_;
     
     $self->setPrestamos($permisosByte);
+    $self->setCirc_opac($permisosByte);
 }
 
 sub modificar{
