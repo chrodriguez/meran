@@ -58,6 +58,11 @@
                       <li><a href='/cgi-bin/koha/login.pl'>[% 'Iniciar Sesi&oacute;n' | i18n %]</a></li>
                   [% ELSE %]
                       <li>
+                          <a href='/cgi-bin/koha/opac-prestamos_vigentes.pl?token=[% token %]'>
+                              [% 'Pr&eacute;stamos vigentes' | i18n %]
+                          </a>
+                      </li>
+                      <li>
                           <a href='/cgi-bin/koha/opac-historial_prestamos.pl?token=[% token %]'>
                               [% 'Historial de pr&eacute;stamos' | i18n %]
                           </a>

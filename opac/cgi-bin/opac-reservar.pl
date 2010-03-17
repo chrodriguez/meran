@@ -14,13 +14,13 @@ use C4::Date;
 
 my $input = new CGI;
 my ($template, $session, $t_params)= get_template_and_user({
-									template_name => "opac-reservar.tmpl",
-									query => $input,
-									type => "opac",
-									authnotrequired => 0,
-									flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'circ_opac'},
-									debug => 1,
-			     });
+        template_name => "opac-reservar.tmpl",
+        query => $input,
+        type => "opac",
+        authnotrequired => 0,
+        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'circ_opac', tipo_permiso => 'circulacion'},
+        debug => 1,
+});
 
 ## FIXME se deberia separar el detalle de las resrvas del usuario y aqui solo realizar la reserva e informar al usuario si se realizo
 # con exito o no
