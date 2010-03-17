@@ -542,7 +542,7 @@ sub obtenerPermisosCirculacion{
     $permisos = C4::AR::Permisos::getPermCirculacionOne(\@filtros);
 
     if ($permisos){
-        $permisos = C4::AR::Permisos::armarPerfilCatalogo($perfil,$permisos);
+        $permisos = C4::AR::Permisos::armarPerfilCirculacion($perfil,$permisos);
         $permisos = C4::AR::Permisos::parsearPermisos($permisos);
         $newUpdate = 0;
     }else{
