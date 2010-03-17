@@ -768,7 +768,7 @@ sub verificar_permisos_por_nivel{
     
     my @entornos_perm_general       = ( 'reportes','preferencias','permisos' );
     
-    my @entornos_perm_circulacion   = ( 'prestamos' );
+    my @entornos_perm_circulacion   = ( 'prestamos', 'circ_opac' );
 
     my @entornos_manejo_usuario     = ( 'usuarios' );
 #     my @entornos_circulacion = ('');

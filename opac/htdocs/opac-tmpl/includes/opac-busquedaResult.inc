@@ -193,6 +193,7 @@
             [% END %]
     </table>
     <br />
+    <div class="contenedor_paginador">[% paginador %]</div>
 [% END %]
 <!-- FIX PARA W3C PORQUE NO SE PERMITEN SCRIPT DENTRO DE TABLAS -->
 
