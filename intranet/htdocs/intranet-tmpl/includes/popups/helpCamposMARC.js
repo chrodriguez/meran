@@ -16,14 +16,16 @@ function abrirVentanaHelperMARC(){
 
 function updateAbrirVentanaHelperMARC(responseText){
 //se crea el objeto que maneja la ventana para modificar los/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl' datos del usuario
-    vHelperMARC=new WindowHelper({draggable: false, opacity: true});
-    vHelperMARC.debug= true;
-    vHelperMARC.html=responseText;
-    vHelperMARC.titulo= 'Ayuda campos MARC';
-    vHelperMARC.draggable= true;
-    vHelperMARC.dimmer_On= false;
-    vHelperMARC.create(); 
-    vHelperMARC.height('40%');
-    vHelperMARC.width('50%');
-    vHelperMARC.open();
+//     vHelperMARC=new WindowHelper({draggable: false, opacity: true});
+//     vHelperMARC.debug= true;
+//     vHelperMARC.html=responseText;
+//     vHelperMARC.titulo= 'Ayuda campos MARC';
+//     vHelperMARC.draggable= true;
+//     vHelperMARC.dimmer_On= false;
+//     vHelperMARC.create(); 
+//     vHelperMARC.height('40%');
+//     vHelperMARC.width('50%');
+//     vHelperMARC.open();
+    $('#ayuda_marc_content').html(responseText);
+    $('#windowHelp').dialog({ width: 510 });
 }

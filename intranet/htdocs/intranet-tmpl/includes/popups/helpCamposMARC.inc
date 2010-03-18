@@ -47,9 +47,11 @@ $(document).ready(function() {
 			<input type="hidden" id="campoHelpId" name="campoHelpId">
 		</li>
 		<li>
-			<label for="subcampo">
+<!-- 			<label for="subcampo"> -->
 			Sub Campo:
-			</label>
+<!-- 			</label> -->
+        </li>
+        <li>
 			<textarea 	id="subcampos" name="subcampos" rows="7" style="width:70%;" readonly=readonly></textarea>
 		</li>
 		<li>
