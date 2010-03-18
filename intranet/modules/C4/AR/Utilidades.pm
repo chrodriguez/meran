@@ -2533,7 +2533,7 @@ sub ayudaCampoMARCAutocomplete{
     my $textout;
 
     foreach my $campo_marc (@$campos_marc_array_ref){
-        $textout.= $campo_marc->getCampo."|".$campo_marc->getLiblibrarian."\n";
+        $textout.= $campo_marc->getCampo."| (".$campo_marc->getCampo.") ".$campo_marc->getLiblibrarian."\n";
     }
     
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
