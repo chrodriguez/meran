@@ -4,13 +4,14 @@
 [% INCLUDE 'datePicker.inc' %]
 
 <script type="text/javascript">
-    function postFecha(date,stat){
+    function postFecha(date,stat,feriado){
         objAH=new AjaxHelper(null);
         objAH.debug= true;
         objAH.url='/cgi-bin/koha/admin/postFecha.pl';
         objAH.debug= true;
         objAH.date= date;
         objAH.stat= stat;
+        objAH.feriado= feriado;
         objAH.sendToServer();
     }
 
@@ -31,19 +32,10 @@
             }
         );
 
-        $('#getSelected').bind(
-            'click',
-            function(e)
-            {
-                alert($('#calendar').dpmmGetSelected());
-                return false;
-            }
-        );
-        
     });
     $(document).ready(function(){
         [% FOREACH date IN dates %]
-            $('#calendar').dpmmSetSelected('[% date %]');
+            $('#calendar').dpmmSetSelected('[% date.getFecha %]');
         [% END %]
         $('#calendar').bind(
             'dateSelected',
@@ -51,7 +43,14 @@
             {
                 // uncomment if you have firebug and want to confirm this works as expected...
 //                 console.log('dateSelected', date.asString());
-                  postFecha(date.asString(),status);
+                if (status){
+                    jPrompt('[% "Raz&oacute;n del Feriado" | i18n %]', '', '[% "Feriados" | i18n %]', function(texto) {
+                          if (texto)
+                              postFecha(date.asString(),status,texto);
+                    });
+                }else{
+                    postFecha(date.asString(),status,null);
+                }
             }
         );
     });

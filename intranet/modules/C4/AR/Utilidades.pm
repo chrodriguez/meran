@@ -2927,7 +2927,7 @@ sub getFeriados{
     my @dates;
 
     foreach my $date (@$feriados){
-        push (@dates, $date->getFecha());
+        push (@dates, $date);
     }
 
     return (\@dates);
@@ -2935,7 +2935,7 @@ sub getFeriados{
 
 sub setFeriado{
 
-    my ($fecha,$status) = @_;
+    my ($fecha,$status,$texto_feriado) = @_;
 
     use C4::Modelo::PrefFeriado;
     use C4::Modelo::PrefFeriado::Manager;
@@ -2945,11 +2945,11 @@ sub setFeriado{
     my $feriado = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { eq => $fecha } ] );
     
     if (scalar(@$feriado)){
-        $feriado->[0]->setFecha($fecha,$status);
+        $feriado->[0]->setFecha($fecha,$status,$texto_feriado);
     }else{
         $feriado = C4::Modelo::PrefFeriado->new();
         eval{
-            $feriado->agregar($fecha,$status);
+            $feriado->agregar($fecha,$status,$texto_feriado);
         };
     }
     return (1);
