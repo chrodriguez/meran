@@ -1194,6 +1194,8 @@ fieldset.accionesUsuarios{
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+.titulo_legend_resaltado{font-weight:bold;font-size:12px;color:#555555;font-family:Arial, Helvetica, sans-serif;background-color:threedhighlight;padding:2px;}
+
 .titulo_legend_warning{
   font-weight:bold;
   color: #CC0033;
