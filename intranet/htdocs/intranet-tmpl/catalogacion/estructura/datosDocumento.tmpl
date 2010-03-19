@@ -45,7 +45,7 @@ $(document).ready( function() {
 		params.id3= [% id3 %];
 		params.tipoAccion= '[% tipoAccion %]';
 		cargarNivel1(params);
-    MODIFICAR = 1;
+        MODIFICAR = 1;
         _modificar = true;
 	[% ELSE %] 
 		[% IF tipoAccion == "MODIFICAR_NIVEL_2" %]
@@ -55,7 +55,7 @@ $(document).ready( function() {
 			params.id3= [% id3 %];
 			params.tipoAccion= '[% tipoAccion %]';
 			cargarNivel1(params);
-      MODIFICAR = 1;
+            MODIFICAR = 1;
             _modificar = true;
 		[% ELSE %]	
 			[% IF tipoAccion == "MODIFICAR_NIVEL_3" %]
@@ -65,7 +65,7 @@ $(document).ready( function() {
 				params.id3= [% id3 %];
 				params.tipoAccion= '[% tipoAccion %]';
 				cargarNivel1(params);
-        MODIFICAR = 1;
+                MODIFICAR = 1;
                 _modificar = true;
 			[% END %]
 		[% END %]
