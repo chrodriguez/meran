@@ -526,9 +526,14 @@ sub _verificarDatosBorrower {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U335', 'params' => []} ) ;
     }
 
+    my $tipo_doc = $data->{'tipo_documento'};
+    if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($tipo_doc)))){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U800', 'params' => []} ) ;
+    }
+
     my $documentnumber = $data->{'nro_documento'};
     $checkStatus = &C4::AR::Validator::isValidDocument($data->{'tipo_documento'},$documentnumber);
-C4::AR::Debug::debug("tipo doc: ".$data->{'tipo_documento'}." numero ".$documentnumber." resultado ".$checkStatus);
     if (!($msg_object->{'error'}) && ( $checkStatus == 0)){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;

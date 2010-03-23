@@ -169,6 +169,7 @@ my %mensajesINTRA = (
 	'U334' => 'El apellido no puede estar en blanco.',
 	'U335' => 'El nombre no puede estar en blanco.',
 	'U336' => 'El n&uacute;mero de documento no puede estar en blanco, o no respeta el formato adecuado.',
+	'U800' => 'El tipo de documento no puede estar en blanco.',
 	'U337' => 'El nombre de la ciudad no puede estar en blanco.',
 	'U338' => 'Se modificaron los datos del usuario correctamente.',
 	'U339' => 'Disculpe, no se pudo modificar los datos del usuario, intente nuevamente.',
