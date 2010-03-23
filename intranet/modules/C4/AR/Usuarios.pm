@@ -538,7 +538,7 @@ sub _verificarDatosBorrower {
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;
     }else{
-          if ( (!C4::AR::Usuarios::isUniqueDocument($documentnumber,$data)) && ( !$data->{'modifica'} ) ) {
+          if ( (!C4::AR::Usuarios::isUniqueDocument($documentnumber,$data)) ) {
                 $msg_object->{'error'}= 1;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U388', 'params' => []} ) ;
           }
@@ -827,8 +827,7 @@ sub isUniqueDocument {
     my @filtros;
     use C4::Modelo::UsrSocio::Manager;
 
-    push (@filtros, ( 'persona.nro_documento' => {eq => $nro_documento},
-                      'persona.tipo_documento' => {eq => $params->{'tipo_documento'} } ) );
+    push (@filtros, ( 'persona.nro_documento' => {eq => $nro_documento}, ) );
 
     if (C4::AR::Utilidades::validateString($params->{'nro_socio'})) {
         push (@filtros, (nro_socio => {ne => $params->{'nro_socio'} }) );
