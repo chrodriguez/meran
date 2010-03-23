@@ -432,7 +432,7 @@ sub libreDeuda{
     
     my $categ=$socio->categoria->getDescription;
 
-    my $branchname=$socio->ui->getNombre;
+    my $branchname=$socio->ui->getNombrePDF;
 
     my ($pdf,$pagewidth, $pageheight) = &inicializarPDF();
 

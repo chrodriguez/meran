@@ -35,10 +35,16 @@ sub setId_ui{
     return ($self->id_ui($id_ui));
 }  
 
-sub getNombre{
+sub getNombrePDF{
     my ($self) = shift;
 
     return (C4::AR::Utilidades::trim(Encode::decode_utf8($self->nombre)));
+}
+
+sub getNombre{
+    my ($self) = shift;
+
+    return (C4::AR::Utilidades::trim($self->nombre));
 }
     
 sub setNombre{
