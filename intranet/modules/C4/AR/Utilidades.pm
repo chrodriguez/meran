@@ -1702,7 +1702,7 @@ sub generarComboCategoriasDeSocio{
         $options_hash{'onBlur'}= $params->{'onBlur'};
     }
 
-    $options_hash{'name'}= $params->{'name'}||'categoria_socio_name';
+    $options_hash{'name'}= $params->{'name'}||'categoria_socio_id';
     $options_hash{'id'}= $params->{'id'}||'categoria_socio_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
