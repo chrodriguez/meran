@@ -32,20 +32,19 @@ sub getId_ui{
 sub setId_ui{
     my ($self) = shift;
     my ($id_ui) = @_;
-    
     return ($self->id_ui($id_ui));
 }  
 
 sub getNombre{
     my ($self) = shift;
 
-    return (C4::AR::Utilidades::trim($self->nombre));
+    return (C4::AR::Utilidades::trim(Encode::decode_utf8($self->nombre)));
 }
     
 sub setNombre{
     my ($self) = shift;
     my ($nombre) = @_;
-
+    $nombre = Encode::encode_utf8($nombre);
     $self->nombre($nombre);
 }
     

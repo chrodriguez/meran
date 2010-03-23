@@ -239,7 +239,7 @@ sub generarComboDeCredentials{
     $select_credentials{'librarian'} = 'librarian';
     $select_credentials{'superLibrarian'} = 'superLibrarian';
     my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
-    my $default_credential = 'estudiante';
+    my $default_credential = $params->{'socio_modificar'}->getCredentialType() || 'estudiante';
     if ($socio){
         $default_credential = $socio->getCredentialType;
     }

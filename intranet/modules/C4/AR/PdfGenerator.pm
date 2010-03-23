@@ -442,10 +442,10 @@ sub libreDeuda{
     $titulo{'titulo'}="CERTIFICADO DE LIBRE DEUDA";
     $titulo{'posx'}=170;
     my @parrafo;
-    $parrafo[0]="       Certificamos que ".$nombre.", de la ".$branchname.", ";
-    $parrafo[1]=" con número de documento ".$dni.", no adeuda material bibliográfico en esta Biblioteca.";
-    $parrafo[2]="       Se extiende el presente certificado para ser presentado ante quien corresponda, con una";
-    $parrafo[3]=" validez de 10 días corridos a partir de su fecha de emisión.";
+    $parrafo[0]=Encode::decode_utf8("       Certificamos que ".$nombre.", de la ".$branchname.", ");
+    $parrafo[1]=Encode::decode_utf8(" con número de documento ".$dni.", no adeuda material bibliográfico en esta Biblioteca.");
+    $parrafo[2]=Encode::decode_utf8("       Se extiende el presente certificado para ser presentado ante quien corresponda, con una");
+    $parrafo[3]=Encode::decode_utf8(" validez de 10 días corridos a partir de su fecha de emisión.");
 
     ($pdf)=&imprimirEncabezado($pdf,$categ,$branchname,$x,$pagewidth,$pageheight,\%titulo,);
     ($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
