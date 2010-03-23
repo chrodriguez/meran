@@ -2510,7 +2510,8 @@ sub autorAutocomplete{
         $textout.= $autor->getId."|".$autor->getCompleto."\n";
     }
     
-    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+#     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+    return ($textout eq '')?"-1|".$autorStr:$textout;
 }
 
 sub obtenerDescripcionDeSubCampos{
@@ -2588,14 +2589,15 @@ sub autocompleteTemas{
 sub autoresAutocomplete{
     my ($autor) = @_;
 
-    my ($cant, $autores_array_ref)= &C4::AR::ControlAutoridades::search_autores($autor);
-    my $resultado="";
+    my ($cant, $autores_array_ref) = &C4::AR::ControlAutoridades::search_autores($autor);
+    my $resultado = "";
    
     foreach my $autor (@$autores_array_ref){
         $resultado .=  $autor->getId."|". $autor->getCompleto. "\n";
     }
 
-    return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
+#     return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
+    return ($resultado eq '')?"-1|".$autor:$resultado;
 }
 
 sub autocompleteEditoriales{

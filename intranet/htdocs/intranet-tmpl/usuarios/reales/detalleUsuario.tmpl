@@ -49,7 +49,9 @@
      [% END %]
         <div id="datos_Secundarios">
         <fieldset>
-            <legend class="trigger click titulo_legend">[% "Datos secundarios" | i18n %]</legend>
+            <legend class="trigger click titulo_legend" title='[% "click para acceder a informaci&oacute;n adicional" | i18n %]'>
+                    [% "Datos secundarios" | i18n %]
+            </legend>
             <div class="toggle_container">
                 <ul class="listado_sin_margen">
                     <li>[% "Fecha de nacimiento:" | i18n %] <strong> [% socio.persona.getNacimiento %]</strong></li>
