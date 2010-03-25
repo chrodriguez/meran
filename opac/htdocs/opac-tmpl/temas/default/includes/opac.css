@@ -561,7 +561,9 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
     color:blue;
 }
 
-
-
+/* mensajes de error */
+em.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scroll 0 0;padding-left:16px;color:red;}
+div.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scroll 0 0;padding-left:16px;}
+label.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scroll 0 0;padding-left:16px;width:auto;}
 
 

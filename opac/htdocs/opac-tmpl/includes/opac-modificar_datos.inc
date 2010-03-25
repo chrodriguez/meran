@@ -24,24 +24,27 @@
     });
 </script>
         <h1 class="block">[% 'Modificar sus datos personales' | i18n%]</h1>
+        [% IF mensaje %]
+            <h1 class="block error_field">[% 'Error en datos, s&iacute;rvase corregirlos' | i18n%]</h1>
+        [% END %]
         <div class="column1-unit" style="width: 500px">
           <div class="contactform" style="width: 100%">
             <form method="post" action="/cgi-bin/koha/opac-userupdate.pl" onSubmit="return checkPassword()">
               <fieldset>
                 <legend>&nbsp;[% 'Detalle de ' | i18n %] [% socio.persona.getApellido %], [% socio.persona.getNombre %]&nbsp;</legend>
                 <p><label for="contact_firstname" class="left">[% 'Nombres' |  i18n %]* :</label>
-                   <input type="text" name="nombre" id="nombre" class="field" value="[% socio.persona.getNombre %]" tabindex="6" /></p>
+                   <input type="text" name="nombre" id="nombre" class="field [% IF !socio.persona.getNombre %] error_field [% END %]" value="[% socio.persona.getNombre %]" tabindex="6" /></p>
                 <p><label for="apellido" class="left">[% 'Apellido/s' |  i18n %]* :</label>
-                   <input type="text" name="apellido" id="apellido" class="field" value="[% socio.persona.getApellido %]" tabindex="7" /></p>
+                   <input type="text" name="apellido" id="apellido" class="field [% IF !socio.persona.getApellido %] error_field [% END %]" value="[% socio.persona.getApellido %]" tabindex="7" /></p>
                 <p><label for="ciudad" class="left">[% 'Ciudad' |  i18n %]* :</label>
-                   <input type="text" name="ciudad" id="ciudad" class="field" value="[% socio.persona.ciudad_ref.NOMBRE %]" tabindex="8" />
+                   <input type="text" name="ciudad" id="ciudad" class="field [% IF !socio.persona.ciudad_ref.id %] error_field [% END %]" value="[% socio.persona.ciudad_ref.NOMBRE %]" tabindex="8" />
                    <input type="hidden" name="id_ciudad" id="id_ciudad" class="field" value="[% socio.persona.ciudad_ref.id %]"/> </p>
                 <p><label for="direccion" class="left">[% 'Direcci&oacute;n' |  i18n %]* :</label>
-                   <input type="text" name="direccion" id="direccion" class="field" value="[% socio.persona.getCalle %]" tabindex="9" /></p>
+                   <input type="text" name="direccion" id="direccion" class="field [% IF !socio.persona.getCalle %] error_field [% END %]" value="[% socio.persona.getCalle %]" tabindex="9" /></p>
                 <p><label for="telefono" class="left">[% 'Tel&eacute;fono' |  i18n %]* :</label>
-                   <input type="text" name="telefono" id="telefono" class="field" value="[% socio.persona.getTelefono %]" tabindex="10" /></p>
+                   <input type="text" name="telefono" id="telefono" class="field [% IF !socio.persona.getTelefono %] error_field [% END %]" value="[% socio.persona.getTelefono %]" tabindex="10" /></p>
                 <p><label for="email" class="left">[% 'E-mail' |  i18n %]* :</label>
-                   <input type="text" name="email" id="email" class="field" value="[% socio.persona.getEmail %]" tabindex="11" /></p>
+                   <input type="text" name="email" id="email" class="field [% IF !socio.persona.getEmail %] error_field [% END %]" value="[% socio.persona.getEmail %]" tabindex="11" /></p>
                    <input type="hidden" name="token" id="token" value="[% token %]" />
                    <!-- CAMPOS PARA CAMBIO DE PASSWORD -->
                    <input type="hidden" name="new_password1" id="new_password1" />
