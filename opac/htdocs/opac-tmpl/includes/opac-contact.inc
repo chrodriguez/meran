@@ -16,9 +16,9 @@ function validateForm(){
    
 //          $().ready(function() {
             // validate signup form on keyup and submit
-//             $.validator.setDefaults({
-//               submitHandler:  enviar_datos,
-//             });
+            $.validator.setDefaults({
+              submitHandler:  function(){$('#contactform').submit();},
+            });
 // $.validator.setDefaults({
 //     submitHandler: function() { alert("submitted!"); }
 // });
