@@ -4,29 +4,10 @@
 
 <script type="text/javascript">
 
-// function enviar_datos(){
-// 
-//    $('#contactform').submit();
-// //     return true;
-// }
-
-
 function validateForm(){
-
-   
-//          $().ready(function() {
-            // validate signup form on keyup and submit
-//             $.validator.setDefaults({
-//               submitHandler:  function(){$('#contactform').submit();},
-//             });
-// $.validator.setDefaults({
-//     submitHandler: function() { alert("submitted!"); }
-// });
-
 
             $("#contactform").validate({
     
-//                 debug: true,
                 errorElement: "em",
                 errorClass: "error_adv",
                 rules: {
@@ -45,11 +26,8 @@ function validateForm(){
                         email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
                 }
             });
-//          });
 }
 
-
-// TODO no esta funcionando el submit
 $(document).ready( function() {
     validateForm();
 });
@@ -90,7 +68,6 @@ $(document).ready( function() {
                 <p><label for="mensaje" class="left">[% 'Mensaje *' | i18n %]:</label>
                    <textarea name="mensaje" id="mensaje" cols="45" class="required" rows="10" tabindex="17"></textarea></p>
                 <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Enviar Mensaje' | i18n %]" tabindex="18" /></p>
-<!--                 <p><input type="button" name="submit" id="submit" class="button" value="Send message" onclick="enviar_datos()" tabindex="18" /></p> -->
                    <input type="hidden" name="post_message" id="post_message" value="1"/>
               </fieldset>
             </form>
