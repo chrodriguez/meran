@@ -13,7 +13,7 @@
 
 		<td>
 			<a class="click" id="checkAllPrestamos">
-			<img 	src="[% themelang %]/images/check.png" border="0" 
+			<img 	src="[% temas %]/[% tema %]/imagenes/iconos/check.png" border="0" 
 				title="[% 'Invertir la selecci&oacute;n' | i18n %]">
 			</a>
 		</td>
@@ -85,10 +85,11 @@
 
         [% IF algunoSeRenueva %]
             [% PERL %]
-                        print C4::AR::Filtros::to_Icon(   text    => "[% 'Renovar' | i18n %]",
+                        print C4::AR::Filtros::to_Icon(     text    => "[% 'Renovar' | i18n %]",
                                                             boton   => "icon_renovar",
                                                             onClick => "realizarAccion('RENOVACION','chkboxPrestamos',generaDivRenovacion);",
                                                             title   => "[% 'Renovar' | i18n %]",
+                                                            alternClass => "botonCentrado"
                                 ) ;
             [% END %]
         [% END %]
