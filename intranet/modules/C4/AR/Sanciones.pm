@@ -189,7 +189,7 @@ C4::AR::Debug::debug("Corresponde una sancion vamos a calcular de cuantos dias!"
   my $tipo_sancion_array_ref = C4::Modelo::CircTipoSancion::Manager->get_circ_tipo_sancion ( 
                                                                     query => [ 
                                                                             tipo_prestamo       => { eq => $tipo_prestamo },
-                                                                            categoria_socio  => { eq => $categoria },
+                                                                            categoria_socio     => { eq => $categoria },
                                                                         ],
                                     );
 

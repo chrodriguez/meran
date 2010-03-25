@@ -5,6 +5,7 @@
 <script src="/intranet-tmpl/includes/popups/helpCamposMARC.js"></script>
 <!-- para manejar el ABM del catalogo -->
 <script src="/intranet-tmpl/includes/catalogacion-min.js"></script>
+<script src="/intranet-tmpl/includes/admin/tablasDeReferencia.js"></script>
 
 
 [% INCLUDE 'datePicker.inc' %]
@@ -17,7 +18,7 @@
 
 
 
-<script>
+<script type="text/javascript">
 
 var TIENE_NIVEL_2 = 0;
 
@@ -45,7 +46,7 @@ $(document).ready( function() {
 		params.id3= [% id3 %];
 		params.tipoAccion= '[% tipoAccion %]';
 		cargarNivel1(params);
-    MODIFICAR = 1;
+        MODIFICAR = 1;
         _modificar = true;
 	[% ELSE %] 
 		[% IF tipoAccion == "MODIFICAR_NIVEL_2" %]
@@ -55,7 +56,7 @@ $(document).ready( function() {
 			params.id3= [% id3 %];
 			params.tipoAccion= '[% tipoAccion %]';
 			cargarNivel1(params);
-      MODIFICAR = 1;
+            MODIFICAR = 1;
             _modificar = true;
 		[% ELSE %]	
 			[% IF tipoAccion == "MODIFICAR_NIVEL_3" %]
@@ -65,7 +66,7 @@ $(document).ready( function() {
 				params.id3= [% id3 %];
 				params.tipoAccion= '[% tipoAccion %]';
 				cargarNivel1(params);
-        MODIFICAR = 1;
+                MODIFICAR = 1;
                 _modificar = true;
 			[% END %]
 		[% END %]
@@ -92,6 +93,7 @@ $(document).ready( function() {
 <div id="titulo_modificar" style="display:none">
     <p class="titulos" >[% "Modificar Documento" | i18n %]</p>
 </div>-->
+<div id="abm_tablas_referencia"></div>
 
 <div id="div_combo_tipo_documento">
 [% "Esquema de ingreso de datos tipo:" | i18n %] [% comboTipoDocumento %]
@@ -105,9 +107,6 @@ $(document).ready( function() {
                 [% END %]
 
 </div>
-
-test
-<div id="dialog" title="Dialog Title">I'm in a dialog</div>
 
 
 <div class="todo">

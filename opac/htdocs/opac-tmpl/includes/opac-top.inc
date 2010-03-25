@@ -33,9 +33,7 @@
   <script src="/includes/jquery/jquery.js" type="text/javascript"></script>
   <script src="/includes/AjaxHelper.js" type="text/javascript"></script>
   <script src="/includes/jquery/jquery.alerts.js" type="text/javascript"></script>
-  <script src="/includes/jquery/ui.core.js" type="text/javascript"></script>
-  <script src="/includes/jquery/ui.mouse.js" type="text/javascript"></script>
-  <script src="/includes/jquery/ui.draggable.js" type="text/javascript"></script>
+  <script src="/includes/jquery/ui/jquery-ui-1.7.2.custom.min.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui.stars.js" type="text/javascript"></script>
   <script src="/includes/jquery/jquery.wysiwyg.js" type="text/javascript"></script>
   <script src="/includes/json/jsonStringify.js" type="text/javascript"></script>

@@ -22,8 +22,9 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $fecha = $obj->{'date'};
 my $status = $obj->{'stat'};
+my $feriado = $obj->{'feriado'};
 
-C4::AR::Utilidades::setFeriado($fecha,$status);
+C4::AR::Utilidades::setFeriado($fecha,$status,$feriado);
 
 C4::Auth::print_header($session);
 

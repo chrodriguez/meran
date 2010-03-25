@@ -173,9 +173,9 @@ function updateEliminarUsuario(responseText){
 //************************************************gu Usuario**********************************************
 function agregarUsuario(){
 
-      objAH=new AjaxHelper(updateAgregarUsuario);
-      objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-      objAH.debug= true;
+      objAH         = new AjaxHelper(updateAgregarUsuario);
+      objAH.url     = '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+      objAH.debug   = true;
       if ( (($.trim(nro_socio)).length == 0 ) || ( $('#nro_socio').val() == 'Auto-generar' ) ) {
         objAH.auto_nro_socio=1;
       }else{
@@ -200,7 +200,7 @@ function agregarUsuario(){
       objAH.legajo          = $('#legajo').val();
       objAH.changepassword  = ( $('#changepassword').attr('checked') )?1:0;
       objAH.tipoAccion      = 'AGREGAR_USUARIO';
-      objAH.tema= $('#temas_intra').val();
+      objAH.tema            = $('#temas_intra').val();
 
       objAH.sendToServer();
 }

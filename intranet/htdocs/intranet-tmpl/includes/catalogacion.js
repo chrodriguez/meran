@@ -286,6 +286,8 @@ function syncComponentesArray(){
                     }else if($('#'+subcampos_array[s].getIdCompCliente()).val() != '' && subcampos_array[s].getTipo() == 'auto'){
 //                         subcampos_array[s].setDatoReferencia($('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val());
                         subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val());
+                        subcampos_array[s].setDatoReferencia($('#'+subcampos_array[s].getIdCompCliente()).val());
+//                         alert( ('#'+subcampos_array[s].getIdCompCliente() ));
                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val();
 //                         log("syncComponentesArray => AUTO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
                     }else{
@@ -1505,10 +1507,22 @@ function crearHidden(obj){
     return "<input type='hidden' id='" + obj.getIdCompCliente() + "_hidden' name='" + obj.getIdCompCliente() + "' value='" + obj.getDatoReferencia() + "'>";
 }
 
+function agregarRegistroAutor(){
+    agregarRegistro('autor');
+}
+
+function updateAgregarRegistro(responseText){
+    $('#abm_tablas_referencia').html(responseText);
+    $('#windowHelp').dialog({ width: 510 });
+}
+
 function crearAuto(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='"+ obj.getIdCompCliente() +"' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" class='horizontal' >";
 
     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
+
+    comp = comp + "<input type='button' value='agregar autor' onclick='agregarRegistroAutor()'>"
+
 //     comp = comp + crearBotonEliminarRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 

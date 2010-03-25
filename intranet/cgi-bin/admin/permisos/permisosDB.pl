@@ -33,8 +33,9 @@ if ($accion eq "catalogo"){
                         flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
                         debug => 1,
 			        });
-
-    my $combo_tipoDoc = C4::AR::Utilidades::generarComboTipoNivel3();
+    my %params_combo = {};
+    $params_combo{'default'}='ALL';
+    my $combo_tipoDoc = C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
     $t_params->{'combo_tipoDoc'} = $combo_tipoDoc;
     my %params_options;
     $params_options{'optionALL'} = 1;

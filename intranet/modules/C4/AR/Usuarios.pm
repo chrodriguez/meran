@@ -526,14 +526,19 @@ sub _verificarDatosBorrower {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U335', 'params' => []} ) ;
     }
 
+    my $tipo_doc = $data->{'tipo_documento'};
+    if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($tipo_doc)))){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U800', 'params' => []} ) ;
+    }
+
     my $documentnumber = $data->{'nro_documento'};
     $checkStatus = &C4::AR::Validator::isValidDocument($data->{'tipo_documento'},$documentnumber);
-C4::AR::Debug::debug("tipo doc: ".$data->{'tipo_documento'}." numero ".$documentnumber." resultado ".$checkStatus);
     if (!($msg_object->{'error'}) && ( $checkStatus == 0)){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;
     }else{
-          if ( (!C4::AR::Usuarios::isUniqueDocument($documentnumber,$data)) && ( !$data->{'modifica'} ) ) {
+          if ( (!C4::AR::Usuarios::isUniqueDocument($documentnumber,$data)) ) {
                 $msg_object->{'error'}= 1;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U388', 'params' => []} ) ;
           }
@@ -822,8 +827,7 @@ sub isUniqueDocument {
     my @filtros;
     use C4::Modelo::UsrSocio::Manager;
 
-    push (@filtros, ( 'persona.nro_documento' => {eq => $nro_documento},
-                      'persona.tipo_documento' => {eq => $params->{'tipo_documento'} } ) );
+    push (@filtros, ( 'persona.nro_documento' => {eq => $nro_documento}, ) );
 
     if (C4::AR::Utilidades::validateString($params->{'nro_socio'})) {
         push (@filtros, (nro_socio => {ne => $params->{'nro_socio'} }) );

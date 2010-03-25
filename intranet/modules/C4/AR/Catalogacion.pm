@@ -72,6 +72,7 @@ C4::AR::Debug::debug("CAnt ".$cant_campos." ?????????????????????????");
         my $indentificador_2        = C4::AR::Utilidades::ASCIItoHEX($infoArrayNivel->[$i]->{'indicador_secundario'});
         my $campo                   = $infoArrayNivel->[$i]->{'campo'};
         my $subcampos_hash          = $infoArrayNivel->[$i]->{'subcampos_hash'};
+        my $subcampos_array         = $infoArrayNivel->[$i]->{'subcampos_array'};
         my $cant_subcampos          = $infoArrayNivel->[$i]->{'cant_subcampos'};
 
 
@@ -82,6 +83,8 @@ C4::AR::Debug::debug("CAnt ".$cant_campos." ?????????????????????????");
         for(my $j=0;$j<$cant_subcampos;$j++){
             my $subcampo = $subcampos_hash->{$j};
             C4::AR::Debug::debug("CAMPO => ".$campo);
+            C4::AR::Debug::debug("_meran_to_marc => subcampo, dato => ".$subcampos_array->[$j]->{'dato'});
+            C4::AR::Debug::debug("_meran_to_marc => subcampo, datoReferencia => ".$subcampos_array->[$j]->{'datoReferencia'});
 #             C4::AR::Utilidades::printHASH($subcampo);
             while ( my ($key, $value) = each(%$subcampo) ){
                 #C4::AR::Utilidades::printARRAY($autorizados{$campo});
@@ -132,7 +135,7 @@ sub meran_nivel1_to_meran{
 =head2
 sub meran_nivel2_to_meran 
 
-Funciona de manera similar a meran_nivel1_to_meran pero para el nivel 2
+Funciona de manera similar a meran_nivel2_to_meran pero para el nivel 2
 
 =cut
 sub meran_nivel2_to_meran{
@@ -149,7 +152,7 @@ sub meran_nivel2_to_meran{
 =head2
 sub meran_nivel3_to_meran
 
-Funciona de manera similar a meran_nivel1_to_meran pero para el nivel 3
+Funciona de manera similar a meran_nivel3_to_meran pero para el nivel 3
 
 =cut
 sub meran_nivel3_to_meran{
@@ -450,14 +453,14 @@ sub marc_record_to_meran {
 
             my $subcampo                        = $subfield->[0];
             my $dato                            = $subfield->[1];
-            C4::AR::Debug::debug("Catalogacion => detalleMARC => campo: ".$campo);
-            C4::AR::Debug::debug("Catalogacion => detalleMARC => subcampo: ".$subcampo);
-            C4::AR::Debug::debug("Catalogacion => detalleMARC => dato: ".$dato);
+            C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => campo: ".$campo);
+            C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => subcampo: ".$subcampo);
+            C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato: ".$dato);
             $hash_temp{'subcampo'}              = $subcampo;
             $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype);
             $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype);
             $hash_temp{'datoReferencia'}        = $dato;
-            C4::AR::Debug::debug("Catalogacion => detalleMARC => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
+            C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
             my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype);
             $hash_temp{'dato'}                  = $valor_referencia;
             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato despues de getDatoFromReferencia: ".$hash_temp{'dato'});

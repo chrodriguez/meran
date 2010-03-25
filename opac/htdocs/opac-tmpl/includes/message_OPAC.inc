@@ -27,5 +27,10 @@
 
     OPAC_ALERT_TITLE= '[% "Alerta de La Biblioteca" | i18n %]';
 
+    POR_FAVOR_INGRESE_SU_APELLIDO   = "[% 'Por favor, ingrese su apellido' | i18n %]";
+    POR_FAVOR_INGRESE_SU_NOMBRE     = "[% 'Por favor, ingrese su/s nombre/s' | i18n %]";
+    POR_FAVOR_INGRESE_SU_MENSAJE    = "[% 'Por favor, ingrese su mensaje' | i18n %]";
+    POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA= "[% 'Por favor, ingrese una direcci\u00f3n de email v\u00e1lida' | i18n %]";
+
 
 </script>

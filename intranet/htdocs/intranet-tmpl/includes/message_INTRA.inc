@@ -137,7 +137,8 @@
     SELECCIONE_VISTA_INTRA= "[% 'Seleccione una opcion en todos los campos' | i18n %]";
     /*=============================================Fin===Visualizacion Opac===========================================*/
     /*================================================Busquedas==============================================*/
-    SELECCIONE_AL_MENOS_UN_CAMPO_PARA_BUSCAR= "[% 'Seleccione al menos un campo para buscar' | i18n %]";
+    INGRESE_DATOS_PARA_LA_BUSQUEDA = "[% 'Ingrese datos para la b\u00fasqueda' | i18n %]";
+    INGRESE_AL_MENOS_TRES_CARACTERES_PARA_REALIZAR_LA_BUSQUEDA = "[% 'Ingrese al menos 3 caracteres para realizar la b\u00fasqueda' | i18n %]";    
     /*=============================================Fin===Busquedas===========================================*/
 
     /*================================================Reglas Sanciones==============================================*/

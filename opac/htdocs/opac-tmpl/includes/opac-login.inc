@@ -10,7 +10,6 @@
             var hash= b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
             $("#password").val(hash);
             $("#userid").val(username);
-            $("#datosAEnviar").submit();
             return true;
         }
     </script>
@@ -53,7 +52,7 @@
 
       <div class="column1-unit">
           <div class="contactform">
-              <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl" onsubmit = "enviar()" autocomplete="off">
+              <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl" onsubmit="return enviar()" autocomplete="off">
         <!-- <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl">  -->
                 <p><input type="hidden" name="remember_me" value="0" /></p>
                 <fieldset>

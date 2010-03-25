@@ -239,7 +239,7 @@ sub generarComboDeCredentials{
     $select_credentials{'librarian'} = 'librarian';
     $select_credentials{'superLibrarian'} = 'superLibrarian';
     my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
-    my $default_credential = 'estudiante';
+    my $default_credential = $params->{'socio_modificar'}->getCredentialType() || 'estudiante';
     if ($socio){
         $default_credential = $socio->getCredentialType;
     }
@@ -1702,7 +1702,7 @@ sub generarComboCategoriasDeSocio{
         $options_hash{'onBlur'}= $params->{'onBlur'};
     }
 
-    $options_hash{'name'}= $params->{'name'}||'categoria_socio_name';
+    $options_hash{'name'}= $params->{'name'}||'categoria_socio_id';
     $options_hash{'id'}= $params->{'id'}||'categoria_socio_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
@@ -2510,7 +2510,8 @@ sub autorAutocomplete{
         $textout.= $autor->getId."|".$autor->getCompleto."\n";
     }
     
-    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+#     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+    return ($textout eq '')?"-1|".$autorStr:$textout;
 }
 
 sub obtenerDescripcionDeSubCampos{
@@ -2533,7 +2534,7 @@ sub ayudaCampoMARCAutocomplete{
     my $textout;
 
     foreach my $campo_marc (@$campos_marc_array_ref){
-        $textout.= $campo_marc->getCampo."|".$campo_marc->getLiblibrarian."\n";
+        $textout.= $campo_marc->getCampo."| (".$campo_marc->getCampo.") ".$campo_marc->getLiblibrarian."\n";
     }
     
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
@@ -2588,14 +2589,15 @@ sub autocompleteTemas{
 sub autoresAutocomplete{
     my ($autor) = @_;
 
-    my ($cant, $autores_array_ref)= &C4::AR::ControlAutoridades::search_autores($autor);
-    my $resultado="";
+    my ($cant, $autores_array_ref) = &C4::AR::ControlAutoridades::search_autores($autor);
+    my $resultado = "";
    
     foreach my $autor (@$autores_array_ref){
         $resultado .=  $autor->getId."|". $autor->getCompleto. "\n";
     }
 
-    return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
+#     return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
+    return ($resultado eq '')?"-1|".$autor:$resultado;
 }
 
 sub autocompleteEditoriales{
@@ -2927,7 +2929,7 @@ sub getFeriados{
     my @dates;
 
     foreach my $date (@$feriados){
-        push (@dates, $date->getFecha());
+        push (@dates, $date);
     }
 
     return (\@dates);
@@ -2935,7 +2937,7 @@ sub getFeriados{
 
 sub setFeriado{
 
-    my ($fecha,$status) = @_;
+    my ($fecha,$status,$texto_feriado) = @_;
 
     use C4::Modelo::PrefFeriado;
     use C4::Modelo::PrefFeriado::Manager;
@@ -2945,11 +2947,11 @@ sub setFeriado{
     my $feriado = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { eq => $fecha } ] );
     
     if (scalar(@$feriado)){
-        $feriado->[0]->setFecha($fecha,$status);
+        $feriado->[0]->setFecha($fecha,$status,$texto_feriado);
     }else{
         $feriado = C4::Modelo::PrefFeriado->new();
         eval{
-            $feriado->agregar($fecha,$status);
+            $feriado->agregar($fecha,$status,$texto_feriado);
         };
     }
     return (1);
