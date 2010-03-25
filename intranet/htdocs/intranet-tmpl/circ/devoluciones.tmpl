@@ -7,15 +7,16 @@
 <script language="javascript" type="text/javascript">
 
 function inicializar(){
-	USUARIO= new objeto_usuario();
-	USUARIO.ID = 0;
-	USUARIO.text = '';
+	USUARIO         = new objeto_usuario();
+	USUARIO.ID      = 0;
+	USUARIO.text    = '';
 
 	//input para buscar el usuario
 	$('#usuarioAutocomplete').val('');
-	$('#nro_socio_hidden').val('');
+	$('#nro_socio_hidden').val('-1');
 	//input para buscar el barcode
-	$('#barcode_hidden').val('');
+// 	$('#barcode_hidden').val('-1');
+    $('#prestamo_hidden').val('-1');
 	$('#barcode').val('');
 
 	//oculto el detalle del usuario
@@ -29,15 +30,18 @@ function inicializar(){
 }
 
 function onCompleteAutocompleteUsuarios(){
-	var nro_socio= $('#nro_socio_hidden').val();
-	USUARIO= new objeto_usuario();
-	USUARIO.text= $('#usuarioAutocomplete').val();
-	USUARIO.ID= nro_socio;
-	//detalleUsuario esta implementado en circulacion,js
-	detalleUsuario(nro_socio);
-	detallePrestamos(nro_socio, updateDetallePrestamos);
-// 	detalleSanciones(nro_socio);
-	$('#botonDevolver').hide();
+    var nro_socio = $('#nro_socio_hidden').val();
+    
+	if (nro_socio != '-1'){
+	    USUARIO         = new objeto_usuario();
+	    USUARIO.text    = $('#usuarioAutocomplete').val();
+	    USUARIO.ID      = nro_socio;
+	    //detalleUsuario esta implementado en circulacion,js
+	    detalleUsuario(nro_socio);
+	    detallePrestamos(nro_socio, updateDetallePrestamos);
+    // 	detalleSanciones(nro_socio);
+	    $('#botonDevolver').hide();
+    }
 }
 
 function updateDetallePrestamos(responseText){
@@ -47,10 +51,12 @@ function updateDetallePrestamos(responseText){
 }
 
 function onCompleteAutocompleteBarcodesPrestados(){
-	var prestamo= $('#prestamo_hidden').val();
-	$('#botonDevolver').show();
-	//detalleUsuario esta implementado en circulacion,js
-	getSocioFromPrestamo(prestamo);
+    if($('#prestamo_hidden').val() != '-1'){
+	    var prestamo= $('#prestamo_hidden').val();
+	    $('#botonDevolver').show();
+	    //detalleUsuario esta implementado en circulacion,js
+	    getSocioFromPrestamo(prestamo);
+    }
 }
 
 function getSocioFromPrestamo(prestamo){
@@ -140,7 +146,7 @@ $(document).ready(function() {
         <div id="buscarCodigoDeBarras">
           <strong><label for="barcode">[% 'Ingrese el c&oacute;digo de barras' | i18n %]</label></strong>
               <input id="barcode" type="text" size="40" onClick="inicializar();">
-          <input id="barcode_hidden" type="hidden">
+<!--           <input id="barcode_hidden" type="hidden"> -->
           <input id="prestamo_hidden" type="hidden">
         </div>
       </li>
