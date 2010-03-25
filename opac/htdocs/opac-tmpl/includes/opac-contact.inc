@@ -16,16 +16,16 @@ function validateForm(){
    
 //          $().ready(function() {
             // validate signup form on keyup and submit
-            $.validator.setDefaults({
-              submitHandler:  function(){$('#contactform').submit();},
-            });
+//             $.validator.setDefaults({
+//               submitHandler:  function(){$('#contactform').submit();},
+//             });
 // $.validator.setDefaults({
 //     submitHandler: function() { alert("submitted!"); }
 // });
 
 
             $("#contactform").validate({
-    
+/*    
                 debug: true,
                 errorElement: "em",
                 errorClass: "error_adv",
@@ -44,8 +44,8 @@ function validateForm(){
                     mensaje: POR_FAVOR_INGRESE_SU_MENSAJE,
                     email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
                }
-            });
-//          });
+            });*/
+         });
 }
 
 
@@ -68,7 +68,7 @@ $(document).ready( function() {
                      <option value="Sra"> [% 'Sra.' | i18n %] </option>
                      <option value="Dr"> [% 'Dr.' | i18n %] </option></select></p>
                 <p><label for="nombre" class="left">[% 'Nombre/s *' | i18n %]:</label>
-                   <input type="text" name="nombre" id="nombre" class="field" value="[% socio.persona.getNombre %]" tabindex="6" /></p>
+                   <input type="text" name="nombre" id="nombre" class="field required" value="[% socio.persona.getNombre %]" tabindex="6" /></p>
                 <p><label for="apellido" class="left">[% 'Apellido/s *' | i18n %]:</label>
                    <input type="text" name="apellido" id="apellido" class="field" value="[% socio.persona.getApellido %]" tabindex="7" /></p>
                 <p><label for="direccion" class="left">[% 'Direcci&oacute;n' | i18n %]:</label>
