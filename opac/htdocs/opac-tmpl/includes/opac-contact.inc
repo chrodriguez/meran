@@ -6,6 +6,8 @@
 
 function validateForm(){
 
+   
+
             $("#contactform").validate({
     
                 errorElement: "em",
@@ -18,13 +20,13 @@ function validateForm(){
                             required: true,
                             email: true
                     },
-                },
-                messages: {
-                        apellido: POR_FAVOR_INGRESE_SU_APELLIDO,
-                        nombre: POR_FAVOR_INGRESE_SU_NOMBRE,
-                        mensaje: POR_FAVOR_INGRESE_SU_MENSAJE,
-                        email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
-                }
+               },
+               messages: {
+                    apellido: POR_FAVOR_INGRESE_SU_APELLIDO,
+                    nombre: POR_FAVOR_INGRESE_SU_NOMBRE,
+                    mensaje: POR_FAVOR_INGRESE_SU_MENSAJE,
+                    email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
+               }
             });
 }
 

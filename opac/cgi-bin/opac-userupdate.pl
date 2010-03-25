@@ -68,12 +68,20 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
 
     $t_params->{'partial_template'}= "informacion.inc";
 }else{
+    $socio->persona->nombre($data_hash{'nombre'});
+    $socio->persona->apellido($data_hash{'apellido'});
+    $socio->persona->telefono($data_hash{'numero_telefono'});
+    $socio->persona->ciudad($data_hash{'id_ciudad'});
+    $socio->persona->calle($data_hash{'direccion'});
+    $socio->persona->email($data_hash{'email'});
+    $t_params->{'combo_temas'} = C4::AR::Utilidades::generarComboTemasOPAC();
+    $t_params->{'socio'} = $socio;
     $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('VA002','intranet');
+    $t_params->{'partial_template'}= "opac-modificar_datos.inc";
 }
 
 $t_params->{'socio'}= $socio;
 
 $t_params->{'opac'};
-$t_params->{'partial_template'}= "informacion.inc";
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
