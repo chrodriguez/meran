@@ -32,6 +32,7 @@ __PACKAGE__->meta->setup(
         credential_type                  => { type => 'varchar', length => 255, not_null => 1, default => 'estudiante' },
         theme                            => { type => 'varchar', length => 255 },
         theme_intra                      => { type => 'varchar', length => 255 },
+        locale                           => { type => 'varchar', length => 32 },
     ],
 
      relationships =>
@@ -939,6 +940,20 @@ sub setDni_autorizado{
       $self->dni_autorizado($dni_autorizado);
     }
 }
+
+sub getLocale{
+    my ($self) = shift;
+    return ($self->locale);
+}
+
+sub setLocale{
+    my ($self) = shift;
+    my ($string) = @_;
+    $string = Encode::encode_utf8($string);
+    $self->locale($string);
+    $self->save();
+}
+
 
 sub tieneFoto{
     my ($self) = shift;

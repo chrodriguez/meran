@@ -8,7 +8,13 @@ my $input = new CGI;
 
 ##Aca se controlo el cambio de idioma
 my $session = CGI::Session->load();
+
 $session->param('locale', $input->param('lang_server') );
+
+my $socio = C4::Auth::getSessionNroSocio();
+$socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+$socio->setLocale($input->param('lang_server'));
+
 #regreso a la pagina en la que estaba
 if($session->param('token')){
 #si hay sesion se le agrega el token

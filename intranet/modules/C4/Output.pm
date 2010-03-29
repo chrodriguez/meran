@@ -160,6 +160,14 @@ sub gettemplate {
             user_theme_intra    => $socio->getThemeINTRA() || $tema_intra,
 		);
 
+    #PARA SACAR EL LOCALE ELEGIDO POR EL SOCIO
+    my $socio = C4::Auth::getSessionNroSocio();
+
+    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+
+    my $session = CGI::Session->load();
+
+    $session->param('locale', $socio->getLocale() || C4::Context->config("defaultLang") || 'es_ES');
 
 	return ($template, \%params);
 }

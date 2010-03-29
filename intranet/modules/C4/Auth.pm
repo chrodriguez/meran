@@ -657,7 +657,12 @@ C4::AR::Debug::debug("desde checkauth===========================================
             $session->param('secure', ($type eq 'intranet')?1:0); #OPAC o INTRA
             $session->param('flagsrequired', $flagsrequired);
             $session->param('browser', $ENV{'HTTP_USER_AGENT'} );
-            $session->param('locale', C4::Context->config("defaultLang")|'es_ES');
+            #PARA SACAR EL LOCALE ELEGIDO POR EL SOCIO
+            my $socio = C4::Auth::getSessionNroSocio();
+
+            $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+
+            $session->param('locale', $socio->getLocale() || C4::Context->config("defaultLang") || 'es_ES');
             $session->param('charset', C4::Context->config("charset")||'utf-8'); #se guarda el juego de caracteres
             $session->param('token', _generarToken()); #se guarda el token
             $session->param('SERVER_GENERATED_SID', 1);
@@ -1242,7 +1247,12 @@ sub _generarSession {
     $session->param('secure', ($params->{'type'} eq 'intranet')?1:0); #OPAC o INTRA
 	$session->param('flagsrequired', $params->{'flagsrequired'});
  	$session->param('browser', $params->{'browser'} );
-	$session->param('locale', C4::Context->config("defaultLang")|'es_ES');
+    #PARA SACAR EL LOCALE ELEGIDO POR EL SOCIO
+    my $socio = C4::Auth::getSessionNroSocio();
+
+    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+
+	$session->param('locale', $socio->getLocale() || C4::Context->config("defaultLang") || 'es_ES');
  	$session->param('charset', C4::Context->config("charset")||'utf-8'); #se guarda el juego de caracteres
 	$session->param('token', $params->{'token'}); #se guarda el token
     $session->param('SERVER_GENERATED_SID', 1);

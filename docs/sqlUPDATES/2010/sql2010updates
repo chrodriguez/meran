@@ -207,3 +207,5 @@ NULL ,  'tema_intra', 'default',  'El tema por defecto para INTRANET', NULL , NU
 ALTER TABLE  `perm_circulacion` ADD  `circ_opac` VARBINARY( 8 ) NOT NULL DEFAULT  '00000000';
 
 ALTER TABLE  `pref_feriado` ADD  `feriado` VARCHAR( 255 ) NULL ;
+
+ALTER TABLE  `usr_socio` ADD  `locale` VARCHAR( 32 ) NULL ;
