@@ -8,7 +8,7 @@ use CGI;
 
 my $query = new CGI;
 
-my ($template, $t_params)= C4::Output::gettemplate("opac-main.tmpl", 'opac');
+my ($template, $t_params)= C4::Output::gettemplate("opac-main.tmpl", 'opac',1);
 
 $t_params->{'type'}='opac';
 my ($session) = C4::Auth::inicializarAuth($t_params);

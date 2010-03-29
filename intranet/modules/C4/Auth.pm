@@ -134,9 +134,36 @@ sub getSessionLoggedUser {
 sub getSessionUserID {
 	my ($session) = @_;
 
-	return $session->param('userid');
+    unless($session){
+        $session = CGI::Session->load();
+    }
+
+    return $session->param('userid');
 }
 
+
+sub _setLocale{
+
+  my ($session) = @_;
+  unless($session){
+      $session = CGI::Session->load();
+  }
+
+  #PARA SACAR EL LOCALE ELEGIDO POR EL SOCIO
+  $session->param('locale', getUserLocale());
+  $session->save_param();
+}
+
+
+sub getUserLocale{
+
+    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio(C4::Auth::getSessionUserID());
+    my $locale;
+    if ($socio){
+      $locale = $socio->getLocale();
+    }
+    return ($locale || C4::Context->config("defaultLang") || 'es_ES');
+}
 =item sub getSessionIdSocio
 
     obtiene el id_socio de la session
@@ -223,7 +250,7 @@ sub getSessionBrowser {
 }
 
 
-=item get_template_and_user
+=item get_template_and_userF
 
   my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name   => "opac-main.tmpl",
@@ -252,9 +279,6 @@ sub getSessionBrowser {
 
 sub get_template_and_user {
 	my $in = shift;
-
-	my ($template, $params) = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'});
-    $in->{'template_params'} = $params;
 	my ($user, $session, $flags)= checkauth(    $in->{'query'}, 
                                                 $in->{'authnotrequired'}, 
                                                 $in->{'flagsrequired'}, 
@@ -262,8 +286,11 @@ sub get_template_and_user {
                                                 $in->{'changepassword'},
                                                 $in->{'template_params'}
                                             );
-
 	my $nro_socio;
+    my ($template, $params) = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'},$in->{'loging_out'});
+
+    $in->{'template_params'} = $params;
+
 	if ( $session->param('userid') ) {
         $params->{'loggedinuser'}= $session->param('userid');
 		$nro_socio = $session->param('userid');
@@ -299,6 +326,7 @@ sub get_template_and_user {
 sub output_html_with_http_headers {
     my($template, $params, $session) = @_;
 
+    _setLocale($session);
     print_header($session, $params);
 
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
@@ -657,12 +685,6 @@ C4::AR::Debug::debug("desde checkauth===========================================
             $session->param('secure', ($type eq 'intranet')?1:0); #OPAC o INTRA
             $session->param('flagsrequired', $flagsrequired);
             $session->param('browser', $ENV{'HTTP_USER_AGENT'} );
-            #PARA SACAR EL LOCALE ELEGIDO POR EL SOCIO
-            my $socio = C4::Auth::getSessionNroSocio();
-
-            $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
-
-            $session->param('locale', $socio->getLocale() || C4::Context->config("defaultLang") || 'es_ES');
             $session->param('charset', C4::Context->config("charset")||'utf-8'); #se guarda el juego de caracteres
             $session->param('token', _generarToken()); #se guarda el token
             $session->param('SERVER_GENERATED_SID', 1);
@@ -1247,12 +1269,6 @@ sub _generarSession {
     $session->param('secure', ($params->{'type'} eq 'intranet')?1:0); #OPAC o INTRA
 	$session->param('flagsrequired', $params->{'flagsrequired'});
  	$session->param('browser', $params->{'browser'} );
-    #PARA SACAR EL LOCALE ELEGIDO POR EL SOCIO
-    my $socio = C4::Auth::getSessionNroSocio();
-
-    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
-
-	$session->param('locale', $socio->getLocale() || C4::Context->config("defaultLang") || 'es_ES');
  	$session->param('charset', C4::Context->config("charset")||'utf-8'); #se guarda el juego de caracteres
 	$session->param('token', $params->{'token'}); #se guarda el token
     $session->param('SERVER_GENERATED_SID', 1);
@@ -1352,7 +1368,6 @@ sub printSession {
 
 sub redirectTo {
 	my ($url) = @_;
-    
     C4::AR::Debug::debug("redirectTo=>");  
 	#para saber si fue un llamado con AJAX
     if(C4::AR::Utilidades::isAjaxRequest()){
@@ -1361,7 +1376,6 @@ sub redirectTo {
    		my $session = CGI::Session->load();
 		# send proper HTTP header with cookies:
         $session->param('redirectTo', $url);
-        $session->save_param();
 #         C4::AR::Debug::debug("redirectTo=> session->dump(): ".$session->dump());;
         C4::AR::Debug::debug("redirectTo=> url: ".$url);
 #      	print $session->header();
@@ -1379,7 +1393,6 @@ sub redirectTo {
         C4::AR::Debug::debug("redirectTo=> url: ".$url);
 		exit;
 	}
-
     C4::AR::Debug::debug(" ");
 }
 
@@ -1412,6 +1425,10 @@ sub redirectToNoHTTPS {
 
     C4::AR::Debug::debug("\n");
     C4::AR::Debug::debug("redirectToNoHTTPS=>");
+    #PARA SACAR EL LOCALE ELEGIDO POR EL SOCIO
+    my $socio = C4::Auth::getSessionNroSocio();
+
+    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
 
     #para saber si fue un llamado con AJAX
     if(C4::AR::Utilidades::isAjaxRequest()){
@@ -1421,7 +1438,6 @@ sub redirectToNoHTTPS {
         # send proper HTTP header with cookies:
         $session->param('redirectTo', $url);
         C4::AR::Debug::debug("SESSION url: ".$session->param('redirectTo'));
-
         C4::AR::Debug::debug("redirectToNoHTTPS=> url: ".$url);
 #         print $session->header();
         print_header($session);

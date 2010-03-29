@@ -16,6 +16,7 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
             type        => "intranet",
             authnotrequired => 0,
             flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+            loging_out      => 1,
     });
 
 my ($session)= C4::Auth::cerrarSesion();

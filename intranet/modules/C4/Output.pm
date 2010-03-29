@@ -82,7 +82,7 @@ printable string.
 #==========================================================FUNCIONES NUEVAS=================================================
 
 sub gettemplate {
-	my ($tmplbase, $opac) = @_;
+	my ($tmplbase, $opac, $loging_out) = @_;
 
 	my $htdocs;
     my $tema_opac = C4::AR::Preferencias->getValorPreferencia('tema_opac') || 'default';
@@ -124,7 +124,7 @@ sub gettemplate {
 # 					RELATIVE => 1,
 					});	
 
-	#se inicializa la hash de los parametros para el template�
+	#se inicializa la hash de los parametros para el template
  	my %params=();
 
 	#se asignan los parametros que son necesarios para todos los templates
@@ -139,9 +139,19 @@ sub gettemplate {
         $nombre_ui = $ui->getNombre();
     }
 
-    my $socio = C4::Auth::getSessionNroSocio();
+    my $socio = C4::Auth::getSessionUserID();
     $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
-    
+    my $user_theme,
+    my $user_theme_intra;
+
+    $user_theme = $socio->getTheme() || $tema_opac;
+    $user_theme_intra =  $socio->getThemeINTRA() || $tema_intra;
+
+    if ($loging_out){
+        $user_theme = $tema_opac;
+        $user_theme_intra = $tema_intra;
+    }
+
     %params= (
 # FIXME DEPRECATED
 			themelang           => ($opac ne 'intranet'? '/opac-tmpl/': '/intranet-tmpl/') ,
@@ -156,18 +166,9 @@ sub gettemplate {
             actual_year         => $date->{'year'},
             localization_FLAGS  => C4::AR::Filtros::setFlagsLang('OPAC'),
             HOST                => $ENV{HTTP_HOST},
-            user_theme          => $socio->getTheme() || $tema_opac,
-            user_theme_intra    => $socio->getThemeINTRA() || $tema_intra,
+            user_theme          => $user_theme,
+            user_theme_intra    => $user_theme_intra,
 		);
-
-    #PARA SACAR EL LOCALE ELEGIDO POR EL SOCIO
-    my $socio = C4::Auth::getSessionNroSocio();
-
-    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
-
-    my $session = CGI::Session->load();
-
-    $session->param('locale', $socio->getLocale() || C4::Context->config("defaultLang") || 'es_ES');
 
 	return ($template, \%params);
 }
