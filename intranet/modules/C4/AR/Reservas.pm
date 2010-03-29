@@ -28,7 +28,6 @@ $VERSION = 3.0;
     &cantReservasPorGrupo
     &DatosReservas
     &getDatosReservaDeId3
-    &cant_waiting
     &CheckWaiting
     &tiene_reservas
     &Enviar_Email
@@ -38,6 +37,7 @@ $VERSION = 3.0;
     &getReserva
     &t_realizarPrestamo
     &eliminarReservas
+    &getReservasDeSocioEnEspera
 );
 
 =head2  sub getNivel3ParaReserva
@@ -701,6 +701,26 @@ sub reservasVencidas{
 }
 
 
+=head2
+    sub getReservasDeSocioEnEspera
+    Funcion que trae las reservas en espera de un grupo
+=cut
+sub getReservasDeSocioEnEspera {
+    my($nro_socio)=@_;
+
+
+    my $reservas = getReservasDeSocio($nro_socio);
+
+    my @reservas_espera;
+
+    foreach my $reserva (@$reservas) {
+        if (!$reserva->getId3) {
+            #Reservas en espera
+            push @reservas_espera, $reserva;
+        }
+    }    
+    return(\@reservas_espera);
+}
 
 
 =head2

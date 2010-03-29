@@ -593,7 +593,7 @@ sub imprimirFirma{
     $pdf->addRawText($linea, 330,$pageheight - $y);
     $y=$y+10;
     $pdf->addRawText("Firma", 160,$pageheight - $y);
-    $pdf->addRawText("Aclaraci�n", 360,$pageheight - $y);
+    $pdf->addRawText(Encode::decode_utf8("Aclaración"), 360,$pageheight - $y);
     return($pdf,$y);
 }
 

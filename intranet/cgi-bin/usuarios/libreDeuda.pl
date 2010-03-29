@@ -50,13 +50,13 @@ my $msj="";
 # SANSIONADO           4--------> flag 5; function C4::AR::Sanciones::hasSanctions($borum);
 
 if($array[0] eq "1"){
-	if(C4::AR::Reservas::cant_reservas($nro_socio)){
+	if(C4::AR::Reservas::_getReservasAsignadas($nro_socio)){
 		$ok=0;
 		$msj="por tener reservas asignadas";
 	}
 }
 if($array[1] eq "1" && $ok){
-	if(C4::AR::Reservas::cant_waiting($nro_socio)->{'cant'}){
+	if(C4::AR::Reservas::getReservasDeSocioEnEspera($nro_socio)->{'cant'}){
 		$ok=0;
 		$msj="por tener reservas en espera";
 	}
