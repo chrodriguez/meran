@@ -319,6 +319,8 @@ sub setComboLang {
 ## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
     my @array_lang= ('es_ES', 'en_EN', 'nz_NZ', 'jp_JP');
     my $i;
+    my $socio = C4::Auth::getSessionNroSocio();
+    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
 
     if($type eq 'OPAC'){
         $html="<form id='formLang' action='/cgi-bin/koha/opac-language.pl' method='POST' class='selectLang'><fieldset>";
@@ -334,6 +336,8 @@ sub setComboLang {
 
     for($i=0;$i<scalar(@array_lang);$i++){
         if($session->param('locale') eq @array_lang[$i]){
+            $html .="<option value='".@array_lang[$i]."' selected='selected'>".@array_lang[$i]."</option>"; 
+        }elsif ( ($socio) && ($socio->getLocale() eq @array_lang[$i]) ){
             $html .="<option value='".@array_lang[$i]."' selected='selected'>".@array_lang[$i]."</option>"; 
         }else{
             $html .="<option value='".@array_lang[$i]."'>".@array_lang[$i]."</option>";

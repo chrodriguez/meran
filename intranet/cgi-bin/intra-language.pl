@@ -9,10 +9,13 @@ my $input = new CGI;
 C4::AR::Debug::debug("intr-language.pl \n");
 my $session = CGI::Session->load();
 $session->param('locale', $input->param('lang_server'));
-C4::AR::Debug::debug("lang desde el parametro: ".$input->param('lang_server')."\n");
-C4::AR::Debug::debug("lang desde la session: ".$session->param('lang')."\n");
-C4::AR::Debug::debug("REQUEST_URI: ".$ENV{'REQUEST_URI'}."\n");
-C4::AR::Debug::debug("vengo desde: ".$input->param('url')."\n");
+my $socio = C4::Auth::getSessionNroSocio();
+if ($socio){
+    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+    $socio->setLocale($input->param('lang_server'));
+    $session->param('locale', $socio->getLocale());
+}
+
 #regreso a la pagina en la que estaba
 C4::Auth::redirectTo($input->param('url')."?token=".$session->param('token'));
 
