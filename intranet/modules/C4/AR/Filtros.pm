@@ -269,9 +269,9 @@ Se le parametriza si el combo es para la INTRA u OPAC
 =cut
 sub setFlagsLang {
 
-    my ($type) = @_;
+    my ($type,$theme) = @_;
     my $session = CGI::Session->load();
-    my $html= '<ul>';
+    my $html= '<ul class="culture_selection">';
     my $lang_Selected= $session->param('locale');
 ## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
     my @array_lang;
@@ -294,10 +294,13 @@ sub setFlagsLang {
     if($type eq 'OPAC'){
         $href = '/cgi-bin/koha/opac-language.pl?url='.$url.'&amp;';
     }else{
-        $href = '/cgi-bin/koha/intra-language.pl?';
+        $href = '/cgi-bin/koha/intra-language.pl?url='.$url.'&amp;';
     }
 
-    my $flags_dir = C4::Context->config('temasOPAC').'/default/imagenes/flags';
+    my $flags_dir = C4::Context->config('temasOPAC').'/'.$theme.'/imagenes/flags';
+    if ($type == 'INTRA'){
+        $flags_dir = C4::Context->config('temas').'/'.$theme.'/imagenes/flags';
+    }
     foreach my $hash_temp (@array_lang){
             $html .='<li><a href='."$href"."lang_server=".$hash_temp->{'lang'}.' title="'.$hash_temp->{'title'}.'"><img src='.$flags_dir.'/'.$hash_temp->{'flag'}.' alt="'.i18n("Cambio de lenguaje").'" /></a></li>';
     }
@@ -337,9 +340,11 @@ sub setComboLang {
     for($i=0;$i<scalar(@array_lang);$i++){
         if($session->param('locale') eq @array_lang[$i]){
             $html .="<option value='".@array_lang[$i]."' selected='selected'>".@array_lang[$i]."</option>"; 
-        }elsif ( ($socio) && ($socio->getLocale() eq @array_lang[$i]) ){
-            $html .="<option value='".@array_lang[$i]."' selected='selected'>".@array_lang[$i]."</option>"; 
-        }else{
+        }
+        elsif ( ($socio) && ($socio->getLocale() eq @array_lang[$i]) ){
+            $html .="<option value='".$socio->getLocale()."' selected='selected'>".$socio->getLocale()."</option>"; 
+        }
+        else{
             $html .="<option value='".@array_lang[$i]."'>".@array_lang[$i]."</option>";
         }
     }

@@ -273,3 +273,7 @@ ul li{list-style-type:none;}
 #popup_message{padding-left:48px;}
 #popup_panel{text-align:center;margin:1em 0em 0em 1em;}
 #popup_prompt{margin:.5em 0em;}
+.culture_selection li{
+    width: 20px;
+    float:left;
+}

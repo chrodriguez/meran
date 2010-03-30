@@ -24,7 +24,9 @@
                 </a>
             <div class="culture_Select">
                   [<a target="_parent" href="/cgi-bin/koha/logout.pl?token=[% token %]" tabindex="-1">[% "Salir" | i18n %]</a>]
-                  [%  "INTRA" | setComboLang %] 
+                        [% PERL %]
+                            print C4::AR::Filtros::setFlagsLang("INTRA",'[% user_theme %]');
+                        [% END %]
             </div>
         </div>
     [% ELSE %]

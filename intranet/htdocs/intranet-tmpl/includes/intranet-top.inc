@@ -18,8 +18,8 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <META HTTP-EQUIV="cache-control" content="public">
-<!-- <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/completo.css"> -->
-<link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/[% user_theme %]/includes/completo_min.css" />
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/completo.css">
+<!-- <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/[% user_theme %]/includes/completo_min.css" /> -->
 <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/fancybox.css" />
 
 <!-- <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranetOLD.css">  -->
