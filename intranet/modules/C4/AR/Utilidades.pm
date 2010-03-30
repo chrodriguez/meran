@@ -2958,6 +2958,18 @@ sub setFeriado{
 }
 
 
+
+sub redirectAndAdvice{
+
+    my ($cod_msg)= @_;
+    my ($session) = CGI::Session->load();
+
+    $session->param('codMsg',$cod_msg);
+#     $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
+    C4::Auth::redirectTo('/cgi-bin/koha/informacion.pl');
+#     exit;
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;

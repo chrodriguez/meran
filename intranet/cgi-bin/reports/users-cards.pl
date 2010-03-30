@@ -17,6 +17,9 @@ if ($op eq 'pdf') {
     $obj->{'orden'}=$input->param('orden')||'apellido';
     $obj->{'apellido1'}=$input->param('surname1');
     $obj->{'apellido2'}=$input->param('surname2');
+    $obj->{'legajo1'}=$input->param('legajo1');
+    $obj->{'legajo2'}=$input->param('legajo2');
+    $obj->{'categoria_socio'}=$input->param('categoria_socio');
 
     my ($cantidad,$results)=C4::AR::Usuarios::BornameSearchForCard($obj);
 
