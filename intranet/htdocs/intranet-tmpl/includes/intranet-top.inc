@@ -116,6 +116,13 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
   
   
   <div id="marco_contenido_datos" class="contenido">
-      
   <!--  usado como referencia por el MessageHelper -->
-  <div id="end_top"></div>
+  <div id="end_top">
+    [% IF mensaje %]
+        <div class="mensajes_informacion">
+            <div id="mensajes" style="opacity: 90; display: block;">
+                <div class="message_text">[% mensaje %]</div>
+            </div>
+        </div>
+    [% END %]
+  </div>

@@ -19,7 +19,8 @@ my ($userid, $session, $flags) = C4::Auth::checkauth(   $input,
                                                         {   ui => 'ANY', 
                                                             tipo_documento => 'ANY', 
                                                             accion => 'CONSULTA', 
-                                                            entorno => 'usuarios'
+                                                            entorno => 'usuarios',
+                                                            tipo_permiso => 'catalogo'
                                                         },
                                                         "intranet"
                             );
@@ -34,7 +35,8 @@ my ($userid, $session, $flags) = C4::Auth::checkauth(   $input,
                                                         {   ui => 'ANY', 
                                                             tipo_documento => 'ANY', 
                                                             accion => 'CONSULTA', 
-                                                            entorno => 'usuarios'
+                                                            entorno => 'usuarios',
+                                                            tipo_permiso => 'catalogo'
                                                         },
                                                         "intranet"
                             );

@@ -24,4 +24,8 @@ $t_params->{'socio'}= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C
 
 $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Datos del Usuario");
 
+my $mensaje_desde_pdf = $input->param('mensaje');
+if ($mensaje_desde_pdf){
+    $t_params->{'mensaje'} = $mensaje_desde_pdf;
+}
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
