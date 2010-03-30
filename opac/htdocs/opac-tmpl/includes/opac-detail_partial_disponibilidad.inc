@@ -41,7 +41,9 @@
                     </table>
                 </div>
            </div>
-          [% INCLUDE 'rating.inc' %]
+          [% IF socio %]
+              [% INCLUDE 'rating.inc' %]
+          [% END %]
           <h3>
               <a href="/cgi-bin/koha/reviews.pl?token=[% token %]&amp;id2=[% id2 %]">
                   [% 'Revisiones' | i18n %] ([% cant_reviews %])

@@ -28,7 +28,14 @@ my ($socio, $flags) = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 my $review = $input->param('review') || 0;
 my $id2 = $input->param('id2');
 
+my %params = {};
+
+$params{'review'} = $input->param('review');
+$params{'id2'} = $input->param('id2');
+$params{'nro_socio'} = $nro_socio;
+
 if ($review){
+    C4::AR::Validator::validateParams('VA002',\%params,['nro_socio', 'id2', 'review']);
     C4::AR::Nivel2::reviewNivel2($id2,$review,$nro_socio);
 }
 $t_params->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId2($id2,'M');
