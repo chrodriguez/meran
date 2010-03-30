@@ -228,15 +228,6 @@
                                                             ) ;
                             [% END %]
                   </li>
-                  <li>
-                      [% PERL %]
-                          print C4::AR::Filtros::link_to( text =>     "[% 'Disp. de Ejemplares' | i18n %]",
-                                                          url =>      "/cgi-bin/koha/reports/disponibilidad_ejemplares.pl",
-                                                          title =>    "[% 'Disp. de Ejemplares' | i18n %]"
-                                                      ) ;
-                      [% END %]
-                  </li>
-
                 </ul>
             </li>
           <!-- Navigation item -->
@@ -246,7 +237,7 @@
                         <h3 class="menu_superior">[% 'Consultas' | i18n %]</h3>
                     </div>
                 </div>
-                <ul>
+                <!-- <ul>
                   <li><h3 class="menu_intermedio">[% 'Reportes' | i18n %]</h3>
                     <ul>
                      <li><h3 class="menu_intermedio">[% 'Usuarios' | i18n %]</h3>
@@ -399,7 +390,6 @@
                     </li>
                 </ul>
               </li>
-          <!-- Navigation item -->
               <li><h3 class="menu_intermedio">[% 'Estad&iacute;sticas' | i18n %]</h3>
                   <ul>
                         <li>
@@ -420,7 +410,7 @@
                                                                       ) ;
                                       [% END %]
                             </li>
-          </ul>
+          </ul>-->
         </li>
           <!-- Navigation item -->
             <li>

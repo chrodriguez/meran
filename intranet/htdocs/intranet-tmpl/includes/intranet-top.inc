@@ -7,7 +7,7 @@
 //     <!-- variables de entorno sacadas de las preferencias del sistema -->
     token       = '[% token %]';
     imagesForJS = '[% temas %]/[% tema %]/imagenes';
-    M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %];
+    M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %] + 0;
 </script>
 
 [% IF page_sub_title %]
