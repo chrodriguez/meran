@@ -177,6 +177,11 @@ function busquedaPorKeyword(){
 
 function updateBusquedaPorKeyword(responseText){
     updateInfoBusquedas(responseText);
+    var keyword = $('#keyword').val();
+    var temp_keyword = replaceAccents(keyword);
+    $('#keyword').val(temp_keyword);
+    highlightBusquedaPorKeyword();
+    $('#keyword').val(keyword);
     highlightBusquedaPorKeyword();
 }
 
