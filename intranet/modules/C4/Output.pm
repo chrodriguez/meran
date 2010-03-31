@@ -89,14 +89,16 @@ sub gettemplate {
     my $tema_intra = C4::AR::Preferencias->getValorPreferencia('tema_intra') || 'default';
     my $temas = C4::Context->config('temas');
     my $tema;
-
+    my $type;
 	if ($opac ne "intranet") {
 		$htdocs = C4::Context->config('opachtdocs');
         $temas = C4::Context->config('temasOPAC');
         $tema = $tema_opac;
+        $type= 'OPAC';
 	} else {
 		$htdocs = C4::Context->config('intrahtdocs');
         $tema = $tema_intra;
+        $type='INTRA';
 	}
 
 	my $filter= Template::Filters->new({
@@ -164,7 +166,7 @@ sub gettemplate {
 			template_name       => "$htdocs/$tmplbase", #se setea el nombre del tmpl
             ui                  => $ui,
             actual_year         => $date->{'year'},
-            localization_FLAGS  => C4::AR::Filtros::setFlagsLang('OPAC'),
+            localization_FLAGS  => C4::AR::Filtros::setFlagsLang($type,$user_theme),
             HOST                => $ENV{HTTP_HOST},
             user_theme          => $user_theme,
             user_theme_intra    => $user_theme_intra,

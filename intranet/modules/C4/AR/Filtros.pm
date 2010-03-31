@@ -298,7 +298,7 @@ sub setFlagsLang {
     }
 
     my $flags_dir = C4::Context->config('temasOPAC').'/'.$theme.'/imagenes/flags';
-    if ($type == 'INTRA'){
+    if ($type eq 'INTRA'){
         $flags_dir = C4::Context->config('temas').'/'.$theme.'/imagenes/flags';
     }
     foreach my $hash_temp (@array_lang){

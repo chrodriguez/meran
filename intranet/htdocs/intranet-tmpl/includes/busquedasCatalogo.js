@@ -178,11 +178,14 @@ function busquedaPorKeyword(){
 function updateBusquedaPorKeyword(responseText){
     updateInfoBusquedas(responseText);
     var keyword = $('#keyword').val();
+    //sin acentos
     var temp_keyword = replaceAccents(keyword);
     $('#keyword').val(temp_keyword);
+    //todo con acentos
     temp_keyword = replaceNonAccents(keyword);
     $('#keyword').val(temp_keyword);
     highlightBusquedaPorKeyword();
+    //con la entrada original
     $('#keyword').val(keyword);
     highlightBusquedaPorKeyword();
 }

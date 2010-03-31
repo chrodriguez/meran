@@ -354,15 +354,12 @@ function replaceNonAccents(s){
         var r=s.toLowerCase();
         r = r.replace(new RegExp(/\s/g),"");
         r = r.replace(new RegExp(/[àaâãäå]/g),"á");
-        r = r.replace(new RegExp(/æ/g),"ae");
-        r = r.replace(new RegExp(/ç/g),"c");
         r = r.replace(new RegExp(/[èeêë]/g),"é");
         r = r.replace(new RegExp(/[ìiîï]/g),"í");
-        r = r.replace(new RegExp(/ñ/g),"n");                
+        r = r.replace(new RegExp(/n/g),"ñ");                
         r = r.replace(new RegExp(/[òoôõö]/g),"ó");
-        r = r.replace(new RegExp(/œ/g),"oe");
         r = r.replace(new RegExp(/[ùuûü]/g),"ú");
-        r = r.replace(new RegExp(/[ýÿ]/g),"y");
+        r = r.replace(new RegExp(/[y]/g),"ÿ");
         r = r.replace(new RegExp(/\W/g),"");
         return r;
 }
