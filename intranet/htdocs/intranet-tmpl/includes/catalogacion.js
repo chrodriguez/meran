@@ -1519,6 +1519,28 @@ function agregarRegistroAutor(){
 function updateAgregarRegistroAutor(responseText){
     $('#abm_tablas_referencia_content').html(responseText);
     $('#tabla_referencia').dialog({ width: 810 });
+
+    crearEditor();
+}
+
+function crearEditor(){
+    var loaderPath= "";
+    loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>'
+    makeToggle('datos_tabla_div','trigger',null,false);
+    makeDataTable('#tablaResult');
+    zebraId('tablaResult');
+    onEnter('search_tabla',obtenerTablaFiltrada);
+    $('.editable').editable('/cgi-bin/koha/admin/referencias/referenciasDB.pl', { 
+            type      : 'text',
+            cancel    : CANCELAR,
+            submit    : OK,
+            tooltip   : EDITABLE_MSG,
+            placeholder: EDITABLE_MSG,
+            style   : 'display: inline',
+            submitdata : {token: "[% token %]", edit: '1'},
+            indicator : loaderPath,
+
+    });
 }
 
 function crearAuto(obj){
