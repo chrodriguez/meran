@@ -1509,16 +1509,16 @@ function crearHidden(obj){
 
 
 function agregarRegistroAutor(){
-    objAH=new AjaxHelper(updateAgregarRegistro);
+    objAH=new AjaxHelper(updateAgregarRegistroAutor);
     objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
     objAH.accion="AGREGAR_REGISTRO";
     objAH.alias_tabla = 'autor';
     objAH.sendToServer();
 }
 
-function updateAgregarRegistro(responseText){
-    $('#abm_tablas_referencia').html(responseText);
-    $('#windowHelp').dialog({ width: 510 });
+function updateAgregarRegistroAutor(responseText){
+    $('#abm_tablas_referencia_content').html(responseText);
+    $('#tabla_referencia').dialog({ width: 810 });
 }
 
 function crearAuto(obj){
