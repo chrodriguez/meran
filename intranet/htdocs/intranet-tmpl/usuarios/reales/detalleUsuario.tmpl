@@ -7,10 +7,10 @@
 
 <div class="vcard">
 <fieldset>
-<legend class="titulo_legend">[% 'Datos del Usuario' | i18n %]</legend>
+<legend class="titulo_legend_resaltado">[% 'Datos del Usuario' | i18n %]</legend>
      <div class="columna_izq" >
           <fieldset>
-            <legend class="titulo_legend">[% 'Datos Esenciales' | i18n %]</legend>
+            <legend class="titulo_legend_resaltado">[% 'Datos Esenciales' | i18n %]</legend>
                 <ul class="listado_sin_margen">
                   [% IF foto_name %]
                   <li> 
@@ -31,7 +31,7 @@
           </fieldset>
     [% IF socio.tieneAutorizado %]
         <fieldset>
-            <legend class="titulo_legend">[% 'Usuarios autorizados' | i18n %]</legend>
+            <legend class="titulo_legend_resaltado">[% 'Usuarios autorizados' | i18n %]</legend>
               <div class="authorizedBack">
                   <ul class="listado_sin_margen">
                       <li>
@@ -49,7 +49,7 @@
      [% END %]
         <div id="datos_Secundarios">
         <fieldset>
-            <legend class="trigger click titulo_legend" title='[% "click para acceder a informaci&oacute;n adicional" | i18n %]'>
+            <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "click para acceder a informaci&oacute;n adicional" | i18n %]'>
                     [% "Datos secundarios" | i18n %]
             </legend>
             <div class="toggle_container">
@@ -89,7 +89,7 @@
 
 <div class="columna_der" >
           <fieldset  class="accionesUsuarios" style="clear:none" >
-                <legend class="titulo_legend">[% 'Acciones' | i18n %]</legend>
+                <legend class="titulo_legend_resaltado">[% 'Acciones' | i18n %]</legend>
                     <ul class = "listaMenuBotones" >
                         <li>
                             [% PERL %]

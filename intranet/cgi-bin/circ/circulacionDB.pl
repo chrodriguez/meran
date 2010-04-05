@@ -302,17 +302,23 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
                                 );
 
 	#obtengo el objeto de nivel3 segun el barcode que se quiere prestar
-	my ($nivel3aPrestar)= C4::AR::Nivel3::getNivel3FromBarcode($obj->{'barcode'});
-	#obtengo los tipos de prestmos segun disponibilidad del ejemplar y el usuario
-	my ($tipoPrestamos_array_hash_ref)=&C4::AR::Prestamos::prestamosHabilitadosPorTipo($nivel3aPrestar->getId_disponibilidad,$obj->{'nro_socio'});
+	my ($nivel3aPrestar) = C4::AR::Nivel3::getNivel3FromBarcode($obj->{'barcode'});
 
-	my %tiposPrestamos;
-	$tiposPrestamos{'tipoPrestamo'}= $tipoPrestamos_array_hash_ref;
-	
-	my $infoOperacionJSON=to_json \%tiposPrestamos;
+    if($nivel3aPrestar){
 
-    C4::Auth::print_header($session);
-	print $infoOperacionJSON;
+        C4::AR::Debug::debug("nivel3aPrestar => ".$nivel3aPrestar->getIdDisponibilidad());
+	    #obtengo los tipos de prestmos segun disponibilidad del ejemplar y el usuario
+	    my ($tipoPrestamos_array_hash_ref)  = &C4::AR::Prestamos::prestamosHabilitadosPorTipo(   $nivel3aPrestar->getIdDisponibilidad(),
+                                                                                                 $obj->{'nro_socio'}
+                                                                                        );
+    
+	    my %tiposPrestamos;
+	    $tiposPrestamos{'tipoPrestamo'}     = $tipoPrestamos_array_hash_ref;
+	    my $infoOperacionJSON               = to_json \%tiposPrestamos;
+    
+        C4::Auth::print_header($session);
+	    print $infoOperacionJSON;
+    }
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_SOCIO"){
 

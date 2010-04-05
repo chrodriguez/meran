@@ -284,6 +284,11 @@ sub getNivel3FromId3{
     }
 }
 
+=item
+    sub getNivel3FromBarcode
+
+    Esta funcion recupera (si existe) nivel3 segun el barcode pasado por parametro
+=cut
 sub getNivel3FromBarcode {
     my ($barcode) = @_;
     
@@ -307,11 +312,12 @@ sub getNivel3FromBarcode {
 
         if($barcodes_array_ref->[$i]->getBarcode() eq $barcode){
             push(@barcode_result, $barcodes_array_ref->[$i]);
+            last();
         }
     }
 
     if(scalar(@barcode_result) > 0){
-        return (\@barcode_result);
+        return (@barcode_result[0]);
     }else{
         return (0);
     }

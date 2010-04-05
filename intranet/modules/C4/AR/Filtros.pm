@@ -138,11 +138,12 @@ sub to_Button{
       $button .="<a href="."$params_hash_ref{'url'}"."> ";
     }
 
-    my $text= $params_hash_ref{'text'}; #obtengo el texto a mostrar
-    my $boton= $params_hash_ref{'boton'}; #obtengo el boton
-    my $onclick= $params_hash_ref{'onclick'} || $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onclick
-    my $title= $params_hash_ref{'title'}; #obtengo el title de la componete
-    my $width= length($text);
+    my $text    = $params_hash_ref{'text'}; #obtengo el texto a mostrar
+    my $boton   = $params_hash_ref{'boton'}; #obtengo el boton
+    my $onclick = $params_hash_ref{'onclick'} || $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onclick
+    my $title   = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $width   = length($text);
+    my $id      = $params_hash_ref{'id'}; #obtengo el id del boton
     if($params_hash_ref{'width'}){
         if ($params_hash_ref{'width'}=="auto"){
             $width =$width+4;
@@ -153,10 +154,14 @@ sub to_Button{
     }
     
     my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
-    $button .=  '<li  class="click boton_medio '.$alternClass.' " onclick="'.$onclick.'" style="width:'.$width.'"';
+    $button .=  '<li class="click boton_medio '.$alternClass.' " onclick="'.$onclick.'" style="width:'.$width.'"';
 
     if($title){
         $button .= ' title="'.$title.'"';
+    }
+
+    if($id){
+        $button .= ' id="'.$id.'"';
     }
     
     $button .=  '> ';

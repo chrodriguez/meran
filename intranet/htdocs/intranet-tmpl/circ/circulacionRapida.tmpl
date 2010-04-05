@@ -40,9 +40,10 @@ function obtenerTiposDePrestamos(){
 }
 
 function updateObtenerTiposDePrestamos(responseText){
-	var infoHash= JSONstring.toObject(responseText);
-	var tipoPrestamo_array_hash_ref= infoHash.tipoPrestamo;
-	var comboTipoPrestamo_html= crearCombo(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
+	var infoHash                    = JSONstring.toObject(responseText);
+	var tipoPrestamo_array_hash_ref = infoHash.tipoPrestamo;
+// 	var comboTipoPrestamo_html      = crearCombo(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
+    var comboTipoPrestamo_html      = crearComboDeItems(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
 
 	$('#spanComboTipoPrestamo').html(comboTipoPrestamo_html);
 	mostrarBotonAceptar();
@@ -173,10 +174,12 @@ function mostrarBotonAceptar(){
 	//si se va a devolver y tengo el barcode, muetro el boton para devolver
 	if( $('#operacion').val() == 'devolver' && $('#barcodeprestado').val() != '' ){
 		$('#aceptar').show();
+        $('#cambo_tipo_prestamo').show();
 	}
 
 	if( $('#operacion').val() == 'prestar' && $('#barcode').val() != '' && $('#usuario').val() != '' && $('#comboTipoPrestamo').val() != '' ){
 		$('#aceptar').show();
+        $('#cambo_tipo_prestamo').show();
 	}
 }
 
@@ -225,6 +228,7 @@ function updateEsRegular(responseText){
 $(document).ready(function() {
 	$('#operacion').focus();
 	$('#aceptar').hide();
+    $('#cambo_tipo_prestamo').hide();
 	$('#divAutorizado').hide();
 	$('#divAgregarAutorizado').hide();
 	CrearAutocompleteUsuarios({	IdInput: 'usuario', 
@@ -259,7 +263,10 @@ $(document).ready(function() {
                     <option value="devolver">[% 'Devoluci&oacute;n' | i18n %]</option>
                     <option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
                 </select>
-                <div id="spanComboTipoPrestamo"></div>
+                <div id="cambo_tipo_prestamo" style="display: none">
+                    <label for="operacion">[% 'Tipo de Pr&eacute;stamo:' | i18n %]</label>
+                    <div id="spanComboTipoPrestamo"></div>
+                </div>
           </li>
           <br>
           <li class="sub_item">
@@ -298,7 +305,15 @@ $(document).ready(function() {
 <div id="tablaPrestamos" style="clear: both;"></div>
 
 <div style="float: left; width: 47.4%">
-<input style="float: right;" type="button" value="[% 'Aceptar' | i18n %]" id="aceptar" onClick="realizarAccionCircRapida()" tabindex='4'>
+<!-- <input style="float: right;" type="button" value="[% 'Aceptar' | i18n %]" id="aceptar" onClick="realizarAccionCircRapida()" tabindex='4'> -->
+                      [% PERL %]
+                                          print C4::AR::Filtros::to_Button(     text    => "[% 'Aceptar' | i18n %]",
+                                                                                id      => "aceptar",
+                                                                                boton   => "boton_agregar",
+                                                                                onClick => "realizarAccionCircRapida();",
+                                                                                title   => "[% 'Aceptar' | i18n %]",
+                                                  ) ;
+                      [% END %]
 </div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
