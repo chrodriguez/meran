@@ -1517,8 +1517,19 @@ function agregarRegistroAutor(){
 }
 
 function updateAgregarRegistroAutor(responseText){
-    $('#abm_tablas_referencia_content').html(responseText);
-    $('#tabla_referencia').dialog({ width: 810 });
+//     $('#abm_tablas_referencia_content').html(responseText);
+    $('#basic-modal-content').html(responseText);
+
+//     $('#tabla_referencia').dialog({ width: 810 });
+
+    $('#basic-modal-content').modal({   containerCss:{
+            backgroundColor:"#fff",
+    //         borderColor:"#0063dc",
+            height:380,
+            padding:0,
+            width:830
+        },
+    });
 
     crearEditor();
 }
@@ -1527,8 +1538,8 @@ function crearEditor(){
     var loaderPath= "";
     loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>'
     makeToggle('datos_tabla_div','trigger',null,false);
-    makeDataTable('#tablaResult');
-    zebraId('tablaResult');
+//     makeDataTable('#tablaResult');
+//     zebraId('tablaResult');
     onEnter('search_tabla',obtenerTablaFiltrada);
     $('.editable').editable('/cgi-bin/koha/admin/referencias/referenciasDB.pl', { 
             type      : 'text',
@@ -1541,6 +1552,9 @@ function crearEditor(){
             indicator : loaderPath,
 
     });
+
+// FIXXXXX arregla el tamaño de la tabla, FEOOOOOOOOOOOOO
+    $('#tablaResult').attr('style', 'width: 100%');
 }
 
 function crearAuto(obj){

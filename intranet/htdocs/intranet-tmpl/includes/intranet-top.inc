@@ -47,6 +47,8 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
 <script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
 
 <script type="text/javascript" src="/includes/completo-intranet-top.js"></script>
+<script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
+<link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic.css" type="text/css">
 <!--<script type="text/javascript" src="/includes/AjaxHelper.js"></script>
 <script type="text/javascript" src="/includes/util.js"></script>
 <script type="text/javascript" src="/includes/MessageHelper.js"></script>
@@ -126,3 +128,5 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
         </div>
     [% END %]
   </div>
+
+  <div id="basic-modal-content"></div>
