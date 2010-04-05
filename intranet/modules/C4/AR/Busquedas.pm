@@ -1185,7 +1185,6 @@ sub busquedaCombinada_newTemp{
     my ($string,$session,$obj_for_log) = @_;
 
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string);
-  
 
     use Sphinx::Search;
 
