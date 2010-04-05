@@ -1063,9 +1063,7 @@ sub verificarValor{
         $valor=~ s/\b(SELECT|WHERE|INSERT|SHUTDOWN|DROP|DELETE|UPDATE|FROM|AND|OR|BETWEEN)\b/ /gi;
     }
     $valor=~ s/%|"|'|=|;|\*|-(<,>)//g;    
-    $valor=~ s/%3b|%3d|%27|%25//g;#Por aca no entra llegan los caracteres ya traducidos
     $valor=~ s/\<SCRIPT>|\<\/SCRIPT>//gi;
-    $valor= Encode::encode('utf8', $valor);
 
     return $valor;
 }
@@ -2385,7 +2383,7 @@ sub obtenerBusquedas{
     my $pal;
 
     foreach my  $b (@busqueda){
-#         C4::AR::Debug::debug('buscar por: '.$b);
+        C4::AR::Debug::debug('CANTIDAD DE PALABRAS: '.scalar(@busqueda));
         $pal= trim($b);
         if( length($pal) > 0 ){
 #             C4::AR::Debug::debug('agrego: '.$pal);
