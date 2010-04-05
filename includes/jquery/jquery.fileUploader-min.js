@@ -4,7 +4,7 @@ opt.file_types+=',jpeg';$this=$(this);new $.uploadSetUp();}});$.uploadSetUp=func
 '<input id="myUploadFile" class="file" type="file" value="" name="picture"/>'+
 '<div class="fakefile">'+
 '<input id="fake_file"/>'+
-'<img src='+imagesForJS+"/iconos/anadir.png"+' />'+
+'<img src='+imagesForJS+"/iconos/subir_foto.png"+' />'+
 '</div>'+
 '</div>')),$('<ul id="ul_files"></ul>')));init();};$.uploadSetUp.defaults={file_types:"jpg,gif,png",ajaxFile:"upload.pl",uploadFolder:"/ajaxMultiFileUpload/upload/",funcionOnComplete:'',};function init(){$('#myUploadFile').livequery('change',function(){if(checkFileType(this.value))
 $('#myUploadForm').submit();});$('#myUploadForm').submit(function(){return event.submit(this);});var event={frame:function(_form){$("#myFrame")

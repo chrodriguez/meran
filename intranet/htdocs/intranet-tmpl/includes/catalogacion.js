@@ -1507,8 +1507,13 @@ function crearHidden(obj){
     return "<input type='hidden' id='" + obj.getIdCompCliente() + "_hidden' name='" + obj.getIdCompCliente() + "' value='" + obj.getDatoReferencia() + "'>";
 }
 
+
 function agregarRegistroAutor(){
-    agregarRegistro('autor');
+    objAH=new AjaxHelper(updateAgregarRegistro);
+    objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
+    objAH.accion="AGREGAR_REGISTRO";
+    objAH.alias_tabla = 'autor';
+    objAH.sendToServer();
 }
 
 function updateAgregarRegistro(responseText){

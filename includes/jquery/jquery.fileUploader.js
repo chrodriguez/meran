@@ -31,7 +31,7 @@ function assignFileName(idInput){
                             '<input id="myUploadFile" class="file" type="file" value="" name="picture"/>'+
                             '<div class="fakefile">'+
                                 '<input id="fake_file"/>'+
-                                '<img src='+imagesForJS+"/iconos/anadir.png"+' />'+
+                                '<img src='+imagesForJS+"/iconos/subir_foto.png"+' />'+
                             '</div>'+
                           '</div>')), 
             $('<ul id="ul_files"></ul>'))
