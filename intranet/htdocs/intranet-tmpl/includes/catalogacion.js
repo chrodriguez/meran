@@ -952,7 +952,9 @@ function procesarInfoJson(marc_object_array, id_padre){
 
         if(objetos.length == 1) {
             //estoy clonando un campo
-            $("#" + id_padre).append(strComp);
+//             $("#" + id_padre).append(strComp);
+//             $($("#" + id_padre).parent()).append(strComp);
+            $(strComp).insertAfter($("#" + id_padre));
         } else {
             $("#" + getDivDelNivel()).append(strComp);
         }
@@ -1236,10 +1238,10 @@ function cloneSubCampo(id){
 }
 
 //clona un campo 
-//@params: id es el marc_group del padre
-function cloneCampo(id){
+//@params: marc_group es el marc_group del padre
+function cloneCampo(marc_group){
     var id_componente   = generarIdComponente();
-    var campo_temp      = _getCampoMARC_conf_ById(id);
+    var campo_temp      = _getCampoMARC_conf_ById(marc_group);
     var campo_obj       = copy(campo_temp);      //se genera una copia del campo
 
     //ahora cambio el id del campo
@@ -1261,7 +1263,7 @@ function cloneCampo(id){
 
     temp = new Array();
     temp.push(campo_obj)
-    procesarInfoJson(temp, id);
+    procesarInfoJson(temp, marc_group);
 }
 
 function remove(id){
