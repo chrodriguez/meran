@@ -51,6 +51,7 @@ if ($input->param('newflags')) {
     		}
 	}
 	&cambiarLibreDeuda($flags);
+    $t_params->{'message'}= C4::AR::Filtros::i18n("La configuraci&oacute;n de la administraci&oacute;n se ha modificado.");
 }
 
 my $libreD=C4::AR::Preferencias->getValorPreferencia("libreDeuda");

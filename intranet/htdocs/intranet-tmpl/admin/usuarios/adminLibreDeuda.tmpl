@@ -17,7 +17,13 @@ function desmarcar(chk){
 }
 
 </script>
-
+[% IF message %]
+<div class="mensajes_informacion">
+    <div id="mensajes" style="opacity: 90; display: block;">
+        <div class="message_text">[% message %]</div>
+    </div>
+</div>
+[% END %]
 <fieldset >
       <legend class="titulo_legend">[% "Administraci&oacute;n de Libre Deuda" | i18n %]</legend>
       <p class="inputFontNormal">
