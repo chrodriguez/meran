@@ -94,6 +94,7 @@ li {list-style-type: none;}
 .icon_ayuda{background:transparent url(../imagenes/iconos/ayuda.png) no-repeat;height:25px;width:25px;cursor:pointer;float:left;}
 .icon_ayuda_marc{background:transparent url(../imagenes/iconos/ayuda_marc.png) no-repeat;height:25px;width:25px;cursor:pointer;float:right;}
 .icon_agregar{background:transparent url(../imagenes/iconos/agregar.png) no-repeat;height:25px;width:25px;cursor:pointer;}
+.icon_mas{background:transparent url(../imagenes/iconos/mas.png) no-repeat;height:25px;width:25px;cursor:pointer;}
 .icon_renovar{background:transparent url(../imagenes/iconos/renovar.png) no-repeat;height:25px;width:25px;cursor:pointer;}
 .icon_der{background:transparent url(../imagenes/iconos/der.png) no-repeat;height:25px;width:25px;cursor:pointer;}
 .icon_devolver{background:transparent url(../imagenes/iconos/devolver.png) no-repeat;height:25px;width:25px;cursor:pointer;}

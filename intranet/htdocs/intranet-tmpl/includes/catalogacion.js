@@ -1290,7 +1290,7 @@ function cloneObj(o) {
 function crearBotonAgregarSubcampoRepetible(obj){
 
     if(obj.getRepetible() == '1'){
-        return "<div onclick=cloneSubCampo('"+ obj.getIdCompCliente() +"') class='icon_agregar horizontal' title='Agregar subcampo repetible'/>";
+        return "<div onclick=cloneSubCampo('"+ obj.getIdCompCliente() +"') class='icon_mas horizontal' title='Agregar subcampo repetible'/>";
     }else{  
         return "";
     }
@@ -1299,7 +1299,7 @@ function crearBotonAgregarSubcampoRepetible(obj){
 function crearBotonAgregarCampoRepetible(obj, id_padre){
 
     if(obj.getRepetible() == '1'){
-        return "<div onclick=cloneCampo('marc_group"+ id_padre +"') class='icon_agregar horizontal' title='Agregar campo repetible'/>";
+        return "<div onclick=cloneCampo('marc_group"+ id_padre +"') class='icon_mas horizontal' title='Agregar campo repetible'/>";
     }else{  
         return "";
     }
@@ -1557,7 +1557,7 @@ function crearAuto(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='"+ obj.getIdCompCliente() +"' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" class='horizontal' >";
 
     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
-    comp = comp + "<input type='button' value='agregar referencia' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "')>"
+    comp = comp + "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
     $("#div" + obj.getIdCompCliente()).append(comp);
     _cearAutocompleteParaCamponente(obj);
     //se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
