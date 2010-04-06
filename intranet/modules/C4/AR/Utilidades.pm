@@ -2379,11 +2379,10 @@ sub obtenerBusquedas{
 
     my ($searchstring) = @_;
     my @search_array;
-    my @busqueda= split(/\b/,$searchstring); #splitea por blancos, retorna un arreglo de substring, puede estar
+    my @busqueda= split(/ /,$searchstring); #splitea por blancos, retorna un arreglo de substring, puede estar
     my $pal;
 
     foreach my  $b (@busqueda){
-        C4::AR::Debug::debug('CANTIDAD DE PALABRAS: '.scalar(@busqueda));
         $pal= trim($b);
         if( length($pal) > 0 ){
 #             C4::AR::Debug::debug('agrego: '.$pal);

@@ -23,6 +23,8 @@ my $obj=$input->param('obj');
 
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
+$obj->{'keyword'} = Encode::encode_utf8($obj->{'keyword'});
+
 my $start = [ Time::HiRes::gettimeofday( ) ]; #se toma el tiempo de inicio de la búsqueda
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 my $dateformat = C4::Date::get_date_format();

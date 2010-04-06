@@ -1184,13 +1184,13 @@ sub index_update{
 sub busquedaCombinada_newTemp{
     my ($string,$session,$obj_for_log) = @_;
 
+ C4::AR::Debug::debug("STRINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGggggg: ".$string);
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string);
 
     use Sphinx::Search;
 
     my $sphinx = Sphinx::Search->new();
     my $query = '';
-
     #se arma el query string
     foreach $string (@searchstring_array){
       $query .=  " ".$string."*";
