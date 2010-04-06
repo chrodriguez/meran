@@ -30,7 +30,7 @@ if($obj){
   my %hash_temp = {};
   $obj = \%hash_temp;
   $obj->{'tipoAccion'} = $input->param('tipoAccion');
-  $obj->{'string'} = $input->param('string');
+  $obj->{'string'} = Encode::decode_utf8($input->param('string'));
   $obj->{'tipoBusqueda'} = 'all';
   $obj->{'ini'} = $input->param('page') || 0;
 }
@@ -79,7 +79,7 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 
     $t_params->{'partial_template'}         = "opac-busquedaResult.inc";
     $t_params->{'content_title'}            = C4::AR::Filtros::i18n("Resultados de la b&uacute;squeda");
-    $t_params->{'search_string'}            = $obj->{'string'};
+
 #     $t_params->{'buscoPor'}                 = $obj->{'string'};
 }
 
@@ -91,9 +91,10 @@ $t_params->{'timeSeg'}          = $elapsed;
 $obj->{'nro_socio'}             = $session->param('nro_socio');
 $t_params->{'SEARCH_RESULTS'}   = $resultsarray;
 #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
+$obj->{'string'} = Encode::encode_utf8($obj->{'string'});
 $t_params->{'buscoPor'}         = C4::AR::Utilidades::verificarValor($obj->{'string'});#C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'cantidad'}         = $cantidad || 0;
-
+$t_params->{'search_string'}            = $obj->{'string'};
 # my $elapsed = Time::HiRes::tv_interval( $start );
 # $t_params->{'timeSeg'}= $elapsed;
 

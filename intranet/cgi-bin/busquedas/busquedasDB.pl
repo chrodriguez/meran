@@ -22,8 +22,7 @@ my $obj=$input->param('obj');
 
 
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
-
-$obj->{'keyword'} = Encode::encode_utf8($obj->{'keyword'});
+# $obj->{'keyword'} = Encode::encode_utf8($obj->{'keyword'});
 
 my $start = [ Time::HiRes::gettimeofday( ) ]; #se toma el tiempo de inicio de la búsqueda
 my $tipoAccion= $obj->{'tipoAccion'}||"";
@@ -51,11 +50,9 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
       $t_params->{'session'}= $session;
       my ($cantidad, $resultId1)= C4::AR::Busquedas::filtrarPorAutor($t_params);
       $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
-  
+      $t_params->{'cantidad'}= $cantidad;  
       $t_params->{'SEARCH_RESULTS'}= $resultId1;
-	    #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
-      $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
-      $t_params->{'cantidad'}= $cantidad;
+
     
 }elsif($tipoAccion eq "BUSQUEDA_COMBINADA"){
     
@@ -73,10 +70,8 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 	    $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
 	    $obj->{'cantidad'}= $cantidad;  #????????
 	    $t_params->{'SEARCH_RESULTS'}= $resultId1;
-	    #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
-	    $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj); 
-	    $t_params->{'cantidad'}= $cantidad;
-    
+            $t_params->{'cantidad'}= $cantidad;
+
 	    if($outside) {
             $t_params->{'HEADERS'}= 1;
 	    }
@@ -91,11 +86,13 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 	    $obj->{'loggedinuser'}= $session->param('nro_socio');
 	    $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 	    $t_params->{'SEARCH_RESULTS'}= $array_nivel1;
-	    $t_params->{'cantidad'}= $cantidad;
-	    #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
-	    $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
+            $t_params->{'cantidad'}= $cantidad;
     }
-    
+
+    $obj->{'keyword'} = Encode::encode_utf8($obj->{'keyword'});
+    #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
+    $t_params->{'buscoPor'}= C4::AR::Busquedas::armarBuscoPor($obj);
+
     my $elapsed = Time::HiRes::tv_interval( $start );
     $t_params->{'timeSeg'}= $elapsed;
     C4::AR::Busquedas::logBusqueda($t_params, $session);

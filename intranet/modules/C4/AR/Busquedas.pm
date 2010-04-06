@@ -1200,13 +1200,13 @@ sub busquedaCombinada_newTemp{
     my $tipo = $obj_for_log->{'match_mode'}||'SPH_MATCH_ANY';
     my $tipo_match = _getMatchMode($tipo);
 
-#     C4::AR::Debug::debug("MATCH MODE ".$tipo);
+     C4::AR::Debug::debug("MATCH MODE ".$tipo);
 
-    my $results = $sphinx->SetMatchMode($tipo_match)
-                                    ->SetSortMode(SPH_SORT_RELEVANCE)
+      $sphinx->SetMatchMode($tipo_match);
+      $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
 #                                     ->SetSelect("*")
-                                    ->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'})
-                                    ->Query($query);
+      $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'});
+   my $results = $sphinx->Query($query);
 
 
     my @id1_array;
