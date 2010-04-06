@@ -173,6 +173,7 @@ sub modificar{
     #Asignando data...
     $self->setNombre($data_hash->{'nombre'});
     $self->setApellido($data_hash->{'apellido'});
+    $self->setLegajo($data_hash->{'legajo'});
     $self->setVersion_documento($data_hash->{'version_documento'});
     $self->setNro_documento($data_hash->{'nro_documento'});
     $self->setTipo_documento($data_hash->{'tipo_documento'});
