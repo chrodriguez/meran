@@ -106,6 +106,8 @@ function updateInfoRenovar(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 	DetallePrestamos();	
+    infoReservas();
+    infoSanciones();
 }
 
 /*
