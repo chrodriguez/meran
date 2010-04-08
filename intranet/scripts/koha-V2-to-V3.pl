@@ -6630,9 +6630,19 @@ sub guardaNivel3MARC {
   `dato` varchar(255) NOT NULL,
   `campo_marc` char(3) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;"
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;",
+
+"CREATE TABLE IF NOT EXISTS `cat_perfil_opac` (
+  `id` int(11) NOT NULL auto_increment,
+  `nombre` varchar(255) character set utf8 NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;",
+
+"INSERT INTO `cat_perfil_opac` (`id`, `nombre`) VALUES
+(1, 'Perfil 1'),
+(2, 'Perfil 2');"
 );
-    
+
     foreach $est (@estcat){my $ec=$dbh->prepare($est);  $ec->execute();}
 
     }
