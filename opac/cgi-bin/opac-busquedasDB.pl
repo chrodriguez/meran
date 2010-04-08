@@ -35,7 +35,7 @@ if($obj){
   $obj->{'ini'} = $input->param('page') || 0;
 }
 
-my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
+my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".Encode::encode_utf8($obj->{'string'})."&tipoAccion=".$obj->{'tipoAccion'};
 
 my $ini= $obj->{'ini'};
 my $start = [ Time::HiRes::gettimeofday() ]; #se toma el tiempo de inicio de la búsqueda
