@@ -1077,65 +1077,65 @@ sub getBranch{
 # }
 
 
-sub busquedaAvanzada_newTemp{
-	my ($params_obj,$session) = @_;
-
-	my $dbh = C4::Context->dbh;
-	my @searchstring_array;
-	
-	my $body_string = "	SELECT DISTINCT (t1.id1), t2.titulo, t2.autor, t4.completo  \n";
-	$body_string .=	"	FROM cat_nivel3 t1 JOIN (cat_nivel1 t2  JOIN cat_autor t4 ON (t2.autor = t4.id)) ON (t1.id1 = t2.id1)  \n";
-	$body_string .=	"	JOIN cat_nivel2 t3 ON (t1.id2 = t3.id2) \n";
-	$body_string .=	"	WHERE ";
-	
-	my $filtros = "";
-	
-	my @bind;
-	
-	if ( C4::AR::Utilidades::trim($params_obj->{'autor'}) ){
-		$filtros.= "(t4.completo LIKE ?) AND ";
-		push(@bind,"%".$params_obj->{'autor'}."%");
-		push(@searchstring_array, $params_obj->{'autor'});
-	}
-	if ( C4::AR::Utilidades::trim($params_obj->{'signatura'}) ){
-		$filtros.= "(t1.signatura_topografica LIKE ?) AND ";
-		push(@bind,"%".$params_obj->{'signatura'}."%");
-		push(@searchstring_array, $params_obj->{'signatura'});
-	}
-	
-	if ( C4::AR::Utilidades::trim($params_obj->{'tipo_nivel3_name'}) ){
-		$filtros.= "(t3.tipo_documento = ?) AND ";
-		push(@bind,$params_obj->{'tipo_nivel3_name'});
-	}
-	
-	if ( C4::AR::Utilidades::trim($params_obj->{'titulo'}) ){
-		if ( C4::AR::Utilidades::trim($params_obj->{'tipo'} eq "normal") ){
-			$filtros.= "(t2.titulo LIKE ?) AND ";
-			push(@bind,"%".$params_obj->{'titulo'}."%");
-			push(@searchstring_array, $params_obj->{'titulo'});
-		}else{
-			$filtros.= "(t2.titulo = ?) AND ";
-			push(@bind,$params_obj->{'titulo'});
-			push(@searchstring_array, $params_obj->{'titulo'});
-		}
-	}
-	
-	$filtros.= " TRUE ";
-	my $sth = $dbh->prepare($body_string.$filtros);
-	$sth->execute(@bind);
-	
-	my @id1_array;
-	
-	while(my $data = $sth->fetchrow_hashref){
-		push (@id1_array,$data);
-	}
-	#arma y ordena el arreglo para enviar al cliente
-   	 my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,@id1_array);
-	#se loquea la busqueda
-   	C4::AR::Busquedas::logBusqueda($params_obj, $session);
-	
-	return ($cant_total,$resultsarray);
-}
+# sub busquedaAvanzada_newTemp{
+# 	my ($params_obj,$session) = @_;
+# 
+# 	my $dbh = C4::Context->dbh;
+# 	my @searchstring_array;
+# 	
+# 	my $body_string = "	SELECT DISTINCT (t1.id1), t2.titulo, t2.autor, t4.completo  \n";
+# 	$body_string .=	"	FROM cat_nivel3 t1 JOIN (cat_nivel1 t2  JOIN cat_autor t4 ON (t2.autor = t4.id)) ON (t1.id1 = t2.id1)  \n";
+# 	$body_string .=	"	JOIN cat_nivel2 t3 ON (t1.id2 = t3.id2) \n";
+# 	$body_string .=	"	WHERE ";
+# 	
+# 	my $filtros = "";
+# 	
+# 	my @bind;
+# 	
+# 	if ( C4::AR::Utilidades::trim($params_obj->{'autor'}) ){
+# 		$filtros.= "(t4.completo LIKE ?) AND ";
+# 		push(@bind,"%".$params_obj->{'autor'}."%");
+# 		push(@searchstring_array, $params_obj->{'autor'});
+# 	}
+# 	if ( C4::AR::Utilidades::trim($params_obj->{'signatura'}) ){
+# 		$filtros.= "(t1.signatura_topografica LIKE ?) AND ";
+# 		push(@bind,"%".$params_obj->{'signatura'}."%");
+# 		push(@searchstring_array, $params_obj->{'signatura'});
+# 	}
+# 	
+# 	if ( C4::AR::Utilidades::trim($params_obj->{'tipo_nivel3_name'}) ){
+# 		$filtros.= "(t3.tipo_documento = ?) AND ";
+# 		push(@bind,$params_obj->{'tipo_nivel3_name'});
+# 	}
+# 	
+# 	if ( C4::AR::Utilidades::trim($params_obj->{'titulo'}) ){
+# 		if ( C4::AR::Utilidades::trim($params_obj->{'tipo'} eq "normal") ){
+# 			$filtros.= "(t2.titulo LIKE ?) AND ";
+# 			push(@bind,"%".$params_obj->{'titulo'}."%");
+# 			push(@searchstring_array, $params_obj->{'titulo'});
+# 		}else{
+# 			$filtros.= "(t2.titulo = ?) AND ";
+# 			push(@bind,$params_obj->{'titulo'});
+# 			push(@searchstring_array, $params_obj->{'titulo'});
+# 		}
+# 	}
+# 	
+# 	$filtros.= " TRUE ";
+# 	my $sth = $dbh->prepare($body_string.$filtros);
+# 	$sth->execute(@bind);
+# 	
+# 	my @id1_array;
+# 	
+# 	while(my $data = $sth->fetchrow_hashref){
+# 		push (@id1_array,$data);
+# 	}
+# 	#arma y ordena el arreglo para enviar al cliente
+#    	 my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,@id1_array);
+# 	#se loquea la busqueda
+#    	C4::AR::Busquedas::logBusqueda($params_obj, $session);
+# 	
+# 	return ($cant_total,$resultsarray);
+# }
 
 sub callStoredProcedure{
   my $dbh = C4::Context->dbh;
@@ -1233,6 +1233,71 @@ sub busquedaCombinada_newTemp{
     return ($total_found, $resultsarray);
 }
 
+sub busquedaAvanzada_newTemp{
+    my ($params,$session) = @_;
+
+#       $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
+#     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
+
+    use Sphinx::Search;
+
+    my $sphinx = Sphinx::Search->new();
+    my $query = '';
+    #se arma el query string
+#     foreach my $string (@searchstring_array){
+#         $query .=  " ".$string."*";
+#     }
+
+
+    if($params->{'titulo'} ne ""){
+        $query .= '@titulo '.$params->{'titulo'};
+        if($params->{'tipo'} eq "normal"){
+            $query .= "*";
+        }
+    }
+
+    if($params->{'autor'} ne ""){
+        $query .= ' @autor '.$params->{'autor'};
+        if($params->{'tipo'} eq "normal"){
+            $query .= "*";
+        }
+    }
+
+    C4::AR::Debug::debug("Busquedas => query string => ".$query);
+#     C4::AR::Debug::debug("query string ".$query);
+    my $tipo = 'SPH_MATCH_EXTENDED';
+    my $tipo_match = _getMatchMode($tipo);
+
+    $sphinx->SetMatchMode($tipo_match);
+    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+    $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+    $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
+    # NOTA: sphinx necesita el string decode_utf8
+    my $results = $sphinx->Query($query);
+
+    my @id1_array;
+    my $matches = $results->{'matches'};
+    my $total_found = $results->{'total_found'};
+    $params->{'total_found'} = $total_found;
+#     C4::AR::Utilidades::printHASH($results);
+    C4::AR::Debug::debug("total_found: ".$total_found);
+#     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    foreach my $hash (@$matches){
+      my %hash_temp = {};
+      $hash_temp{'id1'} = $hash->{'doc'};
+      $hash_temp{'hits'} = $hash->{'weight'};
+
+      push (@id1_array, \%hash_temp);
+    }
+
+    my ($total_found_paginado, $resultsarray);
+    #arma y ordena el arreglo para enviar al cliente
+    ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @id1_array);
+    #se loquea la busqueda
+    C4::AR::Busquedas::logBusqueda($params, $session);
+
+    return ($total_found, $resultsarray);
+}
 
 sub busquedaPorBarcode{
     my ($string_utf8_encoded,$session,$obj_for_log) = @_;

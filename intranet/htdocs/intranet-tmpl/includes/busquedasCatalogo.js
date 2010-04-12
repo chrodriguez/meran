@@ -36,7 +36,7 @@ function busquedaCombinable(){
     objAH.debug             = true;
     //para busquedas combinables
     objAH.url               = '/cgi-bin/koha/busquedas/busquedasDB.pl';
-    objAH.titulo            =  $('#titulo').val();
+    objAH.titulo            = $('#titulo').val();
     objAH.autor             = $('#autor').val();
     objAH.signatura         = $('#signatura').val();
     objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
@@ -98,8 +98,20 @@ function buscar(doScroll){
         if ( (jQuery.trim($('#tema').val())).length < limite_caracteres ){
             cumple_limite = false;
         } else {buscarPorTema();}
-    } else if( (jQuery.trim($('#titulo').val()) != '') || (jQuery.trim($('#autor').val()) != '') || (jQuery.trim($('#signatura').val()) != '') ){
-        if ( (jQuery.trim($('#titulo').val())).length < limite_caracteres || (jQuery.trim($('#autor').val())).length < limite_caracteres || (jQuery.trim($('#signatura').val())).length < limite_caracteres){
+//     } else if( (jQuery.trim($('#titulo').val()) != '') || (jQuery.trim($('#autor').val()) != '') || (jQuery.trim($('#signatura').val()) != '') ){
+//         if ( (jQuery.trim($('#titulo').val())).length < limite_caracteres || (jQuery.trim($('#autor').val())).length < limite_caracteres || (jQuery.trim($('#signatura').val())).length < limite_caracteres){
+//             cumple_limite = false;
+//         } else {busquedaCombinable();}
+    } else if( (jQuery.trim($('#titulo').val()) != '') ) {
+        if ( (jQuery.trim($('#titulo').val())).length < limite_caracteres ) {
+            cumple_limite = false;
+        } else {busquedaCombinable();}
+    } else if(jQuery.trim($('#autor').val()) != '') {
+        if((jQuery.trim($('#autor').val())).length < limite_caracteres ){
+            cumple_limite = false;
+        } else {busquedaCombinable();}
+    } else if (jQuery.trim($('#signatura').val()) != '') {
+         if ( (jQuery.trim($('#signatura').val())).length < limite_caracteres ) {
             cumple_limite = false;
         } else {busquedaCombinable();}
     } else {

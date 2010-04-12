@@ -77,7 +77,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 	    my $funcion                     = $obj->{'funcion'};
 	    my $ini                         = ($obj->{'ini'}||'');
 	    
-	    my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
+	    my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj, $session);
 	    
 	    $obj->{'cantidad'}              = $cantidad;
 	    $obj->{'loggedinuser'}          = $session->param('nro_socio');
