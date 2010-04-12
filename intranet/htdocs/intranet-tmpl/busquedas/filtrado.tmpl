@@ -86,7 +86,8 @@ function limpiarCampos(side){
                     <label for="codBarra">
                         <strong>[% "C&oacute;digo de barras" | i18n %]</strong>
                     </label>
-                    <input type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">
+                    <!--<input type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">-->
+                    <input type="text" size="25" id="codBarra" onkeypress="limpiarCampos('derecha')">
                 </li>
                 <li class="sub_item">
                     <label for="tema">
@@ -143,7 +144,8 @@ function limpiarCampos(side){
           </fieldset>
           </div>
           <div align ="center">
-                <ul class="listaMenuBotones">
+                <!--<ul class="listaMenuBotones">-->
+                <ul>
                     <li>
     <!-- FIXME esto no se usa??? -->
                     <input type="hidden" name="type" value="intra">

@@ -1233,6 +1233,31 @@ sub busquedaCombinada_newTemp{
     return ($total_found, $resultsarray);
 }
 
+
+sub busquedaPorBarcode{
+    my ($string_utf8_encoded,$session,$obj_for_log) = @_;
+
+
+    my @id1_array;
+    my $nivel3 = C4::AR::Nivel3::getNivel3FromBarcode($string_utf8_encoded);
+
+    if($nivel3){
+        my %hash_temp = {};
+        $hash_temp{'id1'} = $nivel3->getId1();
+        $hash_temp{'hits'} = undef;
+
+        push (@id1_array, \%hash_temp);
+    }
+
+    my ($total_found_paginado, $resultsarray);
+    #arma y ordena el arreglo para enviar al cliente
+    ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
+    #se loquea la busqueda
+    C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
+
+    return ($total_found_paginado, $resultsarray);
+}
+
 =item
 Realiza una busqueda simpel por autor sobre nivel 1
 =cut
@@ -1432,35 +1457,32 @@ sub armarBuscoPor{
     my $str;
 	
 	if($params->{'keyword'} ne ""){
-# 		$buscoPor.="Busqueda combinada: ".C4::AR::Utilidades::verificarValor($params->{'keyword'})."&";
-#         $str = C4::AR::Utilidades::verificarValor($params->{'keyword'});
-            $str = $params->{'keyword'};
-#         $str = Encode::encode('utf8' ,$str);
-        $buscoPor.= "Busqueda combinada: ".$str."&";
+        $str      = $params->{'keyword'};
+        $buscoPor.= Encode::decode_utf8("Búsqueda combinada: ").$str."&";
 	}
 	
 	if( $params->{'tipo_nivel3_name'} != -1 &&  $params->{'tipo_nivel3_name'} ne ""){
-		$buscoPor.="Tipo de documento: ".C4::AR::Utilidades::verificarValor($params->{'tipo_nivel3_name'})."&";
+		$buscoPor.= "Tipo de documento: ".C4::AR::Utilidades::verificarValor($params->{'tipo_nivel3_name'})."&";
 	}
 
 	if( $params->{'titulo'} ne "" ){
-		$buscoPor.="Titulo: ".C4::AR::Utilidades::verificarValor($params->{'titulo'})."&";
+		$buscoPor.= Encode::decode_utf8("Título: ".C4::AR::Utilidades::verificarValor($params->{'titulo'}))."&";
 	}
 	
 	if( $params->{'autor'} ne "" ){
-		$buscoPor.="Autor: ".C4::AR::Utilidades::verificarValor($params->{'autor'})."&";
+		$buscoPor.= "Autor: ".C4::AR::Utilidades::verificarValor($params->{'autor'})."&";
 	}
 
 	if( $params->{'signatura'} ne "" ){
-		$buscoPor.="Signatura: ".C4::AR::Utilidades::verificarValor($params->{'signatura'})."&";
+		$buscoPor.= "Signatura: ".C4::AR::Utilidades::verificarValor($params->{'signatura'})."&";
 	}
 
 	if( $params->{'isbm'} ne "" ){
-		$buscoPor.="ISBN: ".C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
+		$buscoPor.= "ISBN: ".C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
 	}		
 
 	if( $params->{'codBarra'} ne "" ){
-		$buscoPor.="Código de Barra: ".C4::AR::Utilidades::verificarValor($params->{'codBarra'})."&";
+		$buscoPor.= Encode::decode_utf8("Código de Barra: ".C4::AR::Utilidades::verificarValor($params->{'codBarra'}))."&";
 	}		
 
 	my @busqueda=split(/&/,$buscoPor);

@@ -84,6 +84,17 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 	    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 	    $t_params->{'SEARCH_RESULTS'}   = $array_nivel1;
         $t_params->{'cantidad'}         = $cantidad;
+    }elsif($tipoAccion eq "BUSQUEDA_POR_BARCODE"){
+        my $funcion                     = $obj->{'funcion'};
+        my $ini                         = ($obj->{'ini'}||'');
+        
+        my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaPorBarcode($obj->{'codBarra'}, $session, $obj);
+        
+        $obj->{'cantidad'}              = $cantidad;
+        $obj->{'loggedinuser'}          = $session->param('nro_socio');
+        $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+        $t_params->{'SEARCH_RESULTS'}   = $array_nivel1;
+        $t_params->{'cantidad'}         = $cantidad;
     }
 
     #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS

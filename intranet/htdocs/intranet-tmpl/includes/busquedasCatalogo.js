@@ -32,24 +32,22 @@ function highlightBusquedaCombinable(){
 
 function busquedaCombinable(){
 
-    objAH=new AjaxHelper(updateBusquedaCombinable);
-    objAH.debug= true;
-
+    objAH                   = new AjaxHelper(updateBusquedaCombinable);
+    objAH.debug             = true;
     //para busquedas combinables
-    objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
-    objAH.titulo=  $('#titulo').val();
-    objAH.autor= $('#autor').val();
-    objAH.signatura= $('#signatura').val();   
-    objAH.tipo_nivel3_name= $('#tipo_nivel3_id').val();
-    objAH.tipoAccion = 'BUSQUEDA_AVANZADA';    
-    
-    var radio= $(":checked");
-    var tipo=radio[0].value;
-    objAH.tipo= tipo;
+    objAH.url               = '/cgi-bin/koha/busquedas/busquedasDB.pl';
+    objAH.titulo            =  $('#titulo').val();
+    objAH.autor             = $('#autor').val();
+    objAH.signatura         = $('#signatura').val();
+    objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
+    objAH.tipoAccion        = 'BUSQUEDA_AVANZADA';
+    var radio               = $(":checked");
+    var tipo                = radio[0].value;
+    objAH.tipo              = tipo;
     //se setea la funcion para cambiar de pagina
-    objAH.funcion= 'changePage';
+    objAH.funcion           = 'changePage';
     //se envia la consulta
-    objAH.sendToServer();   
+    objAH.sendToServer();
 }
 
 function updateBusquedaCombinable(responseText){
@@ -116,14 +114,6 @@ function buscar(doScroll){
 
 }
 
-function buscarPorCodigoBarra(){
-    objAH=new AjaxHelper(updateInfoBusquedas);
-    objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
-    objAH.codBarra= $('#codBarra').val();
-    objAH.sendToServer();
-}
-
 function highlightbuscarPorCodigoBarra(){
     var string = [];
     var classes = [];
@@ -159,6 +149,15 @@ function buscarPorDiccionario(){
     objAH.dictionary= $('#dictionary').val();
     //se setea la funcion para cambiar de pagina
     objAH.funcion= 'changePage';
+    objAH.sendToServer();
+}
+
+function buscarPorCodigoBarra(){
+    objAH               = new AjaxHelper(updateInfoBusquedas);
+    objAH.debug         = true;
+    objAH.url           = '/cgi-bin/koha/busquedas/busquedasDB.pl';
+    objAH.codBarra      = $('#codBarra').val();
+    objAH.tipoAccion    = 'BUSQUEDA_POR_BARCODE';
     objAH.sendToServer();
 }
 
