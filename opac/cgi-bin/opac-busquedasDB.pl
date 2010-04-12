@@ -36,7 +36,7 @@ if($obj){
   $obj->{'ini'} = $input->param('page') || 0;
 }
 
-C4::AR::Debug::debug("opac-busquedas.pl => string => ".$obj->{'string'});
+# C4::AR::Debug::debug("opac-busquedas.pl => string => ".$obj->{'string'});
 
 # my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".Encode::encode_utf8($obj->{'string'})."&tipoAccion=".$obj->{'tipoAccion'};
 
@@ -101,6 +101,6 @@ $obj->{'keyword'} = $obj->{'string'};
 # $t_params->{'buscoPor'}         = C4::AR::Utilidades::verificarValor($obj->{'string'});#C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'buscoPor'}         = C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'cantidad'}         = $cantidad || 0;
-$t_params->{'search_string'}    = $obj->{'string'};
+# $t_params->{'search_string'}    = $obj->{'string'};
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
