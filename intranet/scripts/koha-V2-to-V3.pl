@@ -1392,10 +1392,39 @@ foreach my $sql (@sqls){
             PRIMARY KEY  (`id`),
             KEY `campo` (`campo`,`subcampo`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;",
-            "INSERT INTO `cat_visualizacion_opac` (`id`, `campo`, `subcampo`, `vista_opac`, `id_perfil`) VALUES
-            (2, '013', 'b', 'rock', 1),
-            (3, '110', 'f', 'No se, ni idea', 1),
-            (4, '653', 'a', 'Lenguaje natural ananaan', 1);",
+            "INSERT INTO `cat_visualizacion_opac` (`campo`, `subcampo`, `vista_opac`, `id_perfil`) VALUES
+                ( '245', 'a', 'Título', '1'),
+                ( '245', 'b', 'Resto del título', '1'),
+                ( '082', '2', 'No. de la edición', '1'),
+                ( '084', 'a', 'Otro Número de Clasificación R', '1'),
+                ( '245', 'h', 'Medio', '1'),
+                ( '260', 'a', 'Ciudad de publicación', '1'),
+                ( '100', 'a', 'Autor', '1'),
+                ( '995', 'f', 'Código de Barras', '1'),
+                ( '995', 't', 'Signatura Topográfica', '1'),
+                ( '900', 'b', 'Nivel Bibliográfico', '1'),
+                ( '995', 'd', 'Unidad de Información de Origen', '1'),
+                ( '260', 'c', 'Fecha de publicación', '1'),
+                ( '910', 'a', 'Tipo de Documento', '1'),
+                ( '995', 'e', 'Estado', '1'),
+                ( '995', 'o', 'Disponibilidad', '1'),
+                ( '995', 'c', 'Unidad de Información', '1'),
+                ( '041', 'h', 'Código de idioma de la versión original y/o traducciones intermedias del texto', '1'),
+                ( '020', 'a', 'ISBN', '1'),
+                ( '440', 'a', 'Serie - título de la serie', '1'),
+                ( '022', 'a', 'Año', '1'),
+                ( '995', 'u', 'Notas del item', '1'),
+                ( '995', 'a', 'Nombre del vendedor', '1'),
+                ( '043', 'c', 'Código ISO (R)', '1'),
+                ( '072', '2', 'Fuente del código', '1');",
+                "CREATE TABLE IF NOT EXISTS `cat_perfil_opac` (
+                `id` int(11) NOT NULL auto_increment,
+                `nombre` varchar(255) character set utf8 NOT NULL,
+                PRIMARY KEY  (`id`)
+                ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;",
+                
+                "INSERT INTO `cat_perfil_opac` (`id`, `nombre`) VALUES
+                (1, 'Perfil 1');",
             "CREATE TABLE IF NOT EXISTS `ref_colaborador` (
             `id` int(11) NOT NULL auto_increment,
             `codigo` varchar(10) NOT NULL,
@@ -6630,17 +6659,7 @@ sub guardaNivel3MARC {
   `dato` varchar(255) NOT NULL,
   `campo_marc` char(3) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;",
-
-"CREATE TABLE IF NOT EXISTS `cat_perfil_opac` (
-  `id` int(11) NOT NULL auto_increment,
-  `nombre` varchar(255) character set utf8 NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;",
-
-"INSERT INTO `cat_perfil_opac` (`id`, `nombre`) VALUES
-(1, 'Perfil 1'),
-(2, 'Perfil 2');"
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;"
 );
 
     foreach $est (@estcat){my $ec=$dbh->prepare($est);  $ec->execute();}
