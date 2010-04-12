@@ -1182,32 +1182,32 @@ sub index_update{
 }
 
 sub busquedaCombinada_newTemp{
-    my ($string,$session,$obj_for_log) = @_;
+    my ($string_utf8_encoded,$session,$obj_for_log) = @_;
 
- C4::AR::Debug::debug("STRINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGggggg: ".$string);
-    my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string);
+      $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
+    my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
 
     use Sphinx::Search;
 
     my $sphinx = Sphinx::Search->new();
     my $query = '';
     #se arma el query string
-    foreach $string (@searchstring_array){
-      $query .=  " ".$string."*";
+    foreach my $string (@searchstring_array){
+        $query .=  " ".$string."*";
     }
 
-    C4::AR::Debug::debug("query string ".$query);
+#     C4::AR::Debug::debug("Busquedas => query => ".$query);
+#     C4::AR::Debug::debug("query string ".$query);
     my $tipo = $obj_for_log->{'match_mode'}||'SPH_MATCH_ANY';
     my $tipo_match = _getMatchMode($tipo);
 
-     C4::AR::Debug::debug("MATCH MODE ".$tipo);
-
-      $sphinx->SetMatchMode($tipo_match);
-      $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
-#                                     ->SetSelect("*")
-      $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'});
-   my $results = $sphinx->Query($query);
-
+#      C4::AR::Debug::debug("MATCH MODE ".$tipo);
+    $sphinx->SetMatchMode($tipo_match);
+    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+    $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+    $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'});
+    # NOTA: sphinx necesita el string decode_utf8
+    my $results = $sphinx->Query($query);
 
     my @id1_array;
     my $matches = $results->{'matches'};
@@ -1215,7 +1215,7 @@ sub busquedaCombinada_newTemp{
     $obj_for_log->{'total_found'} = $total_found;
 #     C4::AR::Utilidades::printHASH($results);
     C4::AR::Debug::debug("total_found: ".$total_found);
-#     C4::AR::Debug::debug("LAST ERROR: ".$sphinx->GetLastError());
+#     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
       my %hash_temp = {};
       $hash_temp{'id1'} = $hash->{'doc'};
@@ -1223,6 +1223,7 @@ sub busquedaCombinada_newTemp{
 
       push (@id1_array, \%hash_temp);
     }
+
     my ($total_found_paginado, $resultsarray);
     #arma y ordena el arreglo para enviar al cliente
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
@@ -1428,9 +1429,13 @@ sub armarBuscoPor{
 	my ($params) = @_;
 	
 	my $buscoPor="";
+    my $str;
 	
 	if($params->{'keyword'} ne ""){
-		$buscoPor.="Busqueda combinada: ".C4::AR::Utilidades::verificarValor($params->{'keyword'})."&";
+# 		$buscoPor.="Busqueda combinada: ".C4::AR::Utilidades::verificarValor($params->{'keyword'})."&";
+        $str = C4::AR::Utilidades::verificarValor($params->{'keyword'});
+#         $str = Encode::encode('utf8' ,$str);
+        $buscoPor.= "Busqueda combinada: ".$str."&";
 	}
 	
 	if( $params->{'tipo_nivel3_name'} != -1 &&  $params->{'tipo_nivel3_name'} ne ""){

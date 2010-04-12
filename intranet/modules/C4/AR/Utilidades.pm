@@ -1331,8 +1331,9 @@ sub from_json_ISO {
 
     eval {
         my ($data)=@_;
-        $data= UTF8toISO($data);
-        return from_json($data, {ascii => 0});
+#         $data= UTF8toISO($data);
+#         return from_json($data, {ascii => 0});
+        return from_json($data, {utf8 => 1});
     }
     or do{
 # FIXME falta generar un codigo de error para error de sistema

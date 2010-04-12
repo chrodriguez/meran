@@ -361,7 +361,7 @@ sub print_header {
                             );
 
 
-    print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'utf-8', "Cache-control: public");
+    print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'UTF-8', "Cache-control: public");
 }
 
 =item sub is_OPAC

@@ -30,12 +30,18 @@ if($obj){
   my %hash_temp = {};
   $obj = \%hash_temp;
   $obj->{'tipoAccion'} = $input->param('tipoAccion');
-  $obj->{'string'} = Encode::decode_utf8($input->param('string'));
+#   $obj->{'string'} = Encode::decode_utf8($input->param('string'));
+  $obj->{'string'} = $input->param('string');
   $obj->{'tipoBusqueda'} = 'all';
   $obj->{'ini'} = $input->param('page') || 0;
 }
 
-my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".Encode::encode_utf8($obj->{'string'})."&tipoAccion=".$obj->{'tipoAccion'};
+C4::AR::Debug::debug("opac-busquedas.pl => string => ".$obj->{'string'});
+
+# my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".Encode::encode_utf8($obj->{'string'})."&tipoAccion=".$obj->{'tipoAccion'};
+
+my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
+
 
 my $ini= $obj->{'ini'};
 my $start = [ Time::HiRes::gettimeofday() ]; #se toma el tiempo de inicio de la búsqueda
@@ -72,15 +78,14 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
     if ($obj->{'tipoBusqueda'} eq 'all'){
-        ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj);
+#         ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaCombinada_newTemp(Encode::decode_utf8($input->param('string')),$session,$obj);
+        ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaCombinada_newTemp($input->param('string'),$session,$obj);
     }else{
         ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
     }
 
     $t_params->{'partial_template'}         = "opac-busquedaResult.inc";
     $t_params->{'content_title'}            = C4::AR::Filtros::i18n("Resultados de la b&uacute;squeda");
-
-#     $t_params->{'buscoPor'}                 = $obj->{'string'};
 }
 
 
@@ -91,11 +96,11 @@ $t_params->{'timeSeg'}          = $elapsed;
 $obj->{'nro_socio'}             = $session->param('nro_socio');
 $t_params->{'SEARCH_RESULTS'}   = $resultsarray;
 #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
-$obj->{'string'} = Encode::encode_utf8($obj->{'string'});
-$t_params->{'buscoPor'}         = C4::AR::Utilidades::verificarValor($obj->{'string'});#C4::AR::Busquedas::armarBuscoPor($obj);
+# $obj->{'keyword'} = Encode::decode_utf8($obj->{'string'});
+$obj->{'keyword'} = $obj->{'string'};
+# $t_params->{'buscoPor'}         = C4::AR::Utilidades::verificarValor($obj->{'string'});#C4::AR::Busquedas::armarBuscoPor($obj);
+$t_params->{'buscoPor'}         = C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'cantidad'}         = $cantidad || 0;
-$t_params->{'search_string'}            = $obj->{'string'};
-# my $elapsed = Time::HiRes::tv_interval( $start );
-# $t_params->{'timeSeg'}= $elapsed;
+$t_params->{'search_string'}    = $obj->{'string'};
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
