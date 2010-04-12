@@ -310,14 +310,14 @@ function cambiarEstadoCampos(campos, clase){
 }
 
 
-function buscarPorAutor(idAutor){
-    objAH=new AjaxHelper(updateInfoBusquedas);
-    objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
+function buscarPorAutor(completo){
+    objAH               = new AjaxHelper(updateInfoBusquedas);
+    objAH.url           = '/cgi-bin/koha/busquedas/busquedasDB.pl';
     //se setea la funcion para cambiar de pagina
-    objAH.debug= true;
-    objAH.funcion= 'changePage';
-    objAH.idAutor= idAutor;
-    objAH.tipoAccion = "POR_AUTOR";
+    objAH.debug         = true;
+    objAH.funcion       = 'changePage';
+    objAH.completo      = completo;
+    objAH.tipoAccion    = "BUSQUEDA_POR_AUTOR";
     objAH.sendToServer();
 }
 

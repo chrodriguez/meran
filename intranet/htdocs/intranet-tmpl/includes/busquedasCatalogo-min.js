@@ -27,5 +27,5 @@ function verSubEstanteVirtual(shelf){objAH=new AjaxHelper(updateVerEstanteVirtua
 function updateVerEstanteVirtual(responseText){$('#resultBusqueda').html(responseText);zebra('tablaresultado');$("#volver").hide();$("#busqueda").slideUp('fast');$("#resultBusqueda").slideDown("fast");}
 function verTema(idtema,tema){objAH=new AjaxHelper(updateInfoBusquedas);objAH.debug=true;objAH.url='/cgi-bin/koha/busquedas/busqueda.pl';objAH.idTema=idtema;objAH.tema=tema;objAH.funcion='changePage';objAH.sendToServer();}
 function cambiarEstadoCampos(campos,clase){for(i=0;i<campos.length;i++){$('#'+campos[i]).attr('class',clase);}}
-function buscarPorAutor(idAutor){objAH=new AjaxHelper(updateInfoBusquedas);objAH.url='/cgi-bin/koha/busquedas/busquedasDB.pl';objAH.debug=true;objAH.funcion='changePage';objAH.idAutor=idAutor;objAH.tipoAccion="POR_AUTOR";objAH.sendToServer();}
+function buscarPorAutor(completo){objAH=new AjaxHelper(updateInfoBusquedas);objAH.url='/cgi-bin/koha/busquedas/busquedasDB.pl';objAH.debug=true;objAH.funcion='changePage';objAH.completo=completo;objAH.tipoAccion="BUSQUEDA_POR_AUTOR";objAH.sendToServer();}
 function ordenar(ord){objAH.sort(ord);}

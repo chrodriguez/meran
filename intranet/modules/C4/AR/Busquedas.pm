@@ -738,16 +738,34 @@ sub buscarDatoDeCampoRepetible {
 }
 
 # FIXME DEPRECATED
-sub getautor {
-    my ($idAutor) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $sth   = $dbh->prepare("	SELECT id,apellido,nombre,completo 
-				FROM cat_autor WHERE id = ?");
-    $sth->execute($idAutor);
-    my $data=$sth->fetchrow_hashref; 
-    $sth->finish();
-    return($data);
- }
+# sub getautor {
+#     my ($idAutor) = @_;
+#     my $dbh   = C4::Context->dbh;
+#     my $sth   = $dbh->prepare("	SELECT id,apellido,nombre,completo 
+# 				FROM cat_autor WHERE id = ?");
+#     $sth->execute($idAutor);
+#     my $data=$sth->fetchrow_hashref; 
+#     $sth->finish();
+#     return($data);
+#  }
+
+# sub getautor {
+#     my ($idAutor) = @_;
+#     my $dbh   = C4::Context->dbh;
+#     my $sth   = $dbh->prepare(" SELECT id,apellido,nombre,completo 
+#                 FROM cat_autor WHERE id = ?");
+#     $sth->execute($idAutor);
+#     my $data=$sth->fetchrow_hashref; 
+#     $sth->finish();
+# 
+# #     $db = $db || C4::Modelo::PermCatalogo->new()->db;
+#     my $nivel3_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor(   
+# #                                                                     db => $db,
+#                                                                     query   => [ id1 => { eq => $id1} ], 
+#                                                                 );
+# 
+#     return($data);
+# }
 
 sub getLevel{
         my ($cod) = @_;
@@ -1012,143 +1030,6 @@ sub getBranch{
 
 ########################################################## NUEVOS!!!!!!!!!!!!!!!!!!!!!!!!!! #################################################
 
-# sub busquedaAvanzada_newTemp{
-# 
-#    my ($ini,$cantR,$params_obj,$session) = @_;
-#    
-#    my @filtros;
-# 
-#    if ( C4::AR::Utilidades::trim($params_obj->{'autor'}) ){
-#       push(@filtros, ( 'nivel1.cat_autor.nombre' => { like => '%'.$params_obj->{'autor'}.'%' }) );
-#    }
-#    
-#    if ( C4::AR::Utilidades::trim($params_obj->{'signatura'}) ){
-#       push(@filtros, ( 'signatura_topografica' => { like => '%'.$params_obj->{'signatura'}.'%' }) );
-#    }
-# 
-#    if ( C4::AR::Utilidades::trim($params_obj->{'tipo_nivel3_name'}) ){
-#       push(@filtros, ( 'nivel2.tipo_documento' => { eq => $params_obj->{'tipo_nivel3_name'} }) );
-#    }
-#    
-#    if ( C4::AR::Utilidades::trim($params_obj->{'titulo'}) ){
-#       if ( C4::AR::Utilidades::trim($params_obj->{'tipo'} eq "normal") ){
-#          push(@filtros, ( 'nivel1.titulo' => { like => '%'.$params_obj->{'titulo'}.'%' }) );
-#       }else{
-#          push(@filtros, ( 'nivel1.titulo' => { eq => $params_obj->{'titulo'} }) );
-#       }
-#    }
-# 
-#    use C4::Modelo::CatNivel3::Manager;
-# 
-#    my $nivel3_result = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-#                                                                         query => \@filtros,
-#                                                                         require_objects => ['nivel1','nivel2','nivel1.cat_autor'],
-#                                                                         limit => $cantR,
-#                                                                         offset => $ini,
-#   						                  												select => ['cat_nivel3.id1'],
-#                                                                         distinct => 1,
-#                                                                      );
-# 
-#    my $nivel3_result_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
-#                                                                         query => \@filtros,
-#                                                                         select => ['COUNT(DISTINCT(t2.id1)) AS agregacion_temp'],
-#                                                                         require_objects => ['nivel1','nivel2','nivel1.cat_autor'],
-#                                                                      );
-# 
-#    my @id1_array;
-#    
-#    foreach my $nivel3 (@$nivel3_result){
-#       if (!C4::AR::Utilidades::existeInArray($nivel3->getId1,@id1_array)){
-#          push(@id1_array,$nivel3->getId1);
-#       }
-#    }
-# 
-# 
-#    C4::AR::Debug::debug("INI: ".$ini);
-#    C4::AR::Debug::debug("CantR: ".$cantR);
-#    C4::AR::Debug::debug("Cant del arreglo filtrado: ".scalar(@id1_array));
-#    $params_obj->{'cantidad'}= scalar(@id1_array);
-# 
-#    C4::AR::Busquedas::logBusqueda($params_obj, $session);
-# 
-# 
-# 
-# 	return ($nivel3_result_count->[0]->agregacion_temp,@id1_array);
-# }
-
-
-# sub busquedaAvanzada_newTemp{
-# 	my ($params_obj,$session) = @_;
-# 
-# 	my $dbh = C4::Context->dbh;
-# 	my @searchstring_array;
-# 	
-# 	my $body_string = "	SELECT DISTINCT (t1.id1), t2.titulo, t2.autor, t4.completo  \n";
-# 	$body_string .=	"	FROM cat_nivel3 t1 JOIN (cat_nivel1 t2  JOIN cat_autor t4 ON (t2.autor = t4.id)) ON (t1.id1 = t2.id1)  \n";
-# 	$body_string .=	"	JOIN cat_nivel2 t3 ON (t1.id2 = t3.id2) \n";
-# 	$body_string .=	"	WHERE ";
-# 	
-# 	my $filtros = "";
-# 	
-# 	my @bind;
-# 	
-# 	if ( C4::AR::Utilidades::trim($params_obj->{'autor'}) ){
-# 		$filtros.= "(t4.completo LIKE ?) AND ";
-# 		push(@bind,"%".$params_obj->{'autor'}."%");
-# 		push(@searchstring_array, $params_obj->{'autor'});
-# 	}
-# 	if ( C4::AR::Utilidades::trim($params_obj->{'signatura'}) ){
-# 		$filtros.= "(t1.signatura_topografica LIKE ?) AND ";
-# 		push(@bind,"%".$params_obj->{'signatura'}."%");
-# 		push(@searchstring_array, $params_obj->{'signatura'});
-# 	}
-# 	
-# 	if ( C4::AR::Utilidades::trim($params_obj->{'tipo_nivel3_name'}) ){
-# 		$filtros.= "(t3.tipo_documento = ?) AND ";
-# 		push(@bind,$params_obj->{'tipo_nivel3_name'});
-# 	}
-# 	
-# 	if ( C4::AR::Utilidades::trim($params_obj->{'titulo'}) ){
-# 		if ( C4::AR::Utilidades::trim($params_obj->{'tipo'} eq "normal") ){
-# 			$filtros.= "(t2.titulo LIKE ?) AND ";
-# 			push(@bind,"%".$params_obj->{'titulo'}."%");
-# 			push(@searchstring_array, $params_obj->{'titulo'});
-# 		}else{
-# 			$filtros.= "(t2.titulo = ?) AND ";
-# 			push(@bind,$params_obj->{'titulo'});
-# 			push(@searchstring_array, $params_obj->{'titulo'});
-# 		}
-# 	}
-# 	
-# 	$filtros.= " TRUE ";
-# 	my $sth = $dbh->prepare($body_string.$filtros);
-# 	$sth->execute(@bind);
-# 	
-# 	my @id1_array;
-# 	
-# 	while(my $data = $sth->fetchrow_hashref){
-# 		push (@id1_array,$data);
-# 	}
-# 	#arma y ordena el arreglo para enviar al cliente
-#    	 my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,@id1_array);
-# 	#se loquea la busqueda
-#    	C4::AR::Busquedas::logBusqueda($params_obj, $session);
-# 	
-# 	return ($cant_total,$resultsarray);
-# }
-
-sub callStoredProcedure{
-  my $dbh = C4::Context->dbh;
-
-  my $SQL_Text = "call r3() " ;
-  my $sth= $dbh->prepare($SQL_Text);
-  $sth->execute();
-
-  my $tt;
-  while ( ($tt) = $sth->fetchrow_array( ) ) { 
-      C4::AR::Debug::debug("tt: ".$tt); 
-  }
-}
 
 sub _getMatchMode{
   my ($tipo) = @_;
@@ -1236,18 +1117,10 @@ sub busquedaCombinada_newTemp{
 sub busquedaAvanzada_newTemp{
     my ($params,$session) = @_;
 
-#       $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
-#     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
-
     use Sphinx::Search;
 
     my $sphinx = Sphinx::Search->new();
     my $query = '';
-    #se arma el query string
-#     foreach my $string (@searchstring_array){
-#         $query .=  " ".$string."*";
-#     }
-
 
     if($params->{'titulo'} ne ""){
         $query .= '@titulo '.$params->{'titulo'};
@@ -1263,6 +1136,65 @@ sub busquedaAvanzada_newTemp{
         }
     }
 
+    C4::AR::Debug::debug("Busquedas => query string => ".$query);
+#     C4::AR::Debug::debug("query string ".$query);
+    my $tipo = 'SPH_MATCH_EXTENDED';
+    my $tipo_match = _getMatchMode($tipo);
+
+    $sphinx->SetMatchMode($tipo_match);
+    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+    $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+    $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
+    # NOTA: sphinx necesita el string decode_utf8
+    my $results = $sphinx->Query($query);
+
+    my @id1_array;
+    my $matches = $results->{'matches'};
+    my $total_found = $results->{'total_found'};
+    $params->{'total_found'} = $total_found;
+#     C4::AR::Utilidades::printHASH($results);
+    C4::AR::Debug::debug("total_found: ".$total_found);
+#     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    foreach my $hash (@$matches){
+      my %hash_temp = {};
+      $hash_temp{'id1'} = $hash->{'doc'};
+      $hash_temp{'hits'} = $hash->{'weight'};
+
+      push (@id1_array, \%hash_temp);
+    }
+
+    my ($total_found_paginado, $resultsarray);
+    #arma y ordena el arreglo para enviar al cliente
+    ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @id1_array);
+    #se loquea la busqueda
+    C4::AR::Busquedas::logBusqueda($params, $session);
+
+    return ($total_found, $resultsarray);
+}
+
+sub filtrarPorAutor{
+    my ($params,$session) = @_;
+
+    use Sphinx::Search;
+
+    my $sphinx = Sphinx::Search->new();
+    my $query = '';
+
+#     if($params->{'titulo'} ne ""){
+#         $query .= '@titulo '.$params->{'titulo'};
+#         if($params->{'tipo'} eq "normal"){
+#             $query .= "*";
+#         }
+#     }
+# 
+#     if($params->{'autor'} ne ""){
+#         $query .= ' @autor '.$params->{'autor'};
+#         if($params->{'tipo'} eq "normal"){
+#             $query .= "*";
+#         }
+#     }
+
+    $query = '@autor '.$params->{'completo'};
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
 #     C4::AR::Debug::debug("query string ".$query);
     my $tipo = 'SPH_MATCH_EXTENDED';
@@ -1386,42 +1318,42 @@ sub busquedaSimplePorTitulo{
    	return ($cant_total, $resultsarray);
 }
 
-sub filtrarPorAutor{
-    my ($params_obj)=@_;
-
-    my $dbh = C4::Context->dbh;
-# FIXME para que se hace el join con nivel 3??????
-=item
-    my $query=" SELECT DISTINCT(c1.id1), c1.titulo, c1.autor
-                FROM cat_nivel1 c1 INNER JOIN cat_nivel2 c2 ON c1.id1 = c2.id1 INNER JOIN cat_nivel3 c3 ON c1.id1 = c3.id1
-                WHERE c1.autor = ?";
-=cut
-	my $query=" SELECT DISTINCT(c1.id1), c1.titulo, c1.autor
-				FROM cat_nivel1 c1 INNER JOIN cat_nivel2 c2 ON (c1.id1 = c2.id1)
-				WHERE c1.autor = ? ";
-
-    my $sth=$dbh->prepare($query);
-    $sth->execute($params_obj->{'idAutor'});
-
-    my @id1_array;
-    my @searchstring_array;
-    my $autor = getautor($params_obj->{'idAutor'});
-# FIXME para que es esto?????????????
-    while(my $data=$sth->fetchrow_hashref){
-        $data->{'completo'} = $autor->{'completo'};
-        push(@id1_array,$data);
-    }
-
-	$params_obj->{'filtrarPorAutor'}= $autor->{'completo'};
-    push (@searchstring_array, "AUTOR: ".$autor->{'completo'});
-
-
-    my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,@id1_array);
-    #se loquea la busqueda
-    C4::AR::Busquedas::logBusqueda($params_obj, $params_obj->{'session'});
-
-    return ($cant_total,$resultsarray);
-}
+# sub filtrarPorAutor{
+#     my ($params_obj)=@_;
+# 
+#     my $dbh = C4::Context->dbh;
+# # FIXME para que se hace el join con nivel 3??????
+# =item
+#     my $query=" SELECT DISTINCT(c1.id1), c1.titulo, c1.autor
+#                 FROM cat_nivel1 c1 INNER JOIN cat_nivel2 c2 ON c1.id1 = c2.id1 INNER JOIN cat_nivel3 c3 ON c1.id1 = c3.id1
+#                 WHERE c1.autor = ?";
+# =cut
+# 	my $query=" SELECT DISTINCT(c1.id1), c1.titulo, c1.autor
+# 				FROM cat_nivel1 c1 INNER JOIN cat_nivel2 c2 ON (c1.id1 = c2.id1)
+# 				WHERE c1.autor = ? ";
+# 
+#     my $sth=$dbh->prepare($query);
+#     $sth->execute($params_obj->{'idAutor'});
+# 
+#     my @id1_array;
+#     my @searchstring_array;
+#     my $autor = getautor($params_obj->{'idAutor'});
+# # FIXME para que es esto?????????????
+#     while(my $data=$sth->fetchrow_hashref){
+#         $data->{'completo'} = $autor->{'completo'};
+#         push(@id1_array,$data);
+#     }
+# 
+# 	$params_obj->{'filtrarPorAutor'}= $autor->{'completo'};
+#     push (@searchstring_array, "AUTOR: ".$autor->{'completo'});
+# 
+# 
+#     my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,@id1_array);
+#     #se loquea la busqueda
+#     C4::AR::Busquedas::logBusqueda($params_obj, $params_obj->{'session'});
+# 
+#     return ($cant_total,$resultsarray);
+# }
 
 
 sub t_loguearBusqueda {
@@ -1572,7 +1504,9 @@ sub armarInfoNivel1{
     my @result_array_paginado_temp;
 
     for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {
+
         my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
+
         if($nivel1){
 #                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".@result_array_paginado[$i]->{'id1'});
 #                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".$nivel1->getTitulo());
@@ -1619,8 +1553,9 @@ sub armarInfoNivel1{
         }
     }
 
-    $cant_total = scalar(@result_array_paginado_temp);
-    @result_array_paginado = @result_array_paginado_temp;
+    $cant_total             = scalar(@result_array_paginado_temp);
+    @result_array_paginado  = @result_array_paginado_temp;
+
     return ($cant_total, \@result_array_paginado);
 }
 

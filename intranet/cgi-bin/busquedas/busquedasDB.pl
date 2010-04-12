@@ -41,18 +41,15 @@ $obj->{'type'} = 'INTRA';
 Aca se maneja el cambio de la password para el usuario
 =cut
 if (C4::AR::Utilidades::validateString($tipoAccion)){
-    if($tipoAccion eq "POR_AUTOR"){
-    
-      my $session = CGI::Session->load();
-    
-      $t_params->{'idAutor'}= $obj->{'idAutor'};
-      $t_params->{'session'}= $session;
-      my ($cantidad, $resultId1)= C4::AR::Busquedas::filtrarPorAutor($t_params);
-      $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
-      $t_params->{'cantidad'}= $cantidad;  
-      $t_params->{'SEARCH_RESULTS'}= $resultId1;
+    if($tipoAccion eq "BUSQUEDA_POR_AUTOR"){
 
-    
+#       $t_params->{'com'}            = $obj->{'completo'};
+      $t_params->{'session'}            = $session;
+      my ($cantidad, $resultId1)        = C4::AR::Busquedas::filtrarPorAutor($obj, $session);
+      $t_params->{'paginador'}          = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
+      $t_params->{'cantidad'}           = $cantidad;  
+      $t_params->{'SEARCH_RESULTS'}     = $resultId1;
+
     }elsif($tipoAccion eq "BUSQUEDA_COMBINADA"){
     
 	    my $outside                     = $input->param('outside');
@@ -84,6 +81,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 	    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 	    $t_params->{'SEARCH_RESULTS'}   = $array_nivel1;
         $t_params->{'cantidad'}         = $cantidad;
+
     }elsif($tipoAccion eq "BUSQUEDA_POR_BARCODE"){
         my $funcion                     = $obj->{'funcion'};
         my $ini                         = ($obj->{'ini'}||'');
@@ -95,6 +93,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
         $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
         $t_params->{'SEARCH_RESULTS'}   = $array_nivel1;
         $t_params->{'cantidad'}         = $cantidad;
+
     }
 
     #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
