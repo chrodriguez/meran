@@ -82,7 +82,7 @@ printable string.
 #==========================================================FUNCIONES NUEVAS=================================================
 
 sub gettemplate {
-	my ($tmplbase, $opac, $loging_out) = @_;
+	my ($tmplbase, $opac, $loging_out,$socio) = @_;
 
 	my $htdocs;
     my $tema_opac = C4::AR::Preferencias->getValorPreferencia('tema_opac') || 'default';
@@ -141,16 +141,16 @@ sub gettemplate {
         $nombre_ui = $ui->getNombre();
     }
 
-    my $socio = C4::Auth::getSessionSocio();
-    if (!$socio) {
-        $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
-    }
+#     if (!$socio) {
+#         $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+#     }
 
     my $user_theme,
     my $user_theme_intra;
+    my ($session) = CGI::Session->load();
 
-    $user_theme = $socio->getTheme() || $tema_opac;
-    $user_theme_intra =  $socio->getThemeINTRA() || $tema_intra;
+    $user_theme         = $session->param('urs_theme') || $tema_opac;
+    $user_theme_intra   = $session->param('usr_theme_intra') || $tema_intra;
 
     if ($loging_out){
         $user_theme = $tema_opac;

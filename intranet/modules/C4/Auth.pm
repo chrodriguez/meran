@@ -290,15 +290,15 @@ sub getSessionBrowser {
 
 sub get_template_and_user {
 	my $in = shift;
-	my ($user, $session, $flags)= checkauth(    $in->{'query'}, 
-                                                $in->{'authnotrequired'}, 
-                                                $in->{'flagsrequired'}, 
-                                                $in->{'type'}, 
-                                                $in->{'changepassword'},
-                                                $in->{'template_params'}
+	my ($user, $session, $flags, $socio) = checkauth(       $in->{'query'}, 
+                                                            $in->{'authnotrequired'}, 
+                                                            $in->{'flagsrequired'}, 
+                                                            $in->{'type'}, 
+                                                            $in->{'changepassword'},
+                                                            $in->{'template_params'}
                                             );
 	my $nro_socio;
-    my ($template, $params) = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'},$in->{'loging_out'});
+    my ($template, $params) = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'},$in->{'loging_out'},$socio);
 
     $in->{'template_params'} = $params;
 
@@ -307,9 +307,9 @@ sub get_template_and_user {
 		$nro_socio = $session->param('userid');
         $params->{'nro_socio'}= $nro_socio;
 #         my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
-        my $socio = C4::Auth::getSessionSocio();
+#         my $socio = C4::Auth::getSessionSocio();
         if (!$socio) {
-            $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+            $socio = C4::Modelo::UsrSocio->new();
         }
 
         $session->param('nro_socio',$nro_socio);
@@ -478,6 +478,10 @@ sub _destruirSession{
 
 }
 
+sub _armarSessionSocio {
+    my ($session, $socio) = @_;
+};
+
 
 #checkauth RECORTADO
 sub checkauth {
@@ -545,8 +549,8 @@ C4::AR::Debug::debug("desde checkauth===========================================
 
         if ($userid) {
 
-#             $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-            $socio = $session->param('socio');
+            $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+#             $socio = $session->param('socio');
 
             #la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
             #se verifican algunas condiciones de finalizacion de session
@@ -633,7 +637,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
 
 #                 my ($socio) = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 #                 $flags      = $socio->tienePermisos($flagsrequired);
-                $flags  = $socio->tienePermisos($flagsrequired);
+                $flags  = 1;#$socio->tienePermisos($flagsrequired);
 
                 if ($flags) {
                     $loggedin = 1;
@@ -667,7 +671,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
         }#end if (($userid) && (new_password_is_needed($userid)))
 
         C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." sessionID: ".$sessionID."\n");
-        return ($userid, $session, $flags);
+        return ($userid, $session, $flags,$socio);
     }#end if ($loggedin || $authnotrequired || (defined($insecure) && $insecure))
 
 
@@ -694,6 +698,8 @@ C4::AR::Debug::debug("desde checkauth===========================================
             C4::AR::Debug::debug("checkauth=> password valida de sessionID: ".$sessionID."\n");
             C4::AR::Debug::debug("checkauth=> elimino el sessionID de la base: ".$sessionID."\n");
 
+            $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+
             $sessionID  = $session->param('sessionID');
             $sessionID.="_".$branch;
             $session->param('sessionID', $sessionID);
@@ -709,9 +715,11 @@ C4::AR::Debug::debug("desde checkauth===========================================
             $session->param('charset', C4::Context->config("charset")||'utf-8'); #se guarda el juego de caracteres
             $session->param('token', _generarToken()); #se guarda el token
             $session->param('SERVER_GENERATED_SID', 1);
+            $session->param('urs_theme', $socio->getTheme());
+            $session->param('usr_theme_intra', $socio->getThemeINTRA());
 
-            $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-            $session->param('socio', %$socio);
+
+#             _armarSessionSocio($session,$socio);
             #Si se logueo correctamente en intranet entonces guardo la fecha
             my $today = Date::Manip::ParseDate("today");
             $socio->setLast_login($today);
