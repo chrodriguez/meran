@@ -12,71 +12,71 @@
     <ul class="common-vertical-list">
         <li>
             [% "Tarjeta de la biblioteca:" | i18n %]
-                <b>[% socio.getNro_socio %]</b><br>
+                <b>[% socio_data.usr_nro_socio %]</b><br>
         </li>
         <li>
             [% "Categor&iacute;a:" | i18n %] 
-                <b>[% socio.categoria.getDescription %]</b><br>
+                <b>[% socio_data.usr_categoria_desc %]</b><br>
         </li>
         <li>
             [% "Apellido:" | i18n %]
-                <b> [% socio.persona.getApellido %] </b><br>
+                <b> [% socio_data.usr_apellido %] </b><br>
         </li>
         <li>
             [% "Nombre:" | i18n %]
-                    <b> [% socio.persona.getNombre %] </b><br>
+                    <b> [% socio_data.usr_nombre %] </b><br>
         </li>
         <li>
             [% "Documento:" | i18n %]
-                    <b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b><br>
+                    <b> [% socio_data.usr_documento_version %]&nbsp; [% socio_data.usr_nro_documento %]</b><br>
         </li>
         <li>
             [% "Fecha de nacimiento:" | i18n %]
-                    <b> [% socio.persona.getNacimiento %]</b><br>
+                    <b> [% socio_data.usr_fecha_nac %]</b><br>
         </li>
         <li>
             [% "Sexo:" | i18n %]
-                    <b> [% socio.persona.getSexo %]</b><br>
+                    <b> [% socio_data.usr_sexo %]</b><br>
         </li>
         <li>
-            [% IF socio.persona.getTelefono %]
+            [% IF socio_data.persona.getTelefono %]
                 <div class="tel">
                     <span class="type">
                         [% "Tel&eacute;fono:" | i18n %]
                     </span>
-                    <b>[% socio.persona.getTelefono %]</b>
+                    <b>[% socio_data.usr_telefono %]</b>
                 </div>  
             [% END %]
         </li>
         <li>
-            [% IF socio.persona.getAlt_telefono %]
+            [% IF socio_data.usr_alt_telefono %]
                 <div class="tel">
                     <span class="type">
                         [% "Tel&eacute;fono Alt:" | i18n %]
                     </span>
-                    <b>[% socio.persona.getAlt_telefono %]</b><br>
+                    <b>[% socio_data.usr_alt_telefono %]</b><br>
                 </div>  
             [% END %]
         </li>
         <li>
-            [% IF socio.persona.getEmail %]
-                E-mail: <b><a href="mailto:[% socio.persona.getEmail %]">
-                                <span class="email"> [% socio.persona.getEmail %]</span>
+            [% IF socio_data.usr_email %]
+                E-mail: <b><a href="mailto:[% socio_data.usr_email %]">
+                                <span class="email"> [% socio_data.usr_email %]</span>
                             </a>
                         </b>
             [% END %]
         </li>
         <li>
             [% "Legajo" | i18n %]:
-                <b> [%  socio.persona.getLegajo %]</b><br>
+                <b> [%  socio_data.usr_legajo %]</b><br>
         </li>
         <li>
             [% "Ciudad" | i18n %]:
-                <b> [%  socio.persona.ciudad_ref.getNombre %]</b><br>
+                <b> [%  socio_data.usr_ciudad_nombre %]</b><br>
         </li>
         <li>
             [% "Calle" | i18n %]:
-                <b> [%  socio.persona.getCalle %]</b>
+                <b> [%  socio_data.usr_calle %]</b>
         </li>
 <!-- FIXME hacer preferencia para el cambio de password, para permitir o no cambio de pass desde OPAC-->
         <form action=/cgi-bin/koha/change_password.pl method=get id="formCambioPassword">
@@ -130,7 +130,7 @@
         [% ELSE %]
             <form name="foto" method=post enctype="multipart/form-data"  action="/cgi-bin/koha/upload.pl" >
                 <input type=file name="filepath" id="filepath">
-                <input type=hidden name="nro_socio" value='[% socio.getNro_socio %]'>
+                <input type=hidden name="nro_socio" value='[% socio_data.getNro_socio %]'>
 
                     <a  onMouseOut="swap('up','[% themelang %]/images/upload.png')" 
                         onMouseOver="swap('up','[% themelang %]/images/uploadbis.png')" onClick="document.foto.submit();">

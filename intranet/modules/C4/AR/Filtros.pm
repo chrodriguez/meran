@@ -12,7 +12,6 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw( 
 
 	&i18n
-	&setComboLang
 	&link_to
     &to_Button
 );
@@ -112,15 +111,12 @@ Esta funcion es utilizada para la Internacionalizacion, lo que hace es tomar el 
 y hacer la traduccion del mismo, obteniedola del binario correspondiente, por ej. en_EN/LC_MESSAGES/intranet.mo
 =cut
 sub i18n {
-	my ($text) = @_;
+	my ($text)      = @_;
 
-	my $session = CGI::Session->load();#si esta definida
-	my $type= $session->param('type') || 'opac';
-
-    my $locale = C4::Auth::getUserLocale();
-
-    
-	my $setlocale= setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
+	my $session     = CGI::Session->load();#si esta definida
+	my $type        = $session->param('type') || 'opac';
+    my $locale      = C4::Auth::getUserLocale();
+	my $setlocale   = setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
 
 	Locale::Maketext::Gettext::Functions::bindtextdomain($type, C4::Context->config("locale"));
 	Locale::Maketext::Gettext::Functions::textdomain($type);
@@ -313,56 +309,6 @@ sub setFlagsLang {
 
     return $html;
 }
-=item
-Este filtro sirve para generar dinamicamente le combo para seleccionar el idioma.
-Este es llamado desde el opac-top.inc o intranet-top.inc (solo una vez).
-Se le parametriza si el combo es para la INTRA u OPAC
-=cut
-sub setComboLang {
-
-    my ($type) = @_;
-    my $session = CGI::Session->load();
-    my $html= '';
-    my $lang_Selected= $session->param('locale');
-## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
-    my @array_lang= ('es_ES', 'en_EN', 'nz_NZ', 'jp_JP');
-    my $i;
-    my $socio = C4::Auth::getSessionNroSocio();
-    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
-
-    if($type eq 'OPAC'){
-        $html="<form id='formLang' action='/cgi-bin/koha/opac-language.pl' method='POST' class='selectLang'><fieldset>";
-    }else{
-        $html="<form id='formLang' action='/cgi-bin/koha/intra-language.pl' method='POST' class='selectLang'>";
-    }
-
-    $html .="<input id='lang_server' name='lang_server' type='hidden' value=''>";   
-    $html .="<input id='url' name='url' type='hidden' value=''>";
-
-    $html .="<label for='language' class='left' >".i18n("Idioma").":";
-    $html .="<p><select id='language' onChange='cambiarIdioma()' tabindex='-1'>";
-
-    for($i=0;$i<scalar(@array_lang);$i++){
-        if($session->param('locale') eq @array_lang[$i]){
-            $html .="<option value='".@array_lang[$i]."' selected='selected'>".@array_lang[$i]."</option>"; 
-        }
-        elsif ( ($socio) && ($socio->getLocale() eq @array_lang[$i]) ){
-            $html .="<option value='".$socio->getLocale()."' selected='selected'>".$socio->getLocale()."</option>"; 
-        }
-        else{
-            $html .="<option value='".@array_lang[$i]."'>".@array_lang[$i]."</option>";
-        }
-    }
-
-    $html .="</select></p></label>";
-    if($type eq 'OPAC'){
-        $html .="</fieldset>";
-    }
-    $html .="</form>";
-
-    return $html;
-}
-
 
 sub getComboMatchMode {
     my $html= '';

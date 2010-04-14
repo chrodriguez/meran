@@ -141,6 +141,18 @@ sub getSessionUserID {
     return $session->param('userid');
 }
 
+# FIXME DEPRECATED
+sub getSessionSocio {
+    my ($session) = @_;
+
+    unless($session){
+        $session = CGI::Session->load();
+    }
+
+    if (defined $session->param('socio')) { return $session->param('socio')}
+    else {return 0}
+}
+
 
 sub _setLocale{
 
@@ -156,13 +168,16 @@ sub _setLocale{
 
 
 sub getUserLocale{
-
-    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio(C4::Auth::getSessionUserID());
+    my $session = CGI::Session->load();
     my $locale;
-    if ($socio){
-      $locale = $socio->getLocale();
+
+    if ($session){
+        $locale = $session->param('locale');
+    } else {
+        $locale = C4::Context->config("defaultLang") || 'es_ES';
     }
-    return ($locale || C4::Context->config("defaultLang") || 'es_ES');
+
+    return $locale;
 }
 =item sub getSessionIdSocio
 
@@ -279,30 +294,55 @@ sub getSessionBrowser {
 
 sub get_template_and_user {
 	my $in = shift;
-	my ($user, $session, $flags)= checkauth(    $in->{'query'}, 
-                                                $in->{'authnotrequired'}, 
-                                                $in->{'flagsrequired'}, 
-                                                $in->{'type'}, 
-                                                $in->{'changepassword'},
-                                                $in->{'template_params'}
+	my ($user, $session, $flags, $socio) = checkauth(       $in->{'query'}, 
+                                                            $in->{'authnotrequired'}, 
+                                                            $in->{'flagsrequired'}, 
+                                                            $in->{'type'}, 
+                                                            $in->{'changepassword'},
+                                                            $in->{'template_params'}
                                             );
 	my $nro_socio;
-    my ($template, $params) = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'},$in->{'loging_out'});
+    my ($template, $params) = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'},$in->{'loging_out'},$socio);
 
     $in->{'template_params'} = $params;
 
 	if ( $session->param('userid') ) {
-        $params->{'loggedinuser'}= $session->param('userid');
-		$nro_socio = $session->param('userid');
-        $params->{'nro_socio'}= $nro_socio;
-        my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
+        $params->{'loggedinuser'}       = $session->param('userid');
+		$nro_socio                      = $session->param('userid');
+        $params->{'nro_socio'}          = $nro_socio;
+#         my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
+#         my $socio = C4::Auth::getSessionSocio();
+        if (!$socio) {
+            $socio = C4::Modelo::UsrSocio->new();
+        }
+
         $session->param('nro_socio',$nro_socio);
-        $params->{'socio_data'}= $socio;
+        my %socio_data;
+        $socio_data{'usr_apellido'}             = $session->param('usr_apellido');
+        $socio_data{'usr_nombre'}               = $session->param('usr_nombre');
+        $socio_data{'usr_tiene_foto'}           = $session->param('usr_tiene_foto');
+        $socio_data{'usr_nro_socio'}            = $session->param('nro_socio');
+        $socio_data{'usr_documento_nombre'}     = $session->param('usr_documento_nombre');
+        $socio_data{'usr_documento_version'}    = $session->param('usr_documento_version');
+        $socio_data{'usr_nro_documento'}        = $session->param('usr_nro_documento');
+        $socio_data{'usr_calle'}                = $session->param('usr_calle');
+        $socio_data{'usr_ciudad_nombre'}        = $session->param('usr_ciudad_nombre');
+        $socio_data{'usr_categoria_desc'}       = $session->param('usr_categoria_desc');
+        $socio_data{'usr_fecha_nac'}            = $session->param('usr_fecha_nac');
+        $socio_data{'usr_sexo'}                 = $session->param('usr_sexo');
+        $socio_data{'usr_telefono'}             = $session->param('usr_telefono');
+        $socio_data{'usr_alt_telefono'}         = $session->param('usr_alt_telefono');
+        $socio_data{'usr_email'}                = $session->param('usr_email');
+        $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
+        
+
+        $params->{'socio_data'}         = \%socio_data;
         # ES UN ALIAS PARA LOS TEMPLATES QUE PIDEN POR SOCIO, NO POR SOCIO_DATA
-        $params->{'socio'} = $socio;
-		$params->{'token'}= $session->param('token');
+#         $params->{'socio_data'}= $socio;
+#         $params->{'socio'}              = $socio;
+		$params->{'token'}              = $session->param('token');
 		#para mostrar o no algun submenu del menu principal
- 		$params->{'menu_preferences'}= C4::AR::Preferencias::getMenuPreferences();
+ 		$params->{'menu_preferences'}   = C4::AR::Preferencias::getMenuPreferences();
 	}
 
     #se cargan todas las variables de entorno de las preferencias del sistema
@@ -475,6 +515,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
     my $template_params     = shift;
     $type                   = 'opac' unless $type;
     my $dbh                 = C4::Context->dbh;
+    my $socio;
 
 	my $token;
 	if(defined($ENV{'HTTP_X_REQUESTED_WITH'}) && ($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest')){
@@ -527,6 +568,9 @@ C4::AR::Debug::debug("desde checkauth===========================================
 
 
         if ($userid) {
+
+            $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+#             $socio = $session->param('socio');
 
             #la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
             #se verifican algunas condiciones de finalizacion de session
@@ -611,8 +655,9 @@ C4::AR::Debug::debug("desde checkauth===========================================
 
                 $session->param('lasttime', time());
 
-                my ($socio) = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-                $flags      = $socio->tienePermisos($flagsrequired);
+#                 my ($socio) = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+#                 $flags      = $socio->tienePermisos($flagsrequired);
+                $flags  = 1;#$socio->tienePermisos($flagsrequired);
 
                 if ($flags) {
                     $loggedin = 1;
@@ -638,7 +683,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
     if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
         C4::AR::Debug::debug("checkauth=> if (loggedin || authnotrequired || (defined(insecure) && insecure)) \n");
         #Se verifica si el usuario tiene que cambiar la password
-        if ( ($userid) && ( new_password_is_needed($userid) ) && !$change_password ) {
+        if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$change_password ) {
 
             C4::AR::Debug::debug("checkauth=> redirectTo desde el servidor \n");
              _change_Password_Controller($dbh, $query, $userid, $type,\%info, $token);
@@ -646,7 +691,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
         }#end if (($userid) && (new_password_is_needed($userid)))
 
         C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." sessionID: ".$sessionID."\n");
-        return ($userid, $session, $flags);
+        return ($userid, $session, $flags,$socio);
     }#end if ($loggedin || $authnotrequired || (defined($insecure) && $insecure))
 
 
@@ -673,6 +718,9 @@ C4::AR::Debug::debug("desde checkauth===========================================
             C4::AR::Debug::debug("checkauth=> password valida de sessionID: ".$sessionID."\n");
             C4::AR::Debug::debug("checkauth=> elimino el sessionID de la base: ".$sessionID."\n");
 
+            $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+
+# TODO todo esto va en una funcion
             $sessionID  = $session->param('sessionID');
             $sessionID.="_".$branch;
             $session->param('sessionID', $sessionID);
@@ -688,8 +736,26 @@ C4::AR::Debug::debug("desde checkauth===========================================
             $session->param('charset', C4::Context->config("charset")||'utf-8'); #se guarda el juego de caracteres
             $session->param('token', _generarToken()); #se guarda el token
             $session->param('SERVER_GENERATED_SID', 1);
+            $session->param('urs_theme', $socio->getTheme());
+            $session->param('usr_theme_intra', $socio->getThemeINTRA());
+            $session->param('usr_locale', $socio->getLocale());
+            $session->param('usr_apellido', $socio->persona->getApellido());
+            $session->param('usr_nombre', $socio->persona->getNombre());
+            $session->param('usr_tiene_foto', $socio->tieneFoto());
+            $session->param('usr_documento_nombre', $socio->persona->getNro_documento());
+            $session->param('usr_documento_version', $socio->persona->getVersion_documento());
+            $session->param('usr_nro_documento', $socio->persona->getNro_documento());
+            $session->param('usr_calle', $socio->persona->getCalle());
+            $session->param('usr_ciudad_nombre', $socio->persona->ciudad_ref->getNombre());
+            $session->param('usr_categoria_desc', $socio->categoria->getDescription());
+            $session->param('usr_fecha_nac', $socio->persona->getNacimiento());
+            $session->param('usr_sexo', $socio->persona->getSexo());
+            $session->param('usr_telefono', $socio->persona->getTelefono());
+            $session->param('usr_alt_telefono', $socio->persona->getAlt_telefono());
+            $session->param('usr_email', $socio->persona->getEmail());
+            $session->param('usr_legajo', $socio->persona->getLegajo());
 
-            my ($socio) = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+
             #Si se logueo correctamente en intranet entonces guardo la fecha
             my $today = Date::Manip::ParseDate("today");
             $socio->setLast_login($today);
@@ -1030,79 +1096,6 @@ sub _change_Password_Controller {
     } else {
             redirectTo('/cgi-bin/koha/usuarios/change_password.pl?token='.$token);
     }
-   
-=item
-    C4::AR::Debug::debug("\n");
-    C4::AR::Debug::debug("_change_Password_Controller=> ");
-	my $input = new CGI;
-    C4::AR::Debug::debug("_change_Password_Controller=> type: ".$type);
-	my $template_name;
-	my $newpassword = $input->param('newpassword') || 0;
-    C4::AR::Debug::debug("_change_Password_Controller=> newpassword: ".$newpassword);
-# 	my $cardnumber= _getCardnumber($dbh, $userid);
-# FXIME cardnumber = a nro_socio ????
-    my $cardnumber= $userid;
-	my $passwordrepeted= 0;
-	
-	if ($newpassword) {
-	# Check if the password is repeted
-		if (C4::AR::Preferencias->getValorPreferencia("ldapenabled") eq "yes") { # check in ldap
-			my $oldpassword= getldappassword($cardnumber,$dbh);
-			$passwordrepeted= ($oldpassword eq $newpassword);
-		} else { # check in database
-			my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
-			$sth->execute($cardnumber);
-			my $oldpassword= $sth->fetchrow;
-			$passwordrepeted= ($oldpassword eq $newpassword);
-		}
-	}#end if ($newpassword)
-
-	if ($newpassword && !$passwordrepeted) {
-	# The new password is sent
-## FIXME esto se hace en memebr-password.pl tb?????	
-		if (C4::AR::Preferencias->getValorPreferencia("ldapenabled") eq "yes") { # update the ldap password
-			addupdateldapuser($dbh,$cardnumber,$newpassword);
-			my $sth=$dbh->prepare("update borrowers set lastchangepassword=now() where cardnumber=?");
-			$sth->execute($cardnumber);
-		} else { # update the database password
-			my $sth=$dbh->prepare("update borrowers set password=?, lastchangepassword=now() where cardnumber=?");
-			$sth->execute($newpassword, $cardnumber);
-		}
-
-	} else {
-		# The new password is requested
-		if ($type eq 'opac') {
-			$template_name = "opac-changepassword.tmpl";
-		} else {
-			$template_name = "changepassword.tmpl";
-		}
-        C4::AR::Debug::debug("_change_Password_Controller=> template_name: ".$template_name);
-
-		my ($template, $t_params) = C4::Output::gettemplate($template_name, $type);
-        C4::AR::Debug::debug("_change_Password_Controller=> template_name: ".$template_name);	
-		$t_params->{'passwordrepetedv'}= $passwordrepeted;
-
-		#PARA QUE EL USUARIO REALICE UN HASH CON EL NUMERO RANDOM
-		my $random_number= _generarNroRandom();
-## FIXME falta cambiar la pass del LDAP
-		$t_params->{'RANDOM_NUMBER'}= $random_number;
-        C4::AR::Debug::debug("_change_Password_Controller=> genera otro random: ".$random_number);
-        my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-        $t_params->{'userid'}= $userid;
-        $t_params->{'id_socio'}= $socio->getId_socio;
-        $t_params->{'loggedinusername'}= $userid;
-        $t_params->{'nro_socio'}= $userid;
-	
-        my $session = CGI::Session->load();
- 		my $sessionID= $session->param('sessionID');
-        $t_params->{'token'}= $session->param('token');
-        C4::AR::Debug::debug("_change_Password_Controller=> genero cookie:".$sessionID);	
-        C4::AR::Debug::debug("\n");
-
-        C4::Auth::output_html_with_http_headers($query, $template, $t_params, $session);
-	
-	}#end  if ($newpassword && !$passwordrepeted)
-=cut
 }
 
 
@@ -1710,9 +1703,14 @@ sub _hashear_password {
 
 =cut
 sub new_password_is_needed {
-    my ($nro_socio) = @_;
+    my ($nro_socio, $socio) = @_;
 
-    my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+#     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+#     my $socio = C4::Auth::getSessionSocio();
+    if (!$socio) {
+        $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+    }
+
     my $days = C4::AR::Preferencias->getValorPreferencia("keeppasswordalive");
     
     if ($days ne '0') {
