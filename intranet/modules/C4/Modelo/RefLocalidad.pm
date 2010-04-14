@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'ref_localidad',
 
     columns => [
-        id                    => { type => 'serial', not_null => 1 },
+        id               => { type => 'serial', not_null => 1 },
         LOCALIDAD        => { type => 'varchar', length => 11, not_null => 1 },
         NOMBRE           => { type => 'varchar', length => 100 },
         NOMBRE_ABREVIADO => { type => 'varchar', length => 40 },

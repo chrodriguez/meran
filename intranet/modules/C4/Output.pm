@@ -85,49 +85,49 @@ sub gettemplate {
 	my ($tmplbase, $opac, $loging_out,$socio) = @_;
 
 	my $htdocs;
-    my $tema_opac = C4::AR::Preferencias->getValorPreferencia('tema_opac') || 'default';
-    my $tema_intra = C4::AR::Preferencias->getValorPreferencia('tema_intra') || 'default';
-    my $temas = C4::Context->config('temas');
+    my $tema_opac   = C4::AR::Preferencias->getValorPreferencia('tema_opac') || 'default';
+    my $tema_intra  = C4::AR::Preferencias->getValorPreferencia('tema_intra') || 'default';
+    my $temas       = C4::Context->config('temas');
     my $tema;
     my $type;
+
 	if ($opac ne "intranet") {
-		$htdocs = C4::Context->config('opachtdocs');
-        $temas = C4::Context->config('temasOPAC');
-        $tema = $tema_opac;
-        $type= 'OPAC';
+		$htdocs     = C4::Context->config('opachtdocs');
+        $temas      = C4::Context->config('temasOPAC');
+        $tema       = $tema_opac;
+        $type       = 'OPAC';
 	} else {
-		$htdocs = C4::Context->config('intrahtdocs');
-        $tema = $tema_intra;
-        $type='INTRA';
+		$htdocs     = C4::Context->config('intrahtdocs');
+        $tema       = $tema_intra;
+        $type       = 'INTRA';
 	}
 
 	my $filter= Template::Filters->new({
 						FILTERS => {	'i18n' =>  \&C4::AR::Filtros::i18n, #se carga el filtro i18n
-								        'setComboLang' =>  \&C4::AR::Filtros::setComboLang, #se carga el cambo de lenguajes
 							},
 					});
 
 
 	my $template = Template->new({
-					INCLUDE_PATH => [
-								"$htdocs",
-								"$htdocs/includes/",
-                                "$htdocs/catalogacion/",
-                                "$htdocs/includes/popups/",
-								"$htdocs/includes/menu",
-								"/usr/local/koha/includes/",
-							],
- 					ABSOLUTE => 1,
-                    CACHE_SIZE => 200,
-                    COMPILE_DIR => '/tmp/ttc',
-                    RELATIVE => 1,
-					EVAL_PERL => 1,
-					LOAD_FILTERS => [ $filter ],
+					INCLUDE_PATH    => [
+								            "$htdocs",
+								            "$htdocs/includes/",
+                                            "$htdocs/catalogacion/",
+                                            "$htdocs/includes/popups/",
+								            "$htdocs/includes/menu",
+								            "/usr/local/koha/includes/",
+							        ],
+ 					ABSOLUTE        => 1,
+                    CACHE_SIZE      => 200,
+                    COMPILE_DIR     => '/tmp/ttc',
+                    RELATIVE        => 1,
+					EVAL_PERL       => 1,
+					LOAD_FILTERS    => [ $filter ],
 # 					RELATIVE => 1,
 					});	
 
 	#se inicializa la hash de los parametros para el template
- 	my %params=();
+ 	my %params = ();
 
 	#se asignan los parametros que son necesarios para todos los templates
     my $ui;

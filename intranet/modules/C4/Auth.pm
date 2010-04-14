@@ -168,13 +168,16 @@ sub _setLocale{
 
 
 sub getUserLocale{
-
-    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio(C4::Auth::getSessionUserID());
+    my $session = CGI::Session->load();
     my $locale;
-    if ($socio){
-      $locale = $socio->getLocale();
+
+    if ($session){
+        $locale = $session->param('locale');
+    } else {
+        $locale = C4::Context->config("defaultLang") || 'es_ES';
     }
-    return ($locale || C4::Context->config("defaultLang") || 'es_ES');
+
+    return $locale;
 }
 =item sub getSessionIdSocio
 
@@ -304,9 +307,9 @@ sub get_template_and_user {
     $in->{'template_params'} = $params;
 
 	if ( $session->param('userid') ) {
-        $params->{'loggedinuser'}= $session->param('userid');
-		$nro_socio = $session->param('userid');
-        $params->{'nro_socio'}= $nro_socio;
+        $params->{'loggedinuser'}       = $session->param('userid');
+		$nro_socio                      = $session->param('userid');
+        $params->{'nro_socio'}          = $nro_socio;
 #         my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
 #         my $socio = C4::Auth::getSessionSocio();
         if (!$socio) {
@@ -315,16 +318,31 @@ sub get_template_and_user {
 
         $session->param('nro_socio',$nro_socio);
         my %socio_data;
-        $socio_data{'usr_apellido'} = $session->param('usr_apellido');
-        $socio_data{'usr_nombre'} = $session->param('usr_nombre');
-        $socio_data{'usr_tiene_foto'} = $session->param('usr_tiene_foto');
-#         $params->{'socio_data'}= $socio;
-        $params->{'socio_data'} = \%socio_data;
+        $socio_data{'usr_apellido'}             = $session->param('usr_apellido');
+        $socio_data{'usr_nombre'}               = $session->param('usr_nombre');
+        $socio_data{'usr_tiene_foto'}           = $session->param('usr_tiene_foto');
+        $socio_data{'usr_nro_socio'}            = $session->param('nro_socio');
+        $socio_data{'usr_documento_nombre'}     = $session->param('usr_documento_nombre');
+        $socio_data{'usr_documento_version'}    = $session->param('usr_documento_version');
+        $socio_data{'usr_nro_documento'}        = $session->param('usr_nro_documento');
+        $socio_data{'usr_calle'}                = $session->param('usr_calle');
+        $socio_data{'usr_ciudad_nombre'}        = $session->param('usr_ciudad_nombre');
+        $socio_data{'usr_categoria_desc'}       = $session->param('usr_categoria_desc');
+        $socio_data{'usr_fecha_nac'}            = $session->param('usr_fecha_nac');
+        $socio_data{'usr_sexo'}                 = $session->param('usr_sexo');
+        $socio_data{'usr_telefono'}             = $session->param('usr_telefono');
+        $socio_data{'usr_alt_telefono'}         = $session->param('usr_alt_telefono');
+        $socio_data{'usr_email'}                = $session->param('usr_email');
+        $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
+        
+
+        $params->{'socio_data'}         = \%socio_data;
         # ES UN ALIAS PARA LOS TEMPLATES QUE PIDEN POR SOCIO, NO POR SOCIO_DATA
-        $params->{'socio'} = $socio;
-		$params->{'token'}= $session->param('token');
+#         $params->{'socio_data'}= $socio;
+#         $params->{'socio'}              = $socio;
+		$params->{'token'}              = $session->param('token');
 		#para mostrar o no algun submenu del menu principal
- 		$params->{'menu_preferences'}= C4::AR::Preferencias::getMenuPreferences();
+ 		$params->{'menu_preferences'}   = C4::AR::Preferencias::getMenuPreferences();
 	}
 
     #se cargan todas las variables de entorno de las preferencias del sistema
@@ -483,10 +501,6 @@ sub _destruirSession{
     redirectToAuth($template_params)
 
 }
-
-sub _armarSessionSocio {
-    my ($session, $socio) = @_;
-};
 
 
 #checkauth RECORTADO
@@ -706,6 +720,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
 
             $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 
+# TODO todo esto va en una funcion
             $sessionID  = $session->param('sessionID');
             $sessionID.="_".$branch;
             $session->param('sessionID', $sessionID);
@@ -723,13 +738,24 @@ C4::AR::Debug::debug("desde checkauth===========================================
             $session->param('SERVER_GENERATED_SID', 1);
             $session->param('urs_theme', $socio->getTheme());
             $session->param('usr_theme_intra', $socio->getThemeINTRA());
-            $session->param('usr_local', $socio->getLocale());
+            $session->param('usr_locale', $socio->getLocale());
             $session->param('usr_apellido', $socio->persona->getApellido());
             $session->param('usr_nombre', $socio->persona->getNombre());
             $session->param('usr_tiene_foto', $socio->tieneFoto());
+            $session->param('usr_documento_nombre', $socio->persona->getNro_documento());
+            $session->param('usr_documento_version', $socio->persona->getVersion_documento());
+            $session->param('usr_nro_documento', $socio->persona->getNro_documento());
+            $session->param('usr_calle', $socio->persona->getCalle());
+            $session->param('usr_ciudad_nombre', $socio->persona->ciudad_ref->getNombre());
+            $session->param('usr_categoria_desc', $socio->categoria->getDescription());
+            $session->param('usr_fecha_nac', $socio->persona->getNacimiento());
+            $session->param('usr_sexo', $socio->persona->getSexo());
+            $session->param('usr_telefono', $socio->persona->getTelefono());
+            $session->param('usr_alt_telefono', $socio->persona->getAlt_telefono());
+            $session->param('usr_email', $socio->persona->getEmail());
+            $session->param('usr_legajo', $socio->persona->getLegajo());
 
 
-#             _armarSessionSocio($session,$socio);
             #Si se logueo correctamente en intranet entonces guardo la fecha
             my $today = Date::Manip::ParseDate("today");
             $socio->setLast_login($today);
