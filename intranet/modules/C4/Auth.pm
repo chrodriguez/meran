@@ -314,7 +314,12 @@ sub get_template_and_user {
         }
 
         $session->param('nro_socio',$nro_socio);
-        $params->{'socio_data'}= $socio;
+        my %socio_data;
+        $socio_data{'usr_apellido'} = $session->param('usr_apellido');
+        $socio_data{'usr_nombre'} = $session->param('usr_nombre');
+        $socio_data{'usr_tiene_foto'} = $session->param('usr_tiene_foto');
+#         $params->{'socio_data'}= $socio;
+        $params->{'socio_data'} = \%socio_data;
         # ES UN ALIAS PARA LOS TEMPLATES QUE PIDEN POR SOCIO, NO POR SOCIO_DATA
         $params->{'socio'} = $socio;
 		$params->{'token'}= $session->param('token');
