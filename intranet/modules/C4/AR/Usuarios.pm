@@ -625,6 +625,7 @@ sub getSocioInfoPorNroSocio {
                                                                   require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
                                                                                       'persona.documento'],
                                                                   with_objects => ['persona.alt_ciudad_ref'],
+                                                                  select       => ['*'],
                                                                             );
 
         if($socio_array_ref){

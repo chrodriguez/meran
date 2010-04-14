@@ -5,11 +5,11 @@
     [% IF loggedinuser %]
         <div class="user_icon">
             <div style="float:left; height:25px">
-                <a title="[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]" rel="contact" class="url" 
+                <a title="[% socio_data.usr_nombre %], [% socio_data.usr_apellido %]" rel="contact" class="url" 
                     href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?token=[% token %]&amp;nro_socio=[% socio_data.getNro_socio %]">
-                    [% IF socio_data.tieneFoto %]
-                        <img width="48" height="48" src="[% themelang %]/pictures/[% socio_data.tieneFoto %]" class="side_thumb photo fn" 
-                            alt="[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]"/>
+                    [% IF socio_data.usr_tiene_foto %]
+                        <img width="48" height="48" src="[% themelang %]/pictures/[% socio_data.tiene_foto %]" class="side_thumb photo fn" 
+                            alt="[% socio_data.usr_nombre %], [% socio_data.usr_apellido %]"/>
                     [% ELSE %]
                           <img  width="48" height="48" src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 
                                 class="side_thumb photo fn"
@@ -20,7 +20,7 @@
             </div>
                 <a title="[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]" rel="contact"
                     href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?token=[% token %]&amp;nro_socio=[% socio_data.getNro_socio %]">
-                    <span id="me_name">[% socio_data.persona.getApellido %], [% socio_data.persona.getNombre %]</span>
+                    <span id="me_name">[% socio_data.usr_apellido %], [% socio_data.usr_nombre %]</span>
                 </a>
             <div class="culture_Select">
                   [<a target="_parent" href="/cgi-bin/koha/logout.pl?token=[% token %]" tabindex="-1">[% "Salir" | i18n %]</a>]
