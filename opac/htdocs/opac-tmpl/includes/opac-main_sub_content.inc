@@ -11,9 +11,9 @@
               <h1>[% 'Datos Personales' | i18n %]</h1>
 
               <p>
-                [% IF socio_data.tieneFoto %]
-                    <img width="50" height="50" src="/pictures/[% socio_data.tieneFoto %]"
-                        alt="[% socio_data.persona.getNombre %], [% socio_data.persona.getApellido %]"/>
+                [% IF socio_data.usr_tiene_foto %]
+                    <img width="50" height="50" src="/pictures/[% socio_data.usr_tiene_foto %]"
+                        alt="[% socio_data.usr_apellido %], [% socio_data.usr_apellido %]"/>
                 [% ELSE %]
                       <img  width="50" height="50" src="[% temas %]/default/imagenes/no_foto.jpg" 
                             alt="[% 'Usuario sin foto' | i18n %]"
@@ -23,19 +23,19 @@
               </p>
 
               <h3>[% 'Apellido y Nombre' | i18n %]</h3>
-              <p>[% socio.persona.getApellido %], [% socio.persona.getNombre %]</p>
+              <p>[% socio_data.usr_apellido %], [% socio_data.usr_nombre %]</p>
 
               <h3>[% 'Tipo y Nro. de Documento' | i18n %]</h3>
-              <p>[% socio.persona.documento.getNombre %]: [% socio.persona.getNro_documento %]</p>
+              <p>[% socio_data.usr_documento_nombre %]: [% socio_data.usr_nro_documento %]</p>
 
               <h3>[% 'Nro. de Socio' | i18n %]</h3>
-              <p>[% socio.getNro_socio %]</p>
+              <p>[% socio_data.usr_nro_socio %]</p>
 
               <h3>[% 'Direcci&oacute;n' | i18n %]</h3>
-              <p>[% socio.persona.getCalle %], [% socio.persona.ciudad_ref.NOMBRE %]</p>
+              <p>[% socio_data.usr_calle %], [% socio_data.usr_ciudad_nombre %]</p>
 
               <h3>[% 'Categor&iacute;a' | i18n %]</h3>
-              <p>[% socio.categoria.getDescription %]</p>
+              <p>[% socio_data.usr_categoria_desc %]</p>
 
 
               <h3>[% 'Problemas con sus datos' |  i18n %]</h3>

@@ -32,7 +32,7 @@
                 <br />
                 <p>
                     [% review.getReview %]
-                    [% IF socio.getNro_socio != review.socio.getNro_socio %]
+                    [% IF socio_data.usr_nro_socio != review.socio.getNro_socio %]
                         <h2>[% 'Escrito por' | i18n %]:</h2> [% review.socio.persona.getApellido %], [% review.socio.persona.getNombre %] ([% review.socio.getNro_socio %])
                     [% ELSE %]
                         <h2>[% 'Escrito por' | i18n %]: <span class="user_cite">[% 'usted' | i18n %]</span> </h2>
