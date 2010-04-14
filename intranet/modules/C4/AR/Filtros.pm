@@ -319,16 +319,16 @@ Este es llamado desde el opac-top.inc o intranet-top.inc (solo una vez).
 Se le parametriza si el combo es para la INTRA u OPAC
 =cut
 sub setComboLang {
-
     my ($type) = @_;
+
     my $session = CGI::Session->load();
     my $html= '';
     my $lang_Selected= $session->param('locale');
 ## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
     my @array_lang= ('es_ES', 'en_EN', 'nz_NZ', 'jp_JP');
     my $i;
-    my $socio = C4::Auth::getSessionNroSocio();
-    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+#     my $nro_socio = C4::Auth::getSessionNroSocio();
+#     $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::Modelo::UsrSocio->new();
 
     if($type eq 'OPAC'){
         $html="<form id='formLang' action='/cgi-bin/koha/opac-language.pl' method='POST' class='selectLang'><fieldset>";
@@ -346,8 +346,9 @@ sub setComboLang {
         if($session->param('locale') eq @array_lang[$i]){
             $html .="<option value='".@array_lang[$i]."' selected='selected'>".@array_lang[$i]."</option>"; 
         }
-        elsif ( ($socio) && ($socio->getLocale() eq @array_lang[$i]) ){
-            $html .="<option value='".$socio->getLocale()."' selected='selected'>".$socio->getLocale()."</option>"; 
+        elsif ($session->param('usr_local') eq @array_lang[$i]) {
+#             $html .="<option value='".$socio->getLocale()."' selected='selected'>".$socio->getLocale()."</option>";
+            $html .="<option value='".$session->param('usr_local')."' selected='selected'>".$session->param('usr_local')."</option>";  
         }
         else{
             $html .="<option value='".@array_lang[$i]."'>".@array_lang[$i]."</option>";

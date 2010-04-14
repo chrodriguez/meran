@@ -141,6 +141,7 @@ sub getSessionUserID {
     return $session->param('userid');
 }
 
+# FIXME DEPRECATED
 sub getSessionSocio {
     my ($session) = @_;
 
@@ -663,7 +664,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
     if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
         C4::AR::Debug::debug("checkauth=> if (loggedin || authnotrequired || (defined(insecure) && insecure)) \n");
         #Se verifica si el usuario tiene que cambiar la password
-        if ( ($userid) && ( new_password_is_needed($userid) ) && !$change_password ) {
+        if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$change_password ) {
 
             C4::AR::Debug::debug("checkauth=> redirectTo desde el servidor \n");
              _change_Password_Controller($dbh, $query, $userid, $type,\%info, $token);
@@ -717,6 +718,10 @@ C4::AR::Debug::debug("desde checkauth===========================================
             $session->param('SERVER_GENERATED_SID', 1);
             $session->param('urs_theme', $socio->getTheme());
             $session->param('usr_theme_intra', $socio->getThemeINTRA());
+            $session->param('usr_local', $socio->getLocale());
+            $session->param('usr_apellido', $socio->persona->getApellido());
+            $session->param('usr_nombre', $socio->persona->getNombre());
+            $session->param('usr_tiene_foto', $socio->tieneFoto());
 
 
 #             _armarSessionSocio($session,$socio);
@@ -1667,10 +1672,10 @@ sub _hashear_password {
 
 =cut
 sub new_password_is_needed {
-    my ($nro_socio) = @_;
+    my ($nro_socio, $socio) = @_;
 
 #     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
-    my $socio = C4::Auth::getSessionSocio();
+#     my $socio = C4::Auth::getSessionSocio();
     if (!$socio) {
         $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
     }

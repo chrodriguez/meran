@@ -619,19 +619,16 @@ sub getSocioInfo {
 sub getSocioInfoPorNroSocio {
     my ($nro_socio)= @_;
 
-    if ($nro_socio){
-        my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
-                                                                  query => [ nro_socio => { eq => $nro_socio } ],
-                                                                  require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
-                                                                                      'persona.documento'],
-                                                                  with_objects => ['persona.alt_ciudad_ref'],
-                                                                            );
+    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+                                                              query => [ nro_socio => { eq => $nro_socio } ],
+                                                              require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                                                  'persona.documento'],
+                                                              with_objects => ['persona.alt_ciudad_ref'],
+                                                                        );
 
-        if($socio_array_ref){
-            return ($socio_array_ref->[0]);
-        }else{
-            return 0;
-        }
+    if($socio_array_ref){
+#         return ( $socio_array_ref->[0]->load('nonlazy' => 1) ) );
+        return ( $socio_array_ref->[0]);
     }else{
         return 0;
     }
