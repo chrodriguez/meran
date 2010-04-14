@@ -141,8 +141,11 @@ sub gettemplate {
         $nombre_ui = $ui->getNombre();
     }
 
-    my $socio = C4::Auth::getSessionUserID();
-    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+    my $socio = C4::Auth::getSessionSocio();
+    if (!$socio) {
+        $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+    }
+
     my $user_theme,
     my $user_theme_intra;
 
