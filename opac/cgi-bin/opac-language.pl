@@ -9,7 +9,7 @@ my $input = new CGI;
 ##Aca se controlo el cambio de idioma
 my $session = CGI::Session->load();
 
-$session->param('locale', $input->param('lang_server') );
+$session->param('usr_locale', $input->param('lang_server') );
 
 my $socio = C4::Auth::getSessionNroSocio();
 if ($socio){

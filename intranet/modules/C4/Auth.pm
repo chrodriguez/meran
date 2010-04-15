@@ -162,7 +162,7 @@ sub _setLocale{
   }
 
   #PARA SACAR EL LOCALE ELEGIDO POR EL SOCIO
-  $session->param('locale', getUserLocale());
+  $session->param('usr_locale', getUserLocale());
   $session->save_param();
 }
 
@@ -172,9 +172,11 @@ sub getUserLocale{
     my $locale;
 
     if ($session){
-        $locale = $session->param('locale');
+        $locale = $session->param('usr_locale');
+        #C4::AR::Debug::debug("Auth => obtengo locale de la session => ".$locale);
     } else {
         $locale = C4::Context->config("defaultLang") || 'es_ES';
+        #C4::AR::Debug::debug("Auth => NO obtengo locale de la session => ".$locale);
     }
 
     return $locale;
