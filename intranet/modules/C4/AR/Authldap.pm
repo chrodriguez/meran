@@ -24,7 +24,7 @@ use strict;
 use Digest::MD5 qw(md5_base64);
 use C4::Context;
 use Net::LDAP;
-use Net::LDAP qw(:all);
+# use Net::LDAP qw(:all);
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 @ISA = qw(Exporter);
