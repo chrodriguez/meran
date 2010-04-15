@@ -1416,7 +1416,7 @@ sub armarBuscoPor{
     my $str;
 	
 	if($params->{'keyword'} ne ""){
-        $str      = $params->{'keyword'};
+        $str      = C4::AR::Utilidades::verificarValor($params->{'keyword'});
         $buscoPor.= Encode::encode('UTF-8',(Encode::decode('UTF-8', "Búsqueda combinada: "))).$str."&";
 	}
 	
