@@ -302,21 +302,22 @@ sub get_template_and_user {
                                                             $in->{'template_params'}
                                             );
 	my $nro_socio;
-    my ($template, $params) = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'},$in->{'loging_out'},$socio);
+    my ($template, $params)     = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'}, $in->{'loging_out'}, $socio);
 
-    $in->{'template_params'} = $params;
+    $in->{'template_params'}    = $params;
 
 	if ( $session->param('userid') ) {
         $params->{'loggedinuser'}       = $session->param('userid');
-		$nro_socio                      = $session->param('userid');
-        $params->{'nro_socio'}          = $nro_socio;
-#         my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
-#         my $socio = C4::Auth::getSessionSocio();
+# 		$nro_socio                      = $session->param('userid');
+#         $params->{'nro_socio'}          = $nro_socio;
+        $params->{'nro_socio'}          = $session->param('userid');
+
         if (!$socio) {
             $socio = C4::Modelo::UsrSocio->new();
         }
 
-        $session->param('nro_socio',$nro_socio);
+#         $session->param('nro_socio',$nro_socio);
+# TODO pasar a una funcion
         my %socio_data;
         $socio_data{'usr_apellido'}             = $session->param('usr_apellido');
         $socio_data{'usr_nombre'}               = $session->param('usr_nombre');
@@ -337,9 +338,6 @@ sub get_template_and_user {
         
 
         $params->{'socio_data'}         = \%socio_data;
-        # ES UN ALIAS PARA LOS TEMPLATES QUE PIDEN POR SOCIO, NO POR SOCIO_DATA
-#         $params->{'socio_data'}= $socio;
-#         $params->{'socio'}              = $socio;
 		$params->{'token'}              = $session->param('token');
 		#para mostrar o no algun submenu del menu principal
  		$params->{'menu_preferences'}   = C4::AR::Preferencias::getMenuPreferences();
@@ -347,8 +345,6 @@ sub get_template_and_user {
 
     #se cargan todas las variables de entorno de las preferencias del sistema
     $params->{'limite_resultados_autocompletables'} = C4::AR::Preferencias->getValorPreferencia("limite_resultados_autocompletables");
-
-#     my $socio = $params->{'socio'};
 
 	return ($template, $session, $params);
 }
@@ -655,9 +651,8 @@ C4::AR::Debug::debug("desde checkauth===========================================
 
                 $session->param('lasttime', time());
 
-#                 my ($socio) = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-#                 $flags      = $socio->tienePermisos($flagsrequired);
-                $flags  = 1;#$socio->tienePermisos($flagsrequired);
+#                 TODO ver si se pueden guardar los permisos en la sesion para evitar cargar el socio mas arriba
+                $flags = $socio->tienePermisos($flagsrequired);
 
                 if ($flags) {
                     $loggedin = 1;
@@ -691,7 +686,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
         }#end if (($userid) && (new_password_is_needed($userid)))
 
         C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." sessionID: ".$sessionID."\n");
-        return ($userid, $session, $flags,$socio);
+        return ($userid, $session, $flags, $socio);
     }#end if ($loggedin || $authnotrequired || (defined($insecure) && $insecure))
 
 
@@ -725,6 +720,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
             $sessionID.="_".$branch;
             $session->param('sessionID', $sessionID);
             $session->param('userid', $userid);
+            $session->param('nro_socio', $socio->getNro_socio());
             $session->param('loggedinusername', $userid);
             $session->param('ip', $ENV{'REMOTE_ADDR'});
             $session->param('lasttime', time());
@@ -742,7 +738,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
             $session->param('usr_apellido', $socio->persona->getApellido());
             $session->param('usr_nombre', $socio->persona->getNombre());
             $session->param('usr_tiene_foto', $socio->tieneFoto());
-            $session->param('usr_documento_nombre', $socio->persona->getNro_documento());
+            $session->param('usr_documento_nombre', $socio->persona->documento->nombre());
             $session->param('usr_documento_version', $socio->persona->getVersion_documento());
             $session->param('usr_nro_documento', $socio->persona->getNro_documento());
             $session->param('usr_calle', $socio->persona->getCalle());
