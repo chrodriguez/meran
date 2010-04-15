@@ -509,11 +509,11 @@ C4::AR::Debug::debug("desde checkauth===========================================
     my $type                = shift;
     my $change_password     = shift || 0;
     my $template_params     = shift;
-    $type                   = 'opac' unless $type;
     my $dbh                 = C4::Context->dbh;
     my $socio;
-
 	my $token;
+    $type                   = 'opac' unless $type;
+
 	if(defined($ENV{'HTTP_X_REQUESTED_WITH'}) && ($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest')){
 		my $obj = $query->param('obj');
 
@@ -547,9 +547,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
         redirectTo('/cgi-bin/koha/auth.pl');
     }else{
     #NO EXPIRO LA SESION
-
-
-        $sessionID=$session->param('sessionID');
+        $sessionID = $session->param('sessionID');
 
         C4::AR::Debug::debug("checkauth=> sessionID seteado \n".$sessionID);
 
@@ -566,7 +564,6 @@ C4::AR::Debug::debug("desde checkauth===========================================
         if ($userid) {
 
             $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-#             $socio = $session->param('socio');
 
             #la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
             #se verifican algunas condiciones de finalizacion de session
@@ -696,22 +693,19 @@ C4::AR::Debug::debug("desde checkauth===========================================
         C4::AR::Debug::debug("checkauth=> Usuario no logueado, intento de autenticacion \n");     
         #No genero un nuevo sessionID
         #con este sessionID puedo recuperar el nroRandom (si existe) guardado en la base, para verificar la password
-#         my ($sist_sesion) = getSistSession($sessionID);
-        my $sessionID= $session->param('sessionID');
+        my $sessionID       = $session->param('sessionID');
         #recupero el userid y la password desde el cliente
-        $userid= $query->param('userid');
-        my $password= $query->param('password');
-        C4::AR::Debug::debug("checkauth=> busco el sessionID: ".$sessionID." de la base \n");
-        my $random_number = $session->param('nroRandom');#$sist_sesion->getNroRandom;
-        C4::AR::Debug::debug("checkauth=> random_number desde la base: ".$random_number."\n");
+        $userid             = $query->param('userid');
+        my $password        = $query->param('password');
+        my $random_number   = $session->param('nroRandom');
+        C4::AR::Debug::debug("checkauth=> random_number desde la session: ".$random_number);
         #se verifica la password ingresada
-        my ($passwordValida, $cardnumber, $branch)= _verificarPassword($dbh,$userid,$password,$random_number);
+        my ($passwordValida, $cardnumber, $branch) = _verificarPassword($dbh,$userid,$password,$random_number);
         if ($passwordValida) {
            #se valido la password y es valida
            # setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
             _setLoguinDuplicado($userid,  $ENV{'REMOTE_ADDR'});
-            C4::AR::Debug::debug("checkauth=> password valida de sessionID: ".$sessionID."\n");
-            C4::AR::Debug::debug("checkauth=> elimino el sessionID de la base: ".$sessionID."\n");
+            C4::AR::Debug::debug("checkauth=> password valida");
 
             $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 
@@ -751,18 +745,13 @@ C4::AR::Debug::debug("desde checkauth===========================================
             $session->param('usr_email', $socio->persona->getEmail());
             $session->param('usr_legajo', $socio->persona->getLegajo());
 
-
             #Si se logueo correctamente en intranet entonces guardo la fecha
             my $today = Date::Manip::ParseDate("today");
             $socio->setLast_login($today);
             $socio->save();
-            #el usuario se logueo bien, ya no es necessario el nroRandom
-            $random_number= 0;
-            #guardo la session en la base
-#             _save_session_db($sessionID, $userid, $ENV{'REMOTE_ADDR'}, $random_number, $params{'token'});
 
             #Logueo una nueva sesion
-            my $time=localtime(time());
+            my $time = localtime(time());
             _session_log(sprintf "%20s from %16s logged out at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},$time);
     
             #por defecto no tiene permisos
@@ -789,9 +778,6 @@ C4::AR::Debug::debug("desde checkauth===========================================
                     
                     #Genera una comprovacion una vez al dia, cuando se loguea el primer usuario
                     my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"));
-C4::AR::Debug::debug("lastlogin, today ".Date::Manip::Date_Cmp($lastlogin,$today));
-C4::AR::Debug::debug("lastlogin".$lastlogin);
-C4::AR::Debug::debug("today ".$today);
 
                     if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
                         # lastlogin es anterior a hoy
@@ -837,17 +823,9 @@ C4::AR::Debug::debug("today ".$today);
             if ($userid) {
                 #intento de loguin
 #                 C4::AR::Debug::debug("checkauth=> usuario o password incorrecta dentro del if");
-                $template_params->{'loginAttempt'} = 1;      
-                
-#                 C4::AR::Debug::debug("checkauth=> eliminino la sesssion ".$sessionID);
-                #elimino la session vieja
-#                 $sist_sesion->delete;
+                $template_params->{'loginAttempt'} = 1;
                 _destruirSession('U406', $template_params);
             }
-#             C4::AR::Debug::debug("checkauth=> usuario o password incorrecta \n");
-            
-            $userid = undef;
-
             #genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
             redirectToAuth($template_params);
             #EXIT
