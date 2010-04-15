@@ -90,7 +90,6 @@ C4::Auth - Authenticates Koha users
 @EXPORT = qw(
 		&checkauth		
 		&get_template_and_user
-		&get_templateexpr_and_user
 		&getborrowernumber
 		&getuserflags
 		&output_html_with_http_headers
@@ -140,19 +139,6 @@ sub getSessionUserID {
 
     return $session->param('userid');
 }
-
-# FIXME DEPRECATED
-sub getSessionSocio {
-    my ($session) = @_;
-
-    unless($session){
-        $session = CGI::Session->load();
-    }
-
-    if (defined $session->param('socio')) { return $session->param('socio')}
-    else {return 0}
-}
-
 
 sub _setLocale{
 

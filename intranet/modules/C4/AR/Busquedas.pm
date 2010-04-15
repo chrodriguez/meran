@@ -1318,44 +1318,6 @@ sub busquedaSimplePorTitulo{
    	return ($cant_total, $resultsarray);
 }
 
-# sub filtrarPorAutor{
-#     my ($params_obj)=@_;
-# 
-#     my $dbh = C4::Context->dbh;
-# # FIXME para que se hace el join con nivel 3??????
-# =item
-#     my $query=" SELECT DISTINCT(c1.id1), c1.titulo, c1.autor
-#                 FROM cat_nivel1 c1 INNER JOIN cat_nivel2 c2 ON c1.id1 = c2.id1 INNER JOIN cat_nivel3 c3 ON c1.id1 = c3.id1
-#                 WHERE c1.autor = ?";
-# =cut
-# 	my $query=" SELECT DISTINCT(c1.id1), c1.titulo, c1.autor
-# 				FROM cat_nivel1 c1 INNER JOIN cat_nivel2 c2 ON (c1.id1 = c2.id1)
-# 				WHERE c1.autor = ? ";
-# 
-#     my $sth=$dbh->prepare($query);
-#     $sth->execute($params_obj->{'idAutor'});
-# 
-#     my @id1_array;
-#     my @searchstring_array;
-#     my $autor = getautor($params_obj->{'idAutor'});
-# # FIXME para que es esto?????????????
-#     while(my $data=$sth->fetchrow_hashref){
-#         $data->{'completo'} = $autor->{'completo'};
-#         push(@id1_array,$data);
-#     }
-# 
-# 	$params_obj->{'filtrarPorAutor'}= $autor->{'completo'};
-#     push (@searchstring_array, "AUTOR: ".$autor->{'completo'});
-# 
-# 
-#     my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params_obj,@id1_array);
-#     #se loquea la busqueda
-#     C4::AR::Busquedas::logBusqueda($params_obj, $params_obj->{'session'});
-# 
-#     return ($cant_total,$resultsarray);
-# }
-
-
 sub t_loguearBusqueda {
     my($loggedinuser,$desde,$http_user_agent,$search_array)=@_;
 
@@ -1455,7 +1417,7 @@ sub armarBuscoPor{
 	
 	if($params->{'keyword'} ne ""){
         $str      = $params->{'keyword'};
-        $buscoPor.= Encode::decode_utf8("Búsqueda combinada: ").$str."&";
+        $buscoPor.= Encode::encode('UTF-8',(Encode::decode('UTF-8', "Búsqueda combinada: "))).$str."&";
 	}
 	
 	if( $params->{'tipo_nivel3_name'} != -1 &&  $params->{'tipo_nivel3_name'} ne ""){

@@ -10,6 +10,7 @@ my $input = new CGI;
 my $session = CGI::Session->load();
 
 $session->param('usr_locale', $input->param('lang_server') );
+# C4::AR::Debug::debug("opac-language => obtengo locale de la session->param(usr_locale) => ".$session->param('usr_locale'));
 
 my $socio = C4::Auth::getSessionNroSocio();
 if ($socio){

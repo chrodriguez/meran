@@ -100,6 +100,7 @@ $t_params->{'SEARCH_RESULTS'}   = $resultsarray;
 $obj->{'keyword'} = $obj->{'string'};
 # $t_params->{'buscoPor'}         = C4::AR::Utilidades::verificarValor($obj->{'string'});#C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'buscoPor'}         = C4::AR::Busquedas::armarBuscoPor($obj);
+# $t_params->{'buscoPor'}         = Encode::encode('utf8' , C4::AR::Busquedas::armarBuscoPor($obj));
 $t_params->{'cantidad'}         = $cantidad || 0;
 # $t_params->{'search_string'}    = $obj->{'string'};
 
