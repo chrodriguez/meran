@@ -53,7 +53,7 @@
   </title>
   
   <script type="text/javascript">
-      [% IF socio %]
+      [% IF socio_data %]
           $(document).ready(function() {
               infoReservas();
               infoSanciones();

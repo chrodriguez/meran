@@ -54,7 +54,7 @@
                                   ) ;
                       [% END %]
                   </li>
-                  [% IF !socio %]
+                  [% IF !socio_data %]
                       <li><a href='/cgi-bin/koha/login.pl'>[% 'Iniciar Sesi&oacute;n' | i18n %]</a></li>
                   [% ELSE %]
                       <li>

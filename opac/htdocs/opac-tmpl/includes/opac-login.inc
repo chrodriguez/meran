@@ -25,7 +25,7 @@
     </script>
 [% END %]
 <!-- Login -->
-[% IF socio %]
+[% IF socio_data %]
     <h1>[% 'Mi Sesi&oacute;n' | i18n %]</h1>
     <p>
       [% HTML.escape(socio_data.usr_nombre) %] ([% HTML.escape(socio_data.usr_nro_socio) %])

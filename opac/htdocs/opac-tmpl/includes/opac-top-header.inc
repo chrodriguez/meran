@@ -14,7 +14,7 @@
         <div class="main">
           <div class="main-navigation">
               [% INCLUDE 'opac-navlink.inc' %]
-              [% IF socio %]
+              [% IF socio_data %]
                   [% INCLUDE 'opac-login.inc' %]
               [% END %]
               <h1>[% 'Buscar' | i18n %]:</h1>

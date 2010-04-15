@@ -1,4 +1,4 @@
-    [% IF socio %]
+    [% IF socio_data %]
       <div class="main-subcontent">
         <!-- Subcontent unit -->
         <div id="info_reservas"></div>
