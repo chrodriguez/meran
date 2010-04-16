@@ -209,3 +209,10 @@ ALTER TABLE  `perm_circulacion` ADD  `circ_opac` VARBINARY( 8 ) NOT NULL DEFAULT
 ALTER TABLE  `pref_feriado` ADD  `feriado` VARCHAR( 255 ) NULL ;
 
 ALTER TABLE  `usr_socio` ADD  `locale` VARCHAR( 32 ) NULL ;
+
+ALTER TABLE `ref_nivel_bibliografico` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+
+ALTER TABLE `ref_soporte` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+
+
+
