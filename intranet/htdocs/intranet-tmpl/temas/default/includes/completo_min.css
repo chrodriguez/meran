@@ -276,3 +276,5 @@ ul li{list-style-type:none;}
 #popup_message{padding-left:48px;}
 #popup_panel{text-align:center;margin:1em 0em 0em 1em;}
 #popup_prompt{margin:.5em 0em;}
+div.indicators{cursor:pointer;color:black;border:1px solid #777777;background:#E9E9E9 none repeat scroll 0 0;padding:0.12em 4% 0.12em 5%;margin-left:7%;float:left;}
+.indSeparator {color:#AAAAAA;}

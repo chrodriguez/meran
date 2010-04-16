@@ -139,7 +139,7 @@ $(document).ready( function() {
 
             [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 1' | i18n %]",
-                                                        boton   => "boton_buscar",
+                                                        boton   => "boton_guardar",
                                                         onClick => "guardar(1);",
                                                         title   => "[% 'Guardar el nivel 1' | i18n %]",
                                                         alternClass => "botonCentrado"
@@ -165,7 +165,7 @@ $(document).ready( function() {
 
                         [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 2' | i18n %]",
-                                                                    boton   => "boton_buscar",
+                                                                    boton   => "boton_guardar",
                                                                     onClick => "guardar(2);",
                                                                     title   => "[% 'Guardar el nivel 2' | i18n %]",
                                                                     alternClass => "botonCentrado"
@@ -200,7 +200,7 @@ $(document).ready( function() {
      
                         [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 3' | i18n %]",
-                                                                    boton   => "boton_buscar",
+                                                                    boton   => "boton_guardar",
                                                                     onClick => "guardar(3);",
                                                                     title   => "[% 'Guardar el nivel 3' | i18n %]",
                                                                     alternClass => "botonCentrado"
