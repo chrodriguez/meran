@@ -1412,12 +1412,13 @@ ademas escapa para evitar XSS
 sub armarBuscoPor{
 	my ($params) = @_;
 	
-	my $buscoPor="";
+	my $buscoPor = "";
     my $str;
 	
 	if($params->{'keyword'} ne ""){
         $str      = C4::AR::Utilidades::verificarValor($params->{'keyword'});
-        $buscoPor.= Encode::encode('UTF-8',(Encode::decode('UTF-8', "Búsqueda combinada: "))).$str."&";
+#         $buscoPor.= Encode::encode('UTF-8',(Encode::decode('UTF-8', "Búsqueda combinada: "))).$str."&";
+        $buscoPor.= "Búsqueda combinada: ".$str."&";
 	}
 	
 	if( $params->{'tipo_nivel3_name'} != -1 &&  $params->{'tipo_nivel3_name'} ne ""){
@@ -1448,10 +1449,10 @@ sub armarBuscoPor{
 	$buscoPor="";
 	
 	foreach my $str (@busqueda){
-		$buscoPor.=", ".$str;
+		$buscoPor.= ", ".$str;
 	}
 	
-	$buscoPor= substr($buscoPor,2,length($buscoPor));
+	$buscoPor = substr($buscoPor,2,length($buscoPor));
 
 	return $buscoPor;
 }

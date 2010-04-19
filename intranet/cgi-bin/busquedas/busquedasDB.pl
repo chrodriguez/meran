@@ -98,7 +98,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 
     #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
 #     $t_params->{'buscoPor'} = Encode::encode('utf8' , C4::AR::Busquedas::armarBuscoPor($obj));
-    $t_params->{'buscoPor'} = C4::AR::Busquedas::armarBuscoPor($obj);
+    $t_params->{'buscoPor'} = Encode::encode('utf8' ,C4::AR::Busquedas::armarBuscoPor($obj));
     my $elapsed             = Time::HiRes::tv_interval( $start );
     $t_params->{'timeSeg'}  = $elapsed;
     C4::AR::Busquedas::logBusqueda($t_params, $session);

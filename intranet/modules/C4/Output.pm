@@ -102,9 +102,9 @@ sub gettemplate {
         $type       = 'INTRA';
 	}
 
-	my $filter= Template::Filters->new({
-						FILTERS => {	'i18n' =>  \&C4::AR::Filtros::i18n, #se carga el filtro i18n
-							},
+	my $filter      = Template::Filters->new({
+						    FILTERS => {	'i18n' =>  \&C4::AR::Filtros::i18n, #se carga el filtro i18n
+							    },
 					});
 
 
@@ -131,18 +131,18 @@ sub gettemplate {
 
 	#se asignan los parametros que son necesarios para todos los templates
     my $ui;
-    my $nombre_ui   = '';
-    my $default_ui  = C4::AR::Preferencias->getValorPreferencia('defaultUI');
-    $ui             = C4::AR::Referencias::getUI_infoObject($default_ui);
+    my $nombre_ui       = '';
+    my $default_ui      = C4::AR::Preferencias->getValorPreferencia('defaultUI');
+    $ui                 = C4::AR::Referencias::getUI_infoObject($default_ui);
 
-    my $date        = C4::AR::Utilidades::getDate();
+    my $date            = C4::AR::Utilidades::getDate();
     if($ui){
         $nombre_ui = $ui->getNombre();
     }
 
     my $user_theme,
     my $user_theme_intra;
-    my ($session) = CGI::Session->load();
+    my ($session)       = CGI::Session->load();
 
     $user_theme         = $session->param('urs_theme') || $tema_opac;
     $user_theme_intra   = $session->param('usr_theme_intra') || $tema_intra;
@@ -157,7 +157,8 @@ sub gettemplate {
 			themelang           => ($opac ne 'intranet'? '/opac-tmpl/': '/intranet-tmpl/') ,
 # FIXME DEPRECATED
 			interface           => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
-            sitio               => ($opac ne 'intranet'? 'opac': 'intranet'),  #indica desde donde se hace el requerimiento
+#             sitio               => ($opac ne 'intranet'? 'opac': 'intranet'),  #indica desde donde se hace el requerimiento
+            type                => ($opac ne 'intranet'? 'opac': 'intranet'),  #indica desde donde se hace el requerimiento
 			tema                => $tema,
 			temas               => $temas,
             titulo_nombre_ui    => C4::AR::Preferencias->getValorPreferencia('titulo_nombre_ui'),
