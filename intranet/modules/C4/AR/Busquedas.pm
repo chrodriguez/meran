@@ -1069,8 +1069,9 @@ sub busquedaCombinada_newTemp{
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
 
     use Sphinx::Search;
-
+    my $path="/tmp/searchd.sock";
     my $sphinx = Sphinx::Search->new();
+    $sphinx->SetServer($path, 0);
     my $query = '';
     #se arma el query string
     foreach my $string (@searchstring_array){
@@ -1096,7 +1097,7 @@ sub busquedaCombinada_newTemp{
     $obj_for_log->{'total_found'} = $total_found;
 #     C4::AR::Utilidades::printHASH($results);
     C4::AR::Debug::debug("total_found: ".$total_found);
-#     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
       my %hash_temp = {};
       $hash_temp{'id1'} = $hash->{'doc'};
@@ -1412,13 +1413,12 @@ ademas escapa para evitar XSS
 sub armarBuscoPor{
 	my ($params) = @_;
 	
-	my $buscoPor = "";
+	my $buscoPor="";
     my $str;
 	
 	if($params->{'keyword'} ne ""){
         $str      = C4::AR::Utilidades::verificarValor($params->{'keyword'});
-#         $buscoPor.= Encode::encode('UTF-8',(Encode::decode('UTF-8', "Búsqueda combinada: "))).$str."&";
-        $buscoPor.= "Búsqueda combinada: ".$str."&";
+        $buscoPor.= Encode::encode('UTF-8',(Encode::decode('UTF-8', "Búsqueda combinada: "))).$str."&";
 	}
 	
 	if( $params->{'tipo_nivel3_name'} != -1 &&  $params->{'tipo_nivel3_name'} ne ""){
@@ -1449,10 +1449,10 @@ sub armarBuscoPor{
 	$buscoPor="";
 	
 	foreach my $str (@busqueda){
-		$buscoPor.= ", ".$str;
+		$buscoPor.=", ".$str;
 	}
 	
-	$buscoPor = substr($buscoPor,2,length($buscoPor));
+	$buscoPor= substr($buscoPor,2,length($buscoPor));
 
 	return $buscoPor;
 }
