@@ -1115,7 +1115,6 @@ function procesarSubCampo(objeto, marc_group){
         vista_intra = vista_intra + "<b> * </b>";
     }
 
-alert("getTieneEstructura => " + marc_conf_obj.getTieneEstructura());
     if(marc_conf_obj.getTieneEstructura() == '0'){ 
 // TODO armar una funcion q genere esto
         vista_intra = vista_intra + "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled> (NO TIENE ESTRUCTURA) </div>";

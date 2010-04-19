@@ -1640,11 +1640,9 @@ sub _getEstructuraFromCampoSubCampo{
 
     push(@filtros, ( campo      => { eq => $campo } ) );
     push(@filtros, ( subcampo   => { eq => $subcampo } ) );
-#     push(@filtros, ( itemtype   => { eq => $itemtype } ) );
     push (  @filtros, ( or   => [   itemtype   => { eq => $itemtype }, 
                                     itemtype   => { eq => 'ALL'     } ])
                      );
-# TODO falta el or itemtype eq 'ALL' ?????????
 
 	my $cat_estruct_info_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(  
                                                                                 db              => $db,
