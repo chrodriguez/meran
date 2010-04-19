@@ -360,7 +360,7 @@ function updateMostrarEstructuraDelNivel1(responseText){
     //proceso la info del servidor y se crean las componentes en el cliente
     //ademas se carga el arreglo MARC_OBJECT_ARRAY donde se hace el mapeo de componente del cliente y dato
     var objetos_array = JSONstring.toObject(responseText);
-    procesarInfoJson(objetos_array, 'nada'); 
+    procesarInfoJson(objetos_array, null); 
 //     procesarInfoJson(responseText); 
     //carga los datos en los campos solo si se esta modificando
     scrollTo('nivel1Tabla');
@@ -391,7 +391,7 @@ function updateMostrarEstructuraDelNivel2(responseText){
     _showAndHiddeEstructuraDelNivel(2);
     //proceso la info del servidor y se crean las componentes en el cliente
     var objetos_array = JSONstring.toObject(responseText);
-    procesarInfoJson(objetos_array, 'nada'); 
+    procesarInfoJson(objetos_array, null); 
 //     procesarInfoJson(responseText);
     scrollTo('nivel2Tabla');
 	//asigno el handler para el validador
@@ -436,7 +436,8 @@ function updateMostrarEstructuraDelNivel3(responseText){
 	  TAB_INDEX= 0;
     //proceso la info del servidor y se crean las componentes en el cliente
     var objetos_array = JSONstring.toObject(responseText);
-    procesarInfoJson(objetos_array, 'nada'); 
+
+    procesarInfoJson(objetos_array, null); 
 //     procesarInfoJson(responseText);
     scrollTo('nivel3Tabla');
 	
@@ -1002,11 +1003,12 @@ function procesarInfoJson(marc_object_array, id_padre){
         //cierro DIV marc_group
         strComp = strComp + "</div>";
 
-        if(objetos.length == 1) {
+//         if(objetos.length == 1) {
+        if(id_padre == null) {
+            $("#" + getDivDelNivel()).append(strComp);
+        } else {
             //estoy clonando un campo
             $(strComp).insertAfter($("#" + id_padre));
-        } else {
-            $("#" + getDivDelNivel()).append(strComp);
         }
         
         //seteo los datos de los indicadores

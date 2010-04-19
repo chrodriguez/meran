@@ -61,9 +61,7 @@ sub _meran_to_marc{
        push(@{$autorizados{$autorizado->getCampo()}},$autorizado->getSubcampo());
     }
 
-C4::AR::Debug::debug("CAnt ".$cant_campos." ?????????????????????????");
-# TODO mono, autorizados es una HASH asi q para poder mostrar mas de un campo, tengo q sacar la hash pq no me permite agregar por ej dos veces
-# el campo 072
+    C4::AR::Debug::debug("Cant ".$cant_campos." ?????????????????????????");
 
     my $field;
     for (my $i=0;$i<$cant_campos;$i++){

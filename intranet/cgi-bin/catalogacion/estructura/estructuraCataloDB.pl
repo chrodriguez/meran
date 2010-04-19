@@ -331,19 +331,19 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
     if($obj->{'nivel'} eq '2'){$entorno= 'estructura_catalogacion_n2'};
     if($obj->{'nivel'} eq '3'){$entorno= 'estructura_catalogacion_n3'};
 
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => $entorno}, 
-                                                'intranet'
+    my ($user, $session, $flags)    = checkauth(    $input, 
+                                                    $authnotrequired, 
+                                                    {   ui => 'ANY', 
+                                                        tipo_documento => 'ANY', 
+                                                        accion => 'CONSULTA', 
+                                                        entorno => $entorno}, 
+                                                        'intranet'
                                     );
     
     #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
-    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getEstructuraSinDatos($obj);
+    my ($cant, $catalogaciones_array_ref)   = &C4::AR::Catalogacion::getEstructuraSinDatos($obj);
 
-    my $infoOperacionJSON= to_json($catalogaciones_array_ref);
+    my $infoOperacionJSON                   = to_json($catalogaciones_array_ref);
 
 	C4::Auth::print_header($session);
 	print $infoOperacionJSON;
@@ -356,7 +356,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
                                                     tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'}, 
-                                                  'intranet'
+                                                    'intranet'
                                     );
 
     my $infoOperacionJSON;
