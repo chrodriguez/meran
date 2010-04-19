@@ -873,6 +873,38 @@ function updateMostrarInfoAltaNivel3(responseText){
 	checkedAll('checkAllEjemplares','checkEjemplares');
 }
 
+function open_alta_indicador(id_div_alta_indicador){
+    $('#'+id_div_alta_indicador).modal({   
+            containerCss:{
+                backgroundColor:"#fff",
+        //         borderColor:"#0063dc",
+                height: 150,
+                padding: 0,
+                width: 530,
+    //             opacity: 50,
+            },
+    });
+}
+
+function close_alta_indicador(){
+    $.modal.close(); //cirro la ventana
+}
+
+function guardar_indicadores(id_div_indicadores, i){
+    var key_indicador_primario      = $("#select_indicador_primario" + i).val();
+    var key_indicador_secundario    = $("#select_indicador_secundario" + i).val();
+
+    var str                         = "<span>" + key_indicador_primario + "</span>";
+        str                         = str + "<span class='indSeparator'>|</span><span>" + key_indicador_secundario + "</span>";
+
+    $('#'+id_div_indicadores).html(str);
+    $.modal.close(); //cirro la ventana
+
+    //seteo los valores en los combos ocultos para luego guardarlos en la base
+    $("#select_indicador_primario" + i).val(key_indicador_primario); 
+    $("#select_indicador_secundario" + i).val(key_indicador_secundario);
+}
+
 /*
  * procesarInfoJson
  * procesa la informacion que esta en notacion json, que viene del llamado ajax.
@@ -894,25 +926,60 @@ function procesarInfoJson(marc_object_array, id_padre){
         strIndicadores = "";
     
 		//guardo el objeto para luego enviarlo al servidor una vez que este actualizado
-        var campo_marc_conf_obj = new campo_marc_conf(objetos[i]);
-        var subcampos_array     = campo_marc_conf_obj.getSubCamposArray();
-        var id_temp = generarIdComponente();
+        var campo_marc_conf_obj     = new campo_marc_conf(objetos[i]);
+        var subcampos_array         = campo_marc_conf_obj.getSubCamposArray();
+        var id_temp                 = generarIdComponente();
+        var id_div_alta_indicador   = generarIdComponente();
+        var id_div_indicadores      = + id_div_alta_indicador + campo_marc_conf_obj.getCampo();
+        var id_aux                  = MARC_OBJECT_ARRAY.length;
+
+        //los indicadores quedan ocultos y se muestran en una ventana
+        strComp                     = strComp + "<ul id='" + id_div_alta_indicador + "' style='display:none'>";
+   
+        //genero el indicador primario
+        if(campo_marc_conf_obj.getIndicadorPrimario() != ''){
+            strIndicadores = "<li class='sub_item'>Indicador Primero: " + campo_marc_conf_obj.getIndicadorPrimario() + "</li>";
+            strIndicadores = strIndicadores + "<li>" + crearSelectIndicadoresPrimarios(campo_marc_conf_obj, id_aux) + "</li>";
+        }
+
+
+        //genero el indicador secundario
+        if(campo_marc_conf_obj.getIndicadorSecundario() != ''){
+            strIndicadores = strIndicadores + "<li class='sub_item'>Indicador Segundo: " + campo_marc_conf_obj.getIndicadorSecundario() + "</li>";
+            strIndicadores = strIndicadores + "<li>" + crearSelectIndicadoresSecundarios(campo_marc_conf_obj, id_aux) + "</li>";
+        }
+
+        strIndicadores = strIndicadores + "<div class='buttonContainerHorizontal'>";
+
+        strIndicadores = strIndicadores + "<li onclick='guardar_indicadores(" + id_div_indicadores + ", " + id_aux +");' class='click boton_medio horizontal'><div class='boton_guardar'></div><div class='boton_der'></div><div class='boton_texto'>Aceptar</div></li>";
+
+        strIndicadores = strIndicadores + "<li onclick='close_alta_indicador();' class='click boton_medio horizontal'><div class='boton_salir'></div><div class='boton_der'></div><div class='boton_texto'>Cancelar</div></li>";
+
+        //cierro UL de indicadores
+        strComp = strComp + strIndicadores + "</ul>";
+        strComp = strComp + "</div>"; //end div buttonContainerHorizontal
+
         //genero el header para el campo q contiene todos los subcampos
-        strComp = "<div id='marc_group" + id_temp + "' ><li class='MARCHeader'>";
+        strComp = strComp + "<div id='marc_group" + id_temp + "' ><li class='MARCHeader'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
 
         //header LEFT
         strComp = strComp + "<div style='width:10%;float:left'>";
         strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo());
-        strComp = strComp + "</div>";
 
+        //el campo tiene indicadores
+        if ( campo_marc_conf_obj.getIndicadoresPrimarios() != '0') {
+            
+            strComp = strComp + "<div id='" + id_div_indicadores + "' class='indicators' title='Ver/modificar los indicadores' onclick=open_alta_indicador('" + id_div_alta_indicador + "');><span>" + campo_marc_conf_obj.getIndicadorPrimarioDato() + "</span><span class='indSeparator'>|</span><span>" + campo_marc_conf_obj.getIndicadorSecundarioDato() + "</span></div>";
+        }
+
+        strComp = strComp + "</div>";
 
         //header CENTER
         strComp = strComp + "<div style='width:80%;float:left'>";
-        strComp = strComp + campo_marc_conf_obj.getCampo() + " - " + campo_marc_conf_obj.getNombre();
+        strComp = strComp + "<a href='http://www.loc.gov/marc/bibliographic/bd" + campo_marc_conf_obj.getCampo() + ".html' TARGET='_blank'>" + campo_marc_conf_obj.getCampo() + "</a> - " + campo_marc_conf_obj.getNombre();
 
         if(campo_marc_conf_obj.getRepetible() == "1"){  
-//             strComp = strComp + "<b> (R) </b>";
             //cierro div CENTER
             strComp = strComp + "</div>";
             //header RIGHT
@@ -927,24 +994,9 @@ function procesarInfoJson(marc_object_array, id_padre){
 
         //cierro MARCHeader_info
         strComp = strComp + "</div>";
-
+// TODO creo q el div MARCHeader_content esta deprecated
         strComp = strComp + "</li><div class='MARCHeader_content'>";
-        strComp = strComp + "<ul>";
-    
-        //genero el indicador primario
-        if(campo_marc_conf_obj.getIndicadorPrimario() != ''){
-            strIndicadores = "<li class='sub_item'>Indicador Primero: " + campo_marc_conf_obj.getIndicadorPrimario() + "</li>";
-            strIndicadores = strIndicadores + "<li>" + crearSelectIndicadoresPrimarios(campo_marc_conf_obj, MARC_OBJECT_ARRAY.length) + "</li>";
-        }
 
-        //genero el indicador secundario
-        if(campo_marc_conf_obj.getIndicadorSecundario() != ''){
-            strIndicadores = strIndicadores + "<li class='sub_item'>Indicador Segundo: " + campo_marc_conf_obj.getIndicadorSecundario() + "</li>";
-            strIndicadores = strIndicadores + "<li>" + crearSelectIndicadoresSecundarios(campo_marc_conf_obj, MARC_OBJECT_ARRAY.length) + "</li>";
-        }
-
-        //cierro UL de indicadores
-        strComp = strComp + strIndicadores + "</ul>";
         //cierrdo DIV MARCHeader_content
         strComp = strComp + "</div>";
         //cierro DIV marc_group
@@ -1059,15 +1111,12 @@ function procesarSubCampo(objeto, marc_group){
     var divComp             = crearDivComponente("div"+marc_conf_obj.getIdCompCliente());
     var tiene_estructura    = marc_conf_obj.getTieneEstructura(); //falta q los niveles 1, 2, 3 mantengan esta estructura
 
-//     if(marc_conf_obj.getRepetible() == "1"){  
-//         vista_intra = vista_intra + "<b> (R) </b>";
-//     }
-
     if(marc_conf_obj.getObligatorio() == "1"){  
         vista_intra = vista_intra + "<b> * </b>";
     }
 
     if(marc_conf_obj.getTieneEstructura() == '0'){ 
+        //no existe estructura de catalogacion configurada para este campo, subcampo
 // TODO armar una funcion q genere esto
         vista_intra = vista_intra + "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled> (NO TIENE ESTRUCTURA) </div>";
         tiene_estructura = 0;
@@ -1354,8 +1403,8 @@ function campo_marc_conf(obj){
     function fGetSubCamposArray(){          return (this.subcampos_array) };
     function fGetIndicadoresPrimarios(){    return (this.indicadores_primarios)};
     function fGetIndicadoresSecundarios(){  return (this.indicadores_secundarios)};
-    function fGetIndicadorPrimarioDato(){   return (this.indicador_primario_dato)};
-    function fGetIndicadorSecundarioDato(){ return (this.indicador_secundario_dato)};
+    function fGetIndicadorPrimarioDato(){   return ((this.indicador_primario_dato == undefined)?'#':this.indicador_primario_dato)};
+    function fGetIndicadorSecundarioDato(){ return ((this.indicador_secundario_dato == undefined)?'#':this.indicador_secundario_dato)};
     
 
     //metodos

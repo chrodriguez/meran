@@ -398,9 +398,9 @@ sub print_header {
 sub is_OPAC {
     my($template_params) = @_;
 
-    $template_params->{'sitio'} = $template_params->{'sitio'} || 'opac';
+    $template_params->{'type'} = $template_params->{'type'} || 'opac';
 
-    return (($template_params->{'sitio'} eq 'opac')?1:0);
+    return (($template_params->{'type'} eq 'opac')?1:0);
 }
 
 =item checkauth
@@ -1131,8 +1131,8 @@ sub cerrarSesion{
     #genero una nueva session
     my ($session)           = CGI::Session->load();
 
-    C4::AR::Debug::debug("cerrarSesion => ".$session->param('codMsg'));
-    my $msjCode              = getMsgCode();
+#     C4::AR::Debug::debug("cerrarSesion => ".$session->param('codMsg'));
+    my $msjCode             = getMsgCode();
     $t_params->{'mensaje'}  = C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
     #se destruye la session anterior
     $session->clear();
