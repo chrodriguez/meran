@@ -117,7 +117,7 @@ sub sphinx_start{
       } else {
           # Child runs this block
           # some code comes here
-          $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
+          $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
           $mgr->debug(0);
           my $pids = $mgr->get_searchd_pid;
           if(scalar(@$pids) == 0){
@@ -1069,8 +1069,9 @@ sub busquedaCombinada_newTemp{
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
 
     use Sphinx::Search;
-sphinx_start();
+    my $path="/tmp/searchd.sock";
     my $sphinx = Sphinx::Search->new();
+    $sphinx->SetServer($path, 0);
     my $query = '';
     #se arma el query string
     foreach my $string (@searchstring_array){
