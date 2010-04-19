@@ -117,7 +117,7 @@ sub sphinx_start{
       } else {
           # Child runs this block
           # some code comes here
-          $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
+          $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
           $mgr->debug(0);
           my $pids = $mgr->get_searchd_pid;
           if(scalar(@$pids) == 0){
@@ -1069,7 +1069,7 @@ sub busquedaCombinada_newTemp{
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
 
     use Sphinx::Search;
-
+sphinx_start();
     my $sphinx = Sphinx::Search->new();
     my $query = '';
     #se arma el query string
@@ -1412,13 +1412,12 @@ ademas escapa para evitar XSS
 sub armarBuscoPor{
 	my ($params) = @_;
 	
-	my $buscoPor = "";
+	my $buscoPor="";
     my $str;
 	
 	if($params->{'keyword'} ne ""){
         $str      = C4::AR::Utilidades::verificarValor($params->{'keyword'});
-#         $buscoPor.= Encode::encode('UTF-8',(Encode::decode('UTF-8', "Búsqueda combinada: "))).$str."&";
-        $buscoPor.= "Búsqueda combinada: ".$str."&";
+        $buscoPor.= Encode::encode('UTF-8',(Encode::decode('UTF-8', "Búsqueda combinada: "))).$str."&";
 	}
 	
 	if( $params->{'tipo_nivel3_name'} != -1 &&  $params->{'tipo_nivel3_name'} ne ""){
@@ -1449,10 +1448,10 @@ sub armarBuscoPor{
 	$buscoPor="";
 	
 	foreach my $str (@busqueda){
-		$buscoPor.= ", ".$str;
+		$buscoPor.=", ".$str;
 	}
 	
-	$buscoPor = substr($buscoPor,2,length($buscoPor));
+	$buscoPor= substr($buscoPor,2,length($buscoPor));
 
 	return $buscoPor;
 }
