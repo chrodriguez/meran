@@ -97,7 +97,8 @@ function validateForm(func){
                 errorElement: "em",
                 errorClass: "error_adv",
                rules: {
-                  nro_documento: "required",  
+                  nro_documento: "required",
+                  tipo_documento_id: "required",
 				  categoria_socio_id: "required",	
                   apellido: "required",
                   nombre: "required",
@@ -130,6 +131,7 @@ function validateForm(func){
                   nro_documento: {
                      required: POR_FAVOR_INGRESE_SU_NRO_DE_DNI,
                   },
+                  tipo_documento_id: POR_FAVOR_INGRESE_SU_NRO_DE_DNI,
                   email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
                   id_ui: POR_FAVOR_INGRESE_UNA_UI
                }
