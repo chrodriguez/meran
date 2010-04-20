@@ -986,7 +986,7 @@ function procesarInfoJson(marc_object_array, id_padre){
 
         //header CENTER
         strComp = strComp + "<div style='width:80%;float:left'>";
-        strComp = strComp + "<a href='http://www.loc.gov/marc/bibliographic/bd" + campo_marc_conf_obj.getCampo() + ".html' TARGET='_blank'>" + campo_marc_conf_obj.getCampo() + "</a> - " + campo_marc_conf_obj.getNombre();
+        strComp = strComp + "<a class='fancy_extern_link' href='http://www.loc.gov/marc/bibliographic/bd" + campo_marc_conf_obj.getCampo() + ".html' TARGET='_blank'>" + campo_marc_conf_obj.getCampo() + "</a> - " + campo_marc_conf_obj.getNombre();
 
         if(campo_marc_conf_obj.getRepetible() == "1"){  
             //cierro div CENTER

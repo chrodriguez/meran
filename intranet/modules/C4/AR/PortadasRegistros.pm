@@ -130,11 +130,34 @@ sub getImageForId1 {
   return $url;
 }
 
+sub getAllImageForId1 {
+    my ($id1)           = @_;
+    
+    my %result;
+    my $isbn            = C4::AR::Nivel2::getISBNById1($id1);
+    
+    if ($isbn) {
+        my $portada     = getPortadaByIsbn($isbn);
+    
+        if($portada){    
+            $result{'S'}    = $portada->getSmall();
+            $result{'M'}    = $portada->getMedium();
+            $result{'L'}    = $portada->getLarge();
+        } else {
+            $result{'S'}    = '';
+            $result{'M'}    = '';
+            $result{'L'}    = '';
+        }
+    }
+    
+    return \%result;
+}
 
 sub getImageForId2 {
-    my ($id2,$size)=@_;
-    my $url='';
-    my $isbn = C4::AR::Nivel2::getISBNById2($id2);
+    my ($id2,$size)     = @_;
+
+    my $url             = '';
+    my $isbn            = C4::AR::Nivel2::getISBNById2($id2);
 
         if ($isbn ne ''){
             my $portada = getPortadaByIsbn($isbn);
@@ -145,6 +168,29 @@ sub getImageForId2 {
         }
 
     return $url;
+}
+
+sub getAllImageForId2 {
+    my ($id2,$size)     = @_;
+    
+    my %result;
+    my $isbn            = C4::AR::Nivel2::getISBNById2($id2);
+
+    if ($isbn) {
+        my $portada     = getPortadaByIsbn($isbn);
+
+        if($portada){    
+            $result{'S'}    = $portada->getSmall();
+            $result{'M'}    = $portada->getMedium();
+            $result{'L'}    = $portada->getLarge();
+        } else {
+            $result{'S'}    = '';
+            $result{'M'}    = '';
+            $result{'L'}    = '';
+        }
+    }
+    
+    return \%result;
 }
 
 

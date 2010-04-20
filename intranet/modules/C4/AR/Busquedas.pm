@@ -1489,29 +1489,41 @@ sub armarInfoNivel1{
                 @result_array_paginado[$i]->{'grupos'}  = $ediciones;
             }
 
-            @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
-            @result_array_paginado[$i]->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'M');
-            @result_array_paginado[$i]->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'L');
+#             @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
+#             @result_array_paginado[$i]->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'M');
+#             @result_array_paginado[$i]->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'L');
+            my $images_n1_hash_ref = C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
+            @result_array_paginado[$i]->{'portada_registro'}        =  $images_n1_hash_ref->{'S'};
+            @result_array_paginado[$i]->{'portada_registro_medium'} =  $images_n1_hash_ref->{'M'};
+            @result_array_paginado[$i]->{'portada_registro_big'}    =  $images_n1_hash_ref->{'L'};
+
             
             my @nivel2_portadas;
             if (scalar(@$nivel2_array_ref)>1){
                 for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
                     my $hash_nivel2;
-                    $hash_nivel2->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
-                    $hash_nivel2->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
-                    $hash_nivel2->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');
+                    my $images_n2_hash_ref = C4::AR::PortadasRegistros::getAllImageForId2($nivel2_array_ref->[$i]->getId2);
+#                     $hash_nivel2->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
+#                     $hash_nivel2->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
+#                     $hash_nivel2->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');
+                    $hash_nivel2->{'portada_registro'}          =  $images_n2_hash_ref->{'S'};
+                    $hash_nivel2->{'portada_registro_medium'}   =  $images_n1_hash_ref->{'M'};
+                    $hash_nivel2->{'portada_registro_big'}      =  $images_n1_hash_ref->{'L'};
+
                     push(@nivel2_portadas, $hash_nivel2);
                 }
-                @result_array_paginado[$i]->{'portadas_grupo'}= \@nivel2_portadas;
+
+                @result_array_paginado[$i]->{'portadas_grupo'}  = \@nivel2_portadas;
             }
             #se obtine la disponibilidad total 
-            @result_array_paginado[$i]->{'rating'} =  C4::AR::Nivel2::getRatingPromedio($nivel2_array_ref);
+            @result_array_paginado[$i]->{'rating'}              =  C4::AR::Nivel2::getRatingPromedio($nivel2_array_ref);
             my @disponibilidad = &C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);
         
-            @result_array_paginado[$i]->{'disponibilidad'}= 0;
+            @result_array_paginado[$i]->{'disponibilidad'}      = 0;
             if(scalar(@disponibilidad) > 0){
-                @result_array_paginado[$i]->{'disponibilidad'}=\@disponibilidad;
+                @result_array_paginado[$i]->{'disponibilidad'}  = \@disponibilidad;
             }
+
             push (@result_array_paginado_temp, @result_array_paginado[$i]);
         }
     }
