@@ -1730,6 +1730,7 @@ sub generarComboTipoDeDoc{
         push(@select_docs_array, $doc->nombre);
         $select_docs{$doc->nombre}= $doc->descripcion;
     }
+    $select_docs{''}= 'SIN SELECCIONAR';
 
     my %options_hash; 
 
@@ -1743,13 +1744,14 @@ sub generarComboTipoDeDoc{
         $options_hash{'onBlur'}= $params->{'onBlur'};
     }
 
-    $options_hash{'name'}= $params->{'name'}||'tipo_documento_name';
+    $options_hash{'name'}= $params->{'name'}||'tipo_documento_id';
     $options_hash{'id'}= $params->{'id'}||'tipo_documento_id';
     $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'class'}=  'required';
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoDoc");
 
-    push (@select_docs_array, 'SIN SELECCIONAR');
+    push (@select_docs_array, '');
     $options_hash{'values'}= \@select_docs_array;
     $options_hash{'labels'}= \%select_docs;
 
