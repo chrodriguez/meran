@@ -1513,6 +1513,10 @@ sub armarInfoNivel1{
                     $hash_nivel2->{'portada_registro_medium'}   =  $images_n2_hash_ref->{'M'};
                     $hash_nivel2->{'portada_registro_big'}      =  $images_n2_hash_ref->{'L'};
 
+@result_array_paginado[$i]->{'portada_registro'}        =  $images_n2_hash_ref->{'S'};
+            @result_array_paginado[$i]->{'portada_registro_medium'} =  $images_n2_hash_ref->{'M'};
+            @result_array_paginado[$i]->{'portada_registro_big'}    =  $images_n2_hash_ref->{'L'};
+
                     push(@nivel2_portadas, $hash_nivel2);
                 }
 
