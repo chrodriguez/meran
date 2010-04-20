@@ -1492,12 +1492,12 @@ sub armarInfoNivel1{
 #             @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
 #             @result_array_paginado[$i]->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'M');
 #             @result_array_paginado[$i]->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'L');
-#             my $images_n1_hash_ref = C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
+            my $images_n1_hash_ref = C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
 # C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
 
-#             @result_array_paginado[$i]->{'portada_registro'}        =  $images_n1_hash_ref->{'S'};
-#             @result_array_paginado[$i]->{'portada_registro_medium'} =  $images_n1_hash_ref->{'M'};
-#             @result_array_paginado[$i]->{'portada_registro_big'}    =  $images_n1_hash_ref->{'L'};
+            @result_array_paginado[$i]->{'portada_registro'}        =  $images_n1_hash_ref->{'S'};
+            @result_array_paginado[$i]->{'portada_registro_medium'} =  $images_n1_hash_ref->{'M'};
+            @result_array_paginado[$i]->{'portada_registro_big'}    =  $images_n1_hash_ref->{'L'};
 
             
             my @nivel2_portadas;
@@ -1512,10 +1512,6 @@ sub armarInfoNivel1{
                     $hash_nivel2->{'portada_registro'}          =  $images_n2_hash_ref->{'S'};
                     $hash_nivel2->{'portada_registro_medium'}   =  $images_n2_hash_ref->{'M'};
                     $hash_nivel2->{'portada_registro_big'}      =  $images_n2_hash_ref->{'L'};
-
-@result_array_paginado[$i]->{'portada_registro'}        =  $images_n2_hash_ref->{'S'};
-            @result_array_paginado[$i]->{'portada_registro_medium'} =  $images_n2_hash_ref->{'M'};
-            @result_array_paginado[$i]->{'portada_registro_big'}    =  $images_n2_hash_ref->{'L'};
 
                     push(@nivel2_portadas, $hash_nivel2);
                 }
