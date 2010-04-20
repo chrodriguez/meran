@@ -67,7 +67,7 @@ function _HiddeState(options){
     }
 
     if(options.showOverlay){
-        $.modal.close();
+//         $.modal.close();
     }
 
 };

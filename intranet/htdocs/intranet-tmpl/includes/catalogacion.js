@@ -1606,13 +1606,21 @@ function crearEditor(){
 function crearAuto(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='"+ obj.getIdCompCliente() +"' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" class='horizontal' >";
 
-    comp = comp + crearBotonAgregarSubcampoRepetible(obj);
-    comp = comp + "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
+
     $("#div" + obj.getIdCompCliente()).append(comp);
+
+
+//     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
+    $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
+//     comp = comp + "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
+    comp = "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
+//     $("#div" + obj.getIdCompCliente()).append(comp);
+    $(comp).insertAfter("#div" + obj.getIdCompCliente());
     _cearAutocompleteParaCamponente(obj);
     //se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
     comp = crearHidden(obj);
-    $("#div" + obj.getIdCompCliente()).append(comp);
+//     $("#div" + obj.getIdCompCliente()).append(comp);
+    $(comp).insertAfter("#div" + obj.getIdCompCliente());
 }
 
 function crearCalendar(obj){
