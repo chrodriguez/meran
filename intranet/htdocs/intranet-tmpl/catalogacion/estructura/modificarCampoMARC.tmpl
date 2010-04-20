@@ -28,7 +28,7 @@
         <input  type=radio id="obligatorio_si" name="obligatorio" value="1" 
                 [% IF catalogacion.obligatorio == '1' %] checked [% END %]
                 [% IF catalogacion.subCamposBase.getObligatorio %] disabled [% END %]>
-            [% 'S&iacute;' | i18n %]<BR>
+            [% 'S&iacute;' | i18n %]
         <input  type=radio id="obligatorio_no" name="obligatorio" value="0" 
                 [% IF catalogacion.obligatorio == '0' %] checked [% END %]
                 [% IF catalogacion.subCamposBase.getObligatorio %] disabled [% END %]>  
@@ -38,7 +38,7 @@
         <label for="liblibrarian">
             [% 'Vista en Intranet:' | i18n %] 
         </label>
-        <input id="liblibrarian" type="text" value="[% catalogacion.getLiblibrarian %]" size="90"> 
+        <input id="liblibrarian" type="text" value="[% catalogacion.getLiblibrarian %]" size="85"> 
    </li>
     <li class="sub_item">
         <label for="tipoInput">[% 'Tipo de input' | i18n %]:</label>
