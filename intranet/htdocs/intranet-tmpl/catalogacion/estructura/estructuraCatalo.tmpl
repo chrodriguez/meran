@@ -124,11 +124,11 @@ function updateMostrarAgregarCampo(responseText){
 
 
 function mostrarModificarCampo(id){
-    objAH=new AjaxHelper(updateMostrarModificarCampo);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tipoAccion="MOSTRAR_FORM_MODIFICAR_CAMPOS";
-    objAH.id= id;
+    objAH               = new AjaxHelper(updateMostrarModificarCampo);
+    objAH.debug         = true;
+    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tipoAccion    = "MOSTRAR_FORM_MODIFICAR_CAMPOS";
+    objAH.id            = id;
     objAH.sendToServer();
 }
 
@@ -142,6 +142,7 @@ function updateMostrarModificarCampo(responseText){
     $("#campo").attr('disabled',true);
     $("#subcampo").attr('disabled',true);
     $("#tipoInput").removeAttr('disabled');
+    eleccionTablaRef();
 }
 
 function cancelarEstructuraCatalogacion(){
