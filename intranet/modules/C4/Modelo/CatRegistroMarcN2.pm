@@ -105,6 +105,29 @@ sub getISBN{
      return $marc_record->subfield("020","a");
 }
 
+sub getAllImage {
+    my ($self)      = shift;
+    
+    my %result;
+    my $isbn            = $self->getISBN();
+    
+    if ($isbn) {
+        my $portada     = C4::AR::PortadasRegistros::getPortadaByIsbn($isbn);
+    
+        if($portada){    
+            $result{'S'}    = $portada->getSmall();
+            $result{'M'}    = $portada->getMedium();
+            $result{'L'}    = $portada->getLarge();
+        } else {
+            $result{'S'}    = '';
+            $result{'M'}    = '';
+            $result{'L'}    = '';
+        }
+    }
+    
+    return \%result;
+}
+
 =head2
 sub getISSN
 

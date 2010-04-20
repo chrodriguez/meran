@@ -22,7 +22,7 @@ use vars qw(@EXPORT @ISA);
 		);
 
 
-sub getPortadaByIsbn{
+sub getPortadaByIsbn {
     my ($isbn) = @_;
 
     use C4::Modelo::CatPortadaRegistro;
