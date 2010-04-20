@@ -200,16 +200,6 @@ sub getAll{
     use C4::Modelo::CatAutor::Manager;
     use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
-    C4::AR::Debug::debug("----------------------------------RELATIONSHIPS KEYS DE catAutor: ----------------------------");
-    my %test = $self->meta->relationships;
-    C4::AR::Debug::debug("TEST");
-    C4::AR::Utilidades::printHASH($self->meta->relationships);
-    while ( my ($key, $value) = each(%test) ) {
-          if ($key == "_key_columns"){
-              C4::AR::Utilidades::printHASH($value);
-          }
-    }
-    C4::AR::Debug::debug("----------------------------------FIN RELATIONSHIPS KEYS DE catAutor: ----------------------------");
     my @filtros;
     if ($filtro){
         my @filtros_or;
