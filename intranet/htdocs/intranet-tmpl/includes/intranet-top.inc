@@ -103,7 +103,7 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
       </div>
   </noscript>
   
-  
+  <div style="display: none;" id="ajax-indicator"><span>Cargando...</span></div>
   <div id="menu-container" class="main-header">
   
   [% INCLUDE   'menu.inc'  %]

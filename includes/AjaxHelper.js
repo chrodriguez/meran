@@ -11,13 +11,29 @@
 //Funciones Privadas para manejar el estado del la consulta de AJAX
 
 function _Init(options){
+
     if(options.showStatusIn != ''){
         $('#' + options.showStatusIn).addClass('cargando');
 // //         window.console.log("agrego cargando en " + options.showStatusIn);
     }else{
-        _ShowState(options);
+
+        if(options.showOverlay){
+    
+            $('#ajax-indicator').modal({   
+                    closeHTML:"",
+                    containerCss:{
+                        backgroundColor:"#fff",
+                        height: 50,
+                        padding: 0,
+                        width: 190,
+                        opacity: 50,
+                    },
+            });
+
+        } else {
+            _ShowState(options);
+        }
     }
-//  	_AddDiv();
 }
 
 
@@ -49,6 +65,11 @@ function _HiddeState(options){
     }else{
         $('#state').hide();
     }
+
+    if(options.showOverlay){
+        $.modal.close();
+    }
+
 };
 
 //Esta funcion sirve para centrar un objeto
@@ -91,17 +112,18 @@ jQuery.fn.centerObject = function(options) {
 
 function AjaxHelper(fncUpdateInfo, fncInit){
 
-	this.ini = '';						//para manejar el actual del paginador
-	this.funcion = '';					//nombre de funcion que tiene q conocer el paginador
-	this.url = '';
-	this.orden = '';					//para ordenar los resultados
-	this.debug = false; 				//para debuguear AjaxhHelper
-	this.debugJSON = false;				//para debuguear jsonStringify (JSON)
-	this.onComplete = fncUpdateInfo;  	//se ejecuta cuando se completa el ajax
-	this.onBeforeSend = fncInit;		//se ejecuta antes de consultar al servidor con ajax
-	this.showState = true;
-	this.cache = false; 				//para cachear los resultados
-    this.showStatusIn = '';             //muestra el estado del AJAX en el DIV pasado por parametro
+	this.ini            = '';				//para manejar el actual del paginador
+	this.funcion        = '';				//nombre de funcion que tiene q conocer el paginador
+	this.url            = '';
+	this.orden          = '';				//para ordenar los resultados
+	this.debug          = false; 			//para debuguear AjaxhHelper
+	this.debugJSON      = false;			//para debuguear jsonStringify (JSON)
+	this.onComplete     = fncUpdateInfo;  	//se ejecuta cuando se completa el ajax
+	this.onBeforeSend   = fncInit;		    //se ejecuta antes de consultar al servidor con ajax
+	this.showState      = true;
+	this.cache          = false; 			//para cachear los resultados
+    this.showStatusIn   = '';               //muestra el estado del AJAX en el DIV pasado por parametro
+    this.showOverlay    = false;            //muestra el overlay y bloquea la pantalla luego de hacer una peticion AJAX
 
 
 	this.sendToServer= function(){
@@ -162,7 +184,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 
 						if(helper.showState){
 						//muestra el estado del AJAX
-                            _Init({debug: helper.debug, showStatusIn: helper.showStatusIn});
+                            _Init({debug: helper.debug, showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay});
 						}
 
 						if(helper.onBeforeSend){
@@ -172,7 +194,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 					},
 					complete: function(ajax){
 						//oculta el estado del AJAX
-						_HiddeState({showStatusIn: helper.showStatusIn});
+						_HiddeState({showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay});
 						if(helper.onComplete){
 							if(ajax.responseText == 'CLIENT_REDIRECT'){
                                     window.location = "/cgi-bin/koha/redirectController.pl";
@@ -186,6 +208,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 								//respuesta normal
 								helper.onComplete(ajax.responseText);
 							}
+
 						}
   					} 
 				});
