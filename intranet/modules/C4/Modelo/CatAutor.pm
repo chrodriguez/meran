@@ -213,8 +213,8 @@ sub getAll{
     my @filtros;
     if ($filtro){
         my @filtros_or;
-        push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
-        push(@filtros_or, (apellido => {like => '%'.$filtro.'%'}) );
+        push(@filtros_or, (nombre => {like => $filtro.'%'}) );
+        push(@filtros_or, (apellido => {like => $filtro.'%'}) );
         push(@filtros, (or => \@filtros_or) );
     }
     my $ref_valores;

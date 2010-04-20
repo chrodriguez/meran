@@ -89,7 +89,7 @@ sub search_autores{
 
     my @filtros;
 
-    push(@filtros, ( completo => { like => '%'.$autor.'%'}) );
+    push(@filtros, ( completo => { like => $autor.'%'}) );
     
     my $autores_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor(
 
