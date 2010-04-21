@@ -222,6 +222,7 @@ Se genra la ventana para modificar los datos del usuario
         });
 
         my $nro_socio =$obj->{'nro_socio'};
+        $t_params->{'nro_socio'}= $nro_socio;
         C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
         #Obtenemos los datos del borrower
         my $socio= &C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);

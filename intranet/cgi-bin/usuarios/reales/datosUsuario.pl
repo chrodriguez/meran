@@ -20,7 +20,7 @@ $t_params->{'nro_socio'}= $nro_socio;
 
 my $mensaje=$input->param('mensaje');#Mensaje que viene desde libreDeuda si es que no se puede imprimir
 
-$t_params->{'socio'}= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::AR::Utilidades::redirectAndAdvice('U353');
+$t_params->{'socio_modificar'}= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::AR::Utilidades::redirectAndAdvice('U353');
 
 $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Datos del Usuario");
 
