@@ -117,7 +117,8 @@ sub barcodesPorTipo{
 sub listarItemsDeInventorioSigTop{
     my ($sigtop,$orden) = @_;
 
-    my $cat_nivel3 = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( 
+#     my $cat_nivel3 = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( 
+    my $cat_nivel3 = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
                                                                         query => [ signatura_topografica => { like => $sigtop.'%' } ], 
                                                                         require_objects => ['nivel2','nivel1'],
                                                                         select => ['*'],
@@ -129,8 +130,8 @@ sub listarItemsDeInventorioSigTop{
 
 sub getMaxBarcode {
    my ($branch) = @_;
-   use C4::Modelo::CatNivel3::Manager;
-   my $max = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+   use C4::Modelo::CatRegistroMarcN3::Manager;
+   my $max = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
                                                          select => ['MAX(t1.barcode) as barcode'],
                                                          );
    return ($max->[0]->barcode);
@@ -138,8 +139,8 @@ sub getMaxBarcode {
 
 sub getMinBarcode {
    my ($branch) = @_;
-   use C4::Modelo::CatNivel3::Manager;
-   my $min = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+   use C4::Modelo::CatRegistroMarcN3::Manager;
+   my $min = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
                                                          select => ['MIN(t1.barcode) as barcode'],
                                                          );
    return ($min->[0]->barcode);
@@ -147,8 +148,8 @@ sub getMinBarcode {
 
 sub getMinBarcodeLike {
    my ($branch,$part_barcode) = @_;
-   use C4::Modelo::CatNivel3::Manager;
-   my $min = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+   use C4::Modelo::CatRegistroMarcN3::Manager;
+   my $min = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
                                                          query => [ barcode => { like => $part_barcode } ],
                                                          select => ['MIN(t1.barcode) as barcode'],
                                                          );
@@ -157,8 +158,8 @@ sub getMinBarcodeLike {
 
 sub getMaxBarcodeLike {
    my ($branch,$part_barcode) = @_;
-   use C4::Modelo::CatNivel3::Manager;
-   my $max = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+   use C4::Modelo::CatRegistroMarcN3::Manager;
+   my $max = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
                                                          query => [ barcode => { like => $part_barcode } ],
                                                          select => ['MAX(t1.barcode) as barcode'],
                                                          );
@@ -169,7 +170,7 @@ sub listadoDeInventorio{
 
     my ($params_obj)=@_;
 
-    use C4::Modelo::CatNivel3::Manager;
+    use C4::Modelo::CatRegistroMarcN3::Manager;
     my @filtros;
 
     push (@filtros,(barcode => {eq => $params_obj->{'minBarcode'},
@@ -183,12 +184,12 @@ sub listadoDeInventorio{
     my $inventorio_count = 0;
 
     eval{
-        $inventorio_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count(
+        $inventorio_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(
                                                                         query => \@filtros,
                                                                         require_objects => ['nivel2','nivel1','nivel1.cat_autor'],
                                                                         );
 
-        $inventorio = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+        $inventorio = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
                                                                         query => \@filtros,
                                                                         require_objects => ['nivel2','nivel1','nivel1.cat_autor'],
                                                                         sort_by => ['nivel1.titulo'],
@@ -913,14 +914,14 @@ sub tiposDeItem_reporte{
       my @filtros;
       push (@filtros, ( id_ui_poseedora => { eq => $id_ui}) );
 
-      my $tipos_item = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+      my $tipos_item = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
                                                                         query => \@filtros,  
                                                                         select => ['nivel2.*','COUNT(tipo_documento) AS agregacion_temp'],
                                                                         group_by => ['tipo_documento'],
                                                                         with_objects => ['nivel2'],
 
                                                                      );
-      my $tipos_item_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count(
+      my $tipos_item_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(
                                                                         query => \@filtros,  
                                                                         with_objects => ['nivel2'],
 
@@ -944,7 +945,7 @@ sub reporteNiveles{
 
       push (@filtros, ( id_ui_poseedora => { eq => $id_ui}) );
 
-      my $niveles = C4::Modelo::CatNivel3::Manager->get_cat_nivel3(
+      my $niveles = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
                                                                      query => \@filtros,
                                                                      select => ['*','COUNT(nivel_bibliografico) AS agregacion_temp'],
                                                                      group_by => ['nivel_bibliografico'],
@@ -1479,19 +1480,19 @@ sub listaDeEjemplares {
         push (@filtros,( id_ui_origen => { eq => $params->{'id_ui'}.'%'}));
     }
 
-    my $results_count = C4::Modelo::CatNivel3::Manager->get_cat_nivel3_count( query => \@filtros,
+    my $results_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( query => \@filtros,
                                                                               require_objects => ['nivel2','nivel1'],
                                                                     );
     my $results;
 
     if ($params->{'accion'} ne "pdf"){
-        $results = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( query => \@filtros,
+        $results = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros,
                                                                       limit => $params->{'cantR'},
                                                                       offset => $params->{'ini'},
                                                                       require_objects => ['nivel2','nivel1'],
                                                                      );
     }else{
-        $results = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( query => \@filtros,
+        $results = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros,
                                                                       require_objects => ['nivel2','nivel1'],
                                                                     );
     }

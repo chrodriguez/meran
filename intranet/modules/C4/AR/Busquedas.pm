@@ -1476,8 +1476,11 @@ sub armarInfoNivel1{
 #                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".($nivel1->toMARC)->as_formatted);
         # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
             @result_array_paginado[$i]->{'titulo'}              = $nivel1->getTitulo();
-            @result_array_paginado[$i]->{'nomCompleto'}         = $nivel1->getAutorObject->getCompleto();
-            @result_array_paginado[$i]->{'idAutor'}             = $nivel1->getAutorObject->getId();
+            my $autor_object                                    = $nivel1->getAutorObject();
+#             @result_array_paginado[$i]->{'nomCompleto'}         = $nivel1->getAutorObject->getCompleto();
+#             @result_array_paginado[$i]->{'idAutor'}             = $nivel1->getAutorObject->getId();
+            @result_array_paginado[$i]->{'nomCompleto'}         = $autor_object->getCompleto();
+            @result_array_paginado[$i]->{'idAutor'}             = $autor_object->getId();
             @result_array_paginado[$i]->{'esta_en_favoritos'}   = C4::AR::Nivel1::estaEnFavoritos($nivel1->getId1());
             #aca se procesan solo los ids de nivel 1 que se van a mostrar
             #se generan los grupos para mostrar en el resultado de la consulta
@@ -1492,6 +1495,7 @@ sub armarInfoNivel1{
 #             @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
 #             @result_array_paginado[$i]->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'M');
 #             @result_array_paginado[$i]->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'L');
+# FIXME para que se hace esto por nivel 1 ?????????????????????????????????????????????
             my $images_n1_hash_ref = C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
 # C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
 
@@ -1504,8 +1508,9 @@ sub armarInfoNivel1{
             if (scalar(@$nivel2_array_ref)>1){
                 for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
                     my $hash_nivel2;
+# TODO preguntar al mono pq se busca la imagen por nivel 1 y 2 ??????????????????????????????????????????
 #                     my $images_n2_hash_ref = C4::AR::PortadasRegistros::getAllImageForId2($nivel2_array_ref->[$i]->getId2);
-                    my $images_n2_hash_ref = $nivel2_array_ref->[$i]->getAllImage();
+                    my $images_n2_hash_ref                      = $nivel2_array_ref->[$i]->getAllImage();
 #                     $hash_nivel2->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
 #                     $hash_nivel2->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
 #                     $hash_nivel2->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');

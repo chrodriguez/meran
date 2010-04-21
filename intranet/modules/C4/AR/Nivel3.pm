@@ -103,12 +103,11 @@ sub t_modificarNivel3 {
     my ($params) = @_;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
-    my $msg_object = C4::AR::Mensajes::create();
-
-    my $cat_registro_marc_n3 = C4::Modelo::CatRegistroMarcN3->new();
-    my $marc_record = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
-    my $db = $cat_registro_marc_n3->db;
-    $params->{'modificado'} = 1;
+    my $msg_object              = C4::AR::Mensajes::create();
+    my $cat_registro_marc_n3    = C4::Modelo::CatRegistroMarcN3->new();
+    my $marc_record             = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
+    my $db                      = $cat_registro_marc_n3->db;
+    $params->{'modificado'}     = 1;
     # enable transactions, if possible
     $db->{connect_options}->{AutoCommit} = 0;
     
@@ -119,16 +118,14 @@ sub t_modificarNivel3 {
             C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: ".$cant);
 
             for(my $i=0;$i<$cant;$i++){
-                  my $catNivel3;
-            C4::AR::Debug::debug("t_modificarNivel3 => ID3 a modificar: ".$params->{'ID3_ARRAY'}->[$i]);
+                C4::AR::Debug::debug("t_modificarNivel3 => ID3 a modificar: ".$params->{'ID3_ARRAY'}->[$i]);
 
-            $params->{'id3'} = $params->{'ID3_ARRAY'}->[$i];
-            #verifico las condiciones para actualizar los datos
-            _verificarUpdateItem($msg_object, $params);
+                $params->{'id3'} = $params->{'ID3_ARRAY'}->[$i];
+                #verifico las condiciones para actualizar los datos
+                _verificarUpdateItem($msg_object, $params);
 
                 if(!$msg_object->{'error'}){
                     ($cat_registro_marc_n3) = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i], $db);
-    #                 $db = $catNivel3->db;
                     $params->{'marc_record'} = $marc_record->as_usmarc;
                     $cat_registro_marc_n3->modificar($params, $db);  #si es mas de un ejemplar, a todos les setea la misma info
                     $db->commit;

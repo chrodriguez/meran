@@ -528,10 +528,10 @@ sub _verificarHorario{
 sub getDisponibilidad{
 #Devuelve la disponibilidad del item ('Para Sala', 'Domiciliario')
     my ($id3) = @_;   
-    my  $catNivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
+    my  $cat_registro_marc_n3 = C4::AR::Nivel3::getNivel3FromId3($id3);
 
-    if ($catNivel3){
-        return C4::AR::Referencias::getNombreDisponibilidad($catNivel3->getIdDisponibilidad);
+    if ($cat_registro_marc_n3){
+        return C4::AR::Referencias::getNombreDisponibilidad($cat_registro_marc_n3->getIdDisponibilidad);
     }else{
       return (0);
     }

@@ -249,41 +249,6 @@ sub getCantPrestados{
     return $cantPrestamos_count;
 }
 
-=head2
-    sub getIdByISBN
-    retorna un arreglo de Id1 segun el ISBN pasado por parametro
-=cut
-sub getIdByISBN{
-    my ($isbn) = @_;
-# TODO idem q getByBarcode
-# Miguel - esto se podria hacer con el indice, VUELAAAAAAAAAAAA
-
-#     use C4::Modelo::CatNivel2Repetible;
-#     use C4::Modelo::CatNivel2Repetible::Manager;
-
-    my @filtros;
-    my @cat_registro_marc_n2_array_result;
-
-#     push(@filtros, ( id1    => { eq => $id1}));
-
-    my $cat_registro_marc_n2_array_ref = C4::Modelo::CatNivel2Repetible::Manager->get_cat_registro_marc_n2( query => \@filtros );
-
-    my $cant = scalar(@$cat_registro_marc_n2_array_ref);
-
-    for(my $i=0; $i < $cant; $i++){
-
-        if($cat_registro_marc_n2_array_ref->[$i]->getISBN() eq $isbn){
-            push(@cat_registro_marc_n2_array_result, $cat_registro_marc_n2_array_ref->[$i]->getId1());
-        }
-    }
-
-    if(scalar(@cat_registro_marc_n2_array_result) > 0){
-        return (\@cat_registro_marc_n2_array_result);
-    }else{
-        return (0);
-    }
-}
-
 
 =head2
     sub getISBNById1
@@ -336,12 +301,10 @@ sub t_modificarNivel2 {
     my($params) = @_;
 
 ## FIXME ver si falta verificar algo!!!!!!!!!!
-    my $msg_object= C4::AR::Mensajes::create();
-#     my $id2;
-
-    my  $cat_registro_marc_n2 = C4::Modelo::CatNivel2->new();
-    my  $db = $cat_registro_marc_n2->db;
-    my ($cat_registro_marc_n2) = getNivel2FromId2($params->{'id2'}, $db);
+    my $msg_object                          = C4::AR::Mensajes::create();
+    my $cat_registro_marc_n2                = C4::Modelo::CatRegistroMarcN2->new();
+    my $db                                  = $cat_registro_marc_n2->db;
+    my ($cat_registro_marc_n2)              = getNivel2FromId2($params->{'id2'}, $db);
 
     if(!$cat_registro_marc_n2){
         #Se setea error para el usuario

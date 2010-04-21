@@ -27,21 +27,24 @@ __PACKAGE__->meta->setup(
     [
       nivel1 => 
       {
-        class       => 'C4::Modelo::CatNivel1',
+#         class       => 'C4::Modelo::CatNivel1',
+        class       => 'C4::Modelo::CatRegistroMarcN1',
         key_columns => { id1 => 'id1' },
         type        => 'one to one',
       },
 
       nivel2 => 
       {
-        class       => 'C4::Modelo::CatNivel2',
+#         class       => 'C4::Modelo::CatNivel2',
+        class       => 'C4::Modelo::CatRegistroMarcN2',
         key_columns => { id2 => 'id2' },
         type        => 'one to one',
       },
 
       nivel3 => 
       {
-        class       => 'C4::Modelo::CatNivel3',
+#         class       => 'C4::Modelo::CatNivel3',
+        class       => 'C4::Modelo::CatRegistroMarcN3',
         key_columns => { id3 => 'id3' },
         type        => 'one to one',
       },

@@ -24,7 +24,8 @@ __PACKAGE__->meta->setup(
 
     relationships => [
         nivel3 => {
-            class       => 'C4::Modelo::CatNivel3',
+#             class       => 'C4::Modelo::CatNivel3',
+            class       => 'C4::Modelo::CatRegistroMarcN3',
             key_columns => { id3 => 'id3' },
             type        => 'one to one',
         },
