@@ -215,8 +215,8 @@ $(document).ready(function(){
 	
 	//definido en circulacion.js
 	USUARIO= new objeto_usuario();
-	USUARIO.text= "[% socio.persona.getApeYNom %]";
-    USUARIO.ID= '[% socio.getNro_socio %]';
+	USUARIO.text= "[% socio_modificar.persona.getApeYNom %]";
+    USUARIO.ID= '[% socio_modificar.getNro_socio %]';
 	detalleUsuario();
 
     makeToggle('toggle_container_block','trigger',mostrarHistorialDePrestamos, 'historialPrestamos',true);
