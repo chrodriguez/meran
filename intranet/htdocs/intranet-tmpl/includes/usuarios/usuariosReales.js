@@ -23,13 +23,22 @@ function updateModificarDatosDeUsuario(responseText){
 //se crea el objeto que maneja la ventana para modificar los/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl' datos del usuario
         if (!verificarRespuesta(responseText))
             return(0);
-        vDatosUsuario=new WindowHelper({draggable: false, opacity: true});
-	    vDatosUsuario.debug= true;
-	    vDatosUsuario.html=responseText;
-	    vDatosUsuario.create();	
-	    vDatosUsuario.height('75%');
-	    vDatosUsuario.width('85%');
-	    vDatosUsuario.open();
+//         vDatosUsuario=new WindowHelper({draggable: false, opacity: true});
+// 	    vDatosUsuario.debug= true;
+// 	    vDatosUsuario.html=responseText;
+// 	    vDatosUsuario.create();	
+// 	    vDatosUsuario.height('75%');
+// 	    vDatosUsuario.width('85%');
+// 	    vDatosUsuario.open();
+        $('#basic-modal-content').html(responseText);
+        $('#basic-modal-content').modal({   containerCss:{
+                backgroundColor:"#fff",
+        //         borderColor:"#0063dc",
+                height:420,
+                padding:0,
+                width:900
+            },
+        });
 }
 
 function guardarModificacionUsuario(){
@@ -67,8 +76,8 @@ function guardarModificacionUsuario(){
 function updateGuardarModificacionUsuario(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
-	vDatosUsuario.close();
 	detalleUsuario();
+    $.modal.close();
 }
 
 //*********************************************Fin***Modificar Datos Usuario***************************************
