@@ -527,8 +527,6 @@ sub detalleDisponibilidadNivel3{
             my $prestamo                    = C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'});
             $hash_nivel3{'prestamo'}        = $prestamo;
             $hash_nivel3{'socio'}           = $socio;
-# FIXME hago esto para no tener q usar en el template prestamo.socio.getApeYNom, sino hace muchas consultas a la base
-#             $hash_nivel3{'socio_prestamo_getApeYNom'} = $socio->persona->getApeYNom();
 
             if ($prestamo->estaVencido) {
                 $hash_nivel3{'claseFecha'}  = "fecha_vencida";

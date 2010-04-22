@@ -766,7 +766,8 @@ sub getSocioFromPrestamo {
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                                     query => \@filtros,
-                                                                                    require_objects => ['socio']
+                                                                                    require_objects => ['socio', 'socio.persona'],
+                                                                                    select          => ['socio.*','usr_persona.*']
                                                                                 );
 
     if(scalar(@$prestamos_array_ref) > 0){
