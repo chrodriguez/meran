@@ -356,12 +356,12 @@ sub marc_record_to_intra_view {
     my ($marc_record, $params) = @_;
 
     
-    $params->{'tipo'} = 'INTRA';
+    $params->{'tipo'}           = 'INTRA';
     #obtengo los campo, subcampo que se pueden mostrar
-    my ($marc_record_salida) = filtrarVisualizacion($marc_record, $params);
+    my ($marc_record_salida)    = filtrarVisualizacion($marc_record, $params);
 
     #se procesa el marc_record filtrado
-    my ($MARC_result_array) = marc_record_to_meran($marc_record_salida);
+    my ($MARC_result_array)     = marc_record_to_meran($marc_record_salida);
 
     return $MARC_result_array;
 }
@@ -924,6 +924,7 @@ sub getEstructuraYDatosDeNivel{
                                                                                 $subcampo->{'subcampo'},
                                                                                 $tipo_ejemplar,
                                                         );
+
             
                     if($cat_estruct_array){
 
@@ -1650,7 +1651,6 @@ sub _getEstructuraFromCampoSubCampo{
                                                                                 require_objects => [ 'subCamposBase' ] #INNER JOIN
 
 										);	
-
 
   if(scalar(@$cat_estruct_info_array) > 0){
     return $cat_estruct_info_array->[0];

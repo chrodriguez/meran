@@ -305,9 +305,9 @@ sub estadoDisponible{
 sub esParaSala{
     my ($self) = shift;
 
-    C4::AR::Debug::debug("CatRegistroMarcN3 => getIdDisponibilidad ".$self->getIdDisponibilidad);
-    C4::AR::Debug::debug("CatRegistroMarcN3 => getRefFromStringConArrobas ".C4::AR::Catalogacion::getRefFromStringConArrobas('ref_disponibilidad@1'));
-    C4::AR::Debug::debug("CatRegistroMarcN3 => getNombreDisponibilidad ".C4::AR::Referencias::getNombreDisponibilidad(C4::AR::Catalogacion::getRefFromStringConArrobas('ref_disponibilidad@1')));
+    C4::AR::Debug::debug("CatRegistroMarcN3 => esParaSala => getIdDisponibilidad ".$self->getIdDisponibilidad);
+    C4::AR::Debug::debug("CatRegistroMarcN3 => esParaSala => getRefFromStringConArrobas ".C4::AR::Catalogacion::getRefFromStringConArrobas('ref_disponibilidad@1'));
+    C4::AR::Debug::debug("CatRegistroMarcN3 => esParaSala => getNombreDisponibilidad ".C4::AR::Referencias::getNombreDisponibilidad(C4::AR::Catalogacion::getRefFromStringConArrobas('ref_disponibilidad@1')));
 
     return (C4::AR::Referencias::getNombreDisponibilidad($self->getIdDisponibilidad) eq "Sala de Lectura");
 }

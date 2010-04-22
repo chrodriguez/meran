@@ -145,29 +145,62 @@ sub getTableName{
     createFromAlias (TemplateMethod), nextChain, nextMember (HooksMethods)
 
 =cut
+# sub createFromAlias{
+#     my ($self)=shift;
+#     my $classAlias = shift;
+# 
+#     if ($classAlias eq $self->getAlias){
+#         return ($self);
+#     }else
+#         {
+#             return($self->nextChain($classAlias));
+#         }
+# }
+
+
+# TODO feo pero el tren hace muchas consultas
 sub createFromAlias{
-    my ($self)=shift;
-    my $classAlias = shift;
+    my ($self)      = shift;
+    my $classAlias  = shift;
+    my $class;
 
-    if ($classAlias eq $self->getAlias){
-        return ($self);
-    }else
-        {
-            return($self->nextChain($classAlias));
-        }
-}
 
-sub nextChain{
-    my ($self)=shift;
-    my $classAlias = shift;
-    if ($self->lastTable){
-        return ($self->default);
+    use Switch;
+
+    switch ($classAlias) {
+        case 'autor' { return C4::Modelo::CatAutor->new(); }
+        case 'tipo_ejemplar' {return C4::Modelo::CatRefTipoNivel3->new();}
+        case 'ui' {return C4::Modelo::PrefUnidadInformacion->new();}
+        case 'idioma' {return C4::Modelo::RefIdioma->new();}  
+        case 'pais' {return C4::Modelo::RefPais->new();} 
+        case 'disponibilidad' {return C4::Modelo::RefDisponibilidad->new();}
+        case 'tipo_prestamo' {return C4::Modelo::CircRefTipoPrestamo->new();}
+        case 'soporte' {return C4::Modelo::RefSoporte->new();}
+        case 'nivel_bibliografico' {return C4::Modelo::RefNivelBibliografico->new();}
+        case 'tema' {return C4::Modelo::CatTema->new();}
+        case 'tipo_socio' {return C4::Modelo::UsrRefCategoriaSocio->new();}
+        case 'tipo_documento_usr' {return C4::Modelo::UsrRefTipoDocumento->new();}
+        case 'estado' {return C4::Modelo::RefEstado->new();}
+        case 'ciudad' {return C4::Modelo::RefLocalidad->new();}
+
+
+    else { 
+        print "NO EXISTE LA TABLA DE REFERENCIA ".$classAlias }
     }
-    else
-        {
-            return($self->nextMember->createFromAlias($classAlias));
-        }
 }
+
+# 
+# sub nextChain{
+#     my ($self)=shift;
+#     my $classAlias = shift;
+#     if ($self->lastTable){
+#         return ($self->default);
+#     }
+#     else
+#         {
+#             return($self->nextMember->createFromAlias($classAlias));
+#         }
+# }
 
 
 sub printAsTableElement{

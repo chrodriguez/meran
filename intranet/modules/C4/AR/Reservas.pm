@@ -226,48 +226,6 @@ sub reasignarTodasLasReservasEnEspera{
     }
 }
 
-
-=item
-actualizarDatosReservaEnEspera
-Funcion que actualiza la reserva que estaba esperando por un ejemplar.
-=cut
-# FIXME DEPRECATED
-=item
-sub _actualizarDatosReservaEnEspera{
-    my ($reservaGrupo,$loggedinuser)=@_;
-
-    my $dateformat = C4::Date::get_date_format();
-    my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
-
-#Se agrega actualiza la reserva
-    my ($desde,$fecha,$apertura,$cierre)=C4::Date::proximosHabiles(C4::AR::Preferencias->getValorPreferencia("reserveGroup"),1);
-    $reservaGrupo->setEstado('E');
-    $reservaGrupo->setFecha_reserva($desde);
-    $reservaGrupo->setFecha_notificacion($hoy);
-    $reservaGrupo->setFecha_recordatorio($fecha);
-    $reservaGrupo->save();
-
-# Se agrega una sancion que comienza el dia siguiente al ultimo dia que tiene el usuario para ir a retirar el libro
-    my $err= "Error con la fecha";
-    my $dateformat=C4::Date::get_date_format();
-    my $startdate= C4::Date::DateCalc($fecha,"+ 1 days",\$err);
-    $startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
-    my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
-    my $enddate= C4::Date::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
-    $enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
-    C4::AR::Sanciones::insertSanction(undef, $reservaGrupo->getId ,$reservaGrupo->getNro_socio, $startdate, $enddate, undef);
-
-    my $params;
-    $params->{'cierre'}= $cierre;
-    $params->{'fecha'}= $fecha;
-    $params->{'desde'}= $desde;
-    $params->{'apertura'}= $apertura;
-    $params->{'loggedinuser'}= $loggedinuser;
-    #Se envia una notificacion al usuario avisando que se le asigno una reserva
-    Enviar_Email($reservaGrupo,$params);
-}
-=cut
-
 sub cant_reservas{
 #Cantidad de reservas totales de GRUPO y EJEMPLARES
         my ($nro_socio)=@_;
@@ -293,6 +251,7 @@ sub cantReservasPorGrupo{
         push(@filtros, ( estado => { ne => 'P'} ));
 
         my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
+
         return ($reservas_count);
 }
 

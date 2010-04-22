@@ -1,3 +1,7 @@
+
+
+
+ 
 [% IF cantItems %]
 	[% "Cantidad de Items:"|i18n %] [% cantItems %]<br>
 [% END %]
@@ -66,7 +70,7 @@
                     </span>
                     <p class="usuario_del_prestamo">
                     [% IF prestamo.getNro_socio %]
-                            [% prestamo.socio.persona.getApeYNom %]
+                            [% socio.persona.getApeYNom %]
                     [% END %]
                     </p>
                 </td>
@@ -89,7 +93,6 @@
                       [% IF circularDesdeDetalleDelRegistro %]
                           [% IF disponible %]
                               [% IF paraPrestamo %]
-
                                   [% PERL %]
                                       print C4::AR::Filtros::to_Icon( 
                                           boton   =>  "icon_devolver",

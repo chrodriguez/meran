@@ -427,7 +427,7 @@ sub detalleCompletoINTRA{
 	$t_params->{'id1'}	    = $id1;
 	$t_params->{'nivel2'}   = \@nivel2,
 	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
-	$t_params->{'circularDesdeDetalleDelRegistro'}= C4::AR::Preferencias->getValorPreferencia('circularDesdeDetalleDelRegistro');
+	$t_params->{'circularDesdeDetalleDelRegistro'}  = C4::AR::Preferencias->getValorPreferencia('circularDesdeDetalleDelRegistro');
 }
 
 =head2 sub detalleDisponibilidadNivel3
@@ -441,15 +441,17 @@ sub detalleDisponibilidadNivel3{
     my $nivel3_array_ref                = &C4::AR::Nivel3::getNivel3FromId2($id2);
     my @result;
     my %hash_nivel2;
-    my $i = 0;
+    my $i                               = 0;
     my $cantDisponibles                 = 0;
     my %infoNivel3;
+    my $esParaSala;
     $infoNivel3{'cantParaSala'}         = 0;
     $infoNivel3{'cantParaPrestamo'}     = 0;
     $infoNivel3{'disponibles'}          = 0;
     $infoNivel3{'cantPrestados'}        = C4::AR::Nivel2::getCantPrestados($id2);
     $infoNivel3{'cantReservas'}         = C4::AR::Reservas::cantReservasPorGrupo($id2);
     $infoNivel3{'cantReservasEnEspera'} = C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2);
+
 
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
         my %hash_nivel3;
@@ -463,6 +465,9 @@ sub detalleDisponibilidadNivel3{
         $hash_nivel3{'nivel3_obj'}          = $nivel3_array_ref->[$i]; 
         $hash_nivel3{'id3'}                 = $nivel3_array_ref->[$i]->getId3;
         $hash_nivel3{'paraPrestamo'}        = $nivel3_array_ref->[$i]->estaPrestado;
+        $hash_nivel3{'id_ui_poseedora'}     = $nivel3_array_ref->[$i]->getId_ui_poseedora();
+        $hash_nivel3{'id_ui_origen'}        = $nivel3_array_ref->[$i]->getId_ui_origen();
+        $esParaSala                         = $nivel3_array_ref->[$i]->esParaSala();
 
         my $UI_poseedora_object             = C4::AR::Referencias::getUI_infoObject($hash_nivel3{'id_ui_poseedora'});
 
@@ -475,19 +480,19 @@ sub detalleDisponibilidadNivel3{
         if($UI_origen_object){
             $hash_nivel3{'UI_origen'}       = $UI_origen_object->getNombre();
         }
-    
+
         #ESTADO
         $hash_nivel3{'estado'} = $nivel3_array_ref->[$i]->getEstado;
-        if($nivel3_array_ref->[$i]->estadoDisponible){
+        if($nivel3_array_ref->[$i]->estadoDisponible) {
             #ESTADO DISPONIBLE
             $hash_nivel3{'claseEstado'} = "disponible";
             $cantDisponibles++;
             $hash_nivel3{'disponible'} = 1; # lo marco como disponible
     
-                if(!$nivel3_array_ref->[$i]->esParaSala){
+                if(!$esParaSala){
                     #esta DISPONIBLE y es PARA PRESTAMO
                     $infoNivel3{'cantParaPrestamo'}++;
-                }elsif($nivel3_array_ref->[$i]->esParaSala){
+                }elsif($esParaSala){
                     #es PARA SALA
                     $infoNivel3{'cantParaSala'}++;
                 }
@@ -499,11 +504,11 @@ sub detalleDisponibilidadNivel3{
         }
     
         #DISPONIBILIDAD
-        if(!$nivel3_array_ref->[$i]->esParaSala){
+        if(!$esParaSala){
             #PARA PRESTAMO
             $hash_nivel3{'disponibilidad'}      = "Prestamo";
             $hash_nivel3{'claseDisponibilidad'} = "prestamo";
-        }elsif($nivel3_array_ref->[$i]->esParaSala){
+        }elsif($esParaSala){
             #es PARA SALA
             $hash_nivel3{'disponibilidad'}      = "Sala de Lectura";
             $hash_nivel3{'claseDisponibilidad'} = "salaLectura";
@@ -522,6 +527,8 @@ sub detalleDisponibilidadNivel3{
             my $prestamo                    = C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'});
             $hash_nivel3{'prestamo'}        = $prestamo;
             $hash_nivel3{'socio'}           = $socio;
+# FIXME hago esto para no tener q usar en el template prestamo.socio.getApeYNom, sino hace muchas consultas a la base
+#             $hash_nivel3{'socio_prestamo_getApeYNom'} = $socio->persona->getApeYNom();
 
             if ($prestamo->estaVencido) {
                 $hash_nivel3{'claseFecha'}  = "fecha_vencida";
