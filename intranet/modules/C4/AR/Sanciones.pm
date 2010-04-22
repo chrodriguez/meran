@@ -77,11 +77,13 @@ sub permisoParaPrestamo {
   	my $deudaOsancion= 0; #Se supone que no esta sancionado
   	my $hasta= undef;
   	if (tieneLibroVencido($nro_socio)) {
-    		$deudaOsancion= 1; #Tiene biblos vencidos 
+        $deudaOsancion= 1; #Tiene biblos vencidos 
+        C4::AR::Debug::debug("Sanciones::permisoParaPrestamo => tieneLibroVencido ");
   	}
 	elsif (my $sancion= estaSancionado($nro_socio, $tipo_prestamo)) {
-    		$deudaOsancion= 1; #Tiene una sancion vigente
-    		$hasta= $sancion->getFecha_final;
+        $deudaOsancion= 1; #Tiene una sancion vigente
+        $hasta= $sancion->getFecha_final;
+        C4::AR::Debug::debug("Sanciones::permisoParaPrestamo => estaSancionado ");
   	}
   	return($deudaOsancion, $hasta);
 }

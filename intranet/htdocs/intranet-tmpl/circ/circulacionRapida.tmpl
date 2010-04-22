@@ -29,12 +29,12 @@ function updateVerificarBarcode(responseText){
 
 function obtenerTiposDePrestamos(){
 
-	objAH=new AjaxHelper(updateObtenerTiposDePrestamos);
-	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
-	objAH.nro_socio= NRO_SOCIO_AUTH;
-	objAH.barcode= $('#barcode_hidden').val();
-	objAH.tipoAccion= "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO";
+	objAH               = new AjaxHelper(updateObtenerTiposDePrestamos);
+	objAH.debug         = true;
+	objAH.url           = "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.nro_socio     = NRO_SOCIO_AUTH;
+	objAH.barcode       = $('#barcode_hidden').val();
+	objAH.tipoAccion    = "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO";
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -51,29 +51,32 @@ function updateObtenerTiposDePrestamos(responseText){
 
 function realizarAccionCircRapida(){
 
-	objAH=new AjaxHelper(updateRealizarAccion);
-	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
-	objAH.nro_socio= $('#nro_socio_hidden').val();
-	objAH.barcode= $('#barcode').val();
+	objAH                   = new AjaxHelper(updateRealizarAccion);
+	objAH.debug             = true;
+	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.nro_socio         = $('#nro_socio_hidden').val();
+	objAH.barcode           = $('#barcode').val();
+
 	if($('#operacion').val() == 'devolver'){
-		var prestamos_array=new Array();
-		prestamos_array=  $('#barcode_hidden').val();
-		objAH.datosArray= prestamos_array;
+		var prestamos_array = new Array();
+		prestamos_array     = $('#barcode_hidden').val();
+		objAH.datosArray    = prestamos_array;
 	}
-	objAH.operacion= $('#operacion').val();
-	objAH.tipoPrestamo= $('#comboTipoPrestamo').val();
-	objAH.tipoAccion= "CIRCULACION_RAPIDA";
+
+	objAH.operacion         = $('#operacion').val();
+	objAH.tipoPrestamo      = $('#comboTipoPrestamo').val();
+	objAH.tipoAccion        = "CIRCULACION_RAPIDA";
 	//se envia la consulta
 	objAH.sendToServer();
 }
 
 function updateRealizarAccion(responseText){
 	if(objAH.operacion == 'prestar'){
-		var infoHash= JSONstring.toObject(responseText);
-		var messageArray= infoHash.messages;
-		var ticketsArray= infoHash.tickets;
-		var mensajes= '';
+		var infoHash        = JSONstring.toObject(responseText);
+		var messageArray    = infoHash.messages;
+		var ticketsArray    = infoHash.tickets;
+		var mensajes        = '';
+
 		for(var i=0; i<messageArray.length;i++){
 			imprimirTicket(ticketsArray[i].ticket,i);
 			setMessages(messageArray[i]);
@@ -82,7 +85,7 @@ function updateRealizarAccion(responseText){
 		$('#barcode').flushCache();
 		$('#aceptar').hide();
 	}else{
-		var Messages= JSONstring.toObject(responseText);
+		var Messages        = JSONstring.toObject(responseText);
 		setMessages(Messages);
 		//borro la cache del autocomplete
 		$('#barcodePrestado').flushCache();
@@ -196,11 +199,11 @@ function onCompleteUsuarios(){
 }
 
 function esRegular(NRO_SOCIO_AUTH){
-	objAH=new AjaxHelper(updateEsRegular);
-	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
-	objAH.nro_socio= NRO_SOCIO_AUTH;
-	objAH.tipoAccion= "CIRCULACION_RAPIDA_ES_REGULAR";
+	objAH                   = new AjaxHelper(updateEsRegular);
+	objAH.debug             = true;
+	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.nro_socio         = NRO_SOCIO_AUTH;
+	objAH.tipoAccion        = "CIRCULACION_RAPIDA_ES_REGULAR";
 	//se envia la consulta
 	objAH.sendToServer();
 }
