@@ -81,7 +81,7 @@ sub permisoParaPrestamo {
   	if (tieneLibroVencido($nro_socio)) {
         $deudaOsancion  = 1; #Tiene biblos vencidos 
         C4::AR::Debug::debug("Sanciones::permisoParaPrestamo => tieneLibroVencido ");
-        $cod_error      = 'S202';
+        $cod_error      = 'S204';
   	}
 	elsif (my $sancion = estaSancionado($nro_socio, $tipo_prestamo)) {
         $deudaOsancion  = 1; #Tiene una sancion vigente
