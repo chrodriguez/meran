@@ -63,6 +63,7 @@ my %mensajesOPAC = (
     'P120' => 'Disculpe, no se pudo renovar el pr&eacute;stamo, el grupo posee reservas.',
 	'S200' => 'Disculpe, no puede efectuar reservas porque usted esta sancionado hasta el *?*',
 	'S201' => 'Disculpe, no puede efectuar reservas porque usted tiene una posible sanci&oacute;n pendiente.',
+    'S202' => 'Disculpe, no puede efectuar el pr&eacute;stamo porque el usuario tiene un libro vencido.',
 	'U300' => 'Disculpe, no puede efectuar reservas porque usted no es un alumno regular.',
 	'U301' => 'Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.',
 	'U302' => 'El libro que acaba de reservar deber&aacute; ser retirado desde el d&iacute;a  *?* a las *?* hasta el d&iacute;a: *?* hasta las *?*',

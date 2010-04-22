@@ -769,11 +769,11 @@ sub _verificaciones {
     }
 
 #Se verfica si el usuario esta sancionado
-    my ($sancionado,$fechaFin)= C4::AR::Sanciones::permisoParaPrestamo($nro_socio, $tipo_prestamo);
+    my ($sancionado, $fechaFin, $cod_error) = C4::AR::Sanciones::permisoParaPrestamo($nro_socio, $tipo_prestamo);
     C4::AR::Debug::debug("Reservas.pm => _verificaciones => sancionado: $sancionado ------ fechaFin: $fechaFin\n");
     if( !($msg_object->{'error'}) && ($sancionado||$fechaFin) ){
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'S200', 'params' => [C4::Date::format_date($fechaFin,$dateformat)]} ) ;
+        $msg_object->{'error'}  = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  $cod_error, 'params' => [C4::Date::format_date($fechaFin, $dateformat)]} ) ;
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de sanciones");
     }
 

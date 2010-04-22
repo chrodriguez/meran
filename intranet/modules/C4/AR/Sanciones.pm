@@ -72,20 +72,25 @@ sub tieneSancionPendiente {
 
 sub permisoParaPrestamo {
 #Esta funcion retorna un par donde el primer parametro indica si el usuario puede realizar una reserva o se le puede realizar un prestamo y el segundo indica en caso de estar sancionado la fecha en la que la sancion finaliza
-  	my ($nro_socio, $tipo_prestamo)=@_;
+  	my ($nro_socio, $tipo_prestamo) = @_;
 
-  	my $deudaOsancion= 0; #Se supone que no esta sancionado
-  	my $hasta= undef;
+  	my $deudaOsancion   = 0; #Se supone que no esta sancionado
+  	my $hasta           = undef;
+    my $cod_error;
+
   	if (tieneLibroVencido($nro_socio)) {
-        $deudaOsancion= 1; #Tiene biblos vencidos 
+        $deudaOsancion  = 1; #Tiene biblos vencidos 
         C4::AR::Debug::debug("Sanciones::permisoParaPrestamo => tieneLibroVencido ");
+        $cod_error      = 'S201';
   	}
-	elsif (my $sancion= estaSancionado($nro_socio, $tipo_prestamo)) {
-        $deudaOsancion= 1; #Tiene una sancion vigente
-        $hasta= $sancion->getFecha_final;
+	elsif (my $sancion = estaSancionado($nro_socio, $tipo_prestamo)) {
+        $deudaOsancion  = 1; #Tiene una sancion vigente
+        $hasta          = $sancion->getFecha_final;
+        $cod_error      = 'S202';
         C4::AR::Debug::debug("Sanciones::permisoParaPrestamo => estaSancionado ");
   	}
-  	return($deudaOsancion, $hasta);
+
+  	return($deudaOsancion, $hasta, $cod_error);
 }
 
 
