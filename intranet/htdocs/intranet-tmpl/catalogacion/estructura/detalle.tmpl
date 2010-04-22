@@ -107,15 +107,16 @@ function buscarUsuario(id2, id3){
 
 function updateBuscarUsuario(responseText){
 
-	vBuscarUsuario=new WindowHelper({draggable: true, opacity: true});
-	vBuscarUsuario.debug= true;
-	vBuscarUsuario.html=responseText;
-	vBuscarUsuario.create();	
-	vBuscarUsuario.titulo= 'Buscar Usuario';
-	vBuscarUsuario.height('30%');
-	vBuscarUsuario.width('40%');
-	vBuscarUsuario.focus= 'campoUsuario';
-	vBuscarUsuario.open();
+    $('#basic-modal-content').html(responseText);
+    $('#basic-modal-content').modal({   containerCss:{
+            backgroundColor:"#fff",
+    //         borderColor:"#0063dc",
+            height:200,
+            padding:0,
+            width:600
+        },
+    });
+
 }
 
 /*=============================================================FIN====REVISADO================================================================*/
@@ -247,7 +248,7 @@ function confirmarPrestamo(){
 		objAH.nro_socio= USUARIO.ID;
 		//se envia la consulta
 		objAH.sendToServer();
-		vBuscarUsuario.close();
+		$.modal.close();
 	}else{
 		jAlert(INGRESE_EL_USUARIO);
 		$('#campoUsuario').focus();
@@ -401,4 +402,5 @@ $(document).ready(function(){
 [% END %]<!-- END FOREACH Nivel 2-->
 
 </div> <!-- Fin DIV detalleComun -->
+<div id='basic-modal-content'></div>
 [% INCLUDE  "intranet-bottom.inc" %]
