@@ -31,23 +31,23 @@ use vars qw(@EXPORT @ISA);
 	   	&deletePhoto
 	);
 
-my $picturesDir= C4::Context->config("picturesdir");
+my $picturesDir = C4::Context->config("picturesdir");
 
 sub uploadPhoto{
+	my ($bornum, $filepath) = @_;
 
-	my ($bornum,$filepath)=@_;
-	my $msg='';
-	my $bytes_read;
-	my $size= 0;
-	my $msg_object= C4::AR::Mensajes::create();
+    my $bytes_read; 
+	my $msg                     = '';
+    my $size                    = 0;
+    my $msg_object              = C4::AR::Mensajes::create();
+	my @extensiones_permitidas  = ("bmp","jpg","gif","png");
+	my @nombreYextension        = split('\.',$filepath);
 
-	my @extensiones_permitidas=("bmp","jpg","gif","png");
-	my @nombreYextension=split('\.',$filepath);
 	if (scalar(@nombreYextension)==2) { 
 	# verifica que el nombre del archivo tenga el punto (.)
-		my $ext= @nombreYextension[1];
-		my $buff='';
-		my $write_file= $picturesDir."/".$bornum.".".$ext;
+		my $ext         = @nombreYextension[1];
+		my $buff        = '';
+		my $write_file  = $picturesDir."/".$bornum.".".$ext;
 	
 		if (!grep(/$ext/i,@extensiones_permitidas)) {
 			$msg_object->{'error'}= 1;
@@ -85,11 +85,12 @@ sub uploadPhoto{
 }
 
 sub deletePhoto{
-
-	my ($foto_name)=@_;
-	my $msg_object= C4::AR::Mensajes::create();
+	my ($foto_name) = @_;
+# TODO falta verificar permisos
+	my $msg_object  = C4::AR::Mensajes::create();
 	
 # 	if (open(PHOTO,">>".$picturesDir.'/'.$foto_name)){
+C4::AR::Debug::debug("UploadFile => deletePhoto => ".C4::AR::Utilidades::trim($picturesDir."/".$foto_name));
 	if (unlink(C4::AR::Utilidades::trim($picturesDir."/".$foto_name))) { 
 		$msg_object->{'error'}= 0;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U344', 'params' => []} ) ;	

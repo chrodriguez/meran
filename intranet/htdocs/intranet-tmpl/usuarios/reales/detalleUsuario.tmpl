@@ -1,7 +1,14 @@
-<script src="/includes/jquery/jquery.jeditable.js"></script>
+<!--<script src="/includes/jquery/jquery.jeditable.js"></script>-->
 <script type="text/javascript">
     $(document).ready(function(){
         makeToggle('toggle_container','trigger',null,true);
+        createFileUploader();
+    
+        [% IF !foto_name %] 
+            $('#div_uploader').show();
+        [% ELSE %]
+            $('#div_boton_eliminar_foto').show();
+        [% END %]
     });
 </script>
 
@@ -12,14 +19,14 @@
           <fieldset>
             <legend class="titulo_legend_resaltado">[% 'Datos Esenciales' | i18n %]</legend>
                 <ul class="listado_sin_margen">
-                  [% IF foto_name %]
-                  <li> 
+                <li id="foto"> 
+                  [% IF foto_name %]  
                       <img width="96px" height="96px" border="0" src="[% themelang %]/pictures/[% foto_name %]" 
                             alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
                             title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
                       >
-                  </li>
                   [% END %]
+                </li>
                 <li> [% "Apellido:" | i18n %]<strong> [% socio.persona.getApellido %]</strong> </li>
                 <li> [% "Nombre:" | i18n %]<strong> [% socio.persona.getNombre %]</strong> </li>
                 <li> [% "Documento:" | i18n %]<strong> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</strong></li>
@@ -89,8 +96,8 @@
 
 <div class="columna_der" >
           <fieldset  class="accionesUsuarios" style="clear:none" >
-                <legend class="titulo_legend_resaltado">[% 'Acciones' | i18n %]</legend>
-                    <ul class = "listaMenuBotones" >
+                <legend class ="titulo_legend_resaltado">[% 'Acciones' | i18n %]</legend>
+                    <ul class ="listaMenuBotones" >
                         <li>
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar Datos' | i18n %]",
@@ -190,7 +197,8 @@
                                 <font color="red">[% mensaje_error_foto %]</font>
                         </li>
                       [% END %]
-                        [% IF foto_name %]
+
+                       <div id="div_boton_eliminar_foto" style="display: none">
                           <li>
                                 [% PERL %]
                                             print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Foto' | i18n %]",
@@ -199,11 +207,12 @@
                                                     ) ;
                                 [% END %]
                           </li>
-                        [% ELSE %]
-                        <li>
-                            <div id="uploader"></div>
-                        </li>
-                        [% END %]
+                        </div>
+                        <div id="div_uploader" style="display: none">
+                            <li>
+                                <div id="uploader"></div>
+                            </li>
+                        </div>
                     </ul>
                 </fieldset>
               </div><!--columna_der -->

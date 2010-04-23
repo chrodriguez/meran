@@ -5,20 +5,21 @@ use C4::AR::UploadFile;
 use C4::Auth;
 use JSON;
 
-my $query=new CGI;
-my $bornum= $query->param('nro_socio');
-my $filepath= $query->param('picture');
+my $query       = new CGI;
+my $nro_socio   = $query->param('nro_socio');
+my $filepath    = $query->param('picture');
 
-# my ($userid, $session, $flags) = checkauth( $input, 
-#                                             $authnotrequired,
-#                                             {   ui => 'ANY', 
-#                                                 tipo_documento => 'ANY', 
-#                                                 accion => 'CONSULTA', 
-#                                                 entorno => 'usuarios'},
-#                                             "intranet"
-#                                 );
+my ($loggedinuser, $session, $flags) = checkauth( 
+                                                        $input, 
+                                                        $authnotrequired,
+                                                        {   ui              => 'ANY', 
+                                                            tipo_documento  => 'ANY', 
+                                                            accion          => 'MODIFICACION', 
+                                                            entorno         => 'usuarios'},
+                                                            "intranet"
+                        );  
 
-my ($error,$codMsg,$message)= &C4::AR::UploadFile::uploadPhoto($bornum,$filepath);
+my ($error,$codMsg,$message) = &C4::AR::UploadFile::uploadPhoto($nro_socio, $filepath);
 
 
 my %infoOperacion = (
@@ -27,7 +28,7 @@ my %infoOperacion = (
         message => $message,
 );
 
-my $infoOperacionJSON=to_json \%infoOperacion;
+my $infoOperacionJSON = to_json \%infoOperacion;
 
 print $query->header;
 # print $infoOperacionJSON;

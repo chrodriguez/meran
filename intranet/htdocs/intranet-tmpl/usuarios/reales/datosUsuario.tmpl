@@ -96,10 +96,10 @@ function updateInfoCancelacion(responseText){
 }
 
 function detalleUsuario(){
-	objAH=new AjaxHelper(updateDetalleUsuario);
-	objAH.url='/cgi-bin/koha/usuarios/reales/detalleUsuario.pl';
-	objAH.debug= true;
-	objAH.nro_socio= USUARIO.ID;
+	objAH               = new AjaxHelper(updateDetalleUsuario);
+	objAH.url           = '/cgi-bin/koha/usuarios/reales/detalleUsuario.pl';
+	objAH.debug         = true;
+	objAH.nro_socio     = USUARIO.ID;
 	objAH.sendToServer();
 }
 
@@ -107,7 +107,6 @@ function updateDetalleUsuario(responseText){
     if (!verificarRespuesta(responseText))
             return(0);
     $('#detalleUsuario').html(responseText);
-    createFileUploader();
     detalleReservas(USUARIO.ID);
 }
 
@@ -124,13 +123,23 @@ function updatePrestamosInterBibliotecarios(responseText){
 //se crea el objeto que maneja la ventana para modificar los datos del usuario
     if (!verificarRespuesta(responseText))
         return(0);
-    vPrestamoInterBibliotecario=new WindowHelper({draggable: true, opacity: true});
-    vPrestamoInterBibliotecario.html=responseText;
-    vPrestamoInterBibliotecario.titulo= PRESTAMO_INTER_BIBLIO;
-    vPrestamoInterBibliotecario.create();
-    vPrestamoInterBibliotecario.height('420px');
-    vPrestamoInterBibliotecario.width('650px');
-    vPrestamoInterBibliotecario.open();
+//     vPrestamoInterBibliotecario=new WindowHelper({draggable: true, opacity: true});
+//     vPrestamoInterBibliotecario.html=responseText;
+//     vPrestamoInterBibliotecario.titulo= PRESTAMO_INTER_BIBLIO;
+//     vPrestamoInterBibliotecario.create();
+//     vPrestamoInterBibliotecario.height('420px');
+//     vPrestamoInterBibliotecario.width('650px');
+//     vPrestamoInterBibliotecario.open();
+
+    $('#basic-modal-content').html(responseText);
+    $('#basic-modal-content').modal({   containerCss:{
+            backgroundColor:"#fff",
+    //         borderColor:"#0063dc",
+            height:420,
+            padding:0,
+            width:650
+        },
+    });
 }
 
 function createFileUploader(){
@@ -143,11 +152,18 @@ function createFileUploader(){
 						ajaxFile: "uploadPicture.pl",
 						nro_socio: USUARIO.ID,
 						funcionOnComplete: function (){
-									detalleUsuario(USUARIO.ID);
+                                    onCompleteFileUpload(USUARIO.ID);
 								}
 		});
 
 	}
+}
+
+function onCompleteFileUpload(){
+    $('#foto').html("<img border='0' width='96px' height='96px' title='" + USUARIO.text + "(" + USUARIO.ID + ")' alt='" + USUARIO.text + "(" + USUARIO.ID + ")' src='[% themelang %]/pictures/" + USUARIO.ID + ".jpg'>");
+    $('#div_uploader').hide();
+    $('#fake_file').val('');
+    $('#div_boton_eliminar_foto').show();
 }
 
 function detallePrestamos(socio){
@@ -214,15 +230,12 @@ function updateDetalleSanciones(responseText){
 $(document).ready(function(){
 	
 	//definido en circulacion.js
-	USUARIO= new objeto_usuario();
-	USUARIO.text= "[% socio_modificar.persona.getApeYNom %]";
-    USUARIO.ID= '[% socio_modificar.getNro_socio %]';
+	USUARIO         = new objeto_usuario();
+	USUARIO.text    = "[% socio_modificar.persona.getApeYNom %]";
+    USUARIO.ID      = '[% socio_modificar.getNro_socio %]';
 	detalleUsuario();
 
     makeToggle('toggle_container_block','trigger',mostrarHistorialDePrestamos, 'historialPrestamos',true);
-
-//     makeNudge('trigger');
-
 });
 
 </script>

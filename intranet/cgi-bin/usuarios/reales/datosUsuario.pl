@@ -15,17 +15,17 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
     });
 
 
-my $nro_socio= $input->param('nro_socio');
-$t_params->{'nro_socio'}= $nro_socio;
+my $nro_socio                   = $input->param('nro_socio');
+my $mensaje                     = $input->param('mensaje');#Mensaje que viene desde libreDeuda si es que no se puede imprimir
+my $mensaje_desde_pdf           = $input->param('mensaje');
 
-my $mensaje=$input->param('mensaje');#Mensaje que viene desde libreDeuda si es que no se puede imprimir
+$t_params->{'nro_socio'}        = $nro_socio;
+$t_params->{'socio_modificar'}  = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::AR::Utilidades::redirectAndAdvice('U353');
+$t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Datos del Usuario");
 
-$t_params->{'socio_modificar'}= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::AR::Utilidades::redirectAndAdvice('U353');
 
-$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Datos del Usuario");
-
-my $mensaje_desde_pdf = $input->param('mensaje');
 if ($mensaje_desde_pdf){
     $t_params->{'mensaje'} = $mensaje_desde_pdf;
 }
+
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -956,17 +956,18 @@ sub setLocale{
 
 
 sub tieneFoto{
-    my ($self) = shift;
-    my $picturesDir= C4::Context->config("picturesdir");
+    my ($self)      = shift;
+    my $picturesDir = C4::Context->config("picturesdir");
     my $foto;
-    
+  
+# TODO si hay dos fotos con el mismo patron ej. 26320.jpg   26320.jpg.old las concatena
     if (opendir(DIR, $picturesDir)) {
-        my $pattern= $self->getNro_socio."[.].";
-        my @file = grep { /$pattern/ } readdir(DIR);
-        $foto= join("",@file);
+        my $pattern = $self->getNro_socio."[.].";
+        my @file    = grep { /$pattern/ } readdir(DIR);
+        $foto       = join("",@file);
         closedir DIR;
     } else {
-            $foto= 0;
+        $foto = 0;
     }
     return $foto;
 }

@@ -263,12 +263,12 @@ Se genra la ventana para modificar los datos del usuario
                                                                 "intranet"
                                 );  
 
-        my $foto_name= $obj->{'foto_name'};
+        my $foto_name           = $obj->{'foto_name'};
 
         C4::AR::Validator::validateParams('U389',$obj,['foto_name'] );
 
-        my ($Message_arrayref)= &C4::AR::UploadFile::deletePhoto($foto_name);
-        my $infoOperacionJSON=to_json $Message_arrayref;
+        my ($Message_arrayref)  = &C4::AR::UploadFile::deletePhoto($foto_name);
+        my $infoOperacionJSON   = to_json $Message_arrayref;
 
         C4::Auth::print_header($session);
         print $infoOperacionJSON;
