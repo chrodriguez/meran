@@ -36,6 +36,7 @@ my $picturesDir = C4::Context->config("picturesdir");
 sub uploadPhoto{
 	my ($bornum, $filepath) = @_;
 
+    C4::AR::Debug::debug("UploadFile => uploadPhoto");    
     my $bytes_read; 
 	my $msg                     = '';
     my $size                    = 0;
@@ -51,13 +52,15 @@ sub uploadPhoto{
 	
 		if (!grep(/$ext/i,@extensiones_permitidas)) {
 			$msg_object->{'error'}= 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U341', 'params' => []} ) ;	
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U341', 'params' => []} ) ;
+            C4::AR::Debug::debug("UploadFile => uploadPhoto => error U341");	
 		} else 
 		{
 	
 			if (!(open(WFD,">$write_file"))) {
 				$msg_object->{'error'}= 1;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U342', 'params' => []} ) ;	
+                C4::AR::Debug::debug("UploadFile => uploadPhoto => error U342");    
 			}
 			else	
 			{
@@ -74,11 +77,13 @@ sub uploadPhoto{
                     close(FH);
 				$msg_object->{'error'}= 0;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U340', 'params' => []} ) ;	
+                C4::AR::Debug::debug("UploadFile => uploadPhoto => error U340");    
 			}
 		}
 	} else {
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U343', 'params' => []} ) ;	
+        C4::AR::Debug::debug("UploadFile => uploadPhoto => error U343");    
 	}
 
 	return ($msg_object);

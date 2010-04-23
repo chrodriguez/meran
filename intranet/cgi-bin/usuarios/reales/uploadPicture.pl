@@ -8,9 +8,10 @@ use JSON;
 my $query       = new CGI;
 my $nro_socio   = $query->param('nro_socio');
 my $filepath    = $query->param('picture');
+my $authnotrequired = 0;
 
 my ($loggedinuser, $session, $flags) = checkauth( 
-                                                        $input, 
+                                                        $query, 
                                                         $authnotrequired,
                                                         {   ui              => 'ANY', 
                                                             tipo_documento  => 'ANY', 
@@ -19,6 +20,7 @@ my ($loggedinuser, $session, $flags) = checkauth(
                                                             "intranet"
                         );  
 
+C4::AR::Debug::debug("uploadPicture.pl");
 my ($error,$codMsg,$message) = &C4::AR::UploadFile::uploadPhoto($nro_socio, $filepath);
 
 
