@@ -200,7 +200,8 @@ sub generarComboTemasOPAC{
 
 
 sub generarComboTemasINTRA{
-    my ($nro_socio) = @_;
+#     my ($nro_socio) = @_;
+
     my (@label,@values);
     my $temas = C4::AR::Preferencias::getPreferenciasByCategoria("temas_intra");
     my %labels;
@@ -210,15 +211,18 @@ sub generarComboTemasINTRA{
         push (@values,$pref->getValue());
         $labels{$pref->getValue()} = $pref->getValue();
     }
-    
-    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::Modelo::UsrSocio->new();
+  
+#     FIXME llama a al socio, la info esta ahora en la session  
+#     my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::Modelo::UsrSocio->new();
+    my ($session) = CGI::Session->load();
 
-    $options_hash{'values'}= \@values;
-    $options_hash{'labels'}=\%labels;
-    $options_hash{'defaults'}= $socio->getThemeINTRA() || 'default';
-    $options_hash{'size'}= 1;
-    $options_hash{'name'}= 'temas_intra';
-    $options_hash{'id'}= 'temas_intra';
+    $options_hash{'values'}     = \@values;
+    $options_hash{'labels'}     = \%labels;
+#     $options_hash{'defaults'}   = $socio->getThemeINTRA() || 'default';
+    $options_hash{'defaults'}   = $session->param('usr_theme_intra') || 'default';
+    $options_hash{'size'}       = 1;
+    $options_hash{'name'}       = 'temas_intra';
+    $options_hash{'id'}         = 'temas_intra';
 
     my $select = CGI::scrolling_list(\%options_hash);
 
@@ -227,8 +231,8 @@ sub generarComboTemasINTRA{
 }
 
 sub generarComboDeCredentials{
-
     my ($params) = @_;
+
     my @select_credentials;
     my %select_credentials;
 
@@ -238,19 +242,23 @@ sub generarComboDeCredentials{
     $select_credentials{'estudiante'} = 'estudiante';
     $select_credentials{'librarian'} = 'librarian';
     $select_credentials{'superLibrarian'} = 'superLibrarian';
-    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
+# FIXME se llama al socio,ahora la info esta en la sesion
+#     my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
 
-    my $default_credential = 'estudiante';
-    if ($socio){
-        $default_credential = $socio->getCredentialType;
-    }
+    my ($session) = CGI::Session->load();
+#     my $default_credential = 'estudiante';
 
-    my $CGIregular=CGI::scrolling_list(     -name      => 'credential',
-                                            -id        => 'credential',
-                                            -values    => \@select_credentials,
-                                            -defaults  => $default_credential,
-                                            -labels    => \%select_credentials,
-                                            -size      => 1,
+#     if ($socio){
+#         $default_credential = $socio->getCredentialType;
+        my $default_credential = $session->param('usr_credential_type')||'estudiante';
+#     }
+
+    my $CGIregular = CGI::scrolling_list(       -name      => 'credential',
+                                                -id        => 'credential',
+                                                -values    => \@select_credentials,
+                                                -defaults  => $default_credential,
+                                                -labels    => \%select_credentials,
+                                                -size      => 1,
                                       );
     return ($CGIregular);
 }
@@ -1679,11 +1687,11 @@ sub generarComboDeDisponibilidad{
 
 #GENERA EL COMBO CON LAS CATEGORIAS, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboCategoriasDeSocio{
-
     my ($params) = @_;
+
     my @select_categorias_array;
     my %select_categorias_hash;
-    my ($categorias_array_ref)= &C4::AR::Referencias::obtenerCategoriaDeSocio();
+    my ($categorias_array_ref)  = &C4::AR::Referencias::obtenerCategoriaDeSocio();
 
     foreach my $categoria (@$categorias_array_ref) {
         push(@select_categorias_array, $categoria->getCategory_code);
@@ -1693,27 +1701,27 @@ sub generarComboCategoriasDeSocio{
     my %options_hash; 
 
     if ( $params->{'onChange'} ){
-        $options_hash{'onChange'}= $params->{'onChange'};
+        $options_hash{'onChange'}   = $params->{'onChange'};
     }
     if ( $params->{'onFocus'} ){
-        $options_hash{'onFocus'}= $params->{'onFocus'};
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
     if ( $params->{'onBlur'} ){
-        $options_hash{'onBlur'}= $params->{'onBlur'};
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
-    $options_hash{'name'}= $params->{'name'}||'categoria_socio_id';
-    $options_hash{'id'}= $params->{'id'}||'categoria_socio_id';
-    $options_hash{'size'}=  $params->{'size'}||1;
-    $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultCategoriaSocio");
+    $options_hash{'name'}       = $params->{'name'}||'categoria_socio_id';
+    $options_hash{'id'}         = $params->{'id'}||'categoria_socio_id';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultCategoriaSocio");
 
     push (@select_categorias_array, '');
     $select_categorias_hash{''} = "SIN SELECCIONAR";
-    $options_hash{'values'}= \@select_categorias_array;
-    $options_hash{'labels'}= \%select_categorias_hash;
+    $options_hash{'values'}     = \@select_categorias_array;
+    $options_hash{'labels'}     = \%select_categorias_hash;
 
-    my $comboDeCategorias= CGI::scrolling_list(\%options_hash);
+    my $comboDeCategorias       = CGI::scrolling_list(\%options_hash);
 
     return $comboDeCategorias;
 }
@@ -1721,7 +1729,7 @@ sub generarComboCategoriasDeSocio{
 #GENERA EL COMBO CON LOS DOCUMENTOS, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboTipoDeDoc{
 
-    my ($params)=@_;
+    my ($params) = @_;
 
     my @select_docs_array;
     my %select_docs;

@@ -617,16 +617,16 @@ sub getSocioInfo {
     Este funcion devuelve la informacion del usuario segun un nro_socio
 =cut
 sub getSocioInfoPorNroSocio {
-    my ($nro_socio)= @_;
+    my ($nro_socio) = @_;
 
     if ($nro_socio){
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
-                                                                  query => [ nro_socio => { eq => $nro_socio } ],
-                                                                  require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
-                                                                                      'persona.documento'],
-                                                                  with_objects => ['persona.alt_ciudad_ref'],
-                                                                  select       => ['persona.*','usr_socio.*','estado.*'],
-                                                                            );
+                                                    query => [ nro_socio => { eq => $nro_socio } ],
+                                                    require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                                        'persona.documento'],
+                                                    with_objects => ['persona.alt_ciudad_ref'],
+                                                    select       => ['persona.*','usr_socio.*','estado.*','ref_localidad.*'],
+                                        );
 
         if($socio_array_ref){
             return ($socio_array_ref->[0]);

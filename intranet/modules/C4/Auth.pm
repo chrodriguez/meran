@@ -296,8 +296,6 @@ sub get_template_and_user {
 
 	if ( $session->param('userid') ) {
         $params->{'loggedinuser'}       = $session->param('userid');
-# 		$nro_socio                      = $session->param('userid');
-#         $params->{'nro_socio'}          = $nro_socio;
         $params->{'nro_socio'}          = $session->param('userid');
 
         if (!$socio) {
@@ -334,7 +332,7 @@ sub get_template_and_user {
     #se cargan todas las variables de entorno de las preferencias del sistema
     $params->{'limite_resultados_autocompletables'} = C4::AR::Preferencias->getValorPreferencia("limite_resultados_autocompletables");
 
-	return ($template, $session, $params);
+	return ($template, $session, $params, $socio);
 }
 
 
@@ -732,6 +730,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
             $session->param('usr_alt_telefono', $socio->persona->getAlt_telefono());
             $session->param('usr_email', $socio->persona->getEmail());
             $session->param('usr_legajo', $socio->persona->getLegajo());
+            $session->param('usr_credential_type', $socio->getCredentialType());
 
             #Si se logueo correctamente en intranet entonces guardo la fecha
             my $today = Date::Manip::ParseDate("today");

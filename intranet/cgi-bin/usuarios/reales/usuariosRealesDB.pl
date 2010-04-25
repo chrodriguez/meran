@@ -212,41 +212,41 @@ Se genra la ventana para modificar los datos del usuario
 =cut
     elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 
-        my ($template, $session, $t_params) = get_template_and_user({
-                                        template_name => "usuarios/reales/agregarUsuario.tmpl",
-                                        query => $input,
-                                        type => "intranet",
+        my ($template, $session, $t_params, $socio) = get_template_and_user({
+                                        template_name   => "usuarios/reales/agregarUsuario.tmpl",
+                                        query           => $input,
+                                        type            => "intranet",
                                         authnotrequired => 0,
-                                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICACION', entorno => 'usuarios'},
-                                        debug => 1,
+                                        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICACION', entorno => 'usuarios'},
+                                        debug           => 1,
         });
 
-        my $nro_socio =$obj->{'nro_socio'};
-        $t_params->{'nro_socio'}= $nro_socio;
+        my $nro_socio                   = $obj->{'nro_socio'};
+        $t_params->{'nro_socio'}        = $nro_socio;
         C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
         #Obtenemos los datos del borrower
-        my $socio= &C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+#         my $socio                       = &C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
         #SI NO EXISTE EL SOCIO IMPRIME 0, PARA INFORMAR AL CLIENTE QUE ACCION REALIZAR
         C4::AR::Validator::validateObjectInstance($socio);
         my %params;
-        $params{'default'}= $socio->getCod_categoria;
+        $params{'default'}              = $socio->getCod_categoria;
         #se genera el combo de categorias de usuario
-        my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
+        my $comboDeCategorias           = &C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
 
-        $params{'default'}= $socio->persona->getTipo_documento;
+        $params{'default'}              = $socio->persona->getTipo_documento;
         #se genera el combo de tipos de documento
-        my $comboDeTipoDeDoc= &C4::AR::Utilidades::generarComboTipoDeDoc(\%params);
+        my $comboDeTipoDeDoc            = &C4::AR::Utilidades::generarComboTipoDeDoc(\%params);
         #se genera el combo de las bibliotecas
-        my $comboDeUI= &C4::AR::Utilidades::generarComboUI(\%params);
+        my $comboDeUI                   = &C4::AR::Utilidades::generarComboUI(\%params);
 
-        $t_params->{'socio_modificar'}= $socio;
-        my $comboDeCredentials= &C4::AR::Utilidades::generarComboDeCredentials($t_params);
-        $t_params->{'combo_temas'} = C4::AR::Utilidades::generarComboTemasINTRA($nro_socio);
-        $t_params->{'comboDeCredentials'}= $comboDeCredentials;
-        $t_params->{'combo_tipo_documento'}= $comboDeTipoDeDoc;
-        $t_params->{'comboDeCategorias'}= $comboDeCategorias;
-        $t_params->{'comboDeUI'}= $comboDeUI;
-        $t_params->{'addBorrower'}= 0;
+        $t_params->{'socio_modificar'}  = $socio;
+        my $comboDeCredentials          = &C4::AR::Utilidades::generarComboDeCredentials($t_params); #llama a getSocioInfoPorNroSocio
+        $t_params->{'combo_temas'}      = C4::AR::Utilidades::generarComboTemasINTRA($nro_socio); #llama a getSocioInfoPorNroSocio
+        $t_params->{'comboDeCredentials'}   = $comboDeCredentials;
+        $t_params->{'combo_tipo_documento'} = $comboDeTipoDeDoc;
+        $t_params->{'comboDeCategorias'}    = $comboDeCategorias;
+        $t_params->{'comboDeUI'}            = $comboDeUI;
+        $t_params->{'addBorrower'}          = 0;
 
         #paso el objeto socio al cliente
         C4::Auth::output_html_with_http_headers($template, $t_params, $session);
