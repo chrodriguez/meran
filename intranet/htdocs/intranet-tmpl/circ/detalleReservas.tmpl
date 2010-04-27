@@ -1,6 +1,6 @@
 [% USE HTML %]
 <fieldset class="resultado_reservas">
-<legend class="titulo_legend"><strong>[% 'Detalle de reservas asignadas' | i18n %]</strong></legend>
+<legend class="titulo_legend_resaltado"><strong>[% 'Detalle de reservas asignadas' | i18n %]</strong></legend>
 [% IF reservas_asignadas_count %]
 <div class="resultados_consulta">[% 'El usuario tiene' | i18n %] [% reservas_asignadas_count %] 
                                  [% 'ejemplar(es) reservado(s) esperando para ser retirado(s)' | i18n %]
@@ -94,7 +94,7 @@
 
 </fieldset>
 <fieldset class="resultado_reservas">
-<legend class="titulo_legend"><strong>[% 'Detalle de reservas en espera' | i18n %]</strong></legend>
+<legend class="titulo_legend_resaltado"><strong>[% 'Detalle de reservas en espera' | i18n %]</strong></legend>
 [% IF reservas_espera_count %]
 
 

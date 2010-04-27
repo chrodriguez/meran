@@ -503,6 +503,18 @@ sub esRegular{
     return $estado->getRegular;
 }
 
+sub esRegularToString{
+    my ($self) = shift;
+
+    my ($estado) = C4::Modelo::UsrEstado->new(id_estado => $self->getId_estado);
+    $estado->load();
+
+    my $estado_alumno = C4::AR::Filtros::i18n("IRREGULAR");
+    if($estado->getRegular){$estado_alumno = C4::AR::Filtros::i18n("REGULAR")}
+    
+    return $estado_alumno;
+}
+
 sub getIs_super_user{
     my ($self) = shift;
 

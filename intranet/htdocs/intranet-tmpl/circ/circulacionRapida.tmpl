@@ -9,14 +9,15 @@
 // para la ventana de Agregar Autorizado
 NRO_SOCIO_AUTH=0;
 var objAH;
+
 function verificarBarcode(){
 
-	objAH=new AjaxHelper(updateVerificarBarcode);
-	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/cir/circulacionDB.pl";
-	objAH.id1= id1;
-	objAH.id2= id2;
-	objAH.tipoAccion= "VERIFICAR_BARCODE";
+	objAH               = new AjaxHelper(updateVerificarBarcode);
+	objAH.debug         = true;
+	objAH.url           = "/cgi-bin/koha/cir/circulacionDB.pl";
+	objAH.id1           = id1;
+	objAH.id2           = id2;
+	objAH.tipoAccion    = "VERIFICAR_BARCODE";
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -31,6 +32,7 @@ function obtenerTiposDePrestamos(){
 
 	objAH               = new AjaxHelper(updateObtenerTiposDePrestamos);
 	objAH.debug         = true;
+    objAH.showOverlay   = true;
 	objAH.url           = "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio     = NRO_SOCIO_AUTH;
 	objAH.barcode       = $('#barcode_hidden').val();
@@ -97,17 +99,18 @@ function updateRealizarAccion(responseText){
 function tieneApoderado(){
 	//fijo el nro_socio global para la ventana de agregarAutorizado
 // FIXME y esto?
-	NRO_SOCIO_AUTH=  $('#nro_socio_hidden').val(); 
-	var nro_socio= $('#nro_socio_hidden').val();
-	USUARIO= new objeto_usuario();
-	USUARIO.text= $('#usuarioAutocomplete').val();
-	USUARIO.ID= nro_socio;
+	NRO_SOCIO_AUTH  =  $('#nro_socio_hidden').val(); 
+	var nro_socio   = $('#nro_socio_hidden').val();
+	USUARIO         = new objeto_usuario();
+	USUARIO.text    = $('#usuarioAutocomplete').val();
+	USUARIO.ID      = nro_socio;
 
-	var objAH=new AjaxHelper(updateTieneAutorizado);
-	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
-	objAH.nro_socio= $('#nro_socio_hidden').val();
-	objAH.tipoAccion= "CIRCULACION_RAPIDA_TIENE_AUTORIZADO";
+	var objAH               = new AjaxHelper(updateTieneAutorizado);
+	objAH.debug             = true;
+    objAH.showOverlay       = true;
+	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.nro_socio         = $('#nro_socio_hidden').val();
+	objAH.tipoAccion        = "CIRCULACION_RAPIDA_TIENE_AUTORIZADO";
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -194,19 +197,33 @@ function onCompleteUsuarios(){
 		detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
 		
 	}else if($('#operacion').val() == 'prestar'){
-		esRegular(NRO_SOCIO_AUTH);
+// 		esRegular(NRO_SOCIO_AUTH);
 	}
 }
 
+// FIXME croe q no lo vamos a usar mas, el resultado del autocomplete trae la info del usuario y si es REGULAR o NO
 function esRegular(NRO_SOCIO_AUTH){
 	objAH                   = new AjaxHelper(updateEsRegular);
 	objAH.debug             = true;
+    objAH.showOverlay       = true;
 	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio         = NRO_SOCIO_AUTH;
 	objAH.tipoAccion        = "CIRCULACION_RAPIDA_ES_REGULAR";
 	//se envia la consulta
 	objAH.sendToServer();
 }
+
+// FIXME croe q no lo vamos a usar mas, el resultado del autocomplete trae la info del usuario y si es REGULAR o NO
+function updateEsRegular(responseText){
+    var esRegular= "REGULAR";
+
+    if(responseText == '0'){
+        esRegular= "IRREGULAR";
+    }
+    
+    $('#estadoUsuario').html(esRegular);
+}
+
 
 function updateInfoDevolver(responseText){
 	cancelarDiv();
@@ -218,15 +235,6 @@ function updateInfoDevolver(responseText){
 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
 }
 
-function updateEsRegular(responseText){
-	var esRegular= "REGULAR";
-
-	if(responseText == '0'){
-		esRegular= "IRREGULAR";
-	}
-	
-	$('#estadoUsuario').html(esRegular);
-}
 
 $(document).ready(function() {
 	$('#operacion').focus();
@@ -234,20 +242,25 @@ $(document).ready(function() {
     $('#cambo_tipo_prestamo').hide();
 	$('#divAutorizado').hide();
 	$('#divAgregarAutorizado').hide();
-	CrearAutocompleteUsuarios({	IdInput: 'usuario', 
-								IdInputHidden: 'nro_socio_hidden', 
-								callBackFunction: onCompleteUsuarios,
+
+	CrearAutocompleteUsuariosConRegularidad({	
+                                                IdInput: 'usuario', 
+								                IdInputHidden: 'nro_socio_hidden', 
+								                callBackFunction: onCompleteUsuarios,
 						});
 
-	CrearAutocompleteBarcodes({	IdInput: 'barcode', 
+	CrearAutocompleteBarcodes({	
+                                IdInput: 'barcode', 
 								IdInputHidden: 'barcode_hidden', 
 								callBackFunction: updateAutocompleteBarcodes
 						});
 
-	CrearAutocompleteBarcodesPrestados({	IdInput: 'barcodePrestado', 
+	CrearAutocompleteBarcodesPrestados({	
+                                             IdInput: 'barcodePrestado', 
 											IdInputHidden: 'barcode_hidden', 
 											callBackFunction: updateAutocompleteBarcodesPrestados
 									});
+
 	onChangeOperacion();
 });
 
@@ -275,9 +288,9 @@ $(document).ready(function() {
           <li class="sub_item">
                   <div id="divInfoEjemplar">
                       <label for="barcode">[% 'C&oacute;digo de Barras:' | i18n %]</label>
-                      <input type="text" id="barcode" value="" tabindex='2'>
+                      <input type="text" id="barcode" value="" tabindex='2' style="display: none;">
                       <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
-                      <input type="text" id="barcodePrestado" value="" tabindex='2'>
+                      <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
                       <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
                       <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
                   </div>
@@ -307,8 +320,8 @@ $(document).ready(function() {
 <!-- DETALLE DE PRESTAMOS -->
 <div id="tablaPrestamos" style="clear: both;"></div>
 
-<div style="float: left; width: 47.4%">
-<!-- <input style="float: right;" type="button" value="[% 'Aceptar' | i18n %]" id="aceptar" onClick="realizarAccionCircRapida()" tabindex='4'> -->
+<div style="float: left; width: 100%;">
+
                       [% PERL %]
                                           print C4::AR::Filtros::to_Button(     text    => "[% 'Aceptar' | i18n %]",
                                                                                 id      => "aceptar",

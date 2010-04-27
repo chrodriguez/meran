@@ -156,6 +156,14 @@ function CrearAutocompleteUsuarios(options){
 					});
 }
 
+function CrearAutocompleteUsuariosConRegularidad(options){
+    _CrearAutocomplete( {   IdInput: options.IdInput, 
+                            IdInputHidden: options.IdInputHidden, 
+                            accion: 'autocomplete_usuarios_con_regularidad', 
+                            callBackFunction: options.callBackFunction,
+                    });
+}
+
 function CrearAutocompleteBarcodes(options){
     _CrearAutocomplete({
 							IdInput: options.IdInput, 

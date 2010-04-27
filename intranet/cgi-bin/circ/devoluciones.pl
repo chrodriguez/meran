@@ -26,7 +26,7 @@ use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 
-my $input=new CGI;
+my $input       = new CGI;
 
 my ($template, $session, $t_params) =  get_template_and_user ({
 			template_name	=> 'circ/devoluciones.tmpl',
@@ -36,22 +36,24 @@ my ($template, $session, $t_params) =  get_template_and_user ({
 			flagsrequired	=> { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
     });
 
-my $obj=$input->param('obj');
-my $usuarioID="";
-my $usuarioText="";
+
+# FIXME para que esta todo esto?????????????????????????
+my $obj         = $input->param('obj');
+my $usuarioID   ="";
+my $usuarioText = "";
 
 if($obj ne ""){
-	$obj=C4::AR::Utilidades::from_json_ISO($obj);
-	my $array=$obj->{'array_ids3'};
-	$usuarioID=$obj->{'usuario'}->{'ID'};
-	$usuarioText=$obj->{'usuario'}->{'text'};
+	$obj                        = C4::AR::Utilidades::from_json_ISO($obj);
+	my $array                   = $obj->{'array_ids3'};
+	$usuarioID                  = $obj->{'usuario'}->{'ID'};
+	$usuarioText                = $obj->{'usuario'}->{'text'};
 
-    $t_params->{'usuarioText'}= $usuarioText;
-    $t_params->{'array'}= $array;
-    $t_params->{'accion'}= $obj->{'accion'};
+    $t_params->{'usuarioText'}  = $usuarioText;
+    $t_params->{'array'}        = $array;
+    $t_params->{'accion'}       = $obj->{'accion'};
 
 }
 
-$t_params->{'usuarioID'}= $usuarioID;
+$t_params->{'usuarioID'}        = $usuarioID;
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

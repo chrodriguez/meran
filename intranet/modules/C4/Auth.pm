@@ -282,15 +282,15 @@ sub getSessionBrowser {
 
 sub get_template_and_user {
 	my $in = shift;
-	my ($user, $session, $flags, $socio) = checkauth(       $in->{'query'}, 
-                                                            $in->{'authnotrequired'}, 
-                                                            $in->{'flagsrequired'}, 
-                                                            $in->{'type'}, 
-                                                            $in->{'changepassword'},
-                                                            $in->{'template_params'}
+	my ($user, $session, $flags, $usuario_logueado) = checkauth(        $in->{'query'}, 
+                                                                        $in->{'authnotrequired'}, 
+                                                                        $in->{'flagsrequired'}, 
+                                                                        $in->{'type'}, 
+                                                                        $in->{'changepassword'},
+                                                                        $in->{'template_params'}
                                             );
-	my $nro_socio;
-    my ($template, $params)     = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'}, $in->{'loging_out'}, $socio);
+
+    my ($template, $params)     = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'}, $in->{'loging_out'}, $usuario_logueado);
 
     $in->{'template_params'}    = $params;
 
@@ -298,11 +298,10 @@ sub get_template_and_user {
         $params->{'loggedinuser'}       = $session->param('userid');
         $params->{'nro_socio'}          = $session->param('userid');
 
-        if (!$socio) {
-            $socio = C4::Modelo::UsrSocio->new();
+        if (!$usuario_logueado) {
+            $usuario_logueado = C4::Modelo::UsrSocio->new();
         }
 
-#         $session->param('nro_socio',$nro_socio);
 # TODO pasar a una funcion
         my %socio_data;
         $socio_data{'usr_apellido'}             = $session->param('usr_apellido');
@@ -332,7 +331,7 @@ sub get_template_and_user {
     #se cargan todas las variables de entorno de las preferencias del sistema
     $params->{'limite_resultados_autocompletables'} = C4::AR::Preferencias->getValorPreferencia("limite_resultados_autocompletables");
 
-	return ($template, $session, $params, $socio);
+	return ($template, $session, $params, $usuario_logueado);
 }
 
 

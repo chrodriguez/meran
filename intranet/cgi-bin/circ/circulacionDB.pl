@@ -21,14 +21,14 @@ C4::AR::Debug::debug("SOCIO -> ".$nro_socio);
 #***************************************************DEVOLUCION**********************************************
 if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
-                                                    'intranet'
-                                );
+    my ($user, $session, $flags, $usuario_logueado) = checkauth(    $input, 
+                                                                    $authnotrequired, 
+                                                                    {   ui => 'ANY', 
+                                                                        tipo_documento => 'ANY', 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'undefined'}, 
+                                                                        'intranet'
+                                        );
 #items a devolver o renovar
 #aca se arma el div para mostrar los items que se van a devolver o renovar
 
@@ -61,14 +61,14 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 #************************************************CONFIRMAR PRESTAMO*******************************************
 elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 	
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                            $authnotrequired, 
-                                            {   ui => 'ANY', 
-                                                tipo_documento => 'ANY', 
-                                                accion => 'CONSULTA', 
-                                                entorno => 'undefined'}, 
-                                            'intranet'
-                            );
+    my ($user, $session, $flags, $usuario_logueado) = checkauth(    $input, 
+                                                                    $authnotrequired, 
+                                                                    {   ui => 'ANY', 
+                                                                        tipo_documento => 'ANY', 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'undefined'}, 
+                                                                    'intranet'
+                                    );
 #SE CREAN LOS COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
 	my $array_ids3_a_prestar=$obj->{'datosArray'};
 	my $cant= scalar(@$array_ids3_a_prestar);
@@ -102,13 +102,13 @@ elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 
 #***************************************************PRESTAMO*************************************************
 elsif($tipoAccion eq "PRESTAMO"){
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
-                                                'intranet'
+    my ($user, $session, $flags, $usuario_logueado)= checkauth(     $input, 
+                                                                    $authnotrequired, 
+                                                                    {   ui => 'ANY', 
+                                                                        tipo_documento => 'ANY', 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'undefined'}, 
+                                                                    'intranet'
                                 );	
 #se realizan los prestamos
 	my $array_ids3=$obj->{'datosArray'};
@@ -186,13 +186,13 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 }
 #**********************************************FIN*****PRESTAMO**********************************************
 elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
-                                                'intranet'
+    my ($user, $session, $flags, $usuario_logueado) = checkauth(    $input, 
+                                                                    $authnotrequired, 
+                                                                    {   ui => 'ANY', 
+                                                                        tipo_documento => 'ANY', 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'undefined'}, 
+                                                                    'intranet'
                                 );
 
 	$obj->{'loggedinuser'}= $user;
@@ -207,13 +207,13 @@ elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
 
 
 elsif($tipoAccion eq "REALIZAR_RENOVACION"){
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
-                                                'intranet'
+    my ($user, $session, $flags, $usuario_logueado) = checkauth(    $input, 
+                                                                    $authnotrequired, 
+                                                                    {   ui => 'ANY', 
+                                                                        tipo_documento => 'ANY', 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'undefined'}, 
+                                                                    'intranet'
                                 );
 
     my $infoOperaciones = C4::AR::Prestamos::t_renovar($obj);
@@ -228,13 +228,13 @@ elsif($tipoAccion eq "REALIZAR_RENOVACION"){
 #******************************************CANCELAR RESERVA***************************************************
 elsif($tipoAccion eq "CANCELAR_RESERVA"){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
-                                                'intranet'
+    my ($user, $session, $flags, $usuario_logueado) = checkauth(    $input, 
+                                                                    $authnotrequired, 
+                                                                    {   ui => 'ANY', 
+                                                                        tipo_documento => 'ANY', 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'undefined'}, 
+                                                                    'intranet'
                                 );
 		
 	my %params;
@@ -254,13 +254,13 @@ elsif($tipoAccion eq "CANCELAR_RESERVA"){
 
 elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
-                                                'intranet'
+    my ($user, $session, $flags, $usuario_logueado) = checkauth(    $input, 
+                                                                    $authnotrequired, 
+                                                                    {   ui => 'ANY', 
+                                                                        tipo_documento => 'ANY', 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'undefined'}, 
+                                                                    'intranet'
                                 );
 		
 	my $Message_arrayref;
@@ -292,13 +292,13 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
-                                                'intranet'
+    my ($user, $session, $flags, $usuario_logueado) = checkauth(    $input, 
+                                                                    $authnotrequired, 
+                                                                    {   ui => 'ANY', 
+                                                                        tipo_documento => 'ANY', 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'undefined'}, 
+                                                                    'intranet'
                                 );
 
 	#obtengo el objeto de nivel3 segun el barcode que se quiere prestar
@@ -322,13 +322,13 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_SOCIO"){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
-                                                'intranet'
+    my ($user, $session, $flags, $usuario_logueado) = checkauth(    $input, 
+                                                                    $authnotrequired, 
+                                                                    {   ui => 'ANY', 
+                                                                        tipo_documento => 'ANY', 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'undefined'}, 
+                                                                    'intranet'
                                 );
 
 	#obtengo el objeto de nivel3 segun el barcode que se quiere prestar
@@ -347,13 +347,13 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_SOCIO"){
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
-                                                'intranet'
+    my ($user, $session, $flags, $usuario_logueado) = checkauth(    $input, 
+                                                                    $authnotrequired, 
+                                                                    {   ui => 'ANY', 
+                                                                        tipo_documento => 'ANY', 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'undefined'}, 
+                                                                    'intranet'
                                 );
 		
 	my $Message_arrayref;
@@ -372,13 +372,13 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_ES_REGULAR"){
 
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'},
-                                                'intranet'
+    my ($user, $session, $flags, $usuario_logueado) = checkauth(    $input, 
+                                                                    $authnotrequired, 
+                                                                    {   ui => 'ANY', 
+                                                                        tipo_documento => 'ANY', 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'undefined'},
+                                                                    'intranet'
                                 );
 
 	my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'nro_socio'});
