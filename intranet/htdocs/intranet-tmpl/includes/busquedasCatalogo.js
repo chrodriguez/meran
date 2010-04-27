@@ -173,12 +173,22 @@ function buscarPorCodigoBarra(){
     objAH.sendToServer();
 }
 
-function busquedaPorKeyword(){
+function buscarSuggested(suggested){
+    busquedaPorKeyword(suggested);
+    $('#keyword').val(suggested);
+}
+
+function busquedaPorKeyword(suggested){
 
     objAH=new AjaxHelper(updateBusquedaPorKeyword);
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
-    objAH.keyword= $('#keyword').val();
+    if (suggested){
+        objAH.keyword= suggested;
+        objAH.from_suggested= 1;
+    }else{
+        objAH.keyword= $('#keyword').val();
+    }
     objAH.match_mode = $('#match_mode').val();
     objAH.tipoAccion= 'BUSQUEDA_COMBINADA';
     //se setea la funcion para cambiar de pagina
@@ -198,7 +208,7 @@ function updateBusquedaPorKeyword(responseText){
     highlightBusquedaPorKeyword();
     //con la entrada original
     $('#keyword').val(keyword);
-    highlightBusquedaPorKeyword();
+//     highlightBusquedaPorKeyword();
 }
 
 function highlightBusquedaPorKeyword(){

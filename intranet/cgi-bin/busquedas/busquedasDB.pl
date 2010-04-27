@@ -60,8 +60,9 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 	    $search->{'keyword'}            = $keyword;
 	    $search->{'class'}              = $tipo_documento;
 	    
-	    my ($cantidad, $resultId1)      = C4::AR::Busquedas::busquedaCombinada_newTemp($search->{'keyword'}, $session, $obj);
+	    my ($cantidad, $resultId1, $suggested)      = C4::AR::Busquedas::busquedaCombinada_newTemp($search->{'keyword'}, $session, $obj);
 	    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber, $obj->{'funcion'}, $t_params);
+        $t_params->{'suggested'}        = $suggested;
 	    $obj->{'cantidad'}              = $cantidad;  #????????
 	    $t_params->{'SEARCH_RESULTS'}   = $resultId1;
         $t_params->{'cantidad'}         = $cantidad;
