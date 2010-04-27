@@ -29,7 +29,7 @@ use C4::AR::Nivel1;
 use C4::AR::Nivel2;
 use C4::AR::Nivel3;
 use C4::AR::PortadasRegistros;
-
+use Text::Aspell;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -75,7 +75,6 @@ use vars qw(@EXPORT @ISA);
 
 		&t_loguearBusqueda
 );
-
 
 
 #==================================================================SPHINX====================================================================
@@ -1062,11 +1061,38 @@ sub index_update{
   system('indexer --rotate --all');
 }
 
+sub getSuggestion{
+    my ($search,$cant_result_busqueda) = @_;
+    my $speller = Text::Aspell->new;
+    my $lang = C4::Auth::getUserLocale();
+
+    $speller->set_option('lang',$lang);
+    my $suggestion = "";
+    my @words = split(/ /,$search);
+
+    foreach my $word (@words){
+        my @suggestions = $speller->suggest($word);
+        $suggestion.= @suggestions[int(rand()+0.5)];
+    }
+
+    $suggestion = Encode::encode_utf8($suggestion);
+
+    if ($suggestion ne $search){
+        if ($cant_result_busqueda < 10){
+            return ($suggestion);
+        }
+    }
+    return (0);
+
+}
+
 sub busquedaCombinada_newTemp{
     my ($string_utf8_encoded,$session,$obj_for_log) = @_;
 
-      $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
+    $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
+    my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
+    my $string_suggested;
 
     use Sphinx::Search;
     my $path="/tmp/searchd.sock";
@@ -1112,7 +1138,12 @@ sub busquedaCombinada_newTemp{
     #se loquea la busqueda
     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 
-    return ($total_found, $resultsarray);
+    if (!$from_suggested){
+        $string_suggested = getSuggestion($string_utf8_encoded,$total_found);
+
+    }
+
+    return ($total_found, $resultsarray,$string_suggested);
 }
 
 sub busquedaAvanzada_newTemp{

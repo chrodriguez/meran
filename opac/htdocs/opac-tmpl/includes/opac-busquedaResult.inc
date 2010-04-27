@@ -23,7 +23,15 @@
 
         <div class="contenedor_paginador">[% paginador %]</div>
     [% END %]
-
+    [% IF !from_suggested %]
+        [% IF suggested %]
+                <div class="suggested_search">
+                    <a href="/cgi-bin/koha/opac-busquedasDB.pl?string=[% suggested %]&tipoAccion=[% tipoAccion %]&from_suggested=1&token=[% token %]">
+                        [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
+                    </a>
+                </div>
+        [% END %]
+    [% END %]
     <table id="tablaResult" class="tabla_datos" cellspacing='0' cellpadding='0' style="text-align:center; width:100%; border:1;">
             <tr class="tablaresultadoTitle" >
                 <th align="center">

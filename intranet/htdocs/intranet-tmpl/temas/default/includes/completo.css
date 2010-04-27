@@ -282,3 +282,9 @@ div.indicators{cursor:pointer;color:black;border:1px solid #777777;background:#E
 #ajax-indicator span {background-image:url(../imagenes/loaders/ajax-loader.gif);background-position:0 20%;background-repeat:no-repeat;padding-left:40px;vertical-align:bottom;}
 #ajax-indicator div {background-image:url(../imagenes/loaders/ajax-loader.gif);background-position:0 20%;background-repeat:no-repeat;padding-left:40px;vertical-align:bottom; height: 32px}
 #ajax-indicator div p {padding-top: 7px;}
+
+.suggested_search{
+    color: blue;
+    font-weight: bold;
+    font-size: 15px;
+}

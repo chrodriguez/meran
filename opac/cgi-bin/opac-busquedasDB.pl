@@ -32,6 +32,7 @@ if($obj){
   $obj->{'tipoAccion'} = $input->param('tipoAccion');
 #   $obj->{'string'} = Encode::decode_utf8($input->param('string'));
   $obj->{'string'} = $input->param('string');
+  $obj->{'from_suggested'} = $input->param('from_suggested');
   $obj->{'tipoBusqueda'} = 'all';
   $obj->{'ini'} = $input->param('page') || 0;
 }
@@ -47,6 +48,7 @@ my $ini= $obj->{'ini'};
 my $start = [ Time::HiRes::gettimeofday() ]; #se toma el tiempo de inicio de la búsqueda
 
 my $cantidad;
+my $suggested;
 my $resultsarray;
 $obj->{'type'} = 'OPAC';
 $obj->{'session'}= $session;
@@ -56,7 +58,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 $obj->{'cantR'}= $obj->{'cantR'} || $cantR;
 
 C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
-
+$obj->{'from_suggested'}= $obj->{'from_suggested'};
 if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 
     $obj->{'autor'}= $obj->{'searchField'};
@@ -77,9 +79,10 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 # FIXME falta implementar
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
+    
     if ($obj->{'tipoBusqueda'} eq 'all'){
 #         ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaCombinada_newTemp(Encode::decode_utf8($input->param('string')),$session,$obj);
-        ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaCombinada_newTemp($input->param('string'),$session,$obj);
+        ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($input->param('string'),$session,$obj);
     }else{
         ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
     }
@@ -90,6 +93,8 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 
 
 $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
+$t_params->{'suggested'}        = $suggested;
+$t_params->{'tipoAccion'} = $obj->{'tipoAccion'};
 #se arma el arreglo con la info para mostrar en el template
 my $elapsed                     = Time::HiRes::tv_interval( $start );
 $t_params->{'timeSeg'}          = $elapsed;
@@ -98,6 +103,7 @@ $t_params->{'SEARCH_RESULTS'}   = $resultsarray;
 #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
 # $obj->{'keyword'} = Encode::decode_utf8($obj->{'string'});
 $obj->{'keyword'} = $obj->{'string'};
+$t_params->{'keyword'} = $obj->{'keyword'};
 # $t_params->{'buscoPor'}         = C4::AR::Utilidades::verificarValor($obj->{'string'});#C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'buscoPor'}         = C4::AR::Busquedas::armarBuscoPor($obj);
 # $t_params->{'buscoPor'}         = Encode::encode('utf8' , C4::AR::Busquedas::armarBuscoPor($obj));
