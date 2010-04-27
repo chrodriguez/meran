@@ -208,7 +208,7 @@ function updateBusquedaPorKeyword(responseText){
     highlightBusquedaPorKeyword();
     //con la entrada original
     $('#keyword').val(keyword);
-    highlightBusquedaPorKeyword();
+//     highlightBusquedaPorKeyword();
 }
 
 function highlightBusquedaPorKeyword(){

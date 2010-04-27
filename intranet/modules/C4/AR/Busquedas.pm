@@ -1062,20 +1062,30 @@ sub index_update{
 }
 
 sub getSuggestion{
-    my ($search,$cant_result_busqueda) = @_;
+    my ($search,$cant_result_busqueda,$intra) = @_;
     my $speller = Text::Aspell->new;
     my $lang = C4::Auth::getUserLocale();
 
     $speller->set_option('lang',$lang);
     my $suggestion = "";
     my @words = split(/ /,$search);
-
-    foreach my $word (@words){
-        my @suggestions = $speller->suggest($word);
-        $suggestion.= @suggestions[int(rand()+0.5)];
+    my $total_found = 0;
+    my $cont;
+    while ( ($total_found <= 0) && ($cont < 50) ){
+        $suggestion="";
+        foreach my $word (@words){
+            my @suggestions = $speller->suggest($word);
+            $suggestion.= @suggestions[$cont];
+        }
+        my %hash = {};
+        if (!$intra){
+            $suggestion = Encode::encode_utf8($suggestion);
+        }
+        ($total_found) = busquedaCombinada_newTemp($suggestion,\%hash,\%hash,1);
+        C4::AR::Debug::debug("TOTAL FOUND SUGGESTED: ".$total_found."CON ".$suggestion);
+        $cont++;
     }
 
-    $suggestion = Encode::encode_utf8($suggestion);
 
     if ($suggestion ne $search){
         if ($cant_result_busqueda < 10){
@@ -1087,13 +1097,13 @@ sub getSuggestion{
 }
 
 sub busquedaCombinada_newTemp{
-    my ($string_utf8_encoded,$session,$obj_for_log) = @_;
+    my ($string_utf8_encoded,$session,$obj_for_log,$only_sphinx) = @_;
 
     $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
     my $string_suggested;
-
+    $only_sphinx = $only_sphinx || 0;
     use Sphinx::Search;
     my $path="/tmp/searchd.sock";
     my $sphinx = Sphinx::Search->new();
@@ -1113,34 +1123,39 @@ sub busquedaCombinada_newTemp{
     $sphinx->SetMatchMode($tipo_match);
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
-    $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'});
+    if (!$only_sphinx){
+        $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'});
+    }
     # NOTA: sphinx necesita el string decode_utf8
     my $results = $sphinx->Query($query);
 
+    my ($total_found_paginado, $resultsarray);
     my @id1_array;
     my $matches = $results->{'matches'};
     my $total_found = $results->{'total_found'};
+
+    if ($only_sphinx){
+        return ($total_found);
+    }
+#arma y ordena el arreglo para enviar al cliente
     $obj_for_log->{'total_found'} = $total_found;
 #     C4::AR::Utilidades::printHASH($results);
     C4::AR::Debug::debug("total_found: ".$total_found);
     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
-      my %hash_temp = {};
-      $hash_temp{'id1'} = $hash->{'doc'};
-      $hash_temp{'hits'} = $hash->{'weight'};
+    my %hash_temp = {};
+    $hash_temp{'id1'} = $hash->{'doc'};
+    $hash_temp{'hits'} = $hash->{'weight'};
 
-      push (@id1_array, \%hash_temp);
+    push (@id1_array, \%hash_temp);
     }
 
-    my ($total_found_paginado, $resultsarray);
-    #arma y ordena el arreglo para enviar al cliente
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
     #se loquea la busqueda
     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 
     if (!$from_suggested){
         $string_suggested = getSuggestion($string_utf8_encoded,$total_found);
-
     }
 
     return ($total_found, $resultsarray,$string_suggested);
