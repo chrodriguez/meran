@@ -1116,7 +1116,7 @@ sub busquedaCombinada_newTemp{
 
 #     C4::AR::Debug::debug("Busquedas => query => ".$query);
 #     C4::AR::Debug::debug("query string ".$query);
-    my $tipo = $obj_for_log->{'match_mode'}||'SPH_MATCH_ANY';
+    my $tipo = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
     my $tipo_match = _getMatchMode($tipo);
 
 #      C4::AR::Debug::debug("MATCH MODE ".$tipo);
