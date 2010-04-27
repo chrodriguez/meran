@@ -181,16 +181,19 @@ sub generarComboTemasOPAC{
         push (@values,$pref->getValue());
         $labels{$pref->getValue()} = $pref->getValue();
     }
-    
-    my $socio = C4::Auth::getSessionNroSocio();
-    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
 
-    $options_hash{'values'}= \@values;
-    $options_hash{'labels'}=\%labels;
-    $options_hash{'defaults'}= $socio->getTheme() || 'default';
-    $options_hash{'size'}= 1;
-    $options_hash{'name'}= 'temas_opac';
-    $options_hash{'id'}= 'temas_opac';
+    my ($session) = CGI::Session->load();    
+
+#     my $socio = C4::Auth::getSessionNroSocio();
+#     $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
+
+    $options_hash{'values'}     = \@values;
+    $options_hash{'labels'}     = \%labels;
+#     $options_hash{'defaults'}= $socio->getTheme() || 'default';
+    $options_hash{'defaults'}   = $session->param('usr_theme') || 'default';
+    $options_hash{'size'}       = 1;
+    $options_hash{'name'}       = 'temas_opac';
+    $options_hash{'id'}         = 'temas_opac';
 
     my $select = CGI::scrolling_list(\%options_hash);
 
@@ -561,24 +564,6 @@ sub obtenerAutores{
     sub obtenerPaises
 =cut
 sub obtenerPaises{
-
-#    my ($dato)=@_;
-    #   my $dbh = C4::Context->dbh;
-    #my $sth=$dbh->prepare(" SELECT nombre_largo, iso 
-    #                        FROM ref_pais 
-    #                        WHERE nombre_largo LIKE ? 
-    #                        ORDER BY (nombre_largo)");
-
-    #$sth->execute($dato.'%');
-
-    #my @results;
-
-    #while (my $data = $sth->fetchrow_hashref) {
-    #    push(@results, $data);
-    #} # while
-    #$sth->finish;
-    #return(@results);
-
     my ($pais) = @_;
 
     my @filtros;
@@ -1598,12 +1583,12 @@ sub generarComboPermisos{
         $labels{$permiso}= $permiso;
     }
 
-    $options_hash{'values'}= $values;
-    $options_hash{'labels'}=\%labels;
-    $options_hash{'defaults'}= "ui";
-    $options_hash{'size'}= 1;
-    $options_hash{'name'}= 'permisos';
-    $options_hash{'id'}= 'permisos';
+    $options_hash{'values'}     = $values;
+    $options_hash{'labels'}     =\%labels;
+    $options_hash{'defaults'}   = "ui";
+    $options_hash{'size'}       = 1;
+    $options_hash{'name'}       = 'permisos';
+    $options_hash{'id'}         = 'permisos';
 
     my $select = CGI::scrolling_list(\%options_hash);
 
@@ -2760,14 +2745,22 @@ sub temasAutocomplete{
 }
 
 sub usuarioAutocomplete{
+    my ($usuarioStr, $mostrar_regularidad)    = @_;
 
-    my ($usuarioStr)= @_;
-    my $textout="";
-    my ($cant, $usuarios_array_ref)= C4::AR::Usuarios::getSocioLike($usuarioStr);
+    my $textout         = "";
+    my ($cant, $usuarios_array_ref) = C4::AR::Usuarios::getSocioLike($usuarioStr);
 
     if ($cant > 0){
         foreach my $usuario (@$usuarios_array_ref){
-            $textout.= $usuario->getNro_socio."|".$usuario->persona->getApeYNom." (".$usuario->getNro_socio.")\n";
+
+            if($mostrar_regularidad) {
+
+                $textout.= $usuario->getNro_socio."|".$usuario->persona->getApeYNom." (".$usuario->getNro_socio.")";
+                $textout = $textout." - ".$usuario->esRegularToString;
+                $textout.= "\n";
+            } else {
+                $textout.= $usuario->getNro_socio."|".$usuario->persona->getApeYNom." (".$usuario->getNro_socio.")";
+            }
         }
     }
 

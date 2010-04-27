@@ -25,7 +25,7 @@
     ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'Este campo es requerido, no lo deje en blanco' | i18n %]";
     ESTA_SEGURO_QUE_DESEA_BORRARLO= "&iquest;[% 'Est\u00e1 seguro que desea borrarlo' | i18n %]?";
     HAY_BARCODES_REPETIDOS= "[% 'Hay barcodes repetidos' | i18n %]";
-    ELIJA_AL_MENOS_UN_EJEMPLAR= "[% 'Elija al menos un ejemplar para realizar la acción' | i18n %]";
+    ELIJA_AL_MENOS_UN_EJEMPLAR= "[% 'Elija al menos un ejemplar para realizar la acci\u00f3n' | i18n %]";
     FALTA_PARAMETRO_PARA_REFERENCIA= "[% 'Falta par\u00e1metro para referencia' | i18n %]";
     CATALOGO_TITLE= "[% 'Advertencia de cat\u00e1logo' | i18n %]";
     LLENE_EL_CAMPO= "[% 'Llene el campo' | i18n %]";
@@ -39,7 +39,7 @@
     /*=============================================Fin===Catalogacion=================================================*/
 
     ELIMINAR_NOVEDAD = "[% 'Elminar la novedad?' %]";
-    NOVEDAD_TITLE = "[% 'Administración de Novedades' %]";
+    NOVEDAD_TITLE = "[% 'Administraci\u00f3n de Novedades' %]";
 
 
     /*================================================Usuarios========================================================*/

@@ -8,7 +8,7 @@ use C4::Interface::CGI::Output;
 
 my $input=new CGI;
 
-my ($template, $session, $t_params) =  get_template_and_user ({
+my ($template, $session, $t_params, $usuario_logueado) =  get_template_and_user ({
 								template_name	=> 'circ/detalleReservas.tmpl',
 								query		=> $input,
 								type		=> "intranet",
@@ -17,11 +17,11 @@ my ($template, $session, $t_params) =  get_template_and_user ({
     });
 
 
-my $obj=$input->param('obj');
+my $obj         = $input->param('obj');
+$obj            = C4::AR::Utilidades::from_json_ISO($obj);
+my $nro_socio   = $obj->{'nro_socio'};
+my $reservas    = C4::AR::Reservas::obtenerReservasDeSocio($nro_socio);
 
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
-my $nro_socio= $obj->{'nro_socio'};
-my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($nro_socio);
 if($reservas){
 
 	my @reservas_asignadas;
@@ -42,10 +42,10 @@ if($reservas){
 		}
 	}
 	
-	$t_params->{'RESERVAS_ASIGNADAS'}= \@reservas_asignadas;
-	$t_params->{'reservas_asignadas_count'}= $racount;
-	$t_params->{'RESERVAS_ESPERA'}= \@reservas_espera;
-	$t_params->{'reservas_espera_count'}=$recount;
+	$t_params->{'RESERVAS_ASIGNADAS'}           = \@reservas_asignadas;
+	$t_params->{'reservas_asignadas_count'}     = $racount;
+	$t_params->{'RESERVAS_ESPERA'}              = \@reservas_espera;
+	$t_params->{'reservas_espera_count'}        = $recount;
 }
 
 

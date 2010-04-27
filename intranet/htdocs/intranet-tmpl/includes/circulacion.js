@@ -44,10 +44,11 @@ function objeto_usuario(){
  * Funcion que hace la consulta Ajax para buscar los datos del usuario seleccionado, con el autocomplete.
  */
 function detalleUsuario(nro_socio){
-	objAH=new AjaxHelper(updateInfoUsuario);
-	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/circ/detalleUsuario.pl';
-	objAH.nro_socio= nro_socio;
+	objAH               = new AjaxHelper(updateInfoUsuario);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.url           = '/cgi-bin/koha/circ/detalleUsuario.pl';
+	objAH.nro_socio     = nro_socio;
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -68,10 +69,11 @@ function updateInfoUsuario(responseText){
  */
 function detalleSanciones(nro_socio){
 
-	objAH=new AjaxHelper(updateDetalleSanciones);
-	objAH.debug= true;
-	objAH.url='/cgi-bin/koha/usuarios/reales/detalleSanciones.pl';
-	objAH.nro_socio= nro_socio;
+	objAH                   = new AjaxHelper(updateDetalleSanciones);
+	objAH.debug             = true;
+    objAH.showOverlay       = true;
+	objAH.url               = '/cgi-bin/koha/usuarios/reales/detalleSanciones.pl';
+	objAH.nro_socio         = nro_socio;
 	objAH.sendToServer();
 }
 
@@ -88,10 +90,11 @@ function updateDetalleSanciones(responseText){
  * prestamos.tmpl---> tabla de reservas para poder prestar.
  */
 function detalleReservas(nro_socio,funcion){
-	objAH=new AjaxHelper(funcion);
-	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/circ/detalleReservas.pl';
-	objAH.nro_socio= nro_socio;
+	objAH               = new AjaxHelper(funcion);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.url           = '/cgi-bin/koha/circ/detalleReservas.pl';
+	objAH.nro_socio     = nro_socio;
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -114,10 +117,11 @@ function updateInfoReservas(responseText){
  * devoluviones.tmpl---> tabla de prestmos para poder devolver o renovar.
  */
 function detallePrestamos(nro_socio,funcion){
-	objAH=new AjaxHelper(funcion);
-	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/circ/detallePrestamos.pl';
-	objAH.nro_socio= nro_socio;
+	objAH               = new AjaxHelper(funcion);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.url           = '/cgi-bin/koha/circ/detallePrestamos.pl';
+	objAH.nro_socio     = nro_socio;
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -147,18 +151,20 @@ function realizarAccion(accion,chckbox,funcion){
 	var array= new Array;
 	var long=chck.length;
 	if ( long == 0){
-		alert(ELIJA_AL_MENOS_UN_EJEMPLAR);
+		jAlert(ELIJA_AL_MENOS_UN_EJEMPLAR);
 	}
 	else{
 		for(var i=0; i< long; i++){
 			array[i]=chck[i].value;
 		}
-		objAH=new AjaxHelper(funcion);
-		objAH.debug= true;
-		objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-		objAH.tipoAccion= accion;
-		objAH.datosArray= array;
-		objAH.nro_socio= USUARIO.ID;
+
+		objAH                   = new AjaxHelper(funcion);
+		objAH.debug             = true;
+        objAH.showOverlay       = true;
+		objAH.url               = '/cgi-bin/koha/circ/circulacionDB.pl';
+		objAH.tipoAccion        = accion;
+		objAH.datosArray        = array;
+		objAH.nro_socio         = USUARIO.ID;
 		//se envia la consulta
 		objAH.sendToServer();
 	}
@@ -235,12 +241,13 @@ function prestar(){
 		INFO_PRESTAMOS_ARRAY[i].descripcionTipoPrestamo= $("#tiposPrestamos" + i + " option:selected").text();
 	}
 	
-	objAH=new AjaxHelper(updateInfoPrestarReserva);
-	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-	objAH.tipoAccion= 'PRESTAMO';
-	objAH.datosArray= INFO_PRESTAMOS_ARRAY;
-	objAH.nro_socio= USUARIO.ID;
+	objAH               = new AjaxHelper(updateInfoPrestarReserva);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.url           = '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion    = 'PRESTAMO';
+	objAH.datosArray    = INFO_PRESTAMOS_ARRAY;
+	objAH.nro_socio     = USUARIO.ID;
 	//se envia la consulta
 	objAH.sendToServer();
 
@@ -254,10 +261,11 @@ function prestar(){
 function updateInfoPrestarReserva(responseText){
 	cancelarDiv();
 
-	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.messages;
-	var ticketsArray= infoHash.tickets;
-	var mensajes= '';
+	var infoHash        = JSONstring.toObject(responseText);
+	var messageArray    = infoHash.messages;
+	var ticketsArray    = infoHash.tickets;
+	var mensajes        = '';
+
 	for(var i=0; i<messageArray.length;i++){
 		imprimirTicket(ticketsArray[i].ticket,i);
   		setMessages(messageArray[i]);

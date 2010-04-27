@@ -2,7 +2,7 @@
 
 [% INCLUDE  'AutocompleteHelper.inc'  %]
 
-<script src="/intranet-tmpl/includes/circulacion.js"></script>
+<script src="/intranet-tmpl/includes/circulacion-min.js"></script>
 
 <script language="javascript" type="text/javascript">
 
@@ -61,34 +61,34 @@ function onCompleteAutocompleteBarcodesPrestados(){
 
 function getSocioFromPrestamo(prestamo){
 
-	var objAH=new AjaxHelper(updateGetSocioFromPrestamo);
-	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/circ/circulacionDB.pl";
-	objAH.prestamo= prestamo;
-	objAH.tipoAccion= "CIRCULACION_RAPIDA_OBTENER_SOCIO";
+	var objAH               = new AjaxHelper(updateGetSocioFromPrestamo);
+	objAH.debug             = true;
+	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.prestamo          = prestamo;
+	objAH.tipoAccion        = "CIRCULACION_RAPIDA_OBTENER_SOCIO";
 	//se envia la consulta
 	objAH.sendToServer();
 }
 
 function updateGetSocioFromPrestamo(responseText){
-	var socio= JSONstring.toObject(responseText);
+	var socio       = JSONstring.toObject(responseText);
 
-	USUARIO= new objeto_usuario();
-	USUARIO.text= socio.apeYNom;
-	USUARIO.ID= socio.nro_socio;
+	USUARIO         = new objeto_usuario();
+	USUARIO.text    = socio.apeYNom;
+	USUARIO.ID      = socio.nro_socio;
 
 	detalleUsuario(USUARIO.ID);
 	detalleSanciones(USUARIO.ID);
 }
 
 function devolverPrestamo(){
-
-	var objAH=new AjaxHelper(updateDevolverPrestamo);
-	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-	objAH.tipoAccion= 'DEVOLUCION';
-	objAH.datosArray= [$('#prestamo_hidden').val()];
-	objAH.nro_socio= USUARIO.ID;
+	var objAH           = new AjaxHelper(updateDevolverPrestamo);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.url           = '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion    = 'DEVOLUCION';
+	objAH.datosArray    = [$('#prestamo_hidden').val()];
+	objAH.nro_socio     = USUARIO.ID;
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -104,8 +104,8 @@ function updateDevolverPrestamo(responseText){
 function updateInfoDevolver(responseText){
 	cancelarDiv();
 
-	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.Messages_arrayref;
+	var infoHash        = JSONstring.toObject(responseText);
+	var messageArray    = infoHash.Messages_arrayref;
 	setMessages(messageArray);
 
 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
