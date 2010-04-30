@@ -1,0 +1,23 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+
+
+<script type="text/javascript" src="/includes/swfobject.js"></script>
+
+<script type="text/javascript">
+    swfobject.embedSWF(
+    "/includes/open-flash-chart.swf", "chart", "700", "550",
+    "9.0.0", "expressInstall.swf",
+    {"data-file":"/cgi-bin/koha/estadisticas/colecciones_data.pl"}
+    );
+</script>
+<fieldset>
+    <legend class="titulo_legend trigger click" title='[% "click para acceder a la B&uacute;squeda Avanzada" | i18n %]'>
+        [% "A grafiquito loco :P" | i18n %]
+    </legend>
+    <div id="chart"></div>
+</fieldset>
+
+
+
+[% INCLUDE 'intranet-bottom.inc' %]

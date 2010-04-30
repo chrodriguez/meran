@@ -1,4 +1,5 @@
-use strict; use warnings;
+use strict; 
+use warnings;
 
 # This class manages all functions of the open flash chart api.
 package chart;
@@ -754,6 +755,8 @@ sub DESTROY {  }
 #
 #
 package main;
+
+
 sub to_json {
   my ($data_structure, $name) = @_;
 
