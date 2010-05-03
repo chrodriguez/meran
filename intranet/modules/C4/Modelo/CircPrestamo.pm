@@ -351,7 +351,8 @@ sub insertarPrestamo {
 
 	$self->debug("Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo");
 # Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo
-	use C4::Modelo::CircSancion::Manager;
+    use C4::Modelo::CircSancion;
+    use C4::Modelo::CircSancion::Manager;
 	my $sancion= C4::Modelo::CircSancion::Manager->get_circ_sancion(
                                                                         db      =>  $self->db,
                                                                         query   =>  [ id_reserva  =>  {eq => $reserva->getId_reserva }]

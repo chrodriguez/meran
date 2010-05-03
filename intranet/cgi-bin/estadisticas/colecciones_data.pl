@@ -7,7 +7,7 @@ use Chart::OFC2;
 use Chart::OFC2::Pie;
 use C4::AR::Reportes;
 
-my ($tipos_item,$colours,$cantidad,) = C4::AR::Reportes::getItemTypes();
+my ($tipos_item,$colours,$cantidad) = C4::AR::Reportes::getItemTypes();
 
 my $chart = Chart::OFC2->new(
     'title'  => 'Bar chart test',
@@ -18,9 +18,10 @@ my $chart = Chart::OFC2->new(
     },
 );
 
+my $tip = '#val# '.C4::AR::Filtros::i18n('of').' #total#<br>#percent# '.C4::AR::Filtros::i18n('of').' 100%';
 
 my $chart_pie = Chart::OFC2::Pie->new(
-    tip          => '#val# of #total#<br>#percent# of 100%',
+    tip          => $tip,
 );
 
 $chart_pie->values([@$cantidad]);

@@ -1086,7 +1086,7 @@ sub getSuggestion{
         $cont++;
     }
 
-    if ( ($suggestion ne $search) && (C4::AR::Validator::validateString($suggestion)) ){
+    if ( ($suggestion ne $search) && (C4::AR::Utilidades::validateString($suggestion)) ){
         if ( ($cant_result_busqueda < 10) && ($total_found) ){
             return ($suggestion);
         }

@@ -2,6 +2,7 @@ package C4::AR::Reportes;
 
 use strict;
 
+
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
@@ -44,11 +45,24 @@ sub random_color {
 sub getItemTypes{
 
     use C4::Modelo::CatRefTipoNivel3::Manager;
+
+    use C4::Modelo::CatRegistroMarcN1;
+    use C4::Modelo::CatRegistroMarcN2;
+    use C4::Modelo::CatRegistroMarcN2::Manager;
+
     my ($tipos_item) = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(
                                                                                         group_by => ['id_tipo_doc'],
                                                                                         select => ['COUNT(*) AS agregacion_temp','id_tipo_doc','nombre'],
                                                                                         sort_by => ['id_tipo_doc ASC'],
-                                                                                      );
+                                                                                );
+
+    my ($cat_registro_n2) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(select => ['t1.id']);
+
+    foreach my $record (@$cat_registro_n2){
+        C4::AR::Debug::debug("NIVEL 2 ID: ".$record->id);
+        my $nivel = C4::AR::Nivel2::getNivel2FromId2($record->id);
+        C4::AR::Debug::debug("NIVEL 2 TIPO DOC: ".$nivel->getTipoDocumento);
+    }
 
     my @items;
     my @cant;
