@@ -1,9 +1,6 @@
 package C4::Modelo::CircReserva;
 
 use strict;
-use Date::Manip;
-use C4::Date;#formatdate
-use C4::AR::Utilidades;#trim
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(

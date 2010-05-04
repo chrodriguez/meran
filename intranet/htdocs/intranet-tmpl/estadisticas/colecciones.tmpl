@@ -1,23 +1,39 @@
 [% INCLUDE 'intranet-top.inc' %]
 
+<script type="text/javascript" src="/intranet-tmpl/estadisticas/estadisticas.js"></script>
+<div>
+    <div class="titulos" >[% "Generar Carnets de Usuarios" | i18n %]</div>
 
+    <center>
+        <div class="filtros_reportes">
+            <fieldset>
+                <legend class="titulo_legend">[% "Generar estad&iacute;sticas de Colecciones" | i18n %]</legend>
+                <ul class="filtros_reportes_izq">
+                    <li class="sub_item">
+                        [% "Tipo de Item:" | i18n %]
+                        [% item_type_combo %]
+                    </li>
+                    <li class="sub_item">
+                        [% "Unidad de informaci&oacute;n:" | i18n %]
+                        [% ui_combo %]
+                    </li>
+                </ul>
+            </fieldset>
+        </div>
+        <div class="buttonContainerHorizontal">
+            <script> var search = 'search'; </script>
+            [% PERL %]
+                    print C4::AR::Filtros::to_Button( 
+                                                        text    =>  "[% "Let's Rock" | i18n %]",
+                                                        title    =>  "[% 'Buscar' | i18n %]",
+                                                        boton   =>  "boton_buscar",
+                                                        onClick =>  "consultarColecciones();",
+                                                    );
+            [% END %]
+        </div>
+    </center>
+</div>
 
-<script type="text/javascript" src="/includes/swfobject.js"></script>
-
-<script type="text/javascript">
-    swfobject.embedSWF(
-    "/includes/open-flash-chart.swf", "chart", "700", "550",
-    "9.0.0", "expressInstall.swf",
-    {"data-file":"/cgi-bin/koha/estadisticas/colecciones_data.pl"}
-    );
-</script>
-<fieldset class="chart_fieldset">
-    <legend class="titulo_legend trigger click" title='[% "click para acceder a la B&uacute;squeda Avanzada" | i18n %]'>
-        [% "A grafiquito loco :P" | i18n %]
-    </legend>
-    <div id="chart"></div>
-</fieldset>
-
-
+<div id="result_chart"></div>
 
 [% INCLUDE 'intranet-bottom.inc' %]

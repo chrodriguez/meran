@@ -1,0 +1,16 @@
+<script type="text/javascript" src="/includes/swfobject/swfobject.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        swfobject.embedSWF(
+            "/includes/open-flash-chart.swf", "chart", "700", "550","9.0.0", "/includes/swfobject/expressInstall.swf",{"data-file":"[% data_url %]"}
+        );
+    });
+</script>
+
+<fieldset class="chart_fieldset">
+    <legend class="titulo_legend trigger click">
+        [% "A grafiquito loco :P" | i18n %]
+    </legend>
+    <div id="chart"></div>
+</fieldset>

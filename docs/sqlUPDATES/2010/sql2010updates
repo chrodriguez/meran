@@ -214,5 +214,4 @@ ALTER TABLE `ref_nivel_bibliografico` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMA
 
 ALTER TABLE `ref_soporte` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
 
-
-
+ALTER TABLE  `cat_ref_tipo_nivel3` ADD  `agregacion_temp` VARCHAR( 255 ) NULL ;

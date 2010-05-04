@@ -46,31 +46,38 @@ sub getItemTypes{
 
     use C4::Modelo::CatRefTipoNivel3::Manager;
 
-    use C4::Modelo::CatRegistroMarcN1;
-    use C4::Modelo::CatRegistroMarcN2;
-    use C4::Modelo::CatRegistroMarcN2::Manager;
-
     my ($tipos_item) = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(
                                                                                         group_by => ['id_tipo_doc'],
                                                                                         select => ['COUNT(*) AS agregacion_temp','id_tipo_doc','nombre'],
                                                                                         sort_by => ['id_tipo_doc ASC'],
                                                                                 );
 
-    my ($cat_registro_n2) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(select => ['t1.id']);
+    use C4::Modelo::CatRegistroMarcN2;
 
-    foreach my $record (@$cat_registro_n2){
-        C4::AR::Debug::debug("NIVEL 2 ID: ".$record->id);
-        my $nivel = C4::AR::Nivel2::getNivel2FromId2($record->id);
-        C4::AR::Debug::debug("NIVEL 2 TIPO DOC: ".$nivel->getTipoDocumento);
-    }
+    my ($cat_registro_n2) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(select => ['*']);
 
     my @items;
     my @cant;
     my @colors;
-    foreach my $item (@$tipos_item){
-        push (@items, $item->nombre." (".$item->id_tipo_doc.")");
-        push (@cant, int ($item->agregacion_temp+rand(100)));
-        push (@colors, random_color());
+
+    my %item_type_hash = {0};
+    foreach my $record (@$cat_registro_n2){
+            my $item_type = $record->getTipoDocumento;
+            if (!$item_type_hash{$item_type}){
+                $item_type_hash{$item_type} = 0;
+            }
+            $item_type_hash{$item_type}++;
     }
+
+    foreach my $item ( keys %item_type_hash )
+    {
+        $item_type_hash{$item} = int $item_type_hash{$item};
+        if ($item_type_hash{$item} > 0){
+            push (@items, $item);
+            push (@cant,$item_type_hash{$item});
+            push (@colors, random_color());
+        }
+    }
+
     return (\@items,\@colors,\@cant);
 }

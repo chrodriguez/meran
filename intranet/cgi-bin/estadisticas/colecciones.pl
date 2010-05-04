@@ -22,35 +22,40 @@ use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::AR::Estadisticas;
-use C4::AR::SxcGenerator;
-use C4::AR::Busquedas;
+use C4::AR::Utilidades;
 
 my $input = new CGI;
+my $obj=$input->param('obj') || 0;
 
-my ($template, $session, $t_params) = get_template_and_user({
-                        template_name => "estadisticas/colecciones.tmpl",
-                        query => $input,
-                        type => "intranet",
-                        authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-                        debug => 1,
-			    });
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
+my ($template, $session, $t_params, $data_url);
 
+if (!$obj){
+        ($template, $session, $t_params) = get_template_and_user({
+                                template_name => "estadisticas/colecciones.tmpl",
+                                query => $input,
+                                type => "intranet",
+                                authnotrequired => 0,
+                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                debug => 1,
+			            });
+}else{
+        ($template, $session, $t_params) = get_template_and_user({
+                                template_name => "estadisticas/partial_swf.tmpl",
+                                query => $input,
+                                type => "intranet",
+                                authnotrequired => 0,
+                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                debug => 1,
+                        });
+
+        $data_url = "/cgi-bin/koha/estadisticas/colecciones_data.pl?ui=".$obj->{'ui'}."&item_type=".$obj->{'item_type'};
+
+}
+
+
+$t_params->{'data_url'} = $data_url;
+$t_params->{'item_type_combo'} = C4::AR::Utilidades::generarComboTipoNivel3();
+$t_params->{'ui_combo'} = C4::AR::Utilidades::generarComboUI();
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
-
-
-# my $session = CGI::Session->load();
-# 
-# print $session->header();
-# 
-# use Chart::OFC2;
-# use Chart::OFC2::Axis;
-# use Chart::OFC2::Bar;
-# 
-# # use open_flash_chart;
-# 
-# 
-# print open_flash_chart_object( 500, 250, '/cgi-bin/koha/estadisticas/colecciones_data.php', 0 );
-
