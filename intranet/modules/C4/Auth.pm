@@ -159,10 +159,10 @@ sub getUserLocale{
 
     if ($session){
         $locale = $session->param('usr_locale');
-        #C4::AR::Debug::debug("Auth => obtengo locale de la session => ".$locale);
+        C4::AR::Debug::debug("Auth => obtengo locale de la session => ".$locale);
     } else {
         $locale = C4::Context->config("defaultLang") || 'es_ES';
-        #C4::AR::Debug::debug("Auth => NO obtengo locale de la session => ".$locale);
+        C4::AR::Debug::debug("Auth => NO obtengo locale de la session => ".$locale);
     }
 
     return $locale;
