@@ -157,7 +157,7 @@ sub getUserLocale{
     my $session = CGI::Session->load();
     my $locale;
 
-    if ($session){
+    if ($session->param('usr_locale')){
         $locale = $session->param('usr_locale');
         C4::AR::Debug::debug("Auth => obtengo locale de la session => ".$locale);
     } else {
