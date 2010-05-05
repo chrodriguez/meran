@@ -49,13 +49,14 @@ if (!$obj){
                                 debug => 1,
                         });
 
-        $data_url = "/cgi-bin/koha/estadisticas/colecciones_data.pl?ui=".$obj->{'ui'}."&item_type=".$obj->{'item_type'};
+        $data_url = "/cgi-bin/koha/estadisticas/colecciones_data.pl?item_type=".$obj->{'item_type'}."%26ui=".$obj->{'ui'};
 
 }
 
-
+my %params_for_combo = {};
+$params_for_combo{'default'} = 'ALL';
 $t_params->{'data_url'} = $data_url;
-$t_params->{'item_type_combo'} = C4::AR::Utilidades::generarComboTipoNivel3();
+$t_params->{'item_type_combo'} = C4::AR::Utilidades::generarComboTipoNivel3(\%params_for_combo);
 $t_params->{'ui_combo'} = C4::AR::Utilidades::generarComboUI();
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

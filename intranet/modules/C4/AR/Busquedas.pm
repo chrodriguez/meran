@@ -1065,6 +1065,7 @@ sub getSuggestion{
     my ($search,$cant_result_busqueda,$intra) = @_;
     my $speller = Text::Aspell->new;
     my $lang = C4::Auth::getUserLocale();
+    C4::AR::Debug::debug("******************* USER LANG DE SUGGESTIONS: ".$lang);
 
     $speller->set_option('lang',$lang);
     my $suggestion = "";
@@ -1082,7 +1083,7 @@ sub getSuggestion{
             $suggestion = Encode::encode_utf8($suggestion);
         }
         ($total_found) = busquedaCombinada_newTemp($suggestion,\%hash,\%hash,1);
-        C4::AR::Debug::debug("TOTAL FOUND SUGGESTED: ".$total_found."CON ".$suggestion);
+#         C4::AR::Debug::debug("TOTAL FOUND SUGGESTED: ".$total_found."CON ".$suggestion);
         $cont++;
     }
 

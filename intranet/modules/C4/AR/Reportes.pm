@@ -43,14 +43,7 @@ sub random_color {
 }
 
 sub getItemTypes{
-
-    use C4::Modelo::CatRefTipoNivel3::Manager;
-
-    my ($tipos_item) = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(
-                                                                                        group_by => ['id_tipo_doc'],
-                                                                                        select => ['COUNT(*) AS agregacion_temp','id_tipo_doc','nombre'],
-                                                                                        sort_by => ['id_tipo_doc ASC'],
-                                                                                );
+    my ($params) = @_;
 
     use C4::Modelo::CatRegistroMarcN2;
 
@@ -61,12 +54,24 @@ sub getItemTypes{
     my @colors;
 
     my %item_type_hash = {0};
-    foreach my $record (@$cat_registro_n2){
+    if ( ($params->{'item_type'}) && ($params->{'item_type'} ne 'ALL') ){
+        foreach my $record (@$cat_registro_n2){
+            my $item_type = $record->getTipoDocumento;
+            if (($params->{'item_type'} eq $item_type)){
+                if (!$item_type_hash{$item_type}){
+                    $item_type_hash{$item_type} = 0;
+                }
+                $item_type_hash{$item_type}++;
+            }
+        }
+    }else{
+        foreach my $record (@$cat_registro_n2){
             my $item_type = $record->getTipoDocumento;
             if (!$item_type_hash{$item_type}){
                 $item_type_hash{$item_type} = 0;
             }
             $item_type_hash{$item_type}++;
+        }
     }
 
     foreach my $item ( keys %item_type_hash )

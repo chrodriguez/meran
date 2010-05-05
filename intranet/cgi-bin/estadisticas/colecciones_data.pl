@@ -1,16 +1,21 @@
 #!/usr/bin/perl
 
 use CGI::Session;
+use CGI;
+
+my $input = new CGI;
 my $session = CGI::Session->load();
 
 use Chart::OFC2;
 use Chart::OFC2::Pie;
 use C4::AR::Reportes;
 
-my ($tipos_item,$colours,$cantidad) = C4::AR::Reportes::getItemTypes();
+
+my $params = $input->Vars;
+my ($tipos_item,$colours,$cantidad) = C4::AR::Reportes::getItemTypes($params);
 
 my $chart = Chart::OFC2->new(
-    'title'  => 'Bar chart test',
+    'title'  => C4::AR::Filtros::i18n('Colecciones'),
     x_axis => {
         labels => {
             labels => [@$tipos_item],
