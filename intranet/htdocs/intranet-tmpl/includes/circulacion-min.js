@@ -1,6 +1,6 @@
 var INFO_PRESTAMOS_ARRAY=new Array();var objAH;function infoPrestamo(){this.id3='';this.id3Old='';this.tipoPrestamo;}
 function objeto_usuario(){this.text;this.ID;}
-function detalleUsuario(nro_socio){objAH=new AjaxHelper(updateInfoUsuario);objAH.debug=true;objAH.showOverlay=true;objAH.url='/cgi-bin/koha/circ/detalleUsuario.pl';objAH.nro_socio=nro_socio;objAH.sendToServer();}
+function detalleUsuario(nro_socio){objAH=new AjaxHelper(updateInfoUsuario);objAH.debug=true;objAH.cache=true;objAH.showOverlay=true;objAH.url='/cgi-bin/koha/circ/detalleUsuario.pl';objAH.nro_socio=nro_socio;objAH.sendToServer();}
 function updateInfoUsuario(responseText){$('#detalleUsuario').slideDown('slow');$('#detalleUsuario').html(responseText);}
 function detalleSanciones(nro_socio){objAH=new AjaxHelper(updateDetalleSanciones);objAH.debug=true;objAH.showOverlay=true;objAH.url='/cgi-bin/koha/usuarios/reales/detalleSanciones.pl';objAH.nro_socio=nro_socio;objAH.sendToServer();}
 function updateDetalleSanciones(responseText){$('#sanciones').html(responseText);}
@@ -29,7 +29,7 @@ html=html+"</p>";html=html+"<center><input type='button' value='Aceptar' onClick
 function renovar(){objAH=new AjaxHelper(updateInfoRenovar);objAH.debug=true;objAH.url='/cgi-bin/koha/circ/circulacionDB.pl';objAH.tipoAccion='REALIZAR_RENOVACION';objAH.datosArray=INFO_PRESTAMOS_ARRAY;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();}
 function updateInfoRenovar(responseText){cancelarDiv();var infoHash=JSONstring.toObject(responseText);var messageArray=infoHash.messages;var ticketsArray=infoHash.tickets;for(i=0;i<messageArray.length;i++){imprimirTicket(ticketsArray[i].ticket,i);setMessages(messageArray[i]);}
 detallePrestamos(USUARIO.ID,updateInfoPrestamos);ejemplaresDelGrupo(ID_N2);}
-function devolver(){objAH=new AjaxHelper(updateInfoDevolver);objAH.debug=true;objAH.url='/cgi-bin/koha/circ/circulacionDB.pl';objAH.tipoAccion='REALIZAR_DEVOLUCION';objAH.datosArray=INFO_PRESTAMOS_ARRAY;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();}
+function devolver(){objAH=new AjaxHelper(updateInfoDevolver);objAH.debug=true;objAH.showOverlay=true;objAH.url='/cgi-bin/koha/circ/circulacionDB.pl';objAH.tipoAccion='REALIZAR_DEVOLUCION';objAH.datosArray=INFO_PRESTAMOS_ARRAY;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();}
 function updateInfoDevolver(responseText){}
 function imprimirTicket(ticket,num){if(ticket!=0){var obj=JSONstring.make(ticket)
 window.open("/cgi-bin/koha/circ/ticket.pl?token="+token+"&obj="+obj,"Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");}}

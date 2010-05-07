@@ -15,21 +15,6 @@ function updateInfoBusquedas(responseText){
       scrollTo('resultBusqueda');
 }
 
-function highlightBusquedaCombinable(){
-    var string = [];
-    var classes = [];
-    if($('#autor').val() != ''){
-        classes.push('autor_result');
-    }
-    
-    if($('#titulo').val() != ''){
-        classes.push('titulo_result');
-    }
-    
-    var combinables= ['titulo', 'autor', 'signatura'];
-    highlight(classes,combinables);
-}
-
 function busquedaCombinable(){
 
     objAH                   = new AjaxHelper(updateBusquedaCombinable);
@@ -52,7 +37,6 @@ function busquedaCombinable(){
 
 function updateBusquedaCombinable(responseText){
     updateInfoBusquedas(responseText);
-    highlightBusquedaCombinable();
 }
 
 function changePage(ini){

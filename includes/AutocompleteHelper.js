@@ -41,6 +41,7 @@ function= funcion a ejecutar luego de traer la respuesta del servidor
         formatItem: function(row){
             return row[1];
         },
+//         mustMuch: true,
         minChars:3,
 		matchSubset:1,
 		matchContains:1,

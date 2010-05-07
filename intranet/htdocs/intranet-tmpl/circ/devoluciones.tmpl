@@ -52,7 +52,8 @@ function updateDetallePrestamos(responseText){
 
 function onCompleteAutocompleteBarcodesPrestados(){
     if($('#prestamo_hidden').val() != '-1'){
-	    var prestamo= $('#prestamo_hidden').val();
+	    var prestamo    = $('#prestamo_hidden').val();
+        $('#barcode').attr('readonly', true);
 	    $('#botonDevolver').show();
 	    //detalleUsuario esta implementado en circulacion,js
 	    getSocioFromPrestamo(prestamo);
@@ -63,6 +64,7 @@ function getSocioFromPrestamo(prestamo){
 
 	var objAH               = new AjaxHelper(updateGetSocioFromPrestamo);
 	objAH.debug             = true;
+    objAH.showOverlay       = true;
 	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.prestamo          = prestamo;
 	objAH.tipoAccion        = "CIRCULACION_RAPIDA_OBTENER_SOCIO";
@@ -109,6 +111,11 @@ function updateInfoDevolver(responseText){
 	setMessages(messageArray);
 
 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+    $('#barcode').attr('readonly', false);
+}
+
+function cancelarDevolucion(){
+    $('#barcode').attr('readonly', false);
 }
 
 $(document).ready(function() {
@@ -156,15 +163,27 @@ $(document).ready(function() {
 <div id="botonDevolver" align ="center">
                 <ul class="listaMenuBotones">
                     <li>
+                                [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Devolver' | i18n %]",
+                                                                            boton   => "boton_enviar",
+                                                                            onClick => "devolverPrestamo();",
+                                                                            title   => "[% 'Devolver' | i18n %]",
+                                                                            width   => "auto",
+                                                                            alternClass => "botonCentrado"
+                                                ) ;
+                                [% END %]
+                    </li>
+                    <li>
                             [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Devolver' | i18n %]",
-                                                                        boton   => "boton_enviar",
-                                                                        onClick => "devolverPrestamo();",
-                                                                        title   => "[% 'Devolver' | i18n %]",
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar' | i18n %]",
+                                                                        boton   => "boton_borrar",
+                                                                        onClick => "cancelarDevolucion();",
+                                                                        title   => "[% 'Cancelar' | i18n %]",
+                                                                        width   => "auto",
                                                                         alternClass => "botonCentrado"
                                             ) ;
                             [% END %]
-                  </li>
+                    </li>
               </ul>
 </div>
 <!-- DELTALLE DEL USUARIO -->
