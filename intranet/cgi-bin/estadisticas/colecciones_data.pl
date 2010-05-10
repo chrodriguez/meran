@@ -36,4 +36,4 @@ $chart_pie->values->colours([@$colours]);
 $chart->add_element($chart_pie);
 
 print $session->header();
-print $chart->render_chart_data();
+print $chart->render_chart_data({'wmode' => 'opaque'});

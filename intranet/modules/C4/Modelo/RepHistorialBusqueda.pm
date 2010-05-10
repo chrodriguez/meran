@@ -50,7 +50,14 @@ sub agregar{
 
    my $db = $self->db;
    my $rep_busqueda = C4::Modelo::RepBusqueda->new(db => $db);
-      $rep_busqueda->agregar($nro_socio);
+   my $socio;
+   if ($nro_socio){
+      $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+      if ($socio){
+          $rep_busqueda->categoria_socio($socio->categoria->getCategory_code);
+      }
+  }
+  $rep_busqueda->agregar($nro_socio);
 # FIXME ver si se puede mejorar esta muy largo, se puede hacer generico???
 # parace q lo unico q es variable seria  'keyword', $search->{'keyword'}
 

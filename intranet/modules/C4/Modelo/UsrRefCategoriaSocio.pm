@@ -7,7 +7,7 @@ __PACKAGE__->meta->setup
     table   => 'usr_ref_categoria_socio',
     columns =>
         [
-#             id                    => { type => 'serial', not_null => 1 }, MAS ADELANTE DESCOMENTAAR; CUANDO LA DB SE HAGA NUEVA
+            id                    => { type => 'serial', not_null => 1 }, 
             categorycode    => { type => 'char', not_null => 1 , length => 2},
             description     => { type => 'varchar', length => 255, not_null => 1 },
         ],

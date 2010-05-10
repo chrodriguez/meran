@@ -9,6 +9,7 @@ use vars qw(@EXPORT @ISA);
 
     &getReportFilter
     &getItemTypes
+    &getConsultasOPAC
 );
 
 
@@ -82,6 +83,54 @@ sub getItemTypes{
             push (@cant,$item_type_hash{$item});
             push (@colors, random_color());
         }
+    }
+
+    return (\@items,\@colors,\@cant);
+}
+
+sub getConsultasOPAC{
+    my ($params) = @_;
+
+
+
+    my $total       = $params->{'total'};
+    my $registrados = $params->{'registrados'};
+    my $tipo_socio  = $params->{'tipo_socio'};
+    my $f_inicio    = $params->{'f_inicio'};
+    my $f_fin       = $params->{'f_fin'};
+    my @filtros;
+    use C4::Modelo::RepBusqueda::Manager;
+    
+    if (!$total){
+        if ($registrados){
+            push (@filtros, (nro_socio => {ne =>undef}) );
+        }else{
+            push (@filtros, (nro_socio => {eq =>undef}) );
+        }
+        if (C4::AR::Utilidades::validateString($tipo_socio)){
+            push (@filtros, (categoria_socio => {eq =>$tipo_socio}) );
+        }
+        if (C4::AR::Utilidades::validateString($f_inicio)){
+            push (@filtros, (fecha => {eq =>$f_inicio,gt => $f_inicio}) );
+        }
+        if (C4::AR::Utilidades::validateString($f_fin)){
+            push (@filtros, (fecha => {eq =>$f_fin,lt => $f_fin}) );
+        }
+        
+    }
+
+    my ($rep_busqueda) = C4::Modelo::RepBusqueda::Manager->get_rep_busqueda(    query => \@filtros,
+                                                                                group_by => ['categoria_socio'],
+                                                                                select => ['COUNT(categoria_socio) AS agregacion_temp','nro_socio','categoria_socio'],
+                                                                           );
+
+    my @items;
+    my @cant;
+    my @colors;
+    foreach my $record (@$rep_busqueda){
+        push (@items,$record->getCategoria_socio_report);
+        push (@cant,$record->agregacion_temp);
+        push (@colors, random_color());
     }
 
     return (\@items,\@colors,\@cant);
