@@ -1669,7 +1669,10 @@ CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DE
 CHANGE `borrowernumber` `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0',
 CHANGE `date` `fecha` DATE NOT NULL DEFAULT '0000-00-00',
 CHANGE `end_date` `fecha_final` DATE NULL DEFAULT NULL ,
-CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NULL DEFAULT '0';"
+CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NULL DEFAULT '0';",
+"ALTER TABLE `ref_nivel_bibliografico` DROP PRIMARY KEY ;",
+"ALTER TABLE `ref_nivel_bibliografico` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;",
+"ALTER TABLE `ref_soporte` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;"
  );
 
   foreach my $alt (@alternos){
