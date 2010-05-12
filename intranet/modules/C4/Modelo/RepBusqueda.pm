@@ -8,9 +8,12 @@ __PACKAGE__->meta->setup(
     table   => 'rep_busqueda',
 
     columns => [
-        idBusqueda => { type => 'serial', not_null => 1 },
-        nro_socio   => { type => 'varchar' , length => 16},
-        fecha      => { type => 'varchar', length => 12, not_null => 1 },
+        idBusqueda      => { type => 'serial', not_null => 1 },
+        nro_socio       => { type => 'varchar' , length => 16},
+        fecha           => { type => 'varchar', length => 32, not_null => 1 },
+        categoria_socio => { type => 'char', not_null => 1 , length => 2},
+        agregacion_temp => { type => 'varchar' , length => 255},
+        
     ],
 
     primary_key_columns => [ 'idBusqueda' ],
@@ -31,8 +34,16 @@ sub agregar{
    my ($self) = shift;
    my ($nro_socio) = @_;
    $self->setNro_socio($nro_socio);
-   $self->setFecha(C4::AR::Utilidades::getToday());
    $self->save();
+}
+
+sub getCategoria_socio_report{
+   my ($self) = shift;
+    if (C4::AR::Utilidades::validateString($self->categoria_socio)){
+        return ($self->categoria_socio);
+    }else{
+        return(C4::AR::Filtros::i18n('Anonimo'));
+    }
 }
 
 sub getIdBusqueda{
