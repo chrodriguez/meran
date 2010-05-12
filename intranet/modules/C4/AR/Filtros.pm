@@ -172,6 +172,7 @@ sub to_Button{
       $button .="</a>";
     }
 
+    #C4::AR::Debug::debug("Filtros => to_Button => ".$button);
     return $button;
 }
 
