@@ -2,7 +2,7 @@ package C4::AR::Reportes;
 
 use strict;
 no strict "refs";
-
+use C4::Date;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
@@ -115,6 +115,8 @@ sub getConsultasOPAC{
     my $tipo_socio  = $params->{'tipo_socio'};
     my $f_inicio    = $params->{'f_inicio'};
     my $f_fin       = $params->{'f_fin'};
+
+    my $dateformat = C4::Date::get_date_format();
     my @filtros;
     use C4::Modelo::RepBusqueda::Manager;
     
@@ -128,10 +130,10 @@ sub getConsultasOPAC{
             push (@filtros, (categoria_socio => {eq =>$tipo_socio}) );
         }
         if (C4::AR::Utilidades::validateString($f_inicio)){
-            push (@filtros, (fecha => {eq =>$f_inicio,gt => $f_inicio}) );
+            push (@filtros, (fecha => {eq =>format_date_in_iso($f_inicio,$dateformat),gt => format_date_in_iso($f_inicio,$dateformat)}) );
         }
         if (C4::AR::Utilidades::validateString($f_fin)){
-            push (@filtros, (fecha => {eq =>$f_fin,lt => $f_fin}) );
+            push (@filtros, (fecha => {eq =>format_date_in_iso($f_fin,$dateformat),lt => format_date_in_iso($f_fin,$dateformat)}) );
         }
         
     }
