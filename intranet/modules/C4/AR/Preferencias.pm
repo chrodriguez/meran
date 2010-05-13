@@ -156,16 +156,16 @@ sub _verificarDatosVariable {
 }
 
 sub t_modificarVariable {
-	my ($var,$valor,$expl)=@_;
+	my ($var, $valor, $expl) = @_;
 	
 	my $params;
-   	$params->{'value'}= $valor;
-	$params->{'explanation'}= $expl;
+   	$params->{'value'}          = $valor;
+	$params->{'explanation'}    = $expl;
 
-	my $msg_object = C4::AR::Mensajes::create();
-	my ($preferencia) = C4::Modelo::PrefPreferenciaSistema->new( variable => $var );
+	my $msg_object              = C4::AR::Mensajes::create();
+	my ($preferencia)           = C4::Modelo::PrefPreferenciaSistema->new( variable => $var );
 	$preferencia->load();
-	my $db = $preferencia->db;	
+	my $db                      = $preferencia->db;	
 
 	$db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
@@ -185,6 +185,7 @@ sub t_modificarVariable {
 	}
 
 	$db->{connect_options}->{AutoCommit} = 1;
+
 	return ($msg_object);
 }
 

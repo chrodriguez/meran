@@ -217,6 +217,17 @@ ALTER TABLE `ref_soporte` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
 ALTER TABLE  `cat_ref_tipo_nivel3` ADD  `agregacion_temp` VARCHAR( 255 ) NULL ;
 
 
+INSERT INTO pref_preferencia_sistema (`variable` ,`value` ,`explanation` ,`options` ,type)
+VALUES ('port_mail', '587', 'puerto del servidor de mail', NULL,'text');
+
+insert into pref_preferencia_sistema (variable,value,explanation,type) 
+values ('username_mail','kkohatesting@yahoo.com.ar','usuario de la cuenta de mail','text');
+insert into pref_preferencia_sistema (variable,value,explanation,type) 
+values ('password_mail','pato123','password de la cuenta de mail','text');
+insert into pref_preferencia_sistema (variable,value,explanation,type) 
+values ('smtp_server','smtp.live.com','Servidor SMTP','text');
+ insert into pref_preferencia_sistema (variable,value,explanation,type) 
+values ('smtp_metodo','TLS','Método de encriptación usado por el servidor SMTP para la autenticación','text');
 ALTER TABLE  `rep_busqueda` ADD  `categoria_socio` VARCHAR( 255 ) NULL ;
 
 ALTER TABLE  `usr_ref_categoria_socio` ADD  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;

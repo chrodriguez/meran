@@ -1,10 +1,7 @@
 var objAH;var combinables=['titulo','autor','tipo','signatura','tipo_nivel3_id'];var noCombinables=['keyword','isbn','dictionary','codBarra','estante','tema'];var shouldScroll=false;function updateInfoBusquedas(responseText){$("#volver").hide();$("#filtrosBusqueda").slideUp('slow');$('#resultBusqueda').html(responseText);$("#resultBusqueda").slideDown("slow");zebra('datos_tabla');if(shouldScroll)
 scrollTo('resultBusqueda');}
-function highlightBusquedaCombinable(){var string=[];var classes=[];if($('#autor').val()!=''){classes.push('autor_result');}
-if($('#titulo').val()!=''){classes.push('titulo_result');}
-var combinables=['titulo','autor','signatura'];highlight(classes,combinables);}
 function busquedaCombinable(){objAH=new AjaxHelper(updateBusquedaCombinable);objAH.debug=true;objAH.url='/cgi-bin/koha/busquedas/busquedasDB.pl';objAH.titulo=$('#titulo').val();objAH.autor=$('#autor').val();objAH.signatura=$('#signatura').val();objAH.tipo_nivel3_name=$('#tipo_nivel3_id').val();objAH.tipoAccion='BUSQUEDA_AVANZADA';var radio=$(":checked");var tipo=radio[0].value;objAH.tipo=tipo;objAH.funcion='changePage';objAH.sendToServer();}
-function updateBusquedaCombinable(responseText){updateInfoBusquedas(responseText);highlightBusquedaCombinable();}
+function updateBusquedaCombinable(responseText){updateInfoBusquedas(responseText);}
 function changePage(ini){objAH.changePage(ini);}
 function ordenarPor(ord){objAH.sort(ord);}
 function buscar(doScroll){var limite_caracteres=3;var cumple_limite=true;var cumple_vacio=true;if(doScroll)

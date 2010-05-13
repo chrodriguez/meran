@@ -46,6 +46,7 @@ function objeto_usuario(){
 function detalleUsuario(nro_socio){
 	objAH               = new AjaxHelper(updateInfoUsuario);
 	objAH.debug         = true;
+    objAH.cache         = true;
     objAH.showOverlay   = true;
 	objAH.url           = '/cgi-bin/koha/circ/detalleUsuario.pl';
 	objAH.nro_socio     = nro_socio;
@@ -426,12 +427,13 @@ function updateInfoRenovar(responseText){
 * realiza la devolucion de 1 a n ejemplares segun INFO_PRESTAMOS_ARRAY
 */
 function devolver(){
-	objAH=new AjaxHelper(updateInfoDevolver);
-	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-	objAH.tipoAccion= 'REALIZAR_DEVOLUCION';
-	objAH.datosArray= INFO_PRESTAMOS_ARRAY;
-	objAH.nro_socio= USUARIO.ID;
+	objAH               = new AjaxHelper(updateInfoDevolver);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.url           = '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion    = 'REALIZAR_DEVOLUCION';
+	objAH.datosArray    = INFO_PRESTAMOS_ARRAY;
+	objAH.nro_socio     = USUARIO.ID;
 	//se envia la consulta
 	objAH.sendToServer();
 }

@@ -159,10 +159,10 @@ sub getUserLocale{
 
     if ($session->param('usr_locale')){
         $locale = $session->param('usr_locale');
-        C4::AR::Debug::debug("Auth => obtengo locale de la session => ".$locale);
+#         C4::AR::Debug::debug("Auth => obtengo locale de la session => ".$locale);
     } else {
         $locale = C4::Context->config("defaultLang") || 'es_ES';
-        C4::AR::Debug::debug("Auth => NO obtengo locale de la session => ".$locale);
+#         C4::AR::Debug::debug("Auth => NO obtengo locale de la session => ".$locale);
     }
 
     return $locale;
@@ -320,7 +320,6 @@ sub get_template_and_user {
         $socio_data{'usr_alt_telefono'}         = $session->param('usr_alt_telefono');
         $socio_data{'usr_email'}                = $session->param('usr_email');
         $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
-        
 
         $params->{'socio_data'}         = \%socio_data;
 		$params->{'token'}              = $session->param('token');

@@ -135,10 +135,17 @@ sub agregar{
 }
 
 sub modificar{
-    my ($self)=shift;
-    my ($data_hash)=@_;
+    my ($self)          = shift;
+    my ($data_hash)     = @_;
+
 	$self->setValue($data_hash->{'value'});
-    $self->setExplanation($data_hash->{'explanation'});
+    if($data_hash->{'explanation'} || $data_hash->{'explanation'} ne ''){
+        $self->setExplanation($data_hash->{'explanation'});
+    } else {
+        #si no llega nada o es blanco mantengo el dato, solo se esta actualizando la variable
+        $self->setExplanation($self->getExplanation());
+    }
+
     $self->save();
 }
 

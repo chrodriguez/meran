@@ -1331,6 +1331,7 @@ sub from_json_ISO {
     }
     or do{
 # FIXME falta generar un codigo de error para error de sistema
+        C4::AR::Debug::debug("Utilidades => from_json_ISO => ERROR");
         &C4::AR::Mensajes::printErrorDB($@, 'UT001','INTRA');
         return "0";
     }

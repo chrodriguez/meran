@@ -10,6 +10,16 @@
 NRO_SOCIO_AUTH=0;
 var objAH;
 
+function clear_usuario(){
+    $('#usuario').val('');
+    $('#detalleUsuario').slideUp('slow');
+    $('#tablaPrestamos').slideUp('slow');
+}
+
+function clear_barcode(){
+    $('#barcode').val('');
+}
+
 function verificarBarcode(){
 
 	objAH               = new AjaxHelper(updateVerificarBarcode);
@@ -23,7 +33,7 @@ function verificarBarcode(){
 }
 
 function updateVerificarBarcode(responseText){
-	var Messages= JSONstring.toObject(responseText);
+	var Messages    = JSONstring.toObject(responseText);
 	setMessages(Messages);
 }
 
@@ -33,6 +43,7 @@ function obtenerTiposDePrestamos(){
 	objAH               = new AjaxHelper(updateObtenerTiposDePrestamos);
 	objAH.debug         = true;
     objAH.showOverlay   = true;
+    objAH.cache         = true;
 	objAH.url           = "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio     = NRO_SOCIO_AUTH;
 	objAH.barcode       = $('#barcode_hidden').val();
@@ -44,7 +55,6 @@ function obtenerTiposDePrestamos(){
 function updateObtenerTiposDePrestamos(responseText){
 	var infoHash                    = JSONstring.toObject(responseText);
 	var tipoPrestamo_array_hash_ref = infoHash.tipoPrestamo;
-// 	var comboTipoPrestamo_html      = crearCombo(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
     var comboTipoPrestamo_html      = crearComboDeItems(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
 
 	$('#spanComboTipoPrestamo').html(comboTipoPrestamo_html);
@@ -55,13 +65,15 @@ function realizarAccionCircRapida(){
 
 	objAH                   = new AjaxHelper(updateRealizarAccion);
 	objAH.debug             = true;
+    objAH.showOverlay       = true;
 	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio         = $('#nro_socio_hidden').val();
 	objAH.barcode           = $('#barcode').val();
 
 	if($('#operacion').val() == 'devolver'){
 		var prestamos_array = new Array();
-		prestamos_array     = $('#barcode_hidden').val();
+// 		prestamos_array     = prestamos_array.push($('#barcode_hidden').val());
+        prestamos_array.push($('#barcode_hidden').val());
 		objAH.datosArray    = prestamos_array;
 	}
 
@@ -91,6 +103,7 @@ function updateRealizarAccion(responseText){
 		setMessages(Messages);
 		//borro la cache del autocomplete
 		$('#barcodePrestado').flushCache();
+        detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
 	}
 	
 	$('#operacion').focus();
@@ -99,7 +112,7 @@ function updateRealizarAccion(responseText){
 function tieneApoderado(){
 	//fijo el nro_socio global para la ventana de agregarAutorizado
 // FIXME y esto?
-	NRO_SOCIO_AUTH  =  $('#nro_socio_hidden').val(); 
+	NRO_SOCIO_AUTH  = $('#nro_socio_hidden').val(); 
 	var nro_socio   = $('#nro_socio_hidden').val();
 	USUARIO         = new objeto_usuario();
 	USUARIO.text    = $('#usuarioAutocomplete').val();
@@ -108,6 +121,7 @@ function tieneApoderado(){
 	var objAH               = new AjaxHelper(updateTieneAutorizado);
 	objAH.debug             = true;
     objAH.showOverlay       = true;
+    objAH.cache             = true;
 	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio         = $('#nro_socio_hidden').val();
 	objAH.tipoAccion        = "CIRCULACION_RAPIDA_TIENE_AUTORIZADO";
@@ -129,7 +143,8 @@ function updateTieneAutorizado(responseText){
 }
 
 function onChangeOperacion(){
-	var operacion= $('#operacion').val();
+	var operacion = $('#operacion').val();
+//     $("#form_circulacion_rapida").autoAdvance();
 
 	if(operacion == 'prestar'){		
 	//busco sobre el conj. de todos los barcodes
@@ -137,8 +152,9 @@ function onChangeOperacion(){
 		$('#barcode').val('');
 		$('#barcode').focus();
 		$('#barcodePrestado').hide();
-		$('#spanComboTipoPrestamo').html('');
+		$('#spanComboTipoPrestamo').html("<select><option value='-1'>[% 'SIN SELECCIONAR' | i18n %]</option></select>");
 		$('#spanComboTipoPrestamo').show();
+        $('#cambo_tipo_prestamo').show();
 		$('#tablaPrestamos').hide();
 		mostrarBotonAceptar();
 
@@ -148,6 +164,7 @@ function onChangeOperacion(){
 		$('#barcodePrestado').show();
 		$('#barcodePrestado').val('');
 		$('#barcodePrestado').focus();
+        $('#cambo_tipo_prestamo').hide();
 		$('#spanComboTipoPrestamo').hide();
 		$('#tablaPrestamos').show();
 		$('#aceptar').hide();
@@ -166,7 +183,6 @@ function updateAutocompleteBarcodes(){
 }
 
 function updateAutocompleteBarcodesPrestados(){
-	
 	mostrarBotonAceptar();
 }
 
@@ -180,7 +196,7 @@ function mostrarBotonAceptar(){
 	//si se va a devolver y tengo el barcode, muetro el boton para devolver
 	if( $('#operacion').val() == 'devolver' && $('#barcodeprestado').val() != '' ){
 		$('#aceptar').show();
-        $('#cambo_tipo_prestamo').show();
+        $('#cambo_tipo_prestamo').hide();
 	}
 
 	if( $('#operacion').val() == 'prestar' && $('#barcode').val() != '' && $('#usuario').val() != '' && $('#comboTipoPrestamo').val() != '' ){
@@ -192,6 +208,8 @@ function mostrarBotonAceptar(){
 
 function onCompleteUsuarios(){
 	tieneApoderado();
+    detalleUsuario(NRO_SOCIO_AUTH);
+//     $("input[name='usuario']").moveNext(); //para evitar q se llame otra vez al autocomplete
 	if (($('#operacion').val() == 'devolver') || ($('#operacion').val() == 'renovar')) {
 	//se va a devolver algo, se muestra la info de los prestamos del usuario
 		detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
@@ -228,8 +246,8 @@ function updateEsRegular(responseText){
 function updateInfoDevolver(responseText){
 	cancelarDiv();
 
-	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.Messages_arrayref;
+	var infoHash        = JSONstring.toObject(responseText);
+	var messageArray    = infoHash.Messages_arrayref;
 	setMessages(messageArray);
 
 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
@@ -256,12 +274,12 @@ $(document).ready(function() {
 						});
 
 	CrearAutocompleteBarcodesPrestados({	
-                                             IdInput: 'barcodePrestado', 
+                                            IdInput: 'barcodePrestado', 
 											IdInputHidden: 'barcode_hidden', 
 											callBackFunction: updateAutocompleteBarcodesPrestados
 									});
 
-	onChangeOperacion();
+	onChangeOperacion(); 
 });
 
 </script>
@@ -272,6 +290,7 @@ $(document).ready(function() {
     <br>
     <ul>
       <fieldset>
+        <form id="form_circulacion_rapida">
           <li class="sub_item">
                 <label for="operacion">[% 'Operaci&oacute;n:' | i18n %]</label>
                 <select id='operacion' tabindex='1' onChange='onChangeOperacion()'>	
@@ -279,7 +298,8 @@ $(document).ready(function() {
                     <option value="devolver">[% 'Devoluci&oacute;n' | i18n %]</option>
                     <option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
                 </select>
-                <div id="cambo_tipo_prestamo" style="display: none">
+                <!--<div id="cambo_tipo_prestamo" style="display: none">-->
+                <div id="cambo_tipo_prestamo">
                     <label for="operacion">[% 'Tipo de Pr&eacute;stamo:' | i18n %]</label>
                     <div id="spanComboTipoPrestamo"></div>
                 </div>
@@ -288,7 +308,7 @@ $(document).ready(function() {
           <li class="sub_item">
                   <div id="divInfoEjemplar">
                       <label for="barcode">[% 'C&oacute;digo de Barras:' | i18n %]</label>
-                      <input type="text" id="barcode" value="" tabindex='2' style="display: none;">
+                      <input type="text" id="barcode" name="barcode" value="" tabindex='2' style="display: none;" onclick="clear_barcode();">
                       <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
                       <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
                       <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
@@ -299,7 +319,7 @@ $(document).ready(function() {
           <li class="sub_item">
                   <div id="divInfoUsuario">
                       <label for="usuario">[% 'Usuario:' | i18n %]</label>
-                      <input type='text' id='usuario' value='' size=32 tabindex='3' style="float: left">
+                      <input type='text' id='usuario' name='usuario' value='' size=32 tabindex='3' style="float: left" onclick="clear_usuario();">
                       <div id="estadoUsuario"></div>
                       <input type='hidden' id='nro_socio_hidden' value=''>
                       <span id="divAutorizado" style="float:right">[% 'Autorizado:' | i18n %]<input type="checkbox" value="autorizado"></span>
@@ -312,10 +332,13 @@ $(document).ready(function() {
                       [% END %]
                   </div>
           </li>
+        </form>
       </fieldset>
 </fieldset>
 </ul>
 
+<!-- DELTALLE DEL USUARIO -->
+<div id="detalleUsuario"></div>
 <br>
 <!-- DETALLE DE PRESTAMOS -->
 <div id="tablaPrestamos" style="clear: both;"></div>
@@ -328,6 +351,7 @@ $(document).ready(function() {
                                                                                 boton   => "boton_agregar",
                                                                                 onClick => "realizarAccionCircRapida();",
                                                                                 title   => "[% 'Aceptar' | i18n %]",
+                                                                                alternClass => "botonCentrado"
                                                   ) ;
                       [% END %]
 </div>

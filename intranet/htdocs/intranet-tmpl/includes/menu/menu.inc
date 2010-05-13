@@ -632,6 +632,14 @@
                     </li>
                     <li>
                                 [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% 'Configuraci&oacute;n del Mail' | i18n %]",
+                                                                    url =>      "/cgi-bin/koha/admin/global/mail_config.pl", 
+                                                                    title =>    "[% 'Configuraci&oacute;n del Mail' | i18n %]"
+                                                                ) ;
+                                [% END %]
+                    </li>
+                    <li>
+                                [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% 'Unid. de Informaci&oacute;n' | i18n %]",
                                                                     url =>      "/cgi-bin/koha/admin/branches.pl",
                                                                     title =>    "[% 'Unid. de Informaci&oacute;n' | i18n %]"
