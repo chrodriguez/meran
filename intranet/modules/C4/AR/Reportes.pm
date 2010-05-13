@@ -1,7 +1,7 @@
 package C4::AR::Reportes;
 
 use strict;
-
+no strict "refs";
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -10,6 +10,8 @@ use vars qw(@EXPORT @ISA);
     &getReportFilter
     &getItemTypes
     &getConsultasOPAC
+    &getArrayHash
+    
 );
 
 
@@ -43,6 +45,17 @@ sub random_color {
   return "\#" . $hex[0] . $hex[1] . $hex[2];
 }
 
+
+sub next_colour{
+
+  my ($position) = @_;
+  
+  my @colours_array = ("#330000","#3333FF","#669900","#990000","#FF9900","#9966FF","#FF9900","#66FF66");
+  
+  return (@colours_array[$position]);
+    
+
+}
 sub getItemTypes{
     my ($params) = @_;
 
@@ -52,7 +65,7 @@ sub getItemTypes{
 
     my @items;
     my @cant;
-    my @colors;
+    my @colours;
 
     my %item_type_hash = {0};
     if ( ($params->{'item_type'}) && ($params->{'item_type'} ne 'ALL') ){
@@ -75,17 +88,21 @@ sub getItemTypes{
         }
     }
 
+    my $limit_of_view = 0;
+    
     foreach my $item ( keys %item_type_hash )
     {
         $item_type_hash{$item} = int $item_type_hash{$item};
         if ($item_type_hash{$item} > 0){
-            push (@items, $item);
-            push (@cant,$item_type_hash{$item});
-            push (@colors, random_color());
+                push (@items, $item);
+                push (@cant,$item_type_hash{$item});
+                push (@colours, next_colour($limit_of_view++));
         }
     }
 
-    return (\@items,\@colors,\@cant);
+    sort_and_cumulate(\@items,\@colours,\@cant);
+    
+    return (\@items,\@colours,\@cant);
 }
 
 sub getConsultasOPAC{
@@ -123,15 +140,63 @@ sub getConsultasOPAC{
                                                                                 group_by => ['categoria_socio'],
                                                                                 select => ['COUNT(categoria_socio) AS agregacion_temp','nro_socio','categoria_socio'],
                                                                            );
-
     my @items;
     my @cant;
     my @colors;
+    my $cont = 0;
     foreach my $record (@$rep_busqueda){
         push (@items,$record->getCategoria_socio_report);
         push (@cant,$record->agregacion_temp);
-        push (@colors, random_color());
+        push (@colors, next_colour($cont++));
     }
 
+    sort_and_cumulate(\@items,\@colors,\@cant);
+    
     return (\@items,\@colors,\@cant);
+}
+
+sub getArrayHash{
+
+    my ($function_name,$params) = @_;
+    my ($items,$colours,$cant) = &$function_name($params);
+    
+    my $i = 0;
+    my $max = scalar(@$items);
+    my @data;
+    
+    for ($i=0;$i<$max;$i++){
+        my %hash = {};
+        $hash{'item'} = $items->[$i];
+        $hash{'cant'} = $cant->[$i];
+        $hash{'color'} = $colours->[$i];
+        push (@data, \%hash);
+    }
+
+    return (\@data);
+
+}
+
+sub sort_and_cumulate{
+
+    my $items = shift;
+    my $colours = shift;
+    my $cant = shift;
+    
+    
+    C4::AR::Utilidades::bbl_sort($cant,$items,$colours);
+
+    my $CUMULATIVE_LIMIT = 7;
+    
+    if (scalar(@$items)>$CUMULATIVE_LIMIT){
+        my $cant = 0;
+        for (my $i=$CUMULATIVE_LIMIT; $i<scalar(@$items); $i++){
+            $cant+=$cant->[$i];
+            splice(@$cant,$i,1);
+            splice(@$items,$i,1);
+            splice(@$colours,$i,1);
+        }
+        $items->[$CUMULATIVE_LIMIT] = C4::AR::Filtros::i18n("Otros");
+        $cant->[$CUMULATIVE_LIMIT] += $cant;
+        $colours->[$CUMULATIVE_LIMIT] = next_colour(7);
+    }
 }

@@ -288,6 +288,10 @@ div.indicators{cursor:pointer;color:black;border:1px solid #777777;background:#E
 
 .usr_irregular{color:red}
 
-.chart_fieldset{width: 80%;}
+.chart_fieldset{width: 72%;}
 
 #chart{margin:0 auto 0 auto;}
+
+.datos_tabla_char{width:12%;border-collapse: collapse;}
+.datos_tabla_char td, th { padding: .3em; border: 1px #ccc solid; }
+.datos_tabla_char thead { background: #fc9; }

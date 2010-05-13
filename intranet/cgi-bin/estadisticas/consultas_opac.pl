@@ -33,13 +33,13 @@ my ($template, $session, $t_params, $data_url);
 
 if (!$obj){
         ($template, $session, $t_params) = get_template_and_user({
-                                template_name => "estadisticas/colecciones.tmpl",
+                                template_name => "estadisticas/consultas_opac.tmpl",
                                 query => $input,
                                 type => "intranet",
                                 authnotrequired => 0,
                                 flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                                 debug => 1,
-			            });
+          });
 }else{
         ($template, $session, $t_params) = get_template_and_user({
                                 template_name => "estadisticas/partial_swf.tmpl",
@@ -50,15 +50,16 @@ if (!$obj){
                                 debug => 1,
                         });
 
-        $data_url = "/cgi-bin/koha/estadisticas/colecciones_data.pl?item_type=".$obj->{'item_type'}."%26ui=".$obj->{'ui'};
-        $t_params->{'data'} = C4::AR::Reportes::getArrayHash('getItemTypes',$obj);
+        $data_url = "/cgi-bin/koha/estadisticas/consultas_opac_data.pl?total=".$obj->{'total'}."%26tipo_socio=".$obj->{'tipo_socio'}."%26registrados=".$obj->{'registrados'}."%26f_inicio=".$obj->{'f_inicio'}."%26f_fin=".$obj->{'f_fin'};
+        $t_params->{'data'} = C4::AR::Reportes::getArrayHash('getConsultasOPAC',$obj);
 
 }
 
 my %params_for_combo = {};
-$params_for_combo{'default'} = 'ALL';
+$params_for_combo{'default'} = '';
+
 $t_params->{'data_url'} = $data_url;
-$t_params->{'item_type_combo'} = C4::AR::Utilidades::generarComboTipoNivel3(\%params_for_combo);
-$t_params->{'ui_combo'} = C4::AR::Utilidades::generarComboUI();
+$t_params->{'logueo_opac'} = C4::AR::Preferencias->getValorPreferencia("logSearchOPAC");;
+$t_params->{'categorias_usuario'} = C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params_for_combo);
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

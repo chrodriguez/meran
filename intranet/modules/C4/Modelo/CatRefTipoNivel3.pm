@@ -11,7 +11,7 @@ __PACKAGE__->meta->setup(
         id                    => { type => 'serial', not_null => 1 },
         id_tipo_doc           => { type => 'varchar', length => 4, not_null => 1 },
         nombre                => { type => 'varchar', length => 255, not_null => 1 },
-        agregacion_temp    => { type => 'varchar', length => 250 },
+        agregacion_temp       => { type => 'varchar', length => 250 },
 
     ],
 

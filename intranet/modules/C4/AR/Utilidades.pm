@@ -91,7 +91,7 @@ use vars qw(@EXPORT @ISA);
     &generarComboTemasOPAC
     &generarComboTemasINTRA
     &getFeriados
-
+    &bbl_sort
 );
 
 # para los combos que no usan tablas de referencia
@@ -2973,6 +2973,38 @@ sub redirectAndAdvice{
     C4::Auth::redirectTo('/cgi-bin/koha/informacion.pl');
 #     exit;
 }
+
+
+sub bbl_sort {
+    my $array = shift;
+    my $array2 = shift;
+    my $array3 = shift;
+    my $not_complete = 1;
+    my $index;
+    my $len = ((scalar @$array) - 2);
+    while ($not_complete) {
+        $not_complete = 0;
+        foreach $index (0 .. $len) {
+            if (@$array[$index] < @$array[$index + 1]) {
+                my $temp = @$array[$index + 1];
+                @$array[$index + 1] = @$array[$index];
+                @$array[$index] = $temp;
+                
+                $temp = @$array2[$index + 1];
+                @$array2[$index + 1] = @$array2[$index];
+                @$array2[$index] = $temp;
+                
+                $temp = @$array3[$index + 1];
+                @$array3[$index + 1] = @$array3[$index];
+                @$array3[$index] = $temp;
+
+                $not_complete = 1;
+            }
+        }
+    }
+}
+
+
 
 END { }       # module clean-up code here (global destructor)
 
