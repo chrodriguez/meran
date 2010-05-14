@@ -2,7 +2,6 @@
 use strict;
 require Exporter;
 use CGI;
-use Mail::Sendmail;
 use C4::Auth;         # checkauth, getnro_socio.
 use C4::Circulation::Circ2;
 use C4::Interface::CGI::Output;

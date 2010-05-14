@@ -396,16 +396,14 @@ sub Enviar_Email{
         $mailMessage =~ s/a3/$cierre/;
         $fecha=C4::Date::format_date($fecha,$dateformat);
         $mailMessage =~ s/a4/$fecha/;
-        my %mail = (    To => $socio->persona->getEmail,
-                From => $mailFrom,
-                Subject => $mailSubject,
-                Message => $mailMessage);
 
-        my $resultado='ok';
-        if ($socio->persona->getEmail && $mailFrom ){
-            if (!sendmail(%mail))
-                {$resultado='error'};
-        }else {$resultado='';}
+        my %mail;
+        $mail{'mail_from'}             = $mailFrom;
+        $mail{'mail_to'}               = $socio->persona->getEmail;
+        $mail{'mail_subject'}          = $mailSubject;
+        $mail{'mail_message'}          = $mailMessage;
+    
+        my ($ok, $msg_error)           = &C4::AR::Mail::send_mail(\%mail);
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
    my $dateformat=C4::Date::get_date_format();
