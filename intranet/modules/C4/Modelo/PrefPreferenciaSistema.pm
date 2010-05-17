@@ -146,6 +146,13 @@ sub modificar{
         $self->setExplanation($self->getExplanation());
     }
 
+    if($data_hash->{'categoria'} || $data_hash->{'categoria'} ne ''){
+        $self->setExplanation($data_hash->{'categoria'});
+    } else {
+        #si no llega nada o es blanco mantengo el dato, solo se esta actualizando la variable
+        $self->setCategoria($self->getCategoria());
+    }
+
     $self->save();
 }
 
