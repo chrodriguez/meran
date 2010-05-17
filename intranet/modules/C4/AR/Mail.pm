@@ -21,7 +21,7 @@ use vars qw(@EXPORT @ISA);
 # TODO pasar a preferencias????
 
 use constant SMTP_TIME_OUT  => 30;
-use constant DEBUG          => 1;
+use constant DEBUG          => 0;
 
 sub send_mail_TLS {
     my ($mail_hash_ref) = @_;
@@ -253,10 +253,10 @@ sub send_mail_TEST {
     $mail{'mail_subject'}           = Encode::decode('utf8', "Prueba de configuración de mail");
     $mail{'mail_message'}           = "Esta es una prueba de configuraci".chr(243)."n del mail";
 
-    my ($ok, $msg_error)           = &C4::AR::Mail::send_mail(\%mail);
+    my ($ok, $msg_error)            = &C4::AR::Mail::send_mail(\%mail);
 
     if($ok){    
-        $msg_error                 =  Encode::decode('utf8',"Se envió el mail a la cuenta (".$mail_to.")");
+        $msg_error                  =  Encode::decode('utf8',"Se envió el mail a la cuenta (".$mail_to.")");
     }
 
     return ($ok, $msg_error);

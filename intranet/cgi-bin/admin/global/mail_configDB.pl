@@ -36,6 +36,7 @@ my ($userid, $session, $flags, $socio) = checkauth(     $input,
     my $smtp_server_sendmail; 
     
     if($obj){
+
         $obj                     = C4::AR::Utilidades::from_json_ISO($obj);
         $accion                  = $obj->{'accion'};
         $smtp_server             = $obj->{'smtp_server'};
@@ -46,7 +47,9 @@ my ($userid, $session, $flags, $socio) = checkauth(     $input,
         $mailFrom                = $obj->{'mailFrom'};
         $reserveFrom             = $obj->{'reserveFrom'};
         $smtp_server_sendmail    = $obj->{'smtp_server_sendmail'}||0; 
-    }else{
+
+    } else {
+
         my %hash_temp            = {};
         $obj                     = \%hash_temp;
         $accion                  = $input->param('accion');
@@ -58,6 +61,7 @@ my ($userid, $session, $flags, $socio) = checkauth(     $input,
         $mailFrom                = $input->param('mailFrom');
         $reserveFrom             = $input->param('reserveFrom');
         $smtp_server_sendmail    = $input->param('smtp_server_sendmail')||0; 
+
     }
    
 
@@ -77,30 +81,19 @@ if($accion eq "MODIFICAR_CONFIGURACION"){
 
 } elsif($accion eq "PROBAR_CONFIGURACION"){
 
-#     $obj->{'smtp_server'}           = $obj->{'smtp_server'}             || C4::Context->preference("smtp_server");
-#     $obj->{'smtp_metodo'}           = $obj->{'smtp_metodo'}             || C4::Context->preference("smtp_metodo");
-#     $obj->{'smtp_port'}             = $obj->{'port_mail'}               || C4::Context->preference("port_mail");
-#     $obj->{'smtp_user'}             = $obj->{'username_mail'}           || C4::Context->preference("username_mail");
-#     $obj->{'smtp_pass'}             = $obj->{'password_mail'}           || C4::Context->preference("password_mail");
-#     $obj->{'smtp_server_sendmail'}  = $obj->{'smtp_server_sendmail'}    || C4::Context->preference("smtp_server_sendmail");
-#     $obj->{'mail_from'}             = $obj->{'mail_from'}               || C4::Context->preference("mailFrom");
-#     my $reserveFrom                 = $obj->{'reserveFrom'};
-#     $obj->{'mail_to'}               = $socio->persona->getEmail();
-#     $obj->{'mail_subject'}          = Encode::decode('utf8', "Prueba de configuración de mail");
-#     $obj->{'mail_message'}          = Encode::decode('utf8', "Esta es una prueba de configuraci".chr(243)."n del mail");
-    my $msg_object                  = C4::AR::Mensajes::create();
+    my $msg_object          = C4::AR::Mensajes::create();
   
-    my ($ok, $msg_error) = C4::AR::Mail::send_mail_TEST($socio->persona->getEmail());    
+    my ($ok, $msg_error)    = C4::AR::Mail::send_mail_TEST($socio->persona->getEmail());    
     
     if($ok){
-        $msg_object->{'error'} = 0;
+        $msg_object->{'error'}  = 0;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U413', 'params' => [$obj->{'mail_to'}]} ) ;
     } else {
-        $msg_object->{'error'} = 1;
+        $msg_object->{'error'}  = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U414', 'params' => [$obj->{'mail_to'}, $msg_error]} ) ;
     }
 
-    my $infoOperacionJSON=to_json $msg_object;
+    my $infoOperacionJSON       = to_json $msg_object;
     C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }
