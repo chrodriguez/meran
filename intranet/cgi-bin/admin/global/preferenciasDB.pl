@@ -147,11 +147,14 @@ if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){
                                     );
 
 
- 	my $variable=$obj->{'variable'};
- 	my $valor= &C4::AR::Utilidades::trim($obj->{'valor'});
- 	my $expl=$obj->{'explicacion'};
+ 	my $variable    = $obj->{'variable'};
+ 	my $valor       = &C4::AR::Utilidades::trim($obj->{'valor'});
+ 	my $expl        = $obj->{'explicacion'};
+    my $categoria   = 'sistema';#$obj->{'categoria'};
 
-	my $Message_arrayref = &C4::AR::Preferencias::t_modificarVariable($variable,$valor,$expl);
+# TODO falta la categoria
+
+	my $Message_arrayref = &C4::AR::Preferencias::t_modificarVariable($variable,$valor,$expl,$categoria);
     
     my $infoOperacionJSON=to_json $Message_arrayref;
     C4::Auth::print_header($session);

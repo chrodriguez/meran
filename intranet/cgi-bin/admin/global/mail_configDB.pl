@@ -65,14 +65,15 @@ my ($userid, $session, $flags, $socio) = checkauth(     $input,
     }
    
 
-    my $Message_arrayref        = C4::AR::Preferencias::t_modificarVariable('smtp_server', $smtp_server,'');
-    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('smtp_metodo', $smtp_metodo, '');
-    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('port_mail', $port_mail, '');
-    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('username_mail', $username_mail, '');
-    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('password_mail', $password_mail, '');
-    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('mailFrom', $mailFrom, '');
-    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('reserveFrom', $reserveFrom, '');
-    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('smtp_server_sendmail', $smtp_server_sendmail, '');
+    my $categoria               = 'sistema';
+    my $Message_arrayref        = C4::AR::Preferencias::t_modificarVariable('smtp_server', $smtp_server,'',$categoria);
+    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('smtp_metodo', $smtp_metodo, '',$categoria);
+    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('port_mail', $port_mail, '',$categoria);
+    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('username_mail', $username_mail, '',$categoria);
+    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('password_mail', $password_mail, '',$categoria);
+    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('mailFrom', $mailFrom, '',$categoria);
+    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('reserveFrom', $reserveFrom, '',$categoria);
+    $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('smtp_server_sendmail', $smtp_server_sendmail, '',$categoria);
 
 
 if($accion eq "MODIFICAR_CONFIGURACION"){

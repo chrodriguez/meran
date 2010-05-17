@@ -217,17 +217,20 @@ ALTER TABLE `ref_soporte` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
 ALTER TABLE  `cat_ref_tipo_nivel3` ADD  `agregacion_temp` VARCHAR( 255 ) NULL ;
 
 
-INSERT INTO pref_preferencia_sistema (`variable` ,`value` ,`explanation` ,`options` ,type)
-VALUES ('port_mail', '587', 'puerto del servidor de mail', NULL,'text');
+INSERT INTO pref_preferencia_sistema (`variable` ,`value` ,`explanation` ,`options` ,type,categoria)
+VALUES ('port_mail', '587', 'puerto del servidor de mail', NULL,'text', 'sistema');
 
-insert into pref_preferencia_sistema (variable,value,explanation,type) 
-values ('username_mail','kkohatesting@yahoo.com.ar','usuario de la cuenta de mail','text');
-insert into pref_preferencia_sistema (variable,value,explanation,type) 
-values ('password_mail','pato123','password de la cuenta de mail','text');
-insert into pref_preferencia_sistema (variable,value,explanation,type) 
-values ('smtp_server','smtp.live.com','Servidor SMTP','text');
- insert into pref_preferencia_sistema (variable,value,explanation,type) 
-values ('smtp_metodo','TLS','Método de encriptación usado por el servidor SMTP para la autenticación','text');
+INSERT INTO pref_preferencia_sistema (id, variable, value, explanation, options,type,categoria)
+VALUES(  NULL,'smtp_server_sendmail', '0', 'para habilitar/deshabilitar mail por sendmail', '', 'bool', 'sistema')
+
+insert into pref_preferencia_sistema (variable,value,explanation,type,categoria) 
+values ('username_mail','kkohatesting@yahoo.com.ar','usuario de la cuenta de mail','text', 'sistema');
+insert into pref_preferencia_sistema (variable,value,explanation,type,categoria) 
+values ('password_mail','pato123','password de la cuenta de mail','text', 'sistema');
+insert into pref_preferencia_sistema (variable,value,explanation,type,categoria) 
+values ('smtp_server','smtp.live.com','Servidor SMTP','text', 'sistema');
+ insert into pref_preferencia_sistema (variable,value,explanation,type,categoria) 
+values ('smtp_metodo','TLS','Método de encriptación usado por el servidor SMTP para la autenticación','text', 'sistema');
 ALTER TABLE  `rep_busqueda` ADD  `categoria_socio` VARCHAR( 255 ) NULL ;
 
 ALTER TABLE  `usr_ref_categoria_socio` ADD  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
