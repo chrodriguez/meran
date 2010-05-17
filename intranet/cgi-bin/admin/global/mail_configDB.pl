@@ -83,14 +83,15 @@ if($accion eq "MODIFICAR_CONFIGURACION"){
 
     my $msg_object          = C4::AR::Mensajes::create();
   
-    my ($ok, $msg_error)    = C4::AR::Mail::send_mail_TEST($socio->persona->getEmail());    
+    my $mail_to             = $socio->persona->getEmail();
+    my ($ok, $msg_error)    = C4::AR::Mail::send_mail_TEST($mail_to);    
     
     if($ok){
         $msg_object->{'error'}  = 0;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U413', 'params' => [$obj->{'mail_to'}]} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U413', 'params' => [$mail_to]} ) ;
     } else {
         $msg_object->{'error'}  = 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U414', 'params' => [$obj->{'mail_to'}, $msg_error]} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U414', 'params' => [$mail_to, $msg_error]} ) ;
     }
 
     my $infoOperacionJSON       = to_json $msg_object;

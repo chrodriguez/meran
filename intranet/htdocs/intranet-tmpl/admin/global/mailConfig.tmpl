@@ -17,6 +17,7 @@
     function probarConfiguracion(){
         objAH                           = new AjaxHelper(updateProbarConfiguracion);
         objAH.debug                     = true;
+        objAH.showOverlay               = true;
         objAH.url                       = "/cgi-bin/koha/admin/global/mail_configDB.pl";
         objAH.smtp_server               = $('#smtp_server').val();
         objAH.smtp_metodo               = $('#smtp_metodo').val();
