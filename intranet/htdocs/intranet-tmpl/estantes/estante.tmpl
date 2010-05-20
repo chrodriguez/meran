@@ -183,14 +183,73 @@
             }
         }
 
-
-
-      $(document).ready(function() {
-                verEstantes();
-      });
-
 </script>
 <div id="estante">
+<script>
+      $(document).ready(function() {
+
+               $("#nuevo_estante_0").hide("fast");
+
+               $("#input_nuevo_estante_0").blur( 
+                    function(){ 
+                        $("#nuevo_estante_0").hide("fast");
+                        $("#input_nuevo_estante_0").val("");
+                        });
+
+               $("#input_nuevo_estante_0").keydown(
+                    function(e){
+                    if(e.which == 13){ //con Enter 
+                        agregarEstante($("#input_nuevo_estante_0").val());
+                        }
+                    });
+
+               $("#boton_nuevo_estante_0").click( 
+                    function(){ 
+                        $("#nuevo_estante_0").show("slow");
+                        $("#input_nuevo_estante_0").focus();
+                        });
+});
+</script> 
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>
+        <div class="datos_tabla_div_estantes">
+            <div class="botonera_estantes">
+            <div id="nuevo_estante_0" class="horizontal">
+            [% "Nuevo Estante" | i18n %] : <input type="text" id="input_nuevo_estante_0">
+            </div>
+
+            <div id="boton_nuevo_estante_0">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_agregar",
+                                                                    title   => "[% 'Agregar estante' | i18n %]",
+                                        ) ;
+            [% END %]
+            </div>
+
+      [% IF cant_estantes %]
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_borrar",
+                                                                    onClick => "borrarEstantesSeleccionados(0,0);",
+                                                                    title   => "[% 'Borrar seleccionados' | i18n %]",
+                                        ) ;
+            [% END %]
+        [% END %]
+
+            </div>
+
+           <ul class="ul_tabla_div_estante_0" >
+            [% FOREACH estante IN ESTANTES %]
+             <li>
+            <input type=checkbox name="[% estante.getEstante %]" value="[% estante.getId %]">
+             <a class="click" onClick="verSubEstantes(0,[% estante.getId %])">[% estante.getEstante %]</a>
+            </li>
+            [% END %]
+                </ul>
+
+        </div>
+</fieldset>
 </div>
 <div id="subestante">
 </div>

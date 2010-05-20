@@ -41,7 +41,6 @@ sub getListaEstantesPublicos {
     use C4::Modelo::CatEstante;
     use C4::Modelo::CatEstante::Manager;
     my @filtros;
-    push(@filtros, ( tipo    => { eq => 'public'}));
     push(@filtros, ( padre  => { eq => 0} ));
 
     my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros, sort_by => 'estante');
@@ -242,7 +241,7 @@ sub buscarNombreDuplicado {
     my ($padre,$estante,$valor) = @_;
 
  my @filtros;
-    push(@filtros, ( tipo    => { eq => 'public'}));
+
     if ($estante){push(@filtros, ( id  => { ne => $estante->getId} ));}
     push(@filtros, ( padre  => { eq => $padre} ));
     push(@filtros, ( estante  => { eq => $valor} ));
@@ -272,7 +271,6 @@ sub agregarSubEstante  {
             C4::AR::Debug::debug("VAMOS A AGREGAR EL SUBESTANTE");
             my $nuevo_estante = C4::Modelo::CatEstante->new(db => $db);
             $nuevo_estante->setEstante($valor);
-            $nuevo_estante->setTipo('public');
             $nuevo_estante->setPadre($estante->getId);
             $nuevo_estante->save();
             $db->commit;
@@ -312,7 +310,6 @@ sub agregarEstante  {
             C4::AR::Debug::debug("VAMOS A AGREGAR EL ESTANTE");
             my $nuevo_estante = C4::Modelo::CatEstante->new(db => $db);
             $nuevo_estante->setEstante($valor);
-            $nuevo_estante->setTipo('public');
             $nuevo_estante->setPadre($estante->getId);
             $nuevo_estante->save();
             $db->commit;

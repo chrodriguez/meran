@@ -10,7 +10,6 @@ __PACKAGE__->meta->setup(
     columns => [
         id        => { type => 'integer', not_null => 1 },
         estante   => { type => 'varchar', length => 255 },
-        tipo      => { type => 'text', length => 65535, not_null => 1 },
         padre     => { type => 'integer', default => '0', not_null => 1 },
     ],
 
@@ -52,17 +51,6 @@ sub setEstante{
     my ($self) = shift;
     my ($estante) = @_;
     $self->estante($estante);
-}
-
-sub getTipo{
-    my ($self) = shift;
-    return ($self->tipo);
-}
-
-sub setTipo{
-    my ($self) = shift;
-    my ($tipo) = @_;
-    $self->tipo($tipo);
 }
 
 sub getPadre{

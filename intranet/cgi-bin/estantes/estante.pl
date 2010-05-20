@@ -19,4 +19,8 @@ my ($template, $session, $t_params) = get_template_and_user ({
                                         debug => 1,
                  });
 
+my $estantes_publicos = C4::AR::Estantes::getListaEstantesPublicos();
+$t_params->{'cant_estantes'}= @$estantes_publicos;
+$t_params->{'ESTANTES'}= $estantes_publicos;
+
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
