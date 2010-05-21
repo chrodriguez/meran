@@ -22,5 +22,5 @@ cpan -i Chart::OFC2
 cpan -i Net::SMTP::TLS
 cpan -i Net::SSLeay
 cpan -i Net::Twitter
-cpan -i WW::Facebook::API
+cpan -i WWW::Facebook::API
 
