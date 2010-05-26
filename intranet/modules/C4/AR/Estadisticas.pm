@@ -553,6 +553,7 @@ sub registroEntreFechas{
                                                                         limit               => $params_obj->{'cantR'},
                                                                         offset              => $params_obj->{'fin'},
                                                                         require_objects     => ['socio_responsable'],
+#                                                                         select              => ['usr_socio.*','persona.*']
                                                                 );
 
 

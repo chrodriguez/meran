@@ -7,8 +7,7 @@
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (cat&aacute;logo)" | i18n %]:</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
-            <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: [% buscoPor %]</div>
-            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %]  en ([% timeSeg %] segundos)</div>
+            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %]  </div>
             <div class="contenedor_paginador">[% paginador %]</div>
                 <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
                     <tr>
@@ -17,11 +16,11 @@
                         <th class="titulo_tabla_resultado click" onclick="ordenar('operacion')" title=[% "Ordenar por operaci&oacute;n" | i18n %]>
                             [% "Operaci&oacute;n" | i18n %]
                         </th>
-                        <th class="titulo_tabla_resultado click" onclick="ordenar('tipo')" title=[% "Ordenar por tipo" | i18n %]>[% "Tipo" | i18n %]</th>
-<!--                        <th class="titulo_tabla_resultado click" onclick="ordenar('numero')" title=[% "Ordenar por numero de documento" | i18n %]>
-                            [% "N&uacute;mero" | i18n %]
-                        </th>-->
-                        <th class="titulo_tabla_resultado click" onclick="ordenar('numero')" title=[% "Ordenar por título" | i18n %]>
+                        <th class="titulo_tabla_resultado click" onclick="ordenar('tipo')" title=[% "Ordenar por tipo" | i18n %]>
+                            [% "Tipo" | i18n %]
+                        </th>
+                        <th class="titulo_tabla_resultado click" onclick="ordenar('numero')" 
+                            title=[% "Ordenar por título" | i18n %]>
                             [% "T&iacute;tulo" | i18n %]
                         </th>
                         <th class="titulo_tabla_resultado">[% "Acciones" | i18n %]</th>
@@ -39,14 +38,19 @@
                                                                 title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                             ) ;
                             [% END %]
-                            <a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?nro_socio=[% registro.nro_socio %]">
-                            </a>
                         </td>
                         <td> [% registro.fecha %] </td>
                         <td> [% registro.operacion %]</td>
                         <td> [% registro.tipo %]</td>
-<!--                        <td><a href="/cgi-bin/koha/reports/moredetail2.pl?tipo=[% registro.tipo %]&bib=[% registro.numero %]">[% registro.numero %]</a></td>-->
-                        <td><a href="/cgi-bin/koha/reports/moredetail2.pl?tipo=[% registro.tipo %]&bib=[% registro.numero %]">[% registro.titulo %]</a></td>
+                        <td>
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text    =>  "[% registro.titulo %]",
+                                                                url     =>  "/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
+                                                                params  =>  ["id1=[% registro.id1 %]"],
+                                                                title   =>  "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </td>
                         <td> 
 
                             [% PERL %]
@@ -62,13 +66,13 @@
                                     <li><textarea  id="nota_[% registro.idModificacion %]" cols="45" rows="10"></textarea></li>
                                     <li>
                                         <div class="buttonContainerHorizontal">
-                                                [% PERL %]
-                                                                print C4::AR::Filtros::to_Button( 
-                                                                                                    text    =>  "[% 'Guardar nota' | i18n %]",
-                                                                                                    boton   =>  "boton_agregar",
-                                                                                                    onClick =>  "guardarNota([% registro.idModificacion %]);",
-                                                                        ) ;
-                                                [% END %]
+                                        [% PERL %]
+                                                        print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Guardar nota' | i18n %]",
+                                                                    boton   =>  "boton_agregar",
+                                                                    onClick =>  "guardarNota([% registro.idModificacion %]);",
+                                                                ) ;
+                                        [% END %]
                                         </div>
                                     </li>
                                 </ul>
@@ -78,9 +82,9 @@
 
                                 [% PERL %]
                                         print C4::AR::Filtros::to_Icon(   
-                                                                            boton   => "icon_globo",
-                                                                            onClick => "verNota([% registro.idModificacion %]);",
-                                                                            title   => "[% 'Ver nota' | i18n %]",
+                                                                boton   => "icon_globo",
+                                                                onClick => "verNota([% registro.idModificacion %]);",
+                                                                title   => "[% 'Ver nota' | i18n %]",
                                                 ) ;
                                 [% END %]
     

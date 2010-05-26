@@ -36,6 +36,11 @@ sub getIdModificacion{
     return (C4::AR::Utilidades::trim($self->idModificacion));
 }
 
+sub getNumero{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->numero));
+}
+
 sub getNota{
     my ($self) = shift;
     return (C4::AR::Utilidades::trim($self->nota));
