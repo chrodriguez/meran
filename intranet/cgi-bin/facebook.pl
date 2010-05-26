@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use CGI;
 use WWW::Facebook::API;
-@ENV{qw/WFA_API_KEY WFA_SECRET WFA_DESKTOP/};
 
 my $APP_NAME = 'Testing PERL Access';
 my $API_KEY = '09c58cc6d74ca90950f8aac3b850ebb1';
