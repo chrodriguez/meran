@@ -237,12 +237,12 @@
                         <h3 class="menu_superior">[% 'Consultas' | i18n %]</h3>
                     </div>
                 </div>
-                <!-- <ul>
+                <ul>
                   <li><h3 class="menu_intermedio">[% 'Reportes' | i18n %]</h3>
                     <ul>
                      <li><h3 class="menu_intermedio">[% 'Usuarios' | i18n %]</h3>
                         <ul>
-                            <li>
+                          <!--  <li>
                                       [% PERL %]
                                           print C4::AR::Filtros::link_to( text =>     "[% 'Usuarios (PREGUNTALE A FER)' | i18n %]",
                                                                           url =>      "#",
@@ -265,12 +265,12 @@
                                                                     title =>    "[% 'Usuarios por Categor&iacute;as' | i18n %]"
                                                                 ) ;
                                 [% END %]
-                            </li>
+                            </li>-->
                         </ul>
                     </li>
                      <li><h3 class="menu_intermedio">[% 'Cat&aacute;logo' | i18n %]</h3>
                         <ul>
-                            <li>
+                        <!--    <li>
                                   [% PERL %]
                                       print C4::AR::Filtros::link_to( text =>     "[% 'Reportes gen&eacute;ricos (FALTA)' | i18n %]",
                                                                       url =>      "#",
@@ -293,7 +293,7 @@
                                                                         title =>    "[% 'Estantes Virtuales (FALTA DB MODEL)' | i18n %]"
                                                                     ) ;
                                     [% END %]
-                          </li>
+                          </li>-->
                           <li>
                                     [% PERL %]
                                         print C4::AR::Filtros::link_to( text =>     "[% 'Registro de Actividades' | i18n %]",
@@ -302,7 +302,7 @@
                                                                     ) ;
                                     [% END %]
                           </li>
-                          <li>
+<!--                          <li>
                                     [% PERL %]
                                         print C4::AR::Filtros::link_to( text =>     "[% 'Generar Etiquetas' | i18n %]",
                                                                         url =>      "/cgi-bin/koha/reports/generarEtiquetas.pl",
@@ -317,12 +317,12 @@
                                                                   title =>    "[% 'Tipos de Ejemplares' | i18n %]"
                                                               ) ;
                               [% END %]
-                          </li>
+                          </li>-->
                         </ul>
                     </li>
                      <li><h3 class="menu_intermedio">[% 'Circulaci&oacute;n' | i18n %]</h3>
                         <ul>
-                            <li>
+            <!--                <li>
                                       [% PERL %]
                                           print C4::AR::Filtros::link_to( text =>     "[% 'Prest&aacute;mos no Devueltos' | i18n %]",
                                                                           url =>      "/cgi-bin/koha/reports/prestamos.pl",
@@ -385,7 +385,7 @@
                                                                     title =>    "[% 'Logueo de B&uacute;squedas' | i18n %]"
                                                                 ) ;
                                 [% END %]
-                            </li>
+                            </li>-->
                         </ul>
                     </li>
                 </ul>
@@ -410,7 +410,7 @@
                                                                       ) ;
                                       [% END %]
                             </li>
-          </ul>-->
+          </ul>
         </li>
           <!-- Navigation item -->
             <li>
@@ -579,7 +579,7 @@
                                 [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% 'Categor&iacute;as de Usuario' | i18n %]",
                                                                     url =>      "/cgi-bin/koha/admin/usuarios/categorie.pl",
-                                                                    title =>    "[% 'Categor&iacute;s de Usuario' | i18n %]"
+                                                                    title =>    "[% 'Categor&iacute;as de Usuario' | i18n %]"
                                                                 ) ;
                                 [% END %]
                     </li>

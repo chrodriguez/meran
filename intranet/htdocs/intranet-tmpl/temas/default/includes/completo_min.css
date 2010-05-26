@@ -289,3 +289,9 @@ div.indicators{cursor:pointer;color:black;border:1px solid #777777;background:#E
 }
 .usr_regular{color:green}
 .usr_irregular{color:red}
+
+/* ============================================================REPORTES =============================================================== */
+.hasDatepicker {
+    width:76px;
+}
+/* ==========================================================FIN==REPORTES =============================================================== */

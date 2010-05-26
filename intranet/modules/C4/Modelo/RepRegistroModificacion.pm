@@ -31,9 +31,32 @@ __PACKAGE__->meta->setup(
 );
 
 
+sub getIdModificacion{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->idModificacion));
+}
+
+sub getNota{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->nota));
+}
 
 
+sub getTipo{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->tipo));
+}
 
+sub getOperacion{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->operacion));
+}
+
+
+sub getFecha{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->fecha));
+}
 
 
 1;

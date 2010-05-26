@@ -2507,8 +2507,8 @@ sub autorAutocomplete{
         $textout.= $autor->getId."|".$autor->getCompleto."\n";
     }
     
-#     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
-    return ($textout eq '')?"-1|".$autorStr:$textout;
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+#     return ($textout eq '')?"-1|".$autorStr:$textout;
 }
 
 sub obtenerDescripcionDeSubCampos{

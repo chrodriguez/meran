@@ -202,3 +202,30 @@ sub sort_and_cumulate{
         $colours->[$CUMULATIVE_LIMIT] = next_colour(7);
     }
 }
+
+
+
+=head2 
+sub getRepRegistroModificacion
+
+Recupero el registro de modificacion pasado por parámetro
+retorna un objeto o 0 si no existe
+=cut
+sub getRepRegistroModificacion{
+    my ($id, $db) = @_;
+
+    $db = $db || C4::Modelo::RepRegistroModificacion->new()->db();
+    
+    my $rep_registro_modificacion_array_ref = C4::Modelo::RepRegistroModificacion::Manager->get_rep_registro_modificacion(
+                                                                        db => $db,    
+                                                                        query => [ 
+                                                                                    idModificacion => { eq => $id },
+                                                                            ]
+                                                                );
+
+    if( scalar(@$rep_registro_modificacion_array_ref) > 0){
+        return ($rep_registro_modificacion_array_ref->[0]);
+    }else{
+        return 0;
+    }
+}

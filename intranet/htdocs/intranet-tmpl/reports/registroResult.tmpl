@@ -14,11 +14,17 @@
                     <tr>
                         <th class="titulo_tabla_resultado click" onclick="ordenar('surname')" title=[% "Ordenar por usuario" | i18n %]>[% "Usuario" | i18n %]</th>
                         <th class="titulo_tabla_resultado click" onclick="ordenar('fecha')" title=[% "Ordenar por fecha" | i18n %]>[% "Fecha" | i18n %]</th>
-                        <th class="titulo_tabla_resultado click" onclick="ordenar('operacion')" title=[% "Ordenar por operaci&oacute;n" | i18n %]>[% "Operaci&oacute;n" | i18n %]</th>
+                        <th class="titulo_tabla_resultado click" onclick="ordenar('operacion')" title=[% "Ordenar por operaci&oacute;n" | i18n %]>
+                            [% "Operaci&oacute;n" | i18n %]
+                        </th>
                         <th class="titulo_tabla_resultado click" onclick="ordenar('tipo')" title=[% "Ordenar por tipo" | i18n %]>[% "Tipo" | i18n %]</th>
-                        <th class="titulo_tabla_resultado click" onclick="ordenar('numero')" title=[% "Ordenar por numero de documento" | i18n %]>[% "N&uacute;mero" | i18n %]</th>
-                        <th class="titulo_tabla_resultado">[% "Nota" | i18n %]</th>
-                        <th class="titulo_tabla_resultado">[% "Agregar nota" | i18n %]</th>
+<!--                        <th class="titulo_tabla_resultado click" onclick="ordenar('numero')" title=[% "Ordenar por numero de documento" | i18n %]>
+                            [% "N&uacute;mero" | i18n %]
+                        </th>-->
+                        <th class="titulo_tabla_resultado click" onclick="ordenar('numero')" title=[% "Ordenar por título" | i18n %]>
+                            [% "T&iacute;tulo" | i18n %]
+                        </th>
+                        <th class="titulo_tabla_resultado">[% "Acciones" | i18n %]</th>
                     </tr>
                 
                 [% FOREACH registro IN registros %]
@@ -27,26 +33,59 @@
                 
                         <td> 
                             [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% registro.socio_responsable.getNro_socio %] ([% registro.socio_responsable.persona.getApellido %] [% registro.socio_responsable.persona.getNomre %] )",
+                                print C4::AR::Filtros::link_to( text =>     "[% registro.nro_socio %] ([% registro.apellido %] [% registro.nombre %] )",
                                                                 url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
-                                                                params =>   ["nro_socio=[% registro.socio_responsable.getNro_socio %]"],
+                                                                params =>   ["nro_socio=[% registro.nro_socio %]"],
                                                                 title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                             ) ;
                             [% END %]
-                            <a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?nro_socio=[% registro.socio_responsable.getNro_socio %]">
+                            <a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?nro_socio=[% registro.nro_socio %]">
                             </a>
                         </td>
                         <td> [% registro.fecha %] </td>
                         <td> [% registro.operacion %]</td>
                         <td> [% registro.tipo %]</td>
-                        <td><a href="/cgi-bin/koha/reports/moredetail2.pl?tipo=[% registro.tipo %]&bib=[% registro.numero %]">[% registro.numero %]</a></td>
-                        
+<!--                        <td><a href="/cgi-bin/koha/reports/moredetail2.pl?tipo=[% registro.tipo %]&bib=[% registro.numero %]">[% registro.numero %]</a></td>-->
+                        <td><a href="/cgi-bin/koha/reports/moredetail2.pl?tipo=[% registro.tipo %]&bib=[% registro.numero %]">[% registro.titulo %]</a></td>
                         <td> 
-                            <textarea  id="[% registro.idModificacion %]" name="notas2" cols="20" rows="6">[% registro.nota %]</textarea>
-                        </td>
-                        <!-- Aca se guarda la nota de la modificacion con la funcion nota(id) que esta declarada en el archivo registro.tmpl -->
-                        <td> 
-                            <input  src="[% themelang %]/images/guardar.png" type="image"  value=[% "Guardar Nota" | i18n %] title=[% "Guardar Nota" | i18n %] onClick="guardarNota('[% registro.idModificacion %]')"> 
+
+                            [% PERL %]
+                                    print C4::AR::Filtros::to_Icon(   
+                                                                        boton   => "icon_mas",
+                                                                        onClick => "agregarNota([% registro.idModificacion %]);",
+                                                                        title   => "[% 'Agregar nota' | i18n %]",
+                                            ) ;
+                            [% END %]
+
+                            <div id="add_note_[% registro.idModificacion %]" style="display: none">
+                                <ul>
+                                    <li><textarea  id="nota_[% registro.idModificacion %]" cols="45" rows="10"></textarea></li>
+                                    <li>
+                                        <div class="buttonContainerHorizontal">
+                                                [% PERL %]
+                                                                print C4::AR::Filtros::to_Button( 
+                                                                                                    text    =>  "[% 'Guardar nota' | i18n %]",
+                                                                                                    boton   =>  "boton_agregar",
+                                                                                                    onClick =>  "guardarNota([% registro.idModificacion %]);",
+                                                                        ) ;
+                                                [% END %]
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        [% IF registro.nota != '' %]
+
+                                [% PERL %]
+                                        print C4::AR::Filtros::to_Icon(   
+                                                                            boton   => "icon_globo",
+                                                                            onClick => "verNota([% registro.idModificacion %]);",
+                                                                            title   => "[% 'Ver nota' | i18n %]",
+                                                ) ;
+                                [% END %]
+    
+                                <div id="view_note_[% registro.idModificacion %]" style="display: none">[% registro.nota %]</div>
+                        [% END %]
                         </td>
                         
                     </tr>

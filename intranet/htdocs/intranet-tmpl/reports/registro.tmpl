@@ -2,6 +2,10 @@
 
 <script src="/includes/jquery/validate/jquery.validate.js"></script>
 
+[% INCLUDE 'datePicker.inc' %]
+
+[% INCLUDE  'WindowHelper.inc'  %]
+
 <script language="javascript" type="text/javascript">
 
 $(document).ready(function() {
@@ -26,41 +30,56 @@ function changePage(ini){
 
 function updateInfo(responseText){
 	$("#result").html(responseText);
-	zebra("tablaResult");
-	objAH.id="";
-	objAH.notas="";
+	zebra("datos_tabla");
+	objAH.id    = "";
+	objAH.notas = "";
 }
 
 
 function consultar(){
-	objAH=new AjaxHelper(updateInfo);
-	objAH.url="/cgi-bin/koha/reports/registroResult.pl";
-	objAH.chkfecha=$("#chkfecha")[0].checked;
-	objAH.chkuser=$("#chkuser")[0].checked;
-	objAH.chknum=$("#chknum")[0].checked;
-	objAH.dateselected=$("#dateselected").val();
-	objAH.dateselectedEnd=$("#dateselectedEnd").val();
-	objAH.operacion=$("input[@name='operacion']:checked").val();
-	objAH.tipo=     $("input[@name='tipo']:checked").val();
-	objAH.user=$("#socios").val();
-	objAH.numDesde=$("#numDesde").val();
-	objAH.numHasta=$("#numHasta").val();
-	objAH.funcion= "changePage";
+	objAH                   = new AjaxHelper(updateInfo);
+	objAH.url               = "/cgi-bin/koha/reports/registroResult.pl";
+    objAH.debug             = true;
+    objAH.showOverlay       = true;
+	objAH.chkfecha          = $("#chkfecha")[0].checked;
+	objAH.chkuser           = $("#chkuser")[0].checked;
+	objAH.chknum            = $("#chknum")[0].checked;
+	objAH.dateselected      = $("#dateselected").val();
+	objAH.dateselectedEnd   = $("#dateselectedEnd").val();
+	objAH.operacion         = $("input[@name='operacion']:checked").val();
+	objAH.tipo              = $("input[@name='tipo']:checked").val();
+	objAH.user              = $("#socios").val();
+	objAH.numDesde          = $("#numDesde").val();
+	objAH.numHasta          = $("#numHasta").val();
+	objAH.funcion           = "changePage";
 	objAH.sendToServer();
 }
 
-function guardarNota(idNota){
-   objAH=new AjaxHelper(updateGuardarNota);
-   objAH.url="/cgi-bin/koha/reports/reportesDB.pl";
-   objAH.tipoAccion="GUARDAR_NOTA";
-	objAH.idModificacion=idNota;
-	objAH.nota=$("#"+idNota).val();
-	objAH.sendToServer();
+
+function guardarNota(registro){
+    objAH                   = new AjaxHelper(updateGuardarNota);
+    objAH.url               = "/cgi-bin/koha/reports/reportesDB.pl";
+    objAH.debug             = true;
+    objAH.showOverlay       = true;
+    objAH.tipoAccion        = "GUARDAR_NOTA";
+    objAH.registro          = registro;
+    objAH.nota              = $("#nota_" + registro).val();
+    objAH.sendToServer();
 }
 
 function updateGuardarNota(responseText){
-   jAlert("LA NOTA SE GUARDO");
+
+    jAlert("LA NOTA SE GUARDO");
 }
+
+function agregarNota(registro){
+    $('#add_note_' + registro).dialog({ width: 510 });
+}
+
+function verNota(registro){
+    $('#view_note_' + registro).dialog({ width: 510 });
+}
+
 
 </script>
 

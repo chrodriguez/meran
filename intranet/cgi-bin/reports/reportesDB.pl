@@ -4,6 +4,7 @@ use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::AR::UploadFile;
+use C4::AR::Reportes;
 use JSON;
 use CGI;
 
@@ -26,15 +27,19 @@ Aca se maneja el cambio de la password para el usuario
 if($tipoAccion eq "GUARDAR_NOTA"){
 
     my $session = CGI::Session->load();
+    
+    my %params;
+    $params{'idModificacion'}   = $obj->{'registro'};
+    $params{'nota'}             = $obj->{'nota'};
+    
+#     my $rep_reg_mod = C4::Modelo::RepRegistroModificacion->new( idModificacion => $params{'idModificacion'} );
+#     $rep_reg_mod->load();
+#     $rep_reg_mod->nota($params{'nota'});
+#     $rep_reg_mod->save();
 
-	my %params;
-	$params{'idModificacion'}= $obj->{'idModificacion'};
-   $params{'nota'}= $obj->{'nota'};
-
-   my $rep_reg_mod = C4::Modelo::RepRegistroModificacion->new( idModificacion => $params{'idModificacion'} );
-      $rep_reg_mod->load();
-      $rep_reg_mod->nota($params{'nota'});
-      $rep_reg_mod->save();
+    my $rep_reg_mod = C4::AR::Reportes::getRepRegistroModificacion($params{'idModificacion'});
+    $rep_reg_mod->nota($params{'nota'});
+    $rep_reg_mod->save();
 
 # 	my ($Message_arrayref)= C4::AR::Usuarios::cambiarPassword(\%params);
 	
@@ -44,6 +49,8 @@ if($tipoAccion eq "GUARDAR_NOTA"){
 # 	print $infoOperacionJSON;
 	
 } #end if($tipoAccion eq "CAMBIAR_PASSWORD")
+
+
 =item
 Aca se maneja el cambio de permisos para el usuario
 =cut

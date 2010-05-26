@@ -499,63 +499,64 @@ sub cantRegFechas{
 
 
 sub registroEntreFechas{
-   my ($params_obj)=@_;
+    my ($params_obj) = @_;
+    
+    my @filtros;
+    
+    use C4::Modelo::RepRegistroModificacion::Manager;
+    
+    if ($params_obj->{'chkfecha'} ne "false"){
+        push(@filtros, ( fecha => {      eq=> $params_obj->{'fechaInicio'}, 
+                                        gt => $params_obj->{'fechaInicio'}, 
+                                    }
+                        ) );
+    
+        push(@filtros, ( fecha => {      eq=> $params_obj->{'fechaFin'},
+                                        lt => $params_obj->{'fechaFin'}  
+                                    }
+                        ) );
+    }
+    
+    C4::AR::Debug::debug($params_obj->{'tipo'});
+    if ($params_obj->{'operacion'} ne ''){
+        push(@filtros, ( operacion => { eq => $params_obj->{'operacion'} }) );
+    }
+    
+    if ($params_obj->{'tipo'} ne ''){
+        push(@filtros, ( tipo => { eq => $params_obj->{'tipo'} }) );
+    }
+    
+    if ($params_obj->{'chkuser'} ne "false"){
+        push(@filtros, ( responsable => { eq => $params_obj->{'user'} }) );
+    }
+    
+    if ($params_obj->{'chknum'} ne "false"){
+        push(@filtros, ( numero => {  eq=> $params_obj->{'numDesde'},
+                                        gt => $params_obj->{'numDesde'}, 
+                                    } ) );
+    
+        push(@filtros, ( numero => {
+                                        eq=> $params_obj->{'numHasta'},
+                                        lt => $params_obj->{'numHasta'}, 
+                                    }
+                        ) );
+    }
 
-   my @filtros;
+    my $registros_count = C4::Modelo::RepRegistroModificacion::Manager->get_rep_registro_modificacion_count(
+                                                                        query               => \@filtros,
+                                                                        require_objects     => ['socio_responsable'],
+                                                                );
 
-   use C4::Modelo::RepRegistroModificacion::Manager;
+    my $rep_registro_modificacion_array_ref = C4::Modelo::RepRegistroModificacion::Manager->get_rep_registro_modificacion(
+                                                                        query               => \@filtros,
+                                                                        sorty_by            => $params_obj->{'orden'},
+                                                                        limit               => $params_obj->{'cantR'},
+                                                                        offset              => $params_obj->{'fin'},
+                                                                        require_objects     => ['socio_responsable'],
+                                                                );
 
-   if ($params_obj->{'chkfecha'} ne "false"){
-      push(@filtros, ( fecha => {      eq=> $params_obj->{'fechaInicio'}, 
-                                       gt => $params_obj->{'fechaInicio'}, 
-                                 }
-                      ) );
 
-      push(@filtros, ( fecha => {      eq=> $params_obj->{'fechaFin'},
-                                       lt => $params_obj->{'fechaFin'}  
-                                }
-                     ) );
-   }
-
-   C4::AR::Debug::debug($params_obj->{'tipo'});
-   if ($params_obj->{'operacion'} ne ''){
-      push(@filtros, ( operacion => { eq => $params_obj->{'operacion'} }) );
-   }
-
-   if ($params_obj->{'tipo'} ne ''){
-      push(@filtros, ( tipo => { eq => $params_obj->{'tipo'} }) );
-   }
-
-   if ($params_obj->{'chkuser'} ne "false"){
-      push(@filtros, ( responsable => { eq => $params_obj->{'user'} }) );
-   }
-
-   if ($params_obj->{'chknum'} ne "false"){
-      push(@filtros, ( numero => {  eq=> $params_obj->{'numDesde'},
-                                    gt => $params_obj->{'numDesde'}, 
-                                 } ) );
-
-      push(@filtros, ( numero => {
-                                    eq=> $params_obj->{'numHasta'},
-                                    lt => $params_obj->{'numHasta'}, 
-                                 }
-                     ) );
-   }
-
-   my $registros_count = C4::Modelo::RepRegistroModificacion::Manager->get_rep_registro_modificacion_count(
-                                                                        query => \@filtros,
-                                                                        require_objects => ['socio_responsable'],
-                                                                        );
-
-   my $registros = C4::Modelo::RepRegistroModificacion::Manager->get_rep_registro_modificacion(
-                                                                        query => \@filtros,
-                                                                        sorty_by => $params_obj->{'orden'},
-                                                                        limit => $params_obj->{'cantR'},
-                                                                        offset => $params_obj->{'fin'},
-                                                                        require_objects => ['socio_responsable'],
-                                                                        );
-
-   return ($registros_count,$registros);
+    return ($registros_count,$rep_registro_modificacion_array_ref);
 }
 
 =item

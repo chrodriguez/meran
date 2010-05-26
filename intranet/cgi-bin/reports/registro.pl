@@ -1,23 +1,5 @@
 #!/usr/bin/perl
 
-# Copyright 2000-2002 Katipo Communications
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-#
-
 use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
@@ -27,7 +9,7 @@ use C4::Date;
 
 my $input = new CGI;
 
-my ($template, $session, $t_params) = get_template_and_user({
+my ($template, $session, $t_params, $socio) = get_template_and_user({
                         template_name => "reports/registro.tmpl",
                         query => $input,
                         type => "intranet",
@@ -39,19 +21,16 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 #Marca la Fecha de Hoy
 
-my @datearr = localtime(time);
-my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-my $dateformat = C4::Date::get_date_format();
-
-$t_params->{'todaydate'}= format_date($today,$dateformat);
-
-my $dateformat = C4::Date::get_date_format();
-
+my @datearr                 = localtime(time);
+my $today                   = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+my $dateformat              = C4::Date::get_date_format();
+$t_params->{'todaydate'}    = format_date($today,$dateformat);
+my $dateformat              = C4::Date::get_date_format();
 #Tomo las fechas que setea el usuario y las paso a formato ISO
-my $fechaInicio =  format_date_in_iso($input->param('dateselected'),$dateformat);
-my $fechaFin    =  format_date_in_iso($input->param('dateselectedEnd'),$dateformat);
+my $fechaInicio             = format_date_in_iso($input->param('dateselected'),$dateformat);
+my $fechaFin                = format_date_in_iso($input->param('dateselectedEnd'),$dateformat);
 
-$t_params->{'select_usuarios'}= C4::AR::Utilidades::generarComboDeSocios();
-$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n('Registro de actividades');
+$t_params->{'select_usuarios'}  = C4::AR::Utilidades::generarComboDeSocios();
+$t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n('Registro de actividades');
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session, $socio);
