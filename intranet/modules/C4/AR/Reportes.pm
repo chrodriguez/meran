@@ -248,7 +248,7 @@ sub toXLS{
     $filename = $filename || "report.xls";
     $sheet = $sheet || C4::AR::Filtros::i18n('Resultado');
 
-    $path = $reports_dir.'/'.$filename;
+    my $path = $reports_dir.'/'.$filename;
     
     my $workbook = Spreadsheet::WriteExcel->new($path);
     my $worksheet = $workbook->add_worksheet($sheet);

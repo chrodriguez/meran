@@ -25,10 +25,6 @@ my $nota        = $obj->{'notas'};
 my $id          = $obj->{'id'};
 my $funcion     = $obj->{'funcion'};
 
-# if ($id ne ""){
-#         insertarNota($id,$nota);
-# }
-
 #Inicializo el inicio y fin de la instruccion LIMIT en la consulta
 my $ini                         = $obj->{'ini'};
 my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
@@ -49,7 +45,6 @@ $obj->{'fechaFin'}              = $fechaFin;
 
 my ($cantidad_registros, $rep_registro_modificacion_array_ref) = C4::AR::Estadisticas::registroEntreFechas($obj);
 
-
 my @results;
 my $nivel;
 
@@ -58,6 +53,9 @@ foreach my $r (@$rep_registro_modificacion_array_ref){
 
 C4::AR::Debug::debug("tipo => ".$r->getTipo());
 C4::AR::Debug::debug("tipo => ".$r->getNota());
+C4::AR::Debug::debug("fecha sin formato  => ".$r->getFecha());
+C4::AR::Debug::debug("fecha formateada => ".format_date_in_iso($r->getFecha(),$dateformat));
+C4::AR::Debug::debug("fecha ini => ".$fechaFin);
 
     if($r->getTipo() eq "Registro"){
         $nivel          = C4::AR::Nivel1::getNivel1FromId1($r->getNumero());
@@ -73,27 +71,20 @@ C4::AR::Debug::debug("tipo => ".$r->getNota());
         $info{'titulo'} = $nivel->nivel1->getTitulo();
     }
 
-#     my $socio_responsable       = $r->socio_responsable;
-#     $info{'titulo'}             = $nivel->getTitulo();
     $info{'nro_socio'}          = $r->socio_responsable->getNro_socio();
     $info{'apellido'}           = $r->socio_responsable->persona->getApellido();
     $info{'nombre'}             = $r->socio_responsable->persona->getNombre();
-#     $info{'nro_socio'}          = $socio_responsable->getNro_socio();
-#     $info{'apellido'}           = $socio_responsable->persona->getApellido();
-#     $info{'nombre'}             = $socio_responsable->persona->getNombre();
     $info{'fecha'}              = $r->getFecha();
     $info{'tipo'}               = $r->getTipo();
     $info{'operacion'}          = $r->getOperacion();
     $info{'idModificacion'}     = $r->getIdModificacion();
-    $info{'nota'}               = $r->getNota();
+    $info{'nota'}               = C4::AR::Utilidades::trim($r->getNota());
+    C4::AR::Debug::debug("nota =>".$info{'nota'}."=====");
 
     push (@results, \%info);
 } 
 
 
-# C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
-
-# $t_params->{'registros'}    = $rep_registro_modificacion_array_ref;
 $t_params->{'registros'}    = \@results;
 $t_params->{'cantidad'}     = $cantidad_registros;
 $t_params->{'paginador'}    = C4::AR::Utilidades::crearPaginador($cantidad_registros,$cantR, $pageNumber,$funcion,$t_params);

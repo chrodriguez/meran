@@ -46,8 +46,8 @@ function consultar(){
 	objAH.chknum            = $("#chknum")[0].checked;
 	objAH.dateselected      = $("#dateselected").val();
 	objAH.dateselectedEnd   = $("#dateselectedEnd").val();
-	objAH.operacion         = $("input[@name='operacion']:checked").val();
-	objAH.tipo              = $("input[@name='tipo']:checked").val();
+	objAH.operacion         = $("input[name='operacion']:checked").val();
+	objAH.tipo              = $("input[name='tipo']:checked").val();
 	objAH.user              = $("#socios").val();
 	objAH.numDesde          = $("#numDesde").val();
 	objAH.numHasta          = $("#numHasta").val();
@@ -70,14 +70,19 @@ function guardarNota(registro){
 function updateGuardarNota(responseText){
 
     jAlert("LA NOTA SE GUARDO");
+    $('#add_note_' + objAH.registro).dialog('close');
+
+    consultar();
 }
 
 function agregarNota(registro){
-    $('#add_note_' + registro).dialog({ width: 510 });
+    alert('registro => ' + registro);
+    $('#add_note_' + registro).dialog('open');
 }
 
 function verNota(registro){
-    $('#view_note_' + registro).dialog({ width: 510 });
+    alert('registro => ' + registro);
+    $('#view_note_' + registro).dialog('open');
 }
 
 

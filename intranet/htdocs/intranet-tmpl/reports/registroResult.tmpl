@@ -11,17 +11,22 @@
             <div class="contenedor_paginador">[% paginador %]</div>
                 <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
                     <tr>
-                        <th class="titulo_tabla_resultado click" onclick="ordenar('surname')" title=[% "Ordenar por usuario" | i18n %]>[% "Usuario" | i18n %]</th>
-                        <th class="titulo_tabla_resultado click" onclick="ordenar('fecha')" title=[% "Ordenar por fecha" | i18n %]>[% "Fecha" | i18n %]</th>
+                        <th class="titulo_tabla_resultado click" onclick="ordenar('surname')" 
+                            title=[% "Ordenar por usuario" | i18n %]>
+                            [% "Usuario" | i18n %]
+                        </th>
+                        <th class="titulo_tabla_resultado click" onclick="ordenar('numero')" 
+                            title=[% "Ordenar por título" | i18n %]>
+                            [% "T&iacute;tulo" | i18n %]
+                        </th>
+                        <th class="titulo_tabla_resultado click" onclick="ordenar('fecha')" title=[% "Ordenar por fecha" | i18n %]>
+                            [% "Fecha" | i18n %]
+                        </th>
                         <th class="titulo_tabla_resultado click" onclick="ordenar('operacion')" title=[% "Ordenar por operaci&oacute;n" | i18n %]>
                             [% "Operaci&oacute;n" | i18n %]
                         </th>
                         <th class="titulo_tabla_resultado click" onclick="ordenar('tipo')" title=[% "Ordenar por tipo" | i18n %]>
                             [% "Tipo" | i18n %]
-                        </th>
-                        <th class="titulo_tabla_resultado click" onclick="ordenar('numero')" 
-                            title=[% "Ordenar por título" | i18n %]>
-                            [% "T&iacute;tulo" | i18n %]
                         </th>
                         <th class="titulo_tabla_resultado">[% "Acciones" | i18n %]</th>
                     </tr>
@@ -29,7 +34,6 @@
                 [% FOREACH registro IN registros %]
                     
                     <tr align='center' >
-                
                         <td> 
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% registro.nro_socio %] ([% registro.apellido %] [% registro.nombre %] )",
@@ -39,9 +43,6 @@
                                                             ) ;
                             [% END %]
                         </td>
-                        <td> [% registro.fecha %] </td>
-                        <td> [% registro.operacion %]</td>
-                        <td> [% registro.tipo %]</td>
                         <td>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text    =>  "[% registro.titulo %]",
@@ -51,6 +52,9 @@
                                                             ) ;
                             [% END %]
                         </td>
+                        <td> [% registro.fecha %] </td>
+                        <td> [% registro.operacion %]</td>
+                        <td> [% registro.tipo %]</td>
                         <td> 
 
                             [% PERL %]
@@ -63,7 +67,9 @@
 
                             <div id="add_note_[% registro.idModificacion %]" style="display: none">
                                 <ul>
-                                    <li><textarea  id="nota_[% registro.idModificacion %]" cols="45" rows="10"></textarea></li>
+                                    <li>
+                            <textarea  id="nota_[% registro.idModificacion %]" cols="45" rows="10">[% registro.nota %]</textarea>
+                                    </li>
                                     <li>
                                         <div class="buttonContainerHorizontal">
                                         [% PERL %]
@@ -77,6 +83,7 @@
                                     </li>
                                 </ul>
                             </div>
+                        <script>$('#add_note_' + [% registro.idModificacion %]).dialog({ width: 510, autoOpen: false });</script>
 
                         [% IF registro.nota != '' %]
 
@@ -89,6 +96,7 @@
                                 [% END %]
     
                                 <div id="view_note_[% registro.idModificacion %]" style="display: none">[% registro.nota %]</div>
+                        <script>$('#view_note_' + [% registro.idModificacion %]).dialog({ width: 510, autoOpen: false });</script>
                         [% END %]
                         </td>
                         

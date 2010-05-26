@@ -271,6 +271,8 @@ sub getNivel3FromId3{
     my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
                                                                     db => $db,
                                                                     query   => [ id => { eq => $id3} ], 
+                                                                    require_objects => ['nivel1'],
+                                                                    select          => ['cat_registro_marc_n1.*']    
 #                                                                     require_objects => ['ref_disponibilidad', 'ref_estado']
                                                                 );
 

@@ -25,7 +25,6 @@ use vars qw(@EXPORT @ISA);
 	&cantUsuarios
 	&registroActividadesDiarias
 	&registroEntreFechas
-	&insertarNota
 	&armarPaginas
 	&armarPaginasPorRenglones
 	&cantidadRenglones
@@ -428,14 +427,14 @@ sub armarPaginasPorRenglones {
 	return(@numeros);
 }
 
-sub insertarNota{
-	my ($id,$nota)=@_;
-        my $dbh = C4::Context->dbh;
-        my $query="update  rep_registro_modificacion set nota=?
-		   where idModificacion=?";
-        my $sth=$dbh->prepare($query);
-        $sth->execute($nota,$id);
-}
+# sub insertarNota{
+# 	my ($id,$nota)=@_;
+#         my $dbh = C4::Context->dbh;
+#         my $query="update  rep_registro_modificacion set nota=?
+# 		   where idModificacion=?";
+#         my $sth=$dbh->prepare($query);
+#         $sth->execute($nota,$id);
+# }
 
 sub cantRegFechas{
 	my ($chkfecha,$fechaInicio,$fechaFin,$tipo,$operacion,$chkuser,$chknum,$user,$numDesde,$numHasta)=@_;
@@ -506,12 +505,12 @@ sub registroEntreFechas{
     use C4::Modelo::RepRegistroModificacion::Manager;
     
     if ($params_obj->{'chkfecha'} ne "false"){
-        push(@filtros, ( fecha => {      eq=> $params_obj->{'fechaInicio'}, 
+        push(@filtros, ( fecha => {     eq => $params_obj->{'fechaInicio'}, 
                                         gt => $params_obj->{'fechaInicio'}, 
                                     }
                         ) );
     
-        push(@filtros, ( fecha => {      eq=> $params_obj->{'fechaFin'},
+        push(@filtros, ( fecha => {     eq => $params_obj->{'fechaFin'},
                                         lt => $params_obj->{'fechaFin'}  
                                     }
                         ) );
@@ -531,13 +530,13 @@ sub registroEntreFechas{
     }
     
     if ($params_obj->{'chknum'} ne "false"){
-        push(@filtros, ( numero => {  eq=> $params_obj->{'numDesde'},
-                                        gt => $params_obj->{'numDesde'}, 
+        push(@filtros, ( numero => {    eq  => $params_obj->{'numDesde'},
+                                        gt  => $params_obj->{'numDesde'}, 
                                     } ) );
     
         push(@filtros, ( numero => {
-                                        eq=> $params_obj->{'numHasta'},
-                                        lt => $params_obj->{'numHasta'}, 
+                                        eq  => $params_obj->{'numHasta'},
+                                        lt  => $params_obj->{'numHasta'}, 
                                     }
                         ) );
     }
@@ -548,13 +547,13 @@ sub registroEntreFechas{
                                                                 );
 
     my $rep_registro_modificacion_array_ref = C4::Modelo::RepRegistroModificacion::Manager->get_rep_registro_modificacion(
-                                                                        query               => \@filtros,
-                                                                        sorty_by            => $params_obj->{'orden'},
-                                                                        limit               => $params_obj->{'cantR'},
-                                                                        offset              => $params_obj->{'fin'},
-                                                                        require_objects     => ['socio_responsable'],
-#                                                                         select              => ['usr_socio.*','persona.*']
-                                                                );
+                                    query               => \@filtros,
+                                    sorty_by            => $params_obj->{'orden'},
+                                    limit               => $params_obj->{'cantR'},
+                                    offset              => $params_obj->{'fin'},
+                                    require_objects     => ['socio_responsable','socio_responsable.persona'],
+                                    select              => ['rep_registro_modificacion.*','socio_responsable.*','usr_persona.*']
+                );
 
 
     return ($registros_count,$rep_registro_modificacion_array_ref);
