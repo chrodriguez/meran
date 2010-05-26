@@ -1,228 +1,68 @@
 [% INCLUDE "intranet-top.inc" %]
 <script language="javascript" type="text/javascript" src="/includes/jquery/jquery.jeditable.js"></script>
+<script language="javascript" type="text/javascript" src="/intranet-tmpl/includes/estantesVirtuales.js"></script>
 
-<script>
+<div id="nuevo_estante" style="display:none">
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend trigger click">  [% "Nuevo Estante" | i18n %] </legend>
+            <input type="text" id="input_nuevo_estante">
+</fieldset>
+           [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                                        boton   => "boton_guardar",
+                                                                        onClick => 'agregarEstante();',
+                                                                        title   => "[% 'Guardar' | i18n %]",
+                                                                        alternClass => "botonCentrado"
+                                            ) ;
+           [% END %]
+</div>
 
-        function ordenar(orden){
-            objAH.sort(orden);
-        }
+<div id="nuevo_sub_estante" style="display:none">
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend trigger click">  [% "Nuevo Estante" | i18n %] </legend>
+	    <input type="hidden" id="estante_nuevo_sub_estante">
+	    <input type="hidden" id="padre_nuevo_sub_estante">
+            <input type="text" id="input_nuevo_sub_estante">
+</fieldset>
+           [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                                        boton   => "boton_guardar",
+                                                                        onClick => 'agregarSubEstante();',
+                                                                        title   => "[% 'Guardar' | i18n %]",
+                                                                        alternClass => "botonCentrado"
+                                            ) ;
+           [% END %]
+</div>
 
-        function verEstantes(){
-                objAH=new AjaxHelper(updateVerEstantes);
-                objAH.debug= true;
-                objAH.url= 'estanteDB.pl';
-                objAH.tipo= 'VER_ESTANTES';
-                objAH.sendToServer();
-        }
+<div id="editar_estante" style="display:none">
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend trigger click">  [% "Estante" | i18n %] </legend>
+            <input type="hidden" id="input_id_estante">
+            <input type="hidden" id="input_padre_estante">
+            <input type="hidden" id="input_abuelo_estante">
+            <input type="text" id="input_valor_estante">
+</fieldset>
+           [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                                        boton   => "boton_guardar",
+                                                                        onClick => 'modificarEstante();',
+                                                                        title   => "[% 'Guardar' | i18n %]",
+                                                                        alternClass => "botonCentrado"
+                                            ) ;
+           [% END %]
+</div>
 
-        function updateVerEstantes(responseText){
-                $('#estante').html(responseText);
-                makeToggle('datos_tabla_div_estantes','trigger',null,false);
-        }
-
-        function agregarSubEstante(padre,estante,valor){
-                objAH=new AjaxHelper(updateAgregarSubEstante);
-                objAH.debug= true;
-                objAH.padre= padre;
-                objAH.estante= estante;
-                objAH.valor= valor;
-                objAH.url= 'estanteDB.pl';
-                objAH.tipo= 'AGREGAR_SUBESTANTE';
-                objAH.sendToServer();
-        }
-
-        function updateAgregarSubEstante(responseText){
-                var Messages= JSONstring.toObject(responseText);
-                setMessages(Messages);
-                 verSubEstantes(objAH.padre, objAH.estante);
-        }
-
-
-        function verSubEstantes(estante,subestante){
-                objAH=new AjaxHelper(updateVerSubEstantes);
-                objAH.debug= true;
-                objAH.url= 'estanteDB.pl';
-                objAH.estante= subestante;
-                objAH.padre= estante;
-                objAH.tipo= 'VER_SUBESTANTE';
-                objAH.sendToServer();
-        }
-
-        function updateVerSubEstantes(responseText){
-            if(objAH.padre == 0){
-                $('#subestante').html(responseText);
-                $('.datos_tabla_div_estantes').hide();
-            }
-            else{
-                $('#subestante-'+ objAH.padre).html(responseText);
-                zebra('datos_tabla');
-                $('.datos_tabla_div_subestante_'+objAH.padre).hide();
-            }
-        }
-
-        function borrarEstantesSeleccionados(estante,padre) {
-            var checks;
-            if(estante == 0) { checks=$(".ul_tabla_div_estante_0 input[type='checkbox']:checked");}
-                else { checks=$(".ul_tabla_div_subestante_"+estante+" input[type='checkbox']:checked");}
-            var array=checks.get();
-            var theStatus="";
-            var estantes=new Array();
-            var cant=checks.length;
-            if (cant>0){
-                theStatus= ELIMINAR_LOS_ESTANTES+":\n";
-
-                for(i=0;i<checks.length;i++) {
-                    theStatus=theStatus+array[i].name+"\n";
-                    estantes[i]=array[i].value;
-                }
-                theStatus=theStatus + ESTA_SEGURO+"?";
-                jConfirm(theStatus,ELIMINAR_ESTANTE_TITLE, function(confirmStatus){if (confirmStatus) borrarEstantes(estantes,estante,padre);});
-            }
-            else{ jAlert(NO_SE_SELECCIONO_NINGUN_ESTANTE,ELIMINAR_ESTANTE_TITLE);}
-        }
-
-        function borrarEstantes(estantes,estante,padre) {
-                objAH=new AjaxHelper(updateBorrarEstantesSeleccionados);
-                objAH.debug= true;
-                objAH.url= 'estanteDB.pl';
-                objAH.estante= estante;
-                objAH.padre= padre;
-                objAH.estantes= estantes;
-                objAH.tipo= 'BORRAR_ESTANTES';
-                objAH.sendToServer();
-        }
-
-        function updateBorrarEstantesSeleccionados(responseText){
-         var Messages= JSONstring.toObject(responseText);
-         setMessages(Messages);
-         if (objAH.estante == 0) {verEstantes();} 
-            else {verSubEstantes(objAH.padre,objAH.estante);}
-        }
-
-  function borrarContenidoSeleccionado (estante,padre) {
-            var checks=$(".datos_tabla_div_contenido_"+estante+" input[type='checkbox']:checked");
-            var array=checks.get();
-            var theStatus="";
-            var contenido=new Array();
-            var cant=checks.length;
-            if (cant>0){
-                theStatus= ELIMINAR_EL_CONTENIDO+":\n";
-
-                for(i=0;i<checks.length;i++) {
-                    theStatus=theStatus+array[i].name+"\n";
-                    contenido[i]=array[i].value;
-                }
-                theStatus=theStatus + ESTA_SEGURO+"?";
-                jConfirm(theStatus,ELIMINAR_CONTENIDO_TITLE, function(confirmStatus){if (confirmStatus) borrarContenido(contenido,estante,padre);});
-            }
-            else{ jAlert(NO_SE_SELECCIONO_NINGUN_CONTENIDO ,ELIMINAR_CONTENIDO_TITLE);}
-        }
-
-        function borrarContenido(contenido,estante,padre) {
-                objAH=new AjaxHelper(updateBorrarContenidoSeleccionado);
-                objAH.debug= true;
-                objAH.url= 'estanteDB.pl';
-                objAH.estante= estante;
-                objAH.padre= padre;
-                objAH.contenido= contenido;
-                objAH.tipo= 'BORRAR_CONTENIDO';
-                objAH.sendToServer();
-        }
-
-        function updateBorrarContenidoSeleccionado(responseText){
-         var Messages= JSONstring.toObject(responseText);
-         setMessages(Messages);
-         verSubEstantes(objAH.padre,objAH.estante);
-        }
-
-
-        function agregarEstante(estante){
-                objAH=new AjaxHelper(updateAgregarEstante);
-                objAH.debug= true;
-                objAH.url= 'estanteDB.pl';
-                objAH.estante= estante;
-                objAH.tipo= 'AGREGAR_ESTANTE';
-                objAH.sendToServer();
-        }
-
-        function updateAgregarEstante(responseText){
-            var Messages= JSONstring.toObject(responseText);
-            setMessages(Messages);
-            if (!(hayError(Messages))){
-                    verEstantes();
-            }
-        }
-
-        function modificarEstante(abuelo,padre,estante,valor,valorviejo){
-                objAH=new AjaxHelper(updateModificarEstante);
-                objAH.debug= true;
-                objAH.url= 'estanteDB.pl';
-                objAH.estante= estante;
-		        objAH.abuelo= abuelo;
-                objAH.padre= padre;
-                objAH.valor= valor;
-                objAH.valorviejo= valorviejo;
-                objAH.tipo= 'MODIFICAR_ESTANTE';
-                objAH.sendToServer();
-        }
-
-        function updateModificarEstante(responseText){
-            var Messages= JSONstring.toObject(responseText);
-            setMessages(Messages);
-            if (!(hayError(Messages))){
-                if (objAH.padre == 0){
-                    verEstantes();
-                    $('.datos_tabla_div_estantes').hide();
-                }
-                else {
-                    verSubEstantes(objAH.abuelo,objAH.padre);
-                }
-            }
-            else {
-                $('.editable_'+objAH.estante).html(objAH.valorviejo);
-            }
-        }
-
-</script>
 <div id="estante">
-<script>
-      $(document).ready(function() {
-
-               $("#nuevo_estante_0").hide("fast");
-
-               $("#input_nuevo_estante_0").blur( 
-                    function(){ 
-                        $("#nuevo_estante_0").hide("fast");
-                        $("#input_nuevo_estante_0").val("");
-                        });
-
-               $("#input_nuevo_estante_0").keydown(
-                    function(e){
-                    if(e.which == 13){ //con Enter 
-                        agregarEstante($("#input_nuevo_estante_0").val());
-                        }
-                    });
-
-               $("#boton_nuevo_estante_0").click( 
-                    function(){ 
-                        $("#nuevo_estante_0").show("slow");
-                        $("#input_nuevo_estante_0").focus();
-                        });
-});
-</script> 
 <fieldset class="resultados_busqueda">
 <legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>
         <div class="datos_tabla_div_estantes">
             <div class="botonera_estantes">
-            <div id="nuevo_estante_0" class="horizontal">
-            [% "Nuevo Estante" | i18n %] : <input type="text" id="input_nuevo_estante_0">
-            </div>
-
             <div id="boton_nuevo_estante_0">
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_agregar",
                                                                     title   => "[% 'Agregar estante' | i18n %]",
+                                                                    onClick => "agregarNuevoEstante();",
                                         ) ;
             [% END %]
             </div>
@@ -243,7 +83,7 @@
             [% FOREACH estante IN ESTANTES %]
              <li>
             <input type=checkbox name="[% estante.getEstante %]" value="[% estante.getId %]">
-             <a class="click" onClick="verSubEstantes(0,[% estante.getId %])">[% estante.getEstante %]</a>
+             <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstante %]</a>
             </li>
             [% END %]
                 </ul>
@@ -251,6 +91,9 @@
         </div>
 </fieldset>
 </div>
+<script>
+ makeToggle('datos_tabla_div_estantes','trigger',null,false);
+</script>
 <div id="subestante">
 </div>
 [% INCLUDE "intranet-bottom.inc" %]

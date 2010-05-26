@@ -25,7 +25,7 @@ Este módulo provee funciones para manipular estantes virtuales, incluyendo la c
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-		&getListaEstantesPublicos
+	&getListaEstantesPublicos
         &getEstante
         &getSubEstantes
         &borrarEstantes

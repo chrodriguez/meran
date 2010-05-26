@@ -1,45 +1,4 @@
 
-
-<script>
-      $(document).ready(function() {
-               makeToggle('datos_tabla_div_subestante_[% estante.getId %]','trigger',null,false);
-
-               $('.editable_[% estante.getId %]').editable(
-                    function(value, settings){
-                        modificarEstante('[% estante.padre.getPadre %]','[% estante.getPadre %]','[% estante.getId %]',value,'[% estante.getEstante %]');
-                        return value;
-                    }, 
-                    { event : 'editar'});
-
-               $('.edit_trigger_[% estante.getId %]').bind('click', function() { $('.editable_[% estante.getId %]').trigger('editar'); }); 
-                    }
-                );
-
-               $("#nuevo_subestante_[% estante.getId %]").hide("fast");
-
-               $("#input_nuevo_subestante_[% estante.getId %]").blur( 
-                    function(){ 
-                        $("#nuevo_subestante_[% estante.getId %]").hide("fast");
-                        $("#input_nuevo_subestante_[% estante.getId %]").val("");
-                        });
-
-               $("#input_nuevo_subestante_[% estante.getId %]").keydown(
-                    function(e){
-                    if(e.which == 13){ //con Enter 
-                        agregarSubEstante('[% estante.getPadre %]','[% estante.getId %]',$("#input_nuevo_subestante_[% estante.getId %]").val());
-                        }
-                    });
-
-               $("#boton_nuevo_subestante_[% estante.getId %]").click( 
-                    function(){ 
-                        $("#nuevo_subestante_[% estante.getId %]").show("slow");
-                        $("#input_nuevo_subestante_[% estante.getId %]").focus();
-                        });
-
-
-
-</script>
-
 <div id="contenido-[% estante.getId %]">
 <fieldset class="resultados_busqueda">
 
@@ -47,25 +6,22 @@
 
         <div class="datos_tabla_div_subestante_[% estante.getId %]">
             <div class="botonera_estantes">
-
-            <div id="nuevo_subestante_[% estante.getId %]" class="horizontal">
-            [% "Nuevo Estante" | i18n %] : <input type="text" id="input_nuevo_subestante_[% estante.getId %]">
-            </div>
-
             <div id="boton_nuevo_subestante_[% estante.getId %]">
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_agregar",
-                                                                    title   => "[% 'Agregar subestante' | i18n %]",
+                                                                    title   => "[% 'Agregar estante' | i18n %]",
+                                                                    onClick => "agregarNuevoSubEstante([% estante.getId %],[% estante.getPadre %]);",
                                         ) ;
             [% END %]
             </div>
 
-            <div class="edit_trigger_[% estante.getId %]">
+	    <div class="edit_trigger_[% estante.getId %]">
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_edicion",
-                                                                    title   => "[% 'Editar estante actual' | i18n %]",
+                                                                    onClick => "editarEstante('[% estante.getEstante %]',[% estante.getId %],[% estante.getPadre %],[% IF estante.padre.getPadre %][% estante.padre.getPadre %][% ELSE %]-1[% END %]);",
+                                                                    title   => "[%  'Editar estante actual' | i18n %]",
                                         ) ;
             [% END %]
             </div>
@@ -86,7 +42,7 @@
             [% FOREACH subestante IN SUBESTANTES %]
              <li>
              <input type=checkbox name="[% subestante.getEstante %]" value="[% subestante.getId %]">
-              <a class="click" onClick="verSubEstantes([% estante.getId %],[% subestante.getId %])">[% subestante.getEstante %]</a>
+              <a class="click" onClick="verSubEstantes([% subestante.getId %],[% subestante.getPadre %])">[% subestante.getEstante %]</a>
             </li>
             [% END %]
             [% END %]
@@ -182,5 +138,8 @@
  </div>
 </fieldset>
 </div>
+<script>
+ makeToggle('datos_tabla_div_subestante_[% estante.getId %]','trigger',null,false);
+</script>
 <div id="subestante-[% estante.getId %]">
 </div>
