@@ -21,3 +21,6 @@ cpan -i DateTime::Format::DateManip
 cpan -i Chart::OFC2
 cpan -i Net::SMTP::TLS
 cpan -i Net::SSLeay
+cpan -i Net::Twitter
+cpan -i WWW::Facebook::API
+

@@ -11,6 +11,7 @@ use vars qw(@EXPORT @ISA);
     &getItemTypes
     &getConsultasOPAC
     &getArrayHash
+    &toXLS
     
 );
 
@@ -199,7 +200,7 @@ sub sort_and_cumulate{
         }
         $items->[$CUMULATIVE_LIMIT] = C4::AR::Filtros::i18n("Otros");
         $cant->[$CUMULATIVE_LIMIT] += $cant;
-        $colours->[$CUMULATIVE_LIMIT] = next_colour(7);
+        $colours->[$CUMULATIVE_LIMIT] = next_colour($CUMULATIVE_LIMIT);
     }
 }
 
@@ -229,3 +230,52 @@ sub getRepRegistroModificacion{
         return 0;
     }
 }
+
+
+
+sub toXLS{
+
+    my ($data) = shift;
+    my ($sheet) = shift;
+    my ($filename) = shift;
+
+    use C4::Context;
+    use Spreadsheet::WriteExcel;
+    use C4::AR::Filtros;
+    
+    my $context = new C4::Context;
+    my $reports_dir = $context->config('reports_dir');
+    $filename = $filename || "report.xls";
+    $sheet = $sheet || C4::AR::Filtros::i18n('Resultado');
+
+    $path = $reports_dir.'/'.$filename;
+    
+    my $workbook = Spreadsheet::WriteExcel->new($path);
+    my $worksheet = $workbook->add_worksheet($sheet);
+    my $format = $workbook->add_format();
+    my $col;
+    my $row;
+    
+    $worksheet->set_column(0, 0, 5);
+    $worksheet->set_column(1, 3, 20);
+    $worksheet->set_column(4, 5, 50);
+    $worksheet->set_column(7, 7, 20);
+
+    $format->set_font('Verdana');
+    $format->set_align('top');
+
+    $row = 0;
+
+    foreach my $dato (@$data){
+        my $campos = $dato->getCamposAsArray;
+        $col = 0;
+        foreach my $campo (@$campos){
+            $worksheet->write($row, $col, $dato->{$campo}, $format);
+            $col++;
+        }
+        $row++;
+    }
+    return ($filename);
+}
+
+
