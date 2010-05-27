@@ -2762,7 +2762,7 @@ sub usuarioAutocomplete{
                 $textout = $textout." - ".$usuario->esRegularToString;
                 $textout.= "\n";
             } else {
-                $textout.= $usuario->getNro_socio."|".$usuario->persona->getApeYNom." (".$usuario->getNro_socio.")";
+                $textout.= $usuario->getNro_socio."|".$usuario->persona->getApeYNom." (".$usuario->getNro_socio.")"."\n";
             }
         }
     }
