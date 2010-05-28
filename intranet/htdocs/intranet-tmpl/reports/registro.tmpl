@@ -8,16 +8,6 @@
 
 <script language="javascript" type="text/javascript">
 
-$(document).ready(function() {
-    crearDatePicker('dateselected');
-    crearDatePicker('dateselectedEnd');
-
-});
-</script>
-<script type="text/javascript">
-
-//Funcion que guarda la nota de la modificacion, es llamada desde regitroResult.tmpl
-var notas="";
 var objAH;
 
 function ordenar(orden){
@@ -43,14 +33,14 @@ function consultar(){
     objAH.showOverlay       = true;
 	objAH.chkfecha          = $("#chkfecha")[0].checked;
 	objAH.chkuser           = $("#chkuser")[0].checked;
-	objAH.chknum            = $("#chknum")[0].checked;
+// 	objAH.chknum            = $("#chknum")[0].checked;
 	objAH.dateselected      = $("#dateselected").val();
 	objAH.dateselectedEnd   = $("#dateselectedEnd").val();
 	objAH.operacion         = $("input[name='operacion']:checked").val();
 	objAH.tipo              = $("input[name='tipo']:checked").val();
 	objAH.user              = $("#socios").val();
-	objAH.numDesde          = $("#numDesde").val();
-	objAH.numHasta          = $("#numHasta").val();
+// 	objAH.numDesde          = $("#numDesde").val();
+// 	objAH.numHasta          = $("#numHasta").val();
 	objAH.funcion           = "changePage";
 	objAH.sendToServer();
 }
@@ -64,27 +54,32 @@ function guardarNota(registro){
     objAH.tipoAccion        = "GUARDAR_NOTA";
     objAH.registro          = registro;
     objAH.nota              = $("#nota_" + registro).val();
+
+    $("#view_note_" + registro).html($("#nota_" + registro).val());
+    $("#add_note_" + registro).dialog("close");
+
     objAH.sendToServer();
 }
 
 function updateGuardarNota(responseText){
 
-    jAlert("LA NOTA SE GUARDO");
-    $('#add_note_' + objAH.registro).dialog('close');
-
-    consultar();
+//     jAlert("LA NOTA SE GUARDO");
 }
 
 function agregarNota(registro){
-//     alert('registro => ' + registro);
     $('#add_note_' + registro).dialog('open');
 }
 
 function verNota(registro){
-//     alert('registro => ' + registro);
     $('#view_note_' + registro).dialog('open');
 }
 
+
+$(document).ready(function() {
+    crearDatePicker('dateselected');
+    crearDatePicker('dateselectedEnd');
+
+});
 
 </script>
 
@@ -93,7 +88,7 @@ function verNota(registro){
 
 <!-- FIXME para los tipos, el script anda mal, los toma como el check de fecha o el radio operacion -->
 <fieldset>
-    <legend class="titulo_legend">[% "Buscar signatura topogr&aacute;fica: &nbsp;" | i18n %]</legend>
+    <legend class="titulo_legend">[% "Filtro por fechas:" | i18n %]</legend>
         <ul>
             <li class="sub_item">
                 <label for="chkfecha">[% "Seleccione para buscar por fecha" | i18n %]</label>
@@ -127,11 +122,11 @@ function verNota(registro){
             <li class="sub_item">
                 <input id="chkuser" type="checkbox" name="chkuser" value="usuario"><b>[% "Nombre de usuario: " | i18n %]</b>[% select_usuarios %]
             </li>
-            <li class="sub_item">
+<!--            <li class="sub_item">
                 <input id="chknum" type="checkbox" name="chknum" value="num"><b>[% "N&uacute;mero" | i18n %]
                 [% "desde:" | i18n %] <input id="numDesde" type="text" name="numDesde" size="12">
                 [% "hasta:" | i18n %] </b><input id="numHasta" type="text" name="numHasta" size="12" >
-            </li>
+            </li>-->
         </ul>
     </fieldset>
 </div>

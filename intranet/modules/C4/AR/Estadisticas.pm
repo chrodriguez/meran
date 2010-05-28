@@ -529,17 +529,17 @@ sub registroEntreFechas{
         push(@filtros, ( responsable => { eq => $params_obj->{'user'} }) );
     }
     
-    if ($params_obj->{'chknum'} ne "false"){
-        push(@filtros, ( numero => {    eq  => $params_obj->{'numDesde'},
-                                        gt  => $params_obj->{'numDesde'}, 
-                                    } ) );
-    
-        push(@filtros, ( numero => {
-                                        eq  => $params_obj->{'numHasta'},
-                                        lt  => $params_obj->{'numHasta'}, 
-                                    }
-                        ) );
-    }
+#     if ($params_obj->{'chknum'} ne "false"){
+#         push(@filtros, ( numero => {    eq  => $params_obj->{'numDesde'},
+#                                         gt  => $params_obj->{'numDesde'}, 
+#                                     } ) );
+#     
+#         push(@filtros, ( numero => {
+#                                         eq  => $params_obj->{'numHasta'},
+#                                         lt  => $params_obj->{'numHasta'}, 
+#                                     }
+#                         ) );
+#     }
 
     my $registros_count = C4::Modelo::RepRegistroModificacion::Manager->get_rep_registro_modificacion_count(
                                                                         query               => \@filtros,

@@ -51,11 +51,11 @@ my $nivel;
 foreach my $r (@$rep_registro_modificacion_array_ref){
     my %info;
 
-C4::AR::Debug::debug("tipo => ".$r->getTipo());
-C4::AR::Debug::debug("tipo => ".$r->getNota());
-C4::AR::Debug::debug("fecha sin formato  => ".$r->getFecha());
-C4::AR::Debug::debug("fecha formateada => ".format_date_in_iso($r->getFecha(),$dateformat));
-C4::AR::Debug::debug("fecha ini => ".$fechaFin);
+# C4::AR::Debug::debug("tipo => ".$r->getTipo());
+# C4::AR::Debug::debug("tipo => ".$r->getNota());
+# C4::AR::Debug::debug("fecha sin formato  => ".$r->getFecha());
+# C4::AR::Debug::debug("fecha formateada => ".format_date_in_iso($r->getFecha(),$dateformat));
+# C4::AR::Debug::debug("fecha ini => ".$fechaFin);
 
     if($r->getTipo() eq "Registro"){
         $nivel          = C4::AR::Nivel1::getNivel1FromId1($r->getNumero());
@@ -79,7 +79,6 @@ C4::AR::Debug::debug("fecha ini => ".$fechaFin);
     $info{'operacion'}          = $r->getOperacion();
     $info{'idModificacion'}     = $r->getIdModificacion();
     $info{'nota'}               = C4::AR::Utilidades::trim($r->getNota());
-    C4::AR::Debug::debug("nota =>".$info{'nota'}."=====");
 
     push (@results, \%info);
 } 
