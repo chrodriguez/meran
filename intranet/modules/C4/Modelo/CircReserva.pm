@@ -208,7 +208,7 @@ sub reservar {
 	my($params)=@_;
 
 
-	$self->debug("RESERVA: tipo: ".$params->{'tipo'}." id3: ".$params->{'id3'}." tipo_p:".$params->{'tipo_prestamo'});
+	$self->debug("RESERVA: tipo: ".$params->{'tipo'}." id2: ".$params->{'id2'}." id3: ".$params->{'id3'}." tipo_p:".$params->{'tipo_prestamo'});
 	$self->debug("RESERVA: socio: ".$params->{'nro_socio'}." resp: ".$params->{'loggedinuser'});
 
 	my $dateformat = C4::Date::get_date_format();

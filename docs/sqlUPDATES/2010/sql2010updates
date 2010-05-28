@@ -251,3 +251,8 @@ ALTER TABLE `cat_contenido_estante` CHANGE `shelfnumber` `id_estante` INT( 11 ) 
 ALTER TABLE `cat_contenido_estante` DROP PRIMARY KEY ,ADD PRIMARY KEY ( `id_estante` , `id2` );
 ALTER TABLE `cat_contenido_estante` DROP `flags`;
 ALTER TABLE `cat_contenido_estante` DROP `biblioitemnumber`;
+
+
+-- Gracias gaspo53 sigo buscando !!!
+ALTER TABLE  `cat_registro_marc_n3` ADD  `agregacion_temp` VARCHAR( 255 ) NULL ;
+

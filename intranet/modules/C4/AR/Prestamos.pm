@@ -325,10 +325,10 @@ sub prestarYGenerarTicket{
     my @infoMessages;
     my $id3= $nivel3aPrestar->getId3;
     my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3);
-    $params->{'id1'}= $nivel3aPrestar->nivel2->nivel1->getId1;
-    $params->{'id2'}= $nivel3aPrestar->nivel2->getId2;
-    C4::AR::Debug::debug("id1: ".$nivel3aPrestar->nivel1->getId1);
-    C4::AR::Debug::debug("id2: ".$nivel3aPrestar->nivel2->getId2);
+    $params->{'id1'}= $nivel3aPrestar->getId1;
+    $params->{'id2'}= $nivel3aPrestar->getId2;
+    C4::AR::Debug::debug("id1: ".$nivel3aPrestar->getId1);
+    C4::AR::Debug::debug("id2: ".$nivel3aPrestar->getId2);
     C4::AR::Debug::debug("id3: ".$id3);
     $params->{'id3'}= $id3;
     $params->{'id_ui'}=C4::AR::Preferencias->getValorPreferencia('defaultUI');

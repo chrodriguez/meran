@@ -272,7 +272,7 @@ sub getNivel3FromId3{
                                                                     db => $db,
                                                                     query   => [ id => { eq => $id3} ], 
                                                                     require_objects => ['nivel1'],
-                                                                    select          => ['cat_registro_marc_n1.*']    
+#                                                                     select          => ['cat_registro_marc_n1.*']    
 #                                                                     require_objects => ['ref_disponibilidad', 'ref_estado']
                                                                 );
 
