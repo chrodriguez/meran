@@ -57,16 +57,16 @@ function consultar(filtro,doScroll){
 function updateInfoUsuarios(responseText){
     $('#result').html(responseText);
     zebra('datos_tabla');
-    var idArray = [];
-    var classes = [];
-    idArray[0] = 'socio';
-    classes[0] = 'nomCompleto';
-    classes[1] = 'documento';
-    classes[2] = 'legajo';
-    classes[3] = 'tarjetaId';
+//     var idArray = [];
+//     var classes = [];
+//     idArray[0] = 'socio';
+//     classes[0] = 'nomCompleto';
+//     classes[1] = 'documento';
+//     classes[2] = 'legajo';
+//     classes[3] = 'tarjetaId';
     busqueda = jQuery.trim($('#socio').val());
     if (busqueda.substr(0,6).toUpperCase() != 'FILTRO') //SI NO SE QUISO FILTRAR POR INICIAL, NO TENDRIA SENTIDO MARCARLO
-        highlight(classes,idArray);
+//         highlight(classes,idArray);
     if (shouldScrollUser)
         scrollTo('result');
 }

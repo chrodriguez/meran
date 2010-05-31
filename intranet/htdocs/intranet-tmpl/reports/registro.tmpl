@@ -2,9 +2,8 @@
 
 <script src="/includes/jquery/validate/jquery.validate.js"></script>
 
-[% INCLUDE 'datePicker.inc' %]
-
 [% INCLUDE  'WindowHelper.inc'  %]
+[% INCLUDE 'datePicker.inc' %]
 
 <script language="javascript" type="text/javascript">
 
@@ -32,15 +31,11 @@ function consultar(){
     objAH.debug             = true;
     objAH.showOverlay       = true;
 	objAH.chkfecha          = $("#chkfecha")[0].checked;
-	objAH.chkuser           = $("#chkuser")[0].checked;
-// 	objAH.chknum            = $("#chknum")[0].checked;
 	objAH.dateselected      = $("#dateselected").val();
 	objAH.dateselectedEnd   = $("#dateselectedEnd").val();
-	objAH.operacion         = $("input[name='operacion']:checked").val();
-	objAH.tipo              = $("input[name='tipo']:checked").val();
+    objAH.nivel             = $("#select_nivel").val();
+    objAH.operacion         = $("#select_operacion").val();
 	objAH.user              = $("#socios").val();
-// 	objAH.numDesde          = $("#numDesde").val();
-// 	objAH.numHasta          = $("#numHasta").val();
 	objAH.funcion           = "changePage";
 	objAH.sendToServer();
 }
@@ -88,8 +83,9 @@ $(document).ready(function() {
 
 <!-- FIXME para los tipos, el script anda mal, los toma como el check de fecha o el radio operacion -->
 <fieldset>
-    <legend class="titulo_legend">[% "Filtro por fechas:" | i18n %]</legend>
-        <ul>
+
+          <legend class="titulo_legend">[% "Filtrar por:" | i18n %]</legend>
+          <ul>
             <li class="sub_item">
                 <label for="chkfecha">[% "Seleccione para buscar por fecha" | i18n %]</label>
                 <input id="chkfecha" type="checkbox" name="chkfecha">
@@ -102,34 +98,36 @@ $(document).ready(function() {
                 <label for="dateselectedEnd">[% "Seleccione una fecha de fin" | i18n %]:</label>
                 <input id="dateselectedEnd" name="dateselectedEnd" value="[% todaydate %]"> 
             </li>
-        </ul>
-      <fieldset>
-          <legend class="titulo_legend">[% "Filtrar por:" | i18n %]</legend>
-          <ul>
+            <li>&nbsp;</li>
             <li class="sub_item">
-                <input id="operacion" type="radio" name="operacion" value=[% "Alta" | i18n %]>&nbsp;[% "Alta" | i18n %]
-                <input id="operacion" type="radio" name="operacion" value="Actualizado">&nbsp;[% "Actualizado" | i18n %]
-                <input id="operacion" type="radio" name="operacion" value="Borrado">&nbsp;[% "Borrado" | i18n %]
-                <input id="operacion" type="radio" name="operacion" value="" checked>&nbsp;[% "Ninguno" | i18n %]
-            </li>
-            <li class="sub_item">
-                <input id="tipo" type="radio" name="tipo" value=[% "Libro" | i18n %]>&nbsp;[% "Libro" | i18n %]
-                <input id="tipo" type="radio" name="tipo" value=[% "Grupo" | i18n %]>[% "Grupo" | i18n %]
-                <input id="tipo" type="radio" name="tipo" value=[% "Ejemplar" | i18n %]>[% "&nbsp;Ejemplar" | i18n %]
-                <input id="tipo" type="radio" name="tipo" value="" checked>&nbsp;[% "Ninguno" | i18n %]
+                <label for="select_operacion">[% "Operaci&oacute;n: " | i18n %]</label>
+                <select id="select_operacion">
+                    <option value="">SIN SELECCIONAR</option>
+                    <option value="Alta">Alta</option>
+                    <option value="Actualizado">Actualizado</option>
+                    <option value="Borrado">Borrado</option>
+                </select>
             </li>
                 <!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
             <li class="sub_item">
-                <input id="chkuser" type="checkbox" name="chkuser" value="usuario"><b>[% "Nombre de usuario: " | i18n %]</b>[% select_usuarios %]
+                <label for="socios">
+                    [% "Nombre de usuario: " | i18n %]
+                </label>
+                    [% select_usuarios %]
             </li>
-<!--            <li class="sub_item">
-                <input id="chknum" type="checkbox" name="chknum" value="num"><b>[% "N&uacute;mero" | i18n %]
-                [% "desde:" | i18n %] <input id="numDesde" type="text" name="numDesde" size="12">
-                [% "hasta:" | i18n %] </b><input id="numHasta" type="text" name="numHasta" size="12" >
-            </li>-->
+            <li class="sub_item">
+                
+                <label for="select_nivel">[% "Nivel: " | i18n %]</label>
+                <select id="select_nivel">
+                    <option value="">SIN SELECCIONAR</option>
+                    <option value="Registro">Registro</option>
+                    <option value="Grupo">Grupo</option>
+                    <option value="Ejemplar">Ejemplar</option>
+                </select>
+            </li>
         </ul>
     </fieldset>
-</div>
+<!-- </div> -->
 <div class="buttonContainerHorizontal">
         [% PERL %]
                         print C4::AR::Filtros::to_Button( 

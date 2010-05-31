@@ -256,3 +256,6 @@ ALTER TABLE `cat_contenido_estante` DROP `biblioitemnumber`;
 -- Gracias gaspo53 sigo buscando !!!
 ALTER TABLE  `cat_registro_marc_n3` ADD  `agregacion_temp` VARCHAR( 255 ) NULL ;
 
+
+ 
+ALTER TABLE `rep_registro_modificacion` CHANGE `nota` `nota` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;

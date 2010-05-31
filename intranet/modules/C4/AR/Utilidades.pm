@@ -2057,7 +2057,6 @@ sub generarComboDeSocios{
     $options_hash{'multiple'}       = $params->{'multiple'}||0;
     $options_hash{'defaults'}       = $params->{'default'} || '-1';
 
-#     push (@select_socios, 'SIN SELECCIONAR');
     push (@select_socios, '-1');
     $select_socios{'-1'}            ='SIN SELECCIONAR';
     $options_hash{'values'}         = \@select_socios;

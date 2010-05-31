@@ -11,11 +11,11 @@
             <div class="contenedor_paginador">[% paginador %]</div>
                 <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
                     <tr>
-                        <th class="titulo_tabla_resultado click" onclick="ordenar('surname')" 
+                        <th width="20%" class="titulo_tabla_resultado click" onclick="ordenar('surname')" 
                             title='[% "Ordenar por usuario" | i18n %]'>
                             [% "Usuario" | i18n %]
                         </th>
-                        <th class="titulo_tabla_resultado click" onclick="ordenar('numero')" 
+                        <th width="30%" class="titulo_tabla_resultado click" onclick="ordenar('numero')" 
                             title='[% "Ordenar por título" | i18n %]'>
                             [% "T&iacute;tulo" | i18n %]
                         </th>
@@ -74,9 +74,10 @@
                                         <div class="buttonContainerHorizontal">
                                         [% PERL %]
                                                         print C4::AR::Filtros::to_Button( 
-                                                                    text    =>  "[% 'Guardar nota' | i18n %]",
-                                                                    boton   =>  "boton_agregar",
-                                                                    onClick =>  "guardarNota([% registro.idModificacion %]);",
+                                                                    text        =>  "[% 'Guardar nota' | i18n %]",
+                                                                    boton       =>  "boton_agregar",
+                                                                    onClick     =>  "guardarNota([% registro.idModificacion %]);",
+                                                                    alternClass => 'botonCentrado'
                                                                 ) ;
                                         [% END %]
                                         </div>
@@ -89,9 +90,10 @@
 
                                 [% PERL %]
                                         print C4::AR::Filtros::to_Icon(   
-                                                                boton   => "icon_globo",
-                                                                onClick => "verNota([% registro.idModificacion %]);",
-                                                                title   => "[% 'Ver nota' | i18n %]",
+                                                                boton       => "icon_globo",
+                                                                onClick     => "verNota([% registro.idModificacion %]);",
+                                                                title       => "[% 'Ver nota' | i18n %]",
+                                                                alternClass => 'botonCentrado'
                                                 ) ;
                                 [% END %]
     

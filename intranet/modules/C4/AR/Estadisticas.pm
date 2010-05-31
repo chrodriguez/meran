@@ -521,12 +521,17 @@ sub registroEntreFechas{
         push(@filtros, ( operacion => { eq => $params_obj->{'operacion'} }) );
     }
     
-    if ($params_obj->{'tipo'} ne ''){
-        push(@filtros, ( tipo => { eq => $params_obj->{'tipo'} }) );
-    }
+#     if ($params_obj->{'tipo'} ne ''){
+#         push(@filtros, ( tipo => { eq => $params_obj->{'tipo'} }) );
+#     }
     
-    if ($params_obj->{'chkuser'} ne "false"){
+#     if ($params_obj->{'chkuser'} ne "false"){
+    if ($params_obj->{'user'} ne "-1"){
         push(@filtros, ( responsable => { eq => $params_obj->{'user'} }) );
+    }
+
+    if ($params_obj->{'nivel'} ne ''){
+        push(@filtros, ( tipo => { eq => $params_obj->{'nivel'} }) );
     }
     
 #     if ($params_obj->{'chknum'} ne "false"){

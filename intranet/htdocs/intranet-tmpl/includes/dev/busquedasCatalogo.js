@@ -27,7 +27,7 @@ function highlightBusquedaCombinable(){
     }
     
     var combinables= ['titulo', 'autor', 'signatura'];
-    highlight(classes,combinables);
+//     highlight(classes,combinables);
 }
 
 function busquedaCombinable(){
@@ -110,7 +110,7 @@ function highlightbuscarPorCodigoBarra(){
     string[0] = $('#codBarra').val();
     classes[0] = 'titulo_result';
     classes[1] = 'autor_result';
-    highlight(classes,string);
+//     highlight(classes,string);
 }
 
 function buscarPorTema(){
@@ -166,7 +166,7 @@ function highlightBusquedaPorKeyword(){
     string[0] = 'keyword';
     classes[0] = 'titulo_result';
     classes[1] = 'autor_result';
-    highlight(classes,string);
+//     highlight(classes,string);
 }
 
 
