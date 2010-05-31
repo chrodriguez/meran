@@ -67,7 +67,9 @@ sub getEstante {
     use C4::Modelo::CatEstante::Manager;
     my ($estante) = C4::Modelo::CatEstante->new(id => $id_estante);
     $estante->load();
-
+    if( $estante->padre){
+                C4::AR::Debug::debug("PADRE!!!! ".$estante->estante_padre->getEstante);
+         }       
     return ($estante);
 }
 

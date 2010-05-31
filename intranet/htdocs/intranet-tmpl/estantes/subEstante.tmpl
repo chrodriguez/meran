@@ -20,7 +20,7 @@
             [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_edicion",
-                                                                    onClick => "editarEstante('[% estante.getEstante %]',[% estante.getId %],[% estante.getPadre %],[% IF estante.padre.getPadre %][% estante.padre.getPadre %][% ELSE %]-1[% END %]);",
+                                                                    onClick => "editarEstante('[% estante.getEstante %]',[% estante.getId %],[% estante.getPadre %],[% IF estante.padre %][% estante.estante_padre.getPadre %][% ELSE %]-1[% END %]);",
                                                                     title   => "[%  'Editar estante actual' | i18n %]",
                                         ) ;
             [% END %]
