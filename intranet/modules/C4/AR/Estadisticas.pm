@@ -114,15 +114,36 @@ sub barcodesPorTipo{
 }
 
 sub listarItemsDeInventorioSigTop{
-    my ($sigtop,$orden) = @_;
+    my ($signatura,$orden) = @_;
+
+
+    my @filtros;
+    #my @
 
 #     my $cat_nivel3 = C4::Modelo::CatNivel3::Manager->get_cat_nivel3( 
-    my $cat_nivel3 = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
-                                                                        query => [ signatura_topografica => { like => $sigtop.'%' } ], 
-                                                                        require_objects => ['nivel2','nivel1'],
-                                                                        select => ['*'],
-                                                                    );
-    return ($cat_nivel3);
+    my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => [\@filtros],
+#                                                             query => [ signatura_topografica => { like => $sigtop.'%' } ], 
+#                                                             require_objects => ['nivel2','nivel1'],
+#                                                             select => ['*'],
+                                                          );
+
+    my $cant = scalar(@$cat_nivel3_array_ref);
+
+    for(my $i=0; $i < $cant; $i++){
+
+        #if($cat_nivel3_array_ref->[$i]->getSignatura_topografica() eq $signatura){
+        #    push(@barcode_result, $barcodes_array_ref->[$i]);
+        #    last();
+        #}
+    }
+# 
+#     if(scalar(@barcode_result) > 0){
+#         return (@barcode_result[0]);
+#     }else{
+#         return (0);
+#     }
+
+    #return ($cat_nivel3);
 
 
 }
