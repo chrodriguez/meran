@@ -262,4 +262,5 @@ ALTER TABLE `rep_registro_modificacion` CHANGE `nota` `nota` TEXT CHARACTER SET 
 
 ALTER TABLE  `rep_registro_modificacion` ADD  `agregacion_temp` VARCHAR( 255 ) NULL ;
 ALTER TABLE  `rep_historial_busqueda` ADD  `agregacion_temp` VARCHAR( 255 ) NULL ;
-ALTER TABLE  `rep_busqueda` ADD  `agregacion_temp` VARCHAR( 255 ) NULL 
+ALTER TABLE  `rep_busqueda` ADD  `agregacion_temp` VARCHAR( 255 ) NULL;
+ ALTER TABLE `rep_busqueda` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL  ;
