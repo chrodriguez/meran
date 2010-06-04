@@ -93,13 +93,13 @@ sub generar_indice {
 =cut
 sub reindexar{
     use Sphinx::Manager;
+    C4::AR::Debug::debug("Busquedas => reindexar => run_indexer => ");
 
     my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
     #verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada    
     sphinx_start($mgr);
 
     $mgr->run_indexer('--all --rotate --quiet');
-    C4::AR::Debug::debug("Utilidades => reindexar => run_indexer => ");
 }
 
 =head2
