@@ -30,11 +30,16 @@ __PACKAGE__->meta->setup(
 
 
 sub agregar{
+    my ($self) = shift;
+    my ($nro_socio) = @_;
+    use C4::Date;
 
-   my ($self) = shift;
-   my ($nro_socio) = @_;
-   $self->setNro_socio($nro_socio);
-   $self->save();
+    $self->setNro_socio($nro_socio);
+    my $dateformat      = C4::Date::get_date_format();
+    my $hoy             = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+    $self->setFecha($hoy);
+
+    $self->save();
 }
 
 sub getCategoria_socio_report{

@@ -1384,7 +1384,8 @@ sub t_loguearBusqueda {
         #Se setea error para el usuario
         &C4::AR::Mensajes::printErrorDB($@, 'B407',"INTRA");
         $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R011', 'params' => []} ) ;        
+        #no se debe informar nada al usuario, no debería saber de esto      
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R011', 'params' => []} ) ;        
         $db->rollback;
     }
     $db->{connect_options}->{AutoCommit} = 1;
