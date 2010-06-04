@@ -277,7 +277,7 @@
                                                                       title =>    "[% 'Reportes gen&eacute;ricos (FALTA)' | i18n %]"
                                                                   ) ;
                                   [% END %]
-                          </li>
+                          </li> -->
                           <li>
                                     [% PERL %]
                                         print C4::AR::Filtros::link_to( text =>     "[% 'Inventario y Signatura' | i18n %]",
@@ -286,7 +286,7 @@
                                                                     ) ;
                                     [% END %]
                           </li>
-                          <li>
+                          <!--<li>
                                     [% PERL %]
                                         print C4::AR::Filtros::link_to( text =>     "[% 'Estantes Virtuales (FALTA DB MODEL)' | i18n %]",
                                                                         url =>      "#",

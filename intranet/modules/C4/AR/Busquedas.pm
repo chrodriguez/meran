@@ -1062,7 +1062,7 @@ sub index_update{
 }
 
 sub getSuggestion{
-    my ($search,$cant_result_busqueda,$intra) = @_;
+    my ($search,$cant_result_busqueda,$intra,$obj_for_log) = @_;
     my $speller = Text::Aspell->new;
     my $lang = C4::Auth::getUserLocale();
     C4::AR::Debug::debug("******************* USER LANG DE SUGGESTIONS: ".$lang);
@@ -1082,7 +1082,7 @@ sub getSuggestion{
         if (!$intra){
             $suggestion = Encode::encode_utf8($suggestion);
         }
-        ($total_found) = busquedaCombinada_newTemp($suggestion,\%hash,\%hash,1);
+        ($total_found) = busquedaCombinada_newTemp($suggestion,\%hash,$obj_for_log,1);
 #         C4::AR::Debug::debug("TOTAL FOUND SUGGESTED: ".$total_found."CON ".$suggestion);
         $cont++;
     }
@@ -1109,15 +1109,24 @@ sub busquedaCombinada_newTemp{
     my $sphinx = Sphinx::Search->new();
     $sphinx->SetServer($path, 0);
     my $query = '';
+
+    my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
+    my $tipo_match  = _getMatchMode($tipo);
+
+    C4::AR::Debug::debug("Busquedas => match_mode ".$tipo);
+
     #se arma el query string
     foreach my $string (@searchstring_array){
-        $query .=  " ".$string."*";
+
+        if($tipo eq 'SPH_MATCH_PHRASE'){
+            $query .=  " ".$string;
+        } else {
+            $query .=  " ".$string."*";
+        }
     }
 
-#     C4::AR::Debug::debug("Busquedas => query => ".$query);
-#     C4::AR::Debug::debug("query string ".$query);
-    my $tipo = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
-    my $tipo_match = _getMatchMode($tipo);
+    C4::AR::Debug::debug("Busquedas => query string ".$query);
+
 
 #      C4::AR::Debug::debug("MATCH MODE ".$tipo);
     $sphinx->SetMatchMode($tipo_match);
@@ -1143,11 +1152,11 @@ sub busquedaCombinada_newTemp{
     C4::AR::Debug::debug("total_found: ".$total_found);
     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
-    my %hash_temp = {};
-    $hash_temp{'id1'} = $hash->{'doc'};
-    $hash_temp{'hits'} = $hash->{'weight'};
+        my %hash_temp = {};
+        $hash_temp{'id1'} = $hash->{'doc'};
+        $hash_temp{'hits'} = $hash->{'weight'};
 
-    push (@id1_array, \%hash_temp);
+        push (@id1_array, \%hash_temp);
     }
 
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
@@ -1155,7 +1164,7 @@ sub busquedaCombinada_newTemp{
     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 
     if (!$from_suggested){
-        $string_suggested = getSuggestion($string_utf8_encoded,$total_found);
+        $string_suggested = getSuggestion($string_utf8_encoded,$total_found,1,$obj_for_log);
     }
 
     return ($total_found, $resultsarray,$string_suggested);
@@ -1384,7 +1393,8 @@ sub t_loguearBusqueda {
         #Se setea error para el usuario
         &C4::AR::Mensajes::printErrorDB($@, 'B407',"INTRA");
         $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R011', 'params' => []} ) ;        
+        #no se debe informar nada al usuario, no debería saber de esto      
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R011', 'params' => []} ) ;        
         $db->rollback;
     }
     $db->{connect_options}->{AutoCommit} = 1;

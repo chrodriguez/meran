@@ -110,15 +110,6 @@ function buscar(doScroll){
 
 }
 
-function highlightbuscarPorCodigoBarra(){
-    var string = [];
-    var classes = [];
-    string[0] = $('#codBarra').val();
-    classes[0] = 'titulo_result';
-    classes[1] = 'autor_result';
-    highlight(classes,string);
-}
-
 function buscarPorTema(){
     objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
@@ -183,27 +174,8 @@ function busquedaPorKeyword(suggested){
 function updateBusquedaPorKeyword(responseText){
     updateInfoBusquedas(responseText);
     var keyword = $('#keyword').val();
-    //sin acentos
-    var temp_keyword = replaceAccents(keyword);
-    $('#keyword').val(temp_keyword);
-    //todo con acentos
-    temp_keyword = replaceNonAccents(keyword);
-    $('#keyword').val(temp_keyword);
-    highlightBusquedaPorKeyword();
-    //con la entrada original
     $('#keyword').val(keyword);
-//     highlightBusquedaPorKeyword();
 }
-
-function highlightBusquedaPorKeyword(){
-    var string = [];
-    var classes = [];
-    string[0] = 'keyword';
-    classes[0] = 'titulo_result';
-    classes[1] = 'autor_result';
-    highlight(classes,string);
-}
-
 
 function buscarEstante(){
 
