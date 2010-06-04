@@ -16,7 +16,7 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 
     relationships => [
-        padre => {
+        estante_padre => {
             class       => 'C4::Modelo::CatEstante',
             key_columns => { padre => 'id' },
             type        => 'one to one',

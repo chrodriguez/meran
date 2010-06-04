@@ -2,6 +2,7 @@
 [% INCLUDE "intranet-top.inc" %]
 <!-- FIXME no se usa mas -->
 <!-- <script language="javascript" type="text/javascript" src="/includes/jquery/jquery-highlight-min.js"></script> -->
+<script language="javascript" type="text/javascript" src="/intranet-tmpl/includes/estantesVirtuales.js"></script>
 <script language="javascript" type="text/javascript" src="/intranet-tmpl/includes/busquedasCatalogo-min.js"> </script>
 
 <script language="javascript" type="text/javascript">
@@ -158,16 +159,6 @@ function limpiarCampos(side){
                                                                         alternClass => "botonCentrado"
                                             ) ;
                             [% END %]
-    
-                            [% PERL %]
-                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Mostrar Estantes' | i18n %]",
-                                                                            boton   => "boton_buscar",
-                                                                            onClick => "mostrarEstantes();",
-                                                                            title   => "[% 'Mostrar Estantes' | i18n %]",
-                                                                            alternClass => "botonCentrado"
-                                                ) ;
-                            [% END %]
-                        
                     </li>
                 </ul>
             </div>
