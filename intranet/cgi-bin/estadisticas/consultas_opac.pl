@@ -53,12 +53,11 @@ if (!$obj){
         $data_url = "/cgi-bin/koha/estadisticas/consultas_opac_data.pl?total=".$obj->{'total'}."%26tipo_socio=".$obj->{'tipo_socio'}."%26registrados=".$obj->{'registrados'}."%26f_inicio=".$obj->{'f_inicio'}."%26f_fin=".$obj->{'f_fin'};
         $t_params->{'data'} = C4::AR::Reportes::getArrayHash('getConsultasOPAC',$obj);
         
-        # TEST PARA XLS, despues sacar
-            my ($cont,$socios) = C4::AR::Usuarios::getSocioLike('a');
-            C4::AR::Reportes::toXLS($socios,'ananananana');
-        # FIN TEST
-
+        my ($cont,$socios) = C4::AR::Usuarios::getSocioLike('a');
+        my ($path,$filename) = C4::AR::Reportes::toXLS($socios,'ananananana');
+        $t_params->{'filename'} = '/reports/'.$filename;
 }
+
 
 my %params_for_combo = {};
 $params_for_combo{'default'} = '';

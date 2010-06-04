@@ -231,12 +231,24 @@ sub getRepRegistroModificacion{
     }
 }
 
+sub titleByUser{
+    my ($fileType,$report_type) = shift;
 
+    $report_type = $report_type || C4::AR::Filtros::i18n('reporte');
+    $fileType = $fileType || 'null';
+    
+    my $username = C4::Auth::getSessionNroSocio() || 'GUEST_USER_WARNING';
+    my $title = $report_type."_".$username.".".$fileType;
+    
+    return ($title);
+  
+}
 
 sub toXLS{
 
     my ($data) = shift;
     my ($sheet) = shift;
+    my ($report_type) = shift;
     my ($filename) = shift;
 
     use C4::Context;
@@ -245,11 +257,11 @@ sub toXLS{
     
     my $context = new C4::Context;
     my $reports_dir = $context->config('reports_dir');
-    $filename = $filename || "report.xls";
+    
     $sheet = $sheet || C4::AR::Filtros::i18n('Resultado');
+    $filename = $filename?($report_type."_".$filename):(titleByUser('xls',$report_type));
 
     my $path = $reports_dir.'/'.$filename;
-    
     my $workbook = Spreadsheet::WriteExcel->new($path);
     my $worksheet = $workbook->add_worksheet($sheet);
     my $format = $workbook->add_format();
@@ -275,7 +287,7 @@ sub toXLS{
         }
         $row++;
     }
-    return ($filename);
+    return ($path,$filename);
 }
 
 
