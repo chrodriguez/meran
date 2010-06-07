@@ -52,6 +52,12 @@ if (!$obj){
 
         $data_url = "/cgi-bin/koha/estadisticas/colecciones_data.pl?item_type=".$obj->{'item_type'}."%26ui=".$obj->{'ui'};
         $t_params->{'data'} = C4::AR::Reportes::getArrayHash('getItemTypes',$obj);
+        
+        my ($data,$is_array_of_hash) = C4::AR::Reportes::getItemTypes($obj,1);
+        my ($path,$filename) = C4::AR::Reportes::toXLS($data,$is_array_of_hash,'Pagina 1','Colecciones');
+        
+        $t_params->{'filename'} = '/reports/'.$filename;
+
 
 }
 

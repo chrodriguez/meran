@@ -58,16 +58,18 @@ sub next_colour{
 
 }
 sub getItemTypes{
-    my ($params) = @_;
+    my ($params,$return_arrays) = @_;
 
     use C4::Modelo::CatRegistroMarcN2;
 
     my ($cat_registro_n2) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(select => ['*']);
+    
 
     my @items;
     my @cant;
     my @colours;
-
+    my @array_for_file_export;
+    
     my %item_type_hash = {0};
     if ( ($params->{'item_type'}) && ($params->{'item_type'} ne 'ALL') ){
         foreach my $record (@$cat_registro_n2){
@@ -95,14 +97,23 @@ sub getItemTypes{
     {
         $item_type_hash{$item} = int $item_type_hash{$item};
         if ($item_type_hash{$item} > 0){
-                push (@items, $item);
-                push (@cant,$item_type_hash{$item});
-                push (@colours, next_colour($limit_of_view++));
+            push (@items, $item);
+            push (@cant,$item_type_hash{$item});
+            push (@colours, next_colour($limit_of_view++));
+            #HASH PARA EXPORTAR
+            my %hash_temp;
+            $hash_temp{'Cantidad'}=$item_type_hash{$item};
+            $hash_temp{'Item'}=$item;
+            push (@array_for_file_export,\%hash_temp);
         }
     }
 
     sort_and_cumulate(\@items,\@colours,\@cant);
-    
+
+    if ($return_arrays){
+        return(\@array_for_file_export,1);
+    }
+
     return (\@items,\@colours,\@cant);
 }
 
@@ -144,7 +155,7 @@ sub getConsultasOPAC{
                                                                                 select => ['COUNT(categoria_socio) AS agregacion_temp','nro_socio','categoria_socio'],
                                                                            );
     if ($return_arrays){
-        return($rep_busqueda);
+        return($rep_busqueda,0);
     }
 
 
@@ -236,11 +247,12 @@ sub getRepRegistroModificacion{
 }
 
 sub titleByUser{    
-    my ($fileType,$report_type) = shift;
+    my ($fileType) = shift;
+    my ($report_type) = shift;
 
     $report_type = $report_type || C4::AR::Filtros::i18n('reporte');
     $fileType = $fileType || 'null';
-    
+   
     my $username = C4::Auth::getSessionNroSocio() || 'GUEST_USER_WARNING';
     my $title = $report_type."_".$username.".".$fileType;
     
@@ -251,6 +263,7 @@ sub titleByUser{
 sub toXLS{
 
     my ($data) = shift;
+    my ($is_array_of_hash) = shift;
     my ($sheet) = shift;
     my ($report_type) = shift;
     my ($filename) = shift;
@@ -286,22 +299,44 @@ sub toXLS{
         $header->set_size(12);
         $header->set_color('blue');
 
-    my $campos = $data->[0]->getCamposAsArray;
-    my $x = 0;
-    foreach my $campo (@$campos){
-        $worksheet->write(0, $x++, $campo,$header);
-    }
-    #FIN column titles
-    $row = 1;
-    foreach my $dato (@$data){
-        my $campos = $dato->getCamposAsArray;
-        $col = 0;
+
+    if (!$is_array_of_hash){
+        my $campos = $data->[0]->getCamposAsArray;
+        my $x = 0;
+      
         foreach my $campo (@$campos){
-            $worksheet->write($row, $col, $dato->{$campo}, $format);
-            $col++;
+            $worksheet->write(0, $x++, $campo,$header);
         }
-        $row++;
+        #FIN column titles
+        $row = 1;
+        foreach my $dato (@$data){
+            my $campos = $dato->getCamposAsArray;
+            $col = 0;
+            foreach my $campo (@$campos){
+                $worksheet->write($row, $col, $dato->{$campo}, $format);
+                $col++;
+            }
+            $row++;
+        }
+    }else{
+    
+        my $x = 0;
+        
+        my $hash_temp = $data->[0];
+        foreach my $key ( keys (%$hash_temp) ){
+            $worksheet->write(0, $x++, $key,$header);
+        }
+        #FIN column titles
+        $row = 1;
+        foreach my $hash (@$data){
+            $col = 0;
+            foreach my $key ( keys %$hash ){
+                $worksheet->write($row, $col++, $hash->{$key},$format);
+            }
+            $row++;
+        }
     }
+    
     return ($path,$filename);
 }
 

@@ -51,10 +51,10 @@ if (!$obj){
                         });
 
         $data_url = "/cgi-bin/koha/estadisticas/consultas_opac_data.pl?total=".$obj->{'total'}."%26tipo_socio=".$obj->{'tipo_socio'}."%26registrados=".$obj->{'registrados'}."%26f_inicio=".$obj->{'f_inicio'}."%26f_fin=".$obj->{'f_fin'};
-        my $data = $t_params->{'data'} = C4::AR::Reportes::getArrayHash('getConsultasOPAC',$obj);
+        $t_params->{'data'} = C4::AR::Reportes::getArrayHash('getConsultasOPAC',$obj);
         
-        my ($data) = C4::AR::Reportes::getConsultasOPAC($obj,1);
-        my ($path,$filename) = C4::AR::Reportes::toXLS($data,'ananananana');
+        my ($data,$is_hash) = C4::AR::Reportes::getConsultasOPAC($obj,1);
+        my ($path,$filename) = C4::AR::Reportes::toXLS($data,$is_hash,'Pagina 1','colecciones');
         $t_params->{'filename'} = '/reports/'.$filename;
 }
 
