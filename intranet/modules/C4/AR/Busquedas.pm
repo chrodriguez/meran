@@ -99,7 +99,15 @@ sub reindexar{
     #verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada    
     sphinx_start($mgr);
 
-    $mgr->run_indexer('--all --rotate --quiet');
+    my @args;
+    push (@args, '--all');
+    push (@args, '--rotate');
+    push (@args, '--quiet');
+
+    $mgr->indexer_args(\@args);
+#     $mgr->run_indexer('--all --rotate --quiet');
+    $mgr->run_indexer();
+    C4::AR::Debug::debug("Busquedas => reindexar => --all --rotate => ");
 }
 
 =head2
