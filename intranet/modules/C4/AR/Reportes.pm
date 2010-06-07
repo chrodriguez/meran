@@ -107,7 +107,7 @@ sub getItemTypes{
 }
 
 sub getConsultasOPAC{
-    my ($params) = @_;
+    my ($params,$return_arrays) = @_;
 
 
 
@@ -143,6 +143,11 @@ sub getConsultasOPAC{
                                                                                 group_by => ['categoria_socio'],
                                                                                 select => ['COUNT(categoria_socio) AS agregacion_temp','nro_socio','categoria_socio'],
                                                                            );
+    if ($return_arrays){
+        return($rep_busqueda);
+    }
+
+
     my @items;
     my @cant;
     my @colors;
@@ -154,8 +159,7 @@ sub getConsultasOPAC{
     }
 
     sort_and_cumulate(\@items,\@colors,\@cant);
-    
-    return (\@items,\@colors,\@cant);
+    return (\@items,\@colors,\@cant,$rep_busqueda);
 }
 
 sub getArrayHash{
@@ -231,7 +235,7 @@ sub getRepRegistroModificacion{
     }
 }
 
-sub titleByUser{
+sub titleByUser{    
     my ($fileType,$report_type) = shift;
 
     $report_type = $report_type || C4::AR::Filtros::i18n('reporte');
@@ -268,16 +272,27 @@ sub toXLS{
     my $col;
     my $row;
     
-    $worksheet->set_column(0, 0, 5);
+    $worksheet->set_column(0, 3, 20);
     $worksheet->set_column(1, 3, 20);
-    $worksheet->set_column(4, 5, 50);
+    $worksheet->set_column(4, 5, 20);
     $worksheet->set_column(7, 7, 20);
 
-    $format->set_font('Verdana');
-    $format->set_align('top');
+    #Escribo los column titles :)
 
-    $row = 0;
+    my  $header = $workbook->add_format();
+        $header->set_font('Verdana');
+        $header->set_align('top');
+        $header->set_bold();
+        $header->set_size(12);
+        $header->set_color('blue');
 
+    my $campos = $data->[0]->getCamposAsArray;
+    my $x = 0;
+    foreach my $campo (@$campos){
+        $worksheet->write(0, $x++, $campo,$header);
+    }
+    #FIN column titles
+    $row = 1;
     foreach my $dato (@$data){
         my $campos = $dato->getCamposAsArray;
         $col = 0;
