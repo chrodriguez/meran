@@ -1482,41 +1482,48 @@ sub armarBuscoPor{
 	
 	if($params->{'keyword'} ne ""){
         $str      = C4::AR::Utilidades::verificarValor($params->{'keyword'});
-        $buscoPor.= Encode::encode('UTF-8',(Encode::decode('UTF-8', "Búsqueda combinada: "))).$str."&";
+#         $buscoPor.= Encode::encode('UTF-8',(Encode::decode('UTF-8', C4::AR::Filtros::i18n("B&uacute;squeda combinada: ")))).$str."&";
+        $buscoPor.= $str."&";
 	}
 	
 	if( $params->{'tipo_nivel3_name'} != -1 &&  $params->{'tipo_nivel3_name'} ne ""){
-		$buscoPor.= "Tipo de documento: ".C4::AR::Utilidades::verificarValor($params->{'tipo_nivel3_name'})."&";
+# 		$buscoPor.= C4::AR::Filtros::i18n("Tipo de documento: ").C4::AR::Utilidades::verificarValor($params->{'tipo_nivel3_name'})."&";
+        $buscoPor.= C4::AR::Utilidades::verificarValor($params->{'tipo_nivel3_name'})."&";
 	}
 
 	if( $params->{'titulo'} ne "" ){
-		$buscoPor.= Encode::decode_utf8("Título: ".C4::AR::Utilidades::verificarValor($params->{'titulo'}))."&";
+# 		$buscoPor.= Encode::decode_utf8("Título: ".C4::AR::Utilidades::verificarValor($params->{'titulo'}))."&";
+        $buscoPor.= Encode::decode_utf8(C4::AR::Utilidades::verificarValor($params->{'titulo'}))."&";  
 	}
 	
 	if( $params->{'autor'} ne "" ){
-		$buscoPor.= "Autor: ".C4::AR::Utilidades::verificarValor($params->{'autor'})."&";
+# 		$buscoPor.= "Autor: ".C4::AR::Utilidades::verificarValor($params->{'autor'})."&";
+        $buscoPor.= C4::AR::Utilidades::verificarValor($params->{'autor'})."&";
 	}
 
 	if( $params->{'signatura'} ne "" ){
-		$buscoPor.= "Signatura: ".C4::AR::Utilidades::verificarValor($params->{'signatura'})."&";
+# 		$buscoPor.= "Signatura: ".C4::AR::Utilidades::verificarValor($params->{'signatura'})."&";
+        $buscoPor.= C4::AR::Utilidades::verificarValor($params->{'signatura'})."&";
 	}
 
 	if( $params->{'isbm'} ne "" ){
-		$buscoPor.= "ISBN: ".C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
+# 		$buscoPor.= "ISBN: ".C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
+        $buscoPor.= C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
 	}		
 
 	if( $params->{'codBarra'} ne "" ){
-		$buscoPor.= Encode::decode_utf8("Código de Barra: ".C4::AR::Utilidades::verificarValor($params->{'codBarra'}))."&";
+# 		$buscoPor.= Encode::decode_utf8("Código de Barra: ".C4::AR::Utilidades::verificarValor($params->{'codBarra'}))."&";
+        $buscoPor.= Encode::decode_utf8(C4::AR::Utilidades::verificarValor($params->{'codBarra'}))."&";
 	}		
 
-	my @busqueda=split(/&/,$buscoPor);
-	$buscoPor="";
+	my @busqueda    = split(/&/,$buscoPor);
+	$buscoPor       = " ";
 	
 	foreach my $str (@busqueda){
 		$buscoPor.=", ".$str;
 	}
 	
-	$buscoPor= substr($buscoPor,2,length($buscoPor));
+	$buscoPor       = substr($buscoPor,2,length($buscoPor));
 
 	return $buscoPor;
 }
