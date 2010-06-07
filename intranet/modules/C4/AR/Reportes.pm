@@ -313,7 +313,7 @@ sub toXLS{
             my $campos = $dato->getCamposAsArray;
             $col = 0;
             foreach my $campo (@$campos){
-                $worksheet->write($row, $col, $dato->{$campo}, $format);
+                $worksheet->write($row, $col, Encode::decode_utf8($dato->{$campo}), $format);
                 $col++;
             }
             $row++;
@@ -331,7 +331,7 @@ sub toXLS{
         foreach my $hash (@$data){
             $col = 0;
             foreach my $key ( keys %$hash ){
-                $worksheet->write($row, $col++, $hash->{$key},$format);
+                $worksheet->write($row, $col++, Encode::decode_utf8($hash->{$key}),$format);
             }
             $row++;
         }

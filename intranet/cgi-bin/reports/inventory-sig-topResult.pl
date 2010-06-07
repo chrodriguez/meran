@@ -3,6 +3,7 @@
 use strict;
 use C4::Auth;
 use CGI;
+use C4::AR::Reportes;
 
 #Genera un inventario a partir de la busqueda por signatura topografica
 
@@ -23,24 +24,18 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 #Buscar
 my $cat_nivel3;
+my $array_hash_ref;
 
 if($sigtop ne ''){
-   $cat_nivel3 = C4::AR::Estadisticas::listarItemsDeInventorioSigTop($sigtop,$orden);
+   ($cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::listarItemsDeInventorioSigTop($sigtop,$orden);
+   my ($path, $filename)            = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');
+      
+   $t_params->{'filename'}          = '/reports/'.$filename;
+
 }
-#
-# Generar Planilla
-# my $loggedinuser = $session->param('loggedinuser');
-# my $planilla=generar_planilla_inventario_sig_top(\@res,$loggedinuser);
-#
 
-my @results;
-my $cant = scalar(@$cat_nivel3);
-
-
+my $cant                = scalar(@$cat_nivel3);
 $t_params->{'results'}  = $cat_nivel3;
-
-# print $cat_nivel3->[0]->nivel2->nivel1->autor;
-# $t_params->{'name'}= $planilla;
 $t_params->{'cantidad'} = $cant;
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

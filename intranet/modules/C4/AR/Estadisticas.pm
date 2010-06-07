@@ -119,9 +119,12 @@ sub listarItemsDeInventorioSigTop{
 
     my @filtros;
     my @cat_nivel3_result;
+    my @info_reporte;
 
     my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
                                                                                             query => \@filtros,
+#               require_objects     => ['nivel2','nivel1'],
+#               select              => ['cat_registro_marc_n2.*','cat_registro_marc_n1.*'],
                                                                               );
 
 
@@ -129,12 +132,24 @@ sub listarItemsDeInventorioSigTop{
     my $cant = scalar(@$cat_nivel3_array_ref);
 
     for(my $i=0; $i < $cant; $i++){
-        if ($cat_nivel3_array_ref->[$i]->getSignatura_topografica() =~ m/$signatura/) {
-           push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+        if ($cat_nivel3_array_ref->[$i]->getSignatura_topografica() =~ m/^$signatura/) {
+            my %hash_info;
+
+            $hash_info{'nro_inventario'}          = $cat_nivel3_array_ref->[$i]->getBarcode();
+            $hash_info{'signatura_topografica'}   = $cat_nivel3_array_ref->[$i]->getSignatura_topografica();
+            $hash_info{'autor'}                   = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getAutor();
+            $hash_info{'titulo'}                  = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getTitulo();
+# TODO FALTAN
+#             $hash_info{'edicion'}                 = $cat_nivel3_array_ref->[$i]->
+#             $hash_info{'editor'}                  = $cat_nivel3_array_ref->[$i]->
+            $hash_info{'fecha'}                   = $cat_nivel3_array_ref->[$i]->nivel2->getAnio_publicacion();
+
+            push(@info_reporte, \%hash_info);
+            push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
         }
     }
 
-    return (\@cat_nivel3_result);
+    return (\@cat_nivel3_result, \@info_reporte);
 
 
 }

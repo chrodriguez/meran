@@ -32,7 +32,7 @@
                             [% cat_nivel3.getSignatura_topografica %]
                     </td>
                     <td align="center">
-                            [% cat_nivel3.nivel2.nivel1.cat_autor.getNombre %]
+                            [% cat_nivel3.nivel2.nivel1.getAutor %]
                     </td>
                     <td align="center">
                             [% HTML.escape(cat_nivel3.nivel2.nivel1.getTitulo) %]
@@ -56,14 +56,13 @@
 
 <br><br>
 
-<center>
-    [% PERL %]
-        print C4::AR::Filtros::link_to(  text    => "[% 'Generar Planilla' | i18n %]",
-                                         title    => "[% 'Generar Planilla' | i18n %]",
-                                         boton   => "boton_buscar",
-                                         url => "/cgi-bin/koha/reports/plantillas/generatesxc.pl?name=[% name %]",
-                                        width => 150,
-                ) ;
-    [% END %]
-
-</center>
+      <div class="buttonContainerHorizontal">
+          [% PERL %]
+                  print C4::AR::Filtros::to_Button( 
+                                                      text    =>  "[% "Exportar XLS" | i18n %]",
+                                                      title    =>  "[% 'Exportar XLS' | i18n %]",
+                                                      boton   =>  "boton_guardar",
+                                                      onClick =>  "tableToXLS('[% filename %]');",
+                                                  );
+          [% END %]
+      </div>
