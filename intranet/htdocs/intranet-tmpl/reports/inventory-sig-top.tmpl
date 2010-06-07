@@ -1,32 +1,34 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <script>
+
     function ordenar(orden){
 	    objAH.sort=orden;
 	    objAH.sendToServer();
     }
     
     function consultar(){
-	    objAH=new AjaxHelper(updateInfo);
-	    objAH.url= "/cgi-bin/koha/reports/inventory-sig-topResult.pl";
-	    objAH.sigtop= $("#sigtop").val();
+	    objAH           = new AjaxHelper(updateInfo);
+        objAH.debug     = true;
+	    objAH.url       = "/cgi-bin/koha/reports/inventory-sig-topResult.pl";
+	    objAH.sigtop    = $("#sigtop").val();
 	    //se envia la consulta
 	    objAH.sendToServer();
     }
     
     function updateInfo(responseText){
 	    $("#result").html(responseText);
-	    zebra("tablaResult");
+	    zebra("datos_tabla");
     }
+
     $(document).ready(function() {
         //onEnter con foco en input, ejecuta la busqueda
         onEnter("sigtop",consultar);
     });
+
 </script>
 
 <div class="titulos" >[% "Inventario por signatura topogr&aacute;fica:" | i18n %]</div>
-
-<!-- <form method="post" name="form1" action='inventory-sig-top.pl'> -->
 
 <fieldset>
     <legend class="titulo_legend">[% "Buscar signatura topogr&aacute;fica: &nbsp;" | i18n %]</legend>
@@ -43,8 +45,6 @@
             [% END %]
         </ul>
 </fieldset>
-
-<!-- </form> -->
 
 <br>
 
