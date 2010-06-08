@@ -394,9 +394,17 @@
                   <ul>
                         <li>
                             [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Estad&iacute;sticas y graficos openFlashChart' | i18n %]",
-                                                                url =>      "#",
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Colecciones' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/estadisticas/colecciones.pl",
                                                                 title =>    "[% 'Estad&iacute;sticas y graficos openFlashChart' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </li>
+                        <li>
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Consultas al OPAC' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/estadisticas/consultas_opac.pl",
+                                                                title =>    "[% 'Consultas al OPAC' | i18n %]"
                                                             ) ;
                             [% END %]
                         </li>
