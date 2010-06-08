@@ -1,0 +1,84 @@
+[% USE HTML %]
+
+<script type="text/javascript">
+      $(document).ready(function() {
+        makeToggle('datos_tabla_div','trigger',null,false);
+      });
+</script>
+
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (cat&aacute;logo)" | i18n %]:</legend>
+        <div class="datos_tabla_div" id="datos_tabla_div">
+            <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: [% buscoPor %]</div>
+            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %]  en ([% timeSeg %] segundos)</div>
+            <div class="contenedor_paginador">[% paginador %]</div>
+                <table id="tablaResult" class="datos_tabla" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr class="tablaResultadoTitulo">
+                    
+                        <th>
+                            [% "Apellido y Nombres" | i18n %]
+                        </th>
+                        <th >
+                            [% "N&uacute;mero de socio" | i18n %]
+                        </th>
+                        <th>
+                            [% "Categor&iacute;a" | i18n %]
+                        </th>
+                        <th>
+                            [% "Fecha" | i18n %]
+                        </th>
+                        <th>
+                            [% "Campo" | i18n %]
+                        </th>
+                        <th>
+                            [% "Valor" | i18n %]
+                        </th>
+                        <th>
+                            [% "Tipo" | i18n %]
+                        </th>
+                
+                    </tr>
+                
+                    </tr>
+                [% FOREACH busqueda IN logs_busqueda %]
+                    <tr align='center'>
+                        <td>
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% busqueda.busqueda.socio.persona.getApeYNom %]",
+                                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                                params =>   ["nro_socio=[% busqueda.busqueda.socio.getNro_socio %]"],
+                                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </td>
+                        <td>[% IF busqueda.busqueda.socio.getNro_socio %]
+                                [% busqueda.busqueda.socio.getNro_socio %]
+                            [% ELSE %]
+                                [% 'Usuario no logueado' | i18n %]
+                            [% END %]
+                        </td>
+                        <td>[% busqueda.busqueda.socio.getCod_categoria %]</td>
+                        <td>[% busqueda.busqueda.fecha %]</td>
+                        <td>[% busqueda.campo %]</td>
+                        <td>[% HTML.escape(busqueda.getValor) %]</td>
+                        <td>[% busqueda.getTipo %]</td>
+                
+                    </tr>
+                [% END %]
+                    <tr valign=bottom>
+                            <td class="lineafinaltabla"  align="left" colspan="9"></td>
+                    </tr>
+                
+                </table>
+        </div>
+                <div class="buttonContainerHorizontal">
+          [% PERL %]
+                  print C4::AR::Filtros::to_Button( 
+                                                      text    =>  "[% "Exportar XLS" | i18n %]",
+                                                      title    =>  "[% 'Exportar XLS' | i18n %]",
+                                                      boton   =>  "boton_guardar",
+                                                      onClick =>  "tableToXLS('[% filename %]');",
+                                                  );
+          [% END %]
+      </div>
+</fieldset>
