@@ -1171,7 +1171,7 @@ sub busquedaCombinada_newTemp{
     #se loquea la busqueda
     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 
-    if (!$from_suggested){
+    if ( (!$from_suggested) && ($total_found<=3) && ($tipo ne 'SPH_MATCH_PHRASE') ){
         $string_suggested = getSuggestion($string_utf8_encoded,$total_found,1,$obj_for_log);
     }
 
