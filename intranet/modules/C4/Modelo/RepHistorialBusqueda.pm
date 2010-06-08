@@ -14,6 +14,7 @@ __PACKAGE__->meta->setup(
         valor              => { type => 'varchar', length => 100, not_null => 1 },
         tipo               => { type => 'varchar', length => 10 },
         agent              => { type => 'varchar', length => 500},
+        agregacion_temp     => { type => 'varchar', length => 255},
     ],
 
    primary_key_columns => [ 'idHistorial' ],

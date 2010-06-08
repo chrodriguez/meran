@@ -301,22 +301,24 @@ sub toXLS{
 
 
     if (!$is_array_of_hash){
-        my $campos = $data->[0]->getCamposAsArray;
-        my $x = 0;
-      
-        foreach my $campo (@$campos){
-            $worksheet->write(0, $x++, $campo,$header);
-        }
-        #FIN column titles
-        $row = 1;
-        foreach my $dato (@$data){
-            my $campos = $dato->getCamposAsArray;
-            $col = 0;
+        if (scalar(@$data)){
+            my $campos = $data->[0]->getCamposAsArray;
+            my $x = 0;
+          
             foreach my $campo (@$campos){
-                $worksheet->write($row, $col, Encode::decode_utf8($dato->{$campo}), $format);
-                $col++;
+                $worksheet->write(0, $x++, $campo,$header);
             }
-            $row++;
+            #FIN column titles
+            $row = 1;
+            foreach my $dato (@$data){
+                my $campos = $dato->getCamposAsArray;
+                $col = 0;
+                foreach my $campo (@$campos){
+                    $worksheet->write($row, $col, Encode::decode_utf8($dato->{$campo}), $format);
+                    $col++;
+                }
+                $row++;
+            }
         }
     }else{
     
@@ -340,4 +342,51 @@ sub toXLS{
     return ($path,$filename);
 }
 
+
+sub getBusquedasOPAC{
+    my ($params,$limit,$offset) = @_;
+
+
+
+    my $total       = $params->{'total'};
+    my $registrados = $params->{'registrados'};
+    my $tipo_socio  = $params->{'tipo_socio'};
+    my $f_inicio    = $params->{'f_inicio'};
+    my $f_fin       = $params->{'f_fin'};
+
+    my $dateformat = C4::Date::get_date_format();
+    my @filtros;
+    use C4::Modelo::RepHistorialBusqueda::Manager;
+    
+    if (!$total){
+        if ($registrados){
+            push (@filtros, ('usr_socio.nro_socio' => {ne =>undef}) );
+        }else{
+            push (@filtros, ('busqueda.nro_socio' => {eq =>undef}) );
+        }
+        if ((C4::AR::Utilidades::validateString($tipo_socio)) && ($registrados)){
+            push (@filtros, ('usr_socio.categoria_socio' => {eq =>$tipo_socio}) );
+        }
+        if (C4::AR::Utilidades::validateString($f_inicio)){
+            push (@filtros, (fecha => {eq =>format_date_in_iso($f_inicio,$dateformat),gt => format_date_in_iso($f_inicio,$dateformat)}) );
+        }
+        if (C4::AR::Utilidades::validateString($f_fin)){
+            push (@filtros, (fecha => {eq =>format_date_in_iso($f_fin,$dateformat),lt => format_date_in_iso($f_fin,$dateformat)}) );
+        }
+        
+    }
+
+    my ($rep_busqueda) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda(    
+                                                                                query => \@filtros,
+                                                                                require_objects => ['busqueda','busqueda.socio','busqueda.socio.persona'],
+                                                                                limit => $limit,
+                                                                                offset => $offset,
+                                                                                select => ['*','busqueda.*'],
+                                                                           );
+    my ($rep_busqueda_count) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda_count(    
+                                                                                query => \@filtros,
+                                                                                require_objects => ['busqueda'],
+                                                                           );
+    return ($rep_busqueda_count,$rep_busqueda);
+}
 
