@@ -360,12 +360,12 @@ sub getBusquedasOPAC{
     
     if (!$total){
         if ($registrados){
-            push (@filtros, ('busqueda.nro_socio' => {ne =>undef}) );
+            push (@filtros, ('usr_socio.nro_socio' => {ne =>undef}) );
         }else{
             push (@filtros, ('busqueda.nro_socio' => {eq =>undef}) );
         }
-        if (C4::AR::Utilidades::validateString($tipo_socio)){
-            push (@filtros, ('busqueda.categoria_socio' => {eq =>$tipo_socio}) );
+        if ((C4::AR::Utilidades::validateString($tipo_socio)) && ($registrados)){
+            push (@filtros, ('usr_socio.categoria_socio' => {eq =>$tipo_socio}) );
         }
         if (C4::AR::Utilidades::validateString($f_inicio)){
             push (@filtros, (fecha => {eq =>format_date_in_iso($f_inicio,$dateformat),gt => format_date_in_iso($f_inicio,$dateformat)}) );
@@ -378,7 +378,7 @@ sub getBusquedasOPAC{
 
     my ($rep_busqueda) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda(    
                                                                                 query => \@filtros,
-                                                                                require_objects => ['busqueda'],
+                                                                                require_objects => ['busqueda','busqueda.socio','busqueda.socio.persona'],
                                                                                 limit => $limit,
                                                                                 offset => $offset,
                                                                                 select => ['*','busqueda.*'],
