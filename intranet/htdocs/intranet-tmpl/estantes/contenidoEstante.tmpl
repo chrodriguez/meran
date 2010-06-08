@@ -1,0 +1,37 @@
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>
+        <div class="datos_tabla_div_estantes">
+            <div class="botonera_estantes">
+            <div id="boton_nuevo_estante_0">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_agregar",
+                                                                    title   => "[% 'Agregar estante' | i18n %]",
+                                                                    onClick => "agregarNuevoEstante();",
+                                        ) ;
+            [% END %]
+            </div>
+
+      [% IF cant_estantes %]
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_borrar",
+                                                                    onClick => "borrarEstantesSeleccionados(0,0);",
+                                                                    title   => "[% 'Borrar seleccionados' | i18n %]",
+                                        ) ;
+            [% END %]
+        [% END %]
+
+            </div>
+
+           <ul class="ul_tabla_div_estante_0" >
+            [% FOREACH estante IN ESTANTES %]
+             <li>
+            <input type=checkbox name="[% estante.getEstante %]" value="[% estante.getId %]">
+             <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstante %]</a>
+            </li>
+            [% END %]
+                </ul>
+
+        </div>
+</fieldset>
