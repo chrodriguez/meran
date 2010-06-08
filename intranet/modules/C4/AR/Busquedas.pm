@@ -1113,9 +1113,7 @@ sub busquedaCombinada_newTemp{
     my $string_suggested;
     $only_sphinx = $only_sphinx || 0;
     use Sphinx::Search;
-    my $path="/tmp/searchd.sock";
     my $sphinx = Sphinx::Search->new();
-    $sphinx->SetServer($path, 0);
     my $query = '';
 
     my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';

@@ -51,6 +51,24 @@
            [% END %]
 </div>
 
+
+<div id="contenido_estante" style="display:none">
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend">  [% "Buscar Contenido" | i18n %] </legend>
+            <input type="hidden" id="input_contenido_id_estante">
+            <input type="text" id="input_busqueda_contenido">
+           [% PERL %]
+                                    print C4::AR::Filtros::to_Icon(
+                                                                        boton   => "icon_buscar",
+                                                                        onClick => 'buscarContenido();',
+                                                                        title   => "[% 'Buscar' | i18n %]",
+                                            ) ;
+           [% END %]
+</fieldset>  
+
+<div id="resultado_contenido_estante"> </div>
+</div>
+
 <div id="estante">
 <fieldset class="resultados_busqueda">
 <legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>

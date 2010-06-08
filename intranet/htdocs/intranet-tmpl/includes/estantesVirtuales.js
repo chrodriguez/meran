@@ -226,3 +226,40 @@ function ordenar(orden){
                 }
             }
         }
+        
+        function agregarContenido(estante){
+		$('#input_contenido_id_estante').val(estante);
+		objAH=new AjaxHelper();
+		objAH.showOverlay       = true;
+		$('#contenido_estante').modal({
+			    containerCss:{
+			    backgroundColor:"#fff",
+			    height:500,
+			    padding:0,
+			    width:800
+			},
+		    });
+	}
+	
+	function buscarContenido(){
+                objAH=new AjaxHelper(updateBuscarContenido);
+                objAH.debug= true;
+                objAH.url= 'estanteDB.pl';
+                objAH.valor=$('#input_busqueda_contenido').val();
+                objAH.tipo= 'BUSCAR_CONTENIDO';
+                objAH.sendToServer();
+        }
+
+        function updateBuscarContenido(responseText){
+            var Messages= JSONstring.toObject(responseText);
+            setMessages(Messages);
+            if (!(hayError(Messages))){
+                if (objAH.padre == 0){
+                    verEstantes();
+                    $('.datos_tabla_div_estantes').hide();
+                }
+                else {
+                    verSubEstantes(objAH.padre,objAH.abuelo);
+                }
+            }
+        }

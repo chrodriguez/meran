@@ -118,7 +118,7 @@
                 [% PERL %]
                                 print C4::AR::Filtros::to_Icon(
                                                                     boton   => "icon_anadir",
-                                                                    onClick => "agregarContenido();",
+                                                                    onClick => "agregarContenido([% estante.getId %]);",
                                                                     title   => "[% 'Agregar contenido' | i18n %]",
                                         ) ;
                 [% END %]
