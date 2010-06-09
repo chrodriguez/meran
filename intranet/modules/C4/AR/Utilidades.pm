@@ -2432,13 +2432,13 @@ DESC: 1 si es descendente, 0 = ascendente
 info: la informacion de la HASH a ordenar
 devuelve un arreglo de HASHES listo para enviar al template
 =cut
-sub sortHASHString{
-
+sub sortHASHString {
     my ($params) = @_;
-    my $desc= $params->{'DESC'};
-    my $orden= $params->{'orden'};
-    my $info= $params->{'info'};
-    my @keys=keys %$info;
+
+    my $desc        = $params->{'DESC'};
+    my $orden       = $params->{'orden'};
+    my $info        = $params->{'info'};
+    my @keys        = keys %$info;
 
     if($desc){
     #ordena la HASH de strings de manera DESC

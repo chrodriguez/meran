@@ -13,29 +13,29 @@
 <table id="tablaResult" class="datos_tabla" border="0" cellspacing="0" cellpadding="0" width="100%">
     <tr class="titulo_tabla_resultado click">
 
-        <th onClick="ordenar('barcode');">[% "Nro. de Inventario" | i18n %]</th>
-        <th onClick="ordenar('bulk');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
-        <th onClick="ordenar('completo');">[% "Autor" | i18n %]</th>
+        <th onClick="ordenar('nro_inventario');">[% "Nro. de Inventario" | i18n %]</th>
+        <th onClick="ordenar('signatura_topografica');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
+        <th onClick="ordenar('autor');">[% "Autor" | i18n %]</th>
         <th onClick="ordenar('title');">[% "T&iacute;tulo" | i18n %]</th>
         <th onClick="ordenar('number');">[% "Edic." | i18n %]</th>
         <th onClick="ordenar('publisher');">[% "Editor" | i18n %]</th>
-        <th onClick="ordenar('publicationyear');">[% "A&ntilde;o" | i18n %]</th>
+        <th onClick="ordenar('anio_publicacion');">[% "A&ntilde;o" | i18n %]</th>
 
     </tr>
 
     [% FOREACH cat_nivel3 IN results %]
             <tr >
                     <td  align="center">
-                            [% cat_nivel3.getBarcode %]
+                            [% cat_nivel3.nro_inventario %]
                     </td>
                     <td align="center">
-                            [% cat_nivel3.getSignatura_topografica %]
+                            [% cat_nivel3.signatura_topografica %]
                     </td>
                     <td align="center">
-                            [% cat_nivel3.nivel2.nivel1.getAutor %]
+                            [% cat_nivel3.autor %]
                     </td>
                     <td align="center">
-                            [% HTML.escape(cat_nivel3.nivel2.nivel1.getTitulo) %]
+                            [% HTML.escape(cat_nivel3.titulo) %]
                             [% IF cat_nivel3.unititle %]:&nbsp;
                                     [% HTML.escape(unititle) %]
                             [% END %]
@@ -47,7 +47,7 @@
                             [% publisher %]
                     </td>
                     <td align="center">
-                            [% cat_nivel3.nivel2.getAnio_publicacion %]
+                            [% cat_nivel3.anio_publicacion %]
                     </td>
             </tr>
 

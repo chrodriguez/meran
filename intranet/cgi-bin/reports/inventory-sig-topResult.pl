@@ -11,6 +11,8 @@ my $input   = new CGI;
 my @results;
 my $obj     = C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $sigtop  = $obj->{'sigtop'};
+my $barcode = $obj->{'barcode'};
+my $accion  = $obj->{'accion'};
 my $orden   = $obj->{'orden'} || 'barcode';
 
 my ($template, $session, $t_params) = get_template_and_user({
@@ -25,17 +27,26 @@ my ($template, $session, $t_params) = get_template_and_user({
 #Buscar
 my $cat_nivel3;
 my $array_hash_ref;
+my $cant = 0;
 
-if($sigtop ne ''){
-   ($cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::listarItemsDeInventorioSigTop($sigtop,$orden);
-   my ($path, $filename)            = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');
-      
-   $t_params->{'filename'}          = '/reports/'.$filename;
+if ($accion eq "CONSULTA_POR_SIGNATURA") {
+    ($cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::listarItemsDeInventorioPorSigTop($obj);
+    my ($path, $filename)            = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');        
+    $t_params->{'filename'}          = '/reports/'.$filename;
+    $cant                = scalar(@$cat_nivel3);
+    $t_params->{'results'}  = $cat_nivel3;
 
 }
 
-my $cant                = scalar(@$cat_nivel3);
-$t_params->{'results'}  = $cat_nivel3;
+if ($accion eq "CONSULTA_POR_BARCODE") {
+    ($cat_nivel3, $array_hash_ref)  = C4::AR::Estadisticas::listarItemsDeInventorioPorBarcode($obj);
+    my ($path, $filename)           = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');
+      
+    $t_params->{'filename'}         = '/reports/'.$filename;
+    $cant                           = scalar(@$cat_nivel3);
+    $t_params->{'results'}          = $cat_nivel3;
+}
+
 $t_params->{'cantidad'} = $cant;
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

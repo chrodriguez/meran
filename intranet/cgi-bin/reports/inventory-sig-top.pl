@@ -18,6 +18,13 @@ my ($template, $session, $t_params) = get_template_and_user({
 			    });
 
 
-$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Signatura topografica");
+my ($signatura_min, $signatura_max) = C4::AR::Estadisticas::getMinYMaxSignaturaTopografica();
+$t_params->{'signatura_min'}        = $signatura_min;
+$t_params->{'signatura_max'}        = $signatura_max;
+
+my ($barcode_min, $barcode_max)     = C4::AR::Estadisticas::getMinYMaxBarcode();
+$t_params->{'barcode_min'}          = $barcode_min;
+$t_params->{'barcode_max'}          = $barcode_max;
+$t_params->{'page_sub_title'}       = C4::AR::Filtros::i18n("Signatura topografica");
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -55,7 +55,7 @@ use vars qw(@EXPORT @ISA);
     &getMinBarcode
     &getMinBarcodeLike
     &getMaxBarcodeLike
-    &listarItemsDeInventorioSigTop
+    &listarItemsDeInventorioPorSigTop
     &barcodesPorTipo
     &actualizarNotaHistoricoCirculacion
 );
@@ -113,13 +113,155 @@ sub barcodesPorTipo{
    return @results;
 }
 
-sub listarItemsDeInventorioSigTop{
-    my ($signatura,$orden) = @_;
+
+sub getMinYMaxBarcode{
+    my ($params_hash_ref) = @_;
+
+
+    my @filtros;
+    my @cat_nivel3_result;
+    my @info_array;;
+
+    my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            query => \@filtros,
+                                                                          );
+
+    my $cant = scalar(@$cat_nivel3_array_ref);
+
+    for(my $i=0; $i < $cant; $i++){
+
+        my %hash_info;
+        my $barcode_temp = $cat_nivel3_array_ref->[$i]->getBarcode();
+
+        if($barcode_temp ne ""){
+
+            $hash_info{'value'}   = $barcode_temp;
+            push(@info_array, \%hash_info);
+        }
+    }
+
+    @cat_nivel3_result = sort { $a->{'value'} cmp $b->{'value'} } @info_array;
+
+#     @cat_nivel3_result = C4::AR::Utilidades::sortHASHString();
+
+#     for(my $i=0; $i < scalar(@cat_nivel3_result); $i++){
+#       C4::AR::Debug::debug("hash de signatura_topografica => ".@cat_nivel3_result[$i]->{'value'}); 
+#     }
+
+    my $barcode_min = @cat_nivel3_result[1]->{'value'};
+    my $barcode_max = @cat_nivel3_result[scalar(@cat_nivel3_result) - 1]->{'value'};
+
+#     C4::AR::Debug::debug("min => ".$signatura_min); 
+#     C4::AR::Debug::debug("max => ".$signatura_max);
+
+    return ($barcode_min, $barcode_max);
+}
+
+
+sub getMinYMaxSignaturaTopografica{
+    my ($params_hash_ref) = @_;
+
+
+    my @filtros;
+    my @cat_nivel3_result;
+    my @info_array;;
+
+    my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            query => \@filtros,
+                                                                          );
+
+    my $cant = scalar(@$cat_nivel3_array_ref);
+
+    for(my $i=0; $i < $cant; $i++){
+
+        my %hash_info;
+        my $signatura_temp = $cat_nivel3_array_ref->[$i]->getSignatura_topografica();
+
+        if($signatura_temp ne ""){
+
+            $hash_info{'value'}   = $signatura_temp;
+            push(@info_array, \%hash_info);
+        }
+    }
+
+    @cat_nivel3_result = sort { $a->{'value'} cmp $b->{'value'} } @info_array;
+
+#     @cat_nivel3_result = C4::AR::Utilidades::sortHASHString();
+
+#     for(my $i=0; $i < scalar(@cat_nivel3_result); $i++){
+#       C4::AR::Debug::debug("hash de signatura_topografica => ".@cat_nivel3_result[$i]->{'value'}); 
+#     }
+
+    my $signatura_min = @cat_nivel3_result[1]->{'value'};
+    my $signatura_max = @cat_nivel3_result[scalar(@cat_nivel3_result) - 1]->{'value'};
+
+#     C4::AR::Debug::debug("min => ".$signatura_min); 
+#     C4::AR::Debug::debug("max => ".$signatura_max);
+
+    return ($signatura_min, $signatura_max);
+}
+
+sub listarItemsDeInventorioPorSigTop{
+    my ($params_hash_ref) = @_;
 
 
     my @filtros;
     my @cat_nivel3_result;
     my @info_reporte;
+    my $orden = $params_hash_ref->{'sort'} || 'signatura_topografica';
+
+    my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            query => \@filtros,
+                                                                              );
+
+
+
+    my $cant = scalar(@$cat_nivel3_array_ref);
+
+#     C4::AR::Debug::debug("desde_signatura".$params_hash_ref->{'desde_signatura'});
+#     C4::AR::Debug::debug("hasta_signatura".$params_hash_ref->{'hasta_signatura'});
+
+    for(my $i=0; $i < $cant; $i++){
+
+        my %hash_info;
+
+        $hash_info{'nro_inventario'}          = $cat_nivel3_array_ref->[$i]->getBarcode();
+        $hash_info{'signatura_topografica'}   = $cat_nivel3_array_ref->[$i]->getSignatura_topografica();
+        $hash_info{'autor'}                   = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getAutor();
+        $hash_info{'titulo'}                  = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getTitulo();
+# TODO FALTAN
+#             $hash_info{'edicion'}                 = $cat_nivel3_array_ref->[$i]->
+#             $hash_info{'editor'}                  = $cat_nivel3_array_ref->[$i]->
+        $hash_info{'anio_publicacion'}        = $cat_nivel3_array_ref->[$i]->nivel2->getAnio_publicacion();
+
+        if ($params_hash_ref->{'sigtop'} ne "" && $cat_nivel3_array_ref->[$i]->getSignatura_topografica() =~ m/^$params_hash_ref->{'sigtop'}/i) {
+#             C4::AR::Debug::debug("no busco por rango");
+            push(@info_reporte, \%hash_info);
+            push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+        } 
+    
+
+        if (($params_hash_ref->{'desde_signatura'} ne "")&&($cat_nivel3_array_ref->[$i]->getSignatura_topografica() ge $params_hash_ref->{'desde_signatura'}) && 
+            ($params_hash_ref->{'hasta_signatura'} ne "")&&($cat_nivel3_array_ref->[$i]->getSignatura_topografica() le $params_hash_ref->{'hasta_signatura'})) {
+            push(@info_reporte, \%hash_info);
+            push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+        }
+
+    }
+
+    @cat_nivel3_result = sort { $a->{$orden} cmp $b->{$orden} } @info_reporte;
+
+    return (\@cat_nivel3_result, \@info_reporte);
+}
+
+sub listarItemsDeInventorioPorBarcode{
+    my ($params_hash_ref) = @_;
+
+
+    my @filtros;
+    my @cat_nivel3_result;
+    my @info_reporte;
+    my $orden = $params_hash_ref->{'sort'} || 'barcode';
 
     my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
                                                                                             query => \@filtros,
@@ -132,45 +274,61 @@ sub listarItemsDeInventorioSigTop{
     my $cant = scalar(@$cat_nivel3_array_ref);
 
     for(my $i=0; $i < $cant; $i++){
-        if ($cat_nivel3_array_ref->[$i]->getSignatura_topografica() =~ m/^$signatura/) {
-            my %hash_info;
+#         C4::AR::Debug::debug("barcode => ".$cat_nivel3_array_ref->[$i]->getBarcode());
 
-            $hash_info{'nro_inventario'}          = $cat_nivel3_array_ref->[$i]->getBarcode();
-            $hash_info{'signatura_topografica'}   = $cat_nivel3_array_ref->[$i]->getSignatura_topografica();
-            $hash_info{'autor'}                   = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getAutor();
-            $hash_info{'titulo'}                  = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getTitulo();
+        my %hash_info;
+
+        $hash_info{'nro_inventario'}          = $cat_nivel3_array_ref->[$i]->getBarcode();
+        $hash_info{'signatura_topografica'}   = $cat_nivel3_array_ref->[$i]->getSignatura_topografica();
+        $hash_info{'autor'}                   = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getAutor();
+        $hash_info{'titulo'}                  = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getTitulo();
 # TODO FALTAN
 #             $hash_info{'edicion'}                 = $cat_nivel3_array_ref->[$i]->
 #             $hash_info{'editor'}                  = $cat_nivel3_array_ref->[$i]->
-            $hash_info{'fecha'}                   = $cat_nivel3_array_ref->[$i]->nivel2->getAnio_publicacion();
+        $hash_info{'anio_publicacion'}        = $cat_nivel3_array_ref->[$i]->nivel2->getAnio_publicacion();
 
+
+        if ($params_hash_ref->{'barcode'} ne "" && $cat_nivel3_array_ref->[$i]->getBarcode() =~ m/^$params_hash_ref->{'barcode'}/i) {
+#             C4::AR::Debug::debug("no busco por rango");
+C4::AR::Debug::debug("barcode ".$params_hash_ref->{'barcode'});
+            push(@info_reporte, \%hash_info);
+            push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+        } 
+    
+
+        if (($params_hash_ref->{'desde_barcode'} ne "")&&($cat_nivel3_array_ref->[$i]->getBarcode() ge $params_hash_ref->{'desde_barcode'}) && 
+            ($params_hash_ref->{'hasta_barcode'} ne "")&&($cat_nivel3_array_ref->[$i]->getBarcode() le $params_hash_ref->{'hasta_barcode'})) {
+C4::AR::Debug::debug("desde_barcode ".$params_hash_ref->{'desde_barcode'});
+C4::AR::Debug::debug("hasta_barcode ".$params_hash_ref->{'hasta_barcode'});
             push(@info_reporte, \%hash_info);
             push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
         }
     }
 
+    @cat_nivel3_result = sort { $a->{$orden} cmp $b->{$orden} } @info_reporte;
+
     return (\@cat_nivel3_result, \@info_reporte);
-
-
 }
 
-sub getMaxBarcode {
-   my ($branch) = @_;
-   use C4::Modelo::CatRegistroMarcN3::Manager;
-   my $max = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
-                                                         select => ['MAX(t1.barcode) as barcode'],
-                                                         );
-   return ($max->[0]->barcode);
-}
+# TODO DEPRECATED
+# sub getMaxBarcode {
+#    my ($branch) = @_;
+#    use C4::Modelo::CatRegistroMarcN3::Manager;
+#    my $max = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+#                                                          select => ['MAX(t1.barcode) as barcode'],
+#                                                          );
+#    return ($max->[0]->barcode);
+# }
 
-sub getMinBarcode {
-   my ($branch) = @_;
-   use C4::Modelo::CatRegistroMarcN3::Manager;
-   my $min = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
-                                                         select => ['MIN(t1.barcode) as barcode'],
-                                                         );
-   return ($min->[0]->barcode);
-}
+# TODO DEPRECATED
+# sub getMinBarcode {
+#    my ($branch) = @_;
+#    use C4::Modelo::CatRegistroMarcN3::Manager;
+#    my $min = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+#                                                          select => ['MIN(t1.barcode) as barcode'],
+#                                                          );
+#    return ($min->[0]->barcode);
+# }
 
 sub getMinBarcodeLike {
    my ($branch,$part_barcode) = @_;
