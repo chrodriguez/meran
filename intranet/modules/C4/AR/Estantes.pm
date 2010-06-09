@@ -331,4 +331,13 @@ sub agregarEstante  {
 
     return ($msg_object);
 }
+
+sub agregarContenidoAEstante {
+    my ($id_estante,$id2)=@_;
+    
+    C4::AR::Debug::debug("Antes de verificar");
+    my $msg_object= C4::AR::Mensajes::create();
+    
+    return ($msg_object);
+}
 1;

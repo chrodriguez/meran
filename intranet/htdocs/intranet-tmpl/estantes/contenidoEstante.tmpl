@@ -1,37 +1,64 @@
+
 <fieldset class="resultados_busqueda">
-<legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>
-        <div class="datos_tabla_div_estantes">
-            <div class="botonera_estantes">
-            <div id="boton_nuevo_estante_0">
-            [% PERL %]
-                                print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_agregar",
-                                                                    title   => "[% 'Agregar estante' | i18n %]",
-                                                                    onClick => "agregarNuevoEstante();",
-                                        ) ;
+    <legend class="titulo_legend">
+        [% "Resultados de la b&uacute;squeda" | i18n %]:</legend>
+        <div class="datos_tabla_div" id="datos_tabla_div">
+            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %] </div>
+            <div class="contenedor_paginador">[% paginador %]</div>
+
+            <table id="tablaResult" class="datos_tabla modal_result" border=0 cellspacing=0 cellpadding=0 width=100%>
+                <tr class="titulo_tabla_resultado">
+                    <td width="35%" class="click" onClick="ordenar('titulo')" Title='[% "Ordenar por T&iacute;tulo" | i18n %]'>
+                        [% "T&iacute;tulo" | i18n %]
+                    </td>
+                    <td width="30%" class="click" onClick="ordenar('nomCompleto')" Title='[% "Ordenar por Autor" | i18n %]'>
+                        [% "Autor" | i18n %]
+                    </td>
+                    <td width="30%">[% "Edici&oacute;n/A&ntilde;o" | i18n %]</td>
+                </tr>
+            <!-- Actual Resultados de la b&uacute;squeda -->
+            [% FOREACH SEARCH_RESULTS %]
+                <tr>
+                    <td>
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to( text =>     "[% titulo %]",
+                                                            url =>      "/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
+                                                            params =>   ["id1=[% id1 %]"],
+                                                            title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                                                        ) ;
+                        [% END %]
+                    </td>
+
+                    <td>
+                            [% nomCompleto %]
+                    </td>
+            
+                    <td>
+			<ul class='listado_a_izquierda'>
+                        [% FOREACH grupos %]
+			    <li>
+                            [% IF edicion %]
+                                [% edicion %]
+                            [% END %]
+                            [% IF anio_publicacion %]
+                                ([% anio_publicacion %])
+                            [% END %]
+                            [% IF volume %]
+                                t [% volume %]
+                            [% END %]
+                            [% PERL %]
+                                    print C4::AR::Filtros::to_Icon(
+                                                                        boton   => "icon_mas",
+                                                                        onClick => "agregarContenidoAEstante([% id2 %]);",
+                                                                        title   => "[% 'Agregar a Estante Actual' | i18n %]",
+                                            ) ;
+			    [% END %]
+                            </li>
+                        [% END %]
+                        </ul>
+                    </td>
+                </tr>
             [% END %]
-            </div>
-
-      [% IF cant_estantes %]
-            [% PERL %]
-                                print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_borrar",
-                                                                    onClick => "borrarEstantesSeleccionados(0,0);",
-                                                                    title   => "[% 'Borrar seleccionados' | i18n %]",
-                                        ) ;
-            [% END %]
-        [% END %]
-
-            </div>
-
-           <ul class="ul_tabla_div_estante_0" >
-            [% FOREACH estante IN ESTANTES %]
-             <li>
-            <input type=checkbox name="[% estante.getEstante %]" value="[% estante.getId %]">
-             <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstante %]</a>
-            </li>
-            [% END %]
-                </ul>
-
+            </table>
         </div>
 </fieldset>

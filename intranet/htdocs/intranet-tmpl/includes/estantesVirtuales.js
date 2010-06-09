@@ -2,6 +2,7 @@
  * LIBRERIA Estantes Virtuales v 1.0
  *
  */
+function zebra(classObj){$("."+classObj+" tr:gt(0):odd").addClass("impar");$("."+classObj+" tr:gt(0):even").addClass("par");}
 
 function ordenar(orden){
             objAH.sort(orden);
@@ -217,6 +218,7 @@ function ordenar(orden){
             var Messages= JSONstring.toObject(responseText);
             setMessages(Messages);
             if (!(hayError(Messages))){
+		$('#resultBusqueda').html(responseText);
                 if (objAH.padre == 0){
                     verEstantes();
                     $('.datos_tabla_div_estantes').hide();
@@ -251,15 +253,19 @@ function ordenar(orden){
         }
 
         function updateBuscarContenido(responseText){
-            var Messages= JSONstring.toObject(responseText);
-            setMessages(Messages);
-            if (!(hayError(Messages))){
-                if (objAH.padre == 0){
-                    verEstantes();
-                    $('.datos_tabla_div_estantes').hide();
-                }
-                else {
-                    verSubEstantes(objAH.padre,objAH.abuelo);
-                }
-            }
+		$('#resultado_contenido_estante').html(responseText);
+		zebra('datos_tabla');
         }
+
+        function agregarContenidoAEstante(id2 ){
+	        objAH=new AjaxHelper(updateAgregarContenidoAEstante);
+                objAH.debug= true;
+                objAH.url= 'estanteDB.pl';
+                objAH.estante=$('#input_contenido_id_estante').val();
+		objAH.id2=id2;
+                objAH.tipo= 'AGREGAR_CONTENIDO';
+                objAH.sendToServer();
+		$.modal.close();
+	}
+	
+	

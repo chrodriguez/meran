@@ -498,44 +498,19 @@ sub obtenerEdiciones{
 obtenerGrupos
 Esta funcion devuelve los datos de los grupos a mostrar en una busaqueda dado un id1. Se puede filtrar por tipo de documento.
 =cut
-# FIXME falta pasar!!!!
 sub obtenerGrupos {
 	my ($id1,$itemtype,$type)=@_;
-  	my $dbh = C4::Context->dbh;
-  	my $query="SELECT * FROM cat_nivel2 LEFT JOIN cat_nivel1 ON cat_nivel1.id1=cat_nivel2.id1 WHERE cat_nivel2.id1=?";
-	my @bind;
-	push(@bind,$id1);
-  	if($itemtype != -1 && $itemtype ne "" && $itemtype ne "ALL"){
-		$query .=" AND cat_nivel2.tipo_documento = ?";
-		push(@bind,$itemtype);
-	}
-
-  	my $sth=$dbh->prepare($query);
-  	$sth->execute(@bind);
-  	my @result;
-  	my $res=0;
-  	my $data;
-	my $opacUnavail= C4::AR::Preferencias->getValorPreferencia("opacUnavail");
-
-  	while ( $data=$sth->fetchrow_hashref){
-		my $query2="SELECT COUNT(*) AS cant FROM cat_nivel3 n3 WHERE n3.id2 = ?";
-#  		if (($type ne 'intra')&&(C4::Context->preference("opacUnavail") eq 0)){
-		if (($type ne 'intra')&&($opacUnavail eq 0)){
-    			$query2.=" AND (id_estado=0 OR id_estado IS NULL  OR id_estado=2)"; #wthdrawn=2 es COMPARTIDO
-  		}
-
-		my $sth2=$dbh->prepare($query2);
-  		$sth2->execute($data->{'id2'});
-		my $cant=($sth2->fetchrow);
-
-		if ( $cant > 0){
-        		$result[$res]->{'id2'}=$data->{'id2'};
-			$result[$res]->{'cant'}=$cant;
-#         		$result[$res]->{'edicion'}= &C4::AR::Nivel2::getEdicion($data->{'id2'});
-        		$result[$res]->{'anio_publicacion'}=$data->{'anio_publicacion'};
-#         		$result[$res]->{'volume'}= C4::AR::Nivel2::getVolume($data->{'id2'});
-        		$res++;
-		}
+	
+	#Obtenemos los niveles 2
+	my $niveles2 = C4::AR::Nivel2::getNivel2FromId1($id1);
+	
+	my @result;
+	my $res=0;
+	foreach my $nivel2 (@$niveles2){
+	    $result[$res]->{'id2'}=$nivel2->getId2;
+            $result[$res]->{'edicion'}= $nivel2->getEdicion;
+	    $result[$res]->{'anio_publicacion'}=$nivel2->getAnio_publicacion;
+	    $res++;
 	}
 
 	return (\@result);

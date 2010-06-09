@@ -150,6 +150,7 @@ ul.horizontal-list li{display:inline;}
 #marca{background-image:url(../imagenes/fondo_footer.png);background-color:#f7f6f6;text-align:center;padding:1%;margin-top:1%;-moz-border-radius-topleft:8px;-moz-border-radius-topright:8px;-moz-border-radius-bottomleft:8px;-moz-border-radius-bottomright:8px;background-repeat:repeat-x;height:10px;clear:both;}
 fieldset.main{width:70%;margin-left:14%;}
 ul.listado_sin_margen{padding-left:0px;}
+ul.listado_a_izquierda{padding-left:0px;text-align:left;}
 .listaMenuBotones li{width:100%;}
 .listaCondicionesHorizontales{display:table;}
 .listaCondicionesHorizontales li div{float:left;padding:3px;}

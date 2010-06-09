@@ -68,24 +68,6 @@ elsif($tipo eq "BORRAR_ESTANTES"){
     C4::Auth::print_header($session);
     print $infoOperacionJSON;
 }
-elsif($tipo eq "BORRAR_CONTENIDO"){
-    my ($user, $session, $flags)= checkauth(    $input, 
-                                                $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'BAJA', 
-                                                    entorno => 'undefined' },
-                                                'intranet'
-                               );
-    my $id_estante= $obj->{'estante'};
-    my $contenido_array_ref= $obj->{'contenido'};
-    ($Messages_arrayref)= &C4::AR::Estantes::borrarContenido($id_estante,$contenido_array_ref);
-
-    my $infoOperacionJSON=to_json $Messages_arrayref;
-
-    C4::Auth::print_header($session);
-    print $infoOperacionJSON;
-}
 elsif($tipo eq "MODIFICAR_ESTANTE"){
     my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
@@ -136,6 +118,71 @@ elsif($tipo eq "AGREGAR_ESTANTE"){
 
     my $valor= $obj->{'estante'};
     ($Messages_arrayref)= &C4::AR::Estantes::agregarEstante($valor);
+
+    my $infoOperacionJSON=to_json $Messages_arrayref;
+
+    C4::Auth::print_header($session);
+    print $infoOperacionJSON;
+}
+elsif($tipo eq "BUSCAR_CONTENIDO"){
+
+my ($template, $session, $t_params) = get_template_and_user(
+            {template_name => "estantes/contenidoEstante.tmpl",
+					query => $input,
+					type => "intranet",
+					authnotrequired => 0,
+					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+					});
+					
+    #verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada    
+    C4::AR::Busquedas::sphinx_start();
+    my $ini= 0;
+    my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+    $t_params->{'ini'} = $obj->{'ini'} = $ini;
+    $t_params->{'cantR'} = $obj->{'cantR'} = $cantR;
+    $obj->{'type'} = 'INTRA';
+    my $valor= $obj->{'valor'};
+    my $search;
+    $search->{'keyword'}            = $valor;
+    my ($cantidad, $resultId1, $suggested)      = C4::AR::Busquedas::busquedaCombinada_newTemp($search->{'keyword'}, $session, $obj);
+    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber, $obj->{'funcion'}, $t_params);
+    $obj->{'cantidad'}              = $cantidad;
+    $t_params->{'SEARCH_RESULTS'}   = $resultId1;
+    $t_params->{'cantidad'}         = $cantidad;
+    
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
+elsif($tipo eq "AGREGAR_CONTENIDO"){
+    my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'ALTA', 
+                                                    entorno => 'undefined' },
+                                                'intranet'
+                               );
+
+    my $estante= $obj->{'estante'};
+    my $id2= $obj->{'id2'};
+    ($Messages_arrayref)= &C4::AR::Estantes::agregarContenidoAEstante($estante,$id2);
+
+    my $infoOperacionJSON=to_json $Messages_arrayref;
+
+    C4::Auth::print_header($session);
+    print $infoOperacionJSON;
+}
+elsif($tipo eq "BORRAR_CONTENIDO"){
+    my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'BAJA', 
+                                                    entorno => 'undefined' },
+                                                'intranet'
+                               );
+    my $id_estante= $obj->{'estante'};
+    my $contenido_array_ref= $obj->{'contenido'};
+    ($Messages_arrayref)= &C4::AR::Estantes::borrarContenido($id_estante,$contenido_array_ref);
 
     my $infoOperacionJSON=to_json $Messages_arrayref;
 

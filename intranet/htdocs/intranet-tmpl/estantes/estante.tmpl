@@ -56,7 +56,13 @@
 <fieldset class="resultados_busqueda">
 <legend class="titulo_legend">  [% "Buscar Contenido" | i18n %] </legend>
             <input type="hidden" id="input_contenido_id_estante">
-            <input type="text" id="input_busqueda_contenido">
+            <input class="horizontal" type="text" id="input_busqueda_contenido">
+            
+            <script language="javascript" type="text/javascript">
+            $(document).ready(function() {
+		$('#input_busqueda_contenido').keypress(function(e){if(e.which==13){if(this.value!=''){buscarContenido();}}});
+            });
+            </script>
            [% PERL %]
                                     print C4::AR::Filtros::to_Icon(
                                                                         boton   => "icon_buscar",
