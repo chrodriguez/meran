@@ -65,11 +65,11 @@ sub getEstante {
 
     use C4::Modelo::CatEstante;
     use C4::Modelo::CatEstante::Manager;
-    my ($estante) = C4::Modelo::CatEstante->new(id => $id_estante);
-    $estante->load();
-    if( $estante->padre){
-                C4::AR::Debug::debug("PADRE!!!! ".$estante->estante_padre->getEstante);
-         }       
+    my @filtros;
+    push(@filtros, ( id  => { eq => $id_estante} ));
+    my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros,require_objects => ['contenido'],);
+    my $estante=  $estantes_array_ref->[0];
+    if($estante) {C4::AR::Debug::debug("Se obtiene el estante  ".$estante->getEstante);}
     return ($estante);
 }
 
@@ -104,7 +104,8 @@ sub borrarEstantes {
             };
         if ($@){
             C4::AR::Debug::debug("ERROR");
-            eval {$db->rollback};
+            &C4::AR::Mensajes::printErrorDB($@, '',"INTRA");
+            $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E003', 'params' => [$estante->getEstante]} ) ;
@@ -145,7 +146,8 @@ sub borrarContenido {
     };
     if ($@){
         C4::AR::Debug::debug("ERROR");
-        eval {$db->rollback};
+        &C4::AR::Mensajes::printErrorDB($@, '',"INTRA");
+        $db->rollback;
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E005', 'params' => [$estante->getEstante]} ) ;
@@ -206,7 +208,8 @@ sub modificarEstante  {
         };
     if ($@){
         C4::AR::Debug::debug("ERROR");
-        eval {$db->rollback};
+        &C4::AR::Mensajes::printErrorDB($@, '',"INTRA");
+        $db->rollback;
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E008', 'params' => [$estante->getEstante]} ) ;
@@ -237,6 +240,22 @@ sub _verificacionesParaAgregar {
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E010', 'params' => [$valor]} ) ;
             C4::AR::Debug::debug("Entro al if de estante duplicado ");
       }
+}
+
+sub _verificacionesParaAgregarContenido {
+    my($msg_object,$estante,$id2)=@_;
+	
+	my $contenido = $estante->contenido;
+	  if ($contenido){
+        foreach my $contenido_estante (@$contenido){
+	   if($contenido_estante->getId2 eq $id2){
+		#El estante ya posee contenido
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E015', 'params' => [$estante->getEstante]} ) ;
+		C4::AR::Debug::debug("Entro al if de estante duplicado ");
+	    }
+         }
+         }
 }
 
 sub buscarNombreDuplicado {
@@ -283,7 +302,8 @@ sub agregarSubEstante  {
         };
     if ($@){
         C4::AR::Debug::debug("ERROR");
-        eval {$db->rollback};
+        &C4::AR::Mensajes::printErrorDB($@, '',"INTRA");
+        $db->rollback;
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E012', 'params' => [$valor]} ) ;
@@ -322,7 +342,8 @@ sub agregarEstante  {
         };
     if ($@){
         C4::AR::Debug::debug("ERROR");
-        eval {$db->rollback};
+        &C4::AR::Mensajes::printErrorDB($@, '',"INTRA");
+        $db->rollback;
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E012', 'params' => [$valor]} ) ;
@@ -334,10 +355,43 @@ sub agregarEstante  {
 
 sub agregarContenidoAEstante {
     my ($id_estante,$id2)=@_;
-    
+
     C4::AR::Debug::debug("Antes de verificar");
     my $msg_object= C4::AR::Mensajes::create();
-    
+    $msg_object->{'tipo'}="INTRA";
+
+  C4::AR::Debug::debug("Cargando estante ".$id_estante);
+    my $estante = C4::AR::Estantes::getEstante($id_estante);
+     C4::AR::Debug::debug("Cargando estante ".$estante->getEstante);
+    my $db = $estante->db;
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+
+    eval{
+        C4::AR::Estantes::_verificacionesParaAgregarContenido($msg_object,$estante,$id2);
+        if(!$msg_object->{'error'}){
+            C4::AR::Debug::debug("VAMOS A AGREGAR CONTENIDO AL ESTANTE");
+            my $nuevo_contenido_estante = C4::Modelo::CatContenidoEstante->new(db => $db);
+            $nuevo_contenido_estante->setId_estante($id_estante);
+            $nuevo_contenido_estante->setId2($id2);
+            $nuevo_contenido_estante->save();
+            $db->commit;
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E014', 'params' => [$estante->getEstante]} ) ;
+            C4::AR::Debug::debug("CONTENIDO AGREGADO CON EXITO AL ESTANTE");
+        }
+        };
+    if ($@){
+        C4::AR::Debug::debug("ERROR");
+        &C4::AR::Mensajes::printErrorDB($@, '',"INTRA");
+        $db->rollback;
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E013', 'params' => [$estante->getEstante]} ) ;
+    }
+    $db->{connect_options}->{AutoCommit} = 1;
+
     return ($msg_object);
-}
+    }
+
 1;

@@ -229,8 +229,9 @@ function ordenar(orden){
             }
         }
         
-        function agregarContenido(estante){
+        function agregarContenido(estante,padre){
 		$('#input_contenido_id_estante').val(estante);
+		$('#input_contenido_id_padre_estante').val(padre);
 		objAH=new AjaxHelper();
 		objAH.showOverlay       = true;
 		$('#contenido_estante').modal({
@@ -262,10 +263,18 @@ function ordenar(orden){
                 objAH.debug= true;
                 objAH.url= 'estanteDB.pl';
                 objAH.estante=$('#input_contenido_id_estante').val();
+		objAH.padre=$('#input_contenido_id_padre_estante').val();
 		objAH.id2=id2;
                 objAH.tipo= 'AGREGAR_CONTENIDO';
                 objAH.sendToServer();
 		$.modal.close();
 	}
 	
+	function updateAgregarContenidoAEstante(responseText){
+            var Messages= JSONstring.toObject(responseText);
+            setMessages(Messages);
+            if (!(hayError(Messages))){
+                    verSubEstantes(objAH.estante,objAH.padre);
+                }
+        }
 	

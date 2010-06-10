@@ -360,6 +360,9 @@ my %mensajesINTRA = (
     'E010' => 'No se pudo agregar el estante  ya que existe otro con el nombre "*?*".',
     'E011' => 'El estante "*?*" fue agregado con &eacute;xito.',
     'E012' => 'Se produjo un error al tratar de agregar el estante "*?*" .',
+    'E013' => 'Se produjo un error al tratar de agregar contenido al estante "*?*" .',
+    'E014' => 'El contenido fue agregado con &eacute;xito al estante "*?*".',
+    'E015' => 'Ya existe el contenido en el estante "*?*".',
     'REF0' => 'La referencia no se ha podido eliminar, verifique que no se est&eacute; usando.',
     'REF1' => 'La referencia ha sido eliminada correctamente.',
 );

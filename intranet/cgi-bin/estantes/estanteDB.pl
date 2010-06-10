@@ -38,7 +38,7 @@ elsif($tipo eq "VER_SUBESTANTE"){
 					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 					});
 	
-	my $id_estante= $obj->{'estante'};
+    my $id_estante= $obj->{'estante'};
     if($id_estante ne 0){
     my $estante= C4::AR::Estantes::getEstante($id_estante);
     $t_params->{'estante'}= $estante;
