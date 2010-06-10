@@ -134,8 +134,13 @@ sub borrarContenido {
     eval{
         C4::AR::Debug::debug("VAMOS A ELIMINAR EL CONTENIDO");
         foreach my $id2 (@$contenido_array_ref){
-            my ($contenido_estante) = C4::Modelo::CatContenidoEstante->new(id_estante => $id_estante, id2 => $id2, db => $db);
-            $contenido_estante->load();
+        
+            my @filtros;
+	    push(@filtros, ( id_estante  => { eq => $id_estante} ));
+	    push(@filtros, ( id2  	 => { eq => $id2} ));
+	    my $contenido_estantes_array_ref = C4::Modelo::CatContenidoEstante::Manager->get_cat_estante(db => $db,query => \@filtros);
+	    my $contenido_estante=  $contenido_estantes_array_ref->[0];
+
             my $text = $contenido_estante->nivel2->nivel1->getTitulo."(".$contenido_estante->nivel2->nivel1->cat_autor->getCompleto.")";
             $contenido_estante->delete();
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E006', 'params' => [$text]} ) ;
