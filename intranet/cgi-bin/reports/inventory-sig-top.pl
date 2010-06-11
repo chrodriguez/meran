@@ -27,4 +27,17 @@ $t_params->{'barcode_min'}          = $barcode_min;
 $t_params->{'barcode_max'}          = $barcode_max;
 $t_params->{'page_sub_title'}       = C4::AR::Filtros::i18n("Signatura topografica");
 
+
+my %params;
+# $params{'onChange'}= 'hacerSubmit()';
+$params{'defaults'}                 = 'SIN SELECCIONAR';
+$params{'id'}                       = 'combo_ui_barcode';
+my $ComboUI                         = C4::AR::Utilidades::generarComboUI(\%params);
+$t_params->{'combo_ui_barcode'}     = $ComboUI;
+
+$params{'defaults'}                 = 'SIN SELECCIONAR';
+$params{'id'}                       = 'combo_ui_signatura';
+my $ComboUI                         = C4::AR::Utilidades::generarComboUI(\%params);
+$t_params->{'combo_ui_signatura'}   = $ComboUI;
+
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

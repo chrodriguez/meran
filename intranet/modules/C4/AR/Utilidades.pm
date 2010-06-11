@@ -1998,11 +1998,11 @@ sub generarComboUI{
         $options_hash{'onBlur'}= $params->{'onBlur'};
     }
 
-    $options_hash{'name'}= $params->{'name'}||'id_ui';
-    $options_hash{'id'}= $params->{'id'}||'id_ui';
-    $options_hash{'size'}=  $params->{'size'}||1;
-    $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultUI");
+    $options_hash{'name'}       = $params->{'name'}||'id_ui';
+    $options_hash{'id'}         = $params->{'id'}||'id_ui';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultUI");
 
     if ($params->{'optionALL'}){
         push (@select_ui, 'ALL');

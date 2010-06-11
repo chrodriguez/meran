@@ -204,7 +204,6 @@ sub getMinYMaxSignaturaTopografica{
 sub listarItemsDeInventorioPorSigTop{
     my ($params_hash_ref) = @_;
 
-
     my @filtros;
     my @cat_nivel3_result;
     my @info_reporte;
@@ -215,12 +214,12 @@ sub listarItemsDeInventorioPorSigTop{
                                                                               );
 
 
-
-    my $cant = scalar(@$cat_nivel3_array_ref);
-
-#     C4::AR::Debug::debug("desde_signatura".$params_hash_ref->{'desde_signatura'});
-#     C4::AR::Debug::debug("hasta_signatura".$params_hash_ref->{'hasta_signatura'});
-
+    my $cant            = scalar(@$cat_nivel3_array_ref);
+    my $cant_total      = 0;
+    my $signatura       = C4::AR::Utilidades::trim($params_hash_ref->{'sigtop'});
+    my $desde_signatura = C4::AR::Utilidades::trim($params_hash_ref->{'desde_signatura'});
+    my $hasta_signatura = C4::AR::Utilidades::trim($params_hash_ref->{'hasta_signatura'});
+    
     for(my $i=0; $i < $cant; $i++){
 
         my %hash_info;
@@ -229,29 +228,66 @@ sub listarItemsDeInventorioPorSigTop{
         $hash_info{'signatura_topografica'}   = $cat_nivel3_array_ref->[$i]->getSignatura_topografica();
         $hash_info{'autor'}                   = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getAutor();
         $hash_info{'titulo'}                  = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getTitulo();
-# TODO FALTAN
-#             $hash_info{'edicion'}                 = $cat_nivel3_array_ref->[$i]->
-#             $hash_info{'editor'}                  = $cat_nivel3_array_ref->[$i]->
+        $hash_info{'edicion'}                 = $cat_nivel3_array_ref->[$i]->nivel2->getEdicion();
+        $hash_info{'editor'}                  = $cat_nivel3_array_ref->[$i]->nivel2->getEditor();
+# TODO falta implementar
+#         $hash_info{'edicion'}                 = $cat_nivel3_array_ref->[$i]->nivel2->getVolumen();
         $hash_info{'anio_publicacion'}        = $cat_nivel3_array_ref->[$i]->nivel2->getAnio_publicacion();
+        $hash_info{'ui'}                      = $cat_nivel3_array_ref->[$i]->getId_ui_poseedora();
 
-        if ($params_hash_ref->{'sigtop'} ne "" && $cat_nivel3_array_ref->[$i]->getSignatura_topografica() =~ m/^$params_hash_ref->{'sigtop'}/i) {
-#             C4::AR::Debug::debug("no busco por rango");
-            push(@info_reporte, \%hash_info);
-            push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+# TODO esto esta feooooooo despues lo acomodo
+        if ($params_hash_ref->{'sigtop'} ne "" && $cat_nivel3_array_ref->[$i]->getSignatura_topografica() =~ m/^$signatura/i) {
+
+            if($params_hash_ref->{'id_ui'} ne "" && $cat_nivel3_array_ref->[$i]->getId_ui_poseedora() eq $params_hash_ref->{'id_ui'}){
+                push(@info_reporte, \%hash_info);
+                push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+                $cant_total++;
+            }
+
+           if($params_hash_ref->{'id_ui'} eq ""){
+                push(@info_reporte, \%hash_info);
+                push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+                $cant_total++;
+            }
         } 
     
 
-        if (($params_hash_ref->{'desde_signatura'} ne "")&&($cat_nivel3_array_ref->[$i]->getSignatura_topografica() ge $params_hash_ref->{'desde_signatura'}) && 
-            ($params_hash_ref->{'hasta_signatura'} ne "")&&($cat_nivel3_array_ref->[$i]->getSignatura_topografica() le $params_hash_ref->{'hasta_signatura'})) {
-            push(@info_reporte, \%hash_info);
-            push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+        if (($desde_signatura ne "")&&($cat_nivel3_array_ref->[$i]->getSignatura_topografica() ge $desde_signatura) && 
+            ($hasta_signatura ne "")&&($cat_nivel3_array_ref->[$i]->getSignatura_topografica() le $hasta_signatura)) {
+
+            if($params_hash_ref->{'id_ui'} ne "" && $cat_nivel3_array_ref->[$i]->getId_ui_poseedora() eq $params_hash_ref->{'id_ui'}){
+                push(@info_reporte, \%hash_info);
+                push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+                $cant_total++;
+            }
+
+           if($params_hash_ref->{'id_ui'} eq ""){
+                push(@info_reporte, \%hash_info);
+                push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+                $cant_total++;
+            }
         }
 
     }
 
     @cat_nivel3_result = sort { $a->{$orden} cmp $b->{$orden} } @info_reporte;
 
-    return (\@cat_nivel3_result, \@info_reporte);
+    my $cantFila = $params_hash_ref->{'cantR'} - 1 + $params_hash_ref->{'ini'};
+    my @results2;
+    if($cant < $cantFila ){
+        @results2 = @cat_nivel3_result[$params_hash_ref->{'ini'}..$cant];
+#         C4::AR::Debug::debug(" cant < cantFila ");
+    }
+    else{
+        @results2 = @cat_nivel3_result[$params_hash_ref->{'ini'}..$params_hash_ref->{'cantR'} - 1 + $params_hash_ref->{'ini'}];
+#         C4::AR::Debug::debug(" cant > cantFila ");
+    }
+
+#     C4::AR::Debug::debug(" ini ".$params_hash_ref->{'ini'});
+#     C4::AR::Debug::debug(" cantR ".$params_hash_ref->{'cantR'});
+#     C4::AR::Debug::debug(" cant. total ".$cant);
+
+    return ($cant_total, \@cat_nivel3_result, \@info_reporte);
 }
 
 sub listarItemsDeInventorioPorBarcode{
@@ -271,7 +307,11 @@ sub listarItemsDeInventorioPorBarcode{
 
 
 
-    my $cant = scalar(@$cat_nivel3_array_ref);
+    my $cant            = scalar(@$cat_nivel3_array_ref);
+    my $cant_total      = 0;
+    my $barcode         = C4::AR::Utilidades::trim($params_hash_ref->{'barcode'});
+    my $desde_barcode   = C4::AR::Utilidades::trim($params_hash_ref->{'desde_barcode'});
+    my $hasta_barcode   = C4::AR::Utilidades::trim($params_hash_ref->{'hasta_barcode'});
 
     for(my $i=0; $i < $cant; $i++){
 #         C4::AR::Debug::debug("barcode => ".$cat_nivel3_array_ref->[$i]->getBarcode());
@@ -282,32 +322,69 @@ sub listarItemsDeInventorioPorBarcode{
         $hash_info{'signatura_topografica'}   = $cat_nivel3_array_ref->[$i]->getSignatura_topografica();
         $hash_info{'autor'}                   = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getAutor();
         $hash_info{'titulo'}                  = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getTitulo();
-# TODO FALTAN
-#             $hash_info{'edicion'}                 = $cat_nivel3_array_ref->[$i]->
-#             $hash_info{'editor'}                  = $cat_nivel3_array_ref->[$i]->
+        $hash_info{'edicion'}                 = $cat_nivel3_array_ref->[$i]->nivel2->getEdicion();
+# TODO falta implementar
+#         $hash_info{'edicion'}                 = $cat_nivel3_array_ref->[$i]->nivel2->getVolumen();
+        $hash_info{'editor'}                  = $cat_nivel3_array_ref->[$i]->nivel2->getEditor();
         $hash_info{'anio_publicacion'}        = $cat_nivel3_array_ref->[$i]->nivel2->getAnio_publicacion();
+        $hash_info{'ui'}                      = $cat_nivel3_array_ref->[$i]->getId_ui_poseedora();
 
 
-        if ($params_hash_ref->{'barcode'} ne "" && $cat_nivel3_array_ref->[$i]->getBarcode() =~ m/^$params_hash_ref->{'barcode'}/i) {
-#             C4::AR::Debug::debug("no busco por rango");
-C4::AR::Debug::debug("barcode ".$params_hash_ref->{'barcode'});
-            push(@info_reporte, \%hash_info);
-            push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+        if ($barcode ne "" && $cat_nivel3_array_ref->[$i]->getBarcode() =~ m/^$barcode/i) {
+
+# TODO esto esta feooooooo despues lo acomodo
+            if($params_hash_ref->{'id_ui'} ne "" && $cat_nivel3_array_ref->[$i]->getId_ui_poseedora() eq $params_hash_ref->{'id_ui'}){
+
+                push(@info_reporte, \%hash_info);
+                push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+                $cant_total++;
+            }
+
+            if($params_hash_ref->{'id_ui'} eq ""){
+                push(@info_reporte, \%hash_info);
+                push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+                $cant_total++;
+            }
         } 
     
 
-        if (($params_hash_ref->{'desde_barcode'} ne "")&&($cat_nivel3_array_ref->[$i]->getBarcode() ge $params_hash_ref->{'desde_barcode'}) && 
-            ($params_hash_ref->{'hasta_barcode'} ne "")&&($cat_nivel3_array_ref->[$i]->getBarcode() le $params_hash_ref->{'hasta_barcode'})) {
-C4::AR::Debug::debug("desde_barcode ".$params_hash_ref->{'desde_barcode'});
-C4::AR::Debug::debug("hasta_barcode ".$params_hash_ref->{'hasta_barcode'});
-            push(@info_reporte, \%hash_info);
-            push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+        if (($desde_barcode ne "")&&($cat_nivel3_array_ref->[$i]->getBarcode() ge $desde_barcode) && 
+            ($hasta_barcode ne "")&&($cat_nivel3_array_ref->[$i]->getBarcode() le $hasta_barcode)) {
+
+            if($params_hash_ref->{'id_ui'} ne "" && $cat_nivel3_array_ref->[$i]->getId_ui_poseedora() eq $params_hash_ref->{'id_ui'}){
+                push(@info_reporte, \%hash_info);
+                push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+                $cant_total++;
+            }
+
+            if($params_hash_ref->{'id_ui'} eq ""){
+
+                push(@info_reporte, \%hash_info);
+                push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
+                $cant_total++;
+            }
         }
-    }
+    }#END for(my $i=0; $i < $cant; $i++)
 
     @cat_nivel3_result = sort { $a->{$orden} cmp $b->{$orden} } @info_reporte;
 
-    return (\@cat_nivel3_result, \@info_reporte);
+    my $cantFila = $params_hash_ref->{'cantR'} - 1 + $params_hash_ref->{'ini'};
+    my @results2;
+    if($cant < $cantFila ){
+        @results2 = @cat_nivel3_result[$params_hash_ref->{'ini'}..$cant];
+#         C4::AR::Debug::debug(" cant < cantFila ");
+    }
+    else{
+        @results2 = @cat_nivel3_result[$params_hash_ref->{'ini'}..$params_hash_ref->{'cantR'} - 1 + $params_hash_ref->{'ini'}];
+#         C4::AR::Debug::debug(" cant > cantFila ");
+    }
+
+#     C4::AR::Debug::debug(" ini ".$params_hash_ref->{'ini'});
+#     C4::AR::Debug::debug(" cantR ".$params_hash_ref->{'cantR'});
+#     C4::AR::Debug::debug(" cant. total ".$cant);
+
+
+    return ($cant_total, \@results2, \@info_reporte);
 }
 
 # TODO DEPRECATED

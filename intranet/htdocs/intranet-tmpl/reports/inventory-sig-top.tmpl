@@ -10,6 +10,10 @@
 	    objAH.sendToServer();
     }
 
+    function changePage(ini){
+        objAH.changePage(ini);
+    }
+
     function consultarPorBarcode(){
         objAH                   = new AjaxHelper(updateInfo);
         objAH.debug             = true;
@@ -18,6 +22,8 @@
         objAH.desde_barcode     = $("#desde_barcode").val();
         objAH.hasta_barcode     = $("#hasta_barcode").val();
         objAH.accion            = "CONSULTA_POR_BARCODE";
+        objAH.funcion           = "changePage";
+        objAH.id_ui             = $("#combo_ui_barcode").val();
         //se envia la consulta
         objAH.sendToServer();
     }
@@ -30,6 +36,8 @@
         objAH.desde_signatura   = $("#desde_signatura").val();
         objAH.hasta_signatura   = $("#hasta_signatura").val();
         objAH.accion            = "CONSULTA_POR_SIGNATURA";
+        objAH.funcion           = "changePage";
+        objAH.id_ui             = $("#combo_ui_signatura").val();
 	    //se envia la consulta
 	    objAH.sendToServer();
     }
@@ -39,35 +47,52 @@
 	    zebra("datos_tabla");
     }
 
-// TODO enable/disable inputs
-    function toggleChckSendmail(){
-        $('#smtp_server_sendmail').click(function() {
-            enableDisableInputs();
+    function onClickBarcode(){
+        $('#barcode').click(function() {
+            $('#desde_barcode').val('');
+            $('#hasta_barcode').val('');
         });
     }
 
-    function enableDisableInputs(){
-        if ($('#smtp_server_sendmail').attr('checked')){
-            $('#smtp_server_sendmail').attr('checked', true);
-            $('#smtp_server').attr('disabled', true);
-            $('#port_mail').attr('disabled', true);
-            $('#username_mail').attr('disabled', true);
-            $('#password_mail').attr('disabled', true);
-            $('#smtp_metodo').attr('disabled', true);
-        } else {
-            $('#smtp_server_sendmail').attr('checked', false);
-            $('#smtp_server').attr('disabled', false);
-            $('#port_mail').attr('disabled', false);
-            $('#username_mail').attr('disabled', false);
-            $('#password_mail').attr('disabled', false);
-            $('#smtp_metodo').attr('disabled', false);
-        } 
+    function onClickDesdeHastaBarcode(){
+        $('#desde_barcode').click(function() {
+            $('#barcode').val('');
+        });
+
+        $('#hasta_barcode').click(function() {
+            $('#barcode').val('');
+        });
+    }
+
+    function onClickSignatura(){
+        $('#sigtop').click(function() {
+            $('#desde_signatura').val('');
+            $('#hasta_signatura').val('');
+        });
+    }
+
+    function onClickDesdeHastaSignatura(){
+        $('#desde_signatura').click(function() {
+            $('#sigtop').val('');
+        });
+
+        $('#hasta_signatura').click(function() {
+            $('#sigtop').val('');
+        });
     }
 
     $(document).ready(function() {
         //onEnter con foco en input, ejecuta la busqueda
         onEnter("barcode",consultarPorBarcode);
+        onEnter("desde_barcode",consultarPorBarcode);
+        onEnter("hasta_barcode",consultarPorBarcode);
         onEnter("sigtop",consultarPorSignatura);
+        onEnter("desde_signatura",consultarPorSignatura);
+        onEnter("hasta_signatura",consultarPorSignatura);
+        onClickBarcode();
+        onClickSignatura();
+        onClickDesdeHastaBarcode();
+        onClickDesdeHastaSignatura();
     });
 
 </script>
@@ -92,6 +117,10 @@
             <li class="sub_item">
               <label for="hasta_signatura">[% "Hasta" | i18n %]</label>
               <input type="text" id="hasta_signatura" value="[% hasta_signatura %]"> Max: [% signatura_max %] 
+            </li>
+            <li class="sub_item">
+              <label for="ui">[% "Unidad de Informaci&oacute;n" | i18n %]</label>
+              [% combo_ui_signatura %]
             </li>
 
             [% PERL %]
@@ -118,6 +147,10 @@
             <li class="sub_item">
               <label for="hasta_signatura">[% "Hasta" | i18n %]</label>
               <input type="text" id="hasta_barcode" value="[% hasta_barcode %]"> Max: [% barcode_max %] 
+            </li>
+            <li class="sub_item">
+              <label for="ui">[% "Unidad de Informaci&oacute;n" | i18n %]</label>
+              [% combo_ui_barcode %]
             </li>
 
             [% PERL %]

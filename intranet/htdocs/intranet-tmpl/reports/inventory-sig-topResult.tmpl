@@ -5,6 +5,7 @@
 
 <p  align="center">
     [% "La cantidad Total de ejemplares es:" | i18n %] [% cantidad %]
+    <div class="contenedor_paginador">[% paginador %]</div>
 </p>
 
 <br>
@@ -17,9 +18,9 @@
         <th onClick="ordenar('signatura_topografica');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
         <th onClick="ordenar('autor');">[% "Autor" | i18n %]</th>
         <th onClick="ordenar('title');">[% "T&iacute;tulo" | i18n %]</th>
-        <th onClick="ordenar('number');">[% "Edic." | i18n %]</th>
         <th onClick="ordenar('publisher');">[% "Editor" | i18n %]</th>
-        <th onClick="ordenar('anio_publicacion');">[% "A&ntilde;o" | i18n %]</th>
+        <th onClick="ordenar('edicion');">[% "Edici&oacute;n" | i18n %]</th>
+        <th onClick="ordenar('ui');">[% "UI" | i18n %]</th>
 
     </tr>
 
@@ -41,13 +42,21 @@
                             [% END %]
                     </td>
                     <td align="center">
-                            [% number %]
+                            [% cat_nivel3.publisher %]
                     </td>
                     <td align="center">
-                            [% publisher %]
+                            [% IF cat_nivel3.edicion %]
+                              [% cat_nivel3.edicion %]
+                            [% END %]
+                            [% IF cat_nivel3.anio_publicacion %]
+                              ([% cat_nivel3.anio_publicacion %])
+                            [% END %]
+                            [% IF cat_nivel3.volume %]
+                              t [% cat_nivel3.volume %]
+                            [% END %]
                     </td>
                     <td align="center">
-                            [% cat_nivel3.anio_publicacion %]
+                            [% cat_nivel3.ui %]
                     </td>
             </tr>
 
