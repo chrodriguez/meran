@@ -272,20 +272,8 @@ sub listarItemsDeInventorioPorSigTop{
 
     @cat_nivel3_result = sort { $a->{$orden} cmp $b->{$orden} } @info_reporte;
 
-    my $cantFila = $params_hash_ref->{'cantR'} - 1 + $params_hash_ref->{'ini'};
-    my @results2;
-    if($cant < $cantFila ){
-        @results2 = @cat_nivel3_result[$params_hash_ref->{'ini'}..$cant];
-#         C4::AR::Debug::debug(" cant < cantFila ");
-    }
-    else{
-        @results2 = @cat_nivel3_result[$params_hash_ref->{'ini'}..$params_hash_ref->{'cantR'} - 1 + $params_hash_ref->{'ini'}];
-#         C4::AR::Debug::debug(" cant > cantFila ");
-    }
-
-#     C4::AR::Debug::debug(" ini ".$params_hash_ref->{'ini'});
-#     C4::AR::Debug::debug(" cantR ".$params_hash_ref->{'cantR'});
-#     C4::AR::Debug::debug(" cant. total ".$cant);
+    $params_hash_ref->{'cant_total'}    = $cant_total;
+    @cat_nivel3_result                  = C4::AR::Utilidades::paginarArrayResult($params_hash_ref, @cat_nivel3_result);
 
     return ($cant_total, \@cat_nivel3_result, \@info_reporte);
 }
@@ -368,23 +356,11 @@ sub listarItemsDeInventorioPorBarcode{
 
     @cat_nivel3_result = sort { $a->{$orden} cmp $b->{$orden} } @info_reporte;
 
-    my $cantFila = $params_hash_ref->{'cantR'} - 1 + $params_hash_ref->{'ini'};
-    my @results2;
-    if($cant < $cantFila ){
-        @results2 = @cat_nivel3_result[$params_hash_ref->{'ini'}..$cant];
-#         C4::AR::Debug::debug(" cant < cantFila ");
-    }
-    else{
-        @results2 = @cat_nivel3_result[$params_hash_ref->{'ini'}..$params_hash_ref->{'cantR'} - 1 + $params_hash_ref->{'ini'}];
-#         C4::AR::Debug::debug(" cant > cantFila ");
-    }
-
-#     C4::AR::Debug::debug(" ini ".$params_hash_ref->{'ini'});
-#     C4::AR::Debug::debug(" cantR ".$params_hash_ref->{'cantR'});
-#     C4::AR::Debug::debug(" cant. total ".$cant);
+    $params_hash_ref->{'cant_total'}    = $cant_total;
+    @cat_nivel3_result                  = C4::AR::Utilidades::paginarArrayResult($params_hash_ref, @cat_nivel3_result);
 
 
-    return ($cant_total, \@results2, \@info_reporte);
+    return ($cant_total, \@cat_nivel3_result, \@info_reporte);
 }
 
 # TODO DEPRECATED

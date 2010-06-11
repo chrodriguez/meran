@@ -3005,6 +3005,23 @@ sub bbl_sort {
 }
 
 
+sub paginarArrayResult {
+    my ($params_hash_ref, @array_to_paginate) = @_;
+
+    my $cantFila = $params_hash_ref->{'cantR'} - 1 + $params_hash_ref->{'ini'};
+    my @results2;
+
+    if($params_hash_ref->{'cant_total'} < $cantFila ){
+        @results2 = @array_to_paginate[$params_hash_ref->{'ini'}..$params_hash_ref->{'cant_total'}];
+#         C4::AR::Debug::debug(" cant < cantFila ");
+    }
+    else{
+        @results2 = @array_to_paginate[$params_hash_ref->{'ini'}..$params_hash_ref->{'cantR'} - 1 + $params_hash_ref->{'ini'}];
+#         C4::AR::Debug::debug(" cant > cantFila ");
+    }
+
+    return @results2;
+}
 
 END { }       # module clean-up code here (global destructor)
 
