@@ -77,7 +77,7 @@
                 [% FOREACH contenido_estante IN estante.contenido %]
                 <tr>
                     <td>
-                    <input type='checkbox' class="chk_contenido_[% estante.getId %]" name="[% contenido_estante.nivel2.nivel1.getTitulo %] ([% contenido_estante.nivel2.nivel1.cat_autor.getCompleto %])" value="[% contenido_estante.getId2 %]">
+                    <input type='checkbox' class="chk_contenido_[% estante.getId %]" name="[% contenido_estante.nivel2.nivel1.getTitulo %] ([% contenido_estante.nivel2.nivel1.getAutor %])" value="[% contenido_estante.getId2 %]">
                     </td>
                     <td class="titulo_result">
                         [% PERL %]
@@ -89,14 +89,10 @@
                         [% END %]
                     </td>
                     <td class="autor_result">
-                        <a class="click" onClick="buscarPorAutor([% contenido_estante.nivel2.nivel1.getAutor %])" title="[% 'Filtrar por Autor' | i18n %]">
-                            [% contenido_estante.nivel2.nivel1.cat_autor.getCompleto %]
-                        </a>
+                            [% contenido_estante.nivel2.nivel1.getAutor %]
                     </td>
                     <td align=center>
-                     [% contenido_estante.nivel2.getCiudad_publicacion %]
-                     [% IF  contenido_estante.nivel2.getCiudad_publicacion %][% IF  contenido_estante.nivel2.getPais_publicacion %], [% END %][% END %]
-                     [% contenido_estante.nivel2.getPais_publicacion %]
+                     [% contenido_estante.nivel2.getCiudadPublicacion %]
                     </td>
                     <td align=center>
                       [% IF contenido_estante.nivel2.getEdicion %]

@@ -5,6 +5,11 @@
 <fieldset class="resultados_busqueda">
 <legend class="titulo_legend trigger click">  [% "Nuevo Estante" | i18n %] </legend>
             <input type="text" id="input_nuevo_estante">
+            <script language="javascript" type="text/javascript">
+            $(document).ready(function() {
+		$('#input_nuevo_estante').keypress(function(e){if(e.which==13){if(this.value!=''){agregarEstante();}}});
+            });
+            </script>
 </fieldset>
            [% PERL %]
                                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
@@ -22,6 +27,11 @@
 	    <input type="hidden" id="estante_nuevo_sub_estante">
 	    <input type="hidden" id="padre_nuevo_sub_estante">
             <input type="text" id="input_nuevo_sub_estante">
+            <script language="javascript" type="text/javascript">
+            $(document).ready(function() {
+		$('#input_nuevo_sub_estante').keypress(function(e){if(e.which==13){if(this.value!=''){agregarSubEstante();}}});
+            });
+            </script>
 </fieldset>
            [% PERL %]
                                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
@@ -40,6 +50,11 @@
             <input type="hidden" id="input_padre_estante">
             <input type="hidden" id="input_abuelo_estante">
             <input type="text" id="input_valor_estante">
+           <script language="javascript" type="text/javascript">
+            $(document).ready(function() {
+		$('#input_valor_estante').keypress(function(e){if(e.which==13){if(this.value!=''){modificarEstante();}}});
+            });
+            </script>
 </fieldset>
            [% PERL %]
                                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
@@ -53,6 +68,7 @@
 
 
 <div id="contenido_estante" style="display:none">
+<div id="busqueda_contenido_estante">
 <fieldset class="resultados_busqueda">
 <legend class="titulo_legend">  [% "Buscar Contenido" | i18n %] </legend>
             <input type="hidden" id="input_contenido_id_estante">
@@ -71,8 +87,8 @@
                                                                         title   => "[% 'Buscar' | i18n %]",
                                             ) ;
            [% END %]
-</fieldset>  
-
+</fieldset>
+</div>
 <div id="resultado_contenido_estante"> </div>
 </div>
 

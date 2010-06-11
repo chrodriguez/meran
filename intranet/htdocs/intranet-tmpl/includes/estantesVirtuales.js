@@ -4,6 +4,10 @@
  */
 function zebra(classObj){$("."+classObj+" tr:gt(0):odd").addClass("impar");$("."+classObj+" tr:gt(0):even").addClass("par");}
 
+function changePage(ini){
+        objAH.changePage(ini);
+    }
+
 function ordenar(orden){
             objAH.sort(orden);
         }
@@ -37,6 +41,8 @@ function ordenar(orden){
 	}
 	
         function agregarSubEstante(){
+	    
+	    if ( objAH.valor= $("#input_nuevo_sub_estante").val() ) {
                 objAH=new AjaxHelper(updateAgregarSubEstante);
                 objAH.debug= true;
 		objAH.padre= $("#padre_nuevo_sub_estante").val();
@@ -46,6 +52,7 @@ function ordenar(orden){
                 objAH.tipo= 'AGREGAR_SUBESTANTE';
                 objAH.sendToServer();
 		$.modal.close();
+	    }
         }
 
         function updateAgregarSubEstante(responseText){
@@ -165,6 +172,7 @@ function ordenar(orden){
 	}
 
         function agregarEstante(){
+	    if($("#input_nuevo_estante").val()){
                 objAH=new AjaxHelper(updateAgregarEstante);
                 objAH.debug= true;
                 objAH.url= 'estanteDB.pl';
@@ -173,6 +181,7 @@ function ordenar(orden){
                 objAH.tipo= 'AGREGAR_ESTANTE';
                 objAH.sendToServer();
 		$.modal.close();
+	    }
         }
 
         function updateAgregarEstante(responseText){
@@ -202,6 +211,7 @@ function ordenar(orden){
         }
 
 	function modificarEstante(){
+	    if($('#input_valor_estante').val()){
                 objAH=new AjaxHelper(updateModificarEstante);
                 objAH.debug= true;
                 objAH.url= 'estanteDB.pl';
@@ -212,6 +222,7 @@ function ordenar(orden){
                 objAH.tipo= 'MODIFICAR_ESTANTE';
                 objAH.sendToServer();
 		$.modal.close();
+	    }
         }
 
         function updateModificarEstante(responseText){
@@ -248,6 +259,8 @@ function ordenar(orden){
                 objAH=new AjaxHelper(updateBuscarContenido);
                 objAH.debug= true;
                 objAH.url= 'estanteDB.pl';
+		objAH.showStatusIn  = 'busqueda_contenido_estante';
+		objAH.funcion = "changePage";
                 objAH.valor=$('#input_busqueda_contenido').val();
                 objAH.tipo= 'BUSCAR_CONTENIDO';
                 objAH.sendToServer();

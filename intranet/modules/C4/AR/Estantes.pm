@@ -67,7 +67,7 @@ sub getEstante {
     use C4::Modelo::CatEstante::Manager;
     my @filtros;
     push(@filtros, ( id  => { eq => $id_estante} ));
-    my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros,require_objects => ['contenido'],);
+    my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros);
     my $estante=  $estantes_array_ref->[0];
     if($estante) {C4::AR::Debug::debug("Se obtiene el estante  ".$estante->getEstante);}
     return ($estante);
@@ -127,6 +127,9 @@ sub borrarContenido {
     my ($estante) = C4::Modelo::CatEstante->new(id => $id_estante);
     $estante->load();
 
+    use C4::Modelo::CatContenidoEstante;
+    use C4::Modelo::CatContenidoEstante::Manager;
+
     my $db = $estante->db;
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
@@ -134,14 +137,14 @@ sub borrarContenido {
     eval{
         C4::AR::Debug::debug("VAMOS A ELIMINAR EL CONTENIDO");
         foreach my $id2 (@$contenido_array_ref){
-        
+	    C4::AR::Debug::debug("CONTENIDO ".$id2);
             my @filtros;
 	    push(@filtros, ( id_estante  => { eq => $id_estante} ));
 	    push(@filtros, ( id2  	 => { eq => $id2} ));
-	    my $contenido_estantes_array_ref = C4::Modelo::CatContenidoEstante::Manager->get_cat_estante(db => $db,query => \@filtros);
+	    my $contenido_estantes_array_ref = C4::Modelo::CatContenidoEstante::Manager->get_cat_contenido_estante(db => $db,query => \@filtros);
 	    my $contenido_estante=  $contenido_estantes_array_ref->[0];
 
-            my $text = $contenido_estante->nivel2->nivel1->getTitulo."(".$contenido_estante->nivel2->nivel1->cat_autor->getCompleto.")";
+            my $text = $contenido_estante->nivel2->nivel1->getTitulo."(".$contenido_estante->nivel2->nivel1->getAutor.")";
             $contenido_estante->delete();
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E006', 'params' => [$text]} ) ;
             }

@@ -4,18 +4,20 @@
         [% "Resultados de la b&uacute;squeda" | i18n %]:</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
             <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %] </div>
-            <div class="contenedor_paginador">[% paginador %]</div>
-
-            <table id="tablaResult" class="datos_tabla modal_result" border=0 cellspacing=0 cellpadding=0 width=100%>
+            <div>[% paginador %]</div>
+            <table id="tablaResultHeader" class="datos_tabla modal_result" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <tr class="titulo_tabla_resultado">
                     <td width="35%" class="click" onClick="ordenar('titulo')" Title='[% "Ordenar por T&iacute;tulo" | i18n %]'>
                         [% "T&iacute;tulo" | i18n %]
                     </td>
-                    <td width="30%" class="click" onClick="ordenar('nomCompleto')" Title='[% "Ordenar por Autor" | i18n %]'>
+                    <td width="25%" class="click" onClick="ordenar('nomCompleto')" Title='[% "Ordenar por Autor" | i18n %]'>
                         [% "Autor" | i18n %]
                     </td>
-                    <td width="30%">[% "Edici&oacute;n/A&ntilde;o" | i18n %]</td>
+                    <td width="35%">[% "Edici&oacute;n/A&ntilde;o" | i18n %]</td>
                 </tr>
+            </table>
+            <div id="div_resultado" style="overflow:auto; width: 100%; height: 350px">
+            <table id="tablaResult" class="datos_tabla modal_result" border=0 cellspacing=0 cellpadding=0 width=100%>
             <!-- Actual Resultados de la b&uacute;squeda -->
             [% FOREACH SEARCH_RESULTS %]
                 <tr>
@@ -36,7 +38,8 @@
                     <td>
 			<ul class='listado_a_izquierda'>
                         [% FOREACH grupos %]
-			    <li>
+			    <li  style="clear:both;">
+			    <div style="float:left;">
                             [% IF edicion %]
                                 [% edicion %]
                             [% END %]
@@ -46,11 +49,13 @@
                             [% IF volume %]
                                 t [% volume %]
                             [% END %]
+                            </div>
                             [% PERL %]
                                     print C4::AR::Filtros::to_Icon(
                                                                         boton   => "icon_mas",
                                                                         onClick => "agregarContenidoAEstante([% id2 %]);",
                                                                         title   => "[% 'Agregar a Estante Actual' | i18n %]",
+                                                                        alternClass => "botonCentrado"
                                             ) ;
 			    [% END %]
                             </li>
@@ -60,5 +65,6 @@
                 </tr>
             [% END %]
             </table>
+          </div>
         </div>
 </fieldset>
