@@ -173,14 +173,6 @@
                                                             ) ;
                             [% END %]
                     </li>
-                  <li>
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Generar Carnets' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/reports/users-cards.pl", 
-                                                                title =>    "[% 'Generar Carnets' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                  </li>
                 </ul>
             </li>
 
@@ -242,15 +234,23 @@
                     <ul>
                      <li><h3 class="menu_intermedio">[% 'Usuarios' | i18n %]</h3>
                         <ul>
-                          <!--  <li>
-                                      [% PERL %]
-                                          print C4::AR::Filtros::link_to( text =>     "[% 'Usuarios (PREGUNTALE A FER)' | i18n %]",
-                                                                          url =>      "#",
-                                                                          title =>    "[% 'Usuarios (PREGUNTALE A FER)' | i18n %]"
-                                                                      ) ;
-                                      [% END %]
-                            </li>
-                            <li>
+                        <li>
+                                    [% PERL %]
+                                        print C4::AR::Filtros::link_to( text =>     "[% 'Generar Carnets' | i18n %]",
+                                                                        url =>      "/cgi-bin/koha/reports/users-cards.pl", 
+                                                                        title =>    "[% 'Generar Carnets' | i18n %]"
+                                                                    ) ;
+                                    [% END %]
+                        </li>
+                        <li>
+                                    [% PERL %]
+                                        print C4::AR::Filtros::link_to( text =>     "[% 'Usuarios' | i18n %]",
+                                                                        url =>      "/cgi-bin/koha/reports/usuarios.pl",
+                                                                        title =>    "[% 'Usuarios (PREGUNTALE A FER)' | i18n %]"
+                                                                    ) ;
+                                    [% END %]
+                        </li>
+                          <!--    <li>
                                       [% PERL %]
                                           print C4::AR::Filtros::link_to( text =>     "[% 'Generar Carnets' | i18n %]",
                                                                           url =>      "/cgi-bin/koha/reports/users-cards.pl",

@@ -12,7 +12,7 @@ use vars qw(@EXPORT @ISA);
     &getConsultasOPAC
     &getArrayHash
     &toXLS
-    
+    &registroDeUsuarios
 );
 
 
@@ -346,8 +346,6 @@ sub toXLS{
 sub getBusquedasOPAC{
     my ($params,$limit,$offset) = @_;
 
-
-
     my $total       = $params->{'total'};
     my $registrados = $params->{'registrados'};
     my $tipo_socio  = $params->{'tipo_socio'};
@@ -376,17 +374,96 @@ sub getBusquedasOPAC{
         
     }
 
-    my ($rep_busqueda) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda(    
+
+    my ($rep_busqueda);
+    if ( ($limit == 0) && ($offset == 0) ){
+
+        ($rep_busqueda) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda(    
+                                                                                    query => \@filtros,
+                                                                                    require_objects => ['busqueda','busqueda.socio','busqueda.socio.persona'],
+                                                                                    select => ['*','busqueda.*'],
+                                                                              );
+    }else{
+    
+        ($rep_busqueda) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda(    
                                                                                 query => \@filtros,
                                                                                 require_objects => ['busqueda','busqueda.socio','busqueda.socio.persona'],
                                                                                 limit => $limit,
                                                                                 offset => $offset,
                                                                                 select => ['*','busqueda.*'],
                                                                            );
+    }
     my ($rep_busqueda_count) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda_count(    
                                                                                 query => \@filtros,
                                                                                 require_objects => ['busqueda'],
                                                                            );
     return ($rep_busqueda_count,$rep_busqueda);
+}
+
+sub registroDeUsuarios{
+
+    my ($params,$limit,$offset) = @_;
+
+    my $total       = $params->{'total'};
+    my $anio        = $params->{'year'};
+    my $categoria   = $params->{'category'};
+    my $ui          = $params->{'ui'};
+    my $name_from   = $params->{'name_from'};
+    my $name_to     = $params->{'name_to'};
+
+    my $dateformat = C4::Date::get_date_format();
+    my $anio_fecha_start = "01/01/".$anio;
+    my $anio_fecha_end = "12/31/".$anio;
+# 
+#     $anio_fecha_start = C4::Date::format_date($anio_fecha_start,$dateformat);
+#     $anio_fecha_end = C4::Date::format_date($anio_fecha_end,$dateformat);
+C4::AR::Debug::debug("FECHA START: ".$anio_fecha_start." FECHA END: ".$anio_fecha_end);
+
+    my @filtros;
+    use C4::Modelo::UsrSocio::Manager;
+    
+
+    if (!$total){
+        if ($categoria){
+            push (@filtros, ('usr_socio.cod_categoria' => {eq =>$categoria}) );
+        }
+        if ($ui){
+            push (@filtros, ('usr_socio.id_ui' => {eq =>$ui}) );
+        }
+        if ((C4::AR::Utilidades::validateString($name_from)) || (C4::AR::Utilidades::validateString($name_to))){
+            push (@filtros, ('usr_socio.persona.apellido' => {eq =>$name_from,gt =>$name_from}) );
+            push (@filtros, ('usr_socio.persona.apellido' => {eq =>$name_to,lt =>$name_to}) );
+        }
+        if ( ($anio) && ($anio =~ /^-?[\.|\d]*\Z/ ) ){
+            push (@filtros, ('usr_socio.fecha_alta' => {eq =>$anio_fecha_start, gt=>$anio_fecha_start}));
+            push (@filtros, ('usr_socio.fecha_alta' => {eq =>$anio_fecha_end, lt=>$anio_fecha_end}));
+        }
+    }
+
+    my ($rep_busqueda);
+    if ( ($limit == 0) && ($offset == 0) ){
+
+        ($rep_busqueda) = C4::Modelo::UsrSocio::Manager->get_usr_socio(    
+                                                                                    query => \@filtros,
+                                                                                    require_objects => ['persona'],
+                                                                                    select => ['*','persona.*'],
+                                                                              );
+    }else{
+    
+        ($rep_busqueda) = C4::Modelo::UsrSocio::Manager->get_usr_socio(    
+                                                                                query => \@filtros,
+                                                                                require_objects => ['persona'],
+                                                                                select => ['*','persona.*'],
+                                                                                limit => $limit,
+                                                                                offset => $offset,
+                                                                           );
+    }
+
+    my ($rep_busqueda_count) = C4::Modelo::UsrSocio::Manager->get_usr_socio_count(    
+                                                                                query => \@filtros,
+                                                                                require_objects => ['persona'],
+                                                                            );
+    return ($rep_busqueda_count,$rep_busqueda);
+
 }
 

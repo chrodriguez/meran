@@ -4,7 +4,7 @@ use strict;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 use utf8;
 use C4::AR::Permisos;
-
+use C4::AR::Utilidades;
 __PACKAGE__->meta->setup(
     table   => 'usr_socio',
 
@@ -104,7 +104,12 @@ sub agregar{
 
     $self->setId_ui($data_hash->{'id_ui'});
     $self->setCod_categoria($data_hash->{'cod_categoria'});
-    $self->setFecha_alta($data_hash->{'fecha_alta'});
+
+
+    my $dateformat = C4::Date::get_date_format();
+    my $fecha_alta = $data_hash->{'fecha_alta'} || C4::Date::format_date_in_iso(C4::AR::Utilidades::getToday(),$dateformat);
+    $self->setFecha_alta($fecha_alta);
+
     $self->setExpira($data_hash->{'expira'});
     $self->setFlags($data_hash->{'flags'});
 #     $self->setPassword($data_hash->{'password'});
