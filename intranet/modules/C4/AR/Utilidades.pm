@@ -158,17 +158,20 @@ sub generarComboDeAnios{
 
     my $year_Default=$anio_actual;
 
-C4::AR::Debug::debug("ANIO ACTUAL: ".$year_Default);
     my @years;
     my @yearsValues;
-    my $onChange = $notChange?'consultar()':'null';
-    push (@years,"Seleccione");
+    my %labels;
+    my $onChange = $notChange?'null':'consultar()';
+    push (@years,0);
+    $labels{0}=C4::AR::Filtros::i18n("Seleccione");
     for (my $i =2000 ; $i < 2036; $i++){
         push (@years,$i);
+        $labels{$i} = $i;
     }
     my $year_select=CGI::scrolling_list(   -name      => 'year',
                     -id    => 'year',
                                     -values    => \@years,
+                                    -labels    => \%labels,
                                     -defaults  => $year_Default,
                                     -size      => 1,
                                     -onChange  =>$onChange,

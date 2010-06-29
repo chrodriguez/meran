@@ -106,6 +106,7 @@ C4::Auth - Authenticates Koha users
 		&_generarNroRandom
         &redirectAndAdvice
         &_hashear_password
+        &get_hmtl_content
 		
 );
 
@@ -348,9 +349,16 @@ sub output_html_with_http_headers {
 
     _setLocale($session);
     print_header($session, $params);
-
 	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
 	exit;
+}
+
+sub get_hmtl_content {
+    my($template, $params, $session) = @_;
+
+    my $out = '';
+    $template->process($params->{'template_name'},$params,\$out) || die "Template process failed: ", $template->error(), "\n";
+    return($out);
 }
 
 

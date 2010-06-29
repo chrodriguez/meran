@@ -402,9 +402,8 @@ sub getBusquedasOPAC{
 
 sub registroDeUsuarios{
 
-    my ($params,$limit,$offset) = @_;
+    my ($params,$limit,$offset,$total) = @_;
 
-    my $total       = $params->{'total'};
     my $anio        = $params->{'year'};
     my $categoria   = $params->{'category'};
     my $ui          = $params->{'ui'};
@@ -417,32 +416,30 @@ sub registroDeUsuarios{
 # 
 #     $anio_fecha_start = C4::Date::format_date($anio_fecha_start,$dateformat);
 #     $anio_fecha_end = C4::Date::format_date($anio_fecha_end,$dateformat);
-C4::AR::Debug::debug("FECHA START: ".$anio_fecha_start." FECHA END: ".$anio_fecha_end);
+C4::AR::Debug::debug("FECHA START: ".$anio_fecha_start." FECHA END: ".$anio_fecha_end." TOTAL??: ".$total);
 
     my @filtros;
     use C4::Modelo::UsrSocio::Manager;
     
 
-    if (!$total){
-        if ($categoria){
-            push (@filtros, ('usr_socio.cod_categoria' => {eq =>$categoria}) );
-        }
-        if ($ui){
-            push (@filtros, ('usr_socio.id_ui' => {eq =>$ui}) );
-        }
-        if ((C4::AR::Utilidades::validateString($name_from)) || (C4::AR::Utilidades::validateString($name_to))){
-            push (@filtros, ('usr_socio.persona.apellido' => {eq =>$name_from,gt =>$name_from}) );
-            push (@filtros, ('usr_socio.persona.apellido' => {eq =>$name_to,lt =>$name_to}) );
-        }
-        if ( ($anio) && ($anio =~ /^-?[\.|\d]*\Z/ ) ){
-            push (@filtros, ('usr_socio.fecha_alta' => {eq =>$anio_fecha_start, gt=>$anio_fecha_start}));
-            push (@filtros, ('usr_socio.fecha_alta' => {eq =>$anio_fecha_end, lt=>$anio_fecha_end}));
-        }
+    if ($categoria){
+        push (@filtros, ('usr_socio.cod_categoria' => {eq =>$categoria}) );
+    }
+    if ($ui){
+        push (@filtros, ('usr_socio.id_ui' => {eq =>$ui}) );
+    }
+    if ((C4::AR::Utilidades::validateString($name_from)) || (C4::AR::Utilidades::validateString($name_to))){
+        push (@filtros, ('usr_socio.persona.apellido' => {eq =>$name_from,gt =>$name_from}) );
+        push (@filtros, ('usr_socio.persona.apellido' => {eq =>$name_to,lt =>$name_to}) );
+    }
+    if ( ($anio) && ($anio =~ /^-?[\.|\d]*\Z/ ) ){
+        push (@filtros, ('usr_socio.fecha_alta' => {eq =>$anio_fecha_start, gt=>$anio_fecha_start}));
+        push (@filtros, ('usr_socio.fecha_alta' => {eq =>$anio_fecha_end, lt=>$anio_fecha_end}));
     }
 
     my ($rep_busqueda);
-    if ( ($limit == 0) && ($offset == 0) ){
-
+    if ( (($limit == 0) && ($offset == 0) ) || ($total) ){
+        C4::AR::Debug::debug("HACIENDO EL TOTAL");
         ($rep_busqueda) = C4::Modelo::UsrSocio::Manager->get_usr_socio(    
                                                                                     query => \@filtros,
                                                                                     require_objects => ['persona'],
