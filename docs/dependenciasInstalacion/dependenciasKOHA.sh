@@ -23,4 +23,4 @@ cpan -i Net::SMTP::TLS
 cpan -i Net::SSLeay
 cpan -i Net::Twitter
 cpan -i WWW::Facebook::API
-
+cpan -i WWW::Shorten::Bitly
