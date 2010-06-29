@@ -152,19 +152,29 @@ $valor es el valor por defecto que tiene el componente, si es que tiene.
 =cut
 
 sub generarComboDeAnios{
-    my $year_Default="Seleccione";
+    my ($notChange) = @_;
+    my @localtime = localtime();
+    my $anio_actual = 1900+$localtime[5];
+
+    my $year_Default=$anio_actual;
+
     my @years;
     my @yearsValues;
-    push (@years,"Seleccione");
+    my %labels;
+    my $onChange = $notChange?'null':'consultar()';
+    push (@years,0);
+    $labels{0}=C4::AR::Filtros::i18n("Seleccione");
     for (my $i =2000 ; $i < 2036; $i++){
         push (@years,$i);
+        $labels{$i} = $i;
     }
     my $year_select=CGI::scrolling_list(   -name      => 'year',
                     -id    => 'year',
                                     -values    => \@years,
-                                    -defaults  => 0,
+                                    -labels    => \%labels,
+                                    -defaults  => $year_Default,
                                     -size      => 1,
-                                    -onChange  =>'consultar()'
+                                    -onChange  =>$onChange,
                                 );
     return ($year_select);
 }

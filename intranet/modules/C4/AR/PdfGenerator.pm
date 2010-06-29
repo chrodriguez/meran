@@ -6,6 +6,7 @@ use C4::Context;
 use PDF::Report;
 # use PDF::API2;
 use C4::AR::Usuarios;
+use HTML::HTMLDoc;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -31,6 +32,7 @@ $VERSION = 0.01;
     &prestInterBiblio
     &generateBookLabel
     &batchBookLabelGenerator
+    &pdfFromHTML
 );
 
 
@@ -750,3 +752,23 @@ sub generateBookLabel {
     $pdf->setFont("Arial");
 }
 #############FIN Etiquetas########################
+
+sub pdfFromHTML{
+
+    my ($out,$filename) = @_;
+
+    my $htmldoc = new HTML::HTMLDoc();
+
+    $filename = $filename || "report_export.pdf";
+
+    $htmldoc->set_html_content($out);
+    $htmldoc->landscape();
+    $htmldoc->color_on();
+    $htmldoc->path('/root/meran/intranet/htdocs/intranet-tmpl/temas/default');
+    my $pdf = $htmldoc->generate_pdf();
+
+    print "Content-type: application/pdf\n";
+    print "Content-Disposition: attachement;  filename=\"$filename\"\n\n";
+    print $pdf->to_string();
+
+}

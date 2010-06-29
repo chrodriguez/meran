@@ -53,7 +53,9 @@ my ($template, $session, $t_params, $data_url);
             my $ini= $obj->{'ini'};
             my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
             my ($cantidad,$data,$is_hash) = C4::AR::Reportes::getBusquedasOPAC($obj,$cantR,$ini);
-            my ($path,$filename) = C4::AR::Reportes::toXLS($data,$is_hash,'Pagina 1','busquedas_opac');
+
+            my ($cantidad,$data_xls,$is_hash) = C4::AR::Reportes::getBusquedasOPAC($obj,0,0);
+            my ($path,$filename) = C4::AR::Reportes::toXLS($data_xls,$is_hash,'Pagina 1','busquedas_opac');
             
             $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
             $t_params->{'filename'} = '/reports/'.$filename;
