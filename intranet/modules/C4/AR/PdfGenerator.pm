@@ -756,15 +756,16 @@ sub generateBookLabel {
 sub pdfFromHTML{
 
     my ($out,$filename) = @_;
-
     my $htmldoc = new HTML::HTMLDoc();
 
     $filename = $filename || "report_export.pdf";
 
     $htmldoc->set_html_content($out);
     $htmldoc->landscape();
+    $htmldoc->set_header('t', '.', '1');
     $htmldoc->color_on();
-    $htmldoc->path('/root/meran/intranet/htdocs/intranet-tmpl/temas/default');
+    $htmldoc->no_links();
+    $htmldoc->path('/root/koha/intranet/htdocs');
     my $pdf = $htmldoc->generate_pdf();
 
     print "Content-type: application/pdf\n";

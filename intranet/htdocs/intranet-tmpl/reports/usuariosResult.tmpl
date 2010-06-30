@@ -1,5 +1,6 @@
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
 <script type="text/javascript" src="/intranet-tmpl/reports/reports.js"></script>
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/completo.css">
 <script type="text/javascript">
       $(document).ready(function() {
         makeToggle('datos_tabla_div','trigger',null,false);
@@ -60,12 +61,14 @@
                                   <img border="0" src="[% themelang %]/pictures/[% socio.tieneFoto %]" 
                                         alt="[% 'Imagen de' | i18n %] [% socio.persona.getApellido %], [% socio.persona.getNombre %]"
                                         title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                                        width="50px" height="50px"
                                   >
                               </a>
                           [% ELSE %]
                               <img border="0" src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 
                                     alt="[% 'Usuario sin foto' | i18n %]"
                                     title="[% 'Usuario sin foto' | i18n %]"
+                                    width="50px" height="50px"
                               >
                           [% END %]
                       </td>
@@ -115,7 +118,7 @@
                 print C4::AR::Filtros::link_to(   text =>     "[% 'Exportar a PDF' | i18n %]",
                                                 url =>      "/cgi-bin/koha/reports/usuariosResult.pl", 
                                                 params =>   ["export=pdf","year=[% param_anio %]","ui=[% param_ui %]"
-                                                            ,"categoria=[% param_categoria %]","name_from=[% param_name_from %]","name_to=[% param_name_to %]"],
+                                                            ,"category=[% param_categoria %]","name_from=[% param_name_from %]","name_to=[% param_name_to %]"],
                                                 title =>    "[% 'Exportar a PDF' | i18n %]"
                                             );
             [% END %]
