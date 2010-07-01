@@ -439,27 +439,26 @@ C4::AR::Debug::debug("FECHA START: ".$anio_fecha_start." FECHA END: ".$anio_fech
 
     my ($rep_busqueda);
     if ( (($limit == 0) && ($offset == 0) ) || ($total) ){
-        C4::AR::Debug::debug("HACIENDO EL TOTAL");
         ($rep_busqueda) = C4::Modelo::UsrSocio::Manager->get_usr_socio(    
-                                                                                    query => \@filtros,
-                                                                                    require_objects => ['persona'],
-                                                                                    select => ['*','persona.*'],
-                                                                              );
+                                                                            query => \@filtros,
+                                                                            require_objects => ['persona'],
+                                                                            select => ['*','persona.*'],
+                                                                            );
     }else{
     
         ($rep_busqueda) = C4::Modelo::UsrSocio::Manager->get_usr_socio(    
-                                                                                query => \@filtros,
-                                                                                require_objects => ['persona'],
-                                                                                select => ['*','persona.*'],
-                                                                                limit => $limit,
-                                                                                offset => $offset,
-                                                                           );
+                                                                            query => \@filtros,
+                                                                            require_objects => ['persona'],
+                                                                            select => ['*','persona.*'],
+                                                                            limit => $limit,
+                                                                            offset => $offset,
+                                                                        );
     }
 
     my ($rep_busqueda_count) = C4::Modelo::UsrSocio::Manager->get_usr_socio_count(    
-                                                                                query => \@filtros,
-                                                                                require_objects => ['persona'],
-                                                                            );
+                                                                            query => \@filtros,
+                                                                            require_objects => ['persona'],
+                                                                        );
     return ($rep_busqueda_count,$rep_busqueda);
 
 }
