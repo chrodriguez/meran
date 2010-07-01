@@ -66,7 +66,7 @@ $t_params->{'param_name_to'}     = $obj->{'name_to'};
 if ($to_pdf){
     $t_params->{'exported'}     = 1;
     my $out= C4::Auth::get_hmtl_content($template, $t_params, $session);
-       C4::AR::PdfGenerator::pdfFromHTML($out);
+       print(C4::AR::PdfGenerator::pdfFromHTML($out));
 }else{
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

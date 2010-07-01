@@ -772,4 +772,6 @@ sub pdfFromHTML{
     print "Content-Disposition: attachement;  filename=\"$filename\"\n\n";
     print $pdf->to_string();
 
+    return($pdf);
+
 }
