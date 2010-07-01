@@ -760,7 +760,7 @@ sub pdfFromHTML{
 
     $filename = $filename || "report_export.pdf";
 
-    $htmldoc->set_html_content('<div>HOLaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>'.$out);
+    $htmldoc->set_html_content($out);
     $htmldoc->landscape();
     $htmldoc->set_header('t', '.', '1');
     $htmldoc->color_on();
