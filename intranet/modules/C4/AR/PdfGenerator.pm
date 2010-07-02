@@ -764,9 +764,7 @@ sub pdfFromHTML{
     $htmldoc->set_header('t', '.', '1');
     $htmldoc->color_on();
     $htmldoc->no_links();
-#     $htmldoc->path('/usr/koha/intranet/htdocs');
     my $pdf = $htmldoc->generate_pdf();
-
-   return($pdf);
+   return($pdf->to_string());
 
 }
