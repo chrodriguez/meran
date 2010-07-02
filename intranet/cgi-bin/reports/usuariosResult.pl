@@ -69,8 +69,8 @@ if ($to_pdf){
     my $pdf= C4::AR::PdfGenerator::pdfFromHTML($out);
     my $filename="report_export.pdf";
     print "Content-type: application/pdf\n\n";
-#     print "Content-type: application/pdf\n";
-#     print "Content-Disposition: attachement;  filename=\"$filename\"\n\n";
+    print "Content-Disposition: attachement;  filename=\"$filename\"\n\n";
+     C4::AR::Debug::debug($pdf->to_string());
     print $pdf->to_string();
 }else{
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
