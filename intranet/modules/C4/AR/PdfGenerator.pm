@@ -756,10 +756,8 @@ sub generateBookLabel {
 
 sub pdfFromHTML{
 
-    my ($out,$filename) = @_;
+    my ($out) = @_;
     my $htmldoc = new HTML::HTMLDoc();
-
-    $filename = $filename || "report_export.pdf";
 
     $htmldoc->set_html_content($out);
     $htmldoc->landscape();
