@@ -7,6 +7,7 @@ use PDF::Report;
 # use PDF::API2;
 use C4::AR::Usuarios;
 use HTML::HTMLDoc;
+use HTML::HTMLDoc::PDF;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -765,13 +766,9 @@ sub pdfFromHTML{
     $htmldoc->set_header('t', '.', '1');
     $htmldoc->color_on();
     $htmldoc->no_links();
-    $htmldoc->path('/root/koha/intranet/htdocs');
+#     $htmldoc->path('/usr/koha/intranet/htdocs');
     my $pdf = $htmldoc->generate_pdf();
 
-    print "Content-type: application/pdf\n";
-    print "Content-Disposition: attachement;  filename=\"$filename\"\n\n";
-    print $pdf->to_string();
-
-    return($pdf);
+   return($pdf);
 
 }
