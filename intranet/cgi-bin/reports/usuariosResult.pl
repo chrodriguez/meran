@@ -9,8 +9,20 @@ use C4::AR::Reportes;
 use C4::Date;
 use C4::AR::PdfGenerator;
 my $input = new CGI;
+my $to_pdf = $input->param('export') || 0;
+my ($template, $session, $t_params);
 
-my ($template, $session, $t_params) = get_template_and_user({
+if ($to_pdf){
+    ($template, $session, $t_params) = get_template_and_user({
+                            template_name => "reports/usuariosResult-export.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                            debug => 1,
+                });
+}else{
+    ($template, $session, $t_params) = get_template_and_user({
                             template_name => "reports/usuariosResult.tmpl",
                             query => $input,
                             type => "intranet",
@@ -18,8 +30,9 @@ my ($template, $session, $t_params) = get_template_and_user({
                             flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                             debug => 1,
                 });
+}
+
 my ($ini,$pageNumber,$cantR);
-my $to_pdf = $input->param('export') || 0;
 my $obj         = $input->param('obj');
 my $ini;
 

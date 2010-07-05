@@ -106,7 +106,7 @@ C4::Auth - Authenticates Koha users
 		&_generarNroRandom
         &redirectAndAdvice
         &_hashear_password
-        &get_hmtl_content
+        &get_html_content
 		
 );
 
@@ -353,7 +353,7 @@ sub output_html_with_http_headers {
 	exit;
 }
 
-sub get_hmtl_content {
+sub get_html_content {
     my($template, $params, $session) = @_;
 
     my $out = '';

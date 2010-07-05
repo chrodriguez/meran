@@ -762,7 +762,7 @@ sub pdfFromHTML{
 
     $htmldoc->set_html_content($out);
     $htmldoc->landscape();
-    $htmldoc->set_header('t', '.', '1');
+    $htmldoc->set_header('t', '.', 'D');
     $htmldoc->color_on();
     $htmldoc->no_links();
     $htmldoc->path('/root/koha/intranet/htdocs');
