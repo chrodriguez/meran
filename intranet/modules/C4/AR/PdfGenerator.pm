@@ -33,6 +33,7 @@ $VERSION = 0.01;
     &generateBookLabel
     &batchBookLabelGenerator
     &pdfFromHTML
+    &pdfHeader
 );
 
 
@@ -758,8 +759,6 @@ sub pdfFromHTML{
     my ($out,$filename) = @_;
     my $htmldoc = new HTML::HTMLDoc();
 
-    $filename = $filename || "report_export.pdf";
-
     $htmldoc->set_html_content($out);
     $htmldoc->landscape();
     $htmldoc->set_header('t', '.', 'D');
@@ -769,5 +768,17 @@ sub pdfFromHTML{
     my $pdf = $htmldoc->generate_pdf();
 
     return($pdf->to_string());
+
+}
+
+sub pdfHeader{
+
+    my ($filename) = @_;
+
+    $filename = $filename || "report_export.pdf";
+
+    my $header ="Content-type: application/pdf\n\n"."Content-Disposition: attachement;  filename=\"$filename\"\n\n";
+
+    return ($header);
 
 }

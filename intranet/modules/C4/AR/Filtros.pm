@@ -40,6 +40,7 @@ sub link_to {
 	my $class= $params_hash_ref{'class'}; #obtengo la clase
     my $boton= $params_hash_ref{'boton'}; #obtengo el title a mostrar
     my $width= $params_hash_ref{'width'};
+    my $blank= $params_hash_ref{'blank'} || 0;
 	my $cant= scalar(@$params);
 # C4::AR::Debug::debug("link_to => cant params: ".$cant);
 
@@ -76,9 +77,13 @@ sub link_to {
         }
 	}
 
-	if($title ne ''){
-		$link .= " title='".$title."'";
-	}
+    if($title ne ''){
+        $link .= " title='".$title."'";
+    }
+
+    if($blank){
+        $link .= " target='blank'";
+    }
 
 	$link .= " >";
 

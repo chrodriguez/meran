@@ -1,5 +1,4 @@
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
-<script type="text/javascript" src="/intranet-tmpl/reports/reports.js"></script>
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/completo.css">
 <script type="text/javascript">
       $(document).ready(function() {
@@ -18,22 +17,23 @@
                 <tr class="titulo_tabla_resultado">
             
                     <th class="click" 
-                        Title="[% 'Ordenar por tarjeta de Id.' | i18n %]" width="12%">[% "Tarjeta Id." | i18n %]
+                        Title="[% 'Ordenar por tarjeta de Id.' | i18n %]" width="12%" onclick="hideTableColumn(1,'hide_nro_socio')">[% "Tarjeta Id." | i18n %]
                     </th>
 
-                    <th Title="[% 'Imagen para mostrar' | i18n %]" width="12%"></th>
+                    <th class="click"
+                        Title="[% 'Imagen para mostrar' | i18n %]" width="12%" onclick="hideTableColumn(2,'hide_imagen')">[% "Foto" | i18n %]</th>
 
                     <th class="click"
-                        Title="[% 'Ordenar por apellido' | i18n %]" align="left" width="30%">[% "Apellido y Nombres" | i18n %]
+                        Title="[% 'Ordenar por apellido' | i18n %]" align="left" width="30%" onclick="hideTableColumn(3,'hide_nom_ape')">[% "Apellido y Nombres" | i18n %]
                     </th>
                     <th class="click"
-                        Title="[% 'Ordenar por DNI' | i18n %]" width="15%">[% "Documento" | i18n %]
+                        Title="[% 'Ordenar por DNI' | i18n %]" width="15%" onclick="hideTableColumn(4,'hide_nro_documento')">[% "Documento" | i18n %]
                     </th>
                     <th class="click"
-                        Title="[% 'Ordenar por legajo' | i18n %]" align="left">[% "Legajo" | i18n %]
+                        Title="[% 'Ordenar por legajo' | i18n %]" align="left" onclick="hideTableColumn(5,'hide_legajo')">[% "Legajo" | i18n %]
                     </th>
                     <th class="click" 
-                        Title="[% 'Ordenar por categoria' | i18n %]">[% "Cat." | i18n %]
+                        Title="[% 'Ordenar por categoria' | i18n %]" onclick="hideTableColumn(6,'hide_categoria_socio_id')">[% "Cat." | i18n %]
                     </th>
                     <th>[% "Prest." | i18n %]</th>
                     <th>[% "Ven." | i18n %]</th>
@@ -44,7 +44,7 @@
                 <tbody>
             
             [% FOREACH socio IN usuarios %]   
-                <tr  align="center">
+                <tr  align="center" style="height:50px">
             
                       <td align='left' class="tarjetaId">
                           [% PERL %]
@@ -112,16 +112,36 @@
             </table>
         </div>
 </fieldset>
-[% IF !exported %]
-    <div class="buttonContainerHorizontal">
-            [% PERL %]
-                print C4::AR::Filtros::link_to(   text =>     "[% 'Exportar a PDF' | i18n %]",
-                                                url =>      "/cgi-bin/koha/reports/usuariosResult.pl", 
-                                                params =>   ["export=pdf","year=[% param_anio %]","ui=[% param_ui %]"
-                                                            ,"category=[% param_categoria %]","name_from=[% param_name_from %]","name_to=[% param_name_to %]"],
-                                                title =>    "[% 'Exportar a PDF' | i18n %]"
-                                            );
-            [% END %]
-    </div>
 
-[% END %]
+<form id="exportPDF" action="/cgi-bin/koha/reports/usuariosResult.pl?token=[% token %]">
+        <input type="hidden" name="export" value="pdf" />
+        <input type="hidden" name="year" value="[% param_anio %]" />
+        <input type="hidden" name="ui" value="[% param_ui %]" />
+        <input type="hidden" name="category" value="[% param_categoria %]" />
+        <input type="hidden" name="name_from" value="[% param_name_from %]" />
+        <input type="hidden" name="name_to" value="[% param_name_to %]" />
+        
+        <input type="hidden" name="hide_nro_socio" id="hide_nro_socio" value=0 />
+        <input type="hidden" name="hide_nro_documento" id="hide_nro_documento" value=0 />
+        <input type="hidden" name="hide_imagen" id="hide_imagen" value=0 />
+        <input type="hidden" name="hide_nom_ape" id="hide_nom_ape" value=0 />
+        <input type="hidden" name="hide_categoria_socio_id" id="hide_categoria_socio_id" value=0 />
+        <input type="hidden" name="hide_id_ui" id="hide_id_ui" value=0 />
+        <input type="hidden" name="hide_legajo" id="hide_legajo" value=0 />
+        <input type="hidden" name="hide_name_from" id="hide_name_from" value=0 />
+        <input type="hidden" name="hide_name_to" id="hide_name_to" value=0 />
+        <input type="hidden" name="hide_year" id="hide_year" value=0 />
+
+
+</form>
+
+
+<div class="buttonContainerHorizontal">
+        [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Exportar a PDF' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "submitForm('exportPDF');",
+                    ) ;
+        [% END %]
+</div>
