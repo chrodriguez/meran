@@ -413,12 +413,8 @@ sub registroDeUsuarios{
     my $dateformat = C4::Date::get_date_format();
     my $anio_fecha_start = "01/01/".$anio;
     my $anio_fecha_end = "12/31/".$anio;
-# 
-#     $anio_fecha_start = C4::Date::format_date($anio_fecha_start,$dateformat);
-#     $anio_fecha_end = C4::Date::format_date($anio_fecha_end,$dateformat);
-C4::AR::Debug::debug("FECHA START: ".$anio_fecha_start." FECHA END: ".$anio_fecha_end." TOTAL??: ".$total);
-
     my @filtros;
+
     use C4::Modelo::UsrSocio::Manager;
     
 
