@@ -79,8 +79,13 @@ $t_params->{'param_name_to'}     = $obj->{'name_to'};
 if ($to_pdf){
     $t_params->{'exported'}     = 1;
     my $out= C4::Auth::get_html_content($template, $t_params, $session);
-       C4::AR::PdfGenerator::pdfFromHTML($out);
+    my $pdf_string= C4::AR::PdfGenerator::pdfFromHTML($out);
+    my $filename="report_export.pdf";  
+      
+    print "Content-type: application/pdf\n\n";
+    print "Content-Disposition: attachement;  filename=\"$filename\"\n\n";
+    print $pdf_string;
+    
 }else{
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
-

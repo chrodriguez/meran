@@ -768,10 +768,6 @@ sub pdfFromHTML{
     $htmldoc->path('/root/koha/intranet/htdocs');
     my $pdf = $htmldoc->generate_pdf();
 
-    print "Content-type: application/pdf\n";
-    print "Content-Disposition: attachement;  filename=\"$filename\"\n\n";
-    print $pdf->to_string();
-
-    return($pdf);
+    return($pdf->to_string());
 
 }
