@@ -281,7 +281,7 @@
                         <li>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Busquedas desde OPAC' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/estadisticas/busquedas_opac.pl",
+                                                                url =>      "/cgi-bin/koha/reports/busquedas_opac.pl",
                                                                 title =>    "[% 'Busquedas desde OPAC' | i18n %]"
                                                             ) ;
                             [% END %]

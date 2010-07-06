@@ -71,7 +71,7 @@ function consultarBusquedasOPAC(){
     objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
     objAH.funcion="changePage";
-    objAH.url= "/cgi-bin/koha/estadisticas/busquedas_opac.pl";
+    objAH.url= "/cgi-bin/koha/reports/busquedas_opac.pl";
     objAH.total= total;
     objAH.registrados= registrados;
     objAH.tipo_socio= tipo_socio;

@@ -72,6 +72,7 @@ li {list-style-type: none;}
 .boton_ayuda{background:transparent url(../imagenes/botones/boton_ayuda.png) no-repeat;height:21px;width:20px;float:left;}
 .boton_borrar{background:transparent url(../imagenes/botones/boton_borrar.png) no-repeat;height:21px;width:20px;float:left;}
 .boton_campo_temporal{background:transparent url(../imagenes/botones/boton_campo_temporal.png) no-repeat;height:21px;width:20px;float:left;}
+.boton_eliminar_X{background:transparent url(../imagenes/iconos/12-em-cross.png) no-repeat;height:21px;width:20px;float:left;}
 .boton_edicion{background:transparent url(../imagenes/botones/boton_edicion.png) no-repeat;height:21px;width:20px;float:left;}
 .boton_entrar{background:transparent url(../imagenes/botones/boton_entrar.png) no-repeat;height:21px;width:20px;float:left;}
 .boton_enviar{background:transparent url(../imagenes/botones/boton_enviar.png) no-repeat;height:21px;width:20px;float:left;}
