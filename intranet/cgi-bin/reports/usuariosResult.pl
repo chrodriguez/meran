@@ -8,6 +8,7 @@ use C4::AR::Estadisticas;
 use C4::AR::Reportes;
 use C4::Date;
 use C4::AR::PdfGenerator;
+
 my $input = new CGI;
 my $to_pdf = $input->param('export') || 0;
 my ($template, $session, $t_params);
