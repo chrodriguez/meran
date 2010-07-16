@@ -92,8 +92,13 @@ if ($to_pdf){
     my $out= C4::Auth::get_html_content($template, $t_params, $session);
     my $pdf_string= C4::AR::PdfGenerator::pdfFromHTML($out);
     my $filename="report_export.pdf";  
-    print $session->header();
-    print C4::AR::PdfGenerator::pdfHeader();
+#     print $session->header();
+#     print C4::AR::PdfGenerator::pdfHeader();
+ print $input->header(
+                                -type           => 'application/pdf', 
+                                -attachment     => $filename,
+                                -expires        => '0',
+                      );
     print $pdf_string;
     
 }else{
