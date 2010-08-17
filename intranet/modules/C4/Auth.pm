@@ -774,9 +774,6 @@ C4::AR::Debug::debug("desde checkauth===========================================
 
                     if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
                         # lastlogin es anterior a hoy
-                        # Hoy no se enviaron nunca los mails de recordacion
-                        _enviarCorreosDeRecordacion($today);
-#                         _realizarOperaciones({ type => $type , socio => $socio });
                         if ($type eq 'intranet') {
                         ##Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
                             C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeINTRA\n");
@@ -851,6 +848,20 @@ sub _session_expired {
     }
 
     return 0;
+}
+
+
+=item
+Se envian los correos recordatorios si se encuentra seteada la preferencia "remainderMail"
+=cut
+sub _enviarCorreosDeRecordacion {
+# C4::AR::Debug::debug("EnabledMailSystem ".C4::Context->preference("EnabledMailSystem"));
+# C4::AR::Debug::debug("reminderMail ".C4::Context->preference("reminderMail"));
+
+    if ((C4::Context->preference("EnabledMailSystem"))&&(C4::Context->preference("reminderMail") eq 1)){
+# TODO falta pasar
+        &C4::AR::Prestamos::enviar_recordatorios_prestamos();
+    }
 }
 
 =item sub _getTimeOut

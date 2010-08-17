@@ -1004,6 +1004,128 @@ sub getCountPrestamosDeGrupo {
     return ($prestamos_grupo_count);
 }
 
+
+# TODO falta pasar
+=item
+sub enviar_recordatorios_prestamos {
+
+    if ((C4::Context->preference("EnabledMailSystem"))&&(C4::Context->preference("reminderMail") eq 1)){
+
+        my $dbh = C4::Context->dbh;
+# TODO si tengo por ej 1000 prestamos tarda mucho
+        my $sth=$dbh->prepare(" SELECT * FROM issues LEFT JOIN issuetypes ON issues.issuecode=issuetypes.issuecode WHERE issues.returndate IS NULL AND issuetypes.notforloan = 0 AND cant_recordatorio_via_mail = ? ");
+        $sth->execute(0);
+
+        # TODO preferencia para enviar recordatorio x días antes y no 1 día antes
+        my $proximohabil = proximoHabil(1,0);
+        while(my $data = $sth->fetchrow_hashref) {
+            my $fechaDeVencimiento  = vencimiento ($data->{'itemnumber'});
+
+            C4::AR::Debug::debug("fecha proximo vencimiento => ".$fechaDeVencimiento);
+            C4::AR::Debug::debug("proximo dia habil         => ".$proximohabil);
+            C4::AR::Debug::debug("Date_Cmp                  => ".Date::Manip::Date_Cmp($fechaDeVencimiento,$proximohabil));
+            C4::AR::Debug::debug("itemnumber                => ".$data->{'itemnumber'});
+
+            #se verifica si la $fechaDeVencimiento es == al proximo dia habil (vence mañana?), si es asi, se envía recordatorio
+            if (Date::Manip::Date_Cmp($fechaDeVencimiento, $proximohabil) == 0) {
+                C4::AR::Debug::debug("Issues => HAY QUE ENVIAR RECORDATORIO A BORROWER => ".$data->{'borrowernumber'});  
+                my $ok = Enviar_Recordatorio($data->{'itemnumber'},$data->{'borrowernumber'},&C4::Date::format_date($fechaDeVencimiento));
+
+                if ($ok) {
+                    my $sth = $dbh->prepare("UPDATE issues SET cant_recordatorio_via_mail = 1 WHERE id = ?;");
+                    $sth->execute($data->{'id'});
+                }  
+            };
+        }
+    }
+}
+=cut
+
+=item
+mail de recordatorio envia los mails a los dueños de los items que vencen el proximo dia habil
+=cut
+# TODO falta pasar
+=item
+sub Enviar_Recordatorio {
+    my ($itemnumber,$bor,$vencimiento) = @_;
+
+    my $ok = 0;
+    my $msg_error;
+
+    #C4::AR::Debug::debug("Issues => Enviar_Recordatorio");
+    my $dbh = C4::Context->dbh;
+
+    if ((C4::Context->preference("EnabledMailSystem"))&&(C4::Context->preference("reminderMail"))){
+    
+#         my $sth             = $dbh->prepare("SELECT * FROM borrowers WHERE borrowernumber = ?;");
+#         $sth->execute($bor);
+#         my $borrower        = $sth->fetchrow_hashref;
+        my $socio = getSocioInfoPorNroSocio(C4::Auth::getSessionNroSocio());
+
+        $sth=$dbh->prepare("SELECT biblio.title as rtitle, biblio.biblionumber as rbiblionumber,biblio.author as rauthor, 
+                            biblio.unititle as runititle, reserves.biblioitemnumber as rbiblioitemnumber, biblioitems.number as redicion          
+                            FROM reserves INNER JOIN biblioitems ON  biblioitems.biblioitemnumber = reserves.biblioitemnumber
+                            INNER JOIN biblio on biblioitems.biblionumber = biblio.biblionumber 
+                            WHERE  reserves.borrowernumber = ? AND reserves.itemnumber = ?  
+                       ");
+        $sth->execute($bor,$itemnumber);
+        my $res             = $sth->fetchrow_hashref;    
+
+        my $branchname      = C4::Search::getbranchname($borrower->{'branchcode'});        
+        $res->{'rauthor'}   = (C4::Search::getautor($res->{'rauthor'}))->{'completo'};
+
+        my $mail_from       = C4::Context->preference("mailFrom");
+        my $mail_to         = $borrower->{'emailaddress'};
+        my $mail_subject    = C4::Context->preference("reminderSubject");
+        my $mail_message    = C4::Context->preference("reminderMessage");
+
+        $mail_from      =~ s/BRANCH/$branchname/;
+        $mail_subject   =~ s/BRANCH/$branchname/;
+        $mail_message   =~ s/BRANCH/$branchname/;
+        $mail_message   =~ s/FIRSTNAME/$socio->getPersona()->getNombre()/;
+        $mail_message   =~ s/SURNAME/$socio->getPersona()->getApellido()/;
+        $mail_message   =~ s/UNITITLE/$res->{'runititle'}/;
+        $mail_message   =~ s/TITLE/$res->{'rtitle'}/;
+        $mail_message   =~ s/AUTHOR/$res->{'rauthor'}/;
+        $mail_message   =~ s/EDICION/$res->{'redicion'}/;
+        $mail_message   =~ s/VENCIMIENTO/$vencimiento/;
+
+        my %mail;
+        $mail{'mail_from'}             = $mail_from;
+        $mail{'mail_to'}               = $mail_to;
+        $mail{'mail_subject'}          = $mail_subject;
+        $mail{'mail_message'}          = $mail_message;
+    
+        ($ok, $msg_error)              = &C4::AR::Mail::send_mail(\%mail);
+
+        #**********************************Se registra el movimiento en historicCirculation***************************
+        my $dataItems           = C4::Circulation::Circ2::getDataItems($itemnumber);
+        my $biblionumber        = $dataItems->{'biblionumber'};
+        my $biblioitemnumber    = $dataItems->{'biblioitemnumber'};
+        my $branchcode          = $dataItems->{'homebranch'};
+        my $borrowernumber      = $bor;
+        my $loggedinuser        = $bor;
+        my $issuecode           = '-';
+        my $end_date            = "null";
+
+        C4::Circulation::Circ2::insertHistoricCirculation(  'reminder',
+                                                            $borrowernumber,
+                                                            $loggedinuser,
+                                                            $biblionumber,
+                                                            $biblioitemnumber,
+                                                            $itemnumber,
+                                                            $branchcode,
+                                                            $issuecode,
+                                                            $end_date
+                                    );
+        #*******************************Fin***Se registra el movimiento en historicCirculation**********************
+    
+    }#end if (C4::Context->preference("EnabledMailSystem"))
+
+    return $ok;
+}
+=cut
+
 END { }       # module clean-up code here (global destructor)
 
 1;
