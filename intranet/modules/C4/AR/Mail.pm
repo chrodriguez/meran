@@ -12,6 +12,7 @@ use C4::AR::Debug;
 use Net::SMTP;
 use Net::SMTP::SSL;
 use Net::SMTP::TLS;
+use C4::AR::Preferencias;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -20,21 +21,21 @@ use vars qw(@EXPORT @ISA);
 
 # TODO pasar a preferencias????
 
-use constant SMTP_TIME_OUT  => 30;
-use constant DEBUG          => 0;
+use constant SMTP_TIME_OUT  => 5;
+use constant DEBUG          => 1;
 
 sub send_mail_TLS {
     my ($mail_hash_ref) = @_;
 
 
-    my $mailer = 0;
-    my $ok;
+    my $mailer  = 0;
+    my $ok      = 0;
     my $msg_error;
     C4::AR::Debug::debug("Mail => send_mail_TLS => smtp_server:     ".$mail_hash_ref->{'smtp_server'});
     C4::AR::Debug::debug("Mail => send_mail_TLS => mail_metodo:     ".$mail_hash_ref->{'smtp_metodo'});
     C4::AR::Debug::debug("Mail => send_mail_TLS => smtp_port:       ".$mail_hash_ref->{'smtp_port'});
     C4::AR::Debug::debug("Mail => send_mail_TLS => smtp_user:       ".$mail_hash_ref->{'smtp_user'});
-    C4::AR::Debug::debug("Mail => send_mail_TLS => smtp_pass:       ".$mail_hash_ref->{'smtp_pass'});
+#     C4::AR::Debug::debug("Mail => send_mail_TLS => smtp_pass:       ".$mail_hash_ref->{'smtp_pass'});
     C4::AR::Debug::debug("Mail => send_mail_TLS => mail_from:       ".$mail_hash_ref->{'mail_from'});
     C4::AR::Debug::debug("Mail => send_mail_TLS => mail_to:         ".$mail_hash_ref->{'mail_to'});
     C4::AR::Debug::debug("Mail => send_mail_TLS => mail_subject:    ".$mail_hash_ref->{'mail_subject'});
@@ -74,6 +75,7 @@ sub send_mail_TLS {
         $msg_error = "Mail => send_mail_TLS => error => $@";
         C4::AR::Debug::debug($msg_error);
         $ok = 0;
+        $msg_error = "Mail => send_mail_TLS => Error al intentar conectar con el servidor";
     }
 
     C4::AR::Debug::debug("Mail => send_mail_TLS => return => ".$ok);
@@ -93,7 +95,7 @@ sub send_mail_SSL {
     C4::AR::Debug::debug("Mail => send_mail_SSL => mail_metodo:     ".$mail_hash_ref->{'smtp_metodo'});
     C4::AR::Debug::debug("Mail => send_mail_SSL => smtp_port:       ".$mail_hash_ref->{'smtp_port'});
     C4::AR::Debug::debug("Mail => send_mail_SSL => smtp_user:       ".$mail_hash_ref->{'smtp_user'});
-    C4::AR::Debug::debug("Mail => send_mail_SSL => smtp_pass:       ".$mail_hash_ref->{'smtp_pass'});
+#     C4::AR::Debug::debug("Mail => send_mail_SSL => smtp_pass:       ".$mail_hash_ref->{'smtp_pass'});
     C4::AR::Debug::debug("Mail => send_mail_SSL => mail_from:       ".$mail_hash_ref->{'mail_from'});
     C4::AR::Debug::debug("Mail => send_mail_SSL => mail_to:         ".$mail_hash_ref->{'mail_to'});
     C4::AR::Debug::debug("Mail => send_mail_SSL => mail_subject:    ".$mail_hash_ref->{'mail_subject'});
@@ -123,6 +125,7 @@ sub send_mail_SSL {
             $mailer->datasend("Subject: " . $mail_hash_ref->{'mail_subject'} . "\n");
             $mailer->datasend("\n");
             $mailer->datasend($mail_hash_ref->{'mail_message'} . "\n");
+
             $mailer->dataend;  
             $mailer->quit;
             $ok = 1;
@@ -132,6 +135,7 @@ sub send_mail_SSL {
     if($@){
         $msg_error = "Mail => send_mail_SSL => error => $@";
         C4::AR::Debug::debug($msg_error);
+        $msg_error = "Mail => send_mail_SSL => Error al intentar conectar con el servidor";
     }
 
     C4::AR::Debug::debug("Mail => send_mail_SSL => return => ".$ok);
@@ -147,11 +151,12 @@ sub send_mail_PLANO {
     my $mailer = 0;
     my $ok;
     my $msg_error;
+    my @data;
     C4::AR::Debug::debug("Mail => send_mail_PLANO => smtp_server:     ".$mail_hash_ref->{'smtp_server'});
     C4::AR::Debug::debug("Mail => send_mail_PLANO => mail_metodo:     ".$mail_hash_ref->{'smtp_metodo'});
     C4::AR::Debug::debug("Mail => send_mail_PLANO => smtp_port:       ".$mail_hash_ref->{'smtp_port'});
     C4::AR::Debug::debug("Mail => send_mail_PLANO => smtp_user:       ".$mail_hash_ref->{'smtp_user'});
-    C4::AR::Debug::debug("Mail => send_mail_PLANO => smtp_pass:       ".$mail_hash_ref->{'smtp_pass'});
+#     C4::AR::Debug::debug("Mail => send_mail_PLANO => smtp_pass:       ".$mail_hash_ref->{'smtp_pass'});
     C4::AR::Debug::debug("Mail => send_mail_PLANO => mail_from:       ".$mail_hash_ref->{'mail_from'});
     C4::AR::Debug::debug("Mail => send_mail_PLANO => mail_to:         ".$mail_hash_ref->{'mail_to'});
     C4::AR::Debug::debug("Mail => send_mail_PLANO => mail_subject:    ".$mail_hash_ref->{'mail_subject'});
@@ -162,8 +167,8 @@ sub send_mail_PLANO {
                                             $mail_hash_ref->{'smtp_server'},  
                                             Hello       => $mail_hash_ref->{'smtp_server'},  
                                             Port        => $mail_hash_ref->{'smtp_port'},  
-                                            User        => $mail_hash_ref->{'smtp_user'},  
-                                            Password    => $mail_hash_ref->{'smtp_pass'},
+#                                             User        => $mail_hash_ref->{'smtp_user'},  
+#                                             Password    => $mail_hash_ref->{'smtp_pass'},
                                             Timeout     => SMTP_TIME_OUT,
                                             Debug       => DEBUG
                                     );
@@ -173,24 +178,32 @@ sub send_mail_PLANO {
             $msg_error = "Mail => send_mail_PLANO => No se pudo conectar con el servidor: ".$mail_hash_ref->{'smtp_server'};
             C4::AR::Debug::debug($msg_error);  
         } else {
-            $mailer->mail($mail_hash_ref->{'mail_from'});
-            $mailer->recipient($mail_hash_ref->{'mail_to'});
-#             $mailer->to($mail_hash_ref->{'mail_to'});
-#             $mailer->data;  
-            $mailer->datasend("From: " . $mail_hash_ref->{'mail_from'} . "\n");
-            $mailer->datasend("To: " . $mail_hash_ref->{'mail_to'} . "\n");
+            $ok = $mailer->mail($mail_hash_ref->{'mail_from'});
+            if (!$ok) {
+                $msg_error = " Error en mail_from: ".$mail_hash_ref->{'mail_from'};
+#                 C4::AR::Debug::debug("Mail => send_mail_SENDMAIL => mail_from => OK:       ".$ok);
+                return ($ok, $msg_error);
+            }
+
+            $ok = $mailer->recipient($mail_hash_ref->{'mail_to'});
+            if (!$ok) {
+                $msg_error = " Error en mail_to: ".$mail_hash_ref->{'mail_to'};
+#                 C4::AR::Debug::debug("Mail => send_mail_SENDMAIL => mail_to => OK:       ".$ok);
+                return ($ok, $msg_error);
+            }
+
             $mailer->datasend("Subject: " . $mail_hash_ref->{'mail_subject'} . "\n");
             $mailer->datasend("\n");
             $mailer->datasend($mail_hash_ref->{'mail_message'} . "\n");
-#             $mailer->dataend;  
+
             $mailer->quit;
-            $ok = 1;
         }  
     };
 
     if($@){
         $msg_error = "Mail => send_mail_PLANO => error => $@";
         C4::AR::Debug::debug($msg_error);
+        $msg_error = "Mail => send_mail_PLANO => Error al intentar conectar con el servidor";
     }
 
     C4::AR::Debug::debug("Mail => send_mail_PLANO => return => ".$ok);
@@ -236,6 +249,7 @@ sub send_mail_SENDMAIL {
     if($@){
         $msg_error = "Mail => send_mail_SENDMAIL => error => $@";
         C4::AR::Debug::debug($msg_error);
+        $msg_error = "Mail => send_mail_SENDMAIL => Error al intentar conectar con el servidor";
     }
 
     C4::AR::Debug::debug("Mail => send_mail_SENDMAIL => return => ".$ok);
@@ -247,17 +261,24 @@ sub send_mail_TEST {
     my ($mail_to) = @_;
 
     my %mail;
+    my $ok          = 0;
+    my $msg_error   = "Error inesperado";
 
     $mail{'mail_from'}              = C4::Context->preference("mailFrom");
     $mail{'mail_to'}                = $mail_to;
     $mail{'mail_subject'}           = Encode::decode('utf8', "Prueba de configuración de mail");
     $mail{'mail_message'}           = "Esta es una prueba de configuraci".chr(243)."n del mail";
 
-    my ($ok, $msg_error)            = &C4::AR::Mail::send_mail(\%mail);
+    eval {
 
-    if($ok){    
-        $msg_error                  =  Encode::decode('utf8',"Se envió el mail a la cuenta (".$mail_to.")");
-    }
+        ($ok, $msg_error)           = &C4::AR::Mail::send_mail(\%mail);
+
+        if($ok){    
+            $msg_error              = Encode::decode('utf8',"Se envió el mail a la cuenta (".$mail_to.")");
+        }
+
+    };
+
 
     return ($ok, $msg_error);
 }
@@ -290,13 +311,28 @@ sub send_mail {
 
     C4::AR::Debug::debug("Mail => send_mail");
 
-# Servidores SMTP
-# yahoo     => smtp.mail.yahoo.com.ar 465 SSL
-# gmail     => smtp.gmail.com 587 TLS
-# hotmail   => smtp.live.com 25 TLS
-# hotmail   => smtp.live.com 587 SSL
-# linti     => mail.linti.unlp.edu.ar 25 TLS
-# linti     => mail.linti.unlp.edu.ar 993 SSL
+
+    my $mailer          = 0;
+    my $ok              = 0;
+    my $msg_error;
+
+    # Servidores SMTP
+    # yahoo     => smtp.mail.yahoo.com.ar 465 SSL
+    # gmail     => smtp.gmail.com 587 TLS
+    # hotmail   => smtp.live.com 25 TLS
+    # hotmail   => smtp.live.com 587 SSL
+    # linti     => mail.linti.unlp.edu.ar 25 TLS
+    # linti     => mail.linti.unlp.edu.ar 993 SSL
+
+    my @preferencias = ('smtp_server', 'smtp_metodo', 'port_mail', 'username_mail', 'password_mail', 'smtp_server_sendmail');
+
+    my ($existe, $variable) = &C4::AR::Preferencias::verificar_preferencias(\@preferencias);
+
+    if (!$existe) { 
+      $msg_error   = "NO EXISTE la preferencia ".$variable;
+
+      return (0, $msg_error);
+    }
 
     $info_smtp_hash_ref->{'smtp_server'}           = C4::Context->preference("smtp_server");
     $info_smtp_hash_ref->{'smtp_metodo'}           = C4::Context->preference("smtp_metodo");
@@ -305,19 +341,15 @@ sub send_mail {
     $info_smtp_hash_ref->{'smtp_pass'}             = C4::Context->preference("password_mail");
     $info_smtp_hash_ref->{'smtp_server_sendmail'}  = C4::Context->preference("smtp_server_sendmail");
 
-    my $mailer          = 0;
-    my $ok              = 0;
-    my $msg_error;
-
-    if($info_smtp_hash_ref->{'smtp_server_sendmail'}) {
+    if ($info_smtp_hash_ref->{'smtp_server_sendmail'}) {
         #se envia el mail con SENDMAIL
         ($ok, $msg_error) =  send_mail_SENDMAIL($info_smtp_hash_ref);
     } else {
-        if($info_smtp_hash_ref->{'smtp_metodo'} eq "TLS"){
+        if ($info_smtp_hash_ref->{'smtp_metodo'} eq "TLS") {
             ($ok, $msg_error) =  send_mail_TLS($info_smtp_hash_ref);
-        }elsif($info_smtp_hash_ref->{'smtp_metodo'} eq "SSL"){
+        }elsif ($info_smtp_hash_ref->{'smtp_metodo'} eq "SSL") {
             ($ok, $msg_error) =  send_mail_SSL($info_smtp_hash_ref);
-        }elsif($info_smtp_hash_ref->{'smtp_metodo'} eq "PLANO"){
+        }elsif ($info_smtp_hash_ref->{'smtp_metodo'} eq "PLANO") {
             ($ok, $msg_error) =  send_mail_PLANO($info_smtp_hash_ref);
         }#END if($mail_metodo eq "PLANO")
     }
