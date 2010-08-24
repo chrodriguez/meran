@@ -344,6 +344,7 @@ sub toXLS{
 
 
 sub getBusquedasOPAC{
+
     my ($params,$limit,$offset) = @_;
 
     my $total       = $params->{'total'};
@@ -354,6 +355,7 @@ sub getBusquedasOPAC{
 
     my $dateformat = C4::Date::get_date_format();
     my @filtros;
+
     use C4::Modelo::RepHistorialBusqueda::Manager;
     
     if (!$total){
@@ -374,8 +376,8 @@ sub getBusquedasOPAC{
         
     }
 
-
     my ($rep_busqueda);
+
     if ( ($limit == 0) && ($offset == 0) ){
 
         ($rep_busqueda) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda(    
@@ -393,6 +395,7 @@ sub getBusquedasOPAC{
                                                                                 select => ['*','busqueda.*'],
                                                                            );
     }
+
     my ($rep_busqueda_count) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda_count(    
                                                                                 query => \@filtros,
                                                                                 require_objects => ['busqueda'],

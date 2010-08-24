@@ -87,21 +87,21 @@ $t_params->{'cantidad'} = $cantidad;
 
 ## PARAMETOS PARA ARMAR LA URL DE PDF
 
-$t_params->{'param_total'}        = $obj->{'total'};
-$t_params->{'param_registrados'}   = $obj->{'registrados'};
-$t_params->{'param_tipo_socio'}          = $obj->{'tipo_socio'};
-$t_params->{'param_f_inicio'}   = $obj->{'f_inicio'};
-$t_params->{'param_f_fin'}     = $obj->{'f_fin'};
+$t_params->{'param_total'}          =   $obj->{'total'};
+$t_params->{'param_registrados'}    =   $obj->{'registrados'};
+$t_params->{'param_tipo_socio'}     =   $obj->{'tipo_socio'};
+$t_params->{'param_f_inicio'}       =   $obj->{'f_inicio'};
+$t_params->{'param_f_fin'}          =   $obj->{'f_fin'};
 
 ## PARAMETOS PARA OCULTAR CAMPOS DE LA TABLA
 
-$t_params->{'hide_nom_ape'}        = $obj->{'hide_nom_ape'};
-$t_params->{'hide_nro_socio'}   = $obj->{'hide_nro_socio'};
-$t_params->{'hide_categoria'}          = $obj->{'hide_categoria'};
-$t_params->{'hide_fecha'}   = $obj->{'hide_fecha'};
-$t_params->{'hide_campo'}     = $obj->{'hide_campo'};
-$t_params->{'hide_valor'}   = $obj->{'hide_valor'};
-$t_params->{'hide_tipo'}     = $obj->{'hide_tipo'};
+$t_params->{'hide_nom_ape'}     =   $obj->{'hide_nom_ape'};
+$t_params->{'hide_nro_socio'}   =   $obj->{'hide_nro_socio'};
+$t_params->{'hide_categoria'}   =   $obj->{'hide_categoria'};
+$t_params->{'hide_fecha'}       =   $obj->{'hide_fecha'};
+$t_params->{'hide_campo'}       =   $obj->{'hide_campo'};
+$t_params->{'hide_valor'}       =   $obj->{'hide_valor'};
+$t_params->{'hide_tipo'}        =   $obj->{'hide_tipo'};
 
 my %params_for_combo = {};
 $params_for_combo{'default'} = '';
