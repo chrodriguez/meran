@@ -1,80 +1,118 @@
-Listen 443
-<VirtualHost *:443>
-ServerAdmin einar@info.unlp.edu.ar
-DocumentRoot /usr/local/koha/intranet/htdocs
-ServerName localhost
-ScriptAlias /cgi-bin/koha/ "/usr/local/koha/intranet/cgi-bin/"
+NameVirtualHost *:443
 
-#<Location /cgi-bin/koha/ >
-#    SetHandler perl-script
-#    PerlResponseHandler ModPerl::Registry
-#    PerlOptions +ParseHeaders
-#    Options +ExecCGI
-#</Location>
-#<Perl>
-#use Carp;
-#</Perl>
-			
-ErrorLog /var/log/koha/koha-error_log
-TransferLog /var/log/koha/koha-access_log
-SetEnv PERL5LIB "/usr/local/koha/intranet/modules"
+<VirtualHost *:443>
 SetEnv KOHA_CONF "/etc/koha.conf"
+DocumentRoot /usr/local/koha/intranet/htdocs
+ServerAdmin koha@info.unlp.edu.ar
+ErrorLog /var/log/koha/koha-error.log
+TransferLog /var/log/koha/koha-access.log
 SSLEngine On
-SSLCertificateFile /etc/apache2/ssl/apacheINT.pem
+SSLProtocol -all +SSLv3 +TLSv1
+SSLCipherSuite HIGH:MEDIUM
+SSLCertificateFile /etc/apache2/ssl/apache.pem
+
+#DirectoryIndex inde/cgi-bin/koha/opac-main.pl
+
+Alias /images/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/images/"
+Alias /pictures/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/pictures/"
+SetEnv PERL5LIB "/usr/local/koha/intranet/modules"
+
+#Enabling Compression
+SetOutputFilter DEFLATE
+
+#SIN MODPERL
+#ScriptAlias /cgi-bin/koha/ "/usr/local/koha/intranet/cgi-bin/"
+
+#CON MODPERL
+Alias /cgi-bin/koha/ /usr/local/koha/intranet/cgi-bin/
+<Location /cgi-bin/koha/ >
+       SetHandler perl-script
+       PerlResponseHandler ModPerl::Registry
+       PerlOptions +ParseHeaders
+       Options +ExecCGI
+</Location>
+#	<Perl>
+#	use Carp;
+#	push(@INC,"/usr/local/koha/intranet/modules");
+#	</Perl>
+
 
 <Directory /usr/local/koha/intranet/ >
- Order allow,deny
+Order deny,allow
 Allow from all
+Deny from all
 </Directory>
 
-Alias /reports/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/reports/"
-Alias /images/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/images/"
-<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/images/ >
- Order allow,deny
- Allow from all
-</Directory>
 
-Alias /pictures/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/pictures/"
-<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/pictures/ >
+<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/images/ >
 Order allow,deny
 Allow from all
 </Directory>
-#ErrorDocument 403 https://catalogo.econo.unlp.edu.ar/    
+
+<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/pictures/ >
+Order allow,deny
+Allow from all
+</Directory>
+
+ErrorDocument 403 http://koha.unlp.edu.ar/
+
+ServerSignature Off
+
+RewriteEngine on
+RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)
+RewriteRule .* - [F]
+
+
+Alias /includes/ "/usr/local/koha/includes/"
+<Directory /usr/local/koha/includes/ >
+   Options  -Indexes
+   Order allow,deny
+   Allow from all
+</Directory>
+
+Alias /phpmyadmin /var/www/phpmyadmin/
+<Directory /usr/share/phpmyadmin/>
+    AllowOverride All
+    Order deny,allow
+    Allow from 163.10.10.
+    Deny from all
+</Directory>
+
+<Directory /var/www/phpmyadmin/>
+    AllowOverride All
+    Order deny,allow
+    Allow from 163.10.10.
+    Deny from all
+</Directory>
+
+
+# Protect some directories
+
+<Directory /var/lib/phpmyadmin/>
+    Options -FollowSymLinks
+    AllowOverride None
+    Order deny,allow
+    Deny from all
+</Directory>
+
+<Directory /usr/share/phpmyadmin/config/>
+    Options -FollowSymLinks
+    AllowOverride None
+    Order deny,allow
+    Deny from all
+</Directory>
+
+<Directory /var/www/phpmyadmin/config/>
+    Options -FollowSymLinks
+    AllowOverride None
+    Order deny,allow
+    Deny from all
+</Directory>
+
+#<FilesMatch "\.(ico|flv|jpe?g|png|gif|js|css|swf)$">
+# ExpiresActive On
+#  ExpiresDefault "access plus 1 year"
+#</FilesMatch>
+
 
 </VirtualHost>
-
-
-#<VirtualHost *:80>
-#ServerAdmin einar@info.unlp.edu.ar
-#ServerName intranet.redes.info.unlp.edu.ar
-#R.ewriteEngine   on
-#RewriteCond     %{SERVER_PORT} ^80$
-#RewriteRule     ^/(.*)$ https://intranet.redes.info.unlp.edu.ar/ [L,R]
-#RewriteLog      "/var/log/koha/rewrite.log"
-#RewriteLogLevel 4
-#
-#Alias /images/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/images/"
-#<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/images/ >
-#Order allow,deny
-#Allow from all
-#</Directory>
-#
-#Alias /pictures/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/pictures/"
-#<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/pictures/ >
-#Order allow,deny
-#Allow from all
-#</Directory>
-
-#<Directory /usr/local/koha/intranet/ >
-# Order deny,allow
-# Allow from 163.10.10.
-# Allow from 163.10.20.
-# Allow from 163.10.17.4
-# Allow from 163.10.17.2
-# Allow from 163.10.5.67
-# Deny from all
-#</Directory>
-	    
-#ErrorDocument 403 https://catalogo.econo.unlp.edu.ar/    
-#</VirtualHost>
-
