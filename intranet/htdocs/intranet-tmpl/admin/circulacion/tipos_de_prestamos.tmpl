@@ -26,7 +26,7 @@ function borrarDiv(){$("#divResultado").html("");}
  */
 function agregarTipoPrestamo(){
     objAH=new AjaxHelper(updateAgregarTipoPrestamo);
-    objAH.url= "/cgi-bin/koha/admin/tipos_de_prestamosDB.pl";
+    objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
     objAH.tipoAccion= "NUEVO_TIPO_PRESTAMO";
     objAH.sendToServer();
 }
@@ -42,7 +42,7 @@ function eliminarTipoPrestamo(tipo){
     if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO) ){
     objAH=new AjaxHelper(updateEliminarTipoPrestamo);
     objAH.debug= true;
-    objAH.url= "/cgi-bin/koha/admin/tipos_de_prestamosDB.pl";
+    objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
     objAH.tipo_prestamo=tipo;
     objAH.tipoAccion= "BORRAR";
     borrarDiv();
@@ -73,7 +73,7 @@ function respuesta(responseText){
 function buscarTiposPrestamos(){
     objAH=new AjaxHelper(updateTiposPrestamos);
     objAH.debug= true;
-    objAH.url= "/cgi-bin/koha/admin/tipos_de_prestamosDB.pl";
+    objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
     objAH.tipoAccion= "TIPOS_PRESTAMOS";
     objAH.sendToServer();
 }
@@ -90,7 +90,7 @@ function updateTiposPrestamos(responseText){
 function modificarTipoPrestamo(tipo){
     objAH=new AjaxHelper(updateModificarTipoPrestamo);
     objAH.debug= true;
-    objAH.url= "/cgi-bin/koha/admin/tipos_de_prestamosDB.pl";
+    objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
     objAH.tipo_prestamo=tipo;
     objAH.tipoAccion= "MODIFICAR_TIPO_PRESTAMO";
     objAH.sendToServer();
@@ -110,7 +110,7 @@ function guardarModificacionTipoPrestamo(){
 
     objAH=new AjaxHelper(updateGuardarModificacionTipoPrestamo);
     objAH.debug= true;
-    objAH.url= "/cgi-bin/koha/admin/tipos_de_prestamosDB.pl";
+    objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
     objAH.tipo_prestamo=$("#id_tipo_prestamo").val();
     objAH.descripcion=$("#descripcion").val();
     if ($("#disponibilidad:checked").val()){objAH.disponibilidad=1;}else{objAH.disponibilidad=0;}
@@ -140,7 +140,7 @@ function guardarNuevoTipoPrestamo(){
 
     objAH=new AjaxHelper(updateGuardarNuevoTipoPrestamo);
     objAH.debug= true;
-    objAH.url= "/cgi-bin/koha/admin/tipos_de_prestamosDB.pl";
+    objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
     objAH.tipo_prestamo=$("#id_tipo_prestamo").val();
     objAH.descripcion=$("#descripcion").val();
     if ($("#disponibilidad:checked").val()){objAH.disponibilidad=1;}else{objAH.disponibilidad=0;}

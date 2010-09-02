@@ -283,13 +283,17 @@ sub getSessionBrowser {
 
 sub get_template_and_user {
 	my $in = shift;
-	my ($user, $session, $flags, $usuario_logueado) = checkauth(        $in->{'query'}, 
-                                                                        $in->{'authnotrequired'}, 
-                                                                        $in->{'flagsrequired'}, 
-                                                                        $in->{'type'}, 
-                                                                        $in->{'changepassword'},
-                                                                        $in->{'template_params'}
-                                            );
+#   my ($user, $session, $flags, $usuario_logueado) = checkauth(        $in->{'query'}, 
+#                                                                         $in->{'authnotrequired'}, 
+#                                                                         $in->{'flagsrequired'}, 
+#                                                                         $in->{'type'}, 
+#                                                                         $in->{'changepassword'},
+#                                                                         $in->{'template_params'}
+#                                             );
+
+  my ($user, $session, $flags, $usuario_logueado);
+
+  $session = CGI::Session->load();
 
     my ($template, $params)     = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'}, $in->{'loging_out'}, $usuario_logueado);
 
