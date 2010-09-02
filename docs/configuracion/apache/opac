@@ -1,45 +1,27 @@
-#NameVirtualHost *:443
-#<VirtualHost *:443>
-#ServerAdmin einar@info.unlp.edu.ar
-#DocumentRoot /usr/local/koha/opac/htdocs
-#ServerName catalogo.econo.unlp.edu.ar
-#ScriptAlias /cgi-bin/koha/ /usr/local/koha/opac/cgi-bin/
-#ErrorLog /var/log/koha/opac-error_log
-#TransferLog /var/log/koha/opac-access_log
-#SetEnv PERL5LIB "/usr/local/koha/intranet/modules"
-#SetEnv KOHA_CONF "/etc/koha.conf"
-#SSLEngine On
-#SSLCertificateFile /etc/apache2/ssl/apache.pem
-#
-#Alias /images/ "/usr/local/koha/opac/htdocs/opac-tmpl/default/es/images/"
-#<Directory /usr/local/koha/opac/htdocs/opac-tmpl/default/es/images/ >
-# Order allow,deny
-# Allow from all
-#</Directory>
-
-#Alias /pictures/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/pictures/"
-#<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/pictures/ >
-# Order allow,deny
-# Allow from all
-#</Directory>
-#</VirtualHost>
-#
 NameVirtualHost *:80
 <VirtualHost *:80>
-ServerAdmin einar@info.unlp.edu.ar
 DocumentRoot /usr/local/koha/opac/htdocs
-ServerName opac.redes.info.unlp.edu.ar
-#ScriptAlias /cgi-bin/koha/ /usr/local/koha/opac/cgi-bin/
-ErrorLog /var/log/koha/opac-error_log
-TransferLog /var/log/koha/opac-access_log
-SetEnv PERL5LIB "/usr/local/koha/intranet/modules"
+ErrorLog /var/log/koha/opac-error.log
+TransferLog /var/log/koha/opac-access.log
 SetEnv KOHA_CONF "/etc/koha.conf"
 
+DirectoryIndex /cgi-bin/koha/opac-main.pl
+
 Alias /cgi-bin/koha/ /usr/local/koha/opac/cgi-bin/
-#PerlSetEnv PERDLDB_OPTS "NonStop=1 LineInfo=/tmp/db.out AutoTrace=1 frame=2"
-#PerlModule Apache::DB
+Alias /pictures/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/pictures/"
+<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/pictures/ >
+ Order allow,deny
+ Allow from all
+</Directory>
+
+
+Alias /covers/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/covers/"
+<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/covers/ >
+ Order allow,deny
+ Allow from all
+</Directory>
+
 <Location /cgi-bin/koha/ >
-#      PerlFixupHandler Apache::DB
       SetHandler perl-script
       PerlResponseHandler ModPerl::Registry
       PerlOptions +ParseHeaders
@@ -47,17 +29,31 @@ Alias /cgi-bin/koha/ /usr/local/koha/opac/cgi-bin/
 </Location>
 <Perl>
 use Carp;
+push(@INC,"/usr/local/koha/intranet/modules");
 </Perl>
-Alias /images/ "/usr/local/koha/opac/htdocs/opac-tmpl/default/es/images/"
-<Directory /usr/local/koha/opac/htdocs/opac-tmpl/default/es/images/ >
- Order allow,deny
- Allow from all
+
+ServerSignature Off
+RewriteEngine on
+RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)
+RewriteRule .* - [F]
+
+Alias /includes/ "/usr/local/koha/includes/"
+<Directory /usr/local/koha/includes/ >
+    SetOutputFilter DEFLATE
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip\
+    BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+    # Don't compress images
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+    Options  -Indexes
+    Order allow,deny
+    Allow from all
 </Directory>
 
-Alias /pictures/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/pictures/"
-<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/es2/pictures/ >
-  Order allow,deny
-  Allow from all
-</Directory>
-	    
+<FilesMatch "\.(ico|flv|jpe?g|png|gif|js|css|swf)$">
+ ExpiresActive On
+ ExpiresDefault "access plus 1 month"
+</FilesMatch>
+ 
 </VirtualHost>
+
+
