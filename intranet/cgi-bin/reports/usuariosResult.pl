@@ -92,16 +92,10 @@ if ($to_pdf){
     my $out= C4::Auth::get_html_content($template, $t_params, $session);
     my $filename= C4::AR::PdfGenerator::pdfFromHTML($out);
 
-    print C4::AR::PdfGenerator::pdfHeader($session);
+    print C4::AR::PdfGenerator::pdfHeader();
 
-
-    open INF, $filename or die "\nCan't open $filename for reading: $!\n";
-
-    my $buffer;
-
-    while (read (INF, $buffer, 65536) and print $buffer ) {};
-
-    close INF;
+    C4::AR::PdfGenerator::printPDF($filename);
+    
     
 }else{
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
