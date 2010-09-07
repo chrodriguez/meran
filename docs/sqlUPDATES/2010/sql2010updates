@@ -264,3 +264,48 @@ ALTER TABLE  `rep_registro_modificacion` ADD  `agregacion_temp` VARCHAR( 255 ) N
 ALTER TABLE  `rep_historial_busqueda` ADD  `agregacion_temp` VARCHAR( 255 ) NULL ;
 ALTER TABLE  `rep_busqueda` ADD  `agregacion_temp` VARCHAR( 255 ) NULL;
  ALTER TABLE `rep_busqueda` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL  ;
+
+
+
+INSERT INTO pref_preferencia_sistema
+(
+  id,
+  variable,
+  value,
+  explanation,
+  options,
+  type,
+  categoria
+)
+VALUES
+(
+  NULL,
+  '404_error_message',
+  '404 NOT FOUND',
+  'Mensaje a mostrar cuando se intenta acceder a una página inexistente',
+  '',
+  'texta',
+  'sistema'
+)
+
+
+INSERT INTO pref_preferencia_sistema
+(
+  id,
+  variable,
+  value,
+  explanation,
+  options,
+  type,
+  categoria
+)
+VALUES
+(
+  NULL,
+  '500_error_message',
+  '500 ERROR DE SISTEMA',
+  'Mensaje a mostrar cuando se produce un error interno de sistema',
+  '',
+  'texta',
+  'sistema'
+)
