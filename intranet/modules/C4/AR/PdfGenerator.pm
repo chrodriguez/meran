@@ -34,6 +34,7 @@ $VERSION = 0.01;
     &batchBookLabelGenerator
     &pdfFromHTML
     &pdfHeader
+    &printPDF
 );
 
 
@@ -747,8 +748,8 @@ sub generateBookLabel {
     my @sigs = split(/ /, $signatura);
     my $posicion=0;
     foreach my $sig (@sigs) {
-    $pdf->addRawText("$sig",$x+15,$pageheight + ($y-120) - $posicion );
-    $posicion+=15;
+      $pdf->addRawText("$sig",$x+15,$pageheight + ($y-120) - $posicion );
+      $posicion+=15;
     }
     $pdf->setFont("Arial");
 }
@@ -756,29 +757,47 @@ sub generateBookLabel {
 
 sub pdfFromHTML{
 
-    my ($out,$filename) = @_;
-    my $htmldoc = new HTML::HTMLDoc();
+    my ($out) = @_;
+    my $htmldoc = new HTML::HTMLDoc('mode'=>'file', 'tmpdir'=>'/tmp');
 
     $htmldoc->set_html_content($out);
     $htmldoc->landscape();
     $htmldoc->set_header('t', '.', 'D');
     $htmldoc->color_on();
     $htmldoc->no_links();
-    $htmldoc->path('/root/koha/intranet/htdocs');
+    $htmldoc->path('/usr/local/koha/intranet/htdocs');
+
     my $pdf = $htmldoc->generate_pdf();
 
-    return($pdf->to_string());
+    my $file_name = '/tmp/export'.time().'.pdf';
+
+    $pdf->to_file($file_name);
+
+    return($file_name);
 
 }
 
 sub pdfHeader{
 
-    my ($filename) = @_;
+    my ($session,$filename) = @_;
 
     $filename = $filename || "report_export.pdf";
 
-    my $header ="Content-type: application/pdf\n\n"."Content-Disposition: attachement;  filename=\"$filename\"\n\n";
+    my $header = $session->header( -type => 'application/pdf', -attachment => $filename );
 
     return ($header);
 
+}
+
+sub printPDF{
+    
+    my ($filename) = @_;
+
+    open INF, $filename or die "\nCan't open $filename for reading: $!\n";
+
+    my $buffer;
+
+    while (read (INF, $buffer, 65536) and print $buffer ) {};
+
+    close INF;
 }

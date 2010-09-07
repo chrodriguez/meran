@@ -282,14 +282,14 @@ sub getSessionBrowser {
 
 
 sub get_template_and_user {
-	my $in = shift;
-	my ($user, $session, $flags, $usuario_logueado) = checkauth(        $in->{'query'}, 
+  my $in = shift;
+  my ($user, $session, $flags, $usuario_logueado) = checkauth(          $in->{'query'}, 
                                                                         $in->{'authnotrequired'}, 
                                                                         $in->{'flagsrequired'}, 
                                                                         $in->{'type'}, 
                                                                         $in->{'changepassword'},
                                                                         $in->{'template_params'}
-                                            );
+                                                             );
 
 
 
@@ -297,7 +297,7 @@ sub get_template_and_user {
 
     $in->{'template_params'}    = $params;
 
-	if ( $session->param('userid') ) {
+  if ( $session->param('userid') ) {
         $params->{'loggedinuser'}       = $session->param('userid');
         $params->{'nro_socio'}          = $session->param('userid');
 
@@ -324,10 +324,10 @@ sub get_template_and_user {
         $socio_data{'usr_email'}                = $session->param('usr_email');
         $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
 
-        $params->{'socio_data'}         = \%socio_data;
-		$params->{'token'}              = $session->param('token');
-		#para mostrar o no algun submenu del menu principal
- 		$params->{'menu_preferences'}   = C4::AR::Preferencias::getMenuPreferences();
+    $params->{'socio_data'}         = \%socio_data;
+    $params->{'token'}              = $session->param('token');
+    #para mostrar o no algun submenu del menu principal
+    $params->{'menu_preferences'}   = C4::AR::Preferencias::getMenuPreferences();
 	}
 
     #se cargan todas las variables de entorno de las preferencias del sistema
@@ -351,8 +351,8 @@ sub output_html_with_http_headers {
 
     _setLocale($session);
     print_header($session, $params);
-	$template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
-	exit;
+    $template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
+    exit;
 }
 
 sub get_html_content {
