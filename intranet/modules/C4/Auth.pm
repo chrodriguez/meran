@@ -291,6 +291,8 @@ sub get_template_and_user {
                                                                         $in->{'template_params'}
                                             );
 
+
+
     my ($template, $params)     = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'}, $in->{'loging_out'}, $usuario_logueado);
 
     $in->{'template_params'}    = $params;
