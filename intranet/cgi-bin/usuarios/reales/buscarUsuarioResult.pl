@@ -75,4 +75,6 @@ if($socios){
 
 }#END if($socios)
 
+# print $session->header();
+# print "LISTO";
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
