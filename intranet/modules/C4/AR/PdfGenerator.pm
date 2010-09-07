@@ -462,15 +462,15 @@ prestInterBiblio
 Genera y muestra la ventana para imprimir el documento de prestamos interbibliotecarios.
 =cut
 sub prestInterBiblio{
-	my ($nro_socio, $socio, $biblioDestino, $director, $datos)=@_;
+  my ($nro_socio, $socio, $biblioDestino, $director, $datos)=@_;
 
     my $tmpFileName= "prestInterBiblio".$nro_socio.".pdf";
-	my $nombre = $socio->persona->getApeYNom;
-	my $dni= $socio->persona->getNro_documento;
-	my $branchcode= $socio->getId_ui;
-	my $biblio=&datosBiblio($branchcode);
-	my $categ=$biblio->{'categ'};
-	my $branchname=$biblio->{'branchname'};
+  my $nombre = $socio->persona->getApeYNom;
+  my $dni= $socio->persona->getNro_documento;
+  my $branchcode= $socio->getId_ui;
+  my $biblio=&datosBiblio($branchcode);
+  my $categ=$biblio->{'categ'};
+  my $branchname=$biblio->{'branchname'};
 
     my ($pdf,$pagewidth, $pageheight) = &inicializarPDF();
 
@@ -492,15 +492,15 @@ sub prestInterBiblio{
     my $cant=scalar(@$datos);
     ($pdf,$y)=&imprimirTabla($pdf,$y,$pageheight,$cant,$datos);
 
-	$parrafo[0]="La(s) misma(s) ser�(n) retirada(s) por:";
-	$parrafo[1]="Nombre y apellido:".$nombre;
-	$parrafo[2]="DNI:".$dni;
+  $parrafo[0]="La(s) misma(s) ser�(n) retirada(s) por:";
+  $parrafo[1]="Nombre y apellido:".$nombre;
+  $parrafo[2]="DNI:".$dni;
     $parrafo[3]="Direcci�n:".$socio->persona->getCalle.", ".$socio->persona->ciudad_ref->getNombre;
     $parrafo[4]="Tel�fono:".$socio->persona->getTelefono;
     $parrafo[5]="Correo electr�nico:".$socio->persona->getEmail;
-	$parrafo[6]="";
-	$parrafo[7]="          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy";
-	$parrafo[8]="atentamente.";
+  $parrafo[6]="";
+  $parrafo[7]="          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy";
+  $parrafo[8]="atentamente.";
 
     ($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
     ($pdf,$y)=&imprimirFirma($pdf,$y,$pageheight);
@@ -779,11 +779,12 @@ sub pdfFromHTML{
 
 sub pdfHeader{
 
-    my ($session,$filename) = @_;
+    my ($filename) = @_;
 
     $filename = $filename || "report_export.pdf";
 
-    my $header = $session->header( -type => 'application/pdf', -attachment => $filename );
+    my $session = CGI::Session->load();
+    my $header =  $session->header( -type => 'application/pdf', -attachment => $filename );
 
     return ($header);
 
