@@ -606,7 +606,12 @@ sub _getReservasAsignadas {
                                                                     require_objects => ['nivel3','nivel2'] 
                                                     );
 
-    return($reservas_array_ref);
+
+    if (scalar(@$reservas_array_ref) > 0){
+        return($reservas_array_ref);
+    }else{
+      return (0);
+    }
 }
 
 =head2
@@ -666,17 +671,23 @@ sub getReservasDeSocioEnEspera {
     my($nro_socio)=@_;
 
 
-    my $reservas = getReservasDeSocio($nro_socio);
+    my ($reservas,$cant_reservas) = getReservasDeSocio($nro_socio);
 
     my @reservas_espera;
+    if ($cant_reservas){
+      foreach my $reserva (@$reservas) {
+          if (!$reserva->getId3) {
+              #Reservas en espera
+              push @reservas_espera, $reserva;
+          }
+      }    
+    }
 
-    foreach my $reserva (@$reservas) {
-        if (!$reserva->getId3) {
-            #Reservas en espera
-            push @reservas_espera, $reserva;
-        }
-    }    
-    return(\@reservas_espera);
+    if (scalar(@reservas_espera)){
+        return(\@reservas_espera);
+    }else{
+      return(0);
+    }
 }
 
 
