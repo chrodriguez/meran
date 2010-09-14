@@ -6,19 +6,19 @@ use C4::Interface::CGI::Output;
 use CGI;
 
 my $input=new CGI;
+
 my ($template, $session, $t_params)= get_template_and_user({
-								template_name => "opac-main.tmpl",
-								query => $input,
-								type => "opac",
-								authnotrequired => 0,
-                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-								debug => 1,
-			});
+            template_name => "opac-main.tmpl",
+            query => $input,
+            type => "opac",
+            authnotrequired => 0,
+            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+            debug => 1,
+      });
 
 my $ini = $input->param('page') || 0;
 my $orden = 'titulo';
 my $url = "/cgi-bin/koha/opac-prestamos_vigentes.pl?token=".$input->param('token');
-
 my $nro_socio = C4::Auth::getSessionNroSocio($session);
 my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
 
