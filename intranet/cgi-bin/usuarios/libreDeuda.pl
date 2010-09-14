@@ -58,7 +58,7 @@ if($array[0] eq "1"){
 	}
 }
 if($array[1] eq "1" && $ok){
-	if(C4::AR::Reservas::getReservasDeSocioEnEspera($nro_socio)->{'cant'}){
+	if(C4::AR::Reservas::getReservasDeSocioEnEspera($nro_socio)){
 		$ok=0;
 		$msj="por tener reservas en espera";
 	}
@@ -69,20 +69,26 @@ if($array[2] eq "1" && $ok){
 		$msj="por tener pr&eacute;stamos vencidos";
 	}
 }
-if($array[3] eq "1" && $ok){
-	my($cant,$result)=C4::AR::Prestamos::DatosPrestamos($nro_socio);
-	if($cant){
-		$ok=0;
-		$msj="por tener pr&eacute;stamos en curso";
-	}
-}
-if($array[4] eq "1" && $ok){
-	my $result=C4::AR::Sanciones::hasSanctions($nro_socio);
-	if(scalar(@$result) > 0){
-		$ok=0;
-		$msj="por estar sancionado";
-	}
-}
+
+# FIXME no existe la funcion datosPrestamos
+# if($array[3] eq "1" && $ok){
+# 	my($cant,$result)=C4::AR::Prestamos::datosPrestamos($nro_socio);
+# 	if($cant){
+# 		$ok=0;
+# 		$msj="por tener pr&eacute;stamos en curso";
+# 	}
+# }
+
+# FIXME no existe la funcion hasSanctions
+#
+# if($array[4] eq "1" && $ok){
+# 	my $result=C4::AR::Sanciones::hasSanctions($nro_socio);
+# 	if(scalar(@$result) > 0){
+# 		$ok=0;
+# 		$msj="por estar sancionado";
+# 	}
+# }
+
 if($ok){
 	&C4::AR::PdfGenerator::libreDeuda($socio);
 }

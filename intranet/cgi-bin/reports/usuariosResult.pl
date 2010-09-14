@@ -78,28 +78,24 @@ $t_params->{'param_name_to'}     = $obj->{'name_to'};
 
 ## PARAMETOS PARA OCULTAR CAMPOS DE LA TABLA
 
-$t_params->{'hide_nro_socio'}        = $obj->{'hide_nro_socio'};
-$t_params->{'hide_imagen'}   = $obj->{'hide_imagen'};
-$t_params->{'hide_nom_ape'}          = $obj->{'hide_nom_ape'};
-$t_params->{'hide_categoria_socio_id'}   = $obj->{'hide_categoria_socio_id'};
-$t_params->{'hide_id_ui'}     = $obj->{'hide_id_ui'};
-$t_params->{'hide_legajo'}     = $obj->{'hide_legajo'};
-$t_params->{'hide_year'}     = $obj->{'hide_year'};
-$t_params->{'hide_nro_documento'}     = $obj->{'hide_nro_documento'};
+$t_params->{'hide_nro_socio'}           = $obj->{'hide_nro_socio'};
+$t_params->{'hide_imagen'}              = $obj->{'hide_imagen'};
+$t_params->{'hide_nom_ape'}             = $obj->{'hide_nom_ape'};
+$t_params->{'hide_categoria_socio_id'}  = $obj->{'hide_categoria_socio_id'};
+$t_params->{'hide_id_ui'}               = $obj->{'hide_id_ui'};
+$t_params->{'hide_legajo'}              = $obj->{'hide_legajo'};
+$t_params->{'hide_year'}                = $obj->{'hide_year'};
+$t_params->{'hide_nro_documento'}       = $obj->{'hide_nro_documento'};
 
 if ($to_pdf){
-    $t_params->{'exported'}     = 1;
+    $t_params->{'exported'} = 1;
     my $out= C4::Auth::get_html_content($template, $t_params, $session);
-    my $pdf_string= C4::AR::PdfGenerator::pdfFromHTML($out);
-    my $filename="report_export.pdf";  
-#     print $session->header();
-#     print C4::AR::PdfGenerator::pdfHeader();
- print $input->header(
-                                -type           => 'application/pdf', 
-                                -attachment     => $filename,
-                                -expires        => '0',
-                      );
-    print $pdf_string;
+    my $filename= C4::AR::PdfGenerator::pdfFromHTML($out);
+
+    print C4::AR::PdfGenerator::pdfHeader();
+
+    C4::AR::PdfGenerator::printPDF($filename);
+    
     
 }else{
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);

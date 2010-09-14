@@ -34,6 +34,7 @@ $VERSION = 0.01;
     &batchBookLabelGenerator
     &pdfFromHTML
     &pdfHeader
+    &printPDF
 );
 
 
@@ -461,15 +462,15 @@ prestInterBiblio
 Genera y muestra la ventana para imprimir el documento de prestamos interbibliotecarios.
 =cut
 sub prestInterBiblio{
-	my ($nro_socio, $socio, $biblioDestino, $director, $datos)=@_;
+  my ($nro_socio, $socio, $biblioDestino, $director, $datos)=@_;
 
     my $tmpFileName= "prestInterBiblio".$nro_socio.".pdf";
-	my $nombre = $socio->persona->getApeYNom;
-	my $dni= $socio->persona->getNro_documento;
-	my $branchcode= $socio->getId_ui;
-	my $biblio=&datosBiblio($branchcode);
-	my $categ=$biblio->{'categ'};
-	my $branchname=$biblio->{'branchname'};
+  my $nombre = $socio->persona->getApeYNom;
+  my $dni= $socio->persona->getNro_documento;
+  my $branchcode= $socio->getId_ui;
+  my $biblio=&datosBiblio($branchcode);
+  my $categ=$biblio->{'categ'};
+  my $branchname=$biblio->{'branchname'};
 
     my ($pdf,$pagewidth, $pageheight) = &inicializarPDF();
 
@@ -491,15 +492,15 @@ sub prestInterBiblio{
     my $cant=scalar(@$datos);
     ($pdf,$y)=&imprimirTabla($pdf,$y,$pageheight,$cant,$datos);
 
-	$parrafo[0]="La(s) misma(s) ser�(n) retirada(s) por:";
-	$parrafo[1]="Nombre y apellido:".$nombre;
-	$parrafo[2]="DNI:".$dni;
+  $parrafo[0]="La(s) misma(s) ser�(n) retirada(s) por:";
+  $parrafo[1]="Nombre y apellido:".$nombre;
+  $parrafo[2]="DNI:".$dni;
     $parrafo[3]="Direcci�n:".$socio->persona->getCalle.", ".$socio->persona->ciudad_ref->getNombre;
     $parrafo[4]="Tel�fono:".$socio->persona->getTelefono;
     $parrafo[5]="Correo electr�nico:".$socio->persona->getEmail;
-	$parrafo[6]="";
-	$parrafo[7]="          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy";
-	$parrafo[8]="atentamente.";
+  $parrafo[6]="";
+  $parrafo[7]="          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy";
+  $parrafo[8]="atentamente.";
 
     ($pdf,$y)=&imprimirContenido($pdf,$x,$y,$pageheight,15,\@parrafo);
     ($pdf,$y)=&imprimirFirma($pdf,$y,$pageheight);
@@ -747,8 +748,8 @@ sub generateBookLabel {
     my @sigs = split(/ /, $signatura);
     my $posicion=0;
     foreach my $sig (@sigs) {
-    $pdf->addRawText("$sig",$x+15,$pageheight + ($y-120) - $posicion );
-    $posicion+=15;
+      $pdf->addRawText("$sig",$x+15,$pageheight + ($y-120) - $posicion );
+      $posicion+=15;
     }
     $pdf->setFont("Arial");
 }
@@ -756,18 +757,23 @@ sub generateBookLabel {
 
 sub pdfFromHTML{
 
-    my ($out,$filename) = @_;
-    my $htmldoc = new HTML::HTMLDoc();
+    my ($out) = @_;
+    my $htmldoc = new HTML::HTMLDoc('mode'=>'file', 'tmpdir'=>'/tmp');
 
     $htmldoc->set_html_content($out);
     $htmldoc->landscape();
     $htmldoc->set_header('t', '.', 'D');
     $htmldoc->color_on();
     $htmldoc->no_links();
-    $htmldoc->path('/root/koha/intranet/htdocs');
+    $htmldoc->path('/usr/local/koha/intranet/htdocs');
+
     my $pdf = $htmldoc->generate_pdf();
 
-    return($pdf->to_string());
+    my $file_name = '/tmp/export'.time().'.pdf';
+
+    $pdf->to_file($file_name);
+
+    return($file_name);
 
 }
 
@@ -777,8 +783,22 @@ sub pdfHeader{
 
     $filename = $filename || "report_export.pdf";
 
-    my $header ="Content-type: application/pdf\n\n"."Content-Disposition: attachement;  filename=\"$filename\"\n\n";
+    my $session = CGI::Session->load();
+    my $header =  $session->header( -type => 'application/pdf', -attachment => $filename );
 
     return ($header);
 
+}
+
+sub printPDF{
+    
+    my ($filename) = @_;
+
+    open INF, $filename or die "\nCan't open $filename for reading: $!\n";
+
+    my $buffer;
+
+    while (read (INF, $buffer, 65536) and print $buffer ) {};
+
+    close INF;
 }
