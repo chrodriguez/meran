@@ -94,7 +94,7 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 
 $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
 $t_params->{'suggested'}        = $suggested;
-$t_params->{'tipoAccion'} = $obj->{'tipoAccion'};
+$t_params->{'tipoAccion'}       = $obj->{'tipoAccion'};
 #se arma el arreglo con la info para mostrar en el template
 my $elapsed                     = Time::HiRes::tv_interval( $start );
 $t_params->{'timeSeg'}          = $elapsed;
@@ -102,12 +102,14 @@ $obj->{'nro_socio'}             = $session->param('nro_socio');
 $t_params->{'SEARCH_RESULTS'}   = $resultsarray;
 #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
 # $obj->{'keyword'} = Encode::decode_utf8($obj->{'string'});
-$obj->{'keyword'} = $obj->{'string'};
-$t_params->{'keyword'} = $obj->{'keyword'};
+$obj->{'keyword'}               = $obj->{'string'};
+$t_params->{'keyword'}          = $obj->{'keyword'};
 # $t_params->{'buscoPor'}         = C4::AR::Utilidades::verificarValor($obj->{'string'});#C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'buscoPor'}         = C4::AR::Busquedas::armarBuscoPor($obj);
 # $t_params->{'buscoPor'}         = Encode::encode('utf8' , C4::AR::Busquedas::armarBuscoPor($obj));
 $t_params->{'cantidad'}         = $cantidad || 0;
 # $t_params->{'search_string'}    = $obj->{'string'};
+
+$t_params->{'show_search_details'} = 1;
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -41,7 +41,7 @@
                     </table>
                 </div>
            </div>
-          [% IF socio %]
+          [% IF socio_data %]
               [% INCLUDE 'rating.inc' %]
           [% END %]
           <h3>

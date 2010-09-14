@@ -20,7 +20,7 @@
  body {font-size:62.5%; background-color:rgb(255,255,255); font-family:verdana,arial,sans-serif;} /*Font-size: 1.0em = 10px when browser default size is 16px*/
  
 body input[type="text"]:focus{
-  background: InfoBackground;
+  background: Wheat;
 }
 
 body textarea:focus{

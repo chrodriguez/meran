@@ -53,6 +53,9 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
 
     if (!$msg_object->{'error'}){
         $socio->persona->modificarVisibilidadOPAC(\%data_hash);
+        $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio->getNro_socio);
+        C4::Auth::buildSocioData($session,$socio);
+
     }else{
         my $cod_msg = C4::AR::Mensajes::getFirstCodeError($msg_object);
         $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($cod_msg,'opac');

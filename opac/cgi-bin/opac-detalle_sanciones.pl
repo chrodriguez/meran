@@ -32,5 +32,7 @@ if ($san){
     $san->{'fecha_comienzo'}=format_date($san->getFecha_comienzo,$dateformat);
     $t_params->{'sancion'} = $san;
 }
+$t_params->{'content_title'}= C4::AR::Filtros::i18n("Sanciones");
+
 $t_params->{'partial_template'}= "opac-detalle_sanciones.inc";
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -107,6 +107,7 @@ C4::Auth - Authenticates Koha users
         &redirectAndAdvice
         &_hashear_password
         &get_html_content
+  &buildSocioData
 		
 );
 
@@ -321,7 +322,7 @@ sub get_template_and_user {
         $socio_data{'usr_alt_telefono'}         = $session->param('usr_alt_telefono');
         $socio_data{'usr_email'}                = $session->param('usr_email');
         $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
-
+        $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id');
     $params->{'socio_data'}         = \%socio_data;
     $params->{'token'}              = $session->param('token');
     #para mostrar o no algun submenu del menu principal
@@ -490,6 +491,31 @@ sub _destruirSession{
 
 }
 
+sub buildSocioData{
+
+    my ($session,$socio) = @_;
+
+    $session->param('urs_theme', $socio->getTheme());
+    $session->param('usr_theme_intra', $socio->getThemeINTRA());
+    $session->param('usr_locale', $socio->getLocale());
+    $session->param('usr_apellido', $socio->persona->getApellido());
+    $session->param('usr_nombre', $socio->persona->getNombre());
+    $session->param('usr_tiene_foto', $socio->tieneFoto());
+    $session->param('usr_documento_nombre', $socio->persona->documento->nombre());
+    $session->param('usr_documento_version', $socio->persona->getVersion_documento());
+    $session->param('usr_nro_documento', $socio->persona->getNro_documento());
+    $session->param('usr_calle', $socio->persona->getCalle());
+    $session->param('usr_ciudad_nombre', $socio->persona->ciudad_ref->getNombre());
+    $session->param('usr_ciudad_id',$socio->persona->ciudad_ref->id);
+    $session->param('usr_categoria_desc', $socio->categoria->getDescription());
+    $session->param('usr_fecha_nac', $socio->persona->getNacimiento());
+    $session->param('usr_sexo', $socio->persona->getSexo());
+    $session->param('usr_telefono', $socio->persona->getTelefono());
+    $session->param('usr_alt_telefono', $socio->persona->getAlt_telefono());
+    $session->param('usr_email', $socio->persona->getEmail());
+    $session->param('usr_legajo', $socio->persona->getLegajo());
+    $session->param('usr_credential_type', $socio->getCredentialType());
+}
 
 #checkauth RECORTADO
 sub checkauth {
@@ -718,26 +744,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
             $session->param('charset', C4::Context->config("charset")||'utf-8'); #se guarda el juego de caracteres
             $session->param('token', _generarToken()); #se guarda el token
             $session->param('SERVER_GENERATED_SID', 1);
-            $session->param('urs_theme', $socio->getTheme());
-            $session->param('usr_theme_intra', $socio->getThemeINTRA());
-            $session->param('usr_locale', $socio->getLocale());
-            $session->param('usr_apellido', $socio->persona->getApellido());
-            $session->param('usr_nombre', $socio->persona->getNombre());
-            $session->param('usr_tiene_foto', $socio->tieneFoto());
-            $session->param('usr_documento_nombre', $socio->persona->documento->nombre());
-            $session->param('usr_documento_version', $socio->persona->getVersion_documento());
-            $session->param('usr_nro_documento', $socio->persona->getNro_documento());
-            $session->param('usr_calle', $socio->persona->getCalle());
-            $session->param('usr_ciudad_nombre', $socio->persona->ciudad_ref->getNombre());
-            $session->param('usr_categoria_desc', $socio->categoria->getDescription());
-            $session->param('usr_fecha_nac', $socio->persona->getNacimiento());
-            $session->param('usr_sexo', $socio->persona->getSexo());
-            $session->param('usr_telefono', $socio->persona->getTelefono());
-            $session->param('usr_alt_telefono', $socio->persona->getAlt_telefono());
-            $session->param('usr_email', $socio->persona->getEmail());
-            $session->param('usr_legajo', $socio->persona->getLegajo());
-            $session->param('usr_credential_type', $socio->getCredentialType());
-
+            buildSocioData($session,$socio);
             #Si se logueo correctamente en intranet entonces guardo la fecha
             my $today = Date::Manip::ParseDate("today");
             $socio->setLast_login($today);

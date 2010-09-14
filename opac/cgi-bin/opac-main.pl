@@ -25,4 +25,6 @@ $t_params->{'nro_socio'}= $session->param('nro_socio');
 $t_params->{'SEARCH_RESULTS'}= $grupos;
 $t_params->{'novedades'}= $novedades;
 
+$t_params->{'partial_template'}     = "opac-content_data.inc";
+
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
