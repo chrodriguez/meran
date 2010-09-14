@@ -14,7 +14,7 @@ my ($template, $session, $t_params)= get_template_and_user({
                                     query => $query,
                                     type => "opac",
                                     authnotrequired => 0,
-                                    flagsrequired => {  ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
             });
 
 $t_params->{'opac'};
@@ -25,7 +25,7 @@ my $dateformat = C4::Date::get_date_format();
 if ($san){
     if ($san->{'id3'}) {
         my $aux=C4::AR::Nivel1::getNivel1FromId3($san->{'id3'});
-        #FALTA ARMAR EL TIPO DE PRESTAMO, DE DONDE LO SACAMOS?????????????????????????????????
+        #FALTA ARMAR EL TIPO DE PRESTAMO, DE DONDE LO SACAMOS???
         $san->{'description'}.=": ".$aux->getTitulo." (".$aux->getAutor.") ";
     }
     $san->{'fecha_final'}=format_date($san->getFecha_final,$dateformat);

@@ -11,9 +11,9 @@
                   <ul>
                   [% IF sancion %]
                         [% IF sancion.description %]
-                          <li class="sancionesOPAC">
-                              [% sancion.description %] - [% "Desde el" | i18n %] [% sancion.getFecha_comienzo %] [% "hasta el" | i18n %] [% sancion.getFecha_final %]
-                          </li>
+                            <li class="sancionesOPAC">
+                                [% sancion.description %] - [% "Desde el" | i18n %] [% sancion.getFecha_comienzo %] [% "hasta el" | i18n %] [% sancion.getFecha_final %]
+                            </li>
                         [% END %]
                   [% END %]
                   <ul>
@@ -26,4 +26,3 @@
 [% ELSE %]
     <h1> [% 'Ud. no ha sido sancionado.' | i18n %]
 [% END %]
-

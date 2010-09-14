@@ -2,9 +2,9 @@
     $(document).ready(function() {
         $(function()
         {
-            [% IF socio %]
+//             [% IF socio_data %]
                 $('#review').wysiwyg();
-            [% END %]
+//             [% END %]
             $('.fancylink').fancybox();
         });
     });
@@ -48,7 +48,7 @@
     <br />
     <br />
 </div>
-[% IF socio %]
+[% IF socio_data %]
     <form action="/cgi-bin/koha/reviews.pl" method="post">
         <textarea id="review" name="review" class="self_review" style="width: 88.3%"></textarea>
         <input type="hidden" name="token" value="[% token %]" />
