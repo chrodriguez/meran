@@ -248,15 +248,16 @@ sub _procesar_referencias{
                    $dato=_procesar_referencia($campo,$subcampo,$dato);
 #                    C4::AR::Debug::debug("ACA ESTAMOS".$campo.$subcampo."NUEVO DATO".$dato);
                 }
+
                 if ( ($dato ne '')&&(C4::AR::Utilidades::existeInArray($subcampo, @{$campos_nivel1{$campo}} ) )) { 
                     push(@subcampos1_array, ($subcampo => $dato));
                 } elsif ( ($dato ne '')&&(C4::AR::Utilidades::existeInArray($subcampo, @{$campos_nivel2{$campo}} ) )) { 
-                        push(@subcampos2_array, ($subcampo => $dato));
-                        } elsif ( ($dato ne '')&&(C4::AR::Utilidades::existeInArray($subcampo, @{$campos_nivel3{$campo}} ) )) { 
-                            push(@subcampos3_array, ($subcampo => $dato));
-                            } elsif ($dato ne '') { 
-                                push(@subcampos_sin_definir_array, ($subcampo => $dato));
-                            }
+                    push(@subcampos2_array, ($subcampo => $dato));
+                } elsif ( ($dato ne '')&&(C4::AR::Utilidades::existeInArray($subcampo, @{$campos_nivel3{$campo}} ) )) { 
+                    push(@subcampos3_array, ($subcampo => $dato));
+                } elsif ($dato ne '') { 
+                    push(@subcampos_sin_definir_array, ($subcampo => $dato));
+                }
             }
 
             if (scalar(@subcampos1_array)>0){
@@ -735,7 +736,7 @@ sub _procesar_referencia
 
 Esta funcion recibe un campo, un subcampo y un dato y busca en la tabla de referencia correspondinte en valor que se corresponde con el dato, en el caso de no encontrarlo lo agrega en la tabla de referencia correspondiente y devuelve el id del nuevo elemento
 =cut
-sub _procesar_referencia{
+sub _procesar_referencia {
     my ($campo, $subcampo, $dato, $itemtype) = @_;
 
 #     C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
@@ -744,11 +745,11 @@ sub _procesar_referencia{
     if($estructura){
        if($estructura->getReferencia){
             #tiene referencia
-            my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
-            my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+            my $pref_tabla_referencia   = C4::Modelo::PrefTablaReferencia->new();
+            my $obj_generico            = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
 
                 #se genera el nuevo dato => tabla@dato para poder obtener el dato de la referencia luego
-                my $string_result = $obj_generico->getTableName.'@'.$dato;
+                my $string_result       = $obj_generico->getTableName.'@'.$dato;
 
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);

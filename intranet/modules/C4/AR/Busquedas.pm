@@ -1674,6 +1674,95 @@ sub _existeEnArregloDeCampoMARC{
 	return 0;
 }
 
+
+=item sub getRegistrosFromRange
+
+Retorna todos los registros que se encuentran dentro del rango [$biblio_ini, $biblio_fin]
+=cut
+sub getRegistrosFromRange {
+    my ($params, $cgi ) = @_;
+
+    my @result;
+    my @params;
+#     my @joins;
+#     my @where;
+    my @filtros;
+    my $resultsarray;
+    use Sphinx::Search;
+
+    my $sphinx = Sphinx::Search->new();
+    my $query = '';
+
+
+
+    if ($cgi->param('tipo_nivel3_name') ne "") {
+        #filtro por tipo de ejemplar
+        $query .= " cat_ref_tipo_nivel3@".$cgi->param('tipo_nivel3_name');
+    } 
+
+    if ($cgi->param('name_nivel_bibliografico') ne "") {
+        #filtro por el nivel bibliográfico
+        $query .= " ref_nivel_bibliografico@".$cgi->param('name_nivel_bibliografico');
+    } 
+
+    if ($cgi->param('name_ui') ne "") {
+        #filtro por homebranch
+        $query .= " pref_unidad_informacion@".$cgi->param('name_ui');
+    } 
+
+#     if ( ($cgi->param('biblio_ini') ne "") && ($cgi->param('biblio_fin') ne "") ){
+#         #filtro por rango de blbionumber
+# #         push (@where, " ( b.biblionumber >= ? AND b.biblionumber <= ? ) ");
+#         push (@params, $cgi->param('biblio_ini'));
+#         push (@params, $cgi->param('biblio_fin'));
+#     } 
+# 
+#     
+
+    
+#     $query      .= " ORDER BY b.biblionumber ";
+# 
+#     if ($cgi->param('limit') ne "") {
+#         #muesrto los primeros "limit" registros
+# 
+#         $query  .= " LIMIT 0,".$cgi->param('limit')." ;";
+#         #push (@params, int($cgi->param('limit')));
+#     }   
+# 
+
+    C4::AR::Debug::debug("Exportacion => query string => ".$query);
+#     C4::AR::Debug::debug("query string ".$query);
+    my $tipo = 'SPH_MATCH_EXTENDED';
+    my $tipo_match = _getMatchMode($tipo);
+
+    $sphinx->SetMatchMode($tipo_match);
+    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+    $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+#     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
+    # NOTA: sphinx necesita el string decode_utf8
+    my $results = $sphinx->Query($query);
+
+    my @id1_array;
+    my $matches                 = $results->{'matches'};
+    my $total_found             = $results->{'total_found'};
+    $params->{'total_found'}    = $total_found;
+#     C4::AR::Utilidades::printHASH($results);
+    C4::AR::Debug::debug("total_found: ".$total_found);
+
+    C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    foreach my $hash (@$matches){
+        my %hash_temp       = {};
+        $hash_temp{'id1'}   = $hash->{'doc'};
+        $hash_temp{'hits'}  = $hash->{'weight'};
+
+        push (@id1_array, \%hash_temp);
+    }
+
+
+
+    return (scalar(@id1_array), \@id1_array);
+}
+
 #***************************************Fin**Soporte MARC*********************************************************************
 
 

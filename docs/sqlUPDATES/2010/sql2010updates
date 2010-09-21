@@ -286,7 +286,7 @@ VALUES
   '',
   'texta',
   'sistema'
-)
+);
 
 
 INSERT INTO pref_preferencia_sistema
@@ -308,4 +308,27 @@ VALUES
   '',
   'texta',
   'sistema'
+);
+
+
+INSERT INTO pref_preferencia_sistema
+(
+  id,
+  variable,
+  value,
+  explanation,
+  options,
+  type,
+  categoria
 )
+VALUES
+(
+  NULL,
+  'origen_catalogacion',
+  'AgLpU',
+  'Origen de Catalogacion Campo 40 a en exportación Isis MARC',
+  '',
+  'text',
+  'sistema'
+);
+

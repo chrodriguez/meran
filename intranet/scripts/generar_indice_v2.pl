@@ -21,6 +21,8 @@ my $dbh = C4::Context->dbh;
 
 
 my $sth1;
+my $dato;
+my $subcampo;
 
 if($id1 eq '0'){
 
@@ -95,12 +97,23 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
         #recorro los subcampos
         foreach my $subfield ($field->subfields()) {
+
+# FIXME parche feo
+# MONO  tenemos q permitir agregar   "tabla@referencia" tambien para cuando queremos filtrar por Tipo de documento, o algun otro filtro
+# por ej si quiero filtra por tipo de documento libro => "cat_ref_tipo_nivel3@LIB"
+
+            if (($field->tag ne '910')&&($subfield->[0] ne 'a')){
+            
     
-            my $subcampo                    = $subfield->[0];
-            my $dato                        = $subfield->[1];
+            $subcampo                       = $subfield->[0];
+            $dato                           = $subfield->[1];
             $dato                           = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
             $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato);
-            
+
+            } else {
+                $dato                           = $subfield->[1];
+            }    
+
     
             if ($superstring eq "") {
                 $superstring = $dato;
