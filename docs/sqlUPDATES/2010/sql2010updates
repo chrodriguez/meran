@@ -332,3 +332,4 @@ VALUES
   'sistema'
 );
 
+ALTER TABLE `indice_busqueda` ADD `string_tabla_con_dato` TEXT NOT NULL AFTER `string` ;

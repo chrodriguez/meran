@@ -672,11 +672,11 @@ sub getDatoFromReferencia{
 
 
                 my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
-                my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+                my $obj_generico    = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
                                                                                 #campo_tabla,                   id_tabla
-                $valor_referencia = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
+                $valor_referencia   = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
 
-               C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
+                C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
                 C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
                 C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
 
@@ -742,7 +742,7 @@ sub _procesar_referencia {
 #     C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
 
     my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype);
-    if($estructura){
+    if($estructura) {
        if($estructura->getReferencia){
             #tiene referencia
             my $pref_tabla_referencia   = C4::Modelo::PrefTablaReferencia->new();
