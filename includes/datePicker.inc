@@ -2,9 +2,10 @@
 
 <script type="text/javascript" src="/includes/jquery/datetimepicker/ui.datepicker-min.js"></script>
 <script type="text/javascript" src="/includes/jquery/ui/custom.js"></script>
-<!-- <script type="text/javascript" src="/includes/jquery/dateMethods.js"></script> -->
+<script type="text/javascript" src="/includes/jquery/dateMethods.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.datePickerMultiMonth.js"></script>
 <!-- <script type="text/javascript" src="/includes/jquery/datePicker_locale_es.js"></script> -->
+<!-- Miguel agregue esta de abajo, es la de datepicker -->
 <script type="text/javascript" src="/includes/jquery/datetimepicker/jquery.ui.datepicker-es.js"></script>
 
 
