@@ -15,7 +15,7 @@ function buscarPorCodigoBarra(){objAH=new AjaxHelper(updateInfoBusquedas);objAH.
 function buscarSuggested(suggested){busquedaPorKeyword(suggested);$('#keyword').val(suggested);}
 function busquedaPorKeyword(suggested){objAH=new AjaxHelper(updateBusquedaPorKeyword);objAH.debug=true;objAH.url='/cgi-bin/koha/busquedas/busquedasDB.pl';if(suggested){objAH.keyword=suggested;objAH.from_suggested=1;}else{objAH.keyword=$('#keyword').val();}
 objAH.match_mode=$('#match_mode').val();objAH.tipoAccion='BUSQUEDA_COMBINADA';objAH.funcion='changePage';objAH.sendToServer();}
-function updateBusquedaPorKeyword(responseText){updateInfoBusquedas(responseText);var keyword=$('#keyword').val();var temp_keyword=replaceAccents(keyword);$('#keyword').val(temp_keyword);temp_keyword=replaceNonAccents(keyword);$('#keyword').val(temp_keyword);$('#keyword').val(keyword);}
+function updateBusquedaPorKeyword(responseText){updateInfoBusquedas(responseText);var keyword=$('#keyword').val();$('#keyword').val(keyword);}
 function buscarEstante(){objAH=new AjaxHelper(updateInfoBusquedas);objAH.debug=true;objAH.url='/cgi-bin/koha/busquedas/estante.pl';objAH.viewShelfName=$('#estante').val();objAH.orden='title';objAH.funcion='changePage';objAH.sendToServer();}
 function mostrarEstantes(){objAH=new AjaxHelper(updateMostrarEstantes);objAH.debug=true;objAH.url='../estanteVirtual.pl';objAH.funcion='changePage';objAH.sendToServer();}
 function updateMostrarEstantes(responseText){$("#filtrosBusqueda").slideUp('slow');$('#resultBusqueda').html(responseText);$("#resultBusqueda").slideDown("slow");zebra('tablaresultado');}
