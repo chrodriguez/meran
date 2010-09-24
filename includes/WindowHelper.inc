@@ -13,7 +13,8 @@
 <script type="text/javascript" src="/includes/jquery/ui.mouse-min.js"></script>-->
 
 <!-- <script type="text/javascript" src="/includes/jquery/jquery.dimensions-min.js"></script> -->
-<script type="text/javascript" src="/includes/jquery/ui/custom.js"></script>
+<!-- <script type="text/javascript" src="/includes/jquery/ui/custom-min.js"></script> -->
+<script type="text/javascript" src="/includes/jquery/ui/ui-min.js"></script>
 <!--<script type="text/javascript" src="/includes/jquery/ui/core-min.js"></script>
 <script type="text/javascript" src="/includes/jquery/ui/draggable-min.js"></script>
 <script type="text/javascript" src="/includes/jquery/ui/mouse-min.js"></script>-->
