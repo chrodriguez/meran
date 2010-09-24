@@ -20,6 +20,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 
 $t_params->{'partial_template'}= "opac-favoritos.inc";
+$t_params->{'content_title'}= C4::AR::Filtros::i18n("Mis favoritos");
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 

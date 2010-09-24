@@ -39,8 +39,7 @@ elsif ($action eq "delete_favorite"){
     $t_params->{'nro_socio'}= $session->param('nro_socio');
     $t_params->{'SEARCH_RESULTS'}= $resultsarray;
     $t_params->{'content_title'}= C4::AR::Filtros::i18n("Sus favoritos: ".$cantidad);
-    # $t_params->{'partial_template'}= "opac-busquedaResult.inc";
-
+    
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($action eq "get_favoritos"){
@@ -56,10 +55,8 @@ elsif ($action eq "get_favoritos"){
     $t_params->{'nro_socio'}= $session->param('nro_socio');
     $t_params->{'SEARCH_RESULTS'}= $resultsarray;
     $t_params->{'content_title'}= C4::AR::Filtros::i18n("Sus favoritos: ".$cantidad);
-    # $t_params->{'partial_template'}= "opac-busquedaResult.inc";
 
     C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
-
 
 1;

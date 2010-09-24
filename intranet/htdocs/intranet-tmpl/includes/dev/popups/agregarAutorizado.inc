@@ -43,8 +43,8 @@
     function updateConfirmarAgregarAutorizado(responseText){
         var Messages=JSONstring.toObject(responseText);
         setMessages(Messages);
-        vAgregarAutorizado.close();
         detalleUsuario();
+        $.modal.close();
     }
 
     /*

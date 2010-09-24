@@ -43,8 +43,8 @@
     function updateConfirmarAgregarAutorizado(responseText){
         var Messages=JSONstring.toObject(responseText);
         setMessages(Messages);
-        vAgregarAutorizado.close();
         detalleUsuario();
+        $.modal.close();    
     }
 
     /*
@@ -78,13 +78,13 @@
             <li class="sub_item">
                 [% PERL %]
                         print C4::AR::Filtros::to_Button(      text    => "[% 'Aceptar' | i18n %]",
-                                                                boton   => "boton_buscar",
-                                                                onClick => "confirmarAgregarAutorizado();",
-                                                                title   => "[% 'Agregar Autorizado' | i18n %]",
+                                                               boton   => "boton_buscar",
+                                                               onClick => "confirmarAgregarAutorizado();",
+                                                               title   => "[% 'Agregar Autorizado' | i18n %]",
                                 ) ;
                 [% END %]
             </li>
-      </ul>
+        </ul>
     </fieldset>
 </div> <!--end div id="contentWindow"-->
 

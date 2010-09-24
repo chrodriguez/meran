@@ -299,6 +299,7 @@ sub get_template_and_user {
   if ( $session->param('userid') ) {
         $params->{'loggedinuser'}       = $session->param('userid');
         $params->{'nro_socio'}          = $session->param('userid');
+        $params->{'socio'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
 
         if (!$usuario_logueado) {
             $usuario_logueado = C4::Modelo::UsrSocio->new();

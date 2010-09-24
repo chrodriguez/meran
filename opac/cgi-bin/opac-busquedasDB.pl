@@ -81,7 +81,7 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
     
     if ($obj->{'tipoBusqueda'} eq 'all'){
-#         ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaCombinada_newTemp(Encode::decode_utf8($input->param('string')),$session,$obj);
+#         ($cantidad, $resultsarray, $suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp(Encode::decode_utf8($input->param('string')),$session,$obj);
         ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($input->param('string'),$session,$obj);
     }else{
         ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);

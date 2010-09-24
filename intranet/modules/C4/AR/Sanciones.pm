@@ -140,21 +140,21 @@ sub getSociosSancionados {
   my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
   
   my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion (   
-																	query => [ 
-																			fecha_comienzo 	=> { le => $hoy },
-																			fecha_final    	=> { ge => $hoy},
-																			tipo_prestamo 	=> { eq => $tipo_prestamo },
-																			or   => [
-																				tipo_prestamo => { eq => 0 },
-                                                                            ],
-																		],
-																	select => ['nro_socio'],
-																	with_objects => [ 'ref_tipo_prestamo_sancion' ]
-									);
+                                                                query => [ 
+                                                                    fecha_comienzo 	=> { le => $hoy },
+                                                                    fecha_final    	=> { ge => $hoy},
+                                                                    tipo_prestamo 	=> { eq => $tipo_prestamo },
+                                                                    or   => [
+                                                                      tipo_prestamo => { eq => 0 },
+                                                                                                          ],
+                                                                  ],
+                                                                select => ['nro_socio'],
+                                                                with_objects => [ 'ref_tipo_prestamo_sancion' ]
+                  );
 
   my @socios_sancionados;
   foreach my $sancion (@$sanciones_array_ref){
-  	push (@socios_sancionados,$sancion->getNro_socio);
+    push (@socios_sancionados,$sancion->getNro_socio);
   }
 
   return(\@socios_sancionados);
@@ -203,8 +203,8 @@ C4::AR::Debug::debug("Corresponde una sancion vamos a calcular de cuantos dias!"
  C4::AR::Debug::debug("HAY REGLAS? ");
 
  if (!$tipo_sancion_array_ref->[0]){
-	C4::AR::Debug::debug("NO HAY REGLAS!!!! DIAS DE SANCION 0!!! ");	
-	return 0;
+    C4::AR::Debug::debug("NO HAY REGLAS!!!! DIAS DE SANCION 0!!! ");	
+    return 0;
  }
 
   my $reglas_tipo_array_ref=$tipo_sancion_array_ref->[0]->ref_regla_tipo_sancion;
