@@ -1830,6 +1830,7 @@ function modificarN2(id2, tipo_ejemplar){
 //     objAH.cache = true;
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
     objAH.id            = ID_N2;
+    objAH.id_tipo_doc   = ID_TIPO_EJEMPLAR;
     objAH.nivel         = 2;
     objAH.sendToServer();
 }

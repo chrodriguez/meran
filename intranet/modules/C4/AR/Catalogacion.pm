@@ -877,17 +877,17 @@ sub getEstructuraYDatosDeNivel{
     if( $params->{'nivel'} eq '1'){
         $nivel = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
         $tipo_ejemplar = 'ALL';
-        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel1FromId1");
+        C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel1FromId1 => ID1 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '2'){
         $nivel = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
         $tipo_ejemplar = $nivel->getTipoDocumento;
-        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel2FromId2");
+        C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel2FromId2 => ID2 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '3'){
         $nivel = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
         $tipo_ejemplar = $nivel->nivel2->getTipoDocumento;
-        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel3FromId3");
+        C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel3FromId3 => ID3 ".$params->{'id3'});
     }
 
     #paso todo a MARC
@@ -942,10 +942,10 @@ sub getEstructuraYDatosDeNivel{
     
                         } else {
 
-                            $liblibrarian           = "NO EXISTE EL CAMPO (".$campo.")";
-                            $indicador_primario     = "NO EXISTE EL CAMPO (".$campo.")";
-                            $indicador_secundario   = "NO EXISTE EL CAMPO (".$campo.")";
-                            $descripcion_campo      = "NO EXISTE EL CAMPO (".$campo.")";  
+                            $liblibrarian           = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
+                            $indicador_primario     = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
+                            $indicador_secundario   = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
+                            $descripcion_campo      = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";  
 
                         }
             
@@ -1584,11 +1584,11 @@ sub cantNivel2 {
 sub getDatosFromNivel{
     my ($params) = @_;
 
-    C4::AR::Debug::debug("getDatosFromNivel => ======================================================================");
+    C4::AR::Debug::debug("Catalogacion => getDatosFromNivel => ======================================================================");
     my $nivel       = $params->{'nivel'};
     my $itemType    = $params->{'id_tipo_doc'};
 
-    C4::AR::Debug::debug("getDatosFromNivel => tipo de documento: ".$itemType);
+    C4::AR::Debug::debug("Catalogacion => getDatosFromNivel => tipo de documento: ".$itemType);
 
     #obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
     my @resultEstYDatos = getEstructuraYDatosDeNivel($params);

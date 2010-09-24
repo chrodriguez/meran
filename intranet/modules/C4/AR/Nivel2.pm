@@ -191,7 +191,8 @@ sub getNivel2FromId2{
                                                                                     id => { eq => $id2 },
                                                                             ],
                                                                         require_objects => ['nivel1'],
-                                                                        select          => ['cat_registro_marc_n1.*']    
+#                                                                         select          => ['cat_registro_marc_n1.*']
+                                                                        select          => ['*']    
                                                                 );
 
     if (scalar(@$nivel2_array_ref) > 0){
