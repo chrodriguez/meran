@@ -252,6 +252,43 @@ sub getCantPrestados{
 }
 
 
+=item
+  sub getNivel2FromTipoDocumento
+
+  devuelve un arreglo de niveles 2 filtrados por tipo de documento
+=cut
+sub getNivel2FromTipoDocumento {
+    my ($tipo_doc) = @_;
+    
+
+# TODO Miguel ver si esto es eficiente, de todos modos no se si se puede hacer de otra manera!!!!!!!!!!
+# 1) parece q no queda otra, hay q "abrir" el marc_record y sacar el barcode para todos los ejemplares e ir comparando cada uno GARRONNNN!!!!
+# 2) se podria usar el indice??????????????
+
+    my @filtros;
+    my $cat_registro_marc_n2_array_ref;
+    my @cat_registro_marc_n2_array_ref_result;
+
+    
+    my $cat_registro_marc_n2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2( query => \@filtros ); 
+
+    my $cant = scalar(@$cat_registro_marc_n2_array_ref);
+
+    for(my $i=0; $i < $cant; $i++){
+
+        if($cat_registro_marc_n2_array_ref->[$i]->getTipoDocumentoObject() eq $tipo_doc){
+            push(@cat_registro_marc_n2_array_ref_result, $cat_registro_marc_n2_array_ref->[$i]);
+            last();
+        }
+    }
+
+    if(scalar(@cat_registro_marc_n2_array_ref_result) > 0){
+        return (\@cat_registro_marc_n2_array_ref_result);
+    }else{
+        return (0);
+    }
+}
+
 =head2
     sub getISBNById1
     Retorna (SI EXISTE) el ISBN segun el Id1 pasado por parametro

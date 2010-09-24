@@ -223,6 +223,20 @@ sub obtenerUnidadesDeInformacion {
 }
 
 =item
+Devuelve un arreglo de objetos Nivel Bibliografico
+=cut
+sub obtenerNivelesBibliograficos {
+    my $niveles_array_ref = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico;
+    my @results;
+
+    foreach my $objeto_nivel (@$niveles_array_ref) {
+        push (@results, $objeto_nivel);
+    }
+
+    return(\@results);
+}
+
+=item
 Devuelve un arreglo de objetos Autor
 =cut
 sub obtenerAutores {

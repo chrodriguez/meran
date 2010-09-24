@@ -2008,7 +2008,7 @@ sub generarComboUI{
         $options_hash{'onBlur'}= $params->{'onBlur'};
     }
 
-    $options_hash{'name'}       = $params->{'name'}||'id_ui';
+    $options_hash{'name'}       = $params->{'name'}||'name_ui';
     $options_hash{'id'}         = $params->{'id'}||'id_ui';
     $options_hash{'size'}       = $params->{'size'}||1;
     $options_hash{'multiple'}   = $params->{'multiple'}||0;
@@ -2029,6 +2029,57 @@ sub generarComboUI{
     return $CGIunidadDeInformacion; 
 }
 
+sub generarComboNivelBibliografico{
+
+    my ($params) = @_;
+    my @select_niveles;
+    my %select_niveles;
+
+    my $niveles_bibliograficos = C4::AR::Referencias::obtenerNivelesBibliograficos();
+
+    foreach my $nivel (@$niveles_bibliograficos) {
+# TODO ver si va el id o el code
+        push(@select_niveles, $nivel->id);
+        $select_niveles{$nivel->id}= $nivel->description;
+    }
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}= $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}= $params->{'onFocus'};
+    }
+
+    if ( $params->{'class'} ){
+         $options_hash{'class'}= $params->{'class'};
+    }
+
+    if ( $params->{'onBlur'} ){
+        $options_hash{'onBlur'}= $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}       = $params->{'name'}||'name_nivel_bibliografico';
+    $options_hash{'id'}         = $params->{'id'}||'id_nivel_bibliografico';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultNivelBibliografico");
+
+    if ($params->{'optionALL'}){
+        push (@select_niveles, 'ALL');
+        $select_niveles{'ALL'}    ='TODOS';
+    }else{
+        push (@select_niveles, '');
+        $select_niveles{''}   ='SIN SELECCIONAR';
+    }
+    $options_hash{'values'}     = \@select_niveles;
+    $options_hash{'labels'}     = \%select_niveles;
+
+    my $CGI_Nivel_Bibliografico = CGI::scrolling_list(\%options_hash);
+
+    return $CGI_Nivel_Bibliografico; 
+}
 
 sub generarComboDeSocios{
 

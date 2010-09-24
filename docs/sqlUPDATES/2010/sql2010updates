@@ -286,7 +286,7 @@ VALUES
   '',
   'texta',
   'sistema'
-)
+);
 
 
 INSERT INTO pref_preferencia_sistema
@@ -308,4 +308,28 @@ VALUES
   '',
   'texta',
   'sistema'
+);
+
+
+INSERT INTO pref_preferencia_sistema
+(
+  id,
+  variable,
+  value,
+  explanation,
+  options,
+  type,
+  categoria
 )
+VALUES
+(
+  NULL,
+  'origen_catalogacion',
+  'AgLpU',
+  'Origen de Catalogacion Campo 40 a en exportación Isis MARC',
+  '',
+  'text',
+  'sistema'
+);
+
+ALTER TABLE `indice_busqueda` ADD `string_tabla_con_dato` TEXT NOT NULL AFTER `string` ;

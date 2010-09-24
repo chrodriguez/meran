@@ -22,7 +22,7 @@
         </div>
         <hr class="clear-contentunit" />
         <!-- Content unit - Two columns -->
-
+        <br />
         <h1 class="pagetitle"> [% 'Ultimos ejemplares adquiridos por la biblioteca' | i18n %]</h1>
         <hr class="clear-contentunit" />
         [% INCLUDE 'opac-busquedaResult.inc' %]

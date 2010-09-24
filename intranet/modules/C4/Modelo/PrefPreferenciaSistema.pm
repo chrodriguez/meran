@@ -131,6 +131,7 @@ sub agregar{
     $self->setExplanation($data_hash->{'explanation'});
     $self->setOptions($data_hash->{'options'});
     $self->setType($data_hash->{'type'});
+    $self->setCategoria($data_hash->{'categoria'}||'sistema');
     $self->save();
 }
 

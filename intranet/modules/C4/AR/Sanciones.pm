@@ -102,12 +102,12 @@ sub estaSancionado {
   my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
 
   my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion (
-																	query => [ 
-																			nro_socio 		=> { eq => $nro_socio },
-																			fecha_comienzo 	=> { le => $hoy },
-																			fecha_final    	=> { ge => $hoy},
-																		],
-									);
+                                                                                query => [ 
+                                                                                    nro_socio 		=> { eq => $nro_socio },
+                                                                                    fecha_comienzo 	=> { le => $hoy },
+                                                                                    fecha_final    	=> { ge => $hoy},
+                                                                                    ],
+                                                                                );
   if (scalar($sanciones_array_ref->[0])){
       return($sanciones_array_ref->[0] || 0);
   }else{

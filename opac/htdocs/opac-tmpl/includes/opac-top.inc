@@ -76,7 +76,7 @@
   
   <div class="page-container">
     <!-- For alternative headers START PASTE here -->
-      [% INCLUDE 'opac-top-header.inc' %]
+        [% INCLUDE 'opac-top-header.inc' %]
         [% INCLUDE 'opac-main_content.inc' %]
         [% INCLUDE 'opac-main_sub_content.inc' %]
   </div>
