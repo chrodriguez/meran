@@ -20,6 +20,7 @@
 /includes/jquery/ui/widget
 /includes/jquery/ui/dialog
 /includes/jquery/ui/custom
+/includes/jquery/ui/resizable
 /includes/util
 /includes/md5
 /includes/sha1

@@ -64,6 +64,7 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
 
 
 
+
 <!-- <script src="/includes/jquery/jquery.tablednd.js"></script> -->
 
 
