@@ -57,6 +57,12 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
 <script type="text/javascript" src="/includes/WindowHelper.js"></script>
 <script type="text/javascript" src="/includes/AutocompleteHelper.js"></script>-->
 
+<!--   <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/> -->
+<!--   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script> -->
+<!--  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>-->
+
+
+
 
 
 <!-- <script src="/includes/jquery/jquery.tablednd.js"></script> -->

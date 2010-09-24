@@ -248,15 +248,16 @@ sub _procesar_referencias{
                    $dato=_procesar_referencia($campo,$subcampo,$dato);
 #                    C4::AR::Debug::debug("ACA ESTAMOS".$campo.$subcampo."NUEVO DATO".$dato);
                 }
+
                 if ( ($dato ne '')&&(C4::AR::Utilidades::existeInArray($subcampo, @{$campos_nivel1{$campo}} ) )) { 
                     push(@subcampos1_array, ($subcampo => $dato));
                 } elsif ( ($dato ne '')&&(C4::AR::Utilidades::existeInArray($subcampo, @{$campos_nivel2{$campo}} ) )) { 
-                        push(@subcampos2_array, ($subcampo => $dato));
-                        } elsif ( ($dato ne '')&&(C4::AR::Utilidades::existeInArray($subcampo, @{$campos_nivel3{$campo}} ) )) { 
-                            push(@subcampos3_array, ($subcampo => $dato));
-                            } elsif ($dato ne '') { 
-                                push(@subcampos_sin_definir_array, ($subcampo => $dato));
-                            }
+                    push(@subcampos2_array, ($subcampo => $dato));
+                } elsif ( ($dato ne '')&&(C4::AR::Utilidades::existeInArray($subcampo, @{$campos_nivel3{$campo}} ) )) { 
+                    push(@subcampos3_array, ($subcampo => $dato));
+                } elsif ($dato ne '') { 
+                    push(@subcampos_sin_definir_array, ($subcampo => $dato));
+                }
             }
 
             if (scalar(@subcampos1_array)>0){
@@ -671,11 +672,11 @@ sub getDatoFromReferencia{
 
 
                 my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
-                my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+                my $obj_generico    = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
                                                                                 #campo_tabla,                   id_tabla
-                $valor_referencia = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
+                $valor_referencia   = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
 
-               C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
+                C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
                 C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
                 C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
 
@@ -735,20 +736,20 @@ sub _procesar_referencia
 
 Esta funcion recibe un campo, un subcampo y un dato y busca en la tabla de referencia correspondinte en valor que se corresponde con el dato, en el caso de no encontrarlo lo agrega en la tabla de referencia correspondiente y devuelve el id del nuevo elemento
 =cut
-sub _procesar_referencia{
+sub _procesar_referencia {
     my ($campo, $subcampo, $dato, $itemtype) = @_;
 
 #     C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
 
     my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype);
-    if($estructura){
+    if($estructura) {
        if($estructura->getReferencia){
             #tiene referencia
-            my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
-            my $obj_generico = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+            my $pref_tabla_referencia   = C4::Modelo::PrefTablaReferencia->new();
+            my $obj_generico            = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
 
                 #se genera el nuevo dato => tabla@dato para poder obtener el dato de la referencia luego
-                my $string_result = $obj_generico->getTableName.'@'.$dato;
+                my $string_result       = $obj_generico->getTableName.'@'.$dato;
 
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
@@ -876,17 +877,17 @@ sub getEstructuraYDatosDeNivel{
     if( $params->{'nivel'} eq '1'){
         $nivel = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
         $tipo_ejemplar = 'ALL';
-        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel1FromId1");
+        C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel1FromId1 => ID1 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '2'){
         $nivel = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
         $tipo_ejemplar = $nivel->getTipoDocumento;
-        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel2FromId2");
+        C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel2FromId2 => ID2 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '3'){
         $nivel = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
         $tipo_ejemplar = $nivel->nivel2->getTipoDocumento;
-        C4::AR::Debug::debug("getEstructuraYDatosDeNivel=>  getNivel3FromId3");
+        C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel3FromId3 => ID3 ".$params->{'id3'});
     }
 
     #paso todo a MARC
@@ -941,10 +942,10 @@ sub getEstructuraYDatosDeNivel{
     
                         } else {
 
-                            $liblibrarian           = "NO EXISTE EL CAMPO (".$campo.")";
-                            $indicador_primario     = "NO EXISTE EL CAMPO (".$campo.")";
-                            $indicador_secundario   = "NO EXISTE EL CAMPO (".$campo.")";
-                            $descripcion_campo      = "NO EXISTE EL CAMPO (".$campo.")";  
+                            $liblibrarian           = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
+                            $indicador_primario     = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
+                            $indicador_secundario   = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
+                            $descripcion_campo      = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";  
 
                         }
             
@@ -1583,11 +1584,11 @@ sub cantNivel2 {
 sub getDatosFromNivel{
     my ($params) = @_;
 
-    C4::AR::Debug::debug("getDatosFromNivel => ======================================================================");
+    C4::AR::Debug::debug("Catalogacion => getDatosFromNivel => ======================================================================");
     my $nivel       = $params->{'nivel'};
     my $itemType    = $params->{'id_tipo_doc'};
 
-    C4::AR::Debug::debug("getDatosFromNivel => tipo de documento: ".$itemType);
+    C4::AR::Debug::debug("Catalogacion => getDatosFromNivel => tipo de documento: ".$itemType);
 
     #obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
     my @resultEstYDatos = getEstructuraYDatosDeNivel($params);

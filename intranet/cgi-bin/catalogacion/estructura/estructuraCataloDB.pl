@@ -366,6 +366,9 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
         $obj->{'id_tipo_doc'} = 'ALL';
     }elsif($obj->{'nivel'} eq '2'){
         my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($obj->{'id'});
+C4::AR::Debug::debug("IDNIVEL 2 => ".$nivel2->getId2());
+C4::AR::Debug::debug("IDNIVEL 1 => ".$nivel2->getId1());
+C4::AR::Debug::debug("NIVEL 2 => ".$nivel2);
         if($nivel2){
           $obj->{'id_tipo_doc'} = $nivel2->getTipoDocumentoObject()->getId_tipo_doc();
         }

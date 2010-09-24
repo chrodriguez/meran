@@ -1674,6 +1674,80 @@ sub _existeEnArregloDeCampoMARC{
 	return 0;
 }
 
+
+=item sub getRegistrosFromRange
+
+Retorna todos los registros que se encuentran dentro del rango [$biblio_ini, $biblio_fin]
+=cut
+sub getRegistrosFromRange {
+    my ($params, $cgi ) = @_;
+
+    my $resultsarray;
+    use Sphinx::Search;
+    my $sphinx  = Sphinx::Search->new();
+    my $query   = '';
+
+    if ($cgi->param('tipo_nivel3_name') ne "") {
+        #filtro por tipo de ejemplar
+        $query .= " cat_ref_tipo_nivel3@".$cgi->param('tipo_nivel3_name');
+    } 
+
+    if ($cgi->param('name_nivel_bibliografico') ne "") {
+        #filtro por el nivel bibliográfico
+        $query .= " ref_nivel_bibliografico@".$cgi->param('name_nivel_bibliografico');
+    } 
+
+    if ($cgi->param('name_ui') ne "") {
+        #filtro por homebranch
+        $query .= " pref_unidad_informacion@".$cgi->param('name_ui');
+    } 
+
+    my $tipo = 'SPH_MATCH_EXTENDED';
+    my $tipo_match = _getMatchMode($tipo);
+
+    $sphinx->SetMatchMode($tipo_match);
+    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+    $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+#     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
+    # NOTA: sphinx necesita el string decode_utf8
+    C4::AR::Debug::debug("Busquedas.pm => query: ".$query);
+    my $results = $sphinx->Query($query);
+
+    my @id1_array;
+    my @id1_array_aux;
+    my $matches                 = $results->{'matches'};
+    my $total_found             = $results->{'total_found'};
+    $params->{'total_found'}    = $total_found;
+
+    #C4::AR::Debug::debug("Busquedas.pm => total_found: ".$total_found);
+    #C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    foreach my $hash (@$matches) {
+        push (@id1_array, $hash->{'doc'});
+    }
+
+    if ($cgi->param('limit') ne "") {
+        #muesrto los primeros "limit" registros
+        @id1_array = @id1_array[0..$cgi->param('limit') - 1];
+    }   
+
+    if ( ($cgi->param('biblio_ini') ne "") && ($cgi->param('biblio_fin') ne "") ){
+        #filtro por rango de id1
+        foreach my $id1 (@id1_array) {
+            if( ($id1 >= $cgi->param('biblio_ini')) && ( $id1 <= $cgi->param('biblio_fin')) ){
+
+                push (@id1_array_aux, $id1);
+            }
+        }
+
+        @id1_array = @id1_array_aux;
+    }
+    
+
+    C4::AR::Debug::debug("Busquedas.pm => TOTAL FINAL =============== : ".scalar(@id1_array));
+
+    return (scalar(@id1_array), \@id1_array);
+}
+
 #***************************************Fin**Soporte MARC*********************************************************************
 
 
