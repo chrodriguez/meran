@@ -1125,7 +1125,8 @@ function procesarSubCampo(objeto, marc_group){
     if(marc_conf_obj.getTieneEstructura() == '0'){ 
         //no existe estructura de catalogacion configurada para este campo, subcampo
 // TODO armar una funcion q genere esto
-        vista_intra = vista_intra + "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled> (NO TIENE ESTRUCTURA) </div>";
+        vista_intra = vista_intra + "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled></div>";
+        vista_intra = vista_intra + crearIconWarning(marc_conf_obj);
         tiene_estructura = 0;
     }
 
@@ -1337,6 +1338,11 @@ function crearBotonAgregarSubcampoRepetible(obj){
     }else{  
         return "";
     }
+}
+
+function crearIconWarning(obj){
+
+    return "<div class='icon_warning horizontal' title='NO TIENE ESTRUCTURA'/>";
 }
 
 function crearBotonAgregarCampoRepetible(obj, id_padre){
