@@ -24,6 +24,7 @@ my $sth1;
 my $dato;
 my $dato_con_tabla;
 my $subcampo;
+my $string_tabla_con_dato   = "";
 
 my $MARC_result_array;
 
@@ -49,21 +50,34 @@ if($id1 eq '0'){
 }
 
 
-my $nivel1_array_ref = C4::AR::Nivel1::getNivel1FromId1($id1);
-# while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
+while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
-    $MARC_result_array = $nivel1_array_ref->toMARC();
-    foreach my $m (@$MARC_result_array){
-        C4::AR::Debug::debug("generar_indice_v2.pl => campo => ".$m->{'campo'});
-        foreach my $s (@{$m->{'subcampos_array'}}){
-            C4::AR::Debug::debug("generar_indice_v2.pl => liblibrarian => ".$s->{'subcampo'});        
-            C4::AR::Debug::debug("generar_indice_v2.pl => liblibrarian => ".$s->{'liblibrarian'});        
+
+    my %params;
+    $params{'nivel'}        = "1";
+    $params{'id_tipo_doc'}  = "ALL";
+    $params{'id'}           = $registro_marc_n1->{'id'};
+
+    my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
+
+    C4::AR::Debug::debug("generar_indice_v2 => AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa ");
+
+    foreach my $c (@resultEstYDatos){
+        C4::AR::Debug::debug("generar_indice_v2 => campo ".$c->{'campo'});
+
+        foreach my $s (@{$c->{'subcampos_array'}}){ 
+            C4::AR::Debug::debug("generar_indice_v2 => subcampo ".$s->{'subcampo'});
+            C4::AR::Debug::debug("generar_indice_v2 => dato ".$s->{'dato'});
+            $string_con_dato = $string_con_dato." ".$s->{'dato'};   
+            if($s->{'referenciaTabla'} eq ""){
+                $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'dato'};
+            } else {
+                $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'referenciaTabla'}."@".$s->{'dato'};
+            }
         }
     }
 
-while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
-#     C4::AR::Debug::debug('generar_indice_v2 => ID1 '.$registro_marc_n1->{'id'});
     my $marc_record = MARC::Record->new_from_usmarc($registro_marc_n1->{'marc_record'});
 
     my $query2=" SELECT * FROM cat_registro_marc_n2 where id1 =?;";
@@ -71,12 +85,36 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
     $sth2->execute($registro_marc_n1->{'id'});
 
 
+
     #se agregan todos los ejemplares (nivel3) al nivel2
     while (my $registro_marc_n2 = $sth2->fetchrow_hashref ){
-#         C4::AR::Debug::debug('generar_indice_v2 => ID2 '.$registro_marc_n2->{'id'});
+
+
+        $params{'nivel'}        = "2";
+    # FIXME falta el itemtype y MODULARIZAR
+        $params{'id_tipo_doc'}  = "ALL";
+        $params{'id'}           = $registro_marc_n2->{'id'};
+
+        my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
+
+        foreach my $c (@resultEstYDatos){
+            C4::AR::Debug::debug("generar_indice_v2 => campo ".$c->{'campo'});
+
+            foreach my $s (@{$c->{'subcampos_array'}}){ 
+                C4::AR::Debug::debug("generar_indice_v2 => subcampo ".$s->{'subcampo'});
+                C4::AR::Debug::debug("generar_indice_v2 => dato ".$s->{'dato'});
+                $string_con_dato = $string_con_dato." ".$s->{'dato'};   
+                if($s->{'referenciaTabla'} eq ""){
+                    $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'dato'};
+                } else {
+                    $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'referenciaTabla'}."@".$s->{'dato'};
+                }
+            }
+        }
+
+
         my $marc_record2 = MARC::Record->new_from_usmarc($registro_marc_n2->{'marc_record'});
         $marc_record->add_fields($marc_record2->fields);
-
 
         my $query3=" SELECT * FROM cat_registro_marc_n3 where id1=? and id2=?;";
         my $sth3=$dbh->prepare($query3);
@@ -86,6 +124,33 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #             C4::AR::Debug::debug('generar_indice_v2 => ID3 '.$registro_marc_n3->{'id'});
             my $marc_record3 = MARC::Record->new_from_usmarc($registro_marc_n3->{'marc_record'});
             $marc_record->add_fields($marc_record3->fields);
+
+
+            $params{'nivel'}        = "3";
+# FIXME falta el itemtype y MODULARIZAR
+            $params{'id_tipo_doc'}  = "ALL";
+            $params{'id3'}           = $registro_marc_n3->{'id'};
+
+C4::AR::Debug::debug("generar_indice_v2 => NIVEL 3 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa ".$registro_marc_n3->{'id3'});
+            my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
+
+            C4::AR::Debug::debug("generar_indice_v2 => NIVEL 3 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa ");
+
+            foreach my $c (@resultEstYDatos){
+                C4::AR::Debug::debug("generar_indice_v2 => campo ".$c->{'campo'});
+
+                foreach my $s (@{$c->{'subcampos_array'}}){ 
+                    C4::AR::Debug::debug("generar_indice_v2 => subcampo ".$s->{'subcampo'});
+                    C4::AR::Debug::debug("generar_indice_v2 => dato ".$s->{'dato'});
+                    $string_con_dato = $string_con_dato." ".$s->{'dato'};   
+                    if($s->{'referenciaTabla'} eq ""){
+                        $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'dato'};
+                    } else {
+                        $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'referenciaTabla'}."@".$s->{'dato'};
+                    }
+                }
+            }
+
         }
     }
 #Ahora en $marc_record tenemos todo el registro completo
@@ -93,7 +158,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
     my $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("100","a"));
 #      C4::AR::Debug::debug("autor ANTES  ".$autor);
     $autor = C4::AR::Catalogacion::getDatoFromReferencia("100","a",$autor,"ALL");
-    C4::AR::Debug::debug("autor DESPUES  ".$autor);
+#     C4::AR::Debug::debug("autor DESPUES  ".$autor);
     if(! $autor) { 
        $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("110","a"));
        $autor = C4::AR::Catalogacion::getDatoFromReferencia("110","a",$autor,"ALL");
@@ -111,7 +176,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
     #Armo el superstring
     my $superstring             = "";
-    my $string_tabla_con_dato   = "";
+    
 
     #recorro los campos
     foreach my $field ($marc_record->fields){
@@ -125,9 +190,9 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 # por ej si quiero filtra por tipo de documento libro => "cat_ref_tipo_nivel3@LIB"
 
 
-C4::AR::Debug::debug("dato antes de buscar ref => ".$subfield->[1]);
-C4::AR::Debug::debug("campo => ".$field->tag);
-C4::AR::Debug::debug("subcampo => ".$subfield->[0]);
+# C4::AR::Debug::debug("dato antes de buscar ref => ".$subfield->[1]);
+# C4::AR::Debug::debug("campo => ".$field->tag);
+# C4::AR::Debug::debug("subcampo => ".$subfield->[0]);
 
 
             if (($field->tag ne '910')&&($subfield->[0] ne 'a')) {
@@ -143,14 +208,14 @@ C4::AR::Debug::debug("subcampo => ".$subfield->[0]);
                 $dato                           = $subfield->[1];
             }    
 
-C4::AR::Debug::debug("dato despues de buscar ref => ".$dato);
+# C4::AR::Debug::debug("dato despues de buscar ref => ".$dato);
     
             if ($superstring eq "") {
                 $superstring            = $dato;
-                $string_tabla_con_dato  = $dato;
+#                 $string_tabla_con_dato  = $dato;
             } else {
                 $superstring .= " ".$dato;
-                $string_tabla_con_dato .= " ".$dato;
+#                 $string_tabla_con_dato .= " ".$dato;
             }
         }
     }
@@ -158,9 +223,10 @@ C4::AR::Debug::debug("dato despues de buscar ref => ".$dato);
 #     C4::AR::Debug::debug("generar_indice_v2 => superstring!!!!!!!!!!!!!!!!!!! => ".$superstring);
 
     if($id1 eq '0') {
-        my $query4  = "INSERT INTO indice_busqueda (id, titulo, autor, string, string_tabla_con_dato) VALUES (?,?,?,?,?) ";
+        my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string, string_tabla_con_dato, string_con_dato) ";
+        $query4 .=      " VALUES (?,?,?,?,?,?) ";
         my $sth4    = $dbh->prepare($query4);
-        $sth4->execute($registro_marc_n1->{'id'}, $titulo, $autor, $superstring, $string_tabla_con_dato);
+        $sth4->execute($registro_marc_n1->{'id'}, $titulo, $autor, $superstring, $string_tabla_con_dato, $string_con_dato);
     } else {    
 
         my $query4  = "SELECT COUNT(*) as cant FROM indice_busqueda WHERE id = ?";
@@ -169,15 +235,17 @@ C4::AR::Debug::debug("dato despues de buscar ref => ".$dato);
         my $data = $sth4->fetchrow_hashref;
 
         if($data->{'cant'}) {
-            my $query4  = "UPDATE indice_busqueda SET titulo = ?, autor = ?, string = ? WHERE id = ? ";
+            my $query4  =   " UPDATE indice_busqueda SET titulo = ?, autor = ?, string = ?, string_tabla_con_dato = ?, string_con_dato = ? ";
+            $query4 .=      " WHERE id = ? ";
             my $sth4    = $dbh->prepare($query4);
-            $sth4->execute($titulo, $autor, $superstring, $registro_marc_n1->{'id'});
+            $sth4->execute($titulo, $autor, $superstring, $string_tabla_con_dato, $string_con_dato, $registro_marc_n1->{'id'});
 
         } else {
 
-            my $query4  = "INSERT INTO indice_busqueda (id, titulo, autor, string, string_tabla_con_dato) VALUES (?,?,?,?,?) ";
+            my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string, string_tabla_con_dato, string_con_dato) ";
+            $query4 .=      " VALUES (?,?,?,?,?,?) ";
             my $sth4    = $dbh->prepare($query4);
-            $sth4->execute($registro_marc_n1->{'id'}, $titulo, $autor, $superstring, $string_tabla_con_dato);
+            $sth4->execute($registro_marc_n1->{'id'}, $titulo, $autor, $superstring, $string_tabla_con_dato, $string_con_dato);
 
         }
 

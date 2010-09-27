@@ -967,6 +967,7 @@ sub getEstructuraYDatosDeNivel{
                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => datoReferencia => ".$subcampo->{'datoReferencia'});
             
                         my $hash_result = _setDatos_de_estructura($cat_estruct_array, \%hash_temp);
+                      
                             
                         push(@result, $hash_result);
                     }else{
