@@ -435,7 +435,7 @@ sub filtrarVisualizacion{
 sub marc_record_to_meran {
     my ($marc_record, $itemtype) = @_;
 
-    C4::AR::Debug::debug("Catalogacion => marc_record_to_meran ");
+    #C4::AR::Debug::debug("Catalogacion => marc_record_to_meran ");
     my @MARC_result_array;
 
     foreach my $field ($marc_record->fields) {
@@ -452,17 +452,17 @@ sub marc_record_to_meran {
 
             my $subcampo                        = $subfield->[0];
             my $dato                            = $subfield->[1];
-            C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => campo: ".$campo);
-            C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => subcampo: ".$subcampo);
-            C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato: ".$dato);
+            #C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => campo: ".$campo);
+            #C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => subcampo: ".$subcampo);
+            #C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato: ".$dato);
             $hash_temp{'subcampo'}              = $subcampo;
             $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype);
             $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype);
             $hash_temp{'datoReferencia'}        = $dato;
-            C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
+            #C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
             my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype);
             $hash_temp{'dato'}                  = $valor_referencia;
-            C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato despues de getDatoFromReferencia: ".$hash_temp{'dato'});
+            #C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato despues de getDatoFromReferencia: ".$hash_temp{'dato'});
 
             push(@subcampos_array, \%hash_temp);
         }
@@ -653,9 +653,9 @@ sub getDatoFromReferencia{
     my ($campo, $subcampo, $dato, $itemtype) = @_;
     
     my $valor_referencia = '';
-    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo:                    ".$campo);
-    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => subcampo:                 ".$subcampo);
-    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato:                     ".$dato);
+    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo:                    ".$campo);
+    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => subcampo:                 ".$subcampo);
+    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato:                     ".$dato);
     
     if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato ne '')&&($dato ne '0')){
 
@@ -666,21 +666,26 @@ sub getDatoFromReferencia{
             if($estructura->getReferencia){
                 #tiene referencia
 
-                C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => getReferencia:       ".$estructura->infoReferencia->getReferencia);
-                C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato entrada:        ".$dato);
- 
+                if($estructura->infoReferencia){
+
+                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => getReferencia:       ".$estructura->infoReferencia->getReferencia);
+                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato entrada:        ".$dato);
+    
 
 
-                my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
-                my $obj_generico    = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
-                                                                                #campo_tabla,                   id_tabla
-                $valor_referencia   = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
+                    my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
+                    my $obj_generico    = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+                                                                                    #campo_tabla,                   id_tabla
+                    $valor_referencia   = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
 
-                C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
-                C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
-                C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
+                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
+                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
+                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
 
-                return $valor_referencia;
+                    return $valor_referencia;
+                } else {
+                    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => ERROR EN REFERENCIA campo, subcampo => ".$campo.", ".$subcampo);
+                }
             }
         }
 
@@ -785,7 +790,7 @@ sub _setDatos_de_estructura {
     $hash_ref_result{'dato'}                    = $datos_hash_ref->{'dato'};
     $hash_ref_result{'datoReferencia'}          = $datos_hash_ref->{'datoReferencia'};
     $hash_ref_result{'tiene_estructura'}        = $datos_hash_ref->{'tiene_estructura'};
-    $hash_ref_result{'ayuda_subcampo'}          =  $datos_hash_ref->{'ayuda_subcampo'};
+    $hash_ref_result{'ayuda_subcampo'}          = $datos_hash_ref->{'ayuda_subcampo'};
     $hash_ref_result{'descripcion_subcampo'}    = $datos_hash_ref->{'descripcion_subcampo'};
 
     $hash_ref_result{'subcampo'}                = $cat->getSubcampo;
@@ -811,9 +816,11 @@ sub _setDatos_de_estructura {
 #         C4::AR::Debug::debug("_setDatos_de_estructura => ======== COMBO ======== ");
         _obtenerOpciones ($cat, \%hash_ref_result);
 
-    }elsif( ($cat->getReferencia) && ($cat->getTipo eq 'auto') ){
+    }elsif( ($cat->getReferencia) && ($cat->getTipo eq 'auto') && defined($cat->infoReferencia) ){
+        
         #es un autocomplete
         $hash_ref_result{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
+       
         #si es un autocomplete y no tengo el dato de la referencia, muestro un blanco
         if ( ($hash_ref_result{'datoReferencia'} eq 0) || ($hash_ref_result{'dato'} eq 0) || not defined($hash_ref_result{'datoReferencia'}) ) {
           $hash_ref_result{'dato'} = '';#'NO TIENE';
