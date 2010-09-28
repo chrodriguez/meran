@@ -1144,7 +1144,7 @@ function procesarSubCampo(objeto, marc_group){
             case "combo":
                 crearCombo(marc_conf_obj);
             break;
-            case "texta2":
+            case "texta":
                 crearTextArea(marc_conf_obj);
             break;
             case "auto": 
@@ -1542,21 +1542,13 @@ function crearCombo(obj){
 }
 
 function crearTextArea(obj){
-// TODO falta terminar
-    crearText(obj);
 
-    var comp = "<textarea id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' rows='4' tabindex="+TAB_INDEX+">" + obj.getOpciones() + "</textarea>";
+    var comp = "<textarea id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' rows='4' tabindex=" + TAB_INDEX + ">" + obj.getOpciones() + "</textarea>";
     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
-//     comp = comp + crearBotonEliminarRepetible(obj);
-
-    comp = crearComponente("texta","texta"+idComp,"readonly='readonly'","");
-    var boton="<input type='image' value='borrar ultima opcion' onclick='borrarEleccion("+idComp+")' src='[% themelang %]/images/sacar.png'>";
-    comp = "<div style='float: left;padding-right:1%; padding-bottom: 1%;'>"+comp+"</div>";
-    compText = compText+" "+boton;
-    $(compText).appendTo("#"+idDiv);
 
     $("#div" + obj.getIdCompCliente()).append(comp);
-    $("#texta"+idComp).val(objeto.valTextArea);
+    $("#texta" + obj.getIdCompCliente()).val(obj.getDatoReferencia());
+    $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
 }
 
 function crearHidden(obj){
