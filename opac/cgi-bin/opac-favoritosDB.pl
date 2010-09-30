@@ -25,6 +25,8 @@ my $action = $obj->{'action'};
 my $id1 = $obj->{'id1'};
 my $nro_socio = C4::Auth::getSessionNroSocio();
 
+$t_params->{'no_content_message'}= C4::AR::Filtros::i18n("UD. no ha marcado ningun ejemplar como favorito.");
+
 if ($action eq "add_favorite"){
     print $session->header;
     print C4::AR::Nivel1::addToFavoritos($id1,$nro_socio);

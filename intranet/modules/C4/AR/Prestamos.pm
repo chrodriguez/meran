@@ -845,6 +845,9 @@ sub getHistorialPrestamos {
     $sth->execute($nro_socio);
     my $total_found = $sth->fetchrow_hashref;
     $total_found = $total_found->{'cantidad'};
+    if ($total_found == 0){
+        $resultsarray = 0;
+    }
     return ($total_found, $resultsarray);
 }
 

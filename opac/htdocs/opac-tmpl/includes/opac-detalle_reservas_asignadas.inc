@@ -82,7 +82,6 @@
     <br>
 [% ELSE %]
     <h1> [% 'Ud. no tiene reservas asignadas.' | i18n %] </h1>
-
 [% END %]
 
 

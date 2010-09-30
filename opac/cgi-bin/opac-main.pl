@@ -23,6 +23,7 @@ my ($cantidad_novedades,$novedades)= C4::AR::Novedades::getUltimasNovedades();
 
 $t_params->{'nro_socio'}= $session->param('nro_socio');
 $t_params->{'SEARCH_RESULTS'}= $grupos;
+$t_params->{'cantidad'}= $cantidad_novedades;
 $t_params->{'novedades'}= $novedades;
 
 $t_params->{'partial_template'}     = "opac-content_data.inc";
