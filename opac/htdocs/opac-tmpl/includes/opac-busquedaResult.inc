@@ -20,7 +20,6 @@
     [% IF show_search_details %]
         <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
         <div class="resultados_consulta">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
-
         <div class="contenedor_paginador">[% paginador %]</div>
     [% END %]
     [% IF !from_suggested %]

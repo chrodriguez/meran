@@ -24,7 +24,7 @@ sub agregar{
 
     use HTML::Entities;
     my $contenido = $input->param('contenido');
-
+#     FALTA CONVERTIR A CODIGO HTML!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (pero tener cuidado con <> que se requieren para estilos!!!)
     %params = $input->Vars;
     $params{'contenido'} = $contenido;
 

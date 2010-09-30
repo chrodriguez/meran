@@ -10,7 +10,7 @@
               <h1><a href='/cgi-bin/koha/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% novedad.getTitulo %]</a></h1>
               <h3>[% novedad.getFechaLegible %], [% 'por ' | i18n %] <span class="highlighted">[% novedad.getUsuario %]</span></h3>
               <p>
-                  [% HTML.escape(novedad.getResumen) %]
+                  [% novedad.getResumen %]
                   <a href='/cgi-bin/koha/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% 'Leer m&aacute;s' | i18n %] &raquo;</a>
               </p>
               <p class="details">| 

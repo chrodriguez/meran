@@ -33,7 +33,8 @@
   <script src="/includes/jquery/jquery.js" type="text/javascript"></script>
   <script src="/includes/AjaxHelper.js" type="text/javascript"></script>
   <script src="/includes/jquery/jquery.alerts.js" type="text/javascript"></script>
-  <script src="/includes/jquery/ui/jquery-ui-1.7.2.custom.min.js" type="text/javascript"></script>
+  <script src="/includes/jquery/ui/ui-min.js" type="text/javascript"></script>
+  <script src="/includes/jquery/ui/core.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui.stars.js" type="text/javascript"></script>
   <script src="/includes/jquery/jquery.wysiwyg.js" type="text/javascript"></script>
   <script src="/includes/json/jsonStringify.js" type="text/javascript"></script>
@@ -65,8 +66,6 @@
 
 <!-- Global IE fix to avoid layout crash when single word size wider than column width -->
 <!--[if IE]><style type="text/css"> body {word-wrap: break-word;}</style><![endif]-->
-
-
     
 <body>
   <!-- Main Page Container -->
