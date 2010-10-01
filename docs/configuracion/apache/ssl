@@ -1,8 +1,8 @@
 NameVirtualHost *:443
 
 <VirtualHost *:443>
-SetEnv KOHA_CONF "/etc/koha.conf"
-DocumentRoot /usr/local/koha/intranet/htdocs
+SetEnv KOHA_CONF "/etc/meran/koha.conf"
+DocumentRoot /usr/share/meran/intranet/htdocs
 ServerAdmin koha@info.unlp.edu.ar
 ErrorLog /var/log/koha/koha-error.log
 TransferLog /var/log/koha/koha-access.log
@@ -13,18 +13,18 @@ SSLCertificateFile /etc/apache2/ssl/apache.pem
 
 #DirectoryIndex inde/cgi-bin/koha/opac-main.pl
 
-Alias /images/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/images/"
-Alias /pictures/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/blue/pictures/"
-SetEnv PERL5LIB "/usr/local/koha/intranet/modules"
+Alias /images/ "/usr/share/meran/intranet/htdocs/intranet-tmpl/blue/images/"
+Alias /pictures/ "/usr/share/meran/intranet/htdocs/intranet-tmpl/blue/pictures/"
+SetEnv PERL5LIB "/usr/share/meran/intranet/modules"
 
 #Enabling Compression
 SetOutputFilter DEFLATE
 
 #SIN MODPERL
-#ScriptAlias /cgi-bin/koha/ "/usr/local/koha/intranet/cgi-bin/"
+#ScriptAlias /cgi-bin/koha/ "/usr/share/meran/intranet/cgi-bin/"
 
 #CON MODPERL
-Alias /cgi-bin/koha/ /usr/local/koha/intranet/cgi-bin/
+Alias /cgi-bin/koha/ /usr/share/meran/intranet/cgi-bin/
 <Location /cgi-bin/koha/ >
        SetHandler perl-script
        PerlResponseHandler ModPerl::Registry
@@ -33,23 +33,23 @@ Alias /cgi-bin/koha/ /usr/local/koha/intranet/cgi-bin/
 </Location>
 #	<Perl>
 #	use Carp;
-#	push(@INC,"/usr/local/koha/intranet/modules");
+#	push(@INC,"/usr/share/meran/intranet/modules");
 #	</Perl>
 
 
-<Directory /usr/local/koha/intranet/ >
+<Directory /usr/share/meran/intranet/ >
 Order deny,allow
 Allow from all
 Deny from all
 </Directory>
 
 
-<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/images/ >
+<Directory /usr/share/meran/intranet/htdocs/intranet-tmpl/blue/images/ >
 Order allow,deny
 Allow from all
 </Directory>
 
-<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/pictures/ >
+<Directory /usr/share/meran/intranet/htdocs/intranet-tmpl/blue/pictures/ >
 Order allow,deny
 Allow from all
 </Directory>
@@ -63,50 +63,11 @@ RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)
 RewriteRule .* - [F]
 
 
-Alias /includes/ "/usr/local/koha/includes/"
-<Directory /usr/local/koha/includes/ >
+Alias /includes/ "/usr/share/meran/includes/"
+<Directory /usr/share/meran/includes/ >
    Options  -Indexes
    Order allow,deny
    Allow from all
-</Directory>
-
-Alias /phpmyadmin /var/www/phpmyadmin/
-<Directory /usr/share/phpmyadmin/>
-    AllowOverride All
-    Order deny,allow
-    Allow from 163.10.10.
-    Deny from all
-</Directory>
-
-<Directory /var/www/phpmyadmin/>
-    AllowOverride All
-    Order deny,allow
-    Allow from 163.10.10.
-    Deny from all
-</Directory>
-
-
-# Protect some directories
-
-<Directory /var/lib/phpmyadmin/>
-    Options -FollowSymLinks
-    AllowOverride None
-    Order deny,allow
-    Deny from all
-</Directory>
-
-<Directory /usr/share/phpmyadmin/config/>
-    Options -FollowSymLinks
-    AllowOverride None
-    Order deny,allow
-    Deny from all
-</Directory>
-
-<Directory /var/www/phpmyadmin/config/>
-    Options -FollowSymLinks
-    AllowOverride None
-    Order deny,allow
-    Deny from all
 </Directory>
 
 #<FilesMatch "\.(ico|flv|jpe?g|png|gif|js|css|swf)$">

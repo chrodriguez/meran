@@ -1,22 +1,22 @@
 NameVirtualHost *:80
 <VirtualHost *:80>
-DocumentRoot /usr/local/koha/opac/htdocs
-ErrorLog /var/log/koha/opac-error.log
-TransferLog /var/log/koha/opac-access.log
-SetEnv KOHA_CONF "/etc/koha.conf"
+DocumentRoot /usr/share/meran/opac/htdocs
+ErrorLog /var/log/meran/opac-error.log
+TransferLog /var/log/meran/opac-access.log
+SetEnv KOHA_CONF "/etc/meran/koha.conf"
 
 DirectoryIndex /cgi-bin/koha/opac-main.pl
 
-Alias /cgi-bin/koha/ /usr/local/koha/opac/cgi-bin/
-Alias /pictures/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/pictures/"
-<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/blue/pictures/ >
+Alias /cgi-bin/koha/ /usr/share/meran/opac/cgi-bin/
+Alias /pictures/ "/usr/share/meran/intranet/htdocs/intranet-tmpl/pictures/"
+<Directory /usr/share/meran/intranet/htdocs/intranet-tmpl/blue/pictures/ >
  Order allow,deny
  Allow from all
 </Directory>
 
 
-Alias /covers/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/covers/"
-<Directory /usr/local/koha/intranet/htdocs/intranet-tmpl/covers/ >
+Alias /covers/ "/usr/share/meran/intranet/htdocs/intranet-tmpl/covers/"
+<Directory /usr/share/meran/intranet/htdocs/intranet-tmpl/covers/ >
  Order allow,deny
  Allow from all
 </Directory>
@@ -29,7 +29,7 @@ Alias /covers/ "/usr/local/koha/intranet/htdocs/intranet-tmpl/covers/"
 </Location>
 <Perl>
 use Carp;
-push(@INC,"/usr/local/koha/intranet/modules");
+push(@INC,"/usr/share/meran/intranet/modules");
 </Perl>
 
 ServerSignature Off
@@ -37,8 +37,8 @@ RewriteEngine on
 RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)
 RewriteRule .* - [F]
 
-Alias /includes/ "/usr/local/koha/includes/"
-<Directory /usr/local/koha/includes/ >
+Alias /includes/ "/usr/share/meran/includes/"
+<Directory /usr/share/meran/includes/ >
     SetOutputFilter DEFLATE
     BrowserMatch ^Mozilla/4\.0[678] no-gzip\
     BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
