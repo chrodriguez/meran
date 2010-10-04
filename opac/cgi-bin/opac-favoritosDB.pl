@@ -32,7 +32,7 @@ if ($action eq "add_favorite"){
     print C4::AR::Nivel1::addToFavoritos($id1,$nro_socio);
 }
 elsif ($action eq "delete_favorite"){
-    C4::AR::Debug::debug("NRO_SOCIO_FAVORITOS: ".$nro_socio." ID1: ".$id1);
+
     C4::AR::Nivel1::removeFromFavoritos($id1,$nro_socio);
     
     my ($cantidad,$resultsarray)= C4::AR::Nivel1::getFavoritos($nro_socio);
