@@ -52,7 +52,6 @@ elsif ($action eq "get_favoritos"){
 
 
     my ($cantidad,$resultsarray)= C4::AR::Nivel1::getFavoritos($nro_socio);
-
     $t_params->{'cantidad'}= $cantidad;
     $t_params->{'nro_socio'}= $session->param('nro_socio');
     $t_params->{'SEARCH_RESULTS'}= $resultsarray;

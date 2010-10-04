@@ -9,5 +9,5 @@
         [% IF partial_template %]
           [% INCLUDE $partial_template %]
         [% END %]
-  <div id="ajax_indicator"><br /></div>
+  <div id="ajax-indicator"><br /></div>
 </div>

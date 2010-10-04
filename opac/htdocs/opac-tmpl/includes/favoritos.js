@@ -102,8 +102,8 @@ function obtenerFavoritos(){
     objAH.url='/cgi-bin/koha/opac-favoritosDB.pl';
     objAH.debug= true;
     objAH.action='get_favoritos';
+    objAH.showStatusIn='ajax-indicator';
     objAH.sendToServer();
-    objAH.showStatusIn='ajax_indicator';
 }
 
 function updateObtenerFavoritos(responseText){
