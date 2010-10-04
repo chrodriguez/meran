@@ -44,6 +44,8 @@
   <script src="/includes/jquery/fancybox/jquery.easing.1.3.js" type="text/javascript"></script>
   <script src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js" type="text/javascript"></script>
 
+  <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
+
 
   <title>
     [% IF titulo_nombre_ui %]

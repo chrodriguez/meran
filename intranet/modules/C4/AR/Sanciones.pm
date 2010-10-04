@@ -107,6 +107,8 @@ sub estaSancionado {
                                                                                     fecha_comienzo 	=> { le => $hoy },
                                                                                     fecha_final    	=> { ge => $hoy},
                                                                                     ],
+                                                                                require_objetcs => ['ref_tipo_sancion','reserva'],
+                                                                                select => ['*'],
                                                                                 );
   if (scalar($sanciones_array_ref->[0])){
       return($sanciones_array_ref->[0] || 0);
