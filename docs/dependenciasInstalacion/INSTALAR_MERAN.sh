@@ -1,6 +1,6 @@
 #!/bin/bash
 #obtener el código fuente
-apt-get install git-core
+apt-get install git-core -y
 cd /usr/share/
 git clone ssh://root@proyectos.linti.unlp.edu.ar/var/meran
 cd /usr/share/meran/docs/dependenciasInstalacion/
