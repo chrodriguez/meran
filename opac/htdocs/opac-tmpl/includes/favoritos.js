@@ -95,3 +95,41 @@ function borrarDeFavoritos(){
 	}
 	
 }
+
+function obtenerFavoritos(){
+    objAH=new AjaxHelper(updateObtenerFavoritos);
+    objAH.debug= true;
+    objAH.url='/cgi-bin/koha/opac-favoritosDB.pl';
+    objAH.debug= true;
+    objAH.action='get_favoritos';
+    objAH.showStatusIn='ajax-indicator';
+    objAH.sendToServer();
+}
+
+function updateObtenerFavoritos(responseText){
+        if (!verificarRespuesta(responseText))
+            return(0);
+        $('#mis_favoritos').html(responseText);
+        zebra('datos_tabla');
+}
+
+function eliminarFavorito(id_favorito){
+    jConfirm(FAVORITE_CONFIRM_DELETE, CATALOGO_TITLE, function(confirmStatus){
+        if (confirmStatus){
+            objAH=new AjaxHelper(updateEliminarFavorito);
+            objAH.debug= true;
+            objAH.url='/cgi-bin/koha/opac-favoritosDB.pl';
+            objAH.debug= true;
+            objAH.action='delete_favorite';
+            objAH.id1=id_favorito;
+            objAH.sendToServer();
+        }
+    });
+}
+
+function updateEliminarFavorito(responseText){
+        if (!verificarRespuesta(responseText))
+            return(0);
+        $('#mis_favoritos').html(responseText);
+        zebra('datos_tabla');
+}

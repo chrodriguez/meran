@@ -10,9 +10,9 @@
                   </font></b>
                   <ul>
                   [% IF sancion %]
-                        [% IF sancion.description %]
+                        [% IF sancion.ref_tipo_sancion.tipo_sancion %]
                             <li class="sancionesOPAC">
-                                [% sancion.description %] - [% "Desde el" | i18n %] [% sancion.getFecha_comienzo %] [% "hasta el" | i18n %] [% sancion.getFecha_final %]
+                                [% sancion.ref_tipo_sancion.tipo_sancion %] - [% "Desde el" | i18n %] [% sancion.getFecha_comienzo %] [% "hasta el" | i18n %] [% sancion.getFecha_final %]
                             </li>
                         [% END %]
                   [% END %]

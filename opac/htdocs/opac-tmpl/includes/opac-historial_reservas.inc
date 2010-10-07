@@ -64,5 +64,5 @@
     </table>
 
 [% ELSE %]
-    <h1> [% 'Ud. no tiene registrado ninguna reserva.' | i18n %] </h1>
+    <h1> [% 'Ud. no tiene registrada ninguna reserva.' | i18n %] </h1>
 [% END %]
