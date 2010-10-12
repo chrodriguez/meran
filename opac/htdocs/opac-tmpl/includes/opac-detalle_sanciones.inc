@@ -12,7 +12,7 @@
                   [% IF sancion %]
                         [% IF sancion.ref_tipo_sancion.tipo_sancion %]
                             <li class="sancionesOPAC">
-                                [% sancion.ref_tipo_sancion.tipo_sancion %] - [% "Desde el" | i18n %] [% sancion.getFecha_comienzo %] [% "hasta el" | i18n %] [% sancion.getFecha_final %]
+                                <h2>[% sancion.ref_tipo_prestamo_sancion.getDetalle %]</h2> &nbsp;[% "Desde el" | i18n %] [% sancion.getFecha_comienzo %] [% "hasta el" | i18n %] [% sancion.getFecha_final %]
                             </li>
                         [% END %]
                   [% END %]

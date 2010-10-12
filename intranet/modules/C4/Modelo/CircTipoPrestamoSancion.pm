@@ -8,8 +8,9 @@ __PACKAGE__->meta->setup(
     table   => 'circ_tipo_prestamo_sancion',
 
     columns => [
-        tipo_sancion  		 => { type => 'integer', not_null => 1 },
-        tipo_prestamo        => { type => 'character', length => 2, not_null => 1 },
+        tipo_sancion    => { type => 'integer', not_null => 1 },
+        tipo_prestamo   => { type => 'character', length => 2, not_null => 1 },
+        detalle         => { type => 'varchar', length => 255, not_null => 1 },
     ],
 
     primary_key_columns => [ 'tipo_sancion', 'tipo_prestamo' ],
@@ -51,6 +52,11 @@ sub setTipo_sancion{
     my ($self) = shift;
     my ($tipo_sancion) = @_;
     $self->tipo_sancion($tipo_sancion);
+}
+
+sub getDetalle{
+    my ($self) = shift;
+    return ($self->detalle);
 }
 
 1;

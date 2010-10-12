@@ -116,7 +116,7 @@ body textarea:focus{
 .main-navigation .round-border-topright {width:10px; height:10px; position:absolute; z-index:100; margin:0 0 0 190px; background:url(../imagenes/bg_corner_topright.gif) no-repeat;}
 
 /* MAIN CONTENT */
-.column1-unit {width:440px; margin-bottom:0 0 0 20px /*Non-IE6*/;}
+.column1-unit {width:440px; margin-bottom:0 0 0 20px /*Non-IE6*/; margin-left: 15px;}
 .column2-unit-left {float:left; width:200px; margin-bottom:10px !important /*Non-IE6*/; margin-bottom:5px /*IE6*/;}
 .column2-unit-right {float:right; width:200px; margin-bottom:10px !important /*Non-IE6*/; margin-bottom:5px /*IE6*/;}
 .column3-unit-left {float:left; width:120px; margin-bottom:10px !important /*Non-IE6*/; margin-bottom:5px /*IE6*/;}

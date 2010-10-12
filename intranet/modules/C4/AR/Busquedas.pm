@@ -1066,7 +1066,6 @@ sub getSuggestion{
             $suggestion = Encode::encode_utf8($suggestion);
         }
         ($total_found) = busquedaCombinada_newTemp($suggestion,\%hash,$obj_for_log,1);
-#         C4::AR::Debug::debug("TOTAL FOUND SUGGESTED: ".$total_found."CON ".$suggestion);
         $cont++;
     }
 

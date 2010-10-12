@@ -1,4 +1,3 @@
-
 package C4::Modelo::CircSancion;
 
 use strict;
@@ -11,14 +10,14 @@ __PACKAGE__->meta->setup(
     table   => 'circ_sancion',
 
     columns => [
-        id_sancion   => { type => 'serial', not_null => 1 },
-        tipo_sancion => { type => 'integer', default => '0' },
-        id_reserva    => { type => 'integer' },
-        nro_socio   => { type => 'integer', default => '0', not_null => 1 },
-        fecha_comienzo        => { type => 'varchar', default => '0000-00-00', not_null => 1 },
-        fecha_final          => { type => 'varchar', default => '0000-00-00', not_null => 1 },
-        dias_sancion        => { type => 'integer', default => '0' },
-        id3       => { type => 'integer' },
+        id_sancion        => { type => 'serial', not_null => 1 },
+        tipo_sancion      => { type => 'integer', default => '0' },
+        id_reserva        => { type => 'integer' },
+        nro_socio         => { type => 'integer', default => '0', not_null => 1 },
+        fecha_comienzo    => { type => 'varchar', default => '0000-00-00', not_null => 1 },
+        fecha_final       => { type => 'varchar', default => '0000-00-00', not_null => 1 },
+        dias_sancion      => { type => 'integer', default => '0' },
+        id3               => { type => 'integer' },
     ],
 
     primary_key_columns => [ 'id_sancion' ],
@@ -43,7 +42,7 @@ __PACKAGE__->meta->setup(
 		ref_tipo_prestamo_sancion => {
             class      => 'C4::Modelo::CircTipoPrestamoSancion',
             column_map => { tipo_sancion => 'tipo_sancion' },
-            type       => 'one to many',
+            type       => 'one to one',
         },
     ],
 );

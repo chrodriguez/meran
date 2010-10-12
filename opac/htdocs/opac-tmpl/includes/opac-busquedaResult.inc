@@ -3,7 +3,7 @@
         $('.fancylink').fancybox();
     });
 </script>
-[% IF cantidad > 0 %]
+[% IF (cantidad > 0) || ( (!from_suggested) && (suggested) )%]
     [% FOREACH NIVEL IN SEARCH_RESULTS %]
         <script type="text/javascript">
             $(function(){
