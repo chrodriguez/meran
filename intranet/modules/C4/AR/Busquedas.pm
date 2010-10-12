@@ -1112,6 +1112,13 @@ sub busquedaCombinada_newTemp{
     $sphinx->SetMatchMode($tipo_match);
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+
+    #FIX porque cuando viene 1, se saltea el primer resultado
+    if ($obj_for_log->{'ini'}==1){
+      $obj_for_log->{'ini'} = 0;
+    }
+
+
     if (!$only_sphinx){
         $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'});
     }
