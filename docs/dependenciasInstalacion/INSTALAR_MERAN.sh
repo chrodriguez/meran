@@ -22,4 +22,5 @@ cp ../configuracion/sphinx/sphinx.conf /etc/sphinxsearch/sphinx.conf
 
 #Configurar cron
 #Crear bdd
+#Dar permisos a los usuarios en la bdd (userAdmin,userOPAC,userINTRA,userDevelop)
 #Reiniciar apache 
