@@ -18,6 +18,8 @@ chown -R +r /etc/meran/koha.conf
 mkdir /var/log/meran
 cp ../configuracion/logrotate.d/meran /etc/logrotate.d/
 #Configurar Sphinx
+cp ../configuracion/sphinx/sphinx.conf /etc/sphinxsearch/sphinx.conf
+
 #Configurar cron
 #Crear bdd
 #Reiniciar apache 
