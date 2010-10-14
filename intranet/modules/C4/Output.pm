@@ -115,7 +115,7 @@ sub gettemplate {
                                             "$htdocs/catalogacion/",
                                             "$htdocs/includes/popups/",
 								            "$htdocs/includes/menu",
-								            "/usr/local/koha/includes/",
+								            C4::Context->config('includes_general'),
 							        ],
  					ABSOLUTE        => 1,
                     CACHE_SIZE      => 200,
