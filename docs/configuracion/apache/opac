@@ -3,7 +3,7 @@ NameVirtualHost *:80
 DocumentRoot /usr/share/meran/opac/htdocs
 ErrorLog /var/log/meran/opac-error.log
 TransferLog /var/log/meran/opac-access.log
-SetEnv KOHA_CONF "/etc/meran/koha.conf"
+SetEnv MERAN_CONF "/etc/meran/koha.conf"
 
 DirectoryIndex /cgi-bin/koha/opac-main.pl
 

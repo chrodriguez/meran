@@ -1,7 +1,7 @@
 NameVirtualHost *:443
 
 <VirtualHost *:443>
-SetEnv KOHA_CONF "/etc/meran/koha.conf"
+SetEnv MERAN_CONF "/etc/meran/koha.conf"
 DocumentRoot /usr/share/meran/intranet/htdocs
 ServerAdmin koha@info.unlp.edu.ar
 ErrorLog /var/log/koha/koha-error.log

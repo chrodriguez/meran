@@ -91,7 +91,7 @@ environment variable to the pathname of a configuration file to use.
 #	Used by &set_dbh and &restore_dbh to hold other database
 #	handles for this context.
 
-use constant CONFIG_FNAME => "/etc/koha.conf";
+use constant CONFIG_FNAME => "/etc/meran.conf";
 				# Default config file, if none is specified
 
 $context = undef;		# Initially, no context is set
@@ -179,8 +179,7 @@ sub new
 	{
 		# If the $KOHA_CONF environment variable is set, use
 		# that. Otherwise, use the built-in default.
-		$conf_fname = $ENV{"KOHA_CONF"} ||
-				CONFIG_FNAME;
+		$conf_fname = $ENV{"MERAN_CONF"} || CONFIG_FNAME;
 	}
 	$self->{"config_file"} = $conf_fname;
 
