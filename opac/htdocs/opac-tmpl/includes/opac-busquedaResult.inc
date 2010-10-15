@@ -62,19 +62,21 @@
                         <td class="titulo_result">
                             [% IF NIVEL.portadas_grupo %]
                                     [% FOREACH NIVEL.portadas_grupo %]
-                                        [% IF portada_registro %]
-                                            <a class="fancylink" rel="group" href="/covers/[% portada_registro_big %]">
-                                                <img alt="cover"
-                                                    src="/covers/[% portada_registro %]" title="Portada" style="float:left"
-                                                />
-                                            </a>
-                                        [% ELSE %]
-                                              <a class="fancylink" href="/covers/no_image.jpg">
-                                                  <img src="/covers/no_image.jpg" 
-                                                        alt="[% 'Sin Portada' | i18n %]"
-                                                        title="[% 'Sin Portada' | i18n %]" style="float:left" 
-                                                  />
-                                              </a>
+                                        [% IF loop.count < 4 %]
+                                            [% IF portada_registro %]
+                                                <a class="fancylink" rel="group" href="/covers/[% portada_registro_big %]">
+                                                    <img alt="cover"
+                                                        src="/covers/[% portada_registro %]" title="Portada" style="float:left"
+                                                    />
+                                                </a>
+                                            [% ELSE %]
+                                                  <a class="fancylink" href="/covers/no_image.jpg">
+                                                      <img src="/covers/no_image.jpg" 
+                                                            alt="[% 'Sin Portada' | i18n %]"
+                                                            title="[% 'Sin Portada' | i18n %]" style="float:left" 
+                                                      />
+                                                  </a>
+                                            [% END %]
                                         [% END %]
                                     [% END %]
                             [% ELSE %]
