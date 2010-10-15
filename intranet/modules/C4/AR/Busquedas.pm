@@ -1062,9 +1062,9 @@ sub getSuggestion{
             $suggestion.= @suggestions[$cont]." ";
         }
         my %hash = {};
-        if (!$intra){
+#         if (!$intra){
             $suggestion = Encode::encode_utf8($suggestion);
-        }
+#         }
         ($total_found) = busquedaCombinada_newTemp($suggestion,\%hash,$obj_for_log,1);
         $cont++;
     }
