@@ -70,12 +70,10 @@
                                                     />
                                                 </a>
                                             [% ELSE %]
-                                                  <a class="fancylink" href="/covers/no_image.jpg">
-                                                      <img src="/covers/no_image.jpg" 
-                                                            alt="[% 'Sin Portada' | i18n %]"
-                                                            title="[% 'Sin Portada' | i18n %]" style="float:left" 
-                                                      />
-                                                  </a>
+                                                  <img src="/covers/no_image.jpg" 
+                                                        alt="[% 'Sin Portada' | i18n %]"
+                                                        title="[% 'Sin Portada' | i18n %]" style="float:left" 
+                                                  />
                                             [% END %]
                                         [% END %]
                                     [% END %]

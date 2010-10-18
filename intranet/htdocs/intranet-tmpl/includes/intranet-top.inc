@@ -51,6 +51,10 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
 <script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
 <!-- <script type="text/javascript" src="/includes/jquery/jquery.field.min.js"></script> -->
 <link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic.css" type="text/css">
+
+<script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
+
 <!--<script type="text/javascript" src="/includes/AjaxHelper.js"></script>
 <script type="text/javascript" src="/includes/util.js"></script>
 <script type="text/javascript" src="/includes/MessageHelper.js"></script>

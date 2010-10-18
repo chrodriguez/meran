@@ -9,6 +9,8 @@
 <script type="text/javascript">
       $(document).ready(function() {
         makeToggle('datos_tabla_div','trigger',null,false);
+        $('.fancylink').fancybox();
+
       });
 </script>
 <fieldset class="resultados_busqueda">
@@ -58,7 +60,9 @@
             
                     <td class="titulo_result">
                     [% IF portada_registro %]
-                        <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/covers/[% portada_registro %]" title="Portada">
+                        <a class="fancylink" rel="group" href="[% themelang %]/covers/[% portada_registro_big %]">
+                            <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/covers/[% portada_registro %]" title="Portada">
+                        </a>
                     [% ELSE %]
                           <img src="[% themelang %]/covers/no_image.jpg" 
                                 alt="[% 'Sin Portada' | i18n %]"
