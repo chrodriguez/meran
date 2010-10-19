@@ -630,7 +630,7 @@ sub borrar_sancion_de_reserva{
     my ($db) = @_;
 
     my $dateformat  = C4::Date::get_date_format();
-    my $hoy         = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+    my $hoy         = C4::Date::format_date_in_iso(C4::Date::ParseDate("today"), $dateformat);
 
     use C4::Modelo::CircSancion::Manager;
     use C4::Modelo::CircSancion;
