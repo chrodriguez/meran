@@ -118,8 +118,8 @@ function DetalleReservas(){
 	objAH=new AjaxHelper(updateDetalleReserva);
   	objAH.debug= true;
 	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/opac-info_reservas.pl';
-    objAH.action = 'detalle_espera';
+	objAH.url= '/cgi-bin/koha/opac-info_reservas.pl?action='+'detalle_asignadas';
+    objAH.action = 'detalle_asignadas';
 // 	objAH.borrowernumber= borrowernumber;
 	//se envia la consulta
 	objAH.sendToServer();
