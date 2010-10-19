@@ -19,10 +19,14 @@
         [% FOREACH reserva IN RESERVAS_ASIGNADAS %]
             <tr>
                 <td >
-                    <b><a class="click" onClick="detalle([% reserva.nivel2.nivel1.getId1 %])" title="[% 'Mostrar Detalle' | i18n %]">
-                    [% reserva.nivel2.nivel1.getTitulo %]
-                <!--	[% IF runititle %]:&nbsp;[% runititle %][% END %]-->
-                    </a></b>
+                   
+                    [% PERL %]
+                          print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel2.nivel1.getTitulo %]",
+                                                          url =>      "/cgi-bin/koha/opac-detail.pl", 
+                                                          params =>   ["id1=[% reserva.nivel2.nivel1.getId1 %]"],
+                                                          title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                                                      ) ;
+                    [% END %]
                 </td>
                 <td >
                 [% IF reserva.nivel2.nivel1.getAutor %]

@@ -890,31 +890,31 @@ sub t_cancelar_reserva{
     $msg_object->{'tipo'}=$tipo;
     my $db = undef;
     my ($reserva) = getReserva($params->{'id_reserva'});
-    if ($reserva){
+#     if ($reserva){
         $db = $reserva->db;
         $db->{connect_options}->{AutoCommit} = 0;
             $db->begin_work;
-        eval{
+#         eval{
             C4::AR::Debug::debug("VAMOS A CANCELAR LA RESERVA");
             $reserva->cancelar_reserva($params);
             $db->commit;
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U308', 'params' => []} ) ;
             C4::AR::Debug::debug("LA RESERVA SE CANCELO CON EXITO");
-        };
-    }else{
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
-    }
-
-    if ($@){
-        C4::AR::Debug::debug("ERROR");
-        #Se loguea error de Base de Datos
-        C4::AR::Mensajes::printErrorDB($@, 'B404',$tipo);
-        eval {$db->rollback};
-        #Se setea error para el usuario
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
-    }
+#         };
+#     }else{
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
+#     }
+# 
+#     if ($@){
+#         C4::AR::Debug::debug("ERROR");
+#         #Se loguea error de Base de Datos
+#         C4::AR::Mensajes::printErrorDB($@, 'B404',$tipo);
+#         eval {$db->rollback};
+#         #Se setea error para el usuario
+#         $msg_object->{'error'}= 1;
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
+#     }
     $db->{connect_options}->{AutoCommit} = 1;
 
     return ($msg_object);
