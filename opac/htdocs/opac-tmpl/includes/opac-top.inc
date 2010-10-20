@@ -40,7 +40,7 @@
   <script src="/includes/json/jsonStringify.js" type="text/javascript"></script>
   [% INCLUDE 'AutocompleteHelper.inc'  %]
   <script src="/includes/MessageHelper.js" type="text/javascript"></script>
-  <script src="/includes/circulacionOPAC.js" type="text/javascript"></script>
+  <script src="/opac-tmpl/includes/circulacionOPAC.js" type="text/javascript"></script>
   <script src="/includes/jquery/fancybox/jquery.easing.1.3.js" type="text/javascript"></script>
   <script src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js" type="text/javascript"></script>
 
@@ -58,8 +58,10 @@
   <script type="text/javascript">
       [% IF socio_data %]
           $(document).ready(function() {
-              infoReservas();
-              infoSanciones();
+            infoReservas();
+            infoSanciones();
+            setInterval(infoReservas,10000);
+            setInterval(infoSanciones,10000);
           });
       [% END %]
   </script>
