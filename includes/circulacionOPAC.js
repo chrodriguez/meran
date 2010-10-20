@@ -44,13 +44,18 @@ function updateInfoReserva(responseText){
 */
 function cancelarReserva(id_reserva){
 
-    objAH=new AjaxHelper(updateInfoCancelarReserva);
 
-    objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/reservasDB.pl';
-    objAH.id_reserva= id_reserva;
-    objAH.accion= 'CANCELAR_RESERVA';
-    objAH.sendToServer();
+    jConfirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_RESERVA,OPAC_ALERT_TITLE, function(confirmStatus){
+        if (confirmStatus){
+            objAH=new AjaxHelper(updateInfoCancelarReserva);
+
+            objAH.debug= true;
+            objAH.url= '/cgi-bin/koha/reservasDB.pl';
+            objAH.id_reserva= id_reserva;
+            objAH.accion= 'CANCELAR_RESERVA';
+            objAH.sendToServer();
+        }
+    });
 }
 
 /*
@@ -117,7 +122,7 @@ function DetalleReservas(){
     objAH=new AjaxHelper(updateDetalleReserva);
     objAH.debug= true;
     //para busquedas combinables
-    objAH.url= '/cgi-bin/koha/opac-info_reservas.pl?action='+'detalle_asignadas';
+    objAH.url= '/cgi-bin/koha/opac-info_reservas.pl';
     objAH.action = 'detalle_asignadas';
 //  objAH.borrowernumber= borrowernumber;
     //se envia la consulta
@@ -169,6 +174,7 @@ function infoReservas(){
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/opac-info_reservas.pl';
     objAH.action = 'detalle_espera';
+    objAH.bubble = 1;
     objAH.sendToServer();
 }
 

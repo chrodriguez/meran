@@ -13,6 +13,8 @@
 
     ESTA_SEGURO_QUE_DESEA_RESERVAR= '[% "Realmente desea reservar el ejemplar?" | i18n %]';
 
+    ESTA_SEGURO_QUE_DESEA_CANCELAR_RESERVA= '[% "Realmente desea cancelar la reserva?" | i18n %]';
+
     FAVORITE_ADDED= '[% "Se agrego el favorito correctamente." | i18n %]';
 
     FAVORITE_ADDED_ERROR= '[% "No se pudo agregar el favorito" | i18n %]';

@@ -10,17 +10,40 @@ use C4::AR::Busquedas;
 
 my $input = new CGI;
 my $action = $input->param('action') || 0;
+my $from_bubble = 0;
+my $obj=$input->param('obj') || 0;
 
-my $template = $action?"opac-main.tmpl":"includes/opac-reservas_info.inc";
+if ($obj){
+  $obj=C4::AR::Utilidades::from_json_ISO($obj);
+  $action = $obj->{'action'} || 0;
+  $from_bubble = $obj->{'bubble'};
+
+}
+
+
+my $template = ($action && (!$from_bubble))?"opac-main.tmpl":"includes/opac-reservas_info.inc";
+
+
+if ( ($obj) && (!$from_bubble) ){
+
+    if ($action eq "detalle_espera"){
+        $template = "includes/opac-detalle_reservas_espera.inc";
+    }
+    elsif ($action eq "detalle_asignadas"){
+        $template = "includes/opac-detalle_reservas_asignadas.inc";
+    }
+
+
+}
 
 my ($template, $session, $t_params)= get_template_and_user({
-									template_name => $template,
-									query => $input,
-									type => "opac",
-									authnotrequired => 0,
-									flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-									debug => 1,
-			     });
+                template_name => $template,
+                query => $input,
+                type => "opac",
+                authnotrequired => 0,
+                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                debug => 1,
+          });
 
 
 if ($action eq "detalle_espera"){
