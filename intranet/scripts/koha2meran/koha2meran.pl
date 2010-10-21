@@ -1140,7 +1140,7 @@ $biblios->finish();
 (14, 'usr_ref_tipo_documento', 'tipo_documento_usr', 'nombre'),
 (15, 'ref_estado', 'estado', 'nombre'),
 (16, 'ref_localidad', 'ciudad', 'NOMBRE'),
-(17, 'cat_perfil_opac', 'perfiles_opac', 'nombre');"
+(17, 'cat_perfil_opac', 'perfiles_opac', 'nombre');",
 "DROP TABLE IF EXISTS cat_rating;",
 "CREATE TABLE IF NOT EXISTS cat_rating (
   nro_socio varchar(11) NOT NULL,
@@ -1686,7 +1686,7 @@ CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DE
 "ALTER TABLE `rep_historial_prestamo` DROP `return`;",
 "ALTER TABLE `rep_historial_prestamo` ADD ` id_historial_prestamo` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;",
 "ALTER TABLE `rep_historial_prestamo` ADD `tipo_prestamo` CHAR( 2 ) NOT NULL AFTER `nro_socio` ;",
-"ALTER TABLE `rep_historial_prestamo` ADD `agregacion_temp` VARCHAR( 255 ) NULL ;"
+"ALTER TABLE `rep_historial_prestamo` ADD `agregacion_temp` VARCHAR( 255 ) NULL ;",
 "ALTER TABLE `rep_historial_sancion` CHANGE `type` `tipo_operacion` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
 CHANGE `borrowernumber` `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0',
 CHANGE `date` `fecha` DATE NOT NULL DEFAULT '0000-00-00',
@@ -1809,7 +1809,7 @@ CHANGE `parent` `padre` INT( 11 ) NOT NULL DEFAULT '0';",
 #Agregamos KOHAADMIN!!!
 
  my $kohaadmin_persona="INSERT INTO `usr_persona` (`version_documento`, `nro_documento`, `tipo_documento`, `apellido`, `nombre`, `titulo`, `otros_nombres`, `iniciales`, `calle`, `barrio`, `ciudad`, `telefono`, `email`, `fax`, `msg_texto`, `alt_calle`, `alt_barrio`, `alt_ciudad`, `alt_telefono`, `nacimiento`, `fecha_alta`, `legajo`, `sexo`, `telefono_laboral`, `cumple_condicion`, `es_socio`) VALUES
-('P', '1000000', 'DNI', 'kohaadmin', 'kohaadmin', NULL, NULL, 'DGR', '007', NULL, '16648', '', '', NULL, NULL, NULL, NULL, '', NULL, '2009-12-23', NULL, '007', NULL, NULL, 0, 1);"
+('P', '1000000', 'DNI', 'kohaadmin', 'kohaadmin', NULL, NULL, 'DGR', '007', NULL, '16648', '', '', NULL, NULL, NULL, NULL, '', NULL, '2009-12-23', NULL, '007', NULL, NULL, 0, 1);";
  my $kp=$dbh->prepare($kohaadmin_persona);
     $kp->execute();
  my $personaka=$dbh->prepare("SELECT id_persona FROM usr_persona WHERE  nro_documento= ? ;");
@@ -2467,8 +2467,7 @@ sub guardaNivel3MARC {
 ('365', 'TRADE PRICE', 'TRADE PRICE', 1, 0, '', 'Undefined', 'Undefined', 0),
 ('338', 'CARRIER TYPE', 'CARRIER TYPE', 1, 0, '', 'Undefined', 'Undefined', 0),
 ('031', 'MUSICAL INCIPITS INFORMATION', 'MUSICAL INCIPITS INFORMATION', 1, 0, '', 'Undefined', 'Undefined', 0),
-('363', 'NORMALIZED DATE AND SEQUENTIAL DESIGNATION', 'NORMALIZED DATE AND SEQUENTIAL DESIGNATION', 1, 0, '', 'Start/End designator', 'State of issuance', 0);"
-
+('363', 'NORMALIZED DATE AND SEQUENTIAL DESIGNATION', 'NORMALIZED DATE AND SEQUENTIAL DESIGNATION', 1, 0, '', 'Start/End designator', 'State of issuance', 0);",
 "CREATE TABLE IF NOT EXISTS `pref_estructura_subcampo_marc` (
   `nivel` tinyint(1) NOT NULL default '0',
   `obligatorio` tinyint(1) NOT NULL default '0',

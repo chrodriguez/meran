@@ -8,7 +8,7 @@ __PACKAGE__->use_private_registry;
 
     my $context = new C4::Context;
     
-    my $driverDB;
+    my $driverDB= 'mysql';
     my $database;
     my $hostname;
     my $user;
@@ -54,7 +54,6 @@ opac = ususario comun de OPAC (MENOR cant. de permisos sobre la base)
         
 __PACKAGE__->register_db
 (
-    
   connect_options => {RaiseError => 1},
   driver          => $driverDB,
   dsn             => "dbi:mysql:dbname=".$database.";host=".$hostname,
