@@ -2925,12 +2925,14 @@ sub armarPaginasOPAC{
 
 # FIXME falta pasar las imagenes al estilo
     my ($actual, $cantRegistros, $cantRenglones, $url, $t_params)=@_;
+
     my $pagAMostrar=C4::AR::Preferencias->getValorPreferencia("paginas") || 10;
     my $numBloq=floor($actual / $pagAMostrar);
     my $limInf=($numBloq * $pagAMostrar);
     my $limSup=$limInf + $pagAMostrar;
     my $previous_text = "« ".C4::AR::Filtros::i18n('Anterior');
     my $next_text = C4::AR::Filtros::i18n('Siguiente')." »";
+
     if($limInf == 0){
         $limInf= 1;
         $limSup=$limInf + $pagAMostrar -1;

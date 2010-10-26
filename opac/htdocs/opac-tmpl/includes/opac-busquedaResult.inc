@@ -22,11 +22,14 @@
             <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
             <div class="resultados_consulta">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
             <div class="contenedor_paginador">[% paginador %]</div>
+            [% IF only_available %]
+               <h2 class="advice"> [% ' Solo se muestran ejemplares disponibles.' | i18n %] <a href="[% url_todos %]">([% ' Mostrar todos' | i18n %])</a></h2>
+            [% END %]
         [% END %]
         [% IF !from_suggested %]
             [% IF suggested %]
                     <div class="suggested_search">
-                        <a href="/cgi-bin/koha/opac-busquedasDB.pl?string=[% suggested %]&tipoAccion=[% tipoAccion %]&from_suggested=1&token=[% token %]">
+                        <a href="/cgi-bin/koha/opac-busquedasDB.pl?string=[% suggested %]&tipoAccion=[% tipoAccion %]&from_suggested=1&only_available=[% only_available %]&token=[% token %]">
                             [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
                         </a>
                     </div>

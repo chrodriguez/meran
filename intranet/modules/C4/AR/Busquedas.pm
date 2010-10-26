@@ -34,46 +34,46 @@ use Text::Aspell;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
-		&busquedaAvanzada
-		&busquedaCombinada
+    &busquedaAvanzada
+    &busquedaCombinada
 
-		&obtenerEdiciones
-		&obtenerGrupos
-		&obtenerDisponibilidadTotal
+    &obtenerEdiciones
+    &obtenerGrupos
+    &obtenerDisponibilidadTotal
 
-		&buscarMapeo
-		&buscarMapeoTotal
-		&buscarMapeoCampoSubcampo
-		&buscarCamposMARC
-		&buscarSubCamposMARC
-		&buscarAutorPorCond
-		&buscarDatoDeCampoRepetible
-		&buscarTema
+    &buscarMapeo
+    &buscarMapeoTotal
+    &buscarMapeoCampoSubcampo
+    &buscarCamposMARC
+    &buscarSubCamposMARC
+    &buscarAutorPorCond
+    &buscarDatoDeCampoRepetible
+    &buscarTema
 
-        &filtrarPorAutor
-		&MARCDetail
-	
-		&getLibrarian
-		&getautor
-		&getLevel
-		&getLevels
-		&getCountry
-		&getCountryTypes
-		&getSupport
-		&getSupportTypes
-		&getLanguage
-		&getLanguages
-		&getItemType
-		&getItemTypes
-		&getborrowercategory
-		&getAvail
-		&getAvails
-		&getTema
-		&getNombreLocalidad
-		&getBranches
-		&getBranch
+    &filtrarPorAutor
+    &MARCDetail
 
-		&t_loguearBusqueda
+    &getLibrarian
+    &getautor
+    &getLevel
+    &getLevels
+    &getCountry
+    &getCountryTypes
+    &getSupport
+    &getSupportTypes
+    &getLanguage
+    &getLanguages
+    &getItemType
+    &getItemTypes
+    &getborrowercategory
+    &getAvail
+    &getAvails
+    &getTema
+    &getNombreLocalidad
+    &getBranches
+    &getBranch
+
+    &t_loguearBusqueda
 );
 
 
@@ -518,7 +518,7 @@ sub obtenerGrupos {
 
 
 sub obtenerDisponibilidadTotal{
-	my ($id1, $itemtype) = @_;
+	my ($id1, $itemtype, $only_available) = @_;
 
 	my @disponibilidad;
 	my $dbh = C4::Context->dbh;
@@ -1143,7 +1143,24 @@ sub busquedaCombinada_newTemp{
         $hash_temp{'id1'} = $hash->{'doc'};
         $hash_temp{'hits'} = $hash->{'weight'};
 
-        push (@id1_array, \%hash_temp);
+##TODO mike lo va a hacer en el record para filtrar con Sphinx
+        if ($obj_for_log->{'only_available'}){
+            my @disponibilidad = &C4::AR::Busquedas::obtenerDisponibilidadTotal($hash->{'doc'}, $obj_for_log->{'tipo_nivel3_name'});
+        
+            $hash->{'disponibilidad'}      = 0;
+            if (scalar(@disponibilidad) > 0){
+                $hash->{'disponibilidad'}  = \@disponibilidad;
+            }
+            if ((@disponibilidad[0]->{'cantTotal'}) > 0){
+                push (@id1_array, \%hash_temp);
+            }
+        }else{
+            push (@id1_array, \%hash_temp);
+        }
+    }
+
+    if ($obj_for_log->{'only_available'}){
+        $total_found = scalar(@id1_array);
     }
 
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
@@ -1153,9 +1170,102 @@ sub busquedaCombinada_newTemp{
     if ( (!$from_suggested) && ($total_found<=3) && ($tipo ne 'SPH_MATCH_PHRASE') ){
         $string_suggested = getSuggestion($string_utf8_encoded,$total_found,1,$obj_for_log);
     }
+    
 
     return ($total_found, $resultsarray,$string_suggested);
 }
+
+
+
+
+sub armarInfoNivel1{
+    my ($params, @resultId1)    = @_;
+
+    my $tipo_nivel3_name        = $params->{'tipo_nivel3_name'};
+    my $only_available          = $params->{'only_available'};
+    my @result_array_paginado   = @resultId1;
+    my $cant_total              = scalar(@resultId1);
+    my @result_array_paginado_temp;
+
+    for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {
+
+        my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
+
+        if($nivel1){
+#                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".@result_array_paginado[$i]->{'id1'});
+#                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".($nivel1->toMARC)->as_formatted);
+        # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
+            @result_array_paginado[$i]->{'titulo'}              = $nivel1->getTitulo();
+            my $autor_object                                    = $nivel1->getAutorObject();
+#             @result_array_paginado[$i]->{'nomCompleto'}         = $nivel1->getAutorObject->getCompleto();
+#             @result_array_paginado[$i]->{'idAutor'}             = $nivel1->getAutorObject->getId();
+            @result_array_paginado[$i]->{'nomCompleto'}         = $autor_object->getCompleto();
+            @result_array_paginado[$i]->{'idAutor'}             = $autor_object->getId();
+            @result_array_paginado[$i]->{'esta_en_favoritos'}   = C4::AR::Nivel1::estaEnFavoritos($nivel1->getId1());
+            #aca se procesan solo los ids de nivel 1 que se van a mostrar
+            #se generan los grupos para mostrar en el resultado de la consulta
+            my $ediciones           = &C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA");
+            my $nivel2_array_ref    = &C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
+
+            @result_array_paginado[$i]->{'grupos'} = 0;
+            if(scalar(@$ediciones) > 0){
+                @result_array_paginado[$i]->{'grupos'}  = $ediciones;
+            }
+
+#             @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
+#             @result_array_paginado[$i]->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'M');
+#             @result_array_paginado[$i]->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'L');
+# FIXME para que se hace esto por nivel 1 ?????????????????????????????????????????????
+            my $images_n1_hash_ref = C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
+# C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
+
+            @result_array_paginado[$i]->{'portada_registro'}        =  $images_n1_hash_ref->{'S'};
+            @result_array_paginado[$i]->{'portada_registro_medium'} =  $images_n1_hash_ref->{'M'};
+            @result_array_paginado[$i]->{'portada_registro_big'}    =  $images_n1_hash_ref->{'L'};
+
+            
+            my @nivel2_portadas;
+            if (scalar(@$nivel2_array_ref)>1){
+                for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
+                    my $hash_nivel2;
+# TODO preguntar al mono pq se busca la imagen por nivel 1 y 2 ??????????????????????????????????????????
+#                     my $images_n2_hash_ref = C4::AR::PortadasRegistros::getAllImageForId2($nivel2_array_ref->[$i]->getId2);
+                    my $images_n2_hash_ref                      = $nivel2_array_ref->[$i]->getAllImage();
+#                     $hash_nivel2->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
+#                     $hash_nivel2->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
+#                     $hash_nivel2->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');
+                    $hash_nivel2->{'portada_registro'}          =  $images_n2_hash_ref->{'S'};
+                    $hash_nivel2->{'portada_registro_medium'}   =  $images_n2_hash_ref->{'M'};
+                    $hash_nivel2->{'portada_registro_big'}      =  $images_n2_hash_ref->{'L'};
+
+                    push(@nivel2_portadas, $hash_nivel2);
+                }
+
+                @result_array_paginado[$i]->{'portadas_grupo'}  = \@nivel2_portadas;
+            }
+            #se obtine la disponibilidad total 
+            @result_array_paginado[$i]->{'rating'}              =  C4::AR::Nivel2::getRatingPromedio($nivel2_array_ref);
+
+            my @disponibilidad = &C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,$only_available);
+        
+            @result_array_paginado[$i]->{'disponibilidad'}= 0;
+          
+            if (scalar(@disponibilidad) > 0){
+                @result_array_paginado[$i]->{'disponibilidad'}  = \@disponibilidad;
+            }
+
+            push (@result_array_paginado_temp, @result_array_paginado[$i]);
+        }
+    }
+
+    $cant_total             = scalar(@result_array_paginado_temp);
+    @result_array_paginado  = @result_array_paginado_temp;
+
+
+    return ($cant_total, \@result_array_paginado);
+}
+
+
 
 sub busquedaAvanzada_newTemp{
     my ($params,$session) = @_;
@@ -1507,90 +1617,6 @@ sub armarBuscoPor{
 	return $buscoPor;
 }
 
-
-sub armarInfoNivel1{
-    my ($params, @resultId1)    = @_;
-
-    my $tipo_nivel3_name        = $params->{'tipo_nivel3_name'};
-    my @result_array_paginado   = @resultId1;
-    my $cant_total              = scalar(@resultId1);
-    my @result_array_paginado_temp;
-
-    for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {
-
-        my $nivel1 = C4::AR::Nivel1::getNivel1FromId1(@result_array_paginado[$i]->{'id1'});
-
-        if($nivel1){
-#                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".@result_array_paginado[$i]->{'id1'});
-#                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".$nivel1->getTitulo());
-#                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".($nivel1->toMARC)->as_formatted);
-        # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
-            @result_array_paginado[$i]->{'titulo'}              = $nivel1->getTitulo();
-            my $autor_object                                    = $nivel1->getAutorObject();
-#             @result_array_paginado[$i]->{'nomCompleto'}         = $nivel1->getAutorObject->getCompleto();
-#             @result_array_paginado[$i]->{'idAutor'}             = $nivel1->getAutorObject->getId();
-            @result_array_paginado[$i]->{'nomCompleto'}         = $autor_object->getCompleto();
-            @result_array_paginado[$i]->{'idAutor'}             = $autor_object->getId();
-            @result_array_paginado[$i]->{'esta_en_favoritos'}   = C4::AR::Nivel1::estaEnFavoritos($nivel1->getId1());
-            #aca se procesan solo los ids de nivel 1 que se van a mostrar
-            #se generan los grupos para mostrar en el resultado de la consulta
-            my $ediciones           = &C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA");
-            my $nivel2_array_ref    = &C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
-
-            @result_array_paginado[$i]->{'grupos'} = 0;
-            if(scalar(@$ediciones) > 0){
-                @result_array_paginado[$i]->{'grupos'}  = $ediciones;
-            }
-
-#             @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
-#             @result_array_paginado[$i]->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'M');
-#             @result_array_paginado[$i]->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'L');
-# FIXME para que se hace esto por nivel 1 ?????????????????????????????????????????????
-            my $images_n1_hash_ref = C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
-# C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
-
-            @result_array_paginado[$i]->{'portada_registro'}        =  $images_n1_hash_ref->{'S'};
-            @result_array_paginado[$i]->{'portada_registro_medium'} =  $images_n1_hash_ref->{'M'};
-            @result_array_paginado[$i]->{'portada_registro_big'}    =  $images_n1_hash_ref->{'L'};
-
-            
-            my @nivel2_portadas;
-            if (scalar(@$nivel2_array_ref)>1){
-                for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
-                    my $hash_nivel2;
-# TODO preguntar al mono pq se busca la imagen por nivel 1 y 2 ??????????????????????????????????????????
-#                     my $images_n2_hash_ref = C4::AR::PortadasRegistros::getAllImageForId2($nivel2_array_ref->[$i]->getId2);
-                    my $images_n2_hash_ref                      = $nivel2_array_ref->[$i]->getAllImage();
-#                     $hash_nivel2->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
-#                     $hash_nivel2->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
-#                     $hash_nivel2->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');
-                    $hash_nivel2->{'portada_registro'}          =  $images_n2_hash_ref->{'S'};
-                    $hash_nivel2->{'portada_registro_medium'}   =  $images_n2_hash_ref->{'M'};
-                    $hash_nivel2->{'portada_registro_big'}      =  $images_n2_hash_ref->{'L'};
-
-                    push(@nivel2_portadas, $hash_nivel2);
-                }
-
-                @result_array_paginado[$i]->{'portadas_grupo'}  = \@nivel2_portadas;
-            }
-            #se obtine la disponibilidad total 
-            @result_array_paginado[$i]->{'rating'}              =  C4::AR::Nivel2::getRatingPromedio($nivel2_array_ref);
-            my @disponibilidad = &C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);
-        
-            @result_array_paginado[$i]->{'disponibilidad'}      = 0;
-            if(scalar(@disponibilidad) > 0){
-                @result_array_paginado[$i]->{'disponibilidad'}  = \@disponibilidad;
-            }
-
-            push (@result_array_paginado_temp, @result_array_paginado[$i]);
-        }
-    }
-
-    $cant_total             = scalar(@result_array_paginado_temp);
-    @result_array_paginado  = @result_array_paginado_temp;
-
-    return ($cant_total, \@result_array_paginado);
-}
 
 #*****************************************Soporte MARC************************************************************************
 #devuelve toda la info en MARC de un item (id3 de nivel 3)
