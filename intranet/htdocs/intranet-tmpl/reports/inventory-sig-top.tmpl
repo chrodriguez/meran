@@ -15,6 +15,24 @@
     }
 
     function consultarPorBarcode(){
+
+        //se busca por barcode
+        if ( ($("#barcode").val() == "")&&(($("#desde_signatura").val() == "")||($("#hasta_signatura").val() == "")) ){
+            jAlert(DEBE_INGRESAR_EL_BARCODE);
+            $("#desde_barcode").focus();
+  
+            return;
+        }
+
+        //se busca el barcode por rango
+        if ( ($("#barcode").val() == "")&&(($("#desde_barcode").val() == "")&&($("#hasta_barcode").val() == "")) ){
+            jAlert(DEBE_INGRESAR_EL_BARCODE);
+            $("#barcode").focus();
+  
+            return;
+        }
+
+
         objAH                   = new AjaxHelper(updateInfo);
         objAH.debug             = true;
         objAH.url               = "/cgi-bin/koha/reports/inventory-sig-topResult.pl";
@@ -29,6 +47,23 @@
     }
     
     function consultarPorSignatura(){
+
+        //se busca por signatura
+        if ( ($("#sigtop").val() == "")&&(($("#desde_signatura").val() == "")||($("#hasta_signatura").val() == "")) ){
+            jAlert(DEBE_INGRESAR_LA_SIGNATURA);
+            $("#desde_signatura").focus();
+  
+            return;
+        }
+
+        //se busca la signatura por rango
+        if ( ($("#sigtop").val() == "")&&(($("#desde_signatura").val() == "")&&($("#hasta_signatura").val() == "")) ){
+            jAlert(DEBE_INGRESAR_LA_SIGNATURA);
+            $("#sigtop").focus();
+  
+            return;
+        }
+
 	    objAH                   = new AjaxHelper(updateInfo);
         objAH.debug             = true;
 	    objAH.url               = "/cgi-bin/koha/reports/inventory-sig-topResult.pl";
@@ -137,15 +172,15 @@
     <legend class="titulo_legend">[% "Buscar nro. inventario: &nbsp;" | i18n %]</legend>
         <ul>
             <li class="sub_item">
-              <label for="sigtop">Nro. Inventario</label>
+              <label for="barcode">Nro. Inventario</label>
               <input type="text" id="barcode" value="[% barcode %]">
             </li>
             <li class="sub_item">
-              <label for="desde_signatura">[% "Desde" | i18n %]</label>
+              <label for="desde_barcode">[% "Desde" | i18n %]</label>
               <input type="text" id="desde_barcode" value="[% desde_barcode %]"> Min: [% barcode_min %] 
             </li>
             <li class="sub_item">
-              <label for="hasta_signatura">[% "Hasta" | i18n %]</label>
+              <label for="hasta_barcode">[% "Hasta" | i18n %]</label>
               <input type="text" id="hasta_barcode" value="[% hasta_barcode %]"> Max: [% barcode_max %] 
             </li>
             <li class="sub_item">
