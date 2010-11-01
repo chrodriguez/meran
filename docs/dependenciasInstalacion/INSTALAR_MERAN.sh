@@ -18,15 +18,17 @@ mkdir /etc/apache2/ssl
 openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/apache2/ssl/apache.pem -out /etc/apache2/ssl/apache.pem
 #Configurar Meran
 mkdir /etc/meran
-cp ../configuracion/meran/koha.conf /etc/meran
-chmod -R +r /etc/meran/koha.conf
+cp ../configuracion/meran/meran.conf /etc/meran
+chmod -R +r /etc/meran/meran.conf
 #Logs de meran
 mkdir /var/log/meran
 cp ../configuracion/logrotate.d/meran /etc/logrotate.d/
 #Configurar Sphinx
+cp ../configuracion/sphinx/sphinxsearch /etc/default/
 cp ../configuracion/sphinx/sphinx.conf /etc/sphinxsearch/sphinx.conf
-
 #Configurar cron
 #Crear bdd
 #Dar permisos a los usuarios en la bdd (userAdmin,userOPAC,userINTRA,userDevelop)
 #Reiniciar apache 
+#Iniciar sphinx
+#Reindexar
