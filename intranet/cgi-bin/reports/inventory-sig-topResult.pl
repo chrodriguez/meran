@@ -42,7 +42,6 @@ if ($accion eq "CONSULTA_POR_SIGNATURA") {
     ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::listarItemsDeInventorioPorSigTop($obj);
     my ($path, $filename)            = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');        
     $t_params->{'filename'}          = '/reports/'.$filename;
-#     $cant                            = $cant_total;#scalar(@$cat_nivel3);
     $t_params->{'results'}           = $cat_nivel3;
 
 }
@@ -51,7 +50,6 @@ if ($accion eq "CONSULTA_POR_BARCODE") {
     ($cant_total, $cat_nivel3, $array_hash_ref)  = C4::AR::Estadisticas::listarItemsDeInventorioPorBarcode($obj);
     my ($path, $filename)           = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');
     $t_params->{'filename'}         = '/reports/'.$filename;
-#     $cant                           = $cant_total;#scalar(@$cat_nivel3);
     $t_params->{'results'}          = $cat_nivel3;
 }
 

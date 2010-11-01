@@ -8,7 +8,7 @@
                 <a title="[% socio_data.usr_nombre %], [% socio_data.usr_apellido %]" rel="contact" class="url" 
                     href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]">
                     [% IF socio_data.usr_tiene_foto %]
-                        <img width="48" height="48" src="[% themelang %]/pictures/[% socio_data.tiene_foto %]" class="side_thumb photo fn" 
+                        <img width="48" height="48" src="[% themelang %]/pictures/[% socio_data.usr_tiene_foto %]" class="side_thumb photo fn" 
                             alt="[% socio_data.usr_nombre %], [% socio_data.usr_apellido %]"/>
                     [% ELSE %]
                           <img  width="48" height="48" src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 

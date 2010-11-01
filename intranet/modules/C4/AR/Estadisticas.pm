@@ -201,6 +201,8 @@ sub getMinYMaxSignaturaTopografica{
     return ($signatura_min, $signatura_max);
 }
 
+
+# TODO ver si se puede utilizar el sphix para no procesar todos los ejemplares
 sub listarItemsDeInventorioPorSigTop{
     my ($params_hash_ref) = @_;
 
@@ -219,7 +221,8 @@ sub listarItemsDeInventorioPorSigTop{
     my $signatura       = C4::AR::Utilidades::trim($params_hash_ref->{'sigtop'});
     my $desde_signatura = C4::AR::Utilidades::trim($params_hash_ref->{'desde_signatura'});
     my $hasta_signatura = C4::AR::Utilidades::trim($params_hash_ref->{'hasta_signatura'});
-    
+ 
+
     for(my $i=0; $i < $cant; $i++){
 
         my %hash_info;
@@ -234,6 +237,7 @@ sub listarItemsDeInventorioPorSigTop{
 #         $hash_info{'edicion'}                 = $cat_nivel3_array_ref->[$i]->nivel2->getVolumen();
         $hash_info{'anio_publicacion'}        = $cat_nivel3_array_ref->[$i]->nivel2->getAnio_publicacion();
         $hash_info{'ui'}                      = $cat_nivel3_array_ref->[$i]->getId_ui_poseedora();
+
 
 # TODO esto esta feooooooo despues lo acomodo
         if ($params_hash_ref->{'sigtop'} ne "" && $cat_nivel3_array_ref->[$i]->getSignatura_topografica() =~ m/^$signatura/i) {

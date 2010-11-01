@@ -32,6 +32,7 @@ if($obj){
   $obj->{'tipoAccion'} = $input->param('tipoAccion');
 #   $obj->{'string'} = Encode::decode_utf8($input->param('string'));
   $obj->{'string'} = $input->param('string');
+  $obj->{'only_available'} = $input->param('only_available') || 0;
   $obj->{'from_suggested'} = $input->param('from_suggested');
   $obj->{'tipoBusqueda'} = 'all';
   $obj->{'ini'} = $input->param('page') || 0;
@@ -41,7 +42,8 @@ if($obj){
 
 # my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".Encode::encode_utf8($obj->{'string'})."&tipoAccion=".$obj->{'tipoAccion'};
 
-my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
+my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
+my $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
 
 
 my $ini= $obj->{'ini'};
@@ -92,9 +94,12 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 }
 
 
-$t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
 $t_params->{'suggested'}        = $suggested;
 $t_params->{'tipoAccion'}       = $obj->{'tipoAccion'};
+$t_params->{'url_todos'}        = $url_todos;
+$t_params->{'only_available'}   = $obj->{'only_available'};
+
+$t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
 #se arma el arreglo con la info para mostrar en el template
 my $elapsed                     = Time::HiRes::tv_interval( $start );
 $t_params->{'timeSeg'}          = $elapsed;
