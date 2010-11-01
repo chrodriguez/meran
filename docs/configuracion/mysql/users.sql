@@ -34,8 +34,9 @@ GRANT SELECT, UPDATE on  usr_socio                      to userOPAC@localhost;
 -- Permisos de la intra
 GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  *   to userINTRA@localhost;
 
--- Permisos de dev
-GRANT ALL on  *   to userINTRA@localhost;
+-- Permisos de dev y admin
+GRANT ALL on  *   to userDevelop@localhost;
+GRANT ALL on  *   to userAdmin@localhost;
 
 -- Permisos para el indice (sphinx)
 GRANT SELECT on  indice_busqueda  to indice@localhost;
