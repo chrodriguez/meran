@@ -4,6 +4,7 @@ apt-get install git-core -y
 cd /usr/share/
 git clone ssh://root@proyectos.linti.unlp.edu.ar/var/meran
 cd /usr/share/meran/docs/dependenciasInstalacion/
+cp ../configuracion/git/config ../../.git/
 #Instalar dependencias
 sh dependenciasKOHA.sh
 #Configurar apache
