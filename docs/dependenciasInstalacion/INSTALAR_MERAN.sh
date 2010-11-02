@@ -31,7 +31,8 @@ mkdir /var/log/meran
 cp ../configuracion/logrotate.d/meran /etc/logrotate.d/
 
 #Configurar Sphinx
-cp ../configuracion/sphinx/sphinxsearch /etc/default/
+cp ../configuracion/sphinx/default-sphinxsearch /etc/default/sphinxsearch
+cp ../configuracion/sphinx/init.d-sphinxsearch /etc/init.d/sphinxsearch
 cp ../configuracion/sphinx/sphinx.conf /etc/sphinxsearch/sphinx.conf
 
 #Crear bdd
