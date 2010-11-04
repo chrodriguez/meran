@@ -29,6 +29,7 @@ __PACKAGE__->meta->setup(
         marc_record     => { type => 'text' },
         id1             => { type => 'integer', not_null => 1 },
         id2             => { type => 'integer', not_null => 1 },
+        date            => { type => 'varchar' },
     ],
 
     primary_key_columns => [ 'id' ],

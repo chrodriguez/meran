@@ -286,6 +286,14 @@
                                                             ) ;
                             [% END %]
                         </li>
+                        <li>
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Altas de Registro' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/reports/altas_registro.pl",
+                                                                title =>    "[% 'Altas de registro' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </li>
                           <li>
                                     [% PERL %]
                                         print C4::AR::Filtros::link_to( text =>     "[% 'Inventario y Signatura' | i18n %]",
