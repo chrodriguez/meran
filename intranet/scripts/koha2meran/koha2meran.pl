@@ -459,7 +459,7 @@ $biblios->finish();
 	my $reserves3=$dbh->prepare("UPDATE reserves SET id2 = ? , id3 = ?  where biblioitemnumber = ? and itemnumber = ?;");
 	$reserves3->execute($nivel3->{'id2'},$nivel3->{'id'},$nivel3->{'biblioitemnumber'},$nivel3->{'itemnumber'});
 	$reserves3->finish();
-
+.
 	my $mod3=$dbh->prepare("UPDATE modificaciones SET id = ? where tipo = 'Ejemplar' and numero = ?;");
 	$mod3->execute($nivel3->{'id'},$nivel3->{'itemnumber'});
 	$mod3->finish();
@@ -791,7 +791,7 @@ $biblios->finish();
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;"
 "DROP TABLE IF EXISTS `cat_portada_registro`;",
 "CREATE TABLE IF NOT EXISTS `cat_portada_registro` (
-  `id` tinyint(4) NOT NULL auto_increment,
+  `id` int(11) NOT NULL auto_increment,
   `isbn` varchar(50) NOT NULL,
   `small` varchar(500) default NULL,
   `medium` varchar(500) default NULL,
@@ -1202,31 +1202,60 @@ foreach my $sql (@sqls){
     #########################################################################
     #           Renombramos tablas!!!             #
     #########################################################################
-    my @antes=( 'biblioanalysis','autores','analyticalauthors','colaboradores','shelfcontents',
-                'publisher','bookshelf','availability','referenciaColaboradores','itemtypes',
-                'temas','analyticalsubject','issues','issuetypes','sanctionrules',
-                'sanctiontypesrules','reserves','sanctions','sanctionissuetypes','sanctiontypes',
-                'branchcategories','feriados','iso2709','stopwords','systempreferences',
-                'branchrelations','branches','authorised_values','dptos_partidos',
-                'languages','localidades','bibliolevel','countries','provincias',
-                'supports','historicCirculation','historicIssues','historicSanctions','modificaciones',
-                'persons','categories','borrowers','deletedborrowers','historialBusqueda','busquedas','sessions','userflags');
+        my %hash = ();
+        $hash{ 'biblioanalysis' } = 'cat_analitica';
+        $hash{ 'autores' } = 'cat_autor';
+        $hash{ 'analyticalauthors' } = 'cat_autor_analitica';
+        $hash{ 'colaboradores' } = 'cat_colaborador';
+        $hash{ 'shelfcontents' } = 'cat_contenido_estante';
+        $hash{ 'publisher' } = 'cat_editorial';
+        $hash{ 'bookshelf' } = 'cat_estante';
+        $hash{ 'availability' } = 'cat_historico_disponibilidad';
+        $hash{ 'referenciaColaboradores' } = 'cat_ref_colaborador';
+        $hash{ 'itemtypes' } = 'cat_ref_tipo_nivel3';
+        $hash{ 'temas' } = 'cat_tema';
+        $hash{ 'analyticalsubject' } = 'cat_tema_analitica';
+        $hash{ 'issues' } = 'circ_prestamo';
+        $hash{ 'issuetypes' } = 'circ_ref_tipo_prestamo';
+        $hash{ 'sanctionrules' } = 'circ_regla_sancion';
+        $hash{ 'sanctiontypesrules' } = 'circ_regla_tipo_sancion';
+        $hash{ 'reserves' } = 'circ_reserva';
+        $hash{ 'sanctions' } = 'circ_sancion';
+        $hash{ 'sanctionissuetypes' } = 'circ_tipo_prestamo_sancion';
+        $hash{ 'sanctiontypes' } = 'circ_tipo_sancion';
+        $hash{ 'branchcategories' } = 'pref_categoria_unidad_informacion';
+        $hash{ 'feriados' } = 'pref_feriado';
+        $hash{ 'iso2709' } = 'pref_iso2709';
+        $hash{ 'stopwords' } = 'pref_palabra_frecuente';
+        $hash{ 'systempreferences' } = 'pref_preferencia_sistema';
+        $hash{ 'branchrelations' } = 'pref_relacion_unidad_informacion';
+        $hash{ 'branches' } = 'pref_unidad_informacion';
+        $hash{ 'authorised_values' } = 'pref_valor_autorizado';
+        $hash{ 'dptos_partidos' } = 'ref_dpto_partido';
+        $hash{ 'languages' } = 'ref_idioma';
+        $hash{ 'localidades' } = 'ref_localidad';
+        $hash{ 'bibliolevel' } = 'ref_nivel_bibliografico';
+        $hash{ 'countries' } = 'ref_pais';
+        $hash{ 'provincias' } = 'ref_provincia';
+        $hash{ 'supports' } = 'ref_soporte';
+        $hash{ 'historicCirculation' } = 'rep_historial_circulacion';
+        $hash{ 'historicIssues' } = 'rep_historial_prestamo';
+        $hash{ 'historicSanctions' } = 'rep_historial_sancion';
+        $hash{ 'modificaciones' } = 'rep_registro_modificacion';
+        $hash{ 'persons' } = 'usr_persona';
+        $hash{ 'categories' } = 'usr_ref_categoria_socio';
+        $hash{ 'borrowers' } = 'usr_socio';
+        $hash{ 'deletedborrowers' } = 'usr_socio_borrado';
+        $hash{ 'historialBusqueda' } = 'rep_historial_busqueda';
+        $hash{ 'busquedas' } = 'rep_busqueda';
+        $hash{ 'sessions' } = 'sist_sesion';
+        $hash{ 'userflags' } = 'usr_permiso';
 
-    my @despues=( 'cat_analitica','cat_autor','cat_autor_analitica','cat_colaborador','cat_contenido_estante',
-                'cat_editorial','cat_estante','cat_historico_disponibilidad','cat_ref_colaborador','cat_ref_tipo_nivel3',
-                'cat_tema','cat_tema_analitica','circ_prestamo','circ_ref_tipo_prestamo','circ_regla_sancion',
-                'circ_regla_tipo_sancion','circ_reserva','circ_sancion','circ_tipo_prestamo_sancion','circ_tipo_sancion',
-                'pref_categoria_unidad_informacion','pref_feriado','pref_iso2709','pref_palabra_frecuente','pref_preferencia_sistema',
-                'pref_relacion_unidad_informacion','pref_unidad_informacion','pref_valor_autorizado','ref_dpto_partido',
-                'ref_idioma','ref_localidad','ref_nivel_bibliografico','ref_pais','ref_provincia',
-                'ref_soporte','rep_historial_circulacion','rep_historial_prestamo','rep_historial_sancion',
-                'rep_registro_modificacion','usr_persona','usr_ref_categoria_socio','usr_socio','usr_socio_borrado',
-                'rep_historial_busqueda','rep_busqueda','sist_sesion','usr_permiso');
+        foreach my $llave (keys %hash){
+            my $rename=$dbh->prepare("RENAME TABLE ".$llave." TO ".$hash{$llave}."; ");
+            $rename->execute();
+        } 
 
-  for(my $i=0; $i< scalar(@antes); $i++){
-    my $rename=$dbh->prepare("RENAME TABLE ".$antes[$i]." TO ".$despues[$i]."; ");
-    $rename->execute();
-  }
 ### Despues de renombrar hay que alterarlas 
 
     my @alternos=(
@@ -1907,119 +1936,119 @@ my $kohaadmin_socio="INSERT INTO `usr_socio` (`id_persona`, `nro_socio`, `id_ui`
     my $pref0=$dbh->prepare("DROP TABLE `pref_preferencia_sistema`;");
      $pref0->execute();
 
-    my $pref1=$dbh->prepare("CREATE TABLE IF NOT EXISTS `pref_preferencia_sistema` (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `variable` varchar(50) NOT NULL DEFAULT '',
-                            `value` text,
-                            `explanation` varchar(200) NOT NULL DEFAULT '',
-                            `options` text,
-                            `type` varchar(20) DEFAULT NULL,
-                            `categoria` varchar(255) NOT NULL DEFAULT 'sistema',
-                            PRIMARY KEY (`id`),
-                            UNIQUE KEY `variable` (`variable`)
-                            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;");
+    my $pref1=$dbh->prepare("CREATE TABLE  `pref_preferencia_sistema` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `variable` varchar(50) NOT NULL DEFAULT '',
+        `value` text,
+        `explanation` varchar(200) NOT NULL DEFAULT '',
+        `options` text,
+        `type` varchar(20) DEFAULT NULL,
+        `categoria` varchar(255) NOT NULL DEFAULT 'sistema',
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `variable` (`variable`)
+        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;");
      $pref1->execute();
 
     my $pref2=$dbh->prepare("
-        INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES
-        (1, 'auto-nro_socio_from_dni', '1', 'Preferencia que configura el auto-generar de nro de socio. Si es 0, es el autogenerar *serial*, sino sera el documento.', NULL, NULL, 'sistema'),
-        (2, 'autoActivarPersona', '1', 'Activa por defecto un alta de una persona', NULL, 'bool', 'sistema'),
-        (3, 'autoMemberNum', '0', 'Member number is auto-calculated', NULL, 'bool', 'sistema'),
-        (4, 'barcodeFormat', 'UI,-,tipo_ejemplar,-', 'Formato del Barcode para la generación automática es un campo de item seguido de un separador', NULL, 'text', 'sistema'),
-        (5, 'beginESissue', '60', 'Cantidad de minutos antes del cierre de la biblioteca que se puede realizar un prestamo ESPECIAL.', NULL, 'text', 'sistema'),
-        (6, 'CheckUpdateDataEnabled', '1', 'evita que Koha modifique los datos del usuario', NULL, 'bool', 'sistema'),
-        (7, 'circularDesdeDetalleDelRegistro', '1', 'se permite (=1) circular desde el detalle del registro', NULL, 'bool', 'sistema'),
-        (8, 'circularDesdeDetalleUsuario', '1', 'se permite (=1) circular desde el detalle del usuario', NULL, 'bool', 'sistema'),
-        (9, 'circulation', '1', 'Habilita o dehabilita la circulación en la biblioteca desde la parte del opac', '', 'bool', 'sistema'),
-        (10, 'close', '19:00', 'Horario de Cierre de la Biblioteca', NULL, 'text', 'sistema'),
-        (11, 'dateformat', 'metric', 'date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)', 'dateformat', 'valAuto', 'sistema'),
-        (12, 'dayrenewals', '1', 'Numero de dias que se renueva un prestamo como maximo.', NULL, 'text', 'sistema'),
-        (13, 'daysissue', '4', 'No se qu e era', NULL, 'text', 'sistema'),
-        (14, 'daysOfSanctionReserves', '15', 'Indica la cantidad de dias se sancion que le corresponde a un usuario que hace una reserva y no va a buscarla', NULL, 'text', 'sistema'),
-        (15, 'daysvirtualcomplete', '10', 'Cantidad de d&iacute;as que un pedido puede estar completado', NULL, 'text', 'sistema'),
-        (16, 'daysvirtualrequest', '4', 'Cantidad de diÂ­as que un pedido puede estar pendiente.', NULL, 'text', 'sistema'),
-        (17, 'days_to_renew', '1', 'N&uacute;mero de d&iacute;as antes del vencimiento de un prestamo en el que se puede renovar.', NULL, 'text', 'sistema'),
-        (18, 'defaultbranch', 'DEO', 'Unidad de informacion por defecto', 'ui|nombre', 'referencia', 'sistema'),
-        (19, 'defaultCategoriaSocio', 'ES', 'Categoria de Socio por defecto', 'tipo_socio|description', 'referencia', 'sistema'),
-        (20, 'defaultDisponibilidad', '0', 'Disponibilidad por defecto', 'disponibilidad|nombre', 'referencia', 'sistema'),
-        (21, 'defaultissuetype', 'DO', 'Es el tipo de préstamo por defecto de la biblioteca', 'tipo_prestamo|descripcion', 'referencia', 'sistema'),
-        (22, 'defaultlevel', 'm', 'Nivel bibliográfico por defecto', 'nivel_bibliografico|description', 'referencia', 'sistema'),
-        (23, 'defaultsuport', '1', ' Soporte por defecto', 'soporte|description', 'referencia', 'sistema'),
-        (24, 'defaultTipoDoc', 'DNI', 'Tipo de Documento de Usuario por defecto', 'tipo_documento_usr|descripcion', 'referencia', 'sistema'),
-        (25, 'defaultTipoNivel3', 'LIB', 'Tipo de Documento por defecto', 'tipo_ejemplar|nombre', 'referencia', 'sistema'),
-        (26, 'EnabledMailSystem', '1', 'Indica si el sistema debe o no enviar mails', NULL, 'bool', 'sistema'),
-        (27, 'endESissue', '35', 'Cantidad de minutos luego de la apertura de la biblioteca  en que se puede devolver un prestamo ESPECIAL.', NULL, 'text', 'sistema'),
-        (28, 'habilitar_https', '1', 'habilita https (=1) o no (=0)', NULL, 'bool', 'sistema'),
-        (29, 'habilitar_irregulares', '0', 'Habilita o no alumnos irregulares', NULL, 'bool', 'sistema'),
-        (30, 'insecure', '0', 'Si es SI, no se necesita autorizacion para nada. CUIDADO!!', NULL, 'bool', 'sistema'),
-        (31, 'keeppasswordalive', '0', 'Indica la cantidad de dias de vida que tiene una contraseña para aquellas cuentas cuya contraseña vence. Si el valor es 0 (cero) entonces la contraseña solo debe ser cambiada la primera vez', NULL, 'bool', 'sistema'),
-        (32, 'KohaAdminEmailAddress', '', 'the email address where borrowers modifs are sent', NULL, 'text', 'sistema'),
-        (33, 'ldapenabled', '0', 'Indica si se usa ldap para hacer autenticacion de usuarios', NULL, 'bool', 'sistema'),
-        (34, 'ldapinfos', '', 'Sufijo de la Base de Datos Ldap', NULL, 'text', 'sistema'),
-        (35, 'ldappass', '', 'Es la clave del del root del servidor Ldap', NULL, 'text', 'sistema'),
-        (36, 'ldaproot', 'admin', 'Es el nombre de usuario del administrador del Ldap', NULL, 'text', 'sistema'),
-        (37, 'ldapserver', 'localhost', 'Dirección del Servidor Ldap', NULL, 'text', 'sistema'),
-        (38, 'libreDeuda', '11111', 'variable que limita la impresion del documento de libre deuda', NULL, 'text', 'sistema'),
-        (39, 'logSearchINTRA', '0', 'Habilita (1) o no (0) loguea busquedas en la INTRA', NULL, 'bool', 'sistema'),
-        (40, 'logSearchOPAC', '0', 'Habilita (1) o no (0) loguea busquedas en el OPAC', NULL, 'bool', 'sistema'),
-        (41, 'mailFrom', '', 'From del Mail', NULL, 'text', 'sistema'),
-        (42, 'mailMensajeVencido', ' Debe un ejemplar de\r\n        TITLE:UNITITLE\r\n desde la fecha DATE.', 'Como se envia el vencimiento de un ejemplar por mail', NULL, 'texta', 'sistema'),
-        (43, 'mailMessage', 'Sr./Sra.  FIRSTNAME SURNAME :\r\n\r\nMENSAJEVENCIDO\r\n\r\nBRANCH\r\n', 'Mensaje del mail', NULL, 'texta', 'sistema'),
-        (44, 'mailSubject', 'Aviso de prestamo vencido !!!', 'Subject del mail', NULL, 'text', 'sistema'),
-        (45, 'maxissues', '3', 'N&uacute;mero m&aacute;ximo de prestamos', NULL, 'text', 'sistema'),
-        (46, 'maxrenewals', '4', 'M&aacute;ximo n&uacute;mero de renovaciones posibles mientras no sea reservado por otra persona', NULL, 'text', 'sistema'),
-        (47, 'maxreserves', '5', 'Numero maximo de reservas', NULL, 'text', 'sistema'),
-        (48, 'maxwaiting', '3', 'Maximo de reservas en espera.', NULL, 'text', 'sistema'),
-        (49, 'noissuescharge', '3', 'maximum amount withstanding to be able to check out an item', NULL, 'text', 'sistema'),
-        (50, 'opaclanguages', 'es2', 'Set the preferred order for translations.  The top language will be tried first.', NULL, 'text', 'sistema'),
-        (51, 'opacSearchAnonymous', '1', 'Esta preferencia permite (=1) realizar bùsquedas desde el OPAC sin haber iniciado sesiòn', NULL, 'bool', 'sistema'),
-        (52, 'opacthemes', 'default', 'Set the preferred order for themes.  The top theme will be tried first.', NULL, 'text', 'sistema'),
-        (53, 'opacUnavail', '1', 'Muestra en Opac ', '', 'bool', 'sistema'),
-        (54, 'open', '08:00', 'Horario de Apertura de la Biblioteca', NULL, 'text', 'sistema'),
-        (55, 'paginas', '10', 'Cantidad de paginas que va a  mostrar el paginador.', '', 'text', 'sistema'),
-        (56, 'permite_cambio_password_desde_opac', '1', 'permite (=1) o no (=0) el cambio de password desde el OPAC', NULL, 'bool', 'sistema'),
-        (57, 'print_renew', '1', 'indica si se imprime la renovacion o no, (1 para si, 0 para no), desde la intranet', NULL, 'bool', 'sistema'),
-        (58, 'puerto_para_https', '444', 'puerto para https', NULL, 'text', 'sistema'),
-        (59, 'reminderMail', '0', 'Habilita o deshabilita el mail de recodatorio de devolucion de ejemplares', NULL, 'bool', 'sistema'),
-        (60, 'reminderMessage', 'Sr./Sra. FIRSTNAME SURNAME : \r\n\r\nSe le recuerda que el día VENCIMIENTO debe reintegrar el ejemplar que posee del libro  \r\nTITLE:UNITITLE - AUTHOR (EDICION) \r\na la BRANCH.\r\n\r\nMuchas gracias\r\n', 'Mensaje del mail de recordatorio de prestamo a vencer', NULL, 'texta', 'sistema'),
-        (61, 'reminderSubject', 'Recordatorio de vencimiento de préstamos', 'Subject del mail de recodatorio de prestamo a vencer', NULL, 'text', 'sistema'),
-        (62, 'renglones', '10', 'Cantidad de renglones que se muestran en las b&uacute;squedas', NULL, 'text', 'sistema'),
-        (63, 'reserveFrom', '', 'Direccion desde la que llegan los mails que se refieren a las reservas', NULL, 'text', 'sistema'),
-        (64, 'reserveGroup', '3', 'Numero de di­as que tiene el usuario para retirar el libro si la reserva se efectua sobre un grupo. Dicho lapso comienza a contarse a partir de que la reserva se asocia a un item.', NULL, 'text', 'sistema'),
-        (65, 'reserveItem', '1', 'Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item', NULL, 'text', 'sistema'),
-        (66, 'reserveMessage', 'Estimado/a SURNAME FIRSTNAME, \r\nTiene un ejemplar disponible para retirar.\r\nTítulo: TITLE\r\nAutor: AUTHOR\r\nLo puede retirar desde el a1 a las a2 hasta el a4 a las a3.', 'El mensaje que nos llegapor una reserva que esta disponible. Las variables que se reemplazan por ahora son: BRANCH,FIRSTNAME,SURNAME,UNITITLE,TITLE,AUTHOR,a1,a2,a3,a4 fechas y horas, EDICION', NULL, 'texta', 'sistema'),
-        (67, 'reserveSubject', 'Importante: Reservas en BRANCH', 'Subject del mail que llega BRANCHNAME se colocarÃ¡ el nombre de la biblioteca', NULL, 'text', 'sistema'),
-        (68, 'sanctions', '1', 'Indica si se hace uso de las sanciones por retraso en la devolucón de los elementos prestados por la biblioteca.', NULL, 'bool', 'sistema'),
-        (69, 'selectHomeBranch', '1', '1 para poder seleccionar otra biblioteca, 0 para que la biblioteca sea la de defecto', NULL, 'bool', 'sistema'),
-        (70, 'showHistoricReserves', '0', 'Muestra (valor = 1) o no el historico de reservas en el OPAC', NULL, 'bool', 'sistema'),
-        (71, 'showMenuItem_circ_devolucion_renovacion', '1', 'Preferencia que configura si el menu item dado se muestra o no en el menu (1 sí ; 0 no).', NULL, 'bool', 'sistema'),
-        (72, 'showMenuItem_circ_prestamos', '1', 'Preferencia que configura si el menu item dado se muestra o no en el menu (1 sí ; 0 no).', NULL, 'bool', 'sistema'),
-        (73, 'split_by_levels', '1', 'Para mostrar en el OPAC el detalle dividido por niveles o no', NULL, NULL, 'sistema'),
-        (74, 'susp', '1', 'Habilita o no el uso de suspensiones', NULL, 'bool', 'sistema'),
-        (75, 'template', 'blue', 'Preference order for intranet interface templates', NULL, 'text', 'sistema'),
-        (76, 'timeout', '3600', 'Inactivity timeout for cookies authentication (in seconds)', NULL, 'text', 'sistema'),
-        (77, 'titulo_nombre_ui', 'Biblioteca - U.N.L.P.', '', NULL, 'text', 'sistema'),
-        (78, 'UploadPictureFromOPAC', '1', 'Permito o no que se pueda subir la foto de un usuario desde el OPAC', NULL, 'bool', 'sistema'),
-        (79, 'usercourse', '0', 'habilita o no que el curso de usuario sea necesario para utilizar el opac. ', NULL, 'bool', 'sistema'),
-        (80, 'viewDetail', '1', 'Habilita o Deshabilita la muestra de campos.', NULL, 'bool', 'sistema'),
-        (81, 'z3950_ cant_resultados', '25', 'Cantidad de resultados por servidor en una busqueda z3950 MAX para devoler todos', NULL, 'text', 'sistema'),
-        (82, 'longitud_barcode', '3', 'cantidad de caracteres que conforman el barcode', NULL, NULL, 'sistema'),
-        (83, 'limite_resultados_autocompletables', '20', 'limite de resultados a mostrar en los campos autocompletables', NULL, NULL, 'sistema'),
-        (84, 'perfil_opac', '1', 'Id del perfil de visualizacion para OPAC', NULL, NULL, 'sistema'),
-        (85, 'detalle_resumido', '1', 'Muestra el detalle desde el OPAC en forma resumida', NULL, NULL, 'sistema'),
-        (86, 'defaultUI', 'DEO', 'Unidad de informacion por defecto', NULL, 'text', 'sistema'),
-        (87, 'google_map', '', '', NULL, NULL, 'sistema'),
-        (88, 'tema_opac_test', 'test', 'Un tema para el OPAC', NULL, NULL, 'temas_opac'),
-        (89, 'tema_opac_default', 'default', 'Un tema para el OPAC', NULL, NULL, 'temas_opac'),
-        (90, 'tema_intra_test', 'test', 'Un tema para el INTRA', NULL, NULL, 'temas_intra'),
-        (91, 'tema_intra_default', 'default', 'Un tema para el INTRA', NULL, NULL, 'temas_intra'),
-        (92, 'tema_opac', 'default', 'El tema por defecto para OPAc', '', '', 'sistema'),
-        (93, 'tema_intra', 'default', 'El tema por defecto para INTRANET', NULL, NULL, 'sistema'),
-        (94, 'port_mail', '587', 'puerto del servidor de mail', NULL, 'text', 'sistema'),
-        (95, 'username_mail', 'kkohatesting@yahoo.com.ar', 'usuario de la cuenta de mail', NULL, 'text', 'sistema'),
-        (96, 'password_mail', 'pato123', 'password de la cuenta de mail', NULL, 'text', 'sistema'),
-        (97, 'smtp_server', 'smtp.live.com', 'Servidor SMTP', NULL, 'text', 'sistema'),
-        (98, 'smtp_metodo', 'TLS', 'Método de encriptación usado por el servidor SMTP para la autenticación', NULL, 'text', 'sistema');
+        INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES
+        ( 'auto-nro_socio_from_dni', '1', 'Preferencia que configura el auto-generar de nro de socio. Si es 0, es el autogenerar *serial*, sino sera el documento.', NULL, NULL, 'sistema'),
+        ( 'autoActivarPersona', '1', 'Activa por defecto un alta de una persona', NULL, 'bool', 'sistema'),
+        ( 'autoMemberNum', '0', 'Member number is auto-calculated', NULL, 'bool', 'sistema'),
+        ( 'barcodeFormat', 'UI,-,tipo_ejemplar,-', 'Formato del Barcode para la generación automática es un campo de item seguido de un separador', NULL, 'text', 'sistema'),
+        ( 'beginESissue', '60', 'Cantidad de minutos antes del cierre de la biblioteca que se puede realizar un prestamo ESPECIAL.', NULL, 'text', 'sistema'),
+        ( 'CheckUpdateDataEnabled', '1', 'evita que Koha modifique los datos del usuario', NULL, 'bool', 'sistema'),
+        ( 'circularDesdeDetalleDelRegistro', '1', 'se permite (=1) circular desde el detalle del registro', NULL, 'bool', 'sistema'),
+        ( 'circularDesdeDetalleUsuario', '1', 'se permite (=1) circular desde el detalle del usuario', NULL, 'bool', 'sistema'),
+        ( 'circulation', '1', 'Habilita o dehabilita la circulación en la biblioteca desde la parte del opac', '', 'bool', 'sistema'),
+        ( 'close', '19:00', 'Horario de Cierre de la Biblioteca', NULL, 'text', 'sistema'),
+        ( 'dateformat', 'metric', 'date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)', 'dateformat', 'valAuto', 'sistema'),
+        ( 'dayrenewals', '1', 'Numero de dias que se renueva un prestamo como maximo.', NULL, 'text', 'sistema'),
+        ( 'daysissue', '4', 'No se qu e era', NULL, 'text', 'sistema'),
+        ( 'daysOfSanctionReserves', '15', 'Indica la cantidad de dias se sancion que le corresponde a un usuario que hace una reserva y no va a buscarla', NULL, 'text', 'sistema'),
+        ( 'daysvirtualcomplete', '10', 'Cantidad de d&iacute;as que un pedido puede estar completado', NULL, 'text', 'sistema'),
+        ( 'daysvirtualrequest', '4', 'Cantidad de diÂ­as que un pedido puede estar pendiente.', NULL, 'text', 'sistema'),
+        ( 'days_to_renew', '1', 'N&uacute;mero de d&iacute;as antes del vencimiento de un prestamo en el que se puede renovar.', NULL, 'text', 'sistema'),
+        ( 'defaultbranch', 'DEO', 'Unidad de informacion por defecto', 'ui|nombre', 'referencia', 'sistema'),
+        ( 'defaultCategoriaSocio', 'ES', 'Categoria de Socio por defecto', 'tipo_socio|description', 'referencia', 'sistema'),
+        ( 'defaultDisponibilidad', '0', 'Disponibilidad por defecto', 'disponibilidad|nombre', 'referencia', 'sistema'),
+        ( 'defaultissuetype', 'DO', 'Es el tipo de préstamo por defecto de la biblioteca', 'tipo_prestamo|descripcion', 'referencia', 'sistema'),
+        ( 'defaultlevel', 'm', 'Nivel bibliográfico por defecto', 'nivel_bibliografico|description', 'referencia', 'sistema'),
+        ( 'defaultsuport', '1', ' Soporte por defecto', 'soporte|description', 'referencia', 'sistema'),
+        ( 'defaultTipoDoc', 'DNI', 'Tipo de Documento de Usuario por defecto', 'tipo_documento_usr|descripcion', 'referencia', 'sistema'),
+        ( 'defaultTipoNivel3', 'LIB', 'Tipo de Documento por defecto', 'tipo_ejemplar|nombre', 'referencia', 'sistema'),
+        ( 'EnabledMailSystem', '1', 'Indica si el sistema debe o no enviar mails', NULL, 'bool', 'sistema'),
+        ( 'endESissue', '35', 'Cantidad de minutos luego de la apertura de la biblioteca  en que se puede devolver un prestamo ESPECIAL.', NULL, 'text', 'sistema'),
+        ( 'habilitar_https', '1', 'habilita https (=1) o no (=0)', NULL, 'bool', 'sistema'),
+        ( 'habilitar_irregulares', '0', 'Habilita o no alumnos irregulares', NULL, 'bool', 'sistema'),
+        ( 'insecure', '0', 'Si es SI, no se necesita autorizacion para nada. CUIDADO!!', NULL, 'bool', 'sistema'),
+        ( 'keeppasswordalive', '0', 'Indica la cantidad de dias de vida que tiene una contraseña para aquellas cuentas cuya contraseña vence. Si el valor es 0 (cero) entonces la contraseña solo debe ser cambiada la primera vez', NULL, 'bool', 'sistema'),
+        ( 'KohaAdminEmailAddress', '', 'the email address where borrowers modifs are sent', NULL, 'text', 'sistema'),
+        ( 'ldapenabled', '0', 'Indica si se usa ldap para hacer autenticacion de usuarios', NULL, 'bool', 'sistema'),
+        ( 'ldapinfos', '', 'Sufijo de la Base de Datos Ldap', NULL, 'text', 'sistema'),
+        ( 'ldappass', '', 'Es la clave del del root del servidor Ldap', NULL, 'text', 'sistema'),
+        ( 'ldaproot', 'admin', 'Es el nombre de usuario del administrador del Ldap', NULL, 'text', 'sistema'),
+        ( 'ldapserver', 'localhost', 'Dirección del Servidor Ldap', NULL, 'text', 'sistema'),
+        ( 'libreDeuda', '11111', 'variable que limita la impresion del documento de libre deuda', NULL, 'text', 'sistema'),
+        ( 'logSearchINTRA', '0', 'Habilita (1) o no (0) loguea busquedas en la INTRA', NULL, 'bool', 'sistema'),
+        ( 'logSearchOPAC', '0', 'Habilita (1) o no (0) loguea busquedas en el OPAC', NULL, 'bool', 'sistema'),
+        ( 'mailFrom', '', 'From del Mail', NULL, 'text', 'sistema'),
+        ( 'mailMensajeVencido', ' Debe un ejemplar de\r\n        TITLE:UNITITLE\r\n desde la fecha DATE.', 'Como se envia el vencimiento de un ejemplar por mail', NULL, 'texta', 'sistema'),
+        ( 'mailMessage', 'Sr./Sra.  FIRSTNAME SURNAME :\r\n\r\nMENSAJEVENCIDO\r\n\r\nBRANCH\r\n', 'Mensaje del mail', NULL, 'texta', 'sistema'),
+        ( 'mailSubject', 'Aviso de prestamo vencido !!!', 'Subject del mail', NULL, 'text', 'sistema'),
+        ( 'maxissues', '3', 'N&uacute;mero m&aacute;ximo de prestamos', NULL, 'text', 'sistema'),
+        ( 'maxrenewals', '4', 'M&aacute;ximo n&uacute;mero de renovaciones posibles mientras no sea reservado por otra persona', NULL, 'text', 'sistema'),
+        ( 'maxreserves', '5', 'Numero maximo de reservas', NULL, 'text', 'sistema'),
+        ( 'maxwaiting', '3', 'Maximo de reservas en espera.', NULL, 'text', 'sistema'),
+        ( 'noissuescharge', '3', 'maximum amount withstanding to be able to check out an item', NULL, 'text', 'sistema'),
+        ( 'opaclanguages', 'es2', 'Set the preferred order for translations.  The top language will be tried first.', NULL, 'text', 'sistema'),
+        ( 'opacSearchAnonymous', '1', 'Esta preferencia permite (=1) realizar bùsquedas desde el OPAC sin haber iniciado sesiòn', NULL, 'bool', 'sistema'),
+        ( 'opacthemes', 'default', 'Set the preferred order for themes.  The top theme will be tried first.', NULL, 'text', 'sistema'),
+        ( 'opacUnavail', '1', 'Muestra en Opac ', '', 'bool', 'sistema'),
+        ( 'open', '08:00', 'Horario de Apertura de la Biblioteca', NULL, 'text', 'sistema'),
+        ( 'paginas', '10', 'Cantidad de paginas que va a  mostrar el paginador.', '', 'text', 'sistema'),
+        ( 'permite_cambio_password_desde_opac', '1', 'permite (=1) o no (=0) el cambio de password desde el OPAC', NULL, 'bool', 'sistema'),
+        ( 'print_renew', '1', 'indica si se imprime la renovacion o no, (1 para si, 0 para no), desde la intranet', NULL, 'bool', 'sistema'),
+        ( 'puerto_para_https', '444', 'puerto para https', NULL, 'text', 'sistema'),
+        ( 'reminderMail', '0', 'Habilita o deshabilita el mail de recodatorio de devolucion de ejemplares', NULL, 'bool', 'sistema'),
+        ( 'reminderMessage', 'Sr./Sra. FIRSTNAME SURNAME : \r\n\r\nSe le recuerda que el día VENCIMIENTO debe reintegrar el ejemplar que posee del libro  \r\nTITLE:UNITITLE - AUTHOR (EDICION) \r\na la BRANCH.\r\n\r\nMuchas gracias\r\n', 'Mensaje del mail de recordatorio de prestamo a vencer', NULL, 'texta', 'sistema'),
+        ( 'reminderSubject', 'Recordatorio de vencimiento de préstamos', 'Subject del mail de recodatorio de prestamo a vencer', NULL, 'text', 'sistema'),
+        ( 'renglones', '10', 'Cantidad de renglones que se muestran en las b&uacute;squedas', NULL, 'text', 'sistema'),
+        ( 'reserveFrom', '', 'Direccion desde la que llegan los mails que se refieren a las reservas', NULL, 'text', 'sistema'),
+        ( 'reserveGroup', '3', 'Numero de di­as que tiene el usuario para retirar el libro si la reserva se efectua sobre un grupo. Dicho lapso comienza a contarse a partir de que la reserva se asocia a un item.', NULL, 'text', 'sistema'),
+        ( 'reserveItem', '1', 'Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item', NULL, 'text', 'sistema'),
+        ( 'reserveMessage', 'Estimado/a SURNAME FIRSTNAME, \r\nTiene un ejemplar disponible para retirar.\r\nTítulo: TITLE\r\nAutor: AUTHOR\r\nLo puede retirar desde el a1 a las a2 hasta el a4 a las a3.', 'El mensaje que nos llegapor una reserva que esta disponible. Las variables que se reemplazan por ahora son: BRANCH,FIRSTNAME,SURNAME,UNITITLE,TITLE,AUTHOR,a1,a2,a3,a4 fechas y horas, EDICION', NULL, 'texta', 'sistema'),
+        ( 'reserveSubject', 'Importante: Reservas en BRANCH', 'Subject del mail que llega BRANCHNAME se colocarÃ¡ el nombre de la biblioteca', NULL, 'text', 'sistema'),
+        ( 'sanctions', '1', 'Indica si se hace uso de las sanciones por retraso en la devolucón de los elementos prestados por la biblioteca.', NULL, 'bool', 'sistema'),
+        ( 'selectHomeBranch', '1', '1 para poder seleccionar otra biblioteca, 0 para que la biblioteca sea la de defecto', NULL, 'bool', 'sistema'),
+        ( 'showHistoricReserves', '0', 'Muestra (valor = 1) o no el historico de reservas en el OPAC', NULL, 'bool', 'sistema'),
+        ( 'showMenuItem_circ_devolucion_renovacion', '1', 'Preferencia que configura si el menu item dado se muestra o no en el menu (1 sí ; 0 no).', NULL, 'bool', 'sistema'),
+        ( 'showMenuItem_circ_prestamos', '1', 'Preferencia que configura si el menu item dado se muestra o no en el menu (1 sí ; 0 no).', NULL, 'bool', 'sistema'),
+        ( 'split_by_levels', '1', 'Para mostrar en el OPAC el detalle dividido por niveles o no', NULL, NULL, 'sistema'),
+        ( 'susp', '1', 'Habilita o no el uso de suspensiones', NULL, 'bool', 'sistema'),
+        ( 'template', 'blue', 'Preference order for intranet interface templates', NULL, 'text', 'sistema'),
+        ( 'timeout', '3600', 'Inactivity timeout for cookies authentication (in seconds)', NULL, 'text', 'sistema'),
+        ( 'titulo_nombre_ui', 'Biblioteca - U.N.L.P.', '', NULL, 'text', 'sistema'),
+        ( 'UploadPictureFromOPAC', '1', 'Permito o no que se pueda subir la foto de un usuario desde el OPAC', NULL, 'bool', 'sistema'),
+        ( 'usercourse', '0', 'habilita o no que el curso de usuario sea necesario para utilizar el opac. ', NULL, 'bool', 'sistema'),
+        ( 'viewDetail', '1', 'Habilita o Deshabilita la muestra de campos.', NULL, 'bool', 'sistema'),
+        ( 'z3950_ cant_resultados', '25', 'Cantidad de resultados por servidor en una busqueda z3950 MAX para devoler todos', NULL, 'text', 'sistema'),
+        ( 'longitud_barcode', '3', 'cantidad de caracteres que conforman el barcode', NULL, NULL, 'sistema'),
+        ( 'limite_resultados_autocompletables', '20', 'limite de resultados a mostrar en los campos autocompletables', NULL, NULL, 'sistema'),
+        ( 'perfil_opac', '1', 'Id del perfil de visualizacion para OPAC', NULL, NULL, 'sistema'),
+        ( 'detalle_resumido', '1', 'Muestra el detalle desde el OPAC en forma resumida', NULL, NULL, 'sistema'),
+        ( 'defaultUI', 'DEO', 'Unidad de informacion por defecto', NULL, 'text', 'sistema'),
+        ( 'google_map', '', '', NULL, NULL, 'sistema'),
+        ( 'tema_opac_test', 'test', 'Un tema para el OPAC', NULL, NULL, 'temas_opac'),
+        ( 'tema_opac_default', 'default', 'Un tema para el OPAC', NULL, NULL, 'temas_opac'),
+        ( 'tema_intra_test', 'test', 'Un tema para el INTRA', NULL, NULL, 'temas_intra'),
+        ( 'tema_intra_default', 'default', 'Un tema para el INTRA', NULL, NULL, 'temas_intra'),
+        ( 'tema_opac', 'default', 'El tema por defecto para OPAc', '', '', 'sistema'),
+        ( 'tema_intra', 'default', 'El tema por defecto para INTRANET', NULL, NULL, 'sistema'),
+        ( 'port_mail', '587', 'puerto del servidor de mail', NULL, 'text', 'sistema'),
+        ( 'username_mail', 'kkohatesting@yahoo.com.ar', 'usuario de la cuenta de mail', NULL, 'text', 'sistema'),
+        ( 'password_mail', 'pato123', 'password de la cuenta de mail', NULL, 'text', 'sistema'),
+        ( 'smtp_server', 'smtp.live.com', 'Servidor SMTP', NULL, 'text', 'sistema'),
+        ( 'smtp_metodo', 'TLS', 'Método de encriptación usado por el servidor SMTP para la autenticación', NULL, 'text', 'sistema');
 ");
        $pref2->execute();
     }

@@ -16,7 +16,7 @@ apt-get install librose-db-perl librose-db-object-perl -y
 #cpan -i Rose::DB::Object
 #cpan -i Rose::DB::Object::Helpers
 
-apt-get install sphinxsearch -y
+apt-get install sphinxsearch libsphinx-search-perl -y
 #cpan -i Sphinx::Search
 cpan -i Sphinx::Manager
 

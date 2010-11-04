@@ -338,3 +338,6 @@ ALTER TABLE `indice_busqueda` ADD `string_con_dato` TEXT NULL AFTER `string_tabl
 ALTER TABLE `circ_tipo_prestamo_sancion` ADD `detalle` VARCHAR( 255 ) NOT NULL ;
 
 ALTER TABLE `cat_historico_disponibilidad` CHANGE `id3` `id3` INT( 11 ) NOT NULL ;
+
+ALTER TABLE `cat_portada_registro` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
