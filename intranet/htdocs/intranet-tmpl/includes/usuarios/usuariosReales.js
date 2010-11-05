@@ -12,7 +12,7 @@ function modificarDatosDeUsuario(){
 	objAH                   = new AjaxHelper(updateModificarDatosDeUsuario);
 	objAH.debug             = true;
 	objAH.url               = '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-	objAH.debug             = true;
+	objAH.debug             = true; 
 	objAH.nro_socio         = USUARIO.ID;
     nro_socio_temp          = objAH.nro_socio; // SETEO LA VARIABLE GLOBAL TEMP
 	objAH.tipoAccion        = 'MODIFICAR_USUARIO';

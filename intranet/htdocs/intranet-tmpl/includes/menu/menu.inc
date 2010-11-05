@@ -113,6 +113,18 @@
 
                      </ul>
                   </li>
+		<li><h3 class="menu_intermedio">[% 'Adquisiciones' | i18n %]</h3>
+                     <ul>
+                        <li>
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Proveedores' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/adquisiciones/formProveedores.pl", 
+                                                                title =>    "[% 'Proveedores' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </li>
+		      </ul>
+                  </li>
 
                   <li><h3 class="menu_intermedio">[% 'Control de autoridades' | i18n %]</h3>
           <ul>
@@ -283,6 +295,14 @@
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Busquedas desde OPAC' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/reports/busquedas_opac.pl",
                                                                 title =>    "[% 'Busquedas desde OPAC' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </li>
+                        <li>
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Altas de Registro' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/reports/altas_registro.pl",
+                                                                title =>    "[% 'Altas de registro' | i18n %]"
                                                             ) ;
                             [% END %]
                         </li>

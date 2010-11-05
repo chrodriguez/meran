@@ -336,4 +336,9 @@ ALTER TABLE `indice_busqueda` ADD `string_tabla_con_dato` TEXT NOT NULL AFTER `s
 ALTER TABLE `indice_busqueda` ADD `string_con_dato` TEXT NULL AFTER `string_tabla_con_dato` ;
 
 ALTER TABLE `circ_tipo_prestamo_sancion` ADD `detalle` VARCHAR( 255 ) NOT NULL ;
+
+ALTER TABLE  `cat_registro_marc_n3` ADD  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ;
+ALTER TABLE `cat_historico_disponibilidad` CHANGE `id3` `id3` INT( 11 ) NOT NULL ;
+
 ALTER TABLE `cat_portada_registro` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
