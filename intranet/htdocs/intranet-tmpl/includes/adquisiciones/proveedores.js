@@ -13,7 +13,7 @@ function save(){
    $('#proveedorDataForm').submit();
 }
 
-function updateAgregarUsuario(responseText){
+function updateAgregarProveedor(responseText){
     if (!verificarRespuesta(responseText))
             return(0);
     var Messages=JSONstring.toObject(responseText);
