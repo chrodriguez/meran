@@ -10,12 +10,14 @@ use JSON;
 
 my $input = new CGI;
 
+my $obj=$input->param('obj');
 
-# my $obj=$input->param('obj');
-# $obj=C4::AR::Utilidades::from_json_ISO($obj); 
-# my $tipoAccion= obj->{'tipo_accion'} || "";
+if($obj){
+    $obj= C4::AR::Utilidades::from_json_ISO($obj);
+    my $tipoAccion= $obj->{'tipo_accion'} || "";
+}
 
-  my ($template, $session, $t_params) = get_template_and_user({
+my ($template, $session, $t_params) = get_template_and_user({
               template_name => "adquisiciones/formProveedores.tmpl",
               query => $input,
               type => "intranet",
@@ -35,17 +37,17 @@ my $input = new CGI;
     #     $t_params->{'comboDeCredentials'}   = $comboDeCredentials;
     #     $t_params->{'comboDeUI'}            = $comboDeUI;
         my %params = {};
-
-#   #     $params{'nombre'} = $obj->{'nombre'};
-#   #     $params{'direccion'} = $obj->{'direccion'};
-#   #     $params{'proveedor_activo'} = 1;
-#   #     $params{'telefono'} = $obj->{'telefono'};
-#   #     $params{'email'} = $obj->{'email'};
-#   #     $params{'actionType'} = $obj->{'tipoAccion'};
 # 
-#   # 
-#   #     my ($value)= C4::AR::Proveedores::agregarProveedor(\%params);
-        $t_params->{'addProveedor'} = 1;
+#       $params{'nombre'} = $obj->{'nombre'};
+#       $params{'direccion'} = $obj->{'direccion'};
+#       $params{'proveedor_activo'} = 1;
+#       $params{'telefono'} = $obj->{'telefono'};
+#       $params{'email'} = $obj->{'email'};
+#       $params{'actionType'} = $obj->{'tipoAccion'};
+
+#   
+#       my ($value)= C4::AR::Proveedores::agregarProveedor(\%params);
+#         $t_params->{'addProveedor'} = 1;
 
     #     $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Agregar Usuario");
   C4::Auth::output_html_with_http_headers($template, $t_params, $session);
