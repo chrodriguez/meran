@@ -45,6 +45,14 @@
             <label for="email">[% "Email" | i18n %]</label>
             <input type=text name="email" id="email" size="25" value="[% socio_modificar.persona.getLegajo %]">
         </li>
+        [% IF addProveedor %]
+               
+        [% ELSE  %]
+                 <li class="sub_item">
+                     <label for="proveedor_activo">[% "Proveedor Activo" | i18n %]</label>
+                     <input type="checkbox" name="proveedor_activo" value="proveedor_activo" />
+                </li>
+        [% END %]
     </ul>
 </fieldset>
 

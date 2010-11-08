@@ -28,7 +28,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 # $t_params->{'comboDeCategorias'}    = $comboDeCategorias;
 # $t_params->{'comboDeCredentials'}   = $comboDeCredentials;
 # $t_params->{'comboDeUI'}            = $comboDeUI;
- $t_params->{'addProveedor'} = 1;
+ $t_params->{'addProveedor'} = 0;
 
 # $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Agregar Usuario");
 
