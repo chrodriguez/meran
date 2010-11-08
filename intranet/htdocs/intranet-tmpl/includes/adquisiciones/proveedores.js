@@ -10,41 +10,28 @@
 
 
 function save(){
-
    $('#proveedorDataForm').submit();
+}
+
+function updateAgregarUsuario(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
 }
 
 function agregarProveedor(){
 
-      objAH         = new AjaxHelper(updateAgregarUsuario);
-      objAH.url     = '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+      objAH         = new AjaxHelper(updateAgregarProveedor);
+      objAH.url     = '/cgi-bin/adquisiciones/addProveedores.pl';
       objAH.debug   = true;
-      if ( (($.trim(nro_socio)).length == 0 ) || ( $('#nro_socio').val() == 'Auto-generar' ) ) {
-        objAH.auto_nro_socio=1;
-      }else{
-        objAH.nro_socio= $('#nro_socio').val();
-      }
 
-      objAH.sexo            = $("input[@name=sexo]:checked").val();
-      objAH.calle           = $('#calle').val();
-      objAH.nombre          = $('#nombre').val();
-      objAH.nacimiento      = $('#nacimiento').val();
-      objAH.email           = $('#email').val();
-      objAH.telefono        = $('#telefono').val();
-      objAH.cod_categoria   = $('#categoria_socio_id').val();
-      objAH.ciudad          = $('#id_ciudad').val();
-      objAH.alt_ciudad      = $('#id_alt_ciudad').val();
-      objAH.alt_telefono    = $('#alt_telefono').val();
-      objAH.apellido        = $('#apellido').val();
-      objAH.id_ui           = $('#id_ui').val();
-      objAH.tipo_documento  = $('#tipo_documento_id').val();
-      objAH.credential_type = $('#credential').val();
-      objAH.nro_documento   = $('#nro_documento').val();
-      objAH.legajo          = $('#legajo').val();
-      objAH.changepassword  = ( $('#changepassword').attr('checked') )?1:0;
-      objAH.tipoAccion      = 'AGREGAR_USUARIO';
-      objAH.tema            = $('#temas_intra').val();
-
+      objAH.nombre              = $('#nombre').val();
+      objAH.direccion           = $('#direccion').val();
+      objAH.proveedor_activo    = $("input[@name=proveedor_activo]:checked").val();
+      objAH.telefono            = $('#telefono').val();
+      objAH.email               = $('#email').val();
+      objAH.tipoAccion          = 'AGREGAR_PROVEEDOR';
       objAH.sendToServer();
 }
 

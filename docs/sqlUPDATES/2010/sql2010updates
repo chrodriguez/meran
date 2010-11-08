@@ -354,7 +354,7 @@ CREATE TABLE IF NOT EXISTS `adq_proveedor` (
   `id_proveedor` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(255) NOT NULL,
   `direccion` varchar(255) DEFAULT NULL,
-  `telefono` varchar(255) DEFAULT NULL,
+  `telefono` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `activo` int(1) NOT NULL,
   PRIMARY KEY (`id_proveedor`)

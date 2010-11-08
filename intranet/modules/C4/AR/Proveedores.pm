@@ -20,7 +20,7 @@ sub agregarProveedor{
     my $proveedor = C4::Modelo::AdqProveedor->new();
     my $db = $proveedor->db;
 
-    _verificarDatosBorrower($params,$msg_object);
+    _verificarDatosBorrower($input,$msg_object);
     if (!($msg_object->{'error'})){
 
         $params->{'iniciales'} = "DGR";
@@ -65,5 +65,82 @@ sub eliminarProveedor {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [$id_prov]} ) ;
     }
 
+    return ($msg_object);
+}
+
+=item
+    Modulo que chekea que todos los datos necesarios sean validos. Queda todo en $msg_object, ademas lo retorna;
+=cut
+sub _verificarDatosBorrower {
+
+    my ($data, $msg_object)=@_;
+    my $actionType = $data->{'actionType'};
+#   my $checkStatus;
+    my $nombre = $data->{'nombre'};
+    my $direccion = $data->{'direccion'};
+    my $telefono = $data->{'telefono'};
+    my $emailAddress = $data->{'email'};
+    my $proveedorActivo = $data->{'proveedor_activo'};
+
+    if ( (!($msg_object->{'error'})) && (!$data->{'modifica'})){
+          $msg_object->{'error'} = (existeSocio($nro_socio) > 0);
+          if ($msg_object->{'error'}){
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U500', 'params' => []} ) ;
+          }
+    }
+
+    if (!($msg_object->{'error'}) && ($credential_type eq "superlibrarian") ){
+        my $socio = getSocioInfoPorNroSocio(C4::Auth::getSessionNroSocio());
+        if ( (!$socio) || (!($socio->isSuperUser())) ){
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U399', 'params' => []} ) ;
+        }
+    }
+
+    if (!($msg_object->{'error'}) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U332', 'params' => []} ) ;
+    }
+$msg_object
+    #### EN ESTE IF VAN TODOS LOS CHECKS PARA UN NUEVO BORROWER, NO PARA UN UPDATE
+    if ($actionType eq "new"){
+
+        my $cardNumber = $data->{'nro_socio'};
+        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($cardNumber)))){
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U333', 'params' => []} ) ;
+        }
+    }
+    #### FIN NUEVO BORROWER's CHECKS
+
+    my $surname = $data->{'apellido'};
+    if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($surname)))){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U334', 'params' => []} ) ;
+    }
+
+    my $firstname = $data->{'nombre'};
+    if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($firstname)))){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U335', 'params' => []} ) ;
+    }
+
+    my $tipo_doc = $data->{'tipo_documento'};
+    if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($tipo_doc)))){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U800', 'params' => []} ) ;
+    }
+
+    my $documentnumber = $data->{'nro_documento'};
+    $checkStatus = &C4::AR::Validator::isValidDocument($data->{'tipo_documento'},$documentnumber);
+    if (!($msg_object->{'error'}) && ( $checkStatus == 0)){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;
+    }else{
+          if ( (!C4::AR::Usuarios::isUniqueDocument($documentnumber,$data)) ) {
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U388', 'params' => []} ) ;
+          }
+    }
     return ($msg_object);
 }
