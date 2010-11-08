@@ -62,21 +62,17 @@ function validateForm(func){
                 debug: true,
                 errorElement: "em",
                 errorClass: "error_adv",
-		  rules: {
+                rules: {
                   nombre: "required",
-                  direccion: "required",
-		  telefono: "required",
-         
+                  telefono: "required",
                   email: {
-                        required: true,
                         email: true
                   },
                },
                messages: {
-		  nombre: POR_FAVOR_INGRESE_EL_NOMBRE,
-		  direccion: POR_FAVOR_INGRESE_UNA_DIRECCION,
-		  telefono: POR_FAVOR_INGRESE_UN_TELEFONO,
-                  email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
+              nombre: POR_FAVOR_INGRESE_EL_NOMBRE,
+              telefono: POR_FAVOR_INGRESE_UN_TELEFONO,
+              email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
 
                }
             });
