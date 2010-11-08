@@ -47,7 +47,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 #   
 #       my ($value)= C4::AR::Proveedores::agregarProveedor(\%params);
-#         $t_params->{'addProveedor'} = 1;
+         $t_params->{'addProveedor'} = 1;
 
     #     $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Agregar Usuario");
   C4::Auth::output_html_with_http_headers($template, $t_params, $session);
