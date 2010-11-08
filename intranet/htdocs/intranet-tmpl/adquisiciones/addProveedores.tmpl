@@ -22,7 +22,7 @@
             [% END %]
 </legend>
 
-<form method=post  name="proveedorDataForm" id="proveedorDataForm" >
+<form method=post  name="proveedorDataForm" id="proveedorDataForm">
     <fieldset>
     <legend class="titulo_legend">[% "Datos del proveedor" | i18n %]</legend>
     <ul>
@@ -106,7 +106,7 @@
                                                         boton   => "boton_buscar",
                                                         onClick => "save();",
                                                         title   => "[% 'Guardar' | i18n %]",
-                                                                ) ;#proveedorDataForm
+                                                                ) ;
             [% END %]
         [% ELSE  %]
                 [% PERL %]

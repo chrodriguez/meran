@@ -1,17 +1,14 @@
 /*
- * LIBRERIA usuarios v 1.0.1
+ * LIBRERIA proveedores v 1.0.1
  * Esta es una libreria creada para el sistema KOHA
  * Contendran las funciones para permitir la circulacion en el sistema
  * Fecha de creacion 22/10/2008
  *
  */
 
-// ***************************************** Validaciones ******************************************************
 
+//*********************************************Agregar Proveedor*********************************************
 
-function save(){
-   $('#proveedorDataForm').submit();
-}
 
 function updateAgregarProveedor(responseText){
     if (!verificarRespuesta(responseText))
@@ -23,7 +20,7 @@ function updateAgregarProveedor(responseText){
 function agregarProveedor(){
 
       objAH         = new AjaxHelper(updateAgregarProveedor);
-      objAH.url     = '/cgi-bin/adquisiciones/addProveedores.pl';
+      objAH.url     = '/cgi-bin/koha/adquisiciones/addProveedores.pl';
       objAH.debug   = true;
 
       objAH.nombre              = $('#nombre').val();
@@ -33,6 +30,13 @@ function agregarProveedor(){
       objAH.email               = $('#email').val();
       objAH.tipoAccion          = 'AGREGAR_PROVEEDOR';
       objAH.sendToServer();
+}
+
+
+// ***************************************** Validaciones ******************************************************
+
+function save(){
+   $('#proveedorDataForm').submit();
 }
 
 
