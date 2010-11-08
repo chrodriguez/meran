@@ -523,6 +523,11 @@ sub buildSocioData{
 #checkauth RECORTADO
 sub checkauth {
 C4::AR::Debug::debug("desde checkauth==================================================================================================");    
+
+my $context = new C4::Context;
+
+    C4::AR::Debug::debug("debug => ".$context->config('debug'));
+
     my $query               = shift;
     # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired     = shift;
