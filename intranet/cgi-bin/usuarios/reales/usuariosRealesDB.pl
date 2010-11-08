@@ -9,7 +9,7 @@ use CGI;
 
 my $input = new CGI;
 my $authnotrequired= 0;
-my $editing = $input->param('edit');;
+my $editing = $input->param('edit');
 
 if($editing){
     my ($template, $session, $t_params)  = get_template_and_user({  

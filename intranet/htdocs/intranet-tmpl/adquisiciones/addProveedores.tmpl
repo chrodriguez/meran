@@ -22,7 +22,7 @@
             [% END %]
 </legend>
 
-<form method=post  name="proveedorDataForm" id="proveedorDataForm" >
+<form method=post  name="proveedorDataForm" id="proveedorDataForm">
     <fieldset>
     <legend class="titulo_legend">[% "Datos del proveedor" | i18n %]</legend>
     <ul>
@@ -32,8 +32,8 @@
         </li>
 
         <li class="sub_item"> 
-            <label for="direccion"> [% "Direccion" | i18n %] *</label>
-            <input  id="direccion" name="direccion" class="required" type="text" size="25" value="[% socio_modificar.persona.getNombre %]">
+            <label for="direccion"> [% "Direccion" | i18n %] </label>
+            <input  id="direccion" name="direccion" type="text" size="25" value="[% socio_modificar.persona.getNombre %]">
         </li>
 
         <li class="sub_item">
@@ -45,6 +45,14 @@
             <label for="email">[% "Email" | i18n %]</label>
             <input type=text name="email" id="email" size="25" value="[% socio_modificar.persona.getLegajo %]">
         </li>
+        [% IF addProveedor %]
+               
+        [% ELSE  %]
+                 <li class="sub_item">
+                     <label for="proveedor_activo">[% "Proveedor Activo" | i18n %]</label>
+                     <input type="checkbox" name="proveedor_activo" value="proveedor_activo" />
+                </li>
+        [% END %]
     </ul>
 </fieldset>
 

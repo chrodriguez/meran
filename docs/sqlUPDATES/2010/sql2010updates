@@ -342,3 +342,29 @@ ALTER TABLE `cat_historico_disponibilidad` CHANGE `id3` `id3` INT( 11 ) NOT NULL
 
 ALTER TABLE `cat_portada_registro` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
 
+CREATE TABLE IF NOT EXISTS `adq_item` (
+  `id_item` int(11) NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(255) NOT NULL,
+  `precio` float NOT NULL,
+  PRIMARY KEY (`id_item`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE IF NOT EXISTS `adq_proveedor` (
+  `id_proveedor` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) NOT NULL,
+  `direccion` varchar(255) DEFAULT NULL,
+  `telefono` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `activo` int(1) NOT NULL,
+  PRIMARY KEY (`id_proveedor`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `adq_proveedor_item` (
+  `id_proveedor` int(11) NOT NULL,
+  `id_item` int(11) NOT NULL,
+  PRIMARY KEY (`id_proveedor`,`id_item`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+
