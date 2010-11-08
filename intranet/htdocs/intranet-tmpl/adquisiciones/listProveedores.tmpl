@@ -1,0 +1,52 @@
+[% INCLUDE "intranet-top.inc" %]
+
+
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/proveedores.js"></script>
+
+[% INCLUDE "FormValidateHelper.inc" %]
+
+<script type="text/javascript">
+
+
+ $(document).ready(function() {
+         validateForm(agregarProveedor);
+ });
+
+</script>
+<fieldset>
+<legend class="titulos"> Listado de Proveedores</legend>
+<div class="buttonContainerHorizontal">
+<ul>
+    <li class="horizontal">
+            <input id="nombre_proveedor" type=text name="nombre_proveedor" onFocus="checkFilter('focus')" 
+                onBlur="checkFilter('blur')">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "consultar();",
+                                                                    title   => "[% 'Buscar' | i18n %]",
+                                        ) ;
+            [% END %]
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "Borrar();",
+                                                                    title   => "[% 'Limpiar' | i18n %]",
+                                        ) ;
+            [% END %]
+    </li>
+</ul>
+</div>
+<ul>
+    <li style="text-align:center">
+                <p class="recuadroAyuda">
+                [% "Tipear el nombre del proveedor que desee buscar." | i18n %]
+                </p>
+    </li>
+</ul>
+
+</fieldset>
+</form>
+
+    [% INCLUDE "intranet-bottom.inc" %]
+
