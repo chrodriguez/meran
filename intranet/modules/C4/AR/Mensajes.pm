@@ -299,7 +299,8 @@ my %mensajesINTRA = (
     'B445' => 'Error en funcion C4::AR::ContR099rolAutoridades::t_updateSinonimosEditoriales',
     'B446' => 'Error en funcion C4::AR::VisualizacionOpac::t_updateConfVisualizacion',
     'B447' => 'Error en funcion C4::AR::Nivel1::t_eliminarNivel1Repetible',
-    'B448' => 'Error en funcion C4::AR::Catalogacion::t_agruparCampos',    
+    'B448' => 'Error en funcion C4::AR::Catalogacion::t_agruparCampos',   
+    'B449' => 'Error en la funcion C4::AR::Provedoores::agregarProveedor',
     'C500' => 'Los items fueron guardados correctamente.',
     'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
     'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',
@@ -365,6 +366,8 @@ my %mensajesINTRA = (
     'E015' => 'Ya existe el contenido en el estante "*?*".',
     'REF0' => 'La referencia no se ha podido eliminar, verifique que no se est&eacute; usando.',
     'REF1' => 'La referencia ha sido eliminada correctamente.',
+#   Mensajes de Adquisicion Proveedores
+    'A001' => 'El proveedor ha sido agregado exitosamente, yeah!',
 );
 
 sub getMensaje {
@@ -412,7 +415,7 @@ Guarda los errores en el siguiente archivo: /var/log/koha/debugErrorDBA.txt
 # TODO usar Debug::debug
 sub printErrorDB {
 	my($errorsDB_array,$codigo,$tipo)=@_;
-
+C4::AR::Debug::debug("hola");
 	my $paraMens;
 	my $path=">>".C4::Context->config("kohalogdir")."debugErrorDBA.txt";
 	open(A,$path);
@@ -464,9 +467,9 @@ sub create {
 
 	#se crea el objetos contenedor de mensajes
 	my %msg_object;
-	$msg_object{'error'}= 0;
-	$msg_object{'messages'}= [];
-	$msg_object{'tipo'}='INTRA';
+	$msg_object{'error'}    = 0;
+	$msg_object{'messages'} = [];
+	$msg_object{'tipo'}     = 'INTRA';
 
 	return \%msg_object;
 }
@@ -495,8 +498,8 @@ sub add {
 	#se obtiene el texto del mensaje
   	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});	
 	$msg_hashref->{'message'}= $messageString;
-C4::AR::Debug::debug("Mensajes::add => message: ".$messageString."\n");
-C4::AR::Debug::debug("Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n");
+# C4::AR::Debug::debug("Mensajes::add => message: ".$messageString."\n");
+# C4::AR::Debug::debug("Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n");
 
  	push (@{$Message_hashref->{'messages'}}, $msg_hashref);
 }
