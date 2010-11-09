@@ -2,6 +2,8 @@ package C4::AR::Proveedores;
 
 use strict;
 require Exporter;
+#  va DBI ? 
+use DBI;
 use C4::Modelo::AdqProveedor;
 use C4::Modelo::AdqProveedor::Manager;
 
@@ -13,6 +15,12 @@ use vars qw(@EXPORT @ISA);
     &modificarProveedor;
 );
 
+=item
+    Este modulo agrega un proveedor
+    Parametros: 
+                HASH: {nombre},{direccion},{proveedor_activo},{telefono},{mail},{tipoAccion}
+=cut
+
 sub agregarProveedor{
 
     my ($input) = @_;
@@ -20,29 +28,38 @@ sub agregarProveedor{
     my $proveedor = C4::Modelo::AdqProveedor->new();
     my $db = $proveedor->db;
 
-    _verificarDatosBorrower($input,$msg_object);
-    if (!($msg_object->{'error'})){
+#     _verificarDatosBorrower($input,$msg_object);
+#     if (!($msg_object->{'error'})){
 
-        $params->{'iniciales'} = "DGR";
+#         $params->{'iniciales'} = "DGR";
         #genero un estado de ALTA para la persona para una fuente de informacion
-        $db->{connect_options}->{AutoCommit} = 0;
-        $db->begin_work;
-        eval{
-            $proveedor->agregarProveedor($params);
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
-            $db->commit;
-        };
 
-        if ($@){
-            &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
-            $db->rollback;
-        }
+
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+    eval{
+        $proveedor->agregarProveedor($params);
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+        $db->commit;
+    };
+
+
+
+#         if ($@){
+#             &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+#             $msg_object->{'error'}= 1;
+#             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U330', 'params' => []} ) ;
+#             $db->rollback;
+#         }
+
+
         $db->{connect_options}->{AutoCommit} = 1;
+
+    return (1);
     }
-    return ($msg_object);
-}
+#     return ($msg_object);
+
 
 
 sub eliminarProveedor {
@@ -144,3 +161,8 @@ $msg_object
     }
     return ($msg_object);
 }
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__

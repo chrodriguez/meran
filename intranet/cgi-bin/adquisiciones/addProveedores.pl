@@ -23,7 +23,9 @@ if($obj){
     $params{'email'} = $obj->{'email'};
     $params{'actionType'} = $obj->{'tipoAccion'};
 
-#     my ($value)= C4::AR::Proveedores::agregarProveedor(\%params);
+# no encuentra esta rutina: 
+     my ($value) = C4::AR::Proveedores::agregarProveedor(\%params);
+#     my $value = C4::AR::Proveedores::agregarProveedor();
 }
 
 my ($template, $session, $t_params) = get_template_and_user({
