@@ -45,8 +45,6 @@ sub agregarProveedor{
     $self->setActivo(1);
 
     $self->save();
-
-C4::AR::Debug::debug("entro a adqproveedor");
 }
 
 

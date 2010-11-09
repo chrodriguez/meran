@@ -368,6 +368,7 @@ my %mensajesINTRA = (
     'REF1' => 'La referencia ha sido eliminada correctamente.',
 #   Mensajes de Adquisicion Proveedores
     'A001' => 'El proveedor ha sido agregado exitosamente, yeah!',
+    'A002' => 'El nombre del proveedor no puede estar en blanco',
 );
 
 sub getMensaje {

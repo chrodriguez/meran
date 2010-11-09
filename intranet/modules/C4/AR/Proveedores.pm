@@ -2,7 +2,6 @@ package C4::AR::Proveedores;
 
 use strict;
 require Exporter;
-#  va DBI ? 
 use DBI;
 use C4::Modelo::AdqProveedor;
 use C4::Modelo::AdqProveedor::Manager;
@@ -28,8 +27,8 @@ sub agregarProveedor{
     my $msg_object= C4::AR::Mensajes::create();
     my $db = $proveedor->db;
 
-#     _verificarDatosBorrower($input,$msg_object);
-#     if (!($msg_object->{'error'})){
+     _verificarDatosProveedor($param,$msg_object);
+#      if (!($msg_object->{'error'})){
 
 #         $params->{'iniciales'} = "DGR";
         #genero un estado de ALTA para la persona para una fuente de informacion
@@ -38,9 +37,7 @@ sub agregarProveedor{
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
     eval{
-        C4::AR::Debug::debug("entro a agregar");
         $proveedor->agregarProveedor($param);
-        
         $msg_object->{'error'}= 0;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
         $db->commit;
@@ -89,25 +86,20 @@ sub eliminarProveedor {
 =item
     Modulo que chekea que todos los datos necesarios sean validos. Queda todo en $msg_object, ademas lo retorna;
 =cut
-sub _verificarDatosBorrower {
+sub _verificarDatosProveedor {
 
-#     my ($data, $msg_object)=@_;
-#     my $actionType = $data->{'actionType'};
-# #   my $checkStatus;
-#     my $nombre = $data->{'nombre'};
-#     my $direccion = $data->{'direccion'};
-#     my $telefono = $data->{'telefono'};
-#     my $emailAddress = $data->{'email'};
-#     my $proveedorActivo = $data->{'proveedor_activo'};
-# 
-#     if ( (!($msg_object->{'error'})) && (!$data->{'modifica'})){
-#           $msg_object->{'error'} = (existeSocio($nro_socio) > 0);
-#           if ($msg_object->{'error'}){
-#               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U500', 'params' => []} ) ;
-#           }
-#     }
-# 
-#     if (!($msg_object->{'error'}) && ($credential_type eq "superlibrarian") ){
+     my ($data, $msg_object)=@_;
+     my $actionType = $data->{'actionType'};
+     my $checkStatus;
+     my $nombre = $data->{'nombre'};
+     my $direccion = $data->{'direccion'};
+     my $telefono = $data->{'telefono'};
+     my $emailAddress = $data->{'email'};
+     my $proveedorActivo = $data->{'proveedor_activo'};
+ 
+
+ 
+#      if (!($msg_object->{'error'}) && ($credential_type eq "superlibrarian") ){
 #         my $socio = getSocioInfoPorNroSocio(C4::Auth::getSessionNroSocio());
 #         if ( (!$socio) || (!($socio->isSuperUser())) ){
 #           $msg_object->{'error'}= 1;
@@ -121,21 +113,31 @@ sub _verificarDatosBorrower {
 #     }
 # $msg_object
 #     #### EN ESTE IF VAN TODOS LOS CHECKS PARA UN NUEVO BORROWER, NO PARA UN UPDATE
-#     if ($actionType eq "new"){
-# 
-#         my $cardNumber = $data->{'nro_socio'};
-#         if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($cardNumber)))){
-#             $msg_object->{'error'}= 1;
-#             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U333', 'params' => []} ) ;
-#         }
-#     }
-#     #### FIN NUEVO BORROWER's CHECKS
-# 
-#     my $surname = $data->{'apellido'};
+     if ($actionType eq "ALTA"){
+ 
+         my $nombre = $data->{'nombre'};
+         if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($nombre)))){
+             $msg_object->{'error'}= 1;
+             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+         }
+     }
+
+#   valida si el email contiene algo
+    if($emailAddress != ""){
+      if (!($msg_object->{'error'}) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U332', 'params' => []} ) ;
+      }
+    }
+
+#   valida si el telefono contiene algo
+
+
 #     if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($surname)))){
 #         $msg_object->{'error'}= 1;
 #         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U334', 'params' => []} ) ;
 #     }
+    
 # 
 #     my $firstname = $data->{'nombre'};
 #     if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($firstname)))){
