@@ -367,8 +367,11 @@ my %mensajesINTRA = (
     'REF0' => 'La referencia no se ha podido eliminar, verifique que no se est&eacute; usando.',
     'REF1' => 'La referencia ha sido eliminada correctamente.',
 #   Mensajes de Adquisicion Proveedores
-    'A001' => 'El proveedor ha sido agregado exitosamente, yeah!',
+    'A001' => 'El proveedor ha sido agregado exitosamente',
     'A002' => 'El nombre del proveedor no puede estar en blanco',
+    'A003' => 'El mail debe ser v&aacute;lido',
+    'A004' => 'La direcion del proveedor no puede estar en blanco',
+    'A005' => 'El telefono no puede contener car&aacute;cteres raros o estar en blanco',
 );
 
 sub getMensaje {

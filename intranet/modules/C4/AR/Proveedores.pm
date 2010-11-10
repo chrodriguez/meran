@@ -28,34 +28,30 @@ sub agregarProveedor{
     my $db = $proveedor->db;
 
      _verificarDatosProveedor($param,$msg_object);
-#      if (!($msg_object->{'error'})){
-
-#         $params->{'iniciales'} = "DGR";
-        #genero un estado de ALTA para la persona para una fuente de informacion
-
-
-    $db->{connect_options}->{AutoCommit} = 0;
-    $db->begin_work;
-    eval{
-        $proveedor->agregarProveedor($param);
-        $msg_object->{'error'}= 0;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
-        $db->commit;
-    };
+      if (!($msg_object->{'error'})){
+# 	entro si no hay algun error, todos los campos ingresados son validos
+	  $db->{connect_options}->{AutoCommit} = 0;
+	  $db->begin_work;
+	  eval{
+	      $proveedor->agregarProveedor($param);
+	      $msg_object->{'error'}= 0;
+	      C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
+	      $db->commit;
+	  };
 
 
 
-    if ($@){
-    # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
-        &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
-        $db->rollback;
+	  if ($@){
+	  # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+	      &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+	      $msg_object->{'error'}= 1;
+	      C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+	      $db->rollback;
+	  }
+
+
+	  $db->{connect_options}->{AutoCommit} = 1;
     }
-
-
-    $db->{connect_options}->{AutoCommit} = 1;
-
     return ($msg_object);
 }
 
@@ -98,71 +94,38 @@ sub _verificarDatosProveedor {
      my $proveedorActivo = $data->{'proveedor_activo'};
  
 
+     if ($actionType eq "AGREGAR_PROVEEDOR"){
  
-#      if (!($msg_object->{'error'}) && ($credential_type eq "superlibrarian") ){
-#         my $socio = getSocioInfoPorNroSocio(C4::Auth::getSessionNroSocio());
-#         if ( (!$socio) || (!($socio->isSuperUser())) ){
-#           $msg_object->{'error'}= 1;
-#           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U399', 'params' => []} ) ;
-#         }
-#     }
-# 
-#     if (!($msg_object->{'error'}) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
-#         $msg_object->{'error'}= 1;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U332', 'params' => []} ) ;
-#     }
-# $msg_object
-#     #### EN ESTE IF VAN TODOS LOS CHECKS PARA UN NUEVO BORROWER, NO PARA UN UPDATE
-     if ($actionType eq "ALTA"){
- 
-         my $nombre = $data->{'nombre'};
          if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($nombre)))){
              $msg_object->{'error'}= 1;
              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
          }
-     }
+     
 
-#   valida si el email contiene algo
-    if($emailAddress != ""){
-      if (!($msg_object->{'error'}) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
-         $msg_object->{'error'}= 1;
-         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U332', 'params' => []} ) ;
-      }
-    }
+    #   valida si el email contiene algo
+	if($emailAddress ne ""){
+	  if (!($msg_object->{'error'}) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
+	    $msg_object->{'error'}= 1;
+	    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A003', 'params' => []} ) ;
+	  }
+	}
 
-#   valida si el telefono contiene algo
+    #   valida que la direccion no este en blanco
+	if($direccion ne ""){
+	  if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($direccion)))){
+		  $msg_object->{'error'}= 1;
+		  C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A004', 'params' => []} ) ;
+	      }
+	}
 
+    #   valida que el telefono no tenga caractes ni simbolos
+	if (!($msg_object->{'error'}) && ( ((&C4::AR::Validator::countAlphaChars($telefono) != 0)) || (&C4::AR::Validator::countSymbolChars($telefono) != 0) || (&C4::AR::Validator::countNumericChars($telefono) == 0))){
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A005', 'params' => []} ) ;
+	    }
+	}
 
-#     if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($surname)))){
-#         $msg_object->{'error'}= 1;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U334', 'params' => []} ) ;
-#     }
-    
-# 
-#     my $firstname = $data->{'nombre'};
-#     if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($firstname)))){
-#         $msg_object->{'error'}= 1;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U335', 'params' => []} ) ;
-#     }
-# 
-#     my $tipo_doc = $data->{'tipo_documento'};
-#     if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($tipo_doc)))){
-#         $msg_object->{'error'}= 1;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U800', 'params' => []} ) ;
-#     }
-# 
-#     my $documentnumber = $data->{'nro_documento'};
-#     $checkStatus = &C4::AR::Validator::isValidDocument($data->{'tipo_documento'},$documentnumber);
-#     if (!($msg_object->{'error'}) && ( $checkStatus == 0)){
-#         $msg_object->{'error'}= 1;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;
-#     }else{
-#           if ( (!C4::AR::Usuarios::isUniqueDocument($documentnumber,$data)) ) {
-#                 $msg_object->{'error'}= 1;
-#                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U388', 'params' => []} ) ;
-#           }
-#     }
-#     return ($msg_object);
+    return ($msg_object);
 }
 
 END { }       # module clean-up code here (global destructor)
