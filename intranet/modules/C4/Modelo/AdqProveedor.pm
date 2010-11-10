@@ -47,6 +47,27 @@ sub agregarProveedor{
     $self->save();
 }
 
+# sub getProveedorInfo {
+# 
+#     my ($id_proveedor) = @_;
+#     my @filtros;
+# 
+#     use C4::Modelo::AdqProveedor::Manager;
+#     push (@filtros, (id_proveedor => {eq =>$id_proveedor}) );
+# 
+#     my  $proveedor = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor(query => \@filtros,
+#                                                               require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+#                                                                                   'persona.documento'],
+#                                                               with_objects => ['persona.alt_ciudad_ref'],
+#                                                              );
+# 
+#     if (scalar(@$proveedor)){
+#         return ($proveedor->[0]);
+#     }else{
+#         return (0);
+#     }
+# }
+
 
 sub setActivo{
     my ($self) = shift;
@@ -81,6 +102,26 @@ sub setNombreProveedor{
     }
 }
 
+sub getNombre{
+    my ($self) = shift;
+    return ($self->nombre);
+}
+
+sub getDireccion{
+    my ($self) = shift;
+    return ($self->direccion);
+}
+
+sub getTelefono{
+    my ($self) = shift;
+    return ($self->telefono);
+}
+
+sub getEmail{
+    my ($self) = shift;
+    return ($self->email);
+}
+
 sub setDireccion{
     my ($self) = shift;
     my ($direccion) = @_;
@@ -89,6 +130,8 @@ sub setDireccion{
       $self->direccion($direccion);
     }
 }
+
+
 
 1;
 
