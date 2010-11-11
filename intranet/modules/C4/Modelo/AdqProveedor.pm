@@ -46,26 +46,26 @@ sub agregarProveedor{
     $self->save();
 }
 
- sub getProveedorInfo {
- 
-     my ($id_proveedor) = @_;
-     my @filtros;
- 
-     use C4::Modelo::AdqProveedor::Manager;
-     push (@filtros, (id_proveedor => {eq =>$id_proveedor}) );
- 
-     my  $proveedor = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor(query => \@filtros,
-#                                                               require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
-#                                                                                   'persona.documento'],
-#                                                               with_objects => ['persona.alt_ciudad_ref'],
-                                                              );
- 
-     if (scalar(@$proveedor)){
-         return ($proveedor->[0]);
-     }else{
-         return (0);
-     }
- }
+# sub getProveedorInfo {
+# 
+#     my ($id_proveedor) = @_;
+#     my @filtros;
+# 
+#     use C4::Modelo::AdqProveedor::Manager;
+#     push (@filtros, (id_proveedor => {eq =>$id_proveedor}) );
+# 
+#     my  $proveedor = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor(query => \@filtros,
+##                                                               require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+##                                                                                   'persona.documento'],
+##                                                               with_objects => ['persona.alt_ciudad_ref'],
+#                                                              );
+# 
+#     if (scalar(@$proveedor)){
+#         return ($proveedor->[0]);
+#     }else{
+#         return (0);
+#     }
+# }
 
 
 sub setActivo{
