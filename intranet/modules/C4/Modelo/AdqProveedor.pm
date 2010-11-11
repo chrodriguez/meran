@@ -172,7 +172,7 @@ sub getProveedorLike {
                                                                             sort_by => $ordenAux,
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
-#                                                              require_objects => ['nombre','direccion','telefono',
+#                                                               require_objects => ['nombre','direccion','telefono',
 #                                                                                  'email'],
      ); 
 
