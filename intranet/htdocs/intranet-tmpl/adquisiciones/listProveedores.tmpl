@@ -1,7 +1,7 @@
 [% INCLUDE "intranet-top.inc" %]
 
 
-<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/proveedores.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedores.js"></script>
 
 [% INCLUDE "FormValidateHelper.inc" %]
 
@@ -9,7 +9,7 @@
 
 
  $(document).ready(function() {
-         validateForm(agregarProveedor);
+       onEnter("nombre_proveedor",consultar);
  });
 
 </script>
@@ -22,7 +22,7 @@
                 onBlur="checkFilter('blur')">
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                    boton   => "boton_buscar",
+                                                                    boton   => "boto n_buscar",
                                                                     onClick => "consultar();",
                                                                     title   => "[% 'Buscar' | i18n %]",
                                         ) ;
@@ -40,13 +40,17 @@
 <ul>
     <li style="text-align:center">
                 <p class="recuadroAyuda">
-                [% "Tipear el nombre del proveedor que desee buscar." | i18n %]
+                [% "Tipee el nombre del proveedor que desea buscar." | i18n %]
                 </p>
     </li>
 </ul>
-
 </fieldset>
-</form>
+<!-- para que esta este?: -->
+<!--<div class="contenedor_paginador">[% paginador %]</div>-->
+
+<br>
+<div id="result"></div>
+<br>
 
     [% INCLUDE "intranet-bottom.inc" %]
 

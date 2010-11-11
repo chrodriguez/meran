@@ -20,7 +20,7 @@
 <META HTTP-EQUIV="cache-control" content="public">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/completo.css">
 <!-- <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/[% user_theme %]/includes/completo_min.css" /> -->
-<link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/fancybox.css" />
+<link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/fancybox-min.css" />
 
 <!-- <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranetOLD.css">  -->
 <!-- Estos 3 css fueron a parar a completo.css 
@@ -50,7 +50,7 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
 <!-- FIXME falta pasar a completo -->
 <script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
 <!-- <script type="text/javascript" src="/includes/jquery/jquery.field.min.js"></script> -->
-<link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic.css" type="text/css">
+<link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css">
 
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>

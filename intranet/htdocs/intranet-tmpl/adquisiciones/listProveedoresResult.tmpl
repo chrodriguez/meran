@@ -1,0 +1,91 @@
+<script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function() {
+//           makeToggle('datos_tabla_div_user','trigger',null,false);
+//           $('.user_pic_fancy').fancybox();
+      });
+</script>
+
+[% USE HTML %]
+
+<div class="contenedor_paginador">[% paginador %]</div>
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (Proveedores):" | i18n %]</legend>
+        <div class="datos_tabla_div_proveedor">
+            <div class="resultados_consulta">[% "La cantidad de Proveedores es" | i18n %]: [% cantidad %]</div> 
+            <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% HTML.escape(proveedor_busqueda) %]</div> 
+            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                <thead>
+                <tr class="titulo_tabla_resultado">
+            
+                    <th class="click" onclick="ordenar('nombre_proveedor')" 
+                        Title="[% 'Ordenar Nombre de Proveedor.' | i18n %]" width="12%">[% "Nombre de Proveedor" | i18n %]
+                    </th>
+                    <th>
+                      [% "Direccion" | i18n %]
+                    </th>
+                    <th>
+                        [% "Telefono" | i18n %]
+                    </th>
+                    <th>
+                        [% "Mail" | i18n %]
+                    </th>
+                    <th>[% "Editar Proveedor" | i18n %]</th>
+                    <th>[% "Eliminar Proveedor" | i18n %]</th>            
+                </tr>
+                </thead>
+                <tbody>
+            
+            [% FOREACH resultsloop %]   
+                <tr  align="center">
+
+                      <td align="left" class="proveedores">
+                          [% proveedor %]
+                      </td>
+
+                      <td align="left" class="proveedores">
+                          [% proveedor.getDireccion %]
+                      </td>
+
+                      <td align="left" class="proveedores">
+                          [% proveedor.Telefono %]
+                      </td>
+
+                      <td align="left" class="proveedores">
+                          [% proveedor.Mail %]
+                      </td>
+            
+                      <td align='left' class="proveedores">
+                          [% PERL %]
+                              print C4::AR::Filtros::link_to(   text =>     "[% proveedor.getId %]",
+                                                                url =>      "/cgi-bin/koha/adquisiciones/editProveedor.pl", 
+                                                                params =>   ["id_proveedor=[% proveedor.getId %]"],
+                                                                title =>    "[% 'Editar Proveedor' | i18n %]"
+                                                          );
+                          [% END %]
+                      </td>
+
+                      <td align='left' class="proveedores">
+                          [% PERL %]
+                              print C4::AR::Filtros::link_to(   text =>     "[% proveedor.getId %]",
+                                                                url =>      "/cgi-bin/koha/adquisiciones/delProveedor.pl", 
+                                                                params =>   ["id_proveedor=[% proveedor.getId %]"],
+                                                                title =>    "[% 'Eliminar Proveedor' | i18n %]"
+                                                          );
+                          [% END %]
+                      </td>
+            
+                </tr>
+            
+            [% END %]
+            
+                <tr>
+                    <td class="lineafinaltabla"  align="left" colspan="14"></td>
+                </tr>
+                </tbody>
+            
+            </table>
+        </div>
+</fieldset>

@@ -1,5 +1,5 @@
 /*
- * LIBRERIA proveedores v 1.0.1
+ * LIBRERIA addProveedores v 1.0.1
  * Esta es una libreria creada para el sistema KOHA
  * Contendran las funciones para permitir la circulacion en el sistema
  * Fecha de creacion 22/10/2008
