@@ -46,26 +46,26 @@ sub agregarProveedor{
     $self->save();
 }
 
-# sub getProveedorInfo {
-# 
-#     my ($id_proveedor) = @_;
-#     my @filtros;
-# 
-#     use C4::Modelo::AdqProveedor::Manager;
-#     push (@filtros, (id_proveedor => {eq =>$id_proveedor}) );
-# 
-#     my  $proveedor = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor(query => \@filtros,
+ sub getProveedorInfo {
+ 
+     my ($id_proveedor) = @_;
+     my @filtros;
+ 
+     use C4::Modelo::AdqProveedor::Manager;
+     push (@filtros, (id_proveedor => {eq =>$id_proveedor}) );
+ 
+     my  $proveedor = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor(query => \@filtros,
 #                                                               require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
 #                                                                                   'persona.documento'],
 #                                                               with_objects => ['persona.alt_ciudad_ref'],
-#                                                              );
-# 
-#     if (scalar(@$proveedor)){
-#         return ($proveedor->[0]);
-#     }else{
-#         return (0);
-#     }
-# }
+                                                              );
+ 
+     if (scalar(@$proveedor)){
+         return ($proveedor->[0]);
+     }else{
+         return (0);
+     }
+ }
 
 
 sub setActivo{
@@ -164,18 +164,24 @@ sub getProveedorLike {
  #   push(@filtros, ( es_socio => { eq => $habilitados}));
     my $ordenAux= $proveedorTemp->sortByString($orden);
 
-    my $proveedores_array_ref = C4::Modelo::UsrSocio::Manager->get_adq_proveedor(   query => \@filtros,
+
+
+
+
+    my $proveedores_array_ref = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor(   query => \@filtros,
                                                                             sort_by => $ordenAux,
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
-                                                              require_objects => ['nombre','direccion','telefono',
-                                                                                  'email'],
+#                                                              require_objects => ['nombre','direccion','telefono',
+#                                                                                  'email'],
      ); 
+
+C4::AR::Debug::debug("|" . @filtros . "|");
 
     #Obtengo la cant total de socios para el paginador
     my $proveedores_array_ref_count = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor( query => \@filtros,
-                                                              require_objects => ['nombre','direccion','telefono',
-                                                                                  'email'],
+#                                                              require_objects => ['nombre','direccion','telefono',
+#                                                                                  'email'],
                                                                      );
 
     if(scalar(@$proveedores_array_ref) > 0){

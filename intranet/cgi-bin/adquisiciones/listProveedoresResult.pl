@@ -7,7 +7,7 @@ use C4::Date;
 use Date::Manip;
 use C4::AR::Usuarios;
 use C4::AR::Utilidades;
-
+use C4::Modelo::AdqProveedor;
 
 my $input = new CGI;
 
@@ -29,19 +29,19 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
 # Test:
 
-      my $proveedor = $obj->{'nombre_proveedor'};
-
-      my @resultsdata;
-
-
-      my %row = (
-                  proveedor => $proveedor
-      );
-      push(@resultsdata, \%row);
-
-      $t_params->{'resultsloop'}= \@resultsdata;
-
-      C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+#      my $proveedor = $obj->{'nombre_proveedor'};
+#
+#      my @resultsdata;
+#
+#
+#      my %row = (
+#                  proveedor => $proveedor
+#      );
+#      push(@resultsdata, \%row);
+#
+#      $t_params->{'resultsloop'}= \@resultsdata;
+#
+#      C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 
 # fin Test, anda OK. Muestra el nombre del proveedor que ingrese en el input.
@@ -63,29 +63,31 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 #  C4::AR::Validator::validateParams('U389',$obj,['proveedor','ini','funcion'] );
 
 
-#  my $orden= '';
+  my $orden= $obj->{'orden'}||'id_proveedor';;
 
-# my $ini= 1;
-# my $funcion=$input->param('funcion');
-# 
-# 
-# 
-# 
+ my $ini= 1;
+ my $funcion=$input->param('funcion');
+ 
+ 
+ 
+ 
 # C4::AR::Debug::debug($orden);
 # C4::AR::Debug::debug($proveedor);
 # C4::AR::Debug::debug($ini);
 # C4::AR::Debug::debug($funcion);
 # C4::AR::Debug::debug($inicial);
-# 
-# my ($cantidad,$proveedores);
-# my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
-# # 
-# if ($inicial){
-#     ($cantidad,$proveedores)= C4::Modelo::AdqProveedor::getProveedorLike($proveedor,$orden,$ini,$cantR,1,$inicial);
-# }else{
-#     ($cantidad,$proveedores)= C4::Modelo::AdqProveedor::getProveedorLike($proveedor,$orden,$ini,$cantR,1,0);
-# }
-#  
+ 
+ my ($cantidad,$proveedores);
+ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+ # 
+ if ($inicial){
+     ($cantidad,$proveedores)= C4::Modelo::AdqProveedor::getProveedorLike($proveedor,$orden,$ini,$cantR,1,$inicial);
+ }else{
+     ($cantidad,$proveedores)= C4::Modelo::AdqProveedor::getProveedorLike($proveedor,$orden,$ini,$cantR,1,0);
+ }
+  
+  C4::AR::Debug::debug($proveedores);
+  
 # if($proveedores){
 #      $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 #      my @resultsdata;
@@ -118,8 +120,8 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 #      $t_params->{'proveedor_busqueda'}=$proveedor;
 # 
 # }#END if($proveedores)
-# 
-# C4::Auth::output_html_with_http_headers($template, $t_params, $session);
-# 
+ 
+ C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+ 
 
 1;
