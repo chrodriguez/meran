@@ -29,21 +29,19 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
 # Test:
 
+      my $proveedor = $obj->{'nombre_proveedor'};
+
+      my @resultsdata;
 
 
-    my $proveedor=$obj->{'nombre_proveedor'};
+      my %row = (
+                  proveedor => $proveedor
+      );
+      push(@resultsdata, \%row);
 
-    my @resultsdata;
+      $t_params->{'resultsloop'}= \@resultsdata;
 
-
-    my %row = (
-                proveedor => $proveedor
-    );
-    push(@resultsdata, \%row);
-
-    $t_params->{'resultsloop'}= \@resultsdata;
-
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+      C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 
 # fin Test, anda OK. Muestra el nombre del proveedor que ingrese en el input.
@@ -56,16 +54,17 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 #  Como debe ser:
 # my $orden=$obj->{'orden'}||'nombre';
 
-#  $obj->{'ini'} = $obj->{'ini'} || 1;
-#  my $ini=$obj->{'ini'};
-#  my $funcion=$obj->{'funcion'};
-#  my $inicial=$obj->{'inicial'};
-#  my $env;
+  $obj->{'ini'} = $obj->{'ini'} || 1;
+  my $ini=$obj->{'ini'};
+  my $funcion=$obj->{'funcion'};
+  my $inicial=$obj->{'inicial'};
+  my $proveedor = $obj->{'nombre_proveedor'};
+  my $env;
 #  C4::AR::Validator::validateParams('U389',$obj,['proveedor','ini','funcion'] );
 
 
-# my $orden= '';
-# my $proveedor= $input->param('proveedor');
+#  my $orden= '';
+
 # my $ini= 1;
 # my $funcion=$input->param('funcion');
 # 
