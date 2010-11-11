@@ -69,3 +69,86 @@ function validateForm(func){
             });
          });
    }
+   
+   
+function consultar(filtro,doScroll){
+    if (doScroll)
+      shouldScrollUser = doScroll;
+    objAH=new AjaxHelper(updateInfoProveedores);
+    objAH.cache = true;
+    busqueda = jQuery.trim($('#nombre_proveedor').val());
+    inicial = '0';
+    if (filtro){
+        inicial = filtro;
+        busqueda = jQuery.trim(filtro);
+        objAH.inicial= inicial;
+        $('#nombre_proveedor').val(FILTRO_POR + filtro);
+    }
+    else
+       {
+        if (busqueda.substr(8,5).toUpperCase() == 'TODOS'){
+                busqueda = busqueda.substr(8,5);
+                $('#nombre_proveedor').val(busqueda);
+                consultar(busqueda);
+        }
+        else
+           {
+            if (busqueda.substr(0,6).toUpperCase() == 'FILTRO'){
+                busqueda = busqueda.substr(8,1);
+                $('#nombre_proveedor').val(busqueda);
+                consultar(busqueda);
+            }
+           }
+    }
+    if(jQuery.trim(busqueda).length > 0){
+        objAH.url= '/cgi-bin/koha/usuarios/reales/buscarProveedorResult.pl';
+        objAH.debug= true;
+//      objAH.cache= true;
+        objAH.funcion= 'changePage';
+        objAH.socio= busqueda;
+        objAH.sendToServer();
+    }
+    else{
+        jAlert(INGRESE_UN_DATO,USUARIOS_ALERT_TITLE);
+        $('#nombre_proveedor').focus();
+    }
+
+}
+
+function updateInfoProveedores(responseText){
+    $('#result').html(responseText);
+    zebra('datos_tabla');
+    var idArray = [];
+    var classes = [];
+    idArray[0] = 'proveedor';
+    classes[0] = 'nombre';
+    classes[1] = 'direccion';
+    classes[2] = 'telefono';
+    classes[3] = 'email';
+    busqueda = jQuery.trim($('#nombre_proveedor').val());
+    if (busqueda.substr(0,6).toUpperCase() != 'FILTRO') //SI NO SE QUISO FILTRAR POR INICIAL, NO TENDRIA SENTIDO MARCARLO
+        highlight(classes,idArray);
+    if (shouldScrollUser)
+        scrollTo('result');
+}
+
+function Borrar(){
+    $('#nombre_proveedor').val('');
+}
+
+function checkFilter(eventType){
+    var str = $('#nombre_proveedor').val();
+    
+    if (eventType.toUpperCase() == 'FOCUS'){
+
+        if (str.substr(0,6).toUpperCase() == 'FILTRO'){
+            globalSearchTemp = $('#nombre_proveedor').val();
+            Borrar();
+        }
+    }
+    else
+       {
+        if (jQuery.trim($('#nombre_proveedor').val()) == "")
+            $('#nombre_proveedor').val(globalSearchTemp);
+       }
+}
