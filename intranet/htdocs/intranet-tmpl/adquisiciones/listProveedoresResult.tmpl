@@ -32,8 +32,7 @@
                     <th>
                         [% "Mail" | i18n %]
                     </th>
-                    <th>[% "Editar Proveedor" | i18n %]</th>
-                    <th>[% "Eliminar Proveedor" | i18n %]</th>            
+                    <th>[% "Acciones" | i18n %]</th>          
                 </tr>
                 </thead>
                 <tbody>
@@ -42,7 +41,7 @@
                 <tr  align="center">
 
                       <td align="left" class="proveedores">
-                          [% proveedor %]
+                          [% proveedor.getNombre %]
                       </td>
 
                       <td align="left" class="proveedores">
@@ -57,24 +56,25 @@
                           [% proveedor.Mail %]
                       </td>
             
-                      <td align='left' class="proveedores">
-                          [% PERL %]
-                              print C4::AR::Filtros::link_to(   text =>     "[% proveedor.getId %]",
+                      <td align='left' width="9%" class="proveedores">
+                          <div class="click horizontal icon_edicion">
+			    [% PERL %]
+				print C4::AR::Filtros::link_to(   text =>     "",
                                                                 url =>      "/cgi-bin/koha/adquisiciones/editProveedor.pl", 
                                                                 params =>   ["id_proveedor=[% proveedor.getId %]"],
                                                                 title =>    "[% 'Editar Proveedor' | i18n %]"
                                                           );
-                          [% END %]
-                      </td>
-
-                      <td align='left' class="proveedores">
-                          [% PERL %]
-                              print C4::AR::Filtros::link_to(   text =>     "[% proveedor.getId %]",
+			    [% END %]
+			  </div>
+			  <div class="click horizontal icon_borrar">
+			    [% PERL %]
+                              print C4::AR::Filtros::link_to(   text =>     "",
                                                                 url =>      "/cgi-bin/koha/adquisiciones/delProveedor.pl", 
                                                                 params =>   ["id_proveedor=[% proveedor.getId %]"],
                                                                 title =>    "[% 'Eliminar Proveedor' | i18n %]"
                                                           );
-                          [% END %]
+			    [% END %]
+			  </div>
                       </td>
             
                 </tr>

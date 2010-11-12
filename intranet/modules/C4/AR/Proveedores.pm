@@ -12,6 +12,7 @@ use vars qw(@EXPORT @ISA);
     &agregarProveedor;
     &eliminarProveedor;
     &modificarProveedor;
+    &getProveedorLike;
 );
 
 =item
@@ -126,6 +127,69 @@ sub _verificarDatosProveedor {
 	}
 
     return ($msg_object);
+}
+
+sub getProveedorLike {
+
+    use C4::Modelo::AdqProveedor;
+    use C4::Modelo::AdqProveedor::Manager;
+    my ($proveedor,$orden,$ini,$cantR,$habilitados,$inicial) = @_;
+    my @filtros;
+    my $proveedorTemp = C4::Modelo::AdqProveedor->new();
+#     my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($proveedor);
+
+    if($proveedor ne 'TODOS'){
+
+        #SI VIENE INICIAL, SE BUSCA SOLAMENTE POR APELLIDOS QUE COMIENCEN CON ESA LETRA, SINO EN TODOS LADOS CON LIKE EN AMBOS LADOS
+        if (!($inicial)){
+        C4::AR::Debug::debug("entro al if inicial");
+#             foreach my $s (@searchstring_array){ 
+                push (  @filtros, ( or   => [   nombre => { like => '%'.$proveedor.'%'},          
+                                            ])
+                     );
+#             }
+        }else{
+#             foreach my $s (@searchstring_array){ 
+                push (  @filtros, ( or   => [   nombre => { like => $proveedor.'%'}, 
+                                            ])
+                                    );
+#             }
+        }
+    }
+
+    if (!defined $habilitados){
+        $habilitados = 1;
+    }
+
+    push(@filtros, ( activo => { eq => $habilitados}));
+ #   push(@filtros, ( es_socio => { eq => $habilitados}));
+    my $ordenAux= $proveedorTemp->sortByString($orden);
+
+
+
+
+
+    my $proveedores_array_ref = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor(   query => \@filtros,
+                                                                            sort_by => $ordenAux,
+                                                                            limit   => $cantR,
+                                                                            offset  => $ini,
+#                                                               require_objects => ['nombre','direccion','telefono',
+#                                                                                  'email'],
+     ); 
+
+C4::AR::Debug::debug("|" . @filtros . "|");
+
+    #Obtengo la cant total de socios para el paginador
+    my $proveedores_array_ref_count = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor_count( query => \@filtros,
+#                                                              require_objects => ['nombre','direccion','telefono',
+#                                                                                  'email'],
+                                                                     );
+
+    if(scalar(@$proveedores_array_ref) > 0){
+        return ($proveedores_array_ref_count, $proveedores_array_ref);
+    }else{
+        return (0,0);
+    }
 }
 
 END { }       # module clean-up code here (global destructor)

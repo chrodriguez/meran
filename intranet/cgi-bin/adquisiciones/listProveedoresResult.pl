@@ -5,9 +5,8 @@ use C4::Auth;
 use CGI;
 use C4::Date;
 use Date::Manip;
-use C4::AR::Usuarios;
 use C4::AR::Utilidades;
-use C4::Modelo::AdqProveedor;
+use C4::AR::Proveedores;
 
 my $input = new CGI;
 
@@ -52,20 +51,16 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
 
 #  Como debe ser:
- my $orden=$obj->{'orden'}||'nombre';
-
-  $obj->{'ini'} = $obj->{'ini'} || 1;
-  my $ini=$obj->{'ini'};
+  my $orden=$obj->{'orden'}||'nombre';
   my $funcion=$obj->{'funcion'};
   my $inicial=$obj->{'inicial'};
-  my $proveedor = $obj->{'nombre'};
+  my $proveedor = $obj->{'nombre_proveedor'};
   my $env;
+  my $ini;
 #  C4::AR::Validator::validateParams('U389',$obj,['proveedor','ini','funcion'] );
 
 
   #my $orden= $obj->{'orden'}||'id_proveedor';;
-
- my $ini= 1;
  my $funcion=$input->param('funcion');
  
  
@@ -79,14 +74,18 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
  
  my ($cantidad,$proveedores);
  my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+ C4::AR::Debug::debug($ini);
+C4::AR::Debug::debug($cantR);
+C4::AR::Debug::debug($pageNumber);
  # 
  if ($inicial){
-     ($cantidad,$proveedores)= C4::Modelo::AdqProveedor::getProveedorLike($proveedor,$orden,$ini,$cantR,1,$inicial);
+     ($cantidad,$proveedores)= C4::AR::Proveedores::getProveedorLike($proveedor,$orden,$ini,$cantR,1,$inicial);
  }else{
-     ($cantidad,$proveedores)= C4::Modelo::AdqProveedor::getProveedorLike($proveedor,$orden,$ini,$cantR,1,0);
+     ($cantidad,$proveedores)= &C4::AR::Proveedores::getProveedorLike($proveedor,$orden,$ini,$cantR,1,0);
  }
   
   C4::AR::Debug::debug($proveedores);
+  C4::AR::Debug::debug($cantidad);
   
  if($proveedores){
       $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);

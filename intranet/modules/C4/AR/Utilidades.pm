@@ -1085,7 +1085,7 @@ sub InitPaginador{
 
     if (($iniParam eq "")|($iniParam <= 0)){
             $ini=0;
-        $pageNumber=1;
+	    $pageNumber=1;
     } else {
         $ini= ($iniParam-1)* $cantR;
         $pageNumber= $iniParam;
