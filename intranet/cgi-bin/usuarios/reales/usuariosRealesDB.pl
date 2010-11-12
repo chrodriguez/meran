@@ -160,7 +160,7 @@ Se elimina el usuario
 
 
 =item
-Se elimina el usuario
+Se agrega el usuario
 =cut
     elsif($tipoAccion eq "AGREGAR_USUARIO"){
         my ($loggedinuser, $session, $flags) = checkauth( $input, 
