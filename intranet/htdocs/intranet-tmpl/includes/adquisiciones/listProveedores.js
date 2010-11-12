@@ -59,6 +59,10 @@ function consultar(filtro,doScroll){
 
 }
 
+function changePage(ini){
+    objAH.changePage(ini);
+}
+
 function updateInfoProveedores(responseText){
     $('#result').html(responseText);
     zebra('datos_tabla');

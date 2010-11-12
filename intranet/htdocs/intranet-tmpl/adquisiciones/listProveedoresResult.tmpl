@@ -60,8 +60,8 @@
                           <div class="click horizontal icon_edicion">
 			    [% PERL %]
 				print C4::AR::Filtros::link_to(   text =>     "",
-                                                                url =>      "/cgi-bin/koha/adquisiciones/editProveedor.pl", 
-                                                                params =>   ["id_proveedor=[% proveedor.getId %]"],
+                                                                url =>      "/cgi-bin/koha/adquisiciones/listProveedoresResult.pl", 
+                                                                params =>   ["nombre_proveedor=[% proveedor.getNombre %]","accion=EDITAR"],
                                                                 title =>    "[% 'Editar Proveedor' | i18n %]"
                                                           );
 			    [% END %]
@@ -74,6 +74,8 @@
                                                                 title =>    "[% 'Eliminar Proveedor' | i18n %]"
                                                           );
 			    [% END %]
+
+
 			  </div>
                       </td>
             
