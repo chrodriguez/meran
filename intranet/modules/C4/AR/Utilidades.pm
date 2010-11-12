@@ -1538,7 +1538,8 @@ sub buscarNivelesBibliograficos{
 
 =head2
 # Esta funcioin remueve los blancos del principio y el final del string
-=cut;
+=cut
+
 sub trim{
     my ($string) = @_;
 
