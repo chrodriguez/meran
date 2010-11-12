@@ -8,6 +8,20 @@
       });
 </script>
 
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedoresResul.js"></script>
+
+[% INCLUDE "FormValidateHelper.inc" %]
+
+<script type="text/javascript">
+
+
+ $(document).ready(function() {
+       onEnter("nombre_proveedor",consultar);
+ });
+
+</script>
+
+
 [% USE HTML %]
 
 <div class="contenedor_paginador">[% paginador %]</div>
@@ -68,9 +82,10 @@
 			  </div>
 			  <div class="click horizontal icon_borrar">
 			    [% PERL %]
-                              print C4::AR::Filtros::link_to(   text =>     "",
-                                                                url =>      "/cgi-bin/koha/adquisiciones/delProveedor.pl", 
-                                                                params =>   ["id_proveedor=[% proveedor.getId %]"],
+                              print C4::AR::Filtros::link_to(   text =>     "Eliminar",
+                                                                url =>      "/cgi-bin/koha/adquisiciones/proveedoresDB.pl", 
+                                                                params =>   ["id_proveedor=[% proveedor.getId %]",
+                                                                             "accion=ELIMINAR"],
                                                                 title =>    "[% 'Eliminar Proveedor' | i18n %]"
                                                           );
 			    [% END %]

@@ -59,25 +59,25 @@ sub agregarProveedor{
 
 sub eliminarProveedor {
 
-#     my ($id_prov)=@_;
-#     my $msg_object= C4::AR::Mensajes::create();
-#     my $prov = C4::AR::Proveedores::getProveedorInfoPorId($id_prov);
-# 
-#     eval {
-#         $prov->desactivar;
-#         $msg_object->{'error'}= 0;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$id_prov]} ) ;
-#     };
-# 
-#     if ($@){
-#         #Se loguea error de Base de Datos
-#         &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
-#         #Se setea error para el usuario
-#         $msg_object->{'error'}= 1;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [$id_prov]} ) ;
-#     }
-# 
-#     return ($msg_object);
+     my ($id_prov)=@_;
+     my $msg_object= C4::AR::Mensajes::create();
+     my $prov = C4::AR::Proveedores::getProveedorInfoPorId($id_prov);
+ 
+     eval {
+         $prov->desactivar;
+         $msg_object->{'error'}= 0;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$id_prov]} ) ;
+     };
+ 
+     if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [$id_prov]} ) ;
+     }
+ 
+     return ($msg_object);
 }
 
 =item

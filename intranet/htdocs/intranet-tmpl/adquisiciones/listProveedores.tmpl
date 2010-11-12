@@ -22,7 +22,7 @@
                 onBlur="checkFilter('blur')">
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                    boton   => "boto n_buscar",
+                                                                    boton   => "boton_buscar",
                                                                     onClick => "consultar();",
                                                                     title   => "[% 'Buscar' | i18n %]",
                                         ) ;

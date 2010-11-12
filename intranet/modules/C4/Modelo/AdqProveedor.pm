@@ -101,6 +101,12 @@ sub setNombreProveedor{
     }
 }
 
+sub getId{
+    my ($self) = shift;
+    return ($self->id_proveedor);
+}
+
+
 sub getNombre{
     my ($self) = shift;
     return ($self->nombre);
