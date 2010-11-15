@@ -2,7 +2,7 @@
  * LIBRERIA listProveedoresResult v 1.0.0
  * Esta es una libreria creada para el sistema KOHA
  * Contendran las funciones para permitir la circulacion en el sistema
- * Fecha de creacion 12/11/2010
+ * Fecha de creación 12/11/2010
  *
  */
 
@@ -79,10 +79,38 @@ function updateInfoProveedores(responseText){
     if (shouldScrollUser)
         scrollTo('result');
 }
+/*
+function BorrarProveedor(id){  
+    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,PROVEEDOR_ALERT_TITLE, function(confirmStatus){
 
-function Borrar(){
-    $('#nombre_proveedor').val('');
+        if(confirmStatus){
+		    objAH                   = new AjaxHelper(updateBorrarProveedor);
+		    objAH.debug             = true;
+		    objAH.url               = "/cgi-bin/koha/adquisiciones/proveedoresDB.pl";
+                    objAH.id_array         = [id];
+		    //objAH.nivel             = 3;
+		    objAH.itemtype          = $("#id_proveedor").val();
+		    objAH.tipoAccion        = "ELIMINAR";
+		    objAH.sendToServer();
+        }
+	});
 }
+
+function updateBorrarProveedor(responseText){
+    var info        = JSONstring.toObject(responseText);  
+    var Messages    = info.Message_arrayref;
+    setMessages(Messages);
+        alert('apesaspe');
+    if (! (hayError(Messages) ) ){
+        alert('pepe');
+        //inicializar();
+        //mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+        //acutalizo los datos de nivel 2
+        //mostrarInfoAltaNivel2(ID_N2);
+        //mostrarInfoAltaNivel3(ID_N2);
+    }
+}
+*/
 
 function checkFilter(eventType){
     var str = $('#nombre_proveedor').val();

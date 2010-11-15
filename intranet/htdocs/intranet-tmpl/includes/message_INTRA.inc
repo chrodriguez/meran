@@ -187,6 +187,7 @@
     POR_FAVOR_INGRESE_EL_NOMBRE = "[% 'Por favor ingrese un nombre' | i18n %]";
     POR_FAVOR_INGRESE_UNA_DIRECCION = "[% 'Por favor ingrese una direccion' | i18n %]";
     POR_FAVOR_INGRESE_UN_TELEFONO = "[% 'Por favor ingrese un telefono' | i18n %]";
+    PROVEEDOR_ALERT_TITLE= "[% 'Advertencia de cat\u00e1logo' | i18n %]";
     
     /*=================================================Fin===Proveedor=======================================================*/
 

@@ -6,9 +6,41 @@
 //           makeToggle('datos_tabla_div_user','trigger',null,false);
 //           $('.user_pic_fancy').fancybox();
       });
+      
+      function BorrarProveedor(id){  
+    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,PROVEEDOR_ALERT_TITLE, function(confirmStatus){
+
+        if(confirmStatus){
+            objAH                   = new AjaxHelper(updateBorrarProveedor);
+            objAH.debug             = true;
+            objAH.url               = "/cgi-bin/koha/adquisiciones/proveedoresDB.pl";
+                    objAH.id_array         = [id];
+            //objAH.nivel             = 3;
+            objAH.itemtype          = $("#id_proveedor").val();
+            objAH.tipoAccion        = "ELIMINAR";
+            objAH.sendToServer();
+        }
+    });
+}
+
+function updateBorrarProveedor(responseText){
+    var info        = JSONstring.toObject(responseText);  
+    var Messages    = info.Message_arrayref;
+    setMessages(Messages);
+        alert('apesaspe');
+    if (! (hayError(Messages) ) ){
+        alert('pepe');
+        //inicializar();
+        //mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+        //acutalizo los datos de nivel 2
+        //mostrarInfoAltaNivel2(ID_N2);
+        //mostrarInfoAltaNivel3(ID_N2);
+    }
+}
+      
 </script>
 
-<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedoresResul.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedoresResult.js"></script>
 
 [% INCLUDE "FormValidateHelper.inc" %]
 
@@ -82,12 +114,13 @@
 			  </div>
 			  <div class="click horizontal icon_borrar">
 			    [% PERL %]
-                              print C4::AR::Filtros::link_to(   text =>     "Eliminar",
-                                                                url =>      "/cgi-bin/koha/adquisiciones/proveedoresDB.pl", 
-                                                                params =>   ["id_proveedor=[% proveedor.getId %]",
-                                                                             "accion=ELIMINAR"],
-                                                                title =>    "[% 'Eliminar Proveedor' | i18n %]"
-                                                          );
+			    
+			            print C4::AR::Filtros::to_Icon(    
+                                            boton   => "icon_borrar",
+                                            onClick => "BorrarProveedor([% proveedor.getId %]);return false;",
+                                            title   => "[% 'Borrar' | i18n %]",
+                ) ;
+			    
 			    [% END %]
 
 
