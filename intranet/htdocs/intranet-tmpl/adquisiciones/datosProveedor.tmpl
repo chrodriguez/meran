@@ -7,7 +7,31 @@
 [% INCLUDE "WindowHelper.inc" %] 
 [% INCLUDE "ChangePasswordHelper.inc"  %]
 
-  <script type="text/javascript"></script>
+  <script type="text/javascript">
+    function modificarDatosDeProveedor(){
+        objAH         = new AjaxHelper(updateDatosProveedor);
+        objAH.url     = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl';
+        objAH.debug   = true;
+
+        objAH.nombre              = $('#nombre').val();
+        objAH.direccion           = $('#direccion').val();
+        objAH.proveedor_activo    = $("input[@name=proveedor_activo]:checked").val();
+        objAH.telefono            = $('#telefono').val();
+        objAH.email               = $('#email').val();
+        objAH.tipoAccion          = 'GUARDAR_MODIFICION_PROVEEDOR';
+        objAH.id_proveedor        = $('#id_proveedor').val();
+        objAH.sendToServer();
+    }
+
+
+
+    function updateDatosProveedor(responseText){
+          if (!verificarRespuesta(responseText))
+            return(0);
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+    }
+  </script>
 <div>
       <!--    DETALLE PROVEEDOR -->
 
@@ -16,10 +40,19 @@
                               [% "Datos del proveedor" | i18n %]
           </legend>  
           <div id="detalleProveedor">
-             <p><span>Nombre: </span><input type="text" value="[% nombre %]"></p>
-             <p><span>Direccion: </span><input type="text" value="[% dir %]"></p>
-             <p><span>Telefono: </span><input type="text" value="[% tel %]"></p>
-             <p><span>Email: </span><input type="text" value="[% email %]"></p>
+             <input type="hidden" id="id_proveedor" value="[% id_proveedor %]">
+             <p><span>Nombre: </span><input type="text" id="nombre" value="[% nombre %]"></p>
+             <p><span>Direccion: </span><input type="text" id="direccion" value="[% dir %]"></p>
+             <p><span>Telefono: </span><input type="text" id="telefono" value="[% tel %]"></p>
+             <p><span>Email: </span><input type="text" id="email" value="[% email %]"></p>
+          </div>
+          <div id="accion">
+              [% PERL %]
+                         print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                               boton   => "boton_buscar",
+                                                               onClick => "modificarDatosDeProveedor();",
+                                                     ) ;
+              [% END %]
           </div>
 
       </fieldset>

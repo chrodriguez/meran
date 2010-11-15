@@ -372,6 +372,7 @@ my %mensajesINTRA = (
     'A003' => 'El mail debe ser v&aacute;lido',
     'A004' => 'La direcion del proveedor no puede estar en blanco',
     'A005' => 'El telefono no puede contener car&aacute;cteres raros o estar en blanco',
+    'A006' => 'la informacion del proveedor fue guardada con &eacute;xito',
 );
 
 sub getMensaje {

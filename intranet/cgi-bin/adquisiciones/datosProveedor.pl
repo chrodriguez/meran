@@ -21,6 +21,7 @@ my $nombre = $input->param('nombre_proveedor');
 my $direccion = $input->param('direccion');
 my $tel = $input->param('telefono');
 my $email = $input->param('email');
+my $id_proveedor = $input->param('id_proveedor');
 #my $mensaje                     = $input->param('mensaje');#Mensaje que viene desde libreDeuda si es que no se puede imprimir
 #my $mensaje_desde_pdf           = $input->param('mensaje');
 
@@ -37,5 +38,6 @@ $t_params->{'nombre'} = $nombre;
 $t_params->{'dir'} = $direccion;
 $t_params->{'tel'} = $tel;
 $t_params->{'email'} = $email;
+$t_params->{'id_proveedor'} = $id_proveedor;
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

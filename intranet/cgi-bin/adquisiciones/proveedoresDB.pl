@@ -4,39 +4,42 @@ use strict;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::AR::UploadFile;
+use C4::AR::Proveedores;
 use JSON;
 use CGI;
 
 my $input = new CGI;
 my $authnotrequired= 0;
-my $editing = $input->param('edit');
+# my $editing = $input->param('edit');
 
-if($editing){
-   
-    my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "includes/partials/modificar_value.tmpl",
-                        query => $input,
-                        type => "intranet",
-                        authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
-                        debug => 1,
-                    });
-    my %params = {};
+#  El editar viene por JSON, a este if nunca entra. Sacarlo despues:
 
-    $params{'action'} = $input->param('accion');
-#    $params{'edit'} = $input->param('edit');
-    $params{'nombre'} = $input->param('nombre');
-    $params{'direccion'} = $input->param('direccion');
-    $params{'tel'} = $input->param('telefono');
-    $params{'email'} = $input->param('email');
-#    C4::AR::Validator::validateParams('U389',\%params,['nro_socio'] );
-
-    my ($value)= C4::AR::Adquisiciones::editarProveedor(\%params);
-#
-#    $t_params->{'value'} = $value;
-#    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
-
-}else{
+# if($editing){
+#    
+#     my ($template, $session, $t_params)  = get_template_and_user({  
+#                         template_name => "includes/partials/modificar_value.tmpl",
+#                         query => $input,
+#                         type => "intranet",
+#                         authnotrequired => 0,
+#                         flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+#                         debug => 1,
+#                     });
+#     my %params = {};
+# 
+#     $params{'action'} = $input->param('accion');
+# #    $params{'edit'} = $input->param('edit');
+#     $params{'nombre'} = $input->param('nombre');
+#     $params{'direccion'} = $input->param('direccion');
+#     $params{'tel'} = $input->param('telefono');
+#     $params{'email'} = $input->param('email');
+# #    C4::AR::Validator::validateParams('U389',\%params,['nro_socio'] );
+# 
+#     my ($value)= C4::AR::Adquisiciones::editarProveedor(\%params);
+# #
+# #    $t_params->{'value'} = $value;
+# #    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+# 
+# }else{
 
     my $obj=$input->param('obj');
     $obj=C4::AR::Utilidades::from_json_ISO($obj);
@@ -75,28 +78,44 @@ if($editing){
 
 
 =item
-Se guarda la modificacion los datos del usuario
+Se guarda la modificacion los datos del Proveedor
 =cut
-#    elsif($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
-#        my ($loggedinuser, $session, $flags) = checkauth( 
-#                                                                $input, 
-#                                                                $authnotrequired,
-#                                                                {   ui => 'ANY', 
-#                                                                    tipo_documento => 'ANY', 
-#                                                                    accion => 'MODIFICACION', 
-#                                                                    entorno => 'usuarios'},
-#                                                                "intranet"
-#                                );  
-#
-#        C4::AR::Validator::validateParams('U389',$obj,['nro_socio','nombre','nacimiento','ciudad','apellido','id_ui','sexo'] );
-#
-#        my ($Message_arrayref)= C4::AR::Usuarios::actualizarSocio($obj);
-#        my $infoOperacionJSON=to_json $Message_arrayref;
-#
-#        C4::Auth::print_header($session);
-#        print $infoOperacionJSON;
-#
-#    } #end if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO")
+    elsif($tipoAccion eq "GUARDAR_MODIFICION_PROVEEDOR"){
+
+      my $obj=$input->param('obj');
+      $obj=C4::AR::Utilidades::from_json_ISO($obj);
+
+        my ($loggedinuser, $session, $flags) = checkauth( 
+                                                                $input, 
+                                                                $authnotrequired,
+                                                                {   ui => 'ANY', 
+                                                                    tipo_documento => 'ANY', 
+                                                                    accion => 'MODIFICACION', 
+# TODO generar el entorno proveedores
+                                                                    entorno => 'usuarios'},
+#                                                                 entorno => 'proveedores'},    
+                                                                "intranet"
+                                );  
+
+#         my %params = {};
+
+#         $params{'id_proveedor'} = $obj->{'id_proveedor'};
+
+#         $params{'nombre'} = $obj->{'nombre_proveedor'};
+#         $params{'direccion'} = $input->param('direccion');
+#         $params{'tel'} = $input->param('telefono');
+#         $params{'email'} = $input->param('email');
+    #    C4::AR::Validator::validateParams('U389',\%params,['nro_socio'] );
+
+        my ($Message_arrayref)= C4::AR::Proveedores::editarProveedor($obj);
+
+
+        my $infoOperacionJSON=to_json $Message_arrayref;
+  C4::AR::Debug::debug($infoOperacionJSON);
+        C4::Auth::print_header($session);
+        print $infoOperacionJSON;
+
+    } #end if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO")
 
 
 =item
@@ -194,4 +213,4 @@ Se genra la ventana para modificar los datos del usuario
 #        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 #
 #    }
-}
+# }

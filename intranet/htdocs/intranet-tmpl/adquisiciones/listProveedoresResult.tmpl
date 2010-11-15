@@ -76,7 +76,8 @@
                               print C4::AR::Filtros::link_to(   text => "Editar",
                                                                 url =>  "/cgi-bin/koha/adquisiciones/datosProveedor.pl", 
                                                                 params =>   ["nombre_proveedor=[% proveedor.getNombre %]","direccion=[% proveedor.getDireccion %]",
-                                                                             "telefono=[% proveedor.getTelefono %]","email=[% proveedor.getEmail %]","action=EDITAR"],
+                                                                             "telefono=[% proveedor.getTelefono %]","email=[% proveedor.getEmail %]","action=EDITAR",
+                                                                              "id_proveedor=[% proveedor.getId %]"],
                                                                 title =>    "[% 'Editar Proveedor' | i18n %]"
                                                             );
                               [% END %]
