@@ -13,6 +13,7 @@ use vars qw(@EXPORT @ISA);
     &eliminarProveedor;
     &modificarProveedor;
     &getProveedorLike;
+    &editarAutorizado;
 );
 
 =item
@@ -127,6 +128,26 @@ sub _verificarDatosProveedor {
 	}
 
     return ($msg_object);
+}
+
+sub editarProveedor{
+    my ($params)=@_;
+    use Switch;
+    my $nombre = $params->{'nombre'};
+    my $direccion = $params->{'direccion'};
+    my $tel = $params->{'tel'};
+    my $email = $params->{'email'};
+   # my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+# 
+#     if ($socio){
+#         switch ($campo) {
+#             case "nombre_autorizado" { $socio->setNombre_apellido_autorizado($value); $socio->save();  }
+#             case "dni_autorizado" { $socio->setDni_autorizado($value); $socio->save();  }
+#             case "telefono_autorizado" { $socio->setTelefono_autorizado($value); $socio->save();  }
+#             else { }
+#         }
+#     }
+#     return ($value);
 }
 
 sub getProveedorLike {

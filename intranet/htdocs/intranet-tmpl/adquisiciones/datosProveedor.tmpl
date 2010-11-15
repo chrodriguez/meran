@@ -1,0 +1,40 @@
+[% INCLUDE "intranet-top.inc" %] 
+  <script type="text/javascript" src="/intranet-tmpl/includes/circulacion-min.js"></script>
+  <script type="text/javascript" src="/intranet-tmpl/includes/usuarios/usuariosReales-min.js"></script>
+  <script type="text/javascript" src="/includes/jquery/jquery.fileUploader-min.js"></script>
+  <script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
+
+[% INCLUDE "WindowHelper.inc" %] 
+[% INCLUDE "ChangePasswordHelper.inc"  %]
+
+  <script type="text/javascript"></script>
+<div>
+      <!--    DETALLE PROVEEDOR -->
+
+      <fieldset>
+          <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Datos del proveedor" | i18n %]'>
+                              [% "Datos del proveedor" | i18n %]
+          </legend>  
+          <div id="detalleProveedor">
+             <p><span>Nombre: </span><input type="text" value="[% nombre %]"></p>
+             <p><span>Direccion: </span><input type="text" value="[% dir %]"></p>
+             <p><span>Telefono: </span><input type="text" value="[% tel %]"></p>
+             <p><span>Email: </span><input type="text" value="[% email %]"></p>
+          </div>
+
+      </fieldset>
+      <fieldset>   
+              <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "click para acceder al listado de items" | i18n %]'>
+                              [% "Listado de items" | i18n %]
+              </legend>         
+              <!--DETALLE DE ITEMS-->
+              <div id="itemsProveedor"></div>
+      </fieldset>
+     
+     
+</fieldset>
+      
+    
+
+  </div>
+[% INCLUDE "intranet-bottom.inc" %]
