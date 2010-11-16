@@ -8,6 +8,22 @@
 [% INCLUDE "ChangePasswordHelper.inc"  %]
 
   <script type="text/javascript">
+
+/*
+*  Funcion que esconde el div con los detalles del proveedor
+*/
+    var escondido = false;
+    function esconder(){
+	if(escondido){
+	    $('#detalleProveedor').show('slow')
+	    escondido = false	    
+	}else{
+	    $('#detalleProveedor').hide('slow')
+	    escondido = true
+	}
+    }
+
+  
     function modificarDatosDeProveedor(){
         objAH         = new AjaxHelper(updateDatosProveedor);
         objAH.url     = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl';
@@ -57,7 +73,7 @@
       <!--    DETALLE PROVEEDOR -->
 
       <fieldset>
-          <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Datos del proveedor" | i18n %]'>
+          <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Datos del proveedor" | i18n %]'>
                               [% "Datos del proveedor" | i18n %]
           </legend>  
           <div id="detalleProveedor">
