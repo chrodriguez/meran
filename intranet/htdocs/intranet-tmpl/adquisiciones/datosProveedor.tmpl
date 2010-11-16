@@ -1,0 +1,109 @@
+[% INCLUDE "intranet-top.inc" %] 
+
+  <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedoresResult.js"></script>
+
+[% INCLUDE "WindowHelper.inc" %] 
+[% INCLUDE "ChangePasswordHelper.inc"  %]
+
+  <script type="text/javascript">
+
+  
+    function modificarDatosDeProveedor(){
+        objAH         = new AjaxHelper(updateDatosProveedor);
+        objAH.url     = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl';
+        objAH.debug   = true;
+
+        objAH.nombre              = $('#nombre').val();
+        objAH.direccion           = $('#direccion').val();
+        objAH.proveedor_activo    = $("input[@name=proveedor_activo]:checked").val();
+        objAH.telefono            = $('#telefono').val();
+        objAH.email               = $('#email').val();
+        objAH.tipoAccion          = 'GUARDAR_MODIFICION_PROVEEDOR';
+        objAH.id_proveedor        = $('#id_proveedor').val();
+        objAH.sendToServer();
+    }
+
+    function updateDatosProveedor(responseText){
+          if (!verificarRespuesta(responseText))
+            return(0);
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+    }
+
+    function changePage(ini){
+        objAH.changePage(ini);
+    }
+
+    function mostrarItems(){
+        objAH=new AjaxHelper(updateMostrarItems);
+        objAH.debug= true;
+        objAH.cache= true;
+        objAH.url='/cgi-bin/koha/adquisiciones/items.pl';
+        objAH.id_proveedor= $('#id_proveedor').val();
+        objAH.funcion= 'changePage';
+        objAH.sendToServer();
+    }
+
+    function updateMostrarItems(responseText){
+        $('#itemsProveedor').html(responseText);
+//         zebra('tablaHistorialPrestamos');
+//         $.scrollTo('#historialPrestamos');
+    }
+
+
+
+  </script>
+<div>
+      <!--    DETALLE PROVEEDOR -->
+
+      <fieldset>
+          <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Datos del proveedor" | i18n %]'>
+                              [% "Datos del proveedor" | i18n %]
+          </legend>  
+          <div id="detalleProveedor">
+             <input type="hidden" id="id_proveedor" value="[% id_proveedor %]">
+	      <li class="sub_item">
+		  <label for="nombre"> [% "Nombre" | i18n %] *</label>
+		  <input id="nombre" name="nombre" class="required" type="text" size="25" value="[% nombre %]">
+	      </li>
+
+	      <li class="sub_item"> 
+		  <label for="direccion"> [% "Direccion" | i18n %] </label>
+		  <input  id="direccion" name="direccion" type="text" size="25" value="[% dir %]">
+	      </li>
+
+	      <li class="sub_item">
+		  <label for="telefono">[% "Telefono" | i18n %] *</label>
+		  <input 	id="telefono" name="telefono" class="required" type="text" size="15" value="[% tel %]">
+	      </li>
+
+	      <li class="sub_item">
+		  <label for="email">[% "Email" | i18n %]</label>
+		  <input type=text name="email" id="email" size="25" value="[% email %]">
+	      </li>
+          </div>
+          <div id="accion">
+              [% PERL %]
+                         print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                               boton   => "boton_buscar",
+                                                               onClick => "modificarDatosDeProveedor();",
+                                                     ) ;
+              [% END %]
+          </div>
+
+      </fieldset>
+      <fieldset>   
+              <legend onClick="mostrarItems()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "click para acceder al listado de items" | i18n %]'>
+                              [% "Listado de items" | i18n %]
+              </legend>         
+              <!--DETALLE DE ITEMS-->
+              <div id="itemsProveedor"></div>
+      </fieldset>
+     
+     
+</fieldset>
+      
+    
+
+  </div>
+[% INCLUDE "intranet-bottom.inc" %]

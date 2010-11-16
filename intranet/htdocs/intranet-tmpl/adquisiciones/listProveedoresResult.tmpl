@@ -48,13 +48,11 @@ function updateBorrarProveedor(responseText){
 
 
  $(document).ready(function() {
-       onEnter("nombre_proveedor",consultar);
+//        onEnter("nombre_proveedor",consultar);
  });
 
 </script>
 
-
-[% USE HTML %]
 
 <div class="contenedor_paginador">[% paginador %]</div>
 <fieldset class="resultados_busqueda">
@@ -99,15 +97,18 @@ function updateBorrarProveedor(responseText){
                       </td>
 
                       <td align="left" class="proveedores">
-                          [% proveedor.getEmail %]
+<!--                            FIXME si no lo muestro asi se rompe!!!!!! ver -->
+			  <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>
                       </td>
             
                       <td align='left' width="9%" class="proveedores">
                           <div class="click horizontal icon_edicion">
-			    [% PERL %]
-				print C4::AR::Filtros::link_to(   text =>     "",
-                                                                url =>      "/cgi-bin/koha/adquisiciones/listProveedoresResult.pl", 
-                                                                params =>   ["nombre_proveedor=[% proveedor.getNombre %]","accion=EDITAR"],
+                              [% PERL %]
+                              print C4::AR::Filtros::link_to(   text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
+                                                                url =>  "/cgi-bin/koha/adquisiciones/datosProveedor.pl", 
+                                                                params =>   ["nombre_proveedor=[% proveedor.getNombre %]","direccion=[% proveedor.getDireccion %]",
+                                                                             "telefono=[% proveedor.getTelefono %]","email=[% proveedor.getEmail %]","action=EDITAR",
+                                                                              "id_proveedor=[% proveedor.getId %]"],
                                                                 title =>    "[% 'Editar Proveedor' | i18n %]"
                                                           );
 			    [% END %]
@@ -122,9 +123,23 @@ function updateBorrarProveedor(responseText){
                 ) ;
 			    
 			    [% END %]
+                                                            );
+
+                              [% END %]
 
 
-			  </div>
+                          </div>
+                          <div class="click horizontal icon_borrar">
+                              [% PERL %]
+                                            print C4::AR::Filtros::link_to(   
+									      text =>     C4::AR::Filtros::to_Icon( boton   => "icon_borrar" ),
+                                                                              url =>      "/cgi-bin/koha/adquisiciones/proveedoresDB.pl", 
+                                                                              params =>   ["id_proveedor=[% proveedor.getId %]",
+                                                                                          "accion=ELIMINAR"],
+                                                                              title =>    "[% 'Eliminar Proveedor' | i18n %]"
+                                                                        );
+                              [% END %]
+                          </div>
                       </td>
             
                 </tr>

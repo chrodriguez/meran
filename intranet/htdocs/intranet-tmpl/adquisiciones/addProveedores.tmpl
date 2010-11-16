@@ -28,22 +28,22 @@
     <ul>
         <li class="sub_item">
             <label for="nombre"> [% "Nombre" | i18n %] *</label>
-            <input id="nombre" name="nombre" class="required" type="text" size="25" value="[% socio_modificar.persona.getApellido %]">
+            <input id="nombre" name="nombre" class="required" type="text" size="25">
         </li>
 
         <li class="sub_item"> 
             <label for="direccion"> [% "Direccion" | i18n %] </label>
-            <input  id="direccion" name="direccion" type="text" size="25" value="[% socio_modificar.persona.getNombre %]">
+            <input  id="direccion" name="direccion" type="text" size="25">
         </li>
 
         <li class="sub_item">
             <label for="telefono">[% "Telefono" | i18n %] *</label>
-            <input 	id="telefono" name="telefono" class="required" type="text" size="15"  value="[% socio_modificar.persona.getNro_documento %]">
+            <input 	id="telefono" name="telefono" class="required" type="text" size="15">
         </li>
 
         <li class="sub_item">
             <label for="email">[% "Email" | i18n %]</label>
-            <input type=text name="email" id="email" size="25" value="[% socio_modificar.persona.getLegajo %]">
+            <input type=text name="email" id="email" size="25">
         </li>
         [% IF addProveedor %]
                
