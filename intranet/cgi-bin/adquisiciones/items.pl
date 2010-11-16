@@ -28,6 +28,7 @@ my $funcion= $obj->{'funcion'};
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
+# ver esta funcion:
 my ($cant,$items_array_ref,$loop_reading)=C4::AR::Items::getItemsParaTemplate($id_proveedor,$ini,$cantR,$orden);
 
 if($items_array_ref){
