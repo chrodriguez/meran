@@ -23,14 +23,35 @@
         objAH.sendToServer();
     }
 
-
-
     function updateDatosProveedor(responseText){
           if (!verificarRespuesta(responseText))
             return(0);
         var Messages=JSONstring.toObject(responseText);
         setMessages(Messages);
     }
+
+    function changePage(ini){
+        objAH.changePage(ini);
+    }
+
+    function mostrarItems(){
+        objAH=new AjaxHelper(updateMostrarItems);
+        objAH.debug= true;
+        objAH.cache= true;
+        objAH.url='/cgi-bin/koha/adquisiciones/items.pl';
+        objAH.id_proveedor= $('#id_proveedor').val();
+        objAH.funcion= 'changePage';
+        objAH.sendToServer();
+    }
+
+    function updateMostrarItems(responseText){
+        $('#itemsProveedor').html(responseText);
+//         zebra('tablaHistorialPrestamos');
+//         $.scrollTo('#historialPrestamos');
+    }
+
+
+
   </script>
 <div>
       <!--    DETALLE PROVEEDOR -->
@@ -57,7 +78,7 @@
 
       </fieldset>
       <fieldset>   
-              <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "click para acceder al listado de items" | i18n %]'>
+              <legend onClick="mostrarItems()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "click para acceder al listado de items" | i18n %]'>
                               [% "Listado de items" | i18n %]
               </legend>         
               <!--DETALLE DE ITEMS-->
