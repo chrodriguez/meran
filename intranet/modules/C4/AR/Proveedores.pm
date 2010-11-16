@@ -95,28 +95,22 @@ sub eliminarProveedor {
 sub editarProveedor{
 #   Recibe la informacion del proveedos, el objeto JSON.
 
-
-    my ($info_proveedor)=@_;
+    my ($params)=@_;
     my $msg_object= C4::AR::Mensajes::create();
 
-
-    my $proveedor = getProveedorInfoPorId($info_proveedor->{'id_proveedor'});
-#     C4::AR::Debug::debug(" proveedor ".$proveedor);
+    my $proveedor = getProveedorInfoPorId($params->{'id_proveedor'});
 
     my $db = $proveedor->db;
 
-
-#       Checkear esto:
-    _verificarDatosProveedor($info_proveedor,$msg_object);
+    _verificarDatosProveedor($params,$msg_object);
 
     if (!($msg_object->{'error'})){
 
 #   entro si no hay algun error, todos los campos ingresados son validos
           $db->{connect_options}->{AutoCommit} = 0;
           $db->begin_work;
-          C4::AR::Debug::debug("proveedor ".$info_proveedor->{'nombre'});
           eval{
-              $proveedor->editarProveedor($info_proveedor);
+              $proveedor->editarProveedor($params);
               $msg_object->{'error'}= 0;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A006', 'params' => []});
               $db->commit;
@@ -144,13 +138,13 @@ sub editarProveedor{
 #     Esta funcion devuelve la informacion del proveedor segun su id
 # =cut
 sub getProveedorInfoPorId {
-    my ($id_prov) = @_;
+    my ($params) = @_;
 
     my $proveedorTemp;
     my @filtros;
 
-    if ($id_prov){
-        push (@filtros, ( id_proveedor => { eq => $id_prov}));
+    if ($params){
+        push (@filtros, ( id_proveedor => { eq => $params}));
         $proveedorTemp = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor(   query => \@filtros );
 
  
@@ -161,7 +155,7 @@ sub getProveedorInfoPorId {
 }
 
 # =item
-#     Este funcion devuelve la informacion del proveedor segun su id
+#     Este funcion devuelve la informacion de proveedores segun su nombre
 # =cut
 sub getProveedorLike {
 

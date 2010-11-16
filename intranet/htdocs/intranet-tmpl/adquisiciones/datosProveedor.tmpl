@@ -62,10 +62,25 @@
           </legend>  
           <div id="detalleProveedor">
              <input type="hidden" id="id_proveedor" value="[% id_proveedor %]">
-             <p><span>Nombre: </span><input type="text" id="nombre" value="[% nombre %]"></p>
-             <p><span>Direccion: </span><input type="text" id="direccion" value="[% dir %]"></p>
-             <p><span>Telefono: </span><input type="text" id="telefono" value="[% tel %]"></p>
-             <p><span>Email: </span><input type="text" id="email" value="[% email %]"></p>
+	      <li class="sub_item">
+		  <label for="nombre"> [% "Nombre" | i18n %] *</label>
+		  <input id="nombre" name="nombre" class="required" type="text" size="25" value="[% nombre %]">
+	      </li>
+
+	      <li class="sub_item"> 
+		  <label for="direccion"> [% "Direccion" | i18n %] </label>
+		  <input  id="direccion" name="direccion" type="text" size="25" value="[% dir %]">
+	      </li>
+
+	      <li class="sub_item">
+		  <label for="telefono">[% "Telefono" | i18n %] *</label>
+		  <input 	id="telefono" name="telefono" class="required" type="text" size="15" value="[% tel %]">
+	      </li>
+
+	      <li class="sub_item">
+		  <label for="email">[% "Email" | i18n %]</label>
+		  <input type=text name="email" id="email" size="25" value="[% email %]">
+	      </li>
           </div>
           <div id="accion">
               [% PERL %]
