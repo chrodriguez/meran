@@ -1,28 +1,12 @@
-<script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
-<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
-
-<script type="text/javascript">
-      $(document).ready(function() {
-//           makeToggle('datos_tabla_div_user','trigger',null,false);
-//           $('.user_pic_fancy').fancybox();
-      });
-</script>
-
-<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedoresResult.js"></script>
-
-[% INCLUDE "FormValidateHelper.inc" %]
-
 <script type="text/javascript">
 
 
  $(document).ready(function() {
-       onEnter("nombre_proveedor",consultar);
+//        onEnter("nombre_proveedor",consultar);
  });
 
 </script>
 
-
-[% USE HTML %]
 
 <div class="contenedor_paginador">[% paginador %]</div>
 <fieldset class="resultados_busqueda">
@@ -67,24 +51,30 @@
                       </td>
 
                       <td align="left" class="proveedores">
-                          [% proveedor.getEmail %]
+<!--                            FIXME si no lo muestro asi se rompe!!!!!! ver -->
+			  <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>
                       </td>
             
                       <td align='left' width="9%" class="proveedores">
                           <div class="click horizontal icon_edicion">
                               [% PERL %]
-                              print C4::AR::Filtros::link_to(   text => "Editar",
+                              print C4::AR::Filtros::link_to(   text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
                                                                 url =>  "/cgi-bin/koha/adquisiciones/datosProveedor.pl", 
                                                                 params =>   ["nombre_proveedor=[% proveedor.getNombre %]","direccion=[% proveedor.getDireccion %]",
                                                                              "telefono=[% proveedor.getTelefono %]","email=[% proveedor.getEmail %]","action=EDITAR",
                                                                               "id_proveedor=[% proveedor.getId %]"],
                                                                 title =>    "[% 'Editar Proveedor' | i18n %]"
                                                             );
+
                               [% END %]
+
+
+
                           </div>
                           <div class="click horizontal icon_borrar">
                               [% PERL %]
-                                            print C4::AR::Filtros::link_to(   text =>     "Eliminar",
+                                            print C4::AR::Filtros::link_to(   
+									      text =>     C4::AR::Filtros::to_Icon( boton   => "icon_borrar" ),
                                                                               url =>      "/cgi-bin/koha/adquisiciones/proveedoresDB.pl", 
                                                                               params =>   ["id_proveedor=[% proveedor.getId %]",
                                                                                           "accion=ELIMINAR"],

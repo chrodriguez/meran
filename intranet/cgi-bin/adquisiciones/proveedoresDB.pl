@@ -10,41 +10,11 @@ use CGI;
 
 my $input = new CGI;
 my $authnotrequired= 0;
-# my $editing = $input->param('edit');
 
-#  El editar viene por JSON, a este if nunca entra. Sacarlo despues:
+my $obj=$input->param('obj');
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
 
-# if($editing){
-#    
-#     my ($template, $session, $t_params)  = get_template_and_user({  
-#                         template_name => "includes/partials/modificar_value.tmpl",
-#                         query => $input,
-#                         type => "intranet",
-#                         authnotrequired => 0,
-#                         flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
-#                         debug => 1,
-#                     });
-#     my %params = {};
-# 
-#     $params{'action'} = $input->param('accion');
-# #    $params{'edit'} = $input->param('edit');
-#     $params{'nombre'} = $input->param('nombre');
-#     $params{'direccion'} = $input->param('direccion');
-#     $params{'tel'} = $input->param('telefono');
-#     $params{'email'} = $input->param('email');
-# #    C4::AR::Validator::validateParams('U389',\%params,['nro_socio'] );
-# 
-#     my ($value)= C4::AR::Adquisiciones::editarProveedor(\%params);
-# #
-# #    $t_params->{'value'} = $value;
-# #    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
-# 
-# }else{
-
-    my $obj=$input->param('obj');
-    $obj=C4::AR::Utilidades::from_json_ISO($obj);
-
-    my $tipoAccion= $obj->{'tipoAccion'}||"";
+my $tipoAccion= $obj->{'tipoAccion'}||"";
 
 
 =item
@@ -96,16 +66,6 @@ Se guarda la modificacion los datos del Proveedor
 #                                                                 entorno => 'proveedores'},    
                                                                 "intranet"
                                 );  
-
-#         my %params = {};
-
-#         $params{'id_proveedor'} = $obj->{'id_proveedor'};
-
-#         $params{'nombre'} = $obj->{'nombre_proveedor'};
-#         $params{'direccion'} = $input->param('direccion');
-#         $params{'tel'} = $input->param('telefono');
-#         $params{'email'} = $input->param('email');
-    #    C4::AR::Validator::validateParams('U389',\%params,['nro_socio'] );
 
         my ($Message_arrayref)= C4::AR::Proveedores::editarProveedor($obj);
 

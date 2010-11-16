@@ -33,11 +33,7 @@ if($obj){
     $params{'email'} = $obj->{'email'};
     $params{'actionType'} = $obj->{'tipoAccion'};
 
-# no encuentra esta rutina: 
     my ($message) = C4::AR::Proveedores::agregarProveedor(\%params);
-#     my $value = C4::AR::Proveedores::agregarProveedor();
-#     C4::AR::Debug::debug($message);
-#     C4::AR::Debug::_printHASH($message);
     my $infoOperacionJSON=to_json $message;
 
     C4::Auth::print_header($session);

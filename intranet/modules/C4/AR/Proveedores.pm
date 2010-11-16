@@ -16,12 +16,12 @@ use vars qw(@EXPORT @ISA);
     &editarAutorizado;
 );
 
+
 =item
-    Este modulo agrega un proveedor
+    Esta funcion agrega un proveedor
     Parametros: 
                 HASH: {nombre},{direccion},{proveedor_activo},{telefono},{mail},{tipoAccion}
 =cut
-
 sub agregarProveedor{
 
     my ($param) = @_;
@@ -58,6 +58,11 @@ sub agregarProveedor{
 }
 
 
+=item
+    Esta funcion elimina un proveedor
+    Parametros: 
+                {id_proveedor}
+=cut
 sub eliminarProveedor {
 
      my ($id_prov)=@_;
@@ -81,55 +86,12 @@ sub eliminarProveedor {
      return ($msg_object);
 }
 
+
 =item
-    Modulo que chekea que todos los datos necesarios sean validos. Queda todo en $msg_object, ademas lo retorna;
+    Esta funcion edita un proveedor
+    Parametros: 
+                 HASH: {nombre},{direccion},{proveedor_activo},{telefono},{mail}
 =cut
-sub _verificarDatosProveedor {
-
-     my ($data, $msg_object)=@_;
-     my $actionType = $data->{'actionType'};
-     my $checkStatus;
-     my $nombre = $data->{'nombre'};
-     my $direccion = $data->{'direccion'};
-     my $telefono = $data->{'telefono'};
-     my $emailAddress = $data->{'email'};
-     my $proveedorActivo = $data->{'proveedor_activo'};
- 
-
-     if (($actionType eq "AGREGAR_PROVEEDOR") || ($actionType eq "MODIFICACION")){
- 
-         if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($nombre)))){
-             $msg_object->{'error'}= 1;
-             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
-         }
-     
-
-        #   valida si el email contiene algo
-        if($emailAddress ne ""){
-          if (!($msg_object->{'error'}) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A003', 'params' => []} ) ;
-          }
-        }
-
-        #   valida que la direccion no este en blanco
-        if($direccion ne ""){
-          if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($direccion)))){
-              $msg_object->{'error'}= 1;
-              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A004', 'params' => []} ) ;
-              }
-        }
-
-        #   valida que el telefono no tenga caractes ni simbolos
-        if (!($msg_object->{'error'}) && ( ((&C4::AR::Validator::countAlphaChars($telefono) != 0)) || (&C4::AR::Validator::countSymbolChars($telefono) != 0) || (&C4::AR::Validator::countNumericChars($telefono) == 0))){
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A005', 'params' => []} ) ;
-            }
-        }
-
-    return ($msg_object);
-}
-
 sub editarProveedor{
 #   Recibe la informacion del proveedos, el objeto JSON.
 
@@ -178,11 +140,9 @@ sub editarProveedor{
      return ($msg_object);
 }
 
-# =item_object->{'error'}= 0;
-#     Este funcion devuelve la informacion del proveedor segun su id
+# =item
+#     Esta funcion devuelve la informacion del proveedor segun su id
 # =cut
-
-
 sub getProveedorInfoPorId {
     my ($id_prov) = @_;
 
@@ -200,6 +160,9 @@ sub getProveedorInfoPorId {
   return 0;
 }
 
+# =item
+#     Este funcion devuelve la informacion del proveedor segun su id
+# =cut
 sub getProveedorLike {
 
     use C4::Modelo::AdqProveedor;
@@ -207,24 +170,13 @@ sub getProveedorLike {
     my ($proveedor,$orden,$ini,$cantR,$habilitados,$inicial) = @_;
     my @filtros;
     my $proveedorTemp = C4::Modelo::AdqProveedor->new();
-#     my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($proveedor);
 
     if($proveedor ne 'TODOS'){
-
-        #SI VIENE INICIAL, SE BUSCA SOLAMENTE POR APELLIDOS QUE COMIENCEN CON ESA LETRA, SINO EN TODOS LADOS CON LIKE EN AMBOS LADOS
         if (!($inicial)){
         C4::AR::Debug::debug("entro al if inicial");
-#             foreach my $s (@searchstring_array){ 
-                push (  @filtros, ( or   => [   nombre => { like => '%'.$proveedor.'%'},          
-                                            ])
-                     );
-#             }
+                push (  @filtros, ( or   => [   nombre => { like => '%'.$proveedor.'%'}, ]));
         }else{
-#             foreach my $s (@searchstring_array){ 
-                push (  @filtros, ( or   => [   nombre => { like => $proveedor.'%'}, 
-                                            ])
-                                    );
-#             }
+                push (  @filtros, ( or   => [   nombre => { like => $proveedor.'%'}, ]) );
         }
     }
 
@@ -233,34 +185,71 @@ sub getProveedorLike {
     }
 
     push(@filtros, ( activo => { eq => $habilitados}));
- #   push(@filtros, ( es_socio => { eq => $habilitados}));
     my $ordenAux= $proveedorTemp->sortByString($orden);
-
-
-
-
-
     my $proveedores_array_ref = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor(   query => \@filtros,
                                                                             sort_by => $ordenAux,
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
-#                                                               require_objects => ['nombre','direccion','telefono',
-#                                                                                  'email'],
      ); 
 
-C4::AR::Debug::debug("|" . @filtros . "|");
-
-    #Obtengo la cant total de socios para el paginador
-    my $proveedores_array_ref_count = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor_count( query => \@filtros,
-#                                                              require_objects => ['nombre','direccion','telefono',
-#                                                                                  'email'],
-                                                                     );
+    #Obtengo la cant total de proveedores para el paginador
+    my $proveedores_array_ref_count = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor_count( query => \@filtros, );
 
     if(scalar(@$proveedores_array_ref) > 0){
         return ($proveedores_array_ref_count, $proveedores_array_ref);
     }else{
         return (0,0);
     }
+}
+
+=item
+    Modulo que chekea que todos los datos necesarios sean validos. Queda todo en $msg_object, ademas lo retorna;
+    Usado en agregar proveedor y modificar proveedor
+=cut
+sub _verificarDatosProveedor {
+
+     my ($data, $msg_object)=@_;
+     my $actionType = $data->{'actionType'};
+     my $checkStatus;
+     my $nombre = $data->{'nombre'};
+     my $direccion = $data->{'direccion'};
+     my $telefono = $data->{'telefono'};
+     my $emailAddress = $data->{'email'};
+     my $proveedorActivo = $data->{'proveedor_activo'};
+ 
+
+     if (($actionType eq "AGREGAR_PROVEEDOR") || ($actionType eq "MODIFICACION")){
+ 
+         if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($nombre)))){
+             $msg_object->{'error'}= 1;
+             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+         }
+     
+
+        #   valida si el email contiene algo
+        if($emailAddress ne ""){
+          if (!($msg_object->{'error'}) && (!(&C4::AR::Validator::isValidMail($emailAddress)))){
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A003', 'params' => []} ) ;
+          }
+        }
+
+        #   valida que la direccion no este en blanco
+        if($direccion ne ""){
+          if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($direccion)))){
+              $msg_object->{'error'}= 1;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A004', 'params' => []} ) ;
+              }
+        }
+
+        #   valida que el telefono no tenga caractes ni simbolos
+        if (!($msg_object->{'error'}) && ( ((&C4::AR::Validator::countAlphaChars($telefono) != 0)) || (&C4::AR::Validator::countSymbolChars($telefono) != 0) || (&C4::AR::Validator::countNumericChars($telefono) == 0))){
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A005', 'params' => []} ) ;
+            }
+        }
+
+    return ($msg_object);
 }
 
 END { }       # module clean-up code here (global destructor)

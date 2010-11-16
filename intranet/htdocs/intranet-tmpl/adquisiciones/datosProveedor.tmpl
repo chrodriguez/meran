@@ -1,27 +1,11 @@
 [% INCLUDE "intranet-top.inc" %] 
-  <script type="text/javascript" src="/intranet-tmpl/includes/circulacion-min.js"></script>
-  <script type="text/javascript" src="/intranet-tmpl/includes/usuarios/usuariosReales-min.js"></script>
-  <script type="text/javascript" src="/includes/jquery/jquery.fileUploader-min.js"></script>
-  <script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
+
+  <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedoresResult.js"></script>
 
 [% INCLUDE "WindowHelper.inc" %] 
 [% INCLUDE "ChangePasswordHelper.inc"  %]
 
   <script type="text/javascript">
-
-/*
-*  Funcion que esconde el div con los detalles del proveedor
-*/
-    var escondido = false;
-    function esconder(){
-	if(escondido){
-	    $('#detalleProveedor').show('slow')
-	    escondido = false	    
-	}else{
-	    $('#detalleProveedor').hide('slow')
-	    escondido = true
-	}
-    }
 
   
     function modificarDatosDeProveedor(){
