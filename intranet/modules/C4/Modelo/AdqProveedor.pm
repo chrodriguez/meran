@@ -46,6 +46,23 @@ sub agregarProveedor{
     $self->save();
 }
 
+sub editarProveedor{
+
+    my ($self) = shift;
+    my ($params) = @_;
+   
+
+    $self->setNombreProveedor($params->{'nombre'});
+    $self->setDireccion($params->{'direccion'});
+    $self->setTelefono($params->{'telefono'});
+    $self->setMail($params->{'email'});
+    $self->setActivo(1);
+
+    $self->save();
+}
+
+
+
 # sub getProveedorInfo {
 # 
 #     my ($id_proveedor) = @_;

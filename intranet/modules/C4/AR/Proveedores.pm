@@ -136,21 +136,25 @@ sub editarProveedor{
 
     my ($info_proveedor)=@_;
     my $msg_object= C4::AR::Mensajes::create();
-    my $proveedor = C4::Modelo::AdqProveedor->new();
+
+
+    my $proveedor = getProveedorInfoPorId($info_proveedor->{'id_proveedor'});
+#     C4::AR::Debug::debug(" proveedor ".$proveedor);
+
     my $db = $proveedor->db;
 
 
 #       Checkear esto:
     _verificarDatosProveedor($info_proveedor,$msg_object);
 
-      if (!($msg_object->{'error'})){
+    if (!($msg_object->{'error'})){
 
 #   entro si no hay algun error, todos los campos ingresados son validos
           $db->{connect_options}->{AutoCommit} = 0;
           $db->begin_work;
+          C4::AR::Debug::debug("proveedor ".$info_proveedor->{'nombre'});
           eval{
-
-    #           $proveedor->editarProveedor($info_proveedor);
+              $proveedor->editarProveedor($info_proveedor);
               $msg_object->{'error'}= 0;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A006', 'params' => []});
               $db->commit;
@@ -174,21 +178,26 @@ sub editarProveedor{
      return ($msg_object);
 }
 
-=item_object->{'error'}= 0;
-    Este funcion devuelve la informacion del proveedor segun su id
-=cut
+# =item_object->{'error'}= 0;
+#     Este funcion devuelve la informacion del proveedor segun su id
+# =cut
+
+
 sub getProveedorInfoPorId {
     my ($id_prov) = @_;
-    my $proveedorTemp = C4::Modelo::AdqProveedor->new();
+
+    my $proveedorTemp;
     my @filtros;
 
     if ($id_prov){
-        push (@filtros, ( id_proveedor => { eq => 1}));
+        push (@filtros, ( id_proveedor => { eq => $id_prov}));
+        $proveedorTemp = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor(   query => \@filtros );
 
-        my $proveedores_array_ref = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor(   query => \@filtros,
-      ); 
-    return $proveedores_array_ref;
+ 
+        return $proveedorTemp->[0]
     }
+
+  return 0;
 }
 
 sub getProveedorLike {
