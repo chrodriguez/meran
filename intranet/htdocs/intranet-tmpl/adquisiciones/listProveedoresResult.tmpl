@@ -59,13 +59,13 @@ function updateBorrarProveedor(responseText){
     <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (Proveedores):" | i18n %]</legend>
         <div class="datos_tabla_div_proveedor">
             <div class="resultados_consulta">[% "La cantidad de Proveedores es" | i18n %]: [% cantidad %]</div> 
-            <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% HTML.escape(proveedor_busqueda) %]</div> 
+            <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% proveedor_busqueda %]</div> 
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <thead>
                 <tr class="titulo_tabla_resultado">
             
-                    <th class="click" onclick="ordenar('nombre_proveedor')" 
-                        Title="[% 'Ordenar Nombre de Proveedor.' | i18n %]" width="12%">[% "Nombre de Proveedor" | i18n %]
+                    <th>
+		      [% "Nombre de Proveedor" | i18n %]
                     </th>
                     <th>
                       [% "Direcci&oacute;n" | i18n %]
@@ -113,7 +113,7 @@ function updateBorrarProveedor(responseText){
                                                           );
 			    [% END %]
 			  </div>
-			  <div class="click horizontal icon_borrar">
+<!--			  <div class="click horizontal icon_borrar">
 			    [% PERL %]
 			    
 			            print C4::AR::Filtros::to_Icon(    
@@ -123,12 +123,8 @@ function updateBorrarProveedor(responseText){
                 ) ;
 			    
 			    [% END %]
-                                                            );
 
-                              [% END %]
-
-
-                          </div>
+                          </div>-->
                           <div class="click horizontal icon_borrar">
                               [% PERL %]
                                             print C4::AR::Filtros::link_to(   
@@ -143,9 +139,7 @@ function updateBorrarProveedor(responseText){
                       </td>
             
                 </tr>
-            
-            [% END %]
-            
+                                          [% END %]
                 <tr>
                     <td class="lineafinaltabla"  align="left" colspan="14"></td>
                 </tr>
