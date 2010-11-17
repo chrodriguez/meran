@@ -98,7 +98,7 @@ function updateBorrarProveedor(responseText){
 
                       <td align="left" class="proveedores">
 <!--                            FIXME si no lo muestro asi se rompe!!!!!! ver -->
-			  <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>
+              <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>
                       </td>
             
                       <td align='left' width="9%" class="proveedores">
@@ -111,18 +111,18 @@ function updateBorrarProveedor(responseText){
                                                                               "id_proveedor=[% proveedor.getId %]"],
                                                                 title =>    "[% 'Editar Proveedor' | i18n %]"
                                                           );
-			                 [% END %]
-			  </div>
-			  <div class="click horizontal icon_borrar">
-			    [% PERL %]
-			    
-			            print C4::AR::Filtros::to_Icon(    
+                             [% END %]
+              </div>
+              <div class="click horizontal icon_borrar">
+                [% PERL %]
+                
+                        print C4::AR::Filtros::to_Icon(    
                                             boton   => "icon_borrar",
                                             onClick => "BorrarProveedor([% proveedor.getId %]);return false;",
                                             title   => "[% 'Borrar' | i18n %]",
                 ) ;
-			    
-			    [% END %]
+                
+                [% END %]
                                                            
 
                              
