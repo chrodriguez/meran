@@ -13,10 +13,41 @@ __PACKAGE__->meta->setup(
         id   => { type => 'integer', length => 11, not_null => 1 },
         nombre  => { type => 'varchar', length => 255, not_null => 1},
     ],
-    
+
     primary_key_columns => [ 'id' ],
 
 );
 
+# *************************************************************************FUNCIONES DEL MODELO | MONEDA************************************************************
+
+# Agrega una nueva moneda
+sub agregarMoneda{
+
+    my ($self) = shift;
+    my ($params) = @_;
+
+    $self->setNombre($params->{'nombre'});
+
+    $self->save();
+}
+
+# **********************************************************************FIN FUNCIONES DEL MODELO | MONEDA************************************************************
+
+
+
+
+
+# *********************************************************************************Getter y Setter*******************************************************************
+
+sub setNombre{
+    my ($self) = shift;
+    my ($nombre) = @_;
+    utf8::encode($nombre);
+    if (C4::AR::Utilidades::validateString($nombre)){
+      $self->nombre($nombre);
+    }
+}
+
+# ******************************************************************************FIN Getter y Setter*******************************************************************
 
 1;
