@@ -368,3 +368,23 @@ CREATE TABLE IF NOT EXISTS `adq_proveedor_item` (
 
 
 
+DROP TABLE `adq_item`, `adq_proveedor_item`;
+
+CREATE TABLE `meran`.`adq_moneda` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`nombre` VARCHAR( 255 ) NOT NULL ,
+UNIQUE (
+`nombre`
+)
+) ENGINE = InnoDB;
+
+
+CREATE TABLE `meran`.`adq_proveedor_moneda` (
+`proveedor_id` INT( 11 ) NOT NULL ,
+`moneda_id` INT( 11 ) NOT NULL ,
+PRIMARY KEY ( `proveedor_id` , `moneda_id` )
+) ENGINE = InnoDB;
+
+
+
+
