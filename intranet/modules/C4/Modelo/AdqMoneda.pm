@@ -10,7 +10,7 @@ __PACKAGE__->meta->setup(
     table   => 'adq_moneda',
 
     columns => [
-        id   => { type => 'integer', length => 255, not_null => 1 },
+        id   => { type => 'integer', length => 11, not_null => 1 },
         nombre  => { type => 'varchar', length => 255, not_null => 1},
     ],
     
