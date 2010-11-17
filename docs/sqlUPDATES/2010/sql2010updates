@@ -367,4 +367,7 @@ CREATE TABLE IF NOT EXISTS `adq_proveedor_item` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
+DROP TABLE `adq_item`, `adq_proveedor_item`;
+
+
 
