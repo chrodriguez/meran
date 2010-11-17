@@ -3,11 +3,11 @@
 
 <script type="text/javascript">
       $(document).ready(function() {
-//           makeToggle('datos_tabla_div_user','trigger',null,false);
-//           $('.user_pic_fancy').fancybox();
+           makeToggle('datos_tabla_div_user','trigger',null,false);
+           $('.user_pic_fancy').fancybox();
       });
       
-      function BorrarProveedor(id){  
+function BorrarProveedor(id){  
     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,PROVEEDOR_ALERT_TITLE, function(confirmStatus){
 
         if(confirmStatus){
@@ -27,7 +27,6 @@ function updateBorrarProveedor(responseText){
     var info        = JSONstring.toObject(responseText);  
     var Messages    = info.Message_arrayref;
     setMessages(Messages);
-        alert('apesaspe');
     if (! (hayError(Messages) ) ){
         alert('pepe');
         //inicializar();
@@ -53,6 +52,7 @@ function updateBorrarProveedor(responseText){
 
 </script>
 
+[% USE HTML %]
 
 <div class="contenedor_paginador">[% paginador %]</div>
 <fieldset class="resultados_busqueda">
@@ -111,7 +111,7 @@ function updateBorrarProveedor(responseText){
                                                                               "id_proveedor=[% proveedor.getId %]"],
                                                                 title =>    "[% 'Editar Proveedor' | i18n %]"
                                                           );
-			    [% END %]
+			                 [% END %]
 			  </div>
 			  <div class="click horizontal icon_borrar">
 			    [% PERL %]
@@ -123,24 +123,12 @@ function updateBorrarProveedor(responseText){
                 ) ;
 			    
 			    [% END %]
-                                                            );
+                                                           
 
-                              [% END %]
+                             
 
 
-                          </div>
-                          <div class="click horizontal icon_borrar">
-                              [% PERL %]
-                                            print C4::AR::Filtros::link_to(   
-									      text =>     C4::AR::Filtros::to_Icon( boton   => "icon_borrar" ),
-                                                                              url =>      "/cgi-bin/koha/adquisiciones/proveedoresDB.pl", 
-                                                                              params =>   ["id_proveedor=[% proveedor.getId %]",
-                                                                                          "accion=ELIMINAR"],
-                                                                              title =>    "[% 'Eliminar Proveedor' | i18n %]"
-                                                                        );
-                              [% END %]
-                          </div>
-                      </td>
+                    </td>
             
                 </tr>
             
