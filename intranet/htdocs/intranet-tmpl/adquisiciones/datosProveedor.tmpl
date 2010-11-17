@@ -61,7 +61,7 @@
                               [% "Datos del proveedor" | i18n %]
           </legend>  
           <div id="detalleProveedor">
-             <input type="hidden" id="id_proveedor" value="[% id_proveedor %]">
+             <input type="hidden" id="id_proveedor" value="[% proveedor.getId %]">
 	      <li class="sub_item">
 		  <label for="nombre"> [% "Nombre" | i18n %] *</label>
 		  <input id="nombre" name="nombre" class="required" type="text" size="25" value="[% proveedor.getNombre %]">
