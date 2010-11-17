@@ -367,6 +367,7 @@ CREATE TABLE IF NOT EXISTS `adq_proveedor_item` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
+
 DROP TABLE `adq_item`, `adq_proveedor_item`;
 
 CREATE TABLE `meran`.`adq_moneda` (
@@ -375,6 +376,13 @@ CREATE TABLE `meran`.`adq_moneda` (
 UNIQUE (
 `nombre`
 )
+) ENGINE = InnoDB;
+
+
+CREATE TABLE `meran`.`adq_proveedor_moneda` (
+`proveedor_id` INT( 11 ) NOT NULL ,
+`moneda_id` INT( 11 ) NOT NULL ,
+PRIMARY KEY ( `proveedor_id` , `moneda_id` )
 ) ENGINE = InnoDB;
 
 
