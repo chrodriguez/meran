@@ -98,7 +98,8 @@ function updateBorrarProveedor(responseText){
 
                       <td align="left" class="proveedores">
 <!--                            FIXME si no lo muestro asi se rompe!!!!!! ver -->
-			  <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>
+			  <!--<input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>-->
+			      [% proveedor.getEmail %]
                       </td>
             
                       <td align='left' width="9%" class="proveedores">
@@ -106,25 +107,11 @@ function updateBorrarProveedor(responseText){
                               [% PERL %]
                               print C4::AR::Filtros::link_to(   text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
                                                                 url =>  "/cgi-bin/koha/adquisiciones/datosProveedor.pl", 
-                                                                params =>   ["nombre_proveedor=[% proveedor.getNombre %]","direccion=[% proveedor.getDireccion %]",
-                                                                             "telefono=[% proveedor.getTelefono %]","email=[% proveedor.getEmail %]","action=EDITAR",
-                                                                              "id_proveedor=[% proveedor.getId %]"],
+                                                                params =>   ["id_proveedor=[% proveedor.getId %]"],
                                                                 title =>    "[% 'Editar Proveedor' | i18n %]"
                                                           );
 			    [% END %]
 			  </div>
-<!--			  <div class="click horizontal icon_borrar">
-			    [% PERL %]
-			    
-			            print C4::AR::Filtros::to_Icon(    
-                                            boton   => "icon_borrar",
-                                            onClick => "BorrarProveedor([% proveedor.getId %]);return false;",
-                                            title   => "[% 'Borrar' | i18n %]",
-                ) ;
-			    
-			    [% END %]
-
-                          </div>-->
                           <div class="click horizontal icon_borrar">
                               [% PERL %]
                                             print C4::AR::Filtros::link_to(   
