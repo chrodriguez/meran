@@ -15,7 +15,7 @@ __PACKAGE__->meta->setup(
     table   => 'adq_proveedor',
 
     columns => [
-        id_proveedor   => { type => 'integer', not_null => 1 },
+        id   => { type => 'integer', not_null => 1 },
         apellido  => { type => 'varchar', length => 255, not_null => 1},
         nombre  => { type => 'varchar', length => 255, not_null => 1},
         tipo_doc => { type => 'integer', not_null => 1},
@@ -75,7 +75,7 @@ __PACKAGE__->meta->setup(
 
     ],
     
-    primary_key_columns => [ 'id_proveedor' ],
+    primary_key_columns => [ 'id' ],
     unique_key => ['tipo_doc','nro_doc'],
 
 );
@@ -284,7 +284,7 @@ sub setActivo{
 
 sub getId{
     my ($self) = shift;
-    return ($self->id_proveedor);
+    return ($self->id);
 }
 
 sub getApellido{
