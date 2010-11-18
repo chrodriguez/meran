@@ -167,7 +167,6 @@ sub getProveedorLike {
 
     if($proveedor ne 'TODOS'){
         if (!($inicial)){
-        C4::AR::Debug::debug("entro al if inicial");
                 push (  @filtros, ( or   => [   nombre => { like => '%'.$proveedor.'%'}, ]));
         }else{
                 push (  @filtros, ( or   => [   nombre => { like => $proveedor.'%'}, ]) );
@@ -188,6 +187,7 @@ sub getProveedorLike {
 
     #Obtengo la cant total de proveedores para el paginador
     my $proveedores_array_ref_count = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor_count( query => \@filtros, );
+    C4::AR::Debug::debug($proveedores_array_ref_count);
 
     if(scalar(@$proveedores_array_ref) > 0){
         return ($proveedores_array_ref_count, $proveedores_array_ref);

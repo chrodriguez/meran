@@ -387,4 +387,28 @@ PRIMARY KEY ( `proveedor_id` , `moneda_id` )
 
 
 
+CREATE TABLE IF NOT EXISTS `adq_proveedor` (
+  `id_proveedor` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) NOT NULL,
+  `apellido` varchar(255) NOT NULL,
+  `tipo_doc` int(11) NOT NULL,
+  `nro_doc` varchar(21) NOT NULL,
+  `razon_social` varchar(255) NOT NULL,
+  `cuit_cuil` int(11) NOT NULL,
+  `pais` int(11) NOT NULL,
+  `provincia` int(11) NOT NULL,
+  `ciudad` int(11) NOT NULL,
+  `domicilio` varchar(255) NOT NULL,
+  `telefono` varchar(32) NOT NULL,
+  `fax` varchar(32) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `activo` int(1) NOT NULL,
+  `plazo_reclamo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_proveedor`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+
+
+
+
 
