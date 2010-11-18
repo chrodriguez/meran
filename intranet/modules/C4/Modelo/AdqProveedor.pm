@@ -64,6 +64,15 @@ __PACKAGE__->meta->setup(
         type        => 'one to one',
       },
 
+
+#     one to many asi trae monedad en un vector de objetos
+      moneda_ref => 
+      {
+        class       => 'C4::Modelo::RefAdqMoneda',
+        key_columns => { moneda => 'id' },
+        type        => 'one to many',
+      },
+
     ],
     
     primary_key_columns => [ 'id_proveedor' ],

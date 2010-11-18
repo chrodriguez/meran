@@ -412,6 +412,9 @@ DROP TABLE `adq_proveedor_moneda`;
 
 ALTER TABLE adq_moneda RENAME AS ref_adq_moneda; 
 
+ALTER TABLE `adq_proveedor` ADD `moneda` INT( 11 ) NOT NULL AFTER `activo`;
+
+ALTER TABLE `adq_proveedor` CHANGE `id_proveedor` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
 
 
 
