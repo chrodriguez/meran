@@ -62,6 +62,7 @@ function updateBorrarProveedor(responseText){
             <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% HTML.escape(proveedor_busqueda) %]</div> 
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <thead>
+<<<<<<< HEAD
                 <tr class="titulo_tabla_resultado">
             
                     <th class="click" onclick="ordenar('nombre_proveedor')" 
@@ -78,8 +79,54 @@ function updateBorrarProveedor(responseText){
                     </th>
                     <th>[% "Acciones" | i18n %]</th>          
                 </tr>
+=======
+                    <tr class="titulo_tabla_resultado">
+                        <th>
+                            [% "Nombre de Proveedor" | i18n %]
+                        </th>
+                        <th>
+                            [% "Apellido" | i18n %]
+                        </th>
+                        <th>
+                            [% "Tipo y nro de Documento" | i18n %]
+                        </th>
+                        <th>
+                            [% "Raz&oacute;n Social" | i18n %]
+                        </th>
+                        <th>
+                            [% "CUIT/CIUL" | i18n %]
+                        </th>
+            <!--             <th>
+                            [% "Pa&iacute;s" | i18n %]
+                        </th>
+                        <th>
+                            [% "Provincia" | i18n %]
+                        </th>
+                        <th>
+                            [% "Ciudad" | i18n %]
+                        </th>
+                        <th>
+                            [% "Domicilio" | i18n %]
+                        </th>
+                        <th>
+                            [% "Tel&eacute;fono" | i18n %]
+                        </th>
+                        <th>
+                            [% "Fax" | i18n %]
+                        </th>
+                        <th>
+                            [% "Mail" | i18n %]
+                        </th>-->
+                         <th>
+                            [% "Plazo para reclamo" | i18n %]
+                        </th>  
+                        <th>
+                            [% "Acciones" | i18n %]
+                        </th>           
+                    </tr>
+>>>>>>> 257754790b5ca289c6736e1138cbbbb02cbcceba
                 </thead>
-                <tbody>
+            <tbody>
             
             [% FOREACH resultsloop %]   
                 <tr  align="center">
@@ -87,23 +134,71 @@ function updateBorrarProveedor(responseText){
                       <td align="left" class="proveedores">
                           [% proveedor.getNombre %]
                       </td>
-
                       <td align="left" class="proveedores">
-                          [% proveedor.getDireccion %]
+                          [% proveedor.getApellido %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getTipoDoc %] [%proveedor.getNroDoc %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getRazonSocial %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getCuitCuil %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getPlazoReclamo %]
+                      </td>
+          <!--            <td align="left" class="proveedores">
+                          [% proveedor.getPais %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getProvincia %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getCiudad %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getDomicilio %]
                       </td>
 
                       <td align="left" class="proveedores">
                           [% proveedor.getTelefono %]
                       </td>
-
                       <td align="left" class="proveedores">
+<<<<<<< HEAD
 <!--                            FIXME si no lo muestro asi se rompe!!!!!! ver -->
               <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>
+=======
+                          [% proveedor.getFax %]
+>>>>>>> 257754790b5ca289c6736e1138cbbbb02cbcceba
                       </td>
-            
+                                                 FIXME si no lo muestro asi se rompe!!!!!! ver 
+                      <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>
+                     
+                      <td align="left" class="proveedores">
+                          [% proveedor.getEmail %]
+                      </td>-->
+                  
+                      <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
                       <td align='left' width="9%" class="proveedores">
+                           
+
+                      <!--  Deberia llevar a un tmpl que muestre los datos de contacto del proveedor -->
+                          <div class="click horizontal icon_mas">
+                              [% PERL %]
+                                            print C4::AR::Filtros::link_to(   
+                                                                              text =>     C4::AR::Filtros::to_Icon( boton   => "icon_mas" ),
+                                                                              url =>      "/cgi-bin/koha/adquisiciones/proveedoresDB.pl", 
+                                                                              params =>   ["id_proveedor=[% proveedor.getId %]",
+                                                                                          "accion=DETALLE"],
+                                                                              title =>    "[% 'Ver datos de contacto' | i18n %]"
+                                                                        );
+                              [% END %]
+                          </div>
                           <div class="click horizontal icon_edicion">
                               [% PERL %]
+<<<<<<< HEAD
                               print C4::AR::Filtros::link_to(   text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
                                                                 url =>  "/cgi-bin/koha/adquisiciones/datosProveedor.pl", 
                                                                 params =>   ["nombre_proveedor=[% proveedor.getNombre %]","direccion=[% proveedor.getDireccion %]",
@@ -135,10 +230,35 @@ function updateBorrarProveedor(responseText){
             [% END %]
             
                 <tr>
-                    <td class="lineafinaltabla"  align="left" colspan="14"></td>
-                </tr>
-                </tbody>
+=======
+                                            print C4::AR::Filtros::link_to(   text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
+                                                                              url =>  "/cgi-bin/koha/adquisiciones/datosProveedor.pl", 
+                                                                              params =>   ["id_proveedor=[% proveedor.getId %]"],
+                                                                              title =>    "[% 'Editar Proveedor' | i18n %]"
+                                                                        );
+                              [% END %]
+                          </div>
+                          <div class="click horizontal icon_borrar">
+                              [% PERL %]
+                                            print C4::AR::Filtros::link_to(   
+                                                                              text =>     C4::AR::Filtros::to_Icon( boton   => "icon_borrar" ),
+                                                                              url =>      "/cgi-bin/koha/adquisiciones/proveedoresDB.pl", 
+                                                                              params =>   ["id_proveedor=[% proveedor.getId %]",
+                                                                                          "accion=ELIMINAR"],
+                                                                              title =>    "[% 'Eliminar Proveedor' | i18n %]"
+                                                                        );
+                              [% END %]
+                          </div>
+                         
+                      </td>
             
+                </tr>
+            [% END %]
+              <tr>
+>>>>>>> 257754790b5ca289c6736e1138cbbbb02cbcceba
+                    <td class="lineafinaltabla"  align="left" colspan="14"></td>
+              </tr>
+            </tbody>
             </table>
         </div>
 </fieldset>

@@ -20,9 +20,6 @@ my ($template, $session, $t_params)= get_template_and_user({
                  });
 
   my $accion = $input->param('accion');
-  C4::AR::Debug::debug("accion :".$input->param('accion'));
-  C4::AR::Debug::debug("nombre :".$input->param('nombre_proveedor'));
-
   my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
   my $orden=$obj->{'orden'}||'nombre';

@@ -3,6 +3,7 @@
 # use strict;
 use C4::Auth;
 use CGI;
+use C4::AR::Proveedores;
 
 my $input=new CGI;
 
@@ -20,7 +21,6 @@ my $id_proveedor = $input->param('id_proveedor');
 
 my $proveedor = C4::AR::Proveedores::getProveedorInfoPorId($id_proveedor);
 
-$t_params->{'id_proveedor'} = $id_proveedor;
 $t_params->{'proveedor'} = $proveedor;
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
