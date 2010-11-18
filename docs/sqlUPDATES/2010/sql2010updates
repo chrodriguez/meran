@@ -408,6 +408,10 @@ CREATE TABLE IF NOT EXISTS `adq_proveedor` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 
+DROP TABLE `adq_proveedor_moneda`;
+
+ALTER TABLE adq_moneda RENAME AS ref_adq_moneda; 
+
 
 
 

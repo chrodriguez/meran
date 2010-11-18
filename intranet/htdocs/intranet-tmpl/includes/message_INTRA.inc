@@ -193,7 +193,7 @@
     POR_FAVOR_INGRESE_UN_TIPO_DE_DOC = "[% 'Por favor seleccione un tipo de documento' | i18n %]";
     POR_FAVOR_INGRESE_UN_NRO_DE_DOC = "[% 'Por favor ingrese un n\u00famero de documento' | i18n %]";
     POR_FAVOR_INGRESE_UNA_RAZON_SOCIAL = "[% 'Por favor ingrese una raz\u00f3n social' | i18n %]";
-    POR_FAVOR_INGRESE_UN_CUIT/CUIL= "[% 'Por favor ingrese un n\u00famero de CUIT o CUIL' | i18n %]";
+    POR_FAVOR_INGRESE_UN_CUIT_CUIL= "[% 'Por favor ingrese un n\u00famero de CUIT o CUIL' | i18n %]";
     POR_FAVOR_INGRESE_UN_PAIS = "[% 'Por favor seleccione un pais' | i18n %]";
     POR_FAVOR_INGRESE_UNA_PROV = "[% 'Por favor seleccione una provincia' | i18n %]";
     POR_FAVOR_INGRESE_UNA_CIUDAD = "[% 'Por favor seleccione una ciudad' | i18n %]";

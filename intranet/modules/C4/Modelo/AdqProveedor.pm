@@ -30,7 +30,8 @@ __PACKAGE__->meta->setup(
         fax  => { type => 'varchar', length => 32},
         email  => { type => 'varchar', length => 255},
         plazo_reclamo => { type => 'integer', length => 11},
-        activo => { type => 'integer', default => 0, not_null => 1},
+        activo => { type => 'integer', default => 1, not_null => 1},
+        moneda => { type => 'integer', length => 11},
     ],
 
     relationships =>
@@ -125,11 +126,15 @@ sub editarProveedor{
 }
 
 # Funcion que devuelve las monedas que tiene el proveedor
-sub getMonedas{
-
-    my ($params) = @_;
-    
-}
+# sub getMonedas{
+# 
+# #     my ($params) = @_;
+#     my $id_proveedor = this->getId();
+#   
+#     
+#     
+#     
+# }
 
 # ****************************************************FIN FUNCIONES DEL MODELO | PROVEEDORES**************************************************************
 
