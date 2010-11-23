@@ -370,9 +370,26 @@ my %mensajesINTRA = (
     'A001' => 'El proveedor ha sido agregado exitosamente',
     'A002' => 'El nombre del proveedor no puede estar en blanco',
     'A003' => 'El mail debe ser v&aacute;lido',
-    'A004' => 'La direcion del proveedor no puede estar en blanco',
+    'A004' => 'El domicilio del proveedor no puede estar en blanco',
     'A005' => 'El telefono no puede contener car&aacute;cteres raros o estar en blanco',
     'A006' => 'La informacion del proveedor fue guardada con &eacute;xito',
+    'A007' => 'El nombre del proveedor es inv&aacute;lido',
+    'A008' => 'El domicilio del proveedor es inv&aacute;lido',
+    'A009' => 'El apellido del proveedor es inv&aacute;lido',
+    'A010' => 'El apellido del proveedor no puede estar en blanco',
+    'A011' => 'La razon social del proveedor es inv&aacute;lida',
+    'A012' => 'La razon social del proveedor no puede estar en blanco',
+    'A013' => 'El CUIT/CUIL del proveedor es inv&aacute;lido',
+    'A014' => 'El CIUT/CUIL del proveedor no puede estar en blanco',
+    'A015' => 'El nro de documento del proveedor es inv&aacute;lido',
+    'A016' => 'El nro de documento del proveedor no puede estar en blanco',
+    'A017' => 'El pais es inv&aacute;lido',
+    'A018' => 'El pais no puede estar en blanco',
+    'A019' => 'La provincia es inv&aacute;lida',
+    'A020' => 'La provincia no puede estar en blanco',
+    'A021' => 'La ciudad es inv&aacute;lida',
+    'A022' => 'La ciudad no puede estar en blanco',
+
 );
 
 sub getMensaje {

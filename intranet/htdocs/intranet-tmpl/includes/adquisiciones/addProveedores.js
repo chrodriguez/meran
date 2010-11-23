@@ -35,6 +35,7 @@ function agregarProveedor(){
       objAH.provincia           = $('#provincia').val();
       objAH.ciudad              = $('#ciudad').val();
       objAH.email               = $('#email').val();
+      objAH.plazo_reclamo       = $('#plazo_reclamo').val();
       objAH.fax                 = $('#fax').val();  
       
       objAH.tipoAccion          = 'AGREGAR_PROVEEDOR';

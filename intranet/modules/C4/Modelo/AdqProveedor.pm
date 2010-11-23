@@ -16,7 +16,7 @@ __PACKAGE__->meta->setup(
     table   => 'adq_proveedor',
 
     columns => [
-        id   => { type => 'integer', not_null => 1 },
+        id_proveedor   => { type => 'integer', not_null => 1 },
         apellido  => { type => 'varchar', length => 255, not_null => 1},
         nombre  => { type => 'varchar', length => 255, not_null => 1},
         tipo_doc => { type => 'integer', not_null => 1},
@@ -75,7 +75,7 @@ __PACKAGE__->meta->setup(
 
     ],
     
-    primary_key_columns => [ 'id' ],
+    primary_key_columns => [ 'id_proveedor' ],
     unique_key => ['tipo_doc','nro_doc'],
 
 );
@@ -100,12 +100,13 @@ sub agregarProveedor{
     $self->setEmail($params->{'email'});
     $self->setTipoDoc($params->{'tipo_doc'});
     $self->setNroDoc($params->{'nro_doc'});
-    $self->setRazonSocial($params->{' razon_social'});
+    $self->setRazonSocial($params->{'razon_social'});
     $self->setCuitCuil($params->{'cuit_cuil'});
     $self->setFax($params->{'fax'});
     $self->setPais($params->{'pais'});
     $self->setProvincia($params->{'provincia'});
     $self->setCiudad($params->{'ciudad'});
+    $self->setPlazoReclamo($params->{'plazo_reclamo'});
     $self->setActivo(1);
 
     $self->save();
@@ -129,6 +130,7 @@ sub editarProveedor{
     $self->setPais($params->{'pais'});
     $self->setProvincia($params->{'provincia'});
     $self->setCiudad($params->{'ciudad'});
+    $self->setPlazoReclamo($params->{'plazo_reclamo'});
     $self->setActivo(1);
 
     $self->save();

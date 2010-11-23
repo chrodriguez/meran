@@ -66,26 +66,24 @@
      </ul>
     </fieldset>
   
-<!--    VER COMO MOSTRAR COMBOS DE PAISES; CIUDADES, PROV, lo mismo para tipo_doc  -->
+<!--    VER COMO MOSTRAR COMBOS DE PAISES; CIUDADES, PROV  -->
 
-        <!-- <li class="sub_item">
-            <label for="pais">[% "Pais" | i18n %] *</label>
-            [% combo_pais %] 
-        </li>
-
-        <li class="sub_item">
-            <label for="provincia">[% "Provincia" | i18n %] *</label>
-            [% combo_provincia %] 
-        </li>
-
-        <li class="sub_item">
-            <label for="ciudad">[% "Localidad" | i18n %] *</label>
-            [% combo_localidad %] 
-        </li>-->
-        
+ 
     <fieldset>
       <legend class="titulo_legend">[% "Datos de contacto del proveedor" | i18n %]</legend>
         <ul>
+            <li class="sub_item">
+                <label for="pais">[% "Pais" | i18n %] *</label>
+                <input  id="pais" name="pais" class="required" type="text" size="15">
+            </li>
+            <li class="sub_item">
+                <label for="provincia">[% "Provincia" | i18n %] *</label>
+                <input  id="provincia" name="provincia" class="required" type="text" size="15">
+            </li>
+            <li class="sub_item">
+                <label for="ciudad">[% "Ciudad" | i18n %] *</label>
+                <input  id="ciudad" name="ciudad" class="required" type="text" size="15">
+            </li>
             <li class="sub_item">
                 <label for="domicilio">[% "Domicilio" | i18n %] *</label>
                 <input  id="domicilio" name="domicilio" class="required" type="text" size="15">
@@ -97,7 +95,7 @@
             </li>
 
             <li class="sub_item">
-                <label for="fax">[% "Fax" | i18n %] *</label>
+                <label for="fax">[% "Fax" | i18n %] </label>
                 <input  id="fax" name="fax" class="required" type="text" size="15">
             </li>
 
@@ -107,6 +105,17 @@
             </li>
       
       </ul>
+</fieldset>
+
+<fieldset>
+      <legend class="titulo_legend">[% "Materiales que provee" | i18n %]</legend>
+</fieldset>
+
+<fieldset>
+      <legend class="titulo_legend">[% "Formas de Envio" | i18n %]</legend>
+</fieldset>
+<fieldset>
+      <legend class="titulo_legend">[% "Monedas" | i18n %]</legend>
 </fieldset>
 
 <!--<fieldset>
