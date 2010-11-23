@@ -27,9 +27,8 @@ use warnings;
 require Exporter;
 use C4::AR::Authldap;
 use C4::Membersldap;
-# use C4::Context;
+use C4::Context;
 use C4::Output;              # to get the template
-# use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;  # getpatroninformation
 use C4::AR::Usuarios; #Miguel lo agregue pq sino no ve la funcion esRegular!!!!!!!!!!!!!!!
 use C4::AR::Prestamos;
@@ -301,7 +300,7 @@ sub get_template_and_user {
   if ( $session->param('userid') ) {
         $params->{'loggedinuser'}       = $session->param('userid');
         $params->{'nro_socio'}          = $session->param('userid');
-        $params->{'socio'}              = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
+        $params->{'socio'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
 
         if (!$usuario_logueado) {
             $usuario_logueado = C4::Modelo::UsrSocio->new();
@@ -326,10 +325,10 @@ sub get_template_and_user {
         $socio_data{'usr_email'}                = $session->param('usr_email');
         $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
         $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id');
-        $params->{'socio_data'}         = \%socio_data;
-        $params->{'token'}              = $session->param('token');
-        #para mostrar o no algun submenu del menu principal
-        $params->{'menu_preferences'}   = C4::AR::Preferencias::getMenuPreferences();
+    $params->{'socio_data'}         = \%socio_data;
+    $params->{'token'}              = $session->param('token');
+    #para mostrar o no algun submenu del menu principal
+    $params->{'menu_preferences'}   = C4::AR::Preferencias::getMenuPreferences();
 	}
 
     #se cargan todas las variables de entorno de las preferencias del sistema
@@ -865,6 +864,19 @@ sub _session_expired {
     return 0;
 }
 
+
+=item
+Se envian los correos recordatorios si se encuentra seteada la preferencia "remainderMail"
+=cut
+sub _enviarCorreosDeRecordacion {
+# C4::AR::Debug::debug("EnabledMailSystem ".C4::Context->preference("EnabledMailSystem"));
+# C4::AR::Debug::debug("reminderMail ".C4::Context->preference("reminderMail"));
+
+    if ((C4::Context->preference("EnabledMailSystem"))&&(C4::Context->preference("reminderMail") eq 1)){
+# TODO falta pasar
+        &C4::AR::Prestamos::enviar_recordatorios_prestamos();
+    }
+}
 
 =item sub _getTimeOut
 
