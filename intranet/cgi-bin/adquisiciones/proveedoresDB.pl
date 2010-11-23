@@ -24,6 +24,9 @@ my $tipoAccion= $obj->{'tipoAccion'}||"";
     # resetPassword = [0 | 1]
     # autoGeneratePassword = [0 | 1]
     if($tipoAccion eq "ELIMINAR"){
+    	
+#     	C4::AR::Debug::debug($infoOperacionJSON);
+#     	C4::AR::Debug::debug("Estoy eliminando");
         my ($userid, $session, $flags) = checkauth( $input, 
                                             $authnotrequired,
                                             {   ui => 'ANY', 
@@ -71,7 +74,6 @@ Se guarda la modificacion los datos del Proveedor
 
 
         my $infoOperacionJSON=to_json $Message_arrayref;
-  C4::AR::Debug::debug($infoOperacionJSON);
         C4::Auth::print_header($session);
         print $infoOperacionJSON;
 

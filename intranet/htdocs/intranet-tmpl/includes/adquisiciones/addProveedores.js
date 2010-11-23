@@ -35,6 +35,7 @@ function agregarProveedor(){
       objAH.provincia           = $('#provincia').val();
       objAH.ciudad              = $('#ciudad').val();
       objAH.email               = $('#email').val();
+      objAH.plazo_reclamo       = $('#plazo_reclamo').val();
       objAH.fax                 = $('#fax').val();  
       
       objAH.tipoAccion          = 'AGREGAR_PROVEEDOR';
@@ -86,7 +87,7 @@ function validateForm(func){
                     tipo_doc: POR_FAVOR_INGRESE_UN_TIPO_DE_DOC,
                     nro_doc: POR_FAVOR_INGRESE_UN_NRO_DE_DOC,
                     razon_social: POR_FAVOR_INGRESE_UNA_RAZON_SOCIAL,
-                    cuit_cuil: POR_FAVOR_INGRESE_UN_CUIT/CUIL,
+                    cuit_cuil: POR_FAVOR_INGRESE_UN_CUIT_CUIL,
                     pais: POR_FAVOR_INGRESE_UN_PAIS,
                     provincia: POR_FAVOR_INGRESE_UNA_PROV,
                     ciudad: POR_FAVOR_INGRESE_UNA_CIUDAD,

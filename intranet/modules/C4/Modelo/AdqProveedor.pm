@@ -1,6 +1,15 @@
 package C4::Modelo::AdqProveedor;
 
 use strict;
+use utf8;
+use C4::AR::Permisos;
+use C4::AR::Utilidades;
+use C4::Modelo::RefTipoDocumento;
+use C4::Modelo::RefPais;
+use C4::Modelo::RefProvincia;
+use C4::Modelo::RefLocalidad;
+# use C4::Modelo::AdqProveedorMoneda;
+
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -23,7 +32,6 @@ __PACKAGE__->meta->setup(
         email  => { type => 'varchar', length => 255},
         plazo_reclamo => { type => 'integer', length => 11},
         activo => { type => 'integer', default => 1, not_null => 1},
-        moneda => { type => 'integer', length => 11},
     ],
 
     relationships =>
@@ -60,8 +68,8 @@ __PACKAGE__->meta->setup(
 #     one to many asi trae monedad en un vector de objetos
       moneda_ref => 
       {
-        class       => 'C4::Modelo::RefAdqMoneda',
-        key_columns => { moneda => 'id' },
+        class       => 'C4::Modelo::AdqProveedorMoneda',
+        key_columns => { id => 'proveedor_id' },
         type        => 'one to many',
       },
 
@@ -71,14 +79,6 @@ __PACKAGE__->meta->setup(
     unique_key => ['tipo_doc','nro_doc'],
 
 );
-
-use utf8;
-use C4::AR::Permisos;
-use C4::AR::Utilidades;
-use C4::Modelo::RefTipoDocumento;
-use C4::Modelo::RefPais;
-use C4::Modelo::RefProvincia;
-use C4::Modelo::RefLocalidad;
 
 # *************************************************************************FUNCIONES DEL MODELO | PROVEEDORES************************************************************
 
@@ -100,12 +100,13 @@ sub agregarProveedor{
     $self->setEmail($params->{'email'});
     $self->setTipoDoc($params->{'tipo_doc'});
     $self->setNroDoc($params->{'nro_doc'});
-    $self->setRazonSocial($params->{' razon_social'});
+    $self->setRazonSocial($params->{'razon_social'});
     $self->setCuitCuil($params->{'cuit_cuil'});
     $self->setFax($params->{'fax'});
     $self->setPais($params->{'pais'});
     $self->setProvincia($params->{'provincia'});
     $self->setCiudad($params->{'ciudad'});
+    $self->setPlazoReclamo($params->{'plazo_reclamo'});
     $self->setActivo(1);
 
     $self->save();
@@ -121,14 +122,15 @@ sub editarProveedor{
     $self->setDomicilio($params->{'domicilio'});
     $self->setTelefono($params->{'telefono'});
     $self->setEmail($params->{'email'});
-    $self->setTipoDoc($params->{'tipo_doc'});
-    $self->setNroDoc($params->{'nro_doc'});
+    $self->setTipoDoc($params->{'tipo_documento'});
+    $self->setNroDoc($params->{'numero_documento'});
     $self->setRazonSocial($params->{' razon_social'});
     $self->setCuitCuil($params->{'cuit_cuil'});
     $self->setFax($params->{'fax'});
     $self->setPais($params->{'pais'});
     $self->setProvincia($params->{'provincia'});
     $self->setCiudad($params->{'ciudad'});
+    $self->setPlazoReclamo($params->{'plazo_reclamo'});
     $self->setActivo(1);
 
     $self->save();
