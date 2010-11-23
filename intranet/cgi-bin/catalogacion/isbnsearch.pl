@@ -22,7 +22,7 @@ use CGI;
 use C4::Auth;
 use C4::Catalogue;
 use C4::Biblio;
-use C4::Interface::CGI::Output;
+
 
 my $input      = new CGI;
 my $isbn       = $input->param('isbn');

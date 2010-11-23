@@ -2,7 +2,7 @@
 
 use strict;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+
 use C4::Context;
 use C4::AR::Proveedores;
 use CGI;

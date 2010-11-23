@@ -40,7 +40,7 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;

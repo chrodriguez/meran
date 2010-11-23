@@ -3,7 +3,7 @@ use strict;
 require Exporter;
 use CGI;
 use C4::Auth;         # checkauth, getnro_socio.
-use C4::Interface::CGI::Output;
+
 use C4::AR::Novedades;
 
 my $query = new CGI;

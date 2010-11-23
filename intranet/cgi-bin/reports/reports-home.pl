@@ -3,7 +3,7 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+
 
 my $query = new CGI;
 
