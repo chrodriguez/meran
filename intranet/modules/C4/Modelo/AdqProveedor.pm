@@ -286,7 +286,7 @@ sub setActivo{
 
 sub getId{
     my ($self) = shift;
-    return ($self->id);
+    return ($self->id_proveedor);
 }
 
 sub getApellido{

@@ -141,10 +141,9 @@ sub getProveedorInfoPorId {
     my @filtros;
 
     if ($params){
-        push (@filtros, ( id => { eq => $params}));
+        push (@filtros, ( id_proveedor => { eq => $params}));
         $proveedorTemp = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor(   query => \@filtros );
 
- 
         return $proveedorTemp->[0]
     }
 
