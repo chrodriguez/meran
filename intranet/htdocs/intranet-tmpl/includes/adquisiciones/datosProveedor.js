@@ -9,7 +9,6 @@
 
 //*********************************************Editar Proveedor********************************************* 
 
-
    function modificarDatosDeProveedor(){
         objAH         = new AjaxHelper(updateDatosProveedor);
         objAH.url     = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl';
@@ -18,7 +17,7 @@
         objAH.id_proveedor        = $('#id_proveedor').val();
         objAH.nombre              = $('#nombre').val();
         objAH.apellido            = $('#apellido').val();
-        objAH.tipo_documento      = $('#tipo_documento').val();
+        objAH.tipo_documento      = $('#tipo_documento_id').val();
         objAH.numero_documento    = $('#numero_documento').val();
         objAH.razon_social        = $('#razon_social').val();
         objAH.cuit_cuil           = $('#cuit_cuil').val();

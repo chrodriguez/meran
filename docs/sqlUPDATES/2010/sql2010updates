@@ -489,5 +489,5 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
-
-
+-- 23/11 cambiado el tipo de documento a un char(3)
+ALTER TABLE `adq_proveedor` CHANGE `tipo_doc` `tipo_doc` CHAR( 3 ) NOT NULL;
