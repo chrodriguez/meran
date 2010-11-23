@@ -6,11 +6,6 @@ require Exporter;
 
 use CGI;
 use C4::Auth;
-<<<<<<< HEAD:intranet/cgi-bin/catalogacion/estructura/detalle.pl
-=======
-
->>>>>>> 392fc8ce7552b2fe84deab2c0361e9e6d69bab87:intranet/cgi-bin/catalogacion/estructura/detalle.pl
-
 my $input=new CGI;
 
 BEGIN {$Exporter::Verbose=1}

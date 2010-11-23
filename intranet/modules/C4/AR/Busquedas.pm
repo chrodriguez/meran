@@ -31,6 +31,7 @@ use C4::AR::Nivel3;
 use C4::AR::PortadasRegistros;
 use Text::Aspell;
 
+
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
@@ -1472,6 +1473,7 @@ sub busquedaSimplePorTitulo{
 }
 
 sub t_loguearBusqueda {
+    require C4::Modelo::RepHistorialBusqueda;
     my($loggedinuser,$desde,$http_user_agent,$search_array)=@_;
 
     my $msg_object= C4::AR::Mensajes::create();
