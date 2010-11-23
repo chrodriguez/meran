@@ -32,9 +32,25 @@
 
 	      <li class="sub_item">
 		  <label for="email">[% "Email" | i18n %]</label>
-		  <input type=text name="email" id="email" size="25" value="[% proveedor.getEmail %]">
+		  <input type="text" name="email" id="email" size="25" value="[% proveedor.getEmail %]">
 	      </li>
-          </div>
+
+          <!--  moneda, moneda_ref-->
+          <li class="sub_item">
+          <label for="moneda">[% "Moneda" | i18n %]</label>
+              <p>Lista de monedas</p>
+          </li>
+          <li class="sub_item"> 
+            <label for="moneda">[% "Listado de Monedas" | i18n %]</label>
+            <select>
+            [% FOREACH moneda IN proveedor.moneda_ref %] 
+                <option>[% moneda.nombre %]</option>
+<!--                <option>Dolares</option>
+                <option>Euros</option>-->
+            [% END %]
+            </select>
+          </li>
+
           <div id="accion">
               [% PERL %]
                          print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",

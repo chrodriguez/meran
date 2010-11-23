@@ -407,14 +407,22 @@ CREATE TABLE IF NOT EXISTS `adq_proveedor` (
   PRIMARY KEY (`id_proveedor`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
-
+-- va al final esta tabla:
 DROP TABLE `adq_proveedor_moneda`;
 
 ALTER TABLE adq_moneda RENAME AS ref_adq_moneda; 
 
+
+-- no va! abajo se borra
 ALTER TABLE `adq_proveedor` ADD `moneda` INT( 11 ) NOT NULL AFTER `activo`;
 
+ALTER TABLE `adq_proveedor` DROP `moneda`; 
+
+
+
 ALTER TABLE `adq_proveedor` CHANGE `id_proveedor` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
+
 
 
 

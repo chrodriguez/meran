@@ -8,6 +8,7 @@ use C4::Modelo::RefTipoDocumento;
 use C4::Modelo::RefPais;
 use C4::Modelo::RefProvincia;
 use C4::Modelo::RefLocalidad;
+# use C4::Modelo::AdqProveedorMoneda;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
@@ -31,7 +32,6 @@ __PACKAGE__->meta->setup(
         email  => { type => 'varchar', length => 255},
         plazo_reclamo => { type => 'integer', length => 11},
         activo => { type => 'integer', default => 1, not_null => 1},
-        moneda => { type => 'integer', length => 11},
     ],
 
     relationships =>
@@ -68,8 +68,8 @@ __PACKAGE__->meta->setup(
 #     one to many asi trae monedad en un vector de objetos
       moneda_ref => 
       {
-        class       => 'C4::Modelo::RefAdqMoneda',
-        key_columns => { moneda => 'id' },
+        class       => 'C4::Modelo::AdqProveedorMoneda',
+        key_columns => { id => 'proveedor_id' },
         type        => 'one to many',
       },
 

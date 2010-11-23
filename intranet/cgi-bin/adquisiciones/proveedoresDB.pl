@@ -71,7 +71,6 @@ Se guarda la modificacion los datos del Proveedor
 
 
         my $infoOperacionJSON=to_json $Message_arrayref;
-  C4::AR::Debug::debug($infoOperacionJSON);
         C4::Auth::print_header($session);
         print $infoOperacionJSON;
 
