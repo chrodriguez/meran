@@ -533,7 +533,7 @@ ALTER TABLE `meran`.`adq_proveedor_forma_envio` CHANGE COLUMN `adq_proveedor_id`
 , ADD PRIMARY KEY (`adq_forma_envio_id`, `adq_proveedor_id`) 
 , ADD INDEX `fk_adq_proveedor_forma_envio_adq_proveedor1` (`adq_proveedor_id` ASC) ;
 
-ALTER TABLE `meran`.`adq_proveedor` CHANGE COLUMN `ciudad` `ref_localidad_id` INT(11) NOT NULL  ,DROP COLUMN `tipo_doc` , ADD COLUMN `usr_ref_tipo_documento_id` INT(11) NOT NULL  AFTER `plazo_reclamo` ,  
+ALTER TABLE `meran`.`adq_proveedor` CHANGE COLUMN `ciudad` `ref_localidad_id` INT(11) NOT NULL  ,DROP COLUMN `pais` , DROP COLUMN `provincia` , DROP COLUMN `tipo_doc` , ADD COLUMN `usr_ref_tipo_documento_id` INT(11) NOT NULL  AFTER `plazo_reclamo` ,  
   ADD CONSTRAINT `fk_adq_proveedor_usr_ref_tipo_documento1`
   FOREIGN KEY (`usr_ref_tipo_documento_id` )
   REFERENCES `meran`.`usr_ref_tipo_documento` (`id` )
