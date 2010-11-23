@@ -3,11 +3,11 @@
 
 <script type="text/javascript">
       $(document).ready(function() {
-//           makeToggle('datos_tabla_div_user','trigger',null,false);
-//           $('.user_pic_fancy').fancybox();
+           makeToggle('datos_tabla_div_user','trigger',null,false);
+           $('.user_pic_fancy').fancybox();
       });
       
-      function BorrarProveedor(id){  
+function BorrarProveedor(id){  
     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,PROVEEDOR_ALERT_TITLE, function(confirmStatus){
 
         if(confirmStatus){
@@ -27,7 +27,6 @@ function updateBorrarProveedor(responseText){
     var info        = JSONstring.toObject(responseText);  
     var Messages    = info.Message_arrayref;
     setMessages(Messages);
-        alert('apesaspe');
     if (! (hayError(Messages) ) ){
         alert('pepe');
         //inicializar();
@@ -53,15 +52,34 @@ function updateBorrarProveedor(responseText){
 
 </script>
 
+[% USE HTML %]
 
 <div class="contenedor_paginador">[% paginador %]</div>
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (Proveedores):" | i18n %]</legend>
         <div class="datos_tabla_div_proveedor">
             <div class="resultados_consulta">[% "La cantidad de Proveedores es" | i18n %]: [% cantidad %]</div> 
-            <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% proveedor_busqueda %]</div> 
+            <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% HTML.escape(proveedor_busqueda) %]</div> 
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <thead>
+<<<<<<< HEAD
+                <tr class="titulo_tabla_resultado">
+            
+                    <th class="click" onclick="ordenar('nombre_proveedor')" 
+                        Title="[% 'Ordenar Nombre de Proveedor.' | i18n %]" width="12%">[% "Nombre de Proveedor" | i18n %]
+                    </th>
+                    <th>
+                      [% "Direcci&oacute;n" | i18n %]
+                    </th>
+                    <th>
+                        [% "Tel&eacute;fono" | i18n %]
+                    </th>
+                    <th>
+                        [% "Mail" | i18n %]
+                    </th>
+                    <th>[% "Acciones" | i18n %]</th>          
+                </tr>
+=======
                     <tr class="titulo_tabla_resultado">
                         <th>
                             [% "Nombre de Proveedor" | i18n %]
@@ -106,6 +124,7 @@ function updateBorrarProveedor(responseText){
                             [% "Acciones" | i18n %]
                         </th>           
                     </tr>
+>>>>>>> 257754790b5ca289c6736e1138cbbbb02cbcceba
                 </thead>
             <tbody>
             
@@ -147,7 +166,12 @@ function updateBorrarProveedor(responseText){
                           [% proveedor.getTelefono %]
                       </td>
                       <td align="left" class="proveedores">
+<<<<<<< HEAD
+<!--                            FIXME si no lo muestro asi se rompe!!!!!! ver -->
+              <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>
+=======
                           [% proveedor.getFax %]
+>>>>>>> 257754790b5ca289c6736e1138cbbbb02cbcceba
                       </td>
                                                  FIXME si no lo muestro asi se rompe!!!!!! ver 
                       <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>
@@ -174,6 +198,39 @@ function updateBorrarProveedor(responseText){
                           </div>
                           <div class="click horizontal icon_edicion">
                               [% PERL %]
+<<<<<<< HEAD
+                              print C4::AR::Filtros::link_to(   text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
+                                                                url =>  "/cgi-bin/koha/adquisiciones/datosProveedor.pl", 
+                                                                params =>   ["nombre_proveedor=[% proveedor.getNombre %]","direccion=[% proveedor.getDireccion %]",
+                                                                             "telefono=[% proveedor.getTelefono %]","email=[% proveedor.getEmail %]","action=EDITAR",
+                                                                              "id_proveedor=[% proveedor.getId %]"],
+                                                                title =>    "[% 'Editar Proveedor' | i18n %]"
+                                                          );
+                             [% END %]
+              </div>
+              <div class="click horizontal icon_borrar">
+                [% PERL %]
+                
+                        print C4::AR::Filtros::to_Icon(    
+                                            boton   => "icon_borrar",
+                                            onClick => "BorrarProveedor([% proveedor.getId %]);return false;",
+                                            title   => "[% 'Borrar' | i18n %]",
+                ) ;
+                
+                [% END %]
+                                                           
+
+                             
+
+
+                    </td>
+            
+                </tr>
+            
+            [% END %]
+            
+                <tr>
+=======
                                             print C4::AR::Filtros::link_to(   text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
                                                                               url =>  "/cgi-bin/koha/adquisiciones/datosProveedor.pl", 
                                                                               params =>   ["id_proveedor=[% proveedor.getId %]"],
@@ -198,6 +255,7 @@ function updateBorrarProveedor(responseText){
                 </tr>
             [% END %]
               <tr>
+>>>>>>> 257754790b5ca289c6736e1138cbbbb02cbcceba
                     <td class="lineafinaltabla"  align="left" colspan="14"></td>
               </tr>
             </tbody>

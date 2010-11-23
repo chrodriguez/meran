@@ -424,6 +424,70 @@ ALTER TABLE `adq_proveedor` CHANGE `id_proveedor` `id` INT( 11 ) NOT NULL AUTO_I
 
 
 
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+
+CREATE  TABLE IF NOT EXISTS `adq_forma_envio` (
+  `id` INT(11) NOT NULL ,
+  `nombre` VARCHAR(100) NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_swedish_ci;
+
+CREATE  TABLE IF NOT EXISTS `adq_proveedor_forma_envio` (
+  `envio_id` INT(11) NOT NULL ,
+  `proveedor_id` INT(11) NOT NULL ,
+  PRIMARY KEY (`envio_id`, `proveedor_id`) ,
+  INDEX `fk_adq_forma_envio_has_adq_proveedor_adq_proveedor1` (`proveedor_id` ASC) ,
+  CONSTRAINT `fk_adq_forma_envio_has_adq_proveedor_adq_forma_envio1`
+    FOREIGN KEY (`envio_id` )
+    REFERENCES `meran`.`adq_forma_envio` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_adq_forma_envio_has_adq_proveedor_adq_proveedor1`
+    FOREIGN KEY (`proveedor_id` )
+    REFERENCES `meran`.`adq_proveedor` (`id_proveedor` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_swedish_ci;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+
+ALTER TABLE `meran`.`adq_proveedor_forma_envio` DROP FOREIGN KEY `fk_adq_forma_envio_has_adq_proveedor_adq_forma_envio1` ;
+
+ALTER TABLE `meran`.`adq_proveedor` ENGINE = InnoDB ;
+
+ALTER TABLE `meran`.`adq_proveedor_forma_envio` DROP COLUMN `proveedor_id` , DROP COLUMN `envio_id` , ADD COLUMN `adq_forma_envio_id` INT(11) NOT NULL  FIRST , ADD COLUMN `adq_proveedor_id` INT(11) NOT NULL  AFTER `adq_forma_envio_id` , 
+  ADD CONSTRAINT `fk_adq_forma_envio_has_adq_proveedor_adq_forma_envio1`
+  FOREIGN KEY (`adq_forma_envio_id` )
+  REFERENCES `meran`.`adq_forma_envio` (`id` )
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION, 
+  ADD CONSTRAINT `fk_adq_proveedor_forma_envio_adq_proveedor1`
+  FOREIGN KEY (`adq_proveedor_id` )
+  REFERENCES `meran`.`adq_proveedor` (`id` )
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION
+, DROP PRIMARY KEY 
+, ADD PRIMARY KEY (`adq_forma_envio_id`, `adq_proveedor_id`) 
+, ADD INDEX `fk_adq_proveedor_forma_envio_adq_proveedor1` (`adq_proveedor_id` ASC) 
+, DROP INDEX `fk_adq_forma_envio_has_adq_proveedor_adq_proveedor1` ;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
 
