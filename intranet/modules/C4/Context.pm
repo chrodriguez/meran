@@ -20,6 +20,7 @@
 package C4::Context;
 use strict;
 use DBI;
+#Einar use CGI::Session;
 
 use vars qw($VERSION $AUTOLOAD),
 	qw($context),
@@ -91,7 +92,7 @@ environment variable to the pathname of a configuration file to use.
 #	Used by &set_dbh and &restore_dbh to hold other database
 #	handles for this context.
 
-use constant CONFIG_FNAME => "/etc/meran.conf";
+use constant CONFIG_FNAME => "/etc/meran/meran.conf";
 				# Default config file, if none is specified
 
 $context = undef;		# Initially, no context is set
@@ -379,8 +380,6 @@ sub _new_dbh
 		# FIXME - It should be possible to use "MySQL" instead
 		# of "mysql", "PostgreSQL" instead of "Pg", and so
 		# forth.
-
-	use CGI::Session;
 
 =item
 	my $session = CGI::Session->load();

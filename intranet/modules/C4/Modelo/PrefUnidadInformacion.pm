@@ -23,6 +23,11 @@ __PACKAGE__->meta->setup(
     unique_key => [ 'id_ui' ],
 ); 
 
+use C4::Modelo::RefIdioma;
+use C4::Modelo::PrefUnidadInformacion::Manager;
+use Text::LevenshteinXS;
+    
+
 sub getId_ui{
     my ($self) = shift;
 
@@ -137,14 +142,12 @@ sub agregar{
 
 
 sub nextMember{
-    use C4::Modelo::RefIdioma;
     return(C4::Modelo::RefIdioma->new());
 }
 
 sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
-	use C4::Modelo::PrefUnidadInformacion::Manager;
  	my $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion
 						( select   => ['id_ui' , $campo],
 						  sort_by => ($orden) );
@@ -163,9 +166,7 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self) = shift;
-  my ($campo,$id) = @_;
-
-	use C4::Modelo::PrefUnidadInformacion::Manager;
+    my ($campo,$id) = @_;
  	my $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion
 						( select   => [$campo],
 						  query =>[ id_ui => { eq => $id} ]);
@@ -200,8 +201,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::PrefUnidadInformacion::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
 

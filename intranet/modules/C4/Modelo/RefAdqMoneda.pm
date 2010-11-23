@@ -1,9 +1,7 @@
 package C4::Modelo::RefAdqMoneda;
 
 use strict;
-use utf8;
-use C4::AR::Permisos;
-use C4::AR::Utilidades;
+
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -17,7 +15,9 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 
 );
-
+use utf8;
+use C4::AR::Permisos;
+use C4::AR::Utilidades;
 # *************************************************************************FUNCIONES DEL MODELO | MONEDA************************************************************
 
 # Agrega una nueva moneda

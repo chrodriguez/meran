@@ -20,6 +20,10 @@ __PACKAGE__->meta->setup(
     unique_key => [ 'LOCALIDAD' ],
 );
 
+use C4::Modelo::CatPerfilOpac;
+use C4::Modelo::RefLocalidad::Manager;
+use Text::LevenshteinXS;
+
 sub toString{
 	my ($self) = shift;
 
@@ -71,8 +75,7 @@ sub setId_persona{
 sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
-	use C4::Modelo::RefLocalidad::Manager;
- 	my $ref_valores = C4::Modelo::RefLocalidad::Manager->get_ref_localidad
+	my $ref_valores = C4::Modelo::RefLocalidad::Manager->get_ref_localidad
 						( select   => ['LOCALIDAD' , $campo],
 						  sort_by => ($orden) );
     my @array_valores;
@@ -89,8 +92,7 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self)=shift;
-    	my ($campo,$id)=@_;
-	use C4::Modelo::RefLocalidad::Manager;
+    my ($campo,$id)=@_;
  	my $ref_valores = C4::Modelo::RefLocalidad::Manager->get_ref_localidad
 						( select   => [$campo],
 						  query =>[ LOCALIDAD => { eq => $id} ]);
@@ -118,8 +120,6 @@ sub getCampo{
 
 
 sub nextMember{
-    use C4::Modelo::CatPerfilOpac;
-
     return(C4::Modelo::CatPerfilOpac->new());
 }
 
@@ -127,8 +127,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::RefLocalidad::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
 

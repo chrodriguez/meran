@@ -21,8 +21,8 @@ package C4::AR::Authldap;
 
 require Exporter;
 use strict;
-use Digest::MD5 qw(md5_base64);
-use C4::Context;
+#EINARuse Digest::MD5 qw(md5_base64);
+#EINARuse C4::Context;
 use Net::LDAP;
 # use Net::LDAP qw(:all);
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);

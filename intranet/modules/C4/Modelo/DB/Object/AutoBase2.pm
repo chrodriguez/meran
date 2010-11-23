@@ -18,7 +18,7 @@ sub init_db {
 #     }
 #     else # act "normally" when not under mod_perl
 #     {
-#         C4::AR::Debug::debug("AutoBase2 => init_db => NO CACHED");
+        C4::AR::Debug::debug("AutoBase2 => init_db => NO CACHED");
       *init_db = sub { C4::Modelo::DB::AutoBase1->new };
 #     }
 }

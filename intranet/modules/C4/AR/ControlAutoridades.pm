@@ -2,13 +2,13 @@ package C4::AR::ControlAutoridades;
 
 use strict;
 require Exporter;
-use C4::Context;
-use Date::Manip;
+#Einar use C4::Context;
+# use Date::Manip;
 use C4::Date;
 
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(	
+@EXPORT_OK=qw(	
 
 		&t_insertSinonimosAutor
 		&t_insertSinonimosTemas 
@@ -774,4 +774,7 @@ sub t_eliminarSeudonimosEditorial {
   return ($msg_object)
 }
 
+END { }       # module clean-up code here (global destructor)
+
 1;
+__END__

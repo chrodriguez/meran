@@ -2,9 +2,7 @@ package C4::Modelo::UsrSocio;
 
 use strict;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
-use utf8;
-use C4::AR::Permisos;
-use C4::AR::Utilidades;
+
 __PACKAGE__->meta->setup(
     table   => 'usr_socio',
 
@@ -71,6 +69,16 @@ __PACKAGE__->meta->setup(
 
     unique_key => [ 'nro_socio' ],
 );
+use utf8;
+use C4::AR::Permisos;
+use C4::AR::Utilidades;
+use C4::Modelo::UsrPersona;
+use C4::Modelo::UsrPersona::Manager;
+use Switch;
+use C4::Date;
+use C4::Modelo::UsrPermiso;
+use C4::Modelo::UsrPermiso::Manager;
+
 
 sub setCredentialType{
     my ($self)=shift;
@@ -207,8 +215,6 @@ sub defaultSort{
 sub cambiarPassword{
     my ($self)=shift;
     my ($password)=@_;
-    use C4::Date;
-
     C4::AR::Debug::debug("UsrSocio => cambiarPassword => ".C4::Auth::prepare_password(C4::AR::Utilidades::trim($password)) );
     $self->setPassword( C4::Auth::prepare_password(C4::AR::Utilidades::trim($password)) );
     my $today = Date::Manip::ParseDate("today");
@@ -258,10 +264,6 @@ Retorna los permisos del socio
 # FIXME DEPRECATED
 sub getPermisos{
     my ($self) = shift;
-    
-    use C4::Modelo::UsrPermiso;
-    use C4::Modelo::UsrPermiso::Manager;
-
     #retorna todos los permisos
     my $permisos_array_ref = C4::Modelo::UsrPermiso::Manager->get_usr_permiso();
 
@@ -604,8 +606,6 @@ sub setCredentials{
     my ($self) = shift;
     my ($credential_type) = @_;
 
-    use Switch;
-
     switch ($credential_type){
 
       case 'estudiante'      {$self->convertirEnEstudiante}
@@ -888,9 +888,6 @@ Retorna la persona que corresponde al socio
 =cut
 sub getPersona{
     my ($self) = shift;
-
-    use C4::Modelo::UsrPersona;
-    use C4::Modelo::UsrPersona::Manager;
 
     my $persona = C4::Modelo::UsrPersona::Manager->get_usr_persona( query => [ id_persona => { eq => $self->getId_persona } ]);
 

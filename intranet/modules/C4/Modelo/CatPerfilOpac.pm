@@ -1,8 +1,8 @@
 package C4::Modelo::CatPerfilOpac;
 
 use strict;
-
 use base qw(C4::Modelo::DB::Object::AutoBase2);
+use utf8;
 
 __PACKAGE__->meta->setup(
     table   => 'cat_perfil_opac',
@@ -15,6 +15,10 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
+use C4::Modelo::PrefServidorZ3950;
+use C4::Modelo::CatPerfilOpac::Manager;
+use Text::LevenshteinXS;
+
 sub getNombre{
     my ($self)=shift;
 
@@ -24,15 +28,12 @@ sub getNombre{
 sub setNombre{
     my ($self) = shift;
     my ($string) = @_;
-    use utf8;
-	utf8::encode($string);
+    utf8::encode($string);
     $self->nombre($string);
 }
 
 sub nextMember{
-    use C4::Modelo::PrefServidorZ3950;
-
-    return(C4::Modelo::PrefServidorZ3950->new());
+     return(C4::Modelo::PrefServidorZ3950->new());
 }
 
 
@@ -40,8 +41,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::CatPerfilOpac::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
 

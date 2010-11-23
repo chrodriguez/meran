@@ -1,7 +1,7 @@
 package C4::Modelo::RefDisponibilidad;
 
 use strict;
-
+    
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -17,6 +17,9 @@ __PACKAGE__->meta->setup(
 
 );
 
+use C4::Modelo::RefDisponibilidad::Manager;
+use C4::Modelo::CircRefTipoPrestamo;
+use Text::LevenshteinXS;
 
 # 1 =  Domiciliario
 # 2 =  Sala de Lectura
@@ -65,8 +68,6 @@ sub setNombre{
 sub obtenerValoresCampo {
 	my ($self)=shift;
     my ($campo, $orden)=@_;
-
-	use C4::Modelo::RefDisponibilidad::Manager;
  	my $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad
 						( select   => [ 'id',$campo],
 						  sort_by => ($orden) );
@@ -84,9 +85,8 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self)=shift;
-    	my ($campo,$id)=@_;
-	use C4::Modelo::RefDisponibilidad::Manager;
- 	my $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad
+    my ($campo,$id)=@_;
+    my $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad
 						( select   => [$campo],
 						  query =>[ id => { eq => $id} ]);
     	
@@ -111,7 +111,6 @@ sub getCampo{
 }
 
 sub nextMember{
-    use C4::Modelo::CircRefTipoPrestamo;
     return(C4::Modelo::CircRefTipoPrestamo->new());
 }
 
@@ -120,8 +119,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::RefDisponibilidad::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){

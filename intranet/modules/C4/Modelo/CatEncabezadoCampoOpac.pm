@@ -1,7 +1,8 @@
 package C4::Modelo::CatEncabezadoCampoOpac;
 
 use strict;
-
+use C4::Modelo::CatEncabezadoItemOpac;
+use utf8;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -31,9 +32,6 @@ __PACKAGE__->meta->setup(
 );
 
 
-use utf8;
-
-
 # TODO
 =item
   orden        => { type => 'integer', not_null => 1 },
@@ -46,8 +44,6 @@ use utf8;
 sub agregar{
 	my ($self)=shift;
 	my ($data_hash) = @_;
-	use C4::Modelo::CatEncabezadoItemOpac;
-
 	$self->setNivel($data_hash->{'nivel'});
 	$self->setOrden($data_hash->{'orden'});
 	$self->setNombre($data_hash->{'nombre'});

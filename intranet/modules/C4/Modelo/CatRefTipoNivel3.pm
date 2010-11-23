@@ -1,7 +1,6 @@
 package C4::Modelo::CatRefTipoNivel3;
 
 use strict;
-
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -18,6 +17,9 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
     unique_key => [ 'id_tipo_doc' ],
 );
+use C4::Modelo::PrefUnidadInformacion;
+use C4::Modelo::CatRefTipoNivel3::Manager;
+use Text::LevenshteinXS;
 
 
 sub getId_tipo_doc{
@@ -43,7 +45,6 @@ sub setNombre{
 }
 
 sub nextMember{
-    use C4::Modelo::PrefUnidadInformacion;
     return(C4::Modelo::PrefUnidadInformacion->new());
 }
 
@@ -70,9 +71,8 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self)=shift;
-    	my ($campo,$id)=@_;
-	use C4::Modelo::CatRefTipoNivel3::Manager;
- 	my $ref_valores = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3
+    my ($campo,$id)=@_;
+    my $ref_valores = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3
 						( select   => [$campo],
 						  query =>[ id_tipo_doc => { eq => $id} ]);
     	
@@ -101,8 +101,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::CatRefTipoNivel3::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){

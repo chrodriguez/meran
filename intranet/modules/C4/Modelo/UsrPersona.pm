@@ -3,7 +3,6 @@ package C4::Modelo::UsrPersona;
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
-use utf8;
 
 __PACKAGE__->meta->setup(
     table   => 'usr_persona',
@@ -66,6 +65,12 @@ __PACKAGE__->meta->setup(
     unique_key => ['tipo_documento','nro_documento'],
 );
 
+use utf8;
+use C4::Modelo::UsrPersona;
+use C4::Modelo::UsrEstado;
+
+
+
 =item
     Returns true (1) if the row was loaded successfully
     undef if the row could not be loaded due to an error, 
@@ -98,8 +103,6 @@ sub load{
 
 sub getCategoria{
     my ($self)=shift;
-    
-    use C4::Modelo::UsrPersona;
     my $socio_array_ref = C4::Modelo::UsrPersona::Manager->get_usr_persona( query => [ id_persona => { eq => $self->getId_persona } ]);
 
     return ($socio_array_ref->[0]->categoria->getDescription);
@@ -149,9 +152,6 @@ sub convertirEnSocio{
     my ($data_hash)=@_;
 
     $self->log($data_hash,'convertirEnSocio');
-
-    use C4::Modelo::UsrPersona;
-    use C4::Modelo::UsrEstado;
     my $db = $self->db;
     my $socio = C4::Modelo::UsrSocio->new(db => $db);
         $data_hash->{'id_persona'} = $self->getId_persona;

@@ -18,7 +18,7 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
-
+use utf8;
 sub agregar{
 
     my ($self)=shift;
@@ -51,8 +51,7 @@ sub getVistaOpac{
 sub setVistaOpac{
     my ($self) = shift;
     my ($vista_opac) = @_;
-    use utf8;
-	utf8::encode($vista_opac);
+    utf8::encode($vista_opac);
     $self->vista_opac($vista_opac);
 }
 

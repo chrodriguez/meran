@@ -25,20 +25,29 @@ use strict;
 use warnings;
 
 require Exporter;
-use C4::AR::Authldap;
-use C4::Membersldap;
 use C4::Context;
-use C4::Output;              # to get the template
-use C4::Interface::CGI::Output;
-use C4::Circulation::Circ2;  # getpatroninformation
-use C4::AR::Usuarios; #Miguel lo agregue pq sino no ve la funcion esRegular!!!!!!!!!!!!!!!
-use C4::AR::Prestamos;
-use CGI::Session qw/-ip-match/;
-use C4::Modelo::SistSesion;
-use C4::Modelo::SistSesion::Manager;
-use JSON;
 use Digest::MD5 qw(md5_base64);
 use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
+use C4::AR::Authldap;
+use C4::AR::Usuarios; #Miguel lo agregue pq sino no ve la funcion esRegular!!!!!!!!!!!!!!!
+
+
+use C4::Output;              # to get the template
+# use CGI::Session qw/-ip-match/;
+use CGI::Session;
+use C4::Modelo::SistSesion;
+use C4::Modelo::SistSesion::Manager;
+
+use C4::Modelo::CircReserva;
+use CGI::Cookie;
+use Crypt::CBC;
+use MIME::Base64;
+
+#EINAR use C4::Interface::CGI::Output;
+#EINAR use C4::Circulation::Circ2;  # getpatroninformation
+#EINAR use JSON;
+#EINAR use C4::AR::Prestamos;
+#EINAR use C4::Membersldap;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 my $codMSG = 'U000';
@@ -301,7 +310,7 @@ sub get_template_and_user {
   if ( $session->param('userid') ) {
         $params->{'loggedinuser'}       = $session->param('userid');
         $params->{'nro_socio'}          = $session->param('userid');
-        $params->{'socio'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
+        $params->{'socio'}              = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
 
         if (!$usuario_logueado) {
             $usuario_logueado = C4::Modelo::UsrSocio->new();
@@ -326,10 +335,10 @@ sub get_template_and_user {
         $socio_data{'usr_email'}                = $session->param('usr_email');
         $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
         $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id');
-    $params->{'socio_data'}         = \%socio_data;
-    $params->{'token'}              = $session->param('token');
-    #para mostrar o no algun submenu del menu principal
-    $params->{'menu_preferences'}   = C4::AR::Preferencias::getMenuPreferences();
+        $params->{'socio_data'}                 = \%socio_data;
+        $params->{'token'}                      = $session->param('token');
+        #para mostrar o no algun submenu del menu principal
+        $params->{'menu_preferences'}           = C4::AR::Preferencias::getMenuPreferences();
 	}
 
     #se cargan todas las variables de entorno de las preferencias del sistema
@@ -368,7 +377,7 @@ sub get_html_content {
 
 sub print_header {
     my($session, $template_params) = @_;
-    use CGI::Cookie;
+#     use CGI::Cookie;
 
     my $query = new CGI;
     my $cookie = undef;
@@ -523,7 +532,9 @@ sub buildSocioData{
 #checkauth RECORTADO
 sub checkauth {
 C4::AR::Debug::debug("desde checkauth==================================================================================================");    
-
+use POSIX;
+use Locale::Maketext::Gettext::Functions;
+use Template::Plugin::Filter;
 my $context = new C4::Context;
 
     C4::AR::Debug::debug("debug => ".$context->config('debug'));
@@ -585,6 +596,13 @@ my $context = new C4::Context;
         $nroRandom  = $session->param('nroRandom');
         $tokenDB    = $session->param('token');
         $flag       = $session->param('flagsrequired');
+
+        #my $session     = CGI::Session->load();#si esta definida
+        my $locale      = C4::Auth::getUserLocale();
+        Locale::Maketext::Gettext::Functions::bindtextdomain($type, C4::Context->config("locale"));
+        Locale::Maketext::Gettext::Functions::textdomain($type);
+        Locale::Maketext::Gettext::Functions::get_handle($locale);
+        #my $setlocale   = setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
 
 
         if ($userid) {
@@ -869,15 +887,15 @@ sub _session_expired {
 =item
 Se envian los correos recordatorios si se encuentra seteada la preferencia "remainderMail"
 =cut
-sub _enviarCorreosDeRecordacion {
+#EINAR sub _enviarCorreosDeRecordacion {
 # C4::AR::Debug::debug("EnabledMailSystem ".C4::Context->preference("EnabledMailSystem"));
 # C4::AR::Debug::debug("reminderMail ".C4::Context->preference("reminderMail"));
 
-    if ((C4::Context->preference("EnabledMailSystem"))&&(C4::Context->preference("reminderMail") eq 1)){
+#EINAR    if ((C4::Context->preference("EnabledMailSystem"))&&(C4::Context->preference("reminderMail") eq 1)){
 # TODO falta pasar
-        &C4::AR::Prestamos::enviar_recordatorios_prestamos();
-    }
-}
+  #EINAR      &C4::AR::Prestamos::enviar_recordatorios_prestamos();
+#EINAR    }
+#EINAR}
 
 =item sub _getTimeOut
 
@@ -891,28 +909,6 @@ sub _getTimeOut {
     
 #     C4::AR::Debug::debug("_getTimeOut => ".$timeout);
     return $timeout;
-}
-
-=item sub _clear_sessions_from_DB
-
-    Limpia la tabla sist_sesion, todas las sesiones "colgadas" que queraron por ej. cuando se cierra el navegador y no se sale de 
-    la sesion.
-
-    Parametros: 
-
-=cut
-sub _clear_sessions_from_DB {
-# TODO esto no esta 100% confirmado de que pueda dejar a gente afuera de la sesion    
-    use C4::Context;
-    my $dbh = C4::Context->dbh;
-
-    my $sth = $dbh->prepare("DELETE FROM sist_sesion WHERE lasttime < ? ");
-    my $tope = time() - _getTimeOut();
-    my $count = $sth->execute($tope);
-    if($count ne '0E0'){
-        C4::AR::Debug::debug("_clear_sessions_from_DB=> TAREAS DE MANTENIMIENTO DE LA TABLA DE sist_sesion");
-        C4::AR::Debug::debug("_clear_sessions_from_DB=> se borraron ".$count." sessiones viejas");
-    }
 }
 
 
@@ -986,9 +982,9 @@ sub _getEncriptionKey{
 sub desencriptar{
     my ($texto_a_desencriptar, $key) = @_;
 
-    use Crypt::CBC;
-    use MIME::Base64;
- C4::AR::Debug::debug("desencriptar=> ".$texto_a_desencriptar);
+#     use Crypt::CBC;
+#     use MIME::Base64;
+#     C4::AR::Debug::debug("desencriptar=> ".$texto_a_desencriptar);
     my  $cipher = Crypt::CBC->new( 
                                     -key    => $key,
                                     -cipher => 'Rijndael',
@@ -1561,7 +1557,7 @@ sub t_operacionesDeINTRA{
     my $userid = $socio->getNro_socio();
 
 	eval{
-		use C4::Modelo::CircReserva;
+# 		use C4::Modelo::CircReserva;
 		my $reserva=C4::Modelo::CircReserva->new(db=> $db);
 		#Se borran las reservas de todos los usuarios sancionados
 		$reserva->cancelar_reservas_sancionados($userid);
@@ -1680,7 +1676,7 @@ sub _hashear_password {
         return md5_base64($password);
     }
 
-    C4::AR::Debug::debug("C4::Auth::_hashear_password => Error al intentar hashear password, falta METODO de encriptacion");
+#     C4::AR::Debug::debug("C4::Auth::_hashear_password => Error al intentar hashear password, falta METODO de encriptacion");
 }
 
 

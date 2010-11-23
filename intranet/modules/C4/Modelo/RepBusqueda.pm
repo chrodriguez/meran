@@ -27,13 +27,11 @@ __PACKAGE__->meta->setup(
          
     ],
 );
-
+use C4::Date;
 
 sub agregar{
     my ($self) = shift;
     my ($nro_socio) = @_;
-    use C4::Date;
-
     $self->setNro_socio($nro_socio);
     my $dateformat      = C4::Date::get_date_format();
     my $hoy             = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);

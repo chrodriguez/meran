@@ -6,14 +6,19 @@ package C4::AR::Preferencias;
 
 use strict;
 require Exporter;
-use C4::Context;
-use C4::Date;
+#EINAR use C4::Context;
+#EINAR use C4::Date;
+#VOY ACA
 
-use vars qw(@EXPORT @ISA);
+use C4::Modelo::PrefPreferenciaSistema;
+use C4::Modelo::PrefPreferenciaSistema::Manager;    
+
+
+use vars qw(@EXPORT_OK @ISA);
 
 @ISA=qw(Exporter);
 
-@EXPORT=qw(
+@EXPORT_OK=qw(
 	&getPreferencia
 	&getValorPreferencia
 	&getPreferenciaLike
@@ -25,9 +30,7 @@ use vars qw(@EXPORT @ISA);
 
 sub getMenuPreferences{
 
-    use C4::Modelo::PrefPreferenciaSistema;
-    use C4::Modelo::PrefPreferenciaSistema::Manager;
-
+    
     my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
                                     query => [ variable=> { like => '%showMenuItem_%' }],
                             );
@@ -41,8 +44,6 @@ sub getMenuPreferences{
 
 sub getPreferenciasByCategoria {
 
-    use C4::Modelo::PrefPreferenciaSistema;
-    use C4::Modelo::PrefPreferenciaSistema::Manager;
     my ($str)=@_;
     my $preferencias_array_ref;
     my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
@@ -56,8 +57,6 @@ sub getPreferenciasByCategoria {
 
 sub getPreferenciaLike {
 
-    use C4::Modelo::PrefPreferenciaSistema;
-    use C4::Modelo::PrefPreferenciaSistema::Manager;
     my ($str,$orden)=@_;
     my $preferencias_array_ref;
     my @filtros;
@@ -74,8 +73,6 @@ sub getPreferenciaLike {
 
 sub getPreferencia {
     my $self = shift;
-    use C4::Modelo::PrefPreferenciaSistema;
-
     my ($variable)= @_;
 
     my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => $variable} ]);
@@ -86,13 +83,9 @@ if ($preferencia_array_ref->[0]){return ($preferencia_array_ref->[0]);} else{ret
 
 sub getValorPreferencia {
     my $self = shift;
-    use C4::Modelo::PrefPreferenciaSistema;
-
     my ($variable)= @_;
-
     my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => $variable} ]);
-
-if ($preferencia_array_ref->[0]){return ($preferencia_array_ref->[0]->getValue);} else{return 0;}
+    if ($preferencia_array_ref->[0]){return ($preferencia_array_ref->[0]->getValue);} else{return 0;}
 
 }
 

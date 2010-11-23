@@ -17,7 +17,9 @@ __PACKAGE__->meta->setup(
     unique_key => [ 'idLanguage' ],
 
 );
-
+use C4::Modelo::RefIdioma::Manager;
+use C4::Modelo::RefPais;
+use Text::LevenshteinXS;
 sub toString{
 	my ($self) = shift;
 
@@ -64,8 +66,7 @@ sub setDescription{
 sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
-	use C4::Modelo::RefIdioma::Manager;
- 	my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_idioma
+	my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_idioma
 						( select   => ['idLanguage', $campo],
 						  sort_by => ($orden) );
     my @array_valores;
@@ -82,8 +83,7 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self)=shift;
-    	my ($campo,$id)=@_;
-	use C4::Modelo::RefIdioma::Manager;
+   	my ($campo,$id)=@_;
  	my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_idioma
 						( select   => [$campo],
 						  query =>[ idLanguage => { eq => $id} ]);
@@ -110,7 +110,6 @@ sub getCampo{
 
 
 sub nextMember{
-    use C4::Modelo::RefPais;
     return(C4::Modelo::RefPais->new());
 }
 
@@ -118,8 +117,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::RefIdioma::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){

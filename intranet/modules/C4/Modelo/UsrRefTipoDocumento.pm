@@ -1,7 +1,7 @@
 package C4::Modelo::UsrRefTipoDocumento;
 
 use strict;
-
+    
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -17,7 +17,9 @@ __PACKAGE__->meta->setup(
     unique_key => [ 'nombre' ],
 
 );
-
+use C4::Modelo::UsrRefTipoDocumento::Manager;
+use C4::Modelo::RefEstado;
+use Text::LevenshteinXS;
 
 sub getId{
   my ($self) = shift;
@@ -51,8 +53,6 @@ sub setNombre{
 sub obtenerValoresCampo {
 	my ($self)=shift;
     my ($campo, $orden)=@_;
-
-	use C4::Modelo::UsrRefTipoDocumento::Manager;
  	my $ref_valores = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento
 						( select   => [$campo],
 						  sort_by => ($orden) );
@@ -72,7 +72,6 @@ sub obtenerValoresCampo {
 sub obtenerValorCampo {
 	my ($self)=shift;
     	my ($campo,$id)=@_;
-	use C4::Modelo::UsrRefTipoDocumento::Manager;
  	my $ref_valores = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento
 						( select   => [$campo],
 						  query =>[ descripcion => { eq => $id} ]);
@@ -97,7 +96,6 @@ sub getCampo{
 
 
 sub nextMember{
-    use C4::Modelo::RefEstado;
     return(C4::Modelo::RefEstado->new());
 }
 
@@ -105,8 +103,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::UsrRefTipoDocumento::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){

@@ -26,9 +26,9 @@ use C4::Context;
 use ooolib;
 
 #use C4::Date;
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(&getReportTables &insertReportTable &getAllTables &getFields 
+@EXPORT_OK=qw(&getReportTables &insertReportTable &getAllTables &getFields 
 	   &deleteReportTable &getReportJoinTables &insertReportJoinTable &getFieldsArray
 	   &getSearchFields &getSearchJoins 
 	   &reportSearch &generar_planilla);
@@ -455,3 +455,10 @@ my $name="reporte-generico-".$loggedinuser;
 	 $sheet->oooGenerate($name);
 	return($name);
 	}
+
+
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__

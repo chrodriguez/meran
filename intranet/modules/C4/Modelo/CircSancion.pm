@@ -1,9 +1,7 @@
 package C4::Modelo::CircSancion;
 
 use strict;
-use Date::Manip;
-use C4::Date;#formatdate
-use C4::AR::Utilidades;#trim
+
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -47,7 +45,10 @@ __PACKAGE__->meta->setup(
     ],
 );
 
-
+#Einar use Date::Manip;
+use C4::Date;#formatdate
+use C4::AR::Utilidades;#trim
+use C4::Modelo::RepHistorialSancion;
 sub getId_sancion{
     my ($self) = shift;
     return ($self->id_sancion);
@@ -196,7 +197,6 @@ my $sancion_existente=C4::AR::Sanciones::tieneSancionPendiente($data_hash->{'nro
 		$sancion_existente->save();
         
         #**********************************Se registra el movimiento en historicSanction***************************
-        use C4::Modelo::RepHistorialSancion;
         my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
         $data_hash->{'tipo_operacion'}= 'Actualizacion';
         $historial_sancion->agregar($data_hash);
@@ -208,7 +208,7 @@ my $sancion_existente=C4::AR::Sanciones::tieneSancionPendiente($data_hash->{'nro
 	$self->agregar($data_hash);
 
      #**********************************Se registra el movimiento en historicSanction***************************
-     use C4::Modelo::RepHistorialSancion;
+     
      my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
      $data_hash->{'tipo_operacion'}= 'Insercion';
      $historial_sancion->agregar($data_hash);
@@ -239,7 +239,6 @@ my $sancion_existente=C4::AR::Sanciones::tieneSancionPendiente($data_hash->{'nro
             $sancion_existente->setDias_sancion($data_hash->{'dias_sancion'});
             $sancion_existente->save();
             #**********************************Se registra el movimiento en historicSanction***************************
-            use C4::Modelo::RepHistorialSancion;
             my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
             $data_hash->{'tipo_operacion'}= 'Actualizacion Pendiente';
             $historial_sancion->agregar($data_hash);
@@ -248,7 +247,6 @@ my $sancion_existente=C4::AR::Sanciones::tieneSancionPendiente($data_hash->{'nro
     }else { #No tiene sanciones pendientes
             $self->agregar($data_hash);
             #**********************************Se registra el movimiento en historicSanction***************************
-            use C4::Modelo::RepHistorialSancion;
             my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
             $data_hash->{'tipo_operacion'}= 'Insercion Pendiente';
             $historial_sancion->agregar($data_hash);
@@ -265,7 +263,6 @@ sub actualizar_sancion {
 	$self->save();
 
 #**********************************Se registra el movimiento en historicSanction***************************
-   use C4::Modelo::RepHistorialSancion;
    my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
    $params->{'tipo_operacion'}= 'Actualizacion';
    $historial_sancion->agregar($params);
@@ -283,8 +280,7 @@ sub eliminar_sancion {
     $data_hash->{'loggedinuser'}=$loggedinuser;
     $data_hash->{'fecha_final'}=$self->getFecha_final;
     $data_hash->{'tipo_sancion'}=$self->getTipo_sancion;
-   use C4::Modelo::RepHistorialSancion;
-   my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
+    my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
    $data_hash->{'tipo_operacion'}= 'Actualizacion';
    $historial_sancion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en historicSanction*************************

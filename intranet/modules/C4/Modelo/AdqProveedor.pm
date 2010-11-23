@@ -1,14 +1,6 @@
 package C4::Modelo::AdqProveedor;
 
 use strict;
-use utf8;
-use C4::AR::Permisos;
-use C4::AR::Utilidades;
-use C4::Modelo::RefTipoDocumento;
-use C4::Modelo::RefPais;
-use C4::Modelo::RefProvincia;
-use C4::Modelo::RefLocalidad;
-
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -79,6 +71,14 @@ __PACKAGE__->meta->setup(
     unique_key => ['tipo_doc','nro_doc'],
 
 );
+
+use utf8;
+use C4::AR::Permisos;
+use C4::AR::Utilidades;
+use C4::Modelo::RefTipoDocumento;
+use C4::Modelo::RefPais;
+use C4::Modelo::RefProvincia;
+use C4::Modelo::RefLocalidad;
 
 # *************************************************************************FUNCIONES DEL MODELO | PROVEEDORES************************************************************
 

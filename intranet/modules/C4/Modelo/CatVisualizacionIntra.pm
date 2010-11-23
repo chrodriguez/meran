@@ -17,7 +17,7 @@ __PACKAGE__->meta->setup(
 
     primary_key_columns => [ 'id' ],
 );
-
+use utf8;
 
 sub agregar{
 
@@ -51,8 +51,7 @@ sub getVistaIntra{
 sub setVistaIntra{
     my ($self) = shift;
     my ($vista_intra) = @_;
-    use utf8;
-	utf8::encode($vista_intra);
+    utf8::encode($vista_intra);
     $self->vista_intra($vista_intra);
 }
 

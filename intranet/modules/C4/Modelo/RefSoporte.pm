@@ -1,7 +1,6 @@
 package C4::Modelo::RefSoporte;
 
 use strict;
-
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -17,6 +16,10 @@ __PACKAGE__->meta->setup(
     unique_key => [ 'idSupport' ],
 
 );
+
+use C4::Modelo::RefNivelBibliografico;
+use C4::Modelo::RefSoporte::Manager;
+use Text::LevenshteinXS;
 
 sub toString{
 	my ($self) = shift;
@@ -63,9 +66,7 @@ sub setDescription{
 sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
-	use C4::Modelo::RefSoporte::Manager;
-    my $ref_valores = C4::Modelo::RefSoporte::Manager->get_ref_soporte
-# 						( select   => [$self->meta->primary_key , $campo],
+	my $ref_valores = C4::Modelo::RefSoporte::Manager->get_ref_soporte
               ( select   => ['idSupport' , $campo],
 						  sort_by => ($orden) );
     my @array_valores;
@@ -82,8 +83,7 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self)=shift;
-    	my ($campo,$id)=@_;
-	use C4::Modelo::RefSoporte::Manager;
+    my ($campo,$id)=@_;
  	my $ref_valores = C4::Modelo::RefSoporte::Manager->get_ref_soporte
 						( select   => [$campo],
 						  query =>[ idSupport => { eq => $id} ]);
@@ -108,7 +108,6 @@ sub getCampo{
 
 
 sub nextMember{
-    use C4::Modelo::RefNivelBibliografico;
     return(C4::Modelo::RefNivelBibliografico->new());
 }
 
@@ -116,8 +115,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::RefSoporte::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){

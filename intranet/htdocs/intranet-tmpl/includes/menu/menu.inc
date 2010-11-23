@@ -1,3 +1,6 @@
+
+[% USE cache = Cache %]
+
       <div class="header-bottom">
       <div class="logo_Superior">
   </div>

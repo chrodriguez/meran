@@ -1,7 +1,7 @@
 package C4::Modelo::CircPrestamo;
 
 use strict;
-use Date::Manip;
+
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -54,6 +54,13 @@ __PACKAGE__->meta->setup(
       },
     ],
 );
+use C4::Modelo::RepHistorialCirculacion;
+use C4::Modelo::CircSancion;
+use C4::Modelo::CircSancion::Manager;
+use C4::AR::Sanciones;
+use C4::Modelo::RepHistorialPrestamo;
+use Date::Manip;
+
 
 sub getId_prestamo{
     my ($self) = shift;
@@ -219,7 +226,6 @@ sub agregar {
 	#**********************************Se registra el movimiento en rep_historial_circulacion***************************
    $self->debug("Se loguea en historico de circulacion el prestamo");
 	C4::AR::Debug::debug("CircPrestamo => agregar => responsable: ".$data_hash->{'responsable'});
-   use C4::Modelo::RepHistorialCirculacion;
    my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
    $data_hash->{'tipo'}='prestamo';
    $historial_circulacion->agregar($data_hash);
@@ -351,9 +357,7 @@ sub insertarPrestamo {
 
 	$self->debug("Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo");
 # Se borra la sancion correspondiente a la reserva porque se esta prestando el biblo
-    use C4::Modelo::CircSancion;
-    use C4::Modelo::CircSancion::Manager;
-	my $sancion= C4::Modelo::CircSancion::Manager->get_circ_sancion(
+    my $sancion= C4::Modelo::CircSancion::Manager->get_circ_sancion(
                                                                         db      =>  $self->db,
                                                                         query   =>  [ id_reserva  =>  {eq => $reserva->getId_reserva }]
                                                                    );
@@ -503,7 +507,6 @@ C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
    $data_hash->{'tipo_prestamo'}= $self->getTipo_prestamo;
    $data_hash->{'id_ui'}= $self->getId_ui_prestamo;
    $data_hash->{'tipo'}= 'devolucion';
-   use C4::Modelo::RepHistorialCirculacion;
    my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
    $historial_circulacion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
@@ -515,8 +518,6 @@ C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
 
 # Hay que ver si devolvio el ejemplar a termino para, en caso contrario, aplicarle una sancion    
         my $daysissue=$self->tipo->getDias_prestamo;
-    
-        use C4::AR::Sanciones;
         my $diasSancion= C4::AR::Sanciones::diasDeSancion($fechaHoy, $fechaVencimiento, $self->socio->getCod_categoria, $self->getTipo_prestamo);
 
         if ($diasSancion > 0) {
@@ -528,7 +529,6 @@ C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
             # El usuario tiene libros vencidos en su poder (es moroso)
                 #SE INSERTA UNA SANCION PENDIENTE (se va a hacer efectiva al devolver el ultimo libro!!)
                 $self->debug("SE INSERTA UNA SANCION PENDIENTE");
-              use C4::Modelo::CircSancion;
                 my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
                 my %paramsSancion;
                 $paramsSancion{'loggedinuser'}= $loggedinuser;
@@ -547,8 +547,6 @@ C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
                 my $err;
 # Se calcula la fecha de fin de la sancion en funcion de la fecha actual (hoy + cantidad de dias de sancion)
                 $fechaFinSancion= C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ ".$diasSancion." days",\$err),$dateformat);
-
-                use C4::Modelo::CircSancion;
                 my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
                 my %paramsSancion;
                 $paramsSancion{'loggedinuser'}= $loggedinuser;
@@ -570,7 +568,6 @@ C4::AR::Debug::debug("CircPrestamo=> devolver => responsable".$loggedinuser);
 ### FIN SANCIONES
 
 #**********************************Se registra el movimiento en rep_historial_prestamo***************************
-	use C4::Modelo::RepHistorialPrestamo;
 	my $historial_prestamo = C4::Modelo::RepHistorialPrestamo->new(db=>$self->db);
 	$historial_prestamo->agregarPrestamo($self);
 
@@ -708,8 +705,7 @@ sub renovar {
 	$data_hash->{'tipo_prestamo'}= $self->getTipo_prestamo;
 	$data_hash->{'id_ui'}= $self->getId_ui_prestamo;
 	$data_hash->{'tipo'}= 'renovacion';
-	use C4::Modelo::RepHistorialCirculacion;
-	my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
+    my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
 	$historial_circulacion->agregar($data_hash);
 	#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 }
@@ -718,34 +714,21 @@ sub renovar {
 sub getInvolvedCount{
  
     my ($self) = shift;
-
     my ($campo, $value)= @_;
-    
     my @filtros;
-
     push (@filtros, ( $campo => $value ) );
-
     my $circ_prestamo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros );
-
     return ($circ_prestamo_count);
 }
 
 sub replaceBy{
- 
     my ($self) = shift;
-
     my ($campo,$value,$new_value) = @_;
-    
     my @filtros;
-
     push (  @filtros, ( $campo => { eq => $value},) );
-
-
     my $replaced = C4::Modelo::CircPrestamo::Manager->update_circ_prestamo(   where => \@filtros,
                                                                         set   => { $campo => $new_value });
 }
-
-
 
 
 1;

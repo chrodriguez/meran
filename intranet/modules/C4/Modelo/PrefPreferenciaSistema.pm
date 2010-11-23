@@ -21,6 +21,12 @@ __PACKAGE__->meta->setup(
     unique_key => [ 'variable' ],
 );
 
+
+use C4::Modelo::PrefValorAutorizado;
+use C4::Modelo::PrefTablaReferencia;
+use C4::AR::Utilidades; 
+        
+
 sub defaultSort {
      return ('variable');
 }
@@ -65,9 +71,7 @@ sub getShowValue{
 		if($self->getValue){ $show="Si";}else{$show="No";}
 	}
 	elsif($self->getType eq 'valAuto'){
-	    use C4::Modelo::PrefValorAutorizado;
-		use C4::AR::Utilidades;
-    		my $valAuto_array_ref = C4::Modelo::PrefValorAutorizado::Manager->get_pref_valor_autorizado( 
+	   	my $valAuto_array_ref = C4::Modelo::PrefValorAutorizado::Manager->get_pref_valor_autorizado( 
 										query => [ category => { eq => $self->getOptions} , 
 										           authorised_value => { eq => $self->getValue}]
 								);
@@ -79,7 +83,6 @@ sub getShowValue{
 		my @array=split(/\|/,$self->getOptions);
 		my $tabla=$array[0];
 		my $campo=$array[1];
-		use C4::Modelo::PrefTablaReferencia;
 		$show=C4::Modelo::PrefTablaReferencia->obtenerValorDeReferencia($tabla,$campo,$self->getValue);
 
 	}
@@ -159,4 +162,5 @@ sub modificar{
 
 
 1;
+__END__
 

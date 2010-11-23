@@ -1,12 +1,11 @@
 #!/usr/bin/perl
 
 use strict;
-require Exporter;
 
-use C4::Output;  # contains gettemplate
+#use C4::Output;  # contains gettemplate
 use C4::Auth;
-use C4::Context;
-use CGI::Session;
+#use C4::Context;
+#use CGI::Session;
 use CGI;
 
 my $cgi = new CGI;
