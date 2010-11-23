@@ -19,6 +19,7 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 # recibimos solo el id del proveedor y creamos el objeto aca
 my $id_proveedor = $input->param('id_proveedor');
 
+
 my $proveedor = C4::AR::Proveedores::getProveedorInfoPorId($id_proveedor);
 
 $t_params->{'proveedor'} = $proveedor;

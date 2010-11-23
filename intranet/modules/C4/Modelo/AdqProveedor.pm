@@ -121,8 +121,8 @@ sub editarProveedor{
     $self->setDomicilio($params->{'domicilio'});
     $self->setTelefono($params->{'telefono'});
     $self->setEmail($params->{'email'});
-    $self->setTipoDoc($params->{'tipo_doc'});
-    $self->setNroDoc($params->{'nro_doc'});
+    $self->setTipoDoc($params->{'tipo_documento'});
+    $self->setNroDoc($params->{'numero_documento'});
     $self->setRazonSocial($params->{' razon_social'});
     $self->setCuitCuil($params->{'cuit_cuil'});
     $self->setFax($params->{'fax'});
