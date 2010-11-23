@@ -25,8 +25,8 @@ my $tipoAccion= $obj->{'tipoAccion'}||"";
     # autoGeneratePassword = [0 | 1]
     if($tipoAccion eq "ELIMINAR"){
     	
-    	C4::AR::Debug::debug($infoOperacionJSON);
-    	C4::AR::Debug::debug("Estoy eliminando");
+#     	C4::AR::Debug::debug($infoOperacionJSON);
+#     	C4::AR::Debug::debug("Estoy eliminando");
         my ($userid, $session, $flags) = checkauth( $input, 
                                             $authnotrequired,
                                             {   ui => 'ANY', 
