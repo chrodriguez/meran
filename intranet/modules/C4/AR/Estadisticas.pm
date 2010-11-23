@@ -11,11 +11,11 @@ require Exporter;
 use C4::Date;
 use C4::AR::Busquedas;
 
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 
 @ISA=qw(Exporter);
 
-@EXPORT=qw(
+@EXPORT_OK=qw(
 	&usuarios
 	&historicoPrestamos
 	&cantidadRetrasados
@@ -1747,4 +1747,8 @@ sub listaDeEjemplares {
 
     return ($results_count,$results);
 }
+
+END { }       # module clean-up code here (global destructor)
+
 1;
+__END__

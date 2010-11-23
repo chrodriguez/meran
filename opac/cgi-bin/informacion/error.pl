@@ -3,7 +3,7 @@ use strict;
 require Exporter;
 use CGI;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+
 
 my $input=new CGI;
 

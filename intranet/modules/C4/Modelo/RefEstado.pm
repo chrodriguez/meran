@@ -15,7 +15,9 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
     unique_key => [ 'nombre' ],
 );
-
+use C4::Modelo::RefLocalidad;
+use C4::Modelo::RefEstado::Manager;
+use Text::LevenshteinXS;
 
 # 1   Baja
 # 2   Compartido
@@ -44,8 +46,7 @@ sub setNombre{
 sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
-	use C4::Modelo::RefEstado::Manager;
- 	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
+	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
 						( select   => [ 'id' , $campo],
 						  sort_by => ($orden) );
     my @array_valores;
@@ -62,9 +63,8 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self)=shift;
-    	my ($campo,$id)=@_;
-	use C4::Modelo::RefEstado::Manager;
- 	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
+    my ($campo,$id)=@_;
+    my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
 						( select   => [$campo],
 						  query =>[ id => { eq => $id} ]);
     	
@@ -89,7 +89,6 @@ sub getCampo{
 }
 
 sub nextMember{
-    use C4::Modelo::RefLocalidad;
     return(C4::Modelo::RefLocalidad->new());
 }
 
@@ -97,8 +96,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::RefEstado::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
 

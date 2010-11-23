@@ -117,18 +117,21 @@ y hacer la traduccion del mismo, obteniedola del binario correspondiente, por ej
 =cut
 sub i18n {
 	my ($text)      = @_;
+# TODO se paso todo a auth => checkauth
 
-	my $session     = CGI::Session->load();#si esta definida
-	my $type        = $session->param('type') || 'opac';
-    my $locale      = C4::Auth::getUserLocale();
-	my $setlocale   = setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
+# 	my $session     = CGI::Session->load();#si esta definida
+# 	my $type        = $session->param('type') || 'opac';
+#     my $locale      = C4::Auth::getUserLocale();
+# 	my $setlocale   = setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
 
-	Locale::Maketext::Gettext::Functions::bindtextdomain($type, C4::Context->config("locale"));
-	Locale::Maketext::Gettext::Functions::textdomain($type);
-	Locale::Maketext::Gettext::Functions::get_handle($locale);
+# 	Locale::Maketext::Gettext::Functions::bindtextdomain($type, C4::Context->config("locale"));
+# 	Locale::Maketext::Gettext::Functions::textdomain($type);
+# 	Locale::Maketext::Gettext::Functions::get_handle($locale);
 
  	return __($text);
 }
+
+
 
 sub to_Button{
     my (%params_hash_ref) = @_;

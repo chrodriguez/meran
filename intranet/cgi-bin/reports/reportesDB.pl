@@ -2,7 +2,7 @@
 
 use strict;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+
 use C4::AR::UploadFile;
 use C4::AR::Reportes;
 use JSON;

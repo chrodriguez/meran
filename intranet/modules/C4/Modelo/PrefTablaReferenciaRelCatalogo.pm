@@ -18,16 +18,13 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
-
+use C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager;
 
 sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset)=@_;
-    use C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager;
-    
     my $ref_valores = C4::Modelo::RefPais::Manager->get_pref_tabla_referencia_rel_catalogo( limit => $limit, offset => $offset);
-        
     return ($ref_valores);
 }
 

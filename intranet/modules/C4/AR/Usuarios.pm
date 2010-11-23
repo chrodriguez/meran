@@ -34,17 +34,20 @@ C4::AR::Usuarios
 
 use strict;
 require Exporter;
-use C4::Context;
+
 use Date::Manip;
 use C4::Date;
 use C4::AR::Validator;
+
 use C4::AR::Prestamos;
 use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrPersona::Manager;
 use C4::Modelo::UsrEstado;
 use C4::Modelo::UsrEstado::Manager;
-use Digest::MD5 qw(md5_base64);
-use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
+
+#use C4::Context;
+#EINAR use Digest::MD5 qw(md5_base64);
+#EINAR use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
 
 use vars qw(@EXPORT @ISA);

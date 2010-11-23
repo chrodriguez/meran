@@ -17,6 +17,11 @@ __PACKAGE__->meta->setup(
     unique_key => [ 'codigo' ],
 
 );
+use C4::Modelo::RefColaborador::Manager;
+use C4::Modelo::PrefValorAutorizado;
+use C4::Modelo::RefIdioma::Manager;
+use Text::LevenshteinXS;
+
 
 sub toString{
 	my ($self) = shift;
@@ -64,8 +69,7 @@ sub setDescripcion{
 sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
-	use C4::Modelo::RefColaborador::Manager;
- 	my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_colaborador
+	my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_colaborador
 						( select   => ['codigo', $campo],
 						  sort_by => ($orden) );
     my @array_valores;
@@ -82,8 +86,7 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self)=shift;
-    	my ($campo,$id)=@_;
-	use C4::Modelo::RefColaborador::Manager;
+   	my ($campo,$id)=@_;
  	my $ref_valores = C4::Modelo::RefColaborador::Manager->get_ref_colaborador
 						( select   => [$campo],
 						  query =>[ codigo => { eq => $id} ]);
@@ -110,7 +113,6 @@ sub getCampo{
 
 
 sub nextMember{
-    use C4::Modelo::PrefValorAutorizado;
     return(C4::Modelo::PrefValorAutorizado->new());
 }
 
@@ -119,8 +121,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::RefIdioma::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){

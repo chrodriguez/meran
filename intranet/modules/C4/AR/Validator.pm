@@ -14,7 +14,7 @@ Synopsis:   Este PM tiene como fin contener todas las funciones que estén dedic
 use strict;
 use C4::AR::Utilidades;
 use C4::AR::Address;
-use CGI::Session;
+#EINAR use CGI::Session;
 
 use vars qw(@EXPORT @ISA);
 

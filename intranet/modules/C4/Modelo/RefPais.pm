@@ -1,6 +1,7 @@
 package C4::Modelo::RefPais;
 
 use strict;
+   
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
@@ -20,7 +21,10 @@ __PACKAGE__->meta->setup(
     unique_key => [ 'iso' ],
 
 );
-
+use C4::Modelo::RefDisponibilidad;
+use C4::Modelo::RefPais::Manager;
+use Text::LevenshteinXS;
+    
 sub toString{
 	my ($self) = shift;
 
@@ -96,7 +100,6 @@ sub setCodigo{
 sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
-	  use C4::Modelo::RefPais::Manager;
     my $ref_valores = C4::Modelo::RefPais::Manager->get_ref_pais
 						  ( select   => ['iso' , $campo],
 						    sort_by => ($orden) );
@@ -114,8 +117,7 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self)=shift;
-    	my ($campo,$id)=@_;
-	use C4::Modelo::RefPais::Manager;
+   	my ($campo,$id)=@_;
  	my $ref_valores = C4::Modelo::RefPais::Manager->get_ref_pais
 						( select   => [$campo],
 						  query =>[ iso => { eq => $id} ]);
@@ -142,7 +144,6 @@ sub getCampo{
 
 
 sub nextMember{
-    use C4::Modelo::RefDisponibilidad;
     return(C4::Modelo::RefDisponibilidad->new());
 }
 
@@ -150,8 +151,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::RefPais::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){

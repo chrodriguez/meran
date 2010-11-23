@@ -11,7 +11,7 @@ use C4::AR::Usuarios;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 @ISA = qw(Exporter);
-@EXPORT = qw( delmembers addmembers sepuedeeliminar checkDocument addborrower updateborrower addperson updateperson);
+@EXPORT_OK = qw( delmembers addmembers sepuedeeliminar checkDocument addborrower updateborrower addperson updateperson);
 
 #delmembers recibe un arreglo de personnumbers y lo que hace es deshabilitarlos de la lista de miembros de la biblioteca, se invoca desde member2.pl  
 
@@ -272,3 +272,8 @@ my $sth=$dbh->prepare($query);
   return (1);
 }
 
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__

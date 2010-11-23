@@ -17,6 +17,11 @@ __PACKAGE__->meta->setup(
     unique_key => [ 'code' ],
 
 );
+use C4::Modelo::RefNivelBibliografico::Manager;
+use C4::Modelo::CatTema;
+use Text::LevenshteinXS;
+    
+
 
 sub toString{
 	my ($self) = shift;
@@ -64,7 +69,6 @@ sub setDescription{
 sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
-	use C4::Modelo::RefNivelBibliografico::Manager;
  	my $ref_valores = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico
 						( select   => ['code' , $campo],
 						  sort_by => ($orden) );
@@ -82,9 +86,8 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self)=shift;
-    	my ($campo,$id)=@_;
-	use C4::Modelo::RefNivelBibliografico::Manager;
- 	my $ref_valores = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico
+    my ($campo,$id)=@_;
+    my $ref_valores = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico
 						( select   => [$campo],
 						  query =>[ code => { eq => $id} ]);
 # 	return ($ref_valores->[0]->getCampo($campo));
@@ -109,7 +112,6 @@ sub getCampo{
 
 
 sub nextMember{
-    use C4::Modelo::CatTema;
     return(C4::Modelo::CatTema->new());
 }
 
@@ -117,8 +119,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::RefNivelBibliografico::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){

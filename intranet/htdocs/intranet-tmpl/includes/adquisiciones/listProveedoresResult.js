@@ -100,11 +100,10 @@ function updateBorrarProveedor(responseText){
     var info        = JSONstring.toObject(responseText);  
     var Messages    = info.Message_arrayref;
     setMessages(Messages);
-        alert('apesaspe');
+    
     if (! (hayError(Messages) ) ){
-        alert('pepe');
-        //inicializar();
-        //mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+        inicializar();
+        mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
         //acutalizo los datos de nivel 2
         //mostrarInfoAltaNivel2(ID_N2);
         //mostrarInfoAltaNivel3(ID_N2);

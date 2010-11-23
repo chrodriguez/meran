@@ -19,8 +19,13 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
 # recibimos solo el id del proveedor y creamos el objeto aca
 my $id_proveedor = $input->param('id_proveedor');
 
+my $comboDeTipoDeDoc = &C4::AR::Utilidades::generarComboTipoDeDoc();
+
 my $proveedor = C4::AR::Proveedores::getProveedorInfoPorId($id_proveedor);
 
+C4::AR::Debug::debug("monedas ".$proveedor->{moneda_ref});
+
 $t_params->{'proveedor'} = $proveedor;
+$t_params->{'combo_tipo_documento'} = $comboDeTipoDeDoc;
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -1,7 +1,8 @@
 package C4::Date;
 
 use strict;
-use C4::Context;
+#EINAR use C4::Context;
+
 use Date::Manip;
 use C4::AR::Preferencias;
 

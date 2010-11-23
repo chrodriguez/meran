@@ -3,9 +3,9 @@ package C4::AR::Reportes;
 use strict;
 no strict "refs";
 use C4::Date;
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA    = qw(Exporter);
-@EXPORT = qw(
+@EXPORT_OK = qw(
 
   &getReportFilter
   &getItemTypes
@@ -567,3 +567,8 @@ sub registroDeUsuarios {
 
 }
 
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__

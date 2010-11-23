@@ -13,11 +13,11 @@ use C4::AR::EstructuraCatalogacionBase;
 
 
 
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 
 @ISA=qw(Exporter);
 
-@EXPORT=qw(
+@EXPORT_OK=qw(
   &crearCatalogo
   &buscarCamposObligatorios
   &buscarCampo

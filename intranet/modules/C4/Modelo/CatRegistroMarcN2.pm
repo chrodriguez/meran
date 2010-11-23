@@ -24,7 +24,8 @@ __PACKAGE__->meta->setup(
     ],
 );
 
-
+use C4::Modelo::CircReserva;
+use C4::Modelo::CircReserva::Manager;
 sub getId2{
     my ($self)  = shift;
 
@@ -435,9 +436,6 @@ sub getCantPrestados{
 =cut
 sub tieneReservas {
     my ($self) = shift;
-
-    use C4::Modelo::CircReserva;
-    use C4::Modelo::CircReserva::Manager;
     my @filtros;
     push(@filtros, ( id2    => { eq => $self->getId2}));
 

@@ -3,6 +3,10 @@
 use strict;
 use CGI;
 use C4::Auth;
+<<<<<<< HEAD:intranet/cgi-bin/catalogacion/estructura/datosDocumento.pl
+=======
+
+>>>>>>> 392fc8ce7552b2fe84deab2c0361e9e6d69bab87:intranet/cgi-bin/catalogacion/estructura/datosDocumento.pl
 use C4::AR::Catalogacion;
 use JSON;
 my $input = new CGI;

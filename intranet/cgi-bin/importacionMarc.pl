@@ -25,7 +25,7 @@
 
 use strict;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+
 use CGI;
 use C4::AR::ImportacionIsoMARC;
 use C4::AR::Busquedas;

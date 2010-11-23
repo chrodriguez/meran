@@ -4,7 +4,7 @@ use strict;
 use CGI;
 use C4::AR::Estantes;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+
 use JSON;
 my $input=new CGI;
 my $authnotrequired= 0;

@@ -10,9 +10,9 @@ use strict;
 require Exporter;
 
 use C4::Context;
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(&ui
+@EXPORT_OK=qw(&ui
            &campoIso
 	   &subCampoIso
 	   &datosCompletos
@@ -177,3 +177,9 @@ sub list{
 	        }
         return (%results);
 }
+
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__

@@ -12,14 +12,14 @@ use C4::Modelo::CatVisualizacionIntra;
 use C4::Modelo::CatVisualizacionIntra::Manager;
 use C4::Modelo::CatEstructuraCatalogacion;
 use C4::Modelo::CatEstructuraCatalogacion::Manager;
-use vars qw($VERSION @EXPORT @ISA);
+use vars qw($VERSION @EXPORT_OK @ISA);
 
 # set the version for version checking
 $VERSION = 0.01;
 
 @ISA=qw(Exporter);
 
-@EXPORT=qw(
+@EXPORT_OK=qw(
 
 	&getConfiguracion
     &deleteConfiguracion

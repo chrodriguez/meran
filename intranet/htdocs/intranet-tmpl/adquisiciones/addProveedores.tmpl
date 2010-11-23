@@ -1,9 +1,12 @@
 [% INCLUDE "intranet-top.inc" %]
 
-
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/addProveedores.js"></script>
 
 [% INCLUDE "FormValidateHelper.inc" %]
+
+[% INCLUDE 'datePicker.inc' %]
+[% INCLUDE 'AutocompleteHelper.inc'  %]
+
 
 <script type="text/javascript">
 
@@ -30,21 +33,28 @@
             <label for="nombre"> [% "Nombre" | i18n %] *</label>
             <input id="nombre" name="nombre" class="required" type="text" size="25">
         </li>
-
-        <li class="sub_item"> 
-            <label for="direccion"> [% "Direccion" | i18n %] </label>
-            <input  id="direccion" name="direccion" type="text" size="25">
+        <li class="sub_item">
+            <label for="apellido"> [% "Apellido" | i18n %] *</label>
+            <input id="apellido" name="apellido" class="required" type="text" size="25">
         </li>
 
         <li class="sub_item">
-            <label for="telefono">[% "Telefono" | i18n %] *</label>
-            <input 	id="telefono" name="telefono" class="required" type="text" size="15">
+            <label for="nro_doc">[% "Documento" | i18n %] *</label>
+            [% combo_tipo_documento %] 
+            <input  id="nro_doc" name="nro_doc" class="required" type="text" size="15" 
+                    value="[% proveedor.getNroDoc %]">
         </li>
 
         <li class="sub_item">
-            <label for="email">[% "Email" | i18n %]</label>
-            <input type=text name="email" id="email" size="25">
+            <label for="razon_social">[% "Razon Social" | i18n %] *</label>
+            <input 	id="razon_social" name="razon_social" class="required" type="text" size="15">
         </li>
+
+        <li class="sub_item">
+            <label for="cuit_cuil">[% "CUIT/CUIL" | i18n %] *</label>
+            <input  id="cuit_cuil" name="cuit_cuil" class="required" type="text" size="15">
+        </li>
+
         [% IF addProveedor %]
                
         [% ELSE  %]
@@ -53,7 +63,59 @@
                      <input type="checkbox" name="proveedor_activo" value="proveedor_activo" />
                 </li>
         [% END %]
-    </ul>
+     </ul>
+    </fieldset>
+  
+<!--    VER COMO MOSTRAR COMBOS DE PAISES; CIUDADES, PROV  -->
+
+ 
+    <fieldset>
+      <legend class="titulo_legend">[% "Datos de contacto del proveedor" | i18n %]</legend>
+        <ul>
+            <li class="sub_item">
+                <label for="pais">[% "Pais" | i18n %] *</label>
+                <input  id="pais" name="pais" class="required" type="text" size="15">
+            </li>
+            <li class="sub_item">
+                <label for="provincia">[% "Provincia" | i18n %] *</label>
+                <input  id="provincia" name="provincia" class="required" type="text" size="15">
+            </li>
+            <li class="sub_item">
+                <label for="ciudad">[% "Ciudad" | i18n %] *</label>
+                <input  id="ciudad" name="ciudad" class="required" type="text" size="15">
+            </li>
+            <li class="sub_item">
+                <label for="domicilio">[% "Domicilio" | i18n %] *</label>
+                <input  id="domicilio" name="domicilio" class="required" type="text" size="15">
+            </li>
+
+            <li class="sub_item">
+                <label for="telefono">[% "Telefono" | i18n %] *</label>
+                <input  id="telefono" name="telefono" class="required" type="text" size="15">
+            </li>
+
+            <li class="sub_item">
+                <label for="fax">[% "Fax" | i18n %] </label>
+                <input  id="fax" name="fax" class="required" type="text" size="15">
+            </li>
+
+            <li class="sub_item">
+                <label for="email">[% "Email" | i18n %]</label>
+                <input type=text name="email" id="email" size="25">
+            </li>
+      
+      </ul>
+</fieldset>
+
+<fieldset>
+      <legend class="titulo_legend">[% "Materiales que provee" | i18n %]</legend>
+</fieldset>
+
+<fieldset>
+      <legend class="titulo_legend">[% "Formas de Envio" | i18n %]</legend>
+</fieldset>
+<fieldset>
+      <legend class="titulo_legend">[% "Monedas" | i18n %]</legend>
 </fieldset>
 
 <!--<fieldset>
@@ -126,7 +188,7 @@
 
 
 
-</fieldset>
+
 </form>
 
     [% INCLUDE "intranet-bottom.inc" %]

@@ -1,5 +1,4 @@
 package C4::Modelo::PrefInformacionReferencia;
-
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
@@ -29,6 +28,7 @@ __PACKAGE__->meta->setup(
     ],
 
 );
+use C4::Modelo::CatAutor;
 
 sub load{
     my $self = $_[0]; # Copy, not shift
@@ -84,14 +84,9 @@ sub modificar{
 }
 
 sub createFromAlias{
-
-    use C4::Modelo::CatAutor;
-
     my ($self)      = shift;
     my $classAlias  = shift;
-
     my $autorTemp   = C4::Modelo::CatAutor->new();
-
     return ($autorTemp->createFromAlias($classAlias));
 }
 

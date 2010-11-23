@@ -30,11 +30,12 @@ package C4::Output;
 use strict;
 require Exporter;
 
-use C4::Context;
-use HTML::Template; #LUEGO DE PASAR TODO ELIMINAR PM, NO SE USA MAS
-use HTML::Template::Expr; #LUEGO DE PASAR TODO ELIMINAR PM, NO SE USA MAS
+#use C4::Context;
 use Template;
 use Template::Filters;
+use HTML::Template; #LUEGO DE PASAR TODO ELIMINAR PM, NO SE USA MAS
+use HTML::Template::Expr; #LUEGO DE PASAR TODO ELIMINAR PM, NO SE USA MAS
+
 use C4::AR::Filtros;
 use C4::AR::Preferencias;
 
@@ -67,16 +68,7 @@ printable string.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-
-		&startpage &endpage
-	     	&mktablehdr &mktableft &mktablerow &mklink
-	     	&endmenu &mkheadr
-	     	&center &endcenter
-	     	&mkform &mkform2 &bold
-	     	&gotopage &mkformnotable &mkform3
-	     	&getkeytableselectoptions
-	     	&pathtotemplate
-		&themelanguage &gettemplate
+                &gettemplate
 	     );
 
 #==========================================================FUNCIONES NUEVAS=================================================
@@ -177,20 +169,22 @@ sub gettemplate {
 
 #=====================================================Fin=====FUNCIONES NUEVAS===============================================
 
-sub printTemplateParams {
-	my ($params) = @_;
-	my $k;
-	my $v;
-
-	while ( ($k,$v) = each %$params ) {
-		print "$k => $v\n";
-	}
-}
+# FIXME  DEPRECATDDDD
+# sub printTemplateParams {
+# 	my ($params) = @_;
+# 	my $k;
+# 	my $v;
+# 
+# 	while ( ($k,$v) = each %$params ) {
+# 		print "$k => $v\n";
+# 	}
+# }
 
 
 #FIXME: this is a quick fix to stop rc1 installing broken
 #Still trying to figure out the correct fix.
-my $path = C4::Context->config('intrahtdocs')."/default/en/includes/";
+# FIXME  DEPRECATDDDD
+# my $path = C4::Context->config('intrahtdocs')."/default/en/includes/";
 
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
@@ -198,44 +192,45 @@ my $path = C4::Context->config('intrahtdocs')."/default/en/includes/";
 
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
-sub themelanguage {
-	my ($htdocs, $tmpl, $section) = @_;
-	my $dbh = C4::Context->dbh;
-	my @languages;
-	my @themes;
-	if ( $section eq "intranet"){
-		push @languages , C4::AR::Preferencias->getValorPreferencia('opaclanguages');
-		push @themes ,  C4::AR::Preferencias->getValorPreferencia('template');
-	}else	{
-		push @languages, C4::AR::Preferencias->getValorPreferencia('opaclanguages');
-		push @themes , C4::AR::Preferencias->getValorPreferencia('opacthemes');
-	}
-	
-	my ($theme, $lang);
-	# searches through the themes and languages. First template it find it returns.
-	# Priority is for getting the theme right.
-	THEME:
-	foreach my $th (@themes) {
-		foreach my $la (@languages) {
-			for (my $pass = 1; $pass <= 2; $pass += 1) {
-			$la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
-# 			if (-e "$htdocs/$th/$la/$tmpl") {
-            if (-e "$htdocs/$th/$tmpl") {
-				$theme = $th;
-				$lang = $la;
-				last THEME;
-			}
-			last unless $la =~ /[-_]/;
-			}
-		}
-	}
-
-	if ($theme and $lang) {
-		return ($theme, $lang);
-	} else {
-		return ('default', 'en');
-	}
-}
+# FIXME  DEPRECATDDDD
+# sub themelanguage {
+# 	my ($htdocs, $tmpl, $section) = @_;
+# 	my $dbh = C4::Context->dbh;
+# 	my @languages;
+# 	my @themes;
+# 	if ( $section eq "intranet"){
+# 		push @languages , C4::AR::Preferencias->getValorPreferencia('opaclanguages');
+# 		push @themes ,  C4::AR::Preferencias->getValorPreferencia('template');
+# 	}else	{
+# 		push @languages, C4::AR::Preferencias->getValorPreferencia('opaclanguages');
+# 		push @themes , C4::AR::Preferencias->getValorPreferencia('opacthemes');
+# 	}
+# 	
+# 	my ($theme, $lang);
+# 	# searches through the themes and languages. First template it find it returns.
+# 	# Priority is for getting the theme right.
+# 	THEME:
+# 	foreach my $th (@themes) {
+# 		foreach my $la (@languages) {
+# 			for (my $pass = 1; $pass <= 2; $pass += 1) {
+# 			$la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
+# # 			if (-e "$htdocs/$th/$la/$tmpl") {
+#             if (-e "$htdocs/$th/$tmpl") {
+# 				$theme = $th;
+# 				$lang = $la;
+# 				last THEME;
+# 			}
+# 			last unless $la =~ /[-_]/;
+# 			}
+# 		}
+# 	}
+# 
+# 	if ($theme and $lang) {
+# 		return ($theme, $lang);
+# 	} else {
+# 		return ('default', 'en');
+# 	}
+# }
 
 
 =item pathtotemplate
@@ -305,72 +300,73 @@ document.
 #'
 # FIXME - Fix POD: it doesn't look in the directory given by the
 # 'includes' option in /etc/koha.conf.
-sub pathtotemplate {
-  my %params = @_;
-  my $template = $params{'template'};
-  my $themeor = $params{'theme'};
-  my $languageor = lc($params{'language'});
-  my $ptype = lc($params{'type'} or 'intranet');
-
-  # FIXME - Make sure $params{'template'} was given. Or else assume
-  # "default".
-  my $type;
-  if ($ptype eq 'opac') {$type = 'opac-tmpl/'; }
-  elsif ($ptype eq 'none') {$type = ''; }
-  elsif ($ptype eq 'intranet') {$type = 'intranet-tmpl/'; }
-  else {$type = $ptype . '/'; }
-
-  my %returns;
-  my $theme = C4::AR::Preferencias->getValorPreferencia("theme") || "default";
-  if ($themeor and
-      C4::AR::Preferencias->getValorPreferencia("allowthemeoverride") =~ qr/$themeor/i)
-  {
-    $theme = $themeor;
-  }
-  my @languageorder = getlanguageorder();
-  my $language = $languageor || shift(@languageorder);
-
-  #where to search for templates
-  my @tmpldirs = ("$path/templates", $path);
-  unshift (@tmpldirs, C4::Context->config('templatedirectory')) if C4::Context->config('templatedirectory');
-  unshift (@tmpldirs, $params{'path'}) if $params{'path'};
-
-  my ($etheme, $elanguage, $epath);
-
-  CHECK: foreach my $edir (@tmpldirs) {
-    foreach $etheme ($theme, 'all', 'default') {
-      foreach $elanguage ($language, @languageorder, 'all','en') {
-				# 'en' is the fallback-language
-      	if (-e "$edir/$type$etheme/$elanguage/$template") {
-      	  $epath = "$edir/$type$etheme/$elanguage/$template";
-      	  last CHECK;
-      	}
-      }
-    }
-  }
-
-  unless ($epath) {
-    warn "Could not find $template in @tmpldirs";
-    return 0;
-  }
-
-  if ($language eq $elanguage) {
-    $returns{'foundlanguage'} = 1;
-  } else {
-    $returns{'foundlanguage'} = 0;
-    warn "The language $language could not be found for $template of $theme.\nServing $elanguage instead.\n";
-  }
-  if ($theme eq $etheme) {
-    $returns{'foundtheme'} = 1;
-  } else {
-    $returns{'foundtheme'} = 0;
-    warn "The template $template could not be found for theme $theme.\nServing $template of $etheme instead.\n";
-  }
-
-  $returns{'path'} = $epath;
-
-  return (%returns);
-}
+# FIXME  DEPRECATDDDD
+# sub pathtotemplate {
+#   my %params = @_;
+#   my $template = $params{'template'};
+#   my $themeor = $params{'theme'};
+#   my $languageor = lc($params{'language'});
+#   my $ptype = lc($params{'type'} or 'intranet');
+# 
+#   # FIXME - Make sure $params{'template'} was given. Or else assume
+#   # "default".
+#   my $type;
+#   if ($ptype eq 'opac') {$type = 'opac-tmpl/'; }
+#   elsif ($ptype eq 'none') {$type = ''; }
+#   elsif ($ptype eq 'intranet') {$type = 'intranet-tmpl/'; }
+#   else {$type = $ptype . '/'; }
+# 
+#   my %returns;
+#   my $theme = C4::AR::Preferencias->getValorPreferencia("theme") || "default";
+#   if ($themeor and
+#       C4::AR::Preferencias->getValorPreferencia("allowthemeoverride") =~ qr/$themeor/i)
+#   {
+#     $theme = $themeor;
+#   }
+#   my @languageorder = getlanguageorder();
+#   my $language = $languageor || shift(@languageorder);
+# 
+#   #where to search for templates
+#   my @tmpldirs = ("$path/templates", $path);
+#   unshift (@tmpldirs, C4::Context->config('templatedirectory')) if C4::Context->config('templatedirectory');
+#   unshift (@tmpldirs, $params{'path'}) if $params{'path'};
+# 
+#   my ($etheme, $elanguage, $epath);
+# 
+#   CHECK: foreach my $edir (@tmpldirs) {
+#     foreach $etheme ($theme, 'all', 'default') {
+#       foreach $elanguage ($language, @languageorder, 'all','en') {
+# 				# 'en' is the fallback-language
+#       	if (-e "$edir/$type$etheme/$elanguage/$template") {
+#       	  $epath = "$edir/$type$etheme/$elanguage/$template";
+#       	  last CHECK;
+#       	}
+#       }
+#     }
+#   }
+# 
+#   unless ($epath) {
+#     warn "Could not find $template in @tmpldirs";
+#     return 0;
+#   }
+# 
+#   if ($language eq $elanguage) {
+#     $returns{'foundlanguage'} = 1;
+#   } else {
+#     $returns{'foundlanguage'} = 0;
+#     warn "The language $language could not be found for $template of $theme.\nServing $elanguage instead.\n";
+#   }
+#   if ($theme eq $etheme) {
+#     $returns{'foundtheme'} = 1;
+#   } else {
+#     $returns{'foundtheme'} = 0;
+#     warn "The template $template could not be found for theme $theme.\nServing $template of $etheme instead.\n";
+#   }
+# 
+#   $returns{'path'} = $epath;
+# 
+#   return (%returns);
+# }
 
 =item getlanguageorder
 
@@ -384,19 +380,20 @@ the Koha database. If neither is set, it defaults to C<en> (English).
 
 =cut
 #'
-sub getlanguageorder () {
-  my @languageorder;
-
-  if ($ENV{'HTTP_ACCEPT_LANGUAGE'}) {
-    @languageorder = split (/\s*,\s*/ ,lc($ENV{'HTTP_ACCEPT_LANGUAGE'}));
-  } elsif (my $order = C4::AR::Preferencias->getValorPreferencia("languageorder")) {
-    @languageorder = split (/\s*,\s*/ ,lc($order));
-  } else { # here should be another elsif checking for apache's languageorder
-    @languageorder = ('en');
-  }
-
-  return (@languageorder);
-}
+# FIXME  DEPRECATDDDD
+# sub getlanguageorder () {
+#   my @languageorder;
+# 
+#   if ($ENV{'HTTP_ACCEPT_LANGUAGE'}) {
+#     @languageorder = split (/\s*,\s*/ ,lc($ENV{'HTTP_ACCEPT_LANGUAGE'}));
+#   } elsif (my $order = C4::AR::Preferencias->getValorPreferencia("languageorder")) {
+#     @languageorder = split (/\s*,\s*/ ,lc($order));
+#   } else { # here should be another elsif checking for apache's languageorder
+#     @languageorder = ('en');
+#   }
+# 
+#   return (@languageorder);
+# }
 
 =item startpage
 
@@ -407,9 +404,10 @@ Returns a string of HTML, the beginning of a new HTML document.
 
 =cut
 #'
-sub startpage() {
-  return("<html>\n");
-}
+# FIXME  DEPRECATDDDD
+# sub startpage() {
+#   return("<html>\n");
+# }
 
 =item gotopage
 
@@ -421,12 +419,13 @@ Generates a snippet of HTML code that will redirect to the given URL
 
 =cut
 #'
-sub gotopage($) {
-  my ($target) = shift;
-  #print "<br>goto target = $target<br>";
-  my $string = "<META HTTP-EQUIV=Refresh CONTENT=\"0;URL=http:$target\">";
-  return $string;
-}
+# FIXME  DEPRECATDDDD
+# sub gotopage($) {
+#   my ($target) = shift;
+#   #print "<br>goto target = $target<br>";
+#   my $string = "<META HTTP-EQUIV=Refresh CONTENT=\"0;URL=http:$target\">";
+#   return $string;
+# }
 
 
 =item endmenu
@@ -443,32 +442,33 @@ will be for the catalog pages.
 
 =cut
 #'
-sub endmenu {
-  my ($type) = @_;
-  if ( ! defined $type ) { $type=''; }
-  # FIXME - It's bad form to die in a CGI script. It's even worse form
-  # to die without issuing an error message.
-  if ($type eq 'issue') {
-    open (FILE,"<$path/issues-bottom.inc") || die;
-  } elsif ($type eq 'opac') {
-    open (FILE,"<$path/opac-bottom.inc") || die;
-  } elsif ($type eq 'member') {
-    open (FILE,"<$path/members-bottom.inc") || die;
-  } elsif ($type eq 'acquisitions') {
-    open (FILE,"<$path/acquisitions-bottom.inc") || die;
-  } elsif ($type eq 'report') {
-    open (FILE,"<$path/reports-bottom.inc") || die;
-  } elsif ($type eq 'circulation') {
-    open (FILE,"<$path/circulation-bottom.inc") || die;
-  } elsif ($type eq 'admin') {
-    open (FILE,"<$path/parameters-bottom.inc") || die;
-  } else {
-    open (FILE,"<$path/cat-bottom.inc") || die;
-  }
-  my @string=<FILE>;
-  close FILE;
-  return @string;
-}
+# FIXME  DEPRECATDDDD
+# sub endmenu {
+#   my ($type) = @_;
+#   if ( ! defined $type ) { $type=''; }
+#   # FIXME - It's bad form to die in a CGI script. It's even worse form
+#   # to die without issuing an error message.
+#   if ($type eq 'issue') {
+#     open (FILE,"<$path/issues-bottom.inc") || die;
+#   } elsif ($type eq 'opac') {
+#     open (FILE,"<$path/opac-bottom.inc") || die;
+#   } elsif ($type eq 'member') {
+#     open (FILE,"<$path/members-bottom.inc") || die;
+#   } elsif ($type eq 'acquisitions') {
+#     open (FILE,"<$path/acquisitions-bottom.inc") || die;
+#   } elsif ($type eq 'report') {
+#     open (FILE,"<$path/reports-bottom.inc") || die;
+#   } elsif ($type eq 'circulation') {
+#     open (FILE,"<$path/circulation-bottom.inc") || die;
+#   } elsif ($type eq 'admin') {
+#     open (FILE,"<$path/parameters-bottom.inc") || die;
+#   } else {
+#     open (FILE,"<$path/cat-bottom.inc") || die;
+#   }
+#   my @string=<FILE>;
+#   close FILE;
+#   return @string;
+# }
 
 =item mktablehdr
 
@@ -480,9 +480,10 @@ declaration.
 
 =cut
 #'
-sub mktablehdr() {
-    return("<table border=0 cellspacing=0 cellpadding=5>\n");
-}
+# FIXME  DEPRECATDDDD
+# sub mktablehdr() {
+#     return("<table border=0 cellspacing=0 cellpadding=5>\n");
+# }
 
 =item mktablerow
 
@@ -507,32 +508,33 @@ document root.
 
 =cut
 #'
-sub mktablerow {
-    #the last item in data may be a backgroundimage
-
-    # FIXME
-    # should this be a foreach (1..$cols) loop?
-
-  my ($cols,$colour,@data)=@_;
-  my $i=0;
-  my $string="<tr valign=top bgcolor=$colour>";
-  while ($i <$cols){
-      if (defined $data[$cols]) { # if there is a background image
-	  $string.="<td background=\"$data[$cols]\">";
-      } else { # if there's no background image
-	  $string.="<td>";
-      }
-      if (! defined $data[$i]) {$data[$i]="";}
-      if ($data[$i] eq "") {
-	  $string.=" &nbsp; </td>";
-      } else {
-	  $string.="$data[$i]</td>";
-      }
-      $i++;
-  }
-  $string .= "</tr>\n";
-  return($string);
-}
+# FIXME  DEPRECATDDDD
+# sub mktablerow {
+#     #the last item in data may be a backgroundimage
+# 
+#     # FIXME
+#     # should this be a foreach (1..$cols) loop?
+# 
+#   my ($cols,$colour,@data)=@_;
+#   my $i=0;
+#   my $string="<tr valign=top bgcolor=$colour>";
+#   while ($i <$cols){
+#       if (defined $data[$cols]) { # if there is a background image
+# 	  $string.="<td background=\"$data[$cols]\">";
+#       } else { # if there's no background image
+# 	  $string.="<td>";
+#       }
+#       if (! defined $data[$i]) {$data[$i]="";}
+#       if ($data[$i] eq "") {
+# 	  $string.=" &nbsp; </td>";
+#       } else {
+# 	  $string.="$data[$i]</td>";
+#       }
+#       $i++;
+#   }
+#   $string .= "</tr>\n";
+#   return($string);
+# }
 
 =item mktableft
 
@@ -544,58 +546,60 @@ declaration.
 
 =cut
 #'
-sub mktableft() {
-  return("</table>\n");
-}
+# FIXME  DEPRECATDDDD
+# sub mktableft() {
+#   return("</table>\n");
+# }
 
 # FIXME - This is never used.
-sub mkform{
-  my ($action,%inputs)=@_;
-  my $string="<form action=$action method=post>\n";
-  $string .= mktablehdr();
-  my $key;
-  my @keys=sort keys %inputs;
-
-  my $count=@keys;
-  my $i2=0;
-  while ( $i2<$count) {
-    my $value=$inputs{$keys[$i2]};
-    my @data=split('\t',$value);
-    #my $posn = shift(@data);
-    if ($data[0] eq 'hidden'){
-      $string .= "<input type=hidden name=$keys[$i2] value=\"$data[1]\">\n";
-    } else {
-      my $text;
-      if ($data[0] eq 'radio') {
-        $text="<input type=radio name=$keys[$i2] value=$data[1]>$data[1]
-	<input type=radio name=$keys[$i2] value=$data[2]>$data[2]";
-      }
-      if ($data[0] eq 'text') {
-        $text="<input type=$data[0] name=$keys[$i2] value=\"$data[1]\">";
-      }
-      if ($data[0] eq 'textarea') {
-        $text="<textarea name=$keys[$i2] wrap=physical cols=40 rows=4>$data[1]</textarea>";
-      }
-      if ($data[0] eq 'select') {
-        $text="<select name=$keys[$i2]>";
-	my $i=1;
-       	while ($data[$i] ne "") {
-	  my $val = $data[$i+1];
-      	  $text .= "<option value=$data[$i]>$val";
-      	  $i += 2;
-	}
-	$text .= "</select>";
-      }
-      $string .= mktablerow(2,'white',$keys[$i2],$text);
-      #@order[$posn] =mktablerow(2,'white',$keys[$i2],$text);
-    }
-    $i2++;
-  }
-  #$string=$string.join("\n",@order);
-  $string .= mktablerow(2,'white','<input type=submit>','<input type=reset>');
-  $string .= mktableft;
-  $string .= "</form>";
-}
+# FIXME  DEPRECATDDDD
+# sub mkform{
+#   my ($action,%inputs)=@_;
+#   my $string="<form action=$action method=post>\n";
+#   $string .= mktablehdr();
+#   my $key;
+#   my @keys=sort keys %inputs;
+# 
+#   my $count=@keys;
+#   my $i2=0;
+#   while ( $i2<$count) {
+#     my $value=$inputs{$keys[$i2]};
+#     my @data=split('\t',$value);
+#     #my $posn = shift(@data);
+#     if ($data[0] eq 'hidden'){
+#       $string .= "<input type=hidden name=$keys[$i2] value=\"$data[1]\">\n";
+#     } else {
+#       my $text;
+#       if ($data[0] eq 'radio') {
+#         $text="<input type=radio name=$keys[$i2] value=$data[1]>$data[1]
+# 	<input type=radio name=$keys[$i2] value=$data[2]>$data[2]";
+#       }
+#       if ($data[0] eq 'text') {
+#         $text="<input type=$data[0] name=$keys[$i2] value=\"$data[1]\">";
+#       }
+#       if ($data[0] eq 'textarea') {
+#         $text="<textarea name=$keys[$i2] wrap=physical cols=40 rows=4>$data[1]</textarea>";
+#       }
+#       if ($data[0] eq 'select') {
+#         $text="<select name=$keys[$i2]>";
+# 	my $i=1;
+#        	while ($data[$i] ne "") {
+# 	  my $val = $data[$i+1];
+#       	  $text .= "<option value=$data[$i]>$val";
+#       	  $i += 2;
+# 	}
+# 	$text .= "</select>";
+#       }
+#       $string .= mktablerow(2,'white',$keys[$i2],$text);
+#       #@order[$posn] =mktablerow(2,'white',$keys[$i2],$text);
+#     }
+#     $i2++;
+#   }
+#   #$string=$string.join("\n",@order);
+#   $string .= mktablerow(2,'white','<input type=submit>','<input type=reset>');
+#   $string .= mktableft;
+#   $string .= "</form>";
+# }
 
 =item mkform3
 
@@ -664,60 +668,61 @@ the C<label>Ns are empty, the rest of the list will be ignored.
 
 =cut
 #'
-sub mkform3 {
-  my ($action, %inputs) = @_;
-  my $string = "<form action=\"$action\" method=\"post\">\n";
-  $string   .= mktablehdr();
-  my $key;
-  my @keys = sort(keys(%inputs));	# FIXME - Why do these need to be
-					# sorted?
-  my @order;
-  my $count = @keys;
-  my $i2 = 0;
-  while ($i2 < $count) {
-    my $value=$inputs{$keys[$i2]};
-    # FIXME - Why use a tab-separated string? Why not just use an
-    # anonymous array?
-    my @data=split('\t',$value);
-    my $posn = $data[2];
-    if ($data[0] eq 'hidden'){
-      $order[$posn]="<input type=hidden name=$keys[$i2] value=\"$data[1]\">\n";
-    } else {
-      my $text;
-      if ($data[0] eq 'radio') {
-        $text="<input type=radio name=$keys[$i2] value=$data[1]>$data[1]
-	<input type=radio name=$keys[$i2] value=$data[2]>$data[2]";
-      }
-      # FIXME - Is 40 the right size in all cases?
-      if ($data[0] eq 'text') {
-        $text="<input type=$data[0] name=$keys[$i2] value=\"$data[1]\" size=40>";
-      }
-      # FIXME - Is 40x4 the right size in all cases?
-      if ($data[0] eq 'textarea') {
-        $text="<textarea name=$keys[$i2] cols=40 rows=4>$data[1]</textarea>";
-      }
-      if ($data[0] eq 'select') {
-        $text="<select name=$keys[$i2]>";
-	my $i=1;
-       	while ($data[$i] ne "") {
-	  my $val = $data[$i+1];
-      	  $text .= "<option value=$data[$i]>$val";
-      	  $i += 2;
-	}
-	$text .= "</select>";
-      }
-#      $string=$string.mktablerow(2,'white',$keys[$i2],$text);
-      $order[$posn]=mktablerow(2,'white',$keys[$i2],$text);
-    }
-    $i2++;
-  }
-  my $temp=join("\n",@order);
-  $string .= $temp;
-  $string .= mktablerow(1,'white','<input type=submit>');
-  $string .= mktableft;
-  $string .= "</form>";
-  # FIXME - A return statement, while not strictly necessary, would be nice.
-}
+# FIXME  DEPRECATDDDD
+# sub mkform3 {
+#   my ($action, %inputs) = @_;
+#   my $string = "<form action=\"$action\" method=\"post\">\n";
+#   $string   .= mktablehdr();
+#   my $key;
+#   my @keys = sort(keys(%inputs));	# FIXME - Why do these need to be
+# 					# sorted?
+#   my @order;
+#   my $count = @keys;
+#   my $i2 = 0;
+#   while ($i2 < $count) {
+#     my $value=$inputs{$keys[$i2]};
+#     # FIXME - Why use a tab-separated string? Why not just use an
+#     # anonymous array?
+#     my @data=split('\t',$value);
+#     my $posn = $data[2];
+#     if ($data[0] eq 'hidden'){
+#       $order[$posn]="<input type=hidden name=$keys[$i2] value=\"$data[1]\">\n";
+#     } else {
+#       my $text;
+#       if ($data[0] eq 'radio') {
+#         $text="<input type=radio name=$keys[$i2] value=$data[1]>$data[1]
+# 	<input type=radio name=$keys[$i2] value=$data[2]>$data[2]";
+#       }
+#       # FIXME - Is 40 the right size in all cases?
+#       if ($data[0] eq 'text') {
+#         $text="<input type=$data[0] name=$keys[$i2] value=\"$data[1]\" size=40>";
+#       }
+#       # FIXME - Is 40x4 the right size in all cases?
+#       if ($data[0] eq 'textarea') {
+#         $text="<textarea name=$keys[$i2] cols=40 rows=4>$data[1]</textarea>";
+#       }
+#       if ($data[0] eq 'select') {
+#         $text="<select name=$keys[$i2]>";
+# 	my $i=1;
+#        	while ($data[$i] ne "") {
+# 	  my $val = $data[$i+1];
+#       	  $text .= "<option value=$data[$i]>$val";
+#       	  $i += 2;
+# 	}
+# 	$text .= "</select>";
+#       }
+# #      $string=$string.mktablerow(2,'white',$keys[$i2],$text);
+#       $order[$posn]=mktablerow(2,'white',$keys[$i2],$text);
+#     }
+#     $i2++;
+#   }
+#   my $temp=join("\n",@order);
+#   $string .= $temp;
+#   $string .= mktablerow(1,'white','<input type=submit>');
+#   $string .= mktableft;
+#   $string .= "</form>";
+#   # FIXME - A return statement, while not strictly necessary, would be nice.
+# }
 
 =item mkformnotable
 
@@ -779,33 +784,34 @@ text for the button.
 =back
 
 =cut
-#'
-sub mkformnotable{
-  my ($action,@inputs)=@_;
-  my $string="<form action=$action method=post>\n";
-  my $count=@inputs;
-  for (my $i=0; $i<$count; $i++){
-    if ($inputs[$i][0] eq 'hidden'){
-      $string .= "<input type=hidden name=$inputs[$i][1] value=\"$inputs[$i][2]\">\n";
-    }
-    if ($inputs[$i][0] eq 'radio') {
-      $string .= "<input type=radio name=$inputs[1] value=$inputs[$i][2]>$inputs[$i][2]";
-    }
-    if ($inputs[$i][0] eq 'text') {
-      $string .= "<input type=$inputs[$i][0] name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
-    }
-    if ($inputs[$i][0] eq 'textarea') {
-        $string .= "<textarea name=$inputs[$i][1] wrap=physical cols=40 rows=4>$inputs[$i][2]</textarea>";
-    }
-    if ($inputs[$i][0] eq 'reset'){
-      $string .= "<input type=reset name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
-    }
-    if ($inputs[$i][0] eq 'submit'){
-      $string .= "<input type=submit name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
-    }
-  }
-  $string .= "</form>";
-}
+# #'
+# FIXME  DEPRECATDDDD
+# sub mkformnotable{
+#   my ($action,@inputs)=@_;
+#   my $string="<form action=$action method=post>\n";
+#   my $count=@inputs;
+#   for (my $i=0; $i<$count; $i++){
+#     if ($inputs[$i][0] eq 'hidden'){
+#       $string .= "<input type=hidden name=$inputs[$i][1] value=\"$inputs[$i][2]\">\n";
+#     }
+#     if ($inputs[$i][0] eq 'radio') {
+#       $string .= "<input type=radio name=$inputs[1] value=$inputs[$i][2]>$inputs[$i][2]";
+#     }
+#     if ($inputs[$i][0] eq 'text') {
+#       $string .= "<input type=$inputs[$i][0] name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
+#     }
+#     if ($inputs[$i][0] eq 'textarea') {
+#         $string .= "<textarea name=$inputs[$i][1] wrap=physical cols=40 rows=4>$inputs[$i][2]</textarea>";
+#     }
+#     if ($inputs[$i][0] eq 'reset'){
+#       $string .= "<input type=reset name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
+#     }
+#     if ($inputs[$i][0] eq 'submit'){
+#       $string .= "<input type=submit name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
+#     }
+#   }
+#   $string .= "</form>";
+# }
 
 =item mkform2
 
@@ -881,70 +887,71 @@ corresponding choice will initially be selected.
 
 =cut
 #'
-sub mkform2{
-    # FIXME
-    # No tests yet.  Once tests are written,
-    # this function can be cleaned up with the following steps:
-    #  turn the while loop into a foreach loop
-    #  pull the nested if,elsif structure back up to the main level
-    #  pull the code for the different kinds of inputs into separate
-    #   functions
-  my ($action,%inputs)=@_;
-  my $string="<form action=$action method=post>\n";
-  $string .= mktablehdr();
-  my $key;
-  my @order;
-  while ( my ($key, $value) = each %inputs) {
-    my @data=split('\t',$value);
-    my $posn = shift(@data);
-    my $reqd = shift(@data);
-    my $ltext = shift(@data);
-    if ($data[0] eq 'hidden'){
-      $string .= "<input type=hidden name=$key value=\"$data[1]\">\n";
-    } else {
-      my $text;
-      if ($data[0] eq 'radio') {
-        $text="<input type=radio name=$key value=$data[1]>$data[1]
-	<input type=radio name=$key value=$data[2]>$data[2]";
-      } elsif ($data[0] eq 'text') {
-        my $size = $data[1];
-        if ($size eq "") {
-          $size=40;
-        }
-        $text="<input type=$data[0] name=$key size=$size value=\"$data[2]\">";
-      } elsif ($data[0] eq 'textarea') {
-        my @size=split("x",$data[1]);
-        if ($data[1] eq "") {
-          $size[0] = 40;
-          $size[1] = 4;
-        }
-        $text="<textarea name=$key wrap=physical cols=$size[0] rows=$size[1]>$data[2]</textarea>";
-      } elsif ($data[0] eq 'select') {
-        $text="<select name=$key>";
-	my $sel=$data[1];
-	my $i=2;
-       	while ($data[$i] ne "") {
-	  my $val = $data[$i+1];
-       	  $text .= "<option value=\"$data[$i]\"";
-	  if ($data[$i] eq $sel) {
-	     $text .= " selected";
-	  }
-          $text .= ">$val";
-          $i += 2;
-	}
-	$text .= "</select>";
-      }
-      if ($reqd eq "R") {
-        $ltext .= " (Req)";
-	}
-      $order[$posn] =mktablerow(2,'white',$ltext,$text);
-    }
-  }
-  $string .= join("\n",@order);
-  $string .= mktablerow(2,'white','<input type=submit>','<input type=reset>');
-  $string .= mktableft;
-  $string .= "</form>";
-}
+# FIXME  DEPRECATDDDD
+# sub mkform2{
+#     # FIXME
+#     # No tests yet.  Once tests are written,
+#     # this function can be cleaned up with the following steps:
+#     #  turn the while loop into a foreach loop
+#     #  pull the nested if,elsif structure back up to the main level
+#     #  pull the code for the different kinds of inputs into separate
+#     #   functions
+#   my ($action,%inputs)=@_;
+#   my $string="<form action=$action method=post>\n";
+#   $string .= mktablehdr();
+#   my $key;
+#   my @order;
+#   while ( my ($key, $value) = each %inputs) {
+#     my @data=split('\t',$value);
+#     my $posn = shift(@data);
+#     my $reqd = shift(@data);
+#     my $ltext = shift(@data);
+#     if ($data[0] eq 'hidden'){
+#       $string .= "<input type=hidden name=$key value=\"$data[1]\">\n";
+#     } else {
+#       my $text;
+#       if ($data[0] eq 'radio') {
+#         $text="<input type=radio name=$key value=$data[1]>$data[1]
+# 	<input type=radio name=$key value=$data[2]>$data[2]";
+#       } elsif ($data[0] eq 'text') {
+#         my $size = $data[1];
+#         if ($size eq "") {
+#           $size=40;
+#         }
+#         $text="<input type=$data[0] name=$key size=$size value=\"$data[2]\">";
+#       } elsif ($data[0] eq 'textarea') {
+#         my @size=split("x",$data[1]);
+#         if ($data[1] eq "") {
+#           $size[0] = 40;
+#           $size[1] = 4;
+#         }
+#         $text="<textarea name=$key wrap=physical cols=$size[0] rows=$size[1]>$data[2]</textarea>";
+#       } elsif ($data[0] eq 'select') {
+#         $text="<select name=$key>";
+# 	my $sel=$data[1];
+# 	my $i=2;
+#        	while ($data[$i] ne "") {
+# 	  my $val = $data[$i+1];
+#        	  $text .= "<option value=\"$data[$i]\"";
+# 	  if ($data[$i] eq $sel) {
+# 	     $text .= " selected";
+# 	  }
+#           $text .= ">$val";
+#           $i += 2;
+# 	}
+# 	$text .= "</select>";
+#       }
+#       if ($reqd eq "R") {
+#         $ltext .= " (Req)";
+# 	}
+#       $order[$posn] =mktablerow(2,'white',$ltext,$text);
+#     }
+#   }
+#   $string .= join("\n",@order);
+#   $string .= mktablerow(2,'white','<input type=submit>','<input type=reset>');
+#   $string .= mktableft;
+#   $string .= "</form>";
+# }
 
 =item endpage
 
@@ -955,9 +962,10 @@ Returns a string of HTML, the end of an HTML document.
 
 =cut
 #'
-sub endpage() {
-  return("</body></html>\n");
-}
+# FIXME  DEPRECATDDDD
+# sub endpage() {
+#   return("</body></html>\n");
+# }
 
 =item mklink
 
@@ -968,11 +976,12 @@ Returns an HTML string, where C<$text> is a link to C<$url>.
 
 =cut
 #'
-sub mklink($$) {
-  my ($url,$text)=@_;
-  my $string="<a href=\"$url\">$text</a>";
-  return ($string);
-}
+# FIXME  DEPRECATDDDD
+# sub mklink($$) {
+#   my ($url,$text)=@_;
+#   my $string="<a href=\"$url\">$text</a>";
+#   return ($string);
+# }
 
 =item mkheadr
 
@@ -989,24 +998,25 @@ break.
 
 =cut
 #'
-sub mkheadr {
-    # FIXME
-    # would it be better to make this more generic by accepting an optional
-    # argument with a closing tag instead of a numeric type?
-
-  my ($type,$text)=@_;
-  my $string;
-  if ($type eq '1'){
-    $string="<FONT SIZE=6><em>$text</em></FONT><br>";
-  }
-  if ($type eq '2'){
-    $string="<FONT SIZE=6><em>$text</em></FONT>";
-  }
-  if ($type eq '3'){
-    $string="<FONT SIZE=6><em>$text</em></FONT><p>";
-  }
-  return ($string);
-}
+# FIXME  DEPRECATDDDD
+# sub mkheadr {
+#     # FIXME
+#     # would it be better to make this more generic by accepting an optional
+#     # argument with a closing tag instead of a numeric type?
+# 
+#   my ($type,$text)=@_;
+#   my $string;
+#   if ($type eq '1'){
+#     $string="<FONT SIZE=6><em>$text</em></FONT><br>";
+#   }
+#   if ($type eq '2'){
+#     $string="<FONT SIZE=6><em>$text</em></FONT>";
+#   }
+#   if ($type eq '3'){
+#     $string="<FONT SIZE=6><em>$text</em></FONT><p>";
+#   }
+#   return ($string);
+# }
 
 =item center and endcenter
 
@@ -1017,13 +1027,15 @@ C<&center> and C<&endcenter> take no arguments and return HTML tags
 
 =cut
 #'
-sub center() {
-  return ("<CENTER>\n");
-}
-
-sub endcenter() {
-  return ("</CENTER>\n");
-}
+# FIXME  DEPRECATDDDD
+# sub center() {
+#   return ("<CENTER>\n");
+# }
+# 
+# FIXME  DEPRECATDDDD
+# sub endcenter() {
+#   return ("</CENTER>\n");
+# }
 
 =item bold
 
@@ -1033,11 +1045,12 @@ sub endcenter() {
 Returns a string of HTML that renders C<$text> in bold.
 
 =cut
+# FIXME  DEPRECATDDDD
 #'
-sub bold($) {
-  my ($text)=shift;
-  return("<b>$text</b>");
-}
+# sub bold($) {
+#   my ($text)=shift;
+#   return("<b>$text</b>");
+# }
 
 =item getkeytableselectoptions
 
@@ -1068,53 +1081,54 @@ C<$keyfieldname>) matches C<$default>, it will be selected by default.
 
 =cut
 #'
-#---------------------------------------------
+#----------
+# FIXME  DEPRECATDDDD-----------------------------------
 # Create an HTML option list for a <SELECT> form tag by using
 #    values from a DB file
-sub getkeytableselectoptions {
-	use strict;
-	# inputs
-	my (
-		$dbh,		# DBI handle
-				# FIXME - Obsolete argument
-		$tablename,	# name of table containing list of choices
-		$keyfieldname,	# column name of code to use in option list
-		$descfieldname,	# column name of descriptive field
-		$showkey,	# flag to show key in description
-		$default,	# optional default key
-	)=@_;
-	my $selectclause;	# return value
-
-	my (
-		$sth, $query,
-		$key, $desc, $orderfieldname,
-	);
-	my $debug=0;
-
-    	$dbh = C4::Context->dbh;
-
-	if ( $showkey ) {
-		$orderfieldname=$keyfieldname;
-	} else {
-		$orderfieldname=$descfieldname;
-	}
-	$query= "select $keyfieldname,$descfieldname
-		from $tablename
-		order by $orderfieldname ";
-	print "<PRE>Query=$query </PRE>\n" if $debug;
-	$sth=$dbh->prepare($query);
-	$sth->execute;
-	while ( ($key, $desc) = $sth->fetchrow) {
-	    if ($showkey || ! $desc ) { $desc="$key - $desc"; }
-	    $selectclause.="<option";
-	    if (defined $default && $default eq $key) {
-		$selectclause.=" selected";
-	    }
-	    $selectclause.=" value='$key'>$desc\n";
-	    print "<PRE>Sel=$selectclause </PRE>\n" if $debug;
-	}
-	return $selectclause;
-} # sub getkeytableselectoptions
+# sub getkeytableselectoptions {
+# 	use strict;
+# 	# inputs
+# 	my (
+# 		$dbh,		# DBI handle
+# 				# FIXME - Obsolete argument
+# 		$tablename,	# name of table containing list of choices
+# 		$keyfieldname,	# column name of code to use in option list
+# 		$descfieldname,	# column name of descriptive field
+# 		$showkey,	# flag to show key in description
+# 		$default,	# optional default key
+# 	)=@_;
+# 	my $selectclause;	# return value
+# 
+# 	my (
+# 		$sth, $query,
+# 		$key, $desc, $orderfieldname,
+# 	);
+# 	my $debug=0;
+# 
+#     	$dbh = C4::Context->dbh;
+# 
+# 	if ( $showkey ) {
+# 		$orderfieldname=$keyfieldname;
+# 	} else {
+# 		$orderfieldname=$descfieldname;
+# 	}
+# 	$query= "select $keyfieldname,$descfieldname
+# 		from $tablename
+# 		order by $orderfieldname ";
+# 	print "<PRE>Query=$query </PRE>\n" if $debug;
+# 	$sth=$dbh->prepare($query);
+# 	$sth->execute;
+# 	while ( ($key, $desc) = $sth->fetchrow) {
+# 	    if ($showkey || ! $desc ) { $desc="$key - $desc"; }
+# 	    $selectclause.="<option";
+# 	    if (defined $default && $default eq $key) {
+# 		$selectclause.=" selected";
+# 	    }
+# 	    $selectclause.=" value='$key'>$desc\n";
+# 	    print "<PRE>Sel=$selectclause </PRE>\n" if $debug;
+# 	}
+# 	return $selectclause;
+# } # sub getkeytableselectoptions
 
 #---------------------------------
 

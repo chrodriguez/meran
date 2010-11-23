@@ -17,7 +17,10 @@ __PACKAGE__->meta->setup(
 
 );
 
-
+use C4::Modelo::UsrRefCategoriaSocio;
+use C4::Modelo::CatTema::Manager;
+use Text::LevenshteinXS;
+    
 sub toString{
 	my ($self) = shift;
 
@@ -64,7 +67,6 @@ sub setNombre{
 sub obtenerValoresCampo {
 	my ($self)=shift;
     my ($campo,$orden)=@_;
-	use C4::Modelo::CatTema::Manager;
  	my $ref_valores = C4::Modelo::CatTema::Manager->get_cat_tema
 						( select  => [ $self->meta->primary_key ,$campo ],
 						  sort_by => ($orden) );
@@ -82,9 +84,8 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self)=shift;
-    	my ($campo,$id)=@_;
-	use C4::Modelo::CatTema::Manager;
- 	my $ref_valores = C4::Modelo::CatTema::Manager->get_cat_tema
+    my ($campo,$id)=@_;
+    my $ref_valores = C4::Modelo::CatTema::Manager->get_cat_tema
 						( select   => [$campo],
 						  query =>[ id => { eq => $id} ]);
     	
@@ -110,7 +111,6 @@ sub getCampo{
 
 
 sub nextMember{
-    use C4::Modelo::UsrRefCategoriaSocio;
     return(C4::Modelo::UsrRefCategoriaSocio->new());
 }
 
@@ -118,8 +118,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::CatTema::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){

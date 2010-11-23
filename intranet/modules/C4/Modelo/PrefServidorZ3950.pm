@@ -1,8 +1,10 @@
 package C4::Modelo::PrefServidorZ3950;
 
 use strict;
-
 use base qw(C4::Modelo::DB::Object::AutoBase2);
+use C4::Modelo::RefColaborador;
+use C4::Modelo::PrefServidorZ3950::Manager;
+use Text::LevenshteinXS;
 
 __PACKAGE__->meta->setup(
     table   => 'pref_servidor_z3950',
@@ -22,8 +24,8 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
+
 sub nextMember{
-    use C4::Modelo::RefColaborador;
     return(C4::Modelo::RefColaborador->new());
 }
 
@@ -146,8 +148,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::PrefServidorZ3950::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){

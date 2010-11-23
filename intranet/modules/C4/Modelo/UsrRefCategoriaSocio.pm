@@ -17,8 +17,12 @@ __PACKAGE__->meta->setup
 
 );
 
+use C4::Modelo::UsrRefTipoDocumento;
+use C4::Modelo::UsrRefCategoriaSocio::Manager;
+use Text::LevenshteinXS;
+    
 sub nextMember{
-    use C4::Modelo::UsrRefTipoDocumento;
+    
     return(C4::Modelo::UsrRefTipoDocumento->new());
 }
 
@@ -160,7 +164,7 @@ sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo, $orden)=@_;
 
-    use C4::Modelo::UsrRefCategoriaSocio::Manager;
+    
     my $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio
                         ( select   => [$self->meta->primary_key ,$campo],
                           sort_by => ($orden) );
@@ -178,8 +182,7 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
     my ($self)=shift;
-        my ($campo,$id)=@_;
-    use C4::Modelo::UsrRefCategoriaSocio::Manager;
+    my ($campo,$id)=@_;
     my $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio
                         ( select   => [$campo],
                           query =>[ categorycode => { eq => $id} ]);
@@ -208,8 +211,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::UsrRefCategoriaSocio::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){

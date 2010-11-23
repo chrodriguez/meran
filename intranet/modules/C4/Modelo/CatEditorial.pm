@@ -1,7 +1,6 @@
 package C4::Modelo::CatEditorial;
 
 use strict;
-
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -14,7 +13,8 @@ __PACKAGE__->meta->setup(
 
     primary_key_columns => [ 'id' ],
 );
-
+use C4::Modelo::CatTema::Manager;
+use C4::Modelo::RefEstado;
 
 sub toString{
 	my ($self) = shift;
@@ -62,8 +62,7 @@ sub setEditorial{
 sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
-	use C4::Modelo::CatTema::Manager;
- 	my $ref_valores = C4::Modelo::CatTema::Manager->get_cat_tema
+	my $ref_valores = C4::Modelo::CatTema::Manager->get_cat_tema
 						( select   => [$self->meta->primary_key , $campo],
 						  sort_by => ($orden) );
     my @array_valores;
@@ -80,9 +79,8 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self)=shift;
-    	my ($campo,$id)=@_;
-	use C4::Modelo::CatTema::Manager;
- 	my $ref_valores = C4::Modelo::CatTema::Manager->get_cat_tema
+    my ($campo,$id)=@_;
+    my $ref_valores = C4::Modelo::CatTema::Manager->get_cat_tema
 						( select   => [$campo],
 						  query =>[ id => { eq => $id} ]);
     	
@@ -108,8 +106,6 @@ sub getCampo{
 
 
 sub nextMember{
-    use C4::Modelo::RefEstado;
-
     return(C4::Modelo::RefEstado->new());
 }
 

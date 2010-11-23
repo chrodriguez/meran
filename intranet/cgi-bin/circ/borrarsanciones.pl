@@ -22,7 +22,7 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+
 use Date::Manip;
 use C4::Date;
 use C4::AR::Sanciones;

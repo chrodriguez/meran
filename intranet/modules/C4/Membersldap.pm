@@ -98,3 +98,9 @@ my $error= 0;
 return($error);
 
 }
+
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__

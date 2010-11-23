@@ -26,7 +26,7 @@ __PACKAGE__->meta->setup(
 
 );
 
-
+use C4::Modelo::RefSoporte::Manager;
 
 
 sub getCampo{
@@ -72,7 +72,6 @@ sub setDato{
 sub obtenerValoresCampo {
     my ($self) = shift;
     my ($campo,$orden)=@_;
-    use C4::Modelo::RefSoporte::Manager;
     my $ref_valores = C4::Modelo::RefSoporte::Manager->get_ref_soporte
                                                 ( select      => ['idSupport' , $campo],
                                                             sort_by => ($orden) );

@@ -17,6 +17,9 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
+use C4::Modelo::RefIdioma::Manager;
+use Text::LevenshteinXS;
+
 sub lastTable{
     return(1);
 }
@@ -76,8 +79,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::RefIdioma::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){
