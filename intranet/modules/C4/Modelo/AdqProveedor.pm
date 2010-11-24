@@ -85,8 +85,6 @@ sub agregarProveedor{
     $self->setRazonSocial($params->{'razon_social'});
     $self->setCuitCuil($params->{'cuit_cuil'});
     $self->setFax($params->{'fax'});
-    $self->setPais($params->{'pais'});
-    $self->setProvincia($params->{'provincia'});
     $self->setCiudad($params->{'ciudad'});
     $self->setPlazoReclamo($params->{'plazo_reclamo'});
     $self->setActivo(1);
@@ -109,8 +107,6 @@ sub editarProveedor{
     $self->setRazonSocial($params->{' razon_social'});
     $self->setCuitCuil($params->{'cuit_cuil'});
     $self->setFax($params->{'fax'});
-    $self->setPais($params->{'pais'});
-    $self->setProvincia($params->{'provincia'});
     $self->setCiudad($params->{'ciudad'});
     $self->setPlazoReclamo($params->{'plazo_reclamo'});
     $self->setActivo(1);

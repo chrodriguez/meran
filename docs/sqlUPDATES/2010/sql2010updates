@@ -455,3 +455,8 @@ CREATE TABLE IF NOT EXISTS `adq_proveedor_moneda` (
   `moneda_id` int(11) NOT NULL,
   PRIMARY KEY (`proveedor_id`,`moneda_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- email unico en proveedor
+ALTER TABLE `adq_proveedor` ADD UNIQUE (
+`email`
+)

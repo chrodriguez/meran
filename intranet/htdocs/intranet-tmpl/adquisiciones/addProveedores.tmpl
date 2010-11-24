@@ -65,16 +65,13 @@
         [% END %]
      </ul>
     </fieldset>
-  
-<!--    VER COMO MOSTRAR COMBOS DE PAISES; CIUDADES, PROV  -->
-
- 
     <fieldset>
       <legend class="titulo_legend">[% "Datos de contacto del proveedor" | i18n %]</legend>
         <ul>
             <li class="sub_item">
                 <label for="ciudad">[% "Ciudad" | i18n %] *</label>
                 <input  id="ciudad" name="ciudad" class="required" type="text" size="15">
+                <input  id="id_ciudad" type="hidden" name="ciudad" class="required" type="text" size="15">
             </li>
             <li class="sub_item">
                 <label for="domicilio">[% "Domicilio" | i18n %] *</label>

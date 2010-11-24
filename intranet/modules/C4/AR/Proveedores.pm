@@ -241,7 +241,7 @@ sub _verificarDatosProveedor {
 
           #   valida apellido
           if($apellido ne "") {
-              if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($apellido)))){
+               if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($apellido)))){
                     $msg_object->{'error'}= 1;
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A009', 'params' => []} ) ;
                     }
@@ -287,27 +287,27 @@ sub _verificarDatosProveedor {
 
           
           #   valida el pais contiene algo
-          if($pais ne ""){
-              if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($pais)))){
-                  $msg_object->{'error'}= 1;
-                  C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A017', 'params' => []} ) ;
-              }
-          } else {
-                   $msg_object->{'error'}= 1;
-                   C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A018', 'params' => []} ) ;
-                
-          }
-
-          if($provincia ne ""){
-              if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($provincia)))){
-                  $msg_object->{'error'}= 1;
-                  C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A019', 'params' => []} ) ;
-              }
-          } else {
-                   $msg_object->{'error'}= 1;
-                   C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A020', 'params' => []} ) ;
-                
-          }
+#           if($pais ne ""){
+#               if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($pais)))){
+#                   $msg_object->{'error'}= 1;
+#                   C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A017', 'params' => []} ) ;
+#               }
+#           } else {
+#                    $msg_object->{'error'}= 1;
+#                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A018', 'params' => []} ) ;
+#                 
+#           }
+# 
+#           if($provincia ne ""){
+#               if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($provincia)))){
+#                   $msg_object->{'error'}= 1;
+#                   C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A019', 'params' => []} ) ;
+#               }
+#           } else {
+#                    $msg_object->{'error'}= 1;
+#                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A020', 'params' => []} ) ;
+#                 
+#           }
 
 
           if($ciudad ne ""){
