@@ -158,7 +158,7 @@ sub setTipoDoc{
     my ($self) = shift;
     my ($tipoDoc) = @_;
     utf8::encode($tipoDoc);
-    $self->tipo_doc($tipoDoc);
+    $self->usr_ref_tipo_documento_id($tipoDoc);
 }
 
 sub setNroDoc{
@@ -191,25 +191,11 @@ sub setCuitCuil{
     }
 }
 
-sub setPais{
-    my ($self) = shift;
-    my ($pais) = @_;
-    utf8::encode($pais);
-    $self->pais($pais);
-}
-
-sub setProvincia{
-    my ($self) = shift;
-    my ($prov) = @_;
-    utf8::encode($prov);
-    $self->provincia($prov);  
-}
-
 sub setCiudad{
     my ($self) = shift;
     my ($ciu) = @_;
     utf8::encode($ciu);
-    $self->ciudad($ciu);
+    $self->ref_localidad_id($ciu);
     
 }
 
@@ -268,7 +254,7 @@ sub setActivo{
 
 sub getId{
     my ($self) = shift;
-    return ($self->id_proveedor);
+    return ($self->id);
 }
 
 sub getApellido{
@@ -283,7 +269,7 @@ sub getNombre{
 
 sub getTipoDoc{
     my ($self) = shift;
-    return ($self->tipo_doc);
+    return ($self->usr_ref_tipo_documento_id);
 }
 
 sub getNroDoc{
@@ -301,19 +287,9 @@ sub getCuitCuil{
     return ($self->cuit_cuil);
 }
 
-sub getPais{
-    my ($self) = shift;
-    return ($self->pais);
-}
-
-sub getProvincia{
-    my ($self) = shift;
-    return ($self->provincia);
-}
-
 sub getCiudad{
     my ($self) = shift;
-    return ($self->ciudad);
+    return ($self->ref_localidad_id);
 }
 
 sub getDomicilio{
