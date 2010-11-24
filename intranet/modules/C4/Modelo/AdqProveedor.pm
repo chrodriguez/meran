@@ -37,7 +37,7 @@ __PACKAGE__->meta->setup(
       usr_ref_tipo_documento_id => 
       {
          class       => 'C4::Modelo::RefTipoDocumento',
-         key_columns => { tipo_doc => 'idTipoDoc' },
+         key_columns => { id => 'idTipoDoc' },
          type        => 'one to one',
        },
       ref_localidad_id => 
