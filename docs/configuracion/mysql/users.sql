@@ -32,7 +32,7 @@ GRANT SELECT, UPDATE on  usr_persona                    to userOPAC@localhost;
 GRANT SELECT, UPDATE on  usr_socio                      to userOPAC@localhost;
 
 -- Permisos de la intra
-GRANT ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  *   to userINTRA@localhost;
+GRANT SELECT,ALTER,INSERT,UPDATE, DELETE, CREATE, DROP on  *   to userINTRA@localhost;
 
 -- Permisos de dev y admin
 GRANT ALL on  *   to userDevelop@localhost;

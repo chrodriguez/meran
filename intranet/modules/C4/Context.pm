@@ -180,6 +180,7 @@ sub new
 		# If the $KOHA_CONF environment variable is set, use
 		# that. Otherwise, use the built-in default.
 		$conf_fname = $ENV{"MERAN_CONF"} || CONFIG_FNAME;
+		
 	}
 	$self->{"config_file"} = $conf_fname;
 

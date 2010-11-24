@@ -26,44 +26,67 @@ use C4::AR::Utilidades;
 use C4::AR::Reportes;
 
 my $input = new CGI;
-my $obj=$input->param('obj') || 0;
+my $obj = $input->param('obj') || 0;
 
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
-my ($template, $session, $t_params, $data_url);
+$obj = C4::AR::Utilidades::from_json_ISO($obj);
+my ( $template, $session, $t_params, $data_url );
 
-if (!$obj){
-        ($template, $session, $t_params) = get_template_and_user({
-                                template_name => "reports/altas_registro.tmpl",
-                                query => $input,
-                                type => "intranet",
-                                authnotrequired => 0,
-                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-                                debug => 1,
-			            });
-}else{
-        ($template, $session, $t_params) = get_template_and_user({
-                                template_name => "reports/altas_registro_result.tmpl",
-                                query => $input,
-                                type => "intranet",
-                                authnotrequired => 0,
-                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-                                debug => 1,
-                        });
+if ( !$obj ) {
+	( $template, $session, $t_params ) = get_template_and_user(
+		{
+			template_name   => "reports/altas_registro.tmpl",
+			query           => $input,
+			type            => "intranet",
+			authnotrequired => 0,
+			flagsrequired   => {
+				ui             => 'ANY',
+				tipo_documento => 'ANY',
+				accion         => 'CONSULTA',
+				entorno        => 'undefined'
+			},
+			debug => 1,
+		}
+	);
+}
+else {
+	( $template, $session, $t_params ) = get_template_and_user(
+		{
+			template_name   => "reports/altas_registro_result.tmpl",
+			query           => $input,
+			type            => "intranet",
+			authnotrequired => 0,
+			flagsrequired   => {
+				ui             => 'ANY',
+				tipo_documento => 'ANY',
+				accion         => 'CONSULTA',
+				entorno        => 'undefined'
+			},
+			debug => 1,
+		}
+	);
 
-        $t_params->{'data'} = C4::AR::Reportes::getArrayHash('getItemTypes',$obj);
-        
-        my ($data,$is_array_of_hash) = C4::AR::Reportes::altasRegistro($obj);
-        my ($path,$filename) = C4::AR::Reportes::toXLS($data,$is_array_of_hash,'Pagina 1','Altas de Registro');
-        
-        $t_params->{'filename'} = '/reports/'.$filename;
+	$t_params->{'data'} = C4::AR::Reportes::getArrayHash( 'getItemTypes', $obj );
+	my $ini = $obj->{'ini'};
+	my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+	$obj->{'cantR'} = $cantR;
+	$obj->{'fin'}   = $ini;
+	$obj->{'ini'} = $ini; 
+	my $funcion     = $obj->{'funcion'};
+	my ( $cantidad, $data ) = C4::AR::Reportes::altasRegistro($obj);
+C4::AR::Debug::debug("CANTIDAD TOTALLLLLLLLLLLLLLLLLLLLLL: ".$cantidad);
+	$t_params->{'data'} = $data;
+	
+	$t_params->{'paginador'}    = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
+
+#my ($path,$filename) = C4::AR::Reportes::toXLS($data,$is_array_of_hash,'Pagina 1','Altas de Registro');
+#$t_params->{'filename'} = '/reports/'.$filename;
 
 }
 
 my %params_for_combo = {};
 $params_for_combo{'default'} = 'ALL';
-$t_params->{'data_url'} = $data_url;
-$t_params->{'item_type_combo'} = C4::AR::Utilidades::generarComboTipoNivel3(\%params_for_combo);
+$t_params->{'item_type_combo'} = C4::AR::Utilidades::generarComboTipoNivel3( \%params_for_combo );
 $t_params->{'ui_combo'} = C4::AR::Utilidades::generarComboUI();
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::Auth::output_html_with_http_headers( $template, $t_params, $session );

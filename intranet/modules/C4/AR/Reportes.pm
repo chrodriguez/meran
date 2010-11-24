@@ -25,20 +25,56 @@ sub altasRegistro {
 	my $date_begin = $params->{'date_begin'};
 	my $date_end   = $params->{'date_end'};
 	my $item_type  = $params->{'item_type'};
+	my $dateformat = C4::Date::get_date_format();
+	my @filtros;
+
+	push(
+		@filtros,
+		(
+			date => {
+				eq => format_date_in_iso( $date_begin, $dateformat ),
+				gt => format_date_in_iso( $date_begin, $dateformat )
+			}
+		)
+	);
+
+	push(
+		@filtros,
+		(
+			date => {
+				eq => format_date_in_iso( $date_end, $dateformat ),
+				lt => format_date_in_iso( $date_end, $dateformat )
+			}
+		)
+	);
 
 	my ($cat_registro_n3) =
 	  C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+		query           => \@filtros,
 		select          => ['*'],
-		require_objects => ['nivel1.*'],
+		require_objects => ['nivel1'],
+		limit   => $params->{'cantR'},
+        offset  => $params->{'ini'},
 	  );
-    my %item_type_hash = {0};
+
+	my ($cantidad) =
+	  C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(
+		query           => \@filtros,
+	  );
+	my %item_type_hash = {0};
+	my @result_filtered;
+	
 	foreach my $record (@$cat_registro_n3) {
-		my $item_type = $record->getTipoDocumento;
-		if ( !$item_type_hash{$item_type} ) {
-			$item_type_hash{$item_type} = 0;
+		my %hash_temp = {};
+		my $n3_item_type = $record->nivel2->getTipoDocumento;
+		if ( ($item_type eq $n3_item_type ) || ($item_type eq 'ALL') ) {
+			$hash_temp{'id1'} = $record->nivel2->id1;
+			push(@result_filtered,\%hash_temp)
 		}
-		$item_type_hash{$item_type}++;
 	}
+	
+	my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @result_filtered);
+	return ($cantidad,\@result_filtered);
 }
 
 sub getReportFilter {
@@ -327,6 +363,8 @@ sub toXLS {
 	  : ( titleByUser( 'xls', $report_type ) );
 
 	my $path      = $reports_dir . '/' . $filename;
+	
+	C4::AR::Debug::debug("PATH DEL XLS: ".$path);
 	my $workbook  = Spreadsheet::WriteExcel->new($path);
 	my $worksheet = $workbook->add_worksheet($sheet);
 	my $format    = $workbook->add_format();
