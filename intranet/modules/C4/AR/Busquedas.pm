@@ -1,6 +1,6 @@
 package C4::AR::Busquedas;
 
-#Copyright (C) 2003-2008  Linti, Facultad de Inform�tica, UNLP
+#Copyright (C) 2003-2008  Linti, Facultad de Informática, UNLP
 #This file is part of Koha-UNLP
 #
 #This program is free software; you can redistribute it and/or
@@ -30,6 +30,8 @@ use C4::AR::Nivel2;
 use C4::AR::Nivel3;
 use C4::AR::PortadasRegistros;
 use Text::Aspell;
+use C4::Modelo::RepHistorialBusqueda;
+
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -1472,6 +1474,7 @@ sub busquedaSimplePorTitulo{
 }
 
 sub t_loguearBusqueda {
+#     require C4::Modelo::RepHistorialBusqueda;
     my($loggedinuser,$desde,$http_user_agent,$search_array)=@_;
 
     my $msg_object= C4::AR::Mensajes::create();

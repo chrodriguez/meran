@@ -126,9 +126,15 @@
                           [% 'NO SE PERMITE CIRCULAR' | i18n %]
                       [% END %] <!--END IF permiso_para_circular -->
                 </td>
-                <td>
-                    <input TYPE="image" name="marc"  VALUE="detalle MARC" src="[% themelang %]/images/MARC.png" title="[% 'Detalle MARC' | i18n %]" 
-                            onClick="detalleMARC('[% id3 %]')">
+                <td> 
+		[% PERL %]
+                                          print C4::AR::Filtros::to_Icon( 
+                                                                          boton   =>  "icon_marc",
+                                                                          onClick =>   "detalleMARC('[% id3 %]');", 
+                                                                          title   =>   "[% 'Detalle MARC' | i18n %]",
+                                                                              alternClass=> "botonCentradoTabla",
+                                                                      ) ;
+                                  [% END %]
                 </td>
     </tr>
 [% END %]<!-- END FOREACH NIVEL 3 -->

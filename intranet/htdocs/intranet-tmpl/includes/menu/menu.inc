@@ -1,3 +1,5 @@
+
+
       <div class="header-bottom">
       <div class="logo_Superior">
   </div>
@@ -117,13 +119,22 @@
                      <ul>
                         <li>
                             [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Proveedores' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/adquisiciones/formProveedores.pl", 
-                                                                title =>    "[% 'Proveedores' | i18n %]"
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Listado de Proveedores' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/adquisiciones/listProveedores.pl", 
+                                                                title =>    "[% 'Listado de Proveedores' | i18n %]"
                                                             ) ;
                             [% END %]
                         </li>
-		      </ul>
+                      <li>
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Agregar Proveedor' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/adquisiciones/addProveedores.pl", 
+                                                                title =>    "[% 'Agregar Proveedores' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </li>
+                    </ul>
+                   
                   </li>
 
                   <li><h3 class="menu_intermedio">[% 'Control de autoridades' | i18n %]</h3>

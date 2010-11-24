@@ -184,9 +184,20 @@
     /*=================================================Fin===Estante=======================================================*/
 
     /*=================================================Proveedores=========================================================*/
-    POR_FAVOR_INGRESE_EL_NOMBRE = "[% 'Por favor ingrese un nombre' | i18n %]";
-    POR_FAVOR_INGRESE_UNA_DIRECCION = "[% 'Por favor ingrese una direccion' | i18n %]";
+    POR_FAVOR_INGRESE_UN_NOMBRE = "[% 'Por favor ingrese un nombre' | i18n %]";
+    POR_FAVOR_INGRESE_UN_DOMICILIO = "[% 'Por favor ingrese un domicilio' | i18n %]";
     POR_FAVOR_INGRESE_UN_TELEFONO = "[% 'Por favor ingrese un telefono' | i18n %]";
+    PROVEEDOR_ALERT_TITLE= "[% 'Advertencia de cat\u00e1logo' | i18n %]";
+    POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA = "[% 'Por favor ingrese una direcci\u00f3n de email v\u00e1lida' | i18n %]";
+    POR_FAVOR_INGRESE_UN_APELLIDO = "[% 'Por favor ingrese un apellido' | i18n %]";
+    POR_FAVOR_INGRESE_UN_TIPO_DE_DOC = "[% 'Por favor seleccione un tipo de documento' | i18n %]";
+    POR_FAVOR_INGRESE_UN_NRO_DE_DOC = "[% 'Por favor ingrese un n\u00famero de documento' | i18n %]";
+    POR_FAVOR_INGRESE_UNA_RAZON_SOCIAL = "[% 'Por favor ingrese una raz\u00f3n social' | i18n %]";
+    POR_FAVOR_INGRESE_UN_CUIT_CUIL= "[% 'Por favor ingrese un n\u00famero de CUIT o CUIL' | i18n %]";
+    POR_FAVOR_INGRESE_UN_PAIS = "[% 'Por favor seleccione un pais' | i18n %]";
+    POR_FAVOR_INGRESE_UNA_PROV = "[% 'Por favor seleccione una provincia' | i18n %]";
+    POR_FAVOR_INGRESE_UNA_CIUDAD = "[% 'Por favor seleccione una ciudad' | i18n %]";
+    
     
     /*=================================================Fin===Proveedor=======================================================*/
 

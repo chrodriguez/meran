@@ -10,20 +10,22 @@ package C4::AR::Utilidades;
 
 use strict;
 require Exporter;
-use C4::Context;
-use Date::Manip;
-use C4::Date;
-use C4::AR::Estadisticas;
-use C4::AR::Referencias;
-use C4::AR::ControlAutoridades;
-use CGI::Session;
-use CGI;
-use Encode;
-use JSON;
-use POSIX qw(ceil floor); #para redondear cuando divido un numero
-use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
-#use C4::Date;
+use C4::AR::Referencias;
+
+use C4::AR::ControlAutoridades;
+use C4::Date;
+use Encode;
+use POSIX qw(ceil floor); 
+# EINAR use Date::Manip;
+#Einar use C4::AR::Estadisticas;
+#Einar use C4::Context;
+#Einar use CGI::Session;
+#Einar use CGI;
+#Einar use JSON;
+use JSON;
+#Einar use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
+
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
@@ -1085,7 +1087,7 @@ sub InitPaginador{
 
     if (($iniParam eq "")|($iniParam <= 0)){
             $ini=0;
-        $pageNumber=1;
+	    $pageNumber=1;
     } else {
         $ini= ($iniParam-1)* $cantR;
         $pageNumber= $iniParam;
@@ -1369,7 +1371,7 @@ sub ASCIItoHEX {
 sub HEXtoASCII {
     my ($char) = @_;
 
-    use Switch;
+    require Switch;
    
     switch ($char) {
         case "\x20"     { $char =  "#"   }
@@ -1429,8 +1431,8 @@ Obtiene todas las categorias, sin repetición de la tabla authorised_values.
 =cut
 sub obtenerValoresAutorizados{
 
-    use C4::Modelo::PrefValorAutorizado;
-    use C4::Modelo::PrefValorAutorizado::Manager;
+    require C4::Modelo::PrefValorAutorizado;
+    require C4::Modelo::PrefValorAutorizado::Manager;
 
     my $valAuto_array_ref;
     my @filtros;
@@ -1453,7 +1455,7 @@ sub obtenerDatosValorAutorizado{
 
     my ($categoria)= @_;
 
-    use C4::Modelo::PrefValorAutorizado;
+    require C4::Modelo::PrefValorAutorizado;
     my $valAuto_array_ref = C4::Modelo::PrefValorAutorizado::Manager->get_pref_valor_autorizado( query => [ category => { eq => $categoria} ]);
     my %autoValueHash;
 
@@ -1572,7 +1574,7 @@ sub validateBarcode{
 sub generarComboPermisos{
 
     my (@label,$values);
-    use C4::Modelo::PermCatalogo;
+    require C4::Modelo::PermCatalogo;
     push (@label,"Unidad De Informaci&oacute;n");
     push (@label,"Tipo de Documento");
     push (@label,"Datos Nivel 1");
@@ -1823,7 +1825,7 @@ sub generarComboTipoPrestamo{
     my @select_tipo_nivel3_array;
     my %select_tipo_prestamo_hash;
 
-    use C4::Modelo::CircRefTipoPrestamo::Manager;
+    require C4::Modelo::CircRefTipoPrestamo::Manager;
     my ($tipoPrestamo_array)= C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo();
 
     foreach my $tipoPrestamo (@$tipoPrestamo_array) {
@@ -1875,7 +1877,7 @@ sub generarComboTablasDeReferencia{
     my @select_tabla_ref_array;
     my %select_tabla_ref_array;
 
-    use C4::Modelo::PrefTablaReferencia::Manager;
+    require C4::Modelo::PrefTablaReferencia::Manager;
     my ($tabla_ref_array)= C4::Modelo::PrefTablaReferencia::Manager->get_pref_tabla_referencia();
     
 
@@ -1930,7 +1932,7 @@ sub generarComboDePerfilesOPAC{
     my @select_perfil_ref_array;
     my %select_perfil_ref_array;
 
-    use C4::Modelo::CatPerfilOpac::Manager;
+    require C4::Modelo::CatPerfilOpac::Manager;
     my ($perfiles)= C4::Modelo::CatPerfilOpac::Manager->get_cat_perfil_opac();
     
 
@@ -2164,7 +2166,7 @@ sub generarComboTipoDeOperacion{
 
     my ($params) = @_;
 
-    use C4::Modelo::RefTipoOperacion::Manager;
+    require C4::Modelo::RefTipoOperacion::Manager;
     my @select_tipoOperacion_Values;
     my %select_tipoOperacion_Labels;
     my $result = C4::Modelo::RefTipoOperacion::Manager->get_ref_tipo_operacion();
@@ -2308,7 +2310,7 @@ sub arrayObjectsToJSONString{
     my ($objects_array) = @_;
     my @objects_array_JSON;
 
-    use utf8;
+    require utf8;
 
     for(my $i=0; $i<scalar(@$objects_array); $i++ ){
         push (@objects_array_JSON, $objects_array->[$i]->as_json);
@@ -2989,8 +2991,8 @@ sub getDate{
 
 
 sub getFeriados{
-    use C4::Modelo::PrefFeriado;
-    use C4::Modelo::PrefFeriado::Manager;
+    require C4::Modelo::PrefFeriado;
+    require C4::Modelo::PrefFeriado::Manager;
 
     my $feriados = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(sort_by => ['fecha DESC']);
     my @dates;
@@ -3006,8 +3008,8 @@ sub setFeriado{
 
     my ($fecha,$status,$texto_feriado) = @_;
 
-    use C4::Modelo::PrefFeriado;
-    use C4::Modelo::PrefFeriado::Manager;
+    require C4::Modelo::PrefFeriado;
+    require C4::Modelo::PrefFeriado::Manager;
     my $dateformat      = C4::Date::get_date_format();
     $fecha              = C4::Date::format_date_in_iso($fecha, $dateformat);
 

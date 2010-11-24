@@ -4,7 +4,7 @@ use strict;
 use CGI;
 use C4::AR::Z3950;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+
 use MARC::Record;
 use C4::AR::PortadasRegistros;
 use JSON;

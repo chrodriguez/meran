@@ -2,14 +2,14 @@
 
 use strict;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+
 use C4::AR::UploadFile;
 use JSON;
 use CGI;
 
 my $input = new CGI;
 my $authnotrequired= 0;
-my $editing = $input->param('edit');;
+my $editing = $input->param('edit');
 
 if($editing){
     my ($template, $session, $t_params)  = get_template_and_user({  
@@ -160,7 +160,7 @@ Se elimina el usuario
 
 
 =item
-Se elimina el usuario
+Se agrega el usuario
 =cut
     elsif($tipoAccion eq "AGREGAR_USUARIO"){
         my ($loggedinuser, $session, $flags) = checkauth( $input, 

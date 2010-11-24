@@ -4,7 +4,7 @@ require Exporter;
 use CGI;
 use C4::Auth;         # checkauth, getnro_socio.
 use C4::Circulation::Circ2;
-use C4::Interface::CGI::Output;
+
 use C4::Date;
 
 my $query = new CGI;

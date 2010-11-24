@@ -1,0 +1,225 @@
+<script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function() {
+           makeToggle('datos_tabla_div_user','trigger',null,false);
+           $('.user_pic_fancy').fancybox();
+      });
+      
+function BorrarProveedor(id){  
+    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,PROVEEDOR_ALERT_TITLE, function(confirmStatus){
+
+        if(confirmStatus){
+            objAH                   = new AjaxHelper(updateBorrarProveedor);
+            objAH.debug             = true;
+            objAH.url               = "/cgi-bin/koha/adquisiciones/proveedoresDB.pl";
+                    objAH.id_array         = [id];
+            //objAH.nivel             = 3;
+            objAH.itemtype          = $("#id_proveedor").val();
+            objAH.tipoAccion        = "ELIMINAR";
+            objAH.sendToServer();
+        }
+    });
+}
+
+function updateBorrarProveedor(responseText){
+    var info        = JSONstring.toObject(responseText);  
+    var Messages    = info.Message_arrayref;
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        alert('pepe');
+        //inicializar();
+        //mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+        //acutalizo los datos de nivel 2
+        //mostrarInfoAltaNivel2(ID_N2);
+        //mostrarInfoAltaNivel3(ID_N2);
+    }
+}
+      
+</script>
+
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedoresResult.js"></script>
+
+[% INCLUDE "FormValidateHelper.inc" %]
+
+<script type="text/javascript">
+
+
+ $(document).ready(function() {
+//        onEnter("nombre_proveedor",consultar);
+ });
+
+</script>
+
+
+<div class="contenedor_paginador">[% paginador %]</div>
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (Proveedores):" | i18n %]</legend>
+        <div class="datos_tabla_div_proveedor">
+            <div class="resultados_consulta">[% "La cantidad de Proveedores es" | i18n %]: [% cantidad %]</div> 
+            <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% proveedor_busqueda %]</div> 
+            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                <thead>
+<!--                <tr class="titulo_tabla_resultado">
+            
+                    <th class="click" onclick="ordenar('nombre_proveedor')" 
+                        Title="[% 'Ordenar Nombre de Proveedor.' | i18n %]" width="12%">[% "Nombre de Proveedor" | i18n %]
+                    </th>
+                    <th>
+                      [% "Direcci&oacute;n" | i18n %]
+                    </th>
+                    <th>
+                        [% "Tel&eacute;fono" | i18n %]
+                    </th>
+                    <th>
+                        [% "Mail" | i18n %]
+                    </th>
+                    <th>[% "Acciones" | i18n %]</th>          
+                </tr>-->
+                    <tr class="titulo_tabla_resultado">
+                        <th>
+                            [% "Nombre de Proveedor" | i18n %]
+                        </th>
+                        <th>
+                            [% "Apellido" | i18n %]
+                        </th>
+                        <th>
+                            [% "Tipo y nro de Documento" | i18n %]
+                        </th>
+                        <th>
+                            [% "Raz&oacute;n Social" | i18n %]
+                        </th>
+                        <th>
+                            [% "CUIT/CIUL" | i18n %]
+                        </th>
+                    <th>
+                        [% "Mail" | i18n %]
+                    </th>
+            <!--             <th>
+                            [% "Pa&iacute;s" | i18n %]
+                        </th>
+                        <th>
+                            [% "Provincia" | i18n %]
+                        </th>
+                        <th>
+                            [% "Ciudad" | i18n %]
+                        </th>
+                        <th>
+                            [% "Domicilio" | i18n %]
+                        </th>
+                        <th>
+                            [% "Tel&eacute;fono" | i18n %]
+                        </th>
+                        <th>
+                            [% "Fax" | i18n %]
+                        </th>
+                        <th>
+                            [% "Mail" | i18n %]
+                        </th>-->
+<!--                         <th>
+                            [% "Plazo para reclamo" | i18n %]
+                        </th>  -->
+                        <th>
+                            [% "Acciones" | i18n %]
+                        </th>           
+                    </tr>
+                </thead>
+            <tbody>
+            
+            [% FOREACH resultsloop %]   
+                <tr  align="center">
+
+                      <td align="left" class="proveedores">
+                          [% proveedor.getNombre %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getApellido %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getTipoDoc %] [%proveedor.getNroDoc %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getRazonSocial %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getCuitCuil %]
+                      </td>
+<!--                      <td align="left" class="proveedores">
+                          [% proveedor.getPlazoReclamo %]
+                      </td>-->
+          <!--            <td align="left" class="proveedores">
+                          [% proveedor.getPais %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getProvincia %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getCiudad %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getDomicilio %]
+                      </td>
+
+                      <td align="left" class="proveedores">
+                          [% proveedor.getTelefono %]
+                      </td>
+                      <td align="left" class="proveedores"> -->
+<!--                            FIXME si no lo muestro asi se rompe!!!!!! ver -->
+<!--              <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>
+                          [% proveedor.getFax %]
+                      </td>-->
+                                                <!-- FIXME si no lo muestro asi se rompe!!!!!! ver -->
+<!--                      <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>-->
+                     
+                     <td align="left" class="proveedores">
+                          [% proveedor.getEmail %]
+                      </td>
+                  
+                      <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
+                      <td align='left' width="9%" class="proveedores">
+                           
+
+                      <!--  Deberia llevar a un tmpl que muestre los datos de contacto del proveedor -->
+                          <div class="click horizontal icon_mas">
+                              [% PERL %]
+                                            print C4::AR::Filtros::link_to(   
+                                                                              text =>     C4::AR::Filtros::to_Icon( boton   => "icon_mas" ),
+                                                                              url =>      "/cgi-bin/koha/adquisiciones/proveedoresDB.pl", 
+                                                                              params =>   ["id_proveedor=[% proveedor.getId %]",
+                                                                                          "accion=DETALLE"],
+                                                                              title =>    "[% 'Ver datos de contacto' | i18n %]"
+                                                                        );
+                              [% END %]
+                          </div>
+                          <div class="click horizontal icon_edicion">
+                              [% PERL %]
+                              print C4::AR::Filtros::link_to(   text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
+                                                                url =>  "/cgi-bin/koha/adquisiciones/datosProveedor.pl", 
+                                                                params =>   ["nombre_proveedor=[% proveedor.getNombre %]","direccion=[% proveedor.getDireccion %]",
+                                                                             "telefono=[% proveedor.getTelefono %]","email=[% proveedor.getEmail %]","action=EDITAR",
+                                                                              "id_proveedor=[% proveedor.getId %]"],
+                                                                title =>    "[% 'Editar Proveedor' | i18n %]"
+                                                          );
+                             [% END %]
+              </div>
+              <div class="click horizontal icon_borrar">
+                [% PERL %]
+                
+                        print C4::AR::Filtros::to_Icon(    
+                                            boton   => "icon_borrar",
+                                            onClick => "BorrarProveedor([% proveedor.getId %]);return false;",
+                                            title   => "[% 'Borrar' | i18n %]",
+                ) ;
+                
+                [% END %]
+                                                           
+
+            [% END %]
+              <tr>
+                    <td class="lineafinaltabla"  align="left" colspan="14"></td>
+              </tr>
+            </tbody>
+            </table>
+        </div>
+</fieldset>

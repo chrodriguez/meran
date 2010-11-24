@@ -3,8 +3,6 @@ package C4::Modelo::CatEstructuraCatalogacion;
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
-use Switch;
-
 
 __PACKAGE__->meta->setup(
     table   => 'cat_estructura_catalogacion',
@@ -66,12 +64,14 @@ __PACKAGE__->meta->setup(
     ]
 
 );
-
+use Switch;
 use utf8;
+use Digest::MD5 qw(md5_hex);
+use C4::Modelo::PrefInformacionReferencia;
+
+
 
 sub agregar{
-    use Digest::MD5 qw(md5_hex);
-    use C4::Modelo::PrefInformacionReferencia;
     my ($self)      = shift;
     my ($data_hash) = @_;
 

@@ -1,0 +1,123 @@
+[% INCLUDE "intranet-top.inc" %] 
+
+  <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedoresResult.js"></script>
+
+[% INCLUDE "WindowHelper.inc" %] 
+[% INCLUDE "ChangePasswordHelper.inc"  %]
+
+  <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
+<div>
+      <!--    DETALLE PROVEEDOR -->
+
+      <fieldset>
+          <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Datos del proveedor" | i18n %]'>
+                              [% "Datos del proveedor" | i18n %]
+          </legend>  
+          <div id="detalleProveedor">
+             <input type="hidden" id="id_proveedor" value="[% proveedor.getId %]">
+	      <li class="sub_item">
+		  <label for="nombre"> [% "Nombre" | i18n %] *</label>
+		  <input id="nombre" name="nombre" class="required" type="text" size="25" value="[% proveedor.getNombre %]">
+	      </li>
+
+          <li class="sub_item">
+          <label for="apellido"> [% "Apellido" | i18n %] *</label>
+          <input id="apellido" name="apellido" class="required" type="text" size="25" value="[% proveedor.getApellido %]">
+          </li>
+
+          <li class="sub_item"> 
+          <label for="tipo_documento"> [% "Tipo Documento" | i18n %] *</label>
+          [% combo_tipo_documento %] 
+<!--           <input  id="tipo_documento" name="tipo_documento" class="required"  type="text" size="25" value="[% proveedor.getTipoDoc %]"> -->
+          </li>
+
+          <li class="sub_item"> 
+          <label for="numero_documento"> [% "Numero Documento" | i18n %] *</label>
+          <input  id="numero_documento" name="numero_documento" class="required"  type="text" size="25" value="[% proveedor.getNroDoc %]">
+          </li>
+
+          <li class="sub_item"> 
+          <label for="razon_social"> [% "Razon Social" | i18n %] *</label>
+          <input  id="razon_social" name="razon_social" class="required"  type="text" size="25" value="[% proveedor.getRazonSocial %]">
+          </li>
+
+          <li class="sub_item"> 
+          <label for="cuit_cuil"> [% "CUIT - CUIL" | i18n %] *</label>
+          <input  id="cuit_cuil" name="cuit_cuil" class="required" type="text" size="25" value="[% proveedor.getCuitCuil %]">
+          </li>
+
+          <li class="sub_item"> 
+          <label for="pais"> [% "Pais" | i18n %] *</label>
+          <input  id="pais" name="pais" type="text" class="required" size="25" value="[% proveedor.getPais %]">
+          </li>
+
+          <li class="sub_item"> 
+          <label for="provincia"> [% "Provincia" | i18n %] *</label>
+          <input  id="provincia" name="provincia" class="required" type="text" size="25" value="[% proveedor.getProvincia %]">
+          </li>
+
+          <li class="sub_item"> 
+          <label for="cuidad"> [% "Ciudad" | i18n %] *</label>
+          <input  id="cuidad" name="cuidad" type="text" class="required" size="25" value="[% proveedor.getCiudad %]">
+          </li>
+
+          <li class="sub_item"> 
+          <label for="domicilio"> [% "Domicilio" | i18n %] *</label>
+          <input  id="domicilio" name="domicilio" class="required" type="text" size="25" value="[% proveedor.getDomicilio %]">
+          </li>
+
+	      <li class="sub_item">
+		  <label for="telefono">[% "Telefono" | i18n %] *</label>
+		  <input id="telefono" name="telefono" class="required" type="text" size="15" value="[% proveedor.getTelefono %]">
+	      </li>
+
+          <li class="sub_item">
+          <label for="fax">[% "Fax" | i18n %] </label>
+          <input id="fax" name="fax" type="text" size="15" value="[% proveedor.getFax %]">
+          </li>
+	      <li class="sub_item">
+		  <label for="email">[% "Email" | i18n %]</label>
+		  <input type="text" name="email" id="email" size="25" value="[% proveedor.getEmail %]">
+	      </li>
+
+          <li class="sub_item">
+          <label for="plazo_reclamo">[% "Plazo Reclamo" | i18n %] </label>
+          <input  id="plazo_reclamo" name="plazo_reclamo" type="text" size="15" value="[% proveedor.getPlazoReclamo %]">
+          </li>
+
+          <li class="sub_item">
+          <label for="proveedor_activo">[% "Proveedor Activo" | i18n %] </label>
+          <input id="proveedor_activo" name="proveedor_activo" class="required" type="checkbox" value="[% proveedor.getActivo %]">
+          </li>
+
+          <!--  moneda, moneda_ref-->
+          <li class="sub_item">
+          <label for="moneda">[% "Moneda" | i18n %]</label>
+              <p>Lista de monedas</p>
+          </li>
+          <li class="sub_item"> 
+            <label for="moneda">[% "Listado de Monedas" | i18n %]</label>
+            <select>
+            [% FOREACH moneda IN proveedor.moneda_ref %] 
+                <option>[% moneda.nombre %]</option>
+<!--                <option>Dolares</option>
+                <option>Euros</option>-->
+            [% END %]
+            </select>
+          </li>
+
+          <div id="accion">
+              [% PERL %]
+                         print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                               boton   => "boton_buscar",
+                                                               onClick => "modificarDatosDeProveedor();",
+                                                     ) ;
+              [% END %]
+          </div>
+      </fieldset>
+</fieldset>
+      
+    
+
+  </div>
+[% INCLUDE "intranet-bottom.inc" %]

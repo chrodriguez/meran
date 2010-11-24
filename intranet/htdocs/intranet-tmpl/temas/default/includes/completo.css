@@ -117,6 +117,7 @@ li {list-style-type: none;}
 .icon_miembros{background:transparent url(../imagenes/iconos/miembros.png) no-repeat;height:25px;width:25px;cursor:pointer;}
 .icon_pdf{background:transparent url(../imagenes/iconos/pdf.png) no-repeat;height:25px;width:25px;cursor:pointer;}
 .icon_prestar{background:transparent url(../imagenes/iconos/prestar.png) no-repeat;height:25px;width:25px;cursor:pointer;}
+.icon_marc{background:transparent url(../imagenes/iconos/marc.png) no-repeat;height:25px;width:25px;cursor:pointer;}
 .icon_cancelar{background:transparent url(../imagenes/iconos/cancelar.png) no-repeat;height:25px;width:25px;cursor:pointer;}
 .icon_sacar{background:transparent url(../imagenes/iconos/sacar.png) no-repeat;height:25px;width:25px;cursor:pointer;}
 .icon_salir{background:transparent url(../imagenes/iconos/salir.png) no-repeat;height:25px;width:25px;cursor:pointer;}

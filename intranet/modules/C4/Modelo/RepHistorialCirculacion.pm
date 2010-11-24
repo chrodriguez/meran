@@ -1,7 +1,7 @@
 package C4::Modelo::RepHistorialCirculacion;
 
 use strict;
-use Date::Manip;
+
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -74,6 +74,8 @@ __PACKAGE__->meta->setup(
 
     primary_key_columns => [ 'id' ],
 );
+
+use Date::Manip;
 
 sub getId{
     my ($self) = shift;

@@ -23,7 +23,7 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+
 use C4::AR::Utilidades;
 use C4::AR::Estadisticas;
 

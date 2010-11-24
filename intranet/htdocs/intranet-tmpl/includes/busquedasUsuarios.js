@@ -67,8 +67,8 @@ function updateInfoUsuarios(responseText){
     busqueda = jQuery.trim($('#socio').val());
     if (busqueda.substr(0,6).toUpperCase() != 'FILTRO') //SI NO SE QUISO FILTRAR POR INICIAL, NO TENDRIA SENTIDO MARCARLO
         highlight(classes,idArray);
-    if (shouldScrollUser)
-        scrollTo('result');
+//     if (shouldScrollUser)
+//         scrollTo('result');
 }
 
 function Borrar(){

@@ -25,7 +25,9 @@ __PACKAGE__->meta->setup(
         },
     ],
 );
-
+use C4::Modelo::CatRefTipoNivel3;
+use C4::Modelo::CatAutor::Manager;
+use Text::LevenshteinXS;
 
 =item
     Returns true (1) if the row was loaded successfully
@@ -138,16 +140,13 @@ sub setCompleto{
 }
 
 sub nextMember{
-    use C4::Modelo::CatRefTipoNivel3;
-    return(C4::Modelo::CatRefTipoNivel3->new());
+     return(C4::Modelo::CatRefTipoNivel3->new());
 }
 
 sub obtenerValoresCampo {
 	my ($self)=shift;
     my ($campo, $orden)=@_;
-
-	use C4::Modelo::CatAutor::Manager;
- 	my $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor
+    my $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor
 						( select   => [$campo],
 						  sort_by => ($orden) );
     my @array_valores;
@@ -165,9 +164,7 @@ sub obtenerValoresCampo {
 sub obtenerValorCampo {
   my ($self)=shift;
   my ($campo,$id)=@_;
-
-	use C4::Modelo::CatAutor::Manager;
- 	my $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor
+  my $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor
 						( select   => [$campo],
 						  query =>[ id => { eq => $id} ]);
 
@@ -197,8 +194,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::CatAutor::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){

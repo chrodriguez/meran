@@ -15,9 +15,9 @@ use MARC::Record;
 use MARC::File::USMARC;
 use C4::AR::Utilidades;
 
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(&ui
+@EXPORT_OK=qw(&ui
            &campoIso
 	   &subCampoIso
 	   &datosCompletos
@@ -1501,3 +1501,8 @@ sub procesar_reglas_matcheo{
         
         return ($reglas_matcheo);
 }
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__

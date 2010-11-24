@@ -8,7 +8,7 @@ use PDF::Report;
 use C4::AR::Usuarios;
 use HTML::HTMLDoc;
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw($VERSION @ISA @EXPORT_OK);
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -18,7 +18,7 @@ $VERSION = 0.01;
 # don't forget MARCxxx subs are exported only for testing purposes. Should not be used
 # as the old-style API and the NEW one are the only public functions.
 #
-@EXPORT = qw(
+@EXPORT_OK = qw(
     &searchGenerator 
     &availPdfGenerator 
     &searchShelfGenerator 
@@ -802,3 +802,9 @@ sub printPDF{
 
     close INF;
 }
+
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__

@@ -2,7 +2,7 @@ package C4::Modelo::SistSesion;
 
 use strict;
 
-use C4::Context;
+
 use base qw(C4::Modelo::DB::Object::AutoBaseSession);
 
 __PACKAGE__->meta->setup(
@@ -21,7 +21,7 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'sessionID' ],
 );
 
-
+#Einar use C4::Context;
 sub getActiveSession{
 
     my $self = shift;
@@ -47,14 +47,14 @@ sub delete{
     my $context = new C4::Context;
 
     if($context->config('debug')){
-open(Z, ">>/tmp/debug.txt");
-print Z "\n";
-print Z "SistSesion=> DELETE\n";
+# open(Z, ">>/tmp/debug.txt");
+# print Z "\n";
+# print Z "SistSesion=> DELETE\n";
         foreach my $param (@_){
-print Z "SistSesion=> DELETE param: ".$param."\n";            
+# print Z "SistSesion=> DELETE param: ".$param."\n";            
         }
-print Z "\n";
-close(Z);        
+# print Z "\n";
+# close(Z);        
     }
     
     #se llama a delete

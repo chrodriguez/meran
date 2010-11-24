@@ -2,7 +2,6 @@
 
 use strict;
 require Exporter;
-use C4::Auth;
 use C4::Context;
 use CGI;
 
@@ -15,7 +14,7 @@ C4::AR::Debug::debug("CRON => recordatorio_prestamos.pl => Se verifica via CRON 
 # C4::AR::Debug::debug("recordatorio_prestamos => se intento correr script de una dir. IP no local => ".$ENV{'REMOTE_ADDR'});
 
 if ($ENV{'REMOTE_ADDR'} eq '127.0.0.1') {
-    C4::Auth::_enviarCorreosDeRecordacion($today);
+    C4::AR::Prestamos::enviarCorreosDeRecordacion($today);
 } else {
     C4::AR::Debug::debug("recordatorio_prestamos => se intento correr script de una dir. IP no local => ".$ENV{'REMOTE_ADDR'});
 }

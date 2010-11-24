@@ -23,7 +23,7 @@ use C4::Output;
 use HTML::Template;
 use C4::Auth;
 use C4::Context;
-use C4::Interface::CGI::Output;
+
 
 my $input = new CGI;
 

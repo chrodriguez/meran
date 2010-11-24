@@ -6,9 +6,9 @@ require Exporter;
 
 use CGI;
 use C4::Auth;
-use C4::Interface::CGI::Output;
-
 my $input=new CGI;
+
+BEGIN {$Exporter::Verbose=1}
 
 my ($template, $session, $t_params) = get_template_and_user({
 							template_name   => ('catalogacion/estructura/detalle.tmpl'),

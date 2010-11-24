@@ -47,6 +47,12 @@ __PACKAGE__->meta->setup(
     ],
 );
 
+use C4::Modelo::CircSancion::Manager;
+use C4::Modelo::RepHistorialCirculacion;
+use C4::Modelo::CircSancion;
+use C4::Modelo::CircReserva::Manager;
+use C4::Modelo::CircReserva;
+
 sub getId_reserva{
     my ($self) = shift;
     return ($self->id_reserva);
@@ -190,7 +196,6 @@ sub agregar {
     $self->save();
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
-   use C4::Modelo::RepHistorialCirculacion;
    my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
    $data_hash->{'tipo'}= 'reserva';
    $historial_circulacion->agregar($data_hash);
@@ -255,8 +260,6 @@ $self->debug("RESERVA: estado: ".$paramsReserva{'estado'}." id_ui: ".	$paramsRes
 		my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
 		my $enddate= C4::Date::proximoHabil($daysOfSanctions,0,$startdate);
 		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
-		
-		use C4::Modelo::CircSancion;
 		my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
 		my %paramsSancion;
         $paramsSancion{'loggedinuser'}= $params->{'loggedinuser'};
@@ -310,7 +313,6 @@ sub cancelar_reserva{
    $data_hash->{'tipo_prestamo'}='-';
    $data_hash->{'id_ui'}=$self->getId_ui;
    $data_hash->{'tipo'}='cancelacion';
-   use C4::Modelo::RepHistorialCirculacion;
    my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
    $historial_circulacion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
@@ -348,8 +350,6 @@ sub actualizarDatosReservaEnEspera{
 	my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
 	my $enddate=  Date::Manip::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
 	$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
-	
-	use C4::Modelo::CircSancion;
 	my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
 	my %paramsSancion;
 	$paramsSancion{'tipo_sancion'}= undef;
@@ -381,8 +381,6 @@ Funcion que trae los datos de la primer reserva de la cola que estaba esperando 
 =cut
 sub getReservaEnEspera{
 	my ($self) = shift;
-
-    use C4::Modelo::CircReserva::Manager;
     my @filtros;
     push(@filtros, ( id2 => { eq => $self->getId2 }));
     push(@filtros, ( id3 => undef ));
@@ -410,11 +408,7 @@ sub cancelar_reservas_inmediatas{
 	my ($self)=shift;
 	my ($params)=@_;
 	my $socio=$params->{'nro_socio'};
-	
-    	use C4::Modelo::CircReserva;
-    	use C4::Modelo::CircReserva::Manager;
-
-    	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
+   	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
 					db=>$self->db,
 					query => [ nro_socio => { eq => $socio }, estado => {ne => 'P'}, id3 => undef ]
      				);
@@ -458,8 +452,7 @@ sub cancelar_reservas_sancionados {
 	my $dateformat = C4::Date::get_date_format();
     my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
   	my $tipo_prestamo=C4::AR::Preferencias->getValorPreferencia("defaultissuetype");
-	use C4::Modelo::CircSancion::Manager;
-    my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion ( db=>$self->db, 
+	my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion ( db=>$self->db, 
 																	query => [ 
 																			fecha_comienzo 	=> { le => $hoy },
 																			fecha_final    	=> { ge => $hoy},
@@ -631,9 +624,6 @@ sub borrar_sancion_de_reserva{
 
     my $dateformat  = C4::Date::get_date_format();
     my $hoy         = C4::Date::format_date_in_iso(C4::Date::ParseDate("today"), $dateformat);
-
-    use C4::Modelo::CircSancion::Manager;
-    use C4::Modelo::CircSancion;
     my @filtros;
     push(@filtros, ( id_reserva     => { eq => $self->getId_reserva}));
     push(@filtros, ( fecha_comienzo => { gt => $hoy} ));
@@ -662,7 +652,6 @@ sub intercambiarId3{
     my ($db, $nuevo_Id3, $msg_object) = @_;
     
     C4::AR::Debug::debug("intercambiarId3 => se va a intercambiar el id3, nuevo_Id3: ".$nuevo_Id3);
-    use C4::Modelo::CircReserva::Manager;
     my @filtros;
     push(@filtros, ( id3 => { eq => $nuevo_Id3 } ));
     my ($reserva_array_ref) = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $db, query => \@filtros);

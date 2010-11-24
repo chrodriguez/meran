@@ -31,7 +31,9 @@ __PACKAGE__->meta->setup(
         },
     ],
 );
-
+use C4::Modelo::CircRefTipoPrestamo::Manager;
+use C4::Modelo::RefSoporte;
+use Text::LevenshteinXS;
 sub getId_tipo_prestamo{
     my ($self) = shift;
     return ($self->id_tipo_prestamo);
@@ -140,8 +142,7 @@ sub setHabilitado{
 sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
-	use C4::Modelo::CircRefTipoPrestamo::Manager;
- 	my $ref_valores = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo
+	my $ref_valores = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo
 						( select  => ['id_tipo_prestamo' ,$campo],
 						  sort_by => ($orden) );
     my @array_valores;
@@ -159,8 +160,6 @@ sub obtenerValoresCampo {
 sub obtenerValorCampo {
 	my ($self)=shift;
     my ($campo,$id)=@_;
-
-	use C4::Modelo::CircRefTipoPrestamo::Manager;
  	my $ref_valores = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo
 						( select   => [$campo],
 						  query =>[ id_tipo_prestamo => { eq => $id} ]);
@@ -192,7 +191,6 @@ sub getCampo{
 }
 
 sub nextMember{
-    use C4::Modelo::RefSoporte;
     return(C4::Modelo::RefSoporte->new());
 }
 
@@ -224,8 +222,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::CircRefTipoPrestamo::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){

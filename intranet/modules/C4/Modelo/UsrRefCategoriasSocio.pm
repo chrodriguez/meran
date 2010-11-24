@@ -2,6 +2,7 @@ package C4::Modelo::UsrRefCategoriaSocio;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
+    
 __PACKAGE__->meta->setup
   (
     table   => 'usr_ref_categorias_socio',
@@ -16,6 +17,10 @@ __PACKAGE__->meta->setup
     unique_key => ['categorycode'],
 
 );
+
+use C4::Modelo::UsrRefCategoriaSocio::Manager;
+use Text::LevenshteinXS;
+
 
 sub lastTable{
     return(1);
@@ -159,8 +164,6 @@ sub setBorrowing_days{
 sub obtenerValoresCampo {
 	my ($self)=shift;
     my ($campo, $orden)=@_;
-
-	use C4::Modelo::UsrRefCategoriaSocio::Manager;
  	my $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categorias_socio
 						( select   => [$self->meta->primary_key ,$campo],
 						  sort_by => ($orden) );
@@ -178,8 +181,7 @@ sub obtenerValoresCampo {
 
 sub obtenerValorCampo {
 	my ($self)=shift;
-    	my ($campo,$id)=@_;
-	use C4::Modelo::UsrRefCategoriaSocio::Manager;
+    my ($campo,$id)=@_;
  	my $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categorias_socio
 						( select   => [$campo],
 						  query =>[ categorycode => { eq => $id} ]);
@@ -208,8 +210,6 @@ sub getAll{
 
     my ($self) = shift;
     my ($limit,$offset,$matchig_or_not,$filtro)=@_;
-    use C4::Modelo::UsrRefCategoriaSocio::Manager;
-    use Text::LevenshteinXS;
     $matchig_or_not = $matchig_or_not || 0;
     my @filtros;
     if ($filtro){
