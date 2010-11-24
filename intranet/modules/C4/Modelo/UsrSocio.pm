@@ -69,6 +69,7 @@ __PACKAGE__->meta->setup(
 
     unique_key => [ 'nro_socio' ],
 );
+
 use utf8;
 use C4::AR::Permisos;
 use C4::AR::Utilidades;
@@ -76,8 +77,6 @@ use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrPersona::Manager;
 use Switch;
 use C4::Date;
-use C4::Modelo::UsrPermiso;
-use C4::Modelo::UsrPermiso::Manager;
 
 
 sub setCredentialType{
