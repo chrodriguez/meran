@@ -447,3 +447,11 @@ CREATE  TABLE IF NOT EXISTS `meran`.`adq_proveedor_forma_envio` (
 ENGINE = InnoDB;
 
 CREATE INDEX `fk_adq_proveedor_forma_envio_adq_proveedor1` ON `meran`.`adq_proveedor_forma_envio` (`adq_proveedor_id` ASC) ;
+
+
+--- proveedor moneda
+CREATE TABLE IF NOT EXISTS `adq_proveedor_moneda` (
+  `proveedor_id` int(11) NOT NULL,
+  `moneda_id` int(11) NOT NULL,
+  PRIMARY KEY (`proveedor_id`,`moneda_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

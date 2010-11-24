@@ -16,54 +16,36 @@ __PACKAGE__->meta->setup(
     table   => 'adq_proveedor',
 
     columns => [
-        id_proveedor   => { type => 'integer', not_null => 1 },
-        apellido  => { type => 'varchar', length => 255, not_null => 1},
-        nombre  => { type => 'varchar', length => 255, not_null => 1},
-        tipo_doc => { type => 'integer', not_null => 1},
-        nro_doc => { type => 'varchar', length => 12, not_null => 1 },
-        razon_social => { type => 'varchar', length => 255, not_null => 1 },
-        cuit_cuil => { type => 'varchar', length => 32, not_null => 1 },
-        pais => { type => 'integer', not_null => 1},
-        provincia => { type => 'integer', not_null => 1},
-        ciudad => { type => 'integer', not_null => 1},
-        domicilio    => { type => 'varchar', length =>  255, not_null => 1 },
-        telefono => { type => 'varchar', length => 32, not_null => 1 },
-        fax  => { type => 'varchar', length => 32},
-        email  => { type => 'varchar', length => 255},
-        plazo_reclamo => { type => 'integer', length => 11},
-        activo => { type => 'integer', default => 1, not_null => 1},
+        id                              => { type => 'integer', not_null => 1 },
+        apellido                        => { type => 'varchar', length => 255, not_null => 1},
+        nombre                          => { type => 'varchar', length => 255, not_null => 1},
+        usr_ref_tipo_documento_id       => { type => 'integer', not_null => 1},
+        nro_doc                         => { type => 'varchar', length => 12, not_null => 1 },
+        razon_social                    => { type => 'varchar', length => 255, not_null => 1 },
+        cuit_cuil                       => { type => 'varchar', length => 32, not_null => 1 },
+        ref_localidad_id                => { type => 'integer', not_null => 1},
+        domicilio                       => { type => 'varchar', length =>  255, not_null => 1 },
+        telefono                        => { type => 'varchar', length => 32, not_null => 1 },
+        fax                             => { type => 'varchar', length => 32},
+        email                           => { type => 'varchar', length => 255},
+        plazo_reclamo                   => { type => 'integer', length => 11},
+        activo                          => { type => 'integer', default => 1, not_null => 1},
     ],
 
     relationships =>
     [
-      tipo_doc_ref => 
+      usr_ref_tipo_documento_id => 
       {
          class       => 'C4::Modelo::RefTipoDocumento',
          key_columns => { tipo_doc => 'idTipoDoc' },
          type        => 'one to one',
        },
-
-      pais_ref => 
-      {
-        class       => 'C4::Modelo::RefPais',
-        key_columns => { pais => 'id' },
-        type        => 'one to one',
-      },
-
-      provincia_ref => 
-      {
-        class       => 'C4::Modelo::RefProvincia',
-        key_columns => { provincia => 'provincia' },
-        type        => 'one to one',
-      },
-
-      cuidad_ref => 
+      ref_localidad_id => 
       {
         class       => 'C4::Modelo::RefLocalidad',
-        key_columns => { provincia => 'id' },
+        key_columns => { id => 'id' },
         type        => 'one to one',
       },
-
 
 #     one to many asi trae monedad en un vector de objetos
       moneda_ref => 
@@ -75,8 +57,8 @@ __PACKAGE__->meta->setup(
 
     ],
     
-    primary_key_columns => [ 'id_proveedor' ],
-    unique_key => ['tipo_doc','nro_doc'],
+    primary_key_columns => [ 'id' ],
+    unique_key => ['usr_ref_tipo_documento_id','nro_doc'],
 
 );
 
