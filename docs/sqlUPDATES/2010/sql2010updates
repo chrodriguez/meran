@@ -390,7 +390,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `meran`.`adq_proveedor` ;
 
 CREATE  TABLE IF NOT EXISTS `meran`.`adq_proveedor` (
-  `id_proveedor` INT(11) NOT NULL AUTO_INCREMENT ,
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `nombre` VARCHAR(255) NOT NULL ,
   `apellido` VARCHAR(255) NOT NULL ,
   `nro_doc` VARCHAR(21) NOT NULL ,
@@ -404,7 +404,7 @@ CREATE  TABLE IF NOT EXISTS `meran`.`adq_proveedor` (
   `plazo_reclamo` INT(11) NULL DEFAULT NULL ,
   `usr_ref_tipo_documento_id` INT(11) NOT NULL ,
   `ref_localidad_id` INT(11) NOT NULL ,
-  PRIMARY KEY (`id_proveedor`) ,
+  PRIMARY KEY (`id`) ,
   CONSTRAINT `fk_adq_proveedor_usr_ref_tipo_documento1`
     FOREIGN KEY (`usr_ref_tipo_documento_id` )
     REFERENCES `meran`.`usr_ref_tipo_documento` (`id` )
@@ -418,7 +418,7 @@ CREATE  TABLE IF NOT EXISTS `meran`.`adq_proveedor` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = utf8
-COLLATE = latin1_swedish_ci;
+COLLATE = utf8_general_ci;
 
 CREATE INDEX `fk_adq_proveedor_usr_ref_tipo_documento1` ON `meran`.`adq_proveedor` (`usr_ref_tipo_documento_id` ASC) ;
 
@@ -441,7 +441,7 @@ CREATE  TABLE IF NOT EXISTS `meran`.`adq_proveedor_forma_envio` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_adq_proveedor_forma_envio_adq_proveedor1`
     FOREIGN KEY (`adq_proveedor_id` )
-    REFERENCES `meran`.`adq_proveedor` (`id_proveedor` )
+    REFERENCES `meran`.`adq_proveedor` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
