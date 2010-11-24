@@ -8,9 +8,9 @@ __PACKAGE__->meta->setup(
     table   => 'ref_provincia',
 
     columns => [
-        PROVINCIA => { type => 'varchar', length => 11, not_null => 1 },
-        NOMBRE    => { type => 'varchar', length => 60 },
-        PAIS      => { type => 'varchar', default => '0', length => 11 },
+        PROVINCIA        => { type => 'varchar', length => 11, not_null => 1 },
+        NOMBRE           => { type => 'varchar', length => 60 },
+        ref_pais_id      => { type => 'varchar', default => '0', length => 11 },
     ],
 
     primary_key_columns => [ 'PROVINCIA' ],
