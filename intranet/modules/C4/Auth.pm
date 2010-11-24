@@ -104,8 +104,6 @@ C4::Auth - Authenticates Koha users
 		&getborrowernumber
 		&getuserflags
 		&output_html_with_http_headers
-
-
 		&getSessionLoggedUser
 		&getSessionUserID
 		&getSessionPassword
@@ -114,13 +112,14 @@ C4::Auth - Authenticates Koha users
 		&getSessionFlagsRequired
 		&getSessionBrowser
         &getSessionNroSocio
-		&_generarNroRandom
         &redirectAndAdvice
         &_hashear_password
         &get_html_content
-  &buildSocioData
-		
 );
+
+#Miguel se exportaban los saque para probar
+#         &buildSocioData
+#       &_generarNroRandom
 
 =item sub getSessionLoggedUser
 
@@ -362,7 +361,8 @@ sub get_template_and_user {
 sub output_html_with_http_headers {
     my($template, $params, $session) = @_;
 
-    _setLocale($session);
+# FIXME creo q no es necesario, el usr_locale se setea cuando inicia session
+#     _setLocale($session);
     print_header($session, $params);
     $template->process($params->{'template_name'},$params) || die "Template process failed: ", $template->error(), "\n";
     exit;
@@ -531,6 +531,13 @@ sub buildSocioData{
     $session->param('usr_credential_type', $socio->getCredentialType());
 }
 
+
+=item
+
+  sub i18n
+
+  setea lo necesario para que el filtro C4::AR::Filtros::i18n pueada realizar la internacionalizacion dinámicamente
+=cut
 sub _init_i18n {
     my($params) = @_;
   
@@ -552,7 +559,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
 # use POSIX;
 # use Locale::Maketext::Gettext::Functions;
 # use Template::Plugin::Filter;
-my $context = new C4::Context;
+    my $context = new C4::Context;
 
     C4::AR::Debug::debug("debug => ".$context->config('debug'));
 
@@ -759,7 +766,7 @@ my $context = new C4::Context;
         my ($passwordValida, $cardnumber, $branch) = _verificarPassword($dbh,$userid,$password,$random_number);
         if ($passwordValida) {
            #se valido la password y es valida
-           # setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
+           #setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
             _setLoguinDuplicado($userid,  $ENV{'REMOTE_ADDR'});
             C4::AR::Debug::debug("checkauth=> password valida");
 
@@ -1328,36 +1335,6 @@ sub _verificarPassword {
     C4::AR::Debug::debug(" ");
 
 	return ($passwordValida, $cardnumber, $ui);
-}
-
-=item sub printSession
-
-    imprime los datos de la sesion
-    Parametros:
-    $session: sesion de la cual se sacan los datos a imprimir
-    $desde: desde donde se llama esta funcion
-
-=cut
-# FIXME deberia ir en DEBUG
-sub printSession {
-	my ($session, $desde) = @_;
-
-    C4::AR::Debug::debug("\n");
-	C4::AR::Debug::debug("*******************************************SESSION******************************************************");
-	C4::AR::Debug::debug("Desde: ".$desde);
-	C4::AR::Debug::debug("session->userid: ".$session->param('userid'));
-	C4::AR::Debug::debug("session->loggedinusername: ".$session->param('loggedinusername'));
-	C4::AR::Debug::debug("session->borrowernumber: ".$session->param('borrowernumber'));
-	C4::AR::Debug::debug("session->password: ".$session->param('password'));
-	C4::AR::Debug::debug("session->nroRandom: ".$session->param('nroRandom'));
-	C4::AR::Debug::debug("session->sessionID: ".$session->param('sessionID'));
-	C4::AR::Debug::debug("session->lang: ".$session->param('lang'));
-	C4::AR::Debug::debug("session->type: ".$session->param('type'));
-	C4::AR::Debug::debug("session->flagsrequired: ".$session->param('flagsrequired'));
-	C4::AR::Debug::debug("session->REQUEST_URI: ".$session->param('REQUEST_URI'));
-	C4::AR::Debug::debug("session->browser: ".$session->param('browser'));
-	C4::AR::Debug::debug("*****************************************END**SESSION****************************************************");
-	C4::AR::Debug::debug("\n");
 }
 
 sub redirectTo {

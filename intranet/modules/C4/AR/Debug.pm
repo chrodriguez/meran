@@ -101,6 +101,35 @@ sub _printHASH {
 }
 
 
+=item sub printSession
+
+    imprime los datos de la sesion
+    Parametros:
+    $session: sesion de la cual se sacan los datos a imprimir
+    $desde: desde donde se llama esta funcion
+
+=cut
+sub printSession {
+    my ($session, $desde) = @_;
+
+# TODO hace mas generico, falta data de la session
+    C4::AR::Debug::debug("\n");
+    C4::AR::Debug::debug("*******************************************SESSION******************************************************");
+    C4::AR::Debug::debug("Desde:                        ".$desde);
+    C4::AR::Debug::debug("session->userid:              ".$session->param('userid'));
+    C4::AR::Debug::debug("session->loggedinusername:    ".$session->param('loggedinusername'));
+    C4::AR::Debug::debug("session->borrowernumber:      ".$session->param('borrowernumber'));
+    C4::AR::Debug::debug("session->password:            ".$session->param('password'));
+    C4::AR::Debug::debug("session->nroRandom:           ".$session->param('nroRandom'));
+    C4::AR::Debug::debug("session->sessionID:           ".$session->param('sessionID'));
+    C4::AR::Debug::debug("session->lang:                ".$session->param('lang'));
+    C4::AR::Debug::debug("session->type:                ".$session->param('type'));
+    C4::AR::Debug::debug("session->flagsrequired:       ".$session->param('flagsrequired'));
+    C4::AR::Debug::debug("session->REQUEST_URI:         ".$session->param('REQUEST_URI'));
+    C4::AR::Debug::debug("session->browser:             ".$session->param('browser'));
+    C4::AR::Debug::debug("*****************************************END**SESSION****************************************************");
+    C4::AR::Debug::debug("\n");
+}
 =pod
 
 =back
