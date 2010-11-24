@@ -531,12 +531,27 @@ sub buildSocioData{
     $session->param('usr_credential_type', $socio->getCredentialType());
 }
 
+sub _init_i18n {
+    my($params) = @_;
+  
+    use POSIX;
+    use Locale::Maketext::Gettext::Functions;
+
+    my $locale = C4::Auth::getUserLocale();
+    Locale::Maketext::Gettext::Functions::bindtextdomain($params->{'type'}, C4::Context->config("locale"));
+    Locale::Maketext::Gettext::Functions::textdomain($params->{'type'});
+    Locale::Maketext::Gettext::Functions::get_handle($locale);
+
+# TODO para q estaba???
+#     setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
+}
+
 #checkauth RECORTADO
 sub checkauth {
 C4::AR::Debug::debug("desde checkauth==================================================================================================");    
-use POSIX;
-use Locale::Maketext::Gettext::Functions;
-use Template::Plugin::Filter;
+# use POSIX;
+# use Locale::Maketext::Gettext::Functions;
+# use Template::Plugin::Filter;
 my $context = new C4::Context;
 
     C4::AR::Debug::debug("debug => ".$context->config('debug'));
@@ -599,13 +614,8 @@ my $context = new C4::Context;
         $tokenDB    = $session->param('token');
         $flag       = $session->param('flagsrequired');
 
-        #my $session     = CGI::Session->load();#si esta definida
-        my $locale      = C4::Auth::getUserLocale();
-        Locale::Maketext::Gettext::Functions::bindtextdomain($type, C4::Context->config("locale"));
-        Locale::Maketext::Gettext::Functions::textdomain($type);
-        Locale::Maketext::Gettext::Functions::get_handle($locale);
-        #my $setlocale   = setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
-
+        #inicializa variables para i18n
+        _init_i18n({ type => $type });
 
         if ($userid) {
 

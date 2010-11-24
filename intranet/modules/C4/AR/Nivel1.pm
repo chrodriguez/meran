@@ -82,10 +82,10 @@ sub guardarRealmente{
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$id1]} ) ;
         };
 
-        C4::AR::Debug::debug("Nivel1 => guardarRealmente");
+#         C4::AR::Debug::debug("Nivel1 => guardarRealmente");
         C4::AR::Busquedas::generar_indice($id1);
         C4::AR::Busquedas::reindexar();
-        C4::AR::Debug::debug("Nivel1 => guardarRealmente => run_indexer => ");
+#         C4::AR::Debug::debug("Nivel1 => guardarRealmente => run_indexer => ");
     
         if ($@){
             #Se loguea error de Base de Datos
