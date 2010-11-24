@@ -7,7 +7,7 @@ use C4::Auth;
 use C4::AR::Preferencias;
 use C4::AR::Permisos;
 # use C4::AR::Utilidades;
-use JSON;
+# use JSON;
 
 my $input = new CGI;
 my $obj=$input->param('obj');
