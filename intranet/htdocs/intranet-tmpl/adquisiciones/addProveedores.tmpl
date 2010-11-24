@@ -73,14 +73,6 @@
       <legend class="titulo_legend">[% "Datos de contacto del proveedor" | i18n %]</legend>
         <ul>
             <li class="sub_item">
-                <label for="pais">[% "Pais" | i18n %] *</label>
-                <input  id="pais" name="pais" class="required" type="text" size="15">
-            </li>
-            <li class="sub_item">
-                <label for="provincia">[% "Provincia" | i18n %] *</label>
-                <input  id="provincia" name="provincia" class="required" type="text" size="15">
-            </li>
-            <li class="sub_item">
                 <label for="ciudad">[% "Ciudad" | i18n %] *</label>
                 <input  id="ciudad" name="ciudad" class="required" type="text" size="15">
             </li>
@@ -117,48 +109,6 @@
 <fieldset>
       <legend class="titulo_legend">[% "Monedas" | i18n %]</legend>
 </fieldset>
-
-<!--<fieldset>
-<legend class="titulo_legend">[% "Informaci&oacute;n de contacto" | i18n %] </legend>
-<ul>
-<li class="sub_item">
-    <label for="calle"> [% "Direcci&oacute;n" | i18n %] * </label>
-            <input class="required" type=text id="calle" name="calle" size="25" value="[% socio_modificar.persona.getCalle %]">
-</li>
-<li class="sub_item">
- <label for="codigo_postal">           [% "C&oacute;digo Postal" | i18n %]</label>
-            <input type="text" name="codigo_postal"  id="codigo_postal" size="25" value="[% codigo_postal %]">
-</li>
-<li class="sub_item">
-     <label for="id_ciudad"> [% "Ciudad" | i18n %] * </label>
-            <input class="required" type=text id="ciudad" name="ciudad" value="[% socio_modificar.persona.ciudad_ref.getNombre %]" size="25"  >
-            <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% socio_modificar.persona.ciudad_ref.id %]">
-</li>
-<li class="sub_item">
- <label for="telefono">           [% "Tel&eacute;fono particular" | i18n %] </label>
-                <input type=text id="telefono" name="telefono" size="25" value="[% socio_modificar.persona.getTelefono %]">
-</li>
-<li class="sub_item">
- <label for="telefono_laboral">    [% "Tel&eacute;fono del trabajo" | i18n %]</label>
-                <input type=text id="telefono_laboral" name="telefono_laboral" size="25" 
-                    value="[% socio_modificar.persona.getTelefono_laboral %]">
-</li>
-<li class="sub_item">
-  <label for="alt_calle">          [% "Direcci&oacute;n de origen" | i18n %]</label>
-                <input type=text id="alt_calle" name="alt_calle" size="25" value="[% socio_modificar.persona.getAlt_calle %]">
-</li>
-<li class="sub_item">
-   <label for="id_alt_ciudad">    [% "Ciudad de origen" | i18n %]</label>
-            <input  type=text id="alt_ciudad" name="alt_ciudad" 
-                value="[% socio_modificar.persona.alt_ciudad_ref.getNombre%]" size="25" >
-            <input type=hidden id="id_alt_ciudad" name="id_alt_ciudad" value="[% socio_modificar.persona.alt_ciudad_ref.LOCALIDAD %]"> 
-</li>
-<li class="sub_item">
-   <label for="email">   [% "E-Mail" | i18n %] *</label>
-                <input class="required" type=text id="email" name="email" size="25" value="[% socio_modificar.persona.getEmail %]">
-        </li>
-        </ul>
-</fieldset>-->
 
 <div class="buttonContainerHorizontal">
     <ul class="listaMenuBotones" >
