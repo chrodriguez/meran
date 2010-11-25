@@ -111,8 +111,8 @@ ENGINE = MyIsam;
 CREATE INDEX `fk_adq_proveedor_forma_envio_adq_proveedor1` ON `adq_proveedor_forma_envio` (`adq_proveedor_id` ASC) ;
 
 
-alter table adq_proveedor=InnoDB;
-alter table adq_proveedor_forma_envio=InnoDB;
+alter table adq_proveedor engine=InnoDB;
+alter table adq_proveedor_forma_envio engine=InnoDB;
 
 
 
