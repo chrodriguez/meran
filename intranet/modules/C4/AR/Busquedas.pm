@@ -1015,32 +1015,7 @@ sub getBranch{
 ########################################################## NUEVOS!!!!!!!!!!!!!!!!!!!!!!!!!! #################################################
 
 
-sub _getMatchMode{
-  my ($tipo) = @_;
-  use Sphinx::Search;
 
-  #por defecto se setea este match_mode
-  my $tipo_match = SPH_MATCH_ANY;
-
-  if($tipo eq 'SPH_MATCH_ANY'){
-    #Match any words
-    $tipo_match = SPH_MATCH_ANY;
-  }elsif($tipo eq 'SPH_MATCH_PHRASE'){
-    #Exact phrase match
-    $tipo_match = SPH_MATCH_PHRASE;
-  }elsif($tipo eq 'SPH_MATCH_BOOLEAN'){
-    #Boolean match, using AND (&), OR (|), NOT (!,-) and parenthetic grouping
-    $tipo_match = SPH_MATCH_BOOLEAN;
-  }elsif($tipo eq 'SPH_MATCH_EXTENDED'){
-    #Extended match, which includes the Boolean syntax plus field, phrase and proximity operators
-    $tipo_match = SPH_MATCH_EXTENDED;
-  }elsif($tipo eq 'SPH_MATCH_ALL'){
-    #Match all words
-    $tipo_match = SPH_MATCH_ALL;
-  }
-
-  return ($tipo_match);
-}
 
 sub index_update{
   system('indexer --rotate --all');
@@ -1093,7 +1068,7 @@ sub busquedaCombinada_newTemp{
     my $query = '';
 
     my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
-    my $tipo_match  = _getMatchMode($tipo);
+    my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     C4::AR::Debug::debug("Busquedas => match_mode ".$tipo);
 
@@ -1294,7 +1269,7 @@ sub busquedaAvanzada_newTemp{
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
 #     C4::AR::Debug::debug("query string ".$query);
     my $tipo = 'SPH_MATCH_EXTENDED';
-    my $tipo_match = _getMatchMode($tipo);
+    my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     $sphinx->SetMatchMode($tipo_match);
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
@@ -1353,7 +1328,7 @@ sub filtrarPorAutor{
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
 #     C4::AR::Debug::debug("query string ".$query);
     my $tipo = 'SPH_MATCH_EXTENDED';
-    my $tipo_match = _getMatchMode($tipo);
+    my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     $sphinx->SetMatchMode($tipo_match);
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
@@ -1738,7 +1713,7 @@ sub getRegistrosFromRange {
     } 
 
     my $tipo = 'SPH_MATCH_EXTENDED';
-    my $tipo_match = _getMatchMode($tipo);
+    my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     $sphinx->SetMatchMode($tipo_match);
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
