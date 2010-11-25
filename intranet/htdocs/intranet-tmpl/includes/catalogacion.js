@@ -30,7 +30,7 @@ var HASH_MESSAGES = new Array();
 var AGREGAR_COMPLETO = 1; //flag para verificar si se esta por agregar un documento desde el nivel 1 o no
 var ID_COMPONENTE = 1;
 
-function agrearAHash (HASH, name, value){
+function agregarAHash (HASH, name, value){
     HASH[name] = value;
 }
 
@@ -1642,7 +1642,7 @@ function hacerComponenteObligatoria(idObj){
     $("#"+idObj).addClass("obligatorio");
     $("#"+idObj).addClass("required");
 
-    agrearAHash(HASH_MESSAGES, idObj, ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO);    
+    agregarAHash(HASH_MESSAGES, idObj, ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO);    
 }
 
 // Esta funcion crea un divComponente con un id segun parametro idObj

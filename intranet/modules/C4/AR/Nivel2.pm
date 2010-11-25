@@ -1,6 +1,5 @@
 package C4::AR::Nivel2;
 
-
 use strict;
 require Exporter;
 use C4::Context;
