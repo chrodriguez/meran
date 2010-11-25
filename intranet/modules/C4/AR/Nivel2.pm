@@ -8,7 +8,7 @@ use C4::Modelo::CatRegistroMarcN2;
 use C4::Modelo::CatRegistroMarcN2::Manager;
 use C4::Modelo::CatRating::Manager;
 use C4::Modelo::CatRating;
-use POSIX;
+use POSIX qw(NULL ceil);
 
 
 use vars qw(@EXPORT_OK @ISA);
@@ -16,8 +16,10 @@ use vars qw(@EXPORT_OK @ISA);
 @ISA    = qw(Exporter);
 
 @EXPORT_OK = qw(
-		
+		&getNivel1FromId2
 		&getCantPrestados
+        &getNivel2FromId1
+        
 );
 
 =head1 NAME
@@ -407,7 +409,7 @@ sub getRating{
     }
 
     if($rating_count > 0){
-        $rating_count = ceil($count/$rating_count);
+        $rating_count = POSIX::ceil($count/$rating_count);
     } 
     
     return $rating_count;
@@ -422,7 +424,7 @@ sub getRatingPromedio{
         foreach my $nivel2 (@$nivel2_array_ref){
             $ratings+= getRating($nivel2->getId2);
         }
-        my $rating_count = ceil($ratings/$cant);
+        my $rating_count = POSIX::ceil($ratings/$cant);
         return $rating_count;
     }else{
         return (0);

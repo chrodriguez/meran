@@ -2,26 +2,24 @@ package C4::AR::Prestamos;
 
 use strict;
 require Exporter;
-use DBI;
-use C4::Date;
-use C4::AR::Reservas;
+#use DBI;
+use C4::Date qw(get_date_format format_date_in_iso);
+#use C4::AR::Reservas;
 use C4::Modelo::CircPrestamo;
 use C4::Modelo::CircPrestamo::Manager;
-
-use C4::Circulation::Circ2;
+#use C4::Circulation::Circ2;
 use C4::AR::Sanciones;
-use Date::Manip;
-use Time::HiRes qw(gettimeofday);
-use Thread;
-use Mail::Sendmail;
+#use Date::Manip;
+#use Thread;
+#use Mail::Sendmail;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
 
 $VERSION = 3;
 
 @ISA = qw(Exporter);
 
-@EXPORT = qw(
+@EXPORT_OK = qw(
 
     &t_devolver
     &t_renovar
@@ -53,7 +51,6 @@ sub getInfoPrestamo{
 
     my ($id_prestamo,$db) = @_;
     my @filtros;
-
     my $db_temp = C4::Modelo::CircPrestamo->new()->db;
     push (@filtros, (id_prestamo => {eq => $id_prestamo} ) );
     $db = $db || $db_temp;
