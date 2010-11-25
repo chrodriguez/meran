@@ -4,8 +4,6 @@ use strict;
 use C4::Auth;
 use CGI;
 use C4::Date;
-use Date::Manip;
-use C4::AR::Utilidades;
 use C4::AR::Proveedores;
 
 my $input = new CGI;
@@ -22,12 +20,11 @@ my ($template, $session, $t_params)= get_template_and_user({
   my $accion = $input->param('accion');
   my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
-  my $orden=$obj->{'orden'}||'nombre';
-  my $funcion=$obj->{'funcion'};
-  my $inicial=$obj->{'inicial'};
-  my $proveedor = $obj->{'nombre_proveedor'};
-  my $env;
-  my $ini=$obj->{'ini'} || 1;
+  my $orden =       $obj->{'orden'}||'nombre';
+  my $funcion =     $obj->{'funcion'};
+  my $inicial =     $obj->{'inicial'};
+  my $proveedor =   $obj->{'nombre_proveedor'};
+  my $ini =         $obj->{'ini'} || 1;
 
   my $funcion=$obj->{'funcion'};
 
@@ -58,7 +55,6 @@ my ($template, $session, $t_params)= get_template_and_user({
  
  }#END if($proveedores)
  
- C4::Auth::output_html_with_http_headers($template, $t_params, $session);
- 
 
-1;
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+ 
