@@ -87,6 +87,7 @@ use vars qw(@EXPORT @ISA);
     &paginarArreglo
     &capitalizarString
     &ciudadesAutocomplete
+    &catalogoAutocomplete
     &redirectAndAdvice
     &generarComboDeAnios
     &generarComboDeCredentials
@@ -2767,6 +2768,57 @@ sub ciudadesAutocomplete{
 
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
+
+sub catalogoAutocomplete{
+
+    my ($string_utf8_encoded) = @_;
+
+    $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
+
+    my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
+
+    use Sphinx::Search;
+    my $sphinx = Sphinx::Search->new();
+    my $query = '';
+
+    my $tipo        = 'SPH_MATCH_ALL';
+    my $tipo_match  = SPH_MATCH_ALL;
+
+    C4::AR::Debug::debug("Busquedas => match_mode ".$tipo);
+
+    #se arma el query string
+    foreach my $string (@searchstring_array){
+
+        if($tipo eq 'SPH_MATCH_PHRASE'){
+            $query .=  " ".$string;
+        } else {
+            $query .=  " ".$string."*";
+        }
+    }
+
+    $sphinx->SetMatchMode($tipo_match);
+    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+    $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+
+
+    my $results = $sphinx->Query($query);
+    
+    
+    my @results_array;
+    my $matches = $results->{'matches'};
+    my $total_found = $results->{'total_found'};
+    foreach my $hash (@$matches){
+            
+            push (@results_array, $hash->{'titulo'});
+    }
+    C4::AR::Debug::debug("CANTIDAD: ".$total_found);
+    return (\@results_array);
+}
+
+
+
+
+
 
 sub soportesAutocomplete{
 

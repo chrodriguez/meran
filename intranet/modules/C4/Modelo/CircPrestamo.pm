@@ -903,7 +903,6 @@ sub replaceBy {
 
 1;
 
-=======
 package C4::Modelo::CircPrestamo;
 
 use strict;

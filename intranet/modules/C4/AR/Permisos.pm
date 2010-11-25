@@ -147,7 +147,7 @@ sub getSelectorByte{
 }
 
 sub getRegularByte{
-  return SELECTOR;
+  return AUX;
 }
 
 
