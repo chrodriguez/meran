@@ -8,13 +8,10 @@
 <!-- Miguel agregue esta de abajo, es la de datepicker -->
 <script type="text/javascript" src="/includes/jquery/datetimepicker/jquery.ui.datepicker-es.js"></script>
 
-
+<link href="/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet"> 
+<!-- <link href="/includes/css/datePicker.css" type="text/css" rel="stylesheet">  -->
 
 <script type="text/javascript">
-
-// MIGUEL esto lo saque de arriba parece q no es necesario
-// <link href="/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet"> 
-// <link href="/includes/css/datePicker.css" type="text/css" rel="stylesheet"> 
 
     /* VARIABLES PARA EL DatePicker */
     

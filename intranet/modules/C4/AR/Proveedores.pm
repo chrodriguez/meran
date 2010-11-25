@@ -35,19 +35,20 @@ sub agregarProveedor{
           # 	entro si no hay algun error, todos los campos ingresados son validos
           $db->{connect_options}->{AutoCommit} = 0;
           $db->begin_work;
-#           eval{
+          eval{
               $proveedor->agregarProveedor($param);
               $msg_object->{'error'}= 0;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
               $db->commit;
-#           };
-#           if ($@){
+
+          };
+          if ($@){
 #           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
-#               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
-#               $msg_object->{'error'}= 1;
-#               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
-#               $db->rollback;
-#           }
+              &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+              $msg_object->{'error'}= 1;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+              $db->rollback;
+          }
 
           $db->{connect_options}->{AutoCommit} = 1;
     }
@@ -62,13 +63,14 @@ sub agregarProveedor{
 =cut
 sub eliminarProveedor {
 
-     my ($id_prov)=@_;
+     my ($id_prov) = @_;
      my $msg_object= C4::AR::Mensajes::create();
      my $prov = C4::AR::Proveedores::getProveedorInfoPorId($id_prov);
  
      eval {
          $prov->desactivar;
          $msg_object->{'error'}= 0;
+# FIXME no mostrar id_prov, mostrar Apellido y Nombre si es persona física y Razon social si es persona jurídica
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$id_prov]} ) ;
      };
  
@@ -77,6 +79,7 @@ sub eliminarProveedor {
          &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
          #Se setea error para el usuario
          $msg_object->{'error'}= 1;
+# FIXME no mostrar id_prov, mostrar Apellido y Nombre si es persona física y Razon social si es persona jurídica
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [$id_prov]} ) ;
      }
  
@@ -124,8 +127,6 @@ sub editarProveedor{
               $db->rollback;
           }
 
-    #       my $prov = C4::AR::Proveedores::getProveedorInfoPorId($id_prov);
-
     }
 
      return ($msg_object);
@@ -147,7 +148,7 @@ sub getProveedorInfoPorId {
         return $proveedorTemp->[0]
     }
 
-  return 0;
+    return 0;
 }
 
 # =item
@@ -155,8 +156,9 @@ sub getProveedorInfoPorId {
 # =cut
 sub getProveedorLike {
 
-    use C4::Modelo::AdqProveedor;
-    use C4::Modelo::AdqProveedor::Manager;
+# FIXME definir los módulos arriba
+#     use C4::Modelo::AdqProveedor;
+#     use C4::Modelo::AdqProveedor::Manager;
     my ($proveedor,$orden,$ini,$cantR,$habilitados,$inicial) = @_;
     my @filtros;
     my $proveedorTemp = C4::Modelo::AdqProveedor->new();
@@ -176,9 +178,9 @@ sub getProveedorLike {
     push(@filtros, ( activo => { eq => $habilitados}));
     my $ordenAux= $proveedorTemp->sortByString($orden);
     my $proveedores_array_ref = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor(   query => \@filtros,
-                                                                            sort_by => $ordenAux,
-                                                                            limit   => $cantR,
-                                                                            offset  => $ini,
+                                                                                        sort_by => $ordenAux,
+                                                                                        limit   => $cantR,
+                                                                                        offset  => $ini,
      ); 
 
     #Obtengo la cant total de proveedores para el paginador

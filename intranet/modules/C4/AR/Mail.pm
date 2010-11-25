@@ -305,10 +305,6 @@ sub send_mail_TEST {
 sub send_mail {
     my ($info_smtp_hash_ref) = @_;
 
-    use Net::SMTP;
-    use Net::SMTP::SSL;
-    use Net::SMTP::TLS;
-
     C4::AR::Debug::debug("Mail => send_mail");
 
 
@@ -358,4 +354,8 @@ sub send_mail {
 }
 
 
+END { }       # module clean-up code here (global destructor)
+
 1;
+__END__
+

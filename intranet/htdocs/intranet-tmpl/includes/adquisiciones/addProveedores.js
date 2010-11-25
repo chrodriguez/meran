@@ -181,7 +181,7 @@ function agregarProveedor(){
       objAH.apellido            = $('#apellido').val();
       objAH.nombre              = $('#nombre').val();
       objAH.domicilio           = $('#domicilio').val();
-      objAH.tipo_doc            = $('#tipo_doc').val();
+      objAH.tipo_doc            = $('#tipo_documento_id').val();
       objAH.nro_doc             = $('#nro_doc').val();
       objAH.razon_social        = $('#razon_social').val();
       objAH.proveedor_activo    = $("input[@name=proveedor_activo]:checked").val();
@@ -189,7 +189,7 @@ function agregarProveedor(){
       objAH.pais                = $('#pais').val();
       objAH.cuit_cuil           = $('#cuit_cuil').val();
       objAH.provincia           = $('#provincia').val();
-      objAH.ciudad              = $('#ciudad').val();
+      objAH.ciudad              = $('#id_ciudad').val();
       objAH.email               = $('#email').val();
       objAH.plazo_reclamo       = $('#plazo_reclamo').val();
       objAH.fax                 = $('#fax').val();  
