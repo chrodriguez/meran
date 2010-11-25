@@ -35,7 +35,6 @@ C4::AR::Usuarios
 use strict;
 require Exporter;
 
-use Date::Manip;
 use C4::Date;
 use C4::AR::Validator;
 
@@ -44,6 +43,9 @@ use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrPersona::Manager;
 use C4::Modelo::UsrEstado;
 use C4::Modelo::UsrEstado::Manager;
+use C4::Modelo::UsrSocio;
+use C4::Modelo::UsrSocio::Manager;
+use Switch;
 
 #use C4::Context;
 #EINAR use Digest::MD5 qw(md5_base64);
@@ -555,11 +557,9 @@ sub _verificarDatosBorrower {
                 HASH: con todos los datos de UsrPersona y UsrSocio
 =cut
 sub actualizarSocio {
-
-    my ($params)=@_;
-    my $dbh = C4::Context->dbh;
-    my $msg_object= C4::AR::Mensajes::create();
-    use C4::Modelo::UsrSocio::Manager;
+    my ($params)    = @_;
+    my $dbh         = C4::Context->dbh;
+    my $msg_object  = C4::AR::Mensajes::create();
 
     $params->{'actionType'} = "update";
     $params->{'modifica'} = 1;
@@ -596,11 +596,9 @@ sub actualizarSocio {
     Esta funcion devuelve la informacion del socio, segun el id_socio que recibe por parametro
 =cut
 sub getSocioInfo {
-
     my ($id_socio) = @_;
     my @filtros;
 
-    use C4::Modelo::UsrSocio::Manager;
     push (@filtros, (id_socio => {eq =>$id_socio}) );
 
     my  $socio = C4::Modelo::UsrSocio::Manager->get_usr_socio(query => \@filtros,
@@ -643,9 +641,8 @@ sub getSocioInfoPorNroSocio {
     Este funcion devuelve 1 si existe el socio y 0 si no existe
 =cut
 sub existeSocio {
-
     my ($nro_socio)= @_;
-    use C4::Modelo::UsrSocio;
+  
 
     my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => [ nro_socio => { eq => $nro_socio } ]);
 
@@ -656,10 +653,8 @@ sub existeSocio {
     Esta funcion busca por nro_documento, nro_socio, apellido y combinados por ej: "27 Car", donde 27 puede ser parte del DNI o legajo o ambos
 =cut
 sub getSocioLike {
-
-    use C4::Modelo::UsrSocio;
-    use C4::Modelo::UsrSocio::Manager;
     my ($socio,$orden,$ini,$cantR,$habilitados,$inicial) = @_;
+
     my @filtros;
     my $socioTemp = C4::Modelo::UsrSocio->new();
     my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($socio);
@@ -741,12 +736,12 @@ sub estaSancionado {
 }
 
 sub editarAutorizado{
-    my ($params)=@_;
-    use Switch;
-    my $nro_socio = $params->{'nro_socio'};
-    my $campo = $params->{'id'};
-    my $value = $params->{'value'};
-    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+    my ($params)    = @_;
+
+    my $nro_socio   = $params->{'nro_socio'};
+    my $campo       = $params->{'id'};
+    my $value       = $params->{'value'};
+    my $socio       = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
     if ($socio){
         switch ($campo) {
@@ -828,10 +823,8 @@ sub BornameSearchForCard {
     Checkea que un nro_documento junto con su tipo, no existan en la base, porque por motivos de diseño, no se puede poner restriccion en la DB.
 =cut
 sub isUniqueDocument {
-
     my ($nro_documento,$params) = @_;
     my @filtros;
-    use C4::Modelo::UsrSocio::Manager;
 
     push (@filtros, ( 'persona.nro_documento' => {eq => $nro_documento}, ) );
 
