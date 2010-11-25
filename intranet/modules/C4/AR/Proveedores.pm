@@ -35,20 +35,20 @@ sub agregarProveedor{
           # 	entro si no hay algun error, todos los campos ingresados son validos
           $db->{connect_options}->{AutoCommit} = 0;
           $db->begin_work;
-#           eval{
+          eval{
               $proveedor->agregarProveedor($param);
               $msg_object->{'error'}= 0;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
               $db->commit;
-# TODO falta !!!!
-#           };
-#           if ($@){
+
+          };
+          if ($@){
 #           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
-#               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
-#               $msg_object->{'error'}= 1;
-#               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
-#               $db->rollback;
-#           }
+              &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+              $msg_object->{'error'}= 1;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+              $db->rollback;
+          }
 
           $db->{connect_options}->{AutoCommit} = 1;
     }
