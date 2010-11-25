@@ -1469,6 +1469,7 @@ sub obtenerDatosValorAutorizado{
 buscarCiudades
 Busca las ciudades con todas la relaciones. Se usa para el autocomplete en la parte de agregar usuario.
 =cut
+# TODO usar Ros::DB
 sub buscarCiudades{
 
     my ($ciudad) = @_;
@@ -1478,10 +1479,10 @@ sub buscarCiudades{
                             ref_localidad.nombre AS nombre 
 
                     FROM ref_localidad LEFT JOIN ref_dpto_partido ON 
-                                (ref_localidad.DPTO_PARTIDO = ref_dpto_partido.DPTO_PARTIDO) 
+                                (ref_localidad.ref_dpto_partido_id = ref_dpto_partido.id) 
                                     LEFT JOIN ref_provincia ON 
-                                        (ref_dpto_partido.provincia = ref_provincia.provincia) LEFT JOIN ref_pais ON 
-                                            (ref_pais.codigo = ref_provincia.pais)
+                                        (ref_dpto_partido.ref_provincia_id = ref_provincia.id) LEFT JOIN ref_pais ON 
+                                            (ref_pais.id = ref_provincia.ref_pais_id)
 
                     WHERE (ref_localidad.nombre LIKE ?) OR (ref_localidad.nombre LIKE ?)
                     ORDER BY (ref_localidad.nombre)";
