@@ -61,6 +61,7 @@ sub agregarProveedor{
     Parametros: 
                 {id_proveedor}
 =cut
+
 sub eliminarProveedor {
 
      my ($id_prov) = @_;
@@ -214,7 +215,6 @@ sub _verificarDatosProveedor {
      my $pais = $data->{'pais'};
      my $provincia = $data->{'provincia'};
      my $ciudad = $data->{'ciudad'};
-
      my $domicilio = $data->{'domicilio'};
      my $telefono = $data->{'telefono'};
      my $fax = $data->{'fax'};     
@@ -311,7 +311,7 @@ sub _verificarDatosProveedor {
 #                 
 #           }
 
-
+          
           if($ciudad ne ""){
               if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($ciudad)))){
                   $msg_object->{'error'}= 1;

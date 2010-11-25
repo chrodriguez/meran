@@ -184,9 +184,9 @@
                               [% PERL %]
                                             print C4::AR::Filtros::link_to(   
                                                                               text =>     C4::AR::Filtros::to_Icon( boton   => "icon_mas" ),
-                                                                              url =>      "/cgi-bin/koha/adquisiciones/proveedoresDB.pl", 
+                                                                              url =>      "/cgi-bin/koha/adquisiciones/datosProveedor.pl", 
                                                                               params =>   ["id_proveedor=[% proveedor.getId %]",
-                                                                                          "accion=DETALLE"],
+                                                                                          "action=DETALLE"],
                                                                               title =>    "[% 'Ver datos de contacto' | i18n %]"
                                                                         );
                               [% END %]

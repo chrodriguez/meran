@@ -32,18 +32,20 @@ __PACKAGE__->meta->setup(
         activo                          => { type => 'integer', default => 1, not_null => 1},
     ],
 
+
     relationships =>
     [
-      usr_ref_tipo_documento_id => 
+      ref_tipo_documento => 
       {
-         class       => 'C4::Modelo::RefTipoDocumento',
-         key_columns => { id => 'idTipoDoc' },
+         class       => 'C4::Modelo::UsrRefTipoDocumento',
+         key_columns => {usr_ref_tipo_documento_id => 'id' },
          type        => 'one to one',
        },
-      ref_localidad_id => 
+      
+      ref_localidad => 
       {
         class       => 'C4::Modelo::RefLocalidad',
-        key_columns => { id => 'id' },
+        key_columns => {ref_localidad_id => 'id' },
         type        => 'one to one',
       },
 
