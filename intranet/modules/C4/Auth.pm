@@ -714,6 +714,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
 #                 TODO ver si se pueden guardar los permisos en la sesion para evitar cargar el socio mas arriba
                 $flags = $socio->tienePermisos($flagsrequired);
 
+
                 if ($flags) {
                     $loggedin = 1;
                     C4::AR::Debug::debug("checkauth=> TIENE PERMISOS: \n");
