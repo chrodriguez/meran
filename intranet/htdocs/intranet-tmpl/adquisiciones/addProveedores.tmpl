@@ -4,15 +4,15 @@
 
 [% INCLUDE "FormValidateHelper.inc" %]
 
-[% INCLUDE 'datePicker.inc' %]
 [% INCLUDE 'AutocompleteHelper.inc'  %]
 
 
 <script type="text/javascript">
 
-
  $(document).ready(function() {
-         validateForm(agregarProveedor);
+         validateForm(agregarProveedor)
+         $('#datos_proveedor').hide()
+         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
  });
 
 </script>
@@ -25,28 +25,41 @@
             [% END %]
 </legend>
 
+<form name=myform>
+  <ul>
+    <li class="sub_item">
+        <input type="radio" name="radio" id="persona_fisica" onclick="verDatosPersonaFisica()">Persona Fisica
+    </li>
+    <li class="sub_item">
+      <input type="radio" name="radio" id="persona_juridica" onclick="verDatosPersonaJuridica()">Persona Juridica
+    </li>
+  </ul>
+</form>
+
 <form method=post  name="proveedorDataForm" id="proveedorDataForm">
-    <fieldset>
+    <fieldset id="datos_proveedor">
     <legend class="titulo_legend">[% "Datos del proveedor" | i18n %]</legend>
     <ul>
         <li class="sub_item">
-            <label for="nombre"> [% "Nombre" | i18n %] *</label>
+            <label for="nombre" id="label_nombre"> [% "Nombre" | i18n %] *</label>
             <input id="nombre" name="nombre" class="required" type="text" size="25">
         </li>
         <li class="sub_item">
-            <label for="apellido"> [% "Apellido" | i18n %] *</label>
+            <label for="apellido" id="label_apellido"> [% "Apellido" | i18n %] *</label>
             <input id="apellido" name="apellido" class="required" type="text" size="25">
         </li>
 
         <li class="sub_item">
-            <label for="nro_doc">[% "Documento" | i18n %] *</label>
+            <label for="nro_doc" id="label_nro_doc">[% "Documento" | i18n %] *</label>
+
             [% combo_tipo_documento %] 
+
             <input  id="nro_doc" name="nro_doc" class="required" type="text" size="15" 
                     value="[% proveedor.getNroDoc %]">
         </li>
 
         <li class="sub_item">
-            <label for="razon_social">[% "Razon Social" | i18n %] *</label>
+            <label for="razon_social" id="label_razon_social">[% "Razon Social" | i18n %] *</label>
             <input 	id="razon_social" name="razon_social" class="required" type="text" size="15">
         </li>
 
@@ -65,24 +78,13 @@
         [% END %]
      </ul>
     </fieldset>
-  
-<!--    VER COMO MOSTRAR COMBOS DE PAISES; CIUDADES, PROV  -->
-
- 
     <fieldset>
       <legend class="titulo_legend">[% "Datos de contacto del proveedor" | i18n %]</legend>
         <ul>
             <li class="sub_item">
-                <label for="pais">[% "Pais" | i18n %] *</label>
-                <input  id="pais" name="pais" class="required" type="text" size="15">
-            </li>
-            <li class="sub_item">
-                <label for="provincia">[% "Provincia" | i18n %] *</label>
-                <input  id="provincia" name="provincia" class="required" type="text" size="15">
-            </li>
-            <li class="sub_item">
                 <label for="ciudad">[% "Ciudad" | i18n %] *</label>
                 <input  id="ciudad" name="ciudad" class="required" type="text" size="15">
+                <input  id="id_ciudad" type="hidden" name="ciudad" class="required" type="text" size="15">
             </li>
             <li class="sub_item">
                 <label for="domicilio">[% "Domicilio" | i18n %] *</label>
@@ -96,7 +98,7 @@
 
             <li class="sub_item">
                 <label for="fax">[% "Fax" | i18n %] </label>
-                <input  id="fax" name="fax" class="required" type="text" size="15">
+                <input  id="fax" name="fax" type="text" size="15">
             </li>
 
             <li class="sub_item">
@@ -117,48 +119,6 @@
 <fieldset>
       <legend class="titulo_legend">[% "Monedas" | i18n %]</legend>
 </fieldset>
-
-<!--<fieldset>
-<legend class="titulo_legend">[% "Informaci&oacute;n de contacto" | i18n %] </legend>
-<ul>
-<li class="sub_item">
-    <label for="calle"> [% "Direcci&oacute;n" | i18n %] * </label>
-            <input class="required" type=text id="calle" name="calle" size="25" value="[% socio_modificar.persona.getCalle %]">
-</li>
-<li class="sub_item">
- <label for="codigo_postal">           [% "C&oacute;digo Postal" | i18n %]</label>
-            <input type="text" name="codigo_postal"  id="codigo_postal" size="25" value="[% codigo_postal %]">
-</li>
-<li class="sub_item">
-     <label for="id_ciudad"> [% "Ciudad" | i18n %] * </label>
-            <input class="required" type=text id="ciudad" name="ciudad" value="[% socio_modificar.persona.ciudad_ref.getNombre %]" size="25"  >
-            <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% socio_modificar.persona.ciudad_ref.id %]">
-</li>
-<li class="sub_item">
- <label for="telefono">           [% "Tel&eacute;fono particular" | i18n %] </label>
-                <input type=text id="telefono" name="telefono" size="25" value="[% socio_modificar.persona.getTelefono %]">
-</li>
-<li class="sub_item">
- <label for="telefono_laboral">    [% "Tel&eacute;fono del trabajo" | i18n %]</label>
-                <input type=text id="telefono_laboral" name="telefono_laboral" size="25" 
-                    value="[% socio_modificar.persona.getTelefono_laboral %]">
-</li>
-<li class="sub_item">
-  <label for="alt_calle">          [% "Direcci&oacute;n de origen" | i18n %]</label>
-                <input type=text id="alt_calle" name="alt_calle" size="25" value="[% socio_modificar.persona.getAlt_calle %]">
-</li>
-<li class="sub_item">
-   <label for="id_alt_ciudad">    [% "Ciudad de origen" | i18n %]</label>
-            <input  type=text id="alt_ciudad" name="alt_ciudad" 
-                value="[% socio_modificar.persona.alt_ciudad_ref.getNombre%]" size="25" >
-            <input type=hidden id="id_alt_ciudad" name="id_alt_ciudad" value="[% socio_modificar.persona.alt_ciudad_ref.LOCALIDAD %]"> 
-</li>
-<li class="sub_item">
-   <label for="email">   [% "E-Mail" | i18n %] *</label>
-                <input class="required" type=text id="email" name="email" size="25" value="[% socio_modificar.persona.getEmail %]">
-        </li>
-        </ul>
-</fieldset>-->
 
 <div class="buttonContainerHorizontal">
     <ul class="listaMenuBotones" >
@@ -191,5 +151,5 @@
 
 </form>
 
-    [% INCLUDE "intranet-bottom.inc" %]
+[% INCLUDE "intranet-bottom.inc" %]
 

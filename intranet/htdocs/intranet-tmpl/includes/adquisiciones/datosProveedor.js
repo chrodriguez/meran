@@ -8,6 +8,16 @@
 
 
 //*********************************************Editar Proveedor********************************************* 
+   $(document).ready(function() {
+        CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
+   
+   
+      });   
+     
+ 
+
+
+
 
    function modificarDatosDeProveedor(){
         objAH         = new AjaxHelper(updateDatosProveedor);
@@ -21,8 +31,6 @@
         objAH.numero_documento    = $('#numero_documento').val();
         objAH.razon_social        = $('#razon_social').val();
         objAH.cuit_cuil           = $('#cuit_cuil').val();
-        objAH.pais                = $('#pais').val();
-        objAH.provincia           = $('#provincia').val();
         objAH.cuidad              = $('#cuidad').val();
         objAH.domicilio           = $('#domicilio').val();
         objAH.telefono            = $('#telefono').val();

@@ -7,12 +7,15 @@ use C4::Context;
 use C4::Date;
 use C4::Modelo::CatRegistroMarcN3;
 use C4::Modelo::CatRegistroMarcN3::Manager;
+use C4::Modelo::CircPrestamo;
+use C4::Modelo::CircPrestamo::Manager;
 
-use vars qw(@EXPORT @ISA);
+
+use vars qw(@EXPORT_OK @ISA);
 
 @ISA=qw(Exporter);
 
-@EXPORT=qw(
+@EXPORT_OK=qw(
 
 	&detalleNivel3
 	&getBarcode
@@ -291,9 +294,6 @@ sub getNivel3FromId3{
 sub getNivel3FromBarcode {
     my ($barcode) = @_;
     
-#     use C4::Modelo::CatNivel3;
-#     use C4::Modelo::CatNivel3::Manager;
-
 # TODO Miguel ver si esto es eficiente, de todos modos no se si se puede hacer de otra manera!!!!!!!!!!
 # 1) parece q no queda otra, hay q "abrir" el marc_record y sacar el barcode para todos los ejemplares e ir comparando cada uno GARRONNNN!!!!
 # 2) se podria usar el indice??????????????
@@ -324,11 +324,8 @@ sub getNivel3FromBarcode {
 
 
 sub getBarcodesLike {
-    
-    use C4::Modelo::CatRegistroMarcN3;
-    use C4::Modelo::CatRegistroMarcN3::Manager;
-
     my ($barcode) = @_;
+
     my  $barcodes_array_ref;
     my @filtros;
  
@@ -348,11 +345,8 @@ sub getBarcodesLike {
 busca un barcode segun barcode, sobre el conjunto de barcodes prestados
 =cut
 sub getBarcodesPrestadoLike {
-    
-    use C4::Modelo::CircPrestamo;
-    use C4::Modelo::CircPrestamo::Manager;
-
     my ($barcode) = @_;
+
     my  $barcodes_array_ref;
     my @filtros;
  

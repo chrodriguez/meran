@@ -3,17 +3,18 @@ package C4::AR::Permisos;
 use strict;
 require Exporter;
 use C4::Context;
-use CGI::Session;
+# use CGI::Session;
 use C4::Modelo::PermCatalogo;
 use C4::Modelo::PermCatalogo::Manager;
 use C4::Modelo::PermGeneral;
 use C4::Modelo::PermGeneral::Manager;
 use C4::Modelo::PermCirculacion;
 use C4::Modelo::PermCirculacion::Manager;
-use CGI;
+# use CGI;
 use Encode;
-use JSON;
+# use JSON;
 use POSIX qw(ceil floor); #para redondear cuando divido un numero
+
 use constant {
         AUX             => '00100000',
         TODOS           => '00010000',
@@ -356,7 +357,7 @@ sub armarPerfilCatalogo{
 
     my ($perfil,$permisos) = @_;
 
-    use C4::Modelo::PermCatalogo;
+#     use C4::Modelo::PermCatalogo;
     my $permisoTemp = $permisos || C4::Modelo::PermCatalogo->new();
 
     if ($perfil eq 'SL'){
@@ -484,7 +485,7 @@ sub armarPerfilGeneral{
 
     my ($perfil,$permisos) = @_;
 
-    use C4::Modelo::PermGeneral;
+#     use C4::Modelo::PermGeneral;
 
     my $permisoTemp = $permisos || C4::Modelo::PermGeneral->new();
 
@@ -613,7 +614,7 @@ sub armarPerfilCirculacion{
 
     my ($perfil,$permisos) = @_;
 
-    use C4::Modelo::PermCirculacion;
+#     use C4::Modelo::PermCirculacion;
 
     my $permisoTemp = $permisos || C4::Modelo::PermCirculacion->new();
 

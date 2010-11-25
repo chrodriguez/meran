@@ -23,19 +23,25 @@ package C4::AR::Referencias;
 use strict;
 require Exporter;
 use C4::Context;
-use Date::Manip;
 use C4::Date;
+use C4::Modelo::PrefTablaReferencia;
+use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
+use C4::Modelo::PrefEstructuraSubcampoMarc;
+use C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager;
 use JSON;
+use Switch;
 
-use vars qw(@EXPORT @ISA);
-@ISA=qw(Exporter);
-@EXPORT=qw(
-            &obtenerTiposDeDocumentos
-            &obtenerCategoriaDeSocio
-				&getCamposDeTablaRef
-				&obtenerValoresTablaRef
-				&obtenerTablasDeReferencia
-    );
+use vars qw(@EXPORT_OK @ISA);
+@ISA        = qw(Exporter);
+@EXPORT_OK  = qw(
+                    &obtenerTiposDeDocumentos
+                    &obtenerCategoriaDeSocio
+                    &getCamposDeTablaRef
+                    &obtenerValoresTablaRef
+                    &obtenerTablasDeReferencia
+                    &obtenerTiposDeDocumentos
+                    &obtenerTiposNivel3
+        );
 
 
 #Este modulo provee funcionalidades varias sobre las tablas de referencias en general
@@ -57,36 +63,6 @@ use vars qw(@EXPORT @ISA);
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
-use strict;
-require Exporter;
-use C4::Context;
-use Date::Manip;
-use C4::Date;
-use C4::Modelo::PrefTablaReferencia;
-use C4::Modelo::PrefTablaReferencia::Manager;
-use C4::Modelo::UsrRefTipoDocumento;
-use C4::Modelo::UsrRefTipoDocumento::Manager;
-use C4::Modelo::UsrRefCategoriaSocio;
-use C4::Modelo::UsrRefCategoriaSocio::Manager;
-use C4::Modelo::PrefUnidadInformacion;
-use C4::Modelo::PrefUnidadInformacion::Manager;
-use C4::Modelo::RefDisponibilidad;
-use C4::Modelo::RefDisponibilidad::Manager;
-use C4::Modelo::CatRefTipoNivel3;
-use C4::Modelo::CatRefTipoNivel3::Manager;
-use C4::Modelo::RefLocalidad;
-use C4::Modelo::RefLocalidad::Manager;
-use C4::Modelo::RefColaborador;
-use C4::Modelo::RefColaborador::Manager;
-# use JSON;
-
-use vars qw(@EXPORT @ISA);
-@ISA=qw(Exporter);
-@EXPORT=qw(
-            &obtenerTiposDeDocumentos
-            &obtenerTiposNivel3
-          );
 
 # 
 # INSERT INTO `ref_estado` (`id`, `nombre`) VALUES
@@ -151,8 +127,6 @@ sub getIdRefEstadoEtiquetado{
 =cut
 sub getInformacionReferenciaFromId {
     my ($db, $id) = @_;
-
-    use C4::Modelo::PrefInformacionReferencia::Manager;
 
     my $informacion_referencia_array_ref = C4::Modelo::PrefInformacionReferencia::Manager->get_pref_informacion_referencia(
                                                                 db      => $db,
@@ -335,7 +309,6 @@ sub obtenerTablasDeReferenciaAsString {
 
 sub getCamposDeTablaRef{
     # (Chain Of Responsibility Object Pattern)
-    use C4::Modelo::PrefTablaReferencia;
     my ($tableAlias) = @_;
 
     my $db = C4::Modelo::PrefTablaReferencia->new();
@@ -358,7 +331,7 @@ sub obtenerValoresTablaRef{
 #     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => tableAlias: ".$tableAlias);
 #     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => campo: ".$campo);
 #     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => orden: ".$orden);
-    use C4::Modelo::PrefTablaReferencia;
+    
     my $ref = C4::Modelo::PrefTablaReferencia->new();
 	  my ($cantidad,$valores) = $ref->obtenerValoresTablaRef($tableAlias,$campo, $orden);
 
@@ -375,7 +348,6 @@ Obtiene el campo clave de la tabla a la cual se esta asi referencia
 sub obtenerIdentTablaRef{
     my ($tableAlias)=@_;
 
-    use C4::Modelo::PrefTablaReferencia;
     my $ref = C4::Modelo::PrefTablaReferencia->new();
 
     return($ref->obtenerIdentTablaRef($tableAlias));
@@ -431,8 +403,6 @@ Devuelve un arreglo de objetos PrefEstructuraCampoMarc
 =cut
 sub obtenerSubCamposDeCampo {
 	my ($campo) = @_;
-	use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
-	use C4::Modelo::PrefEstructuraSubcampoMarc;
 
     my $campos_marc_array_ref = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
 																query => [ campo => { eq => $campo } ]
@@ -573,11 +543,8 @@ sub getTablaInstanceByAlias{
     return ($clave,$tabla);
 }
 
-sub getTablaInstanceByTableName{
-    
+sub getTablaInstanceByTableName{ 
     my ($name) = @_;
-    
-    use Switch;
    
     my $tabla;
 
@@ -628,7 +595,6 @@ sub mostrarReferencias{
 
     my @data_array;
 
-    use C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager;
     push (  @filtros, ( alias_tabla => { eq => $alias },) );
 
     my $tablas_matching = C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager->get_pref_tabla_referencia_rel_catalogo(

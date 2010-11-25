@@ -1470,6 +1470,7 @@ sub obtenerDatosValorAutorizado{
 buscarCiudades
 Busca las ciudades con todas la relaciones. Se usa para el autocomplete en la parte de agregar usuario.
 =cut
+# TODO usar Ros::DB
 sub buscarCiudades{
 
     my ($ciudad) = @_;
@@ -1479,10 +1480,10 @@ sub buscarCiudades{
                             ref_localidad.nombre AS nombre 
 
                     FROM ref_localidad LEFT JOIN ref_dpto_partido ON 
-                                (ref_localidad.DPTO_PARTIDO = ref_dpto_partido.DPTO_PARTIDO) 
+                                (ref_localidad.ref_dpto_partido_id = ref_dpto_partido.id) 
                                     LEFT JOIN ref_provincia ON 
-                                        (ref_dpto_partido.provincia = ref_provincia.provincia) LEFT JOIN ref_pais ON 
-                                            (ref_pais.codigo = ref_provincia.pais)
+                                        (ref_dpto_partido.ref_provincia_id = ref_provincia.id) LEFT JOIN ref_pais ON 
+                                            (ref_pais.id = ref_provincia.ref_pais_id)
 
                     WHERE (ref_localidad.nombre LIKE ?) OR (ref_localidad.nombre LIKE ?)
                     ORDER BY (ref_localidad.nombre)";
@@ -1727,43 +1728,43 @@ sub generarComboCategoriasDeSocio{
 
 #GENERA EL COMBO CON LOS DOCUMENTOS, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
 sub generarComboTipoDeDoc{
-
     my ($params) = @_;
 
     my @select_docs_array;
     my %select_docs;
-    my $docs=&C4::AR::Referencias::obtenerTiposDeDocumentos();
+    my $docs        = &C4::AR::Referencias::obtenerTiposDeDocumentos();
 
     foreach my $doc (@$docs) {
-        push(@select_docs_array, $doc->nombre);
-        $select_docs{$doc->nombre}= $doc->descripcion;
+        push(@select_docs_array, $doc->getId);
+        $select_docs{$doc->getId}  = $doc->getNombre;
     }
-    $select_docs{''}= 'SIN SELECCIONAR';
+
+    $select_docs{''}                = 'SIN SELECCIONAR';
 
     my %options_hash; 
 
     if ( $params->{'onChange'} ){
-        $options_hash{'onChange'}= $params->{'onChange'};
+        $options_hash{'onChange'}   = $params->{'onChange'};
     }
     if ( $params->{'onFocus'} ){
-        $options_hash{'onFocus'}= $params->{'onFocus'};
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
-    if ( $params->{'onBlur'} ){
-        $options_hash{'onBlur'}= $params->{'onBlur'};
+    if ( $params->{'onBlur'} ){ 
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
-    $options_hash{'name'}= $params->{'name'}||'tipo_documento_id';
-    $options_hash{'id'}= $params->{'id'}||'tipo_documento_id';
-    $options_hash{'size'}=  $params->{'size'}||1;
-    $options_hash{'class'}=  'required';
-    $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoDoc");
+    $options_hash{'name'}       = $params->{'name'}||'tipo_documento_id';
+    $options_hash{'id'}         = $params->{'id'}||'tipo_documento_id';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'class'}      = 'required';
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoDoc");
 
     push (@select_docs_array, '');
-    $options_hash{'values'}= \@select_docs_array;
-    $options_hash{'labels'}= \%select_docs;
+    $options_hash{'values'}     = \@select_docs_array;
+    $options_hash{'labels'}     = \%select_docs;
 
-    my $combo_tipo_documento= CGI::scrolling_list(\%options_hash);
+    my $combo_tipo_documento    = CGI::scrolling_list(\%options_hash);
 
     return $combo_tipo_documento; 
 }

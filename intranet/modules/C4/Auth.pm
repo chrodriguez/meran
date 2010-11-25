@@ -44,6 +44,8 @@ use C4::Modelo::CircReserva;
 use CGI::Cookie;
 use Crypt::CBC;
 use MIME::Base64;
+# use POSIX;
+use Locale::Maketext::Gettext::Functions;
 
 #EINAR use C4::Interface::CGI::Output;
 #EINAR use C4::Circulation::Circ2;  # getpatroninformation
@@ -540,9 +542,6 @@ sub buildSocioData{
 =cut
 sub _init_i18n {
     my($params) = @_;
-  
-    use POSIX;
-    use Locale::Maketext::Gettext::Functions;
 
     my $locale = C4::Auth::getUserLocale();
     Locale::Maketext::Gettext::Functions::bindtextdomain($params->{'type'}, C4::Context->config("locale"));
@@ -555,13 +554,8 @@ sub _init_i18n {
 
 #checkauth RECORTADO
 sub checkauth {
-C4::AR::Debug::debug("desde checkauth==================================================================================================");    
-# use POSIX;
-# use Locale::Maketext::Gettext::Functions;
-# use Template::Plugin::Filter;
+    C4::AR::Debug::debug("desde checkauth==================================================================================================");    
     my $context = new C4::Context;
-
-    C4::AR::Debug::debug("debug => ".$context->config('debug'));
 
     my $query               = shift;
     # $authnotrequired will be set for scripts which will run without authentication
@@ -713,6 +707,7 @@ C4::AR::Debug::debug("desde checkauth===========================================
 
 #                 TODO ver si se pueden guardar los permisos en la sesion para evitar cargar el socio mas arriba
                 $flags = $socio->tienePermisos($flagsrequired);
+
 
                 if ($flags) {
                     $loggedin = 1;

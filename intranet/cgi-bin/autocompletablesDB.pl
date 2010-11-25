@@ -2,6 +2,7 @@
 
 use strict;
 use CGI;
+use C4::Auth;
 use C4::AR::Utilidades;
 
 my $input = new CGI;

@@ -3,6 +3,7 @@
   <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedoresResult.js"></script>
 
 [% INCLUDE "WindowHelper.inc" %] 
+[% INCLUDE 'AutocompleteHelper.inc'  %]
 [% INCLUDE "ChangePasswordHelper.inc"  %]
 
   <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
@@ -47,18 +48,9 @@
           </li>
 
           <li class="sub_item"> 
-          <label for="pais"> [% "Pais" | i18n %] *</label>
-          <input  id="pais" name="pais" type="text" class="required" size="25" value="[% proveedor.getPais %]">
-          </li>
-
-          <li class="sub_item"> 
-          <label for="provincia"> [% "Provincia" | i18n %] *</label>
-          <input  id="provincia" name="provincia" class="required" type="text" size="25" value="[% proveedor.getProvincia %]">
-          </li>
-
-          <li class="sub_item"> 
-          <label for="cuidad"> [% "Ciudad" | i18n %] *</label>
-          <input  id="cuidad" name="cuidad" type="text" class="required" size="25" value="[% proveedor.getCiudad %]">
+          <label for="ciudad"> [% "Ciudad" | i18n %] *</label>
+          <input  id="ciudad" name="ciudad" type="text" class="required" size="25" value="[% proveedor.ref_localidad.getNombre %]">
+           <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% proveedor.ref_localidad_id.id %]">
           </li>
 
           <li class="sub_item"> 

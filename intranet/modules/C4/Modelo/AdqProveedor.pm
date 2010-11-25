@@ -16,54 +16,38 @@ __PACKAGE__->meta->setup(
     table   => 'adq_proveedor',
 
     columns => [
-        id_proveedor   => { type => 'integer', not_null => 1 },
-        apellido  => { type => 'varchar', length => 255, not_null => 1},
-        nombre  => { type => 'varchar', length => 255, not_null => 1},
-        tipo_doc => { type => 'integer', not_null => 1},
-        nro_doc => { type => 'varchar', length => 12, not_null => 1 },
-        razon_social => { type => 'varchar', length => 255, not_null => 1 },
-        cuit_cuil => { type => 'varchar', length => 32, not_null => 1 },
-        pais => { type => 'integer', not_null => 1},
-        provincia => { type => 'integer', not_null => 1},
-        ciudad => { type => 'integer', not_null => 1},
-        domicilio    => { type => 'varchar', length =>  255, not_null => 1 },
-        telefono => { type => 'varchar', length => 32, not_null => 1 },
-        fax  => { type => 'varchar', length => 32},
-        email  => { type => 'varchar', length => 255},
-        plazo_reclamo => { type => 'integer', length => 11},
-        activo => { type => 'integer', default => 1, not_null => 1},
+        id                              => { type => 'integer', not_null => 1 },
+        apellido                        => { type => 'varchar', length => 255, not_null => 1},
+        nombre                          => { type => 'varchar', length => 255, not_null => 1},
+        usr_ref_tipo_documento_id       => { type => 'integer', not_null => 1},
+        nro_doc                         => { type => 'varchar', length => 12, not_null => 1 },
+        razon_social                    => { type => 'varchar', length => 255, not_null => 1 },
+        cuit_cuil                       => { type => 'varchar', length => 32, not_null => 1 },
+        ref_localidad_id                => { type => 'integer', not_null => 1},
+        domicilio                       => { type => 'varchar', length =>  255, not_null => 1 },
+        telefono                        => { type => 'varchar', length => 32, not_null => 1 },
+        fax                             => { type => 'varchar', length => 32},
+        email                           => { type => 'varchar', length => 255},
+        plazo_reclamo                   => { type => 'integer', length => 11},
+        activo                          => { type => 'integer', default => 1, not_null => 1},
     ],
+
 
     relationships =>
     [
-      tipo_doc_ref => 
+      ref_tipo_documento => 
       {
-         class       => 'C4::Modelo::RefTipoDocumento',
-         key_columns => { tipo_doc => 'idTipoDoc' },
+         class       => 'C4::Modelo::UsrRefTipoDocumento',
+         key_columns => {usr_ref_tipo_documento_id => 'id' },
          type        => 'one to one',
        },
-
-      pais_ref => 
-      {
-        class       => 'C4::Modelo::RefPais',
-        key_columns => { pais => 'id' },
-        type        => 'one to one',
-      },
-
-      provincia_ref => 
-      {
-        class       => 'C4::Modelo::RefProvincia',
-        key_columns => { provincia => 'provincia' },
-        type        => 'one to one',
-      },
-
-      cuidad_ref => 
+      
+      ref_localidad => 
       {
         class       => 'C4::Modelo::RefLocalidad',
-        key_columns => { provincia => 'id' },
+        key_columns => {ref_localidad_id => 'id' },
         type        => 'one to one',
       },
-
 
 #     one to many asi trae monedad en un vector de objetos
       moneda_ref => 
@@ -75,8 +59,8 @@ __PACKAGE__->meta->setup(
 
     ],
     
-    primary_key_columns => [ 'id_proveedor' ],
-    unique_key => ['tipo_doc','nro_doc'],
+    primary_key_columns => [ 'id' ],
+    unique_key => ['usr_ref_tipo_documento_id','nro_doc'],
 
 );
 
@@ -103,8 +87,6 @@ sub agregarProveedor{
     $self->setRazonSocial($params->{'razon_social'});
     $self->setCuitCuil($params->{'cuit_cuil'});
     $self->setFax($params->{'fax'});
-    $self->setPais($params->{'pais'});
-    $self->setProvincia($params->{'provincia'});
     $self->setCiudad($params->{'ciudad'});
     $self->setPlazoReclamo($params->{'plazo_reclamo'});
     $self->setActivo(1);
@@ -127,8 +109,6 @@ sub editarProveedor{
     $self->setRazonSocial($params->{' razon_social'});
     $self->setCuitCuil($params->{'cuit_cuil'});
     $self->setFax($params->{'fax'});
-    $self->setPais($params->{'pais'});
-    $self->setProvincia($params->{'provincia'});
     $self->setCiudad($params->{'ciudad'});
     $self->setPlazoReclamo($params->{'plazo_reclamo'});
     $self->setActivo(1);
@@ -176,7 +156,7 @@ sub setTipoDoc{
     my ($self) = shift;
     my ($tipoDoc) = @_;
     utf8::encode($tipoDoc);
-    $self->tipo_doc($tipoDoc);
+    $self->usr_ref_tipo_documento_id($tipoDoc);
 }
 
 sub setNroDoc{
@@ -209,25 +189,11 @@ sub setCuitCuil{
     }
 }
 
-sub setPais{
-    my ($self) = shift;
-    my ($pais) = @_;
-    utf8::encode($pais);
-    $self->pais($pais);
-}
-
-sub setProvincia{
-    my ($self) = shift;
-    my ($prov) = @_;
-    utf8::encode($prov);
-    $self->provincia($prov);  
-}
-
 sub setCiudad{
     my ($self) = shift;
     my ($ciu) = @_;
     utf8::encode($ciu);
-    $self->ciudad($ciu);
+    $self->ref_localidad_id($ciu);
     
 }
 
@@ -286,7 +252,7 @@ sub setActivo{
 
 sub getId{
     my ($self) = shift;
-    return ($self->id_proveedor);
+    return ($self->id);
 }
 
 sub getApellido{
@@ -301,7 +267,7 @@ sub getNombre{
 
 sub getTipoDoc{
     my ($self) = shift;
-    return ($self->tipo_doc);
+    return ($self->usr_ref_tipo_documento_id);
 }
 
 sub getNroDoc{
@@ -319,19 +285,9 @@ sub getCuitCuil{
     return ($self->cuit_cuil);
 }
 
-sub getPais{
-    my ($self) = shift;
-    return ($self->pais);
-}
-
-sub getProvincia{
-    my ($self) = shift;
-    return ($self->provincia);
-}
-
 sub getCiudad{
     my ($self) = shift;
-    return ($self->ciudad);
+    return ($self->ref_localidad_id);
 }
 
 sub getDomicilio{

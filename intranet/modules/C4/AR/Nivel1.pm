@@ -5,16 +5,20 @@ require Exporter;
 use C4::Context;
 use C4::Modelo::CatRegistroMarcN1;
 use C4::Modelo::CatRegistroMarcN1::Manager;
+use C4::Modelo::CatFavoritosOpac::Manager;
+use C4::Modelo::CatFavoritosOpac;
+use POSIX;
 
 
-use vars qw(@EXPORT @ISA);
+
+use vars qw(@EXPORT_OK @ISA);
 
 @ISA=qw(Exporter);
 
-@EXPORT=qw(
-	&getAutoresAdicionales
-	&getColaboradores
-	&getUnititle
+@EXPORT_OK = qw(
+                  &getAutoresAdicionales
+                  &getColaboradores
+                  &getUnititle
 );
 
 =head1 NAME
@@ -341,9 +345,6 @@ sub t_eliminarNivel1{
 #========================================================IMPORTACION MARC==========================================================================
 
 sub getUltimosGrupos{
-    use C4::Modelo::CatRegistroMarcN1::Manager;
-    use POSIX;
-
     my @filtros;
 
     my $grupos = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1(query => \@filtros,
@@ -365,12 +366,12 @@ sub getUltimosGrupos{
 }
 
 sub addToFavoritos{
-
     my($id1,$nro_socio) = @_;
-    use C4::Modelo::CatFavoritosOpac;
-    my $favorito_obj = C4::Modelo::CatFavoritosOpac->new();
-    my $status = 0;
-    $favorito_obj = $favorito_obj->getObjeto($nro_socio, $id1);
+
+    my $favorito_obj    = C4::Modelo::CatFavoritosOpac->new();
+    my $status          = 0;
+    $favorito_obj       = $favorito_obj->getObjeto($nro_socio, $id1);
+
     eval{
         $favorito_obj->save();
         $status = 1;
@@ -381,9 +382,8 @@ sub addToFavoritos{
 }
 
 sub removeFromFavoritos{
-
     my($id1,$nro_socio) = @_;
-    use C4::Modelo::CatFavoritosOpac;
+
     my $favorito_obj = C4::Modelo::CatFavoritosOpac->new();
 
     $favorito_obj = $favorito_obj->getObjeto($nro_socio, $id1);
@@ -393,7 +393,7 @@ sub removeFromFavoritos{
 
 sub estaEnFavoritos{
     my($id1) = @_;
-    use C4::Modelo::CatFavoritosOpac::Manager;
+
     my @filtros;
     my $nro_socio = C4::Auth::getSessionNroSocio();
     
@@ -408,7 +408,7 @@ sub estaEnFavoritos{
 
 sub getFavoritos{
     my($nro_socio) = @_;
-    use C4::Modelo::CatFavoritosOpac::Manager;
+
     my @filtros;
     my %obj_for_log = {};
 
