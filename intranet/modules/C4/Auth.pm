@@ -44,6 +44,8 @@ use C4::Modelo::CircReserva;
 use CGI::Cookie;
 use Crypt::CBC;
 use MIME::Base64;
+# use POSIX;
+use Locale::Maketext::Gettext::Functions;
 
 #EINAR use C4::Interface::CGI::Output;
 #EINAR use C4::Circulation::Circ2;  # getpatroninformation
@@ -540,9 +542,6 @@ sub buildSocioData{
 =cut
 sub _init_i18n {
     my($params) = @_;
-  
-    use POSIX;
-    use Locale::Maketext::Gettext::Functions;
 
     my $locale = C4::Auth::getUserLocale();
     Locale::Maketext::Gettext::Functions::bindtextdomain($params->{'type'}, C4::Context->config("locale"));
