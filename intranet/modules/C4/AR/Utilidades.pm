@@ -96,7 +96,7 @@ use vars qw(@EXPORT @ISA);
     &getFeriados
     &bbl_sort
     &createSphinxInstance
-    &getSphinxMatchmode
+    &getSphinxMatchMode
 );
 
 # para los combos que no usan tablas de referencia
@@ -2773,7 +2773,7 @@ sub ciudadesAutocomplete{
 }
 
 
-sub getSphinxMatchmode{
+sub getSphinxMatchMode{
   my ($tipo) = @_;
   use Sphinx::Search;
 
@@ -2842,7 +2842,7 @@ sub catalogoAutocomplete{
 
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
 
-    my ($sphinx,$query) = createSphinxInstance(\@searchstring_array);
+    my ($sphinx,$query) = createSphinxInstance(\@searchstring_array,'SPH_MATCH_ANY');
 
     my $results = $sphinx->Query($query);
     
