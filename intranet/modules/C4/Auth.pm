@@ -555,13 +555,8 @@ sub _init_i18n {
 
 #checkauth RECORTADO
 sub checkauth {
-C4::AR::Debug::debug("desde checkauth==================================================================================================");    
-# use POSIX;
-# use Locale::Maketext::Gettext::Functions;
-# use Template::Plugin::Filter;
+    C4::AR::Debug::debug("desde checkauth==================================================================================================");    
     my $context = new C4::Context;
-
-    C4::AR::Debug::debug("debug => ".$context->config('debug'));
 
     my $query               = shift;
     # $authnotrequired will be set for scripts which will run without authentication

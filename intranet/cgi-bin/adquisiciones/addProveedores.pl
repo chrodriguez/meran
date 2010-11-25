@@ -56,6 +56,8 @@ if($obj){
     $params{'proveedor_activo'} = 1; 
     $params{'actionType'} = $obj->{'tipoAccion'};
 
+# FIXME pueden pasar directamente $obj a agregarProveedor es una HASH = a $params
+
     my ($message) = C4::AR::Proveedores::agregarProveedor(\%params);
     my $infoOperacionJSON=to_json $message;
 

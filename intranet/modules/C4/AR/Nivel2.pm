@@ -6,12 +6,16 @@ require Exporter;
 use C4::Context;
 use C4::Modelo::CatRegistroMarcN2;
 use C4::Modelo::CatRegistroMarcN2::Manager;
+use C4::Modelo::CatRating::Manager;
+use C4::Modelo::CatRating;
+use POSIX;
 
-use vars qw(@EXPORT @ISA);
 
-@ISA=qw(Exporter);
+use vars qw(@EXPORT_OK @ISA);
 
-@EXPORT=qw(
+@ISA    = qw(Exporter);
+
+@EXPORT_OK = qw(
 		
 		&getCantPrestados
 );
@@ -390,8 +394,6 @@ sub t_modificarNivel2 {
 
 sub getRating{
     my($id2) = @_;
-    use C4::Modelo::CatRating::Manager;
-    use POSIX;
 
     my @filtros;
 
@@ -428,10 +430,10 @@ sub getRatingPromedio{
 }
 
 sub rate{
-
     my($rate,$id2,$nro_socio) = @_;
+
     my $rating_obj = C4::Modelo::CatRating->new();
-    use C4::Modelo::CatRating;
+    
 
     $rating_obj = $rating_obj->getObjeto($nro_socio, $id2);
     $rating_obj->setRate($rate);
@@ -442,8 +444,6 @@ sub rate{
 
 sub getCantReviews{
     my($id2) = @_;
-    use C4::Modelo::CatRating::Manager;
-    use POSIX;
 
     my @filtros;
 
@@ -456,8 +456,6 @@ sub getCantReviews{
 
 sub getReviews{
     my($id2) = @_;
-    use C4::Modelo::CatRating::Manager;
-    use POSIX;
 
     my @filtros;
 
@@ -476,8 +474,9 @@ sub getReviews{
 
 sub reviewNivel2{
     my ($id2,$review,$nro_socio) = @_;
+
     my $rating_obj = C4::Modelo::CatRating->new();
-    use C4::Modelo::CatRating;
+
     $rating_obj = $rating_obj->getObjeto($nro_socio, $id2);
     $rating_obj->setReview($review);
     $rating_obj->save();
