@@ -60,22 +60,6 @@
             <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% proveedor_busqueda %]</div> 
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <thead>
-<!--                <tr class="titulo_tabla_resultado">
-            
-                    <th class="click" onclick="ordenar('nombre_proveedor')" 
-                        Title="[% 'Ordenar Nombre de Proveedor.' | i18n %]" width="12%">[% "Nombre de Proveedor" | i18n %]
-                    </th>
-                    <th>
-                      [% "Direcci&oacute;n" | i18n %]
-                    </th>
-                    <th>
-                        [% "Tel&eacute;fono" | i18n %]
-                    </th>
-                    <th>
-                        [% "Mail" | i18n %]
-                    </th>
-                    <th>[% "Acciones" | i18n %]</th>          
-                </tr>-->
                     <tr class="titulo_tabla_resultado">
                         <th>
                             [% "Nombre de Proveedor" | i18n %]
@@ -92,33 +76,9 @@
                         <th>
                             [% "CUIT/CIUL" | i18n %]
                         </th>
-                    <th>
-                        [% "Mail" | i18n %]
-                    </th>
-            <!--             <th>
-                            [% "Pa&iacute;s" | i18n %]
-                        </th>
-                        <th>
-                            [% "Provincia" | i18n %]
-                        </th>
-                        <th>
-                            [% "Ciudad" | i18n %]
-                        </th>
-                        <th>
-                            [% "Domicilio" | i18n %]
-                        </th>
-                        <th>
-                            [% "Tel&eacute;fono" | i18n %]
-                        </th>
-                        <th>
-                            [% "Fax" | i18n %]
-                        </th>
                         <th>
                             [% "Mail" | i18n %]
-                        </th>-->
-<!--                         <th>
-                            [% "Plazo para reclamo" | i18n %]
-                        </th>  -->
+                        </th>
                         <th>
                             [% "Acciones" | i18n %]
                         </th>           
@@ -130,7 +90,11 @@
                 <tr  align="center">
 
                       <td align="left" class="proveedores">
+                      [% IF proveedor.getNombre == "" %]
+                          Persona Juridica
+                      [% ELSE %]
                           [% proveedor.getNombre %]
+                      [% END %]
                       </td>
                       <td align="left" class="proveedores">
                           [% proveedor.getApellido %]
@@ -144,31 +108,7 @@
                       <td align="left" class="proveedores">
                           [% proveedor.getCuitCuil %]
                       </td>
-<!--                      <td align="left" class="proveedores">
-                          [% proveedor.getPlazoReclamo %]
-                      </td>-->
-          <!--            <td align="left" class="proveedores">
-                          [% proveedor.getPais %]
-                      </td>
-                      <td align="left" class="proveedores">
-                          [% proveedor.getProvincia %]
-                      </td>
-                      <td align="left" class="proveedores">
-                          [% proveedor.getCiudad %]
-                      </td>
-                      <td align="left" class="proveedores">
-                          [% proveedor.getDomicilio %]
-                      </td>
-
-                      <td align="left" class="proveedores">
-                          [% proveedor.getTelefono %]
-                      </td>
-                      <td align="left" class="proveedores"> -->
-<!--                            FIXME si no lo muestro asi se rompe!!!!!! ver -->
-<!--              <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>
-                          [% proveedor.getFax %]
-                      </td>-->
-                                                <!-- FIXME si no lo muestro asi se rompe!!!!!! ver -->
+                        <!-- FIXME si no lo muestro asi se rompe!!!!!! ver -->
 <!--                      <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>-->
                      
                      <td align="left" class="proveedores">
