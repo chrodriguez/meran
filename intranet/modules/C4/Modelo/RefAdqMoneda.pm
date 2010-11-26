@@ -31,6 +31,12 @@ sub agregarMoneda{
     $self->save();
 }
 
+sub getNombre{
+    my ($self) = shift;
+    return ($self->nombre);
+    
+}
+
 # **********************************************************************FIN FUNCIONES DEL MODELO | MONEDA************************************************************
 
 

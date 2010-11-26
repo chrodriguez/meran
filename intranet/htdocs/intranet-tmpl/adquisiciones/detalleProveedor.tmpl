@@ -39,6 +39,22 @@
                         <li> [% "Fax:" | i18n %]<strong> [% proveedor.getFax %]</strong></li> 
                         <li> [% "Email:" | i18n %]<strong> [% proveedor.getEmail %]</strong></li> 
                   </fieldset>
+                  <fieldset>
+                        <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Monedas" | i18n %]'>
+                              [% "Monedas" | i18n %]
+                        </legend>
+                                  [% FOREACH moneda IN monedas %]   
+                                    <li><strong> [% moneda.moneda_ref.nombre %]</strong></li> 
+                                  [% END %]
+                  </fieldset>
+                  <!--TODO<fieldset>
+                        <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Formas de envio" | i18n %]'>
+                              [% "Formas de envio" | i18n %]
+                        </legend>
+                                  [% FOREACH moneda IN monedas %]   
+                                    <li><strong> [% moneda.moneda_ref.nombre %]</strong></li> 
+                                  [% END %]
+                  </fieldset>-->
     </div>
     <div class="columna_der" >
           <fieldset  class="accionesUsuarios" style="clear:none" >
