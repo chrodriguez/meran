@@ -9,7 +9,7 @@ use C4::Auth;
 use CGI;
 # use Benchmark;
 
-# my $cgi = new CGI;
+my $cgi = new CGI;
 # my $t0 = Benchmark->new;
 # # ... your code here ...
 my ($template, $t_params)   = C4::Output::gettemplate("auth.tmpl", 'intranet');
