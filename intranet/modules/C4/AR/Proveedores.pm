@@ -166,9 +166,9 @@ sub getProveedorLike {
 
     if($proveedor ne 'TODOS'){
         if (!($inicial)){
-                push (  @filtros, ( or   => [   nombre => { like => '%'.$proveedor.'%'}, ]));
+                push (  @filtros, ( or   => [   nombre => { like => '%'.$proveedor.'%'}, razon_social => { like => '%'.$proveedor.'%'}, ]));
         }else{
-                push (  @filtros, ( or   => [   nombre => { like => $proveedor.'%'}, ]) );
+                push (  @filtros, ( or   => [   nombre => { like => $proveedor.'%'}, razon_social => { like => $proveedor.'%'}, ]) );
         }
     }
 

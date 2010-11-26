@@ -17,10 +17,8 @@ my $tipoAccion= $obj->{'tipoAccion'}||"";
 =item
     Se elimina el Proveedor
 =cut
-    ## TODO tambien se podria hacer que el sistema genere la pass y se la envie por correo al socio, esto deberia ser una preferencia 
-    # resetPassword = [0 | 1]
-    # autoGeneratePassword = [0 | 1]
-   if($tipoAccion eq "ELIMINAR"){
+
+if($tipoAccion eq "ELIMINAR"){
     	
 #     	C4::AR::Debug::debug($infoOperacionJSON);
 #     	C4::AR::Debug::debug("Estoy eliminando");
@@ -50,7 +48,7 @@ my $tipoAccion= $obj->{'tipoAccion'}||"";
 =item
 Se guarda la modificacion los datos del Proveedor
 =cut
-  elsif($tipoAccion eq "GUARDAR_MODIFICION_PROVEEDOR"){
+elsif($tipoAccion eq "GUARDAR_MODIFICION_PROVEEDOR"){
 
 
       my ($loggedinuser, $session, $flags) = checkauth( 
