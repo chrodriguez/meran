@@ -3,7 +3,7 @@ package C4::Auth;
 
 =head1 NAME
 
-C4::Auth 
+  C4::Auth 
 
 =head1 SYNOPSIS
 

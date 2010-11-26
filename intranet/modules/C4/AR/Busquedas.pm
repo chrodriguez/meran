@@ -1037,6 +1037,7 @@ sub _getMatchMode{
     #Match all words
     $tipo_match = SPH_MATCH_ALL;
   }
+}
 
 sub index_update{
   system('indexer --rotate --all');
