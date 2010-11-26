@@ -17,28 +17,23 @@
           <div id="detalleProveedor">
              <input type="hidden" id="id_proveedor" value="[% proveedor.getId %]">
 	      <li class="sub_item">
-		  <label for="nombre"> [% "Nombre" | i18n %] *</label>
+		  <label for="nombre" id="label_nombre"> [% "Nombre" | i18n %] *</label>
 		  <input id="nombre" name="nombre" class="required" type="text" size="25" value="[% proveedor.getNombre %]">
 	      </li>
 
           <li class="sub_item">
-          <label for="apellido"> [% "Apellido" | i18n %] *</label>
+          <label for="apellido" id="label_apellido"> [% "Apellido" | i18n %] *</label>
           <input id="apellido" name="apellido" class="required" type="text" size="25" value="[% proveedor.getApellido %]">
           </li>
 
           <li class="sub_item"> 
-          <label for="tipo_documento"> [% "Tipo Documento" | i18n %] *</label>
-          [% combo_tipo_documento %] 
-<!--           <input  id="tipo_documento" name="tipo_documento" class="required"  type="text" size="25" value="[% proveedor.getTipoDoc %]"> -->
+          <label for="tipo_documento" id="label_tipo_documento_id"> [% "Tipo Documento" | i18n %] *</label>
+          [% combo_tipo_documento %] <input  id="numero_documento" name="numero_documento" class="required"  type="text" size="15" value="[% proveedor.getNroDoc %]">
           </li>
 
-          <li class="sub_item"> 
-          <label for="numero_documento"> [% "Numero Documento" | i18n %] *</label>
-          <input  id="numero_documento" name="numero_documento" class="required"  type="text" size="25" value="[% proveedor.getNroDoc %]">
-          </li>
 
           <li class="sub_item"> 
-          <label for="razon_social"> [% "Razon Social" | i18n %] *</label>
+          <label for="razon_social" id="label_razon_social"> [% "Razon Social" | i18n %] *</label>
           <input  id="razon_social" name="razon_social" class="required"  type="text" size="25" value="[% proveedor.getRazonSocial %]">
           </li>
 

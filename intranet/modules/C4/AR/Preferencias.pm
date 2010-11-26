@@ -25,6 +25,7 @@ use vars qw(@EXPORT_OK @ISA);
 	&t_guardarVariable
 	&t_modificarVariable
     &getMenuPreferences
+    &getPreferenciasByArray
 );
 
 
@@ -72,21 +73,57 @@ sub getPreferenciaLike {
 
 
 sub getPreferencia {
-    my $self = shift;
     my ($variable)= @_;
 
     my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => $variable} ]);
 
-if ($preferencia_array_ref->[0]){return ($preferencia_array_ref->[0]);} else{return undef;}
+    if ($preferencia_array_ref->[0]){
+        return ($preferencia_array_ref->[0]);
+    } else{
+        return undef;
+    }
+}
 
+
+sub getPreferenciasByArray {
+    my ($variables_array)= @_;
+
+    my @filtros;
+    my %preferencias_hash;
+
+    foreach my $variable (@$variables_array){
+
+        push (@filtros, (  variable => {eq => $variable} ) );
+
+    }
+
+    my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ or  => \@filtros ]);
+
+#     if ($preferencias_array_ref->[0]){
+   if ($preferencias_array_ref){
+
+        foreach my $p (@$preferencias_array_ref){
+            $preferencias_hash{$p->getVariable} = $p->getValue;
+        }
+
+        return \%preferencias_hash;
+#         return ($preferencia_array_ref);
+    } else{
+        return undef;
+    }
 }
 
 sub getValorPreferencia {
     my $self = shift;
     my ($variable)= @_;
-    my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => $variable} ]);
-    if ($preferencia_array_ref->[0]){return ($preferencia_array_ref->[0]->getValue);} else{return 0;}
 
+    my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => $variable} ]);
+
+    if ($preferencia_array_ref->[0]){
+        return ($preferencia_array_ref->[0]->getValue);
+    } else{
+        return 0;
+    }
 }
 
 

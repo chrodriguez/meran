@@ -35,10 +35,10 @@ C4::AR::Usuarios
 use strict;
 require Exporter;
 
-use C4::Date;
+
 use C4::AR::Validator;
 
-use C4::AR::Prestamos;
+use C4::AR::Prestamos qw(cantidadDePrestamosPorUsuario);
 use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrPersona::Manager;
 use C4::Modelo::UsrEstado;
@@ -50,7 +50,7 @@ use Switch;
 #use C4::Context;
 #EINAR use Digest::MD5 qw(md5_base64);
 #EINAR use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
-
+#use C4::Date;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -672,9 +672,7 @@ sub getSocioLike {
             }
         }else{
             foreach my $s (@searchstring_array){ 
-                push (  @filtros, ( or   => [   apellido => { like => $s.'%'}, 
-                                            ])
-                                    );
+                push (  @filtros, ( or   => [   apellido => { like => $s.'%'}, ]) );
             }
         }
     }

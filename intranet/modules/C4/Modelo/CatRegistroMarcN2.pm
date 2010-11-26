@@ -26,6 +26,18 @@ __PACKAGE__->meta->setup(
 
 use C4::Modelo::CircReserva;
 use C4::Modelo::CircReserva::Manager;
+use MARC::Record; #FIXME creo que esta funcion es interna qw(new_from_usmarc);
+use C4::AR::Catalogacion qw(getRefFromStringConArrobas);
+use C4::Modelo::CatRegistroMarcN3::Manager qw(get_cat_registro_marc_n3_count);
+# use vars qw(@EXPORT_OK @ISA);
+# 
+# @ISA=qw(Exporter);
+# 
+# @EXPORT_OK = qw(
+#                   &getRefFromStringConArrobas
+# );
+
+
 sub getId2{
     my ($self)  = shift;
 

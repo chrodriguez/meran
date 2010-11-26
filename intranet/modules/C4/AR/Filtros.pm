@@ -2,14 +2,14 @@ package C4::AR::Filtros;
 
 use strict;
 require Exporter;
-use POSIX;
-use Locale::Maketext::Gettext::Functions;
+#use POSIX;
+use Locale::Maketext::Gettext::Functions qw(__);
 use Template::Plugin::Filter;
 use base qw( Template::Plugin::Filter );
 
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw( 
+@EXPORT_OK=qw( 
 
 	&i18n
 	&link_to

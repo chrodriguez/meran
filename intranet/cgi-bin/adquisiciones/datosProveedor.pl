@@ -35,11 +35,18 @@ if ($tipoAccion eq "EDITAR") {
                       authnotrequired => 0,
                       flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
           });
+          
+      
 }
 
 # recibimos solo el id del proveedor y creamos el objeto aca
+my $monedas = C4::AR::Proveedores::getMonedasProveedor($id_proveedor);
 my $proveedor = C4::AR::Proveedores::getProveedorInfoPorId($id_proveedor);
 
+# C4::AR::Debug::debug("monedas ".$monedas);
+
 $t_params->{'proveedor'} = $proveedor;
+$t_params->{'monedas'} = $monedas;
+$t_params->{'tes'} = scalar(@$monedas);
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

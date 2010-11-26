@@ -9,14 +9,16 @@ use C4::Modelo::CatRegistroMarcN3;
 use C4::Modelo::CatRegistroMarcN3::Manager;
 use C4::Modelo::CircPrestamo;
 use C4::Modelo::CircPrestamo::Manager;
-
+use C4::AR::Nivel1 qw(getNivel1FromId1); 
+use C4::AR::Nivel2 qw(getNivel1FromId2);
+use C4::AR::Reservas qw(cantReservasPorGrupo);
 
 use vars qw(@EXPORT_OK @ISA);
 
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
-
+    &detalleCompletoINTRA
 	&detalleNivel3
 	&getBarcode
 	&modificarEstadoItem

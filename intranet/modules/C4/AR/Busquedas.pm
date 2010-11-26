@@ -31,18 +31,20 @@ use C4::AR::Nivel3;
 use C4::AR::PortadasRegistros;
 use Text::Aspell;
 use C4::Modelo::RepHistorialBusqueda;
+use Sphinx::Search  qw(SPH_MATCH_ANY SPH_MATCH_PHRASE SPH_MATCH_BOOLEAN SPH_MATCH_EXTENDED SPH_MATCH_ALL SPH_SORT_RELEVANCE);
+use Sphinx::Manager qw(new);
 
-
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(
+@EXPORT_OK=qw(
     &busquedaAvanzada
     &busquedaCombinada
-
+    &armarBuscoPor
     &obtenerEdiciones
     &obtenerGrupos
+    &busquedaCombinada_newTemp
     &obtenerDisponibilidadTotal
-
+    &busquedaPorBarcode
     &buscarMapeo
     &buscarMapeoTotal
     &buscarMapeoCampoSubcampo
@@ -76,6 +78,7 @@ use vars qw(@EXPORT @ISA);
     &getBranch
 
     &t_loguearBusqueda
+    &sphinx_start
 );
 
 
@@ -94,7 +97,6 @@ sub generar_indice {
     sub reindexar
 =cut
 sub reindexar{
-    use Sphinx::Manager;
     C4::AR::Debug::debug("Busquedas => reindexar => run_indexer => ");
 
     my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
@@ -117,7 +119,6 @@ sub reindexar{
     verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada
 =cut
 sub sphinx_start{
-    use Sphinx::Manager;
     my ($mgr)= @_;
     if (exists $ENV{MOD_PERL}){
         defined (my $kid = fork) or die "Cannot fork: $!\n";
@@ -1017,8 +1018,6 @@ sub getBranch{
 
 sub _getMatchMode{
   my ($tipo) = @_;
-  use Sphinx::Search;
-
   #por defecto se setea este match_mode
   my $tipo_match = SPH_MATCH_ANY;
 
@@ -1038,8 +1037,6 @@ sub _getMatchMode{
     #Match all words
     $tipo_match = SPH_MATCH_ALL;
   }
-
-  return ($tipo_match);
 }
 
 sub index_update{
@@ -1088,12 +1085,11 @@ sub busquedaCombinada_newTemp{
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
     my $string_suggested;
     $only_sphinx = $only_sphinx || 0;
-    use Sphinx::Search;
     my $sphinx = Sphinx::Search->new();
     my $query = '';
 
     my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
-    my $tipo_match  = _getMatchMode($tipo);
+    my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     C4::AR::Debug::debug("Busquedas => match_mode ".$tipo);
 
@@ -1272,8 +1268,6 @@ sub armarInfoNivel1{
 sub busquedaAvanzada_newTemp{
     my ($params,$session) = @_;
 
-    use Sphinx::Search;
-
     my $sphinx = Sphinx::Search->new();
     my $query = '';
 
@@ -1294,7 +1288,7 @@ sub busquedaAvanzada_newTemp{
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
 #     C4::AR::Debug::debug("query string ".$query);
     my $tipo = 'SPH_MATCH_EXTENDED';
-    my $tipo_match = _getMatchMode($tipo);
+    my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     $sphinx->SetMatchMode($tipo_match);
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
@@ -1330,8 +1324,6 @@ sub busquedaAvanzada_newTemp{
 sub filtrarPorAutor{
     my ($params,$session) = @_;
 
-    use Sphinx::Search;
-
     my $sphinx = Sphinx::Search->new();
     my $query = '';
 
@@ -1353,7 +1345,7 @@ sub filtrarPorAutor{
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
 #     C4::AR::Debug::debug("query string ".$query);
     my $tipo = 'SPH_MATCH_EXTENDED';
-    my $tipo_match = _getMatchMode($tipo);
+    my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     $sphinx->SetMatchMode($tipo_match);
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
@@ -1718,7 +1710,6 @@ sub getRegistrosFromRange {
     my ($params, $cgi ) = @_;
 
     my $resultsarray;
-    use Sphinx::Search;
     my $sphinx  = Sphinx::Search->new();
     my $query   = '';
 
@@ -1738,7 +1729,7 @@ sub getRegistrosFromRange {
     } 
 
     my $tipo = 'SPH_MATCH_EXTENDED';
-    my $tipo_match = _getMatchMode($tipo);
+    my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     $sphinx->SetMatchMode($tipo_match);
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
