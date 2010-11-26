@@ -5,6 +5,9 @@ require Exporter;
 use DBI;
 use C4::Modelo::AdqProveedor;
 use C4::Modelo::AdqProveedor::Manager;
+use C4::Modelo::AdqProveedor;
+use C4::Modelo::AdqProveedorMoneda::Manager;
+
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -14,6 +17,7 @@ use vars qw(@EXPORT @ISA);
     &modificarProveedor;
     &getProveedorLike;
     &editarAutorizado;
+    &getMonedasProveedor;
 );
 
 
@@ -198,6 +202,53 @@ sub getProveedorLike {
     Modulo que chekea que todos los datos necesarios sean validos. Queda todo en $msg_object, ademas lo retorna;
     Usado en agregar proveedor y modificar proveedor
 =cut
+
+sub getMonedasProveedor{
+ 
+   my ($params) = @_;
+   my $id_proveedor = $params;
+
+   my $monedas = C4::Modelo::AdqProveedorMoneda::Manager->get_adq_proveedor_moneda(   query =>  [ 
+                                                                                                proveedor_id  => { eq => $id_proveedor  },
+                                                                                   ],
+                                                                                    require_objects => ['moneda_ref'],
+   
+                                                    );
+   my @nombres_monedas;
+   foreach my $moneda (@$monedas){
+#      push (@nombres_monedas,$moneda->moneda_ref->getNombre);
+      push (@nombres_monedas,$moneda);
+   }
+
+#   C4::AR::Debug::debug(@nombres_monedas[0]);
+    
+   return($monedas);
+}
+
+
+# TODO sub getFormasEnvioProveedor{
+#  
+#    my ($params) = @_;
+#    my $id_proveedor = $params;
+# 
+#    my $monedas = C4::Modelo::AdqProveedorMoneda::Manager->get_adq_proveedor_moneda(   query =>  [ 
+#                                                                                                 proveedor_id  => { eq => $id_proveedor  },
+#                                                                                    ],
+#                                                                                     require_objects => ['moneda_ref'],
+#    
+#                                                     );
+#    my @nombres_monedas;
+#    foreach my $moneda (@$monedas){
+# #      push (@nombres_monedas,$moneda->moneda_ref->getNombre);
+#       push (@nombres_monedas,$moneda);
+#    }
+# 
+# #   C4::AR::Debug::debug(@nombres_monedas[0]);
+#     
+#    return($monedas);
+# }
+
+
 sub _verificarDatosProveedor {
 
      my ($data, $msg_object)=@_;
