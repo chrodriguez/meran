@@ -26,9 +26,10 @@ use POSIX qw(ceil floor);
 use JSON;
 #Einar use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(
+@EXPORT_OK=qw(
+    &ASCIItoHEX
     &aplicarParches 
     &obtenerParches
     &obtenerTiposDeColaboradores 

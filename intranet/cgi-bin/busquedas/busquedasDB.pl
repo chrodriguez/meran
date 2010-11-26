@@ -5,6 +5,7 @@ use C4::Auth;
 use JSON;
 use Time::HiRes;
 use CGI;
+use C4::AR::Busquedas qw(sphinx_start busquedaPorBarcode armarBuscoPor busquedaCombinada_newTemp);
 
 my $input = new CGI;
 

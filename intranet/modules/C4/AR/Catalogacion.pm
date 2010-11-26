@@ -5,13 +5,12 @@ require Exporter;
 use C4::Context;
 use C4::AR::Busquedas;
 use C4::Date;
-use C4::AR::Utilidades;
+use C4::AR::Utilidades qw(ASCIItoHEX existeInArray);
 use MARC::Record;
 use C4::Modelo::CatPrefMapeoKohaMarc;
 use C4::Modelo::CatPrefMapeoKohaMarc::Manager;
 use C4::AR::EstructuraCatalogacionBase;
-
-
+use C4::Modelo::CatRegistroMarcN2::Manager qw(get_cat_registro_marc_n2_count);
 
 use vars qw(@EXPORT_OK @ISA);
 
@@ -23,6 +22,7 @@ use vars qw(@EXPORT_OK @ISA);
   &buscarCampo
   &guardarCamposModificados
   &guardarCampoTemporal
+  &getRefFromStringConArrobas
 );
 
 =head1 NAME
@@ -83,9 +83,7 @@ sub _meran_to_marc{
             C4::AR::Debug::debug("CAMPO => ".$campo);
             C4::AR::Debug::debug("_meran_to_marc => subcampo, dato => ".$subcampos_array->[$j]->{'dato'});
             C4::AR::Debug::debug("_meran_to_marc => subcampo, datoReferencia => ".$subcampos_array->[$j]->{'datoReferencia'});
-#             C4::AR::Utilidades::printHASH($subcampo);
             while ( my ($key, $value) = each(%$subcampo) ){
-                #C4::AR::Utilidades::printARRAY($autorizados{$campo});
                 $value = _procesar_referencia($campo, $key, $value, $itemtype);
                 if ( ($value ne '')&&(C4::AR::Utilidades::existeInArray($key, @{$autorizados{$campo}} ) )) {
                 #el subcampo $key, esta autorizado para el campo $campo

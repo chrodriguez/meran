@@ -3,7 +3,7 @@ package C4::Auth;
 
 =head1 NAME
 
-C4::Auth 
+  C4::Auth 
 
 =head1 SYNOPSIS
 
@@ -19,34 +19,27 @@ C4::Auth
 
 =cut
 
-
-
 use strict;
 use warnings;
 
 require Exporter;
-use C4::Context;
-use C4::Output;              # to get the template
-use C4::Circulation::Circ2;  # getpatroninformation
 use Digest::MD5 qw(md5_base64);
 use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
-# use C4::AR::Authldap;
-use C4::AR::Usuarios; #Miguel lo agregue pq sino no ve la funcion esRegular!!!!!!!!!!!!!!!
-
-
+use C4::AR::Usuarios qw(getSocioInfoPorNroSocio); #Miguel lo agregue pq sino no ve la funcion esRegular!!!!!!!!!!!!!!!
+use Locale::Maketext::Gettext::Functions qw(bindtextdomain textdomain get_handle);
 use C4::Output;              # to get the template
-# use CGI::Session qw/-ip-match/;
-use CGI::Session;
+use C4::Context;
+#use CGI::Session;
 use C4::Modelo::SistSesion;
 use C4::Modelo::SistSesion::Manager;
-
 use C4::Modelo::CircReserva;
-use CGI::Cookie;
-use Crypt::CBC;
-use MIME::Base64;
+#use CGI::Cookie qw(new); 
+#use Crypt::CBC;
+# use CGI::Session qw/-ip-match/;
+#use MIME::Base64;
 # use POSIX;
-use Locale::Maketext::Gettext::Functions;
-
+#use C4::Circulation::Circ2;  # getpatroninformation
+# use C4::AR::Authldap;
 #EINAR use C4::Interface::CGI::Output;
 #EINAR use C4::Circulation::Circ2;  # getpatroninformation
 #EINAR use JSON;
