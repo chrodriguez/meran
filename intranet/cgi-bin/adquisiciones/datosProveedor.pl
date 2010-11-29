@@ -40,11 +40,14 @@ if ($tipoAccion eq "EDITAR") {
 }
 
 # recibimos solo el id del proveedor y creamos el objeto aca
+
 my $monedas = C4::AR::Proveedores::getMonedasProveedor($id_proveedor);
+my $formas_envio = C4::AR::Proveedores::getFormasEnvioProveedor($id_proveedor);
 my $proveedor = C4::AR::Proveedores::getProveedorInfoPorId($id_proveedor);
 
 # C4::AR::Debug::debug("monedas ".$monedas);
 
+$t_params->{'formas_envio'} = $formas_envio;
 $t_params->{'proveedor'} = $proveedor;
 $t_params->{'monedas'} = $monedas;
 $t_params->{'tes'} = scalar(@$monedas);

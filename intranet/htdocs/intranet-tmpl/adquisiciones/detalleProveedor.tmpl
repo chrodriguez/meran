@@ -44,17 +44,17 @@
                               [% "Monedas" | i18n %]
                         </legend>
                                   [% FOREACH moneda IN monedas %]   
-                                    <li><strong> [% moneda.moneda_ref.nombre %]</strong></li> 
+                                    <li> [% moneda.moneda_ref.nombre %]</li> 
                                   [% END %]
                   </fieldset>
-                  <!--TODO<fieldset>
+                 <fieldset>
                         <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Formas de envio" | i18n %]'>
                               [% "Formas de envio" | i18n %]
                         </legend>
-                                  [% FOREACH moneda IN monedas %]   
-                                    <li><strong> [% moneda.moneda_ref.nombre %]</strong></li> 
+                                  [% FOREACH forma_envio IN formas_envio %]   
+                                    <li> [% forma_envio.forma_envio_ref.nombre %]</li> 
                                   [% END %]
-                  </fieldset>-->
+                  </fieldset>
     </div>
     <div class="columna_der" >
           <fieldset  class="accionesUsuarios" style="clear:none" >
