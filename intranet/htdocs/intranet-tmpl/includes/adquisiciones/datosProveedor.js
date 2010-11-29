@@ -11,6 +11,7 @@
    $(document).ready(function() {
      
         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
+        CrearAutocompleteMonedas({IdInput: 'moneda', IdInputHidden: 'id_moneda'})
         ocultarDatos()
    
       });   

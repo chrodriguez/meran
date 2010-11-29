@@ -22,7 +22,12 @@ my $string      = C4::AR::Utilidades::trim( $input->param('q') );
 #Variable para luego hacerle el print
 my $result;
 
-if ($accion eq 'autocomplete_ciudades'){
+if ($accion eq 'autocomplete_monedas'){
+
+    $result = C4::AR::Utilidades::monedasAutocomplete($string);
+}
+
+elsif ($accion eq 'autocomplete_ciudades'){
 
     $result = C4::AR::Utilidades::ciudadesAutocomplete($string);
 }
