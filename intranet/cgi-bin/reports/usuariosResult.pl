@@ -4,9 +4,9 @@ use strict;
 use C4::Auth;
 
 use CGI;
-use C4::AR::Estadisticas;
+#use C4::AR::Estadisticas;
 use C4::AR::Reportes;
-use C4::Date;
+#use C4::Date;
 use C4::AR::PdfGenerator;
 
 my $input = new CGI;

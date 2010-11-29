@@ -16,6 +16,7 @@ use Encode;
 use POSIX qw(ceil floor); #para redondear cuando divido un numero
 
 use constant {
+        AUX             => '00100000',
         TODOS           => '00010000',
         ALTA            => '00001000',
         BAJA            => '00000100',
@@ -142,6 +143,13 @@ sub getTodosByte{
   return TODOS;
 }
 
+sub getSelectorByte{
+  return AUX;
+}
+
+sub getRegularByte{
+  return AUX;
+}
 
 
 
@@ -153,19 +161,19 @@ sub checkTipoPermiso{
     my $flag;
     my $result;
     if($tipo_permiso eq 'TODOS'){
-        $flag= TODOS;
+        $flag= getTodosByte();
         $result = substr($entorno_byte,3,1);
     }elsif($tipo_permiso eq 'ALTA'){
-        $flag= ALTA;
+        $flag= getAltaByte();
         $result = substr($entorno_byte,4,1);
     }elsif($tipo_permiso eq 'BAJA'){
-        $flag= BAJA;
+        $flag= getBajaByte();
         $result = substr($entorno_byte,5,1);
     }elsif($tipo_permiso eq 'MODIFICACION'){
-        $flag= MODIFICACION;
+        $flag= getModificacionByte();
         $result = substr($entorno_byte,6,1);
     }elsif($tipo_permiso eq 'CONSULTA'){
-        $flag= CONSULTA;
+        $flag= getConsultaByte();
         $result = substr($entorno_byte,7,1);
     }
     return ($result);
@@ -221,15 +229,15 @@ sub permisos_str_to_bin {
     $flag= '00000000';
 
     if($permisos eq 'TODOS'){
-        $flag= TODOS;
+        $flag= getTodosByte();
     }elsif($permisos eq 'ALTA'){
-        $flag= ALTA;
+        $flag= getAltaByte();
     }elsif($permisos eq 'BAJA'){
-        $flag= BAJA;
+        $flag= getBajaByte();
     }elsif($permisos eq 'MODIFICACION'){
-        $flag= MODIFICACION;
+        $flag= getModificacionByte();
     }elsif($permisos eq 'CONSULTA'){
-        $flag= CONSULTA;
+        $flag= getConsultaByte();
     }
 
     return $flag;

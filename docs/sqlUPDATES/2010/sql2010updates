@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `cat_visualizacion_intra` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
--- ejemplo de configuracion de la vista de la intra
+
 
 INSERT INTO cat_visualizacion_intra (campo, subcampo, tipo_ejemplar, vista_intra) VALUES
 ('245', 'a', 'ALL', 'Título'),
@@ -73,9 +73,7 @@ CREATE TABLE IF NOT EXISTS `cat_favoritos_opac` (
   PRIMARY KEY  (`nro_socio`,`id1`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
---12/01/10
---esto solo es para mostrar el formato que tiene q tener el barcode autogenerado, la 20.30 no generaba bien porque el "barcodeFormat" estaba mal
---UPDATE `pref_preferencia_sistema` SET `value` = 'UI,-,tipo_ejemplar,-' WHERE `pref_preferencia_sistema`.`id` =62 LIMIT 1 ;
+
 
 
 CREATE TABLE  `sys_novedad` (
@@ -112,10 +110,10 @@ INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo
 
 INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`) VALUES (NULL, 'usr_ref_categoria_socio', 'categoria_socio', 'description');
 
--- Para la nueva biblia --
+
  ALTER TABLE `pref_estructura_subcampo_marc` CHANGE `subcampo` `subcampo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ;
 
--- GASPO ROMPISTE TODO!!! ( NO ROMPI NADA!!!!!!!!!!!!!!!!! :P)
+
 
 ALTER TABLE  `cat_rating` CHANGE  `rate`  `rate` FLOAT NULL;
 
@@ -181,11 +179,12 @@ VALUES (
 NULL ,  'tema_intra_default',  'default',  'Un tema para el INTRA', NULL , NULL ,  'temas_intra'
 );
 
--- Para Feriados
+
+
 ALTER TABLE  `pref_feriado` CHANGE  `fecha`  `fecha` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '0000-00-00';
 ALTER TABLE  `pref_feriado` ADD  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
 
--- Para permitir cancelar reservas de grupo y guardar el histórico
+
  ALTER TABLE `rep_historial_circulacion` CHANGE `id3` `id3` INT( 11 ) NULL ;
 
 
@@ -253,7 +252,7 @@ ALTER TABLE `cat_contenido_estante` DROP `flags`;
 ALTER TABLE `cat_contenido_estante` DROP `biblioitemnumber`;
 
 
--- Gracias gaspo53 sigo buscando !!!
+
 ALTER TABLE  `cat_registro_marc_n3` ADD  `agregacion_temp` VARCHAR( 255 ) NULL ;
 
 
@@ -342,55 +341,51 @@ ALTER TABLE `cat_historico_disponibilidad` CHANGE `id3` `id3` INT( 11 ) NOT NULL
 
 ALTER TABLE `cat_portada_registro` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
 
--- 20101124 
+ 
 
-ALTER TABLE `meran`.`ref_dpto_partido` CHANGE COLUMN `PROVINCIA` `ref_provincia_id` VARCHAR(11) NOT NULL  ,  CHANGE COLUMN `DPTO_PARTIDO` `id` VARCHAR(11) NOT NULL DEFAULT ''  , 
+ALTER TABLE `ref_dpto_partido` CHANGE COLUMN `PROVINCIA` `ref_provincia_id` VARCHAR(11) NOT NULL  ,  CHANGE COLUMN `DPTO_PARTIDO` `id` VARCHAR(11) NOT NULL DEFAULT ''  , 
   ADD CONSTRAINT `fk_ref_dpto_partido_ref_provincia1`
   FOREIGN KEY (`ref_provincia_id` )
-  REFERENCES `meran`.`ref_provincia` (`id` )
+  REFERENCES `ref_provincia` (`id` )
   ON DELETE NO ACTION
   ON UPDATE NO ACTION
 , DROP PRIMARY KEY 
 , ADD PRIMARY KEY (`id`) 
 , ADD INDEX `fk_ref_dpto_partido_ref_provincia1` (`ref_provincia_id` ASC) ;
 
-ALTER TABLE `meran`.`ref_localidad` CHANGE COLUMN `DPTO_PARTIDO` `ref_dpto_partido_id` VARCHAR(11) NOT NULL  , 
+ALTER TABLE `ref_localidad` CHANGE COLUMN `DPTO_PARTIDO` `ref_dpto_partido_id` VARCHAR(11) NOT NULL  , 
   ADD CONSTRAINT `fk_ref_localidad_ref_dpto_partido1`
   FOREIGN KEY (`ref_dpto_partido_id` )
-  REFERENCES `meran`.`ref_dpto_partido` (`id` )
+  REFERENCES `ref_dpto_partido` (`id` )
   ON DELETE NO ACTION
   ON UPDATE NO ACTION
 , ADD INDEX `fk_ref_localidad_ref_dpto_partido1` (`ref_dpto_partido_id` ASC) ;
 
-ALTER TABLE `meran`.`ref_provincia` CHANGE COLUMN `PAIS` `ref_pais_id` INT(11) NOT NULL ,  CHANGE COLUMN `PROVINCIA` `id` VARCHAR(11) NOT NULL DEFAULT '0'  , 
+ALTER TABLE `ref_provincia` CHANGE COLUMN `PAIS` `ref_pais_id` INT(11) NOT NULL ,  CHANGE COLUMN `PROVINCIA` `id` VARCHAR(11) NOT NULL DEFAULT '0'  , 
   ADD CONSTRAINT `fk_ref_provincia_ref_pais1`
   FOREIGN KEY (`ref_pais_id` )
-  REFERENCES `meran`.`ref_pais` (`id` )
+  REFERENCES `ref_pais` (`id` )
   ON DELETE NO ACTION
   ON UPDATE NO ACTION
 , DROP PRIMARY KEY 
 , ADD PRIMARY KEY (`id`) 
 , ADD INDEX `fk_ref_provincia_ref_pais1` (`ref_pais_id` ASC) ;
 
--- -----------------------------------------------------
--- Table `meran`.`adq_forma_envio`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `meran`.`adq_forma_envio` ;
 
-CREATE  TABLE IF NOT EXISTS `meran`.`adq_forma_envio` (
+DROP TABLE IF EXISTS `adq_forma_envio` ;
+
+CREATE  TABLE IF NOT EXISTS `adq_forma_envio` (
   `id` INT NOT NULL ,
   `nombre` VARCHAR(100) NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `meran`.`adq_proveedor`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `meran`.`adq_proveedor` ;
 
-CREATE  TABLE IF NOT EXISTS `meran`.`adq_proveedor` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+DROP TABLE IF EXISTS `adq_proveedor` ;
+
+CREATE  TABLE IF NOT EXISTS `adq_proveedor` (
+  `id_proveedor` INT(11) NOT NULL AUTO_INCREMENT ,
   `nombre` VARCHAR(255) NOT NULL ,
   `apellido` VARCHAR(255) NOT NULL ,
   `nro_doc` VARCHAR(21) NOT NULL ,
@@ -404,59 +399,71 @@ CREATE  TABLE IF NOT EXISTS `meran`.`adq_proveedor` (
   `plazo_reclamo` INT(11) NULL DEFAULT NULL ,
   `usr_ref_tipo_documento_id` INT(11) NOT NULL ,
   `ref_localidad_id` INT(11) NOT NULL ,
-  PRIMARY KEY (`id`) ,
+  PRIMARY KEY (`id_proveedor`) ,
   CONSTRAINT `fk_adq_proveedor_usr_ref_tipo_documento1`
     FOREIGN KEY (`usr_ref_tipo_documento_id` )
-    REFERENCES `meran`.`usr_ref_tipo_documento` (`id` )
+    REFERENCES `usr_ref_tipo_documento` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_adq_proveedor_ref_localidad1`
     FOREIGN KEY (`ref_localidad_id` )
-    REFERENCES `meran`.`ref_localidad` (`id` )
+    REFERENCES `ref_localidad` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE INDEX `fk_adq_proveedor_usr_ref_tipo_documento1` ON `meran`.`adq_proveedor` (`usr_ref_tipo_documento_id` ASC) ;
-
-CREATE INDEX `fk_adq_proveedor_ref_localidad1` ON `meran`.`adq_proveedor` (`ref_localidad_id` ASC) ;
+COLLATE = latin1_swedish_ci;
 
 
--- -----------------------------------------------------
--- Table `meran`.`adq_proveedor_forma_envio`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `meran`.`adq_proveedor_forma_envio` ;
+DROP TABLE IF EXISTS `adq_proveedor_forma_envio` ;
 
-CREATE  TABLE IF NOT EXISTS `meran`.`adq_proveedor_forma_envio` (
+CREATE  TABLE IF NOT EXISTS `adq_proveedor_forma_envio` (
   `adq_forma_envio_id` INT NOT NULL ,
   `adq_proveedor_id` INT(11) NOT NULL ,
   PRIMARY KEY (`adq_forma_envio_id`, `adq_proveedor_id`) ,
   CONSTRAINT `fk_adq_forma_envio_has_adq_proveedor_adq_forma_envio1`
     FOREIGN KEY (`adq_forma_envio_id` )
-    REFERENCES `meran`.`adq_forma_envio` (`id` )
+    REFERENCES `adq_forma_envio` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_adq_proveedor_forma_envio_adq_proveedor1`
     FOREIGN KEY (`adq_proveedor_id` )
-    REFERENCES `meran`.`adq_proveedor` (`id` )
+    REFERENCES `adq_proveedor` (`id_proveedor` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_adq_proveedor_forma_envio_adq_proveedor1` ON `meran`.`adq_proveedor_forma_envio` (`adq_proveedor_id` ASC) ;
+
+ALTER TABLE  `usr_socio` ENGINE = INNODB;
+
+-- 26112010
+CREATE TABLE IF NOT EXISTS `ref_adq_moneda` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 
---- proveedor moneda
-CREATE TABLE IF NOT EXISTS `adq_proveedor_moneda` (
-  `proveedor_id` int(11) NOT NULL,
-  `moneda_id` int(11) NOT NULL,
-  PRIMARY KEY (`proveedor_id`,`moneda_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- email unico en proveedor
-ALTER TABLE `adq_proveedor` ADD UNIQUE (
-`email`
-)
+--Cambie el id de la tabla a autoincremental
+
+CREATE TABLE IF NOT EXISTS `adq_forma_envio` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+-- para poder insertar el proveedor con sus tipos (si es tipo persona_juridica no tiene nombre,app,dni,etc)
+ALTER TABLE `adq_proveedor` CHANGE `nombre` `nombre` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL 
+ALTER TABLE `adq_proveedor` CHANGE `apellido` `apellido` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL 
+ALTER TABLE `adq_proveedor` CHANGE `usr_ref_tipo_documento_id` `usr_ref_tipo_documento_id` INT( 11 ) NULL 
+ALTER TABLE `adq_proveedor` CHANGE `nro_doc` `nro_doc` VARCHAR( 21 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL 
+ALTER TABLE `adq_proveedor` CHANGE `razon_social` `razon_social` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL 
+
+
+
+
+

@@ -31,8 +31,7 @@ __PACKAGE__->meta->setup(
       ],
 
 
-    primary_key_columns => [ 'proveedor_id' ],
-    primary_key_columns => [ 'moneda_id' ],
+    primary_key_columns => [ 'proveedor_id' ,'moneda_id'],
 
 );
 

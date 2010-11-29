@@ -26,9 +26,10 @@ use POSIX qw(ceil floor);
 use JSON;
 #Einar use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(
+@EXPORT_OK=qw(
+    &ASCIItoHEX
     &aplicarParches 
     &obtenerParches
     &obtenerTiposDeColaboradores 
@@ -87,6 +88,7 @@ use vars qw(@EXPORT @ISA);
     &paginarArreglo
     &capitalizarString
     &ciudadesAutocomplete
+    &catalogoAutocomplete
     &redirectAndAdvice
     &generarComboDeAnios
     &generarComboDeCredentials
@@ -94,6 +96,8 @@ use vars qw(@EXPORT @ISA);
     &generarComboTemasINTRA
     &getFeriados
     &bbl_sort
+    &createSphinxInstance
+    &getSphinxMatchMode
 );
 
 # para los combos que no usan tablas de referencia
@@ -1541,7 +1545,7 @@ sub buscarNivelesBibliograficos{
 
 =head2
 # Esta funcioin remueve los blancos del principio y el final del string
-=cut;
+=cut
 sub trim{
     my ($string) = @_;
 
@@ -2767,6 +2771,95 @@ sub ciudadesAutocomplete{
 
 
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
+
+
+sub getSphinxMatchMode{
+  my ($tipo) = @_;
+  use Sphinx::Search;
+
+  #por defecto se setea este match_mode
+  my $tipo_match = SPH_MATCH_ANY;
+
+  if($tipo eq 'SPH_MATCH_ANY'){
+    #Match any words
+    $tipo_match = SPH_MATCH_ANY;
+  }elsif($tipo eq 'SPH_MATCH_PHRASE'){
+    #Exact phrase match
+    $tipo_match = SPH_MATCH_PHRASE;
+  }elsif($tipo eq 'SPH_MATCH_BOOLEAN'){
+    #Boolean match, using AND (&), OR (|), NOT (!,-) and parenthetic grouping
+    $tipo_match = SPH_MATCH_BOOLEAN;
+  }elsif($tipo eq 'SPH_MATCH_EXTENDED'){
+    #Extended match, which includes the Boolean syntax plus field, phrase and proximity operators
+    $tipo_match = SPH_MATCH_EXTENDED;
+  }elsif($tipo eq 'SPH_MATCH_ALL'){
+    #Match all words
+    $tipo_match = SPH_MATCH_ALL;
+  }
+
+  return ($tipo_match);
+}
+
+sub createSphinxInstance{
+	my ($string_array,$tipo) = @_;
+	
+    use Sphinx::Search;
+    my $sphinx = Sphinx::Search->new();
+    
+    my $server_address = C4::Context->config("sphinx_server") || 'localhost';
+    
+    my $server_port = C4::Context->config("server_port") || '3312'; 
+    
+    $sphinx->SetServer($server_address, $server_port);
+    
+    my $query = '';
+
+    my $tipo_match  = getSphinxMatchmode($tipo);
+
+    #se arma el query string
+    foreach my $string (@$string_array){
+
+        if($tipo eq 'SPH_MATCH_PHRASE'){
+            $query .=  " ".$string;
+        } else {
+            $query .=  " ".$string."*";
+        }
+    }
+
+    $sphinx->SetMatchMode($tipo_match);
+    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+    $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+
+    return ($sphinx,$query);	
+
+}
+
+sub catalogoAutocomplete{
+
+    my ($string_utf8_encoded) = @_;
+
+    $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
+
+    my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
+
+    my ($sphinx,$query) = createSphinxInstance(\@searchstring_array,'SPH_MATCH_ANY');
+
+    my $results = $sphinx->Query($query);
+    
+C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    
+    my @results_array;
+    my $matches = $results->{'matches'};
+    my $total_found = $results->{'total_found'};
+    my $textout = "";
+    foreach my $hash (@$matches){
+            $textout.= $hash->{'doc'}."|".$hash->{'group'}."|".$hash->{'weight'}."|".$hash->{'stamp'}."\n";
+            #push (@results_array, $hash->{'titulo'});
+            printHASH($hash);
+    }
+    C4::AR::Debug::debug("CANTIDAD: ".$total_found);
+    return ($textout);
 }
 
 sub soportesAutocomplete{

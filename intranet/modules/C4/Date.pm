@@ -30,6 +30,7 @@ $VERSION = 0.01;
 	     &ParseDate
 	     &UnixDate
          &getCurrentTimestamp
+         &get_date_format
 );
 
 sub get_date_format

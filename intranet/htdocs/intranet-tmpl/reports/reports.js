@@ -31,6 +31,7 @@ function consultarAltas() {
 	objAH.item_type 	= item_type;
 	objAH.date_begin 	= date_begin;
 	objAH.date_end 		= date_end;
+	objAH.funcion		= 'changePage';
 	// se envia la consulta
 	objAH.sendToServer();
 }

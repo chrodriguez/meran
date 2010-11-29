@@ -55,7 +55,7 @@ __PACKAGE__->meta->setup(
     ],
 );
 
-use Date::Manip;
+use C4::Date qw(get_date_format format_date_in_iso);
 
 sub getId_historial_prestamo{
     my ($self) = shift;

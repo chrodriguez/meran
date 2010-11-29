@@ -9,20 +9,50 @@
 
 //*********************************************Editar Proveedor********************************************* 
    $(document).ready(function() {
+     
         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
-   
+        ocultarDatos()
    
       });   
+      
+      
+   function ocultarDatos(){
      
- 
-
-
-
+      if(($('#apellido').val() == "") && ($('#razon_social').val() != "")){
+        
+          //es una persona juridica
+          $('#datos_proveedor').show()
+          $('#nombre').hide()
+          $('#label_nombre').hide()
+          $('#apellido').hide()  
+          $('#label_apellido').hide()  
+          $('#nro_doc').hide()    
+          $('#label_tipo_documento_id').hide()
+          $('#numero_documento').hide()
+          $('#tipo_documento_id').hide()
+          $('#razon_social').show()
+          $('#label_razon_social').show()    
+      }else{
+        
+          //es una persona fisica
+          $('#datos_proveedor').show()
+          $('#razon_social').hide()
+          $('#label_razon_social').hide()
+          $('#nombre').show()
+          $('#label_nombre').show()
+          $('#apellido').show()  
+          $('#label_apellido').show()  
+          $('#nro_doc').show()    
+          $('#label_nro_doc').show()
+          $('#tipo_documento_id').show()   
+        
+      }     
+   }
 
    function modificarDatosDeProveedor(){
-        objAH         = new AjaxHelper(updateDatosProveedor);
-        objAH.url     = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl';
-        objAH.debug   = true;
+        objAH                     = new AjaxHelper(updateDatosProveedor);
+        objAH.url                 = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl';
+        objAH.debug               = true;
 
         objAH.id_proveedor        = $('#id_proveedor').val();
         objAH.nombre              = $('#nombre').val();

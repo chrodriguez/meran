@@ -16,7 +16,7 @@ __PACKAGE__->meta->setup(
 
 );
 use utf8;
-use C4::AR::Permisos;
+
 use C4::AR::Utilidades;
 # *************************************************************************FUNCIONES DEL MODELO | MONEDA************************************************************
 
@@ -46,6 +46,12 @@ sub setNombre{
     if (C4::AR::Utilidades::validateString($nombre)){
       $self->nombre($nombre);
     }
+}
+
+sub getNombre{
+    my ($self) = shift;
+    return ($self->nombre);
+    
 }
 
 # ******************************************************************************FIN Getter y Setter*******************************************************************

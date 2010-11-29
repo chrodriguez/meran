@@ -7,9 +7,6 @@ use C4::Modelo::CatRegistroMarcN1;
 use C4::Modelo::CatRegistroMarcN1::Manager;
 use C4::Modelo::CatFavoritosOpac::Manager;
 use C4::Modelo::CatFavoritosOpac;
-use POSIX;
-
-
 
 use vars qw(@EXPORT_OK @ISA);
 
@@ -19,6 +16,7 @@ use vars qw(@EXPORT_OK @ISA);
                   &getAutoresAdicionales
                   &getColaboradores
                   &getUnititle
+                  &getNivel1FromId1
 );
 
 =head1 NAME

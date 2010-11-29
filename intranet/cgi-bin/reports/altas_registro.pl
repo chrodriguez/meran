@@ -20,7 +20,6 @@
 
 use strict;
 use C4::Auth;
-
 use CGI;
 use C4::AR::Utilidades;
 use C4::AR::Reportes;

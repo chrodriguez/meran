@@ -9,9 +9,10 @@
 
 <script type="text/javascript">
 
-
  $(document).ready(function() {
-         validateForm(agregarProveedor);
+         validateForm(agregarProveedor)
+         $('#datos_proveedor').hide()
+         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
  });
 
 </script>
@@ -25,27 +26,37 @@
 </legend>
 
 <form method=post  name="proveedorDataForm" id="proveedorDataForm">
-    <fieldset>
+    <ul>
+      <li class="sub_item">
+          <input type="radio" name="radio" id="persona_fisica" value="persona_fisica" onclick="verDatosPersonaFisica()">Persona Fisica
+      </li>
+      <li class="sub_item">
+        <input type="radio" name="radio" id="persona_juridica" value="persona_juridica" onclick="verDatosPersonaJuridica()">Persona Juridica
+      </li>
+    </ul>
+    <fieldset id="datos_proveedor">
     <legend class="titulo_legend">[% "Datos del proveedor" | i18n %]</legend>
     <ul>
         <li class="sub_item">
-            <label for="nombre"> [% "Nombre" | i18n %] *</label>
+            <label for="nombre" id="label_nombre"> [% "Nombre" | i18n %] *</label>
             <input id="nombre" name="nombre" class="required" type="text" size="25">
         </li>
         <li class="sub_item">
-            <label for="apellido"> [% "Apellido" | i18n %] *</label>
+            <label for="apellido" id="label_apellido"> [% "Apellido" | i18n %] *</label>
             <input id="apellido" name="apellido" class="required" type="text" size="25">
         </li>
 
         <li class="sub_item">
-            <label for="nro_doc">[% "Documento" | i18n %] *</label>
+            <label for="nro_doc" id="label_nro_doc">[% "Documento" | i18n %] *</label>
+
             [% combo_tipo_documento %] 
+
             <input  id="nro_doc" name="nro_doc" class="required" type="text" size="15" 
                     value="[% proveedor.getNroDoc %]">
         </li>
 
         <li class="sub_item">
-            <label for="razon_social">[% "Razon Social" | i18n %] *</label>
+            <label for="razon_social" id="label_razon_social">[% "Razon Social" | i18n %] *</label>
             <input 	id="razon_social" name="razon_social" class="required" type="text" size="15">
         </li>
 
@@ -84,7 +95,7 @@
 
             <li class="sub_item">
                 <label for="fax">[% "Fax" | i18n %] </label>
-                <input  id="fax" name="fax" class="required" type="text" size="15">
+                <input  id="fax" name="fax" type="text" size="15">
             </li>
 
             <li class="sub_item">
