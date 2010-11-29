@@ -5,8 +5,8 @@ require Exporter;
 use DBI;
 use C4::Modelo::AdqProveedor;
 use C4::Modelo::AdqProveedor::Manager;
-use C4::Modelo::AdqProveedor;
 use C4::Modelo::AdqProveedorMoneda::Manager;
+use C4::Modelo::AdqProveedorFormaEnvio::Manager;
 
 
 use vars qw(@EXPORT @ISA);
@@ -18,6 +18,7 @@ use vars qw(@EXPORT @ISA);
     &getProveedorLike;
     &editarAutorizado;
     &getMonedasProveedor;
+    &getFormasEnvioProveedor;
 );
 
 
@@ -224,6 +225,23 @@ sub getMonedasProveedor{
     
    return($monedas);
 }
+
+sub getFormasEnvioProveedor{
+ 
+   my ($params) = @_;
+   my $id_proveedor = $params;
+
+   my $formas_envio = C4::Modelo::AdqProveedorFormaEnvio::Manager->get_adq_proveedor_forma_envio(   query =>  [ 
+                                                                                              adq_proveedor_id  => { eq => $id_proveedor  },
+                                                                                   ],
+                                                                                    require_objects => ['forma_envio_ref'],
+   
+                                                    );
+
+   return($formas_envio);
+}
+
+
 
 
 # TODO sub getFormasEnvioProveedor{
