@@ -7,6 +7,7 @@ use C4::Modelo::AdqProveedor;
 use C4::Modelo::AdqProveedor::Manager;
 use C4::Modelo::AdqProveedor;
 use C4::Modelo::AdqProveedorMoneda::Manager;
+use C4::Modelo::RefAdqMoneda::Manager;
 
 
 use vars qw(@EXPORT @ISA);
@@ -18,6 +19,7 @@ use vars qw(@EXPORT @ISA);
     &getProveedorLike;
     &editarAutorizado;
     &getMonedasProveedor;
+    &getMonedas;
 );
 
 
@@ -199,8 +201,7 @@ sub getProveedorLike {
 }
 
 =item
-    Modulo que chekea que todos los datos necesarios sean validos. Queda todo en $msg_object, ademas lo retorna;
-    Usado en agregar proveedor y modificar proveedor
+   Modulo que devuelve todas las monedas que tenga el proveedor
 =cut
 
 sub getMonedasProveedor{
@@ -216,13 +217,27 @@ sub getMonedasProveedor{
                                                     );
    my @nombres_monedas;
    foreach my $moneda (@$monedas){
-#      push (@nombres_monedas,$moneda->moneda_ref->getNombre);
       push (@nombres_monedas,$moneda);
    }
-
-#   C4::AR::Debug::debug(@nombres_monedas[0]);
     
    return($monedas);
+}
+
+
+
+=item
+   Modulo que devuelve todas las monedas para mostrarlas en Editar Proveedor - TEMPORAL aca, dsp va en C4::AR::Monedas ?
+=cut
+
+sub getMonedas{
+ 
+   my $todasMonedas = C4::Modelo::RefAdqMoneda::Manager->get_ref_adq_moneda();
+   my @nombres_monedas;
+   foreach my $moneda (@$todasMonedas){
+      push (@nombres_monedas,$moneda);
+   }
+    
+   return($todasMonedas);
 }
 
 
