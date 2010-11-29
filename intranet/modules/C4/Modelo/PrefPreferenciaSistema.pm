@@ -23,6 +23,7 @@ __PACKAGE__->meta->setup(
 
 
 use C4::Modelo::PrefValorAutorizado;
+use C4::Modelo::PrefValorAutorizado::Manager;
 use C4::Modelo::PrefTablaReferencia;
 use C4::AR::Utilidades; 
         

@@ -69,59 +69,64 @@ printable string.
 @ISA = qw(Exporter);
 @EXPORT = qw(
                 &gettemplate
-	     );
+         );
 
 #==========================================================FUNCIONES NUEVAS=================================================
 
 sub gettemplate {
-	my ($tmplbase, $opac, $loging_out, $socio) = @_;
+    my ($tmplbase, $opac, $loging_out, $socio) = @_;
 
-	my $htdocs;
+
+#     my $preferencias_hash_ref = C4::AR::Preferencias::getPreferenciasByArray(['tema_opac', 'tema_intra', 'defaultUI', 'titulo_nombre_ui']);
+
+# C4::AR::Debug::debug("tema_opac ".$preferencias_hash_ref->{'tema_opac'});
+
+    my $htdocs;
     my $tema_opac   = C4::AR::Preferencias->getValorPreferencia('tema_opac') || 'default';
     my $tema_intra  = C4::AR::Preferencias->getValorPreferencia('tema_intra') || 'default';
     my $temas       = C4::Context->config('temas');
     my $tema;
     my $type;
 
-	if ($opac ne "intranet") {
-		$htdocs     = C4::Context->config('opachtdocs');
+    if ($opac ne "intranet") {
+        $htdocs     = C4::Context->config('opachtdocs');
         $temas      = C4::Context->config('temasOPAC');
         $tema       = $tema_opac;
         $type       = 'OPAC';
-	} else {
-		$htdocs     = C4::Context->config('intrahtdocs');
+    } else {
+        $htdocs     = C4::Context->config('intrahtdocs');
         $tema       = $tema_intra;
         $type       = 'INTRA';
-	}
+    }
 
-	my $filter      = Template::Filters->new({
-						    FILTERS => {	'i18n' =>  \&C4::AR::Filtros::i18n, #se carga el filtro i18n
-							    },
-					});
+    my $filter      = Template::Filters->new({
+                            FILTERS => {    'i18n' =>  \&C4::AR::Filtros::i18n, #se carga el filtro i18n
+                                },
+                    });
 
 
-	my $template = Template->new({
-					INCLUDE_PATH    => [
-								            "$htdocs",
-								            "$htdocs/includes/",
+    my $template = Template->new({
+                    INCLUDE_PATH    => [
+                                            "$htdocs",
+                                            "$htdocs/includes/",
                                             "$htdocs/catalogacion/",
                                             "$htdocs/includes/popups/",
-								            "$htdocs/includes/menu",
-								            C4::Context->config('includes_general'),
-							        ],
- 					ABSOLUTE        => 1,
+                                            "$htdocs/includes/menu",
+                                            C4::Context->config('includes_general'),
+                                    ],
+                    ABSOLUTE        => 1,
                     CACHE_SIZE      => 200,
                     COMPILE_DIR     => '/tmp/ttc',
                     RELATIVE        => 1,
-					EVAL_PERL       => 1,
-					LOAD_FILTERS    => [ $filter ],
-# 					RELATIVE => 1,
-					});	
+                    EVAL_PERL       => 1,
+                    LOAD_FILTERS    => [ $filter ],
+#                   RELATIVE => 1,
+                    }); 
 
-	#se inicializa la hash de los parametros para el template
- 	my %params = ();
+    #se inicializa la hash de los parametros para el template
+    my %params = ();
 
-	#se asignan los parametros que son necesarios para todos los templates
+    #se asignan los parametros que son necesarios para todos los templates
     my $ui;
     my $nombre_ui       = '';
     my $default_ui      = C4::AR::Preferencias->getValorPreferencia('defaultUI');
@@ -146,24 +151,24 @@ sub gettemplate {
 
     %params= (
 # FIXME DEPRECATED
-			themelang           => ($opac ne 'intranet'? '/opac-tmpl/': '/intranet-tmpl/') ,
+            themelang           => ($opac ne 'intranet'? '/opac-tmpl/': '/intranet-tmpl/') ,
 # FIXME DEPRECATED
-			interface           => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
+            interface           => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
 #             sitio               => ($opac ne 'intranet'? 'opac': 'intranet'),  #indica desde donde se hace el requerimiento
             type                => ($opac ne 'intranet'? 'opac': 'intranet'),  #indica desde donde se hace el requerimiento
-			tema                => $tema,
-			temas               => $temas,
+            tema                => $tema,
+            temas               => $temas,
             titulo_nombre_ui    => C4::AR::Preferencias->getValorPreferencia('titulo_nombre_ui'),
-			template_name       => "$htdocs/$tmplbase", #se setea el nombre del tmpl
+            template_name       => "$htdocs/$tmplbase", #se setea el nombre del tmpl
             ui                  => $ui,
             actual_year         => $date->{'year'},
             localization_FLAGS  => C4::AR::Filtros::setFlagsLang($type,$user_theme),
             HOST                => $ENV{HTTP_HOST},
             user_theme          => $user_theme,
             user_theme_intra    => $user_theme_intra,
-		);
+        );
 
-	return ($template, \%params);
+    return ($template, \%params);
 }
 
 
@@ -171,13 +176,13 @@ sub gettemplate {
 
 # FIXME  DEPRECATDDDD
 # sub printTemplateParams {
-# 	my ($params) = @_;
-# 	my $k;
-# 	my $v;
+#   my ($params) = @_;
+#   my $k;
+#   my $v;
 # 
-# 	while ( ($k,$v) = each %$params ) {
-# 		print "$k => $v\n";
-# 	}
+#   while ( ($k,$v) = each %$params ) {
+#       print "$k => $v\n";
+#   }
 # }
 
 
@@ -194,52 +199,52 @@ sub gettemplate {
 # FIXME - POD
 # FIXME  DEPRECATDDDD
 # sub themelanguage {
-# 	my ($htdocs, $tmpl, $section) = @_;
-# 	my $dbh = C4::Context->dbh;
-# 	my @languages;
-# 	my @themes;
-# 	if ( $section eq "intranet"){
-# 		push @languages , C4::AR::Preferencias->getValorPreferencia('opaclanguages');
-# 		push @themes ,  C4::AR::Preferencias->getValorPreferencia('template');
-# 	}else	{
-# 		push @languages, C4::AR::Preferencias->getValorPreferencia('opaclanguages');
-# 		push @themes , C4::AR::Preferencias->getValorPreferencia('opacthemes');
-# 	}
-# 	
-# 	my ($theme, $lang);
-# 	# searches through the themes and languages. First template it find it returns.
-# 	# Priority is for getting the theme right.
-# 	THEME:
-# 	foreach my $th (@themes) {
-# 		foreach my $la (@languages) {
-# 			for (my $pass = 1; $pass <= 2; $pass += 1) {
-# 			$la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
-# # 			if (-e "$htdocs/$th/$la/$tmpl") {
+#   my ($htdocs, $tmpl, $section) = @_;
+#   my $dbh = C4::Context->dbh;
+#   my @languages;
+#   my @themes;
+#   if ( $section eq "intranet"){
+#       push @languages , C4::AR::Preferencias->getValorPreferencia('opaclanguages');
+#       push @themes ,  C4::AR::Preferencias->getValorPreferencia('template');
+#   }else   {
+#       push @languages, C4::AR::Preferencias->getValorPreferencia('opaclanguages');
+#       push @themes , C4::AR::Preferencias->getValorPreferencia('opacthemes');
+#   }
+#   
+#   my ($theme, $lang);
+#   # searches through the themes and languages. First template it find it returns.
+#   # Priority is for getting the theme right.
+#   THEME:
+#   foreach my $th (@themes) {
+#       foreach my $la (@languages) {
+#           for (my $pass = 1; $pass <= 2; $pass += 1) {
+#           $la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
+# #             if (-e "$htdocs/$th/$la/$tmpl") {
 #             if (-e "$htdocs/$th/$tmpl") {
-# 				$theme = $th;
-# 				$lang = $la;
-# 				last THEME;
-# 			}
-# 			last unless $la =~ /[-_]/;
-# 			}
-# 		}
-# 	}
+#               $theme = $th;
+#               $lang = $la;
+#               last THEME;
+#           }
+#           last unless $la =~ /[-_]/;
+#           }
+#       }
+#   }
 # 
-# 	if ($theme and $lang) {
-# 		return ($theme, $lang);
-# 	} else {
-# 		return ('default', 'en');
-# 	}
+#   if ($theme and $lang) {
+#       return ($theme, $lang);
+#   } else {
+#       return ('default', 'en');
+#   }
 # }
 
 
 =item pathtotemplate
 
   %values = &pathtotemplate(template => $template,
-	theme => $themename,
-	language => $language,
-	type => $ptype,
-	path => $includedir);
+    theme => $themename,
+    language => $language,
+    type => $ptype,
+    path => $includedir);
 
 Finds a directory containing the desired template. The C<template>
 argument specifies the template you're looking for (this should be the
@@ -336,11 +341,11 @@ document.
 #   CHECK: foreach my $edir (@tmpldirs) {
 #     foreach $etheme ($theme, 'all', 'default') {
 #       foreach $elanguage ($language, @languageorder, 'all','en') {
-# 				# 'en' is the fallback-language
-#       	if (-e "$edir/$type$etheme/$elanguage/$template") {
-#       	  $epath = "$edir/$type$etheme/$elanguage/$template";
-#       	  last CHECK;
-#       	}
+#               # 'en' is the fallback-language
+#           if (-e "$edir/$type$etheme/$elanguage/$template") {
+#             $epath = "$edir/$type$etheme/$elanguage/$template";
+#             last CHECK;
+#           }
 #       }
 #     }
 #   }
@@ -520,15 +525,15 @@ document root.
 #   my $string="<tr valign=top bgcolor=$colour>";
 #   while ($i <$cols){
 #       if (defined $data[$cols]) { # if there is a background image
-# 	  $string.="<td background=\"$data[$cols]\">";
+#     $string.="<td background=\"$data[$cols]\">";
 #       } else { # if there's no background image
-# 	  $string.="<td>";
+#     $string.="<td>";
 #       }
 #       if (! defined $data[$i]) {$data[$i]="";}
 #       if ($data[$i] eq "") {
-# 	  $string.=" &nbsp; </td>";
+#     $string.=" &nbsp; </td>";
 #       } else {
-# 	  $string.="$data[$i]</td>";
+#     $string.="$data[$i]</td>";
 #       }
 #       $i++;
 #   }
@@ -572,7 +577,7 @@ declaration.
 #       my $text;
 #       if ($data[0] eq 'radio') {
 #         $text="<input type=radio name=$keys[$i2] value=$data[1]>$data[1]
-# 	<input type=radio name=$keys[$i2] value=$data[2]>$data[2]";
+#   <input type=radio name=$keys[$i2] value=$data[2]>$data[2]";
 #       }
 #       if ($data[0] eq 'text') {
 #         $text="<input type=$data[0] name=$keys[$i2] value=\"$data[1]\">";
@@ -582,13 +587,13 @@ declaration.
 #       }
 #       if ($data[0] eq 'select') {
 #         $text="<select name=$keys[$i2]>";
-# 	my $i=1;
-#        	while ($data[$i] ne "") {
-# 	  my $val = $data[$i+1];
-#       	  $text .= "<option value=$data[$i]>$val";
-#       	  $i += 2;
-# 	}
-# 	$text .= "</select>";
+#   my $i=1;
+#           while ($data[$i] ne "") {
+#     my $val = $data[$i+1];
+#             $text .= "<option value=$data[$i]>$val";
+#             $i += 2;
+#   }
+#   $text .= "</select>";
 #       }
 #       $string .= mktablerow(2,'white',$keys[$i2],$text);
 #       #@order[$posn] =mktablerow(2,'white',$keys[$i2],$text);
@@ -604,9 +609,9 @@ declaration.
 =item mkform3
 
   $str = &mkform3($action,
-	$fieldname => "$fieldtype\t$fieldvalue\t$fieldpos",
-	...
-	);
+    $fieldname => "$fieldtype\t$fieldvalue\t$fieldpos",
+    ...
+    );
   print $str;
 
 Takes a set of arguments that define an input form, generates an HTML
@@ -674,8 +679,8 @@ the C<label>Ns are empty, the rest of the list will be ignored.
 #   my $string = "<form action=\"$action\" method=\"post\">\n";
 #   $string   .= mktablehdr();
 #   my $key;
-#   my @keys = sort(keys(%inputs));	# FIXME - Why do these need to be
-# 					# sorted?
+#   my @keys = sort(keys(%inputs)); # FIXME - Why do these need to be
+#                   # sorted?
 #   my @order;
 #   my $count = @keys;
 #   my $i2 = 0;
@@ -691,7 +696,7 @@ the C<label>Ns are empty, the rest of the list will be ignored.
 #       my $text;
 #       if ($data[0] eq 'radio') {
 #         $text="<input type=radio name=$keys[$i2] value=$data[1]>$data[1]
-# 	<input type=radio name=$keys[$i2] value=$data[2]>$data[2]";
+#   <input type=radio name=$keys[$i2] value=$data[2]>$data[2]";
 #       }
 #       # FIXME - Is 40 the right size in all cases?
 #       if ($data[0] eq 'text') {
@@ -703,13 +708,13 @@ the C<label>Ns are empty, the rest of the list will be ignored.
 #       }
 #       if ($data[0] eq 'select') {
 #         $text="<select name=$keys[$i2]>";
-# 	my $i=1;
-#        	while ($data[$i] ne "") {
-# 	  my $val = $data[$i+1];
-#       	  $text .= "<option value=$data[$i]>$val";
-#       	  $i += 2;
-# 	}
-# 	$text .= "</select>";
+#   my $i=1;
+#           while ($data[$i] ne "") {
+#     my $val = $data[$i+1];
+#             $text .= "<option value=$data[$i]>$val";
+#             $i += 2;
+#   }
+#   $text .= "</select>";
 #       }
 # #      $string=$string.mktablerow(2,'white',$keys[$i2],$text);
 #       $order[$posn]=mktablerow(2,'white',$keys[$i2],$text);
@@ -740,8 +745,8 @@ The remaining arguments define the fields in the form. Each is an
 anonymous array, e.g.:
 
   &mkformnotable("/cgi-bin/foo",
-	[ "hidden", "hiddenvar", "value" ],
-	[ "text", "username", "" ]);
+    [ "hidden", "hiddenvar", "value" ],
+    [ "text", "username", "" ]);
 
 The first element of each argument defines its type. The remaining
 ones are type-dependent. The supported types are:
@@ -816,10 +821,10 @@ text for the button.
 =item mkform2
 
   $str = &mkform2($action,
-	$fieldname =>
-	  "$fieldpos\t$required\t$label\t$fieldtype\t$value0\t$value1\t...",
-	...
-	);
+    $fieldname =>
+      "$fieldpos\t$required\t$label\t$fieldtype\t$value0\t$value1\t...",
+    ...
+    );
   print $str;
 
 Takes a set of arguments that define an input form, generates an HTML
@@ -912,7 +917,7 @@ corresponding choice will initially be selected.
 #       my $text;
 #       if ($data[0] eq 'radio') {
 #         $text="<input type=radio name=$key value=$data[1]>$data[1]
-# 	<input type=radio name=$key value=$data[2]>$data[2]";
+#   <input type=radio name=$key value=$data[2]>$data[2]";
 #       } elsif ($data[0] eq 'text') {
 #         my $size = $data[1];
 #         if ($size eq "") {
@@ -928,22 +933,22 @@ corresponding choice will initially be selected.
 #         $text="<textarea name=$key wrap=physical cols=$size[0] rows=$size[1]>$data[2]</textarea>";
 #       } elsif ($data[0] eq 'select') {
 #         $text="<select name=$key>";
-# 	my $sel=$data[1];
-# 	my $i=2;
-#        	while ($data[$i] ne "") {
-# 	  my $val = $data[$i+1];
-#        	  $text .= "<option value=\"$data[$i]\"";
-# 	  if ($data[$i] eq $sel) {
-# 	     $text .= " selected";
-# 	  }
+#   my $sel=$data[1];
+#   my $i=2;
+#           while ($data[$i] ne "") {
+#     my $val = $data[$i+1];
+#             $text .= "<option value=\"$data[$i]\"";
+#     if ($data[$i] eq $sel) {
+#        $text .= " selected";
+#     }
 #           $text .= ">$val";
 #           $i += 2;
-# 	}
-# 	$text .= "</select>";
+#   }
+#   $text .= "</select>";
 #       }
 #       if ($reqd eq "R") {
 #         $ltext .= " (Req)";
-# 	}
+#   }
 #       $order[$posn] =mktablerow(2,'white',$ltext,$text);
 #     }
 #   }
@@ -1055,8 +1060,8 @@ Returns a string of HTML that renders C<$text> in bold.
 =item getkeytableselectoptions
 
   $str = &getkeytableselectoptions($dbh, $tablename,
-	$keyfieldname, $descfieldname,
-	$showkey, $default);
+    $keyfieldname, $descfieldname,
+    $showkey, $default);
   print $str;
 
 Builds an HTML selection box from a database table. Returns a string
@@ -1086,48 +1091,48 @@ C<$keyfieldname>) matches C<$default>, it will be selected by default.
 # Create an HTML option list for a <SELECT> form tag by using
 #    values from a DB file
 # sub getkeytableselectoptions {
-# 	use strict;
-# 	# inputs
-# 	my (
-# 		$dbh,		# DBI handle
-# 				# FIXME - Obsolete argument
-# 		$tablename,	# name of table containing list of choices
-# 		$keyfieldname,	# column name of code to use in option list
-# 		$descfieldname,	# column name of descriptive field
-# 		$showkey,	# flag to show key in description
-# 		$default,	# optional default key
-# 	)=@_;
-# 	my $selectclause;	# return value
+#   use strict;
+#   # inputs
+#   my (
+#       $dbh,       # DBI handle
+#               # FIXME - Obsolete argument
+#       $tablename, # name of table containing list of choices
+#       $keyfieldname,  # column name of code to use in option list
+#       $descfieldname, # column name of descriptive field
+#       $showkey,   # flag to show key in description
+#       $default,   # optional default key
+#   )=@_;
+#   my $selectclause;   # return value
 # 
-# 	my (
-# 		$sth, $query,
-# 		$key, $desc, $orderfieldname,
-# 	);
-# 	my $debug=0;
+#   my (
+#       $sth, $query,
+#       $key, $desc, $orderfieldname,
+#   );
+#   my $debug=0;
 # 
-#     	$dbh = C4::Context->dbh;
+#       $dbh = C4::Context->dbh;
 # 
-# 	if ( $showkey ) {
-# 		$orderfieldname=$keyfieldname;
-# 	} else {
-# 		$orderfieldname=$descfieldname;
-# 	}
-# 	$query= "select $keyfieldname,$descfieldname
-# 		from $tablename
-# 		order by $orderfieldname ";
-# 	print "<PRE>Query=$query </PRE>\n" if $debug;
-# 	$sth=$dbh->prepare($query);
-# 	$sth->execute;
-# 	while ( ($key, $desc) = $sth->fetchrow) {
-# 	    if ($showkey || ! $desc ) { $desc="$key - $desc"; }
-# 	    $selectclause.="<option";
-# 	    if (defined $default && $default eq $key) {
-# 		$selectclause.=" selected";
-# 	    }
-# 	    $selectclause.=" value='$key'>$desc\n";
-# 	    print "<PRE>Sel=$selectclause </PRE>\n" if $debug;
-# 	}
-# 	return $selectclause;
+#   if ( $showkey ) {
+#       $orderfieldname=$keyfieldname;
+#   } else {
+#       $orderfieldname=$descfieldname;
+#   }
+#   $query= "select $keyfieldname,$descfieldname
+#       from $tablename
+#       order by $orderfieldname ";
+#   print "<PRE>Query=$query </PRE>\n" if $debug;
+#   $sth=$dbh->prepare($query);
+#   $sth->execute;
+#   while ( ($key, $desc) = $sth->fetchrow) {
+#       if ($showkey || ! $desc ) { $desc="$key - $desc"; }
+#       $selectclause.="<option";
+#       if (defined $default && $default eq $key) {
+#       $selectclause.=" selected";
+#       }
+#       $selectclause.=" value='$key'>$desc\n";
+#       print "<PRE>Sel=$selectclause </PRE>\n" if $debug;
+#   }
+#   return $selectclause;
 # } # sub getkeytableselectoptions
 
 #---------------------------------
