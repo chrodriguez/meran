@@ -20,7 +20,7 @@ function _getSubCampoMARC_conf_ById(id){for(var i=0;i<MARC_OBJECT_ARRAY.length;i
 return 0;}
 function _getCampoMARC_conf_ById(id){for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){if(MARC_OBJECT_ARRAY[i].getIdCompCliente()==id){return MARC_OBJECT_ARRAY[i];}}
 return 0;}
-function removeFromArray(array,from,to){var rest=array.slice((to||from)+1||array.length);array.length=from<0?array.length+from:from;return array.push.apply(array,rest);};function _getBarcodes(){var barcodes_string=$('#'+_getIdComponente('995','f')).val();_freeMemory(BARCODES_ARRAY);BARCODES_ARRAY=[];if(barcodes_string!=''){BARCODES_ARRAY=barcodes_string.split(",");return 1;}
+function removeFromArray(array,from,to){var rest=array.slice((to||from)+1||array.length);array.length=from<0?array.length+from:from;return array.push.apply(array,rest);};function _getBarcodes(){var barcodes_string=$('#'+_getIdComponente('995','f')).val();_freeMemory(BARCODES_ARRAY);BARCODES_ARRAY=[];if((typeof(barcodes_string)!=='undefined')&&(barcodes_string!='')){BARCODES_ARRAY=barcodes_string.split(",");return 1;}
 return 0;}
 function _sacarOpciones(){for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){var subcampos_array=MARC_OBJECT_ARRAY[i].getSubCamposArray();for(var s=0;s<subcampos_array.length;s++){if(subcampos_array[s].opciones){if(subcampos_array[s].opciones.length>0){subcampos_array[s].opciones=[];}}}}}
 function _clearDataFromComponentesArray(){for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){MARC_OBJECT_ARRAY[i].dato='';$('#'+MARC_OBJECT_ARRAY[i].idCompCliente).val('');}}
