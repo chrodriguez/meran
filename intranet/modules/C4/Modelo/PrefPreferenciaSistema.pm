@@ -34,7 +34,8 @@ sub defaultSort {
 
 sub getVariable{
     my ($self) = shift;
-    return (C4::AR::Utilidades::trim($self->variable));
+#     return (C4::AR::Utilidades::trim($self->variable));
+    return ($self->variable);
 }
 
 sub setVariable{
@@ -45,7 +46,9 @@ sub setVariable{
 
 sub getValue{
     my ($self) = shift;
-    return (C4::AR::Utilidades::trim($self->value));
+
+#     return (&C4::AR::Utilidades::trim($self->value));
+    return ($self->value);
 }
 
 sub setValue{
