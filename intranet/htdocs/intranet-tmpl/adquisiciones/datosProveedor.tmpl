@@ -78,29 +78,28 @@
           </li>
 <!--          <li class="sub_item">
           <label for="moneda">[% "Monedas del proveedor" | i18n %]</label>
-          </li>-->
-<!--              [% FOREACH moneda IN monedas %]   
+          </li>
+            [% FOREACH moneda IN monedas %]   
                             <li id="[% moneda.moneda_ref.id %]"><strong> [% moneda.moneda_ref.nombre %]</strong></li> 
-              [% END %]
-          <li class="sub_item"> 
-            <label for="moneda">[% "Listado de Monedas" | i18n %]</label>
-            <select>
+              [% END %]-->
+            <li class="sub_item"> 
+            <label for="moneda">[% "Monedas del proveedor" | i18n %]</label>
+
             [% FOREACH moneda IN todas_monedas %] 
-                <option>[% moneda.nombre %]</option>
+                  <li id="[% moneda.id %]"><strong> [% moneda.nombre %]</strong></li> 
             [% END %]
-            </select>
-          </li>-->
+
+          </li>
 
 
           <!-- Autocomplete Monedas -->
           <li class="sub_item"> 
-          <label for="moneda"> [% "Moneda del proveedor" | i18n %]</label>
-          <input  id="moneda" name="moneda" type="text" class="required" size="25" >
+          <label for="moneda"> [% "Monedas posibles" | i18n %]</label>
+          <input  id="moneda" name="moneda" type="text" class="required" size="25" >           
+          <input  id="agregar_moneda" name="agregar_moneda" type="button" size="15" value="Agregar Moneda">
+          <input  id="borrar_moneda" name="borrar_moneda" type="button" size="15" value="Borrar Moneda">
            <input type="hidden" id="id_moneda" name="id_moneda">
           </li>
-
-
-
 
           <div id="accion">
               [% PERL %]

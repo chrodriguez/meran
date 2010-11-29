@@ -13,8 +13,21 @@
         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
         CrearAutocompleteMonedas({IdInput: 'moneda', IdInputHidden: 'id_moneda'})
         ocultarDatos()
+        monedas()
    
       });   
+      
+      
+    function monedas(){
+      $('#agregar_moneda').click(function() {
+          //alert($('#moneda').val() + $('#id_moneda').val() )
+          //aler($('#id_moneda').val())
+          
+      });
+
+     
+     
+   }
       
       
    function ocultarDatos(){
