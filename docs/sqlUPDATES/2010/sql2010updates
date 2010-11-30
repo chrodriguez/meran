@@ -457,12 +457,11 @@ CREATE TABLE IF NOT EXISTS `adq_forma_envio` (
 
 
 -- para poder insertar el proveedor con sus tipos (si es tipo persona_juridica no tiene nombre,app,dni,etc)
-ALTER TABLE `adq_proveedor` CHANGE `nombre` `nombre` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL 
-ALTER TABLE `adq_proveedor` CHANGE `apellido` `apellido` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL 
-ALTER TABLE `adq_proveedor` CHANGE `usr_ref_tipo_documento_id` `usr_ref_tipo_documento_id` INT( 11 ) NULL 
-ALTER TABLE `adq_proveedor` CHANGE `nro_doc` `nro_doc` VARCHAR( 21 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL 
-ALTER TABLE `adq_proveedor` CHANGE `razon_social` `razon_social` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL 
-
+ALTER TABLE `adq_proveedor` CHANGE `nombre` `nombre` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ;
+ALTER TABLE `adq_proveedor` CHANGE `apellido` `apellido` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ;
+ALTER TABLE `adq_proveedor` CHANGE `usr_ref_tipo_documento_id` `usr_ref_tipo_documento_id` INT( 11 ) NULL ;
+ALTER TABLE `adq_proveedor` CHANGE `nro_doc` `nro_doc` VARCHAR( 21 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ;
+ALTER TABLE `adq_proveedor` CHANGE `razon_social` `razon_social` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ;
 
 
 

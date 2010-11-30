@@ -28,9 +28,6 @@ if ($tipoAccion eq "EDITAR") {
     my $comboDeTipoDeDoc = &C4::AR::Utilidades::generarComboTipoDeDoc();
     $t_params->{'combo_tipo_documento'} = $comboDeTipoDeDoc;
 
-    my $todadMonedas = C4::AR::Proveedores::getMonedas();
-    $t_params->{'todas_monedas'} = $todadMonedas;   
-
 } else {
           ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
                       template_name   => '/adquisiciones/detalleProveedor.tmpl',

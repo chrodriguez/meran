@@ -22,6 +22,15 @@
       $('#agregar_moneda').click(function() {
           //alert($('#moneda').val() + $('#id_moneda').val() )
           //aler($('#id_moneda').val())
+          if($('#moneda').val() == ""){
+              alert('Por favor ingrese una moneda')            
+          }else{
+              var monedaNueva = $('#moneda').val()
+           //   
+                $('#monedas_proveedor').append("ho0laaa")
+               alert("ok")
+            
+          }
           
       });
 

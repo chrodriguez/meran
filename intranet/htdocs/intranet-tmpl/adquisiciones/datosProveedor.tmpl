@@ -84,12 +84,12 @@
               [% END %]-->
             <li class="sub_item"> 
             <label for="moneda">[% "Monedas del proveedor" | i18n %]</label>
-
-            [% FOREACH moneda IN todas_monedas %] 
-                  <li id="[% moneda.id %]"><strong> [% moneda.nombre %]</strong></li> 
-            [% END %]
-
-          </li>
+              <div id=monedas_proveedor">
+              [% FOREACH moneda IN monedas %] 
+                    <li id="[% moneda.moneda_ref.id %]"><strong>[% moneda.moneda_ref.nombre %]</strong></li> 
+              [% END %]
+              </div>
+            </li>
 
 
           <!-- Autocomplete Monedas -->
