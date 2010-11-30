@@ -196,11 +196,12 @@ function removeFromArray (array, from, to) {
 
 function _getBarcodes(){
 	var barcodes_string = $('#'+_getIdComponente('995','f')).val();
+
 	//inicializo el arreglo
 	_freeMemory(BARCODES_ARRAY);
 	BARCODES_ARRAY= [];
 
-	if(barcodes_string != ''){
+	if((typeof(barcodes_string) !== 'undefined')&&(barcodes_string != '')){
 		BARCODES_ARRAY = barcodes_string.split(",");
 		return 1;
 	}
@@ -466,11 +467,11 @@ function switchTipoBarcode(chosen, readOnly){
 }
 
 function registrarToggleOnChangeForBarcode(callFromBarcode){
-    var cantidad_comp = $('#cantEjemplares');
-    var cantidad_val = $.trim(cantidad_comp.val());
-    var id = _getIdComponente('995','f');
-    var barcode_comp = $('#'+id);
-    var barcode_val = $.trim(barcode_comp.val());
+    var cantidad_comp   = $('#cantEjemplares');
+    var cantidad_val    = $.trim(cantidad_comp.val());
+    var id              = _getIdComponente('995','f');
+    var barcode_comp    = $('#'+id);
+    var barcode_val     = $.trim(barcode_comp.val());
 
     if (callFromBarcode){       
         if ((cantidad_val.length)>0)

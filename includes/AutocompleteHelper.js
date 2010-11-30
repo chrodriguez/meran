@@ -109,6 +109,14 @@ function= funcion a ejecutar luego de traer la respuesta del servidor
 
 //Funciones publicas
 
+function CrearAutocompleteMonedas(options){
+    _CrearAutocomplete({    IdInput: options.IdInput, 
+                            IdInputHidden: options.IdInputHidden, 
+                            accion: 'autocomplete_monedas', 
+                            callBackFunction: options.callBackFunction,
+                    });
+}
+
 function CrearAutocompleteCiudades(options){
     _CrearAutocomplete({	IdInput: options.IdInput, 
 							IdInputHidden: options.IdInputHidden, 

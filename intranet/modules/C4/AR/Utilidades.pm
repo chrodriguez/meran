@@ -29,6 +29,8 @@ use JSON;
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw(
+    &monedasAutocomplete
+    &buscarCiudades
     &ASCIItoHEX
     &aplicarParches 
     &obtenerParches
@@ -1470,6 +1472,36 @@ sub obtenerDatosValorAutorizado{
 }
 
 =item
+buscarMonedas
+Busca las monedas con todas la relaciones. Se usa para el autocomplete en la parte de agregar proveedor.
+=cut
+# TODO usar Ros::DB
+sub buscarMonedas{
+
+    my ($moneda) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "   SELECT  ref_adq_moneda.id, ref_adq_moneda.nombre
+
+                    FROM ref_adq_moneda 
+    
+                    WHERE (ref_adq_moneda.nombre LIKE ?)
+
+                    ORDER BY (ref_adq_moneda.nombre)";
+    my $sth = $dbh->prepare($query);
+
+    $sth->execute('%'.$moneda.'%');
+    my @results;
+    my $cant;
+
+    while (my $data=$sth->fetchrow_hashref){ 
+        push(@results,$data); 
+        $cant++;
+    }
+    $sth->finish;
+    return ($cant, \@results);
+}
+
+=item
 buscarCiudades
 Busca las ciudades con todas la relaciones. Se usa para el autocomplete en la parte de agregar usuario.
 =cut
@@ -2563,6 +2595,25 @@ sub stringToArray{
 }
 
 ############################## Funciones para AUTOCOMPLETABLES #############################################################
+
+sub monedasAutocomplete{
+    my ($moneda)= @_;
+
+C4::AR::Debug::debug("moneda".$moneda);
+    my $textout;
+    my @result;
+    if ($moneda){
+        my($cant, $result) = C4::AR::Utilidades::buscarMonedas($moneda);# agregado sacar
+        $textout= "";
+        for (my $i; $i<$cant; $i++){
+            $textout.= $result->[$i]->{'id'}."|".$result->[$i]->{'nombre'}."\n";
+        }
+    }
+
+
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
+
 
 sub autorAutocomplete{
 

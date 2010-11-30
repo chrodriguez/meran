@@ -7,21 +7,25 @@ echo "DEFAULT: DIRECTORIO_REPO_GIT ==> /usr/share/meran "
 exit 1
 fi
 #Tomamos los defaults
-if [ $2 -eq 0 ]; then
+
+if [ $2 -eq 0 ] 
+then
     BACKUP=0
 else
     BACKUP=1
-fi;
-if [ !$3 ]; then
-    ARCHIVO_CONF=/etc/meran/meran.conf
-else
+fi
+if [ $3 != " " ] 
+then
     ARCHIVO_CONF=$3
-fi;
-if [ !$4 ]; then
-    DIRECTORIO_REPO_GIT=/usr/share/meran
 else
+    ARCHIVO_CONF=/etc/meran/meran.conf
+fi
+if [ $4 != " " ] 
+then
     DIRECTORIO_REPO_GIT=$4
-fi;
+else
+    DIRECTORIO_REPO_GIT=/usr/share/meran
+fi
 
 echo "Estamos verificando si es necesario aplicar cambios en la base";
 echo "En caso de serlo es recomendable que realice un BACKUP de su base previamente";
@@ -29,9 +33,11 @@ echo "En caso de serlo es recomendable que realice un BACKUP de su base previame
 BASE=$(grep ^database= $ARCHIVO_CONF| awk '{split($0,a,"="); print a[2]}') 
 PASSWD=$(grep ^pass= $ARCHIVO_CONF| awk '{split($0,a,"="); print a[2]}') 
 USER=$(grep ^user= $ARCHIVO_CONF| awk '{split($0,a,"="); print a[2]}') 
+
 #echo $BASE
 #echo $PASSWD
 #echo $USER
+
 echo $BACKUP
 if [ $BACKUP -eq 1 ]; then
     echo "Backupeando base";
