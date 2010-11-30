@@ -19,20 +19,21 @@
                         <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Datos escenciales" | i18n %]'>
                               [% "Datos escenciales" | i18n %]
                         </legend>
-             
-          
-                        <li> [% "Apellido:" | i18n %]<strong> [% proveedor.getApellido %]</strong> </li>             
-                        <li> [% "Nombre:" | i18n %]<strong> [% proveedor.getNombre %]</strong> </li> 
-                        <li> [% "Documento:" | i18n %]<strong> [% proveedor.ref_tipo_documento.getNombre %] [% proveedor.getNroDoc %]</strong> </li>  
-                    
+                        [% IF proveedor.ref_tipo_documento.getNombre == NULL %]   
+                                  <li> [% "Razon Social:" | i18n %]<strong> [% proveedor.getRazonSocial %]</strong> </li>  
+                                  <li> [% "CUIT/CUIL:" | i18n %]<strong> [% proveedor.getCuitCuil %]</strong></li> 
+                        [% ELSE %]
+                                  <li> [% "Apellido:" | i18n %]<strong> [% proveedor.getApellido %]</strong> </li>             
+                                  <li> [% "Nombre:" | i18n %]<strong> [% proveedor.getNombre %]</strong> </li> 
+                                  <li> [% "Documento:" | i18n %]<strong> [% proveedor.ref_tipo_documento.getNombre %] [% proveedor.getNroDoc %]</strong> </li>  
+                        [% END %]
                   </fieldset>
 
                   <fieldset>
                         <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Datos de contacto" | i18n %]'>
                               [% "Datos de contacto" | i18n %]
                         </legend>
-                        <li> [% "Razon Social:" | i18n %]<strong> [% proveedor.getRazonSocial %]</strong> </li>  
-                        <li> [% "CUIT/CUIL:" | i18n %]<strong> [% proveedor.getCuitCuil %]</strong></li>  
+            
                         <li> [% "Localidad:" | i18n %]<strong> [% proveedor.ref_localidad.NOMBRE%]</strong></li>  
                         <li> [% "Domicilio:" | i18n %]<strong> [% proveedor.getDomicilio %]</strong></li>  
                         <li> [% "Telefono:" | i18n %]<strong> [% proveedor.getTelefono %]</strong></li> 

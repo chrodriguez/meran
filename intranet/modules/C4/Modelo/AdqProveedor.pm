@@ -76,6 +76,13 @@ sub agregarProveedor{
     my ($self) = shift;
     my ($params) = @_;
 
+    if($params->{'tipo_proveedor'} eq "persona_juridica"){
+        $params->{'tipo_doc'} = 0;
+    }
+
+#     C4::AR::Debug::debug("tipo proveedor ".$params->{'tipo_proveedor'});
+#     C4::AR::Debug::debug("tipo doc ".$params->{'tipo_doc'});
+
     $self->setNombre($params->{'nombre'});
     $self->setApellido($params->{'apellido'});
     $self->setDomicilio($params->{'domicilio'});
