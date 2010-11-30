@@ -463,6 +463,3 @@ ALTER TABLE `adq_proveedor` CHANGE `usr_ref_tipo_documento_id` `usr_ref_tipo_doc
 ALTER TABLE `adq_proveedor` CHANGE `nro_doc` `nro_doc` VARCHAR( 21 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ;
 ALTER TABLE `adq_proveedor` CHANGE `razon_social` `razon_social` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ;
 
-
-
-
