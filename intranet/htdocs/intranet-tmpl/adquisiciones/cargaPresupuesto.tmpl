@@ -1,0 +1,87 @@
+[% INCLUDE "intranet-top.inc" %]
+
+[% INCLUDE "FormValidateHelper.inc" %]
+
+[% INCLUDE 'AutocompleteHelper.inc'  %]
+
+
+<script type="text/javascript">
+
+
+</script>
+<fieldset>
+<legend class="titulos">    
+                [% "Carga de presupuesto" | i18n %] 
+</legend>
+    
+    <fieldset id="carga_planilla">
+             <legend class="titulo_legend">[% "Carga de Planilla Excel" | i18n %]</legend>
+                
+
+             <!-- VER BIEN Q PONER-->
+              <p>Seleccione el archivo que desea cargar </p>
+              
+              <form>
+                  <input type="file" name="datafile" size="30">
+                  <div>
+                          <input type="submit" value="Aceptar">
+                  </div>
+              </form>
+
+    </fieldset>
+    
+    
+
+    <form method=post  name="proveedorDataForm" id="proveedorDataForm">
+
+          <fieldset>
+                    <legend class="titulo_legend">[% "Datos de contacto del proveedor" | i18n %]</legend>  
+                    <p>Seleccione el proveedor para el cual cargara un presupuesto</p>
+              
+                    <label id="label_provs">[% "Proveedor" | i18n %]</label>
+                            [% combo_proveedores %] 
+          </fieldset>
+
+          <fieldset>
+                    <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend> 
+
+                    <ul>
+                        <li class="sub_item">
+                             <label for="descripcion" id="label_descripcion"> [% "Descripcion" | i18n %] *</label>
+                             <input id="descripcion" name="descripcion" class="required" type="text" size="25">
+                        </li>
+                            
+                        <li class="sub_item">
+                             <label for="moneda" id="label_moneda"> [% "Moneda" | i18n %] *</label>
+                             <input id="moneda" name="moneda" class="required" type="text" size="25">
+                        </li>
+
+                        <li class="sub_item">
+                             <label for="precio" id="moneda"> [% "Moneda" | i18n %] *</label>
+                             <input id="moneda" name="moneda" class="required" type="text" size="25">
+                        </li>
+                     </ul>
+          </fieldset>
+          <div class="buttonContainerHorizontal">
+              <ul class="listaMenuBotones" >
+                      [% PERL %]
+                              print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                                  boton   => "boton_buscar",
+                                                                  onClick => "save();",
+                                                                  title   => "[% 'Guardar' | i18n %]",
+                                                                          ) ;
+                      [% END %]
+              </ul>
+          </div>
+  </fieldset>          
+  <div>
+              <strong>(*) [% "Obligatorio" | i18n %]</strong>
+          </div>
+
+
+
+
+</form>
+
+[% INCLUDE "intranet-bottom.inc" %]
+
