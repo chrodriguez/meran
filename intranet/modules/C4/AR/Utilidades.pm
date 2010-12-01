@@ -1813,7 +1813,7 @@ sub generarComboProveedores{
     my $proveedores        = &C4::AR::Referencias::obtenerProveedores();
 
     foreach my $prov (@$proveedores) {
-        if ($prov-> getNombre == null) {
+        if ($prov-> getNombre eq "NULL") {
              push(@select_proveedores_array, $prov->getId);
              $select_proveedores{$prov->getId}  = $prov->getRazonSocial;
         } else { 
