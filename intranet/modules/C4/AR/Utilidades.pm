@@ -1814,8 +1814,7 @@ sub generarComboProveedores{
 
     foreach my $prov (@$proveedores) {
         push(@select_proveedores_array, $prov->getId);
-        if ($prov-> getNombre eq "NULL") {
-             
+        if ($prov-> getNombre eq "") {
              $select_proveedores{$prov->getId}  = $prov->getRazonSocial;
         } else { 
             $select_proveedores{$prov->getId}  = $prov->getNombre;
