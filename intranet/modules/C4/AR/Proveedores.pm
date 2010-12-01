@@ -5,6 +5,7 @@ require Exporter;
 use DBI;
 use C4::Modelo::AdqProveedor;
 use C4::Modelo::AdqProveedor::Manager;
+use C4::Modelo::AdqProveedorMoneda;
 use C4::Modelo::AdqProveedorMoneda::Manager;
 use C4::Modelo::AdqProveedorFormaEnvio::Manager;
 use C4::Modelo::RefAdqMoneda::Manager;
@@ -12,7 +13,8 @@ use C4::Modelo::RefAdqMoneda::Manager;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(   
+@EXPORT=qw(  
+    &agregarMoneda;
     &agregarProveedor;
     &eliminarProveedor;
     &modificarProveedor;
@@ -22,6 +24,63 @@ use vars qw(@EXPORT @ISA);
     &getFormasEnvioProveedor;
     &getMonedas;
 );
+
+=item
+    Esta funcion agrega una modena al proveedor ,,   ¿¿¿ NO IRIA EN AdqProveedorMoneda ???
+    Parametros: 
+                HASH: {id_proveedor},{id_moneda}
+=cut
+sub agregarMoneda{
+
+     my ($params) = @_;
+
+    C4::AR::Debug::debug("objeto : ".$params->{'id_proveedor'});
+
+#      my $id_proveedor = $params->{'id_proveedor'};
+#      my $id_moneda    = $params->{'id_moneda'};
+
+#   hacer objeto esto y llamarlo como tal :
+
+    C4::Modelo::AdqProveedorMoneda::agregarMonedaProveedor($params);
+    return "ok";
+
+    
+
+#     my $proveedor = getProveedorInfoPorId($params->{'id_proveedor'});
+# 
+#     my $msg_object= C4::AR::Mensajes::create();
+#     my $db = $proveedor->db;
+# 
+#     # _verificarDatosProveedor($param,$msg_object);
+# 
+#     if (!($msg_object->{'error'})){
+#           $db->{connect_options}->{AutoCommit} = 0;
+#           $db->begin_work;
+# 
+#           eval{
+#               $proveedor->agregarMoneda($params->{'id_moneda'});
+#               $msg_object->{'error'}= 0;
+#               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A023', 'params' => []});
+# #             no agrega nada en 'codMsg'
+#               $db->commit;
+#           };
+# 
+#           if ($@){
+# #           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+#               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+#               $msg_object->{'error'}= 1;
+#               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+#               $db->rollback;
+#           }
+# 
+#           $db->{connect_options}->{AutoCommit} = 1;
+#     }
+# 
+#     C4::AR::Debug::debug("msg_object = ".$msg_object->{'codMsg'});
+#     return ($msg_object);
+}
+
+
 
 
 =item

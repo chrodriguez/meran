@@ -19,9 +19,7 @@ my $tipoAccion= $obj->{'tipoAccion'}||"";
 =cut
 
 if($tipoAccion eq "ELIMINAR"){
-    	
-#     	C4::AR::Debug::debug($infoOperacionJSON);
-#     	C4::AR::Debug::debug("Estoy eliminando");
+
         my ($userid, $session, $flags) = checkauth( $input, 
                                             $authnotrequired,
                                             {   ui => 'ANY', 
@@ -71,3 +69,39 @@ elsif($tipoAccion eq "GUARDAR_MODIFICION_PROVEEDOR"){
         print $infoOperacionJSON;
 
  } #end if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO")
+
+
+=item
+Se guarda una nueva moneda del proveedor
+=cut
+elsif($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR"){
+
+
+      my ($loggedinuser, $session, $flags) = checkauth( 
+                                                                $input, 
+                                                                $authnotrequired,
+                                                                {   ui => 'ANY', 
+                                                                    tipo_documento => 'ANY', 
+                                                                    accion => 'MODIFICACION', 
+# TODO generar el entorno proveedores
+                                                                    entorno => 'usuarios'},
+#                                                                 entorno => 'proveedores'},    
+                                                                "intranet"
+                                );  
+
+#         C4::AR::Debug::debug("objeto : ".$obj->{'id_proveedor'});
+         my ($Message_arrayref) = C4::AR::Proveedores::agregarMoneda($obj);
+
+#          C4::AR::Debug::debug("dsfsd ".$Message_arrayref->{'codMsg'});
+#         my $infoOperacionJSON=to_json $Message_arrayref;
+        
+
+#       si la guardo bien, hacer una consulta para traer todas las monedas del proveedor
+#       y mostrarlas en el div en el tmpl
+
+        C4::Auth::print_header($session);
+#         print "ok";
+    
+#         print $infoOperacionJSON;
+
+ } #end if($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR")

@@ -22,20 +22,37 @@
       $('#agregar_moneda').click(function() {
           //alert($('#moneda').val() + $('#id_moneda').val() )
           //aler($('#id_moneda').val())
-          if($('#moneda').val() == ""){
+          if(($('#moneda').val() == "") || ($('#id_moneda').val() == "")){
               alert('Por favor ingrese una moneda')            
           }else{
-              var monedaNueva = $('#moneda').val()
-           //   
-                $('#monedas_proveedor').append("ho0laaa")
-               alert("ok")
-            
+              var idMonedaNueva = $('#id_moneda').val()
+              agregarMoneda(idMonedaNueva)
           }
           
-      });
+      });   
+     
+   }
+   
+   // agregar la moneda en la base por ajax y volver a cargarlas en el div
+   function agregarMoneda(idMonedaNueva){
+      objAH                     = new AjaxHelper(updateMonedasProveedor)
+      objAH.url                 = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl'
+      objAH.debug               = true
 
-     
-     
+      objAH.id_proveedor        = $('#id_proveedor').val()
+      objAH.id_moneda           = idMonedaNueva
+
+      objAH.tipoAccion          = 'GUARDAR_MONEDA_PROVEEDOR'
+      objAH.sendToServer();   
+   }
+   
+   
+   function updateMonedasProveedor(){
+//        if (!verificarRespuesta(responseText))
+//             return(0)
+//        var Messages=JSONstring.toObject(responseText)
+//        alert(Messages)
+//         alert('ok')
    }
       
       
@@ -91,7 +108,6 @@
         objAH.email               = $('#email').val();
         objAH.plazo_reclamo       = $('#plazo_reclamo').val();
         objAH.proveedor_activo    = $("input[@name=proveedor_activo]:checked").val();
-//         monedas aca
 
         objAH.tipoAccion          = 'GUARDAR_MODIFICION_PROVEEDOR';
         objAH.sendToServer();

@@ -122,16 +122,12 @@ sub editarProveedor{
     $self->save();
 }
 
-# Funcion que devuelve las monedas que tiene el proveedor
-# sub getMonedas{
-# 
-# #     my ($params) = @_;
-#     my $id_proveedor = this->getId();
-#   
-#     
-#     
-#     
-# }
+
+sub agregarMoneda{
+ 
+     my ($params) = @_;
+#      agregar la moneda
+}
 
 # ****************************************************FIN FUNCIONES DEL MODELO | PROVEEDORES**************************************************************
 
