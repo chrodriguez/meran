@@ -6,7 +6,7 @@ require Exporter;
 # use C4::AR::Authldap;
 # use C4::Membersldap;
 use C4::Context;
-use Log::Log4perl qw(:easy);
+#use Log::Log4perl qw(:easy);
 
 use vars qw(@EXPORT @ISA);
 @ISA = qw(Exporter);
@@ -71,8 +71,7 @@ sub _str_debug_date_time{
 }
 
 
-=item
-debug por linea
+#debug por linea
 sub debug{
     my ($data) = @_;
 
@@ -85,8 +84,6 @@ sub debug{
 		close(Z);        
     }
 }
-=cut
-
 
 sub getLogger{
     my $context = new C4::Context;
@@ -102,7 +99,7 @@ sub getLogger{
   
   
 }
-
+=item
 sub debug{
     my ($data,$level) = @_;
 
@@ -127,7 +124,7 @@ sub debug{
     }   
     
 }
-
+=cut
 
 sub _printHASH {
     my ($hash_ref) = @_;
