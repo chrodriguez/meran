@@ -125,7 +125,7 @@ sub editarProveedor{
 
 sub agregarMoneda{
  
-     my ($params) = @_;
+#      my ($params) = @_;
 #      agregar la moneda
 }
 

@@ -147,14 +147,14 @@ function updateInfoPrestamos(responseText){
  *          chckbox-> nombre del los checkbox correspondientes a las tablas.
  *	    funcion-> la funcion que se tiene que ejecutar cuando termina la consulta ajax.
  */
-function realizarAccion(accion,chckbox,funcion){
-	var chck=$("input[@name="+chckbox+"]:checked");
-	var array= new Array;
-	var long=chck.length;
+function realizarAccion(accion,chckbox,funcion) {
+	var chck    = $("input[@name="+chckbox+"]:checked");
+	var array   = new Array;
+	var long    = chck.length;
+
 	if ( long == 0){
 		jAlert(ELIJA_AL_MENOS_UN_EJEMPLAR);
-	}
-	else{
+	} else {
 		for(var i=0; i< long; i++){
 			array[i]=chck[i].value;
 		}
@@ -324,22 +324,39 @@ function updateInfoCancelacion(responseText){
  * Genera el div con los datos de los items que se van a devolver o renovar.
  */
 function generaDivDevolucion(responseText){
-	var infoArray= new Array;
-	INFO_PRESTAMOS_ARRAY= new Array();
-	infoArray= JSONstring.toObject(responseText);
-	var html="<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
-	var accion=infoArray[0].accion;
-	html=html + infoArray[0].accion +":<br>";
+	var infoArray           = new Array;
+	INFO_PRESTAMOS_ARRAY    = new Array();
+	infoArray               = JSONstring.toObject(responseText);
+	var html                = "<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
+	var accion              = infoArray[0].accion;
+	html                    = html + infoArray[0].accion +":<br>";
+
 	for(var i=0; i<infoArray.length;i++){
 	
 		INFO_PRESTAMOS_ARRAY[i]= infoArray[i].id_prestamo;
  
-		if(infoArray[i].autor != ""){ html= html + infoArray[i].autor + ", "};
-		html= html + infoArray[i].titulo + ", ";
-		if(infoArray[i].unititle != ""){html= html + infoArray[i].unititle + ", "};
-		if(infoArray[i].edicion != ""){html= html + infoArray[i].edicion + ". <br>"};
-        html= html + ". <br>"
+		if(infoArray[i].autor != ""){ 
+            html= html + infoArray[i].autor;
+            if(infoArray[i].titulo != ""){html= html + ", ";}
+        }
+
+        if(infoArray[i].titulo != ""){
+            html= html + infoArray[i].titulo;
+            if(infoArray[i].unititle != ""){html= html + ", ";}
+        }
+
+		if(infoArray[i].unititle != ""){
+            html= html + infoArray[i].unititle;
+            if(infoArray[i].edicion != ""){html= html + ", ";}
+        };
+
+        if(infoArray[i].edicion != ""){
+            html= html + infoArray[i].edicion + ". <br>"
+        };
+  
+        html= html + "<br>"
 	}
+
 	html= html + "</p>";
 	html= html + "<center><input type='button' value='Aceptar' onClick=devolver()>";
 	html= html + "<input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";

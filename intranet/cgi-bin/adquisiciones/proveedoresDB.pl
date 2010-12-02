@@ -92,16 +92,14 @@ elsif($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR"){
 #         C4::AR::Debug::debug("objeto : ".$obj->{'id_proveedor'});
          my ($Message_arrayref) = C4::AR::Proveedores::agregarMoneda($obj);
 
-#          C4::AR::Debug::debug("dsfsd ".$Message_arrayref->{'codMsg'});
-#         my $infoOperacionJSON=to_json $Message_arrayref;
+          C4::AR::Debug::debug("dsfsd ".$Message_arrayref->{'codMsg'});
+#          my $infoOperacionJSON=to_json $Message_arrayref;
         
 
 #       si la guardo bien, hacer una consulta para traer todas las monedas del proveedor
 #       y mostrarlas en el div en el tmpl
 
-        C4::Auth::print_header($session);
-#         print "ok";
-    
-#         print $infoOperacionJSON;
+#         C4::Auth::print_header($session);    
+#          print $infoOperacionJSON;
 
  } #end if($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR")
