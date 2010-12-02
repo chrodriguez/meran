@@ -1,14 +1,11 @@
-package C4::Modelo::RefAdqMoneda;
+package C4::Modelo::AdqFormaEnvio;
 
 use strict;
-use utf8;
-use C4::AR::Permisos;
-use C4::AR::Utilidades;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
-    table   => 'ref_adq_moneda',
+    table   => 'adq_forma_envio',
 
     columns => [
         id   => { type => 'integer', length => 11, not_null => 1 },
@@ -19,25 +16,6 @@ __PACKAGE__->meta->setup(
 
 );
 
-# *************************************************************************FUNCIONES DEL MODELO | MONEDA************************************************************
-
-# Agrega una nueva moneda
-sub agregarMoneda{
-
-    my ($self) = shift;
-    my ($params) = @_;
-
-    $self->setNombre($params->{'nombre'});
-
-    $self->save();
-}
-
-sub getNombre{
-    my ($self) = shift;
-    return ($self->nombre);
-    
-}
-
 # **********************************************************************FIN FUNCIONES DEL MODELO | MONEDA************************************************************
 
 
@@ -45,6 +23,7 @@ sub getNombre{
 
 
 # *********************************************************************************Getter y Setter*******************************************************************
+
 
 sub setNombre{
     my ($self) = shift;
@@ -55,6 +34,13 @@ sub setNombre{
     }
 }
 
-# ******************************************************************************FIN Getter y Setter*******************************************************************
+sub getNombre{
+    my ($self) = shift;
+    return ($self->nombre);
+    
+}
+
+
+
 
 1;

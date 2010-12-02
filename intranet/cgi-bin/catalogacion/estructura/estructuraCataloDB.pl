@@ -3,6 +3,8 @@
 
 use strict;
 use CGI;
+use C4::AR::Nivel1 qw(getNivel1FromId1);
+use C4::AR::Nivel2 qw(getNivel2FromId1);
 use C4::Auth;
 use C4::AR::Utilidades;
 use C4::AR::Catalogacion;

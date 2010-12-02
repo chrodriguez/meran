@@ -17,28 +17,23 @@
           <div id="detalleProveedor">
              <input type="hidden" id="id_proveedor" value="[% proveedor.getId %]">
 	      <li class="sub_item">
-		  <label for="nombre"> [% "Nombre" | i18n %] *</label>
+		  <label for="nombre" id="label_nombre"> [% "Nombre" | i18n %] *</label>
 		  <input id="nombre" name="nombre" class="required" type="text" size="25" value="[% proveedor.getNombre %]">
 	      </li>
 
           <li class="sub_item">
-          <label for="apellido"> [% "Apellido" | i18n %] *</label>
+          <label for="apellido" id="label_apellido"> [% "Apellido" | i18n %] *</label>
           <input id="apellido" name="apellido" class="required" type="text" size="25" value="[% proveedor.getApellido %]">
           </li>
 
           <li class="sub_item"> 
-          <label for="tipo_documento"> [% "Tipo Documento" | i18n %] *</label>
-          [% combo_tipo_documento %] 
-<!--           <input  id="tipo_documento" name="tipo_documento" class="required"  type="text" size="25" value="[% proveedor.getTipoDoc %]"> -->
+          <label for="tipo_documento" id="label_tipo_documento_id"> [% "Tipo Documento" | i18n %] *</label>
+          [% combo_tipo_documento %] <input  id="numero_documento" name="numero_documento" class="required"  type="text" size="15" value="[% proveedor.getNroDoc %]">
           </li>
 
-          <li class="sub_item"> 
-          <label for="numero_documento"> [% "Numero Documento" | i18n %] *</label>
-          <input  id="numero_documento" name="numero_documento" class="required"  type="text" size="25" value="[% proveedor.getNroDoc %]">
-          </li>
 
           <li class="sub_item"> 
-          <label for="razon_social"> [% "Razon Social" | i18n %] *</label>
+          <label for="razon_social" id="label_razon_social"> [% "Razon Social" | i18n %] *</label>
           <input  id="razon_social" name="razon_social" class="required"  type="text" size="25" value="[% proveedor.getRazonSocial %]">
           </li>
 
@@ -81,21 +76,29 @@
           <label for="proveedor_activo">[% "Proveedor Activo" | i18n %] </label>
           <input id="proveedor_activo" name="proveedor_activo" class="required" type="checkbox" value="[% proveedor.getActivo %]">
           </li>
-
-          <!--  moneda, moneda_ref-->
-          <li class="sub_item">
-          <label for="moneda">[% "Moneda" | i18n %]</label>
-              <p>Lista de monedas</p>
+<!--          <li class="sub_item">
+          <label for="moneda">[% "Monedas del proveedor" | i18n %]</label>
           </li>
+            [% FOREACH moneda IN monedas %]   
+                            <li id="[% moneda.moneda_ref.id %]"><strong> [% moneda.moneda_ref.nombre %]</strong></li> 
+              [% END %]-->
+            <li class="sub_item"> 
+            <label for="moneda">[% "Monedas del proveedor" | i18n %]</label>
+              <div id=monedas_proveedor">
+              [% FOREACH moneda IN monedas %] 
+                    <li id="[% moneda.moneda_ref.id %]"><strong>[% moneda.moneda_ref.nombre %]</strong></li> 
+              [% END %]
+              </div>
+            </li>
+
+
+          <!-- Autocomplete Monedas -->
           <li class="sub_item"> 
-            <label for="moneda">[% "Listado de Monedas" | i18n %]</label>
-            <select>
-            [% FOREACH moneda IN proveedor.moneda_ref %] 
-                <option>[% moneda.nombre %]</option>
-<!--                <option>Dolares</option>
-                <option>Euros</option>-->
-            [% END %]
-            </select>
+          <label for="moneda"> [% "Monedas posibles" | i18n %]</label>
+          <input  id="moneda" name="moneda" type="text" class="required" size="25" >           
+          <input  id="agregar_moneda" name="agregar_moneda" type="button" size="15" value="Agregar Moneda">
+          <input  id="borrar_moneda" name="borrar_moneda" type="button" size="15" value="Borrar Moneda">
+           <input type="hidden" id="id_moneda" name="id_moneda">
           </li>
 
           <div id="accion">

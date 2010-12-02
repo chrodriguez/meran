@@ -17,15 +17,9 @@ my $tipoAccion= $obj->{'tipoAccion'}||"";
 =item
     Se elimina el Proveedor
 =cut
-    ## TODO tambien se podria hacer que el sistema genere la pass y se la envie por correo al socio, esto deberia ser una preferencia 
-    # resetPassword = [0 | 1]
-    # autoGeneratePassword = [0 | 1]
-   
 
-    if($tipoAccion eq "ELIMINAR"){
-    	
-#     	C4::AR::Debug::debug($infoOperacionJSON);
-#     	C4::AR::Debug::debug("Estoy eliminando");
+if($tipoAccion eq "ELIMINAR"){
+
         my ($userid, $session, $flags) = checkauth( $input, 
                                             $authnotrequired,
                                             {   ui => 'ANY', 
@@ -52,7 +46,7 @@ my $tipoAccion= $obj->{'tipoAccion'}||"";
 =item
 Se guarda la modificacion los datos del Proveedor
 =cut
-  elsif($tipoAccion eq "GUARDAR_MODIFICION_PROVEEDOR"){
+elsif($tipoAccion eq "GUARDAR_MODIFICION_PROVEEDOR"){
 
 
       my ($loggedinuser, $session, $flags) = checkauth( 
@@ -75,3 +69,39 @@ Se guarda la modificacion los datos del Proveedor
         print $infoOperacionJSON;
 
  } #end if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO")
+
+
+=item
+Se guarda una nueva moneda del proveedor
+=cut
+elsif($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR"){
+
+
+      my ($loggedinuser, $session, $flags) = checkauth( 
+                                                                $input, 
+                                                                $authnotrequired,
+                                                                {   ui => 'ANY', 
+                                                                    tipo_documento => 'ANY', 
+                                                                    accion => 'MODIFICACION', 
+# TODO generar el entorno proveedores
+                                                                    entorno => 'usuarios'},
+#                                                                 entorno => 'proveedores'},    
+                                                                "intranet"
+                                );  
+
+#         C4::AR::Debug::debug("objeto : ".$obj->{'id_proveedor'});
+         my ($Message_arrayref) = C4::AR::Proveedores::agregarMoneda($obj);
+
+#          C4::AR::Debug::debug("dsfsd ".$Message_arrayref->{'codMsg'});
+#         my $infoOperacionJSON=to_json $Message_arrayref;
+        
+
+#       si la guardo bien, hacer una consulta para traer todas las monedas del proveedor
+#       y mostrarlas en el div en el tmpl
+
+        C4::Auth::print_header($session);
+#         print "ok";
+    
+#         print $infoOperacionJSON;
+
+ } #end if($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR")

@@ -389,6 +389,7 @@ my %mensajesINTRA = (
     'A020' => 'La provincia no puede estar en blanco',
     'A021' => 'La ciudad es inv&aacute;lida',
     'A022' => 'La ciudad no puede estar en blanco',
+    'A023' => 'La moneda fue agregada con &eacute;xtio',
 
 );
 

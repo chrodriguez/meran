@@ -1,4 +1,4 @@
-var ID_N1=0;var ID_N2=0;var ID_N3=0;var ID_TIPO_EJEMPLAR=0;var TAB_INDEX=0;var MARC_OBJECT_ARRAY=new Array();var MODIFICAR=0;var ID3_ARRAY=new Array();var BARCODES_ARRAY=new Array();var _NIVEL_ACTUAL=1;var _message=CAMPO_NO_PUEDE_ESTAR_EN_BLANCO;var HASH_RULES=new Array();var HASH_MESSAGES=new Array();var AGREGAR_COMPLETO=1;var ID_COMPONENTE=1;function agrearAHash(HASH,name,value){HASH[name]=value;}
+var ID_N1=0;var ID_N2=0;var ID_N3=0;var ID_TIPO_EJEMPLAR=0;var TAB_INDEX=0;var MARC_OBJECT_ARRAY=new Array();var MODIFICAR=0;var ID3_ARRAY=new Array();var BARCODES_ARRAY=new Array();var _NIVEL_ACTUAL=1;var _message=CAMPO_NO_PUEDE_ESTAR_EN_BLANCO;var HASH_RULES=new Array();var HASH_MESSAGES=new Array();var AGREGAR_COMPLETO=1;var ID_COMPONENTE=1;function agregarAHash(HASH,name,value){HASH[name]=value;}
 function objeto_params(){}
 function inicializarSideLayers(){arreglo=$('#nivel2>fieldset legend');for(x=0;x<arreglo.length;x++){$(arreglo[x]).removeClass('activeLayer');$(arreglo[x]).addClass('nivel2Selected');}}
 function toggleClass(layer){inicializarSideLayers();$(layer).addClass('activeLayer');}
@@ -20,7 +20,7 @@ function _getSubCampoMARC_conf_ById(id){for(var i=0;i<MARC_OBJECT_ARRAY.length;i
 return 0;}
 function _getCampoMARC_conf_ById(id){for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){if(MARC_OBJECT_ARRAY[i].getIdCompCliente()==id){return MARC_OBJECT_ARRAY[i];}}
 return 0;}
-function removeFromArray(array,from,to){var rest=array.slice((to||from)+1||array.length);array.length=from<0?array.length+from:from;return array.push.apply(array,rest);};function _getBarcodes(){var barcodes_string=$('#'+_getIdComponente('995','f')).val();_freeMemory(BARCODES_ARRAY);BARCODES_ARRAY=[];if(barcodes_string!=''){BARCODES_ARRAY=barcodes_string.split(",");return 1;}
+function removeFromArray(array,from,to){var rest=array.slice((to||from)+1||array.length);array.length=from<0?array.length+from:from;return array.push.apply(array,rest);};function _getBarcodes(){var barcodes_string=$('#'+_getIdComponente('995','f')).val();_freeMemory(BARCODES_ARRAY);BARCODES_ARRAY=[];if((typeof(barcodes_string)!=='undefined')&&(barcodes_string!='')){BARCODES_ARRAY=barcodes_string.split(",");return 1;}
 return 0;}
 function _sacarOpciones(){for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){var subcampos_array=MARC_OBJECT_ARRAY[i].getSubCamposArray();for(var s=0;s<subcampos_array.length;s++){if(subcampos_array[s].opciones){if(subcampos_array[s].opciones.length>0){subcampos_array[s].opciones=[];}}}}}
 function _clearDataFromComponentesArray(){for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){MARC_OBJECT_ARRAY[i].dato='';$('#'+MARC_OBJECT_ARRAY[i].idCompCliente).val('');}}
@@ -142,7 +142,7 @@ function crearAuto(obj){var comp="<input type='text' id='"+obj.getIdCompCliente(
 $(comp).insertAfter("#div"+obj.getIdCompCliente());_cearAutocompleteParaCamponente(obj);comp=crearHidden(obj);$(comp).insertAfter("#div"+obj.getIdCompCliente());}
 function crearCalendar(obj){var comp="<input type='text' id='"+obj.getIdCompCliente()+"' name='"+obj.getIdCompCliente()+"' value='"+obj.getDato()+"' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";comp=comp+crearBotonAgregarSubcampoRepetible(obj);$("#div"+obj.getIdCompCliente()).append(comp);$("#"+obj.getIdCompCliente()).datepicker({dateFormat:'dd/mm/yy'});}
 function crearTextAnio(obj){var comp="<input type='text' id='"+obj.getIdCompCliente()+"' name='"+obj.getIdCompCliente()+"' value='"+obj.getDato()+"' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";comp=comp+crearBotonAgregarSubcampoRepetible(obj);$("#div"+obj.getIdCompCliente()).append(comp);}
-function hacerComponenteObligatoria(idObj){$("#"+idObj).addClass("obligatorio");$("#"+idObj).addClass("required");agrearAHash(HASH_MESSAGES,idObj,ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO);}
+function hacerComponenteObligatoria(idObj){$("#"+idObj).addClass("obligatorio");$("#"+idObj).addClass("required");agregarAHash(HASH_MESSAGES,idObj,ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO);}
 function crearDivComponente(idObj){return"<div id='"+idObj+"' class='divComponente'></div>";}
 function crearDivLabel(label,idComp){return"<label for='"+idComp+"'> "+label+" </label>";}
 function borrarN1(id1){jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE,function(confirmStatus){if(confirmStatus){objAH=new AjaxHelper(updateBorrarN1);objAH.debug=true;objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";objAH.id1=id1;objAH.nivel=1;objAH.itemtype=$("#id_tipo_doc").val();objAH.tipoAccion="ELIMINAR_NIVEL";objAH.sendToServer();}});}

@@ -25,18 +25,15 @@
             [% END %]
 </legend>
 
-<form name=myform>
-  <ul>
-    <li class="sub_item">
-        <input type="radio" name="radio" id="persona_fisica" onclick="verDatosPersonaFisica()">Persona Fisica
-    </li>
-    <li class="sub_item">
-      <input type="radio" name="radio" id="persona_juridica" onclick="verDatosPersonaJuridica()">Persona Juridica
-    </li>
-  </ul>
-</form>
-
 <form method=post  name="proveedorDataForm" id="proveedorDataForm">
+    <ul>
+      <li class="sub_item">
+          <input type="radio" name="radio" id="persona_fisica" value="persona_fisica" onclick="verDatosPersonaFisica()">Persona Fisica
+      </li>
+      <li class="sub_item">
+        <input type="radio" name="radio" id="persona_juridica" value="persona_juridica" onclick="verDatosPersonaJuridica()">Persona Juridica
+      </li>
+    </ul>
     <fieldset id="datos_proveedor">
     <legend class="titulo_legend">[% "Datos del proveedor" | i18n %]</legend>
     <ul>

@@ -1,0 +1,187 @@
+[% INCLUDE "intranet-top.inc" %] 
+
+  <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedoresResult.js"></script>
+
+[% INCLUDE "WindowHelper.inc" %] 
+[% INCLUDE 'AutocompleteHelper.inc'  %]
+[% INCLUDE "ChangePasswordHelper.inc"  %]
+
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
+<div class="vcard">
+      <!--    DETALLE PROVEEDOR -->
+ 
+      <fieldset>
+          <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Datos del proveedor" | i18n %]'>
+                              [% "Datos del proveedor" | i18n %]
+          </legend>  
+          <div class="columna_izq" >
+                   <fieldset>
+                        <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Datos escenciales" | i18n %]'>
+                              [% "Datos escenciales" | i18n %]
+                        </legend>
+                        [% IF proveedor.ref_tipo_documento.getNombre == NULL %]   
+                                  <li> [% "Razon Social:" | i18n %]<strong> [% proveedor.getRazonSocial %]</strong> </li>  
+                                  <li> [% "CUIT/CUIL:" | i18n %]<strong> [% proveedor.getCuitCuil %]</strong></li> 
+                        [% ELSE %]
+                                  <li> [% "Apellido:" | i18n %]<strong> [% proveedor.getApellido %]</strong> </li>             
+                                  <li> [% "Nombre:" | i18n %]<strong> [% proveedor.getNombre %]</strong> </li> 
+                                  <li> [% "Documento:" | i18n %]<strong> [% proveedor.ref_tipo_documento.getNombre %] [% proveedor.getNroDoc %]</strong> </li>  
+                        [% END %]
+                  </fieldset>
+
+                  <fieldset>
+                        <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Datos de contacto" | i18n %]'>
+                              [% "Datos de contacto" | i18n %]
+                        </legend>
+            
+                        <li> [% "Localidad:" | i18n %]<strong> [% proveedor.ref_localidad.NOMBRE%]</strong></li>  
+                        <li> [% "Domicilio:" | i18n %]<strong> [% proveedor.getDomicilio %]</strong></li>  
+                        <li> [% "Telefono:" | i18n %]<strong> [% proveedor.getTelefono %]</strong></li> 
+                        <li> [% "Fax:" | i18n %]<strong> [% proveedor.getFax %]</strong></li> 
+                        <li> [% "Email:" | i18n %]<strong> [% proveedor.getEmail %]</strong></li> 
+                  </fieldset>
+                  <fieldset>
+                        <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Monedas" | i18n %]'>
+                              [% "Monedas" | i18n %]
+                        </legend>
+                                  [% FOREACH moneda IN monedas %]   
+                                    <li> [% moneda.moneda_ref.nombre %]</li> 
+                                  [% END %]
+                  </fieldset>
+                 <fieldset>
+                        <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Formas de envio" | i18n %]'>
+                              [% "Formas de envio" | i18n %]
+                        </legend>
+                                  [% FOREACH forma_envio IN formas_envio %]   
+                                    <li> [% forma_envio.forma_envio_ref.nombre %]</li> 
+                                  [% END %]
+                  </fieldset>
+    </div>
+    <div class="columna_der" >
+          <fieldset  class="accionesUsuarios" style="clear:none" >
+                <legend class ="titulo_legend_resaltado">[% 'Acciones' | i18n %]</legend>
+                    <ul class ="listaMenuBotones" >
+                        <li>
+                            [% PERL %]
+                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar Datos' | i18n %]",
+                                                                                    boton   => "boton_buscar",
+                                                                                    onClick => "modificarDatosDeUsuario();",
+                                                        ) ;
+                            [% END %]
+                        </li>
+                        <li>
+                            [% PERL %]
+                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Usuario' | i18n %]",
+                                                                                    boton   => "boton_buscar",
+                                                                                    onClick => "eliminarUsuario();",
+                                                        ) ;
+                            [% END %]
+                            </li>
+                        [% IF !socio.tieneAutorizado %]
+                            <li>
+    
+                            [% PERL %]
+                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Autorizado' | i18n %]",
+                                                                                    boton   => "boton_buscar",
+                                                                                    onClick => "agregarAutorizado();",
+                                                        ) ;
+                            [% END %]
+                            </li>
+                        [% ELSE %]
+                            <li>
+                            [% PERL %]
+                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Autorizado' | i18n %]",
+                                                                                    boton   => "boton_buscar",
+                                                                                    onClick => "desautorizarTercero();",
+                                                        ) ;
+                            [% END %]
+                            </li>
+                        [% END %]
+                        [% IF nroSocioLoggeado != loggedinuser%]
+                            <li>
+                            [% PERL %]
+                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Reset Password' | i18n %]",
+                                                                                    boton   => "boton_buscar",
+                                                                                    onClick => "resetPassword();",
+                                                        ) ;
+                            [% END %]
+                            </li>
+                        [% ELSE %]
+                            <li>  
+                                    <form action=/cgi-bin/koha/usuarios/change_password.pl method=get id="formCambioPassword">
+                                        <input type=hidden name="token" value="[% token %]" >
+                                    </form>        
+      
+                            [% PERL %]
+                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Cambio de Contrase&ntilde;a' | i18n %]",
+                                                                                    boton   => "boton_buscar",
+                                                                                    onClick => "cambiarPassword();",
+                                                        ) ;
+                            [% END %]
+                            </li>
+                        [% END %]
+                            <li>
+                                <form action=/cgi-bin/koha/usuarios/cardGenerator.pl method=get name="formCarnet">
+                                    <input type=hidden name="nro_socio" value="[% socio.getNro_socio %]" >
+                                    <input type=hidden name="token" value="[% token %]" >
+                                </form>
+        
+                            [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Generar Carnet' | i18n %]",
+                                                                        boton   => "boton_buscar",
+                                                                        onClick => "formCarnet.submit();",
+                                            ) ;
+
+                            [% END %]
+                        </li>
+                        <li>
+                            <form action=/cgi-bin/koha/usuarios/libreDeuda.pl method=get name="formLibre">
+                                        <input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
+                                        <input type=hidden name=token value="[% token %]" >
+                            </form>    
+                            [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Libre Deuda' | i18n %]",
+                                                                            boton   => "boton_buscar",
+                                                                            onClick => "formLibre.submit();",
+                                                ) ;
+                            [% END %]
+                       </li>
+                       <li>
+                            [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Prest. Interbibliotecario' | i18n %]",
+                                                                            boton   => "boton_buscar",
+                                                                            onClick => "prestamosInterBibliotecarios();",
+                                                ) ;
+                            [% END %]
+                      </li>
+
+                      [% IF mensaje_error_foto %] 
+                        <li>
+                                <font color="red">[% mensaje_error_foto %]</font>
+                        </li>
+                      [% END %]
+
+                       <div id="div_boton_eliminar_foto" style="display: none">
+                          <li>
+                                [% PERL %]
+                                            print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Foto' | i18n %]",
+                                                                                boton   => "boton_borrar",
+                                                                                onClick => "eliminarFoto('[% foto_name %] ');",
+                                                    ) ;
+                                [% END %]
+                          </li>
+                        </div>
+                        <div id="div_uploader" style="display: none">
+                            <li>
+                                <div id="uploader"></div>
+                            </li>
+                        </div>
+                    </ul>
+                </fieldset>
+              </div><!--columna_der -->
+
+    </fieldset>
+      
+    
+</div>
+[% INCLUDE "intranet-bottom.inc" %]

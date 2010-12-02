@@ -73,9 +73,15 @@ sub desactivar{
 }
 
 sub agregarProveedor{
-
     my ($self) = shift;
     my ($params) = @_;
+
+    if($params->{'tipo_proveedor'} eq "persona_juridica"){
+        $params->{'tipo_doc'} = 0;
+    }
+
+#     C4::AR::Debug::debug("tipo proveedor ".$params->{'tipo_proveedor'});
+#     C4::AR::Debug::debug("tipo doc ".$params->{'tipo_doc'});
 
     $self->setNombre($params->{'nombre'});
     $self->setApellido($params->{'apellido'});
@@ -116,16 +122,12 @@ sub editarProveedor{
     $self->save();
 }
 
-# Funcion que devuelve las monedas que tiene el proveedor
-# sub getMonedas{
-# 
-# #     my ($params) = @_;
-#     my $id_proveedor = this->getId();
-#   
-#     
-#     
-#     
-# }
+
+sub agregarMoneda{
+ 
+     my ($params) = @_;
+#      agregar la moneda
+}
 
 # ****************************************************FIN FUNCIONES DEL MODELO | PROVEEDORES**************************************************************
 

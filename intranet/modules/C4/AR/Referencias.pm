@@ -28,6 +28,9 @@ use C4::Modelo::PrefTablaReferencia;
 use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
 use C4::Modelo::PrefEstructuraSubcampoMarc;
 use C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager;
+use C4::Modelo::AdqProveedor::Manager;
+
+
 use JSON;
 use Switch;
 
@@ -41,6 +44,8 @@ use vars qw(@EXPORT_OK @ISA);
                     &obtenerTablasDeReferencia
                     &obtenerTiposDeDocumentos
                     &obtenerTiposNivel3
+                    &obtenerProveedores
+                    
         );
 
 
@@ -149,6 +154,17 @@ sub obtenerTiposDeDocumentos {
 
     foreach my $tipo_doc (@$tiposDoc) {
         push (@results, $tipo_doc);
+    }
+
+    return(\@results);
+}
+
+sub obtenerProveedores {
+    my $proveedores = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor;
+    my @results;
+
+    foreach my $prov (@$proveedores) {
+        push (@results, $prov);
     }
 
     return(\@results);

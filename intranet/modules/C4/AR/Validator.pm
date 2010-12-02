@@ -12,7 +12,7 @@ Synopsis:   Este PM tiene como fin contener todas las funciones que estén dedic
 ################################## END About PM ####################################################
 =cut
 use strict;
-use C4::AR::Utilidades;
+use C4::AR::Utilidades qw(validateString trim);
 use C4::AR::Address;
 #EINAR use CGI::Session;
 

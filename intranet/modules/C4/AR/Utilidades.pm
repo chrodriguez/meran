@@ -26,9 +26,12 @@ use POSIX qw(ceil floor);
 use JSON;
 #Einar use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(
+@EXPORT_OK=qw(
+    &monedasAutocomplete
+    &buscarCiudades
+    &ASCIItoHEX
     &aplicarParches 
     &obtenerParches
     &obtenerTiposDeColaboradores 
@@ -1469,6 +1472,36 @@ sub obtenerDatosValorAutorizado{
 }
 
 =item
+buscarMonedas
+Busca las monedas con todas la relaciones. Se usa para el autocomplete en la parte de agregar proveedor.
+=cut
+# TODO usar Ros::DB
+sub buscarMonedas{
+
+    my ($moneda) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "   SELECT  ref_adq_moneda.id, ref_adq_moneda.nombre
+
+                    FROM ref_adq_moneda 
+    
+                    WHERE (ref_adq_moneda.nombre LIKE ?)
+
+                    ORDER BY (ref_adq_moneda.nombre)";
+    my $sth = $dbh->prepare($query);
+
+    $sth->execute('%'.$moneda.'%');
+    my @results;
+    my $cant;
+
+    while (my $data=$sth->fetchrow_hashref){ 
+        push(@results,$data); 
+        $cant++;
+    }
+    $sth->finish;
+    return ($cant, \@results);
+}
+
+=item
 buscarCiudades
 Busca las ciudades con todas la relaciones. Se usa para el autocomplete en la parte de agregar usuario.
 =cut
@@ -1770,6 +1803,54 @@ sub generarComboTipoDeDoc{
 
     return $combo_tipo_documento; 
 }
+
+
+sub generarComboProveedores{
+    my ($params) = @_;
+
+    my @select_proveedores_array;
+    my %select_proveedores;
+    my $proveedores        = &C4::AR::Referencias::obtenerProveedores();
+
+    foreach my $prov (@$proveedores) {
+        push(@select_proveedores_array, $prov->getId);
+        if ($prov-> getNombre eq "") {
+             $select_proveedores{$prov->getId}  = $prov->getRazonSocial;
+        } else { 
+            $select_proveedores{$prov->getId}  = $prov->getNombre;
+        }
+    }
+
+    $select_proveedores{''}                = 'SIN SELECCIONAR';
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){ 
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}       = $params->{'name'}||'proveedor_id';
+    $options_hash{'id'}         = $params->{'id'}||'id';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'class'}      = 'required';
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+    $options_hash{'defaults'}   = $params->{'default'} || 0;
+
+    push (@select_proveedores_array, '');
+    $options_hash{'values'}     = \@select_proveedores_array;
+    $options_hash{'labels'}     = \%select_proveedores;
+
+    my $combo_proveedores    = CGI::scrolling_list(\%options_hash);
+
+    return $combo_proveedores; 
+}
+
 
 sub generarComboTipoNivel3{
 
@@ -2563,6 +2644,25 @@ sub stringToArray{
 
 ############################## Funciones para AUTOCOMPLETABLES #############################################################
 
+sub monedasAutocomplete{
+    my ($moneda)= @_;
+
+C4::AR::Debug::debug("moneda".$moneda);
+    my $textout;
+    my @result;
+    if ($moneda){
+        my($cant, $result) = C4::AR::Utilidades::buscarMonedas($moneda);# agregado sacar
+        $textout= "";
+        for (my $i; $i<$cant; $i++){
+            $textout.= $result->[$i]->{'id'}."|".$result->[$i]->{'nombre'}."\n";
+        }
+    }
+
+
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
+
+
 sub autorAutocomplete{
 
     my ($autorStr) = @_;
@@ -2852,7 +2952,7 @@ sub catalogoAutocomplete{
     my $textout = "";
 
     foreach my $hash (@$matches){
-            $textout.= $hash->{'doc'}."|".$hash->{'titulo'}."\n";
+            $textout.= $hash->{'doc'}."|".$hash->{'group'}."|".$hash->{'weight'}."|".$hash->{'stamp'}."\n";
             #push (@results_array, $hash->{'titulo'});
             printHASH($results);
     }

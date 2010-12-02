@@ -29,32 +29,35 @@ if($obj){
     
     my %params = {};
 
-    $params{'apellido'} = $obj->{'apellido'};
-    $params{'nombre'} = $obj->{'nombre'};
-    
-    $params{'tipo_doc'} = $obj->{'tipo_doc'};
-    $params{'nro_doc'} = $obj->{'nro_doc'};
-    $params{'razon_social'} = $obj->{'razon_social'};
-    $params{'cuit_cuil'} = $obj->{'cuit_cuil'}; 
-    
-    
-    $params{'pais'} = $obj->{'pais'};
-    $params{'provincia'} = $obj->{'provincia'};
-    $params{'ciudad'} = $obj->{'ciudad'}; 
- 
-    
-    $params{'domicilio'} = $obj->{'domicilio'};
-    $params{'telefono'} = $obj->{'telefono'};
-    $params{'fax'} = $obj->{'fax'};
-    $params{'email'} = $obj->{'email'};
-    
+    $params{'tipo_proveedor'}       = $obj->{'tipo_proveedor'};
 
-    $params{'plazo_reclamo'} = $obj->{'plazo_reclamo'};
+#   dependiendo del tipo se guarda ciertos campos
+    if($params{'tipo_proveedor'} eq "persona_fisica"){
+
+        $params{'apellido'}         = $obj->{'apellido'};
+        $params{'nombre'}           = $obj->{'nombre'};   
+        $params{'tipo_doc'}         = $obj->{'tipo_doc'};
+        $params{'nro_doc'}          = $obj->{'nro_doc'};  
+      
+    }else{
+
+        $params{'razon_social'}     = $obj->{'razon_social'}; 
+    }
+
+    $params{'cuit_cuil'}            = $obj->{'cuit_cuil'};     
+    $params{'pais'}                 = $obj->{'pais'};
+    $params{'provincia'}            = $obj->{'provincia'};
+    $params{'ciudad'}               = $obj->{'ciudad'};   
+    $params{'domicilio'}            = $obj->{'domicilio'};
+    $params{'telefono'}             = $obj->{'telefono'};
+    $params{'fax'}                  = $obj->{'fax'};
+    $params{'email'}                = $obj->{'email'};
+    $params{'plazo_reclamo'}        = $obj->{'plazo_reclamo'};
 
 # TODO AGREGAR TIPOS DE MATERIALES, FORMAS DE ENVIO y MONEDAS!!!
 
-    $params{'proveedor_activo'} = 1; 
-    $params{'actionType'} = $obj->{'tipoAccion'};
+    $params{'proveedor_activo'}     = 1; 
+    $params{'actionType'}           = $obj->{'tipoAccion'};
 
 # FIXME pueden pasar directamente $obj a agregarProveedor es una HASH = a $params
 
