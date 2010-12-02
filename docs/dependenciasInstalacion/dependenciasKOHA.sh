@@ -48,3 +48,6 @@ apt-get install libwww-facebook-api-perl -y
 
 cpan -i WWW::Shorten::Bitly
 cpan -i HTML::HTMLDoc
+
+# Modulo para parseo de Excel a HTML
+apt-get install libspreadsheet-read-perl -y
