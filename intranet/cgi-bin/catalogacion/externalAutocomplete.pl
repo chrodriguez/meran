@@ -21,6 +21,7 @@ C4::AR::Debug::debug("BUSCASTE: ".$string);
 my $result = C4::AR::Utilidades::catalogoAutocomplete($string);
 
 
+
 C4::Auth::print_header($session);
 print $result;
 

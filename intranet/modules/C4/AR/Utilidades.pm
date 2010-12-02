@@ -2814,7 +2814,7 @@ sub createSphinxInstance{
     
     my $query = '';
 
-    my $tipo_match  = getSphinxMatchmode($tipo);
+    my $tipo_match  = getSphinxMatchMode($tipo);
 
     #se arma el query string
     foreach my $string (@$string_array){
@@ -2846,18 +2846,18 @@ sub catalogoAutocomplete{
 
     my $results = $sphinx->Query($query);
     
-C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
-    
     my @results_array;
     my $matches = $results->{'matches'};
     my $total_found = $results->{'total_found'};
     my $textout = "";
+
     foreach my $hash (@$matches){
             $textout.= $hash->{'doc'}."|".$hash->{'titulo'}."\n";
             #push (@results_array, $hash->{'titulo'});
-            printHASH($hash);
+            printHASH($results);
     }
-    C4::AR::Debug::debug("CANTIDAD: ".$total_found);
+    
+    
     return ($textout);
 }
 
