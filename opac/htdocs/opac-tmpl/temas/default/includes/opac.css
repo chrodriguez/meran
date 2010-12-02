@@ -29,7 +29,7 @@ body textarea:focus{
 .page-container {width:98%; margin:0px auto; margin-top:10px; margin-bottom:10px; border:solid 1px rgb(150,150,150); font-size:1.0em;}
 .main {clear:both; width:100%; padding-bottom:30px; background:transparent url(../imagenes/bg_main_withnav.jpg) top left repeat-y;}
 .main-navigation {display:inline /*Fix IE floating margin bug*/; float:left; width:200px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
-.main-content {display:inline; /*Fix IE floating margin bug*/; float:left; width:55%; margin:0 0 0 4px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+.main-content {display:inline; /*Fix IE floating margin bug*/; float:left; width:55%; margin:0 0 0 2%; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 .main-subcontent {display:inline /*Fix IE floating margin bug*/; float:right; width:185px; margin:0 15px 0 0; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 .footer {clear:both; width:100%; height:3.7em; padding:1.1em 0 0; background:rgb(225,225,225) url(../imagenes/bg_foot.jpg) repeat; font-size:1.0em; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 
@@ -590,3 +590,7 @@ label.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scro
 #ajax-indicator div p {padding-top: 7px;}
 
 .advice{background-color: #A0B355; text-align: center;}
+
+.listado_sin_margen{
+    clear:both;
+}
