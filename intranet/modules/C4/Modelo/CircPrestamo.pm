@@ -756,8 +756,7 @@ sub _verificarParaRenovar {
 		# El usuario cumple condicion?
 		$self->debug("_verificarParaRenovar - socio no cumple condicion");
 		$msg_object->{'error'} = 1;
-		C4::AR::Mensajes::add( $msg_object,
-			{ 'codMsg' => 'P114', 'params' => [] } );
+		C4::AR::Mensajes::add( $msg_object, { 'codMsg' => 'P114', 'params' => [] } );
 	}
 
 	#Busco si tiene una sancion pendiente
@@ -770,8 +769,7 @@ sub _verificarParaRenovar {
 		# El usuario tiene una sancion pendiente?
 		$self->debug("_verificarParaRenovar - socio con sancion pendiente");
 		$msg_object->{'error'} = 1;
-		C4::AR::Mensajes::add( $msg_object,
-			{ 'codMsg' => 'S201', 'params' => [] } );
+		C4::AR::Mensajes::add( $msg_object, { 'codMsg' => 'S201', 'params' => [] } );
 	}
 
 	my $sancion = C4::AR::Sanciones::estaSancionado( $self->getNro_socio,
@@ -1527,14 +1525,14 @@ sub _verificarParaRenovar{
 			$self->debug("_verificarParaRenovar - socio no es regular");
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U300', 'params' => []} ) ;
-		}
+    }
 
 	if(!($msg_object->{'error'})&&(!$self->socio->getCumple_requisito)){
 	# El usuario cumple condicion? 
 			$self->debug("_verificarParaRenovar - socio no cumple condicion");
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P114', 'params' => []} ) ;
-		}
+    }
 
  	#Busco si tiene una sancion pendiente
 	my $sancion_pendiente=C4::AR::Sanciones::tieneSancionPendiente($self->getNro_socio,$self->db);
@@ -1544,36 +1542,36 @@ sub _verificarParaRenovar{
 			$self->debug("_verificarParaRenovar - socio con sancion pendiente");
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S201', 'params' => []} ) ;
-		}
+    }
 	
 	my $sancion = C4::AR::Sanciones::estaSancionado($self->getNro_socio, $self->getTipo_prestamo);
-	if(!($msg_object->{'error'})&&($sancion)){
+    if(!($msg_object->{'error'})&&($sancion)){
 	# El usuario tiene una sancion ?
 			$self->debug("_verificarParaRenovar - socio sancionado");
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S200', 'params' => [$sancion->getFecha_final_formateada]} ) ;
-		}
+    }
 
 	if(!($msg_object->{'error'})&&(C4::AR::Reservas::reservasEnEspera($self->nivel3->nivel2->getId2))){
 	#Hay alguna reserva pendiente?
 			$self->debug("_verificarParaRenovar - grupo con reserva pendiente");
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P120', 'params' => []} ) ;
-		}
+    }
 
 	if(!($msg_object->{'error'})&&( $self->getRenovaciones == $self->tipo->getRenovaciones )) {
 	# Se llego al maximo de renovaciones? 
 			$self->debug("_verificarParaRenovar - Se llego al maximo de renovaciones");
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R012', 'params' => []} ) ;
-		}
+    }
 
 	if(!($msg_object->{'error'})&&( $self->estaVencido)){
 	# Esta vencido? 
 			$self->debug("_verificarParaRenovar - esta vencido");
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P118', 'params' => []} ) ;
-		}
+    }
 
 }
 

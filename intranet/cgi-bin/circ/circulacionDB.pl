@@ -3,18 +3,16 @@
 use strict;
 use CGI;
 use C4::Auth;
-
-use C4::AR::Mensajes;
+# use C4::AR::Mensajes;
 use JSON;
 
-my $input=new CGI;
-
-my $obj=$input->param('obj');
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
-my $authnotrequired= 0;
+my $input           = new CGI;
+my $obj             = $input->param('obj');
+$obj                = C4::AR::Utilidades::from_json_ISO($obj);
+my $authnotrequired = 0;
 #tipoAccion = PRESTAMO, RESREVA, DEVOLUCION, CONFIRMAR_PRESTAMO
-my $tipoAccion= C4::AR::Utilidades::trim($obj->{'tipoAccion'})||"";
-my $nro_socio= C4::AR::Utilidades::trim($obj->{'nro_socio'});
+my $tipoAccion      = C4::AR::Utilidades::trim($obj->{'tipoAccion'})||"";
+my $nro_socio       = C4::AR::Utilidades::trim($obj->{'nro_socio'});
 C4::AR::Debug::debug("ACCION -> ".$tipoAccion);
 C4::AR::Debug::debug("SOCIO -> ".$nro_socio);
 
@@ -32,15 +30,19 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
 #items a devolver o renovar
 #aca se arma el div para mostrar los items que se van a devolver o renovar
 
+    my $id_prestamo;
+    my $prestamo;
 	my $array_ids   = $obj->{'datosArray'};
 	my $loop        = scalar(@$array_ids);
 
-	my @infoDevRen=();
-	$infoDevRen[0]->{'nro_socio'}=$user;
-	$infoDevRen[0]->{'accion'}=$tipoAccion;
+	my @infoDevRen                  = ();
+	$infoDevRen[0]->{'nro_socio'}   = $user;
+	$infoDevRen[0]->{'accion'}      = $tipoAccion;
+
 	for(my $i=0;$i<$loop;$i++){
- 		my $id_prestamo=$array_ids->[$i];
-        my $prestamo = C4::AR::Prestamos::getInfoPrestamo($id_prestamo);;
+ 		$id_prestamo = $array_ids->[$i];
+        $prestamo = C4::AR::Prestamos::getInfoPrestamo($id_prestamo);
+
         if ($prestamo){
             $infoDevRen[$i]->{'id_prestamo'}    = $id_prestamo;
             $infoDevRen[$i]->{'id3'}            = $prestamo->getId3;

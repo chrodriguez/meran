@@ -463,3 +463,27 @@ ALTER TABLE `adq_proveedor` CHANGE `usr_ref_tipo_documento_id` `usr_ref_tipo_doc
 ALTER TABLE `adq_proveedor` CHANGE `nro_doc` `nro_doc` VARCHAR( 21 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ;
 ALTER TABLE `adq_proveedor` CHANGE `razon_social` `razon_social` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ;
 
+
+
+CREATE TABLE  `adq_presupuesto` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`proveedor_id` INT NOT NULL ,
+`fecha` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE = InnoDB ;
+
+ALTER TABLE  `adq_presupuesto` ADD  `estado_presupuesto_id` INT NOT NULL;
+
+CREATE TABLE  `adq_prepuesto_detalle` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`adq_presupuesto_id` INT NOT NULL ,
+`adq_recomendacion_detalle_id` INT NOT NULL ,
+`precio_unitario` FLOAT NOT NULL ,
+`cantidad` INT NOT NULL
+) ENGINE = InnoDB ;
+
+CREATE TABLE  `ref_estado_presupuesto` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`nombre` VARCHAR( 255 ) NOT NULL
+) ENGINE = MYISAM ;
+
+ALTER TABLE  `adq_prepuesto_detalle` ADD  `seleccionado` INT NOT NULL DEFAULT  '0';

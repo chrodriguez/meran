@@ -6,6 +6,7 @@ require Exporter;
 # use C4::AR::Authldap;
 # use C4::Membersldap;
 use C4::Context;
+use Log::Log4perl qw(:easy);
 
 use vars qw(@EXPORT @ISA);
 @ISA = qw(Exporter);
@@ -72,7 +73,6 @@ sub _str_debug_date_time{
 
 =item
 debug por linea
-=cut
 sub debug{
     my ($data) = @_;
 
@@ -85,6 +85,49 @@ sub debug{
 		close(Z);        
     }
 }
+=cut
+
+
+sub getLogger{
+    my $context = new C4::Context;
+
+    my $file = $context->config('debug');
+    my $config_file = $context->config('config_log4') || '/etc/meran/log4perl.conf' ;
+    
+    my $logger = Log::Log4perl->get_logger('all');
+    
+    Log::Log4perl::init_and_watch($config_file,10);
+    
+    return ($logger);
+  
+  
+}
+
+sub debug{
+    my ($data,$level) = @_;
+
+    my $logger = getLogger();
+    
+    $level = $level || 1;
+
+	# 1 = DEBUG
+	# 2 = INFO
+	# 3 = WARN
+	# 4 = ERROR
+	# 5 = FATAL
+    use Switch;
+    
+    switch($level) {
+		  case 1 {$logger->debug($data);}
+		  case 2 {$logger->info($data);}
+          case 3 {$logger->warn($data);}
+          case 4 {$logger->error($data);}
+          case 5 {$logger->fatal($data);}
+          else   {$logger->debug($data);}
+    }   
+    
+}
+
 
 sub _printHASH {
     my ($hash_ref) = @_;
