@@ -7,6 +7,8 @@ use C4::AR::Proveedores;
 
 my $input = new CGI;
 
+# $onChange="onChange='recuperarProveedor();'"
+
 my $combo_proveedores = &C4::AR::Utilidades::generarComboProveedores();
 
 my ($template, $session, $t_params)= get_template_and_user({
