@@ -21,6 +21,8 @@ my ($loggedinuser, $session, $flags) = checkauth(
                         );  
 
 C4::AR::Debug::debug("uploadPicture.pl");
+
+
 my ($error,$codMsg,$message) = &C4::AR::UploadFile::uploadPhoto($nro_socio, $filepath);
 
 
