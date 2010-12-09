@@ -301,6 +301,7 @@ my %mensajesINTRA = (
     'B447' => 'Error en funcion C4::AR::Nivel1::t_eliminarNivel1Repetible',
     'B448' => 'Error en funcion C4::AR::Catalogacion::t_agruparCampos',   
     'B449' => 'Error en la funcion C4::AR::Provedoores::agregarProveedor',
+    'B450' => 'Error en funcion C4::AR::Catalogacion::_procesar_referencia',
     'C500' => 'Los items fueron guardados correctamente.',
     'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
     'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',
@@ -438,7 +439,7 @@ Guarda los errores en el siguiente archivo: /var/log/koha/debugErrorDBA.txt
 # TODO usar Debug::debug
 sub printErrorDB {
 	my($errorsDB_array,$codigo,$tipo)=@_;
-C4::AR::Debug::debug("hola");
+
 	my $paraMens;
 	my $path=">>".C4::Context->config("kohalogdir")."debugErrorDBA.txt";
 	open(A,$path);
