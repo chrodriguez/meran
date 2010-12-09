@@ -667,21 +667,30 @@ sub getDatoFromReferencia{
 
                 if($estructura->infoReferencia){
 
-                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => getReferencia:       ".$estructura->infoReferencia->getReferencia);
-                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato entrada:        ".$dato);
-    
+                  eval{
+
+                        #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => getReferencia:       ".$estructura->infoReferencia->getReferencia);
+                        #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato entrada:        ".$dato);
+                    
 
 
-                    my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
-                    my $obj_generico    = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
-                                                                                    #campo_tabla,                   id_tabla
-                    $valor_referencia   = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
+                        my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
+                        my $obj_generico    = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+                                                                                        #campo_tabla,                   id_tabla
+                        $valor_referencia   = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
 
-                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
-                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
-                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
+                        #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
+                        #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
+                        #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
 
-                    return $valor_referencia;
+                        return $valor_referencia;
+
+                    };
+
+                    if ($@){
+                        &C4::AR::Mensajes::printErrorDB($@, 'B451',"INTRA");
+                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia, ERROR en campo, subcampo => ".$campo.", ".$subcampo);
+                    }
                 } else {
                     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => ERROR EN REFERENCIA campo, subcampo => ".$campo.", ".$subcampo);
                 }
