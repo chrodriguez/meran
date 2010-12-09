@@ -82,12 +82,27 @@
             [% FOREACH moneda IN monedas %]   
                             <li id="[% moneda.moneda_ref.id %]"><strong> [% moneda.moneda_ref.nombre %]</strong></li> 
               [% END %]-->
-            <li class="sub_item"> 
+
+<!-- LISTADO DE MONEDAS: -->
+<!--            <li class="sub_item"> 
             <label for="moneda">[% "Monedas del proveedor" | i18n %]</label>
-              <div id=monedas_proveedor">
+              <div id="monedas_proveedor">
+                <ul>
               [% FOREACH moneda IN monedas %] 
                     <li id="[% moneda.moneda_ref.id %]"><strong>[% moneda.moneda_ref.nombre %]</strong></li> 
               [% END %]
+                </ul>
+              </div>
+            </li>-->
+
+            <li class="sub_item"> 
+            <label for="moneda">[% "Monedas del proveedor" | i18n %]</label>
+              <div id="monedas_proveedor">
+                <ul>
+                [% FOREACH moneda IN monedas %] 
+                    <input name="options" class="monedas" type="checkbox" value="[% moneda.moneda_ref.id %]"/>[% moneda.moneda_ref.nombre %]
+                [% END %]
+                </ul>
               </div>
             </li>
 

@@ -19,9 +19,7 @@
       
       
     function monedas(){
-      $('#agregar_moneda').click(function() {
-          //alert($('#moneda').val() + $('#id_moneda').val() )
-          //aler($('#id_moneda').val())
+      $('#agregar_moneda').click(function(){
           if(($('#moneda').val() == "") || ($('#id_moneda').val() == "")){
               alert('Por favor ingrese una moneda')            
           }else{
@@ -29,11 +27,48 @@
               agregarMoneda(idMonedaNueva)
           }
           
-      });   
+      }); 
+      
+      $('#borrar_moneda').click(function(){
+          var checkeados = 0
+          var arreglo = new Array() 
+          $('.monedas').each(function(index) {
+            // ver aca como pasar {id_proveedor,id_moneda}. Para dsp en perl hacer un objeto para eliminar
+            if($(this).attr('checked')){ 
+                arreglo[checkeados] = $(this).val()
+                checkeados++
+            }
+          });   
+          if(checkeados == 0){
+              alert('Por favor seleccione la/s monedas que desea borrar')
+          }else{
+              borrarMoneda(arreglo)
+          }
+
+          
+      }); 
      
    }
    
-   // agregar la moneda en la base por ajax y volver a cargarlas en el div
+   // elimina la/s monedas seleccionadas, borra en la base por ajax y vuelve a cargarlas en el div
+   function borrarMoneda(arreglo){
+      objAH                     = new AjaxHelper(updateMonedasProveedor)
+      objAH.url                 = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl'
+      objAH.debug               = true
+
+      objAH.id_proveedor        = $('#id_proveedor').val()
+      objAH.monedas_array       = arreglo
+
+      objAH.tipoAccion          = 'ELIMINAR_MONEDA_PROVEEDOR'
+      objAH.sendToServer();   
+   }
+   
+   
+//    function updateMonedasProveedor(responseText){
+//        $('#monedas_proveedor').html(responseText);
+//    }
+   
+   // agregar la moneda en la base por ajax y vulve a cargarlas en el div
    function agregarMoneda(idMonedaNueva){
       objAH                     = new AjaxHelper(updateMonedasProveedor)
       objAH.url                 = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl'
@@ -47,12 +82,8 @@
    }
    
    
-   function updateMonedasProveedor(){
-//        if (!verificarRespuesta(responseText))
-//             return(0)
-//        var Messages=JSONstring.toObject(responseText)
-//        alert(Messages)
-//         alert('ok')
+   function updateMonedasProveedor(responseText){
+       $('#monedas_proveedor').html(responseText);
    }
       
       
