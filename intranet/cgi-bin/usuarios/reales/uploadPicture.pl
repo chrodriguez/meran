@@ -7,7 +7,7 @@ use JSON;
 
 my $query       = new CGI;
 my $nro_socio   = $query->param('nro_socio');
-my $filepath    = $query->param('picture');
+my $filepath    = $query->param('planilla_xls');
 my $authnotrequired = 0;
 
 my ($loggedinuser, $session, $flags) = checkauth( 
