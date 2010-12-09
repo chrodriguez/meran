@@ -2952,7 +2952,7 @@ sub catalogoAutocomplete{
     my $textout = "";
 
     foreach my $hash (@$matches){
-            $textout.= $hash->{'doc'}."|".$hash->{'group'}."|".$hash->{'weight'}."|".$hash->{'stamp'}."\n";
+            $textout.= $hash->{'doc'}."|\n";
             #push (@results_array, $hash->{'titulo'});
             printHASH($results);
     }

@@ -26,7 +26,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 # con exito o no
 my $obj=$input->param('obj');
 
-$obj=from_json_ISO($obj);
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 
 my $id1= $obj->{'id1'};
