@@ -59,6 +59,8 @@ function limpiarCampos(side){
                         <strong>[% "B&uacute;squeda combinada" | i18n %]</strong>
                     </label>
                     <input type="text" id="keyword" size="25" onkeypress="limpiarCampos('derecha')">
+                    <label for="match_mode">
+                    </label>  
                     [% PERL %]
                         print C4::AR::Filtros::getComboMatchMode() ;
                     [% END %]
@@ -119,17 +121,20 @@ function limpiarCampos(side){
         
                   <li class="sub_item">
                         <label for="titulo"> 
-                            <strong>T&iacute;tulo</strong>
+                            <strong>[% "T&iacute;tulo" %]</strong>
                         </label>
                         <input type="text"  size="25" id="titulo" onkeypress="limpiarCampos('izquierda')">
+              
                         <input name="tipo" type=radio id=tipo value="normal" checked>
+                        <label for="tipo">
                                         [% "Normal" | i18n %]
+                        </label>    
                         <input name="tipo" type=radio id=tipo value="exacto">
                                         [% "Exacto" | i18n %]
                     </li>
                   <li class="sub_item"> 
                         <label for="autor">
-                            <strong>Autor</strong>
+                            <strong>[% "Autor" %]</strong>
                         </label>
                         <input type="text" size="25" id="autor" onkeypress="limpiarCampos('izquierda')">
                     </li>

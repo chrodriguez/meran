@@ -29,6 +29,7 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw(
 		&uploadPhoto,
 	   	&deletePhoto
+        $uploadFile,
 	);
 
 my $picturesDir = C4::Context->config("picturesdir");
@@ -53,14 +54,14 @@ sub uploadPhoto{
 		if (!grep(/$ext/i,@extensiones_permitidas)) {
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U341', 'params' => []} ) ;
-            C4::AR::Debug::debug("UploadFile => uploadPhoto => error U341");	
+            C4::AR::Debug::debug("UploadFile => uploadPhoto => extension no permitida error U341");	
 		} else 
 		{
 	
 			if (!(open(WFD,">$write_file"))) {
 				$msg_object->{'error'}= 1;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U342', 'params' => []} ) ;	
-                C4::AR::Debug::debug("UploadFile => uploadPhoto => error U342");    
+                C4::AR::Debug::debug("UploadFile => uploadPhoto => no se puede escribir error U342");    
 			}
 			else	
 			{
@@ -107,4 +108,45 @@ C4::AR::Debug::debug("UploadFile => deletePhoto => ".C4::AR::Utilidades::trim($p
 	return ($msg_object);
 }
 
+sub uploadFile{
 
+    my ($prov,$write_file,$filepath, $presupuestos_dir) = @_;
+
+    my $bytes_read; 
+    my $msg                     = '';
+    my $size                    = 0;
+    my $msg_object              = C4::AR::Mensajes::create();
+    my @extensiones_permitidas  = ("odt","xls");
+  
+    my @nombreYextension        = split('\.',$filepath);
+
+    if (scalar(@nombreYextension)==2) { 
+    # verifica que el nombre del archivo tenga el punto (.)
+            my $ext         = @nombreYextension[1];
+            my $buff        = '';
+           
+    #         if (!grep(/$ext/i,@extensiones_permitidas)) {
+    #             $msg_object->{'error'}= 1;
+    #             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U341', 'params' => []} ) ;
+    #             C4::AR::Debug::debug("UploadFile => uploadPhoto => error U341");    
+    #         } else 
+    #         {
+    #     
+            if ((open(WFD,">$write_file"))) {
+                    C4::AR::Debug::debug($write_file);
+    #                 $msg_object->{'error'}= 1;
+    #                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U342', 'params' => []} ) ;  
+    #                 C4::AR::Debug::debug("UploadFile => uploadPhoto => error U342");    
+    #             }
+    #             else    
+    #             {
+                    while ($bytes_read=read($filepath,$buff,2096)) {
+                        C4::AR::Debug::debug("ESCRIBIENDO: ".$bytes_read);
+                        $size += $bytes_read;
+                        binmode WFD;
+                        print WFD $buff;
+                    }
+                    close(WFD);
+              }
+    }
+}

@@ -29,6 +29,7 @@ use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
 use C4::Modelo::PrefEstructuraSubcampoMarc;
 use C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager;
 use C4::Modelo::AdqProveedor::Manager;
+use C4::Modelo::PrefInformacionReferencia::Manager;
 
 
 use JSON;

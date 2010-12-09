@@ -25,7 +25,7 @@
                     <span id="me_name">[% socio_data.usr_apellido %], [% socio_data.usr_nombre %]</span>
                 </a>
             <div class="culture_Select">
-                  [<a target="_parent" href="/cgi-bin/koha/logout.pl?token=[% token %]" tabindex="-1">[% "Salir" | i18n %]</a>]
+                  [<a target="_parent" href="/cgi-bin/koha/logout.pl?token=[% token %]" title="Click para Salir" tabindex="-1">[% "Salir" | i18n %]</a>]
                         [% PERL %]
                             print C4::AR::Filtros::setFlagsLang("INTRA",'[% user_theme %]');
                         [% END %]

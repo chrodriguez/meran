@@ -202,7 +202,8 @@ sub _procesar_referencias
 lo que hace esta funcion es recibir un objeto marc y procesarlo para procesar aquellos campos que son referencia, lo que hace es recorrer todos los campos del objeto y aquellos que estan configurados como referencia en la tabla CatEstructuraCatalogacion los modifica, cambiando el dato por su referencia en el marc_record y agregando la referencia a la tabla correspondiente en caso de no estar en ella
 =cut
 sub _procesar_referencias{
-    my($marc_record)=@_;
+    my($marc_record) = @_;
+
     my $campos_referenciados = C4::Modelo::CatEstructuraCatalogacion::getCamposConReferencia();
     my %referenciados;
     my @subcampos1_array;
@@ -666,21 +667,30 @@ sub getDatoFromReferencia{
 
                 if($estructura->infoReferencia){
 
-                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => getReferencia:       ".$estructura->infoReferencia->getReferencia);
-                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato entrada:        ".$dato);
-    
+                  eval{
+
+                        #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => getReferencia:       ".$estructura->infoReferencia->getReferencia);
+                        #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato entrada:        ".$dato);
+                    
 
 
-                    my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
-                    my $obj_generico    = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
-                                                                                    #campo_tabla,                   id_tabla
-                    $valor_referencia   = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
+                        my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
+                        my $obj_generico    = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+                                                                                        #campo_tabla,                   id_tabla
+                        $valor_referencia   = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
 
-                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
-                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
-                    #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
+                        #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
+                        #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
+                        #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
 
-                    return $valor_referencia;
+                        return $valor_referencia;
+
+                    };
+
+                    if ($@){
+                        &C4::AR::Mensajes::printErrorDB($@, 'B451',"INTRA");
+                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia, ERROR en campo, subcampo => ".$campo.", ".$subcampo);
+                    }
                 } else {
                     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => ERROR EN REFERENCIA campo, subcampo => ".$campo.", ".$subcampo);
                 }
@@ -742,17 +752,19 @@ Esta funcion recibe un campo, un subcampo y un dato y busca en la tabla de refer
 sub _procesar_referencia {
     my ($campo, $subcampo, $dato, $itemtype) = @_;
 
-#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
+    C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
 
     my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype);
     if($estructura) {
        if($estructura->getReferencia){
             #tiene referencia
             my $pref_tabla_referencia   = C4::Modelo::PrefTablaReferencia->new();
-            my $obj_generico            = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
+
+            eval{
+                my $obj_generico            = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
 
                 #se genera el nuevo dato => tabla@dato para poder obtener el dato de la referencia luego
-                my $string_result       = $obj_generico->getTableName.'@'.$dato;
+                my $string_result           = $obj_generico->getTableName.'@'.$dato;
 
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
@@ -761,6 +773,13 @@ sub _procesar_referencia {
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result:    ".$string_result);
 
                 return($string_result);
+            };
+
+            if ($@){
+                &C4::AR::Mensajes::printErrorDB($@, 'B450',"INTRA");
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia, ERROR en campo, subcampo => ".$campo.", ".$subcampo);
+            }
+
         }#END if($estructura->getReferencia){
 
     }#END if($estructura){
