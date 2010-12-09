@@ -73,6 +73,14 @@
                           </a>
                       </li>
                       <li>
+                          [% PERL %]
+                              print C4::AR::Filtros::link_to( text    =>  "[% 'Recomendaciones' | i18n %]",
+                                                              url     =>  '/cgi-bin/koha/opac-recomendaciones.pl',
+                                                              title   =>  "[% 'Sugerencias' | i18n %]",
+                                      ) ;
+                          [% END %]
+                      </li>
+                      <li>
                           <a href='/cgi-bin/koha/opac-favoritos.pl?token=[% token %]'>
                               [% 'Mis favoritos' | i18n %]
                           </a>

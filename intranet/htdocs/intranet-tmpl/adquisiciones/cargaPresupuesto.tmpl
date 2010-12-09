@@ -8,37 +8,37 @@
 
 <script type="text/javascript"></script>
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
-<!--<script type="text/javascript">
+<script type="text/javascript">
 
-var objAH;
-NRO_SOCIO_AUTH = '[% nro_socio %]';
-
-
-function createFileUploader(){
-
-    if($("#uploader")[0] != null){
+// var objAH;
+// NRO_SOCIO_AUTH = '[% nro_socio %]';
 
 
-        $("#uploader").fileUploader({
-                        // perl script
-                        ajaxFile: "uploadPicture.pl",
-                        nro_socio: USUARIO.ID,
-                        funcionOnComplete: function (){
-                                    onCompleteFileUpload(USUARIO.ID);
-                                }
-        });
+// function createFileUploader(){
+// 
+//     if($("#uploader")[0] != null){
+// 
+// 
+//         $("#uploader").fileUploader({
+//                         // perl script
+//                         ajaxFile: "uploadPicture.pl",
+//                         nro_socio: USUARIO.ID,
+//                         funcionOnComplete: function (){
+//                                     onCompleteFileUpload(USUARIO.ID);
+//                                 }
+//         });
+// 
+//     }
+// }
+// 
+// function onCompleteFileUpload(){
+//     $('#foto').html("<img border='0' width='96px' height='96px' title='" + USUARIO.text + "(" + USUARIO.ID + ")' alt='" + USUARIO.text + "(" + USUARIO.ID + ")' src='[% themelang %]/pictures/" + USUARIO.ID + ".jpg'>");
+//     $('#div_uploader').hide();
+//     $('#fake_file').val('');
+//     $('#div_boton_eliminar_foto').show();
+// }
 
-    }
-}
-
-function onCompleteFileUpload(){
-    $('#foto').html("<img border='0' width='96px' height='96px' title='" + USUARIO.text + "(" + USUARIO.ID + ")' alt='" + USUARIO.text + "(" + USUARIO.ID + ")' src='[% themelang %]/pictures/" + USUARIO.ID + ".jpg'>");
-    $('#div_uploader').hide();
-    $('#fake_file').val('');
-    $('#div_boton_eliminar_foto').show();
-}
-
-</script>-->
+</script>
 
 <fieldset>
     <legend class="titulos">    [% "Carga de presupuesto" | i18n %] </legend>
@@ -61,7 +61,7 @@ function onCompleteFileUpload(){
               <!-- VER BIEN Q PONER-->
               <p>Seleccione el archivo que desea cargar </p>
                   
-              <form action=/cgi-bin/koha/adquisiciones/importPresupuestoProveedores.pl method=post  name="formPlanilla" id="formPlanilla">
+              <form action=/cgi-bin/koha/adquisiciones/importPresupuestoProveedores.pl enctype="multipart/form-data" method=post name="formPlanilla" id="formPlanilla">
                   <div>
                         <input type="file" name="datafile" size="30">
                   </div>
@@ -73,6 +73,12 @@ function onCompleteFileUpload(){
                                             ) ;
 
                             [% END %]
+
+           <!--        <div id="div_uploader" style="display: none">
+                            <li>
+                                <div id="uploader"></div>
+                            </li>
+                   </div>-->
 
 
                   <!--[% PERL %]
@@ -88,6 +94,7 @@ function onCompleteFileUpload(){
 
           <fieldset>
                <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend> 
+                              
 
                <ul>
                      <li class="sub_item">
