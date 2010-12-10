@@ -15,6 +15,7 @@ my $authnotrequired = 0;
 my $presupuestos_dir= "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores";
 my $write_file  = $presupuestos_dir."/".$filepath;
 
+
 C4::AR::Debug::debug($write_file);
 
 
@@ -42,7 +43,7 @@ if ( !defined $workbook ) {
 my @table;
 my @reg;
 
-
+     
 for my $worksheet ( $workbook->worksheets() ) {
      my ( $row_min, $row_max ) = $worksheet->row_range();
      my ( $col_min, $col_max ) = $worksheet->col_range();

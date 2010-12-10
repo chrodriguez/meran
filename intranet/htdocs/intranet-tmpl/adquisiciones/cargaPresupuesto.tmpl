@@ -25,40 +25,38 @@ $(document).ready(function() {
    $('#id').change(function(){
       prov = $("#id").val();
     })
-//    makeToggle('toggle_container','trigger',null,true);
-//    createFileUploader();
-//             $('#div_uploader').show();
-});
-
-$(document).ready(function() {
    makeToggle('toggle_container','trigger',null,true);
    createFileUploader();
    $('#div_uploader').show();
+
 });
 
-// prov = $("#id:selected").val();
-// alert(prov);
-
-
 function onCompleteFileUpload(){
-  //  $('#foto').html("<img border='0' width='96px' height='96px' title='" + USUARIO.text + "(" + USUARIO.ID + ")' alt='" + USUARIO.text + "(" + USUARIO.ID + ")' src='[% themelang %]/pictures/" + USUARIO.ID + ".jpg'>");
-  //  $('#datos_presupuesto').hide(); 
-//     $('#div_boton_eliminar_foto').show();
- //   $('#div_uploader').hide();
+     alert(document.getElementById('myUploadFile').value);
+
+   //  $('#foto').html("<img border='0' width='96px' height='96px' title='" + USUARIO.text + "(" + USUARIO.ID + ")' alt='" + USUARIO.text + "(" + USUARIO.ID + ")' src='[% themelang %]/pictures/" + USUARIO.ID + ".jpg'>");
+   //  $('#datos_presupuesto').hide(); 
+   //  $('#div_boton_eliminar_foto').show();
+  //   $('#div_uploader').hide();
+    $('#datos_planilla').show;
     $('#select_prov').hide();
     $('#fake_file').val('');
+    
 
 }
+
 
 function createFileUploader(){
  
     if($("#uploader")[0] != null){
+   
        $("#uploader").fileUploader({
                         // perl script
                         file_types: "xls",
                         type_file: "planilla_xls",
                         ajaxFile: "importPresupuestoProveedores.pl",
                         proveedor: prov,
+                        uploadFolder: "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/",
                         funcionOnComplete: function (){
                                     onCompleteFileUpload(prov);
                                 }
@@ -103,6 +101,12 @@ function createFileUploader(){
 
           <fieldset>
                <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend>                
+               <div id="datos_planilla">
+                        <!--  [% FOREACH resultsloop %]   
+                              
+                          [% END %]-->
+
+               </div>
                <ul  id="datos_presupuesto" style="display: none">
                      <li class="sub_item">
                            <label for="descripcion" id="label_descripcion"> [% "Descripcion" | i18n %] *</label>

@@ -2,7 +2,7 @@
 use JavaScript::Minifier qw(minify);
 
 #procesa el archivo archivos_a_comprimir.txt y comprime los js
-my $path="/usr/local/koha";
+my $path="/usr/share/meran";
 open (FILE, $path."/intranet/scripts/archivos_a_comprimir_intranet_top.txt" ) or die "No se pudo abrir el archivo: $!";
 system ("rm $path/includes/completo-intranet-top.js");
 while ( <FILE> ) {

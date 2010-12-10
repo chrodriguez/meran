@@ -31,11 +31,12 @@ function assignFileName(idInput){
                 opt.file_types += ',jpeg';
                 opt.file_types += ',gif';
          }
-         if (opt.file_types.match('xls') && !opt.file_types.match('odt')) 
+         if (opt.file_types.match('xls') && !opt.file_types.match('odt')) {
                 opt.file_types += ',odt';
-    
+               
+         }
          $this = $(this);
-         
+        
          new $.uploadSetUp();
       }
     });
@@ -45,7 +46,7 @@ function assignFileName(idInput){
     $.uploadSetUp = function() {
         $('body').append($('<div></div>').append($('<iframe src="about:blank" id="myFrame" name="myFrame" style="display: none;"></iframe>')));
         
-         if(opt.type_file == "planilla_xls"){
+         if(opt.type_file != "foto"){
               $this.append($('<form target="myFrame" enctype="multipart/form-data" action="' + opt.ajaxFile + '" method="post" name="myUploadForm" id="myUploadForm"></form>')
                   .append(
 	   
@@ -53,7 +54,7 @@ function assignFileName(idInput){
                           $('<input type="hidden" name="upload" value="' + opt.uploadFolder + '" />'),
                           $('<div class="select" title="Subir un presupuesto"></div>').append($(
                                 '<div class="fileinputs">'+
-                                          '<input id="myUploadFile" class="file" type="file" value="" name="planilla_xls"/>'+
+                                          '<input id="myUploadFile" class="file" type="file" value="" name="planilla"/>'+
                                           '<div class="fakefile">'+
                                               '<input id="fake_file"/>'+
                                               '<img src='+imagesForJS+"/iconos/subir_foto.png"+' />'+
@@ -61,7 +62,6 @@ function assignFileName(idInput){
                                         '</div>')), 
                           $('<ul id="ul_files"></ul>'))
                       );
-       
         
         } else {
               $this.append($('<form target="myFrame" enctype="multipart/form-data" action="' + opt.ajaxFile + '" method="post" name="myUploadForm" id="myUploadForm"></form>')
@@ -79,7 +79,7 @@ function assignFileName(idInput){
                       $('<ul id="ul_files"></ul>'))
                   );
             }
-            init();
+            init();*/
     };
 
     $.uploadSetUp.defaults = {
