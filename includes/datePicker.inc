@@ -1,19 +1,13 @@
-
+<link href="/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet"> 
 
 <script type="text/javascript" src="/includes/jquery/datetimepicker/ui.datepicker-min.js"></script>
-<script type="text/javascript" src="/includes/jquery/ui/custom.js"></script>
-<script type="text/javascript" src="/includes/jquery/dateMethods.js"></script>
-<script type="text/javascript" src="/includes/jquery/jquery.datePickerMultiMonth.js"></script>
-<!-- <script type="text/javascript" src="/includes/jquery/datePicker_locale_es.js"></script> -->
-<!-- Miguel agregue esta de abajo, es la de datepicker -->
-<script type="text/javascript" src="/includes/jquery/datetimepicker/jquery.ui.datepicker-es.js"></script>
 
-<link href="/includes/jquery/datetimepicker/flora.datepicker.css" type="text/css" rel="stylesheet"> 
-<!-- <link href="/includes/css/datePicker.css" type="text/css" rel="stylesheet">  -->
+<!-- Miguel agregue esta de abajo, es la de datepick -->
+
 
 <script type="text/javascript">
 
-    /* VARIABLES PARA EL DatePicker */
+    /* VARIABLES PARA EL datepick */
     
     dayNamesMin= [
                     "[% 'Do' | i18n %]",
@@ -50,6 +44,7 @@
                 ];
     monthNames= [
                     "[% 'Enero' | i18n %]",
+                    "[% 'Enero' | i18n %]",
                     "[% 'Febrero' | i18n %]",
                     "[% 'Marzo' | i18n %]",
                     "[% 'Abril' | i18n %]",
@@ -65,28 +60,28 @@
 
     function crearDatePicker(idElem){
 
-            $('#'+idElem).datepicker({  dateFormat: DATE_FORMAT, 
-                                        dayNamesMin: dayNamesMin, 
-                                        dayNames: dayNames,
-                                        monthNamesMin: monthNamesMin,
-                                        monthNames: monthNames,
-                                        clearText: CLEAR_TEXT,
-                                        clearStatus: CLEAR_STATUS,
-                                        closeText: CLOSE_TEXT,
-                                        closeStatus: CLOSE_STATUS,
-                                        prevText: PREV_TEXT,
-                                        prevStatus: PREV_STATUS,
-                                        nextText: NEXT_TEXT,
-                                        nextStatus: NEXT_STATUS,
-                                        currentText: CURRENT_TEXT,
-                                        currentStatus: CURRENT_STATUS,
-                                        monthStatus: MONTH_STATUS,
-                                        yearStatus: YEAR_STATUS,
-                                        weekHeader: WEEK_HEADER,
-                                        weekStatus: WEEK_STATUS,
-                                        dayStatus: DAY_STATUS,
-                                        dateStatus: DATE_STATUS,
-                                        initStatus: INIT_STATUS,
-                                    });
+            $('#'+idElem).datepick({  
+                             monthNames: monthNames,
+        monthNamesShort: monthNamesMin,
+        dayNames: dayNames,
+        dayNamesShort: dayNamesMin,
+        dayNamesMin: dayNamesMin,
+        dateFormat: 'dd/mm/yyyy', firstDay: 0,
+        renderer: $.datepick.defaultRenderer,
+        prevText: '&#x3c;Ant', prevStatus: '',
+        prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+        nextText: 'Sig&#x3e;', nextStatus: '',
+        nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+        currentText: 'Hoy', currentStatus: '',
+        todayText: 'Hoy', todayStatus: '',
+        clearText: 'Limpiar', clearStatus: '',
+        closeText: 'Cerrar', closeStatus: '',
+        yearStatus: '', monthStatus: '',
+        weekText: 'Sm', weekStatus: '',
+        dayStatus: 'D, M d', defaultStatus: '',
+        isRTL: false                                    
+        });
+            
+
     }
 </script>
