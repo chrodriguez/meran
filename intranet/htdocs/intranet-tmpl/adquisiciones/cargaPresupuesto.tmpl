@@ -5,38 +5,66 @@
 [% INCLUDE 'AutocompleteHelper.inc'  %]
 
 
+<script type="text/javascript" >
 
-<script type="text/javascript"></script>
+TYPE_FILE="file_xls";
+
+</script>
+<script type="text/javascript" src="/includes/jquery/jquery.fileUploader-min.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
 <script type="text/javascript">
 
 // var objAH;
-// NRO_SOCIO_AUTH = '[% nro_socio %]';
 
 
-// function createFileUploader(){
-// 
-//     if($("#uploader")[0] != null){
-// 
-// 
-//         $("#uploader").fileUploader({
-//                         // perl script
-//                         ajaxFile: "uploadPicture.pl",
-//                         nro_socio: USUARIO.ID,
-//                         funcionOnComplete: function (){
-//                                     onCompleteFileUpload(USUARIO.ID);
-//                                 }
-//         });
-// 
-//     }
-// }
-// 
-// function onCompleteFileUpload(){
-//     $('#foto').html("<img border='0' width='96px' height='96px' title='" + USUARIO.text + "(" + USUARIO.ID + ")' alt='" + USUARIO.text + "(" + USUARIO.ID + ")' src='[% themelang %]/pictures/" + USUARIO.ID + ".jpg'>");
-//     $('#div_uploader').hide();
-//     $('#fake_file').val('');
-//     $('#div_boton_eliminar_foto').show();
-// }
+var prov;
+
+$(document).ready(function() {
+  // Handler for .ready() called.
+   $('#id').change(function(){
+      prov = $("#id").val();
+    })
+   makeToggle('toggle_container','trigger',null,true);
+   createFileUploader();
+   $('#div_uploader').show();
+
+});
+
+function onCompleteFileUpload(){
+     alert(document.getElementById('myUploadFile').value);
+
+   //  $('#foto').html("<img border='0' width='96px' height='96px' title='" + USUARIO.text + "(" + USUARIO.ID + ")' alt='" + USUARIO.text + "(" + USUARIO.ID + ")' src='[% themelang %]/pictures/" + USUARIO.ID + ".jpg'>");
+   //  $('#datos_presupuesto').hide(); 
+   //  $('#div_boton_eliminar_foto').show();
+  //   $('#div_uploader').hide();
+    $('#datos_planilla').show;
+    $('#select_prov').hide();
+    $('#fake_file').val('');
+    
+
+}
+
+
+function createFileUploader(){
+ 
+    if($("#uploader")[0] != null){
+   
+       $("#uploader").fileUploader({
+                        // perl script
+                        file_types: "xls",
+                        type_file: "planilla_xls",
+                        ajaxFile: "importPresupuestoProveedores.pl",
+                        proveedor: prov,
+                        uploadFolder: "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/",
+                        funcionOnComplete: function (){
+                                    onCompleteFileUpload(prov);
+                                }
+        });
+
+    }
+}
+
 
 </script>
 
@@ -46,7 +74,7 @@
     <form method=post  name="proveedorDataForm" id="proveedorDataForm">
 
           <form method=post  name="planillaDataForm" id="planillaDataForm">
-            <fieldset>
+            <fieldset id="select_prov">
                       <legend class="titulo_legend">[% "Datos de contacto del proveedor" | i18n %]</legend>  
                       <p>Seleccione el proveedor para el cual cargara un presupuesto</p>
                 
@@ -61,42 +89,25 @@
               <!-- VER BIEN Q PONER-->
               <p>Seleccione el archivo que desea cargar </p>
                   
-              <form action=/cgi-bin/koha/adquisiciones/importPresupuestoProveedores.pl enctype="multipart/form-data" method=post name="formPlanilla" id="formPlanilla">
-                  <div>
-                        <input type="file" name="datafile" size="30">
-                  </div>
-                      
-                            [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Enviar' | i18n %]",
-                                                                        boton   => "boton_enviar",
-                                                                        onClick => "formPlanilla.submit();",
-                                            ) ;
-
-                            [% END %]
-
-           <!--        <div id="div_uploader" style="display: none">
+              <!--<form action=/cgi-bin/koha/adquisiciones/importPresupuestoProveedores.pl enctype="multipart/form-data" method=post name="formPlanilla" id="formPlanilla">-->
+                  <div id="div_uploader" >
                             <li>
                                 <div id="uploader"></div>
                             </li>
-                   </div>-->
-
-
-                  <!--[% PERL %]
-                        print C4::AR::Filtros::link_to(   text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-                                                                url =>  "/cgi-bin/koha/adquisiciones/importPresupuestoProveedor.pl", 
-                                                                params =>   ["id_proveedor=[% proveedor.getId %]"],
-                                                                title =>    "[% 'Importar Presupuesto' | i18n %]"
-                                                        );
-                  [% END %]-->
-              </form>
+                   </div>
+          <!--    </form>-->
 
           </fieldset>
 
           <fieldset>
-               <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend> 
+               <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend>                
+               <div id="datos_planilla">
+                        <!--  [% FOREACH resultsloop %]   
                               
+                          [% END %]-->
 
-               <ul>
+               </div>
+               <ul  id="datos_presupuesto" style="display: none">
                      <li class="sub_item">
                            <label for="descripcion" id="label_descripcion"> [% "Descripcion" | i18n %] *</label>
                            <input id="descripcion" name="descripcion" class="required" type="text" size="25">
@@ -130,9 +141,6 @@
 <div>
          <strong>(*) [% "Obligatorio" | i18n %]</strong>
 </div>
-
-
-
 
 
 [% INCLUDE "intranet-bottom.inc" %]

@@ -10,46 +10,104 @@ function assignFileName(idInput){
 
 ; (function($) {
 
+
+// FUNCION ORIGINAL
+  
+//     $.fn.extend({
+//         fileUploader: function(options) { 
+//         	opt = $.extend({}, $.uploadSetUp.defaults, options);
+//             if (opt.file_types.match('jpg') && !opt.file_types.match('jpeg')) 
+//             	opt.file_types += ',jpeg';
+//             $this = $(this);
+//             new $.uploadSetUp();
+//         }
+//     });
+
+
     $.fn.extend({
-        fileUploader: function(options) { 
-        	opt = $.extend({}, $.uploadSetUp.defaults, options);
-            if (opt.file_types.match('jpg') && !opt.file_types.match('jpeg')) 
-            	opt.file_types += ',jpeg';
-            $this = $(this);
-            new $.uploadSetUp();
-        }
+         fileUploader: function(options) { 
+         opt = $.extend({}, $.uploadSetUp.defaults, options);
+         if (opt.file_types.match('jpg') && !opt.file_types.match('jpeg')) {
+                opt.file_types += ',jpeg';
+                opt.file_types += ',gif';
+         }
+         if (opt.file_types.match('xls') && !opt.file_types.match('odt')) {
+                opt.file_types += ',odt';
+               
+         }
+         $this = $(this);
+        
+         new $.uploadSetUp();
+      }
     });
+
+
 
     $.uploadSetUp = function() {
         $('body').append($('<div></div>').append($('<iframe src="about:blank" id="myFrame" name="myFrame" style="display: none;"></iframe>')));
-        $this.append($('<form target="myFrame" enctype="multipart/form-data" action="' + opt.ajaxFile + '" method="post" name="myUploadForm" id="myUploadForm"></form>')
-            .append(
-	    $('<input type="hidden" name="nro_socio" value="' + opt.nro_socio + '" />'),	
-            $('<input type="hidden" name="upload" value="' + opt.uploadFolder + '" />'),
-            $('<div class="select" title="Subir una foto"></div>').append($(
-                  '<div class="fileinputs">'+
-                            '<input id="myUploadFile" class="file" type="file" value="" name="picture"/>'+
-                            '<div class="fakefile">'+
-                                '<input id="fake_file"/>'+
-                                '<img src='+imagesForJS+"/iconos/subir_foto.png"+' />'+
-                            '</div>'+
-                          '</div>')), 
-            $('<ul id="ul_files"></ul>'))
-	     );
-        init();
+        
+         if(opt.type_file != "foto"){
+              $this.append($('<form target="myFrame" enctype="multipart/form-data" action="' + opt.ajaxFile + '" method="post" name="myUploadForm" id="myUploadForm"></form>')
+                  .append(
+	   
+                $('<input type="hidden" name="id_prov" value="' + opt.prov + '" />'),   
+                          $('<input type="hidden" name="upload" value="' + opt.uploadFolder + '" />'),
+                          $('<div class="select" title="Subir un presupuesto"></div>').append($(
+                                '<div class="fileinputs">'+
+                                          '<input id="myUploadFile" class="file" type="file" value="" name="planilla"/>'+
+                                          '<div class="fakefile">'+
+                                              '<input id="fake_file"/>'+
+                                              '<img src='+imagesForJS+"/iconos/subir_foto.png"+' />'+
+                                          '</div>'+
+                                        '</div>')), 
+                          $('<ul id="ul_files"></ul>'))
+                      );
+        
+        } else {
+              $this.append($('<form target="myFrame" enctype="multipart/form-data" action="' + opt.ajaxFile + '" method="post" name="myUploadForm" id="myUploadForm"></form>')
+                .append(
+                  $('<input type="hidden" name="nro_socio" value="' + opt.nro_socio + '" />'),	
+                      $('<input type="hidden" name="upload" value="' + opt.uploadFolder + '" />'),
+                      $('<div class="select" title="Subir una foto"></div>').append($(
+                            '<div class="fileinputs">'+
+                                      '<input id="myUploadFile" class="file" type="file" value="" name="picture"/>'+
+                                      '<div class="fakefile">'+
+                                          '<input id="fake_file"/>'+
+                                          '<img src='+imagesForJS+"/iconos/subir_foto.png"+' />'+
+                                      '</div>'+
+                                    '</div>')), 
+                      $('<ul id="ul_files"></ul>'))
+                  );
+            }
+            init();*/
     };
 
     $.uploadSetUp.defaults = {
         // image types allowed
-        file_types: "jpg,gif,png",
+  //      file_types: "jpg,gif,png",
         // perl script
         ajaxFile: "upload.pl",
         // absolute path for upload pictures folder (don't forget to chmod)
-        uploadFolder: "/ajaxMultiFileUpload/upload/",
+        //uploadFolder: "/ajaxMultiFileUpload/upload/"*/,
         // callback function
 	funcionOnComplete: '',
     };
 
+    
+//  FUNCION ORIGINAL
+
+//     $.uploadSetUp.defaults = {
+//         // image types allowed 
+//         file_types: "jpg,gif,png",
+//         // perl script
+//         ajaxFile: "upload.pl",
+//         // absolute path for upload pictures folder (don't forget to chmod)
+//         uploadFolder: "/ajaxMultiFileUpload/upload/",
+//         // callback function
+//     funcionOnComplete: '',
+//     };
+    
+    
     function init() {
 
         // if file type is allowed, submit form

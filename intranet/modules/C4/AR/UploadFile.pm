@@ -54,14 +54,14 @@ sub uploadPhoto{
 		if (!grep(/$ext/i,@extensiones_permitidas)) {
 			$msg_object->{'error'}= 1;
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U341', 'params' => []} ) ;
-            C4::AR::Debug::debug("UploadFile => uploadPhoto => error U341");	
+            C4::AR::Debug::debug("UploadFile => uploadPhoto => extension no permitida error U341");	
 		} else 
 		{
 	
 			if (!(open(WFD,">$write_file"))) {
 				$msg_object->{'error'}= 1;
 				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U342', 'params' => []} ) ;	
-                C4::AR::Debug::debug("UploadFile => uploadPhoto => error U342");    
+                C4::AR::Debug::debug("UploadFile => uploadPhoto => no se puede escribir error U342");    
 			}
 			else	
 			{

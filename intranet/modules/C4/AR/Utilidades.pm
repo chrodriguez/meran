@@ -1836,7 +1836,7 @@ sub generarComboProveedores{
     }
 
     $options_hash{'name'}       = $params->{'name'}||'proveedor_id';
-    $options_hash{'id'}         = $params->{'id'}||'id';
+    $options_hash{'id'}         = $params->{'id'}||'proveedor';
     $options_hash{'size'}       = $params->{'size'}||1;
     $options_hash{'class'}      = 'required';
     $options_hash{'multiple'}   = $params->{'multiple'}||0;
@@ -2952,7 +2952,7 @@ sub catalogoAutocomplete{
     my $textout = "";
 
     foreach my $hash (@$matches){
-            $textout.= $hash->{'doc'}."|".$hash->{'group'}."|".$hash->{'weight'}."|".$hash->{'stamp'}."\n";
+            $textout.= $hash->{'doc'}."|\n";
             #push (@results_array, $hash->{'titulo'});
             printHASH($results);
     }
