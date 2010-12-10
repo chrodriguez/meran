@@ -88,7 +88,7 @@ function assignFileName(idInput){
         // perl script
         ajaxFile: "upload.pl",
         // absolute path for upload pictures folder (don't forget to chmod)
-        uploadFolder: "/ajaxMultiFileUpload/upload/",
+        //uploadFolder: "/ajaxMultiFileUpload/upload/"*/,
         // callback function
 	funcionOnComplete: '',
     };
