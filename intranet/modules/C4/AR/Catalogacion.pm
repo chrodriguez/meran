@@ -78,18 +78,18 @@ sub _meran_to_marc{
         C4::AR::Debug::debug("_meran_to_marc => cant_subcampos => ".$infoArrayNivel->[$i]->{'cant_subcampos'});
         my @subcampos_array;
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
-        for(my $j=0;$j<$cant_subcampos;$j++){
+        for(my $j=0;$j<$cant_subcampos;$j++) {
             my $subcampo = $subcampos_hash->{$j};
             C4::AR::Debug::debug("CAMPO => ".$campo);
             C4::AR::Debug::debug("_meran_to_marc => subcampo, dato => ".$subcampos_array->[$j]->{'dato'});
             C4::AR::Debug::debug("_meran_to_marc => subcampo, datoReferencia => ".$subcampos_array->[$j]->{'datoReferencia'});
-            while ( my ($key, $value) = each(%$subcampo) ){
+            while ( my ($key, $value) = each(%$subcampo) ) {
                 $value = _procesar_referencia($campo, $key, $value, $itemtype);
                 if ( ($value ne '')&&(C4::AR::Utilidades::existeInArray($key, @{$autorizados{$campo}} ) )) {
                 #el subcampo $key, esta autorizado para el campo $campo
                     push(@subcampos_array, ($key => $value));
                     C4::AR::Debug::debug("campo ".$campo." ACEPTADO clave = ".$key." valor: ".$value);
-                }else{
+                } else {
                     C4::AR::Debug::debug("campo ".$campo." NO ACEPTADO clave = ".$key." valor: ".$value);
 #                     $msg_object->{'error'} = 1;
 #                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [$campo.", ".$key." valor: ".$value]} ) ;
@@ -97,7 +97,7 @@ sub _meran_to_marc{
             }
         }# END for(my $j=0;$j<$cant_subcampos;$j++)
 
-        if(scalar(@subcampos_array) > 0){
+        if(scalar(@subcampos_array) > 0) {
             #el indicador undefined # (numeral) debe ser reemplazado por blanco el asci correspondiente
             $field = MARC::Field->new($campo, $indentificador_1, $indentificador_2, @subcampos_array);            
 #             FIXME DEPRECATEDDDDDDDDDDD, estoy testeando append_fields
@@ -784,6 +784,7 @@ sub _procesar_referencia {
 
     }#END if($estructura){
        
+    C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada???????????????????????????????????????:     ".$dato);
     #si no tiene la estructura o no tiene referencia, se devuelve el dato como viene 
     return $dato;
 }
