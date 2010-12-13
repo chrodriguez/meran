@@ -28,44 +28,6 @@ use vars qw(@EXPORT @ISA);
 );
 
 
-=item
-    Esta funcion agrega un vector de monedas que recibe como parametror  
-    Parametros: 
-                HASH: {id_proveedor},{id_moneda}
-=cut
-sub agregarMonedas{
-
-    my ($params) = @_;
-
-    my $proveedor_moneda = C4::Modelo::AdqProveedorMoneda->new();
-    my $msg_object= C4::AR::Mensajes::create();
-    my $db = $proveedor_moneda->db;
-
- 
-     if (!($msg_object->{'error'})){
-           $db->{connect_options}->{AutoCommit} = 0;
-           $db->begin_work;
-          my $id_proveedor;
-          my $id_moneda;
-          my $adq_proveedor_moneda; 
-
-              for(my $i=0;$i<scalar(@{$params->{'monedas_array'}});$i++){
-                $id_proveedor                   = $params->{'id_proveedor'};
-                $id_moneda                      = $params->{'monedas_array'}->[$i];
-                $adq_proveedor_moneda        = getAdqProveedorMoneda($id_moneda, $id_proveedor, $db);
-                $adq_proveedor_moneda->eliminar();
-                $msg_object->{'error'}= 0;
-             }
-             $db->commit;
-
- 
-
- 
-           $db->{connect_options}->{AutoCommit} = 1;
-     }
-     return ($msg_object);
-}
-
 
 =item
     Esta funcion elimina una modena al proveedor  
@@ -122,9 +84,6 @@ sub getAdqProveedorMoneda{
     my $adq_proveedor_moneda = C4::Modelo::AdqProveedorMoneda::Manager->get_adq_proveedor_moneda(   
                                                                     db => $db,
                                                                     query   => [ proveedor_id => { eq => $id_proveedor} , moneda_id => { eq => $id_moneda }], 
-#                                                                     require_objects => ['nivel1'],
-#                                                                     select          => ['cat_registro_marc_n1.*']    
-#                                                                     require_objects => ['ref_disponibilidad', 'ref_estado']
                                                                 );
 
     if( scalar($adq_proveedor_moneda) > 0){
@@ -157,7 +116,7 @@ sub agregarMoneda{
                $proveedor_moneda->agregarMonedaProveedor($params);
                $msg_object->{'error'}= 0;
 #                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A023', 'params' => []});
-#              a mano porque no anda:
+#              no aagrega el codigo de mensaje
                $db->commit;
            };
  
@@ -190,12 +149,11 @@ sub agregarProveedor{
     my $proveedor = C4::Modelo::AdqProveedor->new();
     my $msg_object= C4::AR::Mensajes::create();
     my $db = $proveedor->db;
-    my $proveedor_moneda = C4::Modelo::AdqProveedorMoneda->new();
 
      _verificarDatosProveedor($param,$msg_object);
 
     if (!($msg_object->{'error'})){
-          # 	entro si no hay algun error, todos los campos ingresados son validos
+          # entro si no hay algun error, todos los campos ingresados son validos
           $db->{connect_options}->{AutoCommit} = 0;
           $db->begin_work;
 
@@ -205,11 +163,10 @@ sub agregarProveedor{
               my $id_proveedor = $proveedor->getId();
 
               for(my $i=0;$i<scalar(@{$param->{'monedas_array'}});$i++){
-      C4::AR::Debug::debug("entro ".$param->{'monedas_array'}->[$i]);
                 my %parametros;
                 $parametros{'id_proveedor'}   = $id_proveedor;
-                $parametros{'id_moneda'}      = $param->{'monedas_array'}->[$i];
-
+                $parametros{'id_moneda'}      = $param->{'monedas_array'}->[$i];          
+                my $proveedor_moneda = C4::Modelo::AdqProveedorMoneda->new(db => $db);    
                 $proveedor_moneda->agregarMonedaProveedor(\%parametros,$db);
               }
 

@@ -14,11 +14,23 @@ function monedas(){
   // agrega monedas en el cliente solamente, y se guardan todos los datos juntos cuando se selecciona "guardar"
   $('#agregar_moneda').click(function(){
       if(($('#moneda').val() == "") || ($('#id_moneda').val() == "")){
-          jConfirm(POR_FAVOR_INGRESE_UNA_MONEDA, function(confirmStatus){ })      
+          jConfirm(POR_FAVOR_INGRESE_UNA_MONEDA, function(){ })      
       }else{
           var idMonedaNueva = $('#id_moneda').val()
           var nombreMoneda = $('#moneda').val()
-          $('#monedas').append('<ul id="'+idMonedaNueva+'"> <input name="options" class="monedas" type="checkbox" value="'+idMonedaNueva+'"/>'+nombreMoneda+'</ul>')   
+          
+        var cantidad = 0 
+        $('.monedas').each(function(index) {     
+        if($(this).attr('value') == idMonedaNueva){ 
+            cantidad++
+        }
+        }); 
+        if(cantidad == 0){      
+            $('#monedas').append('<ul id="'+idMonedaNueva+'"> <input name="options" class="monedas" type="checkbox" value="'+idMonedaNueva+'"/>'+nombreMoneda+'</ul>') 
+        }
+          
+          
+  
           var checkeados = 0
           $('.monedas').each(function(index) {
                 arreglo[checkeados] = $(this).val()
@@ -38,7 +50,7 @@ function monedas(){
              }
            });   
            if(checkeados == 0){
-               jConfirm(POR_FAVOR_SELECCIONE_LAS_MONEDAS_A_BORRAR, function(confirmStatus){ })
+               jConfirm(POR_FAVOR_SELECCIONE_LAS_MONEDAS_A_BORRAR, function(){ })
            }else{
                borrarMoneda(arreglo)
            }          

@@ -39,7 +39,7 @@ __PACKAGE__->meta->setup(
 
 # ************************************************************** FUNCIONES *******************************************************************
 
-# Elimina una o muchas monedas a un proveedor
+# Elimina una moneda a un proveedor
 # parametros: id_proveedor, id_moneda
 sub eliminar{
     my ($self)      = shift;
@@ -52,24 +52,20 @@ sub eliminar{
 # Agrega una moneda a un proveedor
 # parametros: id_proveedor, id_moneda
 sub agregarMonedaProveedor{
-    
     my ($self) = shift;
-    my ($data, $db) = @_;
-
-    $self->db($db);
+    my ($data) = @_;
 
     $self->setProveedorId($data->{'id_proveedor'});
     $self->setMonedaId($data->{'id_moneda'});
 
     $self->save();
-
 }
 
 # *********************************************************** FIN - FUNCIONES *****************************************************************
 
 
 
-# *********************************************************************************Getter y Setter*******************************************************************
+# ********************************************************Getter y Setter*******************************************************************
 
 sub setProveedorId{
     my ($self) = shift;
@@ -83,7 +79,7 @@ sub setMonedaId{
     $self->moneda_id($id_moneda);
 }
 
-# ******************************************************************************FIN Getter y Setter*******************************************************************
+# ******************************************************FIN Getter y Setter*******************************************************************
 
 
 1;
