@@ -1628,7 +1628,9 @@ function crearCalendar(obj){
     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 
-    $("#"+obj.getIdCompCliente()).datepicker({ dateFormat: 'dd/mm/yy' });
+    //     $("#"+obj.getIdCompCliente()).datepicker({ dateFormat: 'dd/mm/yy' });
+    crearDatePicker(obj.getIdCompCliente());
+    
 }
 
 function crearTextAnio(obj){
