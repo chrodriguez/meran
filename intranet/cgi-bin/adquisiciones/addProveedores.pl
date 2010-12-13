@@ -10,6 +10,7 @@ use JSON;
 my $input = new CGI;
 
 my $comboDeTipoDeDoc = &C4::AR::Utilidades::generarComboTipoDeDoc();
+my $tipo_materiales  = &C4::AR::Utilidades::generarComboTipoDeMaterial();
 
 my $obj=$input->param('obj');
 
@@ -52,14 +53,19 @@ if($obj){
     $params{'email'}                = $obj->{'email'};
     $params{'plazo_reclamo'}        = $obj->{'plazo_reclamo'};
 
-# TODO AGREGAR TIPOS DE MATERIALES, FORMAS DE ENVIO!!!
+# TODO AGREGAR FORMAS DE ENVIO!!!
 
     $params{'proveedor_activo'}     = 1; 
     $params{'actionType'}           = $obj->{'tipoAccion'};
 
 # Monedas:
 
-    $params{'monedas_array'}           = $obj->{'monedas_array'}; 
+    $params{'monedas_array'}        = $obj->{'monedas_array'}; 
+
+# Tipo de materiales:
+
+    $params{'materiales_array'}     = $obj->{'materiales_array'}; 
+
 
 # FIXME pueden pasar directamente $obj a agregarProveedor es una HASH = a $params
 
@@ -71,8 +77,9 @@ if($obj){
 
 }else{
 
-  $t_params->{'addProveedor'} = 1;
-  $t_params->{'combo_tipo_documento'} = $comboDeTipoDeDoc; 
+     $t_params->{'addProveedor'}            = 1;
+     $t_params->{'combo_tipo_documento'}    = $comboDeTipoDeDoc; 
+     $t_params->{'tipo_materiales'}         = $tipo_materiales; 
 
   C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

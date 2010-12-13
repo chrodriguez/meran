@@ -1804,6 +1804,50 @@ sub generarComboTipoDeDoc{
     return $combo_tipo_documento; 
 }
 
+#genera el combo multiselect de tipo de materiales
+sub generarComboTipoDeMaterial{
+    my ($params) = @_;
+
+    my @select_tipo_material_array;
+    my %select_tipo_material;
+    my $materiales        = &C4::AR::Referencias::obtenerTiposDeMaterial();
+
+    foreach my $material (@$materiales) {
+        push(@select_tipo_material_array, $material->getId);
+        $select_tipo_material{$material->getId}  = $material->getNombre;
+    }
+
+    $select_tipo_material{''}                = 'SIN SELECCIONAR';
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){ 
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}       = $params->{'name'}||'tipo_material_id';
+    $options_hash{'id'}         = $params->{'id'}||'tipo_material_id';
+    $options_hash{'size'}       = $params->{'size'}||4;
+    $options_hash{'class'}      = 'required';
+    $options_hash{'multiple'}   = $params->{'multiple'}||1;
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoDoc");
+
+    push (@select_tipo_material_array, '');
+    $options_hash{'values'}     = \@select_tipo_material_array;
+    $options_hash{'labels'}     = \%select_tipo_material;
+
+    my $combo_tipo_materiales   = CGI::scrolling_list(\%options_hash);
+
+    return $combo_tipo_materiales; 
+}
+
+
 
 sub generarComboProveedores{
     my ($params) = @_;

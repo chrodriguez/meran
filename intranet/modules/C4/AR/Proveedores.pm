@@ -156,18 +156,30 @@ sub agregarProveedor{
           # entro si no hay algun error, todos los campos ingresados son validos
           $db->{connect_options}->{AutoCommit} = 0;
           $db->begin_work;
-
           my $id_moneda;
+          
            eval{
               $proveedor->agregarProveedor($param);
               my $id_proveedor = $proveedor->getId();
 
+#             monedas
               for(my $i=0;$i<scalar(@{$param->{'monedas_array'}});$i++){
                 my %parametros;
                 $parametros{'id_proveedor'}   = $id_proveedor;
                 $parametros{'id_moneda'}      = $param->{'monedas_array'}->[$i];          
                 my $proveedor_moneda = C4::Modelo::AdqProveedorMoneda->new(db => $db);    
-                $proveedor_moneda->agregarMonedaProveedor(\%parametros,$db);
+                $proveedor_moneda->agregarMonedaProveedor(\%parametros);
+              }
+              
+#             materiales
+              for(my $i=0;$i<scalar(@{$param->{'materiales_array'}});$i++){
+                C4::AR::Debug::debug("provedor : ".$id_proveedor." material : ".$param->{'materiales_array'}->[$i]);
+              
+                my %parametros;
+                $parametros{'id_proveedor'}     = $id_proveedor;
+                $parametros{'id_material'}      = $param->{'materiales_array'}->[$i];          
+                my $proveedor_material = C4::Modelo::AdqProveedorTipoMaterial->new(db => $db);    
+                $proveedor_material->agregarMaterialProveedor(\%parametros);
               }
 
               $msg_object->{'error'} = 0;

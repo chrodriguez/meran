@@ -68,6 +68,15 @@ function monedas(){
     }
     
 }
+
+function getMateriales(){
+    var array_materiales = new Array()
+    var i = 0
+    $('#tipo_material_id option:selected').each(function(index){  
+        array_materiales[i] = index
+    })
+    return array_materiales
+}
    
 
 function updateAgregarProveedor(responseText){
@@ -98,6 +107,7 @@ function agregarProveedor(){
       objAH.fax                 = $('#fax').val();  
       objAH.tipo_proveedor      = $('#proveedorDataForm input:radio:checked').val();
       objAH.monedas_array       = arreglo;
+      objAH.materiales_array    = getMateriales();
       
       objAH.tipoAccion          = 'AGREGAR_PROVEEDOR';
       objAH.sendToServer();

@@ -8,7 +8,6 @@ use C4::Modelo::RefTipoDocumento;
 use C4::Modelo::RefPais;
 use C4::Modelo::RefProvincia;
 use C4::Modelo::RefLocalidad;
-# use C4::Modelo::AdqProveedorMoneda;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
@@ -49,10 +48,17 @@ __PACKAGE__->meta->setup(
         type        => 'one to one',
       },
 
-#     one to many asi trae monedad en un vector de objetos
+#     one to many asi trae monedas en un vector de objetos
       moneda_ref => 
       {
         class       => 'C4::Modelo::AdqProveedorMoneda',
+        key_columns => { id => 'proveedor_id' },
+        type        => 'one to many',
+      },
+      
+      ref_tipo_material => 
+      {
+        class       => 'C4::Modelo::AdqProveedorTipoMaterial',
         key_columns => { id => 'proveedor_id' },
         type        => 'one to many',
       },
@@ -64,7 +70,7 @@ __PACKAGE__->meta->setup(
 
 );
 
-# *************************************************************************FUNCIONES DEL MODELO | PROVEEDORES************************************************************
+# ********************************************FUNCIONES DEL MODELO | PROVEEDORES*****************************************************
 
 sub desactivar{
     my ($self) = shift;
@@ -79,9 +85,6 @@ sub agregarProveedor{
     if($params->{'tipo_proveedor'} eq "persona_juridica"){
         $params->{'tipo_doc'} = 0;
     }
-
-#     C4::AR::Debug::debug("tipo proveedor ".$params->{'tipo_proveedor'});
-#     C4::AR::Debug::debug("tipo doc ".$params->{'tipo_doc'});
 
     $self->setNombre($params->{'nombre'});
     $self->setApellido($params->{'apellido'});
@@ -123,18 +126,12 @@ sub editarProveedor{
 }
 
 
-sub agregarMoneda{
- 
-#      my ($params) = @_;
-#      agregar la moneda
-}
-
-# ****************************************************FIN FUNCIONES DEL MODELO | PROVEEDORES**************************************************************
+# ***************************************FIN FUNCIONES DEL MODELO | PROVEEDORES*************************************************************
 
 
 
 
-# *********************************************************************************Getters y Setters*******************************************************************
+# *******************************************************Getters y Setters***************************************************************
 
 sub setApellido{
     my ($self) = shift;
@@ -221,27 +218,23 @@ sub setTelefono{
     my ($self) = shift;
     my ($telefono) = @_;
     utf8::encode($telefono);
-#     if (C4::AR::Validator::countAlphaNumericChars($telefono) = 0){
-       $self->telefono($telefono);
-#     }
+    $self->telefono($telefono);
+
 }
 
 sub setFax{
     my ($self) = shift;
     my ($fax) = @_;
     utf8::encode($fax);
- #   if ((C4::AR::Validator::countAlphaChars($fax) = 0) & (C4::AR::Validator::countSymbolChars($fax) = 0)){
-      $self->fax($fax);
-  #  }
+    $self->fax($fax);
 }
 
 sub setPlazoReclamo{
     my ($self) = shift;
     my ($plazoRec) = @_;
     utf8::encode($plazoRec);
- #   if (C4::AR::Validator::countAlphaChars($plazoRec) = 0) & (C4::AR::Validator::countSymbolChars($plazoRec) = 0){
-      $self->plazo_reclamo($plazoRec);
-    }
+    $self->plazo_reclamo($plazoRec);
+}
 
 sub setActivo{
     my ($self) = shift;
@@ -327,7 +320,7 @@ sub getActivo{
 
 
 
-# *************************************************************************************FIN Getter y Setter*******************************************************************
+# *******************************************************FIN Getter y Setter*******************************************************************
 
 1;
 
