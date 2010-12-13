@@ -32,17 +32,15 @@ $(document).ready(function() {
 });
 
 function onCompleteFileUpload(){
-     alert(document.getElementById('myUploadFile').value);
-
+   
    //  $('#foto').html("<img border='0' width='96px' height='96px' title='" + USUARIO.text + "(" + USUARIO.ID + ")' alt='" + USUARIO.text + "(" + USUARIO.ID + ")' src='[% themelang %]/pictures/" + USUARIO.ID + ".jpg'>");
    //  $('#datos_presupuesto').hide(); 
    //  $('#div_boton_eliminar_foto').show();
   //   $('#div_uploader').hide();
+  
     $('#datos_planilla').show;
     $('#select_prov').hide();
     $('#fake_file').val('');
-    
-
 }
 
 
@@ -88,7 +86,10 @@ function createFileUploader(){
                 
               <!-- VER BIEN Q PONER-->
               <p>Seleccione el archivo que desea cargar </p>
-                  
+               <form action=/cgi-bin/koha/adquisiciones/importPresupuestoProveedores.pl enctype="multipart/form-data" method=post name="formPlanilla" id="formPlanilla">   
+                  <input type="file" name="file" id="file"> 
+                  <input type="submit" value="aceptar">
+               </form> 
               <!--<form action=/cgi-bin/koha/adquisiciones/importPresupuestoProveedores.pl enctype="multipart/form-data" method=post name="formPlanilla" id="formPlanilla">-->
                   <div id="div_uploader" >
                             <li>
@@ -101,13 +102,20 @@ function createFileUploader(){
 
           <fieldset>
                <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend>                
-               <div id="datos_planilla">
-                        <!--  [% FOREACH resultsloop %]   
-                              
-                          [% END %]-->
-
-               </div>
-               <ul  id="datos_presupuesto" style="display: none">
+               
+               
+                  <div id="datos_planilla">
+                           <ul  id="datos_presupuesto"> 
+                                  [% FOREACH dato IN datos_presupuesto %]
+                                          
+                                                  <li class="sub_item">
+                                                        <p>hola</p>
+                                                  </li>
+                                                  
+                                  [% END %]
+                           </ul>
+                  </div>
+              <!-- <ul  id="datos_presupuesto" style="display: none">
                      <li class="sub_item">
                            <label for="descripcion" id="label_descripcion"> [% "Descripcion" | i18n %] *</label>
                            <input id="descripcion" name="descripcion" class="required" type="text" size="25">
@@ -123,7 +131,7 @@ function createFileUploader(){
                            <label for="precio" id="precio"> [% "Precio" | i18n %] *</label>
                            <input id="precio" name="precio" class="required" type="text" size="25">
                       </li>
-               </ul>
+               </ul>-->
           </fieldset>
           <div class="buttonContainerHorizontal">
               <ul class="listaMenuBotones" >

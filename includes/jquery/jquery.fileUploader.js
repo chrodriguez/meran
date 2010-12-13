@@ -79,16 +79,16 @@ function assignFileName(idInput){
                       $('<ul id="ul_files"></ul>'))
                   );
             }
-            init();*/
+            init();
     };
 
     $.uploadSetUp.defaults = {
         // image types allowed
-  //      file_types: "jpg,gif,png",
+        // file_types: "jpg,gif,png",
         // perl script
         ajaxFile: "upload.pl",
         // absolute path for upload pictures folder (don't forget to chmod)
-        //uploadFolder: "/ajaxMultiFileUpload/upload/"*/,
+        // uploadFolder: "/ajaxMultiFileUpload/upload/"*/,
         // callback function
 	funcionOnComplete: '',
     };

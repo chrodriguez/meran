@@ -95,7 +95,7 @@ sub obtenerValorCampo {
     my ($campo,$id)=@_;
  	my $ref_valores = C4::Modelo::RefLocalidad::Manager->get_ref_localidad
 						( select   => [$campo],
-						  query =>[ LOCALIDAD => { eq => $id} ]);
+						  query =>[ id => { eq => $id} ]);
     	
 # 	return ($ref_valores->[0]->getCampo($campo));
   if(scalar(@$ref_valores) > 0){
