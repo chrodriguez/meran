@@ -119,8 +119,8 @@ sub uploadFile{
     my @extensiones_permitidas  = ("odt","xls");
   
     my @nombreYextension        = split('\.',$filepath);
-
     if (scalar(@nombreYextension)==2) { 
+    
     # verifica que el nombre del archivo tenga el punto (.)
             my $ext         = @nombreYextension[1];
             my $buff        = '';
@@ -133,7 +133,6 @@ sub uploadFile{
     #         {
     #     
             if ((open(WFD,">$write_file"))) {
-                    C4::AR::Debug::debug($write_file);
     #                 $msg_object->{'error'}= 1;
     #                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U342', 'params' => []} ) ;  
     #                 C4::AR::Debug::debug("UploadFile => uploadPhoto => error U342");    

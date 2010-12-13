@@ -1,15 +1,114 @@
 /*
  * LIBRERIA addProveedores v 1.0.1
  * Esta es una libreria creada para el sistema KOHA
- * Contendran las funciones para permitir la circulacion en el sistema
- * Fecha de creacion 22/10/2008
+ * Contendran las funciones para agregar proveedores al sistema
+ * Fecha de creacion 10/11/2010
  *
  */
-
-
+   
 //*********************************************Agregar Proveedor*********************************************
+
+var arreglo = new Array() // global, arreglo con los id de las moneda que se le agregan al proveedor
+
+function monedas(){
+  // agrega monedas en el cliente solamente, y se guardan todos los datos juntos cuando se selecciona "guardar"
+  $('#agregar_moneda').click(function(){
+      if(($('#moneda').val() == "") || ($('#id_moneda').val() == "")){
+          jConfirm(POR_FAVOR_INGRESE_UNA_MONEDA, function(){ })      
+      }else{
+          var idMonedaNueva = $('#id_moneda').val()
+          var nombreMoneda = $('#moneda').val()
+          
+        var cantidad = 0 
+        $('.monedas').each(function(index) {     
+        if($(this).attr('value') == idMonedaNueva){ 
+            cantidad++
+        }
+        }); 
+        if(cantidad == 0){      
+            $('#monedas').append('<ul id="'+idMonedaNueva+'"> <input name="options" class="monedas" type="checkbox" value="'+idMonedaNueva+'"/>'+nombreMoneda+'</ul>') 
+        }
+          
+          
+  
+          var checkeados = 0
+          $('.monedas').each(function(index) {
+                arreglo[checkeados] = $(this).val()
+                checkeados++
+           });  
+
+      }     
+  }); 
+  
+   // anda ok
+   $('#borrar_moneda').click(function(){
+           var checkeados = 0
+           $('.monedas').each(function(index) {
+             if($(this).attr('checked')){ 
+                 arreglo[checkeados] = $(this).val()
+                 checkeados++
+             }
+           });   
+           if(checkeados == 0){
+               jConfirm(POR_FAVOR_SELECCIONE_LAS_MONEDAS_A_BORRAR, function(){ })
+           }else{
+               borrarMoneda(arreglo)
+           }          
+   }); 
    
+    function borrarMoneda(arreglo){
+      $('.monedas').each(function(index) {
+        if($(this).attr('checked')){ 
+          $(this).remove()
+          var value = $(this).val()
+          $('#'+value+'').remove()
+        }
+      });
+      $('#moneda').val("")
+    }
+    
+}
    
+
+function updateAgregarProveedor(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+}
+
+function agregarProveedor(){
+
+      objAH                     = new AjaxHelper(updateAgregarProveedor);
+      objAH.url                 = '/cgi-bin/koha/adquisiciones/addProveedores.pl';
+      objAH.debug               = true;
+      objAH.apellido            = $('#apellido').val();
+      objAH.nombre              = $('#nombre').val();
+      objAH.domicilio           = $('#domicilio').val();
+      objAH.tipo_doc            = $('#tipo_documento_id').val();
+      objAH.nro_doc             = $('#nro_doc').val();
+      objAH.razon_social        = $('#razon_social').val();
+      objAH.telefono            = $('#telefono').val();
+      objAH.pais                = $('#pais').val();
+      objAH.cuit_cuil           = $('#cuit_cuil').val();
+      objAH.provincia           = $('#provincia').val();
+      objAH.ciudad              = $('#id_ciudad').val();
+      objAH.email               = $('#email').val();
+      objAH.plazo_reclamo       = $('#plazo_reclamo').val();
+      objAH.fax                 = $('#fax').val();  
+      objAH.tipo_proveedor      = $('#proveedorDataForm input:radio:checked').val();
+      objAH.monedas_array       = arreglo;
+      
+      objAH.tipoAccion          = 'AGREGAR_PROVEEDOR';
+      objAH.sendToServer();
+}
+// ***************************************** FIN - Agregar Proveedor ******************************************************
+
+
+
+
+// ***************************************** Validaciones ***************************************************************
+
 var HASH_MESSAGES = new Array(); //para manejar las reglas de validacion y sus mensajes del FORM dinamicamente
      
 function _freeMemory(array){
@@ -98,45 +197,6 @@ function verDatosPersonaJuridica(){
   
   $('#razon_social').focus()
 }
-
-function updateAgregarProveedor(responseText){
-    if (!verificarRespuesta(responseText))
-            return(0);
-    var Messages=JSONstring.toObject(responseText);
-    setMessages(Messages);
-}
-
-function agregarProveedor(){
-
-      objAH                     = new AjaxHelper(updateAgregarProveedor);
-      objAH.url                 = '/cgi-bin/koha/adquisiciones/addProveedores.pl';
-      objAH.debug               = true;
-      objAH.apellido            = $('#apellido').val();
-      objAH.nombre              = $('#nombre').val();
-      objAH.domicilio           = $('#domicilio').val();
-      objAH.tipo_doc            = $('#tipo_documento_id').val();
-      objAH.nro_doc             = $('#nro_doc').val();
-      objAH.razon_social        = $('#razon_social').val();
-      //objAH.proveedor_activo    = $("input[@name=proveedor_activo]:checked").val();
-      objAH.telefono            = $('#telefono').val();
-      objAH.pais                = $('#pais').val();
-      objAH.cuit_cuil           = $('#cuit_cuil').val();
-      objAH.provincia           = $('#provincia').val();
-      objAH.ciudad              = $('#id_ciudad').val();
-      objAH.email               = $('#email').val();
-      objAH.plazo_reclamo       = $('#plazo_reclamo').val();
-      objAH.fax                 = $('#fax').val();  
-      objAH.tipo_proveedor      = $('#proveedorDataForm input:radio:checked').val();
-      
-      objAH.tipoAccion          = 'AGREGAR_PROVEEDOR';
-      objAH.sendToServer();
-}
-// ***************************************** FIN - Agregar Proveedor ******************************************************
-
-
-
-
-// ***************************************** Validaciones ***************************************************************
 
 function save(){
    $('#proveedorDataForm').submit();

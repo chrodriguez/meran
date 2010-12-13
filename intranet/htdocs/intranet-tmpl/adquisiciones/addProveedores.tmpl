@@ -13,6 +13,8 @@
          validateForm(agregarProveedor)
          $('#datos_proveedor').hide()
          CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
+         CrearAutocompleteMonedas({IdInput: 'moneda', IdInputHidden: 'id_moneda'})
+         monedas()
  });
 
 </script>
@@ -115,6 +117,21 @@
 </fieldset>
 <fieldset>
       <legend class="titulo_legend">[% "Monedas" | i18n %]</legend>
+        <li class="sub_item"> 
+          <div id="monedas">
+          
+          </div>
+        </li>
+          <!-- Autocomplete Monedas -->
+          <li class="sub_item"> 
+          <label for="moneda"> [% "Monedas posibles" | i18n %]</label>
+          <input  id="moneda" name="moneda" type="text" size="25" >           
+          <input  id="agregar_moneda" name="agregar_moneda" type="button" size="15" value="Agregar Moneda">
+          <input  id="borrar_moneda" name="borrar_moneda" type="button" size="15" value="Borrar Moneda">
+           <input type="hidden" id="id_moneda" name="id_moneda">
+          </li>
+
+
 </fieldset>
 
 <div class="buttonContainerHorizontal">

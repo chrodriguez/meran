@@ -148,7 +148,6 @@ function updatePrestamosInterBibliotecarios(responseText){
 }
 
 function createFileUploader(){
-  C4::AR::Debug::debug("Holaaaaa");
 	if($("#uploader")[0] != null){
 
       
@@ -158,7 +157,7 @@ function createFileUploader(){
 						ajaxFile: "uploadPicture.pl",
 						nro_socio: USUARIO.ID,
                         type_file: "foto",
-                        uploadFolder: "/ajaxMultiFileUpload/upload/"*/,
+                        uploadFolder: "/ajaxMultiFileUpload/upload/",
 						funcionOnComplete: function (){
                                     onCompleteFileUpload(USUARIO.ID);
 								}

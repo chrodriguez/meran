@@ -2,12 +2,10 @@
 
 use strict;
 use C4::Auth;
-
 use C4::Context;
 use C4::AR::Proveedores;
 use CGI;
 use JSON;
-
 
 my $input = new CGI;
 
@@ -54,10 +52,14 @@ if($obj){
     $params{'email'}                = $obj->{'email'};
     $params{'plazo_reclamo'}        = $obj->{'plazo_reclamo'};
 
-# TODO AGREGAR TIPOS DE MATERIALES, FORMAS DE ENVIO y MONEDAS!!!
+# TODO AGREGAR TIPOS DE MATERIALES, FORMAS DE ENVIO!!!
 
     $params{'proveedor_activo'}     = 1; 
     $params{'actionType'}           = $obj->{'tipoAccion'};
+
+# Monedas:
+
+    $params{'monedas_array'}           = $obj->{'monedas_array'}; 
 
 # FIXME pueden pasar directamente $obj a agregarProveedor es una HASH = a $params
 
@@ -70,7 +72,7 @@ if($obj){
 }else{
 
   $t_params->{'addProveedor'} = 1;
-  $t_params->{'combo_tipo_documento'} = $comboDeTipoDeDoc;
+  $t_params->{'combo_tipo_documento'} = $comboDeTipoDeDoc; 
 
   C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

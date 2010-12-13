@@ -1,125 +1,160 @@
 /*
- * LIBRERIA datosProveedores v 1.0.0
- * Esta es una libreria creada para el sistema KOHA
- * Contendran las funciones para permitir la circulacion en el sistema
- * Fecha de creación 12/11/2010
- *
- */
+* LIBRERIA datosProveedores v 1.0.0
+* Esta es una libreria creada para el sistema KOHA
+* Contendran las funciones para editar un proveedor
+* Fecha de creación 12/11/2010
+*
+*/
 
 
 //*********************************************Editar Proveedor********************************************* 
-   $(document).ready(function() {
-     
-        CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
-        CrearAutocompleteMonedas({IdInput: 'moneda', IdInputHidden: 'id_moneda'})
-        ocultarDatos()
-        monedas()
-   
-      });   
-      
-      
-    function monedas(){
-      $('#agregar_moneda').click(function() {
-          //alert($('#moneda').val() + $('#id_moneda').val() )
-          //aler($('#id_moneda').val())
-          if(($('#moneda').val() == "") || ($('#id_moneda').val() == "")){
-              alert('Por favor ingrese una moneda')            
-          }else{
-              var idMonedaNueva = $('#id_moneda').val()
-              agregarMoneda(idMonedaNueva)
-          }
-          
-      });   
-     
-   }
-   
-   // agregar la moneda en la base por ajax y volver a cargarlas en el div
-   function agregarMoneda(idMonedaNueva){
-      objAH                     = new AjaxHelper(updateMonedasProveedor)
-      objAH.url                 = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl'
-      objAH.debug               = true
+$(document).ready(function() {
 
-      objAH.id_proveedor        = $('#id_proveedor').val()
-      objAH.id_moneda           = idMonedaNueva
+    CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
+    CrearAutocompleteMonedas({IdInput: 'moneda', IdInputHidden: 'id_moneda'})
+    ocultarDatos()
+    monedas()
 
-      objAH.tipoAccion          = 'GUARDAR_MONEDA_PROVEEDOR'
-      objAH.sendToServer();   
-   }
-   
-   
-   function updateMonedasProveedor(){
-//        if (!verificarRespuesta(responseText))
-//             return(0)
-//        var Messages=JSONstring.toObject(responseText)
-//        alert(Messages)
-//         alert('ok')
-   }
-      
-      
-   function ocultarDatos(){
-     
-      if(($('#apellido').val() == "") && ($('#razon_social').val() != "")){
-        
-          //es una persona juridica
-          $('#datos_proveedor').show()
-          $('#nombre').hide()
-          $('#label_nombre').hide()
-          $('#apellido').hide()  
-          $('#label_apellido').hide()  
-          $('#nro_doc').hide()    
-          $('#label_tipo_documento_id').hide()
-          $('#numero_documento').hide()
-          $('#tipo_documento_id').hide()
-          $('#razon_social').show()
-          $('#label_razon_social').show()    
-      }else{
-        
-          //es una persona fisica
-          $('#datos_proveedor').show()
-          $('#razon_social').hide()
-          $('#label_razon_social').hide()
-          $('#nombre').show()
-          $('#label_nombre').show()
-          $('#apellido').show()  
-          $('#label_apellido').show()  
-          $('#nro_doc').show()    
-          $('#label_nro_doc').show()
-          $('#tipo_documento_id').show()   
-        
-      }     
-   }
+});   
 
-   function modificarDatosDeProveedor(){
-        objAH                     = new AjaxHelper(updateDatosProveedor);
-        objAH.url                 = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl';
-        objAH.debug               = true;
 
-        objAH.id_proveedor        = $('#id_proveedor').val();
-        objAH.nombre              = $('#nombre').val();
-        objAH.apellido            = $('#apellido').val();
-        objAH.tipo_documento      = $('#tipo_documento_id').val();
-        objAH.numero_documento    = $('#numero_documento').val();
-        objAH.razon_social        = $('#razon_social').val();
-        objAH.cuit_cuil           = $('#cuit_cuil').val();
-        objAH.cuidad              = $('#cuidad').val();
-        objAH.domicilio           = $('#domicilio').val();
-        objAH.telefono            = $('#telefono').val();
-        objAH.fax                 = $('#fax').val();
-        objAH.email               = $('#email').val();
-        objAH.plazo_reclamo       = $('#plazo_reclamo').val();
-        objAH.proveedor_activo    = $("input[@name=proveedor_activo]:checked").val();
+function monedas(){
 
-        objAH.tipoAccion          = 'GUARDAR_MODIFICION_PROVEEDOR';
-        objAH.sendToServer();
-    }
+    $('#agregar_moneda').click(function(){
+        if(($('#moneda').val() == "") || ($('#id_moneda').val() == "")){
+            jConfirm(POR_FAVOR_INGRESE_UNA_MONEDA, function(){ })                
+        }else{
+            var idMonedaNueva = $('#id_moneda').val()        
+            var cantidad = 0
+            $('.monedas').each(function(index) {     
+            if($(this).attr('value') == idMonedaNueva){ 
+                cantidad++
+            }
+            }); 
+            if(cantidad == 0){      
+                agregarMoneda(idMonedaNueva)
+                $('#moneda').val("") 
+            }
+        }
 
-    function updateDatosProveedor(responseText){
-          if (!verificarRespuesta(responseText))
-            return(0);
-        var Messages=JSONstring.toObject(responseText);
-        setMessages(Messages);
-    }
+    }); 
 
-    function changePage(ini){
-        objAH.changePage(ini);
-    }
+    $('#borrar_moneda').click(function(){
+        var checkeados = 0
+        var arreglo = new Array() 
+        $('.monedas').each(function(index) {
+            if($(this).attr('checked')){ 
+                arreglo[checkeados] = $(this).val()
+                checkeados++
+            }
+        });   
+        if(checkeados == 0){
+            jConfirm(POR_FAVOR_SELECCIONE_LAS_MONEDAS_A_BORRAR, function(){ })
+        }else{
+            borrarMoneda(arreglo)
+            $('#moneda').val("")                
+        }
+    }); 
+
+}
+
+// elimina la/s monedas seleccionadas, borra en la base por ajax y vuelve a cargarlas en el div
+function borrarMoneda(arreglo){
+    objAH                     = new AjaxHelper(updateMonedasProveedor)
+    objAH.url                 = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl'
+    objAH.debug               = true
+
+    objAH.id_proveedor        = $('#id_proveedor').val()
+    objAH.monedas_array       = arreglo
+
+    objAH.tipoAccion          = 'ELIMINAR_MONEDA_PROVEEDOR'
+    objAH.sendToServer();   
+}
+
+
+//    function updateMonedasProveedor(responseText){
+//        $('#monedas_proveedor').html(responseText);
+//    }
+
+// agregar la moneda en la base por ajax y vulve a cargarlas en el div
+function agregarMoneda(idMonedaNueva){
+    objAH                     = new AjaxHelper(updateMonedasProveedor)
+    objAH.url                 = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl'
+    objAH.debug               = true
+
+    objAH.id_proveedor        = $('#id_proveedor').val()
+    objAH.id_moneda           = idMonedaNueva
+
+    objAH.tipoAccion          = 'GUARDAR_MONEDA_PROVEEDOR'
+    objAH.sendToServer();   
+}
+
+
+function updateMonedasProveedor(responseText){
+    $('#monedas_proveedor').html(responseText); 
+}
+
+
+function ocultarDatos(){
+    if(($('#apellido').val() == "") && ($('#razon_social').val() != "")){
+        //es una persona juridica
+        $('#datos_proveedor').show()
+        $('#nombre').hide()
+        $('#label_nombre').hide()
+        $('#apellido').hide()  
+        $('#label_apellido').hide()  
+        $('#nro_doc').hide()    
+        $('#label_tipo_documento_id').hide()
+        $('#numero_documento').hide()
+        $('#tipo_documento_id').hide()
+        $('#razon_social').show()
+        $('#label_razon_social').show()    
+    }else{
+        //es una persona fisica
+        $('#datos_proveedor').show()
+        $('#razon_social').hide()
+        $('#label_razon_social').hide()
+        $('#nombre').show()
+        $('#label_nombre').show()
+        $('#apellido').show()  
+        $('#label_apellido').show()  
+        $('#nro_doc').show()    
+        $('#label_nro_doc').show()
+        $('#tipo_documento_id').show()   
+    }     
+}
+
+function modificarDatosDeProveedor(){
+    objAH                     = new AjaxHelper(updateDatosProveedor);
+    objAH.url                 = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl';
+    objAH.debug               = true;
+
+    objAH.id_proveedor        = $('#id_proveedor').val();
+    objAH.nombre              = $('#nombre').val();
+    objAH.apellido            = $('#apellido').val();
+    objAH.tipo_documento      = $('#tipo_documento_id').val();
+    objAH.numero_documento    = $('#numero_documento').val();
+    objAH.razon_social        = $('#razon_social').val();
+    objAH.cuit_cuil           = $('#cuit_cuil').val();
+    objAH.cuidad              = $('#cuidad').val();
+    objAH.domicilio           = $('#domicilio').val();
+    objAH.telefono            = $('#telefono').val();
+    objAH.fax                 = $('#fax').val();
+    objAH.email               = $('#email').val();
+    objAH.plazo_reclamo       = $('#plazo_reclamo').val();
+    objAH.proveedor_activo    = $("input[@name=proveedor_activo]:checked").val();
+
+    objAH.tipoAccion          = 'GUARDAR_MODIFICION_PROVEEDOR';
+    objAH.sendToServer();
+}
+
+function updateDatosProveedor(responseText){
+    if (!verificarRespuesta(responseText))
+        return(0);
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+}
+
+function changePage(ini){
+    objAH.changePage(ini);
+}

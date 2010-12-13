@@ -10,25 +10,29 @@ use Spreadsheet::ParseExcel;
  
 my $query       = new CGI;
 my $prov   = $query->param('id');
-my $filepath    = $query->param('fake_file');
+
+# PARA FILEUPLOAD
+# my $filepath    = $query->param('planilla');
+#----------------
+
+
+# PARA INPUT COMUN
+my $filepath    = $query->param('file');
+#-----------------
+
+
 my $authnotrequired = 0;
 my $presupuestos_dir= "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores";
 my $write_file  = $presupuestos_dir."/".$filepath;
 
 
-C4::AR::Debug::debug($write_file);
-
-
-  ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
+($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
                       template_name   => '/adquisiciones/cargaPresupuesto.tmpl',
                       query       => $query,
                       type        => "intranet",
                       authnotrequired => 0,
                       flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
-   });
-
-
-
+});
 
 my ($error,$codMsg,$message) = &C4::AR::UploadFile::uploadFile($prov,$write_file,$filepath, $presupuestos_dir);
 
@@ -42,7 +46,6 @@ if ( !defined $workbook ) {
  
 my @table;
 my @reg;
-
      
 for my $worksheet ( $workbook->worksheets() ) {
      my ( $row_min, $row_max ) = $worksheet->row_range();
@@ -50,16 +53,15 @@ for my $worksheet ( $workbook->worksheets() ) {
  
      for my $row ( $row_min .. $row_max ) {
          for my $col ( $col_min .. $col_max ) {
-                 my $cell = $worksheet->get_cell( $row, $col );
-                 next unless $cell;
-                 @reg[$col]= $cell->value();
-                 C4::AR::Debug::debug($reg[$col])      
-         }
-     @table[$row]= @reg; 
+                  my $cell = $worksheet->get_cell( $row, $col );
+                  next unless $cell;
+                  @reg[$col]= $cell->value();               
+         } 
+#      @table[$row]= @reg; 
+     push(@table, \@reg);
      }
 }
-
-
-$t_params->{'datos_presupuesto'} = $table;
+C4::AR::Debug::debug("LONG DEL ARRAY: ".scalar(@table));
+$t_params->{'datos_presupuesto'} = \@table;
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

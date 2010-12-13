@@ -689,13 +689,13 @@ sub getSocioLike {
                                                                             sort_by => $ordenAux,
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
-                                                              require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                              with_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
                                                                                   'persona.documento'],
      ); 
 
     #Obtengo la cant total de socios para el paginador
     my $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => \@filtros,
-                                                              require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                              with_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
                                                                                   'persona.documento'],
                                                                      );
 

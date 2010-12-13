@@ -39,27 +39,33 @@ __PACKAGE__->meta->setup(
 
 # ************************************************************** FUNCIONES *******************************************************************
 
+# Elimina una moneda a un proveedor
+# parametros: id_proveedor, id_moneda
+sub eliminar{
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    $self->delete();    
+}
+
+
 # Agrega una moneda a un proveedor
 # parametros: id_proveedor, id_moneda
 sub agregarMonedaProveedor{
-    
     my ($self) = shift;
     my ($data) = @_;
-
-    C4::AR::Debug::debug("id prov : ".$data->{'id_proveedor'});
 
     $self->setProveedorId($data->{'id_proveedor'});
     $self->setMonedaId($data->{'id_moneda'});
 
     $self->save();
-
 }
 
 # *********************************************************** FIN - FUNCIONES *****************************************************************
 
 
 
-# *********************************************************************************Getter y Setter*******************************************************************
+# ********************************************************Getter y Setter*******************************************************************
 
 sub setProveedorId{
     my ($self) = shift;
@@ -73,7 +79,7 @@ sub setMonedaId{
     $self->moneda_id($id_moneda);
 }
 
-# ******************************************************************************FIN Getter y Setter*******************************************************************
+# ******************************************************FIN Getter y Setter*******************************************************************
 
 
 1;
