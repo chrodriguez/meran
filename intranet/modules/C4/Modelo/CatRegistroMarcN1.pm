@@ -86,8 +86,10 @@ sub getAutorObject{
     #obtengo la referencia al autor
     my $ref_autor   = $marc_record->subfield("100","a");
     my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
+    C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> ref => ".$ref_autor);
 
     my $autor = C4::AR::Referencias::getAutorObject($ref);
+    C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> autor => ".$autor);
 
     if(!$autor){
         C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> EL OBJECTO (ID) AUTOR NO EXISTE");

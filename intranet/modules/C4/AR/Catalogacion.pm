@@ -461,7 +461,7 @@ sub marc_record_to_meran {
             #C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
             my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype);
             $hash_temp{'dato'}                  = $valor_referencia;
-            #C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato despues de getDatoFromReferencia: ".$hash_temp{'dato'});
+            C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato despues de getDatoFromReferencia ?????????????: ".$hash_temp{'dato'});
 
             push(@subcampos_array, \%hash_temp);
         }
@@ -683,7 +683,7 @@ sub getDatoFromReferencia{
                         #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
                         #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
 
-                        return $valor_referencia;
+                        $dato = $valor_referencia;
 
                     };
 
@@ -717,8 +717,9 @@ sub getRefFromStringConArrobas{
     @datos_array[1]; #tabla
     @datos_array[2]; #dato
 =cut
-
+    
 #     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato: ".$dato);
+#     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 1: ".@datos_array[1]);
 #     C4::AR::Debug::debug("Catalogacion => getRefFromStringConArrobas => dato despues del split 2: ".@datos_array[2]);
 
     return @datos_array[1];
@@ -772,7 +773,7 @@ sub _procesar_referencia {
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Modulo:           ".$obj_generico->toString);
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result:    ".$string_result);
 
-                return($string_result);
+                $dato = $string_result;
             };
 
             if ($@){
@@ -784,7 +785,7 @@ sub _procesar_referencia {
 
     }#END if($estructura){
        
-    C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada???????????????????????????????????????:     ".$dato);
+    C4::AR::Debug::debug("Catalogacion => _procesar_referencia => salida =>     ".$dato);
     #si no tiene la estructura o no tiene referencia, se devuelve el dato como viene 
     return $dato;
 }
@@ -900,18 +901,18 @@ sub getEstructuraYDatosDeNivel{
     my $tipo_ejemplar;
 
     if( $params->{'nivel'} eq '1'){
-        $nivel = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
-        $tipo_ejemplar = 'ALL';
+        $nivel          = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
+        $tipo_ejemplar  = 'ALL';
         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel1FromId1 => ID1 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '2'){
-        $nivel = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
-        $tipo_ejemplar = $nivel->getTipoDocumento;
+        $nivel          = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
+        $tipo_ejemplar  = $nivel->getTipoDocumento;
         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel2FromId2 => ID2 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '3'){
-        $nivel = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
-        $tipo_ejemplar = $nivel->nivel2->getTipoDocumento;
+        $nivel          = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
+        $tipo_ejemplar  = $nivel->nivel2->getTipoDocumento;
         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel3FromId3 => ID3 ".$params->{'id3'});
     }
 
@@ -1610,11 +1611,11 @@ sub cantNivel2 {
 sub getDatosFromNivel{
     my ($params) = @_;
 
-    C4::AR::Debug::debug("Catalogacion => getDatosFromNivel => ======================================================================");
+#     C4::AR::Debug::debug("Catalogacion => getDatosFromNivel => ======================================================================");
     my $nivel       = $params->{'nivel'};
     my $itemType    = $params->{'id_tipo_doc'};
 
-    C4::AR::Debug::debug("Catalogacion => getDatosFromNivel => tipo de documento: ".$itemType);
+#     C4::AR::Debug::debug("Catalogacion => getDatosFromNivel => tipo de documento: ".$itemType);
 
     #obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
     my @resultEstYDatos = getEstructuraYDatosDeNivel($params);
