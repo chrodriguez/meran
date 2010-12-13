@@ -610,7 +610,7 @@ sub setCredentials{
       case 'estudiante'      {$self->convertirEnEstudiante}
       case 'librarian'       {$self->convertirEnLibrarian}
       case 'superLibrarian'  {$self->convertirEnSuperLibrarian; $self->setIs_super_user(1);}
-      else                   {$self->convertirEnEstudiante} # estudiante deberÃ­a ser default?
+      else                   {$self->convertirEnEstudiante} # estudiante debería ser default?
     }
 
     $self->setCredentialType($credential_type);
