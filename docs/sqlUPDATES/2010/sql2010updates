@@ -487,3 +487,79 @@ CREATE TABLE  `ref_estado_presupuesto` (
 ) ENGINE = MYISAM ;
 
 ALTER TABLE  `adq_prepuesto_detalle` ADD  `seleccionado` INT NOT NULL DEFAULT  '0';
+
+
+-- -----------------------------------------------------
+-- Table `adq_ref_tipo_recomendacion`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `adq_ref_tipo_recomendacion` ;
+
+CREATE  TABLE IF NOT EXISTS `adq_ref_tipo_recomendacion` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `tipo_recomendacion` VARCHAR(255) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `adq_recomendacion`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `adq_recomendacion` ;
+
+CREATE  TABLE IF NOT EXISTS `adq_recomendacion` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `fecha` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  `activa` TINYINT(4) NOT NULL DEFAULT '1' ,
+  `adq_ref_tipo_recomendacion_id` INT(11) NOT NULL ,
+  `usr_socio_id` INT(11) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `fk_adq_recomendacion_adq_ref_tipo_recomendacion1`
+    FOREIGN KEY (`adq_ref_tipo_recomendacion_id` )
+    REFERENCES `adq_ref_tipo_recomendacion` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_adq_recomendacion_usr_socio1`
+    FOREIGN KEY (`usr_socio_id` )
+    REFERENCES `usr_socio` (`id_socio` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+CREATE INDEX `fk_adq_recomendacion_adq_ref_tipo_recomendacion1` ON `adq_recomendacion` (`adq_ref_tipo_recomendacion_id` ASC) ;
+
+CREATE INDEX `fk_adq_recomendacion_usr_socio1` ON `adq_recomendacion` (`usr_socio_id` ASC) ;
+
+
+-- -----------------------------------------------------
+-- Table `adq_recomendacion_detalle`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `adq_recomendacion_detalle` ;
+
+CREATE  TABLE IF NOT EXISTS `adq_recomendacion_detalle` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `cat_nivel2_id` INT(11) NULL DEFAULT NULL ,
+  `autor` VARCHAR(255) NULL DEFAULT NULL ,
+  `titulo` VARCHAR(255) NULL DEFAULT NULL ,
+  `lugar_publicacion` VARCHAR(255) NULL DEFAULT NULL ,
+  `editorial` VARCHAR(255) NULL DEFAULT NULL ,
+  `fecha_publicacion` DATE NULL DEFAULT NULL ,
+  `coleccion` VARCHAR(255) NULL DEFAULT NULL ,
+  `isbn_issn` VARCHAR(45) NULL DEFAULT NULL ,
+  `cantidad_ejemplares` INT(5) NOT NULL DEFAULT '1' ,
+  `motivo_propuesta` TEXT NOT NULL ,
+  `comentario` TEXT NULL DEFAULT NULL ,
+  `reserva_material` TINYINT(4) NOT NULL DEFAULT '0' ,
+  `adq_recomendacion_id` INT(11) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `fk_adq_recomendacion_detalle_adq_recomendacion1`
+    FOREIGN KEY (`adq_recomendacion_id` )
+    REFERENCES `adq_recomendacion` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+CREATE INDEX `fk_adq_recomendacion_detalle_adq_recomendacion1` ON `adq_recomendacion_detalle` (`adq_recomendacion_id` ASC) ;
+
