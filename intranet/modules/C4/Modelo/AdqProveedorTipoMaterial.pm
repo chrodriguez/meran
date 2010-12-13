@@ -11,6 +11,22 @@ __PACKAGE__->meta->setup(
         proveedor_id        => { type => 'integer', length => 11, not_null => 1},
         tipo_material_id    => { type => 'integer', length => 11, not_null => 1},
     ],
+    
+     relationships =>
+        [
+          material_ref => 
+          {
+            class       => 'C4::Modelo::AdqTipoMaterial',
+            key_columns => { tipo_material_id => 'id' },
+            type        => 'one to one',
+          },
+          proveedor_ref => 
+          {
+            class       => 'C4::Modelo::AdqProveedor',
+            key_columns => { proveedor_id => 'id' },
+            type        => 'one to one',
+          },
+      ],
 
     primary_key_columns => [ 'proveedor_id', 'tipo_material_id' ],
 
