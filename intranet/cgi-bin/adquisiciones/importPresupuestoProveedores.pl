@@ -46,22 +46,27 @@ if ( !defined $workbook ) {
  
 my @table;
 my @reg;
+my $presupuesto;
      
+
 for my $worksheet ( $workbook->worksheets() ) {
      my ( $row_min, $row_max ) = $worksheet->row_range();
      my ( $col_min, $col_max ) = $worksheet->col_range();
- 
      for my $row ( $row_min .. $row_max ) {
-         for my $col ( $col_min .. $col_max ) {
+          for my $col ( $col_min .. $col_max ) {
                   my $cell = $worksheet->get_cell( $row, $col );
                   next unless $cell;
-                  @reg[$col]= $cell->value();               
-         } 
-#      @table[$row]= @reg; 
-     push(@table, \@reg);
+                  push(@reg,$cell->value());
+#                   @reg[$col]= $cell->value();
+                  C4::AR::Debug::debug($cell->value());
+#                   if (($row eq $row_min) && ($col eq $col_max + 1)){
+#                         my $recomendacion= $cell->value();
+#                   }
+     }   
+     push(@table,@reg);
      }
 }
-C4::AR::Debug::debug("LONG DEL ARRAY: ".scalar(@table));
+
 $t_params->{'datos_presupuesto'} = \@table;
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

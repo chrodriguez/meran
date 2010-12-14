@@ -43,3 +43,45 @@ __PACKAGE__->meta->setup(
     unique_key => ['id'],
 
 );
+
+#----------------------------------- GETTERS y SETTERS------------------------------------------------
+
+sub setProveedorId{
+    my ($self) = shift;
+    my ($prov) = @_;
+    utf8::encode($prov);
+    $self->proveedor_id ($prov);
+}
+
+sub setFecha{
+    my ($self) = shift;
+    my ($fecha) = @_;
+    $self->fecha($fecha);
+}
+
+sub setRefEstadoPresupuestoId{
+    my ($self) = shift;
+    my ($estado) = @_;
+    utf8::encode($estado);
+    $self->ref_estado_presupuesto_id($estado);
+}
+
+sub getId{
+    my ($self) = shift;
+    return ($self->id);
+}
+
+sub getFecha{
+    my ($self) = shift;
+    return ($self->fecha);
+}
+
+sub getProveedorId{
+    my ($self) = shift;
+    return ($self->proveedor_id);
+}
+
+sub getRefEstadoPresupuestoId{
+    my ($self) = shift;
+    return ($self->ref_estado_presupuesto_id);
+}
