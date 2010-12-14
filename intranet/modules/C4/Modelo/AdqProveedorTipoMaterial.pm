@@ -37,6 +37,7 @@ __PACKAGE__->meta->setup(
 # Agrega un tipo de material a un proveedor
 # parametros: id_proveedor, id_tipo_material
 sub agregarMaterialProveedor{
+
     my ($self) = shift;
     my ($data) = @_;
 
@@ -45,7 +46,6 @@ sub agregarMaterialProveedor{
 
     $self->save();
     
-         C4::AR::Debug::debug("entro");
 }
 
 
@@ -63,17 +63,5 @@ sub setMaterialId{
     my ($id_material) = @_;
     $self->tipo_material_id($id_material);
 }
-
-
-
-
-#sub getNombre{
-#    my ($self) = shift;
-#    return ($self->nombre);
-#    
-#}
-
-
-
 
 1;

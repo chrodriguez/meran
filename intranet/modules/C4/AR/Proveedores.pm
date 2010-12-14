@@ -172,14 +172,12 @@ sub agregarProveedor{
               }
               
 #             materiales
-              for(my $i=0;$i<scalar(@{$param->{'materiales_array'}});$i++){
-                C4::AR::Debug::debug("provedor : ".$id_proveedor." material : ".$param->{'materiales_array'}->[$i]);
-              
-                my %parametros;
-                $parametros{'id_proveedor'}     = $id_proveedor;
-                $parametros{'id_material'}      = $param->{'materiales_array'}->[$i];          
+              for(my $i=0;$i<scalar(@{$param->{'materiales_array'}});$i++){             
+                my %parametros2;
+                $parametros2{'id_proveedor'}     = $id_proveedor;
+                $parametros2{'id_material'}      = $param->{'materiales_array'}->[$i];          
                 my $proveedor_material = C4::Modelo::AdqProveedorTipoMaterial->new(db => $db);    
-                $proveedor_material->agregarMaterialProveedor(\%parametros);
+                $proveedor_material->agregarMaterialProveedor(\%parametros2);
               }
 
               $msg_object->{'error'} = 0;

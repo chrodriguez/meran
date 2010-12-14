@@ -9,9 +9,6 @@ use JSON;
 
 my $input = new CGI;
 
-my $comboDeTipoDeDoc = &C4::AR::Utilidades::generarComboTipoDeDoc();
-my $tipo_materiales  = &C4::AR::Utilidades::generarComboTipoDeMaterial();
-
 my $obj=$input->param('obj');
 
 my ($template, $session, $t_params) = get_template_and_user({
@@ -23,6 +20,7 @@ my ($template, $session, $t_params) = get_template_and_user({
     debug => 1,
 });
 
+# preguntamos si existe el objeto JSON, si es asi, estamos guardando en la base
 if($obj){
     $obj= C4::AR::Utilidades::from_json_ISO($obj);
     
@@ -76,6 +74,10 @@ if($obj){
     print $infoOperacionJSON;
 
 }else{
+# mostramos el template porque esta agregando normalmente
+
+     my $comboDeTipoDeDoc = &C4::AR::Utilidades::generarComboTipoDeDoc();
+     my $tipo_materiales  = &C4::AR::Utilidades::generarComboTipoDeMaterial();
 
      $t_params->{'addProveedor'}            = 1;
      $t_params->{'combo_tipo_documento'}    = $comboDeTipoDeDoc; 
