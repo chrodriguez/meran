@@ -62,11 +62,11 @@ elsif($tipoAccion eq "GUARDAR_MODIFICION_PROVEEDOR"){
                                 );  
 
         my ($Message_arrayref)= C4::AR::Proveedores::editarProveedor($obj);
-        my $infoOperacionJSON=to_json $Message_arrayref;
+#        my $infoOperacionJSON=to_json $Message_arrayref;
         
 
-        C4::Auth::print_header($session);
-        print $infoOperacionJSON;
+#        C4::Auth::print_header($session);
+#        print $infoOperacionJSON;
 
  } #end if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO")
 

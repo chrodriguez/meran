@@ -5,17 +5,52 @@
 * Fecha de creación 12/11/2010
 *
 */
-
-
 //*********************************************Editar Proveedor********************************************* 
+
 $(document).ready(function() {
 
     CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
     CrearAutocompleteMonedas({IdInput: 'moneda', IdInputHidden: 'id_moneda'})
     ocultarDatos()
     monedas()
+    materiales()
 
 });   
+
+var arreglo_materiales = new Array() // arreglo de materiales a agregar en la base
+
+function materiales(){
+
+    // eliminamos la opcion "SIN SELECCIONAR" de la vista
+    $('#tipo_material_id option').last().remove()
+    // se eliminan las opciones seleccionadas de la vista
+    $('#quitar_material').click(function(){
+        var seleccionados = 0
+        // preguntamos si hay alguna opcion seleccionada
+        $('#tipo_material_id option:selected').each(function(){  
+          seleccionados++
+        })
+        // si no hay ninguna seleccionada avisamos
+        if(seleccionados == 0){
+            jConfirm('Por favor seleccione los materiales que desea quitar', function(){ }) 
+        }else{
+            // si hay seleccionadas, las quitamos
+            $('#tipo_material_id option:selected').each(function(){  
+                $(this).remove()
+            })
+        }
+    });
+
+}
+// Devuelve un arreglo con los id de los materiales a agregar
+function getMateriales(){
+    var i = 0
+    $('#tipo_material_id option').each(function(){  
+        arreglo_materiales[i] = $(this).val()
+        i++
+    })
+    return arreglo_materiales
+}
 
 
 function monedas(){
@@ -70,11 +105,6 @@ function borrarMoneda(arreglo){
     objAH.tipoAccion          = 'ELIMINAR_MONEDA_PROVEEDOR'
     objAH.sendToServer();   
 }
-
-
-//    function updateMonedasProveedor(responseText){
-//        $('#monedas_proveedor').html(responseText);
-//    }
 
 // agregar la moneda en la base por ajax y vulve a cargarlas en el div
 function agregarMoneda(idMonedaNueva){
@@ -143,6 +173,7 @@ function modificarDatosDeProveedor(){
     objAH.email               = $('#email').val();
     objAH.plazo_reclamo       = $('#plazo_reclamo').val();
     objAH.proveedor_activo    = $("input[@name=proveedor_activo]:checked").val();
+    objAH.materiales_array    = getMateriales()  
 
     objAH.tipoAccion          = 'GUARDAR_MODIFICION_PROVEEDOR';
     objAH.sendToServer();

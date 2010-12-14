@@ -40,12 +40,24 @@ sub agregarMaterialProveedor{
 
     my ($self) = shift;
     my ($data) = @_;
+    
+    C4::AR::Debug::debug("entra a save");
 
     $self->setProveedorId($data->{'id_proveedor'});
     $self->setMaterialId($data->{'id_material'});
 
     $self->save();
     
+}
+
+# Elimina una material a un proveedor
+# parametros: id_proveedor, id_material
+sub eliminar{
+
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    $self->delete();    
 }
 
 

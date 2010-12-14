@@ -72,7 +72,16 @@
           <label for="proveedor_activo">[% "Proveedor Activo" | i18n %] </label>
           <input id="proveedor_activo" name="proveedor_activo" class="required" type="checkbox" value="[% proveedor.getActivo %]">
           </li>
-            <li class="sub_item"> 
+          
+          <!-- Materiales -->
+          <li class="sub_item"> 
+              <label for="material">[% "Materiales del proveedor" | i18n %]</label>
+              [% tipo_materiales %] 
+              <input type="button" name="quitar_material" value="Quitar" id="quitar_material"/>
+          </li>
+          
+          <!-- Monedas -->
+          <li class="sub_item"> 
             <label for="moneda">[% "Monedas del proveedor" | i18n %]</label>
               <div id="monedas_proveedor">
                 <ul>
@@ -81,16 +90,15 @@
                 [% END %]
                 </ul>
               </div>
-            </li>
-
+          </li>
 
           <!-- Autocomplete Monedas -->
           <li class="sub_item"> 
-          <label for="moneda"> [% "Monedas posibles" | i18n %]</label>
-          <input  id="moneda" name="moneda" type="text" size="25" >           
-          <input  id="agregar_moneda" name="agregar_moneda" type="button" size="15" value="Agregar Moneda">
-          <input  id="borrar_moneda" name="borrar_moneda" type="button" size="15" value="Borrar Moneda">
-          <input type="hidden" id="id_moneda" name="id_moneda">
+              <label for="moneda"> [% "Monedas posibles" | i18n %]</label>
+              <input  id="moneda" name="moneda" type="text" size="25" >           
+              <input  id="agregar_moneda" name="agregar_moneda" type="button" size="15" value="Agregar Moneda">
+              <input  id="borrar_moneda" name="borrar_moneda" type="button" size="15" value="Borrar Moneda">
+              <input type="hidden" id="id_moneda" name="id_moneda">
           </li>
 
           <div id="accion">
