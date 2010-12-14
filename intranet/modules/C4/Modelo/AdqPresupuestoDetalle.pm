@@ -38,11 +38,85 @@ __PACKAGE__->meta->setup(
         type        => 'one to one',
       },
 
-
-
     ],
     
     primary_key_columns => [ 'id' ],
     unique_key => ['id'],
 
 );
+
+
+#----------------------------------- GETTERS y SETTERS------------------------------------------------
+
+sub setAdqPresupuestoId {
+    my ($self) = shift;
+    my ($presupuesto) = @_;
+    utf8::encode($presupuesto);
+    $self->adq_presupuesto_id($presupuesto);
+}
+
+sub setAdqRecomendacionDetalleId  {
+    my ($self) = shift;
+    my ($recomendacion_detalle) = @_;
+    utf8::encode($recomendacion_detalle);
+    $self->adq_recomendacion_detalle_id($recomendacion_detalle);
+}
+
+sub setPrecioUnitario {
+    my ($self) = shift;
+    my ($precio) = @_;
+    utf8::encode($precio);
+    $self->precio_unitario($precio);
+}
+
+sub setCantidad {
+    my ($self) = shift;
+    my ($cantidad) = @_;
+    utf8::encode($cantidad);
+    $self->cantidad($cantidad);
+}
+
+sub setSeleccionado {
+    my ($self) = shift;
+    my ($seleccionado) = @_;
+    utf8::encode($seleccionado);
+    $self->seleccionado($seleccionado);
+}
+
+sub getId{
+    my ($self) = shift;
+    return ($self->id);
+
+}
+
+sub getAdqPresupuestoId{
+    my ($self) = shift;
+    return ($self->adq_presupuesto_id);
+
+}
+
+sub getAdqRecomendacionDetalleId {
+    my ($self) = shift;
+    return ($self->adq_recomendacion_detalle_id);
+
+}
+
+sub getPrecioUnitario  {
+    my ($self) = shift;
+    return ($self->precio_unitario);
+
+}
+
+sub getCantidad  {
+    my ($self) = shift;
+    return ($self->cantidad);
+
+}
+
+sub getCantidad  {
+    my ($self) = shift;
+    return ($self->seleccionado);
+
+}
+
+

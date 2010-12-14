@@ -105,15 +105,31 @@ function createFileUploader(){
                
                
                   <div id="datos_planilla">
-                           <ul  id="datos_presupuesto"> 
-                                  [% FOREACH dato IN datos_presupuesto %]
-                                          
-                                                  <li class="sub_item">
-                                                        <p>hola</p>
-                                                  </li>
-                                                  
+                           <table>       
+                                  [% FOR datos_presupuesto%] 
+                                        <tr>  
+                                            [% FOREACH item IN dato %] 
+                                              
+                                                    <td>[% dato %]</td>  
+                                            
+                                          [% END %] 
+                                         </tr>   
                                   [% END %]
-                           </ul>
+                          </table>                            
+
+                            <!--<ul  id="datos_presupuesto"> 
+                                  [% FOREACH dato IN datos_presupuesto %]
+                                      [% FOREACH item IN dato %]    
+ 
+                                            <li class="sub_item"> 
+                                                
+                                                  <input  id="cantidad" name="cantidad" type="text" value=[% item %]>           
+                                            </li>
+
+                                            
+                                         [% END %]       
+                                  [% END %]
+                           </ul>-->
                   </div>
               <!-- <ul  id="datos_presupuesto" style="display: none">
                      <li class="sub_item">
