@@ -52,21 +52,29 @@ my $presupuesto;
 for my $worksheet ( $workbook->worksheets() ) {
      my ( $row_min, $row_max ) = $worksheet->row_range();
      my ( $col_min, $col_max ) = $worksheet->col_range();
-     for my $row ( $row_min .. $row_max ) {
-          for my $col ( $col_min .. $col_max ) {
-                  my $cell = $worksheet->get_cell( $row, $col );
-                  next unless $cell;
-                  push(@reg,$cell->value());
-#                   @reg[$col]= $cell->value();
-                  C4::AR::Debug::debug($cell->value());
-#                   if (($row eq $row_min) && ($col eq $col_max + 1)){
-#                         my $recomendacion= $cell->value();
-#                   }
-     }   
-     push(@table,@reg);
-     }
+     for my $row ( $row_min + 1 .. $row_max ) {
+        my %hash;
+#         for my $col ( $col_min .. $col_max ) {
+                my $cell = $worksheet->get_cell( $row, $col );
+#                 next unless $cell;
+  #                   push(@reg,$cell->value());
+  # #                   @reg[$col]= $cell->value();
+  # #                   if (($row eq $row_min) && ($col eq $col_max + 1)){
+  # #                         my $recomendacion= $cell->value();
+  #                    }
+
+          $hash{'renglon'}            = $worksheet->get_cell( $row, 0 )->value();
+          $hash{'cantidad'}           = $worksheet->get_cell( $row, 1 )->value();
+          $hash{'articulo'}           = $worksheet->get_cell( $row, 2 )->value();       
+          $hash{'precio_unitario'}    = $worksheet->get_cell( $row, 3 )->value();
+          $hash{'total'}              = $worksheet->get_cell( $row, 4 )->value();
+
+          push(@reg, \%hash);
+#     }  
+  }
 }
 
-$t_params->{'datos_presupuesto'} = \@table;
+
+$t_params->{'datos_presupuesto'} = \@reg;
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
