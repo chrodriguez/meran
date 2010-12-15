@@ -20,7 +20,7 @@ $(document).ready(function() {
 var arreglo_materiales = new Array() // arreglo de materiales a agregar en la base
 
 function materiales(){
-
+    
     // eliminamos la opcion "SIN SELECCIONAR" de la vista
     $('#tipo_material_id option').last().remove()
     

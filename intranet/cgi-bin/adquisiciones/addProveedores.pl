@@ -51,8 +51,6 @@ if($obj){
     $params{'email'}                = $obj->{'email'};
     $params{'plazo_reclamo'}        = $obj->{'plazo_reclamo'};
 
-# TODO AGREGAR FORMAS DE ENVIO!!!
-
     $params{'proveedor_activo'}     = 1; 
     $params{'actionType'}           = $obj->{'tipoAccion'};
 
@@ -63,6 +61,10 @@ if($obj){
 # Tipo de materiales:
 
     $params{'materiales_array'}     = $obj->{'materiales_array'}; 
+    
+# Formas de envio:
+
+    $params{'formas_envios_array'}     = $obj->{'formas_envios_array'}; 
 
 
 # FIXME pueden pasar directamente $obj a agregarProveedor es una HASH = a $params
@@ -76,12 +78,14 @@ if($obj){
 }else{
 # mostramos el template porque esta agregando normalmente
 
-     my $comboDeTipoDeDoc = &C4::AR::Utilidades::generarComboTipoDeDoc();
-     my $tipo_materiales  = &C4::AR::Utilidades::generarComboTipoDeMaterial();
+     my $comboDeTipoDeDoc       = &C4::AR::Utilidades::generarComboTipoDeDoc();
+     my $combo_tipo_materiales  = &C4::AR::Utilidades::generarComboTipoDeMaterial();
+     my $combo_formas_envio     = &C4::AR::Utilidades::generarComboFormasDeEnvio();
 
      $t_params->{'addProveedor'}            = 1;
      $t_params->{'combo_tipo_documento'}    = $comboDeTipoDeDoc; 
-     $t_params->{'tipo_materiales'}         = $tipo_materiales; 
+     $t_params->{'combo_tipo_materiales'}   = $combo_tipo_materiales; 
+     $t_params->{'combo_formas_envio'}      = $combo_formas_envio;
 
   C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

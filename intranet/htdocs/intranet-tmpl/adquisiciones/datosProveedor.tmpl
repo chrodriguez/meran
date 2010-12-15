@@ -76,7 +76,7 @@
           <!-- Materiales -->
           <li class="sub_item"> 
               <label for="material">[% "Materiales del proveedor" | i18n %]</label>
-                <select name="materiales" id="materiales_del_provedor" multiple="multiple" size="4">
+                <select name="materiales" style="width:8%;" id="materiales_del_provedor" multiple="multiple" size="4">
                 [% FOREACH material IN materiales_proveedor %] 
                     <option value="[% material.material_ref.id %]">[% material.material_ref.nombre %]
                 [% END %]
