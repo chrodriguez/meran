@@ -23,11 +23,12 @@ function materiales(){
 
     // eliminamos la opcion "SIN SELECCIONAR" de la vista
     $('#tipo_material_id option').last().remove()
+    
     // se eliminan las opciones seleccionadas de la vista
     $('#quitar_material').click(function(){
         var seleccionados = 0
         // preguntamos si hay alguna opcion seleccionada
-        $('#tipo_material_id option:selected').each(function(){  
+        $('#materiales_del_provedor option:selected').each(function(){  
           seleccionados++
         })
         // si no hay ninguna seleccionada avisamos
@@ -35,8 +36,36 @@ function materiales(){
             jConfirm('Por favor seleccione los materiales que desea quitar', function(){ }) 
         }else{
             // si hay seleccionadas, las quitamos
-            $('#tipo_material_id option:selected').each(function(){  
+            $('#materiales_del_provedor option:selected').each(function(){  
                 $(this).remove()
+            })
+        }
+    });
+    
+    $('#agregar_material').click(function(){
+        var seleccionados = 0
+        // preguntamos si hay alguna opcion seleccionada
+        $('#tipo_material_id option:selected').each(function(){  
+          seleccionados++
+        })
+        // si no hay ninguna seleccionada avisamos
+        if(seleccionados == 0){
+            jConfirm('Por favor seleccione los materiales que desea agregar', function(){ }) 
+        }else{
+            // si hay seleccionadas, las agregamos
+            $('#tipo_material_id option:selected').each(function(value){  
+                var id = $(this).val()
+                var ok = true
+                // pero antes preguntamos si ya tiene ese material el proveedor
+                $('#materiales_del_provedor option').each(function(key){
+                    if($(this).val() == id){
+                        ok = false
+                    }
+                })
+                // si no lo tiene se agrega
+                if(ok){
+                    $(this).clone().appendTo($('#materiales_del_provedor'))
+                }
             })
         }
     });
@@ -45,7 +74,7 @@ function materiales(){
 // Devuelve un arreglo con los id de los materiales a agregar
 function getMateriales(){
     var i = 0
-    $('#tipo_material_id option').each(function(){  
+    $('#materiales_del_provedor option').each(function(){  
         arreglo_materiales[i] = $(this).val()
         i++
     })

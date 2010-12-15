@@ -40,8 +40,6 @@ sub agregarMaterialProveedor{
 
     my ($self) = shift;
     my ($data) = @_;
-    
-    C4::AR::Debug::debug("entra a save");
 
     $self->setProveedorId($data->{'id_proveedor'});
     $self->setMaterialId($data->{'id_material'});
@@ -74,6 +72,11 @@ sub setMaterialId{
     my ($self) = shift;
     my ($id_material) = @_;
     $self->tipo_material_id($id_material);
+}
+
+sub getMaterialId{
+    my ($self) = shift;
+    return ($self->tipo_material_id);
 }
 
 1;

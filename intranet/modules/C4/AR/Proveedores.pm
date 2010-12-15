@@ -8,7 +8,8 @@ use C4::Modelo::AdqProveedor::Manager;
 use C4::Modelo::AdqProveedorMoneda;
 use C4::Modelo::AdqProveedorMoneda::Manager;
 use C4::Modelo::AdqProveedorFormaEnvio::Manager;
-use C4::Modelo::RefAdqMoneda::Manager;
+#use C4::Modelo::RefAdqMoneda::Manager;
+use C4::Modelo::AdqProveedorTipoMaterial;
 use C4::Modelo::AdqProveedorTipoMaterial::Manager;
 
 
@@ -26,7 +27,7 @@ use vars qw(@EXPORT @ISA);
     &getMonedasProveedor;
     &getFormasEnvioProveedor;
     &getMonedas;
-    &_getMaterialesProveedor
+    &getMaterialesProveedor
 );
 
 
@@ -198,6 +199,26 @@ sub agregarProveedor{
     return ($msg_object);
 }
 
+=item 
+Recupero un registro de AdqProveedorTipoMaterial
+retorna un objeto o 0 si no existe
+=cut
+sub getAdqProveedorTipoMaterial{
+    my ($id_material, $id_proveedor, $db) = @_;
+
+    $db = $db || C4::Modelo::AdqProveedorTipoMaterial->new()->db;
+    my $adq_proveedor_tipo_material = C4::Modelo::AdqProveedorTipoMaterial::Manager->get_adq_proveedor_tipo_material(   
+                                                                    db => $db,
+                                                                    query   => [ proveedor_id => { eq => $id_proveedor} , tipo_material_id => { eq => $id_material }], 
+                                                                );
+
+    if( scalar($adq_proveedor_tipo_material) > 0){
+        return ($adq_proveedor_tipo_material->[0]);
+    }else{
+        return 0;
+    }
+}
+
 
 =item
     Esta funcion elimina un proveedor (pone el flag activo en 0)
@@ -252,45 +273,39 @@ sub editarProveedor{
 #         entro si no hay algun error, todos los campos ingresados son validos
           $db->{connect_options}->{AutoCommit} = 0;
           $db->begin_work;
-#          eval{
+          eval{
               $proveedor->editarProveedor($params);
               
 #             materiales
-
 #             antes de agregar borrar todo de la tabla proveedor_tipo_material:
-              my $arreglo_materiales            = _getMaterialesProveedor($params->{'id_proveedor'});
+              my $arreglo_materiales            = getMaterialesProveedor($params->{'id_proveedor'});
               for(my $i=0;$i<scalar(@{$arreglo_materiales});$i++){
-                my $proveedor_material          = C4::Modelo::AdqProveedorTipoMaterial->new(db => $db); 
-                C4::AR::Debug::debug("id_prov: ".$params->{'id_proveedor'}." material_id: ".$arreglo_materiales->[$i]);
-                $proveedor_material->eliminar($params->{'id_proveedor'},$arreglo_materiales->[$i]);
+                my $proveedor_material = getAdqProveedorTipoMaterial($arreglo_materiales->[$i]->getMaterialId, $params->{'id_proveedor'}, $db);
+                $proveedor_material->eliminar();             
               }
+              
 #             se agregan los materiales              
               for(my $i=0;$i<scalar(@{$params->{'materiales_array'}});$i++){
-                C4::AR::Debug::debug("entra a materiales, prov: ".$params->{'id_proveedor'}." material id: ".$params->{'materiales_array'}->[$i]);
                 my %parametros;
                 $parametros{'id_proveedor'}     = $params->{'id_proveedor'};
                 $parametros{'id_material'}      = $params->{'materiales_array'}->[$i];          
                 my $proveedor_material          = C4::Modelo::AdqProveedorTipoMaterial->new(db => $db);   
 
                 $proveedor_material->agregarMaterialProveedor(\%parametros);
-                C4::AR::Debug::debug("paso"); 
               }
               
               $msg_object->{'error'}= 0;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A006', 'params' => []});
               $db->commit;
-#          };
+          };
 
-
-
-#          if ($@){
-
+          if ($@){
           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
-#              &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
-#              $msg_object->{'error'}= 1;
-#              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
-#              $db->rollback;
-#          }
+              &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+              $msg_object->{'error'}= 1;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+              $db->rollback;
+          }
 
     }
 
@@ -361,23 +376,19 @@ sub getProveedorLike {
 =item
    Modulo que devuelve todos los tipos de materiales que tenga el proveedor
 =cut
-sub _getMaterialesProveedor{
+sub getMaterialesProveedor{
  
-   my ($params) = @_;
-   my $id_proveedor = $params;
+    my ($params) = @_;
+    my $id_proveedor = $params;
 
-   my $materiales = C4::Modelo::AdqProveedorTipoMaterial::Manager->get_adq_proveedor_tipo_material(   
+    my $materiales_array_ref = C4::Modelo::AdqProveedorTipoMaterial::Manager->get_adq_proveedor_tipo_material(   
                                                                                         query =>  [ 
                                                                                         proveedor_id  => { eq => $id_proveedor  },
                                                                                         ],
-#                                                                                        require_objects => ['moneda_ref'],
+                                                                                        require_objects => ['material_ref'],
                                                                                         );
-   my @nombres_materiales;
-   foreach my $material (@$materiales){
-      push (@nombres_materiales,$material);
-   }
-    
-   return($materiales);
+ 
+    return($materiales_array_ref);
 }
 
 
@@ -389,18 +400,15 @@ sub getMonedasProveedor{
    my ($params) = @_;
    my $id_proveedor = $params;
 
-   my $monedas = C4::Modelo::AdqProveedorMoneda::Manager->get_adq_proveedor_moneda(   query =>  [ 
+   my $monedas_array_ref = C4::Modelo::AdqProveedorMoneda::Manager->get_adq_proveedor_moneda(   query =>  [ 
                                                                                                 proveedor_id  => { eq => $id_proveedor  },
                                                                                    ],
                                                                                     require_objects => ['moneda_ref'],
    
                                                     );
-   my @nombres_monedas;
-   foreach my $moneda (@$monedas){
-      push (@nombres_monedas,$moneda);
-   }
+
     
-   return($monedas);
+   return($monedas_array_ref);
 }
 
 sub getFormasEnvioProveedor{

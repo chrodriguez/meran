@@ -41,7 +41,7 @@
           <li class="sub_item"> 
           <label for="ciudad"> [% "Ciudad" | i18n %] *</label>
           <input  id="ciudad" name="ciudad" type="text" class="required" size="25" value="[% proveedor.ref_localidad.getNombre %]">
-           <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% proveedor.ref_localidad_id.id %]">
+           <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% proveedor.ref_localidad.id %]">
           </li>
 
           <li class="sub_item"> 
@@ -76,8 +76,14 @@
           <!-- Materiales -->
           <li class="sub_item"> 
               <label for="material">[% "Materiales del proveedor" | i18n %]</label>
-              [% tipo_materiales %] 
-              <input type="button" name="quitar_material" value="Quitar" id="quitar_material"/>
+                <select name="materiales" id="materiales_del_provedor" multiple="multiple" size="4">
+                [% FOREACH material IN materiales_proveedor %] 
+                    <option value="[% material.material_ref.id %]">[% material.material_ref.nombre %]
+                [% END %]
+                </select>
+                <input type="button" name="quitar_material" value="<" id="agregar_material"/>
+                <input type="button" name="quitar_material" value=">" id="quitar_material"/>
+                [% tipo_materiales %] 
           </li>
           
           <!-- Monedas -->
