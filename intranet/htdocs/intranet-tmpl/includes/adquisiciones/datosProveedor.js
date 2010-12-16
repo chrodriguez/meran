@@ -5,18 +5,148 @@
 * Fecha de creación 12/11/2010
 *
 */
-
-
 //*********************************************Editar Proveedor********************************************* 
+
 $(document).ready(function() {
 
     CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
     CrearAutocompleteMonedas({IdInput: 'moneda', IdInputHidden: 'id_moneda'})
     ocultarDatos()
     monedas()
+    materiales()
+    envios()
 
 });   
 
+var arreglo_formas_envio = new Array() // arreglo de formas de envio a agregar en la base
+
+function envios(){
+
+    // eliminamos la opcion "SIN SELECCIONAR" de la vista
+    $('#forma_envio_id option').last().remove()
+    
+    // se eliminan las opciones seleccionadas de la vista
+    $('#quitar_forma_envio').click(function(){
+        var seleccionados = 0
+        // preguntamos si hay alguna opcion seleccionada
+        $('#formas_envio_provedor option:selected').each(function(){  
+          seleccionados++
+        })
+        // si no hay ninguna seleccionada avisamos
+        if(seleccionados == 0){
+            jConfirm('Por favor seleccione las formas de envio que desea quitar', function(){ }) 
+        }else{
+            // si hay seleccionadas, las quitamos
+            $('#formas_envio_provedor option:selected').each(function(){  
+                $(this).remove()
+            })
+        }
+    });
+    
+    $('#agregar_forma_envio').click(function(){
+        var seleccionados = 0
+        // preguntamos si hay alguna opcion seleccionada
+        $('#forma_envio_id option:selected').each(function(){  
+          seleccionados++
+        })
+        // si no hay ninguna seleccionada avisamos
+        if(seleccionados == 0){
+            jConfirm('Por favor seleccione las formas de envio que desea agregar', function(){ }) 
+        }else{
+            // si hay seleccionadas, las agregamos
+            $('#forma_envio_id option:selected').each(function(value){  
+                var id = $(this).val()
+                var ok = true
+                // pero antes preguntamos si ya tiene ese material el proveedor
+                $('#formas_envio_provedor option').each(function(key){
+                    if($(this).val() == id){
+                        ok = false
+                    }
+                })
+                // si no lo tiene se agrega
+                if(ok){
+                    $(this).clone().appendTo($('#formas_envio_provedor'))
+                }
+            })
+        }
+    });
+
+}
+
+// Devuelve un arreglo con los id de las formas de envio a agregar
+function getFormasEnvio(){
+    var i = 0
+    $('#formas_envio_provedor option').each(function(){  
+        arreglo_formas_envio[i] = $(this).val()
+        i++
+    })
+    return arreglo_formas_envio
+}
+
+var arreglo_materiales = new Array() // arreglo de materiales a agregar en la base
+
+function materiales(){
+    
+    // eliminamos la opcion "SIN SELECCIONAR" de la vista
+    $('#tipo_material_id option').last().remove()
+    
+    // se eliminan las opciones seleccionadas de la vista
+    $('#quitar_material').click(function(){
+        var seleccionados = 0
+        // preguntamos si hay alguna opcion seleccionada
+        $('#materiales_del_provedor option:selected').each(function(){  
+          seleccionados++
+        })
+        // si no hay ninguna seleccionada avisamos
+        if(seleccionados == 0){
+            jConfirm('Por favor seleccione los materiales que desea quitar', function(){ }) 
+        }else{
+            // si hay seleccionadas, las quitamos
+            $('#materiales_del_provedor option:selected').each(function(){  
+                $(this).remove()
+            })
+        }
+    });
+    
+    $('#agregar_material').click(function(){
+        var seleccionados = 0
+        // preguntamos si hay alguna opcion seleccionada
+        $('#tipo_material_id option:selected').each(function(){  
+          seleccionados++
+        })
+        // si no hay ninguna seleccionada avisamos
+        if(seleccionados == 0){
+            jConfirm('Por favor seleccione los materiales que desea agregar', function(){ }) 
+        }else{
+            // si hay seleccionadas, las agregamos
+            $('#tipo_material_id option:selected').each(function(value){  
+                var id = $(this).val()
+                var ok = true
+                // pero antes preguntamos si ya tiene ese material el proveedor
+                $('#materiales_del_provedor option').each(function(key){
+                    if($(this).val() == id){
+                        ok = false
+                    }
+                })
+                // si no lo tiene se agrega
+                if(ok){
+                    $(this).clone().appendTo($('#materiales_del_provedor'))
+                }
+            })
+        }
+    });
+
+}
+
+// Devuelve un arreglo con los id de los materiales a agregar
+function getMateriales(){
+    var i = 0
+    $('#materiales_del_provedor option').each(function(){  
+        arreglo_materiales[i] = $(this).val()
+        i++
+    })
+    return arreglo_materiales
+}
 
 function monedas(){
 
@@ -70,11 +200,6 @@ function borrarMoneda(arreglo){
     objAH.tipoAccion          = 'ELIMINAR_MONEDA_PROVEEDOR'
     objAH.sendToServer();   
 }
-
-
-//    function updateMonedasProveedor(responseText){
-//        $('#monedas_proveedor').html(responseText);
-//    }
 
 // agregar la moneda en la base por ajax y vulve a cargarlas en el div
 function agregarMoneda(idMonedaNueva){
@@ -143,6 +268,8 @@ function modificarDatosDeProveedor(){
     objAH.email               = $('#email').val();
     objAH.plazo_reclamo       = $('#plazo_reclamo').val();
     objAH.proveedor_activo    = $("input[@name=proveedor_activo]:checked").val();
+    objAH.materiales_array    = getMateriales() 
+    objAH.formas_envios_array = getFormasEnvio() 
 
     objAH.tipoAccion          = 'GUARDAR_MODIFICION_PROVEEDOR';
     objAH.sendToServer();

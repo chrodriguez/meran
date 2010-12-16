@@ -29,6 +29,8 @@ use JSON;
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw(
+    &generarComboFormasDeEnvio
+    &generarComboTipoDeMaterial
     &monedasAutocomplete
     &buscarCiudades
     &ASCIItoHEX
@@ -1804,6 +1806,48 @@ sub generarComboTipoDeDoc{
     return $combo_tipo_documento; 
 }
 
+#genera el combo multiselect de formas de envio
+sub generarComboFormasDeEnvio{
+    my ($params) = @_;
+
+    my @select_formas_envio_array;
+    my %select_formas_envio;
+    my $formas_envio        = &C4::AR::Referencias::obtenerFormasDeEnvio();
+
+    foreach my $forma_envio (@$formas_envio) {
+        push(@select_formas_envio_array, $forma_envio->getId);
+        $select_formas_envio{$forma_envio->getId}  = $forma_envio->getNombre;
+    }
+
+    $select_formas_envio{''}                = 'SIN SELECCIONAR';
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){ 
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}       = $params->{'name'}||'forma_envio_id';
+    $options_hash{'id'}         = $params->{'id'}||'forma_envio_id';
+    $options_hash{'size'}       = $params->{'size'}||4;
+    $options_hash{'class'}      = 'required';
+    $options_hash{'multiple'}   = $params->{'multiple'}||1;
+
+    push (@select_formas_envio_array, '');
+    $options_hash{'values'}     = \@select_formas_envio_array;
+    $options_hash{'labels'}     = \%select_formas_envio;
+
+    my $combo_formas_envio   = CGI::scrolling_list(\%options_hash);
+
+    return $combo_formas_envio; 
+}
+
 #genera el combo multiselect de tipo de materiales
 sub generarComboTipoDeMaterial{
     my ($params) = @_;
@@ -1836,7 +1880,6 @@ sub generarComboTipoDeMaterial{
     $options_hash{'size'}       = $params->{'size'}||4;
     $options_hash{'class'}      = 'required';
     $options_hash{'multiple'}   = $params->{'multiple'}||1;
-    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoDoc");
 
     push (@select_tipo_material_array, '');
     $options_hash{'values'}     = \@select_tipo_material_array;
@@ -2906,6 +2949,7 @@ sub ciudadesAutocomplete{
     my @result;
     if ($ciudad){
         my($cant, $result) = C4::AR::Utilidades::buscarCiudades($ciudad);# agregado sacar
+        C4::AR::Debug::debug("CANTIDAD DE CIUDADES: ".$cant);
         $textout= "";
         for (my $i; $i<$cant; $i++){
             $textout.= $result->[$i]->{'id'}."|".$result->[$i]->{'nombre'}."\n";

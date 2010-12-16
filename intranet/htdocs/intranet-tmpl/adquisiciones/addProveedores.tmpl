@@ -66,15 +66,6 @@
             <label for="cuit_cuil">[% "CUIT/CUIL" | i18n %] *</label>
             <input  id="cuit_cuil" name="cuit_cuil" class="required" type="text" size="15">
         </li>
-
-        [% IF addProveedor %]
-               
-        [% ELSE  %]
-                 <li class="sub_item">
-                     <label for="proveedor_activo">[% "Proveedor Activo" | i18n %]</label>
-                     <input type="checkbox" name="proveedor_activo" value="proveedor_activo" />
-                </li>
-        [% END %]
      </ul>
     </fieldset>
     <fieldset>
@@ -112,12 +103,16 @@
       <legend class="titulo_legend">[% "Materiales que provee" | i18n %]</legend>
          <li class="sub_item"> 
             <label for="material"> [% "Materiales" | i18n %]</label>
-             [% tipo_materiales %] 
+             [% combo_tipo_materiales %] 
          </li>
 </fieldset>
 
 <fieldset>
       <legend class="titulo_legend">[% "Formas de Envio" | i18n %]</legend>
+        <li class="sub_item"> 
+            <label for="formas_envio"> [% "Envios" | i18n %]</label>
+             [% combo_formas_envio %] 
+         </li>
 </fieldset>
 <fieldset>
       <legend class="titulo_legend">[% "Monedas" | i18n %]</legend>

@@ -66,7 +66,7 @@ __PACKAGE__->meta->setup(
     ],
     
     primary_key_columns => [ 'id' ],
-    unique_key => ['usr_ref_tipo_documento_id','nro_doc'],
+    unique_key => ['nro_doc'],
 
 );
 

@@ -41,7 +41,7 @@
           <li class="sub_item"> 
           <label for="ciudad"> [% "Ciudad" | i18n %] *</label>
           <input  id="ciudad" name="ciudad" type="text" class="required" size="25" value="[% proveedor.ref_localidad.getNombre %]">
-           <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% proveedor.ref_localidad_id.id %]">
+           <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% proveedor.ref_localidad.id %]">
           </li>
 
           <li class="sub_item"> 
@@ -72,7 +72,35 @@
           <label for="proveedor_activo">[% "Proveedor Activo" | i18n %] </label>
           <input id="proveedor_activo" name="proveedor_activo" class="required" type="checkbox" value="[% proveedor.getActivo %]">
           </li>
-            <li class="sub_item"> 
+          
+          <!-- Materiales -->
+          <li class="sub_item"> 
+              <label for="material">[% "Materiales del proveedor" | i18n %]</label>
+                <select name="materiales" style="width:8%;" id="materiales_del_provedor" multiple="multiple" size="4">
+                [% FOREACH material IN materiales_proveedor %] 
+                    <option value="[% material.material_ref.id %]">[% material.material_ref.nombre %]
+                [% END %]
+                </select>
+                <input type="button" name="agregar_material" value="<" id="agregar_material"/>
+                <input type="button" name="quitar_material" value=">" id="quitar_material"/>
+                [% tipo_materiales %] 
+          </li>
+          
+          <!-- Envios -->
+          <li class="sub_item"> 
+              <label for="envios">[% "Formas de envio del proveedor" | i18n %]</label>
+                <select name="formas_envios_proveedor" style="width:8%;" id="formas_envio_provedor" multiple="multiple" size="4">
+                [% FOREACH forma IN formas_envio_proveedor %] 
+                    <option value="[% forma.forma_envio_ref.id %]">[% forma.forma_envio_ref.nombre %]
+                [% END %]
+                </select>
+                <input type="button" name="agregar_forma_envio" value="<" id="agregar_forma_envio"/>
+                <input type="button" name="quitar_forma_envio" value=">" id="quitar_forma_envio"/>
+                [% formas_envio %] 
+          </li>
+          
+          <!-- Monedas -->
+          <li class="sub_item"> 
             <label for="moneda">[% "Monedas del proveedor" | i18n %]</label>
               <div id="monedas_proveedor">
                 <ul>
@@ -81,16 +109,15 @@
                 [% END %]
                 </ul>
               </div>
-            </li>
-
+          </li>
 
           <!-- Autocomplete Monedas -->
           <li class="sub_item"> 
-          <label for="moneda"> [% "Monedas posibles" | i18n %]</label>
-          <input  id="moneda" name="moneda" type="text" size="25" >           
-          <input  id="agregar_moneda" name="agregar_moneda" type="button" size="15" value="Agregar Moneda">
-          <input  id="borrar_moneda" name="borrar_moneda" type="button" size="15" value="Borrar Moneda">
-          <input type="hidden" id="id_moneda" name="id_moneda">
+              <label for="moneda"> [% "Monedas posibles" | i18n %]</label>
+              <input  id="moneda" name="moneda" type="text" size="25" >           
+              <input  id="agregar_moneda" name="agregar_moneda" type="button" size="15" value="Agregar Moneda">
+              <input  id="borrar_moneda" name="borrar_moneda" type="button" size="15" value="Borrar Moneda">
+              <input type="hidden" id="id_moneda" name="id_moneda">
           </li>
 
           <div id="accion">

@@ -32,11 +32,12 @@ __PACKAGE__->meta->setup(
 
 );
 
-# *************************************************FIN FUNCIONES DEL MODELO | MONEDA************************************************************
+# ************************************************* FUNCIONES DEL MODELO | TIPO MATERIAL ********************************************************
 
 # Agrega un tipo de material a un proveedor
 # parametros: id_proveedor, id_tipo_material
 sub agregarMaterialProveedor{
+
     my ($self) = shift;
     my ($data) = @_;
 
@@ -45,7 +46,16 @@ sub agregarMaterialProveedor{
 
     $self->save();
     
-         C4::AR::Debug::debug("entro");
+}
+
+# Elimina una material a un proveedor
+# parametros: id_proveedor, id_material
+sub eliminar{
+
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    $self->delete();    
 }
 
 
@@ -64,16 +74,9 @@ sub setMaterialId{
     $self->tipo_material_id($id_material);
 }
 
-
-
-
-#sub getNombre{
-#    my ($self) = shift;
-#    return ($self->nombre);
-#    
-#}
-
-
-
+sub getMaterialId{
+    my ($self) = shift;
+    return ($self->tipo_material_id);
+}
 
 1;

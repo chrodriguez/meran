@@ -9,9 +9,6 @@ use JSON;
 
 my $input = new CGI;
 
-my $comboDeTipoDeDoc = &C4::AR::Utilidades::generarComboTipoDeDoc();
-my $tipo_materiales  = &C4::AR::Utilidades::generarComboTipoDeMaterial();
-
 my $obj=$input->param('obj');
 
 my ($template, $session, $t_params) = get_template_and_user({
@@ -23,6 +20,7 @@ my ($template, $session, $t_params) = get_template_and_user({
     debug => 1,
 });
 
+# preguntamos si existe el objeto JSON, si es asi, estamos guardando en la base
 if($obj){
     $obj= C4::AR::Utilidades::from_json_ISO($obj);
     
@@ -53,8 +51,6 @@ if($obj){
     $params{'email'}                = $obj->{'email'};
     $params{'plazo_reclamo'}        = $obj->{'plazo_reclamo'};
 
-# TODO AGREGAR FORMAS DE ENVIO!!!
-
     $params{'proveedor_activo'}     = 1; 
     $params{'actionType'}           = $obj->{'tipoAccion'};
 
@@ -65,6 +61,10 @@ if($obj){
 # Tipo de materiales:
 
     $params{'materiales_array'}     = $obj->{'materiales_array'}; 
+    
+# Formas de envio:
+
+    $params{'formas_envios_array'}     = $obj->{'formas_envios_array'}; 
 
 
 # FIXME pueden pasar directamente $obj a agregarProveedor es una HASH = a $params
@@ -76,10 +76,15 @@ if($obj){
     print $infoOperacionJSON;
 
 }else{
+# mostramos el template porque esta agregando normalmente
 
-     $t_params->{'addProveedor'}            = 1;
+     my $comboDeTipoDeDoc       = &C4::AR::Utilidades::generarComboTipoDeDoc();
+     my $combo_tipo_materiales  = &C4::AR::Utilidades::generarComboTipoDeMaterial();
+     my $combo_formas_envio     = &C4::AR::Utilidades::generarComboFormasDeEnvio();
+
      $t_params->{'combo_tipo_documento'}    = $comboDeTipoDeDoc; 
-     $t_params->{'tipo_materiales'}         = $tipo_materiales; 
+     $t_params->{'combo_tipo_materiales'}   = $combo_tipo_materiales; 
+     $t_params->{'combo_formas_envio'}      = $combo_formas_envio;
 
   C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

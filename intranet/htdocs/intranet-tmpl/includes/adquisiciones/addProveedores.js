@@ -4,8 +4,7 @@
  * Contendran las funciones para agregar proveedores al sistema
  * Fecha de creacion 10/11/2010
  *
- */
-   
+ */ 
 //*********************************************Agregar Proveedor*********************************************
 
 var arreglo = new Array() // global, arreglo con los id de las moneda que se le agregan al proveedor
@@ -19,18 +18,18 @@ function monedas(){
           var idMonedaNueva = $('#id_moneda').val()
           var nombreMoneda = $('#moneda').val()
           
-        var cantidad = 0 
-        $('.monedas').each(function(index) {     
-        if($(this).attr('value') == idMonedaNueva){ 
-            cantidad++
-        }
-        }); 
-        if(cantidad == 0){      
+          // preguntamos si esta agregando la misma moneda nuevamente, que no se muestre porque ya esta
+          var cantidad = 0 
+          $('.monedas').each(function(index) {     
+          if($(this).attr('value') == idMonedaNueva){ 
+              cantidad++
+          }
+          }); 
+          // si es 0 la mostramos
+          if(cantidad == 0){      
             $('#monedas').append('<ul id="'+idMonedaNueva+'"> <input name="options" class="monedas" type="checkbox" value="'+idMonedaNueva+'"/>'+nombreMoneda+'</ul>') 
-        }
-          
-          
-  
+          }
+          // obtenemos un array con los ids de las monedas a agregar
           var checkeados = 0
           $('.monedas').each(function(index) {
                 arreglo[checkeados] = $(this).val()
@@ -40,7 +39,7 @@ function monedas(){
       }     
   }); 
   
-   // anda ok
+
    $('#borrar_moneda').click(function(){
            var checkeados = 0
            $('.monedas').each(function(index) {
@@ -69,13 +68,28 @@ function monedas(){
     
 }
 
+// materiales
 function getMateriales(){
     var array_materiales = new Array()
     var i = 0
     $('#tipo_material_id option:selected').each(function(index){  
         array_materiales[i] = index
+        i++
     })
     return array_materiales
+
+}
+
+// envios
+function getEnvios(){
+    var array_envios = new Array()
+    var i = 0
+    $('#forma_envio_id option:selected').each(function(index){  
+        array_envios[i] = index
+        i++
+    })
+    return array_envios
+
 }
    
 
@@ -108,6 +122,7 @@ function agregarProveedor(){
       objAH.tipo_proveedor      = $('#proveedorDataForm input:radio:checked').val();
       objAH.monedas_array       = arreglo;
       objAH.materiales_array    = getMateriales();
+      objAH.formas_envios_array = getEnvios();
       
       objAH.tipoAccion          = 'AGREGAR_PROVEEDOR';
       objAH.sendToServer();

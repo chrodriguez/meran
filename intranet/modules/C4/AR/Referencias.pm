@@ -30,6 +30,9 @@ use C4::Modelo::PrefEstructuraSubcampoMarc;
 use C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager;
 use C4::Modelo::AdqProveedor::Manager;
 use C4::Modelo::PrefInformacionReferencia::Manager;
+use C4::Modelo::AdqTipoMaterial::Manager;
+use C4::Modelo::AdqFormaEnvio::Manager;
+
 
 
 use JSON;
@@ -38,6 +41,8 @@ use Switch;
 use vars qw(@EXPORT_OK @ISA);
 @ISA        = qw(Exporter);
 @EXPORT_OK  = qw(
+                    &obtenerFormasDeEnvio
+                    &obtenerTiposDeMaterial
                     &obtenerTiposDeDocumentos
                     &obtenerCategoriaDeSocio
                     &getCamposDeTablaRef
@@ -155,6 +160,35 @@ sub obtenerTiposDeDocumentos {
 
     foreach my $tipo_doc (@$tiposDoc) {
         push (@results, $tipo_doc);
+    }
+
+    return(\@results);
+}
+
+
+=item
+Esta funcion devuelve un arreglo de objetos formas de envio
+=cut
+sub obtenerFormasDeEnvio {
+    my $formasEnvio = C4::Modelo::AdqFormaEnvio::Manager->get_adq_forma_envio;
+    my @results;
+
+    foreach my $forma_envio (@$formasEnvio) {
+        push (@results, $forma_envio);
+    }
+
+    return(\@results);
+}
+
+=item
+Esta funcion devuelve un arreglo de objetos tipo de material
+=cut
+sub obtenerTiposDeMaterial {
+    my $tiposMaterial = C4::Modelo::AdqTipoMaterial::Manager->get_adq_tipo_material;
+    my @results;
+
+    foreach my $tipo_material (@$tiposMaterial) {
+        push (@results, $tipo_material);
     }
 
     return(\@results);

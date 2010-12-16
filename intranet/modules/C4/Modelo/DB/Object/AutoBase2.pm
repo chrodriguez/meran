@@ -140,9 +140,9 @@ sub getTableName{
 
     CHAIN OF RESPONSIBILITY
 
-    HandleReques = createFromAlias, implementado como un  TemplateMethod compuesto por 
+    HandleRequest = createFromAlias, implementado como un  TemplateMethod compuesto por 
 
-    createFromAlias (TemplateMethod), nextChain, nextMember (HooksMethods)
+    createFromAlias (TemplateMethod), nextChain, nextMember (HookMethods)
 
 =cut
 # sub createFromAlias{
@@ -182,9 +182,7 @@ sub createFromAlias{
         case 'tipo_documento_usr' {return C4::Modelo::UsrRefTipoDocumento->new();}
         case 'estado' {return C4::Modelo::RefEstado->new();}
         case 'ciudad' {return C4::Modelo::RefLocalidad->new();}
-
-
-    else { 
+    else {
         print "NO EXISTE LA TABLA DE REFERENCIA ".$classAlias }
     }
 }
