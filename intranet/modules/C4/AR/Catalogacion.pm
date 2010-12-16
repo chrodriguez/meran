@@ -1373,6 +1373,17 @@ sub cambiarVisibilidad{
     }
 }
 
+sub cambiarHabilitado{
+    my ($id) = @_;
+
+    my $catalogacion = getEstructuraCatalogacionById($id);
+
+    if($catalogacion){
+        $catalogacion->cambiarHabilitado();
+     }else{
+        C4::AR::Debug::debug("Catalogacion => cambiarVisibilidad => NO EXISTE EL ID DE LA ESTRUCTURA QUE SE INTENTA MODIFICAR");
+    }
+}
 =item sub eliminarCampo
 Esta funcion elimina un "campo", estructura de catalogacion, segun parametro ID
 =cut
@@ -1643,14 +1654,15 @@ sub getEstructuraCatalogacionFromDBCompleta{
                                                                             	itemtype => { eq => 'ALL' },    
                                                                             ],
 
-                                                                        		intranet_habilitado => { gt => 0 }, 
+#                                                                         		intranet_habilitado => { gt => 0 }, 
                                                                         ],
-
+                                                                select          => ['*'],  
                                                                 with_objects    => [ 'infoReferencia' ],  #LEFT OUTER JOIN
                                                                 require_objects => [ 'camposBase', 'subCamposBase' ],
 #                                                                 sort_by => ( 'intranet_habilitado' ),
                                                                 sort_by => ( 'campo' ),
                                                              );
+
 
     return (scalar(@$catalogaciones_array_ref), $catalogaciones_array_ref);
 }

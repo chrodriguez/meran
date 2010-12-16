@@ -30,7 +30,6 @@ use C4::Modelo::PrefEstructuraSubcampoMarc;
 use C4::Modelo::PrefTablaReferenciaRelCatalogo::Manager;
 use C4::Modelo::AdqProveedor::Manager;
 use C4::Modelo::PrefInformacionReferencia::Manager;
-use C4::Modelo::AdqTipoMaterial::Manager;
 
 
 use JSON;
@@ -156,20 +155,6 @@ sub obtenerTiposDeDocumentos {
 
     foreach my $tipo_doc (@$tiposDoc) {
         push (@results, $tipo_doc);
-    }
-
-    return(\@results);
-}
-
-=item
-Esta funcion devuelve un arreglo de objetos tipo de material
-=cut
-sub obtenerTiposDeMaterial {
-    my $tiposMaterial = C4::Modelo::AdqTipoMaterial::Manager->get_adq_tipo_material;
-    my @results;
-
-    foreach my $tipo_material (@$tiposMaterial) {
-        push (@results, $tipo_material);
     }
 
     return(\@results);
@@ -465,19 +450,19 @@ sub getUI_infoObject {
 
 
 
-sub getEstadoObject {
-    my ($id)= @_;
-
-    my $estado_array_ref = C4::Modelo::RefEstado::Manager->get_ref_estado(
-                                                                    query => [ id => $id ]
-                                                        );
-
-    if(scalar(@$estado_array_ref) > 0){
-        return $estado_array_ref->[0];
-    }else{
-        return 0;
-    }
-}
+# sub getEstadoObject {
+#     my ($id)= @_;
+# 
+#     my $estado_array_ref = C4::Modelo::RefEstado::Manager->get_ref_estado(
+#                                                                     query => [ id => $id ]
+#                                                         );
+# 
+#     if(scalar(@$estado_array_ref) > 0){
+#         return $estado_array_ref->[0];
+#     }else{
+#         return 0;
+#     }
+# }
 
 # sub getIdEstadoDisponibleFromName {
 #     my ($name) = @_;
@@ -493,20 +478,20 @@ sub getEstadoObject {
 #     }
 # }
 
-
-sub getDisponibilidadObject {
-    my ($id)= @_;
-
-    my $disponibilidad_array_ref = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad(
-                                                                    query => [ id => $id ]
-                                                        );
-
-    if(scalar(@$disponibilidad_array_ref) > 0){
-        return $disponibilidad_array_ref->[0];
-    }else{
-        return 0;
-    }
-}
+# 
+# sub getDisponibilidadObject {
+#     my ($id)= @_;
+# 
+#     my $disponibilidad_array_ref = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad(
+#                                                                     query => [ id => $id ]
+#                                                         );
+# 
+#     if(scalar(@$disponibilidad_array_ref) > 0){
+#         return $disponibilidad_array_ref->[0];
+#     }else{
+#         return 0;
+#     }
+# }
 
 # sub getIdDisponibilidadFromName {
 #     my ($name)= @_;
@@ -525,19 +510,19 @@ sub getDisponibilidadObject {
 =item
 Retorna el objeto autor segun el id pasado por parametro, si no existe el autor retorna 0
 =cut
-sub getAutorObject {
-	my ($id)= @_;
-
-    my $autor_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor(
-																	query => [ id => $id ]
-														);
-
-	if(scalar(@$autor_array_ref) > 0){
- 		return $autor_array_ref->[0];
-	}else{
-		return 0;
-	}
-}
+# sub getAutorObject {
+# 	my ($id)= @_;
+# 
+#     my $autor_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor(
+# 																	query => [ id => $id ]
+# 														);
+# 
+# 	if(scalar(@$autor_array_ref) > 0){
+#  		return $autor_array_ref->[0];
+# 	}else{
+# 		return 0;
+# 	}
+# }
 
 
 sub getTabla{
@@ -812,34 +797,34 @@ sub getValidadores{
 #==================================================== GETTER DE OBJECTS ===================================================================
 
 
-sub getPaisObject {
-    my ($iso)= @_;
+# sub getPaisObject {
+#     my ($iso)= @_;
+# 
+#     my $pais_array_ref = C4::Modelo::RefPais::Manager->get_ref_pais(
+#                                                                     query => [ iso => $iso]
+#                                                         );
+# 
+#     if(scalar(@$pais_array_ref) > 0){
+#         return $pais_array_ref->[0]->getNombre;
+#     }else{
+#         return 0;
+#     }
+# }
 
-    my $pais_array_ref = C4::Modelo::RefPais::Manager->get_ref_pais(
-                                                                    query => [ iso => $iso]
-                                                        );
 
-    if(scalar(@$pais_array_ref) > 0){
-        return $pais_array_ref->[0]->getNombre;
-    }else{
-        return 0;
-    }
-}
-
-
-sub getCiudadObject {
-    my ($localidad)= @_;
-
-    my $localidad_array_ref = C4::Modelo::RefLocalidad::Manager->get_ref_localidad(
-                                                                    query => [ LOCALIDAD => $localidad ]
-                                                        );
-
-    if(scalar(@$localidad_array_ref) > 0){
-        return $localidad_array_ref->[0];
-    }else{
-        return 0;
-    }
-}
+# sub getCiudadObject {
+#     my ($localidad)= @_;
+# 
+#     my $localidad_array_ref = C4::Modelo::RefLocalidad::Manager->get_ref_localidad(
+#                                                                     query => [ LOCALIDAD => $localidad ]
+#                                                         );
+# 
+#     if(scalar(@$localidad_array_ref) > 0){
+#         return $localidad_array_ref->[0];
+#     }else{
+#         return 0;
+#     }
+# }
 
 
 sub getTipoDocumentoObject {
@@ -856,62 +841,62 @@ sub getTipoDocumentoObject {
     }
 }
 
-sub getPaisObject {
-    my ($iso)= @_;
+# sub getPaisObject {
+#     my ($iso)= @_;
+# 
+#     my $pais_array_ref = C4::Modelo::RefPais::Manager->get_ref_pais(
+#                                                                     query => [ iso => $iso]
+#                                                         );
+# 
+#     if(scalar(@$pais_array_ref) > 0){
+#         return $pais_array_ref->[0];
+#     }else{
+#         return 0;
+#     }
+# }
 
-    my $pais_array_ref = C4::Modelo::RefPais::Manager->get_ref_pais(
-                                                                    query => [ iso => $iso]
-                                                        );
 
-    if(scalar(@$pais_array_ref) > 0){
-        return $pais_array_ref->[0];
-    }else{
-        return 0;
-    }
-}
+# sub getLenguajeObject {
+#     my ($id_lenguaje)= @_;
+# 
+#     my $idioma_array_ref = C4::Modelo::RefIdioma::Manager->get_ref_idioma(
+#                                                                     query => [ idLanguage => $id_lenguaje ]
+#                                                         );
+# 
+#     if(scalar(@$idioma_array_ref) > 0){
+#         return $idioma_array_ref->[0];
+#     }else{
+#         return 0;
+#     }
+# }
 
+# sub getSoporteObject {
+#     my ($idSupport)= @_;
+# 
+#     my $soporte_array_ref = C4::Modelo::RefSoporte::Manager->get_ref_soporte(
+#                                                                     query => [ idSupport => $idSupport ]
+#                                                         );
+# 
+#     if(scalar(@$soporte_array_ref) > 0){
+#         return $soporte_array_ref->[0];
+#     }else{
+#         return 0;
+#     }
+# }
 
-sub getLenguajeObject {
-    my ($id_lenguaje)= @_;
-
-    my $idioma_array_ref = C4::Modelo::RefIdioma::Manager->get_ref_idioma(
-                                                                    query => [ idLanguage => $id_lenguaje ]
-                                                        );
-
-    if(scalar(@$idioma_array_ref) > 0){
-        return $idioma_array_ref->[0];
-    }else{
-        return 0;
-    }
-}
-
-sub getSoporteObject {
-    my ($idSupport)= @_;
-
-    my $soporte_array_ref = C4::Modelo::RefSoporte::Manager->get_ref_soporte(
-                                                                    query => [ idSupport => $idSupport ]
-                                                        );
-
-    if(scalar(@$soporte_array_ref) > 0){
-        return $soporte_array_ref->[0];
-    }else{
-        return 0;
-    }
-}
-
-sub getNivelBibliograficoObject {
-    my ($code)= @_;
-
-    my $nivel_bibliografico_array_ref = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico(
-                                                                    query => [ code => $code ]
-                                                        );
-
-    if(scalar(@$nivel_bibliografico_array_ref) > 0){
-        return $nivel_bibliografico_array_ref->[0];
-    }else{
-        return 0;
-    }
-}
+# sub getNivelBibliograficoObject {
+#     my ($code)= @_;
+# 
+#     my $nivel_bibliografico_array_ref = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico(
+#                                                                     query => [ code => $code ]
+#                                                         );
+# 
+#     if(scalar(@$nivel_bibliografico_array_ref) > 0){
+#         return $nivel_bibliografico_array_ref->[0];
+#     }else{
+#         return 0;
+#     }
+# }
 
 
 sub getUIObject {
@@ -946,76 +931,78 @@ sub getIdiomaObject {
 #=====================================================ESTO ESTA DE MAS USAR LOS getObject DE CADA OBJETO===================================
 
 
+# FIXME estos metodos no tienen sentido, que se recupere el objeto y a este se le pida el nombre
 
-sub getNombreLenguaje {
-    my ($id_lenguaje)= @_;
+# 
+# sub getNombreLenguaje {
+#     my ($id_lenguaje)= @_;
+# 
+#     my $idioma_array_ref = C4::Modelo::RefIdioma::Manager->get_ref_idioma(
+#                                                                     query => [ idLanguage => $id_lenguaje ]
+#                                                         );
+# 
+#     if(scalar(@$idioma_array_ref) > 0){
+#         return $idioma_array_ref->[0]->getDescription;
+#     }else{
+#         return 0;
+#     }
+# }
 
-    my $idioma_array_ref = C4::Modelo::RefIdioma::Manager->get_ref_idioma(
-                                                                    query => [ idLanguage => $id_lenguaje ]
-                                                        );
+# sub getNombreSoporte {
+#     my ($idSupport)= @_;
+# 
+#     my $soporte_array_ref = C4::Modelo::RefSoporte::Manager->get_ref_soporte(
+#                                                                     query => [ idSupport => $idSupport ]
+#                                                         );
+# 
+#     if(scalar(@$soporte_array_ref) > 0){
+#         return $soporte_array_ref->[0]->getDescription;
+#     }else{
+#         return 0;
+#     }
+# }
 
-    if(scalar(@$idioma_array_ref) > 0){
-        return $idioma_array_ref->[0]->getDescription;
-    }else{
-        return 0;
-    }
-}
+# sub getNombreNivelBibliografico {
+#     my ($code)= @_;
+# 
+#     my $nivel_bibliografico_array_ref = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico(
+#                                                                     query => [ code => $code ]
+#                                                         );
+# 
+#     if(scalar(@$nivel_bibliografico_array_ref) > 0){
+#         return $nivel_bibliografico_array_ref->[0]->getDescription;
+#     }else{
+#         return 0;
+#     }
+# }
 
-sub getNombreSoporte {
-    my ($idSupport)= @_;
+# sub getNombreUI {
+#     my ($id_ui)= @_;
+# 
+#     my $ui_array_ref = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(
+#                                                                     query => [ id_ui => $id_ui ]
+#                                                         );
+# 
+#     if(scalar(@$ui_array_ref) > 0){
+#         return $ui_array_ref->[0]->getNombre;
+#     }else{
+#         return 0;
+#     }
+# }
 
-    my $soporte_array_ref = C4::Modelo::RefSoporte::Manager->get_ref_soporte(
-                                                                    query => [ idSupport => $idSupport ]
-                                                        );
-
-    if(scalar(@$soporte_array_ref) > 0){
-        return $soporte_array_ref->[0]->getDescription;
-    }else{
-        return 0;
-    }
-}
-
-sub getNombreNivelBibliografico {
-    my ($code)= @_;
-
-    my $nivel_bibliografico_array_ref = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico(
-                                                                    query => [ code => $code ]
-                                                        );
-
-    if(scalar(@$nivel_bibliografico_array_ref) > 0){
-        return $nivel_bibliografico_array_ref->[0]->getDescription;
-    }else{
-        return 0;
-    }
-}
-
-sub getNombreUI {
-    my ($id_ui)= @_;
-
-    my $ui_array_ref = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(
-                                                                    query => [ id_ui => $id_ui ]
-                                                        );
-
-    if(scalar(@$ui_array_ref) > 0){
-        return $ui_array_ref->[0]->getNombre;
-    }else{
-        return 0;
-    }
-}
-
-sub getNombreEstado {
-    my ($id)= @_;
-
-    my $estado_array_ref = C4::Modelo::RefEstado::Manager->get_ref_estado(
-                                                                    query => [ id => $id ]
-                                                        );
-
-    if(scalar(@$estado_array_ref) > 0){
-        return $estado_array_ref->[0]->getNombre;
-    }else{
-        return 0;
-    }
-}
+# sub getNombreEstado {
+#     my ($id)= @_;
+# 
+#     my $estado_array_ref = C4::Modelo::RefEstado::Manager->get_ref_estado(
+#                                                                     query => [ id => $id ]
+#                                                         );
+# 
+#     if(scalar(@$estado_array_ref) > 0){
+#         return $estado_array_ref->[0]->getNombre;
+#     }else{
+#         return 0;
+#     }
+# }
 
 sub getNombreDisponibilidad {
     my ($id)= @_;
