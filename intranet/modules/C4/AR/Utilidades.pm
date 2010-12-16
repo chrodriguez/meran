@@ -29,6 +29,7 @@ use JSON;
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw(
+    &generarComboFormasDeEnvio
     &generarComboTipoDeMaterial
     &monedasAutocomplete
     &buscarCiudades
@@ -1805,7 +1806,7 @@ sub generarComboTipoDeDoc{
     return $combo_tipo_documento; 
 }
 
-#genera el combo multiselect de tipo de materiales
+#genera el combo multiselect de formas de envio
 sub generarComboFormasDeEnvio{
     my ($params) = @_;
 

@@ -8,9 +8,10 @@ use C4::Modelo::AdqProveedor::Manager;
 use C4::Modelo::AdqProveedorMoneda;
 use C4::Modelo::AdqProveedorMoneda::Manager;
 use C4::Modelo::AdqProveedorFormaEnvio::Manager;
-#use C4::Modelo::RefAdqMoneda::Manager;
 use C4::Modelo::AdqProveedorTipoMaterial;
 use C4::Modelo::AdqProveedorTipoMaterial::Manager;
+use C4::Modelo::AdqProveedorFormaEnvio;
+use C4::Modelo::AdqProveedorFormaEnvio::Manager;
 
 
 use vars qw(@EXPORT @ISA);
@@ -27,7 +28,8 @@ use vars qw(@EXPORT @ISA);
     &getMonedasProveedor;
     &getFormasEnvioProveedor;
     &getMonedas;
-    &getMaterialesProveedor
+    &getMaterialesProveedor;
+    &getAdqProveedorFormaEnvio;
 );
 
 
@@ -181,7 +183,16 @@ sub agregarProveedor{
                 my $proveedor_material = C4::Modelo::AdqProveedorTipoMaterial->new(db => $db);    
                 $proveedor_material->agregarMaterialProveedor(\%parametros2);
               }
-
+              
+#             envios
+              for(my $i=0;$i<scalar(@{$param->{'formas_envios_array'}});$i++){             
+                my %parametros2;
+                $parametros2{'id_proveedor'}     = $id_proveedor;
+                $parametros2{'id_forma_envio'}   = $param->{'formas_envios_array'}->[$i];          
+                my $proveedor_forma_envio = C4::Modelo::AdqProveedorFormaEnvio->new(db => $db);    
+                $proveedor_forma_envio->agregarFormaDeEnvioProveedor(\%parametros2);
+              }
+              
               $msg_object->{'error'} = 0;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
               $db->commit;
@@ -214,6 +225,26 @@ sub getAdqProveedorTipoMaterial{
 
     if( scalar($adq_proveedor_tipo_material) > 0){
         return ($adq_proveedor_tipo_material->[0]);
+    }else{
+        return 0;
+    }
+}
+
+=item 
+Recupero un registro de AdqProveedorFormaEnvio
+retorna un objeto o 0 si no existe
+=cut
+sub getAdqProveedorFormaEnvio{
+    my ($id_forma_envio, $id_proveedor, $db) = @_;
+
+    $db = $db || C4::Modelo::AdqProveedorTipoMaterial->new()->db;
+    my $adq_proveedor_forma_envio = C4::Modelo::AdqProveedorFormaEnvio::Manager->get_adq_proveedor_forma_envio(   
+                                                                    db => $db,
+                                                                    query   => [ adq_proveedor_id => { eq => $id_proveedor} , adq_forma_envio_id => { eq => $id_forma_envio }], 
+                                                                );
+
+    if( scalar($adq_proveedor_forma_envio) > 0){
+        return ($adq_proveedor_forma_envio->[0]);
     }else{
         return 0;
     }
@@ -294,6 +325,24 @@ sub editarProveedor{
                 $proveedor_material->agregarMaterialProveedor(\%parametros);
               }
               
+#              hacer formas envio
+#             antes de agregar borrar todo de la tabla adq_proveedor_forma_envio:
+              my $arreglo_formas_envio            = getFormasEnvioProveedor($params->{'id_proveedor'});
+              for(my $i=0;$i<scalar(@{$arreglo_formas_envio});$i++){
+                my $proveedor_forma_envio = getAdqProveedorFormaEnvio($arreglo_formas_envio->[$i]->getFormaEnvioId, $params->{'id_proveedor'}, $db);
+                $proveedor_forma_envio->eliminar();             
+              }
+              
+#             se agregan las formas de envio              
+              for(my $i=0;$i<scalar(@{$params->{'formas_envios_array'}});$i++){
+                my %parametros;
+                $parametros{'id_proveedor'}         = $params->{'id_proveedor'};
+                $parametros{'id_forma_envio'}       = $params->{'formas_envios_array'}->[$i];          
+                my $proveedor_forma_envio           = C4::Modelo::AdqProveedorFormaEnvio->new(db => $db);   
+
+                $proveedor_forma_envio->agregarFormaDeEnvioProveedor(\%parametros);
+              }
+              
               $msg_object->{'error'}= 0;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A006', 'params' => []});
               $db->commit;
@@ -371,7 +420,25 @@ sub getProveedorLike {
 }
 
 
-# VER ACA QUE DEVUELVE UNA HASH DE IDS DE MATERIALES Y NO SE PUEDEN BORRAR ARRIBA
+
+=item
+   Modulo que devuelve todos las formas de envio que tenga el proveedor
+=cut
+sub getFormasEnvioProveedor{
+ 
+    my ($params) = @_;
+    my $id_proveedor = $params;
+
+    my $formas_envio_array_ref = C4::Modelo::AdqProveedorFormaEnvio::Manager->get_adq_proveedor_forma_envio(   
+                                                                                        query =>  [ 
+                                                                                        adq_proveedor_id  => { eq => $id_proveedor  },
+                                                                                        ],
+                                                                                        require_objects => ['forma_envio_ref'],
+                                                                                        );
+ 
+    return($formas_envio_array_ref);
+}
+
 
 =item
    Modulo que devuelve todos los tipos de materiales que tenga el proveedor
@@ -410,24 +477,6 @@ sub getMonedasProveedor{
     
    return($monedas_array_ref);
 }
-
-sub getFormasEnvioProveedor{
- 
-   my ($params) = @_;
-   my $id_proveedor = $params;
-
-   my $formas_envio = C4::Modelo::AdqProveedorFormaEnvio::Manager->get_adq_proveedor_forma_envio(   query =>  [ 
-                                                                                              adq_proveedor_id  => { eq => $id_proveedor  },
-                                                                                   ],
-                                                                                    require_objects => ['forma_envio_ref'],
-   
-                                                    );
-
-   return($formas_envio);
-}
-
-
-
 
 
 =item

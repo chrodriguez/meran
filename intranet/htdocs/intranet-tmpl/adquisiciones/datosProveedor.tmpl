@@ -81,9 +81,22 @@
                     <option value="[% material.material_ref.id %]">[% material.material_ref.nombre %]
                 [% END %]
                 </select>
-                <input type="button" name="quitar_material" value="<" id="agregar_material"/>
+                <input type="button" name="agregar_material" value="<" id="agregar_material"/>
                 <input type="button" name="quitar_material" value=">" id="quitar_material"/>
                 [% tipo_materiales %] 
+          </li>
+          
+          <!-- Envios -->
+          <li class="sub_item"> 
+              <label for="envios">[% "Formas de envio del proveedor" | i18n %]</label>
+                <select name="formas_envios_proveedor" style="width:8%;" id="formas_envio_provedor" multiple="multiple" size="4">
+                [% FOREACH forma IN formas_envio_proveedor %] 
+                    <option value="[% forma.forma_envio_ref.id %]">[% forma.forma_envio_ref.nombre %]
+                [% END %]
+                </select>
+                <input type="button" name="agregar_forma_envio" value="<" id="agregar_forma_envio"/>
+                <input type="button" name="quitar_forma_envio" value=">" id="quitar_forma_envio"/>
+                [% formas_envio %] 
           </li>
           
           <!-- Monedas -->
