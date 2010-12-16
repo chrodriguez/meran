@@ -196,7 +196,8 @@ sub getTipoDocumentoObject{
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
     my $ref         = $self->getTipoDocumento();
         
-    my $tipo_doc    = C4::AR::Referencias::getTipoDocumentoObject($ref);
+    my $tipo_doc    = C4::Modelo::CatRefTipoNivel3->getByPk($ref);
+
         
     if(!$tipo_doc){
             C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject()=> EL OBJECTO (ID) CatRefTipoNivel3 NO EXISTE");
@@ -300,7 +301,7 @@ sub getIdiomaObject{
     my $marc_record     = MARC::Record->new_from_usmarc($self->getMarcRecord());
     my $ref             = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdioma());
      
-    my $idioma_object   = C4::AR::Referencias::getIdiomaObject($ref);
+    my $idioma_object   = C4::Modelo::RefIdioma->getByPk($ref);
         
     if(!$idioma_object){
             C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) RefSoporte NO EXISTE");

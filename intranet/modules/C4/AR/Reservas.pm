@@ -488,10 +488,10 @@ sub getDisponibilidad{
     my  $cat_registro_marc_n3 = C4::AR::Nivel3::getNivel3FromId3($id3);
 
     if ($cat_registro_marc_n3){
-#         return C4::Modelo::RefDisponibilidad::Manager::getByPk($cat_registro_marc_n3->getIdDisponibilidad)->getNombre();
-        return C4::AR::Referencias::getNombreDisponibilidad($cat_registro_marc_n3->getIdDisponibilidad);
+        return C4::Modelo::RefDisponibilidad->getByPk($cat_registro_marc_n3->getIdDisponibilidad)->getNombre();
+#         return C4::AR::Referencias::getNombreDisponibilidad($cat_registro_marc_n3->getIdDisponibilidad);
     }else{
-      return (0);
+        return (0);
     }
 }
 
