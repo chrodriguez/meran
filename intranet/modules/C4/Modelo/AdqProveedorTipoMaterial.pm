@@ -32,7 +32,7 @@ __PACKAGE__->meta->setup(
 
 );
 
-# *************************************************FIN FUNCIONES DEL MODELO | MONEDA************************************************************
+# ************************************************* FUNCIONES DEL MODELO | TIPO MATERIAL ********************************************************
 
 # Agrega un tipo de material a un proveedor
 # parametros: id_proveedor, id_tipo_material

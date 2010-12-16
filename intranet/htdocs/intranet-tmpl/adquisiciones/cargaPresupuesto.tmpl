@@ -14,6 +14,7 @@ TYPE_FILE="file_xls";
 <script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosPresupuesto.js"> </script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/tabletojson.js"> </script>
 <script type="text/javascript">
 
 // var objAH;
@@ -44,6 +45,18 @@ function onCompleteFileUpload(){
     $('#fake_file').val('');
 }
 
+function modificarDatosDePresupuesto(){
+ 
+        $("#tablaResult").tabletojson({
+            headers: "Renglon,Cantidad,Articulo,Precio Unitario, Total",
+            attribHeaders: "{}",
+            returnElement: "#hf",
+            complete: function(x){
+                  alert(x);
+            }
+        })
+        
+}
 
 function createFileUploader(){
  
@@ -106,19 +119,19 @@ function createFileUploader(){
                         <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                             <thead>
                                 <tr class="titulo_tabla_resultado">
-                                    <th>
+                                    <th id="renglon">
                                         [% "Renglon" | i18n %]
                                     </th>
-                                    <th>
+                                    <th id="cantidad">
                                         [% "Cantidad" | i18n %]
                                     </th>
-                                    <th>
+                                    <th id="articulo">
                                         [% "Articulo" | i18n %]
                                     </th>
-                                    <th>
+                                    <th id="precio_unitario">
                                         [% "Precio Unitario" | i18n %]
                                     </th>  
-                                    <th>
+                                    <th id="total">
                                         [% "Total" | i18n %]
                                     </th>          
                                 </tr>
@@ -126,21 +139,21 @@ function createFileUploader(){
                             <tbody>
                               
                                   [% FOREACH datos_presupuesto %]   
-                                  <tr  align="center">
-                                        <td align="left" class="proveedores">
-                                          [% renglon %]
+                                  <tr  align="center" id="[% renglon %]">
+                                        <td align="left" class="presupuesto">
+                                          <input type="text" name="renglon[% renglon %]" id="renglon[% renglon %]" value="[% renglon %]" READONLY> 
                                         </td>
-                                        <td align="left" class="proveedores">
-                                            <input type="text" name="cantidad" id="cantidad" value=[% cantidad %]> 
+                                        <td align="left" class="presupuesto">
+                                            <input type="text" name="cantidad[% renglon %]" id="cantidad[% renglon %]" value="[% cantidad %]"> 
                                         </td>
-                                        <td align="left" class="proveedores">
-                                            <input type="text" name="articulo" id="articulo" value=[% articulo %]> 
+                                        <td align="left" class="presupuesto">
+                                            <input type="text" name="articulo[% renglon %]" id="articulo[% renglon %]" value="[% articulo %]"> 
                                         </td>
-                                        <td align="left" class="proveedores">
-                                            <input type="text" name="precio_unitario" id="precio_unitario" value=[% precio_unitario%]> 
+                                        <td align="left" class="presupuesto">
+                                            <input type="text" name="precio_unitario[% renglon %]" id="precio_unitario[% renglon %]" value="[% precio_unitario%]"> 
                                         </td>
-                                        <td align="left" class="proveedores">
-                                            <input type="text" name="total" id="total" value=[% total %]> 
+                                        <td align="left" class="presupuesto">
+                                            <input type="text" name="total[% renglon %]" id="total[% renglon %]" value="[% total %]"> 
                                         </td>
 
                                 </tr>        
