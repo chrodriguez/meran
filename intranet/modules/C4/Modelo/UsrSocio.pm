@@ -287,6 +287,7 @@ sub activar{
 
 sub desactivar{
     my ($self) = shift;
+    $self->persona->desactivar;
     $self->setActivo(0);
     $self->save();
 }

@@ -2948,6 +2948,7 @@ sub ciudadesAutocomplete{
     my @result;
     if ($ciudad){
         my($cant, $result) = C4::AR::Utilidades::buscarCiudades($ciudad);# agregado sacar
+        C4::AR::Debug::debug("CANTIDAD DE CIUDADES: ".$cant);
         $textout= "";
         for (my $i; $i<$cant; $i++){
             $textout.= $result->[$i]->{'id'}."|".$result->[$i]->{'nombre'}."\n";
