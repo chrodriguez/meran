@@ -6,26 +6,42 @@
 *
 */
 
-
+var test;
 //*********************************************Editar Proveedor********************************************* 
 
-
+/*
 function modificarDatosDePresupuesto(){
+ 
+        $("#tablaResult").tabletojson({
+            headers: "Renglon,Cantidad,Articulo,Precio Unitario, Total",
+            attribHeaders: "{'customerID':'CustomerID','orderID':'OrderID'}",
+            returnElement: "#hf",
+            complete: function(x){
+                alert(x);
+            }
+        })
     objAH                     = new AjaxHelper(updateDatosPresupuesto);
     objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
     objAH.debug               = true;
-    var $table = $('#tablaResult');
-    $('tr', $table).each(function (i, item){
-                $('td',$(this)).each(function(i,item){
-                           alert(($(this).html()).val());
-                       }); 
-    });
     objAH.id_proveedor        = $('#proveedor').val();
-    objAH.nombre              = 
+ 
    
     objAH.tipoAccion          = 'GUARDAR_MODIFICION_PROVEEDOR';
     objAH.sendToServer();
-}
+}*/
+//     var table = $('#tablaResult');
+//     var renglones= new Array();
+//     
+//     $('#tablaResult tr').each(function (i, item){
+//                 renglones[i]=$(this).find("name=renglon");                 
+//                 valor= renglones[i].val();              
+//                 $('#tablaResult td').each(function(i,item){
+          
+/*                              alert(item.html().val());*/  
+                      /* });*/ 
+//   });
+//     test = renglones;
+
 
 
 function updateDatosPresupuesto(responseText){
