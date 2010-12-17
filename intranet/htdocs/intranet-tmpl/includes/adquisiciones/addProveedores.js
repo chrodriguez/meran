@@ -175,6 +175,7 @@ function verDatosPersonaFisica(){
   agregarAHash(HASH_MESSAGES, "telefono", POR_FAVOR_INGRESE_UN_TELEFONO)
   agregarAHash(HASH_MESSAGES, "email", POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA)
   agregarAHash(HASH_MESSAGES, "tipo_material_id", POR_FAVOR_INGRESE_UN_TIPO_DE_MATERIAL)
+  agregarAHash(HASH_MESSAGES, "forma_envio_id", POR_FAVOR_INGRESE_UNA_FORMA_DE_ENVIO)
       
   //remueve los mensajes de error si hubiera alguno
   $('em').remove()
@@ -210,6 +211,7 @@ function verDatosPersonaJuridica(){
   agregarAHash(HASH_MESSAGES, "telefono", POR_FAVOR_INGRESE_UN_TELEFONO)
   agregarAHash(HASH_MESSAGES, "email", POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA)
   agregarAHash(HASH_MESSAGES, "tipo_material_id", POR_FAVOR_INGRESE_UN_TIPO_DE_MATERIAL)
+  agregarAHash(HASH_MESSAGES, "forma_envio_id", POR_FAVOR_INGRESE_UNA_FORMA_DE_ENVIO)
    
   //remueve los mensajes de error si hubiera alguno   
   $('em').remove()
