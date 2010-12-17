@@ -198,8 +198,12 @@
     POR_FAVOR_INGRESE_UNA_PROV                      = "[% 'Por favor seleccione una provincia' | i18n %]";
     POR_FAVOR_INGRESE_UNA_CIUDAD                    = "[% 'Por favor seleccione una ciudad' | i18n %]";
     POR_FAVOR_INGRESE_UNA_MONEDA                    = "[% 'Por favor ingrese una moneda' | i18n %]";
-    POR_FAVOR_SELECCIONE_LAS_MONEDAS_A_BORRAR       = "[%' Por favor seleccione la/s monedas que desea borrar' | i18n %]";
-    POR_FAVOR_INGRESE_UN_TIPO_DE_MATERIAL           = "[%' Por favor seleccione alg&uacute;n tipo de material' | i18n %]";
+    POR_FAVOR_SELECCIONE_LAS_MONEDAS_A_BORRAR       = "[% 'Por favor seleccione la/s monedas que desea borrar' | i18n %]";
+    POR_FAVOR_INGRESE_UN_TIPO_DE_MATERIAL           = "[% 'Por favor seleccione alg&uacute;n tipo de material' | i18n %]";
+    POR_FAVOR_SELECCIONE_LAS_FORMAS_DE_ENVIO_QUITAR = "[% 'Por favor seleccione las formas de envio que desea quitar' | i18n %]";
+    POR_FAVOR_SELECCIONE_LAS_FORMAS_DE_ENVIO_AGREGAR= "[% 'Por favor seleccione las formas de envio que desea agregar' | i18n %]";
+    POR_FAVOR_SELECCIONE_LOS_MATERIALES_QUITAR      = "[% 'Por favor seleccione los materiales que desea quitar' | i18n %]";
+    POR_FAVOR_SELECCIONE_LOS_MATERIALES_AGREGAR     = "[% 'Por favor seleccione los materiales que desea agregar' | i18n %]";
     
     /*=================================================Fin===Proveedor=======================================================*/
 

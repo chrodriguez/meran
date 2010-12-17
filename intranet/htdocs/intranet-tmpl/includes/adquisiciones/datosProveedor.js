@@ -34,7 +34,7 @@ function envios(){
         })
         // si no hay ninguna seleccionada avisamos
         if(seleccionados == 0){
-            jConfirm('Por favor seleccione las formas de envio que desea quitar', function(){ }) 
+            jConfirm(POR_FAVOR_SELECCIONE_LAS_FORMAS_DE_ENVIO_QUITAR, function(){ }) 
         }else{
             // si hay seleccionadas, las quitamos
             $('#formas_envio_provedor option:selected').each(function(){  
@@ -51,7 +51,7 @@ function envios(){
         })
         // si no hay ninguna seleccionada avisamos
         if(seleccionados == 0){
-            jConfirm('Por favor seleccione las formas de envio que desea agregar', function(){ }) 
+            jConfirm(POR_FAVOR_SELECCIONE_LAS_FORMAS_DE_ENVIO_AGREGAR, function(){ }) 
         }else{
             // si hay seleccionadas, las agregamos
             $('#forma_envio_id option:selected').each(function(value){  
@@ -99,7 +99,7 @@ function materiales(){
         })
         // si no hay ninguna seleccionada avisamos
         if(seleccionados == 0){
-            jConfirm('Por favor seleccione los materiales que desea quitar', function(){ }) 
+            jConfirm(POR_FAVOR_SELECCIONE_LOS_MATERIALES_QUITAR, function(){ }) 
         }else{
             // si hay seleccionadas, las quitamos
             $('#materiales_del_provedor option:selected').each(function(){  
@@ -116,7 +116,7 @@ function materiales(){
         })
         // si no hay ninguna seleccionada avisamos
         if(seleccionados == 0){
-            jConfirm('Por favor seleccione los materiales que desea agregar', function(){ }) 
+            jConfirm(POR_FAVOR_SELECCIONE_LOS_MATERIALES_AGREGAR, function(){ }) 
         }else{
             // si hay seleccionadas, las agregamos
             $('#tipo_material_id option:selected').each(function(value){  
@@ -261,17 +261,17 @@ function modificarDatosDeProveedor(){
     objAH.numero_documento    = $('#numero_documento').val();
     objAH.razon_social        = $('#razon_social').val();
     objAH.cuit_cuil           = $('#cuit_cuil').val();
-    objAH.cuidad              = $('#cuidad').val();
+    objAH.ciudad              = $('#id_ciudad').val();
     objAH.domicilio           = $('#domicilio').val();
     objAH.telefono            = $('#telefono').val();
     objAH.fax                 = $('#fax').val();
     objAH.email               = $('#email').val();
     objAH.plazo_reclamo       = $('#plazo_reclamo').val();
-    objAH.proveedor_activo    = $("input[@name=proveedor_activo]:checked").val();
+    objAH.proveedor_activo    = $('#proveedor_activo').val();
     objAH.materiales_array    = getMateriales() 
     objAH.formas_envios_array = getFormasEnvio() 
 
-    objAH.tipoAccion          = 'GUARDAR_MODIFICION_PROVEEDOR';
+    objAH.tipoAccion          = 'GUARDAR_MODIFICACION_PROVEEDOR';
     objAH.sendToServer();
 }
 
