@@ -25,7 +25,11 @@
                         [% ELSE %]
                                   <li> [% "Apellido:" | i18n %]<strong> [% proveedor.getApellido %]</strong> </li>             
                                   <li> [% "Nombre:" | i18n %]<strong> [% proveedor.getNombre %]</strong> </li> 
-                                  <li> [% "Documento:" | i18n %]<strong> [% proveedor.ref_tipo_documento.getNombre %] [% proveedor.getNroDoc %]</strong> </li>  
+                                  <li> [% "Documento:" | i18n %]<strong> 
+                                        [% IF proveedor.getNroDoc != null %]
+                                            [% proveedor.ref_tipo_documento.getNombre %] [% proveedor.getNroDoc %]
+                                        [% END %]
+                                  </strong> </li>  
                         [% END %]
                   </fieldset>
 
@@ -48,14 +52,22 @@
                                     <li> [% moneda.moneda_ref.nombre %]</li> 
                                   [% END %]
                   </fieldset>
-                 <fieldset>
+                  <fieldset>
+                        <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Materiales" | i18n %]'>
+                              [% "Materiales" | i18n %]
+                        </legend>
+                                  [% FOREACH material IN materiales_proveedor %]   
+                                    <li> [% material.material.material_ref.nombre %]</li> 
+                                  [% END %]
+                  </fieldset>
+                  <fieldset>
                         <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Formas de envio" | i18n %]'>
                               [% "Formas de envio" | i18n %]
                         </legend>
-                                  [% FOREACH forma_envio IN formas_envio %]   
+                                  [% FOREACH forma_envio IN formas_envio_proveedor %]   
                                     <li> [% forma_envio.forma_envio_ref.nombre %]</li> 
                                   [% END %]
-                  </fieldset>
+                   </fieldset>
     </div>
     <div class="columna_der" >
           <fieldset  class="accionesUsuarios" style="clear:none" >

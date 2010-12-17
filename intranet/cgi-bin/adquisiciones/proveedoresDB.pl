@@ -47,7 +47,7 @@ if($tipoAccion eq "ELIMINAR"){
 =item
 Se guarda la modificacion los datos del Proveedor
 =cut
-elsif($tipoAccion eq "GUARDAR_MODIFICION_PROVEEDOR"){
+elsif($tipoAccion eq "GUARDAR_MODIFICACION_PROVEEDOR"){
 
 
       my ($loggedinuser, $session, $flags) = checkauth( 
@@ -62,6 +62,7 @@ elsif($tipoAccion eq "GUARDAR_MODIFICION_PROVEEDOR"){
                                                                 "intranet"
                                 );  
 
+        C4::AR::Debug::debug("ciudad en proveedoresDB: ".$obj->{'ciudad'});
         my ($Message_arrayref)= C4::AR::Proveedores::editarProveedor($obj);
         my $infoOperacionJSON=to_json $Message_arrayref;
         

@@ -83,7 +83,9 @@ sub agregarProveedor{
     my ($params) = @_;
 
     if($params->{'tipo_proveedor'} eq "persona_juridica"){
-        $params->{'tipo_doc'} = 0;
+        $params->{'tipo_doc'} = "NULL";
+    }else{
+        $self->setTipoDoc($params->{'tipo_doc'});
     }
 
     $self->setNombre($params->{'nombre'});
@@ -91,7 +93,6 @@ sub agregarProveedor{
     $self->setDomicilio($params->{'domicilio'});
     $self->setTelefono($params->{'telefono'});
     $self->setEmail($params->{'email'});
-    $self->setTipoDoc($params->{'tipo_doc'});
     $self->setNroDoc($params->{'nro_doc'});
     $self->setRazonSocial($params->{'razon_social'});
     $self->setCuitCuil($params->{'cuit_cuil'});
@@ -118,9 +119,10 @@ sub editarProveedor{
     $self->setRazonSocial($params->{' razon_social'});
     $self->setCuitCuil($params->{'cuit_cuil'});
     $self->setFax($params->{'fax'});
+    C4::AR::Debug::debug("ciudad en adqproveedor: ".$params->{'ciudad'});
     $self->setCiudad($params->{'ciudad'});
     $self->setPlazoReclamo($params->{'plazo_reclamo'});
-    $self->setActivo(1);
+    $self->setActivo($params->{'proveedor_activo'});
 
     $self->save();
 }
@@ -262,6 +264,7 @@ sub getNombre{
 
 sub getTipoDoc{
     my ($self) = shift;
+#    if($self->usr_ref_tipo_documento_id ==)
     return ($self->usr_ref_tipo_documento_id);
 }
 
