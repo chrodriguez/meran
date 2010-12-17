@@ -88,7 +88,7 @@ sub getAutorObject{
     my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
     C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> ref => ".$ref_autor);
 
-    my $autor = C4::AR::Referencias::getAutorObject($ref);
+    my $autor       = C4::Modelo::CatAutor->getByPk($ref);
     C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> autor => ".$autor);
 
     if(!$autor){
@@ -147,13 +147,13 @@ sub toMARC_Opac{
     my ($self) = shift;
 
     #obtengo el marc_record del NIVEL 1
-    my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
 
     my $params;
-    $params->{'nivel'} = '1';
-    $params->{'id_tipo_doc'} = 'ALL';
-    my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
+    $params->{'nivel'}          = '1';
+    $params->{'id_tipo_doc'}    = 'ALL';
+    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
 
     return ($MARC_result_array);
 }

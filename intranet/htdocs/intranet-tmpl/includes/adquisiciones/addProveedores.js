@@ -79,6 +79,18 @@ function getMateriales(){
     return array_materiales
 
 }
+
+// envios
+function getEnvios(){
+    var array_envios = new Array()
+    var i = 0
+    $('#forma_envio_id option:selected').each(function(index){  
+        array_envios[i] = index
+        i++
+    })
+    return array_envios
+
+}
    
 
 function updateAgregarProveedor(responseText){
@@ -110,6 +122,7 @@ function agregarProveedor(){
       objAH.tipo_proveedor      = $('#proveedorDataForm input:radio:checked').val();
       objAH.monedas_array       = arreglo;
       objAH.materiales_array    = getMateriales();
+      objAH.formas_envios_array = getEnvios();
       
       objAH.tipoAccion          = 'AGREGAR_PROVEEDOR';
       objAH.sendToServer();

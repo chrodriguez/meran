@@ -31,6 +31,15 @@ my $accion = $input->param('tipoAccion');
 my $biblioDestino = C4::AR::Busquedas::getBranch($input->param('branchcode'));
 $biblioDestino = $biblioDestino->{'branchname'};
 my $director = $input->param('director')||"___________________";
+
+
+
+C4::AR::Debug::debug("DIRECTOR: ".$input->param('director'));
+
+
+
+
+
 my @autores=split("#",$input->param('autores'));
 my @titulos=split("#",$input->param('titulos'));
 my @otros=split("#",$input->param('otros'));

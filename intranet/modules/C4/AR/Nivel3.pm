@@ -468,13 +468,13 @@ sub detalleDisponibilidadNivel3{
         $hash_nivel3{'id_ui_origen'}        = $nivel3_array_ref->[$i]->getId_ui_origen();
         $esParaSala                         = $nivel3_array_ref->[$i]->esParaSala();
 
-        my $UI_poseedora_object             = C4::AR::Referencias::getUI_infoObject($hash_nivel3{'id_ui_poseedora'});
+        my $UI_poseedora_object             = C4::Modelo::PrefUnidadInformacion->getByPk($hash_nivel3{'id_ui_poseedora'});#C4::AR::Referencias::getUI_infoObject($hash_nivel3{'id_ui_poseedora'});
 
         if($UI_poseedora_object){
             $hash_nivel3{'UI_poseedora'}    = $UI_poseedora_object->getNombre();
         }
 
-        my $UI_origen_object                = C4::AR::Referencias::getUI_infoObject($hash_nivel3{'id_ui_origen'});
+        my $UI_origen_object                = C4::Modelo::PrefUnidadInformacion->getByPk($hash_nivel3{'id_ui_origen'});#C4::AR::Referencias::getUI_infoObject($hash_nivel3{'id_ui_origen'});
 
         if($UI_origen_object){
             $hash_nivel3{'UI_origen'}       = $UI_origen_object->getNombre();
@@ -557,24 +557,25 @@ sub detalleCompletoOPAC{
 	for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
  		my $hash_nivel2;
 		$nivel2_array_ref->[$i]->load();
-		$hash_nivel2->{'id2'}= $nivel2_array_ref->[$i]->getId2;
-		$hash_nivel2->{'tipo_documento'}= C4::AR::Referencias::getNombreTipoDocumento($nivel2_array_ref->[$i]->getTipoDocumentoObject);
-		$hash_nivel2->{'nivel2_array'}= ($nivel2_array_ref->[$i])->toMARC_Opac; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
-		my ($totales_nivel3,@result)= detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2,$config_visualizacion);
-		$hash_nivel2->{'nivel3'}= \@result;
-		$hash_nivel2->{'cantPrestados'}= $totales_nivel3->{'cantPrestados'};
-		$hash_nivel2->{'cantReservas'}= $totales_nivel3->{'cantReservas'};
-        $hash_nivel2->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
-        $hash_nivel2->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
-        $hash_nivel2->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');
-		$hash_nivel2->{'cantReservasEnEspera'}= $totales_nivel3->{'cantReservasEnEspera'};
-		$hash_nivel2->{'disponibles'}= $totales_nivel3->{'disponibles'};
-		$hash_nivel2->{'cantParaSala'}= $totales_nivel3->{'cantParaSala'};
-		$hash_nivel2->{'cantParaPrestamo'}= $totales_nivel3->{'cantParaPrestamo'};
-		$hash_nivel2->{'DivMARC'}="MARCDetail".$i;
-		$hash_nivel2->{'DivDetalle'}="Detalle".$i;
-        $hash_nivel2->{'rating'}= C4::AR::Nivel2::getRating($hash_nivel2->{'id2'});;
-        $hash_nivel2->{'cant_reviews'}= C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'});;
+		$hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
+        $hash_nivel2->{'tipo_documento'}            = C4::Modelo::CatRefTipoNivel3->getByPk($nivel2_array_ref->[$i]->getTipoDocumentoObject)->getNombre();
+		$hash_nivel2->{'nivel2_array'}              = ($nivel2_array_ref->[$i])->toMARC_Opac; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
+		my ($totales_nivel3,@result)                = detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2,$config_visualizacion);
+
+		$hash_nivel2->{'nivel3'}                    = \@result;
+		$hash_nivel2->{'cantPrestados'}             = $totales_nivel3->{'cantPrestados'};
+		$hash_nivel2->{'cantReservas'}              = $totales_nivel3->{'cantReservas'};
+        $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
+        $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
+        $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');
+		$hash_nivel2->{'cantReservasEnEspera'}      = $totales_nivel3->{'cantReservasEnEspera'};
+		$hash_nivel2->{'disponibles'}               = $totales_nivel3->{'disponibles'};
+		$hash_nivel2->{'cantParaSala'}              = $totales_nivel3->{'cantParaSala'};
+		$hash_nivel2->{'cantParaPrestamo'}          = $totales_nivel3->{'cantParaPrestamo'};
+		$hash_nivel2->{'DivMARC'}                   = "MARCDetail".$i;
+		$hash_nivel2->{'DivDetalle'}                = "Detalle".$i;
+        $hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'});;
+        $hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'});;
 		push(@nivel2, $hash_nivel2);
 	}
 

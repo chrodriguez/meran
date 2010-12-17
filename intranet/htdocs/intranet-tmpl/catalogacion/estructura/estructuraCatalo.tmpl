@@ -90,6 +90,14 @@ function visibilidad(id){
     objAH.sendToServer();
 }
 
+function habilitado(id){
+    objAH=new AjaxHelper(eleccionDeNivel);
+    objAH.debug= true;
+    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.id=id;
+    objAH.tipoAccion= 'CAMBIAR_HABILITADO';
+    objAH.sendToServer();
+}
 
 //Elimina el campo en la estructura inicial del catalogo
 function eliminarCampo(id){

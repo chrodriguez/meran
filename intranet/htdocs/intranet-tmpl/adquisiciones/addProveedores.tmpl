@@ -66,15 +66,6 @@
             <label for="cuit_cuil">[% "CUIT/CUIL" | i18n %] *</label>
             <input  id="cuit_cuil" name="cuit_cuil" class="required" type="text" size="15">
         </li>
-
-        [% IF addProveedor %]
-               
-        [% ELSE  %]
-                 <li class="sub_item">
-                     <label for="proveedor_activo">[% "Proveedor Activo" | i18n %]</label>
-                     <input type="checkbox" name="proveedor_activo" value="proveedor_activo" />
-                </li>
-        [% END %]
      </ul>
     </fieldset>
     <fieldset>

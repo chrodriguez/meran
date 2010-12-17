@@ -292,6 +292,21 @@ elsif($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
     C4::Auth::print_header($session);
 }
 
+elsif($tipoAccion eq "CAMBIAR_HABILITADO"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
+
+    C4::AR::Validator::validateParams('U389', $obj,['id']);
+    C4::AR::Catalogacion::cambiarHabilitado($obj->{'id'});
+
+    C4::Auth::print_header($session);
+}
 #Se deshabilita el campo seleccionado para la vista en intranet
 elsif($tipoAccion eq "ELIMINAR_CAMPO"){
      my ($user, $session, $flags)= checkauth(    $input, 

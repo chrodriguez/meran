@@ -408,6 +408,13 @@ sub cambiarVisibilidad{
     $self->save();
 }
 
+sub cambiarHabilitado{
+    my ($self) = shift;
+
+    $self->setIntranet_habilitado(!$self->getHabilitado);
+    $self->save();
+}
+
 sub defaultSort{
     return ("intranet_habilitado");
 }
@@ -608,6 +615,11 @@ sub setIntranet_habilitado{
     my ($self) = shift;
     my ($intranet_habilitado) = @_;
     $self->intranet_habilitado($intranet_habilitado);
+}
+
+sub getHabilitado{
+    my ($self) = shift;
+    return ($self->intranet_habilitado);
 }
 
 

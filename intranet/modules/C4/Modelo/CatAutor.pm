@@ -144,8 +144,9 @@ sub nextMember{
 }
 
 sub obtenerValoresCampo {
-	my ($self)=shift;
-    my ($campo, $orden)=@_;
+	my ($self) = shift;
+    my ($campo, $orden) = @_;
+
     my $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor
 						( select   => [$campo],
 						  sort_by => ($orden) );
@@ -162,8 +163,9 @@ sub obtenerValoresCampo {
 }
 
 sub obtenerValorCampo {
-  my ($self)=shift;
-  my ($campo,$id)=@_;
+  my ($self) = shift;
+  my ($campo,$id) = @_;
+
   my $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor
 						( select   => [$campo],
 						  query =>[ id => { eq => $id} ]);

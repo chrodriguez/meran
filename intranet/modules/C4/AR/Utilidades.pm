@@ -29,6 +29,7 @@ use JSON;
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw(
+    &generarComboFormasDeEnvio
     &generarComboTipoDeMaterial
     &monedasAutocomplete
     &buscarCiudades
@@ -1805,7 +1806,7 @@ sub generarComboTipoDeDoc{
     return $combo_tipo_documento; 
 }
 
-#genera el combo multiselect de tipo de materiales
+#genera el combo multiselect de formas de envio
 sub generarComboFormasDeEnvio{
     my ($params) = @_;
 
@@ -2948,6 +2949,7 @@ sub ciudadesAutocomplete{
     my @result;
     if ($ciudad){
         my($cant, $result) = C4::AR::Utilidades::buscarCiudades($ciudad);# agregado sacar
+        C4::AR::Debug::debug("CANTIDAD DE CIUDADES: ".$cant);
         $textout= "";
         for (my $i; $i<$cant; $i++){
             $textout.= $result->[$i]->{'id'}."|".$result->[$i]->{'nombre'}."\n";

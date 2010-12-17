@@ -82,7 +82,6 @@ if($obj){
      my $combo_tipo_materiales  = &C4::AR::Utilidades::generarComboTipoDeMaterial();
      my $combo_formas_envio     = &C4::AR::Utilidades::generarComboFormasDeEnvio();
 
-     $t_params->{'addProveedor'}            = 1;
      $t_params->{'combo_tipo_documento'}    = $comboDeTipoDeDoc; 
      $t_params->{'combo_tipo_materiales'}   = $combo_tipo_materiales; 
      $t_params->{'combo_formas_envio'}      = $combo_formas_envio;

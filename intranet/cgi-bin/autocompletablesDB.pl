@@ -26,7 +26,6 @@ if ($accion eq 'autocomplete_monedas'){
 
     $result = C4::AR::Utilidades::monedasAutocomplete($string);
 }
-
 elsif ($accion eq 'autocomplete_ciudades'){
 
     $result = C4::AR::Utilidades::ciudadesAutocomplete($string);

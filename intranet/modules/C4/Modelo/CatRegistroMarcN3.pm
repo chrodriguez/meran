@@ -218,7 +218,7 @@ sub getEstadoObject{
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
     my $ref         = $self->getIdEstado();
      
-    my $estado      = C4::AR::Referencias::getEstadoObject($ref);
+    my $estado      = C4::Modelo::RefEstado->getByPk($self->getIdEstado());
         
     if(!$estado){
             C4::AR::Debug::debug("CatRegistroMarcN3 => getEstadoObject()=> EL OBJECTO (ID) RefEstado NO EXISTE");
@@ -248,7 +248,7 @@ sub getDisponibilidadObject{
 #     my $ref                 = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdDisponibilidad());
 
      
-    my $disponibilidad      = C4::AR::Referencias::getDisponibilidadObject($self->getIdDisponibilidad());
+    my $disponibilidad      = C4::Modelo::RefDisponibilidad->getByPk($self->getIdDisponibilidad());
         
     if(!$disponibilidad){
             C4::AR::Debug::debug("CatRegistroMarcN3 => getDisponibilidadObject()=> EL OBJECTO (ID) RefDisponibilidad NO EXISTE");
@@ -282,7 +282,7 @@ sub estaPrestado {
 sub getEstado{
     my ($self) = shift;
 
-    my $estado_object = C4::AR::Referencias::getEstadoObject($self->getIdEstado);
+    my $estado_object = C4::Modelo::RefEstado->getByPk($self->getIdEstado());
 
     if($estado_object){
         return C4::AR::Utilidades::trim($estado_object->getNombre());
@@ -297,8 +297,8 @@ sub getEstado{
 =cut
 sub estadoDisponible{
     my ($self) = shift;
-
-    return (C4::AR::Referencias::getNombreEstado($self->getIdEstado) eq "Disponible");
+    
+    return (C4::Modelo::RefEstado->getByPk($self->getIdEstado())->getNombre() eq "Disponible");  
 }
 
 =head2 sub esParaSala
@@ -306,11 +306,7 @@ sub estadoDisponible{
 sub esParaSala{
     my ($self) = shift;
 
-    #C4::AR::Debug::debug("CatRegistroMarcN3 => esParaSala => getIdDisponibilidad ".$self->getIdDisponibilidad);
-    #C4::AR::Debug::debug("CatRegistroMarcN3 => esParaSala => getRefFromStringConArrobas ".C4::AR::Catalogacion::getRefFromStringConArrobas('ref_disponibilidad@1'));
-    #C4::AR::Debug::debug("CatRegistroMarcN3 => esParaSala => getNombreDisponibilidad ".C4::AR::Referencias::getNombreDisponibilidad(C4::AR::Catalogacion::getRefFromStringConArrobas('ref_disponibilidad@1')));
-
-    return (C4::AR::Referencias::getNombreDisponibilidad($self->getIdDisponibilidad) eq "Sala de Lectura");
+    return (C4::Modelo::RefDisponibilidad->getByPk($self->getIdDisponibilidad)->getNombre() eq "Sala de Lectura");
 }
 
 =head2 sub toMARC
@@ -320,13 +316,12 @@ sub toMARC{
     my ($self) = shift;
 
     #obtengo el marc_record del NIVEL 3
-    my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
-
+    my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
     my $params;
-    $params->{'nivel'} = '3';
-    $params->{'id_tipo_doc'} = $self->nivel2->getTipoDocumento;
-    my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
+    $params->{'nivel'}          = '3';
+    $params->{'id_tipo_doc'}    = $self->nivel2->getTipoDocumento;
+    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
 
 #     my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran($marc_record);
@@ -374,7 +369,7 @@ sub toMARC_Intra{
 
 
     my $params;
-    $params->{'nivel'} = '3';
+    $params->{'nivel'}          = '3';
     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params);
 

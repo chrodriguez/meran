@@ -72,30 +72,29 @@ elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
                                                                     'intranet'
                                     );
 #SE CREAN LOS COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
-	my $array_ids3_a_prestar=$obj->{'datosArray'};
-	my $cant= scalar(@$array_ids3_a_prestar);
-
-
+	my $array_ids3_a_prestar    = $obj->{'datosArray'};
+	my $cant                    = scalar(@$array_ids3_a_prestar);
 	my @infoPrestamo;
+
 	for(my $i=0;$i<$cant;$i++){
-		my $id3_a_prestar= $array_ids3_a_prestar->[$i];
-		my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3_a_prestar);
+		my $id3_a_prestar                       = $array_ids3_a_prestar->[$i];
+		my $nivel3aPrestar                      = C4::AR::Nivel3::getNivel3FromId3($id3_a_prestar);
 		#Busco ejemplares no prestados con estado disponible e igual disponibilidad que el que se quiere prestar
-		my $items_array_ref= C4::AR::Nivel3::buscarNivel3PorDisponibilidad($nivel3aPrestar);
+		my $items_array_ref                     = C4::AR::Nivel3::buscarNivel3PorDisponibilidad($nivel3aPrestar);
 		#Busco los tipos de prestamo habilitados y con la misma disponibilidad del nivel 3 a prestar
-		my ($tipoPrestamos)=&C4::AR::Prestamos::prestamosHabilitadosPorTipo($nivel3aPrestar->getIdDisponibilidad,$nro_socio);
-			
-		$infoPrestamo[$i]->{'id3Old'}= $id3_a_prestar;
-		my ($nivel2)= C4::AR::Nivel2::getNivel2FromId2($nivel3aPrestar->nivel2->getId2);
- 		$infoPrestamo[$i]->{'autor'}= C4::AR::Referencias::getNombreAutor($nivel2->nivel1->getAutor);
- 		$infoPrestamo[$i]->{'titulo'}= $nivel3aPrestar->nivel2->nivel1->getTitulo;
-		$infoPrestamo[$i]->{'unititle'}='';#C4::AR::Nivel1::getUnititle($iteminfo->{'id1'});
-		$infoPrestamo[$i]->{'edicion'}= $nivel3aPrestar->nivel2->getEdicion;
-		$infoPrestamo[$i]->{'items'}= $items_array_ref;
-		$infoPrestamo[$i]->{'tipoPrestamo'}= $tipoPrestamos;
+		my ($tipoPrestamos)                     = &C4::AR::Prestamos::prestamosHabilitadosPorTipo($nivel3aPrestar->getIdDisponibilidad,$nro_socio);
+
+		$infoPrestamo[$i]->{'id3Old'}           = $id3_a_prestar;
+		my ($nivel2)                            = C4::AR::Nivel2::getNivel2FromId2($nivel3aPrestar->nivel2->getId2);
+        $infoPrestamo[$i]->{'autor'}            = C4::Modelo::CatAutor->getByPk($nivel2->nivel1->getAutor)->getNombre();
+ 		$infoPrestamo[$i]->{'titulo'}           = $nivel3aPrestar->nivel2->nivel1->getTitulo;
+		$infoPrestamo[$i]->{'unititle'}         = '';
+		$infoPrestamo[$i]->{'edicion'}          = $nivel3aPrestar->nivel2->getEdicion;
+		$infoPrestamo[$i]->{'items'}            = $items_array_ref;
+		$infoPrestamo[$i]->{'tipoPrestamo'}     = $tipoPrestamos;
 	}
 
-	my $infoPrestamoJSON = to_json \@infoPrestamo;
+	my $infoPrestamoJSON                        = to_json \@infoPrestamo;
 
     C4::Auth::print_header($session);
 	print $infoPrestamoJSON;
