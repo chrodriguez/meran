@@ -37,7 +37,7 @@ my $picturesDir = C4::Context->config("picturesdir");
 sub uploadPhoto{
 	my ($bornum, $filepath) = @_;
 
-    C4::AR::Debug::debug("UploadFile => uploadPhoto");    
+     C4::AR::Debug::debug("UploadFile => uploadPhoto");    
     my $bytes_read; 
 	my $msg                     = '';
     my $size                    = 0;
@@ -140,7 +140,7 @@ sub uploadFile{
     #             else    
     #             {
                     while ($bytes_read=read($filepath,$buff,2096)) {
-                        C4::AR::Debug::debug("ESCRIBIENDO: ".$bytes_read);
+#                         C4::AR::Debug::debug("ESCRIBIENDO: ".$bytes_read);
                         $size += $bytes_read;
                         binmode WFD;
                         print WFD $buff;

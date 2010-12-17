@@ -67,7 +67,8 @@
                 $('td', tr).each(function (i, td) {
                     var re = /&nbsp;/gi
        //             var v = $(td).html().replace(re, '')
-                    var v = $('input').tagName
+                    var v = $(this).children().val()
+                    //var v = $('td :text').val()
                     jsonItem[jsonItem.length] = "\"" + heads[headCounter] + "\":\"" + v + "\"";
                     headCounter++
 

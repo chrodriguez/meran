@@ -9,26 +9,26 @@
 var test;
 //*********************************************Editar Proveedor********************************************* 
 
-/*
+
 function modificarDatosDePresupuesto(){
  
         $("#tablaResult").tabletojson({
             headers: "Renglon,Cantidad,Articulo,Precio Unitario, Total",
             attribHeaders: "{'customerID':'CustomerID','orderID':'OrderID'}",
-            returnElement: "#hf",
+            returnElement: "#table",
             complete: function(x){
-                alert(x);
+                 objAH                     = new AjaxHelper(updateDatosPresupuesto);
+                 objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
+                 objAH.debug               = true;
+                 objAH.id_proveedor        = $('#proveedor').val();
+                 objAH.table               = x;
+   
+                 objAH.tipoAccion          = 'GUARDAR_MODIFICION_PRESUPUESTO';
+                 objAH.sendToServer();
             }
         })
-    objAH                     = new AjaxHelper(updateDatosPresupuesto);
-    objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
-    objAH.debug               = true;
-    objAH.id_proveedor        = $('#proveedor').val();
- 
    
-    objAH.tipoAccion          = 'GUARDAR_MODIFICION_PROVEEDOR';
-    objAH.sendToServer();
-}*/
+}
 //     var table = $('#tablaResult');
 //     var renglones= new Array();
 //     
@@ -42,6 +42,18 @@ function modificarDatosDePresupuesto(){
 //   });
 //     test = renglones;
 
+function procesarPlanilla(){
+                 objAH                     = new AjaxHelper(updateDatosPresupuesto);
+                 objAH.url                 = '/cgi-bin/koha/adquisiciones/importPresupuestoProveedores.pl';
+                 objAH.debug               = true;
+                 objAH.id_proveedor        = $('#proveedor').val();
+//                  objAH.planilla            = $('#file').val();
+   
+                 objAH.tipoAccion          = 'GUARDAR_MODIFICION_PRESUPUESTO';
+                 objAH.sendToServer();
+
+}
+
 
 
 function updateDatosPresupuesto(responseText){
@@ -51,7 +63,23 @@ function updateDatosPresupuesto(responseText){
     setMessages(Messages);
 }
 
+function mostrarPresupuesto(){
+                 objAH                     = new AjaxHelper(updateMostrarPresupuesto);
+                 objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
+                 objAH.debug               = true;
+                 objAH.id_proveedor        = $('#proveedor').val();
+//                  objAH.planilla            = $('#file').val();
+   
+                 objAH.tipoAccion          = 'MOSTRAR_PRESUPUESTO';
+                 objAH.sendToServer();
 
+}
+
+
+
+function updateMostrarPresupuesto(responseText){
+   $('#presupuesto').html(responseText);
+}
 
 function changePage(ini){
     objAH.changePage(ini);

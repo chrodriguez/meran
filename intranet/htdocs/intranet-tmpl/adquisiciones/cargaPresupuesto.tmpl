@@ -13,8 +13,9 @@ TYPE_FILE="file_xls";
 <script type="text/javascript" src="/includes/jquery/jquery.fileUploader-min.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
-<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosPresupuesto.js"> </script>
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/tabletojson.js"> </script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosPresupuesto.js"> </script>
+
 <script type="text/javascript">
 
 // var objAH;
@@ -35,28 +36,13 @@ $(document).ready(function() {
 
 function onCompleteFileUpload(){
    
-   //  $('#foto').html("<img border='0' width='96px' height='96px' title='" + USUARIO.text + "(" + USUARIO.ID + ")' alt='" + USUARIO.text + "(" + USUARIO.ID + ")' src='[% themelang %]/pictures/" + USUARIO.ID + ".jpg'>");
-   //  $('#datos_presupuesto').hide(); 
-   //  $('#div_boton_eliminar_foto').show();
-  //   $('#div_uploader').hide();
-//     $('#select_prv').show;
-    $('#datos_planilla').show;
-//     $('#select_prov').hide();
-    $('#fake_file').val('');
+//     $('#datos_planilla').show;
+//     $('#fake_file').val('');
+mostrarPresupuesto();
+
+   
 }
 
-function modificarDatosDePresupuesto(){
- 
-        $("#tablaResult").tabletojson({
-            headers: "Renglon,Cantidad,Articulo,Precio Unitario, Total",
-            attribHeaders: "{}",
-            returnElement: "#hf",
-            complete: function(x){
-                  alert(x);
-            }
-        })
-        
-}
 
 function createFileUploader(){
  
@@ -78,87 +64,51 @@ function createFileUploader(){
 }
 
 
+
 </script>
 
 <fieldset>
     <legend class="titulos">    [% "Carga de presupuesto" | i18n %] </legend>
 
-    <form method=post  name="proveedorDataForm" id="proveedorDataForm">
-
-          <form method=post  name="planillaDataForm" id="planillaDataForm">
-            
-                <fieldset id="select_prov" >
-                      <legend class="titulo_legend">[% "Proveedor" | i18n %]</legend>  
-                      <p>Seleccione el proveedor para el cual cargara un presupuesto</p>
-                
-                      <label id="label_provs">[% "Proveedor" | i18n %]</label>
-                              [% combo_proveedores %] 
-                </fieldset>
-          </form>
-          
           <fieldset id="carga_planilla">
                 <legend class="titulo_legend">[% "Carga de Planilla Excel" | i18n %]</legend>
                 
                 <!-- VER BIEN Q PONER-->
                 <p>Seleccione el archivo que desea cargar </p>
-                <form action=/cgi-bin/koha/adquisiciones/importPresupuestoProveedores.pl enctype="multipart/form-data" method=post name="formPlanilla" id="formPlanilla">   
+                <!--<form target="myFrame" enctype="multipart/form-data" action=/cgi-bin/koha/adquisiciones/importPresupuestoProveedores.pl method="post" name="formPlanilla" id="formPlanilla">
                         <input type="file" name="file" id="file"> 
-                        <input type="submit" value="aceptar">
-                </form> 
-               <!-- <div id="div_uploader" >
+                        <div id="accion">
+                                    [% PERL %]
+                                              print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                                                    boton   => "boton_guardar",
+                                                                                    onClick => "procesarPlanilla();",
+                                                                          ) ;
+                                    [% END %]
+                        </div>
+              </form> -->
+              <div id="div_uploader" >
                         <li>
                              <div id="uploader"></div>
                         </li>
-                </div>-->
+                </div>
+
+<!--                 <form method=post  name="proveedorDataForm" id="proveedorDataForm"> -->
+                      <fieldset id="select_prov" >
+                            <legend class="titulo_legend">[% "Proveedor" | i18n %]</legend>  
+                            <p>Seleccione el proveedor para el cual cargara un presupuesto</p>
+                
+                            <label id="label_provs">[% "Proveedor" | i18n %]</label>
+                                    [% combo_proveedores %] 
+                      </fieldset>
+
+<!--                  </form> --> 
 
           </fieldset>
 
-          <fieldset>
+          <fieldset  id="datos_planilla" >
                   <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend>                
-                  <div id="datos_planilla">
-                        <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                            <thead>
-                                <tr class="titulo_tabla_resultado">
-                                    <th id="renglon">
-                                        [% "Renglon" | i18n %]
-                                    </th>
-                                    <th id="cantidad">
-                                        [% "Cantidad" | i18n %]
-                                    </th>
-                                    <th id="articulo">
-                                        [% "Articulo" | i18n %]
-                                    </th>
-                                    <th id="precio_unitario">
-                                        [% "Precio Unitario" | i18n %]
-                                    </th>  
-                                    <th id="total">
-                                        [% "Total" | i18n %]
-                                    </th>          
-                                </tr>
-                            </thead>
-                            <tbody>
-                              
-                                  [% FOREACH datos_presupuesto %]   
-                                  <tr  align="center" id="[% renglon %]">
-                                        <td align="left" class="presupuesto">
-                                          <input type="text" name="renglon[% renglon %]" id="renglon[% renglon %]" value="[% renglon %]" READONLY> 
-                                        </td>
-                                        <td align="left" class="presupuesto">
-                                            <input type="text" name="cantidad[% renglon %]" id="cantidad[% renglon %]" value="[% cantidad %]"> 
-                                        </td>
-                                        <td align="left" class="presupuesto">
-                                            <input type="text" name="articulo[% renglon %]" id="articulo[% renglon %]" value="[% articulo %]"> 
-                                        </td>
-                                        <td align="left" class="presupuesto">
-                                            <input type="text" name="precio_unitario[% renglon %]" id="precio_unitario[% renglon %]" value="[% precio_unitario%]"> 
-                                        </td>
-                                        <td align="left" class="presupuesto">
-                                            <input type="text" name="total[% renglon %]" id="total[% renglon %]" value="[% total %]"> 
-                                        </td>
+                  <div id="presupuesto">
 
-                                </tr>        
-                                [% END %]             
-                          </tbody>              
                   </div>
             </fieldset>
           
