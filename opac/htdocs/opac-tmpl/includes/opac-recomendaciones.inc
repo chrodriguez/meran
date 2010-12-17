@@ -26,6 +26,8 @@ function validateForm(){
                     nombre: POR_FAVOR_INGRESE_SU_NOMBRE,
                     mensaje: POR_FAVOR_INGRESE_SU_MENSAJE,
                     email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
+                    profesor-departamento: POR_FAVOR_INGRESO_DEPARTAMENTO,
+                    
                }
             });
 }
