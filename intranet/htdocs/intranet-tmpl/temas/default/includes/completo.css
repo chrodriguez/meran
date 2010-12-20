@@ -41,7 +41,7 @@ tr.impar{background-color:#C0C0C0;}
 em.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scroll 0 0;padding-left:16px;}
 div.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scroll 0 0;padding-left:16px;color:#A1C162;clear:both}
 label.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scroll 0 0;padding-left:16px;width:auto;}
-.divCirculacion{border-style:solid;border-color:gray;left:75%;text-align:center;background-color:white;margin-left:30px;}
+.divCirculacion{border-style:solid;border-color:gray;left:75%;text-align:center;background-color:white;}
 .fontMsgConfirmation{text-decoration:none;font-size:10pt;font-family:"Trebuchet MS","Verdana";color:red;font-weight:bold;}
 .fecha_vencida{font-size:10pt;color:red;}
 .fecha_critica{color:red;font-weight:bold;font-style:italic;}
