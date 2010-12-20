@@ -1,5 +1,3 @@
-
-
 [% INCLUDE "FormValidateHelper.inc" %]
 
 <script type="text/javascript">
@@ -33,8 +31,11 @@ function validateForm(){
 }
 
 $(document).ready( function() {
+    CrearAutocompleteCatalogoBiblioteca({IdInput: 'buscar_biblioteca', IdInputHidden: 'hidden_id_nivel_2'});
     validateForm();
 });
+
+
 
 </script>        
 
