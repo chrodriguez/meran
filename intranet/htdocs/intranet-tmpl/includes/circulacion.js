@@ -347,22 +347,16 @@ function generaDivDevolucion(responseText){
 	
 		INFO_PRESTAMOS_ARRAY[i]= infoArray[i].id_prestamo;
  
-		if(infoArray[i].autor != ""){ 
+		if((infoArray[i].autor != "")&&(infoArray[i].autor != null)){ 
             html= html + infoArray[i].autor;
-            if(infoArray[i].titulo != ""){html= html + ", ";}
+            if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){html= html + ", ";}
         }
 
-        if(infoArray[i].titulo != ""){
+        if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){
             html= html + infoArray[i].titulo;
-            if(infoArray[i].unititle != ""){html= html + ", ";}
         }
 
-		if(infoArray[i].unititle != ""){
-            html= html + infoArray[i].unititle;
-            if(infoArray[i].edicion != ""){html= html + ", ";}
-        };
-
-        if(infoArray[i].edicion != ""){
+        if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){
             html= html + infoArray[i].edicion + ". <br>"
         };
   

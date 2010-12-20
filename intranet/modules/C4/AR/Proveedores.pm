@@ -66,7 +66,6 @@ sub eliminarMoneda{
             };
  
             if ($@){
-                # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
                &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
                $msg_object->{'error'}= 1;
                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
@@ -120,13 +119,10 @@ sub agregarMoneda{
            eval{
                $proveedor_moneda->agregarMonedaProveedor($params);
                $msg_object->{'error'}= 0;
-#                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A023', 'params' => []});
-#              no aagrega el codigo de mensaje
                $db->commit;
            };
  
            if ($@){
-                # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
                &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
                $msg_object->{'error'}= 1;
                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
@@ -138,8 +134,6 @@ sub agregarMoneda{
      
      return ($msg_object);
 }
-
-
 
 
 =item
@@ -162,11 +156,12 @@ sub agregarProveedor{
           $db->begin_work;
           my $id_moneda;
           
-           eval{
+#           eval{
               $proveedor->agregarProveedor($param);
               my $id_proveedor = $proveedor->getId();
 
 #             monedas
+                C4::AR::Debug::debug("cantidad MONEDAS: ".scalar(@{$param->{'monedas_array'}}));
               for(my $i=0;$i<scalar(@{$param->{'monedas_array'}});$i++){
                 my %parametros;
                 $parametros{'id_proveedor'}   = $id_proveedor;
@@ -176,6 +171,7 @@ sub agregarProveedor{
               }
               
 #             materiales
+                C4::AR::Debug::debug("cantidad materiales: ".scalar(@{$param->{'materiales_array'}}));
               for(my $i=0;$i<scalar(@{$param->{'materiales_array'}});$i++){             
                 my %parametros2;
                 $parametros2{'id_proveedor'}     = $id_proveedor;
@@ -185,6 +181,7 @@ sub agregarProveedor{
               }
               
 #             envios
+                C4::AR::Debug::debug("cantidad envios: ".scalar(@{$param->{'formas_envios_array'}}));
               for(my $i=0;$i<scalar(@{$param->{'formas_envios_array'}});$i++){             
                 my %parametros2;
                 $parametros2{'id_proveedor'}     = $id_proveedor;
@@ -196,14 +193,14 @@ sub agregarProveedor{
               $msg_object->{'error'} = 0;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
               $db->commit;
-           };
-           if ($@){
-           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
-               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
-               $msg_object->{'error'}= 1;
-               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
-               $db->rollback;
-           }
+#           };
+#           if ($@){
+#           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+#               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+#               $msg_object->{'error'}= 1;
+#               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+#               $db->rollback;
+#           }
 
           $db->{connect_options}->{AutoCommit} = 1;
     }
@@ -261,22 +258,21 @@ sub eliminarProveedor {
      my ($id_prov) = @_;
      my $msg_object= C4::AR::Mensajes::create();
      my $prov = C4::AR::Proveedores::getProveedorInfoPorId($id_prov);
+#     my $db = $prov->db;
  
-     eval {
+#     eval {
          $prov->desactivar;
          $msg_object->{'error'}= 0;
-# FIXME no mostrar id_prov, mostrar Apellido y Nombre si es persona física y Razon social si es persona jurídica
-         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$id_prov]} ) ;
-     };
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A024', 'params' => []} ) ;
+#     };
  
-     if ($@){
-         #Se loguea error de Base de Datos
-         &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
-         #Se setea error para el usuario
-         $msg_object->{'error'}= 1;
-# FIXME no mostrar id_prov, mostrar Apellido y Nombre si es persona física y Razon social si es persona jurídica
-         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [$id_prov]} ) ;
-     }
+#     if ($@){
+#         #Se loguea error de Base de Datos
+#         &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+#         #Se setea error para el usuario
+#         $msg_object->{'error'}= 1;
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A025', 'params' => []} ) ;
+#     }
  
      return ($msg_object);
 }
@@ -349,7 +345,7 @@ sub editarProveedor{
           };
 
           if ($@){
-          # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+          # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo editar el proveedor
               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
               $msg_object->{'error'}= 1;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
@@ -409,7 +405,7 @@ sub getProveedorLike {
                                                                                         offset  => $ini,
      ); 
 
-    #Obtengo la cant total de proveedores para el paginador
+    #Obtengo la cantidad total de proveedores para el paginador
     my $proveedores_array_ref_count = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor_count( query => \@filtros, );
 
     if(scalar(@$proveedores_array_ref) > 0){
@@ -480,7 +476,7 @@ sub getMonedasProveedor{
 
 
 =item
-   Modulo que devuelve todas las monedas para mostrarlas en Editar Proveedor - TEMPORAL aca, dsp va en C4::AR::Monedas ?
+   Modulo que devuelve todas las monedas para mostrarlas en Editar Proveedor
 =cut
 
 sub getMonedas{
@@ -493,29 +489,6 @@ sub getMonedas{
     
    return($todasMonedas);
 }
-
-
-# TODO sub getFormasEnvioProveedor{
-#  
-#    my ($params) = @_;
-#    my $id_proveedor = $params;
-# 
-#    my $monedas = C4::Modelo::AdqProveedorMoneda::Manager->get_adq_proveedor_moneda(   query =>  [ 
-#                                                                                                 proveedor_id  => { eq => $id_proveedor  },
-#                                                                                    ],
-#                                                                                     require_objects => ['moneda_ref'],
-#    
-#                                                     );
-#    my @nombres_monedas;
-#    foreach my $moneda (@$monedas){
-# #      push (@nombres_monedas,$moneda->moneda_ref->getNombre);
-#       push (@nombres_monedas,$moneda);
-#    }
-# 
-# #   C4::AR::Debug::debug(@nombres_monedas[0]);
-#     
-#    return($monedas);
-# }
 
 
 sub _verificarDatosProveedor {
