@@ -178,26 +178,38 @@ function realizarAccion(accion,chckbox,funcion) {
  * y el item que se va a prestar.
  * prestamos.tmpl---> crea el div para los prestamos
  */
+
+// TODO habría que ver si esto puede ser un partial
 function generaDivPrestamo(responseText){
-	var infoArray= new Array;
-	infoArray= JSONstring.toObject(responseText);
-	var html="<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
+	var infoArray       = new Array;
+	infoArray           = JSONstring.toObject(responseText);
+	var html            = "<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
 	var i;
+    
 
 	for(i=0; i<infoArray.length;i++){
 	
-		var infoPrestamoObj= new infoPrestamo();
-		infoPrestamoObj.id3Old= infoArray[i].id3Old;
-		INFO_PRESTAMOS_ARRAY[i]= infoPrestamoObj;
+        var coma                = "";
+		var infoPrestamoObj     = new infoPrestamo();
+		infoPrestamoObj.id3Old  = infoArray[i].id3Old;
+		INFO_PRESTAMOS_ARRAY[i] = infoPrestamoObj;
  
-		var comboItems = crearComboDeItems(infoArray[i].items, 'comboItems' + i);
-		var comboTipoPrestamo =crearComboDeItems(infoArray[i].tipoPrestamo, 'tiposPrestamos' + i);
-		if(infoArray[i].autor != ""){ html= html + infoArray[i].autor + ", "};
-		html= html + infoArray[i].titulo + ", ";
-		if(infoArray[i].unititle != ""){html= html + infoArray[i].unititle + ", "};
-		if(infoArray[i].edicion != ""){html= html + infoArray[i].edicion + ". <br>"};
-		html= html + "C&oacute;digo de barras: " + comboItems + "<br>";
-		html= html + "Tipo de pr&eacute;stamo: " + comboTipoPrestamo + "<br>";
+		var comboItems          = crearComboDeItems(infoArray[i].items, 'comboItems' + i);
+		var comboTipoPrestamo   = crearComboDeItems(infoArray[i].tipoPrestamo, 'tiposPrestamos' + i);
+      
+		if((infoArray[i].autor != "")&&(infoArray[i].autor != null)){ 
+            html    = html + infoArray[i].autor;
+            coma    = ", ";
+        };
+
+		if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){ 
+            html= html + coma + infoArray[i].titulo;
+            coma    = ", ";
+        };
+
+		if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){ html= html + coma + infoArray[i].edicion + "."};
+		html= html + "<br>C&oacute;digo de barras: " + comboItems;
+		html= html + "<br>Tipo de pr&eacute;stamo: " + comboTipoPrestamo;
 	}
 
 	html= html + "</p>";
@@ -236,10 +248,10 @@ function prestar(){
 
 	for(var i=0; i< INFO_PRESTAMOS_ARRAY.length; i++){
 		//se setea el id3 que se va a prestar
-		INFO_PRESTAMOS_ARRAY[i].id3= $('#comboItems' + i).val();
-		INFO_PRESTAMOS_ARRAY[i].barcode= $("#comboItems" + i + " option:selected").text();
-		INFO_PRESTAMOS_ARRAY[i].tipoPrestamo= $('#tiposPrestamos' + i).val();
-		INFO_PRESTAMOS_ARRAY[i].descripcionTipoPrestamo= $("#tiposPrestamos" + i + " option:selected").text();
+		INFO_PRESTAMOS_ARRAY[i].id3                     = $('#comboItems' + i).val();
+		INFO_PRESTAMOS_ARRAY[i].barcode                 = $("#comboItems" + i + " option:selected").text();
+		INFO_PRESTAMOS_ARRAY[i].tipoPrestamo            = $('#tiposPrestamos' + i).val();
+		INFO_PRESTAMOS_ARRAY[i].descripcionTipoPrestamo = $("#tiposPrestamos" + i + " option:selected").text();
 	}
 	
 	objAH               = new AjaxHelper(updateInfoPrestarReserva);
@@ -335,22 +347,16 @@ function generaDivDevolucion(responseText){
 	
 		INFO_PRESTAMOS_ARRAY[i]= infoArray[i].id_prestamo;
  
-		if(infoArray[i].autor != ""){ 
+		if((infoArray[i].autor != "")&&(infoArray[i].autor != null)){ 
             html= html + infoArray[i].autor;
-            if(infoArray[i].titulo != ""){html= html + ", ";}
+            if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){html= html + ", ";}
         }
 
-        if(infoArray[i].titulo != ""){
+        if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){
             html= html + infoArray[i].titulo;
-            if(infoArray[i].unititle != ""){html= html + ", ";}
         }
 
-		if(infoArray[i].unititle != ""){
-            html= html + infoArray[i].unititle;
-            if(infoArray[i].edicion != ""){html= html + ", ";}
-        };
-
-        if(infoArray[i].edicion != ""){
+        if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){
             html= html + infoArray[i].edicion + ". <br>"
         };
   

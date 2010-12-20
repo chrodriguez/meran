@@ -66,7 +66,7 @@ sub getPk{
 sub getByPk{
 
     my ($self) = shift;
-    my ($value_id)=@_;
+    my ($value_id) = @_;
 
     my $pk = $self->meta->primary_key;
     my $self_like = $self->meta->class->new($pk => $value_id);

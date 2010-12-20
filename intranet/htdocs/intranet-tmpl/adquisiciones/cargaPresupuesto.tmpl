@@ -20,7 +20,6 @@ TYPE_FILE="file_xls";
 
 // var objAH;
 
-
 var prov;
 
 $(document).ready(function() {
@@ -43,7 +42,6 @@ mostrarPresupuesto();
    
 }
 
-
 function createFileUploader(){
  
     if($("#uploader")[0] != null){
@@ -63,46 +61,32 @@ function createFileUploader(){
     }
 }
 
-
-
 </script>
 
 <fieldset>
     <legend class="titulos">    [% "Carga de presupuesto" | i18n %] </legend>
 
-          <fieldset id="carga_planilla">
-                <legend class="titulo_legend">[% "Carga de Planilla Excel" | i18n %]</legend>
+      
                 
-                <!-- VER BIEN Q PONER-->
-                <p>Seleccione el archivo que desea cargar </p>
-                <!--<form target="myFrame" enctype="multipart/form-data" action=/cgi-bin/koha/adquisiciones/importPresupuestoProveedores.pl method="post" name="formPlanilla" id="formPlanilla">
-                        <input type="file" name="file" id="file"> 
-                        <div id="accion">
-                                    [% PERL %]
-                                              print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
-                                                                                    boton   => "boton_guardar",
-                                                                                    onClick => "procesarPlanilla();",
-                                                                          ) ;
-                                    [% END %]
-                        </div>
-              </form> -->
-              <div id="div_uploader" >
-                        <li>
-                             <div id="uploader"></div>
-                        </li>
-                </div>
-
-<!--                 <form method=post  name="proveedorDataForm" id="proveedorDataForm"> -->
-                      <fieldset id="select_prov" >
+                <fieldset id="select_prov" >
                             <legend class="titulo_legend">[% "Proveedor" | i18n %]</legend>  
                             <p>Seleccione el proveedor para el cual cargara un presupuesto</p>
                 
                             <label id="label_provs">[% "Proveedor" | i18n %]</label>
                                     [% combo_proveedores %] 
-                      </fieldset>
+                </fieldset>
+      
+          <fieldset id="carga_planilla">
 
-<!--                  </form> --> 
-
+                <legend class="titulo_legend">[% "Carga de Planilla Excel" | i18n %]</legend>
+                
+                <!-- VER BIEN Q PONER-->
+                <p>Seleccione el archivo que desea cargar </p>
+                    <div id="div_uploader" >
+                              <li>
+                                  <div id="uploader"></div>
+                              </li>
+                    </div>
           </fieldset>
 
           <fieldset  id="datos_planilla" >
@@ -110,11 +94,8 @@ function createFileUploader(){
                   <div id="presupuesto">
 
                   </div>
-            </fieldset>
-          
-      </form>
+          </fieldset>
 </fieldset>          
-
 <fildset>  
     <div id="accion">
               [% PERL %]

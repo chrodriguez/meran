@@ -282,14 +282,14 @@ sub getCiudadObject{
 }
 
 =head2 sub getIdioma
-Recupera el Idioma segun el MARC 041,a
+Recupera el Idioma segun el MARC 041,h
 =cut
 sub getIdioma{
     my ($self)      = shift;
     
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
-    return $marc_record->subfield("041","a");
+    return $marc_record->subfield("041","h");
 }
 
 =head2 sub getIdiomaObject
@@ -301,7 +301,10 @@ sub getIdiomaObject{
     my $marc_record     = MARC::Record->new_from_usmarc($self->getMarcRecord());
     my $ref             = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdioma());
      
+C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> ref => ".$ref);
     my $idioma_object   = C4::Modelo::RefIdioma->getByPk($ref);
+
+C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> idioma_object->getId => ".$idioma_object->getId);
         
     if(!$idioma_object){
             C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) RefSoporte NO EXISTE");

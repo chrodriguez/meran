@@ -14,16 +14,15 @@ function modificarDatosDePresupuesto(){
  
         $("#tablaResult").tabletojson({
             headers: "Renglon,Cantidad,Articulo,Precio Unitario, Total",
-            attribHeaders: "{'customerID':'CustomerID','orderID':'OrderID'}",
+            attribHeaders: "{}",
             returnElement: "#table",
             complete: function(x){
                  objAH                     = new AjaxHelper(updateDatosPresupuesto);
                  objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
                  objAH.id_proveedor        = $('#proveedor').val();
-                 objAH.table               = x;
-   
-                 objAH.tipoAccion          = 'GUARDAR_MODIFICION_PRESUPUESTO';
+                 objAH.table               = JSONstring.toObject(x);
+                 objAH.tipoAccion          = 'GUARDAR_MODIFICACION_PRESUPUESTO';
                  objAH.sendToServer();
             }
         })
@@ -44,7 +43,7 @@ function modificarDatosDePresupuesto(){
 
 function procesarPlanilla(){
                  objAH                     = new AjaxHelper(updateDatosPresupuesto);
-                 objAH.url                 = '/cgi-bin/koha/adquisiciones/importPresupuestoProveedores.pl';
+                 objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
                  objAH.id_proveedor        = $('#proveedor').val();
 //                  objAH.planilla            = $('#file').val();

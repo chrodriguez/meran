@@ -11,7 +11,6 @@
 /includes/jquery/validate/jquery.validate
 /includes/jquery/jquery-highlight
 /includes/jquery/jquery.autocomplete
-/includes/jquery/datetimepicker/ui.datepicker
 /includes/jquery/jquery.dimensions
 /includes/jquery/ui/core
 /includes/jquery/ui/draggable

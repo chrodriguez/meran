@@ -226,3 +226,11 @@ function CrearAutocompleteUI(options){
                             callBackFunction: options.callBackFunction,
                     }); 
 }
+
+function CrearAutocompleteCatalogoBiblioteca(options){
+    _CrearAutocomplete({	IdInput: options.IdInput, 
+							IdInputHidden: options.IdInputHidden, 
+							accion: 'autocomplete_catalogo_biblioteca', 
+							callBackFunction: options.callBackFunction,
+					});
+}

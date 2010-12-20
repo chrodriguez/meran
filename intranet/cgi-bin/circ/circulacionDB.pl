@@ -86,7 +86,7 @@ elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 
 		$infoPrestamo[$i]->{'id3Old'}           = $id3_a_prestar;
 		my ($nivel2)                            = C4::AR::Nivel2::getNivel2FromId2($nivel3aPrestar->nivel2->getId2);
-        $infoPrestamo[$i]->{'autor'}            = C4::Modelo::CatAutor->getByPk($nivel2->nivel1->getAutor)->getNombre();
+        $infoPrestamo[$i]->{'autor'}            = $nivel2->nivel1->getAutor;
  		$infoPrestamo[$i]->{'titulo'}           = $nivel3aPrestar->nivel2->nivel1->getTitulo;
 		$infoPrestamo[$i]->{'unititle'}         = '';
 		$infoPrestamo[$i]->{'edicion'}          = $nivel3aPrestar->nivel2->getEdicion;

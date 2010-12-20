@@ -8,7 +8,7 @@ use JSON;
 
 my $input = new CGI;
 my $authnotrequired= 0;
-
+C4::AR::Debug::debug($input->param('obj'));
 my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
