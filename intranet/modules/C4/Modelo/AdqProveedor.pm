@@ -128,12 +128,12 @@ sub editarProveedor{
 }
 
 
-# ***************************************FIN FUNCIONES DEL MODELO | PROVEEDORES*************************************************************
+# ***********************************FIN FUNCIONES DEL MODELO | PROVEEDORES***********************************************************
 
 
 
 
-# *******************************************************Getters y Setters***************************************************************
+# ****************************************************Getters y Setters***************************************************************
 
 sub setApellido{
     my ($self) = shift;
@@ -264,7 +264,6 @@ sub getNombre{
 
 sub getTipoDoc{
     my ($self) = shift;
-#    if($self->usr_ref_tipo_documento_id ==)
     return ($self->usr_ref_tipo_documento_id);
 }
 

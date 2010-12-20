@@ -33,10 +33,12 @@ if($tipoAccion eq "ELIMINAR"){
         my %params;
         my $id_proveedor= $obj->{'id_proveedor'};
 
-        C4::AR::Validator::validateParams('U389',$obj,['id_proveedor'] );
+#        C4::AR::Validator::validateParams('U389',$obj,['id_proveedor'] );
 
         my ($Message_arrayref)= C4::AR::Proveedores::eliminarProveedor($id_proveedor);
         my $infoOperacionJSON=to_json $Message_arrayref;
+        
+#                C4::AR::Debug::debug("llego ok");
 
         C4::Auth::print_header($session);
         print $infoOperacionJSON;

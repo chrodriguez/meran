@@ -18,7 +18,7 @@ function consultar(filtro,doScroll){
     if (doScroll)
       shouldScrollUser = doScroll;
     objAH=new AjaxHelper(updateInfoProveedores);
-    objAH.cache = true;
+    objAH.cache = false;
     busqueda = jQuery.trim($('#nombre_proveedor').val());
     inicial = '0';
     if (filtro){
@@ -46,7 +46,6 @@ function consultar(filtro,doScroll){
     if(jQuery.trim(busqueda).length > 0){
         objAH.url= '/cgi-bin/koha/adquisiciones/listProveedoresResult.pl';
         objAH.debug= true;
-//      objAH.cache= true;
         objAH.funcion= 'changePage';
         objAH.nombre_proveedor= busqueda;
         objAH.sendToServer();
@@ -76,8 +75,8 @@ function updateInfoProveedores(responseText){
     busqueda = jQuery.trim($('#nombre_proveedor').val());
     if (busqueda.substr(0,6).toUpperCase() != 'FILTRO') //SI NO SE QUISO FILTRAR POR INICIAL, NO TENDRIA SENTIDO MARCARLO
         highlight(classes,idArray);
-//     if (shouldScrollUser)
-//         scrollTo('result');
+     if (shouldScrollUser)
+         scrollTo('result');
 }
 
 function Borrar(){
