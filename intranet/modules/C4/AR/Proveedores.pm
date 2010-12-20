@@ -156,11 +156,12 @@ sub agregarProveedor{
           $db->begin_work;
           my $id_moneda;
           
-           eval{
+#           eval{
               $proveedor->agregarProveedor($param);
               my $id_proveedor = $proveedor->getId();
 
 #             monedas
+                C4::AR::Debug::debug("cantidad MONEDAS: ".scalar(@{$param->{'monedas_array'}}));
               for(my $i=0;$i<scalar(@{$param->{'monedas_array'}});$i++){
                 my %parametros;
                 $parametros{'id_proveedor'}   = $id_proveedor;
@@ -170,6 +171,7 @@ sub agregarProveedor{
               }
               
 #             materiales
+                C4::AR::Debug::debug("cantidad materiales: ".scalar(@{$param->{'materiales_array'}}));
               for(my $i=0;$i<scalar(@{$param->{'materiales_array'}});$i++){             
                 my %parametros2;
                 $parametros2{'id_proveedor'}     = $id_proveedor;
@@ -179,6 +181,7 @@ sub agregarProveedor{
               }
               
 #             envios
+                C4::AR::Debug::debug("cantidad envios: ".scalar(@{$param->{'formas_envios_array'}}));
               for(my $i=0;$i<scalar(@{$param->{'formas_envios_array'}});$i++){             
                 my %parametros2;
                 $parametros2{'id_proveedor'}     = $id_proveedor;
@@ -190,14 +193,14 @@ sub agregarProveedor{
               $msg_object->{'error'} = 0;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
               $db->commit;
-           };
-           if ($@){
-           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
-               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
-               $msg_object->{'error'}= 1;
-               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
-               $db->rollback;
-           }
+#           };
+#           if ($@){
+#           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+#               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+#               $msg_object->{'error'}= 1;
+#               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+#               $db->rollback;
+#           }
 
           $db->{connect_options}->{AutoCommit} = 1;
     }
