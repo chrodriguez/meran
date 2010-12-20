@@ -22,14 +22,13 @@ __PACKAGE__->meta->setup(
           editorial             => { type => 'varchar', length => 255, not_null => 1},
           fecha_publicacion     => { type => 'varchar'},
           coleccion             => { type => 'varchar', length => 255, not_null => 1},
-          isbn_issn             => { type => 'varchar', length => 45, not_null => 1}
+          isbn_issn             => { type => 'varchar', length => 45, not_null => 1},
           cantidad_ejemplares   => { type => 'integer', length => 5, not_null => 1 },  
           motivo_propuesta      => { type => 'varchar', length => 255, not_null => 1},
           comentario            => { type => 'varchar', length => 255, not_null => 1},
           reserva_material      => { type => 'integer', not_null => 1 },
         
-
-cat_registro_marc_n2
+    ],
 
     relationships =>
     [
@@ -42,7 +41,7 @@ cat_registro_marc_n2
       
       ref_cat_nivel2 => 
       {
-        class       => 'C4::Modelo::cat_registro_marc_n2',
+        class       => 'C4::Modelo::CatRegistroMarcN2',
         key_columns => { cat_nivel2_id => 'id' },
         type        => 'one to one',
       },
@@ -88,7 +87,7 @@ sub setLugarPublicacion{
     my ($self) = shift;
     my ($lugar_public) = @_;
     utf8::encode($lugar_public);
-    $self->$lugar_publicacion($lugar_public);
+    $self->lugar_publicacion($lugar_public);
 }
 
 sub setEditorial{
