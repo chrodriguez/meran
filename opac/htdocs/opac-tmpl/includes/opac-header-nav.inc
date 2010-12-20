@@ -76,7 +76,7 @@
                           [% PERL %]
                               print C4::AR::Filtros::link_to( text    =>  "[% 'Recomendaciones' | i18n %]",
                                                               url     =>  '/cgi-bin/koha/opac-recomendaciones.pl',
-                                                              title   =>  "[% 'Sugerencias' | i18n %]",
+                                                              title   =>  "[% 'Recomendaciones' | i18n %]",
                                       ) ;
                           [% END %]
                       </li>
