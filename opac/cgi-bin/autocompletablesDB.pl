@@ -23,7 +23,10 @@ my $result;
 if ($accion eq 'autocomplete_ciudades'){
 
     $result = C4::AR::Utilidades::ciudadesAutocomplete($string);
+}
+elsif ($accion eq 'autocomplete_catalogo_biblioteca'){
 
+     $result = C4::AR::Utilidades::catalogoBibliotecaAutocomplete($string);
 }
 
 
