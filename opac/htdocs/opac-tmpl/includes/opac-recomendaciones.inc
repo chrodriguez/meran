@@ -33,7 +33,10 @@ function validateForm(){
 }
 
 $(document).ready( function() {
-    CrearAutocompleteCatalogoBiblioteca({IdInput: 'buscar_biblioteca', IdInputHidden: 'hidden_id_nivel_2'});
+    CrearAutocompleteCatalogoBiblioteca({IdInput: 'buscar_biblioteca', 
+                                         IdInputHidden: 'hidden_id_nivel_2',
+                                         IdInputAutor: 'autor'
+                                        });
     validateForm();
 });
 
