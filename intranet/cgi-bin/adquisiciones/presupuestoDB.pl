@@ -15,6 +15,7 @@ my $authnotrequired= 0;
 my $obj=$input->param('obj');
 
 $obj            = C4::AR::Utilidades::from_json_ISO($obj);
+
 my $proveedor   = $obj->{'id_proveedor'}||"";
 my $tipoAccion  = $obj->{'tipoAccion'}||"";
 
@@ -125,6 +126,8 @@ elsif($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR"){
 
 elsif($tipoAccion eq "GUARDAR_MODIFICACION_PRESUPUESTO"){
 
+    my $tabla_array_ref = $obj->{'table'};
+    
     my $recomendacion=1;
 
     my ($template, $session, $t_params)  = get_template_and_user({  
@@ -136,11 +139,20 @@ elsif($tipoAccion eq "GUARDAR_MODIFICACION_PRESUPUESTO"){
                         debug => 1,
                     });
 
-     my (@pres_detalle) = &C4::AR::Presupuestos::getAdqPresupuestoDetalle($recomendacion);  
-     C4::AR::Debug::debug(@pres_detalle);
+     my @pres_detalle = C4::AR::Presupuestos::getAdqPresupuestoDetalle($recomendacion);  
 
+     my $i=0;
+     for my $detalle (@pres_detalle){          
+           $detalle->setPrecioUnitario($tabla_array_ref->[$i]->{'PrecioUnitario'});
+           $detalle->save(); 
+           $i++;
+           
+#            my %row = ( detalle => $detalle ); 
+#            my @resultsData;
+#            push(@resultsData, \%row);
+#            C4::AR::Debug::debug(scalar(@resultsData));
+     } 
 }
-
 
 =item
 Se procesa la planilla ingresada
@@ -148,7 +160,10 @@ Se procesa la planilla ingresada
 elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
 
 # PARA FILEUPLOAD
-my $filepath    = $input->param('planilla');
+ my $filepath    = $input->param('upload');
+
+
+C4::AR::Debug::debug("PATH:".$filepath);
 
 my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
                       template_name   => '/adquisiciones/mostrarPresupuesto.tmpl',
@@ -158,8 +173,10 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
                       flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
 });
 
-my $presupuestos_dir= "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores";
-my $write_file  = $presupuestos_dir."/prueba.xls";
+my $presupuestos_dir= "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/";
+my $write_file  = $presupuestos_dir.$filepath;
+
+
 
 my $parser  = Spreadsheet::ParseExcel->new();
 
@@ -187,7 +204,7 @@ for my $worksheet ( $workbook->worksheets() ) {
         $hash{'articulo'}           = $worksheet->get_cell( $row, 2 )->value();       
         $hash{'precio_unitario'}    = $worksheet->get_cell( $row, 3 )->value();
         $hash{'total'}              = $worksheet->get_cell( $row, 4 )->value();
-        C4::AR::Debug::debug("MI RENGLON:".$hash{'renglon'});
+     
        
         push(@reg, \%hash);  
   }
