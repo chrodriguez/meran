@@ -14,7 +14,8 @@ my $tipoAccion      = $input->param('action');
 my ($template, $session, $t_params);
 
 if ($tipoAccion eq "EDITAR") {
-    
+# se edita la informacion del proveedor   
+ 
     ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
             template_name   => '/adquisiciones/datosProveedor.tmpl',
             query       => $input,
@@ -22,21 +23,21 @@ if ($tipoAccion eq "EDITAR") {
             authnotrequired => 0,
             flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
     });
+    
     my $comboDeTipoDeDoc = &C4::AR::Utilidades::generarComboTipoDeDoc();
     $t_params->{'combo_tipo_documento'} = $comboDeTipoDeDoc;
 
 }else{
+# se muestran los detalles del proveedor
+
           ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
                       template_name   => '/adquisiciones/detalleProveedor.tmpl',
                       query       => $input,
                       type        => "intranet",
                       authnotrequired => 0,
                       flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
-          });
-          
-      
+          });    
 }
-
 
 my $monedas                 = C4::AR::Proveedores::getMonedasProveedor($id_proveedor);
 my $formas_envio            = C4::AR::Proveedores::getFormasEnvioProveedor($id_proveedor);

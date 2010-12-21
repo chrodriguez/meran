@@ -3,6 +3,7 @@
 use strict;
 use CGI;
 use C4::AR::Utilidades;
+use C4::Auth;
 
 my $input = new CGI;
 my $authnotrequired = 0;
@@ -26,7 +27,8 @@ if ($accion eq 'autocomplete_ciudades'){
 }
 elsif ($accion eq 'autocomplete_catalogo_biblioteca'){
 
-     $result = C4::AR::Utilidades::catalogoBibliotecaAutocomplete($string);
+     #$result = C4::AR::Utilidades::catalogoBibliotecaAutocomplete($string);
+     $result = C4::AR::Utilidades::catalogoAutocomplete($string);
 }
 
 

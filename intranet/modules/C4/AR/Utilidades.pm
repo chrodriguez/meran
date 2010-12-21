@@ -2960,25 +2960,6 @@ sub ciudadesAutocomplete{
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
-sub catalogoBibliotecaAutocomplete{
-
-    my ($ciudad)= @_;
-    my $textout;
-    my @result;
-    if ($ciudad){
-        my($cant, $result) = C4::AR::Utilidades::buscarCiudades($ciudad);# agregado sacar
-        C4::AR::Debug::debug("CANTIDAD DE CIUDADES: ".$cant);
-        $textout= "";
-        for (my $i; $i<$cant; $i++){
-            $textout.= $result->[$i]->{'id'}."|".$result->[$i]->{'nombre'}."\n";
-        }
-    }
-
-
-    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
-}
-
-
 sub getSphinxMatchMode{
   my ($tipo) = @_;
   use Sphinx::Search;
@@ -3056,10 +3037,11 @@ sub catalogoAutocomplete{
     my $matches = $results->{'matches'};
     my $total_found = $results->{'total_found'};
     my $textout = "";
+    my $documento;
 
     foreach my $hash (@$matches){
-            $textout.= $hash->{'doc'}."|\n";
-            #push (@results_array, $hash->{'titulo'});
+    	    $documento = C4::AR::Nivel1::getNivel1FromId1($hash->{'doc'});
+            $textout.= $hash->{'doc'}."|" . $documento->marc_record . "|Pepe Iuliano|\n";
             printHASH($results);
     }
     

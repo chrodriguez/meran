@@ -229,7 +229,8 @@ function CrearAutocompleteUI(options){
 
 function CrearAutocompleteCatalogoBiblioteca(options){
     _CrearAutocomplete({	IdInput: options.IdInput, 
-							IdInputHidden: options.IdInputHidden, 
+							IdInputHidden: options.IdInputHidden,
+							IdInputAutor: options.IdInputAutor,
 							accion: 'autocomplete_catalogo_biblioteca', 
 							callBackFunction: options.callBackFunction,
 					});

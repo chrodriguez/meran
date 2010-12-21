@@ -20,11 +20,7 @@
 </script>
 <fieldset>
 <legend class="titulos">
-            [% IF addProveedor %]
                 [% "Agregar Proveedor" | i18n %]
-            [% ELSE  %]
-                [% "Proveedores - Modificar Datos" | i18n %]
-            [% END %]
 </legend>
 
 <form method=post  name="proveedorDataForm" id="proveedorDataForm">
@@ -53,7 +49,7 @@
 
             [% combo_tipo_documento %] 
 
-            <input  id="nro_doc" name="nro_doc" class="required" type="text" size="15" 
+            <input  id="nro_doc" name="nro_doc" class="required" type="text" size="7" 
                     value="[% proveedor.getNroDoc %]">
         </li>
 
@@ -93,7 +89,7 @@
 
             <li class="sub_item">
                 <label for="email">[% "Email" | i18n %]</label>
-                <input type=text name="email" id="email" size="25">
+                <input type=text name="email" id="email" size="15">
             </li>
       
       </ul>
@@ -102,7 +98,7 @@
 <fieldset>
       <legend class="titulo_legend">[% "Materiales que provee" | i18n %]</legend>
          <li class="sub_item"> 
-            <label for="material"> [% "Materiales" | i18n %]</label>
+            <label for="material"> [% "Materiales" | i18n %] *</label>
              [% combo_tipo_materiales %] 
          </li>
 </fieldset>
@@ -110,7 +106,7 @@
 <fieldset>
       <legend class="titulo_legend">[% "Formas de Envio" | i18n %]</legend>
         <li class="sub_item"> 
-            <label for="formas_envio"> [% "Envios" | i18n %]</label>
+            <label for="formas_envio"> [% "Envios" | i18n %] *</label>
              [% combo_formas_envio %] 
          </li>
 </fieldset>

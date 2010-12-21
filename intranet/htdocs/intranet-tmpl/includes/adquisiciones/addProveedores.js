@@ -8,6 +8,8 @@
 //*********************************************Agregar Proveedor*********************************************
 
 var arreglo = new Array() // global, arreglo con los id de las moneda que se le agregan al proveedor
+var array_materiales = new Array() // globalarreglo de values de materiales a agregar en la base
+var array_envios = new Array() //global, arreglo de values de envios a agregar en la base
 
 function monedas(){
   // agrega monedas en el cliente solamente, y se guardan todos los datos juntos cuando se selecciona "guardar"
@@ -20,7 +22,7 @@ function monedas(){
           
           // preguntamos si esta agregando la misma moneda nuevamente, que no se muestre porque ya esta
           var cantidad = 0 
-          $('.monedas').each(function(index) {     
+          $('.monedas').each(function() {     
           if($(this).attr('value') == idMonedaNueva){ 
               cantidad++
           }
@@ -42,7 +44,7 @@ function monedas(){
 
    $('#borrar_moneda').click(function(){
            var checkeados = 0
-           $('.monedas').each(function(index) {
+           $('.monedas').each(function() {
              if($(this).attr('checked')){ 
                  arreglo[checkeados] = $(this).val()
                  checkeados++
@@ -56,7 +58,7 @@ function monedas(){
    }); 
    
     function borrarMoneda(arreglo){
-      $('.monedas').each(function(index) {
+      $('.monedas').each(function() {
         if($(this).attr('checked')){ 
           $(this).remove()
           var value = $(this).val()
@@ -70,11 +72,13 @@ function monedas(){
 
 // materiales
 function getMateriales(){
-    var array_materiales = new Array()
     var i = 0
-    $('#tipo_material_id option:selected').each(function(index){  
-        array_materiales[i] = index
-        i++
+    $('#tipo_material_id option:selected').each(function(){  
+        // para no agregar en el arreglo el option "SIN SELECCIONAR"
+        if($(this).val() != ""){
+            array_materiales[i] = $(this).val()
+            i++
+        }
     })
     return array_materiales
 
@@ -82,11 +86,13 @@ function getMateriales(){
 
 // envios
 function getEnvios(){
-    var array_envios = new Array()
     var i = 0
-    $('#forma_envio_id option:selected').each(function(index){  
-        array_envios[i] = index
-        i++
+    $('#forma_envio_id option:selected').each(function(){  
+        // para no agregar en el arreglo el option "SIN SELECCIONAR"
+        if($(this).val() != ""){
+            array_envios[i] = $(this).val()
+            i++
+        }
     })
     return array_envios
 

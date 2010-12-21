@@ -1,5 +1,8 @@
 [% INCLUDE "FormValidateHelper.inc" %]
 
+[% INCLUDE 'AutocompleteHelper.inc'  %]
+
+
 <script type="text/javascript">
 
 function validateForm(){
@@ -24,14 +27,16 @@ function validateForm(){
                     nombre: POR_FAVOR_INGRESE_SU_NOMBRE,
                     mensaje: POR_FAVOR_INGRESE_SU_MENSAJE,
                     email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
-                    profesor-departamento: POR_FAVOR_INGRESO_DEPARTAMENTO,
-                    
+                    profesor_departamento: POR_FAVOR_INGRESE_DEPARTAMENTO  
                }
             });
 }
 
 $(document).ready( function() {
-    CrearAutocompleteCatalogoBiblioteca({IdInput: 'buscar_biblioteca', IdInputHidden: 'hidden_id_nivel_2'});
+    CrearAutocompleteCatalogoBiblioteca({IdInput: 'buscar_biblioteca', 
+                                         IdInputHidden: 'hidden_id_nivel_2',
+                                         IdInputAutor: 'autor'
+                                        });
     validateForm();
 });
 

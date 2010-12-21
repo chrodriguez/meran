@@ -1,35 +1,4 @@
-
 <script type="text/javascript">
-      
-    function BorrarProveedor(id){  
-        jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,PROVEEDOR_ALERT_TITLE, function(confirmStatus){
-
-            if(confirmStatus){
-                objAH                   = new AjaxHelper(updateBorrarProveedor);
-                objAH.debug             = true;
-                objAH.url               = "/cgi-bin/koha/adquisiciones/proveedoresDB.pl";
-                objAH.id_array          = [id];
-                objAH.itemtype          = $("#id_proveedor").val();
-                objAH.tipoAccion        = "ELIMINAR";
-                objAH.sendToServer();
-            }
-        });
-    }
-
-    function updateBorrarProveedor(responseText){
-        var info        = JSONstring.toObject(responseText);  
-        var Messages    = info.Message_arrayref;
-        setMessages(Messages);
-        if (! (hayError(Messages) ) ){
-            alert('pepe');
-            //inicializar();
-            //mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
-            //acutalizo los datos de nivel 2
-            //mostrarInfoAltaNivel2(ID_N2);
-            //mostrarInfoAltaNivel3(ID_N2);
-        }
-    }
-
 
     $(document).ready(function() {
           makeToggle('datos_tabla_div_user','trigger',null,false);
@@ -41,15 +10,6 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedoresResult.js"></script>
 
 [% INCLUDE "FormValidateHelper.inc" %]
-
-<script type="text/javascript">
-
-
- $(document).ready(function() {
-//        onEnter("nombre_proveedor",consultar);
- });
-
-</script>
 
 
 <div class="contenedor_paginador">[% paginador %]</div>
@@ -64,15 +24,6 @@
                         <th>
                             [% "Nombre o Raz&oacute;n Social" | i18n %]
                         </th>
-<!--                        <th>
-                            [% "Apellido" | i18n %]
-                        </th>-->
-<!--                        <th>
-                            [% "Tipo y nro de Documento" | i18n %]
-                        </th>-->
-<!--                        <th>
-                            [% "Raz&oacute;n Social" | i18n %]
-                        </th>-->
                         <th>
                             [% "CUIT/CIUL" | i18n %]
                         </th>
@@ -96,31 +47,17 @@
                           [% proveedor.getApellido %], [% proveedor.getNombre %]
                       [% END %]
                       </td>
-<!--                      <td align="left" class="proveedores">
-                          [% proveedor.getApellido %]
-                      </td>-->
-<!--                       <td align="left" class="proveedores"> -->
-<!--                           [% proveedor.getTipoDoc %] [%proveedor.getNroDoc %] -->
-<!--                      </td>-->
-<!--                      <td align="left" class="proveedores">
-                          [% proveedor.getRazonSocial %]
-                      </td>-->
                       <td align="left" class="proveedores">
                           [% proveedor.getCuitCuil %]
-                      </td>
-                        <!-- FIXME si no lo muestro asi se rompe!!!!!! ver -->
-<!--                      <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>-->
-                     
-                     <td align="left" class="proveedores">
+                      </td>                     
+                      <td align="left" class="proveedores">
                           [% proveedor.getEmail %]
                       </td>
                   
                       <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
                       <td align='left' width="9%" class="proveedores">
-                           
-
-                      <!--  Deberia llevar a un tmpl que muestre los datos de contacto del proveedor -->
-                          <div class="click horizontal icon_mas">
+                      
+                      <div class="click horizontal icon_mas">
                               [% PERL %]
                                             print C4::AR::Filtros::link_to(   
                                                                               text =>     C4::AR::Filtros::to_Icon( boton   => "icon_mas" ),
@@ -145,7 +82,7 @@
                 
                         print C4::AR::Filtros::to_Icon(    
                                             boton   => "icon_borrar",
-                                            onClick => "BorrarProveedor([% proveedor.getId %]);return false;",
+                                            onClick => "borrarProveedor([% proveedor.getId %]);",
                                             title   => "[% 'Borrar' | i18n %]",
                 ) ;
                 

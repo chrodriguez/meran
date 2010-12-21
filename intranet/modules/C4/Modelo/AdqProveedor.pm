@@ -116,10 +116,9 @@ sub editarProveedor{
     $self->setEmail($params->{'email'});
     $self->setTipoDoc($params->{'tipo_documento'});
     $self->setNroDoc($params->{'numero_documento'});
-    $self->setRazonSocial($params->{' razon_social'});
+    $self->setRazonSocial($params->{'razon_social'});
     $self->setCuitCuil($params->{'cuit_cuil'});
     $self->setFax($params->{'fax'});
-    C4::AR::Debug::debug("ciudad en adqproveedor: ".$params->{'ciudad'});
     $self->setCiudad($params->{'ciudad'});
     $self->setPlazoReclamo($params->{'plazo_reclamo'});
     $self->setActivo($params->{'proveedor_activo'});
@@ -128,12 +127,12 @@ sub editarProveedor{
 }
 
 
-# ***************************************FIN FUNCIONES DEL MODELO | PROVEEDORES*************************************************************
+# ***********************************FIN FUNCIONES DEL MODELO | PROVEEDORES***********************************************************
 
 
 
 
-# *******************************************************Getters y Setters***************************************************************
+# ****************************************************Getters y Setters***************************************************************
 
 sub setApellido{
     my ($self) = shift;
@@ -264,7 +263,6 @@ sub getNombre{
 
 sub getTipoDoc{
     my ($self) = shift;
-#    if($self->usr_ref_tipo_documento_id ==)
     return ($self->usr_ref_tipo_documento_id);
 }
 

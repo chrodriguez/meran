@@ -255,11 +255,18 @@ function modificarDatosDeProveedor(){
     objAH.debug               = true;
 
     objAH.id_proveedor        = $('#id_proveedor').val();
-    objAH.nombre              = $('#nombre').val();
-    objAH.apellido            = $('#apellido').val();
-    objAH.tipo_documento      = $('#tipo_documento_id').val();
-    objAH.numero_documento    = $('#numero_documento').val();
-    objAH.razon_social        = $('#razon_social').val();
+    
+    // preguntamos que tipo de proveedor estamos guardando
+    if(($('#apellido').val() == "") && ($('#razon_social').val() != "")){
+        // es una persona juridica
+        objAH.razon_social    = $('#razon_social').val();
+    }else{
+        // persona fisica
+        objAH.nombre              = $('#nombre').val();
+        objAH.apellido            = $('#apellido').val();
+        objAH.tipo_documento      = $('#tipo_documento_id').val();
+        objAH.numero_documento    = $('#numero_documento').val(); 
+    }
     objAH.cuit_cuil           = $('#cuit_cuil').val();
     objAH.ciudad              = $('#id_ciudad').val();
     objAH.domicilio           = $('#domicilio').val();
