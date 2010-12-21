@@ -372,6 +372,25 @@ sub getProveedorInfoPorId {
 }
 
 # =item
+#     Esta funcion devuelve el proveedor con nro_doc recibido como parametro
+# =cut
+sub getProveedorPorDni{
+    my ($params) = @_;
+
+    my $proveedorTemp;
+    my @filtros;
+
+    if ($params){
+        push (@filtros, ( nro_doc => { eq => $params}));
+        $proveedorTemp = C4::Modelo::AdqProveedor::Manager->get_adq_proveedor( query => \@filtros );
+
+        return $proveedorTemp->[0]
+    }
+
+    return 0;
+}
+
+# =item
 #     Este funcion devuelve la informacion de proveedores segun su nombre
 # =cut
 sub getProveedorLike {
@@ -547,11 +566,18 @@ sub _verificarDatosProveedor {
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A010', 'params' => []} ) ;   
             }
 
-            #   valida nro documento
+            #   valida nro documento, tambien que no exista ya en la base
             if($nro_doc ne "") {
                 if (!($msg_object->{'error'}) && ( ((&C4::AR::Validator::countAlphaChars($nro_doc) != 0)) || (&C4::AR::Validator::countSymbolChars($nro_doc) != 0) || (&C4::AR::Validator::countNumericChars($nro_doc) == 0))){
                       $msg_object->{'error'}= 1;
                       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A015', 'params' => []} ) ;
+                      }else{
+                        # el dni es valido, validamos que sea unico
+                        my $proveedor_dni = getProveedorPorDni($nro_doc);
+                        if($proveedor_dni != 0){
+                            $msg_object->{'error'}= 1;
+                            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A026', 'params' => []} ) ;
+                        }
                       }
             } else {
                     $msg_object->{'error'}= 1;
