@@ -28,8 +28,24 @@ my $tipoAccion= $obj->{'tipoAccion'}||"";
 
 
 
+# DEBUG (21-12-2010 12:32:7) => elemento id_prov
+# DEBUG (21-12-2010 12:32:7) => elemento upload
+# DEBUG (21-12-2010 12:32:7) => elemento planilla
+
+
 # PARA FILEUPLOAD
 my $filepath    = $input->param('planilla');
+
+C4::AR::Debug::debug("plantilla ????????? ". $input->param('planilla'));
+C4::AR::Debug::debug("upload ????????? ". $input->param('upload'));
+
+C4::AR::Debug::debug("???????????????????????????????");
+C4::AR::Utilidades::printHASH($input);
+
+foreach my $e (@{$input->{'.parameters'}}){
+C4::AR::Debug::debug("elemento ".$e);    
+# C4::AR::Debug::debug("value ".@input->{'.parameters'}->{$e});  
+}
 
 #----------------
 
@@ -54,38 +70,5 @@ my $write_file  = $presupuestos_dir."/".$filepath;
 
 my ($error,$codMsg,$message) = &C4::AR::UploadFile::uploadFile($prov,$write_file,$filepath, $presupuestos_dir);
 
-# my $parser  = Spreadsheet::ParseExcel->new();
-# 
-# my $workbook = $parser->parse($write_file);
-# 
-# if ( !defined $workbook ) {
-#             die $parser->error(), ".\n";
-# }
-#  
-# my @table;
-# my @reg;
-# my $presupuesto;
-#      
-# 
-# for my $worksheet ( $workbook->worksheets() ) {
-#      my ( $row_min, $row_max ) = $worksheet->row_range();
-#      my ( $col_min, $col_max ) = $worksheet->col_range();
-#      for my $row ( $row_min + 1 .. $row_max ) {
-#         my %hash;
-#         my $cell = $worksheet->get_cell( $row, $col );
-#         
-#         $hash{'renglon'}            = $worksheet->get_cell( $row, 0 )->value();
-#         $hash{'cantidad'}           = $worksheet->get_cell( $row, 1 )->value();
-#         $hash{'articulo'}           = $worksheet->get_cell( $row, 2 )->value();       
-#         $hash{'precio_unitario'}    = $worksheet->get_cell( $row, 3 )->value();
-#         $hash{'total'}              = $worksheet->get_cell( $row, 4 )->value();
-#         C4::AR::Debug::debug("MI RENGLON:".$hash{'renglon'});
-#        
-#         push(@reg, \%hash);  
-#   }
-# }
-# 
-# 
-# $t_params->{'datos_presupuesto'} = \@reg;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+# C4::Auth::output_html_with_http_headers($template, $t_params, $session);

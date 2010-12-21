@@ -160,7 +160,7 @@ Se procesa la planilla ingresada
 elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
 
 # PARA FILEUPLOAD
- my $filepath    = $input->param('upload');
+my $filepath    = $input->param('planilla');
 
 
 C4::AR::Debug::debug("PATH:".$filepath);
