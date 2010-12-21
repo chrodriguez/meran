@@ -1,4 +1,3 @@
-
 <script type="text/javascript">
 
     $(document).ready(function() {
@@ -25,15 +24,6 @@
                         <th>
                             [% "Nombre o Raz&oacute;n Social" | i18n %]
                         </th>
-<!--                        <th>
-                            [% "Apellido" | i18n %]
-                        </th>-->
-<!--                        <th>
-                            [% "Tipo y nro de Documento" | i18n %]
-                        </th>-->
-<!--                        <th>
-                            [% "Raz&oacute;n Social" | i18n %]
-                        </th>-->
                         <th>
                             [% "CUIT/CIUL" | i18n %]
                         </th>
@@ -57,31 +47,17 @@
                           [% proveedor.getApellido %], [% proveedor.getNombre %]
                       [% END %]
                       </td>
-<!--                      <td align="left" class="proveedores">
-                          [% proveedor.getApellido %]
-                      </td>-->
-<!--                       <td align="left" class="proveedores"> -->
-<!--                           [% proveedor.getTipoDoc %] [%proveedor.getNroDoc %] -->
-<!--                      </td>-->
-<!--                      <td align="left" class="proveedores">
-                          [% proveedor.getRazonSocial %]
-                      </td>-->
                       <td align="left" class="proveedores">
                           [% proveedor.getCuitCuil %]
-                      </td>
-                        <!-- FIXME si no lo muestro asi se rompe!!!!!! ver -->
-<!--                      <input type=text id="email" name="email" size="25" value="[% proveedor.getEmail %]" disabled>-->
-                     
-                     <td align="left" class="proveedores">
+                      </td>                     
+                      <td align="left" class="proveedores">
                           [% proveedor.getEmail %]
                       </td>
                   
                       <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
                       <td align='left' width="9%" class="proveedores">
-                           
-
-                      <!--  Deberia llevar a un tmpl que muestre los datos de contacto del proveedor -->
-                          <div class="click horizontal icon_mas">
+                      
+                      <div class="click horizontal icon_mas">
                               [% PERL %]
                                             print C4::AR::Filtros::link_to(   
                                                                               text =>     C4::AR::Filtros::to_Icon( boton   => "icon_mas" ),

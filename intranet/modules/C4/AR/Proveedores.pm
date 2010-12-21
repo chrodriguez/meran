@@ -24,7 +24,6 @@ use vars qw(@EXPORT @ISA);
     &eliminarProveedor;
     &modificarProveedor;
     &getProveedorLike;
-    &editarAutorizado;
     &getMonedasProveedor;
     &getFormasEnvioProveedor;
     &getMonedas;
@@ -156,12 +155,11 @@ sub agregarProveedor{
           $db->begin_work;
           my $id_moneda;
           
-#           eval{
+           eval{
               $proveedor->agregarProveedor($param);
               my $id_proveedor = $proveedor->getId();
 
 #             monedas
-                C4::AR::Debug::debug("cantidad MONEDAS: ".scalar(@{$param->{'monedas_array'}}));
               for(my $i=0;$i<scalar(@{$param->{'monedas_array'}});$i++){
                 my %parametros;
                 $parametros{'id_proveedor'}   = $id_proveedor;
@@ -171,7 +169,6 @@ sub agregarProveedor{
               }
               
 #             materiales
-                C4::AR::Debug::debug("cantidad materiales: ".scalar(@{$param->{'materiales_array'}}));
               for(my $i=0;$i<scalar(@{$param->{'materiales_array'}});$i++){             
                 my %parametros2;
                 $parametros2{'id_proveedor'}     = $id_proveedor;
@@ -181,7 +178,6 @@ sub agregarProveedor{
               }
               
 #             envios
-                C4::AR::Debug::debug("cantidad envios: ".scalar(@{$param->{'formas_envios_array'}}));
               for(my $i=0;$i<scalar(@{$param->{'formas_envios_array'}});$i++){             
                 my %parametros2;
                 $parametros2{'id_proveedor'}     = $id_proveedor;
@@ -193,14 +189,14 @@ sub agregarProveedor{
               $msg_object->{'error'} = 0;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
               $db->commit;
-#           };
-#           if ($@){
-#           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
-#               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
-#               $msg_object->{'error'}= 1;
-#               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
-#               $db->rollback;
-#           }
+           };
+           if ($@){
+           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+               $msg_object->{'error'}= 1;
+               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+               $db->rollback;
+           }
 
           $db->{connect_options}->{AutoCommit} = 1;
     }
@@ -258,21 +254,20 @@ sub eliminarProveedor {
      my ($id_prov) = @_;
      my $msg_object= C4::AR::Mensajes::create();
      my $prov = C4::AR::Proveedores::getProveedorInfoPorId($id_prov);
-#     my $db = $prov->db;
  
-#     eval {
+     eval {
          $prov->desactivar;
          $msg_object->{'error'}= 0;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A024', 'params' => []} ) ;
-#     };
+     };
  
-#     if ($@){
-#         #Se loguea error de Base de Datos
-#         &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
-#         #Se setea error para el usuario
-#         $msg_object->{'error'}= 1;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A025', 'params' => []} ) ;
-#     }
+     if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A025', 'params' => []} ) ;
+     }
  
      return ($msg_object);
 }
@@ -303,7 +298,7 @@ sub editarProveedor{
           eval{
               $proveedor->editarProveedor($params);
               
-#             materiales
+#             materiales:
 #             antes de agregar borrar todo de la tabla proveedor_tipo_material:
               my $arreglo_materiales            = getMaterialesProveedor($params->{'id_proveedor'});
               for(my $i=0;$i<scalar(@{$arreglo_materiales});$i++){
@@ -321,7 +316,7 @@ sub editarProveedor{
                 $proveedor_material->agregarMaterialProveedor(\%parametros);
               }
               
-#              hacer formas envio
+#             formas de envio:
 #             antes de agregar borrar todo de la tabla adq_proveedor_forma_envio:
               my $arreglo_formas_envio            = getFormasEnvioProveedor($params->{'id_proveedor'});
               for(my $i=0;$i<scalar(@{$arreglo_formas_envio});$i++){
@@ -530,7 +525,7 @@ sub _verificarDatosProveedor {
 
     
             # es una persona fisica, se validan estos datos
-            #   valida que el nombre sea valido - no puede estar en blanco ni tener caracteres invalidos - 
+            # valida que el nombre sea valido - no puede estar en blanco ni tener caracteres invalidos - 
             if($nombre ne ""){
                 if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($nombre)))){
                     $msg_object->{'error'}= 1;
@@ -565,8 +560,8 @@ sub _verificarDatosProveedor {
             }
 
         }else{
-            #es una persona juridica
-            #   valida razon social
+            # es una persona juridica
+            # valida razon social
             if($razon_social ne "") {
                 if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($razon_social)))){
                       $msg_object->{'error'}= 1;

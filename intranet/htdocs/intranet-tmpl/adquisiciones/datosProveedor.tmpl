@@ -1,13 +1,12 @@
 [% INCLUDE "intranet-top.inc" %] 
-[% INCLUDE "WindowHelper.inc" %] 
-[% INCLUDE 'AutocompleteHelper.inc'  %]
+[% INCLUDE 'AutocompleteHelper.inc' %]
 
   <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
 <div>
       <!--    DETALLE PROVEEDOR -->
 
       <fieldset>
-          <legend onClick="esconder()" class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Datos del proveedor" | i18n %]'>
+          <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Datos del proveedor" | i18n %]'>
                               [% "Datos del proveedor" | i18n %]
           </legend>  
           <div id="detalleProveedor">
@@ -24,7 +23,7 @@
 
           <li class="sub_item"> 
           <label for="tipo_documento" id="label_tipo_documento_id"> [% "Tipo Documento" | i18n %] *</label>
-          [% combo_tipo_documento %] <input  id="numero_documento" name="numero_documento" class="required"  type="text" size="15" value="[% proveedor.getNroDoc %]">
+          [% combo_tipo_documento %] <input  id="numero_documento" name="numero_documento" class="required"  type="text" size="7" value="[% proveedor.getNroDoc %]">
           </li>
 
 
@@ -51,12 +50,12 @@
 
 	      <li class="sub_item">
 		  <label for="telefono">[% "Telefono" | i18n %] *</label>
-		  <input id="telefono" name="telefono" class="required" type="text" size="15" value="[% proveedor.getTelefono %]">
+		  <input id="telefono" name="telefono" class="required" type="text" size="25" value="[% proveedor.getTelefono %]">
 	      </li>
 
           <li class="sub_item">
           <label for="fax">[% "Fax" | i18n %] </label>
-          <input id="fax" name="fax" type="text" size="15" value="[% proveedor.getFax %]">
+          <input id="fax" name="fax" type="text" size="25" value="[% proveedor.getFax %]">
           </li>
 	      <li class="sub_item">
 		  <label for="email">[% "Email" | i18n %]</label>
@@ -65,7 +64,7 @@
 
           <li class="sub_item">
           <label for="plazo_reclamo">[% "Plazo Reclamo" | i18n %] </label>
-          <input  id="plazo_reclamo" name="plazo_reclamo" type="text" size="15" value="[% proveedor.getPlazoReclamo %]">
+          <input  id="plazo_reclamo" name="plazo_reclamo" type="text" size="25" value="[% proveedor.getPlazoReclamo %]">
           </li>
           
           <!-- Materiales -->
