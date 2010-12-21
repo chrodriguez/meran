@@ -15,6 +15,8 @@
          CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
          CrearAutocompleteMonedas({IdInput: 'moneda', IdInputHidden: 'id_moneda'})
          monedas()
+         // esconde el boton 'Guardar', se muestra cuando selecciona el tipo de proveedor
+         $('#agregar_proveedor').hide()
  });
 
 </script>
@@ -131,24 +133,14 @@
 
 <div class="buttonContainerHorizontal">
     <ul class="listaMenuBotones" >
-        [% IF addProveedor %]
             [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
                                                         boton   => "boton_buscar",
                                                         onClick => "save();",
                                                         title   => "[% 'Guardar' | i18n %]",
+                                                        id      => "[% 'agregar_proveedor' %]",
                                                                 ) ;
             [% END %]
-        [% ELSE  %]
-                [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Modificaci&oacute;n' | i18n %]",
-                                                        boton   => "boton_buscar",
-                                                        onClick => "save();",
-                                                        title   => "[% 'Guardar' | i18n %]",
-                            ) ;
-                [% END %]
-        [% END %]
-
     </ul>
 </div>
         <div>
