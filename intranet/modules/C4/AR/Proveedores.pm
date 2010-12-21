@@ -508,7 +508,7 @@ sub getMonedas{
 sub _verificarDatosProveedor {
 
      my ($data, $msg_object)    = @_;
-     my $actionType             = $data->{'actionType'};
+     my $actionType             = $data->{'tipoAccion'};
      my $checkStatus;
 
      my $tipo_proveedor         = $data->{'tipo_proveedor'};
@@ -537,7 +537,7 @@ sub _verificarDatosProveedor {
 # TODO AGREGAR TIPOS DE MATERIALES, FORMAS DE ENVIO y MONEDAS!!! -- TAMBIEN VER VALIDACIONES
 
 
-     if (($actionType eq "AGREGAR_PROVEEDOR") || ($actionType eq "MODIFICACION")){
+     if (($actionType eq "AGREGAR_PROVEEDOR") || ($actionType eq "GUARDAR_MODIFICACION_PROVEEDOR")){
 
 
         if($tipo_proveedor eq "persona_fisica"){
@@ -556,7 +556,7 @@ sub _verificarDatosProveedor {
             }
 
             #   valida apellido
-            if($apellido ne "") {
+            if($apellido ne ""){
                 if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($apellido)))){
                       $msg_object->{'error'}= 1;
                       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A009', 'params' => []} ) ;
@@ -566,20 +566,32 @@ sub _verificarDatosProveedor {
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A010', 'params' => []} ) ;   
             }
 
-            #   valida nro documento, tambien que no exista ya en la base
+            #   valida nro documento, tambien que no exista ya en la base cuando estamos agregando un proveedor
             if($nro_doc ne "") {
                 if (!($msg_object->{'error'}) && ( ((&C4::AR::Validator::countAlphaChars($nro_doc) != 0)) || (&C4::AR::Validator::countSymbolChars($nro_doc) != 0) || (&C4::AR::Validator::countNumericChars($nro_doc) == 0))){
                       $msg_object->{'error'}= 1;
                       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A015', 'params' => []} ) ;
                       }else{
-                        # el dni es valido, validamos que sea unico
-                        my $proveedor_dni = getProveedorPorDni($nro_doc);
-                        if($proveedor_dni != 0){
-                            $msg_object->{'error'}= 1;
-                            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A026', 'params' => []} ) ;
+                        # el dni es valido, validamos que sea unico si estamos agregando
+                        if($actionType eq "AGREGAR_PROVEEDOR"){
+                            my $proveedor_dni = getProveedorPorDni($nro_doc);
+                            if($proveedor_dni != 0){
+                                $msg_object->{'error'}= 1;
+                                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A026', 'params' => []} ) ;
+                            }
+                        }else{
+                            # si estamos editando tiene que tener el mismo dni el proveedor con mismo id
+                            my $proveedor_dni = getProveedorPorDni($nro_doc);
+                            if($proveedor_dni != 0){
+                                if($proveedor_dni->getId != $data->{'id_proveedor'}){
+                                    $msg_object->{'error'}= 1;
+                                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A026', 'params' => []} ) ;
+                                }
+                            }
                         }
                       }
             } else {
+            C4::AR::Debug::debug("nro_doc: ".$nro_doc);
                     $msg_object->{'error'}= 1;
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A016', 'params' => []} ) ;
                   

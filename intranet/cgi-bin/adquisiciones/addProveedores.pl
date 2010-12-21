@@ -52,7 +52,7 @@ if($obj){
     $params{'plazo_reclamo'}        = $obj->{'plazo_reclamo'};
 
     $params{'proveedor_activo'}     = 1; 
-    $params{'actionType'}           = $obj->{'tipoAccion'};
+    $params{'tipoAccion'}           = $obj->{'tipoAccion'};
 
 # Monedas:
 
