@@ -159,11 +159,7 @@ Se procesa la planilla ingresada
 =cut
 elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
 
-# PARA FILEUPLOAD
-my $filepath    = $input->param('planilla');
-
-
-C4::AR::Debug::debug("PATH:".$filepath);
+my $filepath  = $obj->{'filepath'}||"";
 
 my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
                       template_name   => '/adquisiciones/mostrarPresupuesto.tmpl',
@@ -173,14 +169,15 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
                       flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
 });
 
+
 my $presupuestos_dir= "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/";
 my $write_file  = $presupuestos_dir.$filepath;
 
 
 
 my $parser  = Spreadsheet::ParseExcel->new();
-
 my $workbook = $parser->parse($write_file);
+
 
 
 # if ( !defined $workbook ) {
@@ -189,24 +186,32 @@ my $workbook = $parser->parse($write_file);
 #  
 my @table;
 my @reg;
-my $presupuesto;
+
      
 
-for my $worksheet ( $workbook->worksheets() ) {
+ for my $worksheet ( $workbook->worksheets() ) {
      my ( $row_min, $row_max ) = $worksheet->row_range();
-  
-     for my $row ( $row_min + 1 .. $row_max ) {
-        my %hash;
-#         my $cell = $worksheet->get_cell( $row, $col );
         
-        $hash{'renglon'}            = $worksheet->get_cell( $row, 0 )->value();
-        $hash{'cantidad'}           = $worksheet->get_cell( $row, 1 )->value();
-        $hash{'articulo'}           = $worksheet->get_cell( $row, 2 )->value();       
-        $hash{'precio_unitario'}    = $worksheet->get_cell( $row, 3 )->value();
-        $hash{'total'}              = $worksheet->get_cell( $row, 4 )->value();
-     
-       
-        push(@reg, \%hash);  
+     C4::AR::Debug::debug($row_min . "-" . $row_max);
+     for my $row ( $row_min + 1 .. (6-1) ) {
+         my %hash;         
+#        my $cell = $worksheet->get_cell( $row, 0 );
+#        
+         
+         C4::AR::Debug::debug($row . "-" . $worksheet->get_cell( $row, 0 )->value());
+         C4::AR::Debug::debug($row . "-" . $worksheet->get_cell( $row, 1 )->value());
+         C4::AR::Debug::debug($row . "-" . $worksheet->get_cell( $row, 2 )->value());
+         C4::AR::Debug::debug($row . "-" . $worksheet->get_cell( $row, 3 )->value());
+         C4::AR::Debug::debug($row . "-" . $worksheet->get_cell( $row, 4 )->value());
+
+         $hash{'renglon'}            = $worksheet->get_cell( $row, 0 )->value();   
+         $hash{'cantidad'}           = $worksheet->get_cell( $row, 1 )->value();
+         $hash{'articulo'}           = $worksheet->get_cell( $row, 2 )->value();       
+         $hash{'precio_unitario'}    = $worksheet->get_cell( $row, 3 )->value();
+         $hash{'total'}              = $worksheet->get_cell( $row, 4 )->value();
+#      
+          push(@reg, \%hash);  
+        
   }
 }
 

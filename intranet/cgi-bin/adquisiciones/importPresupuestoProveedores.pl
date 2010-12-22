@@ -8,17 +8,10 @@ use Spreadsheet::Read;
 use Spreadsheet::ParseExcel;
 
  
-# my $query       = new CGI;
-# my $prov   = $query->param('id');
-
-
 my $input = new CGI;
 my $authnotrequired= 0;
 
 my $obj=$input->param('obj');
-
-# my $filepath=$input->param('formPlanilla');
-
 
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
@@ -34,31 +27,23 @@ my $tipoAccion= $obj->{'tipoAccion'}||"";
 
 
 # PARA FILEUPLOAD
-my $filepath    = $input->param('planilla');
+# my $filepath    = $input->param('planilla');
 
-C4::AR::Debug::debug("plantilla ????????? ". $input->param('planilla'));
-C4::AR::Debug::debug("upload ????????? ". $input->param('upload'));
-
-C4::AR::Debug::debug("???????????????????????????????");
-C4::AR::Utilidades::printHASH($input);
-
-foreach my $e (@{$input->{'.parameters'}}){
-C4::AR::Debug::debug("elemento ".$e);    
-# C4::AR::Debug::debug("value ".@input->{'.parameters'}->{$e});  
-}
+# C4::AR::Debug::debug("plantilla ????????? ". $input->param('planilla'));
+# C4::AR::Debug::debug("upload ????????? ". $input->param('upload'));
+# 
+# C4::AR::Debug::debug("???????????????????????????????");
+# C4::AR::Utilidades::printHASH($input);
+# 
+# foreach my $e (@{$input->{'.parameters'}}){
+# C4::AR::Debug::debug("elemento ".$e);    
+# # C4::AR::Debug::debug("value ".@input->{'.parameters'}->{$e});  
+# }
 
 #----------------
 
-
-# PARA INPUT COMUN
-# my $filepath    = $query->param('file');
-#-----------------
-
-
 my $authnotrequired = 0;
 my $presupuestos_dir= "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores";
-my $write_file  = $presupuestos_dir."/".$filepath;
-
 
 ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
                       template_name   => '/adquisiciones/mostrarPresupuesto.tmpl',
@@ -68,7 +53,11 @@ my $write_file  = $presupuestos_dir."/".$filepath;
                       flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
 });
 
-my ($error,$codMsg,$message) = &C4::AR::UploadFile::uploadFile($prov,$write_file,$filepath, $presupuestos_dir);
+my $filepath= $input->param('planilla');
+
+my $write_file  = $presupuestos_dir."/".$filepath;
+
+my ($error,$codMsg,$message) = &C4::AR::UploadFile::uploadFile($prov,$write_file,$filepath,$presupuestos_dir);
 
 
-# C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::Auth::output_html_with_http_headers($template, $t_params, $session);

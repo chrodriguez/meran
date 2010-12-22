@@ -37,7 +37,7 @@ my $picturesDir = C4::Context->config("picturesdir");
 sub uploadPhoto{
 	my ($bornum, $filepath) = @_;
 
-     C4::AR::Debug::debug("UploadFile => uploadPhoto");    
+    C4::AR::Debug::debug("UploadFile => uploadPhoto");    
     my $bytes_read; 
 	my $msg                     = '';
     my $size                    = 0;
@@ -111,7 +111,6 @@ C4::AR::Debug::debug("UploadFile => deletePhoto => ".C4::AR::Utilidades::trim($p
 sub uploadFile{
 
     my ($prov,$write_file,$filepath, $presupuestos_dir) = @_;
-
     my $bytes_read; 
     my $msg                     = '';
     my $size                    = 0;
@@ -119,6 +118,7 @@ sub uploadFile{
     my @extensiones_permitidas  = ("odt","xls");
   
     my @nombreYextension        = split('\.',$filepath);
+   
     if (scalar(@nombreYextension)==2) { 
     
     # verifica que el nombre del archivo tenga el punto (.)

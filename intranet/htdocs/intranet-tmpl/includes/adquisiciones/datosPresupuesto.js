@@ -46,8 +46,6 @@ function procesarPlanilla(){
                  objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
                  objAH.id_proveedor        = $('#proveedor').val();
-//                  objAH.planilla            = $('#file').val();
-   
                  objAH.tipoAccion          = 'GUARDAR_MODIFICACION_PRESUPUESTO';
                  objAH.sendToServer();
 
@@ -66,7 +64,8 @@ function mostrarPresupuesto(){
                  objAH                     = new AjaxHelper(updateMostrarPresupuesto);
                  objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
-                 objAH.id_proveedor        = $('#proveedor').val();   
+                 objAH.id_proveedor        = $('#proveedor').val(); 
+                 objAH.filepath            = $('#myUploadFile').val();
                  objAH.tipoAccion          = 'MOSTRAR_PRESUPUESTO';
                  objAH.sendToServer();
 
