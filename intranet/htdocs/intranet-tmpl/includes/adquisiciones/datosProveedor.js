@@ -260,12 +260,14 @@ function modificarDatosDeProveedor(){
     if(($('#apellido').val() == "") && ($('#razon_social').val() != "")){
         // es una persona juridica
         objAH.razon_social    = $('#razon_social').val();
+        objAH.tipo_proveedor  = 'persona_juridica';
     }else{
         // persona fisica
         objAH.nombre              = $('#nombre').val();
         objAH.apellido            = $('#apellido').val();
         objAH.tipo_documento      = $('#tipo_documento_id').val();
-        objAH.numero_documento    = $('#numero_documento').val(); 
+        objAH.nro_doc             = $('#numero_documento').val(); 
+        objAH.tipo_proveedor      = 'persona_fisica';
     }
     objAH.cuit_cuil           = $('#cuit_cuil').val();
     objAH.ciudad              = $('#id_ciudad').val();

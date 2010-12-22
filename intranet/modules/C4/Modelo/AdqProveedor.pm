@@ -115,7 +115,7 @@ sub editarProveedor{
     $self->setTelefono($params->{'telefono'});
     $self->setEmail($params->{'email'});
     $self->setTipoDoc($params->{'tipo_documento'});
-    $self->setNroDoc($params->{'numero_documento'});
+    $self->setNroDoc($params->{'nro_doc'});
     $self->setRazonSocial($params->{'razon_social'});
     $self->setCuitCuil($params->{'cuit_cuil'});
     $self->setFax($params->{'fax'});
