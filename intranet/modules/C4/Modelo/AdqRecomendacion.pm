@@ -13,10 +13,11 @@ __PACKAGE__->meta->setup(
     table   => 'adq_recomendacion',
 
     columns => [
-        id                              => { type => 'integer', not_null => 1 },
-        usr_socio_id                    => { type => 'integer', not_null => 1},
-        fecha                           => { type => 'varchar', length => 255, not_null => 1},
-        ref_estado_presupuesto_id       => { type => 'integer', not_null => 1},
+        id                                  => { type => 'integer', not_null => 1 },
+        usr_socio_id                        => { type => 'integer', not_null => 1},
+        fecha                               => { type => 'varchar', length => 255, not_null => 1},
+        activa                              => { type => 'integer', length => 4, not_null => 1},
+        adq_ref_tipo_recomendacion_id       => { type => 'integer', not_null => 1},
     ],
 
 
@@ -26,14 +27,14 @@ __PACKAGE__->meta->setup(
       {
          class       => 'C4::Modelo::UsrSocio',
          key_columns => {usr_socio_id => 'id_socio' },
-         type        => 'one to one',
+         type        => 'one to many',
        },
       
-      ref_estado_presupuesto => 
+      adq_ref_tipo_recomendacion_id => 
       {
-        class       => 'C4::Modelo::RefEstadoPresupuesto',
-        key_columns => {ref_estado_presupuesto_id => 'id' },
-        type        => 'one to one',
+        class       => 'C4::Modelo::AdqRefTipoRecomendacion',
+        key_columns => {adq_ref_tipo_recomendacion_id => 'id' },
+        type        => 'one to many',
       },
 
 
@@ -43,6 +44,20 @@ __PACKAGE__->meta->setup(
     unique_key => ['id'],
 
 );
+
+
+sub agregarRecomendacion{
+    my ($self) = shift;
+    my ($params) = @_;
+
+    $self->setFecha($params->{'fecha'});
+    #$self->setActiva($params->{'activa'});
+    $self->setUsrSocioId($params->{'usr_socio_id'});
+    $self->setAdqRefTipoRecomendacionId($params->{'adq_ref_tipo_recomendacion_id'});
+    $self->setActiva(1);
+
+    $self->save();
+}
 
 
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
@@ -60,11 +75,18 @@ sub setFecha{
     $self->fecha($fecha);
 }
 
-sub setRefEstadoPresupuestoId{
+sub setActiva{
     my ($self) = shift;
-    my ($estado) = @_;
-    utf8::encode($estado);
-    $self->ref_estado_presupuesto_id($estado);
+    my ($valor) = @_;
+    $self->fecha($valor);
+}
+
+
+sub setAdqRefTipoRecomendacionId{
+    my ($self) = shift;
+    my ($valor) = @_;
+    utf8::encode($valor);
+    $self->adq_ref_tipo_recomendacion_id($valor);
 }
 
 sub getId{
@@ -77,12 +99,18 @@ sub getFecha{
     return ($self->fecha);
 }
 
+sub getActiva{
+    my ($self) = shift;
+    return ($self->activa);
+}
+
+
 sub getUsrSocioId{
     my ($self) = shift;
     return ($self->usr_socio_id);
 }
 
-sub getRefEstadoPresupuestoId{
+sub getAdqRefTipoRecomendacionId{
     my ($self) = shift;
-    return ($self->ref_estado_presupuesto_id);
+    return ($self->adq_ref_tipo_recomendacion_id);
 }
