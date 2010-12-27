@@ -29,7 +29,7 @@ sub getAdqPresupuestoDetalle{
                                                                     db => $db,
                                                                     query   => [ adq_presupuesto_id => { eq => $presupuesto} ],
                                                                 );
-    if(scalar($detalle_array_ref) > 0){
+    if(scalar(@detalle_array_ref) > 0){
         return (@detalle_array_ref);
     }else{
         return 0;
