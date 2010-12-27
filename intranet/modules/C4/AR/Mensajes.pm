@@ -394,6 +394,7 @@ my %mensajesINTRA = (
     'A023' => 'La moneda fue agregada con &eacute;xtio.',
     'A024' => 'El proveedor fue eliminado con &eacute;xtio.',
     'A025' => 'El proveedor no pudo ser eliminado. Intente nuevamente.',
+    'A026' => 'El n&uacute;mero de documento ingresado ya existe. Por favor ingrese otro.',
 );
 
 sub getMensaje {

@@ -4,6 +4,7 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Modelo::AdqPresupuestoDetalle;
+use C4::Modelo::AdqPresupuestoDetalle::Manager;
 use C4::Modelo::AdqRecomendacionDetalle::Manager;
 
 
@@ -12,36 +13,75 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(  
     &getAdqPresupuestoDetalle;
+    &actualizarPresupuesto;
 );
   
 
 sub getAdqPresupuestoDetalle{
-#     my ($id_recomendacion, $id_proveedor, $db) = @_;
-# 
-#     my presupuesto=1;
-#     
-#     $db = $db || C4::Modelo::AdqPresupuesto->new()->db;
-# 
-#     my $adq_presupuesto= C4::Modelo::AdqPresupuesto::Manager->get_adq_presupuesto(   
-#                                                                     db => $db,
-#                                                                     query   => [ id => { eq => $presupuesto}, proveedor_id => { eq => $id_proveedor}], 
-#                                                                 );
-# 
-#     $db = $db || C4::Modelo::AdqPresupuestoDetalle->new()->db;
-# 
-#     
-#     my $adq_presupuesto_detalle = C4::Modelo::AdqPresupuestoDetalle::Manager->get_adq_presupuesto_detalle(   
-#                                                                     db => $db,
-#                                                                     query   => [ adq_presupuesto_id => { eq => 1}, ], 
-#                                                                 );
-# 
-#     if( scalar($adq_recomendacion_detalle) > 0){
-# #         for(my $i=0;$i<scalar(@{$adq_recomendacion_detalle});$i++){
-# #                 my $detalle = getAdqProveedorTipoMaterial($arreglo_materiales->[$i]->getMaterialId, $params->{'id_proveedor'}, $db);
-# #                 $proveedor_material->eliminar();             
-# #               }
-#         return ($adq_recomendacion_detalle->[0]);
-#     }else{
-#         return 0;
-#     }
+    my ($id_recomendacion, $id_proveedor, $db) = @_;
+
+    my $presupuesto=1;
+  
+    $db = $db || C4::Modelo::AdqPresupuestoDetalle->new()->db;
+
+    
+    my @detalle_array_ref = C4::Modelo::AdqPresupuestoDetalle::Manager->get_adq_presupuesto_detalle(   
+                                                                    db => $db,
+                                                                    query   => [ adq_presupuesto_id => { eq => $presupuesto} ],
+                                                                );
+    if(scalar(@detalle_array_ref) > 0){
+        return (@detalle_array_ref);
+    }else{
+        return 0;
+    }
 }
+
+
+sub actualizarPresupuesto{
+    
+     my ($obj) = @_;
+
+     my $tabla_array_ref = $obj->{'table'};
+
+     my $recomendacion=1;
+
+     my $adq_presupuesto_detalle = C4::Modelo::AdqPresupuestoDetalle->new();
+     my $msg_object= C4::AR::Mensajes::create();
+     
+     my $db = $adq_presupuesto_detalle->db;
+     $db->{connect_options}->{AutoCommit} = 0;
+     $db->begin_work;
+     
+     my $pres_detalle = C4::AR::Presupuestos::getAdqPresupuestoDetalle($recomendacion); 
+     
+     eval{
+          my $i=0;
+         
+          for my $detalle ($pres_detalle){          
+                $detalle->setPrecioUnitario($tabla_array_ref->[$i]->{'PrecioUnitario'});
+                C4::AR::Debug::debug($i);
+                $detalle->save(); 
+                $i++;
+          }
+
+     $msg_object->{'error'}= 0;
+     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A006', 'params' => []});
+     $db->commit;
+
+     };
+     if ($@){
+              &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+              $msg_object->{'error'}= 1;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+              $db->rollback;
+     }
+
+     return ($msg_object);
+
+}
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__
+

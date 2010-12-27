@@ -34,12 +34,8 @@ $(document).ready(function() {
 });
 
 function onCompleteFileUpload(){
-   
-//     $('#datos_planilla').show;
-//     $('#fake_file').val('');
-mostrarPresupuesto();
-
-   
+     
+        mostrarPresupuesto();
 }
 
 function createFileUploader(){
@@ -51,11 +47,11 @@ function createFileUploader(){
                         file_types: "xls",
                         type_file: "planilla_xls",
                         ajaxFile: "importPresupuestoProveedores.pl",
-                        proveedor: prov,
+//                         proveedor: prov,
                         uploadFolder: "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/",
                         funcionOnComplete: function (){
-                                    onCompleteFileUpload(prov);
-                                }
+                                    onCompleteFileUpload();
+                        }
         });
 
     }
@@ -79,7 +75,7 @@ function createFileUploader(){
           <fieldset id="carga_planilla">
 
                 <legend class="titulo_legend">[% "Carga de Planilla Excel" | i18n %]</legend>
-                
+                <input type="hidden" id="filepath" value="">
                 <!-- VER BIEN Q PONER-->
                 <p>Seleccione el archivo que desea cargar </p>
                     <div id="div_uploader" >
@@ -89,7 +85,7 @@ function createFileUploader(){
                     </div>
           </fieldset>
 
-          <fieldset  id="datos_planilla" >
+         <fieldset  id="datos_planilla" >
                   <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend>                
                   <div id="presupuesto">
 

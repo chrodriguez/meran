@@ -154,6 +154,9 @@ function agregarAHash(HASH, name, value){
                
 //funcion que muestra solo los input necesarios para una persona fisica
 function verDatosPersonaFisica(){
+  // mostramos el boton guardar
+  $('#agregar_proveedor').show()
+
   $('#datos_proveedor').show()
   $('#razon_social').hide()
   $('#label_razon_social').hide()
@@ -196,6 +199,9 @@ function verDatosPersonaFisica(){
 
 //funcion que muestra solo los input necesarios para una persona juridica
 function verDatosPersonaJuridica(){
+  // mostramos el boton guardar
+  $('#agregar_proveedor').show()
+  
   $('#datos_proveedor').show()
   $('#nombre').hide()
   $('#label_nombre').hide()

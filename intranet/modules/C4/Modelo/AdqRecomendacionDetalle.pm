@@ -54,6 +54,17 @@ __PACKAGE__->meta->setup(
 );
 
 
+sub agregarRecomendacionDetalle{
+    my ($self) = shift;
+    my ($params) = @_;
+
+    $self->setAdqRecomendacionId($params->{'id_adq_recomendacion'});
+   
+
+    $self->save();
+}
+
+
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 
 sub setAdqRecomendacionId{
