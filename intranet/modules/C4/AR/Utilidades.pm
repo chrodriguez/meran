@@ -3040,7 +3040,7 @@ sub catalogoAutocomplete{
     my $documento;
 
     foreach my $hash (@$matches){
-    	    $documento = C4::AR::Nivel1::getNivel1FromId1($hash->{'doc'});
+    	    $documento = C4::AR::Nivel1::getNivel1Completo($hash->{'doc'});
             $textout.= $hash->{'doc'}."|" . $documento->marc_record . "|Pepe Iuliano|\n";
             printHASH($results);
     }

@@ -34,8 +34,7 @@ function validateForm(){
 
 $(document).ready( function() {
     CrearAutocompleteCatalogoBiblioteca({IdInput: 'buscar_biblioteca', 
-                                         IdInputHidden: 'hidden_id_nivel_2',
-                                         IdInputAutor: 'autor'
+                                         IdInputHidden: 'hidden_completo'
                                         });
     validateForm();
 });
@@ -46,7 +45,7 @@ $(document).ready( function() {
 
         <div class="column1-unit">
           <div class="contactform">
-            <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-recomendaciones.pl">
+            <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">
               <fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
                 <p><label for="nombre" class="left">[% 'Nombre y Apellido *' | i18n %]:</label>
                    <input type="text" name="nombre" id="nombre" class="field required" value="[% socio.persona.getNombre %] [% socio.persona.getApellido %]" tabindex="1" /></p>
@@ -63,6 +62,7 @@ $(document).ready( function() {
                 <p><label for="buscar_biblioteca" class="left">[% 'Buscar en la Biblioteca' | i18n %]:</label>
                    <input type="text" name="buscar_biblioteca" id="buscar_biblioteca" class="field" value="" tabindex="6" /></p>
                 <p><label for="hidden_id_nivel_2" class="left">[% 'HIDDEN_ID_NIVEL_2' | i18n %]:</label>
+                   <input type="text" name="hidden_completo" id="hidden_completo" class="field" value="" tabindex="7" />
                    <input type="text" name="hidden_id_nivel_2" id="hidden_id_nivel_2" class="field" value="" tabindex="7" />
                    <label for="hidden_id_nivel_2" class="left">[% '(puede no estar, dependiendo de si se elig&iacute;o un item de la bilbioteca o no)' | i18n %]:</label></p>
                 <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
