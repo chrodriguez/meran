@@ -8,7 +8,6 @@ use CGI;
 use C4::Auth;
 use C4::AR::Nivel3 qw(detalleCompletoINTRA);
 
-# BEGIN {$Exporter::Verbose=1}
 
 my $input=new CGI;
 my ($template, $session, $t_params) = get_template_and_user({

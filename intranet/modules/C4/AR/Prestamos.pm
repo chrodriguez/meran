@@ -743,9 +743,9 @@ sub crearTicket {
 
     my %ticket;
 
-    $ticket{'socio'}=$nro_socio;
-    $ticket{'responsable'}=$loggedinuser;
-    $ticket{'id3'}=$id3;
+    $ticket{'socio'}        = $nro_socio;
+    $ticket{'responsable'}  = $loggedinuser;
+    $ticket{'id3'}          = $id3;
 
     return(\%ticket);
 }

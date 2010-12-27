@@ -451,9 +451,9 @@ sub marc_record_to_meran {
 
             my $subcampo                        = $subfield->[0];
             my $dato                            = $subfield->[1];
-            #C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => campo: ".$campo);
-            #C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => subcampo: ".$subcampo);
-            #C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato: ".$dato);
+            C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => campo: ".$campo);
+            C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => subcampo: ".$subcampo);
+            C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato: ".$dato);
             $hash_temp{'subcampo'}              = $subcampo;
             $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype);
             $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype);
