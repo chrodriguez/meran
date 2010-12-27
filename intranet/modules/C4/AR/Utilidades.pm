@@ -2846,8 +2846,8 @@ sub autoresAutocomplete{
         $resultado .=  $autor->getId."|". $autor->getCompleto. "\n";
     }
 
-#     return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
-    return ($resultado eq '')?"-1|".$autor:$resultado;
+    return ($resultado eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$resultado;
+#     return ($resultado eq '')?"-1|".$autor:$resultado;
 }
 
 sub autocompleteEditoriales{

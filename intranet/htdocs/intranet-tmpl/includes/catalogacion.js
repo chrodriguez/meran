@@ -766,7 +766,9 @@ function updateGuardarModificacionDocumentoN1(responseText){
         mostrarInfoAltaNivel1(ID_N1);
         mostrarEstructuraDelNivel2();
         //se esta modificando desde el detalle del registro
-        if (FROM_DETALLE_REGISTRO == 1) window.location = "detalle.pl?id1=" + ID_N1;
+        if (FROM_DETALLE_REGISTRO == 1) {
+            window.location = "detalle.pl?id1=" + ID_N1;
+        }
         MODIFICAR = 0;
     }
 }
