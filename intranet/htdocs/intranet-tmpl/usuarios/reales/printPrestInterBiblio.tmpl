@@ -27,67 +27,67 @@
 		<input type="hidden" name="titulos" id="titulos" />
 		<input type="hidden" name="otros" id="otros" />
 		<input type="hidden" name="token" value="[% token %]"/>
-	</form>
-<table align="center" height="100%" weight="100%">
-	<tr>
-		<td>
-			[% "Biblioteca" | i18n %]:
-		</td>
-		<td colspan="2">
-			[% comboDeUI %]
-		</td>
-	</tr>
-	<tr>
-		<td>
-			[% "Nombre Director" | i18n %]:
-		</td>
-		<td colspan="2">
-			<input type="text" id="director" name="director">
-		</td>
-	</tr>
-	<tr class="titulo_tabla_resultado">
-		<td  align="center" colspan="3">
-			[% "DATOS DE LOS DOCUMENTOS" | i18n %]
-		</td>
-	</tr>
-	<tr>
-		<th>
-			[% "Autor" | i18n %]
-		</th>
-		<th>
-			[% "T&iacute;tulo" | i18n %]
-		</th>
-		<th>
-			[% "Otros Datos" | i18n %]
-		</th>
-	</tr>
-	<tr>
-		<td>
-			<input type=text name="autor1" id="autor1" value="">
-		</td>
-		<td>
-			<input type=text name="titulo1" id="titulo1" value="">
-		</td>
-		<td>
-			<input type=text name="otro1" id="otro1" value="">
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<input type=text name="autor2" id="autor2" value="">
-		</td>
-		<td>
-			<input type=text name="titulo2" id="titulo2" value="">
-		</td>
-		<td>
-			<input type=text name="otro2" id="otro2" value="">
-		</td>
-	</tr>
-	<tr>
-		<td align=center colspan="3">
-			<br><br>
-			<input type="image" src="[% themelang %]/images/pdf.png"  onClick="imprimir()"  value="imprimir">
-		</td>
-	</tr>
-</table>
+		<table align="center" height="100%" weight="100%">
+			<tr>
+				<td>
+					[% "Biblioteca" | i18n %]:
+				</td>
+				<td colspan="2">
+					[% comboDeUI %]
+				</td>
+			</tr>
+			<tr>
+				<td>
+					[% "Nombre Director" | i18n %]:
+				</td>
+				<td colspan="2">
+					<input type="text" id="director" name="director">
+				</td>
+			</tr>
+			<tr class="titulo_tabla_resultado">
+				<td  align="center" colspan="3">
+					[% "DATOS DE LOS DOCUMENTOS" | i18n %]
+				</td>
+			</tr>
+			<tr>
+				<th>
+					[% "Autor" | i18n %]
+				</th>
+				<th>
+					[% "T&iacute;tulo" | i18n %]
+				</th>
+				<th>
+					[% "Otros Datos" | i18n %]
+				</th>
+			</tr>
+			<tr>
+				<td>
+					<input type=text name="autor1" id="autor1" value="">
+				</td>
+				<td>
+					<input type=text name="titulo1" id="titulo1" value="">
+				</td>
+				<td>
+					<input type=text name="otro1" id="otro1" value="">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type=text name="autor2" id="autor2" value="">
+				</td>
+				<td>
+					<input type=text name="titulo2" id="titulo2" value="">
+				</td>
+				<td>
+					<input type=text name="otro2" id="otro2" value="">
+				</td>
+			</tr>
+			<tr>
+				<td align=center colspan="3">
+					<br><br>
+					<input type="image" src="[% themelang %]/images/pdf.png"  onClick="imprimir()"  value="imprimir">
+				</td>
+			</tr>
+		</table>
+    </form>
 
