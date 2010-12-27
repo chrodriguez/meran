@@ -46,6 +46,7 @@ $(document).ready( function() {
         <div class="column1-unit">
           <div class="contactform">
             <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">
+              <input type="hidden" name="action" value="agregar">
               <fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
                 <p><label for="nombre" class="left">[% 'Nombre y Apellido *' | i18n %]:</label>
                    <input type="text" name="nombre" id="nombre" class="field required" value="[% socio.persona.getNombre %] [% socio.persona.getApellido %]" tabindex="1" /></p>

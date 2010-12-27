@@ -50,6 +50,11 @@ sub agregarRecomendacion{
     my ($self) = shift;
     my ($params) = @_;
 
+
+C4::AR::Debug::debug("------------------------------------------------------------------------------------");
+C4::AR::Debug::debug("AgregarRecomendacion");
+
+
     $self->setFecha($params->{'fecha'});
     #$self->setActiva($params->{'activa'});
     $self->setUsrSocioId($params->{'usr_socio_id'});
@@ -57,6 +62,11 @@ sub agregarRecomendacion{
     $self->setActiva(1);
 
     $self->save();
+
+C4::AR::Debug::debug("------------------------------------------------------------------------------------");
+C4::AR::Debug::debug("Post Save");
+
+
 }
 
 
@@ -78,7 +88,7 @@ sub setFecha{
 sub setActiva{
     my ($self) = shift;
     my ($valor) = @_;
-    $self->fecha($valor);
+    $self->activa($valor);
 }
 
 

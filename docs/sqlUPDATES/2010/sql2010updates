@@ -563,3 +563,5 @@ DEFAULT CHARACTER SET = latin1;
 
 CREATE INDEX `fk_adq_recomendacion_detalle_adq_recomendacion1` ON `adq_recomendacion_detalle` (`adq_recomendacion_id` ASC) ;
 
+GRANT select, update, insert, delete on adq_recomendacion TO userOPAC@localhost;
+GRANT select, update, insert, delete on adq_recomendacion_detalle TO userOPAC@localhost;
