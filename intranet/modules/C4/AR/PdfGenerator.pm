@@ -621,8 +621,8 @@ sub prestInterBiblio {
 	$titulo{'posx'}   = 100;
 	my @parrafo;
 	$parrafo[0] = ("Sr. Director de la Biblioteca");
-	$parrafo[1] = ( "de la " . $biblioDestino );
-	$parrafo[2] = ($director);
+	$parrafo[1] = ( "de la " . Encode::decode_utf8($biblioDestino) );
+	$parrafo[2] = (Encode::decode_utf8($director));
 	$parrafo[3] = ("S/D");
 	$parrafo[4] = (
 "          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carácter de préstamo"
@@ -712,7 +712,8 @@ sub imprimirEncabezado {
 	$pdf->addRawText( "BIBLIOTECA",    $x, $pageheight - 200 );
 	$pdf->setFont("Verdana-Bold");
 	$pdf->setSize(14);
-	$pdf->addRawText( $titulo->{'titulo'}, $titulo->{'posx'},
+	#Se pone solamente Encode::decode_utf8 porque ya viene en UTF-8
+	$pdf->addRawText( Encode::decode_utf8($titulo->{'titulo'}), Encode::decode_utf8($titulo->{'posx'}),
 		$pageheight - 240 );
 	$pdf->setFont("Verdana");
 	$pdf->setSize(10);
@@ -740,7 +741,7 @@ Imprime el contenido de del documento.
 sub imprimirContenido {
 	my ( $pdf, $x, $y, $pageheight, $tamRenglon, $parrafo ) = @_;
 	for ( my $i = 0 ; $i < scalar(@$parrafo) ; $i++ ) {
-		$pdf->addRawText( $parrafo->[$i], $x, $pageheight - $y );
+		$pdf->addRawText( _format($parrafo->[$i]), $x, $pageheight - $y );
 		$y = $y + $tamRenglon;
 	}
 	return ( $pdf, $y );
@@ -786,22 +787,22 @@ sub imprimirTabla {
 	$pdf->drawRect( 50, $pageheight - $y, 200, $pageheight - ( $y + 20 ) );
 	$pdf->addRawText( "Autor/es", 100, $pageheight - ( $y + 15 ) );
 	$pdf->drawRect( 200, $pageheight - $y, 350, $pageheight - ( $y + 20 ) );
-	$pdf->addRawText( "Tï¿½tulo", 255, $pageheight - ( $y + 15 ) );
+	$pdf->addRawText( _format("Título"), 255, $pageheight - ( $y + 15 ) );
 	$pdf->drawRect( 350, $pageheight - $y, 500, $pageheight - ( $y + 20 ) );
 	$pdf->addRawText( "Otros datos", 395, $pageheight - ( $y + 15 ) );
 	$y = $y + 20;
 	$pdf->setFont("Verdana");
 	$pdf->setSize(11);
-
+#Se pone solamente Encode::decode_utf8 porque ya viene en UTF-8
 	for ( my $i = 0 ; $i < $cantFila ; $i++ ) {
 		$pdf->drawRect( 50, $pageheight - $y, 200, $pageheight - ( $y + 20 ) );
-		$pdf->addRawText( $datos->[$i]->{'autor'},
+		$pdf->addRawText( Encode::decode_utf8($datos->[$i]->{'autor'}),
 			60, $pageheight - ( $y + 15 ) );
 		$pdf->drawRect( 200, $pageheight - $y, 350, $pageheight - ( $y + 20 ) );
-		$pdf->addRawText( $datos->[$i]->{'titulo'},
+		$pdf->addRawText( Encode::decode_utf8($datos->[$i]->{'titulo'}),
 			210, $pageheight - ( $y + 15 ) );
 		$pdf->drawRect( 350, $pageheight - $y, 500, $pageheight - ( $y + 20 ) );
-		$pdf->addRawText( $datos->[$i]->{'otros'},
+		$pdf->addRawText( Encode::decode_utf8($datos->[$i]->{'otros'}),
 			360, $pageheight - ( $y + 15 ) );
 		$y = $y + 20;
 	}
