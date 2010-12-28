@@ -129,38 +129,38 @@ C4::AR::Debug::debug("SE PRESTAN ".$loop." EJEMPLARES");
 	
 	for(my $i=0;$i<$loop;$i++){
 		#obtengo el id3 de un item a prestar
- 		$id3= $array_ids3->[$i]->{'id3'};
-		$tipoPrestamo= $array_ids3->[$i]->{'tipoPrestamo'};
-		$id3Old=$array_ids3->[$i]->{'id3Old'}; #Esto nunca viene
+ 		$id3            = $array_ids3->[$i]->{'id3'};
+		$tipoPrestamo   = $array_ids3->[$i]->{'tipoPrestamo'};
+		$id3Old         = $array_ids3->[$i]->{'id3Old'}; #Esto nunca viene
 
 #Presta 1 o mas al mismo tiempo
 		if($id3 ne ""){
 
 C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON EL TIPO :".$array_ids3->[$i]->{'descripcionTipoPrestamo'}." Y BARCODE ".$array_ids3->[$i]->{'barcode'});
 
-			my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3);
+			my $nivel3aPrestar                  = C4::AR::Nivel3::getNivel3FromId3($id3);
 			my %params;
-			$params{'id1'}= $nivel3aPrestar->nivel2->nivel1->getId1;
-			$params{'id2'}= $nivel3aPrestar->nivel2->getId2;
-			$params{'id3'}= $nivel3aPrestar->getId3;
-			$params{'barcode'}= $nivel3aPrestar->getBarcode;
-			$params{'id3Old'}=$id3Old;
-			$params{'descripcionTipoPrestamo'}= $array_ids3->[$i]->{'descripcionTipoPrestamo'};
-			$params{'nro_socio'}=$nro_socio;
-			$params{'loggedinuser'}= $user;
-			$params{'responsable'}= $user;
-			$params{'id_ui'}=C4::AR::Preferencias->getValorPreferencia('defaultUI');
-			$params{'id_ui_prestamo'}=C4::AR::Preferencias->getValorPreferencia('defaultUI');
-			$params{'tipo'}="INTRA";
-			$params{'tipo_prestamo'}= $tipoPrestamo;
+			$params{'id1'}                      = $nivel3aPrestar->nivel2->nivel1->getId1;
+			$params{'id2'}                      = $nivel3aPrestar->nivel2->getId2;
+			$params{'id3'}                      = $nivel3aPrestar->getId3;
+			$params{'barcode'}                  = $nivel3aPrestar->getBarcode;
+			$params{'id3Old'}                   = $id3Old;
+			$params{'descripcionTipoPrestamo'}  = $array_ids3->[$i]->{'descripcionTipoPrestamo'};
+			$params{'nro_socio'}                = $nro_socio;
+			$params{'loggedinuser'}             = $user;
+			$params{'responsable'}              = $user;
+			$params{'id_ui'}                    = C4::AR::Preferencias->getValorPreferencia('defaultUI');
+			$params{'id_ui_prestamo'}           = C4::AR::Preferencias->getValorPreferencia('defaultUI');
+			$params{'tipo'}                     = "INTRA";
+			$params{'tipo_prestamo'}            = $tipoPrestamo;
 		
-			my ($msg_object)= &C4::AR::Prestamos::t_realizarPrestamo(\%params);
-			my $ticketObj=0;
+			my ($msg_object)                    = &C4::AR::Prestamos::t_realizarPrestamo(\%params);
+			my $ticketObj                       = 0;
 
 			if(!$msg_object->{'error'}){
 			#Se crean los ticket para imprimir.
 				C4::AR::Debug::debug("SE PRESTO SIN ERROR --> SE CREA EL TICKET");
-				$ticketObj=C4::AR::Prestamos::crearTicket($id3,$nro_socio,$user);
+				$ticketObj = C4::AR::Prestamos::crearTicket($id3,$nro_socio,$user);
 			}
 			#guardo los errores
 			push (@infoMessages, $msg_object);
@@ -176,10 +176,9 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 
 	#se arma la info para enviar al cliente
 	my %infoOperaciones;
-	$infoOperaciones{'tickets'}= \@infoTickets;
-	$infoOperaciones{'messages'}= \@infoMessages;
-	
-	my $infoOperacionJSON = to_json \%infoOperaciones;
+	$infoOperaciones{'tickets'}     = \@infoTickets;
+	$infoOperaciones{'messages'}    = \@infoMessages;
+	my $infoOperacionJSON           = to_json \%infoOperaciones;
 
     C4::Auth::print_header($session);
 	print $infoOperacionJSON;

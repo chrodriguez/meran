@@ -162,26 +162,26 @@ sub agregarProveedor{
 #             monedas
               for(my $i=0;$i<scalar(@{$param->{'monedas_array'}});$i++){
                 my %parametros;
-                $parametros{'id_proveedor'}   = $id_proveedor;
-                $parametros{'id_moneda'}      = $param->{'monedas_array'}->[$i];          
-                my $proveedor_moneda = C4::Modelo::AdqProveedorMoneda->new(db => $db);    
+                $parametros{'id_proveedor'}     = $id_proveedor;
+                $parametros{'id_moneda'}        = $param->{'monedas_array'}->[$i];          
+                my $proveedor_moneda            = C4::Modelo::AdqProveedorMoneda->new(db => $db);    
                 $proveedor_moneda->agregarMonedaProveedor(\%parametros);
               }
               
 #             materiales
               for(my $i=0;$i<scalar(@{$param->{'materiales_array'}});$i++){             
                 my %parametros2;
-                $parametros2{'id_proveedor'}     = $id_proveedor;
-                $parametros2{'id_material'}      = $param->{'materiales_array'}->[$i];          
-                my $proveedor_material = C4::Modelo::AdqProveedorTipoMaterial->new(db => $db);    
+                $parametros2{'id_proveedor'}    = $id_proveedor;
+                $parametros2{'id_material'}     = $param->{'materiales_array'}->[$i];          
+                my $proveedor_material          = C4::Modelo::AdqProveedorTipoMaterial->new(db => $db);    
                 $proveedor_material->agregarMaterialProveedor(\%parametros2);
               }
               
 #             envios
               for(my $i=0;$i<scalar(@{$param->{'formas_envios_array'}});$i++){             
                 my %parametros2;
-                $parametros2{'id_proveedor'}     = $id_proveedor;
-                $parametros2{'id_forma_envio'}   = $param->{'formas_envios_array'}->[$i];          
+                $parametros2{'id_proveedor'}    = $id_proveedor;
+                $parametros2{'id_forma_envio'}  = $param->{'formas_envios_array'}->[$i];          
                 my $proveedor_forma_envio = C4::Modelo::AdqProveedorFormaEnvio->new(db => $db);    
                 $proveedor_forma_envio->agregarFormaDeEnvioProveedor(\%parametros2);
               }

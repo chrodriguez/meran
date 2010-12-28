@@ -21,6 +21,7 @@ var TAB_INDEX= 0;//tabindex para las componentes
 var MARC_OBJECT_ARRAY= new Array();
 //arreglo con datos del servidor para modificar las componentes
 var MODIFICAR = 0;
+var FROM_DETALLE_REGISTRO = 0;
 var ID3_ARRAY = new Array(); //para enviar 1 o mas ID_N3 para agregar/modificar/eliminar
 var BARCODES_ARRAY = new Array(); //para enviar 1 o mas barcodes
 var _NIVEL_ACTUAL= 1; //para mantener el nivel que se esta procesando
@@ -752,7 +753,7 @@ function guardarModificacionDocumentoN1(){
 
 function updateGuardarModificacionDocumentoN1(responseText){
 
-	MODIFICAR       = 0;
+// 	MODIFICAR       = 0;
     var info        = JSONstring.toObject(responseText);
     var Messages    = info.Message_arrayref;
 // FIXME para que???
@@ -764,6 +765,11 @@ function updateGuardarModificacionDocumentoN1(responseText){
         //carga la barra lateral con info de nivel 1
         mostrarInfoAltaNivel1(ID_N1);
         mostrarEstructuraDelNivel2();
+        //se esta modificando desde el detalle del registro
+        if (FROM_DETALLE_REGISTRO == 1) {
+            window.location = "detalle.pl?id1=" + ID_N1;
+        }
+        MODIFICAR = 0;
     }
 }
 
@@ -786,7 +792,7 @@ function updateGuardarModificacionDocumentoN2(responseText){
     
     if (!verificarRespuesta(responseText)) return(0);
 
-	MODIFICAR       = 0;
+// 	MODIFICAR       = 0;
     var info        = JSONstring.toObject(responseText);
     var Messages    = info.Message_arrayref;//obtengo los mensajes para el usuario
 // FIXME para que ???
@@ -798,6 +804,9 @@ function updateGuardarModificacionDocumentoN2(responseText){
         //carga la barra lateral con info de nivel 2
         mostrarInfoAltaNivel2(ID_N2);
         mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+        //se esta modificando desde el detalle del registro
+        if (FROM_DETALLE_REGISTRO == 1) window.location = "detalle.pl?id1=" + ID_N1;
+        MODIFICAR = 0;
     }
 }
 
@@ -835,12 +844,14 @@ function updateGuardarModificacionDocumentoN3(responseText){
         //inicializo el arreglo
         _freeMemory(ID3_ARRAY);
         ID3_ARRAY= [];
-        MODIFICAR=0;
         //deja la misma estructura, solo borra el campo dato
         _clearDataFromComponentesArray();
         //muestra la tabla con los ejemplares agregados
 //         mostrarInfoAltaNivel3(ID_N1, ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
+        //se esta modificando desde el detalle del registro
+        if (FROM_DETALLE_REGISTRO == 1) window.location = "detalle.pl?id1=" + ID_N1;
+        MODIFICAR = 0;
     }
 }
 
