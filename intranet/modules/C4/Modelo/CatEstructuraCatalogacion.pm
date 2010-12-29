@@ -541,22 +541,16 @@ sub setRule{
     my ($self) = shift;
     my ($tipo) = @_;
 
-#     my $lettersonly    = " lettersonly: ";
-#     my $dateITA        = " dateITA: "; 
-#     my $digits         = " digits: ";
-#     my $maxlength      = " maxlength: ";
-#     my $minlength      = " minlength: ";
-#     my $alphanumeric   = " alphanumeric: ";
     my $rule;
 
-
-    C4::AR::Debug::debug("tipo: ".$tipo);
+#     C4::AR::Debug::debug("tipo: ".$tipo);
 
     switch ($tipo) {
 
         case "combo"                { $rule = " digits:true " } # Combo
         case "calendar"             { $rule = " dateITA:true " } # Calendario
         case "anio"                 { $rule = " digits:true | maxlength: 4 | minlength: 4 " } # Año
+        case "rango_anio"           { $rule = " rango_anio " } # Rango Años (1979 - 2000)
         case "solo_texto"           { $rule = " alphanumeric_total:true " } # Solo Texto
         case "digits"               { $rule = " digits:true " } # Solo Dígitos
 #         case "alphanumeric"         { $rule = " alphanumeric:true " } # Alfanumérico
@@ -566,10 +560,9 @@ sub setRule{
         case "texto_area"           { $rule = " alphanumeric:true " } #Text Area
 #         case "texta2"       { $rule = $lettersonly." true " }
 
-
     }  
 
-    C4::AR::Debug::debug("rule: ".$rule);
+#     C4::AR::Debug::debug("rule: ".$rule);
     $self->rules($rule);
 }
         
