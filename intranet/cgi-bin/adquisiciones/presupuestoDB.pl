@@ -8,6 +8,7 @@ use CGI;
 use JSON;
 use Spreadsheet::Read;
 use Spreadsheet::ParseExcel;
+use Spreadsheet::ReadSXC qw(read_sxc);
 
 my $input = new CGI;
 my $authnotrequired= 0;
@@ -48,60 +49,92 @@ Se procesa la planilla ingresada
 =cut
 elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
 
-my $filepath  = $obj->{'filepath'}||"";
+        my $filepath  = $obj->{'filepath'}||"";
 
-my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
-                      template_name   => '/adquisiciones/mostrarPresupuesto.tmpl',
-                      query       => $input,
-                      type        => "intranet",
-                      authnotrequired => 0,
-                      flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
-});
-
-
-my $presupuestos_dir= "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/";
-my $write_file  = $presupuestos_dir.$filepath;
+        my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
+                              template_name   => '/adquisiciones/mostrarPresupuesto.tmpl',
+                              query       => $input,
+                              type        => "intranet",
+                              authnotrequired => 0,
+                              flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+        });
 
 
+        my $presupuestos_dir= "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/";
+        my $write_file  = $presupuestos_dir.$filepath;
 
-my $parser  = Spreadsheet::ParseExcel->new();
-my $workbook = $parser->parse($write_file);
-
-# if ( !defined $workbook ) {
-#             die $parser->error(), ".\n";
-# }
-#  
-
-my @table;
-my @reg;
-
-my $worksheet = $workbook->worksheet(0);
-my ( $row_min, $row_max ) = $worksheet->row_range();
+         my $parser  = Spreadsheet::ParseExcel-> new();
+         my $workbook = $parser->parse($write_file);
 
 
-my $prov = $worksheet->get_cell( 0, 1 )->value();
-my $id_prov = $worksheet->get_cell( 1, 0 )->value();
 
-for my $row ( $row_min + 3 .. $row_max ) {
-        
-        my %hash; 
-        
-        $hash{'renglon'}            = $worksheet->get_cell( $row, 0 )->value();        
-        $hash{'cantidad'}           = $worksheet->get_cell( $row, 1 )->value();
-        $hash{'articulo'}           = $worksheet->get_cell( $row, 2 )->value();   
-        $hash{'precio_unitario'}    = $worksheet->get_cell( $row, 3 )->value();
-        $hash{'total'}              = $worksheet->get_cell( $row, 4 )->value(); 
-                      
-        push(@reg, \%hash);  
+# ----------  Para cuando agregue extension .ODS ------------------------ 
+
+#       my @ext= split ('[.]' , $filepath);
+
+#       C4::AR::Debug::debug("EXTENSION:".$ext[1]);
+
+#       if ($ext[1] eq "xls") {
+
+#             PEGAR LINEAS 66 y 67
+
+#       } else {              
             
-}
+              my $workbook_ref = read_sxc($write_file);
 
-$t_params->{'datos_presupuesto'} = \@reg;
-$t_params->{'proveedor'} = $prov;
-$t_params->{'id_prov'} = $id_prov;
+              foreach ( sort keys %$workbook_ref ) {
+                      print "Worksheet ", $_, " contains ", $#{$$workbook_ref{$_}} + 1, " row(s):\n";
+                      foreach ( @{$$workbook_ref{$_}} ) {
+                            foreach ( map { defined $_ ? $_ : '' } @{$_} ) {
+                                  print utf8(" '$_'")->as_string;
+                            }
+                            print "\n";
+                      }
+              }
+
+              
+                
+                 
+          
+
+#       }
+        
 
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+        # if ( !defined $workbook ) {
+        #             die $parser->error(), ".\n";
+        # }
+          
+        
+        my @table;
+        my @reg;
+
+        my $worksheet = $workbook->worksheet(0);
+        my ( $row_min, $row_max ) = $worksheet->row_range();
+
+        my $prov = $worksheet->get_cell( 0, 1 )->value();
+        my $id_prov = $worksheet->get_cell( 1, 0 )->value();
+
+        for my $row ( $row_min + 3 .. $row_max ) {
+                
+                my %hash; 
+                
+                $hash{'renglon'}            = $worksheet->get_cell( $row, 0 )->value();        
+                $hash{'cantidad'}           = $worksheet->get_cell( $row, 1 )->value();
+                $hash{'articulo'}           = $worksheet->get_cell( $row, 2 )->value();   
+                $hash{'precio_unitario'}    = $worksheet->get_cell( $row, 3 )->value();
+                $hash{'total'}              = $worksheet->get_cell( $row, 4 )->value(); 
+                              
+                push(@reg, \%hash);  
+                    
+        }
+
+        $t_params->{'datos_presupuesto'} = \@reg;
+        $t_params->{'proveedor'} = $prov;
+        $t_params->{'id_prov'} = $id_prov;
+
+
+        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 } #end if($tipoAccion eq "MOSTRAR_PRESUPUESTO")
 
