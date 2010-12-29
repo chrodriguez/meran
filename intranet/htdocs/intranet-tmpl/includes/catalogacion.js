@@ -1247,7 +1247,7 @@ function create_rules_object(rule){
                 break;
             case 'rango_anio': 
 
-                jQuery.validator.addMethod("anio_rango", function(value, element) { 
+                jQuery.validator.addMethod("rango_anio", function(value, element) { 
                     return this.optional(element) || /^([0-9]{4} - [0-9]{4})/.test(value); 
                 }, "Ingrese un rango de años válido (1979 - 2000)");
 
