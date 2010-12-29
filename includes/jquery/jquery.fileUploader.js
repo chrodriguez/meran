@@ -31,8 +31,8 @@ function assignFileName(idInput){
                 opt.file_types += ',jpeg';
                 opt.file_types += ',gif';
          }
-         if (opt.file_types.match('xls') && !opt.file_types.match('odt')) {
-                opt.file_types += ',odt';
+         if (opt.file_types.match('xls') && !opt.file_types.match('ods')) {
+                opt.file_types += ',ods';
                
          }
          $this = $(this);

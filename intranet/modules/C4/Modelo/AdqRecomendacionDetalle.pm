@@ -56,10 +56,24 @@ __PACKAGE__->meta->setup(
 
 sub agregarRecomendacionDetalle{
     my ($self) = shift;
-    my ($params) = @_;
+    my ($params, $id_adq_recomendacion) = @_;
 
-    $self->setAdqRecomendacionId($params->{'id_adq_recomendacion'});
+    $self->setAdqRecomendacionId($id_adq_recomendacion);
+    
+    $self->setCatNivel2Id($params->{'hidden_id_nivel_2'});
+    $self->setAutor($params->{'autor'});
+    $self->setTitulo($params->{'titulo'});
+    $self->setLugarPublicacion($params->{'lugar_publicacion'});
+    $self->setEditorial($params->{'editorial'});
+    $self->setFechaPublicacion($params->{'fecha'});
+    $self->setColeccion($params->{'coleccion'});
+    $self->setIsbnIssn($params->{'isbn_issn'});
+    $self->setCantidadEjemplares($params->{'cantidad_ejemplares'});
+    $self->setMotivoPropuesta($params->{'motivo_propuesta'});
+    $self->setComentario($params->{'comentarios'});
+    $self->setReservaMaterial($params->{'reservar'});
    
+    C4::AR::Debug::debug($params);
 
     $self->save();
 }

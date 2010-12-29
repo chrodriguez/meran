@@ -81,6 +81,7 @@ my %mensajesOPAC = (
 	'B407' => 'Error al intentar carncelar y reservar desde OPAC, funcion C4::AR::Reservas::t_cancelar_y_reserva',
 	'B408' => 'Error al intentar agregar un favorito desde OPAC, funcion C4::AR::BookShelves::t_addPrivateShelfs',	
 	'B409' => 'Error al intentar eliminar un favorito desde OPAC, funcion C4::AR::BookShelves::t_delPrivateShelfs',
+    'B410' => 'Error al intentar agregar una recomendaci&oacute;n desde OPAC en funcion C4::AR::Recomendaciones::agregarRecomendacion',
 	'F700' => 'Disculpe, no se pudo agregar el favorito, intente nuevamente.',
 	'F701' => 'Se agrego el favorito con &eacute;xito',
 	'F702' => 'Se elimin&oacute; el favorito con &eacute;xito',
@@ -368,7 +369,7 @@ my %mensajesINTRA = (
     'E015' => 'Ya existe el contenido en el estante "*?*".',
     'REF0' => 'La referencia no se ha podido eliminar, verifique que no se est&eacute; usando.',
     'REF1' => 'La referencia ha sido eliminada correctamente.',
-#   Mensajes de Adquisicion Proveedores
+#   Mensajes de Adquisicion Proveedores y Presupuestos
     'A001' => 'El proveedor ha sido agregado exitosamente.',
     'A002' => 'El nombre del proveedor no puede estar en blanco.',
     'A003' => 'El mail debe ser v&aacute;lido.',
@@ -395,6 +396,8 @@ my %mensajesINTRA = (
     'A024' => 'El proveedor fue eliminado con &eacute;xtio.',
     'A025' => 'El proveedor no pudo ser eliminado. Intente nuevamente.',
     'A026' => 'El n&uacute;mero de documento ingresado ya existe. Por favor ingrese otro.',
+    'A027' => 'La informaci&oacute;n del presupuesto fue guardada con éxito.',
+    'A028' => 'Error en la funcion C4::AR::Presupuestos::actualizarPresupuesto.',
 );
 
 sub getMensaje {

@@ -118,7 +118,7 @@ sub agregarAutorizado {
 }
 
 =item
-    Este modulo agrega una persona al sistema, que dependiendo de las preferencias de MERAN se auto-activará (conviertiendose en Real) o no.
+    Este modulo agrega una persona al sistema, que dependiendo de las preferencias de MERAN se auto-activara (conviertiendose en Real) o no.
     Parametros: 
                 HASH: con toda la info de una persona (ver UsrPersona->agregar() )
 =cut
@@ -221,7 +221,7 @@ sub deshabilitarPersona {
 }
 
 =item
-    Este modulo resetea (deja en blanco) el password de acceso de un usuario, que será su nro_documento.
+    Este modulo resetea (deja en blanco) el password de acceso de un usuario, que sera su nro_documento.
     Parametros: 
                 HASH: {nro_socio}
 =cut 

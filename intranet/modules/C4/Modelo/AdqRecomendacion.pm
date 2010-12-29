@@ -48,7 +48,7 @@ __PACKAGE__->meta->setup(
 
 sub agregarRecomendacion{
     my ($self) = shift;
-    my ($params) = @_;
+    my ($params, $usr_socio_id) = @_;
 
 
 C4::AR::Debug::debug("------------------------------------------------------------------------------------");
@@ -57,8 +57,15 @@ C4::AR::Debug::debug("AgregarRecomendacion");
 
     $self->setFecha($params->{'fecha'});
     #$self->setActiva($params->{'activa'});
-    $self->setUsrSocioId($params->{'usr_socio_id'});
-    $self->setAdqRefTipoRecomendacionId($params->{'adq_ref_tipo_recomendacion_id'});
+    
+    
+    
+    $self->setUsrSocioId($usr_socio_id);
+    #$self->setAdqRefTipoRecomendacionId($params->{'adq_ref_tipo_recomendacion_id'});
+    
+    #$self->setUsrSocioId(1);
+    $self->setAdqRefTipoRecomendacionId(1);
+    
     $self->setActiva(1);
 
     $self->save();
