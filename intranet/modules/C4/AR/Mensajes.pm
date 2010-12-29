@@ -81,6 +81,7 @@ my %mensajesOPAC = (
 	'B407' => 'Error al intentar carncelar y reservar desde OPAC, funcion C4::AR::Reservas::t_cancelar_y_reserva',
 	'B408' => 'Error al intentar agregar un favorito desde OPAC, funcion C4::AR::BookShelves::t_addPrivateShelfs',	
 	'B409' => 'Error al intentar eliminar un favorito desde OPAC, funcion C4::AR::BookShelves::t_delPrivateShelfs',
+    'B410' => 'Error al intentar agregar una recomendaci&oacute;n desde OPAC en funcion C4::AR::Recomendaciones::agregarRecomendacion',
 	'F700' => 'Disculpe, no se pudo agregar el favorito, intente nuevamente.',
 	'F701' => 'Se agrego el favorito con &eacute;xito',
 	'F702' => 'Se elimin&oacute; el favorito con &eacute;xito',
