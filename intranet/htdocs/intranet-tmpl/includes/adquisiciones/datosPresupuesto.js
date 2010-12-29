@@ -20,7 +20,7 @@ function modificarDatosDePresupuesto(){
                  objAH                     = new AjaxHelper(updateDatosPresupuesto);
                  objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
-                 objAH.id_proveedor        = $('#proveedor').val();
+                 objAH.id_proveedor        = $('#id_prov').val();
                  objAH.table               = JSONstring.toObject(x);
                  objAH.tipoAccion          = 'GUARDAR_MODIFICACION_PRESUPUESTO';
                  objAH.sendToServer();
@@ -45,7 +45,7 @@ function procesarPlanilla(){
                  objAH                     = new AjaxHelper(updateDatosPresupuesto);
                  objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
-                 objAH.id_proveedor        = $('#proveedor').val();
+                 objAH.id_proveedor        = $('#id_prov').val();
                  objAH.tipoAccion          = 'GUARDAR_MODIFICACION_PRESUPUESTO';
                  objAH.sendToServer();
 

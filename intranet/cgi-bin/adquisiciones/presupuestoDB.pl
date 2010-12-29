@@ -24,8 +24,6 @@ if($tipoAccion eq "GUARDAR_MODIFICACION_PRESUPUESTO"){
 
     my $tabla_array_ref = $obj->{'table'};
 
-    my $recomendacion=1;
-
     my ($template, $session, $t_params)  = get_template_and_user({  
                         template_name => "/adquisiciones/mostrarPresupuesto.tmpl",
                         query => $input,
@@ -81,20 +79,26 @@ my $worksheet = $workbook->worksheet(0);
 my ( $row_min, $row_max ) = $worksheet->row_range();
 
 
-for my $row ( $row_min + 1 .. $row_max ) {
+my $prov = $worksheet->get_cell( 0, 1 )->value();
+my $id_prov = $worksheet->get_cell( 1, 0 )->value();
+
+for my $row ( $row_min + 3 .. $row_max ) {
         
         my %hash; 
-
+        
         $hash{'renglon'}            = $worksheet->get_cell( $row, 0 )->value();        
         $hash{'cantidad'}           = $worksheet->get_cell( $row, 1 )->value();
         $hash{'articulo'}           = $worksheet->get_cell( $row, 2 )->value();   
         $hash{'precio_unitario'}    = $worksheet->get_cell( $row, 3 )->value();
-        $hash{'total'}              = $worksheet->get_cell( $row, 4 )->value();          
+        $hash{'total'}              = $worksheet->get_cell( $row, 4 )->value(); 
+                      
         push(@reg, \%hash);  
             
 }
 
 $t_params->{'datos_presupuesto'} = \@reg;
+$t_params->{'proveedor'} = $prov;
+$t_params->{'id_prov'} = $id_prov;
 
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -7,8 +7,6 @@
 
 <script type="text/javascript" >
 
-TYPE_FILE="file_xls";
-
 </script>
 <script type="text/javascript" src="/includes/jquery/jquery.fileUploader-min.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
@@ -18,23 +16,16 @@ TYPE_FILE="file_xls";
 
 <script type="text/javascript">
 
-// var objAH;
-
-var prov;
 
 $(document).ready(function() {
-  // Handler for .ready() called.
-   $('#id').change(function(){
-      prov = $("#id").val();
-    })
    makeToggle('toggle_container','trigger',null,true);
    createFileUploader();
    $('#div_uploader').show();
-
+   $('#datos_planilla').hide();
 });
 
 function onCompleteFileUpload(){
-     
+        $('#datos_planilla').show(); 
         mostrarPresupuesto();
 }
 
@@ -47,7 +38,6 @@ function createFileUploader(){
                         file_types: "xls",
                         type_file: "planilla_xls",
                         ajaxFile: "importPresupuestoProveedores.pl",
-//                         proveedor: prov,
                         uploadFolder: "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/",
                         funcionOnComplete: function (){
                                     onCompleteFileUpload();
@@ -61,17 +51,6 @@ function createFileUploader(){
 
 <fieldset>
     <legend class="titulos">    [% "Carga de presupuesto" | i18n %] </legend>
-
-      
-                
-                <fieldset id="select_prov" >
-                            <legend class="titulo_legend">[% "Proveedor" | i18n %]</legend>  
-                            <p>Seleccione el proveedor para el cual cargara un presupuesto</p>
-                
-                            <label id="label_provs">[% "Proveedor" | i18n %]</label>
-                                    [% combo_proveedores %] 
-                </fieldset>
-      
           <fieldset id="carga_planilla">
 
                 <legend class="titulo_legend">[% "Carga de Planilla Excel" | i18n %]</legend>
@@ -84,9 +63,9 @@ function createFileUploader(){
                               </li>
                     </div>
           </fieldset>
-
+        
          <fieldset  id="datos_planilla" >
-                  <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend>                
+                  <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend> 
                   <div id="presupuesto">
 
                   </div>

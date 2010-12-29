@@ -18,19 +18,18 @@ use vars qw(@EXPORT @ISA);
   
 
 sub getAdqPresupuestoDetalle{
-    my ($id_recomendacion, $id_proveedor, $db) = @_;
-
-    my $presupuesto=1;
+    my ( $id_presupuesto, $db) = @_;
   
     $db = $db || C4::Modelo::AdqPresupuestoDetalle->new()->db;
 
     
-    my @detalle_array_ref = C4::Modelo::AdqPresupuestoDetalle::Manager->get_adq_presupuesto_detalle(   
+    my $detalle_array_ref = C4::Modelo::AdqPresupuestoDetalle::Manager->get_adq_presupuesto_detalle(   
                                                                     db => $db,
-                                                                    query   => [ adq_presupuesto_id => { eq => $presupuesto} ],
+                                                                    query   => [ adq_presupuesto_id => { eq => $id_presupuesto} ],
                                                                 );
-    if(scalar(@detalle_array_ref) > 0){
-        return (@detalle_array_ref);
+   
+    if(scalar(@$detalle_array_ref) > 0){
+        return ($detalle_array_ref);
     }else{
         return 0;
     }
@@ -43,8 +42,8 @@ sub actualizarPresupuesto{
 
      my $tabla_array_ref = $obj->{'table'};
 
-     my $recomendacion=1;
-
+     my $presupuesto=$obj->{'id_proveedor'};;
+  
      my $adq_presupuesto_detalle = C4::Modelo::AdqPresupuestoDetalle->new();
      my $msg_object= C4::AR::Mensajes::create();
      
@@ -52,27 +51,26 @@ sub actualizarPresupuesto{
      $db->{connect_options}->{AutoCommit} = 0;
      $db->begin_work;
      
-     my $pres_detalle = C4::AR::Presupuestos::getAdqPresupuestoDetalle($recomendacion); 
+     my $pres_detalle = C4::AR::Presupuestos::getAdqPresupuestoDetalle($presupuesto,$db); 
      
      eval{
           my $i=0;
-         
-          for my $detalle ($pres_detalle){          
+          for my $detalle (@{$pres_detalle}){          
                 $detalle->setPrecioUnitario($tabla_array_ref->[$i]->{'PrecioUnitario'});
-                C4::AR::Debug::debug($i);
+                $detalle->setCantidad($tabla_array_ref->[$i]->{'Cantidad'});
                 $detalle->save(); 
                 $i++;
           }
 
      $msg_object->{'error'}= 0;
-     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A006', 'params' => []});
+     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A027', 'params' => []});
      $db->commit;
 
      };
      if ($@){
-              &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+              &C4::AR::Mensajes::printErrorDB($@, 'A028',"INTRA");
               $msg_object->{'error'}= 1;
-              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A028', 'params' => []} ) ;
               $db->rollback;
      }
 
