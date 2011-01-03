@@ -369,7 +369,7 @@ my %mensajesINTRA = (
     'E015' => 'Ya existe el contenido en el estante "*?*".',
     'REF0' => 'La referencia no se ha podido eliminar, verifique que no se est&eacute; usando.',
     'REF1' => 'La referencia ha sido eliminada correctamente.',
-#   Mensajes de Adquisicion Proveedores
+#   Mensajes de Adquisicion Proveedores y Presupuestos
     'A001' => 'El proveedor ha sido agregado exitosamente.',
     'A002' => 'El nombre del proveedor no puede estar en blanco.',
     'A003' => 'El mail debe ser v&aacute;lido.',
@@ -396,6 +396,8 @@ my %mensajesINTRA = (
     'A024' => 'El proveedor fue eliminado con &eacute;xtio.',
     'A025' => 'El proveedor no pudo ser eliminado. Intente nuevamente.',
     'A026' => 'El n&uacute;mero de documento ingresado ya existe. Por favor ingrese otro.',
+    'A027' => 'La informaci&oacute;n del presupuesto fue guardada con éxito.',
+    'A028' => 'Error en la funcion C4::AR::Presupuestos::actualizarPresupuesto.',
 );
 
 sub getMensaje {

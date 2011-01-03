@@ -89,7 +89,7 @@ use vars qw(@EXPORT_OK @ISA);
 sub generar_indice {
     my ($id1) = @_;
 
-    my $err = system("perl /usr/local/koha/intranet/scripts/generar_indice_v2.pl ".$id1);
+    my $err = system("perl ".C4::Context->config("intranetdir")."/scripts/generar_indice_v2.pl ".$id1);
     C4::AR::Debug::debug("Busquedas => generar_indice => ERROR ".$err);
 }
 

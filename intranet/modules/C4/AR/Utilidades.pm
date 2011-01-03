@@ -105,9 +105,9 @@ use vars qw(@EXPORT_OK @ISA);
 );
 
 # para los combos que no usan tablas de referencia
-my @VALUES_COMPONENTS = (   "-1", "text", "texta", "combo", "auto", "calendar", "anio" );
+my @VALUES_COMPONENTS = (   "-1", "text", "texta", "combo", "auto", "calendar", "anio", "rango_anio" );
 my %LABELS_COMPONENTS = (   "-1" => "SIN SELECCIONAR" => "text" => "Texto" , "texta" => "Texto Area", "combo" => "ComoBox", 
-                            "auto" => "Autocompletable", "calendar" => "Calendario", "anio" => "A&ntilde;o" );
+                            "auto" => "Autocompletable", "calendar" => "Calendario", "anio" => "A&ntilde;o", "rango_anio" => "A&ntilde;o Rango" );
 
 =item sub getStringFor
     Devuelve el texto de la clave pasada por parametro

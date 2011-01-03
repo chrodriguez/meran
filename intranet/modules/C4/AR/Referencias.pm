@@ -727,6 +727,7 @@ sub getValidadores{
     $validadores{'alphanumeric_total'}  = C4::AR::Filtros::i18n('Alfanum&eacute;rico');
     $validadores{'combo'}               = C4::AR::Filtros::i18n('Combo');
     $validadores{'anio'}                = C4::AR::Filtros::i18n('A&ntilde;o');
+    $validadores{'rango_anio'}          = C4::AR::Filtros::i18n('Rango A&ntilde;o');
     $validadores{'calendar'}            = C4::AR::Filtros::i18n('Calendario');
     $validadores{'auto'}                = C4::AR::Filtros::i18n('Autocompletable');
     $validadores{'texto_area'}          = C4::AR::Filtros::i18n('Texto Area');

@@ -1,4 +1,9 @@
-  <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+    <fieldset id="proveedor" >
+                            <legend class="titulo_legend">[% "Proveedor" | i18n %]</legend>  
+                            <p>[% proveedor %]</p>
+                            <input type="hidden" id="id_prov" value="[% id_prov %]">
+                </fieldset>
+    <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
       <thead>
           <tr class="titulo_tabla_resultado">
               <th id="renglon">

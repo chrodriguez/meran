@@ -87,14 +87,16 @@ $(document).ready( function() {
               </fieldset>
               <fieldset><legend>&nbsp;[% 'Motivo de la propuesta' | i18n %]&nbsp;</legend>
                 <p>
-                   <textarea name="mensaje" id="mensaje" cols="45" class="required" rows="10" tabindex="17"></textarea></p>
+                   <textarea name="motivo_propuesta" id="motivo_propuesta" cols="45" class="required" rows="10" tabindex="17"></textarea></p>
               </fieldset>
               <fieldset><legend>&nbsp;[% 'Comentarios' | i18n %]&nbsp;</legend>
                 <p>
-                   <textarea name="mensaje" id="mensaje" cols="45" class="required" rows="10" tabindex="17"></textarea></p>
+                   <textarea name="comentarios" id="comentarios" cols="45" class="required" rows="10" tabindex="17"></textarea></p>
                 <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Enviar Mensaje' | i18n %]" tabindex="18" /></p>
                    <input type="hidden" name="post_message" id="post_message" value="1"/>
               </fieldset>
             </form>
           </div>
         </div>
+        
+        [% INCLUDE 'opac-recomendaciones-detalle.inc'  %]

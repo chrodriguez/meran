@@ -1168,6 +1168,9 @@ function procesarSubCampo(objeto, marc_group){
             case "anio":
                 crearTextAnio(marc_conf_obj);
             break;
+            case "rango_anio":
+                crearTextRangoAnio(marc_conf_obj);
+            break;
         }
     
         //Se agregan clases para cuando tenga que recuperar los datos.
@@ -1196,6 +1199,7 @@ function addRules(){
             }
         }
     }
+
 }
 
 
@@ -1240,6 +1244,13 @@ function create_rules_object(rule){
                 break;
             case 'solo_texto': 
                 RULES_OPTIONS.solo_texto    = valor;
+                break;
+            case 'rango_anio': 
+
+                jQuery.validator.addMethod("rango_anio", function(value, element) { 
+                    return this.optional(element) || /^([0-9]{4} - [0-9]{4})/.test(value); 
+                }, "Ingrese un rango de años válido (1979 - 2000)");
+
                 break;
         }
     }
@@ -1645,6 +1656,13 @@ function crearCalendar(obj){
 }
 
 function crearTextAnio(obj){
+    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
+
+    comp = comp + crearBotonAgregarSubcampoRepetible(obj);
+    $("#div" + obj.getIdCompCliente()).append(comp);
+}
+
+function crearTextRangoAnio(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
