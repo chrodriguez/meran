@@ -1,3 +1,4 @@
 # m h  dom mon dow   command
-* * * * * perl /usr/local/koha/intranet/scripts/z3950daemon/procesarColaZ3950.pl &
-0 3 * * 0 perl /usr/local/koha/intranet/scripts/obtener_portadas_de_registros.pl &
+5 * * * * export MERAN_CONF=/etc/meran/meran.conf;cd /usr/share/meran/intranet/modules/;perl /usr/share/meran/intranet/scripts/z3950daemon/procesarColaZ3950.pl &
+0 3 * * 0 export MERAN_CONF=/etc/meran/meran.conf;cd /usr/share/meran/intranet/modules/;perl /usr/share/meran/intranet/scripts/obtener_portadas_de_registros.pl &
+0 2 * * 0 export MERAN_CONF=/etc/meran/meran.conf;cd /usr/share/meran/intranet/modules/;perl /usr/share/meran/intranet/scripts/generar_indice.pl &

@@ -134,8 +134,6 @@ my ($template, $session, $t_params) = get_template_and_user(
 					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 					});
 					
-    #verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada    
-    C4::AR::Busquedas::sphinx_start();
     my $ini= $obj->{'ini'};
     my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
     $t_params->{'ini'} = $obj->{'ini'} = $ini;
