@@ -306,7 +306,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
 
     if($nivel3aPrestar){
 
-        C4::AR::Debug::debug("nivel3aPrestar => ".$nivel3aPrestar->getIdDisponibilidad());
+        C4::AR::Debug::debug("nivel3aPrestar disponibilidad=> ".$nivel3aPrestar->getIdDisponibilidad());
 	    #obtengo los tipos de prestmos segun disponibilidad del ejemplar y el usuario
 	    my ($tipoPrestamos_array_hash_ref)  = &C4::AR::Prestamos::prestamosHabilitadosPorTipo(   $nivel3aPrestar->getIdDisponibilidad(),
                                                                                                  $obj->{'nro_socio'}
