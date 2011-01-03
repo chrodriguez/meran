@@ -23,19 +23,37 @@ $(document).ready(function() {
     makeToggle('filtrosBusqueda','trigger',null,false);
 });
 
+function limpiarArriba(){
+	$('#keyword').val('');
+}
+
+function limpiarCentro(){
+
+	$('#isbn').val('');
+    $('#dictionary').val('');
+    $('#codBarra').val('');
+    $('#tema').val('');
+    $('#estante').val('');
+}
+
+function limpiarAbajo(){
+
+	$('#titulo').val('');
+    $('#autor').val('');
+    $('#signatura').val('');
+}
+
 function limpiarCampos(side){
 
-    if (side == 'izquierda'){
-        $('#keyword').val('');
-        $('#isbn').val('');
-        $('#dictionary').val('');
-        $('#codBarra').val('');
-        $('#tema').val('');
-        $('#estante').val('');
+    if (side == 'arriba'){
+        limpiarCentro();
+        limpiarAbajo();
+    }else if (side == 'centro'){
+    	limpiarArriba();
+    	limpiarAbajo();
     }else{
-        $('#titulo').val('');
-        $('#autor').val('');
-        $('#signatura').val('');
+    	limpiarArriba();
+        limpiarCentro();
     }
 }
 
@@ -45,7 +63,7 @@ function limpiarCampos(side){
 <div id="formulario"></div>
 
 <fieldset>
-	<legend class="titulo_legend trigger click" title='[% "click para acceder a la B&uacute;squeda Avanzada" | i18n %]'>
+	<legend class="titulo_legend trigger click" title='[% "Click para acceder a la B&uacute;squeda Avanzada" | i18n %]'>
         [% "B&uacute;squeda Avanzada en el cat&aacute;logo" | i18n %]</legend>
     <div id="filtrosBusqueda" class="filtrosBusqueda">
         <span class="titulos"></span>
@@ -58,7 +76,7 @@ function limpiarCampos(side){
                     <label for="keyword">
                         <strong>[% "B&uacute;squeda combinada" | i18n %]</strong>
                     </label>
-                    <input type="text" id="keyword" size="25" onkeypress="limpiarCampos('derecha')">
+                    <input type="text" id="keyword" size="25" onkeypress="limpiarCampos('arriba')">
                     <label for="match_mode">
                     </label>  
                     [% PERL %]
@@ -76,33 +94,33 @@ function limpiarCampos(side){
                     <label for="isbn">
                         <strong>ISBN</strong>   
                     </label>
-                    <input type="text" id="isbn" size="25" readonly onkeypress="limpiarCampos('derecha')">
+                    <input type="text" id="isbn" size="25"  onkeypress="limpiarCampos('centro')">
                 </li>
                 
                 <li class="sub_item">
                     <label for="dictionary">
                         <strong>[% "B&uacute;squeda por diccionario" | i18n %]</strong>
                     </label>
-                    <input type="text" size="25" id="dictionary" readonly onkeypress="limpiarCampos('derecha')">
+                    <input type="text" size="25" id="dictionary"  onkeypress="limpiarCampos('centro')">
                 </li>		
                 <li class="sub_item">
                     <label for="codBarra">
                         <strong>[% "C&oacute;digo de barras" | i18n %]</strong>
                     </label>
                     <!--<input type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">-->
-                    <input type="text" size="25" id="codBarra" onkeypress="limpiarCampos('derecha')">
+                    <input type="text" size="25" id="codBarra" onkeypress="limpiarCampos('centro')">
                 </li>
                 <li class="sub_item">
                     <label for="tema">
                         <strong>Tema</strong>
                     </label>
-                    <input type="text" size="25" id="tema" readonly onkeypress="limpiarCampos('derecha')">
+                    <input type="text" size="25" id="tema"  onkeypress="limpiarCampos('centro')">
                 </li>
                 <li class="sub_item">
                     <label for="estante">
                         <strong>[% "Estantes Virtuales" | i18n %]</strong>
                     </label>
-                    <input type="text" size="25" id="estante" readonly onkeypress="limpiarCampos('derecha')">
+                    <input type="text" size="25" id="estante"  onkeypress="limpiarCampos('centro')">
                 </li>
               </ul>
             </fieldset>
@@ -123,11 +141,11 @@ function limpiarCampos(side){
                         <label for="titulo"> 
                             <strong>[% "T&iacute;tulo" %]</strong>
                         </label>
-                        <input type="text"  size="25" id="titulo" onkeypress="limpiarCampos('izquierda')">
+                        <input type="text"  size="25" id="titulo" onkeypress="limpiarCampos('abajo')">
               
                         <input name="tipo" type=radio id=tipo value="normal" checked>
-                        <label for="tipo">
                                         [% "Normal" | i18n %]
+                        <label for="tipo">
                         </label>    
                         <input name="tipo" type=radio id=tipo value="exacto">
                                         [% "Exacto" | i18n %]
@@ -136,14 +154,14 @@ function limpiarCampos(side){
                         <label for="autor">
                             <strong>[% "Autor" %]</strong>
                         </label>
-                        <input type="text" size="25" id="autor" onkeypress="limpiarCampos('izquierda')">
+                        <input type="text" size="25" id="autor" onkeypress="limpiarCampos('abajo')">
                     </li>
         
                   <li class="sub_item"> 
                         <label for="signatura">
                             <strong>[% "Signatura Topogr&aacute;fica" | i18n %]</strong>
                         </label>
-                        <input type="text" size="25" id="signatura" readonly onkeypress="limpiarCampos('izquierda')">
+                        <input type="text" size="25" id="signatura"  onkeypress="limpiarCampos('abajo')">
                     </li>
                         
                 </ul>
