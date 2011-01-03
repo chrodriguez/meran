@@ -688,14 +688,14 @@ sub editarReferencia{
 
     my @values = split('___',$string_ref);
 
-    eval{
-        my $tabla = getTablaInstanceByAlias($values[0]);
-        my $campo = $values[1];
-        my $id_tabla = $values[2];
+        my $tabla = getTablaInstanceByAlias(@values[0]);
+        my $campo = @values[1];
+        my $id_tabla = @values[2];
+        
         my $object = $tabla->getByPk($id_tabla);
         $object->modifyFieldValue($campo,$value);
+
         return ($object->{$campo});
-    };
 
 }
 
@@ -704,18 +704,18 @@ sub agregarRegistro{
     my ($alias,$filtro) = @_;
     my $tabla = C4::Modelo::PrefTablaReferencia->new();
        $tabla = $tabla->createFromAlias($alias);
-
+    my $object;
     eval{
-        $tabla->addNewRecord();
+        $object = $tabla->addNewRecord();
     };
     $tabla = $tabla->createFromAlias($alias);
 #     my $datos = $tabla->getAll(100,0,0,$filtro);
     my @array;
-    push (@array,$tabla);
-    my $campos = $tabla->getCamposAsArray();
-    my $clave = $tabla->meta->primary_key;
+    push (@array,$object);
+    my $campos = $object->getCamposAsArray();
+    my $clave = $object->meta->primary_key;
 
-    $tabla = $tabla->getAlias;
+    $tabla = $object->getAlias;
     return ($clave,$tabla,\@array,$campos);
 }
 

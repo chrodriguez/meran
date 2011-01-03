@@ -67,7 +67,9 @@ sub getByPk{
 
     my ($self) = shift;
     my ($value_id) = @_;
-
+    
+        C4::AR::Debug::debug("ID TABLA: ".$value_id);
+    
     my $pk = $self->meta->primary_key;
     my $self_like = $self->meta->class->new($pk => $value_id);
   
@@ -114,7 +116,7 @@ sub getPkValue{
 
     my ($self) = shift;
 
-    return ($self->{$self->meta->primary_key});
+    return ($self->{$self->getPk});
 }
 
 sub getInvolvedCount{
@@ -283,6 +285,8 @@ sub addNewRecord{
     }
 
     $self->save;
+    
+    return $self;
 
 }
 
