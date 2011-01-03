@@ -1085,6 +1085,9 @@ sub getSuggestion{
 }
 
 sub busquedaCombinada_newTemp{
+	
+	use Sphinx::Search;
+	
     my ($string_utf8_encoded,$session,$obj_for_log,$only_sphinx) = @_;
 
     $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
@@ -1113,9 +1116,11 @@ sub busquedaCombinada_newTemp{
     C4::AR::Debug::debug("Busquedas => query string ".$query);
 
 
-#      C4::AR::Debug::debug("MATCH MODE ".$tipo);
     $sphinx->SetMatchMode($tipo_match);
-    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+
+#    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+   $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo");
+    
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
 
     #FIX porque cuando viene 1, se saltea el primer resultado
