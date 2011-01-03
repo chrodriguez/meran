@@ -619,7 +619,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
     my ($Message_arrayref, $nivel3) = &C4::AR::Nivel3::t_modificarNivel3($obj);
     
     my %info;
-    $info{'Message_arrayref'}= $Message_arrayref;
+    $info{'Message_arrayref'}       = $Message_arrayref;
 
     C4::Auth::print_header($session);
     print to_json \%info;

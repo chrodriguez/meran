@@ -18,7 +18,7 @@ sub init_db {
 #     }
 #     else # act "normally" when not under mod_perl
 #     {
-        C4::AR::Debug::debug("AutoBase2 => init_db => NO CACHED");
+#         C4::AR::Debug::debug("AutoBase2 => init_db => NO CACHED");
       *init_db = sub { C4::Modelo::DB::AutoBase1->new };
 #     }
 }
@@ -36,16 +36,16 @@ sub load{
     eval {
     
          unless( $self->SUPER::load(speculative => 1) ){
-                 C4::AR::Debug::debug("AutoBase2 =>  dentro del unless, no existe el objeto SUPER load");
+#                  C4::AR::Debug::debug("AutoBase2 =>  dentro del unless, no existe el objeto SUPER load");
                 $error = 0;
          }
 
-        C4::AR::Debug::debug("AutoBase2 =>  SUPER load");
+#         C4::AR::Debug::debug("AutoBase2 =>  SUPER load");
         return $self->SUPER::load(@_);
     };
 
     if($@){
-        C4::AR::Debug::debug("AutoBase2 =>  no existe el objeto");
+#         C4::AR::Debug::debug("AutoBase2 =>  no existe el objeto");
         $error = undef;
     }
 
@@ -67,8 +67,7 @@ sub getByPk{
 
     my ($self) = shift;
     my ($value_id) = @_;
-    
-        C4::AR::Debug::debug("ID TABLA: ".$value_id);
+   
     
     my $pk = $self->meta->primary_key;
     my $self_like = $self->meta->class->new($pk => $value_id);

@@ -21,6 +21,7 @@ var TAB_INDEX= 0;//tabindex para las componentes
 var MARC_OBJECT_ARRAY= new Array();
 //arreglo con datos del servidor para modificar las componentes
 var MODIFICAR = 0;
+var EDICION_N3_GRUPAL = 0; //=1 indica si se estan editando datos del Nivel 3 de forma grupal
 var FROM_DETALLE_REGISTRO = 0;
 var ID3_ARRAY = new Array(); //para enviar 1 o mas ID_N3 para agregar/modificar/eliminar
 var BARCODES_ARRAY = new Array(); //para enviar 1 o mas barcodes
@@ -56,10 +57,11 @@ function toggleClass(layer){
 function inicializar(){
 
 	_freeMemory(MARC_OBJECT_ARRAY);
-	MARC_OBJECT_ARRAY= [];
+	MARC_OBJECT_ARRAY   = [];
 	_freeMemory(BARCODES_ARRAY);
-	BARCODES_ARRAY= [];
-	TAB_INDEX= 0;
+	BARCODES_ARRAY      = [];
+	TAB_INDEX           = 0;
+    EDICION_N3_GRUPAL   = 0;
 }
 
 //libera espacio de memoria utilizada por los arreglos
@@ -442,13 +444,12 @@ function updateMostrarEstructuraDelNivel3(responseText){
     var objetos_array = JSONstring.toObject(responseText);
 
     procesarInfoJson(objetos_array, null); 
-//     procesarInfoJson(responseText);
     scrollTo('nivel3Tabla');
 	
 	//asigno el handler para el validador
 	validateForm('formNivel3',guardarModificarDocumentoN3);
     if(MODIFICAR == 0){
-    //si se esta agregando se muestra el input para la cantidad    
+        //si se esta agregando se muestra el input para la cantidad    
         var id = _getIdComponente('995','f');
         $('#'+id).click(function(){
             registrarToggleOnChangeForBarcode(id);
@@ -824,6 +825,7 @@ function guardarModificacionDocumentoN3(){
     objAH.tipo_ejemplar     = ID_TIPO_EJEMPLAR;
     objAH.id1               = ID_N1;
     objAH.id2               = ID_N2;
+    objAH.EDICION_N3_GRUPAL = EDICION_N3_GRUPAL;
 	objAH.ID3_ARRAY         = ID3_ARRAY;
     objAH.sendToServer();
 }
@@ -1906,18 +1908,19 @@ lo modificado al servidor y a los 3 ID_N3 se les modifica esta informacion
 function modificarEjemplaresN3(id3){
 
     if(seleccionoAlgo("checkEjemplares")){
-    //si selecciono los ejemplares para editar....
+        //si selecciono los ejemplares para editar....
 	    inicializar();
-	    ID_N3= id3;	
-	    objAH=new AjaxHelper(updateModificarEjemplaresN3);
-	    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-	    objAH.debug= true;
-	    objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
-	    objAH.itemtype=$("#id_tipo_doc").val();
+	    ID_N3               = id3;	
+	    objAH               = new AjaxHelper(updateModificarEjemplaresN3);
+	    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+	    objAH.debug         = true;
+	    objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+	    objAH.itemtype      = $("#id_tipo_doc").val();
 	    //obtengo todos los ejemplares seleccionados para modificar
-	    ID3_ARRAY= _recuperarSeleccionados("checkEjemplares");
-	    objAH.id3= ID3_ARRAY[0]; //muestra la info del primer ejemplar en el arreglo de ejemplares
-	    objAH.nivel = 3;
+	    ID3_ARRAY           = _recuperarSeleccionados("checkEjemplares");
+	    objAH.id3           = ID3_ARRAY[0]; //muestra la info del primer ejemplar en el arreglo de ejemplares
+	    objAH.nivel         = 3;
+        EDICION_N3_GRUPAL   = 1;  
 	    objAH.sendToServer();
     }
 }
