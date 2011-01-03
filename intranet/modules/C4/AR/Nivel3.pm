@@ -12,6 +12,7 @@ use C4::Modelo::CircPrestamo::Manager;
 use C4::AR::Nivel1 qw(getNivel1FromId1); 
 use C4::AR::Nivel2 qw(getNivel1FromId2);
 use C4::AR::Reservas qw(cantReservasPorGrupo);
+use C4::AR::Sphinx qw(generar_indice reindexar);
 
 use vars qw(@EXPORT_OK @ISA);
 
@@ -72,14 +73,14 @@ sub t_guardarNivel3 {
                 $db->commit;
                 #recupero el id3 recien agregado
                 my $id3 = $catRegistroMarcN3->getId3;
-                C4::AR::Busquedas::generar_indice($catRegistroMarcN3->getId1);
+                C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1);
                 #se agregaron los barcodes con exito
                 $msg_object->{'error'} = 0;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$id3]} );
         }
     
 #                 $db->commit;
-                C4::AR::Busquedas::reindexar();
+                C4::AR::Sphinx::reindexar();
         };
 
       if ($@){
@@ -134,7 +135,7 @@ sub t_modificarNivel3 {
                     $params->{'marc_record'} = $marc_record->as_usmarc;
                     $cat_registro_marc_n3->modificar($params, $db);  #si es mas de un ejemplar, a todos les setea la misma info
                     $db->commit;
-                    C4::AR::Busquedas::generar_indice($cat_registro_marc_n3->getId1);
+                    C4::AR::Sphinx::generar_indice($cat_registro_marc_n3->getId1);
                     #se cambio el permiso con exito
                     $msg_object->{'error'} = 0;
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$cat_registro_marc_n3->getBarcode]} ) ;
@@ -143,7 +144,7 @@ sub t_modificarNivel3 {
 
 #             $db->commit;
             
-            C4::AR::Busquedas::reindexar();
+            C4::AR::Sphinx::reindexar();
     };
 
     if ($@){
@@ -245,8 +246,8 @@ sub t_eliminarNivel3{
         $db->commit;
 
         if ($id1) {
-            C4::AR::Busquedas::generar_indice($id1);
-            C4::AR::Busquedas::reindexar();
+            C4::AR::Sphinx::generar_indice($id1);
+            C4::AR::Sphinx::reindexar();
         }
     };
 

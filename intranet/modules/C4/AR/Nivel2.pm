@@ -7,6 +7,8 @@ use C4::Modelo::CatRegistroMarcN2;
 use C4::Modelo::CatRegistroMarcN2::Manager;
 use C4::Modelo::CatRating::Manager;
 use C4::Modelo::CatRating;
+use C4::AR::Sphinx qw(generar_indice reindexar);
+
 use POSIX qw(NULL ceil);
 
 
@@ -85,8 +87,8 @@ sub guardarRealmente{
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => [$id2]} ) ;
         };
 
-        C4::AR::Busquedas::generar_indice($catRegistroMarcN2->getId1);
-        C4::AR::Busquedas::reindexar();
+        C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1);
+        C4::AR::Sphinx::reindexar();
 
     
         if ($@){
@@ -139,8 +141,8 @@ sub t_eliminarNivel2{
         eval {
             $cat_registro_marc_n2->eliminar($params);  
             $db->commit;
-            C4::AR::Busquedas::generar_indice($cat_registro_marc_n2->getId1());
-            C4::AR::Busquedas::reindexar();
+            C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1());
+            C4::AR::Sphinx::reindexar();
             #se cambio el permiso con exito
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U375', 'params' => [$id2]} ) ;
@@ -370,8 +372,8 @@ sub t_modificarNivel2 {
             my $marc_record = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
             $cat_registro_marc_n2->modificar($marc_record->as_usmarc);  
             $db->commit;
-            C4::AR::Busquedas::generar_indice($cat_registro_marc_n2->getId1);
-            C4::AR::Busquedas::reindexar();
+            C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1);
+            C4::AR::Sphinx::reindexar();
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U381', 'params' => [$cat_registro_marc_n2->getId2]} ) ;

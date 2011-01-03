@@ -5,7 +5,7 @@ use C4::Auth;
 use JSON;
 use Time::HiRes;
 use CGI;
-use C4::AR::Busquedas qw(sphinx_start busquedaPorBarcode armarBuscoPor busquedaCombinada_newTemp);
+use C4::AR::Busquedas qw(busquedaPorBarcode armarBuscoPor busquedaCombinada_newTemp);
 
 my $input = new CGI;
 
@@ -27,9 +27,6 @@ my $start = [ Time::HiRes::gettimeofday( ) ]; #se toma el tiempo de inicio de la
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 my $dateformat = C4::Date::get_date_format();
 my $ini= $obj->{'ini'};
-
-#verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada    
-C4::AR::Busquedas::sphinx_start();
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
