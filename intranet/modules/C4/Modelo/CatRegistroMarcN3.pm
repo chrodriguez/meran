@@ -53,8 +53,8 @@ __PACKAGE__->meta->setup(
     sub agregar
 =cut
 sub agregar{
-    my ($self)      = shift;
-    my ($db, $params)    = @_;
+    my ($self)          = shift;
+    my ($db, $params)   = @_;
 
     $self->setId2($params->{'id2'});
     $self->setId1($params->{'id1'});
@@ -70,7 +70,30 @@ sub modificar{
 
     $self->setId2($params->{'id2'});
     $self->setId1($params->{'id1'});
-    $self->setMarcRecord($params->{'marc_record'});
+
+    my $marc_record_cliente = MARC::Record->new_from_usmarc($params->{'marc_record'}); #marc_record que viene del cliente
+    my $marc_record_base    = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+
+    if($params->{'EDICION_N3_GRUPAL'}){
+    #si es una edicion grupal no se permite editar el barcode 995,f  
+        C4::AR::Debug::debug("EDICION GRUPAL !!!!!!!!!!!!!!!!!");
+        #pisa el barcode (995, f) del marc_record del cliente con el barcode del marc_record de la base
+        C4::AR::Debug::debug("barcode de la base ".$marc_record_base->subfield("995","f"));
+        C4::AR::Debug::debug("marc_record as_usmarc del cliente ".$params->{'marc_record'});
+#         C4::AR::Debug::debug("barcode del cliente ".$marc_record_cliente->subfield("995","f"));
+        #elimina el barcode del cliente, si es que existe
+        $marc_record_cliente->delete_field($marc_record_base->subfield("995","f"));
+        #agrega el barcode de la base al marc_record del cliente
+#         my $field_limpio1 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos1_array);
+        my $field = MARC::Field->new('995','','','f' => $marc_record_base->subfield("995","f"));
+        $marc_record_cliente->append_fields($field);
+        C4::AR::Debug::debug("marc_record as_usmarc de la base ".$marc_record_cliente->as_usmarc);
+
+        $self->setMarcRecord($marc_record_cliente);
+    } else {
+        $self->setMarcRecord($params->{'marc_record'});
+    }
 
     $self->save();
 }

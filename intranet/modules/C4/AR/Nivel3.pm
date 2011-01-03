@@ -130,18 +130,18 @@ sub t_modificarNivel3 {
                 _verificarUpdateItem($msg_object, $params);
 
                 if(!$msg_object->{'error'}){
-                    ($cat_registro_marc_n3) = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i], $db);
-                    $params->{'marc_record'} = $marc_record->as_usmarc;
+                    ($cat_registro_marc_n3)     = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i], $db);
+                    $params->{'marc_record'}    = $marc_record->as_usmarc;
                     $cat_registro_marc_n3->modificar($params, $db);  #si es mas de un ejemplar, a todos les setea la misma info
-                    $db->commit;
+#                     $db->commit;
                     C4::AR::Busquedas::generar_indice($cat_registro_marc_n3->getId1);
                     #se cambio el permiso con exito
-                    $msg_object->{'error'} = 0;
+                    $msg_object->{'error'}      = 0;
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$cat_registro_marc_n3->getBarcode]} ) ;
                 }
             }#END for(my $i=0;$i<$cant;$i++)
 
-#             $db->commit;
+            $db->commit;
             
             C4::AR::Busquedas::reindexar();
     };
