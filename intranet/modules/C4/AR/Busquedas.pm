@@ -87,9 +87,13 @@ use vars qw(@EXPORT_OK @ISA);
     sub generar_indice
 =cut
 sub generar_indice {
-    my ($id1) = @_;
+    my ($id1)   = @_;
 
-    my $err = system("perl ".C4::Context->config("intranetdir")."/scripts/generar_indice_v2.pl ".$id1);
+#     my $err = system("perl ".C4::Context->config("intranetdir")."/scripts/generar_indice_v2.pl ".$id1);
+    my $command = "perl ".C4::Context->config("intranetdir")."/scripts/generar_indice_v2.pl";
+    my @args    = ($command, $id1);
+    my $err     = system(@args);
+
     C4::AR::Debug::debug("Busquedas => generar_indice => ERROR ".$err);
 }
 
@@ -109,7 +113,6 @@ sub reindexar{
     push (@args, '--quiet');
 
     $mgr->indexer_args(\@args);
-#     $mgr->run_indexer('--all --rotate --quiet');
     $mgr->run_indexer();
     C4::AR::Debug::debug("Busquedas => reindexar => --all --rotate => ");
 }
