@@ -124,8 +124,9 @@ function buscarPorTema(){
 function buscarPorISBN(){
     objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
+    objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
     objAH.isbn= $('#isbn').val();
+    objAH.tipoAccion    = 'BUSQUEDA_POR_ISBN';
     objAH.sendToServer();
 }
 

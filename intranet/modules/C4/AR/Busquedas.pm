@@ -1105,7 +1105,7 @@ sub busquedaAvanzada_newTemp{
     }
 
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
-#     C4::AR::Debug::debug("query string ".$query);
+
     my $tipo = 'SPH_MATCH_EXTENDED';
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
@@ -1113,6 +1113,7 @@ sub busquedaAvanzada_newTemp{
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
+
     # NOTA: sphinx necesita el string decode_utf8
     my $results = $sphinx->Query($query);
 
@@ -1120,7 +1121,7 @@ sub busquedaAvanzada_newTemp{
     my $matches = $results->{'matches'};
     my $total_found = $results->{'total_found'};
     $params->{'total_found'} = $total_found;
-#     C4::AR::Utilidades::printHASH($results);
+
     C4::AR::Debug::debug("total_found: ".$total_found);
 #     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
@@ -1138,6 +1139,21 @@ sub busquedaAvanzada_newTemp{
     C4::AR::Busquedas::logBusqueda($params, $session);
 
     return ($total_found, $resultsarray);
+}
+
+sub busquedaPorISBN{
+	
+	my ($isbn, $session, $obj_for_log) = @_;
+	
+	
+	$obj_for_log->{'match_mode'} = 'SPH_MATCH_PHRASE';
+	
+	$isbn = "isbn@".$isbn;
+	
+	my ($cantidad, $resultId1, $suggested) = C4::AR::Busquedas::busquedaCombinada_newTemp($isbn, $session, $obj_for_log);
+	
+
+    return ($cantidad, $resultId1, $suggested);	
 }
 
 sub busquedaCombinada_newTemp{
