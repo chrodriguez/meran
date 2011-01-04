@@ -772,6 +772,9 @@ sub _procesar_referencia {
 
                 #se genera el nuevo dato => tabla@dato para poder obtener el dato de la referencia luego
                 my $string_result           = $obj_generico->getTableName.'@'.$dato;
+                if (($campo eq "020") && ($subcampo eq "a")){
+                   $string_result           = 'isbn@'.$dato;  
+                }
 
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
 #                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
