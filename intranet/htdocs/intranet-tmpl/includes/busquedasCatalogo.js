@@ -113,8 +113,9 @@ function buscar(doScroll){
 function buscarPorTema(){
     objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/busquedas/tema.pl';
+    objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
     objAH.tema= $('#tema').val();
+    objAH.tipoAccion    = 'BUSQUEDA_POR_TEMA';
 
     //se setea la funcion para cambiar de pagina
     objAH.funcion= 'changePage';

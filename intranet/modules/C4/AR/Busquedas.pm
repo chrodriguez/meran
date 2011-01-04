@@ -1141,6 +1141,21 @@ sub busquedaAvanzada_newTemp{
     return ($total_found, $resultsarray);
 }
 
+sub busquedaPorTema{
+    
+    my ($tema, $session, $obj_for_log) = @_;
+    
+    
+    $obj_for_log->{'match_mode'} = 'SPH_MATCH_PHRASE';
+    
+    $tema = "tema@".$tema; #ES ASI????????????????????????
+    
+    my ($cantidad, $resultId1, $suggested) = C4::AR::Busquedas::busquedaCombinada_newTemp($tema, $session, $obj_for_log);
+    
+
+    return ($cantidad, $resultId1, $suggested); 
+}
+
 sub busquedaPorISBN{
 	
 	my ($isbn, $session, $obj_for_log) = @_;
