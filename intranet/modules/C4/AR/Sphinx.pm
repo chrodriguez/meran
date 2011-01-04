@@ -20,7 +20,7 @@ use vars qw(@EXPORT @ISA);
     sub reindexar
 =cut
 sub reindexar{
-    C4::AR::Debug::debug("Busquedas => reindexar => run_indexer => ");
+#     C4::AR::Debug::debug("Busquedas => reindexar => run_indexer => ");
 
     my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
     #verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada    
@@ -33,7 +33,7 @@ sub reindexar{
 
     $mgr->indexer_args(\@args);
     $mgr->run_indexer();
-    C4::AR::Debug::debug("Busquedas => reindexar => --all --rotate => ");
+#     C4::AR::Debug::debug("Busquedas => reindexar => --all --rotate => ");
 }
 
 =head2
@@ -53,9 +53,9 @@ sub sphinx_start{
           $mgr->debug(0);
           my $pids = $mgr->get_searchd_pid;
           if(scalar(@$pids) == 0){
-              C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
+#               C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
               $mgr->start_searchd;
-              C4::AR::Debug::debug("Utilidades => generar_indice => levantó sphinx!!!!!!! => ");
+#               C4::AR::Debug::debug("Utilidades => generar_indice => levantó sphinx!!!!!!! => ");
           }
           CORE::exit(0);
       }
@@ -64,9 +64,9 @@ sub sphinx_start{
       $mgr->debug(0);
       my $pids = $mgr->get_searchd_pid;
       if(scalar(@$pids) == 0){
-          C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
+#           C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
           $mgr->start_searchd;
-          C4::AR::Debug::debug("Utilidades => generar_indice => levantó sphinx!!!!!!! => ");
+#           C4::AR::Debug::debug("Utilidades => generar_indice => levantó sphinx!!!!!!! => ");
       }
   }
 }
@@ -89,7 +89,7 @@ my $string_con_dato   = "";
 
 my $MARC_result_array;
 
-C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice ???????????????????????????????????????????????????????????? ");
+# C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice ???????????????????????????????????????????????????????????? ");
 
 if(($id1 eq '0')||(!$id1)){
 
@@ -121,14 +121,14 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
     my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
 
-    C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa ");
+#     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa ");
 
     foreach my $c (@resultEstYDatos){
-        C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
+#         C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
 
         foreach my $s (@{$c->{'subcampos_array'}}){ 
-            C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
-            C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
+#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
+#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
             $string_con_dato = $string_con_dato." ".$s->{'dato'};   
             if($s->{'referenciaTabla'} eq ""){
                 $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'dato'};
@@ -159,11 +159,11 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
 
         foreach my $c (@resultEstYDatos){
-            C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
+#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
 
             foreach my $s (@{$c->{'subcampos_array'}}){ 
-                C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
-                C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
+#                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
+#                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
                 $string_con_dato = $string_con_dato." ".$s->{'dato'};   
                 if($s->{'referenciaTabla'} eq ""){
                     $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'dato'};
@@ -192,17 +192,17 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
             $params{'id_tipo_doc'}  = "ALL";
             $params{'id3'}           = $registro_marc_n3->{'id'};
 
-C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => NIVEL 3 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa ".$registro_marc_n3->{'id3'});
+# C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => NIVEL 3 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa ".$registro_marc_n3->{'id3'});
             my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
 
-            C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => NIVEL 3 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa ");
+#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => NIVEL 3 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa ");
 
             foreach my $c (@resultEstYDatos){
-                C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
+#                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
 
                 foreach my $s (@{$c->{'subcampos_array'}}){ 
-                    C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
-                    C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
+#                     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
+#                     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
                     $string_con_dato = $string_con_dato." ".$s->{'dato'};   
                     if($s->{'referenciaTabla'} eq ""){
                         $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'dato'};

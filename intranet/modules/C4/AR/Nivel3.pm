@@ -78,7 +78,6 @@ sub t_guardarNivel3 {
                 $msg_object->{'error'} = 0;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$id3]} );
         }
-    
 #                 $db->commit;
                 C4::AR::Sphinx::reindexar();
         };
@@ -119,8 +118,8 @@ sub t_modificarNivel3 {
     
     eval {
 
-            my $id3_array = $params->{'ID3_ARRAY'}; 
-            my $cant = scalar(@$id3_array);
+            my $id3_array   = $params->{'ID3_ARRAY'}; 
+            my $cant        = scalar(@$id3_array);
             C4::AR::Debug::debug("t_modificarNivel3 => cant de items a modificar / agregar: ".$cant);
 
             for(my $i=0;$i<$cant;$i++){
@@ -134,8 +133,7 @@ sub t_modificarNivel3 {
                     ($cat_registro_marc_n3)     = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i], $db);
                     $params->{'marc_record'}    = $marc_record->as_usmarc;
                     $cat_registro_marc_n3->modificar($params, $db);  #si es mas de un ejemplar, a todos les setea la misma info
-#                     $db->commit;
-                    C4::AR::Sphinx::generar_indice($cat_registro_marc_n3->getId1);
+                    
                     #se cambio el permiso con exito
                     $msg_object->{'error'}      = 0;
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$cat_registro_marc_n3->getBarcode]} ) ;
@@ -143,7 +141,7 @@ sub t_modificarNivel3 {
             }#END for(my $i=0;$i<$cant;$i++)
 
             $db->commit;
-            
+            C4::AR::Sphinx::generar_indice($cat_registro_marc_n3->getId1);
             C4::AR::Sphinx::reindexar();
     };
 

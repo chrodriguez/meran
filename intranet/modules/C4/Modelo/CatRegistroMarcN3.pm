@@ -73,28 +73,76 @@ sub modificar{
 
     my $marc_record_cliente = MARC::Record->new_from_usmarc($params->{'marc_record'}); #marc_record que viene del cliente
     my $marc_record_base    = MARC::Record->new_from_usmarc($self->getMarcRecord());
+#     my $marc_record_salida  = MARC::Record->new();
 
 
     if($params->{'EDICION_N3_GRUPAL'}){
     #si es una edicion grupal no se permite editar el barcode 995,f  
+
+
+
+
+
+
+        foreach my $field ($marc_record_cliente->fields) {
+                if(! $field->is_control_field){
+                    #se verifica si el campo esta autorizado para el nivel que se estra procesando
+#                         my @subcampos_array = ();
+                        foreach my $subfield ($field->subfields()){
+                            my $dato        = $subfield->[1];
+                            my $sub_campo   = $subfield->[0];
+
+                            C4::AR::Debug::debug("campo     => ".$field->tag);
+                            C4::AR::Debug::debug("subcampo  => ".$sub_campo);
+                            C4::AR::Debug::debug("dato      => ".$dato);
+
+
+                            if (($field->tag eq "995")&& ($sub_campo eq "f")) {
+                                #se mantiene el dato del barcode cuando es una actualizacion grupal
+                            } else {
+
+    #                             my $dato_base   = $marc_record_base->subfield($field, $sub_campo); 
+                                if(($dato eq "")||($dato eq "-1")||($dato eq "NULL")){
+    #                             if($dato_base eq $dato)
+                                    C4::AR::Debug::debug("el dato ".$dato." no fue modificado");
+                                    C4::AR::Debug::debug("se mantiene el dato ".$marc_record_base->subfield($field->tag, $sub_campo)." de la base");
+                                } else {
+                                    #ahora se obtienen las referencias  
+                                    $dato = C4::AR::Catalogacion::_procesar_referencia($field->tag, $sub_campo, $dato, $self->nivel2->getTipoDocumento); 
+                                    $marc_record_base->field($field->tag)->update( $sub_campo => $dato );
+                                }
+                            }
+                        }
+
+                }
+        }
+
+        $self->setMarcRecord($marc_record_base->as_usmarc);
+        C4::AR::Debug::debug("marc_record as_usmarc para la base ".$marc_record_base->as_usmarc);
+
+
+=item
         C4::AR::Debug::debug("EDICION GRUPAL !!!!!!!!!!!!!!!!!");
         #pisa el barcode (995, f) del marc_record del cliente con el barcode del marc_record de la base
         C4::AR::Debug::debug("barcode de la base ".$marc_record_base->subfield("995","f"));
         C4::AR::Debug::debug("marc_record as_usmarc del cliente ".$params->{'marc_record'});
-#         C4::AR::Debug::debug("barcode del cliente ".$marc_record_cliente->subfield("995","f"));
-        #elimina el barcode del cliente, si es que existe
-        $marc_record_cliente->delete_field($marc_record_base->subfield("995","f"));
-        #agrega el barcode de la base al marc_record del cliente
-#         my $field_limpio1 = MARC::Field->new($campo, $field->indicator(1), $field->indicator(2), @subcampos1_array);
-        my $field = MARC::Field->new('995','','','f' => $marc_record_base->subfield("995","f"));
-        $marc_record_cliente->append_fields($field);
-        C4::AR::Debug::debug("marc_record as_usmarc de la base ".$marc_record_cliente->as_usmarc);
+        my $barcode = '';
+        C4::AR::Debug::debug("EDICION GRUPAL !!!!!!!!!!!!!!!!! barcide ==========================".$marc_record_base->subfield("995","f")."================");
+        if ($marc_record_base->subfield("995","f") ne "") {
+        #en la edicion grupal se mantiene el barcode
+            $barcode = $marc_record_base->subfield("995","f");
+        }
 
-        $self->setMarcRecord($marc_record_cliente);
+        #aca van todos los campos a los que se les tiene que mantener el dato cuando es una edicion grupal
+        $marc_record_cliente->field("995")->update( 'f' => $barcode );
+        C4::AR::Debug::debug("marc_record as_usmarc para la base ".$marc_record_cliente->as_usmarc);
+
+        $self->setMarcRecord($marc_record_cliente->as_usmarc);
+=cut
     } else {
         $self->setMarcRecord($params->{'marc_record'});
     }
-
+# die;
     $self->save();
 }
 

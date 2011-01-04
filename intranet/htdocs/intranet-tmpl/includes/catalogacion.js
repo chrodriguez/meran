@@ -295,10 +295,12 @@ function syncComponentesArray(){
                         subcampo_valor[subcampos_array[s].getSubCampo()] = $('#'+subcampos_array[s].getIdCompCliente() + '_hidden').val();
 //                         log("syncComponentesArray => AUTO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
                     }else{
-                        subcampos_array[s].datoReferencia = 0;
+//                         subcampos_array[s].datoReferencia = 0;
+                        subcampos_array[s].datoReferencia = 'NULL';
 //                         subcampos_array[s].setDato('');
                         subcampos_array[s].setDato($('#'+subcampos_array[s].getIdCompCliente()).val());
-                        subcampo_valor[subcampos_array[s].getSubCampo()] = 0;
+//                         subcampo_valor[subcampos_array[s].getSubCampo()] = 0;
+                        subcampo_valor[subcampos_array[s].getSubCampo()] = 'NULL';  
 //                         log("syncComponentesArray => OTRO => subcampo => " + subcampos_array[s].getSubCampo() + " dato " + subcampos_array[s].getDato());
                     }
                 }else{  
@@ -456,7 +458,11 @@ function updateMostrarEstructuraDelNivel3(responseText){
         });
     }
 
-    addRules();
+    if(EDICION_N3_GRUPAL == 0){
+    //no se trata de una edicion grupal se agregan las reglas para validar los campos, sino se permiten campos nulos
+//         validateForm('formNivel3',guardarModificarDocumentoN3);  
+        addRules();
+    }
 }
 
 function switchTipoBarcode(chosen, readOnly){
@@ -1914,6 +1920,7 @@ function modificarEjemplaresN3(id3){
 	    objAH               = new AjaxHelper(updateModificarEjemplaresN3);
 	    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 	    objAH.debug         = true;
+        objAH.showOverlay   = true;
 	    objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	    objAH.itemtype      = $("#id_tipo_doc").val();
 	    //obtengo todos los ejemplares seleccionados para modificar
