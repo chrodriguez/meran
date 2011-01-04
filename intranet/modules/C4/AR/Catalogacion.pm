@@ -11,6 +11,8 @@ use C4::Modelo::CatPrefMapeoKohaMarc;
 use C4::Modelo::CatPrefMapeoKohaMarc::Manager;
 use C4::AR::EstructuraCatalogacionBase;
 use C4::Modelo::CatRegistroMarcN2::Manager qw(get_cat_registro_marc_n2_count);
+use C4::AR::VisualizacionOpac;
+use C4::AR::VisualizacionIntra;
 
 use vars qw(@EXPORT_OK @ISA);
 
@@ -50,7 +52,7 @@ Funcion auxiliar que toma datos desde json con formato de entrada de la interfaz
 El formato es el siguiente [dato], cada dato es un hash con los siguientes campos (campo->'950',identificador_1->'1', indentificador2->'2',[subcampo]) y cada subcampo es un hash con ('subcampo'->'contenido, ej 'a'->'Mikaela es del rojo')
 =cut
 sub _meran_to_marc{
-    my ($infoArrayNivel, $campos_autorizados, $itemtype) = @_;
+    my ($infoArrayNivel, $campos_autorizados, $itemtype, $with_references) = @_;
 
     my $marc_record = MARC::Record->new();
     my $cant_campos = scalar(@$infoArrayNivel);
@@ -84,7 +86,11 @@ sub _meran_to_marc{
             C4::AR::Debug::debug("_meran_to_marc => subcampo, dato => ".$subcampos_array->[$j]->{'dato'});
             C4::AR::Debug::debug("_meran_to_marc => subcampo, datoReferencia => ".$subcampos_array->[$j]->{'datoReferencia'});
             while ( my ($key, $value) = each(%$subcampo) ) {
-                $value = _procesar_referencia($campo, $key, $value, $itemtype);
+
+                if($with_references){
+                    $value = _procesar_referencia($campo, $key, $value, $itemtype);
+                }
+
                 if ( ($value ne '')&&(C4::AR::Utilidades::existeInArray($key, @{$autorizados{$campo}} ) )) {
                 #el subcampo $key, esta autorizado para el campo $campo
                     push(@subcampos_array, ($key => $value));
@@ -123,7 +129,7 @@ sub meran_nivel1_to_meran{
 
     my $campos_autorizados          = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(1);
     $data_hash->{'tipo_ejemplar'}   = 'ALL';
-    my $marc_record                 = _meran_to_marc($data_hash->{'infoArrayNivel1'},$campos_autorizados,$data_hash->{'tipo_ejemplar'});
+    my $marc_record                 = _meran_to_marc($data_hash->{'infoArrayNivel1'},$campos_autorizados,$data_hash->{'tipo_ejemplar'}, 1);
 
     return($marc_record);
 }
@@ -138,7 +144,7 @@ sub meran_nivel2_to_meran{
     my ($data_hash) = @_;
 
     my $campos_autorizados          = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(2);
-    my $marc_record                 = _meran_to_marc($data_hash->{'infoArrayNivel2'},$campos_autorizados,$data_hash->{'tipo_ejemplar'});
+    my $marc_record                 = _meran_to_marc($data_hash->{'infoArrayNivel2'},$campos_autorizados,$data_hash->{'tipo_ejemplar'}, 1);
 
     return($marc_record);
 }
@@ -155,10 +161,11 @@ sub meran_nivel3_to_meran{
     my ($data_hash) = @_;
 
     my $campos_autorizados  = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(3);
-    my $marc_record         = _meran_to_marc($data_hash->{'infoArrayNivel3'},$campos_autorizados,$data_hash->{'tipo_ejemplar'});
+    #si es una edicion grupa del nivel3 no se traen las referencias, se procesan luego
+    my $with_references     = $data_hash->{'EDICION_N3_GRUPAL'}?0:1;
+    my $marc_record         = _meran_to_marc($data_hash->{'infoArrayNivel3'},$campos_autorizados,$data_hash->{'tipo_ejemplar'}, $with_references);
 
     return($marc_record);
-
 }
 
 
@@ -376,9 +383,6 @@ sub filtrarVisualizacion{
 
     my $visulizacion_array_ref;
 
-    use C4::AR::VisualizacionOpac;
-    use C4::AR::VisualizacionIntra;
-    use C4::AR::VisualizacionOpac;
     if($params->{'tipo'} eq 'OPAC'){
         ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion();
     } else {
@@ -651,12 +655,14 @@ sub getImportacionSinEstructura{
 sub getDatoFromReferencia{
     my ($campo, $subcampo, $dato, $itemtype) = @_;
     
-    my $valor_referencia = '';
+#     my $valor_referencia = '';
+    my $valor_referencia = 'NULL';
     #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo:                    ".$campo);
     #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => subcampo:                 ".$subcampo);
     #C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato:                     ".$dato);
     
-    if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato ne '')&&($dato ne '0')){
+#     if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato ne '')&&($dato ne '0')){
+    if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato ne '')&&($dato ne "NULL")){
 
         my ($estructura) = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype);
         
@@ -841,7 +847,8 @@ sub _setDatos_de_estructura {
         $hash_ref_result{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
        
         #si es un autocomplete y no tengo el dato de la referencia, muestro un blanco
-        if ( ($hash_ref_result{'datoReferencia'} eq 0) || ($hash_ref_result{'dato'} eq 0) || not defined($hash_ref_result{'datoReferencia'}) ) {
+#         if ( ($hash_ref_result{'datoReferencia'} eq 0) || ($hash_ref_result{'dato'} eq 0) || not defined($hash_ref_result{'datoReferencia'}) ) {
+if ( ($hash_ref_result{'datoReferencia'} eq "NULL") || ($hash_ref_result{'dato'} eq "NULL") || not defined($hash_ref_result{'datoReferencia'}) ) {
           $hash_ref_result{'dato'} = '';#'NO TIENE';
         }
 
@@ -866,22 +873,22 @@ sub _setDatos_de_estructura_base {
 
     my %hash_ref_result;
 
-    $hash_ref_result{'campo'} =                  $cat->getCampo;
-    $hash_ref_result{'subcampo'} =               $cat->getSubcampo;
-    $hash_ref_result{'Id_rep'} =                 $datos_hash_ref->{'Id_rep'};
-    $hash_ref_result{'tiene_estructura'}=        $datos_hash_ref->{'tiene_estructura'};
-    $hash_ref_result{'dato'}=                    $datos_hash_ref->{'dato'};
-    $hash_ref_result{'nivel'} =                  '';#$cat->getNivel;
-    $hash_ref_result{'visible'} =                '';#$cat->getVisible;
-    $hash_ref_result{'liblibrarian'} =           $cat->getLiblibrarian;
-    $hash_ref_result{'itemtype'} =               '';#$cat->getItemType;
-    $hash_ref_result{'repetible'} =              '';#$cat->subCamposBase->getRepetible;
-    $hash_ref_result{'tipo'} =                   '';#$cat->getTipo;
-    $hash_ref_result{'referencia'} =             '';#$cat->getReferencia;
-    $hash_ref_result{'obligatorio'} =            $cat->getObligatorio;
-    $hash_ref_result{'idCompCliente'} =          '';#$cat->getIdCompCliente;
-    $hash_ref_result{'intranet_habilitado'} =    '';#$cat->getIntranet_habilitado;
-    $hash_ref_result{'rules'} =                  '';#$cat->getRules;    
+    $hash_ref_result{'campo'}                   = $cat->getCampo;
+    $hash_ref_result{'subcampo'}                = $cat->getSubcampo;
+    $hash_ref_result{'Id_rep'}                  = $datos_hash_ref->{'Id_rep'};
+    $hash_ref_result{'tiene_estructura'}        = $datos_hash_ref->{'tiene_estructura'};
+    $hash_ref_result{'dato'}                    = $datos_hash_ref->{'dato'};
+    $hash_ref_result{'nivel'}                   = '';#$cat->getNivel;
+    $hash_ref_result{'visible'}                 = '';#$cat->getVisible;
+    $hash_ref_result{'liblibrarian'}            = $cat->getLiblibrarian;
+    $hash_ref_result{'itemtype'}                = '';#$cat->getItemType;
+    $hash_ref_result{'repetible'}               = '';#$cat->subCamposBase->getRepetible;
+    $hash_ref_result{'tipo'}                    = '';#$cat->getTipo;
+    $hash_ref_result{'referencia'}              = '';#$cat->getReferencia;
+    $hash_ref_result{'obligatorio'}             = $cat->getObligatorio;
+    $hash_ref_result{'idCompCliente'}           = '';#$cat->getIdCompCliente;
+    $hash_ref_result{'intranet_habilitado'}     = '';#$cat->getIntranet_habilitado;
+    $hash_ref_result{'rules'}                   = '';#$cat->getRules;    
 
     C4::AR::Debug::debug("_setDatos_de_estructura_base => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
     C4::AR::Debug::debug("_setDatos_de_estructura_base => dato: ".$datos_hash_ref->{'dato'});
@@ -1117,7 +1124,8 @@ sub getEstructuraSinDatos {
         
             $hash{'tiene_estructura'}  = '1';
             $hash{'dato'}              = '';
-            $hash{'datoReferencia'}    = 0;
+#             $hash{'datoReferencia'}    = 0;
+$hash{'datoReferencia'}    = "NULL";
             
             my ($hash_temp) = _setDatos_de_estructura($sc, \%hash);
             C4::AR::Debug::debug("getEstructuraSinDatos => campo, subcampo: ".$c->getCampo.", ".$sc->getSubcampo);

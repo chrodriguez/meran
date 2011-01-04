@@ -377,7 +377,7 @@ sub toMARC{
     my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
     my $params;
-    $params->{'nivel'} = '2';
+    $params->{'nivel'}          = '2';
     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
