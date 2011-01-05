@@ -235,17 +235,18 @@ function updateAgregarUsuario(responseText){
 
 function desautorizarTercero(claveUsuario, confirmeClave){
 
-    var is_confirmed = confirm(CONFIRMAR_ELIMINAR_AFILIADO);
+    jConfirm(CONFIRMAR_ELIMINAR_AFILIADO, USUARIOS_ALERT_TITLE, function(confirmStatus){
 
-    if (is_confirmed) {
-        objAH=new AjaxHelper(updateDesautorizarTercero);
-        objAH.debug= true;
-        objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-        objAH.nro_socio= USUARIO.ID;
-        objAH.tipoAccion= 'ELIMINAR_AUTORIZADO';
-        //se envia la consulta
-        objAH.sendToServer();
-    }
+    	if (confirmStatus){
+	    	objAH=new AjaxHelper(updateDesautorizarTercero);
+	        objAH.debug= true;
+	        objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+	        objAH.nro_socio= USUARIO.ID;
+	        objAH.tipoAccion= 'ELIMINAR_AUTORIZADO';
+	        //se envia la consulta
+	        objAH.sendToServer();
+    	}
+    });
 }
 
 function updateDesautorizarTercero(responseText){
