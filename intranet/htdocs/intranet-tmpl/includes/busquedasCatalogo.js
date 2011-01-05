@@ -26,7 +26,7 @@ function busquedaCombinable(){
     objAH.signatura         = $('#signatura').val();
     objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
     objAH.tipoAccion        = 'BUSQUEDA_AVANZADA';
-    var radio               = $(":checked");
+    var radio               = $("#tipo:checked");
     var tipo                = radio[0].value;
     objAH.tipo              = tipo;
     //se setea la funcion para cambiar de pagina
