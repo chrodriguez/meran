@@ -1087,30 +1087,32 @@ sub getSuggestion{
 sub busquedaAvanzada_newTemp{
     my ($params,$session) = @_;
 
+    use Sphinx::Search;
+    
     my $sphinx = Sphinx::Search->new();
     my $query = '';
-
+    my $tipo = 'SPH_MATCH_EXTENDED';
+    
     if($params->{'titulo'} ne ""){
-        $query .= '@titulo '.$params->{'titulo'};
-        if($params->{'tipo'} eq "normal"){
-            $query .= "*";
-        }
+        $query .= ' @titulo "'.$params->{'titulo'}.'"';
     }
 
     if($params->{'autor'} ne ""){
-        $query .= ' @autor '.$params->{'autor'};
-        if($params->{'tipo'} eq "normal"){
-            $query .= "*";
-        }
+        $query .= ' @autor "'.$params->{'autor'}.'"';
+    }
+
+    if($params->{'tipo'} eq "normal"){
+        $query .= "*";
     }
 
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
 
-    my $tipo = 'SPH_MATCH_EXTENDED';
+    
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     $sphinx->SetMatchMode($tipo_match);
-    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+    #$sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+    $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo");
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
 
@@ -1123,7 +1125,9 @@ sub busquedaAvanzada_newTemp{
     $params->{'total_found'} = $total_found;
 
     C4::AR::Debug::debug("total_found: ".$total_found);
-#     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    C4::AR::Debug::debug("MATCH_MODE => ".$tipo);
+    
     foreach my $hash (@$matches){
       my %hash_temp = {};
       $hash_temp{'id1'} = $hash->{'doc'};
