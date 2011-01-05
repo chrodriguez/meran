@@ -70,7 +70,7 @@ sub t_guardarNivel3 {
 #                 C4::AR::Debug::debug("marc_record!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=> ".$marc_record->as_usmarc);
                 $catRegistroMarcN3->agregar($db, $params);
                 # FIXME transaccion por ejemplar???
-                $db->commit;
+#                 $db->commit;
                 #recupero el id3 recien agregado
                 my $id3 = $catRegistroMarcN3->getId3;
                 #se agregaron los barcodes con exito

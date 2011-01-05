@@ -458,6 +458,7 @@ function updateMostrarEstructuraDelNivel3(responseText){
         });
     }
 
+// TODO fatlta ver esto!!!!!!!
     if(EDICION_N3_GRUPAL == 0){
     //no se trata de una edicion grupal se agregan las reglas para validar los campos, sino se permiten campos nulos
 //         validateForm('formNivel3',guardarModificarDocumentoN3);  
@@ -1680,7 +1681,10 @@ function crearTextRangoAnio(obj){
 // Esta funcion convierte una componete segun idObj en obligatoria, agrega * a la derecha de la misma
 function hacerComponenteObligatoria(idObj){
     $("#"+idObj).addClass("obligatorio");
-    $("#"+idObj).addClass("required");
+
+    if(EDICION_N3_GRUPAL == 0){
+        $("#"+idObj).addClass("required");
+    }
 
     agregarAHash(HASH_MESSAGES, idObj, ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO);    
 }
