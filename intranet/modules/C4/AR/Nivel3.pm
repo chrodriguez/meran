@@ -73,12 +73,12 @@ sub t_guardarNivel3 {
                 $db->commit;
                 #recupero el id3 recien agregado
                 my $id3 = $catRegistroMarcN3->getId3;
-                C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1);
                 #se agregaron los barcodes con exito
                 $msg_object->{'error'} = 0;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$id3]} );
         }
-#                 $db->commit;
+                $db->commit;
+                C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1);
                 C4::AR::Sphinx::reindexar();
         };
 
@@ -141,10 +141,11 @@ sub t_modificarNivel3 {
             }#END for(my $i=0;$i<$cant;$i++)
 
             $db->commit;
-            C4::AR::Sphinx::generar_indice($cat_registro_marc_n3->getId1);
-            C4::AR::Sphinx::reindexar();
+#             C4::AR::Sphinx::generar_indice($cat_registro_marc_n3->getId1);
+#             C4::AR::Sphinx::reindexar();
     };
 
+die;
     if ($@){
         #Se loguea error de Base de Datos
         &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");

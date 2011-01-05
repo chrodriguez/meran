@@ -569,15 +569,15 @@ sub checkauth {
 			$obj=C4::AR::Utilidades::from_json_ISO($obj);
             #ESTO ES PARA LAS LLAMADAS AJAX QUE PASSAN UN OBJETO JSON (HELPER DE AJAX)
 		    $token = $obj->{'token'};
-            C4::AR::Debug::debug("checkauth=> Token desde AjaxHelper: ".$token);
+#             C4::AR::Debug::debug("checkauth=> Token desde AjaxHelper: ".$token);
         }else{
             #ESTO ES PARA LAS LLAMADAS AJAX TRADICIONALES (PARAMETROS POR URL)
             $token = $query->param('token');
-            C4::AR::Debug::debug("checkauth=> Token desde Ajax comun: ".$token);
+#             C4::AR::Debug::debug("checkauth=> Token desde Ajax comun: ".$token);
         }
 	}else{
 		$token = $query->param('token');
-        C4::AR::Debug::debug("checkauth=> Token desde GET: ".$token);
+#         C4::AR::Debug::debug("checkauth=> Token desde GET: ".$token);
 	}
 
     # state variables
@@ -597,7 +597,7 @@ sub checkauth {
     #NO EXPIRO LA SESION
         $sessionID = $session->param('sessionID');
 
-        C4::AR::Debug::debug("checkauth=> sessionID seteado \n".$sessionID);
+#         C4::AR::Debug::debug("checkauth=> sessionID seteado \n".$sessionID);
 
         my ($ip , $lasttime, $nroRandom, $flag, $tokenDB);
 
@@ -617,7 +617,7 @@ sub checkauth {
 
             #la sesion existia en la bdd, chequeo que no se halla vencido el tiempo
             #se verifican algunas condiciones de finalizacion de session
-            C4::AR::Debug::debug("checkauth=> El usuario se encuentra logueado");
+#             C4::AR::Debug::debug("checkauth=> El usuario se encuentra logueado");
 #           if ($lasttime<time()-$timeout) {      
             if ($lasttime < time() - _getTimeOut()) {
 
@@ -625,7 +625,7 @@ sub checkauth {
                 $info{'timed_out'} = 1;
                 #elimino la session del usuario porque caduco
                 _destruirSession('U406', $template_params);
-                C4::AR::Debug::debug("checkauth=> caduco la session \n");
+#                 C4::AR::Debug::debug("checkauth=> caduco la session \n");
                 #Logueo la sesion que se termino por timeout
                 my $time=localtime(time());
                 _session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time);
@@ -654,7 +654,7 @@ sub checkauth {
                 $info{'different_ip'} = 1;
                 #elimino la session del usuario porque caduco
                 _destruirSession('U406', $template_params);
-                C4::AR::Debug::debug("checkauth=> cambio la IP, se elimina la session\n");
+#                 C4::AR::Debug::debug("checkauth=> cambio la IP, se elimina la session\n");
                 #Logueo la sesion que se cambio la ip
                 my $time=localtime(time());
                 _session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
@@ -676,7 +676,7 @@ sub checkauth {
                 $info{'loguin_duplicado'} = 1;
                 #elimino la session del usuario porque caduco
                 _destruirSession('U406', $template_params);
-                C4::AR::Debug::debug("checkauth=> se loguearon con el mismo userid desde otro lado\n");
+#                 C4::AR::Debug::debug("checkauth=> se loguearon con el mismo userid desde otro lado\n");
                 #Logueo la sesion que se cambio la ip
                 my $time=localtime(time());
                 _session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
@@ -694,7 +694,7 @@ sub checkauth {
                 #EXIT
             } else {
             #esta todo OK, continua logueado y se actualiza la session, lasttime
-                C4::AR::Debug::debug("checkauth=> continua logueado, actualizo lasttime de sessionID: ".$sessionID."\n");
+#                 C4::AR::Debug::debug("checkauth=> continua logueado, actualizo lasttime de sessionID: ".$sessionID."\n");
 
                 $session->param('lasttime', time());
 
@@ -704,10 +704,10 @@ sub checkauth {
 
                 if ($flags) {
                     $loggedin = 1;
-                    C4::AR::Debug::debug("checkauth=> TIENE PERMISOS: \n");
+#                     C4::AR::Debug::debug("checkauth=> TIENE PERMISOS: \n");
                 } else {
                     $info{'nopermission'} = 1;
-                    C4::AR::Debug::debug("checkauth=> NO TIENE PERMISOS: \n");
+#                     C4::AR::Debug::debug("checkauth=> NO TIENE PERMISOS: \n");
                     #redirecciono a una pagina informando q no tiene  permisos
                     $session->param('codMsg', 'U354');
                     $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
@@ -724,16 +724,16 @@ sub checkauth {
     # finished authentification, now respond
 
     if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
-        C4::AR::Debug::debug("checkauth=> if (loggedin || authnotrequired || (defined(insecure) && insecure)) \n");
+#         C4::AR::Debug::debug("checkauth=> if (loggedin || authnotrequired || (defined(insecure) && insecure)) \n");
         #Se verifica si el usuario tiene que cambiar la password
         if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$change_password ) {
 
-            C4::AR::Debug::debug("checkauth=> redirectTo desde el servidor \n");
+#             C4::AR::Debug::debug("checkauth=> redirectTo desde el servidor \n");
              _change_Password_Controller($dbh, $query, $userid, $type,\%info, $token);
             #EXIT
         }#end if (($userid) && (new_password_is_needed($userid)))
 
-        C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." sessionID: ".$sessionID."\n");
+#         C4::AR::Debug::debug("checkauth=> EXIT => userid: ".$userid." sessionID: ".$sessionID."\n");
         return ($userid, $session, $flags, $socio);
     }#end if ($loggedin || $authnotrequired || (defined($insecure) && $insecure))
 
@@ -741,7 +741,7 @@ sub checkauth {
 
     unless ($userid) { 
         #si no hay userid, hay que autentificarlo y no existe sesion
-        C4::AR::Debug::debug("checkauth=> Usuario no logueado, intento de autenticacion \n");     
+#         C4::AR::Debug::debug("checkauth=> Usuario no logueado, intento de autenticacion \n");     
         #No genero un nuevo sessionID
         #con este sessionID puedo recuperar el nroRandom (si existe) guardado en la base, para verificar la password
         my $sessionID       = $session->param('sessionID');
@@ -749,14 +749,14 @@ sub checkauth {
         $userid             = $query->param('userid');
         my $password        = $query->param('password');
         my $random_number   = $session->param('nroRandom');
-        C4::AR::Debug::debug("checkauth=> random_number desde la session: ".$random_number);
+#         C4::AR::Debug::debug("checkauth=> random_number desde la session: ".$random_number);
         #se verifica la password ingresada
         my ($passwordValida, $cardnumber, $branch) = _verificarPassword($dbh,$userid,$password,$random_number);
         if ($passwordValida) {
            #se valido la password y es valida
            #setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
             _setLoguinDuplicado($userid,  $ENV{'REMOTE_ADDR'});
-            C4::AR::Debug::debug("checkauth=> password valida");
+#             C4::AR::Debug::debug("checkauth=> password valida");
 
             $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 
@@ -790,7 +790,7 @@ sub checkauth {
             #por defecto no tiene permisos
             $info{'nopermission'} = 1;
             if( $flags = $socio->tienePermisos($flagsrequired) ){
-                C4::AR::Debug::debug("checkauth=> tiene permisos!!!!!!!!LAST LOGUIN");
+#                 C4::AR::Debug::debug("checkauth=> tiene permisos!!!!!!!!LAST LOGUIN");
                 $info{'nopermission'} = 0;
                 $loggedin = 1;
                 #WARNING: Cuando pasan dias habiles sin actividad se consideran automaticamente feriados
@@ -831,7 +831,7 @@ sub checkauth {
 
                 if ($type eq 'opac') {
                     #Si es un usuario de opac que esta sancionado entonces se borran sus reservas
-                    C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeOPAC\n");
+#                     C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeOPAC\n");
                     t_operacionesDeOPAC($socio);
                 } 
     
@@ -843,7 +843,7 @@ sub checkauth {
                 redirectToNoHTTPS('/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
                 $session->secure(0);
             }else{
-                C4::AR::Debug::debug("DESDE Auth, redirect al MAIN");
+#                 C4::AR::Debug::debug("DESDE Auth, redirect al MAIN");
                 $session->param('redirectTo', '/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
                 redirectTo('/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
             }
