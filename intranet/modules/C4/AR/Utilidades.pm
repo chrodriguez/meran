@@ -1772,8 +1772,8 @@ sub generarComboTipoDeDoc{
     my $docs        = &C4::AR::Referencias::obtenerTiposDeDocumentos();
 
     foreach my $doc (@$docs) {
-        push(@select_docs_array, $doc->getId);
-        $select_docs{$doc->getId}  = $doc->getNombre;
+        push(@select_docs_array, $doc->getNombre);
+        $select_docs{$doc->getNombre}  = $doc->getNombre;
     }
 
     $select_docs{''}                = 'SIN SELECCIONAR';
