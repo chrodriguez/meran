@@ -374,6 +374,7 @@ sub t_modificarNivel2 {
             $db->commit;
             C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1);
             C4::AR::Sphinx::reindexar();
+
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U381', 'params' => [$cat_registro_marc_n2->getId2]} ) ;

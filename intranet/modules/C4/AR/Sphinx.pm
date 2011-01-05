@@ -78,16 +78,15 @@ sub generar_indice {
     my ($id1)   = @_;
 
 
-my $dbh = C4::Context->dbh;
-
-my $sth1;
-my $dato;
-my $dato_con_tabla;
-my $subcampo;
-my $string_tabla_con_dato   = "";
-my $string_con_dato   = "";
-
-my $MARC_result_array;
+    my $dbh = C4::Context->dbh;
+    my $sth1;
+    my $dato;
+    my $dato_con_tabla;
+    my $campo;
+    my $subcampo;
+    my $string_tabla_con_dato   = "";
+    my $string_con_dato         = "";
+    my $MARC_result_array;
 
 # C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice ???????????????????????????????????????????????????????????? ");
 
@@ -241,10 +240,13 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
     #recorro los campos
     foreach my $field ($marc_record->fields){
-        my $campo = $field->tag;
+        $campo = $field->tag;
 
         #recorro los subcampos
         foreach my $subfield ($field->subfields()) {
+
+            $subcampo                       = $subfield->[0];
+            $dato                           = $subfield->[1];
 
 # FIXME parche feo
 # MONO  tenemos q permitir agregar   "tabla@referencia" tambien para cuando queremos filtrar por Tipo de documento, o algun otro filtro
@@ -252,22 +254,34 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
 
 # C4::AR::Debug::debug("dato antes de buscar ref => ".$subfield->[1]);
-# C4::AR::Debug::debug("campo => ".$field->tag);
-# C4::AR::Debug::debug("subcampo => ".$subfield->[0]);
+C4::AR::Debug::debug("generar_indice => campo => ".$field->tag);
+C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
 
 
-            if (($field->tag ne '910')&&($subfield->[0] ne 'a')) {
-            
-                $subcampo                       = $subfield->[0];
-                $dato                           = $subfield->[1];
+            if (($field->tag ne '910')&&($subcampo ne 'a')) {
+#                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
                 $dato                           = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
+#                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
                 $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato, "ALL");
-#                                           $autor = C4::AR::Catalogacion::getDatoFromReferencia("111","a",$autor,"ALL");
-#                                                                           my ($campo, $subcampo, $dato, $itemtype)  
+#                 C4::AR::Debug::debug("generar_indice => dato ".$dato);                
 
             } else {
                 $dato                           = $subfield->[1];
-            }    
+#                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
+            } 
+
+
+            #aca van todas las excepciones que no son referencias pero son necesarios para las busquedas 
+            if (($campo eq "020") && ($subcampo eq "a")){
+                $dato = 'isbn@'.$dato;  
+                C4::AR::Debug::debug("generar_indice => 020, a => dato ".$dato);
+            }
+
+            if (($campo eq "995") && ($subcampo eq "f")){
+                $dato = 'barcode@'.$dato;  
+                C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
+            }
+   
 
 # C4::AR::Debug::debug("dato despues de buscar ref => ".$dato);
     
@@ -283,7 +297,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
 #     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => superstring!!!!!!!!!!!!!!!!!!! => ".$superstring);
 
-if(($id1 eq '0')||(!$id1)){
+    if(($id1 eq '0')||(!$id1)){
         my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string, string_tabla_con_dato, string_con_dato) ";
         $query4 .=      " VALUES (?,?,?,?,?,?) ";
         my $sth4    = $dbh->prepare($query4);

@@ -397,13 +397,13 @@ sub toMARC{
 
 #     my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran($marc_record);
 
-    foreach my $m (@$MARC_result_array){
-        C4::AR::Debug::debug("campo => ".$m->{'campo'});
-        foreach my $s (@{$m->{'subcampos_array'}}){
-            C4::AR::Debug::debug("liblibrarian => ".$s->{'subcampo'});        
-            C4::AR::Debug::debug("liblibrarian => ".$s->{'liblibrarian'});        
-        }
-    }
+#     foreach my $m (@$MARC_result_array){
+#         C4::AR::Debug::debug("CatRegistroMarcN3 => toMARC => campo => ".$m->{'campo'});
+#         foreach my $s (@{$m->{'subcampos_array'}}){
+#             C4::AR::Debug::debug("CatRegistroMarcN3 => toMARC => liblibrarian => ".$s->{'subcampo'});        
+#             C4::AR::Debug::debug("CatRegistroMarcN3 => toMARC => liblibrarian => ".$s->{'liblibrarian'});        
+#         }
+#     }
 
     return ($MARC_result_array);
 }
