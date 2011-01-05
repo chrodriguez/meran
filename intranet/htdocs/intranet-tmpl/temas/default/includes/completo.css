@@ -171,7 +171,7 @@ h2.trigger{float:left;font-size:2em;font-weight:normal;height:20px;line-height:2
 #sanciones{clear:both;}
 fieldset.accionesUsuarios{float:right;margin-left:5%;width:30%;}
 .divDatosUsuario{float:left;}
-.mensajes_informacion{background-color:#000000;border:0;text-decoration:none;font-size:12pt;font-family:verdana;color:#f2f2f2;font-weight:bold;text-align:center;}
+.mensajes_informacion{background-color:#FFFFE1;border:0;text-decoration:none;font-size:12pt;font-family:verdana;color:#f2f2f2;font-weight:bold;text-align:center;}
 .showhelp{background:transparent url(../imagenes/iconos/ayuda.png) no-repeat;height:25px;width:25px;cursor:pointer;float:right;}
 .titulo_legend{font-weight:bold;font-size:12px;color:#555555;font-family:Arial, Helvetica, sans-serif;}
 .titulo_legend_resaltado{font-weight:bold;font-size:12px;color:#555555;font-family:Arial, Helvetica, sans-serif;background-color:threedhighlight;padding:2px;}
