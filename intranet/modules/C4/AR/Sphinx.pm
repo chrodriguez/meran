@@ -23,14 +23,17 @@ sub reindexar{
 #     C4::AR::Debug::debug("Busquedas => reindexar => run_indexer => ");
 
     my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
-    #verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada    
-    C4::AR::Sphinx::sphinx_start($mgr);
+    #verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada
+    #Esto no deberia llamarse mas porque el sphinx es un servicio del squezze ahora!
+    #asi que lo comento    
+    #C4::AR::Sphinx::sphinx_start($mgr);
 
     my @args;
     push (@args, '--all');
     push (@args, '--rotate');
     push (@args, '--quiet');
-
+    $mgr->indexer_sudo("sudo");
+    $mgr->indexer_args(\@args);
     $mgr->indexer_args(\@args);
     $mgr->run_indexer();
 #     C4::AR::Debug::debug("Busquedas => reindexar => --all --rotate => ");
@@ -51,6 +54,7 @@ sub sphinx_start{
           # some code comes here
           $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
           $mgr->debug(0);
+	  $mgr->searchd_sudo("sudo");
           my $pids = $mgr->get_searchd_pid;
           if(scalar(@$pids) == 0){
 #               C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
@@ -62,6 +66,7 @@ sub sphinx_start{
   }else{
       $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
       $mgr->debug(0);
+      $mgr->searchd_sudo("sudo");
       my $pids = $mgr->get_searchd_pid;
       if(scalar(@$pids) == 0){
 #           C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");

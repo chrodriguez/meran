@@ -25,8 +25,8 @@ DESC=sphinxsearch
 
 test -x $DAEMON || exit 0
 
-LOGDIR=/var/log/meran/
-PIDFILE=/var/log/meran/searchd.pid
+LOGDIR=/var/log/sphinxsearch
+PIDFILE=/var/run/sphinx/searchd.pid
 DODTIME=1                   # Time to wait for the server to die, in seconds
                             # If this value is set too low you might not
                             # let some servers to die gracefully and
@@ -102,8 +102,8 @@ case "$1" in
             exit 0
         fi
 
-        start-stop-daemon --start -c www-data --exec ${DAEMON}
-        if running ; then
+        start-stop-daemon --start --exec ${DAEMON}
+	if running ; then
             echo "$NAME."
         else
             echo " ERROR."
@@ -129,7 +129,7 @@ case "$1" in
         start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE \
             --exec $DAEMON
         [ -n "$DODTIME" ] && sleep $DODTIME
-        start-stop-daemon --start -c www-data --exec ${DAEMON}
+        start-stop-daemon --start --exec ${DAEMON}
         echo "$NAME."
         ;;
 
