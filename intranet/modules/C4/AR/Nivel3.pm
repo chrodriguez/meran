@@ -81,7 +81,7 @@ sub t_guardarNivel3 {
             $db->commit;
             C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1);
             #ahora el indice se encuentra DESACTUALIZADO
-            C4::AR::Preferencias::setVariable('indexado', 0);
+            C4::AR::Preferencias::setVariable('indexado', 0, $db);
         };
 
       if ($@){
@@ -145,7 +145,7 @@ sub t_modificarNivel3 {
             $db->commit;
             C4::AR::Sphinx::generar_indice($cat_registro_marc_n3->getId1);
             #ahora el indice se encuentra DESACTUALIZADO
-            C4::AR::Preferencias::setVariable('indexado', 0);
+            C4::AR::Preferencias::setVariable('indexado', 0, $db);
     };
 
     if ($@){

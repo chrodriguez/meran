@@ -83,7 +83,7 @@ sub guardarRealmente{
             $id1 = $catRegistroMarcN1->getId1;
             C4::AR::Sphinx::generar_indice($id1);
             #ahora el indice se encuentra DESACTUALIZADO
-            C4::AR::Preferencias::setVariable('indexado', 0);
+            C4::AR::Preferencias::setVariable('indexado', 0, $db);
             #se cambio el permiso con exito
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$id1]} ) ;
