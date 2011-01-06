@@ -247,6 +247,7 @@ sub setVariable {
 
     if(scalar(@$preferencia) > 0){
         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor => ".$valor);
+        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE => ".$PREFERENCES->{$variable});
         $preferencia->[0]->setValue($valor);
         $PREFERENCES->{$variable} = $valor;
         $preferencia->[0]->save();
