@@ -1215,7 +1215,7 @@ sub busquedaCombinada_newTemp{
     $sphinx->SetMatchMode($tipo_match);
 
 #    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
-   $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo");
+   $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
     
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
 
