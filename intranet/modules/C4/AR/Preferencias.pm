@@ -251,7 +251,6 @@ sub setVariable {
         $preferencia->[0]->setValue($valor);
         $PREFERENCES->{$variable} = $valor;
         $preferencia->[0]->save();
-die;
         
         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE despues => ".$PREFERENCES->{$variable});
         C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias->getValorPreferencia($variable));
