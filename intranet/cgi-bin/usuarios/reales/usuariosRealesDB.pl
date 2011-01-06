@@ -46,8 +46,8 @@ if($editing){
     Aca se maneja el resteo de password del usuario
 =cut
     ## TODO tambien se podria hacer que el sistema genere la pass y se la envie por correo al socio, esto deberia ser una preferencia 
-    # resetPassword = [0 | 1]
-    # autoGeneratePassword = [0 | 1]
+    ## resetPassword = [0 | 1]
+    ## autoGeneratePassword = [0 | 1]
     if($tipoAccion eq "RESET_PASSWORD"){
         my ($userid, $session, $flags) = checkauth( $input, 
                                             $authnotrequired,
