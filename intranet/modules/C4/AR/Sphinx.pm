@@ -39,6 +39,7 @@ sub reindexar{
         $mgr->indexer_args(\@args);
         $mgr->run_indexer();
         C4::AR::Debug::debug("Sphinx => reindexar => --all --rotate => ");
+        C4::AR::Preferencias::setVariable('indexado', 1);
     } else {
         C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA ACTUALIZADO!!!!!!!");
     }
