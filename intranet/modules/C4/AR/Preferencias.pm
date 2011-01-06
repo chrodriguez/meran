@@ -205,11 +205,11 @@ sub t_guardarVariable {
     my ($var,$val,$exp,$tipo,$op)=@_;
     
     my $params;
-    $params->{'variable'}= $var;
-        $params->{'value'}= $val;
-    $params->{'explanation'}= $exp;
-    $params->{'options'}= $op;
-        $params->{'type'}= $tipo;
+    $params->{'variable'}       = $var;
+    $params->{'value'}          = $val;
+    $params->{'explanation'}    = $exp;
+    $params->{'options'}        = $op;
+    $params->{'type'}           = $tipo;
 
     my $msg_object= C4::AR::Mensajes::create();
     _verificarDatosVariable($params,$msg_object);
@@ -236,6 +236,14 @@ sub t_guardarVariable {
         $db->{connect_options}->{AutoCommit} = 1;
     }
     return ($msg_object);
+}
+
+sub setVariable {
+    my ($variable, $valor)=@_;
+    
+ 
+    my ($preferencia) = C4::Modelo::PrefPreferenciaSistema->new();
+
 }
 
 sub _verificarDatosVariable {
@@ -295,9 +303,9 @@ sub getConfigVisualizacionOPAC{
     my $self = shift;
 
     my %hash_config = {};
-    $hash_config{'resumido'} = C4::AR::Preferencias->getValorPreferencia("detalle_resumido") || 0;
-    $hash_config{'nivel1_repetible'} = C4::AR::Preferencias->getValorPreferencia("nivel1_repetible") || 0;
-    $hash_config{'perfil_visual'} = C4::AR::Preferencias->getValorPreferencia("perfil_visual") || 0;
+    $hash_config{'resumido'}            = C4::AR::Preferencias->getValorPreferencia("detalle_resumido") || 0;
+    $hash_config{'nivel1_repetible'}    = C4::AR::Preferencias->getValorPreferencia("nivel1_repetible") || 0;
+    $hash_config{'perfil_visual'}       = C4::AR::Preferencias->getValorPreferencia("perfil_visual") || 0;
 
     return (\%hash_config);
 }
