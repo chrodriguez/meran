@@ -17,19 +17,25 @@
     <legend class="titulo_legend trigger click" title='[% "click para acceder a los resultados de la b&uacute;squeda" | i18n %]'>
         [% "Resultados de la b&uacute;squeda (cat&aacute;logo)" | i18n %]:</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
-            <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: <h2><i>[% buscoPor %]</i></h2></div>
+            <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: 
+            
+                <h2><i>[% buscoPor %]</i></h2>
+            
+                [% IF !from_suggested %]
+			        [% IF suggested %]
+			                <div class="suggested_search click">
+			                    <a onclick="buscarSuggested('[% suggested %]')">
+			                        [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
+			                    </a>
+			                </div>
+			        [% END %]
+			    [% END %]
+            
+            
+            </div>
             <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b>  en ([% timeSeg %] segundos)</div>
             <div class="contenedor_paginador">[% paginador %]</div>
 
-    [% IF !from_suggested %]
-        [% IF suggested %]
-                <div class="suggested_search click">
-                    <a onclick="buscarSuggested('[% suggested %]')">
-                        [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
-                    </a>
-                </div>
-        [% END %]
-    [% END %]
 
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <tr class="titulo_tabla_resultado">

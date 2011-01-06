@@ -1094,16 +1094,22 @@ sub busquedaAvanzada_newTemp{
     my $tipo = 'SPH_MATCH_EXTENDED';
     
     if($params->{'titulo'} ne ""){
-        $query .= ' @titulo "'.$params->{'titulo'}.'"';
+        $query .= ' @titulo "'.$params->{'titulo'};
+	    if($params->{'tipo'} eq "normal"){
+	        $query .= "*";
+	    }
+	    $query .='"';
     }
 
     if($params->{'autor'} ne ""){
-        $query .= ' @autor "'.$params->{'autor'}.'"';
+        $query .= ' @autor "'.$params->{'autor'};
+
+        if($params->{'tipo'} eq "normal"){
+            $query .= "*";
+        }
+        $query .='"';
     }
 
-    if($params->{'tipo'} eq "normal"){
-        $query .= "*";
-    }
 
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
 
