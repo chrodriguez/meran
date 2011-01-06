@@ -23,6 +23,7 @@ sub reindexar{
     C4::AR::Debug::debug("Sphinx => reindexar => run_indexer => ");
 
     if(!C4::AR::Preferencias->getValorPreferencia('indexado')){
+        C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA DESACTUALIZADO!!!!!!!!");
         my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
         #verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada
         #Esto no deberia llamarse mas porque el sphinx es un servicio del squezze ahora!
@@ -39,7 +40,7 @@ sub reindexar{
         $mgr->run_indexer();
         C4::AR::Debug::debug("Sphinx => reindexar => --all --rotate => ");
     } else {
-        C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA ACTUALIZADO ");
+        C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA ACTUALIZADO!!!!!!!");
     }
     
 }
@@ -263,9 +264,8 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 # por ej si quiero filtra por tipo de documento libro => "cat_ref_tipo_nivel3@LIB"
 
 
-# C4::AR::Debug::debug("dato antes de buscar ref => ".$subfield->[1]);
-C4::AR::Debug::debug("generar_indice => campo => ".$field->tag);
-C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
+#             C4::AR::Debug::debug("generar_indice => campo => ".$field->tag);
+#             C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
 
 
             if (($field->tag ne '910')&&($subcampo ne 'a')) {
@@ -284,12 +284,12 @@ C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
             #aca van todas las excepciones que no son referencias pero son necesarios para las busquedas 
             if (($campo eq "020") && ($subcampo eq "a")){
                 $dato = 'isbn@'.$dato;  
-                C4::AR::Debug::debug("generar_indice => 020, a => dato ".$dato);
+#                 C4::AR::Debug::debug("generar_indice => 020, a => dato ".$dato);
             }
 
             if (($campo eq "995") && ($subcampo eq "f")){
                 $dato = 'barcode@'.$dato;  
-                C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
+#                 C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
             }
    
 

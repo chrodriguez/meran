@@ -84,7 +84,7 @@ sub guardarRealmente{
             $id2 = $catRegistroMarcN2->getId2;
             C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1);
             #ahora el indice se encuentra DESACTUALIZADO
-            C4::AR::Preferecias::setVariable('indexado', 0);
+            C4::AR::Preferencias::setVariable('indexado', 0);
 
             #se cambio el permiso con exito
             $msg_object->{'error'} = 0;
@@ -377,7 +377,7 @@ sub t_modificarNivel2 {
             $db->commit;
             C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1);
             #ahora el indice se encuentra DESACTUALIZADO
-            C4::AR::Preferecias::setVariable('indexado', 0);
+            C4::AR::Preferencias::setVariable('indexado', 0);
 
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;

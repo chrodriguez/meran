@@ -17,6 +17,7 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
 
 @EXPORT_OK=qw(
     &getPreferencia
+    &setVariable
     &getValorPreferencia
     &getPreferenciaLike
     &t_guardarVariable
@@ -239,10 +240,15 @@ sub t_guardarVariable {
 }
 
 sub setVariable {
-    my ($variable, $valor)=@_;
+
+    my ($variable, $valor) = @_;
     
-    my  $preferencia = C4::Modelo::UsrSocio::Manager->get_pref_preferencia_sistema(query => variable => {eq => $variable} );
-    $preferencia->setVariable($valor);
+    my  $preferencia = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema(query => [variable => {eq => $variable}] );
+
+    if(scalar(@$preferencia)){
+        $preferencia->[0]->setVariable($valor);
+        $preferencia->[0]->save();
+    }
 }
 
 sub _verificarDatosVariable {
