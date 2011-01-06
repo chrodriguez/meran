@@ -12,7 +12,7 @@ use C4::Modelo::CircPrestamo::Manager;
 use C4::AR::Nivel1 qw(getNivel1FromId1); 
 use C4::AR::Nivel2 qw(getNivel1FromId2);
 use C4::AR::Reservas qw(cantReservasPorGrupo);
-use C4::AR::Sphinx qw(generar_indice reindexar);
+use C4::AR::Sphinx qw(generar_indice);
 
 use vars qw(@EXPORT_OK @ISA);
 
@@ -79,7 +79,7 @@ sub t_guardarNivel3 {
         }
                 $db->commit;
                 C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1);
-                C4::AR::Sphinx::reindexar();
+#                 C4::AR::Sphinx::reindexar();
         };
 
       if ($@){
@@ -141,11 +141,10 @@ sub t_modificarNivel3 {
             }#END for(my $i=0;$i<$cant;$i++)
 
             $db->commit;
-#             C4::AR::Sphinx::generar_indice($cat_registro_marc_n3->getId1);
+            C4::AR::Sphinx::generar_indice($cat_registro_marc_n3->getId1);
 #             C4::AR::Sphinx::reindexar();
     };
 
-die;
     if ($@){
         #Se loguea error de Base de Datos
         &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
@@ -246,7 +245,7 @@ sub t_eliminarNivel3{
 
         if ($id1) {
             C4::AR::Sphinx::generar_indice($id1);
-            C4::AR::Sphinx::reindexar();
+#             C4::AR::Sphinx::reindexar();
         }
     };
 

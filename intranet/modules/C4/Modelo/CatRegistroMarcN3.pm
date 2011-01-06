@@ -60,6 +60,7 @@ sub agregar{
     $self->setId1($params->{'id1'});
     $self->setMarcRecord($params->{'marc_record'});
 
+
     $self->save();
 }
 
@@ -75,6 +76,25 @@ sub modificar{
     my $marc_record_base    = MARC::Record->new_from_usmarc($self->getMarcRecord());
 #     my $marc_record_salida  = MARC::Record->new();
 
+
+
+# TODO falta verificar el cambio de estado/disponibilidad
+
+    my %params;
+
+    
+
+
+#     return C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record->subfield("995","o")));
+
+
+
+# verificar_cambio 
+    $params{'estado_anterior'}          = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
+    $params{'estado_nuevo'}             = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","e")));        
+    $params{'disponibilidad_anterior'}  = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
+    $params{'disponibilidad_nueva'}     = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","o")));
+   
 
     if($params->{'EDICION_N3_GRUPAL'}){
     #si es una edicion grupal no se permite editar el barcode 995,f  
@@ -142,7 +162,10 @@ sub modificar{
     } else {
         $self->setMarcRecord($params->{'marc_record'});
     }
-# die;
+
+#     $self->verificar_cambio($db, \%params);
+
+# die;  
     $self->save();
 }
 
@@ -297,6 +320,10 @@ sub getEstadoObject{
     }
 
     return $estado;
+}
+
+sub getEstadoFromMarcrecord{
+
 }
 
 =head2 sub getIdDisponibilidad
@@ -513,14 +540,14 @@ sub verificar_cambio {
     #hay que reasignar las reservas que existen para el ejemplar, si no se puede reasignar se eliminan las reservas y sanciones
         C4::AR::Debug::debug("verificar_cambio => DISPONIBLE a NO DISPONIBLE con disponibilidad anterior PRESTAMO");
         
-        C4::AR::Reservas::reasignarNuevoEjemplarAReserva($db, $params, $msg_object);
+#         C4::AR::Reservas::reasignarNuevoEjemplarAReserva($db, $params, $msg_object);
 
     }elsif ( (!ESTADO_DISPONIBLE($estado_anterior)) && ESTADO_DISPONIBLE($estado_nuevo) && DISPONIBILIDAD_PRESTAMO($disponibilidad_nueva) ){
     #pasa de DISPONIBLE a NO DISPONIBLE con disponibilidad_nueva PRESTAMO
     #Si estado_anterior es NO DISPONIBLE  y  estado_nuevo es DISPONIBLE  y  disponibilidad_nueva es PRESTAMO
     #hay que verificar si hay reservas en espera, si hay se reasignan al nuevo ejemplar
         C4::AR::Debug::debug("verificar_cambio => NO DISPONIBLE a DISPONIBLE con disponibilidad nueva PRESTAMO");
-        C4::AR::Reservas::asignarEjemplarASiguienteReservaEnEspera($params);
+#         C4::AR::Reservas::asignarEjemplarASiguienteReservaEnEspera($params);
 
     }elsif ( ESTADO_DISPONIBLE($estado_anterior) && DISPONIBILIDAD_PRESTAMO($disponibilidad_anterior) && 
              DISPONIBILIDAD_PARA_SALA($disponibilidad_nueva) ){
@@ -534,7 +561,7 @@ sub verificar_cambio {
     #Si estaba DISPONIBLE y pasa de disponibilidad_anterior PARA SALA a disponibilidad_nueva PRESTAMO
     #Se verifica si hay reservas en espera, si hay se reasignan al nuevo ejemplar
         C4::AR::Debug::debug("verificar_cambio => DISPONIBLE de disponibilidad anterior PARA SALA a disponibilidad nueva PRESTAMO");
-        C4::AR::Reservas::asignarEjemplarASiguienteReservaEnEspera($params);
+#         C4::AR::Reservas::asignarEjemplarASiguienteReservaEnEspera($params);
     }
     
 }

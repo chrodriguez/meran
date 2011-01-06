@@ -7,7 +7,7 @@ use C4::Modelo::CatRegistroMarcN1;
 use C4::Modelo::CatRegistroMarcN1::Manager;
 use C4::Modelo::CatFavoritosOpac::Manager;
 use C4::Modelo::CatFavoritosOpac;
-use C4::AR::Sphinx qw(generar_indice reindexar);
+use C4::AR::Sphinx qw(generar_indice);
 
 use vars qw(@EXPORT_OK @ISA);
 
@@ -86,7 +86,7 @@ sub guardarRealmente{
         };
 #         C4::AR::Debug::debug("Nivel1 => guardarRealmente");
         C4::AR::Sphinx::generar_indice($id1);
-        C4::AR::Sphinx::reindexar();
+#         C4::AR::Sphinx::reindexar();
 #         C4::AR::Debug::debug("Nivel1 => guardarRealmente => run_indexer => ");
     
         if ($@){
@@ -235,7 +235,7 @@ sub t_modificarNivel1 {
             $cat_registro_marc_n1->modificar($marc_record->as_usmarc);
             $db->commit;
             C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1());
-            C4::AR::Sphinx::reindexar();
+#             C4::AR::Sphinx::reindexar();
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U380', 'params' => [$cat_registro_marc_n1->getId1]} ) ;
@@ -317,7 +317,7 @@ sub t_eliminarNivel1{
             $cat_registro_marc_n1->eliminar;  
             $db->commit;
             C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1());
-            C4::AR::Sphinx::reindexar();
+#             C4::AR::Sphinx::reindexar();
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U374', 'params' => [$id1]} ) ;

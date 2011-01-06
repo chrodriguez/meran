@@ -36,7 +36,7 @@ sub reindexar{
     $mgr->indexer_args(\@args);
     $mgr->indexer_args(\@args);
     $mgr->run_indexer();
-#     C4::AR::Debug::debug("Busquedas => reindexar => --all --rotate => ");
+    C4::AR::Debug::debug("Busquedas => reindexar => --all --rotate => ");
 }
 
 =head2
