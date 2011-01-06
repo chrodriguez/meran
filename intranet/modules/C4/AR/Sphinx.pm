@@ -22,7 +22,9 @@ use vars qw(@EXPORT @ISA);
 sub reindexar{
     C4::AR::Debug::debug("Sphinx => reindexar => run_indexer => indexado => ".C4::AR::Preferencias->getValorPreferencia('indexado'));
 
-    if(!C4::AR::Preferencias->getValorPreferencia('indexado')){
+    if(C4::AR::Preferencias->getValorPreferencia('indexado')){
+        C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA ACTUALIZADO!!!!!!!");
+    } else {
         C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA DESACTUALIZADO!!!!!!!!");
         my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
         #verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada
@@ -40,8 +42,6 @@ sub reindexar{
         $mgr->run_indexer();
         C4::AR::Debug::debug("Sphinx => reindexar => --all --rotate => ");
         C4::AR::Preferencias::setVariable('indexado', 1);
-    } else {
-        C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA ACTUALIZADO!!!!!!!");
     }
     
 }
