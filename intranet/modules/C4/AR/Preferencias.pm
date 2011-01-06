@@ -246,14 +246,14 @@ sub setVariable {
     my  $preferencia = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema(db => $db,query => [variable => {eq => $variable}] );
 
     if(scalar(@$preferencia) > 0){
-        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor => ".$valor);
-        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE antes => ".$PREFERENCES->{$variable});
+#         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor => ".$valor);
+#         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE antes => ".$PREFERENCES->{$variable});
         $preferencia->[0]->setValue($valor);
         $PREFERENCES->{$variable} = $valor;
         $preferencia->[0]->save();
         
-        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE despues => ".$PREFERENCES->{$variable});
-        C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias->getValorPreferencia($variable));
+#         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE despues => ".$PREFERENCES->{$variable});
+#         C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias->getValorPreferencia($variable));
     }
 }
 
