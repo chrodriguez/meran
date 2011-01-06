@@ -245,7 +245,8 @@ sub setVariable {
     
     my  $preferencia = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema(query => [variable => {eq => $variable}] );
 
-    if(scalar(@$preferencia) > 0){;
+    if(scalar(@$preferencia) > 0){
+        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor => ".$valor);
         $preferencia->[0]->setValue($valor);
         $preferencia->[0]->save();
     }
