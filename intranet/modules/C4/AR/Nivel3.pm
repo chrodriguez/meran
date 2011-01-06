@@ -58,7 +58,7 @@ sub t_guardarNivel3 {
             foreach my $barcode (@$barcodes_para_agregar){
                 #se procesa un barcode por vez junto con la info del nivel 3 y nivel3 repetible
                 my $marc_record         = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
-#                 C4::AR::Debug::debug("barcodes===============================".$barcode);
+    #                 C4::AR::Debug::debug("barcodes===============================".$barcode);
         
                 $catRegistroMarcN3      = C4::Modelo::CatRegistroMarcN3->new(db => $db);  
 
@@ -67,19 +67,21 @@ sub t_guardarNivel3 {
                 $field->add_subfields( 'f' => $barcode );
 
                 $params->{'marc_record'} = $marc_record->as_usmarc;
-#                 C4::AR::Debug::debug("marc_record!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=> ".$marc_record->as_usmarc);
+    #                 C4::AR::Debug::debug("marc_record!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=> ".$marc_record->as_usmarc);
                 $catRegistroMarcN3->agregar($db, $params);
                 # FIXME transaccion por ejemplar???
-#                 $db->commit;
+    #                 $db->commit;
                 #recupero el id3 recien agregado
                 my $id3 = $catRegistroMarcN3->getId3;
                 #se agregaron los barcodes con exito
                 $msg_object->{'error'} = 0;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$id3]} );
-        }
-                $db->commit;
-                C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1);
-#                 C4::AR::Sphinx::reindexar();
+            }
+
+            $db->commit;
+            C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1);
+            #ahora el indice se encuentra DESACTUALIZADO
+            C4::AR::Preferecias::setVariable('indexado', 0);
         };
 
       if ($@){
@@ -142,7 +144,8 @@ sub t_modificarNivel3 {
 
             $db->commit;
             C4::AR::Sphinx::generar_indice($cat_registro_marc_n3->getId1);
-#             C4::AR::Sphinx::reindexar();
+            #ahora el indice se encuentra DESACTUALIZADO
+            C4::AR::Preferecias::setVariable('indexado', 0);
     };
 
     if ($@){

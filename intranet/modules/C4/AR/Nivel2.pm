@@ -82,12 +82,15 @@ sub guardarRealmente{
             $db->commit;
             #recupero el id1 recien agregado
             $id2 = $catRegistroMarcN2->getId2;
+            C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1);
+            #ahora el indice se encuentra DESACTUALIZADO
+            C4::AR::Preferecias::setVariable('indexado', 0);
+
             #se cambio el permiso con exito
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => [$id2]} ) ;
         };
 
-        C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1);
 #         C4::AR::Sphinx::reindexar();
 
     
@@ -373,7 +376,8 @@ sub t_modificarNivel2 {
             $cat_registro_marc_n2->modificar($marc_record->as_usmarc);  
             $db->commit;
             C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1);
-#             C4::AR::Sphinx::reindexar();
+            #ahora el indice se encuentra DESACTUALIZADO
+            C4::AR::Preferecias::setVariable('indexado', 0);
 
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;

@@ -241,9 +241,8 @@ sub t_guardarVariable {
 sub setVariable {
     my ($variable, $valor)=@_;
     
- 
-    my ($preferencia) = C4::Modelo::PrefPreferenciaSistema->new();
-
+    my  $preferencia = C4::Modelo::UsrSocio::Manager->get_pref_preferencia_sistema(query => variable => {eq => $variable} );
+    $preferencia->setVariable($valor);
 }
 
 sub _verificarDatosVariable {

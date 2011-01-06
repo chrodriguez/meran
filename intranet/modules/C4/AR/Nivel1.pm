@@ -80,14 +80,13 @@ sub guardarRealmente{
             $db->commit;            
             #recupero el id1 recien agregado
             $id1 = $catRegistroMarcN1->getId1;
+            C4::AR::Sphinx::generar_indice($id1);
+            #ahora el indice se encuentra DESACTUALIZADO
+            C4::AR::Preferecias::setVariable('indexado', 0);
             #se cambio el permiso con exito
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$id1]} ) ;
         };
-#         C4::AR::Debug::debug("Nivel1 => guardarRealmente");
-        C4::AR::Sphinx::generar_indice($id1);
-#         C4::AR::Sphinx::reindexar();
-#         C4::AR::Debug::debug("Nivel1 => guardarRealmente => run_indexer => ");
     
         if ($@){
             #Se loguea error de Base de Datos
@@ -235,7 +234,9 @@ sub t_modificarNivel1 {
             $cat_registro_marc_n1->modificar($marc_record->as_usmarc);
             $db->commit;
             C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1());
-#             C4::AR::Sphinx::reindexar();
+            #ahora el indice se encuentra DESACTUALIZADO
+            C4::AR::Preferecias::setVariable('indexado', 0);
+
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U380', 'params' => [$cat_registro_marc_n1->getId1]} ) ;
