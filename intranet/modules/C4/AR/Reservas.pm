@@ -35,7 +35,6 @@ $VERSION = 3.0;
     &eliminarReservasVencidas
     &reasignarTodasLasReservasEnEspera
     &getReserva
-    &t_realizarPrestamo
     &eliminarReservas
     &getReservasDeSocioEnEspera
 );
@@ -471,6 +470,19 @@ sub estaReservado{
 
 sub _verificarHorario{
     my $end = ParseDate(C4::AR::Preferencias->getValorPreferencia("close"));
+    my $begin =ParseDate(C4::AR::Preferencias->getValorPreferencia("open"));
+    my $actual=ParseDate("today");
+    my $error=0;
+
+    if ((Date_Cmp($actual, $begin) < 0) || (Date_Cmp($actual, $end) > 0)){
+        $error=1;
+    }
+
+    return $error;
+}
+
+sub _verificarHorarioES{
+    my $end = ParseDate(C4::AR::Preferencias->getValorPreferencia("close"));
     my $begin =C4::Date::calc_beginES();
     my $actual=ParseDate("today");
     my $error=0;
@@ -780,10 +792,18 @@ sub _verificaciones {
 
 #Se verifica si es un prestamo especial este dentro de los horarios que corresponde.
 #SOLO PARA INTRA, ES UN PRESTAMO ESPECIAL.
-    if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo eq 'ES' && _verificarHorario()){
+    if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo eq 'ES' && _verificarHorarioES()){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P102', 'params' => []} ) ;
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de prestamos especiales");
+    }
+
+#Se verifica que la operación este dentro del horario de funcionamiento de la biblioteca.
+#SOLO PARA INTRA, ES UN PRESTAMO.
+    if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo ne 'ES' && !C4::AR::Preferencias->getValorPreferencia("operacion_fuera_horario") && _verificarHorario()){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P127', 'params' => []} ) ;
+        C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de operacion fuera de horario");
     }
 
 #Se verfica si el usuario esta sancionado

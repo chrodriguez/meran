@@ -546,6 +546,8 @@ sub t_renovar {
 
     foreach my $data (@$array_id_prestamos){
         my ($msg_object)= C4::AR::Mensajes::create();
+
+        $msg_object->{'tipo'}= "INTRA";
         $msg_object->{'error'}= 0;
         C4::AR::Debug::debug("T_Renovar ".$data->{'barcode'});
         my $prestamo = C4::AR::Prestamos::getInfoPrestamo($data->{'id_prestamo'},$db);
@@ -735,6 +737,13 @@ sub verificarCirculacionRapida {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P116', 'params' => []} ) ;
     }
 
+    #Se verifica que la operación este dentro del horario de funcionamiento de la biblioteca.
+    #SOLO PARA INTRA
+    if(!$msg_object->{'error'} && !C4::AR::Preferencias->getValorPreferencia("operacion_fuera_horario") && C4::AR::Reservas::_verificarHorario()){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P127', 'params' => []} ) ;
+        C4::AR::Debug::debug("Prestamos.pm => verificarCirculacionRapida => Entro al if de operacion fuera de horario ");
+    }
 }
 
 
