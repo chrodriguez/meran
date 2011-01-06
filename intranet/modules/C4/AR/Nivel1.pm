@@ -236,7 +236,7 @@ sub t_modificarNivel1 {
             $db->commit;
             C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1());
             #ahora el indice se encuentra DESACTUALIZADO
-            C4::AR::Preferencias::setVariable('indexado', 0);
+            C4::AR::Preferencias::setVariable('indexado', 0, $db);
 
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;

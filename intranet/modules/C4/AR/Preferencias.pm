@@ -241,7 +241,7 @@ sub t_guardarVariable {
 
 sub setVariable {
 
-    my ($variable, $valor) = @_;
+    my ($variable, $valor, $db) = @_;
     
     my  $preferencia = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema(db => $db,query => [variable => {eq => $variable}] );
 
