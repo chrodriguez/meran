@@ -471,8 +471,10 @@ sub estaReservado{
 sub _verificarHorario{
     my $end = ParseDate(C4::AR::Preferencias->getValorPreferencia("close"));
     my $begin =ParseDate(C4::AR::Preferencias->getValorPreferencia("open"));
-    my $actual=ParseDate("today");
+    my $actual=ParseDate("now");
     my $error=0;
+
+   C4::AR::Debug::debug("_verificarHorario ->>  apertura = $begin , cierre = $end , actual = $actual");
 
     if ((Date_Cmp($actual, $begin) < 0) || (Date_Cmp($actual, $end) > 0)){
         $error=1;
@@ -484,7 +486,7 @@ sub _verificarHorario{
 sub _verificarHorarioES{
     my $end = ParseDate(C4::AR::Preferencias->getValorPreferencia("close"));
     my $begin =C4::Date::calc_beginES();
-    my $actual=ParseDate("today");
+    my $actual=ParseDate("now");
     my $error=0;
 
     if ((Date_Cmp($actual, $begin) < 0) || (Date_Cmp($actual, $end) > 0)){
