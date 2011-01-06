@@ -1,9 +1,5 @@
-
-
-
- 
 [% IF cantItems %]
-	[% "Cantidad de Items:"|i18n %] [% cantItems %]<br>
+[% "Cantidad de Items:"|i18n %] [% cantItems %]<br>
 [% END %]
 
 <ul class="resumen_items">
@@ -56,11 +52,9 @@
                 <td>
                 [% PERL %]
                     print C4::AR::Filtros::link_to( text => "[% nivel3_obj.getBarcode %]",
-                                                    url =>      "/cgi-bin/koha/busquedas/detalleItem.pl", 
-                                                    params =>   [   "id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]",
-                                                                    "barcode=[% barcode %]","signatura_topografica=[% signatura_topografica %]"
-                                                            ],
-                                                    title =>    "[% 'Detalle de disponibilidad' | i18n %]"
+                                                    url =>      "/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
+                                                    params =>   ["id3=[% id3 %]"],
+                                                    title =>    "[% 'Detalle del ejemplar' | i18n %]"
                                                 ) ;
                 [% END %]
                 </td>
@@ -68,11 +62,11 @@
                     <span class="[% claseDisponibilidad %]">
                         [% nivel3_obj.getDisponibilidadObject.getNombre %]
                     </span>
-                    <p class="usuario_del_prestamo">
                     [% IF prestamo.getNro_socio %]
+                    <p class="usuario_del_prestamo">
                             [% socio.persona.getApeYNom %]
-                    [% END %]
                     </p>
+                    [% END %]
                 </td>
                 <td>
                     <span class="[% claseEstado %]">
