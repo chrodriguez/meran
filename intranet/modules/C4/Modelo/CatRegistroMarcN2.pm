@@ -301,13 +301,13 @@ sub getIdiomaObject{
     my $marc_record     = MARC::Record->new_from_usmarc($self->getMarcRecord());
     my $ref             = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdioma());
      
-C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> ref => ".$ref);
+    C4::AR::Debug::debug("CatRegistroMarcN2 => getIdioma => ".$self->getIdioma());
+    C4::AR::Debug::debug("CatRegistroMarcN2 => getIdiomaObject()=> ref => ".$ref);
     my $idioma_object   = C4::Modelo::RefIdioma->getByPk($ref);
 
-C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> idioma_object->getId => ".$idioma_object->getId);
         
     if(!$idioma_object){
-            C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) RefSoporte NO EXISTE");
+            C4::AR::Debug::debug("CatRegistroMarcN2 => getIdiomaObject()=> EL OBJECTO (ID) RefIdioma NO EXISTE");
             $idioma_object = C4::Modelo::RefIdioma->new();
     }
 

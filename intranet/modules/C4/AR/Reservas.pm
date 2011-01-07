@@ -1075,9 +1075,9 @@ sub manejoDeDisponibilidadDomiciliaria{
         $params->{'loggedinuser'}: el usuario logueado
 =cut
 sub asignarEjemplarASiguienteReservaEnEspera{
-    my ($params) = @_;
+    my ($params, $db) = @_;
 
-    my ($reservaGrupo) = getReservaEnEsperaById2($params->{'id2'}); #retorna la primer reserva en espera (SI EXISTE) del grupo
+    my ($reservaGrupo) = getReservaEnEsperaById2($db, $params->{'id2'}); #retorna la primer reserva en espera (SI EXISTE) del grupo
 
     if($reservaGrupo){
         #Si hay al menos un ejemplar esperando se reasigna
@@ -1182,11 +1182,11 @@ sub getReservaEnEsperaById2{
 
     my $reservas_array_ref = getReservasEnEsperaById2($db, $id2);
 
-    if(scalar(@$reservas_array_ref) > 0){
-        return ($reservas_array_ref->[0]);
-    }else{
+    if($reservas_array_ref eq 0){
         #NO hay reservas en espera para este grupo
         return 0;
+    }else{
+        return ($reservas_array_ref->[0]);
     }
 }
 
