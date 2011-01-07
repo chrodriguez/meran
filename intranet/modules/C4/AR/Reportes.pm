@@ -605,7 +605,6 @@ sub registroDeUsuarios {
 
 }
 
-=======
 package C4::AR::Reportes;
 
 use strict;
@@ -1107,41 +1106,43 @@ sub registroDeUsuarios {
 	use C4::Modelo::UsrSocio::Manager;
 
 	if ($categoria) {
-		push( @filtros, ( 'usr_socio.cod_categoria' => { eq => $categoria } ) );
+		push( @filtros, ( 'cod_categoria' => { eq => $categoria } ) );
 	}
 	if ($ui) {
-		push( @filtros, ( 'usr_socio.id_ui' => { eq => $ui } ) );
+		push( @filtros, ( 'id_ui' => { eq => $ui } ) );
 	}
-	if (   ( C4::AR::Utilidades::validateString($name_from) )
-		|| ( C4::AR::Utilidades::validateString($name_to) ) )
-	{
-		push(
-			@filtros,
-			(
-				'usr_socio.persona.apellido' =>
-				  { eq => $name_from, gt => $name_from }
-			)
-		);
-		push(
-			@filtros,
-			(
-				'usr_socio.persona.apellido' =>
-				  { eq => $name_to, lt => $name_to }
-			)
-		);
-	}
+    if ( ( C4::AR::Utilidades::validateString($name_to) ) )
+    {
+        push(
+            @filtros,
+            (
+                'persona.apellido' =>
+                  { eq => $name_to, lt => $name_to }
+            )
+        );
+    }
+    if (   ( C4::AR::Utilidades::validateString($name_from) ) )
+    {
+        push(
+            @filtros,
+            (
+                'persona.apellido' =>
+                  { eq => $name_from, gt => $name_from }
+            )
+        );
+   }
 	if ( ($anio) && ( $anio =~ /^-?[\.|\d]*\Z/ ) ) {
 		push(
 			@filtros,
 			(
-				'usr_socio.fecha_alta' =>
+				'fecha_alta' =>
 				  { eq => $anio_fecha_start, gt => $anio_fecha_start }
 			)
 		);
 		push(
 			@filtros,
 			(
-				'usr_socio.fecha_alta' =>
+				'fecha_alta' =>
 				  { eq => $anio_fecha_end, lt => $anio_fecha_end }
 			)
 		);

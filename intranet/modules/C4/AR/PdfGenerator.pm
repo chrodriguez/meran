@@ -477,15 +477,15 @@ sub generateCard {
 	#Write the borrower data into the pdf file
 	$pdf->setSize(7);
 	$pdf->setFont("Arial-Bold");
-	$pdf->addRawText( _format( uc( $socio->categoria->getDescription ) ),
+	$pdf->addRawText( _unformat( uc( $socio->categoria->getDescription ) ),
 		$x, $pageheight - ( $y + 4 ) );
-	$pdf->addRawText( _format( uc( $socio->ui->getNombre ) ),
+	$pdf->addRawText( _unformat( uc( $socio->ui->getNombre ) ),
 		$x, $pageheight - ( $y + 11 ) );
 	$pdf->addRawText( "BIBLIOTECA", $x, $pageheight - ( $y + 18 ) );
 	$pdf->setFont("Arial");
 	$pdf->setSize(6);
 
-	my $address = _format( $socio->ui->getDireccion );
+	my $address = _unformat( $socio->ui->getDireccion );
 	$pdf->addRawText( $address, $x, $pageheight - ( $y + 25 ) );
 	use locale;
 
@@ -493,17 +493,17 @@ sub generateCard {
 	$phone = $socio->ui->getTelefono;
 	$pdf->addRawText( $phone, $x, $pageheight - ( $y + 31 ) );
 	$pdf->setSize(8);
-	$pdf->addRawText( "Apellido: " . _format( $socio->persona->getApellido ),
+	$pdf->addRawText( "Apellido: " . _unformat( $socio->persona->getApellido ),
 		$x + 4, $pageheight - ( $y + 57 ) );
-	$pdf->addRawText( "Nombre: " . _format( $socio->persona->getNombre ),
+	$pdf->addRawText( "Nombre: " . _unformat( $socio->persona->getNombre ),
 		$x + 4, $pageheight - ( $y + 65 ) );
 	$pdf->addRawText(
-		"Tipo de Lector: " . _format( $socio->categoria->getDescription ),
+		"Tipo de Lector: " . _unformat( $socio->categoria->getDescription ),
 		$x + 4, $pageheight - ( $y + 73 ) );
 	$pdf->addRawText(
 		""
-		  . _format( $socio->persona->documento->getNombre ) . ":"
-		  . _format( $socio->persona->getNro_documento ),
+		  . _unformat( $socio->persona->documento->getNombre ) . ":"
+		  . _unformat( $socio->persona->getNro_documento ),
 		$x + 4,
 		$pageheight - ( $y + 81 )
 	);
@@ -514,6 +514,13 @@ sub _format {
 
 	$string = Encode::decode_utf8( Encode::encode_utf8($string) );
 	return ($string);
+}
+
+sub _unformat {
+    my ($string) = @_;
+
+    $string = Encode::decode_utf8($string);
+    return ($string);
 }
 
 sub _formatArrayOfStrings {

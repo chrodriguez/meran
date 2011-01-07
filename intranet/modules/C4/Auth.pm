@@ -368,6 +368,8 @@ sub get_html_content {
 
     my $out = '';
     $template->process($params->{'template_name'},$params,\$out) || die "Template process failed: ", $template->error(), "\n";
+    #Por qué es necesario esto?????????????? :(
+    $out = Encode::decode_utf8($out);
     return($out);
 }
 
