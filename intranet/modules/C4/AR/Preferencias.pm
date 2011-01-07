@@ -27,6 +27,11 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
 );
 
 
+sub reloadAllPreferences {
+        $PREFERENCES = undef;
+        $PREFERENCES = C4::AR::Preferencias::getAllPreferencias();
+}
+
 sub getPreferenciasByArray {
     my $self = shift;
 
@@ -83,10 +88,7 @@ sub getAllPreferencias {
 
 BEGIN
 {
-    $PREFERENCES = undef;
-#     $PREFERENCES = C4::AR::Preferencias::getPreferenciasByArray(['tema_opac', 'tema_intra', 'defaultUI', 'titulo_nombre_ui', 'timeout']);
-# $PREFERENCES = C4::AR::Preferencias::getPreferenciasByArray([]);
-    $PREFERENCES = C4::AR::Preferencias::getAllPreferencias();
+    reloadAllPreferences();
 }
 
 sub getMenuPreferences{
@@ -249,7 +251,7 @@ sub setVariable {
 #         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor => ".$valor);
 #         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE antes => ".$PREFERENCES->{$variable});
         $preferencia->[0]->setValue($valor);
-        $PREFERENCES->{$variable} = $valor;
+        reloadAllPreferences();
         $preferencia->[0]->save();
         
 #         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE despues => ".$PREFERENCES->{$variable});
