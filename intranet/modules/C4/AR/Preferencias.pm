@@ -185,7 +185,7 @@ sub getValorPreferencia {
 
     #verifico si se encuentra en la cache, sino se busca de la base
     if (defined $PREFERENCES->{$variable}){
-        C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== valor => ".$PREFERENCES->{$variable}." CACHED!!!!!!!");
+#         C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== valor => ".$PREFERENCES->{$variable}." CACHED!!!!!!!");
         return $PREFERENCES->{$variable};
     }
 
