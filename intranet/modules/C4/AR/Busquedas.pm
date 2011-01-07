@@ -1110,6 +1110,13 @@ sub busquedaAvanzada_newTemp{
         $query .='"';
     }
 
+    if($params->{'tipo_nivel3_name'} ne ""){
+        $query .= ' @string "'."cat_ref_tipo_nivel3%".$params->{'tipo_nivel3_name'};
+
+        $query .='"';
+    }
+
+    C4::AR::Debug::debug("tipo_nivel3_name tipo_nivel3_name tipo_nivel3_name =>=> ".$params->{'tipo_nivel3_name'});
 
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
 
@@ -1645,10 +1652,15 @@ sub armarBuscoPor{
         $buscoPor.= C4::AR::Utilidades::verificarValor($params->{'signatura'})."&";
 	}
 
-	if( C4::AR::Utilidades::validateString($params->{'isbn'})){
-# 		$buscoPor.= "ISBN: ".C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
-        $buscoPor.= C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
-	}		
+    if( C4::AR::Utilidades::validateString($params->{'isbn'})){
+#       $buscoPor.= "ISBN: ".C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
+        $buscoPor.= "ISBN: ".C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
+    }       
+
+    if( C4::AR::Utilidades::validateString($params->{'tema'})){
+#       $buscoPor.= "ISBN: ".C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
+        $buscoPor.= "Tema: ".C4::AR::Utilidades::verificarValor($params->{'tema'})."&";
+    }       
 
 	if( C4::AR::Utilidades::validateString($params->{'codBarra'})){
 # 		$buscoPor.= Encode::decode_utf8("Código de Barra: ".C4::AR::Utilidades::verificarValor($params->{'codBarra'}))."&";
