@@ -74,20 +74,11 @@ sub modificar{
 
     my $marc_record_cliente = MARC::Record->new_from_usmarc($params->{'marc_record'}); #marc_record que viene del cliente
     my $marc_record_base    = MARC::Record->new_from_usmarc($self->getMarcRecord());
-#     my $marc_record_salida  = MARC::Record->new();
-
 
 
 # TODO falta verificar el cambio de estado/disponibilidad
 
     my %params;
-
-    
-
-
-#     return C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record->subfield("995","o")));
-
-
 
 # verificar_cambio 
     $params{'estado_anterior'}          = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
@@ -163,7 +154,7 @@ sub modificar{
         $self->setMarcRecord($params->{'marc_record'});
     }
 
-#     $self->verificar_cambio($db, \%params);
+    $self->verificar_cambio($db, \%params);
 
 # die;  
     $self->save();
@@ -488,6 +479,7 @@ ESTADO
     
     my ($estado) = @_;
 
+    C4::AR::Debug::debug("CatRegistroMarcN3 => ESTADO DISPONIBLE");
     return ($estado eq 0);
 }   
 
@@ -501,12 +493,14 @@ DISPONIBILIDAD
 sub DISPONIBILIDAD_PRESTAMO{
     my ($estado) = @_;
 
+    C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PRESTAMO");
     return ($estado eq 1);
 }
 
 sub DISPONIBILIDAD_PARA_SALA{
     my ($estado) = @_;
 
+    C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PARA SALA");
     return ($estado eq 2);
 }
 

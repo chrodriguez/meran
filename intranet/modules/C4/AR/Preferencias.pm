@@ -185,7 +185,7 @@ sub getValorPreferencia {
 
     #verifico si se encuentra en la cache, sino se busca de la base
     if (defined $PREFERENCES->{$variable}){
-#         C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== CACHED!!!!!!!");
+        C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== valor => ".$PREFERENCES->{$variable}." CACHED!!!!!!!");
         return $PREFERENCES->{$variable};
     }
 
@@ -242,17 +242,22 @@ sub t_guardarVariable {
 }
 
 sub setVariable {
-
     my ($variable, $valor, $db) = @_;
     
-    my  $preferencia = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema(db => $db,query => [variable => {eq => $variable}] );
+    my  $preferencia;
+
+    if($db){
+        $preferencia = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( db => $db,query => [variable => {eq => $variable}] );
+    } else {
+        $preferencia = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [variable => {eq => $variable}] );
+    } 
 
     if(scalar(@$preferencia) > 0){
 #         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor => ".$valor);
 #         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE antes => ".$PREFERENCES->{$variable});
         $preferencia->[0]->setValue($valor);
-        reloadAllPreferences();
         $preferencia->[0]->save();
+        reloadAllPreferences();
         
 #         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE despues => ".$PREFERENCES->{$variable});
 #         C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias->getValorPreferencia($variable));
