@@ -155,8 +155,8 @@ sub modificar{
         $self->setMarcRecord($params->{'marc_record'});
     }
 
-    $self->verificar_cambio($db, \%params);
-    $self->verificar_historico_disponibilidad($db, \%params);
+    $self->verificar_cambio($db, $params);
+    $self->verificar_historico_disponibilidad($db, $params);
 
 # die;  
     $self->save();
