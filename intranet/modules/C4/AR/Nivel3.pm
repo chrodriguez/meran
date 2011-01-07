@@ -880,11 +880,11 @@ sub getHistoricoDisponibilidad {
                                                                                 ],
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
-                                                                            sort_by => ['fecha']
+                                                                            sort_by => ['timestamp']
      );
 
     #Obtengo la cant total en el histórico para el paginador
-    my $historico_array_ref_count = C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad_count();
+    my $historico_array_ref_count = C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad_count( query => [id3 => { eq => $id3 }]);
     if(scalar(@$historico_array_ref) > 0){
         return ($historico_array_ref_count, $historico_array_ref);
     }else{

@@ -155,6 +155,7 @@ sub modificar{
     }
 
     $self->verificar_cambio($db, \%params);
+    $self->verificar_historico_disponibilidad($db, \%params);
 
 # die;  
     $self->save();
@@ -560,6 +561,39 @@ sub verificar_cambio {
     
 }
 
+
+
+sub verificar_historico_disponibilidad {
+    my ($self) = shift;
+
+    my ($db, $params) = @_;
+
+    my $estado_anterior             = $params->{'estado_anterior'};          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
+    my $estado_nuevo                = $params->{'estado_nuevo'};
+    my $disponibilidad_anterior     = $params->{'disponibilidad_anterior'};  #(DISPONIBLE, PRESTAMO, SALA LECTURA)
+    my $disponibilidad_nueva        = $params->{'disponibilidad_nueva'};
+    #  ESTADOS
+    #   wthdrawn = 0 => DISPONIBLE
+    #   wthdrawn > => NO DISPONIBLE
+
+    #  DISPONIBILIDADES
+    #   notforloan = 1 => PARA SALA
+    #   notforload = 0 => PARA PRESTAMO
+
+    if(($estado_anterior ne $estado_nuevo) || ($disponibilidad_anterior ne $disponibilidad_nueva)){
+        #cambió algo, hay que guardar en el histórico de disponibilidad el cambio de estado
+        C4::AR::Debug::debug("verificar_historico_disponibilidad => CAMBIO");
+        my $catHistoricoDisponibilidad      = C4::Modelo::CatHistoricoDisponibilidad->new(db => $db);
+        
+        my $estado      = C4::Modelo::RefEstado->getByPk($estado_nuevo);
+        $params->{'detalle'} = $estado->getNombre();
+
+        my $disponibilidad      = C4::Modelo::RefDisponibilidad->getByPk($disponibilidad_nueva);
+        $params->{'tipo_prestamo'} = $disponibilidad->getNombre();
+        $params->{'id3'} = $self->getId3();
+        $catHistoricoDisponibilidad->agregar($params);
+    }
+}
 
 1;
 
