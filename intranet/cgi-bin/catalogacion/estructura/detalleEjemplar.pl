@@ -16,23 +16,86 @@ my ($template, $session, $t_params) = get_template_and_user({
     });
 
 
+my $obj=$input->param('obj');
+if($obj) {
+    $obj=C4::AR::Utilidades::from_json_ISO($obj);
+    my $tipo= $obj->{'tipo'};
+    my $id3 = $obj->{'id3'};
 
-my %hash_temp = {};
-my $obj = \%hash_temp;
-my $id3 = $input->param('id3');
-my $ini = $obj->{'ini'} = $input->param('page') || 0;
-my $url = "/cgi-bin/koha/admin/detalleEjemplar.pl?token=".$input->param('token')."&id3=".$input->param('id3');
+    if($tipo eq "VER_HISTORICO_DISPONIBILIDAD"){
 
-my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
+    my ($template, $session, $t_params) = get_template_and_user({
+                                            template_name => "catalogacion/estructura/detalleEjemplarDisponibilidad.tmpl",
+                                            query => $input,
+                                            type => "intranet",
+                                            authnotrequired => 0,
+                                            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel3'},
+                                            debug => 1,
+        });
 
-if ($nivel3) {
-    my ($ini,$pageNumber,$cantR)    =   C4::AR::Utilidades::InitPaginador($ini);
-    my ($cant_historico,$historico_disponibilidad) = C4::AR::Nivel3::getHistoricoDisponibilidad($id3,$ini,$cantR);
+    my $ini = $obj->{'ini'} || 0;
 
-    $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginadorOPAC($cant_historico,$cantR, $pageNumber,$url,$t_params);
-    $t_params->{'nivel3'} = $nivel3;
-    $t_params->{'historico_disponibilidad'} = $historico_disponibilidad;
-    $t_params->{'cant_historico'} = $cant_historico;
+    my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
+
+    if ($nivel3) {
+        my ($ini,$pageNumber,$cantR)    =   C4::AR::Utilidades::InitPaginador($ini);
+        my ($cant_historico,$historico_disponibilidad) = C4::AR::Nivel3::getHistoricoDisponibilidad($id3,$ini,$cantR);
+
+        $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cant_historico,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
+        $t_params->{'nivel3'} = $nivel3;
+        $t_params->{'historico_disponibilidad'} = $historico_disponibilidad;
+        $t_params->{'cant_historico'} = $cant_historico;
+    }
+
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+    }
+    elsif($tipo eq "VER_HISTORICO_CIRCULACION"){
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                            template_name => "catalogacion/estructura/detalleEjemplarCirculacion.tmpl",
+                                            query => $input,
+                                            type => "intranet",
+                                            authnotrequired => 0,
+                                            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel3'},
+                                            debug => 1,
+        });
+
+    my $ini = $obj->{'ini'} || 0;
+
+    my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
+
+    if ($nivel3) {
+        my ($ini,$pageNumber,$cantR)    =   C4::AR::Utilidades::InitPaginador($ini);
+        my ($cant_historico,$historico_circulacion) = C4::AR::Nivel3::getHistoricoCirculacion($id3,$ini,$cantR);
+
+        $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cant_historico,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
+        $t_params->{'nivel3'} = $nivel3;
+        $t_params->{'historico_circulacion'} = $historico_circulacion;
+        $t_params->{'cant_historico'} = $cant_historico;
+    }
+
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+    }
+}
+else {
+    my ($template, $session, $t_params) = get_template_and_user({
+                                            template_name => "catalogacion/estructura/detalleEjemplar.tmpl",
+                                            query => $input,
+                                            type => "intranet",
+                                            authnotrequired => 0,
+                                            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel3'},
+                                            debug => 1,
+        });
+
+    my $id3=$input->param('id3');
+    my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
+
+    if ($nivel3) {
+        $t_params->{'nivel3'} = $nivel3;
+        }
+
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);

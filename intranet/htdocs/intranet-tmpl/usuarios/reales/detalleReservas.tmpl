@@ -52,13 +52,8 @@
 			<td>
 				[% PERL %]
 					print C4::AR::Filtros::link_to(	text => 	"[% reserva.nivel3.getBarcode %]",
-													url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
-													params =>	[	"id1=[% reserva.nivel3.nivel1.getId1 %]",
-																	"id2=[% reserva.nivel3.nivel2.getId2 %]",
-																	"id3=[% reserva.getId3 %]",
-																	"barcode=[% reserva.nivel3.getBarcode %]",
-																	"signatura_topografica=[% reserva.nivel3.getSignatura_topografica %]"
-																],
+													url => 		"/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
+													params =>	["id3=[% reserva.getId3 %]"],
 													title =>	"[% 'Mostrar Detalle de Disponibilidad' | i18n %]"
 												) ;
 				[% END %]

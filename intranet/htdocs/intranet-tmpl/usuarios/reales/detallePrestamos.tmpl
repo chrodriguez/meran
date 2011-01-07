@@ -54,11 +54,9 @@
 			<td>
 			[% PERL %]
 				print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getBarcode %]",
-												url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
-												params =>	["id1=[% prestamo.nivel3.nivel1.getId1 %]", "id2=[% prestamo.nivel3.nivel2.getId2 %]", 
-																"id3=[% prestamo.getId3 %]","barcode=[% prestamo.nivel3.getBarcode %]",
-															"signatura_topografica=[% prestamo.nivel3.getSignatura_topografica %]"],
-												title =>	"[% 'Detalle de disponibilidad' | i18n %]"
+												url => 		"/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
+												params =>	["id3=[% prestamo.getId3 %]"],
+												title =>	"[% 'Detalle del Ejemplar' | i18n %]"
 											) ;
 			[% END %]
 			</td>

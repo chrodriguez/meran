@@ -55,9 +55,9 @@
                         <td>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% hist.nivel3.getBarcode %]",
-                                                                url =>      "/cgi-bin/koha/busquedas/detalleItem.pl", 
-                                                                params =>   ["id1=[% hist.getId1 %]&id2=[% hist.getId2 %]&id3=[% hist.getId3 %]&barcode=[% hist.nivel3.getBarcode %]&signatura_topografica=[% hist.nivel3.getSignatura_topografica %]"],
-                                                                title =>    "[% 'Mostrar Detalle del Item' | i18n %]"
+                                                                url =>      "catalogacion/estructura/detalleEjemplar.pl", 
+                                                                params =>   ["id3=[% hist.getId3 %]"],
+                                                                title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
                                                             ) ;
                             [% END %]
                         </td>	
