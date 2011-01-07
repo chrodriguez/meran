@@ -72,11 +72,9 @@
 	    <td align="center" >
 		    [% PERL %]
 				    print C4::AR::Filtros::link_to(	text => 	"[% barcode %]",
-												    url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
-												    params =>	[	"id1=[% id1 %]", "id2=[% id2 %]", "id3=[% id3 %]", "barcode=[% barcode %]", 
-																    "signatura_topografica=[% signatura_topografica %]"
-                                                                ],
-												    title =>	"[% "Detalle de disponibilidad" | i18n %]"
+												    url => 		"/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
+												    params =>	["id3=[% id3 %]"],
+												    title =>	"[% "Detalle del Ejemplar" | i18n %]"
 											    ) ;
 		    [% END %]	
 	    </td>
