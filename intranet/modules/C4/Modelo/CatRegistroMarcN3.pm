@@ -78,13 +78,14 @@ sub modificar{
 
 # TODO falta verificar el cambio de estado/disponibilidad
 
-    my %params;
+#     my %params;
 
 # verificar_cambio 
-    $params{'estado_anterior'}          = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
-    $params{'estado_nuevo'}             = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","e")));        
-    $params{'disponibilidad_anterior'}  = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
-    $params{'disponibilidad_nueva'}     = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","o")));
+    $params->{'estado_anterior'}          = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
+    $params->{'estado_nuevo'}             = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","e")));        
+    $params->{'disponibilidad_anterior'}  = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
+    $params->{'disponibilidad_nueva'}     = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","o")));
+    
    
 
     if($params->{'EDICION_N3_GRUPAL'}){
@@ -154,7 +155,7 @@ sub modificar{
         $self->setMarcRecord($params->{'marc_record'});
     }
 
-    $self->verificar_cambio($db, \%params);
+    $self->verificar_cambio($db, $params);
 
 # die;  
     $self->save();
@@ -499,14 +500,14 @@ sub DISPONIBILIDAD_PRESTAMO{
     my ($estado) = @_;
 
     C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PRESTAMO");
-    return ($estado eq 1);
+    return ($estado eq 0);
 }
 
 sub DISPONIBILIDAD_PARA_SALA{
     my ($estado) = @_;
 
     C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PARA SALA");
-    return ($estado eq 2);
+    return ($estado eq 1);
 }
 
 sub verificar_cambio {

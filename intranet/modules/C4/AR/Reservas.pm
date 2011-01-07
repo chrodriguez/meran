@@ -987,21 +987,21 @@ sub cantReservasPorNivel1{
 sub reasignarNuevoEjemplarAReserva{
     my ($db, $params, $msg_object) = @_;
 
-    C4::AR::Debug::debug("reasignarNuevoEjemplarAReserva => id3: ".$params->{'id3'});
+    C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => id3: ".$params->{'id3'});
     #se verifca si el ejemplar que se esta modificado tiene o no un reserva asignada
-    my ($reserva_asignada) = C4::AR::Reservas::getReservaDeId3($db, $params->{'id3'});
+    my ($reserva_asignada) = C4::AR::Reservas::getReservaDeId3($params->{'id3'}, $db);
 
     if($reserva_asignada){
-        C4::AR::Debug::debug("reasignarNuevoEjemplarAReserva => tiene reserva asignada ");
+        C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => tiene reserva asignada ");
         #si TIENE RESERVA ASIGNADA hay q buscar un ejemplar disponible para asignarlo a la reserva
         my ($nuevoId3) = getEjemplarDeGrupoParaReserva($params->{'id2'});
     
         if($nuevoId3){
-            C4::AR::Debug::debug("reasignarNuevoEjemplarAReserva => EXISTE ejemplar disponible");
+            C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => EXISTE ejemplar disponible");
             #EXISTE un ejemplar disponible
             $reserva_asignada->intercambiarId3 ($db, $nuevoId3, $msg_object);
         }else{
-            C4::AR::Debug::debug("reasignarNuevoEjemplarAReserva => NO EXISTE");
+            C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => NO EXISTE");
             #si NO EXISTE un ejemplar disponible del grupo
             #a la reserva se la pasa a reserva en  espera (id3 = null) por DEFECTO, debido a q en la funcion manejoDeDisponibilidadDomiciliaria
             # se va a eliminar si es q no existe disponibilidad en la biblioteca.
@@ -1152,6 +1152,8 @@ sub getReservaDeId3{
     use C4::Modelo::CircReserva::Manager;
 
     $db = $db || C4::Modelo::PermCatalogo->new()->db;  
+
+C4::AR::Debug::debug("Reservas => getReservaDeId3 => id3 => ".$id3);
 
     my @filtros;
     push(@filtros, ( id3        => { eq => $id3}));
