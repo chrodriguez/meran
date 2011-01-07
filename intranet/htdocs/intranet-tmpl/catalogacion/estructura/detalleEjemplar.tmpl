@@ -1,6 +1,17 @@
 [% INCLUDE 'intranet-top.inc' %]
 [% USE HTML %]
 
+<div id="detalleEjemplar">
+<fieldset>
+<strong><legend>[% "Detalles del ejemplar" | i18n %] [% nivel3.id %]</legend></strong>
+
+    <ul class="listado_sin_margen">
+                    <li> [% "Sig. Top."|i18n %]:        <strong>[% nivel3.getSignatura_topografica %]</strong></li>
+                    <li> [% "C&oacute;digo"|i18n %]:    <strong>[% nivel3.getBarcode  %]</strong></li>
+                    <li> [% "Disponibilidad"|i18n %]:   <strong class="[% IF nivel3.esParaSala %]salaLectura[% ELSE %]prestamo[% END %]">[% nivel3.getDisponibilidadObject.getNombre  %]</strong></li>
+                    <li> [% "Estado"|i18n %]:           <strong class="[% IF nivel3.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% nivel3.getEstadoObject.getNombre  %]</strong></li>
+    </ul>
+
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend">[% "Hist&oacute;rico de Disponibilidad" | i18n %]:</legend>
         <div class="contenedor_paginador">[% paginador %]</div>
@@ -34,4 +45,6 @@
         </div>
 </fieldset>
 
+</fieldset>
+</div>
 [% INCLUDE 'intranet-bottom.inc' %]
