@@ -269,17 +269,17 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #             C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
 
 
-            if (($field->tag ne '910')&&($subcampo ne 'a')) {
+#             if (($field->tag ne '910')&&($subcampo ne 'a')) {
 #                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
                 $dato                           = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
 #                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
                 $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato, "ALL");
 #                 C4::AR::Debug::debug("generar_indice => dato ".$dato);                
 
-            } else {
-                $dato                           = $subfield->[1];
+#             } else {
+#                 $dato                           = $subfield->[1];
 #                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
-            } 
+#             } 
 
 
             #aca van todas las excepciones que no son referencias pero son necesarios para las busquedas 
@@ -293,6 +293,14 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #                 C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
             }
    
+            if (($campo eq "910") && ($subcampo eq "a")){
+# FIXME es para la busqueda MATCH EXTENDED
+                $dato = 'cat_ref_tipo_nivel3%'.$dato;   
+                $superstring .= " ".$dato;
+                $dato = 'cat_ref_tipo_nivel3@'.$dato;  
+#                 C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
+            }
+
 
 # C4::AR::Debug::debug("dato despues de buscar ref => ".$dato);
     
