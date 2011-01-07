@@ -294,6 +294,9 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
             }
    
             if (($campo eq "910") && ($subcampo eq "a")){
+# FIXME es para la busqueda MATCH EXTENDED
+                $dato = 'cat_ref_tipo_nivel3%'.$dato;   
+                $superstring .= " ".$dato;
                 $dato = 'cat_ref_tipo_nivel3@'.$dato;  
 #                 C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
             }

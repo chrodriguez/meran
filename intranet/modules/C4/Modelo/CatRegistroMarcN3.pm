@@ -469,23 +469,23 @@ sub ESTADO_DISPONIBLE{
 =item    
 ESTADO
 
-    0   Disponible
-    1   Perdido
+    1   Baja
     2   Compartido
-    4   Baja
-    5   Ejemplar deteriorado
-    6   En Encuadernación
+    3   Disponible
+    4   Ejemplar deteriorado
+    5   En Encuadernación
+    6   Perdido
 =cut
     
     my ($estado) = @_;
 
-    if ($estado eq 0) { 
+    if ($estado eq 3) { 
         C4::AR::Debug::debug("CatRegistroMarcN3 => ESTADO DISPONIBLE");
     } else { 
         C4::AR::Debug::debug("CatRegistroMarcN3 => ESTADO NO DISPONIBLE");
     }
 
-    return ($estado eq 0);
+    return ($estado eq 3);
 }   
 
 =item
