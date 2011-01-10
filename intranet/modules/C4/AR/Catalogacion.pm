@@ -78,7 +78,7 @@ sub _meran_to_marc{
         my $cant_subcampos          = $infoArrayNivel->[$i]->{'cant_subcampos'};
 
 
-#         C4::AR::Debug::debug("_meran_to_marc => campo => ".$infoArrayNivel->[$i]->{'campo'});
+        C4::AR::Debug::debug("_meran_to_marc => campo => ".$infoArrayNivel->[$i]->{'campo'});
 #         C4::AR::Debug::debug("_meran_to_marc => cant_subcampos => ".$infoArrayNivel->[$i]->{'cant_subcampos'});
         my @subcampos_array;
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
@@ -86,8 +86,9 @@ sub _meran_to_marc{
             my $subcampo_hash_ref = $subcampos_hash->{$j};
 #             C4::AR::Debug::debug("_meran_to_marc => campo => ".$campo);
             while ( my ($key, $value) = each(%$subcampo_hash_ref) ) {
-#                 C4::AR::Debug::debug("_meran_to_marc => subcampo, dato => ".$key.", ".$subcampos_array->[$j]->{'dato'});
-#                 C4::AR::Debug::debug("_meran_to_marc => subcampo, datoReferencia => ".$key.", ".$subcampos_array->[$j]->{'datoReferencia'});
+                C4::AR::Debug::debug("_meran_to_marc => subcampo, dato => ".$key.", ".$subcampos_array->[$j]->{'dato'});
+                C4::AR::Debug::debug("_meran_to_marc => subcampo, datoReferencia => ".$key.", ".$subcampos_array->[$j]->{'datoReferencia'});
+                C4::AR::Debug::debug("_meran_to_marc => ITEMTYPEEEEEEEEEE => ".$itemtype);  
 
                 if($with_references){
                     $value = _procesar_referencia($campo, $key, $value, $itemtype);
@@ -100,6 +101,8 @@ sub _meran_to_marc{
                 } else {
 #                     C4::AR::Debug::debug("campo ".$campo." NO ACEPTADO clave = ".$key." valor: ".$value);
                 }
+
+                C4::AR::Debug::debug("_meran_to_marc => value de campo, subcampo => ".$key.", ".$campo." => ".$value);
             }
         }# END for(my $j=0;$j<$cant_subcampos;$j++)
 
@@ -759,6 +762,9 @@ sub _procesar_referencia {
     my ($campo, $subcampo, $dato, $itemtype) = @_;
 
     C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
+    C4::AR::Debug::debug("Catalogacion => _procesar_referencia => campo => ".$campo);
+    C4::AR::Debug::debug("Catalogacion => _procesar_referencia => subcampo => ".$subcampo);
+    C4::AR::Debug::debug("Catalogacion => _procesar_referencia => itemype => ".$itemtype);
 
     my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype);
     if($estructura) {
@@ -772,11 +778,11 @@ sub _procesar_referencia {
                 #se genera el nuevo dato => tabla@dato para poder obtener el dato de la referencia luego
                 my $string_result           = $obj_generico->getTableName.'@'.$dato;
 
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Tabla:            ".$obj_generico->getTableName);
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Modulo:           ".$obj_generico->toString);
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result:    ".$string_result);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Tabla:            ".$obj_generico->getTableName);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Modulo:           ".$obj_generico->toString);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result:    ".$string_result);
 
                 $dato = $string_result;
             };
@@ -1068,7 +1074,7 @@ sub agregarCamposVacios {
         
         #recorro los subcampos del campo que se esta procesando
         foreach my $subcampo (@{$estructura_array_ref->[$j]->{'subcampos_array'}}){
-            #C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => campo, subcampo => ".$campo.", ".$subcampo->{'subcampo'});
+#             C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => campo, subcampo => ".$campo.", ".$subcampo->{'subcampo'});
             #setedo el dato para cada (campo, subcampo) en estructura_array_ref                            
 
             if ($marc_record->field($campo)) {
@@ -1093,7 +1099,8 @@ sub agregarCamposVacios {
         }# END foreach my $subcampo (@{$estructura_array_ref->[$j]->{'subcampos_array'}})
     }# END for(my $j=0;$j<scalar(@$catalogaciones_array_ref);$j++)
 
-    C4::AR::Debug::debug("agregarCamposVacios => as_usmarc => ".$marc_record->as_usmarc);
+#     C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => as_usmarc => ".$marc_record->as_usmarc);
+#     C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => as_formatted => ".$marc_record->as_formatted);
 }
 
 sub getEstructuraSinDatos {

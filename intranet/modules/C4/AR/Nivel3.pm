@@ -251,7 +251,8 @@ sub t_eliminarNivel3{
 
         if ($id1) {
             C4::AR::Sphinx::generar_indice($id1);
-#             C4::AR::Sphinx::reindexar();
+            #ahora el indice se encuentra DESACTUALIZADO
+            C4::AR::Preferencias::setVariable('indexado', 0, $db);
         }
     };
 

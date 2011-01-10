@@ -145,7 +145,8 @@ sub t_eliminarNivel2{
             $cat_registro_marc_n2->eliminar($params);  
             $db->commit;
             C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1());
-#             C4::AR::Sphinx::reindexar();
+            #ahora el indice se encuentra DESACTUALIZADO
+            C4::AR::Preferencias::setVariable('indexado', 0, $db);
             #se cambio el permiso con exito
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U375', 'params' => [$id2]} ) ;

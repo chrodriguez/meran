@@ -507,6 +507,9 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
 }
 
 function agregarN2(){
+// FIXME parche!!!!!!!
+
+    ID_TIPO_EJEMPLAR = $('#tipo_nivel3_id').val();
     if( (TIENE_NIVEL_2 == 0)&&($('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') ){
         jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
         $('#tipo_nivel3_id').focus();
