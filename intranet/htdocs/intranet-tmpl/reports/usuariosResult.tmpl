@@ -113,7 +113,7 @@
         </div>
 </fieldset>
 
-<form id="exportPDF" action="/cgi-bin/koha/reports/usuariosResult.pl?token=[% token %]">
+<form id="exportPDF" action="/cgi-bin/koha/reports/usuariosResult.pl?token=[% token %]"  accept-charset="utf-8">
         <input type="hidden" name="export" value="pdf" />
         <input type="hidden" name="year" value="[% param_anio %]" />
         <input type="hidden" name="ui" value="[% param_ui %]" />

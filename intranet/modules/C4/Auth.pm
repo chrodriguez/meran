@@ -340,9 +340,17 @@ sub _obtenerToken{
   Devuelve el idioma por defecto del Usuario, lo busca en la sesion, sino en el defaultLanguage o devuelve el esES por defecto
 =cut
 
+<<<<<<< HEAD
+    my $out = '';
+    $template->process($params->{'template_name'},$params,\$out) || die "Template process failed: ", $template->error(), "\n";
+    #Por qué es necesario esto?????????????? :(
+    $out = Encode::decode_utf8($out);
+    return($out);
+=======
 sub getUserLocale{
     my $session = CGI::Session->load();
     return $session->param('usr_locale') || C4::Context->config("defaultLang") || 'es_ES';
+>>>>>>> 63b68236218006940c33d854c580990d28e53ae4
 }
 
 =item
