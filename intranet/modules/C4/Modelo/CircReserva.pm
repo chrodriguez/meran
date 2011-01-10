@@ -198,6 +198,7 @@ sub agregar {
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
    my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
    $data_hash->{'tipo'}= 'reserva';
+   $data_hash->{'hasta'}= $data_hash->{'fecha_recordatorio'};
    $historial_circulacion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 

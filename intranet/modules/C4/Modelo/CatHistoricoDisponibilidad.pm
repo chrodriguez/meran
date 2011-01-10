@@ -56,7 +56,8 @@ sub setId3 {
 
 sub getFecha {
     my ($self) = shift;
-    return ($self->timestamp );
+    my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date( substr($self->timestamp,0,10), $dateformat );
 }
 
 sub getTipo_prestamo{

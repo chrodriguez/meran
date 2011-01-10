@@ -127,10 +127,13 @@ sub agregar {
     my ($self)=shift;
     my ($data_hash)=@_;
 
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy = ParseDate("today");
+
 	$self->setTipo_operacion($data_hash->{'tipo_operacion'});
     $self->setNro_socio($data_hash->{'nro_socio'});
     $self->setResponsable($data_hash->{'loggedinuser'});
-    $self->setFecha(ParseDate("today"));
+    $self->setFecha(C4::Date::format_date_in_iso($hoy, $dateformat));
     $self->setFecha_final($data_hash->{'fecha_final'});
     $self->setTipo_sancion($data_hash->{'tipo_sancion'});
 

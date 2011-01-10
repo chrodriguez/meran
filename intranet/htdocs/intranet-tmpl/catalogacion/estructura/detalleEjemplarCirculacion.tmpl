@@ -8,6 +8,7 @@
                     <th>[% "Usuario" | i18n %]</th>
                     <th>[% "Responsable" | i18n %]</th>
                     <th>[% "Fecha" | i18n %]</th>
+                    <th>[% "Fecha Fin" | i18n %]</th>
                     <th>[% "Operaci&oacute;n" | i18n %]</th>
                     <th>[% "Tipo de Pr&eacute;stamo" | i18n %]</th>
                 </tr>
@@ -22,7 +23,10 @@
                                 [% historico.responsable_ref.persona.getApeYNom %] 
                             </td>
                             <td>
-                                [% historico.getTimestamp %] 
+                                [% historico.getFecha_formateada %] 
+                            </td>
+                            <td>
+                                [% historico.getFecha_fin_formateada %] 
                             </td>
                             <td>
                                 [% historico.getTipo_operacion %] 

@@ -160,6 +160,13 @@ sub getFecha{
     return ($self->fecha);
 }
 
+sub getFecha_formateada{
+    my ($self) = shift; 
+    my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha),$dateformat);
+}
+
+
 sub setFecha{
     my ($self) = shift;
     my ($fecha) = @_;
@@ -169,6 +176,12 @@ sub setFecha{
 sub getFecha_fin{
     my ($self) = shift;
     return ($self->fecha_fin);
+}
+
+sub getFecha_fin_formateada{
+    my ($self) = shift; 
+    my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha_fin),$dateformat);
 }
 
 sub setFecha_fin{
@@ -244,8 +257,11 @@ sub agregar {
     $self->setResponsable($data_hash->{'responsable'});
 
     C4::AR::Debug::debug("FECHA desde rep_historial_circulacion***************************: ".C4::Date::format_date_in_iso(ParseDate("today")));
+    
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy = ParseDate("today");
 
-    $self->setFecha(C4::Date::format_date_in_iso(ParseDate("today")));
+    $self->setFecha(C4::Date::format_date_in_iso($hoy, $dateformat));
     $self->setFecha_fin($data_hash->{'hasta'});
     $self->setTipo_prestamo($data_hash->{'tipo_prestamo'});
     $self->setId_ui($data_hash->{'id_ui'});
