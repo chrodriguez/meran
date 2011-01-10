@@ -345,7 +345,7 @@ sub _obtenerToken{
     #PARECE QUE QUEDO MAL MEZCLADO CON LO DE ABAJO, VER YA CUAL QUEDA!!!!!!!!!!!!!!!
     my $out = '';
     $template->process($params->{'template_name'},$params,\$out) || die "Template process failed: ", $template->error(), "\n";
-    #Por qué es necesario esto?????????????? :(
+    #Por que es necesario esto?????????????? :(
     $out = Encode::decode_utf8($out);
     return($out);
 =cut
