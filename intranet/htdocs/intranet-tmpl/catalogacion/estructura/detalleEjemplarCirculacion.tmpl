@@ -1,0 +1,40 @@
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend">[% "Hist&oacute;rico de Circulaci&oacute;n" | i18n %]:</legend>
+        <div class="contenedor_paginador">[% paginador %]</div>
+        <div class="datos_tabla_div_user">
+            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                <thead>
+                <tr class="titulo_tabla_resultado">
+                    <th>[% "Usuario" | i18n %]</th>
+                    <th>[% "Responsable" | i18n %]</th>
+                    <th>[% "Fecha" | i18n %]</th>
+                    <th>[% "Operaci&oacute;n" | i18n %]</th>
+                    <th>[% "Tipo de Pr&eacute;stamo" | i18n %]</th>
+                </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH historico IN historico_circulacion %]
+                        <tr>
+                            <td>
+                                [% historico.socio.persona.getApeYNom %] 
+                            </td>
+                            <td>
+                                [% historico.responsable_ref.persona.getApeYNom %] 
+                            </td>
+                            <td>
+                                [% historico.getTimestamp %] 
+                            </td>
+                            <td>
+                                [% historico.getTipo_operacion %] 
+                            </td>
+                            <td>
+                                [% IF historico.tipo_prestamo_ref %][% historico.tipo_prestamo_ref.getDescripcion %][% ELSE %]-[% END %]
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+            <div class="resultados_consulta">[% "La cantidad en el historial de circulaci&oacute;n es" | i18n %]: [% cant_historico %]</div>
+            <div class="contenedor_paginador">[% paginador %]</div>
+        </div>
+</fieldset>

@@ -11,6 +11,8 @@ use C4::Modelo::CircPrestamo;
 use C4::Modelo::CircPrestamo::Manager;
 use C4::Modelo::CatHistoricoDisponibilidad;
 use C4::Modelo::CatHistoricoDisponibilidad::Manager;
+use C4::Modelo::RepHistorialCirculacion;
+use C4::Modelo::RepHistorialCirculacion::Manager;
 use C4::AR::Nivel1 qw(getNivel1FromId1); 
 use C4::AR::Nivel2 qw(getNivel1FromId2);
 use C4::AR::Reservas qw(cantReservasPorGrupo);
@@ -880,11 +882,32 @@ sub getHistoricoDisponibilidad {
                                                                                 ],
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
-                                                                            sort_by => ['fecha']
+                                                                            sort_by => ['timestamp DESC']
      );
 
     #Obtengo la cant total en el histórico para el paginador
-    my $historico_array_ref_count = C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad_count();
+    my $historico_array_ref_count = C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad_count( query => [id3 => { eq => $id3 }]);
+    if(scalar(@$historico_array_ref) > 0){
+        return ($historico_array_ref_count, $historico_array_ref);
+    }else{
+        return (0,0);
+    }
+}
+
+sub getHistoricoCirculacion {
+
+    my ($id3,$ini,$cantR) = @_;
+    my $historico_array_ref = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion (
+                                                                        query => [
+                                                                                        id3 => { eq => $id3 },
+                                                                                ],
+                                                                            limit   => $cantR,
+                                                                            offset  => $ini,
+                                                                            sort_by => ['timestamp DESC']
+     );
+
+    #Obtengo la cant total en el histórico para el paginador
+    my $historico_array_ref_count = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( query => [id3 => { eq => $id3 }]);
     if(scalar(@$historico_array_ref) > 0){
         return ($historico_array_ref_count, $historico_array_ref);
     }else{

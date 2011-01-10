@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
     function enviar(){
-        var nroRandom   = [% RANDOM_NUMBER %];
+        var nroRandom   = [% nroRandom %];
         var username    = $.trim($("#username").val());
         var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
 

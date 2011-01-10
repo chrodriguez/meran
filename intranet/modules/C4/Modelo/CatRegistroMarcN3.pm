@@ -78,13 +78,14 @@ sub modificar{
 
 # TODO falta verificar el cambio de estado/disponibilidad
 
-    my %params;
+#     my %params;
 
 # verificar_cambio 
-    $params{'estado_anterior'}          = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
-    $params{'estado_nuevo'}             = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","e")));        
-    $params{'disponibilidad_anterior'}  = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
-    $params{'disponibilidad_nueva'}     = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","o")));
+    $params->{'estado_anterior'}          = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
+    $params->{'estado_nuevo'}             = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","e")));        
+    $params->{'disponibilidad_anterior'}  = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
+    $params->{'disponibilidad_nueva'}     = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","o")));
+    
    
 
     if($params->{'EDICION_N3_GRUPAL'}){
@@ -154,7 +155,8 @@ sub modificar{
         $self->setMarcRecord($params->{'marc_record'});
     }
 
-    $self->verificar_cambio($db, \%params);
+    $self->verificar_cambio($db, $params);
+    $self->verificar_historico_disponibilidad($db, $params);
 
 # die;  
     $self->save();
@@ -499,14 +501,14 @@ sub DISPONIBILIDAD_PRESTAMO{
     my ($estado) = @_;
 
     C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PRESTAMO");
-    return ($estado eq 1);
+    return ($estado eq 0);
 }
 
 sub DISPONIBILIDAD_PARA_SALA{
     my ($estado) = @_;
 
     C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PARA SALA");
-    return ($estado eq 2);
+    return ($estado eq 1);
 }
 
 sub verificar_cambio {
@@ -538,15 +540,14 @@ sub verificar_cambio {
     #Si estado_anterior es DISPONIBLE y estado_nuevo es NO DISPONIBLE y disponibilidad_anterior es PARA PRESTAMO
     #hay que reasignar las reservas que existen para el ejemplar, si no se puede reasignar se eliminan las reservas y sanciones
         C4::AR::Debug::debug("verificar_cambio => DISPONIBLE a NO DISPONIBLE con disponibilidad anterior PRESTAMO");
-        
-#         C4::AR::Reservas::reasignarNuevoEjemplarAReserva($db, $params, $msg_object);
+        C4::AR::Reservas::reasignarNuevoEjemplarAReserva($db, $params, $msg_object);
 
     }elsif ( (!ESTADO_DISPONIBLE($estado_anterior)) && ESTADO_DISPONIBLE($estado_nuevo) && DISPONIBILIDAD_PRESTAMO($disponibilidad_nueva) ){
     #pasa de DISPONIBLE a NO DISPONIBLE con disponibilidad_nueva PRESTAMO
     #Si estado_anterior es NO DISPONIBLE  y  estado_nuevo es DISPONIBLE  y  disponibilidad_nueva es PRESTAMO
     #hay que verificar si hay reservas en espera, si hay se reasignan al nuevo ejemplar
         C4::AR::Debug::debug("verificar_cambio => NO DISPONIBLE a DISPONIBLE con disponibilidad nueva PRESTAMO");
-#         C4::AR::Reservas::asignarEjemplarASiguienteReservaEnEspera($params);
+        C4::AR::Reservas::asignarEjemplarASiguienteReservaEnEspera($params, $db);
 
     }elsif ( ESTADO_DISPONIBLE($estado_anterior) && DISPONIBILIDAD_PRESTAMO($disponibilidad_anterior) && 
              DISPONIBILIDAD_PARA_SALA($disponibilidad_nueva) ){
@@ -560,11 +561,44 @@ sub verificar_cambio {
     #Si estaba DISPONIBLE y pasa de disponibilidad_anterior PARA SALA a disponibilidad_nueva PRESTAMO
     #Se verifica si hay reservas en espera, si hay se reasignan al nuevo ejemplar
         C4::AR::Debug::debug("verificar_cambio => DISPONIBLE de disponibilidad anterior PARA SALA a disponibilidad nueva PRESTAMO");
-#         C4::AR::Reservas::asignarEjemplarASiguienteReservaEnEspera($params);
+        C4::AR::Reservas::asignarEjemplarASiguienteReservaEnEspera($params, $db);
     }
     
 }
 
+
+
+sub verificar_historico_disponibilidad {
+    my ($self) = shift;
+
+    my ($db, $params) = @_;
+
+    my $estado_anterior             = $params->{'estado_anterior'};          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
+    my $estado_nuevo                = $params->{'estado_nuevo'};
+    my $disponibilidad_anterior     = $params->{'disponibilidad_anterior'};  #(DISPONIBLE, PRESTAMO, SALA LECTURA)
+    my $disponibilidad_nueva        = $params->{'disponibilidad_nueva'};
+    #  ESTADOS
+    #   wthdrawn = 0 => DISPONIBLE
+    #   wthdrawn > => NO DISPONIBLE
+
+    #  DISPONIBILIDADES
+    #   notforloan = 1 => PARA SALA
+    #   notforload = 0 => PARA PRESTAMO
+
+    if(($estado_anterior ne $estado_nuevo) || ($disponibilidad_anterior ne $disponibilidad_nueva)){
+        #cambió algo, hay que guardar en el histórico de disponibilidad el cambio de estado
+        C4::AR::Debug::debug("verificar_historico_disponibilidad => CAMBIO");
+        my $catHistoricoDisponibilidad      = C4::Modelo::CatHistoricoDisponibilidad->new(db => $db);
+        
+        my $estado      = C4::Modelo::RefEstado->getByPk($estado_nuevo);
+        $params->{'detalle'} = $estado->getNombre();
+
+        my $disponibilidad      = C4::Modelo::RefDisponibilidad->getByPk($disponibilidad_nueva);
+        $params->{'tipo_prestamo'} = $disponibilidad->getNombre();
+        $params->{'id3'} = $self->getId3();
+        $catHistoricoDisponibilidad->agregar($params);
+    }
+}
 
 1;
 

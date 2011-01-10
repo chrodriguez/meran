@@ -45,7 +45,7 @@
                 [% END %]
 		</td>
             	<td align="center">
-                <a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]&id2=[% prestamo.nivel3.nivel2.getId2 %]&id3=[% prestamo.getId3 %]&barcode=[% prestamo.nivel3.getBarcode %]&signatura_topografica=[% prestamo.nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'> 
+                <a href='/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl?id3=[% prestamo.getId3 %]' title='Detalle del Ejemplar'> 
                 [% prestamo.nivel3.getBarcode %]</a>
                 </td>
           	<td align="center">

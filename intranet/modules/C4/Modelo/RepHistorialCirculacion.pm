@@ -12,12 +12,12 @@ __PACKAGE__->meta->setup(
         id1            => { type => 'integer', not_null => 1 },
         id2            => { type => 'integer', not_null => 1 },
         id3            => { type => 'integer', not_null => 1 },
-        tipo_operacion => { type => 'varchar', default => 'issue', length => 15, not_null => 1 },
+        tipo_operacion => { type => 'varchar', length => 15, not_null => 1 },
         nro_socio      => { type => 'varchar', length => 16, default => '0', not_null => 1 },
         responsable    => { type => 'varchar', length => 16, not_null => 1 },
         id_ui	       => { type => 'varchar', length => 4 },
         timestamp      => { type => 'timestamp', not_null => 1 },
-        fecha          => { type => 'varchar', default => '0000-00-00', not_null => 1 },
+        fecha          => { type => 'varchar', not_null => 1 },
         nota           => { type => 'varchar', length => 255 },
         fecha_fin      => { type => 'varchar' },
         tipo_prestamo  => { type => 'character', length => 2 },
@@ -56,7 +56,7 @@ __PACKAGE__->meta->setup(
         type        => 'one to one',
       },
 
-     responsable => 
+     responsable_ref => 
       {
         class       => 'C4::Modelo::UsrSocio',
         key_columns => { responsable => 'nro_socio' },
@@ -211,7 +211,10 @@ sub setTipo_prestamo{
 }
 
 
-
+sub getTimestamp{
+    my ($self) = shift;
+    return ($self->timestamp);
+}
 
 
 sub agregar {
@@ -237,9 +240,12 @@ sub agregar {
     $self->setId2($data_hash->{'id2'}); 
     $self->setId3($data_hash->{'id3'});
     $self->setNro_socio($data_hash->{'nro_socio'});
-C4::AR::Debug::debug("responsable desde rep_historial_circulacion***************************: ".$data_hash->{'responsable'});
+    C4::AR::Debug::debug("responsable desde rep_historial_circulacion***************************: ".$data_hash->{'responsable'});
     $self->setResponsable($data_hash->{'responsable'});
-    $self->setFecha(ParseDate("today"));
+
+    C4::AR::Debug::debug("FECHA desde rep_historial_circulacion***************************: ".C4::Date::format_date_in_iso(ParseDate("today")));
+
+    $self->setFecha(C4::Date::format_date_in_iso(ParseDate("today")));
     $self->setFecha_fin($data_hash->{'hasta'});
     $self->setTipo_prestamo($data_hash->{'tipo_prestamo'});
     $self->setId_ui($data_hash->{'id_ui'});

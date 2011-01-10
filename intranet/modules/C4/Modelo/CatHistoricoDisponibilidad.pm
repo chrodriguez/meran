@@ -11,8 +11,7 @@ __PACKAGE__->meta->setup(
          id_detalle     => { type => 'serial', not_null => 1 },
          id3            => { type => 'integer', length => 11, not_null => 1 },
          detalle        => { type => 'varchar', length => 30, not_null => 1 },
-         timestamp      => { type => 'timestamp',not_null => 1, default => 'CURRENT_TIMESTAMP' },
-         fecha          => { type => 'varchar', length => 10, not_null => 1, default => '0000-00-00' },
+         timestamp      => { type => 'timestamp', not_null => 1 },
          tipo_prestamo  => { type => 'varchar', length => 40, not_null => 1},
     ],
 
@@ -57,13 +56,7 @@ sub setId3 {
 
 sub getFecha {
     my ($self) = shift;
-    return ( $self->fecha );
-}
-
-sub setFecha {
-    my ($self)      = shift;
-    my ($fecha) = @_;
-    $self->fecha($fecha);
+    return ($self->timestamp );
 }
 
 sub getTipo_prestamo{
@@ -82,7 +75,6 @@ sub getTimestamp {
     return ( $self->timestamp );
 }
 
-
 =item
 agregar
 Funcion que agrega al historico de disponibilidad
@@ -92,15 +84,18 @@ sub agregar {
     my ($self)      = shift;
     my ($data_hash) = @_;
 
-    $self->debug("SE AGREGO EL HISTORICO DE DISPONIBILIDAD");
+
+    $self->debug("HISTORICO DE DISPONIBILIDAD ==> ".$data_hash->{'id3'});
+    $self->debug("HISTORICO DE DISPONIBILIDAD ==> ".$data_hash->{'detalle'});
+    $self->debug("HISTORICO DE DISPONIBILIDAD ==> ".$data_hash->{'tipo_prestamo'});
 
     #Asignando data...
     $self->setId3( $data_hash->{'id3'} );
     $self->setDetalle( $data_hash->{'detalle'} );
-    $self->setFecha( ParseDate("today") );
     $self->setTipo_prestamo( $data_hash->{'tipo_prestamo'} );
     $self->save();
 
+    $self->debug("SE AGREGO EL HISTORICO DE DISPONIBILIDAD");
 }
 
 1;

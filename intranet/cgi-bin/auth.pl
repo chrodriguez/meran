@@ -2,12 +2,9 @@
 
 use strict;
 
-#use C4::Output;  # contains gettemplate
 use C4::Auth;
-#use C4::Context;
-#use CGI::Session;
 use CGI;
-# use Benchmark;
+
 
 my $cgi = new CGI;
 # my $t0 = Benchmark->new;

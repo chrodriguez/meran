@@ -5,7 +5,7 @@
 [% IF RANDOM_NUMBER %]
     <script type="text/javascript">
         function enviar(){
-            var nroRandom= [% RANDOM_NUMBER %];
+            var nroRandom= [% nroRandom %];
             var username = $.trim($("#userid").val());
             var hash= b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
             $("#password").val(hash);

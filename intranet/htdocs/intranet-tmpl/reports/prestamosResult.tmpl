@@ -1,4 +1,3 @@
-
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda | i18n %]:</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
@@ -90,7 +89,7 @@
                         </td>
                 
                         <td > 
-                            <a href='/cgi-bin/koha/busquedas/detalleItem.pl?id1=[% id1 %]&id2=[% id2 %]&id3=[% prestamo.getId3 %]&barcode=[% prestamo.nivel3.getBarcode %]&signatura_topografica=[% prestamo.nivel3.getSignatura_topografica %]' title='Detalle de disponibilidad'>
+                            <a href='/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl?id3=[% prestamo.getId3 %]' title='Detalle del Ejemplar'>
                             [% prestamo.nivel3.getBarcode %]
                         </a>
                         </td>
