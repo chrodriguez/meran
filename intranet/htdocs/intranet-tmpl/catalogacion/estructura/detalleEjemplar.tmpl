@@ -1,5 +1,47 @@
-[% INCLUDE 'intranet-top.inc' %]
-[% USE HTML %]
+[% INCLUDE "intranet-top.inc" %]
+
+<script>
+    function changePage(ini){
+            objAH.changePage(ini);
+        }
+
+    function ordenar(orden){
+                objAH.sort(orden);
+            }
+
+    function verHistoricoDisponibilidad(id3){
+            objAH=new AjaxHelper(updateHistoricoDisponibilidad);
+            objAH.debug= true;
+            objAH.url= 'detalleEjemplar.pl';
+            objAH.funcion = "changePage";
+            objAH.id3= id3;
+            objAH.tipo= 'VER_HISTORICO_DISPONIBILIDAD';
+            objAH.sendToServer();
+    }
+
+    function updateHistoricoDisponibilidad(responseText){
+            $('#historicoDisponibilidad').html(responseText);
+    }
+
+    function verHistoricoCirculacion(id3){
+            objAH=new AjaxHelper(updateHistoricoCirculacion);
+            objAH.debug= true;
+            objAH.url= 'detalleEjemplar.pl';
+            objAH.funcion = "changePage";
+            objAH.id3= id3;
+            objAH.tipo= 'VER_HISTORICO_CIRCULACION';
+            objAH.sendToServer();
+    }
+
+    function updateHistoricoCirculacion(responseText){
+            $('#historicoCirculacion').html(responseText);
+    }
+
+    $(document).ready(function(){
+        verHistoricoDisponibilidad('[% nivel3.id %]');
+        verHistoricoCirculacion('[% nivel3.id %]');
+    });
+</script>
 
 <div id="detalleEjemplar">
 <fieldset>
@@ -12,39 +54,9 @@
                     <li> [% "Estado"|i18n %]:           <strong class="[% IF nivel3.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% nivel3.getEstadoObject.getNombre  %]</strong></li>
     </ul>
 
-<fieldset class="resultados_busqueda">
-    <legend class="titulo_legend">[% "Hist&oacute;rico de Disponibilidad" | i18n %]:</legend>
-        <div class="contenedor_paginador">[% paginador %]</div>
-        <div class="datos_tabla_div_user">
-            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <thead>
-                <tr class="titulo_tabla_resultado">
-                    <th>[% "Disponibilidad" | i18n %]</th>
-                    <th>[% "Estado" | i18n %]</th>
-                    <th>[% "Fecha" | i18n %]</th>
-
-                </tr>
-                </thead>
-                <tbody>
-                    [% FOREACH historico IN historico_disponibilidad %]
-                        <tr>
-                            <td>
-                                [% historico.getTipo_prestamo %] 
-                            </td>
-                            <td>
-                                [% historico.getDetalle %] 
-                            </td>
-                            <td>
-                                [% historico.getFecha %] 
-                            </td>
-                        </tr>
-                    [% END %]
-                </tbody>
-            </table>
-            <div class="resultados_consulta">[% "La cantidad es" | i18n %]: [% cant_historico %]</div>
-        </div>
-</fieldset>
+<div id="historicoDisponibilidad"></div>
+<div id="historicoCirculacion"></div>
 
 </fieldset>
 </div>
-[% INCLUDE 'intranet-bottom.inc' %]
+[% INCLUDE "intranet-bottom.inc" %]
