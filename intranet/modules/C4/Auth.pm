@@ -116,7 +116,7 @@ sub getMsgCode{
     return ($session->param('codMsg') || $codMSG);
 }
 
-=iemt sub _getExpireStatus
+=item sub _getExpireStatus
     Devuelve el valor de la variable de contexto que indica si expiran las sesiones o devuelve true si no esta definido este valor
 =cut
 sub _getExpireStatus{
@@ -387,16 +387,17 @@ Funcion que devuelve si se cambio la ip o no para la misma session
 sub _cambioIp{ 
     my $session=shift;
     if ($session->param('ip') ne $ENV{'REMOTE_ADDR'}) {
-                my $time=localtime(time());
-                _session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
-                                                            $session->param('userid'), 
-                                                            $time, 
-                                                            $session->param('ip'), 
-                                                            $ENV{'REMOTE_ADDR'}
-                 );
-            return 1;}
-    else{
-            return 0;
+        my $time=localtime(time());
+        _session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
+                                                    $session->param('userid'), 
+                                                    $time, 
+                                                    $session->param('ip'), 
+                                                    $ENV{'REMOTE_ADDR'}
+          );
+
+        return 1;
+    } else {
+        return 0;
     }
 }
 =item sub _verificarSession
@@ -418,6 +419,7 @@ if(defined $session and _sessionExpired($session)){
             C4::AR::Debug::debug($session->param('userid').'eomar');    
             $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
             C4::AR::Debug::debug($socio.'eomar2');
+# FIXME y la verificacion del Token???????????????
               #Verificar condiciones
             if (_cambioIp($session)){                
                 _destruirSession('U406', $template_params);
