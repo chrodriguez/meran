@@ -340,17 +340,19 @@ sub _obtenerToken{
   Devuelve el idioma por defecto del Usuario, lo busca en la sesion, sino en el defaultLanguage o devuelve el esES por defecto
 =cut
 
-<<<<<<< HEAD
+=item
+
+    #PARECE QUE QUEDO MAL MEZCLADO CON LO DE ABAJO, VER YA CUAL QUEDA!!!!!!!!!!!!!!!
     my $out = '';
     $template->process($params->{'template_name'},$params,\$out) || die "Template process failed: ", $template->error(), "\n";
     #Por qué es necesario esto?????????????? :(
     $out = Encode::decode_utf8($out);
     return($out);
-=======
+=cut
 sub getUserLocale{
     my $session = CGI::Session->load();
+
     return $session->param('usr_locale') || C4::Context->config("defaultLang") || 'es_ES';
->>>>>>> 63b68236218006940c33d854c580990d28e53ae4
 }
 
 =item
@@ -455,13 +457,14 @@ sub checkauth {
     my $change_password     = shift || 0;
     my $template_params     = shift;
     my $dbh                 = C4::Context->dbh;
-    my $socio               ='concha te uma';
+    my $socio               ='';
     $type                   = 'opac' unless $type;
     my $token=_obtenerToken($query);
     my $loggedin = 0;
     my %info;
     my ($session) = CGI::Session->load();
     my $userid= $session->param('userid');
+    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
     my $flags=0;
     C4::AR::Debug::debug($socio.'eomar5');
     my $estado=_verificarSession($session,$socio,\%info,\$template_params,\$type);
