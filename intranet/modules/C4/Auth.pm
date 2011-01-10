@@ -32,6 +32,7 @@ use C4::Context;
 use C4::Modelo::SistSesion;
 use C4::Modelo::SistSesion::Manager;
 use C4::Modelo::CircReserva;
+use Switch;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 my $codMSG = 'U000';
@@ -205,7 +206,6 @@ sub inicializarAuth{
     #se destruye la session anterior
     $session->delete();
     undef($session); 
-    
     #Genero una nueva sesion.
     my %params;
     $params{'userid'}               = undef;
@@ -219,11 +219,10 @@ sub inicializarAuth{
     $params{'browser'}              = $ENV{'HTTP_USER_AGENT'};
     $params{'SERVER_GENERATED_SID'} = 1;
     $params{'ip'}                   = $ENV{'REMOTE_ADDR'};
-      
     $session                        = C4::Auth::_generarSession(\%params);
 
     #Guardo la sesion en la base
-    C4::Auth::_save_session_db($session->param('sessionID'), undef, $params{'ip'} , $params{'nroRandom'}, $params{'token'});
+    #FIXME C4::Auth::_save_session_db($session->param('sessionID'), undef, $params{'ip'} , $params{'nroRandom'}, $params{'token'});
     $t_params->{"nroRandom"}=$params{'nroRandom'};
     return ($session);
 }
@@ -358,43 +357,77 @@ sub _init_i18n {
     Locale::Maketext::Gettext::Functions::get_handle($locale);
 }
 
-=item sub _session_expired
+=item sub _sessionExpired
     Verifica si expiró la sesion, no me esta funcionando el método del CGI::Session is_expired
 =cut
-sub _session_expired {
+sub _sessionExpired {
     my ($session) = @_;
-    if( (($session->atime + $session->etime) <= time()) && (_getExpireStatus()) ){
+    C4::AR::Debug::debug("sesion puta".$session->expire());
+    if((($session->expire()) <=0) && (_getExpireStatus()) ){
         C4::AR::Debug::debug("_session_expired=> EXPIRO LA SESSION DE LA COOKIE CON: ".(($session->atime + $session->etime) <= time())." Y _getExpireStatus:  true");
         C4::AR::Debug::debug("atime: ".$session->atime."etime: ".$session->etime);
         return 1;
     }
     return 0;
 }
-=item sub _cambio_ip
-
-
-
+=item sub _cambioIp
+Funcion que devuelve si se cambio la ip o no para la misma session
 =cut
 
-sub _cambio_ip{ 
-my $ip=shift;
-my %info=shift;
-if ($ip ne $ENV{'REMOTE_ADDR'}) {
-                $info{'oldip'} = $ip;
-                $info{'newip'} = $ENV{'REMOTE_ADDR'};
-                $info{'different_ip'} = 1;
-                #elimino la session del usuario porque cambio de ip
-                #Logueo la sesion que se cambio la ip
+sub _cambioIp{ 
+    my $session=shift;
+    if ($session->param('ip') ne $ENV{'REMOTE_ADDR'}) {
                 my $time=localtime(time());
                 _session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
-                                                            $userid, 
+                                                            $session->param('userid'), 
                                                             $time, 
-                                                            $ip, 
-                                                            $info{'newip'}
-                    );
-                $sessionID = undef;
-                $userid = undef;    
-                #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
+                                                            $session->param('ip'), 
+                                                            $ENV{'REMOTE_ADDR'}
+                 );
+            return 1;}
+    else{
+            return 0;
+    }
+}
+=item sub _verificarSession
+Devuelve  sesion_valida sin_sesion o sesion_invalida de acuerdo a lo q corresponda
+=cut
+
+sub _verificarSession {
+my ($session,$socio,%info,$socio,$template_params,$type)=@_;
+if(defined $session and _sessionExpired($session)){
+    #EXPIRO LA SESION
+        $info{'timed_out'} = 1;
+        _destruirSession('U406', $template_params);
+        $session->param('codMsg', 'U355');
+    }else{
+    #NO EXPIRO LA SESION
+        _init_i18n({ type => $type });
+        if ($session->param('userid')) {
+            #Quiere decir que la sesion existe
+            C4::AR::Debug::debug($session->param('userid').'eomar');    
+            $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
+            C4::AR::Debug::debug($socio.'eomar2');
+              #Verificar condiciones
+            if (_cambioIp($session)){                
+                _destruirSession('U406', $template_params);
+                $session->param('codMsg', 'U356');
+            } elsif ($session->param('flag') eq 'LOGUIN_DUPLICADO'){
+                _destruirSession('U406', $template_params);
+                $session->param('codMsg', 'U359');
+              }
+                else {
+                #ESTA TODO OK
+                 $session->param('lasttime', time());
+                #TODO ver si se pueden guardar los permisos en la sesion para evitar cargar el socio mas arriba
+                return "sesion_valida";
+            }
+          }
+        else {
+        #Esto quiere decir que la sesion esta bien pero que no hay nadie logueado
+        return "sin_sesion";}
+       }
+return "sesion_invalida";
 }
 
 =item sub checkauth
@@ -402,7 +435,7 @@ if ($ip ne $ENV{'REMOTE_ADDR'}) {
 
 
 =cut
-#checkauth RECORTADO
+
 
 sub checkauth {
     C4::AR::Debug::debug("desde checkauth==================================================================================================");    
@@ -414,91 +447,39 @@ sub checkauth {
     my $change_password     = shift || 0;
     my $template_params     = shift;
     my $dbh                 = C4::Context->dbh;
-    my $socio;
-    
+    my $socio               ='concha te uma';
     $type                   = 'opac' unless $type;
     my $token=_obtenerToken($query);
-
-    # state variables
     my $loggedin = 0;
     my %info;
     my ($session) = CGI::Session->load();
-    my ($userid, $cookie, $sessionID, $flags);
-    if(_session_expired($session)){
-    #EXPIRO LA SESION
-        $info{'timed_out'} = 1;
-        _destruirSession('U406', $template_params);
-        $session->param('codMsg', 'U355');
-        $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-        redirectTo('/cgi-bin/koha/auth.pl');
-    }else{
-    #NO EXPIRO LA SESION
-        $sessionID = $session->param('sessionID');
-        my ($ip , $lasttime, $nroRandom, $flag, $tokenDB);
-        $userid     = $session->param('userid');
-        $ip         = $session->param('ip');
-        $lasttime   = $session->param('lasttime');
-        $nroRandom  = $session->param('nroRandom');
-        $tokenDB    = $session->param('token');
-        $flag       = $session->param('flagsrequired');
-        #inicializa variables para i18n por si se cambiaron hay q hacerlo cada vez
-        _init_i18n({ type => $type });
-        if ($userid) {
-            #Quiere decir que la sesion existe
-            $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-            if _cambio_ip($ip){
-                }
-                $session->param('codMsg', 'U356');
-                $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-                redirectTo('/cgi-bin/koha/auth.pl');
-            #FIXME esto logion duplicado hay q mirarlo
-            } elsif ($flag eq 'LOGUIN_DUPLICADO') {
-                #Se encuentra una session activa con el mismo userid
-                #se eliminan las sessiones, solo se permite una session activa a la vez
-                $info{'loguin_duplicado'} = 1;
-                #elimino la session del usuario porque caduco
-                _destruirSession('U406', $template_params);
-#                 C4::AR::Debug::debug("checkauth=> se loguearon con el mismo userid desde otro lado\n");
-                #Logueo la sesion que se cambio la ip
-                my $time=localtime(time());
-                _session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
-                                                            $userid, 
-                                                            $time, 
-                                                            $ip, 
-                                                            $info{'newip'}
-                    );
-                $sessionID = undef;
-                $userid = undef;    
-                #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
-                $session->param('codMsg', 'U359');
-                $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-                redirectTo('/cgi-bin/koha/auth.pl');
-                #EXIT
-            } else {
-                #ESTA TODO OK
-                $session->param('lasttime', time());
-
-#                 TODO ver si se pueden guardar los permisos en la sesion para evitar cargar el socio mas arriba
-                $flags = $socio->tienePermisos($flagsrequired);
-
-
+    my $userid= $session->param('userid');
+    my $flags=0;
+    C4::AR::Debug::debug($socio.'eomar5');
+    my $estado=_verificarSession($session,$socio,\%info,\$template_params,\$type);
+    C4::AR::Debug::debug($socio.'eomar7');
+    if ($estado eq "sesion_valida"){ 
+                C4::AR::Debug::debug($socio.'eomar4');
+                $flags=$socio->tienePermisos($flagsrequired);
                 if ($flags) {
                     $loggedin = 1;
-#                     C4::AR::Debug::debug("checkauth=> TIENE PERMISOS: \n");
                 } else {
                     $info{'nopermission'} = 1;
-#                     C4::AR::Debug::debug("checkauth=> NO TIENE PERMISOS: \n");
                     #redirecciono a una pagina informando q no tiene  permisos
                     $session->param('codMsg', 'U354');
                     $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
                     redirectTo('/cgi-bin/koha/informacion.pl');
-                    #EXIT
                 }
+        } elsif ($estado eq "sesion_invalida") { 
+                $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
+                redirectTo('/cgi-bin/koha/auth.pl'); 
+            } elsif ($estado eq "sin_sesion") { 
+              }
+              else { 
+                $session->param('redirectTo', '/cgi-bin/koha/error.pl');
+                redirectTo('/cgi-bin/koha/error.pl'); 
             }
-          }#if de la sesion que existia en la bdd
-        }#end ($sessionID=$query->cookie('sessionID'))
-
-
+        
     #por aca se permite llegar a paginas que no necesitan autenticarse
     my $insecure = C4::AR::Preferencias->getValorPreferencia('insecure');
     # finished authentification, now respond
@@ -643,7 +624,6 @@ sub checkauth {
  
     }# end unless ($userid) 
 }# end checkauth
-
 
 
 
@@ -920,20 +900,6 @@ sub buildSocioData{
 }
 
 
-
-
-=item
-Se envian los correos recordatorios si se encuentra seteada la preferencia "remainderMail"
-=cut
-#EINAR sub _enviarCorreosDeRecordacion {
-# C4::AR::Debug::debug("EnabledMailSystem ".C4::Context->preference("EnabledMailSystem"));
-# C4::AR::Debug::debug("reminderMail ".C4::Context->preference("reminderMail"));
-
-#EINAR    if ((C4::Context->preference("EnabledMailSystem"))&&(C4::Context->preference("reminderMail") eq 1)){
-# TODO falta pasar
-  #EINAR      &C4::AR::Prestamos::enviar_recordatorios_prestamos();
-#EINAR    }
-#EINAR}
 
 =item sub _getTimeOut
 
