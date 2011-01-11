@@ -163,6 +163,23 @@ function _getIdComponente(campo, subcampo){
 }
 
 /*
+    Esta funcion busca la posicion dentro del arreglo de subcampos del subcampo marc segun el idCompCliente
+*/
+function _getPosBySubCampoMARC_conf_ById(id){
+    for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){
+        var subcampos_array = MARC_OBJECT_ARRAY[i].getSubCamposArray();
+        for(var s=0;s<subcampos_array.length;s++){
+            if(subcampos_array[s].getIdCompCliente() == id){
+
+                return s;
+            }
+        }
+    }
+
+    return 0;
+}
+
+/*
     Esta funcion busca un objeto subcampo marc en el arreglo de objetos de configuracion MARC, sgeun el idCompCliente
 */
 function _getSubCampoMARC_conf_ById(id){
@@ -623,15 +640,16 @@ function guardarModificarDocumentoN3(){
 function guardarDocumentoN1(){
 
     syncComponentesArray();
-    objAH                   = new AjaxHelper(updateGuardarDocumentoN1);
-    objAH.debug             = true;
-    objAH.showOverlay       = true;
-    objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tipoAccion        = "GUARDAR_NIVEL_1";
-    objAH.id_tipo_doc       = $("#tipo_nivel3_id").val();
+    objAH                           = new AjaxHelper(updateGuardarDocumentoN1);
+    objAH.debug                     = true;
+    objAH.showOverlay               = true;
+    objAH.url                       = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tipoAccion                = "GUARDAR_NIVEL_1";
+    objAH.id_tipo_doc               = $("#tipo_nivel3_id").val();
+    objAH.id_nivel_bibliografico    = $("#id_nivel_bibliografico").val();
 	_sacarOpciones();
-    objAH.infoArrayNivel1   = MARC_OBJECT_ARRAY;
-    objAH.id1               = ID_N1;
+    objAH.infoArrayNivel1           = MARC_OBJECT_ARRAY;
+    objAH.id1                       = ID_N1;
 
     objAH.sendToServer();
 }
@@ -750,15 +768,16 @@ function updateGuardarDocumentoN3(responseText){
 
 function guardarModificacionDocumentoN1(){
     syncComponentesArray();
-    objAH                   = new AjaxHelper(updateGuardarModificacionDocumentoN1);
-    objAH.debug             = true;
-    objAH.showOverlay       = true;    
-    objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tipoAccion        = "MODIFICAR_NIVEL_1";
-    objAH.id_tipo_doc       = $("#tipo_nivel3_id").val();
+    objAH                           = new AjaxHelper(updateGuardarModificacionDocumentoN1);
+    objAH.debug                     = true;
+    objAH.showOverlay               = true;    
+    objAH.url                       = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tipoAccion                = "MODIFICAR_NIVEL_1";
+    objAH.id_tipo_doc               = $("#tipo_nivel3_id").val();
+    objAH.id_nivel_bibliografico    = $("#id_nivel_bibliografico").val();
 	_sacarOpciones();
-    objAH.infoArrayNivel1   = MARC_OBJECT_ARRAY;
-    objAH.id1               = ID_N1;
+    objAH.infoArrayNivel1           = MARC_OBJECT_ARRAY;
+    objAH.id1                       = ID_N1;
     objAH.sendToServer();
 }
 
@@ -1047,9 +1066,9 @@ function procesarInfoJson(marc_object_array, id_padre){
         $("#select_indicador_secundario" + MARC_OBJECT_ARRAY.length).val(campo_marc_conf_obj.getIndicadorSecundarioDato());
 
         //proceso los subcampos
-        var subcampo_marc_conf_obj = new subcampo_marc_conf(objetos[i]);
-        var subcampos_array = campo_marc_conf_obj.getSubCamposArray();
-        marc_group = "marc_group" + id_temp;
+        var subcampo_marc_conf_obj  = new subcampo_marc_conf(objetos[i]);
+        var subcampos_array         = campo_marc_conf_obj.getSubCamposArray();
+        marc_group                  = "marc_group" + id_temp;
         
         for(var j=0; j < subcampos_array.length; j++){
         //recorro los subcampos
@@ -1366,10 +1385,29 @@ function remove(id){
     removeFromArray(MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray(), _from, _to); //elimino la informacion del subcampo
 }
 
+function removeSubcampo(id){
+    var subcampo_temp   = _getSubCampoMARC_conf_ById(id);       //recupero el subcampo segun el id pasado por parametro
+    var _from           = _getPosBySubCampoMARC_conf_ById(id);  //posicion del subcampo en el arreglo de subcampos
+    var _to             = _from;
+    
+    $('#LI'+id).remove();                                       //elimino la componete del cliente
+
+    removeFromArray(MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray(), _from, _to); //elimino la informacion del subcampo
+}
+
 function crearBotonAgregarSubcampoRepetible(obj){
 
     if(obj.getRepetible() == '1'){
         return "<div onclick=cloneSubCampo('"+ obj.getIdCompCliente() +"') class='icon_mas horizontal' title='Agregar subcampo repetible'/>";
+    }else{  
+        return "";
+    }
+}
+
+function crearBotonEliminarSubcampoRepetible(obj){
+
+    if(obj.getRepetible() == '1'){
+        return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo repetible'/>";
     }else{  
         return "";
     }
@@ -1532,14 +1570,8 @@ function subcampo_marc_conf(obj){
 
 function crearText(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "' class='horizontal' >";     
-//     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
-//     $("#div" + obj.getIdCompCliente()).append(comp);
-//     $(strComp).insertAfter($("#" + id_padre));
-//     $("#div" + obj.getIdCompCliente()).append(comp);
-//     $("#div" + obj.getIdCompCliente()).append(crearBotonAgregarSubcampoRepetible(obj));
-
-//     $(comp).insertAfter("#div" + obj.getIdCompCliente());
     $("#div" + obj.getIdCompCliente()).append(comp);
+    $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
     $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
 }
 
@@ -1568,11 +1600,8 @@ function newCombo(obj){
 
 function crearCombo(obj){
     var comp = newCombo(obj);
-
-//     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
-//     $("#div" + obj.getIdCompCliente()).append(comp);
-
     $("#div" + obj.getIdCompCliente()).append(comp);
+    $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
     $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
 }
 
@@ -1583,6 +1612,7 @@ function crearTextArea(obj){
 
     $("#div" + obj.getIdCompCliente()).append(comp);
     $("#texta" + obj.getIdCompCliente()).val(obj.getDatoReferencia());
+    $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
     $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
 }
 
@@ -1644,6 +1674,7 @@ function crearAuto(obj){
 
 
 //     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
+    $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
     $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
 //     comp = comp + "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
     comp = "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
@@ -1840,7 +1871,6 @@ function modificarN1(id1){
     _mostrarAccion("Modificando el metadato (" + ID_N1 + ")");
 	objAH               = new AjaxHelper(updateModificarN1);
 	objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-//     objAH.showStatusIn  = "centro";
     objAH.showOverlay   = true;
 	objAH.debug         = true;
 //     objAH.cache = true;
@@ -1869,7 +1899,6 @@ function modificarN2(id2, tipo_ejemplar){
     ID_TIPO_EJEMPLAR    = tipo_ejemplar;
     objAH               = new AjaxHelper(updateModificarN2);
     objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-//     objAH.showStatusIn  = "centro";
     objAH.showOverlay   = true;
     objAH.debug         = true;
 //     objAH.cache = true;
@@ -1896,7 +1925,6 @@ function modificarN3(id3, tipo_ejemplar){
 	objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug         = true;
 //     objAH.cache = true;
-//     objAH.showStatusIn  = "centro";
     objAH.showOverlay   = true;
 	objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
  	objAH.id3           = ID_N3;

@@ -180,8 +180,8 @@ sub getTipoDocumento{
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
     my $tipo_doc    = $marc_record->subfield("910","a");
 
-    C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumento => getTipoDocumento => ".$tipo_doc);
-    C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumento => getTipoDocumento => ".C4::AR::Catalogacion::getRefFromStringConArrobas($tipo_doc));
+#     C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumento => ".$tipo_doc);
+#     C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumento => ".C4::AR::Catalogacion::getRefFromStringConArrobas($tipo_doc));
     return C4::AR::Catalogacion::getRefFromStringConArrobas($tipo_doc);
 }
 
@@ -195,15 +195,17 @@ sub getTipoDocumentoObject{
     my ($self)      = shift;
         
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    my $ref         = $self->getTipoDocumento();
+    my $tipo_doc    = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("910","a"));
+
+#     C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject => ".$tipo_doc);
         
-    my $tipo_doc    = C4::Modelo::CatRefTipoNivel3->getByPk($ref);
-# FIXME ver esto
-$tipo_doc = $ref;
+    my $tipo_doc_object = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3 ( query => [  'id_tipo_doc' => { eq => $tipo_doc } ] );
         
-    if(!$tipo_doc){
-            C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject()=> EL OBJECTO (ID) CatRefTipoNivel3 NO EXISTE");
-            $tipo_doc = C4::Modelo::CatRefTipoNivel3->new();
+    if(scalar($tipo_doc_object) > 0){
+        return $tipo_doc_object->[0];
+    } else {
+        C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject()=> EL OBJECTO (ID) CatRefTipoNivel3 NO EXISTE");
+        $tipo_doc = C4::Modelo::CatRefTipoNivel3->new();
     }
     
     return $tipo_doc;
@@ -303,8 +305,8 @@ sub getIdiomaObject{
     my $marc_record     = MARC::Record->new_from_usmarc($self->getMarcRecord());
     my $ref             = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getIdioma());
      
-    C4::AR::Debug::debug("CatRegistroMarcN2 => getIdioma => ".$self->getIdioma());
-    C4::AR::Debug::debug("CatRegistroMarcN2 => getIdiomaObject()=> ref => ".$ref);
+#     C4::AR::Debug::debug("CatRegistroMarcN2 => getIdioma => ".$self->getIdioma());
+#     C4::AR::Debug::debug("CatRegistroMarcN2 => getIdiomaObject()=> ref => ".$ref);
     my $idioma_object   = C4::Modelo::RefIdioma->getByPk($ref);
 
         
@@ -314,36 +316,6 @@ sub getIdiomaObject{
     }
 
     return $idioma_object;
-}
-
-=head2 sub getNivelBibliografico
-Recupera el Nivel Bibliografico segun el MARC 900,b
-=cut
-sub getNivelBibliografico{
-    my ($self)      = shift;
-    
-    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-
-    return $marc_record->subfield("900","b");
-}
-
-=head2 sub getNivelBibliograficoObject
-    Recupera el objeto 
-=cut
-sub getNivelBibliograficoObject{
-    my ($self)          = shift;
-     
-    my $marc_record     = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    my $ref             = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getNivelBibliografico());
-     
-    my $nivel_bibliografico_objecto = C4::Modelo::RefNivelBibliografico->getByPk($ref);
-        
-    if(!$nivel_bibliografico_objecto){
-            C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) RefSoporte NO EXISTE");
-            $nivel_bibliografico_objecto = C4::Modelo::RefNivelBibliografico->new();
-    }
-
-    return $nivel_bibliografico_objecto;
 }
 
 =head2 sub getAnio_publicacion
