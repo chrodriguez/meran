@@ -33,22 +33,54 @@ sub setMarcRecord{
     $self->marc_record($marc_record);
 }
 
-sub agregar{
-    my ($self)          = shift;
-    my ($marc_record)   = @_;
+=item
+  sub setearLeader
 
+  setea el LEADER según lo indicado desde el cliente
+=cut
+sub setearLeader {
+    my ($self)      = shift;
+    my ($params)    = @_;
 
-    $self->setMarcRecord($marc_record);
+    my $nivel_bibliografico = C4::Modelo::RefNivelBibliografico->getByPk($params->{'id_nivel_bibliografico'});
+    my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord()); 
+
+# FIXME no me funciona el substr con reemplazo
+    my $leader = substr($marc_record->leader(), 0, 7).$nivel_bibliografico->getCode().substr($marc_record->leader(), 8, 24);
+    #seteo el nuevo LEADER
+    $marc_record->leader($leader);
+    C4::AR::Debug::debug("CatRegistroMarcN1 => setearLeader !!!!!!!!!!!!! ".$marc_record->leader());
+    $self->setMarcRecord($marc_record->as_usmarc);
+
     $self->save();
 }
 
-sub modificar{
-    my ($self)           = shift;
-    my ($marc_record)    = @_;
+sub agregar{
+    my ($self)                  = shift;
+    my ($marc_record, $params)  = @_;
 
     $self->setMarcRecord($marc_record);
-
     $self->save();
+
+    #seteo datos del LEADER
+    $self->setearLeader($params);
+
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => agregar => LEADER guardado !!!!!!!!!!!!! ".$marc_record->leader());
+}
+
+sub modificar{
+    my ($self)                  = shift;
+    my ($marc_record, $params)  = @_;
+
+    $self->setMarcRecord($marc_record);
+    $self->save();
+
+    #seteo datos del LEADER
+    $self->setearLeader($params);
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => agregar => LEADER modificado !!!!!!!!!!!!! ".$marc_record->leader());
 }
 
 
@@ -109,6 +141,31 @@ sub getAutor{
     return ($autor->getCompleto());
 }
 
+=head2 sub getNivelBibliografico
+Recupera el Nivel Bibliografico (el code), bit 7 del LEADER
+=cut
+sub getNivelBibliografico{
+    my ($self)      = shift;
+
+# bit 7 del Leader    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => getNivelBibliografico => LEADER !!!!!!!!!!!!!!!! ".substr ($marc_record->leader(),7,1));
+    return substr ($marc_record->leader(),7,1);
+}
+
+sub getNivelBibliograficoObject{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    my $code        = $self->getNivelBibliografico();
+
+    my $nivel_bibliografico = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico( query => [ code => { eq => $code }]);
+   
+
+    return ($nivel_bibliografico->[0]);
+}
+
 =head2 sub toMARC
 
 =cut
@@ -118,11 +175,10 @@ sub toMARC{
     #obtengo el marc_record del NIVEL 2
     my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
-
     my $params;
-    $params->{'nivel'} = '1';
-    $params->{'id_tipo_doc'} = 'ALL';
-    my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
+    $params->{'nivel'}          = '1';
+    $params->{'id_tipo_doc'}    = 'ALL';
+    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
 
 #     my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran($marc_record);

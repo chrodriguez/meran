@@ -23,13 +23,7 @@ function updateModificarDatosDeUsuario(responseText){
 //se crea el objeto que maneja la ventana para modificar los/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl' datos del usuario
         if (!verificarRespuesta(responseText))
             return(0);
-//         vDatosUsuario=new WindowHelper({draggable: false, opacity: true});
-// 	    vDatosUsuario.debug= true;
-// 	    vDatosUsuario.html=responseText;
-// 	    vDatosUsuario.create();	
-// 	    vDatosUsuario.height('75%');
-// 	    vDatosUsuario.width('85%');
-// 	    vDatosUsuario.open();
+
         $('#basic-modal-content').html(responseText);
         $('#basic-modal-content').modal({   containerCss:{
                 backgroundColor:"#fff",
@@ -346,3 +340,30 @@ function updateAgregarAutorizado(responseText){
         },
     });
 }
+
+function validarDatosCensales(){
+	objAH                   = new AjaxHelper(updateValidarDatosCensales);
+	objAH.debug             = true;
+	objAH.url               = '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+	objAH.debug             = true; 
+	objAH.nro_socio         = USUARIO.ID;
+    nro_socio_temp          = objAH.nro_socio; // SETEO LA VARIABLE GLOBAL TEMP
+	objAH.tipoAccion        = 'VALIDAR_DATOS_CENSALES';
+	objAH.sendToServer();
+}
+
+function updateValidarDatosCensales(responseText){
+//se crea el objeto que maneja la ventana para modificar los /cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl' datos del usuario
+        if (!verificarRespuesta(responseText))
+            return(0);
+
+    	var Messages = JSONstring.toObject(responseText);
+    	setMessages(Messages);
+    	detalleUsuario();
+    	
+}
+
+
+
+
+

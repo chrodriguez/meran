@@ -92,6 +92,26 @@ if($editing){
 
     }
 
+    elsif($tipoAccion eq "VALIDAR_DATOS_CENSALES"){
+        my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'usuarios'},
+                                            "intranet"
+                                );
+
+        C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
+
+        my ($Message_arrayref)= C4::AR::Usuarios::updateUserDataValidation($obj->{'nro_socio'});
+        my $infoOperacionJSON=to_json $Message_arrayref;
+
+        C4::Auth::print_header($session);
+        print $infoOperacionJSON;
+
+    }
+
     elsif($tipoAccion eq "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO"){
         my $flagsrequired;
         $flagsrequired->{permissions}=1;

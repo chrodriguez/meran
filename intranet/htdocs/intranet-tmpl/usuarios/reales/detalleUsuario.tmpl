@@ -13,6 +13,9 @@
 </script>
 
 <div class="vcard">
+[% IF needsDataValidation %]
+    <h3 class="warning" style="padding: 20px;">[% "Los datos censales del socio necesitan ser validados. Por favor, s&iacute;rvase a realizar dicho proceso." | i18n %]</h3>
+[% END %]
 <fieldset>
 <legend class="titulo_legend_resaltado">[% 'Datos del Usuario' | i18n %]</legend>
      <div class="columna_izq" >
@@ -98,6 +101,16 @@
           <fieldset  class="accionesUsuarios" style="clear:none" >
                 <legend class ="titulo_legend_resaltado">[% 'Acciones' | i18n %]</legend>
                     <ul class ="listaMenuBotones" >
+                        [% IF needsDataValidation %]
+	                        <li>
+	                            [% PERL %]
+                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Validar datos Censales' | i18n %]",
+                                                                                    boton   => "boton_buscar",
+                                                                                    onClick => "validarDatosCensales();",
+                                                        ) ;
+	                            [% END %]
+	                        </li>
+                        [% END %]
                         <li>
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar Datos' | i18n %]",

@@ -27,3 +27,6 @@ return(0);$('#foto').html('');var Messages=JSONstring.toObject(responseText);set
 function agregarAutorizado(){objAH=new AjaxHelper(updateAgregarAutorizado);objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';objAH.tipoAccion="MOSTRAR_VENTANA_AGREGAR_AUTORIZADO";objAH.debug=true;objAH.sendToServer();}
 function updateAgregarAutorizado(responseText){if(!verificarRespuesta(responseText))
 return(0);$('#basic-modal-content').html(responseText);$('#basic-modal-content').modal({containerCss:{backgroundColor:"#fff",height:200,padding:0,width:650},});}
+function validarDatosCensales(){objAH=new AjaxHelper(updateValidarDatosCensales);objAH.debug=true;objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.nro_socio=USUARIO.ID;nro_socio_temp=objAH.nro_socio;objAH.tipoAccion='VALIDAR_DATOS_CENSALES';objAH.sendToServer();}
+function updateValidarDatosCensales(responseText){if(!verificarRespuesta(responseText))
+return(0);var Messages=JSONstring.toObject(responseText);setMessages(Messages);detalleUsuario();}

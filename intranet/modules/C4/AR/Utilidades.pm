@@ -102,6 +102,8 @@ use vars qw(@EXPORT_OK @ISA);
     &bbl_sort
     &createSphinxInstance
     &getSphinxMatchMode
+    &getToday
+    &dateDiff
 );
 
 # para los combos que no usan tablas de referencia
@@ -2220,18 +2222,18 @@ sub generarComboNivelBibliografico{
     my %options_hash; 
 
     if ( $params->{'onChange'} ){
-        $options_hash{'onChange'}= $params->{'onChange'};
+        $options_hash{'onChange'}   = $params->{'onChange'};
     }
     if ( $params->{'onFocus'} ){
-        $options_hash{'onFocus'}= $params->{'onFocus'};
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
 
     if ( $params->{'class'} ){
-         $options_hash{'class'}= $params->{'class'};
+         $options_hash{'class'} = $params->{'class'};
     }
 
     if ( $params->{'onBlur'} ){
-        $options_hash{'onBlur'}= $params->{'onBlur'};
+        $options_hash{'onBlur'} = $params->{'onBlur'};
     }
 
     $options_hash{'name'}       = $params->{'name'}||'name_nivel_bibliografico';
@@ -2242,10 +2244,10 @@ sub generarComboNivelBibliografico{
 
     if ($params->{'optionALL'}){
         push (@select_niveles, 'ALL');
-        $select_niveles{'ALL'}    ='TODOS';
+        $select_niveles{'ALL'}  = 'TODOS';
     }else{
         push (@select_niveles, '');
-        $select_niveles{''}   ='SIN SELECCIONAR';
+        $select_niveles{''}     = 'SIN SELECCIONAR';
     }
     $options_hash{'values'}     = \@select_niveles;
     $options_hash{'labels'}     = \%select_niveles;
@@ -3350,6 +3352,35 @@ sub bbl_sort {
     }
 }
 
+sub getToday{
+
+    use Date::Manip;
+    
+    my $dateformat = C4::Date::get_date_format();
+	
+	return  C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days"),$dateformat);
+}
+
+
+sub daysToNow{
+    my ($date) = @_;
+    
+    use Date::Calc qw(Delta_Days);
+
+    my @today = (localtime)[5,4,3];
+    $today[0] += 1900;
+    $today[1]++;
+
+    my @date_to_cmp = (split '-',$date);
+
+    my $days = 0;
+    
+    eval{
+        $days = Delta_Days(@date_to_cmp,@today);
+    };
+    
+    return ($days);
+}
 
 sub paginarArrayResult {
     my ($params_hash_ref, @array_to_paginate) = @_;

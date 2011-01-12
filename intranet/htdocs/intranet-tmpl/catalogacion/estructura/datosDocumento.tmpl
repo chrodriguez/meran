@@ -99,19 +99,30 @@ $(document).ready( function() {
 </div>-->
 <div id="abm_tablas_referencia"><div id="abm_tablas_referencia_content"></div></div>
 
-<div id="div_combo_tipo_documento">
-[% "Esquema de ingreso de datos tipo:" | i18n %] [% comboTipoDocumento %]
-
-                [% PERL %]
-                        print C4::AR::Filtros::to_Icon(   
-                                                            boton   => "icon_buscar",
-                                                            onClick => "mostrarEstructuraDelNivel1();",
-                                                            title   => "[% 'Buscar' | i18n %]",
-                                ) ;
-                [% END %]
-
-</div>
-
+<!-- <div id="div_combo_tipo_documento"> -->
+<ul style="clear:both">
+    <li class="sub_item" >
+        <label for="tipo_nivel3_id">
+            [% "Esquema de ingreso de datos tipo:" | i18n %]
+        </label>
+            [% comboTipoDocumento %]
+    
+        [% PERL %]
+                print C4::AR::Filtros::to_Icon(   
+                                                    boton   => "icon_buscar",
+                                                    onClick => "mostrarEstructuraDelNivel1();",
+                                                    title   => "[% 'Buscar' | i18n %]",
+                        ) ;
+        [% END %]
+    </li>
+<!-- </div> -->
+    <li class="sub_item" >
+        <label for="id_nivel_bibliografico">
+            [% "Nivel Bibliogr&aacute;fico:" | i18n %]
+        </label>
+        [% comboTipoNivelBibliografico %]
+    </li>
+</ul>
 
 <div class="todo">
 

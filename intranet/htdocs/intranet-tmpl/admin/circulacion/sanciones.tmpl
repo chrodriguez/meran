@@ -1,5 +1,7 @@
 [% INCLUDE "intranet-top.inc" %]
 
+[% INCLUDE "WindowHelper.inc" %]
+
 <script language="JavaScript" type="text/javascript">
 
 var objAH;//Objeto AjaxHelper.
@@ -162,16 +164,25 @@ function editarReglas(){
     objAH.sendToServer();
 }
 
- vReglasSanciones=new WindowHelper({draggable: true, opacity: true});
-
 function updateEditarReglas(responseText){
-
+/*
+        vReglasSanciones = new WindowHelper({draggable: true, opacity: true});
         vReglasSanciones.debug= true;
         vReglasSanciones.html=responseText;
         vReglasSanciones.create();
         vReglasSanciones.height('70%');
         vReglasSanciones.width('50%');
-        vReglasSanciones.open();
+        vReglasSanciones.open();*/
+
+    $('#basic-modal-content').html(responseText);
+    $('#basic-modal-content').modal({   containerCss:{
+            backgroundColor:"#fff",
+    //         borderColor:"#0063dc",
+            height:320,
+            padding:0,
+            width:650
+        },
+    });
 
 }
 
