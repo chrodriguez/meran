@@ -210,7 +210,6 @@ sub getUnititle {
 sub t_modificarNivel1 {
     my($params) = @_;
  
-# FIXME falta verificar que no se agregue con barcode repetido
     my $msg_object= C4::AR::Mensajes::create();
     my $id1 = 0;
 

@@ -89,8 +89,8 @@ function _existeEnArray(array, elemento){
 }
 
 function verificarAgregarDocumentoN3(){
-	var repetidos_array= new Array();
-	var existe= 0;
+	var repetidos_array = new Array();
+	var existe          = 0;
 
 	if(_getBarcodes()){
 		//verifico que los barcodes no esten repetidos
@@ -548,6 +548,7 @@ function agregarN3(id2, tipo_documento){
     ID_N2               = id2; 
     ID_TIPO_EJEMPLAR    = tipo_documento;
 	MODIFICAR           = 0;
+    inicializar();  
     _mostrarAccion("Agregando ejemplares");
 	$('#divCantEjemplares').show();
 	mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
@@ -728,12 +729,11 @@ function guardarDocumentoN3(){
         objAH.esPorBarcode      = porBarcode;
 
     if (porBarcode)
-        objAH.BARCODES_ARRAY= BARCODES_ARRAY;
+        objAH.BARCODES_ARRAY    = BARCODES_ARRAY;
     else
-        objAH.cantEjemplares= $("#cantEjemplares").val();
-
+        objAH.cantEjemplares    = $("#cantEjemplares").val();
 		_sacarOpciones();
-		objAH.infoArrayNivel3= MARC_OBJECT_ARRAY;
+		objAH.infoArrayNivel3   = MARC_OBJECT_ARRAY;
 		objAH.id1 = ID_N1;
 		objAH.id2 = ID_N2;
 		objAH.sendToServer();
@@ -908,7 +908,8 @@ function mostrarInfoAltaNivel3(idNivel2){
     if(idNivel2 != 0){
         objAH               = new AjaxHelper(updateMostrarInfoAltaNivel3);
         objAH.debug         = true;
-        objAH.showStatusIn  = 'detalleDelNivel3';
+//         objAH.showStatusIn  = 'detalleDelNivel3';
+        objAH.showOverlay   = true;
         objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL3_TABLA";
 //         objAH.id1= id1;
@@ -923,6 +924,8 @@ function updateMostrarInfoAltaNivel3(responseText){
     $('#detalleDelNivel3').html(responseText);
     zebra('tablaResult');
 	checkedAll('checkAllEjemplares','checkEjemplares');
+    
+    scrollTo('detalleDelNivel3');
 }
 
 function open_alta_indicador(id_div_alta_indicador){

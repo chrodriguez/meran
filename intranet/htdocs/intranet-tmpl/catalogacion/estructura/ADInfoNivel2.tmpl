@@ -10,7 +10,7 @@
     [% ELSE %]
 
         [% FOREACH nivel2 IN nivel2_array %]    
-        <fieldset><legend class="nivel2Selected" onClick="mostrarInfoAltaNivel3('[% nivel2.getId2 %]'); toggleClass(this);">
+        <fieldset><legend class="nivel2Selected">
             <strong>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.getTipoDocumentoObject.getNombre %]</strong>
             </legend>
         <ul class="listado_sin_margen">
@@ -38,6 +38,14 @@
                                                             boton   => "icon_borrar",
                                                             onClick => "borrarN2('[% nivel2.getId2 %]');",
                                                             title   => "[% 'Borrar nivel 2' | i18n %]",
+                                                            li => 1,
+                                ) ;
+                [% END %]
+                [% PERL %]
+                        print C4::AR::Filtros::to_Icon(   
+                                                            boton   => "icon_edicion",
+                                                            onClick => "mostrarInfoAltaNivel3('[% nivel2.getId2 %]');",
+                                                            title   => "[% 'Mostrar ejemplares del grupo (CAMBIAR ICONO!!!!!!!!)' | i18n %]",
                                                             li => 1,
                                 ) ;
                 [% END %]
