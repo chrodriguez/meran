@@ -38,14 +38,11 @@ sub t_guardarNivel3 {
 
     my $msg_object = C4::AR::Mensajes::create();
     my $catRegistroMarcN3;
-    my $db;
+    my $id3 = undef;
 
     if(!$msg_object->{'error'}){
     #No hay error
 
-#  my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
-# TODO no esta funcionando el generar barcodes pq se tiene que hacer aca, antes de llamar a meran_nivel3_to_meran
-#         my $marc_record             = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
         my $catRegistroMarcN3_tmp   = C4::Modelo::CatRegistroMarcN3->new();  
         my $db = $catRegistroMarcN3_tmp->db;
         # enable transactions, if possible
@@ -77,16 +74,19 @@ sub t_guardarNivel3 {
                 # FIXME transaccion por ejemplar???
     #                 $db->commit;
                 #recupero el id3 recien agregado
-                my $id3 = $catRegistroMarcN3->getId3;
+                $id3 = $catRegistroMarcN3->getId3;
                 #se agregaron los barcodes con exito
                 $msg_object->{'error'} = 0;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$id3]} );
             }
 
             $db->commit;
-            C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1);
-            #ahora el indice se encuentra DESACTUALIZADO
-            C4::AR::Preferencias::setVariable('indexado', 0, $db);
+
+            if(defined $id3){
+                C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1);
+                #ahora el indice se encuentra DESACTUALIZADO
+                C4::AR::Preferencias::setVariable('indexado', 0, $db);
+            }
         };
 
       if ($@){
@@ -132,12 +132,14 @@ sub t_modificarNivel3 {
             for(my $i=0;$i<$cant;$i++){
                 C4::AR::Debug::debug("t_modificarNivel3 => ID3 a modificar: ".$params->{'ID3_ARRAY'}->[$i]);
 
-                $params->{'id3'} = $params->{'ID3_ARRAY'}->[$i];
+                $params->{'id3'}        = $params->{'ID3_ARRAY'}->[$i];
+                ($cat_registro_marc_n3) = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i], $db);
+                $params->{'barcode'}    = $cat_registro_marc_n3->getBarcode();
                 #verifico las condiciones para actualizar los datos
                 _verificarUpdateItem($msg_object, $params);
 
                 if(!$msg_object->{'error'}){
-                    ($cat_registro_marc_n3)     = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i], $db);
+                    
                     $params->{'marc_record'}    = $marc_record->as_usmarc;
                     $cat_registro_marc_n3->modificar($params, $db);  #si es mas de un ejemplar, a todos les setea la misma info
                     
@@ -320,7 +322,7 @@ sub getNivel3FromBarcode {
     for(my $i=0; $i < $cant; $i++){
 
         if($barcodes_array_ref->[$i]->getBarcode() eq $barcode){
-            push(@barcode_result, $barcodes_array_ref->[$i]);
+            push(@barcode_result, $barcodes_array_ref->[$i]->getBarcode());
             last();
         }
     }
@@ -713,7 +715,7 @@ sub _verificarDeleteItem {
 
 sub _verificarUpdateItem {
 # FIXME no se verificar si se repiten los barcodes
-    my($msg_object, $params)=@_;
+    my($msg_object, $params) = @_;
 
     $msg_object->{'error'} = 0;#no hay error
 
@@ -722,6 +724,11 @@ sub _verificarUpdateItem {
         $msg_object->{'error'} = 1;
         C4::AR::Debug::debug("_verificarDeleteItem => Se está intentando modificar un ejemplar que tiene un prestamo");
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P125', 'params' => [$params->{'id3'}]} ) ;
+
+    } elsif ( existeBarcode($params->{'barcode'}) ){
+        #el barcode existe en la base de datos
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$params->{'barcode'}]} ) ;        
     }
 
 }
@@ -733,11 +740,20 @@ sub _verificarUpdateItem {
 Verifica si existe el barcode en la base
 =cut
 sub existeBarcode{
-	my($barcode)=@_;
+	my($barcode) = @_;
 
-	my $nivel_array_ref= C4::AR::Nivel3::getNivel3FromBarcode($barcode);
+	my $nivel_array_ref = C4::AR::Nivel3::getNivel3FromBarcode($barcode);
 	
-	return ( $nivel_array_ref != 0);
+#     C4::AR::Debug::debug("Nivel3 => existeBarcode => ".$nivel_array_ref);
+
+    if ($nivel_array_ref == 0){
+        return $nivel_array_ref;
+    } else {
+        return 1;
+    }
+
+    
+# 	return ( $nivel_array_ref != 0);
 }
 #=======================================================================ABM Nivel 3======================================================
 
@@ -774,17 +790,19 @@ sub _generateBarcode{
 sub _generarArreglo{	
 	my ($params, $msg_object) = @_;
  
-	my $cant = $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
-	my $barcodes_array = $params->{'BARCODES_ARRAY'}; #se esta agregando por barcodes 
+	my $cant                        = $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
+	my $barcodes_array              = $params->{'BARCODES_ARRAY'}; #se esta agregando por barcodes 
 	my @barcodes_para_agregar;
 	$params->{'agregarPorBarcodes'} = 0;
-    my $esPorBarcode = 0;
-    $esPorBarcode = defined $barcodes_array;
+    my $esPorBarcode                = 0;
+    $esPorBarcode                   = $params->{'esPorBarcode'};#defined $barcodes_array;
 
+    C4::AR::Debug::debug("Nivel 3 => _generarArreglo => esPorBarcode => ".$esPorBarcode);
     #se setea la cantidad de ejemplares a agregar
-	if($esPorBarcode){
+	if($esPorBarcode eq 'true'){
 		$params->{'agregarPorBarcodes'} = 1;
-        _generarArregloDeBarcodesPorBarcodes($msg_object, $barcodes_array, \@barcodes_para_agregar);
+#         _generarArregloDeBarcodesPorBarcodes($msg_object, $barcodes_array, \@barcodes_para_agregar);
+        @barcodes_para_agregar = _generarArregloDeBarcodesPorBarcodes($msg_object, $barcodes_array);
 	}else{
 		@barcodes_para_agregar = _generarArregloDeBarcodesPorCantidad($cant, $params, $msg_object);
 	}
@@ -796,13 +814,16 @@ sub _generarArreglo{
 Esta funcion genera un arreglo de barcodes VALIDOS para agregar en la base de datos, ademas setea los mensajes de ERROR para los usuarios
 =cut
 sub _generarArregloDeBarcodesPorBarcodes{   
-    my ($msg_object, $barcodes_array, $barcodes_para_agregar) = @_;
+#     my ($msg_object, $barcodes_array, $barcodes_para_agregar) = @_;
+    my ($msg_object, $barcodes_array) = @_;
     C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorBarcodes !!!!!!!!!!");
+    my @barcodes_para_agregar;
  
+    C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorBarcodes !!!!!!!!!! barcodes_array => ".scalar(@$barcodes_array));
     foreach my $barcode (@$barcodes_array){
         $msg_object->{'error'} = 0;
 
-        if(_existeBarcodeEnArray($barcode, $barcodes_para_agregar)){
+        if(_existeBarcodeEnArray($barcode, @barcodes_para_agregar)){
         #si el barcode existe se informa al usuario y no se agrega en el arreglo de barcodes para agregar
 # C4::AR::Debug::debug("_generarArregloDeBarcodesPorBarcodes => EXISTE EL BARCODE EN EL ARREGLO");
             $msg_object->{'error'} = 1;
@@ -811,23 +832,24 @@ sub _generarArregloDeBarcodesPorBarcodes{
 # C4::AR::Debug::debug("_generarArregloDeBarcodesPorBarcodes => NO EXISTE EL BARCODE EN EL ARREGLO");
         if( !C4::AR::Utilidades::validateBarcode($barcode) ) {
             #el barcode ingresado no es valido
-            $msg_object->{'error'}= 1;
+            $msg_object->{'error'} = 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U402', 'params' => [$barcode]} ) ;
         }
 
         if( existeBarcode($barcode) ){
             #el barcode existe en la base de datos
-            $msg_object->{'error'}= 1;
+            $msg_object->{'error'} = 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcode]} ) ;
         }
 
         if(!$msg_object->{'error'}){
         #el barcode es VALIDO, se agrega al arreglo de barcodes para agregar
 # C4::AR::Debug::debug("_generarArregloDeBarcodesPorBarcodes => AGREGO A ARREGLO ".$barcode);
-            push (@$barcodes_para_agregar, $barcode);
+            push (@barcodes_para_agregar, $barcode);
         }
     }# END foreach my $barcode (@$barcodes_array)
 
+    return @barcodes_para_agregar;
 }
 
 =head2 sub _generarArregloDeBarcodesPorCantidad
@@ -869,9 +891,9 @@ sub _generarArregloDeBarcodesPorCantidad {
 
 
 sub _existeBarcodeEnArray {
-    my ($barcode, $barcodes_array)= @_;
+    my ($barcode, @barcodes_array)= @_;
 
-    return C4::AR::Utilidades::existeInArray($barcode, $barcodes_array);
+    return C4::AR::Utilidades::existeInArray($barcode, @barcodes_array);
 }
 
 sub getHistoricoDisponibilidad {

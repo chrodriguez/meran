@@ -38,6 +38,7 @@ sub setMarcRecord{
 
   setea el LEADER según lo indicado desde el cliente
 =cut
+# TODO getter y setter de cada bit
 sub setearLeader {
     my ($self)      = shift;
     my ($params)    = @_;

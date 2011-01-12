@@ -29,7 +29,7 @@ __PACKAGE__->meta->setup(
         marc_record     => { type => 'text' },
         id1             => { type => 'integer', not_null => 1 },
         id2             => { type => 'integer', not_null => 1 },
-        date            => { type => 'varchar' },
+        updated_at      => { type => 'varchar' },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -75,12 +75,7 @@ sub modificar{
     my $marc_record_cliente = MARC::Record->new_from_usmarc($params->{'marc_record'}); #marc_record que viene del cliente
     my $marc_record_base    = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
-
-# TODO falta verificar el cambio de estado/disponibilidad
-
-#     my %params;
-
-# verificar_cambio 
+    # verificar_cambio 
     $params->{'estado_anterior'}          = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
     $params->{'estado_nuevo'}             = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","e")));        
     $params->{'disponibilidad_anterior'}  = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
@@ -91,15 +86,9 @@ sub modificar{
     if($params->{'EDICION_N3_GRUPAL'}){
     #si es una edicion grupal no se permite editar el barcode 995,f  
 
-
-
-
-
-
         foreach my $field ($marc_record_cliente->fields) {
                 if(! $field->is_control_field){
                     #se verifica si el campo esta autorizado para el nivel que se estra procesando
-#                         my @subcampos_array = ();
                         foreach my $subfield ($field->subfields()){
                             my $dato        = $subfield->[1];
                             my $sub_campo   = $subfield->[0];
@@ -113,10 +102,8 @@ sub modificar{
                                 #se mantiene el dato del barcode cuando es una actualizacion grupal
                             } else {
 
-    #                             my $dato_base   = $marc_record_base->subfield($field, $sub_campo); 
                                 if(($dato eq "")||($dato eq "-1")||($dato eq "NULL")){
-    #                             if($dato_base eq $dato)
-                                    C4::AR::Debug::debug("el dato ".$dato." no fue modificado");
+                                        C4::AR::Debug::debug("el dato ".$dato." no fue modificado");
                                     C4::AR::Debug::debug("se mantiene el dato ".$marc_record_base->subfield($field->tag, $sub_campo)." de la base");
                                 } else {
                                     #ahora se obtienen las referencias  
@@ -132,25 +119,6 @@ sub modificar{
         $self->setMarcRecord($marc_record_base->as_usmarc);
         C4::AR::Debug::debug("marc_record as_usmarc para la base ".$marc_record_base->as_usmarc);
 
-
-=item
-        C4::AR::Debug::debug("EDICION GRUPAL !!!!!!!!!!!!!!!!!");
-        #pisa el barcode (995, f) del marc_record del cliente con el barcode del marc_record de la base
-        C4::AR::Debug::debug("barcode de la base ".$marc_record_base->subfield("995","f"));
-        C4::AR::Debug::debug("marc_record as_usmarc del cliente ".$params->{'marc_record'});
-        my $barcode = '';
-        C4::AR::Debug::debug("EDICION GRUPAL !!!!!!!!!!!!!!!!! barcide ==========================".$marc_record_base->subfield("995","f")."================");
-        if ($marc_record_base->subfield("995","f") ne "") {
-        #en la edicion grupal se mantiene el barcode
-            $barcode = $marc_record_base->subfield("995","f");
-        }
-
-        #aca van todos los campos a los que se les tiene que mantener el dato cuando es una edicion grupal
-        $marc_record_cliente->field("995")->update( 'f' => $barcode );
-        C4::AR::Debug::debug("marc_record as_usmarc para la base ".$marc_record_cliente->as_usmarc);
-
-        $self->setMarcRecord($marc_record_cliente->as_usmarc);
-=cut
     } else {
         $self->setMarcRecord($params->{'marc_record'});
     }
@@ -158,7 +126,6 @@ sub modificar{
     $self->verificar_cambio($db, $params);
     $self->verificar_historico_disponibilidad($db, $params);
 
-# die;  
     $self->save();
 }
 
@@ -389,7 +356,8 @@ sub getEstado{
 sub estadoDisponible{
     my ($self) = shift;
     
-    return (C4::Modelo::RefEstado->getByPk($self->getIdEstado())->getNombre() eq "Disponible");  
+#     return (C4::Modelo::RefEstado->getByPk($self->getIdEstado())->getNombre() eq "Disponible");
+    return (ESTADO_DISPONIBLE($self->getIdEstado()));    
 }
 
 =head2 sub esParaSala
@@ -397,7 +365,8 @@ sub estadoDisponible{
 sub esParaSala{
     my ($self) = shift;
 
-    return (C4::Modelo::RefDisponibilidad->getByPk($self->getIdDisponibilidad)->getNombre() eq "Sala de Lectura");
+#     return (C4::Modelo::RefDisponibilidad->getByPk($self->getIdDisponibilidad)->getNombre() eq "Sala de Lectura");
+    return (DISPONIBILIDAD_PARA_SALA($self->getIdDisponibilidad));
 }
 
 =head2 sub toMARC
