@@ -31,6 +31,7 @@ __PACKAGE__->meta->setup(
         theme                            => { type => 'varchar', length => 255 },
         theme_intra                      => { type => 'varchar', length => 255 },
         locale                           => { type => 'varchar', length => 32 },
+        lastValidation                   => { type => 'varchar', length => 32 },
     ],
 
      relationships =>
@@ -436,6 +437,33 @@ sub setLast_change_password{
     $last_change_password = C4::Date::format_date_in_iso($last_change_password,$dateformat);
     $self->last_change_password($last_change_password);
 }
+
+sub getLastValidation{
+    my ($self) = shift;
+
+    return ($self->lastValidation);
+}
+
+sub updateValidation{
+    my ($self) = shift;
+    
+    my $today = C4::AR::Utilidades::getToday();
+    
+    $self->setLastValidation($today);
+    
+    $self->save();
+}
+
+sub setLastValidation{
+    my ($self) = shift;
+    my ($lastValidation) = @_;
+
+    my $dateformat = C4::Date::get_date_format();
+    
+    $lastValidation = C4::Date::format_date_in_iso($lastValidation,$dateformat);
+    $self->lastValidation($lastValidation);
+}
+
 
 sub getChange_password{
     my ($self) = shift;
@@ -984,6 +1012,24 @@ sub tieneFoto{
         $foto = 0;
     }
     return $foto;
+}
+
+sub needsValidation{
+	my ($self)      = shift;
+	
+	my $lastValidation = $self->getLastValidation();
+	
+	my $days = C4::AR::Utilidades::daysToNow($lastValidation);
+	            
+	my $validation_required_or_days = C4::AR::Preferencias->getValorPreferencia("user_data_validation_required_or_days") || 0;
+	            
+	            
+	my $needsDataValidation = ($validation_required_or_days) 
+	                                   &&  
+	                          (($days > $validation_required_or_days) || ($lastValidation eq '0000-00-00 00:00:00'));
+	                          
+	return ($needsDataValidation);
+	
 }
 
 sub getInvolvedCount{

@@ -50,6 +50,7 @@ $t_params->{'error'}                = 0;
 $t_params->{'nroSocioLoggeado'}     = $socio->getNro_socio;	
 $t_params->{'socio'}                = $socio;
 $t_params->{'relativePicturesDir'}  = C4::Context->config("relativePicturesDir");
+$t_params->{'needsDataValidation'} = C4::AR::Usuarios::needsDataValidation($nro_socio);
 
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);

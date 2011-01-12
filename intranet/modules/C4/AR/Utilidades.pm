@@ -102,6 +102,8 @@ use vars qw(@EXPORT_OK @ISA);
     &bbl_sort
     &createSphinxInstance
     &getSphinxMatchMode
+    &getToday
+    &dateDiff
 );
 
 # para los combos que no usan tablas de referencia
@@ -3350,6 +3352,35 @@ sub bbl_sort {
     }
 }
 
+sub getToday{
+
+    use Date::Manip;
+    
+    my $dateformat = C4::Date::get_date_format();
+	
+	return  C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days"),$dateformat);
+}
+
+
+sub daysToNow{
+    my ($date) = @_;
+    
+    use Date::Calc qw(Delta_Days);
+
+    my @today = (localtime)[5,4,3];
+    $today[0] += 1900;
+    $today[1]++;
+
+    my @date_to_cmp = (split '-',$date);
+
+    my $days = 0;
+    
+    eval{
+        $days = Delta_Days(@date_to_cmp,@today);
+    };
+    
+    return ($days);
+}
 
 sub paginarArrayResult {
     my ($params_hash_ref, @array_to_paginate) = @_;
