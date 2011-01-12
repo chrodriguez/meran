@@ -15,22 +15,21 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 
 @EXPORT = qw(
-             &display_date_format
-             &format_date
-             &format_date_hour
-             &format_date_in_iso
-	     &updateForHoliday
-	     &updateForNonHoliday
-	     &calc_beginES
-	     &calc_endES
-	     &proximosHabiles
-	     &proximoHabil
-	     &mesString
-	     &Date_Init
-	     &ParseDate
-	     &UnixDate
-         &getCurrentTimestamp
-         &get_date_format
+    &display_date_format
+    &format_date
+    &format_date_hour
+    &format_date_in_iso
+	&updateForHoliday
+    &updateForNonHoliday
+    &calc_beginES
+    &calc_endES
+    &proximosHabiles
+    &proximoHabil
+    &mesString
+    &UnixDate
+    &getCurrentTimestamp
+    &get_date_format
+    &format_date_complete
 );
 
 sub get_date_format
@@ -99,6 +98,41 @@ sub format_date
 	}
 }
 
+sub format_date_complete
+{
+    my ($olddate, $dateformat)=@_;
+
+    my $newdate;
+
+    if ( ! $olddate )
+    {
+        return "";
+    }
+
+    if ( $dateformat eq "us" )
+    {
+        Date_Init("DateFormat=US");
+        $olddate = ParseDate($olddate);
+        $newdate = UnixDate($olddate,'%m/%d/%Y %H:%M:%S');
+    }
+    elsif ( $dateformat eq "metric" )
+    {
+        Date_Init("DateFormat=metric");
+        $olddate = ParseDate($olddate);
+        $newdate = UnixDate($olddate,'%d/%m/%Y %H:%M:%S');
+    }
+    elsif ( $dateformat eq "iso" )
+    {
+        Date_Init("DateFormat=iso");
+        $olddate = ParseDate($olddate);
+        $newdate = UnixDate($olddate,'%Y-%m-%d %H:%M:%S');
+    }
+    else
+    {
+        return "Invalid date format: $dateformat. Please change in system preferences";
+    }
+}
+
 
 sub format_date_hour
 {
@@ -163,32 +197,32 @@ sub calc_endES
 sub format_date_in_iso
 {
 	my ($olddate, $dateformat)=@_;
-        my $newdate;
+    my $newdate;
+   
+    if ( ! $olddate )
+    {
+            return "";
+    }
 
-        if ( ! $olddate )
-        {
-                return "";
-        }
-
-        if ( $dateformat eq "us" )
-        {
-                Date_Init("DateFormat=US");
-                $olddate = ParseDate($olddate);
-        }
-        elsif ( $dateformat eq "metric" )
-        {
-                Date_Init("DateFormat=metric");
-                $olddate = ParseDate($olddate);
-        }
-        elsif ( $dateformat eq "iso" )
-        {
-                Date_Init("DateFormat=iso");
-                $olddate = ParseDate($olddate);
-        }
-        else
-        {
-                return "9999-99-99";
-        }
+    if ( $dateformat eq "us" )
+    {
+            Date_Init("DateFormat=US");
+            $olddate = ParseDate($olddate);
+    }
+    elsif ( $dateformat eq "metric" )
+    {
+            Date_Init("DateFormat=metric");
+            $olddate = ParseDate($olddate);
+    }
+    elsif ( $dateformat eq "iso" )
+    {
+            Date_Init("DateFormat=iso");
+            $olddate = ParseDate($olddate);
+    }
+    else
+    {
+            return "9999-99-99";
+    }
 
 	$newdate = UnixDate($olddate, '%Y-%m-%d');
 

@@ -7,7 +7,8 @@ use CGI;
 
 my $input   = new CGI;
 my $dbh     = C4::Context->dbh;
-my $today   = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"));
+my $dateformat = C4::Date::get_date_format();
+my $today   = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
 
 C4::AR::Debug::debug("CRON => recordatorio_prestamos.pl => Se verifica via CRON si es necesario enviar los mails de recordacion!!! TODAY=".$today);
 

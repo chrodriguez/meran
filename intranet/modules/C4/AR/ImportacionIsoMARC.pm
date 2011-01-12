@@ -38,9 +38,8 @@ use vars qw(@EXPORT_OK @ISA);
 =cut
 sub save_marc_import {
     my ($archivo, $comentario, $estado) = @_; 
-
-
-    my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"));
+    my $dateformat = C4::Date::get_date_format();
+    my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
     my $dbh = C4::Context->dbh;
 
     my $query   =  " INSERT INTO marc_import (archivo, comentario, estado, fecha_upload) ";

@@ -255,11 +255,9 @@ sub agregar {
     $self->setNro_socio($data_hash->{'nro_socio'});
     C4::AR::Debug::debug("responsable desde rep_historial_circulacion***************************: ".$data_hash->{'responsable'});
     $self->setResponsable($data_hash->{'responsable'});
-
-    C4::AR::Debug::debug("FECHA desde rep_historial_circulacion***************************: ".C4::Date::format_date_in_iso(ParseDate("today")));
-    
-    my $dateformat = C4::Date::get_date_format();
     my $hoy = ParseDate("today");
+    my $dateformat = C4::Date::get_date_format();
+    C4::AR::Debug::debug("FECHA desde rep_historial_circulacion***************************: ".$hoy);
 
     $self->setFecha(C4::Date::format_date_in_iso($hoy, $dateformat));
     $self->setFecha_fin($data_hash->{'hasta'});

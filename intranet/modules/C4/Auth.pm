@@ -33,6 +33,7 @@ use C4::Modelo::SistSesion;
 use C4::Modelo::SistSesion::Manager;
 use C4::Modelo::CircReserva;
 use C4::Modelo::UsrSocio;
+use C4::Modelo::PrefFeriado;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 my $codMSG = 'U000';
@@ -510,7 +511,6 @@ sub checkauth {
     my $type                = shift;
     my $change_password     = shift || 0;
     my $template_params     = shift;
-    my $dbh                 = C4::Context->dbh;
     my $socio;
     $type                   = 'opac' unless $type;
     my $demo=C4::Context->config("demo") || 0;
@@ -524,8 +524,6 @@ sub checkauth {
         #Quiere decir que no es necesario una autenticacion
         $userid="demo";
         $flags=1;
-        #FALTA socio y sesion.
-        #_actualizarSession($sessionID, $userid, $socio->getNro_socio(), $time, '', $type, $flagsrequired, _generarToken(), $session);
         _actualizarSession($userid, $userid,$userid, $time, '', $type, $flagsrequired, _generarToken(), $session);
         $socio=C4::Modelo::UsrSocio->new();
         return ($userid, $session, $flags, $socio);
@@ -570,7 +568,7 @@ sub checkauth {
         if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
             #Se verifica si el usuario tiene que cambiar la password
             if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$change_password ) {
-                _change_Password_Controller($dbh, $query, $userid, $type, $token);
+                _change_Password_Controller($query, $userid, $type, $token);
             }
         return ($userid, $session, $flags, $socio);
         }
@@ -585,7 +583,7 @@ sub checkauth {
             my $nroRandom   = $session->param('nroRandom');
             C4::AR::Debug::debug("checkauth=> nroRandom desde la session: ".$nroRandom);
             #se verifica la password ingresada
-            my ($passwordValida, $cardnumber, $branch) = _verificarPassword($dbh,$userid,$password,$nroRandom);
+            my ($passwordValida, $cardnumber, $branch) = _verificarPassword($userid,$password,$nroRandom);
             C4::AR::Debug::debug("la pass es valida?".$passwordValida);
             if ($passwordValida) {
             #se valido la password y es valida
@@ -599,16 +597,16 @@ sub checkauth {
                 C4::AR::Debug::debug("userid en actualizarSession actualizadoarafue".$session->param('userid'));
                 buildSocioData($session,$socio);
                 C4::AR::Debug::debug($session->param('usr_apellido'));
-                #Si se logueo correctamente en intranet entonces guardo la fecha
-                my $today = Date::Manip::ParseDate("today");
-                $socio->setLast_login($today);
-                $socio->save();
                 #Logueo una nueva sesion
                 _session_log(sprintf "%20s from %16s logged out at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},$time);
                 #por defecto no tiene permisos
                 if( $flags = $socio->tienePermisos($flagsrequired) ){
-                    _realizarOperacionesLogin($type,$socio,$dbh);
+                    _realizarOperacionesLogin($type,$socio);
                 }
+                #Si se logueo correctamente en intranet entonces guardo la fecha
+                my $now = Date::Manip::ParseDate("now");
+                $socio->setLast_login($now);
+                $socio->save();
                 if ($type eq 'opac') {
                     $session->param('redirectTo', '/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
                     redirectToNoHTTPS('/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
@@ -640,24 +638,32 @@ Funcion que realiza todas las operaciones asociadas a un inicio de sesion como s
 =cut
 
 sub _realizarOperacionesLogin{
-    my ($type,$socio,$dbh)=@_;
+    my ($type,$socio)=@_;
+    C4::AR::Debug::debug("_realizarOperacionesLOGIN=> t_operacionesDeINTRA\n");
     #WARNING: Cuando pasan dias habiles sin actividad se consideran automaticamente feriados
-    my $sth=$dbh->prepare("SELECT MAX(last_login) AS lastlogin FROM usr_socio");
-    $sth->execute();
-    my $lastlogin= $sth->fetchrow;
-    my $prevWorkDate = C4::Date::format_date_in_iso(Date::Manip::Date_PrevWorkDay("today",1));
+    #my $sth=$dbh->prepare("SELECT MAX(last_login) AS lastlogin FROM usr_socio");
+    #$sth->execute();
+    #my $lastlogin= $sth->fetchrow;
+    my $dateformat = 'iso';
+    my $lastlogin= C4::AR::Usuarios::getLastLoginTime($type);
+    my $prevWorkDate = C4::Date::format_date_complete(Date::Manip::Date_PrevWorkDay("today",1),$dateformat);
+    C4::AR::Debug::debug("_realizarOperacionesLOGIN=> t_operacionesDeINTRA lastlogin".$lastlogin);
+    C4::AR::Debug::debug("_realizarOperacionesLOGIN=> t_operacionesDeINTRA prevWorkDate".$prevWorkDate);
     my $enter=0;
     if ($lastlogin){
         while (Date::Manip::Date_Cmp($lastlogin,$prevWorkDate)<0) {
-            # lastlogin es anterior a prevWorkDate
-            # desde el dia siguiente a lastlogin hasta el dia prevWorkDate no hubo actividad
-            $lastlogin= C4::Date::format_date_in_iso(Date::Manip::Date_NextWorkDay($lastlogin,1));
-            my $sth=$dbh->prepare("INSERT INTO pref_feriado (fecha) VALUES (?)");
-            $sth->execute($lastlogin);
+            C4::AR::Debug::debug("_realizarOperacionesLOGIN=> t_operacionesDeINTRA lastlogin".$lastlogin);
+            my $nextWorkingDay=C4::Date::format_date_complete(Date::Manip::Date_NextWorkDay($lastlogin,1),$dateformat);
+            C4::AR::Debug::debug("_realizarOperacionesLOGIN=> t_operacionesDeINTRA nextworkingDay".$nextWorkingDay);
+            if(Date::Manip::Date_Cmp($nextWorkingDay,$prevWorkDate)<=0) {
+                my $feriado= C4::Modelo::PrefFeriado->new();
+                $feriado->agregar(C4::Date::format_date_in_iso($nextWorkingDay,$dateformat),"true","Biblioteca sin actividad");
+                }
+            $lastlogin=$nextWorkingDay;
             $enter=1;
         }
         #Genera una comprobacion una vez al dia, cuando se loguea el primer usuario
-        my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"));
+        my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
         if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
             # lastlogin es anterior a hoy
             if ($type eq 'intranet') {
@@ -855,7 +861,7 @@ sub desencriptar{
 
 =cut
 sub _change_Password_Controller {
-	my ($dbh, $query, $userid, $type, $token) = @_;
+	my ($query, $userid, $type, $token) = @_;
     if ($type eq 'opac') {
             redirectTo('/cgi-bin/koha/change_password.pl?token='.$token);
     } else {
@@ -921,7 +927,7 @@ sub session_destroy {
 
 =cut
 sub _verificarPassword {
-	my ($dbh, $userid, $password, $nroRandom) = @_;
+	my ($userid, $password, $nroRandom) = @_;
     C4::AR::Debug::debug("_verificarPassword=> verificarPassword:");
     C4::AR::Debug::debug("_verificarPassword=> userID: ".$userid);
     C4::AR::Debug::debug("_verificarPassword=> nroRandom: ".$nroRandom);
@@ -931,7 +937,7 @@ sub _verificarPassword {
     ## FIXME falta verificar la pass en LDAP si esta esta usando
 	if ( C4::AR::Preferencias->getValorPreferencia('ldapenabled')) {
 	#se esta usando LDAP
-		($passwordValida, $cardnumber, $ui) = checkpwldap($dbh,$userid,$password,$nroRandom);
+		($passwordValida, $cardnumber, $ui) = checkpwldap($userid,$password,$nroRandom);
 	} else {
          ($passwordValida, $cardnumber, $ui) = _checkpw($userid,$password,$nroRandom); 
 	}
@@ -1139,7 +1145,6 @@ sub _operacionesDeINTRA{
 =cut
 sub _checkpw {
     my ($userid, $password, $nroRandom) = @_;
-    C4::AR::Debug::debug("_checkpw=> \n");
     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
     if ($socio){
         C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");

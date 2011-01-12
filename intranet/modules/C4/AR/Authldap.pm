@@ -36,14 +36,12 @@ sub checkpwldap{
 # (e.g. LDAP), as well as local authentication through the borrowers
 # tables passwd field
 #
-
-        my ($dbh, $userid, $password, $random_number) = @_;
-
-	my $p= getldappassword($userid,$dbh);
-
+    my ($userid, $password, $random_number) = @_;
+    my $dbh = C4::Context->dbh;
+#FIXME el pass del ldap deberia estar en el archivo de configuracion y no en la base de datos.	
+    my $p= getldappassword($userid,$dbh);
 	$p= md5_base64($p.$random_number);
-
-	my $consulta=$dbh->prepare("select cardnumber,branchcode from borrowers where cardnumber =?");
+    my $consulta=$dbh->prepare("select cardnumber,branchcode from borrowers where cardnumber =?");
 	$consulta->execute($userid);
 	my ($usuario,$branchcode) = $consulta->fetchrow;
 
