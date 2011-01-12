@@ -24,16 +24,29 @@
              <input type="checkbox" name="chkboxSanciones" value="[% sancion.getId_sancion %]" 
 					id="[% sancion.getId_sancion %]">
     		</td>
-	
-		<td>[% sancion.getNro_socio %]</td>
-		<td>
-		[% sancion.socio.persona.getApeYNom %]
-		</td>
+        <td align='left' class="tarjetaId">
+            [% PERL %]
+                print C4::AR::Filtros::link_to(   text =>     "[% sancion.getNro_socio %]",
+                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                params =>   ["nro_socio=[% sancion.socio.getNro_socio %]"],
+                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                            );
+            [% END %]
+        </td>
+        <td align='left' class="tarjetaId">
+            [% PERL %]
+                print C4::AR::Filtros::link_to(   text =>     "[% sancion.socio.persona.getApeYNom %]",
+                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                params =>   ["nro_socio=[% sancion.socio.getNro_socio %]"],
+                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                            );
+            [% END %]
+        </td>
 		<td>[% sancion.socio.persona.getLegajo %]</td>
 		<td>[% sancion.socio.categoria.getDescription %]</td>
 		<td>
 			[% IF sancion.getTipo_sancion %]
-				[% sancion.ref_tipo_sancion.getTipo_prestamo %]
+				[% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
 			[% ELSE %]
 				Reserva no retirada
 			[% END %]

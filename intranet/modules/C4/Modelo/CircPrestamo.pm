@@ -598,9 +598,12 @@ sub devolver {
 
 # Se calcula el tipo de sancion que le corresponde segun la categoria del prestamo devuelto tardiamente y la categoria de usuario que tenga
 			$self->debug("SANCION!!  DIAS: $diasSancion");
-			my $tipo_sancion =
-			  C4::AR::Sanciones::getTipoSancion( $self->getTipo_prestamo,
-				$self->socio->getCod_categoria );
+
+            $self->debug("SANCION!!  TIPO PRESTAMO: ".$self->getTipo_prestamo." CATEGORIA SOCIO: ".$self->socio->getCod_categoria);
+
+			my $tipo_sancion =  C4::AR::Sanciones::getTipoSancion( $self->getTipo_prestamo,$self->socio->getCod_categoria );
+
+            $self->debug("SANCION!!  TIPO SANCION: ".$tipo_sancion->getTipo_sancion);
 
 			if ( C4::AR::Sanciones::tieneLibroVencido( $nro_socio, $self->db ) )
 			{
@@ -640,7 +643,7 @@ sub devolver {
 				my $sancion = C4::Modelo::CircSancion->new( db => $self->db );
 				my %paramsSancion;
 				$paramsSancion{'loggedinuser'}   = $loggedinuser;
-				$paramsSancion{'tipo_sancion'}   = $tipo_sancion;
+				$paramsSancion{'tipo_sancion'}   = $tipo_sancion->getTipo_sancion;
 				$paramsSancion{'id_reserva'}     = undef;
 				$paramsSancion{'nro_socio'}      = $nro_socio;
 				$paramsSancion{'fecha_comienzo'} = $fechaHoy;

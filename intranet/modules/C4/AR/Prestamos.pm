@@ -127,7 +127,7 @@ sub prestamosHabilitadosPorTipo {
                 #tipos de prestamo que afecta
                 my @tipos_prestamo_sancion=$sancion->ref_tipo_sancion->ref_tipo_prestamo_sancion;
                     foreach my $tipo_prestamo_sancion (@tipos_prestamo_sancion){
-                        if ($tipo_prestamo_sancion->getId_tipo_prestamo eq $tipo_prestamo->getId_tipo_prestamo){
+                        if ($tipo_prestamo_sancion->getTipo_prestamo eq $tipo_prestamo->getId_tipo_prestamo){
                             $estaSancionado= 1;
                         }
                     }
