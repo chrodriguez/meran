@@ -33,7 +33,7 @@ my ($template, $session, $t_params)  = get_template_and_user({
 
 	my $buscar=$obj->{'buscar'};
 	my $orden=$obj->{'orden'};
-	my ($cant,$preferencias)=&C4::AR::Preferencias::getPreferenciaLike($buscar,$orden);
+	my ($cant,$preferencias) = C4::AR::Preferencias->getPreferenciaLike($buscar,$orden);
 	$t_params->{'preferencias'}= $preferencias;
 	$t_params->{'cant'}= $cant;
 	
@@ -43,8 +43,7 @@ my ($template, $session, $t_params)  = get_template_and_user({
 if($accion eq "MODIFICAR_VARIABLE"){
 #Muestra el tmpl para modificar una preferencias
 
-my ($template, $session, $t_params) = 
-	get_template_and_user({
+my ($template, $session, $t_params) = get_template_and_user({
 				template_name => "admin/global/modificarPreferencia.tmpl",
 				query => $input,
 				type => "intranet",
@@ -154,7 +153,7 @@ if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){
 
 # TODO falta la categoria
 
-	my $Message_arrayref = &C4::AR::Preferencias::t_modificarVariable($variable,$valor,$expl,$categoria);
+	my $Message_arrayref = C4::AR::Preferencias->t_modificarVariable($variable,$valor,$expl,$categoria);
     
     my $infoOperacionJSON=to_json $Message_arrayref;
     C4::Auth::print_header($session);
@@ -280,7 +279,7 @@ if($accion eq "GUARDAR_NUEVA_VARIABLE"){
 
 	if($tipo eq "valAuto"){ $opciones=$obj->{'categoria'};}
 
-	my $Message_arrayref= &C4::AR::Preferencias::t_guardarVariable($variable,$valor,$expl,$tipo,$opciones);
+	my $Message_arrayref= C4::AR::Preferencias->t_guardarVariable($variable,$valor,$expl,$tipo,$opciones);
  
 	my $infoOperacionJSON=to_json $Message_arrayref;
 

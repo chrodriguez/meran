@@ -182,7 +182,7 @@ function procesarJSON(json, id,change,tipo){
 			}
 		}
 	var sel="<select id='"+id+"'"+change+">"+opciones+"</select>";
-	$(sel).insertBefore("#boton");
+	$(sel).insertBefore("#divAgregar");
 }
 
 /*
@@ -414,8 +414,8 @@ $(document).ready( function() {
                 </select>
             </li>
         </ul>
-    </fieldset>
-    
+
+    <div id="divAgregar" style="clear: both;"></div>
     [% PERL %]
                         print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
                                                             boton   => "boton_agregar",
@@ -424,8 +424,7 @@ $(document).ready( function() {
                                                             alternClass => "botonCentrado"
                                 ) ;
     [% END %]
-    
-    <div id="divAgregar" style="clear: both;"></div>
+</fieldset>
 </div>
 
 <div id="divResultado" style="clear: both;"></div>

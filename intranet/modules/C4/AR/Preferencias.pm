@@ -124,6 +124,8 @@ sub getPreferenciaLike {
 
     my ($str,$orden)=@_;
 
+ C4::AR::Debug::debug("getValorPreferencia => getPreferenciaLike == $str");
+
     my $preferencias_array_ref;
     my @filtros;
     my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
