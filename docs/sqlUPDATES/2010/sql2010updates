@@ -565,3 +565,5 @@ CREATE INDEX `fk_adq_recomendacion_detalle_adq_recomendacion1` ON `adq_recomenda
 
 GRANT select, update, insert, delete on adq_recomendacion TO userOPAC@localhost;
 GRANT select, update, insert, delete on adq_recomendacion_detalle TO userOPAC@localhost;
+
+ALTER TABLE `usr_socio` ADD  `lastValidation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;

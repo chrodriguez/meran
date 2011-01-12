@@ -51,12 +51,10 @@ if (!$obj){
 
         $t_params->{'data'} = C4::AR::Reportes::getArrayHash('getItemTypes',$obj);
         
-        my ($data,$is_array_of_hash) = C4::AR::Reportes::altasRegistro($obj);
-        my ($path,$filename) = C4::AR::Reportes::toXLS($data,$is_array_of_hash,'Pagina 1','Altas de Registro');
+        my ($cantidad,$data) = C4::AR::Reportes::altasRegistro($obj);
+        my ($path,$filename) = C4::AR::Reportes::toXLS($data,0,'Altas','Altas de Registro');
         
         $t_params->{'filename'} = '/reports/'.$filename;
-
-
 }
 
 my %params_for_combo = {};

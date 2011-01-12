@@ -629,23 +629,58 @@ sub altasRegistro {
 
 	use C4::Modelo::CatRegistroMarcN3;
 
-	my $date_begin = $params->{'date_begin'};
-	my $date_end   = $params->{'date_end'};
+	my $f_inicio = $params->{'date_begin'};
+	my $f_fin   = $params->{'date_end'};
 	my $item_type  = $params->{'item_type'};
+    
+    my $dateformat = C4::Date::get_date_format();
+    my @filtros;
+    
+    if ( C4::AR::Utilidades::validateString($f_inicio) ) {
+         push(
+             @filtros,
+             (
+                updated_at => {
+                    eq => format_date_in_iso( $f_inicio, $dateformat ),
+                    gt => format_date_in_iso( $f_inicio, $dateformat )
+                 }
+             )
+         );
+     }
+    if ( C4::AR::Utilidades::validateString($f_fin) ) {
+        push(
+             @filtros,
+                (
+                 updated_at => {
+                     eq => format_date_in_iso( $f_fin, $dateformat ),
+                     lt => format_date_in_iso( $f_fin, $dateformat )
+                 }
+             )
+         );
+    }
+
 
 	my ($cat_registro_n3) =
 	  C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+	    query           => \@filtros,              
 		select          => ['*'],
-		require_objects => ['nivel1.*'],
+		require_objects => ['nivel2','nivel1'],
 	  );
-    my %item_type_hash = {0};
+	  
+    my @items;    
 	foreach my $record (@$cat_registro_n3) {
-		my $item_type = $record->getTipoDocumento;
-		if ( !$item_type_hash{$item_type} ) {
-			$item_type_hash{$item_type} = 0;
+		my $record_item_type = $record->getTipoDocumento;
+		if ($item_type){
+			if ( $item_type eq $record_item_type ) {
+                push (@items,$record);
+			}
+		}else{
+			push (@items,$record);
 		}
-		$item_type_hash{$item_type}++;
 	}
+	
+	return (scalar(@items),\@items);
+	
 }
 
 sub getReportFilter {
