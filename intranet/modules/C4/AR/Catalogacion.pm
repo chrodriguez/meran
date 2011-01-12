@@ -57,6 +57,7 @@ sub _meran_to_marc{
     my ($infoArrayNivel, $campos_autorizados, $itemtype, $with_references) = @_;
 
     my $marc_record = MARC::Record->new();
+
     my $cant_campos = scalar(@$infoArrayNivel);
     my %autorizados;
 

@@ -2222,18 +2222,18 @@ sub generarComboNivelBibliografico{
     my %options_hash; 
 
     if ( $params->{'onChange'} ){
-        $options_hash{'onChange'}= $params->{'onChange'};
+        $options_hash{'onChange'}   = $params->{'onChange'};
     }
     if ( $params->{'onFocus'} ){
-        $options_hash{'onFocus'}= $params->{'onFocus'};
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
 
     if ( $params->{'class'} ){
-         $options_hash{'class'}= $params->{'class'};
+         $options_hash{'class'} = $params->{'class'};
     }
 
     if ( $params->{'onBlur'} ){
-        $options_hash{'onBlur'}= $params->{'onBlur'};
+        $options_hash{'onBlur'} = $params->{'onBlur'};
     }
 
     $options_hash{'name'}       = $params->{'name'}||'name_nivel_bibliografico';
@@ -2244,10 +2244,10 @@ sub generarComboNivelBibliografico{
 
     if ($params->{'optionALL'}){
         push (@select_niveles, 'ALL');
-        $select_niveles{'ALL'}    ='TODOS';
+        $select_niveles{'ALL'}  = 'TODOS';
     }else{
         push (@select_niveles, '');
-        $select_niveles{''}   ='SIN SELECCIONAR';
+        $select_niveles{''}     = 'SIN SELECCIONAR';
     }
     $options_hash{'values'}     = \@select_niveles;
     $options_hash{'labels'}     = \%select_niveles;

@@ -51,22 +51,23 @@ sub t_guardarNivel1 {
 
     if(!$msg_object->{'error'}){
     #No hay error
-        my $marc_record = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
-        ($msg_object, $id1) = guardarRealmente($msg_object,$marc_record);
+        my $marc_record     = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
         
+        ($msg_object, $id1) = guardarRealmente($msg_object,$marc_record,$params);
     }
 
 #     C4::AR::Debug::debug("Nivel1 => t_guardarNivel1 => return msg_object => ".$msg_object);
 #     C4::AR::Debug::debug("Nivel1 => t_guardarNivel1 => return id1 => ".$id1);
     return ($msg_object, $id1);
 }
+
 =head2
 sub guardarRealmente
 
 Esta funcion realmente guarda el elemento en la base
 =cut
 sub guardarRealmente{
-    my ($msg_object,$marc_record) = @_;
+    my ($msg_object,$marc_record,$params) = @_;
 
     my $id1;
     if(!$msg_object->{'error'}){
@@ -77,7 +78,7 @@ sub guardarRealmente{
         $db->begin_work;
         
         eval {
-            $catRegistroMarcN1->agregar($marc_record->as_usmarc);
+            $catRegistroMarcN1->agregar($marc_record->as_usmarc,$params);
             $db->commit;            
             #recupero el id1 recien agregado
             $id1 = $catRegistroMarcN1->getId1;
@@ -232,7 +233,7 @@ sub t_modificarNivel1 {
         eval {
             my $marc_record = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
 
-            $cat_registro_marc_n1->modificar($marc_record->as_usmarc);
+            $cat_registro_marc_n1->modificar($marc_record->as_usmarc, $params);
             $db->commit;
             C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1());
             #ahora el indice se encuentra DESACTUALIZADO
