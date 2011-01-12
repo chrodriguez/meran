@@ -69,7 +69,7 @@
         var password = $("#password_user").val();
 
         if ( (nro_socio != "") && (password != "") ){
-            var nroRandom= [% RANDOM_NUMBER %];
+            var nroRandom= [% nroRandom %];
             hash= b64_sha256(b64_sha256(b64_md5(password))+nroRandom);
             $("#password").val(hash);
             $("#userid").val(nro_socio);

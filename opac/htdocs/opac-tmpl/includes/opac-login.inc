@@ -2,7 +2,7 @@
 <script src="/includes/md5.js" type="text/javascript"></script>
 <script src="/includes/sha1.js" type="text/javascript"></script>
 [% USE HTML %]
-[% IF RANDOM_NUMBER %]
+[% IF nroRandom %]
     <script type="text/javascript">
         function enviar(){
             var nroRandom= [% nroRandom %];
