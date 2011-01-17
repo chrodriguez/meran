@@ -881,11 +881,11 @@ sub generarArregloParaMofidicar {
 #             C4::AR::Debug::debug("_verificarDeleteItem => Se está intentando modificar un ejemplar que tiene un prestamo");
 #             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P125', 'params' => [$params->{'id3'}]} ) ;
 #             } elsif (seRepiteBarcode($params)) {
-            if (seRepiteBarcode($params)) {
-                #el barcode existe en la base de datos
-                $msg_object->{'error'} = 1;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$params->{'barcode'}]} ) ;        
-            }
+#             if (seRepiteBarcode($params)) {
+#                 #el barcode existe en la base de datos
+#                 $msg_object->{'error'} = 1;
+#                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$params->{'barcode'}]} ) ;        
+#             }
   
 
             #si esta todo Ok lo agrego al arreglo
