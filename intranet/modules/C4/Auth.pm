@@ -110,7 +110,7 @@ sub getMsgCode{
     return ($session->param('codMsg') || $codMSG);
 }
 
-=iemt sub _getExpireStatus
+=item sub _getExpireStatus
     Devuelve el valor de la variable de contexto que indica si expiran las sesiones o devuelve true si no esta definido este valor
 =cut
 sub _getExpireStatus{
