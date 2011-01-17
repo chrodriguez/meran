@@ -48,13 +48,16 @@ if (!$obj){
                                 flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                                 debug => 1,
                         });
-
-        $t_params->{'data'} = C4::AR::Reportes::getArrayHash('getItemTypes',$obj);
         
         my ($cantidad,$data) = C4::AR::Reportes::altasRegistro($obj);
-        my ($path,$filename) = C4::AR::Reportes::toXLS($data,0,'Altas','Altas de Registro');
+
+        #my ($path,$filename) = C4::AR::Reportes::toXLS($data,0,'Altas','Altas de Registro');
         
-        $t_params->{'filename'} = '/reports/'.$filename;
+        #$t_params->{'filename'} = '/reports/'.$filename;
+        
+        
+        $t_params->{'data'} = $data;
+        $t_params->{'cantidad'} = $cantidad;
 }
 
 my %params_for_combo = {};
