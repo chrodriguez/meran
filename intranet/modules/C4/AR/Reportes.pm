@@ -55,11 +55,21 @@ sub altasRegistro {
 
 	my ($cat_registro_n3) =
 	  C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
-	    query           => \@filtros,              
-		select          => ['*'],
-		require_objects => ['nivel2','nivel1'],
+				    query           => \@filtros,              
+					select          => ['*'],
+                    limit => 15,
+                    offset => 0,
+					require_objects => ['nivel2','nivel1'],
 	  );
 	  
+	## Retorna la cantidad total, sin paginar
+    my ($cat_registro_n3_count) =
+      C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(
+			        query           => \@filtros,              
+			        select          => ['*'],
+      );
+
+
     my @items;    
 	foreach my $record (@$cat_registro_n3) {
 		my $record_item_type = $record->nivel2->getTipoDocumento;
@@ -72,7 +82,7 @@ sub altasRegistro {
 		}
 	}
 	
-	return (scalar(@items),\@items);
+	return ($cat_registro_n3_count,\@items);
 	
 }
 
