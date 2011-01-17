@@ -118,6 +118,8 @@ sub t_modificarNivel3 {
     my $msg_object              = C4::AR::Mensajes::create();
     my $cat_registro_marc_n3    = C4::Modelo::CatRegistroMarcN3->new();
     my $marc_record             = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
+# generarArregloParaMofidicar($msg_object, $marc_record);
+# die;
     my $db                      = $cat_registro_marc_n3->db;
     $params->{'modificado'}     = 1;
     # enable transactions, if possible
@@ -322,14 +324,17 @@ sub getNivel3FromBarcode {
     for(my $i=0; $i < $cant; $i++){
 
         if($barcodes_array_ref->[$i]->getBarcode() eq $barcode){
-            push(@barcode_result, $barcodes_array_ref->[$i]->getBarcode());
+#             push(@barcode_result, $barcodes_array_ref->[$i]->getBarcode());
+            push(@barcode_result, $barcodes_array_ref->[$i]);
             last();
         }
     }
 
     if(scalar(@barcode_result) > 0){
+        C4::AR::Debug::debug("Nivel3 => getNivel3FromBarcode => EXISTE el barcode => ".$barcode);
         return (@barcode_result[0]);
     }else{
+        C4::AR::Debug::debug("Nivel3 => getNivel3FromBarcode => NO EXISTE el barcode => ".$barcode);
         return (0);
     }
 }
@@ -725,21 +730,65 @@ sub _verificarUpdateItem {
         C4::AR::Debug::debug("_verificarDeleteItem => Se está intentando modificar un ejemplar que tiene un prestamo");
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P125', 'params' => [$params->{'id3'}]} ) ;
 
-    } elsif ( existeBarcode($params->{'barcode'}) ){
+#     } elsif ( existeBarcode($params->{'barcode'}, $params->{'id3'} ) && !($params->{'EDICION_N3_GRUPAL'}) ){
+    } elsif (seRepiteBarcode($params)) {
         #el barcode existe en la base de datos
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$params->{'barcode'}]} ) ;        
     }
-
 }
 
 
 
+=head2 sub seRepiteBarcode
+Verifica si se repite el barcode, esto se usa cuandos se tiene q modificar
+=cut
+sub seRepiteBarcode {
+    my($params) = @_;
+  
+    my $nivel_array_ref = C4::AR::Nivel3::getNivel3FromBarcode($params->{'barcode'});
+
+    C4::AR::Debug::debug("Nivel3 => seRepiteBarcode => ivel_array_ref->getId3() => ".$nivel_array_ref->getId3()."  params->{'id3'} => ".$params->{'id3'});
+
+    if ($nivel_array_ref == 0){
+        C4::AR::Debug::debug("Nivel3 => seRepiteBarcode => ivel_array_ref->getId3() => ".$nivel_array_ref->getId3()."  params->{'id3'} => ".$params->{'id3'});
+        return $nivel_array_ref->getId3() ne $params->{'id3'};
+    } else {
+        return 0;
+    }
+}
+
+# sub seRepiteBarcode {
+#     my($params) = @_;
+# 
+#     my @filtros;
+#     my @barcode_result;
+# 
+# #     push(@filtros, ( id => { eq => $params-> {'id3'} }) );
+#     
+#     my $barcodes_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
+# 
+#     my $cant = scalar(@$barcodes_array_ref);
+# 
+#     for(my $i=0; $i < $cant; $i++){
+# 
+#         if( ($barcodes_array_ref->[$i]->getBarcode() eq $params->{'barcode'}) && ($barcodes_array_ref->[$i]->getId3() eq $params->{'id3'}) ){
+#             push(@barcode_result, $barcodes_array_ref->[$i]->getBarcode());
+#             last();
+#         }
+#     }
+# 
+#     if(scalar(@barcode_result) > 0){
+#         return 1;
+#     }else{
+#         return (0);
+#     }
+# }
 
 =head2 sub existeBarcode
 Verifica si existe el barcode en la base
 =cut
-sub existeBarcode{
+sub existeBarcode {
 	my($barcode) = @_;
 
 	my $nivel_array_ref = C4::AR::Nivel3::getNivel3FromBarcode($barcode);
@@ -751,8 +800,6 @@ sub existeBarcode{
     } else {
         return 1;
     }
-
-    
 # 	return ( $nivel_array_ref != 0);
 }
 #=======================================================================ABM Nivel 3======================================================
@@ -808,6 +855,55 @@ sub _generarArreglo{
 	}
 
 	return (\@barcodes_para_agregar);
+}
+
+# TODO estoy probando Miguel
+sub generarArregloParaMofidicar {
+    my ($msg_object, $marc_record) = @_;
+
+    my @array_nivel3;
+
+    my ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran($marc_record);
+    C4::AR::Debug::debug("Nivel3 => generarArregloParaMofidicar !!!!");
+
+    foreach my $campo_hash_info (@$MARC_result_array) {
+        my @subcampos_array_nivel3;
+        C4::AR::Debug::debug("Nivel3 => generarArregloParaMofidicar => campo => ".$campo_hash_info->{'campo'});
+        foreach my $subcampo_hash_info (@{$campo_hash_info->{'subcampos_array'}}){
+            C4::AR::Debug::debug("Nivel3 => generarArregloParaMofidicar => subcampo => ".$subcampo_hash_info->{'subcampo'});
+            C4::AR::Debug::debug("Nivel3 => generarArregloParaMofidicar => dato => ".$subcampo_hash_info->{'dato'});
+            C4::AR::Debug::debug("Nivel3 => generarArregloParaMofidicar => datoReferencia => ".$subcampo_hash_info->{'datoReferencia'});
+
+            #verifico reglas
+#             if( !($msg_object->{'error'}) && C4::AR::Prestamos::estaPrestado($params->{'id3'}) ){
+#             #verifico que el ejemplar no se encuentre reservado
+#             $msg_object->{'error'} = 1;
+#             C4::AR::Debug::debug("_verificarDeleteItem => Se está intentando modificar un ejemplar que tiene un prestamo");
+#             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P125', 'params' => [$params->{'id3'}]} ) ;
+#             } elsif (seRepiteBarcode($params)) {
+            if (seRepiteBarcode($params)) {
+                #el barcode existe en la base de datos
+                $msg_object->{'error'} = 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$params->{'barcode'}]} ) ;        
+            }
+  
+
+            #si esta todo Ok lo agrego al arreglo
+            my %subcampo_hash_result;
+            $subcampo_hash_result{'subcampo'}   = $subcampo_hash_info->{'subcampo'};
+            $subcampo_hash_result{'dato'}       = $subcampo_hash_info->{'datoReferencia'};
+
+            push (@subcampos_array_nivel3, \%subcampo_hash_result);
+        }
+
+        #si esta todo Ok lo agrego al arreglo
+        my %campo_hash_result;
+        $campo_hash_result{'campo'} = $campo_hash_info->{'campo'};
+        push(@array_nivel3, \%campo_hash_result);
+        
+    }
+
+#     return $MARC_result_array;
 }
 
 =head2 sub _generarArregloDeBarcodesPorBarcodes
