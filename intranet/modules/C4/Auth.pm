@@ -38,7 +38,7 @@ use C4::Modelo::PrefFeriado;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 my $codMSG = 'U000';
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = 1.0;
 
 =head1 NAME
 
@@ -110,7 +110,7 @@ sub getMsgCode{
     return ($session->param('codMsg') || $codMSG);
 }
 
-=iemt sub _getExpireStatus
+=item sub _getExpireStatus
     Devuelve el valor de la variable de contexto que indica si expiran las sesiones o devuelve true si no esta definido este valor
 =cut
 sub _getExpireStatus{
@@ -459,6 +459,7 @@ Devuelve  sesion_valida sin_sesion o sesion_invalida de acuerdo a lo q correspon
 sub _verificarSession {
 
     my ($session,$type,$token)=@_;
+    my $valido_token=C4::Context->config("token") || 0;
     my $codeMSG;
     if(defined $session and $session->is_expired()){
         #EXPIRO LA SESION
@@ -476,7 +477,7 @@ sub _verificarSession {
             } elsif ($session->param('flag') eq 'LOGUIN_DUPLICADO'){
                 $codeMSG='U359';            
                 C4::AR::Debug::debug("invalida duplicado");    
-             } elsif ($session->param('token') ne $token){
+             } elsif (($session->param('token') ne $token) and ($valido_token)){
                 $codeMSG='U354';            
                 C4::AR::Debug::debug("invalida token");    
                 }else {
@@ -612,7 +613,6 @@ sub checkauth {
                     redirectToNoHTTPS('/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
                     #$session->secure(0);
                 }else{
-                    #C4::AR::Debug::debug("DESDE Auth, redirect al MAIN");
                     $session->param('redirectTo', '/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
                     redirectTo('/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
                 }
@@ -633,55 +633,52 @@ sub checkauth {
 
 =item sub _realizarOperacionesLogin
 
-Funcion que realiza todas las operaciones asociadas a un inicio de sesion como ser, revisar si ayer fue feriado y dar de baja reservas de acuerdo a las sanciones
+Funcion que realiza todas las operaciones asociadas a un inicio de sesion como ser:
+- revisar si los dias anteriores huubo actividad en la biblioteca, en aso de no haberla se marcan en la base como días feriados 
+- Dar de baja reservas de acuerdo a las sanciones
 
 =cut
 
 sub _realizarOperacionesLogin{
     my ($type,$socio)=@_;
     C4::AR::Debug::debug("_realizarOperacionesLOGIN=> t_operacionesDeINTRA\n");
-    #WARNING: Cuando pasan dias habiles sin actividad se consideran automaticamente feriados
-    #my $sth=$dbh->prepare("SELECT MAX(last_login) AS lastlogin FROM usr_socio");
-    #$sth->execute();
-    #my $lastlogin= $sth->fetchrow;
     my $dateformat = 'iso';
-    my $lastlogin= C4::AR::Usuarios::getLastLoginTime($type);
-    my $prevWorkDate = C4::Date::format_date_complete(Date::Manip::Date_PrevWorkDay("today",1),$dateformat);
-    C4::AR::Debug::debug("_realizarOperacionesLOGIN=> t_operacionesDeINTRA lastlogin".$lastlogin);
-    C4::AR::Debug::debug("_realizarOperacionesLOGIN=> t_operacionesDeINTRA prevWorkDate".$prevWorkDate);
-    my $enter=0;
-    if ($lastlogin){
-        while (Date::Manip::Date_Cmp($lastlogin,$prevWorkDate)<0) {
-            C4::AR::Debug::debug("_realizarOperacionesLOGIN=> t_operacionesDeINTRA lastlogin".$lastlogin);
-            my $nextWorkingDay=C4::Date::format_date_complete(Date::Manip::Date_NextWorkDay($lastlogin,1),$dateformat);
-            C4::AR::Debug::debug("_realizarOperacionesLOGIN=> t_operacionesDeINTRA nextworkingDay".$nextWorkingDay);
-            if(Date::Manip::Date_Cmp($nextWorkingDay,$prevWorkDate)<=0) {
-                my $feriado= C4::Modelo::PrefFeriado->new();
-                $feriado->agregar(C4::Date::format_date_in_iso($nextWorkingDay,$dateformat),"true","Biblioteca sin actividad");
-                }
-            $lastlogin=$nextWorkingDay;
-            $enter=1;
-        }
-        #Genera una comprobacion una vez al dia, cuando se loguea el primer usuario
-        my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
-        if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
-            # lastlogin es anterior a hoy
-            if ($type eq 'intranet') {
-            ##Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
-                C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeINTRA\n");
-                _operacionesDeINTRA($socio);
-            }# end if ($type eq 'intra')
-        }
-    }#end if ($lastlogin)
-
-    if ($enter) {
-    #Se actuliza el archivo con los feriados (.DateManip.cfg) solo si se dieron de alta nuevos feriados en 
-    #el while anterior
-        my ($count,@holidays)= C4::AR::Utilidades::getholidays();
-        C4::AR::Utilidades::savedatemanip(@holidays);
-    }
-
-    if ($type eq 'opac') {
+    my $lastlogin= C4::AR::Usuarios::getLastLoginTime();
+    if ($type eq 'intranet') {
+        #Se entran a realizar las rutinas solo cuando es intranet
+        my $auxlastlogin=$lastlogin;
+        my $prevWorkDate = C4::Date::format_date_complete(Date::Manip::Date_PrevWorkDay("today",1),$dateformat);
+        my $enter=0;
+        if ($lastlogin){
+            while (Date::Manip::Date_Cmp($lastlogin,$prevWorkDate)<0) {
+                #Se recorren todos los dias entre el lastlogin y el dia previo laboral a hoy, si en esos dias no hubo actividad se marca como no activo al dia en la bdd
+                my $dias=Date::Manip::Date_IsWorkDay($lastlogin);
+                my $nextWorkingDay=C4::Date::format_date_complete(Date::Manip::Date_NextWorkDay($lastlogin,$dias),$dateformat);
+                if(Date::Manip::Date_Cmp($nextWorkingDay,$prevWorkDate)<=0) {
+                    my $feriado= C4::Modelo::PrefFeriado->new();
+                    C4::AR::Debug::debug("_realizarOperacionesLOGIN=> agregando dia sin actividad".$nextWorkingDay);
+                    $feriado->agregar(C4::Date::format_date_in_iso($nextWorkingDay,$dateformat),"true","Biblioteca sin actividad");
+                    }
+                $lastlogin=$nextWorkingDay;
+                $enter=1;
+            }
+            if ($enter) {
+                #Se actuliza el archivo con los feriados (.DateManip.cfg) solo si se dieron de alta nuevos feriados en 
+                #el while anterior
+                my ($count,@holidays)= C4::AR::Utilidades::getholidays();
+                C4::AR::Utilidades::savedatemanip(@holidays);
+            }
+            #Genera una comprobacion una vez al dia, cuando se loguea el primer usuario
+            my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
+            if (Date::Manip::Date_Cmp($lastlogin,$auxlastlogin)<0) {
+                # lastlogin es anterior a hoy
+                ##Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
+                    C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeINTRA\n");
+                    _operacionesDeINTRA($socio);     
+            }
+        }#end if ($lastlogin)
+    }# end if ($type eq 'intra')
+    elsif ($type eq 'opac') {
         #Si es un usuario de opac que esta sancionado entonces se borran sus reservas
         _operacionesDeOPAC($socio);
     } 
@@ -694,7 +691,6 @@ sub _realizarOperacionesLogin{
     $session
 
 =cut
-# FIXME creo q esta deprecated
 sub getSessionUserID {
 	my ($session) = @_;
     unless($session){
