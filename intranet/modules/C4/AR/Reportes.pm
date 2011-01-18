@@ -39,7 +39,8 @@ sub altasRegistro {
                  }
              )
          );
-     }
+    }
+    
     if ( (C4::AR::Utilidades::validateString($item_type)) && ($item_type ne 'ALL') ) {
          push(
              @filtros,
@@ -49,7 +50,8 @@ sub altasRegistro {
                 }
              )
          );
-     }
+    }
+    
     if ( C4::AR::Utilidades::validateString($f_fin) ) {
         push(
              @filtros,
@@ -62,16 +64,15 @@ sub altasRegistro {
          );
     }
 
-
 	my ($cat_registro_n3) =
-	  C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
-				    query           => \@filtros,              
-					select          => ['*'],
-                    limit   => $cantR,
-                    offset  => $ini,
-					require_objects => ['nivel2','nivel1'],
-                    sort_by          => 'id1 DESC',
-	  );
+		C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+					    query           => \@filtros,              
+						select          => ['*'],
+	                    limit   => $cantR,
+	                    offset  => $ini,
+						require_objects => ['nivel2','nivel1'],
+	                    sort_by          => 'id1 DESC',
+	    );
 	  
 	## Retorna la cantidad total, sin paginar.
 	
@@ -79,11 +80,11 @@ sub altasRegistro {
     my ($cat_registro_n3_count) =
       C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
 			        query            => \@filtros,              
-			        select           => ['COUNT(*) AS id1'],
+			        select           => ['COUNT(*) AS agregacion_temp'],
                     require_objects => ['nivel2','nivel1'],
       );
 
-    $cat_registro_n3_count = $cat_registro_n3_count->[0]->{'id1'};
+    $cat_registro_n3_count = $cat_registro_n3_count->[0]->{'agregacion_temp'};
     
     
     #Este for es sólo para hacer el array de id1, para que se puedar usar armarInfoNivel1
