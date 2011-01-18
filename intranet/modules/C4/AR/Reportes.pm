@@ -18,7 +18,7 @@ use vars qw(@EXPORT_OK @ISA);
 
 sub altasRegistro {
 
-	my ($params) = @_;
+	my ($ini, $cantR, $params) = @_;
 
 	use C4::Modelo::CatRegistroMarcN3;
 
@@ -40,6 +40,16 @@ sub altasRegistro {
              )
          );
      }
+    if ( (C4::AR::Utilidades::validateString($item_type)) && ($item_type ne 'ALL') ) {
+         push(
+             @filtros,
+             (
+                marc_record => {
+                    like => '%-'.$item_type.'-%',
+                }
+             )
+         );
+     }
     if ( C4::AR::Utilidades::validateString($f_fin) ) {
         push(
              @filtros,
@@ -57,32 +67,42 @@ sub altasRegistro {
 	  C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
 				    query           => \@filtros,              
 					select          => ['*'],
-                    limit => 15,
-                    offset => 0,
+                    limit   => $cantR,
+                    offset  => $ini,
 					require_objects => ['nivel2','nivel1'],
+                    sort_by          => 'id1 DESC',
 	  );
 	  
-	## Retorna la cantidad total, sin paginar
+	## Retorna la cantidad total, sin paginar.
+	
+	## FIXME no anda el _count, tuve que poner la agregacion COUNT(*) en el campo id1.
     my ($cat_registro_n3_count) =
-      C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(
-			        query           => \@filtros,              
-			        select          => ['*'],
+      C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+			        query            => \@filtros,              
+			        select           => ['COUNT(*) AS id1'],
+                    require_objects => ['nivel2','nivel1'],
       );
 
+    $cat_registro_n3_count = $cat_registro_n3_count->[0]->{'id1'};
+    
+    
+    #Este for es sólo para hacer el array de id1, para que se puedar usar armarInfoNivel1
+    my @id1_array;  
 
-    my @items;    
 	foreach my $record (@$cat_registro_n3) {
 		my $record_item_type = $record->nivel2->getTipoDocumento;
-		if ($item_type){
-			if ( $item_type eq $record_item_type ) {
-                push (@items,$record);
-			}
-		}else{
-			push (@items,$record);
-		}
+        my %hash_temp = {};
+          
+        $hash_temp{'id1'} = $record->getId1;
+
+		push (@id1_array,\%hash_temp);
 	}
+
+	$params->{'tipo_nivel3_name'} = $item_type;
 	
-	return ($cat_registro_n3_count,\@items);
+    my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @id1_array);
+
+    return ($cat_registro_n3_count, $resultsarray);
 	
 }
 

@@ -25,45 +25,21 @@ use C4::AR::Utilidades;
 use C4::AR::Reportes;
 
 my $input = new CGI;
-my $obj=$input->param('obj') || 0;
 
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
 my ($template, $session, $t_params, $data_url);
 
-if (!$obj){
-        ($template, $session, $t_params) = get_template_and_user({
-                                template_name => "reports/altas_registro.tmpl",
-                                query => $input,
-                                type => "intranet",
-                                authnotrequired => 0,
-                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-                                debug => 1,
-			            });
-}else{
-        ($template, $session, $t_params) = get_template_and_user({
-                                template_name => "reports/altas_registro_result.tmpl",
-                                query => $input,
-                                type => "intranet",
-                                authnotrequired => 0,
-                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-                                debug => 1,
-                        });
-        
-        my ($cantidad,$data) = C4::AR::Reportes::altasRegistro($obj);
-
-        #my ($path,$filename) = C4::AR::Reportes::toXLS($data,0,'Altas','Altas de Registro');
-        
-        #$t_params->{'filename'} = '/reports/'.$filename;
-        
-        
-        $t_params->{'data'} = $data;
-        $t_params->{'cantidad'} = $cantidad;
-}
+($template, $session, $t_params) = get_template_and_user({
+                           template_name => "reports/altas_registro.tmpl",
+                           query => $input,
+                           type => "intranet",
+                           authnotrequired => 0,
+                           flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                           debug => 1,
+            });
 
 my %params_for_combo = {};
 $params_for_combo{'default'} = 'ALL';
 $t_params->{'data_url'} = $data_url;
 $t_params->{'item_type_combo'} = C4::AR::Utilidades::generarComboTipoNivel3(\%params_for_combo);
-$t_params->{'ui_combo'} = C4::AR::Utilidades::generarComboUI();
 
 C4::Auth::output_html_with_http_headers($template, $t_params, $session);
