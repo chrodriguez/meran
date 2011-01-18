@@ -89,6 +89,7 @@ C4::Auth - Este modulo es para el manejo de authenticacion en Meran
 		&getSessionNroSocio
         &redirectAndAdvice
         &_hashear_password
+        &get_html_content
 );
 
 =item sub _generarNroRandom
@@ -1244,6 +1245,13 @@ sub redirectAndAdvice{
     $cod_msg = getMsgCode();
     $session->param('codMsg',$cod_msg);
     redirectTo('/cgi-bin/koha/informacion.pl');
+}
+
+sub get_html_content {
+    my($template, $params, $session) = @_;
+    my $out = '';
+    $template->process($params->{'template_name'},$params,\$out) || die "Template process failed: ", $template->error(), "\n";
+    return($out);
 }
 
 

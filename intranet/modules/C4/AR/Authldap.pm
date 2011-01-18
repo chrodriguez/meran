@@ -21,25 +21,16 @@ package C4::AR::Authldap;
 
 require Exporter;
 use strict;
-#EINARuse Digest::MD5 qw(md5_base64);
-#EINARuse C4::Context;
 use Net::LDAP;
-# use Net::LDAP qw(:all);
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 @ISA = qw(Exporter);
 @EXPORT = qw(checkpwldap getldappassword);
 
 sub checkpwldap{
-                                                                                                                             
-# This should be modified to allow a selection of authentication schemes
-# (e.g. LDAP), as well as local authentication through the borrowers
-# tables passwd field
-#
     my ($userid, $password, $random_number) = @_;
     my $dbh = C4::Context->dbh;
-#FIXME el pass del ldap deberia estar en el archivo de configuracion y no en la base de datos.	
-    my $p= getldappassword($userid,$dbh);
+    #FIXME el pass del ldap deberia estar en el archivo de configuracion y no en la base de datos.	
+    my $p= getldappassword($userid);
 	$p= md5_base64($p.$random_number);
     my $consulta=$dbh->prepare("select cardnumber,branchcode from borrowers where cardnumber =?");
 	$consulta->execute($userid);
@@ -48,7 +39,6 @@ sub checkpwldap{
 	if (($p eq $password)  && ($usuario  eq $userid)){
 		return 1,$userid,$branchcode;
         }
-
 	my $superpasswd=C4::Context->config('pass');
 	$superpasswd= md5_base64(md5_base64($superpasswd).$random_number);
 	my $superbranch=C4::Context->config('branch');
@@ -67,39 +57,26 @@ sub checkpwldap{
 
 
 sub getldappassword {
-#It gets the password for a particular userid
-	my ($userid,$dbh) = @_;
-        my $sth=$dbh->prepare("select value from pref_preferencia_sistema where variable=?");
-        $sth->execute("ldapserver");
-        my $ldapserver = $sth->fetchrow;
-        $sth->execute("ldapinfos");
-        my $ldapinfos = $sth->fetchrow;
-                                                                                                                             
-        $sth->execute("ldaproot");
-        my $ldaproot = $sth->fetchrow;
-        $sth->execute("ldappass");
-        my $ldappass = $sth->fetchrow;
-                                                                                                                             
-        my %bindargs;
-        my $nom  = "uid=$userid, $ldapinfos";
-        my $db = Net::LDAP->new($ldapserver);
-                                                                                                                             
-        my $res = $db->bind( 'cn='.$ldaproot.','.$ldapinfos , password => $ldappass) or die "$@";
-                                                                                                                             
-                                                                                                                             
-        my $entries = $db->search(
-                        base   => $ldapinfos,
-                        filter => "(uid = $userid)"
-                      );
-        my $p;
-        my $entry;
-        my @values;
-                                                                                                                             
-        foreach $entry ($entries->all_entries) {
-                @values = $entry->get_value("userPassword");
-                $p= @values[0];
-        }
-	
-	return($p);
-
+    #It gets the password for a particular userid
+	my ($userid) = @_;
+    my $ldapserver= C4::AR::Preferencias->getValorPreferencia("ldapserver");
+    my $ldapinfos= C4::AR::Preferencias->getValorPreferencia("ldapinfos");
+    my $ldaproot= C4::AR::Preferencias->getValorPreferencia("ldaproot");
+    my $ldappass= C4::AR::Preferencias->getValorPreferencia("ldappass");
+    my %bindargs;
+    my $nom  = "uid=$userid, $ldapinfos";
+    my $db = Net::LDAP->new($ldapserver);
+    my $res = $db->bind( 'cn='.$ldaproot.','.$ldapinfos , password => $ldappass) or die "$@";
+    my $entries = $db->search(
+                    base   => $ldapinfos,
+                    filter => "(uid = $userid)"
+                    );
+    my $p;
+    my $entry;
+    my @values;
+    foreach $entry ($entries->all_entries) {
+            @values = $entry->get_value("userPassword");
+            $p= @values[0];
+    }
+    return($p);
 }
