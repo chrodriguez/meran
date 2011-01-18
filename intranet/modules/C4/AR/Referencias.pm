@@ -51,6 +51,7 @@ use vars qw(@EXPORT_OK @ISA);
                     &obtenerTiposDeDocumentos
                     &obtenerTiposNivel3
                     &obtenerProveedores
+                    &translateTipoNivel3
                     
         );
 
@@ -734,6 +735,23 @@ sub getValidadores{
 
     return \%validadores;
 }
+
+sub translateTipoNivel3{
+    my ($tipo_nivel3) = @_;
+    
+    my @filtros;
+
+    push (  @filtros, ( id_tipo_doc => { eq => $tipo_nivel3 },) );
+
+    my $tiposNivel3 = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(query => \@filtros);
+
+    if (scalar(@$tiposNivel3)){
+    	return ($tiposNivel3->[0]->getNombre);
+    }else{
+    	return ($tipo_nivel3);
+    }
+}
+
 
 
 END { }       # module clean-up code here (global destructor)
