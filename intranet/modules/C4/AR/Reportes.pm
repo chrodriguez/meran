@@ -45,8 +45,8 @@ sub altasRegistro {
          push(
              @filtros,
              (
-                marc_record => {
-                    like => '%-'.$item_type.'-%',
+                'nivel2.marc_record' => {
+                    like => '%cat_ref_tipo_nivel3@'.$item_type.'%',
                 }
              )
          );

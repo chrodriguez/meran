@@ -17,6 +17,23 @@
     <legend class="titulo_legend trigger click" title='[% "click para acceder a los resultados de la b&uacute;squeda" | i18n %]'>
         [% "Resultados de la b&uacute;squeda (altas de registro)" | i18n %]: [% cantidad %]</legend>
         <div class="contenedor_paginador">[% paginador %]</div>
+                    <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: 
+            
+                <h2><i>[% buscoPor %]</i></h2>
+            
+                [% IF !from_suggested %]
+                    [% IF suggested %]
+                            <div class="suggested_search click">
+                                <a onclick="buscarSuggested('[% suggested %]')">
+                                    [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
+                                </a>
+                            </div>
+                    [% END %]
+                [% END %]
+            
+            
+            </div>
+        
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <tr class="titulo_tabla_resultado">
                     <td width="35%" class="click" onClick="ordenar('titulo')" Title='[% "Ordenar por T&iacute;tulo" | i18n %]'>
@@ -89,6 +106,23 @@
             </table>
         </div>
 </fieldset>
+<form id="exportPDF" action="/cgi-bin/koha/reports/altas_registro_result.pl?token=[% token %]"  accept-charset="utf-8">
+        <input type="hidden" name="export" value="pdf" />
+        <input type="hidden" name="item_type" value="[% item_type %]" />
+        <input type="hidden" name="date_begin" value="[% date_begin %]" />
+        <input type="hidden" name="date_end" value="[% date_end %]" />
+</form>
+
+
+<div class="buttonContainerHorizontal">
+        [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Exportar a PDF' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "submitForm('exportPDF');",
+                    ) ;
+        [% END %]
+</div>
 
 [% IF HEADERS %]
     [% INCLUDE "intranet-bottom.inc" %]

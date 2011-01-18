@@ -26,6 +26,7 @@ function consultarAltas() {
 	var date_end 		= $("#dateselectedEnd").val();
 	objAH 				= new AjaxHelper(updateInfo);
 	objAH.debug 		= true;
+    objAH.showOverlay       = true;
 	objAH.url 			= "/cgi-bin/koha/reports/altas_registro_result.pl";
 	objAH.item_type 	= item_type;
 	objAH.date_begin 	= date_begin;

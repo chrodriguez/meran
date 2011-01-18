@@ -25,6 +25,7 @@ use C4::AR::Utilidades;
 use C4::AR::Reportes;
 
 my $input = new CGI;
+my $to_pdf = $input->param('export') || 0;
 my $obj=$input->param('obj') || 0;
 
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
@@ -33,8 +34,7 @@ my ($template, $session, $t_params, $data_url);
 
 ( $template, $session, $t_params ) = get_template_and_user(
 	{
-		#template_name   => "reports/altas_registro_result.tmpl",
-        template_name   => 'busquedas/busquedaResult.tmpl',
+		template_name   => "reports/altas_registro_result.tmpl",
 		query           => $input,
 		type            => "intranet",
 		authnotrequired => 0,
@@ -48,11 +48,18 @@ my ($template, $session, $t_params, $data_url);
 	}
 );
 
-$obj->{'ini'} = $obj->{'ini'} || 1;
 
 my $ini = $obj->{'ini'};
-my ( $ini, $pageNumber, $cantR ) = C4::AR::Utilidades::InitPaginador($ini);
 
+if (!$to_pdf){
+    $obj->{'ini'} = $obj->{'ini'} || 1;
+}else{
+    $obj= $input->Vars;
+    $ini= 0;
+}
+
+
+my ( $ini, $pageNumber, $cantR ) = C4::AR::Utilidades::InitPaginador($ini);
 my ( $cantidad, $data ) = C4::AR::Reportes::altasRegistro( $ini, $cantR, $obj );
 
 #my ($path,$filename) = C4::AR::Reportes::toXLS($data,0,'Altas','Altas de Registro');
@@ -61,10 +68,36 @@ my ( $cantidad, $data ) = C4::AR::Reportes::altasRegistro( $ini, $cantR, $obj );
 my $funcion = $obj->{'funcion'};
 my $inicial = $obj->{'inicial'};
 
-$t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador( $cantidad, $cantR, $pageNumber,$funcion, $t_params );
+if (!$to_pdf){
+    $t_params->{'paginador'}    = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+}
+
 $t_params->{'buscoPor'} = Encode::encode('utf8' ,C4::AR::Busquedas::armarBuscoPor($obj));
 $t_params->{'data'}     = $data;
-$t_params->{'SEARCH_RESULTS'}     = $data;
 $t_params->{'cantidad'} = $cantidad;
+$t_params->{'item_type'} = $obj->{'item_type'};
+$t_params->{'date_begin'} = $obj->{'date_begin'};
+$t_params->{'date_end'} = $obj->{'date_end'};
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+if ($to_pdf){
+    $t_params->{'exported'} = 1;
+    my $out= C4::Auth::get_html_content($template, $t_params, $session);
+    my $filename= C4::AR::PdfGenerator::pdfFromHTML($out);
+
+    print C4::AR::PdfGenerator::pdfHeader();
+
+    C4::AR::PdfGenerator::printPDF($filename);
+    
+    
+}else{
+    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
+
+
+
+
+
+
+
+
