@@ -23,6 +23,7 @@ use C4::Auth;
 use CGI;
 use C4::AR::Utilidades;
 use C4::AR::Reportes;
+use C4::AR::PdfGenerator;
 
 my $input = new CGI;
 my $to_pdf = $input->param('export') || 0;
@@ -34,7 +35,7 @@ my ($template, $session, $t_params, $data_url);
 
 ( $template, $session, $t_params ) = get_template_and_user(
 	{
-		template_name   => "reports/altas_registro_result.tmpl",
+		template_name   => "reports/altas_registro_result_export.tmpl",
 		query           => $input,
 		type            => "intranet",
 		authnotrequired => 0,
@@ -48,11 +49,11 @@ my ($template, $session, $t_params, $data_url);
 	}
 );
 
-
-my $ini = $obj->{'ini'};
+my $ini = 0;
 
 if (!$to_pdf){
     $obj->{'ini'} = $obj->{'ini'} || 1;
+    $ini = $obj->{'ini'};
 }else{
     $obj= $input->Vars;
     $ini= 0;
@@ -60,7 +61,7 @@ if (!$to_pdf){
 
 
 my ( $ini, $pageNumber, $cantR ) = C4::AR::Utilidades::InitPaginador($ini);
-my ( $cantidad, $data ) = C4::AR::Reportes::altasRegistro( $ini, $cantR, $obj );
+my ( $cantidad, $data ) = C4::AR::Reportes::altasRegistro( $ini, $cantR, $obj, $to_pdf );
 
 #my ($path,$filename) = C4::AR::Reportes::toXLS($data,0,'Altas','Altas de Registro');
 #$t_params->{'filename'} = '/reports/'.$filename;

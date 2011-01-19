@@ -52,7 +52,7 @@
                     <td class="titulo_result">
             
                         [% PERL %]
-                            print C4::AR::Filtros::link_to( text =>     "( [% hits %] ) - [% HTML.escape(titulo) %]",
+                            print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(titulo) %]",
                                                             url =>      "/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
                                                             params =>   ["id1=[% id1 %]"],
                                                             title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
