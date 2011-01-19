@@ -32,23 +32,40 @@ my $obj=$input->param('obj') || 0;
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my ($template, $session, $t_params, $data_url);
-
-( $template, $session, $t_params ) = get_template_and_user(
-	{
-		template_name   => "reports/altas_registro_result_export.tmpl",
-		query           => $input,
-		type            => "intranet",
-		authnotrequired => 0,
-		flagsrequired   => {
-			ui             => 'ANY',
-			tipo_documento => 'ANY',
-			accion         => 'CONSULTA',
-			entorno        => 'undefined'
-		},
-		debug => 1,
-	}
-);
-
+if ($to_pdf){
+	( $template, $session, $t_params ) = get_template_and_user(
+		{
+			template_name   => "reports/altas_registro_result_export.tmpl",
+			query           => $input,
+			type            => "intranet",
+			authnotrequired => 0,
+			flagsrequired   => {
+				ui             => 'ANY',
+				tipo_documento => 'ANY',
+				accion         => 'CONSULTA',
+				entorno        => 'undefined'
+			},
+			debug => 1,
+		}
+	);
+}else{
+    ( $template, $session, $t_params ) = get_template_and_user(
+        {
+            template_name   => "reports/altas_registro_result.tmpl",
+            query           => $input,
+            type            => "intranet",
+            authnotrequired => 0,
+            flagsrequired   => {
+                ui             => 'ANY',
+                tipo_documento => 'ANY',
+                accion         => 'CONSULTA',
+                entorno        => 'undefined'
+            },
+            debug => 1,
+        }
+    );
+	
+}
 my $ini = 0;
 
 if (!$to_pdf){
