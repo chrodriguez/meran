@@ -13,6 +13,7 @@
 
       });
 </script>
+<div id="resultBusqueda">
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click" title='[% "click para acceder a los resultados de la b&uacute;squeda" | i18n %]'>
         [% "Resultados de la b&uacute;squeda (altas de registro)" | i18n %]: [% cantidad %]</legend>
@@ -106,6 +107,7 @@
             </table>
         </div>
 </fieldset>
+</div>
 <form id="exportPDF" action="/cgi-bin/koha/reports/altas_registro_result.pl?token=[% token %]"  accept-charset="utf-8">
         <input type="hidden" name="export" value="pdf" />
         <input type="hidden" name="item_type" value="[% item_type %]" />
