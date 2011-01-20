@@ -28,7 +28,7 @@ sub _esSuperUsusario
 
 sub pp
 {
-    
+    my ($userid) = @_;
             my $dbh = C4::Context->dbh;
             
             my $consulta=$dbh->prepare("select cardnumber,branchcode from borrowers where cardnumber =?");
@@ -64,7 +64,7 @@ sub checkpwDC
     my $ldapMsg = $ldap->bind($userDN, password => $password);
     C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->code() );
     if (!$ldapMsg->code()) {
-            my ($usuario,$branchcode) = $consulta->fetchrow;
+            my ($usuario,$branchcode) = pp($userid);
             if (($usuario  eq $userid)){
                     return 1,$userid,$branchcode;
             }
