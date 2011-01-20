@@ -25,11 +25,12 @@ __PACKAGE__->meta->setup(
     table   => 'cat_registro_marc_n3',
 
     columns => [
-        id              => { type => 'serial', not_null => 1 },
-        marc_record     => { type => 'text' },
-        id1             => { type => 'integer', not_null => 1 },
-        id2             => { type => 'integer', not_null => 1 },
-        updated_at      => { type => 'varchar' },
+        id                      => { type => 'serial', not_null => 1 },
+        marc_record             => { type => 'text' },
+        id1                     => { type => 'integer', not_null => 1 },
+        id2                     => { type => 'integer', not_null => 1 },
+        updated_at              => { type => 'varchar' },
+        agregacion_temp         => { type => 'varchar' },
     ],
 
     primary_key_columns => [ 'id' ],

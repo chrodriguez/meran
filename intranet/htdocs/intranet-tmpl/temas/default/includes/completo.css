@@ -309,4 +309,8 @@ div.indicators{cursor:pointer;color:black;border:1px solid #777777;background:#E
 .hasDatepicker {
     width:76px;
 }
+.catalogue-last-added{
+    border-style:dashed;
+
+}
 /* ==========================================================FIN==REPORTES =============================================================== */
