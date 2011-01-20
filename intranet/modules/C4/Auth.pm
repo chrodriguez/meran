@@ -34,6 +34,7 @@ use C4::Modelo::SistSesion::Manager;
 use C4::Modelo::CircReserva;
 use C4::Modelo::UsrSocio;
 use C4::Modelo::PrefFeriado;
+use C4::AR::Authldap;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 my $codMSG = 'U000';
@@ -303,7 +304,7 @@ sub inicializarAuth{
     #Guardo la sesion en la base
     #FIXME C4::Auth::_save_session_db($session->param('sessionID'), undef, $params{'ip'} , $params{'nroRandom'}, $params{'token'});
     $t_params->{"nroRandom"}=$params{'nroRandom'};
-    $t_params->{"authMERAN"}=C4::AR::Preferencias->getValorPreferencia('authMERAN');
+    $t_params->{"authMERAN"}=C4::Context->config('authMERAN');
     return ($session);
 }
 
@@ -936,16 +937,16 @@ sub _verificarPassword {
     if ( C4::Context->config('ldapenabled')) {
     #se esta usando LDAP
         if (C4::Context->config('authMERAN')){
-            ($passwordValida, $cardnumber, $ui) = checkpwldap($userid,$password,$nroRandom);
+            ($passwordValida, $cardnumber, $ui) = C4::AR::Authldap::checkpwldap($userid,$password,$nroRandom);
         }
         else { 
-            ($passwordValida, $cardnumber, $ui) = checkpwDC($userid,$password);
+            ($passwordValida, $cardnumber, $ui) = C4::AR::Authldap::checkpwDC($userid,$password);
         }
      }
     else {
         ($passwordValida, $cardnumber, $ui) = _checkpw($userid,$password,$nroRandom); 
     }
-#     C4::AR::Debug::debug("_verificarPassword=> password hzzzzzzzzzzzz?: ".$passwordValida);
+     C4::AR::Debug::debug("_verificarPassword=> password hzzzzzzzzzzzz?: ".$passwordValida);
     return ($passwordValida, $cardnumber, $ui);
 }
 
@@ -1151,9 +1152,9 @@ sub _checkpw {
     my ($userid, $password, $nroRandom) = @_;
     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
     if ($socio){
-#         C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
+         C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
         if ( ($socio->persona)&&($socio->getActivo) ) {
-#             C4::AR::Debug::debug("_checkpw=> tengo persona y socio\n");
+            C4::AR::Debug::debug("_checkpw=> tengo persona y socio\n");
             #existe el socio y se encuentra activo
             my $hashed_password= $socio->getPassword;
             my $ui= $socio->getId_ui;
@@ -1181,9 +1182,9 @@ sub _getMetodoEncriptacion {
 =cut
 sub _verificar_password_con_metodo {
     my ($hashed_password, $password, $dni, $nroRandom, $metodo) = @_;
-#     C4::AR::Debug::debug("_verificar_password_con_metodo=> password del cliente: ".$password."\n");
-#     C4::AR::Debug::debug("_verificar_password_con_metodo=> password de la base: ".$hashed_password."\n");
-#     C4::AR::Debug::debug("_verificar_password_con_metodo=> password_hasheada_con_metodo.nroRandom: "._hashear_password($hashed_password.$nroRandom, $metodo)."\n");
+     C4::AR::Debug::debug("_verificar_password_con_metodo=> password del cliente: ".$password."\n");
+     C4::AR::Debug::debug("_verificar_password_con_metodo=> password de la base: ".$hashed_password."\n");
+     C4::AR::Debug::debug("_verificar_password_con_metodo=> password_hasheada_con_metodo.nroRandom: "._hashear_password($hashed_password.$nroRandom, $metodo)."\n");
     if ($password eq _hashear_password($hashed_password.$nroRandom, $metodo)) {
 #         C4::AR::Debug::debug("_verificar_password_con_metodo=> las pass son = todo OK\n");
         #PASSWORD VALIDA

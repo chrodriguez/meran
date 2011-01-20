@@ -13,8 +13,9 @@ use Net::LDAP::LDIF;
 use Net::LDAP::Util qw(ldap_error_text);
 use Net::LDAP::Constant qw(LDAP_EXTENSION_START_TLS);
 
+use vars qw(@ISA @EXPORT_OK );
 @ISA = qw(Exporter);
-@EXPORT = qw(checkpwldap getldappassword checkpwDC);
+@EXPORT_OK = qw(checkpwldap getldappassword checkpwDC);
 
 
 sub _esSuperUsusario
@@ -25,6 +26,15 @@ sub _esSuperUsusario
 }
 
 
+sub pp
+{
+    
+            my $dbh = C4::Context->dbh;
+            
+            my $consulta=$dbh->prepare("select cardnumber,branchcode from borrowers where cardnumber =?");
+            $consulta->execute($userid);
+}
+
 sub checkpwDC
 {
     my ($userid, $password) = @_;
@@ -32,10 +42,11 @@ sub checkpwDC
     my $LDAP_INFOS= C4::Context->config("ldapinfos");
     my $LDAP_PORT= C4::Context->config("ldapport");
     my $LDAP_TYPE=C4::Context->config("ldaptype");
-    my $userDN = 'cn='.$userid.','.$LDAPINFOS;
-    
+    my $LDAP_SUFF=C4::Context->config("ldasuff");
+    my $userDN = $LDAP_SUFF.'='.$userid.','.$LDAP_INFOS;
+    my $ldap;
     if ($LDAP_TYPE ne 'SSL'){
-        my $ldap = Net::LDAP->new($LDAP_SERVER, port => $LDAP_PORT) or die "Coult not create LDAP object because:\n$!";
+        $ldap = Net::LDAP->new($LDAP_SERVER, port => $LDAP_PORT) or die "Coult not create LDAP object because:\n$!";
         if ($LDAP_TYPE eq 'TLS') {
             my $dse = $ldap->root_dse();
             my $doesSupportTLS = $dse->supported_extension(LDAP_EXTENSION_START_TLS);
@@ -45,14 +56,14 @@ sub checkpwDC
         } 
     }
     else{
-        my $ldap = Net::LDAPS->new($LDAP_SERVER, port => $LDAP_PORT) or die "Coult not create LDAP object because:\n$!";
+        $ldap = Net::LDAPS->new($LDAP_SERVER, port => $LDAP_PORT) or die "Coult not create LDAP object because:\n$!";
     }
     
     #Primero me fijo si es un usuario del domnio 
-    my $ldapMsg = $ldap->bind($userDN, password => $PASSWORD);
-    if ($ldapMsg->done()) {
-            my $consulta=$dbh->prepare("select cardnumber,branchcode from borrowers where cardnumber =?");
-            $consulta->execute($userid);
+    C4::AR::Debug::debug("Authldap => server $LDAP_SERVER:$LDAP_PORT por $LDAP_TYPE usuario $userDN" );
+    my $ldapMsg = $ldap->bind($userDN, password => $password);
+    C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->code() );
+    if (!$ldapMsg->code()) {
             my ($usuario,$branchcode) = $consulta->fetchrow;
             if (($usuario  eq $userid)){
                     return 1,$userid,$branchcode;
@@ -68,7 +79,7 @@ sub checkpwDC
     if ($userid eq 'demo' && $password eq 'demo' && C4::Context->config('demo')) {
                     return 2,0,$superbranch;
             }
-    die $ldapMsg->error if $ldapMsg->is_error;
+    #die $ldapMsg->error if $ldapMsg->is_error;
     #Finalmente si no es ni usuario valido, ni superusuario, ni un sitio demo se marca como invalidas las credenciales
     return 0;
 
