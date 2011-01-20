@@ -101,14 +101,12 @@ sub t_guardarNivel3 {
 sub t_modificarNivel3 {
     my ($params) = @_;
 
-## FIXME ver si falta verificar algo!!!!!!!!!!
     my $msg_object              = C4::AR::Mensajes::create();
     my $cat_registro_marc_n3    = C4::Modelo::CatRegistroMarcN3->new();
     my $marc_record             = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
-# generarArregloParaMofidicar($msg_object, $marc_record);
-# die;
     my $db                      = $cat_registro_marc_n3->db;
     $params->{'modificado'}     = 1;
+
     # enable transactions, if possible
     $db->{connect_options}->{AutoCommit} = 0;
     
@@ -123,20 +121,13 @@ sub t_modificarNivel3 {
             $params->{'id3'}        = $params->{'ID3_ARRAY'}->[$i];
             ($cat_registro_marc_n3) = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i], $db);
             $params->{'barcode'}    = $cat_registro_marc_n3->getBarcode();
-            #verifico las condiciones para actualizar los datos
-    #                 _verificarUpdateItem($msg_object, $params);
-
-#             if(!$msg_object->{'error'}){
-                
-                $params->{'marc_record'}    = $marc_record->as_usmarc;
-                $cat_registro_marc_n3->modificar($db, $params, $msg_object);  #si es mas de un ejemplar, a todos les setea la misma info
-                
-                #se cambio el permiso con exito
-#                 $msg_object->{'error'}      = 0;
-                if(!$msg_object->{'error'}){
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$cat_registro_marc_n3->getBarcode]} ) ;
-                }
-#             }
+            #verifico las condiciones para actualizar los datos            
+            $params->{'marc_record'}    = $marc_record->as_usmarc;
+            $cat_registro_marc_n3->modificar($db, $params, $msg_object);  #si es mas de un ejemplar, a todos les setea la misma info
+            
+            if(!$msg_object->{'error'}){
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$cat_registro_marc_n3->getBarcode]} ) ;
+            }
         }#END for(my $i=0;$i<$cant;$i++)
 
         $db->commit;
@@ -150,7 +141,7 @@ sub t_modificarNivel3 {
         &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
         $db->rollback;
         #Se setea error para el usuario
-        $msg_object->{'error'}= 1;
+        $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U385', 'params' => []} ) ;
     }
 
@@ -706,26 +697,26 @@ sub _verificarDeleteItem {
 
 }
 
-sub _verificarUpdateItem {
-# FIXME no se verificar si se repiten los barcodes
-    my($msg_object, $params) = @_;
-
-    $msg_object->{'error'} = 0;#no hay error
-
-    if( !($msg_object->{'error'}) && C4::AR::Prestamos::estaPrestado($params->{'id3'}) ){
-        #verifico que el ejemplar no se encuentre reservado
-        $msg_object->{'error'} = 1;
-        C4::AR::Debug::debug("_verificarDeleteItem => Se está intentando modificar un ejemplar que tiene un prestamo");
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P125', 'params' => [$params->{'id3'}]} ) ;
-
-#     } elsif ( existeBarcode($params->{'barcode'}, $params->{'id3'} ) && !($params->{'EDICION_N3_GRUPAL'}) ){
-    } 
-#     elsif (seRepiteBarcode($params)) {
-#         #el barcode existe en la base de datos
+# sub _verificarUpdateItem {
+# # FIXME no se verificar si se repiten los barcodes
+#     my($msg_object, $params) = @_;
+# 
+#     $msg_object->{'error'} = 0;#no hay error
+# 
+#     if( !($msg_object->{'error'}) && C4::AR::Prestamos::estaPrestado($params->{'id3'}) ){
+#         #verifico que el ejemplar no se encuentre reservado
 #         $msg_object->{'error'} = 1;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$params->{'barcode'}]} ) ;        
-#     }
-}
+#         C4::AR::Debug::debug("_verificarDeleteItem => Se está intentando modificar un ejemplar que tiene un prestamo");
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P125', 'params' => [$params->{'id3'}]} ) ;
+# 
+# #     } elsif ( existeBarcode($params->{'barcode'}, $params->{'id3'} ) && !($params->{'EDICION_N3_GRUPAL'}) ){
+#     } 
+# #     elsif (seRepiteBarcode($params)) {
+# #         #el barcode existe en la base de datos
+# #         $msg_object->{'error'} = 1;
+# #         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$params->{'barcode'}]} ) ;        
+# #     }
+# }
 
 
 
@@ -840,7 +831,8 @@ sub _generarArreglo{
 	if($esPorBarcode eq 'true'){
 		$params->{'agregarPorBarcodes'} = 1;
 #         _generarArregloDeBarcodesPorBarcodes($msg_object, $barcodes_array, \@barcodes_para_agregar);
-        @barcodes_para_agregar = _generarArregloDeBarcodesPorBarcodes($msg_object, $barcodes_array);
+#         @barcodes_para_agregar = _generarArregloDeBarcodesPorBarcodes($msg_object, $barcodes_array);
+        @barcodes_para_agregar = @$barcodes_array;
 	}else{
 		@barcodes_para_agregar = _generarArregloDeBarcodesPorCantidad($cant, $params, $msg_object);
 	}
@@ -848,90 +840,17 @@ sub _generarArreglo{
 	return (\@barcodes_para_agregar);
 }
 
-# TODO estoy probando Miguel
-sub generarArregloParaMofidicar {
-    my ($msg_object, $marc_record) = @_;
-
-    my @array_nivel3;
-
-    my ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran($marc_record);
-    C4::AR::Debug::debug("Nivel3 => generarArregloParaMofidicar !!!!");
-
-    foreach my $campo_hash_info (@$MARC_result_array) {
-        my @subcampos_array_nivel3;
-        C4::AR::Debug::debug("Nivel3 => generarArregloParaMofidicar => campo => ".$campo_hash_info->{'campo'});
-        foreach my $subcampo_hash_info (@{$campo_hash_info->{'subcampos_array'}}){
-            C4::AR::Debug::debug("Nivel3 => generarArregloParaMofidicar => subcampo => ".$subcampo_hash_info->{'subcampo'});
-            C4::AR::Debug::debug("Nivel3 => generarArregloParaMofidicar => dato => ".$subcampo_hash_info->{'dato'});
-            C4::AR::Debug::debug("Nivel3 => generarArregloParaMofidicar => datoReferencia => ".$subcampo_hash_info->{'datoReferencia'});
-
-            #verifico reglas
-#             if( !($msg_object->{'error'}) && C4::AR::Prestamos::estaPrestado($params->{'id3'}) ){
-#             #verifico que el ejemplar no se encuentre reservado
-#             $msg_object->{'error'} = 1;
-#             C4::AR::Debug::debug("_verificarDeleteItem => Se está intentando modificar un ejemplar que tiene un prestamo");
-#             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P125', 'params' => [$params->{'id3'}]} ) ;
-#             } elsif (seRepiteBarcode($params)) {
-#             if (seRepiteBarcode($params)) {
-#                 #el barcode existe en la base de datos
-#                 $msg_object->{'error'} = 1;
-#                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$params->{'barcode'}]} ) ;        
-#             }
-  
-
-            #si esta todo Ok lo agrego al arreglo
-            my %subcampo_hash_result;
-            $subcampo_hash_result{'subcampo'}   = $subcampo_hash_info->{'subcampo'};
-            $subcampo_hash_result{'dato'}       = $subcampo_hash_info->{'datoReferencia'};
-
-            push (@subcampos_array_nivel3, \%subcampo_hash_result);
-        }
-
-        #si esta todo Ok lo agrego al arreglo
-        my %campo_hash_result;
-        $campo_hash_result{'campo'} = $campo_hash_info->{'campo'};
-        push(@array_nivel3, \%campo_hash_result);
-        
-    }
-
-#     return $MARC_result_array;
-}
-
 =head2 sub _generarArregloDeBarcodesPorBarcodes
 Esta funcion genera un arreglo de barcodes VALIDOS para agregar en la base de datos, ademas setea los mensajes de ERROR para los usuarios
 =cut
 sub _generarArregloDeBarcodesPorBarcodes{   
-#     my ($msg_object, $barcodes_array, $barcodes_para_agregar) = @_;
     my ($msg_object, $barcodes_array) = @_;
     C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorBarcodes !!!!!!!!!!");
     my @barcodes_para_agregar;
  
     C4::AR::Debug::debug("Nivel3 => _generarArregloDeBarcodesPorBarcodes !!!!!!!!!! barcodes_array => ".scalar(@$barcodes_array));
     foreach my $barcode (@$barcodes_array){
-#         $msg_object->{'error'} = 0;
-# 
-#         if(_existeBarcodeEnArray($barcode, @barcodes_para_agregar)){
-#         #si el barcode existe se informa al usuario y no se agrega en el arreglo de barcodes para agregar
-# # C4::AR::Debug::debug("_generarArregloDeBarcodesPorBarcodes => EXISTE EL BARCODE EN EL ARREGLO");
-#             $msg_object->{'error'} = 1;
-#             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcode]} ) ;
-#         }
-# C4::AR::Debug::debug("_generarArregloDeBarcodesPorBarcodes => NO EXISTE EL BARCODE EN EL ARREGLO");
-#         if( !C4::AR::Utilidades::validateBarcode($barcode) ) {
-#             #el barcode ingresado no es valido
-#             $msg_object->{'error'} = 1;
-#             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U402', 'params' => [$barcode]} ) ;
-#         }
-# 
-#         if( existeBarcode($barcode) ){
-#             #el barcode existe en la base de datos
-#             $msg_object->{'error'} = 1;
-#             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$barcode]} ) ;
-#         }
 
-#         if(!$msg_object->{'error'}){
-        #el barcode es VALIDO, se agrega al arreglo de barcodes para agregar
-# C4::AR::Debug::debug("_generarArregloDeBarcodesPorBarcodes => AGREGO A ARREGLO ".$barcode);
             push (@barcodes_para_agregar, $barcode);
 #         }
     }# END foreach my $barcode (@$barcodes_array)
