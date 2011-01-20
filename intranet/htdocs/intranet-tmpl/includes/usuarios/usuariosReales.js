@@ -10,6 +10,7 @@ var vDatosUsuario = 0;
 //*********************************************Modificar Datos Usuario*********************************************
 function modificarDatosDeUsuario(){
 	objAH                   = new AjaxHelper(updateModificarDatosDeUsuario);
+    objAH.showOverlay       = true;
 	objAH.debug             = true;
 	objAH.url               = '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug             = true; 
@@ -40,6 +41,7 @@ function guardarModificacionUsuario(){
 	objAH=new AjaxHelper(updateGuardarModificacionUsuario);
 	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug= true;
+    objAH.showOverlay       = true;
 	objAH.nro_socio= nro_socio_temp; 
     objAH.sexo= $("input[@name=sexo]:checked").val();
     objAH.calle= $('#calle').val();
@@ -151,6 +153,7 @@ function eliminarUsuario(){
 		objAH=new AjaxHelper(updateEliminarUsuario);
 		objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 		objAH.debug= true;
+	    objAH.showOverlay       = true;
 		objAH.nro_socio= USUARIO.ID;
 		objAH.tipoAccion= 'ELIMINAR_USUARIO';
 		objAH.sendToServer();
@@ -180,6 +183,7 @@ function agregarUsuario(){
 
       objAH         = new AjaxHelper(updateAgregarUsuario);
       objAH.url     = '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+      objAH.showOverlay       = true;
       objAH.debug   = true;
       if ( (($.trim(nro_socio)).length == 0 ) || ( $('#nro_socio').val() == 'Auto-generar' ) ) {
         objAH.auto_nro_socio=1;
@@ -234,6 +238,7 @@ function desautorizarTercero(claveUsuario, confirmeClave){
     	if (confirmStatus){
 	    	objAH=new AjaxHelper(updateDesautorizarTercero);
 	        objAH.debug= true;
+	        objAH.showOverlay       = true;
 	        objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	        objAH.nro_socio= USUARIO.ID;
 	        objAH.tipoAccion= 'ELIMINAR_AUTORIZADO';
@@ -257,6 +262,7 @@ function resetPassword(claveUsuario, confirmeClave){
     jConfirm(RESET_PASSWORD, USUARIOS_ALERT_TITLE, function(confirmStatus){
         if (confirmStatus){
             objAH=new AjaxHelper(updateResetPassword);
+            objAH.showOverlay       = true;
             objAH.url= '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
             objAH.nro_socio= USUARIO.ID;
             objAH.tipoAccion= 'RESET_PASSWORD';
@@ -289,6 +295,7 @@ function cambiarPassword(){
 function eliminarFoto(foto){
 	objAH               = new AjaxHelper(updateEliminarFoto);
  	objAH.debug         = true;
+    objAH.showOverlay       = true;
 	objAH.url           = '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.tipoAccion    = 'ELIMINAR_FOTO';
 	objAH.foto_name     = foto;
@@ -310,6 +317,7 @@ function updateEliminarFoto(responseText){
 
 function agregarAutorizado(){
     objAH=new AjaxHelper(updateAgregarAutorizado);
+    objAH.showOverlay       = true;
     objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
     objAH.tipoAccion = "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO";
     objAH.debug= true;
@@ -344,6 +352,7 @@ function updateAgregarAutorizado(responseText){
 function validarDatosCensales(){
 	objAH                   = new AjaxHelper(updateValidarDatosCensales);
 	objAH.debug             = true;
+    objAH.showOverlay       = true;
 	objAH.url               = '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug             = true; 
 	objAH.nro_socio         = USUARIO.ID;

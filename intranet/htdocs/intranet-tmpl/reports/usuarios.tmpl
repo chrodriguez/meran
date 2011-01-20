@@ -1,10 +1,11 @@
 [% INCLUDE "intranet-top.inc" %]
 
+[% INCLUDE  'WindowHelper.inc'  %]
+[% INCLUDE 'datePicker.inc' %]
+
 <script src="/includes/jquery/validate/jquery.validate.js"></script>
 <script type="text/javascript" src="/intranet-tmpl/reports/reports.js"></script>
 
-[% INCLUDE  'WindowHelper.inc'  %]
-[% INCLUDE 'datePicker.inc' %]
 
 <script language="javascript" type="text/javascript">
 
@@ -20,6 +21,7 @@ function changePage(ini){
 
 function updateInfo(responseText){
 	$("#result").html(responseText);
+    scrollTo('result');
 	zebra("datos_tabla");
 	objAH.id    = "";
 	objAH.notas = "";
