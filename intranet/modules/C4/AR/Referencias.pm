@@ -52,6 +52,7 @@ use vars qw(@EXPORT_OK @ISA);
                     &obtenerTiposNivel3
                     &obtenerProveedores
                     &translateTipoNivel3
+                    &obtenerEstantes
                     
         );
 
@@ -752,6 +753,16 @@ sub translateTipoNivel3{
     }
 }
 
+sub obtenerEstantes{
+	
+	use C4::Modelo::CatEstante::Manager;
+	
+	my $estantes = C4::Modelo::CatEstante::Manager->get_cat_estante();
+	
+	return ($estantes);
+	
+	
+}
 
 
 END { }       # module clean-up code here (global destructor)

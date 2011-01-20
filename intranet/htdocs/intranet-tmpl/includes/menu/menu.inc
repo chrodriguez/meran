@@ -306,6 +306,14 @@
                           </li> -->
                         <li>
                             [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Estantes virtuales' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/reports/estantes_virtuales.pl",
+                                                                title =>    "[% 'Busquedas desde OPAC' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </li>
+                        <li>
+                            [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Busquedas desde OPAC' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/reports/busquedas_opac.pl",
                                                                 title =>    "[% 'Busquedas desde OPAC' | i18n %]"

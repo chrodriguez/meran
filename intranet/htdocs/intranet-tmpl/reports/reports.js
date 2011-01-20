@@ -36,6 +36,20 @@ function consultarAltas() {
 	objAH.sendToServer();
 }
 
+
+function consultarEstantes() {
+	var ui = $("#id_ui").val();
+	var estante 		= $("#estante_id").val();
+	objAH 				= new AjaxHelper(updateInfo);
+	objAH.debug 		= true;
+    objAH.showOverlay       = true;
+	objAH.url 			= "/cgi-bin/koha/reports/estantes_virtuales_result.pl";
+	objAH.estante 	= estante;
+	objAH.funcion		= 'changePage';
+	// se envia la consulta
+	objAH.sendToServer();
+}
+
 function updateInfo(responseText) {
 	$("#result").html(responseText);
 }
