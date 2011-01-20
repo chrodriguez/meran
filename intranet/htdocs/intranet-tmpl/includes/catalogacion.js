@@ -386,7 +386,8 @@ function updateMostrarEstructuraDelNivel1(responseText){
     procesarInfoJson(objetos_array, null); 
 //     procesarInfoJson(responseText); 
     //carga los datos en los campos solo si se esta modificando
-    scrollTo('nivel1Tabla');
+//     FIXME esto no es neceario, luego de agregar o modificar se muestra un mensaje y ya se hace un scrollTo al mendaje
+//     scrollTo('nivel1Tabla');
     
 	//asigno el handler para el validador
 	validateForm('formNivel1',guardarModificarDocumentoN1);
@@ -417,7 +418,8 @@ function updateMostrarEstructuraDelNivel2(responseText){
     var objetos_array = JSONstring.toObject(responseText);
     procesarInfoJson(objetos_array, null); 
 //     procesarInfoJson(responseText);
-    scrollTo('nivel2Tabla');
+// FIXME esto no es neceario, luego de agregar o modificar se muestra un mensaje y ya se hace un scrollTo al mendaje
+//     scrollTo('nivel2Tabla');
 	//asigno el handler para el validador
 	validateForm('formNivel2',guardarModificarDocumentoN2);
     addRules();

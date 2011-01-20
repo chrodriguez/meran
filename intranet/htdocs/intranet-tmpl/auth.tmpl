@@ -12,11 +12,14 @@
 
 <script type="text/javascript">
     function enviar(){
-        var nroRandom   = [% nroRandom %];
+        [% IF authMERAN %]
+            var nroRandom   = [% nroRandom %];
+            var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
+            $("#password").val(hash);
+        [% ELSE %]
+            $("#password").val($("#password_plain"));
+        [% END %]
         var username    = $.trim($("#username").val());
-        var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
-
-        $("#password").val(hash);
         $("#userid").val(username);
         $("#datosAEnviar").submit();
     }

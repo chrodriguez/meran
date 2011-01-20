@@ -2,29 +2,80 @@ package C4::AR::Authldap;
 
 
 #package for ldap authentification
-#written 24/06/2003 by lerenarm@esiee.fr
-
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
+#Sirve tanto para utilizar el esquema propio de Meran como para 
+#autenticarse en un dominio
 
 require Exporter;
 use strict;
 use Net::LDAP;
+use Net::LDAPS;
+use Net::LDAP::LDIF;
+use Net::LDAP::Util qw(ldap_error_text);
+use Net::LDAP::Constant qw(LDAP_EXTENSION_START_TLS);
 
 @ISA = qw(Exporter);
-@EXPORT = qw(checkpwldap getldappassword);
+@EXPORT = qw(checkpwldap getldappassword checkpwDC);
+
+
+sub _esSuperUsusario
+{
+    my ($userid, $password) = @_;
+    my $superpasswd=C4::Context->config('pass');
+   return ($userid eq C4::Context->config('user') && $password eq $superpasswd);
+}
+
+
+sub checkpwDC
+{
+    my ($userid, $password) = @_;
+    my $LDAP_SERVER= C4::Context->config("ldapserver");
+    my $LDAP_INFOS= C4::Context->config("ldapinfos");
+    my $LDAP_PORT= C4::Context->config("ldapport");
+    my $LDAP_TYPE=C4::Context->config("ldaptype");
+    my $userDN = 'cn='.$userid.','.$LDAPINFOS;
+    
+    if ($LDAP_TYPE ne 'SSL'){
+        my $ldap = Net::LDAP->new($LDAP_SERVER, port => $LDAP_PORT) or die "Coult not create LDAP object because:\n$!";
+        if ($LDAP_TYPE eq 'TLS') {
+            my $dse = $ldap->root_dse();
+            my $doesSupportTLS = $dse->supported_extension(LDAP_EXTENSION_START_TLS);
+            die "Server does not support TLS\n" unless($doesSupportTLS);
+            my $startTLSMsg = $ldap->start_tls();
+            die $startTLSMsg->error if $startTLSMsg->is_error;
+        } 
+    }
+    else{
+        my $ldap = Net::LDAPS->new($LDAP_SERVER, port => $LDAP_PORT) or die "Coult not create LDAP object because:\n$!";
+    }
+    
+    #Primero me fijo si es un usuario del domnio 
+    my $ldapMsg = $ldap->bind($userDN, password => $PASSWORD);
+    if ($ldapMsg->done()) {
+            my $consulta=$dbh->prepare("select cardnumber,branchcode from borrowers where cardnumber =?");
+            $consulta->execute($userid);
+            my ($usuario,$branchcode) = $consulta->fetchrow;
+            if (($usuario  eq $userid)){
+                    return 1,$userid,$branchcode;
+            }
+    }
+    #Despues me fijo si es superusuario
+    my $superbranch=C4::Context->config('branch');
+    if (_esSuperUsusario($userid,$password)){
+                    # Koha superuser account
+                    return 2,0,$superbranch;
+            }
+    #Finalmente me fijo si el usuario es demo, esto esta deprecated
+    if ($userid eq 'demo' && $password eq 'demo' && C4::Context->config('demo')) {
+                    return 2,0,$superbranch;
+            }
+    die $ldapMsg->error if $ldapMsg->is_error;
+    #Finalmente si no es ni usuario valido, ni superusuario, ni un sitio demo se marca como invalidas las credenciales
+    return 0;
+
+}
+
+# Referencia http://blog.case.edu/jeremy.smith/2004/12/13/bind_ldap_perl
+
 
 sub checkpwldap{
     my ($userid, $password, $random_number) = @_;
@@ -46,11 +97,10 @@ sub checkpwldap{
         	# Koha superuser account
                 return 2,0,$superbranch;
         }
-
         if ($userid eq 'demo' && $password eq 'demo' && C4::Context->config('demo')) {
                 # DEMO => the demo user is allowed to do everything (if demo set to 1 in koha.conf
                 # some features won't be effective : modify systempref, modify MARC structure,
-                return 2;
+                return 2,0,$superbranch;
         }
         return 0;
 }
@@ -58,11 +108,11 @@ sub checkpwldap{
 
 sub getldappassword {
     #It gets the password for a particular userid
-	my ($userid) = @_;
-    my $ldapserver= C4::AR::Preferencias->getValorPreferencia("ldapserver");
-    my $ldapinfos= C4::AR::Preferencias->getValorPreferencia("ldapinfos");
-    my $ldaproot= C4::AR::Preferencias->getValorPreferencia("ldaproot");
-    my $ldappass= C4::AR::Preferencias->getValorPreferencia("ldappass");
+    my ($userid) = @_;
+    my $ldapserver= C4::Context->config("ldapserver");
+    my $ldapinfos= C4::Context->config("ldapinfos");
+    my $ldaproot= C4::Context->config("ldaproot");
+    my $ldappass= C4::Context->config("ldappass");
     my %bindargs;
     my $nom  = "uid=$userid, $ldapinfos";
     my $db = Net::LDAP->new($ldapserver);
