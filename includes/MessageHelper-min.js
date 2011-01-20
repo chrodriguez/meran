@@ -2,7 +2,7 @@ function _clearMessages(){$('#mensajes').css({opacity:0,"filter":"alpha(opacity=
 function verificarRespuesta(responseText){if(responseText==0){jAlert(DATOS_ENVIADOS_INCORRECTOS,'Info','errboxid');return(0);}else{return(1);}}
 function setMessages(Messages_hashref){//@params
 try{_createContentMessages();var i;for(i=0;i<Messages_hashref.messages.length;i++){$('#mensajes').append('<div class="message_text" >'+Messages_hashref.messages[i].message+'</div>');}
-scrollTo('mensajes');$('#mensajes').css("display","block");_show();_delay(_clearMessages,180);}
+$('#mensajes').css("display","block");_show();scrollTo('mensajes');_delay(_clearMessages,180);}
 catch(e){}}
 function assignCloseButton(){$('#close_message').click(function()
 {$('#mensajes').animate({opacity:0},"slow");_clearMessages();});}

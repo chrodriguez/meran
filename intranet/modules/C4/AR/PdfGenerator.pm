@@ -959,6 +959,9 @@ sub generateBookLabel {
 sub pdfFromHTML {
 
 	my ($out) = @_;
+	
+	$out = _unformat($out);
+	
 	my $htmldoc = new HTML::HTMLDoc( 'mode' => 'file', 'tmpdir' => '/tmp' );
 
 	$htmldoc->set_html_content($out);

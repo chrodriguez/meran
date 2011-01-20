@@ -50,10 +50,10 @@ function setMessages(Messages_hashref){
             $('#mensajes').append('<div class="message_text" >'+Messages_hashref.messages[i].message + '</div>');
         }
     
-        scrollTo('mensajes');
         $('#mensajes').css("display","block");
 
         _show();
+        scrollTo('mensajes');  
         _delay(_clearMessages, 180);
     }
     catch (e){
