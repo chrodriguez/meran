@@ -19,6 +19,7 @@ function busquedaCombinable(){
 
     objAH                   = new AjaxHelper(updateBusquedaCombinable);
     objAH.debug             = true;
+    objAH.showOverlay       = true;
     //para busquedas combinables
     objAH.url               = '/cgi-bin/koha/busquedas/busquedasDB.pl';
     objAH.titulo            = $('#titulo').val();
@@ -113,6 +114,7 @@ function buscar(doScroll){
 function buscarPorTema(){
     objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
+    objAH.showOverlay       = true;
     objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
     objAH.tema= $('#tema').val();
     objAH.tipoAccion    = 'BUSQUEDA_POR_TEMA';
@@ -134,6 +136,7 @@ function buscarPorISBN(){
 function buscarPorDiccionario(){
     objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
+    objAH.showOverlay       = true;
     objAH.url= '/cgi-bin/koha/busquedas/diccionario.pl';
     objAH.dictionary= $('#dictionary').val();
     //se setea la funcion para cambiar de pagina
@@ -144,6 +147,7 @@ function buscarPorDiccionario(){
 function buscarPorCodigoBarra(){
     objAH               = new AjaxHelper(updateInfoBusquedas);
     objAH.debug         = true;
+    objAH.showOverlay       = true;
     objAH.url           = '/cgi-bin/koha/busquedas/busquedasDB.pl';
     objAH.codBarra      = $('#codBarra').val();
     objAH.tipoAccion    = 'BUSQUEDA_POR_BARCODE';
@@ -158,6 +162,7 @@ function buscarSuggested(suggested){
 function busquedaPorKeyword(suggested){
 
     objAH=new AjaxHelper(updateBusquedaPorKeyword);
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
     if (suggested){
@@ -182,6 +187,7 @@ function updateBusquedaPorKeyword(responseText){
 function buscarEstante(){
 
     objAH=new AjaxHelper(updateInfoBusquedas);
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/busquedas/estante.pl';
     objAH.viewShelfName= $('#estante').val();
@@ -196,6 +202,7 @@ function buscarEstante(){
 function mostrarEstantes(){
 
     objAH=new AjaxHelper(updateMostrarEstantes);
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.url= '../estanteVirtual.pl';
     //se setea la funcion para cambiar de pagina
@@ -219,6 +226,7 @@ function verEstanteVirtual(shelf){
     
     objAH=new AjaxHelper(updateVerEstanteVirtual);
     objAH.debug= true;
+    objAH.showOverlay       = true;
     objAH.url= '../estanteVirtualDB.pl';
     objAH.shelves= shelf;
     objAH.tipo= 'VER_ESTANTE';
@@ -232,6 +240,7 @@ function verSubEstanteVirtual(shelf){
     
     objAH=new AjaxHelper(updateVerEstanteVirtual);
     objAH.debug= true;
+    objAH.showOverlay       = true;
     objAH.url= '../estanteVirtualDB.pl';
     objAH.shelves= shelf;
     objAH.tipo= 'VER_SUBESTANTE';
@@ -257,6 +266,7 @@ function verTema(idtema,tema){
 
     objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
+    objAH.showOverlay       = true;
     objAH.url= '/cgi-bin/koha/busquedas/busqueda.pl';
     objAH.idTema= idtema;
     objAH.tema= tema;
@@ -280,6 +290,7 @@ function cambiarEstadoCampos(campos, clase){
 
 function buscarPorAutor(completo){
     objAH               = new AjaxHelper(updateInfoBusquedas);
+    objAH.showOverlay       = true;
     objAH.url           = '/cgi-bin/koha/busquedas/busquedasDB.pl';
     //se setea la funcion para cambiar de pagina
     objAH.debug         = true;

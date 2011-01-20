@@ -20,6 +20,7 @@ Modulo para manejar objetos del ORM de los datos del nivel3 del catalogo
 =cut
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
+use C4::AR::Utilidades qw(trim);
 
 __PACKAGE__->meta->setup(
     table   => 'cat_registro_marc_n3',
@@ -53,20 +54,6 @@ __PACKAGE__->meta->setup(
 =head2
     sub agregar
 =cut
-# FIXME esto es lo original, esoty probando Miguel
-# sub agregar{
-#     my ($self)          = shift;
-#     my ($db, $params)   = @_;
-# 
-#     $self->setId2($params->{'id2'});
-#     $self->setId1($params->{'id1'});
-#     $self->setMarcRecord($params->{'marc_record'});
-# 
-# 
-#     $self->save();
-# }
-
-
 sub agregar {
     my ($self)          = shift;
     my ($db, $params, $msg_object)   = @_;
@@ -106,7 +93,11 @@ sub validar {
                 $self->validarBarcode($msg_object, $subcampo_hash_ref, $action);
             } elsif(($campo_hash_ref->{'campo'} eq '995')&&($subcampo_hash_ref->{'subcampo'} eq 't')){
             #validaciones para la signatura topografica, la signatura es unica en el grupo
-#                 $self->validarBarcode($msg_object, $subcampo_hash_ref, $action);
+                if ($self->seRepiteSignatura($subcampo_hash_ref->{'dato'})){
+                    C4::AR::Debug::debug("CatRegistroMarcN3 => validar => se repite la signatura");
+                    $msg_object->{'error'} = 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U417', 'params' => [$subcampo_hash_ref->{'dato'}]} ) ;
+                }
             }
       }
     }# END foreach my $barcode (@$barcodes_array)
@@ -181,6 +172,36 @@ sub seRepiteBarcode {
             return 1;
         }
     }
+}
+
+=head2 sub seRepiteBarcode
+Verifica si se repite el barcode, esto se usa cuandos se tiene q modificar
+=cut
+sub seRepiteSignatura {
+    my ($self)          = shift;
+    my ($signatura)     = @_;
+
+#     C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteSignatura => ".$signatura." para el grupo ".$self->getId2());
+
+    my $existe              = 0;  
+    my $nivel3_array_ref    = C4::AR::Nivel3::getAllNivel3FromId2($self->getId2());
+
+#     C4::AR::Debug::debug("CatRegistroMarcN3 => cant de ejemplares => ".scalar(@$nivel3_array_ref));
+
+    foreach my $nivel3 (@$nivel3_array_ref){
+
+#         C4::AR::Debug::debug("CatRegistroMarcN3 => signatura => db =>  ==".$nivel3->getSignatura_topografica()."==");
+#         C4::AR::Debug::debug("CatRegistroMarcN3 => nivel3->getId3 => ".$nivel3->getId3());
+#         C4::AR::Debug::debug("CatRegistroMarcN3 => self->getId3 => ".$self->getId3());
+
+        if( ($nivel3->getSignatura_topografica() eq C4::AR::Utilidades::trim($signatura)) && ($nivel3->getId3() != $self->getId3()) ){
+            #otro ejemplar ya tiene la misma signatura
+            $existe = 1;
+            last();
+        }
+    }
+
+    return $existe;
 }
 
 sub modificar {

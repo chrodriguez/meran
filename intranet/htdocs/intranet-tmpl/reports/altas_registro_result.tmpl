@@ -46,6 +46,7 @@
                     </td>
                     <td width="12%">[% "Edici&oacute;n/A&ntilde;o" | i18n %]</td>
                     <td width="15%"> [% "Disponibilidad" | i18n %] </td>
+                    <td width="12%">[% "Agregado/Actualizado" | i18n %]</td>
                 </tr>
             <!-- Actual Resultados de la b&uacute;squeda -->
             [% FOREACH data %]
@@ -101,7 +102,8 @@
                                     [% prestados %]
                         [% END %]
                     </td>   
-            
+                    
+                    <td> [% marc_n3.getUpdatedAt %] </td>
                 </tr>
             [% END %]
             </table>

@@ -14,6 +14,7 @@ function consultar(filtro,doScroll){
     if (doScroll)
       shouldScrollUser = doScroll;
     objAH=new AjaxHelper(updateInfoUsuarios);
+    objAH.showOverlay       = true;
     objAH.cache = true;
     busqueda = jQuery.trim($('#socio').val());
     inicial = '0';
@@ -41,6 +42,7 @@ function consultar(filtro,doScroll){
     }
     if(jQuery.trim(busqueda).length > 0){
         objAH.url= '/cgi-bin/koha/usuarios/reales/buscarUsuarioResult.pl';
+        objAH.showOverlay       = true;
         objAH.debug= true;
 //      objAH.cache= true;
         objAH.funcion= 'changePage';
@@ -65,10 +67,7 @@ function updateInfoUsuarios(responseText){
     classes[2] = 'legajo';
     classes[3] = 'tarjetaId';
     busqueda = jQuery.trim($('#socio').val());
-    if (busqueda.substr(0,6).toUpperCase() != 'FILTRO') //SI NO SE QUISO FILTRAR POR INICIAL, NO TENDRIA SENTIDO MARCARLO
-        highlight(classes,idArray);
-//     if (shouldScrollUser)
-//         scrollTo('result');
+    scrollTo('result');
 }
 
 function Borrar(){
