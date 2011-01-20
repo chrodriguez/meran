@@ -570,5 +570,17 @@ sub verificar_historico_disponibilidad {
     }
 }
 
+sub getUpdatedAt{
+    my ($self) = shift;
+    
+    my $date = $self->updated_at;
+    
+    my $dateformat = C4::Date::get_date_format();
+    
+    $date = C4::Date::format_date_in_iso($date,$dateformat);
+    
+    return ($date);
+	
+}
 1;
 

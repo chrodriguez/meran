@@ -76,6 +76,8 @@ use vars qw(@EXPORT @ISA);
     &BornameSearchForCard
     &isUniqueDocument
     &esRegular
+    &updateUserDataValidation
+    &needsDataValidation
 );
 
 =item
@@ -852,6 +854,63 @@ sub esRegular {
     }
 }
 
+
+
+=item
+    Este funcion devuelve si el socio tiene que pasar por ventanilla a validar sus datos censales
+=cut
+sub needsDataValidation {
+    my ($nro_socio) = @_;
+
+    if ($nro_socio){
+        my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+                                                   query => [ nro_socio => { eq => $nro_socio } ],
+                                                    select       => ['*'],
+                                       );
+        if($socio_array_ref){
+            my $socio = $socio_array_ref->[0];
+
+            return ( $socio->needsValidation());
+        }else{
+            return 0;
+        }
+   }
+}
+
+=item
+    Este funcion devuelve si el socio tiene que pasar por ventanilla a validar sus datos censales
+=cut
+sub updateUserDataValidation {
+    my ($nro_socio) = @_;
+
+    my $msg_object= C4::AR::Mensajes::create();
+    use Date::Manip;
+    
+    if ($nro_socio){
+        my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+                                                    query => [ nro_socio => { eq => $nro_socio } ],
+                                                    select       => ['*'],
+                                        );
+
+        if($socio_array_ref){
+            my $socio = $socio_array_ref->[0];
+            
+            eval{
+                $socio->updateValidation();
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U415', 'params' => []});
+            };
+            if ($@){
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U416', 'params' => []} ) ;
+            }
+        }
+    }
+    
+    return ($msg_object);
+}
+
+
+=item
 =item sub getLastLoginTime
 
 Esta funcion devuelve el momento en q se logeo el ultimo socio ed la biblioteca
@@ -872,17 +931,6 @@ END { }       # module clean-up code here (global destructor)
 
 1;
 __END__
-=back
-
-=head1 AUTHOR
-
-Grupo de Desarrollo Meran <grupomeran@linti.unlp.edu.ar>
-
-=head1 SEE ALSO
-
-C4::AR::Reservas 
-
-=cut
 
 
 

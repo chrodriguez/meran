@@ -67,8 +67,7 @@ else {
 }
 
 my ( $ini, $pageNumber, $cantR ) = C4::AR::Utilidades::InitPaginador($ini);
-my ( $cantidad, $data ) =
-  C4::AR::Reportes::altasRegistro( $ini, $cantR, $obj, $to_pdf );
+my ( $cantidad, $data ) = C4::AR::Reportes::altasRegistro( $ini, $cantR, $obj, $to_pdf );
 
 #my ($path,$filename) = C4::AR::Reportes::toXLS($data,0,'Altas','Altas de Registro');
 #$t_params->{'filename'} = '/reports/'.$filename;
