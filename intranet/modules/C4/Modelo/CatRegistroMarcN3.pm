@@ -53,20 +53,6 @@ __PACKAGE__->meta->setup(
 =head2
     sub agregar
 =cut
-# FIXME esto es lo original, esoty probando Miguel
-# sub agregar{
-#     my ($self)          = shift;
-#     my ($db, $params)   = @_;
-# 
-#     $self->setId2($params->{'id2'});
-#     $self->setId1($params->{'id1'});
-#     $self->setMarcRecord($params->{'marc_record'});
-# 
-# 
-#     $self->save();
-# }
-
-
 sub agregar {
     my ($self)          = shift;
     my ($db, $params, $msg_object)   = @_;
@@ -160,6 +146,33 @@ sub validarBarcode {
 Verifica si se repite el barcode, esto se usa cuandos se tiene q modificar
 =cut
 sub seRepiteBarcode {
+    my ($self)      = shift;
+    my($barcode)    = @_;
+  
+    my $nivel_array_ref = C4::AR::Nivel3::getNivel3FromBarcode($barcode);
+
+#     C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteBarcode => nivel_array_ref->getId3() => ".$nivel_array_ref->getId3()."  params->{'id3'} => ".$self->getId3());
+
+    if ($nivel_array_ref == 0){
+    #no existe el barcode
+        return 0;
+    } else {
+        if($nivel_array_ref->getId3() == $self->getId3()){
+            #estoy modificando el mismo ejemplar
+            C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteBarcode => estoy modificando el mismo ejemplar ");
+            return 0;
+        } else {
+            #existe, hay que ver si estoy modificando el existente, si es asi esta bien
+            C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteBarcode => estoy modificando otro ejemplar, SE REPITE ");
+            return 1;
+        }
+    }
+}
+
+=head2 sub seRepiteBarcode
+Verifica si se repite el barcode, esto se usa cuandos se tiene q modificar
+=cut
+sub seRepiteSignatura {
     my ($self)      = shift;
     my($barcode)    = @_;
   
