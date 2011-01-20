@@ -109,6 +109,7 @@ sub altasRegistro {
         my %hash_temp = {};
           
         $hash_temp{'id1'} = $record->getId1;
+        $hash_temp{'marc_n3'} = $record;
 
 		push (@id1_array,\%hash_temp);
 	}

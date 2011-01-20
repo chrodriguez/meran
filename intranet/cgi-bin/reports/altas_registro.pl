@@ -39,6 +39,7 @@ my ($template, $session, $t_params, $data_url);
 
 my %params_for_combo = {};
 $params_for_combo{'default'} = 'ALL';
+$params_for_combo{'onChange'} = 'consultarAltas()';
 $t_params->{'data_url'} = $data_url;
 $t_params->{'item_type_combo'} = C4::AR::Utilidades::generarComboTipoNivel3(\%params_for_combo);
 
