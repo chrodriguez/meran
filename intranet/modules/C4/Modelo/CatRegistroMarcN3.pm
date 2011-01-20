@@ -52,22 +52,141 @@ __PACKAGE__->meta->setup(
 =head2
     sub agregar
 =cut
-sub agregar{
+# FIXME esto es lo original, esoty probando Miguel
+# sub agregar{
+#     my ($self)          = shift;
+#     my ($db, $params)   = @_;
+# 
+#     $self->setId2($params->{'id2'});
+#     $self->setId1($params->{'id1'});
+#     $self->setMarcRecord($params->{'marc_record'});
+# 
+# 
+#     $self->save();
+# }
+
+
+sub agregar {
     my ($self)          = shift;
-    my ($db, $params)   = @_;
+    my ($db, $params, $msg_object)   = @_;
 
     $self->setId2($params->{'id2'});
     $self->setId1($params->{'id1'});
     $self->setMarcRecord($params->{'marc_record'});
 
+    C4::AR::Debug::debug("CatRegistroMarcN3 => agregar => tipo de ejemplar => ".$params->{'tipo_ejemplar'});
+    my ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran(MARC::Record->new_from_usmarc($params->{'marc_record'}), $params->{'tipo_ejemplar'});
 
-    $self->save();
+    $self->validar($msg_object, $MARC_result_array, $params, 'INSERT', $db);
+  
+    if(!$msg_object->{'error'}){
+        $self->save();
+    }
 }
 
-
-sub modificar{
+sub validar {
     my ($self)           = shift;
-    my ($params, $db)    = @_;
+    my ($msg_object, $MARC_array, $params, $action, $db)    = @_;
+
+    C4::AR::Debug::debug("CatRegistroMarcN3 => validar => action => ".$action);
+
+    $msg_object->{'error'} = 0;
+
+    foreach my $campo_hash_ref (@$MARC_array){
+
+        my $subcampos_array = $campo_hash_ref->{'subcampos_array'};
+
+        foreach my $subcampo_hash_ref (@{$subcampos_array}) {
+#             C4::AR::Debug::debug("CatRegistroMarcN3 => validar => campo, subcampo ".$campo_hash_ref->{'campo'}.", ".$subcampo_hash_ref->{'subcampo'});
+
+
+            if(($campo_hash_ref->{'campo'} eq '995')&&($subcampo_hash_ref->{'subcampo'} eq 'f')){
+            #validaciones para el BARCODE
+                $self->validarBarcode($msg_object, $subcampo_hash_ref, $action);
+            } elsif(($campo_hash_ref->{'campo'} eq '995')&&($subcampo_hash_ref->{'subcampo'} eq 't')){
+            #validaciones para la signatura topografica, la signatura es unica en el grupo
+#                 $self->validarBarcode($msg_object, $subcampo_hash_ref, $action);
+            }
+      }
+    }# END foreach my $barcode (@$barcodes_array)
+
+
+    if($msg_object->{'error'}){
+        C4::AR::Debug::debug("CatRegistroMarcN3 => DATOS INVALIDOS!!!!");
+    } else {
+        C4::AR::Debug::debug("CatRegistroMarcN3 => DATOS VALIDOS!!!!");
+    }
+}
+
+sub validarBarcode {
+    my ($self)                                      = shift;
+    my ($msg_object, $subcampo_hash_ref, $action)   = @_;
+
+    if ($action eq "INSERT") {
+
+        if( !C4::AR::Utilidades::validateBarcode($subcampo_hash_ref->{'dato'}) ) {
+            #el barcode ingresado no es valido
+            C4::AR::Debug::debug("CatRegistroMarcN3 => validarBarcode => NO EXISTE EL BARCODE EN EL ARREGLO");
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U402', 'params' => [$subcampo_hash_ref->{'dato'}]} ) ;
+
+        } elsif( !($msg_object->{'error'}) && C4::AR::Nivel3::existeBarcode($subcampo_hash_ref->{'dato'}) ){
+            #verifico en el INSERT si el barcode existe en la base de datos
+            C4::AR::Debug::debug("CatRegistroMarcN3 => validarBarcode => el barcode ".$subcampo_hash_ref->{'dato'}." existe en la base");
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$subcampo_hash_ref->{'dato'}]} );
+
+        } 
+
+    } elsif ($action eq "UPDATE") {
+
+        if( !($msg_object->{'error'}) && $self->seRepiteBarcode($subcampo_hash_ref->{'dato'}) ){
+            #verifico en el UPDATE si el barcode existe en la base de datos
+            C4::AR::Debug::debug("CatRegistroMarcN3 => validarBarcode => el barcode ".$subcampo_hash_ref->{'dato'}." existe en la base");
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$subcampo_hash_ref->{'dato'}]} );
+
+        } elsif( !($msg_object->{'error'}) && C4::AR::Prestamos::estaPrestado($self->getId3()) ){
+            #verifico que el ejemplar no se encuentre reservado
+            $msg_object->{'error'} = 1;
+            C4::AR::Debug::debug("CatRegistroMarcN3 => validarBarcode => Se está intentando modificar un ejemplar que tiene un prestamo");
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P125', 'params' => [$self->getId3()]} );
+        }
+    }
+}
+
+=head2 sub seRepiteBarcode
+Verifica si se repite el barcode, esto se usa cuandos se tiene q modificar
+=cut
+sub seRepiteBarcode {
+    my ($self)      = shift;
+    my($barcode)    = @_;
+  
+    my $nivel_array_ref = C4::AR::Nivel3::getNivel3FromBarcode($barcode);
+
+#     C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteBarcode => nivel_array_ref->getId3() => ".$nivel_array_ref->getId3()."  params->{'id3'} => ".$self->getId3());
+
+    if ($nivel_array_ref == 0){
+    #no existe el barcode
+        return 0;
+    } else {
+        if($nivel_array_ref->getId3() == $self->getId3()){
+            #estoy modificando el mismo ejemplar
+            C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteBarcode => estoy modificando el mismo ejemplar ");
+            return 0;
+        } else {
+            #existe, hay que ver si estoy modificando el existente, si es asi esta bien
+            C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteBarcode => estoy modificando otro ejemplar, SE REPITE ");
+            return 1;
+        }
+    }
+}
+
+sub modificar {
+    my ($self)                      = shift;
+    my ($db, $params, $msg_object)  = @_;
+
+    my $MARC_result_array;
 
     $self->setId2($params->{'id2'});
     $self->setId1($params->{'id1'});
@@ -118,15 +237,25 @@ sub modificar{
 
         $self->setMarcRecord($marc_record_base->as_usmarc);
         C4::AR::Debug::debug("marc_record as_usmarc para la base ".$marc_record_base->as_usmarc);
+        ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran(MARC::Record->new_from_usmarc($marc_record_base->as_usmarc), $params->{'tipo_ejemplar'});
 
     } else {
         $self->setMarcRecord($params->{'marc_record'});
+        ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran(MARC::Record->new_from_usmarc($params->{'marc_record'}), $params->{'tipo_ejemplar'});
     }
 
     $self->verificar_cambio($db, $params);
     $self->verificar_historico_disponibilidad($db, $params);
 
-    $self->save();
+    C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => self->getId3() => ANTES ".$self->getId3());
+
+    $self->validar($msg_object, $MARC_result_array, $params, 'UPDATE', $db);
+
+    if(!$msg_object->{'error'}){
+        $self->save();
+    }
+
+    C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => self->getId3() DESPUES => ".$self->getId3());
 }
 
 =head2
