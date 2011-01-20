@@ -697,75 +697,28 @@ sub _verificarDeleteItem {
 
 }
 
-# sub _verificarUpdateItem {
-# # FIXME no se verificar si se repiten los barcodes
-#     my($msg_object, $params) = @_;
-# 
-#     $msg_object->{'error'} = 0;#no hay error
-# 
-#     if( !($msg_object->{'error'}) && C4::AR::Prestamos::estaPrestado($params->{'id3'}) ){
-#         #verifico que el ejemplar no se encuentre reservado
-#         $msg_object->{'error'} = 1;
-#         C4::AR::Debug::debug("_verificarDeleteItem => Se está intentando modificar un ejemplar que tiene un prestamo");
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P125', 'params' => [$params->{'id3'}]} ) ;
-# 
-# #     } elsif ( existeBarcode($params->{'barcode'}, $params->{'id3'} ) && !($params->{'EDICION_N3_GRUPAL'}) ){
-#     } 
-# #     elsif (seRepiteBarcode($params)) {
-# #         #el barcode existe en la base de datos
-# #         $msg_object->{'error'} = 1;
-# #         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$params->{'barcode'}]} ) ;        
-# #     }
-# }
 
+=item sub getAllNivel3FromId2
 
-
-=head2 sub seRepiteBarcode
-Verifica si se repite el barcode, esto se usa cuandos se tiene q modificar
+  retorna todos los ejemplares de un nivel 2
 =cut
-# sub seRepiteBarcode {
-#     my($params) = @_;
-#   
-#     my $nivel_array_ref = C4::AR::Nivel3::getNivel3FromBarcode($params->{'barcode'});
-# 
-#     C4::AR::Debug::debug("Nivel3 => seRepiteBarcode => ivel_array_ref->getId3() => ".$nivel_array_ref->getId3()."  params->{'id3'} => ".$params->{'id3'});
-# 
-#     if ($nivel_array_ref == 0){
-#     #no existe el barcode
-#         return 0;
-#     } else {
-#     #existe, hay que ver si estoy modificando el existente, si es asi esta bien
-#         C4::AR::Debug::debug("Nivel3 => seRepiteBarcode => ivel_array_ref->getId3() => ".$nivel_array_ref->getId3()."  params->{'id3'} => ".$params->{'id3'});
-#         return $nivel_array_ref->getId3() ne $params->{'id3'};
-#     }
-# }
+sub getAllNivel3FromId2 {
+    my ($id2) = @_;
+    
+    my @filtros;
 
-# sub seRepiteBarcode {
-#     my($params) = @_;
-# 
-#     my @filtros;
-#     my @barcode_result;
-# 
-# #     push(@filtros, ( id => { eq => $params-> {'id3'} }) );
-#     
-#     my $barcodes_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
-# 
-#     my $cant = scalar(@$barcodes_array_ref);
-# 
-#     for(my $i=0; $i < $cant; $i++){
-# 
-#         if( ($barcodes_array_ref->[$i]->getBarcode() eq $params->{'barcode'}) && ($barcodes_array_ref->[$i]->getId3() eq $params->{'id3'}) ){
-#             push(@barcode_result, $barcodes_array_ref->[$i]->getBarcode());
-#             last();
-#         }
-#     }
-# 
-#     if(scalar(@barcode_result) > 0){
-#         return 1;
-#     }else{
-#         return (0);
-#     }
-# }
+    push(@filtros, ( id2 => { eq => $id2 }) );
+    
+    my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
+
+
+    if(scalar(@$nivel3_array_ref) > 0){
+        return ($nivel3_array_ref);
+    }else{
+        return (0);
+    }
+}
+
 
 =head2 sub existeBarcode
 Verifica si existe el barcode en la base
