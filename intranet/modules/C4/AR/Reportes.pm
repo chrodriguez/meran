@@ -17,7 +17,8 @@ use vars qw(@EXPORT_OK @ISA);
 );
 
 sub altasRegistro {
-
+    # FIXME Cambiar a Sphinx!
+    
 	my ($ini, $cantR, $params) = @_;
 
 	use C4::Modelo::CatRegistroMarcN3;
