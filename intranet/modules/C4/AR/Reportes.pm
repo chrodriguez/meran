@@ -4,7 +4,7 @@ use strict;
 no strict "refs";
 use C4::Date;
 use vars qw(@EXPORT_OK @ISA);
-@ISA    = qw(Exporter);
+@ISA       = qw(Exporter);
 @EXPORT_OK = qw(
 
   &getReportFilter
@@ -14,112 +14,114 @@ use vars qw(@EXPORT_OK @ISA);
   &toXLS
   &registroDeUsuarios
   &altasRegistro
+  &estantesVirtuales
 );
 
 sub altasRegistro {
-    # FIXME Cambiar a Sphinx!
-    
-	my ($ini, $cantR, $params, $total) = @_;
+
+	# FIXME Cambiar a Sphinx!
+
+	my ( $ini, $cantR, $params, $total ) = @_;
 	use C4::Modelo::CatRegistroMarcN3;
 
-	my $f_inicio = $params->{'date_begin'};
-	my $f_fin   = $params->{'date_end'};
-	my $item_type  = $params->{'item_type'};
-    
-    my $dateformat = C4::Date::get_date_format();
-    my @filtros;
-    
-    if ( C4::AR::Utilidades::validateString($f_inicio) ) {
-         push(
-             @filtros,
-             (
-                updated_at => {
-                    eq => format_date_in_iso( $f_inicio, $dateformat ),
-                    gt => format_date_in_iso( $f_inicio, $dateformat )
-                 }
-             )
-         );
-    }
-    
-    if ( (C4::AR::Utilidades::validateString($item_type)) && ($item_type ne 'ALL') ) {
-         push(
-             @filtros,
-             (
-                'nivel2.marc_record' => {
-                    like => '%cat_ref_tipo_nivel3@'.$item_type.'%',
-                }
-             )
-         );
-    }
-    
-    if ( C4::AR::Utilidades::validateString($f_fin) ) {
-        push(
-             @filtros,
-                (
-                 updated_at => {
-                     eq => format_date_in_iso( $f_fin, $dateformat ),
-                     lt => format_date_in_iso( $f_fin, $dateformat )
-                 }
-             )
-         );
-    }
+	my $f_inicio  = $params->{'date_begin'};
+	my $f_fin     = $params->{'date_end'};
+	my $item_type = $params->{'item_type'};
 
+	my $dateformat = C4::Date::get_date_format();
+	my @filtros;
 
-    
+	if ( C4::AR::Utilidades::validateString($f_inicio) ) {
+		push(
+			@filtros,
+			(
+				updated_at => {
+					eq => format_date_in_iso( $f_inicio, $dateformat ),
+					gt => format_date_in_iso( $f_inicio, $dateformat )
+				}
+			)
+		);
+	}
+
+	if (   ( C4::AR::Utilidades::validateString($item_type) )
+		&& ( $item_type ne 'ALL' ) )
+	{
+		push(
+			@filtros,
+			(
+				'nivel2.marc_record' =>
+				  { like => '%cat_ref_tipo_nivel3@' . $item_type . '%', }
+			)
+		);
+	}
+
+	if ( C4::AR::Utilidades::validateString($f_fin) ) {
+		push(
+			@filtros,
+			(
+				updated_at => {
+					eq => format_date_in_iso( $f_fin, $dateformat ),
+					lt => format_date_in_iso( $f_fin, $dateformat )
+				}
+			)
+		);
+	}
+
 	my ($cat_registro_n3);
 	if ( ( ( $cantR == 0 ) && ( $ini == 0 ) ) || ($total) ) {
-	    $cat_registro_n3 = 
-		C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
-					    query           => \@filtros,              
-						select          => ['*'],
-						require_objects => ['nivel2','nivel1'],
-	                    sort_by          => 'id1 DESC',
-	    );
-	}else{
-        $cat_registro_n3 = 
-        C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
-                        query           => \@filtros,              
-                        select          => ['*'],
-                        limit   => $cantR,
-                        offset  => $ini,
-                        require_objects => ['nivel2','nivel1'],
-                        sort_by          => 'id1 DESC',
-        );
-		
+		$cat_registro_n3 =
+		  C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+			query           => \@filtros,
+			select          => ['*'],
+			require_objects => [ 'nivel2', 'nivel1' ],
+			sort_by         => 'id1 DESC',
+		  );
 	}
-	
-	## Retorna la cantidad total, sin paginar.
-	
-	## FIXME no anda el _count, tuve que poner la agregacion COUNT(*) en el campo id1.
-    my ($cat_registro_n3_count) =
-      C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
-			        query            => \@filtros,              
-			        select           => ['COUNT(*) AS agregacion_temp'],
-                    require_objects => ['nivel2','nivel1'],
-      );
+	else {
+		$cat_registro_n3 =
+		  C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+			query           => \@filtros,
+			select          => ['*'],
+			limit           => $cantR,
+			offset          => $ini,
+			require_objects => [ 'nivel2', 'nivel1' ],
+			sort_by         => 'id1 DESC',
+		  );
 
-    $cat_registro_n3_count = $cat_registro_n3_count->[0]->{'agregacion_temp'};
-    
-    
-    #Este for es sólo para hacer el array de id1, para que se puedar usar armarInfoNivel1
-    my @id1_array;  
+	}
+
+	## Retorna la cantidad total, sin paginar.
+
+	## FIXME no anda el _count, tuve que poner la agregacion COUNT(*) en el campo id1.
+	my ($cat_registro_n3_count) =
+	  C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+		query           => \@filtros,
+		select          => ['COUNT(*) AS agregacion_temp'],
+		require_objects => [ 'nivel2', 'nivel1' ],
+	  );
+
+	$cat_registro_n3_count = $cat_registro_n3_count->[0]->{'agregacion_temp'};
+
+#Este for es sólo para hacer el array de id1, para que se puedar usar armarInfoNivel1
+	my @id1_array;
 
 	foreach my $record (@$cat_registro_n3) {
 		my $record_item_type = $record->nivel2->getTipoDocumento;
-        my %hash_temp = {};
-          
-        $hash_temp{'id1'} = $record->getId1;
-        $hash_temp{'marc_n3'} = $record;
+		my %hash_temp        = {};
 
-		push (@id1_array,\%hash_temp);
+		$hash_temp{'id1'}     = $record->getId1;
+		$hash_temp{'marc_n3'} = $record;
+
+		push( @id1_array, \%hash_temp );
 	}
 
 	$params->{'tipo_nivel3_name'} = $item_type;
-	
-    my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @id1_array);
 
-    return ($cat_registro_n3_count, $resultsarray);
-	
+	my ( $total_found_paginado, $resultsarray ) =
+	  C4::AR::Busquedas::armarInfoNivel1( $params, @id1_array );
+
+	return ( $cat_registro_n3_count, $resultsarray );
+
 }
 
 sub getReportFilter {
@@ -585,26 +587,14 @@ sub registroDeUsuarios {
 	if ($ui) {
 		push( @filtros, ( 'id_ui' => { eq => $ui } ) );
 	}
-    if ( ( C4::AR::Utilidades::validateString($name_to) ) )
-    {
-        push(
-            @filtros,
-            (
-                'persona.apellido' =>
-                  { eq => $name_to, lt => $name_to }
-            )
-        );
-    }
-    if (   ( C4::AR::Utilidades::validateString($name_from) ) )
-    {
-        push(
-            @filtros,
-            (
-                'persona.apellido' =>
-                  { eq => $name_from, gt => $name_from }
-            )
-        );
-   }
+	if ( ( C4::AR::Utilidades::validateString($name_to) ) ) {
+		push( @filtros,
+			( 'persona.apellido' => { eq => $name_to, lt => $name_to } ) );
+	}
+	if ( ( C4::AR::Utilidades::validateString($name_from) ) ) {
+		push( @filtros,
+			( 'persona.apellido' => { eq => $name_from, gt => $name_from } ) );
+	}
 	if ( ($anio) && ( $anio =~ /^-?[\.|\d]*\Z/ ) ) {
 		push(
 			@filtros,
@@ -616,8 +606,7 @@ sub registroDeUsuarios {
 		push(
 			@filtros,
 			(
-				'fecha_alta' =>
-				  { eq => $anio_fecha_end, lt => $anio_fecha_end }
+				'fecha_alta' => { eq => $anio_fecha_end, lt => $anio_fecha_end }
 			)
 		);
 	}
@@ -650,8 +639,30 @@ sub registroDeUsuarios {
 
 }
 
+sub estantesVirtuales {
 
-END { }       # module clean-up code here (global destructor)
+	my ( $id_estante ) = @_;
+
+    use C4::Modelo::CatEstante;
+    use C4::Modelo::CatEstante::Manager;
+    use C4::Modelo::CatContenidoEstante;
+    use C4::Modelo::CatContenidoEstante::Manager;
+
+	my @filtros;
+    my $resultsarray;
+    
+	push( @filtros, ( id => { eq => $id_estante } ) );
+    
+    $resultsarray = C4::Modelo::CatEstante::Manager->get_cat_estante(
+                            query   => \@filtros,
+                            
+    );
+
+	return ( $resultsarray );
+
+}
+
+END { }    # module clean-up code here (global destructor)
 
 1;
 __END__

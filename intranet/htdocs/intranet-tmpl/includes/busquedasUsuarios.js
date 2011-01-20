@@ -53,7 +53,6 @@ function consultar(filtro,doScroll){
         jAlert(INGRESE_UN_DATO,USUARIOS_ALERT_TITLE);
         $('#socio').focus();
     }
-
 }
 
 function updateInfoUsuarios(responseText){

@@ -18,23 +18,9 @@
     <legend class="titulo_legend trigger click" title='[% "click para acceder a los resultados de la b&uacute;squeda" | i18n %]'>
         [% "Resultados de la b&uacute;squeda (altas de registro)" | i18n %]: [% cantidad %]</legend>
         <div class="contenedor_paginador">[% paginador %]</div>
-                    <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: 
-            
+            <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: 
                 <h2><i>[% buscoPor %]</i></h2>
-            
-                [% IF !from_suggested %]
-                    [% IF suggested %]
-                            <div class="suggested_search click">
-                                <a onclick="buscarSuggested('[% suggested %]')">
-                                    [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
-                                </a>
-                            </div>
-                    [% END %]
-                [% END %]
-            
-            
             </div>
-        
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <tr class="titulo_tabla_resultado">
                     <td width="35%" class="click" onClick="ordenar('titulo')" Title='[% "Ordenar por T&iacute;tulo" | i18n %]'>

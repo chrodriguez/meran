@@ -40,8 +40,8 @@ elsif($tipo eq "VER_SUBESTANTE"){
 	
     my $id_estante= $obj->{'estante'};
     if($id_estante ne 0){
-    my $estante= C4::AR::Estantes::getEstante($id_estante);
-    $t_params->{'estante'}= $estante;
+	    my $estante= C4::AR::Estantes::getEstante($id_estante);
+	    $t_params->{'estante'}= $estante;
     }
 
     my $subEstantes= C4::AR::Estantes::getSubEstantes($id_estante);

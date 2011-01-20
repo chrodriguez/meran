@@ -104,6 +104,7 @@ use vars qw(@EXPORT_OK @ISA);
     &getSphinxMatchMode
     &getToday
     &dateDiff
+    &generarComboEstantes
 );
 
 # para los combos que no usan tablas de referencia
@@ -3399,6 +3400,57 @@ sub paginarArrayResult {
 
     return @results2;
 }
+
+sub generarComboEstantes{
+	
+    my ($params) = @_;
+
+    my @select_estante_array;
+    my %select_estante_array;
+    my ($tipoNivel3_array_ref)= &C4::AR::Referencias::obtenerEstantes();
+
+    foreach my $estante (@$tipoNivel3_array_ref) {
+        push(@select_estante_array, $estante->id);
+        $select_estante_array{$estante->id}= $estante->estante;
+    }
+
+    push (@select_estante_array, '');
+    $select_estante_array{''}= 'SIN SELECCIONAR';
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+         $options_hash{'onChange'}= $params->{'onChange'};
+    }
+
+    if ( $params->{'class'} ){
+         $options_hash{'class'}= $params->{'class'};
+    }
+
+    if ( $params->{'onFocus'} ){
+      $options_hash{'onFocus'}= $params->{'onFocus'};
+    }
+
+    if ( $params->{'onBlur'} ){
+      $options_hash{'onBlur'}= $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}= $params->{'name'}||'estante_name';
+    $options_hash{'id'}= $params->{'id'}||'estante_id';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
+
+
+    $options_hash{'values'}= \@select_estante_array;
+    $options_hash{'labels'}= \%select_estante_array;
+
+    my $comboTipoNivel3= CGI::scrolling_list(\%options_hash);
+
+    return $comboTipoNivel3;
+}
+
+
 
 END { }       # module clean-up code here (global destructor)
 
