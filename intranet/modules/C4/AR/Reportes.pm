@@ -19,8 +19,7 @@ use vars qw(@EXPORT_OK @ISA);
 sub altasRegistro {
     # FIXME Cambiar a Sphinx!
     
-	my ($ini, $cantR, $params) = @_;
-
+	my ($ini, $cantR, $params, $total) = @_;
 	use C4::Modelo::CatRegistroMarcN3;
 
 	my $f_inicio = $params->{'date_begin'};
@@ -65,16 +64,30 @@ sub altasRegistro {
          );
     }
 
-	my ($cat_registro_n3) =
+
+    
+	my ($cat_registro_n3);
+	if ( ( ( $cantR == 0 ) && ( $ini == 0 ) ) || ($total) ) {
+	    $cat_registro_n3 = 
 		C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
 					    query           => \@filtros,              
 						select          => ['*'],
-	                    limit   => $cantR,
-	                    offset  => $ini,
 						require_objects => ['nivel2','nivel1'],
 	                    sort_by          => 'id1 DESC',
 	    );
-	  
+	}else{
+        $cat_registro_n3 = 
+        C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+                        query           => \@filtros,              
+                        select          => ['*'],
+                        limit   => $cantR,
+                        offset  => $ini,
+                        require_objects => ['nivel2','nivel1'],
+                        sort_by          => 'id1 DESC',
+        );
+		
+	}
+	
 	## Retorna la cantidad total, sin paginar.
 	
 	## FIXME no anda el _count, tuve que poner la agregacion COUNT(*) en el campo id1.
