@@ -507,8 +507,7 @@ sub _verificarSession {
 
 
 sub checkauth {
-#     C4::AR::Debug::debug("desde checkauth==================================================================================================");    
-    my $context = new C4::Context;
+#     C4::AR::Debug::debug("desde checkauth==================================================================================================");
     my $query               = shift;
     my $authnotrequired     = shift;
     my $flagsrequired       = shift;
@@ -524,7 +523,7 @@ sub checkauth {
     my $userid= $session->param('userid');
     my $flags=0;
     my $time = localtime(time());
-    if ($demo){
+    if ($demo) {
         #Quiere decir que no es necesario una autenticacion
         $userid="demo";
         $flags=1;
@@ -585,18 +584,17 @@ sub checkauth {
             $userid             = $query->param('userid');
             my $password        = $query->param('password');
             my $nroRandom   = $session->param('nroRandom');
-#             C4::AR::Debug::debug("checkauth=> nroRandom desde la session: ".$nroRandom);
             #se verifica la password ingresada
-            my ($passwordValida, $cardnumber, $branch) = _verificarPassword($userid,$password,$nroRandom);
+            my ($socio) = _verificarPassword($userid,$password,$nroRandom);
 #             C4::AR::Debug::debug("la pass es valida?".$passwordValida);
-            if ($passwordValida) {
+            if ($socio) {
             #se valido la password y es valida
             #setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
                 _setLoguinDuplicado($userid,  $ENV{'REMOTE_ADDR'});
-                $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+                #$socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
                 # TODO todo esto va en una funcion
                 $sessionID  = $session->param('sessionID');
-                $sessionID.="_".$branch;
+                $sessionID.="_".$socio->ui->getNombre;
                 _actualizarSession($sessionID, $userid, $socio->getNro_socio(), $time, '', $type, $flagsrequired, _generarToken(), $session);
 #                 C4::AR::Debug::debug("userid en actualizarSession actualizadoarafue".$session->param('userid'));
                 buildSocioData($session,$socio);
@@ -629,7 +627,7 @@ sub checkauth {
                 }
                 #genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
                 redirectToAuth($template_params);
-            }#end if ($passwordValida)
+            }#end else de if ($socio)
         }# end unless ($userid)
     }# el else de DEMO
 }# end checkauth
@@ -922,59 +920,56 @@ sub session_destroy {
 
     Esta funcion verifica si el usuario y la password ingresada son valida, ya se en LDAP o en la base, segun configuracion de preferencia
     Parametros:
-    $dbh, $userid, $password, $nroRandom
+    $userid, $password, $nroRandom
 
 =cut
 sub _verificarPassword {
     my ($userid, $password, $nroRandom) = @_;
-#     C4::AR::Debug::debug("_verificarPassword=> verificarPassword:");
-#     C4::AR::Debug::debug("_verificarPassword=> userID: ".$userid);
-#     C4::AR::Debug::debug("_verificarPassword=> nroRandom: ".$nroRandom);
-    # Si se quiere dejar de usar el servidor ldap para hacer la autenticacion debe cambiarse 
-    # la llamada a la funcion checkpwldap por checkpw
-    my ($passwordValida, $cardnumber, $ui);
+    my ($socio);
     ## FIXME falta verificar la pass en LDAP si esta esta usando
     if ( C4::Context->config('ldapenabled')) {
     #se esta usando LDAP
         if (C4::Context->config('authMERAN')){
-            ($passwordValida, $cardnumber, $ui) = C4::AR::Authldap::checkpwldap($userid,$password,$nroRandom);
+            #Autenticacion propia de MERAN
+            ($socio) = C4::AR::Authldap::checkpwldap($userid,$password,$nroRandom);
         }
         else { 
-            ($passwordValida, $cardnumber, $ui) = C4::AR::Authldap::checkpwDC($userid,$password);
+            #Autenticacion propia de LDAP, en este caso es recomendable HTTPS
+            ($socio) = C4::AR::Authldap::checkpwDC($userid,$password);
         }
      }
     else {
-        ($passwordValida, $cardnumber, $ui) = _checkpw($userid,$password,$nroRandom); 
+        #Si no se usa LDAP
+        ($socio) = _checkpw($userid,$password,$nroRandom); 
     }
-     C4::AR::Debug::debug("_verificarPassword=> password hzzzzzzzzzzzz?: ".$passwordValida);
-    return ($passwordValida, $cardnumber, $ui);
+     C4::AR::Debug::debug("_verificarPassword=> password hzzzzzzzzzzzz?: ".$socio);
+    return ($socio);
 }
 
 sub redirectTo {
-	my ($url) = @_;
+    my ($url) = @_;
 #     C4::AR::Debug::debug("redirectTo=>");  
-	#para saber si fue un llamado con AJAX
+    #para saber si fue un llamado con AJAX
     if(C4::AR::Utilidades::isAjaxRequest()){
-	    #redirijo en el cliente
-#         C4::AR::Debug::debug("redirectTo=> CLIENT_REDIRECT"); 		
-   		my $session = CGI::Session->load();
-		# send proper HTTP header with cookies:
+    #redirijo en el cliente
+#      C4::AR::Debug::debug("redirectTo=> CLIENT_REDIRECT"); 		
+        my $session = CGI::Session->load();
+        # send proper HTTP header with cookies:
         $session->param('redirectTo', $url);
 #         C4::AR::Debug::debug("redirectTo=> url: ".$url);
         print_header($session);
- 		print 'CLIENT_REDIRECT';
+        print 'CLIENT_REDIRECT';
         exit;
 	}else{
-#         C4::AR::Debug::debug("redirectTo=> SERVER_REDIRECT");       
-		my $input = CGI->new(); 
-		print $input->redirect( 
-					-location => $url, 
-					-status => 301,
-		); 
-#         C4::AR::Debug::debug("redirectTo=> url: ".$url);
+#       C4::AR::Debug::debug("redirectTo=> SERVER_REDIRECT");       
+        my $input = CGI->new(); 
+        print $input->redirect( 
+            -location => $url, 
+            -status => 301,
+        ); 
+#       C4::AR::Debug::debug("redirectTo=> url: ".$url);
         exit;
-	}
-    
+    }
 }
 
 sub redirectToAuth {
@@ -991,20 +986,20 @@ sub redirectToAuth {
 
 sub redirectToNoHTTPS {
     my ($url) = @_;
-#     C4::AR::Debug::debug("\n");
-#     C4::AR::Debug::debug("redirectToNoHTTPS=>");
+#   C4::AR::Debug::debug("\n");
+#   C4::AR::Debug::debug("redirectToNoHTTPS=>");
     #PARA SACAR EL LOCALE ELEGIDO POR EL SOCIO
     my $socio = C4::Auth::getSessionNroSocio();
     $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
     #para saber si fue un llamado con AJAX
     if(C4::AR::Utilidades::isAjaxRequest()){
     #redirijo en el cliente
-#         C4::AR::Debug::debug("redirectToNoHTTPS=> CLIENT_REDIRECT");         
+#      C4::AR::Debug::debug("redirectToNoHTTPS=> CLIENT_REDIRECT");         
         my $session = CGI::Session->load();
         # send proper HTTP header with cookies:
         $session->param('redirectTo', $url);
-#         C4::AR::Debug::debug("SESSION url: ".$session->param('redirectTo'));
-#         C4::AR::Debug::debug("redirectToNoHTTPS=> url: ".$url);
+#       C4::AR::Debug::debug("SESSION url: ".$session->param('redirectTo'));
+#       C4::AR::Debug::debug("redirectToNoHTTPS=> url: ".$url);
         print_header($session);
         print 'CLIENT_REDIRECT';
         exit;
@@ -1153,16 +1148,8 @@ sub _checkpw {
     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
     if ($socio){
          C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
-        if ( ($socio->persona)&&($socio->getActivo) ) {
-            C4::AR::Debug::debug("_checkpw=> tengo persona y socio\n");
-            #existe el socio y se encuentra activo
-            my $hashed_password= $socio->getPassword;
-            my $ui= $socio->getId_ui;
-            my $dni= $socio->persona->getNro_documento;
-            return _verificar_password_con_metodo($hashed_password, $password, $dni, $nroRandom, _getMetodoEncriptacion()), $userid, $ui;
-        }# END  if ( ($socio->persona)&&($socio->getActivo) )
+         return _verificar_password_con_metodo($password, $socio, $nroRandom, _getMetodoEncriptacion());
     }
-#     C4::AR::Debug::debug("_checkpw=> las pass son <> \n");
     return 0;
 }
 
@@ -1172,23 +1159,22 @@ sub _getMetodoEncriptacion {
 
 =item sub _verificar_password_con_metodo
 
-    Verifica la password ingresada por el usuario con la password recuperada de la base, todo esto con el metodo indicado por parametros    
-    
+    Verifica la password ingresada por el usuario con la password recuperada de la base, todo esto con el metodo indicado por parametros   
     Parametros:
-    $hashed_password: password recuperada de la base
+    $socio: recuperada de la base
     $metodo: MD5, SHA
+    $nroRandom: el nroRandom previamente generado
     $password: ingresada por el usuario
 
 =cut
 sub _verificar_password_con_metodo {
-    my ($hashed_password, $password, $dni, $nroRandom, $metodo) = @_;
-     C4::AR::Debug::debug("_verificar_password_con_metodo=> password del cliente: ".$password."\n");
-     C4::AR::Debug::debug("_verificar_password_con_metodo=> password de la base: ".$hashed_password."\n");
-     C4::AR::Debug::debug("_verificar_password_con_metodo=> password_hasheada_con_metodo.nroRandom: "._hashear_password($hashed_password.$nroRandom, $metodo)."\n");
-    if ($password eq _hashear_password($hashed_password.$nroRandom, $metodo)) {
-#         C4::AR::Debug::debug("_verificar_password_con_metodo=> las pass son = todo OK\n");
+    my ($password, $socio, $nroRandom, $metodo) = @_;
+#      C4::AR::Debug::debug("_verificar_password_con_metodo=> password del cliente: ".$password."\n");
+#      C4::AR::Debug::debug("_verificar_password_con_metodo=> password de la base: ".$hashed_password."\n");
+#      C4::AR::Debug::debug("_verificar_password_con_metodo=> password_hasheada_con_metodo.nroRandom: "._hashear_password($hashed_password.$nroRandom, $metodo)."\n");
+    if ($password eq _hashear_password($socio->getPassword.$nroRandom, $metodo)) {
         #PASSWORD VALIDA
-        return 1;
+        return $socio;
     }else {
         #PASSWORD INVALIDA
         return 0;
