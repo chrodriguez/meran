@@ -20,15 +20,34 @@ use vars qw(@ISA @EXPORT_OK );
 
 sub datosUsuario
 {
-    my ($userid) = @_;
+    my ($userid,$ldap) = @_;
     my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
     if ($socio) { 
         return $socio;
     }
     else {
+        #FIXME hay que agregar esta preferencia que ahora no se puede por algo q rompio MONO
+        my $agregar=C4::AR::Preferencias->getValorPreferencia("agregarDesdeLDAP")||0;
+        if ($agregar){
+                my $LDAP_INFOS= C4::Context->config("ldapinfos");
+                my $LDAP_SUFF=C4::Context->config("ldasuff");
+                my $LDAP_FILTER = $LDAP_SUFF.'='.$userid;
+                my $entries = $ldap->search(
+                    base   => $LDAP_INFOS,
+                    filter => "($LDAP_FILTER)"
+                );
+                my $passwordLDAP;
+                my $entry;
+                #my @values;
+                my $entry =$entries->entry(0);
+                C4::AR::Debug::debug("Authldap =>datosUsuario".$LDAP_FILTER . ' entry '.$entry->ldif); 
+                #$p= @values[0];
+                $ldap->unbind;
+                 }
+                C4::AR::Debug::debug("Authldap =>datosUsuario" );   
+        }
         ######FIXME agregarSocio como inactivo o no???? preferencia???
         return $socio;
-    }
 }
 
 
@@ -61,52 +80,50 @@ sub checkpwDC
     my $userDN = $LDAP_SUFF.'='.$userid.','.$LDAP_INFOS;
     my $ldap=_conectarLDAP();
     my $ldapMsg = $ldap->bind($userDN, password => $password);
-    C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->code() );
+    C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->error );
+    my $socio=0;
     if (!$ldapMsg->code()) {
-            return (datosUsuario($userid));
+            $socio=datosUsuario($userid,$ldap);
     }
-    return 0;
+    $ldap->unbind;
+    return $socio;
 
 }
 
 sub checkpwldap{
-    my ($userid, $password, $random_number) = @_;
-    my $p= getldappassword($userid);
-    #FIXME, este metodo de encriptacion posiblemente no funcione, reever
-    $p= md5_base64($p.$random_number);
-    if (($p eq $password)){
-        return (datosUsuario($userid));
-    }
-    return 0;
-}
-
-
-sub getldappassword {
-    #It gets the password for a particular userid
-    my ($userid) = @_; 
+    my ($userid, $passwordCliente, $random_number) = @_;
     my $LDAP_INFOS= C4::Context->config("ldapinfos");
     my $LDAP_SUFF=C4::Context->config("ldasuff");
     my $LDAP_ROOT= C4::Context->config("ldaproot");
     my $LDAP_PASS= C4::Context->config("ldappass");
     my $LDAP_FILTER = $LDAP_SUFF.'='.$userid;
+    my $passwordLDAP;
     my $ldap=_conectarLDAP();
     my $ldapMsg = $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
     C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->code() );
+    my $socio=0;
     if (!$ldapMsg->code()) {
-                 my %bindargs;
-                 my $entries = $ldap->search(
-                    base   => $LDAP_INFOS,
-                    filter => "($LDAP_FILTER)"
-                    );
-                my $p;
-                my $entry;
-                my @values;
-                foreach $entry ($entries->all_entries) {
-                    @values = $entry->get_value("userPassword");
-                    $p= @values[0];
-                }
-                return($p);}
-    else{
-        return "0";
+        my $entries = $ldap->search(
+            base   => $LDAP_INFOS,
+            filter => "($LDAP_FILTER)"
+        );
+        my $entry;
+        #my @values;
+        my $entry =$entries->entry(0);
+        $passwordLDAP = $entry->get_value("userPassword");
+        #$p= @values[0];
+        #FIXME
+        $passwordLDAP= md5_base64($passwordLDAP.$random_number);
+        if (($passwordLDAP eq $passwordCliente)){
+            $socio=datosUsuario($userid,$ldap);
+        }
+        $ldap->unbind;
     }
+    return $socio;
 }
+
+
+
+END { }       # module clean-up code here (global destructor)
+1;
+__END__
