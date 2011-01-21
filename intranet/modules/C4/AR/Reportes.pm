@@ -228,6 +228,85 @@ sub getItemTypes {
 	return ( \@items, \@colours, \@cant );
 }
 
+
+sub getEstantes {
+    my ( $params, $return_arrays ) = @_;
+
+    use C4::Modelo::CatContenidoEstante;
+    use C4::Modelo::CatContenidoEstante::Manager;
+    use C4::Modelo::CatEstante;
+    
+    my ($cat_estante) = C4::Modelo::CatEstante::Manager->get_cat_estante();
+
+    my @items;
+    my @cant;
+    my @colours;
+    my @array_for_file_export;
+    my %estante_hash = {0};
+
+    if ( (C4::AR::Utilidades::validateString($params->{'estante'})) && ($params->{'estante'} ne 'ALL') ){    
+        foreach my $record (@$cat_estante) {
+            my @filtros = ();
+            my $estante = $record->getEstante;
+            if ($record->getId == $params->{'estante'}){
+                 push(
+                 @filtros,
+                 (
+                      id_estante => {
+                           eq => $record->getId,
+                       }
+                  )
+                );
+               $estante_hash{$estante} = C4::Modelo::CatContenidoEstante::Manager->get_cat_contenido_estante_count(
+                        query => \@filtros,
+               );
+            }
+        }
+    }else{
+        foreach my $record (@$cat_estante) {
+            my @filtros = ();
+            my $estante = $record->getEstante;
+            push(
+                 @filtros,
+                 (
+                      id_estante => {
+                           eq => $record->getId,
+                       }
+                  )
+                );
+               $estante_hash{$estante} = C4::Modelo::CatContenidoEstante::Manager->get_cat_contenido_estante_count(
+                        query => \@filtros,
+               );
+        }
+    }
+
+    my $limit_of_view = 0;
+
+    foreach my $item ( keys %estante_hash ) {
+        $estante_hash{$item} = int $estante_hash{$item};
+        if ( $estante_hash{$item} > 0 ) {
+            push( @items,   $item );
+            push( @cant,    $estante_hash{$item} );
+            push( @colours, next_colour( $limit_of_view++ ) );
+
+            #HASH PARA EXPORTAR
+            my %hash_temp;
+            $hash_temp{'Cantidad'} = $estante_hash{$item};
+            $hash_temp{'Item'}     = $item;
+            push( @array_for_file_export, \%hash_temp );
+        }
+    }
+
+    sort_and_cumulate( \@items, \@colours, \@cant );
+
+    if ($return_arrays) {
+        return ( \@array_for_file_export, 1 );
+    }
+
+    return ( \@items, \@colours, \@cant );
+}
+
+
 sub getConsultasOPAC {
 	my ( $params, $return_arrays ) = @_;
 
@@ -410,7 +489,11 @@ sub toXLS {
 	  : ( titleByUser( 'xls', $report_type ) );
 
 	my $path      = $reports_dir . '/' . $filename;
+
 	my $workbook  = Spreadsheet::WriteExcel->new($path);
+	
+die "Problems creating new Excel file: $!" unless defined $workbook;
+
 	my $worksheet = $workbook->add_worksheet($sheet);
 	my $format    = $workbook->add_format();
 	my $col;

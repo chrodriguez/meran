@@ -30,6 +30,7 @@ __PACKAGE__->meta->setup(
     ],
 );
 
+use C4::Modelo::CatEstante;
 
 sub getId2{
     my ($self) = shift;
