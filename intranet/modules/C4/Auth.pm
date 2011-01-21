@@ -1169,9 +1169,10 @@ sub _getMetodoEncriptacion {
 =cut
 sub _verificar_password_con_metodo {
     my ($password, $socio, $nroRandom, $metodo) = @_;
-#      C4::AR::Debug::debug("_verificar_password_con_metodo=> password del cliente: ".$password."\n");
-#      C4::AR::Debug::debug("_verificar_password_con_metodo=> password de la base: ".$hashed_password."\n");
-#      C4::AR::Debug::debug("_verificar_password_con_metodo=> password_hasheada_con_metodo.nroRandom: "._hashear_password($hashed_password.$nroRandom, $metodo)."\n");
+     C4::AR::Debug::debug("_verificar_password_con_metodo=> password del cliente: ".$password."\n");
+     C4::AR::Debug::debug("_verificar_password_con_metodo=> password de la base: ".$socio->getPassword."\n");
+     C4::AR::Debug::debug("_verificar_password_con_metodo=> nroRandom: ".$nroRandom."\n"); 
+     C4::AR::Debug::debug("_verificar_password_con_metodo=> password_hasheada_con_metodo.nroRandom: "._hashear_password($socio->getPassword.$nroRandom, $metodo)."\n");
     if ($password eq _hashear_password($socio->getPassword.$nroRandom, $metodo)) {
         #PASSWORD VALIDA
         return $socio;
