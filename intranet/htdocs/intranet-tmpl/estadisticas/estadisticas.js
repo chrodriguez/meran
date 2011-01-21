@@ -31,6 +31,7 @@ function consultarColecciones(){
 
     objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
+    objAH.showOverlay = true;
     objAH.url= "/cgi-bin/koha/estadisticas/colecciones.pl";
     objAH.ui= ui;
     objAH.item_type= item_type;
@@ -52,6 +53,7 @@ function consultarAccesosOPAC(){
     objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
     objAH.url= "/cgi-bin/koha/estadisticas/consultas_opac.pl";
+    objAH.showOverlay = true;
     objAH.total= total;
     objAH.registrados= registrados;
     objAH.tipo_socio= tipo_socio;
@@ -71,12 +73,27 @@ function consultarBusquedasOPAC(){
     objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
     objAH.funcion="changePage";
+    objAH.showOverlay = true;
     objAH.url= "/cgi-bin/koha/reports/busquedas_opac.pl";
     objAH.total= total;
     objAH.registrados= registrados;
     objAH.tipo_socio= tipo_socio;
     objAH.f_inicio= f_inicio;
     objAH.f_fin= f_fin;
+    //se envia la consulta
+    objAH.sendToServer();
+}
+
+function consultarEstantesVirtuales(){
+    var estante=$("#estante_id").val();
+    
+    objAH=new AjaxHelper(updateInfo);
+    objAH.debug= true;
+    objAH.funcion="changePage";
+    objAH.url= "/cgi-bin/koha/estadisticas/estantes_virtuales.pl";
+    objAH.showOverlay = true;
+
+    objAH.estante= estante;
     //se envia la consulta
     objAH.sendToServer();
 }
