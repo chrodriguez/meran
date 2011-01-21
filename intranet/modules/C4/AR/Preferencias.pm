@@ -33,8 +33,6 @@ sub reloadAllPreferences {
 }
 
 sub getPreferenciasByArray {
-    my $self = shift;
-
     my ($variables_array)= @_;
 
     my @filtros;
@@ -64,8 +62,6 @@ sub getPreferenciasByArray {
 
 
 sub getAllPreferencias {
-    my $self = shift;
-
     my @filtros;
     my %preferencias_hash;
 
@@ -92,8 +88,6 @@ BEGIN
 }
 
 sub getMenuPreferences{
-    my $self = shift;
-
     my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
                                     query => [ variable=> { like => '%showMenuItem_%' }],
                             );
@@ -106,8 +100,6 @@ sub getMenuPreferences{
 }
 
 sub getPreferenciasByCategoria {
-    my $self = shift;
-
     my ($str)=@_;
     my $preferencias_array_ref;
     my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
@@ -120,8 +112,6 @@ sub getPreferenciasByCategoria {
 }
 
 sub getPreferenciaLike {
-    my $self = shift;
-
     my ($str,$orden)=@_;
 
  C4::AR::Debug::debug("getValorPreferencia => getPreferenciaLike == $str");
@@ -140,7 +130,6 @@ sub getPreferenciaLike {
 
 
 sub getPreferencia {
-    my $self        = shift;
     my ($variable)  = @_;
 
     my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => $variable} ]);
