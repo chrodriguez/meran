@@ -868,17 +868,20 @@ sub verificar_permisos_por_nivel{
 }
 
 sub tienePermisos {
-#     00000000 8bits los 3 más significativos esta para uso futuro
-#     000TABMC TODOS, ALTA, BAJA, MODIFICACION, CONSULTA 
+    #     00000000 8bits los 3 más significativos esta para uso futuro
+    #     000TABMC TODOS, ALTA, BAJA, MODIFICACION, CONSULTA 
 
-#     $flagsrequired->{'tipo_documento'}
-#     $flagsrequired->{'accion'}
-#     $flagsrequired->{'ui'}
-#     $flagsrequired->{'nivel'} #datos_nivel3 | datos_nivel2 | datos_nivel1
+    #     $flagsrequired->{'tipo_documento'}
+    #     $flagsrequired->{'accion'}
+    #     $flagsrequired->{'ui'}
+    #     $flagsrequired->{'nivel'} #datos_nivel3 | datos_nivel2 | datos_nivel1
 
     my ($self) = shift;
     my ($flagsrequired) = @_;
-
+    if (!($self->getActivo)){ 
+        C4::AR::Debug::debug("UsrSocio => TIPO_PERMISO => el socio no es activo");
+        return 0;
+    }
     # Se setean los flags requeridos
     $flagsrequired->{'nro_socio'}       = $self->getNro_socio;
     $flagsrequired->{'tipo_permiso'}    = $flagsrequired->{'tipo_permiso'} || "catalogo";

@@ -47,15 +47,10 @@ use C4::Modelo::UsrSocio;
 use C4::Modelo::UsrSocio::Manager;
 use Switch;
 
-#use C4::Context;
-#EINAR use Digest::MD5 qw(md5_base64);
-#EINAR use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
-#use C4::Date;
-
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 
-@EXPORT=qw(
+@EXPORT_OK=qw(
     &agregarAutorizado
     &agregarPersona
     &habilitarPersona
@@ -621,7 +616,6 @@ sub getSocioInfo {
 =cut
 sub getSocioInfoPorNroSocio {
     my ($nro_socio) = @_;
-
     if ($nro_socio){
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
@@ -644,10 +638,7 @@ sub getSocioInfoPorNroSocio {
 =cut
 sub existeSocio {
     my ($nro_socio)= @_;
-  
-
     my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => [ nro_socio => { eq => $nro_socio } ]);
-
 	return $socio_array_ref;
 }
 
