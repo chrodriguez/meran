@@ -250,7 +250,8 @@ my ($template, $session, $t_params) =
 		$nuevoCampo=&C4::AR::Utilidades::crearComponentes("text","valor",60);
 	}
 
-	$t_params->{'tipo'}= $tipo;
+    $t_params->{'tipo'}= $tipo;
+    $t_params->{'nueva'}= 1;
 	$t_params->{'valor'}= $nuevoCampo;
 
 	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
@@ -279,7 +280,7 @@ if($accion eq "GUARDAR_NUEVA_VARIABLE"){
 
 	if($tipo eq "valAuto"){ $opciones=$obj->{'categoria'};}
 
-	my $Message_arrayref= C4::AR::Preferencias->t_guardarVariable($variable,$valor,$expl,$tipo,$opciones);
+	my $Message_arrayref= C4::AR::Preferencias::t_guardarVariable($variable,$valor,$expl,$tipo,$opciones);
  
 	my $infoOperacionJSON=to_json $Message_arrayref;
 

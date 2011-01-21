@@ -38,32 +38,33 @@
 </ul>
 
 <ul>
-    <li>
-
-    [% PERL %]
-                print C4::AR::Filtros::to_Button(   
-                                    text    => "[% 'Guardar Modificaci&oacute;n' | i18n %]",
-                                    boton   => "boton_agregar",
-                                    onClick => "guardarModificacion();",
-                                    width   => "auto",
-                                    title   => "[% 'Guardar Modificaci&oacute;n' | i18n %]", 
-                                    alternClass   => "botonCentrado"
-                        ) ;
-    [% END %]
-    </li>
-
-    <li>
-    [% PERL %]
-                print C4::AR::Filtros::to_Button(   
-                                    text    => "[% 'Guardar Nueva Variable' | i18n %]",
-                                    boton   => "boton_agregar",
-                                    onClick => "guardarNuevaVariable();",
-                                    width => "auto",
-                                    title   => "[% 'Guardar Nueva Variable' | i18n %]",
-                                    alternClass   => "botonCentrado"    
-                        ) ;
-    [% END %]
-    </li>
+    [% IF !nueva %]
+	    <li>
+	    [% PERL %]
+	                print C4::AR::Filtros::to_Button(   
+	                                    text    => "[% 'Guardar Modificaci&oacute;n' | i18n %]",
+	                                    boton   => "boton_agregar",
+	                                    onClick => "guardarModificacion();",
+	                                    width   => "auto",
+	                                    title   => "[% 'Guardar Modificaci&oacute;n' | i18n %]", 
+	                                    alternClass   => "botonCentrado"
+	                        ) ;
+	    [% END %]
+	    </li>
+    [% ELSE %]
+	    <li>
+	    [% PERL %]
+	                print C4::AR::Filtros::to_Button(   
+	                                    text    => "[% 'Guardar Nueva Variable' | i18n %]",
+	                                    boton   => "boton_agregar",
+	                                    onClick => "guardarNuevaVariable();",
+	                                    width => "auto",
+	                                    title   => "[% 'Guardar Nueva Variable' | i18n %]",
+	                                    alternClass   => "botonCentrado"    
+	                        ) ;
+	    [% END %]
+	    </li>
+      [% END %]
 </ul>
 
     <div style="clear:both">

@@ -209,15 +209,16 @@ guarda la variable del sistema ingresada.
 sub t_guardarVariable {
     my ($var,$val,$exp,$tipo,$op)=@_;
     
-    my $params;
-    $params->{'variable'}       = $var;
-    $params->{'value'}          = $val;
-    $params->{'explanation'}    = $exp;
-    $params->{'options'}        = $op;
-    $params->{'type'}           = $tipo;
+    my %params;
+    $params{'variable'}       = $var;
+    $params{'value'}          = $val;
+    $params{'explanation'}    = $exp;
+    $params{'options'}        = $op;
+    $params{'type'}           = $tipo;
+
 
     my $msg_object= C4::AR::Mensajes::create();
-    _verificarDatosVariable($params,$msg_object);
+    _verificarDatosVariable(\%params,$msg_object);
 
     if(!$msg_object->{'error'}){
         my ($preferencia) = C4::Modelo::PrefPreferenciaSistema->new();
@@ -226,7 +227,7 @@ sub t_guardarVariable {
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
     eval {
-        $preferencia->agregar($params);
+        $preferencia->agregar(\%params);
         $db->commit;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP004', 'params' => []} ) ;
     };
