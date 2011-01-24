@@ -11,7 +11,7 @@ use C4::Auth;
     $usuarios->execute();
     while (my $usuario=$usuarios->fetchrow_hashref) {
       if($usuario->{'password'}){
-          my $upus=$dbh->prepare(" UPDATE usr_socio SET password='".C4::Auth::_hashear_password($usuario->{'password'},'SHA_256_B64')."' WHERE nro_socio='". $usuario->{'nro_socio'} ."' ;");
+          my $upus=$dbh->prepare(" UPDATE usr_socio SET password='".C4::Auth::hashear_password($usuario->{'password'},'SHA_256_B64')."' WHERE nro_socio='". $usuario->{'nro_socio'} ."' ;");
           $upus->execute();
       }
     }

@@ -20,19 +20,19 @@ use vars qw(@EXPORT @ISA);
 
 @ISA=qw(Exporter);
 @EXPORT=qw( 
-    &checkPassword,
-    &checkLength,
-    &countUpperChars,
-    &countLowerChars,
-    &countNumericChars,
-    &countAlphaNumericChars,
-    &countAlphaChars,
-    &countSymbolChars,
-    &isValidMail,
-    &isValidDocument
-    &validateParams
-    &checkParams
-    &validateObjectInstance
+    checkPassword,
+    checkLength,
+    countUpperChars,
+    countLowerChars,
+    countNumericChars,
+    countAlphaNumericChars,
+    countAlphaChars,
+    countSymbolChars,
+    isValidMail,
+    isValidDocument
+    validateParams
+    checkParams
+    validateObjectInstance
 );
 
 

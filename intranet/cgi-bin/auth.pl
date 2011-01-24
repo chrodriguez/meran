@@ -2,7 +2,7 @@
 
 use strict;
 
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 
 
@@ -14,7 +14,7 @@ my ($template, $t_params)   = C4::Output::gettemplate("auth.tmpl", 'intranet');
 # my $t2= timediff($t1, $t0);
 # warn timestr($t2);
 #se inicializa la session y demas parametros para autenticar
-my ($session)               = C4::Auth::inicializarAuth($t_params);
+my ($session)               = C4::AR::Auth::inicializarAuth($t_params);
 # my $t0= Benchmark->new;
 # my $t2= timediff($t0, $t1);
 # warn timestr($t2);
@@ -49,4 +49,4 @@ if ($session->param('codMsg')){
 # warn timestr($t2);
 
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

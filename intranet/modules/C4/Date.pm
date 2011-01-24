@@ -8,28 +8,28 @@ use C4::AR::Preferencias;
 
 require Exporter;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT %EXPORT_TAGS);
 
 $VERSION = 0.01;
 
 @ISA = qw(Exporter);
 
 @EXPORT = qw(
-    &display_date_format
-    &format_date
-    &format_date_hour
-    &format_date_in_iso
-	&updateForHoliday
-    &updateForNonHoliday
-    &calc_beginES
-    &calc_endES
-    &proximosHabiles
-    &proximoHabil
-    &mesString
-    &UnixDate
-    &getCurrentTimestamp
-    &get_date_format
-    &format_date_complete
+    display_date_format
+    format_date
+    format_date_hour
+    format_date_in_iso
+	updateForHoliday
+    updateForNonHoliday
+    calc_beginES
+    calc_endES
+    proximosHabiles
+    proximoHabil
+    mesString
+    UnixDate
+    getCurrentTimestamp
+    get_date_format
+    format_date_complete
 );
 
 sub get_date_format

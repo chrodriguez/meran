@@ -17,19 +17,19 @@ use C4::AR::open_flash_chart;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
-		&itemtypesPieSinFlash
-		&itemtypesHBarsSinFlash
-		&levelsPieSinFlash
-		&levelsHBarsSinFlash
-		&userCategPieSinFlash
-		&userCategHBarsSinFlash
-		&itemtypesPie
-		&itemtypesHBars
-		&levelsPie
-		&levelsHBars
-		&availLines
-		&userCategPie
-		&userCategHBars
+		itemtypesPieSinFlash
+		itemtypesHBarsSinFlash
+		levelsPieSinFlash
+		levelsHBarsSinFlash
+		userCategPieSinFlash
+		userCategHBarsSinFlash
+		itemtypesPie
+		itemtypesHBars
+		levelsPie
+		levelsHBars
+		availLines
+		userCategPie
+		userCategHBars
 	);
 
 

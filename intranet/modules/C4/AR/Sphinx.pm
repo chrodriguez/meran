@@ -10,9 +10,9 @@ use MARC::Record;
 use vars qw(@EXPORT @ISA);
 @ISA = qw(Exporter);
 @EXPORT = qw(
-                &generar_indice
-                &reindexar
-                &sphinx_start
+                generar_indice
+                reindexar
+                sphinx_start
 );
 
 

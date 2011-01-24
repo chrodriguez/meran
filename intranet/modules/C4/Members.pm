@@ -23,7 +23,7 @@ use strict;
 require Exporter;
 use C4::Context;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
+use vars qw($VERSION @ISA @EXPORT);
 
 $VERSION = 0.01;
 
@@ -44,10 +44,9 @@ C4::Members - Perl Module containing convenience functions for member handling
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw();
 
-@EXPORT_OK = qw(
-	&fixup_cardnumber
+@EXPORT = qw(
+	fixup_cardnumber
     );
 
 ################################################################################

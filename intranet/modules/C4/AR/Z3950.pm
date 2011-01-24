@@ -12,12 +12,12 @@ use vars qw($VERSION @ISA @EXPORT);
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-	&getServidoresZ3950
-	&buscarEnZ3950
-    &encolarBusquedaZ3950
-    &busquedasEncoladas
-    &limpiarBusquedas
-    &efectuarBusquedaZ3950
+	getServidoresZ3950
+	buscarEnZ3950
+	encolarBusquedaZ3950
+	busquedasEncoladas
+	limpiarBusquedas
+	efectuarBusquedaZ3950
 );
 
 sub getServidoresZ3950 {

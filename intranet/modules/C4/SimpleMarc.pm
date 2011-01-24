@@ -29,7 +29,7 @@ package C4::SimpleMarc;
 use strict;
 use DBI;
 require Exporter;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
+use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -61,10 +61,10 @@ This module provides functions for parsing MARC records and files.
 	%tagmap
 );
 
-# FIXME - %tagtext and %tagmap are in both @EXPORT and @EXPORT_OK.
+# FIXME - %tagtext and %tagmap are in both @EXPORT and @EXPORT.
 # They should be in one or the other, but not both (though preferably,
 # things shouldn't get exported in the first place).
-@EXPORT_OK   = qw(
+@EXPORT   = qw(
 	%tagtext
 	%tagmap
 );

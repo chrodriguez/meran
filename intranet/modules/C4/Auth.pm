@@ -1,17 +1,26 @@
-package C4::Auth;
+package C4::AR::Auth;
 
 
 =head1 NAME
 
-  C4::Auth 
+  C4::AR::Auth 
 
 =head1 SYNOPSIS
 
-  use C4::Auth;
+  use C4::AR::Auth;
 
 =head1 DESCRIPTION
 
-  Descripción del modulo COMPLETAR
+ En este modulo se centraliza todo lo relacionado a la authenticacion del usuario
+
+=head1 VARIABLES
+
+ Hay algunas variables que se deben configurar para controlar el funcionamiento de este modulo:
+
+    expire: controla el tiempo de expiración de la sesion.
+    
+
+
 
 =head1 FUNCTIONS
 
@@ -36,61 +45,21 @@ use C4::Modelo::UsrSocio;
 use C4::Modelo::PrefFeriado;
 use C4::AR::Authldap;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
 my $codMSG = 'U000';
 # set the version for version checking
 $VERSION = 1.0;
-
-=head1 NAME
-
-C4::Auth - Este modulo es para el manejo de authenticacion en Meran
-
-=head1 SYNOPSIS
-
-  use CGI;
-  use C4::Auth;
-
-  my $query = new CGI;
-
-  my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name   => "opac-main.tmpl",
-                             query           => $query,
-			     type            => "opac",
-			     authnotrequired => 1,
-			     flagsrequired   => {borrow => 1},
-			  });
-
-  print $query->header(
-    -type => guesstype($template->output),
-    -cookie => $cookie
-  ), $template->output;
-
-
-=head1 DESCRIPTION
-
-    The main function of this module is to provide
-    authentification. However the get_template_and_user function has
-    been provided so that a users login information is passed along
-    automatically. This gets loaded into the template.
-
-=head1 FUNCTIONS
-
-=over 2
-
-=cut
-
 @ISA = qw(Exporter);
 @EXPORT = qw(
-		&checkauth		
-		&get_template_and_user
-		&getborrowernumber
-		&getuserflags
-		&output_html_with_http_headers
-		&getSessionUserID
-		&getSessionNroSocio
-        &redirectAndAdvice
-        &_hashear_password
-        &get_html_content
+        checkauth		
+        get_template_and_user
+        output_html_with_http_headers
+        getSessionUserID
+        getSessionNroSocio
+        redirectAndAdvice
+        hashear_password
+        get_html_content
+        getMetodoEncriptacion
 );
 
 =item sub _generarNroRandom
@@ -700,6 +669,13 @@ sub getSessionUserID {
     return $session->param('userid');
 }
 
+=item sub getSessionNroSocio
+
+    obtiene el nroSocio de la session
+    Parametros: 
+    $session
+
+=cut
 sub getSessionNroSocio {
     my $session= CGI::Session->load();
     return $session->param('nro_socio');
@@ -823,8 +799,8 @@ sub prepare_password{
     my ($password) = @_;
     #primero se hashea la pass con MD5 (esto se mantiene por compatibilidad hacia atras KOHA V2), luego con SHA_256_B64
     $password = C4::AR::Utilidades::trim($password);
-#     C4::AR::Debug::debug("_hashear_password=> "._hashear_password(_hashear_password($password, 'MD5_B64'), 'SHA_256_B64'));
-    return _hashear_password(_hashear_password($password, 'MD5_B64'), 'SHA_256_B64');
+#     C4::AR::Debug::debug("hashear_password=> "._hashear_password(_hashear_password($password, 'MD5_B64'), 'SHA_256_B64'));
+    return hashear_password(hashear_password($password, 'MD5_B64'), 'SHA_256_B64');
 }
 
 
@@ -1148,12 +1124,12 @@ sub _checkpw {
     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
     if ($socio){
          C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
-         return _verificar_password_con_metodo($password, $socio, $nroRandom, _getMetodoEncriptacion());
+         return _verificar_password_con_metodo($password, $socio, $nroRandom, getMetodoEncriptacion());
     }
     return 0;
 }
 
-sub _getMetodoEncriptacion {
+sub getMetodoEncriptacion {
     return 'SHA_256_B64';#'MD5'
 }
 
@@ -1172,8 +1148,8 @@ sub _verificar_password_con_metodo {
      C4::AR::Debug::debug("_verificar_password_con_metodo=> password del cliente: ".$password."\n");
      C4::AR::Debug::debug("_verificar_password_con_metodo=> password de la base: ".$socio->getPassword."\n");
      C4::AR::Debug::debug("_verificar_password_con_metodo=> nroRandom: ".$nroRandom."\n"); 
-     C4::AR::Debug::debug("_verificar_password_con_metodo=> password_hasheada_con_metodo.nroRandom: "._hashear_password($socio->getPassword.$nroRandom, $metodo)."\n");
-    if ($password eq _hashear_password($socio->getPassword.$nroRandom, $metodo)) {
+     C4::AR::Debug::debug("_verificar_password_con_metodo=> password_hasheada_con_metodo.nroRandom: ".hashear_password($socio->getPassword.$nroRandom, $metodo)."\n");
+    if ($password eq hashear_password($socio->getPassword.$nroRandom, $metodo)) {
         #PASSWORD VALIDA
         return $socio;
     }else {
@@ -1193,7 +1169,7 @@ sub _verificar_password_con_metodo {
     $metodo: MD5, SHA
 
 =cut
-sub _hashear_password {
+sub hashear_password {
     my ($password, $metodo) = @_;
     if($metodo eq 'SHA'){
         return sha1_hex($password);

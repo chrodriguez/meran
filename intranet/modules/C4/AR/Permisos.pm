@@ -24,13 +24,13 @@ use constant {
         CONSULTA        => '00000001'
 };
 
-use vars qw(@EXPORT @ISA @EXPORT_OK);
+use vars qw(@ISA @EXPORT);
 @ISA=qw(Exporter);
 @EXPORT=qw(
     &obtenerPermisos
 );
 
-our @EXPORT_OK= ('TODOS', 'ALTA', 'BAJA', 'MODIFICACION', 'CONSULTA');
+our @EXPORT= ('TODOS', 'ALTA', 'BAJA', 'MODIFICACION', 'CONSULTA');
 
 
 sub getPermCatalogoOne{

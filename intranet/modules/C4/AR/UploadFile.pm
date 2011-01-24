@@ -27,9 +27,9 @@ use Image::Resize;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
-		&uploadPhoto,
-	   	&deletePhoto
-        $uploadFile,
+		uploadPhoto,
+	 	deletePhoto,
+		uploadFile,
 	);
 
 my $picturesDir = C4::Context->config("picturesdir");

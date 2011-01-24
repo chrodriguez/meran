@@ -58,33 +58,33 @@ items to and from bookshelves.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-		&GetShelfList
-		&GetShelfContents
-		&getbookshelfLike 
-		&getbookshelfLikeCount  
-		&getshelfListCount 
-		&getbookshelfItems 
-		&GetShelfContentsShelf 
-		&GetShelfName 
-		&GetShelfParent  
-		&getbookshelf 
-		&getbooksubshelf  
+		GetShelfList
+		GetShelfContents
+		getbookshelfLike 
+		getbookshelfLikeCount  
+		getshelfListCount 
+		getbookshelfItems 
+		GetShelfContentsShelf 
+		GetShelfName 
+		GetShelfParent  
+		getbookshelf 
+		getbooksubshelf  
 		
-		&AddToShelf	
-		&AddShelf 
-		&t_addPrivateShelfs 
-		
-		&RemoveFromShelf 
-		&RemoveShelf 
+		AddToShelf	
+		AddShelf 
+		t_addPrivateShelfs 
+	
+		RemoveFromShelf 
+		RemoveShelf 
 
-		&t_delPrivateShelfs 
-		
-		&privateShelfs 
-		&gotShelf 
-		&shelfitemcount  
-		&modshelf
-		&itemcountbibitem
-		&viewshelf
+		t_delPrivateShelfs 
+	
+		privateShelfs 
+		gotShelf 
+		shelfitemcount  
+		modshelf
+		itemcountbibitem
+		viewshelf
 
 );
 

@@ -15,15 +15,15 @@ use C4::Modelo::CircSancion::Manager;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(	
-		&tieneSanciones
-		&eliminarSanciones
-		&sanciones
-		&permisoParaPrestamo
-		&estaSancionado
-		&tieneLibroVencido
-		&getSociosSancionados
-		&diasDeSancion
-		&getTipoSancion
+		tieneSanciones
+		eliminarSanciones
+		sanciones
+		permisoParaPrestamo
+		estaSancionado
+		tieneLibroVencido
+		getSociosSancionados
+		diasDeSancion
+		getTipoSancion
 );
 
 

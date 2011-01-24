@@ -13,7 +13,7 @@ use C4::AR::Busquedas;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(	
-        &getImageByIsbn 
+	        &getImageByIsbn 
 		&getImageForId1 
 		&getImageForId2 
 		&getLargeImage 

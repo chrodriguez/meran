@@ -17,6 +17,12 @@ use vars qw(@ISA @EXPORT_OK );
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(checkpwldap getldappassword checkpwDC);
 
+=item sub datosUsuario
+
+Esa funcion devuelve un objeto socio a partir de los datos que estan en la base de Meran una vez que fue autenticado por el ldap,
+en caso de no existir en la base de MERAN lo agrega a la misma siempre y cuando la variable agregarDesdeLDAP este habilitada.
+Si no existe en la base y la variable esta en 0 devulve 0. 
+=cut
 
 sub datosUsuario
 {
@@ -27,7 +33,7 @@ sub datosUsuario
     }
     else {
         #FIXME hay que agregar esta preferencia que ahora no se puede por algo q rompio MONO
-        my $agregar=C4::AR::Preferencias->getValorPreferencia("agregarDesdeLDAP")||0;
+        my $agregar=C4::Context->config("agregarDesdeLDAP")||0;
         if ($agregar){
                 my $LDAP_INFOS= C4::Context->config("ldapinfos");
                 my $LDAP_SUFF=C4::Context->config("ldasuff");
@@ -36,13 +42,12 @@ sub datosUsuario
                     base   => $LDAP_INFOS,
                     filter => "($LDAP_FILTER)"
                 );
-                my $passwordLDAP;
-                my $entry;
-                #my @values;
                 my $entry =$entries->entry(0);
+                my $nombre= $entry->get_value("");
+                my $apellido=$entry->get_value("");
+                my $dni=$entry->get_value("");
                 C4::AR::Debug::debug("Authldap =>datosUsuario".$LDAP_FILTER . ' entry '.$entry->ldif); 
-                #$p= @values[0];
-                $ldap->unbind;
+
                  }
                 C4::AR::Debug::debug("Authldap =>datosUsuario" );   
         }
@@ -108,12 +113,11 @@ sub checkpwldap{
             filter => "($LDAP_FILTER)"
         );
         my $entry;
-        #my @values;
         my $entry =$entries->entry(0);
         $passwordLDAP = $entry->get_value("userPassword");
-        #$p= @values[0];
         #FIXME
-        $passwordLDAP= md5_base64($passwordLDAP.$random_number);
+        my $metodo= C4::AR::Auth::getMetodoEncriptacion();
+        $passwordLDAP= hashear_password($passwordLDAP.$random_number,$metodo);
         if (($passwordLDAP eq $passwordCliente)){
             $socio=datosUsuario($userid,$ldap);
         }

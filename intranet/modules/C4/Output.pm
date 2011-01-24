@@ -68,7 +68,7 @@ printable string.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-                &gettemplate
+                gettemplate
          );
 
 #==========================================================FUNCIONES NUEVAS=================================================

@@ -12,31 +12,31 @@ use C4::Modelo::CircReserva;
 use C4::Modelo::CircReserva::Manager;
 use C4::Modelo::CatRegistroMarcN3::Manager;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT %EXPORT_TAGS);
 
 $VERSION = 3.0;
 
 @ISA = qw(Exporter);
 
 @EXPORT = qw(
-    &t_reservarOPAC
-    &t_cancelar_reserva
-    &t_cancelar_y_reservar
-    &cancelar_reservas
-    &cant_reservas
-    &getReservasDeGrupo
-    &cantReservasPorGrupo
-    &DatosReservas
-    &getDatosReservaDeId3
-    &CheckWaiting
-    &tiene_reservas
-    &Enviar_Email
-    &FindNotRegularUsersWithReserves
-    &eliminarReservasVencidas
-    &reasignarTodasLasReservasEnEspera
-    &getReserva
-    &eliminarReservas
-    &getReservasDeSocioEnEspera
+    t_reservarOPAC
+    t_cancelar_reserva
+    t_cancelar_y_reservar
+    cancelar_reservas
+    cant_reservas
+    getReservasDeGrupo
+    cantReservasPorGrupo
+    DatosReservas
+    getDatosReservaDeId3
+    CheckWaiting
+    tiene_reservas
+    Enviar_Email
+    FindNotRegularUsersWithReserves
+    eliminarReservasVencidas
+    reasignarTodasLasReservasEnEspera
+    getReserva
+    eliminarReservas
+    getReservasDeSocioEnEspera
 );
 
 =head2  sub getNivel3ParaReserva
