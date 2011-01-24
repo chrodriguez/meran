@@ -577,7 +577,7 @@ sub getBusquedasOPAC {
 
 	if ( !$total ) {
 		if ($registrados) {
-			push( @filtros, ( 'usr_socio.nro_socio' => { ne => undef } ) );
+			push( @filtros, ( 'busqueda.socio.nro_socio' => { ne => undef } ) );
 		}
 		else {
 			push( @filtros, ( 'busqueda.nro_socio' => { eq => undef } ) );
@@ -586,7 +586,7 @@ sub getBusquedasOPAC {
 			&& ($registrados) )
 		{
 			push( @filtros,
-				( 'usr_socio.categoria_socio' => { eq => $tipo_socio } ) );
+				( 'usr_socio.cod_categoria' => { eq => $tipo_socio } ) );
 		}
 		if ( C4::AR::Utilidades::validateString($f_inicio) ) {
 			push(
@@ -642,7 +642,8 @@ sub getBusquedasOPAC {
 	  C4::Modelo::RepHistorialBusqueda::Manager
 	  ->get_rep_historial_busqueda_count(
 		query           => \@filtros,
-		require_objects => ['busqueda'],
+		require_objects => [ 'busqueda', 'busqueda.socio', 'busqueda.socio.persona' ],
+		
 	  );
 	return ( $rep_busqueda_count, $rep_busqueda );
 }
