@@ -58,10 +58,28 @@
                 <strong>[% 'Lugar:' | i18n %]</strong> [% nivel2.getCiudadObject.getNombre %]
             </li>
             <li>
+                <strong>[% 'Editor:' | i18n %]</strong> NO ESTA IMPLEMENTADO
+            </li>
+            <li>
                 <strong>[% 'Idioma:' | i18n %]</strong> [% nivel2.getIdiomaObject.getDescription %]
             </li>
             <li>
-                <strong>[% 'Fecha:' | i18n %]</strong> [% nivel2.getAnio_publicacion %]
+                <strong>[% 'Fecha:' | i18n %]</strong>
+                    [% FOREACH fecha IN nivel2.getAnio_publicacion %] 
+                        [% fecha %] [% IF !loop.last() %],[% END %] 
+                    [% END %]
+            </li>
+            <li>
+                <strong>[% 'Descripci&oacute;n F&iacute;sica:' | i18n %]</strong>
+                    [% FOREACH descripcion IN nivel2.getDescripcionFisica %] 
+                        [% descripcion %][% IF !loop.last() %],[% END %] 
+                    [% END %]
+            </li>
+            <li>
+                <strong>[% 'T&iacute;tulo de la Serie:' | i18n %]</strong> [% nivel2.getSeriesTitulo %]
+            </li>
+            <li>
+                <strong>[% 'Nombre de la subserie:' | i18n %]</strong> [% nivel2.getNombreSubSerie %]
             </li>
             <li>
                 <strong>[% 'Cantidad Ejemplares:' | i18n %]</strong> [% nivel2.getCantEjemplares %]
