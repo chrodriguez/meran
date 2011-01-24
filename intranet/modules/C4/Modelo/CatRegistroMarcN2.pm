@@ -177,6 +177,22 @@ sub getNombreSubSerie{
      return $marc_record->subfield("440","p");
 }
 
+sub getNumeroSerie{
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());    
+ 
+     return $marc_record->subfield("440","v");
+}
+
+sub getNotaGeneral{
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());    
+ 
+     return $marc_record->subfield("500","a");
+}
+
 =head2
 sub getTipoDocumento
 
