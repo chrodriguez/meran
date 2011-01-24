@@ -1325,10 +1325,13 @@ function _cearAutocompleteParaCamponente(o){
 													IdInputHidden: o.getIdCompCliente() + '_hidden' }
 									);
         break;
-        case "ui": CrearAutocompleteUI(   {IdInput: o.getIdCompCliente(), 
+        case "ui": CrearAutocompleteUI(             {IdInput: o.getIdCompCliente(), 
                                                     IdInputHidden: o.getIdCompCliente() + '_hidden' }
                                     );
-
+        break;
+        case "tema": CrearAutocompleteTemas(       {IdInput: o.getIdCompCliente(), 
+                                                    IdInputHidden: o.getIdCompCliente() + '_hidden' }
+                                    );
         break;
 	}
 }

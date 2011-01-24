@@ -100,6 +100,150 @@ sub eliminar{
     $self->delete();    
 }
 
+sub getCDU{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => CDU ".$marc_record->subfield("080","a")); 
+
+    return $marc_record->subfield("080","a");
+}
+
+sub getAutoresSecundarios{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => autores secundarios ".$marc_record->subfield("700","a")); 
+
+    return $marc_record->subfield("700","a");
+}
+
+sub getAutoresSecundariosObject{
+    my ($self)      = shift;
+    
+    #obtengo la referencia del autor secundario
+    my $ref_autor   = $self->getAutoresSecundarios();
+    my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> ref_autor => ".$ref_autor);
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> ref => ".$ref);
+
+    my $autor       = C4::Modelo::CatAutor->getByPk($ref);
+
+    if(!$autor){
+        C4::AR::Debug::debug("CatRegistroMarcN1 => getAutoresSecundariosObject()=> EL OBJECTO (ID) AUTOR NO EXISTE");
+        $autor = C4::Modelo::CatAutor->new();
+    }
+
+    return ($autor);
+}
+
+sub getTemas{
+    my ($self)      = shift;
+    
+    my @temas;
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    
+
+    my @campos_array = $marc_record->field("650");
+    
+    foreach my $campo (@campos_array){
+#         C4::AR::Debug::debug("CatRegistroMarcN1 => getTemas ".$campo->subfield("a")); 
+        my $ref     = C4::AR::Catalogacion::getRefFromStringConArrobas($campo->subfield("a"));
+        my $tema    = C4::Modelo::CatTema->getByPk($ref);
+
+        push (@temas, $tema)
+    }
+
+    return (@temas);
+}
+
+
+sub getTema{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => temas ".$marc_record->subfield("700","a")); 
+
+    return $marc_record->subfield("650","a");
+}
+
+sub getTemaObject{
+    my ($self)      = shift;
+    
+    #obtengo la referencia del autor secundario
+    my $ref_tema   = $self->getTema();
+    my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_tema);
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => getTemasObject()=> ref_tema => ".$ref_tema);
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => getTemasObject()=> ref => ".$ref);
+
+    my $autor       = C4::Modelo::CatTema->getByPk($ref);
+
+    if(!$autor){
+        C4::AR::Debug::debug("CatRegistroMarcN1 => getTemasObject()=> EL OBJECTO (ID) TEMA NO EXISTE");
+        $autor = C4::Modelo::CatTema->new();
+    }
+
+    return ($autor);
+}
+
+sub getNombreGeografico{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => nombre geografico ".$marc_record->subfield("651","a")); 
+
+    return $marc_record->subfield("651","a");
+}
+
+sub getNombreGeograficoObject{
+    my ($self)      = shift;
+    
+    #obtengo la referencia del autor secundario
+    my $ref_pais    = $self->getNombreGeografico();
+    my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_pais);
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => getNombreGeograficoObject()=> ref_tema => ".$ref_pais);
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => getNombreGeograficoObject()=> ref => ".$ref);
+
+    my $pais        = C4::Modelo::RefPais::Manager->get_ref_pais ( 
+                                                                      query     => [  'iso' => { eq => $ref } ]
+                                                        );
+
+    if(!$pais){
+        C4::AR::Debug::debug("CatRegistroMarcN1 => getNombreGeograficoObject()=> EL OBJECTO (ID) PAIS NO EXISTE");
+        $pais = C4::Modelo::RefPais->new();
+
+        return ($pais);
+    } else {
+        return ($pais->[0]);
+    }
+
+    
+}
+
+
+sub getTerminoNoControlado{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => termino no contralado ".$marc_record->subfield("653","a")); 
+
+    return $marc_record->subfield("653","a");
+}
+
+sub getEntradaNoControlado{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => entrada no contralado ".$marc_record->subfield("720","a")); 
+
+    return $marc_record->subfield("720","a");
+}
 
 sub getTitulo{
     my ($self)      = shift;
@@ -119,7 +263,7 @@ sub getAutorObject{
     #obtengo la referencia al autor
     my $ref_autor   = $marc_record->subfield("100","a");
     my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
-    C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> ref => ".$ref_autor);
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> ref => ".$ref_autor);
 
     my $autor       = C4::Modelo::CatAutor->getByPk($ref);
 

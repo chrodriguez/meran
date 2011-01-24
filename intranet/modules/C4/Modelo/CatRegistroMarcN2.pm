@@ -169,6 +169,30 @@ sub getSeriesTitulo{
      return $marc_record->subfield("440","a");
 }
 
+sub getNombreSubSerie{
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());    
+ 
+     return $marc_record->subfield("440","p");
+}
+
+sub getNumeroSerie{
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());    
+ 
+     return $marc_record->subfield("440","v");
+}
+
+sub getNotaGeneral{
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());    
+ 
+     return $marc_record->subfield("500","a");
+}
+
 =head2
 sub getTipoDocumento
 
@@ -211,6 +235,25 @@ sub getTipoDocumentoObject{
     return $tipo_doc;
 }
 
+
+sub getEditor{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    my $editor      = $marc_record->subfield("260","b");
+#     C4::AR::Debug::debug("CatRegistroMarcN2 => getEditor => editor => ".$editor);
+    return ($editor);
+}
+
+sub getDescripcionFisica{
+    my ($self)          = shift;
+    
+    my $marc_record     = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    my $descripcion     = $marc_record->subfield("300","a");
+#     C4::AR::Debug::debug("CatRegistroMarcN2 => getDescripcionFisica => $descripcion => ".$$descripcion);
+    return ($descripcion);
+}
 
 =head2 sub getSoporte
 
