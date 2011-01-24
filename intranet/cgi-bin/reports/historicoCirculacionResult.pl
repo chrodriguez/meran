@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use CGI;
 use C4::AR::Estadisticas;
@@ -67,4 +67,4 @@ if ($accion){
     $t_params->{'tipoOperacion'}= $obj->{'tipoOperacion'};
 
 }
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

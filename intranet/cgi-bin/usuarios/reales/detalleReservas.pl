@@ -3,7 +3,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Date;
 use Date::Manip;
 use C4::Date;
@@ -52,5 +52,5 @@ if($reservas){
 	$t_params->{'circularDesdeDetalleUsuario'}= C4::AR::Preferencias->getValorPreferencia('circularDesdeDetalleUsuario');
 }
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

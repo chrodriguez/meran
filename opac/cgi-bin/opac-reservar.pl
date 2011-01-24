@@ -4,7 +4,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;        
+use C4::AR::Auth;        
 use C4::AR::Reservas;
 
 use C4::AR::Mensajes;
@@ -92,5 +92,5 @@ $t_params->{'maximoReservas'}= $acciones->{'maximoReservas'};
 $t_params->{'materialParaRetirar'}= $acciones->{'materialParaRetirar'};
 $t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

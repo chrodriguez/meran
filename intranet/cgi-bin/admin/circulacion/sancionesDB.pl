@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::AR::Sanciones;
 use C4::AR::Prestamos;
@@ -34,7 +34,7 @@ if($accion eq "TIPOS_PRESTAMOS_SANCIONADOS"){
 		my $tipo_prestamos=&C4::AR::Prestamos::getTiposDePrestamos();
 		$t_params->{'TIPOS_PRESTAMOS'}= $tipo_prestamos;
 
-		C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+		C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }#end if($accion eq "TIPOS_PRESTAMOS_SANCIONADOS")
 
 if ($accion eq "GUARDAR_TIPOS_PRESTAMOS_QUE_APLICA") {
@@ -55,7 +55,7 @@ C4::AR::Debug::debug("tipossss : ".$tipos_que_aplica->[0]);
 
     my $Message_arrayref = &C4::AR::Sanciones::actualizarTiposPrestamoQueAplica($tipo_prestamo,$categoria_socio,$tipos_que_aplica);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 
@@ -149,7 +149,7 @@ if($accion eq "REGLAS_SANCIONES"){
         $t_params->{'cantidades'}= $CGIcantidad;
 
 
-        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
         }#end if($accion eq "REGLAS_SANCIONES")
 
 
@@ -169,7 +169,7 @@ if ($accion eq "ELIMINAR_REGLA_TIPO_SANCION") {
 
     my $Message_arrayref = &C4::AR::Sanciones::eliminarReglaTipoSancion($tipo_sancion,$regla_sancion);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 
@@ -192,7 +192,7 @@ if ($accion eq "AGREGAR_REGLA_TIPO_SANCION") {
 
     my $Message_arrayref = &C4::AR::Sanciones::agregarReglaTipoSancion($regla_sancion,$orden,$cantidad,$tipo_prestamo, $categoria_socio);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 
@@ -207,7 +207,7 @@ if($accion eq "MODIFICAR_REGLAS"){
                     });
         my $reglas_sancion=&C4::AR::Sanciones::getReglasSancion();
         $t_params->{'REGLAS_SANCIONES'}= $reglas_sancion;
-        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }#end if($accion eq "MODIFICAR_REGLAS")
 
 
@@ -226,7 +226,7 @@ if ($accion eq "ELIMINAR_REGLA_SANCION") {
 
     my $Message_arrayref = &C4::AR::Sanciones::eliminarReglaSancion($regla_sancion);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 
@@ -246,6 +246,6 @@ if ($accion eq "AGREGAR_REGLA_SANCION") {
 
     my $Message_arrayref = &C4::AR::Sanciones::agregarReglaSancion($dias_sancion,$dias_demora);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }

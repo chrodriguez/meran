@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 use C4::Output;  # contains gettemplate
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 
 my $query = new CGI;
@@ -27,4 +27,4 @@ if ($post){
 }else{
     $t_params->{'partial_template'}= "opac-contact.inc";
 }
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

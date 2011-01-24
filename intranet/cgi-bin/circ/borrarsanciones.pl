@@ -21,7 +21,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use Date::Manip;
 use C4::Date;
@@ -50,6 +50,6 @@ my $sanciones_ids=$obj->{'datosArray'};
 
 my $Message_arrayref = C4::AR::Sanciones::eliminarSanciones($userid,$sanciones_ids);
 my $infoOperacionJSON=to_json $Message_arrayref;
-C4::Auth::print_header($session);
+C4::AR::Auth::print_header($session);
 print $infoOperacionJSON;
 

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use CGI;
 use C4::AR::Estadisticas;
@@ -41,4 +41,4 @@ $t_params->{'orden'}= $orden;
 $t_params->{'resultsloop'}= \@resultsdata;
 $t_params->{'cantidad'}= $cantidad;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session, $cookie);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session, $cookie);

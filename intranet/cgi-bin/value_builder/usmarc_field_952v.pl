@@ -20,8 +20,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 require Exporter;
-use C4::AuthoritiesMarc;
-use C4::Auth;
+use C4::AR::AuthoritiesMarc;
+use C4::AR::Auth;
 
 use CGI;
 use MARC::Record;

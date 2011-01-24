@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Context;
 use C4::AR::Proveedores;
 use CGI;
@@ -72,7 +72,7 @@ if($obj){
     my ($message) = C4::AR::Proveedores::agregarProveedor(\%params);
     my $infoOperacionJSON=to_json $message;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 
 }else{
@@ -86,5 +86,5 @@ if($obj){
      $t_params->{'combo_tipo_materiales'}   = $combo_tipo_materiales; 
      $t_params->{'combo_formas_envio'}      = $combo_formas_envio;
 
-  C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+  C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

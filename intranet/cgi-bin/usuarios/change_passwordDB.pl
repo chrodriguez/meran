@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use JSON;
 use CGI;
@@ -36,7 +36,7 @@ my ($Message_arrayref)= C4::AR::Usuarios::cambiarPassword(\%params);
 if(C4::AR::Mensajes::hayError($Message_arrayref)){
     $session->param('codMsg', C4::AR::Mensajes::getFirstCodeError($Message_arrayref));
     #hay error vulve al mismo
-    C4::Auth::redirectTo('/cgi-bin/koha/usuarios/change_password.pl?token='.$input->param('token'));
+    C4::AR::Auth::redirectTo('/cgi-bin/koha/usuarios/change_password.pl?token='.$input->param('token'));
 }
 
-C4::Auth::redirectTo('/cgi-bin/koha/sessionDestroy.pl');
+C4::AR::Auth::redirectTo('/cgi-bin/koha/sessionDestroy.pl');

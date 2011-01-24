@@ -3,7 +3,7 @@ use HTML::Template;
 use strict;
 require Exporter;
 # use C4::Database;
-# use C4::Auth;
+# use C4::AR::Auth;
 # use C4::Context;
 use CGI;
 use C4::AR::Usuarios;
@@ -134,4 +134,4 @@ if($socio->tienePermisos($flagsrequired)){
 }
 
 
-C4::Auth::print_header($session);
+C4::AR::Auth::print_header($session);

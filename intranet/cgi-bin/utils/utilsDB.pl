@@ -3,7 +3,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::AR::Utilidades;
 use C4::AR::Catalogacion;
@@ -39,7 +39,7 @@ if($tipoAccion eq "GENERAR_ARREGLO_TABLA_REF"){
     my ($infoOperacionJSON) = to_json($tablaRef_array);
 
     
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 
 }
@@ -74,7 +74,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_UI"){
 #     my ($infoOperacionJSON) = to_json(\%select_ui);
     my ($infoOperacionJSON) = to_json(\@infoCombo);
     
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 

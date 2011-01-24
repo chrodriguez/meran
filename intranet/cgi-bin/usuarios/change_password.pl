@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use JSON;
 use CGI;
@@ -18,7 +18,7 @@ my ($template, $session, $t_params)= get_template_and_user({
                               });
 
 
-my $nro_socio = C4::Auth::getSessionNroSocio();
+my $nro_socio = C4::AR::Auth::getSessionNroSocio();
 my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
 if ( $socio->getChange_password() ){
@@ -27,7 +27,7 @@ if ( $socio->getChange_password() ){
 
 $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param("codMsg"),'INTRA',[]);
 
-&C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+&C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 
 

@@ -4,7 +4,7 @@
 # Se obtiene un Historial de los prestamos realizados por los usuarios
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use CGI;
 use C4::AR::Prestamos;
@@ -41,4 +41,4 @@ $t_params->{'selectCatUsuarios'}= $comboCategoriasDeSocio;
 $t_params->{'selectTiposPrestamos'}= $camboTiposPrestamos;
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Historial de prestamos");
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

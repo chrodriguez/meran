@@ -9,7 +9,7 @@ use MARC::Record;
 use MARC::Batch;
 use C4::Context;
 use C4::Biblio;
-use C4::Authorities;
+use C4::AR::Authorities;
 use Time::HiRes qw(gettimeofday);
 
 use Getopt::Long;

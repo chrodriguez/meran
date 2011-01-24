@@ -2,7 +2,7 @@
 
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use CGI;
 
@@ -24,4 +24,4 @@ my  $branch=$input->param('branch');
 $t_params->{'year'}= C4::AR::Utilidades::generarComboDeAnios();
 $t_params->{'branch'}= $branch;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

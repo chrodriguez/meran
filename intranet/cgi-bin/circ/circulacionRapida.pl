@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 
 my $input=new CGI;
@@ -19,4 +19,4 @@ my ($template, $session, $t_params, $usuario_logueado) =  get_template_and_user 
 
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Circulaci&oacute;n R&aacute;pida");
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

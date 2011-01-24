@@ -3,7 +3,7 @@
 use strict;
 use CGI;
 use C4::AR::Utilidades;
-use C4::Auth;
+use C4::AR::Auth;
 
 my $input = new CGI;
 my $authnotrequired = 0;
@@ -13,7 +13,7 @@ my $session = CGI::Session->load();
 
 my $type = $session->param('type') || "opac";
 
-my ($user, $session, $flags)= C4::Auth::checkauth($input, $authnotrequired, $flagsrequired, $type);
+my ($user, $session, $flags)= C4::AR::Auth::checkauth($input, $authnotrequired, $flagsrequired, $type);
 
 my $accion= C4::AR::Utilidades::trim( $input->param('accion') );
 my $string= C4::AR::Utilidades::trim( $input->param('q') );

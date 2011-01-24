@@ -460,7 +460,7 @@ sub titleByUser {
 	$report_type = $report_type || C4::AR::Filtros::i18n('reporte');
 	$fileType    = $fileType    || 'null';
 
-	my $username = C4::Auth::getSessionNroSocio() || 'GUEST_USER_WARNING';
+	my $username = C4::AR::Auth::getSessionNroSocio() || 'GUEST_USER_WARNING';
 	my $title = $report_type . "_" . $username . "." . $fileType;
 
 	return ($title);

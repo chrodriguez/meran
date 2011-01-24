@@ -46,7 +46,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Context;
 use C4::Output;
 
@@ -525,7 +525,7 @@ sub checkcategorycode {
     return $message;
 }
 
-C4::Auth::output_html_with_http_headers($template, $params);
+C4::AR::Auth::output_html_with_http_headers($template, $params);
 
 # Local Variables:
 # tab-width: 8

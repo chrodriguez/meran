@@ -3,7 +3,7 @@
 use strict;
 use CGI;
 use C4::BookShelves;
-use C4::Auth;
+use C4::AR::Auth;
 
 
 my $input=new CGI;
@@ -39,7 +39,7 @@ if($tipo eq "VER_ESTANTE"){
 	$t_params->{'pagetitle'}= "Estantes Virtuales";
 	$t_params->{'shelves'}= 1;
 	
-	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+	C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 
@@ -67,5 +67,5 @@ if($tipo eq "VER_SUBESTANTE"){
 	$t_params->{'pagetitle'}= "Estantes Virtuales";
 	$t_params->{'shelves'}= 1;
 	
-	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+	C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

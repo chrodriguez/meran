@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::AR::Preferencias;
 use C4::AR::Permisos;
@@ -47,7 +47,7 @@ if ($accion eq "catalogo"){
     $t_params->{'combo_perfiles'}= $combo_perfiles;
     $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Permisos de Cat&aacute;logo");
 
-	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+	C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "OBTENER_PERMISOS_CATALOGO"){
 
@@ -69,7 +69,7 @@ elsif ($accion eq "OBTENER_PERMISOS_CATALOGO"){
     if ($newUpdate){
         $t_params->{'nuevoPermiso'}=1;
     }
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }
 elsif ($accion eq "ACTUALIZAR_PERMISOS_CATALOGO"){
@@ -91,7 +91,7 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_CATALOGO"){
     my $updateStatus = C4::AR::Permisos::actualizarPermisosCatalogo($nro_socio,$id_ui,$tipo_documento,$permisos);
     my $permisos = C4::AR::Permisos::obtenerPermisosCatalogo($nro_socio,$id_ui,$tipo_documento);
     $t_params->{'permisos'}=$permisos;
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "NUEVO_PERMISO_CATALOGO"){
 
@@ -112,7 +112,7 @@ elsif ($accion eq "NUEVO_PERMISO_CATALOGO"){
     C4::AR::Permisos::nuevoPermisoCatalogo($nro_socio,$id_ui,$tipo_documento,$permisos);
     my $permisos = C4::AR::Permisos::obtenerPermisosCatalogo($nro_socio,$id_ui,$tipo_documento);
     $t_params->{'permisos'}=$permisos;
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "SHOW_NUEVO_PERMISO_CATALOGO"){
 
@@ -126,7 +126,7 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_CATALOGO"){
                     });
 
     $t_params->{'nuevoPermiso'}=1;
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 
@@ -156,7 +156,7 @@ elsif ($accion eq "general"){
     $t_params->{'combo_perfiles'}= $combo_perfiles;
     $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Permisos generales");
 
-  C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+  C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "OBTENER_PERMISOS_GENERAL"){
 
@@ -178,7 +178,7 @@ elsif ($accion eq "OBTENER_PERMISOS_GENERAL"){
     if ($newUpdate){
         $t_params->{'nuevoPermiso'}=1;
     }
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }
 elsif ($accion eq "ACTUALIZAR_PERMISOS_GENERAL"){
@@ -200,7 +200,7 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_GENERAL"){
     my $updateStatus = C4::AR::Permisos::actualizarPermisosGeneral($nro_socio,$id_ui,$tipo_documento,$permisos);
     my $permisos = C4::AR::Permisos::obtenerPermisosGenerales($nro_socio,$id_ui,$tipo_documento);
     $t_params->{'permisos'}=$permisos;
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
 
@@ -221,7 +221,7 @@ elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
     C4::AR::Permisos::nuevoPermisoGeneral($nro_socio,$id_ui,$tipo_documento,$permisos);
     my $permisos = C4::AR::Permisos::obtenerPermisosGenerales($nro_socio,$id_ui,$tipo_documento);
     $t_params->{'permisos'}=$permisos;
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "SHOW_NUEVO_PERMISO_GENERAL"){
 
@@ -235,7 +235,7 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_GENERAL"){
                     });
 
     $t_params->{'nuevoPermiso'}=1;
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 # PERMISOS PARA CIRCULAR
 
@@ -263,7 +263,7 @@ elsif ($accion eq "circulacion"){
     $t_params->{'combo_perfiles'}= $combo_perfiles;
     $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Permisos de Circulaci&oacute;n");
 
-  C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+  C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "OBTENER_PERMISOS_CIRCULACION"){
 
@@ -285,7 +285,7 @@ elsif ($accion eq "OBTENER_PERMISOS_CIRCULACION"){
     if ($newUpdate){
         $t_params->{'nuevoPermiso'}=1;
     }
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }
 elsif ($accion eq "ACTUALIZAR_PERMISOS_CIRCULACION"){
@@ -307,7 +307,7 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_CIRCULACION"){
     my $updateStatus = C4::AR::Permisos::actualizarPermisosCirculacion($nro_socio,$id_ui,$tipo_documento,$permisos);
     my $permisos = C4::AR::Permisos::obtenerPermisosCirculacion($nro_socio,$id_ui,$tipo_documento);
     $t_params->{'permisos'}=$permisos;
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "NUEVO_PERMISO_CIRCULACION"){
 
@@ -328,7 +328,7 @@ elsif ($accion eq "NUEVO_PERMISO_CIRCULACION"){
     C4::AR::Permisos::nuevoPermisoCirculacion($nro_socio,$id_ui,$tipo_documento,$permisos);
     my $permisos = C4::AR::Permisos::obtenerPermisosCirculacion($nro_socio,$id_ui,$tipo_documento);
     $t_params->{'permisos'}=$permisos;
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "SHOW_NUEVO_PERMISO_CIRCULACION"){
 
@@ -342,5 +342,5 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_CIRCULACION"){
                     });
 
     $t_params->{'nuevoPermiso'}=1;
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

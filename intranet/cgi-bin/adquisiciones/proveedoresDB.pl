@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::AR::Proveedores;
 use CGI;
 use JSON;
@@ -36,7 +36,7 @@ if($tipoAccion eq "ELIMINAR"){
         my ($Message_arrayref)= C4::AR::Proveedores::eliminarProveedor($id_proveedor);
         my $infoOperacionJSON=to_json $Message_arrayref;
 
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
 
     } #end if($tipoAccion eq "ELIMINAR_USUARIO")
@@ -63,7 +63,7 @@ elsif($tipoAccion eq "GUARDAR_MODIFICACION_PROVEEDOR"){
         my $infoOperacionJSON=to_json $Message_arrayref;
         
 
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
 
  } #end if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO")
@@ -96,7 +96,7 @@ elsif($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR"){
         
     }
 
-  C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+  C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 } #end if($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR")
 
@@ -124,6 +124,6 @@ elsif($tipoAccion eq "ELIMINAR_MONEDA_PROVEEDOR"){
          $t_params->{'monedas'} = $monedas;
     }
     
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 } #end if($tipoAccion eq "ELIMINAR_MONEDA_PROVEEDOR")

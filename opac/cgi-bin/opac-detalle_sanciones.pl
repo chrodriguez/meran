@@ -3,7 +3,7 @@ use strict;
 require Exporter;
 
 use C4::Output;  # contains gettemplate
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Date;
 use CGI;
 
@@ -19,7 +19,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 $t_params->{'opac'};
 
-my $nro_socio = C4::Auth::getSessionNroSocio();
+my $nro_socio = C4::AR::Auth::getSessionNroSocio();
 my $san= C4::AR::Sanciones::estaSancionado($nro_socio);
 my $dateformat = C4::Date::get_date_format();
 if ($san){
@@ -35,4 +35,4 @@ if ($san){
 $t_params->{'content_title'}= C4::AR::Filtros::i18n("Sanciones");
 
 $t_params->{'partial_template'}= "opac-detalle_sanciones.inc";
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

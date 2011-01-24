@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;         # checkauth, getnro_socio.
+use C4::AR::Auth;         # checkauth, getnro_socio.
 use C4::Circulation::Circ2;
 
 use C4::Date;
@@ -20,7 +20,7 @@ my ($template, $session, $t_params)= get_template_and_user({
              });
 
 
-my $nro_socio = C4::Auth::getSessionNroSocio();
+my $nro_socio = C4::AR::Auth::getSessionNroSocio();
 
 my ($socio, $flags) = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
@@ -49,5 +49,5 @@ $t_params->{'reviews'}= C4::AR::Nivel2::getReviews($id2);
 $t_params->{'partial_template'}= "reviews.inc";
 $t_params->{'id2'}= $id2;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

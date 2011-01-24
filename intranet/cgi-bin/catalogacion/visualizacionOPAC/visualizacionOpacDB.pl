@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::AR::VisualizacionOpac;
 use C4::AR::Utilidades;
@@ -29,7 +29,7 @@ if($editing){
 
     $t_params->{'value'} = $configuracion;
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 else{
 
@@ -60,7 +60,7 @@ else{
         $t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion($perfil);
         $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
 
-        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
     elsif($tipoAccion eq "AGREGAR_VISUALIZACION"){
 
@@ -76,7 +76,7 @@ else{
         my ($messages) = C4::AR::VisualizacionOpac::addConfiguracion($obj);
         $t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion($perfil);
 
-        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
     elsif($tipoAccion eq "ELIMINAR_VISUALIZACION"){
 
@@ -92,7 +92,7 @@ else{
         my ($status) = C4::AR::VisualizacionOpac::deleteConfiguracion($obj);
         $t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion($perfil);
 
-        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
     elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
         my ($user, $session, $flags)= checkauth(    $input, 
@@ -111,7 +111,7 @@ else{
 
       my $infoOperacionJSON = $info;
 
-      C4::Auth::print_header($session);
+      C4::AR::Auth::print_header($session);
       print $infoOperacionJSON;
     }
 
@@ -132,7 +132,7 @@ else{
 
       my $infoOperacionJSON = $info;
 
-      C4::Auth::print_header($session);
+      C4::AR::Auth::print_header($session);
       print $infoOperacionJSON;
     }
     #**************************************************************************************************

@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Context;
 
 my $input = new CGI;
@@ -28,4 +28,4 @@ $t_params->{'smtp_server_sendmail'}                     = C4::Context->preferenc
 $t_params->{C4::Context->preference("smtp_metodo")}     = 1;
 
     
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

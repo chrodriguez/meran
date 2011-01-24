@@ -19,7 +19,7 @@
 #
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use CGI;
 use C4::Date;
@@ -47,4 +47,4 @@ $t_params->{'todaydate'}=format_date($today,$dateformat);
 ###
 
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

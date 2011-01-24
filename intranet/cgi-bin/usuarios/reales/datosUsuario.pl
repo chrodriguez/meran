@@ -1,12 +1,12 @@
 #!/usr/bin/perl
 
 # use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 
 my $input=new CGI;
 
-my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
+my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
 			template_name	=> 'usuarios/reales/datosUsuario.tmpl',
 			query		=> $input,
 			type		=> "intranet",
@@ -28,4 +28,4 @@ if ($mensaje_desde_pdf){
     $t_params->{'mensaje'} = $mensaje_desde_pdf;
 }
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

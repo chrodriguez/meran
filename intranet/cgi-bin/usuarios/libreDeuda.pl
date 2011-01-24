@@ -14,7 +14,7 @@ use C4::AR::Prestamos;
 my $input= new CGI;
 my $authnotrequired= 0;
 
-my ($userid, $session, $flags) = C4::Auth::checkauth(   $input, 
+my ($userid, $session, $flags) = C4::AR::Auth::checkauth(   $input, 
                                                         $authnotrequired,
                                                         {   ui => 'ANY', 
                                                             tipo_documento => 'ANY', 
@@ -30,7 +30,7 @@ my $nro_socio = $input->param('nro_socio');
 my $authnotrequired = 0;
 my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
-my ($userid, $session, $flags) = C4::Auth::checkauth(   $input, 
+my ($userid, $session, $flags) = C4::AR::Auth::checkauth(   $input, 
                                                         $authnotrequired,
                                                         {   ui => 'ANY', 
                                                             tipo_documento => 'ANY', 

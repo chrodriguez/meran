@@ -3,7 +3,7 @@
 use strict;
 use CGI;
 use C4::AR::Utilidades;
-use C4::Auth;
+use C4::AR::Auth;
 
 my $input = new CGI;
 my $authnotrequired = 0;
@@ -22,7 +22,7 @@ my $result = C4::AR::Utilidades::catalogoAutocomplete($string);
 
 
 
-C4::Auth::print_header($session);
+C4::AR::Auth::print_header($session);
 print $result;
 
 1;

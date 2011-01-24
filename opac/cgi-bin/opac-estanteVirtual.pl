@@ -5,7 +5,7 @@ use strict;
 use CGI;
 use C4::BookShelves;
 use C4::Circulation::Circ2;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::AR::Utilidades;
 
@@ -77,4 +77,4 @@ foreach my $element (@keyAux) {
 
 $t_params->{'shelvesloop'}= \@shelvesloop;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

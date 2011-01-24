@@ -2,7 +2,7 @@
 use CGI;
 use C4::Context;
 use C4::AR::UploadFile;
-use C4::Auth;
+use C4::AR::Auth;
 use JSON;
 
 my $query       = new CGI;

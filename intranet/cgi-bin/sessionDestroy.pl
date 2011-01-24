@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use JSON;
 use CGI;
 
-C4::Auth::_destruirSession('U400');
+C4::AR::Auth::_destruirSession('U400');

@@ -122,7 +122,7 @@ sub agregar{
     $self->setFlags($data_hash->{'flags'});
 #     $self->setPassword($data_hash->{'password'});
     
-    $self->setPassword(C4::Auth::hashear_password(C4::Auth::hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
+    $self->setPassword(C4::AR::Auth::hashear_password(C4::AR::Auth::hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
 #     $self->setLast_login($data_hash->{'last_login'});
     $self->setChange_password($data_hash->{'changepassword'});
     $self->setCumple_requisito($data_hash->{'cumple_requisito'});
@@ -215,8 +215,8 @@ sub defaultSort{
 sub cambiarPassword{
     my ($self)=shift;
     my ($password)=@_;
-    C4::AR::Debug::debug("UsrSocio => cambiarPassword => ".C4::Auth::prepare_password(C4::AR::Utilidades::trim($password)) );
-    $self->setPassword( C4::Auth::prepare_password(C4::AR::Utilidades::trim($password)) );
+    C4::AR::Debug::debug("UsrSocio => cambiarPassword => ".C4::AR::Auth::prepare_password(C4::AR::Utilidades::trim($password)) );
+    $self->setPassword( C4::AR::Auth::prepare_password(C4::AR::Utilidades::trim($password)) );
     my $today = Date::Manip::ParseDate("today");
     $self->setLast_change_password($today);
     $self->setChange_password(0);
@@ -227,7 +227,7 @@ sub cambiarPassword{
 sub resetPassword{
     my ($self)=shift;
 
-    $self->setPassword(C4::Auth::hashear_password(C4::Auth::hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
+    $self->setPassword(C4::AR::Auth::hashear_password(C4::AR::Auth::hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
     $self->forzarCambioDePassword();
     $self->save();
 }
@@ -401,7 +401,7 @@ sub getPassword{
     if (C4::AR::Utilidades::validateString($self->password)){
       return ($self->password);
     }else{
-      return (C4::Auth::prepare_password($self->persona->getNro_documento));
+      return (C4::AR::Auth::prepare_password($self->persona->getNro_documento));
     }
 }
 

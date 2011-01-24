@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Context;
 use C4::Output;
 
@@ -78,7 +78,7 @@ my ($userid, $session, $flags, $socio) = checkauth(     $input,
 
 if($accion eq "MODIFICAR_CONFIGURACION"){
 
-    C4::Auth::redirectTo('/cgi-bin/koha/admin/global/mail_config.pl');
+    C4::AR::Auth::redirectTo('/cgi-bin/koha/admin/global/mail_config.pl');
 
 } elsif($accion eq "PROBAR_CONFIGURACION"){
 
@@ -96,6 +96,6 @@ if($accion eq "MODIFICAR_CONFIGURACION"){
     }
 
     my $infoOperacionJSON       = to_json $msg_object;
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }

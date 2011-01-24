@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::AR::Busquedas;
 
@@ -23,4 +23,4 @@ my $MARCDetail_array= C4::AR::Busquedas::MARCDetail($idNivel3,'intra');
 $t_params->{'MARCDetail_array'}= $MARCDetail_array;
 
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

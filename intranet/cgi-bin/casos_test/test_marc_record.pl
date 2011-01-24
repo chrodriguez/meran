@@ -3,7 +3,7 @@ use HTML::Template;
 use strict;
 require Exporter;
 # use C4::Database;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::AR::Debug;
 use C4::Context;
 use CGI::Session;
@@ -59,4 +59,4 @@ $marc_record->add_fields( $field );
 C4::AR::Debug::debug("marc_record => as_formatted ".$marc_record->as_formatted());
 
 
-C4::Auth::print_header($session);
+C4::AR::Auth::print_header($session);

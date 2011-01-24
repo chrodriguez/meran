@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use CGI;
 use C4::AR::Estadisticas;
@@ -64,4 +64,4 @@ $t_params->{'especial'}=$especial;
 $t_params->{'cantUsuPrest'}=$cantUsuPrest;
 $t_params->{'cantUsuRenov'}=$cantUsuRenov;
 $t_params->{'cantUsuReser'}=$cantUsuReser;
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

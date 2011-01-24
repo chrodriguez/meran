@@ -19,7 +19,7 @@
 #
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 use C4::AR::Utilidades;
 use C4::AR::Reportes;
@@ -83,7 +83,7 @@ $t_params->{'id_estante'}= $id_estante;
 
 if ($to_pdf) {
 	$t_params->{'exported'} = 1;
-	my $out = C4::Auth::get_html_content( $template, $t_params, $session );
+	my $out = C4::AR::Auth::get_html_content( $template, $t_params, $session );
 	my $filename = C4::AR::PdfGenerator::pdfFromHTML($out);
 
 	print C4::AR::PdfGenerator::pdfHeader();
@@ -92,6 +92,6 @@ if ($to_pdf) {
 
 }
 else {
-	C4::Auth::output_html_with_http_headers( $template, $t_params, $session );
+	C4::AR::Auth::output_html_with_http_headers( $template, $t_params, $session );
 }
 

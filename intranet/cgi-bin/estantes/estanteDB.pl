@@ -3,7 +3,7 @@
 use strict;
 use CGI;
 use C4::AR::Estantes;
-use C4::Auth;
+use C4::AR::Auth;
 
 use JSON;
 my $input=new CGI;
@@ -26,7 +26,7 @@ if($tipo eq "VER_ESTANTES"){
     my $estantes_publicos = C4::AR::Estantes::getListaEstantesPublicos();
     $t_params->{'cant_estantes'}= @$estantes_publicos;
     $t_params->{'ESTANTES'}= $estantes_publicos;
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif($tipo eq "VER_SUBESTANTE"){
 
@@ -48,7 +48,7 @@ elsif($tipo eq "VER_SUBESTANTE"){
 
     $t_params->{'SUBESTANTES'}= $subEstantes;
     $t_params->{'cant_subestantes'}= @$subEstantes;
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif($tipo eq "BORRAR_ESTANTES"){
     my ($user, $session, $flags)= checkauth(    $input, 
@@ -65,7 +65,7 @@ elsif($tipo eq "BORRAR_ESTANTES"){
 
     my $infoOperacionJSON=to_json $Messages_arrayref;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 elsif($tipo eq "MODIFICAR_ESTANTE"){
@@ -84,7 +84,7 @@ elsif($tipo eq "MODIFICAR_ESTANTE"){
 
     my $infoOperacionJSON=to_json $Messages_arrayref;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 elsif($tipo eq "AGREGAR_SUBESTANTE"){
@@ -103,7 +103,7 @@ elsif($tipo eq "AGREGAR_SUBESTANTE"){
 
     my $infoOperacionJSON=to_json $Messages_arrayref;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 elsif($tipo eq "AGREGAR_ESTANTE"){
@@ -121,7 +121,7 @@ elsif($tipo eq "AGREGAR_ESTANTE"){
 
     my $infoOperacionJSON=to_json $Messages_arrayref;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 elsif($tipo eq "BUSCAR_CONTENIDO"){
@@ -148,7 +148,7 @@ my ($template, $session, $t_params) = get_template_and_user(
     $t_params->{'SEARCH_RESULTS'}   = $resultId1;
     $t_params->{'cantidad'}         = $cantidad;
     
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif($tipo eq "AGREGAR_CONTENIDO"){
     my ($user, $session, $flags)= checkauth(    $input, 
@@ -166,7 +166,7 @@ elsif($tipo eq "AGREGAR_CONTENIDO"){
 
     my $infoOperacionJSON=to_json $Messages_arrayref;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 elsif($tipo eq "BORRAR_CONTENIDO"){
@@ -184,6 +184,6 @@ elsif($tipo eq "BORRAR_CONTENIDO"){
 
     my $infoOperacionJSON=to_json $Messages_arrayref;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }

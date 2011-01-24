@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use CGI;
 use C4::AR::Estadisticas;
@@ -88,4 +88,4 @@ $t_params->{'registros'}    = \@results;
 $t_params->{'cantidad'}     = $cantidad_registros;
 $t_params->{'paginador'}    = C4::AR::Utilidades::crearPaginador($cantidad_registros,$cantR, $pageNumber,$funcion,$t_params);
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

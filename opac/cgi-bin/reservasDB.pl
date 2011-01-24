@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::AR::Utilidades;
 use JSON;
 
@@ -42,7 +42,7 @@ elsif ($obj->{'accion'} eq 'CANCELAR_Y_RESERVAR'){
 
 my $infoOperacionJSON=to_json $msg_object;
 
-C4::Auth::print_header($session);
+C4::AR::Auth::print_header($session);
 print $infoOperacionJSON;
 
 

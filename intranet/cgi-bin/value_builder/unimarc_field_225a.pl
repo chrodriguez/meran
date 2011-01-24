@@ -42,7 +42,7 @@ It need :
 =cut
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 
 

@@ -38,7 +38,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 
 sub StringSearch  {
@@ -64,7 +64,7 @@ my $script_name="/cgi-bin/koha/admin/categorie.pl";
 my $categorycode=$input->param('categorycode');
 my $op = $input->param('op');
 
-my ($template, $session, $t_params) = C4::Auth::get_template_and_user({
+my ($template, $session, $t_params) = C4::AR::Auth::get_template_and_user({
 								template_name => "admin/usuarios/categorie.tmpl",
 								query => $input,
 								type => "intranet",
@@ -190,5 +190,5 @@ if ($op eq 'add_form') {
 
 
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

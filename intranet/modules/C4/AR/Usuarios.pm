@@ -402,7 +402,7 @@ sub _verificarPassword {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => [$params->{'cardnumber'}]} ) ;
     }
 
-    if ( !($msg_object->{'error'}) && ( C4::Auth::getSessionNroSocio() != $params->{'nro_socio'} ) ){
+    if ( !($msg_object->{'error'}) && ( C4::AR::Auth::getSessionNroSocio() != $params->{'nro_socio'} ) ){
     #no coincide el usuario logueado con el usuario al que se le va a cambiar la password
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U362', 'params' => [$params->{'nro_socio'}]} ) ;
@@ -425,9 +425,9 @@ sub cambiarPassword {
     if ($socio){
     #si la password actual ingresada desde el cliente no es igual a la que se encuentra en la base las key seran <>
     #password1 y password seran distintas siempre, recordar que la key es sha256_base64(md5_base64( password))
-        $params->{'actualPassword'}= C4::Auth::desencriptar($params->{'actualPassword'}, $socio->getPassword());
-        $params->{'newpassword'}= C4::Auth::desencriptar($params->{'newpassword'}, $socio->getPassword());
-        $params->{'newpassword1'}= C4::Auth::desencriptar($params->{'newpassword1'}, $socio->getPassword());
+        $params->{'actualPassword'}= C4::AR::Auth::desencriptar($params->{'actualPassword'}, $socio->getPassword());
+        $params->{'newpassword'}= C4::AR::Auth::desencriptar($params->{'newpassword'}, $socio->getPassword());
+        $params->{'newpassword1'}= C4::AR::Auth::desencriptar($params->{'newpassword1'}, $socio->getPassword());
         C4::AR::Debug::debug("newpassword=> ".$params->{'newpassword'});
         C4::AR::Debug::debug("newpassword1=> ".$params->{'newpassword1'});
         C4::AR::Debug::debug("actualpassword=> ".$params->{'actualPassword'});
@@ -445,7 +445,7 @@ sub cambiarPassword {
 # FIXME si cambia la pass que pasa con LDAP??
         my $password_actual_desde_DB = $socio->getPassword;
         my $cambioDePasswordForzado;
-        my $password_actual_desde_cliente_hasheada = C4::Auth::prepare_password($params->{'actualPassword'});
+        my $password_actual_desde_cliente_hasheada = C4::AR::Auth::prepare_password($params->{'actualPassword'});
 
         if( ($params->{'changePassword'} eq 1) && ($socio->getChange_password) ){
             $cambioDePasswordForzado= 1;
@@ -493,7 +493,7 @@ sub _verificarDatosBorrower {
     }
 
     if (!($msg_object->{'error'}) && ($credential_type eq "superlibrarian") ){
-        my $socio = getSocioInfoPorNroSocio(C4::Auth::getSessionNroSocio());
+        my $socio = getSocioInfoPorNroSocio(C4::AR::Auth::getSessionNroSocio());
         if ( (!$socio) || (!($socio->isSuperUser())) ){
           $msg_object->{'error'}= 1;
           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U399', 'params' => []} ) ;

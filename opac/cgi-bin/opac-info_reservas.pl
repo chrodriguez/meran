@@ -3,7 +3,7 @@ use strict;
 require Exporter;
 
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Date;;
 use Date::Manip;
 use C4::AR::Busquedas;
@@ -55,7 +55,7 @@ elsif ($action eq "detalle_asignadas"){
 
 
 
-my $nro_socio = C4::Auth::getSessionNroSocio();
+my $nro_socio = C4::AR::Auth::getSessionNroSocio();
 my $reservas = C4::AR::Reservas::obtenerReservasDeSocio($nro_socio);
 my ($cant_prestamos, $prestamos) = C4::AR::Prestamos::getHistorialPrestamosVigentesParaTemplate($nro_socio);
 my $racount = 0;
@@ -87,4 +87,4 @@ $t_params->{'pagetitle'}= "Usuarios";
 $t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");
 $t_params->{'content_title'}= C4::AR::Filtros::i18n("Reservas");
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

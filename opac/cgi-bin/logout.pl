@@ -4,13 +4,13 @@ use strict;
 require Exporter;
 
 use C4::Output;  # contains gettemplate
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Context;
 use CGI::Session;
 
 my $input=new CGI;
 
-my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
+my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
             template_name   => 'opac-main.tmpl',
             query       => $input,
             type        => "intranet",
@@ -19,8 +19,8 @@ my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
             loging_out      => 1,
     });
 
-my ($session)= C4::Auth::cerrarSesion();
+my ($session)= C4::AR::Auth::cerrarSesion();
 
 $t_params->{'partial_template'}= "opac-content_data.inc";
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

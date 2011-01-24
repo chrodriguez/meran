@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 
 my $input=new CGI;
@@ -22,4 +22,4 @@ C4::AR::Nivel3::detalleCompletoOPAC($idNivel1, $t_params);
 
 $t_params->{'partial_template'}= "opac-detail.inc";
 $t_params->{'preferencias'}= C4::AR::Preferencias::getConfigVisualizacionOPAC();
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

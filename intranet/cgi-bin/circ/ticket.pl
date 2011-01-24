@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 
 my $input=new CGI;
@@ -25,4 +25,4 @@ $t_params->{'responsable'}      = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj
 $t_params->{'prestamo'}         = C4::AR::Prestamos::getPrestamoDeId3($obj->{'id3'});
 
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

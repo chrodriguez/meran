@@ -11,7 +11,7 @@ use C4::AR::PdfGenerator;
 my $input= new CGI;
 my $authnotrequired= 0;
 
-my ($userid, $session, $flags) = C4::Auth::checkauth(   $input, 
+my ($userid, $session, $flags) = C4::AR::Auth::checkauth(   $input, 
                                                         $authnotrequired,
                                                         {   ui => 'ANY', 
                                                             tipo_documento => 'ANY', 

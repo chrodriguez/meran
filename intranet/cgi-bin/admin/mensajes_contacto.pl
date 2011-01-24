@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 use C4::AR::MensajesContacto;
 my $input = new CGI;
@@ -40,4 +40,4 @@ $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginadorOPAC($cant_mensajes
 $t_params->{'mensajes_contacto'} = $mensajes_contacto;
 $t_params->{'cant_mensajes'} = $cant_mensajes;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -6,7 +6,7 @@ use strict;
 use CGI;
 use C4::AR::PdfGenerator;
 
-use C4::Auth;
+use C4::AR::Auth;
 use C4::AR::Busquedas;
 
 my $input= new CGI;

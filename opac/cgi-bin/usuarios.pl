@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::AR::Utilidades;
 use JSON;
 
@@ -51,7 +51,7 @@ if ($tipoAccion eq 'CAMBIAR_PASSWORD'){
 
     my $infoOperacionJSON=to_json $Message_arrayref;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 
 }
@@ -96,7 +96,7 @@ else{
 
             $t_params->{'errormessage'} = 'La preferencia KohaAdminEmailAddress no esta seteada. Por favor visite la biblioteca para actualizar sus datos';
 
-            C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+            C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
         }
     }
 
@@ -109,7 +109,7 @@ else{
 
     $t_params->{'pagetitle'}= "Actualizaci&oacute;n de datos personales";
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }
 

@@ -4,7 +4,7 @@
 # Se obtiene un Historial de los prestamos realizados por los usuarios
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use CGI;
 use C4::AR::Estadisticas;
@@ -57,4 +57,4 @@ $t_params->{'fechaIni'}= $fechaIni;
 $t_params->{'fechaFin'}= $fechaFin;
 
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

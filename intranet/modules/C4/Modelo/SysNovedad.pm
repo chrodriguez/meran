@@ -34,7 +34,7 @@ sub agregar{
 
     my ($self) = shift;
     my (%params) = @_;
-    my $usuario = C4::Auth::getSessionNroSocio();
+    my $usuario = C4::AR::Auth::getSessionNroSocio();
     $self->setTitulo($params{'titulo'});
     $self->setContenido($params{'contenido'});
     $self->setCategoria($params{'categoria'});

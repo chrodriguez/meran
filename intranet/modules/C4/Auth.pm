@@ -233,7 +233,7 @@ sub _destruirSession{
     my ($session) = CGI::Session->load();
     $codMSG = $codMsg;
     _eliminarSession($session);
-    $session = C4::Auth::_generarSession();
+    $session = C4::AR::Auth::_generarSession();
     $session->param('sessionID', undef);
     #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
     $session->param('codMsg', $codMsg);
@@ -264,14 +264,14 @@ sub inicializarAuth{
     $params{'userid'}               = undef;
     $params{'loggedinusername'}     = undef;
     $params{'token'}                = '';
-    $params{'nroRandom'}            = C4::Auth::_generarNroRandom();
+    $params{'nroRandom'}            = C4::AR::Auth::_generarNroRandom();
     $params{'borrowernumber'}       = undef;
     $params{'type'}                 = $t_params->{'type'}; #OPAC o INTRA
     $params{'flagsrequired'}        = '';
-    $session                        = C4::Auth::_generarSession(\%params);
+    $session                        = C4::AR::Auth::_generarSession(\%params);
 
     #Guardo la sesion en la base
-    #FIXME C4::Auth::_save_session_db($session->param('sessionID'), undef, $params{'ip'} , $params{'nroRandom'}, $params{'token'});
+    #FIXME C4::AR::Auth::_save_session_db($session->param('sessionID'), undef, $params{'ip'} , $params{'nroRandom'}, $params{'token'});
     $t_params->{"nroRandom"}=$params{'nroRandom'};
     $t_params->{"authMERAN"}=C4::Context->config('authMERAN');
     return ($session);
@@ -399,7 +399,7 @@ sub getUserLocale{
 =cut
 sub _init_i18n {
     my($params) = @_;
-    my $locale = C4::Auth::getUserLocale();
+    my $locale = C4::AR::Auth::getUserLocale();
     Locale::Maketext::Gettext::Functions::bindtextdomain($params->{'type'}, C4::Context->config("locale"));
     Locale::Maketext::Gettext::Functions::textdomain($params->{'type'});
     Locale::Maketext::Gettext::Functions::get_handle($locale);
@@ -850,7 +850,7 @@ Funcion que cierra la sesion generando una nueva
 sub cerrarSesion{
     my ($t_params) = @_;
     #se genera un nuevo nroRandom para que se autentique el usuario
-    my $nroRandom       = C4::Auth::_generarNroRandom();
+    my $nroRandom       = C4::AR::Auth::_generarNroRandom();
     #genero una nueva session
     my ($session)           = CGI::Session->load();
     my $msjCode             = getMsgCode();
@@ -868,7 +868,7 @@ sub cerrarSesion{
     $params{'flagsrequired'}        = '';
     $t_params->{'sessionClose'}     = 1;
     $session->param('codMsg', 'U358');
-    $session = C4::Auth::_generarSession(\%params);
+    $session = C4::AR::Auth::_generarSession(\%params);
     redirectToAuth($t_params);
 }
 
@@ -965,7 +965,7 @@ sub redirectToNoHTTPS {
 #   C4::AR::Debug::debug("\n");
 #   C4::AR::Debug::debug("redirectToNoHTTPS=>");
     #PARA SACAR EL LOCALE ELEGIDO POR EL SOCIO
-    my $socio = C4::Auth::getSessionNroSocio();
+    my $socio = C4::AR::Auth::getSessionNroSocio();
     $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
     #para saber si fue un llamado con AJAX
     if(C4::AR::Utilidades::isAjaxRequest()){

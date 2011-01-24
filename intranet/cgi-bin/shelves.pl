@@ -25,7 +25,7 @@ use strict;
 use CGI;
 use C4::BookShelves;
 use C4::Circulation::Circ2;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::AR::Utilidades;
 use C4::AR::Estadisticas;

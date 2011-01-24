@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;         # checkauth, getnro_socio.
+use C4::AR::Auth;         # checkauth, getnro_socio.
 
 use C4::Date;
 
@@ -22,6 +22,6 @@ my ($template, $session, $t_params)= get_template_and_user({
 $t_params->{'partial_template'}= "opac-favoritos.inc";
 $t_params->{'content_title'}= C4::AR::Filtros::i18n("Mis favoritos");
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 1;

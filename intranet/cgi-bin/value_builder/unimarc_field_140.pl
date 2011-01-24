@@ -20,7 +20,7 @@
 # Suite 330, Boston, MA  02111-1407 USA
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 
 =head1

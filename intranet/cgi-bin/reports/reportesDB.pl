@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::AR::UploadFile;
 use C4::AR::Reportes;
@@ -45,7 +45,7 @@ if($tipoAccion eq "GUARDAR_NOTA"){
 	
 # 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
 # 	print $infoOperacionJSON;
 	
 } #end if($tipoAccion eq "CAMBIAR_PASSWORD")
@@ -64,7 +64,7 @@ my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borro
 	
 	my $infoOperacionJSON=to_json $Message_arrayref;
 	
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
 	print $infoOperacionJSON;
 
 } #end if($tipoAccion eq "GUARDAR_PERMISOS")

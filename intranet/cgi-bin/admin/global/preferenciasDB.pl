@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::AR::Preferencias;
 # use C4::AR::Utilidades;
@@ -37,7 +37,7 @@ my ($template, $session, $t_params)  = get_template_and_user({
 	$t_params->{'preferencias'}= $preferencias;
 	$t_params->{'cant'}= $cant;
 	
-	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+	C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }#end if($accion eq "BUSCAR_PREFERENCIAS")
 
 if($accion eq "MODIFICAR_VARIABLE"){
@@ -122,14 +122,14 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 
 
-	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+	C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 	}#No existe la variable
 	else{
 	    my $msg_object = C4::AR::Mensajes::create();
 	    $msg_object->{'error'}= 1;
 	    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP006', 'params' => []} ) ;
 	    my $infoOperacionJSON=to_json $msg_object;
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
     	print $infoOperacionJSON;
 	}
 } #end if($accion eq "MODIFICAR_VARIABLE")
@@ -156,7 +156,7 @@ if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){
 	my $Message_arrayref = C4::AR::Preferencias::t_modificarVariable($variable,$valor,$expl,$categoria);
     
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 
 } #end GUARDAR_MODIFICACION_VARIABLE
@@ -193,7 +193,7 @@ if($accion eq "SELECCION_CAMPO"){
 		$strjson=C4::AR::Utilidades::arrayObjectsToJSONString($valAuto);
 
 	}
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
 	print $strjson;
 }#end SELECCION_CAMPO
 
@@ -254,7 +254,7 @@ my ($template, $session, $t_params) =
     $t_params->{'nueva'}= 1;
 	$t_params->{'valor'}= $nuevoCampo;
 
-	C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+	C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }#end NUEVA_VARIABLE
 
 
@@ -284,7 +284,7 @@ if($accion eq "GUARDAR_NUEVA_VARIABLE"){
  
 	my $infoOperacionJSON=to_json $Message_arrayref;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
 	print $infoOperacionJSON;
 
 }#end GUARDAR_NUEVA_VARIABLE

@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 
 my $input=new CGI;
@@ -19,4 +19,4 @@ $t_params->{'opac'};
 
 $t_params->{'partial_template'}= "opac-ui_info.inc";
 $t_params->{'google_map'} = C4::AR::Preferencias->getValorPreferencia('google_map');
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

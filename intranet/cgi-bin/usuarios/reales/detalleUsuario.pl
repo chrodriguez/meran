@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::Date;
 use C4::AR::Usuarios;
@@ -10,7 +10,7 @@ use Date::Manip;
 use Cwd;
 my $input=new CGI;
 
-my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
+my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
                             template_name	=> 'usuarios/reales/detalleUsuario.tmpl',
                             query		=> $input,
                             type		=> "intranet",
@@ -53,4 +53,4 @@ $t_params->{'relativePicturesDir'}  = C4::Context->config("relativePicturesDir")
 $t_params->{'needsDataValidation'} = C4::AR::Usuarios::needsDataValidation($nro_socio);
 
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

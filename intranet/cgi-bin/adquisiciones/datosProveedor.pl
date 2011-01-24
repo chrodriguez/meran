@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 use C4::AR::Proveedores;
 
@@ -16,7 +16,7 @@ my ($template, $session, $t_params);
 if ($tipoAccion eq "EDITAR") {
 # se edita la informacion del proveedor   
  
-    ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
+    ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
             template_name   => '/adquisiciones/datosProveedor.tmpl',
             query       => $input,
             type        => "intranet",
@@ -30,7 +30,7 @@ if ($tipoAccion eq "EDITAR") {
 }else{
 # se muestran los detalles del proveedor
 
-          ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
+          ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
                       template_name   => '/adquisiciones/detalleProveedor.tmpl',
                       query       => $input,
                       type        => "intranet",
@@ -55,4 +55,4 @@ $t_params->{'materiales_proveedor'}     = $materiales_proveedor;
 $t_params->{'formas_envio'}             = $formas_envio;
 $t_params->{'formas_envio_proveedor'}   = $formas_envio_proveedor;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

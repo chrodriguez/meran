@@ -3,7 +3,7 @@ use strict;
 require Exporter;
 
 use C4::Output;  # contains gettemplate
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 
 my $query = new CGI;
@@ -21,9 +21,9 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 $t_params->{'opac'};
 
-my $nro_socio = C4::Auth::getSessionNroSocio();
+my $nro_socio = C4::AR::Auth::getSessionNroSocio();
 my $sanc= C4::AR::Sanciones::estaSancionado($nro_socio);
 
 $t_params->{'sancionado'}= $sanc;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

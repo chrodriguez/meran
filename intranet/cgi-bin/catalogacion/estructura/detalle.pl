@@ -5,7 +5,7 @@ use strict;
 require Exporter;
 
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::AR::Nivel3 qw(detalleCompletoINTRA);
 
 
@@ -24,4 +24,4 @@ my $id1=$input->param('id1');
 C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Detalle del &iacute;tem");
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

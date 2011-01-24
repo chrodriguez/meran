@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::AR::Proveedores;
 use C4::AR::Presupuestos;
 use CGI;
@@ -38,7 +38,7 @@ if($tipoAccion eq "GUARDAR_MODIFICACION_PRESUPUESTO"){
      
      my $infoOperacionJSON=to_json $Message_arrayref;
         
-     C4::Auth::print_header($session);
+     C4::AR::Auth::print_header($session);
      print $infoOperacionJSON;
 
 
@@ -51,7 +51,7 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
 
         my $filepath  = $obj->{'filepath'}||"";
 
-        my ($template, $session, $t_params) =  C4::Auth::get_template_and_user ({
+        my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
                               template_name   => '/adquisiciones/mostrarPresupuesto.tmpl',
                               query       => $input,
                               type        => "intranet",
@@ -134,7 +134,7 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
         $t_params->{'id_prov'} = $id_prov;
 
 
-        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 } #end if($tipoAccion eq "MOSTRAR_PRESUPUESTO")
 

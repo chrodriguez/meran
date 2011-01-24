@@ -3,7 +3,7 @@
 use strict;
 use CGI;
 use C4::AR::Z3950;
-use C4::Auth;
+use C4::AR::Auth;
 
 use MARC::Record;
 use C4::AR::PortadasRegistros;
@@ -33,7 +33,7 @@ if($tipo eq "BUSCAR"){
     
     my ($Message_arrayref)=C4::AR::Z3950::encolarBusquedaZ3950($termino,$busqueda);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 
 }
@@ -52,7 +52,7 @@ elsif($tipo eq "VER_BUSQUEDAS"){
         $t_params->{'cant_busquedas'}= @$busquedas;
         $t_params->{'BUSQUEDAS'}= $busquedas;
     }
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif($tipo eq "VER_RESULTADO"){
 
@@ -70,7 +70,7 @@ elsif($tipo eq "VER_RESULTADO"){
         $t_params->{'cant_resultados'}= $busqueda->getCantResultados;
         $t_params->{'RESULTADO'}= $busqueda;
     }
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif($tipo eq "VER_DETALLE_MARC"){
 
@@ -91,7 +91,7 @@ elsif($tipo eq "VER_DETALLE_MARC"){
         $t_params->{'MARCDetail_array'}= $MARCDetail_array;
         $t_params->{'id_resultado'}= $id_resultado;
     }
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif($tipo eq "IMPORTAR_MARC"){
 
@@ -113,7 +113,7 @@ elsif($tipo eq "IMPORTAR_MARC"){
         my ($Messages_arrayref, $id1) = C4::AR::Catalogacion::Z3950_to_meran($marc);
         $infoOperacionJSON=to_json $Messages_arrayref;
 
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
     
     }

@@ -3,7 +3,7 @@ use strict;
 require Exporter;
 
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Date;;
 use Date::Manip;
 use C4::AR::Busquedas;
@@ -23,7 +23,7 @@ my $obj=$input->param('obj');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $action = $obj->{'action'};
 my $id1 = $obj->{'id1'};
-my $nro_socio = C4::Auth::getSessionNroSocio();
+my $nro_socio = C4::AR::Auth::getSessionNroSocio();
 
 $t_params->{'no_content_message'}= C4::AR::Filtros::i18n("UD. no ha marcado ningun ejemplar como favorito.");
 
@@ -42,11 +42,11 @@ elsif ($action eq "delete_favorite"){
     $t_params->{'SEARCH_RESULTS'}= $resultsarray;
     $t_params->{'content_title'}= C4::AR::Filtros::i18n("Sus favoritos: ".$cantidad);
     
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($action eq "get_favoritos"){
 
-    my $nro_socio = C4::Auth::getSessionNroSocio();
+    my $nro_socio = C4::AR::Auth::getSessionNroSocio();
     my ($socio, $flags) = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
     C4::AR::Validator::validateObjectInstance($socio);
 
@@ -57,7 +57,7 @@ elsif ($action eq "get_favoritos"){
     $t_params->{'SEARCH_RESULTS'}= $resultsarray;
     $t_params->{'content_title'}= C4::AR::Filtros::i18n("Sus favoritos: ".$cantidad);
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 1;

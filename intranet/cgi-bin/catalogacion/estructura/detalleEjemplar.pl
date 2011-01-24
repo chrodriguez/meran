@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 use C4::AR::Nivel3 qw(getNivel3FromId3);
 my $input = new CGI;
@@ -47,7 +47,7 @@ if($obj) {
         $t_params->{'cant_historico'} = $cant_historico;
     }
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
     }
     elsif($tipo eq "VER_HISTORICO_CIRCULACION"){
@@ -75,7 +75,7 @@ if($obj) {
         $t_params->{'cant_historico'} = $cant_historico;
     }
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
     }
 }
@@ -96,6 +96,6 @@ else {
         $t_params->{'nivel3'} = $nivel3;
         }
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 

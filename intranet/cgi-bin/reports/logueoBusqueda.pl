@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use CGI;
 
@@ -24,5 +24,5 @@ my $comboCategoriasDeSocio= C4::AR::Utilidades::generarComboCategoriasDeSocio(\%
 $t_params->{'selectCatUsuarios'}= $comboCategoriasDeSocio;
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Logueo de B&uacute;quedas");
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

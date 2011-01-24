@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::AR::UploadFile;
 use JSON;
@@ -32,7 +32,7 @@ if($editing){
     my ($value)= C4::AR::Usuarios::editarAutorizado(\%params);
 
     $t_params->{'value'} = $value;
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }else{
 
@@ -66,7 +66,7 @@ if($editing){
         my ($Message_arrayref)= C4::AR::Usuarios::resetPassword(\%params);
         my $infoOperacionJSON=to_json $Message_arrayref;
 
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
 
     } #end if($tipoAccion eq "RESET_PASSWORD")
@@ -87,7 +87,7 @@ if($editing){
         my ($Message_arrayref)= C4::AR::Usuarios::agregarAutorizado($obj);
         my $infoOperacionJSON=to_json $Message_arrayref;
 
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
 
     }
@@ -107,7 +107,7 @@ if($editing){
         my ($Message_arrayref)= C4::AR::Usuarios::updateUserDataValidation($obj->{'nro_socio'});
         my $infoOperacionJSON=to_json $Message_arrayref;
 
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
 
     }
@@ -125,7 +125,7 @@ if($editing){
                                         debug => 1,
                     });
 
-        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
     } 
 
@@ -147,7 +147,7 @@ if($editing){
         my ($Message_arrayref)= C4::AR::Usuarios::desautorizarTercero(\%params);
         my $infoOperacionJSON=to_json $Message_arrayref;
 
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
 
     } 
@@ -173,7 +173,7 @@ Se elimina el usuario
         my ($Message_arrayref)= C4::AR::Usuarios::eliminarUsuario($nro_socio);
         my $infoOperacionJSON=to_json $Message_arrayref;
 
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
 
     } #end if($tipoAccion eq "ELIMINAR_USUARIO")
@@ -196,7 +196,7 @@ Se agrega el usuario
         my $Message_arrayref=C4::AR::Usuarios::agregarPersona($obj);
         my $infoOperacionJSON=to_json $Message_arrayref;
 
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
 
     } #end if($tipoAccion eq "AGREGAR_USUARIO")
@@ -221,7 +221,7 @@ Se guarda la modificacion los datos del usuario
         my ($Message_arrayref)= C4::AR::Usuarios::actualizarSocio($obj);
         my $infoOperacionJSON=to_json $Message_arrayref;
 
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
 
     } #end if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO")
@@ -269,7 +269,7 @@ Se genra la ventana para modificar los datos del usuario
         $t_params->{'addBorrower'}          = 0;
 
         #paso el objeto socio al cliente
-        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 
     elsif($tipoAccion eq "ELIMINAR_FOTO"){
@@ -290,7 +290,7 @@ Se genra la ventana para modificar los datos del usuario
         my ($Message_arrayref)  = &C4::AR::UploadFile::deletePhoto($foto_name);
         my $infoOperacionJSON   = to_json $Message_arrayref;
 
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
     }
 
@@ -319,7 +319,7 @@ Se genra la ventana para modificar los datos del usuario
         $t_params->{'nro_socio'}= $socio->getNro_socio;
         $t_params->{'id_socio'}= $obj->{'id_socio'};
 
-        C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
     }
 }

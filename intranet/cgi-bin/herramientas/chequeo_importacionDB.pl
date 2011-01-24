@@ -3,7 +3,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::AR::Utilidades;
 use C4::AR::Catalogacion;
@@ -39,7 +39,7 @@ $t_params->{'datos_nivel_repetible_array'} = \@nivel_repetible_array_ref;
 $t_params->{'cantidad'} = $cant;
 $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cant, $obj->{'cantR'}, $pageNumber, $obj->{'funcion'}, $t_params);
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }
 
@@ -60,6 +60,6 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL_REPETIBLE"){
     
     my $infoOperacionJSON = to_json $Message_arrayref;
     
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }

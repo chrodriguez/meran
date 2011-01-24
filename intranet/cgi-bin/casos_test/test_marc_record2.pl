@@ -3,7 +3,7 @@ use HTML::Template;
 use strict;
 require Exporter;
 # use C4::Database;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::AR::Debug;
 use C4::Context;
 use CGI::Session;
@@ -69,4 +69,4 @@ while (my $marcblob_n2 = $sth_n2->fetchrow_hashref){
  C4::AR::Debug::debug("marc_record_n1 COMPLETO => as_formatted ".$marc_record_n1->as_formatted());
 
 
-C4::Auth::print_header($session);
+C4::AR::Auth::print_header($session);

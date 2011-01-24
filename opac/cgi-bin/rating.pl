@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;         # checkauth, getnro_socio.
+use C4::AR::Auth;         # checkauth, getnro_socio.
 
 use C4::Date;
 
@@ -19,7 +19,7 @@ my ($template, $session, $t_params)= get_template_and_user({
              });
 
 
-my $nro_socio = C4::Auth::getSessionNroSocio();
+my $nro_socio = C4::AR::Auth::getSessionNroSocio();
 
 my ($socio, $flags) = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 

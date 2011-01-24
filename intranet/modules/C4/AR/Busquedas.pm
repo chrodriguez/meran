@@ -1053,7 +1053,7 @@ sub index_update{
 sub getSuggestion{
     my ($search,$cant_result_busqueda,$intra,$obj_for_log) = @_;
     my $speller = Text::Aspell->new;
-    my $lang = C4::Auth::getUserLocale();
+    my $lang = C4::AR::Auth::getUserLocale();
     C4::AR::Debug::debug("******************* USER LANG DE SUGGESTIONS: ".$lang);
 
     $speller->set_option('lang',$lang);

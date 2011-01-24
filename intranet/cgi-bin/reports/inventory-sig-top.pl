@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 
 #Genera un inventario a partir de la busqueda por signatura topografica
@@ -40,4 +40,4 @@ $params{'id'}                       = 'combo_ui_signatura';
 my $ComboUI                         = C4::AR::Utilidades::generarComboUI(\%params);
 $t_params->{'combo_ui_signatura'}   = $ComboUI;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

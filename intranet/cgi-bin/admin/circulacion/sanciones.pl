@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use Template;
 use C4::AR::Sanciones;
@@ -29,5 +29,5 @@ $t_params->{'categorias_de_socio'}= $CGIusr_ref_categoria_socio;
 $t_params->{'tipos_de_prestamos'}= $CGIcirc_ref_tipo_prestamo;
 $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Circulaci&oacute;n - Sanciones");
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

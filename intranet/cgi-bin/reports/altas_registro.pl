@@ -19,7 +19,7 @@
 #
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 use C4::AR::Utilidades;
 use C4::AR::Reportes;
@@ -43,4 +43,4 @@ $params_for_combo{'onChange'} = 'consultarAltas()';
 $t_params->{'data_url'} = $data_url;
 $t_params->{'item_type_combo'} = C4::AR::Utilidades::generarComboTipoNivel3(\%params_for_combo);
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -19,7 +19,7 @@
 #
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use CGI;
 use C4::AR::Estadisticas;
@@ -44,4 +44,4 @@ $t_params->{'selectTipoOperacion'}= C4::AR::Utilidades::generarComboTipoDeOperac
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Historico de Circulacion");
 
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

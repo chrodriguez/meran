@@ -3,7 +3,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Date;
 use C4::AR::Reservas; 
 use Date::Manip;
@@ -37,4 +37,4 @@ $t_params->{'prestamos_cant'}= scalar(@$prestamos);
 $t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");
 
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

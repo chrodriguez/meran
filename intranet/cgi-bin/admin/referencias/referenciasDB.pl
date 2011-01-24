@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::AR::Preferencias;
 use C4::AR::Referencias;
@@ -41,7 +41,7 @@ if ($editing){
 
     $t_params->{'value'} = $value;
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "OBTENER_TABLAS"){
 
@@ -66,7 +66,7 @@ elsif ($accion eq "OBTENER_TABLAS"){
     $t_params->{'datos'} = $datos;
     $t_params->{'tabla'} = $tabla;
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }
 elsif ($accion eq "AGREGAR_REGISTRO"){
@@ -88,7 +88,7 @@ elsif ($accion eq "AGREGAR_REGISTRO"){
     $t_params->{'datos'} = $datos;
     $t_params->{'tabla'} = $tabla;
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }
 elsif ($accion eq "MOSTRAR_REFERENCIAS"){
@@ -116,7 +116,7 @@ elsif ($accion eq "MOSTRAR_REFERENCIAS"){
         $t_params->{'related_referers'} = $related_referers;
         $t_params->{'tabla_related'} = $tabla_related;
     }
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "ASIGNAR_REFERENCIA"){
 
@@ -145,7 +145,7 @@ elsif ($accion eq "ASIGNAR_REFERENCIA"){
     $t_params->{'related_referers'} = $related_referers;
     $t_params->{'tabla_related'} = $tabla_related;
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "ASIGNAR_Y_ELIMINAR_REFERENCIA"){
 
@@ -174,7 +174,7 @@ elsif ($accion eq "ASIGNAR_Y_ELIMINAR_REFERENCIA"){
     $t_params->{'related_referers'} = $related_referers;
     $t_params->{'tabla_related'} = $tabla_related;
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 elsif ($accion eq "ELIMINAR_REFERENCIA"){
@@ -194,6 +194,6 @@ elsif ($accion eq "ELIMINAR_REFERENCIA"){
     my ($msj_object) = C4::AR::Referencias::eliminarReferencia($alias_tabla,$item_id);
     my $infoOperacionJSON=to_json $msj_object;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }

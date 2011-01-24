@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use HTML::Template;
 
@@ -24,4 +24,4 @@ my $socio               = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
 $t_params->{'socio'}    = $socio;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

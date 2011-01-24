@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Output;
 
 use C4::AR::Busquedas;
@@ -113,4 +113,4 @@ $t_params->{'cantidad'}         = $cantidad || 0;
 
 $t_params->{'show_search_details'} = 1;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

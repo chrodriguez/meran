@@ -5,7 +5,7 @@ require Exporter;
 # use C4::Database;
 use C4::Output;  # contains gettemplate
 
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Context;
 use CGI;
 
@@ -40,4 +40,4 @@ $t_params->{'perlVersion'}= $perlVersion;
 $t_params->{'mysqlVersion'}= $mysqlVersion;
 $t_params->{'apacheVersion'}= $apacheVersion;
 
-C4::Auth::output_html_with_http_headers($template, $t_params,$session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params,$session);

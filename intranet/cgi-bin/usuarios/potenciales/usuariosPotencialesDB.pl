@@ -6,7 +6,7 @@
 #written 3/05/2005  by einar@info.unlp.edu.ar
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use CGI;
 use C4::AR::Persons_Members;
@@ -37,7 +37,7 @@ if($obj->{'tipoAccion'} eq "HABILITAR_PERSON"){
 
 	my $infoOperacionJSON=to_json $Messages_arrayref;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
 	print $infoOperacionJSON;
 
 }elsif($obj->{'tipoAccion'} eq "DESHABILITAR_PERSON"){
@@ -55,7 +55,7 @@ if($obj->{'tipoAccion'} eq "HABILITAR_PERSON"){
 
 	my $infoOperacionJSON=to_json $Messages_arrayref;
 	
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
 	print $infoOperacionJSON;
 
 }

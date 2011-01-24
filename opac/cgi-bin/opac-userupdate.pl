@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;         # checkauth, getnro_socio.
+use C4::AR::Auth;         # checkauth, getnro_socio.
 use C4::Circulation::Circ2;
 
 use C4::Date;
@@ -20,7 +20,7 @@ my ($template, $session, $t_params)= get_template_and_user({
              });
 
 
-my $nro_socio = C4::Auth::getSessionNroSocio();
+my $nro_socio = C4::AR::Auth::getSessionNroSocio();
 
 my ($socio, $flags) = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
@@ -54,7 +54,7 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     if (!$msg_object->{'error'}){
         $socio->persona->modificarVisibilidadOPAC(\%data_hash);
         $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio->getNro_socio);
-        C4::Auth::buildSocioData($session,$socio);
+        C4::AR::Auth::buildSocioData($session,$socio);
 
     }else{
         my $cod_msg = C4::AR::Mensajes::getFirstCodeError($msg_object);
@@ -86,4 +86,4 @@ $t_params->{'socio'}= $socio;
 
 $t_params->{'opac'};
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

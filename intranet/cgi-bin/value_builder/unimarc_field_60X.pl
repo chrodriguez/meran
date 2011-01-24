@@ -20,9 +20,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
-use C4::Authorities;
+use C4::AR::Authorities;
 
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;

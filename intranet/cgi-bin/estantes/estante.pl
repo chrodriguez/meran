@@ -3,7 +3,7 @@
 use strict;
 use CGI;
 use C4::Output;
-use C4::Auth;
+use C4::AR::Auth;
 
 use HTML::Template;
 use C4::AR::Estantes;
@@ -23,4 +23,4 @@ my $estantes_publicos = C4::AR::Estantes::getListaEstantesPublicos();
 $t_params->{'cant_estantes'}= @$estantes_publicos;
 $t_params->{'ESTANTES'}= $estantes_publicos;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

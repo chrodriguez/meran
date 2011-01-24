@@ -396,7 +396,7 @@ sub estaEnFavoritos{
     my($id1) = @_;
 
     my @filtros;
-    my $nro_socio = C4::Auth::getSessionNroSocio();
+    my $nro_socio = C4::AR::Auth::getSessionNroSocio();
     
     push (@filtros, (nro_socio => {eq => $nro_socio}) );
     push (@filtros, (id1 => {eq => $id1}) );

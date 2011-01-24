@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::AR::Utilidades;
 
 my $input = new CGI;
@@ -13,7 +13,7 @@ my $session = CGI::Session->load();
 
 my $type = $session->param('type') || "opac";
 
-my ($user, $session, $flags)= C4::Auth::checkauth($input, $authnotrequired, $flagsrequired, $type);
+my ($user, $session, $flags)= C4::AR::Auth::checkauth($input, $authnotrequired, $flagsrequired, $type);
 
 my $operacion   = C4::AR::Utilidades::trim( $input->param('operacion') ) || '';
 my $accion      = C4::AR::Utilidades::trim( $input->param('accion') );
@@ -80,7 +80,7 @@ elsif ($accion eq 'autocomplete_UI'){
 }
 
 
-C4::Auth::print_header($session);
+C4::AR::Auth::print_header($session);
 print $result;
 
 1;

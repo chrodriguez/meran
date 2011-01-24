@@ -23,7 +23,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 
 # TODO esto es una MIERDA hay q arreglarlo
@@ -52,7 +52,7 @@ my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 
-my ($template, $session, $t_params) = C4::Auth::get_template_and_user({
+my ($template, $session, $t_params) = C4::AR::Auth::get_template_and_user({
 						template_name => "admin/itemtypes.tmpl",
 						query => $input,
 						type => "intranet",
@@ -283,7 +283,7 @@ my $datat;
 	}
 } #---- END $OP eq DEFAULT
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 # Local Variables:
 # tab-width: 4

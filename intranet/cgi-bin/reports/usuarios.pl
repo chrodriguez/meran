@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use CGI;
 use C4::AR::Estadisticas;
@@ -35,4 +35,4 @@ $t_params->{'select_category'}  = C4::AR::Utilidades::generarComboCategoriasDeSo
 $t_params->{'select_year'}      = C4::AR::Utilidades::generarComboDeAnios();
 $t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n('Registro de usuarios');
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

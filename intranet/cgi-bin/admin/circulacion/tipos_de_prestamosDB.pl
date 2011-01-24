@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use Template;
 use C4::AR::Prestamos;
@@ -34,7 +34,7 @@ my ($template, $session, $t_params) = get_template_and_user({
         $t_params->{'tipo_prestamo'}= $tipo_prestamo;
         }
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 } 
 elsif ($tipoAccion eq 'NUEVO_TIPO_PRESTAMO') {
@@ -48,7 +48,7 @@ my ($template, $session, $t_params) = get_template_and_user({
                 debug => 1,
             });
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 } 
 elsif ($tipoAccion eq 'GUARDAR_MODIFICACION_TIPO_PRESTAMO'){
@@ -64,7 +64,7 @@ elsif ($tipoAccion eq 'GUARDAR_MODIFICACION_TIPO_PRESTAMO'){
 
     my $Message_arrayref = &C4::AR::Prestamos::t_modificarTipoPrestamo($obj);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 elsif ($tipoAccion eq 'AGREGAR_TIPO_PRESTAMO') {
@@ -80,7 +80,7 @@ elsif ($tipoAccion eq 'AGREGAR_TIPO_PRESTAMO') {
 
     my $Message_arrayref = &C4::AR::Prestamos::t_agregarTipoPrestamo($obj);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 
 }
@@ -97,7 +97,7 @@ elsif ($tipoAccion eq 'BORRAR') {
 
     my $Message_arrayref = &C4::AR::Prestamos::t_eliminarTipoPrestamo($id_tipo_prestamo);
     my $infoOperacionJSON=to_json $Message_arrayref;
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 
@@ -116,6 +116,6 @@ my ($template, $session, $t_params) = get_template_and_user({
 my $tipos_de_prestamos=C4::AR::Prestamos::getTiposDePrestamos();
 $t_params->{'TIPOS_PRESTAMOS_LOOP'}= $tipos_de_prestamos;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }

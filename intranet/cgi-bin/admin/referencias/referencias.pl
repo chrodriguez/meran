@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::AR::Utilidades;
 
@@ -22,4 +22,4 @@ my $combo_tablas = C4::AR::Utilidades::generarComboTablasDeReferencia();
 $t_params->{'combo_tablas'}= $combo_tablas;
 $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Administraci&oacute;n de tablas de referencia");
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

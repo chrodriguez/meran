@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Date;
 use C4::AR::Prestamos;
 use Date::Manip;
@@ -32,4 +32,4 @@ if ($sanciones){
 	$t_params->{'SANCIONES'}= $sanciones;
 }
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

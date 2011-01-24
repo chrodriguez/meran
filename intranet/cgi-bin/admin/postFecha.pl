@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 use C4::AR::Novedades;
 my $input = new CGI;
@@ -26,5 +26,5 @@ my $feriado = $obj->{'feriado'};
 
 C4::AR::Utilidades::setFeriado($fecha,$status,$feriado);
 
-C4::Auth::print_header($session);
+C4::AR::Auth::print_header($session);
 

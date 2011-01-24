@@ -5,7 +5,7 @@ use strict;
 use CGI;
 use C4::AR::Nivel1 qw(getNivel1FromId1);
 use C4::AR::Nivel2 qw(getNivel2FromId1);
-use C4::Auth;
+use C4::AR::Auth;
 use C4::AR::Utilidades;
 use C4::AR::Catalogacion;
 use JSON;
@@ -47,7 +47,7 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
     $t_params->{'nivel'}            = $nivel;
     $t_params->{'itemType'}         = $itemType;
     
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
@@ -66,7 +66,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
     my $info = to_json($campos_array);
     my $infoOperacionJSON = $info;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 
 }
@@ -90,7 +90,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
 
 	my $infoOperacionJSON = $info;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 
@@ -111,7 +111,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
     my $info                = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
     my $infoOperacionJSON   = $info;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 
@@ -133,7 +133,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_TABLA_REF"){
     my ($infoOperacionJSON) = to_json($tablaRef_array);
 
     
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 
 }
@@ -163,7 +163,7 @@ elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_CAMPOS"){
     $params_combo{'id'}                 = 'tipoInput';
     $t_params->{'comboComponentes'}     = &C4::AR::Utilidades::generarComboComponentes(\%params_combo);
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
@@ -193,7 +193,7 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
     $params_combo{'default'}            = $catalogacion->getTipo();
     $t_params->{'comboComponentes'}     = &C4::AR::Utilidades::generarComboComponentes(\%params_combo);
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif($tipoAccion eq "GUARDAR_ESTRUCTURA_CATALOGACION"){
      my ($user, $session, $flags)= checkauth(    $input, 
@@ -211,7 +211,7 @@ elsif($tipoAccion eq "GUARDAR_ESTRUCTURA_CATALOGACION"){
     
     my $infoOperacionJSON = to_json $Message_arrayref;
     
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 
@@ -232,7 +232,7 @@ elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
     
     my $infoOperacionJSON = to_json $Message_arrayref;
     
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 # FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA
@@ -252,7 +252,7 @@ elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
 #     C4::AR::Validator::validateParams('U389', $obj,['idMod', 'itemtype_cliente']);
 # 
 #     C4::AR::Catalogacion::subirOrden($id,$itemtype);
-#     C4::Auth::print_header($session);
+#     C4::AR::Auth::print_header($session);
 #     print 1;
 # }
 # FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA
@@ -272,7 +272,7 @@ elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
 #     C4::AR::Validator::validateParams('U389', $obj,['idMod', 'itemtype_cliente']);
 # 
 #     C4::AR::Catalogacion::bajarOrden($id,$itemtype);
-#     C4::Auth::print_header($session);
+#     C4::AR::Auth::print_header($session);
 # }
 
 #Se cambia la visibilidad del campo.
@@ -289,7 +289,7 @@ elsif($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
     C4::AR::Validator::validateParams('U389', $obj,['id']);
     C4::AR::Catalogacion::cambiarVisibilidad($obj->{'id'});
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
 }
 
 elsif($tipoAccion eq "CAMBIAR_HABILITADO"){
@@ -305,7 +305,7 @@ elsif($tipoAccion eq "CAMBIAR_HABILITADO"){
     C4::AR::Validator::validateParams('U389', $obj,['id']);
     C4::AR::Catalogacion::cambiarHabilitado($obj->{'id'});
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
 }
 #Se deshabilita el campo seleccionado para la vista en intranet
 elsif($tipoAccion eq "ELIMINAR_CAMPO"){
@@ -321,7 +321,7 @@ elsif($tipoAccion eq "ELIMINAR_CAMPO"){
 #     C4::AR::Validator::validateParams('U389', $obj,['id']);
     C4::AR::Catalogacion::eliminarCampo($obj);
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
 }
 
 elsif($tipoAccion eq "AGREGAR_CAMPO"){
@@ -339,7 +339,7 @@ elsif($tipoAccion eq "AGREGAR_CAMPO"){
     
     my $infoOperacionJSON=to_json $Message_arrayref;
     
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 # ***********************************************ABM CATALOGACION*****************************************************************
@@ -363,7 +363,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
 
     my $infoOperacionJSON                   = to_json($catalogaciones_array_ref);
 
-	C4::Auth::print_header($session);
+	C4::AR::Auth::print_header($session);
 	print $infoOperacionJSON;
 }
 
@@ -402,7 +402,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
     
 	$infoOperacionJSON= to_json($catalogaciones_array_ref);
     
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
 elsif($tipoAccion eq "MOSTRAR_SUBCAMPOS_DE_CAMPO"){
@@ -418,7 +418,7 @@ elsif($tipoAccion eq "MOSTRAR_SUBCAMPOS_DE_CAMPO"){
 
     my ($sub_campos_string) = &C4::AR::Utilidades::obtenerDescripcionDeSubCampos($obj->{'campo'});
     
-	C4::Auth::print_header($session);
+	C4::AR::Auth::print_header($session);
 	print $sub_campos_string;
 }
 
@@ -440,7 +440,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
     $t_params->{'nivel1'}   = $nivel1;
     $t_params->{'OK'}       = ($nivel1?1:0);
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
@@ -464,7 +464,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
     $t_params->{'OK'} = 1;
 #         $t_params->{'OK'} = 0;
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
@@ -483,7 +483,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
     
     $t_params->{'nivel3_array'} = $nivel3;
     
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 # **********************************************FIN ABM CATALOGACION****************************************************************
 
@@ -505,7 +505,7 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
     $info{'Message_arrayref'} = $Message_arrayref;
     $info{'id1'} = $id1;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print to_json \%info;
 }
 
@@ -527,7 +527,7 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
     $info{'id1'}= $id1;
     $info{'id2'}= $id2;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print to_json \%info;
 }
 
@@ -547,7 +547,7 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print to_json \%info;
 }
 
@@ -569,12 +569,12 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_1"){
         $info{'Message_arrayref'}= $Message_arrayref;
         $info{'id1'} = $id1;
 
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print to_json \%info;
 
     }else{
         #no existe el objeto de nivel1
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print 0;
     }
 }
@@ -597,11 +597,11 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_2"){
         $info{'id1'}= $nivel2->getId1;
         $info{'id2'}= $nivel2->getId2;
     
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print to_json \%info;
     }else{
         #no existe el objeto de nivel2
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print 0;
     }
 }
@@ -621,7 +621,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
     my %info;
     $info{'Message_arrayref'}       = $Message_arrayref;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print to_json \%info;
 }
 elsif($tipoAccion eq "IMPORTAR_DESDE_KOHA"){
@@ -639,7 +639,7 @@ elsif($tipoAccion eq "IMPORTAR_DESDE_KOHA"){
     my %info;
     $info{'Message_arrayref'} = $Message_arrayref;
 
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
     print to_json \%info;
 }
 elsif($tipoAccion eq "ELIMINAR_NIVEL"){
@@ -673,7 +673,7 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
 	my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
     
-    C4::Auth::print_header($session);
+    C4::AR::Auth::print_header($session);
 	print to_json \%info;
 }
 #=============================================================FIN ABM Catalogo===============================================================
@@ -701,5 +701,5 @@ elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
 	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
 	$t_params->{'circularDesdeDetalleDelRegistro'}= C4::AR::Preferencias->getValorPreferencia('circularDesdeDetalleDelRegistro');
     
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

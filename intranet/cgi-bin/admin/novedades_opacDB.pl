@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 use C4::AR::Novedades;
 my $input = new CGI;
@@ -36,7 +36,7 @@ if ($accion eq 'ELIMINAR'){
     $t_params->{'cant_novedades'} = $cant_novedades;
 
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq 'LISTAR'){
 
@@ -57,5 +57,5 @@ elsif ($accion eq 'LISTAR'){
     $t_params->{'novedades'} = $novedades;
     $t_params->{'cant_novedades'} = $cant_novedades;
 
-    C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 # use C4::Output;
 # 
 use C4::AR::Utilidades;
@@ -26,4 +26,4 @@ $t_params->{'comboTipoDocumento'}   = $comboTiposNivel3;
 $t_params->{'type'}                 = 'intranet';
 $t_params->{'page_sub_title'}       = C4::AR::Filtros::i18n("Cat&aacute;logo - B&uacute;squeda");
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

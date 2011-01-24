@@ -121,7 +121,7 @@ sub i18n {
 
 # 	my $session     = CGI::Session->load();#si esta definida
 # 	my $type        = $session->param('type') || 'opac';
-#     my $locale      = C4::Auth::getUserLocale();
+#     my $locale      = C4::AR::Auth::getUserLocale();
 # 	my $setlocale   = setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
 
 # 	Locale::Maketext::Gettext::Functions::bindtextdomain($type, C4::Context->config("locale"));

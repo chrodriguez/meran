@@ -39,7 +39,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Context;
 use C4::Output;
 
@@ -78,4 +78,4 @@ for (my $i=0; $i < $cant; $i++){
 $t_params->{'loop'}= \@loop_data;
 $t_params->{'cant'}= $cant;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

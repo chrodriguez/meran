@@ -207,7 +207,7 @@ sub generarComboTemasOPAC{
 
     my ($session) = CGI::Session->load();    
 
-#     my $socio = C4::Auth::getSessionNroSocio();
+#     my $socio = C4::AR::Auth::getSessionNroSocio();
 #     $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
 
     $options_hash{'values'}     = \@values;
@@ -3319,7 +3319,7 @@ sub redirectAndAdvice{
 
     $session->param('codMsg',$cod_msg);
 #     $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
-    C4::Auth::redirectTo('/cgi-bin/koha/informacion.pl');
+    C4::AR::Auth::redirectTo('/cgi-bin/koha/informacion.pl');
 #     exit;
 }
 

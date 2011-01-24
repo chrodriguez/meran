@@ -343,7 +343,7 @@ sub validateParams {
     }
 
     if (!$flag){
-        C4::Auth::redirectAndAdvice($cod_msg);
+        C4::AR::Auth::redirectAndAdvice($cod_msg);
     }
 
 }
@@ -370,7 +370,7 @@ sub validateObjectInstance{
     my $session = CGI::Session->new();
 
     if ( (!$object) || ($object == 0) ){
-        C4::Auth::print_header($session);
+        C4::AR::Auth::print_header($session);
         print 0;
         exit;
     }

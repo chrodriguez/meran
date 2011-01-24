@@ -19,7 +19,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::Biblio;
 use C4::Z3950;

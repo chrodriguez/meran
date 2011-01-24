@@ -2,14 +2,14 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;       # get_template_and_user
+use C4::AR::Auth;       # get_template_and_user
 
 my $input = new CGI;
 
 C4::AR::Debug::debug("intr-language.pl \n");
 my $session = CGI::Session->load();
 $session->param('usr_locale', $input->param('lang_server'));
-my $socio = C4::Auth::getSessionNroSocio();
+my $socio = C4::AR::Auth::getSessionNroSocio();
 if ($socio){
     $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
     $socio->setLocale($input->param('lang_server'));
@@ -17,7 +17,7 @@ if ($socio){
 }
 
 #regreso a la pagina en la que estaba
-C4::Auth::redirectTo($input->param('url')."?token=".$session->param('token'));
+C4::AR::Auth::redirectTo($input->param('url')."?token=".$session->param('token'));
 
 
 

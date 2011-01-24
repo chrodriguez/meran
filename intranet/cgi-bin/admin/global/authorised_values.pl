@@ -19,7 +19,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 
 
@@ -50,7 +50,7 @@ my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/authorised_values.pl";
 my $dbh = C4::Context->dbh;
 
-my ($template, $session, $t_params) = C4::Auth::get_template_and_user({
+my ($template, $session, $t_params) = C4::AR::Auth::get_template_and_user({
                                     template_name => "admin/global/authorised_values.tmpl",
                                     query => $input,
                                     type => "intranet",
@@ -200,4 +200,4 @@ $t_params->{'category'}= "<input type=\'hidden\'name=\'category\'value=".$data->
 	}
 } #---- END $OP eq DEFAULT
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

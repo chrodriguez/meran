@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use CGI;
 use C4::AR::Reportes;
 
@@ -56,4 +56,4 @@ if ($accion eq "CONSULTA_POR_BARCODE") {
 $t_params->{'paginador'}            = C4::AR::Utilidades::crearPaginador($cant_total,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
 $t_params->{'cantidad'}             = $cant_total;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

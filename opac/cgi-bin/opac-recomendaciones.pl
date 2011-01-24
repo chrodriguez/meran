@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 
 my $input=new CGI;
@@ -18,4 +18,4 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 $t_params->{'combo_tipo_documento'} = &C4::AR::Utilidades::generarComboTipoNivel3();
 $t_params->{'partial_template'}     = "opac-recomendaciones.inc";
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

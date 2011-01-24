@@ -2,7 +2,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 use Template;
 use C4::AR::Prestamos;
@@ -21,4 +21,4 @@ my ($template, $session, $t_params) = get_template_and_user({
 my $tipos_de_prestamos=C4::AR::Prestamos::getTiposDePrestamos();
 $t_params->{'TIPOS_PRESTAMOS_LOOP'}= $tipos_de_prestamos;
 $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Cat&aacute;logo - Tipos de documento");
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

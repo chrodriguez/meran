@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 
 my $input=new CGI;
@@ -30,4 +30,4 @@ if ($ENV{'REDIRECT_STATUS'}  eq "404") {
 $t_params->{'message_error'}        = $message_error;
 $t_params->{'partial_template'}     = "informacion/error.tmpl";
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

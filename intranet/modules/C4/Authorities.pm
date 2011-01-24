@@ -1,4 +1,4 @@
-package C4::Authorities;
+package C4::AR::Authorities;
 
 # $Id: Authorities.pm,v 1.7.2.2 2004/02/06 14:15:56 tipaul Exp $
 
@@ -34,7 +34,7 @@ C4::Accounts - Functions for dealing with Koha authorities
 
 =head1 SYNOPSIS
 
-  use C4::Authorities;
+  use C4::AR::Authorities;
 
 =head1 DESCRIPTION
 

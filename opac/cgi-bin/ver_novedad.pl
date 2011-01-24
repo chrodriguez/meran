@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Auth;         # checkauth, getnro_socio.
+use C4::AR::Auth;         # checkauth, getnro_socio.
 
 use C4::AR::Novedades;
 
@@ -26,5 +26,5 @@ my $novedad = C4::AR::Novedades::getNovedad($id_novedad);
 $t_params->{'novedad'} = $novedad;
 $t_params->{'partial_template'}= "ver_novedad.inc";
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

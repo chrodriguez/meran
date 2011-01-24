@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 
 use CGI;
 use C4::AR::Estadisticas;
@@ -34,4 +34,4 @@ my %params_combo;
 $params_combo{'clone_values'}= 1;
 $t_params->{'selectTipoOperacion'}=C4::AR::Utilidades::generarComboTipoDeOperacion(\%params_combo);
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

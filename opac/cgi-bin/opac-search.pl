@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 
-use C4::Auth;
+use C4::AR::Auth;
 
 use C4::Context;
 use CGI;
@@ -31,4 +31,4 @@ $t_params->{'pagetitle'}= "Buscar bibliograf&iacute;a";
 $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
 $t_params->{'hiddesearch'}= 1;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

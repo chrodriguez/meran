@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use C4::Auth;
+use C4::AR::Auth;
 use C4::Date;
 
 use CGI;
@@ -35,5 +35,5 @@ $t_params->{'cant'}= $cant;
 $t_params->{'nro_socio'}= $nro_socio;
 $t_params->{'loop_reading'}= $loop_reading;
 
-C4::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

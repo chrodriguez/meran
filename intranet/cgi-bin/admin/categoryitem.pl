@@ -39,7 +39,7 @@
 
 use strict;
 use CGI;
-use C4::Auth;
+use C4::AR::Auth;
 
 
 sub StringSearch  {
