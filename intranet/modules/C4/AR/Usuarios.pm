@@ -51,28 +51,28 @@ use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
-    &agregarAutorizado
-    &agregarPersona
-    &habilitarPersona
-    &deshabilitarPersona
-    &resetPassword
-    &eliminarUsuario
-    &_verficarEliminarUsuario
-    &t_cambiarPermisos
-    &cambiarPassword
-    &_verificarDatosBorrower
-    &actualizarSocio
-    &getSocioInfo
-    &getSocioInfoPorNroSocio
-    &existeSocio
-    &getSocioLike
-    &llegoMaxReservas
-    &estaSancionado
-    &BornameSearchForCard
-    &isUniqueDocument
-    &esRegular
-    &updateUserDataValidation
-    &needsDataValidation
+    agregarAutorizado
+    agregarPersona
+    habilitarPersona
+    deshabilitarPersona
+    resetPassword
+    eliminarUsuario
+    _verficarEliminarUsuario
+    t_cambiarPermisos
+    cambiarPassword
+    _verificarDatosBorrower
+    actualizarSocio
+    getSocioInfo
+    getSocioInfoPorNroSocio
+    existeSocio
+    getSocioLike
+    llegoMaxReservas
+    estaSancionado
+    BornameSearchForCard
+    isUniqueDocument
+    esRegular
+    updateUserDataValidation
+    needsDataValidation
 );
 
 =item
