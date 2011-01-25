@@ -13,12 +13,29 @@ package C4::AR::Auth;
 
  En este modulo se centraliza todo lo relacionado a la authenticacion del usuario
 
-=head1 VARIABLES
+=head1 VARIABLES DEL meran.conf necesarias
 
  Hay algunas variables que se deben configurar para controlar el funcionamiento de este modulo:
 
-    expire: controla el tiempo de expiración de la sesion.
-    
+    charset: controla el charset, en caso de no estar definida utiliza utf8
+    authMERAN: controla si se usa la authenticacion de MERAN utilizando el sistema definido internamente con el nroRandom o si utiliza un sistema tradicional simplemente utilizando la password y chequeandola contra un repositorio normal. Por defecto es 0.
+    ldapenabled: Define si se utiliza un ldap para la authenticacion, en combinacion con la variables authMERAN se define si es un ldap especialmente formado para soportar el manejo del nroRandom o si es un ldap comun como ser un dominio
+    defaultLang: el idioma del sistema, por defecto si no esta definido es es_ES
+    expire: controla si las sesiones expiran o no.
+    timeout: define el tiempo que demora una sesion en dar timeout. Se usa en conjunto con expire. Si no esta definida, la busca en las preferencias del sistema, y si no esta alli la setea en 600 segundos.
+
+
+=head1 PREFERENCIAS del sistema necesarias
+
+ Hay algunas variables que se deben configurar para controlar el funcionamiento de este modulo:
+
+    limite_resultados_autocompletables: HELP FIXME
+    insecure: HELP FIXME
+    habilitar_https: HELP FIXME
+    puerto_para_https: HELP FIXME
+    defaultissuetype:HELP FIXME
+    keeppasswordalive: Define cuantos dias dura una contraseña antes de vencer y ser necesario cambiarla.
+    timeout: define el tiempo que demora una sesion en dar timeout. Se usa en conjunto con expire. Si no esta definida en meran.conf la busca en las preferencias del sistema, y si no esta alli la setea en 600 segundos.
 
 
 
@@ -780,7 +797,7 @@ sub buildSocioData{
 
 =cut
 sub _getTimeOut {
-    my $timeout = C4::AR::Preferencias->getValorPreferencia('timeout') || C4::Context->config('timeout') ||600;
+    my $timeout = C4::Context->config('timeout')|| C4::AR::Preferencias->getValorPreferencia('timeout') ||600;
     return $timeout;
 }
 
