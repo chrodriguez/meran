@@ -54,20 +54,16 @@ en caso de no existir en la base de MERAN lo agrega a la misma siempre y cuando 
     Recibe el userid y un ldap con el bind ya realizado.
 =cut
 
-sub datosUsuario
-{
+sub datosUsuario{
     my ($userid,$ldap) = @_;
     my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+
     if ($socio) { 
         return $socio;
     }
     else {
-    	
-    	
-    	
-#DATOS OBLIGATORIOS PARA CREAR UN NUEVO SOCIO
-
-       # nro_socio , id_ui, cod_categoria, change_password (dejala en 0), id_estado (uno de UsrEstado), is_super_user 
+        #DATOS OBLIGATORIOS PARA CREAR UN NUEVO SOCIO
+        # nro_socio , id_ui, cod_categoria, change_password (dejala en 0), id_estado (uno de UsrEstado), is_super_user 
 
         #FIXME hay que agregar esta preferencia que ahora no se puede por algo q rompio MONO
         my $agregar=C4::Context->config("agregarDesdeLDAP")||0;
