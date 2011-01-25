@@ -45,7 +45,7 @@ use C4::Modelo::UsrSocio;
 use C4::Modelo::PrefFeriado;
 use C4::AR::Authldap;
 
-use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT %EXPORT_TAGS);
 my $codMSG = 'U000';
 # set the version for version checking
 $VERSION = 1.0;
