@@ -10,7 +10,7 @@
                         </p>
                         <p>
                             <label for="contact_firstname" class="left">[% 'T&iacute;tulo' | i18n %]:</label>
-                            <input type="text" name="string" id="string" class="field" tabindex="1" />
+                            <input type="text" name="titulo" id="titulo" class="field" tabindex="1" />
                         </p>
                         <p>
                             <label for="only_available" class="left">[% 'S&oacute;lo Disponibles para Pr&eacute;stamo' | i18n %]:</label>
@@ -20,7 +20,8 @@
                           <input type="submit" name="submit" id="submit" class="button" value="[% 'Buscar' | i18n %]" tabindex="6" />
                         </p>
                     </fieldset>
-                    <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
+                    <input type="hidden" name="tipoAccion" value="BUSQUEDA_AVANZADA" />
+                    <input type="hidden" name="tipo" value="normal" />
                     <input type="hidden" name="token" value="[% token %]" />
                 </form>
             </div>

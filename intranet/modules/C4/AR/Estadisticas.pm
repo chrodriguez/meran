@@ -11,55 +11,54 @@ require Exporter;
 use C4::Date;
 use C4::AR::Busquedas;
 
-use vars qw(@EXPORT_OK @ISA);
+use vars qw(@EXPORT @ISA);
 
 @ISA=qw(Exporter);
 
-@EXPORT_OK=qw(
-	&usuarios
-	&historicoPrestamos
-	&cantidadRetrasados
-	&renovacionesDiarias
-	&prestamos
-	&reservas
-	&cantUsuarios
-	&registroActividadesDiarias
-	&registroEntreFechas
-	&armarPaginas
-	&armarPaginasPorRenglones
-	&cantidadRenglones
-	&prestamosAnual
-	&cantRegDiarias
-	&cantRegFechas
-	&cantidadAnaliticas
-	&disponibilidad
-	&itemtypesReport
-	&levelsReport
-	&availYear
-	&getuser
-	&estadisticasGenerales
-	&cantidadUsuariosPrestamos
-	&cantidadUsuariosReservas
-	&cantidadUsuariosRenovados
-	&historicoDeBusqueda
-	&historicoCirculacion
-	&insertarNotaHistCirc
-	&userCategReport
-	&historicoSanciones
-	&historialReservas
-	&signaturamax
-	&signaturamin
-	&listaDeEjemplares
-    &listadoDeInventorio
-    &getMaxBarcode
-    &getMinBarcode
-    &getMinBarcodeLike
-    &getMaxBarcodeLike
-    &listarItemsDeInventorioPorSigTop
-    &barcodesPorTipo
-    &actualizarNotaHistoricoCirculacion
+@EXPORT=qw(
+	usuarios
+	historicoPrestamos
+	cantidadRetrasados
+	renovacionesDiarias
+	prestamos
+	reservas
+	cantUsuarios
+	registroActividadesDiarias
+	registroEntreFechas
+	armarPaginas
+	armarPaginasPorRenglones
+	cantidadRenglones
+	prestamosAnual
+	cantRegDiarias
+	cantRegFechas
+	cantidadAnaliticas
+	disponibilidad
+	itemtypesReport
+	levelsReport
+	availYear
+	getuser
+	estadisticasGenerales
+	cantidadUsuariosPrestamos
+	cantidadUsuariosReservas
+	cantidadUsuariosRenovados
+	historicoDeBusqueda
+	historicoCirculacion
+	insertarNotaHistCirc
+	userCategReport
+	historicoSanciones
+	historialReservas
+	signaturamax
+	signaturamin
+	listaDeEjemplares
+    listadoDeInventorio
+    getMaxBarcode
+    getMinBarcode
+    getMinBarcodeLike
+    getMaxBarcodeLike
+    listarItemsDeInventorioPorSigTop
+    barcodesPorTipo
+    actualizarNotaHistoricoCirculacion
 );
-
 sub actualizarNotaHistoricoCirculacion{
 
     my ($params) = @_;

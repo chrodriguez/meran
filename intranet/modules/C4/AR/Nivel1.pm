@@ -371,6 +371,7 @@ sub addToFavoritos{
 
     my $favorito_obj    = C4::Modelo::CatFavoritosOpac->new();
     my $status          = 0;
+
     $favorito_obj       = $favorito_obj->getObjeto($nro_socio, $id1);
 
     eval{
@@ -379,7 +380,6 @@ sub addToFavoritos{
     };
 
     return($status);
-
 }
 
 sub removeFromFavoritos{

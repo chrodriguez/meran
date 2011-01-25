@@ -21,6 +21,7 @@
 
 use strict;
 use C4::AR::Auth;
+use C4::AR::Estadisticas;
 
 use CGI;
 
@@ -42,7 +43,7 @@ my $url = "/cgi-bin/koha/opac-historial_reservas.pl?token=".$input->param('token
 my $orden = 'titulo';
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-my ($cantidad,$reservas_hashref)=&C4::AR::Estadisticas::historialReservas($nro_socio,$ini,$cantR);
+my ($cantidad,$reservas_hashref)= C4::AR::Estadisticas::historialReservas($nro_socio,$ini,$cantR);
 
 $t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
 $t_params->{'cantidad'}= $cantidad;

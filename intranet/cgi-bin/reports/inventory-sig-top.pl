@@ -2,6 +2,7 @@
 
 use strict;
 use C4::AR::Auth;
+use C4::AR::Estadisticas;
 use CGI;
 
 #Genera un inventario a partir de la busqueda por signatura topografica

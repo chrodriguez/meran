@@ -62,6 +62,13 @@ sub datosUsuario
         return $socio;
     }
     else {
+    	
+    	
+    	
+#DATOS OBLIGATORIOS PARA CREAR UN NUEVO SOCIO
+
+       # nro_socio , id_ui, cod_categoria, change_password (dejala en 0), id_estado (uno de UsrEstado), is_super_user 
+
         #FIXME hay que agregar esta preferencia que ahora no se puede por algo q rompio MONO
         my $agregar=C4::Context->config("agregarDesdeLDAP")||0;
         if ($agregar){

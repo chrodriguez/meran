@@ -27,9 +27,12 @@ if($obj){
   $obj = \%hash_temp;
   $obj->{'tipoAccion'} = $input->param('tipoAccion');
 #   $obj->{'string'} = Encode::decode_utf8($input->param('string'));
-  $obj->{'string'} = $input->param('string');
+  $obj->{'string'} = $input->param('titulo');
+  $obj->{'titulo'} = $input->param('titulo');
+  $obj->{'tipo'} = $input->param('tipo');
   $obj->{'only_available'} = $input->param('only_available') || 0;
   $obj->{'from_suggested'} = $input->param('from_suggested');
+  $obj->{'tipo_nivel3_name'} = $input->param('tipo_nivel3_name');
   $obj->{'tipoBusqueda'} = 'all';
   $obj->{'ini'} = $input->param('page') || 0;
 }
@@ -38,8 +41,8 @@ if($obj){
 
 # my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".Encode::encode_utf8($obj->{'string'})."&tipoAccion=".$obj->{'tipoAccion'};
 
-my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
-my $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
+my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&titulo=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
+my $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&titulo=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
 
 
 my $ini= $obj->{'ini'};
@@ -57,39 +60,20 @@ $obj->{'cantR'}= $obj->{'cantR'} || $cantR;
 
 C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
 $obj->{'from_suggested'}= $obj->{'from_suggested'};
-if($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_AUTOR'){
 
+if($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
     $obj->{'autor'}= $obj->{'searchField'};
-    ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaSimplePorAutor($obj,$session);
 
-}elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_TITULO'){
-
-    $obj->{'titulo'}= $obj->{'searchField'};
-    ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaSimplePorTitulo($obj,$session);
-
-}elsif($obj->{'tipoAccion'} eq 'FILTRAR_POR_AUTOR'){
-
-    ($cantidad, $resultsarray)= C4::AR::Busquedas::filtrarPorAutor($obj);
-
-}elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_SIMPLE_POR_TEMA'){
-
-    $obj->{'tema'}= $obj->{'searchField'};
-# FIXME falta implementar
+    ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
     
-    if ($obj->{'tipoBusqueda'} eq 'all'){
-#         ($cantidad, $resultsarray, $suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp(Encode::decode_utf8($input->param('string')),$session,$obj);
         ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($input->param('string'),$session,$obj);
-    }else{
-        ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
-    }
 
-    $t_params->{'partial_template'}         = "opac-busquedaResult.inc";
-    $t_params->{'content_title'}            = C4::AR::Filtros::i18n("Resultados de la b&uacute;squeda");
 }
 
-
+$t_params->{'partial_template'}         = "opac-busquedaResult.inc";
+$t_params->{'content_title'}            = C4::AR::Filtros::i18n("Resultados de la b&uacute;squeda");
 $t_params->{'suggested'}        = $suggested;
 $t_params->{'tipoAccion'}       = $obj->{'tipoAccion'};
 $t_params->{'url_todos'}        = $url_todos;
