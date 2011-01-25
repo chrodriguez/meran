@@ -34,7 +34,7 @@ use warnings;
 require Exporter;
 use Digest::MD5 qw(md5_base64);
 use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
-use C4::AR::Usuarios qw(getSocioInfoPorNroSocio); #Miguel lo agregue pq sino no ve la funcion esRegular!!!!!!!!!!!!!!!
+use C4::AR::Usuarios qw(getSocioInfoPorNroSocio);
 use Locale::Maketext::Gettext::Functions qw(bindtextdomain textdomain get_handle);
 use C4::Output;              # to get the template
 use C4::Context;
