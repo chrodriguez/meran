@@ -720,6 +720,7 @@ sub getAllNivel3FromId2 {
 }
 
 
+
 =head2 sub existeBarcode
 Verifica si existe el barcode en la base
 =cut

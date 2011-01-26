@@ -79,17 +79,16 @@ sub _meran_to_marc{
         my $cant_subcampos          = $infoArrayNivel->[$i]->{'cant_subcampos'};
 
 
-        C4::AR::Debug::debug("_meran_to_marc => campo => ".$infoArrayNivel->[$i]->{'campo'});
-        C4::AR::Debug::debug("_meran_to_marc => cant_subcampos => ".$infoArrayNivel->[$i]->{'cant_subcampos'});
+#         C4::AR::Debug::debug("_meran_to_marc => campo => ".$infoArrayNivel->[$i]->{'campo'});
+#         C4::AR::Debug::debug("_meran_to_marc => cant_subcampos => ".$infoArrayNivel->[$i]->{'cant_subcampos'});
         my @subcampos_array;
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
         for(my $j=0;$j<$cant_subcampos;$j++) {
             my $subcampo_hash_ref = $subcampos_hash->{$j};
 #             C4::AR::Debug::debug("_meran_to_marc => campo => ".$campo);
             while ( my ($key, $value) = each(%$subcampo_hash_ref) ) {
-                C4::AR::Debug::debug("_meran_to_marc => subcampo, dato => ".$key.", ".$subcampos_array->[$j]->{'dato'});
-                C4::AR::Debug::debug("_meran_to_marc => subcampo, datoReferencia => ".$key.", ".$subcampos_array->[$j]->{'datoReferencia'});
-#                 C4::AR::Debug::debug("_meran_to_marc => ITEMTYPEEEEEEEEEE => ".$itemtype);  
+#                 C4::AR::Debug::debug("_meran_to_marc => subcampo, dato => ".$key.", ".$subcampos_array->[$j]->{'dato'});
+#                 C4::AR::Debug::debug("_meran_to_marc => subcampo, datoReferencia => ".$key.", ".$subcampos_array->[$j]->{'datoReferencia'});
 
                 if($with_references){
                     $value = _procesar_referencia($campo, $key, $value, $itemtype);
@@ -98,9 +97,9 @@ sub _meran_to_marc{
                 if ( ($value ne '')&&(C4::AR::Utilidades::existeInArray($key, @{$autorizados{$campo}} ) )) {
                 #el subcampo $key, esta autorizado para el campo $campo
                     push(@subcampos_array, ($key => $value));
-                    C4::AR::Debug::debug("campo ".$campo." ACEPTADO clave = ".$key." valor: ".$value);
+#                     C4::AR::Debug::debug("campo ".$campo." ACEPTADO clave = ".$key." valor: ".$value);
                 } else {
-                    C4::AR::Debug::debug("campo ".$campo." NO ACEPTADO clave = ".$key." valor: ".$value);
+#                     C4::AR::Debug::debug("campo ".$campo." NO ACEPTADO clave = ".$key." valor: ".$value);
                 }
 
 #                 C4::AR::Debug::debug("_meran_to_marc => value de campo, subcampo => ".$key.", ".$campo." => ".$value);
@@ -203,6 +202,39 @@ sub Z3950_to_meran{
     
 }
 
+
+
+=head2
+    sub getCamposNoEditablesEnGrupo
+
+    retorna un arreglo de campos, subcampo de los cuales no se permite la edicion grupal, esto es para campos como 995, f Barcode, 995, t Signatura Topográfica
+=cut
+
+sub getCamposNoEditablesEnGrupo {
+    my ($nivel) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( nivel          => { eq => $nivel } ) );
+    push(@filtros, ( edicion_grupal => { eq => 0 } ) );
+    push(@filtros, ( itemtype       => { eq => 'ALL' } ) );
+
+    my $cat_estruct_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(
+                                                                query => \@filtros,
+                                                            );
+
+    my @result;
+    foreach my $cat (@$cat_estruct_array){
+        my %hash_info;
+
+        $hash_info{'campo'}     = $cat->{'campo'};
+        $hash_info{'subcampo'}  = $cat->{'subcampo'};
+
+        push(@result, \%hash_info);
+    }
+
+    return(\@result);
+}
 
 =head2
 sub _procesar_referencias
@@ -829,6 +861,7 @@ sub _setDatos_de_estructura {
     $hash_ref_result{'campo'}                   = $cat->getCampo;
     $hash_ref_result{'nivel'}                   = $cat->getNivel;
     $hash_ref_result{'visible'}                 = $cat->getVisible;
+    $hash_ref_result{'edicion_grupal'}          = $cat->getEdicionGrupal;
     $hash_ref_result{'liblibrarian'}            = $cat->getLiblibrarian;
     $hash_ref_result{'itemtype'}                = $cat->getItemType;
     $hash_ref_result{'repetible'}               = $cat->subCamposBase->getRepetible;
@@ -1386,6 +1419,21 @@ sub cambiarVisibilidad{
         $catalogacion->cambiarVisibilidad();
      }else{
         C4::AR::Debug::debug("Catalogacion => cambiarVisibilidad => NO EXISTE EL ID DE LA ESTRUCTURA QUE SE INTENTA MODIFICAR");
+    }
+}
+
+=item sub cambiarEdicionGrupal
+Esta funcion cambia la visibilidad de la estructura de catalogacion que se indica segun parametro ID
+=cut
+sub cambiarEdicionGrupal{
+    my ($id) = @_;
+
+    my $catalogacion = getEstructuraCatalogacionById($id);
+
+    if($catalogacion){
+        $catalogacion->cambiarEdicionGrupal();
+     }else{
+        C4::AR::Debug::debug("Catalogacion => cambiarEdicionGrupal => NO EXISTE EL ID DE LA ESTRUCTURA QUE SE INTENTA MODIFICAR");
     }
 }
 

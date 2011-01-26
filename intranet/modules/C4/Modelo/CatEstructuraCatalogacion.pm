@@ -20,6 +20,7 @@ __PACKAGE__->meta->setup(
         obligatorio         => { type => 'integer', default => '0', not_null => 1 },
         intranet_habilitado => { type => 'integer', default => '1' },
         visible             => { type => 'integer', default => 1, not_null => 1 },
+        edicion_grupal      => { type => 'integer', default => 1, not_null => 1 },
 #         repetible           => { type => 'integer', default => 1},
         idinforef           => { type => 'integer', length => 11, not_null => 0 },
 # NO SE USA MAS, AL USAR MARC_RECORD
@@ -400,11 +401,33 @@ sub setGrupo{
     $self->grupo($grupo);
 }
 
+sub getEdicionGrupal{
+    my ($self) = shift;
+
+    return $self->edicion_grupal;
+}
+
+sub setEdicionGrupal{
+    my ($self) = shift;
+    my ($flag) = @_;
+
+    $self->edicion_grupal($flag);
+}
+
+
 sub cambiarVisibilidad{
 
     my ($self)=shift;
 
     $self->setVisible(!$self->getVisible);
+    $self->save();
+}
+
+sub cambiarEdicionGrupal{
+
+    my ($self)=shift;
+
+    $self->setEdicionGrupal(!$self->getEdicionGrupal);
     $self->save();
 }
 

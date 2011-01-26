@@ -292,6 +292,22 @@ elsif($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
     C4::AR::Auth::print_header($session);
 }
 
+elsif($tipoAccion eq "CAMBIAR_EDICION_GRUPAL"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
+
+    C4::AR::Validator::validateParams('U389', $obj,['id']);
+    C4::AR::Catalogacion::cambiarEdicionGrupal($obj->{'id'});
+
+    C4::AR::Auth::print_header($session);
+}
+
 elsif($tipoAccion eq "CAMBIAR_HABILITADO"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
@@ -398,9 +414,8 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
       }
     }
 
-    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getDatosFromNivel($obj);
-    
-	$infoOperacionJSON= to_json($catalogaciones_array_ref);
+    my ($cant, $catalogaciones_array_ref)   = &C4::AR::Catalogacion::getDatosFromNivel($obj);
+	$infoOperacionJSON                      = to_json($catalogaciones_array_ref);
     
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;

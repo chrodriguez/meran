@@ -1213,6 +1213,12 @@ function procesarSubCampo(objeto, marc_group){
         if(objeto.obligatorio == "1"){
             hacerComponenteObligatoria(marc_conf_obj.getIdCompCliente());
         }
+        
+// TODO modularizar
+// falta poder deshabilitar los botones de agregar y eliminar componente
+        if((objeto.getEdicionGrupal() == "0")&&(MODIFICAR == 1)&&(EDICION_N3_GRUPAL == 1)){  
+            $('#'+marc_conf_obj.getIdCompCliente()).attr('disabled', true);
+        }
 
     }
 }
@@ -1521,6 +1527,7 @@ function subcampo_marc_conf(obj){
     this.intranet_habilitado    = obj.intranet_habilitado;
     this.tiene_estructura       = obj.tiene_estructura;
     this.visible                = obj.visible;
+    this.edicion_grupal         = obj.edicion_grupal;    
     this.repetible              = obj.repetible;
     this.referencia             = obj.referencia;
     this.obligatorio            = obj.obligatorio;
@@ -1538,10 +1545,11 @@ function subcampo_marc_conf(obj){
     function fGetCampo(){ return this.campo };
     function fGetSubCampo(){ return this.subcampo };
     function fGetDato(){ return this.dato };
-    function fSetDato(dato){ this.dato = dato };    
+    function fSetDato(dato){ this.dato = dato };
     function fGetDatoReferencia(){ return $.trim(this.datoReferencia) };
     function fSetDatoReferencia(datoReferencia){ this.datoReferencia = datoReferencia };    
     function fGetTipo(){ return $.trim(this.tipo) };
+    function fGetEdicionGrupal(){ return $.trim(this.edicion_grupal) };
     function fGetReferencia(){ return $.trim(this.referencia) };
     function fGetRepetible(){ return this.repetible };
     function fGetReferenciaTabla(){ return this.referenciaTabla };    
@@ -1571,6 +1579,7 @@ function subcampo_marc_conf(obj){
     this.getTieneEstructura         = fGetTieneEstructura;
     this.getObligatorio             = fGetObligatorio;
     this.getVistaIntra              = fGetVistaIntra;
+    this.getEdicionGrupal           = fGetEdicionGrupal;  
     this.getAyudaCampo              = fGetAyudaCampo;
     this.getDescripcionSubCampo     = fGetDescripcionSubCampo;
 }

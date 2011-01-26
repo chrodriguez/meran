@@ -85,7 +85,7 @@ sub validar {
         my $subcampos_array = $campo_hash_ref->{'subcampos_array'};
 
         foreach my $subcampo_hash_ref (@{$subcampos_array}) {
-#             C4::AR::Debug::debug("CatRegistroMarcN3 => validar => campo, subcampo ".$campo_hash_ref->{'campo'}.", ".$subcampo_hash_ref->{'subcampo'});
+            C4::AR::Debug::debug("CatRegistroMarcN3 => validar => campo, subcampo ".$campo_hash_ref->{'campo'}.", ".$subcampo_hash_ref->{'subcampo'});
 
 
             if(($campo_hash_ref->{'campo'} eq '995')&&($subcampo_hash_ref->{'subcampo'} eq 'f')){
@@ -174,9 +174,10 @@ sub seRepiteBarcode {
     }
 }
 
-=head2 sub seRepiteBarcode
-Verifica si se repite el barcode, esto se usa cuandos se tiene q modificar
+=head2 sub seRepiteSignatura
+Verifica si se repite la signatura topografica en otro grupo, esto se usa cuandos se tiene q modificar
 =cut
+=item
 sub seRepiteSignatura {
     my ($self)          = shift;
     my ($signatura)     = @_;
@@ -191,6 +192,7 @@ sub seRepiteSignatura {
     foreach my $nivel3 (@$nivel3_array_ref){
 
 #         C4::AR::Debug::debug("CatRegistroMarcN3 => signatura => db =>  ==".$nivel3->getSignatura_topografica()."==");
+#         C4::AR::Debug::debug("CatRegistroMarcN3 => signatura => cliente =>  ==".$signatura."==");
 #         C4::AR::Debug::debug("CatRegistroMarcN3 => nivel3->getId3 => ".$nivel3->getId3());
 #         C4::AR::Debug::debug("CatRegistroMarcN3 => self->getId3 => ".$self->getId3());
 
@@ -203,12 +205,48 @@ sub seRepiteSignatura {
 
     return $existe;
 }
+=cut
+
+=item
+    sub seRepiteSignatura
+
+    Verifica si se repite la signatura topografica en otro grupo, esto se usa cuandos se tiene q modificar
+=cut
+sub seRepiteSignatura {
+    my ($self)      = shift;
+    my ($signatura) = @_;
+    
+# TODO Miguel ver si esto es eficiente, de todos modos no se si se puede hacer de otra manera!!!!!!!!!!
+# 1) parece q no queda otra, hay q "abrir" el marc_record y sacar el barcode para todos los ejemplares e ir comparando cada uno GARRONNNN!!!!
+# 2) se podria usar el indice??????????????
+
+    my @filtros;
+    my $existe = 0;
+
+    push(@filtros, ( id2 => { ne => $self->getId2() }) );
+    
+    my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
+
+    foreach my $nivel3 (@$nivel3_array_ref){
+
+        #verifico si la signatura es igual a la signatura de otro grupo
+        if (($nivel3->getSignatura_topografica() eq $signatura) && ($nivel3->getId2() ne $self->getId2())){
+            $existe = 1;
+            last();
+        }
+    }
+
+    C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteSignatura => EXISTE la signatura? => ".$existe);
+    
+    return $existe;
+}
 
 sub modificar {
     my ($self)                      = shift;
     my ($db, $params, $msg_object)  = @_;
 
     my $MARC_result_array;
+    my $edicion_grupal;
 
     $self->setId2($params->{'id2'});
     $self->setId1($params->{'id1'});
@@ -217,16 +255,16 @@ sub modificar {
     my $marc_record_base    = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
     # verificar_cambio 
-    $params->{'estado_anterior'}          = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
-    $params->{'estado_nuevo'}             = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","e")));        
-    $params->{'disponibilidad_anterior'}  = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
-    $params->{'disponibilidad_nueva'}     = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","o")));
+    $params->{'estado_anterior'}            = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
+    $params->{'estado_nuevo'}               = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","e")));        
+    $params->{'disponibilidad_anterior'}    = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
+    $params->{'disponibilidad_nueva'}       = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","o")));
     
    
+    my $cat_estructura_catalogacion         = C4::AR::Catalogacion::getCamposNoEditablesEnGrupo(3);
 
     if($params->{'EDICION_N3_GRUPAL'}){
     #si es una edicion grupal no se permite editar el barcode 995,f  
-
         foreach my $field ($marc_record_cliente->fields) {
                 if(! $field->is_control_field){
                     #se verifica si el campo esta autorizado para el nivel que se estra procesando
@@ -234,18 +272,14 @@ sub modificar {
                             my $dato        = $subfield->[1];
                             my $sub_campo   = $subfield->[0];
 
-                            C4::AR::Debug::debug("campo     => ".$field->tag);
-                            C4::AR::Debug::debug("subcampo  => ".$sub_campo);
-                            C4::AR::Debug::debug("dato      => ".$dato);
-
-
-                            if (($field->tag eq "995")&& ($sub_campo eq "f")) {
-                                #se mantiene el dato del barcode cuando es una actualizacion grupal
-                            } else {
+#                             C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => campo     => ".$field->tag);
+#                             C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => subcampo  => ".$sub_campo);
+#                             C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => dato      => ".$dato);
+                              if(permiteEdicionGrupal($field->tag, $sub_campo, $cat_estructura_catalogacion)){
 
                                 if(($dato eq "")||($dato eq "-1")||($dato eq "NULL")){
-                                        C4::AR::Debug::debug("el dato ".$dato." no fue modificado");
-                                    C4::AR::Debug::debug("se mantiene el dato ".$marc_record_base->subfield($field->tag, $sub_campo)." de la base");
+#                                         C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => el dato ".$dato." no fue modificado");
+#                                     C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => se mantiene el dato ".$marc_record_base->subfield($field->tag, $sub_campo)." de la base");
                                 } else {
                                     #ahora se obtienen las referencias  
                                     $dato = C4::AR::Catalogacion::_procesar_referencia($field->tag, $sub_campo, $dato, $self->nivel2->getTipoDocumento); 
@@ -258,7 +292,7 @@ sub modificar {
         }
 
         $self->setMarcRecord($marc_record_base->as_usmarc);
-        C4::AR::Debug::debug("marc_record as_usmarc para la base ".$marc_record_base->as_usmarc);
+        C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => marc_record as_usmarc para la base ".$marc_record_base->as_usmarc);
         ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran(MARC::Record->new_from_usmarc($marc_record_base->as_usmarc), $params->{'tipo_ejemplar'});
 
     } else {
@@ -269,7 +303,7 @@ sub modificar {
     $self->verificar_cambio($db, $params);
     $self->verificar_historico_disponibilidad($db, $params);
 
-    C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => self->getId3() => ANTES ".$self->getId3());
+#     C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => self->getId3() => ANTES ".$self->getId3());
 
     $self->validar($msg_object, $MARC_result_array, $params, 'UPDATE', $db);
 
@@ -277,7 +311,22 @@ sub modificar {
         $self->save();
     }
 
-    C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => self->getId3() DESPUES => ".$self->getId3());
+#     C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => self->getId3() DESPUES => ".$self->getId3());
+}
+
+sub permiteEdicionGrupal {
+    my ($campo, $subcampo, $cat_estructura_catalogacion) = @_;
+
+    my $edicion_grupal = 1;  
+    foreach my $cat (@$cat_estructura_catalogacion){
+          if ( ($campo eq $cat->{'campo'}) && ($subcampo eq $cat->{'subcampo'}) ){
+              $edicion_grupal = 0;  
+            C4::AR::Debug::debug("CatRegistroMarcN3 => permiteEdicionGrupal => el campo, subcampo ".$campo.", ".$subcampo." NO PERMITE EDICION_GRUPAL");
+              last;
+          }
+    }
+
+    return $edicion_grupal;
 }
 
 =head2
