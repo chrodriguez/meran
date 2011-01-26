@@ -593,11 +593,17 @@ sub obtenerPaises{
 
     push(@filtros, ( nombre_largo => { like => $pais.'%'}) );
 
+    
+    use C4::AR::Preferencias;
+    my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
+     
     my $paises_array_ref = C4::Modelo::RefPais::Manager->get_ref_pais(
 
-        query => \@filtros,
+        query   => \@filtros,
+        select  => ['*'],
         sort_by => 'nombre_largo ASC',
-        limit   => C4::AR::Preferencias->getValorPreferencia("limite_resultados_autocompletables"),
+        limit   => $limit,
+        offset  => 0,
     );
 
     return (scalar(@$paises_array_ref), $paises_array_ref);
@@ -1515,6 +1521,10 @@ sub buscarCiudades{
 
     my ($ciudad) = @_;
     my $dbh = C4::Context->dbh;
+
+    use C4::AR::Preferencias;
+    my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
+    
     my $query = "   SELECT  ref_localidad.id, ref_pais.nombre AS pais, ref_provincia.nombre AS provincia, 
                             ref_dpto_partido.nombre AS partido, ref_localidad.localidad AS localidad,
                             ref_localidad.nombre AS nombre 
@@ -1526,7 +1536,8 @@ sub buscarCiudades{
                                             (ref_pais.id = ref_provincia.ref_pais_id)
 
                     WHERE (ref_localidad.nombre LIKE ?) OR (ref_localidad.nombre LIKE ?)
-                    ORDER BY (ref_localidad.nombre)";
+                    ORDER BY (ref_localidad.nombre)
+                    LIMIT 0,".$limit;
     my $sth = $dbh->prepare($query);
 
     $sth->execute($ciudad.'%', '% '.$ciudad.'%');

@@ -90,12 +90,17 @@ sub search_autores{
     my @filtros;
 
     push(@filtros, ( completo => { like => $autor.'%'}) );
+
+    use C4::AR::Preferencias;
+    my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
     
     my $autores_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor(
 
-                                        query => \@filtros,
+                                        query   => \@filtros,
+                                        select  => ['*'],
                                         sort_by => 'completo ASC',
-                                        limit   => C4::AR::Preferencias->getValorPreferencia("limite_resultados_autocompletables"),
+                                        limit   => $limit,
+                                        offset  => 0,
                                      );
 
     return (scalar(@$autores_array_ref), $autores_array_ref);
