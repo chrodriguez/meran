@@ -106,7 +106,7 @@
                 </td>
                 <td>
                 [% IF catalogacion.getObligatorio != 1 %]
-                    <input type="checkbox" id="[% id %]" value="[% catalogacion.getEdicionGrupal %]" onChange="visibilidad('[% catalogacion.getId %]')" 
+                    <input type="checkbox" id="[% id %]" value="[% catalogacion.getEdicionGrupal %]" onChange="edicionGrupal('[% catalogacion.getId %]')" 
                     value="[% catalogacion.getEdicionGrupal %]"   [% IF catalogacion.getEdicionGrupal %] 
                                                                 checked
                                                             [% END %] 

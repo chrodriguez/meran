@@ -416,16 +416,14 @@ sub setEdicionGrupal{
 
 
 sub cambiarVisibilidad{
-
-    my ($self)=shift;
+    my ($self) = shift;
 
     $self->setVisible(!$self->getVisible);
     $self->save();
 }
 
 sub cambiarEdicionGrupal{
-
-    my ($self)=shift;
+    my ($self) = shift;
 
     $self->setEdicionGrupal(!$self->getEdicionGrupal);
     $self->save();

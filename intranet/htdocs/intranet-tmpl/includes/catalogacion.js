@@ -1216,9 +1216,9 @@ function procesarSubCampo(objeto, marc_group){
         
 // TODO modularizar
 // falta poder deshabilitar los botones de agregar y eliminar componente
-        if((objeto.getEdicionGrupal() == "0")&&(MODIFICAR == 1)&&(EDICION_N3_GRUPAL == 1)){  
-            $('#'+marc_conf_obj.getIdCompCliente()).attr('disabled', true);
-        }
+//         if((objeto.getEdicionGrupal() == "0")&&(MODIFICAR == 1)&&(EDICION_N3_GRUPAL == 1)){  
+//             $('#'+marc_conf_obj.getIdCompCliente()).attr('disabled', true);
+//         }
 
     }
 }
@@ -1588,8 +1588,18 @@ function subcampo_marc_conf(obj){
 function crearText(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "' class='horizontal' >";     
     $("#div" + obj.getIdCompCliente()).append(comp);
-    $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
-    $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
+    
+    crearBotones(obj);
+}
+
+function crearBotones(obj){
+    if((obj.getEdicionGrupal() == "0")&&(MODIFICAR == 1)&&(EDICION_N3_GRUPAL == 1)){  
+        disableComponent(obj.getIdCompCliente());  
+        $('#'+ obj.getIdCompCliente()).val("No se permite edicion grupal");  
+    } else {
+        $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
+        $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
+    }
 }
 
 function newCombo(obj){
@@ -1618,19 +1628,23 @@ function newCombo(obj){
 function crearCombo(obj){
     var comp = newCombo(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
-    $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
-    $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
+//     $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
+//     $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
+    crearBotones(obj);
 }
 
 function crearTextArea(obj){
 
-    var comp = "<textarea id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' rows='4' tabindex=" + TAB_INDEX + ">" + obj.getOpciones() + "</textarea>";
+//     var comp = "<textarea id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' rows='4' tabindex=" + TAB_INDEX + ">" + obj.getOpciones() + "</textarea>";
+    var comp = "<textarea id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' rows='4' tabindex=" + TAB_INDEX + ">" + obj.getDato() + "</textarea>";
     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
 
     $("#div" + obj.getIdCompCliente()).append(comp);
+// FIXME     y esto???
     $("#texta" + obj.getIdCompCliente()).val(obj.getDatoReferencia());
-    $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
-    $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
+//     $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
+//     $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
+    crearBotones(obj);
 }
 
 function crearHidden(obj){
@@ -1639,10 +1653,10 @@ function crearHidden(obj){
 
 
 function agregarTablaReferencias(tabla){
-    objAH=new AjaxHelper(updateAgregarTablaReferencias);
-    objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
-    objAH.accion="AGREGAR_REGISTRO";
-    objAH.alias_tabla = tabla;
+    objAH               = new AjaxHelper(updateAgregarTablaReferencias);
+    objAH.url           = '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
+    objAH.accion        = "AGREGAR_REGISTRO";
+    objAH.alias_tabla   = tabla;
     objAH.sendToServer();
 }
 
@@ -1686,47 +1700,44 @@ function crearEditor(){
 function crearAuto(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='"+ obj.getIdCompCliente() +"' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" class='horizontal' >";
 
-
     $("#div" + obj.getIdCompCliente()).append(comp);
-
-
-//     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
-    $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
-    $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
-//     comp = comp + "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
+//     $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
+//     $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
+// TODO estoy probando
+    crearBotones(obj);
     comp = "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
-//     $("#div" + obj.getIdCompCliente()).append(comp);
     $(comp).insertAfter("#div" + obj.getIdCompCliente());
     _cearAutocompleteParaCamponente(obj);
     //se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
     comp = crearHidden(obj);
-//     $("#div" + obj.getIdCompCliente()).append(comp);
     $(comp).insertAfter("#div" + obj.getIdCompCliente());
+   
 }
 
 function crearCalendar(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
-    comp = comp + crearBotonAgregarSubcampoRepetible(obj);
+//     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 
-    //     $("#"+obj.getIdCompCliente()).datepicker({ dateFormat: 'dd/mm/yy' });
     crearDatePicker(obj.getIdCompCliente());
-    
+    crearBotones(obj);
 }
 
 function crearTextAnio(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
-    comp = comp + crearBotonAgregarSubcampoRepetible(obj);
+//     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
+    crearBotones(obj);
 }
 
 function crearTextRangoAnio(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
-    comp = comp + crearBotonAgregarSubcampoRepetible(obj);
+//     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
+    crearBotones(obj);
 }
 
 // Esta funcion convierte una componete segun idObj en obligatoria, agrega * a la derecha de la misma
