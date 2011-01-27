@@ -169,23 +169,22 @@ sub createFromAlias{
     use Switch;
 
     switch ($classAlias) {
-        case 'autor' { return C4::Modelo::CatAutor->new(); }
-        case 'tipo_ejemplar' {return C4::Modelo::CatRefTipoNivel3->new();}
-        case 'ui' {return C4::Modelo::PrefUnidadInformacion->new();}
-        case 'idioma' {return C4::Modelo::RefIdioma->new();}  
-        case 'pais' {return C4::Modelo::RefPais->new();} 
-        case 'disponibilidad' {return C4::Modelo::RefDisponibilidad->new();}
-        case 'tipo_prestamo' {return C4::Modelo::CircRefTipoPrestamo->new();}
-        case 'soporte' {return C4::Modelo::RefSoporte->new();}
-        case 'nivel_bibliografico' {return C4::Modelo::RefNivelBibliografico->new();}
-        case 'tema' {return C4::Modelo::CatTema->new();}
-        case 'tipo_socio' {return C4::Modelo::UsrRefCategoriaSocio->new();}
-        case 'tipo_documento_usr' {return C4::Modelo::UsrRefTipoDocumento->new();}
-        case 'estado' {return C4::Modelo::RefEstado->new();}
-        case 'ciudad' {return C4::Modelo::RefLocalidad->new();}
-        case 'editorial' {return C4::Modelo::CatEditorial->new();}
-    else {
-        print "NO EXISTE LA TABLA DE REFERENCIA ".$classAlias }
+        case 'autor' { return C4::Modelo::CatAutor->new()}
+        case 'tipo_ejemplar' {return C4::Modelo::CatRefTipoNivel3->new()}
+        case 'ui' {return C4::Modelo::PrefUnidadInformacion->new()}
+        case 'idioma' {return C4::Modelo::RefIdioma->new()}  
+        case 'pais' {return C4::Modelo::RefPais->new()} 
+        case 'disponibilidad' {return C4::Modelo::RefDisponibilidad->new()}
+        case 'tipo_prestamo' {return C4::Modelo::CircRefTipoPrestamo->new()}
+        case 'soporte' {return C4::Modelo::RefSoporte->new()}
+        case 'nivel_bibliografico' {return C4::Modelo::RefNivelBibliografico->new()}
+        case 'tema' {return C4::Modelo::CatTema->new()}
+        case 'tipo_socio' {return C4::Modelo::UsrRefCategoriaSocio->new()}
+        case 'tipo_documento_usr' {return C4::Modelo::UsrRefTipoDocumento->new()}
+        case 'estado' {return C4::Modelo::RefEstado->new()}
+        case 'ciudad' {return C4::Modelo::RefLocalidad->new()}
+        case 'editorial' {return C4::Modelo::CatEditorial->new()}
+	    else {print "NO EXISTE LA TABLA DE REFERENCIA ".$classAlias }
     }
 }
 
@@ -269,7 +268,7 @@ sub getCamposAsArray{
 
 sub getCampos{
     my ($self)=shift;
-    my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
+    my $fieldsString = C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
 
     return($fieldsString);
 }
