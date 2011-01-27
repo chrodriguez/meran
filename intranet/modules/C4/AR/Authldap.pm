@@ -86,7 +86,7 @@ sub datosUsuario{
                 
                 C4::AR::Debug::debug("Authldap =>datosUsuario".$LDAP_FILTER . ' entry '.$entry->ldif); 
 
-                 }
+         }
                 C4::AR::Debug::debug("Authldap =>datosUsuario" );   
         }
         ######FIXME agregarSocio como inactivo o no???? preferencia???
