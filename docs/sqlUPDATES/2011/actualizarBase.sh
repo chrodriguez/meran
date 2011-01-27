@@ -23,3 +23,4 @@ for i in `seq $anterior $hasta`; do
             mysql --default-character-set=utf8 $BASE -u$USER -p$PASSWD < $pathRelativo/sql.rev$i;
         fi;
 done;
+echo $hasta > $conf
