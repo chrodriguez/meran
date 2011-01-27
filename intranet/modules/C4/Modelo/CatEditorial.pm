@@ -13,8 +13,7 @@ __PACKAGE__->meta->setup(
 
     primary_key_columns => [ 'id' ],
 );
-use C4::Modelo::CatTema::Manager;
-use C4::Modelo::RefEstado;
+use C4::Modelo::CatEditorial::Manager;
 
 sub toString{
 	my ($self) = shift;
@@ -26,7 +25,7 @@ sub getObjeto{
 	my ($self) = shift;
 	my ($id) = @_;
 
-	my $objecto= C4::Modelo::CatTema->new(id => $id);
+	my $objecto= C4::Modelo::CatEditorial->new(id => $id);
 	$objecto->load();
 	return $objecto;
 }
@@ -62,7 +61,7 @@ sub setEditorial{
 sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
-	my $ref_valores = C4::Modelo::CatTema::Manager->get_cat_tema
+	my $ref_valores = C4::Modelo::CatEditorial::Manager->get_cat_editorial
 						( select   => [$self->meta->primary_key , $campo],
 						  sort_by => ($orden) );
     my @array_valores;
@@ -80,7 +79,7 @@ sub obtenerValoresCampo {
 sub obtenerValorCampo {
 	my ($self)=shift;
     my ($campo,$id)=@_;
-    my $ref_valores = C4::Modelo::CatTema::Manager->get_cat_tema
+    my $ref_valores = C4::Modelo::CatEditorial::Manager->get_cat_editorial
 						( select   => [$campo],
 						  query =>[ id => { eq => $id} ]);
     	
@@ -108,6 +107,59 @@ sub getCampo{
 sub nextMember{
     return(C4::Modelo::RefEstado->new());
 }
+
+
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset,$matchig_or_not,$filtro)=@_;
+    
+    use C4::Modelo::CatEditorial::Manager;
+    
+    
+    $matchig_or_not = $matchig_or_not || 0;
+    my @filtros;
+    if ($filtro){
+        my @filtros_or;
+        push(@filtros_or, (editorial => {like => $filtro.'%'}) );
+        push(@filtros, (or => \@filtros_or) );
+    }
+    my $ref_valores;
+    if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
+        push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
+        $ref_valores = C4::Modelo::CatEditorial::Manager->get_cat_editorial(query => \@filtros,);
+    }else{
+        $ref_valores = C4::Modelo::CatEditorial::Manager->get_cat_editorial(query => \@filtros,
+                                                                    limit => $limit, 
+                                                                    offset => $offset, 
+                                                                    sort_by => ['editorial'] 
+                                                                   );
+    }
+
+    my $ref_cant = C4::Modelo::CatEditorial::Manager->get_cat_editorial_count(query => \@filtros,);
+    my $self_editorial = $self->getEditorial;
+
+    my $match = 0;
+    if ($matchig_or_not){
+        my @matched_array;
+        foreach my $editorial (@$ref_valores){
+          $match = ((distance($self_editorial,$editorial->getEditorial)<=1));
+          if ($match){
+            push (@matched_array,$editorial);
+          }
+        }
+        return (scalar(@matched_array),\@matched_array);
+    }
+    else{
+      return($ref_cant,$ref_valores);
+    }
+}
+
+
+
+
+
+
 
 1;
 
