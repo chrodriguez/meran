@@ -1189,6 +1189,9 @@ sub busquedaPorISBN{
 
 sub busquedaCombinada_newTemp{
 	
+	
+################### FIXME hacer el filtro de disponible con %ref_disponibilidad (ask MIKE)	
+	
 	use Sphinx::Search;
 	
     my ($string_utf8_encoded,$session,$obj_for_log,$only_sphinx) = @_;
