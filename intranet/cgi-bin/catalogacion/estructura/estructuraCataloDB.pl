@@ -3,8 +3,8 @@
 
 use strict;
 use CGI;
-use C4::AR::Nivel1 qw(getNivel1FromId1);
-use C4::AR::Nivel2 qw(getNivel2FromId1);
+use C4::AR::Nivel1 ;
+use C4::AR::Nivel2 ;
 use C4::AR::Auth;
 use C4::AR::Utilidades;
 use C4::AR::Catalogacion;
@@ -40,7 +40,7 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 
 
 # TODO en el template esta haciendo una consulta por cada fila
-    my ($cant, $catalogaciones_array_ref) = &C4::AR::Catalogacion::getEstructuraCatalogacionFromDBCompleta($nivel,$itemType,$orden);
+    my ($cant, $catalogaciones_array_ref) = C4::AR::Catalogacion::getEstructuraCatalogacionFromDBCompleta($nivel,$itemType,$orden);
     
     #Se pasa al cliente el arreglo de objetos estructura_catalogacion   
     $t_params->{'catalogaciones'}   = $catalogaciones_array_ref;
@@ -191,7 +191,7 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
     my %params_combo;
     $params_combo{'id'}                 = 'tipoInput';
     $params_combo{'default'}            = $catalogacion->getTipo();
-    $t_params->{'comboComponentes'}     = &C4::AR::Utilidades::generarComboComponentes(\%params_combo);
+    $t_params->{'comboComponentes'}     = C4::AR::Utilidades::generarComboComponentes(\%params_combo);
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
@@ -375,7 +375,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
                                     );
     
     #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
-    my ($cant, $catalogaciones_array_ref)   = &C4::AR::Catalogacion::getEstructuraSinDatos($obj);
+    my ($cant, $catalogaciones_array_ref)   = C4::AR::Catalogacion::getEstructuraSinDatos($obj);
 
     my $infoOperacionJSON                   = to_json($catalogaciones_array_ref);
 
@@ -431,7 +431,7 @@ elsif($tipoAccion eq "MOSTRAR_SUBCAMPOS_DE_CAMPO"){
                                     );
     
 
-    my ($sub_campos_string) = &C4::AR::Utilidades::obtenerDescripcionDeSubCampos($obj->{'campo'});
+    my ($sub_campos_string) = C4::AR::Utilidades::obtenerDescripcionDeSubCampos($obj->{'campo'});
     
 	C4::AR::Auth::print_header($session);
 	print $sub_campos_string;
@@ -514,7 +514,7 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
                                     );
 
 	#Se guarda informacion del NIVEL 1
-    my ($Message_arrayref, $id1) = &C4::AR::Nivel1::t_guardarNivel1($obj);
+    my ($Message_arrayref, $id1) = C4::AR::Nivel1::t_guardarNivel1($obj);
     
     my %info;
     $info{'Message_arrayref'} = $Message_arrayref;
@@ -534,7 +534,7 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
                                                 'intranet'
                                     );
     #Se guarda informacion del NIVEL 2 relacionada con un ID de NIVEL 1
-    my ($Message_arrayref, $id1, $id2) = &C4::AR::Nivel2::t_guardarNivel2($obj);
+    my ($Message_arrayref, $id1, $id2) = C4::AR::Nivel2::t_guardarNivel2($obj);
     
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
@@ -557,7 +557,7 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
                
 
 	#Se muestran la estructura de catalogacion para que el usuario agregue un documento
-    my ($Message_arrayref, $nivel3) = &C4::AR::Nivel3::t_guardarNivel3($obj);
+    my ($Message_arrayref, $nivel3) = C4::AR::Nivel3::t_guardarNivel3($obj);
     
     my %info;
     $info{'Message_arrayref'}= $Message_arrayref;
@@ -577,7 +577,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_1"){
                                     );
 
 
-    my ($Message_arrayref, $id1) = &C4::AR::Nivel1::t_modificarNivel1($obj);
+    my ($Message_arrayref, $id1) = C4::AR::Nivel1::t_modificarNivel1($obj);
     
     if($id1){    
         my %info;
@@ -604,7 +604,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_2"){
                                                 'intranet'
                                     );
 
-    my ($Message_arrayref, $nivel2) = &C4::AR::Nivel2::t_modificarNivel2($obj);
+    my ($Message_arrayref, $nivel2) = C4::AR::Nivel2::t_modificarNivel2($obj);
     
     if($nivel2){        
         my %info;
@@ -631,7 +631,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
                                                 'intranet'
                                     );
 
-    my ($Message_arrayref, $nivel3) = &C4::AR::Nivel3::t_modificarNivel3($obj);
+    my ($Message_arrayref, $nivel3) = C4::AR::Nivel3::t_modificarNivel3($obj);
     
     my %info;
     $info{'Message_arrayref'}       = $Message_arrayref;
@@ -649,7 +649,7 @@ elsif($tipoAccion eq "IMPORTAR_DESDE_KOHA"){
                                                 'intranet'
                                     );
 
-    my ($Message_arrayref) = &C4::AR::Catalogacion::koha2_to_meran($obj);
+    my ($Message_arrayref) = C4::AR::Catalogacion::koha2_to_meran($obj);
     
     my %info;
     $info{'Message_arrayref'} = $Message_arrayref;
@@ -676,13 +676,13 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
     my ($Message_arrayref);
    
     if ($nivel == 1){
-      ($Message_arrayref)= &C4::AR::Nivel1::t_eliminarNivel1($id);
+      ($Message_arrayref)= C4::AR::Nivel1::t_eliminarNivel1($id);
     }
     elsif($nivel == 2){
-      ($Message_arrayref)= &C4::AR::Nivel2::t_eliminarNivel2($id);
+      ($Message_arrayref)= C4::AR::Nivel2::t_eliminarNivel2($id);
     }
     elsif($nivel == 3){
-		($Message_arrayref)= &C4::AR::Nivel3::t_eliminarNivel3($obj);
+		($Message_arrayref)= C4::AR::Nivel3::t_eliminarNivel3($obj);
     }
 
 	my %info;
@@ -705,7 +705,7 @@ elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
 
 	#Cuando viene desde otra pagina que llama al detalle.
 	my $id2= $obj->{'id2'};
-	my($nivel2_hashref)=&C4::AR::Nivel3::detalleNivel3($id2);
+	my($nivel2_hashref)= C4::AR::Nivel3::detalleNivel3($id2);
 	
 	$t_params->{'disponibles'}= $nivel2_hashref->{'disponibles'};
 	$t_params->{'cantReservas'}= $nivel2_hashref->{'cantReservas'};

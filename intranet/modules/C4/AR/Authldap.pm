@@ -40,7 +40,7 @@ use Net::LDAPS;
 use Net::LDAP::LDIF;
 use Net::LDAP::Util qw(ldap_error_text);
 use Net::LDAP::Constant qw(LDAP_EXTENSION_START_TLS);
-
+use C4::AR::Preferencias;
 use vars qw(@ISA @EXPORT_OK );
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(checkpwldap getldappassword checkpwDC);
@@ -66,7 +66,7 @@ sub datosUsuario{
         # nro_socio , id_ui, cod_categoria, change_password (dejala en 0), id_estado (uno de UsrEstado), is_super_user 
 
         #FIXME hay que agregar esta preferencia que ahora no se puede por algo q rompio MONO
-        my $agregar=C4::Context->config("agregarDesdeLDAP")||0;
+        my $agregar=C4::AR::Preferencias::getValorPreferencia("agregarDesdeLDAP")||0;
         if ($agregar){
                 my $LDAP_SUF= C4::Context->config("ldapsuf");
                 my $LDAP_PREF=C4::Context->config("ldappref");
@@ -76,19 +76,14 @@ sub datosUsuario{
                     filter => "($LDAP_FILTER)"
                 );
                 my $entry =$entries->entry(0);
-                my $nombre= $entry->get_value("givenName:");
-                my $apellido=$entry->get_value("sn");
-                my $dni=$entry->get_value("dni");
-                my $mail=$entry->get_value("mail");
-                
-                $socio = C4::AR::Usuarios::crearPersonaLDAP($userid);                
-                
-                
-                C4::AR::Debug::debug("Authldap =>datosUsuario".$LDAP_FILTER . ' entry '.$entry->ldif); 
 
-         }
-                C4::AR::Debug::debug("Authldap =>datosUsuario" );   
+                if ($entry){
+                    $socio = C4::AR::Usuarios::crearPersonaLDAP($userid);
+                    C4::AR::Debug::debug("Authldap =>datosUsuario".$LDAP_FILTER . ' entry '.$entry->ldif); 
+                }                
         }
+                C4::AR::Debug::debug("Authldap =>datosUsuario" );   
+    }
         ######FIXME agregarSocio como inactivo o no???? preferencia???
         return $socio;
 }
