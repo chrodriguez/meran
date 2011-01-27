@@ -42,7 +42,7 @@ if($obj){
 # my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".Encode::encode_utf8($obj->{'string'})."&tipoAccion=".$obj->{'tipoAccion'};
 
 my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&titulo=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
-my $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&titulo=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
+my $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&titulo=".$obj->{'string'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'};
 
 
 my $ini= $obj->{'ini'};

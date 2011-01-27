@@ -1116,10 +1116,15 @@ sub busquedaAvanzada_newTemp{
         $query .='"';
     }
 
+
+
+    if ($params->{'only_available'}){
+        $query .= ' @string !"ref_disponibilidad%0"';
+    }
+    
     C4::AR::Debug::debug("tipo_nivel3_name tipo_nivel3_name tipo_nivel3_name =>=> ".$params->{'tipo_nivel3_name'});
 
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
-
 
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
@@ -1190,7 +1195,7 @@ sub busquedaPorISBN{
 sub busquedaCombinada_newTemp{
 	
 	
-################### FIXME hacer el filtro de disponible con %ref_disponibilidad (ask MIKE)	
+################### FIXME hacer el filtro de disponible con ref_disponibilidad%	
 	
 	use Sphinx::Search;
 	
@@ -1202,7 +1207,7 @@ sub busquedaCombinada_newTemp{
     my $string_suggested;
     $only_sphinx = $only_sphinx || 0;
     my $sphinx = Sphinx::Search->new();
-    my $query = '';
+    my $query = "";
 
     my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
@@ -1258,25 +1263,7 @@ sub busquedaCombinada_newTemp{
         my %hash_temp = {};
         $hash_temp{'id1'} = $hash->{'doc'};
         $hash_temp{'hits'} = $hash->{'weight'};
-
-##TODO mike lo va a hacer en el record para filtrar con Sphinx
-        if ($obj_for_log->{'only_available'}){
-            my @disponibilidad = &C4::AR::Busquedas::obtenerDisponibilidadTotal($hash->{'doc'}, $obj_for_log->{'tipo_nivel3_name'});
-        
-            $hash->{'disponibilidad'}      = 0;
-            if (scalar(@disponibilidad) > 0){
-                $hash->{'disponibilidad'}  = \@disponibilidad;
-            }
-            if ((@disponibilidad[0]->{'cantTotal'}) > 0){
-                push (@id1_array, \%hash_temp);
-            }
-        }else{
-            push (@id1_array, \%hash_temp);
-        }
-    }
-
-    if ($obj_for_log->{'only_available'}){
-        $total_found = scalar(@id1_array);
+        push (@id1_array, \%hash_temp);
     }
 
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
