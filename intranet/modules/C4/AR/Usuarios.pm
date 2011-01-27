@@ -39,7 +39,6 @@ require Exporter;
 use C4::AR::Validator;
 
 use C4::AR::Prestamos qw(cantidadDePrestamosPorUsuario);
-use C4::AR::Preferencias;
 use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrPersona::Manager;
 use C4::Modelo::UsrEstado;
@@ -48,10 +47,10 @@ use C4::Modelo::UsrSocio;
 use C4::Modelo::UsrSocio::Manager;
 use Switch;
 
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 
-@EXPORT=qw(
+@EXPORT_OK=qw(
     agregarAutorizado
     agregarPersona
     habilitarPersona
@@ -654,6 +653,7 @@ sub getSocioLike {
     my $socioTemp = C4::Modelo::UsrSocio->new();
     my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($socio);
 
+    use C4::AR::Preferencias;
     my $limit_pref = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
 
     $cantR = $cantR || $limit_pref;
@@ -711,7 +711,7 @@ sub getSocioLike {
 sub llegoMaxReservas {
 
     my ($nro_socio)=@_;
-    my $cant= C4::AR::Reservas::cant_reservas($nro_socio);
+    my $cant= &C4::AR::Reservas::cant_reservas($nro_socio);
 
     return ( $cant >= C4::AR::Preferencias->getValorPreferencia("maxreserves") );
 }

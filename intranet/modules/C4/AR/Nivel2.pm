@@ -12,14 +12,14 @@ use C4::AR::Sphinx qw(generar_indice);
 use POSIX qw(NULL ceil);
 
 
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 
 @ISA    = qw(Exporter);
 
-@EXPORT= qw(
-		getNivel1FromId2
-		getCantPrestados
-        getNivel2FromId1
+@EXPORT_OK = qw(
+		&getNivel1FromId2
+		&getCantPrestados
+        &getNivel2FromId1
         
 );
 

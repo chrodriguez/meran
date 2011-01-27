@@ -18,10 +18,13 @@ use C4::Date;
 use Encode;
 use POSIX qw(ceil floor); 
 use JSON;
+use C4::AR::Preferencias;
 
-use vars qw(@EXPORT @ISA);
+#Einar use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
+
+use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(
+@EXPORT_OK=qw(
     generarComboFormasDeEnvio
     generarComboTipoDeMaterial
     monedasAutocomplete
@@ -585,9 +588,6 @@ sub obtenerPaises{
     my @filtros;
 
     push(@filtros, ( nombre_largo => { like => $pais.'%'}) );
-
-    
-    use C4::AR::Preferencias;
     my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
      
     my $paises_array_ref = C4::Modelo::RefPais::Manager->get_ref_pais(
@@ -1514,8 +1514,6 @@ sub buscarCiudades{
 
     my ($ciudad) = @_;
     my $dbh = C4::Context->dbh;
-
-    use C4::AR::Preferencias;
     my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
     
     my $query = "   SELECT  ref_localidad.id, ref_pais.nombre AS pais, ref_provincia.nombre AS provincia, 
