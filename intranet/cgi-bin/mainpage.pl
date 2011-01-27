@@ -2,7 +2,6 @@
 use strict;
 require Exporter;
 
-use C4::Output;  # contains gettemplate
 use C4::AR::Auth;
 use CGI;
 

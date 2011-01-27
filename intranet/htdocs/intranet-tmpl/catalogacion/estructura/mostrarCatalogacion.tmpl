@@ -24,6 +24,7 @@
                 <td width="4%">[% 'Fijo' | i18n %]</td>
                 <td width="5%">[% 'Obligatorio' | i18n %]</td>
                 <td width="5%">[% 'Visible' | i18n %]</td>
+                <td width="5%">[% 'Edici&oacute;n Grupal' | i18n %]</td>
                 <td width="5%">[% 'Habilitado' | i18n %]</td>
                 <td width="5%">[% 'Editar' | i18n %]</td>
                 <td width="5%">[% 'Eliminar' | i18n %]</td>
@@ -98,6 +99,15 @@
                 [% IF catalogacion.getObligatorio != 1 %]
                     <input type="checkbox" id="[% id %]" value="[% catalogacion.getVisible %]" onChange="visibilidad('[% catalogacion.getId %]')" 
                     value="[% catalogacion.getVisible %]"   [% IF catalogacion.getVisible %] 
+                                                                checked
+                                                            [% END %] 
+                    >
+                [% END %]
+                </td>
+                <td>
+                [% IF catalogacion.getObligatorio != 1 %]
+                    <input type="checkbox" id="[% id %]" value="[% catalogacion.getEdicionGrupal %]" onChange="edicionGrupal('[% catalogacion.getId %]')" 
+                    value="[% catalogacion.getEdicionGrupal %]"   [% IF catalogacion.getEdicionGrupal %] 
                                                                 checked
                                                             [% END %] 
                     >

@@ -2,6 +2,7 @@ package C4::Modelo::CircPrestamo;
 
 use strict;
 use Date::Manip;
+use C4::Modelo::RepHistorialCirculacion;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -223,7 +224,6 @@ sub agregar {
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
 	$self->debug("Se loguea en historico de circulacion el prestamo");
 	C4::AR::Debug::debug( "CircPrestamo => agregar => responsable: " . $data_hash->{'responsable'} );
-	use C4::Modelo::RepHistorialCirculacion;
 	my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new( db => $self->db );
 	$data_hash->{'tipo'} = 'prestamo';
 	$historial_circulacion->agregar($data_hash);

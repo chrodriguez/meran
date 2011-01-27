@@ -82,7 +82,9 @@ sub guardarRealmente{
             $db->commit;            
             #recupero el id1 recien agregado
             $id1 = $catRegistroMarcN1->getId1;
-            C4::AR::Sphinx::generar_indice($id1);
+#             C4::AR::Sphinx::generar_indice($id1);
+# para forzar reindexar
+            C4::AR::Sphinx::generar_indice();
             #ahora el indice se encuentra DESACTUALIZADO
             C4::AR::Preferencias::setVariable('indexado', 0, $db);
             #se cambio el permiso con exito

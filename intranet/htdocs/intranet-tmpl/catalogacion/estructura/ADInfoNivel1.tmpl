@@ -20,7 +20,10 @@
                 <strong>[% 'Nivel bibliogr&aacute;fico:' | i18n %]</strong> [% nivel1.getNivelBibliograficoObject.getDescription %]
             </li>
             <li>
-                <strong>[% 'Autores secundarios:' | i18n %]</strong> [% nivel1.getAutoresSecundariosObject.getCompleto %]
+                <strong>[% 'Autores secundarios:' | i18n %]</strong>
+                [% FOREACH autor_secundario IN nivel1.getAutoresSecundarios %] 
+                    [% autor_secundario %][% IF !loop.last() %],[% END %] 
+                [% END %]
             </li>
             <li>
                 <strong>[% 'T&eacute;rmino no controlado:' | i18n %]</strong> 

@@ -1,6 +1,8 @@
 package C4::Modelo::UsrSocio;
 
 use strict;
+use C4::AR::Auth;
+
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -420,9 +422,10 @@ sub setLast_login{
     my ($self) = shift;
 
     my ($last_login) = @_;
-    my $dateformat = C4::Date::get_date_format();
-    $last_login = C4::Date::format_date_in_iso($last_login,$dateformat);
+    my $dateformat  = C4::Date::get_date_format();
+    $last_login     = C4::Date::format_date_in_iso($last_login,$dateformat);
     $self->last_login($last_login);
+
 }
 
 sub getLast_change_password{

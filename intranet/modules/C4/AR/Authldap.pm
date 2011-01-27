@@ -80,9 +80,13 @@ sub datosUsuario{
                 my $apellido=$entry->get_value("sn");
                 my $dni=$entry->get_value("dni");
                 my $mail=$entry->get_value("mail");
+                
+                $socio = C4::AR::Usuarios::crearPersonaLDAP($userid);                
+                
+                
                 C4::AR::Debug::debug("Authldap =>datosUsuario".$LDAP_FILTER . ' entry '.$entry->ldif); 
 
-                 }
+         }
                 C4::AR::Debug::debug("Authldap =>datosUsuario" );   
         }
         ######FIXME agregarSocio como inactivo o no???? preferencia???

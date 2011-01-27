@@ -73,6 +73,7 @@ use vars qw(@EXPORT_OK @ISA);
     esRegular
     updateUserDataValidation
     needsDataValidation
+    crearPersonaLDAP
 );
 
 =item
@@ -652,6 +653,11 @@ sub getSocioLike {
     my $socioTemp = C4::Modelo::UsrSocio->new();
     my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($socio);
 
+    use C4::AR::Preferencias;
+    my $limit_pref = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
+
+    $cantR = $cantR || $limit_pref;
+
     if($socio ne 'TODOS'){
         #SI VIENE INICIAL, SE BUSCA SOLAMENTE POR APELLIDOS QUE COMIENCEN CON ESA LETRA, SINO EN TODOS LADOS CON LIKE EN AMBOS LADOS
         if (!($inicial)){
@@ -916,6 +922,32 @@ sub getLastLoginTime{
     return $lastlogin;
 }
 
+
+sub crearPersonaLDAP{
+	
+    my ($nro_socio) = @_;
+
+    use C4::AR::Preferencias;	
+	my %params = {};
+	
+    $params{'id_ui'} = C4::AR::Preferencias::getValorPreferencia("defaultUI");
+    $params{'changepassword'} = 0;
+    $params{'apellido'} =  "SIN APELLIDO";
+    $params{'nombre'} = "SIN NOMBRE";
+    $params{'tipo_documento'} = "DNI";
+    $params{'nro_documento'} = "999999999";
+    $params{'legajo'} = "99999";
+    $params{'cumple_condicion'} = 0;
+    $params{'password'} = "123456";  
+	$params{'credential_type'} = "estudiante";
+    $params{'nro_socio'} = $nro_socio;
+    $params{'cod_categoria'} = "ES";
+	
+	my $person = C4::Modelo::UsrPersona->new();
+
+	$person->agregar(\%params);
+	
+}
 
 
 END { }       # module clean-up code here (global destructor)

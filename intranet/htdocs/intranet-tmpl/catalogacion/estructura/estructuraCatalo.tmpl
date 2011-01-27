@@ -92,6 +92,16 @@ function visibilidad(id){
     objAH.sendToServer();
 }
 
+function edicionGrupal(id){
+    objAH               = new AjaxHelper(eleccionDeNivel);
+    objAH.debug         = true;
+    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.id            = id;
+    objAH.showOverlay   = true;
+    objAH.tipoAccion    = 'CAMBIAR_EDICION_GRUPAL';
+    objAH.sendToServer();
+}
+
 function habilitado(id){
     objAH               = new AjaxHelper(eleccionDeNivel);
     objAH.debug         = true;

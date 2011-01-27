@@ -321,13 +321,20 @@ sub getNivel3FromBarcode {
 
 sub getBarcodesLike {
     my ($barcode) = @_;
-
     my  $barcodes_array_ref;
     my @filtros;
- 
+    
+    use C4::AR::Preferencias;
+    my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
+     
 	push(@filtros, ( marc_record => { like => '%'.$barcode.'%' }) );
     
-    $barcodes_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
+    $barcodes_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                        query => \@filtros, 
+                                                        select => ['*'], 
+                                                        non_lazy => 1, 
+                                                        limit => $limit, 
+                                                        offset => 0, ); 
 	my $cant= scalar(@$barcodes_array_ref);
 
 	if($cant > 0){
@@ -718,6 +725,7 @@ sub getAllNivel3FromId2 {
         return (0);
     }
 }
+
 
 
 =head2 sub existeBarcode
