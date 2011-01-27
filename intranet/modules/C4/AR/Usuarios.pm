@@ -926,7 +926,8 @@ sub getLastLoginTime{
 sub crearPersonaLDAP{
 	
     my ($nro_socio) = @_;
-	
+
+    use C4::AR::Preferencias;	
 	my %params = {};
 	
     $params{'id_ui'} = C4::AR::Preferencias::getValorPreferencia("defaultUI");
@@ -943,10 +944,8 @@ sub crearPersonaLDAP{
     $params{'cod_categoria'} = "ES";
 	
 	my $person = C4::Modelo::UsrPersona->new();
+
 	$person->agregar(\%params);
-	
-	
-	
 	
 }
 
