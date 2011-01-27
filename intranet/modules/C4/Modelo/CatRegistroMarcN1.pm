@@ -110,33 +110,57 @@ sub getCDU{
     return $marc_record->subfield("080","a");
 }
 
+# sub getAutoresSecundarios{
+#     my ($self)      = shift;
+#     
+#     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+#     
+# #     C4::AR::Debug::debug("CatRegistroMarcN1 => autores secundarios ".$marc_record->subfield("700","a")); 
+# 
+#     return $marc_record->subfield("700","a");
+# }
+
+# sub getAutoresSecundariosObject{
+#     my ($self)      = shift;
+#     
+#     #obtengo la referencia del autor secundario
+#     my $ref_autor   = $self->getAutoresSecundarios();
+#     my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
+# #     C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> ref_autor => ".$ref_autor);
+# #     C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> ref => ".$ref);
+# 
+#     my $autor       = C4::Modelo::CatAutor->getByPk($ref);
+# 
+#     if(!$autor){
+#         C4::AR::Debug::debug("CatRegistroMarcN1 => getAutoresSecundariosObject()=> EL OBJECTO (ID) AUTOR NO EXISTE");
+#         $autor = C4::Modelo::CatAutor->new();
+#     }
+# 
+#     return ($autor);
+# }
+
 sub getAutoresSecundarios{
     my ($self)      = shift;
     
+    my @colaboradores_array;
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    my $autor;
     
-#     C4::AR::Debug::debug("CatRegistroMarcN1 => autores secundarios ".$marc_record->subfield("700","a")); 
 
-    return $marc_record->subfield("700","a");
-}
-
-sub getAutoresSecundariosObject{
-    my ($self)      = shift;
+    my @campos_array = $marc_record->field("700");
     
-    #obtengo la referencia del autor secundario
-    my $ref_autor   = $self->getAutoresSecundarios();
-    my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
-#     C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> ref_autor => ".$ref_autor);
-#     C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> ref => ".$ref);
+    foreach my $campo (@campos_array){
+        my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($campo->subfield("a"));
+        my $colaborador = C4::Modelo::CatAutor->getByPk($ref);
+        
+        if ($campo->subfield("e")) {
+            $autor = $colaborador->getCompleto()." (".$campo->subfield("e").")";
+        }
 
-    my $autor       = C4::Modelo::CatAutor->getByPk($ref);
-
-    if(!$autor){
-        C4::AR::Debug::debug("CatRegistroMarcN1 => getAutoresSecundariosObject()=> EL OBJECTO (ID) AUTOR NO EXISTE");
-        $autor = C4::Modelo::CatAutor->new();
+        push (@colaboradores_array, $autor);
     }
 
-    return ($autor);
+    return (@colaboradores_array);
 }
 
 sub getTemas{

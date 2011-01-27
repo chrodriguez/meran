@@ -284,20 +284,25 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
             #aca van todas las excepciones que no son referencias pero son necesarios para las busquedas 
             if (($campo eq "020") && ($subcampo eq "a")){
-                $dato = 'isbn@'.$dato;  
+                $dato = 'isbn%'.$dato;  
+#                 C4::AR::Debug::debug("generar_indice => 020, a => dato ".$dato);
+            }
+
+            if (($campo eq "995") && ($subcampo eq "o")){
+                $dato = 'ref_disponilidad%'.$dato;  
 #                 C4::AR::Debug::debug("generar_indice => 020, a => dato ".$dato);
             }
 
             if (($campo eq "995") && ($subcampo eq "f")){
-                $dato = 'barcode@'.$dato;  
+                $dato = 'barcode%'.$dato;  
 #                 C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
             }
    
             if (($campo eq "910") && ($subcampo eq "a")){
 # FIXME es para la busqueda MATCH EXTENDED
                 $dato = 'cat_ref_tipo_nivel3%'.$dato;   
-                $superstring .= " ".$dato;
-                $dato = 'cat_ref_tipo_nivel3@'.$dato;  
+#                 $superstring .= " ".$dato;
+#                 $dato = 'cat_ref_tipo_nivel3@'.$dato;  
 #                 C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
             }
 

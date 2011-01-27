@@ -363,3 +363,7 @@ function replaceNonAccents(s){
         r = r.replace(new RegExp(/\W/g),"");
         return r;
 }
+
+function disableComponent(id){
+    $('#'+id).attr('disabled', true);
+}

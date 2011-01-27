@@ -592,6 +592,7 @@ sub checkauth {
                 if( $flags = $socio->tienePermisos($flagsrequired) ){
                     _realizarOperacionesLogin($type,$socio);
                 }
+
                 #Si se logueo correctamente en intranet entonces guardo la fecha
                 my $now = Date::Manip::ParseDate("now");
                 $socio->setLast_login($now);
@@ -936,7 +937,7 @@ sub _verificarPassword {
         #Si no se usa LDAP
         ($socio) = _checkpw($userid,$password,$nroRandom); 
     }
-     C4::AR::Debug::debug("_verificarPassword=> password hzzzzzzzzzzzz?: ".$socio);
+
     return ($socio);
 }
 
