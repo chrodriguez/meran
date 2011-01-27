@@ -47,10 +47,10 @@ use C4::Modelo::UsrSocio;
 use C4::Modelo::UsrSocio::Manager;
 use Switch;
 
-use vars qw(@EXPORT_OK @ISA);
+use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 
-@EXPORT_OK=qw(
+@EXPORT=qw(
     agregarAutorizado
     agregarPersona
     habilitarPersona

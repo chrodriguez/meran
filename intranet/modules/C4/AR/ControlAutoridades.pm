@@ -2,13 +2,11 @@ package C4::AR::ControlAutoridades;
 
 use strict;
 require Exporter;
-#Einar use C4::Context;
-# use Date::Manip;
 use C4::Date;
 
-use vars qw(@EXPORT_OK @ISA);
+use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT_OK=qw(	
+@EXPORT=qw(	
 
 		&t_insertSinonimosAutor
 		&t_insertSinonimosTemas 

@@ -17,18 +17,12 @@ use C4::AR::ControlAutoridades;
 use C4::Date;
 use Encode;
 use POSIX qw(ceil floor); 
-# EINAR use Date::Manip;
-#Einar use C4::AR::Estadisticas;
-#Einar use C4::Context;
-#Einar use CGI::Session;
-#Einar use CGI;
-#Einar use JSON;
 use JSON;
-#Einar use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
-use vars qw(@EXPORT_OK @ISA);
+
+use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT_OK=qw(
+@EXPORT=qw(
     generarComboFormasDeEnvio
     generarComboTipoDeMaterial
     monedasAutocomplete

@@ -18,16 +18,16 @@ use C4::AR::Nivel2 qw(getNivel1FromId2);
 use C4::AR::Reservas qw(cantReservasPorGrupo);
 use C4::AR::Sphinx qw(generar_indice);
 
-use vars qw(@EXPORT_OK @ISA);
+use vars qw(@EXPORT @ISA);
 
 @ISA=qw(Exporter);
 
-@EXPORT_OK=qw(
-    &detalleCompletoINTRA
-	&detalleNivel3
-	&getBarcode
-	&modificarEstadoItem
-    &getNivel3FromId3
+@EXPORT=qw(
+    detalleCompletoINTRA
+	detalleNivel3
+	getBarcode
+	modificarEstadoItem
+    getNivel3FromId3
 );
 
 =head2
