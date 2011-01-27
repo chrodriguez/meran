@@ -259,29 +259,13 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
             $subcampo                       = $subfield->[0];
             $dato                           = $subfield->[1];
-
-# FIXME parche feo
-# MONO  tenemos q permitir agregar   "tabla@referencia" tambien para cuando queremos filtrar por Tipo de documento, o algun otro filtro
-# por ej si quiero filtra por tipo de documento libro => "cat_ref_tipo_nivel3@LIB"
-
-
 #             C4::AR::Debug::debug("generar_indice => campo => ".$field->tag);
 #             C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
-
-
-#             if (($field->tag ne '910')&&($subcampo ne 'a')) {
+            $dato                           = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
 #                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
-                $dato                           = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
-#                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
-                $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato, "ALL");
-#                 C4::AR::Debug::debug("generar_indice => dato ".$dato);                
+            $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato, "ALL");
 
-#             } else {
-#                 $dato                           = $subfield->[1];
-#                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
-#             } 
-
-
+# TODO modularizame!!!!!!!!!!!!!
             #aca van todas las excepciones que no son referencias pero son necesarios para las busquedas 
             if (($campo eq "020") && ($subcampo eq "a")){
                 $dato = 'isbn%'.$dato;  
