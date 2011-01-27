@@ -16,17 +16,17 @@ use C4::AR::VisualizacionIntra;
 use C4::Modelo::PrefEstructuraSubcampoMarc;
 use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
 
-use vars qw(@EXPORT_OK @ISA);
+use vars qw(@EXPORT @ISA);
 
 @ISA=qw(Exporter);
 
-@EXPORT_OK=qw(
-  &crearCatalogo
-  &buscarCamposObligatorios
-  &buscarCampo
-  &guardarCamposModificados
-  &guardarCampoTemporal
-  &getRefFromStringConArrobas
+@EXPORT=qw(
+  crearCatalogo
+  buscarCamposObligatorios
+  buscarCampo
+  guardarCamposModificados
+  guardarCampoTemporal
+  getRefFromStringConArrobas
 );
 
 =head1 NAME

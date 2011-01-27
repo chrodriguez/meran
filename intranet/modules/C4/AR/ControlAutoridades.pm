@@ -2,45 +2,42 @@ package C4::AR::ControlAutoridades;
 
 use strict;
 require Exporter;
-#Einar use C4::Context;
-# use Date::Manip;
 use C4::Date;
 
-use vars qw(@EXPORT_OK @ISA);
+use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT_OK=qw(	
+@EXPORT=qw(	
 
-		&t_insertSinonimosAutor
-		&t_insertSinonimosTemas 
-		&t_insertSinonimosEditoriales
+		t_insertSinonimosAutor
+		t_insertSinonimosTemas 
+		t_insertSinonimosEditoriales
 
-		&t_insertSeudonimosAutor 
-		&t_insertSeudonimosTemas
-		&t_insertSeudonimosEditoriales 
+		t_insertSeudonimosAutor 
+		t_insertSeudonimosTemas
+		t_insertSeudonimosEditoriales 
 
-		&t_eliminarSinonimosAutor 
-		&t_eliminarSinonimosTema 
-		&t_eliminarSinonimosEditorial 
+		t_eliminarSinonimosAutor 
+		t_eliminarSinonimosTema 
+		t_eliminarSinonimosEditorial 
 
-		&t_eliminarSeudonimosAutor
-		&t_eliminarSeudonimosTema 
-		&t_eliminarSeudonimosEditorial
+		t_eliminarSeudonimosAutor
+		t_eliminarSeudonimosTema 
+		t_eliminarSeudonimosEditorial
 
-		&t_updateSinonimosAutores
-		&t_updateSinonimosEditoriales
-		&t_updateSinonimosTemas
+		t_updateSinonimosAutores
+		t_updateSinonimosEditoriales
+		t_updateSinonimosTemas
 
-		&traerSeudonimosAutor 
-		&traerSeudonimosTemas 
-		&traerSeudonimosEditoriales 
-		&traerSinonimosAutor 
-		&traerSinonimosTemas 
-		&traerSinonimosEditoriales 
-		
-		&search_temas
-		&search_autores
-		&search_editoriales
+		traerSeudonimosAutor 
+		traerSeudonimosTemas 
+		traerSeudonimosEditoriales 
+		traerSinonimosAutor 
+		traerSinonimosTemas 
+		traerSinonimosEditoriales 
 
+		search_temas
+		search_autores
+		search_editoriales
 );
 
 

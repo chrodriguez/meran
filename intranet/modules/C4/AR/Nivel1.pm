@@ -10,15 +10,15 @@ use C4::Modelo::CatFavoritosOpac;
 use C4::AR::Sphinx qw(generar_indice);
 
 
-use vars qw(@EXPORT_OK @ISA);
+use vars qw(@EXPORT @ISA);
 
 @ISA=qw(Exporter);
 
-@EXPORT_OK = qw(
-                  &getAutoresAdicionales
-                  &getColaboradores
-                  &getUnititle
-                  &getNivel1FromId1
+@EXPORT = qw(
+                  getAutoresAdicionales
+                  getColaboradores
+                  getUnititle
+                  getNivel1FromId1
 );
 
 =head1 NAME

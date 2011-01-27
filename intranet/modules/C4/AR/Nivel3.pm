@@ -5,6 +5,7 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Date;
+use C4::AR::Preferencias;
 use C4::Modelo::CatRegistroMarcN3;
 use C4::Modelo::CatRegistroMarcN3::Manager;
 use C4::Modelo::CircPrestamo;
@@ -18,16 +19,16 @@ use C4::AR::Nivel2 qw(getNivel1FromId2);
 use C4::AR::Reservas qw(cantReservasPorGrupo);
 use C4::AR::Sphinx qw(generar_indice);
 
-use vars qw(@EXPORT_OK @ISA);
+use vars qw(@EXPORT @ISA);
 
 @ISA=qw(Exporter);
 
-@EXPORT_OK=qw(
-    &detalleCompletoINTRA
-	&detalleNivel3
-	&getBarcode
-	&modificarEstadoItem
-    &getNivel3FromId3
+@EXPORT=qw(
+    detalleCompletoINTRA
+	detalleNivel3
+	getBarcode
+	modificarEstadoItem
+    getNivel3FromId3
 );
 
 =head2
@@ -324,7 +325,6 @@ sub getBarcodesLike {
     my  $barcodes_array_ref;
     my @filtros;
     
-    use C4::AR::Preferencias;
     my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
      
 	push(@filtros, ( marc_record => { like => '%'.$barcode.'%' }) );

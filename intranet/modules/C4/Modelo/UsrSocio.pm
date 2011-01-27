@@ -420,10 +420,11 @@ sub getLast_login{
 
 sub setLast_login{
     my ($self) = shift;
-
     my ($last_login) = @_;
+
     my $dateformat  = C4::Date::get_date_format();
     $last_login     = C4::Date::format_date_in_iso($last_login,$dateformat);
+
     $self->last_login($last_login);
 
 }

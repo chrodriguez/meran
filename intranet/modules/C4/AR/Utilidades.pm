@@ -17,64 +17,57 @@ use C4::AR::ControlAutoridades;
 use C4::Date;
 use Encode;
 use POSIX qw(ceil floor); 
-# EINAR use Date::Manip;
-#Einar use C4::AR::Estadisticas;
-#Einar use C4::Context;
-#Einar use CGI::Session;
-#Einar use CGI;
-#Einar use JSON;
 use JSON;
-#Einar use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
-use vars qw(@EXPORT_OK @ISA);
+use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT_OK=qw(
+@EXPORT=qw(
     generarComboFormasDeEnvio
     generarComboTipoDeMaterial
     monedasAutocomplete
     buscarCiudades
     ASCIItoHEX
-    aplicarParches 
+    aplicarParches
     obtenerParches
-    obtenerTiposDeColaboradores 
-    obtenerReferencia 
-    obtenerTemas 
-    obtenerEditores 
-    noaccents 
-    saveholidays 
-    getholidays 
-    savedatemanip 
-    obtenerValores 
-    actualizarCampos 
-    buscarTablasdeReferencias 
-    listadoTabla 
-    obtenerCampos 
-    valoresTabla 
-    tablasRelacionadas 
-    valoresSimilares 
-    asignar 
-    obtenerDefaults 
-    guardarDefaults 
-    mailDeUsuarios 
-    obtenerAutores 
-    obtenerPaises 
-    crearComponentes 
-    obtenerTemas2 
-    obtenerBiblios 
-    verificarValor 
-    cantidadRenglones 
-    armarPaginas 
-    crearPaginador 
+    obtenerTiposDeColaboradores
+    obtenerReferencia
+    obtenerTemas
+    obtenerEditores
+    noaccents
+    saveholidays
+    getholidays
+    savedatemanip
+    obtenerValores
+    actualizarCampos
+    buscarTablasdeReferencias
+    listadoTabla
+    obtenerCampos
+    valoresTabla
+    tablasRelacionadas
+    valoresSimilares
+    asignar
+    obtenerDefaults
+    guardarDefaults
+    mailDeUsuarios
+    obtenerAutores
+    obtenerPaises
+    crearComponentes
+    obtenerTemas2
+    obtenerBiblios
+    verificarValor
+    cantidadRenglones
+    armarPaginas
+    crearPaginador
     InitPaginador
-    from_json_ISO 
-    UTF8toISO 
-    obtenerIdentTablaRef 
-    obtenerValoresTablaRef 
-    obtenerValoresAutorizados 
+    from_json_ISO
+    UTF8toISO
+    obtenerIdentTablaRef
+    obtenerValoresTablaRef
+    obtenerValoresAutorizados
     obtenerDatosValorAutorizado
-    cambiarLibreDeuda 
-    checkdigit 
-    checkvalidisbn 
+    cambiarLibreDeuda
+    checkdigit
+    checkvalidisbn
     quitarduplicados
     buscarCiudades
     trim
