@@ -5,7 +5,7 @@ require Exporter;
 use C4::Context;
 use ooolib;
 
-use vars qw($VERSION @ISA @EXPORT_OK);
+use vars qw($VERSION @ISA @EXPORT);
 
 $VERSION = 0.01;
 
@@ -13,12 +13,12 @@ $VERSION = 0.01;
 #
 # Generador de  Planillas Sxc de OpenOffice
 #
-@EXPORT_OK = qw(
-	&generar_planilla_prestamos
-	&generar_planilla_inventario
-	&generar_planilla_estantes
-	&generar_planilla_usuario
-	&generar_planilla_inventario_sig_top
+@EXPORT = qw(
+	generar_planilla_prestamos
+	generar_planilla_inventario
+	generar_planilla_estantes
+	generar_planilla_usuario
+	generar_planilla_inventario_sig_top
 );
 
 
