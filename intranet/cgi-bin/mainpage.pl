@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 
-se C4::AR::Auth;
+use C4::AR::Auth;
 use CGI;
 
 my $query = new CGI;
