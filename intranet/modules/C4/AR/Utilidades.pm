@@ -19,7 +19,6 @@ use Encode;
 use POSIX qw(ceil floor); 
 use JSON;
 
-
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
@@ -28,47 +27,47 @@ use vars qw(@EXPORT @ISA);
     monedasAutocomplete
     buscarCiudades
     ASCIItoHEX
-    aplicarParches 
+    aplicarParches
     obtenerParches
-    obtenerTiposDeColaboradores 
-    obtenerReferencia 
-    obtenerTemas 
-    obtenerEditores 
-    noaccents 
-    saveholidays 
-    getholidays 
-    savedatemanip 
-    obtenerValores 
-    actualizarCampos 
-    buscarTablasdeReferencias 
-    listadoTabla 
-    obtenerCampos 
-    valoresTabla 
-    tablasRelacionadas 
-    valoresSimilares 
-    asignar 
-    obtenerDefaults 
-    guardarDefaults 
-    mailDeUsuarios 
-    obtenerAutores 
-    obtenerPaises 
-    crearComponentes 
-    obtenerTemas2 
-    obtenerBiblios 
-    verificarValor 
-    cantidadRenglones 
-    armarPaginas 
-    crearPaginador 
+    obtenerTiposDeColaboradores
+    obtenerReferencia
+    obtenerTemas
+    obtenerEditores
+    noaccents
+    saveholidays
+    getholidays
+    savedatemanip
+    obtenerValores
+    actualizarCampos
+    buscarTablasdeReferencias
+    listadoTabla
+    obtenerCampos
+    valoresTabla
+    tablasRelacionadas
+    valoresSimilares
+    asignar
+    obtenerDefaults
+    guardarDefaults
+    mailDeUsuarios
+    obtenerAutores
+    obtenerPaises
+    crearComponentes
+    obtenerTemas2
+    obtenerBiblios
+    verificarValor
+    cantidadRenglones
+    armarPaginas
+    crearPaginador
     InitPaginador
-    from_json_ISO 
-    UTF8toISO 
-    obtenerIdentTablaRef 
-    obtenerValoresTablaRef 
-    obtenerValoresAutorizados 
+    from_json_ISO
+    UTF8toISO
+    obtenerIdentTablaRef
+    obtenerValoresTablaRef
+    obtenerValoresAutorizados
     obtenerDatosValorAutorizado
-    cambiarLibreDeuda 
-    checkdigit 
-    checkvalidisbn 
+    cambiarLibreDeuda
+    checkdigit
+    checkvalidisbn
     quitarduplicados
     buscarCiudades
     trim

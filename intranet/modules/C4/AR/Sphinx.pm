@@ -7,9 +7,9 @@ require Exporter;
 use C4::AR::Catalogacion;
 use MARC::Record;
 
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA = qw(Exporter);
-@EXPORT = qw(
+@EXPORT_OK = qw(
                 generar_indice
                 reindexar
                 sphinx_start
