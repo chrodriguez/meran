@@ -7,10 +7,12 @@ SUBCAMPOS_ARRAY= new Array();
 
 function eliminarVista(vista_id){
 
-    objAH=new AjaxHelper(updateAgregarVisualizacion);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
-    objAH.tipoAccion= 'ELIMINAR_VISUALIZACION';
+    objAH               = new AjaxHelper(updateAgregarVisualizacion);
+    objAH.debug         = true;
+    objAH.url           = "/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+    objAH.tipoAccion    = 'ELIMINAR_VISUALIZACION';
+    objAH.showOverlay   = true;
+    
     if ( vista_id ){
         jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
             if (confirmStatus){
@@ -24,19 +26,21 @@ function eliminarVista(vista_id){
 
 function agregarVisualizacion(){
 
-    objAH=new AjaxHelper(updateAgregarVisualizacion);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
-    objAH.tipoAccion= 'AGREGAR_VISUALIZACION';
-    var ejemplar=$("#tipo_nivel3_id").val();
-    var campo=$.trim($("#campo").val());
-    var subcampo=$.trim($("#subcampo").val());
-    var liblibrarian=$.trim($("#liblibrarian").val());
+    objAH               = new AjaxHelper(updateAgregarVisualizacion);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = "/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+    objAH.tipoAccion    = 'AGREGAR_VISUALIZACION';
+    var ejemplar        = $("#tipo_nivel3_id").val();
+    var campo           = $.trim($("#campo").val());
+    var subcampo        = $.trim($("#subcampo").val());
+    var liblibrarian    = $.trim($("#liblibrarian").val());
+    
     if ( (ejemplar) && (campo) && (subcampo) && (liblibrarian) ){
-        objAH.ejemplar = ejemplar;
-        objAH.campo= campo;
-        objAH.subcampo = subcampo;
-        objAH.liblibrarian= liblibrarian;
+        objAH.ejemplar      = ejemplar;
+        objAH.campo         = campo;
+        objAH.subcampo      = subcampo;
+        objAH.liblibrarian  = liblibrarian;
         objAH.sendToServer();
     }else{
         jAlert(SELECCIONE_VISTA_INTRA,CATALOGO_ALERT_TITLE);
@@ -52,17 +56,19 @@ function updateAgregarVisualizacion(responseText){
 }
 
 function eleccionDeEjemplar(){
-    var ejemplar=$("#tipo_nivel3_id").val();
-    var ObjDiv = $("#result");
+    var ejemplar    = $("#tipo_nivel3_id").val();
+    var ObjDiv      = $("#result");
+    
     if (!isNaN(ejemplar)){
         ObjDiv.hide();
     }else{
         ObjDiv.show();
-        objAH=new AjaxHelper(updateEleccionDeNivel);
-        objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
-        objAH.tipoAccion= 'MOSTRAR_VISUALIZACION';
-        objAH.ejemplar = ejemplar;
+        objAH               = new AjaxHelper(updateEleccionDeNivel);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;  
+        objAH.url           = "/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+        objAH.tipoAccion    = 'MOSTRAR_VISUALIZACION';
+        objAH.ejemplar      = ejemplar;
 
         objAH.sendToServer();
     }
@@ -82,11 +88,12 @@ function updateEleccionDeNivel(responseText){
  */
 function eleccionCampoX(){
     if ( $("#campoX").val() != -1){
-        objAH=new AjaxHelper(updateEleccionCampoX);
-        objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
-        objAH.campoX=$('#campoX').val();
-        objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS";
+        objAH               = new AjaxHelper(updateEleccionCampoX);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;  
+        objAH.url           = "/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+        objAH.campoX        = $('#campoX').val();
+        objAH.tipoAccion    = "GENERAR_ARREGLO_CAMPOS";
         objAH.sendToServer();
     }
     else
@@ -96,7 +103,7 @@ function eleccionCampoX(){
 //se genera el combo en el cliente
 function updateEleccionCampoX(responseText){
     //Arreglo de Objetos Global
-    var campos_array=JSONstring.toObject(responseText);
+    var campos_array = JSONstring.toObject(responseText);
     //se inicializa el combo
     $("#campo").html('')
     var options = "<option value='-1'>Seleccionar CampoX</option>";
@@ -114,11 +121,12 @@ function updateEleccionCampoX(responseText){
 
 function eleccionCampo(){
     if ($("#campo").val() != -1){
-        objAH=new AjaxHelper(updateEleccionCampo);
-        objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
-        objAH.campo=$('#campo').val();
-        objAH.tipoAccion="GENERAR_ARREGLO_SUBCAMPOS";
+        objAH               = new AjaxHelper(updateEleccionCampo);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = "/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+        objAH.campo         = $('#campo').val();
+        objAH.tipoAccion    = "GENERAR_ARREGLO_SUBCAMPOS";
         objAH.sendToServer();
     }
     else
