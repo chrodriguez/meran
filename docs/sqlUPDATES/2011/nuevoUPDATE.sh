@@ -13,7 +13,7 @@ git up
 git push
 echo "Quiere editarlo automaticamente?(s/n). Los cambios una vez q termine se enviaran al servidor"
 read pregunta
-if [ "$pregunta" = "S" ] || [ "$pregunta" = "S" ]; then
+if [ "$pregunta" = "s" ] || [ "$pregunta" = "S" ]; then
     vim $OLDPWD/$pathRelativo/sql.rev$(($contador+1))
     git ci "mensaje automatico generado con el sql.rev$(($contador+1)) completo"
     git up
