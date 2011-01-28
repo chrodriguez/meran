@@ -1674,6 +1674,8 @@ li.MARCHeader input {
 	list-style-type: none;
 	float: left;
 	width: 124px;
+    clear: both;
+	
 }
 
 #menu ul ul {
@@ -1721,6 +1723,10 @@ ul li a:visited {
 
 ul li {
 	list-style-type: none;
+}
+
+#menu-container{
+
 }
 
 .menu_superior_der {
