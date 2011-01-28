@@ -636,6 +636,11 @@ sub toMARC_Intra{
     return ($MARC_result_array);
 }
 
+sub paraPrestamoValue{
+	
+	return (0);
+}
+
 sub ESTADO_DISPONIBLE{
 =item    
 ESTADO

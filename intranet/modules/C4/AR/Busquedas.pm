@@ -1118,7 +1118,7 @@ sub busquedaAvanzada_newTemp{
 
 
     if ($params->{'only_available'}){
-        $query .= ' @string !"ref_disponibilidad%0"';
+        $query .= ' @string "ref_disponibilidad%'.C4::Modelo::CatRegistroMarcN3::paraPrestamoValue.'"';
     }
     
     C4::AR::Debug::debug("tipo_nivel3_name tipo_nivel3_name tipo_nivel3_name =>=> ".$params->{'tipo_nivel3_name'});
