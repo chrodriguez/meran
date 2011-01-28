@@ -448,7 +448,6 @@ function mostrarEstructuraDelNivel3(tipo_documento){
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel3);
     objAH.debug         = true;
 // 	  objAH.cache= true;
-//     objAH.showStatusIn  = 'estructuraDelNivel3';
     objAH.showOverlay   = true;
     objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -1213,12 +1212,6 @@ function procesarSubCampo(objeto, marc_group){
         if(objeto.obligatorio == "1"){
             hacerComponenteObligatoria(marc_conf_obj.getIdCompCliente());
         }
-        
-// TODO modularizar
-// falta poder deshabilitar los botones de agregar y eliminar componente
-//         if((objeto.getEdicionGrupal() == "0")&&(MODIFICAR == 1)&&(EDICION_N3_GRUPAL == 1)){  
-//             $('#'+marc_conf_obj.getIdCompCliente()).attr('disabled', true);
-//         }
 
     }
 }
@@ -1261,33 +1254,35 @@ function create_rules_object(rule){
 
         switch (clave) { 
             case 'minlength': 
-                RULES_OPTIONS.minlength     = valor;
+                RULES_OPTIONS.minlength             = valor;
                 break;
             case 'maxlength': 
-                RULES_OPTIONS.maxlength     = valor;
+                RULES_OPTIONS.maxlength             = valor;
                 break;
             case 'digits': 
-                RULES_OPTIONS.digits        = valor;
+                RULES_OPTIONS.digits                = valor;
                 break;
             case 'lettersonly': 
-                RULES_OPTIONS.lettersonly   = valor;
+                RULES_OPTIONS.lettersonly           = valor;
                 break;
             case 'alphanumeric': 
-                RULES_OPTIONS.alphanumeric   = valor;
+                RULES_OPTIONS.alphanumeric          = valor;
                 break;
             case 'alphanumeric_total': 
-                RULES_OPTIONS.alphanumeric_total   = valor;
+                RULES_OPTIONS.alphanumeric_total    = valor;
                 break;
             case 'date': 
-                RULES_OPTIONS.date          = valor;
+                RULES_OPTIONS.date                  = valor;
                 break;
             case 'dateITA': 
-                RULES_OPTIONS.dateITA       = valor;
+                RULES_OPTIONS.dateITA               = valor;
                 break;
             case 'solo_texto': 
-                RULES_OPTIONS.solo_texto    = valor;
+                RULES_OPTIONS.solo_texto            = valor;
                 break;
             case 'rango_anio': 
+              
+                RULES_OPTIONS.rango_anio            = valor;
 
                 jQuery.validator.addMethod("rango_anio", function(value, element) { 
                     return this.optional(element) || /^([0-9]{4} - [0-9]{4})/.test(value); 
@@ -1602,6 +1597,13 @@ function crearBotones(obj){
     }
 }
 
+function crearAyudaComponete(obj, ayuda_string){
+//   <div htmlfor="id_componente_17" generated="true" class="error_adv">Ingrese un rango de años válido (1979 - 2000)</div>
+    var html = "<div htmlfor='" + obj.getIdCompCliente() + "' class='info_adv'>" + ayuda_string + "</div>";
+
+    $(html).insertAfter("#"+obj.getIdCompCliente());
+}
+
 function newCombo(obj){
     var comp            = "<select id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' tabindex="+TAB_INDEX+" class='horizontal'>";
     comp                = comp + "<option value=''>Elegir opci&oacute;n</option>\n";
@@ -1717,7 +1719,6 @@ function crearAuto(obj){
 function crearCalendar(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
-//     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
 
     crearDatePicker(obj.getIdCompCliente());
@@ -1727,7 +1728,6 @@ function crearCalendar(obj){
 function crearTextAnio(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
-//     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
     crearBotones(obj);
 }
@@ -1735,9 +1735,9 @@ function crearTextAnio(obj){
 function crearTextRangoAnio(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
-//     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
     crearBotones(obj);
+    crearAyudaComponete(obj, "un rango de años ej. (1979 - 2000)");
 }
 
 // Esta funcion convierte una componete segun idObj en obligatoria, agrega * a la derecha de la misma
