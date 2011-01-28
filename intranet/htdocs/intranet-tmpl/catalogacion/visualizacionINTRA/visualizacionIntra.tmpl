@@ -35,6 +35,14 @@ $(document).ready(function() {
 <fieldset>
     <legend><strong>[% "Seleccione un tipo de ejemplar:" | i18n %]</strong></legend>
     [% combo_ejemplares %]
+
+    [% PERL %]
+            print C4::AR::Filtros::to_Icon(   
+                                                boton   => "icon_buscar",
+                                                onClick => "eleccionDeEjemplar();",
+                                                title   => "[% 'Buscar' | i18n %]",
+                    ) ;
+    [% END %]
 </fieldset>
 
 <div id="result"></div>
