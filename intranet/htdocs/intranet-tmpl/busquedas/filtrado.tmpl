@@ -175,7 +175,10 @@ function limpiarCampos(side){
                     <li>
     <!-- FIXME esto no se usa??? -->
                     <input type="hidden" name="type" value="intra">
-                        
+                            <label for="only_available">
+                                <strong>[% "Solo disponibles para pr&eacute;stamo" | i18n %]</strong>
+                            </label>
+                            <input type="checkbox" id="only_available" name="only_available" style="float:left;">
                             [% PERL %]
                                     print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
                                                                         boton   => "boton_buscar",

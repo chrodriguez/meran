@@ -1081,7 +1081,6 @@ sub getSuggestion{
         }
     }
     return (0);
-
 }
 
 sub busquedaAvanzada_newTemp{
@@ -1119,7 +1118,7 @@ sub busquedaAvanzada_newTemp{
 
 
     if ($params->{'only_available'}){
-        $query .= ' @string !"ref_disponibilidad%0"';
+        $query .= ' @string "ref_disponibilidad%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
     }
     
     C4::AR::Debug::debug("tipo_nivel3_name tipo_nivel3_name tipo_nivel3_name =>=> ".$params->{'tipo_nivel3_name'});
@@ -1670,6 +1669,9 @@ sub armarBuscoPor{
         $buscoPor.= Encode::decode_utf8(C4::AR::Filtros::i18n("hasta")." ".$params->{'date_end'})."&";  
     }
 
+    if( C4::AR::Utilidades::validateString($params->{'only_available'})){
+        $buscoPor.= Encode::decode_utf8(C4::AR::Filtros::i18n("Solo disponibles"))."&";  
+    }
 
 	my @busqueda    = split(/&/,$buscoPor);
 	$buscoPor       = " ";

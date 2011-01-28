@@ -24,6 +24,7 @@ function busquedaCombinable(){
     objAH.url               = '/cgi-bin/koha/busquedas/busquedasDB.pl';
     objAH.titulo            = $('#titulo').val();
     objAH.autor             = $('#autor').val();
+    objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
     objAH.signatura         = $('#signatura').val();
     objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
     objAH.tipoAccion        = 'BUSQUEDA_AVANZADA';
@@ -130,6 +131,7 @@ function buscarPorISBN(){
     objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
     objAH.isbn= $('#isbn').val();
     objAH.tipoAccion    = 'BUSQUEDA_POR_ISBN';
+    objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
     objAH.sendToServer();
 }
 
@@ -139,6 +141,7 @@ function buscarPorDiccionario(){
     objAH.showOverlay       = true;
     objAH.url= '/cgi-bin/koha/busquedas/diccionario.pl';
     objAH.dictionary= $('#dictionary').val();
+    objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
     //se setea la funcion para cambiar de pagina
     objAH.funcion= 'changePage';
     objAH.sendToServer();
@@ -150,6 +153,7 @@ function buscarPorCodigoBarra(){
     objAH.showOverlay       = true;
     objAH.url           = '/cgi-bin/koha/busquedas/busquedasDB.pl';
     objAH.codBarra      = $('#codBarra').val();
+    objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
     objAH.tipoAccion    = 'BUSQUEDA_POR_BARCODE';
     objAH.sendToServer();
 }
@@ -192,6 +196,7 @@ function buscarEstante(){
     objAH.url= '/cgi-bin/koha/busquedas/estante.pl';
     objAH.viewShelfName= $('#estante').val();
     objAH.orden= 'title';
+    objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
     //se setea la funcion para cambiar de pagina
     objAH.funcion= 'changePage';
     objAH.sendToServer();
@@ -295,6 +300,7 @@ function buscarPorAutor(completo){
     //se setea la funcion para cambiar de pagina
     objAH.debug         = true;
     objAH.funcion       = 'changePage';
+    objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
     objAH.completo      = completo;
     objAH.tipoAccion    = "BUSQUEDA_POR_AUTOR";
     objAH.sendToServer();

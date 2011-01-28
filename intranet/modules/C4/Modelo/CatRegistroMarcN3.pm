@@ -636,6 +636,7 @@ sub toMARC_Intra{
     return ($MARC_result_array);
 }
 
+
 sub ESTADO_DISPONIBLE{
 =item    
 ESTADO

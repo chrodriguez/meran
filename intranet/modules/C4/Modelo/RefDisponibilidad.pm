@@ -10,6 +10,7 @@ __PACKAGE__->meta->setup(
     columns => [
         id     => { type => 'serial', not_null => 1 },
         nombre => { type => 'varchar', default => '', length => 255, not_null => 1 },
+        codigo => { type => 'varchar', default => '', length => 255, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -23,6 +24,12 @@ use Text::LevenshteinXS;
 
 # 1 =  Domiciliario
 # 2 =  Sala de Lectura
+
+
+sub paraPrestamoValue{
+    
+    return (0);
+}
 
 sub toString{
 	my ($self) = shift;
@@ -39,6 +46,18 @@ sub getObjeto{
 	return $objecto;
 }
 
+sub getCodigo{
+    my ($self) = shift;
+
+    return ($self->codigo);
+}
+    
+sub setCodigo{
+    my ($self) = shift;
+    my ($codigo) = @_;
+
+    $self->codigo($codigo);
+}
 
 sub getId{
     my ($self) = shift;
