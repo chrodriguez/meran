@@ -40,6 +40,7 @@ tr.impar{background-color:#C0C0C0;}
 .CEC_componente_corto{width:25%;}
 em.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scroll 0 0;padding-left:16px;}
 div.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scroll 0 0;padding-left:16px;color:#A1C162;clear:both}
+div.info_adv{padding-left:16px;font-style: italic;clear:both}
 label.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scroll 0 0;padding-left:16px;width:auto;}
 .divCirculacion{border-style:solid;border-color:gray;left:75%;text-align:center;background-color:white;}
 .fontMsgConfirmation{text-decoration:none;font-size:10pt;font-family:"Trebuchet MS","Verdana";color:red;font-weight:bold;}
