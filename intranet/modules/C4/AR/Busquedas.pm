@@ -1081,7 +1081,6 @@ sub getSuggestion{
         }
     }
     return (0);
-
 }
 
 sub busquedaAvanzada_newTemp{
@@ -1670,6 +1669,9 @@ sub armarBuscoPor{
         $buscoPor.= Encode::decode_utf8(C4::AR::Filtros::i18n("hasta")." ".$params->{'date_end'})."&";  
     }
 
+    if( C4::AR::Utilidades::validateString($params->{'only_available'})){
+        $buscoPor.= Encode::decode_utf8(C4::AR::Filtros::i18n("Solo disponibles"))."&";  
+    }
 
 	my @busqueda    = split(/&/,$buscoPor);
 	$buscoPor       = " ";
