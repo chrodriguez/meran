@@ -1,0 +1,968 @@
+body {
+	margin : 25px;
+	background-color: #FFFFFF;	
+	font-family: "Trebuchet MS", "Verdana", "Arial" ;
+	font-size: 10px;
+	font-style: normal;
+	color: #000000;
+	behavior: url("http://www.xs4all.nl/~peterned/htc/csshover3.htc");
+	width:95%;
+}
+
+.header{
+
+   margin: 25px;
+   width: 70%;
+}
+#marco_superior {
+	background: transparent  url(../imagenes/arriba_izq.png) no-repeat top left;
+	width: 100%;
+	height: 7px;
+	font-size: 1px;
+}
+
+#marco_superior div {
+	background: transparent url(../imagenes/arriba_der.png) no-repeat top right;
+	width: 100%;
+	height: 7px;
+	font-size: 1px;
+}
+
+#marco_inferior {
+	background: transparent  url(../imagenes/abajo_izq.png) no-repeat bottom left;
+	width: 100%;
+	height: 7px;
+	font-size: 1px;
+}
+
+#marco_inferior div {
+	background: transparent url(../imagenes/abajo_der.png) no-repeat bottom right;
+	width: 100%;
+	height: 7px;
+	font-size: 1px;
+}
+
+#marco_contenido{
+	clear:both;
+	margin-bottom:3%;
+}
+#marco_principal{
+	clear:both;
+	background:#f7f6f6 url(../imagenes/medio.png) repeat;
+
+}
+#marca{
+	background-image:url(../imagenes/fondo_footer.png);
+	background-color:#f7f6f6;
+	text-align:center;
+	padding:1%;
+	margin-top:1%;
+	-moz-border-radius-topleft:8px;
+    -moz-border-radius-topright:8px;
+	-moz-border-radius-bottomleft:8px;
+    -moz-border-radius-bottomright:8px;
+	background-repeat: repeat-x;
+	height:10px;
+	}
+#marca div{
+	background-image:url(../imagenes/logo_meran.png);
+    padding:1%;
+	margin-top:-21px;
+	background-position:center;
+	text-align:center;
+	background-repeat: no-repeat;
+	height:30px;
+	}
+
+/*PARTE SUPERIOR*/
+.logo_Superior{
+   background-image:  url(../imagenes/logo.jpeg);
+   width: 317px;
+   float: left;
+   margin-bottom:12px;
+   height:85px;
+}
+
+#login {
+    background-image:url(../imagenes/meranLogin.png);
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 12px;
+    position: static;
+    height: 185px;
+    width: 307px;
+    text-align: left ; 
+    font-weight: bold;
+}
+
+#login span {
+    display:block;
+    margin-bottom:12%;
+}
+
+#login input {
+    float:right;
+}
+
+#login label {
+    float:left;
+}
+
+#contenido_login  {
+    display:block;
+    padding: 21% 12%;
+    margin-top:50%;
+}
+#boton_login  {
+    display:block;
+    padding: 11% 32%; 
+}
+
+
+
+.idioma_y_login{
+	width: 18%;
+	float: right;
+	margin-bottom:12px;
+	font:bold 7px tahoma,arial,helvetica,sans-serif;
+	text-align:right;
+	
+	
+   }
+
+/* MENU*/ 
+
+#menu{
+   width:1024px;
+   float:left;
+   margin:2px;
+   
+}
+.main-header{
+   width:100%;
+   float:left;
+   margin-bottom:0px;
+   padding-bottom:-10px;
+}
+#menu a, #menu a:visited{
+	font:bold normal 100%/205% tahoma, arial, helvetica, sans-serif;
+	color:#fff;
+	border:0px;
+	text-decoration:none;
+}
+#menu a, #menu a:visited{
+font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+color:#fff;
+border:0px;
+text-decoration:none;
+}
+#menu a, #menu a:visited{
+font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+color:#fff;
+border:0px;
+}
+#menu a, #menu a:visited{
+font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+color:#fff;
+border:0px;
+}
+#menu li ul li{
+	display: none;
+}
+.menu_superior_sin_sub{
+   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+   color:#fff;
+   background:#4b6192 url(../imagenes/menu.png);
+   text-transform:uppercase;
+   cursor: pointer;
+   display:block;
+   white-space:nowrap;
+   margin:0;
+   padding:0 5px;
+   height:21px;
+  
+
+}
+
+.menu_superior{
+	font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+	color:#fff;
+	background: url(../imagenes/menu.png) repeat 100% 100%;
+	text-transform:uppercase;
+	text-align:center;
+	cursor: pointer;
+	display:block;
+	white-space:nowrap;
+	margin:0;
+	font-size:11px;
+	height:21px;
+	border-right-width: thin;
+	border-right-style: solid;
+	border-right-color: #FFFFFF;
+
+
+}
+.menu_intermedio{
+	color:#fff;
+	background:#416ca5 url(../imagenes/expand3.gif) no-repeat right;
+	text-transform:uppercase;
+	cursor: pointer;
+	display:block;
+	white-space:nowrap;
+	margin:0;
+	padding:0 5px;
+	width:auto;
+	font-size: 10px;
+
+}
+.menu-item {
+   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+   display:block;
+   background: #999999;
+   width:auto;
+   text-transform:uppercase;
+   border-bottom:#ccc solid 1px;
+   text-decoration:none;
+}
+
+.menu-item a:hover{
+   background: #ccc;
+   text-decoration:none;
+}
+.menu-item a{
+   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
+   display:block;
+   text-transform:uppercase;
+   color:#fff;
+   background:#999999 repeat-x;
+   text-transform:uppercase;
+   cursor: pointer;
+   white-space:nowrap;
+   margin:0;
+   padding:0 5px;
+   width:auto;
+   text-decoration:none;
+   
+ }
+ 
+ /*                                    titulos                                      */
+ 
+.titulos {/*esto era title, cambiar en templates*/
+       font-weight: bold;
+	   font-Family : normal tahoma,arial,helvetica,sans-serif;
+	   font-size: 12pt;
+	   color: #ffffff;
+	   background-color: transparent;
+	   text-align: left;
+	   height: 30px;
+}
+	   
+.titulos_interior { /*esto era pagetitle, cambiar en templates*/
+	  font-weight: bold;
+	  font-Family : tahoma, arial, helvetica, sans-serif;
+	  font-size : 25px;
+	  color: #416ca5;
+	  text-align: left;
+	  margin-left: 20px;
+	  padding-left: 20px;
+}
+
+.titulo_arriba_tabla {
+    font-size : 18px;
+    text-align: center;
+}
+/*                                 fin de titulos                                      */
+
+/*                                        estilos para los botones                                     */
+.textOverBoton {
+    cursor: pointer;
+    font-family: helvetica;
+    text-align:center;
+}
+
+.botonBehindText {
+   margin-right: -135px; 
+   margin-bottom:-3px
+}
+/*.inputFontNormal{
+	font-family: "Verdana","Trebuchet MS", "Arial";
+	font-size: 10pt;
+	color: #000000;
+	font-weight: normal;
+	overflow:auto; 
+	padding-left:20px;
+	            
+}*/
+/*                                      Fin  estilos para los botones                                  */
+
+/* TODO no se si es compatible con IE */
+/* cambia el color de fondo cuando se selecciona un input */
+input[type=text]:focus{
+    background-color:infoBackground;
+}
+
+/* muestra la manito sobre la componente con class=click */
+.click{
+    cursor: pointer;
+}
+
+
+/*                                     estilos para el paginador                                 */
+.paginaNormal{
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 10pt;
+    color: #000000;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.paginaActual{
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 10pt;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/*                                  Fin   estilos para el paginador                               */
+/*                                   estilos para texto contenido                          */
+
+.tdout{
+      font-family: "Verdana","Trebuchet MS", "Arial";
+    font-size: 8pt;
+    color: #416ca5;
+    list-style: none;
+    font-weight: normal;
+    padding: 0px;
+    margin: 2px;
+	text-decoration:none;
+	
+}
+.tdhover{
+	  font-family: "Verdana","Trebuchet MS", "Arial";
+    list-style: none;
+	font-size: 8pt;
+	text-decoration:none;
+	color: #999999;
+	}
+
+	
+li {
+    list-style-type:none;
+}
+.itemLI{
+    font-family: "Verdana","Trebuchet MS", "Arial";
+    font-size: 8pt;
+    color: #365989;
+    list-style: none;
+    font-weight: normal;
+	text-decoration:none;
+	}
+
+
+/*                                   Fin  estilos para texto contenido                                          */
+	
+/*                                     estilos para la zebra                                            */
+tr.par {
+    background-color:#FFFFFF;
+}
+
+tr.impar {
+    background-color:#F4F4F4;
+}
+/*                                   Fin  estilos para la zebra                                         */
+
+
+/*                                       estilos para mensajes de usuario                                   */
+.tableMsgUser{
+    Background-color: #000000;
+    border: 0;
+}
+
+.fontMsgUser{
+    text-decoration: none;
+    font-size: 12pt;
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    color: #f2f2f2;
+    font-weight: bold;
+	background-color:#FF9999;
+}
+/*                                  Fin     estilos para mensajes de usuario                                */
+
+/*                                        estilos para Circulacion                                              */
+
+.divCirculacion{
+    border-style: solid; 
+    border-color: gray;
+    left: 75%; 
+    text-align: center; 
+    background-color: white;
+    margin-left: 30px;
+}
+
+.fontMsgConfirmation {
+
+    text-decoration: none;
+    font-size: 10pt;
+    font-family: "Trebuchet MS", "Verdana";
+    color: red;
+    font-weight: bold;
+}
+
+.fecha_vencida{
+    font-size:10pt;
+    color:red;
+}
+
+.fecha_critica{
+    color: red;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.fecha_cumple{
+    color: green;
+    font-weight: bold;
+}
+
+.fecha_special{
+    color: orange;
+    font-weight: bold;
+    font-style: underline;
+}
+
+.prestamo{
+    font-size:10pt;
+    color:green;
+}
+
+.salaLectura{
+    font-size:10pt;
+    color:blue;
+}
+.disponible{
+    font-size:10pt;
+    color:green;
+}
+
+.nodisponible{
+    font-size:10pt;
+    color:red;
+}
+
+
+/*                                     Fin   estilos para Circulacion                                           */
+
+/*                                        para los resultados en tablas                                                */
+.tablaresultadoTitle { 
+    font-Family : "Verdana" ;
+    color: #fff;
+    font-size: 9pt;
+    background: url(../imagenes/tablaresultado.png) repeat-x ;
+   /* background-color:#3c9eb4;*/
+    text-align: center;
+    font-weight: bold;
+	height:30px;
+	border-left: 1px solid #ccc;
+}
+
+.tabla_datos {
+    font-size: 9pt;
+}
+/*                                     Fin   para los resultados en tablas                                             */
+
+
+/* para agregar documento */
+.divContentComponente{
+    clear:both; 
+    padding-top:1%;
+}
+
+.divComponente{
+    float: left;
+    padding-right:1%; 
+    padding-bottom: 1%;
+}
+
+.divLabelComponente{
+    float: left; 
+    width: 25%;
+    font-family: "Trebuchet MS", "Verdana", "Arial";
+    font-size: 10pt;
+    color: #000000;
+    font-weight: normal;
+}
+/* fin para agregar documento */
+
+
+/*                                                 estilos para los botones                                */
+
+#boton_buscar {
+    background: transparent  url(../imagenes/botones/boton_buscar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_agregar {
+    background: transparent  url(../imagenes/botones/boton_agregar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_ayuda {
+    background: transparent  url(../imagenes/botones/boton_ayuda.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_borrar {
+    background: transparent  url(../imagenes/botones/boton_borrar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_campo_temporal {
+    background: transparent  url(../imagenes/botones/boton_campo_temporal.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_edicion {
+    background: transparent  url(../imagenes/botones/boton_edicion.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_entrar {
+    background: transparent  url(../imagenes/botones/boton_entrar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_enviar {
+    background: transparent  url(../imagenes/botones/boton_enviar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_estantes {
+    background: transparent  url(../imagenes/botones/boton_estantes.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_favoritos {
+    background: transparent  url(../imagenes/botones/boton_favoritos.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_guardar {
+    background: transparent  url(../imagenes/botones/boton_guardar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_imprimir {
+    background: transparent  url(../imagenes/botones/boton_imprimir.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_indice {
+    background: transparent  url(../imagenes/botones/boton_indice.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_inicio {
+    background: transparent  url(../imagenes/botones/boton_inicio.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_ir {
+    background: transparent  url(../imagenes/botones/boton_ir.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_micuenta {
+    background: transparent  url(../imagenes/botones/boton_micuenta.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_miembros {
+    background: transparent  url(../imagenes/botones/boton_miembros.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_PDF {
+    background: transparent  url(../imagenes/botones/boton_PDF.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_salir {
+    background: transparent  url(../imagenes/botones/boton_salir.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_seleccionar {
+    background: transparent  url(../imagenes/botones/boton_seleccionar.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+#boton_subir {
+    background: transparent  url(../imagenes/botones/boton_subir.png) no-repeat;
+    height: 22px;
+    width: 20px;
+    float: left;
+}
+
+
+
+/*              parte del boton generica                  */
+#boton_texto {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: #000000;
+    background-position: center;
+    margin-left: 27px;
+    margin-top: 5px;
+    text-align:center;
+/*     margin-top: 3px; */
+}
+
+#boton_medio {
+    background:url(../imagenes/botones/boton_medio.png) repeat-x scroll center ;
+    height: 22px;
+    /*width: 7%;*//*se debe modificar dinamicamente*/
+    position: relative;
+    padding-bottom:0;
+    padding-left:0;
+    padding-right:0;
+/*     padding-top:6px; */
+/*     margin-left: 25px;*/
+}
+
+#boton_der {
+    float:right;
+    background: transparent url(../imagenes/botones/boton_der.png) no-repeat;
+    height: 22px;
+    width: 3px;
+}
+/*            fin  parte del boton generica                */
+
+/*                                                Fin estilos para los botones                             */
+
+
+/*                                                      estilos para los iconos                                   */
+#icon_borrar {
+    background: transparent url(../imagenes/iconos/borrar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+#icon_añadir {
+    background: transparent url(../imagenes/iconos/añadir.png) no-repeat;
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+}
+
+#icon_cambiarlibro {
+    background: transparent url(../imagenes/iconos/cambiarlibro.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_der {
+    background: transparent url(../imagenes/iconos/der.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_devolverlibro {
+    background: transparent url(../imagenes/iconos/buscar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+#icon_buscar {
+    background: transparent url(../imagenes/iconos/devolverlibro.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_edicion {
+    background: transparent url(../imagenes/iconos/edicion.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+#icon_entrar {
+    background: transparent url(../imagenes/iconos/entrar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+#icon_enviar {
+    background: transparent url(../imagenes/iconos/enviar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+#icon_estvirtuales {
+    background: transparent url(../imagenes/iconos/estvirtuales.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_favoritos {
+    background: transparent url(../imagenes/iconos/favoritos.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_guardar {
+    background: transparent url(../imagenes/iconos/guardar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_imprimir {
+    background: transparent url(../imagenes/iconos/imprimir.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_indice {
+    background: transparent url(../imagenes/iconos/indice.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_inicio {
+    background: transparent url(../imagenes/iconos/inicio.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_ir {
+    background: transparent url(../imagenes/iconos/ir.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_izq {
+    background: transparent url(../imagenes/iconos/izq.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_micuenta {
+    background: transparent url(../imagenes/iconos/micuenta.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_miembros {
+    background: transparent url(../imagenes/iconos/miembros.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_pdf {
+    background: transparent url(../imagenes/iconos/pdf.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_prestarlibro {
+    background: transparent url(../imagenes/iconos/prestarlibro.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_sacar {
+    background: transparent url(../imagenes/iconos/sacar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_salir {
+    background: transparent url(../imagenes/iconos/salir.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_seleccionar {
+    background: transparent url(../imagenes/iconos/seleccionar.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
+#icon_subir {
+    background: transparent url(../imagenes/iconos/subir.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+/*                 Fin estilos para los iconos  */     
+                          
+/*                  estilo ventanas emergentes            */                                                                    
+
+
+/*                                          para MARC                                                    */
+
+.MARCResult li{
+        border-top:1px dotted #CCCCCC;
+        color:#000000;
+        font-family:'lucida console','courier new',monospace;
+        line-height:1.5em;
+/*      margin:0; */
+        margin-left:32px;   
+        table-layout:fixed;
+}
+
+
+.detalleMARC {
+      list-style-type:none;
+      display:block;
+      padding:5px;
+      text-align: left;
+      width: 90%; 
+}
+
+li.MARCHeader{
+    margin:0;
+    padding:5px;
+    background-color:#FFFFFF;
+    width: 90%;
+    list-style-type:none;
+}
+
+.horizontal{
+    float:left;
+    margin-right: 10px;
+}
+.buttonContainerHorizontal{
+    display: table;   /* Allow the centering to work */
+    margin: 0 auto;
+}
+
+ul#horizontal-list {
+    min-width: 696px;
+    list-style: none;
+    padding-top: 20px;
+}
+
+ul#horizontal-list li {
+    display: inline;
+}
+
+.vertical{
+}
+/*                                                 FIN MARC                            */
+
+/*                                                   estilos para los reportes                     */
+
+/* para mostrar la cant de resultados */
+.resultados_consulta{
+    text-align:center;
+    font-size: 13px;  
+    font-weight:bold;  
+    padding: 5px;
+}
+
+.contenedor_paginador{
+    text-align:center;
+    padding: 5px;
+}
+
+.filtros_reportes{
+    font-size: 13px;
+/*     overflow: auto; */
+    display:table;
+    margin:0 auto;
+    width:auto;
+}
+
+.filtros_reportes li{
+    padding-top: 5px;
+}
+
+.filtros_reportes_izq{
+    float: left;
+    padding-right: 70px;
+}
+
+.filtros_reportes_der{
+    float: right;
+    overflow:auto;
+}
+
+.permissionHigh{
+    background-color:#d40e2a;
+}
+.permissionMedium{
+    background-color:#ffdd00;
+}
+.permissionLow{
+    background-color:#68a928;
+}
+
+/*                                              fin estilos para los reportes                           */
+
+/* 												ESTILO SANCIONES										*/
+
+#divSancionesTiposSocios {
+    float: left;
+    padding: 5px;
+    width: 100%;
+}
+
+#divSancionesTiposPrestamos {
+    padding: 5px;
+    width: 100%
+}
+#divSancionesReglas {
+    padding: 0px 5px;
+    width:50%;
+}
+#divSanciones{
+    width:50%;
+}
+
+#divSancionesEdicionReglas{
+    width:50%;
+}
+
+.divDatosUsuario{
+  display:block;
+  float:left;
+}
+
+#divDatosUsuario{
+  display:block;
+/*   float:left; */
+}
