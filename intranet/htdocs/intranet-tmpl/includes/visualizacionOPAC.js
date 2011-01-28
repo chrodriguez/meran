@@ -7,10 +7,11 @@ SUBCAMPOS_ARRAY= new Array();
 
 function eliminarVista(vista_id){
 
-    objAH=new AjaxHelper(updateAgregarVisualizacion);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
-    objAH.tipoAccion= 'ELIMINAR_VISUALIZACION';
+    objAH               = new AjaxHelper(updateAgregarVisualizacion);
+    objAH.debug         = true;
+    objAH.url           = "/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+    objAH.tipoAccion    = 'ELIMINAR_VISUALIZACION';
+    
     if ( vista_id ){
         jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
             if (confirmStatus){
@@ -24,19 +25,21 @@ function eliminarVista(vista_id){
 
 function agregarVisualizacion(){
 
-    objAH=new AjaxHelper(updateAgregarVisualizacion);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
-    objAH.tipoAccion= 'AGREGAR_VISUALIZACION';
-    var perfil=$("#perfiles_ref").val();
-    var campo=$.trim($("#campo").val());
-    var subcampo=$.trim($("#subcampo").val());
-    var liblibrarian=$.trim($("#liblibrarian").val());
+    objAH               = new AjaxHelper(updateAgregarVisualizacion);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = "/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+    objAH.tipoAccion    = 'AGREGAR_VISUALIZACION';
+    var perfil          = $("#perfiles_ref").val();
+    var campo           = $.trim($("#campo").val());
+    var subcampo        = $.trim($("#subcampo").val());
+    var liblibrarian    = $.trim($("#liblibrarian").val());
+      
     if ( (perfil) && (campo) && (subcampo) && (liblibrarian) ){
-        objAH.perfil = perfil;
-        objAH.campo= campo;
-        objAH.subcampo = subcampo;
-        objAH.liblibrarian= liblibrarian;
+        objAH.perfil        = perfil;
+        objAH.campo         = campo;
+        objAH.subcampo      = subcampo;
+        objAH.liblibrarian  = liblibrarian;
         objAH.sendToServer();
     }else{
         jAlert(SELECCIONE_VISTA_OPAC,CATALOGO_ALERT_TITLE);
@@ -52,17 +55,18 @@ function updateAgregarVisualizacion(responseText){
 }
 
 function eleccionDePerfil(){
-    var perfil=$("#perfiles_ref").val();
-    var ObjDiv = $("#result");
+    var perfil  = $("#perfiles_ref").val();
+    var ObjDiv  = $("#result");
     if (isNaN(perfil)){
         ObjDiv.hide();
     }else{
         ObjDiv.show();
-        objAH=new AjaxHelper(updateEleccionDeNivel);
-        objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
-        objAH.tipoAccion= 'MOSTRAR_VISUALIZACION';
-        objAH.perfil = perfil;
+        objAH               = new AjaxHelper(updateEleccionDeNivel);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;  
+        objAH.url           = "/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+        objAH.tipoAccion    = 'MOSTRAR_VISUALIZACION';
+        objAH.perfil        = perfil;
 
         objAH.sendToServer();
     }
@@ -82,11 +86,12 @@ function updateEleccionDeNivel(responseText){
  */
 function eleccionCampoX(){
     if ( $("#campoX").val() != -1){
-        objAH=new AjaxHelper(updateEleccionCampoX);
-        objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
-        objAH.campoX=$('#campoX').val();
-        objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS";
+        objAH               = new AjaxHelper(updateEleccionCampoX);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = "/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+        objAH.campoX        = $('#campoX').val();
+        objAH.tipoAccion    = "GENERAR_ARREGLO_CAMPOS";
         objAH.sendToServer();
     }
     else
@@ -114,11 +119,12 @@ function updateEleccionCampoX(responseText){
 
 function eleccionCampo(){
     if ($("#campo").val() != -1){
-        objAH=new AjaxHelper(updateEleccionCampo);
-        objAH.debug= true;
-        objAH.url="/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
-        objAH.campo=$('#campo').val();
-        objAH.tipoAccion="GENERAR_ARREGLO_SUBCAMPOS";
+        objAH               = new AjaxHelper(updateEleccionCampo);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;  
+        objAH.url           = "/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+        objAH.campo         = $('#campo').val();
+        objAH.tipoAccion    = "GENERAR_ARREGLO_SUBCAMPOS";
         objAH.sendToServer();
     }
     else
@@ -200,9 +206,10 @@ function eleccionSubCampo(){
 }
 
 function mostrarTablaRef(){
-    objAH=new AjaxHelper(updateMostrarTablaRef);
-    objAH.debug= true;
-    objAH.url="/cgi-bin/koha/utils/utilsDB.pl";
-    objAH.tipoAccion="GENERAR_ARREGLO_TABLA_REF";
+    objAH               = new AjaxHelper(updateMostrarTablaRef);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = "/cgi-bin/koha/utils/utilsDB.pl";
+    objAH.tipoAccion    = "GENERAR_ARREGLO_TABLA_REF";
     objAH.sendToServer();
 }

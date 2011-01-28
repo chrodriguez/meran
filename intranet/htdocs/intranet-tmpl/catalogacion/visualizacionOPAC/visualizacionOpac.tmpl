@@ -35,6 +35,14 @@ $(document).ready(function() {
 <fieldset>
     <legend><strong>[% "Seleccione un perfil:" | i18n %]</strong></legend>
     [% combo_perfiles %]
+
+    [% PERL %]
+            print C4::AR::Filtros::to_Icon(   
+                                                boton   => "icon_buscar",
+                                                onClick => "eleccionDePerfil();",
+                                                title   => "[% 'Buscar' | i18n %]",
+                    ) ;
+    [% END %]
 </fieldset>
 
 <div id="result"></div>
