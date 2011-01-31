@@ -82,8 +82,8 @@ sub gettemplate {
 # C4::AR::Debug::debug("tema_opac ".$preferencias_hash_ref->{'tema_opac'});
 
     my $htdocs;
-    my $tema_opac   = C4::AR::Preferencias->getValorPreferencia('tema_opac') || 'default';
-    my $tema_intra  = C4::AR::Preferencias->getValorPreferencia('tema_intra') || 'default';
+    my $tema_opac   = C4::AR::Preferencias::getValorPreferencia('tema_opac') || 'default';
+    my $tema_intra  = C4::AR::Preferencias::getValorPreferencia('tema_intra') || 'default';
     my $temas       = C4::Context->config('temas');
     my $tema;
     my $type;
@@ -129,7 +129,7 @@ sub gettemplate {
     #se asignan los parametros que son necesarios para todos los templates
     my $ui;
     my $nombre_ui       = '';
-    my $default_ui      = C4::AR::Preferencias->getValorPreferencia('defaultUI');
+    my $default_ui      = C4::AR::Preferencias::getValorPreferencia('defaultUI');
     $ui                 = C4::Modelo::PrefUnidadInformacion->getByPk($default_ui);
 
     my $date            = C4::AR::Utilidades::getDate();
@@ -158,7 +158,7 @@ sub gettemplate {
             type                => ($opac ne 'intranet'? 'opac': 'intranet'),  #indica desde donde se hace el requerimiento
             tema                => $tema,
             temas               => $temas,
-            titulo_nombre_ui    => C4::AR::Preferencias->getValorPreferencia('titulo_nombre_ui'),
+            titulo_nombre_ui    => C4::AR::Preferencias::getValorPreferencia('titulo_nombre_ui'),
             template_name       => "$htdocs/$tmplbase", #se setea el nombre del tmpl
             ui                  => $ui,
             actual_year         => $date->{'year'},
