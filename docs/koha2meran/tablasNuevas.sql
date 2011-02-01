@@ -1,4 +1,6 @@
-DROP TABLE IF EXISTS `cat_control_seudonimo_autor`; CREATE TABLE IF NOT EXISTS `cat_control_seudonimo_autor` (
+DROP TABLE IF EXISTS `cat_control_seudonimo_autor`; 
+
+CREATE TABLE IF NOT EXISTS `cat_control_seudonimo_autor` (
   `id_autor` int(11) NOT NULL,
   `id_autor_seudonimo` int(11) NOT NULL,
   PRIMARY KEY  (`id_autor`,`id_autor_seudonimo`)
@@ -676,3 +678,81 @@ CREATE TABLE  `sys_novedad` (
 `categoria` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
 `contenido` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
 ) ENGINE = MYISAM;
+
+
+-- ADQUISICIONES --
+
+CREATE TABLE IF NOT EXISTS `adq_forma_envio` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `adq_item` (
+  `id_item` int(11) NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(255) NOT NULL,
+  `precio` float NOT NULL,
+  PRIMARY KEY (`id_item`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE IF NOT EXISTS `adq_proveedor` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) NOT NULL,
+  `apellido` varchar(255) NOT NULL,
+  `nro_doc` varchar(21) NOT NULL,
+  `razon_social` varchar(255) NOT NULL,
+  `cuit_cuil` int(11) NOT NULL,
+  `domicilio` varchar(255) NOT NULL,
+  `telefono` varchar(32) NOT NULL,
+  `fax` varchar(32) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `activo` int(1) NOT NULL,
+  `plazo_reclamo` int(11) DEFAULT NULL,
+  `usr_ref_tipo_documento_id` int(11) DEFAULT NULL,
+  `ref_localidad_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_adq_proveedor_usr_ref_tipo_documento1` (`usr_ref_tipo_documento_id`),
+  KEY `fk_adq_proveedor_ref_localidad1` (`ref_localidad_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE IF NOT EXISTS `adq_proveedor_forma_envio` (
+  `adq_forma_envio_id` int(11) NOT NULL,
+  `adq_proveedor_id` int(11) NOT NULL,
+  PRIMARY KEY (`adq_forma_envio_id`,`adq_proveedor_id`),
+  KEY `fk_adq_proveedor_forma_envio_adq_proveedor1` (`adq_proveedor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `adq_proveedor_item` (
+  `id_proveedor` int(11) NOT NULL,
+  `id_item` int(11) NOT NULL,
+  PRIMARY KEY (`id_proveedor`,`id_item`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `adq_ref_moneda` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE IF NOT EXISTS `adq_ref_proveedor_moneda` (
+  `adq_ref_moneda_id` int(11) NOT NULL,
+  `adq_proveedor_id` int(11) NOT NULL,
+  PRIMARY KEY (`adq_ref_moneda_id`,`adq_proveedor_id`),
+  KEY `fk_adq_ref_moneda_has_adq_proveedor_adq_proveedor1` (`adq_proveedor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `adq_proveedor`
+  ADD CONSTRAINT `fk_adq_proveedor_ref_localidad1` FOREIGN KEY (`ref_localidad_id`) REFERENCES `ref_localidad` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_adq_proveedor_usr_ref_tipo_documento1` FOREIGN KEY (`usr_ref_tipo_documento_id`) REFERENCES `usr_ref_tipo_documento` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+CREATE TABLE  `ref_estado_presupuesto` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`nombre` VARCHAR( 255 ) NOT NULL
+) ENGINE = MYISAM ;

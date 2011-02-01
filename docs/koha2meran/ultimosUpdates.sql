@@ -594,3 +594,58 @@ ALTER TABLE `indice_busqueda` ADD `string_tabla_con_dato` TEXT NOT NULL AFTER `s
 ALTER TABLE `indice_busqueda` ADD `string_con_dato` TEXT NULL AFTER `string_tabla_con_dato` ;
 
 ALTER TABLE `circ_tipo_prestamo_sancion` ADD `detalle` VARCHAR( 255 ) NOT NULL ;
+
+ALTER TABLE  `cat_registro_marc_n3` ADD  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ;
+ALTER TABLE `cat_historico_disponibilidad` CHANGE `id3` `id3` INT( 11 ) NOT NULL ;
+
+ALTER TABLE `cat_portada_registro` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `ref_dpto_partido` CHANGE COLUMN `PROVINCIA` `ref_provincia_id` VARCHAR(11) NOT NULL  ,  CHANGE COLUMN `DPTO_PARTIDO` `id` VARCHAR(11) NOT NULL DEFAULT ''  , 
+  ADD CONSTRAINT `fk_ref_dpto_partido_ref_provincia1`
+  FOREIGN KEY (`ref_provincia_id` )
+  REFERENCES `ref_provincia` (`id` )
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION
+, DROP PRIMARY KEY 
+, ADD PRIMARY KEY (`id`) 
+, ADD INDEX `fk_ref_dpto_partido_ref_provincia1` (`ref_provincia_id` ASC) ;
+
+ALTER TABLE `ref_localidad` CHANGE COLUMN `DPTO_PARTIDO` `ref_dpto_partido_id` VARCHAR(11) NOT NULL  , 
+  ADD CONSTRAINT `fk_ref_localidad_ref_dpto_partido1`
+  FOREIGN KEY (`ref_dpto_partido_id` )
+  REFERENCES `ref_dpto_partido` (`id` )
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION
+, ADD INDEX `fk_ref_localidad_ref_dpto_partido1` (`ref_dpto_partido_id` ASC) ;
+
+ALTER TABLE `ref_provincia` CHANGE COLUMN `PAIS` `ref_pais_id` INT(11) NOT NULL ,  CHANGE COLUMN `PROVINCIA` `id` VARCHAR(11) NOT NULL DEFAULT '0'  , 
+  ADD CONSTRAINT `fk_ref_provincia_ref_pais1`
+  FOREIGN KEY (`ref_pais_id` )
+  REFERENCES `ref_pais` (`id` )
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION
+, DROP PRIMARY KEY 
+, ADD PRIMARY KEY (`id`) 
+, ADD INDEX `fk_ref_provincia_ref_pais1` (`ref_pais_id` ASC) ;
+
+INSERT INTO `usr_ref_tipo_documento` (`id`, `nombre`, `descripcion`) VALUES (0, 'INDEFINIDO', 'para las personas jurídicas');
+
+ALTER TABLE `cat_historico_disponibilidad` DROP `id_ui`;
+ALTER TABLE `cat_historico_disponibilidad` DROP `fecha`;
+
+DROP TABLE IF EXISTS cat_editorial;
+
+CREATE TABLE  `cat_editorial` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`editorial` VARCHAR( 255 ) NOT NULL
+) ENGINE = MYISAM ;
+
+INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`) VALUES (NULL, 'cat_editorial', 'editorial', 'editorial');
+
+ALTER TABLE `cat_registro_marc_n3` DROP `date`;
+ALTER TABLE `cat_registro_marc_n3` ADD `updated_at` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `id1`;
+
+ALTER TABLE `cat_estructura_catalogacion` ADD `edicion_grupal` TINYINT NOT NULL DEFAULT '1' AFTER `visible` ;
+
+ALTER TABLE `usr_socio` ADD  `lastValidation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
