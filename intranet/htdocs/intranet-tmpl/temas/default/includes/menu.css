@@ -1,183 +1,122 @@
-/*---------------------------------------------------MENU-------------------------------------------------------------------------*/
-#menu{
-   width:auto;
-   float:left;
-   margin:2px;
-   clear:both;
+
+#menu {
+    width: 8%;
+    float: left;
+    margin: 2px;
+    clear: both;
 }
 
-#menu ul{
-margin:0;
-padding:0;
-float:left;
-width:11.5em;
+#menu ul {
+    margin: 0;
+    padding: 0;
+    float: left;
+    width: 11.5em;
 }
 
-#menu li{
-position:relative;
-list-style-type:none;
-float:left;
-width:124px;
+#menu li {
+    position: relative;
+    list-style-type: none;
+    float: left;
+    width: 124px;
+    margin: 5px;
 }
 
-#menu ul ul{
-position:absolute;
-list-style-type:none;
-z-index:500;
-/* top:auto; */
-display:none;
+.container_test{
+    
 }
 
-#menu ul ul ul{
-top:0;
+#menu ul ul {
+    position: absolute;
+    list-style-type: none;
+    z-index: 500;
+    display: none;
+}
 
+#menu ul ul ul {
+    top: 0;
 }
 
 .menu-ul {
-   font:bold 100%/205% tahoma,arial,helvetica,sans-serif;
-   display:block;
-   background:grey;
-   margin:0;
-   padding:0;
-   text-transform:uppercase;
-   list-style-type:none;
+    font: bold 100%/205% tahoma, arial, helvetica, sans-serif;
+    display: block;
+    background: grey;
+    margin: 0;
+    padding: 0;
+    text-transform: uppercase;
+    list-style-type: none;
 }
 
 #menu ul li {
-      list-style-type:none;
-      display:block;
-      margin:0;
-   float:left;
-   width:100px;  
-}
-
-#menu a, #menu a:visited{
-	color:#fff;
-	border:0px;
-	text-decoration:none;
-	font-family: Arial, Verdana, sans-serif;
-	font-size: 11px;
-	line-height: 180%;
-	font-weight: bold;
-}
-ul li a:visited{
-  text-decoration:none;
-}
-
-.menu_superior_der{
-background: url(../imagenes/menu_der.png) 100% 0 no-repeat;
-width: 100%;
-}
-
-.menu_superior_izq{
-
-background: url(../imagenes/menu_izq.png) 0 0 no-repeat;
-padding-left: 4%;
-}
-
-
-.menu_superior{
-font:bold 100%/180% " Arial ","Verdana"," sans-serif ";
-color:#fff;/*#4b6d22;*/
-background: url(../imagenes/menu_centro.png) repeat-x;
-text-transform:uppercase;
-text-align:center;
-cursor: pointer;
-display:block;
-white-space:nowrap;
-margin:0;
-font-size:11px;
-height:20px;
-width: 96%;
-
-/* PARA HACER ROUND EN FIREFOX Y TOOLKIT ;) */
-
-/* 
-
--webkit-border-bottom-right-radius: 10px;
-    -webkit-border-bottom-left-radius: 10px;
-    -webkit-border-top-right-radius: 10px;
-    -webkit-border-top-left-radius: 10px;
-
-    -khtml-border-radius-bottomright: 10px;
-    -khtml-border-radius-bottomleft: 10px;
-    -khtml-border-radius-topright: 10px;
-    -khtml-border-radius-topleft: 10px;
-
-    -moz-border-radius-bottomright: 10px;
-    -moz-border-radius-bottomleft: 10px;
-    -moz-border-radius-topright: 10px;
-    -moz-border-radius-topleft: 10px;
-
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
-*/
-
-}
-.menu_superior a:hover{
-font:bold 100%/180% " Arial ","Verdana"," sans-serif ";
-color:#FFFFFF;/*#4b6d22;*/
-background: url(../imagenes/menu_centro.png) repeat 100% 100%;
-text-transform:uppercase;
-text-align:center;
-cursor: pointer;
-display:block;
-white-space:nowrap;
-margin:0;
-
-font-size:11px;
-height:20px;
-    -moz-border-radius-topleft:8px;
-    -moz-border-radius-topright:8px;
-
-
-}
-.menu_intermedio {
-    font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
-    cursor: pointer;
-    display:block;
-    border-width:1px;
-    border-style:solid;
-    border-color:#ccc #888 #555 #bbb;
-    white-space:nowrap;
-    margin:0;
-    padding:0 11px;
-    background:#4d838f url(../imagenes/expand3.gif) no-repeat 100% 100%;
-    color: #FFFFFF; 
-}
-.menu-item {
-   font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
-    background:#5fa3a4;
-    color: #FFFFFF;
-    cursor: pointer;
-    display:block;
-    padding:0 2px;
-
-}
-.menu-item a:hover{
-    font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
-    background:#333333/*b1e0e1/*9dcacb /*9bc931 /*c4d872*/;
-    color: #fff/*5FA3A4*/;
-    cursor: pointer;
-    display:block;
-}
-.menu-item a {
-    font:bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
-    color: #FFF;
-    width:auto;
-    cursor: pointer;
-    display:block;
-    padding:0 11px;
+    list-style-type: none;
+    display: none;
     margin: 0;
-    background:grey;
-    border-bottom-width: thin;
-    border-bottom-style: solid;
-    border-bottom-color:#5FA3A4; /*99bf45; /*#A1C162;  */
-    white-space: nowrap;
-     
-   text-transform:uppercase;
+    float: left;
+    width: 100px;
 }
 
-/* ----------------------------------------- FIN MENU ----------------------------------------------- */
+#menu a,#menu a:visited {
+    color: #fff;
+    border: 0px;
+    text-decoration: none;
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 11px;
+    line-height: 180%;
+    font-weight: bold;
+}
+
+
+.menu_superior_der {
+    background: url(../imagenes/menu_der.png) 100% 0 no-repeat;
+    width: 100%;
+}
+
+.menu_superior_izq {
+    background: url(../imagenes/menu_izq.png) 0 0 no-repeat;
+    padding-left: 4%;
+}
+
+.menu_superior {
+    font: bold 100%/180% " Arial ", "Verdana", " sans-serif ";
+    color: #fff;
+    background: url(../imagenes/menu_centro.png) repeat-x;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+    display: block;
+    white-space: nowrap;
+    margin: 0;
+    font-size: 11px;
+    height: 20px;
+    width: 96%;
+}
+
+.menu_superior a:hover {
+    font: bold 100%/180% " Arial ", "Verdana", " sans-serif ";
+    color: #FFFFFF;
+    background: url(../imagenes/menu_centro.png) repeat 100% 100%;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+    display: block;
+    white-space: nowrap;
+    margin: 0;
+    font-size: 11px;
+    height: 20px;
+    -moz-border-radius-topleft: 8px;
+    -moz-border-radius-topright: 8px;
+}
+
+.menu_intermedio {
+    font: bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
+    cursor: pointer;
+    display: block;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ccc #888 #555 #bbb;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0 11px;
+    background: #4d838f url(../imagenes/expand3.gif) no-repeat 100% 100%;
+    color: #FFFFFF;
+}
+

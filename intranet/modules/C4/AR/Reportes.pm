@@ -1,3 +1,4 @@
+
 package C4::AR::Reportes;
 
 use strict;
@@ -490,9 +491,10 @@ sub toXLS {
 
 	my $path      = $reports_dir . '/' . $filename;
 
+    
 	my $workbook  = Spreadsheet::WriteExcel->new($path);
 	
-die "Problems creating new Excel file: $!" unless defined $workbook;
+    die "Problems creating new Excel file: $!" unless defined $workbook;
 
 	my $worksheet = $workbook->add_worksheet($sheet);
 	my $format    = $workbook->add_format();

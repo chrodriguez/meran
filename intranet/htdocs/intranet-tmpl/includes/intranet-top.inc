@@ -19,6 +19,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <META HTTP-EQUIV="cache-control" content="public">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/completo.css">
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/menu.css">
 <!-- <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/[% user_theme %]/includes/completo_min.css" /> -->
 <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/fancybox-min.css" />
 
@@ -71,7 +72,7 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
 
 <!-- <script src="/includes/jquery/jquery.tablednd.js"></script> -->
 
-
+<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.9.custom.min.js"></script>
 
 <!-- FIXME, esto parece que no sirve para nada, preguntar GASPO [% INCLUDE  'SmallPlugins.inc'  %] -->
 <!-- Se incluyen los mensajes para la catalogacion -->
@@ -92,7 +93,22 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
 	function mainmenu(){
 	
 	    var options = {minWidth: 140};  
-	    $('#menu').menu();
+	    //$('#menu').menu();
+	    
+		var icons = {
+            header: "ui-icon-circle-arrow-e",
+            headerSelected: "ui-icon-circle-arrow-s"
+        };
+
+        $('.accordion').accordion({
+
+            autoHeight: false,
+            navigation: true,
+            clearStyle: true,
+            //icons: icons,
+            
+        });
+	    
 	}
 	
 	$(document).ready(function(){
@@ -116,29 +132,29 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
   </noscript>
   
   <div style="display: none;" id="ajax-indicator"><div><p>[% 'Cargando...' | i18n %]</p></div></div>
-  <div id="menu-container" class="main-header">
+  <div class="container_test">
+<!--  <div id="menu-container" class="main-header"> -->
   
   [% INCLUDE   'menu.inc'  %]
   
-  </div>
+<!--  </div> -->
   
   <div id="marco_principal">
-      <div id="marco_superior"> <div>
-  </div></div>
+      <div id="marco_superior"></div>
   
-  <div id="marco_contenido" class="contenido">
+     <div id="marco_contenido" class="contenido">
   
   
-  <div id="marco_contenido_datos" class="contenido">
-  <!--  usado como referencia por el MessageHelper -->
-  <div id="end_top">
-    [% IF mensaje %]
-        <div class="mensajes_informacion">
-            <div id="mensajes" style="opacity: 90; display: block;">
-                <div class="message_text">[% mensaje %]</div>
-            </div>
-        </div>
-    [% END %]
-  </div>
+	  <div id="marco_contenido_datos" class="contenido">
+	  <!--  usado como referencia por el MessageHelper -->
+	  <div id="end_top">
+	    [% IF mensaje %]
+	        <div class="mensajes_informacion">
+	            <div id="mensajes" style="opacity: 90; display: block;">
+	                <div class="message_text">[% mensaje %]</div>
+	            </div>
+	        </div>
+	    [% END %]
+	  </div>
 
-  <div id="basic-modal-content"></div>
+    <div id="basic-modal-content"></div>
