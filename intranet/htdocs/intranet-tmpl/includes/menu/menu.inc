@@ -30,7 +30,7 @@
         </div>
     [% ELSE %]
         <p id="logout">
-            <a href=/cgi-bin/koha/opac-user.pl>Entrar a Koha</a>
+            <a href=/cgi-bin/koha/opac-user.pl>[% 'Entrar a Koha' | i18n %]</a>
         </p>
     [% END %]
 </div>

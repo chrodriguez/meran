@@ -80,7 +80,7 @@ Este tambien pero comprimido<script type="text/javascript" src="/includes/jquery
 <script language="javascript" type="text/javascript">
 
 	function swap(id,src){
-	document.getElementById(id).src=src;
+		   document.getElementById(id).src=src;
 	}
 	
 	function cambiarIdioma() {
