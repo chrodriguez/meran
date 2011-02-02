@@ -4,10 +4,6 @@
 
 [% INCLUDE 'AutocompleteHelper.inc'  %]
 
-
-<script type="text/javascript" >
-
-</script>
 <script type="text/javascript" src="/includes/jquery/jquery.fileUploader-min.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
@@ -15,13 +11,29 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosPresupuesto.js"> </script>
 
 <script type="text/javascript">
+    
+function mostrarManual(){
+       $('#carga_planilla').hide(); 
+       $('#datos_planilla').hide();
+       $('#pres_manual').show(); 
+       $('#acciones').show();
+}
 
+function mostrarPlanilla(){
+       $('#datos_presupuesto').show();  
+       $('#carga_planilla').show(); 
+       $('#datos_planilla').show();
+       $('#acciones').show();
+}
 
 $(document).ready(function() {
    makeToggle('toggle_container','trigger',null,true);
    createFileUploader();
    $('#div_uploader').show();
    $('#datos_planilla').hide();
+   $('#carga_planilla').hide(); 
+   $('#datos_presupuesto').hide(); 
+   $('#acciones').hide(); 
 });
 
 function onCompleteFileUpload(){
@@ -51,27 +63,79 @@ function createFileUploader(){
 
 <fieldset>
     <legend class="titulos">    [% "Carga de presupuesto" | i18n %] </legend>
-          <fieldset id="carga_planilla">
+           
+          <fieldset id="tipo_carga">
+                <legend class="titulo_legend">    [% "Elija una opcion" | i18n %] </legend>
+                <input type="radio" name="tipo_carga" value="carga_manual" onclick="mostrarManual()">Cargar datos manualmente<br>
+                <input type="radio" name="tipo_carga" value="carga_planilla" onclick="mostrarPlanilla()">Cargar planilla<br>
+          </fieldset> 
 
+          <fieldset id="carga_planilla">
                 <legend class="titulo_legend">[% "Carga de Planilla Excel" | i18n %]</legend>
                 <input type="hidden" id="filepath" value="">
                 <!-- VER BIEN Q PONER-->
                 <p>Seleccione el archivo que desea cargar </p>
-                    <div id="div_uploader" >
-                              <li>
-                                  <div id="uploader"></div>
-                              </li>
-                    </div>
+                <div id="div_uploader" >
+                        <li>
+                               <div id="uploader"></div>
+                        </li>
+                </div>
           </fieldset>
-        
-         <fieldset  id="datos_planilla" >
-                  <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend> 
+          
+          <fieldset id="pres_manual">
+              <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend> 
+                  
                   <div id="presupuesto">
-
+                        <fieldset>
+                                   <p>Seleccione el presupuesto que desea cargar </p>
+                                  [% combo_presupuestos %]
+                        </fieldset>
+                        [% cant = 1 %] 
+                       
+                        <table id="tablaManual" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                              <thead>
+                              <tr class="titulo_tabla_resultado">
+                                  <th id="renglon">[% "Renglon" | i18n %]</th>
+                                  <th id="cantidad">[% "Cantidad" | i18n %]</th>
+                                  <th id="articulo">[% "Articulo" | i18n %]</th>
+                                  <th id="precio_unitario">[% "Precio Unitario" | i18n %]</th>  
+                                  <th id="total">[% "Total" | i18n %]</th>          
+                              </tr>
+                              </thead>
+                              <tbody>
+                                  [% WHILE cant < 5 %]     
+                          
+                                      <tr  align="center" id="[% cant %]">  
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="renglon[% cant %]" id="renglon[% cant %]" value="[% cant %]" READONLY> 
+                                          </td>
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="cantidad[% cant %]" id="cantidad[% cant %]" value=""> 
+                                          </td>
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="articulo[% cant %]" id="articulo[% cant %]" value=""> 
+                                          </td>
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="precio_unitario[% cant %]" id="precio_unitario[% cant %]" value=""> 
+                                          </td>
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="total[% cant %]" id="total[% cant %]" value="">
+                                          </td> 
+                                      
+                                          [% cant = cant + 1 %]
+                                      </tr> 
+                                  [% END %]   
+                              </tbody>  
+                        </table>
+                 
                   </div>
-          </fieldset>
+        </fileset>
+
+        <fieldset  id="datos_presupuesto" >
+                  
+        </fieldset>
 </fieldset>          
-<fildset>  
+<fildset id="acciones">  
     <div id="accion">
               [% PERL %]
                          print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",

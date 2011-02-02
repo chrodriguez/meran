@@ -25,6 +25,7 @@ use C4::AR::Preferencias;
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw(
+    generarComboPresupuestos
     generarComboFormasDeEnvio
     generarComboTipoDeMaterial
     monedasAutocomplete
@@ -1812,6 +1813,7 @@ sub generarComboTipoDeDoc{
 }
 
 #genera el combo multiselect de formas de envio
+
 sub generarComboFormasDeEnvio{
     my ($params) = @_;
 
@@ -1942,6 +1944,49 @@ sub generarComboProveedores{
 
     return $combo_proveedores; 
 }
+
+
+sub generarComboPresupuestos{
+    my ($params) = @_;
+
+    my @select_presupuestos_array;
+    my %select_presupuestos;
+    my $presupuestos        = &C4::AR::Referencias::obtenerPresupuestos();
+
+    foreach my $presupuesto (@$presupuestos) {
+        push(@select_presupuestos_array, $presupuesto->getId);
+        $select_presupuestos{$presupuesto->getId}  = $presupuesto->getProveedorId;
+      
+    }
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){ 
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+     $options_hash{'name'}       = $params->{'name'}||'presupuesto_od';
+     $options_hash{'id'}         = $params->{'id'}||'presupuesto';
+     $options_hash{'size'}       = $params->{'size'}||1;
+     $options_hash{'class'}      = 'required';
+     $options_hash{'multiple'}   = $params->{'multiple'}||0;
+     $options_hash{'defaults'}   = $params->{'default'} || 0;
+
+    push (@select_presupuestos_array, '');
+    $options_hash{'values'}     = \@select_presupuestos_array;
+    $options_hash{'labels'}     = \%select_presupuestos;
+
+    my $combo_presupuestos    = CGI::scrolling_list(\%options_hash);
+
+    return $combo_presupuestos; 
+}
+
 
 
 sub generarComboTipoNivel3{

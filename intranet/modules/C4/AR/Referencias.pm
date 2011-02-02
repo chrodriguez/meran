@@ -32,7 +32,7 @@ use C4::Modelo::AdqProveedor::Manager;
 use C4::Modelo::PrefInformacionReferencia::Manager;
 use C4::Modelo::AdqTipoMaterial::Manager;
 use C4::Modelo::AdqFormaEnvio::Manager;
-
+use C4::Modelo::AdqPresupuesto::Manager;
 
 
 use JSON;
@@ -167,6 +167,16 @@ sub obtenerTiposDeDocumentos {
     return(\@results);
 }
 
+sub obtenerPresupuestos{
+    my $presupuestos = C4::Modelo::AdqPresupuesto::Manager->get_adq_presupuesto;
+    my @results;
+
+    foreach my $presupuesto (@$presupuestos) {
+        push (@results, $presupuesto);
+    }
+
+    return(\@results);
+}
 
 =item
 Esta funcion devuelve un arreglo de objetos formas de envio
