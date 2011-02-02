@@ -1,4 +1,6 @@
 
+    ALTER TABLE circ_reserva DROP `priority` , DROP `found`;
+
     ALTER TABLE rep_historial_busqueda CHANGE `HTTP_USER_AGENT` `agent` VARCHAR( 255 ) NOT NULL;
     
     ALTER TABLE rep_busqueda CHANGE `borrower` `nro_socio` INT( 11 ) NULL DEFAULT NULL;
@@ -54,9 +56,12 @@
        CHANGE `phoneday` `telefono_laboral` VARCHAR(50)  NULL DEFAULT NULL,
        CHANGE `regular` `cumple_condicion` TINYINT(1) NOT NULL DEFAULT '0';
        
-      ALTER TABLE `usr_persona` DROP `gonenoaddress`,  DROP `lost`,  DROP `debarred`,  DROP `school`,  DROP `contactname`,  DROP `borrowernotes`,  DROP `guarantor`,  DROP `area`,  DROP `ethnicity`,  DROP `ethnotes`,  DROP `expiry`,  DROP `altnotes`,  DROP `altrelationship`,  DROP `streetcity`,  DROP `preferredcont`,  DROP `physstreet`,  DROP `homezipcode`,  DROP `zipcode`,  DROP `userid`,  DROP `flags`;
+        ALTER TABLE `usr_persona` DROP `gonenoaddress`,  DROP `lost`,  DROP `debarred`,  DROP `school`,  DROP `contactname`,  DROP `borrowernotes`,  DROP `guarantor`,  DROP `area`,  DROP `ethnicity`,  DROP `ethnotes`,  DROP `expiry`,  DROP `altnotes`,  DROP `altrelationship`,  DROP `streetcity`,  DROP `preferredcont`,  DROP `physstreet`,  DROP `homezipcode`,  DROP `zipcode`,  DROP `userid`,  DROP `flags`;
        
-      ALTER TABLE `usr_socio` CHANGE `cardnumber` `nro_socio` VARCHAR( 16 ) NOT NULL ,
+       ALTER TABLE `usr_persona` ADD PRIMARY KEY ( `id_persona` ) ;
+       ALTER TABLE `usr_persona` DROP INDEX `personnumber` ;
+
+        ALTER TABLE `usr_socio` CHANGE `cardnumber` `nro_socio` VARCHAR( 16 ) NOT NULL ,
         CHANGE `borrowernumber` `id_socio` INT( 11 ) NOT NULL AUTO_INCREMENT ,
         CHANGE `branchcode` `id_ui` VARCHAR( 4 ) NOT NULL ,
         CHANGE `categorycode` `cod_categoria` CHAR( 2 ) NOT NULL ,
@@ -66,6 +71,11 @@
         CHANGE `lastchangepassword` `last_change_password` DATE NULL DEFAULT NULL ,
         CHANGE `changepassword` `change_password` TINYINT( 1 ) NULL DEFAULT '0',
         CHANGE `usercourse` `cumple_requisito` DATE NULL DEFAULT NULL;
+
+      ALTER TABLE `usr_socio` ADD PRIMARY KEY ( `id_socio` );
+        
+      ALTER TABLE `usr_socio` DROP INDEX `cardnumber`;
+      ALTER TABLE `usr_socio` DROP INDEX `borrowernumber`;
 
       ALTER TABLE `usr_socio` ADD `nombre_apellido_autorizado` VARCHAR( 255 )  NULL ;
 
@@ -127,12 +137,11 @@
 
       ALTER TABLE `cat_ref_tipo_nivel3` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
      
-      ALTER TABLE `cat_ref_tipo_nivel3`
-      DROP `loanlength`,
-      DROP `renewalsallowed`,
-      DROP `rentalcharge`,
-      DROP `search`,
-      DROP `detail`;",
+      ALTER TABLE `cat_ref_tipo_nivel3` DROP `loanlength`;
+      ALTER TABLE `cat_ref_tipo_nivel3` DROP `renewalsallowed`;
+      ALTER TABLE `cat_ref_tipo_nivel3` DROP `rentalcharge`;
+      ALTER TABLE `cat_ref_tipo_nivel3` DROP `search`;
+      ALTER TABLE `cat_ref_tipo_nivel3` DROP `detail`;
       
       ALTER TABLE `cat_ref_tipo_nivel3` CHANGE `itemtype` `id_tipo_doc` VARCHAR( 4 ) NOT NULL ,
       CHANGE `description` `nombre` TEXT NULL DEFAULT NULL;
@@ -631,8 +640,12 @@ ALTER TABLE `ref_provincia` CHANGE COLUMN `PAIS` `ref_pais_id` INT(11) NOT NULL 
 
 INSERT INTO `usr_ref_tipo_documento` (`id`, `nombre`, `descripcion`) VALUES (0, 'INDEFINIDO', 'para las personas jurídicas');
 
-ALTER TABLE `cat_historico_disponibilidad` DROP `id_ui`;
-ALTER TABLE `cat_historico_disponibilidad` DROP `fecha`;
+ALTER TABLE `cat_historico_disponibilidad` ADD `id_detalle` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+ALTER TABLE `cat_historico_disponibilidad` CHANGE `avail` `detalle` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '';
+ALTER TABLE `cat_historico_disponibilidad` `loan` `tipo_prestamo` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT ''
+
+ALTER TABLE `cat_historico_disponibilidad`  DROP `date`;
+ALTER TABLE `cat_historico_disponibilidad`  DROP `branch`;
 
 DROP TABLE IF EXISTS cat_editorial;
 

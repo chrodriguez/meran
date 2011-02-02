@@ -200,21 +200,6 @@ INSERT  INTO `cat_estructura_catalogacion_opac` (`idestcatopac`, `campo`, `subca
 (11, '043', 'a', 'Codigo de Area Geografica', '', '', 3, 1),
 (15, '020', 'a', 'asd', '', '', 3, 1);
 
-DROP TABLE IF EXISTS `cat_historico_disponibilidad`;
-
-CREATE TABLE IF NOT EXISTS `cat_historico_disponibilidad` (
-  `id_detalle` int(11) NOT NULL auto_increment,
-  `id3` int(11) NOT NULL,
-  `detalle` varchar(30) NOT NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `fecha` date NOT NULL default '0000-00-00',
-  `tipo_prestamo` varchar(15) NOT NULL,
-  `id_ui` varchar(5) NOT NULL,
-  `agregacion_temp` varchar(255) NOT NULL,
-  `anio_agregacion` varchar(255) NOT NULL,
-  `mes_agregacion` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id_detalle`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `cat_portada_registro`;
 

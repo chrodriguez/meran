@@ -1,35 +1,35 @@
 
 -- Preferencias que no se utilizan más --
-DELETE FROM `systempreferences` WHERE `systempreferences`.`variable` IN 
+DELETE FROM `pref_preferencia_sistema` WHERE `systempreferences`.`variable` IN 
 ('acquisitions', 'authoritysep', 'autoBarcode', 'checkdigit', 'marc','marcflavour',
  'maxoutstanding', 'maxvirtualcopy','maxvirtualprint');
 
 -- Modificaciones a la tabla --
-ALTER TABLE `systempreferences` DROP PRIMARY KEY ;
+ALTER TABLE `pref_preferencia_sistema` DROP PRIMARY KEY ;
 
-ALTER TABLE `systempreferences` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+ALTER TABLE `pref_preferencia_sistema` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
 
-ALTER TABLE `systempreferences` ADD `categoria` VARCHAR( 255 ) NOT NULL DEFAULT 'sistema';
+ALTER TABLE `pref_preferencia_sistema` ADD `categoria` VARCHAR( 255 ) NOT NULL DEFAULT 'sistema';
 
 -- Referencias de las variables que ya existen!!!!!!!!!!
 UPDATE `systempreferences` SET `type`='text';
 
-UPDATE `systempreferences` SET `options` = 'ui|nombre', `type` = 'referencia' WHERE `systempreferences`.`variable` = 'defaultbranch';
+UPDATE `pref_preferencia_sistema` SET `options` = 'ui|nombre', `type` = 'referencia' WHERE `systempreferences`.`variable` = 'defaultbranch';
 
-UPDATE `systempreferences` SET `options` = 'nivel_bibliografico|description', `type` = 'referencia' WHERE `systempreferences`.`variable` = 'defaultlevel';
+UPDATE `pref_preferencia_sistema` SET `options` = 'nivel_bibliografico|description', `type` = 'referencia' WHERE `systempreferences`.`variable` = 'defaultlevel';
 
-UPDATE `systempreferences` SET `options` = 'soporte|description', `type` = 'referencia' WHERE `systempreferences`.`variable` = 'defaultsuport';
+UPDATE `pref_preferencia_sistema` SET `options` = 'soporte|description', `type` = 'referencia' WHERE `systempreferences`.`variable` = 'defaultsuport';
 
-UPDATE `systempreferences` SET `type`='bool' WHERE `systempreferences`.`variable` IN 
+UPDATE `pref_preferencia_sistema` SET `type`='bool' WHERE `systempreferences`.`variable` IN 
 ('autoActivarPersona','opacSearchAnonymous','logSearchOPAC','logSearchINTRA','ldapenabled','keeppasswordalive',
 'insecure','habilitar_irregulares','habilitar_https','EnabledMailSystem','circulation','circularDesdeDetalleUsuario',
 'circularDesdeDetalleDelRegistro','CheckUpdateDataEnabled','autoMemberNum','opacUnavail','permite_cambio_password_desde_opac',
 'print_renew', 'reminderMail', 'sanctions', 'selectHomeBranch', 'showHistoricReserves','showMenuItem_circ_devolucion_renovacion',
 'showMenuItem_circ_prestamos', 'susp', 'UploadPictureFromOPAC', 'usercourse', 'viewDetail', 'operacion_fuera_horario');
 
-UPDATE `systempreferences` SET value='0' WHERE `type` =  'bool' AND  value='no';
+UPDATE `pref_preferencia_sistema` SET value='0' WHERE `type` =  'bool' AND  value='no';
 
-UPDATE `systempreferences` SET value='1' WHERE `type` =  'bool' AND  value='yes';
+UPDATE `pref_preferencia_sistema` SET value='1' WHERE `type` =  'bool' AND  value='yes';
 
 -- Nuevas preferencias (separadas para que no fallen todas)--
  INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES
