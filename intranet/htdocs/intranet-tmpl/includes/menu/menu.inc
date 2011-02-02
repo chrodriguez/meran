@@ -132,7 +132,16 @@
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% 'Carga de presupuestos' | i18n %]",
                                                                 url =>      "/cgi-bin/koha/adquisiciones/cargaPresupuesto.pl", 
-                                                                title =>    "[% 'Listado de Proveedores' | i18n %]"
+                                                                title =>    "[% 'Carga de presupuestos' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </li>
+                        <li>
+
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Listado de Compra de Ejemplares' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/adquisiciones/listCompraEjemplares.pl", 
+                                                                title =>    "[% 'Listado de Compra de Ejemplares' | i18n %]"
                                                             ) ;
                             [% END %]
                         </li>
