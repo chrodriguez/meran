@@ -1,0 +1,59 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript" language="javascript" >
+    $(document).ready(function() {
+        $('.editable').attr('readonly', true)
+        
+        $('#editar').click(function() {
+          $('.editable').attr('readonly', false)
+        });
+    });
+</script>
+
+[% INCLUDE "FormValidateHelper.inc" %]
+
+[% INCLUDE 'AutocompleteHelper.inc'  %]
+
+
+<fieldset>
+<legend>
+                [% "Listado de Ejemplares a comprar" | i18n %]
+</legend>
+    <fieldset id="datos_proveedor">
+    <legend class="titulo_legend">[% "Ejemplares recomendados" | i18n %]</legend>
+      <table id="tablaEjemplaresCompra" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+      <thead>
+          <tr class="titulo_tabla_resultado">
+              <th id="renglon">
+                  [% "Libro" | i18n %]
+              </th>
+              <th id="cantidad">
+                  [% "Cantidad" | i18n %]
+              </th>
+              <th id="fecha">
+                  [% "Fecha" | i18n %]
+              </th>         
+          </tr>
+      </thead>
+      <tbody>
+          
+            [% FOREACH resultsloop %]   
+            <tr  align="center" id="[% renglon %]">
+                  <td align="left" >
+                    <input type="text" id="libro" class="editable" value="[% recomendacion.titulo %]" > 
+                  </td>
+                  <td align="left" >
+                      <input type="text" id="cantidad" class="editable" value="[% recomendacion.cantidad_ejemplares %]"> 
+                  </td>
+                  <td align="left" >
+                      <input type="text"  id="fecha" class="editable" value="[% recomendacion.fecha %]"> 
+                  </td>
+            </tr>        
+            [% END %]    
+    </tbody>   
+    </table>
+    <input type="button" value="Editar" id="editar" />
+    
+</fieldset>
+
+[% INCLUDE "intranet-bottom.inc" %]

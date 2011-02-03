@@ -3,6 +3,7 @@
 use CGI::Session;
 use C4::Context;
 use MARC::Record;
+use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
 my @N1;
 my @N2;
@@ -30,7 +31,7 @@ my $additionalauthor;
 my $dbh = C4::Context->dbh;
 
 print "INICIO \n";
-
+my $tt1 = time();
 print "Creando tablas necesarias \n";
     crearTablasNecesarias();
 
@@ -45,18 +46,6 @@ my $end1 = time();
 my $tardo1=($end1 - $st1);
 print "AL FIN TERMINO!!! Tardo $tardo1 segundos !!!\n";
 #################
-
-#Referencias
-print "Reparando referencias. OTRO QUE VA A TARDAR!!! \n";
-my $st2 = time();
-    repararReferencias();
-my $end2 = time();
-my $tardo2=($end2 - $st2);
-print "FFFAAAAAAAAA  NO TERMINABA MAS!! Fuiste a comer???  Tardo $tardo2 segundos !!!\n";
-print "Quitando referencias  viejas \n";
-    quitarReferenciasViejas();
-# ##
-
 
 print "Renombrando tablas \n";
   renombrarTablas();
@@ -73,7 +62,13 @@ print "Creando la estructura MARC \n";
 print "Agregando preferencias del sistema \n";
   agregarPreferenciasDelSistema();
 print "FIN!!! \n";
+my $tt2 = time();
 print "\n GRACIAS DICO!!! \n";
+
+my $tardo2=($tt2 - $tt1);
+my $min= $tardo2/60;
+my $hour= $min/60;
+print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!! o mejor $hour horas !!!\n";
 
 #-----------------------------------------------------------------------------------------------------------------------------------#-----------------------------------------------------------------------------------------------------------------------------------#-----------------------------------------------------------------------------------------------------------------------------------#-----------------------------------------------------------------FUNCIONES---------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------------#-----------------------------------------------------------------------------------------------------------------------------------#-----------------------------------------------------------------------------------------------------------------------------------
@@ -101,11 +96,6 @@ print "\n GRACIAS DICO!!! \n";
 
 	sub procesarV2_V3 
 	{
-	
-
-    my $id1_nuevo;
-    my $id2_nuevo;
-    my $id3_nuevo;
 
 	my $cant_biblios=$dbh->prepare("SELECT count(*) as cantidad FROM biblio ;");
 	$cant_biblios->execute();
@@ -183,7 +173,6 @@ print "\n GRACIAS DICO!!! \n";
 		my $dn1;
 		$dn1->{'campo'}=$_->{'campo'};
 		$dn1->{'subcampo'}=$_->{'subcampo'};
-        
         if($_->{'campoTabla'} eq 'author'){ $dn1->{'valor'}='cat_autor@'.$biblio->{$_->{'campoTabla'}}; }
           else { $dn1->{'valor'}=$biblio->{$_->{'campoTabla'}};}
 
@@ -226,7 +215,7 @@ print "\n GRACIAS DICO!!! \n";
 
 	# additionalauthor
 	
-	my $additionalauthors=$dbh->prepare("SELECT * FROM additionalauthors where biblionumber= ?;");
+	my $additionalauthors=$dbh->prepare("SELECT * FROM additionalauthors where id1= ?;");
 	$additionalauthors->execute($biblio->{'biblionumber'});
 	my $dn1;
 	my @ar1;
@@ -242,7 +231,7 @@ print "\n GRACIAS DICO!!! \n";
 
 	#########################################################################
 	my($error,$codMsg);
-	$id1_nuevo=&guardaNivel1MARC($biblio->{'biblionumber'},\@ids1);
+	&guardaNivel1MARC($biblio->{'biblionumber'},\@ids1);
 
 #---------------------------------------FIN NIVEL1---------------------------------------#	
 
@@ -259,9 +248,8 @@ print "\n GRACIAS DICO!!! \n";
         elsif($_->{'campoTabla'} eq 'idLanguage'){ $dn2->{'valor'}='ref_idioma@'.$biblioitem->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'idCountry'){ $dn2->{'valor'}='ref_pais@'.$biblioitem->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'place'){ #Esto no se puede pasar sin buscar la referencia
-#                     my $idLocalidad= buscarLocalidadParecida($biblioitem->{$_->{'campoTabla'}});
-#                     $dn2->{'valor'}='ref_localidad@'.$idLocalidad; 
-                      $dn2->{'valor'}='ref_localidad@'.$biblioitem->{$_->{'campoTabla'}};
+                     my $idLocalidad= buscarLocalidadParecida($biblioitem->{$_->{'campoTabla'}});
+                      $dn2->{'valor'}='ref_localidad@'.$idLocalidad; 
               } 
         elsif($_->{'campoTabla'} eq 'idSupport'){ $dn2->{'valor'}='ref_soporte@'.$biblioitem->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'classification'){ $dn2->{'valor'}='ref_nivel_bibliografico@'.$biblioitem->{$_->{'campoTabla'}}; }
@@ -308,7 +296,7 @@ print "\n GRACIAS DICO!!! \n";
 	$sth16->finish();
 	########################################################################
 
-	$id2_nuevo=&guardaNivel2MARC($biblio->{'biblionumber'},$biblioitem->{'biblioitemnumber'},$id1_nuevo,\@ids2);
+    &guardaNivel2MARC($biblio->{'biblionumber'},$biblioitem->{'biblioitemnumber'},\@ids2);
 
 #---------------------------------------NIVEL3---------------------------------------#	
 
@@ -336,7 +324,7 @@ print "\n GRACIAS DICO!!! \n";
 		if (($dn3->{'valor'} ne '') && ($dn3->{'valor'} ne null)){push(@ids3,$dn3);}
 	}
 	
-	$id3_nuevo=&guardaNivel3MARC($biblio->{'biblionumber'},$biblioitem->{'biblioitemnumber'},$item->{'itemnumber'},$id1_nuevo,$id2_nuevo,\@ids3);
+	&guardaNivel3MARC($biblio->{'biblionumber'},$biblioitem->{'biblioitemnumber'},$item->{'itemnumber'},\@ids3);
 
 
 	@ids3=();
@@ -357,176 +345,46 @@ $biblios->finish();
 #---------------------------------------FIN NIVEL1---------------------------------------#
 
 	}
-	sub repararReferencias 
-	{
-	#########################################################################
-	#			REPARAR REFERENCIAS!!!!!			#
-	#########################################################################
 
-	my $cant_nivel1=$dbh->prepare("SELECT count(*) as cantidad FROM cat_registro_marc_n1 ;");
-	$cant_nivel1->execute();
-	my $cantidad=$cant_nivel1->fetchrow;
-	my $registro=1;
-	print "Se van a procesar $cantidad registros \n";
-
-
-	#############1111111111111111111111111111111111111111111111##############
-	my $niveles1=$dbh->prepare("SELECT * FROM cat_registro_marc_n1 ;");
-	$niveles1->execute();
-
-	while (my $nivel1=$niveles1->fetchrow_hashref ) {
-	my $porcentaje= int (($registro * 100) / $cantidad );
-# 	print "Procesando registro: $registro de $cantidad ($porcentaje%) \n";
-
-	#########################################################################
-	#			REFERENCIAS A NIVEL 1 (biblio)			#
-	#				colaboradores				#
-	#########################################################################
-	my $col2=$dbh->prepare("UPDATE colaboradores SET id1 = ? where biblionumber= ?;");
-	$col2->execute($nivel1->{'id'},$nivel1->{'biblionumber'});
-	$col2->finish();
-
-	my $mod1=$dbh->prepare("UPDATE modificaciones SET id = ? where tipo = 'Libro' and numero = ?;");
-	$mod1->execute($nivel1->{'id'},$nivel1->{'biblionumber'});
-	$mod1->finish();
-	
-	#########################################################################
-	#		FIN REFERENCIAS A NIVEL 1 (biblio)			#
-	#########################################################################
-
-	#############2222222222222222222222222222222222222222222222##############
-	my $niveles2=$dbh->prepare("SELECT * FROM cat_registro_marc_n2 where id1 = ? ;");
-	$niveles2->execute($nivel1->{'id'});
-
-	while (my $nivel2=$niveles2->fetchrow_hashref ) {
-
-	#########################################################################
-	#		REFERENCIAS A NIVEL 2 (biblioitemnumber)		#
-	#			biblioanalysis					#
-	#			reserves					#
-	#			shelfcontents					#
-	#########################################################################
-	my $banalysis2=$dbh->prepare("UPDATE biblioanalysis SET id1 = ? , id2 = ? where biblionumber= ? and biblioitemnumber= ?;");
-	$banalysis2->execute($nivel1->{'id'},$nivel2->{'id'},$nivel1->{'biblionumber'},$nivel2->{'biblioitemnumber'});
-	$banalysis2->finish();
-
-	my $reserves2=$dbh->prepare("UPDATE reserves SET id2 = ? where biblioitemnumber= ? and itemnumber is NULL;");
-	$reserves2->execute($nivel2->{'id'},$nivel2->{'biblioitemnumber'});
-	$reserves2->finish();
-
-	my $estantes2=$dbh->prepare(" UPDATE shelfcontents SET id2 = ? where biblioitemnumber= ?;");
-	$estantes2->execute($nivel2->{'id'},$nivel2->{'biblioitemnumber'}); 
-	$estantes2->finish();
-
-	my $mod2=$dbh->prepare("UPDATE modificaciones SET id = ? where tipo = 'Grupo' and numero = ?;");
-	$mod2->execute($nivel2->{'id'},$nivel2->{'biblioitemnumber'});
-	$mod2->finish();
-
-	#########################################################################
-	#		FIN REFERENCIAS A NIVEL 2 (biblioitemnumber)		#
-	#########################################################################
-
-	#############3333333333333333333333333333333333333333333333##############
-	my $niveles3=$dbh->prepare("SELECT * FROM cat_registro_marc_n3 where id1 = ? and id2 = ? ;");
-	$niveles3->execute($nivel1->{'id'},$nivel2->{'id'});
-
-	while (my $nivel3=$niveles3->fetchrow_hashref ) {
-
-
-	#########################################################################
-	#		REFERENCIAS A NIVEL 3 (itemnumber)			#
-	#			availability					#
-	#			historicIssues					#
-	#			historicCirculation				#
-	#			issues						#
-	#			reserves						#
-	#########################################################################
-	my $av2=$dbh->prepare(" UPDATE availability SET id3 = ? where item = ?;");
-	$av2->execute($nivel3->{'id'},$nivel3->{'itemnumber'}); 
-	$av2->finish();
-
-	my $hi2=$dbh->prepare(" UPDATE historicIssues SET id3 = ? where itemnumber = ?;");
-	$hi2->execute($nivel3->{'id'},$nivel3->{'itemnumber'}); 
-	$hi2->finish();
-
-	my $hc2=$dbh->prepare(" UPDATE historicCirculation SET id1 = ? , id2 = ? , id3 = ? where biblionumber= ? and biblioitemnumber= ? and itemnumber = ?;");
-	$hc2->execute($nivel3->{'id1'},$nivel3->{'id2'},$nivel3->{'id'},$nivel3->{'biblionumber'},$nivel3->{'biblioitemnumber'},$nivel3->{'itemnumber'}); 
-	$hc2->finish();
-
-	my $is2=$dbh->prepare(" UPDATE issues SET id3 = ? where itemnumber = ?;");
-	$is2->execute($nivel3->{'id'},$nivel3->{'itemnumber'}); 
-	$is2->finish();
-
-	my $reserves3=$dbh->prepare("UPDATE reserves SET id2 = ? , id3 = ?  where biblioitemnumber = ? and itemnumber = ?;");
-	$reserves3->execute($nivel3->{'id2'},$nivel3->{'id'},$nivel3->{'biblioitemnumber'},$nivel3->{'itemnumber'});
-	$reserves3->finish();
-
-	my $mod3=$dbh->prepare("UPDATE modificaciones SET id = ? where tipo = 'Ejemplar' and numero = ?;");
-	$mod3->execute($nivel3->{'id'},$nivel3->{'itemnumber'});
-	$mod3->finish();
-
-	#########################################################################
-	#		FIN REFERENCIAS A NIVEL 3 (itemnumber)			#
-	#########################################################################
-	
-	}#Fin niveles3
-	}#Fin niveles2
-
-	$registro++;
-	}#Fin niveles1
-	
-}
 	sub crearNuevasReferencias
 	{
 	#########################################################################
 	#			NUEVAS REFERENCIAS!!!!!				#
 	#########################################################################
-	# En los Niveles
-	my $rn1=$dbh->prepare("ALTER TABLE cat_registro_marc_n1 ADD biblionumber INT( 11 ) NOT NULL FIRST ;");
-	$rn1->execute();
-
-	my $rn2=$dbh->prepare("ALTER TABLE cat_registro_marc_n2 ADD biblionumber INT( 11 ) NOT NULL FIRST,
-				ADD biblioitemnumber INT( 11 ) NOT NULL AFTER biblionumber;");
-	$rn2->execute();
-
-	my $rn3=$dbh->prepare("ALTER TABLE cat_registro_marc_n3 ADD biblionumber INT( 11 ) NOT NULL FIRST ,
-		ADD biblioitemnumber INT( 11 ) NOT NULL AFTER biblionumber ,
-		ADD itemnumber INT( 11 ) NOT NULL AFTER biblioitemnumber ;");
-	$rn3->execute();
-	#
 	
 	#Nivel 1#
-	my $col=$dbh->prepare("ALTER TABLE `colaboradores` ADD `id1` INT( 11 ) NOT NULL FIRST ;");
+
+	my $col=$dbh->prepare("ALTER TABLE `colaboradores` CHANGE biblionumber `id1` INT( 11 ) NOT NULL FIRST ;");
    	$col->execute();
 
-    my $adaut=$dbh->prepare("ALTER TABLE additionalauthors ADD `id1` INT( 11 ) NOT NULL FIRST ;");
+    my $adaut=$dbh->prepare("ALTER TABLE additionalauthors CHANGE biblionumber `id1` INT( 11 ) NOT NULL FIRST ;");
     $adaut->execute();
 
 	#Nivel 2#
-	my $banalysis=$dbh->prepare("ALTER TABLE `biblioanalysis` ADD `id1` INT( 11 ) NOT NULL FIRST , 
-					ADD `id2` INT( 11 ) NOT NULL AFTER `id1` ;");
+	my $banalysis=$dbh->prepare("ALTER TABLE `biblioanalysis` CHANGE biblionumber `id1` INT( 11 ) NOT NULL FIRST , 
+					CHANGE biblioitemnumber `id2` INT( 11 ) NOT NULL AFTER `id1` ;");
 	$banalysis->execute();
-	my $reserves=$dbh->prepare("ALTER TABLE `reserves` ADD `id2` INT( 11 ) NOT NULL FIRST , 
-					ADD `id3` INT( 11 ) NULL AFTER `id2` ;");
+	my $reserves=$dbh->prepare("ALTER TABLE `reserves` CHANGE biblioitemnumber `id2` INT( 11 ) NOT NULL FIRST , 
+					CHANGE itemnumber `id3` INT( 11 ) NULL AFTER `id2` ;");
 	$reserves->execute();
-	my $estantes=$dbh->prepare("ALTER TABLE `shelfcontents` ADD `id2` INT( 11 ) NOT NULL FIRST ;");
+	my $estantes=$dbh->prepare("ALTER TABLE `shelfcontents` CHANGE biblioitemnumber `id2` INT( 11 ) NOT NULL FIRST ;");
 	$estantes->execute();
 	#Nivel 3#
-	my $av1=$dbh->prepare("ALTER TABLE `availability` ADD `id3` INT( 11 ) NOT NULL FIRST ;");
+	my $av1=$dbh->prepare("ALTER TABLE `availability` CHANGE item `id3` INT( 11 ) NOT NULL FIRST ;");
 	$av1->execute();
 
-	my $hi1=$dbh->prepare("ALTER TABLE `historicIssues` ADD `id3` INT( 11 ) NOT NULL FIRST ;");
+	my $hi1=$dbh->prepare("ALTER TABLE `historicIssues` CHANGE itemnumber `id3` INT( 11 ) NOT NULL FIRST ;");
 	$hi1->execute();
 
-	my $hc1=$dbh->prepare("ALTER TABLE `historicCirculation` ADD `id1` INT( 11 ) NOT NULL AFTER `id` ,
-		ADD `id2` INT( 11 ) NOT NULL AFTER `id1` ,
-		ADD `id3` INT( 11 ) NOT NULL AFTER `id2` ;");
+	my $hc1=$dbh->prepare("ALTER TABLE `historicCirculation` CHANGE biblionumber `id1` INT( 11 ) NOT NULL AFTER `id` ,
+		CHANGE biblioitemnumber `id2` INT( 11 ) NOT NULL AFTER `id1` ,
+		CHANGE itemnumber `id3` INT( 11 ) NOT NULL AFTER `id2` ;");
 	$hc1->execute();
 
-	my $is1=$dbh->prepare("ALTER TABLE `issues` ADD `id3` INT( 11 ) NOT NULL FIRST ;");
+	my $is1=$dbh->prepare("ALTER TABLE `issues` CHANGE itemnumber `id3` INT( 11 ) NOT NULL FIRST ;");
 	$is1->execute();
 	#Los 3 Niveles#
-	my $mod=$dbh->prepare("ALTER TABLE `modificaciones` ADD `id` INT( 11 ) NOT NULL AFTER `numero` ;");
+	my $mod=$dbh->prepare("ALTER TABLE `modificaciones` CHANGE numero `id` INT( 11 ) NOT NULL AFTER idModificacion ;");
 	$mod->execute();
 
     my $loc1=  $dbh->prepare("ALTER TABLE localidades DROP PRIMARY KEY;");
@@ -536,57 +394,6 @@ $biblios->finish();
 	#########################################################################
 	#			FIN NUEVAS REFERENCIAS!!!!!			#
 	#########################################################################
-	}
-
-	sub quitarReferenciasViejas
-	{
-
-	#########################################################################
-	#			QUITAR REFERENCIAS VIEJAS!!!!!			#
-	#########################################################################
-	#En los niveles
-	my $rmn1=$dbh->prepare("ALTER TABLE cat_registro_marc_n1 DROP biblionumber ;");
-	$rmn1->execute();
-	my $rmn2=$dbh->prepare("ALTER TABLE cat_registro_marc_n2 DROP biblionumber, DROP biblioitemnumber;");
-	$rmn2->execute();
-	my $rmn3=$dbh->prepare("ALTER TABLE cat_registro_marc_n3 DROP biblionumber, DROP biblioitemnumber, DROP itemnumber;");
-	$rmn3->execute();
-
-	#Nivel 1
-	my $col3=$dbh->prepare("ALTER TABLE `colaboradores` DROP `biblionumber`;");
-   	$col3->execute();
-	#Nivel 2
-	my $banalysis3=$dbh->prepare("ALTER TABLE biblioanalysis DROP `biblionumber`, DROP `biblioitemnumber`;");
-	$banalysis3->execute();
-
-	my $estantes3=$dbh->prepare("ALTER TABLE `shelfcontents` DROP `biblioitemnumber`;");
-   	$estantes3->execute();
-	#Nivel 3
-	my $av3=$dbh->prepare("ALTER TABLE availability DROP item;");
-   	$av3->execute();
-
-	my $hi3=$dbh->prepare("ALTER TABLE historicIssues DROP itemnumber;");
-   	$hi3->execute();
-
-	my $hc3=$dbh->prepare("ALTER TABLE `historicCirculation` DROP `biblionumber`,   DROP `biblioitemnumber`,   DROP `itemnumber`;");
-   	$hc3->execute();
-
-	my $is3=$dbh->prepare("ALTER TABLE issues DROP itemnumber;");
-   	$is3->execute();
-	
-	my $reserves4=$dbh->prepare("ALTER TABLE `reserves`   DROP `biblioitemnumber`,   DROP `itemnumber`;");
-
-	#TODOS
-	my $mod4=$dbh->prepare("ALTER TABLE modificaciones DROP numero;");
-   	$mod4->execute();
-
-	my $res2=$dbh->prepare("ALTER TABLE `reserves` DROP `priority` , DROP `found` , DROP `itemnumber` ;");
-	$res2->execute();
-
-	#########################################################################
-	#			FIN QUITAR REFERENCIAS VIEJAS!!!!!		#
-	#########################################################################
-
 	}
 
 	sub crearTablasNecesarias 
@@ -782,7 +589,7 @@ my $kohaadmin_socio="INSERT INTO `usr_socio` (`id_persona`, `nro_socio`, `id_ui`
     $usuarios->execute();
     while (my $usuario=$usuarios->fetchrow_hashref) {
       if($usuario->{'password'}){
-          my $upus=$dbh->prepare(" UPDATE usr_socio SET password='".C4::AR::Auth::hashear_password($usuario->{'password'},'SHA_256_B64')."' WHERE nro_socio='". $usuario->{'nro_socio'} ."' ;");
+          my $upus=$dbh->prepare(" UPDATE usr_socio SET password='".sha256_base64($usuario->{'password'})."' WHERE nro_socio='". $usuario->{'nro_socio'} ."' ;");
           $upus->execute();
       }
     }
@@ -866,16 +673,8 @@ sub guardaNivel1MARC {
         }
     }
 
-    my $reg_marc_1 =$dbh->prepare("INSERT INTO cat_registro_marc_n1 (marc_record,biblionumber) VALUES (?,?) ");
+    my $reg_marc_1 =$dbh->prepare("INSERT INTO cat_registro_marc_n1 (marc_record,id) VALUES (?,?) ");
        $reg_marc_1->execute($marc->as_usmarc,$biblionumber);
-
-
-        my $query_MAX = "SELECT MAX(id) FROM cat_registro_marc_n1";
-        my $sth_MAX = $dbh->prepare($query_MAX);
-        $sth_MAX->execute();
-        my $id1_nuevo = $sth_MAX->fetchrow;
-
-    return($id1_nuevo);
 }
 
 
@@ -887,7 +686,7 @@ Guarda los campos del nivel 2 en un MARC RECORD.
 =cut
 
 sub guardaNivel2MARC {
-    my ($biblionumber,$biblioitemnumber,$id1, $nivel2)=@_;
+    my ($biblionumber,$biblioitemnumber, $nivel2)=@_;
 
     my $marc = MARC::Record->new();
 
@@ -923,16 +722,9 @@ sub guardaNivel2MARC {
         }
     }
 
-    my $reg_marc_2 =$dbh->prepare("INSERT INTO cat_registro_marc_n2 (marc_record,id1,biblionumber,biblioitemnumber) VALUES (?,?,?,?) ");
-       $reg_marc_2->execute($marc->as_usmarc,$id1,$biblionumber,$biblioitemnumber);
+    my $reg_marc_2 =$dbh->prepare("INSERT INTO cat_registro_marc_n2 (marc_record,id1,id) VALUES (?,?,?) ");
+       $reg_marc_2->execute($marc->as_usmarc,$biblionumber,$biblioitemnumber);
 
-
-        my $query_MAX = "SELECT MAX(id) FROM cat_registro_marc_n2";
-        my $sth_MAX = $dbh->prepare($query_MAX);
-        $sth_MAX->execute();
-        my $id2_nuevo = $sth_MAX->fetchrow;
-
-    return($id2_nuevo);
 }
 
 
@@ -942,7 +734,7 @@ Guarda los campos del nivel 2 en un MARC RECORD.
 =cut
 
 sub guardaNivel3MARC {
-    my ($biblionumber,$biblioitemnumber,$itemnumber,$id1,$id2,$nivel3)=@_;
+    my ($biblionumber,$biblioitemnumber,$itemnumber,$nivel3)=@_;
 
     my $marc = MARC::Record->new();
 
@@ -978,16 +770,9 @@ sub guardaNivel3MARC {
         }
     }
 
-    my $reg_marc_2 =$dbh->prepare("INSERT INTO cat_registro_marc_n3 (marc_record,id1,id2,biblionumber,biblioitemnumber,itemnumber) VALUES (?,?,?,?,?,?) ");
-       $reg_marc_2->execute($marc->as_usmarc,$id1,$id2,$biblionumber,$biblioitemnumber,$itemnumber);
+    my $reg_marc_2 =$dbh->prepare("INSERT INTO cat_registro_marc_n3 (marc_record,id1,id2,id) VALUES (?,?,?,?)");
+       $reg_marc_2->execute($marc->as_usmarc,$biblionumber,$biblioitemnumber,$itemnumber);
 
-
-        my $query_MAX = "SELECT MAX(id) FROM cat_registro_marc_n3";
-        my $sth_MAX = $dbh->prepare($query_MAX);
-        $sth_MAX->execute();
-        my $id3_nuevo = $sth_MAX->fetchrow;
-
-    return($id3_nuevo);
 }
 
 
