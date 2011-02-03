@@ -1,0 +1,32 @@
+<legend class="titulo_legend">[% "Ejemplares recomendados para la compra" | i18n %]</legend>
+      <table id="tablaEjemplaresCompra" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+      <thead>
+          <tr class="titulo_tabla_resultado">
+              <th id="titulo">
+                  [% "T&iacute;tulo del Libro" | i18n %]
+              </th>
+              <th id="cantidad">
+                  [% "Cantidad Ejemplares" | i18n %]
+              </th>
+              <th id="fecha_publicacion">
+                  [% "Fecha de Publicaci&oacute;n" | i18n %]
+              </th>         
+          </tr>
+      </thead>
+      <tbody>
+          
+            [% FOREACH resultsloop %]   
+            <tr  align="center" id="[% renglon %]">
+                  <td align="left" >
+                    <input type="text" id="libro" class="editable" value="[% recomendacion.titulo %]" > 
+                  </td>
+                  <td align="left" >
+                      <input type="text" id="cantidad" class="editable" value="[% recomendacion.cantidad_ejemplares %]"> 
+                  </td>
+                  <td align="left" >
+                      <input type="text"  id="fecha" class="editable" value="[% recomendacion.fecha_publicacion %]"> 
+                  </td>
+            </tr>        
+            [% END %]    
+    </tbody>   
+</table>

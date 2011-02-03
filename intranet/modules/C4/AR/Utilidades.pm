@@ -25,6 +25,7 @@ use C4::AR::Preferencias;
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw(
+    generarComboProveedoresMultiple
     generarComboFormasDeEnvio
     generarComboTipoDeMaterial
     monedasAutocomplete
@@ -1895,6 +1896,51 @@ sub generarComboTipoDeMaterial{
     return $combo_tipo_materiales; 
 }
 
+sub generarComboProveedoresMultiple{
+    my ($params) = @_;
+
+    my @select_proveedores_array;
+    my %select_proveedores;
+    my $proveedores        = &C4::AR::Referencias::obtenerProveedores();
+
+    foreach my $prov (@$proveedores) {
+        push(@select_proveedores_array, $prov->getId);
+        if ($prov-> getNombre eq "") {
+             $select_proveedores{$prov->getId}  = $prov->getRazonSocial;
+        } else { 
+            $select_proveedores{$prov->getId}  = $prov->getNombre;
+        }
+    }
+
+    $select_proveedores{''}                = 'SIN SELECCIONAR';
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){ 
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}       = $params->{'name'}||'proveedor_id';
+    $options_hash{'id'}         = $params->{'id'}||'proveedor';
+    $options_hash{'size'}       = $params->{'size'}||6;
+    $options_hash{'class'}      = 'required';
+    $options_hash{'multiple'}   = $params->{'multiple'}||1;
+    $options_hash{'defaults'}   = $params->{'default'} || 0;
+
+    push (@select_proveedores_array, '');
+    $options_hash{'values'}     = \@select_proveedores_array;
+    $options_hash{'labels'}     = \%select_proveedores;
+
+    my $combo_proveedores    = CGI::scrolling_list(\%options_hash);
+
+    return $combo_proveedores; 
+}
 
 
 sub generarComboProveedores{

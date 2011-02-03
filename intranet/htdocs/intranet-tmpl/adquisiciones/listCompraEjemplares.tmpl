@@ -10,50 +10,54 @@
     });
 </script>
 
-[% INCLUDE "FormValidateHelper.inc" %]
-
-[% INCLUDE 'AutocompleteHelper.inc'  %]
-
-
-<fieldset>
-<legend>
-                [% "Listado de Ejemplares a comprar" | i18n %]
-</legend>
-    <fieldset id="datos_proveedor">
-    <legend class="titulo_legend">[% "Ejemplares recomendados" | i18n %]</legend>
-      <table id="tablaEjemplaresCompra" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+<fieldset id="datos_proveedor">
+    <legend class="titulo_legend">[% "Ejemplares recomendados para la compra" | i18n %]</legend>
+      <table id="tablaEjemplaresCompra" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 >
       <thead>
           <tr class="titulo_tabla_resultado">
-              <th id="renglon">
-                  [% "Libro" | i18n %]
+              <th id="titulo">
+                  [% "T&iacute;tulo del Libro" | i18n %]
               </th>
               <th id="cantidad">
-                  [% "Cantidad" | i18n %]
+                  [% "Cantidad Ejemplares" | i18n %]
               </th>
-              <th id="fecha">
-                  [% "Fecha" | i18n %]
-              </th>         
+              <th id="fecha_publicacion">
+                  [% "Fecha de Publicaci&oacute;n" | i18n %]
+              </th>    
+              <th id="activo">
+                  [% "Activo" | i18n %]
+              </th>      
           </tr>
       </thead>
       <tbody>
           
             [% FOREACH resultsloop %]   
             <tr  align="center" id="[% renglon %]">
-                  <td align="left" >
-                    <input type="text" id="libro" class="editable" value="[% recomendacion.titulo %]" > 
+                  <td align="right" >
+                    <input type="text" id="libro" value="[% recomendacion.titulo %]" readonly> 
                   </td>
-                  <td align="left" >
+                  <td align="right" >
                       <input type="text" id="cantidad" class="editable" value="[% recomendacion.cantidad_ejemplares %]"> 
                   </td>
-                  <td align="left" >
-                      <input type="text"  id="fecha" class="editable" value="[% recomendacion.fecha %]"> 
+                  <td align="right" >
+                      <input type="text"  id="fecha" value="[% recomendacion.fecha_publicacion %]" readonly> 
+                  </td>
+                  <td align="right" >
+                      <input type="checkbox"  id="activo"> 
                   </td>
             </tr>        
             [% END %]    
     </tbody>   
     </table>
     <input type="button" value="Editar" id="editar" />
-    
+
+    [% PERL %]
+        print C4::AR::Filtros::link_to(   text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
+                                                      url =>  "/cgi-bin/koha/adquisiciones/listCompraEjemplares.pl", 
+                                                      params =>   ["export=1"],
+                                                      title =>    "[% 'Exportar a PDF' | i18n %]"
+                                      );
+    [% END %]
 </fieldset>
 
 [% INCLUDE "intranet-bottom.inc" %]
