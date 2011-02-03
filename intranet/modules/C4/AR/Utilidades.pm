@@ -19,6 +19,7 @@ use Encode;
 use POSIX qw(ceil floor); 
 use JSON;
 use C4::AR::Preferencias;
+use C4::AR::Presupuestos;
 
 #Einar use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
@@ -1951,11 +1952,11 @@ sub generarComboPresupuestos{
 
     my @select_presupuestos_array;
     my %select_presupuestos;
-    my $presupuestos        = &C4::AR::Referencias::obtenerPresupuestos();
+    my $presupuestos  = &C4::AR::Presupuestos::getAdqPresupuestos();
 
     foreach my $presupuesto (@$presupuestos) {
         push(@select_presupuestos_array, $presupuesto->getId);
-        $select_presupuestos{$presupuesto->getId}  = $presupuesto->getProveedorId;
+#         $select_presupuestos{$presupuesto->getId}  = $presupuesto->getProveedorId;
       
     }
 
@@ -1971,8 +1972,8 @@ sub generarComboPresupuestos{
         $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
-     $options_hash{'name'}       = $params->{'name'}||'presupuesto_od';
-     $options_hash{'id'}         = $params->{'id'}||'presupuesto';
+     $options_hash{'name'}       = $params->{'name'}||'combo_presupuesto';
+     $options_hash{'id'}         = $params->{'id'}||'combo_presupuesto';
      $options_hash{'size'}       = $params->{'size'}||1;
      $options_hash{'class'}      = 'required';
      $options_hash{'multiple'}   = $params->{'multiple'}||0;

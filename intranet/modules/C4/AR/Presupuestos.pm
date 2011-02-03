@@ -14,15 +14,26 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw(  
     &getAdqPresupuestoDetalle;
     &actualizarPresupuesto;
+    &getAdqPresupuestos;
 );
   
+sub getAdqPresupuestos{
+    my $presupuestos = C4::Modelo::AdqPresupuesto::Manager->get_adq_presupuesto;
+    my @results;
+
+    foreach my $presupuesto (@$presupuestos) {
+        push (@results, $presupuesto);
+    }
+
+    return(\@results);
+}
+
 
 sub getAdqPresupuestoDetalle{
     my ( $id_presupuesto, $db) = @_;
   
     $db = $db || C4::Modelo::AdqPresupuestoDetalle->new()->db;
 
-    
     my $detalle_array_ref = C4::Modelo::AdqPresupuestoDetalle::Manager->get_adq_presupuesto_detalle(   
                                                                     db => $db,
                                                                     query   => [ adq_presupuesto_id => { eq => $id_presupuesto} ],

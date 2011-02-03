@@ -7,10 +7,17 @@ use C4::AR::Proveedores;
 
 my $input = new CGI;
 
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+
+my $id_pres= $obj->{'id_presupuesto'};
+
 # $onChange="onChange='recuperarProveedor();'"
 
 my $combo_proveedores = &C4::AR::Utilidades::generarComboProveedores();
 my $combo_presupuestos = &C4::AR::Utilidades::generarComboPresupuestos();
+my $presupuestos = &C4::AR::Presupuestos::getAdqPresupuestoDetalle($id_pres);
+
+C4::AR::Utilidades::printARRAY($presupuestos);
 
 my ($template, $session, $t_params)= get_template_and_user({
                                 template_name => "adquisiciones/cargaPresupuesto.tmpl",
@@ -23,8 +30,12 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 my $monedas = C4::AR::Proveedores::getMonedasProveedor($id_proveedor);
 
+
+
 $t_params->{'monedas'} = $monedas;
 $t_params->{'combo_proveedores'} = $combo_proveedores;
 $t_params->{'combo_presupuestos'} = $combo_presupuestos;
+$t_params->{'presupuestos'} = $presupuestos;
+
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

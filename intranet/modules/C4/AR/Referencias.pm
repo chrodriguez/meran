@@ -167,16 +167,7 @@ sub obtenerTiposDeDocumentos {
     return(\@results);
 }
 
-sub obtenerPresupuestos{
-    my $presupuestos = C4::Modelo::AdqPresupuesto::Manager->get_adq_presupuesto;
-    my @results;
 
-    foreach my $presupuesto (@$presupuestos) {
-        push (@results, $presupuesto);
-    }
-
-    return(\@results);
-}
 
 =item
 Esta funcion devuelve un arreglo de objetos formas de envio

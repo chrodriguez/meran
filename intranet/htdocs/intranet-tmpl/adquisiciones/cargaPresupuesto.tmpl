@@ -13,33 +13,54 @@
 <script type="text/javascript">
     
 function mostrarManual(){
-       $('#carga_planilla').hide(); 
-       $('#datos_planilla').hide();
-       $('#pres_manual').show(); 
-       $('#acciones').show();
+        $('#presupuesto').hide();
+        $('#carga_planilla').hide();
+        $('#pres_manual').show();
+        $('#acciones').show();
 }
 
 function mostrarPlanilla(){
-       $('#datos_presupuesto').show();  
-       $('#carga_planilla').show(); 
-       $('#datos_planilla').show();
-       $('#acciones').show();
+     $('#pres_manual').hide();
+     $('#carga_planilla').show();
+     $('#presupuesto').show();
+     $('#acciones').hide();
 }
 
 $(document).ready(function() {
    makeToggle('toggle_container','trigger',null,true);
    createFileUploader();
-   $('#div_uploader').show();
-   $('#datos_planilla').hide();
-   $('#carga_planilla').hide(); 
-   $('#datos_presupuesto').hide(); 
-   $('#acciones').hide(); 
+   $('#carga_planilla').hide();
+   $('#acciones').hide();
+   $('#presupuesto').hide();
+   $('#pres_manual').hide();
+  
+   $('#combo_presupuesto').change(function(){
+      recuperarDetallePresupuesto()
+    })
 });
 
 function onCompleteFileUpload(){
-        $('#datos_planilla').show(); 
+        $('#presupuesto').show();
+        $('#acciones').show();
         mostrarPresupuesto();
 }
+
+function recuperarDetallePresupuesto(){
+    objAH=new AjaxHelper(updateRecuperarDetallePresupuesto);
+    objAH.debug= true;
+    objAH.cache= true;
+    objAH.url='/cgi-bin/koha/adquisiciones/cargaPresupuesto.pl';
+    objAH.id_presupuesto= $('#combo_presupuesto').val();
+    objAH.funcion= 'changePage';
+    objAH.sendToServer();
+}
+
+function updateRecuperarDetallePresupuesto(responseText){
+    $('#tabla_manual').html(responseText);
+//     zebra('tabla_manual');
+    $.scrollTo('#tabla_manual');
+}
+
 
 function createFileUploader(){
  
@@ -82,17 +103,20 @@ function createFileUploader(){
                 </div>
           </fieldset>
           
+          <div id="presupuesto">
+          </div>
+          
           <fieldset id="pres_manual">
               <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend> 
                   
-                  <div id="presupuesto">
+                 
                         <fieldset>
                                    <p>Seleccione el presupuesto que desea cargar </p>
                                   [% combo_presupuestos %]
                         </fieldset>
-                        [% cant = 1 %] 
+                     
                        
-                        <table id="tablaManual" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                        <table id="tabla_manual" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                               <thead>
                               <tr class="titulo_tabla_resultado">
                                   <th id="renglon">[% "Renglon" | i18n %]</th>
@@ -103,11 +127,12 @@ function createFileUploader(){
                               </tr>
                               </thead>
                               <tbody>
-                                  [% WHILE cant < 5 %]     
+                                  [% cant = 1 %] 
+                                  [% WHILE cant != presupuestos.size %]     
                           
                                       <tr  align="center" id="[% cant %]">  
                                           <td align="left" class="presupuesto">
-                                                <input type="text" name="renglon[% cant %]" id="renglon[% cant %]" value="[% cant %]" READONLY> 
+                                                <input type="text" name="renglon[% cant %]" id="renglon[% cant %]" value="[% renglon %]" READONLY> 
                                           </td>
                                           <td align="left" class="presupuesto">
                                                 <input type="text" name="cantidad[% cant %]" id="cantidad[% cant %]" value=""> 
@@ -128,23 +153,20 @@ function createFileUploader(){
                               </tbody>  
                         </table>
                  
-                  </div>
-        </fileset>
-
-        <fieldset  id="datos_presupuesto" >
-                  
         </fieldset>
+
+       <fieldset id="acciones">  
+              <div id="accion">
+                      [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                                      boton   => "boton_buscar",
+                                                                      onClick => "modificarDatosDePresupuesto();",
+                                                            ) ;
+                      [% END %]
+                </div>
+      </fieldset> 
 </fieldset>          
-<fildset id="acciones">  
-    <div id="accion">
-              [% PERL %]
-                         print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
-                                                               boton   => "boton_buscar",
-                                                               onClick => "modificarDatosDePresupuesto();",
-                                                     ) ;
-              [% END %]
-     </div>
-</fieldset> 
+
 
 
 [% INCLUDE "intranet-bottom.inc" %]
