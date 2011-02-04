@@ -176,15 +176,15 @@
         CHANGE `categorycode` `categoria_socio` CHAR( 2 ) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL ,
         CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL ;
 
-        ALTER TABLE `circ_ref_tipo_prestamo` CHANGE `issuecode` `id_tipo_prestamo` CHAR( 2 ) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL ,
-          CHANGE `description` `descripcion` TEXT CHARACTER SET utf8 COLLATE utf8_swedish_ci NULL DEFAULT NULL ,
-          CHANGE `notforloan` `id_disponibilidad` TINYINT( 1 ) NOT NULL DEFAULT '0',
-          CHANGE `maxissues` `prestamos` INT( 11 ) NOT NULL DEFAULT '0',
-          CHANGE `daysissues` `dias_prestamo` INT( 11 ) NOT NULL DEFAULT '0',
-          CHANGE `renew` `renovaciones` INT( 11 ) NOT NULL DEFAULT '0',
-          CHANGE `renewdays` `dias_renovacion` TINYINT( 3 ) NOT NULL DEFAULT '0',
-          CHANGE `dayscanrenew` `dias_antes_renovacion` TINYINT( 10 ) NOT NULL DEFAULT '0',
-          CHANGE `enabled` `habilitado` TINYINT( 4 ) NULL DEFAULT '1' ;",
+        ALTER TABLE `circ_ref_tipo_prestamo` CHANGE `issuecode` `id_tipo_prestamo` CHAR( 2 ) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL ;
+         ALTER TABLE `circ_ref_tipo_prestamo`  CHANGE `description` `descripcion` TEXT CHARACTER SET utf8 COLLATE utf8_swedish_ci NULL DEFAULT NULL ;
+         ALTER TABLE `circ_ref_tipo_prestamo`  CHANGE `notforloan` `id_disponibilidad` TINYINT( 1 ) NOT NULL DEFAULT '0';
+        ALTER TABLE `circ_ref_tipo_prestamo`   CHANGE `maxissues` `prestamos` INT( 11 ) NOT NULL DEFAULT '0';
+        ALTER TABLE `circ_ref_tipo_prestamo`   CHANGE `daysissues` `dias_prestamo` INT( 11 ) NOT NULL DEFAULT '0';
+       ALTER TABLE `circ_ref_tipo_prestamo`    CHANGE `renew` `renovaciones` INT( 11 ) NOT NULL DEFAULT '0';
+        ALTER TABLE `circ_ref_tipo_prestamo`   CHANGE `renewdays` `dias_renovacion` TINYINT( 3 ) NOT NULL DEFAULT '0';
+        ALTER TABLE `circ_ref_tipo_prestamo`   CHANGE `dayscanrenew` `dias_antes_renovacion` TINYINT( 10 ) NOT NULL DEFAULT '0';
+        ALTER TABLE `circ_ref_tipo_prestamo`   CHANGE `enabled` `habilitado` TINYINT( 4 ) NULL DEFAULT '1' ;
          
           ALTER TABLE `circ_ref_tipo_prestamo` DROP PRIMARY KEY ;
          
