@@ -1,0 +1,36 @@
+              <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                              <thead>
+                              <tr class="titulo_tabla_resultado">
+                                  <th id="renglon">[% "Renglon" | i18n %]</th>
+                                  <th id="cantidad">[% "Cantidad" | i18n %]</th>
+                                  <th id="articulo">[% "Articulo" | i18n %]</th>
+                                  <th id="precio_unitario">[% "Precio Unitario" | i18n %]</th>  
+                                  <th id="total">[% "Total" | i18n %]</th>          
+                              </tr>
+                              </thead>
+                              <tbody>
+                                  [% cant = 1 %] 
+                                  [% FOREACH presupuestos %]   
+                                      [% total = presupuesto.getPrecioUnitario * presupuesto.getCantidad %] 
+                                      <tr  align="center" id="[% cant %]">  
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="renglon[% cant %]" id="renglon[% cant %]" value="[% cant %]" READONLY> 
+                                          </td>
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="cantidad[% cant %]" id="cantidad[% cant %]" value="[% presupuesto.getCantidad %]"> 
+                                          </td>
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="articulo[% cant %]" id="articulo[% cant %]" value="[% presupuesto.ref_recomendacion_detalle.getAutor %][% presupuesto.ref_recomendacion_detalle.getTitulo %]"> 
+                                          </td>
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="precio_unitario[% cant %]" id="precio_unitario[% cant %]" value="[% presupuesto.getPrecioUnitario %]"> 
+                                          </td>
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="total[% cant %]" id="total[% cant %]" value="[% total %]">
+                                          </td> 
+                                      
+                                          [% cant = cant + 1 %]
+                                      </tr> 
+                                  [% END %]   
+                              </tbody>  
+                        </table>
