@@ -92,10 +92,6 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
                       }
               }
 
-              
-                
-                 
-          
 
 #       }
         
@@ -113,6 +109,7 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
         my ( $row_min, $row_max ) = $worksheet->row_range();
 
         my $prov = $worksheet->get_cell( 0, 1 )->value();
+        my $id_pres = $worksheet->get_cell( 1, 1 )->value();
         my $id_prov = $worksheet->get_cell( 1, 0 )->value();
 
         for my $row ( $row_min + 3 .. $row_max ) {
@@ -129,14 +126,39 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
                     
         }
 
-        $t_params->{'datos_presupuesto'} = \@reg;
-        $t_params->{'proveedor'} = $prov;
-        $t_params->{'id_prov'} = $id_prov;
+        my $pres= C4::AR::Presupuestos::getAdqPresupuesto();
+        C4::AR::Debug::debug($pres);
 
+
+        $t_params->{'datos_presupuesto'} = \@reg;
+        $t_params->{'proveedor'} = $prov;     
+        
+        $t_params->{'pres'} =  $pres;
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 } #end if($tipoAccion eq "MOSTRAR_PRESUPUESTO")
 
+elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
 
+       
+        my $id_pres= $obj->{'id_presupuesto'};
 
+        my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
+                              template_name   => '/adquisiciones/presupuestoManual.tmpl',
+                              query       => $input,
+                              type        => "intranet",
+                              authnotrequired => 0,
+                              flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+        });
+        
+    
+        my $presupuestos = &C4::AR::Presupuestos::getAdqPresupuestoDetalle($id_pres);
+
+        $t_params->{'presupuestos'} = $presupuestos;
+
+        
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+        
+} #end if($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL")

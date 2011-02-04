@@ -35,7 +35,7 @@ $(document).ready(function() {
    $('#pres_manual').hide();
   
    $('#combo_presupuesto').change(function(){
-      recuperarDetallePresupuesto()
+      mostrarPresupuestoManual()
     })
 });
 
@@ -45,21 +45,6 @@ function onCompleteFileUpload(){
         mostrarPresupuesto();
 }
 
-function recuperarDetallePresupuesto(){
-    objAH=new AjaxHelper(updateRecuperarDetallePresupuesto);
-    objAH.debug= true;
-    objAH.cache= true;
-    objAH.url='/cgi-bin/koha/adquisiciones/cargaPresupuesto.pl';
-    objAH.id_presupuesto= $('#combo_presupuesto').val();
-    objAH.funcion= 'changePage';
-    objAH.sendToServer();
-}
-
-function updateRecuperarDetallePresupuesto(responseText){
-    $('#tabla_manual').html(responseText);
-//     zebra('tabla_manual');
-    $.scrollTo('#tabla_manual');
-}
 
 
 function createFileUploader(){
@@ -116,42 +101,8 @@ function createFileUploader(){
                         </fieldset>
                      
                        
-                        <table id="tabla_manual" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                              <thead>
-                              <tr class="titulo_tabla_resultado">
-                                  <th id="renglon">[% "Renglon" | i18n %]</th>
-                                  <th id="cantidad">[% "Cantidad" | i18n %]</th>
-                                  <th id="articulo">[% "Articulo" | i18n %]</th>
-                                  <th id="precio_unitario">[% "Precio Unitario" | i18n %]</th>  
-                                  <th id="total">[% "Total" | i18n %]</th>          
-                              </tr>
-                              </thead>
-                              <tbody>
-                                  [% cant = 1 %] 
-                                  [% WHILE cant != presupuestos.size %]     
-                          
-                                      <tr  align="center" id="[% cant %]">  
-                                          <td align="left" class="presupuesto">
-                                                <input type="text" name="renglon[% cant %]" id="renglon[% cant %]" value="[% renglon %]" READONLY> 
-                                          </td>
-                                          <td align="left" class="presupuesto">
-                                                <input type="text" name="cantidad[% cant %]" id="cantidad[% cant %]" value=""> 
-                                          </td>
-                                          <td align="left" class="presupuesto">
-                                                <input type="text" name="articulo[% cant %]" id="articulo[% cant %]" value=""> 
-                                          </td>
-                                          <td align="left" class="presupuesto">
-                                                <input type="text" name="precio_unitario[% cant %]" id="precio_unitario[% cant %]" value=""> 
-                                          </td>
-                                          <td align="left" class="presupuesto">
-                                                <input type="text" name="total[% cant %]" id="total[% cant %]" value="">
-                                          </td> 
-                                      
-                                          [% cant = cant + 1 %]
-                                      </tr> 
-                                  [% END %]   
-                              </tbody>  
-                        </table>
+              <div id="presupuesto_manual">
+              </div>
                  
         </fieldset>
 

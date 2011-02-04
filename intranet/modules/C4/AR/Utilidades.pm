@@ -2000,13 +2000,16 @@ sub generarComboPresupuestos{
     my %select_presupuestos;
     my $presupuestos  = &C4::AR::Presupuestos::getAdqPresupuestos();
 
+    push (@select_presupuestos_array, '');
+    
+
     foreach my $presupuesto (@$presupuestos) {
         push(@select_presupuestos_array, $presupuesto->getId);
-#         $select_presupuestos{$presupuesto->getId}  = $presupuesto->getProveedorId;
+        $select_presupuestos{$presupuesto->getId}  = $presupuesto->getId." - ".$presupuesto->ref_proveedor->getNombre." - ".$presupuesto->getFecha;
       
     }
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -2025,11 +2028,11 @@ sub generarComboPresupuestos{
      $options_hash{'multiple'}   = $params->{'multiple'}||0;
      $options_hash{'defaults'}   = $params->{'default'} || 0;
 
-    push (@select_presupuestos_array, '');
+   
     $options_hash{'values'}     = \@select_presupuestos_array;
     $options_hash{'labels'}     = \%select_presupuestos;
 
-    my $combo_presupuestos    = CGI::scrolling_list(\%options_hash);
+    my $combo_presupuestos  = CGI::scrolling_list(\%options_hash);
 
     return $combo_presupuestos; 
 }

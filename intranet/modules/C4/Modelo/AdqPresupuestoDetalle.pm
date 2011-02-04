@@ -113,7 +113,7 @@ sub getCantidad  {
 
 }
 
-sub getCantidad  {
+sub getSeleccionado  {
     my ($self) = shift;
     return ($self->seleccionado);
 
