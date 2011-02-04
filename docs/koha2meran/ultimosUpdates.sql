@@ -1,5 +1,5 @@
 
-    ALTER TABLE circ_reserva DROP `priority` , DROP `found`;
+
 
     ALTER TABLE rep_historial_busqueda CHANGE `HTTP_USER_AGENT` `agent` VARCHAR( 255 ) NOT NULL;
     
@@ -148,17 +148,15 @@
       
       ALTER TABLE ref_idioma ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
       
-      ALTER TABLE `ref_estado` CHANGE `code` `id` TINYINT( 5 ) NOT NULL AUTO_INCREMENT ,
-      CHANGE `description` `nombre` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL;
+      ALTER TABLE `ref_estado` CHANGE `code` `id` TINYINT( 5 ) NOT NULL AUTO_INCREMENT;
+      ALTER TABLE `ref_estado` CHANGE `description` `nombre` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL;
       
       ALTER TABLE `ref_estado` ADD UNIQUE ( `nombre` );
       
-      ALTER TABLE `circ_prestamo` ADD `id_prestamo` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
-        
-        ALTER TABLE `circ_reserva`
-        DROP `biblioitemnumber`,
-        DROP `cancellationdate`,
-        DROP `reservenotes`;
+      ALTER TABLE `circ_prestamo` CHANGE id `id_prestamo` INT( 11 ) NOT NULL AUTO_INCREMENT FIRST ;
+       
+        ALTER TABLE `circ_reserva` DROP `cancellationdate`;
+        ALTER TABLE `circ_reserva` DROP `reservenotes`;
         
         ALTER TABLE `circ_sancion` CHANGE `sanctionnumber` `id_sancion` INT( 11 ) NOT NULL AUTO_INCREMENT ,
         CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NULL DEFAULT '0',
@@ -177,11 +175,11 @@
         CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL ;
 
         ALTER TABLE `circ_ref_tipo_prestamo` CHANGE `issuecode` `id_tipo_prestamo` CHAR( 2 ) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL ;
-         ALTER TABLE `circ_ref_tipo_prestamo`  CHANGE `description` `descripcion` TEXT CHARACTER SET utf8 COLLATE utf8_swedish_ci NULL DEFAULT NULL ;
-         ALTER TABLE `circ_ref_tipo_prestamo`  CHANGE `notforloan` `id_disponibilidad` TINYINT( 1 ) NOT NULL DEFAULT '0';
+        ALTER TABLE `circ_ref_tipo_prestamo`  CHANGE `description` `descripcion` TEXT CHARACTER SET utf8 COLLATE utf8_swedish_ci NULL DEFAULT NULL ;
+        ALTER TABLE `circ_ref_tipo_prestamo`  CHANGE `notforloan` `id_disponibilidad` TINYINT( 1 ) NOT NULL DEFAULT '0';
         ALTER TABLE `circ_ref_tipo_prestamo`   CHANGE `maxissues` `prestamos` INT( 11 ) NOT NULL DEFAULT '0';
         ALTER TABLE `circ_ref_tipo_prestamo`   CHANGE `daysissues` `dias_prestamo` INT( 11 ) NOT NULL DEFAULT '0';
-       ALTER TABLE `circ_ref_tipo_prestamo`    CHANGE `renew` `renovaciones` INT( 11 ) NOT NULL DEFAULT '0';
+        ALTER TABLE `circ_ref_tipo_prestamo`    CHANGE `renew` `renovaciones` INT( 11 ) NOT NULL DEFAULT '0';
         ALTER TABLE `circ_ref_tipo_prestamo`   CHANGE `renewdays` `dias_renovacion` TINYINT( 3 ) NOT NULL DEFAULT '0';
         ALTER TABLE `circ_ref_tipo_prestamo`   CHANGE `dayscanrenew` `dias_antes_renovacion` TINYINT( 10 ) NOT NULL DEFAULT '0';
         ALTER TABLE `circ_ref_tipo_prestamo`   CHANGE `enabled` `habilitado` TINYINT( 4 ) NULL DEFAULT '1' ;
@@ -559,10 +557,6 @@ ALTER TABLE  `pref_feriado` ADD  `feriado` VARCHAR( 255 ) NULL ;
 
 ALTER TABLE  `usr_socio` ADD  `locale` VARCHAR( 32 ) NULL ;
 
-ALTER TABLE `ref_nivel_bibliografico` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
-
-ALTER TABLE `ref_soporte` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
-
 ALTER TABLE  `cat_ref_tipo_nivel3` ADD  `agregacion_temp` VARCHAR( 255 ) NULL ;
 
 ALTER TABLE  `rep_busqueda` ADD  `categoria_socio` VARCHAR( 255 ) NULL ;
@@ -583,8 +577,6 @@ ALTER TABLE `cat_contenido_estante` CHANGE `shelfnumber` `id_estante` INT( 11 ) 
 ALTER TABLE `cat_contenido_estante` DROP PRIMARY KEY ,ADD PRIMARY KEY ( `id_estante` , `id2` );
 
 ALTER TABLE `cat_contenido_estante` DROP `flags`;
-
-ALTER TABLE `cat_contenido_estante` DROP `biblioitemnumber`;
 
 ALTER TABLE  `cat_registro_marc_n3` ADD  `agregacion_temp` VARCHAR( 255 ) NULL ;
 
@@ -642,7 +634,7 @@ INSERT INTO `usr_ref_tipo_documento` (`id`, `nombre`, `descripcion`) VALUES (0, 
 
 ALTER TABLE `cat_historico_disponibilidad` ADD `id_detalle` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
 ALTER TABLE `cat_historico_disponibilidad` CHANGE `avail` `detalle` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '';
-ALTER TABLE `cat_historico_disponibilidad` `loan` `tipo_prestamo` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT ''
+ALTER TABLE `cat_historico_disponibilidad` CHANGE `loan` `tipo_prestamo` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '';
 
 ALTER TABLE `cat_historico_disponibilidad`  DROP `date`;
 ALTER TABLE `cat_historico_disponibilidad`  DROP `branch`;
