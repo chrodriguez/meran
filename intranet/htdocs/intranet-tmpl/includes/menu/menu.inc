@@ -145,6 +145,15 @@
                                                             ) ;
                             [% END %]
                         </li>
+                        <li>
+
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Pedidos de Cotizaci&oacute;n' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/adquisiciones/pedidosCotizacion.pl", 
+                                                                title =>    "[% 'Pedidos de Cotizaci&oacute;n' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                        </li>
                     </ul>
                    
                   </li>
