@@ -10,6 +10,51 @@ function changePage(ini){
     objAH.changePage(ini);
 }
 
+function consultarBar(filtro,doScroll){
+    if (doScroll)
+      shouldScrollUser = doScroll;
+    objAH=new AjaxHelper(updateInfoUsuarios);
+    objAH.showOverlay       = true;
+    objAH.cache = true;
+    busqueda = jQuery.trim($('#socio-bar').val());
+    inicial = '0';
+    if (filtro){
+        inicial = filtro;
+        busqueda = jQuery.trim(filtro);
+        objAH.inicial= inicial;
+        $('#socio').val(FILTRO_POR + filtro);
+    }
+    else
+       {
+        if (busqueda.substr(8,5).toUpperCase() == 'TODOS'){
+                busqueda = busqueda.substr(8,5);
+                $('#socio').val(busqueda);
+                consultar(busqueda);
+        }
+        else
+           {
+            if (busqueda.substr(0,6).toUpperCase() == 'FILTRO'){
+                busqueda = busqueda.substr(8,1);
+                $('#socio').val(busqueda);
+                consultar(busqueda);
+            }
+           }
+    }
+    if(jQuery.trim(busqueda).length > 0){
+        objAH.url= '/cgi-bin/koha/usuarios/reales/buscarUsuarioResult.pl';
+        objAH.showOverlay       = true;
+        objAH.debug= true;
+//      objAH.cache= true;
+        objAH.funcion= 'changePage';
+        objAH.socio= busqueda;
+        objAH.sendToServer();
+    }
+    else{
+        jAlert(INGRESE_UN_DATO,USUARIOS_ALERT_TITLE);
+        $('#socio-bar').focus();
+    }
+}
+
 function consultar(filtro,doScroll){
     if (doScroll)
       shouldScrollUser = doScroll;
@@ -66,6 +111,7 @@ function updateInfoUsuarios(responseText){
     classes[2] = 'legajo';
     classes[3] = 'tarjetaId';
     busqueda = jQuery.trim($('#socio').val());
+    $("#resultBusqueda").slideUp("slow");
     scrollTo('result');
 }
 

@@ -284,13 +284,13 @@ $(document).ready(function() {
 
 </script>
 
-<div id="confirmar_div"></div>
+<div id="confirmar_div" ></div>
 <fieldset>
     <legend class="titulo_legend">[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]</legend>
     <br>
     <ul>
       <fieldset>
-        <form id="form_circulacion_rapida">
+        <form id="form_circulacion_rapida" class="classform">
           <li class="sub_item">
                 <label for="operacion">[% 'Operaci&oacute;n:' | i18n %]</label>
                 <select id='operacion' tabindex='1' onChange='onChangeOperacion()'>	
@@ -299,6 +299,9 @@ $(document).ready(function() {
                     <option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
                 </select>
                 <!--<div id="cambo_tipo_prestamo" style="display: none">-->
+          </li>
+          <br />
+          <li class="sub_item">
                 <div id="cambo_tipo_prestamo">
                     <label for="operacion">[% 'Tipo de Pr&eacute;stamo:' | i18n %]</label>
                     <div id="spanComboTipoPrestamo"></div>
@@ -323,13 +326,7 @@ $(document).ready(function() {
                       <div id="estadoUsuario"></div>
                       <input type='hidden' id='nro_socio_hidden' value=''>
                       <span id="divAutorizado" style="float:right">[% 'Autorizado:' | i18n %]<input type="checkbox" value="autorizado"></span>
-                      [% PERL %]
-                                          print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Autorizado' | i18n %]",
-                                                                              boton   => "boton_agregar",
-                                                                              onClick => "agregarAutorizado();",
-                                                                              title   => "[% 'Agregar Autorizado' | i18n %]",
-                                                  ) ;
-                      [% END %]
+                      <input type="button" class="nonForm" onclick="agregarAutorizado()" id="save_button" value="[% 'Agregar autorizado' | i18n %]" >
                   </div>
           </li>
         </form>

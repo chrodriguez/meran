@@ -1,13 +1,103 @@
 body,html {
 	height: 100%;
+	
+	background-color: #EAEBED;
 }
 
 body input[type="text"]:focus {
+	background: #EAEBED;
 	
 }
 
 fieldset {
 	clear: both;
+}
+
+.header-bottom{
+	width:100%;
+	height: 21%;
+}
+
+#search-bar{
+    width:48.5%;
+    margin: 0 auto;
+    height: 75%;
+}
+
+
+#search-bar-catalogue{
+	background-color: #35414F;
+    width: 48.5%;
+    height: 85%;
+    color: #FCFFFF;
+    float:left;
+    border-right-width: 1px;
+    border-right-color: #8B97A3;
+    border-right-style: solid;
+}
+
+#search-bar-users{
+	background-color: #35414F;
+	width: 50%;
+	height: 85%;
+    color: #FCFFFF;
+	float: left;
+	
+}
+
+#search-bar-catalogue h5{
+    background-color: #4B5869;
+    color: #FCFFFF;
+    margin: 0;
+    font-size: 15px;
+    padding: 0;
+}
+
+#search-bar-users h5{
+    background-color: #4B5869;
+	color: #FCFFFF;
+    font-size: 15px;
+	margin: 0;
+    padding: 0;
+}
+
+
+.item-bar {
+    font-family: "Verdana", "Trebuchet MS", "Arial";
+    font-size: 8pt;
+    color: #FCFFFF;
+    list-style: none;
+    font-weight: bold;
+    padding: 0px;
+    margin: 2px;
+    text-decoration: none;
+    margin: 0 10px 0 9px;
+}
+
+.item-bar label{
+    margin-right: 0;
+}
+
+.item-bar a {
+    font-family: "Verdana", "Trebuchet MS", "Arial";
+    font-size: 8pt;
+    color: #FCFFFF;
+    list-style: none;
+    font-weight: bold;
+    padding: 0px;
+    margin: 0px;
+    text-decoration: none;
+}
+
+.item-bar a:hover {
+    font-family: "Verdana", "Trebuchet MS", "Arial";
+    font-size: 8pt;
+    color: #FCFFFF;
+    list-style: none;
+    font-weight: bold;
+    padding: 0px;
+    margin: 2px;
+    text-decoration: none;
 }
 
 #login {
@@ -81,11 +171,15 @@ fieldset {
 }
 
 .logo_Superior {
-	background-image: url(../imagenes/logo.jpeg);
-	width: 250px;
+	background-image: url(../imagenes/logo.png);
+	width: 220px;
 	float: left;
-	margin-bottom: 12px;
-	height: 25px;
+	margin-left: 2%;
+	margin-top: 1%;
+	margin-bottom: 0;
+	margin-right: 2%;
+	height: 145px;
+	background-repeat: no-repeat;
 }
 
 .idioma_y_login {
@@ -94,6 +188,7 @@ fieldset {
 	float: right;
 	margin-bottom: 12px;
 	margin-left: 2px;
+	margin-top: -155px;
 	font: bold 7px tahoma, arial, helvetica, sans-serif;
 	text-align: right;
 	height: 5em;
@@ -156,10 +251,10 @@ body {
 }
 
 #marco_principal {
-	background: #f7f6f6 url(../imagenes/medio.png) repeat;
+	background: #FEFEFE;
 	float: left;
-	width: 70%;
-	min-height: 700px;
+	width: 80%;
+	min-height: 635px;
 	margin: 0 auto;
 }
 
@@ -173,7 +268,7 @@ body {
 	font-weight: bold;
 	font-Family: arial, helvetica, sans-serif;
 	font-size: 15px;
-	color: #46848F;
+	color: #1C94C4;
 	text-align: left;
 	text-transform: uppercase;
 }
@@ -193,7 +288,7 @@ body {
 .item a {
 	font-family: "Verdana", "Trebuchet MS", "Arial";
 	font-size: 8pt;
-	color: #46848F;
+	color: #35414F;
 	list-style: none;
 	font-weight: bold;
 	padding: 0px;
@@ -204,7 +299,7 @@ body {
 .item a:hover {
 	font-family: "Verdana", "Trebuchet MS", "Arial";
 	font-size: 8pt;
-	color: #73aeaf;
+	color: #4B5869;
 	list-style: none;
 	font-weight: bold;
 	padding: 0px;
@@ -215,7 +310,7 @@ body {
 .sub_item {
 	font-family: "Verdana", "Trebuchet MS", "Arial";
 	font-size: 9pt;
-	color: #46848F;
+	color: #4B5869;
 	list-style: none;
 	font-weight: bold;
 	text-decoration: none;
@@ -246,7 +341,8 @@ body {
 	font-Family: Arial, Helvetica, sans-serif;
 	color: #FFFFFF;
 	font-size: 9pt;
-	background: url(../imagenes/tablaresultado.png) repeat-x;
+/*	background: url(../imagenes/tablaresultado.png) repeat-x; */ 
+    background: #35414F;
 	text-align: center;
 	font-weight: bold;
 	height: 20px;
@@ -292,6 +388,7 @@ tr.impar {
 em.error_adv {
 	background: transparent url(../imagenes/error.gif) no-repeat scroll 0 0;
 	padding-left: 16px;
+	margin-left: 12px;
 }
 
 div.error_adv {
@@ -1008,7 +1105,7 @@ ul.horizontal-list li {
 	padding: 5px;
 	font-family: Arial, Helvetica, sans-serif;
 	color: #fff;
-	background-color: #3a9e9c;
+	background-color: #4B5869;
 }
 
 .resultados_consulta a:hover {
@@ -1096,33 +1193,17 @@ ul.horizontal-list li {
 }
 
 #marca div {
-	background-image: url(../imagenes/logo_meran.png);
-	padding: 1%;
-	margin-top: -21px;
-	background-position: center;
-	text-align: center;
-	background-repeat: no-repeat;
 	height: 30px;
 }
 
 #marca {
-	background-image: url(../imagenes/fondo_footer.png);
-	background-color: #f7f6f6;
-	text-align: center;
-	padding: 1%;
-	margin-top: 1%;
-	-moz-border-radius-topleft: 8px;
-	-moz-border-radius-topright: 8px;
-	-moz-border-radius-bottomleft: 8px;
-	-moz-border-radius-bottomright: 8px;
-	background-repeat: repeat-x;
-	height: 10px;
+	background-color: #35414F;
+	height: 62px;
 	clear: both;
 }
 
 fieldset.main {
-	width: 70%;
-	margin-left: 14%;
+	width: 100%;
 }
 
 ul.listado_sin_margen {
