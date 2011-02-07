@@ -1,6 +1,6 @@
 
 -- Preferencias que no se utilizan más --
-DELETE FROM `pref_preferencia_sistema` WHERE `systempreferences`.`variable` IN 
+DELETE FROM `pref_preferencia_sistema` WHERE `variable` IN 
 ('acquisitions', 'authoritysep', 'autoBarcode', 'checkdigit', 'marc','marcflavour',
  'maxoutstanding', 'maxvirtualcopy','maxvirtualprint');
 
@@ -12,15 +12,15 @@ ALTER TABLE `pref_preferencia_sistema` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMEN
 ALTER TABLE `pref_preferencia_sistema` ADD `categoria` VARCHAR( 255 ) NOT NULL DEFAULT 'sistema';
 
 -- Referencias de las variables que ya existen!!!!!!!!!!
-UPDATE `systempreferences` SET `type`='text';
+UPDATE `pref_preferencia_sistema` SET `type`='text';
 
-UPDATE `pref_preferencia_sistema` SET `options` = 'ui|nombre', `type` = 'referencia' WHERE `systempreferences`.`variable` = 'defaultbranch';
+UPDATE `pref_preferencia_sistema` SET `options` = 'ui|nombre', `type` = 'referencia' WHERE `variable` = 'defaultbranch';
 
-UPDATE `pref_preferencia_sistema` SET `options` = 'nivel_bibliografico|description', `type` = 'referencia' WHERE `systempreferences`.`variable` = 'defaultlevel';
+UPDATE `pref_preferencia_sistema` SET `options` = 'nivel_bibliografico|description', `type` = 'referencia' WHERE `variable` = 'defaultlevel';
 
-UPDATE `pref_preferencia_sistema` SET `options` = 'soporte|description', `type` = 'referencia' WHERE `systempreferences`.`variable` = 'defaultsuport';
+UPDATE `pref_preferencia_sistema` SET `options` = 'soporte|description', `type` = 'referencia' WHERE `variable` = 'defaultsuport';
 
-UPDATE `pref_preferencia_sistema` SET `type`='bool' WHERE `systempreferences`.`variable` IN 
+UPDATE `pref_preferencia_sistema` SET `type`='bool' WHERE `variable` IN 
 ('autoActivarPersona','opacSearchAnonymous','logSearchOPAC','logSearchINTRA','ldapenabled','keeppasswordalive',
 'insecure','habilitar_irregulares','habilitar_https','EnabledMailSystem','circulation','circularDesdeDetalleUsuario',
 'circularDesdeDetalleDelRegistro','CheckUpdateDataEnabled','autoMemberNum','opacUnavail','permite_cambio_password_desde_opac',
@@ -33,7 +33,7 @@ UPDATE `pref_preferencia_sistema` SET value='1' WHERE `type` =  'bool' AND  valu
 
 -- Nuevas preferencias (separadas para que no fallen todas)--
  INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES
-( 'auto-nro_socio_from_dni', '1', 'Preferencia que configura el auto-generar de nro de socio. Si es 0, es el autogenerar *serial*, sino sera el documento.', NULL, NULL, 'sistema');
+( 'auto-nro_socio_from_dni', '1', 'Preferencia que configura el auto-generar de nro de socio. Si es 0, es el autogenerar *serial*, sino sera el documento.', NULL, 'bool', 'sistema');
  INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES
 ( 'autoActivarPersona', '1', 'Activa por defecto un alta de una persona', NULL, 'bool', 'sistema');
  INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES

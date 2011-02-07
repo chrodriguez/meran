@@ -631,7 +631,7 @@ CREATE TABLE IF NOT EXISTS `cat_favoritos_opac` (
   PRIMARY KEY  (`nro_socio`,`id1`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE  `sys_novedad` (
+CREATE TABLE  IF NOT EXISTS `sys_novedad` (
 `id` INT( 16 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `usuario` VARCHAR( 16 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
 `fecha` TIMESTAMP NOT NULL ,
@@ -655,7 +655,7 @@ CREATE TABLE IF NOT EXISTS `cat_favoritos_opac` (
   PRIMARY KEY  (`nro_socio`,`id1`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-CREATE TABLE  `sys_novedad` (
+CREATE TABLE  IF NOT EXISTS `sys_novedad` (
 `id` INT( 16 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `usuario` VARCHAR( 16 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
 `fecha` TIMESTAMP NOT NULL ,
@@ -733,6 +733,8 @@ CREATE TABLE IF NOT EXISTS `adq_ref_proveedor_moneda` (
   KEY `fk_adq_ref_moneda_has_adq_proveedor_adq_proveedor1` (`adq_proveedor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+-- DA ERROR FIXME
 ALTER TABLE `adq_proveedor`
   ADD CONSTRAINT `fk_adq_proveedor_ref_localidad1` FOREIGN KEY (`ref_localidad_id`) REFERENCES `ref_localidad` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_adq_proveedor_usr_ref_tipo_documento1` FOREIGN KEY (`usr_ref_tipo_documento_id`) REFERENCES `usr_ref_tipo_documento` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
