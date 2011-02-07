@@ -23,7 +23,7 @@ my $tipoAccion  = $obj->{'tipoAccion'}||"";
 
 if($tipoAccion eq "GUARDAR_MODIFICACION_PRESUPUESTO"){
 
-    my $tabla_array_ref = $obj->{'table'};
+
 
     my ($template, $session, $t_params)  = get_template_and_user({  
                         template_name => "/adquisiciones/mostrarPresupuesto.tmpl",
@@ -108,9 +108,8 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
         my $worksheet = $workbook->worksheet(0);
         my ( $row_min, $row_max ) = $worksheet->row_range();
 
-        my $prov = $worksheet->get_cell( 0, 1 )->value();
         my $id_pres = $worksheet->get_cell( 1, 1 )->value();
-        my $id_prov = $worksheet->get_cell( 1, 0 )->value();
+     
 
         for my $row ( $row_min + 3 .. $row_max ) {
                 
@@ -125,14 +124,11 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
                 push(@reg, \%hash);  
                     
         }
-
-        my $pres= C4::AR::Presupuestos::getAdqPresupuesto();
-        C4::AR::Debug::debug($pres);
-
-
-        $t_params->{'datos_presupuesto'} = \@reg;
-        $t_params->{'proveedor'} = $prov;     
+    
+        my $pres= C4::AR::Presupuestos::getPresupuestoPorID($id_pres);
         
+
+        $t_params->{'datos_presupuesto'} = \@reg;   
         $t_params->{'pres'} =  $pres;
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -15,7 +15,7 @@ use vars qw(@EXPORT @ISA);
     &getAdqPresupuestoDetalle;
     &actualizarPresupuesto;
     &getAdqPresupuestos;
-    &getAdqPresupuesto;
+    &getPresupuestoPorID;
 );
   
 sub getAdqPresupuestos{
@@ -30,22 +30,32 @@ sub getAdqPresupuestos{
 }
 
 
-sub getAdqPresupuesto{
-    my ( $id_presupuesto, $db) = @_;
-    my @result; 
+sub getPresupuestoPorID{
+     my ( $id_presupuesto, $db) = @_;
+     my @result;
+     
+#     C4::AR::Debug::debug($id_presupuesto);
+  
+     $db = $db || C4::Modelo::AdqPresupuesto->new()->db;
 
-    $db = $db || C4::Modelo::AdqPresupuesto->new()->db;
-
-    my $result= C4::Modelo::AdqPresupuesto::Manager->get_adq_presupuesto(   
+     my $presupuesto= C4::Modelo::AdqPresupuesto::Manager->get_adq_presupuesto(   
                                                                     db => $db,
                                                                     query   => [ id => { eq => $id_presupuesto} ],
                                                                 );
+
     
-    if(scalar(@result) > 0){
-        return (\@result);
-    }else{
-        return 0;
-    }
+#      C4::AR::Utilidades::printARRAY(@presupuesto);
+#      C4::AR::Debug::debug($presupuesto);
+
+
+#      push (@result, $presupuesto);
+#       
+#      C4::AR::Utilidades::printARRAY(@result);
+
+     return $presupuesto->[0];
+    
+    
+    
 }
 
 
@@ -64,8 +74,9 @@ sub getAdqPresupuestoDetalle{
         my %row = ( presupuesto => $detalle_pres, );
 
         push (@results, \%row);
-      
     } 
+    
+    C4::AR::Debug::debug(scalar(@results));
     
     if(scalar(@results) > 0){
         return (\@results);
@@ -79,12 +90,11 @@ sub actualizarPresupuesto{
     
      my ($obj) = @_;
 
-     my $tabla_array_ref = $obj->{'table'};
+      my $tabla_array_ref = $obj->{'table'};
 
-     my $presupuesto=$obj->{'id_proveedor'};
+
      my $pres=$obj->{'id_presupuesto'};
 
-     C4::AR::Debug::debug($pres);
   
      my $adq_presupuesto_detalle = C4::Modelo::AdqPresupuestoDetalle->new();
      my $msg_object= C4::AR::Mensajes::create();
@@ -94,12 +104,13 @@ sub actualizarPresupuesto{
      $db->begin_work;
      
      my $pres_detalle = C4::AR::Presupuestos::getAdqPresupuestoDetalle($pres,$db); 
-     
+  
      eval{
           my $i=0;
-          for my $detalle (@{$pres_detalle}){          
+          for my $detalle (@{$pres_detalle}){  
                 $detalle->setPrecioUnitario($tabla_array_ref->[$i]->{'PrecioUnitario'});
                 $detalle->setCantidad($tabla_array_ref->[$i]->{'Cantidad'});
+
                 $detalle->save(); 
                 $i++;
           }

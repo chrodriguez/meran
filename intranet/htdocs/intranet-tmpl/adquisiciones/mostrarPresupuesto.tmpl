@@ -1,9 +1,12 @@
     <fieldset id="proveedor" >
-                            <legend class="titulo_legend">[% "Proveedor" | i18n %]</legend>  
-                            <p>[% proveedor %]</p>
-                            <p>[% pres %]</p>
-                            <input type="hidden" id="id_prov" value="[% id_prov %]">
-                            <input type="hidden" id="id_pres" value="[% id_p %]">
+                            <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend>  
+                                  <li> [% "Numero de presupuesto:" | i18n %]<strong> [% pres.id %]</strong> </li>  
+                                  <li> [% "Proveedor:" | i18n %]<strong> [% pres.ref_proveedor.getNombre %]</strong> </li>     
+                                  <li> [% "Fecha:" | i18n %]<strong> [% pres.fecha %]</strong> </li>  
+                          
+                            
+                            <input type="hidden" id="id_prov" value="[% pres.proveedor_id %]">
+                            <input type="hidden" id="id_pres" value="[% pres.id %]">
     </fieldset>
     <fieldset>
           <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
