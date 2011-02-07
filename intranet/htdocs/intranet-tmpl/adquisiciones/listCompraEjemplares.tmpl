@@ -9,14 +9,22 @@
         });        
     });
     
-    function submitForm(form_id) {
+    function submitFormPDF(form_id) {
+            $('#exportHidden').remove()
+            $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportPDF' value='pdf' />")
+	        $('#' + form_id).submit()
+    }
+    
+    function submitFormDOC(form_id){
+            $('#exportHidden').remove()
+            $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportDOC' value='doc' />")
 	        $('#' + form_id).submit()
     }
 </script>
 
 <fieldset id="datos_proveedor">
     <legend class="titulo_legend">[% "Ejemplares recomendados para la compra" | i18n %]</legend>
-    <form id="exportPDF" action="/cgi-bin/koha/adquisiciones/listCompraEjemplares.pl?token=[% token %]" accept-charset="utf-8">
+    <form id="export" action="/cgi-bin/koha/adquisiciones/listCompraEjemplares.pl?token=[% token %]" accept-charset="utf-8">
       <table id="tablaEjemplaresCompra" name="tabla" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 >
       <thead>
           <tr class="titulo_tabla_resultado">
@@ -56,7 +64,7 @@
             <input type="hidden" name="cantidad" value="[% i %]" />
     </tbody>   
     </table>
-    <input type="hidden" name="export" value="pdf" />
+    
     </form>
     <input type="button" value="Editar" id="editar" />
 
@@ -64,7 +72,15 @@
             print C4::AR::Filtros::to_Button( 
                                                 text    =>  "[% 'Exportar a PDF' | i18n %]",
                                                 boton   =>  "boton_buscar",
-                                                onClick =>  "submitForm('exportPDF');",
+                                                onClick =>  "submitFormPDF('export');",
+                    ) ;
+        [% END %]
+        
+        [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Exportar a DOC' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "submitFormDOC('export');",
                     ) ;
         [% END %]
 </fieldset>
