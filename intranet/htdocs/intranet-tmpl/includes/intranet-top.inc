@@ -18,10 +18,10 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <META HTTP-EQUIV="cache-control" content="public">
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/completo.css">
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/menu.css">
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/completo.css">
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/menu.css">
 <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/fancybox-min.css" />
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/forms.css">
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/forms.css">
 
 <script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
 
@@ -85,6 +85,7 @@
 	function searchBoxFocus(object){
 		
         object.value='';
+
 	}
 	
 	$(document).ready(function(){

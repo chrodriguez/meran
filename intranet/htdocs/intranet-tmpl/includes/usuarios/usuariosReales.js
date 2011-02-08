@@ -313,6 +313,7 @@ function updateEliminarFoto(responseText){
 	setMessages(Messages);
     $('#div_uploader').show();
     $('#div_boton_eliminar_foto').hide();
+    detalleUsuario();
 }
 
 function agregarAutorizado(){

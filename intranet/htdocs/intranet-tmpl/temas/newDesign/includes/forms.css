@@ -1,35 +1,38 @@
-.classform{
+.classform {
 	margin: 0;
 	padding: 0;
 }
 
 
-.classform p {
+
+/* Si da problemas, agregar a todos .classform */
+
+ p {
 	margin-bottom: 15px;
 }
 
-.classform input, .classform textarea {
+ input,  textarea {
 	padding: 5px;
 	font-family: Helvetica, sans-serif;
 	margin: 0px 0px 10px 0px;
 	border: 2px solid #ccc;
 }
 
-.classform textarea {
+ textarea {
 	height: 90px;
 }
 
-.classform textarea:focus, .classform input:focus {
+ textarea:focus,  input:focus {
 	border: 2px solid #900;
 }
 
-.classform input.submit-button {
+ input.submit-button {
 	width: 140px;
 	float: right;
 	text-align: center;
 }
 
-.classform label {
+ label {
 	float: left;
 	text-align: right;
 	margin-right: 15px;

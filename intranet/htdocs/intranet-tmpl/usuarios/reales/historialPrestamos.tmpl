@@ -1,109 +1,111 @@
-
 [% USE HTML %]
 
-<div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos realizadas" | i18n %]: &nbsp;[% cant %]</div> 
-
-<div class="contenedor_paginador">[% paginador %]</div>
-
-<table class="tablaHistorialPrestamos datos_tabla" cellspacing=0  cellpadding=0 border=0 width="100%">
-    <tr class="titulo_tabla_resultado">
-    
-	    <td class="click" onclick="ordenar('titulo')" 
-            Title='[% "Ordenar por t&iacute;tulo" | i18n %]'>
-		    [% "T&iacute;tulo" | i18n %]
-	    </td>
-	    <td class="click" onclick="ordenar('autor')" 
-            Title='[% "Ordenar por Autor" | i18n %]'>
-            [% "Autor" | i18n %]
-	    </td>
-        <td>
-                [% "Edici&oacute;n" | i18n %]
-        </td>
-            <td class="click" onclick="ordenar('barcode')" 
-                Title='[% "Ordenar por C&oacute;digo" | i18n %]'>
-		    [% "C&oacute;digo" | i18n %]
-        </td>
-	    <td>[% "Pr&eacute;stamo" | i18n %]</td>
-        <td>[% "Renovaci&oacute;n" | i18n %]</td>
-	    <td>[% "Vencimiento" | i18n %]</td>
-	    <td class="click" onclick="ordenar('fecha_devolucion')" 
-                Title='[% "Ordenar por Fecha de devoluci&oacute;n" | i18n %]'>
-		    [% "Devoluci&oacute;n" | i18n %]
-	    </td>
-    
-    </tr>
-    
-    [% FOREACH loop_reading %]
-    <tr valign=middle align="center">
-	    
-	    <td>
-		    [% PERL %]
-				    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(titulo) %]",
-                                                    url => 		"/cgi-bin/koha/catalogacion/estructura/detalle.pl",
-												    params =>	[	"id1=[% HTML.escape(id1) %]"], 
-											    ) ;
-		    [% END %]
-	    </td>
-	    <td>
-		    [% PERL %]
-				    print C4::AR::Filtros::link_to(	text => 	"[% autor %]",
-												    url => 		"/cgi-bin/koha/busquedas/filtrado.pl", 
-												    params =>	[	"origen=detalle", "idAutor=[% idAutor %]"], 
-											    ) ;
-		    [% END %]
-	    </td>
-	    <td>
-	    [% FOREACH grupos %]
-    
-		    [% IF edicion %]
-			    [% edicion %]
-		    [% END %]
-    
-		    [% IF publicationyear %]
-			    &nbsp;([% publicationyear %])
-                [% END %]
-	    
-		    [% IF volume %]
-			            t [% volume %]
-		    [% END %]
-    
-	    [% END %]
-	    </td>
-	    <td align="center" >
-		    [% PERL %]
-				    print C4::AR::Filtros::link_to(	text => 	"[% barcode %]",
-												    url => 		"/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
-												    params =>	["id3=[% id3 %]"],
-												    title =>	"[% "Detalle del Ejemplar" | i18n %]"
-											    ) ;
-		    [% END %]	
-	    </td>
-	    <td>
-		    &nbsp;[% date_due %]&nbsp;
-	    </td>
-	    <td>
-            [% IF date_renew %]
-		        &nbsp;[% date_renew %]&nbsp;
-            [% ELSE %]
-                --------
-            [% END %]
-	    </td>
-	    <td>
-            [% IF estaVencido %]
-		        &nbsp;<span class="fecha_critica">[% date_fin %]</span>&nbsp;
-            [% ELSE %]
-                &nbsp;<span class="fecha_cumple">[% date_fin %]</span>&nbsp;
-            [% END %]
-	    </td>
-	    <td>
-            [% IF returndate %]
-		        &nbsp;[% returndate %]&nbsp;
-            [% ELSE %]
-                --------
-            [% END %]
-	    </td>
-    
-    [% END %] <!-- FOREACH PRIMERO -->
-
-</table>
-
+[% IF loop_reading %]
+		<div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos realizados" | i18n %]: &nbsp;[% cant %]</div> 
+		
+		<div class="contenedor_paginador">[% paginador %]</div>
+		
+		<table class="tablaHistorialPrestamos datos_tabla" cellspacing=0  cellpadding=0 border=0 width="100%">
+		    <tr class="titulo_tabla_resultado">
+		    
+			    <td class="click" onclick="ordenar('titulo')" 
+		            Title='[% "Ordenar por t&iacute;tulo" | i18n %]'>
+				    [% "T&iacute;tulo" | i18n %]
+			    </td>
+			    <td class="click" onclick="ordenar('autor')" 
+		            Title='[% "Ordenar por Autor" | i18n %]'>
+		            [% "Autor" | i18n %]
+			    </td>
+		        <td>
+		                [% "Edici&oacute;n" | i18n %]
+		        </td>
+		            <td class="click" onclick="ordenar('barcode')" 
+		                Title='[% "Ordenar por C&oacute;digo" | i18n %]'>
+				    [% "C&oacute;digo" | i18n %]
+		        </td>
+			    <td>[% "Pr&eacute;stamo" | i18n %]</td>
+		        <td>[% "Renovaci&oacute;n" | i18n %]</td>
+			    <td>[% "Vencimiento" | i18n %]</td>
+			    <td class="click" onclick="ordenar('fecha_devolucion')" 
+		                Title='[% "Ordenar por Fecha de devoluci&oacute;n" | i18n %]'>
+				    [% "Devoluci&oacute;n" | i18n %]
+			    </td>
+		    
+		    </tr>
+		    
+		    [% FOREACH loop_reading %]
+		    <tr valign=middle align="center">
+			    
+			    <td>
+				    [% PERL %]
+						    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(titulo) %]",
+		                                                    url => 		"/cgi-bin/koha/catalogacion/estructura/detalle.pl",
+														    params =>	[	"id1=[% HTML.escape(id1) %]"], 
+													    ) ;
+				    [% END %]
+			    </td>
+			    <td>
+				    [% PERL %]
+						    print C4::AR::Filtros::link_to(	text => 	"[% autor %]",
+														    url => 		"/cgi-bin/koha/busquedas/filtrado.pl", 
+														    params =>	[	"origen=detalle", "idAutor=[% idAutor %]"], 
+													    ) ;
+				    [% END %]
+			    </td>
+			    <td>
+			    [% FOREACH grupos %]
+		    
+				    [% IF edicion %]
+					    [% edicion %]
+				    [% END %]
+		    
+				    [% IF publicationyear %]
+					    &nbsp;([% publicationyear %])
+		                [% END %]
+			    
+				    [% IF volume %]
+					            t [% volume %]
+				    [% END %]
+		    
+			    [% END %]
+			    </td>
+			    <td align="center" >
+				    [% PERL %]
+						    print C4::AR::Filtros::link_to(	text => 	"[% barcode %]",
+														    url => 		"/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
+														    params =>	["id3=[% id3 %]"],
+														    title =>	"[% "Detalle del Ejemplar" | i18n %]"
+													    ) ;
+				    [% END %]	
+			    </td>
+			    <td>
+				    &nbsp;[% date_due %]&nbsp;
+			    </td>
+			    <td>
+		            [% IF date_renew %]
+				        &nbsp;[% date_renew %]&nbsp;
+		            [% ELSE %]
+		                --------
+		            [% END %]
+			    </td>
+			    <td>
+		            [% IF estaVencido %]
+				        &nbsp;<span class="fecha_critica">[% date_fin %]</span>&nbsp;
+		            [% ELSE %]
+		                &nbsp;<span class="fecha_cumple">[% date_fin %]</span>&nbsp;
+		            [% END %]
+			    </td>
+			    <td>
+		            [% IF returndate %]
+				        &nbsp;[% returndate %]&nbsp;
+		            [% ELSE %]
+		                --------
+		            [% END %]
+			    </td>
+		    
+		    [% END %] <!-- FOREACH PRIMERO -->
+		
+		</table>
+[% ELSE %]
+    <div class="resultados_consulta">[% "No se han realizado pr&eacute;stamos." | i18n %] &nbsp;[% cant %]</div>
+[% END %] 

@@ -1314,6 +1314,12 @@ fieldset.accionesUsuarios {
 	width: 30%;
 }
 
+
+#file-uploader{
+    float: left;
+    width: 100%;
+}
+
 .divDatosUsuario {
 	float: left;
 }
@@ -1424,7 +1430,7 @@ input.file {
 
 #me_name {
 	font-size: 2.35em;
-	color: #BBBBBB;
+	color: #4B5869;
 	float: left;
 	padding-left: 2px;
 }
