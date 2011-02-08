@@ -149,7 +149,7 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
         });
         
     
-        my $detalle_pres = &C4::AR::Presupuestos::getAdqPresupuestoDetalle($id_pres);
+        my $detalle_pres = C4::AR::Presupuestos::getAdqPresupuestoDetalle($id_pres);
 
         C4::AR::Debug::debug(@$detalle_pres[0]->{'cantidad'});
         C4::AR::Utilidades::printARRAY($detalle_pres);
@@ -157,7 +157,7 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
         my $pres= C4::AR::Presupuestos::getPresupuestoPorID($id_pres);
         
         $t_params->{'pres'} =  $pres;
-        $t_params->{'detalle'} = $detalle_pres;
+        $t_params->{'detalle_presupuesto'} = $detalle_pres;
        
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
