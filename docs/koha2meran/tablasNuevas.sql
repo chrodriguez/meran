@@ -126,7 +126,7 @@ INSERT INTO `cat_estructura_catalogacion` (`id`, `campo`, `subcampo`, `itemtype`
 (63, '995', 't', 'ALL', 'Signatura Topográfica', 'text', 0, 3, 0, 6, 1, NULL, '6bab6f3097531cc673b716beecb02291', 1, 0, 'alphanumeric_total:true', 0),
 (65, '995', 'f', 'ALL', 'Código de Barras', 'text', 0, 3, 0, 1, 1, NULL, '62fe2d3dcb85e12ed75812bbac9f9e5a', 1, 0, 'alphanumeric_total:true', 0),
 (66, '110', 'a', 'ALL', 'Autor', 'auto', 1, 1, 0, 1, 1, 21, 'bf8e17616267c51064becf693e64501e', 1, 0, 'alphanumeric_total:true', 0),
-(67, '260', 'a', 'ALL', 'Ciudad de publicación', 'text', 0, 2, 0, 7, 1, NULL, 'cbbd9c107865b4586ceed391f8b5223b', 1, 0, 'alphanumeric_total:true', 0),
+(67, '260', 'a', 'ALL', 'Ciudad de publicación', 'text', 1, 2, 0, 7, 1, NULL, 'cbbd9c107865b4586ceed391f8b5223b', 1, 0, 'alphanumeric_total:true', 0),
 (68, '245', 'h', 'ALL', 'Medio', 'combo', 1, 2, 0, 4, 1, 4, 'dbd4ba15b96cf63914351cdb163467b2', 1, 0, 'alphanumeric_total:true', 0),
 (107, '080', 'a', 'ALL', 'CDU', 'text', 0, 1, 0, 3, 1, NULL, 'ea0c6caa38d898989866335e1af0844e', 0, 1, ' alphanumeric_total:true ', 1),
 (108, '084', 'a', 'ALL', 'Otro Número de Clasificación R', 'text', 0, 1, 0, 4, 1, NULL, 'a17d02aa9b8000545cbda6ecc9795cca', 0, 1, ' alphanumeric_total:true ', 2),
@@ -549,9 +549,9 @@ CREATE TABLE IF NOT EXISTS `ref_estado` (
 ALTER TABLE `ref_estado` CHANGE `id` `id` TINYINT( 5 ) NOT NULL ;
 
 INSERT INTO `ref_estado` (`id`, `nombre`) VALUES
-(0, 'Disponible'),
 (1, 'Perdido'),
 (2, 'Compartido'),
+(3, 'Disponible'),
 (4, 'Baja'),
 (5, 'Ejemplar deteriorado'),
 (6, 'En Encuadernación'),

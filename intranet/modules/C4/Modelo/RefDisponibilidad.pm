@@ -22,8 +22,8 @@ use C4::Modelo::RefDisponibilidad::Manager;
 use C4::Modelo::CircRefTipoPrestamo;
 use Text::LevenshteinXS;
 
-# 1 =  Domiciliario
-# 2 =  Sala de Lectura
+# 0 =  Domiciliario
+# 1 =  Sala de Lectura
 
 
 sub paraPrestamoValue{

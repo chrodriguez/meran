@@ -247,10 +247,11 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
         if($_->{'campoTabla'} eq 'itemtype'){ $dn2->{'valor'}='cat_ref_tipo_nivel3@'.$biblioitem->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'idLanguage'){ $dn2->{'valor'}='ref_idioma@'.$biblioitem->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'idCountry'){ $dn2->{'valor'}='ref_pais@'.$biblioitem->{$_->{'campoTabla'}}; }
-        elsif($_->{'campoTabla'} eq 'place'){ #Esto no se puede pasar sin buscar la referencia
-                     my $idLocalidad= buscarLocalidadParecida($biblioitem->{$_->{'campoTabla'}});
-                      $dn2->{'valor'}='ref_localidad@'.$idLocalidad; 
-              } 
+# LA Localidad pasa como texto
+#         elsif($_->{'campoTabla'} eq 'place'){ #Esto no se puede pasar sin buscar la referencia
+#                      my $idLocalidad= buscarLocalidadParecida($biblioitem->{$_->{'campoTabla'}});
+#                       $dn2->{'valor'}='ref_localidad@'.$idLocalidad; 
+#               } 
         elsif($_->{'campoTabla'} eq 'idSupport'){ $dn2->{'valor'}='ref_soporte@'.$biblioitem->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'classification'){ $dn2->{'valor'}='ref_nivel_bibliografico@'.$biblioitem->{$_->{'campoTabla'}}; }
           else { $dn2->{'valor'}=$biblioitem->{$_->{'campoTabla'}}; }
@@ -312,8 +313,15 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 
         if($_->{'campoTabla'} eq 'notforloan'){   $val='ref_disponibilidad@'.$item->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'homebranch'){$val='pref_unidad_informacion@'.$item->{$_->{'campoTabla'}}; }
-        elsif($_->{'campoTabla'} eq 'wthdrawn'){ if ($item->{$_->{'campoTabla'}}){$val='ref_estado@'.$item->{$_->{'campoTabla'}};}
-                                                    else {$val='ref_estado@0';} #Esta disponible
+        elsif($_->{'campoTabla'} eq 'wthdrawn'){ 
+                                            if ($item->{$_->{'campoTabla'}}){
+                                                     # Si no es 0 va con el valor original
+                                                          $val='ref_estado@'.$item->{$_->{'campoTabla'}};
+                                                    }
+                                                    else {
+                                                     # Si es 0, está disponible, va con el nuevo estado que es 3
+                                                          $val='ref_estado@3';
+                                                    } #Esta disponible ==> 3
                                                  }
         elsif($_->{'campoTabla'} eq 'holdingbranch'){ $val='pref_unidad_informacion@'.$item->{$_->{'campoTabla'}}; }
           else { $val=$item->{$_->{'campoTabla'}}; }
