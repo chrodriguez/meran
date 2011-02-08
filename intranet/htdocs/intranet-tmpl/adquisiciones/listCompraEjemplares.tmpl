@@ -1,30 +1,21 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<script type="text/javascript" language="javascript" >
+<script type="text/javascript"src="/intranet-tmpl/includes/adquisiciones/listCompraEjemplares.js"></script>
+<script type="text/javascript" language="javascript">
     $(document).ready(function(){
         $('.editable').attr('readonly', true)
         
         $('#editar').click(function(){
             $('.editable').attr('readonly', false)
-        });        
+        });    
+        
+        checkSeleccionados(false)
     });
-    
-    function submitFormPDF(form_id) {
-            $('#exportHidden').remove()
-            $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportPDF' value='pdf' />")
-	        $('#' + form_id).submit()
-    }
-    
-    function submitFormDOC(form_id){
-            $('#exportHidden').remove()
-            $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportDOC' value='doc' />")
-	        $('#' + form_id).submit()
-    }
 </script>
 
 <fieldset id="datos_proveedor">
     <legend class="titulo_legend">[% "Ejemplares recomendados para la compra" | i18n %]</legend>
-    <form id="export" action="/cgi-bin/koha/adquisiciones/listCompraEjemplares.pl?token=[% token %]" accept-charset="utf-8">
+    <form id="export" method="POST" action="/cgi-bin/koha/adquisiciones/listCompraEjemplares.pl?token=[% token %]" accept-charset="utf-8">
       <table id="tablaEjemplaresCompra" name="tabla" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 >
       <thead>
           <tr class="titulo_tabla_resultado">
@@ -56,7 +47,7 @@
                       <input type="text"  id="fecha" name="fecha[% i %]" value="[% recomendacion.fecha_publicacion %]" readonly> 
                   </td>
                   <td align="right" >
-                      <input type="checkbox" name="activo[% i %]" id="activo"> 
+                      <input type="checkbox" name="activo[% i %]" class="activo"> 
                   </td>
             </tr>  
             [% i = i + 1 %]      

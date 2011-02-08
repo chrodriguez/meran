@@ -28,7 +28,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 });
  
 if($to_pdf){
-    
+#   se exporta a PDF
     my $recomendaciones_activas                 = C4::AR::Recomendaciones::getRecomendacionesActivas();   
     my $cant_recomendaciones                    = (scalar(@$recomendaciones_activas));    
     my $i;
@@ -38,9 +38,9 @@ if($to_pdf){
     
         if($input->param('activo'.$i) eq 'on'){
         
-            my %hash = ( titulo    => $input->param('libro'.$i),
-                      cantidad  => $input->param('cantidad'.$i),
-                      fecha    => $input->param('fecha'.$i), ); 
+            my %hash = (    titulo      => $input->param('libro'.$i),
+                            cantidad    => $input->param('cantidad'.$i),
+                            fecha       => $input->param('fecha'.$i), ); 
                       
             my %row = ( recomendacion => \%hash,);
             
@@ -58,7 +58,34 @@ if($to_pdf){
 	C4::AR::PdfGenerator::printPDF($filename);
 
 }elsif($to_doc){
+#   exporta a DOC
+    my $recomendaciones_activas                 = C4::AR::Recomendaciones::getRecomendacionesActivas();   
+    my $cant_recomendaciones                    = (scalar(@$recomendaciones_activas));    
+    my $i;
+    my @resultsdata;
+    
+    for($i = 1; $i <= $cant_recomendaciones; $i++){
+    
+        if($input->param('activo'.$i) eq 'on'){
+        
+            my %hash = (    titulo      => $input->param('libro'.$i),
+                            cantidad    => $input->param('cantidad'.$i),
+                            fecha       => $input->param('fecha'.$i), ); 
+                      
+            my %row = ( recomendacion => \%hash,);
+            
+            push(@resultsdata, \%row);
+        }
+    }
+    
+    if(@resultsdata > 0){
+        $t_params->{'resultsloop'}= \@resultsdata; 
+    }
 
+	my $out = C4::AR::Auth::get_html_content( $template, $t_params, $session );
+	my $filename = C4::AR::PdfGenerator::pdfFromHTML($out);
+	print C4::AR::PdfGenerator::pdfHeader();
+	C4::AR::PdfGenerator::printPDF($filename."doc.");
 
 }else{
 
