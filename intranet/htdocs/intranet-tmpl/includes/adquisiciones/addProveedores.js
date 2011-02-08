@@ -7,9 +7,9 @@
  */ 
 //*********************************************Agregar Proveedor*********************************************
 
-var arreglo = new Array() // global, arreglo con los id de las moneda que se le agregan al proveedor
-var array_materiales = new Array() // globalarreglo de values de materiales a agregar en la base
-var array_envios = new Array() //global, arreglo de values de envios a agregar en la base
+var arreglo             = new Array() // global, arreglo con los id de las moneda que se le agregan al proveedor
+var array_materiales    = new Array() // globalarreglo de values de materiales a agregar en la base
+var array_envios        = new Array() //global, arreglo de values de envios a agregar en la base
 
 function monedas(){
   // agrega monedas en el cliente solamente, y se guardan todos los datos juntos cuando se selecciona "guardar"
@@ -17,8 +17,8 @@ function monedas(){
       if(($('#moneda').val() == "") || ($('#id_moneda').val() == "")){
           jConfirm(POR_FAVOR_INGRESE_UNA_MONEDA, function(){ })      
       }else{
-          var idMonedaNueva = $('#id_moneda').val()
-          var nombreMoneda = $('#moneda').val()
+          var idMonedaNueva  = $('#id_moneda').val()
+          var nombreMoneda   = $('#moneda').val()
           
           // preguntamos si esta agregando la misma moneda nuevamente, que no se muestre porque ya esta
           var cantidad = 0 

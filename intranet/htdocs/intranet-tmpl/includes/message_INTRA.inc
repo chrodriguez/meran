@@ -205,6 +205,7 @@
     POR_FAVOR_SELECCIONE_LOS_MATERIALES_QUITAR      = "[% 'Por favor seleccione los materiales que desea quitar' | i18n %]";
     POR_FAVOR_SELECCIONE_LOS_MATERIALES_AGREGAR     = "[% 'Por favor seleccione los materiales que desea agregar' | i18n %]";
     POR_FAVOR_INGRESE_UNA_FORMA_DE_ENVIO            = "[% 'Por favor seleccione alg&uacute;na forma de envio' | i18n %]";
+    POR_FAVOR_SELECCIONE_LAS_RECOMENDACIONES        = "[% 'Por favor seleccione las recomendaciones que desea exportar' | i18n %]";
     
     /*=================================================Fin===Proveedor=======================================================*/
 
