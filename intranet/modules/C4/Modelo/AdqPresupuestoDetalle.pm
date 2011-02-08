@@ -65,8 +65,9 @@ sub setAdqRecomendacionDetalleId  {
 sub setPrecioUnitario {
     my ($self) = shift;
     my ($precio) = @_;
-    utf8::encode($precio);
+
     $self->precio_unitario($precio);
+  
 }
 
 sub setCantidad {

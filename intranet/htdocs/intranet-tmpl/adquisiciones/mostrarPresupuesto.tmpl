@@ -37,16 +37,16 @@
                             <input type="text" name="renglon[% renglon %]" id="renglon[% renglon %]" value="[% renglon %]" READONLY> 
                           </td>
                           <td align="left" class="presupuesto">
-                              <input type="text" name="cantidad[% renglon %]" id="cantidad[% renglon %]" value="[% cantidad %]"> 
+                              <input type="text" name="cantidad[% renglon %]" id="cantidad[% renglon %]" onblur="calcularTotal([% renglon %])" value="[% cantidad %]"> 
                           </td>
                           <td align="left" class="presupuesto">
                               <input type="text" name="articulo[% renglon %]" id="articulo[% renglon %]" value="[% articulo %]"> 
                           </td>
                           <td align="left" class="presupuesto">
-                              <input type="text" name="precio_unitario[% renglon %]" id="precio_unitario[% renglon %]" value="[% precio_unitario%]"> 
+                              <input type="text" name="precio_unitario[% renglon %]" id="precio_unitario[% renglon %]" onblur="calcularTotal([% renglon %])" value="[% precio_unitario%]"> 
                           </td>
                           <td align="left" class="presupuesto">
-                              <input type="text" name="total[% renglon %]" id="total[% renglon %]" value="[% total%]">
+                              <input type="text" name="total[% renglon %]" id="total[% renglon %]" value="[% total%]" READONLY>
                               
                           </td> 
                   </tr>        

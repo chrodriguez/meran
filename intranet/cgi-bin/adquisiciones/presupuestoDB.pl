@@ -23,7 +23,7 @@ my $tipoAccion  = $obj->{'tipoAccion'}||"";
 
 if($tipoAccion eq "GUARDAR_MODIFICACION_PRESUPUESTO"){
 
-
+  
 
     my ($template, $session, $t_params)  = get_template_and_user({  
                         template_name => "/adquisiciones/mostrarPresupuesto.tmpl",
@@ -149,11 +149,16 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
         });
         
     
-        my $presupuestos = &C4::AR::Presupuestos::getAdqPresupuestoDetalle($id_pres);
+        my $detalle_pres = &C4::AR::Presupuestos::getAdqPresupuestoDetalle($id_pres);
 
-        $t_params->{'presupuestos'} = $presupuestos;
-
+        C4::AR::Debug::debug(@$detalle_pres[0]->{'cantidad'});
+        C4::AR::Utilidades::printARRAY($detalle_pres);
+    
+        my $pres= C4::AR::Presupuestos::getPresupuestoPorID($id_pres);
         
+        $t_params->{'pres'} =  $pres;
+        $t_params->{'detalle'} = $detalle_pres;
+       
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
         

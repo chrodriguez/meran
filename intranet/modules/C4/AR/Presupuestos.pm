@@ -43,19 +43,7 @@ sub getPresupuestoPorID{
                                                                     query   => [ id => { eq => $id_presupuesto} ],
                                                                 );
 
-    
-#      C4::AR::Utilidades::printARRAY(@presupuesto);
-#      C4::AR::Debug::debug($presupuesto);
-
-
-#      push (@result, $presupuesto);
-#       
-#      C4::AR::Utilidades::printARRAY(@result);
-
-     return $presupuesto->[0];
-    
-    
-    
+     return $presupuesto->[0];  
 }
 
 
@@ -69,14 +57,11 @@ sub getAdqPresupuestoDetalle{
                                                                     db => $db,
                                                                     query   => [ adq_presupuesto_id => { eq => $id_presupuesto} ],
                                                                 );
+      
+     foreach my $detalle_pres (@$detalle_array_ref) {
+        push (@results, $detalle_pres);
+     } 
     
-    foreach my $detalle_pres (@$detalle_array_ref) {
-        my %row = ( presupuesto => $detalle_pres, );
-
-        push (@results, \%row);
-    } 
-    
-    C4::AR::Debug::debug(scalar(@results));
     
     if(scalar(@results) > 0){
         return (\@results);
@@ -90,7 +75,7 @@ sub actualizarPresupuesto{
     
      my ($obj) = @_;
 
-      my $tabla_array_ref = $obj->{'table'};
+     my $tabla_array_ref = $obj->{'table'};
 
 
      my $pres=$obj->{'id_presupuesto'};
@@ -104,16 +89,15 @@ sub actualizarPresupuesto{
      $db->begin_work;
      
      my $pres_detalle = C4::AR::Presupuestos::getAdqPresupuestoDetalle($pres,$db); 
-  
-     eval{
+      eval{
           my $i=0;
-          for my $detalle (@{$pres_detalle}){  
-                $detalle->setPrecioUnitario($tabla_array_ref->[$i]->{'PrecioUnitario'});
+          for my $detalle (@$pres_detalle){ 
+                $detalle->setPrecioUnitario($tabla_array_ref->[$i]->{'PrecioUnitario'}); 
                 $detalle->setCantidad($tabla_array_ref->[$i]->{'Cantidad'});
-
                 $detalle->save(); 
                 $i++;
-          }
+               
+      }
 
      $msg_object->{'error'}= 0;
      C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A027', 'params' => []});

@@ -12,6 +12,8 @@
 
 <script type="text/javascript">
     
+
+// Funcion que muestra solo lo necesario cuando se selecciona "carga manual"
 function mostrarManual(){
         $('#presupuesto').hide();
         $('#carga_planilla').hide();
@@ -19,23 +21,24 @@ function mostrarManual(){
         $('#acciones').show();
 }
 
+// Funcion que muestra solo lo necesario cuando se selecciona "cargar una planilla"
 function mostrarPlanilla(){
-     $('#pres_manual').hide();
-     $('#carga_planilla').show();
-     $('#presupuesto').show();
-     $('#acciones').hide();
+        $('#pres_manual').hide();
+        $('#carga_planilla').show();
+        $('#presupuesto').show();
+        $('#acciones').hide();
 }
 
 $(document).ready(function() {
-   makeToggle('toggle_container','trigger',null,true);
-   createFileUploader();
-   $('#carga_planilla').hide();
-   $('#acciones').hide();
-   $('#presupuesto').hide();
-   $('#pres_manual').hide();
-  
-   $('#combo_presupuesto').change(function(){
-      mostrarPresupuestoManual()
+        makeToggle('toggle_container','trigger',null,true);
+        createFileUploader();
+        $('#carga_planilla').hide();
+        $('#acciones').hide();
+        $('#presupuesto').hide();
+        $('#pres_manual').hide();
+        
+        $('#combo_presupuesto').change(function(){
+            mostrarPresupuestoManual()
     })
 });
 
@@ -45,7 +48,11 @@ function onCompleteFileUpload(){
         mostrarPresupuesto();
 }
 
-
+function calcularTotal(renglon){
+      var total;  
+      total= ($('#cantidad'+ renglon).val() * $('#precio_unitario' + renglon).val()).toFixed(2); 
+      $('#total' + renglon).val(total);
+}
 
 function createFileUploader(){
  

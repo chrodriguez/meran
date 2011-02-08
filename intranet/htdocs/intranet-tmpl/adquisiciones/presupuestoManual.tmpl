@@ -1,4 +1,14 @@
-              <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+<fieldset id="proveedor" >
+                            <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend>  
+                                  <li> [% "Numero de presupuesto:" | i18n %]<strong> [% pres.id %]</strong> </li>  
+                                  <li> [% "Proveedor:" | i18n %]<strong> [% pres.ref_proveedor.getNombre %]</strong> </li>     
+                                  <li> [% "Fecha:" | i18n %]<strong> [% pres.fecha %]</strong> </li>  
+                          
+                            
+                            <input type="hidden" id="id_prov" value="[% pres.proveedor_id %]">
+                            <input type="hidden" id="id_pres" value="[% pres.id %]">
+</fieldset>              
+                      <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                               <thead>
                               <tr class="titulo_tabla_resultado">
                                   <th id="renglon">[% "Renglon" | i18n %]</th>
@@ -10,20 +20,20 @@
                               </thead>
                               <tbody>
                                   [% cant = 1 %] 
-                                  [% FOREACH presupuestos %]   
-                                      [% total = presupuesto.getPrecioUnitario * presupuesto.getCantidad %] 
+                                  [% FOREACH detalle %] 
+                                      [% total = cant * cant %] 
                                       <tr  align="center" id="[% cant %]">  
                                           <td align="left" class="presupuesto">
                                                 <input type="text" name="renglon[% cant %]" id="renglon[% cant %]" value="[% cant %]" READONLY> 
                                           </td>
                                           <td align="left" class="presupuesto">
-                                                <input type="text" name="cantidad[% cant %]" id="cantidad[% cant %]" value="[% presupuesto.getCantidad %]"> 
+                                                <input type="text" name="cantidad[% cant %]" id="cantidad[% cant %]" value="[% cantidad %]"> 
                                           </td>
                                           <td align="left" class="presupuesto">
-                                                <input type="text" name="articulo[% cant %]" id="articulo[% cant %]" value="[% presupuesto.ref_recomendacion_detalle.getAutor %][% presupuesto.ref_recomendacion_detalle.getTitulo %]"> 
+                                                <input type="text" name="articulo[% cant %]" id="articulo[% cant %]" value="[% ref_recomendacion_detalle.getAutor %][% detalle.ref_recomendacion_detalle.getTitulo %]"> 
                                           </td>
                                           <td align="left" class="presupuesto">
-                                                <input type="text" name="precio_unitario[% cant %]" id="precio_unitario[% cant %]" value="[% presupuesto.getPrecioUnitario %]"> 
+                                                <input type="text" name="precio_unitario[% cant %]" id="precio_unitario[% cant %]" value="[% detalle.getPrecioUnitario %]"> 
                                           </td>
                                           <td align="left" class="presupuesto">
                                                 <input type="text" name="total[% cant %]" id="total[% cant %]" value="[% total %]">
@@ -33,4 +43,4 @@
                                       </tr> 
                                   [% END %]   
                               </tbody>  
-                        </table>
+             </table>
