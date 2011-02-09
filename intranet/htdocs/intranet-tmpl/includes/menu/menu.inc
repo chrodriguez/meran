@@ -139,18 +139,9 @@
                         <li>
 
                             [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Listado de Compra de Ejemplares' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/adquisiciones/listCompraEjemplares.pl", 
-                                                                title =>    "[% 'Listado de Compra de Ejemplares' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </li>
-                        <li>
-
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% 'Pedidos de Cotizaci&oacute;n' | i18n %]",
-                                                                url =>      "/cgi-bin/koha/adquisiciones/pedidosCotizacion.pl", 
-                                                                title =>    "[% 'Pedidos de Cotizaci&oacute;n' | i18n %]"
+                                print C4::AR::Filtros::link_to( text =>     "[% 'Generar de Presupuesto' | i18n %]",
+                                                                url =>      "/cgi-bin/koha/adquisiciones/generatePresupuesto.pl", 
+                                                                title =>    "[% 'Generar de Presupuesto' | i18n %]"
                                                             ) ;
                             [% END %]
                         </li>

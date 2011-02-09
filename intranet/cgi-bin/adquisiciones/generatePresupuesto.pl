@@ -12,7 +12,16 @@ my $input = new CGI;
 my $to_pdf = $input->param('exportPDF') || 0;
 my $to_doc = $input->param('exportDOC') || 0;
 
-my $template_name = "adquisiciones/listCompraEjemplares.tmpl";
+my ($template, $session, $t_params) = get_template_and_user({
+    template_name => "adquisiciones/generatePresupuesto.tmpl",
+    query => $input,
+    type => "intranet",
+    authnotrequired => 0,
+    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
+    debug => 1,
+});
+
+my $template_name = "adquisiciones/generatePresupuesto.tmpl";
 
 if($to_pdf){
 	$template_name = "adquisiciones/listado_ejemplares_export.tmpl";
@@ -62,6 +71,7 @@ if($to_pdf){
 
 
 }else{
+#   se muestra el template normal
 
     my $recomendaciones_activas                 = C4::AR::Recomendaciones::getRecomendacionesActivas();
 
@@ -76,6 +86,10 @@ if($to_pdf){
        $t_params->{'resultsloop'}= \@resultsdata; 
        
     }#END if($recomendaciones_activas)
+    
+    my $combo_proveedores         = &C4::AR::Utilidades::generarComboProveedoresMultiple();
+
+    $t_params->{'combo_proveedores'}             = $combo_proveedores;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
