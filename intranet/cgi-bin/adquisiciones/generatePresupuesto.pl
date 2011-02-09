@@ -45,7 +45,7 @@ if($to_pdf){
     
     for($i = 1; $i <= $cant_recomendaciones; $i++){
     
-        if($input->param('activo'.$i) eq 'on'){
+        if($input->param('activo'.$i) eq 'checked'){
         
             my %hash = (    titulo      => $input->param('libro'.$i),
                             cantidad    => $input->param('cantidad'.$i),
