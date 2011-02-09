@@ -1,7 +1,7 @@
 /*
- * LIBRERIA listCompraEjemplares v 0.0.9
+ * LIBRERIA generatePresupuesto v 0.0.9
  * Esta es una libreria creada para el sistema KOHA
- * Contendran las funciones para la edicion y exportacion de recomendaciones para la compra
+ * Contendran las funciones para la generacion de presupuestos para la compra de ejemplares
  * Fecha de creacion 07/02/2011
  *
  */ 
