@@ -150,9 +150,6 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
         
     
         my $detalle_pres = C4::AR::Presupuestos::getAdqPresupuestoDetalle($id_pres);
-
-        C4::AR::Debug::debug(@$detalle_pres[0]->{'cantidad'});
-        C4::AR::Utilidades::printARRAY($detalle_pres);
     
         my $pres= C4::AR::Presupuestos::getPresupuestoPorID($id_pres);
         

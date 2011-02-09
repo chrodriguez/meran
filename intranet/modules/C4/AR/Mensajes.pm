@@ -403,6 +403,10 @@ my %mensajesINTRA = (
     'A026' => 'El n&uacute;mero de documento ingresado ya existe. Por favor ingrese otro.',
     'A027' => 'La informaci&oacute;n del presupuesto fue guardada con éxito.',
     'A028' => 'Error en la funcion C4::AR::Presupuestos::actualizarPresupuesto.',
+    'A029' => 'La cantidad de ejemplares ingresada es inv&aacute;lida.',
+    'A030' => 'La cantidad de ejemplares no puede estar en blanco.',
+    'A031' => 'El precio unitario ingresado es inv&aacute;lido.',
+    'A032' => 'El precio unitario no puede estar en blanco.',
 );
 
 sub getMensaje {
