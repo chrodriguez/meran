@@ -1,0 +1,50 @@
+.classform {
+	margin: 0;
+	padding: 0;
+}
+
+
+
+/* Si da problemas, agregar a todos .classform */
+
+ p {
+	margin-bottom: 15px;
+}
+
+ input,  textarea {
+	padding: 5px;
+	font-family: Helvetica, sans-serif;
+	margin: 0px 0px 10px 0px;
+	border: 2px solid #ccc;
+}
+
+ textarea {
+	height: 90px;
+}
+
+ textarea:focus,  input:focus {
+	border: 2px solid #4B5869;
+}
+
+ input.submit-button {
+	width: 140px;
+	float: right;
+	text-align: center;
+}
+
+ label {
+	float: left;
+	text-align: right;
+	margin-right: 15px;
+	width: 220px;
+	font-size: 1em;
+}
+
+.nonForm{
+	margin: 0 auto;
+	width: auto;
+}
+
+.search-title{
+	font-style: italic;
+	color: graytext;
