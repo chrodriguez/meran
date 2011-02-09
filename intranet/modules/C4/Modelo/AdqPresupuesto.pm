@@ -17,6 +17,7 @@ __PACKAGE__->meta->setup(
         proveedor_id                    => { type => 'integer', not_null => 1},
         fecha                           => { type => 'varchar', length => 255, not_null => 1},
         ref_estado_presupuesto_id       => { type => 'integer', not_null => 1},
+       
     ],
 
 

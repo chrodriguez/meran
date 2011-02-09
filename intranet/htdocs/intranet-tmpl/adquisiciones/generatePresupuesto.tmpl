@@ -1,0 +1,101 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript"src="/intranet-tmpl/includes/adquisiciones/generatePresupuesto.js"></script>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function(){
+        $('.editable').attr('readonly', true)
+        
+        $('#editar').click(function(){
+            $('.editable').attr('readonly', false)
+        });    
+        
+        checkSeleccionados(false)
+        
+    });
+</script>
+
+<fieldset id="datos_proveedor">
+    <legend class="titulo_legend">[% "Ejemplares recomendados para la compra" | i18n %]</legend>
+    <form id="export" method="POST" action="/cgi-bin/koha/adquisiciones/generatePresupuesto.pl?token=[% token %]" accept-charset="utf-8">
+      <table id="tablaEjemplaresCompra" name="tabla" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 >
+      <thead>
+          <tr class="titulo_tabla_resultado">
+              <th id="titulo">
+                  [% "T&iacute;tulo del Libro" | i18n %]
+              </th>
+              <th id="cantidad">
+                  [% "Cantidad de Ejemplares" | i18n %]
+              </th>
+              <th id="fecha_publicacion">
+                  [% "Fecha de Publicaci&oacute;n" | i18n %]
+              </th>    
+              <th id="activo">
+                  [% "Recomendaci&oacute;n Seleccionada" | i18n %]
+              </th>      
+          </tr>
+      </thead>
+      <tbody>
+            [% i = 1 %]
+            [% FOREACH resultsloop %]   
+            <tr align="center">
+                  <td align="right" >
+                      <input type="hidden" id="id_recomendacion_detalle[% i %]" name="id_recomendacion_detalle[% i %]" value="[% recomendacion.id %]"> 
+                      <input type="text" id="libro" name="libro[% i %]" value="[% recomendacion.titulo %]" readonly> 
+                  </td>
+                  <td align="right" >
+                  <!--TODO 
+                        cuando se edite la cantidad guardar en la base, por ajax ? 
+                  -->
+                      <input type="text" id="cantidad" name="cantidad[% i %]" class="editable" value="[% recomendacion.cantidad_ejemplares %]"> 
+                  </td>
+                  <td align="right" >
+                      <input type="text"  id="fecha" name="fecha[% i %]" value="[% recomendacion.fecha_publicacion %]" readonly> 
+                  </td>
+                  <td align="right" >
+                      <input type="checkbox" value="checked" name="activo[% i %]" class="activo"> 
+                  </td>
+            </tr>  
+            [% i = i + 1 %]      
+            [% END %]    
+            <input type="hidden" name="cantidad" value="[% i %]" />
+    </tbody>   
+    </table>
+    
+    </form>
+    <input type="button" value="Editar" id="editar" />
+
+        [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Exportar a PDF' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "submitFormPDF('export');",
+                    ) ;
+        [% END %]
+        
+        [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Exportar a DOC' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "submitFormDOC('export');",
+                    ) ;
+        [% END %]
+</fieldset>
+
+<fieldset id="datos_proveedor">
+<legend class="titulo_legend">[% "Presupuestos" | i18n %]</legend>
+    <ul>
+        <li class="sub_item">Proveedor/es:</li>
+        <li class="sub_item"> [% combo_proveedores %] </li>
+    </ul>
+    <ul>
+        [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Aceptar' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "generatePresupuesto();",
+                    ) ;
+        [% END %]
+    </ul>
+</fieldset>
+
+[% INCLUDE "intranet-bottom.inc" %]

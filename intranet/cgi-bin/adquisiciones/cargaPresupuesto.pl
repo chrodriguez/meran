@@ -10,6 +10,7 @@ my $input = new CGI;
 # $onChange="onChange='recuperarProveedor();'"
 
 my $combo_proveedores = &C4::AR::Utilidades::generarComboProveedores();
+my $combo_presupuestos = &C4::AR::Utilidades::generarComboPresupuestos();
 
 my ($template, $session, $t_params)= get_template_and_user({
                                 template_name => "adquisiciones/cargaPresupuesto.tmpl",
@@ -24,5 +25,8 @@ my $monedas = C4::AR::Proveedores::getMonedasProveedor($id_proveedor);
 
 $t_params->{'monedas'} = $monedas;
 $t_params->{'combo_proveedores'} = $combo_proveedores;
+$t_params->{'combo_presupuestos'} = $combo_presupuestos;
+
+
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

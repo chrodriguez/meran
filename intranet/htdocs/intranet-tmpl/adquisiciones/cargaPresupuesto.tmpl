@@ -4,10 +4,6 @@
 
 [% INCLUDE 'AutocompleteHelper.inc'  %]
 
-
-<script type="text/javascript" >
-
-</script>
 <script type="text/javascript" src="/includes/jquery/jquery.fileUploader-min.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
@@ -15,18 +11,47 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosPresupuesto.js"> </script>
 
 <script type="text/javascript">
+    
 
+// Funcion que muestra solo lo necesario cuando se selecciona "carga manual"
+function mostrarManual(){
+        $('#presupuesto').hide();
+        $('#carga_planilla').hide();
+        $('#pres_manual').show();
+        $('#acciones').show();
+}
+
+// Funcion que muestra solo lo necesario cuando se selecciona "cargar una planilla"
+function mostrarPlanilla(){
+        $('#pres_manual').hide();
+        $('#carga_planilla').show();
+        $('#presupuesto').show();
+        $('#acciones').hide();
+}
 
 $(document).ready(function() {
-   makeToggle('toggle_container','trigger',null,true);
-   createFileUploader();
-   $('#div_uploader').show();
-   $('#datos_planilla').hide();
+        makeToggle('toggle_container','trigger',null,true);
+        createFileUploader();
+        $('#carga_planilla').hide();
+        $('#acciones').hide();
+        $('#presupuesto').hide();
+        $('#pres_manual').hide();
+        
+        $('#combo_presupuesto').change(function(){
+            mostrarPresupuestoManual()
+    })
 });
 
 function onCompleteFileUpload(){
-        $('#datos_planilla').show(); 
+        $('#presupuesto').show();
+        $('#acciones').show();
         mostrarPresupuesto();
+}
+
+function calcularTotal(renglon){
+      var total;  
+      total= ($('#cantidad'+ renglon).val() * $('#precio_unitario' + renglon).val()).toFixed(2); 
+      $('#total' + renglon).val(total);
 }
 
 function createFileUploader(){
@@ -51,36 +76,55 @@ function createFileUploader(){
 
 <fieldset>
     <legend class="titulos">    [% "Carga de presupuesto" | i18n %] </legend>
-          <fieldset id="carga_planilla">
+           
+          <fieldset id="tipo_carga">
+                <legend class="titulo_legend">    [% "Elija una opcion" | i18n %] </legend>
+                <input type="radio" name="tipo_carga" value="carga_manual" onclick="mostrarManual()">Cargar datos manualmente<br>
+                <input type="radio" name="tipo_carga" value="carga_planilla" onclick="mostrarPlanilla()">Cargar planilla<br>
+          </fieldset> 
 
+          <fieldset id="carga_planilla">
                 <legend class="titulo_legend">[% "Carga de Planilla Excel" | i18n %]</legend>
                 <input type="hidden" id="filepath" value="">
                 <!-- VER BIEN Q PONER-->
                 <p>Seleccione el archivo que desea cargar </p>
-                    <div id="div_uploader" >
-                              <li>
-                                  <div id="uploader"></div>
-                              </li>
-                    </div>
+                <div id="div_uploader" >
+                        <li>
+                               <div id="uploader"></div>
+                        </li>
+                </div>
           </fieldset>
-        
-         <fieldset  id="datos_planilla" >
-                  <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend> 
-                  <div id="presupuesto">
+          
+          <div id="presupuesto">
+          </div>
+          
+          <fieldset id="pres_manual">
+              <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend> 
+                  
+                 
+                        <fieldset>
+                                   <p>Seleccione el presupuesto que desea cargar </p>
+                                  [% combo_presupuestos %]
+                        </fieldset>
+                     
+                       
+              <div id="presupuesto_manual">
+              </div>
+                 
+        </fieldset>
 
-                  </div>
-          </fieldset>
+       <fieldset id="acciones">  
+              <div id="accion">
+                      [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                                      boton   => "boton_buscar",
+                                                                      onClick => "modificarDatosDePresupuesto();",
+                                                            ) ;
+                      [% END %]
+                </div>
+      </fieldset> 
 </fieldset>          
-<fildset>  
-    <div id="accion">
-              [% PERL %]
-                         print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
-                                                               boton   => "boton_buscar",
-                                                               onClick => "modificarDatosDePresupuesto();",
-                                                     ) ;
-              [% END %]
-     </div>
-</fieldset> 
+
 
 
 [% INCLUDE "intranet-bottom.inc" %]

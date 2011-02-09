@@ -12,6 +12,7 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(  
     &agregrarRecomendacion;
+    &getRecomendacionesActivas;
 );
 
 
@@ -74,4 +75,21 @@ C4::AR::Debug::debug("$param");
           $db->{connect_options}->{AutoCommit} = 1;
     }
     return ($msg_object);
+}
+
+=item
+    Esta funcion devuelve las recomendaciones activas, con su detalle
+=cut
+sub getRecomendacionesActivas{
+
+    my ($params) = @_;
+
+    my $db                                      = C4::Modelo::AdqRecomendacionDetalle->new()->db;
+    my $recomendaciones_activas_array_ref       = C4::Modelo::AdqRecomendacionDetalle::Manager->get_adq_recomendacion_detalle(   
+                                                                    db => $db,
+                                                                    query   => [ activa => 1 ],
+                                                                    require_objects     => ['ref_adq_recomendacion'],
+                                                                );
+
+    return ($recomendaciones_activas_array_ref);
 }

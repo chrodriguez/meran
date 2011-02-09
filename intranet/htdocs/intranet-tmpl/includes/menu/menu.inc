@@ -150,6 +150,7 @@
           <h3 class="head"><a href="javascript:;">[% 'Usuarios' | i18n %]</a></h3>
           <div id="seccion_usuarios">
 
+
               <ul>
                 <li>
                           [% PERL %]

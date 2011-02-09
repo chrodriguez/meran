@@ -19,12 +19,15 @@ use Encode;
 use POSIX qw(ceil floor); 
 use JSON;
 use C4::AR::Preferencias;
+use C4::AR::Presupuestos;
 
 #Einar use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw(
+    generarComboPresupuestos
+    generarComboProveedoresMultiple
     generarComboFormasDeEnvio
     generarComboTipoDeMaterial
     monedasAutocomplete
@@ -1812,6 +1815,7 @@ sub generarComboTipoDeDoc{
 }
 
 #genera el combo multiselect de formas de envio
+
 sub generarComboFormasDeEnvio{
     my ($params) = @_;
 
@@ -1895,6 +1899,51 @@ sub generarComboTipoDeMaterial{
     return $combo_tipo_materiales; 
 }
 
+sub generarComboProveedoresMultiple{
+    my ($params) = @_;
+
+    my @select_proveedores_array;
+    my %select_proveedores;
+    my $proveedores        = &C4::AR::Referencias::obtenerProveedores();
+
+    foreach my $prov (@$proveedores) {
+        push(@select_proveedores_array, $prov->getId);
+        if ($prov-> getNombre eq "") {
+             $select_proveedores{$prov->getId}  = $prov->getRazonSocial;
+        } else { 
+            $select_proveedores{$prov->getId}  = $prov->getNombre;
+        }
+    }
+
+    $select_proveedores{''}                = 'SIN SELECCIONAR';
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){ 
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}       = $params->{'name'}||'proveedor_id';
+    $options_hash{'id'}         = $params->{'id'}||'proveedor';
+    $options_hash{'size'}       = $params->{'size'}||6;
+    $options_hash{'class'}      = 'required';
+    $options_hash{'multiple'}   = $params->{'multiple'}||1;
+    $options_hash{'defaults'}   = $params->{'default'} || 0;
+
+    push (@select_proveedores_array, '');
+    $options_hash{'values'}     = \@select_proveedores_array;
+    $options_hash{'labels'}     = \%select_proveedores;
+
+    my $combo_proveedores    = CGI::scrolling_list(\%options_hash);
+
+    return $combo_proveedores; 
+}
 
 
 sub generarComboProveedores{
@@ -1942,6 +1991,52 @@ sub generarComboProveedores{
 
     return $combo_proveedores; 
 }
+
+
+sub generarComboPresupuestos{
+    my ($params) = @_;
+
+    my @select_presupuestos_array;
+    my %select_presupuestos;
+    my $presupuestos  = &C4::AR::Presupuestos::getAdqPresupuestos();
+
+    push (@select_presupuestos_array, '');
+    
+
+    foreach my $presupuesto (@$presupuestos) {
+        push(@select_presupuestos_array, $presupuesto->getId);
+        $select_presupuestos{$presupuesto->getId}  = $presupuesto->getId." - ".$presupuesto->ref_proveedor->getNombre." - ".$presupuesto->getFecha;
+      
+    }
+
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){ 
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+     $options_hash{'name'}       = $params->{'name'}||'combo_presupuesto';
+     $options_hash{'id'}         = $params->{'id'}||'combo_presupuesto';
+     $options_hash{'size'}       = $params->{'size'}||1;
+     $options_hash{'class'}      = 'required';
+     $options_hash{'multiple'}   = $params->{'multiple'}||0;
+     $options_hash{'defaults'}   = $params->{'default'} || 0;
+
+   
+    $options_hash{'values'}     = \@select_presupuestos_array;
+    $options_hash{'labels'}     = \%select_presupuestos;
+
+    my $combo_presupuestos  = CGI::scrolling_list(\%options_hash);
+
+    return $combo_presupuestos; 
+}
+
 
 
 sub generarComboTipoNivel3{
