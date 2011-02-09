@@ -21,9 +21,13 @@ fieldset {
 #search-bar{
     width:48.5%;
     margin: 0 auto;
-    height: 75%;
+    height: 95%;
+    max-height: 130px;
 }
 
+#filterBar a{
+    color: #35414F;
+}
 
 #search-bar-catalogue{
 	background-color: #35414F;
@@ -38,7 +42,7 @@ fieldset {
 
 #search-bar-users{
 	background-color: #35414F;
-	width: 50%;
+	width: 49%;
 	height: 85%;
     color: #FCFFFF;
 	float: left;
@@ -188,7 +192,8 @@ fieldset {
 	float: right;
 	margin-bottom: 12px;
 	margin-left: 2px;
-	margin-top: -155px;
+	margin-top: -145px;
+	padding-right: 20px;
 	font: bold 7px tahoma, arial, helvetica, sans-serif;
 	text-align: right;
 	height: 5em;
@@ -254,13 +259,14 @@ body {
 	background: #FEFEFE;
 	float: left;
 	width: 80%;
-	min-height: 635px;
+	min-height: 420px;
+	height: auto;
 	margin: 0 auto;
 }
 
 
 .container_test{
-    height: 800px;
+    height: 93.2%;
 }
 
 
@@ -268,7 +274,7 @@ body {
 	font-weight: bold;
 	font-Family: arial, helvetica, sans-serif;
 	font-size: 15px;
-	color: #1C94C4;
+	color: #35414F;
 	text-align: left;
 	text-transform: uppercase;
 }
@@ -1032,7 +1038,7 @@ li {
 }
 
 .cargando {
-	background-image: url(../imagenes/loaders/loader_para_div.gif);
+	background-image: url(../imagenes/loaders/ajax-loader.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	height: auto;
@@ -1040,7 +1046,7 @@ li {
 }
 
 .loading {
-	background-image: url(../imagenes/loaders/loader_default.gif);
+	background-image: url(../imagenes/loaders/ajax-loader.gif);
 	background-repeat: no-repeat;
 	height: 50px;
 	width: 50px;
@@ -1200,6 +1206,16 @@ ul.horizontal-list li {
 	background-color: #35414F;
 	height: 62px;
 	clear: both;
+}
+
+#footer-info{
+	text-align: center;
+	color: #FEFEFE;
+}
+
+#footer-info a{
+    color: inherit;
+    font-style: none;
 }
 
 fieldset.main {
@@ -1424,8 +1440,8 @@ input.file {
 .user_icon img {
 	padding-right: 0.8em;
 	vertical-align: middle;
-	margin-bottom: -15px;
 	border: 0;
+	float: left;
 }
 
 #me_name {
@@ -1446,6 +1462,20 @@ input.file {
 	padding-left: 2%;
 }
 
+.culture_selection {
+	width: 60px;
+	margin: 0;
+    margin-top: 20px;
+	padding-left: 52px;
+	height: 25px;
+	float: left;
+}
+
+.culture_selection li {
+    width: 25px;
+    float: left;
+}
+
 .sorting_1 {
 	background-color: #C0C0C0;
 }
@@ -1463,13 +1493,28 @@ input.file {
 	text-align: center;
 }
 
+
+.datos_tabla td a{
+    color: #4B5869;
+}
+
 .datos_tabla {
 	width: 100%;
 }
 
 .warning {
-	background-color: #990000;
-	color: InfoBackground;
+	background-color: #35414F;
+	height: 45px;
+}
+
+.warning p{
+    text-align: center;
+    vertical-align: middle;
+    color: InfoBackground;
+    font-weight: bold;
+    font-size: 14pt;
+    padding: 0;
+    margin: 0;
 }
 
 .error_en_parametros {
@@ -1694,13 +1739,18 @@ em {
 }
 
 li.MARCHeader {
-	background-color: #A1C162;
+	background-color: #697F96;
 	margin: 0 0 4px;
 	padding: 4px;
 	width: 100%;
 	list-style-type: none;
 	clear: both;
 	height: 40px;
+}
+
+.fancy_extern_link{
+	color: #FEFEFE;
+    	
 }
 
 li.MARCHeader label {

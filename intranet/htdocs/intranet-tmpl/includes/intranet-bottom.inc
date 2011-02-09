@@ -8,7 +8,17 @@
 	
 </div>
 </div>
-<div id="marca"> <div> </div></div>
+<div id="marca"> 
+    <div id="footer-info">
+	    [% IF titulo_nombre_ui %]
+	        [% titulo_nombre_ui %]
+	    [% ELSE %]
+	        <a href="http://meran.linti.unlp.edu.ar" target="_blank">Meran</a>&nbsp;-&nbsp;Intranet
+	    [% END %]
+	    
+	    &nbsp;@[% actual_year %]
+    </div>
+</div>
 </div> <!-- container_test -->
 </body>
 </html>

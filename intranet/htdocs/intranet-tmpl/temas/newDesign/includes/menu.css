@@ -161,7 +161,7 @@
 
 .ui-state-default a,.ui-state-default a:link,.ui-state-default a:visited
 	{
-	color: #1c94c4;
+	color: #35414F;
 	text-decoration: none;
 }
 
@@ -190,7 +190,7 @@
 }
 
 .ui-state-active a,.ui-state-active a:link,.ui-state-active a:visited {
-	color: #eb8f00;
+	color: #7E94AF;
 	text-decoration: none;
 }
 
@@ -1139,7 +1139,20 @@
 }
 
 .ui-accordion li{
-    list-style-type: disc;
+    list-style-type: none;
+}
+
+.ui-accordion li a{
+    width: 100%;
+}
+
+.ui-accordion li:hover{
+    background: #7E94AF;
+}
+
+.ui-accordion li:hover a:hover{
+    font-weight: bold;
+    color: infobackground;
 }
 
 .ui-accordion .ui-accordion-content-active {

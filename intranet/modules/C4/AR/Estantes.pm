@@ -61,15 +61,23 @@ sub getSubEstantes {
 }
 
 sub getEstante {
-    my ($id_estante) = @_;
+    my ($id_estante,$orden) = @_;
 
     use C4::Modelo::CatEstante;
     use C4::Modelo::CatEstante::Manager;
     my @filtros;
     push(@filtros, ( id  => { eq => $id_estante} ));
-    my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros);
+    
+    my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( 
+                                                                                query => \@filtros,
+                                                                                );
+    
     my $estante=  $estantes_array_ref->[0];
-    if($estante) {C4::AR::Debug::debug("Se obtiene el estante  ".$estante->getEstante);}
+
+    if($estante) {
+    	C4::AR::Debug::debug("Se obtiene el estante  ".$estante->getEstante);
+    }
+    
     return ($estante);
 }
 

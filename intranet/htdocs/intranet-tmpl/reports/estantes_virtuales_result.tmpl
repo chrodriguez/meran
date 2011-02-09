@@ -16,24 +16,26 @@
            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <thead>
                 <tr class="titulo_tabla_resultado">
-                    <th class="click" onclick="ordenar('titulo')" 
-                        Title="[% 'Ordenar por título' | i18n %]" width="33%">[% "T&iacute;tulo" | i18n %]
-                    </th>
-
                     <th class="click" onclick="ordenar('autor')" 
                         Title="[% 'Ordenar por autor' | i18n %]" align="left" width="23%">[% "Autor" | i18n %]
                     </th>
-                    <th class="click" onclick="ordenar('lugar')" 
-                        Title="[% 'Ordenar por lugar' | i18n %]" width="20%">[% "Lugar" | i18n %]
+                    <th class="click" onclick="ordenar('titulo')" 
+                        Title="[% 'Ordenar por título' | i18n %]" width="33%">[% "T&iacute;tulo" | i18n %]
                     </th>
                     <th class="click" onclick="ordenar('edicion')" 
                         Title="[% 'Ordenar por edici&oacute;n' | i18n %]" width="20%">[% "Edic&iacute;on" | i18n %]
+                    </th>
+                    <th class="click" onclick="ordenar('lugar')" 
+                        Title="[% 'Ordenar por lugar' | i18n %]" width="20%">[% "Lugar" | i18n %]
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 [% FOREACH contenido_estante IN estante.contenido %]
                 <tr>
+                    <td class="autor_result">
+                            [% contenido_estante.nivel2.nivel1.getAutor %]
+                    </td>
                     <td class="titulo_result">
                         [% PERL %]
                             print C4::AR::Filtros::link_to( text =>     "[% contenido_estante.nivel2.nivel1.getTitulo %]",
@@ -42,12 +44,6 @@
                                                             title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
                                                         ) ;
                         [% END %]
-                    </td>
-                    <td class="autor_result">
-                            [% contenido_estante.nivel2.nivel1.getAutor %]
-                    </td>
-                    <td align=center>
-                     [% contenido_estante.nivel2.getCiudadPublicacion %]
                     </td>
                     <td align=center>
                       [% IF contenido_estante.nivel2.getEdicion %]
@@ -59,6 +55,9 @@
                             [% IF contenido_estante.nivel2.getVolumen %]
                                 t [% contenido_estante.nivel2.getVolumen %]  [% contenido_estante.nivel2.getVolumenDesc %]
                        [% END %]
+                    </td>
+                    <td align=center>
+                     [% contenido_estante.nivel2.getCiudadPublicacion %]
                     </td>
                 </tr>
                 [% END %]

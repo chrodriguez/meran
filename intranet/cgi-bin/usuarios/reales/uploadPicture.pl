@@ -30,6 +30,9 @@ my ($loggedinuser, $session, $flags) = checkauth(
 
 #my ($error,$codMsg,$message) = C4::AR::UploadFile::uploadPhoto($nro_socio, $filepath);
 
+
+################### PASARLO A C4::AR::UploadFile::uploadPhoto()
+
     my $uploaddir = C4::Context->config("picturesdir");
 
 
