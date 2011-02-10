@@ -1,12 +1,13 @@
-<fieldset id="proveedor" >
+<fieldset class="proveedor" >
                            
+                            <div>
                                   <li> [% "Numero de presupuesto:" | i18n %]<strong> [% pres.id %]</strong> </li>  
                                   <li> [% "Proveedor:" | i18n %]<strong> [% pres.ref_proveedor.getNombre %]</strong> </li>     
                                   <li> [% "Fecha:" | i18n %]<strong> [% pres.fecha %]</strong> </li>  
-                          
-                            
-                            <input type="hidden" id="id_prov" value="[% pres.proveedor_id %]">
-                            <input type="hidden" id="id_pres" value="[% pres.id %]">
+       
+                                  <input type="hidden" id="id_prov" value="[% pres.proveedor_id %]">
+                                  <input type="hidden" id="id_pres" value="[% pres.id %]">
+                            </div>
 </fieldset>              
                       <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                               <thead>
