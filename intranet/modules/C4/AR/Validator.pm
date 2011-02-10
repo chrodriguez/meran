@@ -153,11 +153,10 @@ sub countAlphaChars{
 }
 
 # FIXME------------------------------------------------------
+
 sub isValidReal{
     my ($real)=@_;
-  C4::AR::Debug::debug("REAL:                            ".$real);
     my @parts= split(/\./,$real);
-    C4::AR::Utilidades::printARRAY(@parts);
     if (scalar(@parts) > 2){
         return 0;
     } else {
