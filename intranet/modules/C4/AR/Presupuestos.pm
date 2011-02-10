@@ -21,7 +21,7 @@ use vars qw(@EXPORT @ISA);
 
 # =item
 #   Esta funcion agrega un Presupuesto
-#       Parametros: HASH   { id_proveedor , id_recomendacion }     
+#       Parametros: HASH   { id_proveedor , recomendaciones_array }     
 # =cut
 sub addPresupuesto{
 
@@ -37,15 +37,15 @@ sub addPresupuesto{
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
           
-      #  eval{              
+        eval{              
             my %parametros;
             $parametros{'id_proveedor'}                     = $param->{'id_proveedor'};
             $parametros{'ref_estado_presupuesto_id'}        = '1';
                    
-            # agrega un presupuesto y tiene que hacer: por cada recomendacion hacer un presupuesto_detalle
+            # agrega un presupuesto y tiene que hacer: por cada recomendacion un presupuesto_detalle
             $presupuesto->addPresupuesto(\%parametros);
                
-            # aca agregar presupuesto_detalle con el id del presupuesto recien ingresado
+            # aca agregar presupuesto_detalle con el id_presupuesto recien ingresado
             my $id_presupuesto = $presupuesto->getId();                
             
             # presupuesto_detalle
@@ -55,8 +55,6 @@ sub addPresupuesto{
                 $param{'id_recomendacion_detalle'}          = $param->{'recomendaciones_array'}->[$i];  
                 
                 #TODO ver la cantidad de recomendacion_detalle, si traerla aca antes o pasarla desde el cliente 
-                
-                #C4::AR::Debug::debug('entroo');
                        
                 my $presupuesto_detalle                     = C4::Modelo::AdqPresupuestoDetalle->new(db => $db);    
                 $presupuesto_detalle->addPresupuestoDetalle(\%param);
@@ -67,7 +65,7 @@ sub addPresupuesto{
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A033', 'params' => []});
             $db->commit;
-        #};
+        };
         if ($@){
         # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
             &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");

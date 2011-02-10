@@ -174,7 +174,7 @@ elsif($tipoAccion eq "AGREGAR_PRESUPUESTO"){
    
     my $message;
 
-    # recorremos los proveedores seleccionados y les agregamos el presupuesto
+    # recorremos los proveedores seleccionados y les agregamos el presupuesto, y adentro el presupuesto_detalle
     for(my $i=0;$i<scalar(@{$obj->{'proveedores_array'}});$i++){
     
         my %params = {};
