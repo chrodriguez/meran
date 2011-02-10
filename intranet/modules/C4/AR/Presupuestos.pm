@@ -96,27 +96,24 @@ sub actualizarPresupuesto{
                     
                     if($cantidad ne "") {
                           if (!($msg_object->{'error'}) && ( ((&C4::AR::Validator::countAlphaChars($cantidad) != 0)) || (&C4::AR::Validator::countSymbolChars($cantidad) != 0) || (&C4::AR::Validator::countNumericChars($cantidad) == 0))){
-                                  C4::AR::Debug::debug("ERROR: cantidad invalida");
+
                                   $msg_object->{'error'}= 1;
                                   C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A029', 'params' => []} ) ;
                                   
                           }
                     } else {
                         $msg_object->{'error'}= 1;
-                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A030', 'params' => []} ) ;       
-                        C4::AR::Debug::debug("ERROR cantidad en blanco");  
+                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A030', 'params' => []} ) ;        
                     }
                         
                     if($precio_unitario ne "") {
                           if (!($msg_object->{'error'}) && ( ((&C4::AR::Validator::countAlphaChars($precio_unitario) != 0)) || (C4::AR::Validator::isValidReal($precio_unitario) != 1) || (&C4::AR::Validator::countNumericChars($precio_unitario == 0)))){
                                   $msg_object->{'error'}= 1;
                                   C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A031', 'params' => []} ) ;
-                                  C4::AR::Debug::debug("ERROR: precio invalido");
                           }
                     } else {
                           $msg_object->{'error'}= 1;
                           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A032', 'params' => []} ) ;  
-                          C4::AR::Debug::debug("ERROR: precio en blanco");
                     }
                     
                     $detalle->setPrecioUnitario($precio_unitario);
@@ -124,7 +121,7 @@ sub actualizarPresupuesto{
                     $detalle->save();
                     $i++;     
               }
-              C4::AR::Debug::debug("ERROR FINAL:".$msg_object->{'error'}.$msg_object->{'codMsg'});
+        
               if (!($msg_object->{'error'})){
                  
                     $msg_object->{'error'}= 0;
