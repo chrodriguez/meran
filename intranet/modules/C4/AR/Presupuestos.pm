@@ -65,7 +65,7 @@ sub addPresupuesto{
             
     
             $msg_object->{'error'} = 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A029', 'params' => []});
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A033', 'params' => []});
             $db->commit;
         #};
         if ($@){
@@ -139,45 +139,69 @@ sub actualizarPresupuesto{
      my ($obj) = @_;
 
      my $tabla_array_ref = $obj->{'table'};
-
-
      my $pres=$obj->{'id_presupuesto'};
 
-  
-     my $adq_presupuesto_detalle = C4::Modelo::AdqPresupuestoDetalle->new();
      my $msg_object= C4::AR::Mensajes::create();
-     
+    
+     my $adq_presupuesto_detalle = C4::Modelo::AdqPresupuestoDetalle->new();
+         
      my $db = $adq_presupuesto_detalle->db;
+     
      $db->{connect_options}->{AutoCommit} = 0;
      $db->begin_work;
-     
+    
      my $pres_detalle = C4::AR::Presupuestos::getAdqPresupuestoDetalle($pres,$db); 
       eval{
-          my $i=0;
-          for my $detalle (@$pres_detalle){ 
-                $detalle->setPrecioUnitario($tabla_array_ref->[$i]->{'PrecioUnitario'}); 
-                $detalle->setCantidad($tabla_array_ref->[$i]->{'Cantidad'});
-                $detalle->save(); 
-                $i++;
-               
+              my $i=0;
+              for my $detalle (@$pres_detalle){ 
+                    my $cantidad= $tabla_array_ref->[$i]->{'Cantidad'};
+                    my $precio_unitario= $tabla_array_ref->[$i]->{'PrecioUnitario'};
+                    
+                    if($cantidad ne "") {
+                          if (!($msg_object->{'error'}) && ( ((&C4::AR::Validator::countAlphaChars($cantidad) != 0)) || (&C4::AR::Validator::countSymbolChars($cantidad) != 0) || (&C4::AR::Validator::countNumericChars($cantidad) == 0))){
+
+                                  $msg_object->{'error'}= 1;
+                                  C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A029', 'params' => []} ) ;
+                                  
+                          }
+                    } else {
+                        $msg_object->{'error'}= 1;
+                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A030', 'params' => []} ) ;        
+                    }
+                        
+                    if($precio_unitario ne "") {
+                          if (!($msg_object->{'error'}) && ( ((&C4::AR::Validator::countAlphaChars($precio_unitario) != 0)) || (C4::AR::Validator::isValidReal($precio_unitario) != 1) || (&C4::AR::Validator::countNumericChars($precio_unitario == 0)))){
+                                  $msg_object->{'error'}= 1;
+                                  C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A031', 'params' => []} ) ;
+                          }
+                    } else {
+                          $msg_object->{'error'}= 1;
+                          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A032', 'params' => []} ) ;  
+                    }
+                    
+                    $detalle->setPrecioUnitario($precio_unitario);
+                    $detalle->setCantidad($cantidad);
+                    $detalle->save();
+                    $i++;     
+              }
+        
+              if (!($msg_object->{'error'})){
+                 
+                    $msg_object->{'error'}= 0;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A027', 'params' => []});
+                    $db->commit;
+              }   
+          };
+          if ($@){
+                    &C4::AR::Mensajes::printErrorDB($@, 'A028',"INTRA");
+                    $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A028', 'params' => []} ) ;
+                    $db->rollback;
+          }
+          return ($msg_object);
       }
 
-     $msg_object->{'error'}= 0;
-     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A027', 'params' => []});
-     $db->commit;
-
-     };
-     if ($@){
-              &C4::AR::Mensajes::printErrorDB($@, 'A028',"INTRA");
-              $msg_object->{'error'}= 1;
-              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A028', 'params' => []} ) ;
-              $db->rollback;
-     }
-
-     return ($msg_object);
-
-}
-
+       
 END { }       # module clean-up code here (global destructor)
 
 1;

@@ -13,64 +13,70 @@
 <script type="text/javascript">
     
 
-// Funcion que muestra solo lo necesario cuando se selecciona "carga manual"
-function mostrarManual(){
-        $('#presupuesto').hide();
-        $('#carga_planilla').hide();
-        $('#pres_manual').show();
-        $('#acciones').show();
-}
+            // Funcion que muestra solo lo necesario cuando se selecciona "carga manual"
+            function mostrarManual(){
+                    $('#presupuesto').hide();
+                    $('#carga_planilla').hide();
+                    $('#pres_manual').show();
+                    $('#acciones').hide();
+            }
 
-// Funcion que muestra solo lo necesario cuando se selecciona "cargar una planilla"
-function mostrarPlanilla(){
-        $('#pres_manual').hide();
-        $('#carga_planilla').show();
-        $('#presupuesto').show();
-        $('#acciones').hide();
-}
+            // Funcion que muestra solo lo necesario cuando se selecciona "cargar una planilla"
+            function mostrarPlanilla(){
+                    $('#pres_manual').hide();
+                    $('#carga_planilla').show();
+                    $('#presupuesto').show();
+                    $('#acciones').hide();
+            }
 
-$(document).ready(function() {
-        makeToggle('toggle_container','trigger',null,true);
-        createFileUploader();
-        $('#carga_planilla').hide();
-        $('#acciones').hide();
-        $('#presupuesto').hide();
-        $('#pres_manual').hide();
-        
-        $('#combo_presupuesto').change(function(){
-            mostrarPresupuestoManual()
-    })
-});
+            $(document).ready(function() {
+                    makeToggle('toggle_container','trigger',null,true);
+                    createFileUploader();
+                    $('#carga_planilla').hide();
+                    $('#acciones').hide();
+                    $('#presupuesto').hide();
+                    $('#pres_manual').hide();
+                    
+                    $('#combo_presupuesto').change(function(){
+                          $('#acciones').show();  
+                          mostrarPresupuestoManual()
+                })
+            });
 
-function onCompleteFileUpload(){
-        $('#presupuesto').show();
-        $('#acciones').show();
-        mostrarPresupuesto();
-}
+            function onCompleteFileUpload(){
+                    $('#presupuesto').show();
+                    $('#acciones').show();
+                    mostrarPresupuesto();
+            }
 
-function calcularTotal(renglon){
-      var total;  
-      total= ($('#cantidad'+ renglon).val() * $('#precio_unitario' + renglon).val()).toFixed(2); 
-      $('#total' + renglon).val(total);
-}
+            function calcularTotal(renglon){
+                  var total;  
+                  total= ($('#cantidad'+ renglon).val() * $('#precio_unitario' + renglon).val()).toFixed(2); 
+                  if (isNaN(total)){
+                      $('#total' + renglon).val("Valor incorrecto");
+                  } else{
+                      $('#total' + renglon).val(total);
+                  }
 
-function createFileUploader(){
- 
-    if($("#uploader")[0] != null){
-   
-       $("#uploader").fileUploader({
-                        // perl script
-                        file_types: "xls",
-                        type_file: "planilla_xls",
-                        ajaxFile: "importPresupuestoProveedores.pl",
-                        uploadFolder: "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/",
-                        funcionOnComplete: function (){
-                                    onCompleteFileUpload();
-                        }
-        });
+            }
 
-    }
-}
+            function createFileUploader(){
+            
+                if($("#uploader")[0] != null){
+              
+                  $("#uploader").fileUploader({
+                                    // perl script
+                                    file_types: "xls",
+                                    type_file: "planilla_xls",
+                                    ajaxFile: "importPresupuestoProveedores.pl",
+                                    uploadFolder: "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/",
+                                    funcionOnComplete: function (){
+                                                onCompleteFileUpload();
+                                    }
+                    });
+
+                }
+            }
 
 </script>
 
@@ -102,10 +108,10 @@ function createFileUploader(){
               <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend> 
                   
                  
-                        <fieldset>
+                        
                                    <p>Seleccione el presupuesto que desea cargar </p>
                                   [% combo_presupuestos %]
-                        </fieldset>
+                        
                      
                        
               <div id="presupuesto_manual">

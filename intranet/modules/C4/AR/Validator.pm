@@ -28,11 +28,13 @@ use vars qw(@EXPORT @ISA);
     countAlphaNumericChars,
     countAlphaChars,
     countSymbolChars,
+    isValidReal,
     isValidMail,
     isValidDocument
     validateParams
     checkParams
     validateObjectInstance
+  
 );
 
 
@@ -149,6 +151,22 @@ sub countAlphaChars{
     }
     return $count;
 }
+
+# FIXME------------------------------------------------------
+
+sub isValidReal{
+    my ($real)=@_;
+    my @parts= split(/\./,$real);
+    if (scalar(@parts) > 2){
+        return 0;
+    } else {
+            if (countSymbolChars(@parts[0])!= 0 || countSymbolChars(@parts[0])!= 0){
+                return 0;
+            }
+    }
+    return 1;
+}
+
 
 =item
     Funcion que cuenta la cantidad de simbolos 
