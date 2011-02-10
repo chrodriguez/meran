@@ -1144,6 +1144,7 @@
 
 .ui-accordion li a{
     width: 100%;
+    display: inline-block;
 }
 
 .ui-accordion li:hover{

@@ -8,6 +8,7 @@
     token       = '[% token %]';
     imagesForJS = '[% temas %]/[% tema %]/imagenes';
     M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %] + 0;
+    
 </script>
 
 [% IF page_sub_title %]
