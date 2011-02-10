@@ -6,11 +6,10 @@
  *
  */ 
 
-var arreglo = new Array() // global, arreglo con las recomendaciones seleccionadas
-
 
 /******************************************************** AGREGAR PRESUPUESTO **************************************************/
 
+var arreglo                  = new Array() // global, arreglo con las recomendaciones seleccionadas
 var array_proveedores        = new Array() //global, arreglo de ids de proveedores a generar presupuesto
 var array_recomendaciones    = new Array() //global, arreglo de ids de recomendaciones_detalle
 
@@ -24,7 +23,7 @@ function generatePresupuesto(){
     objAH.recomendaciones_array = getRecomendacionesSelected();
       
     objAH.tipoAccion          = 'AGREGAR_PRESUPUESTO';
-    //objAH.sendToServer();       
+    objAH.sendToServer();       
 }
 
 function updateAgregarPresupuesto(responseText){
@@ -34,24 +33,17 @@ function updateAgregarPresupuesto(responseText){
     setMessages(Messages);
 }
 
-//TODO ver esto
 function getProveedoresSelected(){
     var i = 0
-    $('#proveedor:selected').each(function(){  
-        alert('entro')
-        // para no agregar en el arreglo el option "SIN SELECCIONAR"
-        if($(this).val() != ""){
-            array_proveedores[i] = $(this).val()
-            i++
-            alert($(this).val())
-        }
+    $('#proveedor option:selected').each(function(){  
+        array_proveedores[i] = $(this).val()
+        i++
     })
     return array_proveedores
 }
 
 function getRecomendacionesSelected(){
     var i = 0
-    //alert('entra')
     $('.activo').each(function(){ 
         if($(this).attr('checked') == true){
             $(this).attr('name') // activo1 , activo2 , etc 
@@ -67,11 +59,7 @@ function getRecomendacionesSelected(){
 /************************************************************ FIN - AGREGAR PRESUPUESTO ******************************************/
 
 
-
-
-
-
-// checkea que se seleccionen recomendaciones para exportar
+// checkea que se seleccionen recomendaciones para exportar, o para generar el presupuesto
 function checkSeleccionados(bool){
     if(bool){
         var checkeados = 0

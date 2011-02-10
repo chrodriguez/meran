@@ -401,8 +401,9 @@ my %mensajesINTRA = (
     'A024' => 'El proveedor fue eliminado con &eacute;xtio.',
     'A025' => 'El proveedor no pudo ser eliminado. Intente nuevamente.',
     'A026' => 'El n&uacute;mero de documento ingresado ya existe. Por favor ingrese otro.',
-    'A027' => 'La informaci&oacute;n del presupuesto fue guardada con éxito.',
+    'A027' => 'La informaci&oacute;n del presupuesto fue guardada con &eacute;xtio.',
     'A028' => 'Error en la funcion C4::AR::Presupuestos::actualizarPresupuesto.',
+    'A029' => 'Presupuesto/s generado/s con &eacute;xito.',
 );
 
 sub getMensaje {

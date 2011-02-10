@@ -6,9 +6,9 @@ use C4::AR::Proveedores;
 use C4::AR::Presupuestos;
 use CGI;
 use JSON;
-use Spreadsheet::Read;
-use Spreadsheet::ParseExcel;
-use Spreadsheet::ReadSXC qw(read_sxc);
+#use Spreadsheet::Read;
+#use Spreadsheet::ParseExcel;
+#use Spreadsheet::ReadSXC qw(read_sxc);
 
 my $input = new CGI;
 my $authnotrequired= 0;
@@ -165,7 +165,31 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
 } #end if($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL")
 
 elsif($tipoAccion eq "AGREGAR_PRESUPUESTO"){
+
+    my ($template, $session, $t_params) = get_template_and_user({
+        template_name => "adquisiciones/generatePresupuesto.tmpl",
+        query => $input,
+        type => "intranet",
+        authnotrequired => 0,
+        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
+        debug => 1,
+    });
+   
+    my $message;
+
+    # recorremos los proveedores seleccionados y les agregamos el presupuesto
+    for(my $i=0;$i<scalar(@{$obj->{'proveedores_array'}});$i++){
     
-    #my $proveedores_ids = $obj->{'proveedores_array'}
+        my %params = {};
+        
+        $params{'id_proveedor'}           = $obj->{'proveedores_array'}->[$i];
+        $params{'recomendaciones_array'}  = $obj->{'recomendaciones_array'};
+        
+        $message = C4::AR::Presupuestos::addPresupuesto(\%params);   
+    }
+
+    my $infoOperacionJSON   = to_json $message;
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
 
 }# end if($tipoAccion eq "AGREGAR_PRESUPUESTO")
