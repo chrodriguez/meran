@@ -6,9 +6,9 @@ use C4::AR::Proveedores;
 use C4::AR::Presupuestos;
 use CGI;
 use JSON;
-#use Spreadsheet::Read;
-#use Spreadsheet::ParseExcel;
-#use Spreadsheet::ReadSXC qw(read_sxc);
+use Spreadsheet::Read;
+use Spreadsheet::ParseExcel;
+use Spreadsheet::ReadSXC qw(read_sxc);
 
 my $input = new CGI;
 my $authnotrequired= 0;
