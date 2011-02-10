@@ -116,10 +116,19 @@
 	                       [% PERL %]
 	                           print C4::AR::Filtros::link_to( text =>     "[% 'Carga de presupuestos' | i18n %]",
 	                                                           url =>      "/cgi-bin/koha/adquisiciones/cargaPresupuesto.pl", 
-	                                                           title =>    "[% 'Listado de Proveedores' | i18n %]"
+	                                                           title =>    "[% 'Carga de presupuestos' | i18n %]"
 	                                                       ) ;
 	                       [% END %]
 	                   </li>
+	                   <li>
+	
+	                       [% PERL %]
+	                           print C4::AR::Filtros::link_to( text =>     "[% 'Generar Presupuesto' | i18n %]",
+	                                                           url =>      "/cgi-bin/koha/adquisiciones/generatePresupuesto.pl", 
+	                                                           title =>    "[% 'Generar Presupuesto' | i18n %]"
+	                                                       ) ;
+	                       [% END %]
+	                   </li>	                   
 	                </ul>
 	             </li>
 	                
