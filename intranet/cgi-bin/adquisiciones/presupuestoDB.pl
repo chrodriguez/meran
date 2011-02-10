@@ -160,3 +160,9 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
 
         
 } #end if($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL")
+
+elsif($tipoAccion eq "AGREGAR_PRESUPUESTO"){
+    
+    #my $proveedores_ids = $obj->{'proveedores_array'}
+
+}# end if($tipoAccion eq "AGREGAR_PRESUPUESTO")

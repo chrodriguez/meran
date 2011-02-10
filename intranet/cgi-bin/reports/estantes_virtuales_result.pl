@@ -74,7 +74,7 @@ my ($subEstantes)= C4::AR::Reportes::estantesVirtuales( $id_estante);
 use C4::AR::Estantes;
 
 if($id_estante){
-    my $estante= C4::AR::Estantes::getEstante($id_estante);
+    my $estante= C4::AR::Estantes::getEstante($id_estante,$obj->{'orden'});
     $t_params->{'estante'}= $estante;
 }
 

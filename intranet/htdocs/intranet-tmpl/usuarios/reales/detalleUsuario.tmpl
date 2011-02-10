@@ -1,4 +1,7 @@
-<!--<script src="/includes/jquery/jquery.jeditable.js"></script>-->
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/fileuploader.css">
+
+<script type="text/javascript" src="/includes/jquery/fileuploader.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function(){
         makeToggle('toggle_container','trigger',null,true);
@@ -9,6 +12,24 @@
         [% ELSE %]
             $('#div_boton_eliminar_foto').show();
         [% END %]
+
+        $('.fancylink').fancybox();
+
+        //Inicializacion del FileUploader
+        [% IF !foto_name %]  
+        
+	        var uploader = new qq.FileUploader({
+	            element: document.getElementById('file-uploader'),
+	            action: '/cgi-bin/koha/usuarios/reales/uploadPicture.pl',
+	            params: {
+	            	nro_socio: '[% socio_data.usr_nro_socio %]',
+	                param2: 'value2'
+	            },
+	            onComplete: function(id, fileName){detalleUsuario();},
+	            debug: true,
+	        });
+        [% END %]
+        
     });
 </script>
 
@@ -24,10 +45,13 @@
                 <ul class="listado_sin_margen">
                 <li id="foto"> 
                   [% IF foto_name %]  
-                      <img width="96px" height="96px" border="0" src="[% themelang %]/pictures/[% foto_name %]" 
-                            alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
-                            title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
-                      >
+                      <a class="fancylink" rel="group" href="[% themelang %]/pictures/[% foto_name %]">
+	                      <img border="0" src="[% themelang %]/pictures/[% foto_name %]"
+	                            style="height: 60%; width: 60%; max-width: 120px; max-height: 120px;" 
+	                            alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+	                            title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+	                      >
+	                  </a>
                   [% END %]
                 </li>
                 <li> [% "Apellido:" | i18n %]<strong> [% socio.persona.getApellido %]</strong> </li>
@@ -217,15 +241,18 @@
                                             print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Foto' | i18n %]",
                                                                                 boton   => "boton_borrar",
                                                                                 onClick => "eliminarFoto('[% foto_name %] ');",
-                                                    ) ;
+                                                                             );
                                 [% END %]
                           </li>
                         </div>
-                        <div id="div_uploader" style="display: none">
-                            <li>
-                                <div id="uploader"></div>
-                            </li>
-                        </div>
+                        <li>
+	                        <div id="file-uploader">
+							    <noscript>          
+							        <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>
+							        <!-- or put a simple form for upload here -->
+							    </noscript>                          
+	                        </div>
+                        </li>
                     </ul>
                 </fieldset>
               </div><!--columna_der -->

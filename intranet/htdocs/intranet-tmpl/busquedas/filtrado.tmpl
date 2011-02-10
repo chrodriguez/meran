@@ -5,6 +5,7 @@
 <script language="javascript" type="text/javascript" src="/intranet-tmpl/includes/estantesVirtuales.js"></script>
 <script language="javascript" type="text/javascript" src="/intranet-tmpl/includes/busquedasCatalogo-min.js"> </script>
 
+
 <script language="javascript" type="text/javascript">
 
 $(document).ready(function() {
@@ -21,6 +22,8 @@ $(document).ready(function() {
 
     $("#filtrosBusqueda").show();
     makeToggle('filtrosBusqueda','trigger',null,false);
+    
+   
 });
 
 function limpiarArriba(){
@@ -67,7 +70,7 @@ function limpiarCampos(side){
         [% "B&uacute;squeda Avanzada en el cat&aacute;logo" | i18n %]</legend>
     <div id="filtrosBusqueda" class="filtrosBusqueda">
         <span class="titulos"></span>
-        <div class="formElemets">
+        <div class="formElemets classform">
             <div id="busqueda_combinada">
             <fieldset>
                 <legend class="titulo_legend"><strong>[% "B&uacute;squeda combinada" | i18n %]</strong></legend>
@@ -179,14 +182,7 @@ function limpiarCampos(side){
                                 <strong>[% "Solo disponibles para pr&eacute;stamo" | i18n %]</strong>
                             </label>
                             <input type="checkbox" id="only_available" name="only_available" style="float:left;">
-                            [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                        boton   => "boton_buscar",
-                                                                        onClick => "buscar();",
-                                                                        title   => "[% 'Buscar en el cat&aacute;logo' | i18n %]",
-                                                                        alternClass => "botonCentrado"
-                                            ) ;
-                            [% END %]
+                            <input type="submit" class="nonForm" onclick="buscar()" id="save_button" value="[% 'Buscar' | i18n %]" >
                     </li>
                 </ul>
             </div>

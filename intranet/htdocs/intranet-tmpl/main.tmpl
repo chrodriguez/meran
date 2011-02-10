@@ -1,74 +1,6 @@
 [% INCLUDE 'intranet-top.inc' %]
 
-<script type="text/javascript" src="/intranet-tmpl/includes/busquedasCatalogo-min.js"> </script>
-<script type="text/javascript" src="/intranet-tmpl/includes/busquedasUsuarios-min.js"></script>
 
-<script language="javascript" type="text/javascript"> 
-
-$(document).ready(function() {
-
-  onEnter('keyword',buscar,true);
-  onEnter('socio',consultar);
-  $('#keyword').focus();
-});
-
-</script>
-<fieldset class="main">
-    <legend class="titulo_legend"><strong>[% "Cat&aacute;logo:" | i18n %]</strong></legend>
-	<ul>
-    <li class="item" >
-        [% PERL %]
-            print C4::AR::Filtros::getComboMatchMode();
-        [% END %]
-    </li>
-    <li class="item" >
-        <label for="keyword">
-            [% "B&uacute;squeda combinada" | i18n %]
-        </label>
-        <input type="text" id="keyword" size="20" tabindex=1
-              title="[% 'Ingrese parte del autor, ISBN o parte del titulo' | i18n%]">
-
-         [% PERL %]
-                     print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                             boton   => "boton_buscar",
-                             onClick => "buscar(true);",
-                             width => "auto",
-                             title   => "[% 'Buscar en el cat&aacute;logo' | i18n %]",
-                             ) ;
-          [% END %]
-  	</li>
-    <li class="item">
-        [% PERL %]
-                print C4::AR::Filtros::link_to( text    =>  "[% 'B&uacute;squeda avanzada' | i18n %]",
-                                                url     =>  "/cgi-bin/koha/busquedas/filtrado.pl",
-                                                title   =>  "[% 'B&uacute;squeda avanzada' | i18n %]"
-                        ) ;
-        [% END %]
-    </li>
-    </ul>
-</fieldset>
-<fieldset class="main">
-<legend class="titulo_legend"><strong>[% "Usuarios:" | i18n %]</strong></legend>
-	<ul>
-        <li class="item" >
-            <label for="socio">
-                [% "B&uacute;squeda de usuarios &nbsp;" | i18n %]
-            </label>
-            <input id="socio" type=text name="socio" onFocus="checkFilter('focus')" 
-                onBlur="checkFilter('blur')" value="" size="20" tabindex="2" 
-                title="[% 'Ingrese parte del nombre, apellido; o DNI - Nro. de socio' | i18n%]">
-            [% PERL %]
-                            print C4::AR::Filtros::to_Button( 
-                                                                text    =>  "[% 'Buscar' | i18n %]",
-                                                                boton   =>  "boton_buscar",
-                                                                width => "auto",
-                                                                onClick =>  "consultar();",
-                                                                title   =>  "[% 'Buscar usuario' | i18n %]",
-                                    ) ;
-            [% END %]
-        </li>
-    </ul>
-</fieldset>
 <fieldset class="main">
     <legend class="titulo_legend"><strong>[% "Circulaci&oacute;n:" | i18n %]</strong></legend>
     <ul>
@@ -105,8 +37,5 @@ $(document).ready(function() {
         </li>
     </ul>
 </fieldset>
-<div id="resultBusqueda"></div>
-<div id="result"></div>
-
 [% INCLUDE 'intranet-bottom.inc' %]
 

@@ -2,7 +2,7 @@ var objAH;
 
 var combinables     = ['titulo', 'autor', 'tipo', 'signatura', 'tipo_nivel3_id'];
 var noCombinables   = ['keyword', 'isbn', 'dictionary', 'codBarra', 'estante', 'tema'];
-var shouldScroll    = false;
+var shouldScroll    = true;
 
 function updateInfoBusquedas(responseText){
 
@@ -51,6 +51,19 @@ function ordenarPor(ord){
 }
 
 
+function buscarBar(){
+    objAH=new AjaxHelper(updateInfoBusquedas);
+    objAH.showOverlay       = true;
+    objAH.debug= true;
+    objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
+    objAH.keyword= $('#keyword-bar').val();
+    objAH.shouldScroll = true;
+    objAH.tipoAccion= 'BUSQUEDA_COMBINADA';
+    //se setea la funcion para cambiar de pagina
+    objAH.funcion= 'changePage';
+    objAH.sendToServer();	
+}
+
 function buscar(doScroll){
     var limite_caracteres   = 3; //tiene q ser == a lo configurado en sphinx.conf
     var cumple_limite       = true;
@@ -62,7 +75,8 @@ function buscar(doScroll){
 
     if ($.trim($('#keyword').val()) != '') {
         if ( (jQuery.trim($('#keyword').val())).length < limite_caracteres ){
-            cumple_limite = false;
+        	if ($.trim($('#keyword-bar').val()) == '')
+        		cumple_limite = false;
         } else {busquedaPorKeyword();}
     } else if (jQuery.trim($('#estante').val()) != '') {
         if ( (jQuery.trim($('#estante').val())).length < limite_caracteres ){

@@ -57,7 +57,7 @@
             [% END %]
 </legend>
 
-<form method=post  name="userDataForm" id="userDataForm" >
+<form method=post  name="userDataForm" id="userDataForm" class="classform ">
     <fieldset>
     <legend class="titulo_legend">[% "Datos personales del usuario" | i18n %]</legend>
     <ul>
@@ -205,21 +205,9 @@
 <div class="buttonContainerHorizontal">
     <ul class="listaMenuBotones" >
         [% IF addBorrower %]
-            [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
-                                                        boton   => "boton_buscar",
-                                                        onClick => "save();",
-                                                        title   => "[% 'Guardar' | i18n %]",
-                                                                ) ;
-            [% END %]
+                <input type="button" name="save_button" class="submit-button" onclick="save()" id="save_button" value="[% 'Aregar usuario' | i18n %]">
         [% ELSE  %]
-                [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Modificaci&oacute;n' | i18n %]",
-                                                        boton   => "boton_buscar",
-                                                        onClick => "save();",
-                                                        title   => "[% 'Guardar' | i18n %]",
-                            ) ;
-                [% END %]
+                <input type="button" name="save_button" class="submit-button" onclick="save()" id="save_button" value="[% 'Guardar modificaci&oacute;n' | i18n %]">
         [% END %]
 
     </ul>
