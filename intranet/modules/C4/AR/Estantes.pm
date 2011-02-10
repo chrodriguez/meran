@@ -41,7 +41,7 @@ sub getListaEstantesPublicos {
     use C4::Modelo::CatEstante;
     use C4::Modelo::CatEstante::Manager;
     my @filtros;
-    push(@filtros, ( padre  => { eq => 0} ));
+    push(@filtros, ( padre  => { eq => 0}, tipo  => { eq => 'public'} ));
 
     my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros, sort_by => 'estante');
 
@@ -309,6 +309,7 @@ sub agregarSubEstante  {
             my $nuevo_estante = C4::Modelo::CatEstante->new(db => $db);
             $nuevo_estante->setEstante($valor);
             $nuevo_estante->setPadre($estante->getId);
+            $nuevo_estante->setTipo('public');
             $nuevo_estante->save();
             $db->commit;
             $msg_object->{'error'}= 0;
@@ -349,6 +350,7 @@ sub agregarEstante  {
             my $nuevo_estante = C4::Modelo::CatEstante->new(db => $db);
             $nuevo_estante->setEstante($valor);
             $nuevo_estante->setPadre($estante->getId);
+            $nuevo_estante->setTipo('public');
             $nuevo_estante->save();
             $db->commit;
             $msg_object->{'error'}= 0;
