@@ -53,6 +53,12 @@ print "Quitando tablas de mas \n";
  quitarTablasDeMas();
 print "Hasheando passwords \n";
    hashearPasswords();
+print "Referencias de usuarios en circulacion \n";
+my $st2 = time();
+  repararReferenciasDeUsuarios();
+my $end2 = time();
+my $tardo2=($end2 - $st2);
+print "AL FIN TERMINARON LOS USUARIOS!!! Tardo $tardo2 segundos !!!\n";
 print "Relacion usuario-persona \n";
   crearRelacionUsuarioPersona();
 print "Creando nuevas claves foraneas \n";
@@ -537,7 +543,9 @@ $biblios->finish();
             my $upuspr=$dbh->prepare(" UPDATE usr_socio SET id_persona = ? WHERE nro_socio= ? ;");
             $upuspr->execute($id_persona,$usuario->{'nro_socio'});
      
-
+            #seteamos que es socio
+            my $persocio=$dbh->prepare(" UPDATE usr_persona SET es_socio='1' WHERE id_persona= ? ;");
+            $persocio->execute($id_persona);
     }
 
 #Limpiamos usr_socio
@@ -785,13 +793,64 @@ sub guardaNivel3MARC {
 
 
     #########################################################################
-    #           ESTRUCTURA CATALOGACION               #
+    #           ESTRUCTURA CATALOGACION                                     #
     #########################################################################
   sub crearEstructuraMarc {
 
         aplicarSQL("estructuraMARC.sql");
 
     }
+
+    ###########################################################################################################
+    #                                    REPARARAR REFERENCIAS SOCIO                                          #
+    #           En todos lados se utiliza nro_socio pero en koha hay tablas que tienen id_socio               #
+    #                                           circ_reserva                                                  #
+    #                                           circ_prestamo                                                 #
+    #                                           circ_sancion                                                  #
+    #                                         rep_historial_circulacion                                       #
+    #                                          rep_historial_sancion                                          #
+    #                                          rep_historial_prestamo                                         #
+    ###########################################################################################################
+
+  sub repararReferenciasDeUsuarios {
+
+
+    my $cant_usr=$dbh->prepare("SELECT count(*) as cantidad FROM biblio ;");
+    $cant_usr->execute();
+    my $cantidad=$cant_usr->fetchrow;
+    my $usuario=1;
+    print "Se van a procesar $cantidad usuarios \n";
+
+
+    my @refusrs = ('circ_reserva','circ_prestamo','circ_sancion','rep_historial_circulacion','rep_historial_sancion','rep_historial_prestamo');
+    
+
+    my $usuarios=$dbh->prepare("SELECT * FROM usr_socio;");
+    $usuarios->execute();
+
+    while (my $usuario=$usuarios->fetchrow_hashref) {
+
+    my $porcentaje= int (($usuario * 100) / $cantidad );
+    print "Procesando usuario: $usuario de $cantidad ($porcentaje%) \r";
+
+        foreach $tabla (@refusrs)
+      {
+            my $refusuario=$dbh->prepare("UPDATE $tabla  SET nro_socio='".$usuario->{'nro_socio'}."' WHERE borrowernumber='". $usuario->{'id_socio'} ."' ;");
+            $refusuario->execute();
+      }
+
+    $usuario++;
+    }
+
+
+    foreach $tabla (@refusrs)
+    {
+      my $refusr=$dbh->prepare("ALTER TABLE $tabla DROP borrowernumber;");
+      $refusr->execute();
+    }
+
+    }
+
     #########################################################################
     #           GRACIAS!!!!!!!!!!               #
     #########################################################################
