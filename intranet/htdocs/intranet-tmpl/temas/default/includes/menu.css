@@ -1152,7 +1152,6 @@
 
 .ui-accordion li:hover a:hover{
     font-weight: bold;
-    color: infobackground;
 }
 
 .ui-accordion .ui-accordion-content-active {
