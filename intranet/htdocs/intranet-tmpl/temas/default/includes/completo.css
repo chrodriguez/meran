@@ -13,6 +13,67 @@ fieldset {
 	clear: both;
 }
 
+
+fieldset {
+  background-color:#FCFFFF;
+  border-bottom-color:#35414F;
+  border-bottom-style:solid;
+  border-bottom-width:2px;
+  border-left-color:#35414F;
+  border-left-style:solid;
+  border-left-width:2px;
+  border-right-color:#35414F;
+  border-right-style:solid;
+  border-right-width:2px;
+  border-top-color:#35414F;
+  border-top-style:solid;
+  border-top-width:2px;
+  display:block;
+  font-family:Verdana, Arial, Helvetica, sans-serif;
+  font-size:12px;
+  margin-bottom:20px;
+  margin-left:0;
+  margin-right:0;
+  margin-top:20px;
+  padding-bottom:10px;
+  padding-left:10px;
+  padding-right:10px;
+  padding-top:0;
+  position:relative;
+}
+
+
+
+fieldset legend {
+  background-color:#4B5869;
+  border-bottom-color:#35414F;
+  border-bottom-style:solid;
+  border-bottom-width:1px;
+  border-left-color:#35414F;
+  border-left-style:solid;
+  border-left-width:1px;
+  border-right-color:#35414F;
+  border-right-style:solid;
+  border-right-width:1px;
+  border-top-color:#35414F;
+  border-top-style:solid;
+  border-top-width:1px;
+  color: #FFF9E7;
+  font-size:110%;
+  font-variant:small-caps;
+  font-weight:bold;
+  margin-bottom:10px;
+  margin-left:0;
+  margin-right:0;
+  margin-top:0;
+  padding-bottom:2px;
+  padding-left:5px;
+  padding-right:5px;
+  padding-top:2px;
+  position:relative;
+  top:-12px;
+}
+
 .header-bottom{
 	width:100%;
 	height: 21%;
@@ -53,14 +114,14 @@ fieldset {
     background-color: #4B5869;
     color: #FCFFFF;
     margin: 0;
-    font-size: 15px;
+    font-size: 98%;
     padding: 0;
 }
 
 #search-bar-users h5{
     background-color: #4B5869;
 	color: #FCFFFF;
-    font-size: 15px;
+    font-size: 98%;
 	margin: 0;
     padding: 0;
 }
@@ -1362,16 +1423,14 @@ fieldset.accionesUsuarios {
 .titulo_legend {
 	font-weight: bold;
 	font-size: 12px;
-	color: #555555;
+	color: #FFF9E7;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
 .titulo_legend_resaltado {
 	font-weight: bold;
 	font-size: 12px;
-	color: #555555;
 	font-family: Arial, Helvetica, sans-serif;
-	background-color: threedhighlight;
 	padding: 2px;
 }
 
