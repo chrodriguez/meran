@@ -94,6 +94,8 @@ sub actualizarPresupuesto{
                     my $cantidad= $tabla_array_ref->[$i]->{'Cantidad'};
                     my $precio_unitario= $tabla_array_ref->[$i]->{'PrecioUnitario'};
                     
+                    
+                    # --------------- VALIDACIONES DE DATOS INGRESADOS----------------------
                     if($cantidad ne "") {
                           if (!($msg_object->{'error'}) && ( ((&C4::AR::Validator::countAlphaChars($cantidad) != 0)) || (&C4::AR::Validator::countSymbolChars($cantidad) != 0) || (&C4::AR::Validator::countNumericChars($cantidad) == 0))){
 
@@ -115,6 +117,8 @@ sub actualizarPresupuesto{
                           $msg_object->{'error'}= 1;
                           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A032', 'params' => []} ) ;  
                     }
+                    
+                    # ---------------FIN VALIDACIONES ----------------------------------------                     
                     
                     $detalle->setPrecioUnitario($precio_unitario);
                     $detalle->setCantidad($cantidad);
