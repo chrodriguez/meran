@@ -29,6 +29,9 @@ my $input = new CGI;
 my $obj=$input->param('obj') || 0;
 
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
+
+
+C4::AR::Debug::debug("OBJ ===================================================================>: ".$obj);
 my ($template, $session, $t_params, $data_url);
 
 if (!$obj){

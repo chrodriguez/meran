@@ -91,8 +91,6 @@
 	
 	$(document).ready(function(){
 		mainmenu();
-        searchesText('socio-bar');
-        searchesText('keyword-bar');
 	});
 
 
