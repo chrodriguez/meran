@@ -8,16 +8,17 @@
     ALTER TABLE `rep_busqueda` CHANGE `nro_socio` `nro_socio` VARCHAR( 16 ) NULL DEFAULT NULL;
     
     ALTER TABLE circ_reserva CHANGE `reservenumber` `id_reserva` INT(11) NOT NULL AUTO_INCREMENT,
-      CHANGE `borrowernumber` `nro_socio` VARCHAR(16) NOT NULL DEFAULT '0', 
       CHANGE `reservedate` `fecha_reserva` VARCHAR(20) NOT NULL,
       CHANGE `constrainttype` `estado` CHAR(1) NULL DEFAULT NULL, 
       CHANGE `branchcode` `id_ui` VARCHAR(4) NULL DEFAULT NULL, 
       CHANGE `notificationdate` `fecha_notificacion` VARCHAR(20) NULL DEFAULT NULL, 
       CHANGE `reminderdate` `fecha_recordatorio` VARCHAR(20) NULL DEFAULT NULL;
     
+     ALTER TABLE circ_reserva  ADD `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0' AFTER id_reserva ;
+
     ALTER TABLE circ_reserva  DROP `cancellationdate`,  DROP `reservenotes`,  DROP `priority`,  DROP `found`;
     
-    ALTER TABLE circ_prestamo CHANGE `borrowernumber` `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0',
+    ALTER TABLE circ_prestamo 
       CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) NOT NULL DEFAULT 'DO',
       CHANGE `date_due` `fecha_prestamo` VARCHAR( 20 ) NULL DEFAULT NULL ,
       CHANGE `branchcode` `id_ui_origen` CHAR( 4 ) NULL DEFAULT NULL ,
@@ -26,6 +27,8 @@
       CHANGE `lastreneweddate` `fecha_ultima_renovacion` VARCHAR( 20 ) NULL DEFAULT NULL ,
       CHANGE `renewals` `renovaciones` TINYINT( 4 ) NULL DEFAULT NULL;
       
+     ALTER TABLE circ_prestamo  ADD `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0'  AFTER id3 ;
+
     ALTER TABLE circ_prestamo DROP `return`;
       
       ALTER TABLE `usr_persona` CHANGE `personnumber` `id_persona` INT(11) NOT NULL AUTO_INCREMENT, 
@@ -161,11 +164,12 @@
         ALTER TABLE `circ_sancion` CHANGE `sanctionnumber` `id_sancion` INT( 11 ) NOT NULL AUTO_INCREMENT ,
         CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NULL DEFAULT '0',
         CHANGE `reservenumber` `id_reserva` INT( 11 ) NULL DEFAULT NULL ,
-        CHANGE `borrowernumber` `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0',
         CHANGE `startdate` `fecha_comienzo` DATE NOT NULL DEFAULT '0000-00-00',
         CHANGE `enddate` `fecha_final` DATE NOT NULL DEFAULT '0000-00-00',
         CHANGE `delaydays` `dias_sancion` INT( 11 ) NULL DEFAULT '0',
         CHANGE `itemnumber` `id3` INT( 11 ) NULL DEFAULT NULL ;
+        
+         ALTER TABLE `circ_sancion`  ADD `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0'  AFTER id_reserva ;
         
          ALTER TABLE `circ_tipo_prestamo_sancion` CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NOT NULL DEFAULT '0',
          CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL ;
@@ -506,13 +510,14 @@ INSERT INTO `ref_colaborador` (`id`, `codigo`, `descripcion`) VALUES
 (213, 'wit', 'Witness');
 
  ALTER TABLE `rep_historial_circulacion` CHANGE `type` `tipo_operacion` VARCHAR( 15 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
-CHANGE `borrowernumber` `nro_socio` INT( 11 ) NOT NULL DEFAULT '0',
 CHANGE `branchcode` `id_ui` VARCHAR( 4 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 CHANGE `date` `fecha` DATE NOT NULL DEFAULT '0000-00-00',
 CHANGE `end_date` `fecha_fin` DATE NULL DEFAULT NULL ,
 CHANGE `issuetype` `tipo_prestamo` CHAR( 2 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
-ALTER TABLE `rep_historial_prestamo` CHANGE `borrowernumber` `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0',
+ALTER TABLE `rep_historial_circulacion`  ADD `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0' AFTER `tipo_operacion` ;
+
+ALTER TABLE `rep_historial_prestamo`
 CHANGE `date_due` `fecha_prestamo` VARCHAR( 20 ) NULL DEFAULT NULL ,
 CHANGE `branchcode` `id_ui_origen` CHAR( 4 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 CHANGE `issuingbranch` ` id_ui_prestamo` CHAR( 4 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
@@ -520,6 +525,8 @@ CHANGE `returndate` ` fecha_devolucion` VARCHAR( 20 ) NULL DEFAULT NULL ,
 CHANGE `lastreneweddate` `fecha_ultima_renovacion` VARCHAR( 20 ) NULL DEFAULT NULL ,
 CHANGE `renewals` `renovaciones` TINYINT( 4 ) NULL DEFAULT NULL ,
 CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE `rep_historial_prestamo`  ADD `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0' AFTER id3 ;
 
 ALTER TABLE `rep_historial_prestamo` DROP `return`;
 
@@ -530,10 +537,11 @@ ALTER TABLE `rep_historial_prestamo` ADD `tipo_prestamo` CHAR( 2 ) NOT NULL AFTE
 ALTER TABLE `rep_historial_prestamo` ADD `agregacion_temp` VARCHAR( 255 ) NULL ;
 
 ALTER TABLE `rep_historial_sancion` CHANGE `type` `tipo_operacion` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
-CHANGE `borrowernumber` `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0',
 CHANGE `date` `fecha` DATE NOT NULL DEFAULT '0000-00-00',
 CHANGE `end_date` `fecha_final` DATE NULL DEFAULT NULL ,
 CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NULL DEFAULT '0';
+
+ALTER TABLE `rep_historial_sancion`  ADD `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0' AFTER `tipo_operacion` ;
 
 ALTER TABLE `ref_nivel_bibliografico` DROP PRIMARY KEY ;
 

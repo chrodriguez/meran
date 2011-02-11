@@ -45,6 +45,22 @@ __PACKAGE__->meta->setup(
 
 );
 
+#----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
+
+sub addPresupuestoDetalle{
+    my ($self) = shift;
+    my ($params) = @_;
+
+    $self->setAdqPresupuestoId($params->{'id_presupuesto'});
+    $self->setAdqRecomendacionDetalleId($params->{'id_recomendacion_detalle'});
+    $self->setPrecioUnitario(1);
+    $self->setCantidad(1);
+    $self->setSeleccionado(1);
+
+    $self->save();
+}
+#----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
+
 
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 

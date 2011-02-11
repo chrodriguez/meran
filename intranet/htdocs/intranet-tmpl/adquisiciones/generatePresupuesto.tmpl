@@ -11,6 +11,7 @@
         
         checkSeleccionados(false)
         
+        $('#proveedor option').last().remove()
     });
 </script>
 
@@ -44,7 +45,7 @@
                   </td>
                   <td align="right" >
                   <!--TODO 
-                        cuando se edite la cantidad guardar en la base, por ajax ? 
+                        cuando se edite la cantidad guardar en la base, por ajax ?? 
                   -->
                       <input type="text" id="cantidad" name="cantidad[% i %]" class="editable" value="[% recomendacion.cantidad_ejemplares %]"> 
                   </td>

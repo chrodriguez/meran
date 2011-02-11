@@ -16,7 +16,68 @@ use vars qw(@EXPORT @ISA);
     &actualizarPresupuesto;
     &getAdqPresupuestos;
     &getPresupuestoPorID;
+    &addPresupuesto;
 );
+
+# =item
+#   Esta funcion agrega un Presupuesto
+#       Parametros: HASH   { id_proveedor , recomendaciones_array }     
+# =cut
+sub addPresupuesto{
+
+    my ($param)         = @_;
+    my $presupuesto     = C4::Modelo::AdqPresupuesto->new();
+    my $msg_object      = C4::AR::Mensajes::create();
+    my $db              = $presupuesto->db;
+
+#   _verificarDatosPresupuesto($param,$msg_object); TODO
+
+    if (!($msg_object->{'error'})){
+        # entro si no hay algun error, todos los campos ingresados son validos
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+          
+        eval{              
+            my %parametros;
+            $parametros{'id_proveedor'}                     = $param->{'id_proveedor'};
+            $parametros{'ref_estado_presupuesto_id'}        = '1';
+                   
+            # agrega un presupuesto y tiene que hacer: por cada recomendacion un presupuesto_detalle
+            $presupuesto->addPresupuesto(\%parametros);
+               
+            # aca agregar presupuesto_detalle con el id_presupuesto recien ingresado
+            my $id_presupuesto = $presupuesto->getId();                
+            
+            # presupuesto_detalle
+            for(my $i=0;$i<scalar(@{$param->{'recomendaciones_array'}});$i++){
+                my %param;
+                $param{'id_presupuesto'}                    = $id_presupuesto;
+                $param{'id_recomendacion_detalle'}          = $param->{'recomendaciones_array'}->[$i];  
+                
+                #TODO ver la cantidad de recomendacion_detalle, si traerla aca antes o pasarla desde el cliente 
+                       
+                my $presupuesto_detalle                     = C4::Modelo::AdqPresupuestoDetalle->new(db => $db);    
+                $presupuesto_detalle->addPresupuestoDetalle(\%param);
+            }
+            
+            
+    
+            $msg_object->{'error'} = 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A033', 'params' => []});
+            $db->commit;
+        };
+        if ($@){
+        # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+            &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+            $db->rollback;
+        }
+        $db->{connect_options}->{AutoCommit} = 1;
+    }
+    return ($msg_object);
+}
+
   
 sub getAdqPresupuestos{
     my $presupuestos = C4::Modelo::AdqPresupuesto::Manager->get_adq_presupuesto;

@@ -132,7 +132,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
     my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
 
-#     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa ");
+     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => generando indice del id ".$registro_marc_n1->{'id'});
 
     foreach my $c (@resultEstYDatos){
 #         C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});

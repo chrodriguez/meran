@@ -45,6 +45,21 @@ __PACKAGE__->meta->setup(
 
 );
 
+#----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
+
+sub addPresupuesto{
+    my ($self) = shift;
+    my ($params) = @_;
+
+    $self->setProveedorId($params->{'id_proveedor'});
+    $self->setRefEstadoPresupuestoId(1);
+
+    $self->save();
+}
+#----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
+
+
+
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 
 sub setProveedorId{
