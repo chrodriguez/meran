@@ -1167,6 +1167,8 @@
 .menu_container {
 	clear: both;
 	float: left;
+	position: fixed;
+	padding-top: 39px;
 	height: auto;
-	width: 15%;
+	width: 285px;
 }
