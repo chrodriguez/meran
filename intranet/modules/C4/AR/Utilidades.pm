@@ -452,6 +452,7 @@ sub saveholidays{
     }
 }
 
+
 sub obtenerTiposDeColaboradores{
 
     my $dbh = C4::Context->dbh;
@@ -3058,6 +3059,38 @@ sub ciudadesAutocomplete{
 
 
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
+
+sub ciudadesAutocomplete{
+
+    my ($ciudad)= @_;
+    my $textout;
+    my @result;
+    if ($ciudad){
+        my($cant, $result) = C4::AR::Utilidades::buscarCiudades($ciudad);# agregado sacar
+        C4::AR::Debug::debug("CANTIDAD DE CIUDADES: ".$cant);
+        $textout= "";
+        for (my $i; $i<$cant; $i++){
+            $textout.= $result->[$i]->{'id'}."|".$result->[$i]->{'nombre'}."\n";
+        }
+    }
+
+
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
+
+sub catalogoBibliotecaAutocomplete{
+
+    my ($busquedaStr)= @_;;
+    my $textout="";
+    my ($cant, $busqueda_array_ref)=C4::AR::Utilidades::obtenerCatalogo($busquedaStr);
+
+    foreach my $item (@$busqueda_array_ref){
+        $textout.=$pais->getIso."|".$pais->getNombre_largo."\n";
+    }
+
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+
 }
 
 sub getSphinxMatchMode{
