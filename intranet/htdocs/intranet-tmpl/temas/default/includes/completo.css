@@ -432,7 +432,7 @@ body {
 }
 
 tr.par {
-	background-color: #ccc;
+	background-color: #4B5869;
 }
 
 tr.impar {
@@ -1549,11 +1549,12 @@ input.file {
 
 .datos_tabla td {
 	text-align: center;
+	color: #EAEBED;
 }
 
 
 .datos_tabla td a{
-    color: #4B5869;
+    color: #EAEBED;
 }
 
 .datos_tabla {
