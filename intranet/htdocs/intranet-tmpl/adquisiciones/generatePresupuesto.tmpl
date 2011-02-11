@@ -83,7 +83,7 @@
 </fieldset>
 
 <fieldset id="datos_proveedor">
-<legend class="titulo_legend">[% "Presupuestos" | i18n %]</legend>
+<legend class="titulo_legend">[% "Proveedores a Presupuestar" | i18n %]</legend>
     <ul>
         <li class="sub_item">Proveedor/es:</li>
         <li class="sub_item"> [% combo_proveedores %] </li>
@@ -96,6 +96,13 @@
                                                 onClick =>  "generatePresupuesto();",
                     ) ;
         [% END %]
+        [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Exportar Presupuesto' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "exportar('export');",
+                    ) ;
+        [% END %]        
     </ul>
 </fieldset>
 

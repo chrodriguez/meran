@@ -11,6 +11,7 @@ use C4::AR::PdfGenerator;
 my $input = new CGI;
 my $to_pdf = $input->param('exportPDF') || 0;
 my $to_doc = $input->param('exportDOC') || 0;
+my $to_xls = $input->param('exportXLS') || 0;
 
 my ($template, $session, $t_params) = get_template_and_user({
     template_name => "adquisiciones/generatePresupuesto.tmpl",
@@ -25,6 +26,8 @@ my $template_name = "adquisiciones/generatePresupuesto.tmpl";
 
 if($to_pdf){
 	$template_name = "adquisiciones/listado_ejemplares_export.tmpl";
+}elsif($to_xls){
+	$template_name = "adquisiciones/presupuesto_export.tmpl";
 }  
 
 my ($template, $session, $t_params) = get_template_and_user({
@@ -37,7 +40,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 });
  
 if($to_pdf){
-#   se exporta a PDF
+#   se exporta a PDF las recomendaciones
     my $recomendaciones_activas                 = C4::AR::Recomendaciones::getRecomendacionesActivas();   
     my $cant_recomendaciones                    = (scalar(@$recomendaciones_activas));    
     my $i;
@@ -67,8 +70,39 @@ if($to_pdf){
 	C4::AR::PdfGenerator::printPDF($filename);
 
 }elsif($to_doc){
-#   exporta a DOC
+#   TODO exporta a DOC las recomendaciones
 
+
+}elsif($to_xls){
+#   exporta a XLS el presupuesto
+
+    my $recomendaciones_activas                 = C4::AR::Recomendaciones::getRecomendacionesActivas();   
+    my $cant_recomendaciones                    = (scalar(@$recomendaciones_activas));    
+    my $i;
+    my @resultsdata;
+    
+    for($i = 1; $i <= $cant_recomendaciones; $i++){
+    
+        if($input->param('activo'.$i) eq 'checked'){
+        
+            my %hash = (    titulo      => $input->param('libro'.$i),
+                            cantidad    => $input->param('cantidad'.$i), );
+                      
+            my %row = ( recomendacion => \%hash,);
+            
+            push(@resultsdata, \%row);
+        }
+    }
+    
+    if(@resultsdata > 0){
+        $t_params->{'resultsloop'}= \@resultsdata; 
+    }
+
+    
+    $t_params->{'encabezado'} = "header(\"Content-type: application/vnd.ms-excel; name='excel'\"); header(\"Content-Disposition: filename=ficheroExcel.xls\"); header(\"Pragma: no-cache\");header(\"Expires: 0\");";
+       
+    print C4::AR::Auth::get_html_content( $template, $t_params, $session );
+    #C4::AR::Debug::debug($out);
 
 }else{
 #   se muestra el template normal
