@@ -1,0 +1,30 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/tabletojson.js"> </script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosPresupuesto.js"> </script>
+
+<script type="text/javascript">
+ 
+          
+            $(document).ready(function() {
+                    makeToggle('toggle_container','trigger',null,true);
+                    $('#combo_recomendaciones').change(function(){
+//                            $('#accion').show();  
+                           mostrarPresupuestosParaRecomendacion()
+                })
+            });
+ 
+
+</script>
+
+<fieldset>
+    <legend class="titulos">    [% "Comparacion de presupuestos" | i18n %] </legend>
+     <p>Seleccione el presupuesto que desea cargar </p>
+                    [% combo_recomendaciones %]      
+    
+</fieldset>          
+
+
+[% INCLUDE "intranet-bottom.inc" %]
