@@ -28,6 +28,8 @@ if($to_pdf){
 	$template_name = "adquisiciones/listado_ejemplares_export.tmpl";
 }elsif($to_xls){
 	$template_name = "adquisiciones/presupuesto_export.tmpl";
+}elsif($to_doc){
+    $template_name = "adquisiciones/listado_ejemplares_export_doc.tmpl";
 }  
 
 my ($template, $session, $t_params) = get_template_and_user({
@@ -41,6 +43,7 @@ my ($template, $session, $t_params) = get_template_and_user({
  
 if($to_pdf){
 #   se exporta a PDF las recomendaciones
+
     my $recomendaciones_activas                 = C4::AR::Recomendaciones::getRecomendacionesActivas();   
     my $cant_recomendaciones                    = (scalar(@$recomendaciones_activas));    
     my $i;
@@ -70,11 +73,7 @@ if($to_pdf){
 	C4::AR::PdfGenerator::printPDF($filename);
 
 }elsif($to_doc){
-#   TODO exporta a DOC las recomendaciones
-
-
-}elsif($to_xls){
-#   exporta a XLS el presupuesto
+#   exporta a DOC las recomendaciones
 
     my $recomendaciones_activas                 = C4::AR::Recomendaciones::getRecomendacionesActivas();   
     my $cant_recomendaciones                    = (scalar(@$recomendaciones_activas));    
@@ -86,7 +85,8 @@ if($to_pdf){
         if($input->param('activo'.$i) eq 'checked'){
         
             my %hash = (    titulo      => $input->param('libro'.$i),
-                            cantidad    => $input->param('cantidad'.$i), );
+                            cantidad    => $input->param('cantidad'.$i),
+                            fecha       => $input->param('fecha'.$i), ); 
                       
             my %row = ( recomendacion => \%hash,);
             
@@ -97,12 +97,52 @@ if($to_pdf){
     if(@resultsdata > 0){
         $t_params->{'resultsloop'}= \@resultsdata; 
     }
-
     
-    $t_params->{'encabezado'} = "header(\"Content-type: application/vnd.ms-excel; name='excel'\"); header(\"Content-Disposition: filename=ficheroExcel.xls\"); header(\"Pragma: no-cache\");header(\"Expires: 0\");";
+    print C4::AR::Auth::get_html_content( $template, $t_params, $session );
+
+}elsif($to_xls){
+#   exporta a XLS el presupuesto
+
+    my $recomendaciones_activas        = C4::AR::Recomendaciones::getRecomendacionesActivas();   
+    my $cant_recomendaciones           = (scalar(@$recomendaciones_activas));    
+    my $i;
+    my @resultsdata;
+    
+    for($i = 1; $i <= $cant_recomendaciones; $i++){
+    
+        if($input->param('activo'.$i) eq 'checked'){
+        
+            my %hash = (    titulo      => $input->param('libro'.$i),
+                            cantidad    => $input->param('cantidad'.$i),
+                            autor       => $input->param('autor'.$i), );
+                      
+            my %row = ( recomendacion => \%hash,);
+            
+            push(@resultsdata, \%row);
+        }
+    }
+    
+    #TODO ver como exportar a muchos proveedores, un excel por c/u ?    
+#    my $proveedores = $input->param('proveedores');
+#    my @parts       = split(/\,/,$proveedores);
+    
+#    for($i = 1; $i <= scalar(@parts); $i++){ 
+    
+#        $t_params->{'proveedor'}    = @parts[$i];
+#        $t_params->{'resultsloop'}  = \@resultsdata;
+        
+        #FIXME no exporta muchos archivos, exporta todo en uno mismo
+#        print C4::AR::Auth::get_html_content( $template, $t_params, $session );
+#    }  
+
+# asi anda para un solo archivo OK:    
+    if(@resultsdata > 0){
+        $t_params->{'resultsloop'} = \@resultsdata; 
+    }
+    
+    #TODO exporta el xls en modo solo lectura
        
     print C4::AR::Auth::get_html_content( $template, $t_params, $session );
-    #C4::AR::Debug::debug($out);
 
 }else{
 #   se muestra el template normal

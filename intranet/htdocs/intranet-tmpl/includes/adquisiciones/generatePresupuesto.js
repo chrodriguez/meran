@@ -9,7 +9,7 @@
 
 /******************************************************** AGREGAR PRESUPUESTO **************************************************/
 
-var arreglo                  = new Array() // global, arreglo con las recomendaciones seleccionadas
+var arreglo                  = new Array() //global, arreglo con las recomendaciones seleccionadas
 var array_proveedores        = new Array() //global, arreglo de ids de proveedores a generar presupuesto
 var array_recomendaciones    = new Array() //global, arreglo de ids de recomendaciones_detalle
 
@@ -65,12 +65,18 @@ function getRecomendacionesSelected(){
 
 
 function exportar(form_id){
-    //TODO exportar a excel, usando el template de recomendaciones, pero pasando los ids de los proveedores
     var proveedores = getProveedoresSelected()
-    $('#exportHidden').remove()
-    $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportXLS' value='xls' />")
-    //$('#' + form_id).append("<input type='hidden' name='data' value='getProveedoresSelected()' />")
-    $('#' + form_id).submit()   
+    if(proveedores == ""){
+        jConfirm(POR_FAVOR_SELECCIONE_PROVEEDORES_A_PRESUPUESTAR, function(){ })
+        return false
+    }
+    if(checkSeleccionados(true)){
+        $('#exportHidden').remove()
+        $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportXLS' value='xls' />")
+        $('#' + form_id).append("<input type='hidden' name='proveedores' value='"+proveedores+"' />")
+        $('#' + form_id).submit()  
+    }
+ 
 }
 
 // checkea que se seleccionen recomendaciones para exportar, o para generar el presupuesto

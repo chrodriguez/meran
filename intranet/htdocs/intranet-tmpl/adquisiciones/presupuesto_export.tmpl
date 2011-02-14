@@ -1,0 +1,42 @@
+[% PERL %]
+print "Content-type: application/vnd.ms-excel\n";
+print "Content-Disposition: attachment;filename=presupuesto.xls\n\n";
+[% END %]
+<table>
+      <thead>
+          <tr>
+              <th>
+                  [% "Reglon" | i18n %]
+              </th>          
+              <th>
+                  [% "Cantidad de Ejemplares" | i18n %]
+              </th>
+              <th>
+                  [% "T&iacute;tulo del Libro" | i18n %]
+              </th> 
+              <th>
+                  [% "Precio Unitario" | i18n %]
+              </th>      
+              <th>
+                  [% "Precio Total" | i18n %]
+              </th>                
+          </tr>
+      </thead>
+      <tbody>
+            [% i = 1 %]
+            [% FOREACH resultsloop %]   
+            <tr align="center">
+                  <td align="center" >
+                      <p>[% i %]</p> 
+                  </td>            
+                  <td align="center" >
+                      <p>[% recomendacion.cantidad %]</p> 
+                  </td>
+                  <td align="center" >
+                      <p>[% recomendacion.titulo %] , por [% recomendacion.autor %]</p> 
+                  </td>
+            </tr>     
+            [% i = i + 1 %]
+            [% END %]    
+    </tbody>   
+</table>
