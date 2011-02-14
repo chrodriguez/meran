@@ -13,6 +13,7 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw(  
     &agregrarRecomendacion;
     &getRecomendacionesActivas;
+    &getRecomendacionDetallePorId;
 );
 
 
@@ -92,4 +93,25 @@ sub getRecomendacionesActivas{
                                                                 );
 
     return ($recomendaciones_activas_array_ref);
+}
+
+=item
+    Recupera un registro de recomendacion_detalle
+    Retorna un objeto o 0 si no existe
+=cut
+sub getRecomendacionDetallePorId{
+
+    my ($params) = @_;
+
+    my $db                = C4::Modelo::AdqRecomendacionDetalle->new()->db;
+    my $recomendacion     = C4::Modelo::AdqRecomendacionDetalle::Manager->get_adq_recomendacion_detalle(   
+                                                                    db => $db,
+                                                                    query   => [ id  => { eq => $params} ],
+                                                                );
+                                                                
+    if( scalar($recomendacion) > 0){
+        return ($recomendacion->[0]);
+    }else{
+        return 0;
+    }
 }

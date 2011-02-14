@@ -59,6 +59,20 @@ function getRecomendacionesSelected(){
 /************************************************************ FIN - AGREGAR PRESUPUESTO ******************************************/
 
 
+
+
+/************************************************************ EXPORTACIONES  *********************************************/
+
+
+function exportar(form_id){
+    //TODO exportar a excel, usando el template de recomendaciones, pero pasando los ids de los proveedores
+    var proveedores = getProveedoresSelected()
+    $('#exportHidden').remove()
+    $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportXLS' value='xls' />")
+    //$('#' + form_id).append("<input type='hidden' name='data' value='getProveedoresSelected()' />")
+    $('#' + form_id).submit()   
+}
+
 // checkea que se seleccionen recomendaciones para exportar, o para generar el presupuesto
 function checkSeleccionados(bool){
     if(bool){
@@ -89,3 +103,5 @@ function submitFormDOC(form_id){
         $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportDOC' value='doc' />")
         if(checkSeleccionados(true)) { $('#' + form_id).submit() }
 }
+
+/************************************************************ FIN - EXPORTACIONES ********************************************/

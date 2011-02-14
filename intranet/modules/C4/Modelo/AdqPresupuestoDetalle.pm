@@ -53,8 +53,8 @@ sub addPresupuestoDetalle{
 
     $self->setAdqPresupuestoId($params->{'id_presupuesto'});
     $self->setAdqRecomendacionDetalleId($params->{'id_recomendacion_detalle'});
-    $self->setPrecioUnitario(1);
-    $self->setCantidad(1);
+    $self->setPrecioUnitario(0);
+    $self->setCantidad($params->{'cantidad_ejemplares'});
     $self->setSeleccionado(1);
 
     $self->save();
