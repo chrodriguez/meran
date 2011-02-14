@@ -14,6 +14,7 @@ use vars qw(@EXPORT @ISA);
     &agregrarRecomendacion;
     &getRecomendacionesActivas;
     &getRecomendacionDetallePorId;
+    &getRecomendaciones;
 );
 
 
@@ -90,6 +91,19 @@ sub getRecomendacionesActivas{
                                                                     db => $db,
                                                                     query   => [ activa => 1 ],
                                                                     require_objects     => ['ref_adq_recomendacion'],
+                                                                );
+
+    return ($recomendaciones_activas_array_ref);
+}
+
+sub getRecomendaciones{
+
+    my ($params) = @_;
+
+    my $db                                      = C4::Modelo::AdqRecomendacion->new()->db;
+    my $recomendaciones_activas_array_ref       = C4::Modelo::AdqRecomendacion::Manager->get_adq_recomendacion(   
+                                                                    db => $db,
+                                                                    query   => [ activa => 1 ],
                                                                 );
 
     return ($recomendaciones_activas_array_ref);

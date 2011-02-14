@@ -80,6 +80,15 @@
 	                                                       ) ;
 	                       [% END %]
 	                   </li>
+                       <li>
+    
+                           [% PERL %]
+                               print C4::AR::Filtros::link_to( text =>     "[% 'Comparar Presupuestos' | i18n %]",
+                                                               url =>      "/cgi-bin/koha/adquisiciones/compararPresupuestos.pl", 
+                                                               title =>    "[% 'Comparar presupuestos' | i18n %]"
+                                                           ) ;
+                           [% END %]
+                       </li>
 	                   <li>
 	
 	                       [% PERL %]

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!usr/bin/perl
 
 # use strict;
 use C4::AR::Auth;
@@ -26,7 +26,5 @@ my $monedas = C4::AR::Proveedores::getMonedasProveedor($id_proveedor);
 $t_params->{'monedas'} = $monedas;
 $t_params->{'combo_proveedores'} = $combo_proveedores;
 $t_params->{'combo_presupuestos'} = $combo_presupuestos;
-
-
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

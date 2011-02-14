@@ -135,6 +135,35 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
         
 } #end if($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL")
 
+
+# -------------------------  VA EN RecomendacionesDB ----------------------
+
+# elsif($tipoAccion eq "MOSTRAR_PRESUPUESTOS_REC"){
+# 
+#        
+#         my $id_pres= $obj->{'id_presupuesto'};
+# 
+#         my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
+#                               template_name   => '/adquisiciones/presupuestoManual.tmpl',
+#                               query       => $input,
+#                               type        => "intranet",
+#                               authnotrequired => 0,
+#                               flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+#         });
+#         
+   
+#         my $presupuestos = C4::AR::Presupuestos::getAdqPresupuesto($id_pres);
+#     
+#         my $pres= C4::AR::Presupuestos::getPresupuestoPorID($id_pres);
+#         
+#         $t_params->{'pres'} =  $pres;
+#         $t_params->{'detalle_presupuesto'} = $detalle_pres;
+#        
+#         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);    
+# }
+# ---------------------
+
+
 elsif($tipoAccion eq "AGREGAR_PRESUPUESTO"){
 
     my ($template, $session, $t_params) = get_template_and_user({
