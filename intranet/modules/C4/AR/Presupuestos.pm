@@ -16,6 +16,7 @@ use vars qw(@EXPORT @ISA);
     &getAdqPresupuestos;
     &getPresupuestoPorID;
     &addPresupuesto;
+    &getDetallePorRenglon;
 );
 
 # =item
@@ -88,6 +89,28 @@ sub getAdqPresupuestos{
     }
 
     return(\@results);
+}
+
+#  Devuelve la union de recomendacion_detalle, preupuesto_detalle. presupuesto y recomendacion
+
+sub getDetallePorRenglon{
+  my ($params) = @_;
+
+    my $db            = C4::Modelo::AdqPresupuestoDetalle->new()->db;
+    my $renglones     = C4::Modelo::AdqPresupuestoDetalle::Manager->get_adq_presupuesto_detalle(   
+                                                                    db => $db,
+                                                                    query   => [ adq_recomendacion_id => { eq => $params } ],
+                                                                    require_objects     => ['ref_presupuesto','ref_recomendacion_detalle','ref_recomendacion_detalle.ref_adq_recomendacion' ],
+#                                                                     with_objects => ['ref_recomendacion_detalle'],
+                                                                    select       => ['adq_presupuesto_detalle.*','ref_recomendacion_detalle.*']
+                                                                );    
+    my @results;
+
+    foreach my $renglon (@$renglones) {
+        push (@results, $renglon);
+    }
+
+    return(\@results);   
 }
 
 

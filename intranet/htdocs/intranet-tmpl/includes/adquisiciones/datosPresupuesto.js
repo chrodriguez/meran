@@ -7,7 +7,7 @@
 */
 
 var test;
-//*********************************************Editar Proveedor********************************************* 
+//*********************************************Editar Presupuesto********************************************* 
 
 
 function modificarDatosDePresupuesto(){
@@ -66,18 +66,6 @@ function mostrarPresupuesto(){
                  objAH.tipoAccion          = 'MOSTRAR_PRESUPUESTO';
                  objAH.sendToServer();
 }
-
-
-// ------------------------------- VA en datosRecomendaciones.js
-// function presupuestosParaRecomendacion(){
-//                  objAH                     = new AjaxHelper(updatePresupuestosParaRecomendacion);
-//                  objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
-//                  objAH.debug               = true;
-//                  objAH.recomendacion       = $('#combo_recomendaciones').val();
-//                  objAH.tipoAccion          = 'MOSTRAR_PRESUPUESTOS_REC';
-//                  objAH.sendToServer();
-// }
-// ----------------------------------------------
 
 
 

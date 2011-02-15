@@ -15,6 +15,7 @@ use vars qw(@EXPORT @ISA);
     &getRecomendacionesActivas;
     &getRecomendacionDetallePorId;
     &getRecomendaciones;
+    &getRecomendacionDetalle;
 );
 
 
@@ -121,11 +122,29 @@ sub getRecomendacionDetallePorId{
     my $recomendacion     = C4::Modelo::AdqRecomendacionDetalle::Manager->get_adq_recomendacion_detalle(   
                                                                     db => $db,
                                                                     query   => [ id  => { eq => $params} ],
-                                                                );
-                                                                
+                                                                );                                                       
     if( scalar($recomendacion) > 0){
         return ($recomendacion->[0]);
     }else{
         return 0;
     }
 }
+
+
+sub getRecomendacionDetalle{
+
+    my ($params) = @_;
+
+    my $db                = C4::Modelo::AdqRecomendacionDetalle->new()->db;
+    my $recomendacion     = C4::Modelo::AdqRecomendacionDetalle::Manager->get_adq_recomendacion_detalle(   
+                                                                    db => $db,
+                                                                    query   => [ adq_recomendacion_id => { eq => $params} ],
+                                                                );                                                       
+
+    if( scalar($recomendacion) > 0){
+        return ($recomendacion);
+    }else{
+        return 0;
+    }
+}
+

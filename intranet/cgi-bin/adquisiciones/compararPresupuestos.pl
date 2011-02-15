@@ -9,9 +9,6 @@ my $input = new CGI;
 
 my $combo_recomendaciones = &C4::AR::Utilidades::generarComboRecomendaciones();
 
-C4::AR::Debug::debug($combo_recomendaciones);
-
-
 my ($template, $session, $t_params)= get_template_and_user({
                                 template_name => "adquisiciones/compararPresupuestos.tmpl",
                                 query => $input,
