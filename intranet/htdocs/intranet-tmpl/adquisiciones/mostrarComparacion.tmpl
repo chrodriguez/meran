@@ -1,0 +1,39 @@
+    <fieldset>
+          <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+              <thead>
+                      [% i=1 %]
+                       
+                        <tr class="titulo_tabla_resultado">
+                            <th id="renglon">
+                                [% "Renglon" | i18n %]
+                            </th>
+                            [% FOREACH presupuestos %] 
+                                 
+                                         [% prov= p.adq_presupuesto_id %]
+                                              <th id="proveedor[% prov %]">
+                                                  [% "Proveedor" | i18n %][% i %]
+                                              </th>
+                                 
+                        
+                            [% END %] 
+                        </tr>
+               
+              </thead>
+              <tbody>
+                    [% cant = 1 %] 
+                           <td  align="center" id="[% p %]">
+                                  [% cant%]
+                            </td> 
+                    [% FOREACH p IN presupuestos %]   
+                          
+                            [% prov= p.adq_presupuesto_id %]
+                            <td  align="center" id="[% p %]">
+                                
+                                  [% prov %]
+                        
+                            </td>        
+                             
+                    [% END %]          
+            </tbody>   
+          </table>
+</fieldset>
