@@ -17,6 +17,8 @@ use vars qw(@EXPORT @ISA);
     &getPresupuestoPorID;
     &addPresupuesto;
     &getDetallePorRenglon;
+
+
 );
 
 # =item
@@ -100,9 +102,9 @@ sub getDetallePorRenglon{
     my $renglones     = C4::Modelo::AdqPresupuestoDetalle::Manager->get_adq_presupuesto_detalle(   
                                                                     db => $db,
                                                                     query   => [ adq_recomendacion_id => { eq => $params } ],
-                                                                    require_objects     => ['ref_presupuesto','ref_recomendacion_detalle','ref_recomendacion_detalle.ref_adq_recomendacion' ],
-#                                                                     with_objects => ['ref_recomendacion_detalle'],
-                                                                    select       => ['adq_presupuesto_detalle.*','ref_recomendacion_detalle.*']
+                                                                    sort_by => ('ref_presupuesto.id' ),
+                                                                    require_objects     => ['ref_presupuesto','ref_presupuesto.ref_proveedor','ref_recomendacion_detalle','ref_recomendacion_detalle.ref_adq_recomendacion' ],
+                                                                    select       => ['adq_presupuesto_detalle.*','ref_recomendacion_detalle.*','ref_presupuesto.proveedor_id','ref_presupuesto.*']
                                                                 );    
     my @results;
 
@@ -129,6 +131,9 @@ sub getPresupuestoPorID{
 
      return $presupuesto->[0];  
 }
+
+
+
 
 
 sub getAdqPresupuestoDetalle{

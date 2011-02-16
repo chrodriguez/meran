@@ -11,7 +11,7 @@ var test;
 
 function presupuestosParaRecomendacion(){
                  objAH                     = new AjaxHelper(updatePresupuestosParaRecomendacion);
-                 objAH.url                 = '/cgi-bin/koha/adquisiciones/recomendacionesDB.pl';
+                 objAH.url                 = '/cgi-bin/koha/adquisiciones/mostrarComparacion.pl';
                  objAH.debug               = true;
                  objAH.recomendacion       = $('#combo_recomendaciones').val();
                  objAH.tipoAccion          = 'MOSTRAR_PRESUPUESTOS_REC';
@@ -20,5 +20,5 @@ function presupuestosParaRecomendacion(){
 
 
 function updatePresupuestosParaRecomendacion(responseText){
-   $('#presupuestos').html(responseText);
+   $('#comparacion').html(responseText);
 }

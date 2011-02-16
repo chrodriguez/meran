@@ -18,8 +18,6 @@ my ($template, $session, $t_params)= get_template_and_user({
                                 debug => 1,
                  });
 
-
-
 $t_params->{'combo_recomendaciones'} = $combo_recomendaciones;
 
 
