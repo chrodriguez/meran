@@ -123,31 +123,46 @@ if($to_pdf){
     }
     
     #TODO ver como exportar a muchos proveedores, un excel por c/u ?    
-#    my $proveedores = $input->param('proveedores');
-#    my @parts       = split(/\,/,$proveedores);
+    my $proveedores     = $input->param('proveedores');
+    my @parts           = split(/\,/,$proveedores);
     
-#    for($i = 1; $i <= scalar(@parts); $i++){ 
+
+    #FIXME no exporta muchos archivos, exporta todo en uno mismo
+    my $i;
+    for($i = 0; $i < scalar(@parts); $i++){ 
+
+        my $proveedor       = C4::AR::Proveedores::getProveedorInfoPorId(@parts[$i]);  
+        my $tipo_proveedor  = C4::AR::Proveedores::isPersonaFisica(@parts[$i]);
+
+        if($tipo_proveedor == 0){
+            $t_params->{'proveedor'} = $proveedor->getRazonSocial();
+            $t_params->{'proveedor_nombre'} = @parts[$i];
+        }else{
+            $t_params->{'proveedor'} = $proveedor->getNombre();
+        }
     
-#        $t_params->{'proveedor'}    = @parts[$i];
-#        $t_params->{'resultsloop'}  = \@resultsdata;
-        
-        #FIXME no exporta muchos archivos, exporta todo en uno mismo
-#        print C4::AR::Auth::get_html_content( $template, $t_params, $session );
-#    }  
+        if(@resultsdata > 0){
+            $t_params->{'resultsloop'} = \@resultsdata; 
+        }
+     
+        print C4::AR::Auth::get_html_content( $template, $t_params, $session );
+    }  
 
 # asi anda para un solo archivo OK:    
-    if(@resultsdata > 0){
-        $t_params->{'resultsloop'} = \@resultsdata; 
-    }
+
+    #FIXME exporta el xls en modo solo lectura
+
+# if(@resultsdata > 0){
+#            $t_params->{'resultsloop'} = \@resultsdata; 
+#        }
     
-    #TODO exporta el xls en modo solo lectura
-       
-    print C4::AR::Auth::get_html_content( $template, $t_params, $session );
+        
+#        print C4::AR::Auth::get_html_content( $template, $t_params, $session );
 
 }else{
 #   se muestra el template normal
 
-    my $recomendaciones_activas                 = C4::AR::Recomendaciones::getRecomendacionesActivas();
+    my $recomendaciones_activas   = C4::AR::Recomendaciones::getRecomendacionesActivas();
 
     if($recomendaciones_activas){
         my @resultsdata;
