@@ -34,52 +34,54 @@ if($tipoAccion eq "MOSTRAR_PRESUPUESTOS_REC"){
 
         my $detalle_rec = C4::AR::Presupuestos::getDetallePorRenglon($id_recomendacion);
   
-        my %hash;
-        
+         
         my $renglon;
         my $detalle_renglon;
-        my $nro_renglon=1;
+        my $pres;
         my $cantidad;
         my $precio_unitario;
         my $proveedor= "";
-        my $renglon= $nro_renglon;
-
-
-
+        my @results;
+        my $cant_proveedores = 0; 
+        my @proveedores; 
+        
+        my $i=0;
         foreach my $detalle (@$detalle_rec){
-          
-#             C4::AR::Utilidades::printHASH($detalle);
             if ($proveedor ne ($detalle->{'ref_presupuesto'})->{'proveedor_id'}){
                     $proveedor= ($detalle->{'ref_presupuesto'})->{'proveedor_id'};
-
-            } else{
-                 $renglon=$nro_renglon +1;
+                    
+                    if ((($detalle->{'ref_presupuesto'})->{'ref_proveedor'})->{'nombre'} ne "" ) {
+                            push(@proveedores, (($detalle->{'ref_presupuesto'})->{'ref_proveedor'})->{'nombre'});
+                    } else {
+                            push(@proveedores, (($detalle->{'ref_presupuesto'})->{'ref_proveedor'})->{'razon_social'});
+                    }
+                    $renglon=1;
+                    $pres= ($detalle->{'ref_presupuesto'})->{'id'};
+            }else{
+                 $renglon= $renglon + 1;
             }
-           
+            
             $detalle_renglon=($detalle->{'ref_recomendacion_detalle'})->{'titulo'}." - ".($detalle->{'ref_recomendacion_detalle'})->{'autor'};
             $cantidad= $detalle->{'cantidad'};
             $precio_unitario= $detalle->{'precio_unitario'};
-
-#            %hash= ( proveedor => $proveedor
-#                     )
+            
+            my %hash;
+            
+            %hash= ( renglon => $renglon,
+                    proveedor => $proveedor,
+                    detalle_renglon => $detalle_renglon,
+                    cantidad => $cantidad,
+                    precio => $precio_unitario,
+                    pres_id => $pres
+                  ),
+      
+            push (@results, \%hash);
            
         }
-
-
-
-#             my %hash = (    titulo      => $input->param('libro'.$i),
-#                             cantidad    => $input->param('cantidad'.$i),
-#                             fecha       => $input->param('fecha'.$i), ); 
-                      
-#             my %row = ( recomendacion => \%hash,);
-
-
-
-
-
-
-        my $tabla_comparacion;
-        $t_params->{'presupuestos'} = $tabla_comparacion;
+        
+        $t_params->{'presupuestos'} = \@results;
+   
+        $t_params->{'proveedores'} = \@proveedores;
        
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);    
 }

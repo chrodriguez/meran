@@ -1,39 +1,33 @@
-    <fieldset>
+<fieldset>
           <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
               <thead>
-                      [% i=1 %]
-                       
                         <tr class="titulo_tabla_resultado">
                             <th id="renglon">
-                                [% "Renglon" | i18n %]
+                                [% "Presupuesto - Renglon" | i18n %]
                             </th>
-                            [% FOREACH presupuestos %] 
-                                 
-                                         [% prov= p.adq_presupuesto_id %]
-                                              <th id="proveedor[% prov %]">
-                                                  [% "Proveedor" | i18n %][% i %]
-                                              </th>
-                                 
-                        
-                            [% END %] 
+                            [% FOREACH prov IN proveedores %] 
+                                <th id="renglon">
+                                    [% "Proveedor" | i18n %]: [% prov%]
+                                </th>
+                            [% END %]
                         </tr>
                
               </thead>
               <tbody>
-                    [% cant = 1 %] 
-                           <td  align="center" id="[% p %]">
-                                  [% cant%]
-                            </td> 
-                    [% FOREACH p IN presupuestos %]   
-                          
-                            [% prov= p.adq_presupuesto_id %]
-                            <td  align="center" id="[% p %]">
+                          [% p="" %]
+                          [% FOREACH pres IN presupuestos %]  
+                            <tr>Presupuesto:[% pres.pres_id %] - Renglon: [% pres.renglon %]
                                 
-                                  [% prov %]
-                        
-                            </td>        
-                             
-                    [% END %]          
-            </tbody>   
+                                [% IF (pres.pres_id = p) %] 
+                                    [% p= pres.pres_id %] 
+                                
+                                [% ELSE %]
+                                    [% p= pres.pres_id %] 
+                                     <td>[% pres.precio %]</td> 
+                                [% END %]
+                                     <td>[% pres.precio %]</td> 
+                            </tr>                
+                        [% END %]
+              </tbody>   
           </table>
 </fieldset>
