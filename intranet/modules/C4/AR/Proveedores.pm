@@ -17,6 +17,7 @@ use C4::Modelo::AdqProveedorFormaEnvio::Manager;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(  
+    &isPersonaFisica;
     &eliminarMoneda;
     &getAdqProveedorMoneda;
     &agregarMoneda;
@@ -26,10 +27,30 @@ use vars qw(@EXPORT @ISA);
     &getProveedorLike;
     &getMonedasProveedor;
     &getFormasEnvioProveedor;
+    &getProveedorInfoPorId;
     &getMonedas;
     &getMaterialesProveedor;
     &getAdqProveedorFormaEnvio;
 );
+
+
+
+=item
+    Esta funcion devuelve true si el proveedor es persona fisica, false si es juridica
+    Parametros: 
+                {id_proveedor}
+=cut
+sub isPersonaFisica{
+
+     my ($id_prov) = @_;
+     my $prov = C4::AR::Proveedores::getProveedorInfoPorId($id_prov);
+
+     if(($prov->getNombre() eq "") && ($prov->getApellido() eq "")){
+        return 0;
+     }else{
+        return 1;
+     }
+}
 
 
 
