@@ -1,5 +1,5 @@
 <fieldset>
-          <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+              <table id="tablaResult2" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
               <thead>
                         <tr class="titulo_tabla_resultado">
                             <th id="renglon">
@@ -13,21 +13,14 @@
                         </tr>
                
               </thead>
-              <tbody>
-                          [% p="" %]
-                          [% FOREACH pres IN presupuestos %]  
-                            <tr>Presupuesto:[% pres.pres_id %] - Renglon: [% pres.renglon %]
-                                
-                                [% IF (pres.pres_id = p) %] 
-                                    [% p= pres.pres_id %] 
-                                
-                                [% ELSE %]
-                                    [% p= pres.pres_id %] 
-                                     <td>[% pres.precio %]</td> 
+              <tbody>    
+                     [% FOREACH col IN matriz %]  
+                          <tr>
+                                [% FOREACH celda IN col %]  
+                                        <td> [% celda.precio_unitario %]</td>      
                                 [% END %]
-                                     <td>[% pres.precio %]</td> 
-                            </tr>                
-                        [% END %]
+                           </tr>   
+                     [% END %]
               </tbody>   
           </table>
 </fieldset>

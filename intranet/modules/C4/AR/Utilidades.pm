@@ -2007,6 +2007,8 @@ sub generarComboPresupuestos{
 
     foreach my $presupuesto (@$presupuestos) {
         push(@select_presupuestos_array, $presupuesto->getId);
+        
+# FIXME (ver si es persona fisica o razxon social)
         $select_presupuestos{$presupuesto->getId}  = $presupuesto->getId." - ".$presupuesto->ref_proveedor->getNombre." - ".$presupuesto->getFecha;
       
     }

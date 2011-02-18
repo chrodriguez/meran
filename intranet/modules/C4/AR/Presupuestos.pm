@@ -102,7 +102,7 @@ sub getDetallePorRenglon{
     my $renglones     = C4::Modelo::AdqPresupuestoDetalle::Manager->get_adq_presupuesto_detalle(   
                                                                     db => $db,
                                                                     query   => [ adq_recomendacion_id => { eq => $params } ],
-                                                                    sort_by => ('adq_presupuesto_detalle.adq_presupuesto_id' ),
+                                                                    sort_by => ('ref_proveedor.id'),
                                                                     require_objects => ['ref_recomendacion_detalle', 'ref_presupuesto', 'ref_presupuesto.ref_proveedor'],
 #                                                                     select       => ['adq_presupuesto_detalle.*','ref_recomendacion_detalle.*','ref_presupuesto.*',]
                                                                 );    
