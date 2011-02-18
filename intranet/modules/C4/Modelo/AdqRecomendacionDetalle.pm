@@ -78,6 +78,13 @@ sub agregarRecomendacionDetalle{
     $self->save();
 }
 
+sub setearCantidad{
+    my ($self) = shift;
+    my ($cantidad) = @_;
+    $self->setCantidadEjemplares($cantidad);
+    $self->save();
+}
+
 
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 

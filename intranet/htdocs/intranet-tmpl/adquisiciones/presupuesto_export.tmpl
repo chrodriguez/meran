@@ -1,6 +1,6 @@
 [% PERL %]
 print "Content-type: application/vnd.ms-excel\n";
-print "Content-Disposition: attachment;filename=presupuesto[% proveedor_nombre %].xls\n";
+print "Content-Disposition: attachment;filename=presupuesto[% proveedor %].xls\n";
 print "Cache-Control: public\n";
 print "Pragma: no-cache\n";
 print "Expires: 0\n\n";
@@ -13,13 +13,19 @@ print "Expires: 0\n\n";
     <th>
         [% proveedor %]
     </th>
+</tr>
+<tr>
+    <th></th>
+    <th>
+        [% id_proveedor %]
+    </th>
 <tr>
 
 <table>
       <thead>
           <tr>
               <th>
-                  [% "Reglon" | i18n %]
+                  [% "Renglon" | i18n %]
               </th>          
               <th>
                   [% "Cantidad de Ejemplares" | i18n %]
