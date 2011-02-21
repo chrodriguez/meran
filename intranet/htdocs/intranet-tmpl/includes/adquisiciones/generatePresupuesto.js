@@ -15,15 +15,23 @@ var array_recomendaciones    = new Array() //global, arreglo de ids de recomenda
 
 function generatePresupuesto(){
 
-    objAH                       = new AjaxHelper(updateAgregarPresupuesto);
-    objAH.url                   = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
-    objAH.debug                 = true;
+    var proveedores = getProveedoresSelected()
+    if(proveedores == ""){
+        jConfirm(POR_FAVOR_SELECCIONE_PROVEEDORES_A_PRESUPUESTAR, function(){ })
+        return false
+    }
+    if(checkSeleccionados(true)){
 
-    objAH.proveedores_array     = getProveedoresSelected();
-    objAH.recomendaciones_array = getRecomendacionesSelected();
-      
-    objAH.tipoAccion          = 'AGREGAR_PRESUPUESTO';
-    objAH.sendToServer();       
+        objAH                       = new AjaxHelper(updateAgregarPresupuesto)
+        objAH.url                   = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl'
+        objAH.debug                 = true
+
+        objAH.proveedores_array     = getProveedoresSelected()
+        objAH.recomendaciones_array = getRecomendacionesSelected()
+          
+        objAH.tipoAccion            = 'AGREGAR_PRESUPUESTO'
+        objAH.sendToServer()  
+    }
 }
 
 function updateAgregarPresupuesto(responseText){
@@ -55,14 +63,42 @@ function getRecomendacionesSelected(){
     return array_recomendaciones
 }
 
-
 /************************************************************ FIN - AGREGAR PRESUPUESTO ******************************************/
+
+
+
+
+
+/************************************************************ EDITAR RECOMENDACION ************************************************/
+
+function actualizarCantidad(id){
+  
+    objAH                           = new AjaxHelper(updateActualizarRecomendacion)
+    objAH.url                       = '/cgi-bin/koha/adquisiciones/recomendacionesDB.pl'
+    objAH.debug                     = true
+
+    objAH.id_recomendacion_detalle  = id
+    objAH.cantidad_ejemplares       = $('#cantidad'+id).val()
+      
+    objAH.tipoAccion                = 'ACTUALIZAR_CANTIDAD_RECOMENDACION'
+    objAH.sendToServer()     
+}
+
+function updateActualizarRecomendacion(){
+
+}
+
+/************************************************************ FIN - EDITAR RECOMENDACION ******************************************/
+
 
 
 
 
 /************************************************************ EXPORTACIONES  *********************************************/
 
+function editar(){
+    $('.editable').attr('disabled', false)
+} 
 
 function exportar(form_id){
     var proveedores = getProveedoresSelected()
@@ -72,9 +108,11 @@ function exportar(form_id){
     }
     if(checkSeleccionados(true)){
         $('#exportHidden').remove()
+        $('.editable').attr('disabled', false) 
         $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportXLS' value='xls' />")
         $('#' + form_id).append("<input type='hidden' name='proveedores' value='"+proveedores+"' />")
         $('#' + form_id).submit()  
+        $('.editable').attr('disabled', true) 
     }
  
 }
@@ -100,14 +138,18 @@ function checkSeleccionados(bool){
     
 function submitFormPDF(form_id) {
         $('#exportHidden').remove()
+        $('.editable').attr('disabled', false) 
         $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportPDF' value='pdf' />")
         if(checkSeleccionados(true)) { $('#' + form_id).submit() }
+        $('.editable').attr('disabled', true) 
 }
     
 function submitFormDOC(form_id){
         $('#exportHidden').remove()
+        $('.editable').attr('disabled', false) 
         $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportDOC' value='doc' />")
         if(checkSeleccionados(true)) { $('#' + form_id).submit() }
+        $('.editable').attr('disabled', true) 
 }
 
 /************************************************************ FIN - EXPORTACIONES ********************************************/

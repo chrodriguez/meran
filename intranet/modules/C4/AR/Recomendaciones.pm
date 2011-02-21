@@ -16,8 +16,25 @@ use vars qw(@EXPORT @ISA);
     &getRecomendacionDetallePorId;
     &getRecomendaciones;
     &getRecomendacionDetalle;
+    &editarCantidadEjemplares;
+
 );
 
+=item
+    Esta funcion edita la cantidad de ejemplares de una recomendacion
+    Parametros: 
+                 HASH: {id_recomendacion_detalle},{cantidad de ejemplares}
+=cut
+sub editarCantidadEjemplares{
+#   Recibe la informacion del objeto JSON.
+
+    my ($params)        =@_;
+    my $msg_object      = C4::AR::Mensajes::create();
+
+    my $recomendacion   = getRecomendacionDetallePorId($params->{'id_recomendacion_detalle'});
+
+    $recomendacion->setearCantidad($params->{'cantidad_ejemplares'});
+}
 
 =item
     Esta funcion agrega una recomendacion y su detalle

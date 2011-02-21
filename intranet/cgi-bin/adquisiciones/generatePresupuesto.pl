@@ -50,8 +50,8 @@ if($to_pdf){
     my @resultsdata;
     
     for($i = 1; $i <= $cant_recomendaciones; $i++){
-    
-        if($input->param('activo'.$i) eq 'checked'){
+     
+        if($input->param('activo'.$i) ne ''){
         
             my %hash = (    titulo      => $input->param('libro'.$i),
                             cantidad    => $input->param('cantidad'.$i),
@@ -82,7 +82,7 @@ if($to_pdf){
     
     for($i = 1; $i <= $cant_recomendaciones; $i++){
     
-        if($input->param('activo'.$i) eq 'checked'){
+        if($input->param('activo'.$i) ne ''){
         
             my %hash = (    titulo      => $input->param('libro'.$i),
                             cantidad    => $input->param('cantidad'.$i),
@@ -110,7 +110,7 @@ if($to_pdf){
     
     for($i = 1; $i <= $cant_recomendaciones; $i++){
     
-        if($input->param('activo'.$i) eq 'checked'){
+        if($input->param('activo'.$i) ne ''){
         
             my %hash = (    titulo      => $input->param('libro'.$i),
                             cantidad    => $input->param('cantidad'.$i),
@@ -135,22 +135,22 @@ if($to_pdf){
         my $tipo_proveedor  = C4::AR::Proveedores::isPersonaFisica(@parts[$i]);
 
         if($tipo_proveedor == 0){
-            $t_params->{'proveedor'} = $proveedor->getRazonSocial();
-            $t_params->{'proveedor_nombre'} = @parts[$i];
+            $t_params->{'proveedor'}        = $proveedor->getRazonSocial();
         }else{
-            $t_params->{'proveedor'} = $proveedor->getNombre();
+            $t_params->{'proveedor'}        = $proveedor->getNombre();
         }
     
         if(@resultsdata > 0){
             $t_params->{'resultsloop'} = \@resultsdata; 
         }
+        
+        $t_params->{'id_proveedor'}        = $proveedor->getId();
      
         print C4::AR::Auth::get_html_content( $template, $t_params, $session );
+        C4::AR::Debug::debug(C4::AR::Auth::get_html_content( $template, $t_params, $session ));
     }  
 
 # asi anda para un solo archivo OK:    
-
-    #FIXME exporta el xls en modo solo lectura
 
 # if(@resultsdata > 0){
 #            $t_params->{'resultsloop'} = \@resultsdata; 
@@ -172,11 +172,11 @@ if($to_pdf){
             push(@resultsdata, \%row);
         }
 
-       $t_params->{'resultsloop'}= \@resultsdata; 
+       $t_params->{'resultsloop'}   = \@resultsdata; 
        
-    }#END if($recomendaciones_activas)
+    }
     
-    my $combo_proveedores         = &C4::AR::Utilidades::generarComboProveedoresMultiple();
+    my $combo_proveedores           = &C4::AR::Utilidades::generarComboProveedoresMultiple();
 
     $t_params->{'combo_proveedores'}             = $combo_proveedores;
 
