@@ -30,7 +30,8 @@ __PACKAGE__->meta->setup(
         marc_record             => { type => 'text' },
         id1                     => { type => 'integer', not_null => 1 },
         id2                     => { type => 'integer', not_null => 1 },
-        updated_at              => { type => 'varchar' },
+        updated_at              => { type => 'timestamp', not_null => 1 },
+        created_at              => { type => 'varchar' },
         agregacion_temp         => { type => 'varchar' },
     ],
 
@@ -58,8 +59,11 @@ sub agregar {
     my ($self)          = shift;
     my ($db, $params, $msg_object)   = @_;
 
+    my $dateformat = C4::Date::get_date_format();
+
     $self->setId2($params->{'id2'});
     $self->setId1($params->{'id1'});
+    $self->setCreatedAt(C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat));
     $self->setMarcRecord($params->{'marc_record'});
 
     C4::AR::Debug::debug("CatRegistroMarcN3 => agregar => tipo de ejemplar => ".$params->{'tipo_ejemplar'});
@@ -174,39 +178,6 @@ sub seRepiteBarcode {
     }
 }
 
-=head2 sub seRepiteSignatura
-Verifica si se repite la signatura topografica en otro grupo, esto se usa cuandos se tiene q modificar
-=cut
-=item
-sub seRepiteSignatura {
-    my ($self)          = shift;
-    my ($signatura)     = @_;
-
-#     C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteSignatura => ".$signatura." para el grupo ".$self->getId2());
-
-    my $existe              = 0;  
-    my $nivel3_array_ref    = C4::AR::Nivel3::getAllNivel3FromId2($self->getId2());
-
-#     C4::AR::Debug::debug("CatRegistroMarcN3 => cant de ejemplares => ".scalar(@$nivel3_array_ref));
-
-    foreach my $nivel3 (@$nivel3_array_ref){
-
-#         C4::AR::Debug::debug("CatRegistroMarcN3 => signatura => db =>  ==".$nivel3->getSignatura_topografica()."==");
-#         C4::AR::Debug::debug("CatRegistroMarcN3 => signatura => cliente =>  ==".$signatura."==");
-#         C4::AR::Debug::debug("CatRegistroMarcN3 => nivel3->getId3 => ".$nivel3->getId3());
-#         C4::AR::Debug::debug("CatRegistroMarcN3 => self->getId3 => ".$self->getId3());
-
-        if( ($nivel3->getSignatura_topografica() eq C4::AR::Utilidades::trim($signatura)) && ($nivel3->getId3() != $self->getId3()) ){
-            #otro ejemplar ya tiene la misma signatura
-            $existe = 1;
-            last();
-        }
-    }
-
-    return $existe;
-}
-=cut
-
 =item
     sub seRepiteSignatura
 
@@ -247,6 +218,8 @@ sub modificar {
 
     my $MARC_result_array;
     my $edicion_grupal;
+# FIXME no esta funcionando el currenttime de mysql
+    $self->setUpdatedAt(Date::Manip::ParseDate("now"));
 
     $self->setId2($params->{'id2'});
     $self->setId1($params->{'id1'});
@@ -364,6 +337,33 @@ sub getId2{
     my ($self)  = shift;
 
     return $self->id2;
+}
+
+
+sub getCreatedAt{
+    my ($self)  = shift;
+
+    return $self->created_at;
+}
+
+sub setCreatedAt{
+    my ($self)  = shift;
+    my ($now)   = @_;
+
+    $self->created_at($now);
+}
+
+sub getUpdatedAt{
+    my ($self)  = shift;
+
+    return $self->updated_at;
+}
+
+sub setUpdatedAt{
+    my ($self)  = shift;
+    my ($now)   = @_;
+
+    $self->updated_at($now);
 }
 
 =head2
