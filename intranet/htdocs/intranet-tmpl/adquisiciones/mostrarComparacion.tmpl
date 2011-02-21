@@ -1,26 +1,22 @@
 <fieldset>
-              <table id="tablaResult2" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-              <thead>
-                        <tr class="titulo_tabla_resultado">
-                            <th id="renglon">
-                                [% "Presupuesto - Renglon" | i18n %]
-                            </th>
-                            [% FOREACH prov IN proveedores %] 
-                                <th id="renglon">
-                                    [% "Proveedor" | i18n %]: [% prov%]
-                                </th>
-                            [% END %]
-                        </tr>
-               
-              </thead>
-              <tbody>    
+             
+      
                      [% FOREACH col IN matriz %]  
-                          <tr>
+                            
+                                <li><strong>Presupuesto:[% col.pres_id %]</strong></li>
+                                <li><strong>Detalle:[% col.detalle_renglon %]</strong></li>
                                 [% FOREACH celda IN col %]  
-                                        <td> [% celda.precio_unitario %]</td>      
-                                [% END %]
-                           </tr>   
+                                        <li>Nro Renglon:[% col.renglon %]</li>
+                                        <li>Cantidad:[% col.cantidad %]</li>
+                                        <li>Precio Unitario:[% col.precio %]</li>
+                                      
+                                       
+                                
+                                
+                               
+                                 [% END %]
+                                 
+                         
                      [% END %]
-              </tbody>   
-          </table>
+          
 </fieldset>
