@@ -122,7 +122,7 @@ if($to_pdf){
         }
     }
     
-    #TODO ver como exportar a muchos proveedores, un excel por c/u ?    
+    #trae los id de los proveedores separados por ,
     my $proveedores     = $input->param('proveedores');
     my @parts           = split(/\,/,$proveedores);
     
@@ -141,13 +141,12 @@ if($to_pdf){
         }
     
         if(@resultsdata > 0){
-            $t_params->{'resultsloop'} = \@resultsdata; 
+            $t_params->{'resultsloop'}      = \@resultsdata; 
         }
         
-        $t_params->{'id_proveedor'}        = $proveedor->getId();
+        $t_params->{'id_proveedor'}         = $proveedor->getId();
      
         print C4::AR::Auth::get_html_content( $template, $t_params, $session );
-        C4::AR::Debug::debug(C4::AR::Auth::get_html_content( $template, $t_params, $session ));
     }  
 
 # asi anda para un solo archivo OK:    
@@ -176,9 +175,9 @@ if($to_pdf){
        
     }
     
-    my $combo_proveedores           = &C4::AR::Utilidades::generarComboProveedoresMultiple();
+    my $combo_proveedores               = &C4::AR::Utilidades::generarComboProveedoresMultiple();
 
-    $t_params->{'combo_proveedores'}             = $combo_proveedores;
+    $t_params->{'combo_proveedores'}    = $combo_proveedores;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

@@ -42,6 +42,7 @@ function updateAgregarPresupuesto(responseText){
 }
 
 function getProveedoresSelected(){
+    array_proveedores = new Array()
     var i = 0
     $('#proveedor option:selected').each(function(){  
         array_proveedores[i] = $(this).val()
@@ -110,7 +111,7 @@ function exportar(form_id){
         $('#exportHidden').remove()
         $('.editable').attr('disabled', false) 
         $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportXLS' value='xls' />")
-        $('#' + form_id).append("<input type='hidden' name='proveedores' value='"+proveedores+"' />")
+        $('#proveedores').val(proveedores)
         $('#' + form_id).submit()  
         $('.editable').attr('disabled', true) 
     }
