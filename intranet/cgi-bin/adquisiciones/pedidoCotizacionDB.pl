@@ -2,7 +2,7 @@
 
 use strict;
 use C4::AR::Auth;
-use C4::AR::Recomendaciones;
+use C4::AR::PedidoCotizacion;
 use CGI;
 use JSON;
 
@@ -15,7 +15,7 @@ $obj = C4::AR::Utilidades::from_json_ISO($obj);
 
 my $tipoAccion  = $obj->{'tipoAccion'}||"";
 
-if($tipoAccion eq "ACTUALIZAR_CANTIDAD_RECOMENDACION"){
+if($tipoAccion eq "AGREGAR_PEDIDO_COTIZACION"){
 
     # no va, era antes:
     #my $recomendacion_detalle   = C4::AR::Recomendaciones::editarCantidadEjemplares($obj);

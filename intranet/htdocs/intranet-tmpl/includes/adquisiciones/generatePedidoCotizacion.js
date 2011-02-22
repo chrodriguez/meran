@@ -1,7 +1,7 @@
 /*
- * LIBRERIA generatePresupuesto v 0.0.9
+ * LIBRERIA generatePedidoCotizacion v 0.0.9
  * Esta es una libreria creada para el sistema KOHA
- * Contendran las funciones para la generacion de presupuestos para la compra de ejemplares
+ * Contendran las funciones para la generacion de pedidos de cotizacion
  * Fecha de creacion 07/02/2011
  *
  */ 
@@ -13,7 +13,7 @@ var arreglo                  = new Array() //global, arreglo con las recomendaci
 var array_proveedores        = new Array() //global, arreglo de ids de proveedores a generar presupuesto
 var array_recomendaciones    = new Array() //global, arreglo de ids de recomendaciones_detalle
 
-function generatePresupuesto(){
+/*function generatePresupuesto(){
 
     var proveedores = getProveedoresSelected()
     if(proveedores == ""){
@@ -49,7 +49,7 @@ function getProveedoresSelected(){
         i++
     })
     return array_proveedores
-}
+}*/
 
 function getRecomendacionesSelected(){
     var i = 0
