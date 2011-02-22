@@ -7,7 +7,7 @@ use CGI;
 
 my $input = new CGI;
 
-my $combo_recomendaciones = &C4::AR::Utilidades::generarComboRecomendaciones();
+my $combo_pedidos_cot = &C4::AR::Utilidades::generarComboPedidosCotizacion();
 
 my ($template, $session, $t_params)= get_template_and_user({
                                 template_name => "adquisiciones/compararPresupuestos.tmpl",
@@ -18,7 +18,7 @@ my ($template, $session, $t_params)= get_template_and_user({
                                 debug => 1,
                  });
 
-$t_params->{'combo_recomendaciones'} = $combo_recomendaciones;
+$t_params->{'combo_recomendaciones'} = $combo_pedidos_cot;
 
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

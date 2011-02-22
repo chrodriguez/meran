@@ -20,6 +20,7 @@ use POSIX qw(ceil floor);
 use JSON;
 use C4::AR::Preferencias;
 use C4::AR::Presupuestos;
+use C4::AR::PedidoCotizacion;
 
 #Einar use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
@@ -98,6 +99,7 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboTemasOPAC
     generarComboTemasINTRA
     generarComboRecomendaciones
+    generarComboPedidosCotizacion
     getFeriados
     bbl_sort
     createSphinxInstance
@@ -2040,6 +2042,53 @@ sub generarComboPresupuestos{
 
     return $combo_presupuestos; 
 }
+
+sub generarComboPedidosCotizacion {
+    my ($params) = @_;
+
+    my @select_pedidos_array;
+    my %select_pedidos;
+    my $cotizaciones  = &C4::AR::PedidoCotizacion::getAdqPedidosCotizacion();
+
+    push (@select_pedidos_array, '');
+      
+#     C4::AR::Debug::debug("RECOMENDACIONES:".$recomendaciones);
+
+    foreach my $cotizacion (@$cotizaciones) {
+        push(@select_pedidos_array, $cotizacion->getId);
+        $select_pedidos{$cotizacion->getId}  = $cotizacion->getId." - ".$cotizacion->getFecha
+    }
+    
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){ 
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+     $options_hash{'name'}       = $params->{'name'}||'combo_pedidos';
+     $options_hash{'id'}         = $params->{'id'}||'combo_pedidos';
+     $options_hash{'size'}       = $params->{'size'}||1;
+     $options_hash{'class'}      = 'required';
+     $options_hash{'multiple'}   = $params->{'multiple'}||0;
+     $options_hash{'defaults'}   = $params->{'default'} || 0;
+
+   
+    $options_hash{'values'}     = \@select_pedidos_array;
+    $options_hash{'labels'}     = \%select_pedidos;
+
+    my $combo_pedidos  = CGI::scrolling_list(\%options_hash);
+
+    return $combo_pedidos; 
+
+
+}
+
 
 
 sub generarComboRecomendaciones{
