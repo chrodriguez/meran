@@ -9,3 +9,8 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw(  
 
 );
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__

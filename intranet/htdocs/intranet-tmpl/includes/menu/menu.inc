@@ -83,9 +83,9 @@
 	                   <li>
 	
 	                       [% PERL %]
-	                           print C4::AR::Filtros::link_to( text =>     "[% 'Generar Presupuesto' | i18n %]",
-	                                                           url =>      "/cgi-bin/koha/adquisiciones/generatePresupuesto.pl", 
-	                                                           title =>    "[% 'Generar Presupuesto' | i18n %]"
+	                           print C4::AR::Filtros::link_to( text =>     "[% 'Generar Pedido Cotizacion' | i18n %]",
+	                                                           url =>      "/cgi-bin/koha/adquisiciones/generatePedidoCotizacion.pl", 
+	                                                           title =>    "[% 'Generar Pedido Cotizacion' | i18n %]"
 	                                                       ) ;
 	                       [% END %]
 	                   </li>	                   

@@ -1,6 +1,6 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<script type="text/javascript"src="/intranet-tmpl/includes/adquisiciones/generatePresupuesto.js"></script>
+<script type="text/javascript"src="/intranet-tmpl/includes/adquisiciones/generatePedidoCotizacion.js"></script>
 <script type="text/javascript" language="javascript">
     $(document).ready(function(){
         $('.editable').attr('disabled', true)   
@@ -87,34 +87,6 @@
         [% END %]
 </fieldset>
 </form>
-<!--
-
-en otro template:
-
-<fieldset id="datos_proveedor">
-<legend class="titulo_legend">[% "Proveedores a Presupuestar" | i18n %]</legend>
-    <ul>
-        <li class="sub_item">Proveedor/es:</li>
-        <li class="sub_item"> [% combo_proveedores %] </li>
-    </ul>
-    <ul>
-        [% PERL %]
-            print C4::AR::Filtros::to_Button( 
-                                                text    =>  "[% 'Aceptar' | i18n %]",
-                                                boton   =>  "boton_buscar",
-                                                onClick =>  "generatePresupuesto();",
-                    ) ;
-        [% END %]
-        [% PERL %]
-            print C4::AR::Filtros::to_Button( 
-                                                text    =>  "[% 'Exportar Presupuesto' | i18n %]",
-                                                boton   =>  "boton_buscar",
-                                                onClick =>  "exportar('export');",
-                    ) ;
-        [% END %]        
-    </ul>
-</fieldset> -->
-
 
 
 [% INCLUDE "intranet-bottom.inc" %]
