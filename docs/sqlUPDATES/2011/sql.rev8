@@ -1,1 +1,2 @@
-ALTER TABLE `adq_presupuesto` ADD `pedido_cotizacion_id` INT( 11 ) NOT NULL AFTER `ref_estado_presupuesto_id` 
+ALTER TABLE `adq_presupuesto` ADD `pedido_cotizacion_id` INT( 11 ) NOT NULL AFTER `ref_estado_presupuesto_id`;
+ALTER TABLE `adq_presupuesto` CHANGE `pedido_cotizacion_id` `ref_pedido_cotizacion_id` INT( 11 ) NOT NULL; 
