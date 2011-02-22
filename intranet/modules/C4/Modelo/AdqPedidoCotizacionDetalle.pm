@@ -22,10 +22,30 @@ __PACKAGE__->meta->setup(
           isbn_issn                 => { type => 'varchar', length => 45, not_null => 1},
           cantidad_ejemplares       => { type => 'integer', length => 5, not_null => 1 },  
           precio_unitario           => { type => 'float', length => 5, not_null => 1},
-          adq_recomendacion_detalle => { type => 'varchar', length => 255, not_null => 1},
+          adq_recomendacion_detalle_id => { type => 'varchar', length => 255, not_null => 1},
 
     ],
     
+        relationships =>
+    [
+      ref_adq_pedido_cotizacion => 
+      {
+         class       => 'C4::Modelo::AdqPedidoCotizacion',
+         key_columns => {adq_pedido_cotizacion_id => 'id' },
+         type        => 'one to one',
+       },
+      
+      ref_adq_recomendacion_detalle => 
+      {
+        class       => 'C4::Modelo::AdqRecomendacionDetalle',
+        key_columns => {adq_recomendacion_detalle_id => 'id' },
+        type        => 'one to one',
+      },
+
+    ],
+
+
+
     primary_key_columns => [ 'id' ],
     unique_key => ['id'],
 
@@ -79,6 +99,19 @@ sub setEditorial{
     my ($editorial) = @_;
     utf8::encode($editorial);
     $self->editorial($editorial);
+}
+
+
+sub setRefAdqRecomendacionDetalle{
+    my ($self) = shift;
+    my ($detalle) = @_;
+    utf8::encode($detalle);
+    $self->ref_adq_recomendacion_detalle_id($detalle);
+}
+
+sub getRefAdqRecomendacionDetalle{
+    my ($self) = shift;
+    return ($self->ref_adq_recomendacion_detalle_id);
 }
 
 sub setFechaPublicacion{

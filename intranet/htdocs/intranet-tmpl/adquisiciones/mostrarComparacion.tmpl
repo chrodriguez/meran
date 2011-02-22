@@ -1,20 +1,11 @@
 <fieldset>
              
       
-                     [% FOREACH col IN matriz %]  
+                     [% FOREACH detalle IN detalle_pedido%]  
+                           
+                                <li><strong>[% detalle.getRefAdqRecomendacionDetalle %] </strong></li>
+                       
                             
-                                <li><strong>Presupuesto:[% col.pres_id %]</strong></li>
-                                <li><strong>Detalle:[% col.detalle_renglon %]</strong></li>
-                                [% FOREACH celda IN col %]  
-                                        <li>Nro Renglon:[% col.renglon %]</li>
-                                        <li>Cantidad:[% col.cantidad %]</li>
-                                        <li>Precio Unitario:[% col.precio %]</li>
-                                      
-                                       
-                                
-                                
-                               
-                                 [% END %]
                                  
                          
                      [% END %]
