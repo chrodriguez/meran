@@ -319,7 +319,7 @@ body {
 #marco_principal {
 	background: #FEFEFE;
 	float: left;
-	width: 70%;
+	width: 78%;
 	min-height: 420px;
 	margin-top: 39px;
 	height: auto;
@@ -4392,7 +4392,7 @@ body.fr #top-bar ul.user-dropdown li a, body.es #top-bar ul.user-dropdown li a, 
 }
 #session #screen-name:after {
     background: url("../imagenes/sprite-icons.png") no-repeat scroll -79px -68px transparent;
-    content: "&darr;
+    content: "&darr";
     display: inline-block;
     height: 7px;
     margin-left: 1px;
