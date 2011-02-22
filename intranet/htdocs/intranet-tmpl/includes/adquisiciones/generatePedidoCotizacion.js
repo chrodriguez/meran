@@ -10,7 +10,7 @@
 /******************************************************** AGREGAR PRESUPUESTO **************************************************/
 
 var arreglo                  = new Array() //global, arreglo con las recomendaciones seleccionadas
-var array_proveedores        = new Array() //global, arreglo de ids de proveedores a generar presupuesto
+var array_cantidades         = new Array() //global, arreglo cantidades de ejemplares de las recomendaciones
 var array_recomendaciones    = new Array() //global, arreglo de ids de recomendaciones_detalle
 
 /*function generatePresupuesto(){
@@ -64,6 +64,15 @@ function getRecomendacionesSelected(){
     return array_recomendaciones
 }
 
+function getCantidades(array_ids){
+    var id
+    for(i = 0; i < array_ids.length; i++){
+        id = array_ids[i]
+        array_cantidades[i] = $('#cantidad'+id).val()
+    }
+    return array_cantidades
+}
+
 /************************************************************ FIN - AGREGAR PRESUPUESTO ******************************************/
 
 
@@ -78,7 +87,13 @@ function addPedidoCotizacion(){
     objAH                           = new AjaxHelper(updateAddPedidoCotizacion)
     objAH.url                       = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
     objAH.debug                     = true
+    
+    // se mandan los ids de las recomendacion_detalle SELECCIONADAS. 
+    // Para agregar un pedido_cotizacion_detalle por c/u.
+    // Tambien se mandan las cantidades que pueden ser nuevas.
 
+    objAH.recomendaciones_array     = getRecomendacionesSelected()
+    objAH.cantidades_array          = getCantidades(getRecomendacionesSelected())
       
     objAH.tipoAccion                = 'AGREGAR_PEDIDO_COTIZACION'
     objAH.sendToServer()     
