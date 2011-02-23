@@ -23,6 +23,7 @@ __PACKAGE__->meta->setup(
           cantidad_ejemplares       => { type => 'integer', length => 5, not_null => 1 },  
           precio_unitario           => { type => 'float', length => 5, not_null => 1},
           adq_recomendacion_detalle_id => { type => 'varchar', length => 255, not_null => 1},
+          nro_renglon                   => { type => 'integer', length => 5, not_null => 1 },  
 
     ],
     
@@ -102,16 +103,16 @@ sub setEditorial{
 }
 
 
-sub setRefAdqRecomendacionDetalle{
+sub setAdqRecomendacionDetalle{
     my ($self) = shift;
     my ($detalle) = @_;
     utf8::encode($detalle);
-    $self->ref_adq_recomendacion_detalle_id($detalle);
+    $self->ref_adq_recomendacion_detalle($detalle);
 }
 
-sub getRefAdqRecomendacionDetalle{
+sub getAdqRecomendacionDetalle{
     my ($self) = shift;
-    return ($self->ref_adq_recomendacion_detalle_id);
+    return ($self->ref_adq_recomendacion_detalle);
 }
 
 sub setFechaPublicacion{
@@ -119,6 +120,13 @@ sub setFechaPublicacion{
     my ($fecha_public) = @_;
     utf8::encode($fecha_public);
     $self->fecha_publicacion($fecha_public);
+}
+
+sub setRenglon{
+    my ($self) = shift;
+    my ($renglon) = @_;
+    utf8::encode($renglon);
+    $self->nro_renglon($renglon);
 }
 
 sub setColeccion{
@@ -146,13 +154,6 @@ sub setPrecioUnitario {
     my ($self) = shift;
     my ($precio_unitario) = @_;
     $self->cantidad_ejemplares($precio_unitario);
-}
-
-
-sub setAdqRecomendacionDetalle {
-    my ($self) = shift;
-    my ($adq_recomendacion_detalle) = @_;
-    $self->reserva_material($adq_recomendacion_detalle);
 }
 
 
@@ -216,8 +217,9 @@ sub getPrecioUnitario{
     return ($self->precio_unitario);
 }
 
-sub getAdqRecomendacionDetalle{
+sub getRenglon{
     my ($self) = shift;
-    return ($self->adq_recomendacion_detalle);
-}             
+    return ($self->nro_renglon);
+}
+            
 #----------------------------------- FIN - GETTERS y SETTERS------------------------------------------------

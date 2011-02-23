@@ -4,15 +4,15 @@ use strict;
 require Exporter;
 use DBI;
 
+
 use C4::Modelo::AdqPedidoCotizacion;
 use C4::Modelo::AdqPedidoCotizacion::Manager;
 use C4::Modelo::AdqPedidoCotizacionDetalle;
 use C4::Modelo::AdqPedidoCotizacionDetalle::Manager;
-
 use C4::AR::Recomendaciones;
 use C4::AR::PedidoCotizacion;
-use C4::Modelo::AdqPedidoCotizacion;
-use C4::Modelo::AdqPedidoCotizacion::Manager;
+
+
 
 
 use vars qw(@EXPORT @ISA);
@@ -22,6 +22,7 @@ use vars qw(@EXPORT @ISA);
             &getAdqPedidosCotizacion;
             &getPresupuestosPedidoCotizacion;
             &getAdqPedidoCotizacionDetalle;
+            &addPedidoCotizacion;
 );
 
 
@@ -43,6 +44,27 @@ sub getPresupuestosPedidoCotizacion{
 
 }
 
+# 
+# sub getRenglonFromCotizacion{
+#       my ($id_pedido, $nro_renglon) =@_;
+#       
+#       my $db = C4::Modelo::AdqPedidoCotizacionDetalle->new()->db;
+#       my $presupuestos = C4::Modelo::AdqPedidoCotizacionDetalle::Manager->get_adq_pedido_cotizacion_detalle(   
+#                                                                     db => $db,
+#                                                                     query  => [ ref_pedido_cotizacion_id => $id_pedido && nro_renglon => $nro_renglon],
+#                                                                 );
+#       my @results;
+# 
+#       foreach my $pres (@$presupuestos) {
+#           push (@results, $pres);
+#       }
+# 
+#       return(\@results);
+# 
+# }
+
+
+
 
 sub getAdqPedidoCotizacionDetalle{
     my ( $id_pedido, $db) = @_;
@@ -53,6 +75,7 @@ sub getAdqPedidoCotizacionDetalle{
 
     my $detalle_array_ref = C4::Modelo::AdqPedidoCotizacionDetalle::Manager->get_adq_pedido_cotizacion_detalle(   
                                                                     db => $db,
+                                                                    sort( nro_renglon ),
                                                                     query   => [ adq_pedido_cotizacion_id => { eq => $id_pedido} ],
                                                                 );
       
@@ -85,8 +108,6 @@ sub getAdqPedidosCotizacion{
     return(\@results);
 }
 
-    &addPedidoCotizacion;
-);
 
 =item
     Esta funcion agrega un pedido cotizacion

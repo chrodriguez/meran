@@ -18,6 +18,7 @@ __PACKAGE__->meta->setup(
         precio_unitario                    => { type => 'float', not_null => 1},
         cantidad                           => { type => 'integer', not_null => 1},
         seleccionado                       => { type => 'integer', length => 11, not_null => 1 },
+        nro_renglon                   => { type => 'integer', length => 5, not_null => 1 },  
     ],
 
 
@@ -79,6 +80,13 @@ sub setCantidad {
     $self->cantidad($cantidad);
 }
 
+sub setRenglon{
+    my ($self) = shift;
+    my ($renglon) = @_;
+    utf8::encode($renglon);
+    $self->nro_renglon($renglon);
+}
+
 sub setSeleccionado {
     my ($self) = shift;
     my ($seleccionado) = @_;
@@ -115,7 +123,12 @@ sub getCantidad  {
 sub getSeleccionado  {
     my ($self) = shift;
     return ($self->seleccionado);
-
 }
+
+sub getRenglon{
+    my ($self) = shift;
+    return ($self->nro_renglon);
+}
+      
 
 
