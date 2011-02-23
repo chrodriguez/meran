@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 DROP TABLE IF EXISTS cat_editorial;
 
 CREATE TABLE  `meran`.`cat_editorial` (
@@ -8,13 +8,4 @@ CREATE TABLE  `meran`.`cat_editorial` (
 
 INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`) VALUES (NULL, 'cat_editorial', 'editorial', 'editorial');
 
-=======
-DROP TABLE IF EXISTS cat_editorial;
 
-CREATE TABLE  `cat_editorial` (
-`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`editorial` VARCHAR( 255 ) NOT NULL
-) ENGINE = MYISAM ;
-
-INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`) VALUES (NULL, 'cat_editorial', 'editorial', 'editorial');
->>>>>>> 426b05c55f4a64d5637da4dfcdd8832548961214
