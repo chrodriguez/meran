@@ -45,6 +45,15 @@ __PACKAGE__->meta->setup(
 
 );
 
+sub desactivar{
+
+    C4::AR::Debug::debug("entro a desactivar");
+    my ($self) = shift;
+    $self->setActiva(0);
+    $self->save();
+}
+
+
 
 sub agregarRecomendacion{
     my ($self) = shift;

@@ -21,6 +21,12 @@ __PACKAGE__->meta->setup(
 
 #----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
 
+sub addPedidoCotizacion{
+    my ($self) = shift;
+    my ($params) = @_;
+
+    $self->save();
+}
 
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
 

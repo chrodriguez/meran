@@ -17,17 +17,27 @@ $obj = C4::AR::Utilidades::from_json_ISO($obj);
 my $tipoAccion  = $obj->{'tipoAccion'}||"";
 
 if($tipoAccion eq "AGREGAR_PEDIDO_COTIZACION"){
-    
-    for(my $i=0; $i<scalar(@{$obj->{'recomendaciones_array'}}); $i++){
-    
-        my %params = {};
-        
-        $params{'id_recomendacion'}       = $obj->{'recomendaciones_array'}->[$i];
-        $params{'cantidad_ejemplares'}    = $obj->{'cantidades_array'}->[$i];
-        
-        my $message = C4::AR::PedidoCotizacion::addPedidoCotizacion(\%params);   
-    }
 
+    my %params = {};
+        
+    $params{'recomendaciones_array'}       = $obj->{'recomendaciones_array'};
+    $params{'cantidad_ejemplares_array'}   = $obj->{'cantidades_array'};
+        
+    my ($message) = C4::AR::PedidoCotizacion::addPedidoCotizacion(\%params);  
+
+
+    my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'BAJA', 
+                                                entorno => 'usuarios'},
+                                                "intranet"
+                                );  
+                                
+    my $infoOperacionJSON=to_json $message;
     
-    my $recomendacion_detalle   = C4::AR::Recomendaciones::getRecomendacionDetallePorId($obj);
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
+                           
 }

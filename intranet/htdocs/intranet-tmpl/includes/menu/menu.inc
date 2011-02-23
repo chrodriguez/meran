@@ -88,7 +88,16 @@
 	                                                           title =>    "[% 'Generar Pedido Cotizacion' | i18n %]"
 	                                                       ) ;
 	                       [% END %]
-	                   </li>	                   
+	                   </li>	       
+	                   <li>
+	
+	                       [% PERL %]
+	                           print C4::AR::Filtros::link_to( text =>     "[% 'Listado de Pedidos Cotizacion' | i18n %]",
+	                                                           url =>      "/cgi-bin/koha/adquisiciones/listPedidoCotizacion.pl", 
+	                                                           title =>    "[% 'Listado de Pedidos Cotizacion' | i18n %]"
+	                                                       ) ;
+	                       [% END %]
+	                   </li>	  	                               
 	                </ul>
 	             </li>
 	                

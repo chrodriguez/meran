@@ -64,6 +64,7 @@ sub addPresupuestoDetalle{
 
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 
+
 sub setAdqPresupuestoId {
     my ($self) = shift;
     my ($presupuesto) = @_;
@@ -103,37 +104,29 @@ sub setSeleccionado {
 sub getId{
     my ($self) = shift;
     return ($self->id);
-
 }
 
 sub getAdqPresupuestoId{
     my ($self) = shift;
     return ($self->adq_presupuesto_id);
-
 }
 
 sub getAdqRecomendacionDetalleId {
     my ($self) = shift;
     return ($self->adq_recomendacion_detalle_id);
-
 }
 
 sub getPrecioUnitario  {
     my ($self) = shift;
     return ($self->precio_unitario);
-
 }
 
 sub getCantidad  {
     my ($self) = shift;
     return ($self->cantidad);
-
 }
 
 sub getSeleccionado  {
     my ($self) = shift;
     return ($self->seleccionado);
-
 }
-
-
