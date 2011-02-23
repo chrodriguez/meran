@@ -1347,9 +1347,12 @@ sub UTF8toISO {
     sub from_json_ISO
 =cut
 sub from_json_ISO {
+    my ($data)=@_;
+
+    C4::AR::Debug::debug("Utilidades => from_json_ISO => data => ".$data);
 
     eval {
-        my ($data)=@_;
+        
 #         $data= UTF8toISO($data);
 #         return from_json($data, {ascii => 0});
         return from_json($data, {utf8 => 1});

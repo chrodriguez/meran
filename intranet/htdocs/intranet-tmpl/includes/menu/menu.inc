@@ -303,8 +303,8 @@
 	                   <li>
 	                             [% PERL %]
 	                                 print C4::AR::Filtros::link_to( text =>     "[% 'Permisos Cat&aacute;logo' | i18n %]",
-	                                                                 url =>      "/cgi-bin/koha/admin/permisos/permisosDB.pl",
-	                                                                 params =>   ["action=catalogo"],
+	                                                                 url =>      "/cgi-bin/koha/admin/permisos/permisos_catalogo.pl",
+	                                                                 params =>   [],
 	                                                                 title =>    "[% 'Permisos Cat&aacute;logo' | i18n %]"
 	                                                             ) ;
 	                             [% END %]
@@ -312,8 +312,8 @@
 	                   <li>
 	                             [% PERL %]
 	                                 print C4::AR::Filtros::link_to( text =>     "[% 'Permisos Circulaci&oacute;n' | i18n %]",
-	                                                                 url =>      "/cgi-bin/koha/admin/permisos/permisosDB.pl", 
-	                                                                 params =>   ["action=circulacion"],
+	                                                                 url =>      "/cgi-bin/koha/admin/permisos/permisos_circulacion.pl", 
+	                                                                 params =>   [],
 	                                                                 title =>    "[% 'Permisos Circulaci&oacute;n' | i18n %]"
 	                                                             ) ;
 	                             [% END %]
@@ -321,8 +321,8 @@
 	                   <li>
 	                             [% PERL %]
 	                                 print C4::AR::Filtros::link_to( text =>     "[% 'Permisos Generales' | i18n %]",
-	                                                                 url =>      "/cgi-bin/koha/admin/permisos/permisosDB.pl", 
-	                                                                 params =>   ["action=general"],
+	                                                                 url =>      "/cgi-bin/koha/admin/permisos/permisos_general.pl", 
+	                                                                 params =>   [],
 	                                                                 title =>    "[% 'Permisos Generales' | i18n %]"
 	                                                             ) ;
 	                             [% END %]

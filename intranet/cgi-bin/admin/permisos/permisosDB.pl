@@ -3,14 +3,14 @@
 use strict;
 use CGI;
 use C4::AR::Auth;
-
 use C4::AR::Preferencias;
 use C4::AR::Permisos;
-# use C4::AR::Utilidades;
-# use JSON;
 
 my $input = new CGI;
 my $obj=$input->param('obj');
+
+C4::AR::Debug::debug("obj => ".$obj);
+
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $accion;
@@ -20,36 +20,7 @@ if ($obj != 0){
     $accion = $input->param('action') || undef;
 }
 
-
-# my ($userid, $session, $flags) = checkauth($input, 0,{});
-if ($accion eq "catalogo"){
-    #Busca las preferencias segun lo ingresado como parametro y luego las muestra
-
-    my ($template, $session, $t_params)  = get_template_and_user({	
-                        template_name => "admin/permisos/permisos_catalogo.tmpl",
-                        query => $input,
-                        type => "intranet",
-                        authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
-                        debug => 1,
-			        });
-    my %params_combo = {};
-    $params_combo{'default'}='ALL';
-    my $combo_tipoDoc = C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
-    $t_params->{'combo_tipoDoc'} = $combo_tipoDoc;
-    my %params_options;
-    $params_options{'optionALL'} = 1;
-    my $combo_UI = C4::AR::Utilidades::generarComboUI(\%params_options);
-    $t_params->{'combo_UI'}=$combo_UI;
-    my $combo_permisos = C4::AR::Utilidades::generarComboPermisos();
-    $t_params->{'combo_permisos'}= $combo_permisos;
-    my $combo_perfiles = C4::AR::Utilidades::generarComboPerfiles();
-    $t_params->{'combo_perfiles'}= $combo_perfiles;
-    $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Permisos de Cat&aacute;logo");
-
-	C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
-}
-elsif ($accion eq "OBTENER_PERMISOS_CATALOGO"){
+if ($accion eq "OBTENER_PERMISOS_CATALOGO"){
 
     my $nro_socio = $obj->{'nro_socio'};
     my $id_ui = $obj->{'id_ui'};
@@ -127,38 +98,8 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_CATALOGO"){
 
     $t_params->{'nuevoPermiso'}=1;
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
-}
 
-
-# PERMISOS GENERALES
-
-elsif ($accion eq "general"){
-    #Busca las preferencias segun lo ingresado como parametro y luego las muestra
-
-    my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "admin/permisos/permisos_general.tmpl",
-                        query => $input,
-                        type => "intranet",
-                        authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
-                        debug => 1,
-              });
-
-    my $combo_tipoDoc = C4::AR::Utilidades::generarComboTipoNivel3();
-    $t_params->{'combo_tipoDoc'} = $combo_tipoDoc;
-    my %params_options;
-    $params_options{'optionALL'} = 1;
-    my $combo_UI = C4::AR::Utilidades::generarComboUI(\%params_options);
-    $t_params->{'combo_UI'}=$combo_UI;
-    my $combo_permisos = C4::AR::Utilidades::generarComboPermisos();
-    $t_params->{'combo_permisos'}= $combo_permisos;
-    my $combo_perfiles = C4::AR::Utilidades::generarComboPerfiles();
-    $t_params->{'combo_perfiles'}= $combo_perfiles;
-    $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Permisos generales");
-
-  C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
-}
-elsif ($accion eq "OBTENER_PERMISOS_GENERAL"){
+} elsif ($accion eq "OBTENER_PERMISOS_GENERAL"){
 
     my $nro_socio = $obj->{'nro_socio'};
     my $id_ui = $obj->{'id_ui'};
@@ -222,8 +163,8 @@ elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
     my $permisos = C4::AR::Permisos::obtenerPermisosGenerales($nro_socio,$id_ui,$tipo_documento);
     $t_params->{'permisos'}=$permisos;
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
-}
-elsif ($accion eq "SHOW_NUEVO_PERMISO_GENERAL"){
+
+} elsif ($accion eq "SHOW_NUEVO_PERMISO_GENERAL"){
 
     my ($template, $session, $t_params)  = get_template_and_user({  
                             template_name => "admin/permisos/detalle_permisos_catalogo.tmpl",
@@ -236,36 +177,8 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_GENERAL"){
 
     $t_params->{'nuevoPermiso'}=1;
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
-}
-# PERMISOS PARA CIRCULAR
 
-elsif ($accion eq "circulacion"){
-    #Busca las preferencias segun lo ingresado como parametro y luego las muestra
-
-    my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "admin/permisos/permisos_circulacion.tmpl",
-                        query => $input,
-                        type => "intranet",
-                        authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
-                        debug => 1,
-              });
-
-    my $combo_tipoDoc = C4::AR::Utilidades::generarComboTipoNivel3();
-    $t_params->{'combo_tipoDoc'} = $combo_tipoDoc;
-    my %params_options;
-    $params_options{'optionALL'} = 1;
-    my $combo_UI = C4::AR::Utilidades::generarComboUI(\%params_options);
-    $t_params->{'combo_UI'}=$combo_UI;
-    my $combo_permisos = C4::AR::Utilidades::generarComboPermisos();
-    $t_params->{'combo_permisos'}= $combo_permisos;
-    my $combo_perfiles = C4::AR::Utilidades::generarComboPerfiles();
-    $t_params->{'combo_perfiles'}= $combo_perfiles;
-    $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Permisos de Circulaci&oacute;n");
-
-  C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
-}
-elsif ($accion eq "OBTENER_PERMISOS_CIRCULACION"){
+} elsif ($accion eq "OBTENER_PERMISOS_CIRCULACION"){
 
     my $nro_socio = $obj->{'nro_socio'};
     my $id_ui = $obj->{'id_ui'};
