@@ -658,7 +658,10 @@ INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo
 
 ALTER TABLE `cat_registro_marc_n3` DROP `date`;
 ALTER TABLE `cat_registro_marc_n3` ADD `updated_at` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `id1`;
+ALTER TABLE `cat_registro_marc_n3` ADD `created_at` DATETIME NOT NULL AFTER `updated_at`;
 
 ALTER TABLE `cat_estructura_catalogacion` ADD `edicion_grupal` TINYINT NOT NULL DEFAULT '1' AFTER `visible` ;
 
 ALTER TABLE `usr_socio` ADD  `lastValidation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+ALTER TABLE `ref_disponibilidad` ADD `codigo` VARCHAR( 255 ) NOT NULL AFTER `nombre`;

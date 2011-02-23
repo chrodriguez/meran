@@ -348,7 +348,10 @@ sub marc_record_to_ISO_from_range {
             $marc_record_unido->append_fields($field_ident_universidad);
 
             if($query->param('export_format') eq "iso"){
-                print $marc_record_unido->as_usmarc();
+                # Para ROBLE reemplazo el separador de subcampo \x1F por ^ 
+                my $registro_marc= $marc_record_unido->as_usmarc();
+                $registro_marc =~ s/\x1F/\^/ig;
+                print $registro_marc;
             } else {
                 print MARC::File::XML::record( $marc_record_unido );
             }
