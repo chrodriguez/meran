@@ -232,7 +232,14 @@ sub getPrecioUnitario{
     my ($self) = shift;
     return ($self->precio_unitario);
 }
-            
+
+
+sub getAdqRecomendacionDetalleId{
+    my ($self) = shift;
+    return ($self->adq_recomendacion_detalle_id);
+} 
+
+
 sub getNroRenglon  {
     my ($self) = shift;
     return ($self->nro_renglon);
