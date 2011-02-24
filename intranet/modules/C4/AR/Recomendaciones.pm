@@ -164,11 +164,24 @@ sub getRecomendacionDetalle{
 
     if( scalar($recomendacion) > 0){
         return ($recomendacion);
+    
+    }
+}
+
+
 
 =item
     Recupera un registro de recomendacion
     Retorna un objeto o 0 si no existe
 =cut
+
+
+
+
+
+
+
+
 sub getRecomendacionPorId{
 
     my ($params, $db) = @_;
@@ -185,3 +198,7 @@ sub getRecomendacionPorId{
     }
 }
 
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__
