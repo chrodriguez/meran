@@ -99,7 +99,13 @@ function addPedidoCotizacion(){
     objAH.sendToServer()     
 }
 
-function updateAddPedidoCotizacion(){
+function updateAddPedidoCotizacion(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+    
+    //location.href = '/cgi-bin/koha/adquisiciones/listPedidoCotizacion.pl'
 
 }
 

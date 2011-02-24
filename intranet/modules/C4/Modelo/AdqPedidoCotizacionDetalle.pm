@@ -10,6 +10,7 @@ __PACKAGE__->meta->setup(
     table   => 'adq_pedido_cotizacion_detalle',
 
     columns => [
+
           id                        => { type => 'integer', not_null => 1 },  
           adq_pedido_cotizacion_id  => { type => 'integer', not_null => 1 },  
           cat_nivel2_id             => { type => 'integer', not_null => 1 },
@@ -28,6 +29,26 @@ __PACKAGE__->meta->setup(
     ],
     
         relationships =>
+
+          id                            => { type => 'integer', not_null => 1 },  
+          adq_pedido_cotizacion_id      => { type => 'integer', not_null => 1 },  
+          cat_nivel2_id                 => { type => 'integer', not_null => 1 },
+          autor                         => { type => 'varchar', length => 255, not_null => 1},
+          titulo                        => { type => 'varchar', length => 255, not_null => 1},
+          lugar_publicacion             => { type => 'varchar', length => 255, not_null => 1},
+          editorial                     => { type => 'varchar', length => 255, not_null => 1},
+          fecha_publicacion             => { type => 'varchar'},
+          coleccion                     => { type => 'varchar', length => 255, not_null => 1},
+          isbn_issn                     => { type => 'varchar', length => 45, not_null => 1},
+          cantidad_ejemplares           => { type => 'integer', length => 5, not_null => 1 },  
+          precio_unitario               => { type => 'float', length => 5, not_null => 1},
+          adq_recomendacion_detalle_id  => { type => 'varchar', length => 255, not_null => 1},
+          nro_renglon                   => { type => 'integer', length => 11, not_null => 1 },           
+
+    ],
+    
+     relationships =>
+
     [
       ref_adq_pedido_cotizacion => 
       {
@@ -35,6 +56,7 @@ __PACKAGE__->meta->setup(
          key_columns => {adq_pedido_cotizacion_id => 'id' },
          type        => 'one to one',
        },
+
       
       ref_adq_recomendacion_detalle => 
       {
@@ -47,12 +69,37 @@ __PACKAGE__->meta->setup(
 
 
 
+
+    ],
+    
+
     primary_key_columns => [ 'id' ],
     unique_key => ['id'],
 
 );
 
 #----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
+
+sub addPedidoCotizacionDetalle{
+    my ($self) = shift;
+    my ($params) = @_;
+    
+    $self->setAdqPedidoCotizacionId($params->{'id_pedido_recomendacion'});
+    $self->setCatNivel2Id($params->{'at_nivel2_id'});
+    $self->setAutor($params->{'autor'});
+    $self->setTitulo($params->{'titulo'});
+    $self->setLugarPublicacion($params->{'lugar_publicacion'});
+    $self->setEditorial($params->{'editorial'});
+    $self->setFechaPublicacion($params->{'fecha_publicacion'});
+    $self->setPrecioUnitario('0.0');    
+    $self->setColeccion($params->{'coleccion'});
+    $self->setIsbnIssn($params->{'isbn_issn'});
+    $self->setCantidadEjemplares($params->{'cantidad_ejemplares'});
+    $self->setAdqRecomendacionDetalleId($params->{'adq_recomendacion_detalle'});
+    $self->setNroRenglon($params->{'nro_renglon'});    
+ 
+    $self->save();
+}
 
 
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
@@ -61,11 +108,16 @@ __PACKAGE__->meta->setup(
 
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 
+sub setNroRenglon {
+    my ($self) = shift;
+    my ($nro_renglon) = @_;
+    $self->nro_renglon($nro_renglon);
+}
+
 sub setAdqPedidoCotizacionId{
     my ($self) = shift;
-    my ($recomendacion) = @_;
-    utf8::encode($recomendacion);
-    $self->adq_recomendacion_id($recomendacion);
+    my ($pedido_cotizacion_id) = @_;
+    $self->adq_pedido_cotizacion_id($pedido_cotizacion_id);
 }
 
 sub setCatNivel2Id{
@@ -153,7 +205,15 @@ sub setCantidadEjemplares {
 sub setPrecioUnitario {
     my ($self) = shift;
     my ($precio_unitario) = @_;
-    $self->cantidad_ejemplares($precio_unitario);
+    $self->precio_unitario($precio_unitario);
+}
+
+
+
+sub setAdqRecomendacionDetalleId {
+    my ($self) = shift;
+    my ($adq_recomendacion_detalle_id) = @_;
+    $self->adq_recomendacion_detalle_id($adq_recomendacion_detalle_id);
 }
 
 
@@ -164,7 +224,7 @@ sub getId{
 
 sub getAdqPedidoCotizacionId{
     my ($self) = shift;
-    return ($self->adq_recomendacion_id);
+    return ($self->adq_pedido_cotizacion_id);
 }
 
 sub getCatNivel2Id{
@@ -219,7 +279,17 @@ sub getPrecioUnitario{
 
 sub getRenglon{
     my ($self) = shift;
+
     return ($self->nro_renglon);
 }
             
+
+    return ($self->adq_recomendacion_detalle);
+} 
+
+sub getNroRenglon  {
+    my ($self) = shift;
+    return ($self->nro_renglon);
+}            
+
 #----------------------------------- FIN - GETTERS y SETTERS------------------------------------------------

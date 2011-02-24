@@ -18,6 +18,9 @@ use vars qw(@EXPORT @ISA);
     &getRecomendacionDetalle;
     &editarCantidadEjemplares;
 
+
+    &getRecomendacionPorId;
+
 );
 
 =item
@@ -148,6 +151,7 @@ sub getRecomendacionDetallePorId{
 }
 
 
+
 sub getRecomendacionDetalle{
 
     my ($params) = @_;
@@ -160,6 +164,22 @@ sub getRecomendacionDetalle{
 
     if( scalar($recomendacion) > 0){
         return ($recomendacion);
+
+=item
+    Recupera un registro de recomendacion
+    Retorna un objeto o 0 si no existe
+=cut
+sub getRecomendacionPorId{
+
+    my ($params, $db) = @_;
+    my $recomendacion     = C4::Modelo::AdqRecomendacion::Manager->get_adq_recomendacion(   
+                                                                    db => $db,
+                                                                    query   => [ id  => { eq => $params} ],
+                                                                );
+                                                                
+    if( scalar($recomendacion) > 0){
+        return ($recomendacion->[0]);
+
     }else{
         return 0;
     }
