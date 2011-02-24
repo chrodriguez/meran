@@ -73,15 +73,15 @@ sub getPresupuestosPedidoCotizacion{
 
 sub getAdqPedidoCotizacionDetalle{
     my ( $id_pedido, $db) = @_;
-    
+ 
     my @results; 
 
     $db = $db || C4::Modelo::AdqPedidoCotizacionDetalle->new()->db;
 
     my $detalle_array_ref = C4::Modelo::AdqPedidoCotizacionDetalle::Manager->get_adq_pedido_cotizacion_detalle(   
                                                                     db => $db,
+                                                                    query   => [ adq_pedido_cotizacion_id => { eq => $id_pedido } ],
                                                                     sort( nro_renglon ),
-                                                                    query   => [ adq_pedido_cotizacion_id => { eq => $id_pedido} ],
                                                                 );
       
      foreach my $detalle_pres (@$detalle_array_ref) {
@@ -196,6 +196,7 @@ sub getPedidosCotizacionConDetalle{
     my $db                                      = C4::Modelo::AdqPedidoCotizacionDetalle->new()->db;
     my $pedidos_cotizacion_array_ref            = C4::Modelo::AdqPedidoCotizacionDetalle::Manager->get_adq_pedido_cotizacion_detalle(   
                                                                     db => $db,
+                                                                    sort(nro_renglon),
                                                                     require_objects     => ['ref_adq_pedido_cotizacion'],
                                                                 );
 

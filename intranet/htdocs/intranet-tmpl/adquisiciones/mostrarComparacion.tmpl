@@ -1,21 +1,25 @@
 <fieldset>
-             
-                            [% FOREACH det IN detalle_pedido %]
-                                    <li>DATOS DEL EJEMPLAR</li>
-                                    [% IF det.getAdqRecomendacionDetalle %]
-                                          <li>Titulo:[%  det.getAdqRecomendacionDetalle.getTitulo  %] - Autor:[%  det.getAdqRecomendacionDetalle.getAutor  %]</li>
-                                    [% ELSE %] 
-                                          <li><strong>Titulo:[%  det.geTitulo  %] - Autor:[%  det.getAutor  %]</strong></li>
-                                    [% END %]
-                                   
-                                    [% FOREACH pres IN presupuestos %]
-                                            
-                                            <li><strong>[% pres.precio_unitario %]</strong></li>
-                                            <li><strong>[% pres.cant %]</strong></li>
-                                            <li><strong>[% pres.total %]</strong></li>
-                                    [% END %]                    
-                            [% END %]
+                            [% nro_renglon = 1 %]
 
+                           
+                            [% FOREACH det IN detalle_pedido %]
+                                     <strong>[% detalle_pedido.$nro_renglon.nro_renglon %]</strong>
+                                     <strong>[% det.nro_renglon %]</strong>
+                                     <strong>[% det.autor %]</strong>
+                                     <strong>[% det.titulo %]</strong>
+                                    
+                                    [% FOREACH pres IN presupuestos %]
+                                                  <li>[% pres.cant%] - [% pres.precio_unitario %] - [% pres.total %]</li> 
+                                    [% END %]
+                                    
+                                    [% nro_renglon = nro_renglon + 1 %] 
+                            [% END %]
          
           
 </fieldset>
+
+
+
+
+
+                  

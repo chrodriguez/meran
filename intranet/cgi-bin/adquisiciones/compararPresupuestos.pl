@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# use strict;
+use strict;
 use C4::AR::Auth;
 use C4::AR::Utilidades;
 use CGI;
