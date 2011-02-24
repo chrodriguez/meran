@@ -1,0 +1,110 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<fieldset id="datos_pedido_cotizacion">
+    <legend class="titulo_legend">[% "Pedido De Cotizaci&oacute;n" | i18n %]</legend>
+        <table id="tablaPedidoCotizacion" name="tabla" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 >
+        <thead>
+            <tr class="titulo_tabla_resultado">
+                <th>
+                    [% "Autor" | i18n %]
+                </th>
+                <th>
+                    [% "Titulo" | i18n %]
+                </th>
+                <th>
+                    [% "Lugar Publicacion" | i18n %]
+                </th>
+                <th>
+                    [% "Editorial" | i18n %]
+                </th>
+                <th>
+                    [% "Fecha Publicacion" | i18n %]
+                </th>
+                <th>
+                    [% "Coleccion" | i18n %]
+                </th>
+                <th>
+                    [% "ISBN/ISSN" | i18n %]
+                </th>
+                <th>
+                    [% "Cantidad Ejemplares" | i18n %]
+                </th>
+
+            </tr>
+        </thead>
+        <tbody> 
+        [% FOREACH pedido IN pedido_cotizacion %]
+        [% IF edit %]
+            <tr align="center">
+                <td align="right" >
+                    <input type="text"  value="[% pedido.getAutor %]"> 
+                <td align="right" >
+                    <input type="text" value="[% pedido.getTitulo %]">  
+                </td>
+                <td align="right" >
+                    <input type="text" value="[% pedido.getLugarPublicacion %]">  
+                </td>
+                <td align="right" >
+                    <input type="text" value="[% pedido.getEditorial %]">  
+                </td>
+                <td align="right" >
+                    <input type="text" value="[% pedido.getFechaPublicacion %]">  
+                </td>
+                <td align="right" >
+                    <input type="text" value="[% pedido.getColeccion %]">  
+                </td>
+                <td align="right" >
+                    <input type="text" value="[% pedido.getIsbnIssn %]">  
+                </td>
+                <td align="right" >
+                    <input type="text" value="[% pedido.getCantidadEjemplares %]">  
+                </td>
+            </tr>  
+        [% ELSE %]
+            <tr align="center">
+                <td align="right" >
+                    <p>[% pedido.getAutor %]</p> 
+                <td align="right" >
+                    <p>[% pedido.getTitulo %]</p>  
+                </td>
+                <td align="right" >
+                    <p>[% pedido.getLugarPublicacion %]</p>  
+                </td>
+                <td align="right" >
+                    <p>[% pedido.getEditorial %]</p>  
+                </td>
+                <td align="right" >
+                    <p>[% pedido.getFechaPublicacion %]</p>  
+                </td>
+                <td align="right" >
+                    <p>[% pedido.getColeccion %]</p>  
+                </td>
+                <td align="right" >
+                    <p>[% pedido.getIsbnIssn %]</p>  
+                </td>
+                <td align="right" >
+                    <p>[% pedido.getCantidadEjemplares %]</p>  
+                </td>
+            </tr>          
+        [% END %]
+        [% END %]
+        </tbody>   
+        </table>
+        
+        [% IF edit %]
+        [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Agregar Nuevo Pedido' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "",
+                    ) ;
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Aceptar' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "();",
+                    ) ;                    
+        [% END %]
+        [% END %]
+</fieldset>
+
+[% INCLUDE "intranet-bottom.inc" %]

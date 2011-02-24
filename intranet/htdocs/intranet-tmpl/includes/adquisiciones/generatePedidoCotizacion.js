@@ -105,7 +105,7 @@ function updateAddPedidoCotizacion(responseText){
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
     
-    //location.href = '/cgi-bin/koha/adquisiciones/listPedidoCotizacion.pl'
+    location.href = '/cgi-bin/koha/adquisiciones/listPedidoCotizacion.pl'
 
 }
 
