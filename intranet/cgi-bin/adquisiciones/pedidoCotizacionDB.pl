@@ -41,3 +41,10 @@ if($tipoAccion eq "AGREGAR_PEDIDO_COTIZACION"){
     print $infoOperacionJSON;
                            
 }
+
+elsif($tipoAccion eq "PRESUPUESTAR"){
+
+    # devolver el combo de proveedores
+
+
+}

@@ -1,6 +1,31 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+        $('#presupuesto').hide()  
+   });
+   
+   // TODO llamamos por ajax al combo de proveedores para presupuestar el pedido de cotizacion
+   
+   function presupuestar(){
+        objAH                       = new AjaxHelper(updatePresupuestar)
+        objAH.url                   = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
+        objAH.debug                 = true
+
+        objAH.pedido_cotizacion_id = $('#pedido_cotizacion_id').val()
+
+          
+        objAH.tipoAccion            = 'PRESUPUESTAR'
+        objAH.sendToServer()  
+   
+   }
+   
+   function updatePresupuestar(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+}
 
 </script>
 
@@ -52,6 +77,13 @@
                                                           );
                              [% END %]
                      </div>
+                              [% PERL %]
+                              print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Presupuestar Pedido' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "presupuestar()",
+                    ) ;
+                             [% END %]
                   </td>
             </tr>  
             [% i = i + 1 %]      
@@ -59,6 +91,10 @@
     </tbody>   
     </table>
 </fieldset>
+
+<input type="hidden" value="[% pedido_cotizacion.getId %]" id="pedido_cotizacion_id" />
+
+<div id="presupuesto"></div>
 
 
 
