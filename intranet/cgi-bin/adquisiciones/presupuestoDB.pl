@@ -174,13 +174,13 @@ elsif($tipoAccion eq "AGREGAR_PRESUPUESTO"){
    
     my $message;
 
-    # recorremos los proveedores seleccionados y les agregamos el presupuesto, y adentro el presupuesto_detalle
+    # recorremos los proveedores seleccionados y les agregamos el presupuesto
     for(my $i=0;$i<scalar(@{$obj->{'proveedores_array'}});$i++){
     
         my %params = {};
         
         $params{'id_proveedor'}           = $obj->{'proveedores_array'}->[$i];
-        $params{'recomendaciones_array'}  = $obj->{'recomendaciones_array'};
+        $params{'pedido_cotizacion_id'}   = $obj->{'pedido_cotizacion_id'};
         
         $message = C4::AR::Presupuestos::addPresupuesto(\%params);   
     }

@@ -6,32 +6,28 @@
  *
  */ 
 
-
 /******************************************************** AGREGAR PRESUPUESTO **************************************************/
 
 var arreglo                  = new Array() //global, arreglo con las recomendaciones seleccionadas
 var array_proveedores        = new Array() //global, arreglo de ids de proveedores a generar presupuesto
-var array_recomendaciones    = new Array() //global, arreglo de ids de recomendaciones_detalle
 
-function generatePresupuesto(){
+function generatePresupuesto(pedido_cotizacion_id){
 
     var proveedores = getProveedoresSelected()
     if(proveedores == ""){
         jConfirm(POR_FAVOR_SELECCIONE_PROVEEDORES_A_PRESUPUESTAR, function(){ })
         return false
     }
-    if(checkSeleccionados(true)){
 
-        objAH                       = new AjaxHelper(updateAgregarPresupuesto)
-        objAH.url                   = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl'
-        objAH.debug                 = true
+    objAH                       = new AjaxHelper(updateAgregarPresupuesto)
+    objAH.url                   = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl'
+    objAH.debug                 = true
 
-        objAH.proveedores_array     = getProveedoresSelected()
-        objAH.recomendaciones_array = getRecomendacionesSelected()
+    objAH.proveedores_array     = getProveedoresSelected()
+    objAH.pedido_cotizacion_id  = pedido_cotizacion_id
           
-        objAH.tipoAccion            = 'AGREGAR_PRESUPUESTO'
-        objAH.sendToServer()  
-    }
+    objAH.tipoAccion            = 'AGREGAR_PRESUPUESTO'
+    objAH.sendToServer()  
 }
 
 function updateAgregarPresupuesto(responseText){
@@ -51,18 +47,6 @@ function getProveedoresSelected(){
     return array_proveedores
 }
 
-function getRecomendacionesSelected(){
-    var i = 0
-    $('.activo').each(function(){ 
-        if($(this).attr('checked') == true){
-            $(this).attr('name') // activo1 , activo2 , etc 
-            var pos = $(this).attr('name').charAt(6)
-            array_recomendaciones[i] = $('#id_recomendacion_detalle'+pos).val()
-            i++
-        }
-    })  
-    return array_recomendaciones
-}
 
 /************************************************************ FIN - AGREGAR PRESUPUESTO ******************************************/
 
@@ -70,33 +54,9 @@ function getRecomendacionesSelected(){
 
 
 
-/************************************************************ AGREGAR PEDIDO COTIZACION ************************************************/
-
-
-function addPedidoCotizacion(){
-  
-    objAH                           = new AjaxHelper(updateAddPedidoCotizacion)
-    objAH.url                       = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
-    objAH.debug                     = true
-
-      
-    objAH.tipoAccion                = 'AGREGAR_PEDIDO_COTIZACION'
-    objAH.sendToServer()     
-}
-
-function updateAddPedidoCotizacion(){
-
-}
-
-/************************************************************ FIN - AGREGAR PEDIDO COTIZACION ******************************************/
-
-
-
-
-
 /************************************************************ EXPORTACIONES  *********************************************/
 
-function editar(){
+/*function editar(){
     $('.editable').attr('disabled', false)
 } 
 
@@ -150,6 +110,6 @@ function submitFormDOC(form_id){
         $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportDOC' value='doc' />")
         if(checkSeleccionados(true)) { $('#' + form_id).submit() }
         $('.editable').attr('disabled', true) 
-}
+}*/
 
 /************************************************************ FIN - EXPORTACIONES ********************************************/

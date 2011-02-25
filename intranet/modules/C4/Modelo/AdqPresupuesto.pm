@@ -17,7 +17,7 @@ __PACKAGE__->meta->setup(
         proveedor_id                    => { type => 'integer', not_null => 1},
         fecha                           => { type => 'varchar', length => 255, not_null => 1},
         ref_estado_presupuesto_id       => { type => 'integer', not_null => 1},
-       
+        ref_pedido_cotizacion_id        => { type => 'integer', not_null => 1},       
     ],
 
 
@@ -34,6 +34,13 @@ __PACKAGE__->meta->setup(
       {
         class       => 'C4::Modelo::RefEstadoPresupuesto',
         key_columns => {ref_estado_presupuesto_id => 'id' },
+        type        => 'one to one',
+      },
+      
+      ref_pedido_cotizacion => 
+      {
+        class       => 'C4::Modelo::AdqPedidoCotizacion',
+        key_columns => {ref_pedido_cotizacion_id => 'id' },
         type        => 'one to one',
       },
 
@@ -53,7 +60,8 @@ sub addPresupuesto{
 
     $self->setProveedorId($params->{'id_proveedor'});
     $self->setRefEstadoPresupuestoId(1);
-
+    $self->setRefPedidoCotizacionId($params->{'pedido_cotizacion_id'});
+    
     $self->save();
 }
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
@@ -82,6 +90,13 @@ sub setRefEstadoPresupuestoId{
     $self->ref_estado_presupuesto_id($estado);
 }
 
+sub setRefPedidoCotizacionId{
+    my ($self) = shift;
+    my ($pedido_cotizacion) = @_;
+    utf8::encode($pedido_cotizacion);
+    $self->ref_pedido_cotizacion_id($pedido_cotizacion);
+}
+
 sub getId{
     my ($self) = shift;
     return ($self->id);
@@ -100,4 +115,9 @@ sub getProveedorId{
 sub getRefEstadoPresupuestoId{
     my ($self) = shift;
     return ($self->ref_estado_presupuesto_id);
+}
+
+sub getRefPedidoCotizacionId{
+    my ($self) = shift;
+    return ($self->ref_pedido_cotizacion_id);
 }

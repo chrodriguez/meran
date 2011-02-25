@@ -83,20 +83,21 @@ function getCantidades(array_ids){
 
 
 function addPedidoCotizacion(){
-  
-    objAH                           = new AjaxHelper(updateAddPedidoCotizacion)
-    objAH.url                       = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
-    objAH.debug                     = true
-    
-    // se mandan los ids de las recomendacion_detalle SELECCIONADAS. 
-    // Para agregar un pedido_cotizacion_detalle por c/u.
-    // Tambien se mandan las cantidades que pueden ser nuevas.
+    if(checkSeleccionados(true)){
+        objAH                           = new AjaxHelper(updateAddPedidoCotizacion)
+        objAH.url                       = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
+        objAH.debug                     = true
+        
+        // se mandan los ids de las recomendacion_detalle SELECCIONADAS. 
+        // Para agregar un pedido_cotizacion_detalle por c/u.
+        // Tambien se mandan las cantidades que pueden ser nuevas.
 
-    objAH.recomendaciones_array     = getRecomendacionesSelected()
-    objAH.cantidades_array          = getCantidades(getRecomendacionesSelected())
-      
-    objAH.tipoAccion                = 'AGREGAR_PEDIDO_COTIZACION'
-    objAH.sendToServer()     
+        objAH.recomendaciones_array     = getRecomendacionesSelected()
+        objAH.cantidades_array          = getCantidades(getRecomendacionesSelected())
+          
+        objAH.tipoAccion                = 'AGREGAR_PEDIDO_COTIZACION'
+        objAH.sendToServer()  
+    }   
 }
 
 function updateAddPedidoCotizacion(responseText){

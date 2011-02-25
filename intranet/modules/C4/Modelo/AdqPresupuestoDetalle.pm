@@ -15,10 +15,10 @@ __PACKAGE__->meta->setup(
     columns => [
         id                                 => { type => 'integer', not_null => 1 },
         adq_presupuesto_id                 => { type => 'integer', not_null => 1 },
-        adq_recomendacion_detalle_id       => { type => 'varchar', length => 255, not_null => 1},
         precio_unitario                    => { type => 'float', not_null => 1},
         cantidad                           => { type => 'integer', not_null => 1},
         seleccionado                       => { type => 'integer', length => 11, not_null => 1 },
+        nro_renglon                        => { type => 'integer', length => 11, not_null => 1 },
     ],
 
 
@@ -30,14 +30,6 @@ __PACKAGE__->meta->setup(
          key_columns => {adq_presupuesto_id => 'id' },
          type        => 'one to one',
        },
-      
-      ref_recomendacion_detalle => 
-      {
-        class       => 'C4::Modelo::AdqRecomendacionDetalle',
-        key_columns => {adq_recomendacion_detalle_id => 'id' },
-        type        => 'one to one',
-      },
-
     ],
     
     primary_key_columns => [ 'id' ],
@@ -52,7 +44,7 @@ sub addPresupuestoDetalle{
     my ($params) = @_;
 
     $self->setAdqPresupuestoId($params->{'id_presupuesto'});
-    $self->setAdqRecomendacionDetalleId($params->{'id_recomendacion_detalle'});
+    $self->setNroRenglon($params->{'nro_renglon'});
     $self->setPrecioUnitario(0);
     $self->setCantidad($params->{'cantidad_ejemplares'});
     $self->setSeleccionado(1);
@@ -72,11 +64,10 @@ sub setAdqPresupuestoId {
     $self->adq_presupuesto_id($presupuesto);
 }
 
-sub setAdqRecomendacionDetalleId  {
+sub setNroRenglon  {
     my ($self) = shift;
-    my ($recomendacion_detalle) = @_;
-    utf8::encode($recomendacion_detalle);
-    $self->adq_recomendacion_detalle_id($recomendacion_detalle);
+    my ($nro_renglon) = @_;
+    $self->nro_renglon($nro_renglon);
 }
 
 sub setPrecioUnitario {
@@ -111,9 +102,9 @@ sub getAdqPresupuestoId{
     return ($self->adq_presupuesto_id);
 }
 
-sub getAdqRecomendacionDetalleId {
+sub getNroRenglon {
     my ($self) = shift;
-    return ($self->adq_recomendacion_detalle_id);
+    return ($self->nro_renglon);
 }
 
 sub getPrecioUnitario  {

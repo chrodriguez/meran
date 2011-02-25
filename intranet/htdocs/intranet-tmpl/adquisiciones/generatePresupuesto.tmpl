@@ -1,5 +1,3 @@
-<!-- <script type="text/javascript"src="/intranet-tmpl/includes/adquisiciones/generatePresupuesto.js"></script> -->
-
 <fieldset id="datos_proveedor">
 <legend class="titulo_legend">[% "Proveedores a Presupuestar" | i18n %]</legend>
     <ul>
@@ -11,7 +9,7 @@
             print C4::AR::Filtros::to_Button( 
                                                 text    =>  "[% 'Aceptar' | i18n %]",
                                                 boton   =>  "boton_buscar",
-                                                onClick =>  "generatePresupuesto();",
+                                                onClick =>  "generatePresupuesto([% pedido_cotizacion_id %]);",
                     ) ;
         [% END %]  
     </ul>
