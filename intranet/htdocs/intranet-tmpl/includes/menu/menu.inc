@@ -343,22 +343,6 @@
                  <ul>
                      <li>
                          [% PERL %]
-                             print C4::AR::Filtros::link_to( text =>     "[% 'Links KOHA - MARC DB' | i18n %]",
-                                                             url =>      "/cgi-bin/koha/admin/catalogo/MARC/koha2marclinks.pl",
-                                                             title =>    "[% 'Links KOHA - MARC DB' | i18n %]"
-                                                         ) ;
-                         [% END %]
-                     </li>
-                     <li>
-                         [% PERL %]
-                             print C4::AR::Filtros::link_to( text =>     "[% 'Estructuras de MARC' | i18n %]",
-                                                             url =>      "/cgi-bin/koha/admin/catalogo/MARC/marctagstructure.pl",
-                                                             title =>    "[% 'Estructuras de MARC' | i18n %]"
-                                                         ) ;
-                         [% END %]
-                     </li>
-                     <li>
-                         [% PERL %]
                              print C4::AR::Filtros::link_to( text =>     "[% 'Servidores Z39.50' | i18n %]",
                                                              url =>      "/cgi-bin/koha/admin/catalogo/MARC/z3950servers.pl",
                                                              title =>    "[% 'Servidores Z39.50' | i18n %]"
