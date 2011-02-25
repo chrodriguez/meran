@@ -1,20 +1,31 @@
 <fieldset>
-                            [% nro_renglon = 1 %]
-
-                           
-                            [% FOREACH det IN detalle_pedido %]
-                                     <strong>[% detalle_pedido.$nro_renglon.nro_renglon %]</strong>
-                                     <strong>[% det.nro_renglon %]</strong>
-                                     <strong>[% det.autor %]</strong>
-                                     <strong>[% det.titulo %]</strong>
+                   
+                              [% FOREACH pres. %]     
+                                <fieldset>   
+                                     <li>Renglon: [% detalle.nro_renglon %]</li>
+                                     <li>Autor: [% pres.detalle.autor %]</li>
+                                     <li>Titulo: [% pres.detalle.titulo %]</li>
+                      
+                                </fieldset> 
+                         
+                                     [% FOREACH p IN pres.presupuesto %]
+                                         
+                                                <li>[% p.proveedor %] </li>
+                                           
+                                           <li>[% IF p.precio_unitario == 0 %]
+                                                             <span>No cotiza</span>
+                                               [% ELSE %]
+                                                             <span>[% p.cant%] -</span> [% p.precio_unitario %] - [% p.total %]</span>
+                                               [% END %]       
+                                                                            </li> 
                                     
-                                    [% FOREACH pres IN presupuestos %]
-                                                  <li>[% pres.cant%] - [% pres.precio_unitario %] - [% pres.total %]</li> 
                                     [% END %]
+                                          
+                                [% END %]
                                     
-                                    [% nro_renglon = nro_renglon + 1 %] 
-                            [% END %]
-         
+                             
+                           
+                       
           
 </fieldset>
 

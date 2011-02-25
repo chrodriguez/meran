@@ -36,72 +36,76 @@ if($tipoAccion eq "MOSTRAR_PRESUPUESTOS_PEDIDO"){
 
        
         my $presupuestos = C4::AR::PedidoCotizacion::getPresupuestosPedidoCotizacion($id_pedido);
-
-        C4::AR::Debug::debug("PRES PARA PEDIDO". scalar(@$presupuestos));
+# 
+#         C4::AR::Debug::debug("CANTIDAD DE PRESUPUESTOS PARA PEDIDO".$id_pedido."= ".scalar(@$presupuestos));
+#         C4::AR::Utilidades::printARRAY($presupuestos);
 # -----------------------------------------------------------------------------------------------------------
 
 #------------------ Se Recuperan los datos del pedido de cotizacion------------------------------------------
 
         my $detalle_pedido = C4::AR::PedidoCotizacion::getAdqPedidoCotizacionDetalle($id_pedido);
         
-        C4::AR::Debug::debug("DETALES PEDIDO:". scalar(@$detalle_pedido));
-
-        
+#         C4::AR::Debug::debug("CANTIDAD DE DETALLES PARA PRESUPUESTOS");
+#         C4::AR::Utilidades::printARRAY($detalle_pedido);
+#         C4::AR::Utilidades::printHASH(@$detalle_pedido[0]);
+#         C4::AR::Utilidades::printHASH(@$detalle_pedido[1]);
 # -----------------------------------------------------------------------------------------------------------
 
         
 # -----------------Se recuperan los detalles de cada presupuesto obtenido anteriormente----------------------
 
-     
-#         
-#         foreach my $pres (@$presupuestos){           
-#                     my @array_presupuestos;
-#                     $detalle_presupuesto= C4::AR::Presupuestos::getAdqPresupuestoDetalle($pres->getId);
-#                     foreach my $renglon (@$detalle_pedido){
-#                         
-#                                    my %hash_presupuesto;
-#                                    $hash_presupuesto{'proveedor'} = $pres->ref_proveedor->id;
-#                                    $hash_presupuesto{'cant'} = @$detalle_presupuesto[$renglon->getRenglon]->getCantidad;
-#                                    $hash_presupuesto{'precio_unitario'} = @$detalle_presupuesto[$renglon->getRenglon]->getPrecioUnitario;
-#                                    $hash_presupuesto{'total'} = (@$detalle_presupuesto[$renglon->getRenglon]->getCantidad) * (@$detalle_presupuesto[$renglon->getRenglon]->getPrecioUnitario);
-#                                    push(@array_presupuestos, \%hash_presupuesto);
-#                     }             
-#                     
-#          }
-#                    
-        
         
 #         my $detalle_presupuesto;
         my $detalles;
+#         my @resultado;
         my @resultado;
-        my $renglon= 0;
+        my $renglon=0;
       
         foreach my $det (@$detalle_pedido){           
-                   
+                    
+#                     $renglon= $det->getNroRenglon;
+                    C4::AR::Debug::debug($renglon);
+                    
+                    my %hash_detalle;
                     my @array_presupuestos;
+                    
+                    $hash_detalle{'renglon'} = $renglon + 1;
+                    
+                    if($det->ref_adq_recomendacion_detalle){    
+                              $hash_detalle{'titulo'} = $det->ref_adq_recomendacion_detalle->getTitulo;
+                              $hash_detalle{'autor'} = $det->ref_adq_recomendacion_detalle->getAutor;
+                    } else {
+                              $hash_detalle{'titulo'} = $det->getTitulo;
+                              $hash_detalle{'autor'} = $det->getAutor;
+                    }   
+                    
+                    $resultado{'detalle'}=\%hash_detalle; 
+                  
                     foreach my $pres (@$presupuestos){
                          
                                   my $detalle_presupuesto= C4::AR::Presupuestos::getAdqPresupuestoDetalle($pres->getId);
-                                   
-                                
-                              
+                                    
+                                   C4::AR::Debug::debug($renglon);
                                   my %hash_presupuesto;
-#                                   $detalle_presupuesto =$det_pres;
                                 
-                                  $hash_presupuesto{'proveedor'} = $pres->ref_proveedor->id;
+                                  $hash_presupuesto{'proveedor'} = $pres->ref_proveedor->getNombre." ".$pres->ref_proveedor->getApellido; 
                                   $hash_presupuesto{'cant'} = @$detalle_presupuesto[$renglon]->getCantidad;
                                   $hash_presupuesto{'precio_unitario'} = @$detalle_presupuesto[$renglon]->getPrecioUnitario;
                                   $hash_presupuesto{'total'} = (@$detalle_presupuesto[$renglon]->getCantidad) * (@$detalle_presupuesto[$renglon]->getPrecioUnitario);
-                                  push(@array_presupuestos, \%hash_presupuesto);
+                                  $resultado{'presup'}=\%hash_detalle;
+#                                   push(@array_presupuestos, \%hash_presupuesto);
                                 
                          
-                      }       
-                      push(@resultado,\@array_presupuestos);  
-                      $renglon= $renglon + 1;
+                     }       
+#                     $resultado{'presupuesto'}=\@array_presupuestos;  
+                     push(@resultado,\%presupuesto);  
+                     $renglon= $renglon + 1;
                            
         }
                    
-        C4::AR::Utilidades::printARRAY(@resultado);
+
+ 
+       C4::AR::Utilidades::printHASH(%resultado->{'detalle'});
 
         $t_params->{'detalle_pedido'} = $detalle_pedido;
 #         $t_params->{'detalle_pres'} = \%hash_detalle_pres;

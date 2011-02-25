@@ -122,7 +122,7 @@ sub getAdqPresupuestoDetalle{
     my $detalle_array_ref = C4::Modelo::AdqPresupuestoDetalle::Manager->get_adq_presupuesto_detalle(   
                                                                     db => $db,
                                                                     query   => [ adq_presupuesto_id => { eq => $id_presupuesto} ],
-                                                                    sort(nro_renglon),
+                                                                    sort_by => 'nro_renglon',
                                                                 );
       
      foreach my $detalle_pres (@$detalle_array_ref) {

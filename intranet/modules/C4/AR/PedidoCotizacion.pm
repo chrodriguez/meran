@@ -81,7 +81,7 @@ sub getAdqPedidoCotizacionDetalle{
     my $detalle_array_ref = C4::Modelo::AdqPedidoCotizacionDetalle::Manager->get_adq_pedido_cotizacion_detalle(   
                                                                     db => $db,
                                                                     query   => [ adq_pedido_cotizacion_id => { eq => $id_pedido } ],
-                                                                    sort( nro_renglon ),
+                                                                    sort_by => 'nro_renglon',
                                                                 );
       
      foreach my $detalle_pres (@$detalle_array_ref) {
