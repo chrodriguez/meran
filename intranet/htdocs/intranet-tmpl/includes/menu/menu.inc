@@ -516,14 +516,6 @@
 		                    </li>
 		                    <li>
 		                                [% PERL %]
-		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de Documento' | i18n %]",
-		                                                                    url =>      "/cgi-bin/koha/admin/itemtypes.pl",
-		                                                                    title =>    "[% 'Tipos de Documento' | i18n %]"
-		                                                                ) ;
-		                                [% END %]
-		                    </li>
-		                    <li>
-		                                [% PERL %]
 		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Feriados' | i18n %]",
 		                                                                    url =>      "/cgi-bin/koha/admin/feriados.pl",
 		                                                                    title =>    "[% 'Feriados' | i18n %]"
