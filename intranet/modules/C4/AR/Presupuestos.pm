@@ -12,6 +12,7 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(  
     &getAdqPresupuestoDetalle;
+    $getAdqRenglonPresupuestoDetalle;
     &actualizarPresupuesto;
     &getAdqPresupuestos;
     &getPresupuestoPorID;
@@ -106,7 +107,7 @@ sub getPresupuestoPorID{
 
 
 
-
+# -------- Retorna todos los detalles para el presupuesto con id $id_presupuesto ----------------------------
 
 sub getAdqPresupuestoDetalle{
     my ( $id_presupuesto, $db) = @_;
@@ -132,6 +133,27 @@ sub getAdqPresupuestoDetalle{
     }
 }
 
+# -----------------------------------------------------------------------------------------------------------
+
+# -------- Retorna el renglon nro: $nro_renglon para el presupuesto con id $id_presupuesto ------------------
+
+
+sub getAdqRenglonPresupuestoDetalle{
+    my ( $id_presupuesto, $nro_renglon ,$db) = @_;
+    my @results; 
+
+    $db = $db || C4::Modelo::AdqPresupuestoDetalle->new()->db;
+
+    my $renglon_ref = C4::Modelo::AdqPresupuestoDetalle::Manager->get_adq_presupuesto_detalle(   
+                                                                    db => $db,
+                                                                    query   => [ adq_presupuesto_id => { eq => $id_presupuesto}, nro_renglon => { eq => $nro_renglon} ],
+#                                                                
+                                                                );
+    return $renglon_ref->[0];
+    
+}
+
+# ------------------------------------------------------------------------------------------------------------
 
 sub actualizarPresupuesto{
     

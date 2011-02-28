@@ -2054,7 +2054,7 @@ sub generarComboPedidosCotizacion {
     my %select_pedidos;
     my $cotizaciones  = &C4::AR::PedidoCotizacion::getAdqPedidosCotizacion();
 
-    push (@select_pedidos_array, '');
+#     push (@select_pedidos_array, '');
       
 #     C4::AR::Debug::debug("RECOMENDACIONES:".$recomendaciones);
 
