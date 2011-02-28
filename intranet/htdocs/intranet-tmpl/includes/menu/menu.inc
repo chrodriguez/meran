@@ -350,6 +350,30 @@
                          [% END %]
                      </li>
                       <li>
+                          [% PERL %]
+                              print C4::AR::Filtros::link_to( text =>     "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]",
+                                                              url =>      "/cgi-bin/koha/catalogacion/estructura/estructuraCatalo.pl", 
+                                                              title =>    "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]"
+                                                          ) ;
+                          [% END %]
+                      </li>
+                      <li>
+                          [% PERL %]
+                              print C4::AR::Filtros::link_to( text =>     "[% 'Visualizaci&oacute;n del OPAC' | i18n %]",
+                                                              url =>      "/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpac.pl", 
+                                                              title =>    "[% 'Visualizaci&oacute;n del OPAC' | i18n %]"
+                                                          ) ;
+                          [% END %]
+                      </li>
+                      <li>
+                          [% PERL %]
+                              print C4::AR::Filtros::link_to( text =>     "[% 'Visualizaci&oacute;n de INTRANET' | i18n %]",
+                                                              url =>      "/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntra.pl", 
+                                                              title =>    "[% 'Visualizaci&oacute;n del OPAC' | i18n %]"
+                                                          ) ;
+                          [% END %]
+                      </li>
+                      <li>
                                   [% PERL %]
                                       print C4::AR::Filtros::link_to( text =>     "[% 'Importar' | i18n %]",
                                                                       url =>      "/cgi-bin/koha/herramientas/importar.pl", 
@@ -384,30 +408,6 @@
 		                             print C4::AR::Filtros::link_to( text =>     "[% 'Mapeo KOHA a MARC' | i18n %]",
 		                                                             url =>      "/cgi-bin/koha/catalogacion/kohaToMARC.pl", 
 		                                                             title =>    "[% 'Mapeo KOHA a MARC' | i18n %]"
-		                                                         ) ;
-		                         [% END %]
-		                     </li>
-		                     <li>
-		                         [% PERL %]
-		                             print C4::AR::Filtros::link_to( text =>     "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]",
-		                                                             url =>      "/cgi-bin/koha/catalogacion/estructura/estructuraCatalo.pl", 
-		                                                             title =>    "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]"
-		                                                         ) ;
-		                         [% END %]
-		                     </li>
-		                     <li>
-		                         [% PERL %]
-		                             print C4::AR::Filtros::link_to( text =>     "[% 'Visualizaci&oacute;n del OPAC' | i18n %]",
-		                                                             url =>      "/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpac.pl", 
-		                                                             title =>    "[% 'Visualizaci&oacute;n del OPAC' | i18n %]"
-		                                                         ) ;
-		                         [% END %]
-		                     </li>
-		                     <li>
-		                         [% PERL %]
-		                             print C4::AR::Filtros::link_to( text =>     "[% 'Visualizaci&oacute;n de INTRANET' | i18n %]",
-		                                                             url =>      "/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntra.pl", 
-		                                                             title =>    "[% 'Visualizaci&oacute;n del OPAC' | i18n %]"
 		                                                         ) ;
 		                         [% END %]
 		                     </li>
