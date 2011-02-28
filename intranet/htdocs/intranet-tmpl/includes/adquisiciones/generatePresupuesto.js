@@ -11,6 +11,24 @@
 var arreglo                  = new Array() //global, arreglo con las recomendaciones seleccionadas
 var array_proveedores        = new Array() //global, arreglo de ids de proveedores a generar presupuesto
 
+function presupuestar(position){
+    var pos = position
+    objAH                       = new AjaxHelper(updatePresupuestar)
+    objAH.url                   = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
+    objAH.debug                 = true
+        
+    objAH.pedido_cotizacion_id  = $('#pedido_cotizacion_id'+position).val()
+ 
+    objAH.tipoAccion            = 'PRESUPUESTAR'
+    objAH.sendToServer()  
+    $('#pedidoCotizacion'+position).css('background-color', 'blue')
+}
+  
+function updatePresupuestar(responseText){
+    $('#presupuesto').html(responseText)
+    $('#presupuesto').show()
+}
+
 function generatePresupuesto(pedido_cotizacion_id){
 
     var proveedores = getProveedoresSelected()

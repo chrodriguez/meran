@@ -20,8 +20,8 @@ if ($tipoAccion eq "EDITAR") {
  
     ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
         template_name   => '/adquisiciones/datosPedidoCotizacion.tmpl',
-        query       => $input,
-        type        => "intranet",
+        query           => $input,
+        type            => "intranet",
         authnotrequired => 0,
         flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
     });
@@ -34,8 +34,8 @@ if ($tipoAccion eq "EDITAR") {
 
     ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
         template_name   => '/adquisiciones/datosPedidoCotizacion.tmpl',
-        query       => $input,
-        type        => "intranet",
+        query           => $input,
+        type            => "intranet",
         authnotrequired => 0,
         flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
     });   

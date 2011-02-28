@@ -7,14 +7,11 @@ use C4::AR::Recomendaciones;
 use CGI;
 use JSON;
 
-my $input = new CGI;
-my $authnotrequired= 0;
-
-my $obj=$input->param('obj');
-
-$obj = C4::AR::Utilidades::from_json_ISO($obj);
-
-my $tipoAccion  = $obj->{'tipoAccion'}||"";
+my $input           = new CGI;
+my $authnotrequired = 0;
+my $obj             = $input->param('obj');
+$obj                = C4::AR::Utilidades::from_json_ISO($obj);
+my $tipoAccion      = $obj->{'tipoAccion'}||"";
 
 if($tipoAccion eq "AGREGAR_PEDIDO_COTIZACION"){
 
@@ -33,13 +30,11 @@ if($tipoAccion eq "AGREGAR_PEDIDO_COTIZACION"){
                                                 accion => 'BAJA', 
                                                 entorno => 'usuarios'},
                                                 "intranet"
-                                );  
-                                
-    my $infoOperacionJSON=to_json $message;
+                                            );                              
+    my $infoOperacionJSON = to_json $message;
     
     C4::AR::Auth::print_header($session);
-    print $infoOperacionJSON;
-                           
+    print $infoOperacionJSON;                        
 }
 
 elsif($tipoAccion eq "PRESUPUESTAR"){
@@ -56,9 +51,7 @@ elsif($tipoAccion eq "PRESUPUESTAR"){
                 });
     
     my $combo_proveedores               = &C4::AR::Utilidades::generarComboProveedoresMultiple();
-    
     $t_params->{'pedido_cotizacion_id'} = $obj->{'pedido_cotizacion_id'};
-
     $t_params->{'combo_proveedores'}    = $combo_proveedores;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

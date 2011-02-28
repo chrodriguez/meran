@@ -13,6 +13,8 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(  
     &addPedidoCotizacion;
+    &getPedidosCotizacionConDetalle;
+    &getPedidosCotizacion;
 );
 
 =item

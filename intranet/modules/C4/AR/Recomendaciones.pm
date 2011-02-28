@@ -16,6 +16,7 @@ use vars qw(@EXPORT @ISA);
     &getRecomendacionDetallePorId;
     &editarCantidadEjemplares;
     &getRecomendacionPorId;
+    &updateRecomendacionDetalle;
 );
 
 =item
@@ -150,4 +151,67 @@ sub getRecomendacionPorId{
     }else{
         return 0;
     }
+}
+
+
+=item
+    Actualiza la info de una recomendacion
+=cut
+sub updateRecomendacionDetalle{
+
+    my ($params) = @_;
+    
+    my $recomendacion = getRecomendacionDetallePorId($params->{'id_recomendacion'});
+    
+    my $db = $recomendacion->db;
+    my $msg_object;
+    
+    #TODO _verificarDatosRecomendacion($params,$msg_object);
+    
+    if (!($msg_object->{'error'})){
+    
+          $db->{connect_options}->{AutoCommit} = 0;
+          $db->begin_work;
+          eval{
+              $recomendacion->updateRecomendacionDetalle($params);
+              
+
+              $msg_object->{'error'}= 0;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A034', 'params' => []});
+              $db->commit;
+          };
+
+          if ($@){
+          # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo editar el proveedor
+              &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+              $msg_object->{'error'}= 1;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+              $db->rollback;
+          }
+
+    }
+    return ($msg_object);
+    
+}
+
+sub _verificarDatosRecomendacion {
+
+     my ($data, $msg_object)    = @_;
+     my $checkStatus;
+
+     my $cat_nivel_2            = $data->{'cat_nivel'};
+     my $autor                  = $data->{'autor'};
+     my $titulo                 = $data->{'titulo'};
+     my $lugar_publicacion      = $data->{'lugar_publicacion'};
+     my $editorial              = $data->{'editorial'};
+     my $fecha_publicacion      = $data->{'fecha_publicacion'};
+     my $coleccion              = $data->{'coleccion'};
+     my $isbn                   = $data->{'isbn'};
+     my $cantidad_ejemplares    = $data->{'cantidad_ejemplares'};
+     my $motivo_propuesta       = $data->{'motivo_propuesta'};
+     my $comentario             = $data->{'comentario'};
+     my $reserva_material       = $data->{'reserva_material'};    
+     
+     #TODO: 
+ 
 }
