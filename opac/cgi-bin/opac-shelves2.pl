@@ -58,7 +58,7 @@ my ($template, $loggedinuser, $cookie)
 							flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 						});
 
-if (C4::AR::Preferencias->getValorPreferencia('marc')) {
+if (C4::AR::Preferencias::getValorPreferencia('marc')) {
         $template->param(script => "MARCdetail.pl");
 } else {
         $template->param(script => "detail.pl");
@@ -139,7 +139,7 @@ if ($count>$cantR) {
         push @$numbers, { number => $i+1, highlight => $highlight , break => $break, startfrom => (($i)*$cantR) };
    }
 }$template->param({numbers => $numbers});
-$template->param({LibraryName => C4::AR::Preferencias->getValorPreferencia("LibraryName")});
+$template->param({LibraryName => C4::AR::Preferencias::getValorPreferencia("LibraryName")});
 
 
 #fin de paginacion
@@ -197,7 +197,7 @@ if ($count>$cantR) {
    }
 }
 $template->param({numbers => $numbers});
-$template->param({LibraryName => C4::AR::Preferencias->getValorPreferencia("LibraryName")});
+$template->param({LibraryName => C4::AR::Preferencias::getValorPreferencia("LibraryName")});
 
 
 #fin de paginacion
