@@ -147,7 +147,7 @@ sub generarComboComponentes{
     $options_hash{'id'}             = $params->{'id'}||'disponibilidad_id';
     $options_hash{'size'}           = $params->{'size'}||1;
     $options_hash{'multiple'}       = $params->{'multiple'}||0;
-    $options_hash{'defaults'}       = $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultComboComponentes");
+    $options_hash{'defaults'}       = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultComboComponentes");
     $options_hash{'values'}         = \@VALUES_COMPONENTS;
     $options_hash{'labels'}         = \%LABELS_COMPONENTS;
 
@@ -1132,7 +1132,7 @@ sub armarPaginas{
 # FIXME falta pasar las imagenes al estilo
     my ($actual, $cantRegistros, $cantRenglones,$funcion, $t_params)=@_;
 
-    my $pagAMostrar=C4::AR::Preferencias->getValorPreferencia("paginas") || 10;
+    my $pagAMostrar=C4::AR::Preferencias::getValorPreferencia("paginas") || 10;
     my $numBloq=floor($actual / $pagAMostrar);
     my $limInf=($numBloq * $pagAMostrar);
     my $limSup=$limInf + $pagAMostrar;
@@ -1246,7 +1246,7 @@ sub checkdigit{
             return 0;
         }
     }
-    if (C4::AR::Preferencias->getValorPreferencia("checkdigit") eq "none") {
+    if (C4::AR::Preferencias::getValorPreferencia("checkdigit") eq "none") {
         return 1;
     }
     my @weightings = (8,4,6,3,5,2,1);
@@ -1727,7 +1727,7 @@ sub generarComboDeDisponibilidad{
     $options_hash{'id'}= $params->{'id'}||'disponibilidad_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultDisponibilidad");
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultDisponibilidad");
 
     push (@select_disponibilidades_array, 'SIN SELECCIONAR');
     $options_hash{'values'}= \@select_disponibilidades_array;
@@ -1767,7 +1767,7 @@ sub generarComboCategoriasDeSocio{
     $options_hash{'id'}         = $params->{'id'}||'categoria_socio_id';
     $options_hash{'size'}       = $params->{'size'}||1;
     $options_hash{'multiple'}   = $params->{'multiple'}||0;
-    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultCategoriaSocio");
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultCategoriaSocio");
 
     push (@select_categorias_array, '');
     $select_categorias_hash{''} = "SIN SELECCIONAR";
@@ -1811,7 +1811,7 @@ sub generarComboTipoDeDoc{
     $options_hash{'size'}       = $params->{'size'}||1;
     $options_hash{'class'}      = 'required';
     $options_hash{'multiple'}   = $params->{'multiple'}||0;
-    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoDoc");
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoDoc");
 
     push (@select_docs_array, '');
     $options_hash{'values'}     = \@select_docs_array;
@@ -2148,7 +2148,7 @@ sub generarComboTipoNivel3{
 
     my @select_tipo_nivel3_array;
     my %select_tipo_nivel3_hash;
-    my ($tipoNivel3_array_ref)= &C4::AR::Referencias::obtenerTiposNivel3();
+    my ($tipoNivel3_array_ref)  = &C4::AR::Referencias::obtenerTiposNivel3();
 
     foreach my $tipoNivel3 (@$tipoNivel3_array_ref) {
         push(@select_tipo_nivel3_array, $tipoNivel3->id_tipo_doc);
@@ -2156,39 +2156,39 @@ sub generarComboTipoNivel3{
     }
 
     push (@select_tipo_nivel3_array, '');
-    $select_tipo_nivel3_hash{''}= 'SIN SELECCIONAR';
+    $select_tipo_nivel3_hash{''}    = 'SIN SELECCIONAR';
 
     my %options_hash; 
 
     if ( $params->{'onChange'} ){
-         $options_hash{'onChange'}= $params->{'onChange'};
+         $options_hash{'onChange'}  = $params->{'onChange'};
     }
 
     if ( $params->{'class'} ){
-         $options_hash{'class'}= $params->{'class'};
+         $options_hash{'class'} = $params->{'class'};
     }
 
     if ( $params->{'onFocus'} ){
-      $options_hash{'onFocus'}= $params->{'onFocus'};
+      $options_hash{'onFocus'}  = $params->{'onFocus'};
     }
 
     if ( $params->{'onBlur'} ){
-      $options_hash{'onBlur'}= $params->{'onBlur'};
+      $options_hash{'onBlur'}   = $params->{'onBlur'};
     }
 
     $options_hash{'name'}= $params->{'name'}||'tipo_nivel3_name';
     $options_hash{'id'}= $params->{'id'}||'tipo_nivel3_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
 
     push (@select_tipo_nivel3_array, 'ALL');
-    $select_tipo_nivel3_hash{'ALL'}= 'TODOS';
+    $select_tipo_nivel3_hash{'ALL'} = 'TODOS';
 
-    $options_hash{'values'}= \@select_tipo_nivel3_array;
-    $options_hash{'labels'}= \%select_tipo_nivel3_hash;
+    $options_hash{'values'}     = \@select_tipo_nivel3_array;
+    $options_hash{'labels'}     = \%select_tipo_nivel3_hash;
 
-    my $comboTipoNivel3= CGI::scrolling_list(\%options_hash);
+    my $comboTipoNivel3         = CGI::scrolling_list(\%options_hash);
 
     return $comboTipoNivel3;
 }
@@ -2232,7 +2232,7 @@ sub generarComboTipoPrestamo{
     $options_hash{'multiple'}= $params->{'multiple'}||0;
 
 #FIXME falta un default no?
-#     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
+#     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
 
 
     push (@select_tipo_nivel3_array, 'SIN SELECCIONAR');
@@ -2286,7 +2286,7 @@ sub generarComboTablasDeReferencia{
     $options_hash{'defaults'}       = $params->{'default'} || 'SIN SELECCIONAR';
 
 #FIXME falta un default no?
-#     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
+#     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
 
 
     push (@select_tabla_ref_array, '-1');
@@ -2342,7 +2342,7 @@ sub generarComboDePerfilesOPAC{
     $options_hash{'defaults'}       = 'SIN SELECCIONAR';
 
 #FIXME falta un default no?
-#     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
+#     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
 
 
     push (@select_perfil_ref_array, 'SIN SELECCIONAR');
@@ -2389,7 +2389,7 @@ sub generarComboUI{
     $options_hash{'id'}         = $params->{'id'}||'id_ui';
     $options_hash{'size'}       = $params->{'size'}||1;
     $options_hash{'multiple'}   = $params->{'multiple'}||0;
-    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultUI");
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultUI");
 
     if ($params->{'optionALL'}){
         push (@select_ui, 'ALL');
@@ -2441,7 +2441,7 @@ sub generarComboNivelBibliografico{
     $options_hash{'id'}         = $params->{'id'}||'id_nivel_bibliografico';
     $options_hash{'size'}       = $params->{'size'}||1;
     $options_hash{'multiple'}   = $params->{'multiple'}||0;
-    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultNivelBibliografico");
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultNivelBibliografico");
 
     if ($params->{'optionALL'}){
         push (@select_niveles, 'ALL');
@@ -3444,7 +3444,7 @@ sub armarPaginasOPAC{
 # FIXME falta pasar las imagenes al estilo
     my ($actual, $cantRegistros, $cantRenglones, $url, $t_params)=@_;
 
-    my $pagAMostrar=C4::AR::Preferencias->getValorPreferencia("paginas") || 10;
+    my $pagAMostrar=C4::AR::Preferencias::getValorPreferencia("paginas") || 10;
     my $numBloq=floor($actual / $pagAMostrar);
     my $limInf=($numBloq * $pagAMostrar);
     my $limSup=$limInf + $pagAMostrar;
@@ -3671,7 +3671,7 @@ sub generarComboEstantes{
     $options_hash{'id'}= $params->{'id'}||'estante_id';
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
 
 
     $options_hash{'values'}= \@select_estante_array;

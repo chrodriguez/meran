@@ -25,88 +25,6 @@ use vars qw(@EXPORT @ISA);
 
 my $mapeo_koha_marc=undef;
 
-=head2 getMapeoKohaMarc
-
-=over 4
-($MARCfield,$MARCsubfield)=GetMarcFromKohaField($kohafield,$frameworkcode);
-Returns the MARC fields & subfields mapped to the koha field 
-
-=back
-
-=cut
-
-# sub getMapeoKohaMarc {
-# 
-#     if (defined($mapeo_koha_marc)) {
-#         return $mapeo_koha_marc;
-#     } else {
-#         $mapeo_koha_marc->{'biblio'}        = getMarcSubfieldsFromBiblio();
-#         $mapeo_koha_marc->{'biblioitem'}    = getMarcSubfieldsFromBiblioitem();
-#         $mapeo_koha_marc->{'item'}          = getMarcSubfieldsFromItem();
-# 
-#         return $mapeo_koha_marc;
-#     }
-#     1;
-# }
-
-
-=head2 getMarcSubfieldFromKohaField
-
-=over 4
-($MARCfield,$MARCsubfield)=GetMarcFromKohaField($kohafield,$frameworkcode);
-Returns the MARC fields & subfields mapped to the koha field 
-
-=back
-
-=cut
-
-# sub getMarcSubfieldFromKohaField {
-#     my ( $kohafield ) = @_;
-# 
-#     my $dbh = C4::Context->dbh;
-#     my %results;
-#     my $query ="SELECT * FROM marc_subfield_structure WHERE kohafield='?';";
-#         my $sth=$dbh->prepare($query);
-#     $sth->execute($kohafield);
-#     my $marc=$sth->fetchrow_hashref;
-#     return $marc;
-# }
-
-
-=head2 getMarcSubfieldsFromBiblio
-
-=over 4
-getMarcSubfieldsFromBiblio = campos marc del biblio
-
-=back
-
-=cut
-
-# sub getMarcSubfieldsFromBiblio {
-# 
-#     my $dbh = C4::Context->dbh;
-#     my %loop_data;
-# 
-#     my $query   = "SELECT tagfield,tagsubfield,kohafield,kohadefault FROM marc_subfield_structure WHERE kohafield like 'biblio.%' or kohafield like 'bibliosubject.%' or kohafield like 'bibliosubtitle.%' or kohafield like 'additionalauthors.%' or kohafield like 'colaboradores.%' ORDER BY kohadefault DESC;";
-#     my $sth     = $dbh->prepare($query);
-#     $sth->execute();
-#     while ( my $row = $sth->fetchrow_hashref ) {
-#         my %row_data;
-#         $row_data{campo}                = $row->{tagfield};
-#         $row_data{subcampo}             = $row->{tagsubfield};
-#         $row_data{kohadefault}          = $row->{kohadefault};
-#         my @aux                         = split(/\./,$row->{kohafield});
-#         $row_data{campokoha}            = $aux[1];
-#         $row_data{tablakoha}            = $aux[0];
-#         push(@{$loop_data{$row->{kohafield}}} , \%row_data);
-#     }
-# 
-#     $sth->finish;
-# 
-#     return \%loop_data;
-# }
-
-
 sub getSubfields {
     my $dbh = C4::Context->dbh;
     my %loop_data;
@@ -238,8 +156,8 @@ sub marc_record_to_ISO_from_range {
     my ($cant, $id_nivel1_array_ref) = C4::AR::Busquedas::getRegistrosFromRange( $params, $query );
     my @records_array;
     my $marc_record_array_ref;
-    my $field_ident_biblioteca  = MARC::Field->new('910','','','a' => C4::Context->preference("defaultUI"));
-    my $field_ident_universidad = MARC::Field->new('040','','','a' => C4::Context->preference("origen_catalogacion"));
+    my $field_ident_biblioteca  = MARC::Field->new('910','','','a' => C4::AR::Preferencias::getValorPreferencia("defaultUI"));
+    my $field_ident_universidad = MARC::Field->new('040','','','a' => C4::AR::Preferencias::getValorPreferencia("origen_catalogacion"));
 
     if($query->param('export_format') eq "xml"){print MARC::File::XML::header();}
 
@@ -320,25 +238,6 @@ sub getDatoFromReferencia {
     return $dato;
 }
 
-
-
-=head2 getKohaToMarcItem
-
-=over 4
-
-=back
-
-=cut
-
-# sub getKohaToMarcItem {
-#     my ( $itemnumber ) = @_;
-# 
-#       my $registroMarc  = getKohaToMarcByTablaCampo('item','items','itemnumber',$itemnumber);
-# 
-#     return  $registroMarc;
-# }
-
-
 =head2 getExportFromNivel1
 
 =over 4
@@ -398,29 +297,5 @@ sub getExportFromNivel2 {
     
     return \@export;
 }
-
-=item sub GetAllBiblios
-
-Retorna todos los registros 
-=cut
-# sub GetAllBiblios {
-# 
-#     my $dbh     = C4::Context->dbh;
-#     my @result;
-#     my $query   = "SELECT * FROM biblio;";
-#     my $sth     = $dbh->prepare($query);
-#     my $cant    = 0;
-#     $sth->execute();
-#   
-#     while (my $data=$sth->fetchrow_hashref){
-#       push @result,$data;
-#       $cant++;
-#     }
-# 
-#     $sth->finish;
-#     return($cant,@result);
-# }
-
-
 
 1;

@@ -54,7 +54,7 @@ sub search_temas{
 
         query => \@filtros,
         sort_by => 'nombre ASC',
-        limit   => C4::AR::Preferencias->getValorPreferencia("limite_resultados_autocompletables"),
+        limit   => C4::AR::Preferencias::getValorPreferencia("limite_resultados_autocompletables"),
     );
 
     return (scalar(@$temas_array_ref), $temas_array_ref);
@@ -113,7 +113,7 @@ sub search_editoriales{
 
         query => \@filtros,
         sort_by => 'editorial ASC',
-        limit   => C4::AR::Preferencias->getValorPreferencia("limite_resultados_autocompletables"),
+        limit   => C4::AR::Preferencias::getValorPreferencia("limite_resultados_autocompletables"),
     );
 
     return (scalar(@$editoriales_array_ref), $editoriales_array_ref);

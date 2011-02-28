@@ -225,7 +225,7 @@ sub reservar {
 	}
 
 	#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
-	my $numeroDias= C4::AR::Preferencias->getValorPreferencia("reserveItem");
+	my $numeroDias= C4::AR::Preferencias::getValorPreferencia("reserveItem");
 	my ($desde,$hasta,$apertura,$cierre)= C4::Date::proximosHabiles($numeroDias,1);
 
 	my %paramsReserva;
@@ -237,7 +237,7 @@ sub reservar {
 	$paramsReserva{'responsable'}= $params->{'loggedinuser'};
 	$paramsReserva{'fecha_reserva'}= $desde;
 	$paramsReserva{'fecha_recordatorio'}= $hasta;
-	$paramsReserva{'id_ui'}= C4::AR::Preferencias->getValorPreferencia("defaultUI");
+	$paramsReserva{'id_ui'}= C4::AR::Preferencias::getValorPreferencia("defaultUI");
 	$paramsReserva{'estado'}= ($id3 ne '')?'E':'G';
 	$paramsReserva{'hasta'}= C4::Date::format_date($hasta,$dateformat);
 	$paramsReserva{'desde'}= C4::Date::format_date($desde,$dateformat);
@@ -258,7 +258,7 @@ $self->debug("RESERVA: estado: ".$paramsReserva{'estado'}." id_ui: ".	$paramsRes
 		my $err= "Error con la fecha";
 		my $startdate= C4::Date::proximoHabil(1,0,$hasta);
 		$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
-		my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
+		my $daysOfSanctions= C4::AR::Preferencias::getValorPreferencia("daysOfSanctionReserves");
 		my $enddate= C4::Date::proximoHabil($daysOfSanctions,0,$startdate);
 		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
 		my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
@@ -336,7 +336,7 @@ sub actualizarDatosReservaEnEspera{
 	my $hoy = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
 
     #Se actualiza la reserva
-	my ($desde,$hasta,$apertura,$cierre) = C4::Date::proximosHabiles(C4::AR::Preferencias->getValorPreferencia("reserveGroup"),1);
+	my ($desde,$hasta,$apertura,$cierre) = C4::Date::proximosHabiles(C4::AR::Preferencias::getValorPreferencia("reserveGroup"),1);
 	$self->setEstado('E');
 	$self->setFecha_reserva($desde);
 	$self->setFecha_notificacion($hoy);
@@ -348,7 +348,7 @@ sub actualizarDatosReservaEnEspera{
 	my $dateformat=C4::Date::get_date_format();
 	my $startdate=  C4::Date::DateCalc($hasta,"+ 1 days",\$err);
 	$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
-	my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
+	my $daysOfSanctions= C4::AR::Preferencias::getValorPreferencia("daysOfSanctionReserves");
 	my $enddate=  Date::Manip::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
 	$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
 	my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
@@ -452,7 +452,7 @@ sub cancelar_reservas_sancionados {
 	#Se buscan los socios sancionados
 	my $dateformat = C4::Date::get_date_format();
     my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
-  	my $tipo_prestamo=C4::AR::Preferencias->getValorPreferencia("defaultissuetype");
+  	my $tipo_prestamo=C4::AR::Preferencias::getValorPreferencia("defaultissuetype");
 	my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion ( db=>$self->db, 
 																	query => [ 
 																			fecha_comienzo 	=> { le => $hoy },

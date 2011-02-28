@@ -1549,8 +1549,8 @@ sub logBusqueda{
 	my @search_array;
 
    $params->{'loggedinuser'}= $session->param('nro_socio');
-	my $valorOPAC= C4::AR::Preferencias->getValorPreferencia("logSearchOPAC");
-	my $valorINTRA= C4::AR::Preferencias->getValorPreferencia("logSearchINTRA");
+	my $valorOPAC= C4::AR::Preferencias::getValorPreferencia("logSearchOPAC");
+	my $valorINTRA= C4::AR::Preferencias::getValorPreferencia("logSearchINTRA");
    C4::AR::Debug::debug($params->{'type'});
 	if( (($valorOPAC == 1)&&($params->{'type'} eq 'OPAC')) || (($valorINTRA == 1)&&($params->{'type'} eq 'INTRA')) ){
 		if($params->{'codBarra'} ne ""){

@@ -20,9 +20,9 @@ use vars qw(@EXPORT @ISA);
     sub reindexar
 =cut
 sub reindexar{
-    C4::AR::Debug::debug("Sphinx => reindexar => run_indexer => indexado => ".C4::AR::Preferencias->getValorPreferencia('indexado'));
+    C4::AR::Debug::debug("Sphinx => reindexar => run_indexer => indexado => ".C4::AR::Preferencias::getValorPreferencia('indexado'));
 
-    if(C4::AR::Preferencias->getValorPreferencia('indexado')){
+    if(C4::AR::Preferencias::getValorPreferencia('indexado')){
         C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA ACTUALIZADO!!!!!!!");
     } else {
         C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA DESACTUALIZADO!!!!!!!!");

@@ -43,7 +43,7 @@ my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
   ($count)= &getshelfListCount($type);
 
 $t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginador($count, $cantR, $pageNumber,$funcion,$t_params);
-$t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName")?;
+$t_params->{'LibraryName'}= C4::AR::Preferencias::getValorPreferencia("LibraryName")?;
 
 
 my $color='';

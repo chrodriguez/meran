@@ -51,15 +51,15 @@ if ($op eq "export") {
 }
 
 my %params_combo;
-$params_combo{'default'}                    = C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
+$params_combo{'default'}                    = C4::AR::Preferencias::getValorPreferencia('defaultTipoNivel3');
 $t_params->{'combo_tipo_documento'}         = C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 
 my %params_combo;
-$params_combo{'default'}                    = C4::AR::Preferencias->getValorPreferencia("defaultUI");
+$params_combo{'default'}                    = C4::AR::Preferencias::getValorPreferencia('defaultUI');
 $t_params->{'combo_ui'}                     = C4::AR::Utilidades::generarComboUI(\%params_combo);
 
 my %params_combo;
-$params_combo{'default'}                    = C4::AR::Preferencias->getValorPreferencia("defaultUI");
+$params_combo{'default'}                    = C4::AR::Preferencias::getValorPreferencia('defaultNivelBibliografico');
 $t_params->{'combo_nivel_bibliogratico'}    = C4::AR::Utilidades::generarComboNivelBibliografico(\%params_combo);
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params,$session);

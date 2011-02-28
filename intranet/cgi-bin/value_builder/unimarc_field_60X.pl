@@ -70,7 +70,7 @@ sub plugin {
 		$result = $freelib_text;
 	}
 	my $Rsearch_string="$search_string%";
-	my $authoritysep = C4::AR::Preferencias->getValorPreferencia('authoritysep');
+	my $authoritysep = C4::AR::Preferencias::getValorPreferencia('authoritysep');
 	my @splitted = /$authoritysep/,$search_string;
 	my $level = $#splitted+1;
 	my $sti;

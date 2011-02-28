@@ -49,7 +49,7 @@ sub searchGenerator {
 	my ( $from, @results ) = @_;
 	my $pdf = newPdf();
 	my $pos;
-	my $msg  = "Resultado de la busqueda: ";
+	my $msg  = "Resultado de la bÃºsqueda: ";
 	my $msg2 = "Biblioteca: ";
 	my $text;
 	my $line = 36;
@@ -270,10 +270,10 @@ sub imprimirLinea {
 		$pos = $pos - 15;
 ## FIXME esta funcion es llamada dentro de un loop, de manera q consulta demasiado a la base a travez del ##context(), o sea q estos valores se deben recibir como parametro
 		$pdf->addImg(
-			C4::AR::Preferencias->getValorPreferencia('opacdir')
+			C4::AR::Preferencias::getValorPreferencia('opacdir')
 			  . '/htdocs/opac-tmpl/'
-			  . C4::AR::Preferencias->getValorPreferencia('opacthemes') . '/'
-			  . C4::AR::Preferencias->getValorPreferencia('opaclanguages')
+			  . C4::AR::Preferencias::getValorPreferencia('opacthemes') . '/'
+			  . C4::AR::Preferencias::getValorPreferencia('opaclanguages')
 			  . '/images/escudo-print.png',
 			500,
 			$pageheight - 77
@@ -585,11 +585,11 @@ sub libreDeuda {
 		  . $branchname
 		  . ", " );
 	$parrafo[1] =
-	  Encode::decode_utf8( " con nÃºmero de documento " 
+	  Encode::decode_utf8( " con numero de documento " 
 		  . $dni
 		  . ", no adeuda material bibliogrÃ¡fico en esta Biblioteca." );
 	$parrafo[2] = Encode::decode_utf8(
-"       Se extiende el presente certificado para ser presentado ante quien corresponda, con una"
+"       Se extiende el presente certificado para ser presentado ante quiÃ©n corresponda, con una"
 	);
 	$parrafo[3] = Encode::decode_utf8(
 		" validez de 10 dÃ­as corridos a partir de su fecha de emisiÃ³n.");
@@ -632,7 +632,7 @@ sub prestInterBiblio {
 	$parrafo[2] = (Encode::decode_utf8($director));
 	$parrafo[3] = ("S/D");
 	$parrafo[4] = (
-"          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carácter de préstamo"
+"          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carÃ¡cter de prÃ©stamo"
 	);
 	$parrafo[5] = "interbibliotecario los siguientes items:";
 
@@ -644,15 +644,15 @@ sub prestInterBiblio {
 	my $cant = scalar(@$datos);
 	( $pdf, $y ) = &imprimirTabla( $pdf, $y, $pageheight, $cant, $datos );
 
-	$parrafo[0] = ("La(s) misma(s) sería(n) retirada(s) por:");
+	$parrafo[0] = ("La(s) misma(s) serÃ­a(n) retirada(s) por:");
 	$parrafo[1] = ("Nombre y apellido: ").$nombre;
 	$parrafo[2] = ("DNI:") . $dni;
 	$parrafo[3] =
-	    ("Dirección:")
+	    ("DirecciÃ³n:")
 	  . $socio->persona->getCalle . ", "
 	  . $socio->persona->ciudad_ref->getNombre;
-	$parrafo[4] = ("Teléfono:") . $socio->persona->getTelefono;
-	$parrafo[5] = ("Correo electrónico:") . $socio->persona->getEmail;
+	$parrafo[4] = ("TelÃ©fono:") . $socio->persona->getTelefono;
+	$parrafo[5] = ("Correo electrÃ³nico:") . $socio->persona->getEmail;
 	$parrafo[6] = "";
 	$parrafo[7] = (
 "          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy"
@@ -690,7 +690,7 @@ Imprime el encabezado del documento, con el escudo del la universidad nacional d
     $pdf, objeto que representa al documeto, donde se guardan los datos a imprimir;
     $categ, categoria de la institucion en la que se va a imprimir el documento;
     $branchname, nombre de la biblioteca en la que esta asociado el usuario que pidio el documento;
-    $x, tamaï¿½o de la sangria. A partir de donde se va a escribir en el renglon;
+    $x, tamao de la sangria. A partir de donde se va a escribir en el renglon;
     $pagewidth, ancho del documento;
     $pageheight, largo del documento;
     $titulo, Titulo del documento;
@@ -707,11 +707,11 @@ sub imprimirEncabezado {
 
 	#fin fecha
 	C4::AR::Debug::debug( C4::Context->config('intrahtdocs') . '/'
-		  . C4::AR::Preferencias->getValorPreferencia('template')
+		  . C4::AR::Preferencias::getValorPreferencia('template')
 		  . '/images/escudo-uni.png' );
 
 # FIXME si le dejo esto se rompe, como se va a cambiar el manejador de PDFs lo dejo asi
-#         $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::AR::Preferencias->getValorPreferencia('template').'/images/escudo-uni.png', $x, $pageheight - 160);
+#         $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::AR::Preferencias::getValorPreferencia('template').'/images/escudo-uni.png', $x, $pageheight - 160);
 	$pdf->setFont("Arial-Bold");
 	$pdf->setSize(10);
 	$pdf->addRawText( uc($categ),      $x, $pageheight - 180 );
@@ -737,11 +737,11 @@ imprimirContenido
 Imprime el contenido de del documento.
 @params:
     $pdf, objeto que representa al documeto, donde se guardan los datos a imprimir;
-    $x, tamaï¿½o de la sangria. A partir de donde se va a escribir en el renglon;
+    $x, tamao de la sangria. A partir de donde se va a escribir en el renglon;
     $y, cantidad de renglones que se escribieron hasta el momento. Sirve de puntero para saber en que fila
         imprimir;
     $pageheight, largo del documento;
-    $tamRenglon, tamaï¿½o que va a tener el renglon. Espacio entre texto por fila;
+    $tamRenglon, tamao que va a tener el renglon. Espacio entre texto por fila;
     $parrafo, referencia al arreglo que contiene los string a imprimir en el pdf;
 =cut
 
@@ -772,7 +772,7 @@ sub imprimirFirma {
 	$pdf->addRawText( $linea, 330, $pageheight - $y );
 	$y = $y + 10;
 	$pdf->addRawText( "Firma",                160, $pageheight - $y );
-	$pdf->addRawText( _format("Aclaración"), 360, $pageheight - $y );
+	$pdf->addRawText( _format("AclaraciÃ³n"), 360, $pageheight - $y );
 	return ( $pdf, $y );
 }
 
@@ -794,7 +794,7 @@ sub imprimirTabla {
 	$pdf->drawRect( 50, $pageheight - $y, 200, $pageheight - ( $y + 20 ) );
 	$pdf->addRawText( "Autor/es", 100, $pageheight - ( $y + 15 ) );
 	$pdf->drawRect( 200, $pageheight - $y, 350, $pageheight - ( $y + 20 ) );
-	$pdf->addRawText( _format("Título"), 255, $pageheight - ( $y + 15 ) );
+	$pdf->addRawText( _format("Ttulo"), 255, $pageheight - ( $y + 15 ) );
 	$pdf->drawRect( 350, $pageheight - $y, 500, $pageheight - ( $y + 20 ) );
 	$pdf->addRawText( "Otros datos", 395, $pageheight - ( $y + 15 ) );
 	$y = $y + 20;
@@ -837,9 +837,9 @@ sub imprimirPiePag {
 	$texto[2] =
 	  "Tel/Fax: " . $biblio->{'branchphone'} . "/" . $biblio->{'branchfax'};
 	$texto[3] =
-	    _format("Atención: lunes a viernes, ")
-	  . C4::AR::Preferencias->getValorPreferencia('open') . " a "
-	  . C4::AR::Preferencias->getValorPreferencia('close');
+	    _format("AtenciÃ³n: lunes a viernes, ")
+	  . C4::AR::Preferencias::getValorPreferencia('open') . " a "
+	  . C4::AR::Preferencias::getValorPreferencia('close');
 	$texto[4] = "E-mail: " . $biblio->{'branchemail'};
 	$texto[5] = "Sitios web: " . $biblio->{'branchaddress3'};
 	$texto[6] = "";
@@ -897,16 +897,16 @@ sub generateBookLabel {
 	my $posy = 105;
 	my $escudo =
 	    C4::Context->config('intrahtdocs') . '/'
-	  . C4::AR::Preferencias->getValorPreferencia('template') . '/'
-	  . C4::AR::Preferencias->getValorPreferencia('opaclanguages')
+	  . C4::AR::Preferencias::getValorPreferencia('template') . '/'
+	  . C4::AR::Preferencias::getValorPreferencia('opaclanguages')
 	  . '/images/escudo-'
 	  . $branchcode . '.png';
 
 	if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
 		$escudo =
 		    C4::Context->config('intrahtdocs') . '/'
-		  . C4::AR::Preferencias->getValorPreferencia('template') . '/'
-		  . C4::AR::Preferencias->getValorPreferencia('opaclanguages')
+		  . C4::AR::Preferencias::getValorPreferencia('template') . '/'
+		  . C4::AR::Preferencias::getValorPreferencia('opaclanguages')
 		  . '/images/escudo-uni.png';
 	}
 

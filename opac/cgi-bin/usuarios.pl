@@ -83,7 +83,7 @@ else{
         my @fields = ('surname', 'firstname', 'phone', 'faxnumber', 'streetaddress','city', 'emailaddress');
         my $update;
         $update->{'nro_socio'}=$nro_socio;
-        my $updateemailaddress= C4::AR::Preferencias->getValorPreferencia('KohaAdminEmailAddress');
+        my $updateemailaddress= C4::AR::Preferencias::getValorPreferencia('KohaAdminEmailAddress');
         if ($updateemailaddress eq '') {
             warn "La preferencia KohaAdminEmailAddress no esta seteada. No se puede enviar la informacion de actualizacion de $socio->persona->getApellido, $socio->persona->getNombre (#$nro_socio)\n";
             my ($template, $session, $t_params)= get_template_and_user({
@@ -101,11 +101,11 @@ else{
     }
 
     $t_params->{'socio'}= $socio,
-    $t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
+    $t_params->{'LibraryName'}= C4::AR::Preferencias::getValorPreferencia("LibraryName");
 
     #otra vez einar con Guarani
 
-    $t_params->{'updatedata'} =(!C4::AR::Preferencias->getValorPreferencia('CheckUpdateDataEnabled'));
+    $t_params->{'updatedata'} =(!C4::AR::Preferencias::getValorPreferencia('CheckUpdateDataEnabled'));
 
     $t_params->{'pagetitle'}= "Actualizaci&oacute;n de datos personales";
 

@@ -41,7 +41,7 @@ $t_params->{'vencidos'}= $vencidos;
 $t_params->{'algunoSeRenueva'}= $algunoSeRenueva;
 
 #se ferifica si la preferencia "circularDesdeDetalleUsuario" esta seteada
-$t_params->{'circularDesdeDetalleUsuario'}= C4::AR::Preferencias->getValorPreferencia('circularDesdeDetalleUsuario');
+$t_params->{'circularDesdeDetalleUsuario'}= C4::AR::Preferencias::getValorPreferencia('circularDesdeDetalleUsuario');
 
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

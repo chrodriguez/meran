@@ -24,10 +24,16 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(  
 
+
             &getAdqPedidosCotizacion;
             &getPresupuestosPedidoCotizacion;
             &getAdqPedidoCotizacionDetalle;
             &addPedidoCotizacion;
+
+            &addPedidoCotizacion;
+            &getPedidosCotizacionConDetalle;
+            &getPedidosCotizacion;
+
 );
 
 

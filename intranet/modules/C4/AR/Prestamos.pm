@@ -328,8 +328,8 @@ sub prestarYGenerarTicket{
     C4::AR::Debug::debug("id2: ".$nivel3aPrestar->getId2);
     C4::AR::Debug::debug("id3: ".$id3);
     $params->{'id3'}= $id3;
-    $params->{'id_ui'}=C4::AR::Preferencias->getValorPreferencia('defaultUI');
-    $params->{'id_ui_prestamo'}=C4::AR::Preferencias->getValorPreferencia('defaultUI');
+    $params->{'id_ui'}=C4::AR::Preferencias::getValorPreferencia('defaultUI');
+    $params->{'id_ui_prestamo'}=C4::AR::Preferencias::getValorPreferencia('defaultUI');
     $params->{'tipo'}="INTRA";
 
     my ($msg_object)= &C4::AR::Prestamos::t_realizarPrestamo($params);
@@ -536,7 +536,7 @@ sub t_renovar {
   my $ticketObj;
   my @infoTickets;
   my @infoMessages;
-  my $print_renew= C4::AR::Preferencias->getValorPreferencia("print_renew");
+  my $print_renew= C4::AR::Preferencias::getValorPreferencia("print_renew");
   my $array_id_prestamos= $params->{'datosArray'};
 
   my $prestamoTEMP = C4::Modelo::CircPrestamo->new();
@@ -739,7 +739,7 @@ sub verificarCirculacionRapida {
 
     #Se verifica que la operación este dentro del horario de funcionamiento de la biblioteca.
     #SOLO PARA INTRA
-    if(!$msg_object->{'error'} && !C4::AR::Preferencias->getValorPreferencia("operacion_fuera_horario") && C4::AR::Reservas::_verificarHorario()){
+    if(!$msg_object->{'error'} && !C4::AR::Preferencias::getValorPreferencia("operacion_fuera_horario") && C4::AR::Reservas::_verificarHorario()){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P127', 'params' => []} ) ;
         C4::AR::Debug::debug("Prestamos.pm => verificarCirculacionRapida => Entro al if de operacion fuera de horario ");

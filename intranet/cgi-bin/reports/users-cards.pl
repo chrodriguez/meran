@@ -39,7 +39,7 @@ if ($op eq 'pdf') {
     });
 
     my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
-    my  $ui= $input->param('ui_name') || C4::AR::Preferencias->getValorPreferencia("defaultUI");
+    my  $ui= $input->param('ui_name') || C4::AR::Preferencias::getValorPreferencia("defaultUI");
     my $ComboUI=C4::AR::Utilidades::generarComboUI();
     my %params;
 

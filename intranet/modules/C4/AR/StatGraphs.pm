@@ -62,8 +62,8 @@ my %opt = ( 'title' =>'Tipos de documentos (Torta)',
 }
 );
 $g->set (%opt);
-my $lang=C4::AR::Preferencias->getValorPreferencia('opaclanguages');
-my $template=C4::AR::Preferencias->getValorPreferencia('template');
+my $lang=C4::AR::Preferencias::getValorPreferencia('opaclanguages');
+my $template=C4::AR::Preferencias::getValorPreferencia('template');
 
 $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/itemtypepie$branch.png");
 }
@@ -105,8 +105,8 @@ my %hash = ( 'title' => 'Tipos de documentos (Barras Horizontales)',
 
 $g->set (%hash);
 
-my $lang=C4::AR::Preferencias->getValorPreferencia('opaclanguages');
-my $template=C4::AR::Preferencias->getValorPreferencia('template');
+my $lang=C4::AR::Preferencias::getValorPreferencia('opaclanguages');
+my $template=C4::AR::Preferencias::getValorPreferencia('template');
 
 $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/itemtypehbars$branch.png");
 }
@@ -143,8 +143,8 @@ my %opt = ( 'title' =>'Nivel bibliografico (Torta)',
 );
 $g->set (%opt);
 
-my $lang=C4::AR::Preferencias->getValorPreferencia('opaclanguages');
-my $template=C4::AR::Preferencias->getValorPreferencia('template');
+my $lang=C4::AR::Preferencias::getValorPreferencia('opaclanguages');
+my $template=C4::AR::Preferencias::getValorPreferencia('template');
 $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/levelpie$branch.png");
 }
 
@@ -184,8 +184,8 @@ my %hash = ( 'title' => 'Nivel bibliografico (Barras Horizontales)',
 );
 
 $g->set (%hash);
-my $lang=C4::AR::Preferencias->getValorPreferencia('opaclanguages');
-my $template=C4::AR::Preferencias->getValorPreferencia('template');
+my $lang=C4::AR::Preferencias::getValorPreferencia('opaclanguages');
+my $template=C4::AR::Preferencias::getValorPreferencia('template');
 
 $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/levelhbars$branch.png");
 }
@@ -310,8 +310,8 @@ sub userCategPieSinFlash(){
 			},
 		);
 	$g->set (%opt);
-	my $lang=C4::AR::Preferencias->getValorPreferencia('opaclanguages');
-	my $template=C4::AR::Preferencias->getValorPreferencia('template');
+	my $lang=C4::AR::Preferencias::getValorPreferencia('opaclanguages');
+	my $template=C4::AR::Preferencias::getValorPreferencia('template');
 
 $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/usercategpie$branch.png");
 
@@ -351,8 +351,8 @@ sub userCategHBarsSinFlash(){
 
 	$g->set (%hash);
 
-	my $lang=C4::AR::Preferencias->getValorPreferencia('opaclanguages');
-	my $template=C4::AR::Preferencias->getValorPreferencia('template');
+	my $lang=C4::AR::Preferencias::getValorPreferencia('opaclanguages');
+	my $template=C4::AR::Preferencias::getValorPreferencia('template');
 
 $g->png ("/usr/local/koha/intranet/htdocs/intranet-tmpl/$template/$lang/images/stats/usercateghbars$branch.png");
 }
@@ -372,8 +372,8 @@ sub inicializarGrafico(){
 
 sub finalizarGrafico(){
 	my ($g)=@_;
-	my $lang=C4::AR::Preferencias->getValorPreferencia('opaclanguages');
-	my $template=C4::AR::Preferencias->getValorPreferencia('template');
+	my $lang=C4::AR::Preferencias::getValorPreferencia('opaclanguages');
+	my $template=C4::AR::Preferencias::getValorPreferencia('template');
 	$g->set_swf_path("/intranet-tmpl/$template/$lang/includes/open-flash-chart/");
 	$g->set_js_path("/intranet-tmpl/$template/$lang/includes/open-flash-chart/");
 	$g->set_output_type("js");

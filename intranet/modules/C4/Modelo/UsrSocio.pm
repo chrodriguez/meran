@@ -101,7 +101,7 @@ sub agregar{
 
     $self->setId_persona($data_hash->{'id_persona'});
     if ($data_hash->{'auto_nro_socio'}){
-        if (C4::AR::Preferencias->getValorPreferencia("auto-nro_socio_from_dni")){
+        if (C4::AR::Preferencias::getValorPreferencia("auto-nro_socio_from_dni")){
             $self->setNro_socio( $self->setNro_socio($self->persona->getNro_documento) );
         }else{
              $self->setNro_socio( $self->nextNro_socio )
@@ -128,7 +128,7 @@ sub agregar{
     $self->setCumple_requisito($data_hash->{'cumple_requisito'});
     $self->setId_estado($data_hash->{'id_estado'});
 
-    if (C4::AR::Preferencias->getValorPreferencia("autoActivarPersona")){
+    if (C4::AR::Preferencias::getValorPreferencia("autoActivarPersona")){
         C4::AR::Debug::debug("Desde UsrSocio->agregar(), se tiene autoActivarPersona en 1, ojimetro");
         $self->activar();
     }
@@ -1026,7 +1026,7 @@ sub needsValidation{
 	
 	my $days = C4::AR::Utilidades::daysToNow($lastValidation);
 	            
-	my $validation_required_or_days = C4::AR::Preferencias->getValorPreferencia("user_data_validation_required_or_days") || 0;
+	my $validation_required_or_days = C4::AR::Preferencias::getValorPreferencia("user_data_validation_required_or_days") || 0;
 	            
 	            
 	my $needsDataValidation = ($validation_required_or_days) 
