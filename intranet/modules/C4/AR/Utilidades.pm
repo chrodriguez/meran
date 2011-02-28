@@ -1076,16 +1076,17 @@ sub guardarDefaults{
 verificarValor
 Verifica que el valor que ingresado no tenga sentencias peligrosas, se filtran.
 =cut
-sub verificarValor{
+sub verificarValor {
     my ($valor) = @_;
 
-    my @array = split(/;/,$valor);
+  # C4::AR::Debug::debug("antes de limpiar => ".$valor);
 
-    if(scalar(@array) > 1){
-        #por si viene un ; saco las palabras peligrosas, que son las de sql.
-        $valor=~ s/\b(SELECT|WHERE|INSERT|SHUTDOWN|DROP|DELETE|UPDATE|FROM|AND|OR|BETWEEN)\b/ /gi;
-    }
-    $valor=~ s/%|"|'|=|;|\*|-(<,>)//g;    
+    $valor=~ s/\b(SELECT|SHOW|ALL|WHERE|INSERT|SHUTDOWN|DROP|UNION|DELETE|UPDATE|FROM|AND|OR|BETWEEN|information_schema|table_name)\b/ /gi;
+    
+#     C4::AR::Debug::debug("despues de limpiar => ".$valor);
+
+    $valor=~ s/%|"|=|\*|-(<,>)//g;  
+    $valor=~ s/%3b|%3d|%27|%25//g;#Por aca no entra llegan los caracteres ya traducidos
     $valor=~ s/\<SCRIPT>|\<\/SCRIPT>//gi;
 
     return $valor;
