@@ -58,5 +58,3 @@ if($obj){
     }
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
-
-#C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
