@@ -212,7 +212,7 @@ sub obtenerProveedores {
 Esta funcion devuelve un arreglo de objetos con los tipos de nivel3
 =cut
 sub obtenerTiposNivel3 {
-    my $tiposNivel3 = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3();
+    my $tiposNivel3 = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(sort_by => ['NOMBRE ASC']);
     my @results;
 
     foreach my $tipo_nivel3 (@$tiposNivel3) {
@@ -254,7 +254,7 @@ sub obtenerUnidadesDeInformacion {
 Devuelve un arreglo de objetos Nivel Bibliografico
 =cut
 sub obtenerNivelesBibliograficos {
-    my $niveles_array_ref = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico;
+    my $niveles_array_ref = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico(sort_by => ['DESCRIPTION ASC']);
     my @results;
 
     foreach my $objeto_nivel (@$niveles_array_ref) {

@@ -1072,16 +1072,17 @@ sub guardarDefaults{
 verificarValor
 Verifica que el valor que ingresado no tenga sentencias peligrosas, se filtran.
 =cut
-sub verificarValor{
+sub verificarValor {
     my ($valor) = @_;
 
-    my @array = split(/;/,$valor);
+  # C4::AR::Debug::debug("antes de limpiar => ".$valor);
 
-    if(scalar(@array) > 1){
-        #por si viene un ; saco las palabras peligrosas, que son las de sql.
-        $valor=~ s/\b(SELECT|WHERE|INSERT|SHUTDOWN|DROP|DELETE|UPDATE|FROM|AND|OR|BETWEEN)\b/ /gi;
-    }
-    $valor=~ s/%|"|'|=|;|\*|-(<,>)//g;    
+    $valor=~ s/\b(SELECT|SHOW|ALL|WHERE|INSERT|SHUTDOWN|DROP|UNION|DELETE|UPDATE|FROM|AND|OR|BETWEEN|information_schema|table_name)\b/ /gi;
+    
+#     C4::AR::Debug::debug("despues de limpiar => ".$valor);
+
+    $valor=~ s/%|"|=|\*|-(<,>)//g;  
+    $valor=~ s/%3b|%3d|%27|%25//g;#Por aca no entra llegan los caracteres ya traducidos
     $valor=~ s/\<SCRIPT>|\<\/SCRIPT>//gi;
 
     return $valor;
@@ -2048,7 +2049,7 @@ sub generarComboTipoNivel3{
 
     my @select_tipo_nivel3_array;
     my %select_tipo_nivel3_hash;
-    my ($tipoNivel3_array_ref)= &C4::AR::Referencias::obtenerTiposNivel3();
+    my ($tipoNivel3_array_ref)  = &C4::AR::Referencias::obtenerTiposNivel3();
 
     foreach my $tipoNivel3 (@$tipoNivel3_array_ref) {
         push(@select_tipo_nivel3_array, $tipoNivel3->id_tipo_doc);
@@ -2056,39 +2057,39 @@ sub generarComboTipoNivel3{
     }
 
     push (@select_tipo_nivel3_array, '');
-    $select_tipo_nivel3_hash{''}= 'SIN SELECCIONAR';
+    $select_tipo_nivel3_hash{''}    = 'SIN SELECCIONAR';
 
     my %options_hash; 
 
     if ( $params->{'onChange'} ){
-         $options_hash{'onChange'}= $params->{'onChange'};
+         $options_hash{'onChange'}  = $params->{'onChange'};
     }
 
     if ( $params->{'class'} ){
-         $options_hash{'class'}= $params->{'class'};
+         $options_hash{'class'} = $params->{'class'};
     }
 
     if ( $params->{'onFocus'} ){
-      $options_hash{'onFocus'}= $params->{'onFocus'};
+      $options_hash{'onFocus'}  = $params->{'onFocus'};
     }
 
     if ( $params->{'onBlur'} ){
-      $options_hash{'onBlur'}= $params->{'onBlur'};
+      $options_hash{'onBlur'}   = $params->{'onBlur'};
     }
 
-    $options_hash{'name'}= $params->{'name'}||'tipo_nivel3_name';
-    $options_hash{'id'}= $params->{'id'}||'tipo_nivel3_id';
-    $options_hash{'size'}=  $params->{'size'}||1;
-    $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
+    $options_hash{'name'}       = $params->{'name'}||'tipo_nivel3_name';
+    $options_hash{'id'}         = $params->{'id'}||'tipo_nivel3_id';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias->getValorPreferencia("defaultTipoNivel3");
 
     push (@select_tipo_nivel3_array, 'ALL');
-    $select_tipo_nivel3_hash{'ALL'}= 'TODOS';
+    $select_tipo_nivel3_hash{'ALL'} = 'TODOS';
 
-    $options_hash{'values'}= \@select_tipo_nivel3_array;
-    $options_hash{'labels'}= \%select_tipo_nivel3_hash;
+    $options_hash{'values'}     = \@select_tipo_nivel3_array;
+    $options_hash{'labels'}     = \%select_tipo_nivel3_hash;
 
-    my $comboTipoNivel3= CGI::scrolling_list(\%options_hash);
+    my $comboTipoNivel3         = CGI::scrolling_list(\%options_hash);
 
     return $comboTipoNivel3;
 }

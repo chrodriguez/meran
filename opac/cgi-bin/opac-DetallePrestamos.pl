@@ -34,7 +34,7 @@ $t_params->{'vencidos'}= $vencidos;
 $t_params->{'PRESTAMOS'}= $prestamos;
 $t_params->{'prestamos_cant'}= scalar(@$prestamos);
 
-$t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");
+$t_params->{'CirculationEnabled'}= C4::AR::Preferencias::getValorPreferencia("circulation");
 
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
