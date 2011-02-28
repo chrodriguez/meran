@@ -82,6 +82,7 @@ use vars qw(@EXPORT_OK @ISA);
     buscarLenguajes
     buscarSoportes
     buscarNivelesBibliograficos
+    getNivelBibliograficoByCode
     generarComboTipoPrestamo
     generarComboDeSocios
     generarComboPermisos
@@ -1589,6 +1590,24 @@ sub buscarNivelesBibliograficos{
       return (scalar(@$nivelesBibliograficos), $nivelesBibliograficos);
 }
 
+=item
+getNivelBibliograficoById
+=cut
+sub getNivelBibliograficoByCode{
+
+      my ($code) = @_;
+
+      my $nivelBibliografico = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico(
+                                                                          query => [ code => { eq => $code } ]
+                                                                                );
+
+    if( scalar(@$nivelBibliografico) > 0){
+        return ($nivelBibliografico->[0]);
+    }else{
+        return 0;
+    }
+}
+
 =head2
 # Esta funcioin remueve los blancos del principio y el final del string
 =cut
@@ -2342,7 +2361,13 @@ sub generarComboNivelBibliografico{
     $options_hash{'id'}         = $params->{'id'}||'id_nivel_bibliografico';
     $options_hash{'size'}       = $params->{'size'}||1;
     $options_hash{'multiple'}   = $params->{'multiple'}||0;
-    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultNivelBibliografico");
+
+    my $nb;
+    if(!$params->{'default'}) {
+        $nb =C4::AR::Utilidades::getNivelBibliograficoByCode(C4::AR::Preferencias::getValorPreferencia('defaultNivelBibliografico'));
+    }
+
+    $options_hash{'defaults'}   = $params->{'default'} || $nb->getId;
 
     if ($params->{'optionALL'}){
         push (@select_niveles, 'ALL');
