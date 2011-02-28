@@ -204,7 +204,7 @@ sub getPedidosCotizacionConDetalle{
 }
 
 =item
-    Esta funcion devuelve los pedidos de recomendacion
+    Esta funcion devuelve los pedidos de cotizacion
 =cut
 sub getPedidosCotizacion{
 

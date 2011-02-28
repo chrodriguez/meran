@@ -173,133 +173,6 @@ sub verificarExistenciaDeDato {
     return $data->{'cant'};
 }
 
-
-=head2 getMarcSubfieldsFromBiblioitem
-
-=over 4
-getMarcSubfieldsFromBiblioitem = campos marc del biblioitem
-
-=back
-
-=cut
-
-# sub getMarcSubfieldsFromBiblioitem {
-# 
-#     my $dbh = C4::Context->dbh;
-#     my %loop_data;
-# 
-#     my $query ="SELECT tagfield,tagsubfield,kohafield,kohadefault FROM marc_subfield_structure WHERE kohafield like 'biblioitems.%' or kohafield like 'isbns.%' or kohafield like 'publisher.%' ORDER BY kohadefault DESC;";
-#     my $sth=$dbh->prepare($query);
-#     $sth->execute();
-#     while ( my $row = $sth->fetchrow_hashref ) {
-#         my %row_data;
-# 
-#         $row_data{campo}                = $row->{tagfield};
-#         $row_data{subcampo}             = $row->{tagsubfield};
-#         $row_data{kohadefault}          = $row->{kohadefault};
-#         my @aux                         = split(/\./,$row->{kohafield});
-#         $row_data{campokoha}            = $aux[1];
-#         $row_data{tablakoha}            = $aux[0];
-#         push(@{$loop_data{$row->{kohafield}}},\%row_data);
-#     }
-# 
-#     $sth->finish;
-#     return \%loop_data;
-# }
-
-=head2 getMarcSubfieldsFromItem
-
-=over 4
-getMarcSubfieldsFromItem = campos marc del item
-
-=back
-
-=cut
-
-sub getMarcSubfieldsFromItem {
-
-    my $dbh = C4::Context->dbh;
-    my %loop_data;
-
-    my $query = " SELECT tagfield,tagsubfield,kohafield,kohadefault FROM marc_subfield_structure WHERE kohafield like 'items.%' ORDER BY kohadefault DESC; ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute();
-    while ( my $row = $sth->fetchrow_hashref ) {
-        my %row_data;
-
-        $row_data{campo}                = $row->{tagfield};
-        $row_data{subcampo}             = $row->{tagsubfield};
-        $row_data{kohadefault}          = $row->{kohadefault};
-        my @aux                         = split(/\./,$row->{kohafield});
-        $row_data{campokoha}            = $aux[1];
-        $row_data{tablakoha}            = $aux[0];
-        push(@{$loop_data{$row->{kohafield}}},\%row_data);
-    }
-
-    $sth->finish;
-    return \%loop_data;
-}
-
-
-=head2 getMarcRecordFromBiblio
-
-=over 4
-Obtenemos el Marc::Record de un biblio
-=back
-
-=cut
-
-# sub getKohaToMarcByTablaCampo {
-#     my ($tablahash,$tabla,$campo,$id ) = @_;
-# 
-#     my %registroMarc;
-#     my $dato;
-#     my $camposKohaMarc = getMapeoKohaMarc;
-#     
-#     my $dbh     = C4::Context->dbh;
-#     my $query   = "SELECT * FROM $tabla WHERE $campo = ?;";
-#     my $sth     = $dbh->prepare($query);
-#        $sth->execute($id);
-#     my @datosKoha;
-#     
-#     while (my $datos = $sth->fetchrow_hashref) {
-#         push(@datosKoha,$datos);
-#     }
-#     
-#     my $sth2=$dbh->prepare("SHOW COLUMNS from $tabla");
-#     $sth2->execute;
-# #     C4::AR::Debug::debug("getKohaToMarcByTablaCampo => PROCESANDO la tabla ============ ".$tabla." ============");
-# 
-#     while ((my $campotabla) = $sth2->fetchrow_array) {
-# #         C4::AR::Debug::debug("getKohaToMarcByTablaCampo => tabla: ".$tabla." campo de la tabla: ".$campotabla);
-#     
-#         if ($camposKohaMarc->{$tablahash}->{$tabla.".".$campotabla}){
-#             my $campo;
-#             my $subcampo;
-#             foreach my $hash_record (@{$camposKohaMarc->{$tablahash}->{$tabla.".".$campotabla}}){
-#                 if((!$campo)||($hash_record->{default})){
-#                         $campo    = $hash_record->{campo};
-#                         $subcampo = $hash_record->{subcampo};
-#                         }
-#                 }
-# #             C4::AR::Debug::debug("getKohaToMarcByTablaCampo => se van a procesar ".scalar(@datosKoha)." campos");
-#             foreach my $datos (@datosKoha) {
-# #                 C4::AR::Debug::debug("getKohaToMarcByTablaCampo => PROCESANDO ===> campo: ".$campo." subcampo: ".$subcampo."  valor:".$datos->{$campotabla});
-#                 if ($datos->{$campotabla}){
-#                     #obtengo la referencia si es necesario, sino devuelve el mismo dato
-# # C4::AR::Debug::debug("ExportacionIsoMARC => getKohaToMarcByTablaCampo => campo, subcampo, dato => ".$campo.", ".$subcampo.", ".$datos->{$campotabla});
-#                     $dato = getDatoFromReferencia($campo, $subcampo, $datos->{$campotabla});
-#                     push @{$registroMarc{$campo}} , ($subcampo => $dato);
-#                 }
-#             }
-#         } else {
-# #             C4::AR::Debug::debug("getKohaToMarcByTablaCampo => NO EXISTE MAPEO para tabla: ".$tabla." campo de la tabla: ".$campotabla);
-#         }
-#     }
-# 
-#     return \%registroMarc;
-# }
-
 =item sub marc_record_to_ISO
 
   pasa un marc_record_array_to_ISO a un arhivo ISO
@@ -312,6 +185,45 @@ sub marc_record_array_to_ISO {
     }
 }
 
+sub limpiar_enter_para_roble {
+    my ($marc_record_unido) = @_;
+    #Para ROBLE limpio de \n y \r de los campos de notas (520a,534a,500a,995u)
+        #Un solo campo
+        if (( $marc_record_unido->field('520') )&&( $marc_record_unido->field('520')->subfield('a') )) {
+            my $nota=$marc_record_unido->field('520')->subfield('a');
+            $nota =~ s/\n/ /ig;
+            $nota =~ s/\r/ /ig;
+            $marc_record_unido->field('520')->update( 'a' => $nota );
+        }
+        #Un solo campo
+        if (( $marc_record_unido->field('534') )&&( $marc_record_unido->field('534')->subfield('a') )) {
+            my $nota=$marc_record_unido->field('534')->subfield('a');
+            $nota =~ s/\n/ /ig;
+            $nota =~ s/\r/ /ig;
+            $marc_record_unido->field('534')->update( 'a' => $nota );
+        }
+        #Varios campos
+        if (( $marc_record_unido->field('500') )&&( $marc_record_unido->field('500')->subfield('a') )) {
+            my @notas=$marc_record_unido->field('500')->subfield('a');
+            $marc_record_unido->field('500')->delete_subfield(code => 'a');
+            foreach my $nota (@notas){
+                $nota =~ s/\n/ /ig;
+                $nota =~ s/\r/ /ig;
+                $marc_record_unido->field('500')->add_subfields( 'a' => $nota );
+            }
+        }
+        #Varios campos
+        if (( $marc_record_unido->field('995') )&&( $marc_record_unido->field('995')->subfield('u') )) {
+            my @notas=$marc_record_unido->field('995')->subfield('u');
+            $marc_record_unido->field('995')->delete_subfield(code => 'a');
+            foreach my $nota (@notas){
+                $nota =~ s/\n/ /ig;
+                $nota =~ s/\r/ /ig;
+                $marc_record_unido->field('995')->add_subfields( 'a' => $nota );
+            }
+        }
+    return $marc_record_unido;
+}
 
 =item sub marc_record_to_ISO_from_range
   exporta un rago de biblios pasados por parametro a un archivo ISO
@@ -348,6 +260,8 @@ sub marc_record_to_ISO_from_range {
             $marc_record_unido->append_fields($field_ident_universidad);
 
             if($query->param('export_format') eq "iso"){
+                #Para ROBLE limpio de \n y \r de los campos de notas (520a,534a,500a,995u)
+                $marc_record_unido = C4::AR::ExportacionIsoMARC::limpiar_enter_para_roble($marc_record_unido);
                 # Para ROBLE reemplazo el separador de subcampo \x1F por ^ 
                 my $registro_marc= $marc_record_unido->as_usmarc();
                 $registro_marc =~ s/\x1F/\^/ig;

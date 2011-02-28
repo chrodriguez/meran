@@ -5,8 +5,8 @@ require Exporter;
 use DBI;
 use C4::Modelo::AdqPresupuestoDetalle;
 use C4::Modelo::AdqPresupuestoDetalle::Manager;
-use C4::Modelo::AdqRecomendacionDetalle::Manager;
-use C4::AR::Recomendaciones;
+use C4::AR::PedidoCotizacionDetalle;
+
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -21,7 +21,7 @@ use vars qw(@EXPORT @ISA);
 
 # =item
 #   Esta funcion agrega un Presupuesto
-#       Parametros: HASH   { id_proveedor , recomendaciones_array }     
+#       Parametros: HASH   { id_proveedor , pedido_cotizacion_id (padre del detalle) }     
 # =cut
 sub addPresupuesto{
 
@@ -29,8 +29,6 @@ sub addPresupuesto{
     my $presupuesto     = C4::Modelo::AdqPresupuesto->new();
     my $msg_object      = C4::AR::Mensajes::create();
     my $db              = $presupuesto->db;
-
-#   _verificarDatosPresupuesto($param,$msg_object); TODO
 
     if (!($msg_object->{'error'})){
         # entro si no hay algun error, todos los campos ingresados son validos
@@ -41,23 +39,23 @@ sub addPresupuesto{
             my %parametros;
             $parametros{'id_proveedor'}                     = $param->{'id_proveedor'};
             $parametros{'ref_estado_presupuesto_id'}        = '1';
+            $parametros{'pedido_cotizacion_id'}             = $param->{'pedido_cotizacion_id'};
                    
-            # agrega un presupuesto y tiene que hacer: por cada recomendacion_detalle un presupuesto_detalle
+            # agrega un presupuesto y tiene que hacer: por cada pedido_cotizacion_detalle un presupuesto_detalle
             $presupuesto->addPresupuesto(\%parametros);
                
-            # se va a agrega presupuesto_detalle con el id_presupuesto recien ingresado
-            my $id_presupuesto = $presupuesto->getId();                
+            # se va a agregar presupuesto_detalle con el id_presupuesto recien ingresado
+            my $id_presupuesto = $presupuesto->getId();  
             
-            # presupuesto_detalle
-            for(my $i=0;$i<scalar(@{$param->{'recomendaciones_array'}});$i++){
+            # traer todos los pedidos_cotizacion_detalle consultando por el id del padre (pedido_cotizacion)            
+            my $pedidos_cotizacion_detalle = C4::AR::PedidoCotizacionDetalle::getPedidosCotizacionPorPadre($param->{'pedido_cotizacion_id'});       
+            
+            # pedido_cotizacion_detalle
+            for(my $i=0; $i<scalar(@{$pedidos_cotizacion_detalle}); $i++){
                 my %params;
-                $params{'id_presupuesto'}                    = $id_presupuesto;
-                $params{'id_recomendacion_detalle'}          = $param->{'recomendaciones_array'}->[$i];  
-                
-                # obtenemos una recomendacion_detalle. Pasamos al presupuesto_detalle la cantidad de ejemplares que tenga la recomendacion_det
-                my $recomendacion_detalle = C4::AR::Recomendaciones::getRecomendacionDetallePorId($param->{'recomendaciones_array'}->[$i]);
-                            
-                $params{'cantidad_ejemplares'}              = $recomendacion_detalle->{cantidad_ejemplares}; 
+                $params{'id_presupuesto'}                   = $id_presupuesto;
+                $params{'nro_renglon'}                     = $pedidos_cotizacion_detalle->[$i]->getNroRenglon();               
+                $params{'cantidad_ejemplares'}              = $pedidos_cotizacion_detalle->[$i]->getCantidadEjemplares();
                    
                 my $presupuesto_detalle                     = C4::Modelo::AdqPresupuestoDetalle->new(db => $db);    
                 $presupuesto_detalle->addPresupuestoDetalle(\%params);
@@ -66,7 +64,7 @@ sub addPresupuesto{
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A033', 'params' => []});
             $db->commit;
-        };
+       };
         if ($@){
         # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
             &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
@@ -96,8 +94,6 @@ sub getAdqPresupuestos{
 sub getPresupuestoPorID{
      my ( $id_presupuesto, $db) = @_;
      my @result;
-     
-#     C4::AR::Debug::debug($id_presupuesto);
   
      $db = $db || C4::Modelo::AdqPresupuesto->new()->db;
 
@@ -105,7 +101,6 @@ sub getPresupuestoPorID{
                                                                     db => $db,
                                                                     query   => [ id => { eq => $id_presupuesto} ],
                                                                 );
-
      return $presupuesto->[0];  
 }
 

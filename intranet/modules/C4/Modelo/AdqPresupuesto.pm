@@ -18,6 +18,7 @@ __PACKAGE__->meta->setup(
         fecha                           => { type => 'varchar', length => 255, not_null => 1},
         ref_estado_presupuesto_id       => { type => 'integer', not_null => 1},
         ref_pedido_cotizacion_id        => { type => 'integer', not_null => 1},
+
     ],
 
 
@@ -37,7 +38,8 @@ __PACKAGE__->meta->setup(
         type        => 'one to one',
       },
       
-      ref_pedido_cotizacion=> 
+      ref_pedido_cotizacion => 
+
       {
         class       => 'C4::Modelo::AdqPedidoCotizacion',
         key_columns => {ref_pedido_cotizacion_id => 'id' },
@@ -59,7 +61,8 @@ sub addPresupuesto{
 
     $self->setProveedorId($params->{'id_proveedor'});
     $self->setRefEstadoPresupuestoId(1);
-
+    $self->setRefPedidoCotizacionId($params->{'pedido_cotizacion_id'});
+    
     $self->save();
 }
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
@@ -94,6 +97,9 @@ sub setRefPedidoCotizacionId{
     utf8::encode($pedido);
     $self->ref_pedido_cotizacion_id($pedido);
 }
+
+
+
 
 
 sub getId{
