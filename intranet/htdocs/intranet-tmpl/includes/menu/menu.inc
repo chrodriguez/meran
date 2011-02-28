@@ -517,7 +517,7 @@
 		                    <li>
 		                                [% PERL %]
 		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de Documento' | i18n %]",
-		                                                                    url =>      "/cgi-bin/koha/admin/itemtypes.pl",
+		                                                                    url =>      "/cgi-bin/koha/admin/catalogo/tipos_de_documento.pl",
 		                                                                    title =>    "[% 'Tipos de Documento' | i18n %]"
 		                                                                ) ;
 		                                [% END %]
