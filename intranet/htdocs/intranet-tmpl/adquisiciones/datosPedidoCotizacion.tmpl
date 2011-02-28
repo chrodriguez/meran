@@ -34,33 +34,6 @@
         </thead>
         <tbody> 
         [% FOREACH pedido IN pedido_cotizacion %]
-        [% IF edit %]
-            <tr align="center">
-                <td align="right" >
-                    <input type="text"  value="[% pedido.getAutor %]"> 
-                <td align="right" >
-                    <input type="text" value="[% pedido.getTitulo %]">  
-                </td>
-                <td align="right" >
-                    <input type="text" value="[% pedido.getLugarPublicacion %]">  
-                </td>
-                <td align="right" >
-                    <input type="text" value="[% pedido.getEditorial %]">  
-                </td>
-                <td align="right" >
-                    <input type="text" value="[% pedido.getFechaPublicacion %]">  
-                </td>
-                <td align="right" >
-                    <input type="text" value="[% pedido.getColeccion %]">  
-                </td>
-                <td align="right" >
-                    <input type="text" value="[% pedido.getIsbnIssn %]">  
-                </td>
-                <td align="right" >
-                    <input type="text" value="[% pedido.getCantidadEjemplares %]">  
-                </td>
-            </tr>  
-        [% ELSE %]
             <tr align="center">
                 <td align="right" >
                     <p>[% pedido.getAutor %]</p> 
@@ -87,7 +60,6 @@
                 </td>
             </tr>          
         [% END %]
-        [% END %]
         </tbody>   
         </table>
         
@@ -97,12 +69,7 @@
                                                 text    =>  "[% 'Agregar Nuevo Pedido' | i18n %]",
                                                 boton   =>  "boton_buscar",
                                                 onClick =>  "",
-                    ) ;
-            print C4::AR::Filtros::to_Button( 
-                                                text    =>  "[% 'Aceptar' | i18n %]",
-                                                boton   =>  "boton_buscar",
-                                                onClick =>  "",
-                    ) ;                    
+                    ) ;                 
         [% END %]
         [% END %]
 </fieldset>

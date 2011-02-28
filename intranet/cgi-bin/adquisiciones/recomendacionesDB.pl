@@ -6,17 +6,57 @@ use C4::AR::Recomendaciones;
 use CGI;
 use JSON;
 
-my $input = new CGI;
-my $authnotrequired= 0;
+my $input               = new CGI;
+my $obj                 = $input->param('obj')||"";
 
-my $obj=$input->param('obj');
+my ($template, $session, $t_params);
 
-$obj = C4::AR::Utilidades::from_json_ISO($obj);
+if($obj){
+#   trabajamos con JSON
 
-my $tipoAccion  = $obj->{'tipoAccion'}||"";
+    $obj                    = C4::AR::Utilidades::from_json_ISO($obj);
+    my $tipoAccion          = $obj->{'tipoAccion'};
+    
+    if($tipoAccion eq "ACTUALIZAR_RECOMENDACION"){
+    
+        ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
+            template_name       => '/adquisiciones/datosRecomendacion.tmpl',
+            query               => $input,
+            type                => "intranet",
+            authnotrequired     => 0,
+            flagsrequired       => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+        });   
+           
+    my ($ok) = C4::AR::Recomendaciones::updateRecomendacionDetalle($obj);
+    
+    my $infoOperacionJSON = to_json $ok;
+ 
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
+    
+    }
 
-if($tipoAccion eq "ACTUALIZAR_CANTIDAD_RECOMENDACION"){
+}else{
+#   trabajamos con CGI
 
-    # no va, era antes:
-    #my $recomendacion_detalle   = C4::AR::Recomendaciones::editarCantidadEjemplares($obj);
+    my $id_recomendacion    = $input->param('id_recomendacion');
+    my $tipoAccion          = $input->param('action')||"";
+
+    if($tipoAccion eq "EDITAR_RECOMENDACION"){
+
+        ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
+            template_name       => '/adquisiciones/datosRecomendacion.tmpl',
+            query               => $input,
+            type                => "intranet",
+            authnotrequired     => 0,
+            flagsrequired       => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+        });   
+           
+        my $recomendaciones             = C4::AR::Recomendaciones::getRecomendacionDetallePorId($id_recomendacion);
+        
+        $t_params->{'recomendaciones'}  = $recomendaciones;
+    }
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
+
+#C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
