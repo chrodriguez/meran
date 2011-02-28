@@ -41,7 +41,7 @@ my ($userid, $session, $flags) = C4::AR::Auth::checkauth(   $input,
                                                         "intranet"
                             );
 
-my $libreD=C4::AR::Preferencias->getValorPreferencia("libreDeuda");
+my $libreD=C4::AR::Preferencias::getValorPreferencia("libreDeuda");
 my @array=split(//, $libreD);
 my $ok=1;
 my $msj="";

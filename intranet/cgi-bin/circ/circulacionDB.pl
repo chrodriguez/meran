@@ -149,8 +149,8 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 			$params{'nro_socio'}                = $nro_socio;
 			$params{'loggedinuser'}             = $user;
 			$params{'responsable'}              = $user;
-			$params{'id_ui'}                    = C4::AR::Preferencias->getValorPreferencia('defaultUI');
-			$params{'id_ui_prestamo'}           = C4::AR::Preferencias->getValorPreferencia('defaultUI');
+			$params{'id_ui'}                    = C4::AR::Preferencias::getValorPreferencia('defaultUI');
+			$params{'id_ui_prestamo'}           = C4::AR::Preferencias::getValorPreferencia('defaultUI');
 			$params{'tipo'}                     = "INTRA";
 			$params{'tipo_prestamo'}            = $tipoPrestamo;
 		

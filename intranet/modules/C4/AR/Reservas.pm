@@ -322,7 +322,7 @@ C4::AR::Debug::debug("_chequeoParaPrestamo=> nro_socio: ".$nro_socio);
 # NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE
 # REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
                 $params->{'id3'}="";
-                if(!C4::AR::Preferencias->getValorPreferencia('intranetGroupReserve')){
+                if(!C4::AR::Preferencias::getValorPreferencia('intranetGroupReserve')){
                 #NO SE PERMITE LA RESERVA DE GRUPO
                     $sePermiteReservaGrupo=0;
                     #Hay error no se permite realizar una reserva de grupo en intra.
@@ -366,14 +366,14 @@ sub Enviar_Email{
     my $cierre= $params->{'cierre'};
     my $loggedinuser= $params->{'loggedinuser'};
 
-    if (C4::AR::Preferencias->getValorPreferencia("EnabledMailSystem")){
+    if (C4::AR::Preferencias::getValorPreferencia("EnabledMailSystem")){
 
         my $dateformat = C4::Date::get_date_format();
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
         
-        my $mailFrom=C4::AR::Preferencias->getValorPreferencia("reserveFrom");
-        my $mailSubject =C4::AR::Preferencias->getValorPreferencia("reserveSubject");
-        my $mailMessage =C4::AR::Preferencias->getValorPreferencia("reserveMessage");
+        my $mailFrom=C4::AR::Preferencias::getValorPreferencia("reserveFrom");
+        my $mailSubject =C4::AR::Preferencias::getValorPreferencia("reserveSubject");
+        my $mailMessage =C4::AR::Preferencias::getValorPreferencia("reserveMessage");
         
         $mailSubject =~ s/BRANCH/$reserva->ui->getNombre/;
         $mailMessage =~ s/BRANCH/$reserva->ui->getNombre/;
@@ -469,8 +469,8 @@ sub estaReservado{
 # }
 
 sub _verificarHorario{
-    my $end = ParseDate(C4::AR::Preferencias->getValorPreferencia("close"));
-    my $begin =ParseDate(C4::AR::Preferencias->getValorPreferencia("open"));
+    my $end = ParseDate(C4::AR::Preferencias::getValorPreferencia("close"));
+    my $begin =ParseDate(C4::AR::Preferencias::getValorPreferencia("open"));
     my $actual=ParseDate("now");
     my $error=0;
 
@@ -484,7 +484,7 @@ sub _verificarHorario{
 }
 
 sub _verificarHorarioES{
-    my $end = ParseDate(C4::AR::Preferencias->getValorPreferencia("close"));
+    my $end = ParseDate(C4::AR::Preferencias::getValorPreferencia("close"));
     my $begin =C4::Date::calc_beginES();
     my $actual=ParseDate("now");
     my $error=0;
@@ -769,7 +769,7 @@ sub _verificaciones {
     }
 
 #Se verifica que el usuario halla realizado el curso, segun preferencia del sistema.
-    if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias->getValorPreferencia("usercourse")) && 
+    if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Preferencias::getValorPreferencia("usercourse")) && 
         (!$socio->getCumple_requisito) ){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U304', 'params' => []} ) ;
@@ -802,7 +802,7 @@ sub _verificaciones {
 
 #Se verifica que la operación este dentro del horario de funcionamiento de la biblioteca.
 #SOLO PARA INTRA, ES UN PRESTAMO.
-    if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo ne 'ES' && !C4::AR::Preferencias->getValorPreferencia("operacion_fuera_horario") && _verificarHorario()){
+    if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo ne 'ES' && !C4::AR::Preferencias::getValorPreferencia("operacion_fuera_horario") && _verificarHorario()){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P127', 'params' => []} ) ;
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de operacion fuera de horario");
@@ -836,7 +836,7 @@ sub _verificaciones {
 #Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema desde OPAC
     if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Usuarios::llegoMaxReservas($nro_socio))){
         $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R001', 'params' => [C4::AR::Preferencias->getValorPreferencia("maxreserves")]} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R001', 'params' => [C4::AR::Preferencias::getValorPreferencia("maxreserves")]} ) ;
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de maximo de reservas desde OPAC");
     }
 

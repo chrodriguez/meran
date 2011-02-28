@@ -92,7 +92,7 @@ sub newauthority  {
 	my $sth1b=$dbh->prepare("select id from bibliothesaurus where freelib=? and hierarchy=? and category=?");
 	my $sth2 =$dbh->prepare("insert into bibliothesaurus (category,stdlib,freelib,father,level,hierarchy) values (?,?,?,?,?,?)");
 	$freelib=$stdlib unless ($freelib);
-	my $authoritysep = C4::AR::Preferencias->getValorPreferencia('authoritysep');
+	my $authoritysep = C4::AR::Preferencias::getValorPreferencia('authoritysep');
 	my @Thierarchy = split(/$authoritysep/,$stdlib);
 	#---- split freelib. If not same structure as stdlib (different number of authoritysep),
 	#---- then, drop it => we will use stdlib to build hiearchy, freelib will be used only for last occurence.

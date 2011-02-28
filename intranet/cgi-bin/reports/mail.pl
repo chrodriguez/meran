@@ -33,20 +33,20 @@ my $branch = $input->param('branch');
 
 my ($count,$result)=C4::AR::Reservas::mailReservas($branch);
 # mensaje que depende del tipo de consulta.
-my $mensaje =C4::AR::Preferencias->getValorPreferencia("reserveMessage");
+my $mensaje =C4::AR::Preferencias::getValorPreferencia("reserveMessage");
 # mensaje para el asunto.
-my $mailSubject=C4::AR::Preferencias->getValorPreferencia("reserveSubject")
+my $mailSubject=C4::AR::Preferencias::getValorPreferencia("reserveSubject")
 
 
 my $branchname=C4::AR::Busquedas::getBranch($branch);
 $branchname=$branchname->{'branchname'};
 $mailSubject=~ s/BRANCH/$branchname/;
 
-my $mailFrom=C4::AR::Preferencias->getValorPreferencia("mailFrom");
+my $mailFrom=C4::AR::Preferencias::getValorPreferencia("mailFrom");
    $mailFrom =~ s/BRANCH/$branchname/;
 
-my $horaInicio = C4::AR::Preferencias->getValorPreferencia("open");
-my $horaFin = C4::AR::Preferencias->getValorPreferencia("close");
+my $horaInicio = C4::AR::Preferencias::getValorPreferencia("open");
+my $horaFin = C4::AR::Preferencias::getValorPreferencia("close");
 my $dateformat = C4::Date::get_date_format();
 
 for (my $i=0;$i<$count;$i++){

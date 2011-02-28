@@ -204,11 +204,11 @@ sub gettemplate {
 #   my @languages;
 #   my @themes;
 #   if ( $section eq "intranet"){
-#       push @languages , C4::AR::Preferencias->getValorPreferencia('opaclanguages');
-#       push @themes ,  C4::AR::Preferencias->getValorPreferencia('template');
+#       push @languages , C4::AR::Preferencias::getValorPreferencia('opaclanguages');
+#       push @themes ,  C4::AR::Preferencias::getValorPreferencia('template');
 #   }else   {
-#       push @languages, C4::AR::Preferencias->getValorPreferencia('opaclanguages');
-#       push @themes , C4::AR::Preferencias->getValorPreferencia('opacthemes');
+#       push @languages, C4::AR::Preferencias::getValorPreferencia('opaclanguages');
+#       push @themes , C4::AR::Preferencias::getValorPreferencia('opacthemes');
 #   }
 #   
 #   my ($theme, $lang);
@@ -322,9 +322,9 @@ document.
 #   else {$type = $ptype . '/'; }
 # 
 #   my %returns;
-#   my $theme = C4::AR::Preferencias->getValorPreferencia("theme") || "default";
+#   my $theme = C4::AR::Preferencias::getValorPreferencia("theme") || "default";
 #   if ($themeor and
-#       C4::AR::Preferencias->getValorPreferencia("allowthemeoverride") =~ qr/$themeor/i)
+#       C4::AR::Preferencias::getValorPreferencia("allowthemeoverride") =~ qr/$themeor/i)
 #   {
 #     $theme = $themeor;
 #   }
@@ -391,7 +391,7 @@ the Koha database. If neither is set, it defaults to C<en> (English).
 # 
 #   if ($ENV{'HTTP_ACCEPT_LANGUAGE'}) {
 #     @languageorder = split (/\s*,\s*/ ,lc($ENV{'HTTP_ACCEPT_LANGUAGE'}));
-#   } elsif (my $order = C4::AR::Preferencias->getValorPreferencia("languageorder")) {
+#   } elsif (my $order = C4::AR::Preferencias::getValorPreferencia("languageorder")) {
 #     @languageorder = split (/\s*,\s*/ ,lc($order));
 #   } else { # here should be another elsif checking for apache's languageorder
 #     @languageorder = ('en');

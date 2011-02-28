@@ -892,7 +892,7 @@ sub itemcountbibitem {
 			FROM cat_nivel3 
 			WHERE id2=? ";
 
-	if (($type ne 'intra')&&(C4::AR::Preferencias->getValorPreferencia("opacUnavail") eq 0)){
+	if (($type ne 'intra')&&(C4::AR::Preferencias::getValorPreferencia("opacUnavail") eq 0)){
 		$query2.=" AND (wthdrawn=0 OR wthdrawn IS NULL OR wthdrawn=2)"; #wthdrawn=2 es COMPARTIDO
 	}
 
@@ -957,7 +957,7 @@ sub itemcountbibitem {
 	}
 	$sth->finish;
 	
-	my $opacUnavail= C4::AR::Preferencias->getValorPreferencia("opacUnavail");
+	my $opacUnavail= C4::AR::Preferencias::getValorPreferencia("opacUnavail");
 	my @results;
 	foreach my $key (keys %counts){	
 # 		if(($type eq 'opac')&&(C4::Context->preference("opacUnavail") eq 0)){

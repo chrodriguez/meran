@@ -31,7 +31,7 @@ sub getConfiguracion{
     my ($perfil) = @_;
     my @filtros;
 
-    $perfil = $perfil || C4::AR::Preferencias->getValorPreferencia('perfil_opac');
+    $perfil = $perfil || C4::AR::Preferencias::getValorPreferencia('perfil_opac');
 
     push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
                                     id_perfil   => { eq => '0'     } ]) #PERFIL TODOS

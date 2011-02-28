@@ -59,7 +59,7 @@ my $function_name= "210c".(int(rand(100000))+1);
 my $sth = $dbh->prepare("select father,stdlib from bibliothesaurus where category='EDITORS' and level=2");
 $sth->execute;
 my @editors;
-my $authoritysep = C4::AR::Preferencias->getValorPreferencia("authoritysep");
+my $authoritysep = C4::AR::Preferencias::getValorPreferencia("authoritysep");
 while (my ($father,$stdlib) = $sth->fetchrow) {
 	push(@editors,"$father $stdlib");
 }

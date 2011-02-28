@@ -94,7 +94,7 @@ if ($op eq "do_search") { #HACER LA BUSQUEDA
             
         ####PAGINADOR#####
         #
-        my $num=C4::AR::Preferencias->getValorPreferencia("renglones");
+        my $num=C4::AR::Preferencias::getValorPreferencia("renglones");
         
         $t_params->{'startfrom'}= $startfrom+1;
         ($startfrom+$num<=$count) ? ($t_params->{'endat'}=( $startfrom+$num)) : ($t_params->{'endat'}= $count);

@@ -377,7 +377,7 @@ sub get_template_and_user {
     }
 
     #se cargan todas las variables de entorno de las preferencias del sistema
-    $params->{'limite_resultados_autocompletables'} = C4::AR::Preferencias->getValorPreferencia("limite_resultados_autocompletables");
+    $params->{'limite_resultados_autocompletables'} = C4::AR::Preferencias::getValorPreferencia("limite_resultados_autocompletables");
 
     return ($template, $session, $params, $usuario_logueado);
 }
@@ -554,7 +554,7 @@ sub checkauth {
         }
         
         #por aca se permite llegar a paginas que no necesitan autenticarse
-        my $insecure = C4::AR::Preferencias->getValorPreferencia('insecure');
+        my $insecure = C4::AR::Preferencias::getValorPreferencia('insecure');
         if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
             #Se verifica si el usuario tiene que cambiar la password
             if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$change_password ) {
@@ -798,7 +798,7 @@ sub buildSocioData{
 
 =cut
 sub _getTimeOut {
-    my $timeout = C4::Context->config('timeout')|| C4::AR::Preferencias->getValorPreferencia('timeout') ||600;
+    my $timeout = C4::Context->config('timeout')|| C4::AR::Preferencias::getValorPreferencia('timeout') ||600;
     return $timeout;
 }
 
@@ -1018,7 +1018,7 @@ sub redirectToNoHTTPS {
 =cut
 sub _opac_logout{
 
-    if ( C4::AR::Preferencias->getValorPreferencia("habilitar_https") ){
+    if ( C4::AR::Preferencias::getValorPreferencia("habilitar_https") ){
     #se encuentra habilitado https
         redirectToHTTPS('/cgi-bin/koha/login/auth.pl');
     }else{
@@ -1030,7 +1030,7 @@ sub redirectToHTTPS {
     my ($url) = @_;
 #     C4::AR::Debug::debug("\n");
 #     C4::AR::Debug::debug("redirectToHTTPS=> \n");
-    my $puerto = C4::AR::Preferencias->getValorPreferencia("puerto_para_https")||'80';
+    my $puerto = C4::AR::Preferencias::getValorPreferencia("puerto_para_https")||'80';
     my $protocolo = "https";
     if($puerto eq "80"){
         $protocolo = "http";
@@ -1072,7 +1072,7 @@ sub _operacionesDeOPAC{
     $db->begin_work;
 	eval{
 		#Si es un usuario de opac que esta sancionado entonces se borran sus reservas
-		my ($isSanction,$endDate)= C4::AR::Sanciones::permitionToLoan($socio, C4::AR::Preferencias->getValorPreferencia("defaultissuetype"));
+		my ($isSanction,$endDate)= C4::AR::Sanciones::permitionToLoan($socio, C4::AR::Preferencias::getValorPreferencia("defaultissuetype"));
         my $regular = $socio->esRegular;
         my $userid = $socio->getNro_socio();
 	    if ($isSanction || !$regular ){
@@ -1216,7 +1216,7 @@ sub new_password_is_needed {
     if (!$socio) {
         $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
     }
-    my $days = C4::AR::Preferencias->getValorPreferencia("keeppasswordalive");
+    my $days = C4::AR::Preferencias::getValorPreferencia("keeppasswordalive");
     if ($days ne '0') {
         my $err;
         my $today = Date::Manip::DateCalc("today","- ".$days." days",\$err);
