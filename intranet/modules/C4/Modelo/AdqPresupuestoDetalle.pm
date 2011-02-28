@@ -19,6 +19,7 @@ __PACKAGE__->meta->setup(
         cantidad                           => { type => 'integer', not_null => 1},
         seleccionado                       => { type => 'integer', length => 11, not_null => 1 },
         nro_renglon                        => { type => 'integer', length => 11, not_null => 1 },
+
     ],
 
 
@@ -30,6 +31,7 @@ __PACKAGE__->meta->setup(
          key_columns => {adq_presupuesto_id => 'id' },
          type        => 'one to one',
        },
+
     ],
     
     primary_key_columns => [ 'id' ],
@@ -48,7 +50,6 @@ sub addPresupuestoDetalle{
     $self->setPrecioUnitario(0);
     $self->setCantidad($params->{'cantidad_ejemplares'});
     $self->setSeleccionado(1);
-
     $self->save();
 }
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
@@ -85,6 +86,7 @@ sub setCantidad {
     $self->cantidad($cantidad);
 }
 
+
 sub setSeleccionado {
     my ($self) = shift;
     my ($seleccionado) = @_;
@@ -102,10 +104,12 @@ sub getAdqPresupuestoId{
     return ($self->adq_presupuesto_id);
 }
 
+
 sub getNroRenglon {
     my ($self) = shift;
     return ($self->nro_renglon);
 }
+
 
 sub getPrecioUnitario  {
     my ($self) = shift;
@@ -120,4 +124,11 @@ sub getCantidad  {
 sub getSeleccionado  {
     my ($self) = shift;
     return ($self->seleccionado);
+
 }
+    
+
+
+
+
+

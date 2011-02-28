@@ -20,6 +20,7 @@ use POSIX qw(ceil floor);
 use JSON;
 use C4::AR::Preferencias;
 use C4::AR::Presupuestos;
+use C4::AR::PedidoCotizacion;
 
 #Einar use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 
@@ -98,6 +99,8 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboDeCredentials
     generarComboTemasOPAC
     generarComboTemasINTRA
+    generarComboRecomendaciones
+    generarComboPedidosCotizacion
     getFeriados
     bbl_sort
     createSphinxInstance
@@ -452,6 +455,7 @@ sub saveholidays{
         }
     }
 }
+
 
 sub obtenerTiposDeColaboradores{
 
@@ -2028,6 +2032,8 @@ sub generarComboPresupuestos{
 
     foreach my $presupuesto (@$presupuestos) {
         push(@select_presupuestos_array, $presupuesto->getId);
+        
+# FIXME (ver si es persona fisica o razxon social)
         $select_presupuestos{$presupuesto->getId}  = $presupuesto->getId." - ".$presupuesto->ref_proveedor->getNombre." - ".$presupuesto->getFecha;
       
     }
@@ -2059,6 +2065,99 @@ sub generarComboPresupuestos{
 
     return $combo_presupuestos; 
 }
+
+sub generarComboPedidosCotizacion {
+    my ($params) = @_;
+
+    my @select_pedidos_array;
+    my %select_pedidos;
+    my $cotizaciones  = &C4::AR::PedidoCotizacion::getAdqPedidosCotizacion();
+
+#     push (@select_pedidos_array, '');
+      
+#     C4::AR::Debug::debug("RECOMENDACIONES:".$recomendaciones);
+
+    foreach my $cotizacion (@$cotizaciones) {
+        push(@select_pedidos_array, $cotizacion->getId);
+        $select_pedidos{$cotizacion->getId}  = $cotizacion->getId." - ".$cotizacion->getFecha
+    }
+    
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){ 
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+     $options_hash{'name'}       = $params->{'name'}||'combo_pedidos';
+     $options_hash{'id'}         = $params->{'id'}||'combo_pedidos';
+     $options_hash{'size'}       = $params->{'size'}||1;
+     $options_hash{'class'}      = 'required';
+     $options_hash{'multiple'}   = $params->{'multiple'}||0;
+     $options_hash{'defaults'}   = $params->{'default'} || 0;
+
+   
+    $options_hash{'values'}     = \@select_pedidos_array;
+    $options_hash{'labels'}     = \%select_pedidos;
+
+    my $combo_pedidos  = CGI::scrolling_list(\%options_hash);
+
+    return $combo_pedidos; 
+
+
+}
+
+
+
+sub generarComboRecomendaciones{
+    my ($params) = @_;
+
+    my @select_recomendaciones_array;
+    my %select_recomendaciones;
+    my $recomendaciones  = &C4::AR::Recomendaciones::getRecomendaciones();
+
+    push (@select_recomendaciones_array, '');
+      
+#     C4::AR::Debug::debug("RECOMENDACIONES:".$recomendaciones);
+
+    foreach my $recomendacion (@$recomendaciones) {
+        push(@select_recomendaciones_array, $recomendacion->getId);
+        $select_recomendaciones{$recomendacion->getId}  = $recomendacion->getId." - ".$recomendacion->ref_usr_socio->[0]->persona->nombre." - ".$recomendacion->getFecha;
+    }
+    
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){ 
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+     $options_hash{'name'}       = $params->{'name'}||'combo_recomendaciones';
+     $options_hash{'id'}         = $params->{'id'}||'combo_recomendaciones';
+     $options_hash{'size'}       = $params->{'size'}||1;
+     $options_hash{'class'}      = 'required';
+     $options_hash{'multiple'}   = $params->{'multiple'}||0;
+     $options_hash{'defaults'}   = $params->{'default'} || 0;
+
+   
+    $options_hash{'values'}     = \@select_recomendaciones_array;
+    $options_hash{'labels'}     = \%select_recomendaciones;
+
+    my $combo_recomendaciones  = CGI::scrolling_list(\%options_hash);
+
+    return $combo_recomendaciones; 
+}
+
 
 
 
@@ -3088,6 +3187,38 @@ sub ciudadesAutocomplete{
 
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
+
+sub ciudadesAutocomplete{
+
+    my ($ciudad)= @_;
+    my $textout;
+    my @result;
+    if ($ciudad){
+        my($cant, $result) = C4::AR::Utilidades::buscarCiudades($ciudad);# agregado sacar
+        C4::AR::Debug::debug("CANTIDAD DE CIUDADES: ".$cant);
+        $textout= "";
+        for (my $i; $i<$cant; $i++){
+            $textout.= $result->[$i]->{'id'}."|".$result->[$i]->{'nombre'}."\n";
+        }
+    }
+
+
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
+
+# sub catalogoBibliotecaAutocomplete{
+# 
+#     my ($busquedaStr)= @_;;
+#     my $textout="";
+#     my ($cant, $busqueda_array_ref)=C4::AR::Utilidades::obtenerCatalogo($busquedaStr);
+# 
+#     foreach my $item (@$busqueda_array_ref){
+#         $textout.=$pais->getIso."|".$pais->getNombre_largo."\n";
+#     }
+# 
+#     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+# 
+# }
 
 sub getSphinxMatchMode{
   my ($tipo) = @_;

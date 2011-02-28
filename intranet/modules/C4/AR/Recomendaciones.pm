@@ -14,9 +14,15 @@ use vars qw(@EXPORT @ISA);
     &agregrarRecomendacion;
     &getRecomendacionesActivas;
     &getRecomendacionDetallePorId;
+    &getRecomendaciones;
+    &getRecomendacionDetalle;
     &editarCantidadEjemplares;
+
+
     &getRecomendacionPorId;
+
     &updateRecomendacionDetalle;
+
 );
 
 =item
@@ -113,6 +119,19 @@ sub getRecomendacionesActivas{
     return ($recomendaciones_activas_array_ref);
 }
 
+sub getRecomendaciones{
+
+    my ($params) = @_;
+
+    my $db                                      = C4::Modelo::AdqRecomendacion->new()->db;
+    my $recomendaciones_activas_array_ref       = C4::Modelo::AdqRecomendacion::Manager->get_adq_recomendacion(   
+                                                                    db => $db,
+                                                                    query   => [ activa => 1 ],
+                                                                );
+
+    return ($recomendaciones_activas_array_ref);
+}
+
 =item
     Recupera un registro de recomendacion_detalle
     Retorna un objeto o 0 si no existe
@@ -125,8 +144,7 @@ sub getRecomendacionDetallePorId{
     my $recomendacion     = C4::Modelo::AdqRecomendacionDetalle::Manager->get_adq_recomendacion_detalle(   
                                                                     db => $db,
                                                                     query   => [ id  => { eq => $params} ],
-                                                                );
-                                                                
+                                                                );                                                       
     if( scalar($recomendacion) > 0){
         return ($recomendacion->[0]);
     }else{
@@ -134,10 +152,38 @@ sub getRecomendacionDetallePorId{
     }
 }
 
+
+
+sub getRecomendacionDetalle{
+
+    my ($params) = @_;
+
+    my $db                = C4::Modelo::AdqRecomendacionDetalle->new()->db;
+    my $recomendacion     = C4::Modelo::AdqRecomendacionDetalle::Manager->get_adq_recomendacion_detalle(   
+                                                                    db => $db,
+                                                                    query   => [ adq_recomendacion_id => { eq => $params} ],
+                                                                );                                                       
+
+    if( scalar($recomendacion) > 0){
+        return ($recomendacion);
+    
+    }
+}
+
+
+
 =item
     Recupera un registro de recomendacion
     Retorna un objeto o 0 si no existe
 =cut
+
+
+
+
+
+
+
+
 sub getRecomendacionPorId{
 
     my ($params, $db) = @_;
@@ -148,6 +194,7 @@ sub getRecomendacionPorId{
                                                                 
     if( scalar($recomendacion) > 0){
         return ($recomendacion->[0]);
+
     }else{
         return 0;
     }
@@ -215,3 +262,8 @@ sub _verificarDatosRecomendacion {
      #TODO: 
  
 }
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+__END__

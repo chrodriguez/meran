@@ -7,8 +7,6 @@
 
 function validateForm(){
 
-   
-
             $("#contactform").validate({
     
                 errorElement: "em",
@@ -33,9 +31,9 @@ function validateForm(){
 }
 
 $(document).ready( function() {
-    CrearAutocompleteCatalogoBiblioteca({IdInput: 'buscar_biblioteca', 
-                                         IdInputHidden: 'hidden_completo'
-                                        });
+//     CrearAutocompleteCatalogoBiblioteca({IdInput: 'buscar_biblioteca', 
+//                                          IdInputHidden: 'hidden_completo'
+//                                         });
     validateForm();
 });
 
@@ -48,20 +46,45 @@ $(document).ready( function() {
             <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">
               <input type="hidden" name="action" value="agregar">
               <fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
-                <p><label for="nombre" class="left">[% 'Nombre y Apellido *' | i18n %]:</label>
-                   <input type="text" name="nombre" id="nombre" class="field required" value="[% socio.persona.getNombre %] [% socio.persona.getApellido %]" tabindex="1" /></p>
-                <p><label for="email" class="left">[% 'E-mail *' | i18n %]:</label>
-                   <input type="text" name="email" id="email" class="field required" value="[% socio.persona.getEmail %]" tabindex="2" /></p>
-                <p><label for="profesor-departamento" class="left">[% 'Profesor Indicar Departamento *' | i18n %]:</label>
-                   <input type="text" name="dpto_id" id="dpto_id" class="field required" value="" tabindex="3" /></p>
-                <p><label for="direccion" class="left">[% 'Servicio Indicar Departamento *' | i18n %]:</label>
-                   <input type="text" name="servicio-departamento" id="servicio-departamento" class="field required" value="" tabindex="4" /></p>
-                <p><label for="reservar" class="left">[% 'Reservar' | i18n %]:</label>
-                   <input type="checkbox" name="reservar" id="reservar" class="field" value="" tabindex="5" /></p>
+                
+                    <p><label for="nombre" class="left">[% 'Nombre y Apellido *' | i18n %]:</label>
+                      <input type="text" name="nombre" id="nombre" class="field required" value="[% socio.persona.getNombre %] [% socio.persona.getApellido %]" tabindex="1" /></p>
+                    <p><label for="email" class="left">[% 'E-mail *' | i18n %]:</label>
+                      <input type="text" name="email" id="email" class="field required" value="[% socio.persona.getEmail %]" tabindex="2" /></p>
+                    <p><label for="profesor-departamento" class="left">[% 'Profesor Indicar Departamento *' | i18n %]:</label>
+                      <input type="text" name="dpto_id" id="dpto_id" class="field required" value="" tabindex="3" /></p>
+                    <p><label for="direccion" class="left">[% 'Servicio Indicar Departamento *' | i18n %]:</label>
+                      <input type="text" name="servicio-departamento" id="servicio-departamento" class="field required" value="" tabindex="4" /></p>
+                    <p><label for="reservar" class="left">[% 'Reservar' | i18n %]:</label>
+                      <input type="checkbox" name="reservar" id="reservar" class="field" value="" tabindex="5" /></p>
+              
               </fieldset>
+              
               <fieldset><legend>&nbsp;[% 'Datos del Material' | i18n %]&nbsp;</legend>
-                <p><label for="buscar_biblioteca" class="left">[% 'Buscar en la Biblioteca' | i18n %]:</label>
-                   <input type="text" name="buscar_biblioteca" id="buscar_biblioteca" class="field" value="" tabindex="6" /></p>
+                 <div>
+                          
+                                    <div id="filtrosBusqueda" class="filtrosBusqueda">
+                                            <span class="titulos"></span>
+                                            <div class="formElemets classform">
+                                                <div id="busqueda_combinada">
+                                                   
+                                                                <ul id="simple">
+                                                                    <li class="sub_item">
+                                                                        <label for="keyword">
+                                                                                <strong>[% "B&uacute;squeda combinada" | i18n %]</strong>
+                                                                        </label>
+                                                                        <input type="text" id="keyword" size="25" onkeypress="limpiarCampos('arriba')">
+                                                                        <label for="match_mode">
+                                                                        </label>  
+                                                                                [% PERL %]
+                                                                                          print C4::AR::Filtros::getComboMatchMode() ;
+                                                                                [% END %]
+                                                                    </li>
+                                                                </ul>
+                                               
+                                                </div> 
+                                    </div>
+                 </div>
                 <p><label for="hidden_id_nivel_2" class="left">[% 'HIDDEN_ID_NIVEL_2' | i18n %]:</label>
                    <input type="text" name="hidden_completo" id="hidden_completo" class="field" value="" tabindex="7" />
                    <input type="text" name="hidden_id_nivel_2" id="hidden_id_nivel_2" class="field" value="" tabindex="7" />
@@ -84,7 +107,9 @@ $(document).ready( function() {
                    <input type="text" name="isbn_issn" id="isbn_issn" class="field" value="" tabindex="10" /></p>
                 <p><label for="cantidad_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
                    <input type="text" name="cantidad_ejemplares" id="cantidad_ejemplares" class="field" value="" tabindex="10" /></p>
+              
               </fieldset>
+              
               <fieldset><legend>&nbsp;[% 'Motivo de la propuesta' | i18n %]&nbsp;</legend>
                 <p>
                    <textarea name="motivo_propuesta" id="motivo_propuesta" cols="45" class="required" rows="10" tabindex="17"></textarea></p>

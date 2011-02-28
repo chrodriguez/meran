@@ -12,10 +12,12 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(  
     &getAdqPresupuestoDetalle;
+    $getAdqRenglonPresupuestoDetalle;
     &actualizarPresupuesto;
     &getAdqPresupuestos;
     &getPresupuestoPorID;
     &addPresupuesto;
+
 );
 
 # =item
@@ -89,6 +91,7 @@ sub getAdqPresupuestos{
 }
 
 
+
 sub getPresupuestoPorID{
      my ( $id_presupuesto, $db) = @_;
      my @result;
@@ -103,6 +106,9 @@ sub getPresupuestoPorID{
 }
 
 
+
+# -------- Retorna todos los detalles para el presupuesto con id $id_presupuesto ----------------------------
+
 sub getAdqPresupuestoDetalle{
     my ( $id_presupuesto, $db) = @_;
     my @results; 
@@ -112,6 +118,7 @@ sub getAdqPresupuestoDetalle{
     my $detalle_array_ref = C4::Modelo::AdqPresupuestoDetalle::Manager->get_adq_presupuesto_detalle(   
                                                                     db => $db,
                                                                     query   => [ adq_presupuesto_id => { eq => $id_presupuesto} ],
+                                                                    sort_by => 'nro_renglon',
                                                                 );
       
      foreach my $detalle_pres (@$detalle_array_ref) {
@@ -126,6 +133,27 @@ sub getAdqPresupuestoDetalle{
     }
 }
 
+# -----------------------------------------------------------------------------------------------------------
+
+# -------- Retorna el renglon nro: $nro_renglon para el presupuesto con id $id_presupuesto ------------------
+
+
+sub getAdqRenglonPresupuestoDetalle{
+    my ( $id_presupuesto, $nro_renglon ,$db) = @_;
+    my @results; 
+
+    $db = $db || C4::Modelo::AdqPresupuestoDetalle->new()->db;
+
+    my $renglon_ref = C4::Modelo::AdqPresupuestoDetalle::Manager->get_adq_presupuesto_detalle(   
+                                                                    db => $db,
+                                                                    query   => [ adq_presupuesto_id => { eq => $id_presupuesto}, nro_renglon => { eq => $nro_renglon} ],
+#                                                                
+                                                                );
+    return $renglon_ref->[0];
+    
+}
+
+# ------------------------------------------------------------------------------------------------------------
 
 sub actualizarPresupuesto{
     
@@ -150,6 +178,8 @@ sub actualizarPresupuesto{
                     my $cantidad= $tabla_array_ref->[$i]->{'Cantidad'};
                     my $precio_unitario= $tabla_array_ref->[$i]->{'PrecioUnitario'};
                     
+                    
+                    # --------------- VALIDACIONES DE DATOS INGRESADOS----------------------
                     if($cantidad ne "") {
                           if (!($msg_object->{'error'}) && ( ((&C4::AR::Validator::countAlphaChars($cantidad) != 0)) || (&C4::AR::Validator::countSymbolChars($cantidad) != 0) || (&C4::AR::Validator::countNumericChars($cantidad) == 0))){
 
@@ -171,6 +201,8 @@ sub actualizarPresupuesto{
                           $msg_object->{'error'}= 1;
                           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A032', 'params' => []} ) ;  
                     }
+                    
+                    # ---------------FIN VALIDACIONES ----------------------------------------                     
                     
                     $detalle->setPrecioUnitario($precio_unitario);
                     $detalle->setCantidad($cantidad);

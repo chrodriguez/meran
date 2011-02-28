@@ -10,24 +10,26 @@ __PACKAGE__->meta->setup(
     table   => 'adq_pedido_cotizacion_detalle',
 
     columns => [
-          id                            => { type => 'integer', not_null => 1 },  
-          adq_pedido_cotizacion_id      => { type => 'integer', not_null => 1 },  
-          cat_nivel2_id                 => { type => 'integer', not_null => 1 },
-          autor                         => { type => 'varchar', length => 255, not_null => 1},
-          titulo                        => { type => 'varchar', length => 255, not_null => 1},
-          lugar_publicacion             => { type => 'varchar', length => 255, not_null => 1},
-          editorial                     => { type => 'varchar', length => 255, not_null => 1},
-          fecha_publicacion             => { type => 'varchar'},
-          coleccion                     => { type => 'varchar', length => 255, not_null => 1},
-          isbn_issn                     => { type => 'varchar', length => 45, not_null => 1},
-          cantidad_ejemplares           => { type => 'integer', length => 5, not_null => 1 },  
-          precio_unitario               => { type => 'float', length => 5, not_null => 1},
-          adq_recomendacion_detalle_id  => { type => 'varchar', length => 255, not_null => 1},
-          nro_renglon                   => { type => 'integer', length => 11, not_null => 1 },           
+
+          id                        => { type => 'integer', not_null => 1 },  
+          adq_pedido_cotizacion_id  => { type => 'integer', not_null => 1 },  
+          cat_nivel2_id             => { type => 'integer', not_null => 1 },
+          autor                     => { type => 'varchar', length => 255, not_null => 1},
+          titulo                    => { type => 'varchar', length => 255, not_null => 1},
+          lugar_publicacion         => { type => 'varchar', length => 255, not_null => 1},
+          editorial                 => { type => 'varchar', length => 255, not_null => 1},
+          fecha_publicacion         => { type => 'varchar'},
+          coleccion                 => { type => 'varchar', length => 255, not_null => 1},
+          isbn_issn                 => { type => 'varchar', length => 45, not_null => 1},
+          cantidad_ejemplares       => { type => 'integer', length => 5, not_null => 1 },  
+          precio_unitario           => { type => 'float', length => 5, not_null => 1},
+          adq_recomendacion_detalle_id => { type => 'varchar', length => 255, not_null => 1},
+          nro_renglon                   => { type => 'integer', length => 5, not_null => 1 },  
 
     ],
-    
+   
      relationships =>
+
     [
       ref_adq_pedido_cotizacion => 
       {
@@ -35,8 +37,18 @@ __PACKAGE__->meta->setup(
          key_columns => {adq_pedido_cotizacion_id => 'id' },
          type        => 'one to one',
        },
+
+      
+      ref_adq_recomendacion_detalle => 
+      {
+        class       => 'C4::Modelo::AdqRecomendacionDetalle',
+        key_columns => {adq_recomendacion_detalle_id => 'id' },
+        type        => 'one to one',
+      },
+
     ],
     
+
     primary_key_columns => [ 'id' ],
     unique_key => ['id'],
 
@@ -125,6 +137,7 @@ sub setFechaPublicacion{
     $self->fecha_publicacion($fecha_public);
 }
 
+
 sub setColeccion{
     my ($self) = shift;
     my ($coleccion) = @_;
@@ -152,7 +165,6 @@ sub setPrecioUnitario {
     $self->precio_unitario($precio_unitario);
 }
 
-
 sub setAdqRecomendacionDetalleId {
     my ($self) = shift;
     my ($adq_recomendacion_detalle_id) = @_;
@@ -169,6 +181,7 @@ sub getAdqPedidoCotizacionId{
     my ($self) = shift;
     return ($self->adq_pedido_cotizacion_id);
 }
+
 
 sub getCatNivel2Id{
     my ($self) = shift;
@@ -220,13 +233,16 @@ sub getPrecioUnitario{
     return ($self->precio_unitario);
 }
 
+
 sub getAdqRecomendacionDetalleId{
     my ($self) = shift;
     return ($self->adq_recomendacion_detalle_id);
 } 
 
+
 sub getNroRenglon  {
     my ($self) = shift;
     return ($self->nro_renglon);
 }            
+
 #----------------------------------- FIN - GETTERS y SETTERS------------------------------------------------

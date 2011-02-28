@@ -17,7 +17,8 @@ __PACKAGE__->meta->setup(
         proveedor_id                    => { type => 'integer', not_null => 1},
         fecha                           => { type => 'varchar', length => 255, not_null => 1},
         ref_estado_presupuesto_id       => { type => 'integer', not_null => 1},
-        ref_pedido_cotizacion_id        => { type => 'integer', not_null => 1},       
+        ref_pedido_cotizacion_id        => { type => 'integer', not_null => 1},
+
     ],
 
 
@@ -38,12 +39,12 @@ __PACKAGE__->meta->setup(
       },
       
       ref_pedido_cotizacion => 
+
       {
         class       => 'C4::Modelo::AdqPedidoCotizacion',
         key_columns => {ref_pedido_cotizacion_id => 'id' },
         type        => 'one to one',
       },
-
 
     ],
     
@@ -92,10 +93,14 @@ sub setRefEstadoPresupuestoId{
 
 sub setRefPedidoCotizacionId{
     my ($self) = shift;
-    my ($pedido_cotizacion) = @_;
-    utf8::encode($pedido_cotizacion);
-    $self->ref_pedido_cotizacion_id($pedido_cotizacion);
+    my ($pedido) = @_;
+    utf8::encode($pedido);
+    $self->ref_pedido_cotizacion_id($pedido);
 }
+
+
+
+
 
 sub getId{
     my ($self) = shift;
@@ -119,5 +124,5 @@ sub getRefEstadoPresupuestoId{
 
 sub getRefPedidoCotizacionId{
     my ($self) = shift;
-    return ($self->ref_pedido_cotizacion_id);
+    return ($self-> ref_pedido_cotizacion_id);
 }

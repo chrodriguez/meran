@@ -18,7 +18,7 @@
                     $('#presupuesto').hide();
                     $('#carga_planilla').hide();
                     $('#pres_manual').show();
-                    $('#acciones').hide();
+                    $('#accion').hide();
             }
 
             // Funcion que muestra solo lo necesario cuando se selecciona "cargar una planilla"
@@ -26,26 +26,26 @@
                     $('#pres_manual').hide();
                     $('#carga_planilla').show();
                     $('#presupuesto').show();
-                    $('#acciones').hide();
+                    $('#accion').hide();
             }
 
             $(document).ready(function() {
                     makeToggle('toggle_container','trigger',null,true);
                     createFileUploader();
                     $('#carga_planilla').hide();
-                    $('#acciones').hide();
+                    $('#accion').hide();
                     $('#presupuesto').hide();
                     $('#pres_manual').hide();
                     
                     $('#combo_presupuesto').change(function(){
-                          $('#acciones').show();  
+                          $('#accion').show();  
                           mostrarPresupuestoManual()
                 })
             });
 
             function onCompleteFileUpload(){
                     $('#presupuesto').show();
-                    $('#acciones').show();
+                    $('#accion').show();
                     mostrarPresupuesto();
             }
 
@@ -83,12 +83,13 @@
 <fieldset>
     <legend class="titulos">    [% "Carga de presupuesto" | i18n %] </legend>
            
-          <fieldset id="tipo_carga">
-                <legend class="titulo_legend">    [% "Elija una opcion" | i18n %] </legend>
-                <input type="radio" name="tipo_carga" value="carga_manual" onclick="mostrarManual()">Cargar datos manualmente<br>
-                <input type="radio" name="tipo_carga" value="carga_planilla" onclick="mostrarPlanilla()">Cargar planilla<br>
-          </fieldset> 
-
+         <!-- <fieldset id="tipo_carga">-->
+        <!--        <legend class="titulo_legend">    [% "Elija una opcion" | i18n %] </legend>-->          
+                    <strong><p>Seleccione el archivo que desea cargar </p></strong> 
+                    <li><input type="radio" name="tipo_carga" value="carga_manual" onclick="mostrarManual()">Cargar datos manualmente</li>
+                    <li><input type="radio" name="tipo_carga" value="carga_planilla" onclick="mostrarPlanilla()">Cargar planilla</li>
+        <!--  </fieldset> -->
+         
           <fieldset id="carga_planilla">
                 <legend class="titulo_legend">[% "Carga de Planilla Excel" | i18n %]</legend>
                 <input type="hidden" id="filepath" value="">
@@ -106,29 +107,24 @@
           
           <fieldset id="pres_manual">
               <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend> 
-                  
-                 
-                        
-                                   <p>Seleccione el presupuesto que desea cargar </p>
-                                  [% combo_presupuestos %]
-                        
-                     
-                       
+              <p>Seleccione el presupuesto que desea cargar </p>
+                    [% combo_presupuestos %]
+                                     
               <div id="presupuesto_manual">
-              </div>
-                 
-        </fieldset>
+              </div>       
+          </fieldset>
 
-       <fieldset id="acciones">  
+          <!--<fieldset id="acciones"> --> 
               <div id="accion">
-                      [% PERL %]
+                     [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
                                                                       boton   => "boton_buscar",
                                                                       onClick => "modificarDatosDePresupuesto();",
                                                             ) ;
                       [% END %]
+                    
                 </div>
-      </fieldset> 
+          <!--</fieldset>--> 
 </fieldset>          
 
 

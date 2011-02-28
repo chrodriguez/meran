@@ -7,7 +7,7 @@
 */
 
 var test;
-//*********************************************Editar Proveedor********************************************* 
+//*********************************************Editar Presupuesto********************************************* 
 
 
 function modificarDatosDePresupuesto(){
@@ -66,6 +66,7 @@ function mostrarPresupuesto(){
                  objAH.tipoAccion          = 'MOSTRAR_PRESUPUESTO';
                  objAH.sendToServer();
 }
+
 
 
 function updateMostrarPresupuesto(responseText){
