@@ -8,14 +8,14 @@ PRIMARY KEY (`id`)
 
 
 
-CREATE TABLE `meran`.`adq_proveedor_tipo_material` (
+CREATE TABLE `adq_proveedor_tipo_material` (
     `proveedor_id` INT( 11 ) NOT NULL ,
     `tipo_material_id` INT( 11 ) NOT NULL ,
     PRIMARY KEY ( `proveedor_id`,`tipo_material_id` )
 ) ENGINE = InnoDB;
 
 
-ALTER TABLE `meran`.`adq_proveedor_tipo_material` 
+ALTER TABLE `adq_proveedor_tipo_material` 
     ADD CONSTRAINT `fk_adq_proveedor_adq_proveedor_tipo_material1`
     FOREIGN KEY (`proveedor_id` )
     REFERENCES `adq_proveedor` (`id` )

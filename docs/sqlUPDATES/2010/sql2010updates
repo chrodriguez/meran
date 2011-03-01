@@ -486,7 +486,7 @@ CREATE TABLE  `ref_estado_presupuesto` (
 `nombre` VARCHAR( 255 ) NOT NULL
 ) ENGINE = MYISAM ;
 
-ALTER TABLE  `adq_prepuesto_detalle` ADD  `seleccionado` INT NOT NULL DEFAULT  '0';
+ALTER TABLE  `adq_presupuesto_detalle` ADD  `seleccionado` INT NOT NULL DEFAULT  '0';
 
 
 -- -----------------------------------------------------
