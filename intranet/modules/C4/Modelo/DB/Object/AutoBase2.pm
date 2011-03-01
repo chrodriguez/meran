@@ -184,6 +184,7 @@ sub createFromAlias{
         case 'estado' {return C4::Modelo::RefEstado->new()}
         case 'ciudad' {return C4::Modelo::RefLocalidad->new()}
         case 'editorial' {return C4::Modelo::CatEditorial->new()}
+        case 'perfiles_opac' {return C4::Modelo::CatPerfilOpac->new()}
 	    else {print "NO EXISTE LA TABLA DE REFERENCIA ".$classAlias }
     }
 }

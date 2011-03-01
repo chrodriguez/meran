@@ -2277,7 +2277,7 @@ sub generarComboTablasDeReferencia{
 
     foreach my $tabla (@$tabla_ref_array) {
         push(@select_tabla_ref_array, $tabla->getAlias_tabla);
-        $select_tabla_ref_array{$tabla->getAlias_tabla}= $tabla->getAlias_tabla;
+        $select_tabla_ref_array{$tabla->getAlias_tabla}= $tabla->getClient_title;
     }
 
     my %options_hash; 
