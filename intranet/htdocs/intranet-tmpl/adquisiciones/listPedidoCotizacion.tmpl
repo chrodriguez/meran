@@ -4,7 +4,6 @@
     $(document).ready(function() {
         $('#presupuesto').hide()  
    });  
-}
 </script>
     <input type="hidden" id="proveedores" name="proveedores" value="">
     <fieldset id="datos_proveedor">
@@ -25,8 +24,14 @@
       </thead>
       <tbody>
             [% i = 1 %]
-            [% FOREACH resultsloop %]   
-            <tr align="center">
+            [% FOREACH resultsloop %]  
+            <tr align="center" 
+            [% IF i % 2 == 0 %] 
+                [% "class='par'" %]
+            [% ELSE %]
+                [% "class='impar'" %]
+             >
+            [% END %]
                 <td align="right" >
                     <p id="pedidoCotizacion[% pedido_cotizacion.getId %]">[% i %]</p> 
                 <td align="right" >

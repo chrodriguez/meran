@@ -33,8 +33,15 @@
             </tr>
         </thead>
         <tbody> 
+        [% i = 1 %]
         [% FOREACH pedido IN pedido_cotizacion %]
-            <tr align="center">
+            <tr align="center" 
+            [% IF i % 2 == 0 %] 
+                [% "class='par'" %]
+            [% ELSE %]
+                [% "class='impar'" %]
+             >
+            [% END %]
                 <td align="right" >
                     <p>[% pedido.getAutor %]</p> 
                 <td align="right" >
@@ -58,7 +65,8 @@
                 <td align="right" >
                     <p>[% pedido.getCantidadEjemplares %]</p>  
                 </td>
-            </tr>          
+            </tr> 
+        [% i = i + 1 %]         
         [% END %]
         </tbody>   
         </table>

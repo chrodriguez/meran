@@ -38,7 +38,13 @@
       <tbody>
             [% i = 1 %]
             [% FOREACH resultsloop %]   
-            <tr align="center">
+             <tr align="center" 
+            [% IF i % 2 == 0 %] 
+                [% "class='par'" %]
+            [% ELSE %]
+                [% "class='impar'" %]
+             >
+            [% END %]
                   <td align="right" >
                       <input type="hidden" id="id_recomendacion_detalle[% i %]" name="[% recomendacion.id %]" value="[% recomendacion.id %]"> 
                       <input type="text" id="libro" name="libro[% i %]" value="[% recomendacion.titulo %]" readonly> 
