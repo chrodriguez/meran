@@ -30,7 +30,7 @@ sub init_db {
 =cut
 sub load{
     my $self = $_[0]; # Copy, not shift
-  
+
     my $error = 1;
 
     eval {
@@ -256,7 +256,7 @@ sub getCamposAsArray{
     my @campos_sin_id;
 
     foreach my $campo (@$camposArray){
-      if ($campo ne 'id'){
+      if ( ($campo ne 'id') && ($campo ne 'agregacion_temp') ){
           push (@campos_sin_id,$campo);
       }
     
