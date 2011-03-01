@@ -55,7 +55,7 @@ sub addPresupuesto{
             for(my $i=0; $i<scalar(@{$pedidos_cotizacion_detalle}); $i++){
                 my %params;
                 $params{'id_presupuesto'}                   = $id_presupuesto;
-                $params{'nro_renglon'}                     = $pedidos_cotizacion_detalle->[$i]->getNroRenglon();               
+                $params{'nro_renglon'}                      = $pedidos_cotizacion_detalle->[$i]->getNroRenglon();               
                 $params{'cantidad_ejemplares'}              = $pedidos_cotizacion_detalle->[$i]->getCantidadEjemplares();
                    
                 my $presupuesto_detalle                     = C4::Modelo::AdqPresupuestoDetalle->new(db => $db);    
@@ -63,7 +63,7 @@ sub addPresupuesto{
             }       
     
             $msg_object->{'error'} = 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A033', 'params' => []});
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A035', 'params' => []});
             $db->commit;
        };
         if ($@){
