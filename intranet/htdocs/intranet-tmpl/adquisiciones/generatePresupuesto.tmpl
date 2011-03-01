@@ -11,6 +11,11 @@
                                                 boton   =>  "boton_buscar",
                                                 onClick =>  "generatePresupuesto([% pedido_cotizacion_id %]);",
                     ) ;
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Exportar' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "exportar([% pedido_cotizacion_id %])",
+                    ) ;
         [% END %]  
     </ul>
 </fieldset> 

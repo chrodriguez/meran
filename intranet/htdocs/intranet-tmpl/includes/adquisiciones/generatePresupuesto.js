@@ -3,7 +3,6 @@
  * Esta es una libreria creada para el sistema KOHA
  * Contendran las funciones para la generacion de presupuestos para la compra de ejemplares
  * Fecha de creacion 07/02/2011
- *
  */ 
 
 /******************************************************** AGREGAR PRESUPUESTO **************************************************/
@@ -33,7 +32,7 @@ function generatePresupuesto(pedido_cotizacion_id){
 
     var proveedores = getProveedoresSelected()
     if(proveedores == ""){
-        jConfirm(POR_FAVOR_SELECCIONE_PROVEEDORES_A_PRESUPUESTAR, function(){ })
+        jConfirm(POR_FAVOR_SELECCIONE_PROVEEDORES_A_PRESUPUESTAR)
         return false
     }
 
@@ -74,27 +73,20 @@ function getProveedoresSelected(){
 
 /************************************************************ EXPORTACIONES  *********************************************/
 
-/*function editar(){
-    $('.editable').attr('disabled', false)
-} 
 
-function exportar(form_id){
+
+function exportar(pedido_cotizacion_id){
+
     var proveedores = getProveedoresSelected()
     if(proveedores == ""){
-        jConfirm(POR_FAVOR_SELECCIONE_PROVEEDORES_A_PRESUPUESTAR, function(){ })
+        jConfirm(POR_FAVOR_SELECCIONE_PROVEEDORES_A_PRESUPUESTAR)
         return false
-    }
-    if(checkSeleccionados(true)){
-        $('#exportHidden').remove()
-        $('.editable').attr('disabled', false) 
-        $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportXLS' value='xls' />")
-        $('#proveedores').val(proveedores)
-        $('#' + form_id).submit()  
-        $('.editable').attr('disabled', true) 
     }
  
 }
 
+
+/*
 // checkea que se seleccionen recomendaciones para exportar, o para generar el presupuesto
 function checkSeleccionados(bool){
     if(bool){
