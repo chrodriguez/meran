@@ -255,9 +255,10 @@ sub getCamposAsArray{
     my $camposArray = $self->meta->columns;
 
     my @campos_sin_id;
-
+    my $pk = $self->getPk;
+    
     foreach my $campo (@$camposArray){
-      if ( ($campo ne 'id') && ($campo ne 'agregacion_temp') ){
+      if ( ($campo ne 'id') && ($campo ne 'agregacion_temp') && ($campo ne $pk)){
           push (@campos_sin_id,$campo);
       }
     
