@@ -103,7 +103,7 @@ my ($input) = @_;
 	my $editor_found = $input->param('editor_found');
 	my $isbn_found = $input->param('isbn_found');
 	my $dbh = C4::Context->dbh;
-	my $authoritysep = C4::AR::Preferencias->getValorPreferencia("authoritysep");
+	my $authoritysep = C4::AR::Preferencias::getValorPreferencia("authoritysep");
 	my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "value_builder/unimarc_field_225a.tmpl",
 					query => $input,

@@ -81,7 +81,7 @@ if ($i != 0) {
         my $registros = $resultset[$i-1]->size();
 C4::AR::Debug::debug( "Encontrados $registros registros en ".$servidores->[$i-1]->getNombre." \n");
          # Aca se puede poner una cota al resultado de cada servidor
-         my $max_results=C4::AR::Preferencias->getValorPreferencia('z3950_ cant_resultados');
+         my $max_results=C4::AR::Preferencias::getValorPreferencia('z3950_ cant_resultados');
         if ($max_results eq "MAX") {$max_results = $registros;} #Se recuperan TODOS los registros
          my $cant_registros=0;
          if ($registros > 0){

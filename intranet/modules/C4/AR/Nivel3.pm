@@ -427,7 +427,7 @@ sub detalleCompletoINTRA{
 	$t_params->{'id1'}	    = $id1;
 	$t_params->{'nivel2'}   = \@nivel2,
 	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
-	$t_params->{'circularDesdeDetalleDelRegistro'}  = C4::AR::Preferencias->getValorPreferencia('circularDesdeDetalleDelRegistro');
+	$t_params->{'circularDesdeDetalleDelRegistro'}  = C4::AR::Preferencias::getValorPreferencia('circularDesdeDetalleDelRegistro');
 }
 
 =head2 sub detalleDisponibilidadNivel3
@@ -599,7 +599,7 @@ sub generaCodigoBarra{
     my $dbh   = C4::Context->dbh;
 
 	my $barcode;
-	my @estructurabarcode = split(',',C4::AR::Preferencias->getValorPreferencia("barcodeFormat"));
+	my @estructurabarcode = split(',',C4::AR::Preferencias::getValorPreferencia("barcodeFormat"));
     my $like = '';
 
 	for (my $i=0; $i<@estructurabarcode; $i++) {
@@ -845,7 +845,7 @@ sub _generarArregloDeBarcodesPorCantidad {
     if( !$msg_object->{'error'} ){
 
         my %parametros;
-        $parametros{'UI'}               = C4::AR::Preferencias->getValorPreferencia("defaultUI");
+        $parametros{'UI'}               = C4::AR::Preferencias::getValorPreferencia("defaultUI");
         $parametros{'tipo_ejemplar'}    = $params->{'tipo_ejemplar'};
 
         (@barcodes_para_agregar) = generaCodigoBarra(\%parametros, $cant);

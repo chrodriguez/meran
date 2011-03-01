@@ -84,7 +84,7 @@ sub getAllPreferencias {
 
 BEGIN
 {
-    reloadAllPreferences();
+      reloadAllPreferences();
 }
 
 sub getMenuPreferences{
@@ -171,16 +171,15 @@ sub getPreferenciasByArray {
 }
 
 sub getValorPreferencia {
-    my $self        = shift;
     my ($variable)  = @_;
 
     #verifico si se encuentra en la cache, sino se busca de la base
     if (defined $PREFERENCES->{$variable}){
-#         C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== valor => ".$PREFERENCES->{$variable}." CACHED!!!!!!!");
+#          C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== valor => ".$PREFERENCES->{$variable}." CACHED!!!!!!!");
         return $PREFERENCES->{$variable};
     }
 
-#     C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== NO CACHED!!!!!!!");
+#      C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== NO CACHED!!!!!!!");
     my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => $variable} ]);
 
     if ($preferencia_array_ref->[0]){
@@ -252,7 +251,7 @@ sub setVariable {
         reloadAllPreferences();
         
 #         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE despues => ".$PREFERENCES->{$variable});
-#         C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias->getValorPreferencia($variable));
+#         C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias::getValorPreferencia($variable));
     }
 }
 
@@ -313,9 +312,9 @@ sub getConfigVisualizacionOPAC{
     my $self = shift;
 
     my %hash_config = {};
-    $hash_config{'resumido'}            = C4::AR::Preferencias->getValorPreferencia("detalle_resumido") || 0;
-    $hash_config{'nivel1_repetible'}    = C4::AR::Preferencias->getValorPreferencia("nivel1_repetible") || 0;
-    $hash_config{'perfil_visual'}       = C4::AR::Preferencias->getValorPreferencia("perfil_visual") || 0;
+    $hash_config{'resumido'}            = C4::AR::Preferencias::getValorPreferencia("detalle_resumido") || 0;
+    $hash_config{'nivel1_repetible'}    = C4::AR::Preferencias::getValorPreferencia("nivel1_repetible") || 0;
+    $hash_config{'perfil_visual'}       = C4::AR::Preferencias::getValorPreferencia("perfil_visual") || 0;
 
     return (\%hash_config);
 }

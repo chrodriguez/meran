@@ -21,7 +21,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 			     });
 
 
-my  $ui= $input->param('id_ui') || C4::AR::Preferencias->getValorPreferencia("defaultUI");
+my  $ui= $input->param('id_ui') || C4::AR::Preferencias::getValorPreferencia("defaultUI");
 
 my %params;
 $params{'onChange'}= 'hacerSubmit()';

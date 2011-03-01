@@ -90,7 +90,7 @@ $t_params->{'error'}=  $msg_object->{'error'};
 $t_params->{'reservaGrupo'}= $acciones->{'reservaGrupo'};
 $t_params->{'maximoReservas'}= $acciones->{'maximoReservas'};
 $t_params->{'materialParaRetirar'}= $acciones->{'materialParaRetirar'};
-$t_params->{'CirculationEnabled'}= C4::AR::Preferencias->getValorPreferencia("circulation");
+$t_params->{'CirculationEnabled'}= C4::AR::Preferencias::getValorPreferencia("circulation");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

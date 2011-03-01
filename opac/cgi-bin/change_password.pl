@@ -8,7 +8,7 @@ use CGI;
 
 my $input = new CGI;
 
-if(C4::AR::Preferencias->getValorPreferencia("permite_cambio_password_desde_opac")){
+if(C4::AR::Preferencias::getValorPreferencia("permite_cambio_password_desde_opac")){
     my ($template, $session, $t_params)= get_template_and_user({
                                     template_name => "opac-changepassword.tmpl",
                                     query => $input,

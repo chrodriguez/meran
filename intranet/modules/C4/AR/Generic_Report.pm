@@ -266,7 +266,7 @@ sub reportSearch {
 	   #PAGINADO
 	   #
 	   ($startfrom) || ($startfrom=0);#Si no tiene valor es 0 por defecto
-	   my $num=C4::AR::Preferencias->getValorPreferencia("renglones");
+	   my $num=C4::AR::Preferencias::getValorPreferencia("renglones");
 	   $SQL.=" LIMIT ".$startfrom." , ".$num." ;"; #Se arma el limit
 	   #
 	   ##

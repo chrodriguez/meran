@@ -24,11 +24,11 @@ my $comboTipoNivel3Fijo= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_co
 $t_params->{'comboTipoDocumento'}= $comboTipoNivel3Fijo;
 
 
-my $virtuallibrary=C4::AR::Preferencias->getValorPreferencia("virtuallibrary");
+my $virtuallibrary=C4::AR::Preferencias::getValorPreferencia("virtuallibrary");
 
 $t_params->{'virtuallibrary'}= $virtuallibrary;
 $t_params->{'pagetitle'}= "Buscar bibliograf&iacute;a";
-$t_params->{'LibraryName'}= C4::AR::Preferencias->getValorPreferencia("LibraryName");
+$t_params->{'LibraryName'}= C4::AR::Preferencias::getValorPreferencia("LibraryName");
 $t_params->{'hiddesearch'}= 1;
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

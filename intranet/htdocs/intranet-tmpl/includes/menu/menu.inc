@@ -80,6 +80,15 @@
 	                                                       ) ;
 	                       [% END %]
 	                   </li>
+                       <li>
+    
+                           [% PERL %]
+                               print C4::AR::Filtros::link_to( text =>     "[% 'Comparar Presupuestos' | i18n %]",
+                                                               url =>      "/cgi-bin/koha/adquisiciones/compararPresupuestos.pl", 
+                                                               title =>    "[% 'Comparar presupuestos' | i18n %]"
+                                                           ) ;
+                           [% END %]
+                       </li>
 	                   <li>
 	
 	                       [% PERL %]
@@ -350,6 +359,30 @@
                          [% END %]
                      </li>
                       <li>
+                          [% PERL %]
+                              print C4::AR::Filtros::link_to( text =>     "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]",
+                                                              url =>      "/cgi-bin/koha/catalogacion/estructura/estructuraCatalo.pl", 
+                                                              title =>    "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]"
+                                                          ) ;
+                          [% END %]
+                      </li>
+                      <li>
+                          [% PERL %]
+                              print C4::AR::Filtros::link_to( text =>     "[% 'Visualizaci&oacute;n del OPAC' | i18n %]",
+                                                              url =>      "/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpac.pl", 
+                                                              title =>    "[% 'Visualizaci&oacute;n del OPAC' | i18n %]"
+                                                          ) ;
+                          [% END %]
+                      </li>
+                      <li>
+                          [% PERL %]
+                              print C4::AR::Filtros::link_to( text =>     "[% 'Visualizaci&oacute;n de INTRANET' | i18n %]",
+                                                              url =>      "/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntra.pl", 
+                                                              title =>    "[% 'Visualizaci&oacute;n del OPAC' | i18n %]"
+                                                          ) ;
+                          [% END %]
+                      </li>
+                      <li>
                                   [% PERL %]
                                       print C4::AR::Filtros::link_to( text =>     "[% 'Importar' | i18n %]",
                                                                       url =>      "/cgi-bin/koha/herramientas/importar.pl", 
@@ -389,30 +422,6 @@
 		                     </li>
 		                     <li>
 		                         [% PERL %]
-		                             print C4::AR::Filtros::link_to( text =>     "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]",
-		                                                             url =>      "/cgi-bin/koha/catalogacion/estructura/estructuraCatalo.pl", 
-		                                                             title =>    "[% 'Creaci&oacute;n cat&aacute;logo' | i18n %]"
-		                                                         ) ;
-		                         [% END %]
-		                     </li>
-		                     <li>
-		                         [% PERL %]
-		                             print C4::AR::Filtros::link_to( text =>     "[% 'Visualizaci&oacute;n del OPAC' | i18n %]",
-		                                                             url =>      "/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpac.pl", 
-		                                                             title =>    "[% 'Visualizaci&oacute;n del OPAC' | i18n %]"
-		                                                         ) ;
-		                         [% END %]
-		                     </li>
-		                     <li>
-		                         [% PERL %]
-		                             print C4::AR::Filtros::link_to( text =>     "[% 'Visualizaci&oacute;n de INTRANET' | i18n %]",
-		                                                             url =>      "/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntra.pl", 
-		                                                             title =>    "[% 'Visualizaci&oacute;n del OPAC' | i18n %]"
-		                                                         ) ;
-		                         [% END %]
-		                     </li>
-		                     <li>
-		                         [% PERL %]
 		                             print C4::AR::Filtros::link_to( text =>     "[% 'Tipos de Documento' | i18n %]",
 		                                                             url =>      "/cgi-bin/koha/admin/catalogo/tipos_de_documento.pl", 
 		                                                             title =>    "[% 'Tipos de Documento' | i18n %]"
@@ -430,14 +439,6 @@
 		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Admin. libre Deuda' | i18n %]",
 		                                                                    url =>      "/cgi-bin/koha/admin/usuarios/adminLibreDeuda.pl",
 		                                                                    title =>    "[% 'Admin. libre Deuda' | i18n %]"
-		                                                                ) ;
-		                                [% END %]
-		                    </li>
-		                    <li>
-		                                [% PERL %]
-		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Categor&iacute;as de Usuario' | i18n %]",
-		                                                                    url =>      "/cgi-bin/koha/admin/usuarios/categorie.pl",
-		                                                                    title =>    "[% 'Categor&iacute;as de Usuario' | i18n %]"
 		                                                                ) ;
 		                                [% END %]
 		                    </li>

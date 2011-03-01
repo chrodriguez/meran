@@ -9,8 +9,6 @@ use JSON;
 
 my $input = new CGI;
 
-
-
 my $obj=$input->param('obj');
 
 my ($template, $session, $t_params) = get_template_and_user({

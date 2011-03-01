@@ -106,7 +106,7 @@ $t_params->{'hide_tipo'}        =   $obj->{'hide_tipo'};
 my %params_for_combo = {};
 $params_for_combo{'default'} = '';
 
-$t_params->{'logueo_opac'} = C4::AR::Preferencias->getValorPreferencia("logSearchOPAC");;
+$t_params->{'logueo_opac'} = C4::AR::Preferencias::getValorPreferencia("logSearchOPAC");;
 $t_params->{'categorias_usuario'} = C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params_for_combo);
 
 if ($to_pdf){

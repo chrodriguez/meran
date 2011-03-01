@@ -118,7 +118,7 @@ foreach my $branch (keys %$branches) {
 push @select_branch,'SIN SELECCIONAR';
 
 #agregado por Einar para que quede el branch por defecto
-my $branch=$input->param('branch') || C4::AR::Preferencias->getValorPreferencia('defaultUI');
+my $branch=$input->param('branch') || C4::AR::Preferencias::getValorPreferencia('defaultUI');
 
 
 my $CGIbranch=CGI::scrolling_list( 	-name      => 'branch',

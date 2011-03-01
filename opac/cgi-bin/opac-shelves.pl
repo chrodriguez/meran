@@ -69,7 +69,7 @@ my ($borr, $flags) = getpatroninformation($loggedinuser,"");
 if ($borr and ($borr->{'emailaddress'})){  $template->param(MAIL =>$borr->{'emailaddress'} ); }
 #
 
-if (C4::AR::Preferencias->getValorPreferencia('marc')) {
+if (C4::AR::Preferencias::getValorPreferencia('marc')) {
         $template->param(script => "MARCdetail.pl");
 } else {
         $template->param(script => "opac-detail.pl");
@@ -167,7 +167,7 @@ if ($count>$cantR) {
    }
 }
 $template->param({numbers => $numbers});
-$template->param({LibraryName => C4::AR::Preferencias->getValorPreferencia("LibraryName")});
+$template->param({LibraryName => C4::AR::Preferencias::getValorPreferencia("LibraryName")});
 
 
 #fin de paginacion
@@ -229,7 +229,7 @@ if ($count>$cantR) {
    }
 }
 $template->param({numbers => $numbers});
-$template->param({LibraryName => C4::AR::Preferencias->getValorPreferencia("LibraryName")});
+$template->param({LibraryName => C4::AR::Preferencias::getValorPreferencia("LibraryName")});
 
 
 #fin de paginacion

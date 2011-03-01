@@ -36,13 +36,13 @@ my ($dbh, $userid, $password, $template) = @_;
 
 my $error= 0;
 
-	if ( C4::AR::Preferencias->getValorPreferencia('ldapenabled')) {
+	if ( C4::AR::Preferencias::getValorPreferencia('ldapenabled')) {
 	#se esta usando LDAP
 
-		my $ldapserver = C4::AR::Preferencias->getValorPreferencia('ldapserver');
-		my $ldapinfos = C4::AR::Preferencias->getValorPreferencia('ldapinfos');
-		my $ldaproot = C4::AR::Preferencias->getValorPreferencia('ldaproot');
-		my $ldappass = C4::AR::Preferencias->getValorPreferencia('ldappass');
+		my $ldapserver = C4::AR::Preferencias::getValorPreferencia('ldapserver');
+		my $ldapinfos = C4::AR::Preferencias::getValorPreferencia('ldapinfos');
+		my $ldaproot = C4::AR::Preferencias::getValorPreferencia('ldaproot');
+		my $ldappass = C4::AR::Preferencias::getValorPreferencia('ldappass');
 
 		my $db = Net::LDAP->new($ldapserver);
 

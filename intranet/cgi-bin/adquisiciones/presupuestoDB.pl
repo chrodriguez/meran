@@ -24,7 +24,6 @@ my $tipoAccion  = $obj->{'tipoAccion'}||"";
 if($tipoAccion eq "GUARDAR_MODIFICACION_PRESUPUESTO"){
 
   
-
     my ($template, $session, $t_params)  = get_template_and_user({  
                         template_name => "/adquisiciones/mostrarPresupuesto.tmpl",
                         query => $input,
@@ -41,12 +40,12 @@ if($tipoAccion eq "GUARDAR_MODIFICACION_PRESUPUESTO"){
      C4::AR::Auth::print_header($session);
      print $infoOperacionJSON;
 
-
 }
 
 =item
 Se procesa la planilla ingresada
 =cut
+
 elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
 
         my $filepath  = $obj->{'filepath'}||"";
@@ -59,48 +58,23 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
                               flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
         });
 
-
         my $presupuestos_dir= "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/";
         my $write_file  = $presupuestos_dir.$filepath;
 
-         my $parser  = Spreadsheet::ParseExcel-> new();
-         my $workbook = $parser->parse($write_file);
+        my $parser  = Spreadsheet::ParseExcel-> new();
+        my $workbook = $parser->parse($write_file);
+    
+        my $workbook_ref = read_sxc($write_file);
 
-
-
-# ----------  Para cuando agregue extension .ODS ------------------------ 
-
-#       my @ext= split ('[.]' , $filepath);
-
-#       C4::AR::Debug::debug("EXTENSION:".$ext[1]);
-
-#       if ($ext[1] eq "xls") {
-
-#             PEGAR LINEAS 66 y 67
-
-#       } else {              
-            
-              my $workbook_ref = read_sxc($write_file);
-
-              foreach ( sort keys %$workbook_ref ) {
-                      print "Worksheet ", $_, " contains ", $#{$$workbook_ref{$_}} + 1, " row(s):\n";
-                      foreach ( @{$$workbook_ref{$_}} ) {
-                            foreach ( map { defined $_ ? $_ : '' } @{$_} ) {
-                                  print utf8(" '$_'")->as_string;
-                            }
-                            print "\n";
+        foreach ( sort keys %$workbook_ref ) {
+                print "Worksheet ", $_, " contains ", $#{$$workbook_ref{$_}} + 1, " row(s):\n";
+                foreach ( @{$$workbook_ref{$_}} ) {
+                      foreach ( map { defined $_ ? $_ : '' } @{$_} ) {
+                            print utf8(" '$_'")->as_string;
                       }
-              }
-
-
-#       }
-        
-
-
-        # if ( !defined $workbook ) {
-        #             die $parser->error(), ".\n";
-        # }
-          
+                      print "\n";
+                }
+        }
         
         my @table;
         my @reg;
@@ -160,6 +134,7 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
 
         
 } #end if($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL")
+
 
 elsif($tipoAccion eq "AGREGAR_PRESUPUESTO"){
 

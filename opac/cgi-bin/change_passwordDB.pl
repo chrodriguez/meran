@@ -30,7 +30,7 @@ $params{'newpassword1'}= $input->param('new_password2');
 $params{'changePassword'}= $input->param('changePassword');
 $params{'token'}= $input->param('token');
 
-if(C4::AR::Preferencias->getValorPreferencia("permite_cambio_password_desde_opac")){
+if(C4::AR::Preferencias::getValorPreferencia("permite_cambio_password_desde_opac")){
 
     my ($Message_arrayref)= C4::AR::Usuarios::cambiarPassword(\%params);
     

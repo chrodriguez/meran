@@ -35,7 +35,7 @@ $VERSION = 0.01;
 sub get_date_format
 {
 	#Get the database handle
-	return C4::AR::Preferencias->getValorPreferencia('dateformat');
+	return C4::AR::Preferencias::getValorPreferencia('dateformat');
 }
 
 sub display_date_format
@@ -171,8 +171,8 @@ sub format_date_hour
 
 sub calc_beginES
 {
-	my $close = C4::AR::Preferencias->getValorPreferencia("close");
-	my $beginESissue = C4::AR::Preferencias->getValorPreferencia("beginESissue");
+	my $close = C4::AR::Preferencias::getValorPreferencia("close");
+	my $beginESissue = C4::AR::Preferencias::getValorPreferencia("beginESissue");
 	my $err;
 	my  $time = ParseDate($close);
 	my $hour = DateCalc($close,"- $beginESissue minutes",\$err);	
@@ -182,8 +182,8 @@ sub calc_beginES
 
 sub calc_endES
 {
-	my $open = C4::AR::Preferencias->getValorPreferencia("open");
-	my $endESissue = C4::AR::Preferencias->getValorPreferencia("endESissue");
+	my $open = C4::AR::Preferencias::getValorPreferencia("open");
+	my $endESissue = C4::AR::Preferencias::getValorPreferencia("endESissue");
 	my $err;
 	my  $time = ParseDate($open);
 	my $hour = DateCalc($open,"+ $endESissue minutes",\$err);
@@ -239,7 +239,7 @@ sub updateForHoliday{
 	my $dateformat = C4::Date::get_date_format();
 
 	my $fecha_nueva_inicio = C4::Date::format_date_in_iso(DateCalc($fecha,"$sign 1 business days",\$err),$dateformat);
-	my $daysOfSanctions= C4::AR::Preferencias->getValorPreferencia("daysOfSanctionReserves");
+	my $daysOfSanctions= C4::AR::Preferencias::getValorPreferencia("daysOfSanctionReserves");
 	my $fecha_nueva_fin = C4::Date::format_date_in_iso(DateCalc($fecha_nueva_inicio,"+ $daysOfSanctions days",\$err),$dateformat);
 	my $dbh = C4::Context->dbh;
 
@@ -289,8 +289,8 @@ sub proximoHabil{
 sub proximosHabiles{
 #funcion que recibe como parametro una cantidad de dias y devuelve el proximo d�a h�bil a partir de hoy y el dia habil correspondiente a esa cantidad, ejemplo si recibe 2, devuelve el dia habil que corresponde a hoy y el que corresponde a 2 dias siguientes. El segundo parametro que recibe es una variable que indica si todos los dias dentro del rango deben ser habiles.
 	my ($cantidad,$todosHabiles)=@_;
-	my $apertura=C4::AR::Preferencias->getValorPreferencia("open");
-	my $cierre=C4::AR::Preferencias->getValorPreferencia("close");
+	my $apertura=C4::AR::Preferencias::getValorPreferencia("open");
+	my $cierre=C4::AR::Preferencias::getValorPreferencia("close");
 	my ($actual,$min,$hora)= localtime;
 	$actual=$hora.':'.$min;
 	Date_Init("WorkDayBeg=".$apertura,"WorkDayEnd=".$cierre);

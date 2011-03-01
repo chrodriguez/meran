@@ -85,6 +85,27 @@ sub setearCantidad{
     $self->save();
 }
 
+sub updateRecomendacionDetalle{
+
+    my ($self) = shift;
+    my ($params) = @_;
+
+    $self->setCatNivel2Id($params->{'cat_nivel'});
+    $self->setAutor($params->{'autor'});
+    $self->setTitulo($params->{'titulo'});
+    $self->setLugarPublicacion($params->{'lugar_publicacion'});
+    $self->setEditorial($params->{'editorial'});
+    $self->setFechaPublicacion($params->{'fecha_publicacion'});
+    $self->setColeccion($params->{'coleccion'});
+    $self->setIsbnIssn($params->{'isbn'});
+    $self->setCantidadEjemplares($params->{'cantidad_ejemplares'});
+    $self->setMotivoPropuesta($params->{'motivo_propuesta'});
+    $self->setComentario($params->{'comentario'});
+    $self->setReservaMaterial($params->{'reserva_material'});
+
+    $self->save();
+}
+
 
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 

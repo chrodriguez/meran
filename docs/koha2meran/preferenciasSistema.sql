@@ -17,6 +17,7 @@ UPDATE `pref_preferencia_sistema` SET `type`='text';
 UPDATE `pref_preferencia_sistema` SET `options` = 'ui|nombre', `type` = 'referencia' WHERE `variable` = 'defaultbranch';
 
 UPDATE `pref_preferencia_sistema` SET `options` = 'nivel_bibliografico|description', `type` = 'referencia' WHERE `variable` = 'defaultlevel';
+UPDATE `pref_preferencia_sistema` SET `variable` = 'defaultNivelBibliografico' WHERE `variable` = 'defaultlevel';
 
 UPDATE `pref_preferencia_sistema` SET `options` = 'soporte|description', `type` = 'referencia' WHERE `variable` = 'defaultsuport';
 

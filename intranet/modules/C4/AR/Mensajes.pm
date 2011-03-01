@@ -407,7 +407,8 @@ my %mensajesINTRA = (
     'A030' => 'La cantidad de ejemplares no puede estar en blanco.',
     'A031' => 'El precio unitario ingresado es inv&aacute;lido.',
     'A032' => 'El precio unitario no puede estar en blanco.',
-    'A033' => 'Pedido cotizaci&oacute;n generado con &eacute;xito.',   
+    'A033' => 'Pedido cotizaci&oacute;n generado con &eacute;xito.',  
+    'A034' => 'Recomendaci&oacute;n actualizada con &eacute;xito.',   
 );
 
 sub getMensaje {

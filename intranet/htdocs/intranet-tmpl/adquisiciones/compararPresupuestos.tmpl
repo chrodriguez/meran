@@ -1,0 +1,39 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosPedidoCotizacion.js"> </script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/tabletojson.js"> </script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosPresupuesto.js"> </script>
+
+<script type="text/javascript">
+ 
+          
+    $(document).ready(function() {
+
+            makeToggle('toggle_container','trigger',null,true);
+            $('#combo_pedidos').change(function(){
+                    presupuestosParaPedidoCotizacion()
+        })
+    });
+ 
+
+    function submitFormXLS(form_id){
+      $('#' + form_id).submit(); 
+    }
+
+
+</script>
+
+<fieldset>
+    <legend class="titulos">    [% "Comparacion de presupuestos" | i18n %] </legend>
+     <p>Seleccione el pedido de cotizacion que desea cargar </p>
+                    [% combo_pedidos %]      
+
+   <div id="comparacion" >
+                        
+   </div>
+    
+</fieldset>          
+
+
+[% INCLUDE "intranet-bottom.inc" %]

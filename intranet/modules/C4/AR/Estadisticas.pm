@@ -1620,7 +1620,7 @@ SE USA EN EL REPORTE Generar Etiquetas
 sub listaDeEjemplares {
     my ($minbarcode,$maxbarcode,$minlocation,$maxlocation,$beginlocation,$branch,$ini,$fin,$orden) = @_;
     my @bind;
-    my $branchcode=  $branch || C4::AR::Preferencias->getValorPreferencia('defaultbranch');
+    my $branchcode=  $branch || C4::AR::Preferencias::getValorPreferencia('defaultbranch');
     my $dbh = C4::Context->dbh;
     my $query="SELECT id3, barcode, signatura_topografica, titulo, autor, anio_publicacion, n3.id2, n2.id2, homebranch
     FROM ((cat_nivel3 n3 INNER JOIN cat_nivel2 n2 ON n3.id2 = n2.id2)
@@ -1697,7 +1697,7 @@ sub listaDeEjemplares {
 # FIXME falta el tema de paginar cuando es pdf (o sea, no hay que paginar)
     my ($params) = @_;
 
-    my $id_ui=  $params->{'id_ui'} || C4::AR::Preferencias->getValorPreferencia('defaultUI');
+    my $id_ui=  $params->{'id_ui'} || C4::AR::Preferencias::getValorPreferencia('defaultUI');
 
     my @filtros;
 
