@@ -17,10 +17,31 @@
     });
  
 
-    function submitFormXLS(form_id){
-      $('#' + form_id).submit(); 
-    }
+    function exportarMejorPresupuesto(){
 
+            $("#mejor_pres").tabletojson({
+                    headers: "Renglon, Proveedor, Datos Editoriales,Precio Unitario, Cantidad, Total",
+                    attribHeaders: "{}",
+                    returnElement: "#table",
+                    complete: function(x){
+                        objAH                     = new AjaxHelper(updateExportarMejorPresupuesto);
+                        objAH.url                 = '/cgi-bin/koha/adquisiciones/mostrarComparacion.pl';
+                        objAH.debug               = true;
+                        objAH.table               = JSONstring.toObject(x);
+                        objAH.tipoAccion          = 'EXPORTAR_MEJOR_PRESUPUESTO';
+                        objAH.sendToServer();
+                    }
+              })
+      }
+
+
+     function updateExportarMejorPresupuesto(responseText){
+        if (!verificarRespuesta(responseText))
+            return(0);
+            var Messages=JSONstring.toObject(responseText);
+            setMessages(Messages);
+      }
+    
 
 </script>
 

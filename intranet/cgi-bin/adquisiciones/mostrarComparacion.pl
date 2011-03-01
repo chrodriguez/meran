@@ -4,6 +4,7 @@ use strict;
 use C4::AR::Auth;
 use C4::AR::Presupuestos;
 use C4::AR::Recomendaciones;
+use C4::AR::XLSGenerator;
 use CGI;
 use JSON;
 
@@ -127,5 +128,23 @@ if($tipoAccion eq "MOSTRAR_PRESUPUESTOS_PEDIDO"){
         $t_params->{'presupuestos'} = \@resultado;
         
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);    
+
+} if($tipoAccion eq "EXPORTAR_MEJOR_PRESUPUESTO"){
+
+
+        my $tabla_array_ref = $obj->{'table'};       
+    
+        my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
+                              template_name   => '/adquisiciones/mostrarComparacion.tmpl',
+                              query       => $input,
+                              type        => "intranet",
+                              authnotrequired => 0,
+                              flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+        });
+
+        C4::AR::XLSGenerator::exportarMejorPresupuesto($tabla_array_ref);
+
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session); 
 }
+
 
