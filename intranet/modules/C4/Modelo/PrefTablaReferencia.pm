@@ -12,7 +12,7 @@ __PACKAGE__->meta->setup(
         nombre_tabla        => { type => 'varchar', length => 40, not_null => 1 },
         alias_tabla         => { type => 'varchar', length => 20, not_null => 1 },
         campo_busqueda      => { type => 'varchar', length => 255, not_null => 1 },
-        client_title        => { type = 'varchar', lenght => 255},
+        client_title        => { type => 'varchar', length => 255},
     ],
 
     primary_key_columns => [ 'id' ],
