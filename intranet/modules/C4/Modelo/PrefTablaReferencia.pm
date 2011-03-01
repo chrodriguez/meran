@@ -81,6 +81,17 @@ sub setAlias_tabla{
     $self->alias_tabla($alias_tabla);
 }
 
+sub getClient_title{
+    my ($self) = shift;
+    return ($self->client_title);
+}
+
+sub setClient_title{
+    my ($self) = shift;
+    my ($client_title) = @_;
+    $self->client_title($client_title);
+}
+
 sub getCampo_busqueda{
     my ($self) = shift;
     return (C4::AR::Utilidades::trim($self->campo_busqueda));
