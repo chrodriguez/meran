@@ -17,12 +17,12 @@
   <legend><strong>[% "Herramientas de Exportaci&oacute;n:" | i18n %]</strong></legend>
 
 <div style="width: 100%; clear: both; margin: 0 auto;">
-<form id="fExportacion" name="fExportacion" method="post" action="exportar.pl">
-<fieldset class="rows" id="export">
+<form id="fExportacion" method="post" action="exportar.pl">
+<fieldset class="rows">
 <legend class="titulo_legend">Seleccionar los registros a exportar</legend>
 
 <div style="width: 100%; clear: both; margin: 0 auto;">
-<fieldset  id="export">
+<fieldset >
 <legend class="titulo_legend">Opciones de exportaci&oacute;n</legend>
  <ul>
       <li class="sub_item" >
@@ -52,7 +52,7 @@
       </ul>
     </fieldset>
     <div style="width: 100%; clear: both; margin: 0 auto;text-align:center;">
-    <fieldset  id="export">
+    <fieldset>
     <legend class="titulo_legend">Tipo de exportaci&oacute;n</legend>
         <input type="radio" name="export_type" value="koha_marc" checked/> Koha MARC
         <input type="radio" name="export_type" value="isis_marc" /> Isis MARC (ROBLE)
@@ -64,7 +64,7 @@
     </fieldset>
     </div>
     <div style="text-align:center;">
-        <input type="hidden" name="op" value="export">
+        <input type="hidden" id="op" name="op" value="export">
 
           [% PERL %]
                      print C4::AR::Filtros::to_Button(   

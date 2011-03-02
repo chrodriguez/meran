@@ -153,7 +153,10 @@ sub marc_record_to_ISO_from_range {
     my $start = [ Time::HiRes::gettimeofday( ) ];
     my $params;
 
+    C4::AR::Debug::debug("Exportar => antes de getRegistrosFromRange ");
+
     my ($cant, $id_nivel1_array_ref) = C4::AR::Busquedas::getRegistrosFromRange( $params, $query );
+    C4::AR::Debug::debug("Exportar => cant: ".$cant);
     my @records_array;
     my $marc_record_array_ref;
     my $field_ident_biblioteca  = MARC::Field->new('910','','','a' => C4::AR::Preferencias::getValorPreferencia("defaultUI"));

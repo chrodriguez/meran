@@ -317,27 +317,17 @@ function updateEliminarFoto(responseText){
 }
 
 function agregarAutorizado(){
-    objAH=new AjaxHelper(updateAgregarAutorizado);
-    objAH.showOverlay       = true;
-    objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-    objAH.tipoAccion = "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO";
-    objAH.debug= true;
+    objAH               = new AjaxHelper(updateAgregarAutorizado);
+    objAH.showOverlay   = true;
+    objAH.url           = '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+    objAH.tipoAccion    = "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO";
+    objAH.debug         = true;
     objAH.sendToServer();
 }
 
 function updateAgregarAutorizado(responseText){
     if (!verificarRespuesta(responseText))
             return(0);
-
-//     vAgregarAutorizado=new WindowHelper({draggable: true, opacity: true});
-//     vAgregarAutorizado.debug= true;
-//     vAgregarAutorizado.html=responseText;
-//     vAgregarAutorizado.create();    
-//     vAgregarAutorizado.titulo= 'Agregar autorizado';
-//     vAgregarAutorizado.height('30%');
-//     vAgregarAutorizado.width('60%');
-//     vAgregarAutorizado.focus= 'nombreAutorizado';
-//     vAgregarAutorizado.open();
 
     $('#basic-modal-content').html(responseText);
     $('#basic-modal-content').modal({   containerCss:{

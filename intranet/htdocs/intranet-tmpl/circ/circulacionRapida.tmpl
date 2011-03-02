@@ -12,18 +12,16 @@ var objAH;
 
 function clear_usuario(){
     $('#usuario').val('');
+    $('#datosAutorizado').html('');
     $('#detalleUsuario').slideUp('slow');
     $('#tablaPrestamos').slideUp('slow');
-}
-
-function clear_barcode(){
-    $('#barcode').val('');
 }
 
 function verificarBarcode(){
 
 	objAH               = new AjaxHelper(updateVerificarBarcode);
 	objAH.debug         = true;
+    objAH.showOverlay   = true;
 	objAH.url           = "/cgi-bin/koha/cir/circulacionDB.pl";
 	objAH.id1           = id1;
 	objAH.id2           = id2;
@@ -103,9 +101,9 @@ function updateRealizarAccion(responseText){
 		setMessages(Messages);
 		//borro la cache del autocomplete
 		$('#barcodePrestado').flushCache();
-        detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
 	}
 	
+    detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
 	$('#operacion').focus();
 }
 
@@ -130,14 +128,15 @@ function tieneApoderado(){
 }
 
 function updateTieneAutorizado(responseText){
-	if(responseText != '0'){
-		$('#divAutorizado').show();
-		$('#divAgregarAutorizado').hide();
-	}else{
-		$('#divAgregarAutorizado').show();
-		$('#divAutorizado').hide();
-	}
+// 	if(responseText != '0'){
+// 		$('#divAutorizado').show();
+// 		$('#divAgregarAutorizado').hide();
+// 	}else{
+// 		$('#divAgregarAutorizado').show();
+// 		$('#divAutorizado').hide();
+// 	}
 
+    $('#datosAutorizado').html(responseText);
 	$('#aceptar').focus();
 	refreshTipoPrestamo();
 }
@@ -212,11 +211,13 @@ function onCompleteUsuarios(){
 //     $("input[name='usuario']").moveNext(); //para evitar q se llame otra vez al autocomplete
 	if (($('#operacion').val() == 'devolver') || ($('#operacion').val() == 'renovar')) {
 	//se va a devolver algo, se muestra la info de los prestamos del usuario
-		detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
+// 		detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
 		
 	}else if($('#operacion').val() == 'prestar'){
 // 		esRegular(NRO_SOCIO_AUTH);
 	}
+
+    detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
 }
 
 // FIXME croe q no lo vamos a usar mas, el resultado del autocomplete trae la info del usuario y si es REGULAR o NO
@@ -289,7 +290,6 @@ $(document).ready(function() {
     <legend class="titulo_legend">[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]</legend>
     <br>
     <ul>
-      <fieldset>
         <form id="form_circulacion_rapida" class="classform">
           <li class="sub_item">
                 <label for="operacion">[% 'Operaci&oacute;n:' | i18n %]</label>
@@ -311,7 +311,7 @@ $(document).ready(function() {
           <li class="sub_item">
                   <div id="divInfoEjemplar">
                       <label for="barcode">[% 'C&oacute;digo de Barras:' | i18n %]</label>
-                      <input type="text" id="barcode" name="barcode" value="" tabindex='2' style="display: none;" onclick="clear_barcode();">
+                      <input type="text" id="barcode" name="barcode" value="" tabindex='2' style="display: none;">
                       <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
                       <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
                       <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
@@ -325,12 +325,26 @@ $(document).ready(function() {
                       <input type='text' id='usuario' name='usuario' value='' size=32 tabindex='3' style="float: left" onclick="clear_usuario();">
                       <div id="estadoUsuario"></div>
                       <input type='hidden' id='nro_socio_hidden' value=''>
-                      <span id="divAutorizado" style="float:right">[% 'Autorizado:' | i18n %]<input type="checkbox" value="autorizado"></span>
-                      <input type="button" class="nonForm" onclick="agregarAutorizado()" id="save_button" value="[% 'Agregar autorizado' | i18n %]" >
+                      <input type="button" class="nonForm" onclick="agregarAutorizado()" id="save_button" value="[% 'Agregar Adicional' | i18n %]" >
                   </div>
           </li>
+          <li>
+              <div id="datosAutorizado"></div>
+          </li>
         </form>
-      </fieldset>
+
+        <div style="float: left; width: 100%;">
+
+                              [% PERL %]
+                                                  print C4::AR::Filtros::to_Button(     text    => "[% 'Aceptar' | i18n %]",
+                                                                                        id      => "aceptar",
+                                                                                        boton   => "boton_agregar",
+                                                                                        onClick => "realizarAccionCircRapida();",
+                                                                                        title   => "[% 'realizar operaci&oacute;n' | i18n %]",
+                                                                                        alternClass => "botonCentrado"
+                                                          ) ;
+                              [% END %]
+        </div>
 </fieldset>
 </ul>
 
@@ -339,18 +353,5 @@ $(document).ready(function() {
 <br>
 <!-- DETALLE DE PRESTAMOS -->
 <div id="tablaPrestamos" style="clear: both;"></div>
-
-<div style="float: left; width: 100%;">
-
-                      [% PERL %]
-                                          print C4::AR::Filtros::to_Button(     text    => "[% 'Aceptar' | i18n %]",
-                                                                                id      => "aceptar",
-                                                                                boton   => "boton_agregar",
-                                                                                onClick => "realizarAccionCircRapida();",
-                                                                                title   => "[% 'Aceptar' | i18n %]",
-                                                                                alternClass => "botonCentrado"
-                                                  ) ;
-                      [% END %]
-</div>
 
 [% INCLUDE 'intranet-bottom.inc' %]

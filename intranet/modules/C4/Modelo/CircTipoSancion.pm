@@ -94,9 +94,11 @@ sub aplicaAlTipoDePrestamo{
 }
 
 sub actualizarTiposPrestamoQueAplica {
-    my ($self) = shift;
-    my ($tiposQueAplica,$db) = @_;
-$self->debug("en actualizarTiposPrestamoQueAplica ");
+    my ($self)                  = shift;
+    my ($tiposQueAplica,$db)    = @_;
+    
+    $self->debug("en actualizarTiposPrestamoQueAplica ");
+
 	foreach my $tps ($self->ref_tipo_prestamo_sancion) {
 		$self->debug($tps->getTipo_prestamo);
 		$tps->delete();

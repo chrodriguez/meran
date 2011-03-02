@@ -51,5 +51,10 @@
 	font-size: 99%;
 }
 	
-	
+.reference {
+    font-size: 12px;
+    text-align: right;
+    width: 54%;
+    font-style: italic;
+}
 	
