@@ -132,7 +132,8 @@ if($tipoAccion eq "MOSTRAR_PRESUPUESTOS_PEDIDO"){
 } if($tipoAccion eq "EXPORTAR_MEJOR_PRESUPUESTO"){
 
 
-        my $tabla_array_ref = $obj->{'table'};       
+        my $tabla_array_ref = $obj->{'table'};    
+      
     
         my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
                               template_name   => '/adquisiciones/mostrarComparacion.tmpl',
@@ -141,6 +142,16 @@ if($tipoAccion eq "MOSTRAR_PRESUPUESTOS_PEDIDO"){
                               authnotrequired => 0,
                               flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
         });
+
+        my $mejor_pres_detalle;
+
+        foreach my $celda (@$tabla_array_ref){
+              my $array_campos;
+              foreach my $campo (%$celda){
+                  push($array_campos, $campo);
+              }
+              push ($mejor_pres_detalle, $array_campos)
+        }
 
         C4::AR::XLSGenerator::exportarMejorPresupuesto($tabla_array_ref);
 
