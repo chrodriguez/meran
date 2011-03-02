@@ -35,6 +35,8 @@ function buscarSanciones(){
 }
 function updateBuscarSanciones(responseText){
 	$("#divResultado").html(responseText);
+    zebra('datos_tabla');
+
 }
 
 function borrarSanciones(chck){
