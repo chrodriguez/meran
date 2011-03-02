@@ -83,17 +83,10 @@
                                                 boton   =>  "boton_buscar",
                                                 onClick =>  "submitFormPDF('export');",
                     ) ;
-
             print C4::AR::Filtros::to_Button( 
                                                 text    =>  "[% 'Exportar a DOC' | i18n %]",
                                                 boton   =>  "boton_buscar",
                                                 onClick =>  "submitFormDOC('export');",
-                    ) ;
-
-            print C4::AR::Filtros::to_Button( 
-                                                text    =>  "[% 'Editar cantidades' | i18n %]",
-                                                boton   =>  "boton_buscar",
-                                                onClick =>  "editar();",
                     ) ;
             print C4::AR::Filtros::to_Button( 
                                                 text    =>  "[% 'Aceptar' | i18n %]",
