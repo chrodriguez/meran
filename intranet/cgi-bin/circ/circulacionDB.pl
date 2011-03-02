@@ -347,28 +347,43 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_SOCIO"){
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
 
-    my ($user, $session, $flags, $usuario_logueado) = checkauth(    $input, 
-                                                                    $authnotrequired, 
-                                                                    {   ui => 'ANY', 
-                                                                        tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
-                                                                        entorno => 'undefined'}, 
-                                                                    'intranet'
-                                );
+#     my ($user, $session, $flags, $usuario_logueado) = checkauth(    $input, 
+#                                                                     $authnotrequired, 
+#                                                                     {   ui => 'ANY', 
+#                                                                         tipo_documento => 'ANY', 
+#                                                                         accion => 'CONSULTA', 
+#                                                                         entorno => 'undefined'}, 
+#                                                                     'intranet'
+#                                 );
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                    template_name => "circ/mostrarAdicional.tmpl",
+                                    query => $input,
+                                    type => "intranet",
+                                    authnotrequired => 0,
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+                                    debug => 1,
+                });
 		
 	my $Message_arrayref;
 	my %params;
-	$params{'barcode'}= $obj->{'barcode'};
-	$params{'nro_socio'}= $obj->{'nro_socio'};
-	$params{'operacion'}= $obj->{'operacion'};
+	$params{'barcode'}      = $obj->{'barcode'};
+	$params{'nro_socio'}    = $obj->{'nro_socio'};
+	$params{'operacion'}    = $obj->{'operacion'};
 	
-	my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($params{'nro_socio'});
-	my $flag=0;
-	if($socio){
-		$flag= $socio->tieneAutorizado;
-	}
-    C4::AR::Auth::print_header($session);
-	print $flag;
+	my $socio               = C4::AR::Usuarios::getSocioInfoPorNroSocio($params{'nro_socio'});
+# 	my $flag                = 0;
+
+# 	if($socio){
+# 		$flag = $socio->tieneAutorizado;
+# 	}
+
+    $t_params->{'socio'} = $socio;
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+#     C4::AR::Auth::print_header($session);
+# 	print $flag;
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_ES_REGULAR"){
 

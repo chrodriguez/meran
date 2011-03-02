@@ -4,9 +4,9 @@
 
 function actualizarRecomendacion(){
 
-      objAH                     = new AjaxHelper(updateActualizarRecomendacion);
-      objAH.url                 = '/cgi-bin/koha/adquisiciones/recomendacionesDB.pl';
-      objAH.debug               = true;
+      objAH                     = new AjaxHelper(updateActualizarRecomendacion)
+      objAH.url                 = '/cgi-bin/koha/adquisiciones/recomendacionesDB.pl'
+      objAH.debug               = true
       
       objAH.id_recomendacion    = $('#recomendacion_id').val()
       objAH.cat_nivel           = $('#cat_nivel').val()
@@ -22,8 +22,8 @@ function actualizarRecomendacion(){
       objAH.comentario          = $('#comentario').val()
       objAH.reserva_material    = $('#reserva_material').val()
       
-      objAH.tipoAccion          = 'ACTUALIZAR_RECOMENDACION';
-      objAH.sendToServer();
+      objAH.tipoAccion          = 'ACTUALIZAR_RECOMENDACION'
+      objAH.sendToServer()
 }
 
 function updateActualizarRecomendacion(responseText){
