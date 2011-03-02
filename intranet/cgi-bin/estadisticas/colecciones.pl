@@ -28,8 +28,6 @@ use C4::AR::Reportes;
 my $input = new CGI;
 my $obj=$input->param('obj') || 0;
 
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
-
 
 C4::AR::Debug::debug("OBJ ===================================================================>: ".$obj);
 my ($template, $session, $t_params, $data_url);
@@ -44,6 +42,8 @@ if (!$obj){
                                 debug => 1,
 			            });
 }else{
+        $obj=C4::AR::Utilidades::from_json_ISO($obj);
+
         ($template, $session, $t_params) = get_template_and_user({
                                 template_name => "estadisticas/partial_swf.tmpl",
                                 query => $input,

@@ -30,7 +30,7 @@ sub init_db {
 =cut
 sub load{
     my $self = $_[0]; # Copy, not shift
-  
+
     my $error = 1;
 
     eval {
@@ -184,6 +184,7 @@ sub createFromAlias{
         case 'estado' {return C4::Modelo::RefEstado->new()}
         case 'ciudad' {return C4::Modelo::RefLocalidad->new()}
         case 'editorial' {return C4::Modelo::CatEditorial->new()}
+        case 'perfiles_opac' {return C4::Modelo::CatPerfilOpac->new()}
 	    else {print "NO EXISTE LA TABLA DE REFERENCIA ".$classAlias }
     }
 }
@@ -254,9 +255,10 @@ sub getCamposAsArray{
     my $camposArray = $self->meta->columns;
 
     my @campos_sin_id;
-
+    my $pk = $self->getPk;
+    
     foreach my $campo (@$camposArray){
-      if ($campo ne 'id'){
+      if ( ($campo ne 'id') && ($campo ne 'agregacion_temp') && ($campo ne $pk)){
           push (@campos_sin_id,$campo);
       }
     

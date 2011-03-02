@@ -12,6 +12,7 @@ __PACKAGE__->meta->setup(
         nombre_tabla        => { type => 'varchar', length => 40, not_null => 1 },
         alias_tabla         => { type => 'varchar', length => 20, not_null => 1 },
         campo_busqueda      => { type => 'varchar', length => 255, not_null => 1 },
+        client_title        => { type => 'varchar', length => 255},
     ],
 
     primary_key_columns => [ 'id' ],
@@ -78,6 +79,17 @@ sub setAlias_tabla{
     my ($self) = shift;
     my ($alias_tabla) = @_;
     $self->alias_tabla($alias_tabla);
+}
+
+sub getClient_title{
+    my ($self) = shift;
+    return ($self->client_title);
+}
+
+sub setClient_title{
+    my ($self) = shift;
+    my ($client_title) = @_;
+    $self->client_title($client_title);
 }
 
 sub getCampo_busqueda{
