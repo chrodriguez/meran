@@ -13,9 +13,43 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(  
     &exportarMejorPresupuesto;
+    &exportarPesupuesto;
 
   
 );
+
+=item
+    Exporta el pedido de cotizacion seleccionado, a lo/s proveedor/es seleccioandos. Osea exporta un presupuesto
+=cut
+sub exportarPesupuesto{
+    my ($tabla_a_exportar, $headers_tabla)  = @_;
+    my $msg_object                          = C4::AR::Mensajes::create();
+    my $spread_sheet                        = Spreadsheet::WriteExcel::Simple->new;
+    
+    # headers
+    $spread_sheet->write_bold_row($headers_tabla); 
+    
+    #tabla
+    foreach my $celda (@$tabla_a_exportar){
+        $spread_sheet->write_row($celda);       
+    }
+
+    eval{
+        $spread_sheet->save("/usr/share/meran/intranet/htdocs/intranet-tmpl/reports/presupuesto.xls"); 
+    };
+
+    if ($@){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A037', 'params' => []} ) ;  
+    } else {
+        $msg_object->{'error'}= 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A036', 'params' => []} ) ;  
+    }
+    return ($msg_object);
+}
+
+
+
 
 
 # ----- Exporta los datos de la tabla a un archivo .xls, recibe como parametros un array con los datos y otro con los headers de la tabla ---- 
