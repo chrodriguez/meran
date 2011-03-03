@@ -2072,17 +2072,20 @@ sub generarComboPedidosCotizacion {
     my @select_pedidos_array;
     my %select_pedidos;
     my $cotizaciones  = &C4::AR::PedidoCotizacion::getAdqPedidosCotizacion();
-
-#     push (@select_pedidos_array, '');
       
 #     C4::AR::Debug::debug("RECOMENDACIONES:".$recomendaciones);
+    
+    push(@select_pedidos_array, 0);
+    $select_pedidos{'0'}                = 'SIN SELECCIONAR';
 
     foreach my $cotizacion (@$cotizaciones) {
         push(@select_pedidos_array, $cotizacion->getId);
         $select_pedidos{$cotizacion->getId}  = $cotizacion->getId." - ".$cotizacion->getFecha
     }
-    
+
     my %options_hash;
+    
+ 
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -2093,13 +2096,16 @@ sub generarComboPedidosCotizacion {
     if ( $params->{'onBlur'} ){ 
         $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
+      
 
-     $options_hash{'name'}       = $params->{'name'}||'combo_pedidos';
-     $options_hash{'id'}         = $params->{'id'}||'combo_pedidos';
-     $options_hash{'size'}       = $params->{'size'}||1;
-     $options_hash{'class'}      = 'required';
-     $options_hash{'multiple'}   = $params->{'multiple'}||0;
-     $options_hash{'defaults'}   = $params->{'default'} || 0;
+     
+
+    $options_hash{'name'}       = $params->{'name'}||'combo_pedidos';
+    $options_hash{'id'}         = $params->{'id'}||'combo_pedidos';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'class'}      = 'required';
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+    $options_hash{'defaults'}   = $params->{'default'} || 0;
 
    
     $options_hash{'values'}     = \@select_pedidos_array;

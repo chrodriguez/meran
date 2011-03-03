@@ -34,6 +34,7 @@ cpan -i CGI::Session
 cpan -i Date::Manip 
 cpan -i DateTime::Format::DateManip 
 cpan -i Chart::OFC2
+cpan -i Spreadsheet::WriteExcel::Simple
 
 #cpan -i Net::SMTP::TLS
 apt-get install libnet-smtp-tls-perl -y 

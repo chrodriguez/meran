@@ -4,6 +4,7 @@ use strict;
 use C4::AR::Auth;
 use C4::AR::Presupuestos;
 use C4::AR::Recomendaciones;
+use C4::AR::XLSGenerator;
 use CGI;
 use JSON;
 
@@ -127,5 +128,57 @@ if($tipoAccion eq "MOSTRAR_PRESUPUESTOS_PEDIDO"){
         $t_params->{'presupuestos'} = \@resultado;
         
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);    
+
+} 
+if ($tipoAccion eq "EXPORTAR_MEJOR_PRESUPUESTO"){
+
+
+        my $tabla_array_ref = $obj->{'table'}; 
+
+        my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
+                              template_name   => '/adquisiciones/mostrarComparacion.tmpl',
+                              query       => $input,
+                              type        => "intranet",
+                              authnotrequired => 0,
+                              flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+        });
+
+        my $mejor_pres_detalle;
+        my $headers_tabla;
+        my $message;    
+  
+        push(@$headers_tabla, 'Renglon');
+        push(@$headers_tabla, 'Proveedor');
+        push(@$headers_tabla, 'Datos Editoriales');
+        push(@$headers_tabla, 'Precio Unitario');
+        push(@$headers_tabla, 'Cantidad');
+        push(@$headers_tabla, 'Total');
+
+   
+        foreach my $celda (@$tabla_array_ref){
+              my $celda_xls; 
+              
+              push(@$celda_xls, $celda->{'Renglon'});
+              push(@$celda_xls, $celda->{'Proveedor'});
+              push(@$celda_xls, $celda->{'DatosEditoriales'});
+              push(@$celda_xls, $celda->{'PrecioUnitario'});
+              push(@$celda_xls, $celda->{'Cantidad'});
+              push(@$celda_xls, $celda->{'Total'});
+
+              push (@$mejor_pres_detalle, $celda_xls);
+        }
+ 
+   
+        $message= C4::AR::XLSGenerator::exportarMejorPresupuesto($mejor_pres_detalle, $headers_tabla);
+
+#         C4::AR::Debug::debug($message->{'codMsg'});
+
+
+        my $infoOperacionJSON   = to_json $message;
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;
+
+#         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session); 
 }
+
 

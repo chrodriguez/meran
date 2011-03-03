@@ -642,7 +642,7 @@ sub _verificarDatosProveedor {
             for(my $i=0;$i<$cant_monedas;$i++){
                 if(((&C4::AR::Validator::countAlphaChars($monedas_array->[$i]) != 0)) || (&C4::AR::Validator::countSymbolChars($monedas_array->[$i]) != 0)){
                      $msg_object->{'error'}= 1;
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A036', 'params' => []} ) ;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A038', 'params' => []} ) ;
                 }
             }
             }
@@ -655,7 +655,7 @@ sub _verificarDatosProveedor {
                 for(my $i=0;$i<$cant_formas_envio;$i++){
                    if(((&C4::AR::Validator::countAlphaChars($formas_envio_array->[$i]) != 0)) || (&C4::AR::Validator::countSymbolChars($formas_envio_array->[$i]) != 0)){
                      $msg_object->{'error'}= 1;
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A037', 'params' => []} ) ;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A039', 'params' => []} ) ;
                   }
                 }
             }
@@ -669,7 +669,7 @@ sub _verificarDatosProveedor {
                 for(my $i=0;$i<$cant_materiales;$i++){
                    if(((&C4::AR::Validator::countAlphaChars($materiales_array->[$i]) != 0)) || (&C4::AR::Validator::countSymbolChars($materiales_array->[$i]) != 0)){
                      $msg_object->{'error'}= 1;
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A038', 'params' => []} ) ;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A040', 'params' => []} ) ;
                   }
                 }
                 

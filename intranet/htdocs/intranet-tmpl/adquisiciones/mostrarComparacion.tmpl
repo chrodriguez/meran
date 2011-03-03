@@ -25,9 +25,15 @@
                               </tr>
                       </thead>
                       <tbody>
-                      
+                            [% i = 1 %]
                             [% FOREACH p IN pres.presup_renglon %]
-                                <tr  align="center">
+                                <tr  align="center"
+                                          [% IF i % 2 == 0 %] 
+                                              [% "class='par'" %]
+                                          [% ELSE %]
+                                              [% "class='impar'" %]
+                                              >
+                                          [% END %]
                                     <td align="center" class="proveedores"> [% p.proveedor %] </td>
                                     [% IF p.precio_unitario == 0 %]     
                                           <td>No cotiza</td>
@@ -42,6 +48,7 @@
                                     
                                     [% END %] 
                                 </tr>
+                                  [% i = i + 1 %] 
                               [% END %]
                                             
                       </tbody>
@@ -52,8 +59,7 @@
 
       <fieldset>   
                   <legend class="titulos">    [% "Mejor Presupuesto" | i18n %] </legend>
-                  <form  id="exportXLS" method="POST" action="/cgi-bin/koha/adquisiciones/exportaciones.pl" accept-charset="utf-8">       
-                          <table "class="datos_tabla">
+                            <table id="mejor_pres">  
                               <thead>
                                   <tr class="titulo_tabla_resultado">
                                             <th>
@@ -101,7 +107,7 @@
                                   print C4::AR::Filtros::to_Button( 
                                                                   text    =>  "[% 'Exportar a XLS' | i18n %]",
                                                                   boton   =>  "boton_buscar",
-                                                                  onClick =>  "submitFormXLS('exportXLS');",
+                                                                  onClick =>  "exportarMejorPresupuesto();",
                                   ) ;
 
                       [% END %]
