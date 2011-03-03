@@ -368,6 +368,7 @@ function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL       = 1;
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug         = true;
+    objAH.showOverlay   = true;
 // 	objAH.cache= true;
     objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";

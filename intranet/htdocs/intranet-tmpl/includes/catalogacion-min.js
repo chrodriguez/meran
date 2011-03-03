@@ -33,7 +33,7 @@ subcampos_hash[s]=subcampo_valor;}
 MARC_OBJECT_ARRAY[i].cant_subcampos=subcampos_array.length;}}
 function getDivDelNivel(){switch(_NIVEL_ACTUAL){case 1:return'estructuraDelNivel1';break;case 2:return'estructuraDelNivel2';break;case 3:return'estructuraDelNivel3';break;}}
 function mostrarEstructuraDelNivel1(){if(MODIFICAR==0){_mostrarAccion("Agregando metadatos");}
-_NIVEL_ACTUAL=1;objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);objAH.debug=true;objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL";objAH.nivel=_NIVEL_ACTUAL;objAH.id_tipo_doc='ALL';objAH.sendToServer();}
+_NIVEL_ACTUAL=1;objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);objAH.debug=true;objAH.showOverlay=true;objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL";objAH.nivel=_NIVEL_ACTUAL;objAH.id_tipo_doc='ALL';objAH.sendToServer();}
 function updateMostrarEstructuraDelNivel1(responseText){_clearContentsEstructuraDelNivel();_showAndHiddeEstructuraDelNivel(1);var objetos_array=JSONstring.toObject(responseText);procesarInfoJson(objetos_array,null);validateForm('formNivel1',guardarModificarDocumentoN1);addRules();}
 function mostrarEstructuraDelNivel2(){_NIVEL_ACTUAL=2;if(MODIFICAR==0){_mostrarAccion("Agregando grupo");}
 objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);objAH.debug=true;objAH.showOverlay=true;objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL";objAH.nivel=2;objAH.id_tipo_doc=$("#tipo_nivel3_id").val();objAH.sendToServer();}
