@@ -554,15 +554,14 @@ sub _verificarDatosProveedor {
      my $plazo_reclamo          = $data->{'plazo_reclamo'};
     
      my $proveedorActivo        = $data->{'proveedor_activo'};
- 
-# TODO AGREGAR TIPOS DE MATERIALES, FORMAS DE ENVIO y MONEDAS!!! -- TAMBIEN VER VALIDACIONES
-
+     
+     my $monedas_array          = $data->{'monedas_array'};
+     my $formas_envio_array     = $data->{'formas_envios_array'};
+     my $materiales_array       = $data->{'materiales_array'};
 
      if (($actionType eq "AGREGAR_PROVEEDOR") || ($actionType eq "GUARDAR_MODIFICACION_PROVEEDOR")){
 
-
         if($tipo_proveedor eq "persona_fisica"){
-
     
             # es una persona fisica, se validan estos datos
             # valida que el nombre sea valido - no puede estar en blanco ni tener caracteres invalidos - 
@@ -631,7 +630,52 @@ sub _verificarDatosProveedor {
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A012', 'params' => []} ) ;     
             }
 
+        } 
+        
+        #   validaciones aparte del tipo de persona que sea:  
+        
+        #   valida las monedas:
+        my $cant_monedas = scalar(@{$monedas_array});
+        if($cant_monedas != 0 ){
+            if (!($msg_object->{'error'})){ 
+              
+            for(my $i=0;$i<$cant_monedas;$i++){
+                if(((&C4::AR::Validator::countAlphaChars($monedas_array->[$i]) != 0)) || (&C4::AR::Validator::countSymbolChars($monedas_array->[$i]) != 0)){
+                     $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A036', 'params' => []} ) ;
+                }
+            }
+            }
         }   
+                
+        #   valida las formas de envio:
+        my $cant_formas_envio = scalar(@{$formas_envio_array});
+        if($cant_formas_envio != 0){
+             if (!($msg_object->{'error'})){
+                for(my $i=0;$i<$cant_formas_envio;$i++){
+                   if(((&C4::AR::Validator::countAlphaChars($formas_envio_array->[$i]) != 0)) || (&C4::AR::Validator::countSymbolChars($formas_envio_array->[$i]) != 0)){
+                     $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A037', 'params' => []} ) ;
+                  }
+                }
+            }
+        }
+        
+        
+        #   valida los materiales:
+        my $cant_materiales = scalar(@{$materiales_array});
+        if($cant_materiales != 0){
+             if (!($msg_object->{'error'})){
+                for(my $i=0;$i<$cant_materiales;$i++){
+                   if(((&C4::AR::Validator::countAlphaChars($materiales_array->[$i]) != 0)) || (&C4::AR::Validator::countSymbolChars($materiales_array->[$i]) != 0)){
+                     $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A038', 'params' => []} ) ;
+                  }
+                }
+                
+                } 
+        }    
+        
         #   valida cuit_cuil
         if($cuit_cuil ne "") {
             if (!($msg_object->{'error'}) && ( ((&C4::AR::Validator::countAlphaChars($cuit_cuil) != 0)) || (&C4::AR::Validator::countSymbolChars($cuit_cuil) != 0) || (&C4::AR::Validator::countNumericChars($cuit_cuil) == 0))){

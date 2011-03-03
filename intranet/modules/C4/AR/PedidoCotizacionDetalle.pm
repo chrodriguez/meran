@@ -19,8 +19,10 @@ use vars qw(@EXPORT @ISA);
     Parametros: (El id es AUTO_INCREMENT y la fecha CURRENT_TIMESTAMP)
         HASH { id_pedido_cotizacion, cantidades_ejemplares }
 =cut
-sub addPedidoCotizacion{
-
+sub addPedidoCotizacionDetalle{
+#TODO 
+# un clon de addRecomendacionDetalle    
+#   _verificarDatosPedidoCotizacion
 }
 
 =item

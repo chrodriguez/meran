@@ -409,7 +409,10 @@ my %mensajesINTRA = (
     'A032' => 'El precio unitario no puede estar en blanco.',
     'A033' => 'Pedido cotizaci&oacute;n generado con &eacute;xito.',  
     'A034' => 'Recomendaci&oacute;n actualizada con &eacute;xito.',  
-    'A035' => 'Presupuesto generado con &eacute;xito.', 
+    'A035' => 'Presupuesto generado con &eacute;xito.',
+    'A036' => 'Las monedas seleccionadas son inv&aacute;lidas.', 
+    'A037' => 'Las formas de envio seleccionadas son inv&aacute;lidas.', 
+    'A038' => 'Los materiales seleccionados son inv&aacute;lidos.',              
 );
 
 sub getMensaje {
