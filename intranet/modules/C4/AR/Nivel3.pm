@@ -179,6 +179,9 @@ sub getNivel3Completo{
 
     $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db();
 
+
+# FIXME  (no existe el campo created at en la tabla cat_registro_marc_n3 por eso se rompe)
+
     my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
                                                                         db  => $db,
 #                                                                         query => [  
