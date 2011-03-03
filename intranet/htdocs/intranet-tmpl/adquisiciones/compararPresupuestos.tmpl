@@ -12,7 +12,9 @@
 
             makeToggle('toggle_container','trigger',null,true);
             $('#combo_pedidos').change(function(){
+                   if($('#combo_pedidos').val() != 0){
                     presupuestosParaPedidoCotizacion()
+                  }
         })
     });
  
@@ -41,7 +43,7 @@
             var Messages=JSONstring.toObject(responseText);
             setMessages(Messages);
       }
-    
+  
 
 </script>
 

@@ -410,6 +410,8 @@ my %mensajesINTRA = (
     'A033' => 'Pedido cotizaci&oacute;n generado con &eacute;xito.',  
     'A034' => 'Recomendaci&oacute;n actualizada con &eacute;xito.',  
     'A035' => 'Presupuesto generado con &eacute;xito.', 
+    'A036' => 'La exportaci&oacute;n se realiz&oacute correctamente.', 
+    'A037' => 'La exportaci&oacute;n no ha podido realizarse.', 
 );
 
 sub getMensaje {

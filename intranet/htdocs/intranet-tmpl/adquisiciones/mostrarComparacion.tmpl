@@ -25,9 +25,15 @@
                               </tr>
                       </thead>
                       <tbody>
-                      
+                            [% i = 1 %]
                             [% FOREACH p IN pres.presup_renglon %]
-                                <tr  align="center">
+                                <tr  align="center"
+                                          [% IF i % 2 == 0 %] 
+                                              [% "class='par'" %]
+                                          [% ELSE %]
+                                              [% "class='impar'" %]
+                                              >
+                                          [% END %]
                                     <td align="center" class="proveedores"> [% p.proveedor %] </td>
                                     [% IF p.precio_unitario == 0 %]     
                                           <td>No cotiza</td>
@@ -42,6 +48,7 @@
                                     
                                     [% END %] 
                                 </tr>
+                                  [% i = i + 1 %] 
                               [% END %]
                                             
                       </tbody>

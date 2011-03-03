@@ -68,7 +68,6 @@ function mostrarPresupuesto(){
 }
 
 
-
 function updateMostrarPresupuesto(responseText){
    $('#presupuesto').html(responseText);
 }
