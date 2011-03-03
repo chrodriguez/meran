@@ -31,19 +31,20 @@ $("divSancionesReglas").html("");
 function guardarTiposQueAplica(){
 
 
-    objAH=new AjaxHelper(updateGuardarTiposQueAplica);
-    objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
+    objAH                   = new AjaxHelper(updateGuardarTiposQueAplica);
+    objAH.url               = "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
+    objAH.showOverlay       = true;
+    objAH.tipo_prestamo     = $("#tipo_prestamo_id").val();
+    objAH.categoria_socio   = $("#categoria_socio_id").val();
+    TPArray                 = new Array();
+    size                    = 0;
 
-    objAH.tipo_prestamo=$("#tipo_prestamo_id").val();
-    objAH.categoria_socio=$("#categoria_socio_id").val();
-    TPArray = new Array();
-    size = 0;
-	 $("input[name=chkTP]").each(
-		function() { if(this.checked){TPArray[size] = this.value; size++;}}
-	 );
+    $("input[name=chkTP]").each(
+      function() { if(this.checked){TPArray[size] = this.value; size++;}}
+    );
 
-    objAH.tipos_que_aplica=TPArray;
-    objAH.tipoAccion= "GUARDAR_TIPOS_PRESTAMOS_QUE_APLICA";
+    objAH.tipos_que_aplica  = TPArray;
+    objAH.tipoAccion        = "GUARDAR_TIPOS_PRESTAMOS_QUE_APLICA";
     borrarDiv();
     objAH.sendToServer();
 }
@@ -61,7 +62,7 @@ function updateGuardarTiposQueAplica(responseText){
 function respuesta(responseText){
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
-                }
+}
 /*
  * buscarTiposPrestamosSancionados
  */
@@ -69,19 +70,17 @@ function respuesta(responseText){
 function buscarTiposPrestamosSancionados(){
     
 	if( ( $("#tipo_prestamo_id").val() != 'SIN SELECCIONAR') && ( $("#categoria_socio_id").val() != 'SIN SELECCIONAR')) {
-			
-			 borrarDiv();
-
-			objAH=new AjaxHelper(updateTiposPrestamosSancionados);
-			objAH.debug= true;
-			objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
-			objAH.tipo_prestamo=$("#tipo_prestamo_id").val();
-			objAH.categoria_socio=$("#categoria_socio_id").val();
-			objAH.tipoAccion= "TIPOS_PRESTAMOS_SANCIONADOS";
-            borrarDiv();
-			objAH.sendToServer();
-		}
+        objAH                   = new AjaxHelper(updateTiposPrestamosSancionados);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
+        objAH.tipo_prestamo     = $("#tipo_prestamo_id").val();
+        objAH.categoria_socio   = $("#categoria_socio_id").val();
+        objAH.tipoAccion        = "TIPOS_PRESTAMOS_SANCIONADOS";
+        borrarDiv();
+        objAH.sendToServer();
 	}
+}
 
 function updateTiposPrestamosSancionados(responseText){
     $("#divSancionesTiposPrestamos").html(responseText);
@@ -92,17 +91,17 @@ function buscarSancionesReglas(){
     
     if( ( $("#tipo_prestamo_id").val() != 'SIN SELECCIONAR') && ( $("#categoria_socio_id").val() != 'SIN SELECCIONAR')) {
             
-            $("#divSancionesReglas").html("");
-
-            objAH=new AjaxHelper(updateSancionesReglas);
-            objAH.debug= true;
-            objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
-            objAH.tipo_prestamo=$("#tipo_prestamo_id").val();
-            objAH.categoria_socio=$("#categoria_socio_id").val();
-            objAH.tipoAccion= "REGLAS_SANCIONES";
-            objAH.sendToServer();
-        }
+        $("#divSancionesReglas").html("");
+        objAH                   = new AjaxHelper(updateSancionesReglas);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
+        objAH.tipo_prestamo     = $("#tipo_prestamo_id").val();
+        objAH.categoria_socio   = $("#categoria_socio_id").val();
+        objAH.tipoAccion        = "REGLAS_SANCIONES";
+        objAH.sendToServer();
     }
+}
 
 function updateSancionesReglas(responseText){
     $("#divSancionesReglas").html(responseText);
@@ -113,16 +112,15 @@ function updateSancionesReglas(responseText){
  * Muestra la parte de agregado de una regla de sancion
  */
 function agregarReglaTipoSancion(tipo_sancion){
-    objAH=new AjaxHelper(updateAgregarReglaTipoSancion);
-    objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
-
-    objAH.regla_sancion=$("#regla_sancion").val();
-    objAH.orden=$("#orden").val();
-    objAH.cantidad=$("#cantidad").val();
-    objAH.tipo_prestamo=$("#tipo_prestamo_id").val();
-    objAH.categoria_socio=$("#categoria_socio_id").val();
-
-    objAH.tipoAccion= "AGREGAR_REGLA_TIPO_SANCION";
+    objAH                   = new AjaxHelper(updateAgregarReglaTipoSancion);
+    objAH.showOverlay       = true;
+    objAH.url               = "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
+    objAH.regla_sancion     = $("#regla_sancion").val();
+    objAH.orden             = $("#orden").val();
+    objAH.cantidad          = $("#cantidad").val();
+    objAH.tipo_prestamo     = $("#tipo_prestamo_id").val();
+    objAH.categoria_socio   = $("#categoria_socio_id").val();
+    objAH.tipoAccion        = "AGREGAR_REGLA_TIPO_SANCION";
     objAH.sendToServer();
 }
 
@@ -137,15 +135,17 @@ function updateAgregarReglaTipoSancion(responseText){
 function eliminarReglaTipoSancion(tipo_sancion, regla_sancion){
     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,'Confirme', function(confirmStatus){ 
         if (confirmStatus) {
-            objAH=new AjaxHelper(updateEliminarReglaTipoSancion);
-            objAH.debug= true;
-            objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
-            objAH.tipo_sancion=tipo_sancion;
-            objAH.regla_sancion=regla_sancion;
-            objAH.tipoAccion= "ELIMINAR_REGLA_TIPO_SANCION";
+            objAH                   = new AjaxHelper(updateEliminarReglaTipoSancion);
+            objAH.debug             = true;
+            objAH.showOverlay       = true;
+            objAH.url               = "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
+            objAH.tipo_sancion      = tipo_sancion;
+            objAH.regla_sancion     = regla_sancion;
+            objAH.tipoAccion        = "ELIMINAR_REGLA_TIPO_SANCION";
             $("divSancionesReglas").html("");
             objAH.sendToServer();
-                }
+                
+        }
     });
 }
 
@@ -157,22 +157,15 @@ function updateEliminarReglaTipoSancion(responseText){
 
 //*********************************************Modificar Datos Usuario*********************************************
 function editarReglas(){
-    objAH=new AjaxHelper(updateEditarReglas);
-    objAH.debug= true;
-    objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
-    objAH.tipoAccion= "MODIFICAR_REGLAS";
+    objAH               = new AjaxHelper(updateEditarReglas);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
+    objAH.tipoAccion    = "MODIFICAR_REGLAS";
     objAH.sendToServer();
 }
 
 function updateEditarReglas(responseText){
-/*
-        vReglasSanciones = new WindowHelper({draggable: true, opacity: true});
-        vReglasSanciones.debug= true;
-        vReglasSanciones.html=responseText;
-        vReglasSanciones.create();
-        vReglasSanciones.height('70%');
-        vReglasSanciones.width('50%');
-        vReglasSanciones.open();*/
 
     $('#basic-modal-content').html(responseText);
     $('#basic-modal-content').modal({   containerCss:{
@@ -195,15 +188,16 @@ function eliminarReglaSancion(regla_sancion){
 
     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,'Confirme', function(confirmStatus){ 
         if (confirmStatus) {
-            objAH=new AjaxHelper(updateEliminarReglaSancion);
-            objAH.debug= true;
-            objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
-            objAH.regla_sancion=regla_sancion;
-            objAH.tipoAccion= "ELIMINAR_REGLA_SANCION";
+            objAH                   = new AjaxHelper(updateEliminarReglaSancion);
+            objAH.debug             = true;
+            objAH.showOverlay       = true;
+            objAH.url               = "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
+            objAH.regla_sancion     = regla_sancion;
+            objAH.tipoAccion        = "ELIMINAR_REGLA_SANCION";
             objAH.sendToServer();
             //Cierro la ventana
             vReglasSanciones.close();
-            }
+        }
     });
 }
 
@@ -217,13 +211,12 @@ function updateEliminarReglaSancion(responseText){
  * Muestra la parte de agregado de una regla de sancion
  */
 function agregarReglaSancion(){
-    objAH=new AjaxHelper(updateAgregarReglaSancion);
-    objAH.url= "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
-
-    objAH.dias_sancion=$("#dias_sancion").val();
-    objAH.dias_demora=$("#dias_demora").val();
-
-    objAH.tipoAccion= "AGREGAR_REGLA_SANCION";
+    objAH               = new AjaxHelper(updateAgregarReglaSancion);
+    objAH.showOverlay   = true;
+    objAH.url           = "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
+    objAH.dias_sancion  = $("#dias_sancion").val();
+    objAH.dias_demora   = $("#dias_demora").val();
+    objAH.tipoAccion    = "AGREGAR_REGLA_SANCION";
     objAH.sendToServer();
     //Cierro la ventana
     vReglasSanciones.close();

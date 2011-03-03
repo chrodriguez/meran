@@ -617,6 +617,7 @@ sub getSocioInfo {
 =cut
 sub getSocioInfoPorNroSocio {
     my ($nro_socio) = @_;
+
     if ($nro_socio){
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
@@ -632,6 +633,8 @@ sub getSocioInfoPorNroSocio {
             return 0;
         }
     }
+
+    return 0;
 }
 
 =item

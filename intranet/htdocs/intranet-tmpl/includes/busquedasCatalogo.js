@@ -24,7 +24,7 @@ function busquedaCombinable(){
     objAH.url               = '/cgi-bin/koha/busquedas/busquedasDB.pl';
     objAH.titulo            = $('#titulo').val();
     objAH.autor             = $('#autor').val();
-    objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
+    objAH.only_available 	= ( $('#only_available').attr('checked') )?1:0;
     objAH.signatura         = $('#signatura').val();
     objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
     objAH.tipoAccion        = 'BUSQUEDA_AVANZADA';
@@ -73,53 +73,59 @@ function buscar(doScroll){
     if (doScroll)
         shouldScroll = doScroll;
 
-    if ($.trim($('#keyword').val()) != '') {
-        if ( (jQuery.trim($('#keyword').val())).length < limite_caracteres ){
-        		cumple_limite = false;
-        } else {busquedaPorKeyword();}
-    } else if (jQuery.trim($('#estante').val()) != '') {
+    if (jQuery.trim($('#estante').val()) != '') {
         if ( (jQuery.trim($('#estante').val())).length < limite_caracteres ){
             cumple_limite = false;
         } else {buscarEstante();}
-    } else if (jQuery.trim($('#keyword-bar').val()) != '') {
-        if ( (jQuery.trim($('#keyword-bar').val())).length < limite_caracteres ){
-            cumple_limite = false;
-        } else {buscarBar();}
-    } else if (jQuery.trim($('#dictionary').val()) != '') {
+    } 
+    else if (jQuery.trim($('#dictionary').val()) != '') {
         if ( (jQuery.trim($('#dictionary').val())).length < limite_caracteres ){
             cumple_limite = false;
         } else {buscarPorDiccionario(ini);}
-    } else if (jQuery.trim($('#codBarra').val()) != '') {
+    } 
+    else if (jQuery.trim($('#codBarra').val()) != '') {
         if ( (jQuery.trim($('#codBarra').val())).length < limite_caracteres ){
             cumple_limite = false;
         } else {buscarPorCodigoBarra();}
-    } else if (jQuery.trim($('#isbn').val()) != '') {
+    } 
+    else if (jQuery.trim($('#isbn').val()) != '') {
         if ( (jQuery.trim($('#isbn').val())).length < limite_caracteres ){
             cumple_limite = false;
         } else {buscarPorISBN();}
-    } else if (jQuery.trim($('#tema').val()) != '') {
+    } 
+    else if (jQuery.trim($('#tema').val()) != '') {
         if ( (jQuery.trim($('#tema').val())).length < limite_caracteres ){
             cumple_limite = false;
         } else {buscarPorTema();}
-//     } else if( (jQuery.trim($('#titulo').val()) != '') || (jQuery.trim($('#autor').val()) != '') || (jQuery.trim($('#signatura').val()) != '') ){
-//         if ( (jQuery.trim($('#titulo').val())).length < limite_caracteres || (jQuery.trim($('#autor').val())).length < limite_caracteres || (jQuery.trim($('#signatura').val())).length < limite_caracteres){
-//             cumple_limite = false;
-//         } else {busquedaCombinable();}
-    } else if( (jQuery.trim($('#titulo').val()) != '') ) {
+    } 
+    else if( (jQuery.trim($('#titulo').val()) != '') ) {
         if ( (jQuery.trim($('#titulo').val())).length < limite_caracteres ) {
             cumple_limite = false;
         } else {busquedaCombinable();}
-    } else if(jQuery.trim($('#autor').val()) != '') {
+    } 
+    else if(jQuery.trim($('#autor').val()) != '') {
         if((jQuery.trim($('#autor').val())).length < limite_caracteres ){
             cumple_limite = false;
         } else {busquedaCombinable();}
-    } else if (jQuery.trim($('#signatura').val()) != '') {
+    } 
+    else if (jQuery.trim($('#signatura').val()) != '') {
          if ( (jQuery.trim($('#signatura').val())).length < limite_caracteres ) {
             cumple_limite = false;
         } else {busquedaCombinable();}
-    } else {
-       cumple_vacio = false;
+    } 
+    else if ($.trim($('#keyword').val()) != '') {
+        if ( (jQuery.trim($('#keyword').val())).length < limite_caracteres ){
+    		cumple_limite = false;
+        } else {busquedaPorKeyword();}
+    } 
+    else if (jQuery.trim($('#keyword-bar').val()) != '') {
+        if ( (jQuery.trim($('#keyword-bar').val())).length < limite_caracteres ){
+            cumple_limite = false;
+        } else {buscarBar();}
     }
+    else {
+	       cumple_vacio = false;
+	    }
 
      if (!cumple_limite) {
         jAlert(INGRESE_AL_MENOS_TRES_CARACTERES_PARA_REALIZAR_LA_BUSQUEDA,CATALOGO_ALERT_TITLE);
@@ -181,7 +187,11 @@ function buscarSuggested(suggested){
 }
 
 function busquedaPorKeyword(suggested){
-
+	
+	var keyword = $('#keyword').val();
+	
+	keyword = keyword.replace("&","AND");
+	
     objAH=new AjaxHelper(updateBusquedaPorKeyword);
     objAH.showOverlay       = true;
     objAH.debug= true;
@@ -190,7 +200,7 @@ function busquedaPorKeyword(suggested){
         objAH.keyword= suggested;
         objAH.from_suggested= 1;
     }else{
-        objAH.keyword= $('#keyword').val();
+        objAH.keyword= keyword;
     }
     objAH.match_mode = $('#match_mode').val();
     objAH.tipoAccion= 'BUSQUEDA_COMBINADA';

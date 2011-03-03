@@ -815,7 +815,7 @@ sub guardaNivel3MARC {
   sub repararReferenciasDeUsuarios {
 
 
-    my $cant_usr=$dbh->prepare("SELECT count(*) as cantidad FROM biblio ;");
+    my $cant_usr=$dbh->prepare("SELECT count(*) as cantidad FROM usr_socio ;");
     $cant_usr->execute();
     my $cantidad=$cant_usr->fetchrow;
     my $usuario=1;

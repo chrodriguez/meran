@@ -11,7 +11,7 @@ __PACKAGE__->meta->setup(
         id_sancion        => { type => 'serial', not_null => 1 },
         tipo_sancion      => { type => 'integer', default => '0' },
         id_reserva        => { type => 'integer' },
-        nro_socio         => { type => 'integer', default => '0', not_null => 1 },
+        nro_socio         => { type => 'varchar', length => 16, not_null => 1 },
         fecha_comienzo    => { type => 'varchar', default => '0000-00-00', not_null => 1 },
         fecha_final       => { type => 'varchar', default => '0000-00-00', not_null => 1 },
         dias_sancion      => { type => 'integer', default => '0' },

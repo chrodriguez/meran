@@ -24,4 +24,4 @@ CREATE TABLE IF NOT EXISTS `adq_pedido_cotizacion_detalle` (
 
 
 
-ALTER TABLE `adq_prepuesto_detalle` CHANGE `adq_recomendacion_detalle_id` `adq_pedido_cotizacion_detalle_id` INT( 11 ) NOT NULL ;
+ALTER TABLE `adq_presupuesto_detalle` CHANGE `adq_recomendacion_detalle_id` `adq_pedido_cotizacion_detalle_id` INT( 11 ) NOT NULL ;

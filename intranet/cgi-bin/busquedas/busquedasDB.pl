@@ -23,7 +23,7 @@ my $obj=$input->param('obj');
 
 $obj = C4::AR::Utilidades::from_json_ISO($obj);
 
-my $start = [ Time::HiRes::gettimeofday( ) ]; #se toma el tiempo de inicio de la búsqueda
+my $start = [ Time::HiRes::gettimeofday( ) ]; #se toma el tiempo de inicio de la busqueda
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 my $dateformat = C4::Date::get_date_format();
 my $ini= $obj->{'ini'};
@@ -34,9 +34,7 @@ $t_params->{'ini'}      = $obj->{'ini'} = $ini;
 $t_params->{'cantR'}    = $obj->{'cantR'} = $cantR;
 $obj->{'type'}          = 'INTRA';
 
-=item
-Aca se maneja el cambio de la password para el usuario
-=cut
+
 if (C4::AR::Utilidades::validateString($tipoAccion)){
     if($tipoAccion eq "BUSQUEDA_POR_AUTOR"){
 

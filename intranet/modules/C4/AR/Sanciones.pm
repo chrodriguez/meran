@@ -249,27 +249,27 @@ sub getTipoSancion{
     
     my $tipo_sanciones_array_ref;
     if($db){ #Si viene $db es porque forma parte de una transaccion
-	$tipo_sanciones_array_ref = C4::Modelo::CircTipoSancion::Manager->get_circ_tipo_sancion (db => $db,
+        $tipo_sanciones_array_ref = C4::Modelo::CircTipoSancion::Manager->get_circ_tipo_sancion (db => $db,
                                                                     query => [ 
                                                                             categoria_socio => { eq => $categoria_socio},
                                                                             tipo_prestamo   => { eq => $tipo_prestamo },
                                                                         ],
                                     );
-        }else{
-	$tipo_sanciones_array_ref = C4::Modelo::CircTipoSancion::Manager->get_circ_tipo_sancion (   
+    }else{
+        $tipo_sanciones_array_ref = C4::Modelo::CircTipoSancion::Manager->get_circ_tipo_sancion (   
                                                                     query => [ 
                                                                             categoria_socio => { eq => $categoria_socio},
                                                                             tipo_prestamo   => { eq => $tipo_prestamo },
                                                                         ],
                                     );
-        }
+    }
 
     my $tipo_sancion=undef;
-    if ($tipo_sanciones_array_ref->[0])
-    {$tipo_sancion=$tipo_sanciones_array_ref->[0];}
+    if ($tipo_sanciones_array_ref->[0]){
+        $tipo_sancion = $tipo_sanciones_array_ref->[0];
+    }
 
-  return($tipo_sancion);
-
+    return($tipo_sancion);
 }
 
 
@@ -332,34 +332,39 @@ sub eliminarSanciones{
  }
 
 
+=item
+  sub actualizarTiposPrestamoQueAplica
+  
+  Esta funcion actualiza los tipos de prestamo sobre los cuales se aplica la sancion de un determinado tipo de prestamo y categoria de usuario
+=cut
+
 sub actualizarTiposPrestamoQueAplica {
-#Esta funcion actualiza los tipos de prestamo sobre los cuales se aplica la sancion de un determinado tipo de prestamo y categoria de usuario
- my ($tipo_prestamo,$categoria_socio,$tiposQueAplica)=@_;
+    my ($tipo_prestamo,$categoria_socio,$tiposQueAplica) = @_;
 
     my @infoMessages;
     my %messageObj;
-	my ($msg_object)= C4::AR::Mensajes::create();
-	my $sancionTEMP = C4::Modelo::CircSancion->new();
-	my $db = $sancionTEMP->db;
-	$db->{connect_options}->{AutoCommit} = 0;
-	$db->begin_work;
-	#Busco el tipo de sanción
-	my $tipo_sancion=&C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio,$db);
+    my ($msg_object)    = C4::AR::Mensajes::create();
+    my $sancionTEMP     = C4::Modelo::CircSancion->new();
+    my $db = $sancionTEMP->db;
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+    #Busco el tipo de sanción
+    my $tipo_sancion    = &C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio,$db);
 
-	eval{	
- 		 $tipo_sancion->actualizarTiposPrestamoQueAplica($tiposQueAplica,$db);
-         	 $db->commit;
-		 $msg_object->{'error'}= 0;
-         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP013', 'params' => []} ) ;
-         };
-         if ($@){
+	eval {	
+        $tipo_sancion->actualizarTiposPrestamoQueAplica($tiposQueAplica,$db);
+        $db->commit;
+        $msg_object->{'error'}= 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP013', 'params' => []} ) ;
+   };
+   
+    if ($@){
 		C4::AR::Mensajes::printErrorDB($@, '',"INTRA");
 		$db->rollback;
-                $msg_object->{'error'}= 1;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP014', 'params' => []} ) ;
-                }
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP014', 'params' => []} ) ;
 
-
+    }
    
     $db->{connect_options}->{AutoCommit} = 1;
 
