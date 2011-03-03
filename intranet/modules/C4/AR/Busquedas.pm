@@ -1207,7 +1207,7 @@ sub busquedaCombinada_newTemp{
     $only_sphinx = $only_sphinx || 0;
     my $sphinx = Sphinx::Search->new();
     my $query = "";
-
+    my @boolean_ops = ("&","|","!","-");
     my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
@@ -1218,9 +1218,22 @@ sub busquedaCombinada_newTemp{
 
         if($tipo eq 'SPH_MATCH_PHRASE'){
             $query .=  " ".$string;
-        } else {
+        } 
+        elsif ($tipo eq 'SPH_MATCH_BOOLEAN'){
+            if ($string eq "AND"){
+            	$string = "&";
+            }
+             
+             if (C4::AR::Utilidades::existeInArray($string,@boolean_ops)){
+                $query .=  " ".$string;
+             }else{
+             	$query .=  " ".$string."*";
+             }
+        }else{
             $query .=  " ".$string."*";
         }
+
+
     }
 
     C4::AR::Debug::debug("Busquedas => query string ".$query);
@@ -1669,7 +1682,7 @@ sub armarBuscoPor{
         $buscoPor.= Encode::decode_utf8(C4::AR::Filtros::i18n("hasta")." ".$params->{'date_end'})."&";  
     }
 
-    if( C4::AR::Utilidades::validateString($params->{'only_available'})){
+    if(($params->{'only_available'})){
         $buscoPor.= Encode::decode_utf8(C4::AR::Filtros::i18n("Solo disponibles"))."&";  
     }
 

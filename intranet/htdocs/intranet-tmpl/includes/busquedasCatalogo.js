@@ -190,7 +190,7 @@ function busquedaPorKeyword(suggested){
 	
 	var keyword = $('#keyword').val();
 	
-	keyword = keyword.replace("&","AND");
+	keyword = keyword.replace(/\&/g,"AND");
 	
     objAH=new AjaxHelper(updateBusquedaPorKeyword);
     objAH.showOverlay       = true;

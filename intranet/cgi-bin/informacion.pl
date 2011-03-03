@@ -28,6 +28,6 @@ $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param("codMsg"),'
 
 #$yo->convertirEnSuperLibrarian();
 
-C4::AR::Debug::debug("SEESION TYPE: ===================>>>>>>>>>>> ".$session->param('type'));
+#C4::AR::Debug::debug("SEESION TYPE: ===================>>>>>>>>>>> ".$session->param('type'));
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
