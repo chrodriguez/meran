@@ -21,4 +21,13 @@ C4::AR::Debug::debug("informacion.pl =>  codMsg: ".$session->param("codMsg"));
 $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param("codMsg"),'INTRA',[]);
 
 
+
+
+
+#my $yo = C4::AR::Usuarios::getSocioInfoPorNroSocio("gaspo53");
+
+#$yo->convertirEnSuperLibrarian();
+
+C4::AR::Debug::debug("SEESION TYPE: ===================>>>>>>>>>>> ".$session->param('type'));
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

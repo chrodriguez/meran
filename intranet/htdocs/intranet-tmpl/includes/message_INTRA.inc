@@ -66,6 +66,7 @@
     POR_FAVOR_INGRESE_SU_NRO_DE_DNI= "[% 'Por favor, ingrese su nro. de documento' | i18n %]";
     POR_FAVOR_INGRESE_SOLO_DIGITOS= "[% 'Por favor, ingrese s\u00f3lo d\u00edgitos' | i18n %]";
     POR_FAVOR_INGRESE_UNA_UI= "[% 'Por favor, seleccione una unidad de informacion' | i18n %]";
+    CONFIRMAR_ELIMINAR_FOTO = "[% 'Seguro desea eliminar la foto de usuario?' | i18n %]";
     LA_LONG_DEL_DNI_DEBE_SER_DE_8_DIGITOS_INGRESO_MAS= "[% 'La longitud del documento debe ser de 8 d\u00edgitos (ha ingresado menos)' | i18n %]";
     LA_LONG_DEL_DNI_DEBE_SER_DE_8_DIGITOS_INGRESO_MENOS= "[% 'La longitud del documento debe ser de 8 d\u00edgitos (ha ingresado m\u00e1s)' | i18n %]";
     POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA= "[% 'Por favor, ingrese una direcci\u00f3n de email v\u00e1lida' | i18n %]";

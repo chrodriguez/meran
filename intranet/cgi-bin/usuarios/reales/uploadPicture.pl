@@ -43,7 +43,7 @@ my ($loggedinuser, $session, $flags) = checkauth(
 
     my $file = $IN->param('POSTDATA');
 
-    my $name = "26320";
+    my $name = $nro_socio;
 
     my $type;
     if ($file =~ /^GIF/) {

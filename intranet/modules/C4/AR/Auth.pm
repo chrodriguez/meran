@@ -833,6 +833,8 @@ sub prepare_password{
 =cut
 sub desencriptar{
     my ($texto_a_desencriptar, $key) = @_;
+    use Crypt::CBC;
+    use MIME::Base64;
     my  $cipher = Crypt::CBC->new( 
                                     -key    => $key,
                                     -cipher => 'Rijndael',
