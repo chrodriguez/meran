@@ -153,8 +153,6 @@ sub addPedidoCotizacion{
                 
                 my $recomendacion_padre     = C4::AR::Recomendaciones::getRecomendacionPorId($id_recomendacion_padre, $db);
                 $recomendacion_padre->desactivar();
-                
-                C4::AR::Debug::debug("aver si esta activa:      ".$recomendacion_padre->getActiva());
                                
                 $params{'cat_nivel2_id'}                    = $recomendacion_detalle->getCatNivel2Id(); 
                 $params{'autor'}                            = $recomendacion_detalle->getAutor(); 

@@ -83,43 +83,23 @@ function exportar(pedido_cotizacion_id){
         return false
     }
  
+    objAH                       = new AjaxHelper(updateExportar);
+    objAH.url                   = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
+    objAH.debug                 = true;
+    
+    objAH.proveedores_array     = proveedores
+    objAH.pedido_cotizacion_id  = pedido_cotizacion_id
+    
+    objAH.tipoAccion            = 'EXPORTAR'
+    objAH.sendToServer();
 }
 
+function updateExportar(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+}
 
-/*
-// checkea que se seleccionen recomendaciones para exportar, o para generar el presupuesto
-function checkSeleccionados(bool){
-    if(bool){
-        var checkeados = 0
-        $('.activo').each(function() {
-             if($(this).attr('checked')){ 
-                arreglo[checkeados] = $(this).val()
-                 checkeados++
-             }
-        });
-        if(checkeados == 0){
-            jConfirm(POR_FAVOR_SELECCIONE_LAS_RECOMENDACIONES, function(){ })
-            return false
-        }else{
-            return true
-        }   
-    }         
-}
-    
-function submitFormPDF(form_id) {
-        $('#exportHidden').remove()
-        $('.editable').attr('disabled', false) 
-        $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportPDF' value='pdf' />")
-        if(checkSeleccionados(true)) { $('#' + form_id).submit() }
-        $('.editable').attr('disabled', true) 
-}
-    
-function submitFormDOC(form_id){
-        $('#exportHidden').remove()
-        $('.editable').attr('disabled', false) 
-        $('#' + form_id).append("<input id='exportHidden' type='hidden' name='exportDOC' value='doc' />")
-        if(checkSeleccionados(true)) { $('#' + form_id).submit() }
-        $('.editable').attr('disabled', true) 
-}*/
 
 /************************************************************ FIN - EXPORTACIONES ********************************************/
