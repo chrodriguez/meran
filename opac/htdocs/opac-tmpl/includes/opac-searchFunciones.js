@@ -176,43 +176,83 @@ function updateInfo(responseText){
 }
 
 
-function busquedaCombinable(typeSearch){
 
-    //seteo normal
-    var tipo= $("#checkNormal").val();
-    //busqueda exacta
-    if($("#checkExacto").attr("checked") == true){
-        tipo= $("#checkExacto").val();
-    }
+// --------------- ORIGINAL--------------------------------------
 
-    objAH=new AjaxHelper(updateBusquedaCombinable);
-    objAH.debug= true;
+// function busquedaCombinable(typeSearch){
+// 
+//     //seteo normal
+//     var tipo= $("#checkNormal").val();
+//     //busqueda exacta
+//     if($("#checkExacto").attr("checked") == true){
+//         tipo= $("#checkExacto").val();
+//     }
+// 
+//     objAH=new AjaxHelper(updateBusquedaCombinable);
+//     objAH.debug= true;
+//     //para busquedas combinables
+//     objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
+//     objAH.tipoAccion= 'BUSQUEDA_COMBINABLE';
+//     if (typeSearch != 'all'){
+//         objAH.codBarra= $('#codBarra').val();
+//         objAH.tema=  $('#tema').val();
+//         objAH.autor= $('#autor').val();
+//         objAH.titulo= $('#titulo').val();
+//         objAH.tipo= tipo;
+//         objAH.cantR = $('#cantidad').val();
+//         objAH.tipo_nivel3_name= $('#tipo_nivel3_id').val();
+//     }else
+//     {
+//             objAH.string=  $('#searchField').val();
+//             objAH.tipoBusqueda= 'all';
+//     }
+//     //se setea la funcion para cambiar de pagina
+//     objAH.funcion= 'changePage';
+//     //se envia la consulta
+//     objAH.sendToServer();
+// }
+// 
+// 
+// function updateBusquedaCombinable(responseText){
+// 	updateInfo(responseText);
+// 	highlightBusquedaCombinable();
+// }
+
+
+// ---------------------- MIA
+
+
+function busquedaCombinable(){
+    objAH                   = new AjaxHelper(updateBusquedaCombinable);
+    objAH.debug             = true;
+    objAH.showOverlay       = true;
     //para busquedas combinables
-    objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
-    objAH.tipoAccion= 'BUSQUEDA_COMBINABLE';
-    if (typeSearch != 'all'){
-        objAH.codBarra= $('#codBarra').val();
-        objAH.tema=  $('#tema').val();
-        objAH.autor= $('#autor').val();
-        objAH.titulo= $('#titulo').val();
-        objAH.tipo= tipo;
-        objAH.cantR = $('#cantidad').val();
-        objAH.tipo_nivel3_name= $('#id_tipo_documento').val();
-    }else
-    {
-            objAH.string=  $('#searchField').val();
-            objAH.tipoBusqueda= 'all';
-    }
+    objAH.url               = '/cgi-bin/koha/busquedas/opac-busquedasDB.pl';
+    objAH.titulo            = $('#titulo').val();
+    objAH.autor             = $('#autor').val();
+//     objAH.only_available    = ( $('#only_available').attr('checked') )?1:0;
+    objAH.signatura         = $('#signatura').val();
+    objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
+    objAH.tipoAccion        = 'BUSQUEDA_COMBINABLE';
+    var radio               = $("#tipo:checked");
+    var tipo                = radio[0].value;
+    objAH.tipo              = tipo;
     //se setea la funcion para cambiar de pagina
-    objAH.funcion= 'changePage';
+    objAH.funcion           = 'changePage';
     //se envia la consulta
     objAH.sendToServer();
 }
 
 function updateBusquedaCombinable(responseText){
-	updateInfo(responseText);
-	highlightBusquedaCombinable();
+    updateInfoBusquedas(responseText);
+    highlightBusquedaCombinable();
 }
+
+
+// --------------------FIN MIA
+
+
+
 
 function highlightBusquedaCombinable(){
     var string = [];

@@ -20,6 +20,9 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 my $obj = $input->param('obj');
 
+C4::AR::Debug::debug("HOLAAAAAAAAAAAAA");
+
+
 if($obj){
     $obj= C4::AR::Utilidades::from_json_ISO($obj);
 }else{
@@ -74,10 +77,10 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
 $t_params->{'partial_template'}         = "opac-busquedaResult.inc";
 $t_params->{'content_title'}            = C4::AR::Filtros::i18n("Resultados de la b&uacute;squeda");
-$t_params->{'suggested'}        = $suggested;
-$t_params->{'tipoAccion'}       = $obj->{'tipoAccion'};
-$t_params->{'url_todos'}        = $url_todos;
-$t_params->{'only_available'}   = $obj->{'only_available'};
+$t_params->{'suggested'}                = $suggested;
+$t_params->{'tipoAccion'}               = $obj->{'tipoAccion'};
+$t_params->{'url_todos'}                = $url_todos;
+$t_params->{'only_available'}           = $obj->{'only_available'};
 
 $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
 #se arma el arreglo con la info para mostrar en el template
@@ -85,6 +88,7 @@ my $elapsed                     = Time::HiRes::tv_interval( $start );
 $t_params->{'timeSeg'}          = $elapsed;
 $obj->{'nro_socio'}             = $session->param('nro_socio');
 $t_params->{'SEARCH_RESULTS'}   = $resultsarray;
+
 #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
 # $obj->{'keyword'} = Encode::decode_utf8($obj->{'string'});
 $obj->{'keyword'}               = $obj->{'string'};

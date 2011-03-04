@@ -2,11 +2,11 @@
 
 [% INCLUDE 'AutocompleteHelper.inc'  %]
 
-
+<script src="/opac-tmpl/includes/opac-searchFunciones.js" type="text/javascript"></script>
 <script type="text/javascript">
 
-function validateForm(){
 
+function validateForm(){
             $("#contactform").validate({
     
                 errorElement: "em",
@@ -30,20 +30,22 @@ function validateForm(){
             });
 }
 
+
+
 $(document).ready( function() {
 //     CrearAutocompleteCatalogoBiblioteca({IdInput: 'buscar_biblioteca', 
 //                                          IdInputHidden: 'hidden_completo'
 //                                         });
-    validateForm();
+//     validateForm();
 });
-
-
 
 </script>        
 
+
+
         <div class="column1-unit">
           <div class="contactform">
-            <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">
+<!--           <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-recomendacionesAdd.pl"> -->
               <input type="hidden" name="action" value="agregar">
               <fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
                 
@@ -61,30 +63,23 @@ $(document).ready( function() {
               </fieldset>
               
               <fieldset><legend>&nbsp;[% 'Datos del Material' | i18n %]&nbsp;</legend>
-                 <div>
-                          
-                                    <div id="filtrosBusqueda" class="filtrosBusqueda">
-                                            <span class="titulos"></span>
-                                            <div class="formElemets classform">
-                                                <div id="busqueda_combinada">
-                                                   
-                                                                <ul id="simple">
-                                                                    <li class="sub_item">
-                                                                        <label for="keyword">
-                                                                                <strong>[% "B&uacute;squeda combinada" | i18n %]</strong>
-                                                                        </label>
-                                                                        <input type="text" id="keyword" size="25" onkeypress="limpiarCampos('arriba')">
-                                                                        <label for="match_mode">
-                                                                        </label>  
-                                                                                [% PERL %]
-                                                                                          print C4::AR::Filtros::getComboMatchMode() ;
-                                                                                [% END %]
-                                                                    </li>
-                                                                </ul>
-                                               
-                                                </div> 
-                                    </div>
-                 </div>
+                 <div>   
+<!--action="/cgi-bin/koha/opac-busquedasDB.pl"-->
+                      <form id="formBusqueda" name="formBusqueda" method="get">
+                          <div class="column1-unit">
+                 
+                                <strong>[% "B&uacute;squeda combinada" | i18n %]</strong>
+                              
+                                <input type="text" id="keyword" size="25" onkeypress="limpiarCampos('arriba')">
+                                <label for="match_mode">Seleccione una forma de busqueda</label>  
+                                [% PERL %]
+                                            print C4::AR::Filtros::getComboMatchMode() ;
+                                [% END %]       
+                                <input type="submit" onclick="busquedaCombinable()" id="save_button" value="[% 'Buscar' | i18n %]" >
+                          </div>
+                      </form>
+              </fieldset>
+
                 <p><label for="hidden_id_nivel_2" class="left">[% 'HIDDEN_ID_NIVEL_2' | i18n %]:</label>
                    <input type="text" name="hidden_completo" id="hidden_completo" class="field" value="" tabindex="7" />
                    <input type="text" name="hidden_id_nivel_2" id="hidden_id_nivel_2" class="field" value="" tabindex="7" />
@@ -117,7 +112,7 @@ $(document).ready( function() {
               <fieldset><legend>&nbsp;[% 'Comentarios' | i18n %]&nbsp;</legend>
                 <p>
                    <textarea name="comentarios" id="comentarios" cols="45" class="required" rows="10" tabindex="17"></textarea></p>
-                <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Enviar Mensaje' | i18n %]" tabindex="18" /></p>
+          <!--      <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Enviar Mensaje' | i18n %]" tabindex="18" /></p>-->
                    <input type="hidden" name="post_message" id="post_message" value="1"/>
               </fieldset>
             </form>
