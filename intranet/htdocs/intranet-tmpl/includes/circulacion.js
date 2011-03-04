@@ -194,7 +194,7 @@ function generaDivPrestamo(responseText){
 		infoPrestamoObj.id3Old  = infoArray[i].id3Old;
 		INFO_PRESTAMOS_ARRAY[i] = infoPrestamoObj;
  
-		var comboItems          = crearComboDeItems(infoArray[i].items, 'comboItems' + i);
+        var comboItems          = crearComboDeItems(infoArray[i].items, 'comboItems' + i, infoArray[i].id3Old);
 		var comboTipoPrestamo   = crearComboDeItems(infoArray[i].tipoPrestamo, 'tiposPrestamos' + i);
       
 		if((infoArray[i].autor != "")&&(infoArray[i].autor != null)){ 
@@ -228,12 +228,17 @@ function generaDivPrestamo(responseText){
  * prestamos.tmpl--->se usa en la funcion generarDivPrestamos.
  * PUEDE IR EN OTRA LIBRERIA, COMO UTIL.js !!!!!!???????
  */
-function crearComboDeItems(items_array, idSelect){
+function crearComboDeItems(items_array, idSelect, itemSelected){
 	var opciones= '';	
 	var html= "<select id='" + idSelect + "'>";
 	var i;
 	for(i=0;i<items_array.length;i++){
-		opciones= opciones + "<option value=" + items_array[i].value + ">" + items_array[i].label + "</option>";
+        
+		opciones= opciones + "<option value=" + items_array[i].value;
+        if((itemSelected)&&(itemSelected==items_array[i].value)){
+            opciones= opciones + " selected ";
+        }
+        opciones= opciones + ">" + items_array[i].label + "</option>";
 	}
 	html= html + opciones + "</select>";
 	return html;
