@@ -14,36 +14,41 @@ use vars qw(@EXPORT @ISA);
 @EXPORT=qw(  
     &exportarMejorPresupuesto;
     &exportarPesupuesto;
-
-  
 );
 
 =item
-    Exporta el pedido de cotizacion seleccionado, a lo/s proveedor/es seleccioandos. Osea exporta un presupuesto
+    Exporta el pedido de cotizacion (presupuesto) seleccionado, con todos sus detalles, a un proveedor pasado como parametro
 =cut
 sub exportarPesupuesto{
-    my ($tabla_a_exportar, $headers_tabla)  = @_;
-    my $msg_object                          = C4::AR::Mensajes::create();
-    my $spread_sheet                        = Spreadsheet::WriteExcel::Simple->new;
+    my ($tabla_a_exportar, $headers_tabla, $headers_planilla, $campos_hidden)   = @_;
+    my $msg_object                                                              = C4::AR::Mensajes::create();
+    my $spread_sheet                                                            = Spreadsheet::WriteExcel::Simple->new;
     
-    # headers
+    # headers planilla
+    $spread_sheet->write_bold_row($headers_planilla); 
+    
+    # campo hidden, id_proveedor
+    $spread_sheet->write_hidden_row($campos_hidden);   
+    
+    # headers tabla
     $spread_sheet->write_bold_row($headers_tabla); 
     
     #tabla
     foreach my $celda (@$tabla_a_exportar){
         $spread_sheet->write_row($celda);       
     }
-
+    
     eval{
         $spread_sheet->save("/usr/share/meran/intranet/htdocs/intranet-tmpl/reports/presupuesto.xls"); 
+        #return $spread_sheet->data; 
+
+        $msg_object->{'error'}= 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A036', 'params' => []} ) ;  
     };
 
     if ($@){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A037', 'params' => []} ) ;  
-    } else {
-        $msg_object->{'error'}= 0;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A036', 'params' => []} ) ;  
     }
     return ($msg_object);
 }
