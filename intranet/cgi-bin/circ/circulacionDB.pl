@@ -192,14 +192,14 @@ elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
                                                                         tipo_documento => 'ANY', 
                                                                         accion => 'CONSULTA', 
                                                                         entorno => 'undefined'}, 
-                                                                    'intranet'
+                                                                      'intranet'
                                 );
 
-	$obj->{'loggedinuser'}= $user;
-	my ($Message_arrayref) = C4::AR::Prestamos::t_devolver($obj);
+	$obj->{'loggedinuser'}      = $user;
+	my ($Message_arrayref)      = C4::AR::Prestamos::t_devolver($obj);
     
    	my %info;
-     $info{'Messages_arrayref'}= $Message_arrayref;
+    $info{'Messages_arrayref'}  = $Message_arrayref;
 
     C4::AR::Auth::print_header($session);
     print to_json \%info;
@@ -318,6 +318,29 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
     
         C4::AR::Auth::print_header($session);
 	    print $infoOperacionJSON;
+    }
+}
+elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR"){
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                            template_name       => "circ/mostrarDatosEjemplar.tmpl",
+                                            query               => $input,
+                                            type                => "intranet",
+                                            authnotrequired     => 0,
+                                            flagsrequired       => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+                                            debug               => 1,
+                });
+
+    #obtengo el objeto de nivel3 segun el barcode que se quiere prestar
+    my ($nivel3) = C4::AR::Nivel3::getNivel3FromBarcode($obj->{'barcode'});
+
+    if($nivel3){
+
+    
+        $t_params->{'titulo'}   = $nivel3->nivel2->nivel1->getTitulo();
+        $t_params->{'autor'}    = $nivel3->nivel2->nivel1->getAutor();
+
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
 }
 elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_SOCIO"){

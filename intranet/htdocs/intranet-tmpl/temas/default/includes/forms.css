@@ -58,3 +58,25 @@
     font-style: italic;
 }
 	
+
+.sub_item_data {
+    display: block;
+    float: left;
+    font-size: 12px;
+    margin-right: 13px;
+    padding-right: 10px;
+    position: relative;
+    text-align: right;
+    width: 21%;
+
+    color: #4B5869;
+    font-family: "Verdana","Trebuchet MS","Arial";
+    font-weight: bold;
+    list-style: none outside none;
+    text-decoration: none;
+}
+
+.sub_item_data_right {
+    color: black;
+    font-family: Helvetica,sans-serif
+}
