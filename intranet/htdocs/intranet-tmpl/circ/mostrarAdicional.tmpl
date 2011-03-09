@@ -7,7 +7,9 @@
                             <input  type="checkbox" id="auth_selected" name="auth_selected" 
                                     value="autorizado">
         </li>
-        <li class="reference">click para indicar si se presta al usuario adicional</li>
+            [% PERL %]
+                print C4::AR::Filtros::setHelp( text => "click para indicar si se presta al usuario adicional");
+            [% END %]
         <li>
             <div class="sub_item_data">[% "Nombre y Apellido" | i18n %]</div>
             <div class="sub_item_data_right">[% socio.getNombre_apellido_autorizado %]</div>

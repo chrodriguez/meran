@@ -34,6 +34,8 @@ function _Init(options){
             _ShowState(options);
         }
     }
+    
+     $('#ajax-indicator').ajaxStop(_HiddeState({showStatusIn: options.showStatusIn, showOverlay: options.showOverlay}));
 }
 
 
@@ -124,6 +126,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.cache          = false; 			//para cachear los resultados
     this.showStatusIn   = '';               //muestra el estado del AJAX en el DIV pasado por parametro
     this.showOverlay    = false;            //muestra el overlay y bloquea la pantalla luego de hacer una peticion AJAX
+    this.autoClose      = true;             //cierra automaticamente el overlay
 
 
 	this.sendToServer= function(){
@@ -181,7 +184,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 					url: helper.url,
 					data: params,
  					beforeSend: function(){
-
+                      
 						if(helper.showState){
 						//muestra el estado del AJAX
                             _Init({debug: helper.debug, showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay});
@@ -194,7 +197,8 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 					},
 					complete: function(ajax){
 						//oculta el estado del AJAX
-						_HiddeState({showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay});
+//                          $('#ajax-indicator').ajaxStop(_HiddeState({showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay}));
+// 						_HiddeState({showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay});
 						if(helper.onComplete){
 							if(ajax.responseText == 'CLIENT_REDIRECT'){
                                     window.location = "/cgi-bin/koha/redirectController.pl";
