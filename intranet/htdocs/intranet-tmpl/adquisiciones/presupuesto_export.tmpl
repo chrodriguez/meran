@@ -1,61 +1,13 @@
 [% PERL %]
 print "Content-type: application/vnd.ms-excel\n";
-print "Content-Disposition: attachment;filename=presupuesto[% proveedor %].xls\n";
+print "Content-Disposition: attachment;filename=presupuesto.xls\n";
 print "Cache-Control: public\n";
 print "Pragma: no-cache\n";
 print "Expires: 0\n\n";
 [% END %]
 
-<tr>
-    <th>
-        [% "Proveedor" | i18n %]
-    </th>
-    <th>
-        [% proveedor %]
-    </th>
-</tr>
-<tr>
-    <th></th>
-    <th>
-        [% id_proveedor %]
-    </th>
-<tr>
-
-<table>
-      <thead>
-          <tr>
-              <th>
-                  [% "Renglon" | i18n %]
-              </th>          
-              <th>
-                  [% "Cantidad de Ejemplares" | i18n %]
-              </th>
-              <th>
-                  [% "T&iacute;tulo del Libro" | i18n %]
-              </th> 
-              <th>
-                  [% "Precio Unitario" | i18n %]
-              </th>      
-              <th>
-                  [% "Precio Total" | i18n %]
-              </th>                
-          </tr>
-      </thead>
-      <tbody>
-            [% i = 1 %]
-            [% FOREACH resultsloop %]   
-            <tr align="center">
-                  <td align="center" >
-                      <p>[% i %]</p> 
-                  </td>            
-                  <td align="center" >
-                      <p>[% recomendacion.cantidad %]</p> 
-                  </td>
-                  <td align="center" >
-                      <p>[% recomendacion.titulo %] , por [% recomendacion.autor %]</p> 
-                  </td>
-            </tr>     
-            [% i = i + 1 %]
-            [% END %]    
-    </tbody>   
-</table>
+[% data %]
+<p>holaaa</p>
+[% PERL %]
+C4::AR::Debug::debug("paso el template");
+[% END %]

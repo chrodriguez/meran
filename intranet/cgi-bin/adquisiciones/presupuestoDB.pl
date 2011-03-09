@@ -10,6 +10,7 @@ use Spreadsheet::Read;
 use Spreadsheet::ParseExcel;
 #use Spreadsheet::ReadSXC qw(read_sxc);
 use C4::AR::XLSGenerator;
+use C4::AR::PedidoCotizacionDetalle;
 
 my $input = new CGI;
 my $authnotrequired= 0;
@@ -170,7 +171,7 @@ elsif($tipoAccion eq "AGREGAR_PRESUPUESTO"){
 elsif($tipoAccion eq "EXPORTAR"){
 
     my ($template, $session, $t_params) = get_template_and_user({
-        template_name => "adquisiciones/generatePresupuesto.tmpl",
+        template_name => "adquisiciones/presupuesto_export.tmpl",
         query => $input,
         type => "intranet",
         authnotrequired => 0,
@@ -178,19 +179,24 @@ elsif($tipoAccion eq "EXPORTAR"){
         debug => 1,
     });
     
-    my $proveedores_array       = $obj->{'proveedores_array'};
-    my $pedido_cotizacion_id    = $obj->{'$pedido_cotizacion_id'};
+    my $pedido_cotizacion_id    = $obj->{'pedido_cotizacion_id'};
     
     my $presupuesto;
     my $headers_tabla;
-  
+    my $headers_planilla;
+    my $campos_hidden;
+    
+    push(@$campos_hidden, $obj->{'proveedores_array'}->[0]);
+    
+    push(@$headers_planilla, 'Proveedor');
+    
     push(@$headers_tabla, 'Renglon');
     push(@$headers_tabla, 'Cantidad');
     push(@$headers_tabla, 'Articulo');
     push(@$headers_tabla, 'Precio Unitario');
     push(@$headers_tabla, 'Precio Total');
     
-    #   con muchos proveedores:
+    # TODO  con muchos proveedores:
     #for(my $i=0;$i<scalar(@{$obj->{'proveedores_array'}});$i++){
     #    my $celda_xls;
         
@@ -201,28 +207,46 @@ elsif($tipoAccion eq "EXPORTAR"){
     
     #   test de un solo proveedor:
     
-    
-    
-    #TODO pasar los detalle_presupuesto
-    
-    my $celda_xls;
-    my $i = 0;
-    push(@$celda_xls, $obj->{'proveedores_array'}->[$i]);
-        
-    push (@$presupuesto, $celda_xls);    
-    
-    
-    
-    my $message             = C4::AR::XLSGenerator::exportarPesupuesto($presupuesto, $headers_tabla);    
 
-    my $infoOperacionJSON   = to_json $message;
+    my $pedidos_cotizacion_detalle = C4::AR::PedidoCotizacionDetalle::getPedidosCotizacionPorPadre($pedido_cotizacion_id);
+
+    foreach my $celda (@$pedidos_cotizacion_detalle){
+        my $celda_xls; 
+        
+        push(@$celda_xls, $celda->{'nro_renglon'});
+        push(@$celda_xls, $celda->{'cantidad_ejemplares'});
+        push(@$celda_xls, $celda->{'titulo'});
+
+        push (@$presupuesto, $celda_xls);
+    }
+    
+    # obtenemos el primer proveedor del array
+    my $proveedor = C4::AR::Proveedores::getProveedorInfoPorId($obj->{'proveedores_array'}->[0]);
+
+    # preguntamos si es persona fisica o juridica
+    if(C4::AR::Proveedores::isPersonaFisica($obj->{'proveedores_array'}->[0])){
+        push (@$headers_planilla, $proveedor->{'nombre'});
+    }else{
+        push (@$headers_planilla, $proveedor->{'razon_social'});
+    }
+    
+    # devuelve la data del archivo xls  
+    my $data             = C4::AR::XLSGenerator::exportarPesupuesto($presupuesto, $headers_tabla, $headers_planilla, $campos_hidden);    
+
+    #$t_params->{'data'} = $data;
+    
+    my $infoOperacionJSON   = to_json $data;
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
     
-    #   imrpimir el archivo: FIXME no lo hace
-    my ($file,$cadena);
-    open(file, ">>/usr/share/meran/intranet/htdocs/intranet-tmpl/reports/presupuesto.xls");
-    print file;
+    #  imrpimir el archivo: FIXME no lo hace
+    #  C4::AR::Debug::debug("paso1"); 
+    #  print "Content-type: application/vnd.ms-excel\n";
+    #  print $data;
+        
+    # print C4::AR::Auth::get_html_content($template, $t_params, $session);
 
+    # C4::AR::Debug::debug("paso2");
 
+    
 }# end if($tipoAccion eq "EXPORTAR")

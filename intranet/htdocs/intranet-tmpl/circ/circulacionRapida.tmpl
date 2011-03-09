@@ -50,6 +50,23 @@ function obtenerTiposDePrestamos(){
 	objAH.sendToServer();
 }
 
+function obtenerDatosDelEjemplar(){
+
+    objAH               = new AjaxHelper(updateObtenerDatosDelEjemplar);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.cache         = true;
+    objAH.url           = "/cgi-bin/koha/circ/circulacionDB.pl";
+    objAH.barcode       = $('#barcode_hidden').val();
+    objAH.tipoAccion    = "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR";
+    //se envia la consulta
+    objAH.sendToServer();
+}
+
+function updateObtenerDatosDelEjemplar(responseText){
+    $('#datos_ejemplar').html(responseText);
+}
+
 function updateObtenerTiposDePrestamos(responseText){
 	var infoHash                    = JSONstring.toObject(responseText);
 	var tipoPrestamo_array_hash_ref = infoHash.tipoPrestamo;
@@ -179,10 +196,12 @@ function onChangeOperacion(){
 function updateAutocompleteBarcodes(){
 	$('#usuario').focus();
 	refreshTipoPrestamo();
+    obtenerDatosDelEjemplar();
 }
 
 function updateAutocompleteBarcodesPrestados(){
 	mostrarBotonAceptar();
+    obtenerDatosDelEjemplar();
 }
 
 function refreshTipoPrestamo(){
@@ -300,14 +319,14 @@ $(document).ready(function() {
                 </select>
                 <!--<div id="cambo_tipo_prestamo" style="display: none">-->
           </li>
-          <br />
+<!--           <br /> -->
           <li class="sub_item">
                 <div id="cambo_tipo_prestamo">
                     <label for="operacion">[% 'Tipo de Pr&eacute;stamo:' | i18n %]</label>
                     <div id="spanComboTipoPrestamo"></div>
                 </div>
           </li>
-          <br>
+<!--           <br> -->
           <li class="sub_item">
                   <div id="divInfoEjemplar">
                       <label for="barcode">[% 'C&oacute;digo de Barras:' | i18n %]</label>
@@ -318,7 +337,10 @@ $(document).ready(function() {
                       <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
                   </div>
           </li>
-          <br>
+          <li>
+              <div id="datos_ejemplar"></div>
+          </li>
+<!--           <br> -->
           <li class="sub_item">
                   <div id="divInfoUsuario">
                       <label for="usuario">[% 'Usuario:' | i18n %]</label>

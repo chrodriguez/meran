@@ -517,27 +517,30 @@ sub detalleDisponibilidadNivel3{
             $hash_nivel3{'claseDisponibilidad'} = "salaLectura";
         }
         
-#         C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'});
+#          C4::AR::Debug::debug("nro_socio: ".$hash_nivel3{'nro_socio'}." id3=".$hash_nivel3{'id3'});
         my $socio = C4::AR::Prestamos::getSocioFromPrestamo($hash_nivel3{'id3'});
 
         #se inicializa la hash
         $hash_nivel3{'vencimiento'}         = undef;
         $hash_nivel3{'socio'}               = undef;
         $hash_nivel3{'prestamo'}            = undef;
+        $hash_nivel3{'claseFecha'}          = undef;
 
         if ($socio) { 
 
             my $prestamo                    = C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'});
-            $hash_nivel3{'prestamo'}        = $prestamo;
-            $hash_nivel3{'socio'}           = $socio;
+            if($prestamo){
+                $hash_nivel3{'prestamo'}        = $prestamo;
+                $hash_nivel3{'socio'}           = $socio;
 
-            if ($prestamo->estaVencido) {
-                $hash_nivel3{'claseFecha'}  = "fecha_vencida";
-            }else {
-                $hash_nivel3{'claseFecha'}  = "fecha_cumple";
+                if ($prestamo->estaVencido) {
+                    $hash_nivel3{'claseFecha'}  = "fecha_vencida";
+                }else {
+                    $hash_nivel3{'claseFecha'}  = "fecha_cumple";
+                }
             }
         }
-    
+
         $result[$i]= \%hash_nivel3;
     }
     $infoNivel3{'disponibles'} = $infoNivel3{'cantParaPrestamo'} + $infoNivel3{'cantParaSala'};
