@@ -17,5 +17,14 @@
                                                 onClick =>  "exportar([% pedido_cotizacion_id %])",
                     ) ;
         [% END %]  
+        [% PERL %]
+                                            print C4::AR::Filtros::link_to(   
+                                                                            text =>     C4::AR::Filtros::to_Icon( boton   => "icon_mas" ),
+                                                                            url =>      "/cgi-bin/koha/adquisiciones/export_temp.pl", 
+                                                                            params =>   ["pedido_cotizacion_id=[% pedido_cotizacion_id %]",
+                                                                                        "proveedor=2"],
+                                                                            title =>    "[% 'Exportar' | i18n %]"
+                                                                        );
+                              [% END %]
     </ul>
 </fieldset> 

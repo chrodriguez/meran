@@ -169,6 +169,7 @@ elsif($tipoAccion eq "AGREGAR_PRESUPUESTO"){
 }# end if($tipoAccion eq "AGREGAR_PRESUPUESTO")
 
 elsif($tipoAccion eq "EXPORTAR"){
+# FIXME lo estoy haciendo sin AJAX
 
     my ($template, $session, $t_params) = get_template_and_user({
         template_name => "adquisiciones/presupuesto_export.tmpl",
@@ -232,19 +233,19 @@ elsif($tipoAccion eq "EXPORTAR"){
     
     # devuelve la data del archivo xls  
     my $data             = C4::AR::XLSGenerator::exportarPesupuesto($presupuesto, $headers_tabla, $headers_planilla, $campos_hidden);    
-
-    #$t_params->{'data'} = $data;
+    #C4::AR::Debug::debug("data:      ".$data);
+    $t_params->{'data'} = $data;
     
-    my $infoOperacionJSON   = to_json $data;
-    C4::AR::Auth::print_header($session);
-    print $infoOperacionJSON;
+    #my $infoOperacionJSON   = to_json $data;
+    #C4::AR::Auth::print_header($session);
+    #print $infoOperacionJSON;
     
     #  imrpimir el archivo: FIXME no lo hace
     #  C4::AR::Debug::debug("paso1"); 
     #  print "Content-type: application/vnd.ms-excel\n";
-    #  print $data;
+      #print $data;
         
-    # print C4::AR::Auth::get_html_content($template, $t_params, $session);
+    print C4::AR::Auth::get_html_content($template, $t_params, $session);
 
     # C4::AR::Debug::debug("paso2");
 

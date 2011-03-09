@@ -27,6 +27,7 @@ use C4::AR::PedidoCotizacion;
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw(
+    setHeaders
     generarComboPresupuestos
     generarComboProveedoresMultiple
     generarComboFormasDeEnvio
@@ -114,6 +115,19 @@ use vars qw(@EXPORT_OK @ISA);
 my @VALUES_COMPONENTS = (   "-1", "text", "texta", "combo", "auto", "calendar", "anio", "rango_anio" );
 my %LABELS_COMPONENTS = (   "-1" => "SIN SELECCIONAR" => "text" => "Texto" , "texta" => "Texto Area", "combo" => "ComoBox", 
                             "auto" => "Autocompletable", "calendar" => "Calendario", "anio" => "A&ntilde;o", "rango_anio" => "A&ntilde;o Rango" );
+  
+  
+=item 
+    Devuelve los headers con aplicacion y nombre de archivo recibidos por parametros
+    parametros: HASH (para que se pueda extender)
+=cut
+sub setHeaders{
+    my ($params) = @_;
+    
+    return "Content-type: ".$params->{'aplicacion'}."\n Content-Disposition: attachment; filename=".$params->{'file_name'}."\n Cache-Control: public\n Pragma: no-cache\n Expires: 0\n\n";
+
+}    
+                  
 
 =item sub getStringFor
     Devuelve el texto de la clave pasada por parametro
