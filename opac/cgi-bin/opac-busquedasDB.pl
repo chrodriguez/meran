@@ -11,7 +11,7 @@ use Time::HiRes;
 my $input = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-                        template_name => "opac-main.tmpl",
+                        template_name => "opac-recomendaciones.inc",
                         query => $input,
                         type => "opac",
                         authnotrequired => 1,
@@ -20,24 +20,25 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 my $obj = $input->param('obj');
 
-C4::AR::Debug::debug("HOLAAAAAAAAAAAAA");
-
 
 if($obj){
-    $obj= C4::AR::Utilidades::from_json_ISO($obj);
+    
+      $obj= C4::AR::Utilidades::from_json_ISO($obj);
+      $obj->{'ini'} = 0;
 }else{
-  my %hash_temp = {};
-  $obj = \%hash_temp;
-  $obj->{'tipoAccion'} = $input->param('tipoAccion');
-#   $obj->{'string'} = Encode::decode_utf8($input->param('string'));
-  $obj->{'string'} = $input->param('titulo');
-  $obj->{'titulo'} = $input->param('titulo');
-  $obj->{'tipo'} = $input->param('tipo');
-  $obj->{'only_available'} = $input->param('only_available') || 0;
-  $obj->{'from_suggested'} = $input->param('from_suggested');
-  $obj->{'tipo_nivel3_name'} = $input->param('tipo_nivel3_name');
-  $obj->{'tipoBusqueda'} = 'all';
-  $obj->{'ini'} = $input->param('page') || 0;
+      my %hash_temp = {};
+      $obj = \%hash_temp;
+      $obj->{'tipoAccion'} = $input->param('tipoAccion');
+      $obj->{'string'} = Encode::decode_utf8($input->param('string'));
+      $obj->{'string'} = $input->param('keyword');
+#       $obj->{'string'} = $input->param('titulo');
+#       $obj->{'titulo'} = $input->param('titulo');
+#       $obj->{'tipo'} = $input->param('tipo');
+      $obj->{'only_available'} = $input->param('only_available') || 0;
+      $obj->{'from_suggested'} = $input->param('from_suggested');
+      $obj->{'tipo_nivel3_name'} = $input->param('tipo_nivel3_name');
+      $obj->{'tipoBusqueda'} = 'all';
+      $obj->{'ini'} = $input->param('page') || 0;
 }
 
 # C4::AR::Debug::debug("opac-busquedas.pl => string => ".$obj->{'string'});
@@ -48,7 +49,8 @@ my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&ti
 my $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&titulo=".$obj->{'string'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'};
 
 
-my $ini= $obj->{'ini'};
+my $ini= $obj->{'ini'} || 0;
+
 my $start = [ Time::HiRes::gettimeofday() ]; #se toma el tiempo de inicio de la búsqueda
 
 my $cantidad;
@@ -70,8 +72,10 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
     ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
 
 }elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
+
     
-        ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($input->param('string'),$session,$obj);
+
+    ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj);
 
 }
 

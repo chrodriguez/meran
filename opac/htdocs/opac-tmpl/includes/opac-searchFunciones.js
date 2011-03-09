@@ -227,25 +227,30 @@ function busquedaCombinable(){
     objAH.debug             = true;
     objAH.showOverlay       = true;
     //para busquedas combinables
-    objAH.url               = '/cgi-bin/koha/busquedas/opac-busquedasDB.pl';
-    objAH.titulo            = $('#titulo').val();
-    objAH.autor             = $('#autor').val();
-//     objAH.only_available    = ( $('#only_available').attr('checked') )?1:0;
+    objAH.url               = '/cgi-bin/koha/opac-busquedasDB.pl';
+    objAH.string           = $('#keyword').val();
+//     objAH.autor             = $('#autor').val();
+    objAH.only_available    = ( $('#only_available').attr('checked') )?1:0;
     objAH.signatura         = $('#signatura').val();
     objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
     objAH.tipoAccion        = 'BUSQUEDA_COMBINABLE';
-    var radio               = $("#tipo:checked");
-    var tipo                = radio[0].value;
-    objAH.tipo              = tipo;
+//     var radio               = $("#tipo:checked");
+//     var tipo                = radio[0].value;
+//     objAH.tipo              = tipo;
     //se setea la funcion para cambiar de pagina
     objAH.funcion           = 'changePage';
+    // FIXME ver parametro ini
     //se envia la consulta
     objAH.sendToServer();
 }
 
 function updateBusquedaCombinable(responseText){
-    updateInfoBusquedas(responseText);
-    highlightBusquedaCombinable();
+//     $('#result').html(responseText);
+   if (!verificarRespuesta(responseText))
+            return(0);
+            var Messages=JSONstring.toObject(responseText);
+            setMessages(Messages);
+      }
 }
 
 

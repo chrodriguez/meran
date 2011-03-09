@@ -1200,6 +1200,7 @@ sub busquedaCombinada_newTemp{
 	
     my ($string_utf8_encoded,$session,$obj_for_log,$only_sphinx) = @_;
 
+C4::AR::Utilidades::printHASH($obj_for_log);
     $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
@@ -1250,7 +1251,6 @@ sub busquedaCombinada_newTemp{
     if ($obj_for_log->{'ini'}==1){
       $obj_for_log->{'ini'} = 0;
     }
-
 
     if (!$only_sphinx){
         $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'});

@@ -29,7 +29,6 @@
   </script>
 
   [% INCLUDE 'message_OPAC.inc' %]
-  
   <script src="/includes/jquery/jquery.js" type="text/javascript"></script>
   <script src="/includes/AjaxHelper.js" type="text/javascript"></script>
   <script src="/includes/jquery/jquery.alerts.js" type="text/javascript"></script>
@@ -46,6 +45,7 @@
 
   <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
 
+  [% INCLUDE 'WindowHelper.inc' %]
 
   <title>
     [% IF titulo_nombre_ui %]

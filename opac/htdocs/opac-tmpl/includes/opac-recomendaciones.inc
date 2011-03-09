@@ -1,8 +1,8 @@
 [% INCLUDE "FormValidateHelper.inc" %]
 
-[% INCLUDE 'AutocompleteHelper.inc'  %]
 
 <script src="/opac-tmpl/includes/opac-searchFunciones.js" type="text/javascript"></script>
+<script src="/includes/jquery/modal/jquery.simplemodal.js" type="text/javascript"></script>
 <script type="text/javascript">
 
 
@@ -64,18 +64,18 @@ $(document).ready( function() {
               
               <fieldset><legend>&nbsp;[% 'Datos del Material' | i18n %]&nbsp;</legend>
                  <div>   
-<!--action="/cgi-bin/koha/opac-busquedasDB.pl"-->
+                      <!--action="/cgi-bin/koha/opac-busquedasDB.pl"-->
                       <form id="formBusqueda" name="formBusqueda" method="get">
                           <div class="column1-unit">
                  
                                 <strong>[% "B&uacute;squeda combinada" | i18n %]</strong>
-                              
-                                <input type="text" id="keyword" size="25" onkeypress="limpiarCampos('arriba')">
-                                <label for="match_mode">Seleccione una forma de busqueda</label>  
+                                <!-- onkeypress="limpiarCampos('arriba')" -->
+                                <input type="text" id="keyword" size="25">
+                                <p for="match_mode">Seleccione una forma de busqueda</p>  
                                 [% PERL %]
                                             print C4::AR::Filtros::getComboMatchMode() ;
-                                [% END %]       
-                                <input type="submit" onclick="busquedaCombinable()" id="save_button" value="[% 'Buscar' | i18n %]" >
+                                [% END %]    
+                                <input type="button" id="busq_comb" onclick="busquedaCombinable()"  value="[% 'Buscar' | i18n %]" >
                           </div>
                       </form>
               </fieldset>
