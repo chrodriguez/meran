@@ -4,6 +4,7 @@
 </head>
 <body onload="javascript:window.print();window.close();">
 <!-- LO QUE ESTA COMENTADO ES COMO ESTA ANTES!!!!!!! -->
+
 <table width="100%" border="1px">
   <tbody>
     <tr>
@@ -24,7 +25,11 @@
         	Usuario:
       	</TD>
       	<td>
-       		<b>[% socio.persona.getApeYNom %]</b>
+            [% IF adicional_selected == "true" %]
+                <b>[% socio.getNombre_apellido_autorizado %]</b>
+            [% ELSE %]  
+                <b>[% socio.persona.getApeYNom %]</b>
+            [% END %]
       	</td>
     </tr>
     <tr>
@@ -32,7 +37,13 @@
         	Documento:
       	</TD>
       	<td>
-       		Tipo:<b>[% socio.persona.getTipo_documento  %]</b> N&uacute;mero:<b>[% socio.persona.getNro_documento %]</b>
+       		Tipo:<b>[% socio.persona.getTipo_documento  %]</b> 
+            N&uacute;mero:
+            [% IF adicional_selected == "true" %]
+                <b>[% socio.getDni_autorizado %]</b>
+            [% ELSE %]  
+                <b>[% socio.persona.getNro_documento %]</b>
+            [% END %]
       	</td>
     </tr>
     <tr>

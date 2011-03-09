@@ -265,13 +265,15 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 		
 	my $Message_arrayref;
 	my %params;
-	$params{'barcode'}= $obj->{'barcode'};
-	$params{'nro_socio'}= $obj->{'nro_socio'};
-	$params{'operacion'}= $obj->{'operacion'};
-	$params{'loggedinuser'}= $user;
-	$params{'responsable'}= $user;
-	$params{'tipo_prestamo'}= $obj->{'tipoPrestamo'};
-	$params{'datosArray'}= $obj->{'datosArray'};
+	$params{'barcode'}              = $obj->{'barcode'};
+	$params{'nro_socio'}            = $obj->{'nro_socio'};
+	$params{'operacion'}            = $obj->{'operacion'};
+	$params{'loggedinuser'}         = $user;
+	$params{'responsable'}          = $user;
+	$params{'tipo_prestamo'}        = $obj->{'tipoPrestamo'};
+	$params{'datosArray'}           = $obj->{'datosArray'};
+    $params{'adicional_selected'}   = $obj->{'adicional_selected'};
+
 	
 	if($params{'operacion'} eq "renovar"){	
 # 		my ($Message_arrayref) = C4::AR::Prestamos::t_renovarPorBarcode(\%params);
@@ -279,13 +281,13 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 	}
 	elsif($params{'operacion'} eq "devolver"){
 
-		($Message_arrayref) = C4::AR::Prestamos::t_devolver(\%params);	
+		($Message_arrayref)     = C4::AR::Prestamos::t_devolver(\%params);	
 	}
 	elsif($params{'operacion'} eq "prestar"){
-		($Message_arrayref)= C4::AR::Prestamos::prestarYGenerarTicket(\%params)		
+		($Message_arrayref)     = C4::AR::Prestamos::prestarYGenerarTicket(\%params)		
 	}
 	
-	my $infoOperacionJSON=to_json $Message_arrayref;
+	my $infoOperacionJSON       = to_json $Message_arrayref;
 
     C4::AR::Auth::print_header($session);
 	print $infoOperacionJSON;

@@ -66,7 +66,7 @@ function _HiddeState(options){
         $('#state').hide();
     }
 
-    if(options.showOverlay){
+    if((options.showOverlay)&&(this.autoClose)){
         $.modal.close();
     }
 
@@ -124,6 +124,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.cache          = false; 			//para cachear los resultados
     this.showStatusIn   = '';               //muestra el estado del AJAX en el DIV pasado por parametro
     this.showOverlay    = false;            //muestra el overlay y bloquea la pantalla luego de hacer una peticion AJAX
+    this.autoClose      = true;             //cierra automaticamente el overlay
 
 
 	this.sendToServer= function(){
