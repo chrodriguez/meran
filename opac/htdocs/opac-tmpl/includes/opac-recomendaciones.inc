@@ -30,20 +30,18 @@ function validateForm(){
             });
 }
 
-
-
 $(document).ready( function() {
-//     CrearAutocompleteCatalogoBiblioteca({IdInput: 'buscar_biblioteca', 
-//                                          IdInputHidden: 'hidden_completo'
-//                                         });
-//     validateForm();
+    CrearAutocompleteCatalogoBiblioteca({IdInput: 'buscar_biblioteca', 
+                                         IdInputHidden: 'hidden_completo'
+                                        });
+    validateForm();
 });
 
 </script>        
 
+       
 
-
-        <div class="column1-unit">
+      <div class="column1-unit">
           <div class="contactform">
 <!--           <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-recomendacionesAdd.pl"> -->
               <input type="hidden" name="action" value="agregar">
@@ -70,7 +68,7 @@ $(document).ready( function() {
                  
                                 <strong>[% "B&uacute;squeda combinada" | i18n %]</strong>
                                 <!-- onkeypress="limpiarCampos('arriba')" -->
-                                <input type="text" id="keyword" size="25">
+                                <input type="text" id="buscar" size="25">
                                 <p for="match_mode">Seleccione una forma de busqueda</p>  
                                 [% PERL %]
                                             print C4::AR::Filtros::getComboMatchMode() ;
@@ -79,6 +77,7 @@ $(document).ready( function() {
                           </div>
                       </form>
               </fieldset>
+              <div id="resultado_busqueda"></id>
 
                 <p><label for="hidden_id_nivel_2" class="left">[% 'HIDDEN_ID_NIVEL_2' | i18n %]:</label>
                    <input type="text" name="hidden_completo" id="hidden_completo" class="field" value="" tabindex="7" />

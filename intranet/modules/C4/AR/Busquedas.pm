@@ -1629,13 +1629,13 @@ sub armarBuscoPor{
         $buscoPor.= $str."&";
 	}
 	
+
 	if( $params->{'tipo_nivel3_name'} != -1 &&  C4::AR::Utilidades::validateString($params->{'tipo_nivel3_name'})){
 # 		$buscoPor.= C4::AR::Filtros::i18n("Tipo de documento: ").C4::AR::Utilidades::verificarValor($params->{'tipo_nivel3_name'})."&";
         if ($params->{'tipo_nivel3_name'} eq 'ALL'){
         	$buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("TODOS"))."&";
         }else{
             $buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Referencias::translateTipoNivel3($params->{'tipo_nivel3_name'}))."&";
-        	
         }
 	}
 
