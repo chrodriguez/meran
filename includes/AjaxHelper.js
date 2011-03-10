@@ -28,12 +28,13 @@ function _Init(options){
                         width: 190,
                         opacity: 50,
                     },
-            });
+            });            
 
         } else {
             _ShowState(options);
         }
     }
+    
 }
 
 
@@ -63,11 +64,13 @@ function _HiddeState(options){
         $('#' + options.showStatusIn).show();
         $('#' + options.showStatusIn).removeClass('cargando');
     }else{
-        $('#state').hide();
+//         $('#state').hide();
+        $('#state').ajaxStop($('#state').hide());    
     }
 
-    if((options.showOverlay)&&(this.autoClose)){
-        $.modal.close();
+    if(options.showOverlay){
+//         $.modal.close();
+        $('#ajax-indicator').ajaxStop($.modal.close());
     }
 
 };
@@ -182,7 +185,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 					url: helper.url,
 					data: params,
  					beforeSend: function(){
-
+                      
 						if(helper.showState){
 						//muestra el estado del AJAX
                             _Init({debug: helper.debug, showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay});
@@ -195,6 +198,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 					},
 					complete: function(ajax){
 						//oculta el estado del AJAX
+//                          $('#ajax-indicator').ajaxStop(_HiddeState({showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay}));
 						_HiddeState({showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay});
 						if(helper.onComplete){
 							if(ajax.responseText == 'CLIENT_REDIRECT'){
