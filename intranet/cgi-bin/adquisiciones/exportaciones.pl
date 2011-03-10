@@ -7,6 +7,7 @@ use C4::AR::Proveedores;
 use C4::AR::Recomendaciones;
 use CGI;
 use C4::AR::PdfGenerator;
+use C4::AR::XLSGenerator;
 
 my $input           = new CGI;
 my $to_pdf          = $input->param('exportPDF') || 0;
@@ -16,11 +17,9 @@ my $template_name   = "";
 
 if($to_pdf){
 	$template_name = "adquisiciones/listado_ejemplares_export.tmpl";
-}elsif($to_xls){
-	$template_name = "adquisiciones/presupuesto_export.tmpl";
 }elsif($to_doc){
     $template_name = "adquisiciones/listado_ejemplares_export_doc.tmpl";
-}  
+}
 
 my ($template, $session, $t_params) = get_template_and_user({
     template_name => $template_name,
@@ -91,63 +90,69 @@ if($to_pdf){
     print C4::AR::Auth::get_html_content( $template, $t_params, $session );
 
 }elsif($to_xls){
-#   exporta a XLS el presupuesto
+# se exporta a XLS
 
-    my $recomendaciones_activas        = C4::AR::Recomendaciones::getRecomendacionesActivas();   
-    my $cant_recomendaciones           = (scalar(@$recomendaciones_activas));    
-    my $i;
-    my @resultsdata;
-    
-    for($i = 1; $i <= $cant_recomendaciones; $i++){
-    
-        if($input->param('activo'.$i) ne ''){
-        
-            my %hash = (    titulo      => $input->param('libro'.$i),
-                            cantidad    => $input->param('cantidad'.$i),
-                            autor       => $input->param('autor'.$i), );
-                      
-            my %row = ( recomendacion => \%hash,);
-            
-            push(@resultsdata, \%row);
-        }
-    }
-    
-    #trae los id de los proveedores separados por ,
-    my $proveedores     = $input->param('proveedores');
+    my $pedido_cotizacion_id    = $input->param('pedido_cotizacion_id');
+ 
+    my $proveedores     = $input->param('proveedores_array');
+    C4::AR::Debug::debug("proveedores recibidos:    ".$proveedores);
     my @parts           = split(/\,/,$proveedores);
     
-
-    #FIXME no exporta muchos archivos, exporta todo en uno mismo
+    my $presupuesto;
+    my $headers_tabla;
+    my $headers_planilla;
+    my $campos_hidden;
+    
+    # con muchos proveedores FIXME no lo hace! imprime uno solo presupuesto
     my $i;
     for($i = 0; $i < scalar(@parts); $i++){ 
 
         my $proveedor       = C4::AR::Proveedores::getProveedorInfoPorId(@parts[$i]);  
+        #C4::AR::Debug::debug(@parts[$i]);
         my $tipo_proveedor  = C4::AR::Proveedores::isPersonaFisica(@parts[$i]);
-
+        
+        push(@$headers_planilla, 'Proveedor');
+        
         if($tipo_proveedor == 0){
-            $t_params->{'proveedor'}        = $proveedor->getRazonSocial();
+            push (@$headers_planilla, $proveedor->getRazonSocial());
         }else{
-            $t_params->{'proveedor'}        = $proveedor->getNombre();
+            push (@$headers_planilla, $proveedor->getNombre());
         }
     
-        if(@resultsdata > 0){
-            $t_params->{'resultsloop'}      = \@resultsdata; 
+        push(@$campos_hidden, @parts[$i]);
+        
+        push(@$headers_tabla, 'Renglon');
+        push(@$headers_tabla, 'Cantidad');
+        push(@$headers_tabla, 'Articulo');
+        push(@$headers_tabla, 'Precio Unitario');
+        push(@$headers_tabla, 'Precio Total');
+    
+        my $pedidos_cotizacion_detalle = C4::AR::PedidoCotizacionDetalle::getPedidosCotizacionPorPadre($pedido_cotizacion_id);
+        
+        foreach my $celda (@$pedidos_cotizacion_detalle){
+            my $celda_xls; 
+            
+            push(@$celda_xls, $celda->{'nro_renglon'});
+            push(@$celda_xls, $celda->{'cantidad_ejemplares'});
+            push(@$celda_xls, $celda->{'titulo'});
+
+            push (@$presupuesto, $celda_xls);
         }
         
-        $t_params->{'id_proveedor'}         = $proveedor->getId();
-     
-        print C4::AR::Auth::get_html_content( $template, $t_params, $session );
-    }  
-
-# asi anda para un solo archivo OK:    
-
-# if(@resultsdata > 0){
-#            $t_params->{'resultsloop'} = \@resultsdata; 
-#        }
-    
+         # devuelve la data del archivo xls  
+        my $data             = C4::AR::XLSGenerator::exportarPesupuesto($presupuesto, $headers_tabla, $headers_planilla, $campos_hidden); 
         
-#        print C4::AR::Auth::get_html_content( $template, $t_params, $session );
+        # hash con parametros para imprimir los headers
+        my %hash;
+        $hash{'aplicacion'} = "application/vnd.ms-excel";
+        $hash{'file_name'}  = "presupuesto.xls";    
 
+        print C4::AR::Utilidades::setHeaders(\%hash); 
+        
+        print $data; 
+        C4::AR::Debug::debug("imprimiendo... ");
+    
+    } 
 }else{
 #   se muestra el template normal
 

@@ -1,5 +1,6 @@
 <fieldset id="datos_proveedor">
 <legend class="titulo_legend">[% "Proveedores a Presupuestar" | i18n %]</legend>
+<form action="exportaciones.pl" method="post" id="form_export">
     <ul>
         <li class="sub_item">Proveedor/es:</li>
         <li class="sub_item"> [% combo_proveedores %] </li>
@@ -11,20 +12,11 @@
                                                 boton   =>  "boton_buscar",
                                                 onClick =>  "generatePresupuesto([% pedido_cotizacion_id %]);",
                     ) ;
-            print C4::AR::Filtros::to_Button( 
-                                                text    =>  "[% 'Exportar' | i18n %]",
-                                                boton   =>  "boton_buscar",
-                                                onClick =>  "exportar([% pedido_cotizacion_id %])",
-                    ) ;
-        [% END %]  
-        [% PERL %]
-                                            print C4::AR::Filtros::link_to(   
-                                                                            text =>     C4::AR::Filtros::to_Icon( boton   => "icon_mas" ),
-                                                                            url =>      "/cgi-bin/koha/adquisiciones/export_temp.pl", 
-                                                                            params =>   ["pedido_cotizacion_id=[% pedido_cotizacion_id %]",
-                                                                                        "proveedor=2"],
-                                                                            title =>    "[% 'Exportar' | i18n %]"
-                                                                        );
-                              [% END %]
+        [% END %]                              
     </ul>
+    <input type="hidden" name="pedido_cotizacion_id" value="" id="pedido_cotizacion_id" /> 
+    <input type="hidden" name="proveedores_array" value="" id="proveedores_array" />  
+    <input type="button" value="Exportar" onclick="exportar('form_export')" />  
+    <input type="hidden" name="exportXLS" value="1" />
+</form>
 </fieldset> 
