@@ -17,6 +17,12 @@ function clear_usuario(){
     $('#tablaPrestamos').slideUp('slow');
 }
 
+
+function init_barcode(){
+    $('#barcode').val('');
+    $('#barcode_hidden').val('');
+}
+
 function verificarBarcode(){
 
 	objAH               = new AjaxHelper(updateVerificarBarcode);
@@ -77,13 +83,13 @@ function updateObtenerTiposDePrestamos(responseText){
 }
 
 function realizarAccionCircRapida(){
-
-	objAH                   = new AjaxHelper(updateRealizarAccion);
-	objAH.debug             = true;
-    objAH.showOverlay       = true;
-	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
-	objAH.nro_socio         = $('#nro_socio_hidden').val();
-	objAH.barcode           = $('#barcode').val();
+	objAH                       = new AjaxHelper(updateRealizarAccion);
+	objAH.debug                 = true;
+    objAH.showOverlay           = true;
+	objAH.url                   = "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.nro_socio             = $('#nro_socio_hidden').val();
+    objAH.adicional_selected    = $('#auth_selected').is(':checked'); 
+	objAH.barcode               = $('#barcode').val();
 
 	if($('#operacion').val() == 'devolver'){
 		var prestamos_array = new Array();
@@ -262,19 +268,20 @@ function updateEsRegular(responseText){
     $('#estadoUsuario').html(esRegular);
 }
 
-
 function updateInfoDevolver(responseText){
 	cancelarDiv();
 
 	var infoHash        = JSONstring.toObject(responseText);
 	var messageArray    = infoHash.Messages_arrayref;
 	setMessages(messageArray);
+    init_barcode();    
 
 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
 }
 
 
 $(document).ready(function() {
+
 	$('#operacion').focus();
 	$('#aceptar').hide();
     $('#cambo_tipo_prestamo').hide();
@@ -299,7 +306,7 @@ $(document).ready(function() {
 											callBackFunction: updateAutocompleteBarcodesPrestados
 									});
 
-	onChangeOperacion(); 
+	onChangeOperacion();
 });
 
 </script>

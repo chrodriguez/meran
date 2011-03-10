@@ -316,29 +316,31 @@ sub prestarYGenerarTicket{
 # FIXME falta verificar
 
     my ($nivel3aPrestar)= C4::AR::Nivel3::getNivel3FromBarcode($params->{'barcode'});
-    C4::AR::Debug::debug("barcode a prestar: ".$params->{'barcode'});   
+    C4::AR::Debug::debug("Prestamos => prestarYGenerarTicket => barcode a prestar: ".$params->{'barcode'});   
 
     my @infoTickets;
     my @infoMessages;
-    my $id3= $nivel3aPrestar->getId3;
-    my $nivel3aPrestar= C4::AR::Nivel3::getNivel3FromId3($id3);
-    $params->{'id1'}= $nivel3aPrestar->getId1;
-    $params->{'id2'}= $nivel3aPrestar->getId2;
-    C4::AR::Debug::debug("id1: ".$nivel3aPrestar->getId1);
-    C4::AR::Debug::debug("id2: ".$nivel3aPrestar->getId2);
-    C4::AR::Debug::debug("id3: ".$id3);
-    $params->{'id3'}= $id3;
-    $params->{'id_ui'}=C4::AR::Preferencias::getValorPreferencia('defaultUI');
-    $params->{'id_ui_prestamo'}=C4::AR::Preferencias::getValorPreferencia('defaultUI');
-    $params->{'tipo'}="INTRA";
+    my $id3                         = $nivel3aPrestar->getId3;
+    my $nivel3aPrestar              = C4::AR::Nivel3::getNivel3FromId3($id3);
+    $params->{'id1'}                = $nivel3aPrestar->getId1;
+    $params->{'id2'}                = $nivel3aPrestar->getId2;
+    C4::AR::Debug::debug("Prestamos => prestarYGenerarTicket => id1: ".$nivel3aPrestar->getId1);
+    C4::AR::Debug::debug("Prestamos => prestarYGenerarTicket => id2: ".$nivel3aPrestar->getId2);
+    C4::AR::Debug::debug("Prestamos => prestarYGenerarTicket => id3: ".$id3);
+    $params->{'id3'}                = $id3;
+    $params->{'id_ui'}              = C4::AR::Preferencias::getValorPreferencia('defaultUI');
+    $params->{'id_ui_prestamo'}     = C4::AR::Preferencias::getValorPreferencia('defaultUI');
+    $params->{'tipo'}               = "INTRA";
 
-    my ($msg_object)= &C4::AR::Prestamos::t_realizarPrestamo($params);
-    my $ticketObj=0;
+    my ($msg_object)    = &C4::AR::Prestamos::t_realizarPrestamo($params);
+    my $ticketObj       = 0;
+
+    C4::AR::Debug::debug("Prestamos => prestarYGenerarTicket => adicional_selected=> ".$params->{'adicional_selected'});
 
     if(!$msg_object->{'error'}){
     #Se crean los ticket para imprimir.
-        C4::AR::Debug::debug("SE PRESTO SIN ERROR --> SE CREA EL TICKET");
-        $ticketObj=C4::AR::Prestamos::crearTicket($id3,$params->{'nro_socio'},$params->{'loggedinuser'});
+        C4::AR::Debug::debug("Prestamos => prestarYGenerarTicket => SE PRESTO SIN ERROR --> SE CREA EL TICKET");
+        $ticketObj      = C4::AR::Prestamos::crearTicket($id3,$params->{'nro_socio'},$params->{'loggedinuser'},$params->{'adicional_selected'});
     }
 
     push (@infoMessages, $msg_object);
@@ -350,8 +352,8 @@ sub prestarYGenerarTicket{
     push (@infoTickets, \%infoOperacion);
 
     my %infoOperaciones;
-    $infoOperaciones{'tickets'}= \@infoTickets;
-    $infoOperaciones{'messages'}= \@infoMessages;
+    $infoOperaciones{'tickets'}     = \@infoTickets;
+    $infoOperaciones{'messages'}    = \@infoMessages;
 
 
     return (\%infoOperaciones);
@@ -748,13 +750,14 @@ sub verificarCirculacionRapida {
 
 
 sub crearTicket {
-    my ($id3,$nro_socio,$loggedinuser)=@_;
+    my ($id3,$nro_socio,$loggedinuser,$adicional_selected)=@_;
 
     my %ticket;
 
-    $ticket{'socio'}        = $nro_socio;
-    $ticket{'responsable'}  = $loggedinuser;
-    $ticket{'id3'}          = $id3;
+    $ticket{'adicional_selected'}       = $adicional_selected;
+    $ticket{'socio'}                    = $nro_socio;
+    $ticket{'responsable'}              = $loggedinuser;
+    $ticket{'id3'}                      = $id3;
 
     return(\%ticket);
 }
