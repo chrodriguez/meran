@@ -3,7 +3,7 @@ function objeto_usuario(){this.text;this.ID;}
 function detalleUsuario(nro_socio){objAH=new AjaxHelper(updateInfoUsuario);objAH.debug=true;objAH.cache=true;objAH.showOverlay=true;objAH.url='/cgi-bin/koha/circ/detalleUsuario.pl';objAH.nro_socio=nro_socio;objAH.sendToServer();}
 function updateInfoUsuario(responseText){$('#detalleUsuario').slideDown('slow');$('#detalleUsuario').html(responseText);}
 function detalleSanciones(nro_socio){objAH=new AjaxHelper(updateDetalleSanciones);objAH.debug=true;objAH.showOverlay=true;objAH.url='/cgi-bin/koha/usuarios/reales/detalleSanciones.pl';objAH.nro_socio=nro_socio;objAH.sendToServer();}
-function updateDetalleSanciones(responseText){$('#sanciones').html(responseText);}
+function updateDetalleSanciones(responseText){$('#sanciones').slideDown('slow');$('#sanciones').html(responseText);}
 function detalleReservas(nro_socio,funcion){objAH=new AjaxHelper(funcion);objAH.debug=true;objAH.showOverlay=true;objAH.url='/cgi-bin/koha/circ/detalleReservas.pl';objAH.nro_socio=nro_socio;objAH.sendToServer();}
 function updateInfoReservas(responseText){$('#tablaReservas').slideDown('slow');$('#tablaReservas').html(responseText);zebra('tablaReservas');checkedAll('checkAllReservas','chkboxReservas');}
 function detallePrestamos(nro_socio,funcion){objAH=new AjaxHelper(funcion);objAH.debug=true;objAH.showOverlay=true;objAH.url='/cgi-bin/koha/circ/detallePrestamos.pl';objAH.nro_socio=nro_socio;objAH.sendToServer();}

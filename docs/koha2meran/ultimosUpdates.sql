@@ -530,7 +530,7 @@ ALTER TABLE `rep_historial_prestamo`  ADD `nro_socio` VARCHAR( 16 ) NOT NULL DEF
 
 ALTER TABLE `rep_historial_prestamo` DROP `return`;
 
-ALTER TABLE `rep_historial_prestamo` ADD ` id_historial_prestamo` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+ALTER TABLE `rep_historial_prestamo` ADD `id_historial_prestamo` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
 
 ALTER TABLE `rep_historial_prestamo` ADD `tipo_prestamo` CHAR( 2 ) NOT NULL AFTER `nro_socio` ;
 
