@@ -103,3 +103,4 @@
         <h1> [% 'Nada que mostrar.' | i18n %] </h1>
     [% END %]
 [% END %]
+ [% INCLUDE 'opac-busquedaResultRecom.inc' %]

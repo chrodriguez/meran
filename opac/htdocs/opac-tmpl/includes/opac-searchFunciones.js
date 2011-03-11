@@ -209,16 +209,16 @@ function updateInfo(responseText){
 
 
 
---------------- ORIGINAL--------------------------------------
+// --------------- ORIGINAL--------------------------------------
 
 function busquedaCombinable(typeSearch){
 
     //seteo normal
-    var tipo= $("#checkNormal").val();
-    //busqueda exacta
-    if($("#checkExacto").attr("checked") == true){
-        tipo= $("#checkExacto").val();
-    }
+    //     var tipo= $("#checkNormal").val();
+    //     //busqueda exacta
+    //     if($("#checkExacto").attr("checked") == true){
+    //         tipo= $("#checkExacto").val();
+    //     }
 
     objAH=new AjaxHelper(updateBusquedaCombinable);
     objAH.debug= true;
@@ -226,12 +226,13 @@ function busquedaCombinable(typeSearch){
     objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
     objAH.tipoAccion= 'BUSQUEDA_COMBINABLE';
     if (typeSearch != 'all'){
-        objAH.codBarra= $('#codBarra').val();
-        objAH.tema=  $('#tema').val();
-        objAH.autor= $('#autor').val();
-        objAH.titulo= $('#titulo').val();
-        objAH.tipo= tipo;
-        objAH.cantR = $('#cantidad').val();
+//         objAH.codBarra= $('#codBarra').val();
+//         objAH.tema=  $('#tema').val();
+//         objAH.autor= $('#autor').val();
+//         objAH.titulo= $('#titulo').val();
+        objAH.titulo= $('#string').val();
+//         objAH.tipo= tipo;
+//         objAH.cantR = $('#cantidad').val();
         objAH.tipo_nivel3_name= $('#tipo_nivel3_id').val();
     }else
     {
@@ -251,15 +252,6 @@ function updateBusquedaCombinable(responseText){
 }
 
 
-// ---------------------- MIA
-
-
-
-
-// --------------------FIN MIA
-
-
-
 
 function highlightBusquedaCombinable(){
     var string = [];
@@ -275,6 +267,7 @@ function highlightBusquedaCombinable(){
     var combinables= ['titulo', 'autor'];
     highlight(classes,combinables);
 }
+
 
 function buscarPorCodigoBarra(){
     objAH=new AjaxHelper(updateInfo);

@@ -37,7 +37,7 @@ if($obj){
   $obj->{'ini'} = $input->param('page') || 0;
 }
 
-# C4::AR::Debug::debug("opac-busquedas.pl => string => ".$obj->{'string'});
+#  C4::AR::Debug::debug("opac-busquedas.pl => string => ".$obj->{'string'});
 
 # my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".Encode::encode_utf8($obj->{'string'})."&tipoAccion=".$obj->{'tipoAccion'};
 
@@ -65,7 +65,7 @@ if($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
     $obj->{'autor'}= $obj->{'searchField'};
     
-    $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
+    $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
     $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'};
 
     ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);

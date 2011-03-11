@@ -1198,9 +1198,14 @@ sub busquedaCombinada_newTemp{
 	
 	use Sphinx::Search;
 	
+
     my ($string_utf8_encoded,$session,$obj_for_log,$only_sphinx) = @_;
 
-C4::AR::Utilidades::printHASH($obj_for_log);
+    C4::AR::Debug::debug("STRING                      ".$string_utf8_encoded);
+    C4::AR::Utilidades::printHASH($obj_for_log);
+    C4::AR::Debug::debug("SPHINX                    ".$only_sphinx);
+
+
     $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
@@ -1693,7 +1698,7 @@ sub armarBuscoPor{
 		$buscoPor.=", ".$str;
 	}
 	
-	$buscoPor       = substr($buscoPor,2,length($buscoPor));
+	$buscoPor = substr($buscoPor,2,length($buscoPor));
 
 	return $buscoPor;
 }
