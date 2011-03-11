@@ -203,7 +203,6 @@ sub agregarPrestamo{
     my ($self) = shift;
     my ($prestamo) = @_;
 
-    $self->debug("SE AGREGO EL PRESTAMO AL HISTORIAL DE PRESTAMO!!!!");
     #Asignando data...
 
     $self->setId3($prestamo->getId3);
@@ -217,6 +216,7 @@ sub agregarPrestamo{
     $self->setFecha_ultima_renovacion($prestamo->getFecha_ultima_renovacion);
     $self->save();
 
+    $self->debug("SE AGREGO EL PRESTAMO AL HISTORIAL DE PRESTAMO!!!!");
 }
 
 

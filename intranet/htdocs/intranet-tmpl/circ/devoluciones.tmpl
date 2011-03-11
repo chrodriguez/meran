@@ -27,6 +27,10 @@ function inicializar(){
 	//oculto la tabla de prestamos
 	$('#tablaPrestamos').slideUp('slow');
 	$('#tablaPrestamos').html('');
+
+    //oculto la tabla de sanciones
+    $('#sanciones').slideUp('slow');
+    $('#sanciones').html('');
 }
 
 function onCompleteAutocompleteUsuarios(){
@@ -110,7 +114,7 @@ function updateInfoDevolver(responseText){
 	var messageArray    = infoHash.Messages_arrayref;
 	setMessages(messageArray);
 
-	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+	detallePrestamos(USUARIO.ID,updateDetallePrestamos);
     $('#barcode').attr('readonly', false);
 }
 
