@@ -1,13 +1,2 @@
-[% PERL %]
-print "Content-type: application/vnd.ms-excel\n";
-print "Content-Disposition: attachment;filename=presupuesto.xls\n";
-print "Cache-Control: public\n";
-print "Pragma: no-cache\n";
-print "Expires: 0\n\n";
-[% END %]
-
+[% headers %]
 [% data %]
-<p>holaaa</p>
-[% PERL %]
-C4::AR::Debug::debug("paso el template");
-[% END %]

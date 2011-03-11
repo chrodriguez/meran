@@ -3,9 +3,8 @@
 <script type="text/javascript" language="javascript">
     $(document).ready(function() {
         $('#presupuesto').hide()  
-   });
+    });
 </script>
-    <input type="hidden" id="proveedores" name="proveedores" value="">
     <fieldset id="datos_proveedor">
     <legend class="titulo_legend">[% "Pedidos De Cotizaci&oacute;n" | i18n %]</legend>
       <table id="tablaEjemplaresCompra" name="tabla" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 >
@@ -49,16 +48,6 @@
                                                                         );
                               [% END %]
                     </div>
-                    <div class="click horizontal icon_edicion">
-                              [% PERL %]
-                              print C4::AR::Filtros::link_to(
-                                                            text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-                                                            url =>  "/cgi-bin/koha/adquisiciones/datosPedidoCotizacion.pl", 
-                                                            params =>   ["action=EDITAR", "id_pedido_cotizacion=[% pedido_cotizacion.getId %]"],
-                                                            title =>    "[% 'Editar Pedido' | i18n %]"
-                                                          );
-                             [% END %]
-                     </div>
                               [% PERL %]
                               print C4::AR::Filtros::to_Button( 
                                                 text    =>  "[% 'Presupuestar Pedido' | i18n %]",
@@ -73,6 +62,14 @@
             [% END %]    
     </tbody>   
     </table>
+            [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Agregar Nuevo Pedido' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "",
+                    ) ;                 
+        [% END %]
 </fieldset>
+<input type="hidden" value="" id="pedido_cotizacion_selected" />
 <div id="presupuesto"></div>
 [% INCLUDE "intranet-bottom.inc" %]

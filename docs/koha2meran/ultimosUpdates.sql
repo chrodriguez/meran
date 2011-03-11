@@ -520,8 +520,8 @@ ALTER TABLE `rep_historial_circulacion`  ADD `nro_socio` VARCHAR( 16 ) NOT NULL 
 ALTER TABLE `rep_historial_prestamo`
 CHANGE `date_due` `fecha_prestamo` VARCHAR( 20 ) NULL DEFAULT NULL ,
 CHANGE `branchcode` `id_ui_origen` CHAR( 4 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-CHANGE `issuingbranch` ` id_ui_prestamo` CHAR( 4 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-CHANGE `returndate` ` fecha_devolucion` VARCHAR( 20 ) NULL DEFAULT NULL ,
+CHANGE `issuingbranch` `id_ui_prestamo` CHAR( 4 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+CHANGE `returndate` `fecha_devolucion` VARCHAR( 20 ) NULL DEFAULT NULL ,
 CHANGE `lastreneweddate` `fecha_ultima_renovacion` VARCHAR( 20 ) NULL DEFAULT NULL ,
 CHANGE `renewals` `renovaciones` TINYINT( 4 ) NULL DEFAULT NULL ,
 CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
@@ -530,7 +530,7 @@ ALTER TABLE `rep_historial_prestamo`  ADD `nro_socio` VARCHAR( 16 ) NOT NULL DEF
 
 ALTER TABLE `rep_historial_prestamo` DROP `return`;
 
-ALTER TABLE `rep_historial_prestamo` ADD ` id_historial_prestamo` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+ALTER TABLE `rep_historial_prestamo` ADD `id_historial_prestamo` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
 
 ALTER TABLE `rep_historial_prestamo` ADD `tipo_prestamo` CHAR( 2 ) NOT NULL AFTER `nro_socio` ;
 

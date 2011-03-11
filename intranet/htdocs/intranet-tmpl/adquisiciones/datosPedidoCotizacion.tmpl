@@ -70,16 +70,6 @@
         [% END %]
         </tbody>   
         </table>
-        
-        [% IF edit %]
-        [% PERL %]
-            print C4::AR::Filtros::to_Button( 
-                                                text    =>  "[% 'Agregar Nuevo Pedido' | i18n %]",
-                                                boton   =>  "boton_buscar",
-                                                onClick =>  "",
-                    ) ;                 
-        [% END %]
-        [% END %]
 </fieldset>
 
 [% INCLUDE "intranet-bottom.inc" %]
