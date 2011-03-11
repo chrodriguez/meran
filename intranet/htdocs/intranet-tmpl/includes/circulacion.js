@@ -80,6 +80,7 @@ function detalleSanciones(nro_socio){
 
 
 function updateDetalleSanciones(responseText){
+    $('#sanciones').slideDown('slow');
 	$('#sanciones').html(responseText);
 }
 

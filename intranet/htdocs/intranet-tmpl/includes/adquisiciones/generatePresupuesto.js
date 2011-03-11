@@ -21,6 +21,7 @@ function presupuestar(position){
     objAH.tipoAccion            = 'PRESUPUESTAR'
     objAH.sendToServer()  
     $('#pedidoCotizacion'+position).css('background-color', 'blue')
+    $('#pedido_cotizacion_selected').val($('#pedido_cotizacion_id'+position).val())
 }
   
 function updatePresupuestar(responseText){
@@ -73,33 +74,15 @@ function getProveedoresSelected(){
 
 /************************************************************ EXPORTACIONES  *********************************************/
 
-
-
-function exportar(pedido_cotizacion_id){
-
+function exportar(form_id){
     var proveedores = getProveedoresSelected()
     if(proveedores == ""){
         jConfirm(POR_FAVOR_SELECCIONE_PROVEEDORES_A_PRESUPUESTAR)
         return false
     }
- 
-    objAH                       = new AjaxHelper(updateExportar);
-    objAH.url                   = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
-    objAH.debug                 = true;
-    
-    objAH.proveedores_array     = proveedores
-    objAH.pedido_cotizacion_id  = pedido_cotizacion_id
-    
-    objAH.tipoAccion            = 'EXPORTAR'
-    objAH.sendToServer();
+    $('#proveedores_array').val(proveedores)
+    $('#pedido_cotizacion_id').val($('#pedido_cotizacion_selected').val())
+    $('#'+form_id).submit()
 }
-
-function updateExportar(responseText){
-    if (!verificarRespuesta(responseText))
-            return(0);
-    var Messages=JSONstring.toObject(responseText);
-    setMessages(Messages);
-}
-
 
 /************************************************************ FIN - EXPORTACIONES ********************************************/

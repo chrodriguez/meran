@@ -27,7 +27,7 @@ sub exportarPesupuesto{
     # headers planilla
     $spread_sheet->write_bold_row($headers_planilla); 
     
-    # campo hidden, id_proveedor
+    # campo hidden, id_proveedor FIXME no lo oculta
     $spread_sheet->write_hidden_row($campos_hidden);   
     
     # headers tabla
@@ -37,20 +37,21 @@ sub exportarPesupuesto{
     foreach my $celda (@$tabla_a_exportar){
         $spread_sheet->write_row($celda);       
     }
-    
+    my $data;
     eval{
-        $spread_sheet->save("/usr/share/meran/intranet/htdocs/intranet-tmpl/reports/presupuesto.xls"); 
-        #return $spread_sheet->data; 
+        #$spread_sheet->save("/usr/share/meran/intranet/htdocs/intranet-tmpl/reports/presupuesto.xls");       
+        $data = $spread_sheet->data; 
 
-        $msg_object->{'error'}= 0;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A036', 'params' => []} ) ;  
+        #$msg_object->{'error'}= 0;
+        #C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A036', 'params' => []} ) ;  
     };
 
     if ($@){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A037', 'params' => []} ) ;  
     }
-    return ($msg_object);
+    #return ($msg_object);
+    return ($data);
 }
 
 
