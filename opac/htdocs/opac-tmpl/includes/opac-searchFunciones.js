@@ -9,9 +9,9 @@
 //     objAH.showOverlay       = true;
 //     //para busquedas combinables
 //     objAH.url               = '/cgi-bin/koha/opac-busquedasDB.pl';
-//     objAH.string            = $('#buscar').val();
+//     objAH.string            = $('#string').val();
 //     objAH.only_available    = ( $('#only_available').attr('checked') )?1:0;
-//     objAH.signatura         = $('#signatura').val();
+// //     objAH.signatura         = $('#signatura').val();
 //     objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
 //     objAH.tipoAccion        = 'BUSQUEDA_COMBINABLE';
 // //     var radio               = $("#tipo:checked");
@@ -25,7 +25,7 @@
 // }
 // 
 // function updateBusquedaCombinable(responseText){
-//    $('#resultado_busqueda').html(responseText);
+//    $('#result_busqueda').html(responseText);
 // //    if (!verificarRespuesta(responseText)) {
 // //             return(0);
 // //             var Messages=JSONstring.toObject(responseText);

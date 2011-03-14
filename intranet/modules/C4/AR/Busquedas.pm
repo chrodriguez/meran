@@ -1198,7 +1198,6 @@ sub busquedaCombinada_newTemp{
 	
 	use Sphinx::Search;
 	
-
     my ($string_utf8_encoded,$session,$obj_for_log,$only_sphinx) = @_;
 
     C4::AR::Debug::debug("STRING                      ".$string_utf8_encoded);
@@ -1248,7 +1247,7 @@ sub busquedaCombinada_newTemp{
     $sphinx->SetMatchMode($tipo_match);
 
 #    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
-   $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+    $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
     
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
 

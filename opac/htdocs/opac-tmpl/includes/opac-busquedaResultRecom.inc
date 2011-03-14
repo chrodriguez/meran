@@ -29,7 +29,7 @@
         [% IF !from_suggested %]
             [% IF suggested %]
                     <div class="suggested_search">
-                        <a href="/cgi-bin/koha/opac-busquedasDB.pl?titulo=[% suggested %]&tipoAccion=[% tipoAccion %]&from_suggested=1&only_available=[% only_available %]&token=[% token %]">
+                        <a href="/cgi-bin/koha/opac-busquedasDB.pl?string=[% suggested %]&tipoAccion=[% tipoAccion %]&from_suggested=1&only_available=[% only_available %]&token=[% token %]">
                             [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
                         </a>
                     </div>
