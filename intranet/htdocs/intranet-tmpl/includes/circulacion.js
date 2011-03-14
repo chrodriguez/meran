@@ -150,7 +150,8 @@ function updateInfoPrestamos(responseText){
  */
 function realizarAccion(accion,chckbox,funcion) {
 // 	var chck    = $("input[@name="+chckbox+"]:checked");
-    var chck    = $('#table_tablaPrestamos').find(':checkbox');
+//     var chck    = $('#table_tablaPrestamos').find(':checkbox');
+    var chck    = $('#table_tablaPrestamos').find(':checked');
 	var array   = new Array;
 	var long    = chck.length;
 
@@ -160,7 +161,9 @@ function realizarAccion(accion,chckbox,funcion) {
       
 // FIXME esto esta mal. levanta todos los checkbox
 		for(var i=0; i< long; i++){
-			array[i]=chck[i].value;
+//             if(chck[i].attr('checked')) { 
+                array[i]=chck[i].value;
+//             }        
 		}
 
 		objAH                   = new AjaxHelper(funcion);
