@@ -20,9 +20,9 @@ use vars qw(@EXPORT @ISA);
     Exporta el pedido de cotizacion (presupuesto) seleccionado, con todos sus detalles, a un proveedor pasado como parametro
 =cut
 sub exportarPesupuesto{
-    my ($tabla_a_exportar, $headers_tabla, $headers_planilla, $campos_hidden)   = @_;
-    my $msg_object                                                              = C4::AR::Mensajes::create();
-    my $spread_sheet                                                            = Spreadsheet::WriteExcel::Simple->new;
+    my ($tabla_a_exportar, $headers_tabla, $headers_planilla, $campos_hidden, $nombre_proveedor)    = @_;
+    my $msg_object                                                                                  = C4::AR::Mensajes::create();
+    my $spread_sheet                                                                                = Spreadsheet::WriteExcel::Simple->new;
     
     # headers planilla
     $spread_sheet->write_bold_row($headers_planilla); 
@@ -38,9 +38,13 @@ sub exportarPesupuesto{
         $spread_sheet->write_row($celda);       
     }
     my $data;
+    
+    # path para dsp generar el link para la descarga
+    # TODO crear antes archivo con perl !!
+    my $path = "/usr/share/meran/intranet/htdocs/intranet-tmpl/reports/presupuesto".$nombre_proveedor.".xls";
     eval{
-        #$spread_sheet->save("/usr/share/meran/intranet/htdocs/intranet-tmpl/reports/presupuesto.xls");       
-        $data = $spread_sheet->data; 
+        $spread_sheet->save($path);       
+        #$data = $spread_sheet->data; 
 
         #$msg_object->{'error'}= 0;
         #C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A036', 'params' => []} ) ;  
@@ -51,7 +55,7 @@ sub exportarPesupuesto{
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A037', 'params' => []} ) ;  
     }
     #return ($msg_object);
-    return ($data);
+    return ($path);
 }
 
 
