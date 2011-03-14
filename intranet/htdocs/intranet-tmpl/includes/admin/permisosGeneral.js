@@ -82,10 +82,11 @@ function checkChecks(){
 
 
 function obtenerPermisos(){
-    var objAH=new AjaxHelper(updateObtenerPermisos);
-    objAH.url= '/cgi-bin/koha/admin/permisos/permisosDB.pl';
-    objAH.cache = false;
-    objAH.nro_socio = $('#nro_socio_hidden').val();
+    var objAH           = new AjaxHelper(updateObtenerPermisos);
+    objAH.url           = '/cgi-bin/koha/admin/permisos/permisosDB.pl';
+    objAH.cache         = false;
+    objAH.showOverlay   = true;
+    objAH.nro_socio     = $('#nro_socio_hidden').val();
         if ($('#id_ui').val() != "SIN SELECCIONAR")
             objAH.id_ui = $('#id_ui').val();
         else
@@ -121,10 +122,11 @@ function updateObtenerPermisos(responseText){
 }
 
 function nuevoPermisoSHOW(){
-    var objAH=new AjaxHelper(updateNuevoPermisoSHOW);
-    objAH.url= '/cgi-bin/koha/admin/permisos/permisosDB.pl';
-    objAH.cache = false;
-    objAH.accion="SHOW_NUEVO_PERMISO_GENERAL";
+    var objAH           = new AjaxHelper(updateNuevoPermisoSHOW);
+    objAH.url           = '/cgi-bin/koha/admin/permisos/permisosDB.pl';
+    objAH.cache         = false;
+    objAH.showOverlay   = true;
+    objAH.accion        = "SHOW_NUEVO_PERMISO_GENERAL";
     objAH.sendToServer();
 }
 
@@ -167,10 +169,11 @@ function armarArregloDePermisos(){
 
 
 function actualizarPermisos(){
-    var objAH=new AjaxHelper(updateActualizarPermisos);
-    objAH.url= '/cgi-bin/koha/admin/permisos/permisosDB.pl';
-    objAH.cache = false;
-    objAH.nro_socio = $('#nro_socio_hidden').val();
+    var objAH           = new AjaxHelper(updateActualizarPermisos);
+    objAH.url           = '/cgi-bin/koha/admin/permisos/permisosDB.pl';
+    objAH.cache         = false;
+    objAH.showOverlay   = true;
+    objAH.nro_socio     = $('#nro_socio_hidden').val();
 
     if ($('#id_ui').val() != "SIN SELECCIONAR")
         objAH.id_ui = $('#id_ui').val();
@@ -197,11 +200,12 @@ function nuevoPermiso(){
     var usuario = $('#nro_socio_hidden').val();
 
     if ($.trim(usuario) != ""){
-        objAH=new AjaxHelper(updateNuevoPermiso);
-        objAH.url= '/cgi-bin/koha/admin/permisos/permisosDB.pl';
-        objAH.debug = true;
-        objAH.cache = false;
-        objAH.nro_socio = $('#nro_socio_hidden').val();
+        objAH               = new AjaxHelper(updateNuevoPermiso);
+        objAH.url           = '/cgi-bin/koha/admin/permisos/permisosDB.pl';
+        objAH.debug         = true;
+        objAH.cache         = false;
+        objAH.showOverlay   = true;
+        objAH.nro_socio     = $('#nro_socio_hidden').val();
 
         if ($('#id_ui').val() != "SIN SELECCIONAR")
             objAH.id_ui = $('#id_ui').val();

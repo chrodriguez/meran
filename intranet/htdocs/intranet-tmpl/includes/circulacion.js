@@ -369,7 +369,7 @@ function generaDivDevolucion(responseText){
         }
 
         if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){
-            html= html + infoArray[i].edicion + ". <br>"
+            html= html + " - " + infoArray[i].edicion + ". <br>"
         };
   
         html= html + "<br>"
