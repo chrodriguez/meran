@@ -16,7 +16,7 @@ __PACKAGE__->meta->setup(
         expira                           => { type => 'date' },
         flags                            => { type => 'integer' },
         password                         => { type => 'varchar', length => 255 },
-        last_login                       => { type => 'datetime' },
+        last_login                       => { type => 'timestamp' },
         last_change_password             => { type => 'date' },
         change_password                  => { type => 'integer', default => '0', not_null => 1 },
         cumple_requisito                 => { type => 'integer', not_null => 1, default => '0'},
@@ -31,7 +31,7 @@ __PACKAGE__->meta->setup(
         theme                            => { type => 'varchar', length => 255 },
         theme_intra                      => { type => 'varchar', length => 255 },
         locale                           => { type => 'varchar', length => 32 },
-        lastValidation                   => { type => 'varchar', length => 32 },
+        lastValidation                   => { type => 'timestamp'  },
     ],
 
      relationships =>
@@ -419,9 +419,6 @@ sub getLast_login{
 sub setLast_login{
     my ($self) = shift;
     my ($last_login) = @_;
-
-    my $dateformat  = C4::Date::get_date_format();
-    $last_login     = C4::Date::format_date_in_iso($last_login,$dateformat);
 
     $self->last_login($last_login);
 

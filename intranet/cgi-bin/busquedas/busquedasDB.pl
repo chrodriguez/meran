@@ -36,13 +36,6 @@ $obj->{'type'}          = 'INTRA';
 
 my $only_available = $obj->{'only_available'};
 
-if ($only_available eq '0'){
-	$only_available = 0;
-} else{
-	$only_available = 1;
-}
-
-$obj->{'only_available'} = $only_available;
 
 if (C4::AR::Utilidades::validateString($tipoAccion)){
     if($tipoAccion eq "BUSQUEDA_POR_AUTOR"){
