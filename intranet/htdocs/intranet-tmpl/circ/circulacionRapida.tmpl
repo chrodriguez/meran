@@ -127,6 +127,7 @@ function updateRealizarAccion(responseText){
 	}
 	
     detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
+    detalleSanciones(NRO_SOCIO_AUTH);
 	$('#operacion').focus();
 }
 
@@ -195,6 +196,7 @@ function onChangeOperacion(){
 		if( $('#usuario').val() !='' ){
 			//se va a devolver algo, se muestra la info de los prestamos del usuario
 			detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
+            detalleSanciones(NRO_SOCIO_AUTH);
 		}
 	}
 }
@@ -243,6 +245,7 @@ function onCompleteUsuarios(){
 	}
 
     detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
+    detalleSanciones(NRO_SOCIO_AUTH);
 }
 
 // FIXME croe q no lo vamos a usar mas, el resultado del autocomplete trae la info del usuario y si es REGULAR o NO
@@ -277,8 +280,8 @@ function updateInfoDevolver(responseText){
     init_barcode();    
 
 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+    detalleSanciones(USUARIO.ID);
 }
-
 
 $(document).ready(function() {
 
@@ -384,5 +387,8 @@ $(document).ready(function() {
 <br>
 <!-- DETALLE DE PRESTAMOS -->
 <div id="tablaPrestamos" style="clear: both;"></div>
+
+<!-- DETALLE DE SANCIONES -->
+<div id="sanciones"></div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
