@@ -1,12 +1,23 @@
 [% INCLUDE "intranet-top.inc" %]
 
-
 [% INCLUDE 'datePicker.inc' %]
 
 <script type="text/javascript">
+
+    function contains(a, obj){
+        for(var i = 0; i < a.length; i++) {
+            if(a[i] === obj){
+            return true;
+            }
+        }
+        return false;
+    }
+
+    var FECHAS=new Array();
     function postFecha(date,stat,feriado){
         objAH=new AjaxHelper(null);
         objAH.debug= true;
+        objAH.showOverlay   = true;
         objAH.url='/cgi-bin/koha/admin/postFecha.pl';
         objAH.debug= true;
         objAH.date= date;
@@ -15,44 +26,49 @@
         objAH.sendToServer();
     }
 
-    $(function()
-    {
-        $('#calendar').datePickerMultiMonth(
-            {
-                numMonths: 5,
-                inline: true,
-                selectMultiple:true
-            }
-        ).bind(
-            'dpMonthChanged',
-            function(event, displayedMonth, displayedYear)
-            {
-                // uncomment if you have firebug and want to confirm this works as expected...
-                //console.log('dpMonthChanged', arguments);
+    $(function(){
+        crearDatePickerMultiple('calendar',6,999,
+                function(dates){
+                var dateSelected=dates.pop();
+                if (dateSelected){
+                    dates.push(dateSelected);
+                    var fecha= $.datepick.formatDate('dd/mm/yyyy',dateSelected);
+                    if (!contains(FECHAS,fecha)){
+                        //Fecha Nueva
+                        jPrompt('[% "Raz&oacute;n del Feriado" | i18n %]', '', '[% "Feriados" | i18n %]', function(texto) {
+                            if (texto){
+                                postFecha(fecha,'true',texto);
+                            }
+                            else{
+                                dates.pop();
+                            }
+                        });
+                    }
+                }
+                FECHAS_SEL=new Array();
+                for(var i = 0; i < dates.length; i++) {
+                    FECHAS_SEL.push($.datepick.formatDate('dd/mm/yyyy',dates[i]));
+                }
+            //Hay que eliminar algún feriado?
+                for(var i = 0; i < FECHAS.length; i++) {
+                   if (!contains(FECHAS_SEL,FECHAS[i])){
+                       jAlert('[% "Se elimina el Feriado" | i18n %] '+FECHAS[i], '[% "Feriados" | i18n %]');
+                       postFecha(FECHAS[i],'false','');
+                   }
+                }
+            //Actualizamos FECHAS
+                FECHAS=FECHAS_SEL;
             }
         );
+        });
 
-    });
     $(document).ready(function(){
         [% FOREACH date IN dates %]
-            $('#calendar').dpmmSetSelected('[% date.getFecha %]');
+            FECHAS.push('[% date.getFecha %]');
         [% END %]
-        $('#calendar').bind(
-            'dateSelected',
-            function(event, date, $td, status)
-            {
-                // uncomment if you have firebug and want to confirm this works as expected...
-//                 console.log('dateSelected', date.asString());
-                if (status){
-                    jPrompt('[% "Raz&oacute;n del Feriado" | i18n %]', '', '[% "Feriados" | i18n %]', function(texto) {
-                          if (texto)
-                              postFecha(date.asString(),status,texto);
-                    });
-                }else{
-                    postFecha(date.asString(),status,null);
-                }
-            }
-        );
+
+       $('#calendar').datepick('setDate', FECHAS);
+
     });
 
 </script>
@@ -64,7 +80,7 @@
 
 <fieldset style="width:90%;">
     <legend class="titulos">[% "Definir Feriados" | i18n %]</legend>
-    <div style="overflow:auto; float:left; border: 2px solid #000000; width: 100%; " id="calendar"></div>
+    <div id="calendar"></div>
 </fieldset>
 
 
