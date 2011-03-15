@@ -124,8 +124,14 @@ my %LABELS_COMPONENTS = (   "-1" => "SIN SELECCIONAR" => "text" => "Texto" , "te
 sub setHeaders{
     my ($params) = @_;
     
-    return "Content-type: ".$params->{'aplicacion'}.";\n Content-Disposition: attachment; filename=".$params->{'file_name'}.";\n Cache-Control: public; Pragma: no-cache; Expires: 0;";
+    my ($filename) = $params->{'file_name'};
 
+    $filename = $filename || "presupuesto_export.xls";
+
+    my $session = CGI::Session->load();
+    my $header = $session->header( -type => 'application/excel', -attachment => $filename );
+
+    return ($header);
 }    
                   
 
