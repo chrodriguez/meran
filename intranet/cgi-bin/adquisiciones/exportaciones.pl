@@ -147,8 +147,13 @@ if($to_pdf){
         $hash{'aplicacion'}   = "application/excel";
         $hash{'file_name'}    = "presupuesto".$nombre_proveedor.".xls";
         
-        print C4::AR::Utilidades::setHeaders(\%hash);
-        C4::AR::Debug::debug(C4::AR::Utilidades::setHeaders(\%hash));
+       # print C4::AR::Utilidades::setHeaders(\%hash);
+        #C4::AR::Debug::debug(C4::AR::Utilidades::setHeaders(\%hash));
+        
+        print "Content-type: application/vnd.ms-excel\n";
+        print "Content-Disposition: attachment; filename=archivo.xls\n";
+        print "Pragma: no-cache";
+        print "Expires: 0";
         print $data;
     
 }else{
