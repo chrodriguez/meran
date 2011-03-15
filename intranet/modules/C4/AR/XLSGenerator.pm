@@ -39,23 +39,15 @@ sub exportarPesupuesto{
     }
     my $data;
     
-    # path para dsp generar el link para la descarga
-    # TODO crear antes archivo con perl !!
-    my $path = "/usr/share/meran/intranet/htdocs/intranet-tmpl/reports/presupuesto".$nombre_proveedor.".xls";
-    eval{
-        $spread_sheet->save($path);       
-        #$data = $spread_sheet->data; 
-
-        #$msg_object->{'error'}= 0;
-        #C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A036', 'params' => []} ) ;  
+    eval{   
+        $data = $spread_sheet->data; 
     };
 
     if ($@){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A037', 'params' => []} ) ;  
     }
-    #return ($msg_object);
-    return ($path);
+    return ($data);
 }
 
 

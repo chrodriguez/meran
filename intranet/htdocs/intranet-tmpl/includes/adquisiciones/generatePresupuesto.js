@@ -1,6 +1,6 @@
 /*
  * LIBRERIA generatePresupuesto v 0.0.9
- * Esta es una libreria creada para el sistema KOHA
+ * Esta es una libreria creada para el sistema Meran
  * Contendran las funciones para la generacion de presupuestos para la compra de ejemplares
  * Fecha de creacion 07/02/2011
  */ 
@@ -74,15 +74,29 @@ function getProveedoresSelected(){
 
 /************************************************************ EXPORTACIONES  *********************************************/
 
-function exportar(form_id){
+function exportar(){
+
     var proveedores = getProveedoresSelected()
     if(proveedores == ""){
         jConfirm(POR_FAVOR_SELECCIONE_PROVEEDORES_A_PRESUPUESTAR)
         return false
     }
-    $('#proveedores_array').val(proveedores)
-    $('#pedido_cotizacion_id').val($('#pedido_cotizacion_selected').val())
-    $('#'+form_id).submit()
+
+    objAH                       = new AjaxHelper(updateExportarPresupuesto)
+    objAH.url                   = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl'
+    objAH.debug                 = true
+
+    objAH.proveedores_array     = proveedores
+    objAH.pedido_cotizacion_id  = $('#pedido_cotizacion_selected').val()
+          
+    objAH.tipoAccion            = 'EXPORTAR_PRESUPUESTO'
+    objAH.sendToServer() 
+ 
+}
+
+function updateExportarPresupuesto(responseText){
+    $('#links').html(responseText)
+    $('#links').show()
 }
 
 /************************************************************ FIN - EXPORTACIONES ********************************************/

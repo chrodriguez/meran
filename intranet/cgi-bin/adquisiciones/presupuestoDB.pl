@@ -167,3 +167,42 @@ elsif($tipoAccion eq "AGREGAR_PRESUPUESTO"){
     print $infoOperacionJSON;
 
 }# end if($tipoAccion eq "AGREGAR_PRESUPUESTO")
+
+elsif($tipoAccion eq "EXPORTAR_PRESUPUESTO"){
+
+    # para tener $session nada mas
+    my ($template, $session, $t_params) = get_template_and_user({
+        template_name => "includes/partials/proveedores/linksExportacion.tmpl",
+        query => $input,
+        type => "intranet",
+        authnotrequired => 0,
+        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
+        debug => 1,
+    });
+
+    $t_params->{'pedido_cotizacion_id'} = $obj->{'pedido_cotizacion_id'};
+ 
+    # arreglo con los path para hacer los links de descargas
+    my @paths_array;
+    my @id_proveedor_array;
+    for(my $i = 0; $i < scalar(@{$obj->{'proveedores_array'}}); $i++){ 
+
+        my $proveedor       = C4::AR::Proveedores::getProveedorInfoPorId($obj->{'proveedores_array'}->[$i]);  
+        my $tipo_proveedor  = C4::AR::Proveedores::isPersonaFisica($obj->{'proveedores_array'}->[$i]);
+        
+        $id_proveedor_array[$i] = $obj->{'proveedores_array'}->[$i];
+               
+        my $nombre_proveedor;
+        if($tipo_proveedor == 0){
+            $nombre_proveedor = $proveedor->getRazonSocial();
+        }else{
+            $nombre_proveedor = $proveedor->getNombre();
+        }
+        
+        $paths_array[$i] = "presupuesto".$nombre_proveedor.".xls";
+    } 
+   $t_params->{'nombres'}   =  \@paths_array;
+   $t_params->{'ids_array'} =  \@id_proveedor_array;
+   C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+}# end if($tipoAccion eq "EXPORTAR_PRESUPUESTO")

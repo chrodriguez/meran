@@ -1,6 +1,5 @@
 <fieldset id="datos_proveedor">
 <legend class="titulo_legend">[% "Proveedores a Presupuestar" | i18n %]</legend>
-<form action="exportaciones.pl" method="post" id="form_export">
     <ul>
         <li class="sub_item">Proveedor/es:</li>
         <li class="sub_item"> [% combo_proveedores %] </li>
@@ -14,9 +13,5 @@
                     ) ;
         [% END %]                              
     </ul>
-    <input type="hidden" name="pedido_cotizacion_id" value="" id="pedido_cotizacion_id" /> 
-    <input type="hidden" name="proveedores_array" value="" id="proveedores_array" />  
-    <input type="button" value="Exportar" onclick="exportar('form_export')" />  
-    <input type="hidden" name="exportXLS" value="1" />
-</form>
+    <input type="button" value="Exportar" onclick="exportar()" />  
 </fieldset> 

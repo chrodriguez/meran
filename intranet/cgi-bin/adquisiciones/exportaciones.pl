@@ -8,6 +8,7 @@ use C4::AR::Recomendaciones;
 use CGI;
 use C4::AR::PdfGenerator;
 use C4::AR::XLSGenerator;
+use C4::AR::Utilidades;
 
 my $input           = new CGI;
 my $to_pdf          = $input->param('exportPDF') || 0;
@@ -19,8 +20,6 @@ if($to_pdf){
 	$template_name = "adquisiciones/listado_ejemplares_export.tmpl";
 }elsif($to_doc){
     $template_name = "adquisiciones/listado_ejemplares_export_doc.tmpl";
-}elsif($to_xls){
-    $template_name = "adquisiciones/presupuesto_export.tmpl";
 }
 
 my ($template, $session, $t_params) = get_template_and_user({
@@ -31,6 +30,7 @@ my ($template, $session, $t_params) = get_template_and_user({
     flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
     debug => 1,
 });
+
  
 if($to_pdf){
 #   se exporta a PDF las recomendaciones
@@ -92,25 +92,22 @@ if($to_pdf){
     print C4::AR::Auth::get_html_content( $template, $t_params, $session );
 
 }elsif($to_xls){
-# se exporta a XLS
+# se exporta a XLS 
 
-    my $pedido_cotizacion_id    = $input->param('pedido_cotizacion_id');
+# TODO escupir en el navegador el presupuesto para el proveedor recibido como parametro y el id_pedido_cotizacion
+
+    my $pedido_cotizacion_id    = $input->param('pedido_cotizacion');
  
-    my $proveedores     = $input->param('proveedores_array');
-    my @parts           = split(/\,/,$proveedores);
-    
-    my $i;
-    # arreglo con los path para hacer los links de descargas
-    my @paths_array;
-    for($i = 0; $i < scalar(@parts); $i++){ 
+    my $proveedor_id     = $input->param('proveedor');
+
     
         my $presupuesto;
         my $headers_tabla;
         my $headers_planilla;
         my $campos_hidden;
 
-        my $proveedor       = C4::AR::Proveedores::getProveedorInfoPorId(@parts[$i]);  
-        my $tipo_proveedor  = C4::AR::Proveedores::isPersonaFisica(@parts[$i]);
+        my $proveedor       = C4::AR::Proveedores::getProveedorInfoPorId($proveedor_id);  
+        my $tipo_proveedor  = C4::AR::Proveedores::isPersonaFisica($proveedor_id);
         
         push(@$headers_planilla, 'Proveedor');
         
@@ -123,7 +120,7 @@ if($to_pdf){
             $nombre_proveedor = $proveedor->getNombre();
         }
     
-        push(@$campos_hidden, @parts[$i]);
+        push(@$campos_hidden, $proveedor_id);
         
         push(@$headers_tabla, 'Renglon');
         push(@$headers_tabla, 'Cantidad');
@@ -142,19 +139,17 @@ if($to_pdf){
 
             push (@$presupuesto, $celda_xls);
         }
+               
+        my $data = C4::AR::XLSGenerator::exportarPesupuesto($presupuesto, $headers_tabla, $headers_planilla, $campos_hidden, $nombre_proveedor); 
         
-        # antes creamos el archivo
-        open(PRESUPUESTO,">/usr/share/meran/intranet/htdocs/intranet-tmpl/reports/presupuesto".$nombre_proveedor.".xls") || die "No se pudo crear el archivo";
-        close(PRESUPUESTO); 
+        my %hash;
         
-         # devuelve la data del archivo xls  
-        my $path             = C4::AR::XLSGenerator::exportarPesupuesto($presupuesto, $headers_tabla, $headers_planilla, $campos_hidden, $nombre_proveedor); 
+        $hash{'aplicacion'}   = "application/vnd.ms-excel";
+        $hash{'file_name'}    = "presupuesto".$nombre_proveedor.".xls";
         
-        $paths_array[$i] = "/reports/presupuesto".$nombre_proveedor.".xls";
-    } 
-    
-    $t_params->{'paths'}     = \@paths_array;
-    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+        print C4::AR::Utilidades::setHeaders(\%hash);
+        C4::AR::Debug::debug(C4::AR::Utilidades::setHeaders(\%hash));
+        print $data;
     
 }else{
 #   se muestra el template normal
