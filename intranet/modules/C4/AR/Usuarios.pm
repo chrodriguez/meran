@@ -665,10 +665,12 @@ sub getSocioLike {
         #SI VIENE INICIAL, SE BUSCA SOLAMENTE POR APELLIDOS QUE COMIENCEN CON ESA LETRA, SINO EN TODOS LADOS CON LIKE EN AMBOS LADOS
         if (!($inicial)){
             foreach my $s (@searchstring_array){ 
-                push (	@filtros, ( or   => [   apellido => { like => '%'.$s.'%'}, 
-                                                nro_documento => { like => '%'.$s.'%' }, 
-                                                legajo => { like => '%'.$s.'%' },
-                                                nro_socio => { like => '%'.$s.'%' }          
+                push (	@filtros, ( or   => [   
+                                                'persona.nombre'  => { like => '%'.$s.'%'},   
+                                                apellido        => { like => '%'.$s.'%'},
+                                                nro_documento   => { like => '%'.$s.'%' }, 
+                                                legajo          => { like => '%'.$s.'%' },
+                                                nro_socio       => { like => '%'.$s.'%' }          
                                             ])
                      );
             }
