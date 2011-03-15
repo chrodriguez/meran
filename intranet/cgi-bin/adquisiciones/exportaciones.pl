@@ -144,7 +144,7 @@ if($to_pdf){
         
         my %hash;
         
-        $hash{'aplicacion'}   = "application/vnd.ms-excel";
+        $hash{'aplicacion'}   = "application/excel";
         $hash{'file_name'}    = "presupuesto".$nombre_proveedor.".xls";
         
         print C4::AR::Utilidades::setHeaders(\%hash);
@@ -158,7 +158,7 @@ if($to_pdf){
 
     if($recomendaciones_activas){
         my @resultsdata;
-      
+
         for my $recomendacion (@$recomendaciones_activas){   
             my %row = ( recomendacion => $recomendacion, );
             push(@resultsdata, \%row);
@@ -168,7 +168,7 @@ if($to_pdf){
        
     }
     
-    my $combo_proveedores               = &C4::AR::Utilidades::generarComboProveedoresMultiple();
+    my $combo_proveedores               = C4::AR::Utilidades::generarComboProveedoresMultiple();
 
     $t_params->{'combo_proveedores'}    = $combo_proveedores;
 
