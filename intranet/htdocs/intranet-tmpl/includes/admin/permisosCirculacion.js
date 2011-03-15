@@ -82,10 +82,11 @@ function checkChecks(){
 
 
 function obtenerPermisos(){
-    objAH=new AjaxHelper(updateObtenerPermisos);
-    objAH.url= '/cgi-bin/koha/admin/permisos/permisosDB.pl';
-    objAH.cache = false;
-    objAH.nro_socio = $('#nro_socio_hidden').val();
+    objAH               = new AjaxHelper(updateObtenerPermisos);
+    objAH.url           = '/cgi-bin/koha/admin/permisos/permisosDB.pl';
+    objAH.cache         = false;
+    objAH.showOverlay   = true;
+    objAH.nro_socio     = $('#nro_socio_hidden').val();
         if ($('#id_ui').val() != "SIN SELECCIONAR")
             objAH.id_ui = $('#id_ui').val();
         else
@@ -94,9 +95,9 @@ function obtenerPermisos(){
     if (seleccionoPerfil(comboPerfiles)){
         objAH.perfil=comboPerfiles.val();
     }
-    objAH.accion="OBTENER_PERMISOS_CIRCULACION";
-    objAH.tipo_documento = $('#tipo_nivel3_id').val();
-    objAH.permiso = $('#permisos').val();
+    objAH.accion            = "OBTENER_PERMISOS_CIRCULACION";
+    objAH.tipo_documento    = $('#tipo_nivel3_id').val();
+    objAH.permiso           = $('#permisos').val();
     objAH.sendToServer();
 }
 
@@ -121,10 +122,11 @@ function updateObtenerPermisos(responseText){
 }
 
 function nuevoPermisoSHOW(){
-    objAH=new AjaxHelper(updateNuevoPermisoSHOW);
-    objAH.url= '/cgi-bin/koha/admin/permisos/permisosDB.pl';
-    objAH.cache = false;
-    objAH.accion="SHOW_NUEVO_PERMISO_CIRCULACION";
+    objAH               = new AjaxHelper(updateNuevoPermisoSHOW);
+    objAH.url           = '/cgi-bin/koha/admin/permisos/permisosDB.pl';
+    objAH.cache         = false;
+    objAH.showOverlay   = true;
+    objAH.accion        = "SHOW_NUEVO_PERMISO_CIRCULACION";
     objAH.sendToServer();
 }
 
@@ -167,10 +169,11 @@ function armarArregloDePermisos(){
 
 
 function actualizarPermisos(){
-    objAH=new AjaxHelper(updateActualizarPermisos);
-    objAH.url= '/cgi-bin/koha/admin/permisos/permisosDB.pl';
-    objAH.cache = false;
-    objAH.nro_socio = $('#nro_socio_hidden').val();
+    objAH               = new AjaxHelper(updateActualizarPermisos);
+    objAH.url           = '/cgi-bin/koha/admin/permisos/permisosDB.pl';
+    objAH.cache         = false;
+    objAH.showOverlay   = true;
+    objAH.nro_socio     = $('#nro_socio_hidden').val();
 
     if ($('#id_ui').val() != "SIN SELECCIONAR")
         objAH.id_ui = $('#id_ui').val();
@@ -196,11 +199,12 @@ function nuevoPermiso(){
 
     usuario = $('#nro_socio_hidden').val();
     if ($.trim(usuario) != ""){
-        objAH=new AjaxHelper(updateNuevoPermiso);
-        objAH.url= '/cgi-bin/koha/admin/permisos/permisosDB.pl';
-        objAH.debug = true;
-        objAH.cache = false;
-        objAH.nro_socio = $('#nro_socio_hidden').val();
+        objAH               = new AjaxHelper(updateNuevoPermiso);
+        objAH.url           = '/cgi-bin/koha/admin/permisos/permisosDB.pl';
+        objAH.debug         = true;
+        objAH.cache         = false;
+        objAH.showOverlay   = true;
+        objAH.nro_socio     = $('#nro_socio_hidden').val();
 
         if ($('#id_ui').val() != "SIN SELECCIONAR")
             objAH.id_ui = $('#id_ui').val();

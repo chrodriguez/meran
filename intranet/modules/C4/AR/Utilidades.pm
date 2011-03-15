@@ -124,7 +124,7 @@ my %LABELS_COMPONENTS = (   "-1" => "SIN SELECCIONAR" => "text" => "Texto" , "te
 sub setHeaders{
     my ($params) = @_;
     
-    return "Content-type: ".$params->{'aplicacion'}."\n Content-Disposition: attachment; filename=".$params->{'file_name'}."\n Cache-Control: public\n Pragma: no-cache\n Expires: 0\n\n";
+    return "Content-type: ".$params->{'aplicacion'}.";\n Content-Disposition: filename=".$params->{'file_name'}.";\n Cache-Control: public; Pragma: no-cache; Expires: 0;";
 
 }    
                   

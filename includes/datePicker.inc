@@ -61,27 +61,55 @@
     function crearDatePicker(idElem){
 
             $('#'+idElem).datepick({  
-                             monthNames: monthNames,
-        monthNamesShort: monthNamesMin,
-        dayNames: dayNames,
-        dayNamesShort: dayNamesMin,
-        dayNamesMin: dayNamesMin,
-        dateFormat: 'dd/mm/yyyy', firstDay: 0,
-        renderer: $.datepick.defaultRenderer,
-        prevText: '&#x3c;Ant', prevStatus: '',
-        prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
-        nextText: 'Sig&#x3e;', nextStatus: '',
-        nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
-        currentText: 'Hoy', currentStatus: '',
-        todayText: 'Hoy', todayStatus: '',
-        clearText: 'Limpiar', clearStatus: '',
-        closeText: 'Cerrar', closeStatus: '',
-        yearStatus: '', monthStatus: '',
-        weekText: 'Sm', weekStatus: '',
-        dayStatus: 'D, M d', defaultStatus: '',
-        isRTL: false                                    
-        });
-            
+                            monthNames: monthNames,
+                            monthNamesShort: monthNamesMin,
+                            dayNames: dayNames,
+                            dayNamesShort: dayNamesMin,
+                            dayNamesMin: dayNamesMin,
+                            dateFormat: 'dd/mm/yyyy', firstDay: 0,
+                            renderer: $.datepick.defaultRenderer,
+                            prevText: '&#x3c;Ant', prevStatus: '',
+                            prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+                            nextText: 'Sig&#x3e;', nextStatus: '',
+                            nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+                            currentText: 'Hoy', currentStatus: '',
+                            todayText: 'Hoy', todayStatus: '',
+                            clearText: 'Limpiar', clearStatus: '',
+                            closeText: 'Cerrar', closeStatus: '',
+                            yearStatus: '', monthStatus: '',
+                            weekText: 'Sm', weekStatus: '',
+                            dayStatus: 'D, M d', defaultStatus: '',
+                            isRTL: false
+             });
+    }
 
+
+    function crearDatePickerMultiple(idElem,numMonths,numSelect,selectFunction){
+
+            $('#'+idElem).datepick({  
+                            monthNames: monthNames,
+                            monthNamesShort: monthNamesMin,
+                            dayNames: dayNames,
+                            dayNamesShort: dayNamesMin,
+                            dayNamesMin: dayNamesMin,
+                            monthsToShow: numMonths,
+                            monthsToStep: numMonths,
+                            multiSelect: numSelect,
+                            onSelect:selectFunction,
+                            dateFormat: 'dd/mm/yyyy', firstDay: 0,
+                            renderer: $.datepick.defaultRenderer,
+                            prevText: '&#x3c;Ant', prevStatus: '',
+                            prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+                            nextText: 'Sig&#x3e;', nextStatus: '',
+                            nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+                            currentText: 'Hoy', currentStatus: '',
+                            todayText: 'Hoy', todayStatus: '',
+                            clearText: 'Limpiar', clearStatus: '',
+                            closeText: 'Cerrar', closeStatus: '',
+                            yearStatus: '', monthStatus: '',
+                            weekText: 'Sm', weekStatus: '',
+                            dayStatus: 'D, M d', defaultStatus: '',
+                            isRTL: false
+            });
     }
 </script>
