@@ -10,22 +10,22 @@ use Time::HiRes;
 
 my $input = new CGI;
 
-my ($template, $session, $t_params)= get_template_and_user({
-                        template_name => "opac-main.tmpl",
-                        query => $input,
-                        type => "opac",
-                        authnotrequired => 1,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-                    });
+
 
 my $obj=$input->param('obj');
 my $ini;
 
+my ($template, $session, $t_params);
+
+
+# SI ES UNA BUSQUEDA PARA RECOMENDACION 
 if($obj){
     
     $obj= C4::AR::Utilidades::from_json_ISO($obj);
     $obj->{'ini'}=0;
 
+
+# SI ES UNA BUSQUEDA NORMAL
 }   else    {
 
     my %hash_temp = {};
@@ -39,6 +39,7 @@ if($obj){
     $obj->{'from_suggested'} = $input->param('from_suggested');
     $obj->{'tipo_nivel3_name'} = $input->param('tipo_nivel3_name');
     $obj->{'tipoBusqueda'} = 'all';
+    $obj->{'token'} = $input->param('token');
     $obj->{'ini'} = $input->param('page') || 0;
 
 }
@@ -46,48 +47,72 @@ if($obj){
 #  C4::AR::Debug::debug("opac-busquedas.pl => string => ".$obj->{'string'});
 # my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".Encode::encode_utf8($obj->{'string'})."&tipoAccion=".$obj->{'tipoAccion'};
 
-
 my $start = [ Time::HiRes::gettimeofday() ]; #se toma el tiempo de inicio de la búsqueda
 
 my $cantidad;
 my $suggested;
 my $resultsarray;
+
 $obj->{'type'} = 'OPAC';
 $obj->{'session'}= $session;
 
+
+
+# PAGINADOR
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 $obj->{'cantR'}= $obj->{'cantR'} || $cantR;
 
 C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
+
 $obj->{'from_suggested'}= $obj->{'from_suggested'};
+
 
 my $url;
 my $url_todos;
+my $token;
 
-if($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
+ ($template, $session, $t_params)= get_template_and_user({
+                        template_name => "opac-main.tmpl",
+                        query => $input,
+                        type => "opac",
+                        authnotrequired => 1,
+                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    });
+
+
+if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
     $obj->{'autor'}= $obj->{'searchField'};
     
-    $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
-    $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'};
+    $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
+    $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'};
 
     ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
 
-}elsif($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
-    
-    my $string_buscado;
+}   elsif   ($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
 
-    if ($input->param('string')){
-          $string_buscado= $input->param('string');      
-    } else{
-          $string_buscado= $obj->{'string'};
-    }
-
-    $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".$string_buscado."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
-    $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".$string_buscado."&tipoAccion=".$obj->{'tipoAccion'};
+   
+    $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
+    $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
     
-    ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($string_buscado,$session,$obj);
+    ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($input->param('string'),$session,$obj);
+
+} elsif ($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE_RECOMENDACION') {
+
+   ($template, $session, $t_params)= get_template_and_user({
+                        template_name => "/includes/opac-busquedaResultRecom.inc",
+                        query => $input,
+                        type => "opac",
+                        authnotrequired => 1,
+                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    });
+
+
+    $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token') ."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
+    $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token') ."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
+    
+    ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj);
 
 }
 

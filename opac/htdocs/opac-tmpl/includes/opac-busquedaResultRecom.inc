@@ -22,9 +22,6 @@
             <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
             <div class="resultados_consulta">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
             <div class="contenedor_paginador">[% paginador %]</div>
-            [% IF only_available %]
-               <h2 class="advice"> [% ' Solo se muestran ejemplares disponibles.' | i18n %] <a href="[% url_todos %]">([% ' Mostrar todos' | i18n %])</a></h2>
-            [% END %]
         [% END %]
         [% IF !from_suggested %]
             [% IF suggested %]
@@ -103,4 +100,3 @@
         <h1> [% 'Nada que mostrar.' | i18n %] </h1>
     [% END %]
 [% END %]
- [% INCLUDE 'opac-busquedaResultRecom.inc' %]
