@@ -14,8 +14,21 @@
     }
 
     var FECHAS=new Array();
+
+    function proximosFeriados(){
+
+        objAH=new AjaxHelper(updateProximosFeriados);
+        objAH.url='/cgi-bin/koha/admin/proximosFeriados.pl';
+        objAH.sendToServer();
+    }
+
+
+    function updateProximosFeriados(responseText){
+        $('#proximosFeriados').html(responseText);
+    }
+
     function postFecha(date,stat,feriado){
-        objAH=new AjaxHelper(null);
+        objAH=new AjaxHelper(updatePostFeriado);
         objAH.debug= true;
         objAH.showOverlay   = true;
         objAH.url='/cgi-bin/koha/admin/postFecha.pl';
@@ -26,8 +39,12 @@
         objAH.sendToServer();
     }
 
+    function updatePostFeriado(responseText){
+        proximosFeriados();
+    }
+
     $(function(){
-        crearDatePickerMultiple('calendar',6,999,
+        crearDatePickerMultiple('calendarioFeriados',4,999,
                 function(dates){
                 var dateSelected=dates.pop();
                 if (dateSelected){
@@ -67,20 +84,22 @@
             FECHAS.push('[% date.getFecha %]');
         [% END %]
 
-       $('#calendar').datepick('setDate', FECHAS);
-
-    });
+       $('#calendarioFeriados').datepick('setDate', FECHAS);
+       proximosFeriados();
+    }
+    );
 
 </script>
-<style>
-    .dp-applied {
-        float:left;
-    }
-</style>
 
-<fieldset style="width:90%;">
-    <legend class="titulos">[% "Definir Feriados" | i18n %]</legend>
-    <div id="calendar"></div>
+<fieldset>
+    <legend class="titulos">[% "Feriados" | i18n %]</legend>
+
+    <div style="float:left"  id="calendarioFeriados" >
+    </div>
+
+    <div style="float:right"  id="proximosFeriados" >
+    </div>
+
 </fieldset>
 
 

@@ -3571,6 +3571,23 @@ sub getFeriados{
     return (\@dates);
 }
 
+sub getProximosFeriados{
+    require C4::Modelo::PrefFeriado;
+    require C4::Modelo::PrefFeriado::Manager;
+    
+
+    my $hoy = C4::AR::Utilidades::getToday();
+
+    my $feriados = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { ge => $hoy } ], sort_by => ['fecha ASC'],  limit   => 5);
+    my @dates;
+
+    foreach my $date (@$feriados){
+        push (@dates, $date);
+    }
+
+    return (\@dates);
+}
+
 sub setFeriado{
 
     my ($fecha,$status,$texto_feriado) = @_;
