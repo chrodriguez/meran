@@ -44,7 +44,6 @@
                 ];
     monthNames= [
                     "[% 'Enero' | i18n %]",
-                    "[% 'Enero' | i18n %]",
                     "[% 'Febrero' | i18n %]",
                     "[% 'Marzo' | i18n %]",
                     "[% 'Abril' | i18n %]",
@@ -96,6 +95,7 @@
                             monthsToStep: numMonths,
                             multiSelect: numSelect,
                             onSelect:selectFunction,
+                            onDate: $.datepick.noWeekends,
                             dateFormat: 'dd/mm/yyyy', firstDay: 0,
                             renderer: $.datepick.defaultRenderer,
                             prevText: '&#x3c;Ant', prevStatus: '',
