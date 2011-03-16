@@ -13,44 +13,6 @@ var arreglo                  = new Array() //global, arreglo con las recomendaci
 var array_cantidades         = new Array() //global, arreglo cantidades de ejemplares de las recomendaciones
 var array_recomendaciones    = new Array() //global, arreglo de ids de recomendaciones_detalle
 
-/*function generatePresupuesto(){
-
-    var proveedores = getProveedoresSelected()
-    if(proveedores == ""){
-        jConfirm(POR_FAVOR_SELECCIONE_PROVEEDORES_A_PRESUPUESTAR, function(){ })
-        return false
-    }
-    if(checkSeleccionados(true)){
-
-        objAH                       = new AjaxHelper(updateAgregarPresupuesto)
-        objAH.url                   = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl'
-        objAH.debug                 = true
-
-        objAH.proveedores_array     = getProveedoresSelected()
-        objAH.recomendaciones_array = getRecomendacionesSelected()
-          
-        objAH.tipoAccion            = 'AGREGAR_PRESUPUESTO'
-        objAH.sendToServer()  
-    }
-}
-
-function updateAgregarPresupuesto(responseText){
-    if (!verificarRespuesta(responseText))
-            return(0);
-    var Messages=JSONstring.toObject(responseText);
-    setMessages(Messages);
-}
-
-function getProveedoresSelected(){
-    array_proveedores = new Array()
-    var i = 0
-    $('#proveedor option:selected').each(function(){  
-        array_proveedores[i] = $(this).val()
-        i++
-    })
-    return array_proveedores
-}*/
-
 function getRecomendacionesSelected(){
     var i = 0
     $('.activo').each(function(){ 
