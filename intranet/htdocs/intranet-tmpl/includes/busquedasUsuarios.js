@@ -18,28 +18,7 @@ function consultarBar(filtro,doScroll){
     objAH.cache = true;
     busqueda = jQuery.trim($('#socio-bar').val());
     inicial = '0';
-    if (filtro){
-        inicial = filtro;
-        busqueda = jQuery.trim(filtro);
-        objAH.inicial= inicial;
-        $('#socio').val(FILTRO_POR + filtro);
-    }
-    else
-       {
-        if (busqueda.substr(8,5).toUpperCase() == 'TODOS'){
-                busqueda = busqueda.substr(8,5);
-                $('#socio').val(busqueda);
-                consultar(busqueda);
-        }
-        else
-           {
-            if (busqueda.substr(0,6).toUpperCase() == 'FILTRO'){
-                busqueda = busqueda.substr(8,1);
-                $('#socio').val(busqueda);
-                consultar(busqueda);
-            }
-           }
-    }
+
     if(jQuery.trim(busqueda).length > 0){
         objAH.url= '/cgi-bin/koha/usuarios/reales/buscarUsuarioResult.pl';
         objAH.showOverlay       = true;

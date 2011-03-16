@@ -666,11 +666,11 @@ sub getSocioLike {
         if (!($inicial)){
             foreach my $s (@searchstring_array){ 
                 push (	@filtros, ( or   => [   
-                                                'persona.nombre'  => { like => '%'.$s.'%'},   
-                                                apellido        => { like => '%'.$s.'%'},
-                                                nro_documento   => { like => '%'.$s.'%' }, 
-                                                legajo          => { like => '%'.$s.'%' },
-                                                nro_socio       => { like => '%'.$s.'%' }          
+                                                'persona.nombre'    => { like => '%'.$s.'%'},   
+                                                apellido            => { like => '%'.$s.'%'},
+                                                nro_documento       => { like => '%'.$s.'%' }, 
+                                                legajo              => { like => '%'.$s.'%' },
+                                                nro_socio           => { like => '%'.$s.'%' }          
                                             ])
                      );
             }

@@ -1232,8 +1232,6 @@ sub busquedaCombinada_newTemp{
         }else{
             $query .=  " ".$string."*";
         }
-
-
     }
 
     C4::AR::Debug::debug("Busquedas => query string ".$query);

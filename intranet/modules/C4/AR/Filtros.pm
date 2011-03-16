@@ -332,8 +332,8 @@ sub getComboMatchMode {
     my $html= '';
 
     $html .="<select id='match_mode' tabindex='-1'>";
-    $html .="<option value='SPH_MATCH_ANY' title='ASKLDNAKSJNDKJASNDNASKNKSD'>Coincidir con cualquier palabra</option>";
     $html .="<option value='SPH_MATCH_PHRASE'>Coincidir con la frase exacta</option>";
+    $html .="<option value='SPH_MATCH_ANY'>Coincidir con cualquier palabra</option>";
     $html .="<option value='SPH_MATCH_BOOLEAN'>Coincidir con valores booleanos (&), OR (|), NOT (!,-)</option>";
     $html .="<option value='SPH_MATCH_EXTENDED'>Coincidencia Extendida</option>";
     $html .="<option value='SPH_MATCH_ALL'>Coincidir con todas las palabras</option>";

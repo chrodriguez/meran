@@ -30,8 +30,6 @@
     	  })
     	});      
       
-      
-      
     });
 
 </script>
@@ -45,7 +43,7 @@
             <div class="top-bar-inside">
               <div class="static-links">
   <div id="logo">
-    <a href="/cgi-bin/koha/mainpage.pl" title="[% 'Inicio' | i18n %]"></a>
+    <a href="/cgi-bin/koha/mainpage.pl?token=[% token %]" title="[% 'Inicio' | i18n %]"></a>
   </div>
 
 
