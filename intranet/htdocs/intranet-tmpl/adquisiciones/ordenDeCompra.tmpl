@@ -1,0 +1,40 @@
+[% headers %]
+<h2>[% facultad %]</h2>
+<h3>[% direccion %]</h3>
+<h4>[% "Orden De Compra" | i18n %]</h4></br>
+      <table class="datos_tabla" border=1 cellspacing=0 cellpadding=0 width=100%>
+      <thead>
+          <tr class="titulo_tabla_resultado">
+              <th>
+                  [% "CANT" | i18n %]
+              </th>
+              <th>
+                  [% "ARTICULO" | i18n %]
+              </th>
+              <th>
+                  [% "UNIT" | i18n %]
+              </th>    
+              <th>
+                  [% "TOTAL" | i18n %]
+              </th>     
+          </tr>
+      </thead>
+      <tbody>
+            [% FOREACH resultsloop %]   
+            <tr align="center" >
+                  <td align="center" >
+                    <p>[% orden_compra.cantidad %]</p> 
+                  </td>
+                  <td align="center" >
+                      <p>[% orden_compra.articulo %]</p> 
+                  </td>
+                  <td align="center" >
+                      <p>[% orden_compra.unitario %]</p> 
+                  </td>
+                  <td align="center" >
+                      <p>[% orden_compra.total %]</p> 
+                  </td>
+            </tr>        
+            [% END %]    
+    </tbody>   
+</table>
