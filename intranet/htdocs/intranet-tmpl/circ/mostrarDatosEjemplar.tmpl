@@ -10,5 +10,13 @@
             <div class="sub_item_data">[% 'Autor:' | i18n %]</div>
             <div class="sub_item_data_right">[% autor %]</div>
         </li>
+       <li>
+            <div class="sub_item_data">[% 'Disponibilidad:' | i18n %]</div>
+            <div class="sub_item_data_right"><strong class="[% IF nivel3.esParaSala %]salaLectura[% ELSE %]prestamo[% END %]">[% nivel3.getDisponibilidadObject.getNombre  %]</strong></div>
+        </li>
+       <li>
+            <div class="sub_item_data">[% 'Estado:' | i18n %]</div>
+            <div class="sub_item_data_right"><strong class="[% IF nivel3.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% nivel3.getEstadoObject.getNombre  %]</strong></div>
+        </li>
         </ul>
     </fieldset>

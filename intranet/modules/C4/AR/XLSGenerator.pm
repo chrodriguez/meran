@@ -17,7 +17,7 @@ use vars qw(@EXPORT @ISA);
 );
 
 =item
-    Exporta el pedido de cotizacion (presupuesto) seleccionado, con todos sus detalles, a un proveedor pasado como parametro
+    Devuelve la planilla con el pedido de cotizacion (presupuesto) seleccionado, con todos sus detalles, a un proveedor pasado como parametro
 =cut
 sub exportarPesupuesto{
     my ($tabla_a_exportar, $headers_tabla, $headers_planilla, $campos_hidden, $nombre_proveedor)    = @_;
@@ -28,7 +28,7 @@ sub exportarPesupuesto{
     $spread_sheet->write_bold_row($headers_planilla); 
     
     # campo hidden, id_proveedor FIXME no lo oculta
-    #$spread_sheet->write_hidden_row($campos_hidden);   
+    $spread_sheet->write_hidden_row($campos_hidden);   
     
     # headers tabla
     $spread_sheet->write_bold_row($headers_tabla); 
@@ -38,18 +38,11 @@ sub exportarPesupuesto{
         $spread_sheet->write_row($celda);       
     }
     my $data;
-    
-    eval{   
-        $data = $spread_sheet->data; 
-    };
+  
+    $data = $spread_sheet->data; 
 
-    if ($@){
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A037', 'params' => []} ) ;  
-    }
     return ($data);
 }
-
 
 
 

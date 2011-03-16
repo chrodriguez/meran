@@ -53,6 +53,8 @@ function updateAgregarPresupuesto(responseText){
             return(0);
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
+    
+    exportar()
 }
 
 function getProveedoresSelected(){

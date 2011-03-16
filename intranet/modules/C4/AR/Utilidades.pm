@@ -122,14 +122,16 @@ my %LABELS_COMPONENTS = (   "-1" => "SIN SELECCIONAR" => "text" => "Texto" , "te
     parametros: HASH (para que se pueda extender)
 =cut
 sub setHeaders{
-    my ($params) = @_;
+    my ($params)        = @_;
     
-    my ($filename) = $params->{'file_name'};
+    my ($filename)      = $params->{'file_name'};
+    my ($aplication)    = $params->{'aplicacion'};
 
-    $filename = $filename || "presupuesto_export.xls";
+    $filename           = $filename || "presupuesto_export.xls";
+    $aplication         = $aplication || "application/vnd.ms-excel";
 
-    my $session = CGI::Session->load();
-    my $header = $session->header( -type => 'application/excel', -attachment => $filename );
+    my $session         = CGI::Session->load();
+    my $header          = $session->header( -type => $aplication, -attachment => $filename );
 
     return ($header);
 }    
