@@ -1,7 +1,15 @@
 [% headers %]
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <h2>[% facultad %]</h2>
 <h3>[% direccion %]</h3>
-<h4>[% "Orden De Compra" | i18n %]</h4></br>
+<h4 align="right">ORDEN DE COMPRA Nº </h4>
+<h3>[% proveedor %]</h3>
+<p align="right">[% fecha %]</p>
+<p>Exp. Nº  .   /   .</p>
+<p>SIRVASE PROVEER A ESTA FACULTAD DE LOS ARTICULOS QUE SE DETALLAN 
+Y DE ACUERDO A LA COTIZACION EFECTUADA OPORTUNAMENTE EN LICITACION Nº   CONCURSO DE PRECIOS</p>
+<p>IMPUTACION: </p>
       <table class="datos_tabla" border=1 cellspacing=0 cellpadding=0 width=100%>
       <thead>
           <tr class="titulo_tabla_resultado">
@@ -37,4 +45,11 @@
             </tr>        
             [% END %]    
     </tbody>   
+</table>
+<table border="1" cellspacing="0" cellpadding="0">
+    <tr>
+        <th>IMPUTACION</th>
+        <th>CONTROL</th>
+    </tr>
+    
 </table>

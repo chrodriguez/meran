@@ -11,18 +11,19 @@ use C4::AR::XLSGenerator;
 use C4::AR::Utilidades;
 use C4::AR::Preferencias;
 use C4::AR::Referencias;
+use utf8;
 
 my $input           = new CGI;
 my $to_pdf          = $input->param('exportPDF') || 0;
 my $to_doc          = $input->param('exportDOC') || 0;
 my $to_xls          = $input->param('exportXLS') || 0;
-my $operation       = $input->param('operation') || 0;
+my $operationDOC    = $input->param('operationDOC') || 0;
 my $template_name   = "";
 
 if($to_pdf){
 	$template_name = "adquisiciones/listado_ejemplares_export.tmpl";
 }elsif($to_doc){
-    if($operation){
+    if($operationDOC){
         $template_name = "adquisiciones/ordenDeCompra.tmpl";
     }else{
         $template_name = "adquisiciones/listado_ejemplares_export_doc.tmpl";
@@ -76,7 +77,7 @@ if($to_pdf){
     my @resultsdata;
     my %hash;
     
-    if($operation){
+    if($operationDOC){
         #   exporta a DOC la orden de compra
 
         for(my $i = 1; $i <= $input->param('cantidad'); $i++){
@@ -96,11 +97,25 @@ if($to_pdf){
         
         my $ui_id = C4::AR::Preferencias::getValorPreferencia('defaultbranch');
         
-        my $ui    = C4::AR::Referencias::obtenerUIByIdUi($ui_id);  
+        my $ui    = C4::AR::Referencias::obtenerUIByIdUi($ui_id); 
 
         $t_params->{'facultad'}     = $ui->{'nombre'};
         $t_params->{'direccion'}    = $ui->{'direccion'};
-            
+        
+        my @dias   = ('Domingo','Lunes','Martes','Miércoles',
+               'Jueves','Viernes','Sábado');
+               
+        my @meses = ('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio',
+                 'Agosto','Septiembre','Octubre','Noviembre','Diciembre');
+
+        my ($segundo,$minuto,$hora,$dia,$mes,$anio,$diaSemana) = (localtime(time))[0,1,2,3,4,5,6];
+
+        $anio += 1900;
+
+        $t_params->{'fecha'}        = "La Plata, $dias[$diaSemana] $dia de $meses[$mes]  del $anio";
+        
+        $t_params->{'proveedor'}    = $input->param('nombreProveedor');
+           
     }else{
     #   exporta a DOC las recomendaciones
 
@@ -126,7 +141,7 @@ if($to_pdf){
         $hash{'file_name'}    = "recomendaciones.doc";   
     }
       
-    # generico para los dos casos:    
+    # generico para los dos casos de exportacion a DOC:    
     if(@resultsdata > 0){
         $t_params->{'resultsloop'}= \@resultsdata; 
     } 

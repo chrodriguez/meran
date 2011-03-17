@@ -59,6 +59,7 @@
 
       <fieldset>   
                   <legend class="titulos">    [% "Mejor Presupuesto" | i18n %] </legend>
+                        <form id="formOrdenCompra" action="exportaciones.pl" method="post"> 
                             <table id="mejor_pres">  
                               <thead>
                                   <tr class="titulo_tabla_resultado">
@@ -83,7 +84,8 @@
                                     </tr>
                               </thead> 
                               <tbody>  
-                              <form id="formOrdenCompra" action="exportaciones.pl" method="post">                              
+                                
+                                        [% i = 0 %]                           
                                         [% FOREACH renglon IN mejor_pres %]   
                                               [% IF renglon.proveedor != "" %]
                                                 <tr>    
@@ -93,14 +95,15 @@
                                                   <td><input type="text" name="precio[% renglon.renglon %]" id="precio[% renglon.renglon %]" value="[% renglon.precio%]"></td>
                                                   <td><input type="text" name="cantidad[% renglon.renglon %]" id="cantidad[% renglon.renglon %]" value="[% renglon.cantidad %]"></td> 
                                                   <td><input type="text" name="total[% renglon.renglon %]" id="total[% renglon.renglon %]" value="[% renglon.total %]"></td>
-                                                </tr>
-                                                <input type="hidden" name="cantidad" value="[% loop.index() %]" />                                                   
-                                                [% END %]                                             
+                                                </tr>                          
+                                                [% END %]  
+                                            [% i = loop.index() %]                                          
                                         [% END %]
-                                        
+                                  <input type="hidden" name="cantidad" value="[% i + 1 %]" />                                                   
+                                  <input type="hidden" name="nombreProveedor" value="[% renglon.proveedor %]" />       
                             </tbody>
-                            </form>
                       </table>
+                      </form> 
                       <input id='exportHidden' type='hidden' name='exportXLS' value='xls' />
                       [% PERL %]                               
                                   print C4::AR::Filtros::to_Button( 
