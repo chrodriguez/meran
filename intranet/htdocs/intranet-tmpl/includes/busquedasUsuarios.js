@@ -13,7 +13,7 @@ function changePage(ini){
 function consultarBar(filtro,doScroll){
     if (doScroll)
       shouldScrollUser = doScroll;
-    objAH=new AjaxHelper(updateInfoUsuarios);
+    objAH=new AjaxHelper(updateInfoUsuariosBar);
     objAH.showOverlay       = true;
     objAH.cache = true;
     busqueda = jQuery.trim($('#socio-bar').val());
@@ -92,6 +92,11 @@ function updateInfoUsuarios(responseText){
     busqueda = jQuery.trim($('#socio').val());
     $("#resultBusqueda").slideUp("slow");
     scrollTo('result');
+}
+
+function updateInfoUsuariosBar(responseText){
+	$('#marco_contenido_datos').html("<div id='resultBusqueda'/><div id='result'/>");
+	updateInfoUsuarios(responseText);
 }
 
 function Borrar(){

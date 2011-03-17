@@ -15,6 +15,12 @@ function updateInfoBusquedas(responseText){
       scrollTo('resultBusqueda');
 }
 
+function updateInfoBusquedasBar(responseText){
+
+	$('#marco_contenido_datos').html("<div id='resultBusqueda'/><div id='result'/>");
+	updateInfoBusquedas(responseText);
+}
+
 function busquedaCombinable(){
 
     objAH                   = new AjaxHelper(updateBusquedaCombinable);
@@ -52,7 +58,7 @@ function ordenarPor(ord){
 
 
 function buscarBar(){
-    objAH=new AjaxHelper(updateInfoBusquedas);
+    objAH=new AjaxHelper(updateInfoBusquedasBar);
     objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
