@@ -21,6 +21,7 @@ use vars qw(@EXPORT_OK @ISA);
 sub altasRegistro {
 
 	# FIXME Cambiar a Sphinx!
+	# Filtrar por UI cuando se cambie a Sphinx
 
 	my ( $ini, $cantR, $params, $total ) = @_;
 	use C4::Modelo::CatRegistroMarcN3;
