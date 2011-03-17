@@ -214,7 +214,7 @@ function generaDivPrestamo(responseText){
             coma    = ", ";
         };
 
-		if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){ html= html + coma + infoArray[i].edicion + "."};
+		if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){ html= html + coma + infoArray[i].edicion};
 		html= html + "<br>C&oacute;digo de barras: " + comboItems;
 		html= html + "<br>Tipo de pr&eacute;stamo: " + comboTipoPrestamo;
 	}
