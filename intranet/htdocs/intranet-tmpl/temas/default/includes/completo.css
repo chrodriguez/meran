@@ -4,13 +4,6 @@ body,html {
 	background-color: #EAEBED;
 }
 
-/*body input[type="text"]:focus {*/
-/*	background: #EAEBED;*/
-/*	position: relative;*/
-/*	z-index: 1;*/
-/*	*/
-/*}*/
-
 .focusInput {
     background: #EAEBED;
     position: relative;
