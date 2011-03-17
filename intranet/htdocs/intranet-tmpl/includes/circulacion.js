@@ -214,7 +214,7 @@ function generaDivPrestamo(responseText){
             coma    = ", ";
         };
 
-		if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){ html= html + coma + infoArray[i].edicion + "."};
+		if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){ html= html + coma + infoArray[i].edicion};
 		html= html + "<br>C&oacute;digo de barras: " + comboItems;
 		html= html + "<br>Tipo de pr&eacute;stamo: " + comboTipoPrestamo;
 	}
@@ -319,12 +319,13 @@ function cancelarReserva(reserveNumber){
 
 	jConfirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA,'Info',function(is_confirmed){
         if (is_confirmed) {
-            objAH=new AjaxHelper(updateInfoCancelacion);
-            objAH.debug= true;
-            objAH.url='/cgi-bin/koha/circ/circulacionDB.pl';
-            objAH.tipoAccion= 'CANCELAR_RESERVA';
-            objAH.nro_socio= USUARIO.ID;
-            objAH.id_reserva= reserveNumber;
+            objAH               = new AjaxHelper(updateInfoCancelacion);
+            objAH.debug         = true;
+            objAH.showOverlay   = true;  
+            objAH.url           = '/cgi-bin/koha/circ/circulacionDB.pl';
+            objAH.tipoAccion    = 'CANCELAR_RESERVA';
+            objAH.nro_socio     = USUARIO.ID;
+            objAH.id_reserva    = reserveNumber;
             objAH.sendToServer();
         }
     });
@@ -369,7 +370,7 @@ function generaDivDevolucion(responseText){
         }
 
         if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){
-            html= html + " - " + infoArray[i].edicion + ". <br>"
+            html= html + " - " + infoArray[i].edicion + "<br>"
         };
   
         html= html + "<br>"
@@ -425,12 +426,12 @@ function generaDivRenovacion(responseText){
  */
 // function devolver_renovar(accion){
 function renovar(){
-	objAH=new AjaxHelper(updateInfoRenovar);
-	objAH.debug= true;
-	objAH.url= '/cgi-bin/koha/circ/circulacionDB.pl';
-	objAH.tipoAccion= 'REALIZAR_RENOVACION';
-	objAH.datosArray= INFO_PRESTAMOS_ARRAY;
-	objAH.nro_socio= USUARIO.ID;
+	objAH               = new AjaxHelper(updateInfoRenovar);
+	objAH.debug         = true;
+	objAH.url           = '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.tipoAccion    = 'REALIZAR_RENOVACION';
+	objAH.datosArray    = INFO_PRESTAMOS_ARRAY;
+	objAH.nro_socio     = USUARIO.ID;
 	//se envia la consulta
 	objAH.sendToServer();
 }
