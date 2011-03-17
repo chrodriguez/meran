@@ -91,6 +91,7 @@
 	
 	$(document).ready(function(){
 		mainmenu();
+		$("input[type=text]").addClass('focusInput');
 	});
 
 
