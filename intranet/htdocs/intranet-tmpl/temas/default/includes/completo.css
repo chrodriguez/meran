@@ -4,9 +4,9 @@ body,html {
 	background-color: #EAEBED;
 }
 
-body input[type="text"]:focus {
-	background: #EAEBED;
-	
+.focusInput {
+    background: #EAEBED;
+    
 }
 
 fieldset {
@@ -439,6 +439,14 @@ tr.par {
 
 tr.impar {
 	background-color: #C0C0C0;
+}
+
+tr.par td, tr.par td a{
+    color: #EAEBED;
+}
+
+tr.impar td, tr.impar td a {
+    color: #35414F;
 }
 
 .CEC_componente_largo {

@@ -52,4 +52,5 @@ function consultarEstantes() {
 
 function updateInfo(responseText) {
 	$("#result").html(responseText);
+	zebra('datos_tabla');
 }

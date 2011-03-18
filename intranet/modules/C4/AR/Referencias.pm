@@ -53,6 +53,7 @@ use vars qw(@EXPORT_OK @ISA);
                     &obtenerProveedores
                     &translateTipoNivel3
                     &obtenerEstantes
+                    &obtenerUIByIdUi
                     
         );
 
@@ -312,6 +313,22 @@ sub obtenerUILike {
     }
 
     return(\@results);
+}
+
+=item
+Devuelve un objeto UI o 0 sino lo encuentra
+=cut
+sub obtenerUIByIdUi{
+    my ($nombre) = @_;
+
+    my $uis_array_ref = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(
+                                                                query => [ id_ui => { eq => $nombre } ]
+                                            );
+    if(scalar($uis_array_ref) > 0){
+        return ($uis_array_ref->[0]);
+    }else{
+        return 0;
+    }
 }
 
 

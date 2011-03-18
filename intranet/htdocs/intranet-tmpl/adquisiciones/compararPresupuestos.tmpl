@@ -43,8 +43,15 @@
             var Messages=JSONstring.toObject(responseText);
             setMessages(Messages);
       }
-  
-
+      
+        
+    // se genera la orden de compra a partir del cuadro comparativo, FIXME incluirlo en algun js
+    function generateOrdenCompra(form){
+        $('#' + form).append("<input type='hidden' name='exportDOC' value='doc' />")
+        $('#' + form).append("<input type='hidden' name='operationDOC' value='ordenCompra' />")
+        $('#' + form).submit()  
+    }
+ 
 </script>
 
 <fieldset>

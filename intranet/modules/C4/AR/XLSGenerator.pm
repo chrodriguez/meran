@@ -17,7 +17,7 @@ use vars qw(@EXPORT @ISA);
 );
 
 =item
-    Exporta el pedido de cotizacion (presupuesto) seleccionado, con todos sus detalles, a un proveedor pasado como parametro
+    Devuelve la planilla con el pedido de cotizacion (presupuesto) seleccionado, con todos sus detalles, a un proveedor pasado como parametro
 =cut
 sub exportarPesupuesto{
     my ($tabla_a_exportar, $headers_tabla, $headers_planilla, $campos_hidden, $nombre_proveedor)    = @_;
@@ -38,26 +38,11 @@ sub exportarPesupuesto{
         $spread_sheet->write_row($celda);       
     }
     my $data;
-    
-    # path para dsp generar el link para la descarga
-    # TODO crear antes archivo con perl !!
-    my $path = "/usr/share/meran/intranet/htdocs/intranet-tmpl/reports/presupuesto".$nombre_proveedor.".xls";
-    eval{
-        $spread_sheet->save($path);       
-        #$data = $spread_sheet->data; 
+  
+    $data = $spread_sheet->data; 
 
-        #$msg_object->{'error'}= 0;
-        #C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A036', 'params' => []} ) ;  
-    };
-
-    if ($@){
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A037', 'params' => []} ) ;  
-    }
-    #return ($msg_object);
-    return ($path);
+    return ($data);
 }
-
 
 
 

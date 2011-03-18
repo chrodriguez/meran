@@ -59,6 +59,7 @@
 
       <fieldset>   
                   <legend class="titulos">    [% "Mejor Presupuesto" | i18n %] </legend>
+                        <form id="formOrdenCompra" action="exportaciones.pl" method="post"> 
                             <table id="mejor_pres">  
                               <thead>
                                   <tr class="titulo_tabla_resultado">
@@ -83,35 +84,40 @@
                                     </tr>
                               </thead> 
                               <tbody>  
-                                  
+                                
+                                        [% i = 0 %]                           
                                         [% FOREACH renglon IN mejor_pres %]   
                                               [% IF renglon.proveedor != "" %]
                                                 <tr>    
-                                                  <td><input type="text" id="renglon[% renglon.renglon %]" value="[% renglon.renglon %]"></td>
+                                                  <td><input type="text" name="renglon[% renglon.renglon %]" id="renglon[% renglon.renglon %]" value="[% renglon.renglon %]"></td>
                                                   <td><input type="text" id="prov[% prov.renglon %]" value="[% renglon.proveedor %]"></td>
-                                                  <td><input type="text" id="datosEdit[% renglon.renglon %]" value="[% renglon.titulo %] - [% renglon.autor %] - [% renglon.editorial %]"></td>
-                                                  <td><input type="text" id="precio[% renglon.renglon %]" value="[% renglon.precio%]"></td>
-                                                  <td><input type="text" id="cantidad[% renglon.renglon %]" value="[% renglon.cantidad %]"></td> 
-                                                  <td><input type="text" id="total[% renglon.renglon %]" value="[% renglon.total %]"></td>
-                                                </tr>
-                                                    
-                                                [% END %]
-                                              
+                                                  <td><input type="text" name="datosEdit[% renglon.renglon %]" id="datosEdit[% renglon.renglon %]" value="[% renglon.titulo %] - [% renglon.autor %] - [% renglon.editorial %]"></td>
+                                                  <td><input type="text" name="precio[% renglon.renglon %]" id="precio[% renglon.renglon %]" value="[% renglon.precio%]"></td>
+                                                  <td><input type="text" name="cantidad[% renglon.renglon %]" id="cantidad[% renglon.renglon %]" value="[% renglon.cantidad %]"></td> 
+                                                  <td><input type="text" name="total[% renglon.renglon %]" id="total[% renglon.renglon %]" value="[% renglon.total %]"></td>
+                                                </tr>                          
+                                                [% END %]  
+                                            [% i = loop.index() %]                                          
                                         [% END %]
-                                        
+                                  <input type="hidden" name="cantidad" value="[% i + 1 %]" />                                                   
+                                  <input type="hidden" name="nombreProveedor" value="[% renglon.proveedor %]" />       
                             </tbody>
                       </table>
+                      </form> 
                       <input id='exportHidden' type='hidden' name='exportXLS' value='xls' />
-                      [% PERL %]
-                                                    
+                      [% PERL %]                               
                                   print C4::AR::Filtros::to_Button( 
                                                                   text    =>  "[% 'Exportar a XLS' | i18n %]",
                                                                   boton   =>  "boton_buscar",
                                                                   onClick =>  "exportarMejorPresupuesto();",
                                   ) ;
-
-                      [% END %]
-                              
+                                  
+                                  print C4::AR::Filtros::to_Button( 
+                                                                  text    =>  "[% 'Generar Orden de Compra' | i18n %]",
+                                                                  boton   =>  "boton_buscar",
+                                                                  onClick =>  "generateOrdenCompra('formOrdenCompra');",
+                                  ) ;
+                      [% END %]                  
               </form>
       </fieldset> 
 

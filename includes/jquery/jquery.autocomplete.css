@@ -36,6 +36,8 @@
 
 .ac_loading {
 	background: white url('indicator.gif') right center no-repeat;
+	position: relative;
+	z-index: 100;
 }
 
 .ac_odd {

@@ -3,11 +3,17 @@
 
 <script language="javascript" type="text/javascript"> 
 
+function socioSearchEvent(event){
+    if(event.keyCode==13)
+        consultarBar();
+}
+
     $(document).ready(function() {
     
       onEnter('keyword-bar',buscarBar,true);
-      onEnter('socio-bar',consultarBar);
-      
+
+      //onEnter('socio-bar',consultarBar);
+
       
       $('[placeholder]').focus(function() {
     	  var input = $(this);
@@ -30,8 +36,6 @@
     	  })
     	});      
       
-      
-      
     });
 
 </script>
@@ -45,7 +49,7 @@
             <div class="top-bar-inside">
               <div class="static-links">
   <div id="logo">
-    <a href="/cgi-bin/koha/mainpage.pl" title="[% 'Inicio' | i18n %]"></a>
+    <a href="/cgi-bin/koha/mainpage.pl?token=[% token %]" title="[% 'Inicio' | i18n %]"></a>
   </div>
 
 
@@ -63,7 +67,7 @@
 
   <div class="search-form" >
     <span class="glass right" onclick="consultarBar();"><i></i></span>
-    <input type="text" id="socio-bar" class="search-query" name="socio-bar" placeholder="Buscar usuarios" >
+    <input type="text" id="socio-bar" class="search-query" name="socio-bar" placeholder="Buscar usuarios" onkeypress="socioSearchEvent(event)">
   </div>
 
 

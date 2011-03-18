@@ -1109,7 +1109,7 @@ sub busquedaAvanzada_newTemp{
         $query .='"';
     }
 
-    if($params->{'tipo_nivel3_name'} ne ""){
+    if( ($params->{'tipo_nivel3_name'} ne "") && ($params->{'tipo_nivel3_name'} ne "ALL") ){
         $query .= ' @string "'."cat_ref_tipo_nivel3%".$params->{'tipo_nivel3_name'};
 
         $query .='"';
@@ -1237,8 +1237,6 @@ sub busquedaCombinada_newTemp{
         }else{
             $query .=  " ".$string."*";
         }
-
-
     }
 
     C4::AR::Debug::debug("Busquedas => query string ".$query);

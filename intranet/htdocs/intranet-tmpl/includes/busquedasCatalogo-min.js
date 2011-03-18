@@ -1,10 +1,11 @@
 var objAH;var combinables=['titulo','autor','tipo','signatura','tipo_nivel3_id'];var noCombinables=['keyword','isbn','dictionary','codBarra','estante','tema'];var shouldScroll=true;function updateInfoBusquedas(responseText){$("#volver").hide();$("#filtrosBusqueda").slideUp('slow');$('#resultBusqueda').html(responseText);$("#resultBusqueda").slideDown("slow");zebra('datos_tabla');if(shouldScroll)
 scrollTo('resultBusqueda');}
+function updateInfoBusquedasBar(responseText){$('#marco_contenido_datos').html("<div id='resultBusqueda'/><div id='result'/>");updateInfoBusquedas(responseText);}
 function busquedaCombinable(){objAH=new AjaxHelper(updateBusquedaCombinable);objAH.debug=true;objAH.showOverlay=true;objAH.url='/cgi-bin/koha/busquedas/busquedasDB.pl';objAH.titulo=$('#titulo').val();objAH.autor=$('#autor').val();objAH.only_available=($('#only_available').attr('checked'))?1:0;objAH.signatura=$('#signatura').val();objAH.tipo_nivel3_name=$('#tipo_nivel3_id').val();objAH.tipoAccion='BUSQUEDA_AVANZADA';var radio=$("#tipo:checked");var tipo=radio[0].value;objAH.tipo=tipo;objAH.funcion='changePage';objAH.sendToServer();}
 function updateBusquedaCombinable(responseText){updateInfoBusquedas(responseText);}
 function changePage(ini){objAH.changePage(ini);}
 function ordenarPor(ord){objAH.sort(ord);}
-function buscarBar(){objAH=new AjaxHelper(updateInfoBusquedas);objAH.showOverlay=true;objAH.debug=true;objAH.url='/cgi-bin/koha/busquedas/busquedasDB.pl';objAH.keyword=$('#keyword-bar').val();objAH.shouldScroll=true;objAH.tipoAccion='BUSQUEDA_COMBINADA';objAH.funcion='changePage';objAH.sendToServer();}
+function buscarBar(){objAH=new AjaxHelper(updateInfoBusquedasBar);objAH.showOverlay=true;objAH.debug=true;objAH.url='/cgi-bin/koha/busquedas/busquedasDB.pl';objAH.keyword=$('#keyword-bar').val();objAH.shouldScroll=true;objAH.tipoAccion='BUSQUEDA_COMBINADA';objAH.funcion='changePage';objAH.sendToServer();}
 function buscar(doScroll){var limite_caracteres=3;var cumple_limite=true;var cumple_vacio=true;if(doScroll)
 shouldScroll=doScroll;if(jQuery.trim($('#estante').val())!=''){if((jQuery.trim($('#estante').val())).length<limite_caracteres){cumple_limite=false;}else{buscarEstante();}}
 else if(jQuery.trim($('#dictionary').val())!=''){if((jQuery.trim($('#dictionary').val())).length<limite_caracteres){cumple_limite=false;}else{buscarPorDiccionario(ini);}}

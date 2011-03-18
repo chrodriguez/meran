@@ -1,7 +1,4 @@
-[% PERL %]
-print "Content-type: application/msword\n";
-print "Content-Disposition: attachment;filename=recomendaciones.doc\n\n";
-[% END %]
+[% headers %]
 <h4>[% "Ejemplares recomendados para la compra" | i18n %]</h4></br>
       <table id="tablaEjemplaresCompra" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
       <thead>

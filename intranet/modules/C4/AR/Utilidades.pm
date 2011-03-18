@@ -122,10 +122,18 @@ my %LABELS_COMPONENTS = (   "-1" => "SIN SELECCIONAR" => "text" => "Texto" , "te
     parametros: HASH (para que se pueda extender)
 =cut
 sub setHeaders{
-    my ($params) = @_;
+    my ($params)        = @_;
     
-    return "Content-type: ".$params->{'aplicacion'}.";\n Content-Disposition: filename=".$params->{'file_name'}.";\n Cache-Control: public; Pragma: no-cache; Expires: 0;";
+    my ($filename)      = $params->{'file_name'};
+    my ($aplication)    = $params->{'aplicacion'};
 
+    $filename           = $filename || "presupuesto_export.xls";
+    $aplication         = $aplication || "application/vnd.ms-excel";
+
+    my $session         = CGI::Session->load();
+    my $header          = $session->header( -type => $aplication, -attachment => $filename );
+
+    return ($header);
 }    
                   
 
@@ -3556,6 +3564,23 @@ sub getFeriados{
     require C4::Modelo::PrefFeriado::Manager;
 
     my $feriados = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(sort_by => ['fecha DESC']);
+    my @dates;
+
+    foreach my $date (@$feriados){
+        push (@dates, $date);
+    }
+
+    return (\@dates);
+}
+
+sub getProximosFeriados{
+    require C4::Modelo::PrefFeriado;
+    require C4::Modelo::PrefFeriado::Manager;
+    
+
+    my $hoy = C4::AR::Utilidades::getToday();
+
+    my $feriados = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { ge => $hoy } ], sort_by => ['fecha ASC'],  limit   => 5);
     my @dates;
 
     foreach my $date (@$feriados){

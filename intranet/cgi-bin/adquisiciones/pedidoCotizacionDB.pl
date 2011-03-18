@@ -42,7 +42,7 @@ elsif($tipoAccion eq "PRESUPUESTAR"){
     # se devuelve el combo de proveedores para poder presupuestarlos
     
     my ($template, $session, $t_params) = get_template_and_user({
-                                    template_name => "adquisiciones/generatePresupuesto.tmpl",
+                                    template_name => "includes/partials/proveedores/generatePresupuesto.tmpl",
                                     query => $input,
                                     type => "intranet",
                                     authnotrequired => 0,
