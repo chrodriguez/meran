@@ -6,14 +6,12 @@ use CGI;
 use C4::AR::Proveedores;
 use C4::AR::PedidoCotizacionDetalle;
 
-
 my $input                   = new CGI;
 my $id_pedido_cotizacion    = $input->param('id_pedido_cotizacion');
 my $tipoAccion              = $input->param('action');
+my $pedidos_cotizacion      = C4::AR::PedidoCotizacionDetalle::getPedidosCotizacionPorPadre($id_pedido_cotizacion);
 
 my ($template, $session, $t_params);
-
-my $pedidos_cotizacion               = C4::AR::PedidoCotizacionDetalle::getPedidosCotizacionPorPadre($id_pedido_cotizacion);
 
 if ($tipoAccion eq "EDITAR") {
 # se edita la informacion del pedido_cotizacion
@@ -43,6 +41,5 @@ if ($tipoAccion eq "EDITAR") {
     $t_params->{'pedido_cotizacion'}    = $pedidos_cotizacion;
     $t_params->{'detalle'}              = 1; 
 }
-
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
