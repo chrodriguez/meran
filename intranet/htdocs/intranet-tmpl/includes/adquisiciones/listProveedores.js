@@ -44,10 +44,11 @@ function consultar(filtro,doScroll){
            }
     }
     if(jQuery.trim(busqueda).length > 0){
-        objAH.url= '/cgi-bin/koha/adquisiciones/listProveedoresResult.pl';
-        objAH.debug= true;
-        objAH.funcion= 'changePage';
-        objAH.nombre_proveedor= busqueda;
+        objAH.url               = '/cgi-bin/koha/adquisiciones/listProveedoresResult.pl';
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.funcion           = 'changePage';
+        objAH.nombre_proveedor  = busqueda;
         objAH.sendToServer();
     }
     else{

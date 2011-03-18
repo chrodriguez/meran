@@ -20,6 +20,7 @@ function modificarDatosDePresupuesto(){
                  objAH                     = new AjaxHelper(updateDatosPresupuesto);
                  objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
+                 objAH.showOverlay         = true;
                  objAH.id_presupuesto      = $('#id_pres').val();
                  objAH.table               = JSONstring.toObject(x);
                  objAH.tipoAccion          = 'GUARDAR_MODIFICACION_PRESUPUESTO';
@@ -45,6 +46,7 @@ function procesarPlanilla(){
                  objAH                     = new AjaxHelper(updateDatosPresupuesto);
                  objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
+                 objAH.showOverlay         = true;
                  objAH.id_proveedor        = $('#id_prov').val();
                  objAH.tipoAccion          = 'GUARDAR_MODIFICACION_PRESUPUESTO';
                  objAH.sendToServer();
@@ -62,6 +64,7 @@ function mostrarPresupuesto(){
                  objAH                     = new AjaxHelper(updateMostrarPresupuesto);
                  objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
+                 objAH.showOverlay         = true;
                  objAH.filepath            = $('#myUploadFile').val();
                  objAH.tipoAccion          = 'MOSTRAR_PRESUPUESTO';
                  objAH.sendToServer();
@@ -76,6 +79,7 @@ function mostrarPresupuestoManual(){
                  objAH                     = new AjaxHelper(updateMostrarPresupuestoManual);
                  objAH.url                 = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
+                 objAH.showOverlay         = true;
                  objAH.id_presupuesto      = $('#combo_presupuesto').val();
                  objAH.tipoAccion          = 'MOSTRAR_PRESUPUESTO_MANUAL';
                  objAH.sendToServer();

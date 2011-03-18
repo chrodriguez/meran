@@ -4,6 +4,20 @@
  * Contendran las funciones para la generacion de presupuestos para la compra de ejemplares
  * Fecha de creacion 07/02/2011
  */ 
+ 
+ 
+/************************************************************ PEDIDOS COTIZACION  *********************************************/
+
+function addPedidoCotizacion(){
+// AJAX
+
+}
+
+/********************************************************** FIN -PEDIDOS COTIZACION  *******************************************/
+
+
+
+
 
 /******************************************************** AGREGAR PRESUPUESTO **************************************************/
 
@@ -15,6 +29,7 @@ function presupuestar(position){
     objAH                       = new AjaxHelper(updatePresupuestar)
     objAH.url                   = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
     objAH.debug                 = true
+    objAH.showOverlay           = true
         
     objAH.pedido_cotizacion_id  = $('#pedido_cotizacion_id'+position).val()
  
@@ -40,6 +55,7 @@ function generatePresupuesto(pedido_cotizacion_id){
     objAH                       = new AjaxHelper(updateAgregarPresupuesto)
     objAH.url                   = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl'
     objAH.debug                 = true
+    objAH.showOverlay           = true
 
     objAH.proveedores_array     = getProveedoresSelected()
     objAH.pedido_cotizacion_id  = pedido_cotizacion_id
@@ -67,7 +83,6 @@ function getProveedoresSelected(){
     return array_proveedores
 }
 
-
 /************************************************************ FIN - AGREGAR PRESUPUESTO ******************************************/
 
 
@@ -87,6 +102,7 @@ function exportar(){
     objAH                       = new AjaxHelper(updateExportarPresupuesto)
     objAH.url                   = '/cgi-bin/koha/adquisiciones/presupuestoDB.pl'
     objAH.debug                 = true
+    objAH.showOverlay           = true
 
     objAH.proveedores_array     = proveedores
     objAH.pedido_cotizacion_id  = $('#pedido_cotizacion_selected').val()

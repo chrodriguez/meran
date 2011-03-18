@@ -38,11 +38,10 @@
 </ul>
 </div>
 <ul>
-    <li style="text-align:center">
-                <p class="recuadroAyuda">
-                [% "Tipee el nombre o la razon social del proveedor que desea buscar." | i18n %]
-                </p>
-    </li>
+    [% PERL %]
+         print C4::AR::Filtros::setHelp(text => "[% 'Tipee el nombre o la razon social del proveedor que desea buscar.' | i18n %]",
+                                        );
+    [% END %]
 </ul>
 </fieldset>
 <fieldset>
