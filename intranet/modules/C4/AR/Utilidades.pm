@@ -3318,8 +3318,12 @@ sub catalogoAutocomplete{
      my %params = {};
 
      $params{'tipo'}="normal";
+     $params{'ini'}=0;
+     $params{'cantR'}=20;
+     $params{'from_suggested'}=1;
 
-     my ($cantidad, $resultado_busquedas, $suggested)= C4::AR::Busquedas::busquedaCombinada_newTemp($string_utf8_encoded, \%params, \%params, 1);
+     my $session = CGI::Session->load();
+     my ($cantidad, $resultado_busquedas, $suggested)= C4::AR::Busquedas::busquedaCombinada_newTemp($string_utf8_encoded, $session, \%params, 0);
 
      my $textout = "";
 
