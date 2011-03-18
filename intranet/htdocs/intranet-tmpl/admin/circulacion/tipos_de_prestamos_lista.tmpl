@@ -50,10 +50,22 @@
                 [% END %]
         </td>
         <td   align="center">
-        <input type="image" onclick='modificarTipoPrestamo("[% tipo_prestamo.getId_tipo_prestamo %]")' src="[% themelang  %]images/editar.png" alt="Editar">
+                            [% PERL %]
+                                print C4::AR::Filtros::to_Icon( text =>     "[% 'Editar' | i18n %]",
+                                                                onClick => "modificarTipoPrestamo('[% tipo_prestamo.getId_tipo_prestamo %]')",
+                                                                boton   => "icon_edicion",
+                                                                title =>    "[% 'Editar' | i18n %]"
+                                                            ) ;
+                            [% END %]
         </td>
         <td   align="center">
-    <input type="image" onclick='eliminarTipoPrestamo("[% tipo_prestamo.getId_tipo_prestamo %]")' src="[% themelang %]images/borrar.png" alt="Eliminar">
+                            [% PERL %]
+                                print C4::AR::Filtros::to_Icon( text =>     "[% 'Eliminar' | i18n %]",
+                                                                onClick => "eliminarTipoPrestamo('[% tipo_prestamo.getId_tipo_prestamo %]')",
+                                                                boton   => "icon_borrar",
+                                                                title =>    "[% 'Eliminar' | i18n %]"
+                                                            ) ;
+                            [% END %]
         </td>
     </tr>
 [% END %]
