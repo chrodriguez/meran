@@ -100,16 +100,16 @@ this.ajaxCallback=function(helper){if(this.debugJSON){JSONstring.debug=true;}
 helper.token=token;var params="obj="+JSONstring.make(helper);this.log("AjaxHelper => ajaxCallback \n"+params);this.log("AjaxHelper => token: "+helper.token);var _hash_key;if(this.cache){_hash_key=b64_md5(params);this.log("AjaxHelper => cache element");this.log("AjaxHelper => cache hash_key "+_hash_key);if($.jCache.hasItem(_hash_key)){return helper.onComplete($.jCache.getItem(_hash_key));}}
 $.ajax({type:"POST",url:helper.url,data:params,beforeSend:function(){if(helper.showState){_Init({debug:helper.debug,showStatusIn:helper.showStatusIn,showOverlay:helper.showOverlay});}
 if(helper.onBeforeSend){helper.onBeforeSend();}},complete:function(ajax){_HiddeState({showStatusIn:helper.showStatusIn,showOverlay:helper.showOverlay});if(helper.onComplete){if(ajax.responseText=='CLIENT_REDIRECT'){window.location="/cgi-bin/koha/redirectController.pl";}else{if(helper.cache){$.jCache.setItem(_hash_key,ajax.responseText);}
-helper.onComplete(ajax.responseText);}}}});}}function _clearMessages(){$('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});$('#mensajes').hide();$('#mensajes').html('');}
+helper.onComplete(ajax.responseText);}}}});}}function MessageHelper(){function fClearMessages(){$('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});$('#mensajes').hide();$('#mensajes').html('');};this.clearMessages=fClearMessages;}
 function verificarRespuesta(responseText){if(responseText==0){jAlert(DATOS_ENVIADOS_INCORRECTOS,'Info','errboxid');return(0);}else{return(1);}}
 function setMessages(Messages_hashref){//@params
 try{_createContentMessages();var i;for(i=0;i<Messages_hashref.messages.length;i++){$('#mensajes').append('<div class="message_text" >'+Messages_hashref.messages[i].message+'</div>');}
-$('#mensajes').css("display","block");_show();scrollTo('mensajes');_delay(_clearMessages,180);}
+$('#mensajes').css("display","block");_show();scrollTo('mensajes');_delay(clearMessages,180);}
 catch(e){}}
 function assignCloseButton(){$('#close_message').click(function()
-{$('#mensajes').animate({opacity:0},"slow");_clearMessages();});}
+{$('#mensajes').animate({opacity:0},"slow");clearMessages();});}
 function _createContentMessages(){var contenedor=$('#mensajes')[0];if(contenedor==null){$('#end_top').append("<div class='mensajes_informacion'><div id='mensajes'><img id='close_message' style='float:right;cursor:pointer' src="+imagesForJS+'/iconos/12-em-cross.png'+" /></div></div>");}
-else{_clearMessages();$('#mensajes').append("<img id='close_message' style='float:right;cursor:pointer' src='"+imagesForJS+'/iconos/12-em-cross.png'+" />");}
+else{clearMessages();$('#mensajes').append("<img id='close_message' style='float:right;cursor:pointer' src='"+imagesForJS+'/iconos/12-em-cross.png'+" />");}
 _show();assignCloseButton();}
 function _show(){$('#mensajes').animate({opacity:90,"filter":"alpha(opacity=90)"},"fast");}
 function _delay(funcion,segundos){setTimeout(funcion,segundos*1000);}
