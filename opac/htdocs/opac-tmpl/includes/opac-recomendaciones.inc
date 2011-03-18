@@ -2,6 +2,7 @@
 
 
 <script src="/opac-tmpl/includes/opac-searchFunciones.js" type="text/javascript"></script>
+<script src="/opac-tmpl/includes/opac-recomendaciones.js" type="text/javascript"></script>
 <script src="/includes/jquery/modal/jquery.simplemodal.js" type="text/javascript"></script>
 <script type="text/javascript">
 
@@ -70,8 +71,10 @@ $(document).ready( function() {
 });
 
 </script>        
-      <div class="column1-unit">
-          <div class="contactform">
+     
+
+ <div class="column1-unit">
+          <div class="recomendacionform">
 <!--           <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-recomendacionesAdd.pl"> -->
               <input type="hidden" name="action" value="agregar">
               <fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
@@ -90,16 +93,16 @@ $(document).ready( function() {
               </fieldset>
               
               <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
-              <div class="busqueda_combinable" id="busqueda_combinable">
+                      <div class="busqueda_combinable" id="busqueda_combinable">
 
-                                    <p class="left">[% "B&uacute;squeda combinada" | i18n %]</p>
+                                    <p><label class="left" for="string">[% "B&uacute;squeda combinada" | i18n %]
                                     <!-- onkeypress="limpiarCampos('arriba')" -->
-                                    <input id="string" name="string" class="field" type="text" size="25">
-                                    <p class="left" for="match_mode">Seleccione una forma de busqueda</p>  
+                                    <input id="string" name="string" class="field" type="text" size="25"></p>
+                                    <p><label class="left" for="match_mode">Seleccione una forma de busqueda 
                                     [% PERL %]
                                                 print C4::AR::Filtros::getComboMatchMode() ;
                                     [% END %]    
-                       
+                                    </p> 
                                     <input type="button" onClick="busquedaCombinable()" value="[% 'Buscar' | i18n %]" tabindex="6" />
      
                       <!--<div id="hidden_nivel_2">
@@ -109,7 +112,7 @@ $(document).ready( function() {
                           <label for="hidden_id_nivel_2" class="left">[% '(puede no estar, dependiendo de si se elig&iacute;o un item de la bilbioteca o no)' | i18n %]:</label>
                       </div>-->
                       <div id="result_busqueda"></div>
-              </div>
+             
               </fieldset>
              
             
@@ -131,9 +134,11 @@ $(document).ready( function() {
                       <input type="text" name="coleccion" id="coleccion" class="field" value="" tabindex="10" /></p>
                     <p><label for="isbn_issn" class="left">[% 'ISBN/ISSN*' | i18n %]:</label>
                       <input type="text" name="isbn_issn" id="isbn_issn" class="field" value="" tabindex="10" /></p>
-                    <p><label for="cantidad_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
-                      <input type="text" name="cantidad_ejemplares" id="cantidad_ejemplares" class="field" value="" tabindex="10" /></p>
-                  </div> 
+                    <p><label for="cant_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
+                      <input type="text" name="cant_ejemplares" id="cant_ejemplares" class="field" value="" tabindex="10" /></p>
+                    <input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" />
+                 
+                  </div>      
               </fieldset>
              
              
@@ -149,7 +154,46 @@ $(document).ready( function() {
                    <input type="hidden" name="post_message" id="post_message" value="1"/>
                 </div>
               </fieldset>
-            </form>
+            
+              <table id="tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
+                          <th align="center">
+                              [% "Autor" | i18n %]
+                          </th>
+                          <th align="center">
+                              [% "T&iacute;tulo" | i18n %]
+                          </th>
+                          <th align="center">
+                              [% "Edici&oacute;n" | i18n %]
+                          </th>
+                          <th align="center">
+                              [% "Lugar de publicaci&oacute;n" | i18n %]
+                          </th>
+                          <th align="center">
+                              [% "Editorial" | i18n %]
+                          </th>
+                          <th align="center">
+                              [% "Fecha" | i18n %]
+                          </th>
+                          <th align="center">
+                              [% "Colecci&oacute;n" | i18n %]
+                          </th>
+                          <th align="center">
+                              [% "ISBN/ISSN" | i18n %]
+                          </th>
+                          <th align="center">
+                              [% "Fecha" | i18n %]
+                          </th>
+                          <th align="center">
+                              [% "Cantidad de ejemplares" | i18n %]
+                          </th>
+               
+                    <tbody>
+                    </tbody>
+                  </table>
+            
+                 
+           
           </div>
-        </div>
+          
+</div>
         
