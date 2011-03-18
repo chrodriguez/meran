@@ -45,30 +45,28 @@ sub StringSearch  {
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
 my $offset=$input->param('offset');
-my $script_name="/cgi-bin/koha/admin/z3950servers.pl";
+my $script_name="/cgi-bin/koha/admin/catalogo/MARC/z3950servers.pl";
 
 my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 
-my ($template, $loggedinuser, $cookie) 
-    = get_template_and_user({template_name => "admin/z3950servers.tmpl",
-				query => $input,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-				debug => 1,
-				});
+my ($template, $session, $t_params)= get_template_and_user({template_name => "admin/z3950servers.tmpl",
+                                    query => $input,
+                                    type => "intranet",
+                                    authnotrequired => 0,
+                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                    debug => 1,
+                                    });
 
-
-$template->param(script_name => $script_name,
-                 searchfield => $searchfield);
+$t_params->{'script_name'} = $script_name;
+$t_params->{'searchfield'} = $searchfield;
 
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
-	$template->param(add_form => 1);
+    $t_params->{'add_form'} = 1;
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($searchfield) {
@@ -79,18 +77,20 @@ if ($op eq 'add_form') {
 		$sth->finish;
 	}
 	
-	$template->param(host => $data->{'host'},
-			 port => $data->{'port'},
-			 db   => $data->{'db'},
-			 userid => $data->{'userid'},
-			 password => $data->{'password'},
-			 checked => $data->{'checked'},
-			 rank => $data->{'rank'});
-													# END $OP eq ADD_FORM
+        $t_params->{'host'} = $data->{'host'};
+        $t_params->{'port'} = $data->{'port'};
+        $t_params->{'db'} = $data->{'db'};
+        $t_params->{'userid'} = $data->{'userid'};
+        $t_params->{'password'} = $data->{'password'};
+        $t_params->{'checked'} = $data->{'checked'};
+        $t_params->{'rank'} = $data->{'rank'};
+
+# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	$template->param(add_validate => 1);
+    $t_params->{'add_validate'} = 1;
+	
 	my $dbh=C4::Context->dbh;
 	my $sth=$dbh->prepare("select * from z3950servers where name=?");
 	$sth->execute($input->param('searchfield'));
@@ -125,7 +125,7 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
-	$template->param(delete_confirm => 1);
+    $t_params->{'delete_confirm'} = 1;
 	my $dbh = C4::Context->dbh;
 
 	my $sth2=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name = ?) order by rank,name");
@@ -133,20 +133,21 @@ if ($op eq 'add_form') {
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
 
-        $template->param(host => $data->{'host'},
-                         port => $data->{'port'},
-                         db   => $data->{'db'},
-                         userid => $data->{'userid'},
-                         password => $data->{'password'},
-                         checked => $data->{'checked'},
-                         rank => $data->{'rank'},
-			 id => $data->{'id'});
+        $t_params->{'host'} = $data->{'host'};
+        $t_params->{'port'} = $data->{'port'};
+        $t_params->{'db'} = $data->{'db'};
+        $t_params->{'userid'} = $data->{'userid'};
+        $t_params->{'password'} = $data->{'password'};
+        $t_params->{'checked'} = $data->{'checked'};
+        $t_params->{'rank'} = $data->{'rank'};
+        $t_params->{'id'} = $data->{'id'};
 
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	$template->param(delete_confirmed => 1);
+    $t_params->{'delete_confirmed'} = 1;
+
 	my $dbh=C4::Context->dbh;
 	my $sth=$dbh->prepare("delete from z3950servers where id=?");
 	$sth->execute($searchfield);
@@ -154,7 +155,7 @@ if ($op eq 'add_form') {
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-	$template->param(else => 1);
+    $t_params->{'else'} = 1;
 
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
@@ -186,15 +187,16 @@ if ($op eq 'add_form') {
                 }
 
 	}
-	$template->param(loop => \@loop);
+    $t_params->{'loop'} = \@loop;
 	if ($offset>0) {
-		$template->param(offsetgtzero => 1,
-				prevpage => $offset-$pagesize);
+        $t_params->{'offsetgtzero'} = 1;
+        $t_params->{'prevpage'} =  $offset-$pagesize;
+
 	}
 	if ($offset+$pagesize<$count) {
-		$template->param(ltcount => 1,
-				 nextpage => $offset+$pagesize);
+        $t_params->{'ltcount'} = 1;
+        $t_params->{'nextpage'} =  $offset+$pagesize;
 	}
 } #---- END $OP eq DEFAULT
 
-output_html_with_http_headers $cookie, $template->output;
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

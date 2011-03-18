@@ -3602,7 +3602,9 @@ sub setFeriado{
     my $feriado = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { eq => $fecha } ] );
     
     if (scalar(@$feriado)){
-        $feriado->[0]->setFecha($fecha,$status,$texto_feriado);
+        #El feriado ya existe!! no se puede volver a setear.
+        #$feriado->[0]->setFecha($fecha,$status,$texto_feriado);
+        return (0);
     }else{
         $feriado = C4::Modelo::PrefFeriado->new();
         eval{
