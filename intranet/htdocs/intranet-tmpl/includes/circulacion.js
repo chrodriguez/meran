@@ -169,7 +169,7 @@ function realizarAccion(accion,chckbox,funcion) {
 		objAH                   = new AjaxHelper(funcion);
 		objAH.debug             = true;
         objAH.showOverlay       = true;
-		objAH.url               = '/cgi-bin/koha/circ/circulacionDB.pl';
+		objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
 		objAH.tipoAccion        = accion;
 		objAH.datosArray        = array;
 		objAH.nro_socio         = USUARIO.ID;
@@ -349,6 +349,8 @@ function updateInfoCancelacion(responseText){
  * Genera el div con los datos de los items que se van a devolver o renovar.
  */
 function generaDivDevolucion(responseText){
+    var m                   = new MessageHelper();
+    m.clearMessages();
 	var infoArray           = new Array;
 	INFO_PRESTAMOS_ARRAY    = new Array();
 	infoArray               = JSONstring.toObject(responseText);
@@ -372,6 +374,8 @@ function generaDivDevolucion(responseText){
         if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){
             html= html + " - " + infoArray[i].edicion + "<br>"
         };
+        
+        html= html + " (" + infoArray[i].barcode + ")<br>"  
   
         html= html + "<br>"
 	}

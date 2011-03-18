@@ -78,6 +78,10 @@ elsif ($accion eq 'autocomplete_UI'){
 
      $result = C4::AR::Utilidades::uiAutocomplete($string);
 }
+elsif ($accion eq 'autocomplete_catalogo'){
+
+    $result = C4::AR::Utilidades::catalogoAutocomplete($string);
+}
 
 
 C4::AR::Auth::print_header($session);

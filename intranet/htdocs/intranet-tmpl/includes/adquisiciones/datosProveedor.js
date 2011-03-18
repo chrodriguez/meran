@@ -193,6 +193,7 @@ function borrarMoneda(arreglo){
     objAH                     = new AjaxHelper(updateMonedasProveedor)
     objAH.url                 = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl'
     objAH.debug               = true
+    objAH.showOverlay         = true
 
     objAH.id_proveedor        = $('#id_proveedor').val()
     objAH.monedas_array       = arreglo
@@ -206,6 +207,7 @@ function agregarMoneda(idMonedaNueva){
     objAH                     = new AjaxHelper(updateMonedasProveedor)
     objAH.url                 = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl'
     objAH.debug               = true
+    objAH.showOverlay         = true
 
     objAH.id_proveedor        = $('#id_proveedor').val()
     objAH.id_moneda           = idMonedaNueva
@@ -253,6 +255,7 @@ function modificarDatosDeProveedor(){
     objAH                     = new AjaxHelper(updateDatosProveedor);
     objAH.url                 = '/cgi-bin/koha/adquisiciones/proveedoresDB.pl';
     objAH.debug               = true;
+    objAH.showOverlay         = true;
 
     objAH.id_proveedor        = $('#id_proveedor').val();
     

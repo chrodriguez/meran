@@ -14,7 +14,6 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
-
 =item
     Se elimina el Proveedor
 =cut
@@ -41,7 +40,6 @@ if($tipoAccion eq "ELIMINAR"){
 
     } #end if($tipoAccion eq "ELIMINAR_USUARIO")
 
-
 =item
 Se guarda la modificacion los datos del Proveedor
 =cut
@@ -67,7 +65,6 @@ elsif($tipoAccion eq "GUARDAR_MODIFICACION_PROVEEDOR"){
         print $infoOperacionJSON;
 
  } #end if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO")
-
 
 =item
 Se guarda una nueva moneda del proveedor

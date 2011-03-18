@@ -3311,30 +3311,30 @@ sub createSphinxInstance{
 
 sub catalogoAutocomplete{
 
-    my ($string_utf8_encoded) = @_;
+     my ($string_utf8_encoded) = @_;
 
-    $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
+     $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
 
-    my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
+     my %params = {};
 
-    my ($sphinx,$query) = createSphinxInstance(\@searchstring_array,'SPH_MATCH_ANY');
+     $params{'tipo'}="normal";
+     $params{'ini'}=0;
+     $params{'cantR'}=20;
+     $params{'from_suggested'}=1;
 
-    my $results = $sphinx->Query($query);
-    
-    my @results_array;
-    my $matches = $results->{'matches'};
-    my $total_found = $results->{'total_found'};
-    my $textout = "";
-    my $documento;
+     my $session = CGI::Session->load();
+     my ($cantidad, $resultado_busquedas, $suggested)= C4::AR::Busquedas::busquedaCombinada_newTemp($string_utf8_encoded, $session, \%params, 0);
 
-    foreach my $hash (@$matches){
-    	    $documento = C4::AR::Nivel1::getNivel1Completo($hash->{'doc'});
-            $textout.= $hash->{'doc'}."|" . $documento->marc_record . "|Pepe Iuliano|\n";
-            printHASH($results);
-    }
-    
-    
-    return ($textout);
+     my $textout = "";
+
+
+     foreach my $documento (@$resultado_busquedas){
+             C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
+             $textout.= $documento->{'id1'}."|".$documento->{'titulo'}."\n";
+     }
+
+
+     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub soportesAutocomplete{
@@ -3382,7 +3382,7 @@ sub usuarioAutocomplete{
     my ($usuarioStr, $mostrar_regularidad)    = @_;
 
     my $textout         = "";
-    my ($cant, $usuarios_array_ref) = C4::AR::Usuarios::getSocioLike($usuarioStr);
+    my ($cant, $usuarios_array_ref) = C4::AR::Usuarios::getSocioLike($usuarioStr, 'apellido, nombre');
 
     if ($cant > 0){
         foreach my $usuario (@$usuarios_array_ref){

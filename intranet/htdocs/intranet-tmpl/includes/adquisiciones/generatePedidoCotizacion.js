@@ -49,6 +49,7 @@ function addPedidoCotizacion(){
         objAH                           = new AjaxHelper(updateAddPedidoCotizacion)
         objAH.url                       = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
         objAH.debug                     = true
+        objAH.showOverlay               = true
         
         // se mandan los ids de las recomendacion_detalle SELECCIONADAS. 
         // Para agregar un pedido_cotizacion_detalle por c/u.

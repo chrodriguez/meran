@@ -15,11 +15,26 @@
 //Faltaria manejar mejor el log, opcion debug idem a demas helpers
 
 
-function _clearMessages(){
-    $('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});
-    $('#mensajes').hide();
-	$('#mensajes').html('');
+function MessageHelper(){
+    //defino las propiedades  
+//     this.nombre                     = obj.nombre;
+
+    function fClearMessages(){     
+        $('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});
+        $('#mensajes').hide();
+        $('#mensajes').html(''); 
+    };
+    
+    //metodos
+    this.clearMessages = fClearMessages;
+
 }
+
+// function clearMessages(){
+//     $('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});
+//     $('#mensajes').hide();
+// 	$('#mensajes').html('');
+// }
 
 function verificarRespuesta(responseText){
     if (responseText == 0){
@@ -54,7 +69,7 @@ function setMessages(Messages_hashref){
 
         _show();
         scrollTo('mensajes');  
-        _delay(_clearMessages, 180);
+        _delay(clearMessages, 180);
     }
     catch (e){
       // We do nothing ;)
@@ -67,7 +82,7 @@ function assignCloseButton(){
     {
       //the messagebox gets scrool down with top property and gets hidden with zero opacity
       $('#mensajes').animate({opacity:0}, "slow");
-      _clearMessages();
+      clearMessages();
     });
 
 }
@@ -83,7 +98,7 @@ function _createContentMessages(){
 	}
 	else{
     //existe el contenedor, lo limpio
-        _clearMessages();
+        clearMessages();
         $('#mensajes').append("<img id='close_message' style='float:right;cursor:pointer' src='"+imagesForJS+'/iconos/12-em-cross.png'+ " />");
 	}
 

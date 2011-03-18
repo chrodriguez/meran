@@ -10,7 +10,6 @@ use C4::AR::PdfGenerator;
 
 my $input = new CGI;
 
-
 my ($template, $session, $t_params) = get_template_and_user({
     template_name => "adquisiciones/generatePedidoCotizacion.tmpl",
     query => $input,
@@ -30,8 +29,7 @@ if($recomendaciones_activas){
         push(@resultsdata, \%row);
     }
 
-    $t_params->{'resultsloop'}   = \@resultsdata; 
-       
+    $t_params->{'resultsloop'}   = \@resultsdata;       
 }
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

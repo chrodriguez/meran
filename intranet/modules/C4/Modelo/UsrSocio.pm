@@ -202,12 +202,51 @@ sub modificar{
     $self->save();
 }
 
-sub defaultSort{
+sub sortByString{
+    my ($self)      = shift;
+    my ($campo)     = @_;
 
-    my ($campo)=@_;
+    my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
+#   C4::AR::Debug::debug("UsrPersona=> sortByString => fieldsString: ".$fieldsString);
+    C4::AR::Debug::debug("UsrSocio => campo: ".$campo);
+
+    my $index;  
+    my $campos_salida;
+    my @fields_out;
+    my @fields = split /,/, $campo;
+
+    foreach my $f (@fields){
+        $index = rindex $fieldsString,$f;
+
+        if ($index != -1){
+        #agrego un campo valido
+            C4::AR::Debug::debug("UsrSocio => sortByString => f ".$f);
+            push (@fields_out, $f)
+        }
+    }
+
+    if(scalar(@fields_out) > 0){
+        foreach my $fo (@fields_out){
+            $campos_salida = $campos_salida.'persona.'.C4::AR::Utilidades::trim($fo).",";
+        }
+
+        $campos_salida  = substr $campos_salida, 0, length($campos_salida) - 1;
+    
+        C4::AR::Debug::debug("UsrSocio => sortByString => campos_salida ".$campos_salida);
+        return $campos_salida;
+  
+    } else {
+        return ("persona.apellido");
+    }
+}
+
+sub defaultSort{
+    my ($campo)     = @_;
+
     my $personaTemp = C4::Modelo::UsrPersona->new();
 
     C4::AR::Debug::debug("UsrSocio => defaultSort => return: ".$personaTemp->sortByString($campo));
+    C4::AR::Debug::debug("UsrSocio => defaultSort => campo ".$campo);
     return ($personaTemp->sortByString($campo));
 }
 

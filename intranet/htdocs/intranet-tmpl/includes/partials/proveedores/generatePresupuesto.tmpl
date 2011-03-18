@@ -11,6 +11,8 @@
                                                 boton   =>  "boton_buscar",
                                                 onClick =>  "generatePresupuesto([% pedido_cotizacion_id %]);",
                     ) ;
+         print C4::AR::Filtros::setHelp(text => "[% 'Seleccione el/los proveedor/es que desea presupuestar el pedido de cotizacion seleccionado.' | i18n %]",
+                                        );
         [% END %]                              
     </ul>
 </fieldset> 

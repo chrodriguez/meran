@@ -28,18 +28,16 @@ my ($template, $session, $t_params)= get_template_and_user({
 
   my $funcion=$obj->{'funcion'};
 
- my ($cantidad,$proveedores);
- my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
-
+  my ($cantidad,$proveedores);
+  my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
  
- if ($inicial){
+  if ($inicial){
      ($cantidad,$proveedores)= C4::AR::Proveedores::getProveedorLike($proveedor,$orden,$ini,$cantR,1,$inicial);
- }else{
+  }else{
      ($cantidad,$proveedores)= &C4::AR::Proveedores::getProveedorLike($proveedor,$orden,$ini,$cantR,1,0);
- }
+  }
   
-  
- if($proveedores){
+  if($proveedores){
       $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
       my @resultsdata;
   
@@ -53,8 +51,6 @@ my ($template, $session, $t_params)= get_template_and_user({
       $t_params->{'cantidad'}= $cantidad;
       $t_params->{'proveedor_busqueda'}=$proveedor;
  
- }#END if($proveedores)
- 
+  }#END if($proveedores)
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
- 

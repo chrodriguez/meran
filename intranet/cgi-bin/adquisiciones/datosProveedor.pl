@@ -5,7 +5,6 @@ use C4::AR::Auth;
 use CGI;
 use C4::AR::Proveedores;
 
-
 my $input = new CGI;
 
 my $id_proveedor    = $input->param('id_proveedor');
