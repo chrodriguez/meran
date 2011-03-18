@@ -3319,16 +3319,18 @@ sub catalogoAutocomplete{
     
     $params{'tipo'}="normal";
     
-    my ($cantidad, $resultado_busquedas)= C4::AR::Busquedas::busquedaCombinada_newTemp($string_utf8_encoded, \%params, \%params, 1);
-
+    my ($cantidad, $resultado_busquedas, $suggested)= C4::AR::Busquedas::busquedaCombinada_newTemp($string_utf8_encoded, \%params, \%params, 1);
 
     my $textout = "";
+
+
     foreach my $documento (@$resultado_busquedas){
+            C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
             $textout.= $documento->{'titulo'}."|'Pepe Iuliano'|\n";
     }
     
     
-    return ($textout);
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub soportesAutocomplete{
