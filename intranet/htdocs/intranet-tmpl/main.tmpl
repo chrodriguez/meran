@@ -1,5 +1,15 @@
 [% INCLUDE 'intranet-top.inc' %]
 
+[% INCLUDE  'AutocompleteHelper.inc'  %]
+<script type="text/javascript">
+	$(document).ready(function() {
+		CrearAutocompleteCatalogo({ 
+		    IdInput: 'catalogo_search', 
+		    IdInputHidden: 'catalogo_search_hidden', 
+		    //callBackFunction: updateAutocompleteBarcodes
+		});
+	});
+</script>
 
 <fieldset class="main">
     <legend class="titulo_legend"><strong>[% "Circulaci&oacute;n:" | i18n %]</strong></legend>
@@ -37,5 +47,17 @@
         </li>
     </ul>
 </fieldset>
+
+<fieldset class="main">
+    <legend class="titulo_legend">[% "Autocomplete para Catalogo:" | i18n %]</legend>
+    <ul>
+        <li class="item">
+              <label for="usuario">[% 'Keyword:' | i18n %]</label>
+              <input type='text' id='catalogo_search' name='catalogo_search' value='' size=32 tabindex='3' style="float: left">
+              <input type='hidden' id='catalogo_search_hidden' name='catalogo_search_hidden' value='' size=32 tabindex='3' style="float: left">
+        </li>
+    </ul>
+</fieldset>
+
 [% INCLUDE 'intranet-bottom.inc' %]
 
