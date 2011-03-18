@@ -3315,16 +3315,22 @@ sub catalogoAutocomplete{
 
     $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
 
-    my %params = {};
-    
-    $params{'tipo'}="normal";
-    
-    my ($cantidad, $resultado_busquedas)= C4::AR::Busquedas::busquedaCombinada_newTemp($string_utf8_encoded, \%params, \%params, 1);
+    my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
 
+    my ($sphinx,$query) = createSphinxInstance(\@searchstring_array,'SPH_MATCH_ANY');
 
+    my $results = $sphinx->Query($query);
+    
+    my @results_array;
+    my $matches = $results->{'matches'};
+    my $total_found = $results->{'total_found'};
     my $textout = "";
-    foreach my $documento (@$resultado_busquedas){
-            $textout.= $documento->{'titulo'}."|'Pepe Iuliano'|\n";
+    my $documento;
+
+    foreach my $hash (@$matches){
+    	    $documento = C4::AR::Nivel1::getNivel1Completo($hash->{'doc'});
+            $textout.= $hash->{'doc'}."|" . $documento->marc_record . "|Pepe Iuliano|\n";
+            printHASH($results);
     }
     
     
