@@ -54,7 +54,8 @@
                                 print C4::AR::Filtros::to_Icon( text =>     "[% 'Editar' | i18n %]",
                                                                 onClick => "modificarTipoPrestamo('[% tipo_prestamo.getId_tipo_prestamo %]')",
                                                                 boton   => "icon_edicion",
-                                                                title =>    "[% 'Editar' | i18n %]"
+                                                                title =>    "[% 'Editar' | i18n %]",
+                                                                alternClass => "botonCentrado"
                                                             ) ;
                             [% END %]
         </td>
@@ -63,7 +64,8 @@
                                 print C4::AR::Filtros::to_Icon( text =>     "[% 'Eliminar' | i18n %]",
                                                                 onClick => "eliminarTipoPrestamo('[% tipo_prestamo.getId_tipo_prestamo %]')",
                                                                 boton   => "icon_borrar",
-                                                                title =>    "[% 'Eliminar' | i18n %]"
+                                                                title =>    "[% 'Eliminar' | i18n %]",
+                                                                alternClass => "botonCentrado"
                                                             ) ;
                             [% END %]
         </td>
