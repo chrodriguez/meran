@@ -27,6 +27,7 @@ function borrarDiv(){$("#divResultado").html("");}
 function agregarTipoPrestamo(){
     objAH=new AjaxHelper(updateAgregarTipoPrestamo);
     objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
+    objAH.showOverlay   = true;
     objAH.tipoAccion= "NUEVO_TIPO_PRESTAMO";
     objAH.sendToServer();
 }
@@ -42,6 +43,7 @@ function eliminarTipoPrestamo(tipo){
     if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO) ){
     objAH=new AjaxHelper(updateEliminarTipoPrestamo);
     objAH.debug= true;
+    objAH.showOverlay   = true;
     objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
     objAH.tipo_prestamo=tipo;
     objAH.tipoAccion= "BORRAR";
@@ -73,6 +75,7 @@ function respuesta(responseText){
 function buscarTiposPrestamos(){
     objAH=new AjaxHelper(updateTiposPrestamos);
     objAH.debug= true;
+    objAH.showOverlay   = true;
     objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
     objAH.tipoAccion= "TIPOS_PRESTAMOS";
     objAH.sendToServer();
@@ -80,6 +83,7 @@ function buscarTiposPrestamos(){
 
 function updateTiposPrestamos(responseText){
     $("#divResultado").html(responseText);
+    zebra('datos_tabla');
 }
 
 /*
@@ -90,6 +94,7 @@ function updateTiposPrestamos(responseText){
 function modificarTipoPrestamo(tipo){
     objAH=new AjaxHelper(updateModificarTipoPrestamo);
     objAH.debug= true;
+    objAH.showOverlay   = true;
     objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
     objAH.tipo_prestamo=tipo;
     objAH.tipoAccion= "MODIFICAR_TIPO_PRESTAMO";
@@ -110,6 +115,7 @@ function guardarModificacionTipoPrestamo(){
 
     objAH=new AjaxHelper(updateGuardarModificacionTipoPrestamo);
     objAH.debug= true;
+    objAH.showOverlay   = true;
     objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
     objAH.tipo_prestamo=$("#id_tipo_prestamo").val();
     objAH.descripcion=$("#descripcion").val();
@@ -140,6 +146,7 @@ function guardarNuevoTipoPrestamo(){
 
     objAH=new AjaxHelper(updateGuardarNuevoTipoPrestamo);
     objAH.debug= true;
+    objAH.showOverlay   = true;
     objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
     objAH.tipo_prestamo=$("#id_tipo_prestamo").val();
     objAH.descripcion=$("#descripcion").val();
@@ -167,7 +174,9 @@ $(document).ready( function() {
 
 </script>
 
- <div id="divResultado">
-</div>
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend">[% "Administraci&oacute;n de Tipos de Pr&eacute;stamo" | i18n %]</legend>
+    <div id="divResultado"></div>
+</fieldset>
 
 [% INCLUDE "intranet-bottom.inc" %]
