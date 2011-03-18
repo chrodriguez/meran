@@ -3311,30 +3311,26 @@ sub createSphinxInstance{
 
 sub catalogoAutocomplete{
 
-    my ($string_utf8_encoded) = @_;
+     my ($string_utf8_encoded) = @_;
 
-    $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
+     $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
 
-    my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
+     my %params = {};
 
-    my ($sphinx,$query) = createSphinxInstance(\@searchstring_array,'SPH_MATCH_ANY');
+     $params{'tipo'}="normal";
 
-    my $results = $sphinx->Query($query);
-    
-    my @results_array;
-    my $matches = $results->{'matches'};
-    my $total_found = $results->{'total_found'};
-    my $textout = "";
-    my $documento;
+     my ($cantidad, $resultado_busquedas, $suggested)= C4::AR::Busquedas::busquedaCombinada_newTemp($string_utf8_encoded, \%params, \%params, 1);
 
-    foreach my $hash (@$matches){
-    	    $documento = C4::AR::Nivel1::getNivel1Completo($hash->{'doc'});
-            $textout.= $hash->{'doc'}."|" . $documento->marc_record . "|Pepe Iuliano|\n";
-            printHASH($results);
-    }
-    
-    
-    return ($textout);
+     my $textout = "";
+
+
+     foreach my $documento (@$resultado_busquedas){
+             C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
+             $textout.= $documento->{'titulo'}."|'Pepe Iuliano'|\n";
+     }
+
+
+     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub soportesAutocomplete{
