@@ -3326,7 +3326,7 @@ sub catalogoAutocomplete{
 
      foreach my $documento (@$resultado_busquedas){
              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
-             $textout.= $documento->{'titulo'}."|'Pepe Iuliano'|\n";
+             $textout.= $documento->{'id1'}."|".$documento->{'titulo'}."\n";
      }
 
 
