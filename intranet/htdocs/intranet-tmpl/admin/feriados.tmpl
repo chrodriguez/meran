@@ -13,7 +13,17 @@
         return false;
     }
 
+    function deleteFromFECHAS(fecha){
+        //Fecha Vieja
+        var FECHAS_SEL= new Array();
+        for(var i = 0; i < FECHAS.length; i++) {
+            if(FECHAS[i]!=fecha){FECHAS_SEL.push(FECHAS[i]);}
+        }
+        FECHAS=FECHAS_SEL;
+    }
+
     var FECHAS=new Array();
+    var firstTime=1; //PORQUE MIERDA SE EJECUTA LA 1RA VEZ!!!
 
     function proximosFeriados(){
 
@@ -43,39 +53,65 @@
         proximosFeriados();
     }
 
+    function agregarFeriado(fecha){
+          jPrompt('[% "Raz&oacute;n del Feriado" | i18n %]', '', '[% "Feriados" | i18n %]', function(texto) {
+             if (texto){
+                 postFecha(fecha,'true',texto);
+                 FECHAS.push(fecha);
+                }
+            $('#calendarioFeriados').datepick('setDate', FECHAS);
+          });
+    }
+
+    function eliminarFeriado(fecha,index) {
+        jConfirm('[% "Eliminar el feriado" | i18n %] '+ fecha +' ?', '[% "Feriados" | i18n %]', function(r) {
+                   if(r){
+                         postFecha(fecha,'false','');
+                         deleteFromFECHAS(fecha);
+                        }
+                $('#calendarioFeriados').datepick('setDate', FECHAS);
+        });
+    }
+
+
     $(function(){
         crearDatePickerMultiple('calendarioFeriados',4,999,
                 function(dates){
-                var dateSelected=dates.pop();
-                if (dateSelected){
-                    dates.push(dateSelected);
-                    var fecha= $.datepick.formatDate('dd/mm/yyyy',dateSelected);
-                    if (!contains(FECHAS,fecha)){
-                        //Fecha Nueva
-                        jPrompt('[% "Raz&oacute;n del Feriado" | i18n %]', '', '[% "Feriados" | i18n %]', function(texto) {
-                            if (texto){
-                                postFecha(fecha,'true',texto);
+                    if (firstTime){
+                        firstTime=0;
+                    }
+                    else{
+                        var dateSelected=dates.pop();//Esto me dá la última fecha seleccionada, salvo que no haya más fechas.
+                        if (dateSelected){ 
+                            dates.push(dateSelected);
+                            var fecha= $.datepick.formatDate('dd/mm/yyyy',dateSelected);
+
+                            if (!contains(FECHAS,fecha)){
+                                //Fecha Nueva
+                                agregarFeriado(fecha);
                             }
                             else{
-                                dates.pop();
+                                //Fecha Vieja
+                                var FECHAS_SEL= new Array();
+                                for(var i = 0; i < dates.length; i++) {
+                                    FECHAS_SEL.push($.datepick.formatDate('dd/mm/yyyy',dates[i]));
+                                }
+
+                                var fecha_borrada='';
+                                var index;
+                                for(var i = 0; i < FECHAS.length; i++) {
+                                    if (!contains(FECHAS_SEL,FECHAS[i])){
+                                        fecha_borrada = FECHAS[i];
+                                        index=i;
+                                    }
+                                }
+                                if(fecha_borrada){
+                                    eliminarFeriado(fecha_borrada,index); 
+                                }
                             }
-                        });
+                        }
                     }
                 }
-                FECHAS_SEL=new Array();
-                for(var i = 0; i < dates.length; i++) {
-                    FECHAS_SEL.push($.datepick.formatDate('dd/mm/yyyy',dates[i]));
-                }
-            //Hay que eliminar algún feriado?
-                for(var i = 0; i < FECHAS.length; i++) {
-                   if (!contains(FECHAS_SEL,FECHAS[i])){
-                       jAlert('[% "Se elimina el Feriado" | i18n %] '+FECHAS[i], '[% "Feriados" | i18n %]');
-                       postFecha(FECHAS[i],'false','');
-                   }
-                }
-            //Actualizamos FECHAS
-                FECHAS=FECHAS_SEL;
-            }
         );
         });
 

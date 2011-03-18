@@ -3376,7 +3376,7 @@ sub usuarioAutocomplete{
     my ($usuarioStr, $mostrar_regularidad)    = @_;
 
     my $textout         = "";
-    my ($cant, $usuarios_array_ref) = C4::AR::Usuarios::getSocioLike($usuarioStr);
+    my ($cant, $usuarios_array_ref) = C4::AR::Usuarios::getSocioLike($usuarioStr, 'apellido, nombre');
 
     if ($cant > 0){
         foreach my $usuario (@$usuarios_array_ref){
