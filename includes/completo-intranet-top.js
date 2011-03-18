@@ -159,7 +159,7 @@ function CrearAutocompleteTemas(options){_CrearAutocomplete({IdInput:options.IdI
 function CrearAutocompleteEditoriales(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_editoriales',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteAyudaMARC(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_ayuda_marc',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteUI(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_UI',callBackFunction:options.callBackFunction,});}
-var hexcase=0;var b64pad="";var chrsz=8;function hex_md5(s){return binl2hex(core_md5(str2binl(s),s.length*chrsz));}
+function CrearAutocompleteCatalogo(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,IdInputAutor:options.IdInputAutor,accion:'autocomplete_catalogo',callBackFunction:options.callBackFunction,});}var hexcase=0;var b64pad="";var chrsz=8;function hex_md5(s){return binl2hex(core_md5(str2binl(s),s.length*chrsz));}
 function b64_md5(s){return binl2b64(core_md5(str2binl(s),s.length*chrsz));}
 function str_md5(s){return binl2str(core_md5(str2binl(s),s.length*chrsz));}
 function hex_hmac_md5(key,data){return binl2hex(core_hmac_md5(key,data));}
