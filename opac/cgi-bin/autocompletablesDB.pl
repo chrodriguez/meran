@@ -30,7 +30,10 @@ elsif ($accion eq 'autocomplete_catalogo_biblioteca'){
      #$result = C4::AR::Utilidades::catalogoBibliotecaAutocomplete($string);
      $result = C4::AR::Utilidades::catalogoAutocomplete($string);
 }
+elsif ($accion eq 'autocomplete_catalogo'){
 
+    $result = C4::AR::Utilidades::catalogoAutocomplete($string);
+}
 
 print $session->header;
 print $result;
