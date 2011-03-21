@@ -37,9 +37,11 @@ if ($tipoAccion eq "EDITAR") {
         authnotrequired => 0,
         flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
     });   
-          
+      
     $t_params->{'pedido_cotizacion'}    = $pedidos_cotizacion;
     $t_params->{'detalle'}              = 1; 
 }
+
+$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Pedidos de Cotizacion");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
