@@ -29,7 +29,7 @@ function Datepicker() {
 		monthsToJump: 12, // How many months to move when large prev/next clicked
 		useMouseWheel: true, // True to use mousewheel if available, false to never use it
 		changeMonth: true, // True to change month/year via drop-down, false for navigation only
-		yearRange: 'c-120:c+10', // Range of years to show in drop-down: 'any' for direct text entry
+		yearRange: 'any', // c-120:c+10 // Range of years to show in drop-down: 'any' for direct text entry
 			// or 'start:end', where start/end are '+-nn' for relative to today
 			// or 'c+-nn' for relative to the currently selected date
 			// or 'nnnn' for an absolute year
