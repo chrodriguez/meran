@@ -1,5 +1,6 @@
 [% INCLUDE "FormValidateHelper.inc" %]
 
+[% INCLUDE  "AutocompleteHelper.inc"  %]
 
 <script src="/opac-tmpl/includes/opac-searchFunciones.js" type="text/javascript"></script>
 <script src="/opac-tmpl/includes/opac-recomendaciones.js" type="text/javascript"></script>
@@ -31,49 +32,56 @@ function validateForm(){
             });
 }
 
-function busquedaCombinable(){
-    objAH                   = new AjaxHelper(updateBusquedaCombinable);
-    objAH.debug             = true;
-    objAH.showOverlay       = true;
-    //para busquedas combinables
-    objAH.url               = '/cgi-bin/koha/opac-busquedasDB.pl';
-    objAH.string            = $('#string').val();
-    objAH.only_available    = ( $('#only_available').attr('checked') )?1:0;
-    objAH.tipoAccion        = 'BUSQUEDA_COMBINABLE_RECOMENDACION';
-    objAH.token            = $('#token').val();
-    //se setea la funcion para cambiar de pagina
-    objAH.funcion           = 'changePage';
-    // FIXME ver parametro ini
-    //se envia la consulta
-    objAH.sendToServer();
-}
 
-function updateBusquedaCombinable(responseText){
-   $('#result_busqueda').html(responseText);
-//    if (!verificarRespuesta(responseText)) {
-//             return(0);
-//             var Messages=JSONstring.toObject(responseText);
-//             setMessages(Messages);
-//    }
-}
+
+
+// function busquedaCombinable(){
+//     objAH                   = new AjaxHelper(updateBusquedaCombinable);
+//     objAH.debug             = true;
+//     objAH.showOverlay       = true;
+//     //para busquedas combinables
+//     objAH.url               = '/cgi-bin/koha/opac-busquedasDB.pl';
+//     objAH.string            = $('#string').val();
+//     objAH.only_available    = ( $('#only_available').attr('checked') )?1:0;
+//     objAH.tipoAccion        = 'BUSQUEDA_COMBINABLE_RECOMENDACION';
+//     objAH.token            = $('#token').val();
+//     //se setea la funcion para cambiar de pagina
+//     objAH.funcion           = 'changePage';
+//     // FIXME ver parametro ini
+//     //se envia la consulta
+//     objAH.sendToServer();
+// }
+
+
+// function updateBusquedaCombinable(responseText){
+//    $('#result_busqueda').html(responseText);
+// //    if (!verificarRespuesta(responseText)) {
+// //             return(0);
+// //             var Messages=JSONstring.toObject(responseText);
+// //             setMessages(Messages);
+// //    }
+// }
 
 
 $(document).ready( function() {
-//     CrearAutocompleteCatalogoBiblioteca({IdInput: 'buscar_biblioteca', 
-//                                          IdInputHidden: 'hidden_completo'
-//                                         });
- 
-    makeToggle('busqueda_combinable','trigger',null,true);
-    makeToggle('carga_manual','trigger',null,true);
-    makeToggle('motivo','trigger',null,true);
-    makeToggle('comentario','trigger',null,true);
-    validateForm();
+    CrearAutocompleteCatalogo({ 
+          IdInput: 'catalogo_search', 
+          IdInputHidden: 'catalogo_search_hidden', 
+//           callBackFunction: updateAutocompleteBarcodes
+    });
+
+//     makeToggle('carga_manual','trigger',null,true);
+//     makeToggle('motivo','trigger',null,true);
+//     makeToggle('comentario','trigger',null,true);
+//     validateForm();
+
+   
 });
 
 </script>        
      
 
- <div class="column1-unit">
+<div class="column1-unit">
           <div class="recomendacionform">
 <!--           <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-recomendacionesAdd.pl"> -->
               <input type="hidden" name="action" value="agregar">
@@ -93,26 +101,11 @@ $(document).ready( function() {
               </fieldset>
               
               <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
-                      <div class="busqueda_combinable" id="busqueda_combinable">
-
-                                    <p><label class="left" for="string">[% "B&uacute;squeda combinada" | i18n %]
-                                    <!-- onkeypress="limpiarCampos('arriba')" -->
-                                    <input id="string" name="string" class="field" type="text" size="25"></p>
-                                    <p><label class="left" for="match_mode">Seleccione una forma de busqueda 
-                                    [% PERL %]
-                                                print C4::AR::Filtros::getComboMatchMode() ;
-                                    [% END %]    
-                                    </p> 
-                                    <input type="button" onClick="busquedaCombinable()" value="[% 'Buscar' | i18n %]" tabindex="6" />
-     
-                      <!--<div id="hidden_nivel_2">
-                          <p><label for="hidden_id_nivel_2" class="left">[% 'HIDDEN_ID_NIVEL_2' | i18n %]:</label></p>
-                          <input type="text" name="hidden_completo" id="hidden_completo" class="field" value="" tabindex="7" />
-                          <input type="text" name="hidden_id_nivel_2" id="hidden_id_nivel_2" class="field" value="" tabindex="7" />
-                          <label for="hidden_id_nivel_2" class="left">[% '(puede no estar, dependiendo de si se elig&iacute;o un item de la bilbioteca o no)' | i18n %]:</label>
-                      </div>-->
-                      <div id="result_busqueda"></div>
-             
+                           <li class="item">
+                                <label for="usuario">[% 'Keyword:' | i18n %]</label>
+                                <input type='text' id='catalogo_search' name='catalogo_search' value='' size=80 tabindex='3' style="float: left">
+                                <input type='hidden' id='catalogo_search_hidden' name='catalogo_search_hidden' value=''>
+                            </li>  
               </fieldset>
              
             
