@@ -66,11 +66,16 @@ if($obj) {
     my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
 
     if ($nivel3) {
+        my $fecha_inicial = $obj->{'fecha_inicial'};
+        my $fecha_final = $obj->{'fecha_final'};
+
         my ($ini,$pageNumber,$cantR)    =   C4::AR::Utilidades::InitPaginador($ini);
-        my ($cant_historico,$historico_circulacion) = C4::AR::Nivel3::getHistoricoCirculacion($id3,$ini,$cantR);
+        my ($cant_historico,$historico_circulacion) = C4::AR::Nivel3::getHistoricoCirculacion($id3,$ini,$cantR,$fecha_inicial,$fecha_final);
 
         $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cant_historico,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
         $t_params->{'nivel3'} = $nivel3;
+        $t_params->{'fecha_inicial'} = $fecha_inicial;
+        $t_params->{'fecha_final'} = $fecha_final;
         $t_params->{'historico_circulacion'} = $historico_circulacion;
         $t_params->{'cant_historico'} = $cant_historico;
     }

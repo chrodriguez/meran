@@ -1,4 +1,5 @@
 [% INCLUDE "intranet-top.inc" %]
+[% INCLUDE 'datePicker.inc' %]
 
 <script>
     function changePage(ini){
@@ -12,6 +13,7 @@
     function verHistoricoDisponibilidad(id3){
             objAH=new AjaxHelper(updateHistoricoDisponibilidad);
             objAH.debug= true;
+            objAH.showOverlay = true;
             objAH.url= 'detalleEjemplar.pl';
             objAH.funcion = "changePage";
             objAH.id3= id3;
@@ -21,13 +23,17 @@
 
     function updateHistoricoDisponibilidad(responseText){
             $('#historicoDisponibilidad').html(responseText);
+            zebra('datos_tabla');
     }
 
     function verHistoricoCirculacion(id3){
             objAH=new AjaxHelper(updateHistoricoCirculacion);
             objAH.debug= true;
+            objAH.showOverlay = true;
             objAH.url= 'detalleEjemplar.pl';
             objAH.funcion = "changePage";
+            objAH.fecha_inicial=  $('#fecha_inicial').val();
+            objAH.fecha_final=  $('#fecha_final').val();
             objAH.id3= id3;
             objAH.tipo= 'VER_HISTORICO_CIRCULACION';
             objAH.sendToServer();
@@ -35,6 +41,11 @@
 
     function updateHistoricoCirculacion(responseText){
             $('#historicoCirculacion').html(responseText);
+            zebra('datos_tabla');
+
+            crearDatePicker('fecha_inicial');
+            crearDatePicker('fecha_final');
+
     }
 
     $(document).ready(function(){

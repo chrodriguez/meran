@@ -1,5 +1,25 @@
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend">[% "Hist&oacute;rico de Circulaci&oacute;n" | i18n %]:</legend>
+    <ul>
+                <li class="sub_item">
+                     <label for="descripcion">[% "Fecha Inicial" | i18n %]</label>
+                     <input type=text id="fecha_inicial" class="required" name="fecha_inicial" size=10 value="[% fecha_inicial %]">
+                </li>
+                <li class="sub_item">
+                     <label for="sala">[% "Fecha Final" | i18n %]</label>
+                     <input type=text id="fecha_final" class="required" name="fecha_final" size=10 value="[% fecha_final %]">
+
+                                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Filtrar' | i18n %]",
+                                                                        boton   => "boton_buscar",
+                                                                        onClick => "verHistoricoCirculacion('[% nivel3.id %]');",
+                                                                        title   => "[% 'Filtrar' | i18n %]",
+                                                                        alternClass => "botonCentrado"
+                                            ) ;
+                                [% END %]
+                </li>
+    </ul>
+
         <div class="contenedor_paginador">[% paginador %]</div>
         <div class="datos_tabla_div_user">
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>

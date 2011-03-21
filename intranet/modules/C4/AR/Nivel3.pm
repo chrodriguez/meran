@@ -892,18 +892,30 @@ sub getHistoricoDisponibilidad {
 
 sub getHistoricoCirculacion {
 
-    my ($id3,$ini,$cantR) = @_;
+    my ($id3,$ini,$cantR,$fecha_inicial,$fecha_final) = @_;
+
+    my @filtros;
+    my $dateformat = C4::Date::get_date_format();
+
+    push(@filtros, ( id3 => { eq => $id3 } ) );
+
+    if($fecha_inicial){
+        push(@filtros, ( fecha => { ge => C4::Date::format_date_in_iso($fecha_inicial, $dateformat) }) );
+    }
+
+    if($fecha_final){
+        push(@filtros, ( fecha => { le => C4::Date::format_date_in_iso($fecha_final, $dateformat) }) );
+    }
+
     my $historico_array_ref = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion (
-                                                                        query => [
-                                                                                        id3 => { eq => $id3 },
-                                                                                ],
+                                                                            query => \@filtros, 
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
                                                                             sort_by => ['timestamp DESC']
      );
 
     #Obtengo la cant total en el histórico para el paginador
-    my $historico_array_ref_count = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( query => [id3 => { eq => $id3 }]);
+    my $historico_array_ref_count = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(query => \@filtros);
     if(scalar(@$historico_array_ref) > 0){
         return ($historico_array_ref_count, $historico_array_ref);
     }else{
