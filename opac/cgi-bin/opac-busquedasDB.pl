@@ -98,7 +98,7 @@ if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
     
     ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($input->param('string'),$session,$obj);
 
-} elsif ($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE_RECOMENDACION') {
+} elsif ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
 
    ($template, $session, $t_params)= get_template_and_user({
                         template_name => "/includes/opac-busquedaResultRecom.inc",
@@ -111,6 +111,10 @@ if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
     $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token') ."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
     $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token') ."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
+
+    
+
+
     
     ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj);
 
