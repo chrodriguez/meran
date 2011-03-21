@@ -123,13 +123,13 @@ button.datepick-cmd {
     text-align: center;
 }
 .datepick-month-header, .datepick-month-header select, .datepick-month-header input {
-    height: 1.5em;
+    height: 2.5em;
     background-color: #444;
     color: #fff;
     font-weight: bold;
 }
 .datepick-month-header select, .datepick-month-header input {
-    height: 1.4em;
+    height: 100%;
     border: none;
 }
 .datepick-month-header input {
