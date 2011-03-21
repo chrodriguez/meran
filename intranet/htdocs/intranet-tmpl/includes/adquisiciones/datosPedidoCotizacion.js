@@ -13,6 +13,7 @@ function presupuestosParaPedidoCotizacion(){
                  objAH                     = new AjaxHelper(updatePresupuestosParaPedidoCotizacion);
                  objAH.url                 = '/cgi-bin/koha/adquisiciones/mostrarComparacion.pl';
                  objAH.debug               = true;
+                 objAH.showOverlay         = true;
                  objAH.pedido_cotizacion   = $('#combo_pedidos').val();
                  objAH.tipoAccion          = 'MOSTRAR_PRESUPUESTOS_PEDIDO';
                  objAH.sendToServer();

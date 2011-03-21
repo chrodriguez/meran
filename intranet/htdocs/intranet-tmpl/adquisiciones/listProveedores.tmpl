@@ -1,17 +1,10 @@
 [% INCLUDE "intranet-top.inc" %]
-
-
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedores.js"></script>
-
 [% INCLUDE "FormValidateHelper.inc" %]
-
 <script type="text/javascript">
-
-
  $(document).ready(function() {
        onEnter("nombre_proveedor",consultar);
  });
-
 </script>
 <fieldset>
 <legend class="titulos"> Listado de Proveedores</legend>
@@ -38,11 +31,10 @@
 </ul>
 </div>
 <ul>
-    <li style="text-align:center">
-                <p class="recuadroAyuda">
-                [% "Tipee el nombre o la razon social del proveedor que desea buscar." | i18n %]
-                </p>
-    </li>
+    [% PERL %]
+         print C4::AR::Filtros::setHelp(text => "[% 'Tipee el nombre o la razon social del proveedor que desea buscar.' | i18n %]",
+                                        );
+    [% END %]
 </ul>
 </fieldset>
 <fieldset>
@@ -77,12 +69,7 @@
             <a href="#tablaResult" onClick="consultar('TODOS')"> [% "TODOS" | i18n %] </a>
     </div>
 </fieldset>
-<!-- para que esta este?: -->
-<!--<div class="contenedor_paginador">[% paginador %]</div>-->
-
 <br>
 <div id="result"></div>
 <br>
-
-    [% INCLUDE "intranet-bottom.inc" %]
-
+[% INCLUDE "intranet-bottom.inc" %]

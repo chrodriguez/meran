@@ -111,6 +111,7 @@ function agregarProveedor(){
       objAH                     = new AjaxHelper(updateAgregarProveedor);
       objAH.url                 = '/cgi-bin/koha/adquisiciones/addProveedores.pl';
       objAH.debug               = true;
+      objAH.showOverlay         = true;
       objAH.apellido            = $('#apellido').val();
       objAH.nombre              = $('#nombre').val();
       objAH.domicilio           = $('#domicilio').val();

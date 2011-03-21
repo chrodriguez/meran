@@ -13,15 +13,13 @@
         return false;
     }
 
-    function deleteFromArray(a, obj){
-        var i = 0;
-        while(i < a.length){
-            if(a[i] === obj){
-                delete a[i]
-                return true;
-            }
+    function deleteFromFECHAS(fecha){
+        //Fecha Vieja
+        var FECHAS_SEL= new Array();
+        for(var i = 0; i < FECHAS.length; i++) {
+            if(FECHAS[i]!=fecha){FECHAS_SEL.push(FECHAS[i]);}
         }
-        return false;
+        FECHAS=FECHAS_SEL;
     }
 
     var FECHAS=new Array();
@@ -69,7 +67,7 @@
         jConfirm('[% "Eliminar el feriado" | i18n %] '+ fecha +' ?', '[% "Feriados" | i18n %]', function(r) {
                    if(r){
                          postFecha(fecha,'false','');
-                         deleteFromArray(FECHAS,fecha);
+                         deleteFromFECHAS(fecha);
                         }
                 $('#calendarioFeriados').datepick('setDate', FECHAS);
         });

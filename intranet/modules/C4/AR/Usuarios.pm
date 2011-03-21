@@ -37,7 +37,6 @@ require Exporter;
 
 
 use C4::AR::Validator;
-
 use C4::AR::Prestamos qw(cantidadDePrestamosPorUsuario);
 use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrPersona::Manager;
@@ -45,6 +44,7 @@ use C4::Modelo::UsrEstado;
 use C4::Modelo::UsrEstado::Manager;
 use C4::Modelo::UsrSocio;
 use C4::Modelo::UsrSocio::Manager;
+use C4::AR::Preferencias;
 use Switch;
 
 use vars qw(@EXPORT_OK @ISA);
@@ -652,14 +652,14 @@ sub existeSocio {
 sub getSocioLike {
     my ($socio,$orden,$ini,$cantR,$habilitados,$inicial) = @_;
 
+
+C4::AR::Debug::debug("Usuarios => getSocioLike => orden => ".$orden);
+
     my @filtros;
-    my $socioTemp = C4::Modelo::UsrSocio->new();
-    my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($socio);
-
-    use C4::AR::Preferencias;
-    my $limit_pref = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
-
-    $cantR = $cantR || $limit_pref;
+    my $socioTemp           = C4::Modelo::UsrSocio->new();
+    my @searchstring_array  = C4::AR::Utilidades::obtenerBusquedas($socio);
+    my $limit_pref          = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
+    $cantR                  = $cantR || $limit_pref;
 
     if($socio ne 'TODOS'){
         #SI VIENE INICIAL, SE BUSCA SOLAMENTE POR APELLIDOS QUE COMIENCEN CON ESA LETRA, SINO EN TODOS LADOS CON LIKE EN AMBOS LADOS

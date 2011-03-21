@@ -644,13 +644,9 @@ sub _realizarOperacionesLogin{
                 my $dias=Date::Manip::Date_IsWorkDay($lastlogin);
                 my $nextWorkingDay=C4::Date::format_date_complete(Date::Manip::Date_NextWorkDay($lastlogin,$dias),$dateformat);
                 if(Date::Manip::Date_Cmp($nextWorkingDay,$prevWorkDate)<=0) {
-                    my $feriado= C4::Modelo::PrefFeriado->new();
-#                     C4::AR::Debug::debug("_realizarOperacionesLOGIN=> agregando dia sin actividad".$nextWorkingDay);
-
-                    eval{
-                        $feriado->agregar(C4::Date::format_date_in_iso($nextWorkingDay,$dateformat),"true","Biblioteca sin actividad");
-                    };
-                    
+                       if (C4::AR::Utilidades::setFeriado(C4::Date::format_date_in_iso($nextWorkingDay,$dateformat),"true","Biblioteca sin actividad")){
+                            C4::AR::Debug::debug("_realizarOperacionesLOGIN=> agregando dia sin actividad".$nextWorkingDay);
+                        }
                     }
                 $lastlogin=$nextWorkingDay;
                 $enter=1;

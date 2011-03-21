@@ -11,7 +11,6 @@ use C4::AR::PdfGenerator;
 my $input                   = new CGI;
 my $id_pedido_cotizacion    = $input->param('id_pedido_cotizacion');
 
-
 my ($template, $session, $t_params) = get_template_and_user({
     template_name => "adquisiciones/generatePresupuesto.tmpl",
     query => $input,
@@ -20,9 +19,6 @@ my ($template, $session, $t_params) = get_template_and_user({
     flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
     debug => 1,
 });
-
-
-#   se muestra el template normal
 
 my $recomendaciones_activas   = C4::AR::Recomendaciones::getRecomendacionesActivas();
 
@@ -34,8 +30,7 @@ if($recomendaciones_activas){
         push(@resultsdata, \%row);
     }
 
-    $t_params->{'resultsloop'}   = \@resultsdata; 
-       
+    $t_params->{'resultsloop'}   = \@resultsdata;   
 }
     
 my $combo_proveedores               = &C4::AR::Utilidades::generarComboProveedoresMultiple();
