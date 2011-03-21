@@ -1,6 +1,6 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<script src="/intranet-tmpl/includes/circulacion.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/circulacion-min.js"></script>
 
 <script language=javascript>
 function todos(){
@@ -30,6 +30,7 @@ function borrarDiv(){$("#divResultado").html("");}
 function buscarSanciones(){
 	objAH=new AjaxHelper(updateBuscarSanciones);
 	objAH.debug= true;
+    objAH.showOverlay = true;
     objAH.orden= ORDEN;
 	objAH.url= "/cgi-bin/koha/circ/sancionesDB.pl";
 	objAH.sendToServer();
@@ -63,6 +64,7 @@ function borrarSanciones(chck){
 
             objAH=new AjaxHelper(updateSanciones);
             objAH.debug= true;
+            objAH.showOverlay = true;
             objAH.url= '/cgi-bin/koha/circ/borrarsanciones.pl';
             objAH.datosArray= array;
             //se envia la consulta

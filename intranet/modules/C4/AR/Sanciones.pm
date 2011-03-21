@@ -314,7 +314,7 @@ sub eliminarSanciones{
 
         if(!$msg_object->{'error'}){
                 eval{	
-			$sancion->eliminar_sancion($userid);
+                    $sancion->eliminar_sancion($userid);
                 	$db->commit;
                 };
                 if ($@){
