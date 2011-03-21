@@ -107,7 +107,7 @@ sub estaSancionado {
                                                                                     fecha_comienzo 	=> { le => $hoy },
                                                                                     fecha_final    	=> { ge => $hoy},
                                                                                     ],
-                                                                                require_objetcs => ['ref_tipo_sancion','reserva','ref_tipo_prestamo_sancion'],
+                                                                                require_objetcs => ['ref_tipo_sancion','reserva','ref_tipo_sancion.ref_tipo_prestamo'],
                                                                                 select => ['*'],
                                                                                 );
   if (scalar($sanciones_array_ref->[0])){
@@ -275,6 +275,7 @@ sub getTipoSancion{
 
 sub sanciones {
  #Esta funcion muestra toda las sanciones que hay
+  my ($orden)=@_;
 
   my $dateformat = C4::Date::get_date_format();
   my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
@@ -284,7 +285,10 @@ sub sanciones {
                                                                             fecha_comienzo  => { le => $hoy },
                                                                             fecha_final     => { ge => $hoy},
                                                                               ],
-                                    );
+                                                                    select  => ['circ_sancion.*'],
+                                                                    with_objects => ['socio','socio.persona','ref_tipo_sancion'],
+                                                                    sort_by => $orden,
+                              );
     return $sanciones_array_ref;
 }
 

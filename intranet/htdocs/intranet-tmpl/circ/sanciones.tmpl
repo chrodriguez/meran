@@ -16,7 +16,7 @@ function todos(){
 }
 
 var objAH;//Objeto AjaxHelper.
-
+var ORDEN;//orden
 /*
  * borrarDiv
  * Borra el div 
@@ -30,6 +30,7 @@ function borrarDiv(){$("#divResultado").html("");}
 function buscarSanciones(){
 	objAH=new AjaxHelper(updateBuscarSanciones);
 	objAH.debug= true;
+    objAH.orden= ORDEN;
 	objAH.url= "/cgi-bin/koha/circ/sancionesDB.pl";
 	objAH.sendToServer();
 }
@@ -37,6 +38,11 @@ function updateBuscarSanciones(responseText){
 	$("#divResultado").html(responseText);
     zebra('datos_tabla');
 
+}
+
+function ordenar(orden){
+    ORDEN=orden;
+    buscarSanciones();
 }
 
 function borrarSanciones(chck){
