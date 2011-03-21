@@ -80,9 +80,9 @@ function updateSanciones(responseText){
 
 	borrarDiv();
 
-	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.Messages_arrayref;
-	setMessages(messageArray);
+    var infoHash        = JSONstring.toObject(responseText);
+    var messageArray    = infoHash.Messages_arrayref;
+    setMessages(messageArray);
 
 	buscarSanciones();
 }
@@ -96,7 +96,6 @@ $(document).ready( function() {
 
 </script>
 
-<center>
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend">[% "Sanciones" | i18n %]</legend>
     <div id="divResultado"></div>

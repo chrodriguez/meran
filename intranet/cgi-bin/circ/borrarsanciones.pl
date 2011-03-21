@@ -49,7 +49,9 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $sanciones_ids=$obj->{'datosArray'};
 
 my $Message_arrayref = C4::AR::Sanciones::eliminarSanciones($userid,$sanciones_ids);
-my $infoOperacionJSON=to_json $Message_arrayref;
+
+my %info;
+$info{'Messages_arrayref'}  = $Message_arrayref;
 C4::AR::Auth::print_header($session);
-print $infoOperacionJSON;
+print to_json \%info;
 
