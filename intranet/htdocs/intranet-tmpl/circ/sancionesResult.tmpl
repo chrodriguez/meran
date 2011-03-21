@@ -2,18 +2,17 @@
 <table class="datos_tabla" id="tablaResult" border="0" cellpadding="0" cellspacing="0" width="99%">
 	<tr class="titulo_tabla_resultado">
   
-  		<td align="center"><a href="#" onclick="todos();">
+  		<th align="center"><a href="#" onclick="todos();">
 			<img src="[% temas %]/[% tema %]/imagenes/iconos/check.png" title="[% 'Invertir la selecci&oacute;n' | i18n %]"  border=0></a>
-		</td>
-
+		</th>
   
-		<td>[% "Tarjeta de Id." | i18n %]</td>
-  		<td>[% "Socio" | i18n %]</td>
-  		<td>[% "Legajo" | i18n %]</td>
-  		<td>[% "Cat." | i18n %]</td>
-  		<td>[% "Tipo de pr&eacute;stamo" | i18n %]</td>
-  		<td>[% "Fecha inicio" | i18n %]</td>
-  		<td>[% "Fecha fin" | i18n %]</td>
+		<th class="click" onclick="ordenar('socio.nro_socio')" Title="[% 'Ordenar por tarjeta de Id.' | i18n %]">[% "Tarjeta de Id." | i18n %]</th>
+  		<th class="click" onclick="ordenar('persona.apellido')" Title="[% 'Ordenar por apellido' | i18n %]">[% "Socio" | i18n %]</th>
+  		<th class="click" onclick="ordenar('persona.legajo')" Title="[% 'Ordenar por legajo' | i18n %]">[% "Legajo" | i18n %]</th>
+  		<th class="click" onclick="ordenar('ref_tipo_sancion.categoria_socio')" Title="[% 'Ordenar por categoria' | i18n %]">[% "Cat." | i18n %]</th>
+  		<th class="click" onclick="ordenar('ref_tipo_sancion.tipo_prestamo')" Title="[% 'Ordenar por tipo de pr&eacute;stamo' | i18n %]">[% "Tipo de pr&eacute;stamo" | i18n %]</th>
+  		<th class="click" onclick="ordenar('fecha_comienzo')" Title="[% 'Ordenar por fecha de inicio' | i18n %]">[% "Fecha inicio" | i18n %]</th>
+  		<th class="click" onclick="ordenar('fecha_final')" Title="[% 'Ordenar por fecha de fin' | i18n %]">[% "Fecha fin" | i18n %]</th>
 
 	</tr>
 [% IF CANT_SANCIONES %]
@@ -53,7 +52,6 @@
 		</td>
 		<td>[% sancion.getFecha_comienzo_formateada %]</td>
 		<td>[% sancion.getFecha_final_formateada %]</td>
-		<td width="1%" >&nbsp;</td>
 	</tr>
   [% END %]
     <tr>
