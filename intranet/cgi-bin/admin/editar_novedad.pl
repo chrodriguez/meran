@@ -22,7 +22,7 @@ my $id = $input->param('id') || 0;
 if ($action eq 'editar'){
     my $status = C4::AR::Novedades::editar($input);
     if ($status){
-        C4::AR::Auth::redirectTo('/cgi-bin/koha/admin/novedades_opac.pl?token'.$input->param('token'));
+        C4::AR::Auth::redirectTo('/cgi-bin/koha/admin/novedades_opac.pl?token='.$input->param('token'));
     }
 }
 else{
