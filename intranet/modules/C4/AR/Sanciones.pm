@@ -311,21 +311,24 @@ sub eliminarSanciones{
 	foreach my $id_sancion (@$sanciones_ids) {
 	my $sancion = C4::Modelo::CircSancion->new(id_sancion => $id_sancion, db => $db);
 	$sancion->load();
-
+    my $socio_sancionado=$sancion->getNro_socio;
         if(!$msg_object->{'error'}){
                 eval{	
                     $sancion->eliminar_sancion($userid);
                 	$db->commit;
                 };
                 if ($@){
+                        $db->rollback;
                     	$msg_object->{'error'}= 1;
-                    	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S203', 'params' => [$userid]} ) ;
+                    	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S203', 'params' => [$socio_sancionado]} ) ;
+                    C4::AR::Debug::debug("Sanciones::eliminarSanciones => NO se pudo eliminar");
                 }
                 $msg_object->{'error'}= 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S202', 'params' => [$userid]} ) ;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S202', 'params' => [$socio_sancionado]} ) ;
+                C4::AR::Debug::debug("Sanciones::eliminarSanciones => se elimino correctamente");
         }else{
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S203', 'params' => [$userid]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S203', 'params' => [$socio_sancionado]} ) ;
         }
 
 	}
