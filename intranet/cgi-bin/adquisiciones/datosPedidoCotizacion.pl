@@ -13,35 +13,20 @@ my $pedidos_cotizacion      = C4::AR::PedidoCotizacionDetalle::getPedidosCotizac
 
 my ($template, $session, $t_params);
 
-if ($tipoAccion eq "EDITAR") {
-# se edita la informacion del pedido_cotizacion
+if ($tipoAccion eq "DETALLE") {
+# se muestra la informacion del pedido_cotizacion
  
     ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
         template_name   => '/adquisiciones/datosPedidoCotizacion.tmpl',
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
     });
     
     $t_params->{'pedido_cotizacion'}    = $pedidos_cotizacion;
-    $t_params->{'edit'}                 = 1;
-
-}else{
-# se muestran los detalles del pedido_cotizacion
-
-    ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
-        template_name   => '/adquisiciones/datosPedidoCotizacion.tmpl',
-        query           => $input,
-        type            => "intranet",
-        authnotrequired => 0,
-        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
-    });   
-      
-    $t_params->{'pedido_cotizacion'}    = $pedidos_cotizacion;
-    $t_params->{'detalle'}              = 1; 
 }
 
-$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Pedidos de Cotizacion");
+$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Pedidos de Cotizacion");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

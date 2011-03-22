@@ -20,7 +20,7 @@ if ($tipoAccion eq "EDITAR") {
             query       => $input,
             type        => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICAR', entorno => 'adquisiciones'},
     });
     
     my $comboDeTipoDeDoc = &C4::AR::Utilidades::generarComboTipoDeDoc();
@@ -34,17 +34,17 @@ if ($tipoAccion eq "EDITAR") {
                       query       => $input,
                       type        => "intranet",
                       authnotrequired => 0,
-                      flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+                      flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
           });    
 }
 
-my $monedas                 = C4::AR::Proveedores::getMonedasProveedor($id_proveedor);
-my $formas_envio            = C4::AR::Proveedores::getFormasEnvioProveedor($id_proveedor);
-my $proveedor               = C4::AR::Proveedores::getProveedorInfoPorId($id_proveedor);
-my $tipo_materiales         = &C4::AR::Utilidades::generarComboTipoDeMaterial();
-my $materiales_proveedor    = C4::AR::Proveedores::getMaterialesProveedor($id_proveedor);
-my $formas_envio            = &C4::AR::Utilidades::generarComboFormasDeEnvio();
-my $formas_envio_proveedor  = C4::AR::Proveedores::getFormasEnvioProveedor($id_proveedor);
+my $monedas                             = C4::AR::Proveedores::getMonedasProveedor($id_proveedor);
+my $formas_envio                        = C4::AR::Proveedores::getFormasEnvioProveedor($id_proveedor);
+my $proveedor                           = C4::AR::Proveedores::getProveedorInfoPorId($id_proveedor);
+my $tipo_materiales                     = &C4::AR::Utilidades::generarComboTipoDeMaterial();
+my $materiales_proveedor                = C4::AR::Proveedores::getMaterialesProveedor($id_proveedor);
+my $formas_envio                        = &C4::AR::Utilidades::generarComboFormasDeEnvio();
+my $formas_envio_proveedor              = C4::AR::Proveedores::getFormasEnvioProveedor($id_proveedor);
 
 $t_params->{'formas_envio'}             = $formas_envio;
 $t_params->{'proveedor'}                = $proveedor;

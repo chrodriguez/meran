@@ -24,7 +24,7 @@ if($obj){
             query               => $input,
             type                => "intranet",
             authnotrequired     => 0,
-            flagsrequired       => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+            flagsrequired       => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICAR', entorno => 'adquisiciones'},
         });   
            
     my ($ok) = C4::AR::Recomendaciones::updateRecomendacionDetalle($obj);
@@ -49,7 +49,7 @@ if($obj){
             query               => $input,
             type                => "intranet",
             authnotrequired     => 0,
-            flagsrequired       => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+            flagsrequired       => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICAR', entorno => 'adquisiciones'},
         });   
            
         my $recomendaciones             = C4::AR::Recomendaciones::getRecomendacionDetallePorId($id_recomendacion);

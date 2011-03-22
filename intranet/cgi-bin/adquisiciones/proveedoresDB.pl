@@ -6,13 +6,11 @@ use C4::AR::Proveedores;
 use CGI;
 use JSON;
 
-my $input = new CGI;
-my $authnotrequired= 0;
-C4::AR::Debug::debug($input->param('obj'));
-my $obj=$input->param('obj');
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
-
-my $tipoAccion= $obj->{'tipoAccion'}||"";
+my $input           = new CGI;
+my $authnotrequired = 0;
+my $obj             = $input->param('obj');
+my $tipoAccion      = $obj->{'tipoAccion'}||"";
+$obj                = C4::AR::Utilidades::from_json_ISO($obj);
 
 =item
     Se elimina el Proveedor
@@ -22,18 +20,18 @@ if($tipoAccion eq "ELIMINAR"){
 
         my ($userid, $session, $flags) = checkauth( $input, 
                                             $authnotrequired,
-                                            {   ui => 'ANY', 
-                                                tipo_documento => 'ANY', 
-                                                accion => 'BAJA', 
-                                                entorno => 'usuarios'},
+                                            {   ui              => 'ANY', 
+                                                tipo_documento  => 'ANY', 
+                                                accion          => 'BAJA', 
+                                                entorno         => 'adquisiciones'},
                                                 "intranet"
-                                );
+                                    );
 
         my %params;
-        my $id_proveedor= $obj->{'id_proveedor'};
+        my $id_proveedor        = $obj->{'id_proveedor'};
 
-        my ($Message_arrayref)= C4::AR::Proveedores::eliminarProveedor($id_proveedor);
-        my $infoOperacionJSON=to_json $Message_arrayref;
+        my ($Message_arrayref)  = C4::AR::Proveedores::eliminarProveedor($id_proveedor);
+        my $infoOperacionJSON   = to_json $Message_arrayref;
 
         C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
@@ -46,21 +44,18 @@ Se guarda la modificacion los datos del Proveedor
 elsif($tipoAccion eq "GUARDAR_MODIFICACION_PROVEEDOR"){
 
       my ($loggedinuser, $session, $flags) = checkauth( 
-                                                                $input, 
-                                                                $authnotrequired,
-                                                                {   ui => 'ANY', 
-                                                                    tipo_documento => 'ANY', 
-                                                                    accion => 'MODIFICACION', 
-# TODO generar el entorno proveedores
-                                                                    entorno => 'usuarios'},
-#                                                                 entorno => 'proveedores'},    
-                                                                "intranet"
+                                               $input, 
+                                               $authnotrequired,
+                                               {   ui               => 'ANY', 
+                                                   tipo_documento   => 'ANY', 
+                                                   accion           => 'MODIFICACION', 
+                                                   entorno          => 'adquisiciones'},   
+                                                   "intranet"
                                 );    
 
-        my ($Message_arrayref)= C4::AR::Proveedores::editarProveedor($obj);
-        my $infoOperacionJSON=to_json $Message_arrayref;
+        my ($Message_arrayref)  = C4::AR::Proveedores::editarProveedor($obj);
+        my $infoOperacionJSON   = to_json $Message_arrayref;
         
-
         C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
 
@@ -72,12 +67,12 @@ Se guarda una nueva moneda del proveedor
 elsif($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR"){
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "includes/partials/proveedores/mostrar_monedas.tmpl",
-                        query => $input,
-                        type => "intranet",
+                        template_name   => "includes/partials/proveedores/mostrar_monedas.tmpl",
+                        query           => $input,
+                        type            => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
-                        debug => 1,
+                        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICAR', entorno => 'adquisiciones'},
+                        debug           => 1,
                     });
 
 
@@ -88,8 +83,8 @@ elsif($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR"){
     if($Message_arrayref->{'error'} == 0){
 #   la moneda fue agregada con exito, recargamos el div de las monedas en el tmpl
 
-        $monedas = C4::AR::Proveedores::getMonedasProveedor($obj->{'id_proveedor'});
-        $t_params->{'monedas'} = $monedas;
+        $monedas                = C4::AR::Proveedores::getMonedasProveedor($obj->{'id_proveedor'});
+        $t_params->{'monedas'}  = $monedas;
         
     }
 
@@ -100,12 +95,12 @@ elsif($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR"){
 elsif($tipoAccion eq "ELIMINAR_MONEDA_PROVEEDOR"){
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "includes/partials/proveedores/mostrar_monedas.tmpl",
-                        query => $input,
-                        type => "intranet",
+                        template_name   => "includes/partials/proveedores/mostrar_monedas.tmpl",
+                        query           => $input,
+                        type            => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
-                        debug => 1,
+                        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'BAJA', entorno => 'adquisiciones'},
+                        debug           => 1,
     });
 
 #   le mandamos un arreglo con ids de las monedas a eliminar
