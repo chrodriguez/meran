@@ -67,7 +67,9 @@ function buscarBar(){
     objAH.tipoAccion= 'BUSQUEDA_COMBINADA';
     //se setea la funcion para cambiar de pagina
     objAH.funcion= 'changePage';
-    objAH.sendToServer();	
+  
+    if (jQuery.trim(objAH.keyword).length > 0)
+    	objAH.sendToServer();	
 }
 
 function buscar(doScroll){

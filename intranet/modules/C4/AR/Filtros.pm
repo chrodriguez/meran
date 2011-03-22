@@ -346,10 +346,26 @@ sub getComboLang {
     my $html= '';
 
     my @languages = ("es_ES","en_EN");
+    my %languages_name = {};
+    $languages_name{'es_ES'} = "Espa&ntilde;ol";
+    $languages_name{'en_EN'} = "English";
+
+
+    my $user_lang = C4::AR::Auth::getUserLocale(); 
+    my $default = "";
 
     $html .="<select id='language' tabindex='-1' style='width:170px;'>";
-    $html .="<option value='es_ES'>Espa&ntilde;ol</option>";
-    $html .="<option value='en_EN'>English</option>";
+
+    foreach my $lang (@languages){
+    	if ($user_lang eq $lang){
+    	   $default = "selected=selected";
+           $html .="<option value='$lang ' $default>".$languages_name{$lang}."</option>";
+    	}else{
+           $html .="<option value='$lang '>".$languages_name{$lang}."</option>";
+    		
+    	}
+    }
+    
     $html .="</select>";
 
     return $html;

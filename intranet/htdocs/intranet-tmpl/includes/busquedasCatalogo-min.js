@@ -5,7 +5,8 @@ function busquedaCombinable(){objAH=new AjaxHelper(updateBusquedaCombinable);obj
 function updateBusquedaCombinable(responseText){updateInfoBusquedas(responseText);}
 function changePage(ini){objAH.changePage(ini);}
 function ordenarPor(ord){objAH.sort(ord);}
-function buscarBar(){objAH=new AjaxHelper(updateInfoBusquedasBar);objAH.showOverlay=true;objAH.debug=true;objAH.url='/cgi-bin/koha/busquedas/busquedasDB.pl';objAH.keyword=$('#keyword-bar').val();objAH.shouldScroll=true;objAH.tipoAccion='BUSQUEDA_COMBINADA';objAH.funcion='changePage';objAH.sendToServer();}
+function buscarBar(){objAH=new AjaxHelper(updateInfoBusquedasBar);objAH.showOverlay=true;objAH.debug=true;objAH.url='/cgi-bin/koha/busquedas/busquedasDB.pl';objAH.keyword=$('#keyword-bar').val();objAH.shouldScroll=true;objAH.tipoAccion='BUSQUEDA_COMBINADA';objAH.funcion='changePage';if(jQuery.trim(objAH.keyword).length>0)
+objAH.sendToServer();}
 function buscar(doScroll){var limite_caracteres=3;var cumple_limite=true;var cumple_vacio=true;if(doScroll)
 shouldScroll=doScroll;if(jQuery.trim($('#estante').val())!=''){if((jQuery.trim($('#estante').val())).length<limite_caracteres){cumple_limite=false;}else{buscarEstante();}}
 else if(jQuery.trim($('#dictionary').val())!=''){if((jQuery.trim($('#dictionary').val())).length<limite_caracteres){cumple_limite=false;}else{buscarPorDiccionario(ini);}}

@@ -60,7 +60,6 @@ function guardarModificacionUsuario(){
     objAH.legajo= $('#legajo').val();
     objAH.changepassword= ( $('#changepassword').attr('checked') )?1:0;
 	objAH.tipoAccion= 'GUARDAR_MODIFICACION_USUARIO';
-    objAH.credential_type= $('#credential').val();
     objAH.tema= $('#temas_intra').val();
     objAH.auth_nombre= $('#auth_nombre').val();
     objAH.auth_dni= $('#auth_dni').val();

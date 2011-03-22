@@ -93,7 +93,7 @@ function socioSearchEvent(event){
 	      </a>
 	      <span id="screen-name">
 		      <a href="/cgi-bin/koha/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]"
-		        style="color:#BABABA">
+		        style="color:#BABABA; display: inline-block;">
 		        [% socio_data.usr_nro_socio %] ([% socio_data.usr_apellido %], [% socio_data.usr_nombre %])
 		      </a>
 	      </span>
