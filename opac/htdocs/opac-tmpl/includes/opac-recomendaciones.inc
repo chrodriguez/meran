@@ -89,7 +89,7 @@ $(document).ready( function() {
     CrearAutocompleteCatalogo({ 
           IdInput: 'catalogo_search', 
           IdInputHidden: 'catalogo_search_hidden', 
-          // callBackFunction: cargarFormulario,
+          callBackFunction: cargarFormulario,
     });
     $('#busqueda').hide();
 

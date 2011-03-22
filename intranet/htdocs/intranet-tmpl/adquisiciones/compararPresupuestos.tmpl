@@ -38,11 +38,8 @@
 
 
      function updateExportarMejorPresupuesto(responseText){
-        if (!verificarRespuesta(responseText))
-            return(0);
-            var Messages=JSONstring.toObject(responseText);
-            setMessages(Messages);
-      }
+            $('#ediciones').html(responseText)
+     }
       
         
     // se genera la orden de compra a partir del cuadro comparativo, FIXME incluirlo en algun js

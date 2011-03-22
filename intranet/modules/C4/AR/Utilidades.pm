@@ -2188,8 +2188,6 @@ sub generarComboRecomendaciones{
 }
 
 
-
-
 sub generarComboTipoNivel3{
 
     my ($params) = @_;
@@ -2677,30 +2675,30 @@ sub generarComboNivel2{
     my @select_ediciones_array;
     my %select_ediciones_hash;
 
-    my ($ediciones_array_ref)= &C4::AR::Nivel2::getNivel2FromId1($params);
+    my ($ediciones_array_ref)= C4::AR::Nivel2::getNivel2FromId1($params);
 
     foreach my $edicion (@$ediciones_array_ref) {
-        push(@select_ediciones_array, $edicion->getId);
-        $select_ediciones_hash{$edicion->getId}= $edicion->getEdicion;
+        push(@select_ediciones_array, $edicion->getId2);
+        $select_ediciones_hash{$edicion->getId2}= $edicion->getEdicion;
     }
 
     my %options_hash; 
 
-    if ( $params->{'onChange'} ){
-        $options_hash{'onChange'}   = $params->{'onChange'};
-    }
-    if ( $params->{'onFocus'} ){
-        $options_hash{'onFocus'}    = $params->{'onFocus'};
-    }
-    if ( $params->{'onBlur'} ){
-        $options_hash{'onBlur'}     = $params->{'onBlur'};
-    }
+#     if ( $params->{'onChange'} ){
+#         $options_hash{'onChange'}   = $params->{'onChange'};
+#     }
+#     if ( $params->{'onFocus'} ){
+#         $options_hash{'onFocus'}    = $params->{'onFocus'};
+#     }
+#     if ( $params->{'onBlur'} ){
+#         $options_hash{'onBlur'}     = $params->{'onBlur'};
+#     }
 
-    $options_hash{'name'}       = $params->{'name'}||'edicion_id';
-    $options_hash{'id'}         = $params->{'id'}||'edicion_id';
-    $options_hash{'size'}       = $params->{'size'}||1;
-    $options_hash{'multiple'}   = $params->{'multiple'}||0;
-    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultEdicion");
+    $options_hash{'name'}       = 'edicion_id';
+    $options_hash{'id'}         = 'edicion_id';
+    $options_hash{'size'}       = 1;
+    $options_hash{'multiple'}   = 0;
+    $options_hash{'defaults'}   = C4::AR::Preferencias::getValorPreferencia("defaultEdicion");
 
     push (@select_ediciones_array, '');
     $select_ediciones_hash{''} = "SIN SELECCIONAR";
