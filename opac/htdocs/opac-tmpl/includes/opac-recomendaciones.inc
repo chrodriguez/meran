@@ -63,20 +63,43 @@ function validateForm(){
 // }
 
 
+function cargarFormulario(){
+        objAH                   = new AjaxHelper(updateAgregarDetalleRecomendacion);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        //para busquedas combinables
+        objAH.url               = '/cgi-bin/koha/opac-busquedasDB.pl';
+        objAH.tipoAccion        = 'BUSQUEDA_RECOMENDACION';
+        objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val();
+        objAH.sendToServer();
+}
+
+
+function updateAgregarDetalleRecomendacion(responseText){
+   $('#ediciones').html(responseText);
+   if (!verificarRespuesta(responseText)) {
+            return(0);
+            var Messages=JSONstring.toObject(responseText);
+            setMessages(Messages);
+   }
+}
+
+
 $(document).ready( function() {
     CrearAutocompleteCatalogo({ 
           IdInput: 'catalogo_search', 
           IdInputHidden: 'catalogo_search_hidden', 
-//           callBackFunction: updateAutocompleteBarcodes
+          // callBackFunction: cargarFormulario,
     });
+    $('#busqueda').hide();
 
-//     makeToggle('carga_manual','trigger',null,true);
-//     makeToggle('motivo','trigger',null,true);
-//     makeToggle('comentario','trigger',null,true);
-//     validateForm();
-
-   
+    makeToggle('carga_manual','trigger',null,true);
+    makeToggle('motivo','trigger',null,true);
+    makeToggle('comentario','trigger',null,true);
+// //     validateForm();   
 });
+
+
 
 </script>        
      
@@ -106,34 +129,57 @@ $(document).ready( function() {
                                 <input type='text' id='catalogo_search' name='catalogo_search' value='' size=80 tabindex='3' style="float: left">
                                 <input type='hidden' id='catalogo_search_hidden' name='catalogo_search_hidden' value=''>
                             </li>  
+                                
               </fieldset>
-             
-            
-              <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Carga de Datos Manual' | i18n %]&nbsp;</legend>
-                  <div class="carga_manual" id="carga_manual"> 
-                    <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
-                      <input type="text" name="autor" id="autor" class="field" value="" tabindex="10" /></p>
-                    <p><label for="titulo" class="left">[% 'T&iacute;tulo*' | i18n %]:</label>
-                      <input type="text" name="titulo" id="titulo" class="field" value="" tabindex="10" /></p>
-                    <p><label for="edicion" class="left">[% 'Edici&oacute;n*' | i18n %]:</label>
-                      <input type="text" name="edicion" id="edicion" class="field" value="" tabindex="10" /></p>
-                    <p><label for="lugar_publicacion" class="left">[% 'Lugar de Publicaci&oacute;n*' | i18n %]:</label>
-                      <input type="text" name="lugar_publicacion" id="lugar_publicacion" class="field" value="" tabindex="10" /></p>
-                    <p><label for="editorial" class="left">[% 'Editorial*' | i18n %]:</label>
-                      <input type="text" name="editorial" id="editorial" class="field" value="" tabindex="10" /></p>
-                    <p><label for="fecha" class="left">[% 'Fecha*' | i18n %]:</label>
-                      <input type="text" name="fecha" id="fecha" class="field" value="" tabindex="10" /></p>
-                    <p><label for="coleccion" class="left">[% 'Colecci&oacute;n*' | i18n %]:</label>
-                      <input type="text" name="coleccion" id="coleccion" class="field" value="" tabindex="10" /></p>
-                    <p><label for="isbn_issn" class="left">[% 'ISBN/ISSN*' | i18n %]:</label>
-                      <input type="text" name="isbn_issn" id="isbn_issn" class="field" value="" tabindex="10" /></p>
-                    <p><label for="cant_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
-                      <input type="text" name="cant_ejemplares" id="cant_ejemplares" class="field" value="" tabindex="10" /></p>
-                    <input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" />
-                 
-                  </div>      
+                        <div id="ediciones"></div>
+
+                        <div class="busqueda" id="busqueda"> 
+                                <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
+                                  <input type="text" name="autor" id="autor" class="field" value="" tabindex="10" /></p>
+                                <p><label for="titulo" class="left">[% 'T&iacute;tulo*' | i18n %]:</label>
+                                  <input type="text" name="titulo" id="titulo" class="field" value="" tabindex="10" /></p>
+                                <p><label for="edicion" class="left">[% 'Edici&oacute;n*' | i18n %]:</label>
+                                  <input type="text" name="edicion" id="edicion" class="field" value="" tabindex="10" /></p>
+                                <p><label for="lugar_publicacion" class="left">[% 'Lugar de Publicaci&oacute;n*' | i18n %]:</label>
+                                  <input type="text" name="lugar_publicacion" id="lugar_publicacion" class="field" value="" tabindex="10" /></p>
+                                <p><label for="editorial" class="left">[% 'Editorial*' | i18n %]:</label>
+                                  <input type="text" name="editorial" id="editorial" class="field" value="" tabindex="10" /></p>
+                                <p><label for="fecha" class="left">[% 'Fecha*' | i18n %]:</label>
+                                  <input type="text" name="fecha" id="fecha" class="field" value="" tabindex="10" /></p>
+                                <p><label for="coleccion" class="left">[% 'Colecci&oacute;n*' | i18n %]:</label>
+                                  <input type="text" name="coleccion" id="coleccion" class="field" value="" tabindex="10" /></p>
+                                <p><label for="isbn_issn" class="left">[% 'ISBN/ISSN*' | i18n %]:</label>
+                                  <input type="text" name="isbn_issn" id="isbn_issn" class="field" value="" tabindex="10" /></p>
+                                <p><label for="cant_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
+                                  <input type="text" name="cant_ejemplares" id="cant_ejemplares" class="field" value="" tabindex="10" /></p>
+                                <input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" />     
+                            </div>   
               </fieldset>
-             
+
+              <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
+                    <div class="carga_manual" id="carga_manual"> 
+                          <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
+                            <input type="text" name="autor" id="autor" class="field" value="" tabindex="10" /></p>
+                          <p><label for="titulo" class="left">[% 'T&iacute;tulo*' | i18n %]:</label>
+                            <input type="text" name="titulo" id="titulo" class="field" value="" tabindex="10" /></p>
+                          <p><label for="edicion" class="left">[% 'Edici&oacute;n*' | i18n %]:</label>
+                            <input type="text" name="edicion" id="edicion" class="field" value="" tabindex="10" /></p>
+                          <p><label for="lugar_publicacion" class="left">[% 'Lugar de Publicaci&oacute;n*' | i18n %]:</label>
+                            <input type="text" name="lugar_publicacion" id="lugar_publicacion" class="field" value="" tabindex="10" /></p>
+                          <p><label for="editorial" class="left">[% 'Editorial*' | i18n %]:</label>
+                            <input type="text" name="editorial" id="editorial" class="field" value="" tabindex="10" /></p>
+                          <p><label for="fecha" class="left">[% 'Fecha*' | i18n %]:</label>
+                            <input type="text" name="fecha" id="fecha" class="field" value="" tabindex="10" /></p>
+                          <p><label for="coleccion" class="left">[% 'Colecci&oacute;n*' | i18n %]:</label>
+                            <input type="text" name="coleccion" id="coleccion" class="field" value="" tabindex="10" /></p>
+                          <p><label for="isbn_issn" class="left">[% 'ISBN/ISSN*' | i18n %]:</label>
+                            <input type="text" name="isbn_issn" id="isbn_issn" class="field" value="" tabindex="10" /></p>
+                          <p><label for="cant_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
+                            <input type="text" name="cant_ejemplares" id="cant_ejemplares" class="field" value="" tabindex="10" /></p>
+                          <input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" />     
+                    </div>      
+             </fieldset>
+           
              
               <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Motivo de la propuesta' | i18n %]&nbsp;</legend>
                 <div class="motivo" id="motivo">
