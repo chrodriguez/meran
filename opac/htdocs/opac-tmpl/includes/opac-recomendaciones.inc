@@ -61,29 +61,42 @@ function validateForm(){
 // //             setMessages(Messages);
 // //    }
 // }
-/*
 
-function cargarFormulario{
+
+function cargarFormulario(){
         objAH                   = new AjaxHelper(updateAgregarDetalleRecomendacion);
         objAH.debug             = true;
         objAH.showOverlay       = true;
         //para busquedas combinables
         objAH.url               = '/cgi-bin/koha/opac-busquedasDB.pl';
         objAH.tipoAccion        = 'BUSQUEDA_RECOMENDACION';
-        objAH.string            = $('#catalogo_search_hidden').val();
-}*/
+        objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val();
+        objAH.sendToServer();
+}
+
+
+function updateAgregarDetalleRecomendacion(responseText){
+   $('#ediciones').html(responseText);
+   if (!verificarRespuesta(responseText)) {
+            return(0);
+            var Messages=JSONstring.toObject(responseText);
+            setMessages(Messages);
+   }
+}
+
 
 $(document).ready( function() {
     CrearAutocompleteCatalogo({ 
           IdInput: 'catalogo_search', 
           IdInputHidden: 'catalogo_search_hidden', 
-//           callBackFunction: cargarFormulario;
+          // callBackFunction: cargarFormulario,
     });
     $('#busqueda').hide();
+
     makeToggle('carga_manual','trigger',null,true);
     makeToggle('motivo','trigger',null,true);
     makeToggle('comentario','trigger',null,true);
-//     validateForm();   
+// //     validateForm();   
 });
 
 
@@ -116,8 +129,11 @@ $(document).ready( function() {
                                 <input type='text' id='catalogo_search' name='catalogo_search' value='' size=80 tabindex='3' style="float: left">
                                 <input type='hidden' id='catalogo_search_hidden' name='catalogo_search_hidden' value=''>
                             </li>  
-                            
-                            <div class="busqueda" id="busqueda"> 
+                                
+              </fieldset>
+                        <div id="ediciones"></div>
+
+                        <div class="busqueda" id="busqueda"> 
                                 <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
                                   <input type="text" name="autor" id="autor" class="field" value="" tabindex="10" /></p>
                                 <p><label for="titulo" class="left">[% 'T&iacute;tulo*' | i18n %]:</label>

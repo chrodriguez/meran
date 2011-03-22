@@ -89,6 +89,7 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboDeSocios
     generarComboPermisos
     generarComboPerfiles
+    generarComboNivel2
     generarComboTipoDeOperacion
     existeInArray
     paginarArreglo
@@ -2667,6 +2668,53 @@ sub generarComboNiveles{
 
     return $CGINiveles; 
 }
+
+# GENERA COMBO CON LAS EDICIONES PARA UN ID DADO
+
+sub generarComboNivel2{
+    my ($params) = @_;
+
+    my @select_ediciones_array;
+    my %select_ediciones_hash;
+
+    my ($ediciones_array_ref)= &C4::AR::Nivel2::getNivel2FromId1($params);
+
+    foreach my $edicion (@$ediciones_array_ref) {
+        push(@select_ediciones_array, $edicion->getId);
+        $select_ediciones_hash{$edicion->getId}= $edicion->getEdicion;
+    }
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}       = $params->{'name'}||'edicion_id';
+    $options_hash{'id'}         = $params->{'id'}||'edicion_id';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultEdicion");
+
+    push (@select_ediciones_array, '');
+    $select_ediciones_hash{''} = "SIN SELECCIONAR";
+    $options_hash{'values'}     = \@select_ediciones_array;
+    $options_hash{'labels'}     = \%select_ediciones_hash;
+
+    my $comboDeEdiciones       = CGI::scrolling_list(\%options_hash);
+
+    return $comboDeEdiciones;
+}
+
+
+
+
 
 #****************************************************Fin****Generacion de Combos**************************************************
 sub getToday{
