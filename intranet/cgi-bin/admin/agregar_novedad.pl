@@ -20,7 +20,7 @@ my $action = $input->param('action') || 0;
 if ($action){
     my $status = C4::AR::Novedades::agregar($input);
     if ($status){
-        C4::AR::Auth::redirectTo('/cgi-bin/koha/admin/novedades_opac.pl?token'.$input->param('token'));
+        C4::AR::Auth::redirectTo('/cgi-bin/koha/admin/novedades_opac.pl?token='.$input->param('token'));
     }
 }
 

@@ -40,7 +40,7 @@ __PACKAGE__->meta->setup(
 		ref_tipo_prestamo_sancion => {
             class      => 'C4::Modelo::CircTipoPrestamoSancion',
             column_map => { tipo_sancion => 'tipo_sancion' },
-            type       => 'one to one',
+            type       => 'one to many',
         },
     ],
 );

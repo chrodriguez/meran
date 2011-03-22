@@ -27,4 +27,6 @@ $t_params->{'monedas'} = $monedas;
 $t_params->{'combo_proveedores'} = $combo_proveedores;
 $t_params->{'combo_presupuestos'} = $combo_presupuestos;
 
+$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Presupuestos");
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -34,7 +34,10 @@ my ($template, $session, $t_params) =  get_template_and_user ({
             flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
     });
 
-my $sanciones= C4::AR::Sanciones::sanciones();
+my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+my $orden=$obj->{'orden'}||'persona.apellido';
+
+my $sanciones= C4::AR::Sanciones::sanciones($orden);
 $t_params->{'CANT_SANCIONES'}=scalar(@$sanciones);
 $t_params->{'SANCIONES'}= $sanciones;
 

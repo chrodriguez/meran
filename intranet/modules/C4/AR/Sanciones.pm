@@ -42,6 +42,7 @@ sub tieneSanciones {
 																			fecha_comienzo 	=> { le => $hoy },
 																			fecha_final    	=> { ge => $hoy},
 																		],
+                                                                    require_objetcs => ['ref_tipo_prestamo_sancion'],
 									);
   if (scalar(@$sanciones_array_ref) == 0){
         return 0;
@@ -107,7 +108,7 @@ sub estaSancionado {
                                                                                     fecha_comienzo 	=> { le => $hoy },
                                                                                     fecha_final    	=> { ge => $hoy},
                                                                                     ],
-                                                                                require_objetcs => ['ref_tipo_sancion','reserva','ref_tipo_prestamo_sancion'],
+                                                                                require_objetcs => ['ref_tipo_sancion','reserva','ref_tipo_sancion.ref_tipo_prestamo'],
                                                                                 select => ['*'],
                                                                                 );
   if (scalar($sanciones_array_ref->[0])){
@@ -275,6 +276,7 @@ sub getTipoSancion{
 
 sub sanciones {
  #Esta funcion muestra toda las sanciones que hay
+  my ($orden)=@_;
 
   my $dateformat = C4::Date::get_date_format();
   my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
@@ -284,7 +286,10 @@ sub sanciones {
                                                                             fecha_comienzo  => { le => $hoy },
                                                                             fecha_final     => { ge => $hoy},
                                                                               ],
-                                    );
+                                                                    select  => ['circ_sancion.*'],
+                                                                    with_objects => ['socio','socio.persona','ref_tipo_sancion'],
+                                                                    sort_by => $orden,
+                              );
     return $sanciones_array_ref;
 }
 
@@ -307,21 +312,24 @@ sub eliminarSanciones{
 	foreach my $id_sancion (@$sanciones_ids) {
 	my $sancion = C4::Modelo::CircSancion->new(id_sancion => $id_sancion, db => $db);
 	$sancion->load();
-
+    my $socio_sancionado=$sancion->getNro_socio;
         if(!$msg_object->{'error'}){
                 eval{	
-			$sancion->eliminar_sancion($userid);
+                    $sancion->eliminar_sancion($userid);
                 	$db->commit;
                 };
                 if ($@){
+                        $db->rollback;
                     	$msg_object->{'error'}= 1;
-                    	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S203', 'params' => [$userid]} ) ;
+                    	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S203', 'params' => [$socio_sancionado]} ) ;
+                    C4::AR::Debug::debug("Sanciones::eliminarSanciones => NO se pudo eliminar");
                 }
                 $msg_object->{'error'}= 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S202', 'params' => [$userid]} ) ;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S202', 'params' => [$socio_sancionado]} ) ;
+                C4::AR::Debug::debug("Sanciones::eliminarSanciones => se elimino correctamente");
         }else{
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S203', 'params' => [$userid]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S203', 'params' => [$socio_sancionado]} ) ;
         }
 
 	}

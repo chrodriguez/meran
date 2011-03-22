@@ -20,5 +20,6 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 $t_params->{'combo_pedidos'} = $combo_pedidos_cot;
 
+$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Presupuestos");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
