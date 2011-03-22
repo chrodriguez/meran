@@ -342,6 +342,19 @@ sub getComboMatchMode {
     return $html;
 }
 
+sub getComboLang {
+    my $html= '';
+
+    my @languages = ("es_ES","en_EN");
+
+    $html .="<select id='language' tabindex='-1' style='width:170px;'>";
+    $html .="<option value='es_ES'>Espa&ntilde;ol</option>";
+    $html .="<option value='en_EN'>English</option>";
+    $html .="</select>";
+
+    return $html;
+}
+
 sub getComboValidadores {
     my $html= '';
 

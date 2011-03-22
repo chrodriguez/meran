@@ -9,6 +9,11 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+
+msgid "Autor"
+msgstr "Author"
+
+
 # /usr/local/koha/intranet/htdocs/intranet-tmpl/main.tmpl
 msgid "Cat&aacute;logo:"
 msgstr "Catalogue:"

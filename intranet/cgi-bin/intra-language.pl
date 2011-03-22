@@ -6,7 +6,7 @@ use C4::AR::Auth;       # get_template_and_user
 
 my $input = new CGI;
 
-C4::AR::Debug::debug("intr-language.pl \n");
+C4::AR::Debug::debug("intra-language.pl \n");
 my $session = CGI::Session->load();
 $session->param('usr_locale', $input->param('lang_server'));
 my $socio = C4::AR::Auth::getSessionNroSocio();
