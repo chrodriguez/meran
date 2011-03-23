@@ -29,6 +29,7 @@ use vars qw(@EXPORT_OK @ISA);
 	&getBarcode
 	&modificarEstadoItem
     &getNivel3FromId3
+    &cantNiveles3FromId1
 );
 
 =head2
@@ -428,6 +429,7 @@ sub detalleCompletoINTRA{
 
 	$t_params->{'nivel1'}   = $nivel1->toMARC_Intra,
 	$t_params->{'id1'}	    = $id1;
+    $t_params->{'cantItemN1'} = &C4::AR::Nivel3::cantNiveles3FromId1($id1);
 	$t_params->{'nivel2'}   = \@nivel2,
 	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
 	$t_params->{'circularDesdeDetalleDelRegistro'}  = C4::AR::Preferencias::getValorPreferencia('circularDesdeDetalleDelRegistro');
@@ -666,6 +668,22 @@ sub getNivel3FromId1{
     return $nivel3_array_ref;
 }
 
+=head2 sub cantNiveles3FromId1
+    Recupero la cantidad de ejemplares a partir de un id1
+=cut
+sub cantNiveles3FromId1{
+    my ($id1, $db) = @_;
+
+    $db = $db || C4::Modelo::PermCatalogo->new()->db;
+
+    my $cantnivel3_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
+                                                                    db => $db,
+                                                                    query   => [ id1 => { eq => $id1} ], 
+                                                                );
+
+
+    return $cantnivel3_count;
+}
 
 =head2 sub buscarNiveles3PorDisponibilidad
 Busca los datos del nivel 3 a partir de un id3, respetando su disponibilidad

@@ -40,10 +40,10 @@
                     <th align="center">
                         [% "Im&aacute;gen" | i18n %]
                     </th>
-                    <th align="center">
+                    <th align="center" class="click" onclick="ordenarPor('titulo')" title="[% 'Ordenar por T&iacute;tulo' | i18n %]">
                         [% "T&iacute;tulo" | i18n %]
                     </th>
-                    <th align="center">
+                    <th align="center" class="click" onclick="ordenarPor('autor')" title="[% 'Ordenar por Autor' | i18n %]">
                         [% "Autor" | i18n %]
                     </th>
                     <th align="center">
