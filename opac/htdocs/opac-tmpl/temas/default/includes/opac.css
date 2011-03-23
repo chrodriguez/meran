@@ -23,6 +23,10 @@ body input[type="text"]:focus{
   background: Wheat;
 }
 
+.click {
+    cursor: pointer;
+}
+
 body textarea:focus{
   background: #F5DEB3;
 }
