@@ -29,7 +29,7 @@ if($tipoAccion eq "MOSTRAR_PRESUPUESTOS_PEDIDO"){
                               query       => $input,
                               type        => "intranet",
                               authnotrequired => 0,
-                              flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+                              flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
         });
       
 
@@ -140,7 +140,7 @@ if ($tipoAccion eq "EXPORTAR_MEJOR_PRESUPUESTO"){
                               query       => $input,
                               type        => "intranet",
                               authnotrequired => 0,
-                              flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+                              flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
         });
 
         my $mejor_pres_detalle;

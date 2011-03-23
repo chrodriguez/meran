@@ -89,7 +89,17 @@
 			</select>
 		</td>
 		<td>
-			<input type="image" src="[% themelang %]/images/seleccionar.png" onClick="javascript:habilitar()" >
+
+          [% PERL %]
+                     print C4::AR::Filtros::to_Button(   
+                                                          text          => "[% 'Aceptar' | i18n %]",
+                                                          boton         => "boton_seleccionar",
+                                                          width         => "auto",
+                                                          onClick       => "habilitar();",
+                                                          alternClass   => "botonCentrado",
+                                                          title         => "[% 'Aceptar' | i18n %]",
+                             ) ;
+          [% END %]
 		</td>
 	</tr>
 </table>

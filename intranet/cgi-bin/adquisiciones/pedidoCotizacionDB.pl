@@ -23,12 +23,11 @@ if($tipoAccion eq "AGREGAR_PEDIDO_COTIZACION"){
     my ($message) = C4::AR::PedidoCotizacion::addPedidoCotizacion(\%params);  
 
 
-    my ($userid, $session, $flags) = checkauth( $input, 
-                                            $authnotrequired,
-                                            {   ui => 'ANY', 
-                                                tipo_documento => 'ANY', 
-                                                accion => 'BAJA', 
-                                                entorno => 'usuarios'},
+    my ($userid, $session, $flags) = checkauth( $input, $authnotrequired,
+                                            {   ui              => 'ANY', 
+                                                tipo_documento  => 'ANY', 
+                                                accion          => 'ALTA', 
+                                                entorno         => 'adquisiciones'},
                                                 "intranet"
                                             );                              
     my $infoOperacionJSON = to_json $message;
@@ -42,13 +41,13 @@ elsif($tipoAccion eq "PRESUPUESTAR"){
     # se devuelve el combo de proveedores para poder presupuestarlos
     
     my ($template, $session, $t_params) = get_template_and_user({
-                                    template_name => "includes/partials/proveedores/generatePresupuesto.tmpl",
-                                    query => $input,
-                                    type => "intranet",
+                                    template_name   => "includes/partials/proveedores/generatePresupuesto.tmpl",
+                                    query           => $input,
+                                    type            => "intranet",
                                     authnotrequired => 0,
-                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
-                                    debug => 1,
-                });
+                                    flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'adquisiciones'},
+                                    debug           => 1,
+                            });
     
     my $combo_proveedores               = &C4::AR::Utilidades::generarComboProveedoresMultiple();
     $t_params->{'pedido_cotizacion_id'} = $obj->{'pedido_cotizacion_id'};

@@ -81,11 +81,10 @@ sub desactivar{
 sub agregarProveedor{
     my ($self) = shift;
     my ($params) = @_;
-
-    if($params->{'tipo_proveedor'} eq "persona_juridica"){
-        $params->{'tipo_doc'} = "NULL";
-    }else{
+    
+    if($params->{'tipo_proveedor'} eq "persona_fisica"){
         $self->setTipoDoc($params->{'tipo_doc'});
+        $self->setNroDoc($params->{'nro_doc'});
     }
 
     $self->setNombre($params->{'nombre'});
@@ -93,7 +92,6 @@ sub agregarProveedor{
     $self->setDomicilio($params->{'domicilio'});
     $self->setTelefono($params->{'telefono'});
     $self->setEmail($params->{'email'});
-    $self->setNroDoc($params->{'nro_doc'});
     $self->setRazonSocial($params->{'razon_social'});
     $self->setCuitCuil($params->{'cuit_cuil'});
     $self->setFax($params->{'fax'});
