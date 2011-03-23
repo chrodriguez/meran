@@ -46,14 +46,15 @@ my ($loggedinuser, $session, $flags) = checkauth(
     my $name = $nro_socio;
 
     my $type;
-    if ($file =~ /^GIF/) {
+    if ($file =~ /^GIF/i) {
         $type = "gif";
-    } elsif ($file =~ /PNG/) {
+    } elsif ($file =~ /PNG/i) {
         $type = "png";
-    } elsif ($file =~ /JFIF/) {
+    } elsif ($file =~ /JFIF/i) {
+        $type = "jpg";
+    } else {
         $type = "jpg";
     }
-
 
     C4::AR::Debug::debug("ARCHIVO:        "."$name                     "."$uploaddir/$name.$type");
 
