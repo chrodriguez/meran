@@ -54,10 +54,11 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
     my $usuarios=$dbh->prepare("SELECT * FROM usr_socio;");
     $usuarios->execute();
 
+    my $cant_usr=1;
     while (my $usuario=$usuarios->fetchrow_hashref) {
 
-    my $porcentaje= int (($usuario * 100) / $cantidad );
-    print "Procesando usuario: $usuario de $cantidad ($porcentaje%) \r";
+    my $porcentaje= int (($cant_usr * 100) / $cantidad );
+    print "Procesando usuario: $cant_usr de $cantidad ($porcentaje%) \r";
 
         foreach $tabla (@refusrs)
       {
@@ -65,7 +66,7 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
             $refusuario->execute();
       }
 
-    $usuario++;
+    $cant_usr++;
     }
 
 
