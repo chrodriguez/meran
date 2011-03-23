@@ -8,14 +8,14 @@
           [% END %]
           [% FOREACH novedad IN novedades %]
               <h1><a href='/cgi-bin/koha/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% novedad.getTitulo %]</a></h1>
-              <h3>[% novedad.getFechaLegible %], [% 'por ' | i18n %] <span class="highlighted">[% novedad.getUsuario %]</span></h3>
+              <h3>[% novedad.getFechaLegible %] </h3>
               <p>
                   [% novedad.getResumen %]
                   <a href='/cgi-bin/koha/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% 'Leer m&aacute;s' | i18n %] &raquo;</a>
               </p>
-              <p class="details">| 
-                  [% 'Acutalizado por' | i18n %] <span class="highlighted"> [% novedad.getUsuario %] </span> | [% 'Categor&iacute;a' | i18n %]: 
-                  <span class="highlighted">[% novedad.getCategoria %]</span> |
+              <p class="details">
+                 [% 'Categor&iacute;a' | i18n %]: 
+                  <span class="highlighted">[% novedad.getCategoria %]</span>
               </p>
           [% END %]
           
