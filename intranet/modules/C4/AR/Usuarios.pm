@@ -653,7 +653,7 @@ sub getSocioLike {
     my ($socio,$orden,$ini,$cantR,$habilitados,$inicial) = @_;
 
 
-C4::AR::Debug::debug("Usuarios => getSocioLike => orden => ".$orden);
+# C4::AR::Debug::debug("Usuarios => getSocioLike => orden => ".$orden);
 
     my @filtros;
     my $socioTemp           = C4::Modelo::UsrSocio->new();
