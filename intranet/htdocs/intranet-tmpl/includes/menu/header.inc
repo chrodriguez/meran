@@ -78,7 +78,7 @@ function socioSearchEvent(event){
 	      <a href="#" class="profile-links">
 	        <span id="profile-image">
 	            <a title="[% socio_data.usr_nombre %], [% socio_data.usr_apellido %]" rel="contact" class="url" 
-	               href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]">
+	               href="/cgi-bin/koha/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]">
 	               
 			      [% IF socio_data.usr_tiene_foto %]
 			          <img src="[% themelang %]/pictures/[% socio_data.usr_tiene_foto %]"  
@@ -92,11 +92,12 @@ function socioSearchEvent(event){
 	        </span>
 	      </a>
 	      <span id="screen-name">
-		      <a href="/cgi-bin/koha/usuarios/reales/datosUsuario.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]"
-		        style="color:#BABABA">
+		      <a href="/cgi-bin/koha/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]"
+		        style="color:#BABABA; display: inline-block;">
 		        [% socio_data.usr_nro_socio %] ([% socio_data.usr_apellido %], [% socio_data.usr_nombre %])
 		      </a>
-		      </span>
+	      </span>
+	      
 	    </div>
 	    <span class="vr"></span>
 

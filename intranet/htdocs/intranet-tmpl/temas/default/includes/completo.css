@@ -317,7 +317,7 @@ body {
 }
 
 #marco_principal {
-	background: #FEFEFE;
+	background: #EAEBED;
 	float: left;
 	width: 78%;
 	min-height: 420px;
@@ -524,24 +524,44 @@ label.error_adv {
 	font-style: underline;
 }
 
-.prestamo {
+.par .prestamo {
 	font-size: 10pt;
-	color: green;
+	color: #ADFF2F;
 }
 
-.salaLectura {
-	font-size: 10pt;
-	color: blue;
+.impar .prestamo {
+    font-size: 10pt;
+    color: #006400;
 }
 
-.disponible {
-	font-size: 10pt;
-	color: green;
+.par .salaLectura {
+    font-size: 10pt;
+    color: #FFEBCD;
 }
 
-.nodisponible {
+.impar .salaLectura {
+    font-size: 10pt;
+    color: #35414F;
+}
+
+.par .disponible {
+	font-size: 10pt;
+	color: #ADFF2F;
+}
+
+.impar .disponible {
+    font-size: 10pt;
+    color: #006400;
+}
+
+.par .nodisponible {
 	font-size: 10pt;
 	color: red;
+}
+
+.impar .nodisponible {
+    font-size: 10pt;
+    color: red;
 }
 
 .recuadroAyuda {
@@ -4180,7 +4200,7 @@ form.signin .subchck .remember {
 }
 #top-bar .static-links {
     float: left;
-    margin-left: -26px;
+    margin-left: -52px;
 }
 #global-nav {
     float: right;

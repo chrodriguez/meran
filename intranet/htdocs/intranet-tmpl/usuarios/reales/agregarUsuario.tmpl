@@ -153,10 +153,13 @@
  <label for="categoria_socio_id"> [% "Categor&iacute;a del usuario" | i18n %] * </label>
                 [% comboDeCategorias %]
 </li>
-<li class="sub_item">
-<label for="tipo_socio_id"> [% "Credenciales" | i18n %] *</label>
-                [% comboDeCredentials %]
-</li>
+
+[% IF addBorrower %]
+	<li class="sub_item">
+		<label for="tipo_socio_id"> [% "Credenciales" | i18n %] *</label>
+		                [% comboDeCredentials %]
+	</li>
+[% END %]
 <li class="sub_item">
 <label for="changepassword">[% "Forzar cambio de contrase&ntilde;a " | i18n %] </label>
 <input type="checkbox" id="changepassword" name="changepassword" [% socio_modificar.getChange_password %] checked>
@@ -196,7 +199,7 @@
     </fieldset>
 [% END %]
 <fieldset>
-    <legend>&nbsp;[% 'Personalizacion de visualizaicion' | i18n %]&nbsp;</legend>
+    <legend>&nbsp;[% 'Personalizacion de visualizaci&oacute;n' | i18n %]&nbsp;</legend>
     <p>
         <label for="temas_intra" class="left">[% 'Tema' | i18n %]:</label>
         [% combo_temas %]

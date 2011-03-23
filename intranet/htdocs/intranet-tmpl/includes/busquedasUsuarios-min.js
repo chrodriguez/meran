@@ -1,8 +1,7 @@
 var objAH;var shouldScrollUser=true;var globalSearchTemp;function ordenar(orden){objAH.sort(orden);}
 function changePage(ini){objAH.changePage(ini);}
 function consultarBar(filtro,doScroll){if(doScroll)
-shouldScrollUser=doScroll;objAH=new AjaxHelper(updateInfoUsuariosBar);objAH.showOverlay=true;objAH.cache=true;busqueda=jQuery.trim($('#socio-bar').val());inicial='0';if(jQuery.trim(busqueda).length>0){objAH.url='/cgi-bin/koha/usuarios/reales/buscarUsuarioResult.pl';objAH.showOverlay=true;objAH.debug=true;objAH.funcion='changePage';objAH.socio=busqueda;objAH.sendToServer();}
-else{jAlert(INGRESE_UN_DATO,USUARIOS_ALERT_TITLE);$('#socio-bar').focus();}}
+shouldScrollUser=doScroll;objAH=new AjaxHelper(updateInfoUsuariosBar);objAH.showOverlay=true;objAH.cache=true;busqueda=jQuery.trim($('#socio-bar').val());inicial='0';if(jQuery.trim(busqueda).length>0){objAH.url='/cgi-bin/koha/usuarios/reales/buscarUsuarioResult.pl';objAH.showOverlay=true;objAH.debug=true;objAH.funcion='changePage';objAH.socio=busqueda;objAH.sendToServer();}}
 function consultar(filtro,doScroll){if(doScroll)
 shouldScrollUser=doScroll;objAH=new AjaxHelper(updateInfoUsuarios);objAH.showOverlay=true;objAH.cache=true;busqueda=jQuery.trim($('#socio').val());inicial='0';if(filtro){inicial=filtro;busqueda=jQuery.trim(filtro);objAH.inicial=inicial;$('#socio').val(FILTRO_POR+filtro);}
 else

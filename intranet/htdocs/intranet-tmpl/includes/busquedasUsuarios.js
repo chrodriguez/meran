@@ -28,10 +28,6 @@ function consultarBar(filtro,doScroll){
         objAH.socio= busqueda;
         objAH.sendToServer();
     }
-    else{
-        jAlert(INGRESE_UN_DATO,USUARIOS_ALERT_TITLE);
-        $('#socio-bar').focus();
-    }
 }
 
 function consultar(filtro,doScroll){
