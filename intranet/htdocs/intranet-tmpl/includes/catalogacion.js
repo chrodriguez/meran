@@ -402,6 +402,7 @@ function mostrarEstructuraDelNivel2(){
     }
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug         = true;
+    objAH.showOverlay   = true;  
 // 	  objAH.cache= true;
 //     objAH.showStatusIn  = 'estructuraDelNivel2';
     objAH.showOverlay   = true;
