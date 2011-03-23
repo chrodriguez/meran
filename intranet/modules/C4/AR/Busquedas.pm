@@ -1091,7 +1091,8 @@ sub busquedaAvanzada_newTemp{
     my $sphinx = Sphinx::Search->new();
     my $query = '';
     my $tipo = 'SPH_MATCH_EXTENDED';
-    
+    my $orden       = $params->{'orden'};
+   
     if($params->{'titulo'} ne ""){
         $query .= ' @titulo "'.$params->{'titulo'};
 	    if($params->{'tipo'} eq "normal"){
@@ -1128,8 +1129,13 @@ sub busquedaAvanzada_newTemp{
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     $sphinx->SetMatchMode($tipo_match);
-    #$sphinx->SetSortMode(SPH_SORT_RELEVANCE);
-    $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+
+    if ($orden eq 'autor'){
+        $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor");
+    }else{
+        $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+    }
+    
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
 
@@ -1214,6 +1220,7 @@ sub busquedaCombinada_newTemp{
     my $query = "";
     my @boolean_ops = ("&","|","!","-");
     my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
+    my $orden       = $obj_for_log->{'orden'};
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     C4::AR::Debug::debug("Busquedas => match_mode ".$tipo);
@@ -1244,9 +1251,12 @@ sub busquedaCombinada_newTemp{
 
     $sphinx->SetMatchMode($tipo_match);
 
-#    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
-    $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
-    
+    if ($orden eq 'autor'){
+        $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor");
+    }else{
+    	$sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+    }
+ 
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
 
     #FIX porque cuando viene 1, se saltea el primer resultado

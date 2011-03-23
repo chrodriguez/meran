@@ -35,7 +35,7 @@ my ($template, $session, $t_params) = get_template_and_user({
     query => $input,
     type => "intranet",
     authnotrequired => 0,
-    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
+    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
     debug => 1,
 });
 
@@ -73,7 +73,7 @@ if($to_pdf){
 
 }elsif($to_doc){
 
-    # variables compartidas por los dos ifs
+    # variables compartidas por los dos ifs de abajo
     my @resultsdata;
     my %hash;
     

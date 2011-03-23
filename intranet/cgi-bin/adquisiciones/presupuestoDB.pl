@@ -8,36 +8,30 @@ use CGI;
 use JSON;
 use Spreadsheet::Read;
 use Spreadsheet::ParseExcel;
-#use Spreadsheet::ReadSXC qw(read_sxc);
 use C4::AR::XLSGenerator;
 use C4::AR::PedidoCotizacionDetalle;
 
-my $input = new CGI;
-my $authnotrequired= 0;
-
-my $obj=$input->param('obj');
-
-$obj = C4::AR::Utilidades::from_json_ISO($obj);
-
-my $proveedor   = $obj->{'id_proveedor'}||"";
-my $tipoAccion  = $obj->{'tipoAccion'}||"";
-
+my $input               = new CGI;
+my $authnotrequired     = 0;
+my $obj                 = $input->param('obj');
+my $proveedor           = $obj->{'id_proveedor'}||"";
+my $tipoAccion          = $obj->{'tipoAccion'}||"";
+$obj                    = C4::AR::Utilidades::from_json_ISO($obj);
 
 if($tipoAccion eq "GUARDAR_MODIFICACION_PRESUPUESTO"){
 
-  
     my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "/adquisiciones/mostrarPresupuesto.tmpl",
-                        query => $input,
-                        type => "intranet",
+                        template_name   => "/adquisiciones/mostrarPresupuesto.tmpl",
+                        query           => $input,
+                        type            => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
-                        debug => 1,
+                        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICAR', entorno => 'adquisiciones'},
+                        debug           => 1,
                     });
 
      my ($Message_arrayref) = C4::AR::Presupuestos::actualizarPresupuesto($obj);   
-     
-     my $infoOperacionJSON=to_json $Message_arrayref;
+  
+     my $infoOperacionJSON  = to_json $Message_arrayref;
         
      C4::AR::Auth::print_header($session);
      print $infoOperacionJSON;
@@ -53,20 +47,20 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
         my $filepath  = $obj->{'filepath'}||"";
 
         my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
-                              template_name   => '/adquisiciones/mostrarPresupuesto.tmpl',
-                              query       => $input,
-                              type        => "intranet",
-                              authnotrequired => 0,
-                              flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+                              template_name     => '/adquisiciones/mostrarPresupuesto.tmpl',
+                              query             => $input,
+                              type              => "intranet",
+                              authnotrequired   => 0,
+                              flagsrequired     => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
         });
 
-        my $presupuestos_dir= "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/";
-        my $write_file  = $presupuestos_dir.$filepath;
+        my $presupuestos_dir    = "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/";
+        my $write_file          = $presupuestos_dir.$filepath;
 
-        my $parser  = Spreadsheet::ParseExcel-> new();
-        my $workbook = $parser->parse($write_file);
+        my $parser              = Spreadsheet::ParseExcel-> new();
+        my $workbook            = $parser->parse($write_file);
     
-        my $workbook_ref = read_sxc($write_file);
+        my $workbook_ref        = read_sxc($write_file);
 
         foreach ( sort keys %$workbook_ref ) {
                 print "Worksheet ", $_, " contains ", $#{$$workbook_ref{$_}} + 1, " row(s):\n";
@@ -81,10 +75,10 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
         my @table;
         my @reg;
 
-        my $worksheet = $workbook->worksheet(0);
-        my ( $row_min, $row_max ) = $worksheet->row_range();
+        my $worksheet               = $workbook->worksheet(0);
+        my ( $row_min, $row_max )   = $worksheet->row_range();
 
-        my $id_pres = $worksheet->get_cell( 1, 1 )->value();
+        my $id_pres                 = $worksheet->get_cell( 1, 1 )->value();
      
 
         for my $row ( $row_min + 3 .. $row_max ) {
@@ -104,8 +98,8 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
         my $pres= C4::AR::Presupuestos::getPresupuestoPorID($id_pres);
         
 
-        $t_params->{'datos_presupuesto'} = \@reg;   
-        $t_params->{'pres'} =  $pres;
+        $t_params->{'datos_presupuesto'}    = \@reg;   
+        $t_params->{'pres'}                 = $pres;
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
@@ -117,20 +111,19 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
         my $id_pres= $obj->{'id_presupuesto'};
 
         my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
-                              template_name   => '/adquisiciones/presupuestoManual.tmpl',
-                              query       => $input,
-                              type        => "intranet",
-                              authnotrequired => 0,
-                              flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+                              template_name     => '/adquisiciones/presupuestoManual.tmpl',
+                              query             => $input,
+                              type              => "intranet",
+                              authnotrequired   => 0,
+                              flagsrequired     => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
         });
         
     
-        my $detalle_pres = C4::AR::Presupuestos::getAdqPresupuestoDetalle($id_pres);
-    
-        my $pres= C4::AR::Presupuestos::getPresupuestoPorID($id_pres);
+        my $detalle_pres    = C4::AR::Presupuestos::getAdqPresupuestoDetalle($id_pres);
+        my $pres            = C4::AR::Presupuestos::getPresupuestoPorID($id_pres);
         
-        $t_params->{'pres'} =  $pres;
-        $t_params->{'detalle_presupuesto'} = $detalle_pres;
+        $t_params->{'pres'}                 =  $pres;
+        $t_params->{'detalle_presupuesto'}  = $detalle_pres;
        
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
@@ -141,12 +134,12 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
 elsif($tipoAccion eq "AGREGAR_PRESUPUESTO"){
 
     my ($template, $session, $t_params) = get_template_and_user({
-        template_name => "adquisiciones/generatePresupuesto.tmpl",
-        query => $input,
-        type => "intranet",
+        template_name   => "adquisiciones/generatePresupuesto.tmpl",
+        query           => $input,
+        type            => "intranet",
         authnotrequired => 0,
-        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
-        debug => 1,
+        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'adquisiciones'},
+        debug           => 1,
     });
    
     my $message;
@@ -172,12 +165,12 @@ elsif($tipoAccion eq "EXPORTAR_PRESUPUESTO"){
 
     # para tener $session nada mas
     my ($template, $session, $t_params) = get_template_and_user({
-        template_name => "includes/partials/proveedores/linksExportacion.tmpl",
-        query => $input,
-        type => "intranet",
+        template_name   => "includes/partials/proveedores/linksExportacion.tmpl",
+        query           => $input,
+        type            => "intranet",
         authnotrequired => 0,
-        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
-        debug => 1,
+        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
+        debug           => 1,
     });
 
     $t_params->{'pedido_cotizacion_id'} = $obj->{'pedido_cotizacion_id'};
