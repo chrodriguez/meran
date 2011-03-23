@@ -667,7 +667,7 @@ C4::AR::Debug::debug("Usuarios => getSocioLike => orden => ".$orden);
             foreach my $s (@searchstring_array){ 
                 push (	@filtros, ( or   => [   
                                                 'persona.nombre'    => { like => '%'.$s.'%'},   
-                                                apellido            => { like => '%'.$s.'%'},
+                                                apellido            => { like => $s.'%'},
                                                 nro_documento       => { like => '%'.$s.'%' }, 
                                                 legajo              => { like => '%'.$s.'%' },
                                                 nro_socio           => { like => '%'.$s.'%' }          
@@ -687,6 +687,7 @@ C4::AR::Debug::debug("Usuarios => getSocioLike => orden => ".$orden);
 
     push(@filtros, ( activo => { eq => $habilitados}));
     push(@filtros, ( es_socio => { eq => $habilitados}));
+    $orden = "apellido,nombre";
     my $ordenAux= $socioTemp->sortByString($orden);
 
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
