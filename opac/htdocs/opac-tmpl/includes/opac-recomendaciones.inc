@@ -77,6 +77,8 @@ function buscarDatosNivel2(){
 
 function updateBuscarDatosNivel2(responseText){
    $('#ediciones').html(responseText);
+
+   $('#edicion_id').val('').attr("selected",true);
    $('#edicion_id').change( function(){         
               cargarDatosEdicionSeleccionada();
    });
@@ -95,14 +97,14 @@ function cargarDatosEdicionSeleccionada(){
         objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
         objAH.tipoAccion        = 'CARGAR_DATOS_EDICION';
         objAH.edicion           = $('#edicion_id').val();
-         objAH.idCatalogoSearch = $('#catalogo_search_hidden').val();;
+        objAH.idCatalogoSearch = $('#catalogo_search_hidden').val();;
         objAH.sendToServer();
-
 }
 
 
 function updateCargarDatosEdicionSeleccionada(responseText){
-   $('#datos_edicion_seleccionada').html(responseText);
+   $('#datos_edicion_seleccionada').html(responseText);    
+
 //    if (!verificarRespuesta(responseText)) {
 //             return(0);
 //             var Messages=JSONstring.toObject(responseText);
@@ -115,6 +117,9 @@ $(document).ready( function() {
           IdInput: 'catalogo_search', 
           IdInputHidden: 'catalogo_search_hidden', 
           callBackFunction: buscarDatosNivel2,
+    })
+    $('#carga_manual').click(function(){        
+              $('#datos_edicion').hide()
     });
     makeToggle('carga_manual','trigger',null,true);
     makeToggle('motivo','trigger',null,true);
@@ -161,8 +166,8 @@ $(document).ready( function() {
         
               <div id="datos_edicion_seleccionada"></div>
               
-              
-              <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
+           
+            <!-- <fieldset> <legend class="titulo_legend trigger click">[% "Carga manual de material" %]</legend>
                     <div class="carga_manual" id="carga_manual"> 
                           <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
                             <input type="text" name="autor" id="autor" class="field" value="" tabindex="10" /></p>
@@ -184,7 +189,7 @@ $(document).ready( function() {
                             <input type="text" name="cant_ejemplares" id="cant_ejemplares" class="field" value="" tabindex="10" /></p>
                           <input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" />     
                     </div>      
-             </fieldset>
+             </fieldset>-->
            
              
               <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Motivo de la propuesta' | i18n %]&nbsp;</legend>
@@ -232,6 +237,9 @@ $(document).ready( function() {
                           <th align="center">
                               [% "Cantidad de ejemplares" | i18n %]
                           </th>
+                          <th>
+                            [% "Eliminar" | i18n %]
+                          </th> 
                     </thead>
                     <tbody>
                     </tbody>

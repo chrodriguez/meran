@@ -1,10 +1,12 @@
-<div class="datos_edicion" id="datos_edicion"> 
+<fieldset> <legend class="titulo_legend trigger click">[% "Datos del material" %]</legend>
+         
+        <div class="datos_edicion" id="datos_edicion"> 
                
                   <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
                             <input type="text" name="autor" id="autor" class="field" value="[% datos_nivel1.getAutor %]" tabindex="10" /></p>
-                          <p><label for="titulo" class="left">[% 'T&iacute;tulo*' | i18n %]:</label>
+                            <p><label for="titulo" class="left">[% 'T&iacute;tulo*' | i18n %]:</label>
                             <input type="text" name="titulo" id="titulo" class="field" value="[% datos_nivel1.getTitulo %]" tabindex="10" /></p>
-                  <p><label for="lugar_publicacion" class="left">[% 'Lugar de Publicaci&oacute;n*' | i18n %]:</label>
+                  <p><label for="lugar_publicacion_" class="left">[% 'Lugar de Publicaci&oacute;n*' | i18n %]:</label>
                       <input type="text" name="lugar_publicacion" id="lugar_publicacion" class="field" value="[% datos_edicion.getCiudadPublicacion %]" tabindex="10" /></p>
                   <p><label for="editorial" class="left">[% 'Editorial*' | i18n %]:</label>
                       <input type="text" name="editorial" id="editorial" class="field" value="[% datos_edicion.getEditor %]" tabindex="10" /></p>
@@ -21,5 +23,6 @@
                   <p><label for="cant_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
                       <input type="text" name="cant_ejemplares" id="cant_ejemplares" class="field" value="" tabindex="10" /></p>
                   
-                  <p><input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" /> </p>   
-</div>  
+                  <p><input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" /> </p>  
+        </div>  
+</fieldset>

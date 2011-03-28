@@ -1,35 +1,5 @@
 
-// function agregarDetalleRecomendacion(){
-//     objAH                   = new AjaxHelper(updateAgregarDetalleRecomendacion);
-//     objAH.debug             = true;
-//     objAH.showOverlay       = true;
-//     //para busquedas combinables
-// //     objAH.url               = '/cgi-bin/koha/opac-busquedasDB.pl';
-//     objAH.string            = $('#autor').val();
-//     objAH.string            = $('#titulo').val();
-//     objAH.string            = $('#edicion').val();
-//     objAH.string            = $('#lugar_publicacion').val();
-//     objAH.string            = $('#editorial').val();
-//     objAH.string            = $('#fecha').val();
-//     objAH.string            = $('#coleccion').val();
-//     objAH.string            = $('#ISBN_ISSN').val();
-//     objAH.string            = $('#cant_ejemplares').val();
-//     objAH.tipoAccion        = 'AGREGAR_DETALLE_RECOMENDACION';
-// 
-//     objAH.sendToServer();
-// }
-// 
-// function updateAgregarDetalleRecomendacion(responseText){
-// //    $('#result_busqueda').html(responseText);
-// //    if (!verificarRespuesta(responseText)) {
-// //             return(0);
-// //             var Messages=JSONstring.toObject(responseText);
-// //             setMessages(Messages);
-// //    }
-// }
- 
- 
- function agregarRenglon(){
+function agregarRenglon(){
    
 //      $('#agregar_rec').click(function(){
 //       if(($('#moneda').val() == "") || ($('#id_moneda').val() == "")){
@@ -44,10 +14,12 @@
           var coleccion = $('#coleccion').val();
           var ISBN_ISSN = $('#isbn_issn').val();
           var cant_ejemplares = $('#cant_ejemplares').val();
+          var id= $('#edicion_id').val();
           
           $('#tabla_recomendacion').append(
               '<tr><td>'+autor+'</td><td>'+titulo+'</td><td>'+edicion+'</td><td>'+lugar_publicacion+'</td>'+
-              '<td>'+editorial+'</td><td>'+fecha+'</td><td>'+autor+'</td><td>'+coleccion+'</td><td>'+ISBN_ISSN+'</td><td>'+cant_ejemplares+'</td></tr>'
+              '<td>'+editorial+'</td><td>'+fecha+'</td><td>'+autor+'</td><td>'+coleccion+'</td><td>'+ISBN_ISSN+'</td>'+
+              '<td>'+cant_ejemplares+'</td><td><input type="checkbox" name='+id+' value=""></td></tr>'
            ) 
       }
           

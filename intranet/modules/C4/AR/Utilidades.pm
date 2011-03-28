@@ -2736,7 +2736,7 @@ sub generarComboNivel2{
 #     if ( $params->{'onBlur'} ){
 #         $options_hash{'onBlur'}     = $params->{'onBlur'};
 #     }
-
+   
     $options_hash{'name'}       = 'edicion_id';
     $options_hash{'id'}         = 'edicion_id';
     $options_hash{'size'}       = 1;
