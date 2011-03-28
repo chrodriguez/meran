@@ -17,7 +17,7 @@ function agregarRenglon(){
           var id= $('#edicion_id').val();
           
           $('#tabla_recomendacion').append(
-              '<tr><td>'+autor+'</td><td>'+titulo+'</td><td>'+edicion+'</td><td>'+lugar_publicacion+'</td>'+
+              '<tr name='+id+'><td>'+autor+'</td><td>'+titulo+'</td><td>'+edicion+'</td><td>'+lugar_publicacion+'</td>'+
               '<td>'+editorial+'</td><td>'+fecha+'</td><td>'+autor+'</td><td>'+coleccion+'</td><td>'+ISBN_ISSN+'</td>'+
               '<td>'+cant_ejemplares+'</td><td><input type="checkbox" name='+id+' value=""></td></tr>'
            ) 

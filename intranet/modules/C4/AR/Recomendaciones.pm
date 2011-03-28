@@ -54,8 +54,26 @@ sub agregarRecomendacion{
     my $msg_object= C4::AR::Mensajes::create();
     my $db = $recomendacion->db;
      
-     
-    my $param = $params->Vars;
+    my %datos_usr;
+
+    $datos_usr{'usr_id'}=$usr_socio_id;
+    
+    my %datos_recomendacion;
+
+#     $datos_recomendacion{'hidden_id_nivel_2'}= 
+#     $datos_recomendacion{'autor'}=
+#     $datos_recomendacion{'titulo'}=
+#     $datos_recomendacion{'lugar_publicacion'}=
+#     $datos_recomendacion{'editorial'}=
+#     $datos_recomendacion{'fecha'}=
+#     $datos_recomendacion{'coleccion'}=
+#     $datos_recomendacion{'isbn_issn'}=
+#     $datos_recomendacion{'cantidad_ejemplares'}=
+#     $datos_recomendacion{'motivo_propuesta'}=
+#     $datos_recomendacion{'comentarios'}=
+#     $datos_recomendacion{'reservar'}=
+
+    
     #my $param = $params->param;
      #todo
      #_verificarDatosProveedor($param,$msg_object);
@@ -71,14 +89,13 @@ sub agregarRecomendacion{
            #eval{
            	
            	#C4::AR::Utilidades::printHASH($params_temp);
-              $recomendacion->agregarRecomendacion($param, $usr_socio_id);
+              $recomendacion->agregarRecomendacion($usr_socio_id);
               my $id_adq_recomendacion = $recomendacion->getId();
 
             C4::AR::Debug::debug("------------------------------------------------------------------------------------");
             C4::AR::Debug::debug("ya agrego el id:" . $id_adq_recomendacion);
             
             
-C4::AR::Debug::debug("$param");
 #             recomendaciones detail
 #                my %parametros;
 #                $parametros{'id_adq_recomendacion'}   = $id_adq_recomendacion;

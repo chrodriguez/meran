@@ -105,8 +105,8 @@ $(document).ready( function() {
      
 
 <div class="column1-unit">
-          <div class="recomendacionform">
-<!--           <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-recomendacionesAdd.pl"> -->
+      <div class="recomendacionform">
+          <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">
               <input type="hidden" name="action" value="agregar">
               <fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
                 
@@ -170,7 +170,7 @@ $(document).ready( function() {
               </fieldset>
               <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Comentarios' | i18n %]&nbsp;</legend>
                 <div class="comentario" id="comentario">
-                   <textarea name="comentarios" id="comentarios" cols="45" class="required" rows="10" tabindex="17"></textarea>
+                   <textarea name="comment" id="comment" cols="45" class="required" rows="10" tabindex="17"></textarea>
           <!--      <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Enviar Mensaje' | i18n %]" tabindex="18" /></p>-->
                    <input type="hidden" name="post_message" id="post_message" value="1"/>
                 </div>
@@ -215,7 +215,8 @@ $(document).ready( function() {
                     <tbody>
                     </tbody>
                   </table>
-                      
-          </div>         
+                 <input type="submit" value="Enviar Recomendacion">
+           </form>           
+      </div>         
 </div>
         
