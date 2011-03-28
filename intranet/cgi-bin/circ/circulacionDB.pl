@@ -195,8 +195,9 @@ elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
                                                                       'intranet'
                                 );
 
-	$obj->{'loggedinuser'}      = $user;
-	my ($Message_arrayref)      = C4::AR::Prestamos::t_devolver($obj);
+    $obj->{'nro_socio'}        = $nro_socio;
+	$obj->{'loggedinuser'}     = $user;
+	my ($Message_arrayref)     = C4::AR::Prestamos::t_devolver($obj);
     
    	my %info;
     $info{'Messages_arrayref'}  = $Message_arrayref;
@@ -216,6 +217,7 @@ elsif($tipoAccion eq "REALIZAR_RENOVACION"){
                                                                     'intranet'
                                 );
 
+    $obj->{'loggedinuser'}     = $user;
     my $infoOperaciones = C4::AR::Prestamos::t_renovar($obj);
 
     my $infoOperacionJSON = to_json $infoOperaciones;
