@@ -260,7 +260,8 @@ sub prestar {
 		$self->debug( "El usuario ya tiene una reserva ID::: " . $reservas->[0]->getId_reserva );
 		$params->{'id_reserva'} = $reservas->[0]->getId_reserva;
 
-		if ( $id3 != $reservas->[0]->getId3 ) {
+        #Si tiene una reserva asignada a un ejemplar del mismo grupo se intercambian
+		if (($reservas->[0]->getId3)&&( $id3 != $reservas->[0]->getId3 )) {
 			$self->debug("Los ids son distintos, se intercambian");
 
 #se le esta entregando un item que es <> al que se le asigno al relizar la reserva
