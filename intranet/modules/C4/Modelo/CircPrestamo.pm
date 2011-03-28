@@ -465,7 +465,7 @@ sub estaVencido {
 		if ( $self->getTipo_prestamo eq 'ES' ) {    #Prestamo especial
 			if ( Date::Manip::Date_Cmp( $df, $hoy ) == 0 )
 			{                                       #Se tiene que devolver hoy
-				my $end    = Date::Manip::calc_endES();
+				my $end    = C4::Date::calc_endES();
 				my $actual = Date::Manip::ParseDate("today");
 				if ( Date::Manip::Date_Cmp( $actual, $end ) > 0 )
 				{    #Se devuelve despues del limite
