@@ -3,12 +3,8 @@
 
   <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
 <div>
-      <!--    DETALLE PROVEEDOR -->
-
       <fieldset>
-          <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "Datos del proveedor" | i18n %]'>
-                              [% "Datos del proveedor" | i18n %]
-          </legend>  
+          <legend class="titulo_legend_resaltado">Datos del Proveedor</legend>  
           <div id="detalleProveedor">
              <input type="hidden" id="id_proveedor" value="[% proveedor.getId %]">
 	      <li class="sub_item">
@@ -68,6 +64,10 @@
           </li>
           
           <!-- Materiales -->
+          <br>
+          [% PERL %]
+            print C4::AR::Filtros::setHelp(text => "[% 'A la izquierda se muestran los materiales del proveedor.' | i18n %]");
+          [% END %]           
           <li class="sub_item"> 
               <label for="material">[% "Materiales del proveedor" | i18n %]</label>
                 <select name="materiales" style="width:8%;" id="materiales_del_provedor" multiple="multiple" size="4">
@@ -78,9 +78,13 @@
                 <input type="button" name="agregar_material" value="<" id="agregar_material"/>
                 <input type="button" name="quitar_material" value=">" id="quitar_material"/>
                 [% tipo_materiales %] 
-          </li>
+          </li>         
           
           <!-- Envios -->
+          <br>
+          [% PERL %]
+            print C4::AR::Filtros::setHelp(text => "[% 'A la izquierda se muestran las formas de envio del proveedor.' | i18n %]");
+          [% END %] 
           <li class="sub_item"> 
               <label for="envios">[% "Formas de envio del proveedor" | i18n %]</label>
                 <select name="formas_envios_proveedor" style="width:8%;" id="formas_envio_provedor" multiple="multiple" size="4">
@@ -94,6 +98,7 @@
           </li>
           
           <!-- Monedas -->
+          <br>
           <li class="sub_item"> 
             <label for="moneda">[% "Monedas del proveedor" | i18n %]</label>
               <div id="monedas_proveedor">
@@ -113,7 +118,13 @@
               <input  id="borrar_moneda" name="borrar_moneda" type="button" size="15" value="Borrar Moneda">
               <input type="hidden" id="id_moneda" name="id_moneda">
           </li>
-
+          [% PERL %]
+            print C4::AR::Filtros::setHelp(text => "[% 'Tipee el nombre de la moneda que desea agregar.' | i18n %]");
+          [% END %]
+            <div>
+               <strong>(*) [% "Obligatorio" | i18n %]</strong>
+            </div>
+            <br>
           <div id="accion">
               [% PERL %]
                          print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
@@ -122,10 +133,8 @@
                                                      ) ;
               [% END %]
           </div>
-      </fieldset>
 </fieldset>
-      
-    
+        
 
-  </div>
+</div>
 [% INCLUDE "intranet-bottom.inc" %]

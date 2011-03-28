@@ -1087,11 +1087,12 @@ sub busquedaAvanzada_newTemp{
     my ($params,$session) = @_;
 
     use Sphinx::Search;
-    
-    my $sphinx = Sphinx::Search->new();
-    my $query = '';
-    my $tipo = 'SPH_MATCH_EXTENDED';
-    
+
+    my $sphinx  = Sphinx::Search->new();
+    my $query   = '';
+    my $tipo    = 'SPH_MATCH_EXTENDED';
+    my $orden   = $params->{'orden'};
+   
     if($params->{'titulo'} ne ""){
         $query .= ' @titulo "'.$params->{'titulo'};
 	    if($params->{'tipo'} eq "normal"){
@@ -1128,8 +1129,13 @@ sub busquedaAvanzada_newTemp{
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     $sphinx->SetMatchMode($tipo_match);
-    #$sphinx->SetSortMode(SPH_SORT_RELEVANCE);
-    $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+
+    if ($orden eq 'autor'){
+        $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor");
+    }else{
+        $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+    }
+    
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
 
@@ -1657,6 +1663,7 @@ sub armarBuscoPor{
 
     if( C4::AR::Utilidades::validateString($params->{'autor'})){
 #       $buscoPor.= "Autor: ".C4::AR::Utilidades::verificarValor($params->{'autor'})."&";
+        $buscoPor.= C4::AR::Filtros::i18n("Autor").": ";
         $buscoPor.= C4::AR::Utilidades::verificarValor($params->{'autor'})."&";
     }
 
@@ -1677,6 +1684,7 @@ sub armarBuscoPor{
 
 	if( C4::AR::Utilidades::validateString($params->{'codBarra'})){
 # 		$buscoPor.= Encode::decode_utf8("Código de Barra: ".C4::AR::Utilidades::verificarValor($params->{'codBarra'}))."&";
+        $buscoPor.= C4::AR::Filtros::i18n("C&oacute;digo de Barras").": ";
         $buscoPor.= Encode::decode_utf8(C4::AR::Utilidades::verificarValor($params->{'codBarra'}))."&";
 	}		
 

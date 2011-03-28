@@ -53,9 +53,10 @@
 	
 .reference {
     font-size: 12px;
-    text-align: right;
-    width: 54%;
+    text-align: left;
+/*     width: 54%; */
     font-style: italic;
+    clear: both;
 }
 	
 

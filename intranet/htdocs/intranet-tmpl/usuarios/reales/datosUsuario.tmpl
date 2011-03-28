@@ -28,12 +28,13 @@ function changePage(ini){
 }
 
 function mostrarHistorialDePrestamos(){
-	objAH=new AjaxHelper(updateMostrarHistorialDePrestamos);
-	objAH.debug= true;
-    objAH.cache= true;
-	objAH.url='/cgi-bin/koha/usuarios/reales/historialPrestamos.pl';
-	objAH.nro_socio= USUARIO.ID;
-	objAH.funcion= 'changePage';
+	objAH               = new AjaxHelper(updateMostrarHistorialDePrestamos);
+	objAH.debug         = true;
+    objAH.cache         = true;
+    objAH.showOverlay   = true;
+	objAH.url           = '/cgi-bin/koha/usuarios/reales/historialPrestamos.pl';
+	objAH.nro_socio     = USUARIO.ID;
+	objAH.funcion       = 'changePage';
 	objAH.sendToServer();
 }
 
@@ -104,6 +105,7 @@ function detalleUsuario(){
 	objAH               = new AjaxHelper(updateDetalleUsuario);
 	objAH.url           = '/cgi-bin/koha/usuarios/reales/detalleUsuario.pl';
 	objAH.debug         = true;
+    objAH.showOverlay   = true;
 	objAH.nro_socio     = USUARIO.ID;
 	objAH.sendToServer();
 }
@@ -116,11 +118,12 @@ function updateDetalleUsuario(responseText){
 }
 
 function prestamosInterBibliotecarios(){
-    objAH=new AjaxHelper(updatePrestamosInterBibliotecarios);
-    objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-    objAH.debug= true;
-    objAH.nro_socio= USUARIO.ID;
-    objAH.tipoAccion= 'PRESTAMO_INTER_BIBLIO';
+    objAH               = new AjaxHelper(updatePrestamosInterBibliotecarios);
+    objAH.url           = '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.nro_socio     = USUARIO.ID;
+    objAH.tipoAccion    = 'PRESTAMO_INTER_BIBLIO';
     objAH.sendToServer();
 }
 
@@ -175,9 +178,10 @@ function onCompleteFileUpload(){
 
 function detallePrestamos(socio){
 
-	objAH=new AjaxHelper(updateDetallePrestamos);
-	objAH.url='/cgi-bin/koha/usuarios/reales/detallePrestamos.pl';
-	objAH.nro_socio= socio;
+	objAH               = new AjaxHelper(updateDetallePrestamos);
+	objAH.url           = '/cgi-bin/koha/usuarios/reales/detallePrestamos.pl';
+    objAH.showOverlay   = true;
+	objAH.nro_socio     = socio;
 	objAH.sendToServer();
 }
 
@@ -190,9 +194,10 @@ function updateDetallePrestamos(responseText){
 
 function detalleReservas(socio){
 
-	objAH=new AjaxHelper(updateDetalleReservas);
-	objAH.url='/cgi-bin/koha/usuarios/reales/detalleReservas.pl';
-	objAH.nro_socio= socio;
+	objAH               = new AjaxHelper(updateDetalleReservas);
+	objAH.url           = '/cgi-bin/koha/usuarios/reales/detalleReservas.pl';
+    objAH.showOverlay   = true;
+	objAH.nro_socio     = socio;
 	objAH.sendToServer();
 }
 
@@ -223,9 +228,10 @@ function updateInfoDevolver(responseText){
 
 function detalleSanciones(socio){
 
-    objAH=new AjaxHelper(updateDetalleSanciones);
-    objAH.url='/cgi-bin/koha/usuarios/reales/detalleSanciones.pl';
-    objAH.nro_socio= socio;
+    objAH               = new AjaxHelper(updateDetalleSanciones);
+    objAH.showOverlay   = true;
+    objAH.url           = '/cgi-bin/koha/usuarios/reales/detalleSanciones.pl';
+    objAH.nro_socio     = socio;
     objAH.sendToServer();
 }
 

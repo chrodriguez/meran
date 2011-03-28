@@ -110,6 +110,7 @@ use vars qw(@EXPORT_OK @ISA);
     getToday
     dateDiff
     generarComboEstantes
+    generarComboTipoDeDocConValuesIds
 );
 
 # para los combos que no usan tablas de referencia
@@ -1834,6 +1835,48 @@ sub generarComboTipoDeDoc{
         $select_docs{$doc->getNombre}  = $doc->getNombre;
     }
 
+    $select_docs{''}                = 'SIN SELECCIONAR';
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){ 
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}       = $params->{'name'}||'tipo_documento_id';
+    $options_hash{'id'}         = $params->{'id'}||'tipo_documento_id';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'class'}      = 'required';
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoDoc");
+
+    push (@select_docs_array, '');
+    $options_hash{'values'}     = \@select_docs_array;
+    $options_hash{'labels'}     = \%select_docs;
+
+    my $combo_tipo_documento    = CGI::scrolling_list(\%options_hash);
+
+    return $combo_tipo_documento; 
+}
+
+# genera el combo de documentos con los values del select los id del tipo de documento.
+sub generarComboTipoDeDocConValuesIds{
+    my ($params) = @_;
+
+    my @select_docs_array;
+    my %select_docs;
+    my $docs        = &C4::AR::Referencias::obtenerTiposDeDocumentos();
+
+    foreach my $doc (@$docs) {
+        push(@select_docs_array, $doc->getId);
+        $select_docs{$doc->getId}  = $doc->getNombre;
+    }
     $select_docs{''}                = 'SIN SELECCIONAR';
 
     my %options_hash; 

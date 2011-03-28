@@ -203,8 +203,9 @@ $(document).ready(function() {
     </li>
 </ul>
 
-
-<div id="filterBar" style="text-align:center">
+<fieldset>
+    <legend class="titulo_legend">[% "Inicial del apellido:" | i18n %]</legend>
+    <div id="filterBar" style="text-align:center">
         <a href="#tablaResult" onClick="consultar('A')"> A |</a>
         <a href="#tablaResult" onClick="consultar('B')"> B |</a>
         <a href="#tablaResult" onClick="consultar('C')"> C |</a>
@@ -232,9 +233,8 @@ $(document).ready(function() {
         <a href="#tablaResult" onClick="consultar('Y')"> Y |</a>
         <a href="#tablaResult" onClick="consultar('Z')"> Z |</a>
         <a href="#tablaResult" onClick="consultar('TODOS')"> [% "TODOS" | i18n %] </a>
-        
-</div>
-
+    </div>
+</fieldset>
 <div>
     <input type="checkbox" name="habilitados_filter" id="habilitados_filter">[% 'S&oacute;lo habilitados' | i18n %]
 </div>

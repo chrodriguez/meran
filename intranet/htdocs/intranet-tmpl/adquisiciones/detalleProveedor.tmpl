@@ -1,7 +1,5 @@
 [% INCLUDE "intranet-top.inc" %] 
-<div class="vcard">
-      <!--    DETALLE PROVEEDOR -->
- 
+<div class="vcard"> 
       <fieldset>
           <legend class="titulo_legend_resaltado" title='[% "Datos del proveedor" | i18n %]'>
                               [% "Datos del proveedor" | i18n %]
@@ -11,7 +9,7 @@
                         <legend class="titulo_legend_resaltado" title='[% "Datos escenciales" | i18n %]'>
                               [% "Datos escenciales" | i18n %]
                         </legend>
-                        [% IF proveedor.ref_tipo_documento.getNombre == NULL %]   
+                        [% IF persona_fisica == 0 %]   
                                   <li> [% "Razon Social:" | i18n %]<strong> [% proveedor.getRazonSocial %]</strong> </li>  
                                   <li> [% "CUIT/CUIL:" | i18n %]<strong> [% proveedor.getCuitCuil %]</strong></li> 
                         [% ELSE %]
@@ -62,7 +60,5 @@
                    </fieldset>
     </div>
     </fieldset>
-      
-    
 </div>
 [% INCLUDE "intranet-bottom.inc" %]

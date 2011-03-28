@@ -12,11 +12,12 @@ use Time::HiRes;
 my $input = new CGI;
 
 my $obj=$input->param('obj');
-my $ini;
+
 
 my ($template, $session, $t_params);
 
 
+<<<<<<< HEAD
 # SI ES UNA BUSQUEDA PARA RECOMENDACION 
 if($obj){
     
@@ -45,6 +46,20 @@ if($obj){
 
 #  C4::AR::Debug::debug("opac-busquedas.pl => string => ".$obj->{'string'});
 # my $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$input->param('token')."&string=".Encode::encode_utf8($obj->{'string'})."&tipoAccion=".$obj->{'tipoAccion'};
+=======
+my %hash_temp = {};
+$obj = \%hash_temp;
+$obj->{'tipoAccion'} = $input->param('tipoAccion');
+$obj->{'string'} = Encode::decode_utf8($input->param('string'));
+$obj->{'titulo'} = $input->param('titulo');
+$obj->{'tipo'} = $input->param('tipo');    
+$obj->{'only_available'} = $input->param('only_available') || 0;
+$obj->{'from_suggested'} = $input->param('from_suggested');
+$obj->{'tipo_nivel3_name'} = $input->param('tipo_nivel3_name');
+$obj->{'tipoBusqueda'} = 'all';
+$obj->{'token'} = $input->param('token');
+my $ini = $obj->{'ini'} = $input->param('page') || 0;
+>>>>>>> 4c8f45e6a3ec325d11eed6fad1968aad6b4723c5
 
 my $start = [ Time::HiRes::gettimeofday() ]; #se toma el tiempo de inicio de la búsqueda
 
@@ -89,17 +104,28 @@ if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
     ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
 
+<<<<<<< HEAD
 
 }   elsif   ($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
 
 
+=======
+}   
+elsif   ($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
+
+>>>>>>> 4c8f45e6a3ec325d11eed6fad1968aad6b4723c5
     $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
     $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
     
     ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($input->param('string'),$session,$obj);
 
+<<<<<<< HEAD
 
 } 
+=======
+} 
+
+>>>>>>> 4c8f45e6a3ec325d11eed6fad1968aad6b4723c5
 
 $t_params->{'partial_template'}         = "opac-busquedaResult.inc";
 $t_params->{'content_title'}            = C4::AR::Filtros::i18n("Resultados de la b&uacute;squeda");
@@ -122,15 +148,13 @@ $t_params->{'SEARCH_RESULTS'}           = $resultsarray;
 
 $obj->{'keyword'}               = $obj->{'string'};
 $t_params->{'keyword'}          = $obj->{'keyword'};
-
-# $t_params->{'buscoPor'}         = C4::AR::Utilidades::verificarValor($obj->{'string'});#C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'buscoPor'}         = C4::AR::Busquedas::armarBuscoPor($obj);
 
-# $t_params->{'buscoPor'}         = Encode::encode('utf8' , C4::AR::Busquedas::armarBuscoPor($obj));
-
 $t_params->{'cantidad'}         = $cantidad || 0;
-# $t_params->{'search_string'}    = $obj->{'string'};
-
 $t_params->{'show_search_details'} = 1;
+<<<<<<< HEAD
 # 
+=======
+
+>>>>>>> 4c8f45e6a3ec325d11eed6fad1968aad6b4723c5
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

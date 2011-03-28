@@ -181,7 +181,7 @@ sub insertar_sancion {
  #Si existe se sanciona con la mayor cantidad de dias
 
  #Busco si tiene una sancion pendiente
-my $sancion_existente=C4::AR::Sanciones::tieneSancionPendiente($data_hash->{'nro_socio'},$self->db);
+    my $sancion_existente=C4::AR::Sanciones::tieneSancionPendiente($data_hash->{'nro_socio'},$self->db);
 
 	if ($sancion_existente){
 	#Hay sancion pendiente

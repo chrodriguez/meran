@@ -65,6 +65,8 @@ print "Creando nuevas claves foraneas \n";
   crearClaves();
 print "Creando la estructura MARC \n";
  crearEstructuraMarc();
+print "Traducción Estructura MARC \n";
+  traduccionEstructuraMarc();
 print "Agregando preferencias del sistema \n";
   agregarPreferenciasDelSistema();
 print "FIN!!! \n";
@@ -798,6 +800,12 @@ sub guardaNivel3MARC {
   sub crearEstructuraMarc {
 
         aplicarSQL("estructuraMARC.sql");
+
+    }
+
+sub traduccionEstructuraMarc {
+
+        aplicarSQL("traduccionBibliaMARC.sql");
 
     }
 
