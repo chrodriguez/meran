@@ -49,14 +49,14 @@ __PACKAGE__->meta->setup(
     ],
     
     primary_key_columns => [ 'id' ],
-    unique_key => ['id'],
+    unique_key          => ['id'],
 
 );
 
 #----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
 
 sub addPresupuesto{
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($params) = @_;
 
     $self->setProveedorId($params->{'id_proveedor'});
@@ -79,28 +79,24 @@ sub setProveedorId{
 }
 
 sub setFecha{
-    my ($self) = shift;
+    my ($self)  = shift;
     my ($fecha) = @_;
     $self->fecha($fecha);
 }
 
 sub setRefEstadoPresupuestoId{
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($estado) = @_;
     utf8::encode($estado);
     $self->ref_estado_presupuesto_id($estado);
 }
 
 sub setRefPedidoCotizacionId{
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($pedido) = @_;
     utf8::encode($pedido);
     $self->ref_pedido_cotizacion_id($pedido);
 }
-
-
-
-
 
 sub getId{
     my ($self) = shift;

@@ -23,14 +23,14 @@ __PACKAGE__->meta->setup(
     ],
     
     primary_key_columns => [ 'id' ],
-    unique_key => ['id'],
+    unique_key          => ['id'],
 
 );
 
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 
 sub setTipoRecomendacion{
-    my ($self) = shift;
+    my ($self)    = shift;
     my ($tipoRec) = @_;
     utf8::encode($tipoRec);
     $self->tipo_recomendacion($tipoRec);
@@ -39,7 +39,6 @@ sub setTipoRecomendacion{
 sub getId{
     my ($self) = shift;
     return ($self->id);
-
 }
 
 sub getTipoRecomendacion{
@@ -47,3 +46,5 @@ sub getTipoRecomendacion{
     return ($self->tipo_recomendacion);
 
 }
+
+#----------------------------------- FIN GETTERS y SETTERS----------------------------------------------

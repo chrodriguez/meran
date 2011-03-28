@@ -66,7 +66,7 @@ __PACKAGE__->meta->setup(
     ],
     
     primary_key_columns => [ 'id' ],
-    unique_key => ['nro_doc'],
+    unique_key          => ['nro_doc'],
 
 );
 
@@ -79,7 +79,7 @@ sub desactivar{
 }
 
 sub agregarProveedor{
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($params) = @_;
     
     if($params->{'tipo_proveedor'} eq "persona_fisica"){
@@ -104,7 +104,7 @@ sub agregarProveedor{
 
 sub editarProveedor{
 
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($params) = @_;
    
     $self->setNombre($params->{'nombre'});
@@ -125,15 +125,15 @@ sub editarProveedor{
 }
 
 
-# ***********************************FIN FUNCIONES DEL MODELO | PROVEEDORES***********************************************************
+# *********************************FIN FUNCIONES DEL MODELO | PROVEEDORES********************************************************
 
 
 
 
-# ****************************************************Getters y Setters***************************************************************
+# *************************************************Getters y Setters**********************************************************
 
 sub setApellido{
-    my ($self) = shift;
+    my ($self)     = shift;
     my ($apellido) = @_;
     utf8::encode($apellido);
     if (C4::AR::Utilidades::validateString($apellido)){
@@ -142,7 +142,7 @@ sub setApellido{
 }
 
 sub setNombre{
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($nombre) = @_;
     utf8::encode($nombre);
     if (C4::AR::Utilidades::validateString($nombre)){
@@ -151,14 +151,14 @@ sub setNombre{
 }
 
 sub setTipoDoc{
-    my ($self) = shift;
+    my ($self)    = shift;
     my ($tipoDoc) = @_;
     utf8::encode($tipoDoc);
     $self->usr_ref_tipo_documento_id($tipoDoc);
 }
 
 sub setNroDoc{
-    my ($self) = shift;
+    my ($self)                = shift;
     my ($docNumber, $docType) = @_;
     utf8::encode($docNumber);
     utf8::encode($docType);
@@ -168,7 +168,7 @@ sub setNroDoc{
 }
 
 sub setRazonSocial{
-    my ($self) = shift;
+    my ($self)        = shift;
     my ($razonSocial) = @_;
     utf8::encode($razonSocial);
     if (C4::AR::Utilidades::validateString($razonSocial)){
@@ -179,7 +179,7 @@ sub setRazonSocial{
 # VER COMO VALIDARLO
 
 sub setCuitCuil{
-    my ($self) = shift;
+    my ($self)     = shift;
     my ($cuitCuil) = @_;
     utf8::encode($cuitCuil);
     if (C4::AR::Utilidades::validateString($cuitCuil)){
@@ -189,14 +189,14 @@ sub setCuitCuil{
 
 sub setCiudad{
     my ($self) = shift;
-    my ($ciu) = @_;
+    my ($ciu)  = @_;
     utf8::encode($ciu);
     $self->ref_localidad_id($ciu);
     
 }
 
 sub setDomicilio{
-    my ($self) = shift;
+    my ($self)      = shift;
     my ($domicilio) = @_;
     utf8::encode($domicilio);
     if (C4::AR::Utilidades::validateString($domicilio)){
@@ -205,7 +205,7 @@ sub setDomicilio{
 }
 
 sub setEmail{
-    my ($self) = shift;
+    my ($self)  = shift;
     my ($email) = @_;
     utf8::encode($email);
     if (C4::AR::Validator::isValidMail($email)){
@@ -214,7 +214,7 @@ sub setEmail{
 }
 
 sub setTelefono{
-    my ($self) = shift;
+    my ($self)     = shift;
     my ($telefono) = @_;
     utf8::encode($telefono);
     $self->telefono($telefono);
@@ -223,20 +223,20 @@ sub setTelefono{
 
 sub setFax{
     my ($self) = shift;
-    my ($fax) = @_;
+    my ($fax)  = @_;
     utf8::encode($fax);
     $self->fax($fax);
 }
 
 sub setPlazoReclamo{
-    my ($self) = shift;
+    my ($self)     = shift;
     my ($plazoRec) = @_;
     utf8::encode($plazoRec);
     $self->plazo_reclamo($plazoRec);
 }
 
 sub setActivo{
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($activo) = @_;
     $self->activo($activo);
 }
@@ -313,15 +313,6 @@ sub getActivo{
     my ($self) = shift;
     return ($self->activo);
 }
-
-
-
-
-
-
-# *******************************************************FIN Getter y Setter*******************************************************************
+# ****************************************************FIN Getter y Setter**************************************************************
 
 1;
-
-
-

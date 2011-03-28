@@ -24,7 +24,7 @@ if ($tipoAccion eq "DETALLE") {
         flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
     });
     
-    $t_params->{'pedido_cotizacion'}    = $pedidos_cotizacion;
+    $t_params->{'pedido_cotizacion'} = $pedidos_cotizacion;
 }
 
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Pedidos de Cotizacion");
