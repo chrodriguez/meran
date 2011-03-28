@@ -569,6 +569,14 @@ sub esParaSala{
     return (DISPONIBILIDAD_PARA_SALA($self->getIdDisponibilidad));
 }
 
+=head2 sub esParaPrestamo
+=cut
+sub esParaPrestamo{
+    my ($self) = shift;
+
+    return (DISPONIBILIDAD_PRESTAMO($self->getIdDisponibilidad));
+}
+
 =head2 sub toMARC
 
 =cut
