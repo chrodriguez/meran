@@ -34,35 +34,6 @@ function validateForm(){
 
 
 
-
-// function busquedaCombinable(){
-//     objAH                   = new AjaxHelper(updateBusquedaCombinable);
-//     objAH.debug             = true;
-//     objAH.showOverlay       = true;
-//     //para busquedas combinables
-//     objAH.url               = '/cgi-bin/koha/opac-busquedasDB.pl';
-//     objAH.string            = $('#string').val();
-//     objAH.only_available    = ( $('#only_available').attr('checked') )?1:0;
-//     objAH.tipoAccion        = 'BUSQUEDA_COMBINABLE_RECOMENDACION';
-//     objAH.token            = $('#token').val();
-//     //se setea la funcion para cambiar de pagina
-//     objAH.funcion           = 'changePage';
-//     // FIXME ver parametro ini
-//     //se envia la consulta
-//     objAH.sendToServer();
-// }
-
-
-// function updateBusquedaCombinable(responseText){
-//    $('#result_busqueda').html(responseText);
-// //    if (!verificarRespuesta(responseText)) {
-// //             return(0);
-// //             var Messages=JSONstring.toObject(responseText);
-// //             setMessages(Messages);
-// //    }
-// }
-
-
 function buscarDatosNivel2(){
         objAH                   = new AjaxHelper(updateBuscarDatosNivel2);
         objAH.debug             = true;
@@ -97,7 +68,7 @@ function cargarDatosEdicionSeleccionada(){
         objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
         objAH.tipoAccion        = 'CARGAR_DATOS_EDICION';
         objAH.edicion           = $('#edicion_id').val();
-        objAH.idCatalogoSearch = $('#catalogo_search_hidden').val();;
+        objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val();
         objAH.sendToServer();
 }
 
