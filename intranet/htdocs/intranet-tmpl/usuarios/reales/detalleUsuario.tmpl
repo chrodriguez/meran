@@ -65,17 +65,17 @@
           </fieldset>
     [% IF socio.tieneAutorizado %]
         <fieldset>
-            <legend class="titulo_legend_resaltado">[% 'Usuarios autorizados' | i18n %]</legend>
+            <legend class="titulo_legend_resaltado">[% 'Usuario adicional' | i18n %]</legend>
               <div class="authorizedBack">
                   <ul class="listado_sin_margen">
                       <li>
-                          [% "Nombre y Apellido del autorizado" | i18n %]:<span id="nombre_autorizado" class="strong" > [% socio.getNombre_apellido_autorizado%]</span>
+                          [% "Nombre y Apellido" | i18n %]:<span id="nombre_autorizado" class="strong" > [% socio.getNombre_apellido_autorizado%]</span>
                       </li>
                       <li>
-                            [% "DNI del autorizado" | i18n %]:<span id="dni_autorizado" class="strong" >  [% socio.getDni_autorizado %]</span>
+                            [% "DNI" | i18n %]:<span id="dni_autorizado" class="strong" >  [% socio.getDni_autorizado %]</span>
                       </li>
                       <li>
-                          [% "Tel&eacute;fono del autorizado" | i18n %]:<span id="telefono_autorizado" class="strong" >[% socio.getTelefono_autorizado %]</span>
+                          [% "Tel&eacute;fono" | i18n %]:<span id="telefono_autorizado" class="strong" >[% socio.getTelefono_autorizado %]</span>
                       </li>
                   </ul>
               </div>
@@ -155,7 +155,7 @@
                             <li>
     
                             [% PERL %]
-                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Autorizado' | i18n %]",
+                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Adicional' | i18n %]",
                                                                                     boton   => "boton_buscar",
                                                                                     onClick => "agregarAutorizado();",
                                                         ) ;
@@ -164,7 +164,7 @@
                         [% ELSE %]
                             <li>
                             [% PERL %]
-                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Autorizado' | i18n %]",
+                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Adicional' | i18n %]",
                                                                                     boton   => "boton_buscar",
                                                                                     onClick => "desautorizarTercero();",
                                                         ) ;

@@ -38,20 +38,13 @@ if ($tipoAccion eq "EDITAR") {
           });    
 }
 
-my $monedas                 = C4::AR::Proveedores::getMonedasProveedor($id_proveedor);
-my $formas_envio            = C4::AR::Proveedores::getFormasEnvioProveedor($id_proveedor);
-my $proveedor               = C4::AR::Proveedores::getProveedorInfoPorId($id_proveedor);
-my $tipo_materiales         = &C4::AR::Utilidades::generarComboTipoDeMaterial();
-my $materiales_proveedor    = C4::AR::Proveedores::getMaterialesProveedor($id_proveedor);
-my $formas_envio            = &C4::AR::Utilidades::generarComboFormasDeEnvio();
-my $formas_envio_proveedor  = C4::AR::Proveedores::getFormasEnvioProveedor($id_proveedor);
-
-$t_params->{'formas_envio'}             = $formas_envio;
-$t_params->{'proveedor'}                = $proveedor;
-$t_params->{'monedas'}                  = $monedas;
-$t_params->{'tipo_materiales'}          = $tipo_materiales; 
-$t_params->{'materiales_proveedor'}     = $materiales_proveedor;
-$t_params->{'formas_envio'}             = $formas_envio;
-$t_params->{'formas_envio_proveedor'}   = $formas_envio_proveedor;
+$t_params->{'formas_envio'}             = C4::AR::Proveedores::getFormasEnvioProveedor($id_proveedor);
+$t_params->{'proveedor'}                = C4::AR::Proveedores::getProveedorInfoPorId($id_proveedor);
+$t_params->{'monedas'}                  = C4::AR::Proveedores::getMonedasProveedor($id_proveedor);
+$t_params->{'tipo_materiales'}          = &C4::AR::Utilidades::generarComboTipoDeMaterial();
+$t_params->{'materiales_proveedor'}     = C4::AR::Proveedores::getMaterialesProveedor($id_proveedor);
+$t_params->{'formas_envio'}             = &C4::AR::Utilidades::generarComboFormasDeEnvio();
+$t_params->{'formas_envio_proveedor'}   = C4::AR::Proveedores::getFormasEnvioProveedor($id_proveedor);
+$t_params->{'persona_fisica'}           = C4::AR::Proveedores::isPersonaFisica($id_proveedor);
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

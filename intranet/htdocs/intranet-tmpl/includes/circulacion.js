@@ -432,6 +432,7 @@ function generaDivRenovacion(responseText){
 function renovar(){
 	objAH               = new AjaxHelper(updateInfoRenovar);
 	objAH.debug         = true;
+    objAH.showOverlay   = true;  
 	objAH.url           = '/cgi-bin/koha/circ/circulacionDB.pl';
 	objAH.tipoAccion    = 'REALIZAR_RENOVACION';
 	objAH.datosArray    = INFO_PRESTAMOS_ARRAY;

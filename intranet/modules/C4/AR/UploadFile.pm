@@ -38,56 +38,10 @@ sub uploadPhoto{
 	my ($bornum, $filepath) = @_;
 
     C4::AR::Debug::debug("UploadFile => uploadPhoto");    
-    my $bytes_read; 
-	my $msg                     = '';
-    my $size                    = 0;
-    my $msg_object              = C4::AR::Mensajes::create();
-	my @extensiones_permitidas  = ("bmp","jpg","gif","png");
-	my @nombreYextension        = split('\.',$filepath);
 
-	if (scalar(@nombreYextension)==2) { 
-	# verifica que el nombre del archivo tenga el punto (.)
-		my $ext         = @nombreYextension[1];
-		my $buff        = '';
-		my $write_file  = $picturesDir."/".$bornum.".".$ext;
-	
-		if (!grep(/$ext/i,@extensiones_permitidas)) {
-			$msg_object->{'error'}= 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U341', 'params' => []} ) ;
-            C4::AR::Debug::debug("UploadFile => uploadPhoto => extension no permitida error U341");	
-		} else 
-		{
-	
-			if (!(open(WFD,">$write_file"))) {
-				$msg_object->{'error'}= 1;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U342', 'params' => []} ) ;	
-                C4::AR::Debug::debug("UploadFile => uploadPhoto => no se puede escribir error U342");    
-			}
-			else	
-			{
-				while ($bytes_read=read($filepath,$buff,2096)) {
-					$size += $bytes_read;
-					binmode WFD;
-					print WFD $buff;
-				}
-				close(WFD);
-                my  $image = Image::Resize->new($write_file);
-                    $image = $image->resize(250, 250);
-                    open(FH, ">".$write_file);
-                    print FH $image->jpeg();
-                    close(FH);
-				$msg_object->{'error'}= 0;
-				C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U340', 'params' => []} ) ;	
-                C4::AR::Debug::debug("UploadFile => uploadPhoto => error U340");    
-			}
-		}
-	} else {
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U343', 'params' => []} ) ;	
-        C4::AR::Debug::debug("UploadFile => uploadPhoto => error U343");    
-	}
 
-	return ($msg_object);
+
+
 }
 
 sub deletePhoto{

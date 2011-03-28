@@ -63,6 +63,7 @@
                     <li> [% "C&oacute;digo"|i18n %]:    <strong>[% nivel3.getBarcode  %]</strong></li>
                     <li> [% "Disponibilidad"|i18n %]:   <strong class="[% IF nivel3.esParaSala %]salaLectura[% ELSE %]prestamo[% END %]">[% nivel3.getDisponibilidadObject.getNombre  %]</strong></li>
                     <li> [% "Estado"|i18n %]:           <strong class="[% IF nivel3.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% nivel3.getEstadoObject.getNombre  %]</strong></li>
+
     </ul>
 
 <div id="historicoDisponibilidad"></div>

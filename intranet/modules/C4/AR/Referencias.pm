@@ -48,7 +48,6 @@ use vars qw(@EXPORT_OK @ISA);
                     &getCamposDeTablaRef
                     &obtenerValoresTablaRef
                     &obtenerTablasDeReferencia
-                    &obtenerTiposDeDocumentos
                     &obtenerTiposNivel3
                     &obtenerProveedores
                     &translateTipoNivel3

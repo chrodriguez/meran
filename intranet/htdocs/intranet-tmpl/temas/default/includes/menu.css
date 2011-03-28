@@ -1152,7 +1152,6 @@
 }
 
 .ui-accordion li:hover a:hover{
-    font-weight: bold;
 }
 
 .ui-accordion .ui-accordion-content-active {
@@ -1170,5 +1169,5 @@
 	position: fixed;
 	padding-top: 39px;
 	height: auto;
-	width: 285px;
+	width: 255px;
 }

@@ -175,7 +175,7 @@ sub agregarProveedor{
           $db->{connect_options}->{AutoCommit} = 0;
           $db->begin_work;
           my $id_moneda;
-          
+          # FIXME ver el tipo de documento, poner 1 para DNI
            eval{
               $proveedor->agregarProveedor($param);
               my $id_proveedor = $proveedor->getId();

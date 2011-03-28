@@ -133,9 +133,8 @@ function updateRealizarAccion(responseText){
 
 function tieneApoderado(){
 	//fijo el nro_socio global para la ventana de agregarAutorizado
-// FIXME y esto?
 	NRO_SOCIO_AUTH  = $('#nro_socio_hidden').val(); 
-	var nro_socio   = $('#nro_socio_hidden').val();
+	var nro_socio   = NRO_SOCIO_AUTH;
 	USUARIO         = new objeto_usuario();
 	USUARIO.text    = $('#usuarioAutocomplete').val();
 	USUARIO.ID      = nro_socio;
@@ -145,7 +144,7 @@ function tieneApoderado(){
     objAH.showOverlay       = true;
     objAH.cache             = true;
 	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
-	objAH.nro_socio         = $('#nro_socio_hidden').val();
+	objAH.nro_socio         = NRO_SOCIO_AUTH;
 	objAH.tipoAccion        = "CIRCULACION_RAPIDA_TIENE_AUTORIZADO";
 	//se envia la consulta
 	objAH.sendToServer();
@@ -341,7 +340,9 @@ $(document).ready(function() {
                   <div id="divInfoEjemplar">
                       <label for="barcode">[% 'C&oacute;digo de Barras:' | i18n %]</label>
                       <input type="text" id="barcode" name="barcode" value="" tabindex='2' style="display: none;">
-
+                      [% PERL %]
+                          print C4::AR::Filtros::setHelp( text => "campo autocompletable, ingrese el nro. de inventario, por ej. DEO-LIB-0");
+                      [% END %]
 
                       <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
                       <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
@@ -358,8 +359,12 @@ $(document).ready(function() {
                       <label for="usuario">[% 'Usuario:' | i18n %]</label>
                       <input type='text' id='usuario' name='usuario' value='' size=32 tabindex='3' style="float: left" onclick="clear_usuario();">
                       <div id="estadoUsuario"></div>
-                      <input type='hidden' id='nro_socio_hidden' value=''>
+                      <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
 <!--                       <input type="button" class="nonForm" onclick="agregarAutorizado()" id="save_button" value="[% 'Agregar Adicional' | i18n %]" > -->
+                      [% PERL %]
+                          print C4::AR::Filtros::setHelp( text => "campo autocompletable, b&uacute;squeda por nombre, apellido, nro. de documento, legajo, nro. socio");
+                      [% END %]
+
                   </div>
           </li>
           <li>
