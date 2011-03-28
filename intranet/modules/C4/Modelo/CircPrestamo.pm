@@ -260,7 +260,8 @@ sub prestar {
 		$self->debug( "El usuario ya tiene una reserva ID::: " . $reservas->[0]->getId_reserva );
 		$params->{'id_reserva'} = $reservas->[0]->getId_reserva;
 
-		if ( $id3 != $reservas->[0]->getId3 ) {
+        #Si tiene una reserva asignada a un ejemplar del mismo grupo se intercambian
+		if (($reservas->[0]->getId3)&&( $id3 != $reservas->[0]->getId3 )) {
 			$self->debug("Los ids son distintos, se intercambian");
 
 #se le esta entregando un item que es <> al que se le asigno al relizar la reserva
@@ -465,7 +466,7 @@ sub estaVencido {
 		if ( $self->getTipo_prestamo eq 'ES' ) {    #Prestamo especial
 			if ( Date::Manip::Date_Cmp( $df, $hoy ) == 0 )
 			{                                       #Se tiene que devolver hoy
-				my $end    = Date::Manip::calc_endES();
+				my $end    = C4::Date::calc_endES();
 				my $actual = Date::Manip::ParseDate("today");
 				if ( Date::Manip::Date_Cmp( $actual, $end ) > 0 )
 				{    #Se devuelve despues del limite
