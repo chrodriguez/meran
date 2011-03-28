@@ -38,8 +38,7 @@ if($obj){
      $t_params->{'combo_tipo_documento'}    = $comboDeTipoDeDoc; 
      $t_params->{'combo_tipo_materiales'}   = $combo_tipo_materiales; 
      $t_params->{'combo_formas_envio'}      = $combo_formas_envio;
-     
-     $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Agregar Proveedor");
+     $t_params->{'page_sub_title'}          = C4::AR::Filtros::i18n("Agregar Proveedor");
 
   C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
