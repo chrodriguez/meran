@@ -35,14 +35,14 @@ __PACKAGE__->meta->setup(
     ],
     
     primary_key_columns => [ 'id' ],
-    unique_key => ['id'],
+    unique_key          => ['id'],
 
 );
 
 #----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
 
 sub addPresupuestoDetalle{
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($params) = @_;
 
     $self->setAdqPresupuestoId($params->{'id_presupuesto'});
@@ -59,36 +59,34 @@ sub addPresupuestoDetalle{
 
 
 sub setAdqPresupuestoId {
-    my ($self) = shift;
+    my ($self)        = shift;
     my ($presupuesto) = @_;
     utf8::encode($presupuesto);
     $self->adq_presupuesto_id($presupuesto);
 }
 
 sub setNroRenglon  {
-    my ($self) = shift;
+    my ($self)        = shift;
     my ($nro_renglon) = @_;
     $self->nro_renglon($nro_renglon);
 }
 
 sub setPrecioUnitario {
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($precio) = @_;
 
     $self->precio_unitario($precio);
-  
 }
 
 sub setCantidad {
-    my ($self) = shift;
+    my ($self)     = shift;
     my ($cantidad) = @_;
     utf8::encode($cantidad);
     $self->cantidad($cantidad);
 }
 
-
 sub setSeleccionado {
-    my ($self) = shift;
+    my ($self)         = shift;
     my ($seleccionado) = @_;
     utf8::encode($seleccionado);
     $self->seleccionado($seleccionado);
@@ -126,9 +124,3 @@ sub getSeleccionado  {
     return ($self->seleccionado);
 
 }
-    
-
-
-
-
-

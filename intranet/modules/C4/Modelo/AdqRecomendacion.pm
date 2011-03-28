@@ -41,18 +41,15 @@ __PACKAGE__->meta->setup(
     ],
     
     primary_key_columns => [ 'id' ],
-    unique_key => ['id'],
+    unique_key          => ['id'],
 
 );
 
 sub desactivar{
-
-    C4::AR::Debug::debug("entro a desactivar");
     my ($self) = shift;
     $self->setActiva(0);
     $self->save();
 }
-
 
 
 sub agregarRecomendacion{
@@ -89,27 +86,27 @@ C4::AR::Debug::debug("Post Save");
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 
 sub setUsrSocioId{
-    my ($self) = shift;
+    my ($self)  = shift;
     my ($socio) = @_;
     utf8::encode($socio);
     $self->usr_socio_id($socio);
 }
 
 sub setFecha{
-    my ($self) = shift;
+    my ($self)  = shift;
     my ($fecha) = @_;
     $self->fecha($fecha);
 }
 
 sub setActiva{
-    my ($self) = shift;
+    my ($self)  = shift;
     my ($valor) = @_;
     $self->activa($valor);
 }
 
 
 sub setAdqRefTipoRecomendacionId{
-    my ($self) = shift;
+    my ($self)  = shift;
     my ($valor) = @_;
     utf8::encode($valor);
     $self->adq_ref_tipo_recomendacion_id($valor);

@@ -49,13 +49,13 @@ __PACKAGE__->meta->setup(
     ],
     
     primary_key_columns => [ 'id' ],
-    unique_key => ['id'],
+    unique_key          => ['id'],
 
 );
 
 
 sub agregarRecomendacionDetalle{
-    my ($self) = shift;
+    my ($self)                          = shift;
     my ($params, $id_adq_recomendacion) = @_;
 
     $self->setAdqRecomendacionId($id_adq_recomendacion);
@@ -79,7 +79,7 @@ sub agregarRecomendacionDetalle{
 }
 
 sub setearCantidad{
-    my ($self) = shift;
+    my ($self)     = shift;
     my ($cantidad) = @_;
     $self->setCantidadEjemplares($cantidad);
     $self->save();
@@ -87,7 +87,7 @@ sub setearCantidad{
 
 sub updateRecomendacionDetalle{
 
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($params) = @_;
 
     $self->setCatNivel2Id($params->{'cat_nivel'});
@@ -110,7 +110,7 @@ sub updateRecomendacionDetalle{
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 
 sub setAdqRecomendacionId{
-    my ($self) = shift;
+    my ($self)          = shift;
     my ($recomendacion) = @_;
     utf8::encode($recomendacion);
     $self->adq_recomendacion_id($recomendacion);
@@ -118,47 +118,47 @@ sub setAdqRecomendacionId{
 
 sub setCatNivel2Id{
     my ($self) = shift;
-    my ($cat) = @_;
+    my ($cat)  = @_;
     $self->cat_nivel2_id($cat);
 }
 
 sub setAutor{
-    my ($self) = shift;
+    my ($self)  = shift;
     my ($autor) = @_;
     utf8::encode($autor);
     $self->autor($autor);
 }
 
 sub setTitulo{
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($titulo) = @_;
     utf8::encode($titulo);
     $self->titulo($titulo);
 }
 
 sub setLugarPublicacion{
-    my ($self) = shift;
+    my ($self)         = shift;
     my ($lugar_public) = @_;
     utf8::encode($lugar_public);
     $self->lugar_publicacion($lugar_public);
 }
 
 sub setEditorial{
-    my ($self) = shift;
+    my ($self)      = shift;
     my ($editorial) = @_;
     utf8::encode($editorial);
     $self->editorial($editorial);
 }
 
 sub setFechaPublicacion{
-    my ($self) = shift;
+    my ($self)         = shift;
     my ($fecha_public) = @_;
     utf8::encode($fecha_public);
     $self->fecha_publicacion($fecha_public);
 }
 
 sub setColeccion{
-    my ($self) = shift;
+    my ($self)      = shift;
     my ($coleccion) = @_;
     utf8::encode($coleccion);
     $self->coleccion($coleccion);
@@ -172,32 +172,31 @@ sub setIsbnIssn {
 }
 
 sub setCantidadEjemplares {
-    my ($self) = shift;
+    my ($self)            = shift;
     my ($cant_ejemplares) = @_;
     utf8::encode($cant_ejemplares);
     $self->cantidad_ejemplares($cant_ejemplares);
 }
 
 sub setMotivoPropuesta {
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($motivo) = @_;
     utf8::encode($motivo);
     $self->motivo_propuesta($motivo);
 }
 
 sub setComentario {
-    my ($self) = shift;
+    my ($self)       = shift;
     my ($comentario) = @_;
     utf8::encode($comentario);
     $self->comentario($comentario);
 }
 
 sub setReservaMaterial {
-    my ($self) = shift;
+    my ($self)             = shift;
     my ($reserva_material) = @_;
     $self->reserva_material($reserva_material);
 }
-
 
 sub getId{
     my ($self) = shift;
@@ -267,5 +266,6 @@ sub getComentario{
 sub getReservaMaterial{
     my ($self) = shift;
     return ($self->reserva_material);
-}             
-        
+}   
+
+#----------------------------------- FIN GETTERS y SETTERS------------------------------------------------          

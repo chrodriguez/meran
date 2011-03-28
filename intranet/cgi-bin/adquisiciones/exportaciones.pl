@@ -31,12 +31,12 @@ if($to_pdf){
 }
 
 my ($template, $session, $t_params) = get_template_and_user({
-    template_name => $template_name,
-    query => $input,
-    type => "intranet",
+    template_name   => $template_name,
+    query           => $input,
+    type            => "intranet",
     authnotrequired => 0,
-    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
-    debug => 1,
+    flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
+    debug           => 1,
 });
 
  
@@ -102,6 +102,7 @@ if($to_pdf){
         $t_params->{'facultad'}     = $ui->{'nombre'};
         $t_params->{'direccion'}    = $ui->{'direccion'};
         
+        # generamos la fecha actual
         my @dias   = ('Domingo','Lunes','Martes','Miércoles',
                'Jueves','Viernes','Sábado');
                
