@@ -102,6 +102,7 @@ if($to_pdf){
         $t_params->{'facultad'}     = $ui->{'nombre'};
         $t_params->{'direccion'}    = $ui->{'direccion'};
         
+        # generamos la fecha actual
         my @dias   = ('Domingo','Lunes','Martes','Miércoles',
                'Jueves','Viernes','Sábado');
                
