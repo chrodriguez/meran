@@ -409,11 +409,24 @@ function generaDivRenovacion(responseText){
 		infoDevRenObj.barcode=infoArray[i].barcode;
 		INFO_PRESTAMOS_ARRAY[i]= infoDevRenObj;
  
-		if(infoArray[i].autor != ""){ html= html + infoArray[i].autor + ", "};
-		html= html + infoArray[i].titulo + ", ";
-		if(infoArray[i].unititle != ""){html= html + infoArray[i].unititle + ", "};
-		if(infoArray[i].edicion != ""){html= html + infoArray[i].edicion + ". <br>"};
-        html= html + ". <br>"
+        
+        if((infoArray[i].autor != "")&&(infoArray[i].autor != null)){ 
+            html= html + infoArray[i].autor;
+            if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){html= html + ", ";}
+        }
+        
+        if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){
+            html= html + infoArray[i].titulo;
+        }
+        
+        if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){
+            html= html + " - " + infoArray[i].edicion + "<br>"
+        };
+        
+        html= html + " (" + infoArray[i].barcode + ")<br>"  
+        
+        html= html + "<br>"
+
 	}
 	html= html + "</p>";
 	html= html + "<center><input type='button' value='Aceptar' onClick=renovar()>";
@@ -498,7 +511,7 @@ function updateInfoDevolver(responseText){
 function imprimirTicket(ticket,num){
 
 	if(ticket != 0){
-		var obj=JSONstring.make(ticket)
+		var obj=JSONstring.make(ticket);
 		window.open ("/cgi-bin/koha/circ/ticket.pl?token="+token+"&obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 	}
 }

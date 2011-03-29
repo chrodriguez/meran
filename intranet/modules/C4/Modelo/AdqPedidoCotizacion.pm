@@ -15,14 +15,14 @@ __PACKAGE__->meta->setup(
     ],
     
     primary_key_columns => [ 'id' ],
-    unique_key => ['id'],
+    unique_key          => ['id'],
 
 );
 
-#----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
+#------------------------------------- FUNCIONES DEL MODELO -------------------------------------------
 
 sub addPedidoCotizacion{
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($params) = @_;
 
     $self->save();
@@ -32,16 +32,16 @@ sub addPedidoCotizacion{
 
 
 
-#----------------------------------- GETTERS y SETTERS------------------------------------------------
+#-------------------------------------- GETTERS y SETTERS------------------------------------------------
 
 sub setId{
     my ($self) = shift;
-    my ($id) = @_;
+    my ($id)   = @_;
     $self->id($id);
 }
 
 sub setFecha{
-    my ($self) = shift;
+    my ($self)  = shift;
     my ($fecha) = @_;
     $self->fecha($fecha);
 }

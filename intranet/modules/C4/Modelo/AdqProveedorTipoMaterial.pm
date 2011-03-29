@@ -63,13 +63,13 @@ sub eliminar{
 # ************************************************************Getter y Setter*******************************************************************
 
 sub setProveedorId{
-    my ($self) = shift;
+    my ($self)         = shift;
     my ($id_proveedor) = @_;
     $self->proveedor_id($id_proveedor);
 }
 
 sub setMaterialId{
-    my ($self) = shift;
+    my ($self)        = shift;
     my ($id_material) = @_;
     $self->tipo_material_id($id_material);
 }
@@ -78,5 +78,7 @@ sub getMaterialId{
     my ($self) = shift;
     return ($self->tipo_material_id);
 }
+
+# *********************************************************FIN Getter y Setter*****************************************************************
 
 1;

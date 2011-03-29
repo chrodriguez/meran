@@ -13,7 +13,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
 
-        adq_proveedor_id   => { type => 'integer', length => 11, not_null => 1 },
+        adq_proveedor_id    => { type => 'integer', length => 11, not_null => 1 },
         adq_forma_envio_id  => { type => 'integer', length => 11, not_null => 1},
     ],
 
@@ -67,13 +67,13 @@ sub eliminar{
 # ************************************************************Getter y Setter*******************************************************************
 
 sub setProveedorId{
-    my ($self) = shift;
+    my ($self)         = shift;
     my ($id_proveedor) = @_;
     $self->adq_proveedor_id($id_proveedor);
 }
 
 sub setFormaEnvioId{
-    my ($self) = shift;
+    my ($self)           = shift;
     my ($id_forma_envio) = @_;
     $self->adq_forma_envio_id($id_forma_envio);
 }
@@ -82,5 +82,7 @@ sub getFormaEnvioId{
     my ($self) = shift;
     return ($self->adq_forma_envio_id);
 }
+
+# *******************************************************FIN Getter y Setter**************************************************************
 
 1;
