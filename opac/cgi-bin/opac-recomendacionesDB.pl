@@ -42,11 +42,8 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
 
     my $idNivel1= $obj->{'idCatalogoSearch'};
 
-    C4::AR::Debug::debug($idNivel1);
-
     my $datos_edicion= C4::AR::Nivel2::getNivel2FromId2($idNivel2);
   
-    C4::AR::Utilidades::printHASH($datos_edicion);
     my $datos_nivel1= C4::AR::Nivel1::getNivel1FromId1($idNivel1);
 
     ($template, $session, $t_params)= get_template_and_user({
@@ -57,6 +54,7 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
                         flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                     });
 
+    C4::AR::Debug::debug("aca:                  ".$datos_nivel1->marc_record);
 
     $t_params->{'datos_edicion'} = $datos_edicion;
     $t_params->{'datos_nivel1'} = $datos_nivel1;

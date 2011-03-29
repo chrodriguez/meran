@@ -50,62 +50,49 @@ sub editarCantidadEjemplares{
 =cut
 sub agregarRecomendacion{
     my ($params, $usr_socio_id) = @_;
+    
+
     my $recomendacion = C4::Modelo::AdqRecomendacion->new();
     my $msg_object= C4::AR::Mensajes::create();
     my $db = $recomendacion->db;
-     
-    my %datos_usr;
-
-    $datos_usr{'usr_id'}=$usr_socio_id;
     
     my %datos_recomendacion;
 
-#     $datos_recomendacion{'hidden_id_nivel_2'}= 
-#     $datos_recomendacion{'autor'}=
-#     $datos_recomendacion{'titulo'}=
-#     $datos_recomendacion{'lugar_publicacion'}=
-#     $datos_recomendacion{'editorial'}=
-#     $datos_recomendacion{'fecha'}=
-#     $datos_recomendacion{'coleccion'}=
-#     $datos_recomendacion{'isbn_issn'}=
-#     $datos_recomendacion{'cantidad_ejemplares'}=
-#     $datos_recomendacion{'motivo_propuesta'}=
-#     $datos_recomendacion{'comentarios'}=
-#     $datos_recomendacion{'reservar'}=
+    $datos_recomendacion{'hidden_id_nivel_2'}= $params->{'catalogo_search_hidden'};
+    $datos_recomendacion{'autor'}= $params->{'autor'};
+    $datos_recomendacion{'titulo'}= $params->{'titulo'};
+    $datos_recomendacion{'lugar_publicacion'}=  $params->{'lugar_publicacion'};
+    $datos_recomendacion{'editorial'}= $params->{'editorial'};
+    $datos_recomendacion{'fecha'}= $params->{'fecha'};
+    $datos_recomendacion{'coleccion'}= $params->{'coleccion'};
+    $datos_recomendacion{'isbn_issn'}= $params->{'isbn_issn'};
+    $datos_recomendacion{'cantidad_ejemplares'}= $params->{'cant_ejemplares'};
+    $datos_recomendacion{'motivo_propuesta'}= $params->{'motivo_propuesta'};
+    $datos_recomendacion{'comentarios'}= $params->{'comment'};
+    $datos_recomendacion{'reservar'}= $params->{'reservar'}||0;
 
     
-    #my $param = $params->param;
-     #todo
-     #_verificarDatosProveedor($param,$msg_object);
+# TODO
+
+    #_verificarDatosProveedor($param,$msg_object);
 
     if (!($msg_object->{'error'})){
           # entro si no hay algun error, todos los campos ingresados son validos
           $db->{connect_options}->{AutoCommit} = 0;
           $db->begin_work;
 
-			C4::AR::Debug::debug("------------------------------------------------------------------------------------");
-			C4::AR::Debug::debug("commit");
-          
-           #eval{
-           	
-           	#C4::AR::Utilidades::printHASH($params_temp);
+          eval{
+       
               $recomendacion->agregarRecomendacion($usr_socio_id);
               my $id_adq_recomendacion = $recomendacion->getId();
 
-            C4::AR::Debug::debug("------------------------------------------------------------------------------------");
-            C4::AR::Debug::debug("ya agrego el id:" . $id_adq_recomendacion);
-            
-            
-#             recomendaciones detail
-#                my %parametros;
-#                $parametros{'id_adq_recomendacion'}   = $id_adq_recomendacion;
-                my $recomendacion_detalle = C4::Modelo::AdqRecomendacionDetalle->new(db => $db);    
-                $recomendacion_detalle->agregarRecomendacionDetalle($param, $id_adq_recomendacion);
+              my $recomendacion_detalle = C4::Modelo::AdqRecomendacionDetalle->new(db => $db);    
+              $recomendacion_detalle->agregarRecomendacionDetalle(\%datos_recomendacion, $id_adq_recomendacion);
               
               $msg_object->{'error'} = 0;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
               $db->commit;
-           #};
+           };
            if ($@){
            # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
                &C4::AR::Mensajes::printErrorDB($@, 'B410',"OPAC");

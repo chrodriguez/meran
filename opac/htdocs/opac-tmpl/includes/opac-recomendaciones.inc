@@ -7,33 +7,6 @@
 <script src="/includes/jquery/modal/jquery.simplemodal.js" type="text/javascript"></script>
 <script type="text/javascript">
 
-
-function validateForm(){
-            $("#contactform").validate({
-    
-                errorElement: "em",
-                errorClass: "error_adv",
-                rules: {
-                    apellido:   "required",
-                    nombre:     "required",                 
-                    mensaje:    "required",
-                    email: {
-                            required: true,
-                            email: true
-                    },
-               },
-               messages: {
-                    apellido: POR_FAVOR_INGRESE_SU_APELLIDO,
-                    nombre: POR_FAVOR_INGRESE_SU_NOMBRE,
-                    mensaje: POR_FAVOR_INGRESE_SU_MENSAJE,
-                    email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
-                    profesor_departamento: POR_FAVOR_INGRESE_DEPARTAMENTO  
-               }
-            });
-}
-
-
-
 function buscarDatosNivel2(){
         objAH                   = new AjaxHelper(updateBuscarDatosNivel2);
         objAH.debug             = true;
@@ -92,6 +65,10 @@ $(document).ready( function() {
     $('#carga_manual').click(function(){        
               $('#datos_edicion').hide()
     });
+    $('#catalogo_search').blur(function(){        
+              limpiarCampos()
+    });
+    $('#recomendacion').hide();
     makeToggle('carga_manual','trigger',null,true);
     makeToggle('motivo','trigger',null,true);
     makeToggle('comentario','trigger',null,true);
@@ -105,10 +82,11 @@ $(document).ready( function() {
      
 
 <div class="column1-unit">
+      [% message %]
       <div class="recomendacionform">
-          <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">
+          <form id="recom_form" name="recom_form" method="post" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">
               <input type="hidden" name="action" value="agregar">
-              <fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
+              <!--<fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
                 
                     <p><label for="nombre" class="left">[% 'Nombre y Apellido *' | i18n %]:</label>
                       <input type="text" name="nombre" id="nombre" class="field required" value="[% socio.persona.getNombre %] [% socio.persona.getApellido %]" tabindex="1" /></p>
@@ -121,7 +99,7 @@ $(document).ready( function() {
                     <p><label for="reservar" class="left">[% 'Reservar' | i18n %]:</label>
                       <input type="checkbox" name="reservar" id="reservar" class="field" value="" tabindex="5" /></p>
               
-              </fieldset>
+              </fieldset>-->
               
               <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
                           <!-- <li class="item">-->
@@ -162,7 +140,10 @@ $(document).ready( function() {
                     </div>      
              </fieldset>-->
            
-             
+              [% PERL %]
+                          print C4::AR::Filtros::setHelp(text => "[% 'Haga Click en el titulo para agregar un motivo o comentario' | i18n %]",
+                                        );
+              [% END %]
               <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Motivo de la propuesta' | i18n %]&nbsp;</legend>
                 <div class="motivo" id="motivo">
                      <textarea name="motivo_propuesta" id="motivo_propuesta" cols="45" class="required" rows="10" tabindex="17"></textarea>
@@ -176,46 +157,49 @@ $(document).ready( function() {
                 </div>
               </fieldset>
             
-              <table id="tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
-                      <thead>    
-                          <th align="center">
-                              [% "Autor" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "T&iacute;tulo" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Edici&oacute;n" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Lugar de publicaci&oacute;n" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Editorial" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Fecha" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Colecci&oacute;n" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "ISBN/ISSN" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Fecha" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Cantidad de ejemplares" | i18n %]
-                          </th>
-                          <th>
-                            [% "Eliminar" | i18n %]
-                          </th> 
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
-                 <input type="submit" value="Enviar Recomendacion">
+
+              <fieldset  id="recomendacion"><legend class="titulo_legend trigger click">&nbsp;[% 'Recomendacion' | i18n %]&nbsp;</legend>
+                  <table id="tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
+                          <thead>    
+                              <th align="center">
+                                  [% "Autor" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "T&iacute;tulo" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Edici&oacute;n" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Lugar de publicaci&oacute;n" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Editorial" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Fecha" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Colecci&oacute;n" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "ISBN/ISSN" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Fecha" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Cantidad de ejemplares" | i18n %]
+                              </th>
+                              <th>
+                                [% "Eliminar" | i18n %]
+                              </th> 
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                      <input type="submit" value="Enviar Recomendacion">
+                </fieldset>
            </form>           
       </div>         
 </div>
