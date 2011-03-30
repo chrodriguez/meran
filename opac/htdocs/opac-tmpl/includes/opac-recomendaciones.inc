@@ -140,10 +140,10 @@ $(document).ready( function() {
                     </div>      
              </fieldset>-->
            
-              [% PERL %]
+              <!--[% PERL %]
                           print C4::AR::Filtros::setHelp(text => "[% 'Haga Click en el titulo para agregar un motivo o comentario' | i18n %]",
                                         );
-              [% END %]
+              [% END %]-->
               <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Motivo de la propuesta' | i18n %]&nbsp;</legend>
                 <div class="motivo" id="motivo">
                      <textarea name="motivo_propuesta" id="motivo_propuesta" cols="45" class="required" rows="10" tabindex="17"></textarea>

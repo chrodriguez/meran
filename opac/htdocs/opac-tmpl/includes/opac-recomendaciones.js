@@ -30,6 +30,10 @@ function limpiarCampos(){
 }
 
 
+function eliminarFila(filaId){
+    $('#tr'+filaId).remove()
+}
+
 
 function agregarRenglon(){
   var id= $('#edicion_id').val();
@@ -48,9 +52,9 @@ function agregarRenglon(){
             limpiarCampos();
             
             $('#tabla_recomendacion').append(
-                '<tr name='+id+'><input type="hidden" value="'+id+'" id="input'+id+'"><td>'+autor+'</td><td>'+titulo+'</td><td>'+edicion+'</td><td>'+lugar_publicacion+'</td>'+
+                '<tr id="tr'+id+'" name='+id+'><input type="hidden" value="'+id+'" id="input'+id+'"><td>'+autor+'</td><td>'+titulo+'</td><td>'+edicion+'</td><td>'+lugar_publicacion+'</td>'+
                 '<td>'+editorial+'</td><td>'+fecha+'</td><td>'+autor+'</td><td>'+coleccion+'</td><td>'+ISBN_ISSN+'</td>'+
-                '<td>'+cant_ejemplares+'</td><td><input type="checkbox" name='+id+' value=""></td></tr>'
+                '<td>'+cant_ejemplares+'</td><td><input type="button" onclick="eliminarFila('+id+')" name="'+id+'" value="X"></input></td></tr>'
             )
             $('#recomendacion').show();
           

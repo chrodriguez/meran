@@ -14,7 +14,7 @@
                       <input type="text" name="fecha" id="fecha" class="field" value="[% datos_edicion.getAnio_publicacion %]" tabindex="10" READONLY/></p>
                   <p><label for="coleccion" class="left">[% 'Colecci&oacute;n*' | i18n %]:</label>
                       <input type="text" name="coleccion" id="coleccion" class="field" value="" tabindex="10" READONL/></p>
-                  <p><label for="isbn_issn" class="left">[% 'ISBN/ISSN*' | i18n %]:</label>
+                  <p><label for="isbn_issn" class="left">[% 'ISBN/ISSN' | i18n %]:</label>
                   [% IF datos_edicion.getISBN %]
                             <input type="text" name="isbn_issn" id="isbn_issn" class="field" value="[% datos_edicion.getISBN %]" tabindex="10" READONLY/></p>
                   [% ELSE %]
@@ -23,6 +23,11 @@
                   <p><label for="cant_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
                       <input type="text" name="cant_ejemplares" id="cant_ejemplares" class="field" value="" tabindex="10" /></p>
                   
+                  [% PERL %]
+                          print C4::AR::Filtros::setHelp(text => "[% 'Los campos marcados con * con obligatorios' | i18n %]",
+                                        );
+                  [% END %]
+            
                   <p><input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" /> </p>  
         </div>  
 </fieldset>
