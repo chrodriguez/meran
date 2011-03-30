@@ -21,7 +21,7 @@ if ($tipoAccion eq "DETALLE") {
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
+        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
     });
     
     $t_params->{'pedido_cotizacion'} = $pedidos_cotizacion;

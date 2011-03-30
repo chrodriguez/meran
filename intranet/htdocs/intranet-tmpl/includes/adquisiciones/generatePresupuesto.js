@@ -1,7 +1,8 @@
 /*
  * LIBRERIA generatePresupuesto v 0.0.9
  * Esta es una libreria creada para el sistema Meran
- * Contendran las funciones para la generacion de presupuestos para la compra de ejemplares
+ * Contendran las funciones para la generacion de presupuestos
+ * y pedidos de cotizacion para la compra de ejemplares
  * Fecha de creacion 07/02/2011
  */ 
  
@@ -9,8 +10,22 @@
 /************************************************************ PEDIDOS COTIZACION  *********************************************/
 
 function addPedidoCotizacion(){
-// AJAX
 
+    // traemos el template de busquedas de ejemplares del OPAC para que agregue
+    
+    objAH                       = new AjaxHelper(updateAddPedidoCotizacion)
+    objAH.url                   = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
+    objAH.debug                 = true
+    objAH.showOverlay           = true
+ 
+    objAH.tipoAccion            = 'AGREGAR_PEDIDO_COTIZACION_DETALLE'
+    objAH.sendToServer()  
+
+}
+
+function updateAddPedidoCotizacion(responseText){
+    $('#pedido_cotizacion').html(responseText)
+    $('#pedido_cotizacion').show()
 }
 
 /********************************************************** FIN -PEDIDOS COTIZACION  *******************************************/
