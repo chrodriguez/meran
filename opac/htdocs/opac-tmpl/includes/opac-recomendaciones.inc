@@ -24,8 +24,9 @@ function updateBuscarDatosNivel2(responseText){
    $('#ediciones').html(responseText);
 
    $('#edicion_id').val('').attr("selected",true);
-   $('#edicion_id').change( function(){         
-              cargarDatosEdicionSeleccionada();
+   $('#edicion_id').change( function(){    
+              var edicion=this.options[this.selectedIndex].text
+              cargarDatosEdicionSeleccionada(edicion)
    });
    if (!verificarRespuesta(responseText)) {
             return(0);
@@ -35,13 +36,14 @@ function updateBuscarDatosNivel2(responseText){
 }
 
 
-function cargarDatosEdicionSeleccionada(){
+function cargarDatosEdicionSeleccionada(edicion){
         objAH                   = new AjaxHelper(updateCargarDatosEdicionSeleccionada);
         objAH.debug             = true;
         objAH.showOverlay       = true;
         objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
         objAH.tipoAccion        = 'CARGAR_DATOS_EDICION';
-        objAH.edicion           = $('#edicion_id').val();
+        objAH.edicion_id        = $('#edicion_id').val();
+        objAH.edicion           = edicion;
         objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val();
         objAH.sendToServer();
 }
@@ -83,7 +85,7 @@ $(document).ready( function() {
     makeToggle('carga_manual','trigger',null,true);
     makeToggle('motivo','trigger',null,true);
     makeToggle('comentario','trigger',null,true);
- 
+    
 // //     validateForm();   
 });
 
@@ -144,8 +146,8 @@ $(document).ready( function() {
                             <input type="text" name="editorial" id="editorial" class="field" value="" tabindex="10" /></p>
                           <p><label for="fecha" class="left">[% 'Fecha*' | i18n %]:</label>
                             <input type="text" name="fecha" id="fecha" class="field" value="" tabindex="10" /></p>
-                          <p><label for="coleccion" class="left">[% 'Colecci&oacute;n*' | i18n %]:</label>
-                            <input type="text" name="coleccion" id="coleccion" class="field" value="" tabindex="10" /></p>
+                          <!--<p><label for="coleccion" class="left">[% 'Colecci&oacute;n*' | i18n %]:</label>
+                            <input type="text" name="coleccion" id="coleccion" class="field" value="" tabindex="10" /></p>-->
                           <p><label for="isbn_issn" class="left">[% 'ISBN/ISSN*' | i18n %]:</label>
                             <input type="text" name="isbn_issn" id="isbn_issn" class="field" value="" tabindex="10" /></p>
                           <p><label for="cant_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
@@ -194,14 +196,11 @@ $(document).ready( function() {
                               <th align="center">
                                   [% "Fecha" | i18n %]
                               </th>
-                              <th align="center">
+                             <!-- <th align="center">
                                   [% "Colecci&oacute;n" | i18n %]
-                              </th>
+                              </th>-->
                               <th align="center">
                                   [% "ISBN/ISSN" | i18n %]
-                              </th>
-                              <th align="center">
-                                  [% "Fecha" | i18n %]
                               </th>
                               <th align="center">
                                   [% "Cantidad de ejemplares" | i18n %]

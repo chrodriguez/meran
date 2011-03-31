@@ -1,18 +1,17 @@
 function validateForm(){
-//             $("#recom_form").validate({
-//     
-//                 errorElement: "em",
-//                 errorClass: "error_adv",
-//                 rules: {
-//                     autor:   "required",
-//                     titulo:     "required",                 
-//                     lugar_publicacion:    "required",
-//                     editorial:   "required",
-//                     fecha:     "required",                 
-//                     isbn_issn:    "required",
-//                     cant_ejemplares:    "required"
-//                },
-//             });
+            $("#recom_form").validate({
+    
+                errorElement: "em",
+                errorClass: "error_adv",
+                rules: {
+                    autor:   "required",
+                    titulo:     "required",                 
+                    lugar_publicacion:    "required",
+                    editorial:   "required",
+                    fecha:     "required",                 
+                    cant_ejemplares:    "required"
+               },
+            });
 }
 
 
@@ -36,8 +35,8 @@ function eliminarFila(filaId){
 
 
 function agregarRenglon(){
+  validateForm(); 
   var id= $('#edicion_id').val();
-
   if( ($('#input'+id).val() == null) ){
             var autor  = $('#autor').val()
             var titulo   = $('#titulo').val()
@@ -53,7 +52,7 @@ function agregarRenglon(){
             
             $('#tabla_recomendacion').append(
                 '<tr id="tr'+id+'" name='+id+'><input type="hidden" value="'+id+'" id="input'+id+'"><td>'+autor+'</td><td>'+titulo+'</td><td>'+edicion+'</td><td>'+lugar_publicacion+'</td>'+
-                '<td>'+editorial+'</td><td>'+fecha+'</td><td>'+autor+'</td><td>'+coleccion+'</td><td>'+ISBN_ISSN+'</td>'+
+                '<td>'+editorial+'</td><td>'+fecha+'</td><td>'+ISBN_ISSN+'</td>'+
                 '<td>'+cant_ejemplares+'</td><td><input type="button" onclick="eliminarFila('+id+')" name="'+id+'" value="X"></input></td></tr>'
             )
             $('#recomendacion').show();

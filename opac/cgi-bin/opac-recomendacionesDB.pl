@@ -38,7 +38,9 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
    
 }   elsif ($obj->{'tipoAccion'} eq 'CARGAR_DATOS_EDICION')   {
 
-    my $idNivel2=  $obj->{'edicion'};
+    my $idNivel2 =  $obj->{'edicion_id'};
+    my $edicion =  $obj->{'edicion'};
+
 
     my $idNivel1= $obj->{'idCatalogoSearch'};
 
@@ -54,8 +56,9 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
                         flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                     });
 
-    C4::AR::Debug::debug("aca:                  ".$datos_nivel1->marc_record);
 
+
+    $t_params->{'edicion'} = $edicion;
     $t_params->{'datos_edicion'} = $datos_edicion;
     $t_params->{'datos_nivel1'} = $datos_nivel1;
 }
