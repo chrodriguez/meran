@@ -395,8 +395,8 @@ function registrarEventos(){
 }
 
 
-$(document).ready(function(){
-
-	registrarEventos();
-
-});
+// $(document).ready(function(){
+// 
+// 	registrarEventos();
+// 
+// });

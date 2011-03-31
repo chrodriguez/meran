@@ -47,7 +47,7 @@ function obtenerTiposDePrestamos(){
 	objAH               = new AjaxHelper(updateObtenerTiposDePrestamos);
 	objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.cache         = true;
+//     objAH.cache         = true;
 	objAH.url           = "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio     = NRO_SOCIO_AUTH;
 	objAH.barcode       = $('#barcode_hidden').val();
@@ -57,13 +57,18 @@ function obtenerTiposDePrestamos(){
 }
 
 function obtenerDatosDelEjemplar(){
+    var barcode         = $('#barcode_hidden').val();
+
+    if($('#operacion').val() == 'devolver'){
+        barcode = $('#barcodePrestado').val();
+    }
 
     objAH               = new AjaxHelper(updateObtenerDatosDelEjemplar);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.cache         = true;
+//     objAH.cache         = true;
     objAH.url           = "/cgi-bin/koha/circ/circulacionDB.pl";
-    objAH.barcode       = $('#barcode_hidden').val();
+    objAH.barcode       = barcode;
     objAH.tipoAccion    = "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR";
     //se envia la consulta
     objAH.sendToServer();
@@ -142,7 +147,7 @@ function tieneApoderado(){
 	var objAH               = new AjaxHelper(updateTieneAutorizado);
 	objAH.debug             = true;
     objAH.showOverlay       = true;
-    objAH.cache             = true;
+//     objAH.cache             = true;
 	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio         = NRO_SOCIO_AUTH;
 	objAH.tipoAccion        = "CIRCULACION_RAPIDA_TIENE_AUTORIZADO";
@@ -316,61 +321,59 @@ $(document).ready(function() {
 <div id="confirmar_div" ></div>
 <fieldset>
     <legend class="titulo_legend">[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]</legend>
-    <br>
-    <ul>
+<!--     <br> -->
         <form id="form_circulacion_rapida" class="classform">
-          <li class="sub_item">
-                <label for="operacion">[% 'Operaci&oacute;n:' | i18n %]</label>
-                <select id='operacion' tabindex='1' onChange='onChangeOperacion()'>	
-                    <option value="prestar">[% 'Pr&eacute;stamo' | i18n %]</option>
-                    <option value="devolver">[% 'Devoluci&oacute;n' | i18n %]</option>
-                    <option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
-                </select>
-                <!--<div id="cambo_tipo_prestamo" style="display: none">-->
-          </li>
-<!--           <br /> -->
-          <li class="sub_item">
-                <div id="cambo_tipo_prestamo">
-                    <label for="operacion">[% 'Tipo de Pr&eacute;stamo:' | i18n %]</label>
-                    <div id="spanComboTipoPrestamo"></div>
-                </div>
-          </li>
-<!--           <br> -->
-          <li class="sub_item">
-                  <div id="divInfoEjemplar">
-                      <label for="barcode">[% 'C&oacute;digo de Barras:' | i18n %]</label>
-                      <input type="text" id="barcode" name="barcode" value="" tabindex='2' style="display: none;">
-                      [% PERL %]
-                          print C4::AR::Filtros::setHelp( text => "campo autocompletable, ingrese el nro. de inventario, por ej. DEO-LIB-0");
-                      [% END %]
+        <ul>
+            <li class="sub_item">
+                  <label for="operacion">[% 'Operaci&oacute;n:' | i18n %]</label>
+                  <select id='operacion' tabindex='1' onChange='onChangeOperacion()'>	
+                      <option value="prestar">[% 'Pr&eacute;stamo' | i18n %]</option>
+                      <option value="devolver">[% 'Devoluci&oacute;n' | i18n %]</option>
+                      <option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
+                  </select>
+                  <!--<div id="cambo_tipo_prestamo" style="display: none">-->
+            </li>
+            <li class="sub_item">
+                    <div id="divInfoEjemplar">
+                        <label for="barcode">[% 'C&oacute;digo de Barras:' | i18n %]</label>
+                        <input type="text" id="barcode" name="barcode" value="" tabindex='2' style="display: none;">
+                        <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
+                        <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
+                        <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
+                        <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+                        [% PERL %]
+                            print C4::AR::Filtros::setHelp( text => "campo autocompletable, ingrese el nro. de inventario, por ej. DEO-LIB-0");
+                        [% END %]
+                    </div>
+            </li>
+            <li>
+                <div id="datos_ejemplar"></div>
+            </li>
+            <li class="sub_item">
+                    <div id="divInfoUsuario">
+                        <label for="usuario">[% 'Usuario:' | i18n %]</label>
+                        <input type='text' id='usuario' name='usuario' value='' size=32 tabindex='3' style="float: left" onclick="clear_usuario();">
+                        <div id="estadoUsuario"></div>
+                        <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+  <!--                       <input type="button" class="nonForm" onclick="agregarAutorizado()" id="save_button" value="[% 'Agregar Adicional' | i18n %]" > -->
+                        [% PERL %]
+                            print C4::AR::Filtros::setHelp( text => "campo autocompletable, b&uacute;squeda por nombre, apellido, nro. de documento, legajo, nro. socio");
+                        [% END %]
 
-                      <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
-                      <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
-                      <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
-                      <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+                    </div>
+            </li>
+            <li>
+                <div id="datosAutorizado"></div>
+            </li>
+            <li class="sub_item">
+                  <div id="cambo_tipo_prestamo">
+                      <label for="operacion">[% 'Tipo de Pr&eacute;stamo:' | i18n %]</label>
+                      <div id="spanComboTipoPrestamo"></div>
                   </div>
-          </li>
-          <li>
-              <div id="datos_ejemplar"></div>
-          </li>
-<!--           <br> -->
-          <li class="sub_item">
-                  <div id="divInfoUsuario">
-                      <label for="usuario">[% 'Usuario:' | i18n %]</label>
-                      <input type='text' id='usuario' name='usuario' value='' size=32 tabindex='3' style="float: left" onclick="clear_usuario();">
-                      <div id="estadoUsuario"></div>
-                      <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
-<!--                       <input type="button" class="nonForm" onclick="agregarAutorizado()" id="save_button" value="[% 'Agregar Adicional' | i18n %]" > -->
-                      [% PERL %]
-                          print C4::AR::Filtros::setHelp( text => "campo autocompletable, b&uacute;squeda por nombre, apellido, nro. de documento, legajo, nro. socio");
-                      [% END %]
-
-                  </div>
-          </li>
-          <li>
-              <div id="datosAutorizado"></div>
-          </li>
+            </li>
+          </ul>
         </form>
+</fieldset>
 
         <div style="float: left; width: 100%;">
 
@@ -384,8 +387,6 @@ $(document).ready(function() {
                                                           ) ;
                               [% END %]
         </div>
-</fieldset>
-</ul>
 
 <!-- DELTALLE DEL USUARIO -->
 <div id="detalleUsuario"></div>

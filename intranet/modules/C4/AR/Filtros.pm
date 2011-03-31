@@ -188,9 +188,8 @@ sub to_Button{
 sub setHelp{
     my (%params_hash_ref) = @_;
 
-    my $help = '';
-
-    $help =  "<li class='reference'>".i18n($params_hash_ref{'text'})."</li>";
+    my $help    = '';
+    $help       =  "<div class='reference'>".i18n($params_hash_ref{'text'})."</div>";
 
     return $help;
 }
