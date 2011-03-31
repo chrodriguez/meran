@@ -560,8 +560,15 @@ sub t_renovar {
                     eval{
                         $prestamo->renovar($params->{'nro_socio'});
                         $db->commit;
-                    # Si la renovacion se pudo realizar
-    
+
+                        # Si la renovacion se pudo realizar
+                        C4::AR::Debug::debug("SE RENOVO SIN ERROR --> SE CREA EL TICKET");
+                        my $ticketObj = C4::AR::Prestamos::crearTicket($data->{'id3'},$prestamo->getNro_socio,$params->{'loggedinuser'});
+                        my %infoOperacion = (
+                                    ticket  => $ticketObj,
+                        );
+                        push (@infoTickets,  \%infoOperacion);
+
                         $msg_object->{'error'}= 0;
                         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P111', 'params' => [$data->{'barcode'}]} ) ;
     
@@ -579,6 +586,8 @@ sub t_renovar {
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P112', 'params' => [$data->{'barcode'}]} ) ;
         }
+        #guardo los mensajes
+        push (@infoMessages, $msg_object);
   }
   $db->{connect_options}->{AutoCommit} = 1;
 

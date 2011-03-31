@@ -630,25 +630,30 @@ Funcion que realiza todas las operaciones asociadas a un inicio de sesion como s
 
 sub _realizarOperacionesLogin{
     my ($type,$socio)=@_;
-#     C4::AR::Debug::debug("_realizarOperacionesLOGIN=> t_operacionesDeINTRA\n");
+     C4::AR::Debug::debug("_realizarOperacionesLOGIN=> LOGIN\n");
     my $dateformat = 'iso';
     my $lastlogin= C4::AR::Usuarios::getLastLoginTime();
     if ($type eq 'intranet') {
         #Se entran a realizar las rutinas solo cuando es intranet
-        my $auxlastlogin=$lastlogin;
-        my $prevWorkDate = C4::Date::format_date_complete(Date::Manip::Date_PrevWorkDay("today",1),$dateformat);
+        my $auxlastlogin= C4::Date::format_date($lastlogin,$dateformat);
+        my $prevWorkDate = C4::Date::format_date(Date::Manip::Date_PrevWorkDay("today",1),$dateformat);
         my $enter=0;
         if ($lastlogin){
-            while (Date::Manip::Date_Cmp($lastlogin,$prevWorkDate)<0) {
+            while (Date::Manip::Date_Cmp($auxlastlogin,$prevWorkDate)<0) {
+                
+                C4::AR::Debug::debug("_realizarOperacionesLOGIN=> COMPARACION ll=".$auxlastlogin." prev=".$prevWorkDate);
                 #Se recorren todos los dias entre el lastlogin y el dia previo laboral a hoy, si en esos dias no hubo actividad se marca como no activo al dia en la bdd
-                my $dias=Date::Manip::Date_IsWorkDay($lastlogin);
-                my $nextWorkingDay=C4::Date::format_date_complete(Date::Manip::Date_NextWorkDay($lastlogin,$dias),$dateformat);
+                my $dias=Date::Manip::Date_IsWorkDay($auxlastlogin);
+                C4::AR::Debug::debug("_realizarOperacionesLOGIN=> dias ".$dias);
+                my $nextWorkingDay=C4::Date::format_date(Date::Manip::Date_NextWorkDay($auxlastlogin,$dias),$dateformat);
+                C4::AR::Debug::debug("_realizarOperacionesLOGIN=> nextWorkingDay ".$nextWorkingDay);
+
                 if(Date::Manip::Date_Cmp($nextWorkingDay,$prevWorkDate)<=0) {
                        if (C4::AR::Utilidades::setFeriado(C4::Date::format_date_in_iso($nextWorkingDay,$dateformat),"true","Biblioteca sin actividad")){
-                            C4::AR::Debug::debug("_realizarOperacionesLOGIN=> agregando dia sin actividad".$nextWorkingDay);
+                            C4::AR::Debug::debug("_realizarOperacionesLOGIN=> agregando dia sin actividad ".$nextWorkingDay);
                         }
                     }
-                $lastlogin=$nextWorkingDay;
+                $auxlastlogin=$nextWorkingDay;
                 $enter=1;
             }
             if ($enter) {
@@ -659,10 +664,10 @@ sub _realizarOperacionesLogin{
             }
             #Genera una comprobacion una vez al dia, cuando se loguea el primer usuario
             my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
-            if (Date::Manip::Date_Cmp($lastlogin,$auxlastlogin)<0) {
+            if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
                 # lastlogin es anterior a hoy
                 ##Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
-#                     C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeINTRA\n");
+                     C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeINTRA\n");
                     _operacionesDeINTRA($socio);     
             }
         }#end if ($lastlogin)
@@ -1104,7 +1109,7 @@ sub _operacionesDeOPAC{
 
 sub _operacionesDeINTRA{
 	my ($socio) = @_;
-#     C4::AR::Debug::debug("t_operacionesDeINTRA !!!!!!!!!!!!!!!!!");
+     C4::AR::Debug::debug("t_operacionesDeINTRA !!!!!!!!!!!!!!!!!");
     my $msg_object= C4::AR::Mensajes::create();
     my $db= $socio->db;
     $db->{connect_options}->{AutoCommit} = 0;

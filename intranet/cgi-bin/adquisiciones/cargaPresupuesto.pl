@@ -7,16 +7,16 @@ use C4::AR::Proveedores;
 
 my $input = new CGI;
 
-my $combo_proveedores = &C4::AR::Utilidades::generarComboProveedores();
-my $combo_presupuestos = &C4::AR::Utilidades::generarComboPresupuestos();
+my $combo_proveedores   = &C4::AR::Utilidades::generarComboProveedores();
+my $combo_presupuestos  = &C4::AR::Utilidades::generarComboPresupuestos();
 
 my ($template, $session, $t_params)= get_template_and_user({
-                                template_name => "adquisiciones/cargaPresupuesto.tmpl",
-                                query => $input,
-                                type => "intranet",
+                                template_name   => "adquisiciones/cargaPresupuesto.tmpl",
+                                query           => $input,
+                                type            => "intranet",
                                 authnotrequired => 0,
-                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'adquisiciones'},
-                                debug => 1,
+                                flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'adquisiciones'},
+                                debug           => 1,
                  });
 
 my $monedas = C4::AR::Proveedores::getMonedasProveedor($id_proveedor);

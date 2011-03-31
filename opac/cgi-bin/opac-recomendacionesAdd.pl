@@ -5,11 +5,8 @@ use C4::AR::Auth;
 use C4::Context;
 use C4::AR::Recomendaciones;
 use CGI;
-use JSON;
 
 my $input = new CGI;
-
-my $obj=$input->param('obj');
 
 my ($template, $session, $t_params) = get_template_and_user({
     template_name => "opac-main.tmpl",
@@ -20,15 +17,17 @@ my ($template, $session, $t_params) = get_template_and_user({
     debug => 1,
 });
 
-my $action = $input->param('action') || 0;
+my $input_params = $input->Vars;
+my $usr_socio_id= C4::AR::Usuarios::getSocioInfoPorNroSocio(C4::AR::Auth::getSessionUserID($session))->getId_socio();
 
-if ($action){
 
-    my $status = C4::AR::Recomendaciones::agregarRecomendacion($input, C4::AR::Usuarios::getSocioInfoPorNroSocio(C4::AR::Auth::getSessionUserID($session))->getId_socio());
-    if ($status){
-        C4::AR::Auth::redirectTo('/cgi-bin/koha/opac-recomendaciones.pl?token'.$input->param('token'));
-    }
+my $status = C4::AR::Recomendaciones::agregarRecomendacion($input_params,$usr_socio_id);
+
+
+# TODO MOSTRAR MENSAJE
+
+# $t_params->{'message'}= $status->{'messages'}[0]->{'message'};
+
+if ($status){
+    C4::AR::Auth::redirectTo('/cgi-bin/koha/opac-recomendaciones.pl?token'.$input->param('token'));
 }
-
-
-C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

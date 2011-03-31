@@ -4,19 +4,17 @@ use strict;
 use CGI;
 use C4::AR::Auth;
 use C4::Output;
+use JSON;
 
 use C4::AR::Busquedas;
 use Time::HiRes;
 
 my $input = new CGI;
 
-
-
 my $obj=$input->param('obj');
 
 
 my ($template, $session, $t_params);
-
 
 my %hash_temp = {};
 $obj = \%hash_temp;
@@ -31,6 +29,7 @@ $obj->{'tipoBusqueda'} = 'all';
 $obj->{'token'} = $input->param('token');
 my $ini = $obj->{'ini'} = $input->param('page') || 0;
 
+
 my $start = [ Time::HiRes::gettimeofday() ]; #se toma el tiempo de inicio de la búsqueda
 
 my $cantidad;
@@ -39,7 +38,6 @@ my $resultsarray;
 
 $obj->{'type'} = 'OPAC';
 $obj->{'session'}= $session;
-
 
 
 # PAGINADOR
@@ -56,7 +54,7 @@ my $url;
 my $url_todos;
 my $token;
 
-my ($template, $session, $t_params)= get_template_and_user({
+    ($template, $session, $t_params)= get_template_and_user({
                         template_name => "opac-main.tmpl",
                         query => $input,
                         type => "opac",
@@ -67,6 +65,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
+
     $obj->{'autor'}= $obj->{'searchField'};
     
     $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
@@ -74,13 +73,13 @@ if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
     ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
 
-}   
-elsif   ($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE'){
+}   elsif   ($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE') {
 
     $url = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
     $url_todos = "/cgi-bin/koha/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
     
     ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($input->param('string'),$session,$obj);
+
 
 } 
 
@@ -91,7 +90,6 @@ $t_params->{'suggested'}                = $suggested;
 $t_params->{'tipoAccion'}               = $obj->{'tipoAccion'};
 $t_params->{'url_todos'}                = $url_todos;
 $t_params->{'only_available'}           = $obj->{'only_available'};
-
 $t_params->{'paginador'}                = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
 
 #se arma el arreglo con la info para mostrar en el template
@@ -111,5 +109,6 @@ $t_params->{'buscoPor'}         = C4::AR::Busquedas::armarBuscoPor($obj);
 
 $t_params->{'cantidad'}         = $cantidad || 0;
 $t_params->{'show_search_details'} = 1;
+
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

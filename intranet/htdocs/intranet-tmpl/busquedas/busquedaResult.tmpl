@@ -99,13 +99,9 @@
                     <td>
                         [% FOREACH disponibilidad %]
                             <b>[% tipoPrestamo %]</b> [% cantTotal %]<br>
-<!--                             <br> -->
-<!--                             <div style="margin-right:4px"> -->
-                                    [% reservados %]
-<!--                                     <br>  -->
-                                    [% prestados %]
-<!--                                     <br> -->
-<!--                             </div> -->
+                               [% nodisponibles %]
+                               [% reservados %]
+                               [% prestados %]
                         [% END %]
                     </td>   
             

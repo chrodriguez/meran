@@ -1,55 +1,65 @@
+function validateForm(){
+//             $("#recom_form").validate({
+//     
+//                 errorElement: "em",
+//                 errorClass: "error_adv",
+//                 rules: {
+//                     autor:   "required",
+//                     titulo:     "required",                 
+//                     lugar_publicacion:    "required",
+//                     editorial:   "required",
+//                     fecha:     "required",                 
+//                     isbn_issn:    "required",
+//                     cant_ejemplares:    "required"
+//                },
+//             });
+}
 
-// function agregarDetalleRecomendacion(){
-//     objAH                   = new AjaxHelper(updateAgregarDetalleRecomendacion);
-//     objAH.debug             = true;
-//     objAH.showOverlay       = true;
-//     //para busquedas combinables
-// //     objAH.url               = '/cgi-bin/koha/opac-busquedasDB.pl';
-//     objAH.string            = $('#autor').val();
-//     objAH.string            = $('#titulo').val();
-//     objAH.string            = $('#edicion').val();
-//     objAH.string            = $('#lugar_publicacion').val();
-//     objAH.string            = $('#editorial').val();
-//     objAH.string            = $('#fecha').val();
-//     objAH.string            = $('#coleccion').val();
-//     objAH.string            = $('#ISBN_ISSN').val();
-//     objAH.string            = $('#cant_ejemplares').val();
-//     objAH.tipoAccion        = 'AGREGAR_DETALLE_RECOMENDACION';
-// 
-//     objAH.sendToServer();
-// }
-// 
-// function updateAgregarDetalleRecomendacion(responseText){
-// //    $('#result_busqueda').html(responseText);
-// //    if (!verificarRespuesta(responseText)) {
-// //             return(0);
-// //             var Messages=JSONstring.toObject(responseText);
-// //             setMessages(Messages);
-// //    }
-// }
- 
- 
- function agregarRenglon(){
-   
-//      $('#agregar_rec').click(function(){
-//       if(($('#moneda').val() == "") || ($('#id_moneda').val() == "")){
-//           jConfirm(POR_FAVOR_INGRESE_UNA_MONEDA, function(){ })      
-//       }else{
-          var autor  = $('#autor').val()
-          var titulo   = $('#titulo').val()
-          var edicion = $('#edicion').val()
-          var lugar_publicacion = $('#lugar_publicacion').val();
-          var editorial= $('#editorial').val();
-          var fecha = $('#fecha').val();
-          var coleccion = $('#coleccion').val();
-          var ISBN_ISSN = $('#isbn_issn').val();
-          var cant_ejemplares = $('#cant_ejemplares').val();
+
+function limpiarCampos(){
+    $('#autor').val("");
+    $('#titulo').val("");
+    $('#edicion').val("");
+    $('#lugar_publicacion').val("");
+    $('#editorial').val("");
+    $('#fecha').val("");
+    $('#coleccion').val("");
+    $('#isbn_issn').val("");
+    $('#cant_ejemplares').val("");
+
+}
+
+
+function eliminarFila(filaId){
+    $('#tr'+filaId).remove()
+}
+
+
+function agregarRenglon(){
+  var id= $('#edicion_id').val();
+
+  if( ($('#input'+id).val() == null) ){
+            var autor  = $('#autor').val()
+            var titulo   = $('#titulo').val()
+            var edicion = $('#edicion').val()
+            var lugar_publicacion = $('#lugar_publicacion').val();
+            var editorial= $('#editorial').val();
+            var fecha = $('#fecha').val();
+            var coleccion = $('#coleccion').val();
+            var ISBN_ISSN = $('#isbn_issn').val();
+            var cant_ejemplares = $('#cant_ejemplares').val();
+      
+            limpiarCampos();
+            
+            $('#tabla_recomendacion').append(
+                '<tr id="tr'+id+'" name='+id+'><input type="hidden" value="'+id+'" id="input'+id+'"><td>'+autor+'</td><td>'+titulo+'</td><td>'+edicion+'</td><td>'+lugar_publicacion+'</td>'+
+                '<td>'+editorial+'</td><td>'+fecha+'</td><td>'+autor+'</td><td>'+coleccion+'</td><td>'+ISBN_ISSN+'</td>'+
+                '<td>'+cant_ejemplares+'</td><td><input type="button" onclick="eliminarFila('+id+')" name="'+id+'" value="X"></input></td></tr>'
+            )
+            $('#recomendacion').show();
           
-          $('#tabla_recomendacion').append(
-              '<tr><td>'+autor+'</td><td>'+titulo+'</td><td>'+edicion+'</td><td>'+lugar_publicacion+'</td>'+
-              '<td>'+editorial+'</td><td>'+fecha+'</td><td>'+autor+'</td><td>'+coleccion+'</td><td>'+ISBN_ISSN+'</td><td>'+cant_ejemplares+'</td></tr>'
-           ) 
-      }
+          }
+}
           
-/* } */    
+ 
  

@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'adq_forma_envio',
 
     columns => [
-        id   => { type => 'integer', length => 11, not_null => 1 },
+        id      => { type => 'integer', length => 11, not_null => 1 },
         nombre  => { type => 'varchar', length => 255, not_null => 1},
     ],
 
@@ -16,17 +16,13 @@ __PACKAGE__->meta->setup(
 
 );
 
-# *************************************************FIN FUNCIONES DEL MODELO | MONEDA************************************************************
 
 
-
-
-
-# *****************************************************Getter y Setter*******************************************************************
+# ***************************************************** Getter y Setter *******************************************************************
 
 
 sub setNombre{
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($nombre) = @_;
     utf8::encode($nombre);
     if (C4::AR::Utilidades::validateString($nombre)){
@@ -37,16 +33,13 @@ sub setNombre{
 sub getNombre{
     my ($self) = shift;
     return ($self->nombre);
-    
 }
 
 sub getId{
     my ($self) = shift;
     return ($self->id);
-    
 }
 
-
-
+# *************************************************** FIN - Getter y Setter *****************************************************************
 
 1;

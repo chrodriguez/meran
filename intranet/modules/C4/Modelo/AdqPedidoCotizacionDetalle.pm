@@ -11,19 +11,19 @@ __PACKAGE__->meta->setup(
 
     columns => [
 
-          id                        => { type => 'integer', not_null => 1 },  
-          adq_pedido_cotizacion_id  => { type => 'integer', not_null => 1 },  
-          cat_nivel2_id             => { type => 'integer', not_null => 1 },
-          autor                     => { type => 'varchar', length => 255, not_null => 1},
-          titulo                    => { type => 'varchar', length => 255, not_null => 1},
-          lugar_publicacion         => { type => 'varchar', length => 255, not_null => 1},
-          editorial                 => { type => 'varchar', length => 255, not_null => 1},
-          fecha_publicacion         => { type => 'varchar'},
-          coleccion                 => { type => 'varchar', length => 255, not_null => 1},
-          isbn_issn                 => { type => 'varchar', length => 45, not_null => 1},
-          cantidad_ejemplares       => { type => 'integer', length => 5, not_null => 1 },  
-          precio_unitario           => { type => 'float', length => 5, not_null => 1},
-          adq_recomendacion_detalle_id => { type => 'varchar', length => 255, not_null => 1},
+          id                            => { type => 'integer', not_null => 1 },  
+          adq_pedido_cotizacion_id      => { type => 'integer', not_null => 1 },  
+          cat_nivel2_id                 => { type => 'integer', not_null => 1 },
+          autor                         => { type => 'varchar', length => 255, not_null => 1},
+          titulo                        => { type => 'varchar', length => 255, not_null => 1},
+          lugar_publicacion             => { type => 'varchar', length => 255, not_null => 1},
+          editorial                     => { type => 'varchar', length => 255, not_null => 1},
+          fecha_publicacion             => { type => 'varchar'},
+          coleccion                     => { type => 'varchar', length => 255, not_null => 1},
+          isbn_issn                     => { type => 'varchar', length => 45, not_null => 1},
+          cantidad_ejemplares           => { type => 'integer', length => 5, not_null => 1 },  
+          precio_unitario               => { type => 'float', length => 5, not_null => 1},
+          adq_recomendacion_detalle_id  => { type => 'varchar', length => 255, not_null => 1},
           nro_renglon                   => { type => 'integer', length => 5, not_null => 1 },  
 
     ],
@@ -50,14 +50,14 @@ __PACKAGE__->meta->setup(
     
 
     primary_key_columns => [ 'id' ],
-    unique_key => ['id'],
+    unique_key          => ['id'],
 
 );
 
 #----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
 
 sub addPedidoCotizacionDetalle{
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($params) = @_;
     
     $self->setAdqPedidoCotizacionId($params->{'id_pedido_recomendacion'});
@@ -85,53 +85,53 @@ sub addPedidoCotizacionDetalle{
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 
 sub setNroRenglon {
-    my ($self) = shift;
+    my ($self)        = shift;
     my ($nro_renglon) = @_;
     $self->nro_renglon($nro_renglon);
 }
 
 sub setAdqPedidoCotizacionId{
-    my ($self) = shift;
+    my ($self)                 = shift;
     my ($pedido_cotizacion_id) = @_;
     $self->adq_pedido_cotizacion_id($pedido_cotizacion_id);
 }
 
 sub setCatNivel2Id{
     my ($self) = shift;
-    my ($cat) = @_;
+    my ($cat)  = @_;
     $self->cat_nivel2_id($cat);
 }
 
 sub setAutor{
-    my ($self) = shift;
+    my ($self)  = shift;
     my ($autor) = @_;
     utf8::encode($autor);
     $self->autor($autor);
 }
 
 sub setTitulo{
-    my ($self) = shift;
+    my ($self)   = shift;
     my ($titulo) = @_;
     utf8::encode($titulo);
     $self->titulo($titulo);
 }
 
 sub setLugarPublicacion{
-    my ($self) = shift;
+    my ($self)         = shift;
     my ($lugar_public) = @_;
     utf8::encode($lugar_public);
     $self->lugar_publicacion($lugar_public);
 }
 
 sub setEditorial{
-    my ($self) = shift;
+    my ($self)      = shift;
     my ($editorial) = @_;
     utf8::encode($editorial);
     $self->editorial($editorial);
 }
 
 sub setFechaPublicacion{
-    my ($self) = shift;
+    my ($self)         = shift;
     my ($fecha_public) = @_;
     utf8::encode($fecha_public);
     $self->fecha_publicacion($fecha_public);
@@ -139,34 +139,34 @@ sub setFechaPublicacion{
 
 
 sub setColeccion{
-    my ($self) = shift;
+    my ($self)      = shift;
     my ($coleccion) = @_;
     utf8::encode($coleccion);
     $self->coleccion($coleccion);
 }
 
 sub setIsbnIssn {
-    my ($self) = shift;
+    my ($self)      = shift;
     my ($isbn_issn) = @_;
     utf8::encode($isbn_issn);
     $self->isbn_issn($isbn_issn);
 }
 
 sub setCantidadEjemplares {
-    my ($self) = shift;
+    my ($self)            = shift;
     my ($cant_ejemplares) = @_;
     utf8::encode($cant_ejemplares);
     $self->cantidad_ejemplares($cant_ejemplares);
 }
 
 sub setPrecioUnitario {
-    my ($self) = shift;
+    my ($self)            = shift;
     my ($precio_unitario) = @_;
     $self->precio_unitario($precio_unitario);
 }
 
 sub setAdqRecomendacionDetalleId {
-    my ($self) = shift;
+    my ($self)                         = shift;
     my ($adq_recomendacion_detalle_id) = @_;
     $self->adq_recomendacion_detalle_id($adq_recomendacion_detalle_id);
 }

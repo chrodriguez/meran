@@ -11,8 +11,8 @@ __PACKAGE__->meta->setup(
     table   => 'adq_proveedor_moneda',
 
     columns => [
-        proveedor_id   => { type => 'integer', length => 11, not_null => 1 },
-        moneda_id  => { type => 'integer', length => 11, not_null => 1},
+        proveedor_id    => { type => 'integer', length => 11, not_null => 1 },
+        moneda_id       => { type => 'integer', length => 11, not_null => 1},
     ],
 
     relationships =>
@@ -65,16 +65,17 @@ sub agregarMonedaProveedor{
 
 
 
+
 # ********************************************************Getter y Setter*******************************************************************
 
 sub setProveedorId{
-    my ($self) = shift;
+    my ($self)         = shift;
     my ($id_proveedor) = @_;
     $self->proveedor_id($id_proveedor);
 }
 
 sub setMonedaId{
-    my ($self) = shift;
+    my ($self)      = shift;
     my ($id_moneda) = @_;
     $self->moneda_id($id_moneda);
 }

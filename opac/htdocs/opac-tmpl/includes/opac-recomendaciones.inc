@@ -7,76 +7,25 @@
 <script src="/includes/jquery/modal/jquery.simplemodal.js" type="text/javascript"></script>
 <script type="text/javascript">
 
-
-function validateForm(){
-            $("#contactform").validate({
-    
-                errorElement: "em",
-                errorClass: "error_adv",
-                rules: {
-                    apellido:   "required",
-                    nombre:     "required",                 
-                    mensaje:    "required",
-                    email: {
-                            required: true,
-                            email: true
-                    },
-               },
-               messages: {
-                    apellido: POR_FAVOR_INGRESE_SU_APELLIDO,
-                    nombre: POR_FAVOR_INGRESE_SU_NOMBRE,
-                    mensaje: POR_FAVOR_INGRESE_SU_MENSAJE,
-                    email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
-                    profesor_departamento: POR_FAVOR_INGRESE_DEPARTAMENTO  
-               }
-            });
-}
-
-
-
-
-// function busquedaCombinable(){
-//     objAH                   = new AjaxHelper(updateBusquedaCombinable);
-//     objAH.debug             = true;
-//     objAH.showOverlay       = true;
-//     //para busquedas combinables
-//     objAH.url               = '/cgi-bin/koha/opac-busquedasDB.pl';
-//     objAH.string            = $('#string').val();
-//     objAH.only_available    = ( $('#only_available').attr('checked') )?1:0;
-//     objAH.tipoAccion        = 'BUSQUEDA_COMBINABLE_RECOMENDACION';
-//     objAH.token            = $('#token').val();
-//     //se setea la funcion para cambiar de pagina
-//     objAH.funcion           = 'changePage';
-//     // FIXME ver parametro ini
-//     //se envia la consulta
-//     objAH.sendToServer();
-// }
-
-
-// function updateBusquedaCombinable(responseText){
-//    $('#result_busqueda').html(responseText);
-// //    if (!verificarRespuesta(responseText)) {
-// //             return(0);
-// //             var Messages=JSONstring.toObject(responseText);
-// //             setMessages(Messages);
-// //    }
-// }
-
-
-function cargarFormulario(){
-        objAH                   = new AjaxHelper(updateAgregarDetalleRecomendacion);
+function buscarDatosNivel2(){
+        objAH                   = new AjaxHelper(updateBuscarDatosNivel2);
         objAH.debug             = true;
         objAH.showOverlay       = true;
         //para busquedas combinables
-        objAH.url               = '/cgi-bin/koha/opac-busquedasDB.pl';
+        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
         objAH.tipoAccion        = 'BUSQUEDA_RECOMENDACION';
         objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val();
         objAH.sendToServer();
 }
 
 
-function updateAgregarDetalleRecomendacion(responseText){
+function updateBuscarDatosNivel2(responseText){
    $('#ediciones').html(responseText);
+
+   $('#edicion_id').val('').attr("selected",true);
+   $('#edicion_id').change( function(){         
+              cargarDatosEdicionSeleccionada();
+   });
    if (!verificarRespuesta(responseText)) {
             return(0);
             var Messages=JSONstring.toObject(responseText);
@@ -85,17 +34,45 @@ function updateAgregarDetalleRecomendacion(responseText){
 }
 
 
+function cargarDatosEdicionSeleccionada(){
+        objAH                   = new AjaxHelper(updateCargarDatosEdicionSeleccionada);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
+        objAH.tipoAccion        = 'CARGAR_DATOS_EDICION';
+        objAH.edicion           = $('#edicion_id').val();
+        objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val();
+        objAH.sendToServer();
+}
+
+
+function updateCargarDatosEdicionSeleccionada(responseText){
+   $('#datos_edicion_seleccionada').html(responseText);    
+
+//    if (!verificarRespuesta(responseText)) {
+//             return(0);
+//             var Messages=JSONstring.toObject(responseText);
+//             setMessages(Messages);
+//    }
+}
+
 $(document).ready( function() {
     CrearAutocompleteCatalogo({ 
           IdInput: 'catalogo_search', 
           IdInputHidden: 'catalogo_search_hidden', 
-          // callBackFunction: cargarFormulario,
+          callBackFunction: buscarDatosNivel2,
+    })
+    $('#carga_manual').click(function(){        
+              $('#datos_edicion').hide()
     });
-    $('#busqueda').hide();
-
+    $('#catalogo_search').blur(function(){        
+              limpiarCampos()
+    });
+    $('#recomendacion').hide();
     makeToggle('carga_manual','trigger',null,true);
     makeToggle('motivo','trigger',null,true);
     makeToggle('comentario','trigger',null,true);
+ 
 // //     validateForm();   
 });
 
@@ -105,10 +82,11 @@ $(document).ready( function() {
      
 
 <div class="column1-unit">
-          <div class="recomendacionform">
-<!--           <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-recomendacionesAdd.pl"> -->
+      [% message %]
+      <div class="recomendacionform">
+          <form id="recom_form" name="recom_form" method="post" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">
               <input type="hidden" name="action" value="agregar">
-              <fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
+              <!--<fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
                 
                     <p><label for="nombre" class="left">[% 'Nombre y Apellido *' | i18n %]:</label>
                       <input type="text" name="nombre" id="nombre" class="field required" value="[% socio.persona.getNombre %] [% socio.persona.getApellido %]" tabindex="1" /></p>
@@ -121,42 +99,24 @@ $(document).ready( function() {
                     <p><label for="reservar" class="left">[% 'Reservar' | i18n %]:</label>
                       <input type="checkbox" name="reservar" id="reservar" class="field" value="" tabindex="5" /></p>
               
-              </fieldset>
+              </fieldset>-->
               
               <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
-                           <li class="item">
-                                <label for="usuario">[% 'Keyword:' | i18n %]</label>
-                                <input type='text' id='catalogo_search' name='catalogo_search' value='' size=80 tabindex='3' style="float: left">
+                          <!-- <li class="item">-->
+                                <p><label for="catalogo_search" class="left">[% 'Keyword:' | i18n %]</label>
+                                <input type='text' id='catalogo_search' name='catalogo_search' value='' size=40 tabindex='3' style="float: left"></p>
                                 <input type='hidden' id='catalogo_search_hidden' name='catalogo_search_hidden' value=''>
-                            </li>  
+                         <!--   </li>  -->
                                 
               </fieldset>
-                        <div id="ediciones"></div>
-
-                        <div class="busqueda" id="busqueda"> 
-                                <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
-                                  <input type="text" name="autor" id="autor" class="field" value="" tabindex="10" /></p>
-                                <p><label for="titulo" class="left">[% 'T&iacute;tulo*' | i18n %]:</label>
-                                  <input type="text" name="titulo" id="titulo" class="field" value="" tabindex="10" /></p>
-                                <p><label for="edicion" class="left">[% 'Edici&oacute;n*' | i18n %]:</label>
-                                  <input type="text" name="edicion" id="edicion" class="field" value="" tabindex="10" /></p>
-                                <p><label for="lugar_publicacion" class="left">[% 'Lugar de Publicaci&oacute;n*' | i18n %]:</label>
-                                  <input type="text" name="lugar_publicacion" id="lugar_publicacion" class="field" value="" tabindex="10" /></p>
-                                <p><label for="editorial" class="left">[% 'Editorial*' | i18n %]:</label>
-                                  <input type="text" name="editorial" id="editorial" class="field" value="" tabindex="10" /></p>
-                                <p><label for="fecha" class="left">[% 'Fecha*' | i18n %]:</label>
-                                  <input type="text" name="fecha" id="fecha" class="field" value="" tabindex="10" /></p>
-                                <p><label for="coleccion" class="left">[% 'Colecci&oacute;n*' | i18n %]:</label>
-                                  <input type="text" name="coleccion" id="coleccion" class="field" value="" tabindex="10" /></p>
-                                <p><label for="isbn_issn" class="left">[% 'ISBN/ISSN*' | i18n %]:</label>
-                                  <input type="text" name="isbn_issn" id="isbn_issn" class="field" value="" tabindex="10" /></p>
-                                <p><label for="cant_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
-                                  <input type="text" name="cant_ejemplares" id="cant_ejemplares" class="field" value="" tabindex="10" /></p>
-                                <input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" />     
-                            </div>   
-              </fieldset>
-
-              <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
+              <div id="ediciones"></div>
+                  
+             
+        
+              <div id="datos_edicion_seleccionada"></div>
+              
+           
+            <!-- <fieldset> <legend class="titulo_legend trigger click">[% "Carga manual de material" %]</legend>
                     <div class="carga_manual" id="carga_manual"> 
                           <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
                             <input type="text" name="autor" id="autor" class="field" value="" tabindex="10" /></p>
@@ -178,9 +138,12 @@ $(document).ready( function() {
                             <input type="text" name="cant_ejemplares" id="cant_ejemplares" class="field" value="" tabindex="10" /></p>
                           <input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" />     
                     </div>      
-             </fieldset>
+             </fieldset>-->
            
-             
+              <!--[% PERL %]
+                          print C4::AR::Filtros::setHelp(text => "[% 'Haga Click en el titulo para agregar un motivo o comentario' | i18n %]",
+                                        );
+              [% END %]-->
               <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Motivo de la propuesta' | i18n %]&nbsp;</legend>
                 <div class="motivo" id="motivo">
                      <textarea name="motivo_propuesta" id="motivo_propuesta" cols="45" class="required" rows="10" tabindex="17"></textarea>
@@ -188,51 +151,56 @@ $(document).ready( function() {
               </fieldset>
               <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Comentarios' | i18n %]&nbsp;</legend>
                 <div class="comentario" id="comentario">
-                   <textarea name="comentarios" id="comentarios" cols="45" class="required" rows="10" tabindex="17"></textarea>
+                   <textarea name="comment" id="comment" cols="45" class="required" rows="10" tabindex="17"></textarea>
           <!--      <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Enviar Mensaje' | i18n %]" tabindex="18" /></p>-->
                    <input type="hidden" name="post_message" id="post_message" value="1"/>
                 </div>
               </fieldset>
             
-              <table id="tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
-                          <th align="center">
-                              [% "Autor" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "T&iacute;tulo" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Edici&oacute;n" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Lugar de publicaci&oacute;n" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Editorial" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Fecha" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Colecci&oacute;n" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "ISBN/ISSN" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Fecha" | i18n %]
-                          </th>
-                          <th align="center">
-                              [% "Cantidad de ejemplares" | i18n %]
-                          </th>
-               
-                    <tbody>
-                    </tbody>
-                  </table>
-            
-                 
-           
-          </div>
-          
+
+              <fieldset  id="recomendacion"><legend class="titulo_legend trigger click">&nbsp;[% 'Recomendacion' | i18n %]&nbsp;</legend>
+                  <table id="tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
+                          <thead>    
+                              <th align="center">
+                                  [% "Autor" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "T&iacute;tulo" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Edici&oacute;n" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Lugar de publicaci&oacute;n" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Editorial" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Fecha" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Colecci&oacute;n" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "ISBN/ISSN" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Fecha" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Cantidad de ejemplares" | i18n %]
+                              </th>
+                              <th>
+                                [% "Eliminar" | i18n %]
+                              </th> 
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                      <input type="submit" value="Enviar Recomendacion">
+                </fieldset>
+           </form>           
+      </div>         
 </div>
         
