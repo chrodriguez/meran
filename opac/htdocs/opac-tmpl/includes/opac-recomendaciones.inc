@@ -2,6 +2,7 @@
 
 [% INCLUDE  "AutocompleteHelper.inc"  %]
 
+
 <script src="/opac-tmpl/includes/opac-searchFunciones.js" type="text/javascript"></script>
 <script src="/opac-tmpl/includes/opac-recomendaciones.js" type="text/javascript"></script>
 <script src="/includes/jquery/modal/jquery.simplemodal.js" type="text/javascript"></script>
@@ -56,11 +57,20 @@ function updateCargarDatosEdicionSeleccionada(responseText){
 //    }
 }
 
+function verificarBusqueda(){
+    if ($('#catalogo_search_hidden').val() != (-1)){
+        buscarDatosNivel2();
+    } else {
+        $('#carga_manual').show();
+    }
+
+}
+
 $(document).ready( function() {
     CrearAutocompleteCatalogo({ 
           IdInput: 'catalogo_search', 
           IdInputHidden: 'catalogo_search_hidden', 
-          callBackFunction: buscarDatosNivel2,
+          callBackFunction: verificarBusqueda,
     })
     $('#carga_manual').click(function(){        
               $('#datos_edicion').hide()
@@ -69,6 +79,7 @@ $(document).ready( function() {
               limpiarCampos()
     });
     $('#recomendacion').hide();
+    $('#carga_manual').hide();
     makeToggle('carga_manual','trigger',null,true);
     makeToggle('motivo','trigger',null,true);
     makeToggle('comentario','trigger',null,true);
@@ -115,9 +126,12 @@ $(document).ready( function() {
         
               <div id="datos_edicion_seleccionada"></div>
               
-           
-            <!-- <fieldset> <legend class="titulo_legend trigger click">[% "Carga manual de material" %]</legend>
-                    <div class="carga_manual" id="carga_manual"> 
+              <div class="carga_manual" id="carga_manual"> 
+                     [% PERL %]
+                          print C4::AR::Filtros::setHelp(text => "[% 'No se han encontrado resultados para la busqueda realizada. Si lo desea, puede llenar los campos manualmente' | i18n %]",
+                                        );
+                      [% END %]
+                    <fieldset> <legend class="titulo_legend trigger click">[% "Carga manual de material" %]</legend>
                           <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
                             <input type="text" name="autor" id="autor" class="field" value="" tabindex="10" /></p>
                           <p><label for="titulo" class="left">[% 'T&iacute;tulo*' | i18n %]:</label>
@@ -137,8 +151,9 @@ $(document).ready( function() {
                           <p><label for="cant_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
                             <input type="text" name="cant_ejemplares" id="cant_ejemplares" class="field" value="" tabindex="10" /></p>
                           <input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" />     
-                    </div>      
-             </fieldset>-->
+                    </fieldset>
+            </div>      
+             
            
               <!--[% PERL %]
                           print C4::AR::Filtros::setHelp(text => "[% 'Haga Click en el titulo para agregar un motivo o comentario' | i18n %]",
