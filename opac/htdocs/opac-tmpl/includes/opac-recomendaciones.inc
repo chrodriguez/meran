@@ -97,8 +97,7 @@ $(document).ready( function() {
 <div class="column1-unit">
       [% message %]
       <div class="recomendacionform">
-              <p><label for="catalogo_search" class="left">[% 'Keyword:' | i18n %]</label>
-                  <input type='text' id='catalogo_search' name='catalogo_search' value='' size=40 tabindex='3' style="float: left"></p>
+              
           <form id="recom_form" name="recom_form" method="post" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">
               <input type="hidden" name="action" value="agregar">
               <!--<fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
@@ -118,7 +117,8 @@ $(document).ready( function() {
               
               <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
                           <!-- <li class="item">-->
-                                
+                                <p><label for="catalogo_search" class="left">[% 'Keyword:' | i18n %]</label>
+                                <input type='text' id='catalogo_search' name='catalogo_search' value='' size=40 tabindex='3' style="float: left"></p>
                                 <input type='hidden' id='catalogo_search_hidden' name='catalogo_search_hidden' value=''>
                          <!--   </li>  -->
                                 

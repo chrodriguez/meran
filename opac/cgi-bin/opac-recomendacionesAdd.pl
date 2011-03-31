@@ -17,8 +17,13 @@ my ($template, $session, $t_params) = get_template_and_user({
     debug => 1,
 });
 
+
+
 my $input_params = $input->Vars;
 my $usr_socio_id= C4::AR::Usuarios::getSocioInfoPorNroSocio(C4::AR::Auth::getSessionUserID($session))->getId_socio();
+
+# FIXME  iterar por cada detalle agregado al a recomendacion (por ahora agrega solo un detalle)
+
 
 
 my $status = C4::AR::Recomendaciones::agregarRecomendacion($input_params,$usr_socio_id);
