@@ -191,25 +191,35 @@ function buscarPorCodigoBarra(){
 
 function buscarSuggested(suggested){
     busquedaPorKeyword(suggested);
-    $('#keyword').val(suggested);
+    if ($('#keyword').val())
+    	$('#keyword').val(suggested);
+	else
+		$('#keyword-bar').val(suggested);
 }
 
 function busquedaPorKeyword(suggested){
 	
-	var keyword = $('#keyword').val();
+	var keyword = "";
 	
-	keyword = keyword.replace(/\&/g,"AND");
+    if ($('#keyword').val())
+    	keyword = $('#keyword').val();
+	else
+		keyword = $('#keyword-bar').val();
+
+    keyword = keyword.replace(/\&/g,"AND");
 	
     objAH=new AjaxHelper(updateBusquedaPorKeyword);
-    objAH.showOverlay       = true;
-    objAH.debug= true;
+    objAH.showOverlay = true;
+    objAH.debug = true;
     objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
+
     if (suggested){
         objAH.keyword= suggested;
         objAH.from_suggested= 1;
     }else{
         objAH.keyword= keyword;
     }
+
     objAH.match_mode = $('#match_mode').val();
     objAH.tipoAccion= 'BUSQUEDA_COMBINADA';
     //se setea la funcion para cambiar de pagina
@@ -219,8 +229,13 @@ function busquedaPorKeyword(suggested){
 
 function updateBusquedaPorKeyword(responseText){
     updateInfoBusquedas(responseText);
-    var keyword = $('#keyword').val();
-    $('#keyword').val(keyword);
+	var keyword = "";
+	
+    if ($('#keyword').val())
+    	keyword = $('#keyword').val();
+	else
+		keyword = $('#keyword-bar').val();
+
 }
 
 function buscarEstante(){

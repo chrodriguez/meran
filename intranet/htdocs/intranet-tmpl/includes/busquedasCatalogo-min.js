@@ -24,10 +24,16 @@ function buscarPorTema(){objAH=new AjaxHelper(updateInfoBusquedas);objAH.debug=t
 function buscarPorISBN(){objAH=new AjaxHelper(updateInfoBusquedas);objAH.debug=true;objAH.url='/cgi-bin/koha/busquedas/busquedasDB.pl';objAH.isbn=$('#isbn').val();objAH.tipoAccion='BUSQUEDA_POR_ISBN';objAH.only_available=($('#only_available').attr('checked'))?1:0;objAH.sendToServer();}
 function buscarPorDiccionario(){objAH=new AjaxHelper(updateInfoBusquedas);objAH.debug=true;objAH.showOverlay=true;objAH.url='/cgi-bin/koha/busquedas/diccionario.pl';objAH.dictionary=$('#dictionary').val();objAH.only_available=($('#only_available').attr('checked'))?1:0;objAH.funcion='changePage';objAH.sendToServer();}
 function buscarPorCodigoBarra(){objAH=new AjaxHelper(updateInfoBusquedas);objAH.debug=true;objAH.showOverlay=true;objAH.url='/cgi-bin/koha/busquedas/busquedasDB.pl';objAH.codBarra=$('#codBarra').val();objAH.only_available=($('#only_available').attr('checked'))?1:0;objAH.tipoAccion='BUSQUEDA_POR_BARCODE';objAH.sendToServer();}
-function buscarSuggested(suggested){busquedaPorKeyword(suggested);$('#keyword').val(suggested);}
-function busquedaPorKeyword(suggested){var keyword=$('#keyword').val();keyword=keyword.replace(/\&/g,"AND");objAH=new AjaxHelper(updateBusquedaPorKeyword);objAH.showOverlay=true;objAH.debug=true;objAH.url='/cgi-bin/koha/busquedas/busquedasDB.pl';if(suggested){objAH.keyword=suggested;objAH.from_suggested=1;}else{objAH.keyword=keyword;}
+function buscarSuggested(suggested){busquedaPorKeyword(suggested);if($('#keyword').val())
+$('#keyword').val(suggested);else
+$('#keyword-bar').val(suggested);}
+function busquedaPorKeyword(suggested){var keyword="";if($('#keyword').val())
+keyword=$('#keyword').val();else
+keyword=$('#keyword-bar').val();keyword=keyword.replace(/\&/g,"AND");objAH=new AjaxHelper(updateBusquedaPorKeyword);objAH.showOverlay=true;objAH.debug=true;objAH.url='/cgi-bin/koha/busquedas/busquedasDB.pl';if(suggested){objAH.keyword=suggested;objAH.from_suggested=1;}else{objAH.keyword=keyword;}
 objAH.match_mode=$('#match_mode').val();objAH.tipoAccion='BUSQUEDA_COMBINADA';objAH.funcion='changePage';objAH.sendToServer();}
-function updateBusquedaPorKeyword(responseText){updateInfoBusquedas(responseText);var keyword=$('#keyword').val();$('#keyword').val(keyword);}
+function updateBusquedaPorKeyword(responseText){updateInfoBusquedas(responseText);var keyword="";if($('#keyword').val())
+keyword=$('#keyword').val();else
+keyword=$('#keyword-bar').val();}
 function buscarEstante(){objAH=new AjaxHelper(updateInfoBusquedas);objAH.showOverlay=true;objAH.debug=true;objAH.url='/cgi-bin/koha/busquedas/estante.pl';objAH.viewShelfName=$('#estante').val();objAH.orden='title';objAH.only_available=($('#only_available').attr('checked'))?1:0;objAH.funcion='changePage';objAH.sendToServer();}
 function mostrarEstantes(){objAH=new AjaxHelper(updateMostrarEstantes);objAH.showOverlay=true;objAH.debug=true;objAH.url='../estanteVirtual.pl';objAH.funcion='changePage';objAH.sendToServer();}
 function updateMostrarEstantes(responseText){$("#filtrosBusqueda").slideUp('slow');$('#resultBusqueda').html(responseText);$("#resultBusqueda").slideDown("slow");zebra('tablaresultado');}
