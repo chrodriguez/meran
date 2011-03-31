@@ -7,33 +7,6 @@
  */ 
  
  
-/************************************************************ PEDIDOS COTIZACION  *********************************************/
-
-function addPedidoCotizacion(){
-
-    // traemos el template de busquedas de ejemplares del OPAC para que agregue
-    
-    objAH                       = new AjaxHelper(updateAddPedidoCotizacion)
-    objAH.url                   = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
-    objAH.debug                 = true
-    objAH.showOverlay           = true
- 
-    objAH.tipoAccion            = 'AGREGAR_PEDIDO_COTIZACION_DETALLE'
-    objAH.sendToServer()  
-
-}
-
-function updateAddPedidoCotizacion(responseText){
-    $('#pedido_cotizacion').html(responseText)
-    $('#pedido_cotizacion').show()
-}
-
-/********************************************************** FIN -PEDIDOS COTIZACION  *******************************************/
-
-
-
-
-
 /******************************************************** AGREGAR PRESUPUESTO **************************************************/
 
 var arreglo                  = new Array() //global, arreglo con las recomendaciones seleccionadas

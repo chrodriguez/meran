@@ -3,37 +3,25 @@ package C4::AR::PedidoCotizacion;
 use strict;
 require Exporter;
 use DBI;
-
-
-
-
+use C4::AR::Nivel2;
 use C4::AR::Recomendaciones;
-
 use C4::Modelo::AdqPedidoCotizacion;
 use C4::Modelo::AdqPedidoCotizacion::Manager;
 use C4::Modelo::AdqPedidoCotizacionDetalle;
 use C4::Modelo::AdqPedidoCotizacionDetalle::Manager;
-
 use C4::AR::Recomendaciones;
 use C4::AR::PedidoCotizacion;
-
-
-
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(  
-
-
             &getAdqPedidosCotizacion;
             &getPresupuestosPedidoCotizacion;
             &getAdqPedidoCotizacionDetalle;
             &addPedidoCotizacion;
-
             &addPedidoCotizacion;
             &getPedidosCotizacionConDetalle;
             &getPedidosCotizacion;
-
 );
 
 
@@ -53,6 +41,71 @@ sub getPresupuestosPedidoCotizacion{
 
       return(\@results);
 
+}
+
+=item
+    Esta funcion agrega pedido/s cotizacion_detalle a un pedido_cotizacion ya existente
+    Parametros: (El id del pedido_cotizacion y los ids de los ejemplares a agregar)
+=cut
+sub appenddPedidoCotizacion{
+
+    my ($param)             = @_;
+    my $msg_object          = C4::AR::Mensajes::create();
+    my $pedido_cotizacion   = C4::Modelo::AdqPedidoCotizacion->new();
+    my $db                  = $pedido_cotizacion->db;
+
+    if (!($msg_object->{'error'})){
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+    
+        eval{            
+            my $id_pedido_cotizacion = $param->{'pedido_cotizacion_id'};           
+            
+            # recorremos el array de ids de ejemplares, para por cada id obtenerlo y pasarle la info a agregar a un pedido_detalle
+            for(my $i=0; $i<scalar(@{$param->{'ejemplares_ids_array'}}); $i++){
+            
+                my $ejemplar   = C4::AR::Nivel2::getNivel2FromId2($param->{'ejemplares_ids_array'}->[$i]);
+                
+                my %params;          
+                $params{'id_pedido_recomendacion'}         = $id_pedido_cotizacion; 
+                 
+                # ver esto:               
+                $params{'cat_nivel2_id'}                    = $ejemplar->getCatNivel2Id(); 
+                $params{'autor'}                            = $ejemplar->getAutor(); 
+                $params{'titulo'}                           = $ejemplar->getTitulo(); 
+                $params{'lugar_publicacion'}                = $ejemplar->getLugarPublicacion(); 
+                $params{'editorial'}                        = $ejemplar->getEditorial();
+                $params{'fecha_publicacion'}                = $ejemplar->getFechaPublicacion();
+                $params{'coleccion'}                        = $ejemplar->getColeccion();
+                $params{'isbn_issn'}                        = $ejemplar->getIsbnIssn();
+                $params{'adq_recomendacion_detalle'}        = $ejemplar->getId();      
+                $params{'cantidad_ejemplares'}              = $param->{'cant_ejemplares_array'};
+                
+                # TODO: traer numero de renglon de pedido_cotizacion
+                $params{'nro_renglon'}                      = $i + 1;
+                      
+                my $pedido_cotizacion_detalle               = C4::Modelo::AdqPedidoCotizacionDetalle->new(db => $db);    
+                
+                $pedido_cotizacion_detalle->addPedidoCotizacionDetalle(\%params);    
+
+            }   
+    
+            $msg_object->{'error'} = 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A033', 'params' => []});
+            $db->commit;         
+        };
+        
+        if ($@){
+         # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+            &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+            $db->rollback;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+    }
+    return ($msg_object);  
 }
 
 # 

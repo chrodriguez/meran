@@ -36,6 +36,38 @@ if($tipoAccion eq "AGREGAR_PEDIDO_COTIZACION"){
     print $infoOperacionJSON;                        
 }
 
+elsif($tipoAccion eq "APPEND_PEDIDO_COTIZACION"){
+
+    # agregamos pedido_cotizacion_detalle (uno o varios) al pedido de cotizacion 
+    # que se esta editando en el momento, se va a guardar sin recomendacion_detalle_id
+    
+    my %params = {};
+        
+    # id del pedido_cotizacion padre de los detalles
+    $params{'pedido_cotizacion_id'}  = $obj->{'pedido_cotizacion_id'};
+    
+    # los ids de los ejemplares a agregar
+    $params{'ejemplares_id_array'}   = $obj->{'ejemplares_ids_array'};
+    
+    # array con las cantidades de ejemplares
+    $params{'cant_ejemplares_array'} = $obj->{'cant_ejemplares_array'};
+        
+    my ($message) = C4::AR::PedidoCotizacion::appendPedidoCotizacion(\%params);  
+
+
+    my ($userid, $session, $flags) = checkauth( $input, $authnotrequired,
+                                            {   ui              => 'ANY', 
+                                                tipo_documento  => 'ANY', 
+                                                accion          => 'ALTA', 
+                                                entorno         => 'usuarios'},
+                                                "intranet"
+                                            );                              
+    my $infoOperacionJSON = to_json $message;
+    
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;                        
+}
+
 elsif($tipoAccion eq "PRESUPUESTAR"){
 
     # se devuelve el combo de proveedores para poder presupuestarlos
