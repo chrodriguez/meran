@@ -59,7 +59,7 @@ function obtenerTiposDePrestamos(){
 function obtenerDatosDelEjemplar(){
     var barcode         = $('#barcode_hidden').val();
 
-    if($('#operacion').val() == 'devolver')
+    if($('#operacion').val() == 'devolver'){
         barcode = $('#barcodePrestado').val();
     }
 
