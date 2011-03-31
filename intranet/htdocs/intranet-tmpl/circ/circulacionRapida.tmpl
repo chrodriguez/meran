@@ -57,13 +57,18 @@ function obtenerTiposDePrestamos(){
 }
 
 function obtenerDatosDelEjemplar(){
+    var barcode         = $('#barcode_hidden').val();
+
+    if($('#operacion').val() == 'devolver')
+        barcode = $('#barcodePrestado').val();
+    }
 
     objAH               = new AjaxHelper(updateObtenerDatosDelEjemplar);
     objAH.debug         = true;
     objAH.showOverlay   = true;
 //     objAH.cache         = true;
     objAH.url           = "/cgi-bin/koha/circ/circulacionDB.pl";
-    objAH.barcode       = $('#barcode_hidden').val();
+    objAH.barcode       = 
     objAH.tipoAccion    = "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR";
     //se envia la consulta
     objAH.sendToServer();
