@@ -68,7 +68,7 @@ function obtenerDatosDelEjemplar(){
     objAH.showOverlay   = true;
 //     objAH.cache         = true;
     objAH.url           = "/cgi-bin/koha/circ/circulacionDB.pl";
-    objAH.barcode       = 
+    objAH.barcode       = barcode;
     objAH.tipoAccion    = "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR";
     //se envia la consulta
     objAH.sendToServer();
