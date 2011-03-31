@@ -47,7 +47,7 @@ function obtenerTiposDePrestamos(){
 	objAH               = new AjaxHelper(updateObtenerTiposDePrestamos);
 	objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.cache         = true;
+//     objAH.cache         = true;
 	objAH.url           = "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio     = NRO_SOCIO_AUTH;
 	objAH.barcode       = $('#barcode_hidden').val();
@@ -61,7 +61,7 @@ function obtenerDatosDelEjemplar(){
     objAH               = new AjaxHelper(updateObtenerDatosDelEjemplar);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.cache         = true;
+//     objAH.cache         = true;
     objAH.url           = "/cgi-bin/koha/circ/circulacionDB.pl";
     objAH.barcode       = $('#barcode_hidden').val();
     objAH.tipoAccion    = "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR";
@@ -142,7 +142,7 @@ function tieneApoderado(){
 	var objAH               = new AjaxHelper(updateTieneAutorizado);
 	objAH.debug             = true;
     objAH.showOverlay       = true;
-    objAH.cache             = true;
+//     objAH.cache             = true;
 	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
 	objAH.nro_socio         = NRO_SOCIO_AUTH;
 	objAH.tipoAccion        = "CIRCULACION_RAPIDA_TIENE_AUTORIZADO";
