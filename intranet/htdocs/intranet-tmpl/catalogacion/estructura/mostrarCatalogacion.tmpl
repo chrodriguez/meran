@@ -21,6 +21,8 @@
                 <td width="10%">[% 'Tipo' | i18n %]</td>
                 <td width="10%">[% 'Validador' | i18n %]</td>
                 <td width="10%">[% 'Referencia' | i18n %]</td>
+                <td width="10%">[% 'Campo referencia' | i18n %]</td>
+                <td width="10%">[% 'Orden' | i18n %]</td>
                 <td width="4%">[% 'Fijo' | i18n %]</td>
                 <td width="5%">[% 'Obligatorio' | i18n %]</td>
                 <td width="5%">[% 'Visible' | i18n %]</td>
@@ -78,7 +80,20 @@
                                             [% "No tiene" | i18n %]
                                     [% END %]
                 </td>
-
+                <td>    
+                                    [% IF catalogacion.tieneReferencia == 1 %]
+                                            [% catalogacion.infoReferencia.getCampos %]
+                                    [% ELSE %]
+                                            [% "No tiene" | i18n %]
+                                    [% END %]
+                </td>
+                <td>    
+                                    [% IF catalogacion.tieneReferencia == 1 %]
+                                            [% catalogacion.infoReferencia.getOrden %]
+                                    [% ELSE %]
+                                            [% "No tiene" | i18n %]
+                                    [% END %]
+                </td>
                 <td>    
                         <!-- AGREGADO SOLO PARA DEBUGUEAR -->
                                     [% IF catalogacion.soyFijo == 1 %]
