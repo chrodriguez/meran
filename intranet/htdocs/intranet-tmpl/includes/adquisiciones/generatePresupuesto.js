@@ -1,24 +1,12 @@
 /*
  * LIBRERIA generatePresupuesto v 0.0.9
  * Esta es una libreria creada para el sistema Meran
- * Contendran las funciones para la generacion de presupuestos para la compra de ejemplares
+ * Contendran las funciones para la generacion de presupuestos
+ * y pedidos de cotizacion para la compra de ejemplares
  * Fecha de creacion 07/02/2011
  */ 
  
  
-/************************************************************ PEDIDOS COTIZACION  *********************************************/
-
-function addPedidoCotizacion(){
-// AJAX
-
-}
-
-/********************************************************** FIN -PEDIDOS COTIZACION  *******************************************/
-
-
-
-
-
 /******************************************************** AGREGAR PRESUPUESTO **************************************************/
 
 var arreglo                  = new Array() //global, arreglo con las recomendaciones seleccionadas

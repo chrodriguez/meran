@@ -27,7 +27,39 @@ if($tipoAccion eq "AGREGAR_PEDIDO_COTIZACION"){
                                             {   ui              => 'ANY', 
                                                 tipo_documento  => 'ANY', 
                                                 accion          => 'ALTA', 
-                                                entorno         => 'adquisiciones'},
+                                                entorno         => 'usuarios'},
+                                                "intranet"
+                                            );                              
+    my $infoOperacionJSON = to_json $message;
+    
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;                        
+}
+
+elsif($tipoAccion eq "APPEND_PEDIDO_COTIZACION"){
+
+    # agregamos pedido_cotizacion_detalle (uno o varios) al pedido de cotizacion 
+    # que se esta editando en el momento, se va a guardar sin recomendacion_detalle_id
+    
+    my %params = {};
+        
+    # id del pedido_cotizacion padre de los detalles
+    $params{'pedido_cotizacion_id'}  = $obj->{'pedido_cotizacion_id'};
+    
+    # los ids de los ejemplares a agregar
+    $params{'ejemplares_ids_array'}  = $obj->{'ejemplares_ids_array'};
+    
+    # array con las cantidades de ejemplares
+    $params{'cant_ejemplares_array'} = $obj->{'cant_ejemplares_array'};
+        
+    my ($message) = C4::AR::PedidoCotizacion::appendPedidoCotizacion(\%params);  
+
+
+    my ($userid, $session, $flags) = checkauth( $input, $authnotrequired,
+                                            {   ui              => 'ANY', 
+                                                tipo_documento  => 'ANY', 
+                                                accion          => 'ALTA', 
+                                                entorno         => 'usuarios'},
                                                 "intranet"
                                             );                              
     my $infoOperacionJSON = to_json $message;
@@ -45,7 +77,7 @@ elsif($tipoAccion eq "PRESUPUESTAR"){
                                     query           => $input,
                                     type            => "intranet",
                                     authnotrequired => 0,
-                                    flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'adquisiciones'},
+                                    flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
                                     debug           => 1,
                             });
     
@@ -54,4 +86,21 @@ elsif($tipoAccion eq "PRESUPUESTAR"){
     $t_params->{'combo_proveedores'}    = $combo_proveedores;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
+
+elsif($tipoAccion eq "AGREGAR_PEDIDO_COTIZACION_DETALLE"){
+
+    # se muestra el template de busquedas de ejemplares del OPAC
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                    template_name   => "adquisiciones/addPedidoCotizacion.tmpl",
+                                    query           => $input,
+                                    type            => "intranet",
+                                    authnotrequired => 0,
+                                    flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
+                                    debug           => 1,
+                            });
+
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);    
 }
