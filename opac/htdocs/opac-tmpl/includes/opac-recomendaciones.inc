@@ -4,6 +4,7 @@
 
 
 <script src="/opac-tmpl/includes/opac-searchFunciones.js" type="text/javascript"></script>
+<script src="/opac-tmpl/includes/tabletojson.js" type="text/javascript"> </script>
 <script src="/opac-tmpl/includes/opac-recomendaciones.js" type="text/javascript"></script>
 <script src="/includes/jquery/modal/jquery.simplemodal.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -17,6 +18,34 @@ function buscarDatosNivel2(){
         objAH.tipoAccion        = 'BUSQUEDA_RECOMENDACION';
         objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val();
         objAH.sendToServer();
+}
+
+
+function guardarRecomendacion(){
+    $("#tabla_recomendacion").tabletojson({
+            headers: "Autor,Titulo, Edicion, Lugar Publicacion, Editorial, Fecha, ISBN/ISSN, Cantidad",
+            attribHeaders: "{}",
+            returnElement: "#table",
+            complete: function(x){
+                 objAH                     = new AjaxHelper(updateGuardarRecomendacion);
+                 objAH.url                 = '/cgi-bin/koha/opac-recomendacionesAdd.pl';
+                 objAH.debug               = true;
+                 objAH.showOverlay         = true;
+                 objAH.table               = JSONstring.toObject(x);
+         alert(x)
+                 objAH.tipoAccion          = 'GUARDAR_RECOMENDACION';
+                 objAH.sendToServer();
+            }
+        })
+}
+
+function updateGuardarRecomendacion(responseText){
+  
+   if (!verificarRespuesta(responseText)) {
+            return(0);
+            var Messages=JSONstring.toObject(responseText);
+            setMessages(Messages);
+   }
 }
 
 
@@ -98,7 +127,7 @@ $(document).ready( function() {
       [% message %]
       <div class="recomendacionform">
               
-          <form id="recom_form" name="recom_form" method="post" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">
+ <!--         <form id="recom_form" name="recom_form" method="post" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">-->
               <input type="hidden" name="action" value="agregar">
               <!--<fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
                 
@@ -177,7 +206,7 @@ $(document).ready( function() {
             
 
               <fieldset  id="recomendacion"><legend class="titulo_legend trigger click">&nbsp;[% 'Recomendacion' | i18n %]&nbsp;</legend>
-                  <table id="tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
+                  <table id="tabla_recomendacion" name= "tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
                           <thead>    
                               <th align="center">
                                   [% "Autor" | i18n %]
@@ -213,9 +242,9 @@ $(document).ready( function() {
                         <tbody>
                         </tbody>
                       </table>
-                      <input type="submit" value="Enviar Recomendacion">
+                      <input type="button" onclick="guardarRecomendacion()" value="Enviar Recomendacion">
                 </fieldset>
-           </form>           
+          <!-- </form> -->          
       </div>         
 </div>
         
