@@ -47,7 +47,7 @@ elsif($tipoAccion eq "APPEND_PEDIDO_COTIZACION"){
     $params{'pedido_cotizacion_id'}  = $obj->{'pedido_cotizacion_id'};
     
     # los ids de los ejemplares a agregar
-    $params{'ejemplares_id_array'}   = $obj->{'ejemplares_ids_array'};
+    $params{'ejemplares_ids_array'}  = $obj->{'ejemplares_ids_array'};
     
     # array con las cantidades de ejemplares
     $params{'cant_ejemplares_array'} = $obj->{'cant_ejemplares_array'};
