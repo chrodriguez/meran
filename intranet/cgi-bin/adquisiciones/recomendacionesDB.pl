@@ -24,7 +24,7 @@ if($obj){
             query               => $input,
             type                => "intranet",
             authnotrequired     => 0,
-            flagsrequired       => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICAR', entorno => 'adquisiciones'},
+            flagsrequired       => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
         });   
            
     my ($ok) = C4::AR::Recomendaciones::updateRecomendacionDetalle($obj);
@@ -35,6 +35,46 @@ if($obj){
     print $infoOperacionJSON;
     
     }
+    
+    elsif ($tipoAccion eq 'BUSQUEDA_RECOMENDACION') {
+
+        my $idNivel1        =  $obj->{'idCatalogoSearch'};
+        my $combo_ediciones = C4::AR::Utilidades::generarComboNivel2($idNivel1);
+
+        ($template, $session, $t_params)= get_template_and_user({
+                            template_name   => "includes/partials/proveedores/combo_ediciones.tmpl",
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 1,
+                            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                        });
+
+        $t_params->{'combo_ediciones'} = $combo_ediciones;
+
+       
+    } elsif ($tipoAccion eq 'CARGAR_DATOS_EDICION')   {
+
+        my $idNivel2        =  $obj->{'edicion'};
+
+        my $idNivel1        = $obj->{'idCatalogoSearch'};
+
+        my $datos_edicion   = C4::AR::Nivel2::getNivel2FromId2($idNivel2);
+      
+        my $datos_nivel1    = C4::AR::Nivel1::getNivel1FromId1($idNivel1);
+
+        ($template, $session, $t_params)= get_template_and_user({
+                            template_name   => "includes/partials/proveedores/datos_edicion.tmpl",
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 1,
+                            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                        });
+
+        $t_params->{'datos_edicion'} = $datos_edicion;
+        $t_params->{'datos_nivel1'}  = $datos_nivel1;
+    }
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }else{
 #   trabajamos con CGI
@@ -49,7 +89,7 @@ if($obj){
             query               => $input,
             type                => "intranet",
             authnotrequired     => 0,
-            flagsrequired       => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICAR', entorno => 'adquisiciones'},
+            flagsrequired       => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
         });   
            
         my $recomendaciones             = C4::AR::Recomendaciones::getRecomendacionDetallePorId($id_recomendacion);

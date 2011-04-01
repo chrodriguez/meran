@@ -15,7 +15,7 @@ my ($template, $session, $t_params) = get_template_and_user({
     query           => $input,
     type            => "intranet",
     authnotrequired => 0,
-    flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'adquisiciones'},
+    flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
     debug           => 1,
 });
 
@@ -23,7 +23,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 if($obj){
     $obj                    = C4::AR::Utilidades::from_json_ISO($obj);
     my ($message)           = C4::AR::Proveedores::agregarProveedor($obj);
-    my $infoOperacionJSON   =to_json $message;
+    my $infoOperacionJSON   = to_json $message;
 
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
@@ -31,14 +31,14 @@ if($obj){
 }else{
 # mostramos el template porque esta agregando normalmente
 
-     my $comboDeTipoDeDoc       = &C4::AR::Utilidades::generarComboTipoDeDocConValuesIds();
-     my $combo_tipo_materiales  = &C4::AR::Utilidades::generarComboTipoDeMaterial();
-     my $combo_formas_envio     = &C4::AR::Utilidades::generarComboFormasDeEnvio();
+    my $comboDeTipoDeDoc       = &C4::AR::Utilidades::generarComboTipoDeDocConValuesIds();
+    my $combo_tipo_materiales  = &C4::AR::Utilidades::generarComboTipoDeMaterial();
+    my $combo_formas_envio     = &C4::AR::Utilidades::generarComboFormasDeEnvio();
 
-     $t_params->{'combo_tipo_documento'}    = $comboDeTipoDeDoc; 
-     $t_params->{'combo_tipo_materiales'}   = $combo_tipo_materiales; 
-     $t_params->{'combo_formas_envio'}      = $combo_formas_envio;
-     $t_params->{'page_sub_title'}          = C4::AR::Filtros::i18n("Agregar Proveedor");
+    $t_params->{'combo_tipo_documento'}    = $comboDeTipoDeDoc; 
+    $t_params->{'combo_tipo_materiales'}   = $combo_tipo_materiales; 
+    $t_params->{'combo_formas_envio'}      = $combo_formas_envio;
+    $t_params->{'page_sub_title'}          = C4::AR::Filtros::i18n("Agregar Proveedor");
 
-  C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
