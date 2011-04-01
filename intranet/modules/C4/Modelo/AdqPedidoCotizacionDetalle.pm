@@ -61,7 +61,7 @@ sub addPedidoCotizacionDetalle{
     my ($params) = @_;
     
     $self->setAdqPedidoCotizacionId($params->{'id_pedido_recomendacion'});
-    $self->setCatNivel2Id($params->{'at_nivel2_id'});
+    $self->setCatNivel2Id($params->{'cat_nivel2_id'});
     $self->setAutor($params->{'autor'});
     $self->setTitulo($params->{'titulo'});
     $self->setLugarPublicacion($params->{'lugar_publicacion'});
