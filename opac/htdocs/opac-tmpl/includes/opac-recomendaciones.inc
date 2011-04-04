@@ -32,7 +32,7 @@ function guardarRecomendacion(){
                  objAH.debug               = true;
                  objAH.showOverlay         = true;
                  objAH.table               = JSONstring.toObject(x);
-         alert(x)
+                  alert(x);
                  objAH.tipoAccion          = 'GUARDAR_RECOMENDACION';
                  objAH.sendToServer();
             }
@@ -235,9 +235,7 @@ $(document).ready( function() {
                               <th align="center">
                                   [% "Cantidad de ejemplares" | i18n %]
                               </th>
-                              <th>
-                                [% "Eliminar" | i18n %]
-                              </th> 
+                             
                         </thead>
                         <tbody>
                         </tbody>

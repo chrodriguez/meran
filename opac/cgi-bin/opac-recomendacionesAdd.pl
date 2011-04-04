@@ -10,41 +10,34 @@ use CGI;
 my $input = new CGI;
 
 my $obj   = $input->param('obj');
-# $obj = C4::AR::Utilidades::from_json_ISO($obj);
+$obj = C4::AR::Utilidades::from_json_ISO($obj);
 
+my ($template, $session, $t_params) = get_template_and_user({
+    template_name => "opac-main.tmpl",
+    query => $input,
+    type => "opac",
+    authnotrequired => 0,
+    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'undefined'},
+    debug => 1,
+});
 
+# my $input_params = $input->Vars;
 
+my $usr_socio_id= C4::AR::Usuarios::getSocioInfoPorNroSocio(C4::AR::Auth::getSessionUserID($session))->getId_socio();
 
-# my ($template, $session, $t_params) = get_template_and_user({
-#     template_name => "opac-main.tmpl",
-#     query => $input,
-#     type => "opac",
-#     authnotrequired => 0,
-#     flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'undefined'},
-#     debug => 1,
-# });
-
-
-C4::AR::Debug::debug("################################# INPUT PARAMS #############################################");
-C4::AR::Utilidades::printHASH($obj->{'table'});
-C4::AR::Debug::debug("################################# INPUT Params#############################################");
-
-
-my $input_params = $input->Vars;
-
-# my $usr_socio_id= C4::AR::Usuarios::getSocioInfoPorNroSocio(C4::AR::Auth::getSessionUserID($session))->getId_socio();
-
+my $status = C4::AR::Recomendaciones::agregarRecomendacion($obj,$usr_socio_id);
 
 # FIXME  iterar por cada detalle agregado al a recomendacion (por ahora agrega solo un detalle)
 
 
-# 
-# my $status = C4::AR::Recomendaciones::agregarRecomendacion($input_params,$usr_socio_id);
+
+
+#
 
 
 # TODO MOSTRAR MENSAJE
 
-# $t_params->{'message'}= $status->{'messages'}[0]->{'message'};
+$t_params->{'message'}= $status->{'messages'}[0]->{'message'};
 
 # if ($status){
 #     C4::AR::Auth::redirectTo('/cgi-bin/koha/opac-recomendaciones.pl?token'.$input->param('token'));

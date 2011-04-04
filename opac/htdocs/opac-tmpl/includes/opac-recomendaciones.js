@@ -61,7 +61,7 @@ function agregarRenglon(){
                     '<td id="fecha'+id+'" name=fecha'+id+'>'+fecha+'</td>' +
                     '<td id="isbn_issn'+id+'" name=isbn_issn'+id+'>'+ISBN_ISSN+'</td>'+
                     '<td id="cant_ejemplares'+id+'" name=cant_ejemplares'+id+'>'+cant_ejemplares+'</td>' +
-                    '<td><input type="button" onclick="eliminarFila('+id+')" name="'+id+'" value="X"></input></td>' +
+//                     '<td><input type="button" onclick="eliminarFila('+id+')" name="'+id+'" value="X"></input></td>' +
                  '</tr>'
             )
             $('#recomendacion').show();
