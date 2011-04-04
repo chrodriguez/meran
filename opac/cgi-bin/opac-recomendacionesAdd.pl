@@ -12,6 +12,10 @@ my $input = new CGI;
 my $obj   = $input->param('obj');
 $obj = C4::AR::Utilidades::from_json_ISO($obj);
 
+       C4::AR::Debug::debug("Que carajooooooooooooooooo");
+                          C4::AR::Utilidades::printHASH($obj->{'table'}[0]);
+
+
 my ($template, $session, $t_params) = get_template_and_user({
     template_name => "opac-main.tmpl",
     query => $input,

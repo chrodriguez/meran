@@ -59,7 +59,12 @@ sub agregarRecomendacionDetalle{
     my ($self)   = shift;
     my ($params) = @_;
 
-    $self->setAdqRecomendacionId($id_adq_recomendacion);
+#     C4::AR::Debug::debug("A VERRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+#     C4::AR::Utilidades::printHASH($params);
+ 
+
+
+   $self->setAdqRecomendacionId($params->{'id_recomendacion'});
     
     $self->setCatNivel2Id($params->{'hidden_id_nivel_2'});
     $self->setAutor($params->{'autor'});
