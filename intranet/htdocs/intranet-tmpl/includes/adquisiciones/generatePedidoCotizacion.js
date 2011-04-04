@@ -7,7 +7,7 @@
  */ 
 
 
-/******************************************************** AGREGAR PRESUPUESTO **************************************************/
+/******************************************************** PEDIDO COTIZACION **************************************************/
 
 var arreglo                  = new Array() //global, arreglo con las recomendaciones seleccionadas
 var array_cantidades         = new Array() //global, arreglo cantidades de ejemplares de las recomendaciones
@@ -35,16 +35,30 @@ function getCantidades(array_ids){
     return array_cantidades
 }
 
-/************************************************************ FIN - AGREGAR PRESUPUESTO ******************************************/
+function getTemplateAddPedidoCotizacion(){
 
+    // traemos el template de busquedas de ejemplares para que se agreguen pedidos de cotizacion
+    
+    objAH                       = new AjaxHelper(updateGetTemplateAddPedidoCotizacion)
+    objAH.url                   = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
+    objAH.debug                 = true
+    objAH.showOverlay           = true
+ 
+    objAH.tipoAccion            = 'AGREGAR_PEDIDO_COTIZACION_DETALLE'
+    objAH.sendToServer()  
 
+}
 
+function updateGetTemplateAddPedidoCotizacion(responseText){
+    $('#pedido_cotizacion').html(responseText)
+    $('#pedido_cotizacion').show()
+}
 
-
-/************************************************************ AGREGAR PEDIDO COTIZACION ************************************************/
 
 
 function addPedidoCotizacion(){
+    // agrega pedido de cotizacion a partir de las recomendaciones seleccionadas
+    // nota: no es appendPedidoCotizacion que agrega pedidos_cotizacion nuevos desde la busqueda
     if(checkSeleccionados(true)){
         objAH                           = new AjaxHelper(updateAddPedidoCotizacion)
         objAH.url                       = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
@@ -73,7 +87,7 @@ function updateAddPedidoCotizacion(responseText){
 
 }
 
-/************************************************************ FIN - AGREGAR PEDIDO COTIZACION ******************************************/
+/************************************************************ FIN - PEDIDO COTIZACION ******************************************/
 
 
 

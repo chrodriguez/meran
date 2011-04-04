@@ -3,7 +3,6 @@
 <script type="text/javascript" language="javascript">
     $(document).ready(function() {
         $('#presupuesto').hide() 
-        $('#pedido_cotizacion').hide() 
         $('#links').hide() 
     });
 </script>
@@ -64,16 +63,8 @@
             [% END %]    
     </tbody>   
     </table>
-            [% PERL %]
-            print C4::AR::Filtros::to_Button( 
-                                                text    =>  "[% 'Agregar Nuevo Pedido' | i18n %]",
-                                                boton   =>  "boton_buscar",
-                                                onClick =>  "addPedidoCotizacion()",
-                    ) ;                 
-        [% END %]
 </fieldset>
 <input type="hidden" value="" id="pedido_cotizacion_selected" />
-<div id="pedido_cotizacion"></div>
 <div id="presupuesto"></div>
 <div id="links"></div>
 [% INCLUDE "intranet-bottom.inc" %]

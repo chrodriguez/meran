@@ -207,7 +207,7 @@ sub sortByString{
 
     my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
 #   C4::AR::Debug::debug("UsrPersona=> sortByString => fieldsString: ".$fieldsString);
-    C4::AR::Debug::debug("UsrSocio => campo: ".$campo);
+#     C4::AR::Debug::debug("UsrSocio => campo: ".$campo);
 
     my $index;  
     my $campos_salida;
@@ -219,7 +219,7 @@ sub sortByString{
 
         if ($index != -1){
         #agrego un campo valido
-            C4::AR::Debug::debug("UsrSocio => sortByString => f ".$f);
+#             C4::AR::Debug::debug("UsrSocio => sortByString => f ".$f);
             push (@fields_out, $f)
         }
     }
@@ -231,7 +231,7 @@ sub sortByString{
 
         $campos_salida  = substr $campos_salida, 0, length($campos_salida) - 1;
     
-        C4::AR::Debug::debug("UsrSocio => sortByString => campos_salida ".$campos_salida);
+#         C4::AR::Debug::debug("UsrSocio => sortByString => campos_salida ".$campos_salida);
         return $campos_salida;
   
     } else {

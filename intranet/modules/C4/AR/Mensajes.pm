@@ -414,7 +414,9 @@ my %mensajesINTRA = (
     'A037' => 'La exportaci&oacute;n no ha podido realizarse.', 
     'A038' => 'Las monedas seleccionadas son inv&aacute;lidas.', 
     'A039' => 'Las formas de envio seleccionadas son inv&aacute;lidas.', 
-    'A040' => 'Los materiales seleccionados son inv&aacute;lidos.',    
+    'A040' => 'Los materiales seleccionados son inv&aacute;lidos.',  
+    'A041' => 'El pedido de cotizaci&acute;n fue agregado exitosamente.',       
+    'A042' => 'Alguno de los ejemplares seleccionados ya se encuentran dentro del Pedido de Cotizaci&oacute;n.',   
 );
 
 sub getMensaje {

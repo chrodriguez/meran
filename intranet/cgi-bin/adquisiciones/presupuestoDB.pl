@@ -169,7 +169,7 @@ elsif($tipoAccion eq "EXPORTAR_PRESUPUESTO"){
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
+        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'}, # FIXME
         debug           => 1,
     });
 
