@@ -73,6 +73,7 @@ sub appendPedidoCotizacion{
                 $msg_object->{'error'}= 1;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A042', 'params' => []} ) ;
                 $db->rollback;
+                $bool_existe_ejemplar = 1;
 
               }else{
          
@@ -106,10 +107,14 @@ sub appendPedidoCotizacion{
                 
                 $pedido_cotizacion_detalle->addPedidoCotizacionDetalle(\%params);    
               }
+            } 
+            
+            # nos fijamos si hay que commitear o ya hizo rollback
+            if(!$bool_existe_ejemplar){  
+                $msg_object->{'error'} = 0;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A041', 'params' => []});
+                $db->commit;      
             }   
-            $msg_object->{'error'} = 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A041', 'params' => []});
-            $db->commit;         
         };
         
         if ($@){

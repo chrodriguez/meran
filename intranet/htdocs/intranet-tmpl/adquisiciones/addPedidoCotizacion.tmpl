@@ -25,7 +25,7 @@ function updateBuscarDatosNivel2(responseText){
     });
     if (!verificarRespuesta(responseText)) {
         return(0);
-        var Messages=JSONstring.toObject(responseText)
+        var Messages = JSONstring.toObject(responseText)
         setMessages(Messages)
    }
 }
@@ -106,7 +106,7 @@ function appendPedidoCotizacion(formId){
 function updateAppendPedidoCotizacion(responseText){
     if (!verificarRespuesta(responseText)) {
         return(0);
-        var Messages=JSONstring.toObject(responseText);
+        var Messages = JSONstring.toObject(responseText);
         setMessages(Messages);
    }
 }
