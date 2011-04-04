@@ -76,6 +76,10 @@ $(document).ready( function() {
 		[% END %]
 	[% END %]
 
+
+    if(MODIFICAR){
+        $('#combo_nivel_bibliografico').hide();
+    }
 //     if(_modificar){
 //         $('#titulo_modificar').show();
 //         showTipoDocumento();
@@ -99,30 +103,35 @@ $(document).ready( function() {
 </div>-->
 <div id="abm_tablas_referencia"><div id="abm_tablas_referencia_content"></div></div>
 
+<fieldset>
+    <legend class="titulo_legend">[% "Datos del esquema" | i18n %]</legend>
+        <ul style="clear:both">
+            <li class="sub_item" >
 <!-- <div id="div_combo_tipo_documento"> -->
-<ul style="clear:both">
-    <li class="sub_item" >
-        <label for="tipo_nivel3_id">
-            [% "Esquema de ingreso de datos:" | i18n %]
-        </label>
-            [% comboTipoDocumento %]
-    
-        [% PERL %]
-                print C4::AR::Filtros::to_Icon(   
-                                                    boton   => "icon_buscar",
-                                                    onClick => "mostrarEstructuraDelNivel1();",
-                                                    title   => "[% 'Buscar' | i18n %]",
-                        ) ;
-        [% END %]
-    </li>
-<!-- </div> -->
-    <li class="sub_item" >
-        <label for="id_nivel_bibliografico">
-            [% "Nivel Bibliogr&aacute;fico:" | i18n %]
-        </label>
-        [% comboTipoNivelBibliografico %]
-    </li>
-</ul>
+                <label for="tipo_nivel3_id">
+                    [% "Esquema de ingreso de datos:" | i18n %]
+                </label>
+                    [% comboTipoDocumento %]
+            
+                [% PERL %]
+                        print C4::AR::Filtros::to_Icon(   
+                                                            boton   => "icon_buscar",
+                                                            onClick => "mostrarEstructuraDelNivel1();",
+                                                            title   => "[% 'Buscar' | i18n %]",
+                                ) ;
+                [% END %]
+            </li>
+        <!-- </div> -->
+        <div id="combo_nivel_bibliografico">
+            <li class="sub_item" >
+                <label for="id_nivel_bibliografico">
+                    [% "Nivel Bibliogr&aacute;fico:" | i18n %]
+                </label>
+                [% comboTipoNivelBibliografico %]
+            </li>
+        </div>
+        </ul>
+</fieldset>
 
 <div class="todo classform">
 
@@ -141,7 +150,7 @@ $(document).ready( function() {
 <!--            Manejo del Nivel 1 -->
 <div id="nivel1Tabla" style="display:none">
 <fieldset>
-<legend class="titulo_legend"></legend>
+<legend class="titulo_legend">[% "Datos del registro" | i18n %]</legend>
 
 <!--<form id="formNivel1" name="formNivel1" class="validateDataForm">-->
 <form id="formNivel1" name="formNivel1">
@@ -168,7 +177,7 @@ $(document).ready( function() {
 <!--            Manejo del Nivel 2 -->
 <div id="nivel2Tabla" style="display:none">
 <fieldset>
-<legend class="titulo_legend"></legend>
+<legend class="titulo_legend">[% "Datos del grupo" | i18n %]</legend>
     
 <!--<form id="formNivel2" name="formNivel2" class="validateDataForm">-->
 <form id="formNivel2" name="formNivel2">
@@ -195,7 +204,7 @@ $(document).ready( function() {
 <!--            Manejo del Nivel 3 -->
 <div id="nivel3Tabla" style="display:none">   
 <fieldset>
-<legend class="titulo_legend"></legend>
+<legend class="titulo_legend">[% "Datos del ejemplar" | i18n %]</legend>
 
 <!--<form id="formNivel3" name="formNivel3" class="validateDataForm">-->
 <form id="formNivel3" name="formNivel3">
