@@ -11,6 +11,7 @@ use C4::Modelo::AdqPedidoCotizacionDetalle;
 use C4::Modelo::AdqPedidoCotizacionDetalle::Manager;
 use C4::AR::Recomendaciones;
 use C4::AR::PedidoCotizacion;
+use C4::AR::PedidoCotizacionDetalle;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -47,51 +48,67 @@ sub getPresupuestosPedidoCotizacion{
     Esta funcion agrega pedido/s cotizacion_detalle a un pedido_cotizacion ya existente
     Parametros: (El id del pedido_cotizacion y los ids de los ejemplares a agregar)
 =cut
-sub appenddPedidoCotizacion{
+sub appendPedidoCotizacion{
 
-    my ($param)             = @_;
-    my $msg_object          = C4::AR::Mensajes::create();
-    my $pedido_cotizacion   = C4::Modelo::AdqPedidoCotizacion->new();
-    my $db                  = $pedido_cotizacion->db;
+    my ($param)              = @_;
+    my $msg_object           = C4::AR::Mensajes::create();
+    my $pedido_cotizacion    = C4::Modelo::AdqPedidoCotizacion->new();
+    my $db                   = $pedido_cotizacion->db;
+    my $bool_existe_ejemplar = 0; # bool para el mensaje al cliente, donde chequea que no se agregue el mismo ejemplar dos veces
 
     if (!($msg_object->{'error'})){
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
     
         eval{            
-            my $id_pedido_cotizacion = $param->{'pedido_cotizacion_id'};           
+            my $id_pedido_cotizacion = $param->{'pedido_cotizacion_id'};      
             
             # recorremos el array de ids de ejemplares, para por cada id obtenerlo y pasarle la info a agregar a un pedido_detalle
             for(my $i=0; $i<scalar(@{$param->{'ejemplares_ids_array'}}); $i++){
-            
-                my $ejemplar   = C4::AR::Nivel2::getNivel2FromId2($param->{'ejemplares_ids_array'}->[$i]);
+
+                # chequeamos que el ejemplar no este ya agregado en la base, al mismo pedido_cotizacion
+              if(C4::AR::PedidoCotizacionDetalle::existeEjemplarEnPedidoCotizacion($param->{'ejemplares_ids_array'}->[$i],$id_pedido_cotizacion,$db))
+              {         
+              # existe el ejemplar en la base, cortar la transaccion y mostrar un mensaje al usuario.
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A042', 'params' => []} ) ;
+                $db->rollback;
+
+              }else{
+         
+                # nivel 2
+                my $ejemplar_n2 = C4::AR::Nivel2::getNivel2FromId2($param->{'ejemplares_ids_array'}->[$i]);
+                # nivel 1
+                my $ejemplar_n1 = C4::AR::Nivel1::getNivel1FromId1($ejemplar_n2->getId1());
                 
-                my %params;          
+                my %params;
+                   
+                # FIXME: cambiar 'recomendacion' por 'pedido_cotizacion', pero en TODOS los metodos       
                 $params{'id_pedido_recomendacion'}         = $id_pedido_cotizacion; 
                  
                 # ver esto:               
-                $params{'cat_nivel2_id'}                    = $ejemplar->getCatNivel2Id(); 
-                $params{'autor'}                            = $ejemplar->getAutor(); 
-                $params{'titulo'}                           = $ejemplar->getTitulo(); 
-                $params{'lugar_publicacion'}                = $ejemplar->getLugarPublicacion(); 
-                $params{'editorial'}                        = $ejemplar->getEditorial();
-                $params{'fecha_publicacion'}                = $ejemplar->getFechaPublicacion();
-                $params{'coleccion'}                        = $ejemplar->getColeccion();
-                $params{'isbn_issn'}                        = $ejemplar->getIsbnIssn();
-                $params{'adq_recomendacion_detalle'}        = $ejemplar->getId();      
-                $params{'cantidad_ejemplares'}              = $param->{'cant_ejemplares_array'};
-                
-                # TODO: traer numero de renglon de pedido_cotizacion
-                $params{'nro_renglon'}                      = $i + 1;
-                      
-                my $pedido_cotizacion_detalle               = C4::Modelo::AdqPedidoCotizacionDetalle->new(db => $db);    
+                $params{'cat_nivel2_id'}                    = $param->{'ejemplares_ids_array'}->[$i]; 
+                $params{'autor'}                            = $ejemplar_n1->getAutor(); 
+                $params{'titulo'}                           = $ejemplar_n1->getTitulo(); 
+                $params{'lugar_publicacion'}                = $ejemplar_n2->getCiudadPublicacion(); 
+                $params{'editorial'}                        = $ejemplar_n2->getEditor();
+                $params{'fecha_publicacion'}                = $ejemplar_n2->getAnio_publicacion();
+                $params{'coleccion'}                        = ""; # no encontre la coleccion en nivel1 ni en nivel2
+                $params{'isbn_issn'}                        = $ejemplar_n2->getISSN();
+                $params{'adq_recomendacion_detalle'}        = 'NULL';      
+                $params{'cantidad_ejemplares'}              = $param->{'cant_ejemplares_array'}->[0];
+                               
+                # si le paso:  ->new($db)  se rompe          
+                my $pedido_cotizacion_detalle               = C4::Modelo::AdqPedidoCotizacionDetalle->new(db=>$db);    
+                              
+                # sacar el maximo
+                $params{'nro_renglon'}                      = (C4::AR::PedidoCotizacionDetalle::getCantRenglonesByPedidoPadre($id_pedido_cotizacion,$db) + 1);
                 
                 $pedido_cotizacion_detalle->addPedidoCotizacionDetalle(\%params);    
-
+              }
             }   
-    
             $msg_object->{'error'} = 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A033', 'params' => []});
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A041', 'params' => []});
             $db->commit;         
         };
         
@@ -107,27 +124,6 @@ sub appenddPedidoCotizacion{
     }
     return ($msg_object);  
 }
-
-# 
-# sub getRenglonFromCotizacion{
-#       my ($id_pedido, $nro_renglon) =@_;
-#       
-#       my $db = C4::Modelo::AdqPedidoCotizacionDetalle->new()->db;
-#       my $presupuestos = C4::Modelo::AdqPedidoCotizacionDetalle::Manager->get_adq_pedido_cotizacion_detalle(   
-#                                                                     db => $db,
-#                                                                     query  => [ ref_pedido_cotizacion_id => $id_pedido && nro_renglon => $nro_renglon],
-#                                                                 );
-#       my @results;
-# 
-#       foreach my $pres (@$presupuestos) {
-#           push (@results, $pres);
-#       }
-# 
-#       return(\@results);
-# 
-# }
-
-
 
 
 sub getAdqPedidoCotizacionDetalle{

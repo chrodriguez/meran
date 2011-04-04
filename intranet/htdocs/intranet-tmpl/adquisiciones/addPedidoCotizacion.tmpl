@@ -67,8 +67,8 @@ function eliminarFila(filaId){
 function agregarRenglon(){
     var id= $('#edicion_id').val()
     
-    array_cantidad_ejemplares[array_ejemplares_id.length]   =  $('#cant_ejemplares').val()   
-    cant_ejemplares_array[array_ejemplares_id.length]       = id               
+    cant_ejemplares_array[array_ejemplares_id.length]   =  $('#cant_ejemplares').val()   
+    array_ejemplares_id[array_ejemplares_id.length]     = id               
 
     if( ($('#input'+id).val() == null) ){
         var autor               = $('#autor').val()
@@ -83,7 +83,7 @@ function agregarRenglon(){
       
         limpiarCampos();
             
-        $('#tabla_recomendacion').append('<tr id="tr'+id+'" name='+id+'><input type="hidden" value="'+id+'" id="input'+id+'"><td>'+autor+'</td><td>'+titulo+'</td><td>'+edicion+'</td><td>'+lugar_publicacion+'</td>'+'<td>'+editorial+'</td><td>'+fecha+'</td><td>'+autor+'</td><td>'+coleccion+'</td><td>'+ISBN_ISSN+'</td>'+'<td>'+cant_ejemplares+'</td><td><input type="button" onclick="eliminarFila('+id+')"  value="X"></input></td></tr>')
+        $('#tabla_recomendacion').append('<tr id="tr'+id+'" name='+id+'><input type="hidden" value="'+id+'" id="input'+id+'"><td>'+autor+'</td><td>'+titulo+'</td><td>'+edicion+'</td><td>'+lugar_publicacion+'</td>'+'<td>'+editorial+'</td><td>'+fecha+'</td><td>'+coleccion+'</td><td>'+ISBN_ISSN+'</td>'+'<td>'+cant_ejemplares+'</td><td><input type="button" onclick="eliminarFila('+id+')"  value="X"></input></td></tr>')
         $('#recomendacion').show();     
      }
 }
@@ -102,6 +102,7 @@ function appendPedidoCotizacion(formId){
     objAH.sendToServer()
 }
 
+// FIXME: no muestra el mensaje en la pagina
 function updateAppendPedidoCotizacion(responseText){
     if (!verificarRespuesta(responseText)) {
         return(0);
@@ -140,7 +141,10 @@ function updateAppendPedidoCotizacion(responseText){
             <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
                 <p><label for="catalogo_search" class="left">[% 'Palabra Clave:' | i18n %]</label>
                 <input type='text' id='catalogo_search' name='catalogo_search' value='' size=40 tabindex='3' style="float: left"></p>
-                <input type='hidden' id='catalogo_search_hidden' name='catalogo_search_hidden' value=''>                                
+                <input type='hidden' id='catalogo_search_hidden' name='catalogo_search_hidden' value=''> 
+                [% PERL %]
+                    print C4::AR::Filtros::setHelp(text => "[% 'Tipee el Titulo del libro, el autor, la editorial.' | i18n %]",);
+                [% END %]                               
             </fieldset>
             <div id="ediciones"></div>
             <div id="datos_edicion_seleccionada"></div>
@@ -182,9 +186,6 @@ function updateAppendPedidoCotizacion(responseText){
                         </th>
                         <th align="center">
                             [% "ISBN/ISSN" | i18n %]
-                        </th>
-                        <th align="center">
-                            [% "Fecha" | i18n %]
                         </th>
                         <th align="center">
                             [% "Cantidad de ejemplares" | i18n %]

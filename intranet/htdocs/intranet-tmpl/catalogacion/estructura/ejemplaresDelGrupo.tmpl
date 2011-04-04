@@ -72,12 +72,12 @@
                                                               blank =>  1,
                                                         );
                         [% END %]
-                    [% ELSE %]
-                        
-                        <span class="[% claseDisponibilidad %]">
-                            [% nivel3_obj.getDisponibilidadObject.getNombre %]
-                        </span>
+
                     [% END %]
+
+                        <div class="[% claseDisponibilidad %]">
+                            [% nivel3_obj.getDisponibilidadObject.getNombre %]
+                        </div>
                 </td>
   <!--              <td>
                     <span class="[% claseEstado %]">

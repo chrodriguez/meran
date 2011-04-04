@@ -104,8 +104,8 @@ sub getMsgCode{
 =cut
 sub _getExpireStatus{
   my $expire = C4::Context->config("expire");
+#         C4::AR::Debug::debug("EXPIRA => ".$expire);
   if (defined($expire)){
-#       C4::AR::Debug::debug("EXPIRA".$expire);
       return ( $expire );
   }else{
       return (1);
@@ -451,11 +451,14 @@ sub _verificarSession {
     my ($session,$type,$token)=@_;
     my $valido_token=C4::Context->config("token") || 0;
     my $codeMSG;
+
+#     C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => session ".$session->dump());
+
     if(defined $session and $session->is_expired()){
         #EXPIRO LA SESION
         $codeMSG='U355';     
-        #C4::AR::Debug::debug("expiro");    
-    }else{
+        C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => expiro");    
+    } else {
         #NO EXPIRO LA SESION
         _init_i18n({ type => $type });
         if ($session->param('userid')) {
@@ -463,23 +466,23 @@ sub _verificarSession {
             #Quiere decir que la sesion existe ahora hay q Verificar condiciones
             if (_cambioIp($session)){
                 $codeMSG='U356';             
-#                 C4::AR::Debug::debug("invalida cambioip");    
+                C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => cambio la ip");  
             } elsif ($session->param('flag') eq 'LOGUIN_DUPLICADO'){
                 $codeMSG='U359';            
-#                 C4::AR::Debug::debug("invalida duplicado");    
-             } elsif (($session->param('token') ne $token) and ($valido_token)){
-                $codeMSG='U354';            
-#                 C4::AR::Debug::debug("invalida token");    
+                    C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => loguin duplicado");  
+            } elsif (($session->param('token') ne $token) and ($valido_token)){
+                    $codeMSG='U354';            
+                    C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => token invalido");    
                 }else {
-                #ESTA TODO OK
+                    #ESTA TODO OK
 #                 C4::AR::Debug::debug("valida");    
-                 return ($codeMSG,"sesion_valida");
-            }
-          }
-        else {
-        #Esto quiere decir que la sesion esta bien pero que no hay nadie logueado
-#         C4::AR::Debug::debug("no hay sesion");    
-        return ($codeMSG,"sin_sesion");
+                    return ($codeMSG,"sesion_valida");
+                }
+
+        } else {
+            #Esto quiere decir que la sesion esta bien pero que no hay nadie logueado
+    #         C4::AR::Debug::debug("no hay sesion");    
+            return ($codeMSG,"sin_sesion");
         }
     }
 #     C4::AR::Debug::debug("sesion invalida");    
@@ -523,6 +526,7 @@ sub checkauth {
         #No es DEMO hay q hacer todas las comprobaciones de la sesion
         my ($codeMSG,$estado)=_verificarSession($session,$type,$token);
         if ($estado eq "sesion_valida"){ 
+            C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
             $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
             $flags=$socio->tienePermisos($flagsrequired);
             if ($flags) {
@@ -535,18 +539,21 @@ sub checkauth {
             }
         } 
         elsif ($estado eq "sesion_invalida") { 
+            C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_invalida");
             _destruirSession('U406', $template_params);
             $session->param('codMsg', $codeMSG);
             $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
             redirectTo('/cgi-bin/koha/auth.pl'); 
         } 
         elsif ($estado eq "sin_sesion") { 
+            C4::AR::Debug::debug("C4::AR::Auth::checkauth => sin_sesion");
             #ESTO DEBERIA PASAR solo cuando la sesion esta sin iniciar
             #_destruirSession('U406', $template_params);
             $session->param('codMsg', $codeMSG);
             }
         else { 
             #ESTO MENOS
+            C4::AR::Debug::debug("C4::AR::Auth::checkauth => ESTO MENOS ???");
             _destruirSession('U406', $template_params);
             $session->param('codMsg', $codeMSG);
             $session->param('redirectTo', '/cgi-bin/koha/error.pl');
@@ -570,9 +577,9 @@ sub checkauth {
             #recupero el userid y la password desde el cliente
             $userid             = $query->param('userid');
             my $password        = $query->param('password');
-            my $nroRandom   = $session->param('nroRandom');
+            my $nroRandom       = $session->param('nroRandom');
             #se verifica la password ingresada
-            my ($socio) = _verificarPassword($userid,$password,$nroRandom);
+            my ($socio)         = _verificarPassword($userid,$password,$nroRandom);
 #             C4::AR::Debug::debug("la pass es valida?".$passwordValida);
             if ($socio) {
             #se valido la password y es valida

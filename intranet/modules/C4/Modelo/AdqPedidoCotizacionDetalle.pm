@@ -14,16 +14,16 @@ __PACKAGE__->meta->setup(
           id                            => { type => 'integer', not_null => 1 },  
           adq_pedido_cotizacion_id      => { type => 'integer', not_null => 1 },  
           cat_nivel2_id                 => { type => 'integer', not_null => 1 },
-          autor                         => { type => 'varchar', length => 255, not_null => 1},
-          titulo                        => { type => 'varchar', length => 255, not_null => 1},
-          lugar_publicacion             => { type => 'varchar', length => 255, not_null => 1},
-          editorial                     => { type => 'varchar', length => 255, not_null => 1},
+          autor                         => { type => 'varchar', length => 255 },
+          titulo                        => { type => 'varchar', length => 255 },
+          lugar_publicacion             => { type => 'varchar', length => 255 },
+          editorial                     => { type => 'varchar', length => 255 },
           fecha_publicacion             => { type => 'varchar'},
-          coleccion                     => { type => 'varchar', length => 255, not_null => 1},
-          isbn_issn                     => { type => 'varchar', length => 45, not_null => 1},
+          coleccion                     => { type => 'varchar', length => 255 },
+          isbn_issn                     => { type => 'varchar', length => 45 },
           cantidad_ejemplares           => { type => 'integer', length => 5, not_null => 1 },  
           precio_unitario               => { type => 'float', length => 5, not_null => 1},
-          adq_recomendacion_detalle_id  => { type => 'varchar', length => 255, not_null => 1},
+          adq_recomendacion_detalle_id  => { type => 'varchar', length => 255 },
           nro_renglon                   => { type => 'integer', length => 5, not_null => 1 },  
 
     ],
@@ -61,7 +61,7 @@ sub addPedidoCotizacionDetalle{
     my ($params) = @_;
     
     $self->setAdqPedidoCotizacionId($params->{'id_pedido_recomendacion'});
-    $self->setCatNivel2Id($params->{'at_nivel2_id'});
+    $self->setCatNivel2Id($params->{'cat_nivel2_id'});
     $self->setAutor($params->{'autor'});
     $self->setTitulo($params->{'titulo'});
     $self->setLugarPublicacion($params->{'lugar_publicacion'});
