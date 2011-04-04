@@ -77,6 +77,10 @@ function limpiarCampos(){
 
 function eliminarFila(filaId){
     $('#tr'+filaId).remove()
+    if($('#tabla_recomendacion').length == 1){
+        alert('entro')
+        $('#boton_agregar_pedido').hide()
+    }
 }
 
 
