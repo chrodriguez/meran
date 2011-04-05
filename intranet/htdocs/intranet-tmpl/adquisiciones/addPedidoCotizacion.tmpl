@@ -15,18 +15,7 @@
                 [% END %]                               
             </fieldset>
             <div id="ediciones"></div>
-            <div id="datos_edicion_seleccionada"></div>
-            <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Motivo de la propuesta' | i18n %]&nbsp;</legend>
-                <div class="motivo" id="motivo">
-                    <textarea name="motivo_propuesta" id="motivo_propuesta" cols="45" class="required" rows="10" tabindex="17"></textarea>
-                </div>
-            </fieldset>
-            <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Comentarios' | i18n %]&nbsp;</legend>
-                <div class="comentario" id="comentario">
-                    <textarea name="comment" id="comment" cols="45" class="required" rows="10" tabindex="17"></textarea>
-                    <input type="hidden" name="post_message" id="post_message" value="1"/>
-                </div>
-            </fieldset>  
+            <div id="datos_edicion_seleccionada"></div> 
             <form id="pedido_cotizacion_form" name="recom_form" method="post" action="adquisiciones/pedidoCotizacionDB.pl">       
             <fieldset  id="recomendacion"><legend class="titulo_legend trigger click">&nbsp;[% 'Recomendacion' | i18n %]&nbsp;</legend>
                 <table id="tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
