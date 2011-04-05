@@ -150,6 +150,21 @@ function updatePrestamosInterBibliotecarios(responseText){
     });
 }
 
+
+function generarLibreDeuda(){
+    objAH               = new AjaxHelper(updateGenerarLibreDeuda);
+    objAH.url           = '/cgi-bin/koha/usuarios/libreDeuda.pl';
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.nro_socio     = USUARIO.ID;
+    objAH.sendToServer();
+}
+
+function updateGenerarLibreDeuda(responseText){
+    var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+}
+
 function createFileUploader(){
 	if($("#uploader")[0] != null){
 

@@ -41,6 +41,7 @@ $VERSION = 3;
     &cantidadDeUsoTipoPrestamo
     &getInfoPrestamo
     &getHistorialPrestamosVigentesParaTemplate
+    &tienePrestamos
 );
 
 
@@ -407,6 +408,26 @@ sub obtenerPrestamosDeSocio {
 
                                 );     
     return ($prestamos_array_ref_count, $prestamos_array_ref);
+}
+
+=head2  
+    sub tienePrestamos
+    Dado un socio, devuelve si tiene ejemplares prestados
+=cut
+sub tienePrestamos {
+
+    use C4::Modelo::CircPrestamo;
+    use C4::Modelo::CircPrestamo::Manager;
+
+    my ($nro_socio)=@_;
+
+    my $prestamos_array_ref_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( 
+                                          query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $nro_socio }],
+                                          require_objects => ['nivel3','socio','ui'],
+
+                                );
+
+    return ($prestamos_array_ref_count);
 }
 
 =item
