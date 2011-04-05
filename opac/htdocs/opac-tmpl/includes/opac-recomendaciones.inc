@@ -23,7 +23,7 @@ function buscarDatosNivel2(){
 
 function guardarRecomendacion(){
     $("#tabla_recomendacion").tabletojson({
-            headers: "Autor,Titulo, Edicion, Lugar Publicacion, Editorial, Fecha, ISBN/ISSN, Cantidad",
+            headers: "Autor,Titulo, Edicion, Lugar Publicacion, Editorial, Fecha, ISBN/ISSN, Nivel 2, Cantidad",
             attribHeaders: "{}",
             returnElement: "#table",
             complete: function(x){
@@ -32,7 +32,9 @@ function guardarRecomendacion(){
                  objAH.debug               = true;
                  objAH.showOverlay         = true;
                  objAH.table               = JSONstring.toObject(x);
-                  alert(x);
+                 alert(x)
+                 objAH.motivo_propuesta    = $('#motivo_propuesta').val();
+                 objAH.comment             = $('#comment').val();
                  objAH.tipoAccion          = 'GUARDAR_RECOMENDACION';
                  objAH.sendToServer();
             }
@@ -161,7 +163,7 @@ $(document).ready( function() {
               <div class="carga_manual" id="carga_manual"> 
                      [% PERL %]
                           print C4::AR::Filtros::setHelp(text => "[% 'No se han encontrado resultados para la busqueda realizada. Si lo desea, puede llenar los campos manualmente' | i18n %]",
-                                        );
+                                        );   C4::AR::Debug::debug("Save Detalle");
                       [% END %]
                     <fieldset> <legend class="titulo_legend trigger click">[% "Carga manual de material" %]</legend>
                           <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
@@ -231,6 +233,9 @@ $(document).ready( function() {
                               </th>-->
                               <th align="center">
                                   [% "ISBN/ISSN" | i18n %]
+                              </th>
+                              <th align="center">
+                                  [% "Nivel 2" | i18n %]
                               </th>
                               <th align="center">
                                   [% "Cantidad de ejemplares" | i18n %]

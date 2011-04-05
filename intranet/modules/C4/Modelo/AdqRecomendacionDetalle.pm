@@ -59,14 +59,9 @@ sub agregarRecomendacionDetalle{
     my ($self)   = shift;
     my ($params) = @_;
 
-#     C4::AR::Debug::debug("A VERRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-#     C4::AR::Utilidades::printHASH($params);
- 
-
-
-   $self->setAdqRecomendacionId($params->{'id_recomendacion'});
+    $self->setAdqRecomendacionId($params->{'id_recomendacion'});
     
-    $self->setCatNivel2Id($params->{'hidden_id_nivel_2'});
+    $self->setCatNivel2Id($params->{'nivel_2'});
     $self->setAutor($params->{'autor'});
     $self->setTitulo($params->{'titulo'});
     $self->setLugarPublicacion($params->{'lugar_publicacion'});
@@ -80,6 +75,8 @@ sub agregarRecomendacionDetalle{
     $self->setReservaMaterial($params->{'reservar'});
   
     $self->save();
+ 
+
 
 }
 

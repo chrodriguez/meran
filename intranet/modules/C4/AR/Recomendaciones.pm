@@ -47,24 +47,11 @@ sub editarCantidadEjemplares{
 sub agregarRecomendacion{
     my ($params, $usr_socio_id) = @_;
 
-# C4::AR::Debug::debug("PARAMSSSSSSSSSSSSSSSSSSSSSs");
-#     C4::AR::Utilidades::printHASH($params);
-    
-#  C4::AR::Debug::debug("TABLEEEEE");
-#     C4::AR::Utilidades::printARRAY($params->{'table'});
-
     my $recomendacion = C4::Modelo::AdqRecomendacion->new();
     my $msg_object= C4::AR::Mensajes::create();
     my $db = $recomendacion->db;
     
-    my %datos_recomendacion;
-# 
-#     foreach $renglon (@$obj->{'table'})  {
-#       
-#      
-# 
-#     }
-#     
+
 # TODO
 
     #_verificarDatosProveedor($param,$msg_object);
@@ -74,27 +61,29 @@ sub agregarRecomendacion{
           $db->{connect_options}->{AutoCommit} = 0;
           $db->begin_work;
 
-#           eval{
+           eval{
        
-              $recomendacion->agregarRecomendacion($usr_socio_id);
-           
-              $datos_recomendacion{'id_recomendacion'}=$recomendacion->getId();
-              
-              for my $i=0; $i< scalar($params->{'table'}); $i++ {
-                      C4::AR::Debug::debug("Renglonnn".$renglon);
-                      C4::AR::Utilidades::printARRAY($params->{'table'}[$i]);
-                      $datos_recomendacion{'hidden_id_nivel_2'}= $renglon->{'catalogo_search_hidden'};
-                      $datos_recomendacion{'autor'}=$renglon->{'autor'};
-                      $datos_recomendacion{'titulo'}=$renglon->{'titulo'};
-                      $datos_recomendacion{'lugar_publicacion'}=  $renglon->{'lugar_publicacion'};
-                      $datos_recomendacion{'editorial'}= $renglon->{'editorial'};
-                      $datos_recomendacion{'fecha'}= $renglon->{'fecha'};
-                      $datos_recomendacion{'coleccion'}= $renglon->{'coleccion'};
-                      $datos_recomendacion{'isbn_issn'}= $renglon->{'isbn_issn'};
-                      $datos_recomendacion{'cantidad_ejemplares'}= $renglon->{'cant_ejemplares'};
-                      $datos_recomendacion{'motivo_propuesta'}= $renglon->{'motivo_propuesta'};
-                      $datos_recomendacion{'comentarios'}= $renglon->{'comment'};
-                      $datos_recomendacion{'reservar'}= $renglon->{'reservar'}||0;
+             $recomendacion->agregarRecomendacion($usr_socio_id);
+      
+  
+              for (my $i=0; $i< scalar(@{$params->{'table'}}); $i++) {
+                   
+                      my %datos_recomendacion;
+                      $datos_recomendacion{'id_recomendacion'}=$recomendacion->getId();
+                      $datos_recomendacion{'nivel_2'}= ($params->{'table'}[$i])->{'Nivel2'};
+                      $datos_recomendacion{'autor'}=($params->{'table'}[$i])->{'Autor'};
+                      $datos_recomendacion{'titulo'}=($params->{'table'}[$i])->{'Titulo'};
+                      $datos_recomendacion{'lugar_publicacion'}=  ($params->{'table'}[$i])->{'LugarPublicacion'};
+                      $datos_recomendacion{'editorial'}= ($params->{'table'}[$i])->{'Editorial'};
+                      $datos_recomendacion{'fecha'}= ($params->{'table'}[$i])->{'Fecha'};
+                      $datos_recomendacion{'coleccion'}= ($params->{'table'}[$i])->{'Coleccion'};
+                      $datos_recomendacion{'isbn_issn'}= ($params->{'table'}[$i])->{'ISBN_ISSN'};
+                      $datos_recomendacion{'cantidad_ejemplares'}= ($params->{'table'}[$i])->{'Cantidad'};
+                      $datos_recomendacion{'motivo_propuesta'}= ($params->{'table'}[$i])->{'motivo_propuesta'};
+                      $datos_recomendacion{'comentarios'}= ($params->{'table'}[$i])->{'comment'};
+                      $datos_recomendacion{'reservar'}= ($params->{'table'}[$i])->{'reservar'}||0;
+
+#                           
 
                       my $recomendacion_detalle = C4::Modelo::AdqRecomendacionDetalle->new(db => $db); 
                       $recomendacion_detalle->agregarRecomendacionDetalle(\%datos_recomendacion);
@@ -105,14 +94,14 @@ sub agregarRecomendacion{
                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
                $db->commit;
 
-#               };
-#               if ($@){
-#               # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
-#                   &C4::AR::Mensajes::printErrorDB($@, 'B410',"OPAC");
-#                   $msg_object->{'error'}= 1;
-#                   C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B410', 'params' => []} ) ;
-#                   $db->rollback;
-#               }
+            };
+            if ($@){
+              # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+                  &C4::AR::Mensajes::printErrorDB($@, 'B410',"OPAC");
+                  $msg_object->{'error'}= 1;
+                  C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B410', 'params' => []} ) ;
+                  $db->rollback;
+              }
 
               $db->{connect_options}->{AutoCommit} = 1;
     }

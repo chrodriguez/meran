@@ -47,7 +47,7 @@ function agregarRenglon(){
             var coleccion = $('#coleccion').val();
             var ISBN_ISSN = $('#isbn_issn').val();
             var cant_ejemplares = $('#cant_ejemplares').val();
-      
+            var id_nivel_2 = $('#catalogo_search_hidden').val();
             limpiarCampos();
             
             $('#tabla_recomendacion').append(
@@ -60,7 +60,8 @@ function agregarRenglon(){
                     '<td id="editorial'+id+'" name=editorial'+id+'>'+editorial+'</td>' +
                     '<td id="fecha'+id+'" name=fecha'+id+'>'+fecha+'</td>' +
                     '<td id="isbn_issn'+id+'" name=isbn_issn'+id+'>'+ISBN_ISSN+'</td>'+
-                    '<td id="cant_ejemplares'+id+'" name=cant_ejemplares'+id+'>'+cant_ejemplares+'</td>' +
+                    '<td id="nivel_2'+id+'" name=nivel_2'+id+'>'+id_nivel_2+'</td>'+
+                    '<td id="cant_ejemplares'+id+'" name=cant_ejemplares'+id+'>'+cant_ejemplares+'</td>' +                
 //                     '<td><input type="button" onclick="eliminarFila('+id+')" name="'+id+'" value="X"></input></td>' +
                  '</tr>'
             )
