@@ -260,6 +260,7 @@ my %mensajesINTRA = (
     'U420' => 'No se puede imprimir el certificado de libre deuda por tener pr&eacute;stamos vencidos.',
     'U421' => 'No se puede imprimir el certificado de libre deuda por tener pr&eacute;stamos.',
     'U422' => 'No se puede imprimir el certificado de libre deuda por tener sanciones.',
+    'U423' => 'Se puede imprimir el certificado de libre deuda para *?*. <br/> *?*',
     'U500' => 'La tarjeda de identificaci&oacute;n ingresada (Nro. de socio) ya pertenece a otro usuario.',
 #     'U405' => 'No existe la estructura de catalogaci&oacute;n que se intentando recuperar.',
     'B400' => '',

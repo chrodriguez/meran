@@ -16,17 +16,16 @@ $(document).ready(function() {
           callBackFunction: buscarDatosNivel2,
     })
     $('#carga_manual').click(function(){        
-              $('#datos_edicion').hide()
+        $('#datos_edicion').hide()
     });
     $('#catalogo_search').blur(function(){        
-              limpiarCampos()
+        limpiarCampos()
     });
     $('#recomendacion').hide();
-    makeToggle('carga_manual','trigger',null,true);
-    makeToggle('motivo','trigger',null,true);
-    makeToggle('comentario','trigger',null,true);
+    makeToggle('add_ejemplar','trigger',null,true);
 });
 
+// busqueda autocomplete por nombre ejemplar, editorial, autor
 function buscarDatosNivel2(){
     objAH                   = new AjaxHelper(updateBuscarDatosNivel2)
     objAH.debug             = true
@@ -46,6 +45,7 @@ function updateBuscarDatosNivel2(responseText){
     });   
 }
 
+// trae la edicion cuando selecciona el combo de ediciones
 function cargarDatosEdicionSeleccionada(){
     objAH                   = new AjaxHelper(updateCargarDatosEdicionSeleccionada)
     objAH.debug             = true
@@ -57,11 +57,11 @@ function cargarDatosEdicionSeleccionada(){
     objAH.sendToServer();
 }
 
-
 function updateCargarDatosEdicionSeleccionada(responseText){
     $('#datos_edicion_seleccionada').html(responseText);    
 }
 
+// limpia los inputs cuando se agrega un ejemplar en el cliente
 function limpiarCampos(){
     $('#autor').val("")
     $('#titulo').val("")
@@ -74,16 +74,15 @@ function limpiarCampos(){
     $('#cant_ejemplares').val("")
 }
 
-
+// borra una fila de la tabla en el cliente
 function eliminarFila(filaId){
     $('#tr'+filaId).remove()
     /*if($('#tabla_recomendacion').length == 1){
-        alert('entro')
         $('#boton_agregar_pedido').hide()
     }*/
 }
 
-
+// agrega una fila en el cliente
 function agregarRenglon(){
     var id= $('#edicion_id').val()
     
@@ -108,6 +107,7 @@ function agregarRenglon(){
      }
 }
 
+// agrega el pedido de cotizacion en la base
 function appendPedidoCotizacion(formId){
 
     objAH                       = new AjaxHelper(updateAppendPedidoCotizacion)

@@ -15,18 +15,31 @@
                 [% END %]                               
             </fieldset>
             <div id="ediciones"></div>
-            <div id="datos_edicion_seleccionada"></div>
-            <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Motivo de la propuesta' | i18n %]&nbsp;</legend>
-                <div class="motivo" id="motivo">
-                    <textarea name="motivo_propuesta" id="motivo_propuesta" cols="45" class="required" rows="10" tabindex="17"></textarea>
+<!--            <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Agregar Ejemplar a Mano' | i18n %]&nbsp;</legend>
+                <div class="add_ejemplar" id="add_ejemplar">
+                    <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
+                    <input type="text" name="autor" id="autor" class="field" value="" tabindex="10" /></p>
+                    <p><label for="titulo" class="left">[% 'T&iacute;tulo*' | i18n %]:</label>
+                    <input type="text" name="titulo" id="titulo" class="field" value="" tabindex="10" /></p>
+                    <p><label for="lugar_publicacion_" class="left">[% 'Lugar de Publicaci&oacute;n*' | i18n %]:</label>
+                    <input type="text" name="lugar_publicacion" id="lugar_publicacion" class="field" value="" tabindex="10" /></p>
+                    <p><label for="editorial" class="left">[% 'Editorial*' | i18n %]:</label>
+                    <input type="text" name="editorial" id="editorial" class="field" value="" tabindex="10" /></p>
+                    <p><label for="fecha" class="left">[% 'Fecha*' | i18n %]:</label>
+                    <input type="text" name="fecha" id="fecha" class="field" value="" tabindex="10" /></p>
+                    <p><label for="coleccion" class="left">[% 'Colecci&oacute;n*' | i18n %]:</label>
+                    <input type="text" name="coleccion" id="coleccion" class="field" value="" tabindex="10" /></p>
+                    <p><label for="isbn_issn" class="left">[% 'ISBN/ISSN' | i18n %]:</label>
+                    <input type="text" name="isbn_issn" id="isbn_issn" class="field" value="" tabindex="10" /></p>
+                    <p><label for="cant_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
+                    <input type="text" name="cant_ejemplares" id="cant_ejemplares" class="field" value="" tabindex="10" /></p>        
+                    [% PERL %]
+                        print C4::AR::Filtros::setHelp(text => "[% '(*) Obligatorio ' | i18n %]",                                );
+                    [% END %]
+                    <p><input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" /> </p>  
                 </div>
-            </fieldset>
-            <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Comentarios' | i18n %]&nbsp;</legend>
-                <div class="comentario" id="comentario">
-                    <textarea name="comment" id="comment" cols="45" class="required" rows="10" tabindex="17"></textarea>
-                    <input type="hidden" name="post_message" id="post_message" value="1"/>
-                </div>
-            </fieldset>  
+            </fieldset>  -->
+            <div id="datos_edicion_seleccionada"></div> 
             <form id="pedido_cotizacion_form" name="recom_form" method="post" action="adquisiciones/pedidoCotizacionDB.pl">       
             <fieldset  id="recomendacion"><legend class="titulo_legend trigger click">&nbsp;[% 'Recomendacion' | i18n %]&nbsp;</legend>
                 <table id="tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
