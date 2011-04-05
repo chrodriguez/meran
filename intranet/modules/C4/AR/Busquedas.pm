@@ -576,11 +576,11 @@ sub obtenerDisponibilidadTotal{
         }
 	}
 
-    $disponibilidad[$i]->{'tipoPrestamo'}   = "Para Domicilio:";
+    $disponibilidad[$i]->{'tipoPrestamo'}   = "Domicilio:";
     $disponibilidad[$i]->{'cantTotal'}      = $cant_para_domicilio;
 
     $i++;
-    $disponibilidad[$i]->{'tipoPrestamo'}   = "Para Sala:";
+    $disponibilidad[$i]->{'tipoPrestamo'}   = "Sala:";
     $disponibilidad[$i]->{'cantTotal'}      = $cant_para_sala;
 
     #     $i++;

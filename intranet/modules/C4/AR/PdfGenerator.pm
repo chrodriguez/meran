@@ -331,9 +331,17 @@ sub imprimirLinea2 {
 #que generan pdf - Damian - 23/05/2007
 sub imprimirFinal {
 	my ( $pdf, $tmpFileName ) = @_;
-	print "Content-type: application/pdf\n";
-	print "Content-Disposition: attachment; filename=\"$tmpFileName\"\n\n";
-	print $pdf->Finish();
+
+# OLD WAY
+# 	print "Content-type: application/pdf\n";
+# 	print "Content-Disposition: attachment; filename=\"$tmpFileName\"\n\n";
+# 	print $pdf->Finish();
+
+my $filename='/tmp/'.$tmpFileName;
+ $pdf->saveAs($filename);
+ print C4::AR::PdfGenerator::pdfHeader($filename);
+ C4::AR::PdfGenerator::printPDF($filename);
+
 }
 
 ################CARNETS############################################33
@@ -969,7 +977,7 @@ sub pdfFromHTML {
 	$htmldoc->set_header( 't', '.', 'D' );
 	$htmldoc->color_on();
 	$htmldoc->no_links();
-	$htmldoc->path('/usr/local/koha/intranet/htdocs');
+	$htmldoc->path(C4::Context->config('intrahtdocs'));
 
 	my $pdf = $htmldoc->generate_pdf();
 

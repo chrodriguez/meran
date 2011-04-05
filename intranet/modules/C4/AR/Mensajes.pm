@@ -254,7 +254,12 @@ my %mensajesINTRA = (
     'U414' => 'Error al intentar enviar el mail de prueba a la cuenta (*?*) <br/> (*?*).',                
     'U415' => 'Se han verificado los datos censales del socio.',                
     'U416' => 'No se han verificado los datos censales del socio, intentelo nuevamente.',
-    'U417' => 'No se puede repetir la signatura topogr&aacute;fica, existe en otro grupo.',                                    
+    'U417' => 'No se puede repetir la signatura topogr&aacute;fica, existe en otro grupo.',
+    'U418' => 'No se puede imprimir el certificado de libre deuda por tener reservas asignadas.',
+    'U419' => 'No se puede imprimir el certificado de libre deuda por tener reservas en espera.',
+    'U420' => 'No se puede imprimir el certificado de libre deuda por tener pr&eacute;stamos vencidos.',
+    'U421' => 'No se puede imprimir el certificado de libre deuda por tener pr&eacute;stamos.',
+    'U422' => 'No se puede imprimir el certificado de libre deuda por tener sanciones.',
     'U500' => 'La tarjeda de identificaci&oacute;n ingresada (Nro. de socio) ya pertenece a otro usuario.',
 #     'U405' => 'No existe la estructura de catalogaci&oacute;n que se intentando recuperar.',
     'B400' => '',
@@ -415,7 +420,7 @@ my %mensajesINTRA = (
     'A038' => 'Las monedas seleccionadas son inv&aacute;lidas.', 
     'A039' => 'Las formas de envio seleccionadas son inv&aacute;lidas.', 
     'A040' => 'Los materiales seleccionados son inv&aacute;lidos.',  
-    'A041' => 'El pedido de cotizaci&acute;n due agregado exitosamente.',       
+    'A041' => 'El pedido de cotizaci&oacute;n fue agregado exitosamente.',       
     'A042' => 'Alguno de los ejemplares seleccionados ya se encuentran dentro del Pedido de Cotizaci&oacute;n.',   
 );
 

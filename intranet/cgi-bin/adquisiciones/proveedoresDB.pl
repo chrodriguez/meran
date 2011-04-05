@@ -23,7 +23,7 @@ if($tipoAccion eq "ELIMINAR"){
                                             {   ui              => 'ANY', 
                                                 tipo_documento  => 'ANY', 
                                                 accion          => 'BAJA', 
-                                                entorno         => 'adquisiciones'},
+                                                entorno         => 'usuarios'},
                                                 "intranet"
                                     );
 

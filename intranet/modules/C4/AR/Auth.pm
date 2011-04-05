@@ -1243,12 +1243,15 @@ sub new_password_is_needed {
 }
 
 sub redirectAndAdvice{
-    my ($cod_msg)= @_;
+    my ($cod_msg,$destination)= @_;
     my ($session) = CGI::Session->load();
     $codMSG = $cod_msg;
     $cod_msg = getMsgCode();
     $session->param('codMsg',$cod_msg);
-    redirectTo('/cgi-bin/koha/informacion.pl');
+    if(!$destination){
+        $destination='/cgi-bin/koha/informacion.pl';
+    }
+    C4::AR::Auth::redirectTo($destination);
 }
 
 sub get_html_content {
