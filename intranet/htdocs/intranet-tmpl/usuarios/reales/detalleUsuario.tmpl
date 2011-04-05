@@ -209,14 +209,10 @@
                             [% END %]
                         </li>
                         <li>
-                            <form action=/cgi-bin/koha/usuarios/libreDeuda.pl method=get name="formLibre">
-                                        <input type=hidden name=nro_socio value="[% socio.getNro_socio %]" >
-                                        <input type=hidden name=token value="[% token %]" >
-                            </form>    
                             [% PERL %]
                                         print C4::AR::Filtros::to_Button(   text    => "[% 'Libre Deuda' | i18n %]",
                                                                             boton   => "boton_buscar",
-                                                                            onClick => "formLibre.submit();",
+                                                                            onClick => "generarLibreDeuda();",
                                                 ) ;
                             [% END %]
                        </li>

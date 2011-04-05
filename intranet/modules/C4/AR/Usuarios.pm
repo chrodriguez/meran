@@ -74,6 +74,7 @@ use vars qw(@EXPORT_OK @ISA);
     updateUserDataValidation
     needsDataValidation
     crearPersonaLDAP
+    _verificarLibreDeuda
 );
 
 =item
@@ -955,6 +956,61 @@ sub crearPersonaLDAP{
 	
 }
 
+=item
+    Modulo que chekea que el al usuario se le pueda emitir un libre deuda. Queda todo en $msg_object, ademas lo retorna;
+=cut
+sub _verificarLibreDeuda {
+
+    my ($nro_socio)=@_;
+
+
+    my $msg_object= C4::AR::Mensajes::create();
+
+    my $libreD=C4::AR::Preferencias::getValorPreferencia("libreDeuda");
+    my @array=split(//, $libreD);
+    my $ok=1;
+    my $msj="";
+    # RESERVAS ADJUDICADAS 0--------> flag 1; function C4::AR::Reservas::cant_reservas($borum);
+    # RESERVAS EN ESPERA   1--------> flag 2; function C4::AR::Reserves::cant_waiting($borum);
+    # PRESTAMOS VENCIDOS   2--------> flag 3; fucntion C4::AR::Sanciones::hasDebts("",$borum); 1 tiene vencidos. 0 no.
+    # PRESTAMOS EN CURSO   3--------> flag 4; fucntion C4::AR::Prestamos::DatosPrestamos($borum);
+    # SANSIONADO           4--------> flag 5; function C4::AR::Sanciones::hasSanctions($borum);
+
+    if($array[0] eq "1"){
+        if(C4::AR::Reservas::_getReservasAsignadas($nro_socio)){
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U418', 'params' => []} ) ;
+        }
+    }
+    if($array[1] eq "1" &&  (!($msg_object->{'error'}))){
+        if(C4::AR::Reservas::getReservasDeSocioEnEspera($nro_socio)){
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U419', 'params' => []} ) ;
+        }
+    }
+    if($array[2] eq "1" && (!($msg_object->{'error'}))){
+        if(&C4::AR::Sanciones::tieneLibroVencido($nro_socio)){
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U420', 'params' => []} ) ;
+        }
+    }
+
+     if($array[3] eq "1" && (!($msg_object->{'error'}))){
+        if(&C4::AR::Prestamos::tienePrestamos($nro_socio)){
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U421', 'params' => []} ) ;
+        }
+    }
+
+     if($array[4] eq "1" && (!($msg_object->{'error'}))){
+        if(&C4::AR::Sanciones::tieneSanciones($nro_socio)){
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U422', 'params' => []} ) ;
+        }
+    }
+
+    return ($msg_object);
+}
 
 END { }       # module clean-up code here (global destructor)
 

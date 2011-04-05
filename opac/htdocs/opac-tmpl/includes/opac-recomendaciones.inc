@@ -4,6 +4,7 @@
 
 
 <script src="/opac-tmpl/includes/opac-searchFunciones.js" type="text/javascript"></script>
+<script src="/opac-tmpl/includes/tabletojson.js" type="text/javascript"> </script>
 <script src="/opac-tmpl/includes/opac-recomendaciones.js" type="text/javascript"></script>
 <script src="/includes/jquery/modal/jquery.simplemodal.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -20,12 +21,43 @@ function buscarDatosNivel2(){
 }
 
 
+function guardarRecomendacion(){
+    $("#tabla_recomendacion").tabletojson({
+            headers: "Autor,Titulo, Edicion, Lugar Publicacion, Editorial, Fecha, ISBN/ISSN, Nivel 2, Cantidad",
+            attribHeaders: "{}",
+            returnElement: "#table",
+            complete: function(x){
+                 objAH                     = new AjaxHelper(updateGuardarRecomendacion);
+                 objAH.url                 = '/cgi-bin/koha/opac-recomendacionesAdd.pl';
+                 objAH.debug               = true;
+                 objAH.showOverlay         = true;
+                 objAH.table               = JSONstring.toObject(x);
+                 alert(x)
+                 objAH.motivo_propuesta    = $('#motivo_propuesta').val();
+                 objAH.comment             = $('#comment').val();
+                 objAH.tipoAccion          = 'GUARDAR_RECOMENDACION';
+                 objAH.sendToServer();
+            }
+        })
+}
+
+function updateGuardarRecomendacion(responseText){
+  
+   if (!verificarRespuesta(responseText)) {
+            return(0);
+            var Messages=JSONstring.toObject(responseText);
+            setMessages(Messages);
+   }
+}
+
+
 function updateBuscarDatosNivel2(responseText){
    $('#ediciones').html(responseText);
 
    $('#edicion_id').val('').attr("selected",true);
-   $('#edicion_id').change( function(){         
-              cargarDatosEdicionSeleccionada();
+   $('#edicion_id').change( function(){    
+              var edicion=this.options[this.selectedIndex].text
+              cargarDatosEdicionSeleccionada(edicion)
    });
    if (!verificarRespuesta(responseText)) {
             return(0);
@@ -35,13 +67,14 @@ function updateBuscarDatosNivel2(responseText){
 }
 
 
-function cargarDatosEdicionSeleccionada(){
+function cargarDatosEdicionSeleccionada(edicion){
         objAH                   = new AjaxHelper(updateCargarDatosEdicionSeleccionada);
         objAH.debug             = true;
         objAH.showOverlay       = true;
         objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
         objAH.tipoAccion        = 'CARGAR_DATOS_EDICION';
-        objAH.edicion           = $('#edicion_id').val();
+        objAH.edicion_id        = $('#edicion_id').val();
+        objAH.edicion           = edicion;
         objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val();
         objAH.sendToServer();
 }
@@ -83,7 +116,7 @@ $(document).ready( function() {
     makeToggle('carga_manual','trigger',null,true);
     makeToggle('motivo','trigger',null,true);
     makeToggle('comentario','trigger',null,true);
- 
+    
 // //     validateForm();   
 });
 
@@ -95,9 +128,8 @@ $(document).ready( function() {
 <div class="column1-unit">
       [% message %]
       <div class="recomendacionform">
-              <p><label for="catalogo_search" class="left">[% 'Keyword:' | i18n %]</label>
-                  <input type='text' id='catalogo_search' name='catalogo_search' value='' size=40 tabindex='3' style="float: left"></p>
-          <form id="recom_form" name="recom_form" method="post" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">
+              
+ <!--         <form id="recom_form" name="recom_form" method="post" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">-->
               <input type="hidden" name="action" value="agregar">
               <!--<fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
                 
@@ -116,7 +148,8 @@ $(document).ready( function() {
               
               <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
                           <!-- <li class="item">-->
-                                
+                                <p><label for="catalogo_search" class="left">[% 'Keyword:' | i18n %]</label>
+                                <input type='text' id='catalogo_search' name='catalogo_search' value='' size=40 tabindex='3' style="float: left"></p>
                                 <input type='hidden' id='catalogo_search_hidden' name='catalogo_search_hidden' value=''>
                          <!--   </li>  -->
                                 
@@ -130,7 +163,7 @@ $(document).ready( function() {
               <div class="carga_manual" id="carga_manual"> 
                      [% PERL %]
                           print C4::AR::Filtros::setHelp(text => "[% 'No se han encontrado resultados para la busqueda realizada. Si lo desea, puede llenar los campos manualmente' | i18n %]",
-                                        );
+                                        );   C4::AR::Debug::debug("Save Detalle");
                       [% END %]
                     <fieldset> <legend class="titulo_legend trigger click">[% "Carga manual de material" %]</legend>
                           <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
@@ -145,8 +178,8 @@ $(document).ready( function() {
                             <input type="text" name="editorial" id="editorial" class="field" value="" tabindex="10" /></p>
                           <p><label for="fecha" class="left">[% 'Fecha*' | i18n %]:</label>
                             <input type="text" name="fecha" id="fecha" class="field" value="" tabindex="10" /></p>
-                          <p><label for="coleccion" class="left">[% 'Colecci&oacute;n*' | i18n %]:</label>
-                            <input type="text" name="coleccion" id="coleccion" class="field" value="" tabindex="10" /></p>
+                          <!--<p><label for="coleccion" class="left">[% 'Colecci&oacute;n*' | i18n %]:</label>
+                            <input type="text" name="coleccion" id="coleccion" class="field" value="" tabindex="10" /></p>-->
                           <p><label for="isbn_issn" class="left">[% 'ISBN/ISSN*' | i18n %]:</label>
                             <input type="text" name="isbn_issn" id="isbn_issn" class="field" value="" tabindex="10" /></p>
                           <p><label for="cant_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
@@ -175,7 +208,7 @@ $(document).ready( function() {
             
 
               <fieldset  id="recomendacion"><legend class="titulo_legend trigger click">&nbsp;[% 'Recomendacion' | i18n %]&nbsp;</legend>
-                  <table id="tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
+                  <table id="tabla_recomendacion" name= "tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
                           <thead>    
                               <th align="center">
                                   [% "Autor" | i18n %]
@@ -195,28 +228,26 @@ $(document).ready( function() {
                               <th align="center">
                                   [% "Fecha" | i18n %]
                               </th>
-                              <th align="center">
+                             <!-- <th align="center">
                                   [% "Colecci&oacute;n" | i18n %]
-                              </th>
+                              </th>-->
                               <th align="center">
                                   [% "ISBN/ISSN" | i18n %]
                               </th>
                               <th align="center">
-                                  [% "Fecha" | i18n %]
+                                  [% "Nivel 2" | i18n %]
                               </th>
                               <th align="center">
                                   [% "Cantidad de ejemplares" | i18n %]
                               </th>
-                              <th>
-                                [% "Eliminar" | i18n %]
-                              </th> 
+                             
                         </thead>
                         <tbody>
                         </tbody>
                       </table>
-                      <input type="submit" value="Enviar Recomendacion">
+                      <input type="button" onclick="guardarRecomendacion()" value="Enviar Recomendacion">
                 </fieldset>
-           </form>           
+          <!-- </form> -->          
       </div>         
 </div>
         

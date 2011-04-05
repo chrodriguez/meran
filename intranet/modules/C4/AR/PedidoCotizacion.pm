@@ -23,6 +23,7 @@ use vars qw(@EXPORT @ISA);
             &addPedidoCotizacion;
             &getPedidosCotizacionConDetalle;
             &getPedidosCotizacion;
+            &appendPedidoCotizacion;
 );
 
 

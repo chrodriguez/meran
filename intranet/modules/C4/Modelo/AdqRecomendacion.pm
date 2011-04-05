@@ -68,9 +68,6 @@ sub agregarRecomendacion{
 
     $self->save();
 
-C4::AR::Debug::debug("------------------------------------------------------------------------------------");
-C4::AR::Debug::debug("Post Save");
-
 
 }
 
