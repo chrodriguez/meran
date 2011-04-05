@@ -16,15 +16,13 @@ $(document).ready(function() {
           callBackFunction: buscarDatosNivel2,
     })
     $('#carga_manual').click(function(){        
-              $('#datos_edicion').hide()
+        $('#datos_edicion').hide()
     });
     $('#catalogo_search').blur(function(){        
-              limpiarCampos()
+        limpiarCampos()
     });
     $('#recomendacion').hide();
-    makeToggle('carga_manual','trigger',null,true);
-    makeToggle('motivo','trigger',null,true);
-    makeToggle('comentario','trigger',null,true);
+    makeToggle('add_ejemplar','trigger',null,true);
 });
 
 // busqueda autocomplete por nombre ejemplar, editorial, autor
