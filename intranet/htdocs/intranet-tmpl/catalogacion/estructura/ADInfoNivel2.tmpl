@@ -52,16 +52,7 @@
             </ul>
             </li>
             <li>
-                <strong>[% 'Soporte:' | i18n %]</strong> [% nivel2.getSoporteObject.getDescription %]
-            </li>
-            <li>
-                <strong>[% 'Lugar:' | i18n %]</strong> [% nivel2.getCiudadObject.getNombre %]
-            </li>
-            <li>
-                <strong>[% 'Editor:' | i18n %]</strong> NO ESTA IMPLEMENTADO
-            </li>
-            <li>
-                <strong>[% 'Idioma:' | i18n %]</strong> [% nivel2.getIdiomaObject.getDescription %]
+                <strong>[% 'Edici&oacute;n:' | i18n %]</strong> [% nivel2.getEdicion %]
             </li>
             <li>
                 <strong>[% 'Fecha:' | i18n %]</strong>
@@ -70,27 +61,40 @@
                     [% END %]
             </li>
             <li>
+                <strong>[% 'Soporte:' | i18n %]</strong> [% nivel2.getSoporteObject.getDescription %]
+            </li>
+            <li>
+                <strong>[% 'Lugar:' | i18n %]</strong> [% nivel2.getCiudadObject.getNombre %]
+            </li>
+<!--            <li>
+                <strong>[% 'Editor:' | i18n %]</strong> NO ESTA IMPLEMENTADO
+            </li>-->
+            <li>
+                <strong>[% 'Idioma:' | i18n %]</strong> [% nivel2.getIdiomaObject.getDescription %]
+            </li>
+<!--            <li>
                 <strong>[% 'Descripci&oacute;n F&iacute;sica:' | i18n %]</strong>
                     [% FOREACH descripcion IN nivel2.getDescripcionFisica %] 
                         [% descripcion %][% IF !loop.last() %],[% END %] 
                     [% END %]
-            </li>
-            <li>
+            </li>-->
+<!--            <li>
                 <strong>[% 'T&iacute;tulo de la Serie:' | i18n %]</strong> [% nivel2.getSeriesTitulo %]
-            </li>
-            <li>
+            </li>-->
+<!--            <li>
                 <strong>[% 'N&uacute;mero de la serie:' | i18n %]</strong> [% nivel2.getNumeroSerie %]
-            </li>
-            <li>
+            </li>-->
+<!--            <li>
                 <strong>[% 'Nombre de la subserie:' | i18n %]</strong> [% nivel2.getNombreSubSerie %]
-            </li>
-            <li>
+            </li>-->
+<!--            <li>
                 <strong>[% 'Nota General:' | i18n %]</strong> [% nivel2.getNotaGeneral %]
-            </li>
-            <li>
+            </li>-->
+ <!--           <li>
                 <strong>[% 'Cantidad Ejemplares:' | i18n %]</strong> [% nivel2.getCantEjemplares %]
-            </li>
+            </li>-->
         </ul>
         </fieldset>
         [% END %]
+
     [% END %]
