@@ -24,26 +24,27 @@ var ORDEN;//orden
 function borrarDiv(){$("#divResultado").html("");}
 
 /*
- * buscarSanciones
+ * mostrarSanciones
  * Busca todas las sanciones.
  */
-function buscarSanciones(){
-	objAH=new AjaxHelper(updateBuscarSanciones);
-	objAH.debug= true;
-    objAH.showOverlay = true;
-    objAH.orden= ORDEN;
-	objAH.url= "/cgi-bin/koha/circ/sancionesDB.pl";
+function mostrarSanciones(){
+	objAH               = new AjaxHelper(updateMostrarSanciones);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.orden         = ORDEN;
+	objAH.url           = "/cgi-bin/koha/circ/sancionesDB.pl";
+	objAH.tipoAccion    = 'MOSTRAR_SANCIONES'
 	objAH.sendToServer();
 }
-function updateBuscarSanciones(responseText){
+function updateMostrarSanciones(responseText){
 	$("#divResultado").html(responseText);
     zebra('datos_tabla');
 
 }
 
 function ordenar(orden){
-    ORDEN=orden;
-    buscarSanciones();
+    ORDEN = orden;
+    mostrarSanciones();
 }
 
 function borrarSanciones(chck){
@@ -84,17 +85,78 @@ function updateSanciones(responseText){
     var messageArray    = infoHash.Messages_arrayref;
     setMessages(messageArray);
 
-	buscarSanciones();
+	mostrarSanciones();
 }
 
 
 $(document).ready( function() {
-	buscarSanciones();
+	mostrarSanciones();
 });
 
 
 
+/************************************************************* BUSQUEDA DE SANCIONES *************************************************/
+
+
+/*
+ * buscarSancion
+ * Busca todas las sanciones o las que se corresponden con el string ingresado para filtrar la busqueda.
+ */
+function buscarSancion(){
+	objAH           = new AjaxHelper(updateBuscaSancion)
+	objAH.debug     = true
+	objAH.url       = "/cgi-bin/koha/circ/sancionesDB.pl";
+	objAH.buscar    = $("#buscar").val()
+	objAH.accion    = "BUSCAR_SANCIONES"
+	objAH.sendToServer()
+}
+
+function updateBuscaSancion(responseText){
+	// mostrarCombos();
+	$("#divResultado").html(responseText);
+	// tablaOrdenada();
+}
+
+
+/*
+ * limpiar
+ * Borra el texto ingresado en el componente de busqueda.
+ */
+function limpiar(){
+    $("#buscar").val("")
+}
+
+
+
 </script>
+
+<fieldset id="reportes">
+    <legend class="titulo_legend"> [% "Administraci&oacute;n de Sanciones del Sistema" | i18n %] </legend>
+    <ul>
+        <li class="sub_item">
+            <input type="text" id="buscar" name="buscar" value="">
+            [% PERL %]
+                 print C4::AR::Filtros::setHelp(text => "[% 'Ingrese el Apellido, Nombre o Numero de Socio.' | i18n %]",
+                                                );
+            [% END %]
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "buscarSancion();",
+                                                                    title   => "[% 'Buscar' | i18n %]",
+                                        ) ;
+            [% END %]
+        
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                    boton   => "boton_borrar",
+                                                                    onClick => "limpiar();",
+                                                                    title   => "[% 'Limpiar' | i18n %]",
+                                        ) ;
+            [% END %]
+        </li>
+    </ul>
+</fieldset>
 
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend">[% "Sanciones" | i18n %]</legend>
