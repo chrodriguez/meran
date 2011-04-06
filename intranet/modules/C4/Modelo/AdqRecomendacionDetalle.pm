@@ -75,8 +75,6 @@ sub agregarRecomendacionDetalle{
     $self->setReservaMaterial($params->{'reservar'});
   
     $self->save();
- 
-
 
 }
 

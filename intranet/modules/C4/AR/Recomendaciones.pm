@@ -77,13 +77,11 @@ sub agregarRecomendacion{
                       $datos_recomendacion{'editorial'}= ($params->{'table'}[$i])->{'Editorial'};
                       $datos_recomendacion{'fecha'}= ($params->{'table'}[$i])->{'Fecha'};
                       $datos_recomendacion{'coleccion'}= ($params->{'table'}[$i])->{'Coleccion'};
-                      $datos_recomendacion{'isbn_issn'}= ($params->{'table'}[$i])->{'ISBN_ISSN'};
+                      $datos_recomendacion{'isbn_issn'}= ($params->{'table'}[$i])->{'ISBN/ISSN'};
                       $datos_recomendacion{'cantidad_ejemplares'}= ($params->{'table'}[$i])->{'Cantidad'};
-                      $datos_recomendacion{'motivo_propuesta'}= ($params->{'table'}[$i])->{'motivo_propuesta'};
-                      $datos_recomendacion{'comentarios'}= ($params->{'table'}[$i])->{'comment'};
+                      $datos_recomendacion{'motivo_propuesta'}= ($params->{'table'}[$i])->{'Motivo'};
+                      $datos_recomendacion{'comentarios'}= ($params->{'table'}[$i])->{'Comentario'};
                       $datos_recomendacion{'reservar'}= ($params->{'table'}[$i])->{'reservar'}||0;
-
-#                           
 
                       my $recomendacion_detalle = C4::Modelo::AdqRecomendacionDetalle->new(db => $db); 
                       $recomendacion_detalle->agregarRecomendacionDetalle(\%datos_recomendacion);
