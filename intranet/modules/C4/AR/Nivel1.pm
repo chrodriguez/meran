@@ -78,15 +78,12 @@ sub t_guardarNivel1 {
     my $msg_object = C4::AR::Mensajes::create();
     my $id1;
 
+    my $marc_record     = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
     
-    #No hay error
-        my $marc_record     = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
-        
-        verificar_Alta_Nivel1($marc_record, $msg_object);
+    verificar_Alta_Nivel1($marc_record, $msg_object);
 
-        if(!$msg_object->{'error'}){
-            ($msg_object, $id1) = guardarRealmente($msg_object,$marc_record,$params);
-        }
+    if(!$msg_object->{'error'}){
+        ($msg_object, $id1) = guardarRealmente($msg_object,$marc_record,$params);
     }
 
 #     C4::AR::Debug::debug("Nivel1 => t_guardarNivel1 => return msg_object => ".$msg_object);
