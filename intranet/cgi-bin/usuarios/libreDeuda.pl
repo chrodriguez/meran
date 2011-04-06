@@ -23,10 +23,7 @@ my ($userid, $session, $flags) = C4::AR::Auth::checkauth(   $input,
                                                         "intranet"
                             );
 
-my $obj=$input->param('obj');
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
-
-my $nro_socio = $obj->{'nro_socio'};
+my $nro_socio = $input->param('nro_socio');
 my $msg_object = C4::AR::Usuarios::_verificarLibreDeuda($nro_socio);
 
 if (!($msg_object->{'error'})){

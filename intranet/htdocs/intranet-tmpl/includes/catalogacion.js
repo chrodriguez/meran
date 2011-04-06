@@ -926,7 +926,7 @@ function updateMostrarInfoAltaNivel3(responseText){
 	$('#divCantEjemplares').show();	
     $('#detalleDelNivel3').html(responseText);
     zebra('tablaResult');
-	checkedAll('checkAllEjemplares','checkEjemplares');
+    checkedAll('tabla_ejemplares', 'checkEjemplares');
     
     scrollTo('detalleDelNivel3');
 }

@@ -322,4 +322,39 @@ Se genra la ventana para modificar los datos del usuario
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
     }
+    elsif($tipoAccion eq "GENERAR_LIBRE_DEUDA"){
+
+        my ($loggedinuser, $session, $flags) = checkauth( 
+                                                                $input, 
+                                                                $authnotrequired,
+                                                                {   ui => 'ANY', 
+                                                                    tipo_documento => 'ANY', 
+                                                                    accion => 'CONSULTA', 
+                                                                    entorno => 'usuarios'},
+                                                                "intranet"
+                                );  
+
+        C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
+
+
+        my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'nro_socio'});
+
+        #SI NO EXISTE EL SOCIO IMPRIME 0, PARA INFORMAR AL CLIENTE QUE ACCION REALIZAR
+        C4::AR::Validator::validateObjectInstance($socio);
+
+        my $msg_object = C4::AR::Usuarios::_verificarLibreDeuda($obj->{'nro_socio'});
+
+        if (!($msg_object->{'error'})){
+            # Se puede generar el Libre Deuda
+            my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'nro_socio'});
+            my $url = '/cgi-bin/koha/usuarios/libreDeuda.pl?nro_socio='.$obj->{'nro_socio'}.'&token='.$session->param('token');
+            my $boton ="<a href='".$url."'>Imprimir</a>";
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U423', 'params' => [$socio->persona->getApeYNom,$boton]} ) ;
+        }
+
+            my $infoOperacionJSON=to_json $msg_object;
+            C4::AR::Auth::print_header($session);
+            print $infoOperacionJSON;
+
+    }
 }
