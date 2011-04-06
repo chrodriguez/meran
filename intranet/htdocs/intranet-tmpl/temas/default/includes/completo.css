@@ -1250,14 +1250,13 @@ ul.horizontal-list li {
 
 #divSancionesTiposSocios {
 	float: left;
-	padding: 35px 70px 70px;
-	width: 25%;
+	margin: 4% 7% 5% 12%;
 }
 
 #divSancionesTiposPrestamos {
 	float: left;
-	padding: 35px 70px 70px;
-	width: 25%
+	margin: 4% 8% 5% 3%;
+	width: 35%
 }
 
 #divSancionesReglas {

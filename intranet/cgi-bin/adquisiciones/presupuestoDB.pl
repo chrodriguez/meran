@@ -14,9 +14,10 @@ use C4::AR::PedidoCotizacionDetalle;
 my $input               = new CGI;
 my $authnotrequired     = 0;
 my $obj                 = $input->param('obj');
-my $proveedor           = $obj->{'id_proveedor'}||"";
-my $tipoAccion          = $obj->{'tipoAccion'}||"";
 $obj                    = C4::AR::Utilidades::from_json_ISO($obj);
+my $tipoAccion          = $obj->{'tipoAccion'}||"";
+my $token               = $obj->{'token'}; # usado para las exportaciones a xls
+
 
 if($tipoAccion eq "GUARDAR_MODIFICACION_PRESUPUESTO"){
 
@@ -25,7 +26,7 @@ if($tipoAccion eq "GUARDAR_MODIFICACION_PRESUPUESTO"){
                         query           => $input,
                         type            => "intranet",
                         authnotrequired => 0,
-                        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICAR', entorno => 'adquisiciones'},
+                        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICAR', entorno => 'usuarios'},
                         debug           => 1,
                     });
 
@@ -51,7 +52,7 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
                               query             => $input,
                               type              => "intranet",
                               authnotrequired   => 0,
-                              flagsrequired     => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
+                              flagsrequired     => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
         });
 
         my $presupuestos_dir    = "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/";
@@ -115,7 +116,7 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
                               query             => $input,
                               type              => "intranet",
                               authnotrequired   => 0,
-                              flagsrequired     => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'adquisiciones'},
+                              flagsrequired     => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
         });
         
     
@@ -138,7 +139,7 @@ elsif($tipoAccion eq "AGREGAR_PRESUPUESTO"){
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'adquisiciones'},
+        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
         debug           => 1,
     });
    
@@ -196,6 +197,7 @@ elsif($tipoAccion eq "EXPORTAR_PRESUPUESTO"){
     } 
    $t_params->{'nombres'}   =  \@paths_array;
    $t_params->{'ids_array'} =  \@id_proveedor_array;
+   $t_params->{'token'}     = $token;
    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }# end if($tipoAccion eq "EXPORTAR_PRESUPUESTO")
