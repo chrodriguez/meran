@@ -1,18 +1,33 @@
-// function validateForm(){
-//             $("#recom_form").validate({
-//     
-//                 errorElement: "em",
-//                 errorClass: "error_adv",
-//                 rules: {
-//                     autor:   "required",
-//                     titulo:     "required",                 
-//                     lugar_publicacion:    "required",
-//                     editorial:   "required",
-//                     fecha:     "required",                 
-//                     cant_ejemplares:    "required"
-//                },
-//             });
-// }
+function validateForm(func){
+          $().ready(function() {
+            // validate signup form on keyup and submit
+            $.validator.setDefaults({
+              submitHandler:  func ,
+            });
+            $('#recom_form').validate({
+                errorElement: "em",
+                errorClass: "error_adv",
+                rules: {
+                          autor:   "required",
+                          titulo:     "required",  
+                          edicion:     "required", 
+                          editorial:   "required",              
+                          cant_ejemplares:    "required",
+                          motivo_propuesta:    "required",
+                        },
+                 messages: {
+                          autor: POR_FAVOR_INGRESE_UN_AUTOR,
+                          titulo: POR_FAVOR_INGRESE_UN_TITULO,
+                          edicion: POR_FAVOR_INGRESE_UNA_EDICION,
+                          editorial: POR_FAVOR_INGRESE_UNA_EDITORIAL,
+                          cant_ejemplares: POR_FAVOR_INGRESE_UNA_CANTIDAD,
+                          motivo_propuesta: POR_FAVOR_INGRESE_UN_MOTIVO,
+                     
+                        }, 
+                 });
+            });
+           
+}
 
 
 function limpiarCampos(){
@@ -27,8 +42,12 @@ function limpiarCampos(){
     $('#cant_ejemplares').val("");
     $('#motivo_propuesta').val("");
     $('#comment').val("");  
-    $('#edicion_id').val(null);
+//     $('#edicion_id').val(null);
    
+}
+
+function save(){
+   $('#recom_form').submit();
 }
 
 
@@ -38,9 +57,15 @@ function eliminarFila(filaId){
 
 
 function agregarRenglon(){
-//   validateForm(); 
-  var id= $('#edicion_id').val();
+
+  if ($('#edicion_id').val() == null){
+      id="";
+  } else{
+      
+      var id= $('#edicion_id').val();
+  }
   if( ($('#input'+id).val() == null) ){
+               
             var autor  = $('#autor').val()
             var titulo   = $('#titulo').val()
             var edicion = $('#edicion').val()
@@ -50,10 +75,11 @@ function agregarRenglon(){
             var coleccion = $('#coleccion').val();
             var ISBN_ISSN = $('#isbn_issn').val();
             var cant_ejemplares = $('#cant_ejemplares').val();
-            var id_nivel_2 = "-";
+            var id_nivel_2 = id;
             var comentario= $('#comment').val();
             var motivo= $('#motivo_propuesta').val();
             limpiarCampos();
+      
        
             $('#tabla_recomendacion').append(
                 '<tr id="tr'+id+'" name='+id+'>' +

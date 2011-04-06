@@ -1,5 +1,4 @@
 [% INCLUDE "FormValidateHelper.inc" %]
-
 [% INCLUDE  "AutocompleteHelper.inc"  %]
 
 
@@ -13,13 +12,26 @@ function buscarDatosNivel2(){
         objAH                   = new AjaxHelper(updateBuscarDatosNivel2);
         objAH.debug             = true;
         objAH.showOverlay       = true;
-        //para busquedas combinables
         objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
         objAH.tipoAccion        = 'BUSQUEDA_RECOMENDACION';
         objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val();
         objAH.sendToServer();
 }
 
+function traerImputsVacios(){
+        objAH                   = new AjaxHelper(updateTraerImputsVacios);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
+        objAH.tipoAccion        = 'BUSQUEDA_RECOMENDACION_SIN_RESULTADOS';
+        objAH.sendToServer();
+}
+
+
+function updateTraerImputsVacios(responseText){
+  $('#datos_edicion_seleccionada').html(responseText); 
+
+}
 
 function guardarRecomendacion(){
     $("#tabla_recomendacion").tabletojson({
@@ -91,9 +103,13 @@ function updateCargarDatosEdicionSeleccionada(responseText){
 
 function verificarBusqueda(){
     if ($('#catalogo_search_hidden').val() != (-1)){
-//             $('#carga_manual').hide();
+            $('#carga_manual').hide();
             buscarDatosNivel2();
+            $('#ediciones').show();
     } else {
+         
+           traerImputsVacios();
+           validateForm(agregarRenglon);
            $('#carga_manual').show();
            $('#ediciones').hide();
            
@@ -130,7 +146,7 @@ $(document).ready( function() {
       [% message %]
       <div class="recomendacionform">
               
- <!--         <form id="recom_form" name="recom_form" method="post" action="/cgi-bin/koha/opac-recomendacionesAdd.pl">-->
+
               <input type="hidden" name="action" value="agregar">
            
               <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
@@ -179,8 +195,9 @@ $(document).ready( function() {
                           <input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" />     
                     </fieldset>-->
            </div>     
-    
+      <form id="recom_form" name="recom_form" method="post">
            <div id="datos_edicion_seleccionada"></div>
+      </form>
             <!--  [% PERL %]
                           print C4::AR::Filtros::setHelp(text => "[% 'Haga Click en el titulo para agregar un motivo o comentario' | i18n %]",
                                         );
@@ -197,8 +214,7 @@ $(document).ready( function() {
           <!--         <input type="hidden" name="post_message" id="post_message" value="1"/>
                 </div>
               </fieldset>-->
-            
-
+        
               <fieldset  id="recomendacion"><legend class="titulo_legend trigger click">&nbsp;[% 'Recomendacion' | i18n %]&nbsp;</legend>
                   <table id="tabla_recomendacion" name= "tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
                           <thead>    
@@ -245,7 +261,7 @@ $(document).ready( function() {
                       </table>
                       <input type="button" onclick="guardarRecomendacion()" value="Enviar Recomendacion">
                 </fieldset>
-          <!-- </form> -->          
+                  
       </div>         
 </div>
         
