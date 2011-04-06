@@ -1205,12 +1205,12 @@ sub busquedaPorISBN{
 
 
 sub busquedaPorTitulo{
-    my ($autor) = @_;
+    my ($titulo) = @_;
 
     use Sphinx::Search;
 
     my $sphinx      = Sphinx::Search->new();
-    my $query       = '@autor '.$autor;
+    my $query       = '@titulo '.$titulo;
     my $tipo        = 'SPH_MATCH_EXTENDED';
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
