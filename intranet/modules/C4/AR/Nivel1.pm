@@ -56,10 +56,10 @@ sub verificar_Alta_Nivel1 {
     my $titulo  = $marc_record->subfield("245","a");
 
     my ($cant_titulo, $id1_array_ref) = C4::AR::Busquedas::busquedaPorTitulo($titulo);
-    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad titulos => ".$cant);
+    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad titulos => ".$cant_titulo);
 
     my ($cant_autor, $id1_array_ref) = C4::AR::Busquedas::busquedaPorAutor($autor);
-    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores => ".$cant);
+    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores => ".$cant_autor);
 
 
     if (($cant_titulo > 0)&&($cant_autor > 0)){
