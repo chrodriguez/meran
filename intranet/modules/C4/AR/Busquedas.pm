@@ -1203,6 +1203,40 @@ sub busquedaPorISBN{
     return ($cantidad, $resultId1, $suggested);	
 }
 
+
+sub busquedaPorTitulo{
+    my ($titulo) = @_;
+
+    use Sphinx::Search;
+
+    my $sphinx      = Sphinx::Search->new();
+    my $query       = '@titulo '.$titulo;
+    my $tipo        = 'SPH_MATCH_EXTENDED';
+    my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
+
+    $sphinx->SetMatchMode($tipo_match);
+    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+    $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+    # NOTA: sphinx necesita el string decode_utf8
+    my $results = $sphinx->Query($query);
+
+    my @id1_array;
+    my $matches                 = $results->{'matches'};
+    my $total_found             = $results->{'total_found'};
+#     C4::AR::Utilidades::printHASH($results);
+    C4::AR::Debug::debug("total_found: ".$total_found);
+#     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    foreach my $hash (@$matches){
+      my %hash_temp         = {};
+      $hash_temp{'id1'}     = $hash->{'doc'};
+      $hash_temp{'hits'}    = $hash->{'weight'};
+
+      push (@id1_array, \%hash_temp);
+    }
+
+    return (scalar(@id1_array), \@id1_array);
+}
+
 sub busquedaCombinada_newTemp{
 	
 	
@@ -1344,13 +1378,7 @@ sub armarInfoNivel1{
             if(scalar(@$ediciones) > 0){
                 @result_array_paginado[$i]->{'grupos'}  = $ediciones;
             }
-
-#             @result_array_paginado[$i]->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'S');
-#             @result_array_paginado[$i]->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'M');
-#             @result_array_paginado[$i]->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId1(@result_array_paginado[$i]->{'id1'},'L');
-# FIXME para que se hace esto por nivel 1 ?????????????????????????????????????????????
             my $images_n1_hash_ref = C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
-# C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
 
             @result_array_paginado[$i]->{'portada_registro'}        =  $images_n1_hash_ref->{'S'};
             @result_array_paginado[$i]->{'portada_registro_medium'} =  $images_n1_hash_ref->{'M'};
@@ -1364,9 +1392,6 @@ sub armarInfoNivel1{
 # TODO preguntar al mono pq se busca la imagen por nivel 1 y 2 ??????????????????????????????????????????
 #                     my $images_n2_hash_ref = C4::AR::PortadasRegistros::getAllImageForId2($nivel2_array_ref->[$i]->getId2);
                     my $images_n2_hash_ref                      = $nivel2_array_ref->[$i]->getAllImage();
-#                     $hash_nivel2->{'portada_registro'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
-#                     $hash_nivel2->{'portada_registro_medium'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
-#                     $hash_nivel2->{'portada_registro_big'}=  C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');
                     $hash_nivel2->{'portada_registro'}          =  $images_n2_hash_ref->{'S'};
                     $hash_nivel2->{'portada_registro_medium'}   =  $images_n2_hash_ref->{'M'};
                     $hash_nivel2->{'portada_registro_big'}      =  $images_n2_hash_ref->{'L'};
@@ -1482,6 +1507,7 @@ sub busquedaPorBarcode{
 =item
 Realiza una busqueda simpel por autor sobre nivel 1
 =cut
+# FIXME DEPRECATED
 sub busquedaSimplePorAutor{
 	my ($params,$session) = @_;
 
@@ -1514,6 +1540,7 @@ sub busquedaSimplePorAutor{
 =item
 Realiza una busqueda simple por titulo sobre nivel 1
 =cut
+# FIXME DEPRECATED
 sub busquedaSimplePorTitulo{
 	my ($params,$session) = @_;
 

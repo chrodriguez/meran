@@ -39,6 +39,26 @@ C4::AR::Nivel1 - Funciones que manipulan datos del catálogo de nivel 1
 
 =cut
 
+=item sub verificar_Alta_Nivel1
+
+campos clave => 
+  
+      titulo => 245, a
+      autor => 100, a
+      edicion => 250, a
+=cut
+
+sub verificar_Alta_Nivel1 {
+    my ($marc_record) = @_;
+    # FIXME la edicion no la puedo validar con los datos de N1
+
+    my $autor   = $marc_record->subfield("100","a");
+    my $titulo  = $marc_record->subfield("245","a");
+
+    my ($cant, $id1_array_ref) = C4::AR::Busquedas::busquedaPorTitulo($titulo);
+C4::AR::Debug::debug("cantidad ".$cant);
+}
+
 =head2
 sub t_guardarNivel1
 
@@ -52,6 +72,7 @@ sub t_guardarNivel1 {
     if(!$msg_object->{'error'}){
     #No hay error
         my $marc_record     = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
+        verificar_Alta_Nivel1($marc_record);
         
         ($msg_object, $id1) = guardarRealmente($msg_object,$marc_record,$params);
     }
