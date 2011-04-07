@@ -39,11 +39,14 @@ sub reindexar{
         $mgr->indexer_sudo("sudo");
         $mgr->indexer_args(\@args);
         $mgr->indexer_args(\@args);
-        $mgr->run_indexer();
+#         $mgr->run_indexer();
+
+        my $err = system("wget -q  https://127.0.0.1/cgi-bin/koha/cron/reindexar.pl  --no-check-certificate 2>&1");
+
         C4::AR::Debug::debug("Sphinx => reindexar => --all --rotate => ");
         C4::AR::Preferencias::setVariable('indexado', 1);
     }
-    
+
 }
 
 =head2
