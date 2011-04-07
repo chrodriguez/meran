@@ -58,11 +58,15 @@ sub verificar_Alta_Nivel1 {
     my ($cant_titulo, $id1_array_ref) = C4::AR::Busquedas::busquedaPorTitulo($titulo);
     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad titulos => ".$cant_titulo);
 
+# TODO ver sobre que autores hay q buscar
     my ($cant_autor, $id1_array_ref) = C4::AR::Busquedas::busquedaPorAutor($autor);
-    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores => ".$cant_autor);
+    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores 100, a => ".$cant_autor);
 
+    $autor   = $marc_record->subfield("110","a");
+    my ($cant_autor2, $id1_array_ref) = C4::AR::Busquedas::busquedaPorAutor($autor);
+    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores 110, a => ".$cant_autor);
 
-    if (($cant_titulo > 0)&&($cant_autor > 0)){
+    if (($cant_titulo > 0)&&(($cant_autor > 0)||($cant_autor2 > 0))){
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U501', 'params' => [$titulo.", ".$autor]} ) ;
     }
@@ -112,7 +116,7 @@ sub guardarRealmente{
             $db->commit;            
             #recupero el id1 recien agregado
             $id1 = $catRegistroMarcN1->getId1;
-            C4::AR::Sphinx::generar_indice($id1);
+            C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'UPDATE');
             #ahora el indice se encuentra DESACTUALIZADO
             C4::AR::Preferencias::setVariable('indexado', 0, $db);
             #se cambio el permiso con exito
@@ -264,7 +268,7 @@ sub t_modificarNivel1 {
 
             $cat_registro_marc_n1->modificar($marc_record->as_usmarc, $params);
             $db->commit;
-            C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1());
+            C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1(), 'R_PARTIAL', 'UPDATE');
             #ahora el indice se encuentra DESACTUALIZADO
             C4::AR::Preferencias::setVariable('indexado', 0, $db);
 
@@ -348,7 +352,7 @@ sub t_eliminarNivel1{
         eval {
             $cat_registro_marc_n1->eliminar;  
             $db->commit;
-            C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1());
+            C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1(), 'R_PARTIAL', 'UPDATE');
             #ahora el indice se encuentra DESACTUALIZADO
             C4::AR::Preferencias::setVariable('indexado', 0, $db);
             #se cambio el permiso con exito
