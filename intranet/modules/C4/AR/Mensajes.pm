@@ -262,6 +262,7 @@ my %mensajesINTRA = (
     'U422' => 'No se puede imprimir el certificado de libre deuda por tener sanciones.',
     'U423' => 'Se puede imprimir el certificado de libre deuda para *?*. <br/> *?*',
     'U500' => 'La tarjeda de identificaci&oacute;n ingresada (Nro. de socio) ya pertenece a otro usuario.',
+    'U501' => 'El t&iacute;tulo, autor ya existe *?*.',
 #     'U405' => 'No existe la estructura de catalogaci&oacute;n que se intentando recuperar.',
     'B400' => '',
     'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',

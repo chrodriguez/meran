@@ -49,14 +49,23 @@ campos clave =>
 =cut
 
 sub verificar_Alta_Nivel1 {
-    my ($marc_record) = @_;
+    my ($marc_record, $msg_object) = @_;
     # FIXME la edicion no la puedo validar con los datos de N1
 
     my $autor   = $marc_record->subfield("100","a");
     my $titulo  = $marc_record->subfield("245","a");
 
-    my ($cant, $id1_array_ref) = C4::AR::Busquedas::busquedaPorTitulo($titulo);
-C4::AR::Debug::debug("cantidad ".$cant);
+    my ($cant_titulo, $id1_array_ref) = C4::AR::Busquedas::busquedaPorTitulo($titulo);
+    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad titulos => ".$cant_titulo);
+
+    my ($cant_autor, $id1_array_ref) = C4::AR::Busquedas::busquedaPorAutor($autor);
+    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores => ".$cant_autor);
+
+
+    if (($cant_titulo > 0)&&($cant_autor > 0)){
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U501', 'params' => [$titulo.", ".$autor]} ) ;
+    }
 }
 
 =head2
@@ -69,11 +78,11 @@ sub t_guardarNivel1 {
     my $msg_object = C4::AR::Mensajes::create();
     my $id1;
 
+    my $marc_record     = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
+    
+    verificar_Alta_Nivel1($marc_record, $msg_object);
+
     if(!$msg_object->{'error'}){
-    #No hay error
-        my $marc_record     = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
-        verificar_Alta_Nivel1($marc_record);
-        
         ($msg_object, $id1) = guardarRealmente($msg_object,$marc_record,$params);
     }
 

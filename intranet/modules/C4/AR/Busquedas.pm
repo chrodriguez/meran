@@ -1204,6 +1204,7 @@ sub busquedaPorISBN{
 }
 
 
+# TODO ver si se puede centralizar 
 sub busquedaPorTitulo{
     my ($titulo) = @_;
 
@@ -1211,6 +1212,39 @@ sub busquedaPorTitulo{
 
     my $sphinx      = Sphinx::Search->new();
     my $query       = '@titulo '.$titulo;
+    my $tipo        = 'SPH_MATCH_EXTENDED';
+    my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
+
+    $sphinx->SetMatchMode($tipo_match);
+    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+    $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+    # NOTA: sphinx necesita el string decode_utf8
+    my $results = $sphinx->Query($query);
+
+    my @id1_array;
+    my $matches                 = $results->{'matches'};
+    my $total_found             = $results->{'total_found'};
+#     C4::AR::Utilidades::printHASH($results);
+    C4::AR::Debug::debug("total_found: ".$total_found);
+#     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    foreach my $hash (@$matches){
+      my %hash_temp         = {};
+      $hash_temp{'id1'}     = $hash->{'doc'};
+      $hash_temp{'hits'}    = $hash->{'weight'};
+
+      push (@id1_array, \%hash_temp);
+    }
+
+    return (scalar(@id1_array), \@id1_array);
+}
+
+sub busquedaPorAutor{
+    my ($titulo) = @_;
+
+    use Sphinx::Search;
+
+    my $sphinx      = Sphinx::Search->new();
+    my $query       = '@autor '.$titulo;
     my $tipo        = 'SPH_MATCH_EXTENDED';
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
