@@ -53,7 +53,7 @@ function borrarSanciones(chck){
     var array= new Array;
     var long=chck.length;
     if ( long == 0){
-        jAlert("Elija al menos una sanciona para eliminar");
+        jAlert("Elija al menos una sancion para eliminar");
     }
     else{
 
@@ -137,7 +137,7 @@ function limpiar(){
         <li class="sub_item">
             <input type="text" id="buscar" name="buscar" value="">
             [% PERL %]
-                 print C4::AR::Filtros::setHelp(text => "[% 'Ingrese el Apellido, Nombre o Numero de Socio.' | i18n %]",
+                 print C4::AR::Filtros::seeltHelp(text => "[% 'Ingrese el Apellido, Nombre o Numero de Socio.' | i18n %]",
                                                 );
             [% END %]
             [% PERL %]
