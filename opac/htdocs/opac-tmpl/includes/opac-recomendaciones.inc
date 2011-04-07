@@ -101,10 +101,24 @@ function updateCargarDatosEdicionSeleccionada(responseText){
 //    }
 }
 
+function bloquearCampos(){
+     $('#autor').attr('readonly', true); 
+     $('#titulo').attr('readonly', true); 
+     $('#edicion').attr('readonly', true); 
+     $('#lugar_publicacion').attr('readonly', true); 
+     $('#editorial').attr('readonly', true); 
+     $('#isbn_issn').attr('readonly', true); 
+     $('#fecha').attr('readonly', true); 
+
+
+
+}
+
 function verificarBusqueda(){
     if ($('#catalogo_search_hidden').val() != (-1)){
             $('#carga_manual').hide();
             buscarDatosNivel2();
+            bloquearCampos();
             $('#ediciones').show();
     } else {
          
@@ -143,7 +157,8 @@ $(document).ready( function() {
      
 
 <div class="column1-unit">
-      [% message %]
+  <!--    [% message %]-->
+        
       <div class="recomendacionform">
               
 
@@ -195,9 +210,9 @@ $(document).ready( function() {
                           <input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" />     
                     </fieldset>-->
            </div>     
-      <form id="recom_form" name="recom_form" method="post">
+      
            <div id="datos_edicion_seleccionada"></div>
-      </form>
+   
             <!--  [% PERL %]
                           print C4::AR::Filtros::setHelp(text => "[% 'Haga Click en el titulo para agregar un motivo o comentario' | i18n %]",
                                         );

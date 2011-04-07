@@ -16,6 +16,7 @@ my ($template, $session, $t_params)= get_template_and_user({
             });
 
 $t_params->{'opac'};
+$t_params->{'content_title'}= C4::AR::Filtros::i18n("Formulario de contacto");
 my $post = $query->param('post_message') || 0;
 if ($post){
     use C4::Modelo::Contacto;
