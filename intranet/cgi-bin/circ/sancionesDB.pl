@@ -35,7 +35,7 @@ elsif($tipoAccion eq "BUSCAR_SANCIONES"){
     
     my ($cant,$sanciones)           = C4::AR::Sanciones::getSancionesLike($obj->{'string'});
     $t_params->{'SANCIONES'}        = $sanciones;
-    $t_params->{'CANT_SANCIONES'}   = $cant;
+    $t_params->{'CANT_SANCIONES'}   = scalar(@$sanciones);
     
 } #end if($accion eq "BUSCAR_SANCIONES")
 
