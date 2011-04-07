@@ -106,7 +106,7 @@ function buscarSancion(){
 	objAH           = new AjaxHelper(updateBuscaSancion)
 	objAH.debug     = true
 	objAH.url       = "/cgi-bin/koha/circ/sancionesDB.pl";
-	objAH.buscar    = $("#buscar").val()
+	objAH.string    = $("#buscar").val()
 	objAH.accion    = "BUSCAR_SANCIONES"
 	objAH.sendToServer()
 }

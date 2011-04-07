@@ -8,7 +8,7 @@ use C4::AR::Auth;
 my $input       = new CGI;
 my $obj         = $input->param('obj');
 $obj            = C4::AR::Utilidades::from_json_ISO($obj);
-my $tipoAccion  = $obj->{'tipoAccion'};
+my $tipoAccion  = $obj->{'accion'};
 my $orden; # usado para el order_by de las consultas
 
 my ($template, $session, $t_params) =  get_template_and_user ({
@@ -33,7 +33,7 @@ if($tipoAccion eq "MOSTRAR_SANCIONES"){
 
 elsif($tipoAccion eq "BUSCAR_SANCIONES"){
     
-    my ($cant,$sanciones)           = C4::AR::Sanciones::getSancionesLike($orden);
+    my ($cant,$sanciones)           = C4::AR::Sanciones::getSancionesLike($obj->{'string'});
     $t_params->{'SANCIONES'}        = $sanciones;
     $t_params->{'CANT_SANCIONES'}   = $cant;
     

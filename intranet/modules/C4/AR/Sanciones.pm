@@ -32,15 +32,17 @@ use vars qw(@EXPORT @ISA);
 Busca las sanciones segun lo ingresado en el cliente: apellido, nombre, nro_socio
 =cut
 sub getSancionesLike {
-    my ($str,$orden) = @_;
+
+    my ($str) = @_;
     my $sanciones_array_ref;
     my @filtros;
-    my $prefTemp = C4::Modelo::CircSancion->new();
+    
+    push (@filtros, ( or   => [   nombre => { like => '%'.$str.'%'}, apellido => { like => '%'.$str.'%'}, nro_socio => { like => '%'.$str.'%'} ]));
   
     # TODO: hacer lo join con socio y dsp con persona para poder buscar por: pellido, nombre, nro_socio
     $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion( 
-                                        query => [ variable=> { like => '%'.$str.'%' }],
-                                        sort_by => ( $prefTemp->sortByString($orden) ),
+                                        query           => \@filtros,
+                                        require_objects => ['socio','socio.persona'],
                                 ); 
 
     return (scalar($sanciones_array_ref), $sanciones_array_ref);
