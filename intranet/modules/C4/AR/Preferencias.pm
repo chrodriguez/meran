@@ -244,14 +244,14 @@ sub setVariable {
     } 
 
     if(scalar(@$preferencia) > 0){
-#         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor => ".$valor);
-#         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE antes => ".$PREFERENCES->{$variable});
+        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor => ".$valor);
+        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE antes => ".$PREFERENCES->{$variable});
         $preferencia->[0]->setValue($valor);
         $preferencia->[0]->save();
         reloadAllPreferences();
         
-#         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE despues => ".$PREFERENCES->{$variable});
-#         C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias::getValorPreferencia($variable));
+        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE despues => ".$PREFERENCES->{$variable});
+        C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias::getValorPreferencia($variable));
     }
 }
 

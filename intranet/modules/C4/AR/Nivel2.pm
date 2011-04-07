@@ -82,7 +82,7 @@ sub guardarRealmente{
             $db->commit;
             #recupero el id1 recien agregado
             $id2 = $catRegistroMarcN2->getId2;
-            C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1);
+            C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1, 'R_PARTIAL', 'UPDATE');
             #ahora el indice se encuentra DESACTUALIZADO
             C4::AR::Preferencias::setVariable('indexado', 0, $db);
 
@@ -144,7 +144,7 @@ sub t_eliminarNivel2{
         eval {
             $cat_registro_marc_n2->eliminar($params);  
             $db->commit;
-            C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1());
+            C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1(), 'R_PARTIAL', 'UPDATE');
             #ahora el indice se encuentra DESACTUALIZADO
             C4::AR::Preferencias::setVariable('indexado', 0, $db);
             #se cambio el permiso con exito
@@ -376,7 +376,7 @@ sub t_modificarNivel2 {
             my $marc_record = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
             $cat_registro_marc_n2->modificar($marc_record->as_usmarc);  
             $db->commit;
-            C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1);
+            C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1, 'R_PARTIAL', 'UPDATE');
             #ahora el indice se encuentra DESACTUALIZADO
             C4::AR::Preferencias::setVariable('indexado', 0, $db);
 

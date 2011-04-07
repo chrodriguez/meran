@@ -87,12 +87,13 @@ sub sphinx_start{
     sub generar_indice
 =cut
 sub generar_indice {
-    my ($id1)   = @_;
+    my ($id1, $flag, $action)   = @_;
 
 
     my $dbh = C4::Context->dbh;
     my $sth1;
     my $dato;
+    my $dato_ref;
     my $dato_con_tabla;
     my $campo;
     my $subcampo;
@@ -100,26 +101,24 @@ sub generar_indice {
     my $string_con_dato         = "";
     my $MARC_result_array;
 
-# C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice ???????????????????????????????????????????????????????????? ");
+    C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => flag => ".$flag);
+    if($flag eq "R_FULL"){
+        #Vaciamos el indice
+        my $truncate  =   " TRUNCATE TABLE `indice_busqueda`;";
+        my $sth0      = $dbh->prepare($truncate);
+        $sth0->execute();
 
-if(($id1 eq '0')||(!$id1)){
+        my $query1  =   " SELECT * FROM cat_registro_marc_n1";
+        $sth1       =   $dbh->prepare($query1);
+        $sth1->execute();
 
-    #Vaciamos el indice
-    my $truncate  =   " TRUNCATE TABLE `indice_busqueda`;";
-    my $sth0      = $dbh->prepare($truncate);
-    $sth0->execute();
+    } else {
 
-    my $query1  =   " SELECT * FROM cat_registro_marc_n1";
-    $sth1       =   $dbh->prepare($query1);
-    $sth1->execute();
-
-} else {
-
-    #se va a modificar un registro en particular
-    my $query1  =   " SELECT * FROM cat_registro_marc_n1 WHERE id = ?";
-    $sth1       =   $dbh->prepare($query1);
-    $sth1->execute($id1);
-}
+        #se va a modificar un registro en particular
+        my $query1  =   " SELECT * FROM cat_registro_marc_n1 WHERE id = ?";
+        $sth1       =   $dbh->prepare($query1);
+        $sth1->execute($id1);
+    }
 
 
 while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
@@ -261,9 +260,9 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
             $dato                           = $subfield->[1];
 #             C4::AR::Debug::debug("generar_indice => campo => ".$field->tag);
 #             C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
-            $dato                           = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
+            $dato_ref                       = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
 #                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
-            $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato, "ALL");
+            $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, "ALL");
 
 # TODO modularizame!!!!!!!!!!!!!
             #aca van todas las excepciones que no son referencias pero son necesarios para las busquedas 
@@ -284,7 +283,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
    
             if (($campo eq "910") && ($subcampo eq "a")){
 # FIXME es para la busqueda MATCH EXTENDED
-                $dato = 'cat_ref_tipo_nivel3%'.$dato;   
+                $dato = 'cat_ref_tipo_nivel3%'.$dato_ref;   
 #                 $superstring .= " ".$dato;
 #                 $dato = 'cat_ref_tipo_nivel3@'.$dato;  
 #                 C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
@@ -305,7 +304,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
 #     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => superstring!!!!!!!!!!!!!!!!!!! => ".$superstring);
 
-    if(($id1 eq '0')||(!$id1)){
+    if($action eq "ALTA"){
         my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string, string_tabla_con_dato, string_con_dato) ";
         $query4 .=      " VALUES (?,?,?,?,?,?) ";
         my $sth4    = $dbh->prepare($query4);
