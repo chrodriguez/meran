@@ -22,11 +22,12 @@ $(document).ready(function() {
         limpiarCampos()
     });
     $('#recomendacion').hide();
-    makeToggle('add_ejemplar','trigger',null,true);
 });
+
 
 // busqueda autocomplete por nombre ejemplar, editorial, autor
 function buscarDatosNivel2(){
+    $('#agregarMano').hide();
     objAH                   = new AjaxHelper(updateBuscarDatosNivel2)
     objAH.debug             = true
     objAH.showOverlay       = true
@@ -41,8 +42,8 @@ function updateBuscarDatosNivel2(responseText){
     $('#ediciones').html(responseText)
     $('#edicion_id').val('').attr("selected",true)
     $('#edicion_id').change( function(){         
-        cargarDatosEdicionSeleccionada()
-    });   
+       cargarDatosEdicionSeleccionada()
+    });  
 }
 
 // trae la edicion cuando selecciona el combo de ediciones

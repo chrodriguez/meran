@@ -412,7 +412,7 @@ sub getProveedorPorDni{
 }
 
 # =item
-#     Este funcion devuelve la informacion de proveedores segun su nombre
+#     Este funcion devuelve la informacion de proveedores segun su nombre o razon social
 # =cut
 sub getProveedorLike {
 
