@@ -60,7 +60,10 @@
             </tr>  
             [% i = i + 1 %]  
             <input type="hidden" value="[% pedido_cotizacion.getId %]" id="pedido_cotizacion_id[% pedido_cotizacion.getId %]" />    
-            [% END %]    
+            [% END %]   
+            [% IF cant_pedidos == 0 %]  
+                print C4::AR::Filtros::setHelp(text => "[% 'No se encontraron pedidos de cotizacion en el sistema.' | i18n %]", );
+            [% END %] 
     </tbody>   
     </table>
 </fieldset>

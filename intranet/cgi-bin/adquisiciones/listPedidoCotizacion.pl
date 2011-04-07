@@ -31,6 +31,7 @@ if($pedidos_cotizacion){
     $t_params->{'resultsloop'}   = \@resultsdata;     
 }
 
-$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Pedidos de Cotizacion");
+$t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Pedidos de Cotizacion");
+$t_params->{'cant_pedidos'}     = scalar(@$pedidos_cotizacion);
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
