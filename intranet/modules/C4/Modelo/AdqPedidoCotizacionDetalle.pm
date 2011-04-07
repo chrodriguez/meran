@@ -71,7 +71,10 @@ sub addPedidoCotizacionDetalle{
     $self->setColeccion($params->{'coleccion'});
     $self->setIsbnIssn($params->{'isbn_issn'});
     $self->setCantidadEjemplares($params->{'cantidad_ejemplares'});
-    $self->setAdqRecomendacionDetalleId($params->{'adq_recomendacion_detalle'});
+    # si es 'NULL' no mandamos nada asi por SQL se guarda automaticamente en NULL
+    if($params->{'adq_recomendacion_detalle'} ne "NULL"){
+        $self->setAdqRecomendacionDetalleId($params->{'adq_recomendacion_detalle'});   
+    }
     $self->setNroRenglon($params->{'nro_renglon'});    
  
     $self->save();

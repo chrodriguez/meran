@@ -150,6 +150,28 @@ function updatePrestamosInterBibliotecarios(responseText){
     });
 }
 
+
+function generarLibreDeuda(){
+    objAH               = new AjaxHelper(updateGenerarLibreDeuda);
+    objAH.url           = '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.nro_socio     = USUARIO.ID;
+    objAH.tipoAccion    = 'GENERAR_LIBRE_DEUDA';
+    objAH.sendToServer();
+}
+
+function updateGenerarLibreDeuda(responseText){
+
+    if (!verificarRespuesta(responseText))
+        return(0);
+
+    var Messages=JSONstring.toObject(responseText);
+    if(Messages){
+        setMessages(Messages);
+    }
+}
+
 function createFileUploader(){
 	if($("#uploader")[0] != null){
 

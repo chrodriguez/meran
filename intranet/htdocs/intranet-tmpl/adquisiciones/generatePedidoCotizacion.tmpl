@@ -76,6 +76,7 @@
     </tbody>   
     </table>
         [% PERL %]
+            [% IF i != 1 %] 
             print C4::AR::Filtros::to_Button( 
                                                 text    =>  "[% 'Exportar a PDF' | i18n %]",
                                                 boton   =>  "boton_buscar",
@@ -90,7 +91,10 @@
                                                 text    =>  "[% 'Aceptar' | i18n %]",
                                                 boton   =>  "boton_buscar",
                                                 onClick =>  "addPedidoCotizacion();",
-                    ) ;                    
+                    ) ; 
+            [% ELSE %]
+                 print C4::AR::Filtros::setHelp(text => "[% 'No se encontraron recomendaciones activas en el sistema.' | i18n %]", );
+            [% END %]                   
         [% END %]
 </fieldset>
 </form>

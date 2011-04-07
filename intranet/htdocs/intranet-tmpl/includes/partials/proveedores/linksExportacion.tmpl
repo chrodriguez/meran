@@ -4,7 +4,7 @@
 [% FOREACH nom IN nombres %]
 [% x = loop.index() %]
     <li>
-    <a href="exportaciones.pl?proveedor=[% ids_array.$x %]&pedido_cotizacion=[% pedido_cotizacion_id %]&exportXLS=1"> [% nom %] </a>
+    <a href="exportaciones.pl?token=[% token %]&proveedor=[% ids_array.$x %]&pedido_cotizacion=[% pedido_cotizacion_id %]&exportXLS=1"> [% nom %] </a>
     </li>
 [% END %]
 </ul>

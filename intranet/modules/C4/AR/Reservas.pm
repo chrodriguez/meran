@@ -617,7 +617,7 @@ sub _getReservasAsignadas {
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
                                                                     db => $db,
-                                                                    query => [ nro_socio => { eq => $socio }, id3 => {ne => undef} ],
+                                                                    query => [ nro_socio => { eq => $socio }, id3 => {ne => undef}, estado => {ne => 'P'} ],
                                                                     require_objects => ['nivel3','nivel2'] 
                                                     );
 

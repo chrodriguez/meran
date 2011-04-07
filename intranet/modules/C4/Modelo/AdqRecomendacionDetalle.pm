@@ -5,6 +5,7 @@ use utf8;
 use C4::AR::Permisos;
 use C4::AR::Utilidades;
 use C4::Modelo::AdqRecomendacion;
+use C4::Modelo::AdqRecomendacionDetalle;
 use C4::Modelo::CatRegistroMarcN2;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
@@ -55,12 +56,12 @@ __PACKAGE__->meta->setup(
 
 
 sub agregarRecomendacionDetalle{
-    my ($self)                          = shift;
-    my ($params, $id_adq_recomendacion) = @_;
+    my ($self)   = shift;
+    my ($params) = @_;
 
-    $self->setAdqRecomendacionId($id_adq_recomendacion);
+    $self->setAdqRecomendacionId($params->{'id_recomendacion'});
     
-    $self->setCatNivel2Id($params->{'hidden_id_nivel_2'});
+    $self->setCatNivel2Id($params->{'nivel_2'});
     $self->setAutor($params->{'autor'});
     $self->setTitulo($params->{'titulo'});
     $self->setLugarPublicacion($params->{'lugar_publicacion'});
@@ -72,10 +73,9 @@ sub agregarRecomendacionDetalle{
     $self->setMotivoPropuesta($params->{'motivo_propuesta'});
     $self->setComentario($params->{'comentarios'});
     $self->setReservaMaterial($params->{'reservar'});
-   
-    C4::AR::Debug::debug($params);
-
+  
     $self->save();
+
 }
 
 sub setearCantidad{

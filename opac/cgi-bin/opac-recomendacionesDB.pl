@@ -38,7 +38,9 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
    
 }   elsif ($obj->{'tipoAccion'} eq 'CARGAR_DATOS_EDICION')   {
 
-    my $idNivel2=  $obj->{'edicion'};
+    my $idNivel2 =  $obj->{'edicion_id'};
+    my $edicion =  $obj->{'edicion'};
+
 
     my $idNivel1= $obj->{'idCatalogoSearch'};
 
@@ -54,10 +56,24 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
                         flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                     });
 
-    C4::AR::Debug::debug("aca:                  ".$datos_nivel1->marc_record);
 
+
+    $t_params->{'edicion'} = $edicion;
     $t_params->{'datos_edicion'} = $datos_edicion;
     $t_params->{'datos_nivel1'} = $datos_nivel1;
+
+} elsif ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION_SIN_RESULTADOS') {
+
+ ($template, $session, $t_params)= get_template_and_user({
+                        template_name => "/includes/opac-datos_edicion.inc",
+                        query => $input,
+                        type => "opac",
+                        authnotrequired => 1,
+                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    });
+
+ $t_params->{'datos_edicion'} = "";
+  
 }
- 
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

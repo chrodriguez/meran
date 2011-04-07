@@ -436,13 +436,13 @@ INSERT INTO `pref_informacion_referencia` (`idinforef`, `idestcat`, `referencia`
 (22, 67, 'ciudad', 'NOMBRE', 'NOMBRE', ','),
 (23, 68, 'soporte', 'description', 'description', ','),
 (24, 70, 'idioma', 'description', 'description', ','),
-(25, 71, 'autor', 'nombre', 'completo', ','),
+(25, 71, 'autor', 'completo', 'completo', ','),
 (26, 73, 'tema', '-1', 'id nombre', ''),
 (27, 74, 'ui', 'id_ui', 'id_ui', NULL),
 (28, 73, 'ui', 'nombre', 'nombre', NULL),
 (29, 72, 'ui', 'nombre', 'nombre', NULL),
 (30, 79, 'ui', 'nombre', 'nombre', NULL),
-(31, 80, 'autor', 'nombre', 'completo', NULL),
+(31, 80, 'autor', 'completo', 'completo', NULL),
 (32, 89, 'pais', 'iso', 'iso', NULL);
 
 DROP TABLE IF EXISTS `pref_palabra_frecuente`;
