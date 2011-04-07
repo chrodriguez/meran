@@ -137,7 +137,7 @@ function limpiar(){
         <li class="sub_item">
             <input type="text" id="buscar" name="buscar" value="">
             [% PERL %]
-                 print C4::AR::Filtros::seeltHelp(text => "[% 'Ingrese el Apellido, Nombre o Numero de Socio.' | i18n %]",
+                 print C4::AR::Filtros::setHelp(text => "[% 'Ingrese el Apellido, Nombre o Numero de Socio.' | i18n %]",
                                                 );
             [% END %]
             [% PERL %]
