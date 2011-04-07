@@ -33,7 +33,7 @@ function mostrarSanciones(){
     objAH.showOverlay   = true;
     objAH.orden         = ORDEN;
 	objAH.url           = "/cgi-bin/koha/circ/sancionesDB.pl";
-	objAH.tipoAccion    = 'MOSTRAR_SANCIONES'
+	objAH.accion        = 'MOSTRAR_SANCIONES'
 	objAH.sendToServer();
 }
 function updateMostrarSanciones(responseText){
