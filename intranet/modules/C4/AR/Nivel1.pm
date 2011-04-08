@@ -52,23 +52,23 @@ sub verificar_Alta_Nivel1 {
     my ($marc_record, $msg_object) = @_;
     # FIXME la edicion no la puedo validar con los datos de N1
 
-    my $autor   = $marc_record->subfield("100","a");
-    my $titulo  = $marc_record->subfield("245","a");
+    my $ref_autor   = $marc_record->subfield("100","a");
+    my $titulo      = $marc_record->subfield("245","a");
 
     my ($cant_titulo, $id1_array_ref) = C4::AR::Busquedas::busquedaPorTitulo($titulo);
     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad titulos => ".$cant_titulo);
 
-# TODO ver sobre que autores hay q buscar
-    my ($cant_autor, $id1_array_ref) = C4::AR::Busquedas::busquedaPorAutor($autor);
+    my $id_autor        = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
+    my $autor           = C4::Modelo::CatAutor->getByPk($id_autor);
+    my $nombre_completo = $autor->getCompleto();
+
+    my ($cant_autor, $id1_array_ref)    = C4::AR::Busquedas::busquedaPorAutor($nombre_completo);
+    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => autor 100, a => ".$nombre_completo);
     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores 100, a => ".$cant_autor);
 
-    $autor   = $marc_record->subfield("110","a");
-    my ($cant_autor2, $id1_array_ref) = C4::AR::Busquedas::busquedaPorAutor($autor);
-    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores 110, a => ".$cant_autor);
-
-    if (($cant_titulo > 0)&&(($cant_autor > 0)||($cant_autor2 > 0))){
+    if (($cant_titulo > 0)&&($cant_autor > 0)){
         $msg_object->{'error'} = 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U501', 'params' => [$titulo.", ".$autor]} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U501', 'params' => [$titulo." - ".$nombre_completo]} ) ;
     }
 }
 
@@ -116,7 +116,7 @@ sub guardarRealmente{
             $db->commit;            
             #recupero el id1 recien agregado
             $id1 = $catRegistroMarcN1->getId1;
-            C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'UPDATE');
+            C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'INSERT');
             #ahora el indice se encuentra DESACTUALIZADO
             C4::AR::Preferencias::setVariable('indexado', 0, $db);
             #se cambio el permiso con exito

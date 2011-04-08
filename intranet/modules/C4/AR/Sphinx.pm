@@ -305,7 +305,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
 #     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => superstring!!!!!!!!!!!!!!!!!!! => ".$superstring);
 
-    if($action eq "ALTA"){
+    if($action eq "INSERT"){
         my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string, string_tabla_con_dato, string_con_dato) ";
         $query4 .=      " VALUES (?,?,?,?,?,?) ";
         my $sth4    = $dbh->prepare($query4);
