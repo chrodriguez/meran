@@ -33,7 +33,7 @@ body textarea:focus{
 .page-container {width:98%; margin:0px auto; margin-top:10px; margin-bottom:10px; border:solid 1px rgb(150,150,150); font-size:1.0em;}
 .main {clear:both; width:100%; padding-bottom:30px; background:transparent url(../imagenes/bg_main_withnav.jpg) top left repeat-y;}
 .main-navigation {display:inline /*Fix IE floating margin bug*/; float:left; width:200px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
-.main-content {display:inline; /*Fix IE floating margin bug*/; float:left; width:64%; margin:0 0 0 2%; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+.main-content {display:inline; /*Fix IE floating margin bug*/; float:left; width:56%; margin:0 0 0 2%; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 .main-subcontent {display:inline /*Fix IE floating margin bug*/; float:right; width:185px; margin:0 15px 0 0; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 .footer {clear:both; width:100%; height:3.7em; padding:1.1em 0 0; background:rgb(225,225,225) url(../imagenes/bg_foot.jpg) repeat; font-size:1.0em; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 
@@ -129,7 +129,7 @@ body textarea:focus{
 
 /* MAIN SUBCONTENT */
 .subcontent-unit-border {width:183px; margin:0 0 2.0em 0; padding:0 0 5px 0; border:solid 1px rgb(254,154,46); background:rgb(251,245,239);}
-.subcontent-unit-border-green {width:183px; margin:0 0 2.5em 0; padding:0 0 10px 0; border:solid 1px rgb(160,214,81); background-color:rgb(217,239,185);}
+.subcontent-unit-border-green {width:183px; margin:0 0 2.5em 0; padding:0 0 10px 0; border:solid 1px rgb(160,214,81); background-color:rgb(227,246,206);}
 .subcontent-unit-border-blue  {width:183px; margin:0 0 2.5em 0; padding:0 0 10px 0; border:solid 1px rgb(137,170,214); background-color:rgb(213,225,240);}
 .subcontent-unit-border-orange {width:183px; margin:0 0 2.5em 0px; padding:0 0 10px 0; border:solid 1px rgb(232,177,13); background-color:rgb(248,224,150);}
 
@@ -473,8 +473,8 @@ div.pagination span.disabled {
 
 .main-content table {clear:both; width:100%; margin:2.0em 0 0.2em 20px; table-layout: fixed; border-collapse:collapse; empty-cells:show; background-color:rgb(233,232,244);}
 .main-content table th.top {height:3.5em; padding:0 7px 0 7px; empty-cells:show; background-color:rgb(175,175,175); text-align:left; color:rgb(255,255,255); font-weight:bold; font-size:110%;}
-.main-content table th {height:3.0em; /*padding:2px 20px 2px 7px;*/ border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(225,225,225); text-align:center; color:rgb(80,80,80); font-weight:bold; font-size:9px;}
-.main-content table td {height:3.0em; padding:2px 10px 2px 10px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(225,225,225); text-align:left; font-weight:normal; color:rgb(80,80,80); font-size:93%;}
+.main-content table th {height:3.0em; /*padding:2px 20px 2px 7px;*/ border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(208,245,169); text-align:center; color:rgb(80,80,80); font-weight:bold; font-size:9px;}
+.main-content table td {height:3.0em; padding:2px 10px 2px 10px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(227,246,206); text-align:left; font-weight:normal; color:rgb(80,80,80); font-size:93%;}
 p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,80,80); font-size:110%;}
 
 .main-content ul {list-style:none; margin:0.5em 0 1.0em 0;}
@@ -495,8 +495,8 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 
 
 /* MAIN SUBCONTENT */
-.main-subcontent h1 {clear:both; margin:0 0 10px 0; padding:4px 10px 3px 10px; background-color:rgb(254,154,46); font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
-.main-subcontent h1.green {clear:both; margin:0 0 5px 0; padding:4px 10px 3px 10px; background-color:rgb(160,214,81); font-family:"trebuchet ms",verdana,arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
+.main-subcontent h1 {clear:both; margin:0 0 10px 0; padding:4px 10px 3px 10px; background-color:rgb(255,153,51); font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
+.main-subcontent h1.green {clear:both; margin:0 0 5px 0; padding:4px 10px 3px 10px; background-color:rgb(153, 204, 102); font-family:"trebuchet ms",verdana,arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
 .main-subcontent h1.blue {clear:both; margin:0 0 5px 0; padding:4px 10px 3px 10px; background-color:rgb(137,170,214); font-family:"trebuchet ms",verdana,arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
 .main-subcontent h1.orange {clear:both; margin:0 0 5px 0; padding:4px 10px 3px 10px; background-color:rgb(232,177,13); font-family:"trebuchet ms",verdana,arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
  /* Note: h2 non-existent, to make HTML-code interchangeable between 'main-navigation' and 'main-subcontent' */
