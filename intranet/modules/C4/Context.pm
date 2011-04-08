@@ -389,8 +389,8 @@ sub _new_dbh
 	my $db_user   = $context->{"config"}{"user"};
 	my $db_passwd = $context->{"config"}{"pass"};
 =cut
-	
-	
+
+
 	my $session = CGI::Session->load();
 
 # 	$user = $context->config('userOPAC');
@@ -408,8 +408,6 @@ sub _new_dbh
 		$db_user   = $context->{"config"}{"userINTRA"};
 		$db_passwd = $context->{"config"}{"passINTRA"};
 	}
-	
-
 
 	my $dbh= DBI->connect("DBI:$db_driver:$db_name:$db_host",$db_user, $db_passwd);
 	$dbh->do('SET NAMES utf8');
@@ -417,6 +415,7 @@ sub _new_dbh
 	return $dbh;
 # 	return DBI->connect("DBI:$db_driver:$db_name:$db_host",$db_user, $db_passwd);
 }
+
 
 =item dbh
 
@@ -445,6 +444,7 @@ sub dbh
 
 	return $context->{"dbh"};
 }
+
 
 =item new_dbh
 

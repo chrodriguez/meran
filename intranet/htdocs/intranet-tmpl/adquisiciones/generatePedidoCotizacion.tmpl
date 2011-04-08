@@ -76,7 +76,7 @@
     </tbody>   
     </table>
         [% PERL %]
-            [% IF i != 1 %] 
+            [% IF cant_recomendaciones != 0 %] 
             print C4::AR::Filtros::to_Button( 
                                                 text    =>  "[% 'Exportar a PDF' | i18n %]",
                                                 boton   =>  "boton_buscar",

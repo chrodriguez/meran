@@ -1,4 +1,13 @@
 <script type="text/javascript">
+
+	function ordenarPor(ord){
+	    //seteo el orden de los resultados
+	    
+	}
+
+
+
+
     $(document).ready(function() {
         $('.fancylink').fancybox();
     });
@@ -40,10 +49,10 @@
                     <th align="center">
                         [% "Im&aacute;gen" | i18n %]
                     </th>
-                    <th align="center" class="click" onclick="ordenarPor('titulo')" title="[% 'Ordenar por T&iacute;tulo' | i18n %]">
+                    <th align="center" >
                         [% "T&iacute;tulo" | i18n %]
                     </th>
-                    <th align="center" class="click" onclick="ordenarPor('autor')" title="[% 'Ordenar por Autor' | i18n %]">
+                    <th align="center" >
                         [% "Autor" | i18n %]
                     </th>
                     <th align="center">

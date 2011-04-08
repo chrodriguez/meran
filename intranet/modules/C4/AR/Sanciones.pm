@@ -15,17 +15,38 @@ use C4::Modelo::CircSancion::Manager;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(	
-		tieneSanciones
-		eliminarSanciones
-		sanciones
-		permisoParaPrestamo
-		estaSancionado
-		tieneLibroVencido
-		getSociosSancionados
-		diasDeSancion
-		getTipoSancion
+        &getSancionesLike
+		&tieneSanciones
+		&eliminarSanciones
+		&sanciones
+		&permisoParaPrestamo
+		&estaSancionado
+		&tieneLibroVencido
+		&getSociosSancionados
+		&diasDeSancion
+		&getTipoSancion
 );
 
+
+=item 
+Busca las sanciones segun lo ingresado en el cliente: apellido, nombre, nro_socio
+=cut
+sub getSancionesLike {
+
+    my ($str) = @_;
+    my $sanciones_array_ref;
+    my @filtros;
+    
+    push (@filtros, ( or   => [   nombre => { like => '%'.$str.'%'}, apellido => { like => $str.'%'}, nro_socio => { like => '%'.$str.'%'} ]));
+  
+    # TODO: hacer lo join con socio y dsp con persona para poder buscar por: pellido, nombre, nro_socio
+    $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion( 
+                                        query           => \@filtros,
+                                        require_objects => ['socio','socio.persona'],
+                                ); 
+
+    return (scalar($sanciones_array_ref), $sanciones_array_ref);
+}
 
 
 
