@@ -76,7 +76,7 @@ body textarea:focus{
 .sitemessage h3 a {text-decoration:none; color:rgb(234,239,247);}
 .sitemessage h3 a:hover {text-decoration:none; color:rgb(50,50,50);}
 
-.nav2 {float:left; width:100%; border:none; background:rgb(220,220,220) url(../imagenes/bg_head_bottom_nav.jpg) repeat-x; color:rgb(75,75,75); font-size:1.0em; font-size:130%;} /*Color navigation bar normal mode*/
+.nav2 {float:left; width:100%; border:none; background:rgb(220,220,220) url(../imagenes/bg_head_bottom_nav2.jpg) repeat-x; color:rgb(75,75,75); font-size:1.0em; font-size:130%;} /*Color navigation bar normal mode*/
 .nav2 ul {list-style-type:none;}
 .nav2 ul li {float:left; position:relative; z-index:1000; border-right:solid 1px rgb(175,175,175);}
 .nav2 ul li ul {display:none; border:none;}
@@ -453,7 +453,7 @@ div.pagination span.disabled {
 .main-navigation ol li {list-style-position:outside; margin:0 0 0.4em 0; font-size:110%;}
 
 /* MAIN CONTENT */
-.main-content h1.pagetitle {margin:0 0 0 0px; padding:0 0 2px 0; font-family:"trebuchet ms",arial,sans-serif; color:#EDA45D; font-weight:bold; font-size:220%;}
+.main-content h1.pagetitle {margin:0 0 0 0px; padding:0 0 2px 0; font-family:"trebuchet ms",arial,sans-serif; color:#EDA45D; font-weight:normal; font-size:220%;}
 .main-content h1.block {clear:both; margin:1.0em 0 0em 0; padding:2px 0 2px 2px; background:rgb(190,190,190); font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:220%;}
 .main-content h1 {clear:both; margin:1.0em 0 0.5em 0; font-family:"trebuchet ms",arial,sans-serif; color:rgb(80,80,80); font-weight:normal; font-size:210%;}
 .main-content h2 {clear:both; margin:1.0em 0 0.5em 0; font-family:"trebuchet ms",arial,sans-serif; color:rgb(80,80,80); font-weight:normal; font-size:170%;}
