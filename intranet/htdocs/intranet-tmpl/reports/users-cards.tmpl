@@ -56,8 +56,9 @@
     });
 </script>
 
-<div class="titulos" >[% "Generar Carnets de Usuarios" | i18n %]</div>
-
+<!--<div class="titulos" >[% "Generar Carnets de Usuarios" | i18n %]</div>-->
+<fieldset class="formulario_busqueda">
+    <legend class="titulo_legend"><span class="titulos">[% 'Generar Carnets de Usuarios' | i18n %]</span></legend>   
 <center>
 
 <div class="filtros_reportes">
@@ -121,5 +122,5 @@
 <!-- Formulario para poder crear el pdf -->
 <div id="formulario">
 </div>
-
+</fieldset>
 [% INCLUDE "intranet-bottom.inc" %]

@@ -13,8 +13,9 @@
 
 <script type="text/javascript" src="/intranet-tmpl/reports/reports.js"></script>
 <div>
-    <div class="titulos" >[% "Consultar las nuevas altas de registros" | i18n %]</div>
-
+  <!--  <div class="titulos" >[% "Consultar las nuevas altas de registros" | i18n %]</div>-->
+    <fieldset id="reportes">
+    <legend class="titulo_legend"> <span class="titulos">[% "Consultar las nuevas altas de registros" | i18n %] </span> </legend>
     <center>
         <div class="filtros_reportes">
             <fieldset>
@@ -50,5 +51,6 @@
 </div>
 
 <div id="result"></div>
+</fieldset>
 
 [% INCLUDE 'intranet-bottom.inc' %]

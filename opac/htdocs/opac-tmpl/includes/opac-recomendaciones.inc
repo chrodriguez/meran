@@ -166,7 +166,7 @@ $(document).ready( function() {
            
               <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
                           <!-- <li class="item">-->
-                                <p><label for="catalogo_search" class="left">[% 'Keyword:' | i18n %]</label>
+                                <p><label for="catalogo_search" style="float: left; padding-right:10px">[% 'Keyword' | i18n %]</label>
                                 <input type='text' id='catalogo_search' name='catalogo_search' value='' size=40 tabindex='3' style="float: left"></p>
                                 <input type='hidden' id='catalogo_search_hidden' name='catalogo_search_hidden' value=''>
                          <!--   </li>  -->

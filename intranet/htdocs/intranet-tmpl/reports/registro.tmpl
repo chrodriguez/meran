@@ -78,9 +78,10 @@ $(document).ready(function() {
 
 </script>
 
-<div class="titulos">[% "Registro de Actividades" | i18n %]</div>
+<!--<div class="titulos">[% "Registro de Actividades" | i18n %]</div>-->
 
-
+<fieldset>
+    <legend class="titulo_legend"> <span class="titulos">[% "Registro de Actividades" | i18n %] </span> </legend>
 <!-- FIXME para los tipos, el script anda mal, los toma como el check de fecha o el radio operacion -->
 <fieldset>
 
@@ -141,6 +142,6 @@ $(document).ready(function() {
 </div>
 
 <div id="result" ></div>
-
+</fieldset>
 [% INCLUDE "intranet-bottom.inc" %]
 

@@ -166,8 +166,9 @@ $(document).ready(function() {
 
 <center>
 
-<div class="titulos">[% "B&uacute;squeda de Usuarios Potenciales" | i18n %]</div>
-
+<!--<div class="titulos">[% "B&uacute;squeda de Usuarios Potenciales" | i18n %]</div>-->
+<fieldset>
+    <legend class="titulo_legend">[% "B&uacute;squeda de Usuarios Potenciales" | i18n %]</legend>
 <p id="msj" style="font-size:12pt; color:red"></p>
 
 <div class="buttonContainerHorizontal">
@@ -242,6 +243,7 @@ $(document).ready(function() {
 <br>
 <div id="result"></div>
 </center>
+</fieldset>
 
 [% INCLUDE "intranet-bottom.inc" %]
 

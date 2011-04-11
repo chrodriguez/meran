@@ -132,8 +132,9 @@
 
 </script>
 
-<div class="titulos" >[% "Inventario por signatura topogr&aacute;fica / nro. inventario:" | i18n %]</div>
-
+<!--<div class="titulos" >[% "Inventario por signatura topogr&aacute;fica / nro. inventario:" | i18n %]</div>-->
+ <fieldset id="reportes">
+    <legend class="titulo_legend"> <span class="titulos">[% "Inventario por signatura topogr&aacute;fica / nro. inventario" | i18n %] </span> </legend>
 <fieldset>
     <legend class="titulo_legend">[% "Buscar signatura topogr&aacute;fica: &nbsp;" | i18n %]</legend>
         <ul>
@@ -201,5 +202,6 @@
 <br>
 
 <div id="result"></div>
+</fieldset>
 
 [% INCLUDE "intranet-bottom.inc" %]
