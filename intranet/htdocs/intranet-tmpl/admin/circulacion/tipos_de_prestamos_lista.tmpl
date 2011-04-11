@@ -10,7 +10,7 @@
         <td>[% "Para Sala" | i18n %]</td>
         <td>[% "Habilitado" | i18n %]</td>
         <td width="8%">[% "Editar" | i18n %]</td>
-        <td>[% "Eliminar" | i18n %]</td>
+<!--         <td>[% "Eliminar" | i18n %]</td> -->
     </tr>
 [% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS_LOOP %]
     <tr align="middle">    
@@ -59,7 +59,7 @@
                                                             ) ;
                             [% END %]
         </td>
-        <td   align="center">
+<!--        <td   align="center">
                             [% PERL %]
                                 print C4::AR::Filtros::to_Icon( text =>     "[% 'Eliminar' | i18n %]",
                                                                 onClick => "eliminarTipoPrestamo('[% tipo_prestamo.getId_tipo_prestamo %]')",
@@ -68,7 +68,7 @@
                                                                 alternClass => "botonCentrado"
                                                             ) ;
                             [% END %]
-        </td>
+        </td>-->
     </tr>
 [% END %]
         <tr valign=bottom>

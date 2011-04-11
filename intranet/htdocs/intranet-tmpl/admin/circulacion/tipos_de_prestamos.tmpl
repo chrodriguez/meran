@@ -39,24 +39,25 @@ function updateAgregarTipoPrestamo(responseText){
 /*
  *  eliminarTipoPrestamo
  */
-function eliminarTipoPrestamo(tipo){
-    if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO) ){
-    objAH=new AjaxHelper(updateEliminarTipoPrestamo);
-    objAH.debug= true;
-    objAH.showOverlay   = true;
-    objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
-    objAH.tipo_prestamo=tipo;
-    objAH.tipoAccion= "BORRAR";
-    borrarDiv();
-    objAH.sendToServer();
-    }
-}
-
-function updateEliminarTipoPrestamo(responseText){
-    borrarDiv();
-    respuesta(responseText);
-    buscarTiposPrestamos();
-}
+// TODO falta validar que el tipo de prestamo no tenga referencias antes de eliminar
+// function eliminarTipoPrestamo(tipo){
+//     if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO) ){
+//     objAH=new AjaxHelper(updateEliminarTipoPrestamo);
+//     objAH.debug= true;
+//     objAH.showOverlay   = true;
+//     objAH.url= "/cgi-bin/koha/admin/circulacion/tipos_de_prestamosDB.pl";
+//     objAH.tipo_prestamo=tipo;
+//     objAH.tipoAccion= "BORRAR";
+//     borrarDiv();
+//     objAH.sendToServer();
+//     }
+// }
+// 
+// function updateEliminarTipoPrestamo(responseText){
+//     borrarDiv();
+//     respuesta(responseText);
+//     buscarTiposPrestamos();
+// }
 
 /*
  * respuesta
