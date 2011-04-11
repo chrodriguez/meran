@@ -1225,7 +1225,7 @@ sub busquedaPorTitulo{
     my $matches                 = $results->{'matches'};
     my $total_found             = $results->{'total_found'};
 #     C4::AR::Utilidades::printHASH($results);
-    C4::AR::Debug::debug("total_found: ".$total_found);
+    C4::AR::Debug::debug("C4::AR::Busqueda::busquedaPorTitulo => total_found: ".$total_found);
 #     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
       my %hash_temp         = {};
@@ -1239,12 +1239,12 @@ sub busquedaPorTitulo{
 }
 
 sub busquedaPorAutor{
-    my ($titulo) = @_;
+    my ($autor) = @_;
 
     use Sphinx::Search;
 
     my $sphinx      = Sphinx::Search->new();
-    my $query       = '@autor '.$titulo;
+    my $query       = '@autor '.$autor;
     my $tipo        = 'SPH_MATCH_EXTENDED';
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
@@ -1258,7 +1258,7 @@ sub busquedaPorAutor{
     my $matches                 = $results->{'matches'};
     my $total_found             = $results->{'total_found'};
 #     C4::AR::Utilidades::printHASH($results);
-    C4::AR::Debug::debug("total_found: ".$total_found);
+    C4::AR::Debug::debug("C4::AR::Busqueda::busquedaPorAutor => total_found: ".$total_found);
 #     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
       my %hash_temp         = {};
