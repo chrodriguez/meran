@@ -10,7 +10,9 @@
     });
 </script>
 <div>
-    <div class="titulos" >[% "Generar estad&iacute;sticas de Consultas al OPAC" | i18n %]</div>
+    <!--<div class="titulos" >[% "Generar estad&iacute;sticas de Consultas al OPAC" | i18n %]</div>-->
+<fieldset>
+    <legend class="titulo_legend"> <span class="titulos">[% "Generar estad&iacute;sticas de Consultas al OPAC" | i18n %] </span> </legend>
     [% IF !logueo_opac %]
         <div class="warning"><p>[% "ATENCION: El logueo de busquedas del OPAC esta deshabilitado" | i18n %].</p></div>
     [% END %]
@@ -59,5 +61,5 @@
 </div>
 
 <div id="result_chart"></div>
-
+</fieldset>
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -2,7 +2,9 @@
 
 <script type="text/javascript" src="/intranet-tmpl/estadisticas/estadisticas.js"></script>
 <div>
-    <div class="titulos" >[% "Generar estad&iacute;sticas de Colecciones" | i18n %]</div>
+<fieldset>
+    <legend class="titulo_legend"> <span class="titulos">[% "Generar estad&iacute;sticas de Colecciones" | i18n %] </span> </legend>
+   <!-- <div class="titulos" >[% "Generar estad&iacute;sticas de Colecciones" | i18n %]</div>-->
 
     <center>
         <div class="filtros_reportes">
@@ -34,5 +36,5 @@
 </div>
 
 <div id="result_chart"></div>
-
+</fieldset>
 [% INCLUDE 'intranet-bottom.inc' %]

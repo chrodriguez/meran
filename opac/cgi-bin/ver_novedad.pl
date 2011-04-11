@@ -23,6 +23,8 @@ my $id_novedad = $input->param('id');
 
 my $novedad = C4::AR::Novedades::getNovedad($id_novedad);
 
+
+# $t_params->{'content_title'}= "Novedades"
 $t_params->{'novedad'} = $novedad;
 $t_params->{'partial_template'}= "ver_novedad.inc";
 

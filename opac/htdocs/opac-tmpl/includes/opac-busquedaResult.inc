@@ -220,6 +220,6 @@
     [% IF no_content_message %]
         <h1> [% no_content_message %] </h1>  
     [% ELSE %]
-        <h1> [% 'Nada que mostrar.' | i18n %] </h1>
+        <h1 style="margin:15px;"> [% 'Nada que mostrar.' | i18n %] </h1>
     [% END %]
 [% END %]

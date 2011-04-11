@@ -1,5 +1,5 @@
 <fieldset> <legend class="titulo_legend trigger click">[% "Datos del material" %]</legend>
-         
+    <form id="recom_form" name="recom_form" method="post">     
         <div class="datos_edicion" id="datos_edicion"> 
                
                   <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
@@ -25,8 +25,8 @@
                   <p><label for="cant_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
                             <input type="number" class="required" name="cant_ejemplares" id="cant_ejemplares" class="field" value="" tabindex="10" /></p>
                  
-                  <p><label for="motivo_propuesta" class="left">[% 'Motivo de la Propuesta' | i18n %]:</label>
-                     <textarea name="motivo_propuesta" class="required" id="motivo_propuesta" cols="45" class="required" rows="10" tabindex="17"></textarea></p>
+                  <p><label for="motivo_propuesta" class="left">[% 'Motivo de la Propuesta*' | i18n %]:</label>
+                     <textarea name="motivo_propuesta" id="motivo_propuesta" cols="45" class="required" rows="10" tabindex="17"></textarea></p>
                   <p><label for="comment" class="left">[% 'Comentarios' | i18n %]:</label>
                      <textarea name="comment" id="comment"  cols="45" rows="10" tabindex="17"></textarea></p>
           <!--          <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Enviar Mensaje' | i18n %]" tabindex="18" /></p>-->
@@ -40,4 +40,5 @@
                                         );
                   [% END %]
         </div>  
+   </form>
 </fieldset>

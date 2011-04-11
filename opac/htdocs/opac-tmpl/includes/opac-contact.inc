@@ -36,7 +36,7 @@ $(document).ready( function() {
 
 </script>        
 
-<h1 class="block">[% 'Formulario de contacto' | i18n %]</h1>
+<!--<h1 class="block">[% 'Formulario de contacto' | i18n %]</h1>-->
         <div class="column1-unit">
           <div class="contactform">
             <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-contact.pl">

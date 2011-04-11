@@ -14,74 +14,75 @@ $(document).ready(function() {
 
 </script>
 
-<div class="titulos" >[% "B&uacute;squeda de Usuarios Reales" | i18n %]</div>
-
-<div class="buttonContainerHorizontal">
-<ul>
-    <li class="horizontal">
-			<input id="socio" type=text name="socio" onFocus="checkFilter('focus')" 
-                onBlur="checkFilter('blur')">
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "consultar();",
-                                                                    title   => "[% 'Buscar' | i18n %]",
-                                        ) ;
-            [% END %]
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "Borrar();",
-                                                                    title   => "[% 'Limpiar' | i18n %]",
-                                        ) ;
-            [% END %]
-    </li>
-</ul>
-</div>
-<ul>
-    <li style="text-align:center">
-			    <p class="recuadroAyuda">
-			    [% "Tipear el apellido, DNI, tarjeta de id. o legajo del usuario." | i18n %]
-			    </p>
-    </li>
-</ul>
-
-
+<!--<div class="titulos" >[% "B&uacute;squeda de Usuarios Reales" | i18n %]</div>-->
 <fieldset>
-    <legend class="titulo_legend">[% "Inicial del apellido:" | i18n %]</legend>
-    <div id="filterBar" style="text-align:center">
-            <a href="#tablaResult" onClick="consultar('A')"> A |</a>
-            <a href="#tablaResult" onClick="consultar('B')"> B |</a>
-            <a href="#tablaResult" onClick="consultar('C')"> C |</a>
-            <a href="#tablaResult" onClick="consultar('D')"> D |</a>
-            <a href="#tablaResult" onClick="consultar('E')"> E |</a>
-            <a href="#tablaResult" onClick="consultar('F')"> F |</a>
-            <a href="#tablaResult" onClick="consultar('G')"> G |</a>
-            <a href="#tablaResult" onClick="consultar('H')"> H |</a>
-            <a href="#tablaResult" onClick="consultar('I')"> I |</a>
-            <a href="#tablaResult" onClick="consultar('j')"> J |</a>
-            <a href="#tablaResult" onClick="consultar('K')"> K |</a>
-            <a href="#tablaResult" onClick="consultar('L')"> L |</a>
-            <a href="#tablaResult" onClick="consultar('M')"> M |</a>
-            <a href="#tablaResult" onClick="consultar('N')"> N |</a>
-            <a href="#tablaResult" onClick="consultar('O')"> O |</a>
-            <a href="#tablaResult" onClick="consultar('P')"> P |</a>
-            <a href="#tablaResult" onClick="consultar('Q')"> Q |</a>
-            <a href="#tablaResult" onClick="consultar('R')"> R |</a>
-            <a href="#tablaResult" onClick="consultar('S')"> S |</a>
-            <a href="#tablaResult" onClick="consultar('T')"> T |</a>
-            <a href="#tablaResult" onClick="consultar('U')"> U |</a>
-            <a href="#tablaResult" onClick="consultar('V')"> V |</a>
-            <a href="#tablaResult" onClick="consultar('W')"> W |</a>
-            <a href="#tablaResult" onClick="consultar('X')"> X |</a>
-            <a href="#tablaResult" onClick="consultar('Y')"> Y |</a>
-            <a href="#tablaResult" onClick="consultar('Z')"> Z |</a>
-            <a href="#tablaResult" onClick="consultar('TODOS')"> [% "TODOS" | i18n %] </a>
+    <legend class="titulo_legend">[% "B&uacute;squeda de Usuarios Reales" | i18n %]</legend>
+    <div class="buttonContainerHorizontal">
+    <ul>
+        <li class="horizontal">
+                <input id="socio" type=text name="socio" onFocus="checkFilter('focus')" 
+                    onBlur="checkFilter('blur')">
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                        boton   => "boton_buscar",
+                                                                        onClick => "consultar();",
+                                                                        title   => "[% 'Buscar' | i18n %]",
+                                            ) ;
+                [% END %]
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                        boton   => "boton_buscar",
+                                                                        onClick => "Borrar();",
+                                                                        title   => "[% 'Limpiar' | i18n %]",
+                                            ) ;
+                [% END %]
+        </li>
+    </ul>
     </div>
-</fieldset>
-<br>
-<div id="result"></div>
-<br>
+    <ul>
+        <li style="text-align:center">
+                    <p class="recuadroAyuda">
+                    [% "Tipear el apellido, DNI, tarjeta de id. o legajo del usuario." | i18n %]
+                    </p>
+        </li>
+    </ul>
+
+
+    <fieldset>
+        <legend class="titulo_legend">[% "Inicial del apellido:" | i18n %]</legend>
+        <div id="filterBar" style="text-align:center">
+                <a href="#tablaResult" onClick="consultar('A')"> A |</a>
+                <a href="#tablaResult" onClick="consultar('B')"> B |</a>
+                <a href="#tablaResult" onClick="consultar('C')"> C |</a>
+                <a href="#tablaResult" onClick="consultar('D')"> D |</a>
+                <a href="#tablaResult" onClick="consultar('E')"> E |</a>
+                <a href="#tablaResult" onClick="consultar('F')"> F |</a>
+                <a href="#tablaResult" onClick="consultar('G')"> G |</a>
+                <a href="#tablaResult" onClick="consultar('H')"> H |</a>
+                <a href="#tablaResult" onClick="consultar('I')"> I |</a>
+                <a href="#tablaResult" onClick="consultar('j')"> J |</a>
+                <a href="#tablaResult" onClick="consultar('K')"> K |</a>
+                <a href="#tablaResult" onClick="consultar('L')"> L |</a>
+                <a href="#tablaResult" onClick="consultar('M')"> M |</a>
+                <a href="#tablaResult" onClick="consultar('N')"> N |</a>
+                <a href="#tablaResult" onClick="consultar('O')"> O |</a>
+                <a href="#tablaResult" onClick="consultar('P')"> P |</a>
+                <a href="#tablaResult" onClick="consultar('Q')"> Q |</a>
+                <a href="#tablaResult" onClick="consultar('R')"> R |</a>
+                <a href="#tablaResult" onClick="consultar('S')"> S |</a>
+                <a href="#tablaResult" onClick="consultar('T')"> T |</a>
+                <a href="#tablaResult" onClick="consultar('U')"> U |</a>
+                <a href="#tablaResult" onClick="consultar('V')"> V |</a>
+                <a href="#tablaResult" onClick="consultar('W')"> W |</a>
+                <a href="#tablaResult" onClick="consultar('X')"> X |</a>
+                <a href="#tablaResult" onClick="consultar('Y')"> Y |</a>
+                <a href="#tablaResult" onClick="consultar('Z')"> Z |</a>
+                <a href="#tablaResult" onClick="consultar('TODOS')"> [% "TODOS" | i18n %] </a>
+        </div>
+    </fieldset>
+    <br>
+    <div id="result"></div>
+    <br>
 
 [% INCLUDE 'intranet-bottom.inc' %]
 

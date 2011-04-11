@@ -14,5 +14,5 @@ $t_params->{'opac'};
 my ($session)= C4::AR::Auth::inicializarAuth($t_params);
 
 $t_params->{'partial_template'}= "opac-login.inc";
-
+# $t_params->{'content_title'} = C4::AR::Filtros::i18n("Ingresar");
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -1642,36 +1642,37 @@ div.pagination {
 	font-size: 11px;
 	font-family: Tahoma, Arial, Helvetica, Sans-serif;
 	padding: 2px;
-	background-color: #c1c1c1;
+/*	background-color: #c1c1c1;*/
 	width: 100%;
+    border: 1px solid #35414F;
 }
 
 div.pagination a {
 	padding: 2px 5px 2px 5px;
 	margin: 2px;
-	background-color: #c1c1c1;
+/*	background-color: #c1c1c1;*/
 	text-decoration: none;
 	color: #000;
 }
 
 div.pagination a:hover,div.pagination a:active {
-	background-color: InfoBackground;
-	color: #000;
+	background-color: #7E94AF;
+    color: #000;
 }
 
 div.pagination a.current {
 	padding: 2px 5px 2px 5px;
 	margin: 2px;
 	font-weight: bold;
-	background-color: #D9D300;
+	background-color: #35414F;
 	color: #FFFFFF;
 }
 
 div.pagination span.disabled {
 	padding: 2px 5px 2px 5px;
 	margin: 2px;
-	background-color: #c1c1c1;
-	color: #797979;
+/*	background-color: #c1c1c1;*/
+	color: #35414F;
 }
 
 #content_paginator {
