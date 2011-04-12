@@ -61,7 +61,7 @@
 
 <div id="contentWindow" class="formElemets">
     <fieldset>
-        <legend class="titulo_legend">[% 'Agregar Autorizado' | i18n %]</legend>
+        <legend class="titulo_legend">[% 'Agregar Usuario Adicional' | i18n %]</legend>
         <br>
         <ul>
             <li class="sub_item">

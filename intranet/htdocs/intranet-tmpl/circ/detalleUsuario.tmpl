@@ -5,7 +5,7 @@
     <ul>
         <li>
             [% "Apellido y Nombre:" | i18n %]
-            <b> [% socio.persona.getApellido %] 
+            <b>
               [% PERL %]
                   print C4::AR::Filtros::link_to(   text =>     "[% socio.persona.getApeYNom %]",
                                                     url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
@@ -13,7 +13,8 @@
                                                     title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
                                                     blank =>  1,
                                               );
-              [% END %]</b>
+              [% END %]
+            </b>
         </li>
         <li>
             [% "Documento:" | i18n %]<b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b>
