@@ -14,8 +14,11 @@ __PACKAGE__->meta->setup(
         responsable           => { type => 'varchar', length => 16, not_null => 1 },
         timestamp             => { type => 'timestamp', not_null => 1 },
         fecha                 => { type => 'varchar', default => '0000-00-00', not_null => 1 },
+        fecha_comienzo        => { type => 'varchar' },
         fecha_final           => { type => 'varchar' },
         tipo_sancion          => { type => 'integer', default => '0' },
+        dias_sancion          => { type => 'integer', default => '0' },
+        id3                   => { type => 'integer' },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -84,12 +87,17 @@ sub setResponsable{
     $self->responsable($responsable);
 }
 
-sub getFecha{
+sub getFecha_formateada{
     my ($self) = shift;
     my $dateformat = C4::Date::get_date_format();
-
     return ( C4::Date::format_date($self->fecha, $dateformat) );
 }
+
+sub getFecha{
+    my ($self) = shift;
+    return ($self->fecha);
+}
+
 
 sub setFecha{
     my ($self) = shift;
@@ -97,12 +105,32 @@ sub setFecha{
     $self->fecha($fecha);
 }
 
+sub getFecha_comienzo{
+    my ($self) = shift;
+    return ($self->fecha_comienzo);
+}
+
+sub getFecha_comienzo_formateada {
+    my ($self) = shift;
+    my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha_comienzo),$dateformat);
+}
+
+sub setFecha_comienzo{
+    my ($self) = shift;
+    my ($fecha_comienzo) = @_;
+    $self->fecha_comienzo($fecha_comienzo);
+}
+
 sub getFecha_final{
     my ($self) = shift;
-  
-    my $dateformat = C4::Date::get_date_format();
+    return ($self->fecha_final);
+}
 
-    return ( C4::Date::format_date($self->fecha_final, $dateformat) );
+sub getFecha_final_formateada {
+    my ($self) = shift;
+    my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha_final),$dateformat);
 }
 
 sub setFecha_final{
@@ -110,6 +138,7 @@ sub setFecha_final{
     my ($fecha_final) = @_;
     $self->fecha_final($fecha_final);
 }
+
 
 sub getTipo_sancion{
     my ($self) = shift;
@@ -122,6 +151,27 @@ sub setTipo_sancion{
     $self->tipo_sancion($tipo_sancion);
 }
 
+sub getId3{
+    my ($self) = shift;
+    return ($self->id3);
+}
+
+sub setId3{
+    my ($self) = shift;
+    my ($id3) = @_;
+    $self->id3($id3);
+}
+
+sub getDias_sancion{
+    my ($self) = shift;
+    return ($self->dias_sancion);
+}
+
+sub setDias_sancion{
+    my ($self) = shift;
+    my ($dias_sancion) = @_;
+    $self->dias_sancion($dias_sancion);
+}
 
 sub agregar {
     my ($self)=shift;
@@ -136,6 +186,14 @@ sub agregar {
     $self->setFecha(C4::Date::format_date_in_iso($hoy, $dateformat));
     $self->setFecha_final($data_hash->{'fecha_final'});
     $self->setTipo_sancion($data_hash->{'tipo_sancion'});
+
+    $self->setId3($data_hash->{'id3'}||undef);
+    $self->setId_reserva($data_hash->{'id_reserva'}||undef);
+    $self->setNro_socio($data_hash->{'nro_socio'});
+    $self->setTipo_sancion($data_hash->{'tipo_sancion'}||undef);
+    $self->setFecha_comienzo($data_hash->{'fecha_comienzo'});
+    $self->setFecha_final($data_hash->{'fecha_final'});
+    $self->setDias_sancion($data_hash->{'dias_sancion'}||undef);
 
     $self->save();
 }
