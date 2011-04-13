@@ -668,7 +668,7 @@ sub getSocioLike {
             foreach my $s (@searchstring_array){ 
                 push (	@filtros, ( or   => [   
                                                 'persona.nombre'    => { like => '%'.$s.'%'},   
-                                                apellido            => { like => $s.'%'},
+                                                apellido            => { like => '%'.$s.'%'},
                                                 nro_documento       => { like => '%'.$s.'%' }, 
                                                 legajo              => { like => '%'.$s.'%' },
                                                 nro_socio           => { like => '%'.$s.'%' }          
@@ -690,11 +690,14 @@ sub getSocioLike {
     push(@filtros, ( es_socio => { eq => $habilitados}));
     $orden = "apellido,nombre";
     my $ordenAux= $socioTemp->sortByString($orden);
-
+    
+    $ordenAux = 'agregacion_temp,'.$ordenAux;
+    
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                             sort_by => $ordenAux,
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
+                                                                            select => ['*','length(apellido) AS agregacion_temp'],
                                                               with_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
                                                                                   'persona.documento'],
      ); 
