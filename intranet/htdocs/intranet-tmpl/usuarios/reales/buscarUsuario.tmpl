@@ -41,9 +41,12 @@ $(document).ready(function() {
     </div>
     <ul>
         <li style="text-align:center">
-                    <p class="recuadroAyuda">
-                    [% "Tipear el apellido, DNI, tarjeta de id. o legajo del usuario." | i18n %]
-                    </p>
+<!--                     <p class="recuadroAyuda"> -->
+                    
+                    [% PERL %]
+                        print C4::AR::Filtros::setHelp( text => "Tipear el apellido, DNI, tarjeta de id. o legajo del usuario.");
+                    [% END %]
+<!--                     </p> -->
         </li>
     </ul>
 
