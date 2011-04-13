@@ -31,11 +31,11 @@ __PACKAGE__->meta->setup(
             column_map => { nro_socio => 'nro_socio' },
             type       => 'one to one',
         },
-#          circ_tipo_sancion  => {
-#             class      => 'C4::Modelo::CatNivel2',
-#             column_map => { tipo_sancion => 'tipo_sancion' },
-#             type       => 'one to one',
-#         },
+          ref_tipo_sancion  => {
+             class      => 'C4::Modelo::CircTipoSancion',
+             column_map => { tipo_sancion => 'tipo_sancion' },
+             type       => 'one to one',
+         },
    ],
 );
 

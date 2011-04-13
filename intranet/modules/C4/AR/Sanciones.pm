@@ -640,6 +640,38 @@ sub eliminarReglaSancion {
     return ($msg_object);
 }
 
+sub getHistorialSanciones{
+  #Esta funcion recupera las sanciones históricas de un socio
+   my ($nro_socio,$ini,$cantR,$orden)=@_;
+
+    $cantR  = $cantR || 10;
+    $ini    = $ini || 0;
+
+  if($nro_socio){
+
+    my $err= "Error con la fecha";
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);
+
+    use C4::Modelo::RepHistorialSancion::Manager;
+    my $historial_sanciones_array_ref = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion (   
+                                                                        query => [ 
+                                                                                nro_socio       => { eq => $nro_socio},
+                                                                                fecha_final     => { lt => $hoy},
+                                                                                ],
+                                                                        select  => ['circ_sancion.*'],
+                                                                        with_objects => ['usr_responsable','usr_nro_socio','ref_tipo_sancion'],
+                                                                        sort_by => $orden,
+                                                                        limit   => $cantR,
+                                                                        offset  => $ini,
+                                );
+
+    return (scalar(@$historial_sanciones_array_ref), $historial_sanciones_array_ref);
+
+  }
+  return 0;
+
+}
 
 END { }       # module clean-up code here (global destructor)
 

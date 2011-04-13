@@ -620,6 +620,7 @@ sub devolver {
 				$paramsSancion{'id_reserva'}   = undef;
 				$paramsSancion{'fecha_comienzo'} = undef;
 				$paramsSancion{'fecha_final'}    = undef;
+                $paramsSancion{'id3'}         = $self->getId3;
 				$paramsSancion{'nro_socio'}      = $nro_socio;
 				$paramsSancion{'dias_sancion'}   = $diasSancion;
 				$sancion->insertar_sancion_pendiente( \%paramsSancion );
@@ -646,6 +647,7 @@ sub devolver {
 				$paramsSancion{'loggedinuser'}   = $loggedinuser;
 				$paramsSancion{'tipo_sancion'}   = $tipo_sancion->getTipo_sancion;
 				$paramsSancion{'id_reserva'}     = undef;
+                $paramsSancion{'id3'}         = $self->getId3;
 				$paramsSancion{'nro_socio'}      = $nro_socio;
 				$paramsSancion{'fecha_comienzo'} = $fechaHoy;
 				$paramsSancion{'fecha_final'}    = $fechaFinSancion;

@@ -47,6 +47,27 @@ function updateMostrarHistorialDePrestamos(responseText){
 
 //*******************************Fin Para manejar el historial de prestamos************************************
 
+//*************************************Para manejar el historial de sanciones***********************************
+
+function mostrarHistorialDeSanciones(){
+    objAH               = new AjaxHelper(updateMostrarHistorialDeSanciones);
+    objAH.debug         = true;
+    objAH.cache         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = '/cgi-bin/koha/usuarios/reales/historialSanciones.pl';
+    objAH.nro_socio     = USUARIO.ID;
+    objAH.funcion       = 'changePage';
+    objAH.sendToServer();
+}
+
+function updateMostrarHistorialDeSanciones(responseText){
+    $('#historialSanciones').html(responseText);
+    zebra('tablaHistorialSanciones');
+    $.scrollTo('#historialSanciones');
+}
+
+
+//*******************************Fin Para manejar el historial de sanciones************************************
 
 //************************************Para manejar la circulacion**********************************************
 //REDEFINIDO, se encuentra en circulacion.js
@@ -270,7 +291,8 @@ $(document).ready(function(){
     USUARIO.ID      = '[% socio_modificar.getNro_socio %]';
 	detalleUsuario();
 
-    makeToggle('toggle_container_block','trigger',mostrarHistorialDePrestamos, 'historialPrestamos',true);
+    makeToggle('toggle_container_block','trigger1',mostrarHistorialDePrestamos, 'historialPrestamos',true);
+    makeToggle('toggle_container_block','trigger2',mostrarHistorialDeSanciones, 'historialSanciones',true);
 });
 
 </script>
@@ -292,7 +314,7 @@ $(document).ready(function(){
 
     <div>
         <fieldset>
-            <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "click para acceder al Historial de Pr&eacute;stamos" | i18n %]'>
+            <legend class="titulo_legend_resaltado trigger1 click titulo_legend" title='[% "click para acceder al Historial de Pr&eacute;stamos" | i18n %]'>
                             [% "Historial de Pr&eacute;stamos" | i18n %]
             </legend>
 	        <!-- DETALLE DEL HISTORICO DE PRESTAMOS DEL USUARIO -->
@@ -300,6 +322,15 @@ $(document).ready(function(){
         </fieldset>
     </div>
 
+    <div>
+        <fieldset>
+            <legend class="titulo_legend_resaltado trigger2 click titulo_legend" title='[% "click para acceder al Historial de Sanciones" | i18n %]'>
+                            [% "Historial de Sanciones" | i18n %]
+            </legend>
+            <!-- DETALLE DEL HISTORICO DE SANCIONES DEL USUARIO -->
+            <div id="historialSanciones" class="toggle_container_block" style="display:none"></div>
+        </fieldset>
+    </div>
 </div>
 
 [% INCLUDE "intranet-bottom.inc" %]
