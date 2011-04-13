@@ -7,6 +7,14 @@ use C4::Date qw(get_date_format format_date_in_iso);
 #use C4::AR::Reservas;
 use C4::Modelo::CircPrestamo;
 use C4::Modelo::CircPrestamo::Manager;
+use C4::Modelo::RepHistorialPrestamo;
+use C4::Modelo::RepHistorialPrestamo::Manager;
+# use C4::Modelo::CatRegistroMarcN3;
+# use C4::Modelo::CatRegistroMarcN3::Manager;
+# use C4::Modelo::CatRegistroMarcN2;
+# use C4::Modelo::CatRegistroMarcN2::Manager;
+
+use C4::Modelo::RepHistorialPrestamo::Manager;
 #use C4::Circulation::Circ2;
 use C4::AR::Sanciones;
 #use Date::Manip;
@@ -842,52 +850,67 @@ sub getPrestamoActivo {
 sub getHistorialPrestamos {
     my ($nro_socio,$ini,$cantR,$orden)=@_;
 
-    my @filtros;
-    push(@filtros, ( nro_socio => { eq => $nro_socio } ));
+#     my @filtros;
+#     push(@filtros, ( nro_socio => { eq => $nro_socio } ));
 
-    if($orden eq 'autor'){
-        $orden= 'cat_autor.apellido';
-    }elsif($orden eq 'titulo'){
-        $orden= 'cat_nivel1.titulo';
-    }elsif($orden eq 'barcode'){
-        $orden= 'cat_nivel3.barcode';
-    }elsif($orden eq 'fecha_devolucion'){
-        $orden= 'circ_prestamo.fecha_devolucion';
-    }else{$orden= 'cat_nivel1.titulo';} #ordena por titulo por defecto
+    my $historialPrestamos = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo( 
+                                                    query => [ nro_socio => { eq => $nro_socio } ],
+                                                    require_objects => ['nivel3','nivel3.nivel1'], 
+#                                                     select       => [],
+                                        );
 
-    my $select = "SELECT CN1.id1, RHP.fecha_prestamo, RHP.fecha_devolucion\n";
-
-    my $from = "FROM rep_historial_prestamo RHP INNER JOIN cat_nivel3 CN3 ON RHP.id3 = CN3.id3\n
-                                 INNER JOIN cat_nivel1 CN1 ON CN3.id1 = CN1.id1\n
-                                 INNER JOIN cat_autor CA ON CN1.autor = CA.id\n" ;
-
-    my $where = "WHERE (RHP.nro_socio = ? )\n";
-    my $limit = "LIMIT ".$ini.", ".$cantR."\n";
-    my $query = $select.$from.$where.$limit;
-
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($nro_socio);
-    my @prestamos_array;
-    my $dateformat = C4::Date::get_date_format();
-
-    while(my $data=$sth->fetchrow_hashref){
-        $data->{'fecha_prestamo'} = C4::Date::format_date_in_iso($data->{'fecha_prestamo'},$dateformat);
-        $data->{'fecha_devolucion'} = C4::Date::format_date_in_iso($data->{'fecha_devolucion'},$dateformat);
-        push(@prestamos_array,$data);
+    foreach my $prestamo (@$historialPrestamos) {
+          my $autor= $prestamo->nivel3->nivel1->getAutor;
+          C4::AR::Debug::debug("AUTORRRRRRRRRR:".$autor);
     }
-    my ($obj_for_log) = {};
-    my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @prestamos_array);
 
-    my $count = "SELECT COUNT(*) AS cantidad\n".$from.$where;
-    $sth = $dbh->prepare($count);
-    $sth->execute($nro_socio);
-    my $total_found = $sth->fetchrow_hashref;
-    $total_found = $total_found->{'cantidad'};
-    if ($total_found == 0){
-        $resultsarray = 0;
-    }
-    return ($total_found, $resultsarray);
+
+#     if($orden eq 'autor'){
+#         $orden= 'cat_autor.apellido';
+#     }elsif($orden eq 'titulo'){
+#         $orden= 'cat_nivel1.titulo';
+#     }elsif($orden eq 'barcode'){
+#         $orden= 'cat_nivel3.barcode';
+#     }elsif($orden eq 'fecha_devolucion'){
+#         $orden= 'circ_prestamo.fecha_devolucion';
+#     }else{$orden= 'cat_nivel1.titulo';} #ordena por titulo por defecto
+# 
+#     my $select = "SELECT CN1.id1, RHP.fecha_prestamo, RHP.fecha_devolucion\n";
+# 
+#     my $from = "FROM rep_historial_prestamo RHP INNER JOIN cat_nivel3 CN3 ON RHP.id3 = CN3.id3\n
+#                                  INNER JOIN cat_nivel1 CN1 ON CN3.id1 = CN1.id1\n
+#                                  INNER JOIN cat_autor CA ON CN1.autor = CA.id\n" ;
+# 
+#     my $where = "WHERE (RHP.nro_socio = ? )\n";
+#     my $limit = "LIMIT ".$ini.", ".$cantR."\n";
+#     my $query = $select.$from.$where.$limit;
+# 
+#     my $dbh = C4::Context->dbh;
+#     my $sth = $dbh->prepare($query);
+#     $sth->execute($nro_socio);
+#     my @prestamos_array;
+#     my $dateformat = C4::Date::get_date_format();
+# 
+#     while(my $data=$sth->fetchrow_hashref){
+#         $data->{'fecha_prestamo'} = C4::Date::format_date_in_iso($data->{'fecha_prestamo'},$dateformat);
+#         $data->{'fecha_devolucion'} = C4::Date::format_date_in_iso($data->{'fecha_devolucion'},$dateformat);
+#         push(@prestamos_array,$data);
+#     }
+#     my ($obj_for_log) = {};
+#     my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @prestamos_array);
+# 
+#     my $count = "SELECT COUNT(*) AS cantidad\n".$from.$where;
+#     $sth = $dbh->prepare($count);
+#     $sth->execute($nro_socio);
+#     my $total_found = $sth->fetchrow_hashref;
+#     $total_found = $total_found->{'cantidad'};
+#     if ($total_found == 0){
+#         $resultsarray = 0;
+#     }
+#     return ($total_found, $resultsarray);
+
+      return($historialPrestamos);
+
 }
 
 
