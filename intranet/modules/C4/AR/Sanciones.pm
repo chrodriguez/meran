@@ -29,7 +29,8 @@ use vars qw(@EXPORT @ISA);
 
 
 =item 
-Busca las sanciones segun lo ingresado en el cliente: apellido, nombre, nro_socio
+Busca las sanciones segun lo ingresado en el cliente: apellido, nombre, nro_socio.
+Tambien filtrando por fecha, para mostrar las sanciones actuales.
 =cut
 sub getSancionesLike {
 
@@ -37,9 +38,18 @@ sub getSancionesLike {
     my $sanciones_array_ref;
     my @filtros;
     
-    push (@filtros, ( or   => [   nombre => { like => '%'.$str.'%'}, apellido => { like => $str.'%'}, nro_socio => { like => '%'.$str.'%'} ]));
+    my $dateformat  = C4::Date::get_date_format();
+    my $hoy         = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+    
+    push (@filtros, 
+         ( or => [  nombre          => { like => '%'.$str.'%'}, 
+                    apellido        => { like => $str.'%'}, 
+                    nro_socio       => { like => '%'.$str.'%'}, 
+                    fecha_comienzo  => { le => $hoy }, 
+                    fecha_final     => { ge => $hoy}, 
+                 ]
+         ));
   
-    # TODO: hacer lo join con socio y dsp con persona para poder buscar por: pellido, nombre, nro_socio
     $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion( 
                                         query           => \@filtros,
                                         require_objects => ['socio','socio.persona'],
