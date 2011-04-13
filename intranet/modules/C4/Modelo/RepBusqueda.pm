@@ -34,7 +34,7 @@ sub agregar{
     my ($nro_socio) = @_;
     $self->setNro_socio($nro_socio);
     my $dateformat      = C4::Date::get_date_format();
-    my $hoy             = C4::Date::format_date_in_iso(ParseDate("now"), $dateformat);
+    my $hoy             = C4::Date::format_date_in_iso(C4::Date::ParseDate("now"), $dateformat);
     $self->setFecha($hoy);
 
     $self->save();

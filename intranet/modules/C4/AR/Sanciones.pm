@@ -95,10 +95,10 @@ sub tieneSancionPendiente {
                                        fecha_final => { eq => undef }] 
                             );
 
-  if (scalar(@$sanciones_array_ref) == 0){
-        return 0;
+  if (scalar($sanciones_array_ref->[0])){
+      return($sanciones_array_ref->[0] || 0);
   }else{
-    return(\@$sanciones_array_ref);
+      return (0);
   }
 }
 

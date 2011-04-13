@@ -39,6 +39,11 @@ __PACKAGE__->meta->setup(
              column_map => { tipo_sancion => 'tipo_sancion' },
              type       => 'one to one',
          },
+        nivel3 => {
+            class       => 'C4::Modelo::CatRegistroMarcN3',
+            key_columns => { id3 => 'id' },
+            type        => 'one to one',
+        },
    ],
 );
 
@@ -184,15 +189,10 @@ sub agregar {
     $self->setNro_socio($data_hash->{'nro_socio'});
     $self->setResponsable($data_hash->{'loggedinuser'});
     $self->setFecha(C4::Date::format_date_in_iso($hoy, $dateformat));
-    $self->setFecha_final($data_hash->{'fecha_final'});
-    $self->setTipo_sancion($data_hash->{'tipo_sancion'});
-
-    $self->setId3($data_hash->{'id3'}||undef);
-    $self->setId_reserva($data_hash->{'id_reserva'}||undef);
-    $self->setNro_socio($data_hash->{'nro_socio'});
-    $self->setTipo_sancion($data_hash->{'tipo_sancion'}||undef);
     $self->setFecha_comienzo($data_hash->{'fecha_comienzo'});
     $self->setFecha_final($data_hash->{'fecha_final'});
+    $self->setTipo_sancion($data_hash->{'tipo_sancion'});
+    $self->setId3($data_hash->{'id3'}||undef);
     $self->setDias_sancion($data_hash->{'dias_sancion'}||undef);
 
     $self->save();
