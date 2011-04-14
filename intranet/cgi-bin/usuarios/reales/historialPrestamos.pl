@@ -26,14 +26,18 @@ my $orden= $obj->{'orden'}||'date_due desc';
 my $ini= $obj->{'ini'};
 my $funcion= $obj->{'funcion'};
 
+
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-my ($cant,$presmamos_array_ref,$loop_reading)=C4::AR::Prestamos::getHistorialPrestamosParaTemplate($nro_socio,$ini,$cantR,$orden);
+# my ($cant,$presmamos_array_ref,$loop_reading)=C4::AR::Prestamos::getHistorialPrestamosParaTemplate($nro_socio,$ini,$cantR,$orden);
 
+my ($cant,$prestamos_array_ref)=C4::AR::Prestamos::getHistorialPrestamosParaTemplate($nro_socio,$ini,$cantR, $orden);
+
+$t_params->{'historial'}= $prestamos_array_ref;
 $t_params->{'paginador'}=&C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
 $t_params->{'cant'}= $cant;
 $t_params->{'nro_socio'}= $nro_socio;
-$t_params->{'loop_reading'}= $loop_reading;
+# $t_params->{'loop_reading'}= $loop_reading;
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
