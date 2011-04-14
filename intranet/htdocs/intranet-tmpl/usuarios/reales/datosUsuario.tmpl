@@ -44,6 +44,22 @@ function updateMostrarHistorialDePrestamos(responseText){
 	$.scrollTo('#historialPrestamos');
 }
 
+function mostrarHistorialDeReservas(){
+    objAH               = new AjaxHelper(updateMostrarHistorialDeReservas);
+    objAH.debug         = true;
+    objAH.cache         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = '/cgi-bin/koha/usuarios/reales/historialReservas.pl';
+    objAH.nro_socio     = USUARIO.ID;
+    objAH.funcion       = 'changePage';
+    objAH.sendToServer();
+}
+
+function updateMostrarHistorialDeReservas(responseText){
+    $('#historialReservas').html(responseText);
+    zebra('tablaHistorialReservas');
+    $.scrollTo('#historialReseravs');
+}
 
 //*******************************Fin Para manejar el historial de prestamos************************************
 
@@ -271,6 +287,7 @@ $(document).ready(function(){
 	detalleUsuario();
 
     makeToggle('toggle_container_block','trigger',mostrarHistorialDePrestamos, 'historialPrestamos',true);
+    makeToggle('toggle_container_block','trigger',mostrarHistorialDeReservas, 'historialReservas',true);
 });
 
 </script>
@@ -297,6 +314,16 @@ $(document).ready(function(){
             </legend>
 	        <!-- DETALLE DEL HISTORICO DE PRESTAMOS DEL USUARIO -->
 	        <div id="historialPrestamos" class="toggle_container_block" style="display:none"></div>
+        </fieldset>
+    </div>
+
+    <div>
+        <fieldset>
+            <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "click para acceder al Historial de Reservas" | i18n %]'>
+                            [% "Historial de Reservas" | i18n %]
+            </legend>
+            <!-- DETALLE DEL HISTORICO DE RESERVAS DEL USUARIO -->
+            <div id="historialReservas" class="toggle_container_block" style="display:none"></div>
         </fieldset>
     </div>
 
