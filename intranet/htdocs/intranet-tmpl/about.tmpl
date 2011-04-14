@@ -1,16 +1,31 @@
 [% INCLUDE "intranet-top.inc" %]
 [% USE HTML %]
-[% about %]
+<script type="text/javascript" language="javascript">
+
+function edit(){
+
+      objAH                     = new AjaxHelper(updateAgregarProveedor);
+      objAH.url                 = '/cgi-bin/koha/adquisiciones/addProveedores.pl';
+      objAH.debug               = true;
+      objAH.showOverlay         = true;
+      objAH.apellido            = $('#apellido').val();
+      objAH.nombre              = $('#nombre').val();
+      
+      objAH.tipoAccion          = 'AGREGAR_PROVEEDOR';
+      objAH.sendToServer();
+}
+
+function updateAgregarProveedor(responseText){
+    $('#edicion_about').html(responseText)
+}
+
+
+</script>
 <br>
-<p>Datos acerca de la vesi&oacute;n actual de Koha para reporte de errores (or general
-interest).
+<p>Datos acerca de la vesi&oacute;n actual de MERAN</p>
 <br>
 <center>
 <table border=0 class="texto">
-	<tr bgcolor="white">
-		<td width=25%>Version de Koha:</td>
-		<td>[% HTML.escape(kohaVersion) %]</td>
-	</tr>
 	<tr bgcolor="white">
  		<td valign="top">Cr&eacute;ditos</td>
 		<td>
@@ -20,9 +35,6 @@ interest).
 					<td width="50%">
                     <h4>SIU y CESPI:</h4>
                      <ul><li>Javier Díaz</li></ul>
-                    <h4>Biblioteca Pública:</h4> 
-                    <ul><li>Norma Mangiaterra
-                    </li><li>Lorena Miranda</li></ul>
                     <h4>LINTI, Facultad de Informática:</h4> 
                     <ul> 
                     <li>Einar Lanfranco</li>
@@ -53,4 +65,18 @@ interest).
 </table>
 <br>
 </center>
+
+[% PERL %]
+    print C4::AR::Filtros::to_Button(   text    => "[% 'Editar Informacion' | i18n %]",
+                                                          boton   => "boton_buscar",
+                                                          onClick => "edit()",
+                                                          title   => "[% 'Editar Informacion' | i18n %]",
+                                                          id      => "[% 'edit_about' %]",
+                                                                ) ;
+[% END %]
+
+<div id="edicion_about">
+</div>
+    
+</div>
 [% INCLUDE "intranet-bottom.inc" %]
