@@ -52,11 +52,14 @@
 }
 	
 .reference {
+    color: #4B5869;
+    font-family: "Verdana","Trebuchet MS","Arial";
     font-size: 12px;
     text-align: left;
 /*     width: 54%; */
     font-style: italic;
     clear: both;
+    font-weight: bold;
 }
 	
 

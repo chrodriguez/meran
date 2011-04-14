@@ -71,6 +71,7 @@ $(document).ready( function() {
 				cargarNivel1(params);
                 MODIFICAR = 1;
                 FROM_DETALLE_REGISTRO = 1;
+//                 "Complete sólo el campo que desee modificar"
 //                 _modificar = true;
 			[% END %]
 		[% END %]
@@ -95,19 +96,12 @@ $(document).ready( function() {
     print C4::AR::Filtros::ayuda_marc() ;
 [% END %]
 
-<!--<div id="titulo_agregar" style="display:none">
-    <p class="titulos" >[% "Agregar Documento" | i18n %]</p>
-</div>
-<div id="titulo_modificar" style="display:none">
-    <p class="titulos" >[% "Modificar Documento" | i18n %]</p>
-</div>-->
 <div id="abm_tablas_referencia"><div id="abm_tablas_referencia_content"></div></div>
 
 <fieldset>
     <legend class="titulo_legend">[% "Datos del esquema" | i18n %]</legend>
         <ul style="clear:both">
             <li class="sub_item" >
-<!-- <div id="div_combo_tipo_documento"> -->
                 <label for="tipo_nivel3_id">
                     [% "Esquema de ingreso de datos:" | i18n %]
                 </label>
@@ -139,9 +133,6 @@ $(document).ready( function() {
 <div class="todo classform">
 
 <div class="lateral">
-<!--    <div class="nivel1Barra">
-        <fieldset id="nivel1" class="nivel1Lateral"></fieldset>
-    </div>-->
     <div class="nivel2Barra">
         <div id="nivel2" class="nivel2Lateral"></div>
     </div>
@@ -155,7 +146,6 @@ $(document).ready( function() {
 <fieldset>
 <legend class="titulo_legend">[% "Datos del registro" | i18n %]</legend>
 
-<!--<form id="formNivel1" name="formNivel1" class="validateDataForm">-->
 <form id="formNivel1" name="formNivel1">
 <!--     CAMPOS DINAMICOS DEL NIVEL1 -->
     <div id= "estructuraDelNivel1"></div>
@@ -182,7 +172,6 @@ $(document).ready( function() {
 <fieldset>
 <legend class="titulo_legend">[% "Datos del grupo" | i18n %]</legend>
     
-<!--<form id="formNivel2" name="formNivel2" class="validateDataForm">-->
 <form id="formNivel2" name="formNivel2">
 <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
     <div id= "estructuraDelNivel2"></div>
@@ -209,7 +198,6 @@ $(document).ready( function() {
 <fieldset>
 <legend class="titulo_legend">[% "Datos del ejemplar" | i18n %]</legend>
 
-<!--<form id="formNivel3" name="formNivel3" class="validateDataForm">-->
 <form id="formNivel3" name="formNivel3">
 	<div id="divCantEjemplares" class="divContentComponente">
 		<li class="sub_item"> 

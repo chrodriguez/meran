@@ -29,7 +29,8 @@ use vars qw(@EXPORT @ISA);
 
 
 =item 
-Busca las sanciones segun lo ingresado en el cliente: apellido, nombre, nro_socio
+Busca las sanciones segun lo ingresado en el cliente: apellido, nombre, nro_socio.
+Tambien filtrando por fecha, para mostrar las sanciones actuales.
 =cut
 sub getSancionesLike {
 
@@ -37,12 +38,22 @@ sub getSancionesLike {
     my $sanciones_array_ref;
     my @filtros;
     
-    push (@filtros, ( or   => [   nombre => { like => '%'.$str.'%'}, apellido => { like => $str.'%'}, nro_socio => { like => '%'.$str.'%'} ]));
+    my $dateformat  = C4::Date::get_date_format();
+    my $hoy         = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+    
+    push (@filtros, 
+         ( or => [  nombre          => { like => '%'.$str.'%'}, 
+                    apellido        => { like => $str.'%'}, 
+                    nro_socio       => { like => '%'.$str.'%'}
+                 ],
+                    fecha_comienzo  => { le => $hoy },
+                    fecha_final     => { ge => $hoy},           
+         ));
   
-    # TODO: hacer lo join con socio y dsp con persona para poder buscar por: pellido, nombre, nro_socio
     $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion( 
                                         query           => \@filtros,
-                                        require_objects => ['socio','socio.persona'],
+                                        select          => ['circ_sancion.*'],
+                                        with_objects    => ['socio','socio.persona'],
                                 ); 
 
     return (scalar($sanciones_array_ref), $sanciones_array_ref);
@@ -84,10 +95,10 @@ sub tieneSancionPendiente {
                                        fecha_final => { eq => undef }] 
                             );
 
-  if (scalar(@$sanciones_array_ref) == 0){
-        return 0;
+  if (scalar($sanciones_array_ref->[0])){
+      return($sanciones_array_ref->[0] || 0);
   }else{
-    return(\@$sanciones_array_ref);
+      return (0);
   }
 }
 
@@ -297,10 +308,10 @@ sub getTipoSancion{
 
 sub sanciones {
  #Esta funcion muestra toda las sanciones que hay
-  my ($orden)=@_;
+  my ($orden) = @_;
 
   my $dateformat = C4::Date::get_date_format();
-  my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+  my $hoy        = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
 
   my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion (   
                                                                     query => [ 
@@ -640,6 +651,38 @@ sub eliminarReglaSancion {
     return ($msg_object);
 }
 
+sub getHistorialSanciones{
+  #Esta funcion recupera las sanciones históricas de un socio
+   my ($nro_socio,$ini,$cantR,$orden)=@_;
+
+    $cantR  = $cantR || 10;
+    $ini    = $ini || 0;
+
+  if($nro_socio){
+
+    my $err= "Error con la fecha";
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);
+
+    use C4::Modelo::RepHistorialSancion::Manager;
+    my $historial_sanciones_array_ref = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion (   
+                                                                        query => [ 
+                                                                                nro_socio       => { eq => $nro_socio},
+                                                                                fecha_final     => { lt => $hoy},
+                                                                                ],
+                                                                        select  => ['circ_sancion.*'],
+                                                                        with_objects => ['usr_responsable','usr_nro_socio','ref_tipo_sancion'],
+                                                                        sort_by => $orden,
+                                                                        limit   => $cantR,
+                                                                        offset  => $ini,
+                                );
+
+    return (scalar(@$historial_sanciones_array_ref), $historial_sanciones_array_ref);
+
+  }
+  return 0;
+
+}
 
 END { }       # module clean-up code here (global destructor)
 

@@ -1,0 +1,50 @@
+[% USE HTML %]
+
+[% IF HISTORIAL_SANCIONES %]
+		<div class="resultados_consulta">[% "Cantidad de registros en el hisotrial de sanciones" | i18n %]: &nbsp;[% cant %]</div> 
+		
+		<div class="contenedor_paginador">[% paginador %]</div>
+		
+		<table class="tablaHistorialSanciones datos_tabla" cellspacing=0  cellpadding=0 border=0 width="100%">
+		    <tr class="titulo_tabla_resultado">
+                <td class="click" onclick="ordenar('usr_responsable.nro_socio')" 
+                        Title='[% "Ordenar por Responsable" | i18n %]'>
+                    [% "Responsable" | i18n %]
+                </td>
+		        <td>
+		                [% "Operaci&oacute;n" | i18n %]
+		        </td>
+		            <td class="click" onclick="ordenar('fecha')" 
+		                Title='[% "Ordenar por Fecha Inicial" | i18n %]'>
+				    [% "Fecha Inicial" | i18n %]
+		        </td>
+			    <td class="click" onclick="ordenar('fecha_final')" 
+		                Title='[% "Ordenar por Fecha Final" | i18n %]'>
+				    [% "Fecha Final" | i18n %]
+			    </td>
+		        <td class="click" onclick="ordenar('ref_tipo_sancion')" 
+                    Title='[% "Ordenar por Tipo de Sanci&oacute;n" | i18n %]'>
+                    [% "Tipo de Sanci&oacute;n" | i18n %]
+                </td>
+		    </tr>
+		    
+            [% FOREACH historial_sancion IN HISTORIAL_SANCIONES %]
+		    <tr valign=middle align="center">
+                <td>
+                    [% historial_sancion.usr_responsable.persona.getApeYNom %]
+                </td>
+			    <td>
+				    [% historial_sancion.getTipo_operacion %]
+			    </td>
+                <td>
+                    [% historial_sancion.getFecha %]
+                </td>
+                <td>
+                    [% historial_sancion.getFecha_final %]
+                </td>
+		    [% END %] 
+		
+		</table>
+[% ELSE %]
+    <div class="resultados_consulta">[% "No se han registros en el hisotrial de sanciones." | i18n %] &nbsp;[% cant %]</div>
+[% END %] 
