@@ -846,23 +846,32 @@ sub getPrestamoActivo {
     }
 }
 
-# TODO DEPRECATEDDDDDDDDDDDDd
+
 sub getHistorialPrestamos {
     my ($nro_socio,$ini,$cantR,$orden)=@_;
 
-#     my @filtros;
+    my @filtros;
 #     push(@filtros, ( nro_socio => { eq => $nro_socio } ));
 
     my $historialPrestamos = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
+                                                    limit   => $cantR,
+                                                    offset  => $ini,
                                                     require_objects => ['nivel3','nivel3.nivel1'], 
 #                                                     select       => [],
-                                        );
+           
+);
 
-    foreach my $prestamo (@$historialPrestamos) {
-          my $autor= $prestamo->nivel3->nivel1->getAutor;
-          C4::AR::Debug::debug("AUTORRRRRRRRRR:".$autor);
-    }
+    my $cantidad = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo_count( 
+                                                    query => [ nro_socio => { eq => $nro_socio } ],
+                                                    require_objects => ['nivel3','nivel3.nivel1'], 
+#                                                     select       => [],
+           
+);
+
+
+    return($cantidad,$historialPrestamos);
+  
 
 
 #     if($orden eq 'autor'){
@@ -899,6 +908,9 @@ sub getHistorialPrestamos {
 #     my ($obj_for_log) = {};
 #     my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @prestamos_array);
 # 
+#     C4::AR::Debug::debug("ARRAY PRESTAMOS".$resultsarray);
+#         C4::AR::Utilidades::printARRAY($resultsarray);
+# 
 #     my $count = "SELECT COUNT(*) AS cantidad\n".$from.$where;
 #     $sth = $dbh->prepare($count);
 #     $sth->execute($nro_socio);
@@ -907,18 +919,22 @@ sub getHistorialPrestamos {
 #     if ($total_found == 0){
 #         $resultsarray = 0;
 #     }
+# 
+#     
 #     return ($total_found, $resultsarray);
 
-      return($historialPrestamos);
+   
 
 }
 
 
 sub getHistorialPrestamosParaTemplate {
 
-    my ($nro_socio,$ini,$cantR,$orden)=@_;
+     my ($nro_socio,$ini,$cantR,$orden)=@_;
 
-    my ($cant,$prestamos_array_ref) = getHistorialPrestamos($nro_socio,$ini,$cantR,$orden);
+
+     my ($cant,$prestamos_array_ref) = getHistorialPrestamos($nro_socio,$ini,$cantR,$orden);
+
 
     return ($cant,$prestamos_array_ref);
 }
@@ -930,7 +946,6 @@ sub getHistorialPrestamosVigentesParaTemplate {
 
     my ($cant,$prestamos_array_ref) = obtenerPrestamosDeSocio($nro_socio,$ini,$cantR,$orden);
 
-    
     return ($cant,$prestamos_array_ref);
 }
 
