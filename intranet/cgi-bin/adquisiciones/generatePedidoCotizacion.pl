@@ -11,12 +11,12 @@ use C4::AR::PdfGenerator;
 my $input = new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user({
-    template_name => "adquisiciones/generatePedidoCotizacion.tmpl",
-    query => $input,
-    type => "intranet",
+    template_name   => "adquisiciones/generatePedidoCotizacion.tmpl",
+    query           => $input,
+    type            => "intranet",
     authnotrequired => 0,
-    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
-    debug => 1,
+    flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+    debug           => 1,
 });
 
 my $recomendaciones_activas   = C4::AR::Recomendaciones::getRecomendacionesActivas();

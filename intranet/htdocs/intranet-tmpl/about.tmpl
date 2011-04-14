@@ -4,18 +4,16 @@
 
 function edit(){
 
-      objAH                     = new AjaxHelper(updateAgregarProveedor);
-      objAH.url                 = '/cgi-bin/koha/adquisiciones/addProveedores.pl';
+      objAH                     = new AjaxHelper(updateEdit);
+      objAH.url                 = '/cgi-bin/koha/preferencias/preferenciasDB.pl';
       objAH.debug               = true;
       objAH.showOverlay         = true;
-      objAH.apellido            = $('#apellido').val();
-      objAH.nombre              = $('#nombre').val();
       
-      objAH.tipoAccion          = 'AGREGAR_PROVEEDOR';
+      objAH.tipoAccion          = 'EDIT_ABOUT';
       objAH.sendToServer();
 }
 
-function updateAgregarProveedor(responseText){
+function updateEdit(responseText){
     $('#edicion_about').html(responseText)
 }
 

@@ -10,12 +10,15 @@ use C4::Context;
 use C4::Date;
 use C4::Modelo::PrefPreferenciaSistema;
 use C4::Modelo::PrefPreferenciaSistema::Manager;
+use C4::Modelo::PrefAbout;
+use C4::Modelo::PrefAbout::Manager;
 
 use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
 
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
+    &getInfoAbout
     &getPreferencia
     &setVariable
     &getValorPreferencia
@@ -25,6 +28,22 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
     &getMenuPreferences
     &getPreferenciasByArray
 );
+
+=item
+    Esta funcion trae la informacion de pref_about.
+    Devuelve un objeto o 0.
+=cut
+sub getInfoAbout{
+    my @filtros;
+    
+    my $info_about_ref = C4::Modelo::PrefAbout::Manager->get_pref_about( query => \@filtros );
+    
+    if ($info_about_ref->[0]){
+        return ($info_about_ref->[0]);
+    } else{
+        return 0;
+    }
+}
 
 
 sub reloadAllPreferences {
