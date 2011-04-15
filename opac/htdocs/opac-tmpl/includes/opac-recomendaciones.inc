@@ -159,7 +159,7 @@ $(document).ready( function() {
 <div class="column1-unit">
   <!--    [% message %]-->
         
-      <div class="recomendacionform">
+      <div style= "width: 169%;" class="recomendacionform">
               
 
               <input type="hidden" name="action" value="agregar">
@@ -269,6 +269,10 @@ $(document).ready( function() {
                                <th align="center">
                                   [% "Comentarios" | i18n %]
                               </th>
+                              <th align="center">
+                                  [% "Eliminar" | i18n %]
+                              </th>
+                             
                              
                         </thead>
                         <tbody>
