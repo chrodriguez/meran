@@ -47,7 +47,8 @@ function limpiarCampos(){
 }
 
 function save(){
-   $('#recom_form').submit();
+//     $('#recom_form').submit();
+    agregarRenglon();
 }
 
 
@@ -94,7 +95,7 @@ alert($('#edicion_id').val())
                     '<td id="cant_ejemplares'+id+'" name=cant_ejemplares'+id+'>'+cant_ejemplares+'</td>' +  
                     '<td id="motivo'+id+'" name=motivo'+id+'>'+motivo+'</td>' + 
                     '<td id="comentario'+id+'" name=comentario'+id+'>'+comentario+'</td>' + 
-//                     '<td><input type="button" onclick="eliminarFila('+id+')" name="'+id+'" value="X"></input></td>' +
+                    '<td><input type="button" onclick="eliminarFila('+id+')" name="'+id+'" value="X"></input></td>' +
                  '</tr>'
             )
   $('#recomendacion').show();
