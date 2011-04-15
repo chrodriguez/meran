@@ -16,41 +16,38 @@ function edit(){
 function updateEdit(responseText){
     $('#edicion_about').html(responseText)
 }
-
-[% mensaje %]
 </script>
-<br>
-<p>Datos acerca de la vesi&oacute;n actual de MERAN</p>
-<br>
-<center>
-<table border=0 class="texto">
-	<tr bgcolor="white">
- 		<td valign="top">Cr&eacute;ditos</td>
-		<td>
-			<h3>Equipo Central</h3>
-			<table width=100% class="texto">
-				<tr bgcolor="white">
-					<td width="50%">
-                    <h4>SIU y CESPI:</h4>
-                     <ul><li>Javier Díaz</li></ul>
-                    <h4>LINTI, Facultad de Informática:</h4> 
-                    <ul> 
-                        <li>Einar Lanfranco</li>
-                        <li>Matías Pagano</li>
-                        <li>Augusto Pérez</li>
-                        <li>Miguel Carbone</li>
-                        <li>Gaspar Rajoy</li>
-                    </ul>
-                    </td>
-                    <td width="50%">[% info_about %]</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
+
+<fieldset><legend class="titulo_legend">Equipo Central</legend>
+<table width="100%" border=1>
+    <tr>
+        <td width="50%">
+            <h4>SIU y CESPI:</h4>
+        <ul>
+            <li>Javier Díaz</li>
+        </ul>
+        <h4>LINTI - Facultad de Informática:</h4> 
+        <ul> 
+            <li>Einar Lanfranco</li>
+            <li>Matías Pagano</li>
+            <li>Augusto Pérez</li>
+            <li>Miguel Carbone</li>
+            <li>Gaspar Rajoy</li>
+        </ul>
+        </td>
+    </tr>
 </table>
-<br>
-</center>
-<br>
+</fieldset>
+<br><br>
+<fieldset><legend class="titulo_legend">Datos de la Biblioteca</legend>
+
+<table width="100%">
+    <tr>
+        <td width="50%">[% info_about %]</td>
+    </tr>
+</table>
+</fieldset>
+<br><br>
 [% PERL %]
     print C4::AR::Filtros::to_Button(   text    => "[% 'Editar Informacion' | i18n %]",
                                                           boton   => "boton_buscar",
