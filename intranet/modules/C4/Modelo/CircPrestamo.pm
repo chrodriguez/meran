@@ -666,7 +666,7 @@ sub devolver {
 #**********************************Se registra el movimiento en rep_historial_prestamo***************************
 		use C4::Modelo::RepHistorialPrestamo;
 		my $historial_prestamo =  C4::Modelo::RepHistorialPrestamo->new( db => $self->db );
- 		$historial_prestamo->agregarPrestamo($self);
+ 		$historial_prestamo->agregarPrestamo($self,$fechaVencimiento);
 
 		#AHORA SE BORRA EL PRESTAMO DEVUELTO PASADO AL HISTORICO DE PRESTAMOS
 		$self->delete();
