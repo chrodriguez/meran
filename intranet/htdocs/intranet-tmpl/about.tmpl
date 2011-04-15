@@ -17,7 +17,7 @@ function updateEdit(responseText){
     $('#edicion_about').html(responseText)
 }
 
-
+[% mensaje %]
 </script>
 <br>
 <p>Datos acerca de la vesi&oacute;n actual de MERAN</p>
@@ -35,27 +35,14 @@ function updateEdit(responseText){
                      <ul><li>Javier Díaz</li></ul>
                     <h4>LINTI, Facultad de Informática:</h4> 
                     <ul> 
-                    <li>Einar Lanfranco</li>
-                    <li>Matías Pagano</li>
-                    <li>Augusto Pérez</li>
-                    <li>Miguel Carbone</li>
-                    <li>Gaspar Rajoy</li>
+                        <li>Einar Lanfranco</li>
+                        <li>Matías Pagano</li>
+                        <li>Augusto Pérez</li>
+                        <li>Miguel Carbone</li>
+                        <li>Gaspar Rajoy</li>
                     </ul>
                     </td>
-                    <td width="50%">
-                    <h4>Facultad de Ciencias Económicas:</h4> 
-                    <ul>
-                    <li>María Fernanda Pietroboni</li>
-                    <li>María Laura Asenjo</li>
-                    </ul>
-                    <h4>Facultad de Informática:</h4> 
-                    <ul>
-                        <li>Rosario Molfino</li>
-                        <li>Patricia Genoves</li>
-                    </ul>
-                    <h4>Diseño Gráfico:</h4>
-                    <ul><li>Ariadna Alfano</li></ul>
-					</td>
+                    <td width="50%">[% info_about %]</td>
 				</tr>
 			</table>
 		</td>
@@ -63,7 +50,7 @@ function updateEdit(responseText){
 </table>
 <br>
 </center>
-
+<br>
 [% PERL %]
     print C4::AR::Filtros::to_Button(   text    => "[% 'Editar Informacion' | i18n %]",
                                                           boton   => "boton_buscar",
@@ -72,7 +59,7 @@ function updateEdit(responseText){
                                                           id      => "[% 'edit_about' %]",
                                                                 ) ;
 [% END %]
-
+<br><br>
 <div id="edicion_about">
 </div>
     

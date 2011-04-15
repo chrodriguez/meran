@@ -9,6 +9,9 @@ use C4::AR::Auth;
 use C4::Context;
 use CGI;
 
+my $input = new CGI;
+my $texto = $input->param('about');
+
 # obtenemos en una HASH la UI
 my $ui_id = C4::AR::Preferencias::getValorPreferencia('defaultbranch');    
 my $ui    = C4::AR::Referencias::obtenerUIByIdUi($ui_id); 
@@ -27,6 +30,12 @@ my ($template, $session, $t_params) = get_template_and_user({
 			     flagsrequired      => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
 			     debug              => 1,
 			});
+			
+
+# si esta editando, se guarda en la base pref_about
+if($texto){
+    my ($temp) = C4::AR::Preferencias::updateInfoAbout($texto);	
+}
 
 #my $kohaVersion = C4::Context->config("kohaversion");
 my $osVersion   = `uname -a`;
@@ -40,6 +49,9 @@ my $mysqlVersion = ($sti->fetchrow_array)[0]; # `mysql -V`
 # The web server may not be httpd, and/or may not be in the PATH
 my $apacheVersion =  $ENV{SERVER_SOFTWARE} || `httpd -v`;
 
+# obtenemos lo guardado en la base de pref_about
+my $info_about_hash = C4::AR::Preferencias::getInfoAbout();  
+
 #$t_params->{'kohaVersion'}   = $kohaVersion;
 
 #FIXME: ver si son necesarios:
@@ -47,6 +59,7 @@ $t_params->{'osVersion'}      = $osVersion;
 $t_params->{'perlVersion'}    = $perlVersion;
 $t_params->{'mysqlVersion'}   = $mysqlVersion;
 $t_params->{'apacheVersion'}  = $apacheVersion;
+$t_params->{'info_about'}     = $info_about_hash->{'descripcion'};
 
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Acerca De MERAN");
 

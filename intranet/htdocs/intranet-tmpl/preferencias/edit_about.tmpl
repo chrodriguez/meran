@@ -3,23 +3,18 @@
 <script type="text/javascript" language="javascript">
     $(document).ready(function() {
         $(function(){
-            $('#about').wysiwyg({
-                initialContent: "<p>Initial Content</p>",
-            });
+            $('#about').wysiwyg();
         });
     });
 </script>
-
-<!-- documentacion:           https://github.com/akzhan/jwysiwyg/blob/master/README.rst -->
 
 <center>
 <fieldset>
 <legend class="titulos">Editar Informacion</legend>
 
-<form action="preferencias/editAbout.pl" method="get">
+<form action="about.pl?token=[% token %]" method="post">
 
     <textarea id="about" name="about" class="self_review" style="width: 88.3%">[% info_about %]</textarea>
-    <input type="hidden" name="token" value="[% token %]" />
     
     <p><input type="submit" value="Aceptar" /></p>
 </form>

@@ -18,6 +18,7 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
+    &updateInfoAbout
     &getInfoAbout
     &getPreferencia
     &setVariable
@@ -28,6 +29,42 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
     &getMenuPreferences
     &getPreferenciasByArray
 );
+
+
+=item
+    Esta funcion actualiza pref_about.
+=cut
+sub updateInfoAbout{
+    my ($param)     = @_;
+    my $pref_about  = getInfoAbout();
+    my $msg_object  = C4::AR::Mensajes::create();
+    my $db          = $pref_about->db;
+    
+    #_verificarDatosTexto($param,$msg_object);
+        
+    if (!($msg_object->{'error'})){
+        # entro si no hay algun error, el texto ingresado es valido
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+          
+        eval{
+            $pref_about->updateInfoAbout($param);   
+            $msg_object->{'error'} = 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
+            $db->commit;
+        };
+           
+        if ($@){
+        # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+            &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+            $db->rollback;
+        }
+        $db->{connect_options}->{AutoCommit} = 1;
+    }      
+    return ($msg_object);
+}
 
 =item
     Esta funcion trae la informacion de pref_about.
