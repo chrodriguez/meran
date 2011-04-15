@@ -25,6 +25,7 @@
 		        </td>
 			    <td>[% "Pr&eacute;stamo" | i18n %]</td>
 		        <td>[% "Renovaci&oacute;n" | i18n %]</td>
+                <td>[% "Catidad de Renovaciones" | i18n %]</td>
 			    <td>[% "Vencimiento" | i18n %]</td>
 			    <td class="click" onclick="ordenar('fecha_devolucion')" 
 		                Title='[% "Ordenar por Fecha de devoluci&oacute;n" | i18n %]'>
@@ -55,21 +56,18 @@
 				  
 			    </td>
 			    <td>
-			    [% FOREACH grupos %]
+			   
 		    
 				    [% IF prestamo.nivel3.nivel2.getEdicion %]
 					    [% prestamo.nivel3.nivel2.getEdicion %]
 				    [% END %]
 		    
-				    [% IF publicationyear %]
-					    &nbsp;([% publicationyear %])
-		                [% END %]
-			    
-				    [% IF volume %]
-					            t [% volume %]
-				    [% END %]
+				    [% IF prestamo.nivel3.nivel2.getAnio_publicacion %]
+					    &nbsp;([% prestamo.nivel3.nivel2.getAnio_publicacion %])
+		            [% END %]
+
 		    
-			    [% END %]
+			
 			    </td>
 			    <td align="center" >
 				    [% PERL %]
@@ -90,11 +88,14 @@
 		                --------
 		            [% END %]
 			    </td>
+                <td>
+                    &nbsp;[% prestamo.renovaciones%]&nbsp;
+                </td>
 			    <td>
 		            [% IF estaVencido %]
-				        &nbsp;<span class="fecha_critica">[% date_fin %]</span>&nbsp;
+				        &nbsp;<span class="fecha_critica">[% prestamo.fecha_vencimiento %]</span>&nbsp;
 		            [% ELSE %]
-		                &nbsp;<span class="fecha_cumple">[% date_fin %]</span>&nbsp;
+		                &nbsp;<span class="fecha_cumple">[% prestamo.fecha_vencimiento %]</span>&nbsp;
 		            [% END %]
 			    </td>
 			    <td>
