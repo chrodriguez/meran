@@ -670,7 +670,7 @@ sub getHistorialSanciones{
                                                                                 nro_socio       => { eq => $nro_socio},
                                                                                 fecha_final     => { lt => $hoy},
                                                                                 ],
-                                                                        select  => ['circ_sancion.*'],
+                                                                 
                                                                         with_objects => ['usr_responsable','usr_nro_socio','ref_tipo_sancion'],
                                                                         sort_by => $orden,
                                                                         limit   => $cantR,
