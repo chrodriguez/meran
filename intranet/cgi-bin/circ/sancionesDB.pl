@@ -48,8 +48,6 @@ elsif($tipoAccion eq "ELIMINAR_SANCIONES"){
     my $sanciones_ids     = $obj->{'datosArray'};
     my $Message_arrayref  = C4::AR::Sanciones::eliminarSanciones($userid,$sanciones_ids);
 
-    C4::AR::Debug::debug("entrooo");
-
     my $infoOperacionJSON = to_json $Message_arrayref;
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
