@@ -16,3 +16,30 @@ __PACKAGE__->meta->setup(
 );
 
 1;
+
+
+sub updateInfoAbout{
+    my ($self)   = shift;
+    my ($params) = @_;
+
+    $self->setDescripcion($params);
+
+    $self->save();
+}
+
+
+# ------SETTERS--------------------
+
+sub setDescripcion{
+    my ($self)   = shift;
+    my ($descripcion) = @_;
+    $self->descripcion($descripcion);
+}
+
+
+# ------GETTERS--------------------
+
+sub getDescriptcion{
+    my ($self) = shift;
+    return ($self->descripcion);
+}
