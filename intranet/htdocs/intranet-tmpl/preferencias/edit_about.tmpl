@@ -1,0 +1,22 @@
+<script type="text/javascript" language="javascript" src="/includes/jquery/jquery.wysiwyg.js"></script>
+<link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+        $(function(){
+            $('#about').wysiwyg();
+        });
+    });
+</script>
+
+<center>
+<fieldset>
+<legend class="titulos">Editar Informacion</legend>
+
+<form action="about.pl?token=[% token %]" method="post">
+
+    <textarea id="about" name="about" class="self_review" style="width: 88.3%">[% info_about %]</textarea>
+    
+    <p><input type="submit" value="Aceptar" /></p>
+</form>
+
+</center>

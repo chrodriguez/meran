@@ -10,12 +10,16 @@ use C4::Context;
 use C4::Date;
 use C4::Modelo::PrefPreferenciaSistema;
 use C4::Modelo::PrefPreferenciaSistema::Manager;
+use C4::Modelo::PrefAbout;
+use C4::Modelo::PrefAbout::Manager;
 
 use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
 
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
+    &updateInfoAbout
+    &getInfoAbout
     &getPreferencia
     &setVariable
     &getValorPreferencia
@@ -25,6 +29,58 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
     &getMenuPreferences
     &getPreferenciasByArray
 );
+
+
+=item
+    Esta funcion actualiza pref_about.
+=cut
+sub updateInfoAbout{
+    my ($param)     = @_;
+    my $pref_about  = getInfoAbout();
+    my $msg_object  = C4::AR::Mensajes::create();
+    my $db          = $pref_about->db;
+    
+    #_verificarDatosTexto($param,$msg_object);
+        
+    if (!($msg_object->{'error'})){
+        # entro si no hay algun error, el texto ingresado es valido
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+          
+        eval{
+            $pref_about->updateInfoAbout($param);   
+            $msg_object->{'error'} = 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
+            $db->commit;
+        };
+           
+        if ($@){
+        # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+            &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+            $db->rollback;
+        }
+        $db->{connect_options}->{AutoCommit} = 1;
+    }      
+    return ($msg_object);
+}
+
+=item
+    Esta funcion trae la informacion de pref_about.
+    Devuelve un objeto o 0.
+=cut
+sub getInfoAbout{
+    my @filtros;
+    
+    my $info_about_ref = C4::Modelo::PrefAbout::Manager->get_pref_about( query => \@filtros );
+    
+    if ($info_about_ref->[0]){
+        return ($info_about_ref->[0]);
+    } else{
+        return 0;
+    }
+}
 
 
 sub reloadAllPreferences {

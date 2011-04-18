@@ -1,6 +1,6 @@
 [% USE HTML %]
 
-[% IF loop_reading %]
+[% IF historial %]
 		<div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos realizados" | i18n %]: &nbsp;[% cant %]</div> 
 		
 		<div class="contenedor_paginador">[% paginador %]</div>
@@ -25,6 +25,7 @@
 		        </td>
 			    <td>[% "Pr&eacute;stamo" | i18n %]</td>
 		        <td>[% "Renovaci&oacute;n" | i18n %]</td>
+                <td>[% "Catidad de Renovaciones" | i18n %]</td>
 			    <td>[% "Vencimiento" | i18n %]</td>
 			    <td class="click" onclick="ordenar('fecha_devolucion')" 
 		                Title='[% "Ordenar por Fecha de devoluci&oacute;n" | i18n %]'>
@@ -33,71 +34,73 @@
 		    
 		    </tr>
 		    
-		    [% FOREACH loop_reading %]
+		    [% FOREACH prestamo IN historial %]
+
 		    <tr valign=middle align="center">
-			    
+
 			    <td>
 				    [% PERL %]
-						    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(titulo) %]",
+						    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(prestamo.nivel3.nivel1.getTitulo) %]",
 		                                                    url => 		"/cgi-bin/koha/catalogacion/estructura/detalle.pl",
-														    params =>	[	"id1=[% HTML.escape(id1) %]"], 
+														    params =>	[	"id1=[% HTML.escape(prestamo.nivel3.nivel1.id) %]"], 
 													    ) ;
 				    [% END %]
 			    </td>
 			    <td>
-				    [% PERL %]
-						    print C4::AR::Filtros::link_to(	text => 	"[% autor %]",
-														    url => 		"/cgi-bin/koha/busquedas/filtrado.pl", 
-														    params =>	[	"origen=detalle", "idAutor=[% idAutor %]"], 
-													    ) ;
-				    [% END %]
+			
+                            <a class="click" onClick="buscarPorAutor('[% prestamo.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
+                                  [% prestamo.nivel3.nivel1.getAutor %]
+                            </a>
+                              
+						  
+				  
 			    </td>
 			    <td>
-			    [% FOREACH grupos %]
+			   
 		    
-				    [% IF edicion %]
-					    [% edicion %]
+				    [% IF prestamo.nivel3.nivel2.getEdicion %]
+					    [% prestamo.nivel3.nivel2.getEdicion %]
 				    [% END %]
 		    
-				    [% IF publicationyear %]
-					    &nbsp;([% publicationyear %])
-		                [% END %]
-			    
-				    [% IF volume %]
-					            t [% volume %]
-				    [% END %]
+				    [% IF prestamo.nivel3.nivel2.getAnio_publicacion %]
+					    &nbsp;([% prestamo.nivel3.nivel2.getAnio_publicacion %])
+		            [% END %]
+
 		    
-			    [% END %]
+			
 			    </td>
 			    <td align="center" >
 				    [% PERL %]
-						    print C4::AR::Filtros::link_to(	text => 	"[% barcode %]",
+						    print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getBarcode %]",
 														    url => 		"/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
-														    params =>	["id3=[% id3 %]"],
+														    params =>	["id3=[% prestamo.id3 %]"],
 														    title =>	"[% "Detalle del Ejemplar" | i18n %]"
 													    ) ;
 				    [% END %]	
 			    </td>
 			    <td>
-				    &nbsp;[% date_due %]&nbsp;
+				    &nbsp;[% prestamo.fecha_prestamo %]&nbsp;
 			    </td>
 			    <td>
-		            [% IF date_renew %]
-				        &nbsp;[% date_renew %]&nbsp;
+		            [% IF prestamo.fecha_ultima_renovacion %]
+				        &nbsp;[% prestamo.fecha_ultima_renovacion %]&nbsp;
 		            [% ELSE %]
 		                --------
 		            [% END %]
 			    </td>
+                <td>
+                    &nbsp;[% prestamo.renovaciones%]&nbsp;
+                </td>
 			    <td>
 		            [% IF estaVencido %]
-				        &nbsp;<span class="fecha_critica">[% date_fin %]</span>&nbsp;
+				        &nbsp;<span class="fecha_critica">[% prestamo.fecha_vencimiento %]</span>&nbsp;
 		            [% ELSE %]
-		                &nbsp;<span class="fecha_cumple">[% date_fin %]</span>&nbsp;
+		                &nbsp;<span class="fecha_cumple">[% prestamo.fecha_vencimiento %]</span>&nbsp;
 		            [% END %]
 			    </td>
 			    <td>
-		            [% IF returndate %]
-				        &nbsp;[% returndate %]&nbsp;
+		            [% IF prestamo.fecha_devolucion%]
+				        &nbsp;[% prestamo.fecha_devolucion %]&nbsp;
 		            [% ELSE %]
 		                --------
 		            [% END %]

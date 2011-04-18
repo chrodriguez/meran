@@ -107,7 +107,7 @@ sub getIdRefEstadoCompartido{
 }
 
 sub getIdRefEstadoDisponible{
-    return 'ref_estado@0';
+    return 'ref_estado@3';
 }
 
 sub getIdRefEstadoDeteriorado{
