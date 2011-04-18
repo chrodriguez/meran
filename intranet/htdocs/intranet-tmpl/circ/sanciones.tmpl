@@ -66,7 +66,8 @@ function borrarSanciones(chck){
             objAH               = new AjaxHelper(updateSanciones);
             objAH.debug         = true;
             objAH.showOverlay   = true;
-            objAH.url           = '/cgi-bin/koha/circ/borrarsanciones.pl';
+            objAH.url           = '/cgi-bin/koha/circ/sancionesDB.pl';
+            objAH.accion        = "ELIMINAR_SANCIONES"
             objAH.datosArray    = array;
             
             // no le gusta:  $('#mensajes').html(''); setMessages(' ');
@@ -80,6 +81,7 @@ function borrarSanciones(chck){
 
 
 function updateSanciones(responseText){
+
 	borrarDiv();
 	
     if (!verificarRespuesta(responseText)){
@@ -88,7 +90,6 @@ function updateSanciones(responseText){
         
     var Messages = JSONstring.toObject(responseText);
     setMessages(Messages);
-
 	mostrarSanciones();
 }
 

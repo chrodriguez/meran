@@ -3,7 +3,8 @@
 use strict;
 use CGI;
 use C4::AR::Auth;
-
+use C4::AR::Sanciones;
+use JSON;
 
 my $input       = new CGI;
 my $obj         = $input->param('obj');
@@ -22,14 +23,38 @@ my ($template, $session, $t_params) =  get_template_and_user ({
 
 if($tipoAccion eq "MOSTRAR_SANCIONES"){
 
-# TODO ver orden o dejarlo asi si anda:
     $orden                          = $obj->{'orden'}||'persona.apellido';
     my $sanciones                   = C4::AR::Sanciones::sanciones($orden);
     $t_params->{'CANT_SANCIONES'}   = scalar(@$sanciones);
     $t_params->{'SANCIONES'}        = $sanciones;
     
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+    
 
 }#end if($tipoAccion eq "MOSTRAR_SANCIONES")
+
+elsif($tipoAccion eq "ELIMINAR_SANCIONES"){
+
+    my $authnotrequired= 0;
+    my ($userid, $session, $flags)= checkauth(      $input, 
+                                                    $authnotrequired, 
+                                                    {   ui              => 'ANY', 
+                                                        tipo_documento  => 'ANY', 
+                                                        accion          => 'BAJA', 
+                                                        entorno         => 'undefined'}, 
+                                                        'intranet'
+                                    );
+
+    my $sanciones_ids     = $obj->{'datosArray'};
+    my $Message_arrayref  = C4::AR::Sanciones::eliminarSanciones($userid,$sanciones_ids);
+
+    C4::AR::Debug::debug("entrooo");
+
+    my $infoOperacionJSON = to_json $Message_arrayref;
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
+
+}#end if($tipoAccion eq "ELIMINAR_SANCIONES")
 
 elsif($tipoAccion eq "BUSCAR_SANCIONES"){
     
@@ -37,6 +62,6 @@ elsif($tipoAccion eq "BUSCAR_SANCIONES"){
     $t_params->{'SANCIONES'}        = $sanciones;
     $t_params->{'CANT_SANCIONES'}   = scalar(@$sanciones);
     
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+    
 } #end if($accion eq "BUSCAR_SANCIONES")
-
-C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
