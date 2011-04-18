@@ -37,7 +37,7 @@ function limpiarCampos(){
     $('#lugar_publicacion').val("");
     $('#editorial').val("");
     $('#fecha').val("");
-    $('#coleccion').val("");
+//     $('#coleccion').val("");
     $('#isbn_issn').val("");
     $('#cant_ejemplares').val("");
     $('#motivo_propuesta').val("");
