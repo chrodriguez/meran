@@ -34,24 +34,21 @@ my $input=new CGI;
 my $authnotrequired= 0;
 my ($userid, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
-                                                {   ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'BAJA', 
-                                                    entorno => 'undefined'}, 
-                                                'intranet'
+                                                {   ui              => 'ANY', 
+                                                    tipo_documento  => 'ANY', 
+                                                    accion          => 'BAJA', 
+                                                    entorno         => 'undefined'}, 
+                                                    'intranet'
                                 );
 
 C4::AR::Debug::debug("CirculacionDB:: responsable -> ".$userid);
 
-my $obj=$input->param('obj');
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
+my $obj = $input->param('obj');
+$obj    = C4::AR::Utilidades::from_json_ISO($obj);
 
-my $sanciones_ids=$obj->{'datosArray'};
+my $sanciones_ids     = $obj->{'datosArray'};
+my $Message_arrayref  = C4::AR::Sanciones::eliminarSanciones($userid,$sanciones_ids);
 
-my $Message_arrayref = C4::AR::Sanciones::eliminarSanciones($userid,$sanciones_ids);
-
-my %info;
-$info{'Messages_arrayref'}  = $Message_arrayref;
+my $infoOperacionJSON = to_json $Message_arrayref;
 C4::AR::Auth::print_header($session);
-print to_json \%info;
-
+print $infoOperacionJSON;
