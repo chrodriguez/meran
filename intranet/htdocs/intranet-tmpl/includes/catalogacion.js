@@ -912,11 +912,9 @@ function mostrarInfoAltaNivel3(idNivel2){
     if(idNivel2 != 0){
         objAH               = new AjaxHelper(updateMostrarInfoAltaNivel3);
         objAH.debug         = true;
-//         objAH.showStatusIn  = 'detalleDelNivel3';
         objAH.showOverlay   = true;
         objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL3_TABLA";
-//         objAH.id1= id1;
         objAH.id2           = idNivel2;
         ID_N2               = idNivel2;
         objAH.sendToServer();
@@ -927,7 +925,7 @@ function updateMostrarInfoAltaNivel3(responseText){
 	$('#divCantEjemplares').show();	
     $('#detalleDelNivel3').html(responseText);
     zebra('tablaResult');
-    checkedAll('tabla_ejemplares', 'checkEjemplares');
+    checkedAll('select_all', 'checkEjemplares');
     
     scrollTo('detalleDelNivel3');
 }
@@ -1956,7 +1954,6 @@ function modificarN3(id3, tipo_ejemplar){
 	objAH               = new AjaxHelper(updateModificarN3);
 	objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug         = true;
-//     objAH.cache = true;
     objAH.showOverlay   = true;
 	objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
  	objAH.id3           = ID_N3;
