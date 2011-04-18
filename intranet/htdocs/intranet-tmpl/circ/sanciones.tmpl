@@ -80,13 +80,7 @@ function borrarSanciones(chck){
 
 
 function updateSanciones(responseText){
-    alert('entro al update de borrar sanciones');
 	borrarDiv();
-	
-	// no le gusta: no muestra nada
-	    //$('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});
-        //$('#mensajes').hide();
-        //$('#mensajes').html(''); 
 	
     if (!verificarRespuesta(responseText)){
         return(0); alert('entro al error del responsetext');
@@ -94,7 +88,7 @@ function updateSanciones(responseText){
         
     var Messages = JSONstring.toObject(responseText);
     setMessages(Messages);
-alert('paso el setmessage');
+
 	mostrarSanciones();
 }
 
