@@ -470,6 +470,7 @@ Esta funcion logea los bugs que ocurren cuando una transaccion no es ejecutada c
 Guarda los errores en el siguiente archivo: /var/log/koha/debugErrorDBA.txt
 =cut
 # TODO usar Debug::debug
+# TODO esto no deberia estar aca, va en Debug
 sub printErrorDB {
 	my($errorsDB_array,$codigo,$tipo)=@_;
 
