@@ -14,7 +14,7 @@
 		        <td>
 		                [% "Operaci&oacute;n" | i18n %]
 		        </td>
-		            <td class="click" onclick="ordenar('fecha')" 
+		            <td class="click" onclick="ordenar('fecha_comienzo')" 
 		                Title='[% "Ordenar por Fecha Inicial" | i18n %]'>
 				    [% "Fecha Inicial" | i18n %]
 		        </td>
@@ -25,6 +25,18 @@
 		        <td class="click" onclick="ordenar('ref_tipo_sancion')" 
                     Title='[% "Ordenar por Tipo de Sanci&oacute;n" | i18n %]'>
                     [% "Tipo de Sanci&oacute;n" | i18n %]
+                </td>
+                <td>
+                        [% "Dias Sancion" | i18n %]
+                </td>
+                <td>
+                        [% "Fecha Devolucion" | i18n %]
+                </td>
+                <td>
+                        [% "Vencimiento" | i18n %]
+                </td>
+                <td>
+                        [% "Titulo - Autor - Edicion" | i18n %]
                 </td>
 		    </tr>
 		    
@@ -42,7 +54,10 @@
                 <td>
                     [% historial_sancion.getFecha_final %]
                 </td>
-		    [% END %] 
+                <td>
+                      [% historial_sancion.nivel3 %]
+                </td>
+            [% END %] 
 		
 		</table>
 [% ELSE %]
