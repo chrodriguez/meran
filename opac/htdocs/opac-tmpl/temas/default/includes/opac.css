@@ -482,7 +482,7 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .main-content ol {margin:0.5em 0 1.0em 20px !important /*Non-IE6*/; margin:0.5em 0 1.0em 25px /*IE6*/;}
 .main-content ol li {list-style-position:outside; margin:0 0 0.2em 0; line-height:1.4em; font-size:120%;}
 
-.contactform {width:440px; margin:2.0em 0 0 0; padding:10px 10px 0 10px; border:solid 1px rgb(95,180,4); background-color:rgb(239,251,239);}
+.contactform {width:440px; margin:2.0em 0 0 0; padding:10px 10px 0 10px; border:solid 1px rgb(237,164,93); background-color:rgb(244,244,244);}
 .contactform fieldset {padding:20px 0 0 0 !important /*Non-IE6*/; padding:0 /*IE6*/; margin:0 0 20px 0; border:solid 1px rgb(220,220,220);}
 .contactform fieldset legend {margin:0 0 0 5px !important /*Non-IE*/; margin:0 0 20px 5px /*IE6*/; padding:0 2px 0 2px; color:rgb(80,80,80); font-weight:bold; font-size:130%;}
 .contactform label.left {float:left; width:30%; margin:0 0 0 10px; padding:2px; font-size:110%;}
@@ -529,7 +529,7 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 
 
 /* FORMULARIO RECOMENDACION */
-.recomendacionform {width:114%; margin:2.0em 0 0 0; padding:10px 10px 0 10px; border:solid 1px rgb(95,180,4); background-color:rgb(239,251,239);}
+.recomendacionform {width:114%; margin:2.0em 0 0 0; padding:10px 10px 0 10px; border:solid 1px rgb(237,164,93); background-color:rgb(244,244,244);}
 .recomendacionform fieldset {padding:20px 0 0 0 !important /*Non-IE6*/; padding:0 /*IE6*/; margin:0 0 20px 0; border:solid 1px rgb(220,220,220);}
 .recomendacionform fieldset legend {margin:0 0 0 5px !important /*Non-IE*/; margin:0 0 20px 5px /*IE6*/; padding:0 2px 0 2px; color:rgb(80,80,80); font-weight:bold; font-size:130%;}
 .recomendacionform label.left {float:left; width:30%; margin:0 0 0 10px; padding:2px; font-size:110%;}
