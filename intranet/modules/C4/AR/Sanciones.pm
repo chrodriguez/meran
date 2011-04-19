@@ -53,7 +53,7 @@ sub getSancionesLike {
     $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion( 
                                         query           => \@filtros,
                                         select          => ['circ_sancion.*'],
-                                        with_objects    => ['socio','socio.persona'],
+                                        with_objects    => ['socio','socio.persona','nivel3'],
                                 ); 
 
     return (scalar($sanciones_array_ref), $sanciones_array_ref);
@@ -319,7 +319,7 @@ sub sanciones {
                                                                             fecha_final     => { ge => $hoy},
                                                                               ],
                                                                     select  => ['circ_sancion.*'],
-                                                                    with_objects => ['socio','socio.persona','ref_tipo_sancion'],
+                                                                    with_objects => ['socio','socio.persona','ref_tipo_sancion','nivel3'],
                                                                     sort_by => $orden,
                               );
     return $sanciones_array_ref;
