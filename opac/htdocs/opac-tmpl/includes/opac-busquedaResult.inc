@@ -114,7 +114,7 @@
                         <td class="titulo_result">	
                             [% IF NIVEL.titulo %]
                                 [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "( [% NIVEL.hits %] ) - [% NIVEL.titulo %]",
+                                    print C4::AR::Filtros::link_to( text =>     "[% NIVEL.titulo %]",
                                                                     url =>      "/cgi-bin/koha/opac-detail.pl", 
                                                                     params =>   ["id1=[% NIVEL.id1 %]"],
                                                                     title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"

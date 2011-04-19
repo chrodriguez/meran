@@ -37,6 +37,7 @@ $VERSION = 3.0;
     getReserva
     eliminarReservas
     getReservasDeSocioEnEspera
+    getHistorialReservasParaTemplate
 );
 
 =head2  sub getNivel3ParaReserva
@@ -903,7 +904,10 @@ sub t_reservarOPAC {
                 my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
                 $msg_object->{'error'}= 0;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$socio->persona->getEmail]} ) ;
-            }   
+            }
+            #Se agrega la reserva al historial
+            agregarReservaAHistorial($reserva);
+               
         };
 
         if ($@){
@@ -922,14 +926,44 @@ sub t_reservarOPAC {
 }
 
 =item
+agregarReservaAHistorial
+Agrega una reserva a la tabla de historial de reservas.
+@params: $reserva-->Object CircReserva de la reserva hecha.
+=cut
+
+sub agregarReservaAHistorial{
+	my ($reserva) = @_;
+    
+    use C4::Modelo::RepHistorialCirculacion;
+    
+    my %params = {};
+    
+    $params{'nro_socio'}    = $reserva->getNro_socio;
+    $params{'id1'}          = $reserva->getId1;
+    $params{'id2'}          = $reserva->getId2;
+    $params{'id3'}          = $reserva->getId3;
+    $params{'nro_socio'}    = $reserva->getNro_socio;
+    $params{'responsable'}  = $reserva->getNro_socio;
+    $params{'fecha'}        = $reserva->getFecha_reserva;
+    $params{'id_ui'}        = $reserva->getId_ui;
+    
+    my $historial_circulacion = C4::Modelo::RepHistorialCirculacion->new();
+    
+    
+    $historial_circulacion->agregar(\%params);
+    
+	return ($reserva);
+}
+
+=item
 t_cancelar_reserva
 Transaccion que cancela una reserva.
 @params: $params-->Hash con los datos necesarios para poder cancelar la reserva.
 =cut
 sub t_cancelar_reserva{
     my ($params)=@_;
-        
-    my $tipo=$params->{'tipo'};
+
+    my $tipo = $params->{'tipo'};
     my $msg_object= C4::AR::Mensajes::create();
     $msg_object->{'tipo'}=$tipo;
     my $db = undef;
@@ -1250,6 +1284,31 @@ sub getReservaById{
         return 0;
     }
 }
+
+sub getHistorialReservasParaTemplate {
+    
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
+
+    my ($nro_socio)=@_;
+
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
+                                          query => [ nro_socio  => { eq => $nro_socio }],
+                                          with_objects      => ['nivel2', 'nivel3','socio','ui', 'nivel3.nivel2.nivel1'],
+                                          sorty_by          => ['id_reserva DESC'],
+
+                                ); 
+    my $reservas_array_ref_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( 
+                                          query => [ nro_socio  => { eq => $nro_socio }],
+                                          with_objects => ['nivel3','socio','ui'],
+
+                                );     
+    return ($reservas_array_ref_count, $reservas_array_ref);
+}
+
+
+
+
 
 END { }       # module clean-up code here (global destructor)
 
