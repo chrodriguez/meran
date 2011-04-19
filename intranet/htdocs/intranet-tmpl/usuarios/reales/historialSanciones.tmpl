@@ -36,7 +36,16 @@
                         [% "Vencimiento" | i18n %]
                 </td>
                 <td>
-                        [% "Titulo - Autor - Edicion" | i18n %]
+                        [% "Autor" | i18n %]
+                </td>
+                <td>
+                        [% "Titulo" | i18n %]
+                </td>
+                <td>
+                        [% "Edicion/A&ntildeo" | i18n %]
+                </td>
+                <td>
+                        [% "Tomo" | i18n %]
                 </td>
 		    </tr>
 		    
@@ -49,15 +58,38 @@
 				    [% historial_sancion.getTipo_operacion %]
 			    </td>
                 <td>
-                    [% historial_sancion.getFecha %]
+                    [% historial_sancion.getFecha_comienzo %]
                 </td>
                 <td>
                     [% historial_sancion.getFecha_final %]
                 </td>
                 <td>
-                      [% historial_sancion.nivel3 %]
+                    [% historial_sancion.ref_tipo_sancion.tipo_sancion %]
+                </td>
+  
+                <td>
+                   [% historial_sancion.dias_sancion %]
+                </td>
+                <td>
+                        
+                </td>
+                <td>
+                       
+                </td>
+                <td>
+                   [% historial_sancion.nivel3.nivel1.getAutor %]
+                </td>
+                <td>
+                   [% historial_sancion.nivel3.nivel1.getTitulo %]
+                </td>
+                <td>
+                   [% historial_sancion.nivel3.nivel2.getEdicion %] [%historial_sancion.nivel3.nivel2.getAnio_publicacion %]
+                </td>
+                <td>
+                    
                 </td>
             [% END %] 
+
 		
 		</table>
 [% ELSE %]
