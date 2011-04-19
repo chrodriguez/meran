@@ -49,9 +49,7 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
 
     my $datos_edicion= C4::AR::Nivel2::getNivel2FromId2($idNivel2);
 
-    my $ejemplares_disp= C4::AR::Nivel3::getNivel3FromId2($idNivel2);
-
-    my $cant_ejemplares_disp= scalar(@$ejemplares_disp);
+    my $detalle_nivel_3= C4::AR::Nivel3::detalleNivel3($idNivel2);
 
     my $datos_nivel1= C4::AR::Nivel1::getNivel1FromId1($idNivel1);
 
@@ -63,7 +61,7 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
                         flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                     });
 
-   $t_params->{'cant_ejemplares_disp'} = $cant_ejemplares_disp;
+   $t_params->{'cant_ejemplares_disp'} = $detalle_nivel_3->{'disponibles'};
 
    $t_params->{'edicion'} = $edicion;
    $t_params->{'datos_edicion'} = $datos_edicion;
