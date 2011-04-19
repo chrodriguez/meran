@@ -672,10 +672,10 @@ sub getHistorialSanciones{
     my $historial_sanciones_array_ref = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion (   
                                                                         query => [ 
                                                                                 nro_socio       => { eq => $nro_socio},
-                                                                                fecha_final     => { lt => $hoy},
+#                                                                                 fecha_final     => { lt => $hoy},
                                                                                 ],
-                                                                        select  => ['circ_sancion.*'],
-                                                                        with_objects => ['usr_responsable','usr_nro_socio','ref_tipo_sancion'],
+                                                                 
+                                                                        with_objects => ['usr_responsable','usr_nro_socio','ref_tipo_sancion', 'nivel3'],
                                                                         sort_by => $orden,
                                                                         limit   => $cantR,
                                                                         offset  => $ini,

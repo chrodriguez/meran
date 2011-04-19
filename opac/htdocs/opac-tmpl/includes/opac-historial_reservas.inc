@@ -1,68 +1,71 @@
-[% IF loop_reservas %]
-    [% IF cantidad %]
-        <div class="resultados_consulta">[% "Cantidad de reservas realizadas:" | i18n %]&nbsp;[% cantidad %]</div>
-    [% END %]
+[% USE HTML %]
 
+[% IF cantidad %]
+        <div class="resultados_consulta">[% "Cantidad de reservas realizadas" | i18n %]: &nbsp;[% cantidad %]</div> 
+        
+        <div class="contenedor_paginador">[% paginador %]</div>
+        
+        <table class="tablaHistorialReservas datos_tabla" cellspacing=0  cellpadding=0 border=0 width="100%">
+            <tr class="titulo_tabla_resultado">
+            
+                <td >
+                    [% "T&iacute;tulo" | i18n %]
+                </td>
+                <td >
+                    [% "Autor" | i18n %]
+                </td>
+                <td>
+                    [% "Edici&oacute;n" | i18n %]
+                </td>
+                <td >
+                    [% "C&oacute;digo" | i18n %]
+                </td>
+                <td>[% "Fecha" | i18n %]</td>
+            
+            </tr>
+            
+            [% FOREACH reserva IN reservas %]
+            <tr valign=middle align="center">
+                
+                <td>
+                    [% PERL %]
+                            print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+                                                            url =>      "/cgi-bin/koha/opac-detail.pl",
+                                                            params =>   [   "id1=[% HTML.escape(reserva.nivel2.nivel1.getId1) %]"], 
+                                                        ) ;
+                    [% END %]
+                </td>
+                
+                <td class="autor_result">
+                    <a class="click" onClick="buscarPorAutor('[% reserva.nivel2.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
+                        [% reserva.nivel2.nivel1.getAutor %]
+                    </a>
+                </td>
+                
+                <td>
+                    [% HTML.escape(reserva.nivel2.getEdicion) %]
+                </td>
+                <td align="center" >
 
-    <div class="contenedor_paginador">[% paginador %]</div>
-
-
-    <table id="tablaHistorial" class="tablaHistorial" width="98%" cellspacing="0" cellpadding="4" align="center">   
-
-        <tr class="tablaResultadoTitulo">
-            <th>[% "T&iacute;tulo" | i18n %]</th>
-            <th>[% "Autor" | i18n %]</th>
-            <th>[% "Estado" | i18n %]</th>
-            <th>[% "F. Reserva" | i18n %] </th>
-            <th>[% "F. Vto" | i18n %]</th>
-        </tr>
-
-    <!-- ESTE LOOP MUESTRA LAS RESERVAS -->
-    [% FOREACH loop_reservas %]
-        <tr>
-            <td> 
-        [% IF id1 %]
-            [% PERL %]
-                print C4::AR::Filtros::link_to( text    => "[% 'Mostrar Detalle' | i18n %]",
-                                                boton   => "boton_registrarse", 
-                                                width   => "95",
-                                                class   => "horizontal",
-                                                url     => "/join.html", 
-                                                title   => "[% 'Mostrar Detalle' | i18n %]"
-                                            ) ;
-            [% END %]  
-            <a class="click" onClick="detalle('[% id1 %]')" title="[% 'Mostrar Detalle' | i18n %]">
-        [% titulo %][% IF unititle %]:&nbsp;[% unititle %][% END %]
-            </a> [% ELSE %]&nbsp;[% END %]
-            </td>
-            <td>
-        [% IF idAutor %]
-            [% PERL %]
-                print C4::AR::Filtros::link_to( text    => [% completo %],
-                                                params  => "[authorid=[% idAutor %]]", 
-                                                url     => "/cgi-bin/koha/opac-searchresults.pl", 
-                                                title   => "[% 'Mostrar Detalle' | i18n %]"
-                                            ) ;
-            [% END %]  
-
-            [% ELSE %]&nbsp;[% END %]
-            </td>
-            <td align=center>  
-        [% IF estado %]
-        [% estado %]
-        [% ELSE %] - [% END %]
-            </td>
-            <td align=center>
-            [% fechaReserva %]&nbsp;
-            </td>
-            <td align=center>
-                [% fechaVto %]&nbsp;
-            </td>
-        </tr>
-    [% END %]
-
-    </table>
-
+                    [% IF reserva.nivel2.nivel3.getBarcode %]
+    
+                        [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% barcode %]",
+                                                                url =>      "/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
+                                                                params =>   ["id3=[% reserva.getId3 %]"],
+                                                                title =>    "[% "Detalle del Ejemplar" | i18n %]"
+                                                            ) ;
+                        [% END %]   
+                    [% ELSE %]
+                        ([% 'Reserva de grupo' | i18n %])
+                    [% END %]
+                </td>
+                <td>
+                    &nbsp;[% reserva.getFecha_reserva_formateada %]&nbsp;
+                </td>
+            [% END %] <!-- FOREACH PRIMERO -->
+        
+        </table>
 [% ELSE %]
-    <h1> [% 'Ud. no tiene registrada ninguna reserva.' | i18n %] </h1>
-[% END %]
+    <div class="resultados_consulta">[% "No se han realizado reservas." | i18n %] &nbsp;[% cant %]</div>
+[% END %] 

@@ -14,7 +14,7 @@
 		        <td>
 		                [% "Operaci&oacute;n" | i18n %]
 		        </td>
-		            <td class="click" onclick="ordenar('fecha')" 
+		            <td class="click" onclick="ordenar('fecha_comienzo')" 
 		                Title='[% "Ordenar por Fecha Inicial" | i18n %]'>
 				    [% "Fecha Inicial" | i18n %]
 		        </td>
@@ -25,6 +25,27 @@
 		        <td class="click" onclick="ordenar('ref_tipo_sancion')" 
                     Title='[% "Ordenar por Tipo de Sanci&oacute;n" | i18n %]'>
                     [% "Tipo de Sanci&oacute;n" | i18n %]
+                </td>
+                <td>
+                        [% "Dias Sancion" | i18n %]
+                </td>
+                <td>
+                        [% "Fecha Devolucion" | i18n %]
+                </td>
+                <td>
+                        [% "Vencimiento" | i18n %]
+                </td>
+                <td>
+                        [% "Autor" | i18n %]
+                </td>
+                <td>
+                        [% "Titulo" | i18n %]
+                </td>
+                <td>
+                        [% "Edicion/A&ntildeo" | i18n %]
+                </td>
+                <td>
+                        [% "Tomo" | i18n %]
                 </td>
 		    </tr>
 		    
@@ -37,12 +58,38 @@
 				    [% historial_sancion.getTipo_operacion %]
 			    </td>
                 <td>
-                    [% historial_sancion.getFecha %]
+                    [% historial_sancion.getFecha_comienzo %]
                 </td>
                 <td>
                     [% historial_sancion.getFecha_final %]
                 </td>
-		    [% END %] 
+                <td>
+                    [% historial_sancion.ref_tipo_sancion.tipo_sancion %]
+                </td>
+  
+                <td>
+                   [% historial_sancion.dias_sancion %]
+                </td>
+                <td>
+                        
+                </td>
+                <td>
+                       
+                </td>
+                <td>
+                   [% historial_sancion.nivel3.nivel1.getAutor %]
+                </td>
+                <td>
+                   [% historial_sancion.nivel3.nivel1.getTitulo %]
+                </td>
+                <td>
+                   [% historial_sancion.nivel3.nivel2.getEdicion %] [%historial_sancion.nivel3.nivel2.getAnio_publicacion %]
+                </td>
+                <td>
+                    
+                </td>
+            [% END %] 
+
 		
 		</table>
 [% ELSE %]

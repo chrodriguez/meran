@@ -43,11 +43,11 @@ my $url = "/cgi-bin/koha/opac-historial_reservas.pl?token=".$input->param('token
 my $orden = 'titulo';
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-my ($cantidad,$reservas_hashref)= C4::AR::Estadisticas::historialReservas($nro_socio,$ini,$cantR);
+my ($cantidad,$reservas_hashref)=C4::AR::Reservas::getHistorialReservasParaTemplate($nro_socio,$ini,$cantR,$orden);
 
 $t_params->{'paginador'}= &C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
 $t_params->{'cantidad'}= $cantidad;
-$t_params->{'loop_reservas'}= $reservas_hashref;
+$t_params->{'reservas'}= $reservas_hashref;
 $t_params->{'content_title'}= C4::AR::Filtros::i18n("Historial de reservas");
 $t_params->{'partial_template'}= "opac-historial_reservas.inc";
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
