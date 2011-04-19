@@ -78,7 +78,7 @@ sub getInfoAbout{
     if ($info_about_ref->[0]){
         return ($info_about_ref->[0]);
     } else{
-        return 0;
+        return C4::Modelo::PrefAbout->new();
     }
 }
 

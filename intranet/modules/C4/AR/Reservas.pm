@@ -1286,7 +1286,7 @@ sub getReservaById{
 }
 
 sub getHistorialReservasParaTemplate {
-    
+
     use C4::Modelo::CircReserva;
     use C4::Modelo::CircReserva::Manager;
 
