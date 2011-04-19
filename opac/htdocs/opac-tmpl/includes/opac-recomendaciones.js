@@ -53,14 +53,14 @@ function save(){
 
 
 function eliminarFila(filaId){
-    $('#tr'+filaId).remove()
+    $('#'+filaId).remove()
 }
 
 
 function agregarRenglon(){
 alert($('#edicion_id').val())
   if ($('#edicion_id').val() == null){
-      id="";
+      id=$('#titulo').val();
   } else{    
       var id= $('#edicion_id').val();
   }
@@ -95,7 +95,7 @@ alert($('#edicion_id').val())
                     '<td id="cant_ejemplares'+id+'" name=cant_ejemplares'+id+'>'+cant_ejemplares+'</td>' +  
                     '<td id="motivo'+id+'" name=motivo'+id+'>'+motivo+'</td>' + 
                     '<td id="comentario'+id+'" name=comentario'+id+'>'+comentario+'</td>' + 
-                    '<td><input type="button" onclick="eliminarFila('+id+')" name="'+id+'" value="X"></input></td>' +
+                    '<td><input type="button" onclick=eliminarFila("tr'+id+'") name="'+id+'" value="X"></input></td>' +
                  '</tr>'
             )
   $('#recomendacion').show();
