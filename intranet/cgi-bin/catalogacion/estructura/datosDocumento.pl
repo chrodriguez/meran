@@ -36,10 +36,10 @@ if($tipoAccion eq "MODIFICAR_NIVEL_1"){
 #     $t_params->{'MODIFICAR_NIVEL_1'}    = 1;
 }else{
 #     $params_combo{'onChange'}           = 'mostrarEstructuraDelNivel1()';
-    $params_combo{'onChange'}           = 'seleccionar_esquema()';
+#     $params_combo{'onChange'}           = 'seleccionar_esquema()';
 }
 
-# $params_combo{'class'}                          = 'horizontal';
+$params_combo{'onChange'}                       = 'seleccionar_esquema()';
 $params_combo{'default'}                        = 'SIN SELECCIONAR';
 $t_params->{'comboTipoDocumento'}               = &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'nivel'}                            = $nivel;

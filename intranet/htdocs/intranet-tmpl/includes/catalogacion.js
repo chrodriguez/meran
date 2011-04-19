@@ -1922,6 +1922,7 @@ function updateBorrarEjemplaresN3(responseText){
  * guardados en la base de datos y poder modificarlos.
  */
 function modificarN1(id1){
+     $('#combo_nivel_bibliografico').show();
 	inicializar();
     ID_TIPO_EJEMPLAR    = "ALL";
     ID_N1               = id1;
