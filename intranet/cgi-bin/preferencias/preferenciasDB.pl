@@ -24,7 +24,6 @@ if($tipoAccion eq "EDIT_ABOUT"){
                     
      my $info_about_hash = C4::AR::Preferencias::getInfoAbout();  
      $t_params->{'info_about'} = $info_about_hash;
-    
                     
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
