@@ -18,14 +18,17 @@ use vars qw(@EXPORT_OK @ISA);
 
 =item
     Esta funcion despliega un texto sobre un icono, una especia de ayuda.
-    Es necesario incluir esta linea javascript:
-        $(".hover_ico").tooltip();
 =cut
-sub setHelpIco{
+sub setHelpIcon{
     my (%params_hash_ref) = @_;
 
     my $help    = '';
-    $help       =  "<div class='hover_ico' title='".i18n($params_hash_ref{'text'})."'></div>";
+    $help       =  "<script type='text/javascript'>
+                        \$(document).ready(function() {
+                            \$('.hover_ico').tooltip();
+                         });
+                    </script>
+                    <div class='hover_ico' title='".i18n($params_hash_ref{'text'})."'></div>";
 
     return $help;
 }
