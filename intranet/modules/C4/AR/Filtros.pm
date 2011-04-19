@@ -246,7 +246,7 @@ sub ayuda_marc{
                 title   => i18n("Ayuda MARC"),
             ) ;
 
-    return "<div style='text-align: right;'><span class='click'>".$icon."</span></div><div id='ayuda_marc_content'></div>";
+    return "<div style='float: right;'><span class='click'>".$icon."</span></div><div id='ayuda_marc_content'></div>";
 }
 
 

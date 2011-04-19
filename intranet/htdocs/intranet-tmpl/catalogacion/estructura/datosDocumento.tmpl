@@ -32,6 +32,10 @@ function showTipoDocumento(){
     }
 }
 
+function close_window_esquema(){
+    $('#datos_esquema').dialog('close');
+}  
+
 //Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
 $(document).ready( function() {
 	//oculto todas las tabls
@@ -78,8 +82,13 @@ $(document).ready( function() {
 	[% END %]
 
 
+    $('#datos_esquema').hide();
+
     if(MODIFICAR){
         $('#combo_nivel_bibliografico').hide();
+//         $('#datos_esquema').hide();
+    } else {
+        mostrarEstructuraDelNivel1();
     }
 //     if(_modificar){
 //         $('#titulo_modificar').show();
@@ -98,34 +107,52 @@ $(document).ready( function() {
 
 <div id="abm_tablas_referencia"><div id="abm_tablas_referencia_content"></div></div>
 
+<div id="combo_nivel_bibliografico">
+<fieldset>
+    <legend class="titulo_legend">[% "Datos del LEADER" | i18n %]</legend>
+    <ul style="clear:both">        
+        <li class="sub_item" >
+            <label for="id_nivel_bibliografico">
+                [% "Nivel Bibliogr&aacute;fico:" | i18n %]
+            </label>
+            [% comboTipoNivelBibliografico %]
+        </li>
+    </ul>
+</fieldset>
+</div>
+
+<div id="datos_esquema">
 <fieldset>
     <legend class="titulo_legend">[% "Datos del esquema" | i18n %]</legend>
-        <ul style="clear:both">
-            <li class="sub_item" >
-                <label for="tipo_nivel3_id">
-                    [% "Esquema de ingreso de datos:" | i18n %]
-                </label>
-                    [% comboTipoDocumento %]
-            
-                [% PERL %]
-                        print C4::AR::Filtros::to_Icon(   
-                                                            boton   => "icon_buscar",
-                                                            onClick => "mostrarEstructuraDelNivel1();",
-                                                            title   => "[% 'Buscar' | i18n %]",
-                                ) ;
-                [% END %]
-            </li>
+    <ul style="clear:both">
+        <li class="sub_item" >
+            <label for="tipo_nivel3_id">
+                [% "Esquema de ingreso de datos:" | i18n %]
+            </label>
+                [% comboTipoDocumento %]
         
-        <div id="combo_nivel_bibliografico">
-            <li class="sub_item" >
-                <label for="id_nivel_bibliografico">
-                    [% "Nivel Bibliogr&aacute;fico:" | i18n %]
-                </label>
-                [% comboTipoNivelBibliografico %]
-            </li>
-        </div>
-        </ul>
+<!-- antes se llamaba a =>   onClick => "mostrarEstructuraDelNivel1();",  -->
+            [% PERL %]
+                    print C4::AR::Filtros::to_Icon(   
+                                                        boton   => "icon_buscar",
+                                                        onClick => "seleccionar_esquema();",
+                                                        title   => "[% 'Buscar' | i18n %]",
+                            ) ;
+            [% END %]
+        </li>
+        <li>
+            [% PERL %]
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Aceptar' | i18n %]",
+                                                        boton   => "boton_guardar",
+                                                        onClick => "close_window_esquema()",
+                                                        title   => "[% 'Aceptar' | i18n %]",
+                                                        alternClass => "botonCentrado"
+                            ) ;
+            [% END %]    
+        </li>
+    </ul>
 </fieldset>
+</div>
 
 <!-- DATOS DE NIVEL 1 -->
 <div id="nivel1"></div>

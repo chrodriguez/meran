@@ -530,7 +530,31 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
 function agregarN2(){
 // FIXME parche!!!!!!!
 
+    $('#datos_esquema').dialog({ width: 510 });
+    
+//     scrollTo('tipo_nivel3_id');
+    
+//     ID_TIPO_EJEMPLAR = $('#tipo_nivel3_id').val();
+//     if( (TIENE_NIVEL_2 == 0)&&($('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') ){
+//         jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
+//         $('#tipo_nivel3_id').focus();
+//     }else{
+//         if( $('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') {
+//             jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
+//             $('#tipo_nivel3_id').focus();
+//         }else{
+//             MODIFICAR           = 0;
+//             AGREGAR_COMPLETO    = 0;
+//             
+//             mostrarEstructuraDelNivel2();
+//             inicializarSideLayers();
+//         }
+//     }
+}
+
+function seleccionar_esquema(){
     ID_TIPO_EJEMPLAR = $('#tipo_nivel3_id').val();
+    
     if( (TIENE_NIVEL_2 == 0)&&($('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') ){
         jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
         $('#tipo_nivel3_id').focus();
