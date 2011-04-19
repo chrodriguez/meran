@@ -481,8 +481,9 @@ function updateMostrarEstructuraDelNivel3(responseText){
 // TODO fatlta ver esto!!!!!!!
     if(EDICION_N3_GRUPAL == 0){
     //no se trata de una edicion grupal se agregan las reglas para validar los campos, sino se permiten campos nulos
-//         validateForm('formNivel3',guardarModificarDocumentoN3);  
         addRules();
+    } else {
+        $("#nivel3Tabla").before("<div class='reference'>Complete sólo los campos que desee modificar</div>");  
     }
 }
 
@@ -2001,7 +2002,7 @@ function modificarEjemplaresN3(id3){
 function updateModificarEjemplaresN3(responseText){
 	MODIFICAR = 1;
 	$('#divCantEjemplares').hide();	
-	mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+	mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);  
 }
 
 /*

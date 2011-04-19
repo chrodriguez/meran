@@ -37,6 +37,7 @@ $VERSION = 3.0;
     getReserva
     eliminarReservas
     getReservasDeSocioEnEspera
+    getHistorialReservasParaTemplate
 );
 
 =head2  sub getNivel3ParaReserva
@@ -1270,6 +1271,31 @@ sub getReservaById{
         return 0;
     }
 }
+
+sub getHistorialReservasParaTemplate {
+    
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
+
+    my ($nro_socio)=@_;
+
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
+                                          query => [ nro_socio  => { eq => $nro_socio }],
+                                          with_objects      => ['nivel2', 'nivel3','socio','ui', 'nivel3.nivel2.nivel1'],
+                                          sorty_by          => ['id_reserva DESC'],
+
+                                ); 
+    my $reservas_array_ref_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( 
+                                          query => [ nro_socio  => { eq => $nro_socio }],
+                                          with_objects => ['nivel3','socio','ui'],
+
+                                );     
+    return ($reservas_array_ref_count, $reservas_array_ref);
+}
+
+
+
+
 
 END { }       # module clean-up code here (global destructor)
 

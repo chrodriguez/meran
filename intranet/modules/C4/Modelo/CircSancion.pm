@@ -42,6 +42,11 @@ __PACKAGE__->meta->setup(
             column_map => { tipo_sancion => 'tipo_sancion' },
             type       => 'one to many',
         },
+        nivel3 => {
+            class       => 'C4::Modelo::CatRegistroMarcN3',
+            key_columns => { id3 => 'id' },
+            type        => 'one to one',
+        },
     ],
 );
 
@@ -179,29 +184,54 @@ sub insertar_sancion {
  #Hay varios casos:
  #Si no existe una tupla con una posible sancion y debe ser sancionado por $delaydays
  #Si existe se sanciona con la mayor cantidad de dias
-
+    $self->debug("CircSancion::insertar_sancion ==> SE VA A AGREGAR UNA SANCION");
  #Busco si tiene una sancion pendiente
     my $sancion_existente=C4::AR::Sanciones::tieneSancionPendiente($data_hash->{'nro_socio'},$self->db);
 
 	if ($sancion_existente){
 	#Hay sancion pendiente
+        $self->debug("CircSancion::insertar_sancion ==> YA EXISTIA UNA PENDIENTE");
+
 		if ( $sancion_existente->getDias_sancion < $data_hash->{'dias_sancion'}) {
 		#La Sancion pendiente es menor a la actual, recalculo la fecha de fin
+        $self->debug("CircSancion::insertar_sancion ==> LA SANCION PENDIENTE ES MENOR A LA ACTUAL, SE REEMPLAZA");
 		my $err;
-		my $fecha_final_nueva= C4::Date::format_date_in_iso(DateCalc($data_hash->{'fecha_comienzo'},"+ ".$data_hash->{'dias_sancion'}." days",\$err),$dateformat);
+		my $fecha_final_nueva= C4::Date::format_date_in_iso(C4::Date::DateCalc($data_hash->{'fecha_comienzo'},"+ ".$data_hash->{'dias_sancion'}." days",\$err),$dateformat);
 
 		$sancion_existente->setTipo_sancion($data_hash->{'tipo_sancion'});
 		$sancion_existente->setDias_sancion($data_hash->{'dias_sancion'});
+        $sancion_existente->setId3($data_hash->{'id3'});
 		$sancion_existente->setFecha_final($fecha_final_nueva);
 		$sancion_existente->setFecha_comienzo($data_hash->{'fecha_comienzo'});
 		$sancion_existente->save();
         
         #**********************************Se registra el movimiento en historicSanction***************************
         my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
-        $data_hash->{'tipo_operacion'}= 'Actualizacion';
+        $data_hash->{'tipo_operacion'}= 'Actualizacion y Efectivizacion Pendiente';
+        $data_hash->{'fecha_final'}    = $fecha_final_nueva;
         $historial_sancion->agregar($data_hash);
         #*******************************Fin***Se registra el movimiento en historicSanction*************************
 		}
+        else{
+        #La sancion pendiente es mayor a la actual, nos quedamos con esa, pero hay que aplicar la sancion calculando la fecha de comienzo y fin
+            $self->debug("CircSancion::insertar_sancion ==> LA SANCION PENDIENTE ES MAYOR A LA ACTUAL, SE EFECTIVIZA LA QUE ESTABA");
+            my $err;
+            my $fecha_final_nueva= C4::Date::format_date_in_iso(C4::Date::DateCalc($data_hash->{'fecha_comienzo'},"+ ".$sancion_existente->getDias_sancion." days",\$err),$dateformat);
+            $sancion_existente->setFecha_final($fecha_final_nueva);
+            $sancion_existente->setFecha_comienzo($data_hash->{'fecha_comienzo'});
+            $sancion_existente->save();
+
+            #**********************************Se registra el movimiento en historicSanction***************************
+            my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
+            #Se pasan los datos de la existente al historial
+            $data_hash->{'tipo_sancion'}   = $sancion_existente->getTipo_sancion;
+            $data_hash->{'id3'}            = $sancion_existente->getId3;
+            $data_hash->{'fecha_final'}    = $fecha_final_nueva;
+            $data_hash->{'dias_sancion'}   = $sancion_existente->getDias_sancion;
+            $data_hash->{'tipo_operacion'}= 'Efectivizacion Pendiente';
+            $historial_sancion->agregar($data_hash);
+            #*******************************Fin***Se registra el movimiento en historicSanction*************************
+        }
 	}
 	else {
 	#No tiene sanciones pendientes
@@ -234,9 +264,10 @@ my $sancion_existente=C4::AR::Sanciones::tieneSancionPendiente($data_hash->{'nro
     #Hay sancion pendiente
 
         if ( $sancion_existente->getDias_sancion < $data_hash->{'dias_sancion'}) {
-        #La Sancion pendiente es menor a la actual, hay que actualizar la cantidad de dias de sancion
+        #La Sancion pendiente es menor a la actual, hay que actualizar la cantidad de dias de sancion, sino se descarta
             $sancion_existente->setTipo_sancion($data_hash->{'tipo_sancion'});
             $sancion_existente->setDias_sancion($data_hash->{'dias_sancion'});
+            $sancion_existente->setId3($data_hash->{'id3'});
             $sancion_existente->save();
             #**********************************Se registra el movimiento en historicSanction***************************
             my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
@@ -279,9 +310,11 @@ sub eliminar_sancion {
     $data_hash->{'nro_socio'}=$self->getNro_socio;
     $data_hash->{'loggedinuser'}=$loggedinuser;
     $data_hash->{'fecha_final'}=$self->getFecha_final;
+    $data_hash->{'fecha_comienzo'}=$self->getFecha_comienzo;
     $data_hash->{'tipo_sancion'}=$self->getTipo_sancion;
+    $data_hash->{'id3'}=$self->getId3;
     my ($historial_sancion) = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
-   $data_hash->{'tipo_operacion'}= 'Actualizacion';
+   $data_hash->{'tipo_operacion'}= 'Borrado';
    $historial_sancion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en historicSanction*************************
 

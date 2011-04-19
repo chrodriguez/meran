@@ -220,7 +220,7 @@ sub getTipoPrestamo {
 sub chequeoDeFechas{
     my ($cantDiasRenovacion,$fechaRenovacion,$intervalo_vale_renovacion)=@_;
     # La $fechaRenovacion es la ultima fecha de renovacion o la fecha del prestamo si nunca se renovo
-    my $plazo_actual=$cantDiasRenovacion;# Cuantos dias m�s se puede renovar el prestamo
+    my $plazo_actual=$cantDiasRenovacion; # Cuantos dias más se puede renovar el prestamo
     my $vencimiento=proximoHabil($plazo_actual,0,$fechaRenovacion);
     my $err= "Error con la fecha";
     my $dateformat = C4::Date::get_date_format();
