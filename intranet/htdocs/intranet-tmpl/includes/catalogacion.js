@@ -553,6 +553,8 @@ function agregarN2(){
 }
 
 function seleccionar_esquema(){
+    close_window_esquema();
+    
     ID_TIPO_EJEMPLAR = $('#tipo_nivel3_id').val();
     
     if( (TIENE_NIVEL_2 == 0)&&($('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') ){
@@ -692,6 +694,7 @@ function updateGuardarDocumentoN1(responseText){
 
     if (! (hayError(Messages) ) ){
         inicializar();
+        $('#combo_nivel_bibliografico').hide();  
         //carga la barra lateral con info de nivel 1
         mostrarInfoAltaNivel1(ID_N1);
         mostrarEstructuraDelNivel2();

@@ -23,14 +23,14 @@
 
 var TIENE_NIVEL_2 = 0;
 
-function showTipoDocumento(){
-// parece q tiene q estar siempre, pq aunque se este modificando puede q se quiera agregar un nivel2 y habria q seleccionar el tipo_de_doc
-    if( TIENE_NIVEL_2 > 0){
-//         $('#div_combo_tipo_documento').hide();
-    }else{
-//         $('#div_combo_tipo_documento').show();
-    }
-}
+// function showTipoDocumento(){
+// // parece q tiene q estar siempre, pq aunque se este modificando puede q se quiera agregar un nivel2 y habria q seleccionar el tipo_de_doc
+//     if( TIENE_NIVEL_2 > 0){
+// //         $('#div_combo_tipo_documento').hide();
+//     }else{
+// //         $('#div_combo_tipo_documento').show();
+//     }
+// }
 
 function close_window_esquema(){
     $('#datos_esquema').dialog('close');
@@ -86,16 +86,9 @@ $(document).ready( function() {
 
     if(MODIFICAR){
         $('#combo_nivel_bibliografico').hide();
-//         $('#datos_esquema').hide();
     } else {
         mostrarEstructuraDelNivel1();
     }
-//     if(_modificar){
-//         $('#titulo_modificar').show();
-//         showTipoDocumento();
-//     }else{
-//         $('#titulo_agregar').show();
-//     }
 
 } );
 
