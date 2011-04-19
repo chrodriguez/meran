@@ -198,19 +198,23 @@ sub setHelp{
 sub to_Icon{
     my (%params_hash_ref) = @_;
 
-    my $button= '';
-    my $boton= $params_hash_ref{'boton'}; #obtengo el boton
-    my $onclick= $params_hash_ref{'onclick'} || $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onclick
-    my $title= $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $button  = '';
+    my $boton   = $params_hash_ref{'boton'}; #obtengo el boton
+    my $onclick = $params_hash_ref{'onclick'} || $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onclick
+    my $title   = $params_hash_ref{'title'}; #obtengo el title de la componete
     
-    my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
+    my $alternClass     = $params_hash_ref{'alternClass'} || 'horizontal';
 
-    my $open_elem = "<div ";
-    my $close_elem = "</div>";
+    my $open_elem       = "<div ";
+    my $close_elem      = "</div>";
+
+    if ($params_hash_ref{'id'}){
+        $open_elem     .= "id='".$params_hash_ref{'id'}."' ";
+    }
       
     my $style = $params_hash_ref{'style'} || '';
     if ($params_hash_ref{'elem'}){
-        $open_elem = "<".$params_hash_ref{'elem'};
+        $open_elem  = "<".$params_hash_ref{'elem'};
         $close_elem = "</".$params_hash_ref{'elem'}.">";
     }
 
@@ -334,7 +338,7 @@ sub getComboMatchMode {
     $html .="<option value='SPH_MATCH_PHRASE'>Coincidir con la frase exacta</option>";
     $html .="<option value='SPH_MATCH_ANY'>Coincidir con cualquier palabra</option>";
     $html .="<option value='SPH_MATCH_BOOLEAN'>Coincidir con valores booleanos (&), OR (|), NOT (!,-)</option>";
-    $html .="<option value='SPH_MATCH_EXTENDED'>Coincidencia Extendida</option>";
+    $html .="<option value='SPH_MATCH_EXTENDED' selected='selected'>Coincidencia Extendida</option>";
     $html .="<option value='SPH_MATCH_ALL'>Coincidir con todas las palabras</option>";
     $html .="</select>";
 

@@ -49,9 +49,9 @@ function ordenar(orden){
 
 function borrarSanciones(chck){
 
-    var chck=$("input[@name="+chck+"]:checked");
-    var array= new Array;
-    var long=chck.length;
+    var chck  = $("input[@name="+chck+"]:checked");
+    var array = new Array;
+    var long  = chck.length;
     if ( long == 0){
         jConfirm("Elija al menos una sancion para eliminar");
     }
@@ -60,14 +60,17 @@ function borrarSanciones(chck){
         jConfirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION,SANCIONES_TITLE, function(confirmStatus){if (confirmStatus) {
 
             for(var i=0; i< long; i++){
-            array[i]=chck[i].value;
+              array[i]=chck[i].value;
             }
 
-            objAH=new AjaxHelper(updateSanciones);
-            objAH.debug= true;
-            objAH.showOverlay = true;
-            objAH.url= '/cgi-bin/koha/circ/borrarsanciones.pl';
-            objAH.datosArray= array;
+            objAH               = new AjaxHelper(updateSanciones);
+            objAH.debug         = true;
+            objAH.showOverlay   = true;
+            objAH.url           = '/cgi-bin/koha/circ/sancionesDB.pl';
+            objAH.accion        = "ELIMINAR_SANCIONES"
+            objAH.datosArray    = array;
+            
+            // no le gusta:  $('#mensajes').html(''); setMessages(' ');
             //se envia la consulta
             objAH.sendToServer();
         }
@@ -80,11 +83,13 @@ function borrarSanciones(chck){
 function updateSanciones(responseText){
 
 	borrarDiv();
-
-    var infoHash        = JSONstring.toObject(responseText);
-    var messageArray    = infoHash.Messages_arrayref;
-    setMessages(messageArray);
-
+	
+    if (!verificarRespuesta(responseText)){
+        return(0); alert('entro al error del responsetext');
+        }
+        
+    var Messages = JSONstring.toObject(responseText);
+    setMessages(Messages);
 	mostrarSanciones();
 }
 

@@ -1,5 +1,10 @@
 <fieldset> <legend class="titulo_legend trigger click">[% "Datos del material" %]</legend>
-    <form id="recom_form" name="recom_form" method="post">     
+      [%  IF cant_ejemplares_disp > 0 %]
+                      <div style="border: 1px solid #A0D651; background-color: #E3F6CE; color:#505050; padding:10px 0 0 0; margin: 0 0 10px 0">
+                                    <p>[% 'La biblioteca cuenta con ' | i18n %]<strong>[% cant_ejemplares_disp %]</strong>[% ' ejemplar/es de este tipo, si aun considera necesaria esta recomendacion, complete el formulario, de lo contrario realice otra busqueda' | i18n %] </p>
+                      </div> 
+      [% END  %] 
+      <form id="recom_form" name="recom_form" method="post">     
         <div class="datos_edicion" id="datos_edicion"> 
                
                   <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>

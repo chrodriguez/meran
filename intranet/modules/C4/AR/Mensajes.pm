@@ -131,10 +131,11 @@ my %mensajesINTRA = (
     'P125' => 'Disculpe, no se pudo modificar el ejemplar *?*, se encuentra prestado.',
     'P126' => 'Disculpe, el ejemplar con c&oacute;digo de barras *?* se encuentra prestado.',
     'P127' => 'Disculpe, no se permiten realizar operaciones fuera del horario de apertura de la biblioteca.',
+    'P128' => 'El ejemplar que se intenta prestar no est&aacute; disponible para pr&eacute;stamo.',
     'S200' => 'El usuario no puede reservar porque esta sancionado hasta el *?*',
     'S201' => 'No es posible realizar el pr&eacute;stamo porque el usuario tiene una posible sanci&oacute;n pendiente.',
-    'S202' => 'Se elimin&oacute; la sanci&oacute;n a *?* con &eacute;xito.',
-    'S203' => 'No se pudo eliminar la sanci&oacute;n a *?*.',
+    'S202' => 'Se elimin&oacute; la sanci&oacute;n a *?*, *?*, *?* con &eacute;xito.',
+    'S203' => 'No se pudo eliminar la sanci&oacute;n a *?*, *?*, *?*.',
     'S204' => 'Disculpe, no puede efectuar el pr&eacute;stamo porque el usuario tiene un ejemplar vencido.',
     'U300' => 'El usuario no puede reservar porque no es un alumno regular.',
     'U301' => 'El usuario no puede reservar porque no ha realizado a&uacute;n el curso para usuarios.',
@@ -469,6 +470,7 @@ Esta funcion logea los bugs que ocurren cuando una transaccion no es ejecutada c
 Guarda los errores en el siguiente archivo: /var/log/koha/debugErrorDBA.txt
 =cut
 # TODO usar Debug::debug
+# TODO esto no deberia estar aca, va en Debug
 sub printErrorDB {
 	my($errorsDB_array,$codigo,$tipo)=@_;
 

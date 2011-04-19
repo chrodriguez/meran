@@ -15,26 +15,27 @@
 //Faltaria manejar mejor el log, opcion debug idem a demas helpers
 
 
-function MessageHelper(){
-    //defino las propiedades  
-//     this.nombre                     = obj.nombre;
-
-    function fClearMessages(){     
-        $('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});
-        $('#mensajes').hide();
-        $('#mensajes').html(''); 
-    };
-    
-    //metodos
-    this.clearMessages = fClearMessages;
-
-}
-
-// function clearMessages(){
-//     $('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});
-//     $('#mensajes').hide();
-// 	$('#mensajes').html('');
+// TODO armar objeto
+// function MessageHelper(){
+//     //defino las propiedades  
+// //     this.nombre                     = obj.nombre;
+// 
+//     function fClearMessages(){     
+//         $('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});
+//         $('#mensajes').hide();
+//         $('#mensajes').html(''); 
+//     };
+//     
+//     //metodos
+//     this.clearMessages = fClearMessages;
+// 
 // }
+
+function clearMessages(){
+    $('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});
+    $('#mensajes').hide();
+	$('#mensajes').html('');
+}
 
 function verificarRespuesta(responseText){
     if (responseText == 0){

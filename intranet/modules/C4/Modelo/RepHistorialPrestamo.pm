@@ -16,6 +16,7 @@ __PACKAGE__->meta->setup(
         id_ui_prestamo	         => { type => 'varchar', length => 4 },
         fecha_devolucion         => { type => 'varchar' },
         renovaciones             => { type => 'integer', default => '0', not_null => 1},
+        fecha_vencimiento        => { type => 'varchar' },
         fecha_ultima_renovacion  => { type => 'varchar' },
         timestamp                => { type => 'timestamp', not_null => 1 },
         agregacion_temp          => { type => 'varchar', length => 255, not_null => 0 },
@@ -28,7 +29,7 @@ __PACKAGE__->meta->setup(
        nivel3 => {
 #             class       => 'C4::Modelo::CatNivel3',
             class       => 'C4::Modelo::CatRegistroMarcN3',
-            key_columns => { id3 => 'id3' },
+            key_columns => { id3 => 'id' },
 	        type        => 'one to one',
         },
       tipo => {
@@ -194,6 +195,24 @@ sub setFecha_ultima_renovacion{
     $self->fecha_ultima_renovacion($fecha_ultima_renovacion);
 }
 
+sub setFecha_vencimiento{
+    my ($self) = shift;
+    my ($fecha_vencimiento) = @_;
+    $self->fecha_vencimiento($fecha_vencimiento);
+}
+
+
+sub getFecha_vencimiento_formateada{
+    my ($self) = shift;
+    my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date($self->getFecha_vencimiento,$dateformat);
+}
+
+sub getFecha_vencimiento{
+    my ($self) = shift;
+    return ($self->fecha_vencimiento);
+}
+
 sub getTimestamp{
     my ($self) = shift;
     return ($self->timestamp);
@@ -201,7 +220,7 @@ sub getTimestamp{
 
 sub agregarPrestamo{
     my ($self) = shift;
-    my ($prestamo) = @_;
+    my ($prestamo, $fecha_venc) = @_;
 
     #Asignando data...
 
@@ -213,6 +232,7 @@ sub agregarPrestamo{
     $self->setId_ui_prestamo($prestamo->getId_ui_prestamo);
     $self->setFecha_devolucion($prestamo->getFecha_devolucion);
     $self->setRenovaciones($prestamo->getRenovaciones);
+    $self->setFecha_vencimiento($fecha_venc);
     $self->setFecha_ultima_renovacion($prestamo->getFecha_ultima_renovacion);
     $self->save();
 

@@ -6,6 +6,8 @@ use C4::AR::Auth;
 use C4::Output;
 use JSON;
 use C4::AR::Nivel2;
+use C4::AR::Nivel3;
+
 
 my $input = new CGI;
 
@@ -25,6 +27,8 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
 
     my $combo_ediciones= C4::AR::Utilidades::generarComboNivel2($idNivel1);
 
+  
+
     ($template, $session, $t_params)= get_template_and_user({
                         template_name => "/includes/opac-combo_ediciones.inc",
                         query => $input,
@@ -32,7 +36,7 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
                         authnotrequired => 1,
                         flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                     });
-
+ 
     $t_params->{'combo_ediciones'} = $combo_ediciones;
 
    
@@ -41,11 +45,14 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
     my $idNivel2 =  $obj->{'edicion_id'};
     my $edicion =  $obj->{'edicion'};
 
-
     my $idNivel1= $obj->{'idCatalogoSearch'};
 
     my $datos_edicion= C4::AR::Nivel2::getNivel2FromId2($idNivel2);
-  
+
+    my $ejemplares_disp= C4::AR::Nivel3::getNivel3FromId2($idNivel2);
+
+    my $cant_ejemplares_disp= scalar(@$ejemplares_disp);
+
     my $datos_nivel1= C4::AR::Nivel1::getNivel1FromId1($idNivel1);
 
     ($template, $session, $t_params)= get_template_and_user({
@@ -56,11 +63,11 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
                         flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                     });
 
+   $t_params->{'cant_ejemplares_disp'} = $cant_ejemplares_disp;
 
-
-    $t_params->{'edicion'} = $edicion;
-    $t_params->{'datos_edicion'} = $datos_edicion;
-    $t_params->{'datos_nivel1'} = $datos_nivel1;
+   $t_params->{'edicion'} = $edicion;
+   $t_params->{'datos_edicion'} = $datos_edicion;
+   $t_params->{'datos_nivel1'} = $datos_nivel1;
 
 } elsif ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION_SIN_RESULTADOS') {
 

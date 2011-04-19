@@ -1130,20 +1130,21 @@ sub InitPaginador{
 
     if (($iniParam eq "")|($iniParam <= 0)){
             $ini=0;
-	    $pageNumber=1;
+            $pageNumber=1;
     } else {
-        $ini= ($iniParam-1)* $cantR;
-        $pageNumber= $iniParam;
+            $ini= ($iniParam-1)* $cantR;
+            $pageNumber= $iniParam;
     };
 
     return ($ini,$pageNumber,$cantR);
 }
 
 sub crearPaginador{
-
+     
     my ($cantResult, $cantRenglones, $pagActual, $funcion,$t_params)=@_;
 
     my ($paginador, $cantPaginas)=C4::AR::Utilidades::armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion,$t_params);
+  
     return $paginador;
 
 }

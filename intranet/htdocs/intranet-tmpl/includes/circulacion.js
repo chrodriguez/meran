@@ -349,8 +349,7 @@ function updateInfoCancelacion(responseText){
  * Genera el div con los datos de los items que se van a devolver o renovar.
  */
 function generaDivDevolucion(responseText){
-    var m                   = new MessageHelper();
-    m.clearMessages();
+
 	var infoArray           = new Array;
 	INFO_PRESTAMOS_ARRAY    = new Array();
 	infoArray               = JSONstring.toObject(responseText);

@@ -735,20 +735,20 @@ sub reservasEnEspera {
 
 #VERIFICACIONES PREVIAS tanto para reservas desde el OPAC como para PRESTAMO de la INTRANET
 sub _verificaciones {
-    my($params)=@_;
+    my($params) = @_;
 
-    my $tipo= $params->{'tipo'}; #INTRA u OPAC
-    my $id2= $params->{'id2'};
-    my $id3= $params->{'id3'};
-    my $barcode= $params->{'barcode'};
-    my $nro_socio= $params->{'nro_socio'};
-    my $loggedinuser= $params->{'loggedinuser'};
-    my $tipo_prestamo= $params->{'tipo_prestamo'};
-    my $msg_object= C4::AR::Mensajes::create();
-    $msg_object->{'tipo'}=$tipo;
+    my $tipo                = $params->{'tipo'}; #INTRA u OPAC
+    my $id2                 = $params->{'id2'};
+    my $id3                 = $params->{'id3'};
+    my $barcode             = $params->{'barcode'};
+    my $nro_socio           = $params->{'nro_socio'};
+    my $loggedinuser        = $params->{'loggedinuser'};
+    my $tipo_prestamo       = $params->{'tipo_prestamo'};
+    my $msg_object          = C4::AR::Mensajes::create();
+    $msg_object->{'tipo'}   = $tipo;
 
-    my $dateformat=C4::Date::get_date_format();
-    my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+    my $dateformat          = C4::Date::get_date_format();
+    my $socio               = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
     if ($socio){
     
@@ -832,6 +832,19 @@ sub _verificaciones {
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R002', 'params' => []} ) ;
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de reservas iguales, sobre el mismo grupo y tipo de prestamo");
+    }
+#Verifico la disponibilidad antes de realizar el prestamo
+    my $nivel3      = C4::AR::Nivel3::getNivel3FromId3($id3);
+    my $disponible  = 0;
+
+    if($nivel3){    
+        $disponible  = $nivel3->estadoDisponible();
+    }
+
+    if( !($msg_object->{'error'}) && ($tipo eq "INTRA") && !($disponible) ){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P128', 'params' => []} ) ;
+        C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if donde se verifica la disponibilidad");
     }
 
 #Se verifica que el usuario no supere el numero maximo de reservas posibles seteadas en el sistema desde OPAC

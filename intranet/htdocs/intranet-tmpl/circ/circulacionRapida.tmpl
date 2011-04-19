@@ -81,10 +81,13 @@ function updateObtenerDatosDelEjemplar(responseText){
 function updateObtenerTiposDePrestamos(responseText){
 	var infoHash                    = JSONstring.toObject(responseText);
 	var tipoPrestamo_array_hash_ref = infoHash.tipoPrestamo;
-    var comboTipoPrestamo_html      = crearComboDeItems(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
 
-	$('#spanComboTipoPrestamo').html(comboTipoPrestamo_html);
-	mostrarBotonAceptar();
+//     if (tipoPrestamo_array_hash_ref.length != 0){
+        var comboTipoPrestamo_html      = crearComboDeItems(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
+
+        $('#spanComboTipoPrestamo').html(comboTipoPrestamo_html);
+        mostrarBotonAceptar();
+//     }
 }
 
 function realizarAccionCircRapida(){
