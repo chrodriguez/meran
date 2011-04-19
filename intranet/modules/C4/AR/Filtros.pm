@@ -10,11 +10,25 @@ use base qw( Template::Plugin::Filter );
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw( 
-
+    &setHelpIco
 	&i18n
 	&link_to
     &to_Button
 );
+
+=item
+    Esta funcion despliega un texto sobre un icono, una especia de ayuda.
+    Es necesario incluir esta linea javascript:
+        $(".hover_ico").tooltip();
+=cut
+sub setHelpIco{
+    my (%params_hash_ref) = @_;
+
+    my $help    = '';
+    $help       =  "<div class='hover_ico' title='".i18n($params_hash_ref{'text'})."'></div>";
+
+    return $help;
+}
 
 
 =item
