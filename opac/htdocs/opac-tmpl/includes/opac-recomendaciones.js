@@ -94,10 +94,7 @@ function agregarRenglon(){
                     '<td id="cant_ejemplares'+id+'" name=cant_ejemplares'+id+'>'+cant_ejemplares+'</td>' +  
                     '<td id="motivo'+id+'" name=motivo'+id+'>'+motivo+'</td>' + 
                     '<td id="comentario'+id+'" name=comentario'+id+'>'+comentario+'</td>' + 
-                    '<td><input type="button" onclick=eliminarFila("tr'    +id+   '") name="'   +id+   '" value="X"></td>' +
-
-             
-
+//                     '<td>' + '<input type="button" onclick=eliminarFila("tr'+id+'") name="'+id+'" value="X">' + '</td>' +
                  '</tr>'
             )
   $('#recomendacion').show();

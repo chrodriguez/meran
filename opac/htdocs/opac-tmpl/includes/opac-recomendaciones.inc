@@ -39,6 +39,7 @@ function guardarRecomendacion(){
             attribHeaders: "{}",
             returnElement: "#table",
             complete: function(x){
+                 alert(x)
                  objAH                     = new AjaxHelper(updateGuardarRecomendacion);
                  objAH.url                 = '/cgi-bin/koha/opac-recomendacionesAdd.pl';
                  objAH.debug               = true;
@@ -205,9 +206,7 @@ $(document).ready( function() {
                                <th align="center">
                                   [% "Comentarios" | i18n %]
                               </th>
-                              <th align="center">
-                                  [% "Eliminar" | i18n %]
-                              </th>
+                             
                                   
                         </thead>
                         <tbody>
