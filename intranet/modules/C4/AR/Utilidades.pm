@@ -3501,7 +3501,6 @@ sub barcodeAutocomplete{
     my $textout = "";
     my ($cant, $cat_nivel3_array_ref) = C4::AR::Nivel3::getBarcodesLike($barcodeStr);
     my @barcodes_array;
-    my %has_temp;
     my @return_array_sorted;
 
     if ($cant > 0){
@@ -3509,12 +3508,11 @@ sub barcodeAutocomplete{
             my %has_temp;
             $has_temp{'id'}     = $nivel3->getBarcode;
             $has_temp{'dato'}   = $nivel3->getBarcode;
-#             $textout.= $nivel3->getBarcode."|".$nivel3->getBarcode."\n";
+
             push (@barcodes_array, \%has_temp);
         }
 
-        @return_array_sorted= sort{$a->{'dato'} cmp $b->{'dato'}} @barcodes_array;
-        
+        @return_array_sorted = sort{$a->{'dato'} cmp $b->{'dato'}} @barcodes_array;        
 
         foreach my $e (@return_array_sorted){
             $textout.= $e->{'id'}."|".$e->{'dato'}."\n";
@@ -3530,12 +3528,25 @@ sub barcodePrestadoAutocomplete{
     my $textout="";
     #busco el barcode en el conj. de los barcodes prestados
     my ($cant, $circ_prestamo_array_ref)= C4::AR::Nivel3::getBarcodesPrestadoLike($barcodeStr);
+    my @return_array_sorted;
+    my @barcodes_array;
     #devuelve un arreglo de objetos prestamos con cat_nivel3
 
     if ($cant > 0){
         foreach my $prestamo (@$circ_prestamo_array_ref){
             #se muestra el barcode, pero en el hidden queda el usuario al que se le realizo el prestamo
-            $textout.= $prestamo->getId_prestamo."|".$prestamo->nivel3->getBarcode."\n";
+#             $textout.= $prestamo->getId_prestamo."|".$prestamo->nivel3->getBarcode."\n";
+            my %has_temp;
+            $has_temp{'id'}     = $prestamo->getId_prestamo;
+            $has_temp{'dato'}   = $prestamo->nivel3->getBarcode;
+
+            push (@barcodes_array, \%has_temp);
+        }
+
+        @return_array_sorted = sort{$a->{'dato'} cmp $b->{'dato'}} @barcodes_array;        
+
+        foreach my $e (@return_array_sorted){
+            $textout.= $e->{'id'}."|".$e->{'dato'}."\n";
         }
     }
 
