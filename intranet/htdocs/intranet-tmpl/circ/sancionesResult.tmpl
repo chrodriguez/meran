@@ -13,7 +13,9 @@
   		<th class="click" onclick="ordenar('ref_tipo_sancion.tipo_prestamo')" Title="[% 'Ordenar por tipo de pr&eacute;stamo' | i18n %]">[% "Tipo de pr&eacute;stamo" | i18n %]</th>
   		<th class="click" onclick="ordenar('fecha_comienzo')" Title="[% 'Ordenar por fecha de inicio' | i18n %]">[% "Fecha inicio" | i18n %]</th>
   		<th class="click" onclick="ordenar('fecha_final')" Title="[% 'Ordenar por fecha de fin' | i18n %]">[% "Fecha fin" | i18n %]</th>
-
+        <th class="click" onclick="ordenar('autor')" Title="[% 'Ordenar por autor' | i18n %]">[% "Autor" | i18n %]</th>
+        <th class="click" onclick="ordenar('titulo')" Title="[% 'Ordenar por titulo' | i18n %]">[% "Titulo" | i18n %]</th>
+        <th class="click" onclick="ordenar('edicion')" Title="[% 'Ordenar por edicion' | i18n %]">[% "Edicion/A	&ntilde;o" | i18n %]</th>
 	</tr>
 [% IF CANT_SANCIONES %]
   [% FOREACH sancion IN SANCIONES %]
@@ -52,6 +54,9 @@
 		</td>
 		<td>[% sancion.getFecha_comienzo_formateada %]</td>
 		<td>[% sancion.getFecha_final_formateada %]</td>
+		<td>[% sancion.nivel3.nivel1.getAutor %]</td>
+		<td>[% sancion.nivel3.nivel1.getTitulo %]</td>
+		<td>[% sancion.nivel3.nivel2.getEdicion %]</td>
 	</tr>
   [% END %]
     <tr>

@@ -30,7 +30,6 @@ if($tipoAccion eq "MOSTRAR_SANCIONES"){
     
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     
-
 }#end if($tipoAccion eq "MOSTRAR_SANCIONES")
 
 elsif($tipoAccion eq "ELIMINAR_SANCIONES"){

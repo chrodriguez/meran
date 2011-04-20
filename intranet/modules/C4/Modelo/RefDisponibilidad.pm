@@ -10,7 +10,7 @@ __PACKAGE__->meta->setup(
     columns => [
         id     => { type => 'serial', not_null => 1 },
         nombre => { type => 'varchar', default => '', length => 255, not_null => 1 },
-        codigo => { type => 'varchar', default => '', length => 255, not_null => 1 },
+        codigo => { type => 'varchar', default => '', length => 8, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -22,9 +22,21 @@ use C4::Modelo::RefDisponibilidad::Manager;
 use C4::Modelo::CircRefTipoPrestamo;
 use Text::LevenshteinXS;
 
+########## CODIGOS DE DISPONIBILIDAD #############
+# Domiciliario      = CIRC0000
+# Sala de lectura   = CIRC0001
+#
+#
+#
+#
+#
+#
+#
+#
+##################################################
+
 # 0 =  Domiciliario
 # 1 =  Sala de Lectura
-
 
 sub paraPrestamoValue{
     

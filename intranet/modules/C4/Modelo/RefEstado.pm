@@ -10,6 +10,7 @@ __PACKAGE__->meta->setup(
     columns => [
         id     => { type => 'serial', not_null => 1 },
         nombre => { type => 'varchar', default => '', length => 255, not_null => 1 },
+        codigo => { type => 'varchar', default => '', length => 8, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -18,6 +19,20 @@ __PACKAGE__->meta->setup(
 use C4::Modelo::RefLocalidad;
 use C4::Modelo::RefEstado::Manager;
 use Text::LevenshteinXS;
+
+########## CODIGOS DE DISPONIBILIDAD #############
+# Baja = STATE000
+# Compartido = STATE001 
+# Disponible = STATE002
+# Ejemplar deteriorado = STATE003 
+# En Encuadernación = STATE004
+# Perdido = STATE005
+# En etiquetado = STATE0006
+# En impresiones = STATE007
+# En procesos técnicos = STATE008
+##################################################
+
+
 
 # 1   Baja
 # 2   Compartido
@@ -31,6 +46,21 @@ sub getId{
 
     return ($self->id);
 }    
+
+
+sub getCodigo{
+    my ($self) = shift;
+
+    return ($self->codigo);
+}
+    
+sub setCodigo{
+    my ($self) = shift;
+    my ($codigo) = @_;
+
+    $self->codigo($codigo);
+}
+
 
 sub getNombre{
     my ($self) = shift;

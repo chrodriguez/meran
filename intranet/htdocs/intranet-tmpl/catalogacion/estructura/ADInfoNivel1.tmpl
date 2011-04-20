@@ -28,12 +28,12 @@
             <li>
                 <strong>[% 'Nivel bibliogr&aacute;fico:' | i18n %]</strong> [% nivel1.getNivelBibliograficoObject.getDescription %]
             </li>
-            <li>
+<!--            <li>
                 <strong>[% 'Autores secundarios:' | i18n %]</strong>
                 [% FOREACH autor_secundario IN nivel1.getAutoresSecundarios %] 
                     [% autor_secundario %][% IF !loop.last() %],[% END %] 
                 [% END %]
-            </li>
+            </li>-->
 <!--            <li>
                 <strong>[% 'T&eacute;rmino no controlado:' | i18n %]</strong> 
                     [% FOREACH entrada IN nivel1.getTerminoNoControlado %] 
@@ -46,12 +46,12 @@
 <!--            <li>
                 <strong>[% 'CDU:' | i18n %]</strong> [% nivel1.getCDU %]
             </li>-->
-            <li>
+<!--            <li>
                 <strong>[% 'Temas:' | i18n %]</strong> 
                     [% FOREACH tema IN nivel1.getTemas %] 
                         [% tema.getNombre %][% IF !loop.last() %],[% END %] 
                     [% END %]
-            </li>
+            </li>-->
  <!--           <li>
                 <strong>[% 'Nombre Geogr&aacute;fico:' | i18n %]</strong> [% nivel1.getNombreGeograficoObject.getNombre %]
             </li>-->

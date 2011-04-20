@@ -30,7 +30,7 @@ if($texto){
 # obtenemos lo guardado en la base de pref_about
 my $info_about_hash = C4::AR::Preferencias::getInfoAbout();  
 
-$t_params->{'info_about'}     = $info_about_hash->{'descripcion'};
+$t_params->{'info_about'}     = $info_about_hash;
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Acerca De MERAN");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params,$session);

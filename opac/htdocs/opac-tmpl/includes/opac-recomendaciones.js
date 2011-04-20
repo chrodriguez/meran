@@ -58,7 +58,6 @@ function eliminarFila(filaId){
 
 
 function agregarRenglon(){
-alert($('#edicion_id').val())
   if ($('#edicion_id').val() == null){
       id=$('#titulo').val();
   } else{    
