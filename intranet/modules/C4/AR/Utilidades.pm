@@ -3496,14 +3496,28 @@ sub usuarioAutocomplete{
 busca barcodeStr sobre todos los barcodes
 =cut
 sub barcodeAutocomplete{
+    my ($barcodeStr) = @_;
 
-    my ($barcodeStr)= @_;
-    my $textout="";
-    my ($cant, $cat_nivel3_array_ref)= C4::AR::Nivel3::getBarcodesLike($barcodeStr);
+    my $textout = "";
+    my ($cant, $cat_nivel3_array_ref) = C4::AR::Nivel3::getBarcodesLike($barcodeStr);
+    my @barcodes_array;
+    my %has_temp;
+    my @return_array_sorted;
 
     if ($cant > 0){
         foreach my $nivel3 (@$cat_nivel3_array_ref){
-            $textout.= $nivel3->getBarcode."|".$nivel3->getBarcode."\n";
+            my %has_temp;
+            $has_temp{'id'}     = $nivel3->getBarcode;
+            $has_temp{'dato'}   = $nivel3->getBarcode;
+#             $textout.= $nivel3->getBarcode."|".$nivel3->getBarcode."\n";
+            push (@barcodes_array, \%has_temp);
+        }
+
+        @return_array_sorted= sort{$a->{'dato'} cmp $b->{'dato'}} @barcodes_array;
+        
+
+        foreach my $e (@return_array_sorted){
+            $textout.= $e->{'id'}."|".$e->{'dato'}."\n";
         }
     }
 

@@ -50,7 +50,6 @@ use vars qw(@EXPORT_OK @ISA);
     &buscarMapeoCampoSubcampo
     &buscarCamposMARC
     &buscarSubCamposMARC
-    &buscarAutorPorCond
     &buscarDatoDeCampoRepetible
     &buscarTema
 
@@ -79,84 +78,6 @@ use vars qw(@EXPORT_OK @ISA);
 
     &t_loguearBusqueda
 );
-
-
-#==================================================================nerSPHINX====================================================================
-# =head2
-#     sub generar_indice
-# =cut
-# sub generar_indice {
-#     my ($id1)   = @_;
-# 
-# #     my $err = system("perl ".C4::Context->config("intranetdir")."/scripts/generar_indice_v2.pl ".$id1);
-#     my $command = "perl ".C4::Context->config("intranetdir")."/scripts/generar_indice_v2.pl";
-#     my @args    = ($command, $id1);
-# 
-#     C4::AR::Debug::debug("Busquedas => generar_indice => ejecutando comando ". $command ." con parametro: ".$id1);
-# 
-#     my $err     = system(@args);
-# 
-#     if ($err == -1) {
-#             C4::AR::Debug::debug("Busquedas => generar_indice => ERROR => $!");
-#     }
-# }
-
-=head2
-    sub reindexar
-=cut
-# sub reindexar{
-#     C4::AR::Debug::debug("Busquedas => reindexar => run_indexer => ");
-# 
-#     my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
-#     #verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada    
-#     sphinx_start($mgr);
-# 
-#     my @args;
-#     push (@args, '--all');
-#     push (@args, '--rotate');
-#     push (@args, '--quiet');
-# 
-#     $mgr->indexer_args(\@args);
-#     $mgr->run_indexer();
-#     C4::AR::Debug::debug("Busquedas => reindexar => --all --rotate => ");
-# }
-# 
-# =head2
-#     sub sphinx_start
-#     verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada
-# =cut
-# sub sphinx_start{
-#     my ($mgr)= @_;
-#     if (exists $ENV{MOD_PERL}){
-#         defined (my $kid = fork) or die "Cannot fork: $!\n";
-#         if ($kid) {
-#         # Parent runs this block
-#       } else {
-#           # Child runs this block
-#           # some code comes here
-#           $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
-#           $mgr->debug(0);
-#           my $pids = $mgr->get_searchd_pid;
-#           if(scalar(@$pids) == 0){
-#               C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
-#               $mgr->start_searchd;
-#               C4::AR::Debug::debug("Utilidades => generar_indice => levantó sphinx!!!!!!! => ");
-#           }
-#           CORE::exit(0);
-#       }
-#   }else{
-#       $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
-#       $mgr->debug(0);
-#       my $pids = $mgr->get_searchd_pid;
-#       if(scalar(@$pids) == 0){
-#           C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
-#           $mgr->start_searchd;
-#           C4::AR::Debug::debug("Utilidades => generar_indice => levantó sphinx!!!!!!! => ");
-#       }
-#   }
-# }
-#================================================================FIN SPHINX=================================================================
-
 
 
 =head2
@@ -599,28 +520,6 @@ sub obtenerDisponibilidadTotal{
 
 
 =item
-buscarCamposMARC
-Busca los campos correspondiente a el parametro campoX, para ver en el tmpl de filtradoAvanzado.
-=cut
-# sub buscarCamposMARC{
-# 	my ($campoX) =@_;
-# 	my $dbh = C4::Context->dbh;
-# 	my $query="SELECT DISTINCT nivel,campo FROM pref_estructura_subcampo_marc ";
-# 	$query .=" WHERE nivel > 0 AND campo LIKE ? ORDER BY nivel";
-# 	
-# 	my $sth=$dbh->prepare($query);
-#         $sth->execute($campoX."%");
-# 	my @results;
-# 	my $nivel;
-# 	while(my $data=$sth->fetchrow_hashref){
-# 		$nivel="n".$data->{'nivel'}."r";
-# 		push (@results,$nivel."/".$data->{'campo'});
-# 	}
-# 	$sth->finish;
-# 	return (@results);
-# }
-
-=item
 buscarSubCamposMARC
 Busca los subcampos correspondiente al parametro de campo y que no sean propios de una tabla de nivel, solo los que estan en tablas de nivel repetibles.
 =cut
@@ -706,20 +605,6 @@ sub buscarNivel2EnMARC{
 	return \@nivel2Comp;
 }
 
-sub buscarAutorPorCond{
-	my ($cond)=@_;
-	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM cat_autor WHERE completo".$cond." ORDER BY apellido";
-	my $sth=$dbh->prepare($query);
-	$sth->execute();
-	my @autores;
-	while(my $data=$sth->fetchrow_hashref){
-		push(@autores,$data);
-	}
-	return @autores;
-}
-
-
 sub buscarDatoDeCampoRepetible {
 	my ($id,$campo,$subcampo,$nivel)=@_;
 	
@@ -734,36 +619,6 @@ sub buscarDatoDeCampoRepetible {
 	my $data=$sth->fetchrow_hashref;
 	return $data->{'dato'};
 }
-
-# FIXME DEPRECATED
-# sub getautor {
-#     my ($idAutor) = @_;
-#     my $dbh   = C4::Context->dbh;
-#     my $sth   = $dbh->prepare("	SELECT id,apellido,nombre,completo 
-# 				FROM cat_autor WHERE id = ?");
-#     $sth->execute($idAutor);
-#     my $data=$sth->fetchrow_hashref; 
-#     $sth->finish();
-#     return($data);
-#  }
-
-# sub getautor {
-#     my ($idAutor) = @_;
-#     my $dbh   = C4::Context->dbh;
-#     my $sth   = $dbh->prepare(" SELECT id,apellido,nombre,completo 
-#                 FROM cat_autor WHERE id = ?");
-#     $sth->execute($idAutor);
-#     my $data=$sth->fetchrow_hashref; 
-#     $sth->finish();
-# 
-# #     $db = $db || C4::Modelo::PermCatalogo->new()->db;
-#     my $nivel3_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor(   
-# #                                                                     db => $db,
-#                                                                     query   => [ id1 => { eq => $id1} ], 
-#                                                                 );
-# 
-#     return($data);
-# }
 
 sub getLevel{
         my ($cod) = @_;
@@ -1538,70 +1393,6 @@ sub busquedaPorBarcode{
     return ($total_found_paginado, $resultsarray);
 }
 
-=item
-Realiza una busqueda simpel por autor sobre nivel 1
-=cut
-# FIXME DEPRECATED
-sub busquedaSimplePorAutor{
-	my ($params,$session) = @_;
-
-	$params->{'nomCompleto'}= $params->{'autor'};
-	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($params->{'autor'});	
-	my @id1_array;
-
-	my $dbh = C4::Context->dbh;
-	my $sql_string_c1;
-	
-	$sql_string_c1 = "	SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo \n";
-	$sql_string_c1 .= " FROM cat_nivel1 c1 LEFT JOIN cat_autor a ON (c1.autor = a.id) \n";
-	$sql_string_c1 .=" 	WHERE (a.completo LIKE ?) \n";
-	my $sth = $dbh->prepare($sql_string_c1);
-
-	$sth->execute("%".$params->{'autor'}."%");
-			
-	while(my $data = $sth->fetchrow_hashref){
- 			push (@id1_array,$data);
-	}
-
-	#arma y ordena el arreglo para enviar al cliente
-   	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @id1_array);
-	#se loquea la busqueda
-   	C4::AR::Busquedas::logBusqueda($params, $session);
-
-   	return ($cant_total, $resultsarray);
-}
-
-=item
-Realiza una busqueda simple por titulo sobre nivel 1
-=cut
-# FIXME DEPRECATED
-sub busquedaSimplePorTitulo{
-	my ($params,$session) = @_;
-
-	my @searchstring_array= C4::AR::Utilidades::obtenerBusquedas($params->{'titulo'});	
-	my @id1_array;
-
-	my $dbh = C4::Context->dbh;
-	my $sql_string_c1;
-	
-	$sql_string_c1 = "	SELECT DISTINCT(c1.id1), c1.titulo, c1.autor, a.completo \n";
-	$sql_string_c1 .= "	FROM cat_nivel1 c1 LEFT JOIN cat_autor a ON (c1.autor = a.id) \n";
-	$sql_string_c1 .= " WHERE (c1.titulo LIKE ?)\n ";
-
-	my $sth = $dbh->prepare($sql_string_c1);
-	$sth->execute("%".$params->{'titulo'}."%");
-			
-	while(my $data = $sth->fetchrow_hashref){
- 			push (@id1_array,$data);
-	}
-
-	#arma y ordena el arreglo para enviar al cliente
-   	my ($cant_total, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @id1_array);
-	#se loquea la busqueda
-   	C4::AR::Busquedas::logBusqueda($params, $session);
-
-   	return ($cant_total, $resultsarray);
-}
 
 sub t_loguearBusqueda {
 #     require C4::Modelo::RepHistorialBusqueda;
