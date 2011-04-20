@@ -15,7 +15,7 @@ INSERT INTO `ref_estado` (`id`, `nombre`, `codigo`) VALUES
 (3, 'Disponible', 'STATE002'),
 (4, 'Baja', 'STATE000'),
 (5, 'Ejemplar deteriorado', 'STATE003'),
-(6, 'En Encuadernacion'STATE004'),
+(6, 'En Encuadernacion', 'STATE004'),
 (7, 'En Etiquetado', 'STATE000'),
 (8, 'En Impresiones', 'STATE007'),
 (9, 'En procesos tecnicos', 'STATE008');
