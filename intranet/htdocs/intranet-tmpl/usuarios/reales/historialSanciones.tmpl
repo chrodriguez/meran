@@ -30,12 +30,6 @@
                         [% "Dias Sancion" | i18n %]
                 </td>
                 <td>
-                        [% "Fecha Devolucion" | i18n %]
-                </td>
-                <td>
-                        [% "Vencimiento" | i18n %]
-                </td>
-                <td>
                         [% "Autor" | i18n %]
                 </td>
                 <td>
@@ -43,9 +37,6 @@
                 </td>
                 <td>
                         [% "Edicion/A&ntildeo" | i18n %]
-                </td>
-                <td>
-                        [% "Tomo" | i18n %]
                 </td>
 		    </tr>
 		    
@@ -71,12 +62,6 @@
                    [% historial_sancion.dias_sancion %]
                 </td>
                 <td>
-                        
-                </td>
-                <td>
-                       
-                </td>
-                <td>
                    [% historial_sancion.nivel3.nivel1.getAutor %]
                 </td>
                 <td>
@@ -85,9 +70,7 @@
                 <td>
                    [% historial_sancion.nivel3.nivel2.getEdicion %] [%historial_sancion.nivel3.nivel2.getAnio_publicacion %]
                 </td>
-                <td>
-                    
-                </td>
+           
             [% END %] 
 
 		

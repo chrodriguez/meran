@@ -50,7 +50,7 @@ sub agregarRecomendacion{
     my $recomendacion = C4::Modelo::AdqRecomendacion->new();
     my $msg_object= C4::AR::Mensajes::create();
     my $db = $recomendacion->db;
-    
+ 
 
 # TODO
 
@@ -64,8 +64,6 @@ sub agregarRecomendacion{
            eval{
        
              $recomendacion->agregarRecomendacion($usr_socio_id);
-      
-  
               for (my $i=0; $i< scalar(@{$params->{'table'}}); $i++) {
                    
                       my %datos_recomendacion;

@@ -308,6 +308,7 @@ $(document).ready(function(){
 	detalleUsuario();
 
     makeToggle('toggle_container_block','trigger1',mostrarHistorialDePrestamos, 'historialPrestamos',true);
+    makeToggle('toggle_container_block','trigger2',mostrarHistorialDeSanciones, 'historialSanciones',true);
     makeToggle('toggle_container_block','trigger3',mostrarHistorialDeReservas, 'historialReservas',true);
 });
 
@@ -348,7 +349,15 @@ $(document).ready(function(){
         </fieldset>
     </div>
 
-
+    <div>
+        <fieldset>
+            <legend class="titulo_legend_resaltado trigger2 click titulo_legend" title='[% "click para acceder al Historial de Reservas" | i18n %]'>
+                            [% "Historial de Sanciones" | i18n %]
+            </legend>   
+            <!-- DETALLE DEL HISTORICO DE SANCIONES DEL USUARIO -->
+            <div id="historialSanciones" class="toggle_container_block" style="display:none"></div>
+        </fieldset>
+    </div>
 </div>
 
 [% INCLUDE "intranet-bottom.inc" %]
