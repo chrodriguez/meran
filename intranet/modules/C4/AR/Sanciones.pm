@@ -74,7 +74,7 @@ sub tieneSanciones {
 																			fecha_comienzo 	=> { le => $hoy },
 																			fecha_final    	=> { ge => $hoy},
 																		],
-                                                                    require_objetcs => ['ref_tipo_prestamo_sancion'],
+                                                                    require_objetcs => ['ref_tipo_prestamo_sancion','nivel3'],
 									);
   if (scalar(@$sanciones_array_ref) == 0){
         return 0;
