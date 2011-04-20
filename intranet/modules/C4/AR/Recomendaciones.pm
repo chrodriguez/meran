@@ -50,20 +50,20 @@ sub agregarRecomendacion{
     my $recomendacion = C4::Modelo::AdqRecomendacion->new();
     my $msg_object= C4::AR::Mensajes::create();
     my $db = $recomendacion->db;
- 
 
 # TODO
 
     #_verificarDatosProveedor($param,$msg_object);
 
     if (!($msg_object->{'error'})){
+#           C4::AR::Utilidades::printHASH(\%datos_recomendacion);
+           
           # entro si no hay algun error, todos los campos ingresados son validos
           $db->{connect_options}->{AutoCommit} = 0;
           $db->begin_work;
-
-           eval{
-       
-             $recomendacion->agregarRecomendacion($usr_socio_id);
+          eval{
+                
+              $recomendacion->agregarRecomendacion($usr_socio_id);
               for (my $i=0; $i< scalar(@{$params->{'table'}}); $i++) {
                    
                       my %datos_recomendacion;
@@ -80,6 +80,8 @@ sub agregarRecomendacion{
                       $datos_recomendacion{'motivo_propuesta'}= ($params->{'table'}[$i])->{'Motivo'};
                       $datos_recomendacion{'comentarios'}= ($params->{'table'}[$i])->{'Comentario'};
                       $datos_recomendacion{'reservar'}= ($params->{'table'}[$i])->{'reservar'}||0;
+  
+              
 
                       my $recomendacion_detalle = C4::Modelo::AdqRecomendacionDetalle->new(db => $db); 
                       $recomendacion_detalle->agregarRecomendacionDetalle(\%datos_recomendacion);
