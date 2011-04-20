@@ -3500,8 +3500,7 @@ sub barcodeAutocomplete{
 
     my $textout = "";
     my ($cant, $cat_nivel3_array_ref) = C4::AR::Nivel3::getBarcodesLike($barcodeStr);
-    my @barcodes_array;
-    my @return_array_sorted;
+    my @data_array;
 
     if ($cant > 0){
         foreach my $nivel3 (@$cat_nivel3_array_ref){
@@ -3509,48 +3508,69 @@ sub barcodeAutocomplete{
             $has_temp{'id'}     = $nivel3->getBarcode;
             $has_temp{'dato'}   = $nivel3->getBarcode;
 
-            push (@barcodes_array, \%has_temp);
+            push (@data_array, \%has_temp);
         }
 
-        @return_array_sorted = sort{$a->{'dato'} cmp $b->{'dato'}} @barcodes_array;        
-
-        foreach my $e (@return_array_sorted){
-            $textout.= $e->{'id'}."|".$e->{'dato'}."\n";
-        }
+        $textout = getTextOutSorted(\@data_array, {'DESC' => 1, 'ORDER_BY' => 'dato'});
     }
 
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub barcodePrestadoAutocomplete{
+    my ($barcodeStr) = @_;
 
-    my ($barcodeStr)= @_;
-    my $textout="";
+    my $textout = "";
     #busco el barcode en el conj. de los barcodes prestados
-    my ($cant, $circ_prestamo_array_ref)= C4::AR::Nivel3::getBarcodesPrestadoLike($barcodeStr);
-    my @return_array_sorted;
-    my @barcodes_array;
+    my ($cant, $circ_prestamo_array_ref) = C4::AR::Nivel3::getBarcodesPrestadoLike($barcodeStr);
+    my @data_array;
     #devuelve un arreglo de objetos prestamos con cat_nivel3
 
     if ($cant > 0){
         foreach my $prestamo (@$circ_prestamo_array_ref){
             #se muestra el barcode, pero en el hidden queda el usuario al que se le realizo el prestamo
-#             $textout.= $prestamo->getId_prestamo."|".$prestamo->nivel3->getBarcode."\n";
             my %has_temp;
             $has_temp{'id'}     = $prestamo->getId_prestamo;
             $has_temp{'dato'}   = $prestamo->nivel3->getBarcode;
 
-            push (@barcodes_array, \%has_temp);
+            push (@data_array, \%has_temp);
         }
 
-        @return_array_sorted = sort{$a->{'dato'} cmp $b->{'dato'}} @barcodes_array;        
-
-        foreach my $e (@return_array_sorted){
-            $textout.= $e->{'id'}."|".$e->{'dato'}."\n";
-        }
+        $textout = getTextOutSorted(\@data_array, {'DESC' => 1, 'ORDER_BY' => 'dato'});
     }
 
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
+
+
+=item 
+sub getTextOutSorted
+
+@params 
+
+$params->{'orden'} el orden id or dato
+$params->{'DESC'} DESC => descendente, ASC => ascendete
+=cut
+sub getTextOutSorted{
+    my ($data_array_ref, $params) = @_;
+
+    my $orden       = ($params->{'orden'})?$params->{'orden'}:'dato';
+    my $textout     = "";
+    my @return_array_sorted;
+
+    if($params->{'DESC'}){
+    #ordena la HASH de strings de manera DESC
+        @return_array_sorted = sort{$a->{$orden} cmp $b->{$orden}} @$data_array_ref;
+    }else{
+    #ordena la HASH de strings de manera ASC
+        @return_array_sorted = sort{$b->{$orden} cmp $a->{$orden}} @$data_array_ref;        
+    }
+
+    foreach my $e (@return_array_sorted){
+        $textout.= $e->{'id'}."|".$e->{'dato'}."\n";
+    }
+
+    return $textout;
 }
 ############################## Fin funciones para AUTOCOMPLETABLES #############################################################
 
