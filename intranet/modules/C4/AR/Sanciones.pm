@@ -57,8 +57,12 @@ sub getSancionesLike {
                                         limit   => $cantR,
                                         offset  => $ini,
                                 ); 
-                                    
-    return (scalar(@$sanciones_array_ref),$sanciones_array_ref);
+                                
+   my $sanciones_array_ref_count = C4::Modelo::CircSancion::Manager->get_circ_sancion_count( query => \@filtros,
+                                                                                            with_objects  => ['socio','socio.persona','nivel3'],
+                                                                                           ); 
+  return ($sanciones_array_ref_count,$sanciones_array_ref);
+
 }
 
 
