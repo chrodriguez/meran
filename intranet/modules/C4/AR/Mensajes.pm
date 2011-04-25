@@ -266,6 +266,10 @@ my %mensajesINTRA = (
     'U500' => 'La tarjeda de identificaci&oacute;n ingresada (Nro. de socio) ya pertenece a otro usuario.',
     'U501' => 'El t&iacute;tulo, autor ya existe *?*.',
 #     'U405' => 'No existe la estructura de catalogaci&oacute;n que se intentando recuperar.',
+    'U502' => 'Los permisos del usuario (*?*) no se pudieron cambiar.',
+    'U503' => 'Los permisos del usuario (*?*) se agregaron con &eacute;xito.',
+    'U504' => 'Los permisos del usuario (*?*) no se pudieron agregar.',
+
     'B400' => '',
     'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
     'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',

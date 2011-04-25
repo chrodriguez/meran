@@ -352,8 +352,10 @@ sub actualizarDatosReservaEnEspera{
 	my $daysOfSanctions= C4::AR::Preferencias::getValorPreferencia("daysOfSanctionReserves");
 	my $enddate=  Date::Manip::DateCalc($startdate, "+ $daysOfSanctions days", \$err);
 	$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
+
 	my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
 	my %paramsSancion;
+	
 	$paramsSancion{'tipo_sancion'}= undef;
 	$paramsSancion{'id_reserva'}= $self->getId_reserva;
 	$paramsSancion{'nro_socio'}= $self->getNro_socio;
@@ -375,7 +377,10 @@ sub actualizarDatosReservaEnEspera{
 	$params->{'apertura'}= $apertura;
 	$params->{'loggedinuser'}= $loggedinuser;
 	#Se envia una notificacion al usuario avisando que se le asigno una reserva
-	C4::AR::Reservas::Enviar_Email($self,$params);
+
+	eval{
+	   C4::AR::Reservas::Enviar_Email($self,$params);
+	};
 }
 
 =item sub getReservaEnEspera

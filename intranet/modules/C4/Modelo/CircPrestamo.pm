@@ -520,6 +520,7 @@ la funcion devolver recibe una hash y actualiza la tabla de CircPrestamo,la tabl
 
 sub devolver {
 	my ($self)   = shift;
+	my ($db) = shift;
 	my ($params) = @_;
 
 	my $id3          = $params->{'id3'};
@@ -544,7 +545,7 @@ sub devolver {
 
 	#Busco la reserva del prestamo
 	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
-                        db    => $self->db,
+                        db    => $db,
                         query => [ id3 => { eq => $id3 }, estado => { eq => 'P' } ]
 	);
 	my $reserva = $reservas_array_ref->[0];

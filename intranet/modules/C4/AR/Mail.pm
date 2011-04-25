@@ -16,7 +16,7 @@ use C4::AR::Preferencias;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw( send_mail );
+@EXPORT=qw( &send_mail );
 
 
 # TODO pasar a preferencias????
