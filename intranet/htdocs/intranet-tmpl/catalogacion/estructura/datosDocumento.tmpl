@@ -85,9 +85,10 @@ $(document).ready( function() {
     $('#datos_esquema').hide();
 
     if(MODIFICAR){
-        $('#combo_nivel_bibliografico').hide();
+        $('#datos_del_leader').hide();
     } else {
         mostrarEstructuraDelNivel1();
+	$('#datos_del_leader').show();
     }
 
 } );
@@ -100,7 +101,7 @@ $(document).ready( function() {
 
 <div id="abm_tablas_referencia"><div id="abm_tablas_referencia_content"></div></div>
 
-<div id="combo_nivel_bibliografico" style="display: none;">
+<div id="datos_del_leader" style="display: none;">
 <fieldset>
     <legend class="titulo_legend">[% "Datos del LEADER" | i18n %]</legend>
     <ul style="clear:both">        

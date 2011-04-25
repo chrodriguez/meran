@@ -694,7 +694,7 @@ function updateGuardarDocumentoN1(responseText){
 
     if (! (hayError(Messages) ) ){
         inicializar();
-        $('#combo_nivel_bibliografico').hide();  
+        $('#datos_del_leader').hide();  
         //carga la barra lateral con info de nivel 1
         mostrarInfoAltaNivel1(ID_N1);
         mostrarEstructuraDelNivel2();
@@ -1922,7 +1922,7 @@ function updateBorrarEjemplaresN3(responseText){
  * guardados en la base de datos y poder modificarlos.
  */
 function modificarN1(id1){
-     $('#combo_nivel_bibliografico').show();
+     $('#datos_del_leader').show();
 	inicializar();
     ID_TIPO_EJEMPLAR    = "ALL";
     ID_N1               = id1;
