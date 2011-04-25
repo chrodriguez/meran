@@ -5,6 +5,7 @@ use CGI;
 use C4::AR::Auth;
 use C4::AR::Preferencias;
 use C4::AR::Permisos;
+use JSON;
 
 my $input = new CGI;
 my $obj=$input->param('obj');
@@ -59,10 +60,13 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_CATALOGO"){
                             debug => 1,
                     });
 
-    my $updateStatus = C4::AR::Permisos::actualizarPermisosCatalogo($nro_socio,$id_ui,$tipo_documento,$permisos);
-    my $permisos = C4::AR::Permisos::obtenerPermisosCatalogo($nro_socio,$id_ui,$tipo_documento);
-    $t_params->{'permisos'}=$permisos;
-    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+      my ($Message_arrayref)= C4::AR::Permisos::actualizarPermisosCatalogo($nro_socio,$id_ui,$tipo_documento,$permisos);
+
+      my $infoOperacionJSON=to_json $Message_arrayref;
+
+      C4::AR::Auth::print_header($session);
+      print $infoOperacionJSON;
+
 }
 elsif ($accion eq "NUEVO_PERMISO_CATALOGO"){
 
@@ -80,10 +84,12 @@ elsif ($accion eq "NUEVO_PERMISO_CATALOGO"){
                             debug => 1,
                     });
 
-    C4::AR::Permisos::nuevoPermisoCatalogo($nro_socio,$id_ui,$tipo_documento,$permisos);
-    my $permisos = C4::AR::Permisos::obtenerPermisosCatalogo($nro_socio,$id_ui,$tipo_documento);
-    $t_params->{'permisos'}=$permisos;
-    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+    
+    my ($Message_arrayref)= C4::AR::Permisos::nuevoPermisoCatalogo($nro_socio,$id_ui,$tipo_documento,$permisos);
+
+    my $infoOperacionJSON=to_json $Message_arrayref;
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
 }
 elsif ($accion eq "SHOW_NUEVO_PERMISO_CATALOGO"){
 
@@ -138,10 +144,12 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_GENERAL"){
                             debug => 1,
                     });
 
-    my $updateStatus = C4::AR::Permisos::actualizarPermisosGeneral($nro_socio,$id_ui,$tipo_documento,$permisos);
-    my $permisos = C4::AR::Permisos::obtenerPermisosGenerales($nro_socio,$id_ui,$tipo_documento);
-    $t_params->{'permisos'}=$permisos;
-    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+    my ($Message_arrayref)= C4::AR::Permisos::actualizarPermisosGeneral($nro_socio,$id_ui,$tipo_documento,$permisos);
+
+    my $infoOperacionJSON=to_json $Message_arrayref;
+
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
 }
 elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
 
@@ -159,10 +167,12 @@ elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
                             debug => 1,
                     });
 
-    C4::AR::Permisos::nuevoPermisoGeneral($nro_socio,$id_ui,$tipo_documento,$permisos);
-    my $permisos = C4::AR::Permisos::obtenerPermisosGenerales($nro_socio,$id_ui,$tipo_documento);
-    $t_params->{'permisos'}=$permisos;
-    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+    my ($Message_arrayref)= C4::AR::Permisos::nuevoPermisoGeneral($nro_socio,$id_ui,$tipo_documento,$permisos);
+
+    my $infoOperacionJSON=to_json $Message_arrayref;
+
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
 
 } elsif ($accion eq "SHOW_NUEVO_PERMISO_GENERAL"){
 
@@ -217,10 +227,12 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_CIRCULACION"){
                             debug => 1,
                     });
 
-    my $updateStatus = C4::AR::Permisos::actualizarPermisosCirculacion($nro_socio,$id_ui,$tipo_documento,$permisos);
-    my $permisos = C4::AR::Permisos::obtenerPermisosCirculacion($nro_socio,$id_ui,$tipo_documento);
-    $t_params->{'permisos'}=$permisos;
-    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+    my ($Message_arrayref)= C4::AR::Permisos::actualizarPermisosCirculacion($nro_socio,$id_ui,$tipo_documento,$permisos);
+
+    my $infoOperacionJSON=to_json $Message_arrayref;
+
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
 }
 elsif ($accion eq "NUEVO_PERMISO_CIRCULACION"){
 
@@ -238,10 +250,13 @@ elsif ($accion eq "NUEVO_PERMISO_CIRCULACION"){
                             debug => 1,
                     });
 
-    C4::AR::Permisos::nuevoPermisoCirculacion($nro_socio,$id_ui,$tipo_documento,$permisos);
-    my $permisos = C4::AR::Permisos::obtenerPermisosCirculacion($nro_socio,$id_ui,$tipo_documento);
-    $t_params->{'permisos'}=$permisos;
-    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+    my ($Message_arrayref)= C4::AR::Permisos::nuevoPermisoCirculacion($nro_socio,$id_ui,$tipo_documento,$permisos);
+
+    my $infoOperacionJSON=to_json $Message_arrayref;
+
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
+
 }
 elsif ($accion eq "SHOW_NUEVO_PERMISO_CIRCULACION"){
 
