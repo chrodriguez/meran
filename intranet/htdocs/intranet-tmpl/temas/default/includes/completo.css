@@ -384,6 +384,7 @@ width: 83%;
 	list-style: none;
 	font-weight: bold;
 	text-decoration: none;
+	clear: both;
 }
 
 .sub_item label {
