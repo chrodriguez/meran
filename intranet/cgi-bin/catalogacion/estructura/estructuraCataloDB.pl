@@ -494,10 +494,8 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
                             debug => 1,
                     });
 
-#     my $nivel3 			= C4::AR::Nivel3::getNivel3FromId2($obj->{'id2'});
     my($nivel2_hashref)		= C4::AR::Nivel3::detalleNivel3($obj->{'id2'});
     $t_params->{'nivel3_array'} = $nivel2_hashref->{'nivel3'};
-#     $t_params->{'nivel3_array'} = $nivel3;
   
     
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
