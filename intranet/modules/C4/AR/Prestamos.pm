@@ -542,7 +542,7 @@ sub t_devolver {
             if(!$msg_object->{'error'}){
     
                 eval {
-                    $prestamo->devolver($params);
+                    $prestamo->devolver($db,$params);
                     $db->commit;
                     # Si la devolucion se pudo realizar
                     $msg_object->{'error'}= 0;
