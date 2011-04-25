@@ -9,11 +9,9 @@ use C4::AR::Sphinx qw(reindexar);
 
 C4::AR::Debug::debug("CRON => reindexar.pl!!!!!");
 
-if (1) {
+if ($ENV{'REMOTE_ADDR'} eq '127.0.0.1') {
     C4::AR::Sphinx::reindexar();    
 } else {
     C4::AR::Debug::debug("reindexar => se intento correr script de una dir. IP no local => ".$ENV{'REMOTE_ADDR'});
 }
   
-# print $input->header();
-# exit;

@@ -34,6 +34,7 @@ function mostrarSanciones(){
     objAH.orden         = ORDEN;
 	objAH.url           = "/cgi-bin/koha/circ/sancionesDB.pl";
 	objAH.accion        = 'MOSTRAR_SANCIONES'
+	objAH.funcion       = 'changePage';
 	objAH.sendToServer();
 }
 function updateMostrarSanciones(responseText){
@@ -69,9 +70,7 @@ function borrarSanciones(chck){
             objAH.url           = '/cgi-bin/koha/circ/sancionesDB.pl';
             objAH.accion        = "ELIMINAR_SANCIONES"
             objAH.datosArray    = array;
-            
-            // no le gusta:  $('#mensajes').html(''); setMessages(' ');
-            //se envia la consulta
+
             objAH.sendToServer();
         }
 
@@ -82,12 +81,10 @@ function borrarSanciones(chck){
 
 function updateSanciones(responseText){
 
-	borrarDiv();
-	
+	borrarDiv();	
     if (!verificarRespuesta(responseText)){
-        return(0); alert('entro al error del responsetext');
-        }
-        
+        return(0);
+    }        
     var Messages = JSONstring.toObject(responseText);
     setMessages(Messages);
 	mostrarSanciones();
@@ -115,6 +112,7 @@ function buscarSancion(){
 	objAH.url           = "/cgi-bin/koha/circ/sancionesDB.pl";
 	objAH.string        = $("#buscar").val()
 	objAH.accion        = "BUSCAR_SANCIONES"
+	objAH.funcion       = 'changePage';
 	objAH.sendToServer()
 }
 

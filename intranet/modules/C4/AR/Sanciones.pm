@@ -34,7 +34,7 @@ Tambien filtrando por fecha, para mostrar las sanciones actuales.
 =cut
 sub getSancionesLike {
 
-    my ($str) = @_;
+    my ($str,$ini,$cantR) = @_;
     my $sanciones_array_ref;
     my @filtros;
     
@@ -54,9 +54,15 @@ sub getSancionesLike {
                                         query           => \@filtros,
                                         select          => ['circ_sancion.*'],
                                         with_objects    => ['socio','socio.persona','nivel3'],
+                                        limit   => $cantR,
+                                        offset  => $ini,
                                 ); 
+                                
+   my $sanciones_array_ref_count = C4::Modelo::CircSancion::Manager->get_circ_sancion_count( query => \@filtros,
+                                                                                            with_objects  => ['socio','socio.persona','nivel3'],
+                                                                                           ); 
+  return ($sanciones_array_ref_count,$sanciones_array_ref);
 
-    return (scalar($sanciones_array_ref), $sanciones_array_ref);
 }
 
 
@@ -74,7 +80,7 @@ sub tieneSanciones {
 																			fecha_comienzo 	=> { le => $hoy },
 																			fecha_final    	=> { ge => $hoy},
 																		],
-                                                                    require_objetcs => ['ref_tipo_prestamo_sancion'],
+                                                                    require_objetcs => ['ref_tipo_prestamo_sancion','nivel3'],
 									);
   if (scalar(@$sanciones_array_ref) == 0){
         return 0;
@@ -308,7 +314,7 @@ sub getTipoSancion{
 
 sub sanciones {
  #Esta funcion muestra toda las sanciones que hay
-  my ($orden) = @_;
+  my ($orden,$ini,$cantR) = @_;
 
   my $dateformat = C4::Date::get_date_format();
   my $hoy        = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
@@ -321,8 +327,16 @@ sub sanciones {
                                                                     select  => ['circ_sancion.*'],
                                                                     with_objects => ['socio','socio.persona','ref_tipo_sancion','nivel3'],
                                                                     sort_by => $orden,
+                                                                    limit   => $cantR,
+                                                                    offset  => $ini,
                               );
-    return $sanciones_array_ref;
+                              
+  my $sanciones_array_ref_count = C4::Modelo::CircSancion::Manager->get_circ_sancion_count( query => [  
+                                                                                                    fecha_comienzo  => { le => $hoy },
+                                                                                                    fecha_final     => { ge => $hoy}, 
+                                                                                            ]); 
+  return ($sanciones_array_ref_count,$sanciones_array_ref);
+
 }
 
 

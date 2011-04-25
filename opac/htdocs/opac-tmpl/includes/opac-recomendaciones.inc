@@ -112,8 +112,6 @@ function bloquearCampos(){
      $('#isbn_issn').attr('readonly', true); 
      $('#fecha').attr('readonly', true); 
 
-
-
 }
 
 function verificarBusqueda(){

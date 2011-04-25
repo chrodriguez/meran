@@ -50,6 +50,15 @@
 	color: graytext;
 	font-size: 99%;
 }
+
+/* tooltip */
+.hover_ico{
+    height: 16px;
+    width: 16px;
+    clear: both;
+    background: url("../imagenes/ico_helpbordo.png") no-repeat;
+    margin-left: 53%;
+}
 	
 .reference {
     color: #4B5869;

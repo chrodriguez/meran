@@ -1,3 +1,36 @@
+<script language="javascript">
+
+function borrarSancion(id_sancion){
+
+    var array = new Array; //array de una sola posicion, para que ante el eliminar sanciones
+    array[0]  = id_sancion
+    jConfirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION,SANCIONES_TITLE, function(confirmStatus){if (confirmStatus) {
+
+        objAH               = new AjaxHelper(updateBorrarSancion);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = '/cgi-bin/koha/circ/sancionesDB.pl';
+        objAH.accion        = "ELIMINAR_SANCIONES"
+        objAH.datosArray    = array;
+
+        objAH.sendToServer();
+    }
+    
+    });
+}
+
+function updateBorrarSancion(responseText){
+    
+    if (!verificarRespuesta(responseText)){
+        return(0);
+    } 
+    var Messages = JSONstring.toObject(responseText);
+    setMessages(Messages);
+    detalleSanciones(USUARIO.ID);
+}
+
+</script>
+
 [% IF SANCIONES %]
     <fieldset class="detalle_sanciones_sancionado"> 
 [% ELSE %]
@@ -7,34 +40,48 @@
 
 [% IF SANCIONES %]
 
-<table class="tablaSanciones datos_tabla warning" border=0  width="100%"  cellpadding='0' cellspacing='0'>    
+<table border=0  width="100%"  cellpadding='0' cellspacing='0'>    
     <tr valign="top">
-    
 	    <td>
-	        <ul>
+	    <ul>
 		<font class="fontmsg">
 	        [% FOREACH sancion IN SANCIONES %]
 		        <li>
-			<div>
-			<div>
-		        [% IF sancion.tipo_sancion %]
-				<ul> 
-				[% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %] 
-				<li>[% ts.ref_tipo_prestamo.descripcion %]</li>
-				[% END %]
-				</ul>
-		        [% ELSE %]
-		        [% "Reserva no retirada" | i18n %]
-		        [% END %] 
-        		</div>
-			<div>
-		        [% "Desde el" | i18n %] [% sancion.getFecha_comienzo_formateada %] 
-		        [% "hasta el" | i18n %] [% sancion.getFecha_final_formateada %]
-			</div>
-			</li>
+			    <div>
+			        Sancionado originalmente por: <strong>[% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]</strong>
+		            [% IF sancion.tipo_sancion %]
+				        <ul>La sancion tambien se aplica a:
+				        [% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %] 
+				            <li><strong>[% ts.ref_tipo_prestamo.descripcion %]</strong></li>
+				        [% END %]
+				        </ul>
+		            [% ELSE %]
+		                [% "Reserva no retirada" | i18n %]
+		            [% END %] 
+                </div>
+                <hr/>
+			    <div>
+		            [% "Desde el" | i18n %] <strong>[% sancion.getFecha_comienzo_formateada %]</strong> 
+		            [% "hasta el" | i18n %] <strong>[% sancion.getFecha_final_formateada %]</strong>
+			    </div>
+			    <hr/>
+			    <div>
+			        <li>Autor: <strong>[% sancion.nivel3.nivel1.getAutor %]</strong></li>
+			        <li>Titulo: <strong>[% sancion.nivel3.nivel1.getTitulo %]</strong></li>
+			        <li>Edicion: <strong>[% sancion.nivel3.nivel2.getEdicion %]</strong></li>
+			    </div>
+			    </li>
+			    [% PERL %]
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Sancios' | i18n %]",
+                                                        boton   => "boton_borrar",
+                                                        onClick => "borrarSancion('[% sancion.getId_sancion %]');",
+                                                        title   => "[% 'Borrar Sancion' | i18n %]",
+                                                        alternClass=> "botonCentradoTabla",
+                                        ) ;
+                [% END %]
 	        [% END %]
-		        </font>
-	        </ul>	
+		</font>
+	    </ul>	
 	    </td>
     </tr>
 </table>

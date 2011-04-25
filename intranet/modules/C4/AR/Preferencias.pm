@@ -55,7 +55,6 @@ sub updateInfoAbout{
         };
            
         if ($@){
-        # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
             &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;

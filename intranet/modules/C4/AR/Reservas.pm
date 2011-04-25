@@ -80,10 +80,12 @@ sub estaLibre{
     push(@filtros, ( estado => { ne => undef}));
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
 
+
+    # ESTO ESTABA AL REVÉS
     if ($reservas_array_ref){
-        return 1;
+        return 0;
     }else{
-      return 0;
+      return 1;
     }
 }
 
@@ -387,7 +389,7 @@ sub Enviar_Email{
         $mailMessage =~ s/TITLE/$reserva->nivel2->nivel1->getTitulo/;
         $mailMessage =~ s/AUTHOR/$reserva->nivel2->nivel1->cat_autor->getCompleto/;
         
-        my $edicion=C4::AR::Nivel2::getEdicion($reserva->getId2);
+        my $edicion  =  $reserva->nivel2->getEdicion;
         $mailMessage =~ s/EDICION/$edicion/;
 
         $mailMessage =~ s/a2/$apertura/;
@@ -403,7 +405,7 @@ sub Enviar_Email{
         $mail{'mail_subject'}          = $mailSubject;
         $mail{'mail_message'}          = $mailMessage;
     
-        my ($ok, $msg_error)           = &C4::AR::Mail::send_mail(\%mail);
+        my ($ok, $msg_error)           = C4::AR::Mail::send_mail(\%mail);
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
    my $dateformat=C4::Date::get_date_format();
@@ -855,11 +857,17 @@ sub _verificaciones {
     }
 
 
-#Se verifica que el usuario no tenga un prestamo sobre el mismo grupo para el mismo tipo prestamo
+#Se verifica que el usuario no tenga un prestamo sobre el mismo grupo para el mismo tipo prestamo (o no, depende de la preferencia "prestar_mismo_grupo_distintos_tipos_prestamo")
     if( !($msg_object->{'error'}) && (&C4::AR::Prestamos::getCountPrestamosDeGrupoPorUsuario($nro_socio, $id2, $tipo_prestamo)) ){
         $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;
-        C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de prestamos iguales, sobre el mismo grupo y tipo de prestamo");
+	
+	if(C4::AR::Preferencias::getValorPreferencia('prestar_mismo_grupo_distintos_tipos_prestamo')){
+	  C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;
+	  C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de prestamos iguales, sobre el mismo grupo y tipo de prestamo");
+	}else{
+	  C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P129', 'params' => []} ) ;
+	  C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de prestamos iguales, sobre el mismo grupo sin importar el tipo de prestamo");
+	}
     }
 
     C4::AR::Debug::debug("Reservas.pm => _verificaciones => FIN ".$msg_object->{'error'}." !!!\n\n");
@@ -939,7 +947,8 @@ sub agregarReservaAHistorial{
     my %params = {};
     
     $params{'nro_socio'}    = $reserva->getNro_socio;
-    $params{'id1'}          = $reserva->getId1;
+    # $params{'id1'}          = $reserva->getId1;  SE ROMPE !!!! circ_reserva no tiene id1
+    $params{'id1'}          = $reserva->nivel2->getId1;
     $params{'id2'}          = $reserva->getId2;
     $params{'id3'}          = $reserva->getId3;
     $params{'nro_socio'}    = $reserva->getNro_socio;

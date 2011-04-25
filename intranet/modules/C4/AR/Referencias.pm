@@ -99,7 +99,7 @@ sub getIdRefDisponibilidadSalaLectura{
 }
 
 sub getIdRefEstadoBaja{
-    return 'ref_estado4';
+    return 'ref_estado@4';
 }
 
 sub getIdRefEstadoCompartido{
