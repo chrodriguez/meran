@@ -34,12 +34,16 @@ function updateTraerImputsVacios(responseText){
 }
 
 function guardarRecomendacion(){
+   
+    $(".eliminar").remove();
+    $("#tabla_recomendacion").hide();
+    alert( $("#tabla_recomendacion"));
     $("#tabla_recomendacion").tabletojson({
             headers: "Autor,Titulo, Edicion, Lugar Publicacion, Editorial, Fecha, ISBN/ISSN, Nivel 2, Cantidad, Motivo, Comentario",
             attribHeaders: "{}",
             returnElement: "#table",
             complete: function(x){
-                 alert(x)
+                
                  objAH                     = new AjaxHelper(updateGuardarRecomendacion);
                  objAH.url                 = '/cgi-bin/koha/opac-recomendacionesAdd.pl';
                  objAH.debug               = true;
@@ -51,6 +55,8 @@ function guardarRecomendacion(){
                  objAH.sendToServer();
             }
         })
+    $(".tr").remove
+    
 }
 
 function updateGuardarRecomendacion(responseText){
@@ -206,7 +212,9 @@ $(document).ready( function() {
                                <th align="center">
                                   [% "Comentarios" | i18n %]
                               </th>
-                             
+                              <th class="eliminar" align="center">
+                                  [% "Eliminar" | i18n %]
+                              </th>
                                   
                         </thead>
                         <tbody>

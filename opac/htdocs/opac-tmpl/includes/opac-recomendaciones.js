@@ -1,3 +1,5 @@
+var contador = -1;
+
 function validateForm(func){
           $().ready(function() {
             // validate signup form on keyup and submit
@@ -47,24 +49,28 @@ function limpiarCampos(){
 }
 
 function save(){
-//     $('#recom_form').submit();
+    $('#recom_form').submit();
     agregarRenglon();
 }
+
 
 
 function eliminarFila(filaId){
     $('#'+filaId).remove()
 }
 
-
 function agregarRenglon(){
-  if ($('#edicion_id').val() == null){
-      id=$('#titulo').val();
-  } else{    
-      var id= $('#edicion_id').val();
-  }
-  if( ($('#input'+id).val() == null) & id != ""){
-               
+      
+        if ($('#catalogo_search_hidden').val() == (-1)){
+          var id= contador
+          contador--
+          id_nivel_2 = " - ";
+        } else {
+          var id= $('#edicion_id').val();
+          id_nivel_2 = id;
+        }
+       if ($('#'+id).val() == null){
+     
             var autor  = $('#autor').val()
             var titulo   = $('#titulo').val()
             var edicion = $('#edicion').val()
@@ -74,30 +80,33 @@ function agregarRenglon(){
             var coleccion = $('#coleccion').val();
             var ISBN_ISSN = $('#isbn_issn').val();
             var cant_ejemplares = $('#cant_ejemplares').val();
-            var id_nivel_2 = id;
+            var renglon_recom= 1;
+ 
+            
             var comentario= $('#comment').val();
             var motivo= $('#motivo_propuesta').val();
             limpiarCampos();
       
        
             $('#tabla_recomendacion').append(
-                '<tr id="tr'+id+'" name='+id+'>' +
-                    '<input type="hidden" value="'+id+'" id="input'+id+'">' +
-                    '<td>'+autor+'</td>' +
-                    '<td id="titulo'+id+'" name=titulo'+id+'>'+titulo+'</td>' +
-                    '<td id="edicion'+id+'" name=edicion'+id+'>'+edicion+'</td>'+
-                    '<td id="lugar_publicacion'+id+'" name=lugar_publicacion'+id+'>'+lugar_publicacion+'</td>' +
-                    '<td id="editorial'+id+'" name=editorial'+id+'>'+editorial+'</td>' +
-                    '<td id="fecha'+id+'" name=fecha'+id+'>'+fecha+'</td>' +
-                    '<td id="isbn_issn'+id+'" name=isbn_issn'+id+'>'+ISBN_ISSN+'</td>'+
-                    '<td id="nivel_2'+id+'" name=nivel_2'+id+'>'+id_nivel_2+'</td>'+
-                    '<td id="cant_ejemplares'+id+'" name=cant_ejemplares'+id+'>'+cant_ejemplares+'</td>' +  
-                    '<td id="motivo'+id+'" name=motivo'+id+'>'+motivo+'</td>' + 
-                    '<td id="comentario'+id+'" name=comentario'+id+'>'+comentario+'</td>' + 
-//                     '<td>' + '<input type="button" onclick=eliminarFila("tr'+id+'") name="'+id+'" value="X">' + '</td>' +
+                '<tr class="tr" id="tr'+id+'" name="tr'+id+'">' +
+                    '<input type="hidden" value="'+id+'" id="'+id+'">' +
+                    '<td id="autor'+renglon_recom+'" name=autor'+renglon_recom+'>'+autor+'</td>' +
+                    '<td id="titulo'+renglon_recom+'" name=titulo'+renglon_recom+'>'+titulo+'</td>' +
+                    '<td id="edicion'+renglon_recom+'" name=edicion'+renglon_recom+'>'+edicion+'</td>'+
+                    '<td id="lugar_publicacion'+renglon_recom+'" name=lugar_publicacion'+renglon_recom+'>'+lugar_publicacion+'</td>' +
+                    '<td id="editorial'+renglon_recom+'" name=editorial'+renglon_recom+'>'+editorial+'</td>' +
+                    '<td id="fecha'+renglon_recom+'" name=fecha'+renglon_recom+'>'+fecha+'</td>' +
+                    '<td id="isbn_issn'+renglon_recom+'" name=isbn_issn'+renglon_recom+'>'+ISBN_ISSN+'</td>'+
+                    '<td id="nivel_2'+renglon_recom+'" name=nivel_2'+renglon_recom+'>'+id_nivel_2+'</td>'+
+                    '<td id="cant_ejemplares'+renglon_recom+'" name=cant_ejemplares'+renglon_recom+'>'+cant_ejemplares+'</td>' +  
+                    '<td id="motivo'+renglon_recom+'" name=motivo'+renglon_recom+'>'+motivo+'</td>' + 
+                    '<td id="comentario'+renglon_recom+'" name=comentario'+renglon_recom+'>'+comentario+'</td>' + 
+                    '<td class="eliminar" id="eliminar'+renglon_recom+'" name=eliminar'+renglon_recom+'><input type="button" onclick=eliminarFila('+'"tr'+id+'") id="eliminar'+id+'" value="x" name="eliminar'+id+'"></td>' + 
                  '</tr>'
             )
-  $('#recomendacion').show();
+            renglon_recom= renglon_recom + 1;
+            $('#recomendacion').show();
           
   }
 }
