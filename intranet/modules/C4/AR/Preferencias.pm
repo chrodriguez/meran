@@ -28,6 +28,7 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
     &t_modificarVariable
     &getMenuPreferences
     &getPreferenciasByArray
+    &verificar_preferencias
 );
 
 
@@ -63,6 +64,43 @@ sub updateInfoAbout{
         $db->{connect_options}->{AutoCommit} = 1;
     }      
     return ($msg_object);
+}
+
+=item
+    Esta funcion retorna 0 si alguna preferencia de las requeridas en el arreglo no existe, 
+    y devuelve en $variable el nombre de la primer preferencia no encontrada
+    Devuelve un objeto o 0.
+=cut
+sub verificar_preferencias{
+
+    my ($variables_array)= @_;
+
+    my @filtros;
+    my %preferencias_hash;
+
+    foreach my $variable (@$variables_array){
+
+        push (@filtros, (  variable => {eq => $variable} ) );
+
+    }
+
+    my $preferencias_array_ref = 
+        C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
+                                                                        query => [ or  => \@filtros ]
+                                                                                 );
+    my $existe = 1;
+    my $variable = "";
+    
+    foreach my $preferencia (@$preferencias_array_ref){
+    	$variable = $preferencia->getVariable;
+    	$existe = C4::AR::Utilidades::existeInArray($variable,@$variables_array);
+    	if (!$existe){
+            return($existe,$variable);
+    	}
+    }
+    
+    return($existe,$variable);
+	
 }
 
 =item
@@ -196,34 +234,6 @@ sub getPreferencia {
     }
 }
 
-
-sub getPreferenciasByArray {
-    my ($variables_array)= @_;
-
-    my @filtros;
-    my %preferencias_hash;
-
-    foreach my $variable (@$variables_array){
-
-        push (@filtros, (  variable => {eq => $variable} ) );
-
-    }
-
-    my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ or  => \@filtros ]);
-
-#     if ($preferencias_array_ref->[0]){
-   if ($preferencias_array_ref){
-
-        foreach my $p (@$preferencias_array_ref){
-            $preferencias_hash{$p->getVariable} = $p->getValue;
-        }
-
-        return \%preferencias_hash;
-#         return ($preferencia_array_ref);
-    } else{
-        return undef;
-    }
-}
 
 sub getValorPreferencia {
     my ($variable)  = @_;

@@ -378,9 +378,7 @@ sub actualizarDatosReservaEnEspera{
 	$params->{'loggedinuser'}= $loggedinuser;
 	#Se envia una notificacion al usuario avisando que se le asigno una reserva
 
-	eval{
 	   C4::AR::Reservas::Enviar_Email($self,$params);
-	};
 }
 
 =item sub getReservaEnEspera

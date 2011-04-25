@@ -3,7 +3,7 @@ package C4::AR::Reservas;
 use strict;
 require Exporter;
 
-use Mail::Sendmail;
+use C4::AR::Mail;
 use C4::AR::Mensajes;
 use C4::AR::Prestamos;
 use Date::Manip;
@@ -378,16 +378,24 @@ sub Enviar_Email{
         my $mailSubject =C4::AR::Preferencias::getValorPreferencia("reserveSubject");
         my $mailMessage =C4::AR::Preferencias::getValorPreferencia("reserveMessage");
         
-        $mailSubject =~ s/BRANCH/$reserva->ui->getNombre/;
-        $mailMessage =~ s/BRANCH/$reserva->ui->getNombre/;
-        $mailMessage =~ s/FIRSTNAME/$socio->persona->getNombre/;
-        $mailMessage =~ s/SURNAME/$socio->persona->getApellido/;
+        my $nombreUI = $reserva->ui->getNombre;
+        $mailSubject =~ s/BRANCH/$nombreUI/;
+        $mailMessage =~ s/BRANCH/$nombreUI/;
+        
+        my $nombrePersona = $socio->persona->getNombre;
+        $mailMessage =~ s/FIRSTNAME/$nombrePersona/;
+        
+        my $apellidoPersona = $socio->persona->getApellido;
+        $mailMessage =~ s/SURNAME/$apellidoPersona/;
         
         my $unititle=C4::AR::Nivel1::getUnititle($reserva->nivel2->nivel1->getId1);
         $mailMessage =~ s/UNITITLE/$unititle/;
         
-        $mailMessage =~ s/TITLE/$reserva->nivel2->nivel1->getTitulo/;
-        $mailMessage =~ s/AUTHOR/$reserva->nivel2->nivel1->cat_autor->getCompleto/;
+        my $tituloReserva = $reserva->nivel2->nivel1->getTitulo;
+        $mailMessage =~ s/TITLE/$tituloReserva/;
+        
+        my $autorCompleto = $reserva->nivel2->nivel1->getAutor;
+        $mailMessage =~ s/AUTHOR/$autorCompleto/;
         
         my $edicion  =  $reserva->nivel2->getEdicion;
         $mailMessage =~ s/EDICION/$edicion/;
@@ -404,7 +412,7 @@ sub Enviar_Email{
         $mail{'mail_to'}               = $socio->persona->getEmail;
         $mail{'mail_subject'}          = $mailSubject;
         $mail{'mail_message'}          = $mailMessage;
-    
+
         my ($ok, $msg_error)           = C4::AR::Mail::send_mail(\%mail);
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
@@ -417,6 +425,7 @@ sub Enviar_Email{
    $data_hash->{'id3'}=$reserva->getId3;
    $data_hash->{'nro_socio'}=$reserva->getNro_socio;
    $data_hash->{'loggedinuser'}=$loggedinuser;
+   $data_hash->{'responsable'}=$loggedinuser;
    $data_hash->{'end_date'}=$fecha;
    $data_hash->{'issuesType'}='-';
    $data_hash->{'id_ui'}=$reserva->getId_ui;
