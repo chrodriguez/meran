@@ -381,10 +381,10 @@ sub getBarcodesPrestadoLike {
     $id2, id de nivel2
 =cut
 sub detalleNivel3{
-	my ($id2) = @_;
+    my ($id2) = @_;
 
-	my %hash_nivel2;	
-	#recupero el nivel1 segun el id1 pasado por parametro
+    my %hash_nivel2;	
+    #recupero el nivel1 segun el id1 pasado por parametro
     my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2);
 
     if($nivel2_object){
@@ -524,7 +524,7 @@ sub detalleDisponibilidadNivel3{
 
         #se inicializa la hash
         $hash_nivel3{'vencimiento'}         = undef;
-        $hash_nivel3{'socio'}               = undef;
+        $hash_nivel3{'socio_prestamo'}      = undef;
         $hash_nivel3{'prestamo'}            = undef;
         $hash_nivel3{'claseFecha'}          = undef;
 
@@ -533,7 +533,7 @@ sub detalleDisponibilidadNivel3{
             my $prestamo                    = C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'});
             if($prestamo){
                 $hash_nivel3{'prestamo'}        = $prestamo;
-                $hash_nivel3{'socio'}           = $socio;
+                $hash_nivel3{'socio_prestamo'}  = $socio;
 
                 if ($prestamo->estaVencido) {
                     $hash_nivel3{'claseFecha'}  = "fecha_vencida";

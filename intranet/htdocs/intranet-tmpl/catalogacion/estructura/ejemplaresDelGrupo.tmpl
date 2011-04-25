@@ -66,9 +66,9 @@
                    [% IF prestamo.getNro_socio %]
                         <strong class="[% IF nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Prestado a:' | i18n  %]</strong> 
                         [% PERL %]
-                            print C4::AR::Filtros::link_to(   text =>     "[% socio.persona.getApeYNom %]",
+                            print C4::AR::Filtros::link_to(   text =>     "[% socio_prestamo.persona.getApeYNom %]",
                                                               url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
-                                                              params =>   ["nro_socio=[% socio.getNro_socio %]"],
+                                                              params =>   ["nro_socio=[% socio_prestamo.getNro_socio %]"],
                                                               title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
                                                               blank =>  1,
                                                         );
@@ -102,7 +102,7 @@
                                   [% PERL %]
                                       print C4::AR::Filtros::to_Icon( 
                                           boton   =>  "icon_devolver",
-                                          onClick =>   "devolverPrestamo('[% socio.getNro_socio %]','[% socio.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
+                                          onClick =>   "devolverPrestamo('[% socio_prestamo.getNro_socio %]','[% socio_prestamo.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
                                           title   =>   "[% 'Devolver' | i18n %]",
                                           alternClass=> "botonCentradoTabla",
                                           ) ;
@@ -111,7 +111,7 @@
                                       [% PERL %]
                                           print C4::AR::Filtros::to_Icon( 
                                                                               boton   =>  "icon_renovar",
-                                                                              onClick =>   "renovarPrestamo('[% socio.getNro_socio %]','[% socio.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
+                                                                              onClick =>   "renovarPrestamo('[% socio_prestamo.getNro_socio %]','[% socio_prestamo.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
                                                                               title   =>   "[% 'Renovar' | i18n %]",
                                                                               alternClass=> "botonCentradoTabla",
                                                                       ) ;

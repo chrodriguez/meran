@@ -23,15 +23,15 @@
             <td>
                 <input type="checkbox" id="checkEjemplares" name="checkEjemplares" class="icon_seleccionar" value="[% nivel3.getId3 %]">
             </td>
-            <td>[% nivel3.getSignatura_topografica %]</td>
+            <td>[% nivel3.nivel3_obj.getSignatura_topografica %]</td>
             <td>
 
             [% PERL %]
-                print C4::AR::Filtros::link_to(	text => 	"[% nivel3.getBarcode %]",
+                print C4::AR::Filtros::link_to(	text => 	"[% nivel3.nivel3_obj.getBarcode %]",
                                                 url => 		"/cgi-bin/koha/busquedas/detalleItem.pl", 
                                                 params =>	[	"id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]",
-                                                                "barcode=[% nivel3.getBarcode %]",
-                                                                "signatura_topografica=[% nivel3.getSignatura_topografica %]"
+                                                                "barcode=[% nivel3.nivel3_obj.getBarcode %]",
+                                                                "signatura_topografica=[% nivel3.nivel3_obj.getSignatura_topografica %]"
                                                             ],
                                                 title =>	"[% 'Detalle de disponibilidad' | i18n %]"
                                             ) ;
@@ -39,12 +39,12 @@
             </td>
             <td>
 
-                    [% IF nivel3.estaPrestado %]
-                        <strong class="[% IF nivel3.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Prestado a:' | i18n  %]</strong> 
+                    [% IF nivel3.nivel3_obj.estaPrestado %]
+                        <strong class="[% IF nivel3.nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Prestado a:' | i18n  %]</strong> 
                         [% PERL %]
-                            print C4::AR::Filtros::link_to(   text =>     "[% socio.persona.getApeYNom %]",
+                            print C4::AR::Filtros::link_to(   text =>     "[% nivel3.socio_prestamo.persona.getApeYNom %]",
                                                               url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
-                                                              params =>   ["nro_socio=[% socio.getNro_socio %]"],
+                                                              params =>   ["nro_socio=[% nivel3.socio_prestamo.getNro_socio %]"],
                                                               title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
                                                               blank =>  1,
                                                         );
@@ -53,25 +53,25 @@
                     [% END %]
 
                     <div class="[% claseDisponibilidad %]">
-                        [% nivel3.getDisponibilidadObject.getNombre %]
+                        [% nivel3.nivel3_obj.getDisponibilidadObject.getNombre %]
                     </div>
             </td>
             <td>
-                <span class="[% IF nivel3.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">
-                    [% nivel3.getEstadoObject.getNombre %]
+                <span class="[% IF nivel3.nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">
+                    [% nivel3.nivel3_obj.getEstadoObject.getNombre %]
                 </span>
             </td>
             <td>
-                [% nivel3.getId_ui_origen %] 
+                [% nivel3.nivel3_obj.getId_ui_origen %] 
             </td>
             <td>
-                [% nivel3.getId_ui_poseedora %]
+                [% nivel3.nivel3_obj.getId_ui_poseedora %]
             </td>
             <td>
                 [% PERL %]
                     print C4::AR::Filtros::to_Icon(   
                                                             boton   => "icon_edicion",
-                                                            onClick => "modificarN3('[% nivel3.getId3 %]', '[% nivel3.nivel2.getTipoDocumentoObject.getId_tipo_doc %]');",
+                                                            onClick => "modificarN3('[% nivel3.nivel3_obj.getId3 %]', '[% nivel3.nivel3_obj.nivel2.getTipoDocumentoObject.getId_tipo_doc %]');",
                                                             title   => "[% 'Modificar nivel 3' | i18n %]",
                                                             alternClass => "botonCentrado"
                                 ) ;
@@ -80,7 +80,7 @@
                 [% PERL %]
                         print C4::AR::Filtros::to_Icon( 
                                                             boton   => "icon_borrar",
-                                                            onClick => "borrarN3('[% nivel3.getId3 %]');",
+                                                            onClick => "borrarN3('[% nivel3.nivel3_obj.getId3 %]');",
                                                             title   => "[% 'Borrar nivel 3' | i18n %]",
                                                             alternClass => "botonCentrado"
                                 ) ;

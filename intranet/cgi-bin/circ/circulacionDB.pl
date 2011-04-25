@@ -345,7 +345,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR"){
         $t_params->{'titulo'}           = $nivel3->nivel2->nivel1->getTitulo();
         $t_params->{'autor'}            = $nivel3->nivel2->nivel1->getAutor();
         $t_params->{'nivel3'}           = $nivel3;
-        $t_params->{'socio'}            = $socio;
+        $t_params->{'socio_prestamo'}   = $socio;
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
