@@ -26,6 +26,7 @@ function updateBorrarSancion(responseText){
     } 
     var Messages = JSONstring.toObject(responseText);
     setMessages(Messages);
+    detalleSanciones(USUARIO.ID);
 }
 
 </script>
