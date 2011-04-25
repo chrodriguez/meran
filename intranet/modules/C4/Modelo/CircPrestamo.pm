@@ -209,7 +209,7 @@ sub agregar {
 	$self->debug("SE AGREGO EL PRESTAMO");
 
     my $dateformat = C4::Date::get_date_format();
-    my $hoy = C4::Date::ParseDate("today");
+    my $hoy = Date::Manip::ParseDate("today");
 
 	#Asignando data...
 	$self->setId3( $data_hash->{'id3'} );
@@ -448,15 +448,15 @@ sub estaVencido {
 	my ($self) = shift;
 
 	my $dateformat = C4::Date::get_date_format();
-	my $hoy =  C4::Date::format_date_in_iso( C4::Date::ParseDate("today"), $dateformat );
+	my $hoy =  C4::Date::format_date_in_iso( Date::Manip::ParseDate("today"), $dateformat );
 	my $cierre = C4::AR::Preferencias::getValorPreferencia("close");
-	my $close  = C4::Date::ParseDate($cierre);
+	my $close  = Date::Manip::ParseDate($cierre);
 	my $err;
-	if ( Date::Manip::Date_Cmp( $close, C4::Date::ParseDate("today") ) < 0 )
+	if ( Date::Manip::Date_Cmp( $close, Date::Manip::ParseDate("today") ) < 0 )
 	{    #Se paso la hora de cierre
 		$hoy =
 		  C4::Date::format_date_in_iso(
-			C4::Date::DateCalc( $hoy, "+ 1 day", \$err ), $dateformat );
+			Date::Manip::DateCalc( $hoy, "+ 1 day", \$err ), $dateformat );
 	}
 
 	my $df =
@@ -467,7 +467,7 @@ sub estaVencido {
 			if ( Date::Manip::Date_Cmp( $df, $hoy ) == 0 )
 			{                                       #Se tiene que devolver hoy
 				my $end    = C4::Date::calc_endES();
-				my $actual = C4::Date::ParseDate("today");
+				my $actual = Date::Manip::ParseDate("today");
 				if ( Date::Manip::Date_Cmp( $actual, $end ) > 0 )
 				{    #Se devuelve despues del limite
 					return (1);
@@ -535,7 +535,7 @@ sub devolver {
 	my $fechaVencimiento = $self->getFecha_vencimiento;    # tiene que estar aca porque despues ya se marco como devuelto
 	       #Actualizo la fecha de devolucion!!!!
 	my $dateformat = C4::Date::get_date_format();
-	my $fechaHoy =  C4::Date::format_date_in_iso( C4::Date::ParseDate("today"), $dateformat );
+	my $fechaHoy =  C4::Date::format_date_in_iso( Date::Manip::ParseDate("today"), $dateformat );
 	$self->setFecha_devolucion($fechaHoy);
 	$self->save();
 
@@ -634,8 +634,8 @@ sub devolver {
 
 # Se calcula la fecha de fin de la sancion en funcion de la fecha actual (hoy + cantidad de dias de sancion)
 				$fechaFinSancion = C4::Date::format_date_in_iso(
-					C4::Date::DateCalc(
-						C4::Date::ParseDate("today"), "+ " . $diasSancion . " days",
+					Date::Manip::DateCalc(
+						Date::Manip::ParseDate("today"), "+ " . $diasSancion . " days",
 						\$err
 					),
 					$dateformat
@@ -647,7 +647,7 @@ sub devolver {
 				$paramsSancion{'loggedinuser'}   = $loggedinuser;
 				$paramsSancion{'tipo_sancion'}   = $tipo_sancion->getTipo_sancion;
 				$paramsSancion{'id_reserva'}     = undef;
-                $paramsSancion{'id3'}         = $self->getId3;
+				$paramsSancion{'id3'}         = $self->getId3;
 				$paramsSancion{'nro_socio'}      = $nro_socio;
 				$paramsSancion{'fecha_comienzo'} = $fechaHoy;
 				$paramsSancion{'fecha_final'}    = $fechaFinSancion;
@@ -682,8 +682,8 @@ sub estaEnFechaDeRenovacion {
 
 	my $err;
 	my $dateformat = C4::Date::get_date_format();
-	my $hoy =  C4::Date::format_date_in_iso(C4::Date::DateCalc( C4::Date::ParseDate("today"), "+ 0 days", \$err ), $dateformat );
-	my $desde = C4::Date::format_date_in_iso(C4::Date::DateCalc($self->getFecha_vencimiento,"- ".$self->tipo->getDias_antes_renovacion . " days",\$err, 2),$dateformat );
+	my $hoy =  C4::Date::format_date_in_iso(Date::Manip::DateCalc( Date::Manip::ParseDate("today"), "+ 0 days", \$err ), $dateformat );
+	my $desde = C4::Date::format_date_in_iso(Date::Manip::DateCalc($self->getFecha_vencimiento,"- ".$self->tipo->getDias_antes_renovacion . " days",\$err, 2),$dateformat );
 	my $flag = Date_Cmp( $desde, $hoy );
 
 	#comparo la fecha de hoy con el inicio del plazo de renovacion
@@ -828,7 +828,7 @@ sub renovar {
 
 	$self->setRenovaciones( $self->getRenovaciones + 1 );
     my $dateformat = C4::Date::get_date_format();
-    my $fechaHoy = C4::Date::format_date_in_iso(C4::Date::ParseDate("today"),$dateformat);
+    my $fechaHoy = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
 
     $self->setFecha_ultima_renovacion($fechaHoy);
 	$self->save();
