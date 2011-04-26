@@ -33,7 +33,6 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboFormasDeEnvio
     generarComboTipoDeMaterial
     monedasAutocomplete
-    buscarCiudades
     ASCIItoHEX
     aplicarParches
     obtenerParches
@@ -1588,7 +1587,10 @@ sub buscarLenguajes{
 
       my ($lenguaje) = @_;
 
-      my $lenguajes = C4::Modelo::RefIdioma::Manager->get_ref_idioma(query => [ description => { like => '%'.$lenguaje.'%' } ]);
+      my $lenguajes = C4::Modelo::RefIdioma::Manager->get_ref_idioma(   query => [ description => { like => '%'.$lenguaje.'%' } ]
+                                                                        sort_by => 'description ASC'     
+
+                                                                     );
 
       return (scalar(@$lenguajes), $lenguajes);
 }
@@ -1614,7 +1616,8 @@ sub buscarNivelesBibliograficos{
 
       my $nivelesBibliograficos = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico(
                                                                           query => [ description => { like => '%'.$nivelBibliografico.'%' } ]
-                                                                                );
+                                                                          sort_by => 'description ASC'    
+                                                                          );
 
       return (scalar(@$nivelesBibliograficos), $nivelesBibliograficos);
 }
@@ -3288,23 +3291,6 @@ sub paisesAutocomplete{
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
-sub ciudadesAutocomplete{
-
-    my ($ciudad)= @_;
-    my $textout;
-    my @result;
-    if ($ciudad){
-        my($cant, $result) = C4::AR::Utilidades::buscarCiudades($ciudad);# agregado sacar
-        C4::AR::Debug::debug("CANTIDAD DE CIUDADES: ".$cant);
-        $textout= "";
-        for (my $i; $i<$cant; $i++){
-            $textout.= $result->[$i]->{'id'}."|".$result->[$i]->{'nombre'}."\n";
-        }
-    }
-
-
-    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
-}
 
 sub ciudadesAutocomplete{
 
@@ -3319,8 +3305,6 @@ sub ciudadesAutocomplete{
             $textout.= $result->[$i]->{'id'}."|".$result->[$i]->{'nombre'}."\n";
         }
     }
-
-
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
