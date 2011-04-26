@@ -1587,7 +1587,7 @@ sub buscarLenguajes{
 
       my ($lenguaje) = @_;
 
-      my $lenguajes = C4::Modelo::RefIdioma::Manager->get_ref_idioma(   query => [ description => { like => '%'.$lenguaje.'%' } ]
+      my $lenguajes = C4::Modelo::RefIdioma::Manager->get_ref_idioma(   query => [ description => { like => '%'.$lenguaje.'%' } ],
                                                                         sort_by => 'description ASC'     
 
                                                                      );
@@ -1615,7 +1615,7 @@ sub buscarNivelesBibliograficos{
       my ($nivelBibliografico) = @_;
 
       my $nivelesBibliograficos = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico(
-                                                                          query => [ description => { like => '%'.$nivelBibliografico.'%' } ]
+                                                                          query => [ description => { like => '%'.$nivelBibliografico.'%' } ],
                                                                           sort_by => 'description ASC'    
                                                                           );
 
@@ -3388,7 +3388,7 @@ sub catalogoAutocomplete{
      my ($string_utf8_encoded) = @_;
 
      $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
-
+     my @data_array;
      my %params = {};
 
      $params{'tipo'}="normal";
@@ -3403,11 +3403,19 @@ sub catalogoAutocomplete{
 
 
      foreach my $documento (@$resultado_busquedas){
+            my %has_temp;
+            $has_temp{'id'}= $documento->{'id1'};
             
-             C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
-             $textout.= $documento->{'id1'}."|".$documento->{'titulo'}."\n";
-     }
+            C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
+            $has_temp{'dato'} = $documento->{'titulo'}."\n";
+          
+            push (@data_array, \%has_temp); 
 
+#              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
+#              $textout.= $documento->{'id1'}."|".$documento->{'titulo'}."\n";          
+      }
+ 
+     $textout= getTextOutSorted(\@data_array, {'DESC' => 1, 'ORDER_BY' => 'dato'});
 
      return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
@@ -3483,23 +3491,27 @@ busca barcodeStr sobre todos los barcodes
 sub barcodeAutocomplete{
     my ($barcodeStr) = @_;
 
-    my $textout = "";
-    my ($cant, $cat_nivel3_array_ref) = C4::AR::Nivel3::getBarcodesLike($barcodeStr);
-    my @data_array;
+#     my $textout = "";
+#     my ($cant, $cat_nivel3_array_ref) = C4::AR::Nivel3::getBarcodesLike($barcodeStr);
+#     my @data_array;
+# 
+#     if ($cant > 0){
+#         foreach my $nivel3 (@$cat_nivel3_array_ref){
+#             my %has_temp;
+#             $has_temp{'id'}     = $nivel3->getBarcode;
+#             $has_temp{'dato'}   = $nivel3->getBarcode;
+# 
+#             push (@data_array, \%has_temp);
+#         }
+# 
+#         $textout = getTextOutSorted(\@data_array, {'DESC' => 1, 'ORDER_BY' => 'dato'});
+#     }
+# 
+#     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 
-    if ($cant > 0){
-        foreach my $nivel3 (@$cat_nivel3_array_ref){
-            my %has_temp;
-            $has_temp{'id'}     = $nivel3->getBarcode;
-            $has_temp{'dato'}   = $nivel3->getBarcode;
-
-            push (@data_array, \%has_temp);
-        }
-
-        $textout = getTextOutSorted(\@data_array, {'DESC' => 1, 'ORDER_BY' => 'dato'});
-    }
-
-    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+    my ($textout) = barcodeAutocompleteBySphinx($barcodeStr);
+  
+    return $textout;
 }
 
 sub barcodeAutocompleteBySphinx{

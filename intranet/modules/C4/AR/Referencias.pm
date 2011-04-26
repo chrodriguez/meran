@@ -305,7 +305,7 @@ sub obtenerUILike {
     my ($nombre) = @_;
 
     my $uis_array_ref = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(
-                                                                query => [ nombre => { like => '%'.$nombre.'%' } ]
+                                                                query => [ nombre => { like => '%'.$nombre.'%' } ],
                                                                 sort_by => 'nombre ASC',
                                             );
     my @results;
