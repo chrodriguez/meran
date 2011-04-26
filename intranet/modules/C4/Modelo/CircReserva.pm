@@ -223,6 +223,7 @@ sub reservar {
 	if($params->{'tipo'} eq 'OPAC'){
 		my $nivel3= C4::AR::Reservas::getNivel3ParaReserva($params->{'id2'},'Domiciliario');
 		if($nivel3){ $id3=$nivel3->getId3;}
+		$self->debug("RESERVA: es para OPAC se buscan algún nivel 3 para reservar");
 	}
 
 	#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
