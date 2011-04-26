@@ -1602,7 +1602,9 @@ sub buscarSoportes{
 
       my ($soporte) = @_;
 
-      my $soportes = C4::Modelo::RefSoporte::Manager->get_ref_soporte(query => [ description => { like => '%'.$soporte.'%' } ]);
+      my $soportes = C4::Modelo::RefSoporte::Manager->get_ref_soporte(query => [ description => { like => '%'.$soporte.'%' } ],
+                                                                      sort_by => 'description ASC' 
+                                                                        );
 
       return (scalar(@$soportes), $soportes);
 }
@@ -1616,7 +1618,7 @@ sub buscarNivelesBibliograficos{
 
       my $nivelesBibliograficos = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico(
                                                                           query => [ description => { like => '%'.$nivelBibliografico.'%' } ],
-                                                                          sort_by => 'description ASC'    
+#                                                                           sort_by => 'description ASC'    
                                                                           );
 
       return (scalar(@$nivelesBibliograficos), $nivelesBibliograficos);
@@ -3157,7 +3159,7 @@ sub bibliosAutocomplete{
 
     my ($biblioStr) = @_;
     my $textout="";
-    my @result=C4::AR::UtilidadesobtenerBiblios($biblioStr);
+    my @result=C4::AR::Utilidades::obtenerBiblios($biblioStr);
 
     foreach my $biblio (@result){
         $textout.=$biblio->{'branchname'}."|".$biblio->{'id'}."\n";
