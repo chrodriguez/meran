@@ -118,6 +118,20 @@ sub getISBN{
      return $marc_record->subfield("020","a");
 }
 
+=head2
+sub getVolumen
+
+Funcion que devuelve el volumen del grupo
+=cut
+
+sub getVolumen{
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+ 
+     return $marc_record->subfield("300","a");
+}
+
 sub getAllImage {
     my ($self)      = shift;
     
