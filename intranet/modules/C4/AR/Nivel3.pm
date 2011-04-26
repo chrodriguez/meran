@@ -298,8 +298,6 @@ sub getNivel3FromBarcode {
 
     my @filtros;
     my @barcode_result;
-
-#   push(@filtros, ( barcode=> { eq => $barcode }) );
     
     my $barcodes_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
 
@@ -308,7 +306,6 @@ sub getNivel3FromBarcode {
     for(my $i=0; $i < $cant; $i++){
 
         if($barcodes_array_ref->[$i]->getBarcode() eq $barcode){
-#             push(@barcode_result, $barcodes_array_ref->[$i]->getBarcode());
             push(@barcode_result, $barcodes_array_ref->[$i]);
             last();
         }

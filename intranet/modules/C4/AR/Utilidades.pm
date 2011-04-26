@@ -3518,6 +3518,35 @@ sub barcodeAutocomplete{
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
+sub barcodeAutocompleteBySphinx{
+
+     my ($string_utf8_encoded) = @_;
+
+     $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
+
+     my %params = {};
+
+     $params{'tipo'}            = "normal";
+     $params{'ini'}             = 0;
+     $params{'cantR'}           = 20;
+     $params{'from_suggested'}  = 1;
+
+     my $session = CGI::Session->load();
+     my ($cantidad, $resultado_busquedas, $suggested)= C4::AR::Busquedas::busquedaPorBarcodeBySphinx($string_utf8_encoded, $session, \%params);
+
+     my $textout = "";
+
+
+#      foreach my $s (@$resultado_busquedas){
+#             
+#              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
+#              $textout.= $s->{'id1'}."|".$s->{'id1'}."\n";
+#      }
+
+
+     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
+
 sub barcodePrestadoAutocomplete{
     my ($barcodeStr) = @_;
 

@@ -1201,6 +1201,10 @@ sub busquedaCombinada_newTemp{
     if (!$only_sphinx){
         $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'});
     }
+  
+    C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => ini => ".$obj_for_log->{'ini'});
+    C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => cantR => ".$obj_for_log->{'cantR'});
+
     # NOTA: sphinx necesita el string decode_utf8
     my $results = $sphinx->Query($query);
 
@@ -1398,6 +1402,19 @@ sub busquedaPorBarcode{
     return ($total_found_paginado, $resultsarray);
 }
 
+sub busquedaPorBarcodeBySphinx{
+    
+    my ($barcode, $session, $obj_for_log) = @_;
+    
+    
+    $obj_for_log->{'match_mode'} = 'SPH_MATCH_PHRASE';
+    
+    
+    my ($cantidad, $resultId1, $suggested) = C4::AR::Busquedas::busquedaCombinada_newTemp($barcode, $session, $obj_for_log, 0);
+    
+
+    return ($cantidad, $resultId1, $suggested); 
+}
 
 sub t_loguearBusqueda {
 #     require C4::Modelo::RepHistorialBusqueda;

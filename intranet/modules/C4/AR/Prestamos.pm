@@ -375,9 +375,11 @@ sub prestarYGenerarTicket{
 
 #funcion que realiza la transaccion del Prestamo
 sub t_realizarPrestamo{
-    my ($params)=@_;
-        C4::AR::Debug::debug("Antes de verificar"); 
+    my ($params) = @_;
+    C4::AR::Debug::debug("Antes de verificar"); 
+
     my ($msg_object)= C4::AR::Reservas::_verificaciones($params);
+
     if(!$msg_object->{'error'}){
         C4::AR::Debug::debug("No hay error en las verificaciones");
         my  $prestamo = C4::Modelo::CircPrestamo->new();
