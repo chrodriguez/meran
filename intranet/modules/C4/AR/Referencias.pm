@@ -285,8 +285,8 @@ sub obtenerAutoresLike {
 	my ($autor) = @_;
 
     my $autores_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor(
-																query => [ completo => { like => '%'.$autor.'%' } ]
-#                                                                 sort_by =>[ completo ] ,
+																query => [ completo => { like => '%'.$autor.'%' } ],
+                                                                sort_by => 'completo',
                                                                 
 											);
     my @results;
@@ -306,6 +306,7 @@ sub obtenerUILike {
 
     my $uis_array_ref = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(
                                                                 query => [ nombre => { like => '%'.$nombre.'%' } ]
+                                                                sort_by => 'nombre',
                                             );
     my @results;
 
@@ -440,7 +441,7 @@ sub obtenerCamposLike {
 																					liblibrarian => { like => '%'.$campo.'%' }
 																				]
 																		],
-#                                                                 sort_by =>[  campo   ]
+                                                                  sort_by => 'campo',
                                   
 											);
     my @results;
