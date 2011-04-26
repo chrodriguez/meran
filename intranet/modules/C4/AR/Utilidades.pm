@@ -3499,23 +3499,27 @@ busca barcodeStr sobre todos los barcodes
 sub barcodeAutocomplete{
     my ($barcodeStr) = @_;
 
-    my $textout = "";
-    my ($cant, $cat_nivel3_array_ref) = C4::AR::Nivel3::getBarcodesLike($barcodeStr);
-    my @data_array;
+#     my $textout = "";
+#     my ($cant, $cat_nivel3_array_ref) = C4::AR::Nivel3::getBarcodesLike($barcodeStr);
+#     my @data_array;
+# 
+#     if ($cant > 0){
+#         foreach my $nivel3 (@$cat_nivel3_array_ref){
+#             my %has_temp;
+#             $has_temp{'id'}     = $nivel3->getBarcode;
+#             $has_temp{'dato'}   = $nivel3->getBarcode;
+# 
+#             push (@data_array, \%has_temp);
+#         }
+# 
+#         $textout = getTextOutSorted(\@data_array, {'DESC' => 1, 'ORDER_BY' => 'dato'});
+#     }
+# 
+#     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 
-    if ($cant > 0){
-        foreach my $nivel3 (@$cat_nivel3_array_ref){
-            my %has_temp;
-            $has_temp{'id'}     = $nivel3->getBarcode;
-            $has_temp{'dato'}   = $nivel3->getBarcode;
-
-            push (@data_array, \%has_temp);
-        }
-
-        $textout = getTextOutSorted(\@data_array, {'DESC' => 1, 'ORDER_BY' => 'dato'});
-    }
-
-    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+    my ($textout) = barcodeAutocompleteBySphinx($barcodeStr);
+  
+    return $textout;
 }
 
 sub barcodeAutocompleteBySphinx{
@@ -3529,7 +3533,7 @@ sub barcodeAutocompleteBySphinx{
      $params{'tipo'}            = "normal";
      $params{'ini'}             = 0;
      $params{'cantR'}           = 20;
-     $params{'from_suggested'}  = 1;
+#      $params{'from_suggested'}  = 1;
 
      my $session = CGI::Session->load();
      my ($cantidad, $resultado_busquedas, $suggested)= C4::AR::Busquedas::busquedaPorBarcodeBySphinx($string_utf8_encoded, $session, \%params);
