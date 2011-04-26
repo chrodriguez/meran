@@ -286,6 +286,8 @@ sub obtenerAutoresLike {
 
     my $autores_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor(
 																query => [ completo => { like => '%'.$autor.'%' } ]
+#                                                                 sort_by =>[ completo ] ,
+                                                                
 											);
     my @results;
 
@@ -437,7 +439,9 @@ sub obtenerCamposLike {
                                                                                     campo => { like => '%'.$campo.'%' }, 
 																					liblibrarian => { like => '%'.$campo.'%' }
 																				]
-																		]
+																		],
+#                                                                 sort_by =>[  campo   ]
+                                  
 											);
     my @results;
 
