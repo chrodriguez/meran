@@ -3537,11 +3537,11 @@ sub barcodeAutocompleteBySphinx{
      my $textout = "";
 
 
-#      foreach my $s (@$resultado_busquedas){
-#             
+     foreach my $s (@$resultado_busquedas){
+            
 #              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
-#              $textout.= $s->{'id1'}."|".$s->{'id1'}."\n";
-#      }
+             $textout.= $s->{'id1'}."|".$s->{'id1'}."\n";
+     }
 
 
      return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
