@@ -1407,7 +1407,7 @@ sub busquedaPorBarcodeBySphinx{
     my ($barcode, $session, $obj_for_log) = @_;
     
     
-    $obj_for_log->{'match_mode'} = 'SPH_MATCH_PHRASE';
+    #$obj_for_log->{'match_mode'} = 'SPH_MATCH_PHRASE';
     
     
     my ($cantidad, $resultId1, $suggested) = C4::AR::Busquedas::busquedaCombinada_newTemp($barcode, $session, $obj_for_log, 0);
