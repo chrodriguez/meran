@@ -13,7 +13,7 @@ use C4::Modelo::RepHistorialPrestamo::Manager;
 # use C4::Modelo::CatRegistroMarcN3::Manager;
 # use C4::Modelo::CatRegistroMarcN2;
 # use C4::Modelo::CatRegistroMarcN2::Manager;
-
+use Date::Manip;
 use C4::Modelo::RepHistorialPrestamo::Manager;
 #use C4::Circulation::Circ2;
 use C4::AR::Sanciones;
@@ -171,7 +171,12 @@ sub getCountPrestamosDeGrupoPorUsuario {
         my @filtros;
         push(@filtros, ( id2                => { eq => $id2 } ));
         push(@filtros, ( nro_socio          => { eq => $nro_socio } ));
-        push(@filtros, ( tipo_prestamo      => { eq => $tipo_prestamo } ));
+
+	#Se tiene en cuenta el tipo de préstamo al contar los prestamos del grupo?? Esto permitiría prestar varios ejemplares del mismo grupo con distintos tipos de prestamo.
+	if(C4::AR::Preferencias::getValorPreferencia('prestar_mismo_grupo_distintos_tipos_prestamo')){
+	  push(@filtros, ( tipo_prestamo      => { eq => $tipo_prestamo } ));
+	}
+
         push(@filtros, ( fecha_devolucion   => { eq => undef } ));
 
         my $prestamos_grupo_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
@@ -537,7 +542,7 @@ sub t_devolver {
             if(!$msg_object->{'error'}){
     
                 eval {
-                    $prestamo->devolver($params);
+                    $prestamo->devolver($db,$params);
                     $db->commit;
                     # Si la devolucion se pudo realizar
                     $msg_object->{'error'}= 0;

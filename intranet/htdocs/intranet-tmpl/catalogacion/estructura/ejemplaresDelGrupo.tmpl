@@ -5,22 +5,22 @@
 
 <ul class="resumen_items">
 <li class="columna_izq">[% "Ejemplares Disponibles:"|i18n %]<strong> [% disponibles %]</strong><br>
-<li class="columna_der">[% 	"Reservas Realizadas:"|i18n %] <strong> [% cantReservas %]</strong><br>
-<li class="columna_izq">[% 	"Reservas en Espera:"|i18n %] <strong> [% cantReservasEnEspera %]</strong><br>
-<li class="columna_der">[% 	"Ejemplares Prestados:"|i18n %]<strong> [% cantPrestados %]</strong><br>
+<li class="columna_der">[% "Reservas Realizadas:"|i18n %] <strong> [% cantReservas %]</strong><br>
+<li class="columna_izq">[% "Reservas en Espera:"|i18n %] <strong> [% cantReservasEnEspera %]</strong><br>
+<li class="columna_der">[% "Ejemplares Prestados:"|i18n %]<strong> [% cantPrestados %]</strong><br>
 </ul>                
 <hr>
 <table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult datos_tabla">
 		<tr align="center" cellpadding="0"  valign="middle" class="titulo_tabla_resultado">
             <td>
 				<strong>[% "Acciones" |i18n %]</strong>
-				[% PERL %]
+<!--				[% PERL %]
 					print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
 													url =>      "datosDocumento.pl", 
 													params =>   ["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
 													title =>    "[% 'Editar Nivel 2' | i18n %]"
 												) ;
-				[% END %]
+				[% END %]-->
             </td>
 			<td><strong>[% "Sig. Top."|i18n %]</strong> </td>
 			<td><strong>[% "C&oacute;digo"|i18n %]</strong></td>
@@ -66,9 +66,9 @@
                    [% IF prestamo.getNro_socio %]
                         <strong class="[% IF nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Prestado a:' | i18n  %]</strong> 
                         [% PERL %]
-                            print C4::AR::Filtros::link_to(   text =>     "[% socio.persona.getApeYNom %]",
+                            print C4::AR::Filtros::link_to(   text =>     "[% socio_prestamo.persona.getApeYNom %]",
                                                               url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
-                                                              params =>   ["nro_socio=[% socio.getNro_socio %]"],
+                                                              params =>   ["nro_socio=[% socio_prestamo.getNro_socio %]"],
                                                               title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
                                                               blank =>  1,
                                                         );
@@ -102,7 +102,7 @@
                                   [% PERL %]
                                       print C4::AR::Filtros::to_Icon( 
                                           boton   =>  "icon_devolver",
-                                          onClick =>   "devolverPrestamo('[% socio.getNro_socio %]','[% socio.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
+                                          onClick =>   "devolverPrestamo('[% socio_prestamo.getNro_socio %]','[% socio_prestamo.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
                                           title   =>   "[% 'Devolver' | i18n %]",
                                           alternClass=> "botonCentradoTabla",
                                           ) ;
@@ -111,7 +111,7 @@
                                       [% PERL %]
                                           print C4::AR::Filtros::to_Icon( 
                                                                               boton   =>  "icon_renovar",
-                                                                              onClick =>   "renovarPrestamo('[% socio.getNro_socio %]','[% socio.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
+                                                                              onClick =>   "renovarPrestamo('[% socio_prestamo.getNro_socio %]','[% socio_prestamo.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
                                                                               title   =>   "[% 'Renovar' | i18n %]",
                                                                               alternClass=> "botonCentradoTabla",
                                                                       ) ;

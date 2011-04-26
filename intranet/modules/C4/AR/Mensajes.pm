@@ -132,6 +132,7 @@ my %mensajesINTRA = (
     'P126' => 'Disculpe, el ejemplar con c&oacute;digo de barras *?* se encuentra prestado.',
     'P127' => 'Disculpe, no se permiten realizar operaciones fuera del horario de apertura de la biblioteca.',
     'P128' => 'El ejemplar que se intenta prestar no est&aacute; disponible para pr&eacute;stamo.',
+    'P129' => 'El usuario ya tiene un ejemplar prestado del mismo grupo',
     'S200' => 'El usuario no puede reservar porque esta sancionado hasta el *?*',
     'S201' => 'No es posible realizar el pr&eacute;stamo porque el usuario tiene una posible sanci&oacute;n pendiente.',
     'S202' => 'Se elimin&oacute; la sanci&oacute;n a *?*, *?*, *?* con &eacute;xito.',
@@ -265,6 +266,10 @@ my %mensajesINTRA = (
     'U500' => 'La tarjeda de identificaci&oacute;n ingresada (Nro. de socio) ya pertenece a otro usuario.',
     'U501' => 'El t&iacute;tulo, autor ya existe *?*.',
 #     'U405' => 'No existe la estructura de catalogaci&oacute;n que se intentando recuperar.',
+    'U502' => 'Los permisos del usuario (*?*) no se pudieron cambiar.',
+    'U503' => 'Los permisos del usuario (*?*) se agregaron con &eacute;xito.',
+    'U504' => 'Los permisos del usuario (*?*) no se pudieron agregar.',
+
     'B400' => '',
     'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
     'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',
@@ -478,7 +483,7 @@ sub printErrorDB {
 	my $path=">>".C4::Context->config("kohalogdir")."debugErrorDBA.txt";
 	open(A,$path);
 	print A "\n";
-	print A "**************Error en la transaccion - Fecha:". C4::Date::ParseDate("today")."**************\n";
+	print A "**************Error en la transaccion - Fecha:". Date::Manip::ParseDate("now")."**************\n";
 	print A "Codigo: $codigo\n";
 	my $message= &C4::AR::Mensajes::getMensaje($codigo,$tipo,$paraMens);
 	print A "Message: $message\n";

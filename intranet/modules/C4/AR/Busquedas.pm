@@ -983,6 +983,11 @@ sub busquedaAvanzada_newTemp{
         $query .= ' @string "ref_disponibilidad%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
     }
     
+    if ($params->{'signatura'}){
+        $query .= ' @string "'.$params->{'signatura'}.'"';
+    }
+    
+    
     C4::AR::Debug::debug("tipo_nivel3_name tipo_nivel3_name tipo_nivel3_name =>=> ".$params->{'tipo_nivel3_name'});
 
     C4::AR::Debug::debug("Busquedas => query string => ".$query);

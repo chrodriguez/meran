@@ -16,6 +16,7 @@
 	font-family: Helvetica, sans-serif;
 	margin: 0px 0px 10px 0px;
 	border: 2px solid #ccc;
+	max-width: 300px;
 }
 
  textarea {
@@ -55,8 +56,9 @@
 .hover_ico{
     height: 16px;
     width: 16px;
-    clear: both;
+    float: right;
     background: url("../imagenes/ico_helpbordo.png") no-repeat;
+    margin-left: 2px;
 }
 	
 .reference {

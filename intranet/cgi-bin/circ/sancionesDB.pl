@@ -24,9 +24,15 @@ my ($template, $session, $t_params) =  get_template_and_user ({
 if($tipoAccion eq "MOSTRAR_SANCIONES"){
 
     $orden                          = $obj->{'orden'}||'persona.apellido';
-    my $sanciones                   = C4::AR::Sanciones::sanciones($orden);
-    $t_params->{'CANT_SANCIONES'}   = scalar(@$sanciones);
+    my $ini                         = $obj->{'ini'} || 1;
+    my $funcion                     = $obj->{'funcion'};
+    my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);   
+    my ($cantidad,$sanciones)       = C4::AR::Sanciones::sanciones($orden,$ini,$cantR);
+    
+    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR,$pageNumber,$funcion,$t_params);
+    $t_params->{'cant'}             = $cantidad;
     $t_params->{'SANCIONES'}        = $sanciones;
+    $t_params->{'CANT_SANCIONES'}   = scalar(@$sanciones);
     
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     
@@ -54,8 +60,15 @@ elsif($tipoAccion eq "ELIMINAR_SANCIONES"){
 }#end if($tipoAccion eq "ELIMINAR_SANCIONES")
 
 elsif($tipoAccion eq "BUSCAR_SANCIONES"){
+
+    $orden                          = $obj->{'orden'}||'persona.apellido';
+    my $ini                         = $obj->{'ini'} || 1;
+    my $funcion                     = $obj->{'funcion'};
+    my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);   
+    my ($cantidad,$sanciones)       = C4::AR::Sanciones::getSancionesLike($obj->{'string'},$ini,$cantR);
     
-    my ($cant,$sanciones)           = C4::AR::Sanciones::getSancionesLike($obj->{'string'});
+    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR,$pageNumber,$funcion,$t_params);
+    $t_params->{'cant'}             = $cantidad;
     $t_params->{'SANCIONES'}        = $sanciones;
     $t_params->{'CANT_SANCIONES'}   = scalar(@$sanciones);
     

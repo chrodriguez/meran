@@ -251,10 +251,9 @@ sub actualizarPermisosCatalogo{
     my ($nro_socio,$id_ui,$tipo_documento,$permisos_array)= @_;
 
     my @filtros;
-
     my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
-
     my @filtros;
+    my $msg_object= C4::AR::Mensajes::create();
     
     push (@filtros, (nro_socio => {eq => $nro_socio}));
     push (@filtros, (ui => {eq => $id_ui}));
@@ -269,13 +268,20 @@ sub actualizarPermisosCatalogo{
             $hash_permisos->{'id_ui'} = $id_ui;
     
             $permiso->agregar($hash_permisos);
-    
             $permiso = C4::AR::Permisos::parsearPermisos($permiso);
+     
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U317', 'params' => []});
     
-            return ($permiso);
+            return ($msg_object);
         };
+        
+        if ($@){
+            &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U502', 'params' => [$permiso->getNro_socio]} ) ;
+        }
+        
     }
-    return (0);
+    return ($msg_object);
 
 }
 
@@ -314,19 +320,25 @@ sub nuevoPermisoCatalogo{
     my ($nro_socio,$id_ui,$tipo_documento,$permisos_array)= @_;
 
     my @filtros;
-
+    my $msg_object= C4::AR::Mensajes::create();
     my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
 
     my $permisos = C4::Modelo::PermCatalogo->new();
     $hash_permisos->{'tipo_documento'} = $tipo_documento;
     $hash_permisos->{'nro_socio'} = $nro_socio;
     $hash_permisos->{'id_ui'} = $id_ui || 'ANY';
+    eval{
+        $permisos->agregar($hash_permisos);
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U503', 'params' => [$permisos->getNro_socio]});
+        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+    };
 
-    $permisos->agregar($hash_permisos);
+    if ($@){
+        &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U504', 'params' => [$permisos->getNro_socio]} ) ;
+    }
 
-    $permisos = C4::AR::Permisos::parsearPermisos($permisos);
-    
-    return ($permisos);
+    return ($msg_object);
 }
 
 
@@ -383,7 +395,7 @@ sub actualizarPermisosGeneral{
     my @filtros;
 
     my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
-
+    my $msg_object= C4::AR::Mensajes::create();
     push (@filtros, (nro_socio => {eq => $nro_socio}));
     push (@filtros, (ui => {eq => $id_ui}));
     push (@filtros, (tipo_documento => {eq => $tipo_documento}));
@@ -400,11 +412,17 @@ sub actualizarPermisosGeneral{
             $permiso->agregar($hash_permisos);
     
             $permiso = C4::AR::Permisos::parsearPermisos($permiso);
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U317', 'params' => [$permiso->getNro_socio]});
     
-            return ($permiso);
+            return ($msg_object);
         };
+        
+        if ($@){
+            &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U502', 'params' => [$permiso->getNro_socio]} ) ;
+        }
     }
-    return (0);
+    return ($msg_object);
 
 }
 
@@ -442,7 +460,7 @@ sub nuevoPermisoGeneral{
     my ($nro_socio,$id_ui,$tipo_documento,$permisos_array)= @_;
 
     my @filtros;
-
+    my $msg_object= C4::AR::Mensajes::create();
     my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
 
     my $permisos = C4::Modelo::PermGeneral->new();
@@ -450,11 +468,18 @@ sub nuevoPermisoGeneral{
     $hash_permisos->{'nro_socio'} = $nro_socio;
     $hash_permisos->{'id_ui'} = $id_ui || 'ALL';
 
-    $permisos->agregar($hash_permisos);
-    C4::AR::Debug::debug("PERMISOS/PERMISOS: ".$hash_permisos->{'permisos'});
-    $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+    eval{
+        $permisos->agregar($hash_permisos);
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U503', 'params' => [$permisos->getNro_socio]});
+        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+    };
 
-    return ($permisos);
+    if ($@){
+        &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U504', 'params' => [$permisos->getNro_socio]} ) ;
+    }
+
+    return ($msg_object);
 }
 
 
@@ -512,7 +537,7 @@ sub actualizarPermisosCirculacion{
     my @filtros;
 
     my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
-
+    my $msg_object= C4::AR::Mensajes::create();
     push (@filtros, (nro_socio => {eq => $nro_socio}));
     push (@filtros, (ui => {eq => $id_ui}));
     push (@filtros, (tipo_documento => {eq => $tipo_documento}));
@@ -529,11 +554,17 @@ sub actualizarPermisosCirculacion{
             $permiso->agregar($hash_permisos);
     
             $permiso = C4::AR::Permisos::parsearPermisos($permiso);
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U317', 'params' => []});
     
-            return ($permiso);
+            return ($msg_object);
         };
+        
+        if ($@){
+            &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U502', 'params' => [$permiso->getNro_socio]} ) ;
+        }
     }
-    return (0);
+    return ($msg_object);
 
 }
 
@@ -571,7 +602,7 @@ sub nuevoPermisoCirculacion{
     my ($nro_socio,$id_ui,$tipo_documento,$permisos_array)= @_;
 
     my @filtros;
-
+    my $msg_object= C4::AR::Mensajes::create();
     my $hash_permisos = C4::AR::Permisos::procesarPermisos($permisos_array); #DEBE HACER UNA HASH TENIENDO COMO CLAVE EL NOMBRE
 
     my $permisos = C4::Modelo::PermCirculacion->new();
@@ -579,11 +610,18 @@ sub nuevoPermisoCirculacion{
     $hash_permisos->{'nro_socio'} = $nro_socio;
     $hash_permisos->{'id_ui'} = $id_ui || 'ALL';
 
-    $permisos->agregar($hash_permisos);
+    eval{
+        $permisos->agregar($hash_permisos);
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U503', 'params' => [$permisos->getNro_socio]});
+        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+    };
 
-    $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+    if ($@){
+        &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U504', 'params' => [$permisos->getNro_socio]} ) ;
+    }
 
-    return ($permisos);
+    return ($msg_object);
 }
 
 
