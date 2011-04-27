@@ -137,8 +137,8 @@
 }
 
 .ui-widget-header {
-	border: 1px solid #e78f08;
-	background: #f6a828 url(images/ui-bg_gloss-wave_35_f6a828_500x100.png)
+	border: 1px solid #7E94AF;
+	background: #7E94AF url(images/ui-bg_gloss-wave_35_f6a828_500x100_magui.png)
 		50% 50% repeat-x;
 	color: #ffffff;
 	font-weight: bold;
@@ -147,6 +147,7 @@
 .ui-widget-header a {
 	color: #ffffff;
 }
+
 
 /* Interaction states
 ----------------------------------*/
