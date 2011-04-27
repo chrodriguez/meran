@@ -24,14 +24,14 @@ JSONstring={
 		return this.toJsonStringArray(arg).join('');
 	},
 	clearData:function(x){
-// 		x= (escape(x)); àèìòù
 		var temp = new String (x);
 		//acentos ES áéíóú
 		//acentos FR àèìòù
 // TODO faltarian otros acentos
-		//permite solo lo que indica el patron
-		x =  temp.replace(/[\-_.@áéíóú àèìòù | # ' ?!¡¿ü:]+/g,'');  
-        x =  temp.replace(/"/,'\"');
+		//esto no se permite, segun lo que indica el patron
+		x =  temp.replace(/[\-.@áéíóúàèìòù|#;'?!¡¿ü]+/g,'');  
+//		x =  x.replace(/;/g,'');     
+//      x =  temp.replace(/"/,'\"');
 
 		this.log("jsconStringify => clearData: "+x);
 		return x;

@@ -230,18 +230,18 @@ function getRadioButtonSelectedValue(ctrl)
  */
 function guardarModificacion(){
 
-	objAH=new AjaxHelper(updateGuardarModificacion);
-	objAH.debug= true;
-	objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
-	objAH.variable=$("#variable").val();
-	objAH.valor=$("#valor").val();
+	objAH               = new AjaxHelper(updateGuardarModificacion);
+	objAH.debug         = true;
+	objAH.url           = "/cgi-bin/koha/admin/global/preferenciasDB.pl";
+	objAH.variable      = $("#variable").val();
+	objAH.valor         = $("#valor").val();
 
 	if ($("#tipoVar").val() == 'bool'){
-	objAH.valor=(getRadioButtonSelectedValue( $("[name=valor]")));
+	    objAH.valor=(getRadioButtonSelectedValue( $("[name=valor]")));
 	}
 
-	objAH.explicacion=$("#explicacion").val();
-	objAH.accion= "GUARDAR_MODIFICACION_VARIABLE";
+	objAH.explicacion   = $("#explicacion").val();
+	objAH.accion        = "GUARDAR_MODIFICACION_VARIABLE";
 	objAH.sendToServer();
 
 }

@@ -1379,7 +1379,7 @@ sub UTF8toISO {
 sub from_json_ISO {
     my ($data)=@_;
 
-#     C4::AR::Debug::debug("Utilidades => from_json_ISO => data => ".$data);
+     C4::AR::Debug::debug("Utilidades => from_json_ISO => data => ".$data);
 
     eval {
         
