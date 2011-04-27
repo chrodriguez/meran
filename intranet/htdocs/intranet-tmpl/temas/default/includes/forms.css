@@ -27,6 +27,14 @@
 	border: 2px solid #4B5869;
 }
 
+.ayuda_marc{    
+    width:100%;
+}
+
+
+
+
+
  input.submit-button {
 	width: 140px;
 	float: right;
@@ -37,8 +45,9 @@
 	float: left;
 	text-align: right;
 	margin-right: 15px;
-	width: 220px;
+	width: 149px;
 	font-size: 1em;
+    padding-top: 15px;
 }
 
 .nonForm{
