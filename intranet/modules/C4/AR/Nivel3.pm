@@ -399,9 +399,36 @@ sub detalleNivel3{
 	    $hash_nivel2{'disponibles'}             = $totales_nivel3->{'disponibles'};
 	    $hash_nivel2{'cantParaSala'}            = $totales_nivel3->{'cantParaSala'};
 	    $hash_nivel2{'cantParaPrestamo'}        = $totales_nivel3->{'cantParaPrestamo'};
+	    
+        my ($cant_docs,$e_docs)                 = getListaDeDocs($id2);  
+	    
+        $hash_nivel2{'lista_docs'}              = $e_docs;
+        $hash_nivel2{'cant_docs'}               = $cant_docs;
     }
 
 	return (\%hash_nivel2);
+}
+
+=head2
+sub getListaDeDocs
+Trae todos los objectos EDocument para un nivel 2 dado
+@params
+$id2, id de CatRegistroMarcN2
+=cut
+
+sub getListaDeDocs{
+	my ($id2) = @_;
+    my @filtros;
+	
+	use C4::Modelo::EDocument::Manager;
+	
+	push(@filtros, ( id2 => { eq => $id2 }) );
+	
+	my $e_docs = C4::Modelo::EDocument::Manager->get_e_document(query => \@filtros,);
+	
+	return (scalar(@$e_docs), $e_docs);
+	
+	
 }
 
 =head2 sub detalleCompletoINTRA

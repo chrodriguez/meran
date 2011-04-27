@@ -526,7 +526,6 @@ sub devolver {
 	my $id3          = $params->{'id3'};
 	my $tipo         = $params->{'tipo'};
 	my $loggedinuser = $params->{'loggedinuser'};
-	my $nro_socio    = $params->{'nro_socio'};
 
 	#     my $msg_object= C4::AR::Mensajes::create();
 	#se setea el barcode para informar al usuario en la devolucion
@@ -607,7 +606,7 @@ sub devolver {
 
             $self->debug("SANCION!!  TIPO SANCION: ".$tipo_sancion->getTipo_sancion);
 
-			if ( C4::AR::Sanciones::tieneLibroVencido( $nro_socio, $self->db ) )
+			if ( C4::AR::Sanciones::tieneLibroVencido( $self->getNro_socio , $self->db ) )
 			{
 
 # El usuario tiene libros vencidos en su poder (es moroso)
@@ -621,8 +620,8 @@ sub devolver {
 				$paramsSancion{'id_reserva'}   = undef;
 				$paramsSancion{'fecha_comienzo'} = undef;
 				$paramsSancion{'fecha_final'}    = undef;
-                $paramsSancion{'id3'}         = $self->getId3;
-				$paramsSancion{'nro_socio'}      = $nro_socio;
+				$paramsSancion{'id3'}         = $self->getId3;
+				$paramsSancion{'nro_socio'}      = $self->getNro_socio;
 				$paramsSancion{'dias_sancion'}   = $diasSancion;
 				$sancion->insertar_sancion_pendiente( \%paramsSancion );
 				$hasdebts = 1;
@@ -630,7 +629,7 @@ sub devolver {
 			else {
 
 				#SANCION EFECTIVA
-				$self->debug("SANCION EFECTIVA a $nro_socio");
+				$self->debug("SANCION EFECTIVA a ".$self->getNro_socio);
 				my $err;
 
 # Se calcula la fecha de fin de la sancion en funcion de la fecha actual (hoy + cantidad de dias de sancion)
@@ -649,7 +648,7 @@ sub devolver {
 				$paramsSancion{'tipo_sancion'}   = $tipo_sancion->getTipo_sancion;
 				$paramsSancion{'id_reserva'}     = undef;
 				$paramsSancion{'id3'}         = $self->getId3;
-				$paramsSancion{'nro_socio'}      = $nro_socio;
+				$paramsSancion{'nro_socio'}      = $self->getNro_socio;
 				$paramsSancion{'fecha_comienzo'} = $fechaHoy;
 				$paramsSancion{'fecha_final'}    = $fechaFinSancion;
 				$paramsSancion{'dias_sancion'}   = $diasSancion;

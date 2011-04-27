@@ -279,7 +279,8 @@ function updateInfoPrestarReserva(responseText){
 
 $(document).ready(function(){
 	inicializar();
-	zebra("tablaResult");	
+	zebra("tablaResult");
+
 });
 
 </script>
@@ -309,98 +310,101 @@ aca
 
 
 <fieldset>
-<strong><legend>[% "Detalles de Nivel 1 registro" | i18n %] [% id1 %]</legend></strong>
+	   <legend>[% "Detalles de Nivel 1 registro" | i18n %] [% id1 %]</legend>
 
-<div class="detalle">
+	<div id="detalle1" class="detalle1">
+	
+	    [% PERL %]
+	        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
+	                                        url =>      "datosDocumento.pl", 
+	                                        params =>   ["id1=[% id1 %]","tipoAccion=MODIFICAR_NIVEL_1"],
+	                                        title =>    "[% 'Editar Registro' | i18n %]"
+	                                    ) ;
+	    [% END %]
+	
+	    [% PERL %]
+	        print C4::AR::Filtros::to_Icon(    
+	                                            boton   => "icon_borrar",
+	                                            onClick => "borrarN1([% id1 %]);",
+	                                            title   => "[% 'Borrar Nivel 1' | i18n %]",
+	                ) ;
+	    [% END %]
+	    
+	    <ul class="listado_sin_margen">
+		    [% FOREACH nivel1 %]
+		        [% FOREACH subcampos_array %]
+		            [% IF liblibrarian %]
+		                [% IF dato %]
+		                <li>    [% liblibrarian %]: <strong>[% dato %]</li>
+		                [% END %]
+		            [% END %]
+		        [% END %]
+		    [% END %]
+	    </ul>
 
-    [% PERL %]
-        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-                                        url =>      "datosDocumento.pl", 
-                                        params =>   ["id1=[% id1 %]","tipoAccion=MODIFICAR_NIVEL_1"],
-                                        title =>    "[% 'Editar Registro' | i18n %]"
-                                    ) ;
-    [% END %]
-
-    [% PERL %]
-        print C4::AR::Filtros::to_Icon(    
-                                            boton   => "icon_borrar",
-                                            onClick => "borrarN1([% id1 %]);",
-                                            title   => "[% 'Borrar Nivel 1' | i18n %]",
-                ) ;
-    [% END %]
-    
-    <ul class="listado_sin_margen">
-    [% FOREACH nivel1 %]
-        [% FOREACH subcampos_array %]
-            [% IF liblibrarian %]
-                [% IF dato %]
-                <li>    [% liblibrarian %]: <strong>[% dato %]</strong></li>
-                [% END %]
-            [% END %]
-        [% END %]
-    [% END %]
-    </ul>
-
-
-	[% "N&uacute;mero Total de Ejemplares" | i18n %]:<b> [% cantItemN1 %]</b> 
-</div>
+		[% "N&uacute;mero Total de Ejemplares" | i18n %]:<b> [% cantItemN1 %]</b> 
+	</div>
 </fieldset>
 [% FOREACH nivel2 %]
 
         <div id="fieldset_grupo[% id2 %]">
-        <fieldset>
-        <strong><legend>[% "Detalles de Nivel 2 para registro" | i18n %] [% id2 %] [% "GRUPO" | i18n %] - [% tipo_documento %]</legend></strong>
-        
-                <div id="grupo[% id2 %]">
-                
-                <div class="detalle">
-                <!-- NIVEL 2 -->
-	                <div id="[% id2 %]" style="position: relative; float:right;"></div>
-	                [% PERL %]
-		                print C4::AR::Filtros::link_to(	text => 	C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-										                url => 		"datosDocumento.pl", 
-										                params =>	["id1=[% id1 %]","id2=[% id2 %]","tipoAccion=MODIFICAR_NIVEL_2"],
-										                title =>	"[% 'Editar Nivel 2' | i18n %]"
-									                ) ;
-	                [% END %]
-                
-                <div>
-                    [% PERL %]
-                                        print C4::AR::Filtros::to_Icon(  
-                                                                            boton   => "icon_borrar",
-                                                                            onClick => "borrarN2([% id2 %]);",
-                                                                            title   => "[% 'Borrar Grupo' | i18n %]",
-                                                ) ;
-                    [% END %]
-                </div>
-	                <br>
-	                [% IF amazon_cover %]
-		                <div class='amazon_cover_detail' style="position: relative; float:right;">
-				                <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% lang %]/[% amazon_cover %]" title="Tapa" >
+	        <fieldset>
+	            <legend class="trigger trigger_3_[% id2 %] click">[% "Detalles de Nivel 2 para registro" | i18n %] [% id2 %] [% "GRUPO" | i18n %] - [% tipo_documento %]</legend>
+	                <div id="grupo[% id2 %]" class="grupo[% id2 %]">
+	                
+	                <div id="grupo[% id2 %]" class="grupo[% id2 %]">
+		                <!-- NIVEL 2 -->
+			                <div id="[% id2 %]" style="position: relative; float:right;"></div>
+			                [% PERL %]
+				                print C4::AR::Filtros::link_to(	text => 	C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
+												                url => 		"datosDocumento.pl", 
+												                params =>	["id1=[% id1 %]","id2=[% id2 %]","tipoAccion=MODIFICAR_NIVEL_2"],
+												                title =>	"[% 'Editar Grupo' | i18n %]"
+											                ) ;
+			                [% END %]
+		                
+		                <div>
+		                    [% PERL %]
+		                                        print C4::AR::Filtros::to_Icon(  
+		                                                                            boton   => "icon_borrar",
+		                                                                            onClick => "borrarN2([% id2 %]);",
+		                                                                            title   => "[% 'Borrar Grupo' | i18n %]",
+		                                                ) ;
+		                    [% END %]
 		                </div>
-		                <br>
-	                [% END %]
-	                <ul class="listado_sin_margen">
-	                [% FOREACH nivel2_array %]
-                        [% FOREACH subcampos_array %]
-			                    [% IF liblibrarian %]
-				                    [% IF dato %]
-					                <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
-				                    [% END %]
-			                    [% END %]
-                    
-	                    [% END %] <!-- END FOREACH nivel2_array -->
-                    [% END %] <!-- END FOREACH subcampos_array-->
-                    <li>
-                    <fieldset>
-                    <strong><legend>[% "Ejemplares del grupo" | i18n %] [% id2 %]</legend></strong>
-                    <div id="ejemplaresDelGrupo[% id2 %]" >
-                    [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
-                    </div> <!--end <div id="ejemplaresDelGrupo -->
-                    </fieldset></li>
-                    </div>
-            </div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->
-        </fieldset>
+			                <br>
+			                [% IF amazon_cover %]
+				                <div class='amazon_cover_detail' style="position: relative; float:right;">
+						                <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% lang %]/[% amazon_cover %]" title="Tapa" >
+				                </div>
+				                <br>
+			                [% END %]
+			                <ul class="listado_sin_margen">
+				                [% FOREACH nivel2_array %]
+			                        [% FOREACH subcampos_array %]
+						                    [% IF liblibrarian %]
+							                    [% IF dato %]
+								                <li> [% liblibrarian %]: <strong>[% dato %]</li>
+							                    [% END %]
+						                    [% END %]
+			                    
+				                    [% END %] <!-- END FOREACH nivel2_array -->
+			                    [% END %] <!-- END FOREACH subcampos_array-->
+			                    <li>
+				                    <fieldset>
+					                    <legend class="trigger trigger_2_[% id2 %] click">[% "Ejemplares del grupo" | i18n %] [% id2 %]</legend>
+					                    <div id="ejemplaresDelGrupo[% id2 %]" class="ejemplaresDelGrupo[% id2 %]" >
+					                    [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
+					                    </div> <!--end <div id="ejemplaresDelGrupo -->
+				                    </fieldset>
+				                    <script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
+			                    </li>
+			                 </ul>
+	                </div>
+                [% INCLUDE  "partials/e-docs_grupo.inc" %]
+	            </div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->
+	        </fieldset>
+	        <script type="text/javascript">makeToggle('grupo[% id2 %]','trigger_3_[% id2 %]',null,false);</script>
         </div>
 
 [% END %]<!-- END FOREACH Nivel 2-->

@@ -83,52 +83,52 @@ function limpiarCampos(side){
                     <label for="match_mode">
                     </label>  
                     [% PERL %]
-                        print C4::AR::Filtros::getComboMatchMode() ;
+                        print C4::AR::Filtros::getComboMatchMode();
                     [% END %]
                     </li>
                 </ul>
             </fieldset>
           </div> 
             <div id="busqueda_simple">
-            <fieldset>
-            <legend class="titulo_legend"><strong>[% "B&uacute;squeda simple" | i18n %]</strong></legend>
-                <ul>
-                <li class="sub_item">
-                    <label for="isbn">
-                        <strong>ISBN</strong>   
-                    </label>
-                    <input type="text" id="isbn" size="25"  onkeypress="limpiarCampos('centro')">
-                </li>
-                
-                <li class="sub_item">
-                    <label for="dictionary">
-                        <strong>[% "B&uacute;squeda por diccionario" | i18n %]</strong>
-                    </label>
-                    <input type="text" size="25" id="dictionary" readonly onkeypress="limpiarCampos('centro')">
-                    ### FALTA IMPLEMENTAR
-                </li>		
-                <li class="sub_item">
-                    <label for="codBarra">
-                        <strong>[% "C&oacute;digo de barras" | i18n %]</strong>
-                    </label>
-                    <!--<input type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">-->
-                    <input type="text" size="25" id="codBarra" onkeypress="limpiarCampos('centro')">
-                </li>
-                <li class="sub_item">
-                    <label for="tema">
-                        <strong>Tema</strong>
-                    </label>
-                    <input type="text" size="25" id="tema"  onkeypress="limpiarCampos('centro')">
-                </li>
-                <li class="sub_item">
-                    <label for="estante">
-                        <strong>[% "Estantes Virtuales" | i18n %]</strong>
-                    </label>
-                    <input type="text" size="25" id="estante" readonly onkeypress="limpiarCampos('centro')">
-                    ### FALTA IMPLEMENTAR
-                </li>
-              </ul>
-            </fieldset>
+	            <fieldset>
+	            <legend class="titulo_legend"><strong>[% "B&uacute;squeda simple" | i18n %]</strong></legend>
+	                <ul>
+	                <li class="sub_item">
+	                    <label for="isbn">
+	                        <strong>ISBN</strong>   
+	                    </label>
+	                    <input type="text" id="isbn" size="25"  onkeypress="limpiarCampos('centro')">
+	                </li>
+	                
+	                <li class="sub_item">
+	                    <label for="dictionary">
+	                        <strong>[% "B&uacute;squeda por diccionario" | i18n %]</strong>
+	                    </label>
+	                    <input type="text" size="25" id="dictionary" readonly onkeypress="limpiarCampos('centro')">
+	                    ### FALTA IMPLEMENTAR
+	                </li>		
+	                <li class="sub_item">
+	                    <label for="codBarra">
+	                        <strong>[% "C&oacute;digo de barras" | i18n %]</strong>
+	                    </label>
+	                    <!--<input type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">-->
+	                    <input type="text" size="25" id="codBarra" onkeypress="limpiarCampos('centro')">
+	                </li>
+	                <li class="sub_item">
+	                    <label for="tema">
+	                        <strong>Tema</strong>
+	                    </label>
+	                    <input type="text" size="25" id="tema"  onkeypress="limpiarCampos('centro')">
+	                </li>
+	                <li class="sub_item">
+	                    <label for="estante">
+	                        <strong>[% "Estantes Virtuales" | i18n %]</strong>
+	                    </label>
+	                    <input type="text" size="25" id="estante" readonly onkeypress="limpiarCampos('centro')">
+	                    ### FALTA IMPLEMENTAR
+	                </li>
+	              </ul>
+	            </fieldset>
           </div>
     
           <div id="busqueda_especifica">

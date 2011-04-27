@@ -336,18 +336,18 @@ $(document).ready(function() {
                   <!--<div id="cambo_tipo_prestamo" style="display: none">-->
             </li>
             <li class="sub_item">
-                    <div id="divInfoEjemplar">
-                        <label for="barcode">[% 'C&oacute;digo de Barras:' | i18n %]
-	                        [% PERL %]
-	                            print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, ingrese el nro. de inventario, por ej. DEO-LIB-0' | i18n %]",);
-	                        [% END %]
-                        </label>
-                        <input type="text" id="barcode" name="barcode" value="" tabindex='2' style="display: none;">
-                        <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
-                        <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
-                        <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
-                        <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
-                    </div>
+	            <div id="divInfoEjemplar">
+	                <label for="barcode">[% 'C&oacute;digo de Barras:' | i18n %]
+	                 [% PERL %]
+	                     print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, ingrese el nro. de inventario, por ej. DEO-LIB-0' | i18n %]",);
+	                 [% END %]
+	                </label>
+	                <input type="text" id="barcode" name="barcode" value="" tabindex='2' style="display: none;">
+	                <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
+	                <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
+	                <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
+	                <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+	            </div>
             </li>
             <li>
                 <div id="datos_ejemplar"></div>

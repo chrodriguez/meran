@@ -58,6 +58,7 @@ sub getNivel3ParaReserva{
     my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => [ @filtros ] );
 
     foreach my $nivel3 (@$nivel3_array_ref){
+	C4::AR::Debug::debug("getNivel3ParaReserva=> id3: ".$nivel3->getId3);
         if(estaLibre($nivel3->getId3)){
             return($nivel3);
         }
@@ -78,14 +79,14 @@ sub estaLibre{
     my @filtros;
     push(@filtros, ( id3    => { eq => $id3}));
     push(@filtros, ( estado => { ne => undef}));
-    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
+    my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros);
 
-
-    # ESTO ESTABA AL REVÉS
-    if ($reservas_array_ref){
+    if ($reservas_count > 0){
+	C4::AR::Debug::debug("estaLibre $id3 ? => 0 ");
         return 0;
     }else{
-      return 1;
+	C4::AR::Debug::debug("estaLibre $id3 ? => 1 ");
+	return 1;
     }
 }
 
