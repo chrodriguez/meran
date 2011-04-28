@@ -557,6 +557,14 @@ label.error_adv {
     color: #006400;
 }
 
+.disponible {
+    color: #006400;
+}
+
+.nodisponible {
+    color: red;
+}
+
 .par .nodisponible {
 	font-size: 10pt;
 	color: red;
