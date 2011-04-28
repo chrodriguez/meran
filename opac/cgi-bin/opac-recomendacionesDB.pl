@@ -21,8 +21,8 @@ if($obj){
 
 }
 
-if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
-
+if ($obj->{'tipoAccion'} eq 'AGREGAR_RECOMENDACION') {
+    
     my $idNivel1=  $obj->{'idCatalogoSearch'};
 
     my $combo_ediciones= C4::AR::Utilidades::generarComboNivel2($idNivel1);
@@ -38,6 +38,24 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
                     });
  
     $t_params->{'combo_ediciones'} = $combo_ediciones;
+      
+
+
+} elsif ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
+
+    my $idNivel1=  $obj->{'idCatalogoSearch'};
+
+    my $recomendacion= C4::AR::Recomendaciones::agregarRecomendacion($idNivel1);
+
+    ($template, $session, $t_params)= get_template_and_user({
+                        template_name => "/includes/opac-datos_edicion.inc",
+                        query => $input,
+                        type => "opac",
+                        authnotrequired => 1,
+                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    });
+ 
+    $t_params->{'recomendacion'} = $recomendacion;
 
    
 }   elsif ($obj->{'tipoAccion'} eq 'CARGAR_DATOS_EDICION')   {

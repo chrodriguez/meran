@@ -30,7 +30,7 @@ function traerImputsVacios(){
 
 function updateTraerImputsVacios(responseText){
   $('#datos_edicion_seleccionada').html(responseText); 
-
+  validateForm(agregarRenglon);
 }
 
 function guardarRecomendacion(){
@@ -128,8 +128,8 @@ function verificarBusqueda(){
             bloquearCampos();
             $('#ediciones').show();
     } else {   
+
            traerImputsVacios();
-           validateForm(agregarRenglon);
            $('#carga_manual').show();
            $('#ediciones').hide(); 
     }
