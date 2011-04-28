@@ -110,6 +110,7 @@ use vars qw(@EXPORT_OK @ISA);
     dateDiff
     generarComboEstantes
     generarComboTipoDeDocConValuesIds
+    isValidFile
 );
 
 # para los combos que no usan tablas de referencia
@@ -3912,6 +3913,37 @@ sub generarComboEstantes{
     my $comboTipoNivel3= CGI::scrolling_list(\%options_hash);
 
     return $comboTipoNivel3;
+}
+
+
+
+############### ACOMODARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRr
+sub isValidFile{
+
+    my ($file_path,$extension) = @_;
+    my $return_value = 1;
+    my $file_type;
+
+    use File::LibMagic;
+
+    my $flm = File::LibMagic->new();
+
+    open(FILE, "<$file_path") or die "Can't open $file_path : $!\n";
+    close(FILE);
+
+    $file_type = $flm->checktype_filename($file_path);    
+ 
+    my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","msword","docx","odt","pdf","xls","zip");
+    my @nombreYextension=split('\/',$file_type);
+
+    C4::AR::Debug::debug("UploadDocument ====== > FileType: ".$file_type);
+
+    if (!( @nombreYextension[1] =~ m/bmp|jpg|gif|png|jpeg|msword|docx|odt|pdf|xls|zip/) ) {
+        $return_value = 0;
+    }
+
+    C4::AR::Debug::debug("FILE TYPE RESULT: ".$return_value);
+    return ($return_value);
 }
 
 

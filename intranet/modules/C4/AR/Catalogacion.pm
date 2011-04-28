@@ -27,6 +27,8 @@ use vars qw(@EXPORT_OK @ISA);
   &guardarCamposModificados
   &guardarCampoTemporal
   &getRefFromStringConArrobas
+  &getDocumentById
+  $saveEDocument
 );
 
 =head1 NAME
@@ -1809,6 +1811,31 @@ sub getLiblibrarian{
             return 0;
         }
     }
+}
+
+
+sub getDocumentById{
+    my ($file_id) = @_;
+    use C4::Modelo::EDocument::Manager;
+    
+    my ($file) = C4::Modelo::EDocument::Manager->get_e_document( query => [ id => { eq => $file_id } ] );
+    
+    if (scalar(@$file)){
+    	return ($file->[0]);
+    }
+    
+    return (undef);
+    
+}
+
+sub saveEDocument{
+    my ($id2,$name,$type) = @_;
+	
+	my $filename = $name.".".$type;
+	
+	my $e_doc = C4::Modelo::EDocument->new();
+	$e_doc->agregar($id2,$filename,$type,$name);
+	
 }
 
 sub getHeader{
