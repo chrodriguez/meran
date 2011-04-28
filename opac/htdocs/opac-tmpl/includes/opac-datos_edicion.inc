@@ -4,7 +4,7 @@
                                     <p>[% 'La biblioteca cuenta con ' | i18n %]<strong>[% cant_ejemplares_disp %]</strong>[% ' ejemplar/es de este tipo, si aun considera necesaria esta recomendacion, complete el formulario, de lo contrario realice otra busqueda' | i18n %] </p>
                       </div> 
       [% END  %] 
-      <form id="recom_form" name="recom_form" method="post">     
+      <form id="recom_form" name="recom_form" method="post" onsubmit="return false;">     
         <div class="datos_edicion" id="datos_edicion"> 
                
                   <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>

@@ -557,6 +557,14 @@ label.error_adv {
     color: #006400;
 }
 
+.disponible {
+    color: #006400;
+}
+
+.nodisponible {
+    color: red;
+}
+
 .par .nodisponible {
 	font-size: 10pt;
 	color: red;
@@ -4507,4 +4515,12 @@ body .latest-status-text a {
 .placeholder
 {
   color: #aaa;
+}
+
+.fileUploader_catalogo{
+   clear: both;
+   float: right;
+   height: 90px;
+   width: 100%;	
+   margin-top: 20px;
 }

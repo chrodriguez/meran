@@ -33,14 +33,34 @@ __PACKAGE__->meta->setup(
 );
 
 
+sub agregar(){
+	my ($self) = shift;
+	my ($id2) = shift;
+    my ($filename) = shift;
+    my ($type) = shift;
+    my ($name) = shift;
+	
+	$self->setId2($id2);
+	$self->setFilename($filename);
+    $self->setFileType($type);
+    $self->setTitle($name);
+    
+    $self->save();
+	
+}
+
 # ------GETTERS--------------------
+sub getId{
+    my ($self) = shift;
+    return ($self->id);
+}
 
 sub getFilename{
     my ($self) = shift;
     return ($self->filename);
 }
 
-sub geTitle{
+sub getTitle{
     my ($self) = shift;
     return ($self->title);
 }
