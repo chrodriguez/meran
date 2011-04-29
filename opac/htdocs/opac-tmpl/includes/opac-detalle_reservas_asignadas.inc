@@ -30,9 +30,10 @@
                         [% END %]
                     </td>
                     <td >
+                    <!-- FIXME: ver este link, no esta bien el id del autor, no llega -->
                     [% IF reserva.nivel2.nivel1.getAutor %]
-                        <a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor %]" >
-                        [% reserva.nivel2.nivel1.cat_autor.getCompleto %]
+                        <a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor.getId %]" >
+                        [% reserva.nivel2.nivel1.getAutor %]
                         </a>
                     [% ELSE %]
                         &nbsp;
@@ -41,9 +42,9 @@
                     <td align=center >  
                     [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
                 <!--	[% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]-->
-                    [% IF reserva.nivel2.getVolumen %] t [% reserva.nivel2.getVolumen %] 
+                    <!-- [% IF reserva.nivel2.getVolumen %] t [% reserva.nivel2.getVolumen %] 
                         [% IF reserva.nivel2.getVolumenDesc %] ([% reserva.nivel2.getVolumenDesc %])  [% END %] 
-                    [% END %]
+                    [% END %] -->
                     </td>
                     <td  align="center">
                     [% IF reserva.getFecha_reserva_formateada %] 
