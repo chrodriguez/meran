@@ -221,8 +221,9 @@ sub modificar {
 # FIXME no esta funcionando el currenttime de mysql
     $self->setUpdatedAt(Date::Manip::ParseDate("now"));
 
-    $self->setId2($params->{'id2'});
-    $self->setId1($params->{'id1'});
+#     Esto porque se modifica???? Alguna vez cambia??
+#     $self->setId2($params->{'id2'});
+#     $self->setId1($params->{'id1'});
 
     my $marc_record_cliente = MARC::Record->new_from_usmarc($params->{'marc_record'}); #marc_record que viene del cliente
     my $marc_record_base    = MARC::Record->new_from_usmarc($self->getMarcRecord());
@@ -276,7 +277,7 @@ sub modificar {
     $self->verificar_cambio($db, $params);
     $self->verificar_historico_disponibilidad($db, $params);
 
-#     C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => self->getId3() => ANTES ".$self->getId3());
+   C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => self->getId3() => ANTES ".$self->getId3());
 
     $self->validar($msg_object, $MARC_result_array, $params, 'UPDATE', $db);
 

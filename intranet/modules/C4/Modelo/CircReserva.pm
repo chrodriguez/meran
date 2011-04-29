@@ -363,7 +363,7 @@ sub actualizarDatosReservaEnEspera{
 	$paramsSancion{'fecha_comienzo'}= $startdate;
 	$paramsSancion{'fecha_final'}= $enddate;
 	$paramsSancion{'dias_sancion'}= undef;
-    $paramsSancion{'loggedinuser'}= $loggedinuser;
+	$paramsSancion{'loggedinuser'}= $loggedinuser;
 	$sancion->insertar_sancion(\%paramsSancion);
 	# Se registra la actualizacion
 	$paramsSancion{'id3'}= $self->getId3;
@@ -644,6 +644,7 @@ sub borrar_sancion_de_reserva{
 sub pasar_a_espera{
     my ($self) = shift;
 
+    $self->setEstado('G');
     $self->setId3(undef);
     $self->save();
 }
