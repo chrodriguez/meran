@@ -10,9 +10,7 @@ use C4::AR::Nivel3;
 
 
 my $input = new CGI;
-
 my $obj=$input->param('obj');
-
 my ($template, $session, $t_params);
 
 if($obj){
@@ -21,13 +19,11 @@ if($obj){
 
 }
 
-if ($obj->{'tipoAccion'} eq 'AGREGAR_RECOMENDACION') {
+if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
     
     my $idNivel1=  $obj->{'idCatalogoSearch'};
 
     my $combo_ediciones= C4::AR::Utilidades::generarComboNivel2($idNivel1);
-
-  
 
     ($template, $session, $t_params)= get_template_and_user({
                         template_name => "/includes/opac-combo_ediciones.inc",
@@ -41,24 +37,45 @@ if ($obj->{'tipoAccion'} eq 'AGREGAR_RECOMENDACION') {
       
 
 
-} elsif ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION') {
+} elsif ($obj->{'tipoAccion'} eq 'AGREGAR_RECOMENDACION') {
 
-    my $idNivel1=  $obj->{'idCatalogoSearch'};
+#   ($template, $session, $t_params)= get_template_and_user({
+#                         template_name => "/includes/opac-datos_edicion.inc",
+#                         query => $input,
+#                         type => "opac",
+#                         authnotrequired => 1,
+#                         flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+#                     });
+    my $authnotrequired= 0;
+    my ($userid, $session, $flags)= checkauth(  $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'}, 
+                                                'opac'
+                                );
 
-    my $recomendacion= C4::AR::Recomendaciones::agregarRecomendacion($idNivel1);
+    my $usr_socio= C4::AR::Auth::getSessionNroSocio();
+    my $recomendacion= C4::AR::Recomendaciones::agregarRecomendacion($usr_socio);
 
-    ($template, $session, $t_params)= get_template_and_user({
-                        template_name => "/includes/opac-datos_edicion.inc",
-                        query => $input,
-                        type => "opac",
-                        authnotrequired => 1,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-                    });
- 
+  
+     C4::AR::Utilidades::printHASH($session);
     $t_params->{'recomendacion'} = $recomendacion;
 
    
-}   elsif ($obj->{'tipoAccion'} eq 'CARGAR_DATOS_EDICION')   {
+} elsif ($obj->{'tipoAccion'} eq 'AGREGAR_RENGLON') {
+
+ 
+  my $recom_id= $obj->{'id_recomendacion'}; 
+  
+  my $detalle_recomendacion= C4::AR::RecomendacionDetalle::agregarDetalleARecomendacion($obj, $recom_id);
+  
+  $t_params->{'detalle'} = $detalle_recomendacion;
+
+
+ } elsif ($obj->{'tipoAccion'} eq 'CARGAR_DATOS_EDICION')   {
+
 
     my $idNivel2 =  $obj->{'edicion_id'};
     my $edicion =  $obj->{'edicion'};
@@ -85,9 +102,11 @@ if ($obj->{'tipoAccion'} eq 'AGREGAR_RECOMENDACION') {
    $t_params->{'datos_edicion'} = $datos_edicion;
    $t_params->{'datos_nivel1'} = $datos_nivel1;
 
+
 } elsif ($obj->{'tipoAccion'} eq 'BUSQUEDA_RECOMENDACION_SIN_RESULTADOS') {
 
- ($template, $session, $t_params)= get_template_and_user({
+
+    ($template, $session, $t_params)= get_template_and_user({
                         template_name => "/includes/opac-datos_edicion.inc",
                         query => $input,
                         type => "opac",
@@ -95,7 +114,7 @@ if ($obj->{'tipoAccion'} eq 'AGREGAR_RECOMENDACION') {
                         flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
                     });
 
- $t_params->{'datos_edicion'} = "";
+    $t_params->{'datos_edicion'} = "";
   
 }
 

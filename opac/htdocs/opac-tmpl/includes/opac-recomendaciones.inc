@@ -13,7 +13,7 @@ function buscarDatosNivel2(){
         objAH.debug             = true;
         objAH.showOverlay       = true;
         objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
-        objAH.tipoAccion        = 'BUSQUEDA_RECOMENDACION';
+        objAH.tipoAccion        = 'BUSQUEDA_EDICIONES';
         objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val();
         objAH.sendToServer();
 }
@@ -33,40 +33,40 @@ function updateTraerImputsVacios(responseText){
   validateForm(agregarRenglon);
 }
 
-function guardarRecomendacion(){
-   
-    $(".eliminar").remove();
-    $("#tabla_recomendacion").hide();
-    alert( $("#tabla_recomendacion"));
-    $("#tabla_recomendacion").tabletojson({
-            headers: "Autor,Titulo, Edicion, Lugar Publicacion, Editorial, Fecha, ISBN/ISSN, Nivel 2, Cantidad, Motivo, Comentario",
-            attribHeaders: "{}",
-            returnElement: "#table",
-            complete: function(x){
-                
-                 objAH                     = new AjaxHelper(updateGuardarRecomendacion);
-                 objAH.url                 = '/cgi-bin/koha/opac-recomendacionesAdd.pl';
-                 objAH.debug               = true;
-                 objAH.showOverlay         = true;
-                 objAH.table               = JSONstring.toObject(x);
-                 objAH.motivo_propuesta    = $('#motivo_propuesta').val();
-                 objAH.comment             = $('#comment').val();
-                 objAH.tipoAccion          = 'GUARDAR_RECOMENDACION';
-                 objAH.sendToServer();
-            }
-        })
-    $(".tr").remove
-    
-}
-
-function updateGuardarRecomendacion(responseText){
-  
-   if (!verificarRespuesta(responseText)) {
-            return(0);
-            var Messages=JSONstring.toObject(responseText);
-            setMessages(Messages);
-   }
-}
+// function guardarRecomendacion(){
+//    
+//     $(".eliminar").remove();
+//     $("#tabla_recomendacion").hide();
+//     alert( $("#tabla_recomendacion"));
+//     $("#tabla_recomendacion").tabletojson({
+//             headers: "Autor,Titulo, Edicion, Lugar Publicacion, Editorial, Fecha, ISBN/ISSN, Nivel 2, Cantidad, Motivo, Comentario",
+//             attribHeaders: "{}",
+//             returnElement: "#table",
+//             complete: function(x){
+//                 
+//                  objAH                     = new AjaxHelper(updateGuardarRecomendacion);
+//                  objAH.url                 = '/cgi-bin/koha/opac-recomendacionesAdd.pl';
+//                  objAH.debug               = true;
+//                  objAH.showOverlay         = true;
+//                  objAH.table               = JSONstring.toObject(x);
+//                  objAH.motivo_propuesta    = $('#motivo_propuesta').val();
+//                  objAH.comment             = $('#comment').val();
+//                  objAH.tipoAccion          = 'GUARDAR_RECOMENDACION';
+//                  objAH.sendToServer();
+//             }
+//         })
+//     $(".tr").remove
+//     
+// }
+// 
+// function updateGuardarRecomendacion(responseText){
+//   
+//    if (!verificarRespuesta(responseText)) {
+//             return(0);
+//             var Messages=JSONstring.toObject(responseText);
+//             setMessages(Messages);
+//    }
+// }
 
 
 function updateBuscarDatosNivel2(responseText){
@@ -75,8 +75,7 @@ function updateBuscarDatosNivel2(responseText){
 
    $('#edicion_id').val('').attr("selected",true);
    $('#edicion_id').change( function(){    
-              var edicion=this.options[this.selectedIndex].text
-              
+              var edicion=this.options[this.selectedIndex].text 
               cargarDatosEdicionSeleccionada(edicion)
    });
    if (!verificarRespuesta(responseText)) {
@@ -133,6 +132,7 @@ function verificarBusqueda(){
            $('#carga_manual').show();
            $('#ediciones').hide(); 
     }
+        crearRecomendacion();
 }
 
 $(document).ready( function() {

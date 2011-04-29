@@ -61,7 +61,9 @@ sub agregarRecomendacionDetalle{
 
     $self->setAdqRecomendacionId($params->{'id_recomendacion'});
     
-    $self->setCatNivel2Id($params->{'nivel_2'});
+    if ($params->{'nivel_2'}) {
+      $self->setCatNivel2Id($params->{'nivel_2'});
+    }
     $self->setAutor($params->{'autor'});
     $self->setTitulo($params->{'titulo'});
     $self->setLugarPublicacion($params->{'lugar_publicacion'});
@@ -72,7 +74,7 @@ sub agregarRecomendacionDetalle{
     $self->setCantidadEjemplares($params->{'cantidad_ejemplares'});
     $self->setMotivoPropuesta($params->{'motivo_propuesta'});
     $self->setComentario($params->{'comentarios'});
-    $self->setReservaMaterial($params->{'reservar'});
+#     $self->setReservaMaterial($params->{'reservar'});
   
     $self->save();
 
