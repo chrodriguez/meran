@@ -20,7 +20,6 @@
             [% FOREACH reserva IN RESERVAS_ASIGNADAS %]
                 <tr>
                     <td >
-                      
                         [% PERL %]
                               print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel2.nivel1.getTitulo %]",
                                                               url =>      "/cgi-bin/koha/opac-detail.pl", 
@@ -30,9 +29,7 @@
                         [% END %]
                     </td>
                     <td >
-                    <!-- FIXME: ver este link, no esta bien el id del autor, no llega -->
                     [% IF reserva.nivel2.nivel1.getAutor %]
-                        <a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor.getId %]" >
                         [% reserva.nivel2.nivel1.getAutor %]
                         </a>
                     [% ELSE %]
@@ -41,7 +38,7 @@
                     </td> 
                     <td align=center >  
                     [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
-                <!--	[% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]-->
+                    <!-- [% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]-->
                     <!-- [% IF reserva.nivel2.getVolumen %] t [% reserva.nivel2.getVolumen %] 
                         [% IF reserva.nivel2.getVolumenDesc %] ([% reserva.nivel2.getVolumenDesc %])  [% END %] 
                     [% END %] -->
@@ -90,6 +87,3 @@
         <h1> [% 'Ud. no tiene reservas asignadas.' | i18n %] </h1>
     [% END %]
 </div>
-
-
-

@@ -1,5 +1,5 @@
-
-[% IF reservas_espera_count %]
+<div id="detalleReservas">
+    [% IF reservas_espera_count %]
     <table class="tabla_datos tope" style="width:100%; text-align:center">
       <tr class="tablaResultadoTitulo">
         <td>
@@ -22,12 +22,10 @@
                                                               params =>   ["id1=[% reserva.nivel2.nivel1.getId1 %]"],
                                                               title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
                                                           ) ;
-                        [% END %]
+        [% END %]
         </td>
         <td >
-        <!-- FIXME: ver este link, no esta bien el id del autor, no llega -->
         [% IF reserva.nivel2.nivel1.getAutor %]
-            <a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor.getId %]" >
             [% reserva.nivel2.nivel1.getAutor %]
             </a>
         [% ELSE %]
@@ -35,7 +33,7 @@
         [% END %]
         </td>
         <td> 
-    [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
+        [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
         </td>
         <td>
             [% IF CirculationEnabled %]
@@ -60,6 +58,6 @@
     </table>
     <br />
 [% ELSE %]
-
     <h1> [% 'Ud. no tiene reservas en espera.' | i18n %] </h1>
 [% END %]
+</div>
