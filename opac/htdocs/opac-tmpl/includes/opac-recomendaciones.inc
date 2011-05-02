@@ -8,6 +8,8 @@
 <script src="/includes/jquery/modal/jquery.simplemodal.js" type="text/javascript"></script>
 <script type="text/javascript">
 
+recomendacionCreada= false;
+
 function buscarDatosNivel2(){
         objAH                   = new AjaxHelper(updateBuscarDatosNivel2);
         objAH.debug             = true;
@@ -30,7 +32,6 @@ function traerImputsVacios(){
 
 function updateTraerImputsVacios(responseText){
   $('#datos_edicion_seleccionada').html(responseText); 
-  validateForm(agregarRenglon);
 }
 
 // function guardarRecomendacion(){
@@ -127,12 +128,14 @@ function verificarBusqueda(){
             bloquearCampos();
             $('#ediciones').show();
     } else {   
-
            traerImputsVacios();
            $('#carga_manual').show();
            $('#ediciones').hide(); 
     }
-        crearRecomendacion();
+    if (!recomendacionCreada){    
+      crearRecomendacion();
+      recomendacionCreada= true;
+    }
 }
 
 $(document).ready( function() {
@@ -171,7 +174,8 @@ $(document).ready( function() {
                                         );   C4::AR::Debug::debug("Save Detalle");
                      [% END %]
                   
-           </div>       
+           </div>      
+            <input type="hidden" name="id_recomendacion" id="id_recomendacion" value= ""/>
            <div id="datos_edicion_seleccionada"></div>
               <fieldset  id="recomendacion"><legend class="titulo_legend trigger click">&nbsp;[% 'Recomendacion' | i18n %]&nbsp;</legend>
                   <table id="tabla_recomendacion" name= "tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>

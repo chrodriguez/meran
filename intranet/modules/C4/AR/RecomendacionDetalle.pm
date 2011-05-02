@@ -14,16 +14,15 @@ use vars qw(@EXPORT @ISA);
     &agregarDetalleARecomendacion;
 );
 
-  
-sub agregarDetalleARecomendacion(){
-  my ($params, $obj, $recom_id) = @_;
-  
+sub agregarDetalleARecomendacion{
+  my ($obj, $recom_id) = @_;
+#   
   my %datos_recomendacion;
-  my $db;
+
   my $msg_object;
 
   $datos_recomendacion{'id_recomendacion'}=$recom_id;
-  $datos_recomendacion{'nivel_2'}= $obj->{'table'};
+  $datos_recomendacion{'nivel_2'}= $obj->{'idNivel2'};
   $datos_recomendacion{'autor'}=$obj->{'autor'};
   $datos_recomendacion{'titulo'}=$obj->{'titulo'};
   $datos_recomendacion{'lugar_publicacion'}= $obj->{'lugar_publicacion'};
@@ -34,10 +33,11 @@ sub agregarDetalleARecomendacion(){
   $datos_recomendacion{'motivo_propuesta'}= $obj->{'motivo_propuesta'};
   $datos_recomendacion{'comentarios'}= $obj->{'comment'};
   $datos_recomendacion{'idNivel1'}= $obj->{'catalogo_search_hidden'};
-#   $datos_recomendacion{'reservar'}= $obj->{'reservar'};
+  $datos_recomendacion{'reservar'}= $obj->{'reservar'} || 0;
 
-  my $recomendacion_detalle = C4::Modelo::AdqRecomendacionDetalle->new(db => $db); 
+  my $recomendacion_detalle = C4::Modelo::AdqRecomendacionDetalle->new(); 
 
+  my $db = $recomendacion_detalle->db;
 
   if (!($msg_object->{'error'})){
            
@@ -60,7 +60,7 @@ sub agregarDetalleARecomendacion(){
               }
               $db->{connect_options}->{AutoCommit} = 1;
     }
-    return ($msg_object);
+    return ($recomendacion_detalle->getId());
 }
 
 

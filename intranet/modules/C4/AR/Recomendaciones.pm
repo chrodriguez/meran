@@ -62,7 +62,7 @@ sub agregarRecomendacion{
           eval{
                 
               $recomendacion->agregarRecomendacion($usr_socio_id);
-              
+            
               $msg_object->{'error'} = 0;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
               $db->commit;
@@ -78,7 +78,7 @@ sub agregarRecomendacion{
 
               $db->{connect_options}->{AutoCommit} = 1;
     }
-    return ($msg_object);
+    return ($recomendacion->getId());
 }
 
 =item

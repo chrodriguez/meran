@@ -42,11 +42,11 @@
 
 
 <!--        VER COMO MANDAR EL ID DE LA RECOMENDACION CREADA PARA PASARSELO A LOS RENGLONES SIGUIENTES            -->
-                  <input type="hidden" name="id_recomendacion" id="id_recomendacion" value= "[% recomendacion.id %]"/>
+               
                   
 
 
-                  <p><input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" /> </p>  
+                  <p><input type="button" onClick="guardarDetalle()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" /> </p>  
  
                   [% PERL %]
                           print C4::AR::Filtros::setHelp(text => "[% 'Los campos marcados con * son obligatorios' | i18n %]",

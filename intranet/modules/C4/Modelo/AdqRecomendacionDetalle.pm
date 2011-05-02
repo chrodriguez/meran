@@ -74,7 +74,7 @@ sub agregarRecomendacionDetalle{
     $self->setCantidadEjemplares($params->{'cantidad_ejemplares'});
     $self->setMotivoPropuesta($params->{'motivo_propuesta'});
     $self->setComentario($params->{'comentarios'});
-#     $self->setReservaMaterial($params->{'reservar'});
+    $self->setReservaMaterial($params->{'reservar'});
   
     $self->save();
 

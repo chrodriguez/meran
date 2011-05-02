@@ -1,12 +1,12 @@
 var contador = -1;
 
 function validateForm(func){
+
        $().ready(function() {
             // validate signup form on keyup and submit
             $.validator.setDefaults({
                 submitHandler:  func ,
             });
-          
             $('#recom_form').validate({
                 errorElement: "em",
                 errorClass: "error_adv",
@@ -44,14 +44,14 @@ function limpiarCampos(){
     $('#cant_ejemplares').val("");
     $('#motivo_propuesta').val("");
     $('#comment').val("");  
-//     $('#edicion_id').val(null);
+    $('#edicion_id').val("");
    
 }
 
-function save(){
-   $('#recom_form').submit();
- //   agregarRenglon();
-}
+// function save(){
+//    $('#recom_form').submit();
+//  //   agregarRenglon();
+// }
 
 
 
@@ -119,11 +119,17 @@ function crearRecomendacion(){
 
 }
         
-function updateCrearRecomendacion(){
-
+function updateCrearRecomendacion(responseText){
+    $('#id_recomendacion').val(responseText)
 }
-          
-function agregarRenglon(){   
+      
+function guardarDetalle() {
+    validateForm(agregarRenglon)
+    $('#recom_form').submit(); 
+}      
+      
+      
+function agregarRenglon(){  
         objAH                   = new AjaxHelper(updateAgregarRenglon);
         objAH.debug             = true;
         objAH.showOverlay       = true;
