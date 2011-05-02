@@ -4,7 +4,7 @@
           [% PERL %]
               print C4::AR::Filtros::link_to( text    =>  "&nbsp;[% 'Reservas asignadas' | i18n %]:",
                                               url     =>  "/cgi-bin/koha/opac-info_reservas.pl",
-                                              params => ["action=detalle_asignadas"],
+                                              params  => ["action=detalle_asignadas"],
                                               title   =>  "[% 'Reservas asignadas' | i18n %]",
                       ) ;
           [% END %]
@@ -12,7 +12,7 @@
           [% PERL %]
               print C4::AR::Filtros::link_to( text    =>  "&nbsp;[% 'Reservas en espera' | i18n %]:",
                                               url     =>  "/cgi-bin/koha/opac-info_reservas.pl",
-                                              params => ["action=detalle_espera"],
+                                              params  => ["action=detalle_espera"],
                                               title   =>  "[% 'Reservas en espera' | i18n %]",
                       ) ;
           [% END %]
