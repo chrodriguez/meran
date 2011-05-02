@@ -1085,10 +1085,10 @@ sub _operacionesDeOPAC{
     $db->{connect_options}->{AutoCommit}    = 0;
     $db->begin_work;
 	eval{
-		#Si es un usuario de opac que esta sancionado entonces se borran sus reservas
-		my ($isSanction,$endDate)= C4::AR::Sanciones::permitionToLoan($socio, C4::AR::Preferencias::getValorPreferencia("defaultissuetype"));
-        my $regular = $socio->esRegular;
-        my $userid = $socio->getNro_socio();
+	    #Si es un usuario de opac que esta sancionado entonces se borran sus reservas
+	    my ($isSanction,$endDate)= C4::AR::Sanciones::permisoParaPrestamo($socio, C4::AR::Preferencias::getValorPreferencia("defaultissuetype"));
+	    my $regular = $socio->esRegular;
+	    my $userid = $socio->getNro_socio();
 	    if ($isSanction || !$regular ){
 			&C4::AR::Reservas::cancelar_reserva_socio($userid, $socio);
 		}
@@ -1096,12 +1096,12 @@ sub _operacionesDeOPAC{
 		$db->commit;
 	};
 	if ($@){
-        #Se loguea error de Base de Datos
-        &C4::AR::Mensajes::printErrorDB($@, 'B408',"OPAC");
-        #Se setea error para el usuario
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
-        $db->rollback;
+	  #Se loguea error de Base de Datos
+	  &C4::AR::Mensajes::printErrorDB($@, 'B411',"OPAC");
+	  #Se setea error para el usuario
+	  $msg_object->{'error'}= 1;
+	  C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
+	  $db->rollback;
 	}
 	$db->{connect_options}->{AutoCommit} = 1;
 }

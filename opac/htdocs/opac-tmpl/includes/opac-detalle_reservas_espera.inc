@@ -16,14 +16,19 @@
     [% FOREACH reserva IN RESERVAS_ESPERA %]
       <tr>
         <td>
-        <a class="click" onclick="detalleMaterialEnEspera([% reserva.nivel2.nivel1.getId1  %])" title="[% 'Mostrar Detalle' | i18n %]">
-            [% reserva.nivel2.nivel1.getTitulo %]
-        </a>
+         [% PERL %]
+                              print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel2.nivel1.getTitulo %]",
+                                                              url =>      "/cgi-bin/koha/opac-detail.pl", 
+                                                              params =>   ["id1=[% reserva.nivel2.nivel1.getId1 %]"],
+                                                              title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                                                          ) ;
+                        [% END %]
         </td>
         <td >
+        <!-- FIXME: ver este link, no esta bien el id del autor, no llega -->
         [% IF reserva.nivel2.nivel1.getAutor %]
-            <a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutorObject.getId %]" >
-            [% reserva.nivel2.nivel1.cat_autor.getCompleto %]
+            <a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor.getId %]" >
+            [% reserva.nivel2.nivel1.getAutor %]
             </a>
         [% ELSE %]
             &nbsp;

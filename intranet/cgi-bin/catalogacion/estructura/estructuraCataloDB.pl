@@ -630,7 +630,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
                                                     entorno => 'datos_nivel3'}, 
                                                 'intranet'
                                     );
-
+    $obj->{'loggedinuser'}=$user;
     my ($Message_arrayref, $nivel3) = C4::AR::Nivel3::t_modificarNivel3($obj);
     
     my %info;
