@@ -601,7 +601,14 @@ label.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scro
     font-size: 15px;
 }
 
-.cargando{background-image:url(../imagenes/loaders/loader_para_div.gif);background-repeat:no-repeat;background-position:center center;height:auto;min-height:30px;}
+/* .cargando{background-image:url(../imagenes/loaders/loader_para_div.gif);background-repeat:no-repeat;background-position:center center;height:auto;min-height:30px;} */
+.cargando {
+    background-image: url(../imagenes/loaders/ajax-loader.gif);
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: auto;
+    min-height: 30px;
+}
 
 
 #ajax_state{display:none;background:url(../imagenes/loaders/ajax-loader.gif) no-repeat scroll center;height:35px;position:relative;margin:5px}

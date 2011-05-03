@@ -70,7 +70,8 @@ function _HiddeState(options){
 
     if(options.showOverlay){
 //         $.modal.close();
-        $('#ajax-indicator').ajaxStop($.modal.close());
+//         $('#ajax-indicator').ajaxStop($.modal.close());
+        $(document).ajaxStop($.modal.close());
     }
 
 };
