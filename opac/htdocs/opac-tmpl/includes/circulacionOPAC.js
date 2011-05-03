@@ -184,7 +184,6 @@ function updateInfoReservas(responseText){
 function infoSanciones(){
     objAH               = new AjaxHelper(updateInfoSanciones);
     objAH.debug         = true;
-    objAH.showOverlay   = true;
     objAH.url           = '/cgi-bin/koha/opac-info_sanciones.pl';
     objAH.sendToServer();
 }
