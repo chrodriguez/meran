@@ -27,6 +27,7 @@ $VERSION = 0.01;
 #F700 - F799 para Favoritos
 #VO800 - VO899 para Visualizacion Opac
 #E900 - E999 para Estantes
+#RC00 - #RC99 para Recomendaciones
 
 # %mensajes mapea codigo de mensaje con la descripcion del mismo
 my %mensajesOPAC = (
@@ -82,12 +83,17 @@ my %mensajesOPAC = (
 	'B408' => 'Error al intentar agregar un favorito desde OPAC, funcion C4::AR::BookShelves::t_addPrivateShelfs',	
 	'B409' => 'Error al intentar eliminar un favorito desde OPAC, funcion C4::AR::BookShelves::t_delPrivateShelfs',
 	'B410' => 'Error al intentar agregar una recomendaci&oacute;n desde OPAC en funcion C4::AR::Recomendaciones::agregarRecomendacion',
-        'B411' => 'Error en funcion C4::AR::Auth::t_operacionesDeOPAC',
+    'B411' => 'Error en funcion C4::AR::Auth::t_operacionesDeOPAC',
+    'B412' => 'Error en la funcion C4::AR::RecomendacionDetalle::eliminarDetalleRecomendacion',
+    'B413' => 'Error en la funcion C4::AR::Recomendaciones::eliminarRecomendacion',
 	'F700' => 'Disculpe, no se pudo agregar el favorito, intente nuevamente.',
 	'F701' => 'Se agrego el favorito con &eacute;xito',
 	'F702' => 'Se elimin&oacute; el favorito con &eacute;xito',
 	'F703' => 'Disculpe, no se pudo eliminar el favorito, intente nuevamente.',
-
+    'RC00' => 'El detalle de la recomendacion fue eliminado con &eacute;xito',
+    'RC01' => 'Disculpe, no se pudo eliminar el detalle, intente nuevamente.',
+    'RC02' => 'La recomendacion fue eliminada con &eacute;xito',
+    'RC03' => 'Disculpe, no se pudo eliminar la recomendacion, intente nuevamente.',
 );
 
 my %mensajesINTRA = (

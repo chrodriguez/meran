@@ -5,7 +5,7 @@
 
 <fieldset>
 <legend class="titulo_legend_resaltado">[% "Ejemplares Asignados" | i18n %]</legend>
-	<table class="reseravsAsignadasResult datos_tabla" cellspacing=0  cellpadding=0  border=0   width="100%">
+	<table id="reseravsAsignadasResult" class="reseravsAsignadasResult datos_tabla" cellspacing=0  cellpadding=0  border=0   width="100%">
 		<tr class="titulo_tabla_resultado">
 			<th>
 				<a class="click" id="checkAllReservas">
@@ -117,7 +117,7 @@
             [% PERL %]
                 print C4::AR::Filtros::to_Icon(  
                                                     boton   => "icon_prestar",
-                                                    onClick => "realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);",
+                                                    onClick => "realizarAccion('CONFIRMAR_PRESTAMO','reseravsAsignadasResult',generaDivPrestamo);",
                                                     title   => "[% 'Prestar' | i18n %]",
                                                     alternClass => "botonCentrado"
                         ) ;

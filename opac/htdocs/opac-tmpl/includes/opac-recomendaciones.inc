@@ -8,12 +8,14 @@
 <script src="/includes/jquery/modal/jquery.simplemodal.js" type="text/javascript"></script>
 <script type="text/javascript">
 
+recomendacionCreada= false;
+
 function buscarDatosNivel2(){
         objAH                   = new AjaxHelper(updateBuscarDatosNivel2);
         objAH.debug             = true;
         objAH.showOverlay       = true;
         objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
-        objAH.tipoAccion        = 'BUSQUEDA_RECOMENDACION';
+        objAH.tipoAccion        = 'BUSQUEDA_EDICIONES';
         objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val();
         objAH.sendToServer();
 }
@@ -30,43 +32,42 @@ function traerImputsVacios(){
 
 function updateTraerImputsVacios(responseText){
   $('#datos_edicion_seleccionada').html(responseText); 
-
 }
 
-function guardarRecomendacion(){
-   
-    $(".eliminar").remove();
-    $("#tabla_recomendacion").hide();
-    alert( $("#tabla_recomendacion"));
-    $("#tabla_recomendacion").tabletojson({
-            headers: "Autor,Titulo, Edicion, Lugar Publicacion, Editorial, Fecha, ISBN/ISSN, Nivel 2, Cantidad, Motivo, Comentario",
-            attribHeaders: "{}",
-            returnElement: "#table",
-            complete: function(x){
-                
-                 objAH                     = new AjaxHelper(updateGuardarRecomendacion);
-                 objAH.url                 = '/cgi-bin/koha/opac-recomendacionesAdd.pl';
-                 objAH.debug               = true;
-                 objAH.showOverlay         = true;
-                 objAH.table               = JSONstring.toObject(x);
-                 objAH.motivo_propuesta    = $('#motivo_propuesta').val();
-                 objAH.comment             = $('#comment').val();
-                 objAH.tipoAccion          = 'GUARDAR_RECOMENDACION';
-                 objAH.sendToServer();
-            }
-        })
-    $(".tr").remove
-    
-}
-
-function updateGuardarRecomendacion(responseText){
-  
-   if (!verificarRespuesta(responseText)) {
-            return(0);
-            var Messages=JSONstring.toObject(responseText);
-            setMessages(Messages);
-   }
-}
+// function guardarRecomendacion(){
+//    
+//     $(".eliminar").remove();
+//     $("#tabla_recomendacion").hide();
+//     alert( $("#tabla_recomendacion"));
+//     $("#tabla_recomendacion").tabletojson({
+//             headers: "Autor,Titulo, Edicion, Lugar Publicacion, Editorial, Fecha, ISBN/ISSN, Nivel 2, Cantidad, Motivo, Comentario",
+//             attribHeaders: "{}",
+//             returnElement: "#table",
+//             complete: function(x){
+//                 
+//                  objAH                     = new AjaxHelper(updateGuardarRecomendacion);
+//                  objAH.url                 = '/cgi-bin/koha/opac-recomendacionesAdd.pl';
+//                  objAH.debug               = true;
+//                  objAH.showOverlay         = true;
+//                  objAH.table               = JSONstring.toObject(x);
+//                  objAH.motivo_propuesta    = $('#motivo_propuesta').val();
+//                  objAH.comment             = $('#comment').val();
+//                  objAH.tipoAccion          = 'GUARDAR_RECOMENDACION';
+//                  objAH.sendToServer();
+//             }
+//         })
+//     $(".tr").remove
+//     
+// }
+// 
+// function updateGuardarRecomendacion(responseText){
+//   
+//    if (!verificarRespuesta(responseText)) {
+//             return(0);
+//             var Messages=JSONstring.toObject(responseText);
+//             setMessages(Messages);
+//    }
+// }
 
 
 function updateBuscarDatosNivel2(responseText){
@@ -75,8 +76,7 @@ function updateBuscarDatosNivel2(responseText){
 
    $('#edicion_id').val('').attr("selected",true);
    $('#edicion_id').change( function(){    
-              var edicion=this.options[this.selectedIndex].text
-              
+              var edicion=this.options[this.selectedIndex].text 
               cargarDatosEdicionSeleccionada(edicion)
    });
    if (!verificarRespuesta(responseText)) {
@@ -129,9 +129,12 @@ function verificarBusqueda(){
             $('#ediciones').show();
     } else {   
            traerImputsVacios();
-           validateForm(agregarRenglon);
            $('#carga_manual').show();
            $('#ediciones').hide(); 
+    }
+    if (!recomendacionCreada){    
+      crearRecomendacion();
+      recomendacionCreada= true;
     }
 }
 
@@ -171,7 +174,8 @@ $(document).ready( function() {
                                         );   C4::AR::Debug::debug("Save Detalle");
                      [% END %]
                   
-           </div>       
+           </div>      
+            <input type="hidden" name="id_recomendacion" id="id_recomendacion" value= ""/>
            <div id="datos_edicion_seleccionada"></div>
               <fieldset  id="recomendacion"><legend class="titulo_legend trigger click">&nbsp;[% 'Recomendacion' | i18n %]&nbsp;</legend>
                   <table id="tabla_recomendacion" name= "tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
@@ -220,7 +224,8 @@ $(document).ready( function() {
                         <tbody>
                         </tbody>
                       </table>
-                      <input type="button" onclick="guardarRecomendacion()" value="Enviar Recomendacion">
+                      <input type="button" onclick="cancelarRecomendacion()" value="Cancelar Recomendacion">
+                      <input type="button" onclick="" value="Aceptar Recomendacion">
                 </fieldset>
                   
       </div>         
