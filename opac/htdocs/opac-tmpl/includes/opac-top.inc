@@ -64,8 +64,9 @@
           $(document).ready(function() {
             infoReservas();
             infoSanciones();
-            setInterval(infoReservas,10000);
-            setInterval(infoSanciones,10000);
+            // TODO: una preferencia de tiempo que setee esto
+            setInterval(infoReservas,300000);
+            setInterval(infoSanciones,300000);
           });
       [% END %]
   </script>
