@@ -148,10 +148,11 @@ function updateInfoPrestamos(responseText){
  *          chckbox-> nombre del los checkbox correspondientes a las tablas.
  *	    funcion-> la funcion que se tiene que ejecutar cuando termina la consulta ajax.
  */
-function realizarAccion(accion,chckbox,funcion) {
+function realizarAccion(accion,id_table,funcion) {
 // 	var chck    = $("input[@name="+chckbox+"]:checked");
 //     var chck    = $('#table_tablaPrestamos').find(':checkbox');
-    var chck    = $('#table_tablaPrestamos').find(':checked');
+//     var chck    = $('#table_tablaPrestamos').find(':checked');
+    var chck    = $('#'+id_table).find(':checked');
 	var array   = new Array;
 	var long    = chck.length;
 
