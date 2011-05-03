@@ -224,7 +224,8 @@ $(document).ready( function() {
                         <tbody>
                         </tbody>
                       </table>
-                      <input type="button" onclick="guardarRecomendacion()" value="Enviar Recomendacion">
+                      <input type="button" onclick="cancelarRecomendacion()" value="Cancelar Recomendacion">
+                      <input type="button" onclick="" value="Aceptar Recomendacion">
                 </fieldset>
                   
       </div>         

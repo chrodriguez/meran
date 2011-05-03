@@ -1,3 +1,8 @@
+
+//La Variable contador es un nro que se usa como id de cada detalle agregado a mano en la tabla de la recomendacion.
+//es un nro negarivo porque si fuera positivo podria ser igual a algun id existente en catalogo. Se usa para compara en caso de querer agregar 
+//dos veces el mismo elemento a la tabla.
+
 var contador = -1;
 
 function validateForm(func){
@@ -53,14 +58,33 @@ function limpiarCampos(){
 //  //   agregarRenglon();
 // }
 
-
-
-function eliminarFila(filaId){
-    $('#'+filaId).remove()
+function eliminarDetalle(idRecom){
+    
+        objAH                   = new AjaxHelper(updateEliminarDetalle);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl'; 
+        objAH.id_rec_det        = idRecom;
+        objAH.tipoAccion        = 'ELIMINAR_DETALLE';
+        objAH.sendToServer();
 }
 
- function agregarRenglonATabla(){
-      
+        
+function updateEliminarDetalle(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+}
+
+
+function eliminarFila(filaId, idRecom){
+ 
+    $('#'+filaId).remove()
+    eliminarDetalle(idRecom)
+}
+
+ function agregarRenglonATabla(id_rec_det){
         if ($('#catalogo_search_hidden').val() == (-1)){
           var id= contador
           contador--
@@ -80,7 +104,7 @@ function eliminarFila(filaId){
             var coleccion = $('#coleccion').val();
             var ISBN_ISSN = $('#isbn_issn').val();
             var cant_ejemplares = $('#cant_ejemplares').val();
-            var renglon_recom= 1;   
+            var renglon_recom= id_rec_det;   
             var comentario= $('#comment').val();
             var motivo= $('#motivo_propuesta').val();
             limpiarCampos();
@@ -100,10 +124,9 @@ function eliminarFila(filaId){
                     '<td id="cant_ejemplares'+renglon_recom+'" name=cant_ejemplares'+renglon_recom+'>'+cant_ejemplares+'</td>' +  
                     '<td id="motivo'+renglon_recom+'" name=motivo'+renglon_recom+'>'+motivo+'</td>' + 
                     '<td id="comentario'+renglon_recom+'" name=comentario'+renglon_recom+'>'+comentario+'</td>' + 
-                    '<td class="eliminar" id="eliminar'+renglon_recom+'" name=eliminar'+renglon_recom+'><input type="button" onclick=eliminarFila('+'"tr'+id+'") id="eliminar'+id+'" value="x" name="eliminar'+id+'"></td>' + 
+                    '<td class="eliminar" id="eliminar'+renglon_recom+'" name=eliminar'+renglon_recom+'><input type="button" onclick=eliminarFila('+'"tr'+id+'","'+renglon_recom+'") id="eliminar'+id+'" value="x" name="eliminar'+id+'"></td>' + 
                  '</tr>'
             )
-            renglon_recom= renglon_recom + 1;
             $('#recomendacion').show();
           
   }
@@ -118,11 +141,32 @@ function crearRecomendacion(){
         objAH.sendToServer();
 
 }
-        
+
 function updateCrearRecomendacion(responseText){
     $('#id_recomendacion').val(responseText)
 }
       
+        
+function cancelarRecomendacion(){
+        $('#tabla_recomendacion').hide;
+        objAH                   = new AjaxHelper(updateCancelarRecomendacion);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';     
+        objAH.tipoAccion        = 'CANCELAR_RECOMENDACION';
+        objAH.id_rec            = $('#id_recomendacion').val();
+        objAH.sendToServer();
+
+}
+
+function updateCancelarRecomendacion(responseText){
+   if (!verificarRespuesta(responseText))
+            return(0);
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+}
+        
+
 function guardarDetalle() {
     validateForm(agregarRenglon)
     $('#recom_form').submit(); 
@@ -152,7 +196,7 @@ function agregarRenglon(){
 }      
 
 function updateAgregarRenglon(responseText){
-  agregarRenglonATabla(); 
+  agregarRenglonATabla(responseText); 
 }
           
           

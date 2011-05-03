@@ -51,6 +51,14 @@ sub desactivar{
     $self->save();
 }
 
+sub eliminar{
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    $self->delete();    
+}
+
+
 
 sub agregarRecomendacion{
     my ($self) = shift;

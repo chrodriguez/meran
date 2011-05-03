@@ -75,6 +75,16 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
 
   my $recom_id= $obj->{'id_recomendacion'}; 
   
+  my $authnotrequired= 0;
+  my ($userid, $session, $flags)= checkauth(  $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'}, 
+                                                'opac'
+                                );
+
   my $id_detalle_recomendacion= C4::AR::RecomendacionDetalle::agregarDetalleARecomendacion($obj, $recom_id);
   
   C4::AR::Auth::print_header($session);
@@ -125,4 +135,46 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
     $t_params->{'datos_edicion'} = "";
   
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+} elsif ($obj->{'tipoAccion'} eq 'ELIMINAR_DETALLE') {
+
+  my $detalle_recom_id= $obj->{'id_rec_det'}; 
+  
+  my $authnotrequired= 0;
+  my ($userid, $session, $flags)= checkauth(  $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'}, 
+                                                'opac'
+                                );
+
+  my $message= C4::AR::RecomendacionDetalle::eliminarDetalleRecomendacion($detalle_recom_id);
+  
+  my $infoOperacionJSON = to_json $message;
+    
+  C4::AR::Auth::print_header($session);
+  print $infoOperacionJSON;     
+
+} elsif ($obj->{'tipoAccion'} eq 'CANCELAR_RECOMENDACION') {
+
+  my $recom_id= $obj->{'id_rec'}; 
+  
+  my $authnotrequired= 0;
+  my ($userid, $session, $flags)= checkauth(  $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'}, 
+                                                'opac'
+                                );
+
+  my $message= C4::AR::Recomendaciones::eliminarRecomendacion($recom_id);
+  
+  my $infoOperacionJSON = to_json $message;  
+  C4::AR::Auth::print_header($session);
+  print $infoOperacionJSON;     
+
 }

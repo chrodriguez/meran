@@ -12,7 +12,52 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(  
     &agregarDetalleARecomendacion;
+    &getDetalleRecomendacionPorId;
+    &eliminarDetalleRecomendacion;
 );
+
+
+sub getDetalleRecomendacionPorId {
+    my ($params) = @_;
+    my $detalleTemp;
+    my @filtros;
+
+    if ($params){
+        push (@filtros, ( id => { eq => $params}));
+        $detalleTemp = C4::Modelo::AdqRecomendacionDetalle::Manager->get_adq_recomendacion_detalle( query => \@filtros );
+        return $detalleTemp->[0]
+    }
+ 
+    return 0;
+}
+
+
+sub eliminarDetalleRecomendacion {
+
+     my ($id_rec_det) = @_;
+    
+     my $msg_object= C4::AR::Mensajes::create();
+    
+     my $detalle = C4::AR::RecomendacionDetalle::getDetalleRecomendacionPorId($id_rec_det);
+ 
+     eval {
+         $detalle->eliminar();
+         $msg_object->{'error'}= 0;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'RC00', 'params' => []} ) ;
+     };
+ 
+     if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B411','OPAC');
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'RC01', 'params' => []} ) ;
+     }
+ 
+     return ($msg_object);
+}
+
+
 
 sub agregarDetalleARecomendacion{
   my ($obj, $recom_id) = @_;
@@ -29,7 +74,7 @@ sub agregarDetalleARecomendacion{
   $datos_recomendacion{'editorial'}= $obj->{'editorial'};
   $datos_recomendacion{'fecha'}= $obj->{'fecha'};
   $datos_recomendacion{'isbn_issn'}= $obj->{'isbn_issn'};
-  $datos_recomendacion{'cantidad_ejemplares'}= $obj->{'cantidad_ejemplares'};
+  $datos_recomendacion{'cantidad_ejemplares'}= $obj->{'cant_ejemplares'};
   $datos_recomendacion{'motivo_propuesta'}= $obj->{'motivo_propuesta'};
   $datos_recomendacion{'comentarios'}= $obj->{'comment'};
   $datos_recomendacion{'idNivel1'}= $obj->{'catalogo_search_hidden'};
@@ -53,7 +98,7 @@ sub agregarDetalleARecomendacion{
           };
           if ($@){
                   # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
-                  &C4::AR::Mensajes::printErrorDB($@, 'B410',"OPAC");
+                  &C4::AR::Mensajes::printErrorDB($@, 'B410','OPAC');
                   $msg_object->{'error'}= 1;
                   C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B410', 'params' => []} ) ;
                   $db->rollback;

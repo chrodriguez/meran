@@ -55,6 +55,13 @@ __PACKAGE__->meta->setup(
 );
 
 
+sub eliminar{
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    $self->delete();    
+}
+
 sub agregarRecomendacionDetalle{
     my ($self)   = shift;
     my ($params) = @_;

@@ -11,15 +11,68 @@ use C4::Modelo::AdqRecomendacionDetalle::Manager;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(  
-    &agregrarRecomendacion;
+    &agregarRecomendacion;
     &getRecomendacionesActivas;
     &getRecomendacionDetallePorId;
+    
     &getRecomendaciones;
     &getRecomendacionDetalle;
     &editarCantidadEjemplares;
     &getRecomendacionPorId;
     &updateRecomendacionDetalle;
+    &eliminarRecomendacion
 );
+
+
+sub eliminarDetallesRecomendacion{
+      my ($params)        =@_;
+      my $msg_object= C4::AR::Mensajes::create();
+
+      my $detalles =  C4::AR::Recomendaciones::getRecomendacionDetalle($params);
+      
+      C4::AR::Debug::debug($detalles);
+      for my $det (@$detalles){
+          if ($msg_object->{'error'} == 0){
+              $msg_object = C4::AR::RecomendacionDetalle::eliminarDetalleRecomendacion($det->getId());
+          } else {
+              return $msg_object;
+          }
+      }
+      return $msg_object;
+}
+
+
+sub eliminarRecomendacion {
+
+     my ($id_rec) = @_;
+    
+     my $msg_object= C4::AR::Mensajes::create();
+    
+     my $recomendacion = C4::AR::Recomendaciones::getRecomendacionPorId($id_rec);
+ 
+     my $mensaje= C4::AR::Recomendaciones::eliminarDetallesRecomendacion($id_rec);
+
+      C4::AR::Debug::debug("MENSAJE".$mensaje->{'error'});
+     if ($mensaje->{'error'} == 0){
+          eval {
+              $recomendacion->eliminar();
+              $msg_object->{'error'}= 0;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'RC03', 'params' => []} ) ;
+          };
+      
+          if ($@){
+              #Se loguea error de Base de Datos
+              &C4::AR::Mensajes::printErrorDB($@, 'B411','OPAC');
+              #Se setea error para el usuario
+              $msg_object->{'error'}= 1;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'RC04', 'params' => []} ) ;
+          }
+          return ($msg_object);
+     }
+     return ($mensaje);
+}
+
+
 
 =item
     Esta funcion edita la cantidad de ejemplares de una recomendacion
@@ -123,8 +176,9 @@ sub getRecomendacionDetallePorId{
     my $recomendacion     = C4::Modelo::AdqRecomendacionDetalle::Manager->get_adq_recomendacion_detalle(   
                                                                     db => $db,
                                                                     query   => [ id  => { eq => $params} ],
-                                                                );                                                       
-    if( scalar($recomendacion) > 0){
+                                                                );          
+                                         
+    if( scalar(@$recomendacion) > 0){
         return ($recomendacion->[0]);
     }else{
         return 0;
@@ -137,13 +191,13 @@ sub getRecomendacionDetalle{
 
     my ($params) = @_;
 
+
     my $db                = C4::Modelo::AdqRecomendacionDetalle->new()->db;
     my $recomendacion     = C4::Modelo::AdqRecomendacionDetalle::Manager->get_adq_recomendacion_detalle(   
                                                                     db => $db,
                                                                     query   => [ adq_recomendacion_id => { eq => $params} ],
-                                                                );                                                       
-
-    if( scalar($recomendacion) > 0){
+                                                                );                                                    
+    if( scalar(@$recomendacion) > 0){
         return ($recomendacion);
     
     }
