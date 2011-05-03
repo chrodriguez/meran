@@ -38,15 +38,15 @@
         <td>
             [% IF CirculationEnabled %]
                  <ul>
-                    [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar' | i18n %]",
-                                                            boton   => "boton_borrar",
-                                                            onClick => "cancelarReserva([% reserva.getId_reserva %])",
-                                                            title   => "[% 'Cancelar Reserva' | i18n %]",
-                                                            width => "auto",
-                                                            alternClass => "botonCentradoTabla"
-                                                    );
-                    [% END %]
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(   text    => "[% 'Cancelar' | i18n %]",
+                                                                boton   => "icon_cancelar",
+                                                                width   => "100",
+                                                                onClick => "cancelarReserva([% reserva.getId_reserva %])",
+                                                                title   => "[% 'Cancelar Reserva' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
+                                                        );
+                        [% END %]
                 </ul>
 
             [% ELSE %]

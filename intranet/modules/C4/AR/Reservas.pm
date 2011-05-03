@@ -1042,7 +1042,7 @@ sub reasignarNuevoEjemplarAReserva{
             C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => NO EXISTE");
             #si NO EXISTE un ejemplar disponible del grupo
             #a la reserva se la pasa a reserva en  espera (id3 = null) por DEFECTO, debido a q en la funcion manejoDeDisponibilidadDomiciliaria
-            # se va a eliminar si es q no existe disponibilidad en la biblioteca.
+            # se va a eliminar si es q no existe disponibilidad en la biblioteca. Además, se borra la sanción de esa reserva.
             $reserva_asignada->pasar_a_espera();
             C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => paso la reserva a ESPERA (estado = G)");
         }

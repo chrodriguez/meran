@@ -73,6 +73,15 @@ sub agregar {
   
     if(!$msg_object->{'error'}){
         $self->save();
+
+    # verificar_alta
+     $params->{'id_ui'}= $self->getId_ui_poseedora();
+     $params->{'id3'}= $self->getId3();
+     $params->{'estado_nuevo'}            = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)      
+     $params->{'disponibilidad_nueva'}    = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
+ 
+     $self->verificar_alta($db, $params);
+
     }
 }
 
@@ -229,6 +238,8 @@ sub modificar {
     my $marc_record_base    = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
     # verificar_cambio 
+    $params->{'id_ui'}= $self->getId_ui_poseedora();
+    $params->{'id3'}= $self->getId3();
     $params->{'estado_anterior'}            = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
     $params->{'estado_nuevo'}               = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","e")));        
     $params->{'disponibilidad_anterior'}    = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
@@ -753,6 +764,34 @@ sub verificar_cambio {
     
 }
 
+sub verificar_alta {
+    my ($self) = shift;
+
+    my ($db, $params) = @_;
+
+    my $estado_nuevo                = $params->{'estado_nuevo'};
+    my $disponibilidad_nueva        = $params->{'disponibilidad_nueva'};
+    C4::AR::Debug::debug("verificar_alta => estado_nuevo: ".$params->{'estado_nuevo'});
+    C4::AR::Debug::debug("verificar_alta => disponibilidad_nueva: ".$params->{'disponibilidad_nueva'});
+
+    #  ESTADOS
+    #   wthdrawn = 0 => DISPONIBLE
+    #   wthdrawn > => NO DISPONIBLE
+
+    #  DISPONIBILIDADES
+    #   notforloan = 1 => PARA SALA
+    #   notforload = 0 => PARA PRESTAMO
+        
+    my $msg_object;
+    
+    if ( ESTADO_DISPONIBLE($estado_nuevo) && DISPONIBILIDAD_PRESTAMO($disponibilidad_nueva) ){
+    #se agrega un ejemplar NUEVO con estado_nuevo es DISPONIBLE  y  disponibilidad_nueva es PRESTAMO
+    #hay que verificar si hay reservas en espera, si hay se reasignan al nuevo ejemplar
+        C4::AR::Debug::debug("verificar_alta => nuevo ejemplar con estado DISPONIBLE y disponibilidad PRESTAMO ==> asignarEjemplarASiguienteReservaEnEspera");
+        C4::AR::Reservas::asignarEjemplarASiguienteReservaEnEspera($params, $db);
+
+    }
+}
 
 
 sub verificar_historico_disponibilidad {
