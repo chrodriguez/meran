@@ -7,6 +7,8 @@ use C4::AR::Auth;
 
 my $input=new CGI;
 
+my $mensaje = $input->param('mensaje');
+
 my ($template, $session, $t_params)= get_template_and_user({
                                 template_name => "opac-main.tmpl",
                                 query => $input,
@@ -18,4 +20,5 @@ my ($template, $session, $t_params)= get_template_and_user({
 $t_params->{'combo_tipo_documento'} = &C4::AR::Utilidades::generarComboTipoNivel3();
 $t_params->{'content_title'} = C4::AR::Filtros::i18n("Recomendaciones");
 $t_params->{'partial_template'} = "opac-recomendaciones.inc";
+$t_params->{'mensaje'} = $mensaje;
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

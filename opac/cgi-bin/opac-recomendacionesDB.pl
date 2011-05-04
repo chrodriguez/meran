@@ -38,15 +38,7 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 } elsif ($obj->{'tipoAccion'} eq 'AGREGAR_RECOMENDACION') {
-
-#     ($template, $session, $t_params)= get_template_and_user({
-#                         template_name => "/includes/opac-datos_edicion.inc",
-#                         query => $input,
-#                         type => "opac",
-#                         authnotrequired => 1,
-#                         flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
-#                     });
-#     
+     
     my $authnotrequired= 0;
     my ($userid, $session, $flags)= checkauth(  $input, 
                                                 $authnotrequired, 
@@ -58,18 +50,12 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                                 );
 
     my $usr_socio= C4::AR::Auth::getSessionNroSocio();
+    
     my $id_recomendacion= C4::AR::Recomendaciones::agregarRecomendacion($usr_socio);
- 
+    
     C4::AR::Auth::print_header($session);
+    
     print $id_recomendacion;
-
-#     my $infoOperacionJSON   = to_json $recomendacion;
-# 
-#     C4::AR::Auth::print_header($session);
-#     
-#     print $infoOperacionJSON;
-
-#     $t_params->{'recomendacion'} = $recomendacion;
  
 } elsif ($obj->{'tipoAccion'} eq 'AGREGAR_RENGLON') {
 
@@ -172,9 +158,11 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                                 );
 
   my $message= C4::AR::Recomendaciones::eliminarRecomendacion($recom_id);
-  
+    
   my $infoOperacionJSON = to_json $message;  
   C4::AR::Auth::print_header($session);
   print $infoOperacionJSON;     
 
 }
+
+

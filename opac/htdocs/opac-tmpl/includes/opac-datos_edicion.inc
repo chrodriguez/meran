@@ -43,15 +43,15 @@
 
 <!--        VER COMO MANDAR EL ID DE LA RECOMENDACION CREADA PARA PASARSELO A LOS RENGLONES SIGUIENTES            -->
                
-                  
-
+                 
 
                   <p><input type="button" onClick="guardarDetalle()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" /> </p>  
- 
                   [% PERL %]
                           print C4::AR::Filtros::setHelp(text => "[% 'Los campos marcados con * son obligatorios' | i18n %]",
                                         );
                   [% END %]
+                  
+                  
         </div>  
    </form>
 </fieldset>

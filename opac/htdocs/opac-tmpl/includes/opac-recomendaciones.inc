@@ -149,12 +149,17 @@ $(document).ready( function() {
     });
     $('#recomendacion').hide();
     makeToggle('carga_manual','trigger',null,true);
+
+    [% IF mensaje %]
+      $('#mensajes').html('<div class="message_text">[% mensaje %]</div>');
+      $('#mensajes').show()
+    [% END %]
 });
 
 
 
-</script>        
-     
+</script>         
+ 
 <div class="column1-unit">
   <!--    [% message %]--> 
       <div style= "width: 169%;" class="recomendacionform">
@@ -224,9 +229,14 @@ $(document).ready( function() {
                         <tbody>
                         </tbody>
                       </table>
-                      <input type="button" onclick="cancelarRecomendacion()" value="Cancelar Recomendacion">
-                      <input type="button" onclick="" value="Aceptar Recomendacion">
-                </fieldset>
+                      <div id="acciones" style="float:right; margin: 10px;" >
+                          <input type="button" onclick="cancelarRecomendacion()" value="Cancelar Recomendacion">
+                          <form method="post" action="opac-recomendaciones.pl?token=[% token %]">
+                            <input type="hidden" name="mensaje" value="La recomendacion fue enviada con exito">
+                            <input type="submit" value="Aceptar Recomendacion">
+                          </form>
+                      </div>
+                      </fieldset>
                   
       </div>         
 </div>

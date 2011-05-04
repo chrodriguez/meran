@@ -5,6 +5,7 @@
 
 var contador = -1;
 
+
 function validateForm(func){
 
        $().ready(function() {
@@ -20,7 +21,7 @@ function validateForm(func){
                           titulo:     "required",  
                           edicion:     "required", 
                           editorial:   "required",              
-                          cant_ejemplares:    "required",
+                          cant_ejemplares:    "required",                            
                           motivo_propuesta:    "required",
                         },
                  messages: {
@@ -34,9 +35,9 @@ function validateForm(func){
                         }, 
                  });
             });
+             
            
 }
-
 
 function limpiarCampos(){
     $('#autor').val("");
@@ -53,10 +54,6 @@ function limpiarCampos(){
    
 }
 
-// function save(){
-//    $('#recom_form').submit();
-//  //   agregarRenglon();
-// }
 
 function eliminarDetalle(idRecom){
     
@@ -68,8 +65,7 @@ function eliminarDetalle(idRecom){
         objAH.tipoAccion        = 'ELIMINAR_DETALLE';
         objAH.sendToServer();
 }
-
-        
+       
 function updateEliminarDetalle(responseText){
     if (!verificarRespuesta(responseText))
             return(0);
@@ -77,11 +73,11 @@ function updateEliminarDetalle(responseText){
     setMessages(Messages);
 }
 
-
 function eliminarFila(filaId, idRecom){
  
     $('#'+filaId).remove()
     eliminarDetalle(idRecom)
+     
 }
 
  function agregarRenglonATabla(id_rec_det){
@@ -108,8 +104,7 @@ function eliminarFila(filaId, idRecom){
             var comentario= $('#comment').val();
             var motivo= $('#motivo_propuesta').val();
             limpiarCampos();
-      
-       
+            
             $('#tabla_recomendacion').append(
                 '<tr class="tr" id="tr'+id+'" name="tr'+id+'">' +
                     '<input type="hidden" value="'+id+'" id="'+id+'">' +
@@ -148,7 +143,6 @@ function updateCrearRecomendacion(responseText){
       
         
 function cancelarRecomendacion(){
-        $('#tabla_recomendacion').hide;
         objAH                   = new AjaxHelper(updateCancelarRecomendacion);
         objAH.debug             = true;
         objAH.showOverlay       = true;
@@ -156,10 +150,10 @@ function cancelarRecomendacion(){
         objAH.tipoAccion        = 'CANCELAR_RECOMENDACION';
         objAH.id_rec            = $('#id_recomendacion').val();
         objAH.sendToServer();
-
 }
 
 function updateCancelarRecomendacion(responseText){
+  $('#recomendacion').hide();
    if (!verificarRespuesta(responseText))
             return(0);
     var Messages=JSONstring.toObject(responseText);
@@ -169,6 +163,7 @@ function updateCancelarRecomendacion(responseText){
 
 function guardarDetalle() {
     validateForm(agregarRenglon)
+    $('#recomendacion').show();
     $('#recom_form').submit(); 
 }      
       
