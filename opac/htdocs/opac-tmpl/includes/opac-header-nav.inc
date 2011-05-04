@@ -92,6 +92,12 @@
           </ul>          
 
         </div>
+
+
+        <div class="header-breadcrumbs">
+          [% INCLUDE 'opac-search_form.inc' %]
+        </div>
+
       </div>
 
       <!-- A.4 HEADER BREADCRUMBS -->
@@ -100,7 +106,7 @@
       <div class="header-breadcrumbs">
           [% INCLUDE 'opac-status_links.inc' %]
           <div id="mensajes"></div>
-          [% INCLUDE 'opac-search_form.inc' %]
+          
       </div>
     </div>
 
