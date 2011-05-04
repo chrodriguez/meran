@@ -166,6 +166,7 @@ sub gettemplate {
             HOST                => $ENV{HTTP_HOST},
             user_theme          => $user_theme,
             user_theme_intra    => $user_theme_intra,
+            timeInterval        => C4::AR::Preferencias::getValorPreferencia('timeInterval'),
         );
 
     return ($template, \%params);
