@@ -23,6 +23,7 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::AR::Mensajes;
+use C4::AR::Utilidades;
 use Image::Resize;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -102,4 +103,83 @@ sub uploadFile{
                     close(WFD);
               }
     }
+}
+
+sub uploadDocument {
+
+    my ($file_data,$name,$id2)=@_;
+
+    my $eDocsDir= C4::Context->config("edocsdir");
+    my $msg='';
+    my $bytes_read;
+    my $size= 0;
+    my @nombreYextension=split('\.',$name);
+    my $error = 0;
+    
+    use Digest::MD5;
+#Para chequeos de tamaño
+# my $maxFileSize = 2048 * 2048; # 1/2mb max file size...
+# my $check_size = -s "$uploaddir/$name.$type";
+#if ($check_size > $maxFileSize) { blabla }
+
+
+    if (C4::Context->preference("e_documents")){
+
+        my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","pdf","xls","zip");
+        my $ext= @nombreYextension[1];
+
+        if (!grep(/$ext/i,@extensiones_permitidas)) {
+                $msg= "Solo se permiten archivos del tipo (".join(", ",@extensiones_permitidas).") [Fallo de extension]";
+                $error = qq|{ "success": false, "error": C4::AR::Filtros::i18n("Extension incorrecta.") }|;
+        }elsif (scalar(@nombreYextension)==2) { # verifica que el nombre del archivo tenga el punto (.)
+            my $ext= @nombreYextension[1];
+            my $buff='';
+            
+            $name = @nombreYextension[0];
+            my $file_type = $ext;
+            my $hash_unique = Digest::MD5::md5_hex(localtime());
+            my $file_name = $name.".".$ext."_".$hash_unique;
+            my $write_file= $eDocsDir."/".$file_name;
+                                                                                                                                
+            if (!open(WFD,">$write_file")) {
+                    $msg="Hay un error y el archivo no puede escribirse en el servidor.";
+            }else{
+ #               print WFD $file_data;
+                my $size = 0;
+                my $buff = '';
+                
+                while ($bytes_read=read($file_data,$buff,2096,$size)) {
+                    C4::AR::Debug::debug("ESCRIBIENDO: ".$bytes_read);
+                    $size += $bytes_read;
+                    binmode WFD;
+                    print WFD $buff;
+                }
+                close(WFD);
+
+                my $isValidFileType = C4::AR::Utilidades::isValidFile($write_file);
+
+                if ( !$isValidFileType )
+                {
+                    $msg= "Solo se permiten archivos (".join(", ",@extensiones_permitidas).") [Fallo de contenido]";
+                    $error = qq|{ "success": false, "error": C4::AR::Filtros::i18n("Tipo de contenido de archivo invalido.") }|;
+                    unlink($write_file);
+                }else
+                {
+                    $msg= "El archivo ".$name." se ha cargado correctamente";
+                    $error = qq|{ "success": true, }|;
+                    C4::AR::Catalogacion::saveEDocument($id2,$file_name,$isValidFileType,$name);
+                }
+            }
+        }
+        else 
+        {
+            $msg= C4::AR::Filtros::i18n("El nombre del archivo no tiene un formato correcto.");
+            $error = qq|{ "success": false, "error": $msg }|;
+        }
+    }else{
+         $msg= C4::AR::Filtros::i18n("El manejo de archivos no esta habilitado.");
+         $error = qq|{ "success": false, "error": $msg }|;
+    }
+
+    return($error,$msg);
 }
