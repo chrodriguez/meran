@@ -1,5 +1,5 @@
-
-[% IF reservas_espera_count %]
+<div id="detalleReservas">
+    [% IF reservas_espera_count %]
     <table class="tabla_datos tope" style="width:100%; text-align:center">
       <tr class="tablaResultadoTitulo">
         <td>
@@ -16,34 +16,37 @@
     [% FOREACH reserva IN RESERVAS_ESPERA %]
       <tr>
         <td>
-        <a class="click" onclick="detalleMaterialEnEspera([% reserva.nivel2.nivel1.getId1  %])" title="[% 'Mostrar Detalle' | i18n %]">
-            [% reserva.nivel2.nivel1.getTitulo %]
-        </a>
+         [% PERL %]
+                              print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel2.nivel1.getTitulo %]",
+                                                              url =>      "/cgi-bin/koha/opac-detail.pl", 
+                                                              params =>   ["id1=[% reserva.nivel2.nivel1.getId1 %]"],
+                                                              title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                                                          ) ;
+        [% END %]
         </td>
         <td >
         [% IF reserva.nivel2.nivel1.getAutor %]
-            <a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutorObject.getId %]" >
-            [% reserva.nivel2.nivel1.cat_autor.getCompleto %]
+            [% reserva.nivel2.nivel1.getAutor %]
             </a>
         [% ELSE %]
             &nbsp;
         [% END %]
         </td>
         <td> 
-    [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
+        [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
         </td>
         <td>
             [% IF CirculationEnabled %]
                  <ul>
-                    [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar' | i18n %]",
-                                                            boton   => "boton_borrar",
-                                                            onClick => "cancelarReserva([% reserva.getId_reserva %])",
-                                                            title   => "[% 'Cancelar Reserva' | i18n %]",
-                                                            width => "auto",
-                                                            alternClass => "botonCentradoTabla"
-                                                    );
-                    [% END %]
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(   text    => "[% 'Cancelar' | i18n %]",
+                                                                boton   => "icon_cancelar",
+                                                                width   => "100",
+                                                                onClick => "cancelarReserva([% reserva.getId_reserva %])",
+                                                                title   => "[% 'Cancelar Reserva' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
+                                                        );
+                        [% END %]
                 </ul>
 
             [% ELSE %]
@@ -55,6 +58,6 @@
     </table>
     <br />
 [% ELSE %]
-
     <h1> [% 'Ud. no tiene reservas en espera.' | i18n %] </h1>
 [% END %]
+</div>

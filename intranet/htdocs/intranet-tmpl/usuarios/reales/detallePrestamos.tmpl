@@ -114,7 +114,7 @@
             [% PERL %]
                 print C4::AR::Filtros::to_Icon(  
                                                     boton   => "icon_devolver",
-                                                    onClick => "realizarAccion('DEVOLUCION','chkboxPrestamos',generaDivDevolucion);",
+                                                    onClick => "realizarAccion('DEVOLUCION','table_tablaPrestamos',generaDivDevolucion);",
                                                     title   => "[% 'Devolver' | i18n %]",
                                                     alternClass => "botonCentrado"
                         ) ;
@@ -124,7 +124,7 @@
             [% PERL %]
                 print C4::AR::Filtros::to_Icon(  
                                                     boton   => "icon_renovar",
-                                                    onClick => "realizarAccion('RENOVACION','chkboxPrestamos',generaDivRenovacion);",
+                                                    onClick => "realizarAccion('RENOVACION','table_tablaPrestamos',generaDivRenovacion);",
                                                     title   => "[% 'Renovar' | i18n %]",
                                                     alternClass => "botonCentrado"
                         ) ;

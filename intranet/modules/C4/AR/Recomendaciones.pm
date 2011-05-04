@@ -11,15 +11,68 @@ use C4::Modelo::AdqRecomendacionDetalle::Manager;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(  
-    &agregrarRecomendacion;
+    &agregarRecomendacion;
     &getRecomendacionesActivas;
     &getRecomendacionDetallePorId;
+    
     &getRecomendaciones;
     &getRecomendacionDetalle;
     &editarCantidadEjemplares;
     &getRecomendacionPorId;
     &updateRecomendacionDetalle;
+    &eliminarRecomendacion
 );
+
+
+sub eliminarDetallesRecomendacion{
+      my ($params)        =@_;
+      my $msg_object= C4::AR::Mensajes::create();
+
+      my $detalles =  C4::AR::Recomendaciones::getRecomendacionDetalle($params);
+      
+      C4::AR::Debug::debug($detalles);
+      for my $det (@$detalles){
+          if ($msg_object->{'error'} == 0){
+              $msg_object = C4::AR::RecomendacionDetalle::eliminarDetalleRecomendacion($det->getId());
+          } else {
+              return $msg_object;
+          }
+      }
+      return $msg_object;
+}
+
+
+sub eliminarRecomendacion {
+
+     my ($id_rec) = @_;
+    
+     my $msg_object= C4::AR::Mensajes::create();
+    
+     my $recomendacion = C4::AR::Recomendaciones::getRecomendacionPorId($id_rec);
+ 
+     my $mensaje= C4::AR::Recomendaciones::eliminarDetallesRecomendacion($id_rec);
+
+      C4::AR::Debug::debug("MENSAJE".$mensaje->{'error'});
+     if ($mensaje->{'error'} == 0){
+          eval {
+              $recomendacion->eliminar();
+              $msg_object->{'error'}= 0;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'RC03', 'params' => []} ) ;
+          };
+      
+          if ($@){
+              #Se loguea error de Base de Datos
+              &C4::AR::Mensajes::printErrorDB($@, 'B411','OPAC');
+              #Se setea error para el usuario
+              $msg_object->{'error'}= 1;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'RC04', 'params' => []} ) ;
+          }
+          return ($msg_object);
+     }
+     return ($mensaje);
+}
+
+
 
 =item
     Esta funcion edita la cantidad de ejemplares de una recomendacion
@@ -52,11 +105,9 @@ sub agregarRecomendacion{
     my $db = $recomendacion->db;
 
 # TODO
-
     #_verificarDatosProveedor($param,$msg_object);
 
     if (!($msg_object->{'error'})){
-#           C4::AR::Utilidades::printHASH(\%datos_recomendacion);
            
           # entro si no hay algun error, todos los campos ingresados son validos
           $db->{connect_options}->{AutoCommit} = 0;
@@ -64,33 +115,10 @@ sub agregarRecomendacion{
           eval{
                 
               $recomendacion->agregarRecomendacion($usr_socio_id);
-              for (my $i=0; $i< scalar(@{$params->{'table'}}); $i++) {
-                   
-                      my %datos_recomendacion;
-                      $datos_recomendacion{'id_recomendacion'}=$recomendacion->getId();
-                      $datos_recomendacion{'nivel_2'}= ($params->{'table'}[$i])->{'Nivel2'};
-                      $datos_recomendacion{'autor'}=($params->{'table'}[$i])->{'Autor'};
-                      $datos_recomendacion{'titulo'}=($params->{'table'}[$i])->{'Titulo'};
-                      $datos_recomendacion{'lugar_publicacion'}=  ($params->{'table'}[$i])->{'LugarPublicacion'};
-                      $datos_recomendacion{'editorial'}= ($params->{'table'}[$i])->{'Editorial'};
-                      $datos_recomendacion{'fecha'}= ($params->{'table'}[$i])->{'Fecha'};
-                      $datos_recomendacion{'coleccion'}= ($params->{'table'}[$i])->{'Coleccion'};
-                      $datos_recomendacion{'isbn_issn'}= ($params->{'table'}[$i])->{'ISBN/ISSN'};
-                      $datos_recomendacion{'cantidad_ejemplares'}= ($params->{'table'}[$i])->{'Cantidad'};
-                      $datos_recomendacion{'motivo_propuesta'}= ($params->{'table'}[$i])->{'Motivo'};
-                      $datos_recomendacion{'comentarios'}= ($params->{'table'}[$i])->{'Comentario'};
-                      $datos_recomendacion{'reservar'}= ($params->{'table'}[$i])->{'reservar'}||0;
-  
-              
-
-                      my $recomendacion_detalle = C4::Modelo::AdqRecomendacionDetalle->new(db => $db); 
-                      $recomendacion_detalle->agregarRecomendacionDetalle(\%datos_recomendacion);
-                     
-               }        
-             
-               $msg_object->{'error'} = 0;
-               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
-               $db->commit;
+            
+              $msg_object->{'error'} = 0;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
+              $db->commit;
 
             };
             if ($@){
@@ -103,7 +131,7 @@ sub agregarRecomendacion{
 
               $db->{connect_options}->{AutoCommit} = 1;
     }
-    return ($msg_object);
+    return ($recomendacion->getId());
 }
 
 =item
@@ -148,8 +176,9 @@ sub getRecomendacionDetallePorId{
     my $recomendacion     = C4::Modelo::AdqRecomendacionDetalle::Manager->get_adq_recomendacion_detalle(   
                                                                     db => $db,
                                                                     query   => [ id  => { eq => $params} ],
-                                                                );                                                       
-    if( scalar($recomendacion) > 0){
+                                                                );          
+                                         
+    if( scalar(@$recomendacion) > 0){
         return ($recomendacion->[0]);
     }else{
         return 0;
@@ -162,13 +191,13 @@ sub getRecomendacionDetalle{
 
     my ($params) = @_;
 
+
     my $db                = C4::Modelo::AdqRecomendacionDetalle->new()->db;
     my $recomendacion     = C4::Modelo::AdqRecomendacionDetalle::Manager->get_adq_recomendacion_detalle(   
                                                                     db => $db,
                                                                     query   => [ adq_recomendacion_id => { eq => $params} ],
-                                                                );                                                       
-
-    if( scalar($recomendacion) > 0){
+                                                                );                                                    
+    if( scalar(@$recomendacion) > 0){
         return ($recomendacion);
     
     }
@@ -180,12 +209,6 @@ sub getRecomendacionDetalle{
     Recupera un registro de recomendacion
     Retorna un objeto o 0 si no existe
 =cut
-
-
-
-
-
-
 
 
 sub getRecomendacionPorId{

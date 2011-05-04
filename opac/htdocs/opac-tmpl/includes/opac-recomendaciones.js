@@ -1,10 +1,16 @@
+
+//La Variable contador es un nro que se usa como id de cada detalle agregado a mano en la tabla de la recomendacion.
+//es un nro negarivo porque si fuera positivo podria ser igual a algun id existente en catalogo. Se usa para compara en caso de querer agregar 
+//dos veces el mismo elemento a la tabla.
+
 var contador = -1;
 
 function validateForm(func){
-          $().ready(function() {
+
+       $().ready(function() {
             // validate signup form on keyup and submit
             $.validator.setDefaults({
-              submitHandler:  func ,
+                submitHandler:  func ,
             });
             $('#recom_form').validate({
                 errorElement: "em",
@@ -39,28 +45,46 @@ function limpiarCampos(){
     $('#lugar_publicacion').val("");
     $('#editorial').val("");
     $('#fecha').val("");
-//     $('#coleccion').val("");
     $('#isbn_issn').val("");
     $('#cant_ejemplares').val("");
     $('#motivo_propuesta').val("");
     $('#comment').val("");  
-//     $('#edicion_id').val(null);
+    $('#edicion_id').val("");
    
 }
 
-function save(){
-    $('#recom_form').submit();
-    agregarRenglon();
+// function save(){
+//    $('#recom_form').submit();
+//  //   agregarRenglon();
+// }
+
+function eliminarDetalle(idRecom){
+    
+        objAH                   = new AjaxHelper(updateEliminarDetalle);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl'; 
+        objAH.id_rec_det        = idRecom;
+        objAH.tipoAccion        = 'ELIMINAR_DETALLE';
+        objAH.sendToServer();
+}
+
+        
+function updateEliminarDetalle(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
 }
 
 
-
-function eliminarFila(filaId){
+function eliminarFila(filaId, idRecom){
+ 
     $('#'+filaId).remove()
+    eliminarDetalle(idRecom)
 }
 
-function agregarRenglon(){
-      
+ function agregarRenglonATabla(id_rec_det){
         if ($('#catalogo_search_hidden').val() == (-1)){
           var id= contador
           contador--
@@ -80,9 +104,7 @@ function agregarRenglon(){
             var coleccion = $('#coleccion').val();
             var ISBN_ISSN = $('#isbn_issn').val();
             var cant_ejemplares = $('#cant_ejemplares').val();
-            var renglon_recom= 1;
- 
-            
+            var renglon_recom= id_rec_det;   
             var comentario= $('#comment').val();
             var motivo= $('#motivo_propuesta').val();
             limpiarCampos();
@@ -102,14 +124,82 @@ function agregarRenglon(){
                     '<td id="cant_ejemplares'+renglon_recom+'" name=cant_ejemplares'+renglon_recom+'>'+cant_ejemplares+'</td>' +  
                     '<td id="motivo'+renglon_recom+'" name=motivo'+renglon_recom+'>'+motivo+'</td>' + 
                     '<td id="comentario'+renglon_recom+'" name=comentario'+renglon_recom+'>'+comentario+'</td>' + 
-                    '<td class="eliminar" id="eliminar'+renglon_recom+'" name=eliminar'+renglon_recom+'><input type="button" onclick=eliminarFila('+'"tr'+id+'") id="eliminar'+id+'" value="x" name="eliminar'+id+'"></td>' + 
+                    '<td class="eliminar" id="eliminar'+renglon_recom+'" name=eliminar'+renglon_recom+'><input type="button" onclick=eliminarFila('+'"tr'+id+'","'+renglon_recom+'") id="eliminar'+id+'" value="x" name="eliminar'+id+'"></td>' + 
                  '</tr>'
             )
-            renglon_recom= renglon_recom + 1;
             $('#recomendacion').show();
           
   }
 }
+        
+function crearRecomendacion(){
+        objAH                   = new AjaxHelper(updateCrearRecomendacion);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';     
+        objAH.tipoAccion        = 'AGREGAR_RECOMENDACION';
+        objAH.sendToServer();
+
+}
+
+function updateCrearRecomendacion(responseText){
+    $('#id_recomendacion').val(responseText)
+}
+      
+        
+function cancelarRecomendacion(){
+        $('#tabla_recomendacion').hide;
+        objAH                   = new AjaxHelper(updateCancelarRecomendacion);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';     
+        objAH.tipoAccion        = 'CANCELAR_RECOMENDACION';
+        objAH.id_rec            = $('#id_recomendacion').val();
+        objAH.sendToServer();
+
+}
+
+function updateCancelarRecomendacion(responseText){
+   if (!verificarRespuesta(responseText))
+            return(0);
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+}
+        
+
+function guardarDetalle() {
+    validateForm(agregarRenglon)
+    $('#recom_form').submit(); 
+}      
+      
+      
+function agregarRenglon(){  
+        objAH                   = new AjaxHelper(updateAgregarRenglon);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
+        objAH.autor             = $('#autor').val();
+        objAH.titulo            = $('#titulo').val();
+        objAH.edicion           = $('#edicion').val();
+        objAH.lugar_publicacion = $('#lugar_publicacion').val();
+        objAH.editorial         = $('#editorial').val();
+        objAH.fecha             = $('#fecha').val();
+        objAH.isbn_issn         = $('#isbn_issn').val();
+        objAH.cant_ejemplares   = $('#cant_ejemplares').val();
+        objAH.motivo_propuesta  = $('#motivo_propuesta').val();
+        objAH.comment           = $('#comment').val();
+        objAH.id_recomendacion  = $('#id_recomendacion').val();          
+//         objAH.idNivel1          = $('#catalogo_search_hidden').val();
+        objAH.idNivel2          = $('#edicion_id').val()
+        objAH.tipoAccion        = 'AGREGAR_RENGLON';
+        objAH.sendToServer();   
+}      
+
+function updateAgregarRenglon(responseText){
+  agregarRenglonATabla(responseText); 
+}
+          
+          
           
  
  

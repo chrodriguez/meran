@@ -265,7 +265,7 @@ $self->debug("RESERVA: estado: ".$paramsReserva{'estado'}." id_ui: ".	$paramsRes
 		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
 		my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
 		my %paramsSancion;
-        $paramsSancion{'loggedinuser'}= $params->{'loggedinuser'};
+		$paramsSancion{'loggedinuser'}= $params->{'loggedinuser'};
 		$paramsSancion{'tipo_sancion'}= undef;
 		$paramsSancion{'id_reserva'}= $self->getId_reserva;
 		$paramsSancion{'nro_socio'}= $params->{'nro_socio'};
@@ -363,7 +363,7 @@ sub actualizarDatosReservaEnEspera{
 	$paramsSancion{'fecha_comienzo'}= $startdate;
 	$paramsSancion{'fecha_final'}= $enddate;
 	$paramsSancion{'dias_sancion'}= undef;
-    $paramsSancion{'loggedinuser'}= $loggedinuser;
+	$paramsSancion{'loggedinuser'}= $loggedinuser;
 	$sancion->insertar_sancion(\%paramsSancion);
 	# Se registra la actualizacion
 	$paramsSancion{'id3'}= $self->getId3;
@@ -628,6 +628,9 @@ sub borrar_sancion_de_reserva{
     my ($self) = shift;
     my ($db) = @_;
 
+
+    $db = $db || $self->db; 
+
     my $dateformat  = C4::Date::get_date_format();
     my $hoy         = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat);
     my @filtros;
@@ -644,6 +647,12 @@ sub borrar_sancion_de_reserva{
 sub pasar_a_espera{
     my ($self) = shift;
 
+    # Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
+    $self->debug("Se borra la sancion de la reserva");
+    $self->borrar_sancion_de_reserva();
+
+    $self->debug("Se pasa la reserva a GRUPAL");
+    $self->setEstado('G');
     $self->setId3(undef);
     $self->save();
 }

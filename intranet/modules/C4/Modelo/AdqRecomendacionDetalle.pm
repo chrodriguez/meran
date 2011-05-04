@@ -55,13 +55,22 @@ __PACKAGE__->meta->setup(
 );
 
 
+sub eliminar{
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    $self->delete();    
+}
+
 sub agregarRecomendacionDetalle{
     my ($self)   = shift;
     my ($params) = @_;
 
     $self->setAdqRecomendacionId($params->{'id_recomendacion'});
     
-    $self->setCatNivel2Id($params->{'nivel_2'});
+    if ($params->{'nivel_2'}) {
+      $self->setCatNivel2Id($params->{'nivel_2'});
+    }
     $self->setAutor($params->{'autor'});
     $self->setTitulo($params->{'titulo'});
     $self->setLugarPublicacion($params->{'lugar_publicacion'});

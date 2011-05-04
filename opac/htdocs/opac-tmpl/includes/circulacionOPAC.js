@@ -3,8 +3,6 @@
 * Contendran las funciones para permitir la circulacion en el sistema
 */
 
-
-
 /*
 * Funcion Ajax que hace una reserva
 */
@@ -12,13 +10,13 @@ function reservar(id1, id2){
 
     jConfirm(ESTA_SEGURO_QUE_DESEA_RESERVAR,OPAC_ALERT_TITLE, function(confirmStatus){
         if (confirmStatus){
-            objAH=new AjaxHelper(updateInfoReserva);
-            objAH.debug= true;
+            objAH               = new AjaxHelper(updateInfoReserva);
+            objAH.debug         = true;
+            objAH.showOverlay   = true;
             //para busquedas combinables
-            objAH.url= '/cgi-bin/koha/opac-reservar.pl';
-            objAH.id1= id1;
-            objAH.id2= id2;
-            //se envia la consulta
+            objAH.url           = '/cgi-bin/koha/opac-reservar.pl';
+            objAH.id1           = id1;
+            objAH.id2           = id2;
             objAH.sendToServer();
         }
     });
@@ -47,12 +45,14 @@ function cancelarReserva(id_reserva){
 
     jConfirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_RESERVA,OPAC_ALERT_TITLE, function(confirmStatus){
         if (confirmStatus){
-            objAH=new AjaxHelper(updateInfoCancelarReserva);
-
-            objAH.debug= true;
-            objAH.url= '/cgi-bin/koha/reservasDB.pl';
-            objAH.id_reserva= id_reserva;
-            objAH.accion= 'CANCELAR_RESERVA';
+        
+            objAH               = new AjaxHelper(updateInfoCancelarReserva);
+            objAH.debug         = true;
+            objAH.showOverlay   = true;
+            objAH.url           = '/cgi-bin/koha/reservasDB.pl';
+            objAH.id_reserva    = id_reserva;
+            objAH.accion        = 'CANCELAR_RESERVA';
+            
             objAH.sendToServer();
         }
     });
@@ -64,23 +64,25 @@ function cancelarReserva(id_reserva){
 function updateInfoCancelarReserva(responseText){
 //  objJSON= JSONstring.toObject(responseText);
 //  showMessage(objJSON.message);
-    var Messages=JSONstring.toObject(responseText);
+    var Messages = JSONstring.toObject(responseText);
     setMessages(Messages);
     DetalleReservas();
+    infoReservas();
 }
 /*
 * Funcion que llama a cancelar una reserva
 */
 function cancelarYReservar(reserveNumber,id1Nuevo,id2Nuevo){
 
-    objAH=new AjaxHelper(updateInfoCancelarReserva);
+    objAH               = new AjaxHelper(updateInfoCancelarReserva);
 
-    objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/reservasDB.pl';
-    objAH.reserveNumber= reserveNumber;
-    objAH.id1Nuevo= id1Nuevo;
-    objAH.id2Nuevo= id2Nuevo;
-    objAH.accion= 'CANCELAR_Y_RESERVAR';
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = '/cgi-bin/koha/reservasDB.pl';
+    objAH.reserveNumber = reserveNumber;
+    objAH.id1Nuevo      = id1Nuevo;
+    objAH.id2Nuevo      = id2Nuevo;
+    objAH.accion        = 'CANCELAR_Y_RESERVAR';
 
     objAH.sendToServer();
 }
@@ -90,12 +92,12 @@ function cancelarYReservar(reserveNumber,id1Nuevo,id2Nuevo){
 */
 function renovar(id_prestamo){
 
-    objAH=new AjaxHelper(updateInfoRenovar);
-    objAH.debug= true;
+    objAH               = new AjaxHelper(updateInfoRenovar);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
     //para busquedas combinables
-    objAH.url= '/cgi-bin/koha/opac-renovar.pl';
-    objAH.id_prestamo= id_prestamo;
-    //se envia la consulta
+    objAH.url           = '/cgi-bin/koha/opac-renovar.pl';
+    objAH.id_prestamo   = id_prestamo;
     objAH.sendToServer();
 }
 
@@ -109,7 +111,7 @@ function updateInfoRenovar(responseText){
 //      mensajes= mensajes + infoArray[i].message + '<br>';
 //  }
 //  $('#mensajes font').html(mensajes);
-    var Messages=JSONstring.toObject(responseText);
+    var Messages = JSONstring.toObject(responseText);
     setMessages(Messages);
     DetallePrestamos(); 
 }
@@ -119,13 +121,11 @@ function updateInfoRenovar(responseText){
 */
 function DetalleReservas(){
 
-    objAH=new AjaxHelper(updateDetalleReserva);
-    objAH.debug= true;
+    objAH           = new AjaxHelper(updateDetalleReserva);
+    objAH.debug     = true;
     //para busquedas combinables
-    objAH.url= '/cgi-bin/koha/opac-info_reservas.pl';
-    objAH.action = 'detalle_asignadas';
-//  objAH.borrowernumber= borrowernumber;
-    //se envia la consulta
+    objAH.url       = '/cgi-bin/koha/opac-info_reservas.pl';
+    objAH.action    = 'detalle_asignadas';
     objAH.sendToServer();
 }
 
@@ -141,7 +141,6 @@ function updateDetalleReserva(responseText){
         $('#datosUsuario').slideDown('slow');
         $('#result').slideUp('slow');
     }
-
 }
 
 /*
@@ -149,12 +148,12 @@ function updateDetalleReserva(responseText){
 */
 function DetallePrestamos(){
 
-    objAH=new AjaxHelper(updateDetallePrestamo);
-    objAH.debug= true;
+    objAH               = new AjaxHelper(updateDetallePrestamo);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
     //para busquedas combinables
-    objAH.url= '/cgi-bin/koha/opac-DetallePrestamos.pl';
+    objAH.url           = '/cgi-bin/koha/opac-DetallePrestamos.pl';
 //  objAH.borrowernumber= borrowernumber;
-    //se envia la consulta
     objAH.sendToServer();
 }
 
@@ -170,11 +169,11 @@ function updateDetallePrestamo(responseText){
 }
 
 function infoReservas(){
-    objAH=new AjaxHelper(updateInfoReservas);
-    objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/opac-info_reservas.pl';
-    objAH.action = 'detalle_espera';
-    objAH.bubble = 1;
+    objAH           = new AjaxHelper(updateInfoReservas);
+    objAH.debug     = true;
+    objAH.url       = '/cgi-bin/koha/opac-info_reservas.pl';
+    objAH.action    = 'detalle_espera';
+    objAH.bubble    = 1;
     objAH.sendToServer();
 }
 
@@ -183,9 +182,9 @@ function updateInfoReservas(responseText){
 }
 
 function infoSanciones(){
-    objAH=new AjaxHelper(updateInfoSanciones);
-    objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/opac-info_sanciones.pl';
+    objAH               = new AjaxHelper(updateInfoSanciones);
+    objAH.debug         = true;
+    objAH.url           = '/cgi-bin/koha/opac-info_sanciones.pl';
     objAH.sendToServer();
 }
 
@@ -195,11 +194,12 @@ function updateInfoSanciones(responseText){
 
 
 function addFavorite(id1){
-    objAH=new AjaxHelper(updateAddFavorite);
-    objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/opac-favoritosDB.pl';
-    objAH.action = 'add_favorite';
-    objAH.id1= id1;
+    objAH               = new AjaxHelper(updateAddFavorite);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = '/cgi-bin/koha/opac-favoritosDB.pl';
+    objAH.action        = 'add_favorite';
+    objAH.id1           = id1;
     objAH.sendToServer();
 }
 
@@ -212,11 +212,12 @@ function updateAddFavorite(responseText){
 
 
 function deleteFavorite(id1){
-    objAH=new AjaxHelper(updateDeleteFavorite);
-    objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/opac-favoritosDB.pl';
-    objAH.action = 'delete_favorite';
-    objAH.id1= id1;
+    objAH                   = new AjaxHelper(updateDeleteFavorite);
+    objAH.debug             = true;
+    objAH.showOverlay       = true;
+    objAH.url               = '/cgi-bin/koha/opac-favoritosDB.pl';
+    objAH.action            = 'delete_favorite';
+    objAH.id1               = id1;
     objAH.sendToServer();
 }
 

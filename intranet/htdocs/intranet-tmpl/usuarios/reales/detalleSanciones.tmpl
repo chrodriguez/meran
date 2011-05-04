@@ -72,10 +72,10 @@ function updateBorrarSancion(responseText){
 			    </div>
 			    </li>
 			    [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Sancios' | i18n %]",
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Sancion' | i18n %]",
                                                         boton   => "boton_borrar",
                                                         onClick => "borrarSancion('[% sancion.getId_sancion %]');",
-                                                        title   => "[% 'Borrar Sancion' | i18n %]",
+                                                        title   => "[% 'Borrar Sanci&oacute;n' | i18n %]",
                                                         alternClass=> "botonCentradoTabla",
                                         ) ;
                 [% END %]

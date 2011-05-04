@@ -5,7 +5,7 @@
 
 <fieldset>
 <legend class="titulo_legend_resaltado">[% "Ejemplares Asignados" | i18n %]</legend>
-	<table class="reseravsAsignadasResult datos_tabla" cellspacing=0  cellpadding=0  border=0   width="100%">
+	<table id="reseravsAsignadasResult" class="reseravsAsignadasResult datos_tabla" cellspacing=0  cellpadding=0  border=0   width="100%">
 		<tr class="titulo_tabla_resultado">
 			<th>
 				<a class="click" id="checkAllReservas">
@@ -18,7 +18,7 @@
 			<th>[% "C. Barra" | i18n %]</th>
 			<th>[% "Sig. Top." | i18n %]</th>
 			<th>[% "Ed." | i18n %]</th>
-			<th>[% "Vol." | i18n %]</th> 
+			<!--<th>[% "Vol." | i18n %]</th> -->
 			<th>[% "Vencimiento" | i18n %]</th>
 			<th width="10%">[% "Retira en" | i18n %]</th>
 			<th width="10%">[% "Cancelar" | i18n %]</th>
@@ -44,7 +44,7 @@
 			</td>	
 			<td>
                 [% IF reserva.nivel3.nivel1.getAutor %]
-                    [% reserva.nivel3.nivel1.cat_autor.getCompleto %]
+                    [% reserva.nivel3.nivel1.getAutor %]
                 [% ELSE %]
                     &nbsp;
                 [% END %]
@@ -73,11 +73,11 @@
             [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
             </td>
     
-            <td> 
+            <!-- <td> 
             [% IF reserva.nivel3.nivel2.getVolumen %] t [% reserva.nivel3.nivel2.getVolumen %] 
                 [% IF reserva.nivel3.nivel2.getVolumenDesc %] ([% reserva.nivel3.nivel2.getVolumenDesc %])  [% END %] 
             [% END %]
-            </td>
+            </td> -->
 			<td>
             [% IF reserva.getFecha_recordatorio_formateada %]
             <font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
@@ -117,7 +117,7 @@
             [% PERL %]
                 print C4::AR::Filtros::to_Icon(  
                                                     boton   => "icon_prestar",
-                                                    onClick => "realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);",
+                                                    onClick => "realizarAccion('CONFIRMAR_PRESTAMO','reseravsAsignadasResult',generaDivPrestamo);",
                                                     title   => "[% 'Prestar' | i18n %]",
                                                     alternClass => "botonCentrado"
                         ) ;
@@ -139,7 +139,7 @@
 			    <th>[% "T&iacute;tulo" | i18n %]</th>
 			    <th>[% "Autor" | i18n %]</th>
 			    <th>[% "Edici&oacute;n" | i18n %]</th>
-			    <th>[% "Volumen" | i18n %]</th>
+			    <!--<th>[% "Volumen" | i18n %]</th>-->
 			    <th>[% "Cancelar" | i18n %]</th>
 		    </tr>
         [% FOREACH reserva IN RESERVAS_ESPERA %]
@@ -154,21 +154,21 @@
 			    [% END %]
 			    </td>
 			    <td>
-                    [% IF reserva.nivel3.nivel1.getAutor %]
-                        [% reserva.nivel3.nivel1.cat_autor.getCompleto %]
+                    [% IF reserva.nivel2.nivel1.getAutor %]
+                        [% reserva.nivel2.nivel1.getAutor %]
                     [% ELSE %]
                         &nbsp;
                     [% END %]
 			    </td>
             <td>  
-                [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
+                [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
                 </td>
         
-                <td> 
+                <!--<td> 
                 [% IF reserva.nivel3.nivel2.getVolumen %] t [% reserva.nivel3.nivel2.getVolumen %] 
                     [% IF reserva.nivel3.nivel2.getVolumenDesc %] ([% reserva.nivel3.nivel2.getVolumenDesc %])  [% END %] 
                 [% END %]
-                </td>
+                </td>-->
 		    [% IF circularDesdeDetalleUsuario %]
 			    <td width="10%"> 
 

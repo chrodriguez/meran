@@ -1,3 +1,4 @@
+
 <fieldset> <legend class="titulo_legend trigger click">[% "Datos del material" %]</legend>
       [%  IF cant_ejemplares_disp > 0 %]
                       <div style="border: 1px solid #A0D651; background-color: #E3F6CE; color:#505050; padding:10px 0 0 0; margin: 0 0 10px 0">
@@ -6,14 +7,14 @@
       [% END  %] 
       <form id="recom_form" name="recom_form" method="post" onsubmit="return false;">     
         <div class="datos_edicion" id="datos_edicion"> 
-               
+                  
                   <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
                             <input type="text" class="required" name="autor" id="autor" class="field" value="[% datos_nivel1.getAutor %]" tabindex="10" /></p>
                   <p><label for="titulo" class="left">[% 'T&iacute;tulo*' | i18n %]:</label>
                             <input type="text" class="required" name="titulo" id="titulo" class="field" value="[% datos_nivel1.getTitulo %]" tabindex="10" /></p>
                    <p><label for="edicion" class="left">[% 'Edici&oacute;n*' | i18n %]:</label>
                             <input type="text" class="required" name="edicion" id="edicion" class="field" value="[% edicion %]" tabindex="10" /></p>
-                  <p><label for="lugar_publicacion_" class="left">[% 'Lugar de Publicaci&oacute;n*' | i18n %]:</label>
+                  <p><label for="lugar_publicacion" class="left">[% 'Lugar de Publicaci&oacute;n*' | i18n %]:</label>
                             <input type="text"  name="lugar_publicacion" id="lugar_publicacion" class="field" value="[% datos_edicion.getCiudadPublicacion %]" tabindex="10"/></p>     
                   <p><label for="editorial" class="left">[% 'Editorial*' | i18n %]:</label>
                             <input type="text" class="required" name="editorial" id="editorial" class="field" value="[% datos_edicion.getEditor %]" tabindex="10" /></p>
@@ -34,11 +35,18 @@
                      <textarea name="motivo_propuesta" id="motivo_propuesta" cols="45" class="required" rows="10" tabindex="17"></textarea></p>
                   <p><label for="comment" class="left">[% 'Comentarios' | i18n %]:</label>
                      <textarea name="comment" id="comment"  cols="45" rows="10" tabindex="17"></textarea></p>
-          <!--          <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Enviar Mensaje' | i18n %]" tabindex="18" /></p>-->
-                        <input type="hidden" name="post_message" id="post_message" value="1"/>
+<!--                      <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Enviar Mensaje' | i18n %]" tabindex="18" /></p> -->
+                       <!-- <input type="hidden" name="post_message" id="post_message" value="1"/>-->
                  
-            
-                  <p><input type="button" onClick="save()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" /> </p>  
+                  
+
+
+<!--        VER COMO MANDAR EL ID DE LA RECOMENDACION CREADA PARA PASARSELO A LOS RENGLONES SIGUIENTES            -->
+               
+                  
+
+
+                  <p><input type="button" onClick="guardarDetalle()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" /> </p>  
  
                   [% PERL %]
                           print C4::AR::Filtros::setHelp(text => "[% 'Los campos marcados con * son obligatorios' | i18n %]",
