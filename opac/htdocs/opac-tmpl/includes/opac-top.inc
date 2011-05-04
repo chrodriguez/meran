@@ -64,9 +64,19 @@
           $(document).ready(function() {
             infoReservas();
             infoSanciones();
-            // TODO: una preferencia de tiempo que setee esto
-            setInterval(infoReservas,300000);
-            setInterval(infoSanciones,300000);
+            // TODO: no recupera el valor de timeInterval
+            setInterval(infoReservas,[% IF timeInterval %]
+                                        [% timeInterval %]
+                                     [% ELSE %]
+                                        300000
+                                     [% END %]
+                                     );
+            setInterval(infoSanciones,[% IF timeInterval %]
+                                        [% timeInterval %]
+                                     [% ELSE %]
+                                        300000
+                                     [% END %]
+                                     );
           });
       [% END %]
   </script>
