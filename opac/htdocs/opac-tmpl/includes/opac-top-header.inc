@@ -13,12 +13,11 @@
         <!-- B. MAIN -->
         <div class="main">
           <div class="main-navigation">
-              [% INCLUDE 'opac-navlink.inc' %]
               [% IF socio_data %]
                   [% INCLUDE 'opac-login.inc' %]
               [% END %]
-              <h1>[% 'Buscar' | i18n %]:</h1>
-                [% INCLUDE 'opac-search_form.inc' %]
+<!--              <h1>[% 'Buscar' | i18n %]:</h1>
+                [% INCLUDE 'opac-search_form.inc' %]-->
         <!--         <h1>&nbsp;</h1> -->
           </div>
               <!-- B.1 MAIN CONTENT -->

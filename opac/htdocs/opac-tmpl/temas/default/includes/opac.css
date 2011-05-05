@@ -31,9 +31,9 @@ body textarea:focus{
   background: #F5DEB3;
 }
 .page-container {width:98%; margin:0px auto; margin-top:10px; margin-bottom:10px; border:solid 1px rgb(150,150,150); font-size:1.0em;}
-.main {clear:both; width:100%; padding-bottom:30px; background:transparent url(../imagenes/bg_main_withnav.jpg) top left repeat-y;}
-.main-navigation {display:inline /*Fix IE floating margin bug*/; float:left; width:200px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
-.main-content {display:inline; /*Fix IE floating margin bug*/; float:left; width:56%; margin:0 0 0 2%; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+.main {clear:both; width:100%; padding-bottom:30px; /*background:transparent url(../imagenes/bg_main_withnav.jpg) top left repeat-y;*/}
+.main-navigation {display:inline /*Fix IE floating margin bug*/; /*float:left;*/ width:200px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+.main-content {display:inline; /*Fix IE floating margin bug*/; float:left; width:76%; margin:0 0 0 2%; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 .main-subcontent {display:inline /*Fix IE floating margin bug*/; float:right; width:185px; margin:0 15px 0 0; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 .footer {clear:both; width:100%; height:3.7em; padding:1.1em 0 0; background:rgb(225,225,225) url(../imagenes/bg_foot.jpg) repeat; font-size:1.0em; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 
@@ -43,8 +43,11 @@ body textarea:focus{
 .header {width:100%; font-family:"trebuchet ms",arial,sans-serif;}
 .header-top {width:100%; height:80px; background:rgb(240,240,240) url(../imagenes/bg_head_top.jpg); overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 .header-middle {width:100%; height:100px; background:rgb(230,230,230) url(../imagenes/bg_head_middle.jpg); overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
-.header-bottom {width:100%; height:40px; background:rgb(255,255,255) url(../imagenes/bg_head_breadcrumbs.jpg) repeat-y;}
-.header-breadcrumbs {clear:both; width:100%; padding:1.0em 0 1.5em 0; background:transparent url(../imagenes/bg_head_breadcrumbs.jpg) repeat-y;}
+/*.header-bottom {width:100%; height:40px; background:rgb(255,255,255) url(../imagenes/bg_head_breadcrumbs.jpg) repeat-y;}*/
+.header-bottom {width:100%; height:40px; background:url("../imagenes/bg_head_bottom_nav.jpg") repeat-x scroll 0 0 #DCDCDC;}
+/* .header-breadcrumbs {clear:both; width:100%; padding:1.0em 0 1.5em 0; background:transparent url(../imagenes/bg_head_breadcrumbs.jpg) repeat-y;} */
+.header-breadcrumbs {float:left; width:15%; padding:1.0em 0 1.5em 0;}
+
 
 /********************/
 /*  HEADER SECTION  */
@@ -76,7 +79,7 @@ body textarea:focus{
 .sitemessage h3 a {text-decoration:none; color:rgb(234,239,247);}
 .sitemessage h3 a:hover {text-decoration:none; color:rgb(50,50,50);}
 
-.nav2 {float:left; width:100%; border:none; background:rgb(220,220,220) url(../imagenes/bg_head_bottom_nav.jpg) repeat-x; color:rgb(75,75,75); font-size:1.0em; font-size:130%;} /*Color navigation bar normal mode*/
+.nav2 {float:left; width:85%; border:none; /*background:rgb(220,220,220) url(../imagenes/bg_head_bottom_nav.jpg) repeat-x*/; color:rgb(75,75,75); font-size:1.0em; font-size:130%;} /*Color navigation bar normal mode*/
 .nav2 ul {list-style-type:none;}
 .nav2 ul li {float:left; position:relative; z-index:1000; border-right:solid 1px rgb(175,175,175);}
 .nav2 ul li ul {display:none; border:none;}
@@ -473,8 +476,8 @@ div.pagination span.disabled {
 
 .main-content table {clear:both; width:100%; margin:2.0em 0 0.2em 20px; table-layout: fixed; border-collapse:collapse; empty-cells:show; background-color:rgb(233,232,244);}
 .main-content table th.top {height:3.5em; padding:0 7px 0 7px; empty-cells:show; background-color:rgb(175,175,175); text-align:left; color:rgb(255,255,255); font-weight:bold; font-size:110%;}
-.main-content table th {height:3.0em; /*padding:2px 20px 2px 7px;*/ border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(237,164,93); text-align:center; color:rgb(80,80,80); font-weight:bold; font-size:9px;}
-.main-content table td {height:3.0em; padding:2px 10px 2px 10px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(220,220,220); text-align:left; font-weight:normal; color:rgb(80,80,80); font-size:93%;}
+.main-content table th {height:3.0em; /*padding:2px 20px 2px 7px;*/ border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(237,164,93); text-align:center; color:rgb(80,80,80); font-weight:bold; font-size:11pt;}
+.main-content table td {height:3.0em; padding:2px 10px 2px 10px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(220,220,220); text-align:left; font-weight:normal; color:rgb(80,80,80); font-size:10pt;}
 p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,80,80); font-size:110%;}
 
 .main-content ul {list-style:none; margin:0.5em 0 1.0em 0;}

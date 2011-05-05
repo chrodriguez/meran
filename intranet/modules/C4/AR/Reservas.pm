@@ -104,11 +104,9 @@ sub getDisponibilidadDeGrupoParaPrestamoDomiciliario{
 
     my $cant = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( db => $db, query => \@filtros);
 
-    if($cant > 0){
-        return $cant;
-    }else{
-        return 0;
-    }
+    C4::AR::Debug::debug("getDisponibilidadDeGrupoParaPrestamoDomiciliario $id2 => $cant ");
+
+    return $cant;
 }
 
 =head2
@@ -621,6 +619,30 @@ sub _getReservasAsignadas {
     }
 }
 
+
+=head2  
+    sub _getId3AsignadosyPrestadosById2
+    Dado un id2, devuelve los ejemplares o asignados o prestados
+=cut
+sub _getId3AsignadosyPrestadosById2 {
+
+    my ($id2,$db)=@_;
+    $db = $db || C4::Modelo::CircReserva->new()->db;
+
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
+                                                                    db => $db,
+                                                                    query => [ id2 => { eq => $id2 }, id3 => {ne => undef} ],
+								    select => ['id3']
+                                                    );
+
+
+    if (scalar(@$reservas_array_ref) > 0){
+        return($reservas_array_ref);
+    }else{
+      return (0);
+    }
+}
+
 =head2
     sub getReserva
     Funcion que retorna la informacion de la reserva con el numero que se le pasa por parametro.
@@ -814,6 +836,7 @@ sub _verificaciones {
 #Se verifica que el usuario no tenga dos reservas sobre el mismo grupo
     if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (C4::AR::Reservas::_verificarTipoReserva($nro_socio, $id2)) ){
         $msg_object->{'error'}= 1;
+
         C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R002', 'params' => []} ) ;
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de reservas iguales, sobre el mismo grupo y tipo de prestamo");
     }
@@ -1040,18 +1063,23 @@ sub reasignarNuevoEjemplarAReserva{
             $reserva_asignada->intercambiarId3 ($db, $nuevoId3, $msg_object);
         }else{
             C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => NO EXISTE");
-            #si NO EXISTE un ejemplar disponible del grupo
-            #a la reserva se la pasa a reserva en  espera (id3 = null) por DEFECTO, debido a q en la funcion manejoDeDisponibilidadDomiciliaria
-            # se va a eliminar si es q no existe disponibilidad en la biblioteca. Además, se borra la sanción de esa reserva.
-            $reserva_asignada->pasar_a_espera();
-            C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => paso la reserva a ESPERA (estado = G)");
+            #NO EXISTE un ejemplar disponible del grupo
+	    #Verifico la disponibilidad para reservas del grupo
+	    my ($cant) = C4::AR::Reservas::getDisponibilidadDeGrupoParaPrestamoDomiciliario($db, $params->{'id2'});
+	    if($cant == 0){
+		#No hay mas disponibilidad en el grupo, se cancela la reserva.
+		C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => NO hay disponibilidad para el grupo id2: ".$params->{'id2'}." se CANCELA la reserva asignada!!!");
+		$reserva_asignada->cancelar_reserva($params);
+	    } else {
+		#a la reserva se la pasa a reserva en  espera (id3 = null). Además, se borra la sanción de esa reserva.
+		C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => paso la reserva a ESPERA (estado = G)");
+		$reserva_asignada->pasar_a_espera();
+	    }
         }
     }else{
         #no tiene reserva asiganada, NO SE HACE NADA
     }
 
-    #verifico la disponibilidad del grupo
-    C4::AR::Reservas::manejoDeDisponibilidadDomiciliaria($db, $params);
 }
 
 
@@ -1083,6 +1111,9 @@ sub manejoDeDisponibilidadDomiciliaria{
           }
         }
     }
+  else{
+        C4::AR::Debug::debug("manejoDeDisponibilidadDomiciliaria => aun hay ejemplares disponibles para reservar");
+   }
 }
 
 # sub conseguirEjemplarParaAsignarReserva{
@@ -1132,35 +1163,33 @@ sub asignarEjemplarASiguienteReservaEnEspera{
 =item sub getEjemplarDeGrupoParaReserva
     Busca los ejemplares del grupo disponibles para reserva.
 =cut
-# TODO no se como hacer el NOT IN con Rose::DB
+
 sub getEjemplaresDeGrupoParaReserva{
     my ($id2)   = @_;
-    my $dbh     = C4::Context->dbh;
 
-    my $disponibilidad_prestamo = C4::AR::Referencias::getIdRefDisponibilidadDomiciliaria();
-    my $estado_disponible       = C4::AR::Referencias::getIdRefEstadoDisponible();
+    my @filtros;
+    my $diponibilidad_filtro      = C4::AR::Referencias::getIdRefDisponibilidadDomiciliaria();      #Domiciliario
+    my $estado_disponible_filtro  = C4::AR::Referencias::getIdRefEstadoDisponible();                #Disponible
 
-    #esta consulta devuelve todos los ejemplares del grupo q no estan la tabla reservas
-    my $query= "    SELECT id3 
-                    FROM cat_registro_marc_n3 n3 WHERE n3.id2 = ? AND n3.marc_record LIKE '% ? %' 
-                    AND n3.marc_record LIKE '% ? %' 
-                    AND n3.id3 NOT IN ( SELECT cr.id3 
-                                        FROM circ_reserva cr 
-                                        WHERE cr.id2 = ? AND cr.id3 IS NOT NULL)";
+    push(@filtros, ( id2                => { eq => $id2 }) );
+    push(@filtros, ( marc_record        => { like => '%'.$diponibilidad_filtro.'%' } ) );       
+    push(@filtros, ( marc_record        => { like => '%'.$estado_disponible_filtro.'%' } ) );
 
-    #el 2do SELECT devuelve todas las reservas asigandas del grupo
-
-    my $sth=$dbh->prepare($query);
-    
-    $sth->execute($id2, $disponibilidad_prestamo, $estado_disponible, $id2);
-    
-    my @array_id3;
-
-    while (my $data = $sth->fetchrow_hashref){
-        push (@array_id3, $data->{'id3'});
+    #Hay que sacar los ejemplares reservados o prestados
+    my $reservas =C4::AR::Reservas::_getId3AsignadosyPrestadosById2($id2);
+    if($reservas) {
+      foreach my $reserva (@$reservas){
+	    push(@filtros, ( id  => { ne => $reserva->getId3 }) );
+      }
     }
 
-    return @array_id3;
+    my $ejemplares_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3 ( query => \@filtros);
+
+    if(scalar(@$ejemplares_array_ref) > 0){
+        return ($ejemplares_array_ref);
+    }else{
+        return 0;
+    }
 }
 
 =item sub getEjemplarDeGrupoParaReserva
@@ -1169,10 +1198,10 @@ sub getEjemplaresDeGrupoParaReserva{
 =cut
 sub getEjemplarDeGrupoParaReserva {
     my ($id2) = @_;
-    my (@ejemplares_array_ref) = C4::AR::Reservas::getEjemplaresDeGrupoParaReserva($id2);
+    my $ejemplares_array_ref = C4::AR::Reservas::getEjemplaresDeGrupoParaReserva($id2);
 
-    if(scalar(@ejemplares_array_ref) > 0){
-        return @ejemplares_array_ref->[0];
+    if($ejemplares_array_ref){
+        return $ejemplares_array_ref->[0]->getId3();
     }else{
         return 0;
     }

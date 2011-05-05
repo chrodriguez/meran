@@ -92,16 +92,18 @@
           </ul>          
 
         </div>
-      </div>
 
       <!-- A.4 HEADER BREADCRUMBS -->
 
       <!-- Breadcrumbs -->
-      <div class="header-breadcrumbs">
-          [% INCLUDE 'opac-status_links.inc' %]
-          <div id="mensajes"></div>
+
+        <div class="header-breadcrumbs">
           [% INCLUDE 'opac-search_form.inc' %]
+        </div>
+
       </div>
+
     </div>
+    <div id="mensajes"></div>
 
     <!-- For alternative headers END PASTE here -->
