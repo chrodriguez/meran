@@ -949,9 +949,9 @@ sub busquedaAvanzada_newTemp{
 
     use Sphinx::Search;
     
-    my $sphinx = Sphinx::Search->new();
-    my $query = '';
-    my $tipo = 'SPH_MATCH_EXTENDED';
+    my $sphinx  = Sphinx::Search->new();
+    my $query   = '';
+    my $tipo    = 'SPH_MATCH_EXTENDED';
     my $orden       = $params->{'orden'};
    
     if($params->{'titulo'} ne ""){
@@ -974,9 +974,14 @@ sub busquedaAvanzada_newTemp{
     if( ($params->{'tipo_nivel3_name'} ne "") && ($params->{'tipo_nivel3_name'} ne "ALL") ){
         $query .= ' @string "'."cat_ref_tipo_nivel3%".$params->{'tipo_nivel3_name'};
 
-        $query .='"';
+#         $query .='"';
     }
 
+    if( $params->{'codBarra'} ne "") {
+        $query .= ' @string "'."barcode%".$params->{'codBarra'};
+
+        $query .='*';
+    }
 
 
     if ($params->{'only_available'}){
