@@ -11,7 +11,7 @@ use Digest::MD5;
 C4::AR::Debug::debug("SE CREO CGI ");
 my $query       = new CGI;
 my $id2         = $query->url_param('id2');
-my $name        = $query->url_param('qqfile');;
+my $name        = $query->url_param('qqfile');
 my $file_data   = $query->param('POSTDATA');
 my $authnotrequired = 0;
 
