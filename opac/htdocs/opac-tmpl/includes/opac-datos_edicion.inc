@@ -1,7 +1,7 @@
 
-<fieldset> <legend class="titulo_legend trigger click">[% "Datos del material" %]</legend>
+<fieldset id="datos_material" > <legend class="titulo_legend trigger click">[% "Datos del material" %]</legend>
       [%  IF cant_ejemplares_disp > 0 %]
-                      <div style="border: 1px solid #A0D651; background-color: #E3F6CE; color:#505050; padding:10px 0 0 0; margin: 0 0 10px 0">
+                      <div id="cant_ejemplares_disp" style="border: 1px solid #A0D651; background-color: #E3F6CE; color:#505050; padding:10px 0 0 0; margin: 0 0 10px 0">
                                     <p>[% 'La biblioteca cuenta con ' | i18n %]<strong>[% cant_ejemplares_disp %]</strong>[% ' ejemplar/es de este tipo, si aun considera necesaria esta recomendacion, complete el formulario, de lo contrario realice otra busqueda' | i18n %] </p>
                       </div> 
       [% END  %] 
@@ -43,15 +43,15 @@
 
 <!--        VER COMO MANDAR EL ID DE LA RECOMENDACION CREADA PARA PASARSELO A LOS RENGLONES SIGUIENTES            -->
                
-                  
-
+                 
 
                   <p><input type="button" onClick="guardarDetalle()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" /> </p>  
- 
                   [% PERL %]
                           print C4::AR::Filtros::setHelp(text => "[% 'Los campos marcados con * son obligatorios' | i18n %]",
                                         );
                   [% END %]
+                  
+                  
         </div>  
    </form>
 </fieldset>

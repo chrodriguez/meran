@@ -443,7 +443,7 @@ sub getMensaje {
 	my($codigo,$tipo,$param)=@_;
 	my $msj="";
 
-	($tipo eq "OPAC") ? ($msj=$mensajesOPAC{$codigo}) : ($msj=$mensajesINTRA{$codigo});
+	($tipo eq "opac") ? ($msj=$mensajesOPAC{$codigo}) : ($msj=$mensajesINTRA{$codigo});
 	
 	my $p;
 	foreach $p (@$param){
@@ -539,7 +539,9 @@ sub create {
 	my %msg_object;
 	$msg_object{'error'}    = 0;
 	$msg_object{'messages'} = [];
-	$msg_object{'tipo'}     = 'INTRA';
+    my $session = CGI::Session->load();
+  
+	$msg_object{'tipo'}     = $session->param('type')||'INTRA';
 
 	return \%msg_object;
 }

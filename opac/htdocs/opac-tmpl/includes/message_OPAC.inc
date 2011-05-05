@@ -42,7 +42,7 @@
     POR_FAVOR_INGRESE_UN_TITULO = "[% 'Por favor, ingrese un titulo' | i18n %]";
     POR_FAVOR_INGRESE_UNA_EDICION = "[% 'Por favor, ingrese una edicion' | i18n %]";
     POR_FAVOR_INGRESE_UNA_EDITORIAL = "[% 'Por favor, ingrese una editorial' | i18n %]";
-    POR_FAVOR_INGRESE_UNA_CANTIDAD = "[% 'Por favor, ingrese una cantidad' | i18n %]";
+    POR_FAVOR_INGRESE_UNA_CANTIDAD = "[% 'Por favor, ingrese una cantidad v\u00e1lida' | i18n %]";
     POR_FAVOR_INGRESE_UN_MOTIVO = "[% 'Por favor, ingrese un motivo' | i18n %]";
 
 </script>

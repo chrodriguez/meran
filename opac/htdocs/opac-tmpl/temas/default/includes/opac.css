@@ -535,7 +535,7 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .recomendacionform {width:114%; margin:2.0em 0 0 0; padding:10px 10px 0 10px; border:solid 1px rgb(237,164,93); background-color:rgb(244,244,244);}
 .recomendacionform fieldset {padding:20px 0 0 0 !important /*Non-IE6*/; padding:0 /*IE6*/; margin:0 0 20px 0; border:solid 1px rgb(220,220,220);}
 .recomendacionform fieldset legend {margin:0 0 0 5px !important /*Non-IE*/; margin:0 0 20px 5px /*IE6*/; padding:0 2px 0 2px; color:rgb(80,80,80); font-weight:bold; font-size:130%;}
-.recomendacionform label.left {float:left; width:30%; margin:0 0 0 10px; padding:2px; font-size:110%;}
+.recomendacionform label.left {float:left; width:24%; margin:0 0 0 10px; padding:2px; font-size:110%;}
 .recomendacionform select.combo {width:175px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .recomendacionform input.field {width:275px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .recomendacionform textarea {width:275px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
