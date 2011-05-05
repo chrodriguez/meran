@@ -49,7 +49,7 @@
  		</td>			
  		<td class="impar">
 		[% IF reserva.nivel2.nivel1.getAutor %]
-			[% reserva.nivel2.nivel1.cat_autor.getCompleto %]
+			[% reserva.nivel2.nivel1.getAutor %]
 		[% ELSE %]
 			&nbsp;
 		[% END %]
@@ -114,9 +114,7 @@
  	</td>
  	<td class="impar">
 	[% IF rautor %]
-		<a  href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor %]" >
-		[% reserva.nivel2.nivel1.cat_autor.getCompleto %]
-		</a>
+		[% reserva.nivel2.nivel1.getAutor %]
 	[% ELSE %]
 		&nbsp;
 	[% END %]
@@ -175,9 +173,7 @@
 	</td>
 	<td class="impar">
   	[% IF reserva.nivel2.nivel1.getAutor %]
-		<a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% reserva.nivel2.nivel1.getAutor %]" >
-		[% reserva.nivel2.nivel1.cat_autor.getCompleto %]
-		</a>
+		[% reserva.nivel2.nivel1.getAutor %]
   	[% ELSE %]
 		&nbsp;
  	[% END %]

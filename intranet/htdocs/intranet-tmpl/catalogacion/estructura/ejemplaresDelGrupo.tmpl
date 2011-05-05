@@ -75,6 +75,10 @@
                         [% END %]
 
                     [% END %]
+                    
+                    
+                    
+                    
 
                         <div class="[% claseDisponibilidad %]">
                             [% nivel3_obj.getDisponibilidadObject.getNombre %]
@@ -84,6 +88,21 @@
                     <span class="[% claseEstado %]">
                         [% nivel3_obj.getEstadoObject.getNombre %]
                     </span>
+                    <!-- preguntamos si ya se muestra el usuario en el prestamo, para no mostrarlo dos veces -->
+                    [% IF !prestamo.getNro_socio %]
+                        [% IF reserva.getNro_socio %]
+                            (Asignado a:
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to(   text =>     "[% reserva.getNro_socio %]",
+                                                                  url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                                  params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
+                                                                  title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                                  blank =>  1,
+                                                            );
+                            [% END %]
+                            )
+                        [% END %]
+                    [% END %]
                 </td>
                 <td>
                     <span class="[% claseFecha %]">
