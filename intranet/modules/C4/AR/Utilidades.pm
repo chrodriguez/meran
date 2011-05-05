@@ -2781,7 +2781,7 @@ sub generarComboNivel2{
     $options_hash{'defaults'}   = C4::AR::Preferencias::getValorPreferencia("defaultEdicion");
 
     push (@select_ediciones_array, '');
-    $select_ediciones_hash{''} = "SIN SELECCIONAR";
+    $select_ediciones_hash{''} = "OTRA";
     $options_hash{'values'}     = \@select_ediciones_array;
     $options_hash{'labels'}     = \%select_ediciones_hash;
 

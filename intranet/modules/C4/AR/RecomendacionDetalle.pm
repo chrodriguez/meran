@@ -34,7 +34,7 @@ sub getDetalleRecomendacionPorId {
 
 sub eliminarDetalleRecomendacion {
 
-     my ($id_rec_det) = @_;
+     my ($id_rec_det, $msg_object) = @_;
     
      my $msg_object= C4::AR::Mensajes::create();
     
@@ -53,7 +53,7 @@ sub eliminarDetalleRecomendacion {
          $msg_object->{'error'}= 1;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'RC01', 'params' => []} ) ;
      }
- 
+
      return ($msg_object);
 }
 
