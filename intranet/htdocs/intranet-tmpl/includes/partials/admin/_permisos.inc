@@ -37,6 +37,12 @@
                     [% combo_perfiles %]
                 </li>
 
+                <li class="sub_item">
+                    <label for="perfiles"> Tipo de Permiso: </label>
+                    [% combo_tipo_permisos %]
+                </li>
+
+
                 [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Obtener Permisos' | i18n %]",
                                                         boton   => "boton_agregar",

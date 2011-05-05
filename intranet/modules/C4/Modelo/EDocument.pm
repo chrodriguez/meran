@@ -26,7 +26,7 @@ __PACKAGE__->meta->setup(
         filename        => { type => 'varchar', length => 255, not_null => 1 },
         title           => { type => 'varchar', length => 255, not_null => 1 },
         id2             => { type => 'int', length => 11, not_null => 1 },
-        file_type       => { type => 'varchar', length => 10, not_null => 1, default=>"pdf" },
+        file_type       => { type => 'varchar', length => 64, not_null => 1, default=>"pdf" },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -49,6 +49,16 @@ sub agregar(){
 	
 }
 
+sub getIconType(){
+    my ($self) = shift;
+
+    my $file_type = $self->getFileType;
+    
+    my @nombreYExtension = split('\/',$file_type);
+    
+    return (@nombreYExtension[1]);
+	
+}
 # ------GETTERS--------------------
 sub getId{
     my ($self) = shift;

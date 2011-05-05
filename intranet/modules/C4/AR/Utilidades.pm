@@ -102,6 +102,7 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboTemasINTRA
     generarComboRecomendaciones
     generarComboPedidosCotizacion
+    generarComboTipoPermisos
     getFeriados
     bbl_sort
     createSphinxInstance
@@ -1747,6 +1748,35 @@ sub generarComboPerfiles{
 
 }
 
+sub generarComboTipoPermisos{
+    my ($params) = @_;
+
+    my (@values);
+
+    my %labels;
+    my %options_hash; 
+
+    @values[0]='PCAT';
+    @values[1]='PCIR';
+    @values[2]='PGEN';
+    
+    $labels{"PCAT"}= C4::AR::Filtros::i18n('Permisos Catalogo');
+    $labels{"PCIR"}= C4::AR::Filtros::i18n('Permisos Circulacion');
+    $labels{"PGEN"}= C4::AR::Filtros::i18n('Permisos Generales');
+
+    $options_hash{'onChange'}= $params->{'onChange'};
+    $options_hash{'values'}= \@values;
+    $options_hash{'labels'}=\%labels;
+    $options_hash{'defaults'}= 'PCAT';
+    $options_hash{'size'}= 1;
+    $options_hash{'name'}= 'tipo_permisos';
+    $options_hash{'id'}= 'tipo_permisos';
+
+    my $select = CGI::scrolling_list(\%options_hash);
+
+    return($select);
+
+}
 
 sub generarComboDeDisponibilidad{
 
@@ -3916,16 +3946,13 @@ sub generarComboEstantes{
 }
 
 
-
-############### ACOMODARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRr
 sub isValidFile{
 
-    my ($file_path,$extension) = @_;
+    my ($file_path) = @_;
     my $return_value = 1;
     my $file_type;
 
     use File::LibMagic;
-
     my $flm = File::LibMagic->new();
 
     open(FILE, "<$file_path") or die "Can't open $file_path : $!\n";
@@ -3934,15 +3961,20 @@ sub isValidFile{
     $file_type = $flm->checktype_filename($file_path);    
  
     my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","msword","docx","odt","pdf","xls","zip");
-    my @nombreYextension=split('\/',$file_type);
+    my @nombreYextension=split('\.',$file_path);
 
     C4::AR::Debug::debug("UploadDocument ====== > FileType: ".$file_type);
+    C4::AR::Debug::debug("UploadDocument ====== > FilePath: ".$file_path);
+    C4::AR::Debug::debug("UploadDocument ====== > Extension: ".@nombreYextension[1]);
+    my $size = scalar(@nombreYextension) - 1;
 
-    if (!( @nombreYextension[1] =~ m/bmp|jpg|gif|png|jpeg|msword|docx|odt|pdf|xls|zip/) ) {
+    if (!( @nombreYextension[$size] =~ m/bmp|jpg|gif|png|jpeg|msword|docx|odt|pdf|xls|zip/i) ) {
         $return_value = 0;
     }
 
+    $return_value = trim(split(';', $file_type));
     C4::AR::Debug::debug("FILE TYPE RESULT: ".$return_value);
+    C4::AR::Debug::debug("FILE PATH ///////////////: ".$file_path);
     return ($return_value);
 }
 

@@ -4,7 +4,15 @@
 
 <script type="text/javascript" src="/includes/jquery/fileuploader.js"></script>
 
+<script type="text/javascript">
 
+function refreshPage(fileName, responseJSON){
+	
+	//$("body").html("rock");
+	jAlert(responseJSON.error,fileName);
+	
+}
+</script>
 <fieldset>
 
     <legend class="titulo_legend">[% "Documentos electr&oacute;nicos del grupo"| i18n %]:</legend>
@@ -12,16 +20,23 @@
     <div id="lista_docs_[% id2 %]" class="lista_docs_[% id2 %]">
 	    <ul>
                [% FOREACH file IN lista_docs %]	
-		        <li class="item">
-                       [% PERL %]
-                           print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(file.getTitle) %]",
-                                                           url =>      "getDocument.pl", 
-                                                           params =>   ["id=[% file.getId %]"],
-                                                           title =>    "[% HTML.escape(file.getTitle) %]"
-                                                       ) ;
-                       [% END %]
-	                <img style="height: 25px; width: 25px; border: none; float:left;" src='[% temas %]/[% user_theme_intra %]/imagenes/iconos/[% file.getFileType %].png' />
-		        </li>
+			        <li class="item">
+	                       [% PERL %]
+	                           print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(file.getTitle) %]",
+	                                                           url =>      "getDocument.pl", 
+	                                                           params =>   ["id=[% file.getId %]"],
+	                                                           title =>    "[% HTML.escape(file.getTitle) %]"
+	                                                       ) ;
+	                       [% END %]
+		                <img style="height: 25px; width: 25px; border: none; float:left;" src='[% temas %]/[% user_theme_intra %]/imagenes/iconos/[% file.getIconType %].png' />
+	                       [% PERL %]
+	                           print C4::AR::Filtros::link_to( text =>     "(Eliminar)",
+	                                                           url =>      "deleteDocument.pl", 
+	                                                           params =>   ["id=[% file.getId %]","id1=[% id1 %]"],
+	                                                           title =>    "Eliminar"
+	                                                       ) ;
+	                       [% END %]
+			        </li>
             [% END %]
 
 	    </ul>
@@ -40,9 +55,12 @@
                params: {
                    id2: '[% id2 %]',
                },
-               onComplete: function(id, fileName){},
+               allowedExtensions: ["bmp","jpg","gif","png","jpeg","doc","docx","odt","pdf","xls","zip","avi"],
                debug: true,
+               showMessage: function(message){ jAlert(message); },
+               onComplete: function(id, fileName, responseJSON){},
            });
         </script>
+        
 </fieldset>
 

@@ -330,28 +330,10 @@
 	               <ul>
 	                   <li>
 	                             [% PERL %]
-	                                 print C4::AR::Filtros::link_to( text =>     "[% 'Permisos Cat&aacute;logo' | i18n %]",
-	                                                                 url =>      "/cgi-bin/koha/admin/permisos/permisos_catalogo.pl",
+	                                 print C4::AR::Filtros::link_to( text =>     "[% 'Permisos' | i18n %]",
+	                                                                 url =>      "/cgi-bin/koha/admin/permisos/permisos.pl",
 	                                                                 params =>   [],
-	                                                                 title =>    "[% 'Permisos Cat&aacute;logo' | i18n %]"
-	                                                             ) ;
-	                             [% END %]
-	                   </li>
-	                   <li>
-	                             [% PERL %]
-	                                 print C4::AR::Filtros::link_to( text =>     "[% 'Permisos Circulaci&oacute;n' | i18n %]",
-	                                                                 url =>      "/cgi-bin/koha/admin/permisos/permisos_circulacion.pl", 
-	                                                                 params =>   [],
-	                                                                 title =>    "[% 'Permisos Circulaci&oacute;n' | i18n %]"
-	                                                             ) ;
-	                             [% END %]
-	                   </li>
-	                   <li>
-	                             [% PERL %]
-	                                 print C4::AR::Filtros::link_to( text =>     "[% 'Permisos Generales' | i18n %]",
-	                                                                 url =>      "/cgi-bin/koha/admin/permisos/permisos_general.pl", 
-	                                                                 params =>   [],
-	                                                                 title =>    "[% 'Permisos Generales' | i18n %]"
+	                                                                 title =>    "[% 'Permisos' | i18n %]"
 	                                                             ) ;
 	                             [% END %]
 	                   </li>
