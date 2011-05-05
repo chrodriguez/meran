@@ -183,8 +183,11 @@ sub setIsbnIssn {
 sub setCantidadEjemplares {
     my ($self)            = shift;
     my ($cant_ejemplares) = @_;
-    utf8::encode($cant_ejemplares);
-    $self->cantidad_ejemplares($cant_ejemplares);
+    if (C4::AR::Validator::countAlphaChars($cant_ejemplares) == 0){
+      $self->cantidad_ejemplares($cant_ejemplares);
+    }  
+
+ 
 }
 
 sub setMotivoPropuesta {

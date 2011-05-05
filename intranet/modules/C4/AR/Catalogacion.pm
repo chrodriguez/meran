@@ -1829,12 +1829,10 @@ sub getDocumentById{
 }
 
 sub saveEDocument{
-    my ($id2,$name,$type) = @_;
-	
-	my $filename = $name.".".$type;
+    my ($id2,$filepath,$file_type,$name) = @_;
 	
 	my $e_doc = C4::Modelo::EDocument->new();
-	$e_doc->agregar($id2,$filename,$type,$name);
+	$e_doc->agregar($id2,$filepath,$file_type,$name);
 	
 }
 

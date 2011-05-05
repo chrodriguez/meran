@@ -72,8 +72,7 @@ function updateTraerImputsVacios(responseText){
 
 function updateBuscarDatosNivel2(responseText){
    $('#ediciones').html(responseText);
-   
-
+  
    $('#edicion_id').val('').attr("selected",true);
    $('#edicion_id').change( function(){    
               var edicion=this.options[this.selectedIndex].text 
@@ -149,15 +148,20 @@ $(document).ready( function() {
     });
     $('#recomendacion').hide();
     makeToggle('carga_manual','trigger',null,true);
+
+    [% IF mensaje %]
+      $('#mensajes').html('<div class="message_text">[% mensaje %]</div>');
+      $('#mensajes').show()
+    [% END %]
 });
 
 
 
-</script>        
-     
+</script>         
+ 
 <div class="column1-unit">
   <!--    [% message %]--> 
-      <div style= "width: 169%;" class="recomendacionform">
+      <div style= "width: 200%;" class="recomendacionform">
               <input type="hidden" name="action" value="agregar">
               <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
                           <!-- <li class="item">-->
@@ -174,7 +178,7 @@ $(document).ready( function() {
                                         );   C4::AR::Debug::debug("Save Detalle");
                      [% END %]
                   
-           </div>      
+              </div>      
             <input type="hidden" name="id_recomendacion" id="id_recomendacion" value= ""/>
            <div id="datos_edicion_seleccionada"></div>
               <fieldset  id="recomendacion"><legend class="titulo_legend trigger click">&nbsp;[% 'Recomendacion' | i18n %]&nbsp;</legend>
@@ -224,9 +228,16 @@ $(document).ready( function() {
                         <tbody>
                         </tbody>
                       </table>
-                      <input type="button" onclick="cancelarRecomendacion()" value="Cancelar Recomendacion">
-                      <input type="button" onclick="" value="Aceptar Recomendacion">
-                </fieldset>
+                      <div id="acciones" style="float:left; margin: 20px 10px 10px 10px;" >
+                          
+                          <form method="post" action="opac-recomendaciones.pl?token=[% token %]">
+                            <input type="hidden" name="mensaje" value="La recomendacion fue enviada con exito">
+                            <input type="submit" style="float:left;" value="Aceptar Recomendacion">
+                              <input type="button" style="float:left" onclick="cancelarRecomendacion()" value="Cancelar Recomendacion">
+                          </form>
+                        
+                      </div>
+                      </fieldset>
                   
       </div>         
 </div>

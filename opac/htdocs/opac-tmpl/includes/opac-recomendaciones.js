@@ -5,12 +5,13 @@
 
 var contador = -1;
 
+
 function validateForm(func){
 
        $().ready(function() {
             // validate signup form on keyup and submit
             $.validator.setDefaults({
-                submitHandler:  func ,
+                 submitHandler:  func ,
             });
             $('#recom_form').validate({
                 errorElement: "em",
@@ -20,7 +21,8 @@ function validateForm(func){
                           titulo:     "required",  
                           edicion:     "required", 
                           editorial:   "required",              
-                          cant_ejemplares:    "required",
+                          cant_ejemplares:  "required",
+                          cant_ejemplares: "number",             
                           motivo_propuesta:    "required",
                         },
                  messages: {
@@ -28,17 +30,20 @@ function validateForm(func){
                           titulo: POR_FAVOR_INGRESE_UN_TITULO,
                           edicion: POR_FAVOR_INGRESE_UNA_EDICION,
                           editorial: POR_FAVOR_INGRESE_UNA_EDITORIAL,
-                          cant_ejemplares: POR_FAVOR_INGRESE_UNA_CANTIDAD,
+                          cant_ejemplares: POR_FAVOR_INGRESE_UNA_CANTIDAD, 
                           motivo_propuesta: POR_FAVOR_INGRESE_UN_MOTIVO,
                      
                         }, 
                  });
             });
+             
            
 }
 
-
 function limpiarCampos(){
+
+
+    $('#cant_ejemplares_disp').hide();
     $('#autor').val("");
     $('#titulo').val("");
     $('#edicion').val("");
@@ -53,10 +58,6 @@ function limpiarCampos(){
    
 }
 
-// function save(){
-//    $('#recom_form').submit();
-//  //   agregarRenglon();
-// }
 
 function eliminarDetalle(idRecom){
     
@@ -68,8 +69,7 @@ function eliminarDetalle(idRecom){
         objAH.tipoAccion        = 'ELIMINAR_DETALLE';
         objAH.sendToServer();
 }
-
-        
+       
 function updateEliminarDetalle(responseText){
     if (!verificarRespuesta(responseText))
             return(0);
@@ -77,22 +77,31 @@ function updateEliminarDetalle(responseText){
     setMessages(Messages);
 }
 
-
 function eliminarFila(filaId, idRecom){
  
     $('#'+filaId).remove()
     eliminarDetalle(idRecom)
+     
 }
 
  function agregarRenglonATabla(id_rec_det){
+   
         if ($('#catalogo_search_hidden').val() == (-1)){
           var id= contador
           contador--
           id_nivel_2 = " - ";
         } else {
-          var id= $('#edicion_id').val();
-          id_nivel_2 = id;
+            if ($('#edicion_id').val() != ""){
+                var id= $('#edicion_id').val();
+                 id_nivel_2 = id;
+            } else {
+                id= contador;
+                contador--
+                id_nivel_2 = " - ";
+            }
+           
         }
+
        if ($('#'+id).val() == null){
      
             var autor  = $('#autor').val()
@@ -108,8 +117,7 @@ function eliminarFila(filaId, idRecom){
             var comentario= $('#comment').val();
             var motivo= $('#motivo_propuesta').val();
             limpiarCampos();
-      
-       
+            
             $('#tabla_recomendacion').append(
                 '<tr class="tr" id="tr'+id+'" name="tr'+id+'">' +
                     '<input type="hidden" value="'+id+'" id="'+id+'">' +
@@ -148,7 +156,6 @@ function updateCrearRecomendacion(responseText){
       
         
 function cancelarRecomendacion(){
-        $('#tabla_recomendacion').hide;
         objAH                   = new AjaxHelper(updateCancelarRecomendacion);
         objAH.debug             = true;
         objAH.showOverlay       = true;
@@ -156,19 +163,24 @@ function cancelarRecomendacion(){
         objAH.tipoAccion        = 'CANCELAR_RECOMENDACION';
         objAH.id_rec            = $('#id_recomendacion').val();
         objAH.sendToServer();
-
 }
 
 function updateCancelarRecomendacion(responseText){
-   if (!verificarRespuesta(responseText))
+  $('tabla_recomendacion').remove();
+  $('#ediciones').hide();
+  $('#recomendacion').hide();
+  $('#datos_material').hide();
+  $('#catalogo_search').val('');
+  if (!verificarRespuesta(responseText))
             return(0);
-    var Messages=JSONstring.toObject(responseText);
-    setMessages(Messages);
+  var Messages=JSONstring.toObject(responseText);
+  setMessages(Messages);
 }
         
 
 function guardarDetalle() {
     validateForm(agregarRenglon)
+    $('#recomendacion').show();
     $('#recom_form').submit(); 
 }      
       
@@ -189,7 +201,7 @@ function agregarRenglon(){
         objAH.motivo_propuesta  = $('#motivo_propuesta').val();
         objAH.comment           = $('#comment').val();
         objAH.id_recomendacion  = $('#id_recomendacion').val();          
-//         objAH.idNivel1          = $('#catalogo_search_hidden').val();
+         objAH.idNivel1          = $('#catalogo_search_hidden').val();
         objAH.idNivel2          = $('#edicion_id').val()
         objAH.tipoAccion        = 'AGREGAR_RENGLON';
         objAH.sendToServer();   
@@ -197,6 +209,7 @@ function agregarRenglon(){
 
 function updateAgregarRenglon(responseText){
   agregarRenglonATabla(responseText); 
+      $('#carga_manual').hide();
 }
           
           

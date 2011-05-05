@@ -476,7 +476,7 @@ div.pagination span.disabled {
 
 .main-content table {clear:both; width:100%; margin:2.0em 0 0.2em 20px; table-layout: fixed; border-collapse:collapse; empty-cells:show; background-color:rgb(233,232,244);}
 .main-content table th.top {height:3.5em; padding:0 7px 0 7px; empty-cells:show; background-color:rgb(175,175,175); text-align:left; color:rgb(255,255,255); font-weight:bold; font-size:110%;}
-.main-content table th {height:3.0em; /*padding:2px 20px 2px 7px;*/ border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(237,164,93); text-align:center; color:rgb(80,80,80); font-weight:bold; font-size:11pt;}
+.main-content table th {height:3.0em; /*padding:2px 20px 2px 7px;*/ border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(237,164,93); text-align:center; color:rgb(80,80,80); font-weight:bold; font-size:10pt;}
 .main-content table td {height:3.0em; padding:2px 10px 2px 10px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(220,220,220); text-align:left; font-weight:normal; color:rgb(80,80,80); font-size:10pt;}
 p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,80,80); font-size:110%;}
 
@@ -535,7 +535,7 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .recomendacionform {width:114%; margin:2.0em 0 0 0; padding:10px 10px 0 10px; border:solid 1px rgb(237,164,93); background-color:rgb(244,244,244);}
 .recomendacionform fieldset {padding:20px 0 0 0 !important /*Non-IE6*/; padding:0 /*IE6*/; margin:0 0 20px 0; border:solid 1px rgb(220,220,220);}
 .recomendacionform fieldset legend {margin:0 0 0 5px !important /*Non-IE*/; margin:0 0 20px 5px /*IE6*/; padding:0 2px 0 2px; color:rgb(80,80,80); font-weight:bold; font-size:130%;}
-.recomendacionform label.left {float:left; width:30%; margin:0 0 0 10px; padding:2px; font-size:110%;}
+.recomendacionform label.left {float:left; width:24%; margin:0 0 0 10px; padding:2px; font-size:110%;}
 .recomendacionform select.combo {width:175px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .recomendacionform input.field {width:275px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .recomendacionform textarea {width:275px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}

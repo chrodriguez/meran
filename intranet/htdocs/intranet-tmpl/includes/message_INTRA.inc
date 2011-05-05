@@ -197,5 +197,17 @@
     POR_FAVOR_SELECCIONE_PROVEEDORES_A_PRESUPUESTAR = "[% 'Por favor seleccione los proveedores que desea presupuestar' | i18n %]";
     
     /*=================================================Fin===Proveedor=======================================================*/
+    TYPE_ERROR  = " Error en {file}: Solamente se permiten extensiones {extensions}";
+    SIZE_ERROR  = "{file} es muy grande, el maximo tamaño es {sizeLimit}.";
+    EMPTY_ERROR = "{file} esta vacio. Elija un archivo con contenido, por favor.";
+    ON_LEAVE    = "[% 'The files are being uploaded, if you leave now the upload will be cancelled.' | i18n %]";
+     /*=================================================File Uploader=========================================================*/
 
+     
+     
+     
+     
+     
+     
+     /*=================================================Fin File Uploader=========================================================*/
 </script>

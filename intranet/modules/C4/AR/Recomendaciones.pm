@@ -25,8 +25,7 @@ use vars qw(@EXPORT @ISA);
 
 
 sub eliminarDetallesRecomendacion{
-      my ($params)        =@_;
-      my $msg_object= C4::AR::Mensajes::create();
+      my ($params, $msg_object) = @_;
 
       my $detalles =  C4::AR::Recomendaciones::getRecomendacionDetalle($params);
       
@@ -50,26 +49,26 @@ sub eliminarRecomendacion {
     
      my $recomendacion = C4::AR::Recomendaciones::getRecomendacionPorId($id_rec);
  
-     my $mensaje= C4::AR::Recomendaciones::eliminarDetallesRecomendacion($id_rec);
+     C4::AR::Recomendaciones::eliminarDetallesRecomendacion($id_rec, $msg_object);
 
-      C4::AR::Debug::debug("MENSAJE".$mensaje->{'error'});
-     if ($mensaje->{'error'} == 0){
+     if ($msg_object->{'error'} == 0){
           eval {
               $recomendacion->eliminar();
               $msg_object->{'error'}= 0;
-              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'RC03', 'params' => []} ) ;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'RC02', 'params' => []} ) ;
           };
       
           if ($@){
               #Se loguea error de Base de Datos
-              &C4::AR::Mensajes::printErrorDB($@, 'B411','OPAC');
+              &C4::AR::Mensajes::printErrorDB($@, 'B412','OPAC');
               #Se setea error para el usuario
               $msg_object->{'error'}= 1;
-              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'RC04', 'params' => []} ) ;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'RC03', 'params' => []} ) ;
           }
+         
           return ($msg_object);
      }
-     return ($mensaje);
+     return ($msg_object);
 }
 
 
@@ -98,7 +97,7 @@ sub editarCantidadEjemplares{
                       {motivo_propuesta}, {comentario}, {reserva_material}
 =cut
 sub agregarRecomendacion{
-    my ($params, $usr_socio_id) = @_;
+    my ($usr_socio_id) = @_;
 
     my $recomendacion = C4::Modelo::AdqRecomendacion->new();
     my $msg_object= C4::AR::Mensajes::create();

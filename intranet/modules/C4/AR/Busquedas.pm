@@ -949,9 +949,9 @@ sub busquedaAvanzada_newTemp{
 
     use Sphinx::Search;
     
-    my $sphinx = Sphinx::Search->new();
-    my $query = '';
-    my $tipo = 'SPH_MATCH_EXTENDED';
+    my $sphinx  = Sphinx::Search->new();
+    my $query   = '';
+    my $tipo    = 'SPH_MATCH_EXTENDED';
     my $orden       = $params->{'orden'};
    
     if($params->{'titulo'} ne ""){
@@ -977,6 +977,11 @@ sub busquedaAvanzada_newTemp{
         $query .='"';
     }
 
+    if( $params->{'codBarra'} ne "") {
+        $query .= ' @string "'."barcode%".$params->{'codBarra'};
+
+        $query .='*"';
+    }
 
 
     if ($params->{'only_available'}){
@@ -987,6 +992,7 @@ sub busquedaAvanzada_newTemp{
         $query .= ' @string "'.$params->{'signatura'}.'"';
     }
     
+
     
     C4::AR::Debug::debug("tipo_nivel3_name tipo_nivel3_name tipo_nivel3_name =>=> ".$params->{'tipo_nivel3_name'});
 
