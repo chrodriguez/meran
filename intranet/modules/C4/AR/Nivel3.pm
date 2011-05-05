@@ -551,10 +551,11 @@ sub detalleDisponibilidadNivel3{
         $hash_nivel3{'socio_prestamo'}      = undef;
         $hash_nivel3{'prestamo'}            = undef;
         $hash_nivel3{'claseFecha'}          = undef;
+    
 
         if ($socio) { 
-
             my $prestamo                    = C4::AR::Prestamos::getPrestamoActivo($hash_nivel3{'id3'});
+            
             if($prestamo){
                 $hash_nivel3{'prestamo'}        = $prestamo;
                 $hash_nivel3{'socio_prestamo'}  = $socio;
@@ -565,6 +566,23 @@ sub detalleDisponibilidadNivel3{
                     $hash_nivel3{'claseFecha'}  = "fecha_cumple";
                 }
             }
+        
+        }
+        
+#        RESERVAS:
+        $hash_nivel3{'socio_reserva'}       = undef;
+        $hash_nivel3{'reserva'}             = undef;
+        
+        my $socio_reserva_object = C4::AR::Reservas::getSocioFromReserva($hash_nivel3{'id3'});
+        
+        if($socio_reserva_object){
+            my $reserva                     = C4::AR::Reservas::getReservaActiva($hash_nivel3{'id3'});
+        
+            if($reserva){
+                $hash_nivel3{'reserva'}        = $reserva;
+                $hash_nivel3{'socio_reserva'}  = $socio_reserva_object;
+            }
+        
         }
 
         $result[$i]= \%hash_nivel3;

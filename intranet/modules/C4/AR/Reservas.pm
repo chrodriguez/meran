@@ -19,6 +19,7 @@ $VERSION = 3.0;
 @ISA = qw(Exporter);
 
 @EXPORT = qw(
+    getReservaActiva
     t_reservarOPAC
     t_cancelar_reserva
     t_cancelar_y_reservar
@@ -39,6 +40,60 @@ $VERSION = 3.0;
     getReservasDeSocioEnEspera
     getHistorialReservasParaTemplate
 );
+
+
+=item
+Esta funcion obtiene el socio del ejemplar prestado
+=cut
+# FIXME devuelve otro socio, me devuelve carbonemiguel cuando enrealidad lo reservo kohaadmin
+sub getSocioFromReserva {
+    my ($id3)= @_;
+
+    my @filtros;
+    push(@filtros, ( id3 => { eq => $id3 } ));
+#    push(@filtros, ( fecha_devolucion => { eq => undef } ) );
+
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
+                                                                                    query => \@filtros,
+                                                                                    require_objects => ['socio', 'socio.persona'],
+                                                                                    select          => ['socio.*','usr_persona.*']
+                                                                                );
+
+    if(scalar(@$reservas_array_ref) > 0){
+        return ($reservas_array_ref->[0]->socio);
+    }else{
+        return 0;
+    }
+}
+
+
+
+=item
+Esta funcion obtiene la reserva del ejemplar
+Parametros:
+    { id3 }
+Devuele el objeto o 0 si no lo encuentra
+=cut
+sub getReservaActiva{
+
+    my ($id3)= @_;
+
+    my @filtros;
+    push(@filtros, ( id3 => { eq => $id3 } ));
+#    push(@filtros, ( fecha_devolucion => { eq => undef } ) );
+
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
+                                                    query => \@filtros,
+                                                    require_objects => ['nivel3','socio','ui'],
+                                           );
+                                           
+    if(scalar(@$reservas_array_ref) > 0){
+        return ($reservas_array_ref->[0]);
+    }else{
+        return 0;
+    }
+}
+
 
 =head2  sub getNivel3ParaReserva
     Busca un nivel3 sin reservas para los prestamos y nuevas reservas.
