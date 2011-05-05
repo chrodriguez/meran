@@ -1,6 +1,6 @@
 var objAH = 0;
 var superUserGranted = 0;
-var tipoPermiso = "";
+var tipoPermiso = "CATALOGO";
 
 function changeTipoPermiso(){
     valueSelected = $("#tipo_permisos").val();
@@ -92,7 +92,7 @@ function adviceGrant(checkBox,divID,risk,dontCallChecks){
 
 function obtenerPermisos(){
 	
-	var usuario = $('#usuario').val();
+	var usuario = $('#nro_socio_hidden').val();
 	
 	if ($.trim(usuario) != ""){	
 	    objAH               = new AjaxHelper(updateObtenerPermisos);
