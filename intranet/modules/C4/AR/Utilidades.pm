@@ -102,6 +102,7 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboTemasINTRA
     generarComboRecomendaciones
     generarComboPedidosCotizacion
+    generarComboTipoPermisos
     getFeriados
     bbl_sort
     createSphinxInstance
@@ -1747,6 +1748,35 @@ sub generarComboPerfiles{
 
 }
 
+sub generarComboTipoPermisos{
+    my ($params) = @_;
+
+    my (@values);
+
+    my %labels;
+    my %options_hash; 
+
+    @values[0]='PCAT';
+    @values[1]='PCIR';
+    @values[2]='PGEN';
+    
+    $labels{"PCAT"}= C4::AR::Filtros::i18n('Permisos Catalogo');
+    $labels{"PCIR"}= C4::AR::Filtros::i18n('Permisos Circulacion');
+    $labels{"PGEN"}= C4::AR::Filtros::i18n('Permisos Generales');
+
+    $options_hash{'onChange'}= $params->{'onChange'};
+    $options_hash{'values'}= \@values;
+    $options_hash{'labels'}=\%labels;
+    $options_hash{'defaults'}= 'PCAT';
+    $options_hash{'size'}= 1;
+    $options_hash{'name'}= 'tipo_permisos';
+    $options_hash{'id'}= 'tipo_permisos';
+
+    my $select = CGI::scrolling_list(\%options_hash);
+
+    return($select);
+
+}
 
 sub generarComboDeDisponibilidad{
 
@@ -3936,8 +3966,9 @@ sub isValidFile{
     C4::AR::Debug::debug("UploadDocument ====== > FileType: ".$file_type);
     C4::AR::Debug::debug("UploadDocument ====== > FilePath: ".$file_path);
     C4::AR::Debug::debug("UploadDocument ====== > Extension: ".@nombreYextension[1]);
+    my $size = scalar(@nombreYextension) - 1;
 
-    if (!( @nombreYextension[1] =~ m/bmp|jpg|gif|png|jpeg|msword|docx|odt|pdf|xls|zip/i) ) {
+    if (!( @nombreYextension[$size] =~ m/bmp|jpg|gif|png|jpeg|msword|docx|odt|pdf|xls|zip/i) ) {
         $return_value = 0;
     }
 

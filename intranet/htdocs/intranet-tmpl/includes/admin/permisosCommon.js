@@ -1,5 +1,25 @@
 var objAH = 0;
 var superUserGranted = 0;
+var tipoPermiso = "";
+
+function changeTipoPermiso(){
+    valueSelected = $("#tipo_permisos").val();
+    
+    switch (valueSelected){
+    case "PCAT":
+    	tipoPermiso = "CATALOGO";
+    	break;
+    case "PCIR":
+    	tipoPermiso = "CIRCULACION";
+    	break;
+    case "PGEN":
+    	tipoPermiso = "GENERAL";
+    	break;
+    }
+    
+    obtenerPermisos();
+	
+}
 
 function armarPermisos(){
 }
@@ -71,23 +91,33 @@ function adviceGrant(checkBox,divID,risk,dontCallChecks){
 }
 
 function obtenerPermisos(){
-    objAH               = new AjaxHelper(updateObtenerPermisos);
-    objAH.url           = '/cgi-bin/koha/admin/permisos/permisosDB.pl';
-    objAH.cache         = false;
-    objAH.showOverlay   = true;  
-    objAH.nro_socio     = $('#nro_socio_hidden').val();
-        if ($('#id_ui').val() != "SIN SELECCIONAR")
-            objAH.id_ui = $('#id_ui').val();
-        else
-            objAH.id_ui = 0;
-    comboPerfiles       = $('#perfiles');
-    if (seleccionoPerfil(comboPerfiles)){
-        objAH.perfil=comboPerfiles.val();
+	
+	var usuario = $('#usuario').val();
+	
+	if ($.trim(usuario) != ""){	
+	    objAH               = new AjaxHelper(updateObtenerPermisos);
+	    objAH.url           = '/cgi-bin/koha/admin/permisos/permisosDB.pl';
+	    objAH.cache         = false;
+	    objAH.showOverlay   = true;  
+	    objAH.nro_socio     = $('#nro_socio_hidden').val();
+	        if ($('#id_ui').val() != "SIN SELECCIONAR")
+	            objAH.id_ui = $('#id_ui').val();
+	        else
+	            objAH.id_ui = 0;
+	    comboPerfiles       = $('#perfiles');
+	    if (seleccionoPerfil(comboPerfiles)){
+	        objAH.perfil=comboPerfiles.val();
+	    }
+	    objAH.accion            = "OBTENER_PERMISOS_"+tipoPermiso;
+	    objAH.tipo_documento    = $('#tipo_nivel3_id').val();
+	    objAH.permiso           = $('#permisos').val();
+	    objAH.sendToServer();
+    }else{
+        jAlert(NO_SE_SELECCIONO_NINGUN_USUARIO, ERROR_ITSELF);
+        $('#usuario').focus();
+        $.scrollTo('#usuario');
     }
-    objAH.accion            = "OBTENER_PERMISOS_"+tipoPermiso;
-    objAH.tipo_documento    = $('#tipo_nivel3_id').val();
-    objAH.permiso           = $('#permisos').val();
-    objAH.sendToServer();
+	    
 }
 
 
@@ -197,6 +227,134 @@ function updateObtenerPermisos(responseText){
 //     else
 //         toggleGrantsDiv(false);
 }
+
+
+
+function armarArregloDePermisosSave(){
+	
+	switch (tipoPermiso){
+	case "CATALOGO":
+		return (armarArregloDePermisosSave_CATALOGO());
+		break;
+		
+	case "CIRCULACION":
+		return (armarArregloDePermisosSave_CIRCULACION());
+		break;
+		
+	case "GENERAL":
+		return (armarArregloDePermisosSave_GENERAL());
+		break;
+		
+	}
+	
+}
+
+
+function armarArregloDePermisos(){
+	switch (tipoPermiso){
+	case "CATALOGO":
+		return (armarArregloDePermisos_CATALOGO());
+		break;
+		
+	case "CIRCULACION":
+		return (armarArregloDePermisos_CIRCULACION());
+		break;
+		
+	case "GENERAL":
+		return (armarArregloDePermisos_GENERAL());
+		break;
+		
+	}
+		
+}
+
+
+/* FUNCIONES ESPECIFICAS PARA CADA TIPO DE PERMISO */
+
+
+
+function armarArregloDePermisosSave_CATALOGO(){
+
+    var arreglo = new Array();
+    arreglo[0] = new permiso('datos_nivel1');
+    arreglo[1] = new permiso('datos_nivel2');
+    arreglo[2] = new permiso('datos_nivel3');
+    arreglo[3] = new permiso('estantes_virtuales');
+    arreglo[4] = new permiso('estructura_catalogacion_n1');
+    arreglo[5] = new permiso('estructura_catalogacion_n2');
+    arreglo[6] = new permiso('estructura_catalogacion_n3');
+    arreglo[7] = new permiso('tablas_de_refencia');
+    arreglo[8] = new permiso('control_de_autoridades');
+    arreglo[9] = new permiso('usuarios');
+    arreglo[10] = new permiso('sistema');
+    arreglo[11] = new permiso('undefined');
+
+    return(arreglo);
+}
+
+function armarArregloDePermisos_CATALOGO(){
+    superUserGranted = 0;
+    var arreglo = new Array();
+    arreglo[0] = 'datos_nivel1';
+    arreglo[1] = 'datos_nivel2';
+    arreglo[2] = 'datos_nivel3';
+    arreglo[3] = 'estantes_virtuales';
+    arreglo[4] = 'estructura_catalogacion_n1';
+    arreglo[5] = 'estructura_catalogacion_n2';
+    arreglo[6] = 'estructura_catalogacion_n3';
+    arreglo[7] = 'tablas_de_refencia';
+    arreglo[8] = 'control_de_autoridades';
+    arreglo[9] = 'usuarios';
+    arreglo[10] = 'sistema';
+    arreglo[11] = 'undefined';
+
+    return(arreglo);
+}
+
+
+function armarArregloDePermisosSave_CIRCULACION(){
+    superUserGranted = 0;
+    var arreglo = new Array();
+    arreglo[0] = new permiso('prestamos');
+    arreglo[1] = new permiso('circ_opac');
+
+
+    return(arreglo);
+}
+
+function armarArregloDePermisos_CIRCULACION(){
+    superUserGranted = 0;
+    var arreglo = new Array();
+    arreglo[0] = 'prestamos';
+    arreglo[1] = 'circ_opac';
+
+    return(arreglo);
+}
+
+
+function armarArregloDePermisosSave_GENERAL(){
+
+    var arreglo = new Array();
+
+    arreglo[0] = new permiso('preferencias');
+    arreglo[1] = new permiso('reportes');
+    arreglo[2] = new permiso('permisos');
+
+    return(arreglo);
+}
+
+function armarArregloDePermisos_GENERAL(){
+    superUserGranted = 0;
+    var arreglo = new Array();
+
+    arreglo[0] = 'preferencias';
+    arreglo[1] = 'reportes';
+    arreglo[2] = 'permisos';
+
+    return(arreglo);
+}
+
+
 
 
 
