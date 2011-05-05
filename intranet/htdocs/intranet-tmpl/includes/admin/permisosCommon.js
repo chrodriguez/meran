@@ -66,34 +66,6 @@ function checkChecks(){
     }
 }
 
-function checkChecksByDiv(divID){
-
-    var arreglo = armarArregloDePermisos();
-
-    riskArray = new Array();
-    riskArray['consulta'] = "low";
-    riskArray['alta'] = "medium";
-    riskArray['modif'] = "high";
-    riskArray['baja'] = "high";
-    riskArray['todos'] = "high";
-    
-    var dim = arreglo.length;
-
-    for (x=0;x<dim;x++){
-        checkBoxItems = $('#'+divID+" > ul > li > input");
-        checkTouched = false;
-        for (y=0; y<checkBoxItems.length; y++){
-            riskPart = checkBoxItems[y].id.split("_");
-            if (riskPart.length > 2)
-                riskPart[1] = riskPart[riskPart.length-1];
-            risk = riskArray[riskPart[1]];
-            if (!checkTouched){
-                checkTouched = adviceGrant(checkBoxItems[y],divID,risk,true);
-            }
-          }
-    }
-}
-
 function adviceGrant(checkBox,divID,risk,dontCallChecks){
     array = new Array();
     array['low']="permissionLow";
@@ -112,8 +84,9 @@ function adviceGrant(checkBox,divID,risk,dontCallChecks){
         $('#'+divID).addClass(array[risk]);
         returnValue = true;
     }
-   // checkChecksByDiv();
 
+    if (!dontCallChecks)
+    	checkChecks(divID);
     return(returnValue);
 
 }

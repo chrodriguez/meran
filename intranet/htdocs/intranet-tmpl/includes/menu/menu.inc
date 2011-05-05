@@ -330,10 +330,10 @@
 	               <ul>
 	                   <li>
 	                             [% PERL %]
-	                                 print C4::AR::Filtros::link_to( text =>     "[% 'Permisos' | i18n %]",
+	                                 print C4::AR::Filtros::link_to( text =>     "[% 'Administrar Permisos' | i18n %]",
 	                                                                 url =>      "/cgi-bin/koha/admin/permisos/permisos.pl",
 	                                                                 params =>   [],
-	                                                                 title =>    "[% 'Permisos' | i18n %]"
+	                                                                 title =>    "[% 'Administrar Permisos' | i18n %]"
 	                                                             ) ;
 	                             [% END %]
 	                   </li>
