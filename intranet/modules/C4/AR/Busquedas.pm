@@ -974,13 +974,13 @@ sub busquedaAvanzada_newTemp{
     if( ($params->{'tipo_nivel3_name'} ne "") && ($params->{'tipo_nivel3_name'} ne "ALL") ){
         $query .= ' @string "'."cat_ref_tipo_nivel3%".$params->{'tipo_nivel3_name'};
 
-#         $query .='"';
+        $query .='"';
     }
 
     if( $params->{'codBarra'} ne "") {
         $query .= ' @string "'."barcode%".$params->{'codBarra'};
 
-        $query .='*';
+        $query .='*"';
     }
 
 
@@ -992,6 +992,7 @@ sub busquedaAvanzada_newTemp{
         $query .= ' @string "'.$params->{'signatura'}.'"';
     }
     
+
     
     C4::AR::Debug::debug("tipo_nivel3_name tipo_nivel3_name tipo_nivel3_name =>=> ".$params->{'tipo_nivel3_name'});
 
