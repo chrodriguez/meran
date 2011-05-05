@@ -97,7 +97,7 @@ sub editarCantidadEjemplares{
                       {motivo_propuesta}, {comentario}, {reserva_material}
 =cut
 sub agregarRecomendacion{
-    my ($params, $usr_socio_id) = @_;
+    my ($usr_socio_id) = @_;
 
     my $recomendacion = C4::Modelo::AdqRecomendacion->new();
     my $msg_object= C4::AR::Mensajes::create();

@@ -72,8 +72,7 @@ function updateTraerImputsVacios(responseText){
 
 function updateBuscarDatosNivel2(responseText){
    $('#ediciones').html(responseText);
-   
-
+  
    $('#edicion_id').val('').attr("selected",true);
    $('#edicion_id').change( function(){    
               var edicion=this.options[this.selectedIndex].text 
@@ -162,7 +161,7 @@ $(document).ready( function() {
  
 <div class="column1-unit">
   <!--    [% message %]--> 
-      <div style= "width: 169%;" class="recomendacionform">
+      <div style= "width: 200%;" class="recomendacionform">
               <input type="hidden" name="action" value="agregar">
               <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
                           <!-- <li class="item">-->
@@ -229,12 +228,14 @@ $(document).ready( function() {
                         <tbody>
                         </tbody>
                       </table>
-                      <div id="acciones" style="float:right; margin: 10px;" >
-                          <input type="button" onclick="cancelarRecomendacion()" value="Cancelar Recomendacion">
+                      <div id="acciones" style="float:left; margin: 20px 10px 10px 10px;" >
+                          
                           <form method="post" action="opac-recomendaciones.pl?token=[% token %]">
                             <input type="hidden" name="mensaje" value="La recomendacion fue enviada con exito">
-                            <input type="submit" value="Aceptar Recomendacion">
+                            <input type="submit" style="float:left;" value="Aceptar Recomendacion">
+                              <input type="button" style="float:left" onclick="cancelarRecomendacion()" value="Cancelar Recomendacion">
                           </form>
+                        
                       </div>
                       </fieldset>
                   

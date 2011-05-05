@@ -11,7 +11,7 @@ function validateForm(func){
        $().ready(function() {
             // validate signup form on keyup and submit
             $.validator.setDefaults({
-                submitHandler:  func ,
+                 submitHandler:  func ,
             });
             $('#recom_form').validate({
                 errorElement: "em",
@@ -21,7 +21,8 @@ function validateForm(func){
                           titulo:     "required",  
                           edicion:     "required", 
                           editorial:   "required",              
-                          cant_ejemplares:    "required",                            
+                          cant_ejemplares:  "required",
+                          cant_ejemplares: "number",             
                           motivo_propuesta:    "required",
                         },
                  messages: {
@@ -29,7 +30,7 @@ function validateForm(func){
                           titulo: POR_FAVOR_INGRESE_UN_TITULO,
                           edicion: POR_FAVOR_INGRESE_UNA_EDICION,
                           editorial: POR_FAVOR_INGRESE_UNA_EDITORIAL,
-                          cant_ejemplares: POR_FAVOR_INGRESE_UNA_CANTIDAD,
+                          cant_ejemplares: POR_FAVOR_INGRESE_UNA_CANTIDAD, 
                           motivo_propuesta: POR_FAVOR_INGRESE_UN_MOTIVO,
                      
                         }, 
@@ -40,6 +41,7 @@ function validateForm(func){
 }
 
 function limpiarCampos(){
+    $('#cant_ejemplares_disp').hide();
     $('#autor').val("");
     $('#titulo').val("");
     $('#edicion').val("");
@@ -81,14 +83,23 @@ function eliminarFila(filaId, idRecom){
 }
 
  function agregarRenglonATabla(id_rec_det){
+   
         if ($('#catalogo_search_hidden').val() == (-1)){
           var id= contador
           contador--
           id_nivel_2 = " - ";
         } else {
-          var id= $('#edicion_id').val();
-          id_nivel_2 = id;
+            if ($('#edicion_id').val() != ""){
+                var id= $('#edicion_id').val();
+                 id_nivel_2 = id;
+            } else {
+                id= contador;
+                contador--
+                id_nivel_2 = " - ";
+            }
+           
         }
+
        if ($('#'+id).val() == null){
      
             var autor  = $('#autor').val()
@@ -153,11 +164,15 @@ function cancelarRecomendacion(){
 }
 
 function updateCancelarRecomendacion(responseText){
+  $('tabla_recomendacion').remove();
+  $('#ediciones').hide();
   $('#recomendacion').hide();
-   if (!verificarRespuesta(responseText))
+  $('#datos_material').hide();
+  $('#catalogo_search').val('');
+  if (!verificarRespuesta(responseText))
             return(0);
-    var Messages=JSONstring.toObject(responseText);
-    setMessages(Messages);
+  var Messages=JSONstring.toObject(responseText);
+  setMessages(Messages);
 }
         
 
@@ -184,7 +199,7 @@ function agregarRenglon(){
         objAH.motivo_propuesta  = $('#motivo_propuesta').val();
         objAH.comment           = $('#comment').val();
         objAH.id_recomendacion  = $('#id_recomendacion').val();          
-//         objAH.idNivel1          = $('#catalogo_search_hidden').val();
+         objAH.idNivel1          = $('#catalogo_search_hidden').val();
         objAH.idNivel2          = $('#edicion_id').val()
         objAH.tipoAccion        = 'AGREGAR_RENGLON';
         objAH.sendToServer();   

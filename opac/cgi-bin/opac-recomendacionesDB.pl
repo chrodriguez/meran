@@ -49,8 +49,9 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                                                 'opac'
                                 );
 
-    my $usr_socio= C4::AR::Auth::getSessionNroSocio();
-    
+
+    my $usr_socio= C4::AR::Auth::getSessionUserID($session);
+
     my $id_recomendacion= C4::AR::Recomendaciones::agregarRecomendacion($usr_socio);
     
     C4::AR::Auth::print_header($session);

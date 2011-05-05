@@ -17,7 +17,7 @@ __PACKAGE__->meta->setup(
         usr_socio_id                        => { type => 'integer', not_null => 1},
         fecha                               => { type => 'varchar', length => 255, not_null => 1},
         activa                              => { type => 'integer', length => 4, not_null => 1},
-        adq_ref_tipo_recomendacion_id       => { type => 'integer', not_null => 1},
+        adq_ref_tipo_recomendacion_id       => { type => 'varchar', length => 50,not_null => 1},
     ],
 
 
@@ -26,7 +26,7 @@ __PACKAGE__->meta->setup(
       ref_usr_socio => 
       {
          class       => 'C4::Modelo::UsrSocio',
-         key_columns => {usr_socio_id => 'id_socio' },
+         key_columns => {usr_socio_id => 'nro_socio' },
          type        => 'one to many',
        },
       
