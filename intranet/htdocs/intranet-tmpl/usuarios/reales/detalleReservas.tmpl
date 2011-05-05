@@ -1,193 +1,177 @@
-
-[% USE HTML %] 
-
-[% IF reservas_asignadas_count %]
-
-<fieldset>
-<legend class="titulo_legend_resaltado">[% "Ejemplares Asignados" | i18n %]</legend>
-	<table id="reseravsAsignadasResult" class="reseravsAsignadasResult datos_tabla" cellspacing=0  cellpadding=0  border=0   width="100%">
-		<tr class="titulo_tabla_resultado">
-			<th>
-				<a class="click" id="checkAllReservas">
-					<img src="[% temas %]/[% tema %]/imagenes/iconos/check.png" border="0" title="[% 'Invertir la selecci&oacute;n' | i18n %]">
-				</a>
-			</th>
+[% IF circularDesdeDetalleUsuario == 0 %]
+    [% INCLUDE 'partials/usuarios/detalleReservas-noCirculation.inc' %]
+[% ELSE %]
+	[% USE HTML %] 
 	
-			<th>[% "T&iacute;tulo" | i18n %]</th>
-			<th>[% "Autor" | i18n %]</th>
-			<th>[% "C. Barra" | i18n %]</th>
-			<th>[% "Sig. Top." | i18n %]</th>
-			<th>[% "Ed." | i18n %]</th>
-			<!--<th>[% "Vol." | i18n %]</th> -->
-			<th>[% "Vencimiento" | i18n %]</th>
-			<th width="10%">[% "Retira en" | i18n %]</th>
-			<th width="10%">[% "Cancelar" | i18n %]</th>
-		</tr>
-	[% FOREACH reserva IN RESERVAS_ASIGNADAS %]
-		<tr align="center">
+	[% IF reservas_asignadas_count %]
+	
+	<fieldset>
+	<legend class="titulo_legend_resaltado">[% "Ejemplares Asignados" | i18n %]</legend>
+		<table id="reseravsAsignadasResult" class="reseravsAsignadasResult datos_tabla" cellspacing=0  cellpadding=0  border=0   width="100%">
+			<tr class="titulo_tabla_resultado">
+				<th>
+					<a class="click" id="checkAllReservas">
+						<img src="[% temas %]/[% tema %]/imagenes/iconos/check.png" border="0" title="[% 'Invertir la selecci&oacute;n' | i18n %]">
+					</a>
+				</th>
 		
-			<td>
-		[% IF circularDesdeDetalleUsuario %]
-			<input type="checkbox"  name="chkboxReservas" value="[%  reserva.getId3 %]" id="[% reserva.nivel3.getBarcode %]">
-		[% ELSE %]
-			[% 'NO SE PERMITE CIRCULAR' | i18n %]
-		[% END %] <!--END IF permiso_para_circular -->
-			</td>
-	
-			<td width="16%">
-				[% PERL %]
-					print C4::AR::Filtros::link_to(	text => 	" [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
-													url => 		"/cgi-bin/koha/busquedas/detalle.pl", 
-													params =>	["id1=[% reserva.nivel2.nivel1.getId1 %]"],
-												) ;
+				<th>[% "T&iacute;tulo" | i18n %]</th>
+				<th>[% "Autor" | i18n %]</th>
+				<th>[% "C. Barra" | i18n %]</th>
+				<th>[% "Sig. Top." | i18n %]</th>
+				<th>[% "Ed." | i18n %]</th>
+				<!--<th>[% "Vol." | i18n %]</th> -->
+				<th>[% "Vencimiento" | i18n %]</th>
+				<th width="10%">[% "Retira en" | i18n %]</th>
+				<th width="10%">[% "Cancelar" | i18n %]</th>
+			</tr>
+		[% FOREACH reserva IN RESERVAS_ASIGNADAS %]
+			<tr align="center">
+			
+				<td>
+    				<input type="checkbox"  name="chkboxReservas" value="[%  reserva.getId3 %]" id="[% reserva.nivel3.getBarcode %]">
+				</td>
+		
+				<td width="16%">
+					[% PERL %]
+						print C4::AR::Filtros::link_to(	text => 	" [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+														url => 		"/cgi-bin/koha/busquedas/detalle.pl", 
+														params =>	["id1=[% reserva.nivel2.nivel1.getId1 %]"],
+													) ;
+					[% END %]
+				</td>	
+				<td>
+	                [% IF reserva.nivel3.nivel1.getAutor %]
+	                    [% reserva.nivel3.nivel1.getAutor %]
+	                [% ELSE %]
+	                    &nbsp;
+	                [% END %]
+				</td>
+				<td>
+					[% PERL %]
+						print C4::AR::Filtros::link_to(	text => 	"[% reserva.nivel3.getBarcode %]",
+														url => 		"/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
+														params =>	["id3=[% reserva.getId3 %]"],
+														title =>	"[% 'Mostrar Detalle de Disponibilidad' | i18n %]"
+													) ;
+					[% END %]
+					
+				</td>
+				<td>
+				[% IF reserva.nivel3.getSignatura_topografica %] 
+					[% PERL %]
+						print C4::AR::Filtros::link_to(	text => 	"[% reserva.nivel3.getSignatura_topografica %]",
+														url => 		"/cgi-bin/koha/detalle.pl", 
+														params =>	["id1=[% reserva.nivel3.nivel1.getId1 %]"],
+													) ;
+					[% END %]
 				[% END %]
-			</td>	
-			<td>
-                [% IF reserva.nivel3.nivel1.getAutor %]
-                    [% reserva.nivel3.nivel1.getAutor %]
-                [% ELSE %]
-                    &nbsp;
-                [% END %]
-			</td>
-			<td>
-				[% PERL %]
-					print C4::AR::Filtros::link_to(	text => 	"[% reserva.nivel3.getBarcode %]",
-													url => 		"/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
-													params =>	["id3=[% reserva.getId3 %]"],
-													title =>	"[% 'Mostrar Detalle de Disponibilidad' | i18n %]"
-												) ;
-				[% END %]
-				
-			</td>
-			<td>
-			[% IF reserva.nivel3.getSignatura_topografica %] 
-				[% PERL %]
-					print C4::AR::Filtros::link_to(	text => 	"[% reserva.nivel3.getSignatura_topografica %]",
-													url => 		"/cgi-bin/koha/detalle.pl", 
-													params =>	["id1=[% reserva.nivel3.nivel1.getId1 %]"],
-												) ;
-				[% END %]
-			[% END %]
-			</td>
-            <td>  
-            [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
-            </td>
-    
-            <!-- <td> 
-            [% IF reserva.nivel3.nivel2.getVolumen %] t [% reserva.nivel3.nivel2.getVolumen %] 
-                [% IF reserva.nivel3.nivel2.getVolumenDesc %] ([% reserva.nivel3.nivel2.getVolumenDesc %])  [% END %] 
-            [% END %]
-            </td> -->
-			<td>
-            [% IF reserva.getFecha_recordatorio_formateada %]
-            <font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
-            [% ELSE %]
-               - 
-            [% END %]
-			</td>
-			<td>
-            [% IF reserva.getId_ui %] 
-                [% reserva.ui.getNombre %]
-            [% ELSE %]
-                - 
-            [% END %]
-			</td>
-		[% IF circularDesdeDetalleUsuario %]
-			<td width="10%">
-
-                [% PERL %]
-                    print C4::AR::Filtros::to_Icon(  
-                                                        boton   => "icon_cancelar",
-                                                        onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
-                                                        title   => "[% 'Cancelar' | i18n %]",
-                                                        alternClass => "botonCentradoTabla"
-                            ) ;
-                [% END %]
-
-			</td>
-		[% ELSE %]
-			[% 'NO SE PERMITE CIRCULAR' | i18n %]
-		[% END %] <!--END IF permiso_para_circular -->
-	
-		</tr>
-	[% END %]
-	</table>
-	[% IF circularDesdeDetalleUsuario %]
-
-            [% PERL %]
-                print C4::AR::Filtros::to_Icon(  
-                                                    boton   => "icon_prestar",
-                                                    onClick => "realizarAccion('CONFIRMAR_PRESTAMO','reseravsAsignadasResult',generaDivPrestamo);",
-                                                    title   => "[% 'Prestar' | i18n %]",
-                                                    alternClass => "botonCentrado"
-                        ) ;
-            [% END %]
-
-	[% ELSE %]
-			[% 'NO SE PERMITE CIRCULAR' | i18n %]
-	[% END %] <!--END IF permiso_para_circular -->
-	
-</fieldset>
-[% END %]
-
-[% IF RESERVAS_ESPERA %]
-<fieldset>
-<legend class="titulo_legend">[% "Reservas en espera" | i18n %]</legend>
+				</td>
+	            <td>  
+	            [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
+	            </td>
 	    
-	    <table class="reservasEnEsperaResult datos_tabla" cellspacing=0  cellpadding=0  border=0   width="100%">
-		    <tr valign=middle class="titulo_tabla_resultado">
-			    <th>[% "T&iacute;tulo" | i18n %]</th>
-			    <th>[% "Autor" | i18n %]</th>
-			    <th>[% "Edici&oacute;n" | i18n %]</th>
-			    <!--<th>[% "Volumen" | i18n %]</th>-->
-			    <th>[% "Cancelar" | i18n %]</th>
-		    </tr>
-        [% FOREACH reserva IN RESERVAS_ESPERA %]
-		    <tr align="center">
+	            <!-- <td> 
+	            [% IF reserva.nivel3.nivel2.getVolumen %] t [% reserva.nivel3.nivel2.getVolumen %] 
+	                [% IF reserva.nivel3.nivel2.getVolumenDesc %] ([% reserva.nivel3.nivel2.getVolumenDesc %])  [% END %] 
+	            [% END %]
+	            </td> -->
+				<td>
+	            [% IF reserva.getFecha_recordatorio_formateada %]
+	            <font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
+	            [% ELSE %]
+	               - 
+	            [% END %]
+				</td>
+				<td>
+	            [% IF reserva.getId_ui %] 
+	                [% reserva.ui.getNombre %]
+	            [% ELSE %]
+	                - 
+	            [% END %]
+				</td>
+				<td width="10%">
+	
+	                [% PERL %]
+	                    print C4::AR::Filtros::to_Icon(  
+	                                                        boton   => "icon_cancelar",
+	                                                        onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
+	                                                        title   => "[% 'Cancelar' | i18n %]",
+	                                                        alternClass => "botonCentradoTabla"
+	                            ) ;
+	                [% END %]
+	
+				</td>
+			</tr>
+		[% END %]
+		</table>
+	
+        [% PERL %]
+            print C4::AR::Filtros::to_Icon(  
+                                                boton   => "icon_prestar",
+                                                onClick => "realizarAccion('CONFIRMAR_PRESTAMO','reseravsAsignadasResult',generaDivPrestamo);",
+                                                title   => "[% 'Prestar' | i18n %]",
+                                                alternClass => "botonCentrado"
+                    ) ;
+        [% END %]
+
+	</fieldset>
+	[% END %]
+	
+	[% IF RESERVAS_ESPERA %]
+	<fieldset>
+	<legend class="titulo_legend">[% "Reservas en espera" | i18n %]</legend>
 		    
-			    <td width="10%"> 
-			    [% PERL %]
-				    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
-												    url => 		"/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
-												    params =>	["id1=[% reserva.nivel2.nivel1.getId1 %]"],
-											    ) ;
-			    [% END %]
-			    </td>
-			    <td>
-                    [% IF reserva.nivel2.nivel1.getAutor %]
-                        [% reserva.nivel2.nivel1.getAutor %]
-                    [% ELSE %]
-                        &nbsp;
-                    [% END %]
-			    </td>
-            <td>  
-                [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
-                </td>
-        
-                <!--<td> 
-                [% IF reserva.nivel3.nivel2.getVolumen %] t [% reserva.nivel3.nivel2.getVolumen %] 
-                    [% IF reserva.nivel3.nivel2.getVolumenDesc %] ([% reserva.nivel3.nivel2.getVolumenDesc %])  [% END %] 
-                [% END %]
-                </td>-->
-		    [% IF circularDesdeDetalleUsuario %]
-			    <td width="10%"> 
-
-                    [% PERL %]
-                        print C4::AR::Filtros::to_Icon(  
-                                                            boton   => "icon_cancelar",
-                                                            onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
-                                                            title   => "[% 'Cancelar' | i18n %]",
-                                                            alternClass => "botonCentradoTabla"
-                                ) ;
-                    [% END %]
-
-			    </td>
-		    [% ELSE %]
-			    [% 'NO SE PERMITE CIRCULAR' | i18n %]
-		    [% END %] <!--END IF permiso_para_circular -->
+		    <table class="reservasEnEsperaResult datos_tabla" cellspacing=0  cellpadding=0  border=0   width="100%">
+			    <tr valign=middle class="titulo_tabla_resultado">
+				    <th>[% "T&iacute;tulo" | i18n %]</th>
+				    <th>[% "Autor" | i18n %]</th>
+				    <th>[% "Edici&oacute;n" | i18n %]</th>
+				    <!--<th>[% "Volumen" | i18n %]</th>-->
+				    <th>[% "Cancelar" | i18n %]</th>
+			    </tr>
+	        [% FOREACH reserva IN RESERVAS_ESPERA %]
+			    <tr align="center">
 			    
-		    </tr>
-	    [% END %]
-	    </table>
-</fieldset>
+				    <td width="10%"> 
+				    [% PERL %]
+					    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+													    url => 		"/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
+													    params =>	["id1=[% reserva.nivel2.nivel1.getId1 %]"],
+												    ) ;
+				    [% END %]
+				    </td>
+				    <td>
+	                    [% IF reserva.nivel2.nivel1.getAutor %]
+	                        [% reserva.nivel2.nivel1.getAutor %]
+	                    [% ELSE %]
+	                        &nbsp;
+	                    [% END %]
+				    </td>
+	            <td>  
+	                [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
+	                </td>
+	        
+	                <!--<td> 
+	                [% IF reserva.nivel3.nivel2.getVolumen %] t [% reserva.nivel3.nivel2.getVolumen %] 
+	                    [% IF reserva.nivel3.nivel2.getVolumenDesc %] ([% reserva.nivel3.nivel2.getVolumenDesc %])  [% END %] 
+	                [% END %]
+	                </td>-->
+				    <td width="10%"> 
+	
+	                    [% PERL %]
+	                        print C4::AR::Filtros::to_Icon(  
+	                                                            boton   => "icon_cancelar",
+	                                                            onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
+	                                                            title   => "[% 'Cancelar' | i18n %]",
+	                                                            alternClass => "botonCentradoTabla"
+	                                ) ;
+	                    [% END %]
+	
+				    </td>
+			    </tr>
+		    [% END %]
+		    </table>
+	</fieldset>
+	[% END %]
 [% END %]
