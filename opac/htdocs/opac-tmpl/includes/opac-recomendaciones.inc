@@ -178,7 +178,7 @@ $(document).ready( function() {
                                         );   C4::AR::Debug::debug("Save Detalle");
                      [% END %]
                   
-           </div>      
+              </div>      
             <input type="hidden" name="id_recomendacion" id="id_recomendacion" value= ""/>
            <div id="datos_edicion_seleccionada"></div>
               <fieldset  id="recomendacion"><legend class="titulo_legend trigger click">&nbsp;[% 'Recomendacion' | i18n %]&nbsp;</legend>

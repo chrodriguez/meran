@@ -41,6 +41,8 @@ function validateForm(func){
 }
 
 function limpiarCampos(){
+
+
     $('#cant_ejemplares_disp').hide();
     $('#autor').val("");
     $('#titulo').val("");
@@ -207,6 +209,7 @@ function agregarRenglon(){
 
 function updateAgregarRenglon(responseText){
   agregarRenglonATabla(responseText); 
+      $('#carga_manual').hide();
 }
           
           
