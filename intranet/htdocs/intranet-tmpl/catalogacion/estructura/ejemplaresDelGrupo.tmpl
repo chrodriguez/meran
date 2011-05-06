@@ -93,7 +93,7 @@
                         [% IF reserva.getNro_socio %]
                             (Asignado a:
                             [% PERL %]
-                                print C4::AR::Filtros::link_to(   text =>     "[% reserva.getNro_socio %]",
+                                print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
                                                                   url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
                                                                   params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
                                                                   title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",

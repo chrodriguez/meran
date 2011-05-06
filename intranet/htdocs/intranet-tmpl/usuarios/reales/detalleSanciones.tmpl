@@ -1,5 +1,4 @@
 <script language="javascript">
-
 function borrarSancion(id_sancion){
 
     var array = new Array; //array de una sola posicion, para que ante el eliminar sanciones
@@ -14,8 +13,7 @@ function borrarSancion(id_sancion){
         objAH.datosArray    = array;
 
         objAH.sendToServer();
-    }
-    
+        }
     });
 }
 
@@ -40,50 +38,48 @@ function updateBorrarSancion(responseText){
 
 [% IF SANCIONES %]
 
-<table border=0  width="100%"  cellpadding='0' cellspacing='0'>    
-    <tr valign="top">
-	    <td>
-	    <ul>
-		<font class="fontmsg">
-	        [% FOREACH sancion IN SANCIONES %]
-		        <li>
-			    <div>
-			        Sancionado originalmente por: <strong>[% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]</strong>
-		            [% IF sancion.tipo_sancion %]
-				        <ul>La sancion tambien se aplica a:
-				        [% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %] 
-				            <li><strong>[% ts.ref_tipo_prestamo.descripcion %]</strong></li>
-				        [% END %]
-				        </ul>
-		            [% ELSE %]
-		                [% "Reserva no retirada" | i18n %]
-		            [% END %] 
-                </div>
-                <hr/>
-			    <div>
-		            [% "Desde el" | i18n %] <strong>[% sancion.getFecha_comienzo_formateada %]</strong> 
-		            [% "hasta el" | i18n %] <strong>[% sancion.getFecha_final_formateada %]</strong>
-			    </div>
-			    <hr/>
-			    <div>
-			        <li>Autor: <strong>[% sancion.nivel3.nivel1.getAutor %]</strong></li>
-			        <li>Titulo: <strong>[% sancion.nivel3.nivel1.getTitulo %]</strong></li>
-			        <li>Edicion: <strong>[% sancion.nivel3.nivel2.getEdicion %]</strong></li>
-			    </div>
-			    </li>
-			    [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Sancion' | i18n %]",
-                                                        boton   => "boton_borrar",
-                                                        onClick => "borrarSancion('[% sancion.getId_sancion %]');",
-                                                        title   => "[% 'Borrar Sanci&oacute;n' | i18n %]",
-                                                        alternClass=> "botonCentradoTabla",
-                                        ) ;
-                [% END %]
-	        [% END %]
-		</font>
-	    </ul>	
-	    </td>
+<table id="detalleSancionesResult" width="100%">
+    <tr class="titulo_tabla_resultado">		    
+        <th>[% "Sancion Original" | i18n %]</th>
+	    <th>[% "Se aplica a" | i18n %]</th>
+        <th>[% "Desde" | i18n %]</th>
+        <th>[% "Hasta" | i18n %]</th>
+        <th>[% "Autor" | i18n %]</th>
+        <th>[% "T&iacute;tulo" | i18n %]</th>
+        <th>[% "Edicion" | i18n %]</th>
+        <th>[% "Acciones" | i18n %]</th>
     </tr>
+	
+	[% FOREACH sancion IN SANCIONES %]
+	
+	<tr align="center">
+        <td>[% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]</td>
+        <td>[% IF sancion.tipo_sancion %]
+		    [% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %] 
+			    [% ts.ref_tipo_prestamo.descripcion %]<br>
+		    [% END %]
+		    [% ELSE %]
+		        [% "Reserva no retirada" | i18n %]
+		    [% END %]
+		</td>
+        <td>[% sancion.getFecha_comienzo_formateada %]</td>
+        <td>[% sancion.getFecha_final_formateada %]</td>
+        <td>[% sancion.nivel3.nivel1.getAutor %]</td>
+        <td>[% sancion.nivel3.nivel1.getTitulo %]</td>
+        <td>[% sancion.nivel3.nivel2.getEdicion %]</td>
+        <td>
+        [% PERL %]
+            print C4::AR::Filtros::to_Icon(  
+                                                boton   => "icon_cancelar",
+                                                onClick => "borrarSancion('[% sancion.getId_sancion %]');",
+                                                title   => "[% 'Borrar Sancion' | i18n %]",
+                                                alternClass => "botonCentradoTabla"
+                    ) ;
+	    [% END %]
+  
+        </td>
+	</tr>	    
+    [% END %]	
 </table>
 [% ELSE %]
 
