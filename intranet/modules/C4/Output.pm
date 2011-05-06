@@ -130,7 +130,7 @@ sub gettemplate {
     my $ui;
     my $nombre_ui       = '';
     my $default_ui      = C4::AR::Preferencias::getValorPreferencia('defaultUI');
-    $ui                 = C4::Modelo::PrefUnidadInformacion->getByPk($default_ui);
+    $ui                 = C4::Modelo::PrefUnidadInformacion->getByCode($default_ui);
 
     my $date            = C4::AR::Utilidades::getDate();
     if($ui){

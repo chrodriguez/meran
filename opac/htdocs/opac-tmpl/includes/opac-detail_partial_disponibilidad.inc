@@ -3,19 +3,16 @@
         $('.fancylink').fancybox();
     });
 </script>
-          <div class="main-subcontent" style="width:25%; float:left; margin: 5px">
+          <div class="main-subcontent" style="width:15%; float:left; margin: 1%">
               [% IF portada_registro %]
                   <a class="fancylink" href="/covers/[% portada_registro_big %]">
-                      <img src="/covers/[% portada_registro_medium %]" title="Portada" 
-                            alt="[% 'Portada del ejemplar' | i18n %]" />
+                      <img src="/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
                   </a>
               [% ELSE %]
-                    <img src="/covers/no_image_medium.jpg" 
-                          alt="[% 'Sin Portada' | i18n %]"
-                          title="[% 'Sin Portada' | i18n %]" />
+                    <img src="/covers/no_image_medium.jpg" alt="[% 'Sin Portada' | i18n %]" title="[% 'Sin Portada' | i18n %]" />
               [% END %]
           </div>
-          <div class="main-subcontent" style="width:70%; float:left">
+          <div class="main-subcontent" style="width:80%; float:left">
                 <div class="subcontent-unit-border-orange" style="width:100%;">
                     <h1 class="orange">[% "Informaci&oacute;n de disponibilidad" | i18n %]</h1>
                     <table  style="width:95%;">
