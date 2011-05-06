@@ -49,10 +49,16 @@ function updateBorrarSancion(responseText){
         <th>[% "Edicion" | i18n %]</th>
         <th>[% "Acciones" | i18n %]</th>
     </tr>
-	
+	[% i = 2 %]
 	[% FOREACH sancion IN SANCIONES %]
 	
-	<tr align="center">
+	<tr align="center" 
+            [% IF i % 2 == 0 %] 
+                [% "class='par'" %]
+            [% ELSE %]
+                [% "class='impar'" %]
+            [% END %]
+    >            
         <td>[% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]</td>
         <td>[% IF sancion.tipo_sancion %]
 		    [% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %] 
@@ -78,7 +84,8 @@ function updateBorrarSancion(responseText){
 	    [% END %]
   
         </td>
-	</tr>	    
+	</tr>	
+	[% i = i + 1 %]       
     [% END %]	
 </table>
 [% ELSE %]
