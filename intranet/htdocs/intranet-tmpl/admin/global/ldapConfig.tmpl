@@ -1,0 +1,622 @@
+[% INCLUDE "intranet-top.inc" %]
+    
+<fieldset width="100%">
+    <legend class="titulo_legend"> [% "Configuraci&oacute;n del servidor LDAP" | i18n %] </legend>
+    <div>
+        <h2>Usar un servidor LDAP</h2>
+        <p>Este método proporciona autenticación contra un servidor LDAP externo. Si el nombre de usuario y contraseña facilitados son válidos, MERAN crea una nueva entrada para el usuario en su base de datos.</p>
+    </div>
+        
+<br>
+<!--form-->
+<form action="" method="post">
+<h4>Ajustes de servidor LDAP </h4> 
+<ul>
+    <li class="sub_item">
+        <label>[% "URL del host" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Especificar el host LDAP en forma de URL como ldap://ldap.myorg.com/ o ldaps://ldap.myorg.com/' | i18n %]",);
+            [% END %]
+        </label> 
+        <input name="host_url" id="host_url" size="30" type="text">
+    </li>
+    
+    
+    <li class="sub_item">
+        <label>[% "Versi&oacute;n" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'La versi&oacute;n del protocolo LDAP que su servidor est&aacute; utilizando.' | i18n %]",);
+            [% END %]
+        </label> 
+        <select id="menuversion" class="select menuversion" name="version"> 
+           <option value="2" selected="selected">2</option> 
+           <option value="3">3</option> 
+        </select> 
+    </li>
+
+    <li class="sub_item">
+        <label>[% "Codificaci&oacute;n LDAP" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Especifique la codificación usada por el servidor LDAP. Muy probablemente utf-8, MS AD v2 utiliza codificación de plataforma por defecto como cp1252, cp1250, etc.' | i18n %]",);
+            [% END %]
+        </label> 
+        <input id="ldapencoding" name="ldapencoding" value="utf-8" type="text"> 
+    </li>
+
+    <h4>Fijar ajustes </h4> 
+    
+    <li class="sub_item">
+        <label>[% "Ocultar contrase&ntilde;as" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Seleccione *s&iacute;* para evitar que las contraseñas se almacenen en la base de datos de Moodle.' | i18n %]",);
+            [% END %]
+        </label> 
+        <select id="menupreventpassindb" class="select menupreventpassindb" name="preventpassindb"> 
+           <option value="0">No</option> 
+           <option value="1" selected="selected">Sí</option> 
+        </select> 
+    </li>
+ 
+        
+    <li class="sub_item">
+        <label>[% "Nombre distinguido" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Si quiere usar *bind-user* para buscar usuarios, especif&iacute;quelo aqu&iacute;. Algo como cn=ldapuser,ou=public,o=org' | i18n %]",);
+            [% END %]
+        </label> 
+        <input name="bind_dn" id="bind_dn" size="30" type="text"> 
+    </li>
+    
+    <li class="sub_item">
+        <label>[% "Contrase&ntilde;a" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Contraseña para bind-user.' | i18n %]",);
+            [% END %]
+        </label> 
+        <input name="bind_pw" id="bind_pw" size="30" value="" type="password"> 
+    </li>
+
+    <h4>Ajustes de búsqueda de usuario </h4> 
+
+
+    <li class="sub_item">
+        <label>[% "Tipo de usuario" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Seleccione c&oacute;mo se almacenar&aacute;n los usuarios en LDAP. Este ajuste tambi&eacute;n especifica c&oacute;mo funcionar&aacute;n la caducidad del acceso, los accesos libres y la creación de usuarios.' | i18n %]",);
+            [% END %]
+        </label> 
+        <select id="menuuser_type" class="select menuuser_type" name="user_type"> 
+           <option value="edir">Novell Edirectory</option> 
+           <option value="rfc2307">posixAccount (rfc2307)</option> 
+           <option value="rfc2307bis">posixAccount (rfc2307bis)</option> 
+           <option value="samba">sambaSamAccount (v.3.0.7)</option> 
+           <option value="ad">MS ActiveDirectory</option> 
+           <option value="default" selected="selected">Por defecto</option> 
+        </select>  
+    </li>
+ 
+
+    <li class="sub_item">
+        <label>[% "Contextos" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Lista de contextos donde están localizados los usuarios. Separar contextos diferentes con *;*. Por ejemplo: ou=usuarios,o=org;
+ou=otros,o=org' | i18n %]",);
+            [% END %]
+        </label> 
+        <input name="contexts" id="contexts" size="30" type="text"> 
+    </li>
+ 
+
+    <li class="sub_item">
+        <label>[% "Buscar subcontextos" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Ponga el valor &lt;&gt; 0 si quiere buscar usuarios desde subcontextos.' | i18n %]",);
+            [% END %]
+        </label> 
+        <select id="menusearch_sub" class="select menusearch_sub" name="search_sub"> 
+           <option selected="selected" value="0">No</option> 
+           <option value="1">Sí</option> 
+        </select> 
+    </li>
+ 
+    <li class="sub_item">
+        <label>[% "Alias de referencia" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Determina cómo se manejan los alias durante la búsqueda. Seleccione uno de los siguientes valores: *No* (LDAP_DEREF_NEVER) o *Sí* (LDAP_DEREF_ALWAYS)' | i18n %]",);
+            [% END %]
+        </label> 
+        <select id="menuopt_deref" class="select menuopt_deref" name="opt_deref"> 
+           <option value="LDAP_DEREF_NEVER" selected="selected">No</option> 
+           <option value="LDAP_DEREF_ALWAYS">Sí</option> 
+        </select> 
+    </li>
+ 
+ 
+<tr class="required" valign="top"> 
+    <td align="right"><label for="menuopt_deref">Alias de referencia</label></td> 
+    <td> 
+    <select id="menuopt_deref" class="select menuopt_deref" name="opt_deref"> 
+   <option value="LDAP_DEREF_NEVER" selected="selected">No</option> 
+   <option value="LDAP_DEREF_ALWAYS">Sí</option> 
+</select> 
+    </td> 
+    <td> Determina cómo se manejan los alias
+durante la búsqueda. Seleccione uno de los siguientes valores: "No"
+(LDAP_DEREF_NEVER) o "Sí" (LDAP_DEREF_ALWAYS) </td> 
+</tr> 
+ 
+ 
+ 
+<tr class="required" valign="top"> 
+    <td align="right"><label for="user_attribute">Atributo de usuario</label></td> 
+    <td> 
+    <input name="user_attribute" id="user_attribute" size="30" type="text"> 
+        </td> 
+    <td> 
+    El atributo usado para nombrar/buscar usuarios. Normalmente 'cn'.    </td> 
+</tr> 
+ 
+<tr class="required" valign="top"> 
+        <td align="right"><label for="memberattribute">Atributo de miembro</label></td> 
+        <td> 
+    <input name="memberattribute" id="memberattribute" size="30" type="text"> 
+        </td><td> 
+    Especificar el atributo para nombre de usuario, cuando los usuarios se integran en un grupo. Normalmente 'miembro'    </td> 
+</tr> 
+ 
+<tr class="required" valign="top"> 
+        <td align="right"><label for="memberattribute_isdn">Atributos de miembro utilizan dn</label></td> 
+        <td> 
+    <input name="memberattribute_isdn" id="memberattribute_isdn" size="30" type="text"> 
+        </td><td> 
+    Opcional: Anula el manejo de valores de atributos de los miembros, es 0 ó 1    </td> 
+</tr> 
+ 
+<tr class="required" valign="top"> 
+    <td align="right"><label for="objectclass">Clase de objetos</label></td> 
+    <td> 
+    <input name="objectclass" id="objectclass" size="30" type="text"> 
+        </td> 
+    <td> 
+Filtro usado para usuarios name/search. Normalmente deberá ajustarlo a
+algo parecido a objectClass=posixAccount. Valores por defecto para
+objectClass=* que devolverán todos los objetos desde LDAP. </td> 
+</tr> 
+ 
+<tr> 
+   <td colspan="2"> 
+        <h4>Forzar cambio de contraseña </h4> 
+   </td> 
+</tr> 
+ 
+<tr class="required" valign="top"> 
+    <td valign="top" align="right"><label for="menuforcechangepassword">Forzar cambio de contraseña</label></td> 
+    <td> 
+        <select id="menuforcechangepassword" class="select menuforcechangepassword" name="forcechangepassword"> 
+   <option value="0" selected="selected">No</option> 
+   <option value="1">Sí</option> 
+</select> 
+    </td> 
+    <td valign="top" align="left"> 
+        <p>Forzar a los usuarios a cambiar la contraseña la primera vez que accedan a Moodle.</p> 
+    </td> 
+</tr> 
+ 
+<tr class="required" valign="top"> 
+    <td valign="top" align="right"><label for="menustdchangepassword">Utilizar Página de cambio de contraseña estándar</label></td> 
+    <td> 
+        <select id="menustdchangepassword" class="select menustdchangepassword" name="stdchangepassword"> 
+   <option value="0" selected="selected">No</option> 
+   <option value="1">Sí</option> 
+</select> 
+    </td> 
+    <td valign="top" align="left"> 
+        <p>Si el
+sistema de autenticación externa permite cambios de contraseña en
+Moodle, seleccione Sí. Este ajuste pasa por alto 'Cambiar contraseña
+URL'.</p> 
+        <p>NOTA: Se recomienda que utilice LDAP sobre un túnel encriptado SSL (ldaps://) si el servidor LDAP es remoto.</p> 
+    </td> 
+</tr> 
+ 
+<tr class="required" valign="top"> 
+    <td align="right"><label for="menupasstype">Formato de contraseña</label></td> 
+    <td> 
+        <select id="menupasstype" class="select menupasstype" name="passtype"> 
+   <option value="plaintext" selected="selected">Texto plano</option> 
+   <option value="md5">Encriptación M5</option> 
+   <option value="sha1">SHA-1 hash</option> 
+</select> 
+    </td> 
+    <td>Especifique el formato de las contraseñas nuevas o cambiadas en el servidor LDAP</td> 
+</tr> 
+ 
+<tr valign="top"> 
+    <td align="right"><label for="changepasswordurl">URL para cambio de contraseña</label></td> 
+    <td> 
+        <input name="changepasswordurl" id="changepasswordurl" type="text"> 
+            </td> 
+    <td>Aquí
+puede especificar dónde pueden sus usuarios recuperar o cambiar su
+nombre de usuario/contraseña si lo han olvidado. Para ello, aparecerá
+un botón en la página de entrada. Si deja esto en blanco, este botón no
+se mostrará.</td> 
+</tr> 
+ 
+<tr> 
+   <td colspan="2"> 
+        <h4>Ajustes de caducidad de la contraseña LDAP. </h4> 
+   </td> 
+</tr> 
+ 
+<tr class="required" valign="top"> 
+    <td align="right"><label for="menuexpiration">Expiración</label></td> 
+    <td> 
+    <select id="menuexpiration" class="select menuexpiration" name="expiration"> 
+   <option selected="selected" value="0">no</option> 
+   <option value="1">LDAP</option> 
+</select> 
+    </td> 
+    <td> Seleccione No para deshabilitar comprobar
+si la contraseña ha caducado, o LDAP para leer el tiempo de caducidad
+de la contraseña directamente de LDAP. </td> 
+</tr> 
+ 
+ 
+<tr class="required" valign="top"> 
+    <td align="right"><label for="expiration_warning">Advertencia de expiración</label></td> 
+    <td> 
+    <input name="expiration_warning" id="expiration_warning" size="2" value="10" type="text"> 
+        </td> 
+    <td> 
+    Número de días antes de que aparezca la advertencia de caducidad de la contraseña.    </td> 
+</tr> 
+ 
+<tr class="required" valign="top"> 
+    <td align="right"><label for="expireattr">Atributo de expiración</label></td> 
+    <td> 
+    <input name="expireattr" id="expireattr" size="30" type="text"> 
+        </td> 
+    <td> 
+    Opcional: anula el atributo ldap que almacena el tiempo de caducidad de la contraseña PasswordExpirationTime    </td> 
+</tr> 
+ 
+<tr class="required" valign="top"> 
+    <td align="right"><label for="menugracelogins">Entradas libres</label></td> 
+    <td> 
+        <select id="menugracelogins" class="select menugracelogins" name="gracelogins"> 
+   <option selected="selected" value="0">No</option> 
+   <option value="1">Sí</option> 
+</select> 
+    </td> 
+    <td> Activar el soporte de entrada libre LDAP.
+Una ves que la contraseña ha caducado, el usuario puede entrar hasta
+que la cuenta de acceso libre llega a cero. Si se activa esta opción se
+mostrará un mensaje de acceso libre en el caso de que la contraseña
+haya caducado. </td> 
+</tr> 
+ 
+<tr class="required" valign="top"> 
+    <td align="right"><label for="graceattr">Atributo de entrada libre</label></td> 
+    <td> 
+    <input name="graceattr" id="graceattr" size="30" type="text"> 
+        </td> 
+    <td> 
+    Opcional: Anula el atributo gracelogin    </td> 
+</tr> 
+ 
+ 
+ 
+<tr> 
+   <td colspan="2"> 
+        <h4>Habilitar creación por parte del usuario </h4> 
+   </td> 
+</tr> 
+ 
+<tr valign="top"> 
+    <td align="right"><label for="menuauth_user_create">Crear usuarios externamente</label></td> 
+    <td> 
+      <select id="menuauth_user_create" class="select menuauth_user_create" name="auth_user_create"> 
+   <option selected="selected" value="0">No</option> 
+   <option value="1">Sí</option> 
+</select> 
+    </td> 
+    <td> Los nuevos usuarios (anónimos) pueden
+crear cuentas de usuario sobre el código externo de autentificación y
+confirmar vía correo electrónico. Si usted habilita esto, recuerde
+también configurar las opciones del módulo específico para la creación
+de usuario. </td> 
+</tr> 
+ 
+<tr class="required" valign="top"> 
+    <td align="right"><label for="create_context">Contexto para nuevos usuarios</label></td> 
+    <td> 
+    <input name="create_context" id="create_context" size="30" type="text"> 
+        </td><td> 
+Si habilita la creación de usuario con confirmación por medio de correo
+electrónico, especifique el contexto en el que se crean los usuarios.
+Este contexto debe ser diferente de otros usuarios para prevenir
+problemas de seguridad. No es necesario añadir este contexto a
+ldap_context-variable, Moodle buscará automáticamente los usuarios de
+este contexto. </td> 
+</tr> 
+ 
+ 
+<tr> 
+   <td colspan="2"> 
+        <h4>Autores de curso </h4> 
+   </td> 
+</tr> 
+ 
+<tr class="required" valign="top"> 
+        <td align="right"><label for="creators">Creadores</label></td> 
+        <td> 
+    <input name="creators" id="creators" size="30" type="text"> 
+        </td><td> 
+Lista de grupos cuyos miembros están autorizados para crear nuevos
+cursos. Pueden separarse varios grupos con ';'. Normalmente así:
+'cn=teachers,ou=staff,o=myorg' </td> 
+</tr> 
+ 
+<tr> 
+   <td colspan="2"> 
+        <h4>Script de sincronización del Cron </h4> 
+   </td> 
+</tr> 
+ 
+<tr valign="top"> 
+    <td align="right"><label for="menuremoveuser">Usuario externo eliminado</label></td> 
+    <td> 
+    <select id="menuremoveuser" class="select menuremoveuser" name="removeuser"> 
+   <option value="0" selected="selected">Mantener interna</option> 
+   <option value="1">Suspender interna</option> 
+   <option value="2">Borrado completo</option> 
+</select> 
+    </td> 
+    <td> Especifique qué hacer con una cuenta de
+usuario interna durante sincronización masiva cuando el usuario fue
+eliminado de la fuente externa. Únicamente los usuarios suspendidos son
+automáticamente revividos si ellos reaparecen en una fuente externa. </td> 
+</tr> 
+ 
+<tr> 
+   <td colspan="2"> 
+        <h4>NTLM SSO </h4> 
+   </td> 
+</tr> 
+ 
+<tr valign="top"> 
+    <td align="right"><label for="menuntlmsso_enabled">Habilitar</label></td> 
+    <td> 
+    <select id="menuntlmsso_enabled" class="select menuntlmsso_enabled" name="ntlmsso_enabled"> 
+   <option value="0" selected="selected">No</option> 
+   <option value="1">Sí</option> 
+</select> 
+    </td> 
+    <td> 
+    Seleccione Sí para intentar Single Sign On con el dominio NTLM. <strong>Nota:</strong> esto requiere un ajuste adicional en el servidor web para trabajar; vea <a href="http://docs.moodle.org/en/NTLM_authentication">http://docs.moodle.org/en/NTLM_authentication</a>    </td> 
+</tr> 
+<tr valign="top"> 
+    <td align="right"><label for="ntlmsso_subnet">Sub-red</label></td> 
+    <td><input name="ntlmsso_subnet" id="ntlmsso_subnet" size="30" type="text"> 
+    </td> 
+    <td> 
+    Si se selecciona, sólo intentará el SSO con clientes de esta sub-red. Formato: xxx.xxx.xxx.xxx/bitmask    </td> 
+</tr> 
+<tr valign="top"> 
+    <td align="right"><label for="menuntlmsso_ie_fastpath">MS IE fast path?</label></td> 
+    <td> 
+    <select id="menuntlmsso_ie_fastpath" class="select menuntlmsso_ie_fastpath" name="ntlmsso_ie_fastpath"> 
+   <option value="0" selected="selected">No</option> 
+   <option value="1">Sí</option> 
+</select> 
+    </td> 
+    <td> Set to yes to enable the NTLM SSO fast
+path (bypasses certain steps and only works if the client's browser is
+MS Internet Explorer). </td> 
+</tr> 
+ 
+<tr><td colspan="3"><h2 class="main">Mapeado de datos</h2></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_firstname">Nombre</label></td><td><input id="lockconfig_field_map_firstname" name="lockconfig_field_map_firstname" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_firstname">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_firstname" class="select menulockconfig_field_updatelocal_firstname" name="lockconfig_field_updatelocal_firstname"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_firstname">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_firstname" class="select menulockconfig_field_updateremote_firstname" name="lockconfig_field_updateremote_firstname"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_firstname">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_firstname" class="select menulockconfig_field_lock_firstname" name="lockconfig_field_lock_firstname"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td><td rowspan="14">Estos campos son opcionales. Usted puede elegir pre-rellenar algunos campos de usuario en Moodle con información de los <strong>campos LDAP</strong> que especifique aquí. <p>Si deja estos campos en blanco, entonces no se transferirá nada desde LDAP y se usará el sistema predeterminado en Moodle.</p><p>En ambos casos, los usuarios podrán editar todos estos campos después de entrar.</p><p><b>Actualizar datos locales:</b> 
+Si está activado, el campo debe ser actualizado (con autenticación
+externa) cada vez que el usuario entra o se produce una sincronización
+de usuarios. Los campos a actualizar localmente deberían ser bloqueados.</p><p><b>Bloquear valor:</b> 
+Si se activa, los usuarios y administradores de Moodle no podrán editar
+directamente el campo. Utilice esta opción si mantiene estos datos en
+el sistema de autentificación externo. </p><p><b>Actualizar datos externos:</b> 
+Si está activado, la autenticación externa será actualizada cuando se
+actualice el registro del usuario. Los campos deberían estar
+desbloqueados para poder editarlos.</p><hr><p><b>Note:</b> La
+actualización de datos LDAP externos requiere que usted ajuste los
+valores 'binddn' y 'bindpw' a un usuario con privilegios de edición de
+todos los registros de usuario. Por el momento, esto no preserva los
+atributos multi-valor, y eliminará los valores extra durante la
+actualización. </p></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_lastname">Apellidos</label></td><td><input id="lockconfig_field_map_lastname" name="lockconfig_field_map_lastname" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_lastname">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_lastname" class="select menulockconfig_field_updatelocal_lastname" name="lockconfig_field_updatelocal_lastname"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_lastname">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_lastname" class="select menulockconfig_field_updateremote_lastname" name="lockconfig_field_updateremote_lastname"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_lastname">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_lastname" class="select menulockconfig_field_lock_lastname" name="lockconfig_field_lock_lastname"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_email">Correo electrónico</label></td><td><input id="lockconfig_field_map_email" name="lockconfig_field_map_email" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_email">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_email" class="select menulockconfig_field_updatelocal_email" name="lockconfig_field_updatelocal_email"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_email">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_email" class="select menulockconfig_field_updateremote_email" name="lockconfig_field_updateremote_email"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_email">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_email" class="select menulockconfig_field_lock_email" name="lockconfig_field_lock_email"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_city">Ciudad</label></td><td><input id="lockconfig_field_map_city" name="lockconfig_field_map_city" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_city">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_city" class="select menulockconfig_field_updatelocal_city" name="lockconfig_field_updatelocal_city"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_city">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_city" class="select menulockconfig_field_updateremote_city" name="lockconfig_field_updateremote_city"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_city">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_city" class="select menulockconfig_field_lock_city" name="lockconfig_field_lock_city"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_country">País</label></td><td><input id="lockconfig_field_map_country" name="lockconfig_field_map_country" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_country">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_country" class="select menulockconfig_field_updatelocal_country" name="lockconfig_field_updatelocal_country"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_country">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_country" class="select menulockconfig_field_updateremote_country" name="lockconfig_field_updateremote_country"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_country">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_country" class="select menulockconfig_field_lock_country" name="lockconfig_field_lock_country"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_lang">Idioma</label></td><td><input id="lockconfig_field_map_lang" name="lockconfig_field_map_lang" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_lang">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_lang" class="select menulockconfig_field_updatelocal_lang" name="lockconfig_field_updatelocal_lang"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_lang">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_lang" class="select menulockconfig_field_updateremote_lang" name="lockconfig_field_updateremote_lang"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_lang">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_lang" class="select menulockconfig_field_lock_lang" name="lockconfig_field_lock_lang"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_description">Descripción</label></td><td><input id="lockconfig_field_map_description" name="lockconfig_field_map_description" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_description">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_description" class="select menulockconfig_field_updatelocal_description" name="lockconfig_field_updatelocal_description"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_description">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_description" class="select menulockconfig_field_updateremote_description" name="lockconfig_field_updateremote_description"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_description">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_description" class="select menulockconfig_field_lock_description" name="lockconfig_field_lock_description"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_url">Página web</label></td><td><input id="lockconfig_field_map_url" name="lockconfig_field_map_url" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_url">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_url" class="select menulockconfig_field_updatelocal_url" name="lockconfig_field_updatelocal_url"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_url">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_url" class="select menulockconfig_field_updateremote_url" name="lockconfig_field_updateremote_url"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_url">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_url" class="select menulockconfig_field_lock_url" name="lockconfig_field_lock_url"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_idnumber">Número de id.</label></td><td><input id="lockconfig_field_map_idnumber" name="lockconfig_field_map_idnumber" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_idnumber">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_idnumber" class="select menulockconfig_field_updatelocal_idnumber" name="lockconfig_field_updatelocal_idnumber"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_idnumber">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_idnumber" class="select menulockconfig_field_updateremote_idnumber" name="lockconfig_field_updateremote_idnumber"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_idnumber">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_idnumber" class="select menulockconfig_field_lock_idnumber" name="lockconfig_field_lock_idnumber"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_institution">Institución</label></td><td><input id="lockconfig_field_map_institution" name="lockconfig_field_map_institution" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_institution">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_institution" class="select menulockconfig_field_updatelocal_institution" name="lockconfig_field_updatelocal_institution"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_institution">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_institution" class="select menulockconfig_field_updateremote_institution" name="lockconfig_field_updateremote_institution"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_institution">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_institution" class="select menulockconfig_field_lock_institution" name="lockconfig_field_lock_institution"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_department">Departamento</label></td><td><input id="lockconfig_field_map_department" name="lockconfig_field_map_department" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_department">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_department" class="select menulockconfig_field_updatelocal_department" name="lockconfig_field_updatelocal_department"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_department">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_department" class="select menulockconfig_field_updateremote_department" name="lockconfig_field_updateremote_department"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_department">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_department" class="select menulockconfig_field_lock_department" name="lockconfig_field_lock_department"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_phone1">Teléfono 1</label></td><td><input id="lockconfig_field_map_phone1" name="lockconfig_field_map_phone1" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_phone1">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_phone1" class="select menulockconfig_field_updatelocal_phone1" name="lockconfig_field_updatelocal_phone1"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_phone1">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_phone1" class="select menulockconfig_field_updateremote_phone1" name="lockconfig_field_updateremote_phone1"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_phone1">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_phone1" class="select menulockconfig_field_lock_phone1" name="lockconfig_field_lock_phone1"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_phone2">Teléfono 2</label></td><td><input id="lockconfig_field_map_phone2" name="lockconfig_field_map_phone2" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_phone2">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_phone2" class="select menulockconfig_field_updatelocal_phone2" name="lockconfig_field_updatelocal_phone2"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_phone2">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_phone2" class="select menulockconfig_field_updateremote_phone2" name="lockconfig_field_updateremote_phone2"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_phone2">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_phone2" class="select menulockconfig_field_lock_phone2" name="lockconfig_field_lock_phone2"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td></tr><tr valign="top"><td align="right"><label for="lockconfig_field_map_address">Dirección</label></td><td><input id="lockconfig_field_map_address" name="lockconfig_field_map_address" size="30" type="text"><div style="text-align: right;"><label for="menulockconfig_field_updatelocal_address">Actualizar datos locales</label>&nbsp;<select id="menulockconfig_field_updatelocal_address" class="select menulockconfig_field_updatelocal_address" name="lockconfig_field_updatelocal_address"> 
+   <option selected="selected" value="oncreate">Al crearse</option> 
+   <option value="onlogin">En cada acceso</option> 
+</select> 
+<br><label for="menulockconfig_field_updateremote_address">Actualizar datos externos</label>&nbsp;<select id="menulockconfig_field_updateremote_address" class="select menulockconfig_field_updateremote_address" name="lockconfig_field_updateremote_address"> 
+   <option selected="selected" value="0">Nunca</option> 
+   <option value="1">Al actualizar</option> 
+</select> 
+<br><label for="menulockconfig_field_lock_address">Bloquear valor</label>&nbsp;<select id="menulockconfig_field_lock_address" class="select menulockconfig_field_lock_address" name="lockconfig_field_lock_address"> 
+   <option selected="selected" value="unlocked">Desbloqueado</option> 
+   <option value="unlockedifempty">Desbloqueado si está vacío</option> 
+   <option value="locked">Bloqueado</option> 
+</select> 
+</div></td></tr> 
+</ul>
+</div><p style="text-align: center;"><input value="Guardar cambios" type="submit"></p> 
+</div> 
+</form> 
+</fieldset>
+
+[% INCLUDE "intranet-bottom.inc" %]
