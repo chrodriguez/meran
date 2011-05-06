@@ -1,4 +1,7 @@
-        <!-- Navigation Level 0 -->
+      
+[% USE HTML %]
+  
+      <!-- Navigation Level 0 -->
         <div class="nav0">
           [% localization_FLAGS %]
         </div>
@@ -15,6 +18,26 @@
                 <a href="/cgi-bin/koha/opac-contact.pl?token=[% token %]" title="[% 'P&oacute;ngase en contacto con nosotros' | i18n %]">[% 'Contacto' | i18n %]</a>
             </li>
           </ul>
+        </div>
+      <!-- Navigation Level 1.1 -->
+        <div class="nav_logged">
+            <ul>
+
+              [% IF socio_data %]
+                  <li>    
+                    [% HTML.escape(socio_data.usr_nombre) %] ([% HTML.escape(socio_data.usr_nro_socio) %])
+                  </li>
+                  <li>  
+                    [% PERL %]
+                            print C4::AR::Filtros::link_to( text    =>  "[% 'Cerrar Sesi&oacute;n' | i18n %]",
+                                                            url     =>  "/cgi-bin/koha/logout.pl",
+                                                            title   =>  "[% 'Cerrar Sesi&oacute;n' | i18n %]"
+                                    ) ;
+                    [% END %]
+                  </li>
+              [% END %]
+
+            </ul>
         </div>
       </div>
       <!-- A.2 HEADER MIDDLE -->

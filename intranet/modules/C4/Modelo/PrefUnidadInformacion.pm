@@ -33,7 +33,8 @@ sub getId_ui{
 
     return ($self->id_ui);
 }  
- 
+
+
 sub setId_ui{
     my ($self) = shift;
     my ($id_ui) = @_;
@@ -124,6 +125,21 @@ sub setEmail{
     $self->email($email);
 }
 
+sub getByCode {
+    my ($self)      = shift;
+    my ($ui_code)   = @_;
+
+    my @filtros;
+    push(@filtros, (id_ui => {eq => $ui_code}) );
+    
+    my $ui = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(query => \@filtros);
+
+    if(scalar($ui) > 0){
+        return $ui->[0];
+    } else {
+        return 0;
+    }
+}
 
 sub agregar{
 
