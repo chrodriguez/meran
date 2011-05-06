@@ -605,6 +605,19 @@ sub checkauth {
                 $socio->setLast_login($now);
                 $socio->save();
                 if ($type eq 'opac') {
+
+#                     if (C4::AR::Usuarios::needsDataValidation($socio->getNro_socio) != 0){
+#                             C4::AR::Debug::debug("DEBE VALIDAR LOS DATOS");
+#                             _destruirSession('U406', $template_params);
+#                     } else {
+#                             C4::AR::Debug::debug("NO DEBE VALIDAR LOS DATOS");
+#                     
+#                             $template_params->{'mensaje'}  = C4::AR::Mensajes::getMensaje('U309','OPAC',[]);
+#                             _destruirSession('U406', $template_params);
+#                              
+# #                             $session->param('codMsg', 'U309');
+#                     }
+
                     $session->param('redirectTo', '/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
                     redirectToNoHTTPS('/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
                     #$session->secure(0);
