@@ -576,7 +576,7 @@ sub add {
 	#se obtiene el texto del mensaje
 #   	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});
     my $session         = CGI::Session->load();
-    $tipo               = $session->param('type')||'INTRA';
+    my $tipo            = $session->param('type')||'INTRA';
 
     my $messageString   = &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'}, $tipo, $msg_hashref->{'params'});     
 	$msg_hashref->{'message'}= $messageString;
