@@ -574,7 +574,11 @@ sub add {
     #@param $Message_hashref es el objeto mensaje contenedor de los mensajes
     #@param $msg_hashref es un mensaje
 	#se obtiene el texto del mensaje
-  	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});	
+#   	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});
+    my $session         = CGI::Session->load();
+    $tipo               = $session->param('type')||'INTRA';
+
+    my $messageString   = &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'}, $tipo, $msg_hashref->{'params'});     
 	$msg_hashref->{'message'}= $messageString;
 # C4::AR::Debug::debug("Mensajes::add => message: ".$messageString."\n");
 # C4::AR::Debug::debug("Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n");
