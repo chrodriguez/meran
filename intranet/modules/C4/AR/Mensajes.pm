@@ -451,6 +451,7 @@ sub getMensaje {
 	}
 
     C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => tipo => ".$tipo);
+    C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => codigo => ".$codigo);
     C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => mensaje => ".$msj);
 
 	return $msj;
