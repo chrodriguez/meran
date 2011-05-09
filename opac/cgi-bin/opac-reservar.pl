@@ -8,9 +8,6 @@ use C4::AR::Auth;
 use C4::AR::Reservas;
 use JSON;
 use C4::AR::Mensajes;
-# use C4::AR::Utilidades;
-# use C4::Date;
-
 
 my $input = new CGI;
 my ($template, $session, $t_params)= get_template_and_user({
