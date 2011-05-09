@@ -117,6 +117,10 @@ sub uploadDocument {
     
     my $showName = $name;
     
+    if (!C4::AR::Utilidades::validateString($showName)){
+    	$showName = $file_name;
+    }
+    
     my @nombreYextension=split('\.',$file_name);
 
     use Digest::MD5;
