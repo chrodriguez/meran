@@ -26,11 +26,14 @@ function reservar(id1, id2){
 * Funcion que muestra la informacion de las reservas
 */
 function updateInfoReserva(responseText){
+  
+    var Messages = JSONstring.toObject(responseText);
+    setMessages(Messages);
 
     //si estoy logueado, oculta la informacion del usuario
-    $('#resultadoReserva').html(responseText);
-    $('#resultadoReserva').slideDown('slow');
-    scrollTo('resultadoReserva');
+//     $('#resultadoReserva').html(responseText);
+//     $('#resultadoReserva').slideDown('slow');
+//     scrollTo('resultadoReserva');
 //     var Messages=JSONstring.toObject(responseText);
 //     setMessages(Messages);
     infoReservas();

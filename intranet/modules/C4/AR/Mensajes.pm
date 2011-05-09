@@ -444,7 +444,7 @@ sub getMensaje {
 	my($codigo,$tipo,$param)=@_;
 	my $msj="";
 
-	($tipo eq "opac") ? ($msj=$mensajesOPAC{$codigo}) : ($msj=$mensajesINTRA{$codigo});
+	(($tipo eq "opac")||($tipo eq "OPAC")) ? ($msj=$mensajesOPAC{$codigo}) : ($msj=$mensajesINTRA{$codigo});
 	
 	my $p;
 	foreach $p (@$param){
