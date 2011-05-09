@@ -10,29 +10,35 @@ use Digest::MD5;
 
 C4::AR::Debug::debug("SE CREO CGI ");
 my $query       = new CGI;
-my $id2         = $query->url_param('id2');
-my $name        = $query->url_param('qqfile');
-my $file_data   = $query->param('POSTDATA');
+my $id2         = $query->param('id2');
+my $id1         = $query->param('id1');
+my $name        = $query->param('filename');
+my $file_name   = $query->param('file');
+my $file_data   = $query->upload('file');
 my $authnotrequired = 0;
 
 C4::AR::Debug::debug("E-DOCUMENT PARA GRUPO:                 ".$id2);
+C4::AR::Debug::debug("E-DOCUMENT FILENAME:                 ".$file_data);
 
 
-my ($loggedinuser, $session, $flags) = checkauth( 
-                                                        $query, 
-                                                        $authnotrequired,
-                                                        {   ui              => 'ANY', 
-                                                            tipo_documento  => 'ANY', 
-                                                            accion          => 'MODIFICACION', 
-                                                            entorno         => 'usuarios'},
-                                                            "intranet"
-                        );  
+my ($template, $session, $t_params) = get_template_and_user({
+                            template_name   => ('catalogacion/estructura/detalle.tmpl'),
+                            query           => $query,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1'},
+                        });
 
 
+my ($msg) = C4::AR::UploadFile::uploadDocument($file_name,$name,$id2,$file_data);
 
-my ($error,$msg) = C4::AR::UploadFile::uploadDocument($file_data,$name,$id2);
+C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
 
-C4::AR::Debug::debug($msg);
+$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Detalle del &iacute;tem");
+$t_params->{'mensaje'} = $msg;
 
-print $query->header();
-print $error;
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+#C4::AR::Debug::debug($msg);
+
+
