@@ -1,0 +1,90 @@
+[% INCLUDE 'opac-top.inc' %] 
+
+<script src="/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+<link href="/includes/jquery/tablesorter/blue/style.css" type="text/css" rel="stylesheet">
+<script src="/includes/jquery/tablesorter/jquery.tablesorter.pager.js"></script>
+<script src="/includes/jquery/jquery-highlight.js"></script>
+
+<div id="navegador">
+<input onClick="ant('result', zebra);" id="ant" type="image" value="<<" src="[% themelang %]/images/1leftarrow.png" border="0" title="Anterior" style="display:none">
+<input onClick="sig('result', zebra);" id="sig" type="image" value=">>" src="[% themelang %]/images/1rightarrow.png" border="0" title="Siguiente" style="display:none">
+</div>
+
+
+<table id="filtros" border="0" align="center" width="100%" class="top" >
+<tr width=100%><td colspan="5"><h4>[% "B&uacute;squeda Avanzada" | i18n %] </h4><td></tr>
+<tr>
+        <td width=27% align="right" class = "autor_result">[% "Autor:" | i18n %]</td>
+	<td width=20%> <input id="autor" type="text" size="25" name="autor"></td>
+	<td width=16% align="right">[% "Diccionario:" | i18n %]</td>
+	<td width=37%> <input type="text" size="25" id="dictionary" name="dictionary"></td>
+
+</tr>
+<tr>
+ 	<td align="right">[% "T&iacute;tulo:" | i18n %]</td>
+	<td class = "titulo_result"> <input type="text"  size="25" id="titulo" name="titulo"></td>
+	<td align="right">[% "Tema:" | i18n %]</td>
+        <td><input type="text"  size="25" id="tema" name="tema"></td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>
+		<input type="radio" id="checkNormal" name="ttype" value="normal" checked="checked">[% "Normal" | i18n %]
+		<input type="radio" id="checkExacto" name="ttype" value="exacto">[% "Exacto" | i18n %]
+	</td>
+	<td align="right">[% "C&oacute;digo de Barras:" | i18n %]</td>
+        <td ><input type="text" size="25" id="codBarra" name="codBarra"></td>
+</tr>
+<tr>
+
+	<td align="right">[% "Tipo de Documento:" | i18n %]</td>
+	<td>	
+		[% comboTipoDocumento %]
+	</td>
+	<td align="right">[% "Estante Virtual:" | i18n %]</td>
+	<td align="absbottom"><input type="text"  size="25" id="shelves" name="shelves">
+	</td>
+
+</tr>
+
+<tr>
+    <td align="right"></td>
+    <td align="absbottom"></td>
+    <td align="right">[% "Anal&iacute;ticas:" | i18n %]</td>
+    <td align="absbottom"><input type="text"  size="25" id="analytical" name="analytical"></td>
+</tr>
+
+<tr>
+    <td colspan="5" align="center">
+                [% "Filas a Mostrar:&nbsp;" | i18n %]
+                <select size="1" name="cantidad" id="cantidad">
+                    <option value=5>5</option>
+                    <option value=10>10</option>
+                    <option value=15>15</option>
+                    <option value=20>20</option>
+                    <option value=25>25</option>
+                    <option value=30>30</option>
+                    <option value=50>50</option>
+                    <option value=100>100</option>
+                </select>
+    </td>
+</tr>
+</table>
+
+        <div class="buttonContainerHorizontal">
+            <ul class="horizontal-list-default" style="float:center" >
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Button( text    => "[% 'Buscar' | i18n %]",
+                                                            boton   => "boton_miembros",
+                                                            onClick => "buscar(null,1);",
+                                                            title   => "[% 'Buscar en el catalogo' | i18n %]"
+                                                        );
+                        [% END %]
+            </ul>
+        </div>
+<br>
+<div id="nevegador"></div>
+<div id="result"></div>
+
+[% INCLUDE 'opac-bottom.inc' %]
+
