@@ -4518,9 +4518,10 @@ body .latest-status-text a {
 }
 
 .fileUploader_catalogo{
-   clear: both;
-   float: right;
-   height: 90px;
-   width: 100%;	
-   margin-top: 20px;
+	
+	width: 500px;
+	float: right;
+	clear: both;	
+	
+	
 }

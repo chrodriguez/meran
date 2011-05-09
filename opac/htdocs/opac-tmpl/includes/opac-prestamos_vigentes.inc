@@ -4,7 +4,7 @@
 
     <div class="contenedor_paginador">[% paginador %]</div>
 
-    <div class="tablaResultadoTitulo">[% "Pr&eacute;stamos" | i18n %]</div>
+<!--     <div class="tablaResultadoTitulo">[% "Pr&eacute;stamos" | i18n %]</div> -->
 
     <table id="tablaHistorial" class="tablaHistorial tabla_datos" cellspacing="0" cellpadding="4" style="width:98%; text-align:center; border: 1;">
         <tr class="tablaResultadoTitulo" >
@@ -12,7 +12,7 @@
             <th>[% "Autor" | i18n %]</th>
             <th>[% "Edici&oacute;n" | i18n %]</th>
             <th>[% "Pr&eacute;stamo" | i18n %]</th>
-            <th>[% "Dev" | i18n %]</th>
+<!--             <th>[% "Dev" | i18n %]</th> -->
         </tr>
         <!-- ESTE LOOP MUESTRA LOS PRESTAMOS -->
         [% FOREACH prestamo IN prestamos %]
@@ -57,13 +57,13 @@
                   <td align=center>
                       [% prestamo.getFecha_prestamo_formateada %]
                   </td>
-                  <td align=center>
+<!--                  <td align=center>
                       [% IF prestamo.getFecha_devolucion_formateada %]
                           [% prestamo.getFecha_devolucion_formateada %]&nbsp;
                       [% ELSE %]
                           [% 'Todav&iacute;a en su poder' | i18n %]
                       [% END %]
-                  </td>
+                  </td>-->
             </tr>
         [% END %]
 

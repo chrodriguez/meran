@@ -63,6 +63,7 @@ my %mensajesOPAC = (
     'P119' => 'Renovaci&oacute;n fuera de fecha',
     'P120' => 'Disculpe, no se pudo renovar el pr&eacute;stamo, el grupo posee reservas.',
 	'S200' => 'Disculpe, no puede efectuar reservas porque usted esta sancionado hasta el *?*',
+    'S204' => 'Disculpe, no puede efectuar el pr&eacute;stamo porque el usuario tiene un ejemplar vencido.',
 	'S201' => 'Disculpe, no puede efectuar reservas porque usted tiene una posible sanci&oacute;n pendiente.',
 	'U300' => 'Disculpe, no puede efectuar reservas porque usted no es un alumno regular.',
 	'U301' => 'Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.',
@@ -443,12 +444,17 @@ sub getMensaje {
 	my($codigo,$tipo,$param)=@_;
 	my $msj="";
 
-	($tipo eq "opac") ? ($msj=$mensajesOPAC{$codigo}) : ($msj=$mensajesINTRA{$codigo});
+	(($tipo eq "opac")||($tipo eq "OPAC")) ? ($msj=$mensajesOPAC{$codigo}) : ($msj=$mensajesINTRA{$codigo});
 	
 	my $p;
 	foreach $p (@$param){
 		$msj=~ s/\*\?\*/$p/o;
 	}
+
+    C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => tipo => ".$tipo);
+    C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => codigo => ".$codigo);
+    C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => mensaje => ".$msj);
+
 	return $msj;
 }
 
@@ -568,7 +574,11 @@ sub add {
     #@param $Message_hashref es el objeto mensaje contenedor de los mensajes
     #@param $msg_hashref es un mensaje
 	#se obtiene el texto del mensaje
-  	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});	
+#   	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});
+    my $session         = CGI::Session->load();
+    my $tipo            = $session->param('type')||'INTRA';
+
+    my $messageString   = &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'}, $tipo, $msg_hashref->{'params'});     
 	$msg_hashref->{'message'}= $messageString;
 # C4::AR::Debug::debug("Mensajes::add => message: ".$messageString."\n");
 # C4::AR::Debug::debug("Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n");
