@@ -27,6 +27,7 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
     &t_guardarVariable
     &t_modificarVariable
     &getMenuPreferences
+    &getLdapPreferences
     &getPreferenciasByArray
     &verificar_preferencias
 );
@@ -191,6 +192,20 @@ sub getMenuPreferences{
 
     return (\%hash);
 }
+
+
+sub getLdapPreferences{
+    my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
+                                    query => [ variable=> { like => '%ldap%' }],
+                            );
+    my %hash;
+    foreach my $pref (@$preferencias_array_ref){
+        $hash{$pref->getVariable} = $pref->getValue();
+    }
+
+    return (\%hash);
+}
+
 
 sub getPreferenciasByCategoria {
     my ($str)=@_;
