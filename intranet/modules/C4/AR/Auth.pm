@@ -255,6 +255,7 @@ sub _destruirSession{
     $session->param('sessionID', undef);
     #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
     $session->param('codMsg', $codMsg);
+
 #     C4::AR::Debug::debug("WARNING: ¡¡¡¡Se destruye la session y la cookie!!!!!");
     redirectToAuth($template_params)
 
@@ -274,7 +275,11 @@ sub inicializarAuth{
     my ($session) = CGI::Session->load();
     my $msjCode = getMsgCode();
 #     C4::AR::Debug::debug("inicializarAuth => ".$msjCode);
-    $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
+#     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
+
+     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,$t_params->{'type'},[]);
+
+
     #se destruye la session anterior
     _eliminarSession($session);
     #Genero una nueva sesion.
@@ -340,7 +345,7 @@ sub get_template_and_user {
                                                              );
     #C4::AR::Debug::debug("la SESSION en el get template and user ".$session);    
     my ($template, $params)     = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'}, $in->{'loging_out'}, $usuario_logueado);
-
+  
     $in->{'template_params'}    = $params;
 
     if ( $session->param('userid') ) {
@@ -606,21 +611,37 @@ sub checkauth {
                 $socio->save();
                 if ($type eq 'opac') {
 
-#                     if (C4::AR::Usuarios::needsDataValidation($socio->getNro_socio) != 0){
+#                       if (C4::AR::Usuarios::needsDataValidation($socio->getNro_socio) != 0){
+#                                 $codeMSG='U309';
+#                                 _destruirSession('U309', $template_params);
+#                                 $session->param('codMsg', $codMSG);
+#                                 $session->param('redirectTo', '/cgi-bin/koha/error.pl');
+#                                 redirectTo('/cgi-bin/koha/error.pl'); 
+#                       } else {
+#                             
+#                               $session->param('redirectTo', '/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
+#                               redirectToNoHTTPS('/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
+#                               #$session->secure(0);
+#                       }                    
+
+
+
+                    if (C4::AR::Usuarios::needsDataValidation($socio->getNro_socio) != 0){
 #                             C4::AR::Debug::debug("DEBE VALIDAR LOS DATOS");
 #                             _destruirSession('U406', $template_params);
-#                     } else {
-#                             C4::AR::Debug::debug("NO DEBE VALIDAR LOS DATOS");
-#                     
-#                             $template_params->{'mensaje'}  = C4::AR::Mensajes::getMensaje('U309','OPAC',[]);
-#                             _destruirSession('U406', $template_params);
-#                              
-# #                             $session->param('codMsg', 'U309');
-#                     }
-
-                    $session->param('redirectTo', '/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
-                    redirectToNoHTTPS('/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
-                    #$session->secure(0);
+                    } else {
+                              C4::AR::Debug::debug("NO DEBE VALIDAR LOS DATOS");
+               
+#                               $codMSG= C4::AR::Mensajes::getMensaje('U309','INTRA',[]);
+#                               C4::AR::Debug::debug($codeMSG);
+#                               $codeMSG='U309';
+                              _destruirSession('U309', $template_params);
+                              $session->param('codMsg', $codeMSG);
+                              $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
+                              redirectTo('/cgi-bin/koha/auth.pl'); 
+                   
+               
+                    }
                 }else{
                     $session->param('redirectTo', '/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
                     redirectTo('/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
@@ -983,7 +1004,7 @@ sub redirectTo {
         print 'CLIENT_REDIRECT';
         exit;
 	}else{
-#       C4::AR::Debug::debug("redirectTo=> SERVER_REDIRECT");       
+#        C4::AR::Debug::debug("redirectTo=> SERVER_REDIRECT");       
         my $input = CGI->new(); 
         print $input->redirect( 
             -location => $url, 

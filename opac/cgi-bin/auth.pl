@@ -31,4 +31,5 @@ if ($session->param('codMsg')){
   $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($session->param('codMsg'),'opac');
 }
 
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
