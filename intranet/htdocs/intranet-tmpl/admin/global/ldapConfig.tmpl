@@ -16,12 +16,28 @@
 <ul>
     <li class="sub_item">
     <!-- aca usamos una pref_preferencia_sistema que ya existe -->
-        <label>[% "URL del host" | i18n %]
+        <label>[% "URL del servidor" | i18n %]
             [% PERL %]
-                print C4::AR::Filtros::setHelpIcon(text => "[% 'Direccion del servidor LDAP' | i18n %]",);
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Direccion del servidor LDAP.' | i18n %]",);
             [% END %]
         </label> 
         <input name="host_url" size="30" value="[% preferencias.ldap_server %]" type="text">
+    </li>
+    <li class="sub_item">
+        <label>[% "Puerto del servidor" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Indique el numero de puerto del servidor.' | i18n %]",);
+            [% END %]
+        </label> 
+        <input name="host_port" size="10" value="[% preferencias.ldap_port %]" type="text">
+    </li>
+    <li class="sub_item">
+        <label>[% "Tipo de comunicaci&oacute;n" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Indica como sera la comunicacion, SSL, TLS o PLAIN, por defecto es PLAIN.' | i18n %]",);
+            [% END %]
+        </label> 
+        <input name="host_type" size="10" value="[% preferencias.ldap_type %]" type="text">
     </li>
     <li class="sub_item">
         <label>[% "Versi&oacute;n" | i18n %]
@@ -42,12 +58,28 @@
         </label> 
         <input id="ldapencoding" name="ldapencoding" value="[% preferencias.ldap_encoding %]" type="text"> 
     </li>
+    <li class="sub_item">
+        <label>[% "Sufijo de la base de datos" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Sufijo de la Base de Datos Ldap que se usa para completar el usuario. Ej: dc=unlp,dc=edu,dc=ar.' | i18n %]",);
+            [% END %]
+        </label> 
+        <input name="prefijo_base" size="10" value="[% preferencias.ldap_prefijo_base %]" type="text">
+    </li>
     <br>
     <h4>Fijar ajustes </h4> 
     <li class="sub_item">
+        <label>[% "Agregar desde LDAP" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Indica si se agrega automaticamente a la base de MERAN un usuario valido en el LDAP cuando se autentica positivamente. 0 o 1.' | i18n %]",);
+            [% END %]
+        </label> 
+        <input name="agregar_user_ldap" id="bind_dn" size="30" value="[% preferencias.ldap_agregar_user %]" type="text"> 
+    </li>
+    <li class="sub_item">
         <label>[% "Ocultar contrase&ntilde;as" | i18n %]
             [% PERL %]
-                print C4::AR::Filtros::setHelpIcon(text => "[% 'Seleccione *s&iacute;* para evitar que las contraseñas se almacenen en la base de datos de MERAN.' | i18n %]",);
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Seleccione *s&iacute;* para evitar que las contrase&ntilde;as se almacenen en la base de datos de MERAN.' | i18n %]",);
             [% END %]
         </label> 
         <select id="menupreventpassindb" name="preventpassindb"> 
@@ -66,7 +98,7 @@
     <li class="sub_item">
         <label>[% "Contrase&ntilde;a" | i18n %]
             [% PERL %]
-                print C4::AR::Filtros::setHelpIcon(text => "[% 'Contraseña para bind-user.' | i18n %]",);
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Contrase&ntilde;a para bind-user.' | i18n %]",);
             [% END %]
         </label> 
         <input name="bind_pw" id="bind_pw" size="30" value="[% preferencias.ldap_bind_pw %]" type="password"> 
@@ -119,6 +151,14 @@
         </select> 
     </li>
     <li class="sub_item">
+        <label>[% "Prefijo de usuario" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::setHelpIcon(text => "[% 'Prefijo que va antes del identificador del usuario, ej uid. Esto se completara luego con el userid y el sufijo.' | i18n %]",);
+            [% END %]
+        </label> 
+        <input name="user_prefijo" size="30" value="[% preferencias.ldap_user_prefijo %]" type="text"> 
+    </li>
+    <li class="sub_item">
         <label>[% "Atributo de usuario" | i18n %]
             [% PERL %]
                 print C4::AR::Filtros::setHelpIcon(text => "[% 'El atributo usado para nombrar/buscar usuarios. Normalmente *cn*.' | i18n %]",);
@@ -135,7 +175,7 @@
         <input name="memberattribute" id="memberattribute" value="[% preferencias.ldap_memberattribute %]" size="30" type="text"> 
     </li>
     <li class="sub_item">
-        <label>[% "Atributo de miembroutilizan dn" | i18n %]
+        <label>[% "Atributo de miembro utilizan dn" | i18n %]
             [% PERL %]
                 print C4::AR::Filtros::setHelpIcon(text => "[% 'Opcional: Anula el manejo de valores de atributos de los miembros, es 0 o 1' | i18n %]",);
             [% END %]

@@ -23,6 +23,16 @@ if($input->param('adding') == 1){
 
     C4::AR::Preferencias::setVariableLdap('ldap_version',$input->param('version'));
     C4::AR::Preferencias::setVariableLdap('ldap_server',$input->param('host_url'));
+    
+    # agregadas luego
+    # TODO: agregar estas preferencias en la base, en pref_ldap
+    C4::AR::Preferencias::setVariableLdap('ldap_port',$input->param('host_port'));
+    C4::AR::Preferencias::setVariableLdap('ldap_type',$input->param('host_type'));
+    C4::AR::Preferencias::setVariableLdap('ldap_user_prefijo',$input->param('user_prefijo'));
+    C4::AR::Preferencias::setVariableLdap('ldap_prefijo_base',$input->param('prefijo_base'));
+    C4::AR::Preferencias::setVariableLdap('ldap_agregar_user',$input->param('agregar_user_ldap'));
+    # fin
+    
     C4::AR::Preferencias::setVariableLdap('ldap_encoding',$input->param('ldapencoding'));
     C4::AR::Preferencias::setVariableLdap('ldap_preventpassindb',$input->param('preventpassindb'));
     C4::AR::Preferencias::setVariableLdap('ldap_bind_dn',$input->param('bind_dn'));
