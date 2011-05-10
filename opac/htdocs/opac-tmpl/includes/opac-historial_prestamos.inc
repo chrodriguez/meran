@@ -1,7 +1,5 @@
 [% USE HTML %]
 
-
-
 [% IF prestamos %]
 
     <div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos realizadas:" | i18n %]&nbsp;[% cantidad %]</div>
@@ -19,14 +17,14 @@
             <th>[% "Dev" | i18n %]</th>
         </tr>
         <!-- ESTE LOOP MUESTRA LOS PRESTAMOS -->
-        [% FOREACH prestamos %]
+        [% FOREACH prestamo IN prestamos %]
             <tr>
             <td> 
-                    [% IF id1 %]
+                    [% IF prestamo.nivel3.nivel1.getId1 %]
                         [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% titulo | i18n %]",
+                                print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.getTitulo | i18n %]",
                                                                 url =>      "/cgi-bin/koha/opac-detail.pl", 
-                                                                params => [ "id1=[% id1 %]", ],
+                                                                params => [ "id1=[% prestamo.nivel3.nivel1.getId1 %]", ],
                                                             ) ;
                         [% END %]
                     [% ELSE %]
@@ -34,35 +32,26 @@
                     [% END %]
                 </td>
                 <td class="autor_result click" onClick="filtrarPorAutor([% idAutor %])" title="[% 'Filtrar por Autor' | i18n %]">
-                    [% IF nomCompleto %]
-                        [% nomCompleto %]
+                    [% IF prestamo.nivel3.nivel1.getAutor %]
+                        [% prestamo.nivel3.nivel1.getAutor %]
                     [% ELSE %]
                         &nbsp;
                     [% END %]
                 </td>
                 <td>
-                    [% IF grupos %]
-                        [% FOREACH grupos %]
-                            [% IF edicion %]
-                                [% edicion %] &nbsp;
-                            [% END %]
-                            [% IF anio_publicacion %]
-                                ([% anio_publicacion %])
-                            [% END %]
-                            [% IF volume %] 
-                                t [% volume %]
-                            [% END %]
-                            <br>
+                    [% IF prestamo.nivel3.nivel2.getEdicion %]
+                        [% prestamo.nivel3.nivel2.getEdicion %]
                     [% END %]
-                    [% ELSE %]
-                        &nbsp;
+            
+                    [% IF prestamo.nivel3.nivel2.getAnio_publicacion %]
+                        &nbsp;([% prestamo.nivel3.nivel2.getAnio_publicacion %])
                     [% END %]
                 </td>
                 <td align=center>
-                    [% fecha_prestamo %]&nbsp;
+                    [% prestamo.getFecha_prestamo_formateada %]&nbsp;
                 </td>
                 <td align=center>
-                    [% fecha_devolucion %]&nbsp;
+                    [% prestamo.getFecha_devolucion_formateada %]&nbsp;
                 </td>
             </tr>
         [% END %]
