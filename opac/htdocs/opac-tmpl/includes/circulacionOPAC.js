@@ -125,6 +125,7 @@ function updateInfoRenovar(responseText){
 function DetalleReservas(){
 
     objAH           = new AjaxHelper(updateDetalleReserva);
+    objAH.showOverlay       = true;
     objAH.debug     = true;
     //para busquedas combinables
     objAH.url       = '/cgi-bin/koha/opac-info_reservas.pl';
@@ -173,6 +174,7 @@ function updateDetallePrestamo(responseText){
 
 function infoReservas(){
     objAH           = new AjaxHelper(updateInfoReservas);
+    objAH.showOverlay       = true;
     objAH.debug     = true;
     objAH.url       = '/cgi-bin/koha/opac-info_reservas.pl';
     objAH.action    = 'detalle_espera';
@@ -186,6 +188,7 @@ function updateInfoReservas(responseText){
 
 function infoSanciones(){
     objAH               = new AjaxHelper(updateInfoSanciones);
+    objAH.showOverlay       = true;
     objAH.debug         = true;
     objAH.url           = '/cgi-bin/koha/opac-info_sanciones.pl';
     objAH.sendToServer();

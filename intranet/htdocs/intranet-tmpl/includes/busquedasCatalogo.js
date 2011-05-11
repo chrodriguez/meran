@@ -158,6 +158,7 @@ function buscarPorTema(){
 
 function buscarPorISBN(){
     objAH=new AjaxHelper(updateInfoBusquedas);
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/busquedas/busquedasDB.pl';
     objAH.isbn= $('#isbn').val();
@@ -181,7 +182,7 @@ function buscarPorDiccionario(){
 function buscarPorCodigoBarra(){
     objAH               = new AjaxHelper(updateInfoBusquedas);
     objAH.debug         = true;
-    objAH.showOverlay       = true;
+    objAH.showOverlay   = true;
     objAH.url           = '/cgi-bin/koha/busquedas/busquedasDB.pl';
     objAH.codBarra      = $('#codBarra').val();
     objAH.only_available = ( $('#only_available').attr('checked') )?1:0;

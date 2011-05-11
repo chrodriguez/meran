@@ -8,6 +8,7 @@ SUBCAMPOS_ARRAY= new Array();
 function eliminarVista(vista_id){
 
     objAH               = new AjaxHelper(updateAgregarVisualizacion);
+    objAH.showOverlay       = true;
     objAH.debug         = true;
     objAH.url           = "/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
     objAH.tipoAccion    = 'ELIMINAR_VISUALIZACION';
@@ -209,6 +210,7 @@ function eleccionSubCampo(){
 
 function mostrarTablaRef(){
     objAH=new AjaxHelper(updateMostrarTablaRef);
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/utils/utilsDB.pl";
     objAH.tipoAccion="GENERAR_ARREGLO_TABLA_REF";

@@ -6,6 +6,8 @@ use CGI;
 
 my $input=new CGI;
 
+my $token = $input->url_param('token');
+
 my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
 			                    template_name	=> 'usuarios/potenciales/datosUsuario.tmpl',
 			                    query		=> $input,
@@ -27,4 +29,9 @@ my $socio=C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
 $t_params->{'socio'}= $socio;
 
-C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+if (!$socio->getActivo()){
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}else{
+    C4::AR::Auth::redirectTo("/cgi-bin/koha/usuarios/reales/datosUsuario.pl?nro_socio=".$socio->getNro_socio."&token=".$token);
+}

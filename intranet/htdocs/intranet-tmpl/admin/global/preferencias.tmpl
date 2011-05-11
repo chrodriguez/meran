@@ -64,6 +64,7 @@ function agregarPreferencia(){
 	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
 	objAH.tipo=tipo;
+    objAH.showOverlay       = true;
  	objAH.accion= "NUEVA_VARIABLE";
 	
 	if(tipo == "0"){ok=0;jAlert(DEBE_SELECCIONAR_UNA_OPCION);}
@@ -106,6 +107,7 @@ function selectOpcion(){
 	borrarDiv();
 	objAH=new AjaxHelper(updateInfoConsultaJSON);
 	objAH.debug= true;
+    objAH.showOverlay       = true;
 	objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
 	objAH.tipo=tipo;
 	objAH.accion= "SELECCION_CAMPO";
@@ -151,6 +153,7 @@ function elegirCampo(){
 		campo.remove();
 		objAH=new AjaxHelper(updateInfoConsultaJSON);
 		objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
+        objAH.showOverlay       = true;
 		objAH.tipo=tipo;
 // 		objAH.json=1;
 		objAH.accion= "SELECCION_CAMPO";
@@ -233,6 +236,7 @@ function guardarModificacion(){
 	objAH               = new AjaxHelper(updateGuardarModificacion);
 	objAH.debug         = true;
 	objAH.url           = "/cgi-bin/koha/admin/global/preferenciasDB.pl";
+    objAH.showOverlay       = true;
 	objAH.variable      = $("#variable").val();
 	objAH.valor         = $("#valor").val();
 
@@ -269,6 +273,7 @@ function updateGuardarModificacion(responseText){
 function buscarPreferencia(){
 	objAH=new AjaxHelper(updateBuscarPreferencia);
 	objAH.debug= true;
+    objAH.showOverlay       = true;
 	objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
 	objAH.buscar=$("#buscar").val();
 	objAH.accion= "BUSCAR_PREFERENCIAS";
@@ -307,6 +312,7 @@ function modificarVariable(variable,tipo){
 
 	objAH=new AjaxHelper(updateModificarVariable);
 	objAH.debug= true;
+    objAH.showOverlay       = true;
 	objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
 	objAH.variable=variable;
 	objAH.accion= "MODIFICAR_VARIABLE";
@@ -326,6 +332,7 @@ function guardarNuevaVariable(){
 	objAH=new AjaxHelper(updateGuardarModificacion);
 	objAH.debug= true;
 	objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
+    objAH.showOverlay       = true;
 	objAH.variable=$("#variable").val();
 	objAH.explicacion=$("#explicacion").val();
 	objAH.tipo=$("#tipoVar").val();

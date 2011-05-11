@@ -29,6 +29,7 @@ function changePage(ini){
 
 function consultar(){
     objAH=new AjaxHelper(updateInfo);
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.f_ini= $('#f_ini').val();
     objAH.f_fin= $('#f_fin').val();

@@ -589,6 +589,7 @@ function mostrarInfoAltaNivel1(id1){
 
 	ID_N1= id1;
     objAH=new AjaxHelper(updateMostrarInfoAltaNivel1);
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.showStatusIn = 'nivel1';
     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
@@ -610,6 +611,7 @@ function updateMostrarInfoAltaNivel1(responseText){
 //esta funcion muestra la info en la barra laterarl del NIVEL 2 luego de ser guardado
 function mostrarInfoAltaNivel2(id2){
     objAH               = new AjaxHelper(updateMostrarInfoAltaNivel2);
+    objAH.showOverlay       = true;
     objAH.debug         = true;
     objAH.showStatusIn  = 'nivel2';
     objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
@@ -1685,6 +1687,7 @@ function crearHidden(obj){
 
 function agregarTablaReferencias(tabla){
     objAH               = new AjaxHelper(updateAgregarTablaReferencias);
+    objAH.showOverlay       = true;
     objAH.url           = '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
     objAH.accion        = "AGREGAR_REGISTRO";
     objAH.alias_tabla   = tabla;
@@ -1801,6 +1804,7 @@ function borrarN1(id1){
     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
         if(confirmStatus){
 		    objAH               = new AjaxHelper(updateBorrarN1);
+            objAH.showOverlay       = true;
 		    objAH.debug         = true;
 		    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 		    objAH.id1           = id1;
@@ -1832,6 +1836,7 @@ function borrarN2(id2){
 
         if(confirmStatus){
 		    objAH                   = new AjaxHelper(updateBorrarN2);
+            objAH.showOverlay       = true;
 		    objAH.debug             = true;
 		    objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 		    objAH.id2               = id2;
@@ -1862,6 +1867,7 @@ function borrarN3(id3){
 
         if(confirmStatus){
 		    objAH                   = new AjaxHelper(updateBorrarN3);
+            objAH.showOverlay       = true;
 		    objAH.debug             = true;
 		    objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
             objAH.id3_array         = [id3];
@@ -1892,6 +1898,7 @@ function borrarEjemplaresN3(id3){
     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
         if(confirmStatus){
 		    objAH               = new AjaxHelper(updateBorrarEjemplaresN3);
+            objAH.showOverlay   = true;
 		    objAH.debug         = true;
 		    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 		    var id3_array       = _recuperarSeleccionados("checkEjemplares");
@@ -2037,6 +2044,7 @@ function updateModificarEjemplaresN3(responseText){
  */
 function borrarGrupo(id1,id2){	
 	objAH               = new AjaxHelper(updateBorrarGrupo);
+    objAH.showOverlay       = true;
     objAH.debug         = true;
 	objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.id2           = id2;

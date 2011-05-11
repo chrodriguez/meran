@@ -48,6 +48,7 @@ function consultarTablaSeudonimos(seudonimo){
 	objAH.tipo= 'consultaTablasSeudonimos';
 	objAH.tabla= tabla;
 	objAH.seudonimo= seudonimo;
+    objAH.showOverlay       = true;
 	//se envia la consulta
 	objAH.sendToServer();
 }
@@ -154,9 +155,11 @@ function guardarDatos(){
 
 	objAH=new AjaxHelper(updateGuardarDatos);
 	objAH.debug= true;
+    objAH.showOverlay       = true;
 	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 	objAH.tipo= 'insertarSeudonimos';
 	objAH.tabla= tabla;
+
 	objAH.id= SEUDONIMO_SELECTED.ID;
 	objAH.seudonimos= OBJECTS_ARRAY;
 	//se envia la consulta
@@ -171,6 +174,7 @@ function deleteSeudonimo(idDelete){
 
 		objAH=new AjaxHelper(updateDeleteSeudonimo);
 		objAH.debug= true;
+        objAH.showOverlay       = true;
 		objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 		objAH.tipo= 'eliminarSeudonimos';
 		objAH.tabla= tabla;

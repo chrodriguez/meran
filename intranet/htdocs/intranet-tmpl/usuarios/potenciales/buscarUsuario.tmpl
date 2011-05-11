@@ -1,8 +1,20 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <script src="/includes/jquery/jquery-highlight-min.js"></script>
+<script src="/intranet-tmpl/includes/usuarios/usuariosPotenciales.js"></script>
 
 <script language="javascript" type="text/javascript">
+
+
+function ordenar(orden){
+    objAH.sort(orden);
+}
+
+function changePage(ini){
+    objAH.changePage(ini);
+}
+
+
 var busqueda_armed,incial_armed;
 var flag_armed = false;
 
@@ -45,59 +57,10 @@ function consultar(filtro){
 
 }
 
-function habilitar(){
-	var checks=$("#result input[@type='checkbox']:checked");
-	var array=checks.get();
-	var theStatus="";
-	var personNumbers=new Array();
-	var cant=checks.length;
-	var accion=$("#accion").val();
-	if (cant>0){
-		theStatus= UD_ESTA_A_PUNTO + accion + A_LOS_PROPIETARIOS; 
-	
-		for(i=0;i<checks.length;i++){
-			theStatus=theStatus+ TARJETA_NRO + array[i].value+"\n";
-			personNumbers[i]=array[i].name;
-		}
-
-		theStatus=theStatus + ESTA_SEGURO;
-		if (cant>0){
-			if (confirm (theStatus)){actualizarPersonas(cant,personNumbers);}
-		}
-	}
-	else{ alert (NO_SE_SELECCIONO_NINGUN_USUARIO);}
-}	
-
-var objAH;
-function ordenar(orden){
-	objAH.sort(orden);
-}
-
-function changePage(ini){
-	objAH.changePage(ini);
-}
-
-function actualizarPersonas(cant,arrayPersonNumbers){
-	objAH=new AjaxHelper(updateInfoActualizar);
-	objAH.url= "/cgi-bin/koha/usuarios/potenciales/usuariosPotencialesDB.pl";
-	objAH.debug= true;
-	objAH.cantidad= cant;
-	objAH.tipoAccion= $("#accion").val();
-	objAH.id_personas= arrayPersonNumbers;
-	objAH.funcion= "changePage";
-	objAH.sendToServer();
-}
-
-function updateInfoActualizar(responseText){
-
- 	var Messages=JSONstring.toObject(responseText);
-	setMessages(Messages);
-//     objAH.cache = false;
-	buscarUsuariosPotenciales();
-}
 
 function buscarUsuariosPotenciales(){
     objAH=new AjaxHelper(updateInfo);
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.url= "/cgi-bin/koha/usuarios/potenciales/buscarUsuarioResult.pl";
     objAH.funcion= "changePage";

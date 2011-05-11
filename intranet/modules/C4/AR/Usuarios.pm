@@ -165,13 +165,13 @@ sub habilitarPersona {
     my $dbh = C4::Context->dbh;
     my $msg_object= C4::AR::Mensajes::create();
 
-    eval {
+     eval {
         foreach my $socio (@$id_socios_array_ref){
-            my ($partner) = getSocioInfo($socio);
+            my ($partner) = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio);
             if ($partner){
                 $partner->activar;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U347', 'params' => [$partner->getNro_socio]});
             }
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U347', 'params' => [$partner->getNro_socio]});
         }
      };
 
@@ -297,9 +297,12 @@ sub eliminarUsuario {
     #No hay error
 
         eval {
-            $socio->desactivar;
-            $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U320', 'params' => [$socio->getNro_socio]} ) ;
+            my ($error,$cod_msg) = $socio->desactivar;
+            
+            $error = $error || 0;
+            $cod_msg = $cod_msg || 'U320'; 
+            $msg_object->{'error'}= $error;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> $cod_msg, 'params' => [$socio->getNro_socio]} ) ;
         };
 
         if ($@){
@@ -644,7 +647,7 @@ sub getSocioInfoPorNroSocio {
 sub existeSocio {
     my ($nro_socio)= @_;
     my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => [ nro_socio => { eq => $nro_socio } ]);
-	return $socio_array_ref;
+    return $socio_array_ref;
 }
 
 =item
@@ -666,7 +669,7 @@ sub getSocioLike {
         #SI VIENE INICIAL, SE BUSCA SOLAMENTE POR APELLIDOS QUE COMIENCEN CON ESA LETRA, SINO EN TODOS LADOS CON LIKE EN AMBOS LADOS
         if (!($inicial)){
             foreach my $s (@searchstring_array){ 
-                push (	@filtros, ( or   => [   
+                push (  @filtros, ( or   => [   
                                                 'persona.nombre'    => { like => '%'.$s.'%'},   
                                                 apellido            => { like => '%'.$s.'%'},
                                                 nro_documento       => { like => '%'.$s.'%' }, 
@@ -868,7 +871,6 @@ sub esRegular {
 =cut
 sub needsDataValidation {
     my ($nro_socio) = @_;
-
     if ($nro_socio){
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                    query => [ nro_socio => { eq => $nro_socio } ],
@@ -876,7 +878,7 @@ sub needsDataValidation {
                                        );
         if($socio_array_ref){
             my $socio = $socio_array_ref->[0];
-
+       
             return ( $socio->needsValidation());
         }else{
             return 0;
@@ -934,12 +936,12 @@ sub getLastLoginTime{
 
 
 sub crearPersonaLDAP{
-	
+    
     my ($nro_socio) = @_;
 
-    use C4::AR::Preferencias;	
-	my %params = {};
-	
+    use C4::AR::Preferencias;   
+    my %params = {};
+    
     $params{'id_ui'} = C4::AR::Preferencias::getValorPreferencia("defaultUI");
     $params{'changepassword'} = 0;
     $params{'apellido'} =  "SIN APELLIDO";
@@ -949,14 +951,14 @@ sub crearPersonaLDAP{
     $params{'legajo'} = "99999";
     $params{'cumple_condicion'} = 0;
     $params{'password'} = "123456";  
-	$params{'credential_type'} = "estudiante";
+    $params{'credential_type'} = "estudiante";
     $params{'nro_socio'} = $nro_socio;
     $params{'cod_categoria'} = "ES";
-	
-	my $person = C4::Modelo::UsrPersona->new();
+    
+    my $person = C4::Modelo::UsrPersona->new();
 
-	$person->agregar(\%params);
-	
+    $person->agregar(\%params);
+    
 }
 
 =item

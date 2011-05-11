@@ -72,6 +72,7 @@ my %mensajesOPAC = (
 	<br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
 	'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.',
 	'U308' => 'Se cancel&oacute; la reserva con &eacute;xito.',
+    'U309' => 'No puede iniciar sesi&oacute;n porque sus datos censales est&aacute;n desactualizados, debe dirigirse a la biblioteca para actualizarlos.',
     'U400' => 'UD. acaba de cambiar la password, debe ingresar nuevamente.',
 	'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.',
 	'B401' => '',
@@ -271,6 +272,8 @@ my %mensajesINTRA = (
     'U421' => 'No se puede extender el libre deuda porque el usuario tiene pr&eacute;stamos vigentes.',
     'U422' => 'No se puede extender el libre deuda porque el usuario se encuentra sancionado.',
     'U423' => 'Se puede imprimir el certificado de libre deuda para *?*. <br/> *?*',
+    'U421' => 'No se puede eliminar el usuario porque tiene pr&eacute;stamos vigentes y/o vencidos.',
+
     'U500' => 'La tarjeda de identificaci&oacute;n ingresada (Nro. de socio) ya pertenece a otro usuario.',
     'U501' => 'El t&iacute;tulo, autor ya existe *?*.',
 #     'U405' => 'No existe la estructura de catalogaci&oacute;n que se intentando recuperar.',
@@ -301,7 +304,7 @@ my %mensajesINTRA = (
     'B420' => 'Error en funcion C4::AR::Usuarios::t_cambiarPassword',
     'B421' => 'Error en funcion C4::AR::Usuarios::t_cambiarPermisos',
     'B422' => 'Error en funcion C4::AR::Usuarios::t_eliminarUsuario',
-    'B423' => 'Error en funcion C4::AR::Usuarios::agregarPersona',
+    'B423' => 'Error en funcion C4::AR::Usuarios::habilitarPersona',
     'B424' => 'Error en funcion C4::AR::Usuarios::t_updateBorrower',
     'B425' => 'Error en funcion C4::AR::Usuarios::t_addPersons',
     'B426' => 'Error en funcion C4::AR::Catalogacion::t_guardarEnEstructuraCatalogacion',
@@ -443,10 +446,10 @@ my %mensajesINTRA = (
 sub getMensaje {
 	my($codigo,$tipo,$param)=@_;
 	my $msj="";
-
+    
 	(($tipo eq "opac")||($tipo eq "OPAC")) ? ($msj=$mensajesOPAC{$codigo}) : ($msj=$mensajesINTRA{$codigo});
-	
-	my $p;
+		
+    my $p;
 	foreach $p (@$param){
 		$msj=~ s/\*\?\*/$p/o;
 	}

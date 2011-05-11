@@ -10,6 +10,7 @@ array_info_combo= 0; //para guardar las opciones de los combos que se generan en
 //esta funcion obtiene un arreglo asociativo con todas la UI para crear un SELECT en el cliente
 function getOptionsComboUI(){
     objAH=new AjaxHelper(updateGetOptionsComboUI);
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.url="/cgi-bin/koha/utils/utilsDB.pl";
     objAH.tipoAccion="GENERAR_ARREGLO_UI";

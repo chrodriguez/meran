@@ -29,6 +29,7 @@
                         objAH                     = new AjaxHelper(updateExportarMejorPresupuesto);
                         objAH.url                 = '/cgi-bin/koha/adquisiciones/mostrarComparacion.pl';
                         objAH.debug               = true;
+                        objAH.showOverlay         = true;
                         objAH.table               = JSONstring.toObject(x);
                         objAH.tipoAccion          = 'EXPORTAR_MEJOR_PRESUPUESTO';
                         objAH.sendToServer();

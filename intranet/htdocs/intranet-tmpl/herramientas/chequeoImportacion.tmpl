@@ -21,6 +21,7 @@ function eleccionDeNivel(){
   
   objAH = new AjaxHelper(updateEleccionDeNivel);
   objAH.debug = true;
+  objAH.showOverlay       = true;
   objAH.url = "/cgi-bin/koha/herramientas/chequeo_importacionDB.pl";
   objAH.nivel = $("#niveles_id").val();
   objAH.tipoAccion = 'MOSTRAR_DATOS_NIVEL_REPETIBLE';
@@ -39,6 +40,7 @@ function updateEleccionDeNivel(responseText){
 function eliminarCampo(id_rep){
   jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO, CATALOGO_ALERT_TITLE, function(confirmStatus){
     objAH = new AjaxHelper(updateEliminarCampo);
+    objAH.showOverlay       = true;
     objAH.debug = true;
     objAH.url = "/cgi-bin/koha/herramientas/chequeo_importacionDB.pl";
     objAH.nivel = $("#niveles_id").val();
@@ -51,6 +53,7 @@ function eliminarCampo(id_rep){
 function eliminarCampos(){
   jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO, CATALOGO_ALERT_TITLE, function(confirmStatus){
     objAH = new AjaxHelper(updateEliminarCampo);
+    objAH.showOverlay       = true;
     objAH.debug = true;
     objAH.url = "/cgi-bin/koha/herramientas/chequeo_importacionDB.pl";
     objAH.nivel = $("#niveles_id").val();;  
