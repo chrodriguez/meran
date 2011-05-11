@@ -34,9 +34,9 @@
 			[% IF nomodificable %]
 				[% "Imposible" | i18n %] 
 			[% ELSE %]
-				<input type=checkbox name="[% socio.getId_socio %]" 
-				id="[% socio.persona.getId_persona %]" 
-				value="[% socio.persona.getNro_documento %]">
+				<input type=checkbox name="[% socio.getNro_socio %]" 
+				id="[% socio.getNro_socio %]" 
+				value="[% socio.getNro_socio %]">
 			[% END %]
 		</td>
 		

@@ -1,6 +1,7 @@
 package C4::Modelo::UsrSocio;
 
 use strict;
+
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -326,6 +327,13 @@ sub activar{
 
 sub desactivar{
     my ($self) = shift;
+    use C4::AR::Prestamos;
+    
+    my ($vencidos,$prestamos) = C4::AR::Prestamos::cantidadDePrestamosPorUsuario($self->getNro_socio);
+    
+    if ($vencidos || $prestamos){
+    	return (1,'U421');
+    }
     $self->persona->desactivar;
     $self->setActivo(0);
     $self->save();
