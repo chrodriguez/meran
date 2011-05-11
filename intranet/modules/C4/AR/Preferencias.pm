@@ -12,8 +12,6 @@ use C4::Modelo::PrefPreferenciaSistema;
 use C4::Modelo::PrefPreferenciaSistema::Manager;
 use C4::Modelo::PrefAbout;
 use C4::Modelo::PrefAbout::Manager;
-use C4::Modelo::PrefLdap;
-use C4::Modelo::PrefLdap::Manager;
 
 use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
 
@@ -24,13 +22,11 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
     &getInfoAbout
     &getPreferencia
     &setVariable
-    &setVariableLdap
     &getValorPreferencia
     &getPreferenciaLike
     &t_guardarVariable
     &t_modificarVariable
     &getMenuPreferences
-    &getLdapPreferences
     &getPreferenciasByArray
     &verificar_preferencias
 );
@@ -196,19 +192,6 @@ sub getMenuPreferences{
     return (\%hash);
 }
 
-=item
-    Esta funcion devuelve en una HASH todas las preferencias_ldap
-=cut
-sub getLdapPreferences{
-    my $preferencias_array_ref = C4::Modelo::PrefLdap::Manager->get_pref_ldap();
-    my %hash;
-    foreach my $pref (@$preferencias_array_ref){
-        $hash{$pref->getVariable} = $pref->getValue();
-    }
-
-    return (\%hash);
-}
-
 
 sub getPreferenciasByCategoria {
     my ($str)=@_;
@@ -337,22 +320,7 @@ sub setVariable {
         C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias::getValorPreferencia($variable));
     }
 }
-=item
-    setVariableLdap, esta funcion setea las variables de preferencias_ldap
-=cut
-sub setVariableLdap {
-    my ($variable, $valor, $db) = @_;
-    
-    my  $preferencia;
 
-    $preferencia = C4::Modelo::PrefLdap::Manager->get_pref_ldap( query => [variable => {eq => $variable}] );
-
-
-    if(scalar(@$preferencia) > 0){
-        $preferencia->[0]->setValue($valor);
-        $preferencia->[0]->save();
-    }
-}
 
 sub _verificarDatosVariable {
     my($params,$msg_object)=@_;
