@@ -2,7 +2,7 @@ function obtenerTabla(){
     objAH=new AjaxHelper(updateObtenerTabla);
     objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
     objAH.cache = false;
-
+    objAH.showOverlay       = true;
     objAH.accion="OBTENER_TABLAS";
     objAH.alias_tabla = $('#tablas_ref').val();
     objAH.funcion= 'changePage';
@@ -20,7 +20,7 @@ function obtenerTablaFiltrada(){
     objAH=new AjaxHelper(updateObtenerTablaFiltrada);
     objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
     objAH.cache = false;
-
+    objAH.showOverlay       = true;
     objAH.accion="OBTENER_TABLAS";
     objAH.alias_tabla = $('#tablas_ref').val();
     objAH.filtro = $.trim($('#search_tabla').val());
@@ -44,6 +44,7 @@ function eliminarReferencia(tabla,id){
             objAH=new AjaxHelper(updateEliminarReferencia);
             objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
             objAH.cache = false;
+            bjAH.showOverlay       = true;
             objAH.accion="ELIMINAR_REFERENCIA";
             objAH.alias_tabla = tabla;
             objAH.item_id= id;
@@ -64,7 +65,7 @@ function agregarRegistro(tabla){
     objAH=new AjaxHelper(updateAgregarRegistro);
     objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
     objAH.cache = false;
-
+    objAH.showOverlay       = true;
     objAH.accion="AGREGAR_REGISTRO";
     objAH.alias_tabla = tabla;
     objAH.sendToServer();
@@ -82,7 +83,7 @@ function mostrarReferencias(tabla,value_id){
     objAH=new AjaxHelper(updateObtenerTabla);
     objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
     objAH.cache = false;
-
+    objAH.showOverlay       = true;
     objAH.accion="MOSTRAR_REFERENCIAS";
     objAH.alias_tabla = tabla;
     objAH.value_id = value_id;
@@ -98,6 +99,7 @@ function asignarReferencia(tabla,related_id,referer_involved){
             objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
             objAH.cache = false;
             objAH.accion="ASIGNAR_REFERENCIA";
+            objAH.showOverlay       = true;
             objAH.referer_involved= referer_involved;
             objAH.alias_tabla = tabla;
             objAH.related_id = related_id;
@@ -115,6 +117,7 @@ function asignarEliminarReferencia(tabla,related_id,referer_involved){
             objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
             objAH.cache = false;
             objAH.accion="ASIGNAR_Y_ELIMINAR_REFERENCIA";
+            objAH.showOverlay       = true;
             objAH.alias_tabla = tabla;
             objAH.referer_involved= referer_involved;
             objAH.related_id = related_id;

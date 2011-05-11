@@ -85,6 +85,7 @@ function mostrarHistorialPrestamos(){
 
 	objAH=new AjaxHelper(mostrarHistorialUpdate);
   	objAH.debug= true;
+    objAH.showOverlay       = true;
 	objAH.url= '/cgi-bin/koha/opac-HistorialPrestamos.pl';
 	//se setea la funcion para cambiar de pagina
 	objAH.funcion= 'changePage';
@@ -97,6 +98,7 @@ function mostrarHistorialReservas(bornum){
 
 	objAH=new AjaxHelper(mostrarHistorialUpdate);
   	objAH.debug= true;
+    objAH.showOverlay       = true;
 	//para busquedas combinables
 	objAH.url= '/cgi-bin/koha/opac-HistorialReservas.pl';
 	objAH.bornum= bornum;
@@ -139,6 +141,7 @@ function buscarPorAutor(){
 	
 	objAH=new AjaxHelper(updateBuscarPorAutor);
   	objAH.debug= true;
+    objAH.showOverlay       = true;
 	objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
 	objAH.searchField= $('#searchField').val();
 	objAH.tipo= 'normal';
@@ -170,6 +173,7 @@ function updateBuscarPorAutor(responseText){
 function buscarPorTitulo(){
     objAH=new AjaxHelper(updateBuscarPorTitulo);
     objAH.debug= true;
+    objAH.showOverlay       = true;
     objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
     objAH.searchinc= $('#searchField').val();
     objAH.tipo= 'normal';
@@ -222,6 +226,7 @@ function busquedaCombinable(typeSearch){
 
     objAH=new AjaxHelper(updateBusquedaCombinable);
     objAH.debug= true;
+    objAH.showOverlay       = true;
     //para busquedas combinables
     objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
     objAH.tipoAccion= 'BUSQUEDA_COMBINABLE';
@@ -271,6 +276,7 @@ function highlightBusquedaCombinable(){
 
 function buscarPorCodigoBarra(){
     objAH=new AjaxHelper(updateInfo);
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
     objAH.codBarra= $('#codBarra').val();
@@ -282,6 +288,7 @@ function buscarPorCodigoBarra(){
 
 function filtrarPorAutor(idAutor){
     objAH=new AjaxHelper(updateInfo);
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
     objAH.idAutor= idAutor;	
@@ -301,6 +308,7 @@ function filtrarPorAutor(idAutor){
 function verEstanteVirtual(shelf){
 	
 	objAH=new AjaxHelper(updateVerEstanteVirtual);
+    objAH.showOverlay       = true;
   	objAH.debug= true;
 	objAH.url= 'opac-estanteVirtualDB.pl';
 	objAH.shelves= shelf;
@@ -314,6 +322,7 @@ function verEstanteVirtual(shelf){
 function verSubEstanteVirtual(shelf){
 	
 	objAH=new AjaxHelper(updateVerEstanteVirtual);
+    objAH.showOverlay       = true;
   	objAH.debug= true;
 	objAH.url= 'opac-estanteVirtualDB.pl';
 	objAH.shelves= shelf;
@@ -334,6 +343,7 @@ function updateVerEstanteVirtual(responseText){
 function consultarEstanteVirtual(){
 
 	objAH=new AjaxHelper(updateConsultarEstanteVirutal);
+    objAH.showOverlay       = true;
   	objAH.debug= true;
 	objAH.url= 'opac-estanteVirtual.pl';
 	//se setea la funcion para cambiar de pagina

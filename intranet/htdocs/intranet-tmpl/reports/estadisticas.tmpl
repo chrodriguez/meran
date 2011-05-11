@@ -15,6 +15,7 @@ $(document).ready(function() {
 
 function consultar(){
 	objAH=new AjaxHelper(updateInfo);
+    objAH.showOverlay       = true;
 	objAH.url= "/cgi-bin/koha/reports/estadisticasResult.pl";
 	objAH.chkfecha= document.getElementById("chkfecha").checked;
 	objAH.chkuser= document.getElementById("chkuser").checked;

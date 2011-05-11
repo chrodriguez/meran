@@ -14,6 +14,7 @@ function deleteRow(idmap){
 	objAH=new AjaxHelper(SelectTablasKohaChange);
 	objAH.url= "/cgi-bin/koha/catalogacion/kohaToMARC_DB.pl";
 	objAH.idmap= idmap;
+    objAH.showOverlay       = true;
 	objAH.action= "DELETE";
 	objAH.sendToServer();
 }
@@ -37,6 +38,7 @@ function agregarMapeo(){
 	
 	if(ValidarDatos()){
 		objAH=new AjaxHelper(SelectTablasKohaChange);
+        objAH.showOverlay       = true;
 		objAH.url= "/cgi-bin/koha/catalogacion/kohaToMARC_DB.pl";
 		objAH.tabla= $('#tablasKoha').val();
 		objAH.campoKOHA=$('#camposKoha').val();
@@ -49,6 +51,7 @@ function agregarMapeo(){
 
 function RefreshComposKoha(){
 	objAH=new AjaxHelper(updateInfo);
+    objAH.showOverlay       = true;
 	objAH.url= "/cgi-bin/koha/catalogacion/kohaToMARC_DB.pl";
 	objAH.tabla= $('#tablasKoha').val();
 	objAH.action= "SELECT";
@@ -73,6 +76,7 @@ function updateInfo(responseText){
 
 function SelectTablasKohaChange(){
 	objAH=new AjaxHelper(updateInfoRefresh);
+    objAH.showOverlay       = true;
 	objAH.url= "/cgi-bin/koha/catalogacion/kohaToMARC_DB.pl";
 	objAH.tabla= $('#tablasKoha').val();
 	objAH.action= "TABLARESULT";

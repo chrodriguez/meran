@@ -9,6 +9,7 @@ function eliminarVista(vista_id){
 
     objAH               = new AjaxHelper(updateAgregarVisualizacion);
     objAH.debug         = true;
+    objAH.showOverlay       = true;
     objAH.url           = "/cgi-bin/koha/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
     objAH.tipoAccion    = 'ELIMINAR_VISUALIZACION';
     

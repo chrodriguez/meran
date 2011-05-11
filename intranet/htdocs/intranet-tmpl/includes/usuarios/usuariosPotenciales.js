@@ -37,6 +37,7 @@ function modificarDatosDeUsuario(){
     objAH=new AjaxHelper(updateModificarDatosDeUsuario);
     objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
     objAH.debug= true;
+    objAH.showOverlay       = true;
     objAH.nro_socio= usuario.ID;
     nro_socio_temp = objAH.nro_socio; // SETEO LA VARIABLE GLOBAL TEMP
     objAH.tipoAccion= 'MODIFICAR_USUARIO';
@@ -57,6 +58,7 @@ function updateModificarDatosDeUsuario(responseText){
 function guardarModificacioUsuario(){
 
     objAH=new AjaxHelper(updateGuardarModificacioUsuario);
+    objAH.showOverlay       = true;
     objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
     objAH.debug= true;
     objAH.nro_socio= nro_socio_temp;
@@ -92,6 +94,7 @@ function detalleUsuario(){
     objAH=new AjaxHelper(updateDetalleUsuario);
     objAH.url='/cgi-bin/koha/usuarios/potenciales/detalleUsuario.pl';
     objAH.debug= true;
+    objAH.showOverlay       = true;
     objAH.nro_socio= usuario.ID;
     objAH.sendToServer();
 }

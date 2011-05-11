@@ -31,6 +31,7 @@ $(document).ready(function() {
     function consultar(){
         objAH=new AjaxHelper(updateInfo);
         objAH.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
+        objAH.showOverlay       = true;
         objAH.fechaIni=  $('#fechaIni').val();
         objAH.fechaFin= $('#fechaFin').val();
         objAH.chkfecha=  $('#chkfecha')[0].checked;
@@ -45,6 +46,7 @@ $(document).ready(function() {
 
     function guardarNota(id_historico){
         objAH=new AjaxHelper(updateGuardarNota);
+        objAH.showOverlay       = true;
         objAH.id_historico= id_historico;
         objAH.nota= $('#'+id_historico).val();
         objAH.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';

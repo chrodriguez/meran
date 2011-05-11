@@ -8,6 +8,7 @@
 function consultarFavoritos(){
 
 	objAH=new AjaxHelper(updateConsultarFavoritos);
+    objAH.showOverlay       = true;
   	objAH.debug= true;
 	objAH.url= 'opac-privateshelfs.pl';
 	//se setea la funcion para cambiar de pagina
@@ -43,6 +44,7 @@ function agregarAFavoritos(){
 		}
 		
 		objAH=new AjaxHelper(updateAgregarAFavoritos);
+        objAH.showOverlay       = true;
 		objAH.debug= true;
 		objAH.url= 'opac-privateshelfsDB.pl';
 		objAH.datosArray= array;
@@ -86,6 +88,7 @@ function borrarDeFavoritos(){
 		}
 		
 		objAH=new AjaxHelper(updateAgregarAFavoritos);
+        objAH.showOverlay       = true;
 		objAH.debug= true;
 		objAH.url= 'opac-privateshelfsDB.pl';
 		objAH.datosArray= array;
@@ -98,6 +101,7 @@ function borrarDeFavoritos(){
 
 function obtenerFavoritos(){
     objAH=new AjaxHelper(updateObtenerFavoritos);
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.url='/cgi-bin/koha/opac-favoritosDB.pl';
     objAH.debug= true;
@@ -117,6 +121,7 @@ function eliminarFavorito(id_favorito){
     jConfirm(FAVORITE_CONFIRM_DELETE, CATALOGO_TITLE, function(confirmStatus){
         if (confirmStatus){
             objAH=new AjaxHelper(updateEliminarFavorito);
+            objAH.showOverlay       = true;
             objAH.debug= true;
             objAH.url='/cgi-bin/koha/opac-favoritosDB.pl';
             objAH.debug= true;

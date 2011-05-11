@@ -79,6 +79,7 @@ function changePage(ini){
 
 function actualizarPersonas(cant,arrayPersonNumbers){
 	objAH=new AjaxHelper(updateInfoActualizar);
+    objAH.showOverlay       = true;
 	objAH.url= "/cgi-bin/koha/usuarios/potenciales/usuariosPotencialesDB.pl";
 	objAH.debug= true;
 	objAH.cantidad= cant;
@@ -98,6 +99,7 @@ function updateInfoActualizar(responseText){
 
 function buscarUsuariosPotenciales(){
     objAH=new AjaxHelper(updateInfo);
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.url= "/cgi-bin/koha/usuarios/potenciales/buscarUsuarioResult.pl";
     objAH.funcion= "changePage";

@@ -30,6 +30,7 @@ function changePage(ini){
 function consultar(){
 	objAH=new AjaxHelper(updateConsultar);
     objAH.debug= true;
+    objAH.showOverlay       = true;
 	objAH.fechaIni= $.trim($('#fechaIni').val());
 	objAH.fechaFin= $.trim($('#fechaFin').val());
 	objAH.socio= $('#socios').val();
