@@ -14,7 +14,7 @@ package C4::AR::Authldap;
     En este modulo se centraliza todo lo relacionado a la authenticacion del usuario contra un ldap.
     Sirve tanto para utilizar el esquema propio de Meran como para autenticarse contra un dominio
 
-=head1 VARIABLES DEL meran.conf necesarias
+=head1 VARIABLES DEL meran.conf necesarias. ESTAN EN LA BASE.
 
     Hay algunas variables que se deben configurar para controlar el funcionamiento de este modulo:
     
@@ -41,41 +41,104 @@ use Net::LDAP::LDIF;
 use Net::LDAP::Util qw(ldap_error_text);
 use Net::LDAP::Constant qw(LDAP_EXTENSION_START_TLS);
 use C4::AR::Preferencias;
+use C4::Modelo::PrefLdap;
+use C4::Modelo::PrefLdap::Manager;
 use vars qw(@ISA @EXPORT_OK );
 @ISA = qw(Exporter);
-@EXPORT_OK = qw(checkpwldap getldappassword checkpwDC);
+@EXPORT_OK = qw(
+    &getLdapPreferences
+    &setVariableLdap
+    &checkpwldap 
+    &getldappassword 
+    &checkpwDC
+    &_getValorPreferenciaLdap
+    &datosUsuario
+    &_conectarLDAP
+);
 
-=item sub datosUsuario
 
+
+=item
+    setVariableLdap, esta funcion setea las variables de preferencias_ldap
+=cut
+sub setVariableLdap {
+    my ($variable, $valor, $db) = @_;
+    my  $preferencia;
+    
+    $preferencia = C4::Modelo::PrefLdap::Manager->get_pref_ldap( query => [variable => {eq => $variable}] );
+    
+    if(scalar(@$preferencia) > 0){
+        $preferencia->[0]->setValue($valor);
+        $preferencia->[0]->save();
+    }
+}
+
+=item
+    Esta funcion devuelve en una HASH todas las preferencias_ldap
+=cut
+sub getLdapPreferences{
+
+    my $preferencias_array_ref = C4::Modelo::PrefLdap::Manager->get_pref_ldap();
+    my %hash;
+    foreach my $pref (@$preferencias_array_ref){
+        $hash{$pref->getVariable} = $pref->getValue();
+    }
+
+    return (\%hash);
+}
+
+
+=item
+    Esta funcion devuelve el valor de la preferencia 'variable' recibida como parametro
+=cut
+sub _getValorPreferenciaLdap{
+
+    my ($variable)              = @_;
+    my $preferencia_ldap_array_ref   = C4::Modelo::PrefLdap::Manager->get_pref_ldap( query => [ variable => { eq => $variable} ]);
+
+    if ($preferencia_ldap_array_ref->[0]){
+        return ($preferencia_ldap_array_ref->[0]->getValue);
+    } else{
+        return 0;
+    }
+}
+
+=item 
     Esa funcion devuelve un objeto socio a partir de los datos que estan en la base de Meran una vez que fue autenticado por el ldap,
-en caso de no existir en la base de MERAN lo agrega a la misma siempre y cuando la variable agregarDesdeLDAP este habilitada.
+    en caso de no existir en la base de MERAN lo agrega a la misma siempre y cuando la variable agregarDesdeLDAP este habilitada.
     Si no existe en la base y la variable esta en 0 devuelve 0. 
     
     Recibe el userid y un ldap con el bind ya realizado.
 =cut
 
 sub datosUsuario{
-    my ($userid,$ldap) = @_;
-    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+    my ($userid,$ldap)  = @_;
+    my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 
     if ($socio) { 
         return $socio;
     }
     else {
-        #DATOS OBLIGATORIOS PARA CREAR UN NUEVO SOCIO
+        # DATOS OBLIGATORIOS PARA CREAR UN NUEVO SOCIO
         # nro_socio , id_ui, cod_categoria, change_password (dejala en 0), id_estado (uno de UsrEstado), is_super_user 
 
-        #FIXME hay que agregar esta preferencia que ahora no se puede por algo q rompio MONO
-        my $agregar=C4::AR::Preferencias::getValorPreferencia("agregarDesdeLDAP")||0;
-        if ($agregar){
-                my $LDAP_SUF= C4::Context->config("ldapsuf");
-                my $LDAP_PREF=C4::Context->config("ldappref");
-                my $LDAP_FILTER = $LDAP_PREF.'='.$userid;
-                my $entries = $ldap->search(
-                    base   => $LDAP_SUF,
-                    filter => "($LDAP_FILTER)"
-                );
-                my $entry =$entries->entry(0);
+        my $preferencias_ldap   = getLdapPreferences();
+        
+#        my $agregar_ldap        = _getValorPreferenciaLdap("ldap_agregar_user")||0;
+
+        my $agregar_ldap        = $preferencias_ldap->{'ldap_agregar_user'}||0;
+        
+        if ($agregar_ldap){
+        #               asi estaba: my $LDAP_PREF       = C4::Context->config("ldappref");
+        
+                my $LDAP_DB_PREF    = $preferencias_ldap->{'ldap_prefijo_base'};
+                my $LDAP_U_PREF     = $preferencias_ldap->{'ldap_user_prefijo'};
+                my $LDAP_FILTER     = $LDAP_U_PREF.'='.$userid;
+                my $entries         = $ldap->search(
+                        base   => $LDAP_DB_PREF,
+                        filter => "($LDAP_FILTER)"
+                );  
+                my $entry           = $entries->entry(0);
 
                 if ($entry){
                     $socio = C4::AR::Usuarios::crearPersonaLDAP($userid);
@@ -88,26 +151,30 @@ sub datosUsuario{
         return $socio;
 }
 
-=item sub _conectarLDAP
-
+=item 
     Funcion interna al modulo q se conecta al sevidor LDAP y devuelve un objeto Net::LDAP o NET::LDAPS de acuerdo a las configuraciones del meran.conf 
- 
 =cut
-
-
-
 sub _conectarLDAP{
-    my $LDAP_SERVER= C4::Context->config("ldapserver");
-    my $LDAP_PORT= C4::Context->config("ldapport")||389;
-    my $LDAP_TYPE=C4::Context->config("ldaptype");
+
+    my $preferencias_ldap   = getLdapPreferences();
+    
+    my $LDAP_SERVER = $preferencias_ldap->{'ldap_server'};
+    my $LDAP_PORT   = $preferencias_ldap->{'ldap_port'};
+    my $LDAP_TYPE   = $preferencias_ldap->{'ldap_type'};
+
+# asi estaba:
+#    my $LDAP_SERVER = C4::Context->config("ldapserver");
+#    my $LDAP_PORT= C4::Context->config("ldapport")||389;
+#    my $LDAP_TYPE=C4::Context->config("ldaptype");
+
     my $ldap;
     if ($LDAP_TYPE ne 'SSL'){
         $ldap = Net::LDAP->new($LDAP_SERVER, port => $LDAP_PORT) or die "Coult not create LDAP object because:\n$!";
         if ($LDAP_TYPE eq 'TLS') {
-            my $dse = $ldap->root_dse();
-            my $doesSupportTLS = $dse->supported_extension(LDAP_EXTENSION_START_TLS);
+            my $dse             = $ldap->root_dse();
+            my $doesSupportTLS  = $dse->supported_extension(LDAP_EXTENSION_START_TLS);
             C4::AR::Debug::debug("Authldap =>Server does not support TLS\n") unless($doesSupportTLS);
-            my $startTLSMsg = $ldap->start_tls();
+            my $startTLSMsg     = $ldap->start_tls();
             C4::AR::Debug::debug("Authldap =>".$startTLSMsg->error) if $startTLSMsg->is_error;
         } 
     }
@@ -118,69 +185,76 @@ sub _conectarLDAP{
 }
 
 
-=item sub checkpwDC
-
+=item 
     Funcion que recibe un userid y un password e intenta autenticarse ante un ldap, si lo logra devuelve un objeto Socio.
- 
 =cut
+sub checkpwDC{
 
-sub checkpwDC
-{
     my ($userid, $password) = @_;
-    my $LDAP_SUF= C4::Context->config("ldapsuf");
-    my $LDAP_PREF=C4::Context->config("ldappref");
-    my $userDN = $LDAP_PREF.'='.$userid.','.$LDAP_SUF;
-    my $ldap=_conectarLDAP();
-    my $ldapMsg = $ldap->bind($userDN, password => $password);
+    
+    my $preferencias_ldap   = getLdapPreferences();
+    
+    my $LDAP_DB_PREF    = $preferencias_ldap->{'ldap_prefijo_base'};
+    my $LDAP_U_PREF     = $preferencias_ldap->{'ldap_user_prefijo'};
+    
+# asi estaba:    
+#    my $LDAP_SUF    = C4::Context->config("ldapsuf");
+#    my $LDAP_PREF   = C4::Context->config("ldappref");
+    my $userDN      = $LDAP_U_PREF.'='.$userid.','.$LDAP_DB_PREF;
+    my $ldap        =_conectarLDAP();
+    my $ldapMsg     = $ldap->bind($userDN, password => $password);
     C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->error );
-    my $socio=0;
+    my $socio       = 0;
     if (!$ldapMsg->code()) {
-            $socio=datosUsuario($userid,$ldap);
+            $socio = datosUsuario($userid,$ldap);
     }
     $ldap->unbind;
     return $socio;
-
 }
 
 
 =item sub checkpwldap
-
-    Funcion que recibe un userid un nroRandom y un password e intenta validarlo ante un ldap utilizando el mecanismo interno de Meran, si lo logra devuelve un objeto Socio.
- 
+    Funcion que recibe un userid un nroRandom y un password e intenta validarlo ante un ldap utilizando el mecanismo interno de Meran, si lo    logra devuelve un objeto Socio.
 =cut
-
 sub checkpwldap{
     my ($userid, $passwordCliente, $random_number) = @_;
-    my $LDAP_SUF= C4::Context->config("ldapsuf");
-    my $LDAP_PREF=C4::Context->config("ldapref");
-    my $LDAP_ROOT= C4::Context->config("ldaproot");
-    my $LDAP_PASS= C4::Context->config("ldappass");
-    my $LDAP_FILTER = $LDAP_PREF.'='.$userid;
+    
+    my $preferencias_ldap   = getLdapPreferences();
+    
+    my $LDAP_DB_PREF    = $preferencias_ldap->{'ldap_prefijo_base'};
+    my $LDAP_U_PREF     = $preferencias_ldap->{'ldap_user_prefijo'};
+    my $LDAP_ROOT       = $preferencias_ldap->{'ldap_bind_dn'};
+    my $LDAP_PASS       = $preferencias_ldap->{'ldap_bind_pw'};
+  
+# asi estaba:  
+#    my $LDAP_SUF    = C4::Context->config("ldapsuf");
+#    my $LDAP_PREF   = C4::Context->config("ldapref");
+#    my $LDAP_ROOT   = C4::Context->config("ldaproot");
+#    my $LDAP_PASS   = C4::Context->config("ldappass");
+    my $LDAP_FILTER = $LDAP_U_PREF.'='.$userid;
     my $passwordLDAP;
-    my $ldap=_conectarLDAP();
-    my $ldapMsg = $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
+    my $ldap        = _conectarLDAP();
+    my $ldapMsg     = $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
     C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->code() );
-    my $socio=0;
+    my $socio = 0;
     if (!$ldapMsg->code()) {
         my $entries = $ldap->search(
-            base   => $LDAP_SUF,
+            base   => $LDAP_DB_PREF,
             filter => "($LDAP_FILTER)"
         );
         my $entry;
-        my $entry =$entries->entry(0);
-        $passwordLDAP = $entry->get_value("userPassword");
+        my $entry       = $entries->entry(0);
+        $passwordLDAP   = $entry->get_value("userPassword");
         #FIXME
-        my $metodo= C4::AR::Auth::getMetodoEncriptacion();
-        $passwordLDAP= hashear_password($passwordLDAP.$random_number,$metodo);
+        my $metodo      = C4::AR::Auth::getMetodoEncriptacion();
+        $passwordLDAP   = hashear_password($passwordLDAP.$random_number,$metodo);
         if (($passwordLDAP eq $passwordCliente)){
-            $socio=datosUsuario($userid,$ldap);
+            $socio = datosUsuario($userid,$ldap);
         }
         $ldap->unbind;
     }
     return $socio;
 }
-
-
 
 END { }       # module clean-up code here (global destructor)
 1;
