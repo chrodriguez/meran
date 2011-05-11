@@ -868,7 +868,6 @@ sub esRegular {
 =cut
 sub needsDataValidation {
     my ($nro_socio) = @_;
-
     if ($nro_socio){
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                    query => [ nro_socio => { eq => $nro_socio } ],
@@ -876,7 +875,7 @@ sub needsDataValidation {
                                        );
         if($socio_array_ref){
             my $socio = $socio_array_ref->[0];
-
+       
             return ( $socio->needsValidation());
         }else{
             return 0;
