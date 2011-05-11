@@ -1792,6 +1792,12 @@ sub getEstructuraCatalogacionById{
 sub getLiblibrarian{
     my ($campo, $subcampo, $itemtype) = @_;
 
+    my $conf_visualizacion = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype);
+
+    if($conf_visualizacion){
+        return $conf_visualizacion->getVistaIntra();
+    }
+
     #primero busca en estructura_catalogacion
     my $estructura_array = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype);
 

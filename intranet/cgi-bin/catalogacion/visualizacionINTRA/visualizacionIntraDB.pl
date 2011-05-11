@@ -73,8 +73,8 @@ else{
                             debug => 1,
         });
 
-        my ($messages) = C4::AR::VisualizacionIntra::addConfiguracion($obj);
-        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracion($ejemplar);
+        my ($messages)                  = C4::AR::VisualizacionIntra::addConfiguracion($obj);
+        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getConfiguracion($ejemplar);
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }

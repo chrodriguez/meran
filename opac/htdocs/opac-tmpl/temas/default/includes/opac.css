@@ -34,7 +34,7 @@ body textarea:focus{
 .main {clear:both; width:100%; padding-bottom:30px; margin-top: 2%;}
 .main-navigation {display:inline /*Fix IE floating margin bug*/; /*float:left;*/ width:200px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 .main-content {display:inline; /*Fix IE floating margin bug*/; float:left; width:80%; margin:0 0 0 2%; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
-.main-subcontent {display:inline /*Fix IE floating margin bug*/; float:right; width:185px; margin:0 15px 0 0; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+.main-subcontent {display:inline /*Fix IE floating margin bug*/; float:right; /*width:185px;*/ margin:0 15px 0 0; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 .footer {clear:both; width:100%; height:3.7em; padding:1.1em 0 0; background:rgb(225,225,225) url(../imagenes/bg_foot.jpg) repeat; font-size:1.0em; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 
 /* --- For alternative headers START PASTE here --- */
@@ -271,6 +271,10 @@ div.pagination span.disabled {
     margin-right: 4%;
 }
 
+li.detalle_barra_circulacion{
+    float: right;
+}
+
 .review{
     background: Wheat;
     float: left;
@@ -484,7 +488,7 @@ div.pagination span.disabled {
 p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,80,80); font-size:110%;}
 
 .main-content ul {list-style:none; margin:0.5em 0 1.0em 0;}
-.main-content ul li {margin:0 0 0.2em 2px; padding:0 0 0 12px; background:url(../imagenes/bg_bullet_full_1.gif) no-repeat 0 0.5em; line-height:1.4em; font-size:120%;}
+.main-content ul li {margin:0 0 0.2em 2px; padding:0 0 0 12px; /*background:url(../imagenes/bg_bullet_full_1.gif) no-repeat 0 0.5em;*/ line-height:1.4em; font-size:120%;}
 .main-content ol {margin:0.5em 0 1.0em 20px !important /*Non-IE6*/; margin:0.5em 0 1.0em 25px /*IE6*/;}
 .main-content ol li {list-style-position:outside; margin:0 0 0.2em 0; line-height:1.4em; font-size:120%;}
 
@@ -512,7 +516,7 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .main-subcontent p.right {text-align:right;}
 
 .main-subcontent ul {list-style:none; margin:0.5em 10px 1.0em 10px;}
-.main-subcontent ul li {margin:5px 0 0.2em 2px; padding:0 0 0 11px; background:url(../imagenes/bg_bullet_full_1.gif) no-repeat 0 0.4em; line-height:1.2em; font-size:110%;}
+.main-subcontent ul li {margin:5px 0 0.2em 2px; padding:0 0 0 11px; /*background:url(../imagenes/bg_bullet_full_1.gif) no-repeat 0 0.4em;*/ line-height:1.2em; font-size:110%;}
 .main-subcontent ol {margin:0.5em 10px 1.0em 30px !important /*Non-IE6*/; margin:0.5em 10px 1.0em 35px /*IE6*/;}
 .main-subcontent ol li {list-style-position:outside; margin:0 0 0.4em 0; font-size:110%;}
 

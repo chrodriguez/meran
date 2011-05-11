@@ -37,7 +37,7 @@ sub getConfiguracion{
                                     id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
                 );
 
-    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
+    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('campo, subcampo'),);
 
     return ($configuracion);
 }

@@ -60,6 +60,3 @@
 [% ELSE %]
     <h1> [% 'Ud. no tiene registrado ning&uacute;n pr&eacute;stamo.' | i18n %] </h1>
 [% END %]
-<a class="click" onClick="volverDesdeHistorial()">
-    [% "Volver" | i18n %]
-</a>

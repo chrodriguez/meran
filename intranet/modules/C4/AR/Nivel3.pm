@@ -452,10 +452,10 @@ sub detalleCompletoINTRA{
 		push(@nivel2, $hash_nivel2);
 	}
 
-	$t_params->{'nivel1'}   = $nivel1->toMARC_Intra,
-	$t_params->{'id1'}	    = $id1;
-    $t_params->{'cantItemN1'} = &C4::AR::Nivel3::cantNiveles3FromId1($id1);
-	$t_params->{'nivel2'}   = \@nivel2,
+	$t_params->{'nivel1'}       = $nivel1->toMARC_Intra,
+	$t_params->{'id1'}	        = $id1;
+    $t_params->{'cantItemN1'}   = &C4::AR::Nivel3::cantNiveles3FromId1($id1);
+	$t_params->{'nivel2'}       = \@nivel2,
 	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
 	$t_params->{'circularDesdeDetalleDelRegistro'}  = C4::AR::Preferencias::getValorPreferencia('circularDesdeDetalleDelRegistro');
 }

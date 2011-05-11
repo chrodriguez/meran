@@ -1171,6 +1171,10 @@ li {
 	width: 90%;
 }
 
+.botones_detalle_nivel1 {
+    margin-bottom: 5px;
+}
+
 .guardarMARC {
 	display: block;
 	float: right;
@@ -1323,6 +1327,7 @@ fieldset.main {
 
 ul.listado_sin_margen {
 	padding-left: 0px;
+    clear: both;
 }
 
 .listado_sin_margen li {
