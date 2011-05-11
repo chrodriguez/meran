@@ -14,21 +14,6 @@ package C4::AR::Authldap;
     En este modulo se centraliza todo lo relacionado a la authenticacion del usuario contra un ldap.
     Sirve tanto para utilizar el esquema propio de Meran como para autenticarse contra un dominio
 
-=head1 VARIABLES DEL meran.conf necesarias. ESTAN EN LA BASE.
-
-    Hay algunas variables que se deben configurar para controlar el funcionamiento de este modulo:
-    
-  ok  agregarDesdeLDAP: Esta variable indica si hay q agregar automaticamente a la base de Meran a un usuario valido en el ldap cuando se autentica positivamente.
-  ok  ldapsuf: Sufijo de la Base de Datos Ldap que se usa para completar el usuario. Ej: dc=unlp,dc=edu,dc=ar
-  ok  ldappref: Prefijo que va antes del identificador del usuario, ej uid. Esto se completara luego con el userid y el sufijo
-  ok  ldapserver:Server del ldap que se va a usar, ej:localhost.
-  ok  ldapport: Puerto del server ldap, por defecto si no esta definido es el 389.
-  ok  ldaptype: Indica como sera la comunicacion, SSL, TLS o PLAIN, por defecto es PLAIN
-  ok  ldaproot: Usuario de busqueda en el ldap, solo se usa cuando se utiliza authMERAN
-  ok  ldappass: password del usuario de busqueda del ldap
-
-=head1 FUNCTIONS
-
 =over 2
 
 =cut
