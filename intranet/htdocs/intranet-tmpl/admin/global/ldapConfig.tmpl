@@ -37,7 +37,11 @@
                 print C4::AR::Filtros::setHelpIcon(text => "[% 'Indica como sera la comunicacion, SSL, TLS o PLAIN, por defecto es PLAIN.' | i18n %]",);
             [% END %]
         </label> 
-        <input name="host_type" size="10" value="[% preferencias.ldap_type %]" type="text">
+        <select name="host_type">
+            <option value="TLS" [% IF preferencias.ldap_type == 'TLS' %] selected="selected" [% END %]>TLS</option>
+            <option value="SSL" [% IF preferencias.ldap_type == 'SSL' %] selected="selected" [% END %]>SSL</option>
+            <option value="PLAIN" [% IF preferencias.ldap_type == 'PLAIN' %] selected="selected" [% END %]>PLAIN</option>
+        </select>
     </li>
     <li class="sub_item">
         <label>[% "Versi&oacute;n" | i18n %]
@@ -74,7 +78,10 @@
                 print C4::AR::Filtros::setHelpIcon(text => "[% 'Indica si se agrega automaticamente a la base de MERAN un usuario valido en el LDAP cuando se autentica positivamente. 0 o 1.' | i18n %]",);
             [% END %]
         </label> 
-        <input name="agregar_user_ldap" id="bind_dn" size="30" value="[% preferencias.ldap_agregar_user %]" type="text"> 
+        <select name="agregar_user_ldap">
+            <option value="0" [% IF preferencias.ldap_agregar_user == 0 %] selected="selected" [% END %]>No</option>
+            <option value="1" [% IF preferencias.ldap_agregar_user == 1 %] selected="selected" [% END %]>Si</option>
+        </select>
     </li>
     <li class="sub_item">
         <label>[% "Ocultar contrase&ntilde;as" | i18n %]

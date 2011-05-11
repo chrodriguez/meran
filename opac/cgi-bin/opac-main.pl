@@ -27,4 +27,6 @@ $t_params->{'cantidad'}         = $cantidad_novedades;
 $t_params->{'novedades'}        = $novedades;
 $t_params->{'partial_template'} = "opac-content_data.inc";
 
+
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
