@@ -1,5 +1,5 @@
 var objAH;
-
+var fromDetail = false;
 //*
 /*
  * objeto_usuario
@@ -99,3 +99,67 @@ function detalleUsuario(){
 function updateDetalleUsuario(responseText){
     $('#detalleUsuario').html(responseText);
 }
+
+function habilitar(){
+	var checks=$("#result input[@type='checkbox']:checked");
+	var array=checks.get();
+	var theStatus="";
+	var personNumbers=new Array();
+	var cant=checks.length;
+	var accion=$("#accion").val();
+	if (cant>0){
+		theStatus= UD_ESTA_A_PUNTO + accion + A_LOS_PROPIETARIOS; 
+	
+		for(i=0;i<checks.length;i++){
+			theStatus=theStatus+ TARJETA_NRO + array[i].value+"\n";
+			personNumbers[i]=array[i].name;
+		}
+
+		theStatus=theStatus + ESTA_SEGURO;
+		if (cant>0){
+			if (confirm (theStatus)){actualizarPersonas(cant,personNumbers);}
+		}
+	}
+	else{ alert (NO_SE_SELECCIONO_NINGUN_USUARIO);}
+}	
+
+function habilitarDesdeDetalle(nro_socio){
+	var personas_array = new Array();
+	personas_array[0] = nro_socio;
+	actualizarPersonas(1,personas_array);
+}
+
+function actualizarPersonas(cant,arrayPersonNumbers){
+	objAH=new AjaxHelper(updateInfoActualizar);
+	objAH.url= "/cgi-bin/koha/usuarios/potenciales/usuariosPotencialesDB.pl";
+	objAH.debug= true;
+	objAH.cantidad= cant;
+	var tipoAccion = "HABILITAR_PERSON";
+
+	try{
+		if ($("#accion").val())
+			tipoAccion = $("#accion").val();
+		else
+			fromDetail = true;
+	}
+	catch (e){}
+
+	objAH.tipoAccion= tipoAccion;
+	objAH.id_personas= arrayPersonNumbers;
+	objAH.funcion= "changePage";
+	objAH.sendToServer();
+}
+
+function updateInfoActualizar(responseText){
+
+ 	var Messages=JSONstring.toObject(responseText);
+
+ 	setMessages(Messages);
+	
+	if (!fromDetail)
+		buscarUsuariosPotenciales();
+}
+
+
+
+

@@ -170,7 +170,7 @@ function updateEliminarUsuario(responseText){
 	setMessages(Messages);
 	if (!(hayError(Messages))){
 // FIXME esta feo
-		window.location.href = "/cgi-bin/koha/usuarios/reales/buscarUsuario.pl?token="+token;
+		window.location.href = "/cgi-bin/koha/usuarios/potenciales/buscarUsuario.pl?token="+token;
 	}
 }
 
