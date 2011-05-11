@@ -7,7 +7,7 @@ cd /usr/share/meran/docs/dependenciasInstalacion/
 cp ../configuracion/git/config ../../.git/
 
 #Instalar dependencias
-sh dependenciasKOHA.sh
+sh dependenciasMERAN.sh
 
 #Configurar apache
 cp ../configuracion/apache/* /etc/apache2/sites-available/

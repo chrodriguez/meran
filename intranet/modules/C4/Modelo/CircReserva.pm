@@ -184,8 +184,8 @@ Funcion que agrega una reserva
 =cut
 
 sub agregar {
-    my ($self)=shift;
-    my ($data_hash)=@_;
+    my ($self)      = shift;
+    my ($data_hash) = @_;
     #Asignando data...
     $self->setId3($data_hash->{'id3'}||undef);
     $self->setId2($data_hash->{'id2'});
@@ -197,10 +197,12 @@ sub agregar {
     $self->save();
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
-   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
-   $data_hash->{'tipo'}= 'reserva';
-   $data_hash->{'hasta'}= $data_hash->{'fecha_recordatorio'};
-   $historial_circulacion->agregar($data_hash);
+    my $dateformat                  = C4::Date::get_date_format();
+    my ($historial_circulacion)     = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
+    $data_hash->{'tipo'}            = 'reserva';
+    $data_hash->{'hasta'}           = C4::Date::format_date($data_hash->{'fecha_recordatorio'}, $dateformat);
+
+    $historial_circulacion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 
 }
@@ -227,30 +229,37 @@ sub reservar {
 	}
 
 	#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
-	my $numeroDias= C4::AR::Preferencias::getValorPreferencia("reserveItem");
-	my ($desde,$hasta,$apertura,$cierre)= C4::Date::proximosHabiles($numeroDias,1);
+	my $numeroDias                          = C4::AR::Preferencias::getValorPreferencia("reserveItem");
+	my ($desde,$hasta,$apertura,$cierre)    = C4::Date::proximosHabiles($numeroDias,1);
+    C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde => ".$desde);
+    C4::AR::Debug::debug("C4::AR::CircReserva => reservar => hasta => ".$hasta);
 
 	my %paramsReserva;
-	$paramsReserva{'id1'}= $params->{'id1'};
-	$paramsReserva{'id2'}= $params->{'id2'};
-	$paramsReserva{'id3'}= $id3;
-	$paramsReserva{'nro_socio'}= $params->{'nro_socio'};
-	$paramsReserva{'loggedinuser'}= $params->{'loggedinuser'};
-	$paramsReserva{'responsable'}= $params->{'loggedinuser'};
-	$paramsReserva{'fecha_reserva'}= $desde;
-	$paramsReserva{'fecha_recordatorio'}= $hasta;
-	$paramsReserva{'id_ui'}= C4::AR::Preferencias::getValorPreferencia("defaultUI");
-	$paramsReserva{'estado'}= ($id3 ne '')?'E':'G';
-	$paramsReserva{'hasta'}= C4::Date::format_date($hasta,$dateformat);
-	$paramsReserva{'desde'}= C4::Date::format_date($desde,$dateformat);
-	$paramsReserva{'desdeh'}= $apertura;
-	$paramsReserva{'hastah'}= $cierre;
-	$paramsReserva{'tipo_prestamo'}= $params->{'tipo_prestamo'};
+	$paramsReserva{'id1'}                   = $params->{'id1'};
+	$paramsReserva{'id2'}                   = $params->{'id2'};
+	$paramsReserva{'id3'}                   = $id3;
+	$paramsReserva{'nro_socio'}             = $params->{'nro_socio'};
+	$paramsReserva{'loggedinuser'}          = $params->{'loggedinuser'};
+	$paramsReserva{'responsable'}           = $params->{'loggedinuser'};
+	$paramsReserva{'fecha_reserva'}         = $desde;
+	$paramsReserva{'fecha_recordatorio'}    = $hasta;
+	$paramsReserva{'id_ui'}                 = C4::AR::Preferencias::getValorPreferencia("defaultUI");
+	$paramsReserva{'estado'}                = ($id3 ne '')?'E':'G';
+	$paramsReserva{'hasta'}                 = C4::Date::format_date($hasta,$dateformat);
+C4::AR::Debug::debug("C4::AR::CircReserva => reservar => hasta hash => ".$paramsReserva{'hasta'});
+	$paramsReserva{'desde'}                 = C4::Date::format_date($desde,$dateformat);
+C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash => ".$paramsReserva{'desde'});
+	$paramsReserva{'desdeh'}                = $apertura;
+	$paramsReserva{'hastah'}                = $cierre;
+	$paramsReserva{'tipo_prestamo'}         = $params->{'tipo_prestamo'};
 
 
-$self->debug("RESERVA: estado: ".$paramsReserva{'estado'}." id_ui: ".	$paramsReserva{'id_ui'});
+    $self->debug("RESERVA: estado: ".$paramsReserva{'estado'}." id_ui: ".	$paramsReserva{'id_ui'});
 
 	$self->agregar(\%paramsReserva);
+
+C4::AR::Debug::debug("C4::AR::CircReserva => reservar => hasta hash2 => ".$paramsReserva{'hasta'});
+C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$paramsReserva{'desde'});
 	
 	$paramsReserva{'id_reserva'}= $self->getId_reserva;
 
@@ -258,22 +267,24 @@ $self->debug("RESERVA: estado: ".$paramsReserva{'estado'}." id_ui: ".	$paramsRes
 	#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
 	#al ultimo dia que tiene el usuario para ir a retirar el libro
 		my $err= "Error con la fecha";
-		my $startdate= C4::Date::proximoHabil(1,0,$hasta);
-		$startdate= C4::Date::format_date_in_iso($startdate,$dateformat);
-		my $daysOfSanctions= C4::AR::Preferencias::getValorPreferencia("daysOfSanctionReserves");
-		my $enddate= C4::Date::proximoHabil($daysOfSanctions,0,$startdate);
-		$enddate= C4::Date::format_date_in_iso($enddate,$dateformat);
-		my  $sancion = C4::Modelo::CircSancion->new(db => $self->db);
+		my $startdate           = C4::Date::proximoHabil(1,0,$hasta);
+		$startdate              = C4::Date::format_date_in_iso($startdate,$dateformat);
+		my $daysOfSanctions     = C4::AR::Preferencias::getValorPreferencia("daysOfSanctionReserves");
+		my $enddate             = C4::Date::proximoHabil($daysOfSanctions,0,$startdate);
+		$enddate                = C4::Date::format_date_in_iso($enddate,$dateformat);
+		my  $sancion            = C4::Modelo::CircSancion->new(db => $self->db);
 		my %paramsSancion;
-		$paramsSancion{'loggedinuser'}= $params->{'loggedinuser'};
-		$paramsSancion{'tipo_sancion'}= undef;
-		$paramsSancion{'id_reserva'}= $self->getId_reserva;
-		$paramsSancion{'nro_socio'}= $params->{'nro_socio'};
-		$paramsSancion{'fecha_comienzo'}= $startdate;
-		$paramsSancion{'fecha_final'}= $enddate;
-		$paramsSancion{'dias_sancion'}= undef;
+		$paramsSancion{'loggedinuser'}      = $params->{'loggedinuser'};
+		$paramsSancion{'tipo_sancion'}      = undef;
+		$paramsSancion{'id_reserva'}        = $self->getId_reserva;
+		$paramsSancion{'nro_socio'}         = $params->{'nro_socio'};
+		$paramsSancion{'fecha_comienzo'}    = $startdate;
+		$paramsSancion{'fecha_final'}       = $enddate;
+		$paramsSancion{'dias_sancion'}      = undef;
+
 		$sancion->insertar_sancion(\%paramsSancion);
 	}
+
 	return (\%paramsReserva);
 }
 

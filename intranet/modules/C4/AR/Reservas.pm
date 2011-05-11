@@ -961,11 +961,13 @@ sub t_reservarOPAC {
             C4::AR::Debug::debug("SE RESERVO CON EXITO UN EJEMPLAR!!! codMsg: U302");
             #SE RESERVO CON EXITO UN EJEMPLAR
                 $msg_object->{'error'} = 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [    $paramsReserva->{'desde'},
-                                                    $paramsReserva->{'desdeh'},
-                                                    $paramsReserva->{'hasta'},
-                                                    $paramsReserva->{'hastah'}
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [    
+                                                                                        $paramsReserva->{'desde'},
+                                                                                        $paramsReserva->{'desdeh'},
+                                                                                        $paramsReserva->{'hasta'},
+                                                                                        $paramsReserva->{'hastah'}
                                 ]} ) ;
+
             }else{
             #SE REALIZO UN RESERVA DE GRUPO
                 C4::AR::Debug::debug("SE REALIZO UN RESERVA DE GRUPO codMsg: U303");
@@ -975,7 +977,6 @@ sub t_reservarOPAC {
             }
             #Se agrega la reserva al historial
             C4::AR::Reservas::agregarReservaAHistorial($reserva);
-               
         };
 
         if ($@){
