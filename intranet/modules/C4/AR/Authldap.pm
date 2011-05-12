@@ -1,21 +1,12 @@
 package C4::AR::Authldap;
 
-
 =head1 NAME
-
   C4::AR::Authldap 
-
 =head1 SYNOPSIS
-
   use C4::AR::Authldap;
-
 =head1 DESCRIPTION
-
     En este modulo se centraliza todo lo relacionado a la authenticacion del usuario contra un ldap.
-    Sirve tanto para utilizar el esquema propio de Meran como para autenticarse contra un dominio
-
-=over 2
-
+    Sirve tanto para utilizar el esquema propio de Meran como para autenticarse contra un dominio.
 =cut
 
 require Exporter;
@@ -41,10 +32,8 @@ use vars qw(@ISA @EXPORT_OK );
     &_conectarLDAP
 );
 
-
-
 =item
-    setVariableLdap, esta funcion setea las variables de preferencias_ldap
+    setVariableLdap, esta funcion setea una variable en pref_ldap
 =cut
 sub setVariableLdap {
     my ($variable, $valor, $db) = @_;
@@ -59,7 +48,7 @@ sub setVariableLdap {
 }
 
 =item
-    Esta funcion devuelve en una HASH todas las preferencias_ldap
+    Esta funcion devuelve en una HASH todas las variables de pref_ldap
 =cut
 sub getLdapPreferences{
 
@@ -71,7 +60,6 @@ sub getLdapPreferences{
 
     return (\%hash);
 }
-
 
 =item
     Esta funcion devuelve el valor de la preferencia 'variable' recibida como parametro
@@ -95,7 +83,6 @@ sub _getValorPreferenciaLdap{
     
     Recibe el userid y un ldap con el bind ya realizado.
 =cut
-
 sub datosUsuario{
     my ($userid,$ldap)  = @_;
     my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
@@ -114,6 +101,7 @@ sub datosUsuario{
         my $agregar_ldap        = $preferencias_ldap->{'ldap_agregar_user'}||0;
         
         if ($agregar_ldap){
+        
         #               asi estaba: my $LDAP_PREF       = C4::Context->config("ldappref");
         
                 my $LDAP_DB_PREF    = $preferencias_ldap->{'ldap_prefijo_base'};
@@ -137,7 +125,7 @@ sub datosUsuario{
 }
 
 =item 
-    Funcion interna al modulo q se conecta al sevidor LDAP y devuelve un objeto Net::LDAP o NET::LDAPS de acuerdo a las configuraciones del meran.conf 
+    Funcion interna al modulo q se conecta al sevidor LDAP y devuelve un objeto Net::LDAP o NET::LDAPS de acuerdo a la configuracion.
 =cut
 sub _conectarLDAP{
 
@@ -169,7 +157,6 @@ sub _conectarLDAP{
     return $ldap;
 }
 
-
 =item 
     Funcion que recibe un userid y un password e intenta autenticarse ante un ldap, si lo logra devuelve un objeto Socio.
 =cut
@@ -185,6 +172,7 @@ sub checkpwDC{
 # asi estaba:    
 #    my $LDAP_SUF    = C4::Context->config("ldapsuf");
 #    my $LDAP_PREF   = C4::Context->config("ldappref");
+
     my $userDN      = $LDAP_U_PREF.'='.$userid.','.$LDAP_DB_PREF;
     my $ldap        =_conectarLDAP();
     my $ldapMsg     = $ldap->bind($userDN, password => $password);
@@ -197,9 +185,8 @@ sub checkpwDC{
     return $socio;
 }
 
-
-=item sub checkpwldap
-    Funcion que recibe un userid un nroRandom y un password e intenta validarlo ante un ldap utilizando el mecanismo interno de Meran, si lo    logra devuelve un objeto Socio.
+=item
+    Funcion que recibe un userid, un nroRandom y un password e intenta validarlo ante un ldap utilizando el mecanismo interno de Meran, si      lo logra devuelve un objeto Socio.
 =cut
 sub checkpwldap{
     my ($userid, $passwordCliente, $random_number) = @_;
@@ -216,6 +203,7 @@ sub checkpwldap{
 #    my $LDAP_PREF   = C4::Context->config("ldapref");
 #    my $LDAP_ROOT   = C4::Context->config("ldaproot");
 #    my $LDAP_PASS   = C4::Context->config("ldappass");
+
     my $LDAP_FILTER = $LDAP_U_PREF.'='.$userid;
     my $passwordLDAP;
     my $ldap        = _conectarLDAP();
@@ -230,6 +218,7 @@ sub checkpwldap{
         my $entry;
         my $entry       = $entries->entry(0);
         $passwordLDAP   = $entry->get_value("userPassword");
+        
         #FIXME
         my $metodo      = C4::AR::Auth::getMetodoEncriptacion();
         $passwordLDAP   = hashear_password($passwordLDAP.$random_number,$metodo);
