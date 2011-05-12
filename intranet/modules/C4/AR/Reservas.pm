@@ -39,6 +39,7 @@ $VERSION = 3.0;
     eliminarReservas
     getReservasDeSocioEnEspera
     getHistorialReservasParaTemplate
+    cancelarReservaDesdeGrupoYSocio
 );
 
 
@@ -1024,6 +1025,49 @@ sub agregarReservaAHistorial{
     
 	return ($reserva);
 }
+
+
+sub cancelarReservaDesdeGrupoYSocio{
+    my ($params)=@_;
+
+    my $nro_socio               = $params->{'nro_socio'};
+    my $id2                     = $params->{'id2'};
+    $params->{'loggedinuser'}   = $nro_socio;
+    
+    my $msg_object= C4::AR::Mensajes::create();
+    my @filtros;
+
+    push (@filtros, (nro_socio   => { eq => $nro_socio})    );
+    push (@filtros, (id2         => { eq => $id2})  );
+
+	    my ($reserva) = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
+	                                                                        query           => \@filtros, 
+	                                                                        with_objects    => ['nivel3','nivel2']
+	                                                                        );
+
+    $reserva = $reserva->[0];
+
+    eval{
+	        my $db = $reserva->db;
+	        $db->{connect_options}->{AutoCommit} = 0;
+	        $db->begin_work;
+	            C4::AR::Debug::debug("VAMOS A CANCELAR LA RESERVA");
+	            $params->{'id_reserva'} = $reserva->getId_reserva;
+	            $reserva->cancelar_reserva($params);
+	            $db->commit;
+	            $msg_object->{'error'}= 0;
+	            C4::AR::Debug::debug("LA RESERVA DESDE KOHA SE CANCELO CON EXITO");
+            $db->{connect_options}->{AutoCommit} = 1;
+    };
+
+    if ($@){
+    	$msg_object->{'error'}= 1;
+        C4::AR::Debug::debug("ERROR EN CANCELAR RESERVA DESDE KOHA PARA EL GRUPO $id2 Y EL SOCIO $nro_socio");
+    }
+    
+    return($msg_object);
+}
+
 
 =item
 t_cancelar_reserva
