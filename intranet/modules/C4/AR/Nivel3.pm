@@ -448,6 +448,7 @@ sub detalleCompletoINTRA{
 	for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
 
 		my ($hash_nivel2) = detalleNivel3($nivel2_array_ref->[$i]->getId2);
+
 	
 		push(@nivel2, $hash_nivel2);
 	}

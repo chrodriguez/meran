@@ -130,10 +130,10 @@ sub getVisualizacionFromCampoSubCampo{
 
     push(@filtros, ( campo          => { eq => $campo } ) );
     push(@filtros, ( subcampo       => { eq => $subcampo } ) );
-    push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
-#     push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $itemtype }, 
-#                                     tipo_ejemplar   => { eq => 'ALL'     } ])
-#                      );
+#     push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
+    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $itemtype }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ])
+                     );
 
 
     my $cat_estruct_info_array = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(  
