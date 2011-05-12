@@ -15,6 +15,7 @@ INSERT INTO `pref_ldap` (
 )
 VALUES 
 (NULL , 'ldap_server', 'localhost', 'Indica el servidor LDAP'),
+(NULL , 'ldap_port', '389', 'Puerto del servidor LDAP'),
 (NULL , 'ldap_preventpassindb', '', 'Seleccione *si* para evitar que las contraseñse almacenen en la base de datos de MERAN.'),
 (NULL , 'ldap_encoding', 'utf8', 'Especifique la codificacion usada por el servidor LDAP. Muy probablemente utf-8, MS AD v2 utiliza codificacion de plataforma por defecto como cp1252, cp1250, etc'),
 (NULL, 'ldap_bind_dn', '', 'Si quiere usar *bind-user* para buscar usuarios, especifiquelo aqui. Algo como cn=ldapuser,ou=public,o=org'),
