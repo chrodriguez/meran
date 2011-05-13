@@ -621,11 +621,58 @@ label.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scro
 }
 
 
-#ajax_state{display:none;background:url(../imagenes/loaders/ajax-loader.gif) no-repeat scroll center;height:35px;position:relative;margin:5px}
-#ajax-indicator {font-weight:bold;left:20%;padding:0.6em;position:relative;text-align:center;top:-18%;width:20%;z-index:100;}
+#ajax_state {
+    display: none;
+    background: url(../imagenes/loaders/ajax-loader.gif) no-repeat scroll
+        center;
+    height: 35px;
+    position: relative;
+    margin: 5px
+}
+
+#ajax-indicator {
+    /* background-color:#EEEEEE;border:1px solid #BBBBBB;*/
+    font-weight: bold;
+    left: 12%;
+    padding: 0.6em;
+    position: absolute;
+    text-align: center;
+    top: -18%;
+    width: 20%;
+    z-index: 100;
+}
+
+#ajax-indicator span {
+    background-image: url(../imagenes/loaders/ajax-loader.gif);
+    background-position: 0 20%;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+    vertical-align: bottom;
+}
+
+#ajax-indicator div {
+    background-image: url(../imagenes/loaders/ajax-loader.gif);
+    background-position: 0 20%;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+    vertical-align: bottom;
+    height: 60px;
+    width: 60px;
+}
+
+#ajax-indicator div p {
+    padding-top: 15px;
+    margin-left: 20px;
+}
+
+
+
+
+/*#ajax_state{display:none;background:url(../imagenes/loaders/ajax-loader.gif) no-repeat scroll center;height:35px;position:relative;margin:5px}
+#ajax-indicator {font-weight:bold;left:10%;padding:0.6em;position:relative;text-align:;top:-18%;width:30%;z-index:100;}
 #ajax-indicator span {background-image:url(../imagenes/loaders/ajax-loader.gif);background-position:0 20%;background-repeat:no-repeat;padding-left:40px;vertical-align:bottom;}
-#ajax-indicator div {background-image:url(../imagenes/loaders/ajax-loader.gif);background-position:0 20%;background-repeat:no-repeat;padding-left:40px;vertical-align:bottom; height: 32px}
-#ajax-indicator div p {padding-top: 7px;}
+#ajax-indicator div {background-image:url(../imagenes/loaders/ajax-loader.gif);background-position:0 20%;background-repeat:no-repeat;padding-left:40px;vertical-align:bottom; height: 49px}
+#ajax-indicator div p {padding:18px 0 0 10px;   width: 100px;}*/
 
 .advice{background-color: #A0B355; text-align: center;}
 
