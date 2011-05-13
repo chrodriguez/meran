@@ -10,5 +10,5 @@ INSERT INTO `pref_preferencia_sistema` (
 `categoria`
 )
 VALUES (
-NULL , 'ldapenabled', 'Si', 'Indica si se usa ldap para hacer autenticaciósuarios', NULL , 'bool' , 'sistema'
+NULL , 'ldapenabled', '0', 'Indica si se usa ldap para hacer autenticaciósuarios', NULL , 'bool' , 'sistema'
 );
