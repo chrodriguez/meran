@@ -6,7 +6,7 @@ use C4::AR::Permisos;
 use C4::AR::Utilidades;
 use C4::Modelo::AdqRecomendacion;
 use C4::Modelo::AdqRecomendacionDetalle;
-use C4::Modelo::CatRegistroMarcN2;
+#use C4::Modelo::CatRegistroMarcN2;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
