@@ -86,8 +86,6 @@ sub _getValorPreferenciaLdap{
 sub datosUsuario{
     my ($userid,$ldap)  = @_;
     my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-    
-    C4::AR::Debug::debug("socio:        ".$socio);
 
     if ($socio) { 
         return $socio;
