@@ -20,6 +20,7 @@ my $idNivel1= $input->param('id1');
 
 C4::AR::Nivel3::detalleCompletoOPAC($idNivel1, $t_params);
 
-$t_params->{'partial_template'}= "opac-detail.inc";
-$t_params->{'preferencias'}= C4::AR::Preferencias::getConfigVisualizacionOPAC();
+$t_params->{'partial_template'}     = "opac-detail.inc";
+$t_params->{'preferencias'}         = C4::AR::Preferencias::getConfigVisualizacionOPAC();
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

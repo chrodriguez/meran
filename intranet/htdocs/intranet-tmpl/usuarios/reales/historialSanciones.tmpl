@@ -55,7 +55,13 @@
                     [% historial_sancion.getFecha_final_formateada %]
                 </td>
                 <td>
-                    [% historial_sancion.ref_tipo_sancion.tipo_sancion %]
+                  
+                    [% IF historial_sancion.getTipo_sancion %]
+                            [% historial_sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
+                    [% ELSE %]
+                            Reserva no retirada
+                    [% END %]
+                </td>
                 </td>
   
                 <td>

@@ -19,8 +19,10 @@ use Encode;
 use POSIX qw(ceil floor); 
 use JSON;
 use C4::AR::Preferencias;
-use C4::AR::Presupuestos;
-use C4::AR::PedidoCotizacion;
+
+# FIXME Matiasp: Comentado por error de carga de módulos (Attempt to reload %s aborted.)
+# use C4::AR::Presupuestos;
+# use C4::AR::PedidoCotizacion;
 
 #Einar use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 

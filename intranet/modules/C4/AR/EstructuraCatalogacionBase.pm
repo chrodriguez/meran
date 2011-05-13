@@ -159,6 +159,7 @@ sub getIndicadorSecundarioFromEstructuraBaseByCampo{
 =head2 sub getNivelFromEstructuraBaseByCampo
     Esta funcion retorna el nivel de la estructura BASE de MARC segun un campo
 =cut
+# FIXME creo q no se usa
 sub getNivelFromEstructuraBaseByCampo{
     my ($campo) = @_;
 
@@ -167,6 +168,26 @@ sub getNivelFromEstructuraBaseByCampo{
     push(@filtros, ( campo  => { eq => $campo } ) );
 
     my $estructura_base = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc(
+                                                                                        select  => ['nivel'],
+                                                                                        query   => \@filtros,
+                                                                       );
+
+    if(scalar(@$estructura_base) > 0){  
+        return $estructura_base->[0]->getNivel;
+    }else{
+        return 0;
+    }
+}
+
+sub getNivelFromEstructuraBaseByCampoSubcampo{
+    my ($campo, $subcampo) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( campo      => { eq => $campo } ) );
+    push(@filtros, ( subcampo   => { eq => $subcampo } ) );
+
+    my $estructura_base = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
                                                                                         select  => ['nivel'],
                                                                                         query   => \@filtros,
                                                                        );

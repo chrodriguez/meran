@@ -42,8 +42,6 @@ opac = ususario comun de OPAC (MENOR cant. de permisos sobre la base)
 	if($session->param('type') eq 'intranet'){
 		$user = $context->config('userINTRA');
 		$pass = $context->config('passINTRA');
-	}else{
-	
 	}
 
 #  $user = $context->config('user');

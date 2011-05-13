@@ -28,6 +28,11 @@ sub agregar{
     $self->setSubCampo($params->{'subcampo'});
     $self->setVistaIntra($params->{'liblibrarian'});
     $self->setTipoEjemplar($params->{'ejemplar'});
+# C4::AR::Debug::debug("CatVisualizacionIntra => agregar => nivel => ".C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampo($params->{'campo'}));
+
+    if(C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($params->{'campo'}, $params->{'subcampo'}) <= 1){
+        $self->setTipoEjemplar('ALL');
+    }
 
     $self->save();
 }

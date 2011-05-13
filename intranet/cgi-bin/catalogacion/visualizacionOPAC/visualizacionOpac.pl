@@ -19,6 +19,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 			     });
 
 
-$t_params->{'combo_perfiles'} = C4::AR::Utilidades::generarComboDePerfilesOPAC($t_params);
-$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Catalogaci&oacute;n - Visualizaci&oacute;n del OPAC");
+$t_params->{'combo_perfiles'}   = C4::AR::Utilidades::generarComboDePerfilesOPAC($t_params);
+$t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Visualizaci&oacute;n del OPAC");
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -22,7 +22,7 @@ my $id1=$input->param('id1');
 
 #genera el detalle para intra y setea los parametros para el template
 C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
-$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Detalle del &iacute;tem");
-$t_params->{'mensaje'} = $input->url_param('msg_file');
+$t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Detalle del &iacute;tem");
+$t_params->{'mensaje'}          = $input->url_param('msg_file');
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

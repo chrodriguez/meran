@@ -37,7 +37,7 @@ sub getConfiguracion{
                                     id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
                 );
 
-    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
+    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('campo, subcampo'),);
 
     return ($configuracion);
 }
@@ -120,6 +120,33 @@ sub getCamposXLike{
                                                                        );
     return($db_campos_MARC);
 }
+
+=head2 sub getVisualizacionFromCampoSubCampo
+    Este funcion devuelve la configuracion de la estructura de catalogacion de un campo, subcampo, realizada por el usuario
+=cut
+sub getVisualizacionFromCampoSubCampo{
+    my ($campo, $subcampo, $perfil) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( campo          => { eq => $campo } ) );
+    push(@filtros, ( subcampo       => { eq => $subcampo } ) );
+#     push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
+    push (  @filtros, ( or   => [   id_perfil   => { eq => $perfil } ]) );
+
+
+    my $cat_estruct_info_array = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(  
+                                                                                query           =>  \@filtros, 
+
+                                        );  
+
+    if(scalar(@$cat_estruct_info_array) > 0){
+      return $cat_estruct_info_array->[0];
+    }else{
+      return 0;
+    }
+}
+
 
 
 END { }       # module clean-up code here (global destructor)
