@@ -555,11 +555,11 @@ sub mostrarReferenciasParaCatalogo{
     my $global_references_count = 0;
 
     my @tablas_matching = ('cat_registro_marc_n1','cat_registro_marc_n2','cat_registro_marc_n3');
-    my $tabla_rerefencia = getTablaInstanceByAlias($alias);
+    my ($clave_tabla_referencia, $tabla_referencia) = getTablaInstanceByAlias($alias);
     foreach my $tabla (@tablas_matching){
         my %table_data = {};
-        my $tabla_referente = getTablaInstanceByTableName($tabla);
-        my $involved_count = $tabla_referente->getInvolvedCount($tabla_rerefencia,$value_id);
+        my ($clave,$tabla_referente) = getTablaInstanceByTableName($tabla);
+        my $involved_count = $tabla_referente->getInvolvedCount($tabla_referencia,$value_id);
         $table_data{"tabla"} = $tabla_referente->meta->table;
         $table_data{"tabla_object"} = $tabla_referente;
         $table_data{"cantidad"} = $involved_count;
@@ -584,7 +584,7 @@ sub mostrarReferencias{
                                                                                    query => \@filtros,
                                                                                 );
     my $global_references_count = mostrarReferenciasParaCatalogo($alias,$value_id,\@data_array);
-    my $referer_involved = getTablaInstanceByAlias($alias)->getByPk($value_id);;
+    my ($clave_referer_involved, $referer_involved) = getTablaInstanceByAlias($alias)->getByPk($value_id);;
     if (scalar(@$tablas_matching)){
         my ($clave_original,$tabla_original) = getTablaInstanceByAlias($tablas_matching->[0]->getAlias_tabla);
         #ESTE ES EL REFERIDO ORIGINAL, PARA MOSTRARLO EN EL CLIENTE
@@ -614,7 +614,7 @@ sub mostrarSimilares{
 
     my ($alias,$value_id) = @_;
 
-    my $tabla = getTablaInstanceByAlias($alias);
+    my ($clave,$tabla) = getTablaInstanceByAlias($alias);
   
     if ($tabla){
         my $refered = $tabla->getByPk($value_id);
@@ -633,7 +633,7 @@ sub asignarReferencia{
 
     my ($alias_tabla,$related_id,$referer_involved) = @_;
 
-    my $tabla = getTablaInstanceByAlias($alias_tabla);
+    my ($clave,$tabla) = getTablaInstanceByAlias($alias_tabla);
 
     my $status = 0;
 
@@ -651,7 +651,7 @@ sub asignarReferencia{
 sub asignarReferenciaParaCatalogo{
 
   my ($alias_tabla,$related_id,$referer_involved) = @_;
-  my $tabla = getTablaInstanceByAlias($alias_tabla);
+  my ($clave,$tabla) = getTablaInstanceByAlias($alias_tabla);
   my $nombre_tabla = $tabla->meta->table;
 
   my $id_viejo = $referer_involved;
@@ -669,7 +669,7 @@ sub asignarReferenciaParaCatalogo{
 sub eliminarReferencia{
 
     my ($alias_tabla,$referer_involved) = @_;
-    my $tabla = getTablaInstanceByAlias($alias_tabla);
+    my ($clave,$tabla) = getTablaInstanceByAlias($alias_tabla);
     my $status = 0;
     if ($tabla){
 
@@ -701,6 +701,7 @@ sub asignarYEliminarReferencia{
     my $status;
 
     $status = asignarReferencia($alias_tabla,$related_id,$referer_involved);
+    
     $status = eliminarReferencia($alias_tabla,$referer_involved);
 
     return ($status);
@@ -712,7 +713,7 @@ sub editarReferencia{
 
     my @values = split('___',$string_ref);
 
-        my $tabla = getTablaInstanceByAlias(@values[0]);
+        my ($clave,$tabla) = getTablaInstanceByAlias(@values[0]);
         my $campo = @values[1];
         my $id_tabla = @values[2];
         

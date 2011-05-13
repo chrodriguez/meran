@@ -80,6 +80,27 @@ sub getByPk{
     return($self_like);
 }
 
+sub getInvolvedFilterString{
+	
+    my ($self) = shift;
+    my ($tabla, $value)= @_;
+
+    my @filtros;
+    
+    C4::AR::Debug::debug("C4::Modelo::AutoBase2::getInvolvedFilterString TABLA ===========> ".$tabla);
+    
+    my $table_name = $tabla->meta->table;
+
+    my $filter_string = $table_name."@".$value;
+
+    push (@filtros, ( marc_record => {like => '%'.$filter_string.'%'} ) );
+
+    C4::AR::Debug::debug("FILTER STRING EN ".$self->meta->table." ===========================> ".$filter_string);
+    
+    return($filter_string,\@filtros);
+	
+}
+
 sub replaceByThis{
 
     my ($self) = shift;

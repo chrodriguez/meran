@@ -439,32 +439,23 @@ sub tienePrestamos{
 sub getInvolvedCount{
 
     my ($self) = shift;
-
     my ($tabla, $value)= @_;
-    my @filtros;
-    my $table_name = $tabla->meta->table;
 
-    my $filter_string = $table_name."@".$value;
+    my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
+    my $cat_registro_marc_n1_count = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1_count( query => $filtros );
 
-    push (@filtros, ( marc_record => {like => '%'.$filter_string.'%'} ) );
-
-    my $cat_registro_marc_n1_count = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1_count( query => \@filtros );
-# die;
     return ($cat_registro_marc_n1_count);
 }
 
 
 sub getReferenced{
 
+    my ($self) = shift;
     my ($tabla, $value)= @_;
-    my @filtros;
-    my $table_name = $tabla->meta->table;
 
-    my $filter_string = $table_name.'@'.$value;
+    my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
 
-    push (@filtros, ( marc_record => {like => '%'.$filter_string.'%'} ) );
-
-    my $cat_registro_marc_n1 = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1( query => \@filtros );
+    my $cat_registro_marc_n1 = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1( query => $filtros );
     return ($cat_registro_marc_n1);
 }
 

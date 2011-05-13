@@ -530,5 +530,31 @@ sub getPais{
     return $marc_record->subfield("043","c");
 }
 
+
+
+sub getInvolvedCount{
+
+    my ($self) = shift;
+    my ($tabla, $value)= @_;
+    
+    my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
+    my $cat_registro_marc_n2_count = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2_count( query => $filtros );
+
+    return ($cat_registro_marc_n2_count);
+}
+
+
+sub getReferenced{
+
+    my ($self) = shift;
+    my ($tabla, $value)= @_;
+
+    my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
+
+    my $cat_registro_marc_n2 = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2( query => $filtros );
+    return ($cat_registro_marc_n2);
+}
+
+
 1;
 
