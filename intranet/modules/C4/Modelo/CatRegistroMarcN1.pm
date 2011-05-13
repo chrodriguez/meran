@@ -453,10 +453,12 @@ sub getInvolvedCount{
 }
 
 
+
 sub getReferenced{
 
     my ($self) = shift;
     my ($tabla, $value)= @_;
+   C4::AR::Debug::debug("getReferenced en Nivel1 =========> TABLA $tabla VALUE $value");
 
     my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
 

@@ -835,6 +835,7 @@ sub getInvolvedCount{
 
     my ($self) = shift;
     my ($tabla, $value)= @_;
+   C4::AR::Debug::debug("InvolvedCount en Nivel3 =========> TABLA $tabla VALUE $value");
 
     my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
     

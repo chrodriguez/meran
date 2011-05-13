@@ -540,6 +540,7 @@ sub getInvolvedCount{
     my ($self) = shift;
     my ($tabla, $value)= @_;
     
+   C4::AR::Debug::debug("InvolvedCount en Nivel2 =========> TABLA $tabla VALUE $value");
     my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
     my $cat_registro_marc_n2_count = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2_count( query => $filtros );
 
