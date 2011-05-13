@@ -963,26 +963,21 @@ sub _verificarPassword {
     my ($userid, $password, $nroRandom) = @_;
     my ($socio);
     ## FIXME falta verificar la pass en LDAP si esta esta usando
-#    C4::AR::Debug::debug("preferencia ldapenabled:         ".C4::AR::Preferencias::getValorPreferencia('ldapenabled'));
     if (C4::AR::Preferencias::getValorPreferencia('ldapenabled')){
     #se esta usando LDAP
         if (C4::Context->config('authMERAN')){
             #Autenticacion propia de MERAN
             ($socio) = C4::AR::Authldap::checkpwldap($userid,$password,$nroRandom);
-            C4::AR::Debug::debug("entro por ldap pero autenticando meran");
         }
         else { 
             #Autenticacion propia de LDAP, en este caso es recomendable HTTPS
             ($socio) = C4::AR::Authldap::checkpwDC($userid,$password);
-            C4::AR::Debug::debug("entro por LDAP ok");
         }
      }
     else {
-        C4::AR::Debug::debug("entra por MERAN");
         #Si no se usa LDAP
         ($socio) = _checkpw($userid,$password,$nroRandom); 
     }
-    C4::AR::Debug::debug("socio:                  ".$socio);
     return ($socio);
 }
 
