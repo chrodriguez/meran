@@ -14,6 +14,8 @@ __PACKAGE__->meta->setup(
         nro_documento    => { type => 'varchar', length => 16, not_null => 1 },
         tipo_documento   => { type => 'character', length => 3, not_null => 1 },
         apellido         => { type => 'varchar', length => 255, not_null => 1 },
+# FIXME prueba
+        completo         => { type => 'varchar', length => 255, not_null => 1 },
         nombre           => { type => 'varchar', length => 255, not_null => 1 },
         titulo           => { type => 'varchar', length => 255 },
         otros_nombres    => { type => 'varchar', length => 255 },
