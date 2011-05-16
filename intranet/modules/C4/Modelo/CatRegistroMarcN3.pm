@@ -826,5 +826,34 @@ sub verificar_historico_disponibilidad {
     }
 }
 
+sub getInvolvedCount{
+
+    my ($self) = shift;
+    my ($tabla, $value)= @_;
+
+    my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
+    
+    my $cat_registro_marc_n3_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( query => $filtros, );
+
+    return ($cat_registro_marc_n3_count);
+}
+
+
+
+sub getReferenced{
+
+    my ($self) = shift;
+    my ($tabla, $value)= @_;
+    
+    my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
+
+    my $cat_registro_marc_n3 = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => $filtros );
+    
+    return ($cat_registro_marc_n3);
+}
+
+
+
+
 1;
 

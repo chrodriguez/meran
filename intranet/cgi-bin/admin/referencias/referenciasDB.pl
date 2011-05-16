@@ -62,9 +62,10 @@ elsif ($accion eq "OBTENER_TABLAS"){
     my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
     my ($cantidad,$clave,$tabla,$datos,$campos) = C4::AR::Referencias::getTabla($alias_tabla,$filtro,$cantR,$ini);
     $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
-    $t_params->{'campos'} = $campos;
-    $t_params->{'datos'} = $datos;
-    $t_params->{'tabla'} = $tabla;
+    $t_params->{'campos'}           = $campos;
+    $t_params->{'datos'}            = $datos;
+    $t_params->{'tabla'}            = $tabla;
+    $t_params->{'cantidad_total'}   = $cantidad;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
