@@ -31,7 +31,9 @@ $VERSION = 3.0;
     getDatosReservaDeId3
     CheckWaiting
     tiene_reservas
-    Enviar_Email
+    Enviar_Email_Asignacion_Reserva
+    Enviar_Email_Cancelacion_Reserva
+    Enviar_Email_Reserva_A_Espera
     FindNotRegularUsersWithReserves
     eliminarReservasVencidas
     reasignarTodasLasReservasEnEspera
@@ -403,8 +405,8 @@ C4::AR::Debug::debug("_chequeoParaPrestamo=> nro_socio: ".$nro_socio);
     }
 }
 
-#para enviar un mail cuando al usuario se le vence la reserva
-sub Enviar_Email{
+#para enviar un mail cuando al usuario se le asigna una reserva
+sub Enviar_Email_Asignacion_Reserva{
     my ($reserva,$params)=@_;
 
     my $desde= $params->{'desde'};
@@ -482,6 +484,144 @@ sub Enviar_Email{
 
     }#end if (C4::Context->preference("EnabledMailSystem"))
 }
+
+
+#para enviar un mail cuando al usuario se le cancela una reserva
+sub Enviar_Email_Cancelacion_Reserva{
+    my ($reserva,$loggedinuser)=@_;
+
+    if (C4::AR::Preferencias::getValorPreferencia("EnabledMailSystem") && C4::AR::Preferencias::getValorPreferencia("mail_cambio_disponibilidad_cancelacion")){
+
+        my $dateformat = C4::Date::get_date_format();
+        my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
+        
+        my $mailFrom=C4::AR::Preferencias::getValorPreferencia("mailFrom");
+        my $mailSubject =C4::AR::Preferencias::getValorPreferencia("subject_mail_cambio_disponibilidad_cancelacion");
+        my $mailMessage =C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_cancelacion");
+        
+        my $nombreUI = $reserva->ui->getNombre;
+        $mailSubject =~ s/BRANCH/$nombreUI/;
+        $mailMessage =~ s/BRANCH/$nombreUI/;
+        
+        my $nombrePersona = $socio->persona->getNombre;
+        $mailMessage =~ s/FIRSTNAME/$nombrePersona/;
+        
+        my $apellidoPersona = $socio->persona->getApellido;
+        $mailMessage =~ s/SURNAME/$apellidoPersona/;
+        
+        my $unititle=C4::AR::Nivel1::getUnititle($reserva->nivel2->nivel1->getId1);
+        $mailMessage =~ s/UNITITLE/$unititle/;
+        
+        my $tituloReserva = $reserva->nivel2->nivel1->getTitulo;
+        $mailMessage =~ s/TITLE/$tituloReserva/;
+        
+        my $autorCompleto = $reserva->nivel2->nivel1->getAutor;
+        $mailMessage =~ s/AUTHOR/$autorCompleto/;
+        
+        my $edicion  =  $reserva->nivel2->getEdicion;
+        $mailMessage =~ s/EDICION/$edicion/;
+
+        my %mail;
+        $mail{'mail_from'}             = $mailFrom;
+        $mail{'mail_to'}               = $socio->persona->getEmail;
+        $mail{'mail_subject'}          = $mailSubject;
+        $mail{'mail_message'}          = $mailMessage;
+
+        my ($ok, $msg_error)           = C4::AR::Mail::send_mail(\%mail);
+
+#**********************************Se registra el movimiento en rep_historial_circulacion***************************
+   
+   my $fecha= C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat);
+
+   my $data_hash;
+   $data_hash->{'id1'}=$reserva->nivel2->nivel1->getId1;
+   $data_hash->{'id2'}=$reserva->getId2;
+   $data_hash->{'id3'}=$reserva->getId3;
+   $data_hash->{'nro_socio'}=$reserva->getNro_socio;
+   $data_hash->{'loggedinuser'}=$loggedinuser;
+   $data_hash->{'responsable'}=$loggedinuser;
+   $data_hash->{'end_date'}=$fecha;
+   $data_hash->{'issuesType'}='-';
+   $data_hash->{'id_ui'}=$reserva->getId_ui;
+   $data_hash->{'tipo'}='notification cancelation';
+
+   use C4::Modelo::RepHistorialCirculacion;
+   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$reserva->db);
+   $historial_circulacion->agregar($data_hash);
+#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
+
+    }#end if (C4::Context->preference("EnabledMailSystem"))
+}
+
+
+
+
+#para enviar un mail cuando al usuario se le pasa una reserva a espera
+sub Enviar_Email_Reserva_A_Espera{
+    my ($reserva,$loggedinuser)=@_;
+
+    if (C4::AR::Preferencias::getValorPreferencia("EnabledMailSystem") && C4::AR::Preferencias::getValorPreferencia("mail_cambio_disponibilidad_espera")){
+
+        my $dateformat = C4::Date::get_date_format();
+        my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
+        
+        my $mailFrom=C4::AR::Preferencias::getValorPreferencia("mailFrom");
+        my $mailSubject =C4::AR::Preferencias::getValorPreferencia("subject_mail_cambio_disponibilidad_espera");
+        my $mailMessage =C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_espera");
+        
+        my $nombreUI = $reserva->ui->getNombre;
+        $mailSubject =~ s/BRANCH/$nombreUI/;
+        $mailMessage =~ s/BRANCH/$nombreUI/;
+        
+        my $nombrePersona = $socio->persona->getNombre;
+        $mailMessage =~ s/FIRSTNAME/$nombrePersona/;
+        
+        my $apellidoPersona = $socio->persona->getApellido;
+        $mailMessage =~ s/SURNAME/$apellidoPersona/;
+        
+        my $unititle=C4::AR::Nivel1::getUnititle($reserva->nivel2->nivel1->getId1);
+        $mailMessage =~ s/UNITITLE/$unititle/;
+        
+        my $tituloReserva = $reserva->nivel2->nivel1->getTitulo;
+        $mailMessage =~ s/TITLE/$tituloReserva/;
+        
+        my $autorCompleto = $reserva->nivel2->nivel1->getAutor;
+        $mailMessage =~ s/AUTHOR/$autorCompleto/;
+        
+        my $edicion  =  $reserva->nivel2->getEdicion;
+        $mailMessage =~ s/EDICION/$edicion/;
+
+        my %mail;
+        $mail{'mail_from'}             = $mailFrom;
+        $mail{'mail_to'}               = $socio->persona->getEmail;
+        $mail{'mail_subject'}          = $mailSubject;
+        $mail{'mail_message'}          = $mailMessage;
+
+        my ($ok, $msg_error)           = C4::AR::Mail::send_mail(\%mail);
+
+#**********************************Se registra el movimiento en rep_historial_circulacion***************************
+  my $fecha= C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat);
+
+   my $data_hash;
+   $data_hash->{'id1'}=$reserva->nivel2->nivel1->getId1;
+   $data_hash->{'id2'}=$reserva->getId2;
+   $data_hash->{'id3'}=$reserva->getId3;
+   $data_hash->{'nro_socio'}=$reserva->getNro_socio;
+   $data_hash->{'loggedinuser'}=$loggedinuser;
+   $data_hash->{'responsable'}=$loggedinuser;
+   $data_hash->{'end_date'}=$fecha;
+   $data_hash->{'issuesType'}='-';
+   $data_hash->{'id_ui'}=$reserva->getId_ui;
+   $data_hash->{'tipo'}='notification cancelation';
+
+   use C4::Modelo::RepHistorialCirculacion;
+   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$reserva->db);
+   $historial_circulacion->agregar($data_hash);
+#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
+
+    }#end if (C4::Context->preference("EnabledMailSystem"))
+}
+
 
 
 =item sub estaReservado
@@ -1169,11 +1309,21 @@ sub reasignarNuevoEjemplarAReserva{
 	    if($cant == 0){
 		#No hay mas disponibilidad en el grupo, se cancela la reserva.
 		C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => NO hay disponibilidad para el grupo id2: ".$params->{'id2'}." se CANCELA la reserva asignada!!!");
+
+		#Se envia una notificacion al usuario avisando que se le cancelo la reserva por cambio de disponibilidad
+		C4::AR::Reservas::Enviar_Email_Cancelacion_Reserva($reserva_asignada,$params->{'loggedinuser'});
+
 		$reserva_asignada->cancelar_reserva($params);
+
 	    } else {
 		#a la reserva se la pasa a reserva en  espera (id3 = null). Además, se borra la sanción de esa reserva.
 		C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => paso la reserva a ESPERA (estado = G)");
+
+		#Se envia una notificacion al usuario avisando que se le cancelo la reserva por cambio de disponibilidad
+		C4::AR::Reservas::Enviar_Email_Reserva_A_Espera($reserva_asignada,$params->{'loggedinuser'});
+
 		$reserva_asignada->pasar_a_espera();
+
 	    }
         }
     }else{
