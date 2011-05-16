@@ -593,7 +593,7 @@ sub devolver {
 		my $daysissue = $self->tipo->getDias_prestamo;
 
 		use C4::AR::Sanciones;
-		my $diasSancion =  C4::AR::Sanciones::diasDeSancion( $fechaHoy, $fechaVencimiento,$self->socio->getCod_categoria,$self->getTipo_prestamo );
+		my $diasSancion =  C4::AR::Sanciones::diasDeSancion( $fechaHoy, $fechaVencimiento,$self->socio->categoria->getCategory_code ,$self->getTipo_prestamo );
 
 		if ( $diasSancion > 0 ) {
 
