@@ -55,6 +55,12 @@ sub getSubcampo{
     return (C4::AR::Utilidades::trim($self->subcampo));
 }
 
+sub getNivel{
+    my ($self) = shift;
+
+    return (C4::AR::Utilidades::trim($self->nivel));
+}
+
 sub setSubcampo{
     my ($self) = shift;
     my ($subcampo) = @_;

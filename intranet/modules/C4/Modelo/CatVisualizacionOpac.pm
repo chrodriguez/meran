@@ -13,6 +13,7 @@ __PACKAGE__->meta->setup(
         subcampo     => { type => 'character', length => 1, not_null => 1 },
         vista_opac   => { type => 'varchar', length => 255 },
         id_perfil    => { type => 'integer', default => 1, not_null => 1 },
+#         orden        => { type => 'integer', default => 1, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -28,6 +29,7 @@ sub agregar{
     $self->setSubCampo($params->{'subcampo'});
     $self->setVistaOpac($params->{'liblibrarian'});
     $self->setIdPerfil($params->{'perfil'});
+#     $self->setOrden($params->{'orden'});
 
     $self->save();
 }
@@ -90,6 +92,18 @@ sub setIdPerfil{
     my ($id_perfil) = @_;
     $self->id_perfil($id_perfil);
 }
+
+# sub getOrden{
+#     my ($self) = shift;
+# 
+#     return $self->orden;
+# }
+# 
+# sub setOrden{
+#     my ($self) = shift;
+#     my ($orden) = @_;
+#     $self->orden($orden);
+# }
 
 1;
 

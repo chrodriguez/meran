@@ -29,13 +29,14 @@ $VERSION = 0.01;
 
 sub getConfiguracion{
     my ($ejemplar) = @_;
+
     my @filtros;
 
     push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
                                     tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
                 );
 
-    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros,);
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, sort_by => ('campo, subcampo'),);
 
     return ($configuracion);
 }
@@ -117,6 +118,34 @@ sub getCamposXLike{
                                                                                         group_by => [ 'campo'],
                                                                        );
     return($db_campos_MARC);
+}
+
+=head2 sub getVisualizacionFromCampoSubCampo
+    Este funcion devuelve la configuracion de la estructura de catalogacion de un campo, subcampo, realizada por el usuario
+=cut
+sub getVisualizacionFromCampoSubCampo{
+    my ($campo, $subcampo, $itemtype) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( campo          => { eq => $campo } ) );
+    push(@filtros, ( subcampo       => { eq => $subcampo } ) );
+#     push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
+    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $itemtype }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ])
+                     );
+
+
+    my $cat_estruct_info_array = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(  
+                                                                                query           =>  \@filtros, 
+
+                                        );  
+
+    if(scalar(@$cat_estruct_info_array) > 0){
+      return $cat_estruct_info_array->[0];
+    }else{
+      return 0;
+    }
 }
 
 

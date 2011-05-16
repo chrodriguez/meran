@@ -530,7 +530,7 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
 function agregarN2(){
 // FIXME parche!!!!!!!
 
-    $('#datos_esquema').dialog({ width: 510 });
+    $('#datos_esquema').dialog({ width: 510, position: 'center', modal: true });
     
 //     scrollTo('tipo_nivel3_id');
     
@@ -553,7 +553,9 @@ function agregarN2(){
 }
 
 function seleccionar_esquema(){
-    close_window_esquema();
+//     if(MODIFICAR ==  1){
+        close_window_esquema();
+//     }
     
     ID_TIPO_EJEMPLAR = $('#tipo_nivel3_id').val();
     
@@ -692,14 +694,18 @@ function updateGuardarDocumentoN1(responseText){
     var info        = JSONstring.toObject(responseText);
     var Messages    = info.Message_arrayref;
     ID_N1           = info.id1; //recupero el id desde el servidor
-    setMessages(Messages);
+//     setMessages(Messages);
 
     if (! (hayError(Messages) ) ){
         inicializar();
         $('#datos_del_leader').hide();  
+//         $('#datos_esquema').show();
         //carga la barra lateral con info de nivel 1
         mostrarInfoAltaNivel1(ID_N1);
-        mostrarEstructuraDelNivel2();
+//         mostrarEstructuraDelNivel2();
+        agregarN2();
+    } else {
+        setMessages(Messages);
     }
 }
 

@@ -15,14 +15,18 @@
           <div class="main-subcontent" style="width:80%; float:left">
                 <div class="subcontent-unit-border-orange" style="width:100%;">
                     <h1 class="orange">[% "Informaci&oacute;n de disponibilidad" | i18n %]</h1>
-                    <table  style="width:95%;">
-                        <tr>
-                            <td class="impar" >
-                                <br />
-                                [% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %] <b>[% cantParaPrestamo %]</b><br />
-                                [% "Disponibilidad Actual Para Sala de Lectura:" | i18n %] <b>[% cantParaSala %]</b><br />
-                                [% "Cantidad Actual de Reservas:" | i18n %] <b>[% cantReservas %]</b><br />
-
+                    <div  style="width:95%;">
+                        <ul>
+                            <li>
+                                [% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %] <b>[% cantParaPrestamo %]</b>
+                            </li>
+                            <li>
+                                [% "Disponibilidad Actual Para Sala de Lectura:" | i18n %] <b>[% cantParaSala %]</b>
+                            </li>
+                            <li>
+                                [% "Cantidad Actual de Reservas:" | i18n %] <b>[% cantReservas %]</b>
+                            </li>  
+                            <li class="detalle_barra_circulacion">  
                                 [% IF socio_data %]
                                     [% PERL %]
                                         print C4::AR::Filtros::to_Icon(   text    => "[% 'Reservar' | i18n %]",
@@ -33,9 +37,9 @@
                                                                     );
                                     [% END %]
                                 [% END %]
-                            </td>
-                        </tr>
-                    </table>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
            </div>
           [% IF socio_data %]

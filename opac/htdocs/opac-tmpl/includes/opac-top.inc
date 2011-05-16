@@ -91,7 +91,7 @@
   <noscript> 
       <p>[% 'DEBE HABILITAR SOPORTE PARA JAVASCRIPT EN SU NAVEGADOR, DE LO CONTRARIO NO PODRA NAVEGAR EL SITIO.' | i18n %]</p> 
   </noscript>
-  
+  <div style="display: none; height: 50px;" id="ajax-indicator"><div><p>Cargando...</p></div></div>
   <div class="page-container">
     <!-- For alternative headers START PASTE here -->
         [% INCLUDE 'opac-top-header.inc' %]

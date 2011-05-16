@@ -963,7 +963,7 @@ sub _verificarPassword {
     my ($userid, $password, $nroRandom) = @_;
     my ($socio);
     ## FIXME falta verificar la pass en LDAP si esta esta usando
-    if ( C4::Context->config('ldapenabled')) {
+    if (C4::AR::Preferencias::getValorPreferencia('ldapenabled')){
     #se esta usando LDAP
         if (C4::Context->config('authMERAN')){
             #Autenticacion propia de MERAN
@@ -978,7 +978,6 @@ sub _verificarPassword {
         #Si no se usa LDAP
         ($socio) = _checkpw($userid,$password,$nroRandom); 
     }
-
     return ($socio);
 }
 
@@ -1292,9 +1291,3 @@ sub get_html_content {
 END { }       # module clean-up code here (global destructor)
 1;
 __END__
-
-
-
-
-
-

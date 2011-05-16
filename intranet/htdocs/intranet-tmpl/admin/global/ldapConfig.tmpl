@@ -1,4 +1,11 @@
 [% INCLUDE "intranet-top.inc" %]
+[% INCLUDE 'AutocompleteHelper.inc'  %]
+
+<script type="text/javascript">
+ $(document).ready(function() {
+         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
+ });
+</script>
     
 <fieldset width="100%">
     <legend class="titulo_legend"> [% "Configuraci&oacute;n del servidor LDAP" | i18n %] </legend>
@@ -491,7 +498,9 @@ MERAN, seleccione Si. Este ajuste pasa por alto *Cambiar contrase&ntilde;a URL*.
     <hr>
     <li class="sub_item">
         <label>[% "Ciudad" | i18n %]</label>
-        <input name="lockconfig_field_map_city" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_city %]" type="text"> 
+<!--        <input name="lockconfig_field_map_city" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_city %]" type="text"> -->
+        <input  id="ciudad" name="ciudad" type="text" size="15">
+        <input  id="id_ciudad" type="hidden" name="lockconfig_field_map_city" value="[% preferencias.ldap_lockconfig_field_map_city %]" class="required" type="text" size="15">
     </li>
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]

@@ -379,6 +379,11 @@ sub toMARC_Opac{
     $params->{'id_tipo_doc'}    = 'ALL';
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
 
+#     my $orden = 'orden';
+#     my @return_array_sorted = sort{$b->{$orden} cmp $a->{$orden}} @$MARC_result_array;
+# 
+#     return (\@return_array_sorted);
+
     return ($MARC_result_array);
 }
 
@@ -448,10 +453,12 @@ sub getInvolvedCount{
 }
 
 
+
 sub getReferenced{
 
     my ($self) = shift;
     my ($tabla, $value)= @_;
+   C4::AR::Debug::debug("getReferenced en Nivel1 =========> TABLA $tabla VALUE $value");
 
     my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
 

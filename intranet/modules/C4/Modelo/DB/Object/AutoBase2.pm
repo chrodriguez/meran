@@ -87,16 +87,12 @@ sub getInvolvedFilterString{
 
     my @filtros;
     
-    C4::AR::Debug::debug("C4::Modelo::AutoBase2::getInvolvedFilterString TABLA ===========> ".$tabla);
-    
     my $table_name = $tabla->meta->table;
 
     my $filter_string = $table_name."@".$value;
 
     push (@filtros, ( marc_record => {like => '%'.$filter_string.'%'} ) );
 
-    C4::AR::Debug::debug("FILTER STRING EN ".$self->meta->table." ===========================> ".$filter_string);
-    
     return($filter_string,\@filtros);
 	
 }
@@ -113,7 +109,7 @@ sub replaceByThis{
 
     foreach my $tabla (@$data_array){
         if (!$tabla->{'tabla_catalogo'}){
-            my $tabla_referente = C4::AR::Referencias::getTablaInstanceByTableName($tabla->{'tabla_object'}->getTabla_referente);
+            my ($clave_tabla_referente,$tabla_referente) = C4::AR::Referencias::getTablaInstanceByTableName($tabla->{'tabla_object'}->getTabla_referente);
             $tabla_referente->replaceBy($tabla->{'tabla_object'}->getCampo_referente,$self->getPkValue,$new_id);
         }
     }
@@ -206,7 +202,7 @@ sub createFromAlias{
         case 'ciudad' {return C4::Modelo::RefLocalidad->new()}
         case 'editorial' {return C4::Modelo::CatEditorial->new()}
         case 'perfiles_opac' {return C4::Modelo::CatPerfilOpac->new()}
-	    else {print "NO EXISTE LA TABLA DE REFERENCIA ".$classAlias }
+	    else {C4:AR::Debug::debug("NO EXISTE LA TABLA DE REFERENCIA ".$classAlias) }
     }
 }
 
@@ -306,7 +302,7 @@ sub addNewRecord{
       $self->{$field} = '11## EDITAR ##11';
     }
 
-    $self->save;
+    $self->save();
     
     return $self;
 

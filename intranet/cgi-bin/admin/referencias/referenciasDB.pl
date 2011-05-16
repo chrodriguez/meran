@@ -162,7 +162,6 @@ elsif ($accion eq "ASIGNAR_Y_ELIMINAR_REFERENCIA"){
                             flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
                             debug => 1,
                     });
-
     C4::AR::Referencias::asignarYEliminarReferencia($alias_tabla,$related_id,$referer_involved);
     my ($used_or_not,$referer_involved,$items_involved)=C4::AR::Referencias::mostrarReferencias($alias_tabla,$related_id);
     my ($tabla_related,$related_referers) = C4::AR::Referencias::mostrarSimilares($alias_tabla,$related_id);

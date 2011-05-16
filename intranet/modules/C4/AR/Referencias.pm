@@ -519,9 +519,9 @@ sub getTablaInstanceByAlias{
     my $clave;
 
     if ($tabla){
-      $clave = $tabla->meta->primary_key;
+      $clave = $tabla->meta->primary_key."";
+      
     }
-
 
     return ($clave,$tabla);
 }
@@ -540,7 +540,7 @@ sub getTablaInstanceByTableName{
       case "circ_prestamo" { $tabla = C4::Modelo::CircPrestamo->new()  }
       case "cat_visualizacion_opac" { $tabla = C4::Modelo::CatVisualizacionOpac->new()  }
 
-      else { print "previous case not true" }
+      else { C4::AR::Debug::debug("getTablaInstanceByTableName()========================================= >TABLA POR NOMBRE INEXISTENTE") }
   }
 
     my $clave = $tabla->getPk;
@@ -584,17 +584,21 @@ sub mostrarReferencias{
                                                                                    query => \@filtros,
                                                                                 );
     my $global_references_count = mostrarReferenciasParaCatalogo($alias,$value_id,\@data_array);
-    my ($clave_referer_involved, $referer_involved) = getTablaInstanceByAlias($alias)->getByPk($value_id);;
+    my ($clave_tabla_referer_involved,$tabla_referer_involved) = getTablaInstanceByAlias($alias);
+    my $referer_involved = $tabla_referer_involved->getByPk($value_id);
     if (scalar(@$tablas_matching)){
         my ($clave_original,$tabla_original) = getTablaInstanceByAlias($tablas_matching->[0]->getAlias_tabla);
         #ESTE ES EL REFERIDO ORIGINAL, PARA MOSTRARLO EN EL CLIENTE
+        C4::AR::Debug::debug("================== REFERER INVOLVED ==== ".$referer_involved->meta->table);
         $referer_involved = $tabla_original->getByPk($value_id);
+        C4::AR::Debug::debug("================== REFERER INVOLVED ByPK ==== ".$referer_involved->getPkValue);
 
         foreach my $tabla (@$tablas_matching){
             my %table_data = {};
             my $alias_tabla = $tabla->getAlias_tabla;
             #NO TIENE ALIAS PORQUE NO ES UNA TABLA DE REFERENCIA, IGUAL ESTA POR VERSE SI LE PONEMOS ALIAS A TODAS O NO
             my ($clave_referente,$tabla_referente) = getTablaInstanceByTableName($tabla->getTabla_referente);
+      
             if ($tabla_referente){
                 my $involved_count;
                 $involved_count = $tabla_referente->getInvolvedCount($tabla,$value_id);
@@ -642,7 +646,7 @@ sub asignarReferencia{
         $status = $old_pk->replaceByThis($related_id);
     }
     
-    asignarReferenciaParaCatalogo($alias_tabla,$referer_involved,$related_id);
+    asignarReferenciaParaCatalogo($alias_tabla,$related_id,$referer_involved);
 
     return ($status);
 }
@@ -656,7 +660,9 @@ sub asignarReferenciaParaCatalogo{
 
   my $id_viejo = $referer_involved;
   my $id_nuevo = $related_id;
-  my $registros = C4::Modelo::CatRegistroMarcN1::getReferenced($tabla,$referer_involved);
+  my $nivel1 = C4::Modelo::CatRegistroMarcN1->new();
+  my $registros = $nivel1->getReferenced($tabla,$referer_involved);
+  
   foreach my $registro (@$registros){
       my $marc = $registro->getMarcRecord;
       $marc =~ s/$nombre_tabla\@$id_viejo/$nombre_tabla\@$id_nuevo/g;
@@ -698,11 +704,7 @@ sub asignarYEliminarReferencia{
 
     my ($alias_tabla,$related_id,$referer_involved) = @_;
 
-    my $status;
-
-    $status = asignarReferencia($alias_tabla,$related_id,$referer_involved);
-    
-    $status = eliminarReferencia($alias_tabla,$referer_involved);
+    my $status = asignarReferencia($alias_tabla,$related_id,$referer_involved) && eliminarReferencia($alias_tabla,$referer_involved);
 
     return ($status);
 }

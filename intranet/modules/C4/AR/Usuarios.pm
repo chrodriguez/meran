@@ -937,23 +937,23 @@ sub getLastLoginTime{
 
 sub crearPersonaLDAP{
     
-    my ($nro_socio) = @_;
-
+    my ($nro_socio)                 = @_;
     use C4::AR::Preferencias;   
-    my %params = {};
     
-    $params{'id_ui'} = C4::AR::Preferencias::getValorPreferencia("defaultUI");
-    $params{'changepassword'} = 0;
-    $params{'apellido'} =  "SIN APELLIDO";
-    $params{'nombre'} = "SIN NOMBRE";
-    $params{'tipo_documento'} = "DNI";
-    $params{'nro_documento'} = "999999999";
-    $params{'legajo'} = "99999";
-    $params{'cumple_condicion'} = 0;
-    $params{'password'} = "123456";  
-    $params{'credential_type'} = "estudiante";
-    $params{'nro_socio'} = $nro_socio;
-    $params{'cod_categoria'} = "ES";
+    my %params                      = {};
+    $params{'id_ui'}                = C4::AR::Preferencias::getValorPreferencia("defaultUI");
+    $params{'changepassword'}       = 0;
+    $params{'apellido'}             = C4::AR::Authldap::_getValorPreferenciaLdap('ldap_lockconfig_field_map_lastname');
+    $params{'nombre'}               = C4::AR::Authldap::_getValorPreferenciaLdap('ldap_lockconfig_field_map_firstnames');
+    $params{'tipo_documento'}       = "DNI";
+    $params{'nro_documento'}        = "999999999";
+    $params{'legajo'}               = "99999";
+    $params{'cumple_condicion'}     = 0;
+    $params{'password'}             = "123456";  
+    $params{'ciudad'}               = C4::AR::Authldap::_getValorPreferenciaLdap('ldap_lockconfig_field_map_city');
+    $params{'credential_type'}      = "estudiante";
+    $params{'nro_socio'}            = $nro_socio;
+    $params{'cod_categoria'}        = "ES";
     
     my $person = C4::Modelo::UsrPersona->new();
 

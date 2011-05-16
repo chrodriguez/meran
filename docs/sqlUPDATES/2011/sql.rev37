@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `pref_ldap`;
+
 CREATE TABLE `pref_ldap` (
 `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `variable` VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
@@ -13,6 +15,7 @@ INSERT INTO `pref_ldap` (
 )
 VALUES 
 (NULL , 'ldap_server', 'localhost', 'Indica el servidor LDAP'),
+(NULL , 'ldap_port', '389', 'Puerto del servidor LDAP'),
 (NULL , 'ldap_preventpassindb', '', 'Seleccione *si* para evitar que las contraseñse almacenen en la base de datos de MERAN.'),
 (NULL , 'ldap_encoding', 'utf8', 'Especifique la codificacion usada por el servidor LDAP. Muy probablemente utf-8, MS AD v2 utiliza codificacion de plataforma por defecto como cp1252, cp1250, etc'),
 (NULL, 'ldap_bind_dn', '', 'Si quiere usar *bind-user* para buscar usuarios, especifiquelo aqui. Algo como cn=ldapuser,ou=public,o=org'),
@@ -31,7 +34,7 @@ VALUES
 (NULL ,  'ldap_passtype', '', 'Especifique el formato de las contraseñnuevas o cambiadas en el servidor LDAP'),
 (NULL , 'ldap_changepasswordurl', '','Aqui puede especificar donde pueden sus usuarios recuperar o cambiar su nombre de usuario/contraseñi lo han olvidado. Para ello, aparecera un boton en la pagina de entrada. Si deja esto en blanco, este boton no se mostrara.'),
 (NULL ,  'ldap_expiration', '','Seleccione No para deshabilitar comprobar si la contraseña caducado, o LDAP para leer el tiempo de caducidad de la contraseñirectamente de LDAP.'),
-(NULL ,  'ldap_expiration_warning', '','Numero de dias antes de que aparezca la advertencia de caducidad de la contraseñ),
+(NULL ,  'ldap_expiration_warning', '','Numero de dias antes de que aparezca la advertencia de caducidad de la contraseña'),
 (NULL ,  'ldap_expireattr', '', 'Opcional: anula el atributo ldap que almacena el tiempo de caducidad de la contraseñasswordExpirationTime.'),
 (NULL ,  'ldap_gracelogins', '', 'Activar el soporte de entrada libre LDAP. Una ves que la contraseña caducado, el usuario puede entrar hasta que la cuenta de acceso libre llega a cero. Si se activa esta opcion se mostrara un mensaje de acceso libre en el caso de que la contraseñaya caducado.'),
 (NULL ,  'ldap_graceattr', '','Opcional: Anula el atributo gracelogin.'),

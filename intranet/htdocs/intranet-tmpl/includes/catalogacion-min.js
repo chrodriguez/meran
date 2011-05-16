@@ -52,7 +52,7 @@ else{if((barcode_val.length)>0)
 jConfirm(BORRAR_LISTA_DE_CODIGOS,CATALOGO_ALERT_TITLE,function(confirmStatus){if(confirmStatus){switchTipoBarcode(cantidad_comp,barcode_comp);$('#cantEjemplares').addClass('required');}})
 else
 switchTipoBarcode(cantidad_comp,barcode_comp);}}
-function agregarN2(){$('#datos_esquema').dialog({width:510});}
+function agregarN2(){$('#datos_esquema').dialog({width:510,position:'center',modal:true});}
 function seleccionar_esquema(){close_window_esquema();ID_TIPO_EJEMPLAR=$('#tipo_nivel3_id').val();if((TIENE_NIVEL_2==0)&&($('#tipo_nivel3_id').val()=='SIN SELECCIONAR')){jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);$('#tipo_nivel3_id').focus();}else{if($('#tipo_nivel3_id').val()=='SIN SELECCIONAR'){jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);$('#tipo_nivel3_id').focus();}else{MODIFICAR=0;AGREGAR_COMPLETO=0;mostrarEstructuraDelNivel2();inicializarSideLayers();}}}
 function agregarN3(id2,tipo_documento){ID_N2=id2;ID_TIPO_EJEMPLAR=tipo_documento;MODIFICAR=0;inicializar();_mostrarAccion("Agregando ejemplares");$('#divCantEjemplares').show();mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);}
 function mostrarInfoAltaNivel1(id1){ID_N1=id1;objAH=new AjaxHelper(updateMostrarInfoAltaNivel1);objAH.showOverlay=true;objAH.debug=true;objAH.showStatusIn='nivel1';objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_INFO_NIVEL1_LATERARL";objAH.id1=ID_N1;objAH.sendToServer();}
@@ -65,7 +65,7 @@ function guardarModificarDocumentoN1(){if(MODIFICAR==1){guardarModificacionDocum
 function guardarModificarDocumentoN2(){if(MODIFICAR==1){guardarModificacionDocumentoN2();}else{guardarDocumentoN2();}}
 function guardarModificarDocumentoN3(){if(MODIFICAR==1){guardarModificacionDocumentoN3();}else{guardarDocumentoN3();}}
 function guardarDocumentoN1(){syncComponentesArray();objAH=new AjaxHelper(updateGuardarDocumentoN1);objAH.debug=true;objAH.showOverlay=true;objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="GUARDAR_NIVEL_1";objAH.id_tipo_doc=$("#tipo_nivel3_id").val();objAH.id_nivel_bibliografico=$("#id_nivel_bibliografico").val();_sacarOpciones();objAH.infoArrayNivel1=MARC_OBJECT_ARRAY;objAH.id1=ID_N1;objAH.sendToServer();}
-function updateGuardarDocumentoN1(responseText){var info=JSONstring.toObject(responseText);var Messages=info.Message_arrayref;ID_N1=info.id1;setMessages(Messages);if(!(hayError(Messages))){inicializar();$('#datos_del_leader').hide();mostrarInfoAltaNivel1(ID_N1);mostrarEstructuraDelNivel2();}}
+function updateGuardarDocumentoN1(responseText){var info=JSONstring.toObject(responseText);var Messages=info.Message_arrayref;ID_N1=info.id1;if(!(hayError(Messages))){inicializar();$('#datos_del_leader').hide();mostrarInfoAltaNivel1(ID_N1);agregarN2();}else{setMessages(Messages);}}
 function verificar_guardar_nivel2(){var ok=true;if((MODIFICAR==0)&&($('#tipo_nivel3_id').val()=='SIN SELECCIONAR')){jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);$('#tipo_nivel3_id').focus();ok=false;}
 return ok;}
 function guardarDocumentoN2(){if(verificar_guardar_nivel2()){syncComponentesArray();objAH=new AjaxHelper(updateGuardarDocumentoN2);objAH.debug=true;objAH.showOverlay=true;objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="GUARDAR_NIVEL_2";objAH.tipo_ejemplar=$('#tipo_nivel3_id').val();_sacarOpciones();objAH.infoArrayNivel2=MARC_OBJECT_ARRAY;objAH.id1=ID_N1;objAH.id2=ID_N2;objAH.sendToServer();}}
