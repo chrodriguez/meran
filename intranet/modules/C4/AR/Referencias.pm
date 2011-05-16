@@ -662,7 +662,7 @@ sub asignarReferenciaParaCatalogo{
   my $id_nuevo = $related_id;
   my $nivel1 = C4::Modelo::CatRegistroMarcN1->new();
   my $registros = $nivel1->getReferenced($tabla,$referer_involved);
-  
+
   foreach my $registro (@$registros){
       my $marc = $registro->getMarcRecord;
       $marc =~ s/$nombre_tabla\@$id_viejo/$nombre_tabla\@$id_nuevo/g;

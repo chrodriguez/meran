@@ -1,6 +1,7 @@
 package C4::AR::Novedades;
 
 use strict;
+use HTML::Entities;
 require Exporter;
 use C4::Modelo::SysNovedad;
 use C4::Modelo::SysNovedad::Manager;
@@ -22,9 +23,12 @@ sub agregar{
     my %params;
     my $novedad = C4::Modelo::SysNovedad->new();
 
-    use HTML::Entities;
     my $contenido = $input->param('contenido');
-#     FALTA CONVERTIR A CODIGO HTML!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (pero tener cuidado con <> que se requieren para estilos!!!)
+
+#   Escapa codigo HTML
+    encode_entities($contenido);
+#     C4::AR::Debug::debug($contenido);
+
     %params = $input->Vars;
     $params{'contenido'} = $contenido;
 
@@ -113,7 +117,7 @@ sub eliminar{
 
     #Obtengo la cant total de sys_novedads para el paginador
     if(scalar(@$novedades_array_ref) > 0){
-    C4::AR::Debug::debug("que meirda pasa???????????????????");
+    C4::AR::Debug::debug("que pasa???????????????????");
         return ($novedades_array_ref->[0]->delete());
     }else{
         return (0);

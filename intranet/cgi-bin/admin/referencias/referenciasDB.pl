@@ -19,6 +19,7 @@ my $editing = $input->param('value') && $input->param('id');
 $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $accion;
+
 if ($obj != 0){
     $accion = $obj->{'accion'};
 }else{
@@ -35,7 +36,11 @@ if ($editing){
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                        flagsrequired => {  ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'CONSULTA', 
+                                            entorno => 'permisos', 
+                                            tipo_permiso => 'general'},
                         debug => 1,
                     });
 
@@ -55,7 +60,11 @@ elsif ($accion eq "OBTENER_TABLAS"){
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                        flagsrequired => {  ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'CONSULTA', 
+                                            entorno => 'permisos', 
+                                            tipo_permiso => 'general'},
                         debug => 1,
                     });
 
@@ -79,7 +88,11 @@ elsif ($accion eq "AGREGAR_REGISTRO"){
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                        flagsrequired => {  ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'CONSULTA', 
+                                            entorno => 'permisos', 
+                                            tipo_permiso => 'general'},
                         debug => 1,
                     });
 
@@ -102,7 +115,11 @@ elsif ($accion eq "MOSTRAR_REFERENCIAS"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
                             debug => 1,
                     });
 
@@ -130,7 +147,11 @@ elsif ($accion eq "ASIGNAR_REFERENCIA"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
                             debug => 1,
                     });
 
@@ -159,7 +180,11 @@ elsif ($accion eq "ASIGNAR_Y_ELIMINAR_REFERENCIA"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
                             debug => 1,
                     });
     C4::AR::Referencias::asignarYEliminarReferencia($alias_tabla,$related_id,$referer_involved);
@@ -187,7 +212,11 @@ elsif ($accion eq "ELIMINAR_REFERENCIA"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
                             debug => 1,
                     });
 

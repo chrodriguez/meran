@@ -44,7 +44,7 @@ function eliminarReferencia(tabla,id){
             objAH=new AjaxHelper(updateEliminarReferencia);
             objAH.url= '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
             objAH.cache = false;
-            bjAH.showOverlay       = true;
+            objAH.showOverlay       = true;
             objAH.accion="ELIMINAR_REFERENCIA";
             objAH.alias_tabla = tabla;
             objAH.item_id= id;

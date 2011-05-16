@@ -32,7 +32,10 @@ my ($template, $session, $t_params) = C4::AR::Auth::get_template_and_user({
 									query => $input,
 									type => "intranet",
 									authnotrequired => 0,
-									flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+									flagsrequired => {  ui => 'ANY', 
+                                                        tipo_documento => 'ANY', 
+                                                        accion => 'CONSULTA', 
+                                                        entorno => 'undefined'},
 									debug => 1,
 			    });
 

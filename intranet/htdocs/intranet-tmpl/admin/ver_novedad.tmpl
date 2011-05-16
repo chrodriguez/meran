@@ -3,7 +3,7 @@
     <h2>[% 'Titulo' | i18n %]: [% novedad.getTitulo %]</h2>
     <fieldset>
         <legend>[% 'Cuerpo de la novedad' | i18n %]:</legend>
-        <h3>[% HTML.escape(novedad.getContenido) %]</h3>
+        <h3>[% novedad.getContenido %]</h3>
         <h4> [% novedad.getFechaLegible %]</h4>
     </fieldset>
     <a href="#">[% novedad.getFechaLegible %] </a>
