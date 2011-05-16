@@ -10,12 +10,12 @@
         $('#form_novedad').submit();
     }
 
-    $(document).ready(function() {
-        $(function()
-        {
-            $('#contenido').wysiwyg();
-        });
-    });
+//     $(document).ready(function() {
+//         $(function()
+//         {
+// //             $('#contenido').wysiwyg();
+//         });
+//     });
 </script>
 
 [% USE HTML %]
@@ -41,12 +41,10 @@
                         <label for="categoria">[% "Categor&iacute;a" | i18n %]</label>
                           <input type="text" id="categoria" name="categoria" value="[% novedad.getCategoria %]">
                     </li>
-                    <li class="sub_item">
-                        <label for="contenido">[% "Contenido" | i18n %]</label>
+                     <li class="sub_item">
+                       <label for="contenido">[% "Contenido" | i18n %]</label>
+                          <textarea id="contenido" name="contenido" style="width: 88.3%" >[%novedad.getContenido %]</textarea>
                     </li>
-                    <br/><br/>
-                          <textarea id="contenido" name="contenido" style="width: 88.3%">[% HTML.escape(novedad.getContenido) %]</textarea>
-
 
                         <input type="hidden" id="token" name="token" value="[% token %]">
                         [% IF editing %]
