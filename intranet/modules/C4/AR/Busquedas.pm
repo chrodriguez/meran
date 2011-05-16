@@ -932,7 +932,7 @@ sub getSuggestion{
 #         if (!$intra){
             $suggestion = Encode::encode_utf8($suggestion);
 #         }
-        ($total_found) = busquedaCombinada_newTemp($suggestion,\%hash,$obj_for_log,1);
+        ($total_found) = C4::AR::Busquedas::busquedaCombinada_newTemp($suggestion,\%hash,$obj_for_log,1);
         $cont++;
     }
 
