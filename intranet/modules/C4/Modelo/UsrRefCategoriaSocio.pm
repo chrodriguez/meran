@@ -7,11 +7,21 @@ __PACKAGE__->meta->setup
     table   => 'usr_ref_categoria_socio',
     columns =>
         [
-            id                    => { type => 'serial', not_null => 1 }, 
-            categorycode    => { type => 'char', not_null => 1 , length => 2},
-            description     => { type => 'varchar', length => 255, not_null => 1 },
+            id                      => { type => 'integer', not_null => 1 }, 
+            categorycode            => { type => 'char', not_null => 1 , length => 2},
+            description             => { type => 'varchar', length => 255, not_null => 1 },
+            enrolmentperiod         => { type => 'integer', length => 6 },
+            upperagelimit           => { type => 'integer', length => 6 },
+            dateofbirthrequired     => { type => 'integer', length => 128 },
+            finetype                => { type => 'varchar', length => 30 },
+            bulk                    => { type => 'integer', length => 128 },
+            enrolmentfee            => { type => 'decimal' },
+            overduenoticerequired   => { type => 'integer', length => 128 },
+            issuelimit              => { type => 'integer', length => 128 },
+            reservefee              => { type => 'decimal' },
+            borrowingdays           => { type => 'integer', length => 30, not_null => 1, default   => '14' },           
         ],
-#     primary_key_columns => ['id'],MAS ADELANTE DESCOMENTAAR; CUANDO LA DB SE HAGA NUEVA
+        
     primary_key_columns => ['id'], 
     unique_key => ['categorycode'],
 
@@ -24,6 +34,11 @@ use Text::LevenshteinXS;
 sub nextMember{
     
     return(C4::Modelo::UsrRefTipoDocumento->new());
+}
+
+sub getId{
+    my ($self) = shift;
+    return ($self->id);    
 }
 
 sub getCategory_code{

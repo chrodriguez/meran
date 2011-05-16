@@ -462,7 +462,11 @@ sub historicoDeBusqueda{
    }
 
    if($params_obj->{'catUsuarios'} ne "SIN SELECCIONAR"){
-      push(@filtros, ( 'busqueda.socio.cod_categoria' => { eq=> $params_obj->{'catUsuarios'}, }) );
+   
+#   FIXME: ver si anda! cambiado el 16/05 porque no esta mas el cod_categoria en usr_socio, esta el id_categoria
+#      push(@filtros, ( 'busqueda.socio.cod_categoria' => { eq=> $params_obj->{'catUsuarios'}, }) );
+
+        push(@filtros, ( 'busqueda.socio.categoria.getCategory_code' => { eq => $params_obj->{'catUsuarios'}, }) );
    }
 
    use C4::Modelo::RepHistorialBusqueda::Manager;
@@ -1547,10 +1551,12 @@ sub userCategReport{
    my @filtros;
    use C4::Modelo::UsrSocio::Manager;
    push (@filtros, ( id_ui => { eq => $id_ui },) );
+   
+#   FIXME: ver si anda! cambiado el 16/05 porque no esta mas cod_categoria en usr_socio, esta id_categoria
    my $socios = C4::Modelo::UsrSocio::Manager->get_usr_socio(
                                                                query => \@filtros,
-                                                               select => ['*','COUNT(cod_categoria) AS agregacion_temp'],
-                                                               group_by => ['cod_categoria'],
+                                                               select => ['*','COUNT(id_categoria) AS agregacion_temp'],
+                                                               group_by => ['id_categoria'],
                                                                require_objects => ['categoria','ui'],
                                                             );
 #  	my $clase='par';

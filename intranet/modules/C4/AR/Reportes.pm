@@ -589,7 +589,11 @@ sub getBusquedasOPAC {
 			&& ($registrados) )
 		{
 			push( @filtros,
-				( 'usr_socio.cod_categoria' => { eq => $tipo_socio } ) );
+			
+#			FIXME: ver si anda! cambiado 16/05 porque ahora no esta mas el cod_categoria, esta el id. 
+#				( 'usr_socio.cod_categoria' => { eq => $tipo_socio } ) );
+
+                ( 'usr_socio.categoria.getCategory_code' => { eq => $tipo_socio } ) );
 		}
 		if ( C4::AR::Utilidades::validateString($f_inicio) ) {
 			push(
@@ -656,6 +660,7 @@ sub registroDeUsuarios {
 	my ( $params, $limit, $offset, $total ) = @_;
 
 	my $anio      = $params->{'year'};
+
 	my $categoria = $params->{'category'};
 	my $ui        = $params->{'ui'};
 	my $name_from = $params->{'name_from'};
@@ -669,7 +674,11 @@ sub registroDeUsuarios {
 	use C4::Modelo::UsrSocio::Manager;
 
 	if ($categoria) {
-		push( @filtros, ( 'cod_categoria' => { eq => $categoria } ) );
+	
+#		FIXME: ver si anda! cambiado 16/05 porque ahora no esta mas el cod_categoria, esta el id. 
+#       push( @filtros, ( 'cod_categoria' => { eq => $categoria } ) );
+
+		push( @filtros, ( 'id_categoria' => { eq => $categoria } ) );
 	}
 	if ($ui) {
 		push( @filtros, ( 'id_ui' => { eq => $ui } ) );

@@ -249,7 +249,7 @@ Se genra la ventana para modificar los datos del usuario
         #SI NO EXISTE EL SOCIO IMPRIME 0, PARA INFORMAR AL CLIENTE QUE ACCION REALIZAR
         C4::AR::Validator::validateObjectInstance($socio);
         my %params;
-        $params{'default'}              = $socio->getCod_categoria;
+        $params{'default'}              = $socio->getId_categoria;
         #se genera el combo de categorias de usuario
         my $comboDeCategorias           = &C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
 

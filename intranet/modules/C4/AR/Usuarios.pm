@@ -774,7 +774,11 @@ sub BornameSearchForCard {
     my $socioTemp = C4::Modelo::UsrSocio->new();
 
     if ((C4::AR::Utilidades::validateString($params->{'categoria_socio'}))&& ($params->{'categoria_socio'} ne 'SIN SELECCIONAR')) {
-           push (@filtros, (cod_categoria => { eq => $params->{'categoria_socio'} }) );
+    
+#    FIXME: ver si anda! cambiado el 16/05 porque no esta mas el cod_categoria en usr_socio, esta id_categoria
+#           push (@filtros, (cod_categoria => { eq => $params->{'categoria_socio'} }) );
+
+            push (@filtros, (id_categoria => { eq => $params->{'categoria_socio'} }) );
     }
 
     if ((C4::AR::Utilidades::validateString($params->{'apellido1'})) || (C4::AR::Utilidades::validateString($params->{'apellido2'}))){
@@ -953,7 +957,7 @@ sub crearPersonaLDAP{
     $params{'ciudad'}               = C4::AR::Authldap::_getValorPreferenciaLdap('ldap_lockconfig_field_map_city');
     $params{'credential_type'}      = "estudiante";
     $params{'nro_socio'}            = $nro_socio;
-    $params{'cod_categoria'}        = "ES";
+    $params{'id_categoria'}        = "1";
     
     my $person = C4::Modelo::UsrPersona->new();
 

@@ -12,7 +12,7 @@ __PACKAGE__->meta->setup(
         id_socio                         => { type => 'serial', not_null => 1 , length => 11},
         nro_socio                        => { type => 'varchar', length => 16, not_null => 1 },
         id_ui                            => { type => 'varchar', length => 4, not_null => 1 },
-        cod_categoria                    => { type => 'character', length => 2, not_null => 1 },
+        id_categoria                     => { type => 'integer', length =>2, not_null => 1 },
         fecha_alta                       => { type => 'date' },
         expira                           => { type => 'date' },
         flags                            => { type => 'integer' },
@@ -54,7 +54,7 @@ __PACKAGE__->meta->setup(
      categoria => 
       {
         class       => 'C4::Modelo::UsrRefCategoriaSocio',
-        key_columns => { cod_categoria => 'categorycode' },
+        key_columns => { id_categoria => 'id' },
         type        => 'one to one',
       },
 
@@ -394,15 +394,15 @@ sub setId_ui{
     $self->id_ui($id_ui);
 }
 
-sub getCod_categoria{
+sub getId_categoria{
     my ($self) = shift;
-    return ($self->cod_categoria);
+    return ($self->id_categoria);
 }
 
-sub setCod_categoria{
+sub setId_categoria{
     my ($self) = shift;
-    my ($cod_categoria) = @_;
-    $self->cod_categoria($cod_categoria);
+    my ($id_categoria) = @_;
+    $self->cod_categoria($id_categoria);
 }
 
 sub getFecha_alta{

@@ -9,7 +9,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         tipo_sancion        => { type => 'serial', not_null => 1 },
-        categoria_socio     => { type => 'character', default => '', length => 2, not_null => 1 },
+        categoria_socio     => { type => 'integer', length => 2, not_null => 1 },
         tipo_prestamo       => { type => 'character', default => '', length => 2, not_null => 1 },
     ],
 
@@ -39,7 +39,7 @@ __PACKAGE__->meta->setup(
 
 	    ref_categoria_socio => {
             class      => 'C4::Modelo::UsrRefCategoriaSocio',
-            column_map => { categoria_socio => 'categorycode' },
+            column_map => { categoria_socio => 'id' },
             type       => 'one to one',
         },
     ],
@@ -73,7 +73,7 @@ sub setTipo_sancion{
 
 sub getCategoria_socio{
     my ($self) = shift;
-    return (C4::AR::Utilidades::trim($self->categoria_socio));
+    return ($self->categoria_socio);
 }
 
 sub setCategoria_socio{
