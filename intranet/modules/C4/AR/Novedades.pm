@@ -25,9 +25,9 @@ sub agregar{
 
     my $contenido = $input->param('contenido');
 
-#   This routine replaces unsafe characters in $contenido with their entity representation
+#   Escapa codigo HTML
     encode_entities($contenido);
-    C4::AR::Debug::debug($contenido);
+#     C4::AR::Debug::debug($contenido);
 
     %params = $input->Vars;
     $params{'contenido'} = $contenido;
