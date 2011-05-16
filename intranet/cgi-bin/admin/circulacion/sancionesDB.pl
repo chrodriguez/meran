@@ -22,7 +22,10 @@ if($accion eq "TIPOS_PRESTAMOS_SANCIONADOS"){
 								query => $input,
 								type => "intranet",
 								authnotrequired => 0,
-								flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+								flagsrequired => {  ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'},
 								debug => 1,
 					});
 	
@@ -65,7 +68,10 @@ elsif($accion eq "REGLAS_SANCIONES"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'undefined'},
                             debug => 1,
                 });
 
@@ -202,7 +208,10 @@ elsif($accion eq "MODIFICAR_REGLAS"){
                                 query => $input,
                                 type => "intranet",
                                 authnotrequired => 0,
-                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                flagsrequired => {  ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'},
                                 debug => 1,
                     });
         my $reglas_sancion=&C4::AR::Sanciones::getReglasSancion();

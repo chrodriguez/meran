@@ -32,7 +32,10 @@ if ($accion eq "OBTENER_PERMISOS_CATALOGO"){
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                        flagsrequired => {  ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'CONSULTA', 
+                                            entorno => 'permisos', tipo_permiso => 'general'},
                         debug => 1,
                     });
     my $perfil = $obj->{'perfil'} || 0;
@@ -56,7 +59,11 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_CATALOGO"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
                             debug => 1,
                     });
 
@@ -80,7 +87,11 @@ elsif ($accion eq "NUEVO_PERMISO_CATALOGO"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
                             debug => 1,
                     });
 
@@ -98,7 +109,11 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_CATALOGO"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
                             debug => 1,
                     });
 
@@ -116,7 +131,11 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_CATALOGO"){
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                        flagsrequired => {  ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'CONSULTA', 
+                                            entorno => 'permisos', 
+                                            tipo_permiso => 'general'},
                         debug => 1,
                     });
     my $perfil = $obj->{'perfil'} || 0;
@@ -140,7 +159,11 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_GENERAL"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICACION', entorno => 'permisos', tipo_permiso => 'general'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
                             debug => 1,
                     });
 
@@ -163,7 +186,11 @@ elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'permisos', tipo_permiso => 'general'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'ALTA',   
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
                             debug => 1,
                     });
 
@@ -181,7 +208,11 @@ elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
                             debug => 1,
                     });
 
@@ -199,7 +230,11 @@ elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                        flagsrequired => {  ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'CONSULTA', 
+                                            entorno => 'permisos', 
+                                            tipo_permiso => 'general'},
                         debug => 1,
                     });
     my $perfil = $obj->{'perfil'} || 0;
@@ -223,7 +258,11 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_CIRCULACION"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICACION', entorno => 'permisos', tipo_permiso => 'general'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
                             debug => 1,
                     });
 
@@ -246,7 +285,11 @@ elsif ($accion eq "NUEVO_PERMISO_CIRCULACION"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'permisos', tipo_permiso => 'general'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'ALTA', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
                             debug => 1,
                     });
 
@@ -265,7 +308,11 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_CIRCULACION"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
                             debug => 1,
                     });
 

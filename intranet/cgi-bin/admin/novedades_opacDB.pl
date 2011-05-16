@@ -20,7 +20,10 @@ if ($accion eq 'ELIMINAR'){
                                         query => $input,
                                         type => "intranet",
                                         authnotrequired => 0,
-                                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+                                        flagsrequired => {  ui => 'ANY', 
+                                                            tipo_documento => 'ANY', 
+                                                            accion => 'CONSULTA', 
+                                                            entorno => 'usuarios'},
                                         debug => 1,
     });
     
@@ -45,7 +48,10 @@ elsif ($accion eq 'LISTAR'){
                                         query => $input,
                                         type => "intranet",
                                         authnotrequired => 0,
-                                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+                                        flagsrequired => {  ui => 'ANY', 
+                                                            tipo_documento => 'ANY', 
+                                                            accion => 'CONSULTA', 
+                                                            entorno => 'usuarios'},
                                         debug => 1,
     });
     my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
