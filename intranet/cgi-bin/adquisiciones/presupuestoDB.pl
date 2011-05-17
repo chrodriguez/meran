@@ -26,7 +26,10 @@ if($tipoAccion eq "GUARDAR_MODIFICACION_PRESUPUESTO"){
                         query           => $input,
                         type            => "intranet",
                         authnotrequired => 0,
-                        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICAR', entorno => 'usuarios'},
+                        flagsrequired   => {    ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICAR', 
+                                                entorno => 'usuarios'},
                         debug           => 1,
                     });
 
@@ -52,7 +55,10 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
                               query             => $input,
                               type              => "intranet",
                               authnotrequired   => 0,
-                              flagsrequired     => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+                              flagsrequired     => {    ui => 'ANY', 
+                                                        tipo_documento => 'ANY', 
+                                                        accion => 'CONSULTA', 
+                                                        entorno => 'usuarios'},
         });
 
         my $presupuestos_dir    = "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/";
@@ -116,7 +122,10 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
                               query             => $input,
                               type              => "intranet",
                               authnotrequired   => 0,
-                              flagsrequired     => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+                              flagsrequired     => {    ui => 'ANY', 
+                                                        tipo_documento => 'ANY', 
+                                                        accion => 'CONSULTA', 
+                                                        entorno => 'usuarios'},
         });
         
     
@@ -139,7 +148,10 @@ elsif($tipoAccion eq "AGREGAR_PRESUPUESTO"){
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
+        flagsrequired   => {    ui => 'ANY', 
+                                tipo_documento => 'ANY', 
+                                accion => 'ALTA', 
+                                entorno => 'usuarios'},
         debug           => 1,
     });
    
@@ -170,7 +182,10 @@ elsif($tipoAccion eq "EXPORTAR_PRESUPUESTO"){
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'}, # FIXME
+        flagsrequired   => {    ui => 'ANY', 
+                                tipo_documento => 'ANY', 
+                                accion => 'CONSULTA', 
+                                entorno => 'usuarios'}, # FIXME
         debug           => 1,
     });
 

@@ -36,7 +36,10 @@ if (!$obj){
                                 query => $input,
                                 type => "intranet",
                                 authnotrequired => 0,
-                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                flagsrequired => {  ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'},
                                 debug => 1,
           });
 }else{
@@ -46,7 +49,10 @@ if (!$obj){
                                 query => $input,
                                 type => "intranet",
                                 authnotrequired => 0,
-                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                flagsrequired => {  ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'},
                                 debug => 1,
                         });
 

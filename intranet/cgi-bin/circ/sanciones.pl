@@ -31,7 +31,10 @@ my ($template, $session, $t_params) =  get_template_and_user ({
             query       => $input,
             type        => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+            flagsrequired   => {    ui => 'ANY', 
+                                    tipo_documento => 'ANY', 
+                                    accion => 'CONSULTA', 
+                                    entorno => 'usuarios'},
     });
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

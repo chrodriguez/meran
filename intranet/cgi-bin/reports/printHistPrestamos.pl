@@ -45,7 +45,10 @@ if ($input->param('type') eq 'pdf') {
                                 query => $input,
                                 type => "intranet",
                                 authnotrequired => 1,
-                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                flagsrequired => {  ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'},
                              });
 
 # my $resultsarray=\@results;

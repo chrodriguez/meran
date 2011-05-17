@@ -20,7 +20,10 @@ if ($tipoAccion eq "EDITAR") {
             query           => $input,
             type            => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+            flagsrequired   => {    ui => 'ANY',   
+                                    tipo_documento => 'ANY', 
+                                    accion => 'CONSULTA', 
+                                    entorno => 'usuarios'},
     });
     
     my $comboDeTipoDeDoc = &C4::AR::Utilidades::generarComboTipoDeDoc();
@@ -34,7 +37,10 @@ if ($tipoAccion eq "EDITAR") {
                       query             => $input,
                       type              => "intranet",
                       authnotrequired   => 0,
-                      flagsrequired     => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+                      flagsrequired     => {    ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'usuarios'},
           });    
 }
 

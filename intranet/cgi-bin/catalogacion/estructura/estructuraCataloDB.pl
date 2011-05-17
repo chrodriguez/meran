@@ -34,7 +34,10 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 			                query => $input,
 			                type => "intranet",
 			                authnotrequired => 0,
-			                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+			                flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'datos_nivel1' },
 			                debug => 1,
 			        });
 
@@ -146,7 +149,10 @@ elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_CAMPOS"){
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                        flagsrequired => {      ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'datos_nivel1' },
                         debug => 1,
                     });
 
@@ -174,7 +180,10 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                        flagsrequired => {  ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'CONSULTA', 
+                                            entorno => 'datos_nivel1' },
                         debug => 1,
                     });
 
@@ -445,7 +454,10 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'datos_nivel1' },
                             debug => 1,
                     });
 
@@ -466,7 +478,10 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                            flagsrequired => {      ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1' },
                             debug => 1,
                     });
 
@@ -490,7 +505,10 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+                            flagsrequired => {      ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1' },
                             debug => 1,
                     });
 
@@ -551,7 +569,10 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
 	my ($user, $session, $flags)= checkauth(
 												$input, 	
 												$authnotrequired,	
-                                                { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'datos_nivel3'}, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'ALTA', 
+                                                    entorno => 'datos_nivel3'}, 
 												'intranet'
 											);
                
@@ -699,7 +720,10 @@ elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
 							query           => $input,
 							type            => "intranet",
 							authnotrequired => 0,
-							flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+							flagsrequired   => {    ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1' },
 });
 
 

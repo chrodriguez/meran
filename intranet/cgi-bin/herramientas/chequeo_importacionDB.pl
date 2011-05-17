@@ -27,7 +27,10 @@ my ($template, $session, $t_params)  = get_template_and_user({
               query           => $input,
               type            => "intranet",
               authnotrequired => $authnotrequired,
-              flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1' },
+              flagsrequired   => {  ui => 'ANY', 
+                                    tipo_documento => 'ANY', 
+                                    accion => 'CONSULTA', 
+                                    entorno => 'datos_nivel1' },
 });
 
 $t_params->{'ini'} = $obj->{'ini'} = $ini;
