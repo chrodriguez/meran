@@ -402,7 +402,7 @@ sub getId_categoria{
 sub setId_categoria{
     my ($self) = shift;
     my ($id_categoria) = @_;
-    $self->cod_categoria($id_categoria);
+    $self->id_categoria($id_categoria);
 }
 
 sub getFecha_alta{
