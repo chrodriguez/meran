@@ -673,7 +673,7 @@ sub getSocioLike {
 #                                                 'persona.nombre'    => { like => '%'.$s.'%'},   
 #                                                 apellido            => { like => '%'.$s.'%'},
 # FIXME prueba
-                                                completo            => { like => '%'.$s.'%'},
+                                                completo            => { like => $s.'%'},
                                                 nro_documento       => { like => '%'.$s.'%' }, 
                                                 legajo              => { like => '%'.$s.'%' },
                                                 nro_socio           => { like => '%'.$s.'%' }          
