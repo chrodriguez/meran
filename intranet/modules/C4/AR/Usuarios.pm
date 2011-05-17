@@ -666,7 +666,7 @@ sub getSocioLike {
     $cantR                  = $cantR || $limit_pref;
 
 
-    if (1 == 1){
+    if (C4::AR::Preferencias::getValorPreferencia("busqueda_socio_por_apellido")){
 
             push (  @filtros, ( or   => [   
                                               completo            => { like => $socio.'%'},
