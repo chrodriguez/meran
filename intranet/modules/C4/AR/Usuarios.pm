@@ -666,7 +666,17 @@ sub getSocioLike {
     $cantR                  = $cantR || $limit_pref;
 
 
-    if($socio ne 'TODOS'){
+    if (1 == 1){
+
+            push (  @filtros, ( or   => [   
+                                              completo            => { like => $socio.'%'},
+                                              nro_documento       => { like => '%'.$socio.'%' }, 
+                                              legajo              => { like => '%'.$socio.'%' },
+                                              nro_socio           => { like => '%'.$socio.'%' }          
+                                          ])
+                    );
+        
+    } elsif($socio ne 'TODOS'){
         #SI VIENE INICIAL, SE BUSCA SOLAMENTE POR APELLIDOS QUE COMIENCEN CON ESA LETRA, SINO EN TODOS LADOS CON LIKE EN AMBOS LADOS
         if (!($inicial)){
             foreach my $s (@searchstring_array){ 
@@ -681,17 +691,7 @@ sub getSocioLike {
             }
 
 # TODO preferencia para ECONO
-        }elsif (1 == 1){
-
-            push (  @filtros, ( or   => [   
-                                              completo            => { like => $socio.'%'},
-                                              nro_documento       => { like => '%'.$socio.'%' }, 
-                                              legajo              => { like => '%'.$socio.'%' },
-                                              nro_socio           => { like => '%'.$socio.'%' }          
-                                          ])
-                    );
-        
-        }else{
+        } else {
             foreach my $s (@searchstring_array){ 
                 push (  @filtros, ( or   => [   apellido => { like => $s.'%'}, ]) );
             }
