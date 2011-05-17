@@ -117,6 +117,7 @@ sub agregar{
     $self->setLegajo($data_hash->{'legajo'});
     $self->setNombre(C4::AR::Utilidades::capitalizarString($data_hash->{'nombre'}));
     $self->setApellido(C4::AR::Utilidades::capitalizarString($data_hash->{'apellido'}));
+    $self->setCompleto(C4::AR::Utilidades::capitalizarString($data_hash->{'apellido'}." ".$data_hash->{'nombre'}));
     $self->setVersion_documento($data_hash->{'version_documento'});
     $self->setNro_documento($data_hash->{'nro_documento'});
     $self->setTipo_documento($data_hash->{'tipo_documento'});
@@ -175,6 +176,7 @@ sub modificar{
     #Asignando data...
     $self->setNombre($data_hash->{'nombre'});
     $self->setApellido($data_hash->{'apellido'});
+    $self->setCompleto(C4::AR::Utilidades::capitalizarString($data_hash->{'apellido'}." ".$data_hash->{'nombre'}));
     $self->setLegajo($data_hash->{'legajo'});
     $self->setVersion_documento($data_hash->{'version_documento'});
     $self->setNro_documento($data_hash->{'nro_documento'});
@@ -358,6 +360,13 @@ sub setApellido{
     my ($apellido) = @_;
     Encode::encode_utf8($apellido);
     $self->apellido($apellido);
+}
+
+sub setCompleto{
+    my ($self) = shift;
+    my ($completo) = @_;
+    Encode::encode_utf8($completo);
+    $self->completo($completo);
 }
 
 sub getNombre{

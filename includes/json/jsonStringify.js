@@ -30,7 +30,8 @@ JSONstring={
 // TODO faltarian otros acentos
 		//esto no se permite, segun lo que indica el patron
 //		x =  temp.replace(/[\@áéíóúàèìòù|#;'?!¡¿ü]+/g,'');
-		x =  temp.replace(/[\@|#;'?¿]+/g,'');
+// 		x =  temp.replace(/[\@|#;'?¿]+/g,'');
+        x =  temp.replace(/[|#;'?¿]+/g,'');
         x =  x.replace(/"/,'\"');
 
 		this.log("jsconStringify => clearData: "+x);
