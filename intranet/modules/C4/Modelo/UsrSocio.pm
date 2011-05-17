@@ -112,7 +112,7 @@ sub agregar{
     }
 
     $self->setId_ui($data_hash->{'id_ui'});
-    $self->setCod_categoria($data_hash->{'cod_categoria'});
+    $self->setId_categoria($data_hash->{'cod_categoria'});
 
 
     my $dateformat = C4::Date::get_date_format();
@@ -196,7 +196,7 @@ sub modificar{
     my ($data_hash)=@_;
 
     $self->setId_ui($data_hash->{'id_ui'});
-    $self->setCod_categoria($data_hash->{'cod_categoria'});
+    $self->setId_categoria($data_hash->{'cod_categoria'});
     $self->persona->modificar($data_hash);
     $self->agregarAutorizado($data_hash);
     $self->save();
