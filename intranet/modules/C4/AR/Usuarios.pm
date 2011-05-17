@@ -665,27 +665,39 @@ sub getSocioLike {
     my $limit_pref          = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
     $cantR                  = $cantR || $limit_pref;
 
-    if($socio ne 'TODOS'){
-        #SI VIENE INICIAL, SE BUSCA SOLAMENTE POR APELLIDOS QUE COMIENCEN CON ESA LETRA, SINO EN TODOS LADOS CON LIKE EN AMBOS LADOS
-        if (!($inicial)){
-            foreach my $s (@searchstring_array){ 
-                push (  @filtros, ( or   => [   
+# 
+#     if($socio ne 'TODOS'){
+#         #SI VIENE INICIAL, SE BUSCA SOLAMENTE POR APELLIDOS QUE COMIENCEN CON ESA LETRA, SINO EN TODOS LADOS CON LIKE EN AMBOS LADOS
+#         if (!($inicial)){
+#             foreach my $s (@searchstring_array){ 
+#                 push (  @filtros, ( or   => [   
+# #                                                 'persona.nombre'    => { like => '%'.$s.'%'},   
+# #                                                 apellido            => { like => '%'.$s.'%'},
+# # FIXME prueba
+#                                                 completo            => { like => $s.'%'},
+#                                                 nro_documento       => { like => '%'.$s.'%' }, 
+#                                                 legajo              => { like => '%'.$s.'%' },
+#                                                 nro_socio           => { like => '%'.$s.'%' }          
+#                                             ])
+#                      );
+#             }
+#         }else{
+#             foreach my $s (@searchstring_array){ 
+#                 push (  @filtros, ( or   => [   apellido => { like => $s.'%'}, ]) );
+#             }
+#         }
+#     }
+
+              push (  @filtros, ( or   => [   
 #                                                 'persona.nombre'    => { like => '%'.$s.'%'},   
 #                                                 apellido            => { like => '%'.$s.'%'},
 # FIXME prueba
-                                                completo            => { like => $s.'%'},
-                                                nro_documento       => { like => '%'.$s.'%' }, 
-                                                legajo              => { like => '%'.$s.'%' },
-                                                nro_socio           => { like => '%'.$s.'%' }          
+                                                completo            => { like => $socio.'%'},
+                                                nro_documento       => { like => '%'.$socio.'%' }, 
+                                                legajo              => { like => '%'.$socio.'%' },
+                                                nro_socio           => { like => '%'.$socio.'%' }          
                                             ])
                      );
-            }
-        }else{
-            foreach my $s (@searchstring_array){ 
-                push (  @filtros, ( or   => [   apellido => { like => $s.'%'}, ]) );
-            }
-        }
-    }
 
     if (!defined $habilitados){
         $habilitados = 1;
