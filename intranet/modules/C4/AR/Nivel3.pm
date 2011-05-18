@@ -651,7 +651,8 @@ sub generaCodigoBarra{
     my $dbh   = C4::Context->dbh;
 
 	my $barcode;
-	my @estructurabarcode = split(',',C4::AR::Preferencias::getValorPreferencia("barcodeFormat"));
+    my @estructurabarcode = split(',',C4::AR::Preferencias::getValorPreferencia("barcodeFormat"));
+    
     my $like = '';
 
 	for (my $i=0; $i<@estructurabarcode; $i++) {
@@ -662,10 +663,13 @@ sub generaCodigoBarra{
 		}
 	}
 
-     my $sth2 = $dbh->prepare("     SELECT MAX(substring(marc_record,INSTR(marc_record, ?)+9, 
-                                    INSTR(   substring(marc_record,INSTR(marc_record, ?)+9), CHAR(30))-1 )) as maximo 
-                                    FROM cat_registro_marc_n3 
-                                    WHERE INSTR(marc_record, ?) <> 0 ");
+
+     my $sth2 = $dbh->prepare("     
+                                    SELECT MAX(substring(marc_record,INSTR(marc_record, ?)+9, INSTR(substring(marc_record,INSTR(marc_record, ?)+9),'t')-1 )) 
+                                    FROM cat_registro_marc_n3
+                                    WHERE INSTR(marc_record, ?) <> 0 
+                                    
+                              ");
 
 
 
@@ -673,14 +677,12 @@ sub generaCodigoBarra{
 	my $data2= $sth2->fetchrow_hashref;
     my $numero = ($data2->{'maximo'});
 
-
     my @barcodes_array_ref;
-    for(my $i=0;$i<$cant;$i++){
-        $barcode  = $parametros->{'UI'}."-".$parametros->{'tipo_ejemplar'}."-".completarConCeros($numero + $i + 1);
+    for(my $i=1;$i<=$cant;$i++){
+        $barcode  = $parametros->{'UI'}."-".$parametros->{'tipo_ejemplar'}."-".completarConCeros($numero + $i);
         C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode => ".$barcode);
         push(@barcodes_array_ref, $barcode);
     }
-
     return (@barcodes_array_ref);
 }
 
