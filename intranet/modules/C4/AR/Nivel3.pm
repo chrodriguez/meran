@@ -663,6 +663,8 @@ sub generaCodigoBarra{
 		}
 	}
 
+#FIXME está todo feo, muy fixeado, sobretodo la "t" al final y la "f" al principio.
+#El Mono prometió hacerlo (????)
 
      my $sth2 = $dbh->prepare("     
                                     SELECT MAX(substring(marc_record,INSTR(marc_record, ?)+9, INSTR(substring(marc_record,INSTR(marc_record, ?)+9),'t')-1 )) 
