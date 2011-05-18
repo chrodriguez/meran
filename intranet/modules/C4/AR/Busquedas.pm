@@ -978,7 +978,7 @@ sub busquedaAvanzada_newTemp{
     }
 
     if( $params->{'codBarra'} ne "") {
-        $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'});
+        $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'})."'";
 
         $query .='*"';
     }
@@ -989,9 +989,12 @@ sub busquedaAvanzada_newTemp{
     }
     
     if ($params->{'signatura'}){
-        $query .= ' @string "'.$params->{'signatura'}.'"';
+        $query .= ' @string "'.$params->{'signatura'}.'*"';
     }
     
+    if ($params->{'tema'} ne ""){
+        $query .= ' @string "'."cat_tema%".$sphinx->EscapeString($params->{'tema'}).'"';
+    }
 
     
     C4::AR::Debug::debug("tipo_nivel3_name tipo_nivel3_name tipo_nivel3_name =>=> ".$params->{'tipo_nivel3_name'});
@@ -1556,7 +1559,7 @@ sub armarBuscoPor{
 
 	if( C4::AR::Utilidades::validateString($params->{'signatura'})){
 # 		$buscoPor.= "Signatura: ".C4::AR::Utilidades::verificarValor($params->{'signatura'})."&";
-        $buscoPor.= C4::AR::Utilidades::verificarValor($params->{'signatura'})."&";
+        $buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("Signatura").": ".$params->{'signatura'})."&";
 	}
 
     if( C4::AR::Utilidades::validateString($params->{'isbn'})){
