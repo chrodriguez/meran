@@ -857,7 +857,7 @@ sub verificar_permisos_por_nivel{
     my @entornos_perm_catalogo      = ( 'datos_nivel1','datos_nivel2','datos_nivel3', 'estructura_catalogacion_n1',
                                         'estructura_catalogacion_n2','estructura_catalogacion_n3', 'sistema', 'undefined', 'usuarios');
     
-    my @entornos_perm_general       = ( 'reportes','preferencias','permisos' );
+    my @entornos_perm_general       = ( 'reportes','preferencias','permisos','adq_opac','adq_intra' );
     
     my @entornos_perm_circulacion   = ( 'prestamos', 'circ_opac' );
 

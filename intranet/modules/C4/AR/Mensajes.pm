@@ -333,6 +333,7 @@ my %mensajesINTRA = (
     'B449' => 'Error en la funcion C4::AR::Provedoores::agregarProveedor',
     'B450' => 'Error en funcion C4::AR::Catalogacion::_procesar_referencia',
     'B451' => 'Error en funcion C4::AR::Catalogacion::getDatoFromReferencia',
+    'B452' => 'Error en funcion C4::AR::Permisos::actualizarPermisosGeneral',
     'C500' => 'Los items fueron guardados correctamente.',
     'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
     'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',

@@ -140,7 +140,12 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_CATALOGO"){
                     });
     my $perfil = $obj->{'perfil'} || 0;
     my ($permisos,$newUpdate) = C4::AR::Permisos::obtenerPermisosGenerales($nro_socio,$id_ui,$tipo_documento,$perfil);
+    
+    C4::AR::Utilidades::printHASH($permisos);
+    
     $t_params->{'permisos'}=$permisos;
+    
+    
     if ($newUpdate){
         $t_params->{'nuevoPermiso'}=1;
     }
