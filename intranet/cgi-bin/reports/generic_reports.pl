@@ -55,7 +55,10 @@ if ($op eq "do_search") { #HACER LA BUSQUEDA
                                     query => $input,
                                     type => "intranet",
                                     authnotrequired => 0,
-                                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                    flagsrequired => {  ui => 'ANY', 
+                                                        tipo_documento => 'ANY', 
+                                                        accion => 'CONSULTA', 
+                                                        entorno => 'undefined'},
                                     debug => 1,
                             });
 
@@ -150,7 +153,10 @@ if ($op eq "do_search") { #HACER LA BUSQUEDA
                                 query => $input,
                                 type => "intranet",
                                 authnotrequired => 0,
-                                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                flagsrequired => {  ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'},
                                 debug => 1,
                            });
 	 my %labels;

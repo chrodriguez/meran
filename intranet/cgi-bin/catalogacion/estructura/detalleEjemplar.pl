@@ -11,7 +11,10 @@ my ($template, $session, $t_params) = get_template_and_user({
                                         query => $input,
                                         type => "intranet",
                                         authnotrequired => 0,
-                                        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel1'},
+                                        flagsrequired   => {    ui => 'ANY', 
+                                                                tipo_documento => 'ANY', 
+                                                                accion => 'CONSULTA', 
+                                                                entorno => 'datos_nivel1'},
                                         debug => 1,
     });
 
@@ -29,7 +32,10 @@ if($obj) {
                                             query => $input,
                                             type => "intranet",
                                             authnotrequired => 0,
-                                            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel3'},
+                                            flagsrequired   => {    ui => 'ANY', 
+                                                                    tipo_documento => 'ANY', 
+                                                                    accion => 'CONSULTA', 
+                                                                    entorno => 'datos_nivel3'},
                                             debug => 1,
         });
 
@@ -57,7 +63,10 @@ if($obj) {
                                             query => $input,
                                             type => "intranet",
                                             authnotrequired => 0,
-                                            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel3'},
+                                            flagsrequired   => {    ui => 'ANY', 
+                                                                    tipo_documento => 'ANY', 
+                                                                    accion => 'CONSULTA', 
+                                                                    entorno => 'datos_nivel3'},
                                             debug => 1,
         });
 
@@ -90,7 +99,10 @@ else {
                                             query => $input,
                                             type => "intranet",
                                             authnotrequired => 0,
-                                            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'datos_nivel3'},
+                                            flagsrequired   => {    ui => 'ANY', 
+                                                                    tipo_documento => 'ANY', 
+                                                                    accion => 'CONSULTA', 
+                                                                    entorno => 'datos_nivel3'},
                                             debug => 1,
         });
 

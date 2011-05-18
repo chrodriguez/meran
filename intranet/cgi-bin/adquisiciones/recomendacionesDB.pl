@@ -24,7 +24,10 @@ if($obj){
             query               => $input,
             type                => "intranet",
             authnotrequired     => 0,
-            flagsrequired       => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
+            flagsrequired       => {    ui => 'ANY',   
+                                        tipo_documento => 'ANY', 
+                                        accion => 'ALTA',  
+                                        entorno => 'usuarios'},
         });   
            
     my ($ok) = C4::AR::Recomendaciones::updateRecomendacionDetalle($obj);
@@ -46,7 +49,10 @@ if($obj){
                             query           => $input,
                             type            => "intranet",
                             authnotrequired => 1,
-                            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                            flagsrequired   => {    ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'},
                         });
 
         $t_params->{'combo_ediciones'} = $combo_ediciones;
@@ -67,7 +73,10 @@ if($obj){
                             query           => $input,
                             type            => "intranet",
                             authnotrequired => 1,
-                            flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                            flagsrequired   => {    ui => 'ANY', 
+                                                    tipo_documento => 'ANY',   
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'},
                         });
 
         $t_params->{'datos_edicion'} = $datos_edicion;
@@ -89,7 +98,10 @@ if($obj){
             query               => $input,
             type                => "intranet",
             authnotrequired     => 0,
-            flagsrequired       => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
+            flagsrequired       => {    ui => 'ANY', 
+                                        tipo_documento => 'ANY',   
+                                        accion => 'ALTA', 
+                                        entorno => 'usuarios'},
         });   
            
         my $recomendaciones             = C4::AR::Recomendaciones::getRecomendacionDetallePorId($id_recomendacion);

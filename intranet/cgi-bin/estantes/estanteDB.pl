@@ -20,7 +20,10 @@ if($tipo eq "VER_ESTANTES"){
                     query => $input,
                     type => "intranet",
                     authnotrequired => 0,
-                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    flagsrequired => {  ui => 'ANY', 
+                                        tipo_documento => 'ANY',  
+                                        accion => 'CONSULTA', 
+                                        entorno => 'undefined'},
                     });
 
     my $estantes_publicos = C4::AR::Estantes::getListaEstantesPublicos();
@@ -35,7 +38,10 @@ elsif($tipo eq "VER_SUBESTANTE"){
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+					flagsrequired => {  ui => 'ANY', 
+                                        tipo_documento => 'ANY', 
+                                        accion => 'CONSULTA',  
+                                        entorno => 'undefined'},
 					});
 	
     my $id_estante= $obj->{'estante'};
@@ -131,7 +137,10 @@ my ($template, $session, $t_params) = get_template_and_user(
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+					flagsrequired => {  ui => 'ANY', 
+                                        tipo_documento => 'ANY', 
+                                        accion => 'CONSULTA', 
+                                        entorno => 'undefined'},
 					});
 					
     my $ini= $obj->{'ini'};

@@ -1015,6 +1015,7 @@ sub busquedaAvanzada_newTemp{
     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
 
     # NOTA: sphinx necesita el string decode_utf8
+   
     my $results = $sphinx->Query($query);
 
     my @id1_array;

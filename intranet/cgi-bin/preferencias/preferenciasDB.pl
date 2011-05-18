@@ -18,7 +18,10 @@ if($tipoAccion eq "EDIT_ABOUT"){
                         query           => $input,
                         type            => "intranet",
                         authnotrequired => 0,
-                        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICAR', entorno => 'usuarios'},
+                        flagsrequired   => {    ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICAR', 
+                                                entorno => 'usuarios'},
                         debug           => 1,
                     });
                     

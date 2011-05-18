@@ -77,7 +77,10 @@ elsif($tipoAccion eq "PRESUPUESTAR"){
                                     query           => $input,
                                     type            => "intranet",
                                     authnotrequired => 0,
-                                    flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
+                                    flagsrequired   => {    ui => 'ANY', 
+                                                            tipo_documento => 'ANY', 
+                                                            accion => 'ALTA', 
+                                                            entorno => 'usuarios'},
                                     debug           => 1,
                             });
     
@@ -97,7 +100,10 @@ elsif($tipoAccion eq "AGREGAR_PEDIDO_COTIZACION_DETALLE"){
                                     query           => $input,
                                     type            => "intranet",
                                     authnotrequired => 0,
-                                    flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'},
+                                    flagsrequired   => {    ui => 'ANY', 
+                                                            tipo_documento => 'ANY', 
+                                                            accion => 'ALTA', 
+                                                            entorno => 'usuarios'},
                                     debug           => 1,
                             });
 

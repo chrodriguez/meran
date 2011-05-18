@@ -55,7 +55,7 @@ use vars qw(@EXPORT @ISA);
     getMinBarcode
     getMinBarcodeLike
     getMaxBarcodeLike
-    listarItemsDeInventorioPorSigTop
+    listarItemsDeInventarioPorSigTop
     barcodesPorTipo
     actualizarNotaHistoricoCirculacion
 );
@@ -202,7 +202,7 @@ sub getMinYMaxSignaturaTopografica{
 
 
 # TODO ver si se puede utilizar el sphix para no procesar todos los ejemplares
-sub listarItemsDeInventorioPorSigTop{
+sub listarItemsDeInventarioPorSigTop{
     my ($params_hash_ref) = @_;
 
     my @filtros;
@@ -223,6 +223,7 @@ sub listarItemsDeInventorioPorSigTop{
  
 
     for(my $i=0; $i < $cant; $i++){
+
 
         my %hash_info;
 
@@ -280,6 +281,31 @@ sub listarItemsDeInventorioPorSigTop{
 
     return ($cant_total, \@cat_nivel3_result, \@info_reporte);
 }
+
+
+# sub listarItemsDeInventorioPorBarcode{
+#     my ($params_hash_ref) = @_;
+# 
+#     use Sphinx::Search;
+#     
+#     my $sphinx  = Sphinx::Search->new();
+#     my $query   = '';
+#     my $tipo    = 'SPH_MATCH_EXTENDED';
+#     my $orden       = $params->{'orden'};
+#    
+#     $query .=    $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'});
+# 
+#     $query .='*"';
+# 
+#    
+#     my @filtros;
+#     my @cat_nivel3_result;
+#     my @info_reporte;
+#     my $orden = $params_hash_ref->{'sort'} || 'barcode';
+# 
+# 
+# }
+
 
 sub listarItemsDeInventorioPorBarcode{
     my ($params_hash_ref) = @_;
@@ -365,6 +391,10 @@ sub listarItemsDeInventorioPorBarcode{
 
     return ($cant_total, \@cat_nivel3_result, \@info_reporte);
 }
+
+
+
+
 
 # TODO DEPRECATED
 # sub getMaxBarcode {
