@@ -23,7 +23,10 @@ $obj                = C4::AR::Utilidades::from_json_ISO($obj);
                       query             => $input,
                       type              => "intranet",
                       authnotrequired   => 0,
-                      flagsrequired     => { ui => 'ANY', tipo_documento => 'ANY', accion => 'ALTA', entorno => 'usuarios'}, # FIXME
+                      flagsrequired     => {    ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'ALTA', 
+                                                entorno => 'usuarios'}, # FIXME
                 });
 
 my $filepath    = $input->param('planilla');

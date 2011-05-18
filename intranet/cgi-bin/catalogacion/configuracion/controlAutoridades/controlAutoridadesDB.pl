@@ -420,7 +420,10 @@ if( ($tipo eq 'consultaTablasSinonimos') && ($tabla eq 'autores') ){
 			query => $input,
 			type => "intranet",
 			authnotrequired => 0,
-			flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+			flagsrequired => {  ui => 'ANY', 
+                                tipo_documento => 'ANY', 
+                                accion => 'CONSULTA', 
+                                entorno => 'undefined'},
 			debug => 1,
 });
 
@@ -438,7 +441,10 @@ if( ($tipo eq 'consultaTablasSinonimos')&&($tabla eq 'temas') ){
             query => $input,
             type => "intranet",
             authnotrequired => 0,
-            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+            flagsrequired => {  ui => 'ANY', 
+                                tipo_documento => 'ANY', 
+                                accion => 'CONSULTA', 
+                                entorno => 'undefined'},
             debug => 1,
 });
 
@@ -460,7 +466,10 @@ if( ($tipo eq 'consultaTablasSinonimos')&&($tabla eq 'editoriales') ){
             query => $input,
             type => "intranet",
             authnotrequired => 0,
-            flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+            flagsrequired => {  ui => 'ANY', 
+                                tipo_documento => 'ANY', 
+                                accion => 'CONSULTA', 
+                                entorno => 'undefined'},
             debug => 1,
 });
 
@@ -486,7 +495,10 @@ if( ($tipo eq 'consultaTablasSeudonimos') && ($tabla eq 'autores') ){
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                flagsrequired => {  ui => 'ANY', 
+                                    tipo_documento => 'ANY', 
+                                    accion => 'CONSULTA', 
+                                    entorno => 'undefined'},
                 debug => 1,
     });
     
@@ -504,7 +516,10 @@ if( ($tipo eq 'consultaTablasSeudonimos')&&($tabla eq 'temas') ){
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                flagsrequired => {  ui => 'ANY', 
+                                    tipo_documento => 'ANY', 
+                                    accion => 'CONSULTA', 
+                                    entorno => 'undefined'},
                 debug => 1,
     });
     
@@ -524,7 +539,10 @@ if( ($tipo eq 'consultaTablasSeudonimos')&&($tabla eq 'editoriales') ){
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                flagsrequired => {  ui => 'ANY', 
+                                    tipo_documento => 'ANY', 
+                                    accion => 'CONSULTA', 
+                                    entorno => 'undefined'},
                 debug => 1,
     });
     
