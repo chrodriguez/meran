@@ -14,8 +14,6 @@ __PACKAGE__->meta->setup(
         nro_documento    => { type => 'varchar', length => 16, not_null => 1 },
         tipo_documento   => { type => 'character', length => 3, not_null => 1 },
         apellido         => { type => 'varchar', length => 255, not_null => 1 },
-# FIXME prueba
-        completo         => { type => 'varchar', length => 255, not_null => 1 },
         nombre           => { type => 'varchar', length => 255, not_null => 1 },
         titulo           => { type => 'varchar', length => 255 },
         otros_nombres    => { type => 'varchar', length => 255 },
@@ -117,7 +115,6 @@ sub agregar{
     $self->setLegajo($data_hash->{'legajo'});
     $self->setNombre(C4::AR::Utilidades::capitalizarString($data_hash->{'nombre'}));
     $self->setApellido(C4::AR::Utilidades::capitalizarString($data_hash->{'apellido'}));
-    $self->setCompleto(C4::AR::Utilidades::capitalizarString($data_hash->{'apellido'}." ".$data_hash->{'nombre'}));
     $self->setVersion_documento($data_hash->{'version_documento'});
     $self->setNro_documento($data_hash->{'nro_documento'});
     $self->setTipo_documento($data_hash->{'tipo_documento'});
@@ -176,7 +173,6 @@ sub modificar{
     #Asignando data...
     $self->setNombre($data_hash->{'nombre'});
     $self->setApellido($data_hash->{'apellido'});
-    $self->setCompleto(C4::AR::Utilidades::capitalizarString($data_hash->{'apellido'}." ".$data_hash->{'nombre'}));
     $self->setLegajo($data_hash->{'legajo'});
     $self->setVersion_documento($data_hash->{'version_documento'});
     $self->setNro_documento($data_hash->{'nro_documento'});
@@ -360,13 +356,6 @@ sub setApellido{
     my ($apellido) = @_;
     Encode::encode_utf8($apellido);
     $self->apellido($apellido);
-}
-
-sub setCompleto{
-    my ($self) = shift;
-    my ($completo) = @_;
-    Encode::encode_utf8($completo);
-    $self->completo($completo);
 }
 
 sub getNombre{

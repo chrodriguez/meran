@@ -292,8 +292,8 @@ sub modificar {
     if(!$msg_object->{'error'}){
         $self->save();
 
-	$self->verificar_cambio($db, $params, $msg_object);
-	$self->verificar_historico_disponibilidad($db, $params);
+        $self->verificar_cambio($db, $params, $msg_object);
+        $self->verificar_historico_disponibilidad($db, $params);
     }
 
 #     C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => self->getId3() DESPUES => ".$self->getId3());
