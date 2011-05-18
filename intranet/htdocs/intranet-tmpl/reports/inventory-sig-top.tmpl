@@ -18,15 +18,18 @@
     function consultarPorBarcode(){
 
         //se busca por barcode
-        if ( ($("#barcode").val() == "")&&(($("#desde_signatura").val() == "")||($("#hasta_signatura").val() == "")) ){
+        if ( ($("#barcode").val() == "")&&(($("#desde_barcode").val() == "")||($("#hasta_barcode").val() == "")) ){
             jAlert(DEBE_INGRESAR_EL_BARCODE);
             $("#desde_barcode").focus();
   
             return;
         }
 
-        //se busca el barcode por rango
+
         if ( ($("#barcode").val() == "")&&(($("#desde_barcode").val() == "")&&($("#hasta_barcode").val() == "")) ){
+
+        //se busca el barcode por rango
+      
             jAlert(DEBE_INGRESAR_EL_BARCODE);
             $("#barcode").focus();
   
