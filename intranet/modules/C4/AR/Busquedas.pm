@@ -52,6 +52,7 @@ use vars qw(@EXPORT_OK @ISA);
     &buscarSubCamposMARC
     &buscarDatoDeCampoRepetible
     &buscarTema
+    &busquedaSignaturaBetween
 
     &filtrarPorAutor
     &MARCDetail
@@ -399,6 +400,9 @@ sub buscarSubCamposMapeo{
 	}
 	return (\%mapeo);
 }
+
+
+
 
 
 =item
@@ -1041,6 +1045,16 @@ sub busquedaAvanzada_newTemp{
     return ($total_found, $resultsarray);
 }
 
+
+
+
+
+
+
+
+
+
+
 sub busquedaPorTema{
     
     my ($tema, $session, $obj_for_log) = @_;
@@ -1424,6 +1438,50 @@ sub busquedaPorBarcodeBySphinx{
 
     return ($cantidad, $resultId1, $suggested); 
 }
+
+
+
+# TODO 
+# sub busquedaSignaturaBetween{
+# 
+#     my ($obj) = @_;
+# 
+#     my $min= $obj->{'desde_signatura'};
+#     my $max= $obj->{'hasta_signatura'};
+# 
+#     C4::AR::Debug::debug("---------------------------HOLAGOLAGOALFSADOFD---------------------------");
+# 
+#     use Sphinx::Search;
+#     
+#     my $sphinx  = Sphinx::Search->new();
+#     my $query   = '';
+#     my $tipo    = 'SPH_MATCH_PHRASE';
+# #     my $orden   = $params->{'orden'};
+#    
+#     $query .= ' @string "'.$min.'"';
+#     
+# #     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
+#     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+# #     $sphinx->SetIDRange($min, $max);
+#     
+#     # NOTA: sphinx necesita el string decode_utf8
+#    
+#     my $results = $sphinx->Query($query);
+#  
+#     C4::AR::Utilidades::printHASH($results);
+# 
+#     my $matches = $results->{'matches'};
+#     my $total_found = $results->{'total_found'};
+#   
+# 
+#     C4::AR::Debug::debug("TOTAL FOUND".$total_found);
+# 
+#     return ($total_found, $results );
+# 
+# }
+
+
+
 
 sub t_loguearBusqueda {
 #     require C4::Modelo::RepHistorialBusqueda;

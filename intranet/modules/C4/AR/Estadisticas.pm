@@ -202,6 +202,7 @@ sub getMinYMaxSignaturaTopografica{
 
 
 # TODO ver si se puede utilizar el sphix para no procesar todos los ejemplares
+
 sub listarItemsDeInventarioPorSigTop{
     my ($params_hash_ref) = @_;
 
@@ -283,28 +284,7 @@ sub listarItemsDeInventarioPorSigTop{
 }
 
 
-# sub listarItemsDeInventorioPorBarcode{
-#     my ($params_hash_ref) = @_;
-# 
-#     use Sphinx::Search;
-#     
-#     my $sphinx  = Sphinx::Search->new();
-#     my $query   = '';
-#     my $tipo    = 'SPH_MATCH_EXTENDED';
-#     my $orden       = $params->{'orden'};
-#    
-#     $query .=    $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'});
-# 
-#     $query .='*"';
-# 
-#    
-#     my @filtros;
-#     my @cat_nivel3_result;
-#     my @info_reporte;
-#     my $orden = $params_hash_ref->{'sort'} || 'barcode';
-# 
-# 
-# }
+
 
 
 sub listarItemsDeInventorioPorBarcode{
