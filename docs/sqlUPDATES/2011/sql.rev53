@@ -1,0 +1,42 @@
+ALTER TABLE `perm_general` CHANGE `reportes` `reportes` VARBINARY( 8 ) NOT NULL DEFAULT '00000000',
+CHANGE `permisos` `permisos` VARBINARY( 8 ) NOT NULL DEFAULT '00000000',
+CHANGE `adquisiciones` `adquisiciones` VARBINARY( 8 ) NOT NULL DEFAULT '00000000';
+
+ALTER TABLE `perm_general` CHANGE `adquisiciones` `adq_opac` VARBINARY( 8 ) NOT NULL DEFAULT '00000000';
+
+ALTER TABLE `perm_general` ADD ``adq_intra` VARBINARY( 8 ) NOT NULL DEFAULT '00000000';
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 40;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 84;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 133;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 136;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 139;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 13;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 80;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 78;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 143;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 134;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 135;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 79;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 82;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 81;
+
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`id` = 144;
+
+
+ALTER TABLE `pref_preferencia_sistema` ADD UNIQUE (`variable`);
+
+
