@@ -9,8 +9,12 @@ use C4::AR::Busquedas;
 #Genera un inventario a partir de la busqueda por signatura topografica
 
 my $input   = new CGI;
+
 my @results;
 my $obj     = C4::AR::Utilidades::from_json_ISO($input->param('obj'));
+
+
+C4::AR::Debug::debug($obj);
 my $sigtop  = $obj->{'sigtop'};
 my $barcode = $obj->{'barcode'};
 my $accion  = $obj->{'accion'};
