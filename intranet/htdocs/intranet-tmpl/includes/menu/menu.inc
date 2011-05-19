@@ -542,7 +542,7 @@
                     <li>
                                  [% PERL %]
                                      print C4::AR::Filtros::link_to( text =>     "[% 'Acerca De...' | i18n %]",
-                                                                     url =>      "/cgi-bin/koha/about.pl",
+                                                                     url =>      "/cgi-bin/koha/about/about.pl",
                                                                      title =>    "[% 'Acerca De...' | i18n %]"
                                                                  ) ;
                                  [% END %]
